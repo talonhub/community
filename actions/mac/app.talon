@@ -4,22 +4,22 @@ action(app.preferences):
 	key(cmd-,)
 
 action(app.tab_close):
-	key(ctrl-w)
+	key(cmd-w)
 	
 #action(app.tab_detach):
 #  Move the current tab to a new window
   
 action(app.tab_next):
-	key(ctrl-tab)
+	key(cmd-alt-right)
 	
 action(app.tab_open):
 	key(cmd-t)
 	
 action(app.tab_previous):
-	key(ctrl-shift-tab)
+	key(cmd-alt-left)
 	
 action(app.tab_reopen):
-	key(ctrl-shift-t)
+	key(cmd-shift-t)
 	
 action(app.window_close):
 	key(cmd-w)

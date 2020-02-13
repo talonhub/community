@@ -1,10 +1,9 @@
-app: Google Chrome
-
+os: mac
+app: Safari
 -
 #todo tags
 # settings():
 	# tags = browser
-	
 #action(browser.address):
 
 action(browser.bookmark):
@@ -16,8 +15,8 @@ action(browser.bookmark_tabs):
 action(browser.bookmarks):
 	key(cmd-alt-b)
   
-action(browser.bookmarks_bar):
-	key(cmd-shift-b)
+#action(browser.bookmarks_bar):
+#	key(ctrl-shift-b)
 
 action(browser.focus_address): 
 	key(cmd-l)
@@ -36,10 +35,10 @@ action(browser.go_blank):
 	key(cmd-n)
 	
 action(browser.go_back):
-	key(cmd-[)
+	key(cmd-left)
 
 action(browser.go_forward):
-	key(cmd-])
+	key(cmd-right)
 	
 action(browser.go_home):
 	key(cmd-shift-h)
@@ -55,13 +54,14 @@ action(browser.reload_hard):
 
 #action(browser.reload_hardest):
 	
-action(browser.show_clear_cache):
-	key(cmd-shift-delete)
+#action(browser.show_clear_cache):
+#	key(cmd-shift-delete)
   
 action(browser.show_downloads):
 	key(cmd-shift-j)
 
-#action(browser.show_extensions)
+action(browser.show_extensions):
+	key(ctrl-shift-a)
 
 action(browser.show_history):
 	key(cmd-y)

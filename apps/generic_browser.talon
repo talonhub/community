@@ -4,6 +4,7 @@ app: Microsoft Edge
 app: MicrosoftEdge.exe
 app: chrome.exe
 app: firefox.exe
+app: Safari
 
 #todo: use tags, remove apps
 #tags: browser

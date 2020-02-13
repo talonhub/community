@@ -3,11 +3,8 @@ from talon.engine import engine
 from talon_plugins import speech, eye_mouse, eye_zoom_mouse
 import platform
 import subprocess
-import win32gui
-import win32con
 import ctypes
 import os
-import winreg
 import pathlib
 
 key = actions.key
@@ -38,24 +35,6 @@ hidden_cursor = os.path.join(os.path.dirname(os.path.realpath(__file__)), "Resou
 
 def show_cursor_helper(show):
     """Show/hide the cursor"""
-    if "Windows-10" in platform.platform(terse=True):
-        try:
-            Registrykey = winreg.OpenKey(winreg.HKEY_CURRENT_USER, "Control Panel\Cursors", 0, winreg.KEY_WRITE)
-
-            for value_name, value in default_cursor.items():   
-                if show: 
-                    winreg.SetValueEx(Registrykey, value_name, 0, winreg.REG_EXPAND_SZ, value)
-                else:
-                    winreg.SetValueEx(Registrykey, value_name, 0, winreg.REG_EXPAND_SZ, hidden_cursor)
-                        
-            winreg.CloseKey(Registrykey)
-
-            ctypes.windll.user32.SystemParametersInfoA(win32con.SPI_SETCURSORS, 0, None, 0)
-            
-        except WindowsError:
-            print("Unable to show_cursor({})".format(str(show)))
-    else:
-        ctrl.cursor_visible(show)
             
 mod = Module()
 @mod.action_class
