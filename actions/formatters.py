@@ -5,14 +5,7 @@ from ..utils import surround, sentence_text, text, parse_word, parse_words
 ctx = Context()
 key = actions.key
 
-def title_case_capitalize_word(index, word, _):
-    words_to_keep_lowercase = "a,an,the,at,by,for,in,is,of,on,to,up,and,as,but,or,nor".split(
-        ","
-    )
-    if index == 0 or word not in words_to_keep_lowercase:
-        return word.capitalize()
-    else:
-        return word
+words_to_keep_lowercase = "a,an,the,at,by,for,in,is,of,on,to,up,and,as,but,or,nor".split(",")
 
 def get_formatted_string(words, fmt):
     tmp = []
@@ -63,6 +56,7 @@ def FormatText(m):
     Str(sep.join(words))(None)
 
 formatters = {
+    # True -> no separator
     "dunder": (True, lambda i, word, _: "__%s__" % word if i == 0 else word),
     "camel": (True, lambda i, word, _: word if i == 0 else word.capitalize()),
     "hammer" : (True, lambda i, word, _: word.capitalize()),
@@ -70,7 +64,6 @@ formatters = {
     "smash": (True, lambda i, word, _: word),
     "kebab": (True, lambda i, word, _: word if i == 0 else "-" + word),
     "packed": (True, lambda i, word, _: word if i == 0 else "::" + word),
-    "title": (False, title_case_capitalize_word),
     "allcaps": (False, lambda i, word, _: word.upper()),
     "alldown": (False, lambda i, word, _: word.lower()),
     "dubstring": (False, surround('"')),
@@ -78,16 +71,15 @@ formatters = {
     "padded": (False, surround(" ")),
     "dotted": (True, lambda i, word, _: word if i == 0 else "." + word),
     "slasher": (True, lambda i, word, _: "/" + word),
+    "sentence": (False, lambda i, word, _: word.capitalize() if i == 0 else word),
+    "title": (False, lambda i, word, _:  word.capitalize() if i == 0 or word not in words_to_keep_lowercase else word)
 }
 
-formatters_rule = '(' + ('|'.join(formatters.keys())) + ')'
-@ctx.capture('format_text', rule=f'{formatters_rule} <dgndictation>')
-def format_text(m):
-    return get_formatted_string(m._words[1:], m._words[0])
-    
 mod = Module()
+mod.list('formatters', desc='list of formatters')
+
 @mod.action_class
-class Actions:  
+class Actions:
     def to_sentence(m: Capture):
         """Sentence formatter"""
         sentence_text(m)
@@ -96,3 +88,9 @@ class Actions:
         """text formatter"""
         text(m)
 
+@ctx.capture('format_text', rule='{self.formatters} <dgndictation>')
+def format_text(m):
+    print("formatter: " + str(m._words))
+    return get_formatted_string(m._words[1:], m._words[0])
+
+ctx.lists['self.formatters'] = formatters.keys()
