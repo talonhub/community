@@ -1,20 +1,17 @@
-"""
-This module contains generic repeat commands that can be used following any
-other command, e.g. "go down" or "delete" x many times. The repeat commands are
-the ordinal representation of the total number of times to execute the
-command, so "go down 4th" will go down 4 times.
+from talon import app, Module, Context, actions, ui
+import re
+import time
+import os
+import platform
+from math import floor
 
-A few reasons to use ordinals:
-- Regular numbers are already heavily used
-- Made up words are difficult to learn and remember
-- Ordinals don't need to be memorized
-- Ordinals are not likely to collide with other commands
-"""
-from talon.voice import Rep, Capture
-from talon import Context, Module
-
-ctx = Context()
 ordinals = {}
+ordinal_words = {}
+ordinal_ones = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eight', 'ninth']
+ordinal_teens = ['tenth', 'eleventh', 'twelfth', 'thirteenth', 'fourteenth', 'fifteenth', 'sixteenth', 'seventeenth', 'eighteenth', 'nineteenth']
+ordinal_tens = ['twentieth', 'thirtieth', 'fortieth', 'fiftieth', 'sixtieth', 'seventieth', 'eightieth', 'ninetieth']
+ordinal_tenty = ['twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety']
+
 def ordinal(n):
     """
     Convert an integer into its ordinal representation::
@@ -29,20 +26,43 @@ def ordinal(n):
         suffix = "th"
     return str(n) + suffix
 
+def ordinal_word(n):
+    n = int(n)
+    result = ""
+    if n > 19:
+        if n % 10 == 0:
+            result += ordinal_tens[floor((n / 10)) - 2]
+        else:
+            result += ordinal_tenty[floor(n / 10) - 2]
+            result += ordinal_ones[(n % 10) - 1]
+    elif n > 9:
+        result += ordinal_teens[n - 11]
+    else:
+        result += ordinal_ones[n - 1]
+    return result
 
 for n in range(2, 100):
     ordinals[ordinal(n)] = n - 1
-
-ordinals_rule = '(' + ('|'.join(ordinals.keys())) + ')'
-@ctx.capture('repeater', rule=f'{ordinals_rule}')
-def repeater(m):
-    return m
+    ordinal_words[ordinal_word(n)] = n - 1
 
 mod = Module()
-@mod.action_class
-class Actions:  
-    def repeat(m: Capture):
-        """keys_with_modifiers"""
-        repeater = Rep(int(ordinals[m[-1]]))
-        return repeater(None)
-  
+mod.list('ordinals', desc='list of ordinals')
+mod.list('ordinal_words', desc='list of ordinals')
+
+ctx = Context()
+@ctx.capture('ordinals', rule='{self.ordinals}')
+def capture_ordinals(m):
+    o = m[0]
+    return int(ordinals[o])
+    
+@ctx.capture('ordinal_words', rule='{self.ordinal_words}')
+def captre_ordinal_words(m):
+    o = m[0]
+    return int(ordinal_words[o])
+
+ctx.lists['self.ordinal_words'] = ordinal_words.keys()
+ctx.lists['self.ordinal'] = ordinals.keys()
+    
+
+
+
