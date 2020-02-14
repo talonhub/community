@@ -6,14 +6,11 @@ app: notepad+.exe
 app: Notepad++ : a free (GNU) source code editor
 app: Microsoft Edge
 app: MicrosoftEdge.exe
-
-#todo: tags?
-#tags: tabs
+app: Safari
+app: Code 
 -
-new tab: app.tab_open()
-last tab: app.tab_previous()
-next tab: app.tab_next()
-close tab: app.tab_close()
-reopen tab: app.tab_reopen()
-
-
+open: app.tab_open()
+last: app.tab_previous()
+next: app.tab_next()
+close: app.tab_close()
+reopen: app.tab_reopen()
