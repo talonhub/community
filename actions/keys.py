@@ -143,10 +143,14 @@ def any(m) -> str:
 
 @ctx.capture(rule='[<self.modifiers>] <self.any>')
 def key(m) -> str:
-    mods = m.modifiers
-    if mods:  
-        return "-".join(mods + list(m.any))
-    else:
+    try:
+        mods = m.modifiers
+        if mods:  
+            return "-".join(mods + list(m.any))
+        else:
+            return m.any
+    except:
+        print("todo: figure out this exception")
         return m.any
 
 ctx.commands = {
