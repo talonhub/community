@@ -1,6 +1,0 @@
-(uppercase | ship) <alphabet>: user.actions.basic_keys.uppercase_letters(alphabet)
-<modifiers> <alphabet>: user.actions.basic_keys.keys_with_modifiers(modifiers, alphabet)
-<modifiers> <digits>: user.actions.basic_keys.keys_with_modifiers(modifiers, digits)
-<modifiers> <keys>: user.actions.basic_keys.keys_with_modifiers(modifiers, keys)
-(go | <modifiers>) <arrows>: user.actions.basic_keys.keys_with_modifiers(modifiers, arrows)
-<keys>: user.actions.basic_keys.keys(keys)
