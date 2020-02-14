@@ -150,7 +150,7 @@ def key(m) -> str:
         return m.any
 
 ctx.commands = {
-    'go <self.arrow>': lambda m: actions.key(m.arrow),
+    'go <self.arrow>+': lambda m: actions.key(" ".join(m[1:])),
     '<self.number>': lambda m: actions.key(m.number),
     '<self.letter>': lambda m: actions.key(m.letter),
     '<self.symbol>': lambda m: actions.key(m.symbol),
