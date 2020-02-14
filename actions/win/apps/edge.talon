@@ -1,5 +1,6 @@
 os: windows
-app: Google Chrome
+app: Microsoft Edge
+app: MicrosoftEdge.exe
 -
 #todo tags
 # settings():

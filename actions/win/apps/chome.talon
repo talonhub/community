@@ -1,5 +1,6 @@
 os: windows
 app: Google Chrome
+app: chrome.exe
 -
 #todo tags
 # settings():
