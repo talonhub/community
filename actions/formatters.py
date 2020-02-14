@@ -90,7 +90,6 @@ class Actions:
 
 @ctx.capture('format_text', rule='{self.formatters} <dgndictation>')
 def format_text(m):
-    print("formatter: " + str(m._words))
     return get_formatted_string(m._words[1:], m.formatters[0])
 
 ctx.lists['self.formatters'] = formatters.keys()

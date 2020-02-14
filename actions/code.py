@@ -18,7 +18,7 @@ regex_ext = re.compile("\.(\S*)\s*")
 class CodeActions:
     def language(): 
         title = ui.active_window().title
-        print(str(ui.active_app()))
+        #print(str(ui.active_app()))
         #workaround for VS Code on Mac. The title is "", 
         #but the doc is correct. we will assume the last split
         #has the extension. this may need to be implemented per-app
