@@ -1,5 +1,5 @@
+os: mac
 app: Google Chrome
-
 -
 #todo tags
 # settings():
