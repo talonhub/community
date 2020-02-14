@@ -1,11 +1,21 @@
 from talon import Module, Context, actions, ui
-from talon.voice import Capture, Str
-from ..utils import surround, sentence_text, text, parse_word, parse_words
+from talon.voice import Capture
+from ..utils import sentence_text, text, parse_word, parse_words
 
 ctx = Context()
 key = actions.key
 
 words_to_keep_lowercase = "a,an,the,at,by,for,in,is,of,on,to,up,and,as,but,or,nor".split(",")
+
+def surround(by):
+    def func(i, word, last):
+        if i == 0:
+            word = by + word
+        if last:
+            word += by
+        return word
+
+    return func
 
 def get_formatted_string(words, fmt):
     tmp = []
@@ -53,7 +63,7 @@ def FormatText(m):
     sep = " "
     if not spaces:
         sep = ""
-    Str(sep.join(words))(None)
+    actions.insert(sep.join(words))
 
 formatters = {
     # True -> no separator

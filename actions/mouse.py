@@ -10,32 +10,10 @@ import pathlib
 key = actions.key
 self = actions.self
 
-default_cursor = {
-"AppStarting": "%SystemRoot%\\Cursors\\aero_working.ani",
-"Arrow": "%SystemRoot%\\Cursors\\aero_arrow.cur",
-"Hand": "%SystemRoot%\\Cursors\\aero_link.cur",
-"Help": "%SystemRoot%\\Cursors\\aero_helpsel.cur",
-"No": "%SystemRoot%\\Cursors\\aero_unavail.cur",
-"NWPen": "%SystemRoot%\\Cursors\\aero_pen.cur",
-"Person": "%SystemRoot%\\Cursors\\aero_person.cur",
-"Pin": "%SystemRoot%\\Cursors\\aero_pin.cur",
-"SizeAll": "%SystemRoot%\\Cursors\\aero_move.cur",
-"SizeNESW": "%SystemRoot%\\Cursors\\aero_nesw.cur",
-"SizeNS": "%SystemRoot%\\Cursors\\aero_ns.cur",
-"SizeNWSE": "%SystemRoot%\\Cursors\\aero_nwse.cur",
-"SizeWE": "%SystemRoot%\\Cursors\\aero_ew.cur",
-"UpArrow": "%SystemRoot%\Cursors\\aero_up.cur",
-"Wait": '%SystemRoot%\\Cursors\\aero_busy.ani',
-"Crosshair": "",
-"IBeam":"",
-}
-
-#todo figure out why notepad++ still shows the cursor sometimes.
-hidden_cursor = os.path.join(os.path.dirname(os.path.realpath(__file__)), "Resources\HiddenCursor.cur")
-
 def show_cursor_helper(show):
     """Show/hide the cursor"""
-            
+    ctrl.cursor_visible(show)
+    
 mod = Module()
 @mod.action_class
 class Actions:
@@ -52,7 +30,6 @@ class Actions:
         eye_zoom_mouse.zoom_mouse.enable()
         eye_mouse.control_mouse.enable() 
         show_cursor_helper(False)
-        #use_mic("Microphone (d:vice MMA-A)")
         
     def calibrate():
         """Start calibration"""
