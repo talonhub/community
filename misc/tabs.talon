@@ -9,8 +9,8 @@ app: MicrosoftEdge.exe
 app: Safari
 app: Code 
 -
-open: app.tab_open()
-last: app.tab_previous()
-next: app.tab_next()
-close: app.tab_close()
-reopen: app.tab_reopen()
+open tab: app.tab_open()
+last tab: app.tab_previous()
+next tab: app.tab_next()
+close tab: app.tab_close()
+reopen tab: app.tab_reopen()
