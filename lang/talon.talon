@@ -30,3 +30,7 @@ tags:
 
 user:
 	insert("user.actions.")
+	
+comment: 
+	edit.line_start()
+	insert("#")
