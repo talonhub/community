@@ -98,7 +98,7 @@ volume down: key(voldown)
 mute: key(mute)
 play next: key(next)
 play previous: key(prev)
-(play | pause): key(play)  
+(play | pause): key(play_pause)  
 wipe: key(backspace)
 (pad | padding): 
 	insert("  ") 
