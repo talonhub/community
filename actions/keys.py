@@ -1,7 +1,8 @@
 from typing import Set
 
 from talon import Module, Context, actions
-
+import sys
+    
 default_alphabet = 'air bat cap drum each fine gust harp sit jury crunch look made near odd pit quench red sun trap urge vest whale plex yank zip'.split(' ')
 letters = 'abcdefghijklmnopqrstuvwxyz'
 
@@ -54,7 +55,7 @@ ctx.lists['self.modifier'] = {
     'control': 'ctrl',   'troll':   'ctrl',
     'shift':   'shift',  'sky':     'shift',
     'alt':     'alt',    'option':  'alt',
-    'super':   'win',
+    'super':   'super',
 }
 
 ctx.lists['self.letter'] = dict(zip(default_alphabet, letters))
@@ -131,6 +132,7 @@ def letter(m):
 
 @ctx.capture(rule='{self.special}')
 def special(m):
+    print(str(m))
     return m.special[0]
 
 @ctx.capture(rule='{self.symbol}')
@@ -143,10 +145,10 @@ def any(m) -> str:
 
 @ctx.capture(rule='[<self.modifiers>] <self.any>')
 def key(m) -> str:
-    try:
+    try:    
         mods = m.modifiers
         if mods:  
-            return "-".join(mods + list(m.any))
+            return "-".join(mods + [m.any])
         else:
             return m.any
     except:
