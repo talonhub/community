@@ -132,7 +132,6 @@ def letter(m):
 
 @ctx.capture(rule='{self.special}')
 def special(m):
-    print(str(m))
     return m.special[0]
 
 @ctx.capture(rule='{self.symbol}')
