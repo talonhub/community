@@ -1,7 +1,7 @@
 os: windows
 -
 action(edit.copy): 
-	key(ctrl-v)
+	key(ctrl-c)
  
 action(edit.cut): 
 	key(ctrl-x)
