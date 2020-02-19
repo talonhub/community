@@ -22,7 +22,7 @@ def get_formatted_string(words, fmt):
     spaces = True
     for i, w in enumerate(words):
         w = parse_word(w)
-        smash, func = formatters[fmt]
+        smash, func = formatters_dict[fmt]
         w = func(i, w, i == len(words) - 1)
         spaces = spaces and not smash
         tmp.append(w)
@@ -54,7 +54,7 @@ def FormatText(m):
     for i, w in enumerate(words):
         w = parse_word(w)
         for name in reversed(fmt):
-            smash, func = formatters[name]
+            smash, func = formatters_dict[name]
             w = func(i, w, i == len(words) - 1)
             spaces = spaces and not smash
         tmp.append(w)
@@ -65,7 +65,7 @@ def FormatText(m):
         sep = ""
     actions.insert(sep.join(words))
 
-formatters = {
+formatters_dict = {
     # True -> no separator
     "dunder": (True, lambda i, word, _: "__%s__" % word if i == 0 else word),
     "camel": (True, lambda i, word, _: word if i == 0 else word.capitalize()),
@@ -88,6 +88,14 @@ formatters = {
 mod = Module()
 mod.list('formatters', desc='list of formatters')
 
+@mod.capture
+def formatters(m) -> str:
+    "Returns a single formatter"
+
+@mod.capture
+def format_text(m) -> str:
+    "Formats the text and returns a string"
+
 @mod.action_class
 class Actions:
     def to_sentence(m: Capture):
@@ -97,9 +105,17 @@ class Actions:
     def to_text(m: Capture):
         """text formatter"""
         text(m)
-
-@ctx.capture('format_text', rule='{self.formatters} <dgndictation>')
+        
+@ctx.capture(rule='{self.formatters}')
+def formatters(m):
+    return m.formatters[-1]
+ 
+@ctx.capture(rule='<self.formatters> <dgndictation>')
 def format_text(m):
-    return get_formatted_string(m._words[1:], m.formatters[0])
+    return get_formatted_string(m._words[1:], m.formatters)
 
-ctx.lists['self.formatters'] = formatters.keys()
+ctx.lists['self.formatters'] = formatters_dict.keys()
+
+ctx.commands = {
+    '<self.format_text>': lambda m: actions.insert(m),
+} 
