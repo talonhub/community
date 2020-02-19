@@ -39,11 +39,13 @@ self taught:
 	insert("self.")
 from import: 
 	insert("from import ")
+	key(left)
 	edit.word_left()
 	key(space) 
 	edit.left()
 for in: 
 	insert("for in ")
+	key(left)
 	edit.word_left()
 	key(space) 
 	edit.left()
