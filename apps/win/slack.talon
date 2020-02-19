@@ -1,4 +1,5 @@
 os: windows
+os: linux
 app: Slack
 app: slack.exe
 #todo: some sort of plugin, consolidate with teams or something?
