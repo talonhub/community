@@ -1,4 +1,5 @@
 from talon import app, Module, Context, actions, ui
+from talon.voice import Capture
 import re
 import time
 import os
@@ -11,13 +12,20 @@ mod = Module()
 mod.list('running', desc='all running applications')
 mod.list('launch', desc='all launchable applications')
 
+@mod.capture
+def running_applications(m) -> str:
+    "Returns a single application name"
+    
+@mod.capture
+def launch_applications(m) -> Capture:
+    "Returns a single application name"
+
 ctx = Context()
-@ctx.capture('running_applications', rule='{self.running}')
+@ctx.capture(rule='{self.running}')
 def running_applications(m):
-    print(str(m))
     return m._words[-1]
     
-@ctx.capture('launch_applications', rule='{self.launch}')
+@ctx.capture(rule='{self.launch}')
 def launch_applications(m):
     return m
     

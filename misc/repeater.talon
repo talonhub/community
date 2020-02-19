@@ -1,4 +1,4 @@
-<ordinal_words>: core.repeat_command(ordinal_words)
+<user.actions.repeater.ordinals>: core.repeat_command(user.actions.repeater.ordinals)
 
 
 

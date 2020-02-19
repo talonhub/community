@@ -116,6 +116,6 @@ def format_text(m):
 
 ctx.lists['self.formatters'] = formatters_dict.keys()
 
-ctx.commands = {
-    '<self.format_text>': lambda m: actions.insert(m),
-} 
+# ctx.commands = {
+    # '<self.format_text>': lambda m: actions.insert(m),
+# } 

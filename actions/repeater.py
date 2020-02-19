@@ -5,7 +5,6 @@ import os
 import platform
 from math import floor
 
-ordinals = {}
 ordinal_words = {}
 ordinal_ones = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eight', 'ninth']
 ordinal_teens = ['tenth', 'eleventh', 'twelfth', 'thirteenth', 'fourteenth', 'fifteenth', 'sixteenth', 'seventeenth', 'eighteenth', 'nineteenth']
@@ -42,26 +41,22 @@ def ordinal_word(n):
     return result
 
 for n in range(2, 100):
-    ordinals[ordinal(n)] = n - 1
     ordinal_words[ordinal_word(n)] = n - 1
 
 mod = Module()
-mod.list('ordinals', desc='list of ordinals')
 mod.list('ordinal_words', desc='list of ordinals')
 
 ctx = Context()
-@ctx.capture('ordinals', rule='{self.ordinals}')
-def capture_ordinals(m):
-    o = m[0]
-    return int(ordinals[o])
+@mod.capture
+def ordinals(m) -> int:
+    "Returns a single ordinial as a digit"
     
-@ctx.capture('ordinal_words', rule='{self.ordinal_words}')
-def captre_ordinal_words(m):
+@ctx.capture(rule='{self.ordinal_words}')
+def ordinals(m):
     o = m[0]
     return int(ordinal_words[o])
 
 ctx.lists['self.ordinal_words'] = ordinal_words.keys()
-ctx.lists['self.ordinal'] = ordinals.keys()
     
 
 
