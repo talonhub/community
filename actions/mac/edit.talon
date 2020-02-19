@@ -42,8 +42,11 @@ action(edit.extend_left):
 	
 #action(edit.extend_line): 
 
-action(edit.extend_line_down): 
-	key(down cmd-left)
+action(edit.extend_line_down):       
+	key(shift-down cmd-shift-right)
+
+action(edit.extend_line_end): 
+	key(cmd-shift-right)
 
 action(edit.extend_line_right): 
 	key(cmd-shift-right)
@@ -52,7 +55,7 @@ action(edit.extend_line_start):
 	key(cmd-shift-left)
 
 action(edit.extend_line_up): 
-	key(shift-left cmd-shift-left)
+	key(shift-up cmd-shift-left)
 	
 action(edit.extend_page_down): 
 	key(cmd-shift-pagedown)
@@ -77,10 +80,10 @@ action(edit.extend_up):
 	key(shift-up)
 	
 action(edit.extend_word_left):
-	key(cmd-shift-alt-left)
+	key(shift-alt-left)
 
 action(edit.extend_word_right):
-	key(cmd-shift-alt-right)
+	key(shift-alt-right)
 
 action(edit.file_end):
 	key(cmd-down cmd-left)
@@ -89,8 +92,8 @@ action(edit.file_start):
 	key(cmd-up cmd-left)
 
 action(edit.find):
-	key(ctrl-f)
-	actions.insert(text)
+	key(cmd-f)
+	#actions.insert(text)
 
 action(edit.find_next):
 	key(cmd-g)
@@ -120,7 +123,7 @@ action(edit.line_insert_down):
 	key(end enter)
 	
 action(edit.line_insert_up):
-	key(home enter up)
+	key(cmd-left enter up)
 
 action(edit.line_start):
 	key(cmd-left)
@@ -164,7 +167,8 @@ action(edit.save_all):
 action(edit.select_all):
 	key(cmd-a)
 	
-#action(edit.select_line(n: int = None)):
+#action(edit.select_line):
+
 #action(edit.select_lines(a: int, b: int)):
 
 action(edit.select_none):
