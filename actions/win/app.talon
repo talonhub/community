@@ -13,7 +13,7 @@ action(app.tab_next):
 	key(ctrl-tab)
 	
 action(app.tab_open):
-	key(ctrl-n)
+	key(ctrl-t)
 	
 action(app.tab_previous):
 	key(ctrl-shift-tab)
