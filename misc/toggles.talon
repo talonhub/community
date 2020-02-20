@@ -14,8 +14,11 @@ talon mode:
 	speech.enable()
     user.actions.engine.sleep()
 	
-toggle history:
-	user.actions.canvas_history.toggle()
+show command history:
+	user.actions.canvas_history.enable()
+	
+hide command history:
+	user.actions.canvas_history.disable()
 	
 welcome back: 
 	user.actions.mouse.wake()
