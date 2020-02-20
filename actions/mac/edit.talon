@@ -48,9 +48,6 @@ action(edit.extend_line_down):
 action(edit.extend_line_end): 
 	key(cmd-shift-right)
 
-action(edit.extend_line_right): 
-	key(cmd-shift-right)
-
 action(edit.extend_line_start): 
 	key(cmd-shift-left)
 

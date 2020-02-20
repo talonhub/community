@@ -19,5 +19,5 @@ class Actions:
     def password_edit():
         """Edit password"""
 
-    def password_delte():
+    def password_delete():
         """Delete password"""
