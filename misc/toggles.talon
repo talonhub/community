@@ -15,16 +15,16 @@ talon mode:
     user.actions.engine.sleep()
 	
 show command history:
-	user.actions.canvas_history.enable()
+	user.actions.history.enable()
 	
 hide command history:
-	user.actions.canvas_history.disable()
+	user.actions.history.disable()
 	
 welcome back: 
 	user.actions.mouse.wake()
-	user.actions.canvas_history.enable()
+	user.actions.history.enable()
 	
 sleep all: 
 	user.actions.engine.sleep()
 	user.actions.mouse.sleep()
-	user.actions.canvas_history.disable()
+	user.actions.history.disable()
