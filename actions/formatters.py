@@ -18,6 +18,9 @@ def surround(by):
     return func
 
 def FormatText(m, fmtrs):
+    if m._words[-1] == "over":
+        m._words = m._words[:-1]
+
     try:
         words = parse_words(m)
     except AttributeError:
