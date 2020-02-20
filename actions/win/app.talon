@@ -1,4 +1,5 @@
 os: windows
+os: linux
 -
 #app.preferences()
 
@@ -12,7 +13,7 @@ action(app.tab_next):
 	key(ctrl-tab)
 	
 action(app.tab_open):
-	key(ctrl-n)
+	key(ctrl-t)
 	
 action(app.tab_previous):
 	key(ctrl-shift-tab)
@@ -29,13 +30,13 @@ action(app.window_hide):
 action(app.window_hide_others):
 	key(win-d alt-tab)
 	
-#requires easy window switcher or equivalent
+#requires easy window switcher or equivalent (built into most Linux)
 action(app.window_next): 
 	key(alt-`)
 
 action(app.window_open):
 	key(ctrl-n)
 
-#requires easy window switcher or equivalent
+#requires easy window switcher or equivalent (built into most Linux)
 action(app.window_previous): 
 	key(alt-shift-`)
