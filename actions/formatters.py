@@ -17,29 +17,7 @@ def surround(by):
 
     return func
 
-def get_formatted_string(words, fmt):
-    tmp = []
-    spaces = True
-    for i, w in enumerate(words):
-        w = parse_word(w)
-        smash, func = formatters_dict[fmt]
-        w = func(i, w, i == len(words) - 1)
-        spaces = spaces and not smash
-        tmp.append(w)
-        
-    words = tmp
-    sep = " "
-    if not spaces:
-        sep = ""
-    return sep.join(words)
-
-def FormatText(m):
-    fmt = []
-    if m._words[-1] == "over":
-        m._words = m._words[:-1]
-    for w in m._words:
-        if isinstance(w, Word):
-            fmt.append(w.word)
+def FormatText(m, fmtrs):
     try:
         words = parse_words(m)
     except AttributeError:
@@ -53,7 +31,7 @@ def FormatText(m):
     spaces = True
     for i, w in enumerate(words):
         w = parse_word(w)
-        for name in reversed(fmt):
+        for name in reversed(fmtrs):
             smash, func = formatters_dict[name]
             w = func(i, w, i == len(words) - 1)
             spaces = spaces and not smash
@@ -63,7 +41,7 @@ def FormatText(m):
     sep = " "
     if not spaces:
         sep = ""
-    actions.insert(sep.join(words))
+    return sep.join(words)
 
 formatters_dict = {
     # True -> no separator
@@ -89,8 +67,8 @@ mod = Module()
 mod.list('formatters', desc='list of formatters')
 
 @mod.capture
-def formatters(m) -> str:
-    "Returns a single formatter"
+def formatters(m) -> list:
+    "Returns a list of formatters"
 
 @mod.capture
 def format_text(m) -> str:
@@ -106,16 +84,12 @@ class Actions:
         """text formatter"""
         text(m)
         
-@ctx.capture(rule='{self.formatters}')
+@ctx.capture(rule='{self.formatters}+')
 def formatters(m):
-    return m.formatters[-1]
+    return m.formatters
  
 @ctx.capture(rule='<self.formatters> <dgndictation>')
 def format_text(m):
-    return get_formatted_string(m._words[1:], m.formatters)
+    return FormatText(m.dgndictation, m.formatters)
 
 ctx.lists['self.formatters'] = formatters_dict.keys()
-
-# ctx.commands = {
-    # '<self.format_text>': lambda m: actions.insert(m),
-# } 
