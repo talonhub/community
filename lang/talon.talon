@@ -29,7 +29,7 @@ tags:
 	insert("tags: ")
 
 user:
-	insert("user.knausj_talon.actions.knausj_talon.")
+	insert("user.knausj_talon.code.knausj_talon.")
 	
 comment: 
 	edit.line_start()
