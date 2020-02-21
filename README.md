@@ -1,7 +1,7 @@
 # knausj_talon
 Talon configs for both Mac, Windows and some Linux. Very much in progress.
 
-Clone repo into ~/.talon/user
+Clone repo into ~/.talon/user/knausj_talon
 
 It should look like
 
