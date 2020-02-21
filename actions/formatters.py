@@ -89,6 +89,10 @@ class Actions:
         """text formatter"""
         text(m)
 
+    def modifier_number(modifier: str, m: Capture):
+        """Presses the modifier plus supplied number"""
+        actions.key(modifier + "-" + str(m))
+
     def format_words(words: list, fmtrs: list):
         """Formats a list of words given a list of formatters"""
         actions.insert(format_text_helper(words, fmtrs))
