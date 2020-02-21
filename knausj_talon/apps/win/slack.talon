@@ -7,7 +7,7 @@ app: slack.exe
 channel: key(ctrl-k)
 channel <dgndictation>: 
     key(ctrl-k)
-    user.actions.formatters.to_text(dgndictation)
+    user.knausj_talon.actions.formatters.to_text(dgndictation)
 ([channel] unread last | gopreev): key(alt-shift-up)
 ([channel] unread next | goneck): key(alt-shift-down)
 (slack | lack) [channel] info: key(ctrl-shift-i)
