@@ -2,7 +2,7 @@ os: mac
 app: Slack
 -
 # Workspace
-workspace <number>: user.actions.formatters.modifier_number("cmd", number)
+workspace <number>: user.knausj_talon.actions.formatters.modifier_number("cmd", number)
 previous workspace: key(cmd-shift-[)
 next workspace: key(cmd-shift-])
 # Channel
