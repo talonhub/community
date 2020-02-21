@@ -20,7 +20,6 @@ def surround(by):
 def FormatText(m, fmtrs):
     if m._words[-1] == "over":
         m._words = m._words[:-1]
-
     try:
         words = parse_words(m)
     except AttributeError:
@@ -29,7 +28,10 @@ def FormatText(m, fmtrs):
         words = s.get().split(" ")
         if not words:
             return
+    
+    return format_text_helper(words, fmtrs)
 
+def format_text_helper(words, fmtrs):
     tmp = []
     spaces = True
     for i, w in enumerate(words):
@@ -86,6 +88,14 @@ class Actions:
     def to_text(m: Capture):
         """text formatter"""
         text(m)
+
+    def format_words(words: list, fmtrs: list):
+        """Formats a list of words given a list of formatters"""
+        actions.insert(format_text_helper(words, fmtrs))
+
+    def format_word(word: str, fmtrs: list):
+        """Formats a list of words given a list of formatters"""
+        actions.insert(format_text_helper([word], fmtrs))
         
 @ctx.capture(rule='{self.formatters}+')
 def formatters(m):
