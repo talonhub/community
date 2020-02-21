@@ -1,4 +1,4 @@
-from talon import Context, Module, app, clip, cron, imgui, actions
+from talon import Context, Module, app, clip, cron, imgui, actions, ui
 from talon.voice import Capture
 from ..utils import parse_word
 import os
@@ -23,6 +23,8 @@ ctx = Context()
 
 phones = {}
 canonical_list = []
+main_screen = ui.main_screen()
+
 with open(homophones_file, "r") as f:
     for h in f:
         h = h.rstrip()
@@ -112,7 +114,7 @@ def raise_homophones(word, forced=False, selection=False):
     show_help = False
     gui.show()
 
-@imgui.open(rect=imgui.Rect(1400, 750, 250, 500))
+@imgui.open(y=0,x=main_screen.width/2.6)
 def gui(gui: imgui.GUI):
     global active_word_list
     if show_help:
