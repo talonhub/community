@@ -164,7 +164,8 @@ action(edit.save_all):
 action(edit.select_all):
 	key(cmd-a)
 	
-#action(edit.select_line):
+action(edit.select_line):
+	key(cmd-right cmd-shift-left)
 
 #action(edit.select_lines(a: int, b: int)):
 
