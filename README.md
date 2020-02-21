@@ -1,5 +1,5 @@
 # knausj_talon
-Talon configs for both Mac, Windows and some Linux. Very much in progress.
+Talon configs for Mac, Windows, and Linux. Very much in progress. This is also intended to work with both dragon and wav2letter.
 
 Clone repo into ~/.talon/user/knausj_talon
 
