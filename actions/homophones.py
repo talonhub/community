@@ -139,8 +139,8 @@ def canonical(m) -> str:
     "Returns a single string"
 
 @mod.capture 
-def selection(m) -> int:
-    "Returns a single integer (1-based)"
+def selection(m) -> str:
+    "Returns the selected homophone"
 
 @mod.action_class
 class Actions:
