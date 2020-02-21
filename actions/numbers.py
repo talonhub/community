@@ -1,4 +1,4 @@
-from talon import Module, Context, actions
+from talon import Context, actions
 
 digits = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
 teens = ['eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen']
@@ -97,30 +97,14 @@ assert(test_num([1, 'million', 5, 'hundred', 'and', 1, 'thousand', 1, 'hundred',
 assert(test_num([1, 'million', 1, 1]) == 10000011)
 assert(test_num([1, 'million', 10, 10]) == 100001010)
 '''
-mod = Module()
-@mod.capture
-def digits(m) -> int:
-    "Returns an int from digits"
-    
-@mod.capture
-def number_small(m) -> int:
-    "Returns a small number (<100)"
-    
-@mod.capture
-def number(m) -> int:
-    "Returns a number"
-    
-@mod.capture
-def number_signed(m) -> int:
-    "Returns a signed number"
-    
+
 ctx = Context()
 
-@ctx.capture(rule=f'{alt_digits}+')
+@ctx.capture('digits', rule=f'{alt_digits}+')
 def digits(m):
     return int(''.join([str(digits_map[n]) for n in m]))
 
-@ctx.capture(rule=f'({alt_digits} | {alt_teens} | {alt_tens} [{alt_digits}])')
+@ctx.capture('number_small', rule=f'({alt_digits} | {alt_teens} | {alt_tens} [{alt_digits}])')
 def number_small(m):
     result = 0
     for word in m:
@@ -132,11 +116,11 @@ def number_small(m):
             result += teens_map[word]
     return result
 
-@ctx.capture(rule=f'<self.number_small> [{alt_scales} ([and] (<self.number_small> | {alt_scales} | <self.number_small> {alt_scales}))*]')
+@ctx.capture('number', rule=f'<number_small> [{alt_scales} ([and] (<number_small> | {alt_scales} | <number_small> {alt_scales}))*]')
 def number(m):
     return fuse_num(fuse_scale(fuse_num(fuse_scale(list(m), 3))))[0]
 
-@ctx.capture(rule=f'[negative] <self.number>')
+@ctx.capture('number_signed', rule=f'[negative] <number>')
 def number_signed(m):
     number = m[-1]
     if m[0] == 'negative':
