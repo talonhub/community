@@ -18,3 +18,7 @@ git pull origin: insert("git pull origin ")
 git commit:
   insert("git commit")
   key(enter)
+git clone clipboard:
+  insert("git clone ")
+  edit.paste()
+  key(enter)
