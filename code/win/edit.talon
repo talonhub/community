@@ -162,7 +162,9 @@ action(edit.save_all):
 action(edit.select_all):
 	key(ctrl-a)
 	
-#action(edit.select_line(n: int = None)):
+action(edit.select_line):
+	key(end shift-home)
+
 #action(edit.select_lines(a: int, b: int)):
 
 action(edit.select_none):

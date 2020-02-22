@@ -1,5 +1,5 @@
 # knausj_talon
-Talon configs for Mac, Windows, and Linux. Very much in progress. This is also intended to work with both dragon and wav2letter.
+Talon configs for Mac, Windows, and Linux. Very much in progress. This is also intended to work with both Dragon Naturally Speaking and wav2letter.
 
 Clone repo into ~/.talon/user/knausj_talon
 
@@ -13,10 +13,11 @@ talon\user\knausj_talon\actions
 
 talon\user\knausj_talon\lang
 
-...
+Otherwise, it won't work and you'll see many errors in the console. All user-defined actions in this repository are prefixed user.knausj_talon by Talon. The "knausj_talon" subfolder was chosen to avoid collisions with other talon configurations you may wish to clone from github.
 
-Otherwise it won't work. This is because paths to actions use folder names,
-so avoid collisions we need a specific name.
+...
+## Windows
+Running Talon as an adminstator is highly recommended. 
 
 ## Talon file
 
