@@ -16,7 +16,7 @@ action(browser.bookmark_tabs):
 	key(ctrl-shift-d)
 	
 action(browser.bookmarks):
-	key(ctrl-shift-b)
+	key(ctrl-shift-o)
   
 #action(browser.bookmarks_bar):
 #	key(ctrl-shift-b)
@@ -61,7 +61,7 @@ action(browser.show_clear_cache):
 	key(ctrl-shift-del)
   
 action(browser.show_downloads):
-	key(ctrl-j)
+	key(ctrl-shift-y)
 
 action(browser.show_extensions):
 	key(ctrl-shift-a)
