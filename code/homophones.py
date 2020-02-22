@@ -1,7 +1,10 @@
-from talon import Context, Module, app, clip, cron, imgui, actions
+from talon import Context, Module, app, clip, cron, imgui, actions, ui
 from talon.voice import Capture
 from ..utils import parse_word
 import os
+
+selection_numbers = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty',]
+selection_map = {n: i for i, n in enumerate(selection_numbers)}
 
 ########################################################################
 # global settings
@@ -23,6 +26,8 @@ ctx = Context()
 
 phones = {}
 canonical_list = []
+main_screen = ui.main_screen()
+
 with open(homophones_file, "r") as f:
     for h in f:
         h = h.rstrip()
@@ -107,12 +112,12 @@ def raise_homophones(word, forced=False, selection=False):
     for word in active_word_list:
         selections.append(str(index))
         index = index + 1 
-    ctx.lists['self.selections'] = selections
+    ctx.lists['self.selections'] = selection_numbers[:index-1]
 
     show_help = False
     gui.show()
 
-@imgui.open(rect=imgui.Rect(1400, 750, 250, 500))
+@imgui.open(y=0,x=main_screen.width/2.6)
 def gui(gui: imgui.GUI):
     global active_word_list
     if show_help:
@@ -177,13 +182,13 @@ class Actions:
         
 @ctx.capture(rule='{self.canonicals}')
 def canonical(m):
-    print(str(m.canonicals))
+    #print(str(m.canonicals))
     return m.canonicals[-1]
 
 @ctx.capture(rule='{self.selections}')
 def selection(m):
     global active_word_list
-    return active_word_list[int(m.selections[-1]) - 1]
+    return active_word_list[(selection_map[m.selections[-1]])]
 
 ctx.lists['self.canonicals'] = canonical_list
 ctx.lists['self.selections'] = []

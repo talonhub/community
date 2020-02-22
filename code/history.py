@@ -16,7 +16,7 @@ def on_phrase_post(j):
         history = history[-hist_len:]
 
 #todo: dynamic rect?
-@imgui.open(rect=imgui.Rect(1400, 750, 250, 125*(hist_len/5)))
+@imgui.open(y=0)
 def gui(gui: imgui.GUI):
     global history
     gui.text("Command History")
