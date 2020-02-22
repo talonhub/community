@@ -1,4 +1,5 @@
 os: windows
+os: linux
 app: Firefox
 app: firefox.exe
 -
