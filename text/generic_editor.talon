@@ -106,7 +106,8 @@ clear word right:
 
 clear way left: 
 	edit.extend_line_start()
-	
+	edit.delete()
+
 clear way right: 
 	edit.extend_line_end()
 	edit.delete()
