@@ -1,6 +1,11 @@
 os: mac
 app: Slack
 -
+# Workspace
+workspace <number>: user.knausj_talon.code.formatters.modifier_number("cmd", number)
+previous workspace: key(cmd-shift-[)
+next workspace: key(cmd-shift-])
+# Channel
 channel: key(cmd-k)
 channel <dgndictation>: 
     key(cmd-k)
