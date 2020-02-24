@@ -1,4 +1,5 @@
-
-
- 
-
+[go] <user.knausj_talon.code.keys.arrows>: user.knausj_talon.code.keys.key(arrows)
+<user.knausj_talon.code.keys.number>: user.knausj_talon.code.keys.key(number)
+<user.knausj_talon.code.keys.letter>: user.knausj_talon.code.keys.key(letter)
+<user.knausj_talon.code.keys.symbol>: user.knausj_talon.code.keys.key(symbol)
+<user.knausj_talon.code.keys.key>: user.knausj_talon.code.keys.key(key)

@@ -26,6 +26,10 @@ def arrow(m) -> str:
     "One directional arrow key"
 
 @mod.capture
+def arrows(m) -> str:
+    "One or more arrows separate by a space"
+
+@mod.capture
 def number(m) -> str:
     "One number key"
  
@@ -122,6 +126,10 @@ def modifiers(m):
 def arrow(m) -> str:
     return m.arrow[0]
 
+@ctx.capture(rule='<self.arrow>+')
+def arrows(m) -> str: 
+    return str(m)
+
 @ctx.capture(rule='{self.number}')
 def number(m):
     return m.number[0]
@@ -154,11 +162,14 @@ def key(m) -> str:
         print("todo: figure out this exception")
         return m.any
 
-ctx.commands = {
-    'go <self.arrow>+': lambda m: actions.key(" ".join(m[1:])),
-    '<self.number>': lambda m: actions.key(m.number),
-    '<self.letter>': lambda m: actions.key(m.letter),
-    '<self.symbol>': lambda m: actions.key(m.symbol),
-    '<self.special>': lambda m: actions.key(m.special),
-    '<self.key>': lambda m: actions.key(m.key),
-} 
+@mod.action_class
+class Actions:
+    def key(m: str):
+        """(TEMPORARY) Presses keys from captures defined in the keys.py module"""
+        actions.key(m)
+
+    def modifier_key(modifier: str, key: str):
+        """(TEMPORARY) Presses the modifier plus supplied number"""
+        res = "-".join([modifier] + [str(key)])
+        print(res)
+        actions.key(res)

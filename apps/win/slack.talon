@@ -5,7 +5,7 @@ app: slack.exe
 #todo: some sort of plugin, consolidate with teams or something?
 -
 # Workspaces
-workspace <number>: user.knausj_talon.code.formatters.modifier_number("ctrl", number)
+workspace <number>: user.knausj_talon.code.keys.modifier_key("ctrl", number)
 previous workspace: key(ctrl-shift-tab)
 next workspace: key(ctrl-tab)
 # Channel
