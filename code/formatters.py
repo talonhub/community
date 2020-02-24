@@ -20,6 +20,7 @@ def FormatText(m, fmtrs):
         m._words = m._words[:-1]
     try:
         words = actions.dictate.parse_words(m)
+        words = actions.dictate.replace_words(words)
     except AttributeError:
         with clip.capture() as s:
             edit.copy()
