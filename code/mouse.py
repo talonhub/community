@@ -9,6 +9,7 @@ import pathlib
 
 key = actions.key
 self = actions.self
+dragging = False
 
 def show_cursor_helper(show):
     """Show/hide the cursor"""
@@ -53,7 +54,17 @@ class Actions:
         """Cancel zoom mouse if pending"""
         if eye_zoom_mouse.zoom_mouse.enabled and eye_zoom_mouse.zoom_mouse.state != eye_zoom_mouse.STATE_IDLE:
             eye_zoom_mouse.zoom_mouse.cancel()
-        
+    
+    def drag():
+        """(TEMPORARY) Press and hold/release button 0 depending on state for dragging"""
+        global dragging
+        if not dragging:
+            dragging = True
+            ctrl.mouse_click(button = 0, down = True)
+        else:
+            dragging = False
+            ctrl.mouse_click(up = True)
+    
     def sleep():
         """Disables control mouse, zoom mouse, and re-enables cursor"""
         eye_zoom_mouse.zoom_mouse.disable()

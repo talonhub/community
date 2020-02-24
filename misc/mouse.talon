@@ -4,7 +4,7 @@ zoom mouse:
 	user.knausj_talon.code.mouse.toggle_zoom_mouse()
 camera overlay: 
 	eye_mouse.camera_overlay.toggle()
-(click | chiff): 
+chiff: 
 	mouse_click()
 run calibration: 
 	user.knausj_talon.code.mouse.calibrate()
@@ -20,4 +20,6 @@ run calibration:
 curse yes: 
 	user.knausj_talon.code.mouse.show_cursor()
 curse no: 
-	user.knausj_talon.code.mouse.hide_cursor() 
+	user.knausj_talon.code.mouse.hide_cursor()
+drag: 
+	user.knausj_talon.code.mouse.drag()
