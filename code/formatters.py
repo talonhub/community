@@ -81,14 +81,6 @@ def format_text(m) -> str:
 
 @mod.action_class
 class Actions:
-    def to_sentence(m: Capture):
-        """Sentence formatter"""
-        sentence_text(m)
-        
-    def to_text(m: Capture):
-        """text formatter"""
-        text(m)
-
     def format_words(words: list, fmtrs: list):
         """Formats a list of words given a list of formatters"""
         actions.insert(format_text_helper(words, fmtrs))

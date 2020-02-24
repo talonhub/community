@@ -9,7 +9,7 @@ next workspace: key(cmd-shift-])
 channel: key(cmd-k)
 channel <dgndictation>: 
     key(cmd-k)
-    user.knausj_talon.code.formatters.to_text(dgndictation)
+    dictate.lower(dgndictation)
 ([channel] unread last | gopreev): key(alt-shift-up)
 ([channel] unread next | goneck): key(alt-shift-down)
 (slack | lack) [channel] info: key(cmd-shift-i)
