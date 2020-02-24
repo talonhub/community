@@ -1,6 +1,4 @@
 from talon import Module, Context, actions, ui
-from talon.voice import Capture
-from ..utils import sentence_text, text, parse_word, parse_words
 
 ctx = Context()
 key = actions.key
@@ -21,7 +19,7 @@ def FormatText(m, fmtrs):
     if m._words[-1] == "over":
         m._words = m._words[:-1]
     try:
-        words = parse_words(m)
+        words = actions.dictate.parse_words(m)
     except AttributeError:
         with clip.capture() as s:
             edit.copy()
@@ -35,7 +33,6 @@ def format_text_helper(words, fmtrs):
     tmp = []
     spaces = True
     for i, w in enumerate(words):
-        w = parse_word(w)
         for name in reversed(fmtrs):
             smash, func = formatters_dict[name]
             w = func(i, w, i == len(words) - 1)
@@ -82,12 +79,12 @@ def format_text(m) -> str:
 @mod.action_class
 class Actions:
     def format_words(words: list, fmtrs: list):
-        """Formats a list of words given a list of formatters"""
-        actions.insert(format_text_helper(words, fmtrs))
+        """Formats a list of parsed words given a list of formatters"""
+        return format_text_helper(words, fmtrs)
 
     def format_word(word: str, fmtrs: list):
-        """Formats a list of words given a list of formatters"""
-        actions.insert(format_text_helper([word], fmtrs))
+        """Formats a list of parsed words given a list of formatters"""
+        return format_text_helper([word], fmtrs)
         
 @ctx.capture(rule='{self.formatters}+')
 def formatters(m):

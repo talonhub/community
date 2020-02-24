@@ -9,6 +9,6 @@ hide phones: user.knausj_talon.code.homophones.hide_homophones()
     insert(user.knausj_talon.code.homophones.selection)
     user.knausj_talon.code.homophones.hide_homophones()
 
-(pick | sell | cell) <user.knausj_talon.code.formatters.formatters> <user.knausj_talon.code.homophones.selection>: 
-    user.knausj_talon.code.formatters.format_word(user.knausj_talon.code.homophones.selection, user.knausj_talon.code.formatters.formatters)
+(pick | sell | cell) <user.knausj_talon.code.homophones.formatted_selection>: 
+    insert(formatted_selection)
     user.knausj_talon.code.homophones.hide_homophones()

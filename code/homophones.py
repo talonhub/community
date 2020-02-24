@@ -1,6 +1,5 @@
 from talon import Context, Module, app, clip, cron, imgui, actions, ui
 from talon.voice import Capture
-from ..utils import parse_word
 import os
 
 selection_numbers = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty',]
@@ -62,7 +61,6 @@ def make_selection(index: int):
 
     actions.insert(active_word_list[index - 1])
     
-
 def raise_homophones(word, forced=False, selection=False):
     global quick_replace
     global active_word_list
@@ -147,6 +145,10 @@ def canonical(m) -> str:
 def selection(m) -> str:
     "Returns the selected homophone"
 
+@mod.capture
+def formatted_selection(m) -> str:
+    "Returns the selected homophone with the desired formatter(s) applied"
+
 @mod.action_class
 class Actions:
     def show_homophones_help():
@@ -164,6 +166,7 @@ class Actions:
     def show_homophones_selection():
         """Sentence formatter"""
         actions.edit.copy()
+        actions.sleep("100ms")
         raise_homophones(clip.get(), False, True)
 
     def force_show_homophones(m: str):
@@ -173,6 +176,7 @@ class Actions:
     def force_show_homophones_selection():
         """Sentence formatter"""
         actions.edit.copy()
+        actions.sleep("100ms")
         raise_homophones(clip.get(), True, True)
 
     def format_selection(word: str, fmtrs: list):
@@ -190,5 +194,17 @@ def selection(m):
     global active_word_list
     return active_word_list[(selection_map[m.selections[-1]])]
 
+@ctx.capture(rule='{self.selections}')
+def selection(m):
+    global active_word_list
+    return active_word_list[(selection_map[m.selections[-1]])]
+
+@ctx.capture(rule='<user.knausj_talon.code.formatters.formatters> {self.selections}')
+def formatted_selection(m):
+    global active_word_list
+    selection = active_word_list[(selection_map[m.selections[-1]])]
+    return actions.user.knausj_talon.code.formatters.format_words([selection], m.formatters) 
+
 ctx.lists['self.canonicals'] = canonical_list
 ctx.lists['self.selections'] = []
+ 
