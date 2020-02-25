@@ -148,22 +148,15 @@ def symbol(m):
 1
 @ctx.capture(rule='(<self.arrow> | <self.number> | <self.letter> | <self.special>)')
 def any(m) -> str: 
-    return m._words[0]
+    return str(m)
 
-@ctx.capture(rule='[<self.modifiers>] <self.any>')
+@ctx.capture(rule='<self.modifiers> <self.any>')
 def key(m) -> str:
-    try:
-        mods = m.modifiers
-        return "-".join(mods + [m.any])
-    except AttributeError:
-        return m.any
+    mods = m.modifiers
+    return "-".join(mods + [m.any])
 
 @mod.action_class
 class Actions:
-    def key(m: str):
-        """(TEMPORARY) Presses keys from captures defined in the keys.py module"""
-        actions.key(m)
-
     def modifier_key(modifier: str, key: str):
         """(TEMPORARY) Presses the modifier plus supplied number"""
         res = "-".join([modifier] + [str(key)])
