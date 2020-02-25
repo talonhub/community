@@ -145,21 +145,17 @@ def special(m):
 @ctx.capture(rule='{self.symbol}')
 def symbol(m):
     return m.symbol[0]
-
+1
 @ctx.capture(rule='(<self.arrow> | <self.number> | <self.letter> | <self.special>)')
 def any(m) -> str: 
     return m._words[0]
 
 @ctx.capture(rule='[<self.modifiers>] <self.any>')
 def key(m) -> str:
-    try:    
+    try:
         mods = m.modifiers
-        if mods:  
-            return "-".join(mods + [m.any])
-        else:
-            return m.any
-    except:
-        print("todo: figure out this exception")
+        return "-".join(mods + [m.any])
+    except AttributeError:
         return m.any
 
 @mod.action_class
@@ -171,5 +167,4 @@ class Actions:
     def modifier_key(modifier: str, key: str):
         """(TEMPORARY) Presses the modifier plus supplied number"""
         res = "-".join([modifier] + [str(key)])
-        print(res)
         actions.key(res)
