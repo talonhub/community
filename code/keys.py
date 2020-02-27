@@ -38,7 +38,7 @@ def letter(m) -> str:
     "One letter key" 
 
 @mod.capture
-def letters(m) -> str:
+def letters(m) -> list:
     "Multiple letter keys" 
 
 @mod.capture
