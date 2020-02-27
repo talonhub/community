@@ -4,7 +4,7 @@ from talon import Module, Context, actions
 import sys
     
 default_alphabet = 'air bat cap drum each fine gust harp sit jury crunch look made near odd pit quench red sun trap urge vest whale plex yank zip'.split(' ')
-letters = 'abcdefghijklmnopqrstuvwxyz'
+letters_string = 'abcdefghijklmnopqrstuvwxyz'
 
 default_digits = 'zero one two three four five six seven eight nine'.split(' ')
 numbers = [str(i) for i in range(10)]
@@ -38,6 +38,10 @@ def letter(m) -> str:
     "One letter key" 
 
 @mod.capture
+def letters(m) -> str:
+    "Multiple letter keys" 
+
+@mod.capture
 def symbol(m) -> str:
     "One symbol key"
 
@@ -62,7 +66,7 @@ ctx.lists['self.modifier'] = {
     'super':   'super',
 }
 
-ctx.lists['self.letter'] = dict(zip(default_alphabet, letters))
+ctx.lists['self.letter'] = dict(zip(default_alphabet, letters_string))
 ctx.lists['self.symbol'] = {
     'back tick': '`',
     'comma': ',',
@@ -145,7 +149,7 @@ def special(m):
 @ctx.capture(rule='{self.symbol}')
 def symbol(m):
     return m.symbol[0]
-1
+
 @ctx.capture(rule='(<self.arrow> | <self.number> | <self.letter> | <self.special>)')
 def any(m) -> str: 
     return str(m)
@@ -155,9 +159,17 @@ def key(m) -> str:
     mods = m.modifiers
     return "-".join(mods + [m.any])
 
+@ctx.capture(rule='{self.letter}+')
+def letters(m):
+    return m.letter
+
 @mod.action_class
 class Actions:
     def modifier_key(modifier: str, key: str):
         """(TEMPORARY) Presses the modifier plus supplied number"""
         res = "-".join([modifier] + [str(key)])
         actions.key(res)
+
+    def uppercase_letters(m: list):
+        """Inserts uppercase letters from list"""
+        actions.insert("".join(m).upper())
