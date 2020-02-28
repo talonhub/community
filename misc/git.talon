@@ -22,3 +22,6 @@ git clone clipboard:
   insert("git clone ")
   edit.paste()
   key(enter)
+git status:
+  insert("git status")
+  key(enter)
