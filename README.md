@@ -26,7 +26,8 @@ Talon files may implement actions and define the overall context for voice comma
 ### Context
 There is a "header" section in .talon files that defines the context for the commands. This is everything above the hyphen/dash in the .talon file.
 
-```os: windows
+```insert code:
+os: windows
 os: linux
 app: Slack
 app: slack.exe
@@ -57,7 +58,7 @@ The /'s around emacs mean it's a regular expression, so you can do all kinds of 
 
 Going forward, all voice commands will be implemented in .talon files.
 
-```
+```insert code:
 ([channel] unread next | goneck): key(alt-shift-down)
 ```
 
