@@ -21,7 +21,13 @@ Running Talon as an adminstator is highly recommended.
 
 ## .talon file
 
-Talon files may implement actions and define the overall context for voice commands.
+Talon are used for
+
+- implementoing actions
+
+- define the overall context for commands and actions
+
+- implementing voice commands.
 
 ### Context
 There is a "header" section in .talon files that defines the context for the commands. This is everything above the hyphen/dash in the .talon file.
