@@ -145,7 +145,7 @@ Note that if you attempt to use an action in a context that has no implementatio
 
 Captures must be declared in a module, and do not currently support having a default implementation within the module like actions. This is coming soon.
 
-These examples are from formatters.py:
+These examples are from formatters.py.
 
 ```python:
 mod = Module()
@@ -156,11 +156,12 @@ def formatters(m) -> list:
     "Returns a list of formatters"
 ```
 
-The module also declares a list of the formatters to capture (snake, camel, etc). These lists can be static, as in formatters.py, or dynamic, as in switcher.py (used to switch between running applications).
+The above declares a 'formatters' capture that returns a list. The module also declares a list/mapping of the formatters to capture (snake, camel, etc). These mappings can be static, as in formatters.py, or dynamic, as in switcher.py, which is used to switch between running applications).
 
 To implement a capture, you must create a context in python. Note that contexts are anonymous.
 
 ```python:
+ctx = Context()
 @ctx.capture(rule='{self.formatters}+')
 def formatters(m):
     return m.formatters
@@ -176,7 +177,7 @@ def format_text(m):
     return FormatText(m.dgndictation, m.formatters)
 ```
 
-Once defined, you can then use the captures and associated actions in .talon!
+Once defined, you can then use the captures and associated actions in .talon files!
 
 ```insert code:
 <user.knausj_talon.code.formatters.format_text> [over]: insert(format_text)
