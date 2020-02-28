@@ -9,7 +9,7 @@ It should look like
 
 talon\user\knausj_talon
 
-talon\user\knausj_talon\actions
+talon\user\knausj_talon\code
 
 talon\user\knausj_talon\lang
 
@@ -49,7 +49,7 @@ The above restricts the commands:
     
 Any commands would not be available on Mac OS, for example.
 
-You can also filter by app title.
+You can also filter by window title.
 
 ```
 app: Gnome-terminal
@@ -57,7 +57,7 @@ title: /emacs/
 -
 ```
 
-In this case the definitions would only be active for the Gnome-terminal app with a title that contains emacs
+In this case the definitions would only be active for the Gnome-terminal app with a window title that contains emacs
 The /'s around emacs mean it's a regular expression, so you can do all kinds of matching. This should be done sparingly in scripts you intend to share.
 
 ### Defining Voice Commands
