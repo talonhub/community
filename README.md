@@ -34,8 +34,10 @@ app: Teams
 -
 ```
 
-The above restricts the commands: 
+The above restricts the commands:
+
     - linux or windows OS; and 
+    
     - an app name of Slack, slack.exe, or Teams.
     
 Any commands would not be available on Mac OS, for example.
@@ -66,10 +68,15 @@ Going forward, all voice commands will be implemented in .talon files.
 [] means optional
 
 In the above example, saying any of below voice commands:
+
     - "channel unread next"  
+    
     - "unread next"
+    
     - "goneck" 
+    
     - "unread next"
+    
 will execute the shortcut alt-shift-down.
 
 You can perform many actions with a single command, as below:
