@@ -2,7 +2,7 @@ import os
 import os.path
 import requests
 import time
-from talon import ctrl, ui, Module, Context, actions
+from talon import ctrl, ui, Module, Context, actions, clip
 
 # Courtesy of https://github.com/anonfunc/talon-user/blob/master/apps/jetbrains.py
 
@@ -44,13 +44,13 @@ port_mapping = {
     "google-android-studio": 8652,
 }
 
+
 def _get_nonce(port):
     try:
         with open(os.path.join("/tmp", "vcidea_" + str(port)), "r") as fh:
             return fh.read()
     except IOError:
         return None
-
 
 
 def send_idea_command(cmd):
@@ -66,14 +66,55 @@ def send_idea_command(cmd):
         response.raise_for_status()
         return response.text
 
+
+def get_idea_location():
+    return send_idea_command("location").split()
+
+
 mod = Module()
 @mod.action_class
 class Actions:
     def idea(commands: str):
         """Send a command to Jetbrains product"""
+        command_list = commands.split(",")
         print("executing jetbrains", commands)
         global extendCommands
-        extendCommands = commands
-        for cmd in commands.split(","):
+        extendCommands = command_list
+        for cmd in command_list:
             send_idea_command(cmd)
             time.sleep(0.1)
+
+    def idea_num(command: str, number: str, zero_okay: bool = False):
+        """Sends a command with numbers to Jetbrains product"""
+        print(number)
+        if int(number) == 0 and not zero_okay:
+            print("Not sending, arg was 0")
+            return
+
+        formatted = command % number
+        send_idea_command(formatted)
+        global extendCommands
+        extendCommands = []
+
+    def idea_grab(times: str = "1"):
+        """Copies specified number of words to the left"""
+        old_clip = clip.get()
+        try:
+            original_line, original_column = get_idea_location()
+            for _ in range(int(times)):
+                send_idea_command("action EditorSelectWord")
+            send_idea_command("action EditorCopy")
+            send_idea_command("goto {} {}".format(original_line, original_column))
+            send_idea_command("action EditorPaste")
+        finally:
+            clip.set(old_clip)
+            global extendCommands
+            extendCommands = []
+
+    def extend_action(number: str):
+        """Repeat previous actions up to number of times"""
+        global extendCommands
+        count = max(int(number), 1)
+        for _ in range(count):
+            for cmd in extendCommands:
+                send_idea_command(cmd)
