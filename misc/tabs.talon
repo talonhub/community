@@ -7,7 +7,8 @@ app: Notepad++ : a free (GNU) source code editor
 app: Microsoft Edge
 app: MicrosoftEdge.exe
 app: Safari
-app: Code 
+app: Code
+app: /.*terminal/
 -
 open tab: app.tab_open()
 last tab: app.tab_previous()
