@@ -25,3 +25,6 @@ git clone clipboard:
 git status:
   insert("git status")
   key(enter)
+git log:
+  insert("git log")
+  key(enter)
