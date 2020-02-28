@@ -15,6 +15,11 @@ talon\user\knausj_talon\lang
 
 Otherwise, it won't work and you'll see many errors in the console. All user-defined actions in this repository are prefixed user.knausj_talon by Talon. The "knausj_talon" subfolder was chosen to avoid collisions with other talon configurations you may wish to clone from github.
 
+## Jetbrains commands
+
+For Jetbrains commands to work you must install https://plugins.jetbrains.com/plugin/10504-voice-code-idea
+into each editor.
+
 ...
 ## Windows
 Running Talon as an adminstator is highly recommended. 
