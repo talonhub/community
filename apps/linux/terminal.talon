@@ -9,6 +9,8 @@ action(app.tab_next):
   key(ctrl-pagedown)
 action(app.tab_previous):
   key(ctrl-pageup)
+action(app.window_open):
+  key(ctrl-shift-n)
 go tab <number>:
   user.knausj_talon.code.keys.modifier_key("alt", number)
 run last:

@@ -9,6 +9,8 @@ action(app.tab_next):
   key(ctrl-tab)
 action(app.tab_previous):
   key(ctrl-shift-tab)
+action(app.window_open):
+  key(cmd-n)
 run last:
     key(up)
     key(enter)
