@@ -28,3 +28,9 @@ git status:
 git log:
   insert("git log")
   key(enter)
+git stash:
+  insert("git stash")
+  key(enter)
+git stash pop:
+  insert("git stash pop")
+  key(enter)
