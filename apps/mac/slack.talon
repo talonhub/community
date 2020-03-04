@@ -62,3 +62,4 @@ mark channel read: key(esc)
 (slack | lack) invite: key(a)
     # Miscellaneous
 (slack | lack) shortcuts: key(cmd-/)
+emote <phrase>: insert("{phrase}")
