@@ -1,5 +1,12 @@
 code.language: talon
 -
+action(user.knausj_talon.code.lang.comment_here):
+    insert("#")
+
+action(user.knausj_talon.code.lang.comment_begin_line):
+    edit.line_start()
+    insert("#")
+
 insert: 
 	insert('insert("")')
 	edit.left()
@@ -30,7 +37,4 @@ tags:
 
 user:
 	insert("user.knausj_talon.code.")
-	
-comment: 
-	edit.line_start()
-	insert("#")
+

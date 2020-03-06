@@ -10,7 +10,7 @@ action(user.knausj_talon.code.lang.state_elif):
 	#edit.left()
 
 action(user.knausj_talon.code.lang.state_else):
-	insert("else:")
+	insert("else\n")
 	key(enter)
 
 action(user.knausj_talon.code.lang.state_switch):
@@ -33,10 +33,5 @@ action(user.knausj_talon.code.lang.try_catch):
 	sleep(50ms)
 	insert("try:\n")
 	insert("\nexcept:\n")
-	insert("pass")
-	key(up up)
-
-if: user.knausj_talon.code.lang.state_if()
-(ally | allie | ellie): user.knausj_talon.code.lang.state_elif()
-else: user.knausj_talon.code.lang.state_else()
-while: user.knausj_talon.code.lang.state_while()
+	edit.up()
+	edit.up()

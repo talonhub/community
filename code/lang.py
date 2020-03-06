@@ -24,7 +24,6 @@ class LangActions:
     def state_go_to():
         """inserts go-to statement"""
 
-
     def state_while():
         """Inserts while statement"""
     
