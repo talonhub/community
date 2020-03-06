@@ -34,4 +34,3 @@ user:
 comment: 
 	edit.line_start()
 	insert("#")
-
