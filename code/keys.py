@@ -165,11 +165,11 @@ def letters(m):
 
 @mod.action_class
 class Actions:
-    def modifier_key(modifier: str, key: str):
+    def keys_modifier_key(modifier: str, key: str):
         """(TEMPORARY) Presses the modifier plus supplied number"""
         res = "-".join([modifier] + [str(key)])
         actions.key(res)
 
-    def uppercase_letters(m: list):
+    def keys_uppercase_letters(m: list):
         """Inserts uppercase letters from list"""
         actions.insert("".join(m).upper())

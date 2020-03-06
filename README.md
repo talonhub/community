@@ -13,7 +13,7 @@ talon\user\knausj_talon\code
 
 talon\user\knausj_talon\lang
 
-Otherwise, it won't work and you'll see many errors in the console. All user-defined actions in this repository are prefixed user.knausj_talon by Talon. The "knausj_talon" subfolder was chosen to avoid collisions with other talon configurations you may wish to clone from github.
+All user-defined actions in this repository are prefixed "user." by talon
 
 ...
 ## Windows
@@ -82,8 +82,6 @@ In the above example, saying any of below voice commands:
     
     - "goneck" 
     
-    - "unread next"
-    
 will execute the shortcut alt-shift-down.
 
 You can perform many actions with a single command, as below:
@@ -140,7 +138,7 @@ new window: app.window_open()
 next window: app.window_next()
 last window: app.window_previous()
 close window: app.window_close()
-focus <user.knausj_talon.code.switcher.running_applications>: user.knausj_talon.code.switcher.focus(running_applications)
+focus <user.running_applications>: user.switcher_focus(running_applications)
 ```
 
 The Talon-declared app actions are defined per-operating system in separate OS-specific .talon files. The voice commands themselves work across all operating systems.
@@ -186,7 +184,7 @@ def format_text(m):
 Once defined, you can then use the captures and associated actions in .talon files!
 
 ```insert code:
-<user.knausj_talon.code.formatters.format_text> [over]: insert(format_text)
+<user.formatters_format_text> [over]: insert(format_text)
 ```
 
 This will simply insert the pre-formatted text into your editor.

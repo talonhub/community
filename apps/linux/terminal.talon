@@ -12,7 +12,7 @@ action(app.tab_previous):
 action(app.window_open):
   key(ctrl-shift-n)
 go tab <number>:
-  user.knausj_talon.code.keys.modifier_key("alt", number)
+  user.keys_modifier_key("alt", number)
 run last:
   key(up)
   key(enter)

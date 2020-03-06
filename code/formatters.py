@@ -1,4 +1,5 @@
 from talon import Module, Context, actions, ui
+from typing import List, Union
 
 ctx = Context()
 key = actions.key
@@ -70,7 +71,7 @@ mod = Module()
 mod.list('formatters', desc='list of formatters')
 
 @mod.capture
-def formatters(m) -> list:
+def formatters(m) -> List[str]:
     "Returns a list of formatters"
 
 @mod.capture
@@ -79,13 +80,12 @@ def format_text(m) -> str:
 
 @mod.action_class
 class Actions:
-    def format_words(words: list, fmtrs: list):
+    def formatters_format_text(text: Union[str, List[str]], fmtrs: List[str]) -> str:
         """Formats a list of parsed words given a list of formatters"""
-        return format_text_helper(words, fmtrs)
-
-    def format_word(word: str, fmtrs: list):
-        """Formats a list of parsed words given a list of formatters"""
-        return format_text_helper([word], fmtrs)
+        if isinstance(text, list):
+            return format_text_helper(text, fmtrs)
+        else:
+            return format_text_helper([text], fmtrs)
         
 @ctx.capture(rule='{self.formatters}+')
 def formatters(m):

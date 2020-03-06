@@ -1,13 +1,13 @@
 control mouse: 
-	user.knausj_talon.code.mouse.toggle_control_mouse()
+	user.mouse_toggle_control_mouse()
 zoom mouse: 
-	user.knausj_talon.code.mouse.toggle_zoom_mouse()
+	user.mouse_toggle_zoom_mouse()
 camera overlay: 
 	eye_mouse.camera_overlay.toggle()
 chiff: 
 	mouse_click()
 run calibration: 
-	user.knausj_talon.code.mouse.calibrate()
+	user.mouse_calibrate()
 (righty | rickle): 
 	mouse_click(1)
 (dubclick | duke): 
@@ -18,8 +18,8 @@ run calibration:
 	mouse_click()
 	mouse_click()
 curse yes: 
-	user.knausj_talon.code.mouse.show_cursor()
+	user.mouse_show_cursor()
 curse no: 
-	user.knausj_talon.code.mouse.hide_cursor()
+	user.mouse_hide_cursor()
 drag: 
-	user.knausj_talon.code.mouse.drag()
+	user.mouse_drag()

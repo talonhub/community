@@ -1,5 +1,4 @@
 from talon import Context, Module, app, clip, cron, imgui, actions, ui
-from talon.voice import Capture
 import os
 
 selection_numbers = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty',]
@@ -50,7 +49,7 @@ active_word_list = None
 is_selection = False
 
 def close_homophones():
-    ctx.lists['self.selections'] = []
+    ctx.lists['self.homophones_selections'] = []
     gui.hide()
 
 def make_selection(index: int):
@@ -110,7 +109,7 @@ def raise_homophones(word, forced=False, selection=False):
     for word in active_word_list:
         selections.append(str(index))
         index = index + 1 
-    ctx.lists['self.selections'] = selection_numbers[:index-1]
+    ctx.lists['self.homophones_selections'] = selection_numbers[:index-1]
 
     show_help = False
     gui.show()
@@ -134,77 +133,71 @@ def show_help_gui():
     gui.show()
 
 mod = Module()
-mod.list('canonicals', desc='list of words ')
-mod.list('selections', desc='list of valid selection indexes')
+mod.list('homophones_canonicals', desc='list of words ')
+mod.list('homophones_selections', desc='list of valid selection indexes')
 
 @mod.capture
-def canonical(m) -> str:
+def homophones_canonical(m) -> str:
     "Returns a single string"
 
+
 @mod.capture 
-def selection(m) -> str:
+def homophones_selection(m) -> str:
     "Returns the selected homophone"
 
 @mod.capture
-def formatted_selection(m) -> str:
+def homophones_formatted_selection(m) -> str:
     "Returns the selected homophone with the desired formatter(s) applied"
 
 @mod.action_class
 class Actions:
-    def show_homophones_help():
+    def homophones_show_help():
         """Shows help"""
         show_help_gui()
 
-    def hide_homophones():
+    def homophones_hide():
         """Hides the homophones display"""
         close_homophones()
 
-    def show_homophones(m: str):
+    def homophones_show(m: str):
         """Sentence formatter"""
         raise_homophones(m, False, False)
 
-    def show_homophones_selection():
+    def homophones_show_selection():
         """Sentence formatter"""
         actions.edit.copy()
         actions.sleep("100ms")
         raise_homophones(clip.get(), False, True)
 
-    def force_show_homophones(m: str):
+    def homophones_force_show(m: str):
         """Sentence formatter"""
         raise_homophones(m, True, False)
 
-    def force_show_homophones_selection():
+    def homophones_force_show_selection():
         """Sentence formatter"""
         actions.edit.copy()
         actions.sleep("100ms")
         raise_homophones(clip.get(), True, True)
 
-    def format_selection(word: str, fmtrs: list):
+    def homophones_format_selection(word: str, fmtrs: list):
         """Formats the selection using Formatters"""
-        user.actions.formatters.formatters.format_words([word], fmtrs)
-
+        actions.user.formatters_format_text(word, fmtrs)
         
-@ctx.capture(rule='{self.canonicals}')
-def canonical(m):
-    #print(str(m.canonicals))
-    return m.canonicals[-1]
+@ctx.capture(rule='{self.homophones_canonicals}')
+def homophones_canonical(m):
+    return m.homophones_canonicals[-1]
 
-@ctx.capture(rule='{self.selections}')
-def selection(m):
+@ctx.capture(rule='{self.homophones_selections}')
+def homophones_selection(m):
     global active_word_list
-    return active_word_list[(selection_map[m.selections[-1]])]
+    return active_word_list[(selection_map[m.homophones_selections[-1]])]
 
-@ctx.capture(rule='{self.selections}')
-def selection(m):
+@ctx.capture(rule='<user.formatters> {self.homophones_selections}')
+def homophones_formatted_selection(m):
     global active_word_list
-    return active_word_list[(selection_map[m.selections[-1]])]
+    selection = active_word_list[(selection_map[m.homophones_selections[-1]])]
+    return actions.user.formatters_format_text(selection, m.formatters) 
 
-@ctx.capture(rule='<user.knausj_talon.code.formatters.formatters> {self.selections}')
-def formatted_selection(m):
-    global active_word_list
-    selection = active_word_list[(selection_map[m.selections[-1]])]
-    return actions.user.knausj_talon.code.formatters.format_words([selection], m.formatters) 
-
-ctx.lists['self.canonicals'] = canonical_list
-ctx.lists['self.selections'] = []
+ctx.lists['self.homophones_canonicals'] = canonical_list
+ctx.lists['self.homophones_selections'] = []
  
