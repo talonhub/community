@@ -9,7 +9,7 @@ It should look like
 
 talon\user\knausj_talon
 
-talon\user\knausj_talon\actions
+talon\user\knausj_talon\code
 
 talon\user\knausj_talon\lang
 
@@ -19,35 +19,52 @@ Otherwise, it won't work and you'll see many errors in the console. All user-def
 ## Windows
 Running Talon as an adminstator is highly recommended. 
 
-## Talon file
+## .talon file
 
-Talon files maps words you want to say to things to do (definitions). They look a bit like YAML. 
-They are split into 2 sections, the context and below are definitions.
+.talon files may be used for
+
+- implementing actions
+
+- defining the overall context for commands and actions
+
+- implementing voice commands
 
 ### Context
-There is a "header" section which is the context to activate the commands. This is everything above a
-single - (hyphen/dash)
+There is a "header" section in .talon files that defines the context for the commands. This is everything above the hyphen/dash in the .talon file.
 
-```os: windows
+```insert code:
+os: windows
 os: linux
 app: Slack
 app: slack.exe
+app: Teams
+-
 ```
 
-The above restricts the definitions to an os of linux or windows, and an app name of Slack or slack.exe
-You can also filter by app title:
+The above restricts the commands:
+
+    - linux or windows OS; and 
+    
+    - an app name of Slack, slack.exe, or Teams.
+    
+Any commands would not be available on Mac OS, for example.
+
+You can also filter by window title.
 
 ```
 app: Gnome-terminal
 title: /emacs/
+-
 ```
 
-So in this case the definitions would only be active for the Gnome-terminal app with a title that contains emacs
-The /'s around emacs mean it's a regular expression, so you can do all kinds of matching.
+In this case the definitions would only be active for the Gnome-terminal app with a window title that contains emacs
+The /'s around emacs mean it's a regular expression, so you can do all kinds of matching. This should be done sparingly in scripts you intend to share.
 
-### Definitions
+### Defining Voice Commands
 
-```
+Going forward, all voice commands will be implemented in .talon files.
+
+```insert code:
 ([channel] unread next | goneck): key(alt-shift-down)
 ```
 
@@ -55,12 +72,21 @@ The /'s around emacs mean it's a regular expression, so you can do all kinds of 
 
 | means or
 
-[] is optional
+[] means optional
 
-So in the above example you could say "channel unread next" or "goneck" or "unread next" and alt,
-shift and down will be pressed at the same time.
+In the above example, saying any of below voice commands:
 
-Multiple things can happen by splitting the commands with a new line:
+    - "channel unread next"  
+    
+    - "unread next"
+    
+    - "goneck" 
+    
+    - "unread next"
+    
+will execute the shortcut alt-shift-down.
+
+You can perform many actions with a single command, as below:
 
 ```insert code:
     insert("``````")
@@ -70,41 +96,97 @@ Multiple things can happen by splitting the commands with a new line:
     key(up)
 ```
 
-You can also do multiple presses in one key command, `key(left left left)` will press left three times
+Note that you can also do many key presses in one command, `key(left left left)` will press left three times.
 
-## Action files
+## Modules: Declaring actions and captures
 
-Action files are where you define complex commands for talon (not just key presses). 
-Below is the required structure
+With python scripts, you may declare & implement new actions and captures. 
 
+Modules declare actions and captures; actions may have a default implementation. Actions and captures then can be combined to compose extremely useful voice commands in .talon files.
+
+### Actions
 ```python
 from talon import Module, Context, actions, settings
 
 mod = Module('description')
 @mod.action_class
 class Actions:
-    def bare_action(): "Action prototypes must have a docstring."
+    def bare_action(): 
+        """Action prototypes must have a docstring."""
+        
     def capitalize(s: str) -> str:
     """This capitalizes a string."""
         return s.capitalize()
 ```
 
-The [code](https://github.com/knausj85/knausj_talon/tree/master/code) folder has plenty of in-use examples
+In the above example, bare_actions is declared, but not implemented. On the other hand, capitalize has a default implementation that could be overridden for some contexts. 
 
-### Calling actions from talon files
+Actions may be implemented in a .talon file, allowing the implementation to be customized per-context as needed. The below example for bare_action is active only (1) on Linux and (2) when the Slack application has focus. 
 
-Actions aren't much use unless you use them! You need to specify the full python path 
-(the directory path separated by .) and call the function:
-
-```channel <dgndictation>: 
-    key(ctrl-k)
-    user.knausj_talon.code.formatters.to_text(dgndictation)
+```insert code:
+os: linux
+app: Slack
+-
+action(user.description.bare_action):
+	insert("LINUX")
 ```
 
-## Another way to hook things up
+This makes actions very reusable, particularly across OSes, applications, and programming languages. In this way, you could define a single command that works across all programming languages, etc.
 
-I'm not sure what this is called, but you can make an empty actions file like [password manager](https://github.com/knausj85/knausj_talon/blob/master/code/password_manager.py)
-and then define different things to do based on context e.g. [windows implementation](https://github.com/knausj85/knausj_talon/blob/master/code/win/password_manager.talon)
-vs [mac implementation](https://github.com/knausj85/knausj_talon/blob/master/code/mac/password_manager.talon)
+For example, window_management.talon leverages this:
 
-Then people can use those from a [generic place](https://github.com/knausj85/knausj_talon/blob/master/misc/1password.talon)
+```insert code:
+new window: app.window_open()
+next window: app.window_next()
+last window: app.window_previous()
+close window: app.window_close()
+focus <user.knausj_talon.code.switcher.running_applications>: user.knausj_talon.code.switcher.focus(running_applications)
+```
+
+The Talon-declared app actions are defined per-operating system in separate OS-specific .talon files. The voice commands themselves work across all operating systems.
+
+Note that if you attempt to use an action in a context that has no implementation for the action, you will see warnings in the Talon log. 
+
+### Captures
+
+Captures must be declared in a module, and do not currently support having a default implementation within the module like actions. This is coming soon.
+
+These examples are from formatters.py.
+
+```python:
+mod = Module()
+mod.list('formatters', desc='list of formatters')
+
+@mod.capture
+def formatters(m) -> list:
+    "Returns a list of formatters"
+```
+
+The above declares a 'formatters' capture that returns a list. The module also declares a list/mapping of the formatters to capture (snake, camel, etc). These mappings can be static, as in formatters.py, or dynamic, as in switcher.py, which is used to switch between running applications).
+
+To implement a capture, you must create a context in python. Note that contexts are anonymous.
+
+```python:
+ctx = Context()
+@ctx.capture(rule='{self.formatters}+')
+def formatters(m):
+    return m.formatters
+```
+
+When used in .talon, this capture will provide a list of words matching any the module's 'formatters' list defined above. The result can then be provided to another action.
+
+You may define other useful captures by combining captures too. For example, the below capture will provide formatted text for commands such as "allcaps dubstring something interesting" => "SOMETHING INTERESTING" -
+
+```python:
+@ctx.capture(rule='<self.formatters> <dgndictation>')
+def format_text(m):
+    return FormatText(m.dgndictation, m.formatters)
+```
+
+Once defined, you can then use the captures and associated actions in .talon files!
+
+```insert code:
+<user.knausj_talon.code.formatters.format_text> [over]: insert(format_text)
+```
+
+This will simply insert the pre-formatted text into your editor.

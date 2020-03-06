@@ -87,7 +87,7 @@ def update_lists():
                             continue
                         new[word] = path
     
-    ctx.lists['self.launch'] = new
+        ctx.lists['self.launch'] = new
 
 def ui_event(event, arg):
     if event in ('app_activate', 'app_launch', 'app_close', 'win_open', 'win_close'):
