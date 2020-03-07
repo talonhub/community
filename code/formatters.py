@@ -47,24 +47,32 @@ def format_text_helper(words, fmtrs):
         sep = ""
     return sep.join(words)
 
+NOSEP = True
+SEP   = False
+
+def words_with_joiner(joiner):
+    def formatter_function(i, word, _):
+        return word if i == 0 else joiner + word
+    return (NOSEP, formatter_function)
+
 formatters_dict = {
     # True -> no separator
-    "dunder": (True, lambda i, word, _: "__%s__" % word if i == 0 else word),
-    "camel": (True, lambda i, word, _: word if i == 0 else word.capitalize()),
-    "hammer" : (True, lambda i, word, _: word.capitalize()),
-    "snake": (True, lambda i, word, _: word.lower() if i == 0 else "_" + word.lower()),
-    "smash": (True, lambda i, word, _: word),
-    "kebab": (True, lambda i, word, _: word if i == 0 else "-" + word),
-    "packed": (True, lambda i, word, _: word if i == 0 else "::" + word),
-    "allcaps": (False, lambda i, word, _: word.upper()),
-    "alldown": (False, lambda i, word, _: word.lower()),
-    "dubstring": (False, surround('"')),
-    "string": (False, surround("'")),
-    "padded": (False, surround(" ")),
-    "dotted": (True, lambda i, word, _: word if i == 0 else "." + word),
-    "slasher": (True, lambda i, word, _: "/" + word),
-    "sentence": (False, lambda i, word, _: word.capitalize() if i == 0 else word),
-    "title": (False, lambda i, word, _:  word.capitalize() if i == 0 or word not in words_to_keep_lowercase else word)
+    "dunder": (NOSEP, lambda i, word, _: "__%s__" % word if i == 0 else word),
+    "camel": (NOSEP, lambda i, word, _: word if i == 0 else word.capitalize()),
+    "hammer" : (NOSEP, lambda i, word, _: word.capitalize()),
+    "snake": (NOSEP, lambda i, word, _: word.lower() if i == 0 else "_" + word.lower()),
+    "smash": (NOSEP, lambda i, word, _: word),
+    "kebab": words_with_joiner("-"),
+    "packed": words_with_joiner("::"),
+    "allcaps": (SEP, lambda i, word, _: word.upper()),
+    "alldown": (SEP, lambda i, word, _: word.lower()),
+    "dubstring": (SEP, surround('"')),
+    "string": (SEP, surround("'")),
+    "padded": (SEP, surround(" ")),
+    "dotted": words_with_joiner("."),
+    "slasher": (NOSEP, lambda i, word, _: "/" + word),
+    "sentence": (SEP, lambda i, word, _: word.capitalize() if i == 0 else word),
+    "title": (SEP, lambda i, word, _:  word.capitalize() if i == 0 or word not in words_to_keep_lowercase else word)
 }
 
 mod = Module()
