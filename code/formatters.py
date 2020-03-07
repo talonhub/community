@@ -55,12 +55,18 @@ def words_with_joiner(joiner):
         return word if i == 0 else joiner + word
     return (NOSEP, formatter_function)
 
+def first_vs_rest(first_func, rest_func = lambda w: w):
+    if first_func is None:
+        first_func = lambda w: w
+    def formatter_function(i, word, _):
+        return first_func(word) if i == 0 else rest_func(word)
+    return formatter_function
+
 formatters_dict = {
-    # True -> no separator
-    "dunder": (NOSEP, lambda i, word, _: "__%s__" % word if i == 0 else word),
-    "camel": (NOSEP, lambda i, word, _: word if i == 0 else word.capitalize()),
-    "hammer" : (NOSEP, lambda i, word, _: word.capitalize()),
-    "snake": (NOSEP, lambda i, word, _: word.lower() if i == 0 else "_" + word.lower()),
+    "dunder": (NOSEP, first_vs_rest(lambda w: "__%s__" % word)),
+    "camel": (NOSEP, first_vs_rest(lambda w: w, lambda w: w.capitalize())),
+    "hammer": (NOSEP, lambda i, word, _: word.capitalize()),
+    "snake": (NOSEP, first_vs_rest(lambda w: w.lower(), lambda w: "_" + w.lower())),
     "smash": (NOSEP, lambda i, word, _: word),
     "kebab": words_with_joiner("-"),
     "packed": words_with_joiner("::"),
@@ -71,7 +77,7 @@ formatters_dict = {
     "padded": (SEP, surround(" ")),
     "dotted": words_with_joiner("."),
     "slasher": (NOSEP, lambda i, word, _: "/" + word),
-    "sentence": (SEP, lambda i, word, _: word.capitalize() if i == 0 else word),
+    "sentence": (SEP, first_vs_rest(lambda w: w.capitalize())),
     "title": (SEP, lambda i, word, _:  word.capitalize() if i == 0 or word not in words_to_keep_lowercase else word)
 }
 
