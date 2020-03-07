@@ -62,21 +62,26 @@ def first_vs_rest(first_func, rest_func = lambda w: w):
         return first_func(word) if i == 0 else rest_func(word)
     return formatter_function
 
+def every_word(word_func):
+    def formatter_function(i, word, _):
+        return word_func(word)
+    return formatter_function
+
 formatters_dict = {
     "dunder": (NOSEP, first_vs_rest(lambda w: "__%s__" % word)),
     "camel": (NOSEP, first_vs_rest(lambda w: w, lambda w: w.capitalize())),
-    "hammer": (NOSEP, lambda i, word, _: word.capitalize()),
+    "hammer": (NOSEP, every_word(lambda w: w.capitalize)),
     "snake": (NOSEP, first_vs_rest(lambda w: w.lower(), lambda w: "_" + w.lower())),
-    "smash": (NOSEP, lambda i, word, _: word),
+    "smash": (NOSEP, every_word(lambda w: w)),
     "kebab": words_with_joiner("-"),
     "packed": words_with_joiner("::"),
-    "allcaps": (SEP, lambda i, word, _: word.upper()),
-    "alldown": (SEP, lambda i, word, _: word.lower()),
+    "allcaps": (SEP, every_word(lambda w: w.upper()),
+    "alldown": (SEP, every_word(lambda w: w.lower()),
     "dubstring": (SEP, surround('"')),
     "string": (SEP, surround("'")),
     "padded": (SEP, surround(" ")),
     "dotted": words_with_joiner("."),
-    "slasher": (NOSEP, lambda i, word, _: "/" + word),
+    "slasher": (NOSEP, every_word(lambda w: "/" + word)),
     "sentence": (SEP, first_vs_rest(lambda w: w.capitalize())),
     "title": (SEP, lambda i, word, _:  word.capitalize() if i == 0 or word not in words_to_keep_lowercase else word)
 }
