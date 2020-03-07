@@ -51,11 +51,19 @@ NOSEP = True
 SEP   = False
 
 def words_with_joiner(joiner):
+    """Pass through words unchanged, but add a separator between them."""
     def formatter_function(i, word, _):
         return word if i == 0 else joiner + word
     return (NOSEP, formatter_function)
 
 def first_vs_rest(first_func, rest_func = lambda w: w):
+    """Supply one or two transformer functions for the first and rest of
+    words respectively.
+
+    Leave second argument out if you want all but the first word to be passed
+    through unchanged.
+    Set first argument to None if you want the first word to be passed
+    through unchanged."""
     if first_func is None:
         first_func = lambda w: w
     def formatter_function(i, word, _):
@@ -63,6 +71,7 @@ def first_vs_rest(first_func, rest_func = lambda w: w):
     return formatter_function
 
 def every_word(word_func):
+    """Apply one function to every word."""
     def formatter_function(i, word, _):
         return word_func(word)
     return formatter_function
