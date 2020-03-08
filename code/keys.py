@@ -173,3 +173,8 @@ class Actions:
     def keys_uppercase_letters(m: list):
         """Inserts uppercase letters from list"""
         actions.insert("".join(m).upper())
+
+    def get_alphabet():
+        """Provides the alphabet dictionary"""
+        return ctx.lists['self.letter']
+
