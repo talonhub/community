@@ -77,7 +77,7 @@ def every_word(word_func):
     return formatter_function
 
 formatters_dict = {
-    "dunder": (NOSEP, first_vs_rest(lambda w: "__%s__" % word)),
+    "dunder": (NOSEP, first_vs_rest(lambda w: "__%s__" % w)),
     "camel": (NOSEP, first_vs_rest(lambda w: w, lambda w: w.capitalize())),
     "hammer": (NOSEP, every_word(lambda w: w.capitalize)),
     "snake": (NOSEP, first_vs_rest(lambda w: w.lower(), lambda w: "_" + w.lower())),
@@ -90,7 +90,7 @@ formatters_dict = {
     "string": (SEP, surround("'")),
     "padded": (SEP, surround(" ")),
     "dotted": words_with_joiner("."),
-    "slasher": (NOSEP, every_word(lambda w: "/" + word)),
+    "slasher": (NOSEP, every_word(lambda w: "/" + w)),
     "sentence": (SEP, first_vs_rest(lambda w: w.capitalize())),
     "title": (SEP, lambda i, word, _:  word.capitalize() if i == 0 or word not in words_to_keep_lowercase else word)
 }
