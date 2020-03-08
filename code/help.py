@@ -18,14 +18,16 @@ cached_active_contexts_list = []
 
 max_items_per_page = 25
 live_update = True
+is_context_help_showing = False
 cached_window_title = None
 show_enabled_contexts_only = False
 
 def on_title(win): 
     global live_update
     global show_enabled_contexts_only
+    global is_context_help_showing
 
-    if live_update and win.title != cached_window_title and selected_context == None:
+    if is_context_help_showing and live_update and win.title != cached_window_title and selected_context == None:
         refresh_context_mapping(show_enabled_contexts_only)
 
 #todo: dynamic rect?
@@ -130,7 +132,7 @@ def gui_context_help(gui: imgui.GUI):
         refresh_context_mapping()
 
     if gui.button('close'):
-        gui_context_help.hide()
+        actions.user.help_hide()
 
 def reset():
     global current_context_page
@@ -190,6 +192,9 @@ class Actions:
 
     def help_context_enabled():
         """Display contextual command info"""
+        global is_context_help_showing
+        is_context_help_showing = True
+
         reset()
         refresh_context_mapping(enabled_only=True)
         gui_alphabet.hide()
@@ -197,6 +202,8 @@ class Actions:
 
     def help_context():
         """Display contextual command info"""
+        global is_context_help_showing
+        is_context_help_showing = True
         reset()
         refresh_context_mapping()
         gui_alphabet.hide()
@@ -204,6 +211,8 @@ class Actions:
 
     def help_hide():
         """Hides the help"""
+        global is_context_help_showing
+        is_context_help_showing = False
         reset()
         gui_alphabet.hide()
         gui_context_help.hide()
