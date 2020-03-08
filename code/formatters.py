@@ -47,24 +47,52 @@ def format_text_helper(words, fmtrs):
         sep = ""
     return sep.join(words)
 
+NOSEP = True
+SEP   = False
+
+def words_with_joiner(joiner):
+    """Pass through words unchanged, but add a separator between them."""
+    def formatter_function(i, word, _):
+        return word if i == 0 else joiner + word
+    return (NOSEP, formatter_function)
+
+def first_vs_rest(first_func, rest_func = lambda w: w):
+    """Supply one or two transformer functions for the first and rest of
+    words respectively.
+
+    Leave second argument out if you want all but the first word to be passed
+    through unchanged.
+    Set first argument to None if you want the first word to be passed
+    through unchanged."""
+    if first_func is None:
+        first_func = lambda w: w
+    def formatter_function(i, word, _):
+        return first_func(word) if i == 0 else rest_func(word)
+    return formatter_function
+
+def every_word(word_func):
+    """Apply one function to every word."""
+    def formatter_function(i, word, _):
+        return word_func(word)
+    return formatter_function
+
 formatters_dict = {
-    # True -> no separator
-    "dunder": (True, lambda i, word, _: "__%s__" % word if i == 0 else word),
-    "camel": (True, lambda i, word, _: word if i == 0 else word.capitalize()),
-    "hammer" : (True, lambda i, word, _: word.capitalize()),
-    "snake": (True, lambda i, word, _: word.lower() if i == 0 else "_" + word.lower()),
-    "smash": (True, lambda i, word, _: word),
-    "kebab": (True, lambda i, word, _: word if i == 0 else "-" + word),
-    "packed": (True, lambda i, word, _: word if i == 0 else "::" + word),
-    "allcaps": (False, lambda i, word, _: word.upper()),
-    "alldown": (False, lambda i, word, _: word.lower()),
-    "dubstring": (False, surround('"')),
-    "string": (False, surround("'")),
-    "padded": (False, surround(" ")),
-    "dotted": (True, lambda i, word, _: word if i == 0 else "." + word),
-    "slasher": (True, lambda i, word, _: "/" + word),
-    "sentence": (False, lambda i, word, _: word.capitalize() if i == 0 else word),
-    "title": (False, lambda i, word, _:  word.capitalize() if i == 0 or word not in words_to_keep_lowercase else word)
+    "dunder": (NOSEP, first_vs_rest(lambda w: "__%s__" % w)),
+    "camel": (NOSEP, first_vs_rest(lambda w: w, lambda w: w.capitalize())),
+    "hammer": (NOSEP, every_word(lambda w: w.capitalize)),
+    "snake": (NOSEP, first_vs_rest(lambda w: w.lower(), lambda w: "_" + w.lower())),
+    "smash": (NOSEP, every_word(lambda w: w)),
+    "kebab": words_with_joiner("-"),
+    "packed": words_with_joiner("::"),
+    "allcaps": (SEP, every_word(lambda w: w.upper())),
+    "alldown": (SEP, every_word(lambda w: w.lower())),
+    "dubstring": (SEP, surround('"')),
+    "string": (SEP, surround("'")),
+    "padded": (SEP, surround(" ")),
+    "dotted": words_with_joiner("."),
+    "slasher": (NOSEP, every_word(lambda w: "/" + w)),
+    "sentence": (SEP, first_vs_rest(lambda w: w.capitalize())),
+    "title": (SEP, lambda i, word, _:  word.capitalize() if i == 0 or word not in words_to_keep_lowercase else word)
 }
 
 mod = Module()
