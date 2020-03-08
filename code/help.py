@@ -217,10 +217,6 @@ class Actions:
         gui_alphabet.hide()
         gui_context_help.hide()
 
-@ctx.capture(rule='{self.help_actions}')
-def homophones_canonical(m):
-    return m.help_actions[-1]
-
 if live_update:
     ui.register('win_title', on_title)
     ui.register("win_focus", on_title)
