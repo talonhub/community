@@ -79,7 +79,7 @@ def every_word(word_func):
 formatters_dict = {
     "dunder": (NOSEP, first_vs_rest(lambda w: "__%s__" % w)),
     "camel": (NOSEP, first_vs_rest(lambda w: w, lambda w: w.capitalize())),
-    "hammer": (NOSEP, every_word(lambda w: w.capitalize)),
+    "hammer": (NOSEP, every_word(lambda w: w.capitalize())),
     "snake": (NOSEP, first_vs_rest(lambda w: w.lower(), lambda w: "_" + w.lower())),
     "smash": (NOSEP, every_word(lambda w: w)),
     "kebab": words_with_joiner("-"),
