@@ -106,7 +106,14 @@ def gui_context_help(gui: imgui.GUI):
             target_page = int(math.ceil(current_item_index / max_items_per_page))
 
             if selected_context_page == target_page:
-                gui.text("{}: {}".format(key, val))
+                val = val.split("\n")
+                if len(val) > 1:
+                    gui.text("{}:".format(key))
+                    for line in val:
+                        gui.text("    {}".format(line))
+                    gui.spacer()
+                else:
+                    gui.text("{}: {}".format(key, val[0]))
             
             current_item_index += 1
 
