@@ -208,6 +208,7 @@ def register_events(register: bool):
             events_registered = True
             ui.register('', ui_event)
     else:
+        events_registered = False
         ui.unregister('', ui_event)
 
 @mod.action_class
