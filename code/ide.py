@@ -7,6 +7,7 @@ mod = Module()
 class Actions:
     def refactor():
         """Trigger refactoring menu of the ide"""
+
     def complete():
          """Trigger auto complete in the ide (intellijsense)"""
 
@@ -54,3 +55,30 @@ class Actions:
 
     def rename_file():
         """Trigger rename file of IDE"""
+
+    def fix_format():
+        """Trigger format code function"""
+
+    def fix_imports():
+        """Trigger fix imports function"""
+
+    def follow():
+        """Go to definition of selected item"""
+
+    def go_implementation():
+        """Go to implementation of selected item"""
+
+    def go_usage():
+        """Go to usage of selected item"""
+
+    def go_type():
+        """Go to type of selected item"""
+
+    def go_test():
+        """Go to test of selected item"""
+
+    def go_back():
+        """Go to previous cursor position"""
+
+    def go_forward():
+        """Go to next"""

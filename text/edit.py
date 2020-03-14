@@ -24,4 +24,19 @@ class Actions:
         """Add a cursor above current cursors"""
 
     def down_cursor():
-        """Add a cursor below current curors"""
+        """Add a cursor below current cursors"""
+
+    def select_less():
+        """Unselect current word"""
+
+    def select_more():
+        """Select next word"""
+
+    def multi_select_fewer():
+        """Unselect previously selected word"""
+
+    def multi_select_more():
+        """Select next occurrence of word"""
+
+    def multi_select_all():
+        """Select all occurrences of word"""

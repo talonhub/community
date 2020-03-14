@@ -146,3 +146,19 @@ multi select up:
 
 multi select down:
 	user.down_cursor()
+
+multi select fewer:
+	user.multi_select_fewer()
+
+multi select more:
+	user.multi_select_more()
+
+multi select all:
+	user.multi_select_all()
+
+select less:
+	user.select_less()
+
+select (more|this):
+	user.select_more()
+

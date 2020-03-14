@@ -48,6 +48,27 @@ action(user.refactor_move): user.idea("action Move")
 action(user.refactor_rename): user.idea("action RenameElement")
 action(user.rename_file): user.idea("action RenameFile")
 
+action(user.fix_format): user.idea("action ReformatCode")
+action(user.fix_imports): user.idea("action OptimizeImports")
+
+action(user.follow): user.idea("action GotoDeclaration")
+action(user.go_implementation): user.idea("action GotoImplementation")
+action(user.go_usage): user.idea("action FindUsages")
+action(user.go_type): user.idea("action GotoTypeDeclaration")
+action(user.go_test): user.idea("action GotoTest")
+action(user.go_back): user.idea("action Back")
+action(user.go_forward): user.idea("action Forward")
+
+# Special Selects
+action(user.select_less): user.idea("action EditorUnSelectWord")
+action(user.select_more): user.idea("action EditorSelectWord")
+action(user.multi_select_fewer): user.idea("action UnselectPreviousOccurrence")
+action(user.multi_select_more): user.idea("action SelectNextOccurrence")
+action(user.multi_select_all): user.idea("action SelectAllOccurrences")
+
+# Search
+action(edit.find): user.idea("action SearchEverywhere")
+
 # Select verb/object
 
 <user.select_verbs> this: user.idea_select(select_verbs, "action EditorSelectWord")
