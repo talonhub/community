@@ -82,3 +82,18 @@ class Actions:
 
     def go_forward():
         """Go to next"""
+
+    def find_everywhere():
+        """Searches the entire project"""
+
+    def find_class():
+        """Open search for class functionality of ide"""
+
+    def find_in_path():
+        """Open search filtered to selected path"""
+
+    def find_file():
+        """Open search for file functionality of ide"""
+
+    def recent():
+        """Open recent files list"""

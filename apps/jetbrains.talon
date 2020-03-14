@@ -67,7 +67,19 @@ action(user.multi_select_more): user.idea("action SelectNextOccurrence")
 action(user.multi_select_all): user.idea("action SelectAllOccurrences")
 
 # Search
-action(edit.find): user.idea("action SearchEverywhere")
+action(edit.find): user.idea("action Find")
+action(user.find_everywhere): user.idea("action SearchEverywhere")
+find (everywhere | all) <phrase> [over]:
+  user.idea("action SearchEverywhere")
+  sleep(500ms)
+  insert(phrase)
+
+action(user.find_class): user.idea("action GotoClass")
+action(user.find_file): user.idea("action GotoFile")
+action(user.recent): user.idea("action RecentFiles")
+action(edit.find_next): user.idea("action FindNext")
+action(edit.find_previous): user.idea("action FindPrevious")
+action(user.find_in_path): user.idea("action FindInPath")
 
 # Select verb/object
 
