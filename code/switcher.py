@@ -41,7 +41,7 @@ def get_words(name):
 
 @mod.action_class
 class Actions:
-    def focus(name: str):
+    def switcher_focus(name: str):
         """Focus a new application by  name"""
         full = ctx.lists['self.running'].get(name)
         if not full:
@@ -51,7 +51,7 @@ class Actions:
                 app.focus()
                 break
 
-    def launch(path: str):
+    def switcher_launch(path: str):
         """Launch a new application by path"""
         ui.launch(path=path)
 

@@ -1,14 +1,14 @@
-(phones | homophones) help: user.knausj_talon.code.homophones.show_homophones_help()
-phones <user.knausj_talon.code.homophones.canonical>: user.knausj_talon.code.homophones.show_homophones(canonical)
-phones: user.knausj_talon.code.homophones.show_homophones_selection()
-force phones <user.knausj_talon.code.homophones.canonical>: user.knausj_talon.code.homophones.force_show_homophones(canonical)
-force phones: user.knausj_talon.code.homophones.force_show_homophones_selection()
-hide phones: user.knausj_talon.code.homophones.hide_homophones()
+(phones | homophones) help: user.homophones_show_help()
+phones <user.homophones_canonical>: user.homophones_show(homophones_canonical)
+phones: user.homophones_show_selection()
+force phones <user.homophones_canonical>: user.homophones_force_show(homophones_canonical)
+force phones: user.homophones_force_show_selection()
+hide phones: user.homophones_hide()
 
-(pick | sell | cell) <user.knausj_talon.code.homophones.selection>: 
-    insert(selection)
-    user.knausj_talon.code.homophones.hide_homophones()
+(pick | sell | cell) <user.homophones_selection>: 
+    insert(homophones_selection)
+    user.homophones_hide()
 
-<user.knausj_talon.code.homophones.formatted_selection>: 
-    insert(formatted_selection)
-    user.knausj_talon.code.homophones.hide_homophones()
+<user.homophones_formatted_selection>: 
+    insert(homophones_formatted_selection)
+    user.homophones_hide()

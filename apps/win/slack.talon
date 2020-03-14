@@ -5,7 +5,7 @@ app: slack.exe
 #todo: some sort of plugin, consolidate with teams or something?
 -
 # Workspaces
-workspace <number>: user.knausj_talon.code.keys.modifier_key("ctrl", number)
+workspace <number>: user.keys_modifier_key("ctrl", number)
 previous workspace: key(ctrl-shift-tab)
 next workspace: key(ctrl-tab)
 # Channel
@@ -65,3 +65,4 @@ mark channel read: key(esc)
 (slack | lack) invite: key(a)
     # Miscellaneous
 (slack | lack) shortcuts: key(ctrl-/)
+emote <phrase>: insert("{phrase}")

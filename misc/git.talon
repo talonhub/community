@@ -22,3 +22,15 @@ git clone clipboard:
   insert("git clone ")
   edit.paste()
   key(enter)
+git status:
+  insert("git status")
+  key(enter)
+git log:
+  insert("git log")
+  key(enter)
+git stash:
+  insert("git stash")
+  key(enter)
+git stash pop:
+  insert("git stash pop")
+  key(enter)

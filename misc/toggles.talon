@@ -1,14 +1,28 @@
 show command history:
-	user.knausj_talon.code.history.enable()
+	user.history_enable()
 	
 hide command history:
-	user.knausj_talon.code.history.disable()
+	user.history_disable()
 	
 welcome back: 
-	user.knausj_talon.code.mouse.wake()
-	user.knausj_talon.code.history.enable()
-	
+	user.mouse_wake()
+	user.history_enable()
+
 sleep all: 
-	user.knausj_talon.code.engine.sleep()
-	user.knausj_talon.code.mouse.sleep()
-	user.knausj_talon.code.history.disable()
+	user.history_disable()
+	user.homophones_hide()
+	user.help_hide()
+	user.engine_sleep()
+	user.mouse_sleep()
+
+help alphabet:
+	user.help_alphabet(user.get_alphabet())
+
+help context:
+	user.help_context()
+
+help active context:
+	user.help_context_enabled()
+
+hide help:
+	user.help_hide()

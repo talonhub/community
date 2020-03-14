@@ -30,10 +30,10 @@ engine.register('post:phrase', on_phrase_post)
 mod = Module()
 @mod.action_class
 class Actions:           
-    def enable():
+    def history_enable():
         """Enables the history"""
         gui.show()
         
-    def disable():
+    def history_disable():
         """Disables the history"""
         gui.hide()

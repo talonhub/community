@@ -2,7 +2,7 @@ os: mac
 app: Slack
 -
 # Workspace
-workspace <number>: user.knausj_talon.code.keys.modifier_key("cmd", number)
+workspace <number>: user.keys_modifier_key("cmd", number)
 previous workspace: key(cmd-shift-[)
 next workspace: key(cmd-shift-])
 # Channel
@@ -62,3 +62,4 @@ mark channel read: key(esc)
 (slack | lack) invite: key(a)
     # Miscellaneous
 (slack | lack) shortcuts: key(cmd-/)
+emote <phrase>: insert("{phrase}")
