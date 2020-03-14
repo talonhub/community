@@ -17,8 +17,8 @@ action(user.drag_up):  user.idea("action MoveLineUp")
 action(user.drag_down):  user.idea("action MoveLineDown")
 action(user.multi_cursor): key(shift-alt-insert)
 action(user.multi_cursor_stop): key(escape)
-action(user.up_cursor): key(shift-up)
-action(user.down_cursor): key(shift-down)
+action(user.up_cursor): user.idea("action EditorCloneCaretAbove")
+action(user.down_cursor): user.idea("action EditorCloneCaretBelow")
 
 # Copying
 action(user.clone_line):  user.idea("action EditorDuplicate")

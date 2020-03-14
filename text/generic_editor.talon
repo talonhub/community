@@ -141,8 +141,8 @@ multiple cursor:
 (end|stop) multiple cursor:
 	user.multi_cursor_stop()
 
-up cursor:
+multi select up:
 	user.up_cursor()
 
-down cursor:
+multi select down:
 	user.down_cursor()
