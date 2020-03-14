@@ -47,3 +47,40 @@ action(user.rename_file): user.idea("action RenameFile")
 
 # Quick Fix / Intentions
 
+
+# Select verb/object
+
+<user.select_verbs> this: user.idea_select(select_verbs, "action EditorSelectWord")
+<user.select_verbs> whole line <number>: user.idea_select(select_verbs, "goto {number} 0, action EditorSelectLine")
+<user.select_verbs> way left: user.idea_select(select_verbs, "action EditorLineStartWithSelection")
+<user.select_verbs> way right: user.idea_select(select_verbs, "action EditorLineEndWithSelection")
+<user.select_verbs> way up: user.idea_select(select_verbs, "action EditorTextStartWithSelection")
+<user.select_verbs> way down: user.idea_select(select_verbs, "action EditorTextEndWithSelection")
+<user.select_verbs> go camel left: user.idea_select(select_verbs, "action EditorPreviousWordInDifferentHumpsModeWithSelection")
+<user.select_verbs> go camel right: user.idea_select(select_verbs, "action EditorNextWordInDifferentHumpsModeWithSelection")
+
+<user.select_verbs> all: user.idea_select(select_verbs, "action $SelectAll")
+<user.select_verbs> left: user.idea_select(select_verbs, "action EditorLeftWithSelection")
+<user.select_verbs> right: user.idea_select(select_verbs, "action EditorRightWithSelection")
+<user.select_verbs> up: user.idea_select(select_verbs, "action EditorUpWithSelection")
+<user.select_verbs> down: user.idea_select(select_verbs, "action EditorDownWithSelection")
+<user.select_verbs> word left: user.idea_select(select_verbs, "action EditorPreviousWordWithSelection")
+<user.select_verbs> word right: user.idea_select(select_verbs, "action EditorNextWordWithSelection")
+
+<user.select_verbs> until line <number>: user.idea_select(select_verbs, "extend {number}")
+<user.select_verbs> <number> until <number>: user.idea_select(select_verbs, "range {number_1} {number_2}")
+<user.select_verbs> line <number>: user.idea_select(select_verbs, "goto {number} 0, action EditorLineStart, action EditorLineEndWithSelection")
+<user.select_verbs> line: user.idea_select(select_verbs, "action EditorLineStart, action EditorLineEndWithSelection")
+<user.select_verbs> next <phrase> [over]: user.idea_select(select_verbs, "find next {phrase}")
+<user.select_verbs> last <phrase> [over]: user.idea_select(select_verbs, "find prev {phrase}")
+
+# Movement
+<user.movement_verbs> this: user.idea_movement(movement_verbs, "")
+<user.movement_verbs> next (error | air): user.idea_movement(movement_verbs, "action GotoNextError")
+<user.movement_verbs> last (error | air): user.idea_movement(movement_verbs, "action GotoPreviousError")
+<user.movement_verbs> camel left: user.idea_movement(movement_verbs, "action EditorPreviousWordInDifferentHumpsMode")
+<user.movement_verbs> camel right: user.idea_movement(movement_verbs, "action EditorNextWordInDifferentHumpsMode")
+<user.movement_verbs> line <number>: user.idea_movement(movement_verbs, "goto {number} 0")
+<user.movement_verbs> line <number> end: user.idea_movement(movement_verbs, "goto {number} 9999")
+<user.movement_verbs> next <phrase> [over]: user.idea_movement(movement_verbs, "find next {phrase}, action EditorRight")
+<user.movement_verbs> last <phrase> [over]: user.idea_movement(movement_verbs, "find prev {phrase}, action EditorRight")

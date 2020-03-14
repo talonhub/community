@@ -114,23 +114,38 @@ def idea_commands(commands):
 
 ctx = Context()
 mod = Module()
+
+mod.list('select_verbs', desc='Verbs for selecting in the IDE')
+mod.list('movement_verbs', desc='Verbs for navigating the IDE')
+
+
+@mod.capture
+def select_verbs(m) -> list:
+    """Returns a list of verbs"""
+
+
+@mod.capture
+def movement_verbs(m) -> list:
+    """Returns a list of verbs"""
+
+
 @mod.action_class
 class Actions:
     def idea(commands: str):
         """Send a command to Jetbrains product"""
         idea_commands(commands)
 
-    def idea_num(command: str, number: str, zero_okay: bool = False):
-        """Sends a command with numbers to Jetbrains product"""
-        print(number)
-        if int(number) == 0 and not zero_okay:
-            print("Not sending, arg was 0")
-            return
+    def idea_select(select_verb: str, commands: str):
+        """Do a select command, then the specified commands"""
+        command_list = ','.join(commands.split(",") + select_verbs_map[select_verb[0]])
+        print(command_list)
+        idea_commands(command_list)
 
-        formatted = command % number
-        send_idea_command(formatted)
-        global extendCommands
-        extendCommands = []
+    def idea_movement(movement_verb: str, commands: str):
+        """Do a select movement, then the specified commands"""
+        command_list = ','.join(commands.split(",") + movement_verbs_map[movement_verb[0]])
+        print(command_list)
+        idea_commands(command_list)
 
     def idea_grab(times: str = "1"):
         """Copies specified number of words to the left"""
@@ -154,3 +169,22 @@ class Actions:
         for _ in range(count):
             for cmd in extendCommands:
                 send_idea_command(cmd)
+
+    def set_extended_actions(commands: str):
+        """Adds specified commands to the list of commands to repeat"""
+        set_extend(commands.split(","))
+
+
+@ctx.capture(rule='{self.select_verbs}')
+def select_verbs(m):
+    return m.select_verbs
+
+
+@ctx.capture(rule='{self.movement_verbs}')
+def movement_verbs(m):
+    print(m)
+    return m.movement_verbs
+
+
+ctx.lists['self.select_verbs'] = select_verbs_map.keys()
+ctx.lists['self.movement_verbs'] = movement_verbs_map.keys()
