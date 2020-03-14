@@ -2,6 +2,9 @@
 
 app: /.*jetbrains.*/
 -
+action(app.tab_next):
+  key(ctrl-tab)
+
 # Auto complete
 action(user.complete): user.idea("action CodeCompletion")
 action(user.perfect): user.idea("action CodeCompletion,action CodeCompletion")
