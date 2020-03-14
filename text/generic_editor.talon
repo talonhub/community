@@ -64,7 +64,7 @@ select word left:
 select word right: 
 	edit.extend_word_right()
 
-select way left: 
+select way left:
 	edit.extend_line_start()
 	
 select way right: 
@@ -119,3 +119,24 @@ clear way up:
 clear way down: 
 	edit.extend_file_end()
 	edit.delete()
+
+drag up:
+	user.drag_up()
+
+drag down:
+	user.drag_down()
+
+clone (line|this):
+	user.clone_line()
+
+multiple cursor:
+	user.multi_cursor()
+
+(end|stop) multiple cursor:
+	user.multi_cursor_stop()
+
+up cursor:
+	user.up_cursor()
+
+down cursor:
+	user.down_cursor()

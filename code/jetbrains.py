@@ -44,6 +44,36 @@ port_mapping = {
     "google-android-studio": 8652,
 }
 
+select_verbs_map = {
+    "select": [],
+    "copy": ["action EditorCopy"],
+    "cut": ["action EditorCut"],
+    "clear": ["action EditorBackSpace"],
+    "comment": ["action CommentByLineComment"],
+    "replace": ["action EditorPaste"],
+    "expand": ["action ExpandRegion"],
+    "collapse": ["action CollapseRegion"],
+    "refactor": ["action Refactorings.QuickListPopupAction"],
+    "rename": ["action RenameElement"],
+    "indent": ["action EditorIndentLineOrSelection"],
+    "unindent": ["action EditorUnindentSelection"],
+}
+
+
+movement_verbs_map = {
+    "go": [],
+    "fix": ["action ShowIntentionActions"],
+    "paste": ["action EditorPaste"],
+}
+
+
+def set_extend(*commands):
+    def set_inner(_):
+        global extendCommands
+        extendCommands = commands
+
+    return set_inner
+
 
 def _get_nonce(port):
     try:
@@ -71,18 +101,24 @@ def get_idea_location():
     return send_idea_command("location").split()
 
 
+def idea_commands(commands):
+    command_list = commands.split(",")
+    print("executing jetbrains", commands)
+    global extendCommands
+    extendCommands = command_list
+    for cmd in command_list:
+        if cmd:
+            send_idea_command(cmd.strip())
+            time.sleep(0.1)
+
+
+ctx = Context()
 mod = Module()
 @mod.action_class
 class Actions:
     def idea(commands: str):
         """Send a command to Jetbrains product"""
-        command_list = commands.split(",")
-        print("executing jetbrains", commands)
-        global extendCommands
-        extendCommands = command_list
-        for cmd in command_list:
-            send_idea_command(cmd)
-            time.sleep(0.1)
+        idea_commands(commands)
 
     def idea_num(command: str, number: str, zero_okay: bool = False):
         """Sends a command with numbers to Jetbrains product"""
