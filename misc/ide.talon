@@ -1,3 +1,5 @@
+refactor: user.refactor()
+
 complete: user.complete()
 perfect: user.perfect()
 smart: user.smart()

@@ -33,10 +33,10 @@ grab <number>: user.idea_grab(number)
 extend <number>: user.extend_action(number)
 
 # Refactoring
-#refactor: user.idea("action Refactorings.QuickListPopupAction")
-#refactor <dgndictation>:
-#  user.idea("action Refactorings.QuickListPopupAction")
-#  insert(dictate.join_words(dgndictation))
+action(user.refactor): user.idea("action Refactorings.QuickListPopupAction")
+refactor <dgndictation>:
+  user.idea("action Refactorings.QuickListPopupAction")
+  insert(dictate.join_words(dgndictation))
 action(user.extract_variable): user.idea("action IntroduceVariable")
 action(user.extract_field): user.idea("action IntroduceField")
 action(user.extract_constant): user.idea("action IntroduceConstant")
@@ -47,9 +47,6 @@ action(user.refactor_in_line): user.idea("action Inline")
 action(user.refactor_move): user.idea("action Move")
 action(user.refactor_rename): user.idea("action RenameElement")
 action(user.rename_file): user.idea("action RenameFile")
-
-# Quick Fix / Intentions
-
 
 # Select verb/object
 

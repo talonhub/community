@@ -5,6 +5,8 @@ mod = Module()
 
 @mod.action_class
 class Actions:
+    def refactor():
+        """Trigger refactoring menu of the ide"""
     def complete():
          """Trigger auto complete in the ide (intellijsense)"""
 
