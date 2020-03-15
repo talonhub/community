@@ -135,9 +135,13 @@ class Actions:
     
     def mouse_sleep():
         """Disables control mouse, zoom mouse, and re-enables cursor"""
+        global dragging        
         eye_zoom_mouse.zoom_mouse.disable()
         eye_mouse.control_mouse.disable() 
         show_cursor_helper(True)
+        stop_scroll()
+        if dragging:
+            mouse_drag()
         
     def mouse_scroll_down():
         """Scrolls down"""
