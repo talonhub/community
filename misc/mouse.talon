@@ -17,9 +17,19 @@ run calibration:
 	mouse_click()
 	mouse_click()
 	mouse_click()
+	
+scroll tiny down: mouse_scroll(20)
+scroll tiny up: mouse_scroll(-20)
+#scroll left: mouse_scroll(0, -120)
+#scroll right: mouse_scroll(0, 120)
+scroll [down]: mouse_scroll(120)
+scroll up: mouse_scroll(-120)
+
 curse yes: 
 	user.mouse_show_cursor()
+	
 curse no: 
 	user.mouse_hide_cursor()
+
 drag: 
 	user.mouse_drag()
