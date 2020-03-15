@@ -18,7 +18,7 @@ mod.list('modifier', desc='All modifier keys')
 mod.list('special',  desc='All special keys')
 
 @mod.capture
-def modifiers(m) -> Set[str]:
+def modifiers(m) -> str:
     "One or more modifier keys"
 
 @mod.capture
@@ -124,7 +124,7 @@ ctx.lists['self.special'] = keys
 
 @ctx.capture(rule='{self.modifier}+')
 def modifiers(m):
-    return list(m.modifier)
+    return "-".join(m.modifier)
 
 @ctx.capture(rule='{self.arrow}')
 def arrow(m) -> str:
@@ -157,7 +157,7 @@ def any(m) -> str:
 @ctx.capture(rule='<self.modifiers> <self.any>')
 def key(m) -> str:
     mods = m.modifiers
-    return "-".join(mods + [m.any])
+    return "-".join([mods] + [m.any])
 
 @ctx.capture(rule='{self.letter}+')
 def letters(m):
@@ -165,16 +165,11 @@ def letters(m):
 
 @mod.action_class
 class Actions:
-    def keys_modifier_key(modifier: str, key: str):
-        """(TEMPORARY) Presses the modifier plus supplied number"""
-        res = "-".join([modifier] + [str(key)])
-        actions.key(res)
-
     def keys_uppercase_letters(m: list):
         """Inserts uppercase letters from list"""
         actions.insert("".join(m).upper())
 
     def get_alphabet():
         """Provides the alphabet dictionary"""
-        return ctx.lists['self.letter']
+        return ctx.lists['user.letter']
 
