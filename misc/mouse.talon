@@ -18,7 +18,7 @@ run calibration:
 	mouse_click()
 	mouse_click()
 	
-scroll tiny down: mouse_scroll(20)
+scroll tiny [down]: mouse_scroll(20)
 scroll tiny up: mouse_scroll(-20)
 #scroll left: mouse_scroll(0, -120)
 #scroll right: mouse_scroll(0, 120)
