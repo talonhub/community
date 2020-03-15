@@ -16,6 +16,12 @@ def show_cursor_helper(show):
     ctrl.cursor_visible(show)
     
 mod = Module()
+mod.list('mouse_button',   desc='List of mouse button words to mouse_click index parameter')
+
+@mod.capture
+def mouse_index(m) -> int:
+    "One mouse button index"
+    
 @mod.action_class
 class Actions:
     def mouse_show_cursor():
@@ -70,3 +76,15 @@ class Actions:
         eye_zoom_mouse.zoom_mouse.disable()
         eye_mouse.control_mouse.disable() 
         show_cursor_helper(True)
+
+ctx = Context()
+ctx.lists['self.mouse_button'] = {
+     'righty':  '1',
+     'rickle': '1',
+     'chiff': '0',
+}
+
+@ctx.capture(rule='{self.mouse_button}')
+def mouse_index(m) -> int:
+    return int(m.mouse_button[0])
+    
