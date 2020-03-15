@@ -26,15 +26,17 @@ run calibration:
 	mouse_click()
 	mouse_click()
 	mouse_click()
-	
 
-	
-scroll tiny [down]: mouse_scroll(20)
-scroll tiny up: mouse_scroll(-20)
-#scroll left: mouse_scroll(0, -120)
-#scroll right: mouse_scroll(0, 120)
-scroll [down]: mouse_scroll(120)
 scroll up: mouse_scroll(-120)
+wheel tiny [down]: mouse_scroll(20)
+downer: user.mouse_scroll_down_continuous()
+
+wheel up: user.mouse_scroll_up()
+wheel tiny up: mouse_scroll(-20)
+supper: user.mouse_scroll_up_continuous()
+
+gaze wheel: user.mouse_gaze_scroll()
+wheel stop: user.mouse_scroll_stop()
 
 curse yes: 
 	user.mouse_show_cursor()
