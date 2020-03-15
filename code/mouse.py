@@ -32,7 +32,7 @@ def mouse_scroll(amount):
 
 def scroll_continuous_helper():
     global scroll_amount
-    print("scroll_continuous_helper")
+    #print("scroll_continuous_helper")
     if scroll_amount:
         actions.mouse_scroll(by_lines=False, y=int(scroll_amount / 10))
 
