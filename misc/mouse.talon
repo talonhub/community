@@ -27,7 +27,7 @@ run calibration:
 	mouse_click()
 	mouse_click()
 
-scroll up: mouse_scroll(-120)
+wheel down: user.mouse_scroll_down()
 wheel tiny [down]: mouse_scroll(20)
 downer: user.mouse_scroll_down_continuous()
 
