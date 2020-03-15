@@ -62,8 +62,12 @@ def gaze_scroll():
 def stop_scroll():
     global scroll_amount, scroll_job, gaze_job
     scroll_amount = 0
-    cron.cancel(scroll_job)
-    cron.cancel(gaze_job)
+    if scroll_job:
+        cron.cancel(scroll_job)
+        
+    if gaze_job:
+        cron.cancel(gaze_job)
+        
     scroll_job = None
     gaze_job = None
     
