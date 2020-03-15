@@ -344,7 +344,7 @@ def help_contexts(m) -> str:
 
 @ctx.capture(rule='{self.help_contexts}')
 def help_contexts(m):
-    return m.help_contexts[-1]
+    return m.help_contexts
 
 def ui_event(event, arg):
     if event in ('app_activate', 'app_launch', 'app_close', 'win_open', 'win_close', 'win_title', 'win_focus'):

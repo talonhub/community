@@ -124,11 +124,11 @@ ctx.lists['self.special'] = keys
 
 @ctx.capture(rule='{self.modifier}+')
 def modifiers(m):
-    return "-".join(m.modifier)
+    return "-".join(m.modifier_list)
 
 @ctx.capture(rule='{self.arrow}')
 def arrow(m) -> str:
-    return m.arrow[0]
+    return m.arrow
 
 @ctx.capture(rule='<self.arrow>+')
 def arrows(m) -> str: 
@@ -136,19 +136,19 @@ def arrows(m) -> str:
 
 @ctx.capture(rule='{self.number}')
 def number(m):
-    return m.number[0]
+    return m.number
 
 @ctx.capture(rule='{self.letter}')
 def letter(m):
-    return m.letter[0]
+    return m.letter
 
 @ctx.capture(rule='{self.special}')
 def special(m):
-    return m.special[0]
+    return m.special
 
 @ctx.capture(rule='{self.symbol}')
 def symbol(m):
-    return m.symbol[0]
+    return m.symbol
 
 @ctx.capture(rule='(<self.arrow> | <self.number> | <self.letter> | <self.special>)')
 def any(m) -> str: 

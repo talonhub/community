@@ -185,17 +185,17 @@ class Actions:
         
 @ctx.capture(rule='{self.homophones_canonicals}')
 def homophones_canonical(m):
-    return m.homophones_canonicals[-1]
+    return m.homophones_canonicals
 
 @ctx.capture(rule='{self.homophones_selections}')
 def homophones_selection(m):
     global active_word_list
-    return active_word_list[(selection_map[m.homophones_selections[-1]])]
+    return active_word_list[(selection_map[m.homophones_selections])]
 
 @ctx.capture(rule='<user.formatters> {self.homophones_selections}')
 def homophones_formatted_selection(m):
     global active_word_list
-    selection = active_word_list[(selection_map[m.homophones_selections[-1]])]
+    selection = active_word_list[(selection_map[m.homophones_selections])]
     return actions.user.formatters_format_text(selection, m.formatters) 
 
 ctx.lists['self.homophones_canonicals'] = canonical_list

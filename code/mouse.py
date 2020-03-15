@@ -182,5 +182,5 @@ ctx.lists['self.mouse_button'] = {
 
 @ctx.capture(rule='{self.mouse_button}')
 def mouse_index(m) -> int:
-    return int(m.mouse_button[0])
+    return int(m.mouse_button)
     
