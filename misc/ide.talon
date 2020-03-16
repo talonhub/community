@@ -32,3 +32,40 @@ find (everywhere | all): user.ide_find_everywhere()
 (search | find) file: user.ide_find_file()
 (search | find) path: user.ide_find_in_path()
 recent: user.ide_recent()
+
+
+drag up:
+	user.ide_drag_up()
+
+drag down:
+	user.ide_drag_down()
+
+clone (line|this):
+	user.ide_clone_line()
+
+multiple cursor:
+	user.ide_multi_cursor()
+
+(end|stop) multiple cursor:
+	user.ide_multi_cursor_stop()
+
+multi select up:
+	user.ide_up_cursor()
+
+multi select down:
+	user.ide_down_cursor()
+
+multi select fewer:
+	user.ide_multi_select_fewer()
+
+multi select more:
+	user.ide_multi_select_more()
+
+multi select all:
+	user.ide_multi_select_all()
+
+select less:
+	user.ide_select_less()
+
+select (more|this):
+	user.ide_select_more()

@@ -13,15 +13,15 @@ action(user.ide_done):  user.idea("action EditorCompleteStatement")
 action(user.ide_toggle_tools):  user.idea("action HideAllWindows")
 
 # Movement
-action(user.drag_up):  user.idea("action MoveLineUp")
-action(user.drag_down):  user.idea("action MoveLineDown")
-action(user.multi_cursor): key(shift-alt-insert)
-action(user.multi_cursor_stop): key(escape)
-action(user.up_cursor): user.idea("action EditorCloneCaretAbove")
-action(user.down_cursor): user.idea("action EditorCloneCaretBelow")
+action(user.ide_drag_up):  user.idea("action MoveLineUp")
+action(user.ide_drag_down):  user.idea("action MoveLineDown")
+action(user.ide_multi_cursor): key(shift-alt-insert)
+action(user.ide_multi_cursor_stop): key(escape)
+action(user.ide_up_cursor): user.idea("action EditorCloneCaretAbove")
+action(user.ide_down_cursor): user.idea("action EditorCloneCaretBelow")
 
 # Copying
-action(user.clone_line):  user.idea("action EditorDuplicate")
+action(user.ide_clone_line):  user.idea("action EditorDuplicate")
 clone <number>: user.idea("clone {number}")
 grab <number>: user.idea_grab(number)
 
@@ -60,11 +60,11 @@ action(user.ide_go_back): user.idea("action Back")
 action(user.ide_go_forward): user.idea("action Forward")
 
 # Special Selects
-action(user.select_less): user.idea("action EditorUnSelectWord")
-action(user.select_more): user.idea("action EditorSelectWord")
-action(user.multi_select_fewer): user.idea("action UnselectPreviousOccurrence")
-action(user.multi_select_more): user.idea("action SelectNextOccurrence")
-action(user.multi_select_all): user.idea("action SelectAllOccurrences")
+action(user.ide_select_less): user.idea("action EditorUnSelectWord")
+action(user.ide_select_more): user.idea("action EditorSelectWord")
+action(user.ide_multi_select_fewer): user.idea("action UnselectPreviousOccurrence")
+action(user.ide_multi_select_more): user.idea("action SelectNextOccurrence")
+action(user.ide_multi_select_all): user.idea("action SelectAllOccurrences")
 
 # Search
 action(edit.find): user.idea("action Find")

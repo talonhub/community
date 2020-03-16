@@ -97,3 +97,40 @@ class Actions:
 
     def ide_recent():
         """Open recent files list"""
+
+    def ide_drag_up():
+         """Trigger auto complete in the ide (intellijsense)"""
+
+    def ide_drag_down():
+         """Trigger better auto complete in the ide"""
+
+    def ide_clone_line():
+        """Duplicate the current line"""
+
+    def ide_multi_cursor():
+        """Activate multi cursor mode"""
+
+    def ide_multi_cursor_stop():
+        """Deactivate multi cursor mode"""
+
+    def ide_up_cursor():
+        """Add a cursor above current cursors"""
+
+    def ide_down_cursor():
+        """Add a cursor below current cursors"""
+
+    def ide_select_less():
+        """Unselect current word"""
+
+    def ide_select_more():
+        """Select next word"""
+
+    def ide_multi_select_fewer():
+        """Unselect previously selected word"""
+
+    def ide_multi_select_more():
+        """Select next occurrence of word"""
+
+    def ide_multi_select_all():
+        """Select all occurrences of word"""
+
