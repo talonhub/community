@@ -63,8 +63,8 @@ word streak:
 	key(left)
 word printf: "printf"
 word shell: "shell"
-word Point2d: "Point2d"
-word Point3d: "Point3d"
+word Point two d: "Point2d"
+word Point three d: "Point3d"
 title Point: "Point"
 word angle: "angle"
 dunder in it: "__init__"
@@ -78,7 +78,7 @@ self taught: "self."
 list in it: 
 	insert("[]") 
 	key(left)
-string utf8: 
+string U T F eight: 
 	insert("'utf8'")
 state past: "pass"
 
