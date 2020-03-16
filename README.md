@@ -15,6 +15,11 @@ talon\user\knausj_talon\lang
 
 All user-defined actions in this repository are prefixed "user." by talon
 
+## Jetbrains commands
+
+For Jetbrains commands to work you must install https://plugins.jetbrains.com/plugin/10504-voice-code-idea
+into each editor.
+
 ...
 ## Windows
 Running Talon as an adminstator is highly recommended. 

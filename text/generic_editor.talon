@@ -70,7 +70,7 @@ select word left:
 select word right: 
 	edit.extend_word_right()
 
-select way left: 
+select way left:
 	edit.extend_line_start()
 	
 select way right: 

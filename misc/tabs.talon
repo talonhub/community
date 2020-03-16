@@ -9,6 +9,7 @@ app: MicrosoftEdge.exe
 app: Safari
 app: Code
 app: /.*terminal/
+app: /.*jetbrains/
 -
 open tab: app.tab_open()
 last tab: app.tab_previous()
