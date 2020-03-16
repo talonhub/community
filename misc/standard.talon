@@ -22,7 +22,7 @@ run make (durr | dear): "mkdir "
 (jay son | jason ): "json"
 (http | htp): "http"
 tls: "tls"
-m d five: "md5"
+M D five: "md5"
 (regex | rejex): "regex"
 const: "const "
 static: "static "
@@ -63,8 +63,8 @@ word streak:
 	key(left)
 word printf: "printf"
 word shell: "shell"
-word Point2d: "Point2d"
-word Point3d: "Point3d"
+word Point two D: "Point2d"
+word Point three D: "Point3d"
 title Point: "Point"
 word angle: "angle"
 dunder in it: "__init__"
@@ -78,7 +78,7 @@ self taught: "self."
 list in it: 
 	insert("[]") 
 	key(left)
-string utf8: 
+string U T F eight: 
 	insert("'utf8'")
 state past: "pass"
 
