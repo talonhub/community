@@ -117,7 +117,7 @@ class Actions:
         
 @ctx.capture(rule='{self.formatters}+')
 def formatters(m):
-    return m.formatters
+    return m.formatters_list
  
 @ctx.capture(rule='<self.formatters> <dgndictation>')
 def format_text(m):

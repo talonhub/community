@@ -24,5 +24,8 @@ help context:
 help active context:
 	user.help_context_enabled()
 
+help context <user.help_contexts>: user.help_selected_context(help_contexts)
+
 hide help:
 	user.help_hide()
+
