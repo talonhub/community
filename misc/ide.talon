@@ -1,3 +1,7 @@
+app: /.*jetbrains.*/
+# When tags are supported
+#tags: ide
+-
 refactor: user.ide_refactor()
 
 complete: user.ide_complete()

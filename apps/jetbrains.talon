@@ -1,6 +1,8 @@
 # Requires https://plugins.jetbrains.com/plugin/10504-voice-code-idea
 
 app: /.*jetbrains.*/
+# When tags are supported
+#tags: ide
 -
 action(app.tab_next):
   key(ctrl-tab)
