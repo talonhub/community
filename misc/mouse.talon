@@ -38,6 +38,12 @@ supper: user.mouse_scroll_up_continuous()
 gaze wheel: user.mouse_gaze_scroll()
 wheel stop: user.mouse_scroll_stop()
 
+wheel left: mouse_scroll(0, -40)
+wheel tiny left: mouse_scroll(0, -20)
+
+wheel right: mouse_scroll(0, 40)
+wheel tiny right: mouse_scroll(0, 20)
+
 curse yes: 
 	user.mouse_show_cursor()
 	

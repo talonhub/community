@@ -1,4 +1,4 @@
-from talon import cron, ctrl, ui, Module, Context, actions
+from talon import cron, ctrl, ui, Module, Context, actions, noise
 from talon.engine import engine
 from talon_plugins import speech, eye_mouse, eye_zoom_mouse
 import platform
@@ -14,6 +14,14 @@ scroll_amount = 0
 click_job = None
 scroll_job = None
 gaze_job = None
+cancel_scroll_on_pop = True
+
+def on_pop(active):
+    if gaze_job or scroll_job:
+        stop_scroll()
+
+if cancel_scroll_on_pop:      
+    noise.register('pop', on_pop)
 
 def show_cursor_helper(show):
     """Show/hide the cursor"""
@@ -33,7 +41,7 @@ def mouse_scroll(amount):
 def scroll_continuous_helper():
     global scroll_amount
     #print("scroll_continuous_helper")
-    if scroll_amount:
+    if scroll_amount and eye_zoom_mouse.zoom_mouse.state == eye_zoom_mouse.STATE_IDLE:
         actions.mouse_scroll(by_lines=False, y=int(scroll_amount / 10))
 
 def start_scroll():
@@ -42,20 +50,21 @@ def start_scroll():
     
 def gaze_scroll():
     #print("gaze_scroll")
-    windows = ui.windows()
-    window = None
-    x, y = ctrl.mouse_pos()
-    for w in windows:
-        if w.rect.contains(x, y):
-            window = w.rect
-            break
-    if window is None:
-        #print("no window found!")
-        return
-        
-    midpoint = window.y + window.height / 2
-    amount = int(((y - midpoint) / (window.height / 10)) ** 3)
-    actions.mouse_scroll(by_lines=False, y=amount)
+    if eye_zoom_mouse.zoom_mouse.state == eye_zoom_mouse.STATE_IDLE:
+        windows = ui.windows()
+        window = None
+        x, y = ctrl.mouse_pos()
+        for w in windows:
+            if w.rect.contains(x, y):
+                window = w.rect
+                break
+        if window is None:
+            #print("no window found!")
+            return
+            
+        midpoint = window.y + window.height / 2
+        amount = int(((y - midpoint) / (window.height / 10)) ** 3)
+        actions.mouse_scroll(by_lines=False, y=amount)
     
     #print(f"gaze_scroll: {midpoint} {window.height} {amount}")
     
