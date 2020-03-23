@@ -3,6 +3,9 @@ show command history:
 	
 hide command history:
 	user.history_disable()
+
+clear command history:
+	user.history_clear()
 	
 welcome back: 
 	user.mouse_wake()
