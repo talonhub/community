@@ -1,5 +1,7 @@
 app: /.*terminal/
 app: Cmd.exe
+app: iTerm2
+app: Terminal
 -
 git add: insert("git add ")
 git add patch:
