@@ -137,13 +137,13 @@ class Actions:
 
     def idea_select(select_verb: str, commands: str):
         """Do a select command, then the specified commands"""
-        command_list = ','.join(commands.split(",") + select_verbs_map[select_verb[0]])
+        command_list = ','.join(commands.split(",") + select_verbs_map[select_verb])
         print(command_list)
         idea_commands(command_list)
 
     def idea_movement(movement_verb: str, commands: str):
         """Do a select movement, then the specified commands"""
-        command_list = ','.join(commands.split(",") + movement_verbs_map[movement_verb[0]])
+        command_list = ','.join(commands.split(",") + movement_verbs_map[movement_verb])
         print(command_list)
         idea_commands(command_list)
 
