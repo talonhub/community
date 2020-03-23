@@ -37,3 +37,8 @@ class Actions:
     def history_disable():
         """Disables the history"""
         gui.hide()
+
+    def history_clear():
+        """Clear the history"""
+        global history
+        history = []
