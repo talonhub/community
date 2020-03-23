@@ -8,9 +8,6 @@ class Actions:
     def ide_refactor():
         """Trigger refactoring menu of the ide"""
 
-    def ide_complete():
-        """Trigger auto complete in the ide (intellijsense)"""
-
     def ide_perfect():
         """Trigger better auto complete in the ide"""
 
@@ -97,15 +94,6 @@ class Actions:
 
     def ide_recent():
         """Open recent files list"""
-
-    def ide_drag_up():
-        """Trigger auto complete in the ide (intellijsense)"""
-
-    def ide_drag_down():
-        """Trigger better auto complete in the ide"""
-
-    def ide_clone_line():
-        """Duplicate the current line"""
 
     def ide_multi_cursor():
         """Activate multi cursor mode"""

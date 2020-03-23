@@ -6,22 +6,22 @@ app: /.*jetbrains.*/
 -
 
 # Auto complete
-action(user.ide_complete): user.idea("action CodeCompletion")
+action(code.complete): user.idea("action CodeCompletion")
 action(user.ide_perfect): user.idea("action CodeCompletion,action CodeCompletion")
 action(user.ide_smart): user.idea("action SmartTypeCompletion")
 action(user.ide_done):  user.idea("action EditorCompleteStatement")
 action(user.ide_toggle_tools):  user.idea("action HideAllWindows")
 
 # Movement
-action(user.ide_drag_up):  user.idea("action MoveLineUp")
-action(user.ide_drag_down):  user.idea("action MoveLineDown")
+action(edit.line_swap_up):  user.idea("action MoveLineUp")
+action(edit.line_swap_down):  user.idea("action MoveLineDown")
 action(user.ide_multi_cursor): key(shift-alt-insert)
 action(user.ide_multi_cursor_stop): key(escape)
 action(user.ide_up_cursor): user.idea("action EditorCloneCaretAbove")
 action(user.ide_down_cursor): user.idea("action EditorCloneCaretBelow")
 
 # Copying
-action(user.ide_clone_line):  user.idea("action EditorDuplicate")
+action(edit.line_clone):  user.idea("action EditorDuplicate")
 clone <number>: user.idea("clone {number}")
 grab <number>: user.idea_grab(number)
 
