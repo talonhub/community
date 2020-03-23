@@ -4,8 +4,6 @@ app: /.*jetbrains.*/
 # When tags are supported
 #tags: ide
 -
-action(app.tab_next):
-  key(ctrl-tab)
 
 # Auto complete
 action(user.ide_complete): user.idea("action CodeCompletion")
@@ -82,6 +80,173 @@ action(user.ide_recent): user.idea("action RecentFiles")
 action(edit.find_next): user.idea("action FindNext")
 action(edit.find_previous): user.idea("action FindPrevious")
 action(user.ide_find_in_path): user.idea("action FindInPath")
+
+surround [this] with <phrase> [over]:
+    idea("action SurroundWith")
+    sleep(500ms)
+    insert(phrase)
+
+# Making these longer to reduce collisions with real code dictation.
+insert generated <phrase> [over]:
+    user.idea("action Generate")
+    sleep(500ms)
+    insert(phrase)
+insert template <phrase> [over]:
+    idea("action InsertLiveTemplate")
+    sleep(500ms)
+    insert(phrase)
+
+action(user.ide_create_template): user.idea("action SaveAsTemplate")
+
+action(user.ide_run_menu): user.idea("action ChooseRunConfiguration")
+action(user.ide_run_again): user.idea("action Run")
+# Recording
+action(user.ide_toggle_recording): user.idea("action StartStopMacroRecording")
+action(user.ide_change_recording): user.idea("action EditMacros")
+action(user.ide_play_recording): user.idea("action PlaybackLastMacro")
+
+play recording <phrase> [over]:
+    idea("action PlaySavedMacrosAction")
+    insert(phrase)
+    sleep(500ms)
+    Key("enter")
+
+ # Marks
+action(user.ide_go_mark): user.idea("action ShowBookmarks")
+action(user.ide_toggle_mark): user.idea("action ToggleBookmark")
+
+action(user.ide_go_next_mark): user.idea("action GotoNextBookmark")
+action(user.ide_go_last_mark): user.idea("action GotoPreviousBookmark")
+toggle mark <number>: user.idea("action ToggleBookmark{number}")
+go mark <number>: user.idea("action GotoBookmark{number}")
+# Folding
+action(user.ide_expand_deep): user.idea("action ExpandRegionRecursively")
+action(user.ide_expand_all): user.idea("action ExpandAllRegions")
+action(user.ide_collapse_deep): user.idea("action CollapseRegionRecursively")
+action(user.ide_collapse_all): user.idea("action CollapseAllRegions")
+# Splits
+action(user.ide_split_right): user.idea("action MoveTabRight")
+action(user.ide_split_down): user.idea("action MoveTabDown")
+action(user.ide_split_vertically): user.idea("action SplitVertically")
+action(user.ide_split_horizontally): user.idea("action SplitHorizontally")
+action(user.ide_split_flip): user.idea("action ChangeSplitOrientation")
+action(user.ide_split_window): user.idea("action EditSourceInNewWindow")
+action(user.ide_clear_split): user.idea("action Unsplit")
+action(user.ide_clear_all_splits): user.idea("action UnsplitAll")
+action(user.ide_go_next_split): user.idea("action NextSplitter")
+action(user.ide_go_last_split): user.idea("action LastSplitter")
+# miscellaneous
+# XXX These might be better than the structural ones depending on language.
+action(user.ide_go_next_method): user.idea("action MethodDown")
+action(user.ide_go_last_method): user.idea("action MethodUp")
+# Clipboard
+action(user.ide_clippings): user.idea("action PasteMultiple")
+action(user.ide_copy_path): user.idea("action CopyPaths")
+action(user.ide_copy_reference): user.idea("action CopyReference")
+action(user.ide_copy_pretty): user.idea("action CopyAsRichText")
+# File Creation
+action(user.ide_create_sibling): user.idea("action NewElementSamePlace")
+create sibling <phrase> [over]:
+    user.idea("action NewElementSamePlace")
+    sleep(500ms)
+    insert(phrase)
+action(user.ide_create_file): user.idea("action NewElement")
+create file <phrase> [over]:
+  user.idea("action NewElement")
+  sleep(500ms)
+  insert(phrase)
+# Task Management
+action(user.ide_go_task): user.idea("action tasks.goto")
+action(user.ide_go_browser_task): user.idea("action tasks.open.in.browser")
+action(user.ide_switch_task): user.idea("action tasks.switch")
+action(user.ide_clear_task): user.idea("action tasks.close")
+action(user.ide_configure_servers): user.idea("action tasks.configure.servers")
+# Git / Github (not using verb-noun-adjective pattern, mirroring terminal commands.)
+action(user.ide_git_pull): user.idea("action Vcs.UpdateProject")
+action(user.ide_git_commit): user.idea("action CheckinProject")
+action(user.ide_git_push): user.idea("action CheckinProject")
+action(user.ide_git_log): user.idea("action Vcs.ShowTabbedFileHistory")
+action(user.ide_git_browse): user.idea("action Github.Open.In.Browser")
+action(user.ide_git_get): user.idea("action Github.Create.Gist")
+action(user.ide_git_pull_request): user.idea("action Github.Create.Pull.Request")
+action(user.ide_git_list_requests): user.idea("action Github.View.Pull.Request")
+action(user.ide_git_annotate): user.idea("action Annotate")
+action(user.ide_git_menu): user.idea("action Vcs.QuickListPopupAction")
+# Tool windows:
+# Toggling various tool windows
+action(user.ide_toggle_project): user.idea("action ActivateProjectToolWindow")
+action(user.ide_toggle_find): user.idea("action ActivateFindToolWindow")
+action(user.ide_toggle_run): user.idea("action ActivateRunToolWindow")
+action(user.ide_toggle_debug): user.idea("action ActivateDebugToolWindow")
+action(user.ide_toggle_events): user.idea("action ActivateEventLogToolWindow")
+action(user.ide_toggle_terminal): user.idea("action ActivateTerminalToolWindow")
+action(user.ide_toggle_git): user.idea("action ActivateVersionControlToolWindow")
+action(user.ide_toggle_structure): user.idea("action ActivateStructureToolWindow")
+action(user.ide_toggle_database): user.idea("action ActivateDatabaseToolWindow")
+action(user.ide_toggle_database_changes): user.idea("action ActivateDatabaseChangesToolWindow")
+action(user.ide_toggle_make): user.idea("action ActivatemakeToolWindow")
+action(user.ide_toggle_to_do): user.idea("action ActivateTODOToolWindow")
+action(user.ide_toggle_docker): user.idea("action ActivateDockerToolWindow")
+action(user.ide_toggle_favorites): user.idea("action ActivateFavoritesToolWindow")
+action(user.ide_toggle_last): user.idea("action JumpToLastWindow")
+# Pin/dock/float
+action(user.ide_toggle_pinned): user.idea("action TogglePinnedMode")
+action(user.ide_toggle_docked): user.idea("action ToggleDockMode")
+action(user.ide_toggle_floating): user.idea("action ToggleFloatingMode")
+action(user.ide_toggle_windowed): user.idea("action ToggleWindowedMode")
+action(user.ide_toggle_split): user.idea("action ToggleSideMode")
+# Settings, not windows
+action(user.ide_toggle_tool_buttons): user.idea("action ViewToolButtons")
+action(user.ide_toggle_toolbar): user.idea("action ViewToolBar")
+action(user.ide_toggle_status_bar): user.idea("action ViewStatusBar")
+action(user.ide_toggle_navigation_bar): user.idea("action ViewNavigationBar")
+# Active editor settings
+action(user.ide_toggle_power_save): user.idea("action TogglePowerSave")
+action(user.ide_toggle_whitespace): user.idea("action EditorToggleShowWhitespaces")
+action(user.ide_toggle_indents): user.idea("action EditorToggleShowIndentLines")
+action(user.ide_toggle_line_numbers): user.idea("action EditorToggleShowLineNumbers")
+action(user.ide_toggle_breadcrumbs): user.idea("action EditorToggleShowBreadcrumbs")
+action(user.ide_toggle_gutter_icons): user.idea("action EditorToggleShowGutterIcons")
+action(user.ide_toggle_wrap): user.idea("action EditorToggleUseSoftWraps")
+action(user.ide_toggle_parameters): user.idea("action ToggleInlineHintsAction")
+# Toggleable views
+action(user.ide_toggle_fullscreen): user.idea("action ToggleFullScreen")
+action(user.ide_toggle_distraction_free): user.idea("action ToggleDistractionFreeMode")
+action(user.ide_toggle_presentation_mode): user.idea("action TogglePresentationMode")
+# Tabs
+action(user.ide_go_first_tab): user.idea("action GoToTab1")
+action(user.ide_go_second_tab): user.idea("action GoToTab2")
+action(user.ide_go_third_tab): user.idea("action GoToTab3")
+action(user.ide_go_fourth_tab): user.idea("action GoToTab4")
+action(user.ide_go_fifth_tab): user.idea("action GoToTab5")
+action(user.ide_go_sixth_tab): user.idea("action GoToTab6")
+action(user.ide_go_seventh_tab): user.idea("action GoToTab7")
+action(user.ide_go_eighth_tab): user.idea("action GoToTab8")
+action(user.ide_go_ninth_tab): user.idea("action GoToTab9")
+action(app.tab_next): user.idea("action NextTab")
+action(app.tab_previous): user.idea("action PreviousTab")
+action(user.ide_go_final_tab): user.idea("action GoToLastTab")
+action(user.ide_clear_tab): user.idea("action CloseActiveTab")
+# Quick popups
+action(user.ide_change_scheme): user.idea("action QuickChangeScheme")
+ # Always javadoc
+action(user.ide_toggle_documentation): user.idea("action QuickJavaDoc")
+action(user.ide_toggle_definition): user.idea("action QuickImplementations")
+action(user.ide_pop_type): user.idea("action ExpressionTypeInfo")
+action(user.ide_pop_parameters): user.idea("action ParameterInfo")
+# Breakpoints / debugging
+action(user.ide_go_breakpoints): user.idea("action ViewBreakpoints")
+action(user.ide_toggle_breakpoint): user.idea("action ToggleLineBreakpoint")
+action(user.ide_toggle_method_breakpoint): user.idea("action ToggleMethodBreakpoint")
+action(user.ide_step_over): user.idea("action StepOver")
+action(user.ide_step_into): user.idea("action StepInto")
+action(user.ide_step_smart): user.idea("action SmartStepInto")
+action(user.ide_step_to_line): user.idea("action RunToCursor")
+# Grow / Shrink
+action(user.ide_resize_window_right): user.idea("action ResizeToolWindowRight")
+action(user.ide_resize_window_left): user.idea("action ResizeToolWindowLeft")
+action(user.ide_resize_window_up): user.idea("action ResizeToolWindowUp")
+action(user.ide_resize_window_down): user.idea("action ResizeToolWindowDown")
 
 # Select verb/object
 

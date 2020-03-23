@@ -9,13 +9,13 @@ class Actions:
         """Trigger refactoring menu of the ide"""
 
     def ide_complete():
-         """Trigger auto complete in the ide (intellijsense)"""
+        """Trigger auto complete in the ide (intellijsense)"""
 
     def ide_perfect():
-         """Trigger better auto complete in the ide"""
+        """Trigger better auto complete in the ide"""
 
     def ide_smart():
-         """Trigger type completion in the ide"""
+        """Trigger type completion in the ide"""
 
     def ide_finish():
         """Select auto complete statement"""
@@ -24,7 +24,7 @@ class Actions:
         """Select auto complete statement"""
 
     def ide_toggle_tools():
-         """Hide all windows"""
+        """Hide all windows"""
 
     def ide_extract_variable():
         """Trigger extract variable functionality of IDE"""
@@ -99,10 +99,10 @@ class Actions:
         """Open recent files list"""
 
     def ide_drag_up():
-         """Trigger auto complete in the ide (intellijsense)"""
+        """Trigger auto complete in the ide (intellijsense)"""
 
     def ide_drag_down():
-         """Trigger better auto complete in the ide"""
+        """Trigger better auto complete in the ide"""
 
     def ide_clone_line():
         """Duplicate the current line"""
@@ -134,3 +134,329 @@ class Actions:
     def ide_multi_select_all():
         """Select all occurrences of word"""
 
+    def ide_create_template():
+        """Trigger create template (snippet) functionality of ide"""
+
+    def ide_run_menu():
+        """Trigger run menu of IDE"""
+
+    def ide_run_again():
+        """Run the last item"""
+
+    def ide_toggle_recording():
+        """Start/finish recording"""
+
+    def ide_change_recording():
+        """Trigger menu to select recording"""
+
+    def ide_play_recording():
+        """Play last recording"""
+
+    def ide_go_mark():
+        """Go to bookmarks"""
+
+    def ide_toggle_mark():
+        """Add/remove bookmark"""
+
+    def ide_go_next_mark():
+        """Go the the next bookmark"""
+
+    def ide_go_last_mark():
+        """Go to the last bookmark"""
+
+    def ide_expand_deep():
+        """Expand code recursively"""
+
+    def ide_expand_all():
+        """Expand all blocks in file"""
+
+    def ide_collapse_deep():
+        """Collapse code recursively"""
+
+    def ide_collapse_all():
+        """Collapse all code in file"""
+
+    def ide_split_right():
+        """Move current tab to the right pane"""
+
+    def ide_split_down():
+        """Move tab to the pane below"""
+
+    def ide_split_vertically():
+        """Split the view into panes vertically"""
+
+    def ide_split_horizontally():
+        """Split the view into panes horizontally"""
+
+    def ide_split_flip():
+        """Change split orientation"""
+
+    def ide_split_window():
+        """Open the current file in a new window"""
+
+    def ide_clear_split():
+        """Unsplit the current view (collapse this and previous pane into one)"""
+
+    def ide_clear_all_splits():
+        """Unsplit all views (back to single pane)"""
+
+    def ide_go_next_split():
+        """Go to next pane"""
+
+    def ide_go_last_split():
+        """Go to the previous pane"""
+
+    def ide_go_next_method():
+        """Go to the next method in the file"""
+
+    def ide_go_last_method():
+        """Go to the previous method in the file"""
+
+    def ide_clippings():
+        """Show copy history"""
+
+    def ide_copy_path():
+        """Copy path of file"""
+
+    def ide_copy_reference():
+        """Copy reference (code path to current location)"""
+
+    def ide_copy_pretty():
+        """Copy with formatting"""
+
+    def ide_create_sibling():
+        """Create a new element in the current folder"""
+
+    def ide_create_file():
+        """Create a new element"""
+
+    def ide_go_task():
+        """Open the search for task view"""
+
+    def ide_go_browser_task():
+        """Trigger "open in browser" task"""
+
+    def ide_switch_task():
+        """Open task switcher"""
+
+    def ide_clear_task():
+        """Close tasks list"""
+
+    def ide_configure_servers():
+        """Configure servers in IDE"""
+
+    def ide_git_pull():
+        """Trigger git pull command"""
+
+    def ide_git_commit():
+        """Trigger git commit command"""
+
+    def ide_git_push():
+        """Trigger git push command"""
+
+    def ide_git_log():
+        """Trigger git log command"""
+
+    def ide_git_browse():
+        """Trigger git browsing (open in browser)"""
+
+    def ide_git_get():
+        """Trigger create in git (Github gist)"""
+
+    def ide_git_pull_request():
+        """Trigger create pull request"""
+
+    def ide_git_list_requests():
+        """Show list of pull requests"""
+
+    def ide_git_annotate():
+        """Show git annotate/blame in IDE"""
+
+    def ide_git_menu():
+        """Show the git menu for IDE"""
+
+    def ide_toggle_project():
+        """Hide/Show project (file system) browser window"""
+
+    def ide_toggle_find():
+        """Hide/Show find view"""
+
+    def ide_toggle_run():
+        """Hide/Show run view"""
+
+    def ide_toggle_debug():
+        """Hide/Show debug view"""
+
+    def ide_toggle_events():
+        """Hide/Show events view"""
+
+    def ide_toggle_terminal():
+        """Hide/Show terminal window"""
+
+    def ide_toggle_git():
+        """Hide/Show git view"""
+
+    def ide_toggle_structure():
+        """Hide/Show file/class structure view"""
+
+    def ide_toggle_database():
+        """Hide/Show database view"""
+
+    def ide_toggle_database_changes():
+        """Hide/Show database changes view"""
+
+    def ide_toggle_make():
+        """Hide/Show Make view"""
+
+    def ide_toggle_to_do():
+        """Hide/Show to-do view"""
+
+    def ide_toggle_docker():
+        """Hide/Show Docker view"""
+
+    def ide_toggle_favorites():
+        """Hide/Show favourites"""
+
+    def ide_toggle_last():
+        """Hide/Show the last view you toggled"""
+
+    def ide_toggle_pinned():
+        """Hide/Show pinned view"""
+
+    def ide_toggle_docked():
+        """Dock/undock view"""
+
+    def ide_toggle_floating():
+        """Float/Sink view"""
+
+    def ide_toggle_windowed():
+        """Change windowed mode of view"""
+
+    def ide_toggle_split():
+        """Move where current view is grouped to"""
+
+    def ide_toggle_tool_buttons():
+        """Hide/Show tool buttons"""
+
+    def ide_toggle_toolbar():
+        """Hide/Show toolbar"""
+
+    def ide_toggle_status_bar():
+        """Hide/Show status bar"""
+
+    def ide_toggle_navigation_bar():
+        """Hide/Show navigation bar"""
+
+    def ide_toggle_power_save():
+        """Enable disable power save mode"""
+
+    def ide_toggle_whitespace():
+        """Hide/Show whitespaces"""
+
+    def ide_toggle_indents():
+        """Hide/Show indents"""
+
+    def ide_toggle_line_numbers():
+        """Hide/Show line numbers"""
+
+    def ide_toggle_breadcrumbs():
+        """Hide/Show breadcrumbs"""
+
+    def ide_toggle_gutter_icons():
+        """Hide/Show gutter icons (e.g. breakpoints)"""
+
+    def ide_toggle_wrap():
+        """Enable/disable word wrap"""
+
+    def ide_toggle_parameters():
+        """Enable/Disable inline hints"""
+
+    def ide_toggle_fullscreen():
+        """Enable/Disable full screen"""
+
+    def ide_toggle_distraction_free():
+        """Enable/Disable distraction free mode"""
+
+    def ide_toggle_presentation_mode():
+        """Enable/Disable presentation mode """
+
+    def ide_go_first_tab():
+        """Go to first tab"""
+
+    def ide_go_second_tab():
+        """Go to second tab"""
+
+    def ide_go_third_tab():
+        """Go to third tab"""
+
+    def ide_go_fourth_tab():
+        """Go to fourth tab"""
+
+    def ide_go_fifth_tab():
+        """Go to fifth tab"""
+
+    def ide_go_sixth_tab():
+        """Go to sixth tab"""
+
+    def ide_go_seventh_tab():
+        """Go to seventh tab"""
+
+    def ide_go_eighth_tab():
+        """Go to eighth tab"""
+
+    def ide_go_ninth_tab():
+        """Go to ninth tab"""
+
+    def ide_go_final_tab():
+        """Go to the final tab in the list"""
+
+    def ide_clear_tab():
+        """Close current open view"""
+
+    def ide_change_scheme():
+        """Trigger scheme menu (e.g. to change colour scheme)"""
+
+    def ide_toggle_documentation():
+        """Hide/Show documentation"""
+
+    def ide_toggle_definition():
+        """Hide/Show definition view"""
+
+    def ide_pop_type():
+        """Hide/Show type view"""
+
+    def ide_pop_parameters():
+        """Hide/Show parameters view"""
+
+    def ide_go_breakpoints():
+        """Show list of breakpoints"""
+
+    def ide_toggle_breakpoint():
+        """Add/Remove breakpoint"""
+
+    def ide_toggle_method_breakpoint():
+        """Add/Remove method breakpoint"""
+
+    def ide_step_over():
+        """Step over current statement"""
+
+    def ide_step_into():
+        """Step into current statement"""
+
+    def ide_step_smart():
+        """Trigger smart step into"""
+
+    def ide_step_to_line():
+        """Trigger step to current line"""
+
+    def ide_resize_window_right():
+        """"""
+
+    def ide_resize_window_left():
+        """"""
+
+    def ide_resize_window_up():
+        """"""
+
+    def ide_resize_window_down():
+        """"""
