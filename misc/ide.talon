@@ -4,7 +4,7 @@ app: /.*jetbrains.*/
 -
 refactor: user.ide_refactor()
 
-complete: user.ide_complete()
+complete: code.complete()
 perfect: user.ide_perfect()
 smart: user.ide_smart()
 done: user.ide_done()
@@ -172,13 +172,13 @@ step to line: user.ide_step_to_line()
 (grow | shrink) window down: user.ide_resize_window_down()
 
 drag up:
-	user.ide_drag_up()
+	edit.line_swap_up()
 
 drag down:
-	user.ide_drag_down()
+	edit.line_swap_down()
 
 clone (line|this):
-	user.ide_clone_line()
+	edit.line_clone()
 
 multiple cursor:
 	user.ide_multi_cursor()
