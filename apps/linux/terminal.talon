@@ -16,8 +16,15 @@ go tab <number>:
 run last:
   key(up)
   key(enter)
+rerun <phrase>:
+  key(ctrl-r)
+  insert(phrase)
+rerun search:
+  key(ctrl-r)
 kill all:
   key(ctrl-c)
+action(edit.find):
+  key(ctrl-shift-f)
 action(edit.page_down):
   key(shift-pagedown)
 action(edit.page_up):
