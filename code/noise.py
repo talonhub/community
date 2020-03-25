@@ -1,3 +1,4 @@
+# From https://github.com/talonvoice/examples/blob/master/noise.py
 import time
 
 from talon import ctrl
