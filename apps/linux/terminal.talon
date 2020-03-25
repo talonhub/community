@@ -33,3 +33,7 @@ action(edit.paste):
   key(ctrl-shift-v)
 action(edit.copy):
   key(ctrl-shift-c)
+action(edit.word_left):
+  key(ctrl-w-left)
+action(edit.word_right):
+  key(ctrl-w-right)
