@@ -43,6 +43,9 @@ port_mapping = {
     "jetbrains-rubymine": 8661,
     "jetbrains-webstorm": 8663,
     "google-android-studio": 8652,
+
+    "IntelliJ IDEA": 8653,
+    "PyCharm": 8658
 }
 
 select_verbs_map = {
