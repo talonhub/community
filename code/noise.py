@@ -8,8 +8,6 @@ from talon.track.geom import Point2d
 
 class NoiseModel:
     def __init__(self):
-        self.hiss_start = 0
-        self.hiss_last = 0
         self.button = 0
         self.mouse_origin = Point2d(0, 0)
         self.mouse_last = Point2d(0, 0)
@@ -21,7 +19,7 @@ class NoiseModel:
     def on_move(self, typ, e):
         if typ != tap.MMOVE: return
         self.mouse_last = pos = Point2d(e.x, e.y)
-        if self.hiss_start and not self.dragging:
+        if not self.dragging:
             if (pos - self.mouse_origin).len() > 10:
                 self.dragging = True
                 self.button = 0
