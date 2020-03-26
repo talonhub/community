@@ -1,4 +1,9 @@
 app: /.*jetbrains.*/
+
+app: IntelliJ IDEA
+app: PyCharm
+app: PyCharm64.exe
+
 # When tags are supported
 #tags: ide
 -
