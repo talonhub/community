@@ -119,8 +119,8 @@ class Actions:
 def formatters(m):
     return m.formatters_list
  
-@ctx.capture(rule='<self.formatters> <dgndictation>')
+@ctx.capture(rule='<self.formatters> <phrase>')
 def format_text(m):
-    return FormatText(m.dgndictation, m.formatters)
+    return FormatText(m.phrase, m.formatters)
 
 ctx.lists['self.formatters'] = formatters_dict.keys()

@@ -7,9 +7,9 @@ previous workspace: key(cmd-shift-[)
 next workspace: key(cmd-shift-])
 # Channel
 channel: key(cmd-k)
-channel <dgndictation>: 
+channel <phrase>: 
     key(cmd-k)
-    dictate.lower(dgndictation)
+    dictate.lower(phrase)
 ([channel] unread last | gopreev): key(alt-shift-up)
 ([channel] unread next | goneck): key(alt-shift-down)
 (slack | lack) [channel] info: key(cmd-shift-i)

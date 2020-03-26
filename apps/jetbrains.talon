@@ -31,16 +31,16 @@ grab <number>: user.idea_grab(number)
 
 # Actions
 (action | please): user.idea("action GotoAction")
-(action | please) <dgndictation>:
+(action | please) <phrase>:
   user.idea("action GotoAction")
-  insert(dictate.join_words(dgndictation))
+  insert(dictate.join_words(phrase))
 extend <number>: user.extend_action(number)
 
 # Refactoring
 action(user.ide_refactor): user.idea("action Refactorings.QuickListPopupAction")
-refactor <dgndictation>:
+refactor <phrase>:
   user.idea("action Refactorings.QuickListPopupAction")
-  insert(dictate.join_words(dgndictation))
+  insert(dictate.join_words(phrase))
 action(user.ide_extract_variable): user.idea("action IntroduceVariable")
 action(user.ide_extract_field): user.idea("action IntroduceField")
 action(user.ide_extract_constant): user.idea("action IntroduceConstant")

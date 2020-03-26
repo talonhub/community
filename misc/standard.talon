@@ -1,5 +1,5 @@
 dragon words: "<dgnwords>"
-dragon dictation: "<dgndictation>"
+dragon dictation: "<phrase>"
 slap: key(home enter)
 cd: "cd "
 #cd talon home: "cd {}\n".format(TALON_HOME),
