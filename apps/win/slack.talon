@@ -10,9 +10,9 @@ previous workspace: key(ctrl-shift-tab)
 next workspace: key(ctrl-tab)
 # Channel
 channel: key(ctrl-k)
-channel <dgndictation>: 
+channel <phrase>: 
     key(ctrl-k)
-    dictate.lower(dgndictation)
+    dictate.lower(phrase)
 ([channel] unread last | gopreev): key(alt-shift-up)
 ([channel] unread next | goneck): key(alt-shift-down)
 (slack | lack) [channel] info: key(ctrl-shift-i)

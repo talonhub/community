@@ -181,9 +181,9 @@ When used in .talon, this capture will provide a list of words matching any the 
 You may define other useful captures by combining captures too. For example, the below capture will provide formatted text for commands such as "allcaps dubstring something interesting" => "SOMETHING INTERESTING" -
 
 ```python:
-@ctx.capture(rule='<self.formatters> <dgndictation>')
+@ctx.capture(rule='<self.formatters> <phrase>')
 def format_text(m):
-    return FormatText(m.dgndictation, m.formatters)
+    return FormatText(m.phrase, m.formatters)
 ```
 
 Once defined, you can then use the captures and associated actions in .talon files!
