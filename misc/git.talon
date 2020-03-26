@@ -10,11 +10,11 @@ git new branch: insert("git checkout -b ")
 git push:
   insert("git push")
   key(enter)
-git push origin: insert("git push origin ")
+git push <phrase>: insert("git push {phrase} ")
 git pull:
   insert("git pull")
   key(enter)
-git pull origin: insert("git pull origin ")
+git pull <phrase>: insert("git pull {phrase} ")
 git commit:
   insert("git commit")
   key(enter)
