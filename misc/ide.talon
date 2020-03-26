@@ -1,4 +1,4 @@
-app: /.*jetbrains.*/
+app: /jetbrains/
 
 app: IntelliJ IDEA
 app: PyCharm
