@@ -68,8 +68,8 @@ ctx.lists['self.modifier'] = {
 
 ctx.lists['self.letter'] = dict(zip(default_alphabet, letters_string))
 ctx.lists['self.symbol'] = {
-    'back tick': '`',
-    'comma': ',',
+    'back tick': '`', '`':'`',
+    'comma': ',', ',': ',',
     'dot': '.', 'period': '.',
     'semi': ';', 'semicolon': ';',
     'quote': "'",
