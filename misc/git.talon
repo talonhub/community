@@ -1,4 +1,4 @@
-app: /.*terminal/
+app: /terminal/
 app: Cmd.exe
 -
 git add: insert("git add ")
