@@ -4,6 +4,20 @@ app: iTerm2
 app: Terminal
 -
 git add: insert("git add ")
+git show: insert("git show ")
+git checkout: insert("git checkout ")
+git diff:
+  insert("git diff")
+  key(enter)
+git diff cached:
+  insert("git diff --cached")
+  key(enter)
+git fetch:
+  insert("git fetch")
+  key(enter)
+git fetch all:
+  insert("git fetch --all")
+  key(enter)
 git add patch:
   insert("git add . -p")
   key(enter)
