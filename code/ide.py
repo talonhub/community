@@ -425,6 +425,15 @@ class Actions:
     def ide_toggle_method_breakpoint():
         """Add/Remove method breakpoint"""
 
+    def ide_run_test():
+        """Run the current test"""
+
+    def ide_run_test_again():
+        """Rerun the last-run test"""
+
+    def ide_debug_test():
+        """Run the current test in debug"""
+
     def ide_step_over():
         """Step over current statement"""
 
@@ -436,6 +445,9 @@ class Actions:
 
     def ide_step_to_line():
         """Trigger step to current line"""
+
+    def ide_continue():
+        """Continue running from current statement"""
 
     def ide_resize_window_right():
         """"""
