@@ -19,6 +19,8 @@ cancel_scroll_on_pop = True
 def on_pop(active):
     if gaze_job or scroll_job:
         stop_scroll()
+    elif not eye_zoom_mouse.zoom_mouse.enabled:
+        ctrl.mouse_click(button=0, hold=16000)
 
 if cancel_scroll_on_pop:      
     noise.register('pop', on_pop)
