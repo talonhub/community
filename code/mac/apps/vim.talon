@@ -1,5 +1,7 @@
 app: Vim
 app: Code
+app: /.*/
+and title: /vim/i
 
 -
 delete [around] word:
