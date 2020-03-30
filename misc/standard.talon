@@ -1,6 +1,8 @@
 dragon words: "<dgnwords>"
 dragon dictation: "<phrase>"
-slap: key(home enter)
+slap:
+	key(cmd-right)
+	key(enter)
 cd: "cd "
 #cd talon home: "cd {}\n".format(TALON_HOME),
 #cd talon user: "cd {}\n".format(TALON_USER),
@@ -11,35 +13,16 @@ grep: "grep "
 elle less: "ls "
 run L S: "ls\n"
 run (S S H | S H): "ssh"
-(ssh | sh): "ssh "
-ack: "ack "
 diff: "diff "
 dot pie: ".py"
 run vim: "vim "
 run make: "make\n"
-run jobs: "jobs\n"
 run make (durr | dear): "mkdir "
 (jay son | jason ): "json"
 (http | htp): "http"
 tls: "tls"
 M D five: "md5"
 (regex | rejex): "regex"
-const: "const "
-static: "static "
-tip pent: "int "
-tip char: "char "
-tip byte: "byte "
-tip pent sixty four: "int64_t "
-tip you went sixty four: "uint64_t "
-tip pent thirty two: "int32_t "
-tip you went thirty two: "uint32_t "
-tip pent sixteen: "int16_t "
-tip you went sixteen: "uint16_t "
-tip pent eight: "int8_t "
-tip you went eight: "uint8_t "
-tip size: "size_t"
-tip float: "float "
-tip double: "double "
 args: 
 	insert("()")
 	key(left)
@@ -53,7 +36,6 @@ empty array: "[]"
 comment see: "// "
 word queue: "queue"
 word eye: "eye"
-word bson: "bson"
 word iter: "iter"
 word no: "NULL"
 word cmd: "cmd"
@@ -63,10 +45,6 @@ word streak:
 	key(left)
 word printf: "printf"
 word shell: "shell"
-word Point two D: "Point2d"
-word Point three D: "Point3d"
-title Point: "Point"
-word angle: "angle"
 dunder in it: "__init__"
 self taught: "self."
 (dickt in it | inside bracket | in bracket): 

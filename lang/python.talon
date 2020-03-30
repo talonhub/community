@@ -1,10 +1,17 @@
 code.language: python
 -
+logical and: insert(" and ")
+logical or: insert(" or ")
+state in: insert(" in ")
+is not none: insert(" is not None")
+is none: insert("  None")
 empty dict: insert("{}")
 word (dickt | dictionary): "dict"
 state (def | deaf | deft): "def "
 state else if: "elif "
 state if: "if "
+state else: "else:"
+state self: "self"
 state while: 
 	insert("while ()")
 	edit.left()
