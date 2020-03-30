@@ -6,17 +6,6 @@ hide command history:
 
 clear command history:
 	user.history_clear()
-	
-welcome back: 
-	user.mouse_wake()
-	user.history_enable()
-
-sleep all: 
-	user.history_disable()
-	user.homophones_hide()
-	user.help_hide()
-	user.engine_sleep()
-	user.mouse_sleep()
 
 help alphabet:
 	user.help_alphabet(user.get_alphabet())
