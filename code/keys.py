@@ -172,7 +172,7 @@ def key(m) -> str:
 
 @ctx.capture(rule='{self.letter}+')
 def letters(m):
-    return m.letter
+    return m.letter_list
 
 @mod.action_class
 class Actions:
