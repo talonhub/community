@@ -98,7 +98,8 @@ def _get_nonce(port):
 
 def send_idea_command(cmd):
     print("Sending {}".format(cmd))
-    bundle = ui.active_app().bundle
+    active_app = ui.active_app()
+    bundle = active_app.bundle or active_app.name
     port = port_mapping.get(bundle, None)
     nonce = _get_nonce(port)
     print(f"sending {bundle} {port} {nonce}")
