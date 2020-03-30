@@ -5,13 +5,17 @@ os: mac
 #the below are for 1password, redefine as needed
 -
 action(user.password_fill):
-	key(cmd-\\)
+	user.password_show()
+	sleep(300ms)
+	key(enter)
+	sleep(300ms)
+	key(enter)
 
 action(user.password_show):
-	key(alt-cmd-\\)
+	key(cmd-shift-x)
 	
 action(user.password_new):
-	key(cmd-n)
+	key(cmd-i)
 	
 action(user.password_duplicate):
 	key(cmd-d)

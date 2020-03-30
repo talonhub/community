@@ -6,7 +6,7 @@ import os
 import platform
 
 app_cache = {}
-overrides = {}
+overrides = {'code': 'VSCode', 'grip': 'DataGrip', 'term': 'iTerm2'}
 
 mod = Module()
 mod.list('running', desc='all running applications')
