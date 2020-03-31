@@ -2,17 +2,22 @@
 
 Talon configs for Mac, Windows, and Linux. Very much in progress. This is also intended to work with both Dragon Naturally Speaking and wav2letter.
 
-Clone the repository into `~/.talon/user/knausj_talon`:
+Clone repo into `~/.talon/user`
 
-    git clone git@github.com:knausj85/knausj_talon.git knausj_talon
+    `cd ~/.talon/user`
+    `git clone git@github.com:knausj85/knausj_talon.git knausj_talon`
 
-The folders should look like:
+The folder structure should look like:
 
-    talon\user\knausj_talon
-    talon\user\knausj_talon\code
-    talon\user\knausj_talon\lang
+`~/.talon/user/knausj_talon`
 
-All user-defined actions in this repository are prefixed `user.` by Talon.
+`~/.talon/user/knausj_talon/code`
+
+`~/.talon/user/knausj_talon/lang`
+
+If using wav2letter, extract the entire contents of the tarball (found pinned in Talon's @beta slack channel) in `~/.talon`. The resulting tree should be:
+`~/.talon/w2l/en_US`
+`~/.talon/user/w2l.py`
 
 ## Jetbrains commands
 
