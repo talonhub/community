@@ -120,10 +120,15 @@ With python scripts, you may declare and implement new actions and captures.
 Modules declare actions and captures; actions may have a default implementation. Actions and captures then can be combined to compose extremely useful voice commands in .talon files.
 
 ### Actions
+
+Actions are the functionality assigned to a voice command, e.g. the action for the command "new tab" would implement opening the tab.
+
+All user-defined actions in this repository are prefixed with "user." by talon
+
 ```python
 from talon import Module, Context, actions, settings
 
-mod = Module('description')
+mod = Module()
 @mod.action_class
 class Actions:
     def bare_action():
@@ -142,13 +147,14 @@ Actions may be implemented in a .talon file, allowing the implementation to be c
 os: linux
 app: Slack
 -
-action(user.description.bare_action):
-  insert("LINUX")
+action(user.bare_action):
+    insert("LINUX")
+
 ```
 
 This makes actions very reusable, particularly across OSes, applications, and programming languages. In this way, you could define a single command that works across all programming languages, etc.
 
-For example, `window_management.talon` leverages this:
+For example, window_management.talon leverages this ability to redefine actions per context to make voice commands that do the right thing regardless of operating system (voice commands on the left and actions on the right):
 
 ```insert code:
 new window: app.window_open()
@@ -158,7 +164,24 @@ close window: app.window_close()
 focus <user.running_applications>: user.switcher_focus(running_applications)
 ```
 
-The Talon-declared app actions are defined per-operating system in separate OS-specific .talon files. The voice commands themselves work across all operating systems.
+These Talon-declared app actions are then defined per-operating system in separate OS-specific .talon files:
+
+```insert code:
+os: mac
+-
+action(app.window_open):
+    key(cmd-n)
+```
+
+```insert code
+os: windows
+os: linux
+-
+action(app.window_open):
+    key(ctrl-n)
+```
+
+The voice commands themselves will now work regardless of operating system. For example, "window open" will use `cmd-n` when using mac and `ctrl-n` when using windows or linux.
 
 Note that if you attempt to use an action in a context that has no implementation for the action, you will see warnings in the Talon log.
 
