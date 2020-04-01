@@ -16,8 +16,11 @@ The folder structure should look like:
 `~/.talon/user/knausj_talon/lang`
 
 If using wav2letter, extract the entire contents of the tarball (found pinned in Talon's @beta slack channel) in `~/.talon`. The resulting tree should be:
-`~/.talon/w2l/en_US`
-`~/.talon/user/w2l.py`
+
+```
+~/.talon/w2l/en_US
+~/.talon/user/w2l.py
+```
 
 ## Jetbrains commands
 
@@ -68,6 +71,14 @@ title: /emacs/
 
 In this case the definitions would only be active for the Gnome-terminal app with a window title that contains emacs.
 The /'s around emacs mean it's a regular expression, so you can do all kinds of matching. This should be done sparingly in scripts you intend to share.
+
+You can get the name or bundle for the app via these actions:
+
+```
+app.executable() <-- probably best include both the exe and app name for Windows atm
+app.name()
+app.bundle() <-- OS X
+```
 
 ### Defining Voice Commands
 
