@@ -28,7 +28,17 @@ into each editor.
 
 ## Windows
 
-Running Talon as an administrator is highly recommended.
+Talon should be located in the Program Files directory (or another 'secure' directory). Talon has been signed and now utilizes uiAccess.
+
+C:\Program Files\talon
+
+Note this is required for
+
+(1) eye tracking to work with applications that are run as admin (e.g., regedit) on Windows; and
+
+(2) the zoom mouse to appear over the start menu, and other applications with uiAccess; and
+
+(3) Talon to interact with User Account Control dialogs
 
 ## .talon file
 
