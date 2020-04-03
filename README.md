@@ -2,17 +2,25 @@
 
 Talon configs for Mac, Windows, and Linux. Very much in progress. This is also intended to work with both Dragon Naturally Speaking and wav2letter.
 
-Clone the repository into `~/.talon/user/knausj_talon`:
+Clone repo into `~/.talon/user`
 
-    git clone git@github.com:knausj85/knausj_talon.git knausj_talon
+    `cd ~/.talon/user`
+    `git clone git@github.com:knausj85/knausj_talon.git knausj_talon`
 
-The folders should look like:
+The folder structure should look like:
 
-    talon\user\knausj_talon
-    talon\user\knausj_talon\code
-    talon\user\knausj_talon\lang
+`~/.talon/user/knausj_talon`
 
-All user-defined actions in this repository are prefixed `user.` by Talon.
+`~/.talon/user/knausj_talon/code`
+
+`~/.talon/user/knausj_talon/lang`
+
+If using wav2letter, extract the entire contents of the tarball (found pinned in Talon's @beta slack channel) in `~/.talon`. The resulting tree should be:
+
+```
+~/.talon/w2l/en_US
+~/.talon/user/w2l.py
+```
 
 ## Jetbrains commands
 
@@ -23,7 +31,17 @@ into each editor.
 
 ## Windows
 
-Running Talon as an administrator is highly recommended.
+Talon should be located in the Program Files directory (or another 'secure' directory). Talon has been signed and now utilizes uiAccess.
+
+C:\Program Files\talon
+
+Note this is required for
+
+(1) eye tracking to work with applications that are run as admin (e.g., regedit) on Windows; and
+
+(2) the zoom mouse to appear over the start menu, and other applications with uiAccess; and
+
+(3) Talon to interact with User Account Control dialogs
 
 ## .talon file
 
@@ -63,6 +81,14 @@ title: /emacs/
 
 In this case the definitions would only be active for the Gnome-terminal app with a window title that contains emacs.
 The /'s around emacs mean it's a regular expression, so you can do all kinds of matching. This should be done sparingly in scripts you intend to share.
+
+You can get the name or bundle for the app via these actions:
+
+```
+app.executable() <-- probably best include both the exe and app name for Windows atm
+app.name()
+app.bundle() <-- OS X
+```
 
 ### Defining Voice Commands
 
@@ -105,10 +131,15 @@ With python scripts, you may declare and implement new actions and captures.
 Modules declare actions and captures; actions may have a default implementation. Actions and captures then can be combined to compose extremely useful voice commands in .talon files.
 
 ### Actions
+
+Actions are the functionality assigned to a voice command, e.g. the action for the command "new tab" would implement opening the tab.
+
+All user-defined actions in this repository are prefixed with "user." by talon
+
 ```python
 from talon import Module, Context, actions, settings
 
-mod = Module('description')
+mod = Module()
 @mod.action_class
 class Actions:
     def bare_action():
@@ -127,13 +158,14 @@ Actions may be implemented in a .talon file, allowing the implementation to be c
 os: linux
 app: Slack
 -
-action(user.description.bare_action):
-  insert("LINUX")
+action(user.bare_action):
+    insert("LINUX")
+
 ```
 
 This makes actions very reusable, particularly across OSes, applications, and programming languages. In this way, you could define a single command that works across all programming languages, etc.
 
-For example, `window_management.talon` leverages this:
+For example, window_management.talon leverages this ability to redefine actions per context to make voice commands that do the right thing regardless of operating system (voice commands on the left and actions on the right):
 
 ```insert code:
 new window: app.window_open()
@@ -143,7 +175,24 @@ close window: app.window_close()
 focus <user.running_applications>: user.switcher_focus(running_applications)
 ```
 
-The Talon-declared app actions are defined per-operating system in separate OS-specific .talon files. The voice commands themselves work across all operating systems.
+These Talon-declared app actions are then defined per-operating system in separate OS-specific .talon files:
+
+```insert code:
+os: mac
+-
+action(app.window_open):
+    key(cmd-n)
+```
+
+```insert code
+os: windows
+os: linux
+-
+action(app.window_open):
+    key(ctrl-n)
+```
+
+The voice commands themselves will now work regardless of operating system. For example, "window open" will use `cmd-n` when using mac and `ctrl-n` when using windows or linux.
 
 Note that if you attempt to use an action in a context that has no implementation for the action, you will see warnings in the Talon log.
 
