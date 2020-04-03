@@ -45,8 +45,8 @@ mod.setting('mouse_enable_pop_click', 'str')
 mod.setting('mouse_enable_pop_stops_scroll', 'str')
 
 ctx = Context()
-ctx.settings["user.mouse_enable_pop_click"] = False
-ctx.settings["user.mouse_enable_pop_stops_scroll"] = False
+ctx.settings["user.mouse_enable_pop_click"] = 'False'
+ctx.settings["user.mouse_enable_pop_stops_scroll"] = 'False'
 
 ctx.lists['self.mouse_button'] = {
      #right click
