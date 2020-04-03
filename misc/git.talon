@@ -1,7 +1,8 @@
 app: /terminal/
-app: Cmd.exe
+app: cmd.exe
 app: iTerm2
 app: Terminal
+app: Windows Command Processor
 -
 git add patch: insert("git add . -p\n")
 git add: insert("git add ")
