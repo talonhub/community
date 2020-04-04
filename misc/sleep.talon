@@ -3,11 +3,11 @@ mode: all
 welcome back: 
 	user.mouse_wake()
 	user.history_enable()
+	speech.enable()
     mode.disable('sleep')
     mode.enable('command')
     mode.disable('dictation')
-	speech.enable()
-
+	
 sleep all: 
 	user.history_disable()
 	user.homophones_hide()
