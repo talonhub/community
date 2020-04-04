@@ -11,3 +11,7 @@ class Actions:
     def engine_wake():
         """Wake the engine"""
         engine.mimic("wake up".split()),
+
+    def engine_mimic(cmd: str):
+        """Sends phrase to engine"""
+        engine.mimic(cmd.split())
