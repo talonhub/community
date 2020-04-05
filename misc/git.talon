@@ -15,6 +15,7 @@ git clone clipboard:
   insert("git clone ")
   edit.paste()
   key(enter)
+git commit message <phrase>: insert("git commit -m '{phrase}'")
 git commit: insert("git commit\n")
 git diff (colour|color) words: insert("git diff --color-words ")
 git diff: insert("git diff ")
