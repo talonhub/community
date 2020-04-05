@@ -20,5 +20,5 @@ action(user.password_edit):
 	key(cmd-e)
 	
 action(user.password_delete):
-	key(cmd-delete)
+	key(cmd-backspace)
 
