@@ -1,7 +1,7 @@
 dragon words: "<dgnwords>"
 dragon dictation: "<phrase>"
 slap:
-	key(cmd-right)
+	edit.line_end()
 	key(enter)
 cd: "cd "
 #cd talon home: "cd {}\n".format(TALON_HOME),
@@ -59,7 +59,6 @@ list in it:
 string U T F eight: 
 	insert("'utf8'")
 state past: "pass"
-
 zoom [in]: edit.zoom_in()
 zoom out: edit.zoom_out()
 (page | scroll) up: key(pgup)
