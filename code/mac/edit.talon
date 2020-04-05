@@ -144,7 +144,8 @@ action(edit.page_up):
 action(edit.paste):
 	key(cmd-v)
 	
-#action(paste_match_style):
+action(edit.paste_match_style):
+	key(cmd-alt-shift-v)
 
 action(edit.print):
 	key(cmd-p)
