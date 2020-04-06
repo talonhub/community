@@ -12,6 +12,7 @@ app: com.apple.Terminal
 
 os: linux
 app: Caja
+app: /terminal/
 -
 settings():
     # enable if you'd like the picker gui to automatically appear when explorer has focus

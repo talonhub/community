@@ -45,7 +45,7 @@ if "Windows-10" in platform:
     nameBuffer = ctypes.create_unicode_buffer(size.contents.value)
     GetUserNameEx(NameDisplay, nameBuffer, size)
 
-    #todo use expanduser for cross platform support
+    # todo use expanduser for cross platform support
     ctx.lists['user.file_manager_directory_remap'] = {
         "Desktop": os.path.join(user_path, "Desktop"),
         "Downloads": os.path.join(user_path, "Downloads"),
@@ -56,11 +56,11 @@ if "Windows-10" in platform:
 
     ctx.lists['user.file_manager_directory_remap'][nameBuffer.value] = user_path
     ctx.lists['user.file_manager_directory_exclusions'] = [
-    "Run",
-    "Task View",
-    "",
-    "Task Switching",
-]
+        "Run",
+        "Task View",
+        "",
+        "Task Switching",
+    ]
     supported_programs = ["explorer.exe", "cmd.exe",]
     terminal_programs = ["cmd.exe"]
 
@@ -77,7 +77,7 @@ elif "linux" in platform.lower():
     is_linux = True
     ctx.lists['user.file_manager_directory_remap'] = {}
     ctx.lists['user.file_manager_directory_exclusions'] = {}
-    supported_programs = ['Caja']
+    supported_programs = ['Caja', 'terminal']
     terminal_programs = ['terminal']
 
 @mod.capture
@@ -270,6 +270,10 @@ def update_maps(window):
             if item in window.app.bundle:
                 is_supported = True
                 break
+        elif is_linux:
+            if item in window.app.name:
+                is_supported = True
+                break
     for item in terminal_programs:
         if is_windows:
             if item in window.app.exe.lower():
@@ -294,6 +298,11 @@ def update_maps(window):
         return
 
     if is_mac and "~" in title:
+        title = os.path.expanduser(title)
+
+    # Handle hostname before path
+    if is_linux and ":" in title:
+        title = title.split(":")[1].strip()
         title = os.path.expanduser(title)
 
     current_path = Path(title)
