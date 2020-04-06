@@ -72,15 +72,12 @@ def file_manager_file_index(m) -> int:
 class Actions:
     def file_manager_open_parent():
         """file_manager_open_parent"""
-        actions.key("alt-up")
         
     def file_manager_go_forward():
         """file_manager_go_forward_directory"""
-        actions.key("alt-right")
 
     def file_manager_go_back():
         """file_manager_go_forward_directory"""
-        actions.key("alt-left")
 
     def file_manager_show_pickers():
         """Shows the pickers"""
@@ -155,6 +152,17 @@ class Actions:
             else:
                 current_folder_page = total_folder_pages
 
+    def file_manager_terminal_open_directory(path: Union[str, int]):
+        """file_manager_terminal_open_directory TODO: remove once we can implement that take parameters in .talon"""
+        actions.insert("cd ")
+        if isinstance(path, int):
+            actions.insert(folder_selections[path])
+        else:
+            actions.insert(path)
+
+        actions.key("enter")
+        actions.user.file_manager_refresh_title()
+
     def file_manager_open_directory(path: Union[str, int]):
         """opens the directory"""
         actions.key("ctrl-l")
@@ -182,18 +190,26 @@ def current_directory():
 path_last_update = None
 is_showing = False
 
+supported_programs = ["explorer.exe", "cmd.exe"]
+
 def update_maps(window):
     global path_last_update, is_showing, folder_selections, file_selections, current_folder_page, current_file_page
 
     if not window.app.exe or window.title != ui.active_window().title:
         return
-
+    print("window.app.exe: " + window.app.exe)
     title = window.title
 
     if title in registry.lists['user.file_manager_directory_remap'][0]:
         title = registry.lists['user.file_manager_directory_remap'][0][title]
 
-    if not "explorer.exe" in window.app.exe.lower() or title in registry.lists["user.file_manager_directory_exclusions"][0] or not title:
+    is_supported = False
+    for item in supported_programs:
+        if item in window.app.exe.lower():
+            is_supported = True
+            break
+
+    if not is_supported or title in registry.lists["user.file_manager_directory_exclusions"][0] or not title:
         ctx.lists["self.file_manager_directories"] = []
         ctx.lists["self.file_manager_files"] = []
         path_last_update = None
@@ -202,7 +218,6 @@ def update_maps(window):
         gui_files.hide()
         return
 
-    print("title: " + title)
     current_path = Path(title)
 
     if not current_path.is_dir():
