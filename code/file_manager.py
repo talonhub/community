@@ -31,6 +31,7 @@ file_selections = []
 is_windows = False
 is_mac = False
 is_terminal = False
+is_linux = False
 
 if "Windows-10" in platform:
     is_windows = True
@@ -71,6 +72,13 @@ elif "Darwin" in platform:
     ctx.lists['user.file_manager_directory_exclusions'] = {}
     supported_programs = ["com.apple.Terminal", "com.apple.finder"]
     terminal_programs = ["com.apple.Terminal",]
+
+elif "linux" in platform.lower():
+    is_linux = True
+    ctx.lists['user.file_manager_directory_remap'] = {}
+    ctx.lists['user.file_manager_directory_exclusions'] = {}
+    supported_programs = ['Caja']
+    terminal_programs = ['terminal']
 
 @mod.capture
 def file_manager_directories(m) -> str:
@@ -219,6 +227,10 @@ class Actions:
                 else:
                     actions.insert(path)
                 actions.key("enter")
+            elif is_linux:
+                actions.key("ctrl-l")
+                actions.insert(path)
+                actions.key("enter")
 
     def file_manager_select_directory(path: Union[str, int]):
         """selects the directory"""
@@ -267,6 +279,9 @@ def update_maps(window):
             if item in window.app.bundle:
                 is_terminal = True
                 break
+        elif is_linux:
+            if item in window.app.name:
+                is_terminal = True
 
     if not is_supported or title in registry.lists["user.file_manager_directory_exclusions"][0] or not title or title == "":
         ctx.lists["self.file_manager_directories"] = []
