@@ -11,7 +11,7 @@ def create_spoken_forms(symbols, max_len=10):
 
 def get_directory_map(current_path):
     directories = [f.name for f in os.scandir(current_path) if f.is_dir()]
-    print(len(directories))
+    #print(len(directories))
     spoken_forms = create_spoken_forms(directories)
     return dict(zip(spoken_forms, directories))
 

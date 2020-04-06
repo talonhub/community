@@ -235,10 +235,10 @@ is_showing = False
 
 def update_maps(window):
     global path_last_update, is_showing, folder_selections, file_selections, current_folder_page, current_file_page, is_terminal
-    print("app: " + str(window.app))
-    print("app: " + str(window.app.bundle))
-    print("title: " + str(window.title))
-    print("ui.active_window().doc: ")
+    #print("app: " + str(window.app))
+    #print("app: " + str(window.app.bundle))
+    #print("title: " + str(window.title))
+    #print("ui.active_window().doc: ")
     if not window.app.exe or window.title != ui.active_window().title:
         return
     title = window.title
