@@ -1,7 +1,11 @@
 os: mac
 app: Terminal
 app: iTerm2
+app: com.apple.Terminal
 -
+action(user.file_manager_open_parent):
+    insert("cd ..")
+    key(enter)
 action(app.tab_open):
   key(cmd-t)
 action(app.tab_close):
@@ -26,3 +30,4 @@ suspend:
 resume:
   insert("fg")
   key(enter)
+
