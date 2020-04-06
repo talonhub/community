@@ -3,10 +3,11 @@ from os.path import expanduser
 from subprocess import Popen
 from pathlib import Path
 from typing import List, Union
-from . import utils
 import os
 import math
 import platform
+import re
+from itertools import islice
 
 platform = platform.platform(terse=True)
 #print("platform = " + platform)
@@ -213,6 +214,7 @@ class Actions:
         else:
             if is_windows:
                 actions.key("ctrl-l")
+                #print("windows")
                 if isinstance(path, int):
                     actions.insert(folder_selections[path])
                 else:
@@ -244,15 +246,30 @@ class Actions:
 
 path_last_update = None
 is_showing = False
+pattern = re.compile(r"[A-Z][a-z]*|[a-z]+|\d")
+def create_spoken_forms(symbols, max_len=10):
+    return [' '.join(list(islice(pattern.findall(s), max_len))) for s in symbols]
 
+def get_directory_map(current_path):
+    directories = [f.name for f in os.scandir(current_path) if f.is_dir()]
+    #print(len(directories))
+    spoken_forms = create_spoken_forms(directories)
+    return dict(zip(spoken_forms, directories))
+
+def get_file_map(current_path):
+    files = [f.name for f in os.scandir(current_path) if f.is_file()]
+    spoken_forms = create_spoken_forms([p for p in files])
+    return dict(zip(spoken_forms, [f for f in files]))
+  
 def update_maps(window):
     global path_last_update, is_showing, folder_selections, file_selections, current_folder_page, current_file_page, is_terminal
     #print("app: " + str(window.app))
     #print("app: " + str(window.app.bundle))
     #print("title: " + str(window.title))
     #print("ui.active_window().doc: ")
-    if not window.app.exe or window.title != ui.active_window().title:
+    if not window.app.exe or window != ui.active_window(): #window.title != ui.active_window().title:
         return
+
     title = window.title
 
     if title in registry.lists['user.file_manager_directory_remap'][0]:
@@ -288,6 +305,7 @@ def update_maps(window):
                 is_terminal = True
 
     if not is_supported or title in registry.lists["user.file_manager_directory_exclusions"][0] or not title or title == "":
+        #print("skipped " + title)
         ctx.lists["self.file_manager_directories"] = []
         ctx.lists["self.file_manager_files"] = []
         path_last_update = None
@@ -310,8 +328,8 @@ def update_maps(window):
         return
     path_last_update = current_path
     
-    ctx.lists["self.file_manager_directories"] = utils.get_directory_map(current_path)
-    ctx.lists["self.file_manager_files"] = utils.get_file_map(current_path)
+    ctx.lists["self.file_manager_directories"] = get_directory_map(current_path)
+    ctx.lists["self.file_manager_files"] = get_file_map(current_path)
 
     index = 1
     folder_selections = []
