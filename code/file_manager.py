@@ -191,6 +191,17 @@ class Actions:
             else:
                 current_folder_page = total_folder_pages
 
+    def file_manager_open_volume(volume: str):
+        """file_manager_open_volume"""
+        if is_windows:
+            if is_terminal:
+                actions.insert(volume)
+                actions.key("enter")
+                actions.user.file_manager_refresh_title()
+            else:
+                actions.user.file_manager_open_directory(volume)
+        #todo: mac etc
+
     def file_manager_terminal_open_directory(path: Union[str, int]):
         """file_manager_terminal_open_directory TODO: remove once we can implement that take parameters in .talon"""
         actions.insert("cd ")
