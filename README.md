@@ -6,6 +6,8 @@ Clone repo into `~/.talon/user`
 
     `cd ~/.talon/user`
     `git clone git@github.com:knausj85/knausj_talon.git knausj_talon`
+    
+Alternatively, access the directory by right clicking the Talon icon in taskbar, and clicking `Scripting>Open ~/talon`, then navigating to `user`.
 
 The folder structure should look like:
 
