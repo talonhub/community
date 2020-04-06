@@ -5,14 +5,10 @@ os: mac
 #the below are for 1password, redefine as needed
 -
 action(user.password_fill):
-	user.password_show()
-	sleep(300ms)
-	key(enter)
-	sleep(300ms)
-	key(enter)
+	key(cmd-\)
 
 action(user.password_show):
-	key(cmd-shift-x)
+	key(cmd-alt-\)
 	
 action(user.password_new):
 	key(cmd-i)
@@ -24,5 +20,5 @@ action(user.password_edit):
 	key(cmd-e)
 	
 action(user.password_delete):
-	key(cmd-delete)
+	key(cmd-backspace)
 
