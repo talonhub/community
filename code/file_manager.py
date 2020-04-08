@@ -1,4 +1,4 @@
-from talon import app, Module, Context, actions, ui, imgui
+from talon import app, Module, Context, actions, ui, imgui, settings
 from os.path import expanduser
 from subprocess import Popen
 from pathlib import Path
@@ -367,7 +367,7 @@ def update_maps(window):
     #print(str(ctx.lists["self.directories"]))
     #print(str(ctx.lists["self.files"]))
     #print("Show pickers: " + str(registry.settings["user.auto_show_pickers"]))
-    if not is_showing and ctx.settings["self.file_manager_auto_show_pickers"] >= 1:
+    if not is_showing and settings.get("user.file_manager_auto_show_pickers") >= 1:
         is_showing = True
 
         gui_folders.show()

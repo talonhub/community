@@ -45,8 +45,8 @@ mod.setting('mouse_enable_pop_click', 'str')
 mod.setting('mouse_enable_pop_stops_scroll', 'str')
 
 ctx = Context()
-ctx.settings["user.mouse_enable_pop_click"] = 'False'
-ctx.settings["user.mouse_enable_pop_stops_scroll"] = 'False'
+ctx.settings["self.mouse_enable_pop_click"] = 'False'
+ctx.settings["self.mouse_enable_pop_stops_scroll"] = 'False'
 
 ctx.lists['self.mouse_button'] = {
      #right click
@@ -176,10 +176,10 @@ def show_cursor_helper(show):
 
 def on_pop(active):
     if (gaze_job or scroll_job):
-        if ctx.settings["self.mouse_enable_pop_stops_scroll"].lower() == 'true':
+        if settings.get("user.mouse_enable_pop_stops_scroll").lower() == 'true':
             stop_scroll()
     elif not eye_zoom_mouse.zoom_mouse.enabled and eye_mouse.mouse.attached_tracker is not None:
-        if ctx.settings["self.mouse_enable_pop_click"].lower() == 'true':
+        if settings.get("user.mouse_enable_pop_click").lower() == 'true':
             ctrl.mouse_click(button=0, hold=16000)
 
 noise.register('pop', on_pop)
