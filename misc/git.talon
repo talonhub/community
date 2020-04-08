@@ -43,4 +43,5 @@ git stash pop: insert("git stash pop\n")
 git stash: insert("git stash\n")
 git status: insert("git status\n")
 git tag: insert("git tag ")
+git merge <phrase>:insert("git merge {phrase}")
 
