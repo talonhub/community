@@ -55,15 +55,15 @@ class Actions:
         """Launch a new application by path"""
         ui.launch(path=path)
 
-    def list_running():
+    def switcher_list_running():
         """Lists all running applications"""
         gui.show()
 
-    def hide_list_running():
+    def switcher_hide_running():
         """Hides list of running applications"""
         gui.hide()
 
-@imgui.open(y=0)
+@imgui.open()
 def gui(gui: imgui.GUI):
     gui.text("Names of running applications")
     gui.line()
