@@ -1,4 +1,4 @@
-from talon import cron, ctrl, ui, Module, Context, actions, noise, settings, registry
+from talon import cron, ctrl, ui, Module, Context, actions, noise, settings
 from talon.engine import engine
 from talon_plugins import speech, eye_mouse, eye_zoom_mouse
 import platform
@@ -176,10 +176,10 @@ def show_cursor_helper(show):
 
 def on_pop(active):
     if (gaze_job or scroll_job):
-        if registry.settings["user.mouse_enable_pop_stops_scroll"][1] == 'true':
+        if ctx.settings["self.mouse_enable_pop_stops_scroll"].lower() == 'true':
             stop_scroll()
     elif not eye_zoom_mouse.zoom_mouse.enabled and eye_mouse.mouse.attached_tracker is not None:
-        if registry.settings["user.mouse_enable_pop_click"][1] == 'true':
+        if ctx.settings["self.mouse_enable_pop_click"].lower() == 'true':
             ctrl.mouse_click(button=0, hold=16000)
 
 noise.register('pop', on_pop)

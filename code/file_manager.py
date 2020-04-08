@@ -1,4 +1,4 @@
-from talon import app, Module, Context, actions, ui, imgui, registry
+from talon import app, Module, Context, actions, ui, imgui
 from os.path import expanduser
 from subprocess import Popen
 from pathlib import Path
@@ -22,7 +22,7 @@ mod.list('file_manager_directory_exclusions', desc='list of titles that are excl
 mod.setting('file_manager_auto_show_pickers', 'int')
 
 ctx = Context()
-ctx.settings["user.file_manager_auto_show_pickers"] = 1
+ctx.settings["self.file_manager_auto_show_pickers"] = 1
 
 user_path = os.path.expanduser('~')
 
@@ -69,7 +69,7 @@ elif "Darwin" in platform:
     ###
     #print("Mac OS X!!")
     is_mac = True
-    ctx.lists['user.file_manager_directory_remap'] = {}
+    ctx.lists['user.file_manager_directory_remap'] = {"": "/Volumes"}
     ctx.lists['user.file_manager_directory_exclusions'] = {}
     supported_programs = ["com.apple.Terminal", "com.apple.finder"]
     terminal_programs = ["com.apple.Terminal",]
@@ -283,8 +283,8 @@ def update_maps(window):
 
     title = window.title
 
-    if title in registry.lists['user.file_manager_directory_remap'][0]:
-        title = registry.lists['user.file_manager_directory_remap'][0][title]
+    if title in ctx.lists['self.file_manager_directory_remap']:
+        title = ctx.lists['self.file_manager_directory_remap'][title]
 
     is_supported = False
     is_terminal = False
@@ -315,7 +315,7 @@ def update_maps(window):
             if item in window.app.name:
                 is_terminal = True
 
-    if not is_supported or title in registry.lists["user.file_manager_directory_exclusions"][0] or not title or title == "":
+    if not is_supported or title in ctx.lists["self.file_manager_directory_exclusions"] or not title or title == "":
         #print("skipped " + title)
         ctx.lists["self.file_manager_directories"] = []
         ctx.lists["self.file_manager_files"] = []
@@ -339,8 +339,12 @@ def update_maps(window):
         return
     path_last_update = current_path
     
-    ctx.lists["self.file_manager_directories"] = get_directory_map(current_path)
-    ctx.lists["self.file_manager_files"] = get_file_map(current_path)
+    try:
+        ctx.lists["self.file_manager_directories"] = get_directory_map(current_path)
+        ctx.lists["self.file_manager_files"] = get_file_map(current_path)
+    except Exception as e:
+        ctx.lists["self.file_manager_directories"] ={"ERROR": str(e)}
+        ctx.lists["self.file_manager_files"] = {"ERROR": str(e)}
 
     index = 1
     folder_selections = []
@@ -363,7 +367,7 @@ def update_maps(window):
     #print(str(ctx.lists["self.directories"]))
     #print(str(ctx.lists["self.files"]))
     #print("Show pickers: " + str(registry.settings["user.auto_show_pickers"]))
-    if not is_showing and registry.settings["user.file_manager_auto_show_pickers"][1] >= 1:
+    if not is_showing and ctx.settings["self.file_manager_auto_show_pickers"] >= 1:
         is_showing = True
 
         gui_folders.show()
