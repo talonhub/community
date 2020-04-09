@@ -1,12 +1,12 @@
-code.language: python
+code.language: csharp
 -
 settings():
-    user.lang_private_function_formatter = "SNAKE_CASE"
-    user.lang_protected_function_formatter = "SNAKE_CASE"
-    user.lang_public_function_formatter = "SNAKE_CASE"
-    user.lang_private_variable_formatter = "SNAKE_CASE"
-    user.lang_protected_variable_formatter = "SNAKE_CASE"
-    user.lang_public_variable_formatter = "SNAKE_CASE"
+    user.lang_private_function_formatter = "PRIVATE_CAMEL_CASE"
+    user.lang_protected_function_formatter = "PROTECTED_CAMEL_CASE"
+    user.lang_public_function_formatter = "PROTECTED_CAMEL_CASE"
+    user.lang_private_variable_formatter = "PRIVATE_CAMEL_CASE"
+    user.lang_protected_variable_formatter = "PROTECTED_CAMEL_CASE"
+    user.lang_public_variable_formatter = "PROTECTED_CAMEL_CASE"
 
 action(user.lang_operator_equal): " == "
 action(user.lang_operator_not_equal): " != "
@@ -35,35 +35,35 @@ action(user.lang_bitwise_operator_left_shift): " << "
 action(user.lang_bitwise_operator_left_shift_equals): " <<= "
 action(user.lang_bitwise_operator_right_shift): " >> "
 action(user.lang_bitwise_operator_right_shift_equals): " >>= "
-action(user.lang_null): "None"
-action(user.lang_is_null): " is None"
-action(user.lang_is_not_null): " is not None"
-action(user.lang_self): "self"
+action(user.lang_null): "null"
+action(user.lang_is_null): " == null"
+action(user.lang_is_not_null): " != null"
+action(user.lang_self): "this"
 action(user.lang_state_if): 
-	insert("if :")
+	insert("if()")
 	key(left)
 action(user.lang_state_else_if): 
-	insert("elif :")
+	insert("else if()")
 	key(left)
 action(user.lang_state_else): 
-	insert("else:")
-	key(enter)
+	insert("else\n{{\n}}\n")
+	key(up )
 action(user.lang_state_switch):
-	insert("switch ()") 
+	insert("switch()") 
 	edit.left()
 action(user.lang_state_case):
 	insert("case \nbreak;") 
 	edit.up()
 action(user.lang_state_for): "for "
 action(user.lang_state_for_each): 
-	insert("for in ")
+	insert("foreach() ")
 	key(left)
 	edit.word_left()
 	key(space) 
 	edit.left()
 action(user.lang_state_go_to): "go to "
 action(user.lang_state_while): 
-	insert("while ()")
+	insert("while()")
 	edit.left()
 action(user.lang_type_definition): "typedef "	
 action(user.lang_typedef_struct):	
@@ -72,32 +72,29 @@ action(user.lang_typedef_struct):
 	edit.up()
 	key(tab)
 action(user.lang_type_class): "class "
-action(user.lang_import): "import "
+action(user.lang_import): "using  "
 action(user.lang_from_import):
 	insert("from import ")
 	key(left)
 	edit.word_left()
 	key(space) 
 	edit.left()
+action(user.lang_include):
+	insert("using ")
+	edit.left()
 action(user.lang_include_system):
-	insert("#include <>")
+	insert("using ")
 	edit.left()
 action(user.lang_include_local):
-	insert('#include ""')
+	insert('using ')
 	edit.left()
-action(user.lang_comment_here): "#"
+action(user.lang_comment_here): "//"
  
-action(user.lang_private_function):
-	insert("def _")
-
-action(user.lang_protected_function):
-    user.lang_private_function()
-
-action(user.lang_public_function):
-    insert("def ")
-
-dunder in it: insert("__init__")
-
+action(user.lang_private_function): insert("private ")
+action(user.lang_public_static_function): insert("private static  ")
+action(user.lang_protected_function): insert("protected  ")
+action(user.lang_public_function): insert("public  ")
+action(user.lang_public_static_function): insert("public static ")
 
 
 	

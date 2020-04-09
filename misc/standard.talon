@@ -1,5 +1,3 @@
-dragon words: "<dgnwords>"
-dragon dictation: "<phrase>"
 slap:
 	edit.line_end()
 	key(enter)
@@ -33,7 +31,6 @@ block:
 	insert("{}") 
 	key(left enter enter up tab)
 empty array: "[]"
-comment see: "// "
 word queue: "queue"
 word eye: "eye"
 word iter: "iter"
@@ -45,8 +42,6 @@ word streak:
 	key(left)
 word printf: "printf"
 word shell: "shell"
-dunder in it: "__init__"
-self taught: "self."
 (dickt in it | inside bracket | in bracket): 
 	insert("{}") 
 	key(left)
@@ -61,8 +56,6 @@ string U T F eight:
 state past: "pass"
 zoom [in]: edit.zoom_in()
 zoom out: edit.zoom_out()
-(page | scroll) up: key(pgup)
-(page | scroll) [down]: key(pgdown)
 copy: edit.copy()
 cut: edit.cut()
 paste: edit.paste()

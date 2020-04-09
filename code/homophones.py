@@ -140,7 +140,6 @@ mod.list('homophones_selections', desc='list of valid selection indexes')
 def homophones_canonical(m) -> str:
     "Returns a single string"
 
-
 @mod.capture 
 def homophones_selection(m) -> str:
     "Returns the selected homophone"

@@ -79,6 +79,7 @@ def every_word(word_func):
 formatters_dict = {
     "DOUBLE_UNDERSCORE": (NOSEP, first_vs_rest(lambda w: "__%s__" % w)),
     "PRIVATE_CAMEL_CASE": (NOSEP, first_vs_rest(lambda w: w, lambda w: w.capitalize())),
+    "PROTECTED_CAMEL_CASE": (NOSEP, every_word(lambda w: w.capitalize())),
     "PUBLIC_CAMEL_CASE": (NOSEP, every_word(lambda w: w.capitalize())),
     "SNAKE_CASE": (NOSEP, first_vs_rest(lambda w: w.lower(), lambda w: "_" + w.lower())),
     "NO_SPACES": (NOSEP, every_word(lambda w: w)),
@@ -131,15 +132,17 @@ mod.list('formatters', desc='list of formatters')
 @mod.capture
 def formatters(m) -> List[str]:
     "Returns a list of formatters"
-
+ 
 @mod.capture
 def format_text(m) -> str:
     "Formats the text and returns a string"
 
 @mod.action_class
 class Actions:
-    def formatted_text(text: str, formatter: str) -> str:
+    def formatted_text(text: List[str], formatter: str) -> str:
         """Takes text and formats according to formatter"""
+        #test = " ".join(text)
+        #print("test = " + test)
         return format_text_helper(text, [formatter])
 
     def formatters_format_text(text: Union[str, List[str]], fmtrs: List[str]) -> str:
@@ -148,7 +151,7 @@ class Actions:
             return format_text_helper(text, fmtrs)
         else:
             return format_text_helper([text], fmtrs)
-        
+      
 @ctx.capture(rule='{self.formatters}+')
 def formatters(m):
     return m.formatters_list

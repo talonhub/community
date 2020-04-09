@@ -11,4 +11,3 @@ action(user.file_manager_go_forward):
 action(user.file_manager_open_parent):
     key("alt-up")
 
-
