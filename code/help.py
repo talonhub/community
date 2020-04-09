@@ -5,10 +5,13 @@ import math
 
 mod = Module()
 mod.list('help_contexts', desc='list of available contexts')
+mod.list('help_context_index', desc='available selection numbers for the active help page')
+selection_numbers = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty',]
+selection_map = {n: i for i, n in enumerate(selection_numbers)}
 
 ctx = Context()
 context_mapping = {}
-
+ 
 current_context_page = 1
 sorted_context_map_keys = None
 
@@ -19,7 +22,7 @@ total_page_count = 1
 
 cached_active_contexts_list = []
 
-max_contexts_per_page = 25
+max_contexts_per_page = len(selection_numbers)
 max_commands_per_page = 15 
 
 live_update = True
@@ -55,6 +58,24 @@ def gui_alphabet(gui: imgui.GUI):
     if gui.button('close'):
         gui_alphabet.hide()
 
+# translates 1-based index -> actual index in sorted_context_map_keys
+def get_context_page(index):
+    return math.ceil(index / max_contexts_per_page)
+
+def get_total_context_pages():
+    return math.ceil(len(sorted_context_map_keys) / max_contexts_per_page)
+
+def get_current_context_page_length():
+    start_index = (current_context_page -1) * max_contexts_per_page
+    return len(sorted_context_map_keys[start_index:start_index + max_contexts_per_page])
+
+# translates 1-based index -> actual index in sorted_context_map_keys
+def get_command_page(index):
+    return math.ceil(index / max_commands_per_page)
+
+def get_selected_context_command_pages():
+    return math.ceil(len(context_mapping[selected_context]) / max_commands_per_page)
+
 @imgui.open(y=0)
 def gui_context_help(gui: imgui.GUI):
     global context_mapping
@@ -68,42 +89,43 @@ def gui_context_help(gui: imgui.GUI):
 
     # if no selected context, draw the contexts
     if selected_context is None:
-        total_page_count = int(math.ceil(len(sorted_context_map_keys) / max_contexts_per_page))
+        total_page_count = get_total_context_pages()
 
         if not show_enabled_contexts_only:
-            gui.text("Help: All Contexts ({}/{})".format(current_context_page,total_page_count))
+            gui.text("Help: All ({}/{})".format(current_context_page, total_page_count))
         else:
             gui.text("Help: Active Contexts Only ({}/{})".format(current_context_page,total_page_count))
 
         gui.line()
-
+    
         current_item_index = 1
-
+        current_selection_index = 1
         for key in sorted_context_map_keys:
-            target_page = math.ceil(current_item_index / max_contexts_per_page)
+            target_page = get_context_page(current_item_index)
 
             if current_context_page == target_page:
-                button_name = str(current_item_index) + ": {}"
+                button_name = str(current_selection_index) + ": {}"
 
                 if not show_enabled_contexts_only and key in cached_active_contexts_list:
-                    button_name = str(current_item_index) + " [ACTIVE]: {} "
+                    button_name = str(current_selection_index) + " [ACTIVE]: {} "
 
                 if gui.button(button_name.format(key)):
-                    selected_context = key
-            
+                    selected_context = ctx.lists['self.help_contexts'][key]
+                current_selection_index = current_selection_index + 1
+
             current_item_index += 1
 
         if total_page_count > 1:
             gui.spacer()
-            if gui.button('Next Page...'):
+            if gui.button('Next...'):
                 actions.user.help_next()
 
-            if gui.button("Previous Page..."):
+            if gui.button("Previous..."):
                 actions.user.help_previous()      
     
     #if there's a selected context, draw the commands for it
     else:
-        total_page_count = math.ceil(len(context_mapping[selected_context]) / max_commands_per_page)
+        total_page_count = get_selected_context_command_pages()
         if selected_context in cached_active_contexts_list:
             gui.text("{} ({}/{}) [ACTIVE]".format(selected_context, selected_context_page, total_page_count))
         else:
@@ -112,9 +134,8 @@ def gui_context_help(gui: imgui.GUI):
         gui.line()
         
         current_item_index = 1
-        
         for key, val in context_mapping[selected_context].items():
-            target_page = int(math.ceil(current_item_index / max_commands_per_page))
+            target_page = get_command_page(current_item_index)
 
             if selected_context_page == target_page:
                 val = val.split("\n")
@@ -130,19 +151,19 @@ def gui_context_help(gui: imgui.GUI):
 
         gui.spacer()
         if total_page_count > 1:
-            if gui.button('Next Page...'):
+            if gui.button('Next...'):
                 actions.user.help_next()
                 
-            if gui.button("Previous Page..."):
+            if gui.button("Previous..."):
                 actions.user.help_previous()
 
-        if gui.button('Main Help'):
+        if gui.button('Return'):
             actions.user.help_return()
 
-    if gui.button('refresh'):
+    if gui.button('Refresh'):
         actions.user.help_refresh()
 
-    if gui.button('close'):
+    if gui.button('Close'):
         actions.user.help_hide()
 
 def reset():
@@ -167,6 +188,9 @@ def update_active_contexts_cache(active_contexts):
     for context in active_contexts:
         cached_active_contexts_list.append(str(context))
 
+#example usage todo: make a list definable in .talon
+#overrides = {"generic browser" : "broswer"}
+overrides = {}
 def refresh_context_mapping(enabled_only = False):
     global context_mapping
     global sorted_context_map_keys
@@ -183,6 +207,10 @@ def refresh_context_mapping(enabled_only = False):
     context_mapping = {}
     for context in registry.contexts.values():
         short_name = str(context).replace('(Context', '').replace(')', '').split('.')[-1].replace('_', " ")
+
+        if short_name in overrides:
+            short_name = overrides[short_name]
+
         #print(short_name)
         context_name = str(context)
         if enabled_only and context in active_contexts or not enabled_only:
@@ -198,7 +226,21 @@ def refresh_context_mapping(enabled_only = False):
                 cached_short_context_names[short_name] = context_name
 
     ctx.lists['self.help_contexts'] = cached_short_context_names
-    sorted_context_map_keys = sorted(context_mapping)
+    sorted_context_map_keys = sorted(cached_short_context_names)
+    refresh_help_context_indexes()
+
+def refresh_help_context_indexes():
+    global is_context_help_showing
+    if not is_context_help_showing or selected_context is not None:
+        ctx.lists["self.help_context_index"] = []
+    elif selected_context is None:
+        length = get_current_context_page_length()
+        #print("length = " + str(length))
+        if length < len(selection_numbers):
+           ctx.lists['self.help_context_index'] = selection_numbers[:length]
+        else:
+            ctx.lists['self.help_context_index'] = selection_numbers
+    #print(str(ctx.lists['self.help_context_index']))
     
 events_registered = False
 def register_events(register: bool):
@@ -216,13 +258,17 @@ class Actions:
     def help_alphabet(ab: dict):
         """Provides the alphabet dictionary"""
         # what you say is stored as a trigger
-        global alphabet
+        global alphabet, is_context_help_showing
+        is_context_help_showing = False
         alphabet = ab
         reset()
         gui_context_help.hide()        
         gui_alphabet.show()
-        register_events(False)        
+        register_events(False)
 
+        #refresh since context help is no longer showing...
+        refresh_help_context_indexes()
+                
     def help_context_enabled():
         """Display contextual command info"""
         global is_context_help_showing
@@ -232,7 +278,7 @@ class Actions:
         refresh_context_mapping(enabled_only=True)
         gui_alphabet.hide()
         gui_context_help.show()
-        register_events(True)        
+        register_events(True)       
 
     def help_context():
         """Display contextual command info"""
@@ -242,7 +288,7 @@ class Actions:
         refresh_context_mapping()
         gui_alphabet.hide()
         gui_context_help.show()
-        register_events(True)        
+        register_events(True)      
 
     def help_selected_context(m: str):
         """Display command info for selected context"""
@@ -256,12 +302,12 @@ class Actions:
         else:
             selected_context_page = 1
             update_active_contexts_cache(registry.active_contexts())
-
+        
         is_context_help_showing = True
         selected_context = m
         gui_alphabet.hide()
         gui_context_help.show()
-        register_events(True)        
+        register_events(True) 
     
     def help_next():
         """Navigates to next page"""
@@ -283,6 +329,17 @@ class Actions:
                 else:
                     selected_context_page = 1
 
+            refresh_help_context_indexes()
+
+    def help_select_index(index: int):
+        """Select the context by a number"""
+        global sorted_context_map_keys, selected_context
+        if is_context_help_showing:
+            #print("help_select_index")
+            if selected_context is None:
+                selected_context = ctx.lists['self.help_contexts'][sorted_context_map_keys[(current_context_page - 1) * max_contexts_per_page + index]]
+                refresh_help_context_indexes()
+                
     def help_previous():
         """Navigates to previous page"""
         global is_context_help_showing
@@ -297,11 +354,14 @@ class Actions:
                     current_context_page -= 1
                 else:
                     current_context_page = total_page_count
+
             else:
                 if selected_context_page != 1:
                     selected_context_page -= 1
                 else:
                     selected_context_page = total_page_count
+                    
+            refresh_help_context_indexes()
 
     def help_return():
         """Returns to the main help window"""
@@ -309,11 +369,12 @@ class Actions:
         global selected_context_page
         global is_context_help_showing
         global show_enabled_contexts_only
-
+        
         if is_context_help_showing:
             refresh_context_mapping(show_enabled_contexts_only)
             selected_context_page = 1
             selected_context = None
+            refresh_help_context_indexes()
 
     def help_refresh():
         """Refreshes the help"""
@@ -327,28 +388,39 @@ class Actions:
             else:
                 update_active_contexts_cache(registry.active_contexts())
 
+            refresh_help_context_indexes()
+
+            
     def help_hide():
         """Hides the help"""
         global is_context_help_showing
         is_context_help_showing = False
-
         reset()
         gui_alphabet.hide()
         gui_context_help.hide()
         refresh_context_mapping()
         register_events(False)        
-        
+
 @mod.capture
 def help_contexts(m) -> str:
     "Returns a context name"
 
+@mod.capture
+def help_context_index(m) -> int:
+    "help context selection index"
+
 @ctx.capture(rule='{self.help_contexts}')
 def help_contexts(m):
     return m.help_contexts
+
+@ctx.capture(rule='{self.help_context_index}')
+def help_context_index(m):
+    return selection_map[m.help_context_index]
 
 def ui_event(event, arg):
     if event in ('app_activate', 'app_launch', 'app_close', 'win_open', 'win_close', 'win_title', 'win_focus'):
         #print("updating...")
         update_title()
 
+ctx.lists['self.help_context_index'] = []
 refresh_context_mapping()

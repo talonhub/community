@@ -1,4 +1,4 @@
-from talon import app, Module, Context, actions, ui
+from talon import app, Module, Context, actions, ui,imgui
 from talon.voice import Capture
 import re
 import time
@@ -54,6 +54,21 @@ class Actions:
     def switcher_launch(path: str):
         """Launch a new application by path"""
         ui.launch(path=path)
+
+    def switcher_list_running():
+        """Lists all running applications"""
+        gui.show()
+
+    def switcher_hide_running():
+        """Hides list of running applications"""
+        gui.hide()
+
+@imgui.open()
+def gui(gui: imgui.GUI):
+    gui.text("Names of running applications")
+    gui.line()
+    for line in  ctx.lists['self.running']:
+        gui.text(line)
 
 def update_lists():
     new = {}
