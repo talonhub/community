@@ -188,6 +188,9 @@ def update_active_contexts_cache(active_contexts):
     for context in active_contexts:
         cached_active_contexts_list.append(str(context))
 
+#example usage todo: make a list definable in .talon
+#overrides = {"generic browser" : "broswer"}
+overrides = {}
 def refresh_context_mapping(enabled_only = False):
     global context_mapping
     global sorted_context_map_keys
@@ -204,6 +207,10 @@ def refresh_context_mapping(enabled_only = False):
     context_mapping = {}
     for context in registry.contexts.values():
         short_name = str(context).replace('(Context', '').replace(')', '').split('.')[-1].replace('_', " ")
+
+        if short_name in overrides:
+            short_name = overrides[short_name]
+
         #print(short_name)
         context_name = str(context)
         if enabled_only and context in active_contexts or not enabled_only:
@@ -233,7 +240,7 @@ def refresh_help_context_indexes():
            ctx.lists['self.help_context_index'] = selection_numbers[:length]
         else:
             ctx.lists['self.help_context_index'] = selection_numbers
-    print(str(ctx.lists['self.help_context_index']))
+    #print(str(ctx.lists['self.help_context_index']))
     
 events_registered = False
 def register_events(register: bool):
@@ -328,7 +335,7 @@ class Actions:
         """Select the context by a number"""
         global sorted_context_map_keys, selected_context
         if is_context_help_showing:
-            print("help_select_index")
+            #print("help_select_index")
             if selected_context is None:
                 selected_context = ctx.lists['self.help_contexts'][sorted_context_map_keys[(current_context_page - 1) * max_contexts_per_page + index]]
                 refresh_help_context_indexes()
