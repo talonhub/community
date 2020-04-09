@@ -23,11 +23,11 @@ def launch_applications(m) -> Capture:
 ctx = Context()
 @ctx.capture(rule='{self.running}')
 def running_applications(m):
-    return m._words[-1]
+    return m.running
     
 @ctx.capture(rule='{self.launch}')
 def launch_applications(m):
-    return m
+    return m.launch
     
 def split_camel(word):
     return re.findall(r'[0-9A-Z]*[a-z]+(?=[A-Z]|$)', word)
@@ -43,11 +43,8 @@ def get_words(name):
 class Actions:
     def switcher_focus(name: str):
         """Focus a new application by  name"""
-        full = ctx.lists['self.running'].get(name)
-        if not full:
-            return
         for app in ui.apps():
-            if app.name == full and not app.background:
+            if app.name == name and not app.background:
                 app.focus()
                 break
 
