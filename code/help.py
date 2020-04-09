@@ -110,7 +110,7 @@ def gui_context_help(gui: imgui.GUI):
                     button_name = str(current_selection_index) + " [ACTIVE]: {} "
 
                 if gui.button(button_name.format(key)):
-                    selected_context = key
+                    selected_context = ctx.lists['self.help_contexts'][key]
                 current_selection_index = current_selection_index + 1
 
             current_item_index += 1
