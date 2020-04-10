@@ -1,4 +1,4 @@
-from talon import cron, ctrl, ui, Module, Context, actions, noise, settings
+from talon import cron, ctrl, ui, Module, Context, actions, noise, settings, imgui
 from talon.engine import engine
 from talon_plugins import speech, eye_mouse, eye_zoom_mouse
 import platform
@@ -43,6 +43,7 @@ mod = Module()
 mod.list('mouse_button',   desc='List of mouse button words to mouse_click index parameter')
 mod.setting('mouse_enable_pop_click', 'str')
 mod.setting('mouse_enable_pop_stops_scroll', 'str')
+mod.setting('mouse_focus_change_stops_scroll', 'str')
 
 ctx = Context()
 ctx.settings["self.mouse_enable_pop_click"] = 'False'
@@ -57,10 +58,18 @@ ctx.lists['self.mouse_button'] = {
      'chiff': '0',
 }
 
+continuous_scoll_mode = ""
+
+@imgui.open(x=700, y=0)
+def gui_wheel(gui: imgui.GUI):
+    gui.text("Scroll mode: {}".format(continuous_scoll_mode))
+    gui.line()
+    if gui.button("Wheel Stop [stop scrolling]"):
+        actions.user.mouse_scroll_stop()
+
 @mod.capture
 def mouse_index(m) -> int:
     "One mouse button index"
-    
 
 @mod.action_class
 class Actions:
@@ -127,10 +136,14 @@ class Actions:
         
     def mouse_scroll_down_continuous():
         """Scrolls down continuously"""
+        global continuous_scoll_mode
+        continuous_scoll_mode = "scroll down continuous"
         mouse_scroll(80)()
         
         if scroll_job is None:
             start_scroll()
+
+        gui_wheel.show()
         
     def mouse_scroll_up():
         """Scrolls up"""
@@ -138,10 +151,14 @@ class Actions:
         
     def mouse_scroll_up_continuous():
         """Scrolls up continuously"""
+        global continuous_scoll_mode
+        continuous_scoll_mode = "scroll up continuous"
         mouse_scroll(-80)()
         
         if scroll_job is None:
             start_scroll() 
+
+        gui_wheel.show()
 
     def mouse_scroll_stop():
         """Stops scrolling"""
@@ -149,7 +166,10 @@ class Actions:
         
     def mouse_gaze_scroll():
         """Starts gaze scroll"""
+        global continuous_scoll_mode
+        continuous_scoll_mode = "gaze scroll"
         start_cursor_scrolling()
+        gui_wheel.show()
         
 def show_cursor_helper(show):
     """Show/hide the cursor"""
@@ -236,13 +256,13 @@ def stop_scroll():
         
     scroll_job = None
     gaze_job = None
+    gui_wheel.hide()
+
     
 def start_cursor_scrolling():
     global scroll_job, gaze_job
     stop_scroll()
     gaze_job = cron.interval("60ms", gaze_scroll)
-    
-
 
 @ctx.capture(rule='{self.mouse_button}')
 def mouse_index(m) -> int:
