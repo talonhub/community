@@ -41,13 +41,15 @@ hidden_cursor = os.path.join(os.path.dirname(os.path.realpath(__file__)), "Resou
 
 mod = Module()
 mod.list('mouse_button',   desc='List of mouse button words to mouse_click index parameter')
-mod.setting('mouse_enable_pop_click', 'str')
-mod.setting('mouse_enable_pop_stops_scroll', 'str')
-mod.setting('mouse_focus_change_stops_scroll', 'str')
+mod.setting('mouse_enable_pop_click', int)
+mod.setting('mouse_enable_pop_stops_scroll', int)
+mod.setting('mouse_focus_change_stops_scroll', int)
+mod.setting('mouse_wake_hides_cursor', int)
 
 ctx = Context()
-ctx.settings["self.mouse_enable_pop_click"] = 'False'
-ctx.settings["self.mouse_enable_pop_stops_scroll"] = 'False'
+ctx.settings["self.mouse_enable_pop_click"] = 0
+ctx.settings["self.mouse_enable_pop_stops_scroll"] = 0
+ctx.settings["self.mouse_wake_hides_cursor"] = 0
 
 ctx.lists['self.mouse_button'] = {
      #right click
@@ -85,7 +87,8 @@ class Actions:
         """Enable control mouse, zoom mouse, and disables cursor"""
         eye_zoom_mouse.zoom_mouse.enable()
         eye_mouse.control_mouse.enable() 
-        show_cursor_helper(False)
+        if settings.get("user.mouse_wake_hides_cursor") >= 1:
+            show_cursor_helper(False)
         
     def mouse_calibrate():
         """Start calibration"""
@@ -196,10 +199,10 @@ def show_cursor_helper(show):
 
 def on_pop(active):
     if (gaze_job or scroll_job):
-        if settings.get("user.mouse_enable_pop_stops_scroll").lower() == 'true':
+        if settings.get("user.mouse_enable_pop_stops_scroll") >= 1:
             stop_scroll()
     elif not eye_zoom_mouse.zoom_mouse.enabled and eye_mouse.mouse.attached_tracker is not None:
-        if settings.get("user.mouse_enable_pop_click").lower() == 'true':
+        if settings.get("user.mouse_enable_pop_click") >= 1:
             ctrl.mouse_click(button=0, hold=16000)
 
 noise.register('pop', on_pop)
