@@ -450,13 +450,13 @@ class Actions:
         """Continue running from current statement"""
 
     def ide_resize_window_right():
-        """"""
+        """Resize window right"""
 
     def ide_resize_window_left():
-        """"""
+        """Resize window left"""
 
     def ide_resize_window_up():
-        """"""
+        """Resize window up"""
 
     def ide_resize_window_down():
-        """"""
+        """Resize window down"""
