@@ -24,6 +24,34 @@ If using wav2letter, extract the entire contents of the tarball (found pinned in
 ~/.talon/user/w2l.py
 ```
 
+## Getting started with Talon for coding with this depot
+
+Use the “help all,” "help active," and “help alphabet” commands to browse avaiable commands. Available commands can change with the application or window title that has focus.
+
+It's recommended to learn the alphabet first, then get familiar with the keys, symbols, and formatters. 
+
+The alphabet is defined here
+https://github.com/knausj85/knausj_talon/blob/master/code/keys.py#L6
+
+Keys are defined later in the same file: 
+https://github.com/knausj85/knausj_talon/blob/master/code/keys.py#L67
+
+Symbols: 
+https://github.com/knausj85/knausj_talon/blob/master/text/symbols.talon
+
+Formatters: 
+https://github.com/knausj85/knausj_talon/blob/master/code/formatters.py#L102
+
+Try using formatters by saying e.g. “snake hello world,” which will insert hello_world
+
+Mutliple formatters can be used togther, e.g. “dubstring snake hello world,” which will insert "hello_world" 
+
+Once you have the basics of text input down, try copying some code from one window to another.
+
+After that, explore using ordinal repetition for easily repeating a command without pausing (e.g., saying “go up fifth” will go up five lines), window switching (“focus chrome”), and moving around in your text editor of choice. 
+
+If you use vim, just start with the numbers and alphabet, otherwise look at generic_editor.talon as well at jetbrains, vscode, and any other integrations).  
+
 ## Jetbrains commands
 
 For Jetbrains commands to work you must install https://plugins.jetbrains.com/plugin/10504-voice-code-idea
