@@ -65,35 +65,23 @@ action(user.language_state_go_to): "go to "
 action(user.language_state_while): 
 	insert("while()")
 	edit.left()
-action(user.language_type_definition): "typedef "	
-action(user.language_typedef_struct):	
-	insert("typedef struct")
-	insert("{{\n\n}}")
-	edit.up()
-	key(tab)
+#action(user.language_type_definition): "typedef "	
+#action(user.language_typedef_struct):	
+#	insert("typedef struct")
+#	insert("{{\n\n}}")
+#	edit.up()
+#	key(tab)
 action(user.language_type_class): "class "
 action(user.language_import): "using  "
-action(user.language_from_import):
-	insert("from import ")
-	key(left)
-	edit.word_left()
-	key(space) 
-	edit.left()
-action(user.language_include):
-	insert("using ")
-	edit.left()
-action(user.language_include_system):
-	insert("using ")
-	edit.left()
-action(user.language_include_local):
-	insert('using ')
-	edit.left()
+action(user.language_from_import): "using "
+action(user.language_include): insert("using ")
+action(user.language_include_system): insert("using ")
+action(user.language_include_local): insert('using ')
 action(user.language_comment): "//"
 action(user.language_private_function): insert("private ")
 action(user.language_public_static_function): insert("private static  ")
 action(user.language_protected_function): insert("protected  ")
 action(user.language_public_function): insert("public  ")
-action(user.language_public_static_function): insert("public static ")
 
 
 	
