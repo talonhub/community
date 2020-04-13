@@ -73,7 +73,6 @@ op mod: user.language_operator_modulo()
     user.language_private_function_formatter(phrase)
     insert("()")
     edit.left()
-    sleep(100ms)
 
 ^pro funky <phrase>$:
     #todo: once .talon action definitions can take parameters, combine these functions
@@ -82,44 +81,43 @@ op mod: user.language_operator_modulo()
     #() surely isn't correct for all languages, will be part of the combined function above
     insert("()")
     key(left)
-    sleep(100ms)
 	
 ^pub funky <phrase>$:
     #todo: once .talon action definitions can take parameters, combine these functions
     user.language_public_function()
     user.language_public_function_formatter(phrase)	
-    sleep(50ms)
     insert("()")
-
+    key(left)
 ^static funky <phrase>$:
     #todo: once .talon action definitions can take parameters, combine these functions
     user.language_private_function()
     user.language_private_function_formatter(phrase)
-	
+    insert("()")
+    key(left)
 ^pro static funky <phrase>$:
     #todo: once .talon action definitions can take parameters, combine these functions
     user.language_protected_static_function()
     user.language_protected_function_formatter(phrase)
-
+    insert("()")
+    key(left)
 ^pub static funky <phrase>$:
     #todo: once .talon action definitions can take parameters, combine these functions
 	user.language_public_static_function()
     user.language_public_function_formatter(phrase)
-
+    insert("()")
+    key(left)
 ^pub static <phrase>$:
     #todo: once .talon action definitions can take parameters, combine these functions
 	user.language_public_static_function()
     user.language_public_function_formatter(phrase)
-
+    insert("()")
+    key(left)
 ^comment$: user.language_comment()
-
-#comments the line
 ^comment line$: 
     #todo: this should probably be a single function once
     #.talon supports implementing actions with parameters?
 	edit.line_start()
     user.language_comment()
-    
 #adds comment to the start of the line
 ^comment line <phrase>$: 
     #todo: this should probably be a single function once
@@ -128,13 +126,11 @@ op mod: user.language_operator_modulo()
     user.language_comment()
 	dictate.lower(phrase)
     insert(" ")
-
 ^comment <phrase>$: 
     #todo: this should probably be a single function once
     #.talon supports implementing actions with parameters?
 	user.language_comment()
 	dictate.lower(phrase)
-    
 ^(line | inline) comment <phrase>$:
     #todo: this should probably be a single function once
     #.talon supports implementing actions with parameters?
