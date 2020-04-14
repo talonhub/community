@@ -52,6 +52,22 @@ After that, explore using ordinal repetition for easily repeating a command with
 
 If you use vim, just start with the numbers and alphabet, otherwise look at generic_editor.talon as well at jetbrains, vscode, and any other integrations).  
 
+## File Manager commands
+For the following file manager commands to work, your file manager must display the full folder path in the title bar. https://github.com/knausj85/knausj_talon/blob/baa323fcd34d8a1124658a425abe8eed59cf2ee5/apps/file_manager.talon
+
+
+For Mac OS X's Finder, run this command in terminal to display the full path in the title.
+
+```
+defaults write com.apple.finder _FXShowPosixPathInTitle -bool YES
+```
+
+For Windows Explorer, follow these directions
+https://www.howtogeek.com/121218/beginner-how-to-make-explorer-always-show-the-full-path-in-windows-8/
+
+For the Windows command line, the "refresh title" command will force the title to the current directory, and all directory commands ("follow 1") will automatically update the title. The 
+
+
 ## Jetbrains commands
 
 For Jetbrains commands to work you must install https://plugins.jetbrains.com/plugin/10504-voice-code-idea
