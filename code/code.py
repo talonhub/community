@@ -12,9 +12,9 @@ extension_lang_map = {
 "talon": "talon",
 }
 
-# The [^\\/] is specifically to avoid matching something like a .talon folder
+# The [^\\\/] is specifically to avoid matching something like a .talon folder
 # that would otherwise cause the .talon file action to load
-regex_ext = re.compile("[^\\/]\.(\S*)\s*")
+regex_ext = re.compile("[^\\\/]\.(\S*)\s*")
 
 @ctx.action_class('code')
 class CodeActions:
