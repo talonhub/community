@@ -116,9 +116,10 @@ formatters_words = {
     "slasher": formatters_dict["SLASH_SEPARATED"],
     "sentence": formatters_dict["CAPITALIZE_FIRST_WORD"],
     "title": formatters_dict["CAPITALIZE_ALL_WORDS"],
-    "tree": formatters_dict["FIRST_THREE"],
-    "quad": formatters_dict["FIRST_FOUR"],
-    "fiver": formatters_dict["FIRST_FIVE"],
+    #disable a few formatters for now
+    #"tree": formatters_dict["FIRST_THREE"],
+    #"quad": formatters_dict["FIRST_FOUR"],
+    #"fiver": formatters_dict["FIRST_FIVE"],
 }
 
 all_formatters = {}
