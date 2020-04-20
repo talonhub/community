@@ -85,7 +85,7 @@ select way down:
 # editing
 indent [more]:
 	edit.indent_more()
-	
+
 (indent less | out dent):
 	edit.indent_less()
 

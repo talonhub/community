@@ -2,7 +2,7 @@ from talon import app, Module, Context, actions, ui, imgui, settings
 from os.path import expanduser
 from subprocess import Popen
 from pathlib import Path
-from typing import List, Union, Set
+from typing import List, Union
 import os
 import math
 import platform
