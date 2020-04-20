@@ -16,6 +16,10 @@ action(app.tab_previous):
   key(ctrl-shift-tab)
 action(app.window_open):
   key(cmd-n)
+kill all:
+  key(ctrl-c)
+rerun search:
+  key(ctrl-r)
 run last:
   key(up)
   key(enter)
