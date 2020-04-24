@@ -6,7 +6,11 @@ import os
 import platform
 
 app_cache = {}
-overrides = {'code': 'VSCode', 'grip': 'DataGrip', 'term': 'iTerm2'}
+overrides = {
+    'code': 'Code', #'code': 'VSCode' 
+    'grip': 'DataGrip', 
+    'term': 'iTerm2'
+}
 
 mod = Module()
 mod.list('running', desc='all running applications')
@@ -44,6 +48,8 @@ class Actions:
     def switcher_focus(name: str):
         """Focus a new application by  name"""
         for app in ui.apps():
+            #print("app.name:" + app.name)
+            #print("app.bundler: " + app.bundle)
             if app.name == name and not app.background:
                 app.focus()
                 break
