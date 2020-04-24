@@ -76,8 +76,8 @@ def update_lists():
         words = get_words(name)
         for word in words:
             if word and not word in new:
-                new[word] = cur_app.name
-        new[name] = cur_app.name
+                new[word.lower()] = cur_app.name
+        new[name.lower()] = cur_app.name
     for override in overrides:
         new[override] = overrides[override]
         
