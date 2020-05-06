@@ -20,6 +20,9 @@ class Actions:
     def ide_done():
         """Select auto complete statement"""
 
+    def ide_parameter_hints():
+        """Trigger parameter hints"""
+
     def ide_toggle_tools():
         """Hide all windows"""
 
@@ -281,6 +284,24 @@ class Actions:
     def ide_toggle_terminal():
         """Hide/Show terminal window"""
 
+    def ide_terminal_new():
+        """Create new terminal"""
+
+    def ide_terminal_focus_previous():
+        """Focus the previous terminal pane"""
+
+    def ide_terminal_focus_next():
+        """Focus the next terminal pane"""
+
+    def ide_terminal_kill():
+        """Trash the current terminal pane (must be set in vs code keybindings)"""
+
+    def ide_terminal_scroll_up():
+        """Scroll the terminal up"""
+
+    def ide_terminal_scroll_down():
+        """Scroll the terminal down"""
+
     def ide_toggle_git():
         """Hide/Show git view"""
 
@@ -460,3 +481,27 @@ class Actions:
 
     def ide_resize_window_down():
         """Resize window down"""
+
+    def ide_save_file():
+        """Save current file"""
+
+    def ide_save_all():
+        """Save all open files"""
+
+    def ide_toggle_comment():
+        """Toggle comment for selected text"""
+
+    def ide_show_explorer():
+        """Show Explorer"""
+
+    def ide_show_search():
+        """Show Search"""
+
+    def ide_show_source_control():
+        """Show Source Control"""
+
+    def ide_show_debug():
+        """Show Debug"""
+
+    def ide_show_extensions():
+        """Show Extensions"""
