@@ -1,4 +1,5 @@
 os: linux
+os: windows
 app: Code
 -
 
@@ -47,7 +48,7 @@ action(user.ide_terminal_focus_previous):
 action(user.ide_terminal_focus_next):
   key(alt-right)
 
-action(user.ide_terminal_kill):
+action(user.ide_terminal_trash):
   key(ctrl-shift-delete)
 
 action(user.ide_terminal_scroll_down):

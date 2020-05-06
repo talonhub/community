@@ -293,8 +293,8 @@ class Actions:
     def ide_terminal_focus_next():
         """Focus the next terminal pane"""
 
-    def ide_terminal_kill():
-        """Trash the current terminal pane (must be set in vs code keybindings)"""
+    def ide_terminal_trash():
+        """Trash the current terminal pane"""
 
     def ide_terminal_scroll_up():
         """Scroll the terminal up"""
