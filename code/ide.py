@@ -482,12 +482,6 @@ class Actions:
     def ide_resize_window_down():
         """Resize window down"""
 
-    def ide_save_file():
-        """Save current file"""
-
-    def ide_save_all():
-        """Save all open files"""
-
     def ide_toggle_comment():
         """Toggle comment for selected text"""
 

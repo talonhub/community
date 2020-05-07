@@ -25,8 +25,8 @@ step into: user.ide_step_into()
 step continue: user.ide_continue()
 
 # file management
-save: user.ide_save_file()
-save all: user.ide_save_all()
+save: edit.save()
+save all: edit.save_all()
 
 # terminal
 console: user.ide_toggle_terminal()

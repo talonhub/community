@@ -30,12 +30,6 @@ action(user.ide_up_cursor):
 action(user.ide_down_cursor):
   key(ctrl-shift-down)
 
-action(user.ide_save_file):
-  key(ctrl-s)
-
-action(user.ide_save_all):
-  key(ctrl-shift-s)
-
 action(user.ide_toggle_terminal):
   key(ctrl-`)
 
