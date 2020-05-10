@@ -133,7 +133,7 @@ mod.list('formatters', desc='list of formatters')
 
 @mod.capture
 def formatters(m) -> str:
-    "Returns a list of formatters"
+    "Returns a comma-separated string of formatters e.g. 'SNAKE,DUBSTRING'"
 
 @mod.capture
 def format_text(m) -> str:
