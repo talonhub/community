@@ -100,13 +100,7 @@ class Actions:
 
     def mouse_toggle_zoom_mouse():
         """Toggles zoom mouse"""
-        if eye_zoom_mouse.zoom_mouse.enabled:
-            try:
-                eye_zoom_mouse.zoom_mouse.disable()
-            except:
-                eye_zoom_mouse.zoom_mouse.enabled = False
-        else:
-            eye_zoom_mouse.zoom_mouse.enable()      
+        eye_zoom_mouse.toggle_zoom_mouse(not eye_zoom_mouse.zoom_mouse.enabled)  
        
     def mouse_cancel_zoom_mouse():
         """Cancel zoom mouse if pending"""
