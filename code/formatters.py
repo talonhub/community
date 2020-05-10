@@ -1,4 +1,5 @@
 from talon import Module, Context, actions, ui
+from talon.grammar import Phrase
 from typing import List, Union
 
 ctx = Context()
@@ -17,8 +18,8 @@ def surround(by):
     return func
 
 def FormatText(m, fmtrs):
-    if m._words[-1] == "over":
-        m._words = m._words[:-1]
+    if m.words[-1] == "over":
+        m.words = m.words[:-1]
     try:
         words = actions.dictate.parse_words(m)
         words = actions.dictate.replace_words(words)
@@ -139,11 +140,11 @@ def format_text(m) -> str:
 
 @mod.action_class
 class Actions:
-    def formatted_text(text: str, formatter: str) -> str:
+    def formatted_text(text: Phrase, formatter: str) -> str:
         """Takes text and formats according to formatter"""
         return format_text_helper(text, [formatter])
 
-    def formatters_format_text(text: Union[str, List[str]], fmtrs: List[str]) -> str:
+    def formatters_format_text(text: Union[Phrase, List[Phrase]], fmtrs: List[str]) -> str:
         """Formats a list of parsed words given a list of formatters"""
         if isinstance(text, list):
             return format_text_helper(text, fmtrs)

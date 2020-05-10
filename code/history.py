@@ -1,20 +1,17 @@
-from talon import imgui, Module
-from talon.engine import engine
+from talon import imgui, Module, speech_system, actions
 
 hist_len = 10
 history = []
-def parse_phrase(phrase):
-    return ' '.join(word.split('\\')[0] for word in phrase)
+def parse_phrase(word_list):
+    return ' '.join(word.split('\\')[0] for word in word_list)
         
-def on_phrase_post(j):
+def on_phrase(j):
     global hist_len
     global history
-    phrase = parse_phrase(j.get('phrase', []))
-    cmd = j['cmd']
-    if cmd == 'p.end' and phrase:
-        history.append(phrase)
-        history = history[-hist_len:]
-
+    #print(str(actions.dictate.parse_words(j)))
+    history.append(parse_phrase(j['phrase']))
+    history = history[-hist_len:]
+    
 #todo: dynamic rect?
 @imgui.open(y=0)
 def gui(gui: imgui.GUI):
@@ -25,7 +22,7 @@ def gui(gui: imgui.GUI):
     for line in text:
         gui.text(line)
      
-engine.register('post:phrase', on_phrase_post)
+speech_system.register('phrase', on_phrase)
 
 mod = Module()
 @mod.action_class

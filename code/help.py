@@ -1,6 +1,5 @@
 from typing import Set
 from talon import Module, Context, actions, imgui, Module, registry, ui
-from talon.engine import engine
 import math
 
 mod = Module()
