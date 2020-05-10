@@ -2,9 +2,7 @@ os: windows
 app: Microsoft Edge
 app: MicrosoftEdge.exe
 -
-#todo tags
-# settings():
-	# tags = browser
+tag(): browser
 	
 #action(browser.address):
 
