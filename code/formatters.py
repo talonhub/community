@@ -17,7 +17,7 @@ def surround(by):
 
     return func
 
-def FormatText(m, fmtrs):
+def FormatText(m, fmtrs: str):
     if m.words[-1] == "over":
         m.words = m.words[:-1]
     try:
@@ -32,13 +32,14 @@ def FormatText(m, fmtrs):
     
     return format_text_helper(words, fmtrs)
 
-def format_text_helper(words, fmtrs):
+def format_text_helper(word_list, fmtrs: str):
+    fmtr_list = fmtrs.split(",")
     tmp = []
     spaces = True
-    for i, w in enumerate(words):
-        for name in reversed(fmtrs):
+    for i, w in enumerate(word_list):
+        for name in reversed(fmtr_list):
             smash, func = all_formatters[name]
-            w = func(i, w, i == len(words) - 1)
+            w = func(i, w, i == len(word_list) - 1)
             spaces = spaces and not smash
         tmp.append(w)
     words = tmp
@@ -131,7 +132,7 @@ mod = Module()
 mod.list('formatters', desc='list of formatters')
 
 @mod.capture
-def formatters(m) -> List[str]:
+def formatters(m) -> str:
     "Returns a list of formatters"
 
 @mod.capture
@@ -140,20 +141,13 @@ def format_text(m) -> str:
 
 @mod.action_class
 class Actions:
-    def formatted_text(text: Phrase, formatter: str) -> str:
-        """Takes text and formats according to formatter"""
-        return format_text_helper(text, [formatter])
-
-    def formatters_format_text(text: Union[Phrase, List[Phrase]], fmtrs: List[str]) -> str:
-        """Formats a list of parsed words given a list of formatters"""
-        if isinstance(text, list):
-            return format_text_helper(text, fmtrs)
-        else:
-            return format_text_helper([text], fmtrs)
+    def formatted_text(phrase: Phrase, formatters: str) -> str:
+        """Formats a phrase according to formatters. formatters is a comma-separated string of formatters (e.g. 'CAPITALIZE_ALL_WORDS,DOUBLE_QUOTED_STRING')"""
+        return FormatText(phrase, formatters)
         
 @ctx.capture(rule='{self.formatters}+')
 def formatters(m):
-    return m.formatters_list
+    return ','.join(m.formatters_list)
  
 @ctx.capture(rule='<self.formatters> <phrase>')
 def format_text(m):
