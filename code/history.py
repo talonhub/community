@@ -9,8 +9,10 @@ def on_phrase(j):
     global hist_len
     global history
     #print(str(actions.dictate.parse_words(j)))
-    history.append(parse_phrase(j['phrase']))
-    history = history[-hist_len:]
+    val = parse_phrase(j['phrase'])
+    if val != "":
+        history.append(val)
+        history = history[-hist_len:]
     
 #todo: dynamic rect?
 @imgui.open(y=0)
