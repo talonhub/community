@@ -1,7 +1,7 @@
 from talon import Module, Context, actions, ui
 from talon.grammar import Phrase
 from typing import List, Union
-
+from .vocabulary import TextObject
 ctx = Context()
 key = actions.key
 
@@ -141,7 +141,7 @@ def format_text(m) -> str:
 
 @mod.action_class
 class Actions:
-    def formatted_text(phrase: Phrase, formatters: str) -> str:
+    def formatted_text(phrase: TextObject, formatters: str) -> str:
         """Formats a phrase according to formatters. formatters is a comma-separated string of formatters (e.g. 'CAPITALIZE_ALL_WORDS,DOUBLE_QUOTED_STRING')"""
         return FormatText(phrase, formatters)
         
@@ -149,8 +149,8 @@ class Actions:
 def formatters(m):
     return ','.join(m.formatters_list)
  
-@ctx.capture(rule='<self.formatters> <phrase>')
+@ctx.capture(rule='<self.formatters> <user.textObject>')
 def format_text(m):
-    return FormatText(m.phrase, m.formatters)
+    return FormatText(m.textObject, m.formatters)
 
 ctx.lists['self.formatters'] = formatters_words.keys()
