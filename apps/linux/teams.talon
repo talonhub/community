@@ -17,9 +17,13 @@ open (apps|applications): key(ctrl-`)
 open settings: key(ctrl-,)
 open help: key(f1)
 close: key(escape)
-zoom in: key(ctrl-=)
-zoom out: key(ctrl--)
-reset zoom: key(ctrl-0)
+
+#zoom in: key(ctrl-=)
+#zoom out: key(ctrl--)
+#reset zoom: key(ctrl-0)
+action(edit.zoom_in): key(ctrl-=)
+action(edit.zoom_out): key(ctrl--)
+action(edit.zoom_reset): key(ctrl-0)
 
 # navigations
 open activity: key(ctrl-1)
@@ -45,7 +49,7 @@ attach file: key(ctrl-o)
 reply [to] [thread]: key(r)
 
 # Meetings, Calls and Calendar
-accept video call: key(ctrl-shift-a) 
+accept video call: key(ctrl-shift-a)
 accept audio call: key(ctrl-shift-s)
 decline call: key(ctrl-shift-d)
 start audio call: key(ctrl-shift-c)
