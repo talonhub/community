@@ -1,5 +1,5 @@
-app: firefox
-app: Firefox
+os:linux
+tag: browser
 win.title: /ProtonMail/
 -
 # General
