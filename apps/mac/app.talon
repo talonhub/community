@@ -31,10 +31,10 @@ action(app.window_hide_others):
 	key(cmd-option-h)
 	
 action(app.window_next):
-	key(cmd-~)
+	key(cmd-`)
 
 action(app.window_open):
 	key(cmd-n)
 	
 action(app.window_previous):
-	key(cmd-shift-~)
+	key(cmd-shift-`)
