@@ -22,7 +22,7 @@ mod.list('file_manager_directory_exclusions', desc='list of titles that are excl
 mod.setting('file_manager_auto_show_pickers', 'int')
 
 ctx = Context()
-ctx.settings["self.file_manager_auto_show_pickers"] = 1
+ctx.settings["self.file_manager_auto_show_pickers"] = 0
 
 user_path = os.path.expanduser('~')
 
