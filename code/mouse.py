@@ -57,16 +57,6 @@ ctx.lists['self.mouse_button'] = {
 
 continuous_scoll_mode = ""
 
-class continuous_scroll:
-    def __init__(self):
-        self.mode = None
-        # self.screen_index = 0
-        self.was_control_mouse_enabled = False
-        self.was_zoom_mouse_enabled = False
-
-
-    
-
 @imgui.open(x=700, y=0)
 def gui_wheel(gui: imgui.GUI):
     gui.text("Scroll mode: {}".format(continuous_scoll_mode))
