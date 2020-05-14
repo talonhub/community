@@ -16,7 +16,7 @@ class Actions:
 
     def kubectl_create() -> str:
         """Create a resource from a file or from stdin."""
-        return "kubectl create "
+        return f"{kubectl} create "
 
     def kubectl_expose() -> str:
         """Take a replication controller, service, deployment or pod and expose it as a new Kubernetes Service"""
