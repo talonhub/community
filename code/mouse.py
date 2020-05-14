@@ -40,17 +40,12 @@ default_cursor = {
 hidden_cursor = os.path.join(os.path.dirname(os.path.realpath(__file__)), "Resources\HiddenCursor.cur")
 
 mod = Module()
-mod.list('mouse_button',   desc='List of mouse button words to mouse_click index parameter')
-mod.setting('mouse_enable_pop_click', int)
-mod.setting('mouse_enable_pop_stops_scroll', int)
-mod.setting('mouse_focus_change_stops_scroll', int)
-mod.setting('mouse_wake_hides_cursor', int)
+mod.list('mouse_button', desc='List of mouse button words to mouse_click index parameter')
+mod.setting('mouse_enable_pop_click', type=int, default=0,desc="Enable pop to click when control mouse is enabled.")
+mod.setting('mouse_enable_pop_stops_scroll', type=int,default=0,desc="When enabled, pop stops continuous scroll modes (wheel upper/downer/gaze)")
+mod.setting('mouse_wake_hides_cursor', type=int, default=0,desc="When enabled, mouse wake will hide the cursor. mouse_wake enables zoom mouse.")
 
 ctx = Context()
-ctx.settings["self.mouse_enable_pop_click"] = 0
-ctx.settings["self.mouse_enable_pop_stops_scroll"] = 0
-ctx.settings["self.mouse_wake_hides_cursor"] = 0
-
 ctx.lists['self.mouse_button'] = {
      #right click
      'righty':  '1',
@@ -61,6 +56,16 @@ ctx.lists['self.mouse_button'] = {
 }
 
 continuous_scoll_mode = ""
+
+class continuous_scroll:
+    def __init__(self):
+        self.mode = None
+        # self.screen_index = 0
+        self.was_control_mouse_enabled = False
+        self.was_zoom_mouse_enabled = False
+
+
+    
 
 @imgui.open(x=700, y=0)
 def gui_wheel(gui: imgui.GUI):
