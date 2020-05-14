@@ -26,7 +26,7 @@ If using wav2letter, extract the entire contents of the tarball (found pinned in
 
 ## Getting started with Talon for coding with this depot
 
-Use the “help all,” "help active," and “help alphabet” commands to browse avaiable commands. Available commands can change with the application or window title that has focus.
+Use the “help context,” "help active," and “help alphabet” commands to browse avaiable commands. Available commands can change with the application or window title that has focus.
 
 It's recommended to learn the alphabet first, then get familiar with the keys, symbols, and formatters. 
 
