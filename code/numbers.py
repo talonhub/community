@@ -1,4 +1,4 @@
-from talon import Context, actions
+from talon import Context, Module, actions
 
 digits = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
 teens = ['eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen']
@@ -116,9 +116,18 @@ def number_small(m):
             result += teens_map[word]
     return result
 
-@ctx.capture('number', rule=f'<number_small> [{alt_scales} ([and] (<number_small> | {alt_scales} | <number_small> {alt_scales}))*]')
-def number(m):
+@ctx.capture('self.number_scaled', rule=f'(<digits> | [<digits>] <number_small> [{alt_scales} ([and] (<number_small> | {alt_scales} | <number_small> {alt_scales}))*])')
+def number_scaled(m):
     return fuse_num(fuse_scale(fuse_num(fuse_scale(list(m), 3))))[0]
+
+# This rule offers more colloquial number speaking when combined with a command
+# like: "go to line <number>"
+# Example: " one one five            " == 115
+#          " one fifteen             " == 115
+#          " one hundred and fifteen " == 115
+@ctx.capture('number', rule=f'(<digits> | [<digits>] <user.number_scaled>)$')
+def number(m):
+    return "".join(str(i) for i in list(m))
 
 @ctx.capture('number_signed', rule=f'[negative] <number>')
 def number_signed(m):
@@ -126,3 +135,10 @@ def number_signed(m):
     if m[0] == 'negative':
         return -number
     return number
+
+mod = Module()
+mod.list('number_scaled',    desc='Mix of numbers and digits')
+
+@mod.capture
+def number_scaled(m) -> str:
+    "Returns a series of numbers as a string"
