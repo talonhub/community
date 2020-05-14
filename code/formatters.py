@@ -148,6 +148,7 @@ class Actions:
     def list_formatters():
         """Lists all formatters"""
         gui.show()
+        gui.freeze()
 
     def hide_formatters():
         """Hides list of formatters"""
