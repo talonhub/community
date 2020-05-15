@@ -1,8 +1,9 @@
-os: linux
-#app: /KeePassX/
-#app: /eepassx/
-# XXX for some reason the app: field doesn't match atm
-win.title: /eePass/
+app: KeePassX2
+app: KeePassXC
+app: Keepassx2
+app: keepassx2
+app: keepassxc
+app: Keepassxc
 -
 
 # Database
