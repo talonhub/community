@@ -193,8 +193,6 @@ def number_signed(m):
     return number
 
 
-# XXX - hack until i can figure out the proper way to integrate directly into
-# number
 mod = Module()
 mod.list("number_scaled", desc="Mix of numbers and digits")
 
