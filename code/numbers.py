@@ -180,7 +180,7 @@ def number_scaled(m):
 # Example: " one one five            " == 115
 #          " one fifteen             " == 115
 #          " one hundred and fifteen " == 115
-@ctx.capture("number", rule=f"(<digits> | [<digits>] <user.number_scaled>)$")
+@ctx.capture("number", rule=f"(<digits> | [<digits>] <user.number_scaled>)")
 def number(m):
     return "".join(str(i) for i in list(m))
 
