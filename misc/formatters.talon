@@ -5,6 +5,4 @@ phrase <user.text>$: insert(user.text)
 phrase <user.text> over: insert(user.text)
 (say | speak) <user.text>$: insert(user.text)
 (say | speak) <user.text> over: insert(user.text)
-word <user.word>: insert(user.word)
-
-
+word <user.text>: insert(user.text)

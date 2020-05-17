@@ -1,37 +1,5 @@
 from talon import Context, Module
 
-simple_vocabulary = [
-    "nmap",
-    "admin",
-    "Cisco",
-    "Citrix",
-    "VPN",
-    "DNS",
-    "minecraft",
-    "mac",
-    "git",
-]
-mapping_vocabulary = {
-    "and stall": "install",
-    "recognising": "recognizing",
-    "recognise": "recognize",
-    "recognised": "recognized",
-    "addio": "audio",
-    "the vice": "device",
-    "ap": "app",
-    "curse her": "cursor",
-    "i": "I",
-    "i'm": "I'm",
-    "i've": "I've",
-    "i'll": "I'll",
-    "i'd": "I'd",
-    "mack oh ess": "macOS",
-    "mack book": "macbook",
-    "vender": "vendor",
-}
-
-mapping_vocabulary.update(dict(zip(simple_vocabulary, simple_vocabulary)))
-
 # Sometimes my capture results in vocabulary words getting inserted as the key
 # with the '@' prefix instead of the value, and idk why, but this fixes it by
 # manually mapping those in post
@@ -67,7 +35,3 @@ def textObject(m) -> str:
 
 
 mod.list("vocabulary", desc="user vocabulary")
-
-ctx = Context()
-
-ctx.lists["user.vocabulary"] = mapping_vocabulary
