@@ -91,6 +91,7 @@ formatters_dict = {
     "SINGLE_QUOTED_STRING": (SEP, surround("'")),
     "SPACE_SURROUNDED_STRING": (SEP, surround(" ")),
     "DOT_SEPARATED": words_with_joiner("."),
+    "COMMA_SEPARATED": words_with_joiner(","),
     "SLASH_SEPARATED": (NOSEP, every_word(lambda w: "/" + w)),
     "CAPITALIZE_FIRST_WORD": (SEP, first_vs_rest(lambda w: w.capitalize())),
     "CAPITALIZE_ALL_WORDS": (SEP, lambda i, word, _:  word.capitalize() if i == 0 or word not in words_to_keep_lowercase else word),
@@ -114,6 +115,7 @@ formatters_words = {
     "string": formatters_dict["SINGLE_QUOTED_STRING"],
     "padded": formatters_dict["SPACE_SURROUNDED_STRING"],
     "dotted": formatters_dict["DOT_SEPARATED"],
+    "arguments": formatters_dict["COMMA_SEPARATED"],
     "slasher": formatters_dict["SLASH_SEPARATED"],
     "sentence": formatters_dict["CAPITALIZE_FIRST_WORD"],
     "title": formatters_dict["CAPITALIZE_ALL_WORDS"],
@@ -144,7 +146,7 @@ class Actions:
     def formatted_text(phrase: TextObject, formatters: str) -> str:
         """Formats a phrase according to formatters. formatters is a comma-separated string of formatters (e.g. 'CAPITALIZE_ALL_WORDS,DOUBLE_QUOTED_STRING')"""
         return FormatText(phrase, formatters)
-
+        
     def list_formatters():
         """Lists all formatters"""
         gui.show()
