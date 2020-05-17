@@ -1,3 +1,4 @@
+os: mac
 app: Vim
 app: Code
 app: /.*/
