@@ -190,7 +190,7 @@ def on_pop(active):
     if (gaze_job or scroll_job):
         if settings.get("user.mouse_enable_pop_stops_scroll") >= 1:
             stop_scroll()
-    elif not eye_zoom_mouse.zoom_mouse.enabled and eye_mouse.mouse.attached_tracker is not None:
+    if not eye_zoom_mouse.zoom_mouse.enabled and eye_mouse.mouse.attached_tracker is not None:
         if settings.get("user.mouse_enable_pop_click") >= 1:
             ctrl.mouse_click(button=0, hold=16000)
 
