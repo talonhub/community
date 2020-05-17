@@ -58,13 +58,13 @@ op or: " || "
 [op] bitwise or: " | "
 [op] logical or: " || "
 (op | logical | bitwise) (ex | exclusive) or: " ^ "
-[(op | logical | bitwise)] (left shift | shift left): " << "
-[(op | logical | bitwise)] (right shift | shift right): " >> "
+(op | logical | bitwise) (left shift | shift left): " << "
+(op | logical | bitwise) (right shift | shift right): " >> "
 (op | logical | bitwise) and equals: " &= "
 (op | logical | bitwise) or equals: " |= "
 (op | logical | bitwise) (ex | exclusive) or equals: " ^= "
-[(op | logical | bitwise)] (left shift | shift left) equals: " <<= "
-[(op | logical | bitwise)] (left right | shift right) equals: " >>= "
+(op | logical | bitwise) (left shift | shift left) equals: " <<= "
+(op | logical | bitwise) (right shift | shift right) equals: " >>= "
 empty dubstring:
     '""'
     key(left)

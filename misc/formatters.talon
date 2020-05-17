@@ -1,8 +1,10 @@
 #provide both anchored and unachored commands via 'over'
-<user.format_text>$: insert(format_text)
-<user.format_text> over: insert(format_text)
-phrase <user.text>$: insert(user.text)
-phrase <user.text> over: insert(user.text)
-(say | speak) <user.text>$: insert(user.text)
-(say | speak) <user.text> over: insert(user.text)
-word <user.text>: insert(user.text)
+<user.format_text>$: "{format_text}"
+<user.format_text> over: "{format_text}"
+phrase <user.text>$: "{user.text}"
+phrase <user.text> over: "{user.text}"
+(say | speak) <user.text>$: "{user.text}"
+(say | speak) <user.text> over: "{user.text}"
+word <user.text>: "{user.text}"
+list formatters: user.list_formatters()
+hide formatters: user.hide_formatters()

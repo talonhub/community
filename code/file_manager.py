@@ -15,14 +15,13 @@ selection_numbers = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eig
 selection_map = {n: i for i, n in enumerate(selection_numbers)}
 
 mod = Module()
+ctx = Context()
+
 mod.list('file_manager_directory_index', desc='number -> directory name')
 mod.list('file_manager_file_index', desc='number -> file name')
 mod.list('file_manager_directory_remap', desc='list of titles remapped to the absolute path')
 mod.list('file_manager_directory_exclusions', desc='list of titles that are excluded/disabled from the picker functionality')
-mod.setting('file_manager_auto_show_pickers', 'int')
-
-ctx = Context()
-ctx.settings["self.file_manager_auto_show_pickers"] = 1
+mod.setting('file_manager_auto_show_pickers', type=int, default=0, desc="Enable to show the file/directories pickers automatically")
 
 user_path = os.path.expanduser('~')
 

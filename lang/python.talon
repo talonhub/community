@@ -1,11 +1,11 @@
 code.language: python
 -
-logical and: insert(" and ")
-logical or: insert(" or ")
-state in: insert(" in ")
-is not none: insert(" is not None")
-is none: insert("  None")
-empty dict: insert("{}")
+logical and: " and "
+logical or: " or "
+state in: " in "
+is not none: " is not None"
+is none: "  None"
+empty dict: "{}"
 word (dickt | dictionary): "dict"
 state (def | deaf | deft): "def "
 state else if: "elif "
@@ -26,24 +26,23 @@ state goto:
 	insert("goto ")
 state import:
 	insert("import ")
-state class: insert("class ")
-state include: insert("#include ")
+state class: "class "
+state include: "#include "
 state include system:
 	insert("#include <>")
 	edit.left()
 state include local:
 	insert('#include ""')
 	edit.left()
-state type deaf: insert("typedef ")
+state type deaf: "typedef "
 state type deaf struct:
 	insert("typedef struct")
 	insert("{{\n\n}}")
 	edit.up()
 	key(tab)
-comment py: insert("# ")
-dunder in it: insert("__init__")
-self taught:
-	insert("self.")
+comment py: "# "
+dunder in it: "__init__"
+self taught: "self."
 from import:
 	insert("from import ")
 	key(left)
@@ -62,4 +61,4 @@ dock string:
     edit.left()
     edit.left()
     edit.left()
-pie test: insert("pytest")
+pie test: "pytest"

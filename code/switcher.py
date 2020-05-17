@@ -7,7 +7,6 @@ import platform
 
 app_cache = {}
 overrides = {
-    'code': 'Code', #'code': 'VSCode' 
     'grip': 'DataGrip', 
     'term': 'iTerm2'
 }
@@ -85,8 +84,7 @@ def update_lists():
                 new[word.lower()] = cur_app.name
         new[name.lower()] = cur_app.name
     for override in overrides:
-        new[override] = overrides[override]
-        
+        new[override] = overrides[override] 
     ctx.lists['self.running'] = new
     
     #print(str(new))
