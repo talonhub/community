@@ -1,4 +1,7 @@
+# see app/vscode_generic.talon for linux and windows action implementation 
+
 app: Code
+app: Code.exe
 -
 
 # editing
