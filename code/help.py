@@ -48,7 +48,7 @@ def update_title():
                 update_active_contexts_cache(registry.active_contexts())
 
 #todo: dynamic rect?
-@imgui.open(y=0)
+@imgui.open(y=0,x=10)
 def gui_alphabet(gui: imgui.GUI):
     global alphabet
     gui.text("Alphabet help")
@@ -79,7 +79,7 @@ def get_command_page(index):
 def get_selected_context_command_pages():
     return math.ceil(len(context_command_map[selected_context]) / max_commands_per_page)
 
-@imgui.open(y=0)
+@imgui.open(y=0,x=1400)
 def gui_context_help(gui: imgui.GUI):
     global context_command_map
     global current_context_page
