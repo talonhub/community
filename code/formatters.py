@@ -1,6 +1,5 @@
-from talon import Module, Context, actions, ui
+from talon import Module, Context, actions, ui, imgui
 from talon.grammar import Phrase
-from typing import List, Union
 
 ctx = Context()
 key = actions.key
@@ -124,6 +123,7 @@ formatters_words = {
     #"fiver": formatters_dict["FIRST_FIVE"],
 }
 
+
 all_formatters = {}
 all_formatters.update(formatters_dict)
 all_formatters.update(formatters_words)
@@ -144,13 +144,29 @@ class Actions:
     def formatted_text(phrase: Phrase, formatters: str) -> str:
         """Formats a phrase according to formatters. formatters is a comma-separated string of formatters (e.g. 'CAPITALIZE_ALL_WORDS,DOUBLE_QUOTED_STRING')"""
         return FormatText(phrase, formatters)
-        
+
+    def list_formatters():
+        """Lists all formatters"""
+        gui.show()
+        gui.freeze()
+
+    def hide_formatters():
+        """Hides list of formatters"""
+        gui.hide()
+
 @ctx.capture(rule='{self.formatters}+')
 def formatters(m):
     return ','.join(m.formatters_list)
- 
+
 @ctx.capture(rule='<self.formatters> <phrase>')
 def format_text(m):
     return FormatText(m.phrase, m.formatters)
 
 ctx.lists['self.formatters'] = formatters_words.keys()
+
+@imgui.open()
+def gui(gui: imgui.GUI):
+    gui.text("List formatters")
+    gui.line()
+    for name in sorted(set(formatters_words.keys())):
+        gui.text(f"{name} | {format_text_helper(['one', 'two', 'three'], name)}")
