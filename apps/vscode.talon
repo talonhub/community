@@ -1,4 +1,6 @@
-app: Code
+# see app/vscode_generic.talon for linux and windows action implementation 
+
+app: /Code.*/
 -
 
 # editing
