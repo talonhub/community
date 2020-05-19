@@ -9,7 +9,7 @@ Clone repo into `~/.talon/user`
     
 Alternatively, access the directory by right clicking the Talon icon in taskbar, and clicking `Scripting>Open ~/talon`, then navigating to `user`.
 
-On windows wherever the linux path `~/.talon` is displayed substitute it with the default windows home user directory which is `C:\Users\%username%\AppData\Roaming\talon`.
+On windows wherever the linux path `~/.talon` is displayed substitute it with the default windows home user directory which is `C:\Users\%username%\AppData\Roaming\talon`
 
 The folder structure should look like:
 
@@ -91,7 +91,7 @@ Note this is required for
 
 (3) Talon to interact with User Account Control dialogs
 
-Talon configurations and customizations will usually be done in the default windows home user directory which is `C:\Users\%username%\AppData\Roaming\talon\user`.
+Talon configurations and customizations will usually be done in the default windows home user directory which is `C:\Users\%username%\AppData\Roaming\talon\user`
 
 ## .talon file
 
