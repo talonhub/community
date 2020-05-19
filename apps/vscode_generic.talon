@@ -3,6 +3,7 @@
 os: linux
 os: windows
 app: Code
+app: Visual Studio Code
 app: Code.exe
 -
 

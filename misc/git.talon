@@ -4,6 +4,7 @@ app: iTerm2
 app: Terminal
 app: Windows Command Processor
 app: Code
+app: Visual Studio Code
 app: Code.exe
 -
 git add patch: "git add . -p\n"

@@ -1,6 +1,7 @@
 # see app/vscode_generic.talon for linux and windows action implementation 
 
 app: Code
+app: Visual Studio Code
 app: Code.exe
 -
 
