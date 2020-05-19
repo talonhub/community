@@ -9,6 +9,8 @@ Clone repo into `~/.talon/user`
     
 Alternatively, access the directory by right clicking the Talon icon in taskbar, and clicking `Scripting>Open ~/talon`, then navigating to `user`.
 
+On windows wherever the linux path `~/.talon` is displayed substitute it with the default windows home user directory which is `C:\Users\%username%\AppData\Roaming\talon`
+
 The folder structure should look like:
 
 `~/.talon/user/knausj_talon`
@@ -88,6 +90,8 @@ Note this is required for
 (2) the zoom mouse to appear over the start menu, and other applications with uiAccess; and
 
 (3) Talon to interact with User Account Control dialogs
+
+Talon configurations and customizations will usually be done in the default windows home user directory which is `C:\Users\%username%\AppData\Roaming\talon\user`
 
 ## .talon file
 
