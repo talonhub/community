@@ -2,7 +2,8 @@
 
 os: linux
 os: windows
-app: /Code[.exe]/
+app: Code
+app: Code.exe
 -
 
 action(user.ide_refactor):

@@ -3,7 +3,8 @@ app: cmd.exe
 app: iTerm2
 app: Terminal
 app: Windows Command Processor
-app: /Code[.exe]/
+app: Code
+app: Code.exe
 -
 git add patch: "git add . -p\n"
 git add: "git add "
