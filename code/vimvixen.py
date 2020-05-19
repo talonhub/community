@@ -40,15 +40,13 @@ class Actions:
         VimVixen.focus()
 
     def vimvixen_key(key: str):
-        "Reguarly key prefixed with a focus. Helps keep the talon file clean"
-
+        "Regular talon key() prefixed with an optional focus."
         if settings.get("user.vimvixen_auto_focus") >= 1:
             VimVixen.focus()
         actions.key(key)
 
     def vimvixen_insert(text: str):
-        "Reguarly key prefixed with a focus. Helps keep the talon file clean"
-        # actions.user.focus_vimvixen()
+        "Regular talon insert() prefixed with an optional focus."
         if settings.get("user.vimvixen_auto_focus") >= 1:
             VimVixen.focus()
         actions.insert(text)
