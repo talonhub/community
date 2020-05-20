@@ -1,8 +1,7 @@
-# see app/vscode.talon for voice commands 
+# Microsoft - Visual Studio Code
+# see app/vscode.talon for voice commands
 
-os: linux
 os: windows
-app: Code
 app: Visual Studio Code
 app: Code.exe
 -
