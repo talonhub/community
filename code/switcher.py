@@ -64,6 +64,11 @@ class Actions:
         """Hides list of running applications"""
         gui.hide()
 
+    # for Windows to make choice of application in window chooser, focus on selected
+    def window_select():
+        """Selector for next and last window"""
+
+
 @imgui.open(software=False)
 def gui(gui: imgui.GUI):
     gui.text("Names of running applications")

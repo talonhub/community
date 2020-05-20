@@ -1,10 +1,11 @@
-os: linux
-#os: windows
+os: windows
 -
-
 new window: app.window_open()
+
 next window: app.window_next()
 last window: app.window_previous()
+select window: user.window_select()
+
 close window: app.window_close()
 focus <user.running_applications>: user.switcher_focus(running_applications)
 list running: user.switcher_list_running()
