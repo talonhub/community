@@ -1,4 +1,3 @@
-# see app/vscode_generic.talon for linux and windows action implementation 
 
 os: linux
 app: Code
