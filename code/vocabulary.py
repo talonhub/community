@@ -3,10 +3,9 @@ from talon import Context, Module
 
 mod = Module()
 
-
 class TextObject:
     def __init__(self, m):
-        self.words = str(m).split(" ")
+        self.words = list(str(m).split(" "))
         self.text = " ".join(self.words)
 
 
@@ -16,7 +15,7 @@ def word(m) -> str:
     except AttributeError: return m.word
 
 
-@mod.capture(rule="({user.vocabulary} | <phrase>)+")
+@mod.capture(rule="(<user.word> | <phrase>)+")
 def text(m) -> str:
     return TextObject(m).text
 
