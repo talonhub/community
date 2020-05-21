@@ -49,3 +49,22 @@ action(app.window_hide_others):
 action(app.window_open):
 	key(ctrl-n)
 
+action(user.window_maximize):
+	key(super-up)
+
+action(user.window_minimize):
+	key(super-down)
+
+action(user.window_move_left_screen):
+	key(super-shift-left)
+
+action(user.window_move_right_screen):
+	key(super-shift-right)
+
+action(user.window_snap_left):
+	key(super-left)
+
+action(user.window_snap_right):
+	key(super-right)
+
+	

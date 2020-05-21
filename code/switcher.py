@@ -71,6 +71,24 @@ class Actions:
     def window_last():
         """Selector last window"""
 
+    def window_maximize():
+        """Maximize window"""
+
+    def window_minimize():
+        """Minimize window"""
+
+    def window_snap_left():
+        """Snap window to the left of the screen"""
+
+    def window_snap_right():
+        """Snap window to the right of the screen"""
+
+    def window_move_left_screen():
+        """Move window to the left screen"""
+
+    def window_move_right_screen():
+        """Move window to the right screen"""
+
 
 @imgui.open(software=False)
 def gui(gui: imgui.GUI):
