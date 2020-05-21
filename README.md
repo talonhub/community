@@ -2,26 +2,50 @@
 
 Talon configs for Mac, Windows, and Linux. Very much in progress. This is also intended to work with both Dragon Naturally Speaking and wav2letter.
 
+## Linux & Mac setup
+
 Clone repo into `~/.talon/user`
 
-    `cd ~/.talon/user`
-    `git clone git@github.com:knausj85/knausj_talon.git knausj_talon`
+```insert code:
+cd ~/.talon/user
+git clone git@github.com:knausj85/knausj_talon.git knausj_talon
+```
     
-Alternatively, access the directory by right clicking the Talon icon in taskbar, and clicking `Scripting>Open ~/talon`, then navigating to `user`.
+Alternatively, access the directory by right clicking the Talon icon in taskbar, clicking Scripting>Open ~/talon, and navigating to user.
 
 The folder structure should look like:
 
-`~/.talon/user/knausj_talon`
-
-`~/.talon/user/knausj_talon/code`
-
-`~/.talon/user/knausj_talon/lang`
+```insert code:
+~/.talon/user/knausj_talon
+~/.talon/user/knausj_talon/code
+~/.talon/user/knausj_talon/lang
+```
 
 If using wav2letter, extract the entire contents of the tarball (found pinned in Talon's @beta slack channel) in `~/.talon`. The resulting tree should be:
 
-```
+```insert code:
 ~/.talon/w2l/en_US
 ~/.talon/user/w2l.py
+```
+
+
+## Windows setup
+
+Clone repo into `%AppData%\Talon\user` 
+
+```insert code:
+cd %AppData%\Talon\user
+git clone git@github.com:knausj85/knausj_talon.git knausj_talon
+```
+    
+Alternatively, access the directory by right clicking the Talon icon in taskbar, clicking Scripting>Open ~/talon, and navigating to user.
+    
+The folder structure should look like:
+
+```insert code:
+%AppData%\Talon\user\knausj_talon
+%AppData%\Talon\user\knausj_talon\code
+%AppData%\Talon\user\knausj_talon\lang
 ```
 
 ## Getting started with Talon for coding with this depot
@@ -88,6 +112,8 @@ Note this is required for
 (2) the zoom mouse to appear over the start menu, and other applications with uiAccess; and
 
 (3) Talon to interact with User Account Control dialogs
+
+Talon configurations and customizations will usually be done in the default windows home user directory which is `C:\Users\%username%\AppData\Roaming\talon\user`
 
 ## .talon file
 
