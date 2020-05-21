@@ -31,6 +31,8 @@ If using wav2letter, extract the entire contents of the tarball (found pinned in
 
 ## Windows setup
 
+Note: Talon for Windows should be placed in the Program Files directory (or another 'secure' directory): `C:\Program Files\talon` Talon has been signed and utilizes uiAccess for several goodies: this will allow Talon to work with applications that are run as admin.
+
 Clone repo into `%AppData%\Talon\user` 
 
 ```insert code:
@@ -47,6 +49,8 @@ The folder structure should look like:
 %AppData%\Talon\user\knausj_talon\code
 %AppData%\Talon\user\knausj_talon\lang
 ```
+
+
 
 ## Getting started with Talon for coding with this depot
 
@@ -98,22 +102,6 @@ For Jetbrains commands to work you must install https://plugins.jetbrains.com/pl
 into each editor.
 
 ...
-
-## Windows
-
-Talon should be located in the Program Files directory (or another 'secure' directory). Talon has been signed and now utilizes uiAccess.
-
-C:\Program Files\talon
-
-Note this is required for
-
-(1) eye tracking to work with applications that are run as admin (e.g., regedit) on Windows; and
-
-(2) the zoom mouse to appear over the start menu, and other applications with uiAccess; and
-
-(3) Talon to interact with User Account Control dialogs
-
-Talon configurations and customizations will usually be done in the default windows home user directory which is `C:\Users\%username%\AppData\Roaming\talon\user`
 
 ## .talon file
 
