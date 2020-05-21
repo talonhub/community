@@ -2,8 +2,10 @@ os: windows
 -
 new window: app.window_open()
 
+last window: user.window_last()
+
 next window: app.window_next()
-last window: app.window_previous()
+previous window: app.window_previous()
 select window: user.window_select()
 
 close window: app.window_close()
