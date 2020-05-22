@@ -143,7 +143,8 @@ action(edit.page_up):
 action(edit.paste):
 	key(ctrl-v)
 	
-#action(paste_match_style):
+action(edit.paste_match_style):
+	key(ctrl-shift-v)
 
 action(edit.print):
 	key(ctrl-p)
