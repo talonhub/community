@@ -42,6 +42,9 @@ console last: user.ide_terminal_focus_previous()
 console up: user.ide_terminal_scroll_up()
 console down: user.ide_terminal_scroll_down()
 
+#app window
+new code window: user.ide_window_new()
+
 # focus
 show explorer: user.ide_show_explorer()
 show search: user.ide_show_search()

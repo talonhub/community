@@ -80,3 +80,6 @@ action(user.ide_show_debug):
 
 action(user.ide_show_extensions):
   key(ctrl-shift-x)
+
+action(user.ide_window_new):
+  key(ctrl-shift-n)

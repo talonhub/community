@@ -499,3 +499,6 @@ class Actions:
 
     def ide_show_extensions():
         """Show Extensions"""
+
+    def ide_window_new():
+        """Launch new window"""
