@@ -10,6 +10,9 @@ app: Visual Studio Code
 app: Code.exe
 -
 
+# general
+command palette: user.ide_command_palette()
+
 # editing
 code refactor all: user.ide_refactor()
 code refactor: user.ide_refactor_in_line()

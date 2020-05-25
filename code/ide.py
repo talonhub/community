@@ -168,10 +168,16 @@ class Actions:
         """Collapse all code in file"""
 
     def ide_split_right():
-        """Move current tab to the right pane"""
+        """Copy current tab to the right pane"""
+
+    def ide_split_left():
+        """Copy current tab to the left pane"""
 
     def ide_split_down():
-        """Move tab to the pane below"""
+        """Copy tab to the pane below"""
+
+    def ide_split_up():
+        """Copy tab to the pane above"""
 
     def ide_split_vertically():
         """Split the view into panes vertically"""
@@ -202,6 +208,9 @@ class Actions:
 
     def ide_go_last_method():
         """Go to the previous method in the file"""
+
+    def ide_command_palette():
+        """Open the command palette"""
 
     def ide_clippings():
         """Show copy history"""

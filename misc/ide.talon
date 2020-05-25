@@ -3,6 +3,9 @@ app: /jetbrains/
 app: IntelliJ IDEA
 app: PyCharm
 app: PyCharm64.exe
+app: Visual Studio Code
+app: Code
+app: Code.exe
 
 # When tags are supported
 #tags: ide
@@ -63,7 +66,9 @@ collapse deep: user.ide_collapse_deep()
 collapse all: user.ide_collapse_all()
 # Splits
 split right: user.ide_split_right()
+split left: user.ide_split_left()
 split down: user.ide_split_down()
+split up: user.ide_split_up()
 split vertically: user.ide_split_vertically()
 split horizontally: user.ide_split_horizontally()
 split flip: user.ide_split_flip()

@@ -6,6 +6,21 @@ app: Visual Studio Code
 app: Code.exe
 -
 
+# General
+action(user.ide_command_palette):
+  key(ctrl-shift-p)
+
+# Splits
+action(user.ide_split_right):
+  key(ctrl-shift-p)
+  insert("workbench.action.splitEditorRight")
+  key(enter)
+
+action(user.ide_split_left):
+  key(ctrl-shift-p)
+  insert("workbench.action.splitEditorLeft")
+  key(enter)
+
 action(user.ide_refactor):
   key(ctrl-a)
   key(ctrl-shift-i)
