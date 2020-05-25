@@ -21,6 +21,16 @@ action(user.ide_split_left):
   insert("workbench.action.splitEditorLeft")
   key(enter)
 
+action(user.ide_split_up):
+  key(ctrl-shift-p)
+  insert("workbench.action.splitEditorUp")
+  key(enter)
+
+action(user.ide_split_down):
+  key(ctrl-shift-p)
+  insert("workbench.action.splitEditorDown")
+  key(enter)
+
 action(user.ide_refactor):
   key(ctrl-a)
   key(ctrl-shift-i)
