@@ -54,8 +54,10 @@ if "Windows-10" in platform:
         "Pictures": os.path.join(user_path, "Pictures"),
         "Music": os.path.join(user_path, "Music"),
     }
+    
+    if nameBuffer.value:
+        ctx.lists['user.file_manager_directory_remap'][nameBuffer.value] = user_path
 
-    ctx.lists['user.file_manager_directory_remap'][nameBuffer.value] = user_path
     ctx.lists['user.file_manager_directory_exclusions'] = [
         "Run",
         "Task View",
@@ -118,14 +120,11 @@ class Actions:
 
     def file_manager_hide_pickers():
         """Hides the pickers"""
-        global is_showing
-        is_showing = False
         gui_files.hide()
         gui_folders.hide()
 
     def file_manager_open_file(path: Union[str, int]):
         """opens the file"""
-        #if is_showing:
         if is_windows:
             #print("file_manager_open_file")
             actions.key("home")
@@ -147,7 +146,6 @@ class Actions:
 
     def file_manager_select_file(path: Union[str, int]):
         """selects the file"""
-        #if is_showing:
         actions.key("home")
         if isinstance(path, int):
             #print(str(file_selections))
@@ -166,36 +164,45 @@ class Actions:
     def file_manager_next_file_page():
         """next_file_page"""
         global current_file_page
-        if current_file_page != total_file_pages:
-            current_file_page += 1
-        else:
-            current_file_page = 1
+        if gui_files.showing:
+            if current_file_page != total_file_pages:
+                current_file_page += 1
+            else:
+                current_file_page = 1
+            gui_files.freeze()
 
     def file_manager_previous_file_page():
         """previous_file_page"""
         global current_file_page
-        if current_file_page != 1:
-            current_file_page -= 1
-        else:
-            current_file_page = total_file_pages
+        if gui_files.showing:
+            if current_file_page != 1:
+                current_file_page -= 1
+            else:
+                current_file_page = total_file_pages
+
+            gui_files.freeze()
 
     def file_manager_next_folder_page():
         """next_folder_page"""
         global current_folder_page
-        if is_showing:
+        if gui_folders.showing:
             if current_folder_page != total_folder_pages:
                 current_folder_page += 1
             else:
+
                 current_folder_page = 1
+        gui_folders.freeze()
 
     def file_manager_previous_folder_page():
         """previous_folder_page"""
         global current_folder_page
-        if is_showing:
+        if gui_folders.showing:
             if current_folder_page != 1:
                 current_folder_page -= 1
             else:
                 current_folder_page = total_folder_pages
+
+            gui_folders.freeze()
 
     def file_manager_open_volume(volume: str):
         """file_manager_open_volume"""
@@ -331,10 +338,7 @@ def update_maps(window):
         title = ctx.lists['self.file_manager_directory_remap'][title]
 
     if not is_supported or title in ctx.lists["self.file_manager_directory_exclusions"] or not title or title == "":
-        is_showing = False
         is_terminal = False
-        gui_folders.hide()
-        gui_files.hide()
     else:
         if is_mac and "~" in title:
             title = os.path.expanduser(title)
@@ -402,14 +406,14 @@ def gui_folders(gui: imgui.GUI):
         current_index += 1
         index = index + 1
 
-    if total_folder_pages > 1:
-        gui.spacer()
+    #if total_folder_pages > 1:
+        #gui.spacer()
         
-        if gui.button('Next...'):
-            actions.user.file_manager_next_folder_page()
+        #if gui.button('Next...'):
+        #    actions.user.file_manager_next_folder_page()
 
-        if gui.button("Previous..."):
-            actions.user.file_manager_previous_folder_page()
+        #if gui.button("Previous..."):
+         #   actions.user.file_manager_previous_folder_page()
 
 current_file_page = 1
 @imgui.open(y=10,x=1300)
@@ -427,12 +431,12 @@ def gui_files(gui: imgui.GUI):
         current_index = current_index + 1
         index = index + 1
 
-    if total_file_pages > 1:
-        gui.spacer()
+    #if total_file_pages > 1:
+    #    gui.spacer()
 
-        if gui.button('Next...'):
-            actions.user.file_manager_next_file_page()
+    #    if gui.button('Next...'):
+    #        actions.user.file_manager_next_file_page()
 
-        if gui.button("Previous..."):
-            actions.user.file_manager_previous_file_page()
+    #   if gui.button("Previous..."):
+    #        actions.user.file_manager_previous_file_page()
 
