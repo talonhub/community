@@ -296,7 +296,9 @@ def update_maps(window):
 
     directories = {}
     files = {}
-    
+    folder_selections = []
+    file_selections = []
+
     is_supported = False
     is_terminal = False
 
@@ -334,8 +336,6 @@ def update_maps(window):
         is_terminal = False
         gui_folders.hide()
         gui_files.hide()
-        folder_selections = []
-        file_selections = []
     else:
         if is_mac and "~" in title:
             title = os.path.expanduser(title)
@@ -352,19 +352,13 @@ def update_maps(window):
             try:
                 directories = get_directory_map(current_path)
                 files = get_file_map(current_path)
-
             except Exception as e:
                 directories = {"ERROR": str(e)}
                 files = {"ERROR": str(e)}
 
-            folder_selections = []
-            for path in sorted (directories.values(), key=str.casefold):  
-                folder_selections.append(path)
+            folder_selections = sorted(directories.values(), key=str.casefold)
+            file_selections = sorted(files.values(), key=str.casefold)  
 
-            file_selections = []
-            for path in sorted (files.values(), key=str.casefold):  
-                file_selections.append(path)
-    
         current_folder_page = current_file_page = 1
 
     ctx.lists['self.file_manager_directories'] = directories
