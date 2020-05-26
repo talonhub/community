@@ -28,7 +28,6 @@ user_path = os.path.expanduser('~')
 folder_selections = []
 file_selections = []
 
-is_showing = False
 is_windows = False
 is_mac = False
 is_terminal = False
@@ -63,6 +62,7 @@ if "Windows-10" in platform:
         "",
         "Task Switching",
         "This PC"
+        "File Explorer"
     ]
     supported_programs = ["explorer.exe", "cmd.exe",]
     terminal_programs = ["cmd.exe"]
@@ -113,10 +113,8 @@ class Actions:
 
     def file_manager_show_pickers():
         """Shows the pickers"""
-        global is_showing
-        is_showing = True
-        gui_files.show()
-        gui_folders.show()
+        gui_files.freeze()
+        gui_folders.freeze()
 
     def file_manager_hide_pickers():
         """Hides the pickers"""
@@ -301,6 +299,7 @@ def update_maps(window):
 
     is_supported = False
     is_terminal = False
+    is_valid_path = False
 
     for item in supported_programs:
         if is_windows:
@@ -360,14 +359,18 @@ def update_maps(window):
             file_selections = sorted(files.values(), key=str.casefold)  
 
         current_folder_page = current_file_page = 1
-
+        
     ctx.lists['self.file_manager_directories'] = directories
     ctx.lists['self.file_manager_files'] = files
 
-    if not is_showing and settings.get("user.file_manager_auto_show_pickers", 0) >= 1:
-        is_showing = True
-        gui_folders.show()
-        gui_files.show()
+    #if we made it this far, either it's showing and we need to force an update
+    #or we need to hide the gui
+    if is_valid_path and (gui_folders.showing or settings.get("user.file_manager_auto_show_pickers", 0) >= 1):
+        gui_folders.freeze()
+        gui_files.freeze()
+    else:
+        gui_folders.hide()
+        gui_files.hide()
 
 ui.register("win_title", update_maps)
 ui.register("win_focus", update_maps)
