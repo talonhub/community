@@ -10,7 +10,11 @@ def on_phrase(j):
     global hist_len
     global history
     #print(str(actions.dictate.parse_words(j)))
-    val = parse_phrase(j['phrase'])
+
+    try:
+        val = parse_phrase(getattr(j['parsed'], '_unmapped', j['phrase']))
+    except:
+        val = parse_phrase(j['phrase'])
     if val != "":
         history.append(val)
         history = history[-hist_len:]
