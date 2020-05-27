@@ -1,6 +1,6 @@
 #provide both anchored and unachored commands via 'over'
-<user.format_text>$: insert(user.formatted_text(format_text, "ALL_LOWERCASE"))
-<user.format_text> over: insert(user.formatted_text(format_text, "ALL_LOWERCASE"))
+<user.format_text>$: insert(format_text)
+<user.format_text> over: insert(format_text)
 phrase <user.text>$: insert(user.formatted_text(user.text, "ALL_LOWERCASE"))
 phrase <user.text> over: insert(user.formatted_text(user.text, "ALL_LOWERCASE"))
 (say | speak) <user.text>$: insert(user.formatted_text(user.text, "ALL_LOWERCASE"))
