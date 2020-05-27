@@ -46,9 +46,9 @@ console up: user.ide_terminal_scroll_up()
 console down: user.ide_terminal_scroll_down()
 
 #app window
-new code window: user.ide_window_new()
+new instance: user.ide_window_new()
 
-# focus
+# focus | (see alternate commands in ide.talon)
 show explorer: user.ide_show_explorer()
 show search: user.ide_show_search()
 show source control: user.ide_show_source_control()

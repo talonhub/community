@@ -275,6 +275,9 @@ class Actions:
     def ide_git_menu():
         """Show the git menu for IDE"""
 
+    def ide_toggle_explorer():
+        """Hide/Show explorer (file system) browser window"""
+
     def ide_toggle_project():
         """Hide/Show project (file system) browser window"""
 

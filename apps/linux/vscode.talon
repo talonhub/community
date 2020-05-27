@@ -67,15 +67,30 @@ action(user.ide_done):
 
 action(user.ide_show_explorer):
   key(ctrl-shift-e)
+action(user.ide_toggle_explorer):
+  key(ctrl-shift-e)
 
 action(user.ide_show_search):
+  key(ctrl-shift-f)
+action(user.ide_toggle_find):
+  key(ctrl-shift-f)
+action(user.ide_find_everywhere):
   key(ctrl-shift-f)
 
 action(user.ide_show_source_control):
   key(ctrl-shift-g)
+action(user.ide_toggle_git):
+  key(ctrl-shift-g)
 
 action(user.ide_show_debug):
+  key(ctrl-shift-d)
+action(user.ide_toggle_run):
+  key(ctrl-shift-d)
+action(user.ide_toggle_debug):
   key(ctrl-shift-d)
 
 action(user.ide_show_extensions):
   key(ctrl-shift-x)
+
+action(user.ide_window_new):
+  key(ctrl-shift-n)

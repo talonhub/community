@@ -110,6 +110,7 @@ git (annotate | blame): user.ide_git_annotate()
 git menu: user.ide_git_menu()
 # Tool windows:
 # Toggling various tool windows
+toggle explorer: user.ide_toggle_explorer()
 toggle project: user.ide_toggle_project()
 toggle find: user.ide_toggle_find()
 toggle run: user.ide_toggle_run()
