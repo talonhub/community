@@ -20,8 +20,8 @@ ctx = Context()
 mod.list('file_manager_directory_remap', desc='list of titles remapped to the absolute path')
 mod.list('file_manager_directory_exclusions', desc='list of titles that are excluded/disabled from the picker functionality')
 setting_auto_show_pickers = mod.setting('file_manager_auto_show_pickers', type=int, default=0, desc="Enable to show the file/directories pickers automatically")
-setting_folder_limit = mod.setting('file_manager_folder_limit', type=int, default=100,desc="Maximum number of files/folders to iterate")
-setting_file_limit = mod.setting('file_manager_file_limit', type=int, default=100,desc="Maximum number of files to iterate")
+setting_folder_limit = mod.setting('file_manager_folder_limit', type=int, default=1000,desc="Maximum number of files/folders to iterate")
+setting_file_limit = mod.setting('file_manager_file_limit', type=int, default=1000,desc="Maximum number of files to iterate")
 
 user_path = os.path.expanduser('~')
 
@@ -189,9 +189,9 @@ class Actions:
             if current_folder_page != total_folder_pages:
                 current_folder_page += 1
             else:
-
                 current_folder_page = 1
-        gui_folders.freeze()
+                
+            gui_folders.freeze()
 
     def file_manager_previous_folder_page():
         """previous_folder_page"""
@@ -281,13 +281,13 @@ def create_spoken_forms(symbols, max_len=10):
     return [' '.join(list(islice(pattern.findall(s), max_len))) for s in symbols]
 
 def get_directory_map(current_path):
-    directories = [f.name for f in islice(current_path.iterdir(), settings.get("user.file_manager_folder_limit", 100)) if f.is_dir()]
+    directories = [f.name for f in islice(current_path.iterdir(), settings.get("user.file_manager_folder_limit", 1000)) if f.is_dir()]
     #print(len(directories))
     spoken_forms = create_spoken_forms(directories)
     return dict(zip(spoken_forms, directories))
 
 def get_file_map(current_path):
-    files = [f.name for f in islice(current_path.iterdir(), settings.get("user.file_manager_file_limit", 100)) if f.is_file()]
+    files = [f.name for f in islice(current_path.iterdir(), settings.get("user.file_manager_file_limit", 1000)) if f.is_file()]
     spoken_forms = create_spoken_forms([p for p in files])
     return dict(zip(spoken_forms, [f for f in files]))
   
@@ -363,18 +363,29 @@ def update_maps(window):
             file_selections = sorted(files.values(), key=str.casefold)  
 
         current_folder_page = current_file_page = 1
-        
-    ctx.lists['self.file_manager_directories'] = directories
-    ctx.lists['self.file_manager_files'] = files
+
+    lists = {
+        'user.file_manager_directories': directories,
+        'user.file_manager_files': files,
+    }
+
+    # batch update lists for performance
+    ctx.lists.update(lists)
 
     #if we made it this far, either it's showing and we need to force an update
     #or we need to hide the gui
-    if is_valid_path and (gui_folders.showing or settings.get("user.file_manager_auto_show_pickers", 0) >= 1):
+    if not is_supported:
+        if gui_folders.showing:
+            gui_folders.hide()
+            gui_files.hide()
+    elif is_valid_path and (gui_folders.showing or settings.get("user.file_manager_auto_show_pickers", 0) >= 1):
         gui_folders.freeze()
         gui_files.freeze()
-    else:
-        gui_folders.hide()
-        gui_files.hide()
+
+    #todo: figure out what changed in 1320 
+    #print("hiding: is_valid_path {}, gui_folders.showing {}, title  {}".format(str(is_valid_path), str(gui_folders.showing), str(cached_title)))
+
+
 
 ui.register("win_title", update_maps)
 ui.register("win_focus", update_maps)
