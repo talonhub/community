@@ -1,6 +1,7 @@
 help alphabet: user.help_alphabet(user.get_alphabet())
 help context$: user.help_context()
 help active$: user.help_context_enabled()
+help search <phrase>$: user.help_search(phrase)
 help refresh$: user.help_refresh()
 help next$: user.help_next()
 help previous$: user.help_previous()
