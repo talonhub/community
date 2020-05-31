@@ -5,11 +5,13 @@ ctx = Context()
 key = actions.key
 
 extension_lang_map = {
-"py"   : "python",
-"cs"   : "csharp",
-"cpp"  : "cplusplus",
-"h"    : "cplusplus",
-"talon": "talon",
+    "vue": "javascript",
+    "js": "javascript",
+    "py": "python",
+    "cs": "csharp",
+    "cpp": "cplusplus",
+    "h": "cplusplus",
+    "talon": "talon",
 }
 
 # The [^\\\/] is specifically to avoid matching something like a .talon folder
