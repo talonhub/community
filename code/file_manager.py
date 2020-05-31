@@ -348,9 +348,12 @@ def update_maps(window):
             title = title.split(":")[1].strip()
             title = os.path.expanduser(title)
 
-        current_path = Path(title)
-        is_valid_path = current_path.is_dir()
-
+        try:
+            current_path = Path(title)
+            is_valid_path = current_path.is_dir()
+        except:
+            is_supported = False
+    
         if is_valid_path:
             try:
                 directories = get_directory_map(current_path)
