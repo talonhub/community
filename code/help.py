@@ -69,6 +69,7 @@ def gui_alphabet(gui: imgui.GUI):
         gui_alphabet.hide()
 
 def format_context_title(context_name):
+    global cached_active_contexts_list
     return "{} [{}]".format(
         context_name, 
         "ACTIVE" if context_map[context_name] in cached_active_contexts_list else "INACTIVE"
@@ -169,14 +170,48 @@ def gui_context_help(gui: imgui.GUI):
 def draw_context_commands(gui: imgui.GUI):
     global selected_context
     global total_page_count
+    global selected_context_page
 
     title = format_context_title(selected_context)
     commands = context_command_map[selected_context].items()
     total_page_count = get_command_pages(commands)
-    draw_commands_title(gui, title, total_page_count)
-    draw_commands(gui, commands)
+    draw_commands_title(gui, title)
+    filtered_commands = [command for idx, command in enumerate(commands) if get_command_page(idx + 1) == selected_context_page]
+    draw_commands(gui, filtered_commands)
 
-def get_matching_commands(phrase: str):
+def draw_search_commands(gui: imgui.GUI):
+    global search_phrase
+    global total_page_count
+    global cached_active_contexts_list
+    global selected_context_page
+
+    title = search_phrase
+    commands_grouped = get_search_commands(search_phrase)
+    commands_flat = list(itertools.chain.from_iterable(commands_grouped.values()))
+    total_page_count = get_command_pages(commands_flat)
+    draw_commands_title(gui, title)
+
+    sorted_commands_grouped = sorted(
+        commands_grouped.items(),
+        key=lambda item: context_map[item[0]] not in cached_active_contexts_list
+    )
+
+    filtered_commands_grouped = defaultdict(list)
+    current_item_index = 1
+    for context, commands in commands_grouped.items():
+        current_item_index += 1  # count an index for the new group
+        for command in commands:
+            current_item_index += 1
+            if selected_context_page == get_command_page(current_item_index):
+                filtered_commands_grouped[context].append(command)
+
+    for context, commands in filtered_commands_grouped.items():
+        gui.text(format_context_title(context))
+        gui.line()
+        draw_commands(gui, commands)
+        gui.spacer()
+
+def get_search_commands(phrase: str):
     global rule_word_map
     tokens = search_phrase.split(' ')
 
@@ -191,58 +226,29 @@ def get_matching_commands(phrase: str):
 
     return commands_grouped
 
-def draw_search_commands(gui: imgui.GUI):
-    global search_phrase
-    global total_page_count
-    global cached_active_contexts_list
-
-    title = search_phrase
-    commands_grouped = get_matching_commands(search_phrase)
-    commands_flat = list(itertools.chain.from_iterable(commands_grouped.values()))
-    total_page_count = get_command_pages(commands_flat)
-    draw_commands_title(gui, title, total_page_count)
-
-    sorted_commands_grouped = sorted(
-        commands_grouped.items(),
-        key=lambda item: context_map[item[0]] not in cached_active_contexts_list
-    )
-
-    for context, commands in sorted_commands_grouped:
-        gui.text(format_context_title(context))
-        gui.line()
-        draw_commands(gui, commands)
-        gui.spacer()
-
-
-def draw_commands_title(gui: imgui.GUI, title, total_page_count):
+def draw_commands_title(gui: imgui.GUI, title):
     global selected_context_page
+    global total_page_count
 
     gui.text("{} ({}/{})".format(title, selected_context_page, total_page_count))
     gui.line()
 
 def draw_commands(gui: imgui.GUI, commands: Iterable[Tuple[str, str]]):
-    global selected_context_page
-    current_item_index = 1
     for key, val in commands:
-        #print(key + ": " + val)
-        target_page = get_command_page(current_item_index)
-
-        if selected_context_page == target_page:
-            val = val.split("\n")
-            if len(val) > 1:
-                gui.text("{}:".format(key))
-                for line in val:
-                    gui.text("    {}".format(line))
-                gui.spacer()
-            else:
-                gui.text("{}: {}".format(key, val[0]))
-        
-        current_item_index += 1
+        val = val.split("\n")
+        if len(val) > 1:
+            gui.text("{}:".format(key))
+            for line in val:
+                gui.text("    {}".format(line))
+            gui.spacer()
+        else:
+            gui.text("{}: {}".format(key, val[0]))
 
 def reset():
     global current_context_page
     global sorted_context_map_keys
     global selected_context
+    global search_phrase
     global selected_context_page
     global cached_window_title
     global show_enabled_contexts_only 
@@ -250,6 +256,7 @@ def reset():
     current_context_page = 1
     sorted_context_map_keys = None
     selected_context = None
+    search_phrase = None
     selected_context_page = 1
     cached_window_title = None
     show_enabled_contexts_only = False
@@ -378,13 +385,13 @@ class Actions:
         register_events(True)      
 
     def help_search(phrase: str):
-        """Display contextual command info"""
+        """Display command info for search phrase"""
         global is_context_help_showing
         global search_phrase
         is_context_help_showing = True
 
-        search_phrase = phrase
         reset()
+        search_phrase = phrase
         refresh_context_command_map()
         gui_alphabet.hide()
         gui_context_help.show()
@@ -418,7 +425,7 @@ class Actions:
         global total_page_count
 
         if is_context_help_showing:
-            if selected_context is None:
+            if selected_context is None and search_phrase is None:
                 if current_context_page != total_page_count:
                     current_context_page += 1
                 else:
@@ -449,7 +456,7 @@ class Actions:
         global total_page_count
 
         if is_context_help_showing:
-            if selected_context is None:
+            if selected_context is None and search_phrase is None:
                 if current_context_page != 1:
                     current_context_page -= 1
                 else:
