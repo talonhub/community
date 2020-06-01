@@ -16,7 +16,7 @@ app: /terminal/
 -
 settings():
     # enable if you'd like the picker gui to automatically appear when explorer has focus
-    user.file_manager_auto_show_pickers = 1
+    user.file_manager_auto_show_pickers = 0
 
 force title: user.file_manager_refresh_title()
 show options: user.file_manager_show_pickers()
