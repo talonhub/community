@@ -1,6 +1,7 @@
 
 os: linux
 app: Code
+app: Code - OSS
 
 os: mac
 app: Code
