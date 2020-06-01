@@ -1,9 +1,10 @@
 from collections import defaultdict
 import itertools
 import math
-from typing import Dict, Iterable, Set, Tuple
+from typing import Dict, List, Iterable, Set, Tuple, Union
 
 from talon import Module, Context, actions, imgui, Module, registry, ui
+from talon.grammar import Phrase
 
 mod = Module()
 mod.list('help_contexts', desc='list of available contexts')
@@ -33,7 +34,7 @@ total_page_count = 1
 cached_active_contexts_list = []
 
 max_contexts_per_page = len(selection_numbers)
-max_commands_per_page = 15 
+max_command_lines_per_page = 50
 
 live_update = True
 is_context_help_showing = False
@@ -68,7 +69,7 @@ def gui_alphabet(gui: imgui.GUI):
     if gui.button('close'):
         gui_alphabet.hide()
 
-def format_context_title(context_name):
+def format_context_title(context_name: str) -> str:
     global cached_active_contexts_list
     return "{} [{}]".format(
         context_name, 
@@ -77,22 +78,53 @@ def format_context_title(context_name):
 
 
 # translates 1-based index -> actual index in sorted_context_map_keys
-def get_context_page(index):
+def get_context_page(index: int) -> int:
     return math.ceil(index / max_contexts_per_page)
 
-def get_total_context_pages():
+def get_total_context_pages() -> int:
     return math.ceil(len(sorted_context_map_keys) / max_contexts_per_page)
 
-def get_current_context_page_length():
+def get_current_context_page_length() -> int:
     start_index = (current_context_page -1) * max_contexts_per_page
     return len(sorted_context_map_keys[start_index:start_index + max_contexts_per_page])
 
-# translates 1-based index -> actual index in sorted_context_map_keys
-def get_command_page(index):
-    return math.ceil(index / max_commands_per_page)
+def get_command_line_count(command: Tuple[str, str]) -> int:
+    """This should be kept in sync with draw_commands
+    """
+    _, body = command
+    lines = len(body.split("\n"))
+    if lines == 1:
+        return 1
+    else:
+        return lines + 1
 
-def get_command_pages(commands):
-    return math.ceil(len(commands) / max_commands_per_page)
+def get_pages(item_line_counts: List[int]) -> List[int]:
+    """Given some set of indivisible items with given line counts,
+    return the page number each item should appear on.
+
+    If an item will cross a page boundary, it is moved to the next page,
+    so that pages may be shorter than the maximum lenth, but not longer. The only
+    exception is when an item is longer than the maximum page length, in which
+    case that item will be placed on a longer page.
+    """
+    current_page_line_count = 0
+    current_page = 1
+    pages = []
+    for line_count in item_line_counts:
+        if line_count + current_page_line_count > max_command_lines_per_page:
+            if current_page_line_count == 0:
+                # Special case, render a larger page.
+                page = current_page
+                current_page_line_count = 0
+            else:
+                page = current_page + 1
+                current_page_line_count = line_count
+            current_page += 1
+        else:
+            current_page_line_count += line_count
+            page = current_page
+        pages.append(page)
+    return pages
 
 @imgui.open(y=0)
 def gui_context_help(gui: imgui.GUI):
@@ -172,11 +204,16 @@ def draw_context_commands(gui: imgui.GUI):
     global total_page_count
     global selected_context_page
 
-    title = format_context_title(selected_context)
+    context_title = format_context_title(selected_context)
+    title = f"Context: {context_title}"
     commands = context_command_map[selected_context].items()
-    total_page_count = get_command_pages(commands)
+    item_line_counts = [get_command_line_count(command) for command in commands]
+    pages = get_pages(item_line_counts)
+    total_page_count = max(pages, default=1)
     draw_commands_title(gui, title)
-    filtered_commands = [command for idx, command in enumerate(commands) if get_command_page(idx + 1) == selected_context_page]
+
+    filtered_commands = [command for command, page in zip(commands, pages) if page == selected_context_page]
+
     draw_commands(gui, filtered_commands)
 
 def draw_search_commands(gui: imgui.GUI):
@@ -185,33 +222,32 @@ def draw_search_commands(gui: imgui.GUI):
     global cached_active_contexts_list
     global selected_context_page
 
-    title = search_phrase
+    title = f"Search: {search_phrase}"
     commands_grouped = get_search_commands(search_phrase)
     commands_flat = list(itertools.chain.from_iterable(commands_grouped.values()))
-    total_page_count = get_command_pages(commands_flat)
-    draw_commands_title(gui, title)
 
     sorted_commands_grouped = sorted(
         commands_grouped.items(),
         key=lambda item: context_map[item[0]] not in cached_active_contexts_list
     )
 
-    filtered_commands_grouped = defaultdict(list)
+    pages = get_pages(
+        [sum(get_command_line_count(command) for command in commands) + 3
+         for _, commands in sorted_commands_grouped]
+    )
+    total_page_count = max(pages, default=1)
+
+    draw_commands_title(gui, title)
+
     current_item_index = 1
-    for context, commands in commands_grouped.items():
-        current_item_index += 1  # count an index for the new group
-        for command in commands:
-            current_item_index += 1
-            if selected_context_page == get_command_page(current_item_index):
-                filtered_commands_grouped[context].append(command)
+    for (context, commands), page in zip(sorted_commands_grouped, pages):
+        if page == selected_context_page:
+            gui.text(format_context_title(context))
+            gui.line()
+            draw_commands(gui, commands)
+            gui.spacer()
 
-    for context, commands in filtered_commands_grouped.items():
-        gui.text(format_context_title(context))
-        gui.line()
-        draw_commands(gui, commands)
-        gui.spacer()
-
-def get_search_commands(phrase: str):
+def get_search_commands(phrase: str) -> Dict[str, Tuple[str, str]]:
     global rule_word_map
     tokens = search_phrase.split(' ')
 
@@ -226,7 +262,7 @@ def get_search_commands(phrase: str):
 
     return commands_grouped
 
-def draw_commands_title(gui: imgui.GUI, title):
+def draw_commands_title(gui: imgui.GUI, title: str):
     global selected_context_page
     global total_page_count
 
@@ -240,7 +276,6 @@ def draw_commands(gui: imgui.GUI, commands: Iterable[Tuple[str, str]]):
             gui.text("{}:".format(key))
             for line in val:
                 gui.text("    {}".format(line))
-            gui.spacer()
         else:
             gui.text("{}: {}".format(key, val[0]))
 
@@ -384,14 +419,14 @@ class Actions:
         gui_context_help.show()
         register_events(True)      
 
-    def help_search(phrase: str):
+    def help_search(phrase: Union[str, Phrase]):
         """Display command info for search phrase"""
         global is_context_help_showing
         global search_phrase
         is_context_help_showing = True
 
         reset()
-        search_phrase = phrase
+        search_phrase = str(phrase)
         refresh_context_command_map()
         gui_alphabet.hide()
         gui_context_help.show()
