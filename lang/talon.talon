@@ -1,4 +1,6 @@
-code.language: talon
+mode: user.talon
+mode: command 
+and code.language: talon
 -
 insert: 
 	insert('insert("")')

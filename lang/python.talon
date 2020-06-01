@@ -1,4 +1,6 @@
-code.language: python
+mode: user.python
+mode: command 
+and code.language: python
 -
 logical and: " and "
 logical or: " or "
