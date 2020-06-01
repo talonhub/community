@@ -23,8 +23,6 @@ rerun search:
 run last:
   key(up)
   key(enter)
-kill all:
-  key(ctrl-c)
 action(edit.page_down):
   key(command-pagedown)
 action(edit.page_up):

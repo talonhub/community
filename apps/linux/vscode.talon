@@ -3,6 +3,7 @@
 
 os: linux
 app: Code
+app: Code - OSS
 -
 
 action(user.ide_refactor):
