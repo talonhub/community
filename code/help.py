@@ -73,7 +73,7 @@ def format_context_title(context_name: str) -> str:
     global cached_active_contexts_list
     return "{} [{}]".format(
         context_name, 
-        "ACTIVE" if context_map[context_name] in cached_active_contexts_list else "INACTIVE"
+        "ACTIVE" if context_map.get(context_name, None) in cached_active_contexts_list else "INACTIVE"
     )
 
 
@@ -419,14 +419,14 @@ class Actions:
         gui_context_help.show()
         register_events(True)      
 
-    def help_search(phrase: Union[str, Phrase]):
+    def help_search(phrase: str):
         """Display command info for search phrase"""
         global is_context_help_showing
         global search_phrase
         is_context_help_showing = True
 
         reset()
-        search_phrase = str(phrase)
+        search_phrase = phrase
         refresh_context_command_map()
         gui_alphabet.hide()
         gui_context_help.show()
