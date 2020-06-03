@@ -1,6 +1,39 @@
 os: linux
-app: /terminal/
+tag: terminal
 -
+
+action(edit.page_down):
+  key(shift-pagedown)
+action(edit.page_up):
+  key(shift-pageup)
+action(edit.paste):
+  key(ctrl-shift-v)
+action(edit.copy):
+  key(ctrl-shift-c)
+
+scroll up:
+  key(shift-pageup)
+scroll down:
+  key(shift-pagedown)
+run last:
+  key(up)
+  key(enter)
+rerun <user.text>:
+  key(ctrl-r)
+  insert(text)
+rerun search:
+  key(ctrl-r)
+kill all:
+  key(ctrl-c)
+
+# XXX - these are specific to certain terminals only and should move into their
+# own <term name>.talon file
+action(edit.find):
+  key(ctrl-shift-f)
+action(edit.word_left):
+  key(ctrl-w-left)
+action(edit.word_right):
+  key(ctrl-w-right)
 action(app.tab_open):
   key(ctrl-shift-t)
 action(app.tab_close):
@@ -13,27 +46,3 @@ action(app.window_open):
   key(ctrl-shift-n)
 go tab <number>:
   key("alt-{number}")
-run last:
-  key(up)
-  key(enter)
-rerun <phrase>:
-  key(ctrl-r)
-  insert(phrase)
-rerun search:
-  key(ctrl-r)
-kill all:
-  key(ctrl-c)
-action(edit.find):
-  key(ctrl-shift-f)
-action(edit.page_down):
-  key(shift-pagedown)
-action(edit.page_up):
-  key(shift-pageup)
-action(edit.paste):
-  key(ctrl-shift-v)
-action(edit.copy):
-  key(ctrl-shift-c)
-action(edit.word_left):
-  key(ctrl-w-left)
-action(edit.word_right):
-  key(ctrl-w-right)
