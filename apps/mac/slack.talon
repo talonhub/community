@@ -9,7 +9,7 @@ next workspace: key(cmd-shift-])
 channel: key(cmd-k)
 channel <user.text>:
     key(cmd-k)
-    dictate.lower(text)
+    insert(user.formatted_text(user.text, "ALL_LOWERCASE"))
 ([channel] unread last | gopreev): key(alt-shift-up)
 ([channel] unread next | goneck): key(alt-shift-down)
 (slack | lack) [channel] info: key(cmd-shift-i)
