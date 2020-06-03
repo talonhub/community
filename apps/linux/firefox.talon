@@ -72,5 +72,3 @@ action(browser.submit_form):
 
 action(browser.toggle_dev_tools):
 	key(ctrl-shift-i)
-
-select all: key(ctrl-a)
