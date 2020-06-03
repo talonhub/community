@@ -7,6 +7,8 @@ key = actions.key
 
 words_to_keep_lowercase = "a,an,the,at,by,for,in,is,of,on,to,up,and,as,but,or,nor".split(",")
 
+last_phrase = ""
+
 def surround(by):
     def func(i, word, last):
         if i == 0:
@@ -51,7 +53,12 @@ def format_text_helper(word_list, fmtrs: str):
     sep = " "
     if not spaces:
         sep = ""
-    return sep.join(words)
+    result = sep.join(words)
+
+    global last_phrase
+    last_phrase = result
+
+    return result
 
 NOSEP = True
 SEP   = False
@@ -158,6 +165,13 @@ class Actions:
     def hide_formatters():
         """Hides list of formatters"""
         gui.hide()
+
+    def clear_last_phrase():
+        """Clears the last formatted phrase"""
+        global last_phrase
+        for character in last_phrase:
+            actions.edit.extend_left()
+        actions.edit.delete()
 
 @ctx.capture(rule='{self.formatters}+')
 def formatters(m):
