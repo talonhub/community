@@ -182,7 +182,7 @@ def number_scaled(m):
 #          " one hundred and fifteen " == 115
 @ctx.capture("number", rule=f"(<digits> | [<digits>] <user.number_scaled>)")
 def number(m):
-    return "".join(str(i) for i in list(m))
+    return int("".join(str(i) for i in list(m)))
 
 
 @ctx.capture("number_signed", rule=f"[negative] <number>")
