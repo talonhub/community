@@ -1,4 +1,10 @@
-tag: terminal
+app: cmd.exe # Windows Command Prompt
+app: pwsh.exe # Windows Powershell
+app: Windows Command Processor	
+app: Code	
+app: Visual Studio Code	
+app: Code.exe
+# tag: terminal
 -
 
 # Standard commands
