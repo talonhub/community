@@ -10,7 +10,21 @@ the slack channel.
 Please note that if you want to have the full vim experience you will have to
 make modifications to both the vim config and talon.
 
-# Initial Setup
+Currently supported VIM features:
+
+* motions
+* registers
+* macros
+* folds
+* tabs
+* splits
+* plugins (see list below)
+* settings
+* automatic mode switching (including terminal)
+
+You can contact fidget on the Talon slack for questions/support.
+
+# Initial Setup Walkthrough
 
 ## Talon Change - The word `yank`
 
@@ -32,14 +46,26 @@ other scenarios where you would normally like to be able to press key directly.
 2) Use the alternate vim motion verb `end word`. There aren't too many
 downside to this approach aside from it being somewhat cumbersome.
 
+## Talon Change - The key `word`
+
+By default talon will use the command `word` as a command for saying a single
+word. See `misc/formatters.talon`. In vim "word" is a natural movement motion
+who it is included by default. If you decide to use this you might want to
+change the talon command to be a separate word.
+
 ## The `generic_editor.talon` commands
 
 The default actions defined in `generic_editor.talon` are too simple for more
 complicated use with vim. If you run into problems with overlapping commands
 you can just rename this file to `generic_editor.talon_` to disable it from
-loading. That said, all generic editor actions are defined in `vim.talon`.
+loading. That said, all generic editor actions are defined in `vim.talon`, so
+is should still work, but it has not yet been tested.
+
 
 ## Detecting VIM running inside terminals from Talon
+
+The vim support in talon is built around supporting running vim as your
+terminal and being able to pop in and not of terminal mode.
 
 If you won't use vim from inside of a terminal you can ignore this step.
 
@@ -57,90 +83,110 @@ descriminate terminal vs vim tags in terminal talon files by using
 To set your titlestring to include `VIM`, use something like the following:
 
 ```
-let &titlestring ='%t (%f) - VIM'
+let &titlestring ='VIM - (%f) %t'
 set title " required for neovim
 ```
 
 Talon will search the active terminal window title and look for `VIM`, at which
 point it will correctly trigger the vim tag and disable the terminal tag.
 
+## Detecting the code language of edited files
+
+Currently the logic for detecting the code language inside of vim expect their
+actual file name to be the last part of the titlestring that is pulled out of
+`win.title`. This means you'll have to added your title string to ensure that
+the last entry is the file name. This can be done using the `%t` format
+specifier, which was shown in the previous example. No matter what you say your
+`titlestring` to just be sure that `%t` is the last entry.
+
 ## Detecting current vim mode
 
-The longer term plan is for talon to be able to intelligently determine the
-mode that vim is currently running in, and automatically switch to different
-modes depending on the commands that are issue. In theory you could do this
-using RPC, but vim and neovim both use a different method so for now we
-simply rely on advertising it in the `titlestring`, similar to solving the
-previous problem.
+`code/vim.py` currently realize on the mode being advertised in the title
+string in order to make intelligent decisions about how to flip between modes.
+You can disable this functionality in the settings. If you want to use it you
+need to make sure that your `titlestring` includes a pattern like `MODE:<mode>`
+for example:
 
 ```
-let &titlestring ='%t (%f) - VIM MODE:%{mode()}'
+let &titlestring ='VIM MODE:%{mode()} - (%f) %t'
 set title
 ```
 
 ## Automatically switching neovim using RPC
+
+XXX - note this isn't supported yet
 
 Once again we can rely on the `titlestring` to tell talon where to look to
 access the current neovim RPC interface.
 .
 
 ```
-let &titlestring ='%t (%f) - VIM MODE:%{mode()} RPC:%{v:servername}'
+let &titlestring ='VIM MODE:%{mode()} RPC:%{v:servername} - (%f) %t'
 set title
 ```
-
-With this enableb talon will be able (XXX - not done yet) to directly modify
-the mode of the current neovim window over RPC.
-
 
 ## Using VIM as your terminal
 
 Recent versions of vim and neovim both allow you to run a terminal emulator
 inside of a vim buffer itself. For people that are using voice to control their
 systems this is actually very useful it allows you to navigate the terminal
-history using vim motions. This allows you to for an instance copy in paste
-lines they were printed from different terminal commandswould otherwise require
-you to use a mouse to highlight, copy, and paste. its alternatively you might
-be tempted to use a terminal that supports of thim like selection mode similar
-to termite, however the selection mode has serious drawbacks such as no line
-numbers, limited motion verbs, etc.
+history using vim motions. This allows you to for instance copy and paste lines
+that were printed from different terminal commands that would otherwise require
+you to use a mouse to highlight.
+
+As an alternative to vim you might be tempted to use a terminal that supports
+of vim-like selection mode similar to termite, however the selection mode in
+these terminals has serious drawbacks such as no line numbers, limited motion
+verbs, etc.
 
 If you choose to use them as your terminal than you have to make certain
-modifcations again to the talon configuration files, and the vim configuration
-in order for it to differentiate between terminal mode and wiimote
+modifications again to the talon configuration files, and the vim configuration
+in order for it to differentiate between terminal mode.
 
 First you'll have to ensure that the vim mode is correctly advertised in your
 title string, similar to the previous section. The following example can be
 placed into your vim config file.
 
 ```
-let &titlestring ='%t (%f) - VIM MODE:%{mode()} RPC:%{v:servername}'
+let &titlestring ='VIM MODE:%{mode()} RPC:%{v:servername} - (%f) %t'
 set title
 if has ('autocmd')
-    autocmd TermEnter * let &titlestring='%t (%f) - VIM MODE:%{mode()} RPC:%{v:servername}'|redraw
+    autocmd TermEnter * let &titlestring='VIM MODE:%{mode()} RPC:%{v:servername} - (%f) %t'|redraw
 endif
-
 ```
 
-The `vim_terminal.talon` file can then match based off of the titles string
-above, in which case it will trigger `terminal` mode despite being inside of
-vim.
+In the example above we need to set up in `autocomd` because by default
+terminals were lazily redraw the `titlestring`, which causes talon to not
+correctly detect the mode switch.
 
+The `apps/linux/vim_terminal.talon` file can then match based off of the
+`titlestring` above holding `MODE:t`, in which case it will trigger `terminal`
+mode despite being inside of vim.
 
-### Installing neovim python package
+### Neovim Terminal Quirks
+
+XXX - not completed
+
+Here I will try to document some potential problems you will encounter when
+moving your workflow into vim terminal for everything, and how I solved them.
+
+https://gist.github.com/DrSpeedy/9022d3bee63a7029570c7d3d43054329
+
+### Working directory
+
+```
+# This function calls the script below when loaded by
+# the shell inside of neovim. It must be placed somewhere in
+# your default shell's rc file e.g. ~/.zshrc
+neovim_autocd() {
+    [[ $NVIM_LISTEN_ADDRESS ]] && ${HOME}/.ohmyzsh/custom/functions/neovim-autocd.py
+}
+chpwd_functions+=( neovim_autocd )
+```
+
+### Installing neovim python package inside talon
 
 XXX - this isn't done/documented yet
-
-# Supported VIM Features
-
-* motions
-* registers
-* macros
-* folds
-* tabs
-* splits
-* plugins
-* settings
 
 # VIM Plugins
 

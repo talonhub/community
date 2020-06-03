@@ -1,5 +1,3 @@
-os: linux
-app: /term/
 tag: vim
 -
 

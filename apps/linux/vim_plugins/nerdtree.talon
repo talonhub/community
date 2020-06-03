@@ -1,4 +1,3 @@
-os: linux
 tag: vim
 win.title: /NERD_tree/
 -
@@ -48,3 +47,4 @@ show hidden files: key(I)
 # other mappings
 quick help: key(?)
 close nerd [tree]: key(q)
+nerd close: key(q)

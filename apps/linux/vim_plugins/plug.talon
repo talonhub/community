@@ -1,25 +1,24 @@
-os: linux
 tag: vim
 -
 
 plugins install:
-    insert(":so $MYVIMRC\n")
-    insert(":PlugInstall\n")
+    user.vim_normal_mode(":so $MYVIMRC\n")
+    user.vim_normal_mode(":PlugInstall\n")
 plugins status:
-    insert(":so $MYVIMRC\n")
-    insert(":PlugStatus\n")
+    user.vim_normal_mode(":so $MYVIMRC\n")
+    user.vim_normal_mode(":PlugStatus\n")
 plugins clean:
-    insert(":so $MYVIMRC\n")
-    insert(":PlugClean\n")
+    user.vim_normal_mode(":so $MYVIMRC\n")
+    user.vim_normal_mode(":PlugClean\n")
 plugins diff:
-    insert(":so $MYVIMRC\n")
-    insert(":PlugDiff\n")
+    user.vim_normal_mode(":so $MYVIMRC\n")
+    user.vim_normal_mode(":PlugDiff\n")
 plugins update:
-    insert(":so $MYVIMRC\n")
-    insert(":PlugUpdate\n")
+    user.vim_normal_mode(":so $MYVIMRC\n")
+    user.vim_normal_mode(":PlugUpdate\n")
 plugins upgrade:
-    insert(":so $MYVIMRC\n")
-    insert(":PlugUpgrade\n")
+    user.vim_normal_mode(":so $MYVIMRC\n")
+    user.vim_normal_mode(":PlugUpgrade\n")
 plugins snapshot:
-    insert(":so $MYVIMRC\n")
-    insert(":PlugSnapshot\n")
+    user.vim_normal_mode(":so $MYVIMRC\n")
+    user.vim_normal_mode(":PlugSnapshot\n")
