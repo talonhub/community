@@ -67,7 +67,11 @@ action(user.ide_done):
   key(tab)
 
 action(user.ide_toggle_project):
-  key(ctrl-shift-e)
+  #FIX works manually with caplock on ctrl-shift-E typed works but not key(ctrl-shift-E) -  Linux Mint 19 (Vagrant VirtualBox),
+  #key(ctrl-shift-E)
+  user.ide_command_palette()
+  insert("workbench.files.action.focusFilesExplorer")
+  key(enter)
 
 action(user.ide_toggle_find):
   key(ctrl-shift-f)
