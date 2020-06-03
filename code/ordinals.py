@@ -1,15 +1,56 @@
-from talon import app, Module, Context, actions, ui
-import re
-import time
 import os
 import platform
+import re
+import time
 from math import floor
 
+from talon import Context, Module, actions, app, ui
+
 ordinal_words = {}
-ordinal_ones = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth']
-ordinal_teens = ['tenth', 'eleventh', 'twelfth', 'thirteenth', 'fourteenth', 'fifteenth', 'sixteenth', 'seventeenth', 'eighteenth', 'nineteenth']
-ordinal_tens = ['twentieth', 'thirtieth', 'fortieth', 'fiftieth', 'sixtieth', 'seventieth', 'eightieth', 'ninetieth']
-ordinal_tenty = ['twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety']
+ordinal_ones = [
+    "first",
+    "second",
+    "third",
+    "fourth",
+    "fifth",
+    "sixth",
+    "seventh",
+    "eighth",
+    "ninth",
+]
+ordinal_teens = [
+    "tenth",
+    "eleventh",
+    "twelfth",
+    "thirteenth",
+    "fourteenth",
+    "fifteenth",
+    "sixteenth",
+    "seventeenth",
+    "eighteenth",
+    "nineteenth",
+]
+ordinal_tens = [
+    "twentieth",
+    "thirtieth",
+    "fortieth",
+    "fiftieth",
+    "sixtieth",
+    "seventieth",
+    "eightieth",
+    "ninetieth",
+]
+ordinal_tenty = [
+    "twenty",
+    "thirty",
+    "forty",
+    "fifty",
+    "sixty",
+    "seventy",
+    "eighty",
+    "ninety",
+]
+
 
 def ordinal(n):
     """
@@ -24,6 +65,7 @@ def ordinal(n):
     if 11 <= (n % 100) <= 13:
         suffix = "th"
     return str(n) + suffix
+
 
 def ordinal_word(n):
     n = int(n)
@@ -40,26 +82,30 @@ def ordinal_word(n):
         result += ordinal_ones[n - 1]
     return result
 
-for n in range(2, 100):
+
+for n in range(1, 100):
     # This was initially minus one to compensate for its only use as a command
     # repeater, however ordinals themselves have other uses, so accommodating
     # the negative one in the command repeaters done in the actual talon file
     # now
-    #ordinal_words[ordinal_word(n)] = n - 1
+    # ordinal_words[ordinal_word(n)] = n - 1
     ordinal_words[ordinal_word(n)] = n
 
 mod = Module()
-mod.list('ordinal_words', desc='list of ordinals')
+mod.list("ordinal_words", desc="list of ordinals")
 
 ctx = Context()
+
+
 @mod.capture
 def ordinals(m) -> int:
     "Returns a single ordinial as a digit"
 
-@ctx.capture(rule='{self.ordinal_words}')
+
+@ctx.capture(rule="{self.ordinal_words}")
 def ordinals(m):
     o = m[0]
     return int(ordinal_words[o])
 
-ctx.lists['self.ordinal_words'] = ordinal_words.keys()
 
+ctx.lists["self.ordinal_words"] = ordinal_words.keys()
