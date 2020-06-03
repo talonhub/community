@@ -1,9 +1,9 @@
 os: linux
 app: Firefox
+app: firefox
 -
-#todo tags
-# settings():
-	# tags = browser
+tag(): browser
+tag(): firefox
 
 #action(browser.address):
 
@@ -72,3 +72,5 @@ action(browser.submit_form):
 
 action(browser.toggle_dev_tools):
 	key(ctrl-shift-i)
+
+select all: key(ctrl-a)
