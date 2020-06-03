@@ -1,14 +1,7 @@
-dragon words: "<dgnwords>"
-dragon dictation: "<phrase>"
 slap:
 	edit.line_end()
 	key(enter)
 cd: "cd "
-#cd talon home: "cd {}\n".format(TALON_HOME),
-#cd talon user: "cd {}\n".format(TALON_USER),
-#cd talon [user] emily: "cd {}/emily\n".format(TALON_USER),
-#cd talon plugins: "cd {}\n".format(TALON_PLUGINS),
-#talon logs: "cd {} && tail -f talon.log\n".format(TALON_HOME),
 grep: "grep "
 elle less: "ls "
 run L S: "ls\n"
@@ -70,7 +63,7 @@ paste match: edit.paste_match_style()
 file save: edit.save()
 #menu help: key(F1)
 #spotlight: key(super)
-(undo that | skunks): edit.undo()
+undo that: edit.undo()
 redo that: edit.redo()
 volume up: key(volup)
 volume down: key(voldown)
@@ -84,3 +77,5 @@ wipe: key(backspace)
 	key(left)
 funny: "ha ha"
 #menu: key(alt)
+
+

@@ -2,26 +2,22 @@
 mode: all
 -
 welcome back:
-	user.mouse_wake()
-	user.history_enable()
-	speech.enable()
-sleep all:
-	user.switcher_hide_running()
-	user.history_disable()
-	user.homophones_hide()
-	user.help_hide()
-	user.mouse_sleep()
-	speech.disable()
-	user.engine_sleep()
-talon sleep:
-    speech.disable()
-    user.system_command('notify-send.sh -t 3000 -f -u low "Talon Sleep"')
-talon wake:
+    user.mouse_wake()
+    user.history_enable()
     speech.enable()
-    user.system_command('notify-send.sh -t 3000 -f -u low "Talon Awake"')
+sleep all:
+    user.switcher_hide_running()
+    user.history_disable()
+    user.homophones_hide()
+    user.help_hide()
+    user.mouse_sleep()
+    speech.disable()
+    user.engine_sleep()
+talon sleep: speech.disable()
+talon wake: speech.enable()
 dragon mode: speech.disable()
 talon mode: speech.enable()
-^(dictation mode|dictate)$:
+^dictation mode$:
     mode.disable("sleep")
     mode.disable("command")
     mode.enable("dictation")
@@ -29,6 +25,7 @@ talon mode: speech.enable()
     mode.disable("sleep")
     mode.disable("dictation")
     mode.enable("command")
+
 [enable] debug mode:
     mode.enable("user.gdb")
 disable debug mode:

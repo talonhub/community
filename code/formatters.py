@@ -1,4 +1,5 @@
-from talon import Module, Context, actions, ui
+from talon import Module, Context, actions, ui, imgui
+from talon.grammar import Phrase
 from typing import List, Union
 
 ctx = Context()
@@ -16,28 +17,33 @@ def surround(by):
 
     return func
 
-def FormatText(m, fmtrs):
-    if m._words[-1] == "over":
-        m._words = m._words[:-1]
-    try:
-        words = actions.dictate.parse_words(m)
-        words = actions.dictate.replace_words(words)
-    except AttributeError:
-        with clip.capture() as s:
-            edit.copy()
-        words = s.get().split(" ")
-        if not words:
-            return
+def FormatText(m: Union[str, Phrase], fmtrs: str):
+    words = []
+    if isinstance(m, str):
+        words = m.split(' ')
+    else:
+        if m.words[-1] == "over":
+            m.words = m.words[:-1]
+        try:
+            words = actions.dictate.parse_words(m)
+            words = actions.dictate.replace_words(words)
+        except AttributeError:
+            with clip.capture() as s:
+                edit.copy()
+                words = s.get().split(" ")
+            if not words:
+                return
     
     return format_text_helper(words, fmtrs)
 
-def format_text_helper(words, fmtrs):
+def format_text_helper(word_list, fmtrs: str):
+    fmtr_list = fmtrs.split(",")
     tmp = []
     spaces = True
-    for i, w in enumerate(words):
-        for name in reversed(fmtrs):
+    for i, w in enumerate(word_list):
+        for name in reversed(fmtr_list):
             smash, func = all_formatters[name]
-            w = func(i, w, i == len(words) - 1)
+            w = func(i, w, i == len(word_list) - 1)
             spaces = spaces and not smash
         tmp.append(w)
     words = tmp
@@ -122,6 +128,7 @@ formatters_words = {
     #"fiver": formatters_dict["FIRST_FIVE"],
 }
 
+
 all_formatters = {}
 all_formatters.update(formatters_dict)
 all_formatters.update(formatters_words)
@@ -130,8 +137,8 @@ mod = Module()
 mod.list('formatters', desc='list of formatters')
 
 @mod.capture
-def formatters(m) -> List[str]:
-    "Returns a list of formatters"
+def formatters(m) -> str:
+    "Returns a comma-separated string of formatters e.g. 'SNAKE,DUBSTRING'"
 
 @mod.capture
 def format_text(m) -> str:
@@ -139,23 +146,32 @@ def format_text(m) -> str:
 
 @mod.action_class
 class Actions:
-    def formatted_text(text: str, formatter: str) -> str:
-        """Takes text and formats according to formatter"""
-        return format_text_helper(text, [formatter])
+    def formatted_text(phrase: Union[str, Phrase], formatters: str) -> str:
+        """Formats a phrase according to formatters. formatters is a comma-separated string of formatters (e.g. 'CAPITALIZE_ALL_WORDS,DOUBLE_QUOTED_STRING')"""
+        return FormatText(phrase, formatters)
 
-    def formatters_format_text(text: Union[str, List[str]], fmtrs: List[str]) -> str:
-        """Formats a list of parsed words given a list of formatters"""
-        if isinstance(text, list):
-            return format_text_helper(text, fmtrs)
-        else:
-            return format_text_helper([text], fmtrs)
-        
+    def list_formatters():
+        """Lists all formatters"""
+        gui.show()
+        gui.freeze()
+
+    def hide_formatters():
+        """Hides list of formatters"""
+        gui.hide()
+
 @ctx.capture(rule='{self.formatters}+')
 def formatters(m):
-    return m.formatters_list
- 
-@ctx.capture(rule='<self.formatters> <phrase>')
+    return ','.join(m.formatters_list)
+
+@ctx.capture(rule='<self.formatters> <user.text>')
 def format_text(m):
-    return FormatText(m.phrase, m.formatters)
+    return FormatText(m.text, m.formatters)
 
 ctx.lists['self.formatters'] = formatters_words.keys()
+
+@imgui.open()
+def gui(gui: imgui.GUI):
+    gui.text("List formatters")
+    gui.line()
+    for name in sorted(set(formatters_words.keys())):
+        gui.text(f"{name} | {format_text_helper(['one', 'two', 'three'], name)}")

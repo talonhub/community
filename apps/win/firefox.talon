@@ -2,9 +2,7 @@ os: windows
 app: Firefox
 app: firefox.exe
 -
-#todo tags
-# settings():
-	# tags = browser
+tag(): browser
 	
 #action(browser.address):
 

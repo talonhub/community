@@ -1,20 +1,26 @@
-from talon import imgui, Module
-from talon.engine import engine
+from talon import imgui, Module, speech_system, actions
 
 hist_len = 10
 history = []
-def parse_phrase(phrase):
-    return ' '.join(word.split('\\')[0] for word in phrase)
+def parse_phrase(word_list):
+    return ' '.join(word.split('\\')[0] for word in word_list)
         
-def on_phrase_post(j):
+def on_phrase(j):
     global hist_len
     global history
-    phrase = parse_phrase(j.get('phrase', []))
-    cmd = j['cmd']
-    if cmd == 'p.end' and phrase:
-        history.append(phrase)
+
+    try:
+        val = parse_phrase(getattr(j['parsed'], '_unmapped', j['phrase']))
+    except:
+        val = parse_phrase(j['phrase'])
+    
+    if val != "":
+        history.append(val)
         history = history[-hist_len:]
 
+        if gui.showing:
+            gui.freeze()
+   
 #todo: dynamic rect?
 @imgui.open(y=0)
 def gui(gui: imgui.GUI):
@@ -24,16 +30,16 @@ def gui(gui: imgui.GUI):
     text = history[:]
     for line in text:
         gui.text(line)
-     
-engine.register('post:phrase', on_phrase_post)
+
+speech_system.register('phrase', on_phrase)
 
 mod = Module()
 @mod.action_class
 class Actions:           
     def history_enable():
         """Enables the history"""
-        gui.show()
-        
+        gui.freeze()
+
     def history_disable():
         """Disables the history"""
         gui.hide()
