@@ -168,10 +168,16 @@ class Actions:
         """Collapse all code in file"""
 
     def ide_split_right():
-        """Move current tab to the right pane"""
+        """Copy current tab to the right pane"""
+
+    def ide_split_left():
+        """Copy current tab to the left pane"""
 
     def ide_split_down():
-        """Move tab to the pane below"""
+        """Copy tab to the pane below"""
+
+    def ide_split_up():
+        """Copy tab to the pane above"""
 
     def ide_split_vertically():
         """Split the view into panes vertically"""
@@ -202,6 +208,9 @@ class Actions:
 
     def ide_go_last_method():
         """Go to the previous method in the file"""
+
+    def ide_command_palette():
+        """Open the command palette"""
 
     def ide_clippings():
         """Show copy history"""
@@ -266,6 +275,9 @@ class Actions:
     def ide_git_menu():
         """Show the git menu for IDE"""
 
+    def ide_reveal_in_file_manager():
+        """Reveal in OS file manager. window"""
+
     def ide_toggle_project():
         """Hide/Show project (file system) browser window"""
 
@@ -283,6 +295,9 @@ class Actions:
 
     def ide_toggle_terminal():
         """Hide/Show terminal window"""
+
+    def ide_toggle_extensions():
+        """Hide/Show extensions window"""
 
     def ide_terminal_new():
         """Create new terminal"""
@@ -485,17 +500,5 @@ class Actions:
     def ide_toggle_comment():
         """Toggle comment for selected text"""
 
-    def ide_show_explorer():
-        """Show Explorer"""
 
-    def ide_show_search():
-        """Show Search"""
 
-    def ide_show_source_control():
-        """Show Source Control"""
-
-    def ide_show_debug():
-        """Show Debug"""
-
-    def ide_show_extensions():
-        """Show Extensions"""

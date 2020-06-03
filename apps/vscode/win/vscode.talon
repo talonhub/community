@@ -6,6 +6,39 @@ app: Visual Studio Code
 app: Code.exe
 -
 
+# General
+action(user.ide_command_palette):
+  key(ctrl-shift-p)
+
+action(app.tab_next):
+  key(ctrl-k)
+  key(ctrl-pagedown)
+  
+action(app.tab_previous):
+  key(ctrl-k)
+  key(ctrl-pageup)
+  
+# Splits
+action(user.ide_split_right):
+  user.ide_command_palette()
+  insert("workbench.action.splitEditorRight")
+  key(enter)
+
+action(user.ide_split_left):
+  user.ide_command_palette()
+  insert("workbench.action.splitEditorLeft")
+  key(enter)
+
+action(user.ide_split_up):
+  user.ide_command_palette()
+  insert("workbench.action.splitEditorUp")
+  key(enter)
+
+action(user.ide_split_down):
+  user.ide_command_palette()
+  insert("workbench.action.splitEditorDown")
+  key(enter)
+
 action(user.ide_refactor):
   key(ctrl-a)
   key(ctrl-shift-i)
@@ -40,13 +73,19 @@ action(user.ide_terminal_new):
   key(ctrl-shift-`)
 
 action(user.ide_terminal_focus_previous):
-  key(alt-left)
+  user.ide_command_palette()
+  insert("Terminal:Focus Previous Terminal")
+  key(enter)
 
 action(user.ide_terminal_focus_next):
-  key(alt-right)
+  user.ide_command_palette()
+  insert("Terminal:Focus Next Terminal")
+  key(enter)
 
 action(user.ide_terminal_trash):
-  key(ctrl-shift-delete)
+  user.ide_command_palette()
+  insert("Terminal:Kill")
+  key(enter)
 
 action(user.ide_terminal_scroll_down):
   key(shift-pgdown)
@@ -66,17 +105,30 @@ action(user.ide_parameter_hints):
 action(user.ide_done):
   key(tab)
 
-action(user.ide_show_explorer):
+action(user.ide_toggle_project):
   key(ctrl-shift-e)
 
-action(user.ide_show_search):
+action(user.ide_toggle_find):
+  key(ctrl-shift-f)
+action(user.ide_find_everywhere):
   key(ctrl-shift-f)
 
-action(user.ide_show_source_control):
+action(user.ide_toggle_git):
   key(ctrl-shift-g)
 
-action(user.ide_show_debug):
+action(user.ide_toggle_run):
+  key(ctrl-shift-d)
+action(user.ide_toggle_debug):
   key(ctrl-shift-d)
 
-action(user.ide_show_extensions):
+action(user.ide_toggle_extensions):
   key(ctrl-shift-x)
+
+action(app.window_open):
+  key(ctrl-shift-n)
+
+action(user.ide_create_file):
+  key(ctrl-n)
+
+action(user.ide_reveal_in_file_manager):
+  key(ctrl-k r)

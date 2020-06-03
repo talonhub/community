@@ -3,6 +3,12 @@ app: /jetbrains/
 app: IntelliJ IDEA
 app: PyCharm
 app: PyCharm64.exe
+app: Visual Studio Code
+app: Code - OSS
+app: Code
+app: Code.exe
+app: Atom
+app: atom.exe
 
 # When tags are supported
 #tags: ide
@@ -63,7 +69,9 @@ collapse deep: user.ide_collapse_deep()
 collapse all: user.ide_collapse_all()
 # Splits
 split right: user.ide_split_right()
+split left: user.ide_split_left()
 split down: user.ide_split_down()
+split up: user.ide_split_up()
 split vertically: user.ide_split_vertically()
 split horizontally: user.ide_split_horizontally()
 split flip: user.ide_split_flip()
@@ -103,12 +111,27 @@ git (pull request | request): user.ide_git_pull_request()
 git (view | show | list) (requests | request): user.ide_git_list_requests()
 git (annotate | blame): user.ide_git_annotate()
 git menu: user.ide_git_menu()
+
+# Terminal
+new terminal: user.ide_terminal_new()
+next terminal: user.ide_terminal_focus_next()
+trash terminal: user.ide_terminal_trash()
+(previous | last) terminal: user.ide_terminal_focus_previous()
+terminal scroll up: user.ide_terminal_scroll_up()
+terminal scroll down: user.ide_terminal_scroll_down()
+
+
 # Tool windows:
+command palette: user.ide_command_palette()
+reveal in manager: user.ide_reveal_in_file_manager()
+
 # Toggling various tool windows
+toggle explorer: user.ide_toggle_explorer()
 toggle project: user.ide_toggle_project()
 toggle find: user.ide_toggle_find()
 toggle run: user.ide_toggle_run()
 toggle debug: user.ide_toggle_debug()
+toggle extensions: user.ide_toggle_extensions()
 toggle events: user.ide_toggle_events()
 toggle terminal: user.ide_toggle_terminal()
 toggle git: user.ide_toggle_git()
@@ -144,6 +167,8 @@ toggle parameters: user.ide_toggle_parameters()
 toggle fullscreen: user.ide_toggle_fullscreen()
 toggle distraction [free mode]: user.ide_toggle_distraction_free()
 toggle presentation [mode]: user.ide_toggle_presentation_mode()
+# Toggle additionals
+toggle comment: user.ide_toggle_comment()
 # Tabs
 go first tab: user.ide_go_first_tab()
 go second tab: user.ide_go_second_tab()

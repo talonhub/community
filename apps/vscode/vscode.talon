@@ -11,6 +11,9 @@ app: Visual Studio Code
 app: Code.exe
 -
 
+# general
+command palette: user.ide_command_palette()
+
 # editing
 code refactor all: user.ide_refactor()
 code refactor: user.ide_refactor_in_line()
@@ -43,9 +46,3 @@ console last: user.ide_terminal_focus_previous()
 console up: user.ide_terminal_scroll_up()
 console down: user.ide_terminal_scroll_down()
 
-# focus
-show explorer: user.ide_show_explorer()
-show search: user.ide_show_search()
-show source control: user.ide_show_source_control()
-show debug: user.ide_show_debug()
-show extensions: user.ide_show_extensions()
