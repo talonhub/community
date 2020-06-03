@@ -3,8 +3,11 @@
 app: /jetbrains/
 
 app: IntelliJ IDEA
+app: idea64.exe
 app: PyCharm
 app: PyCharm64.exe
+app: pycharm64.exe
+app: webstorm64.exe
 # When tags are supported
 #tags: ide
 -
