@@ -13,6 +13,7 @@ app: Code.exe
 
 # general
 command palette: user.ide_command_palette()
+open containing folder | show in explorer | show in finder: user.ide_reveal_in_file_manager()
 
 # editing
 code refactor all: user.ide_refactor()

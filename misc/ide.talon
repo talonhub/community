@@ -126,7 +126,6 @@ command palette: user.ide_command_palette()
 reveal in manager: user.ide_reveal_in_file_manager()
 
 # Toggling various tool windows
-toggle explorer: user.ide_toggle_explorer()
 toggle project: user.ide_toggle_project()
 toggle find: user.ide_toggle_find()
 toggle run: user.ide_toggle_run()
