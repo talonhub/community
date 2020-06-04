@@ -161,11 +161,17 @@ class Actions:
     def ide_expand_all():
         """Expand all blocks in file"""
 
+    def ide_expand_region():
+        """Expand current block in file"""
+
     def ide_collapse_deep():
         """Collapse code recursively"""
 
     def ide_collapse_all():
         """Collapse all code in file"""
+
+    def ide_collapse_region():
+        """Collapse current block in file"""
 
     def ide_split_right():
         """Copy current tab to the right pane"""
