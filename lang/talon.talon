@@ -32,7 +32,7 @@ shift key:
 	insert('shift')
 
 action:
-	insert("action()")
+	insert("action():")
 	edit.left()
 os win:
 	insert("os: windows")
