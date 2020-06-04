@@ -22,6 +22,7 @@
 #     `yank X lines @ [line] NNNN`
 #     `yank last X lines` (relative reverse copy)
 #     `yank next X lines` (relative forward copy)
+# - Move ':' stuff to use command mode funcs
 
 os:linux
 app:gvim
@@ -82,6 +83,7 @@ settings():
 # control vim. These are more for people that are used to the official talon
 # editor commands that want to trial vim a bit. I don't personally use most of
 # the actions here, so they have not been thoroughly tested
+#
 ###
 action(edit.find):
     user.vim_normal_mode_exterm_key("/")
@@ -160,17 +162,16 @@ action(edit.paste):
 #    insert("{vim_counted_command}")
 <user.vim_motions_all_adjust>:
     insert("{vim_motions_all_adjust}")
+# XXX - needs to be adjusted to handle the actions associated with key presses
 <user.vim_normal_counted_action>:
     insert("{vim_normal_counted_action}")
-
-# XXX YYY ZZZ
 
 ###
 # File editing and management
 ###
 # NOTE: using `save` alone conflicts too much with the `say`
 save file:
-    user.vim_normal_mode(":w\n")
+    user.vim_command_mode(":w\n")
 save [file] as:
     key(escape)
     user.vim_normal_mode(":w ")
@@ -473,7 +474,7 @@ sprite:
     key(l)
 
 # split left
-speff:
+spleff:
     user.vim_set_normal_mode_exterm()
     key(ctrl-w)
     key(h)
@@ -483,6 +484,12 @@ splot:
     user.vim_set_normal_mode_exterm()
     key(ctrl-w)
     key(t)
+
+sprot:
+    user.vim_set_normal_mode_exterm()
+    key(ctrl-w)
+    key(b)
+
 
 # moving windows
 split (only|exclusive):
@@ -513,7 +520,7 @@ split move left:
     user.vim_set_normal_mode_exterm()
     key(ctrl-w)
     key(H)
-split move to tab:
+split (move to|make) tab:
     user.vim_set_normal_mode_exterm()
     key(ctrl-w)
     key(T)
@@ -523,6 +530,8 @@ split (balance|equalize):
     user.vim_set_normal_mode_exterm()
     key(ctrl-w)
     key(=)
+
+# atm comboing these with ordinals is best, but may add number support
 split taller:
     user.vim_set_normal_mode_exterm()
     key(ctrl-w)
@@ -681,31 +690,30 @@ visual block mode: key(ctrl-v)
 ###
 # Searching
 ###
-# XXX - need exterm
 search:
-    user.vim_any_motion_mode("/\c")
+    user.vim_any_motion_mode_exterm("/\c")
 
 search sensitive:
     key(escape)
-    user.vim_any_motion_mode("/\C")
+    user.vim_any_motion_mode_exterm("/\C")
 
 search <user.text>$:
-    user.vim_any_motion_mode("/\c{text}\n")
+    user.vim_any_motion_mode_exterm("/\c{text}\n")
 
 search <user.text> sensitive$:
-    user.vim_any_motion_mode("/\C{text}\n")
+    user.vim_any_motion_mode_exterm("/\C{text}\n")
 
 search <user.ordinals> <user.text>$:
-    user.vim_any_motion_mode("{ordinals}/\c{text}\n")
+    user.vim_any_motion_mode_exterm("{ordinals}/\c{text}\n")
 
 search (reversed|reverse) <user.text>$:
-    user.vim_any_motion_mode("?\c{text}\n")
+    user.vim_any_motion_mode_exterm("?\c{text}\n")
 
 search (reversed|reverse):
-    user.vim_any_motion_mode("?\c")
+    user.vim_any_motion_mode_exterm("?\c")
 
 search (reversed|reverse) sensitive:
-    user.vim_any_motion_mode("?\C")
+    user.vim_any_motion_mode_exterm("?\C")
 
 ###
 # Text Selection

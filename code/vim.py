@@ -1,4 +1,3 @@
-# Talon VIM - inspired by vimspeak: https://github.com/AshleyF/VimSpeak
 # see doc/vim.md
 #
 # XXX - the old vim speak special characters needs to be replaced to a the
@@ -20,7 +19,7 @@
 #       delay that is buggy depending on your cpu consumption
 # XXX - add setting for disabling local terminal escape when running inside
 #       remote vim sessions via ssh, etc
-# XXX - need to support other mode changes (command, replace, etc)
+# XXX - need to support other mode changes (replace, etc)
 # XXX - import and test scenario where the mode isn't listed at all
 # XXX - add test cases
 
@@ -61,7 +60,53 @@ ctx.lists["self.vim_arrow"] = {
 }
 
 # XXX - need to break into normal, visual, etc
-ctx.lists["self.vim_counted_actions"] = {
+# ctx.lists["self.vim_counted_actions"] = {
+#    "after": "a",
+#    "append": "a",
+#    "after line": "A",
+#    "append line": "A",
+#    "insert": "i",
+#    "insert column zero": "gI",
+#    # "open": "o",  # conflicts too much with other commands
+#    "open below": "o",
+#    "open above": "O",
+#    "substitute": "s",
+#    "substitute line": "S",
+#    "undo": "u",
+#    "undo line": "U",
+#    "erase": "x",
+#    "erase reversed": "X",
+#    "erase back": "X",
+#    "put": "p",
+#    "put below": "p",
+#    "paste": "p",
+#    "paste below": "p",
+#    "put before": "P",
+#    "paste before": "P",
+#    "put above": "P",
+#    "paste above": "P",
+#    "repeat": ".",
+#    "indent line": ">>",
+#    "unindent line": "<<",
+#    "delete line": "dd",
+#    "yank line": "Y",
+#    # "copy line": "Y",
+#    "scroll left": "zh",
+#    "scroll right": "zl",
+#    "scroll half screen left": "zH",
+#    "scroll half screen right": "zL",
+#    "scroll start": "zs",
+#    "scroll end": "ze",
+#    # XXX - these work from visual mode and normal mode
+#    "insert before line": "I",
+#    "insert line": "I",
+#    "play again": "@@",
+#    "toggle case": "~",
+#    # XXX - custom
+#    "panic": "u",
+# }
+
+standard_counted_actions = {
     "after": "a",
     "append": "a",
     "after line": "A",
@@ -75,8 +120,6 @@ ctx.lists["self.vim_counted_actions"] = {
     "substitute line": "S",
     "undo": "u",
     "undo line": "U",
-    # XXX - fix this control char
-    "redo": "<C-r>",
     "erase": "x",
     "erase reversed": "X",
     "erase back": "X",
@@ -89,13 +132,6 @@ ctx.lists["self.vim_counted_actions"] = {
     "put above": "P",
     "paste above": "P",
     "repeat": ".",
-    # XXX - fix these control characters
-    "scroll up": "<C-y>",
-    "scroll down": "<C-e>",
-    "page down": "<C-f>",
-    "page up": "<C-b>",
-    "half page down": "<C-d>",
-    "half page up": "<C-u>",
     "indent line": ">>",
     "unindent line": "<<",
     "delete line": "dd",
@@ -112,9 +148,27 @@ ctx.lists["self.vim_counted_actions"] = {
     "insert line": "I",
     "play again": "@@",
     "toggle case": "~",
-    # XXX - custom
-    "panic": "u",
 }
+
+standard_counted_actions_control_keys = {
+    "redo": "ctrl-r",
+    "scroll up": "ctrl-y",
+    "scroll down": "ctrl-e",
+    "page down": "ctrl-f",
+    "page up": "ctrl-b",
+    "half page down": "ctrl-d",
+    "half page up": "ctrl-u",
+}
+
+# You can put custom shortcuts here to make it easier to manage
+custom_counted_action = {"panic": "u"}
+
+ctx.lists["self.vim_counted_actions"] = {
+    **standard_counted_actions,
+    **standard_counted_actions_control_keys,
+    **custom_counted_action,
+}
+
 
 ctx.lists["self.vim_jump_range"] = {
     "jump to line of": "'",
@@ -769,6 +823,16 @@ class Actions:
         v = VimMode()
         v.set_terminal_mode()
 
+    def vim_set_command_mode():
+        """set visual mode"""
+        v = VimMode()
+        v.set_command_mode()
+
+    def vim_set_command_mode_exterm():
+        """set visual mode"""
+        v = VimMode()
+        v.set_command_mode_exterm()
+
     def vim_insert_mode(cmd: str):
         """run a given list of commands in normal mode, preserve mode"""
         v = VimMode()
@@ -832,12 +896,36 @@ class Actions:
         v.set_insert_mode()
         actions.insert(cmd)
 
+    # technically right now they run in in normal mode, but these calls will
+    # ensure that any queued commands are removed
+    def vim_command_mode(cmd: str):
+        """run a given list of commands in command mode, preserve INSERT"""
+        v = VimMode()
+        v.set_command_mode()
+        actions.insert(cmd)
+
+    # technically right now they run in in normal mode, but these calls will
+    # ensure that any queued commands are removed
+    def vim_command_mode_exterm(cmd: str):
+        """run a given list of commands in command mode, preserve INSERT"""
+        v = VimMode()
+        v.set_command_mode_exterm()
+        actions.insert(cmd)
+
     # Sometimes the .talon file won't know what mode to run something in, just
     # that it needs to be a mode that supports motions like normal and visual.
     def vim_any_motion_mode(cmd: str):
         """run a given list of commands in normal mode"""
         v = VimMode()
         v.set_any_motion_mode()
+        actions.insert(cmd)
+
+    # Sometimes the .talon file won't know what mode to run something in, just
+    # that it needs to be a mode that supports motions like normal and visual.
+    def vim_any_motion_mode_exterm(cmd: str):
+        """run a given list of commands in some motion mode"""
+        v = VimMode()
+        v.set_any_motion_mode_exterm()
         actions.insert(cmd)
 
     def vim_any_motion_mode_key(cmd: str):
@@ -853,6 +941,7 @@ class VimMode:
     VISUAL = 2
     INSERT = 3
     TERMINAL = 4
+    COMMAND = 5
 
     # XXX - not really necessary here, but just used to sanity check for now
     vim_modes = {
@@ -880,8 +969,8 @@ class VimMode:
         # list of all vim instances talon is aware of
         self.vim_instances = []
         self.current_rpc = None
-        self.normal_modes = ["n"]
-        self.visual_modes = ["v", "V", "^V"]
+        self.normal_modes = ["n"]  # XXX - unused
+        self.visual_modes = ["v", "V", "^V"]  # XXX - unused
         self.current_mode = self.get_active_mode()
 
     def is_normal_mode(self):
@@ -895,6 +984,9 @@ class VimMode:
 
     def is_terminal_mode(self):
         return self.current_mode == "t"
+
+    def is_command_mode(self):
+        return self.current_mode == "c"
 
     def get_active_mode(self):
         title = ui.active_window().title
@@ -923,6 +1015,8 @@ class VimMode:
             return self.INSERT
         elif self.is_terminal_mode():
             return self.TERMINAL
+        elif self.is_command_mode():
+            return self.COMMAND
 
     def set_normal_mode(self, auto=True):
         self.adjust_mode(self.NORMAL, auto=auto)
@@ -949,8 +1043,17 @@ class VimMode:
     def set_terminal_mode(self):
         self.adjust_mode(self.TERMINAL)
 
+    def set_command_mode(self):
+        self.adjust_mode(self.COMMAND)
+
+    def set_command_mode_exterm(self):
+        self.adjust_mode(self.COMMAND, escape_terminal=True)
+
     def set_any_motion_mode(self):
         self.adjust_mode([self.NORMAL, self.VISUAL])
+
+    def set_any_motion_mode_exterm(self):
+        self.adjust_mode([self.NORMAL, self.VISUAL], escape_terminal=True)
 
     def set_any_motion_mode_np(self):
         self.adjust_mode(self.NORMAL, no_preserve=True)
@@ -962,7 +1065,6 @@ class VimMode:
             return
 
         cur = self.current_mode_id()
-        # print("Current mode is {}".format(cur))
         if type(valid_mode_ids) != list:
             valid_mode_ids = [valid_mode_ids]
         if cur not in valid_mode_ids:
@@ -1039,6 +1141,12 @@ class VimMode:
         elif self.is_visual_mode():
             actions.key("escape")
             time.sleep(timeout)
+        elif self.is_normal_mode() and wanted_mode == self.COMMAND:
+            # We explicitly escape even if normal mode, to cancel any queued
+            # commands that might affect our command. For instance, accidental
+            # number queueing followed by :w, etc
+            actions.key("escape")
+            time.sleep(timeout)
 
         # switch to explicit mode if necessary
         if wanted_mode == self.INSERT:
@@ -1049,6 +1157,10 @@ class VimMode:
             # ex: normal mode press 5, then press v to switch to visual
             actions.key("escape")
             actions.key("v")
+        elif wanted_mode == self.COMMAND:
+            # XXX - could check cmd to see if it has the ':' and if not have
+            # this func set it
+            pass
 
         # Here we assume we are now in some normalized state:
         # need to make the notify command configurable
