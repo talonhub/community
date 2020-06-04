@@ -15,6 +15,9 @@ app: atom.exe
 -
 refactor: user.ide_refactor()
 
+
+#Intellisense, Rich language support
+suggest (parameters | (args | arguments)): user.ide_intellisense_suggest_parameters()
 complete: code.complete()
 perfect: user.ide_perfect()
 smart: user.ide_smart()
@@ -162,6 +165,7 @@ toggle bread crumbs: user.ide_toggle_breadcrumbs()
 toggle gutter icons: user.ide_toggle_gutter_icons()
 toggle wrap: user.ide_toggle_wrap()
 toggle parameters: user.ide_toggle_parameters()
+
 # Toggleable views
 toggle fullscreen: user.ide_toggle_fullscreen()
 toggle distraction [free mode]: user.ide_toggle_distraction_free()

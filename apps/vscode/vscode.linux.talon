@@ -58,9 +58,10 @@ action(user.ide_toggle_comment):
   key(ctrl-/)
 
 action(user.ide_smart):
+  #user.ide_intellisense_suggest_parameters
   key(ctrl-space)
 
-action(user.ide_parameter_hints):
+action(user.ide_intellisense_suggest_parameters):
   key(ctrl-shift-space)
 
 action(user.ide_done):

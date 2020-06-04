@@ -12,7 +12,7 @@ class Actions:
         """Trigger better auto complete in the ide"""
 
     def ide_smart():
-        """Trigger type completion in the ide"""
+        """Trigger suggestion / type completion in the ide"""
 
     def ide_finish():
         """Select auto complete statement"""
@@ -20,7 +20,7 @@ class Actions:
     def ide_done():
         """Select auto complete statement"""
 
-    def ide_parameter_hints():
+    def ide_intellisense_suggest_parameters():
         """Trigger parameter hints"""
 
     def ide_toggle_tools():

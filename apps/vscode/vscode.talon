@@ -15,10 +15,4 @@ app: Code.exe
 
 open containing folder | show in explorer | show in finder: user.ide_reveal_in_file_manager()
 
-# editing
-code arguments: user.ide_parameter_hints()
-
-
-
-2
 
