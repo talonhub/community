@@ -122,6 +122,15 @@ action(user.ide_toggle_run):
 action(user.ide_toggle_debug):
   key(ctrl-shift-d)
 
+action(user.ide_toggle_breakpoint):
+  key(f9)
+action(user.ide_step_over):
+  key(f10)
+action(user.ide_step_into):
+  key(f11)
+action(user.ide_step_out):
+  key(shift-f11)
+
 action(user.ide_toggle_extensions):
   key(ctrl-shift-x)
 
