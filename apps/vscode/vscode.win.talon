@@ -18,6 +18,20 @@ action(app.tab_previous):
   key(ctrl-k)
   key(ctrl-pageup)
   
+# Folding
+action(user.ide_expand_deep):
+  key(ctrl-k ctrl-])
+action(user.ide_expand_all):
+  key(ctrl-k ctrl-j)
+action(user.ide_expand_region):
+  key(ctrl-shift-])
+action(user.ide_collapse_deep):
+  key(ctrl-k ctrl-[)
+action(user.ide_collapse_all):
+  key(ctrl-k ctrl-0)
+action(user.ide_collapse_region):
+  key(ctrl-shift-[)
+
 # Splits
 action(user.ide_split_right):
   user.ide_command_palette()
