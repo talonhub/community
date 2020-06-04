@@ -5,6 +5,11 @@ os: linux
 app: Code
 app: Code - OSS
 -
+
+tag(): git
+# TODO When tags are supported
+# tag(): ide
+
 # General
 action(user.ide_command_palette):
   key(ctrl-shift-p)

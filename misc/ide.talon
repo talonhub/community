@@ -10,7 +10,7 @@ app: Code.exe
 app: Atom
 app: atom.exe
 
-# When tags are supported
+# TODO When tags are supported
 #tags: ide
 -
 refactor: user.ide_refactor()

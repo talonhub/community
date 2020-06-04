@@ -6,6 +6,11 @@ app: Visual Studio Code
 app: Code.exe
 -
 
+
+tag(): git
+# TODO When tags are supported
+# tag(): ide
+
 # General
 action(user.ide_command_palette):
   key(ctrl-shift-p)
