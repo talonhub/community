@@ -68,10 +68,10 @@ go last mark: user.ide_go_last_mark()
 # Folding
 expand deep: user.ide_expand_deep()
 expand all: user.ide_expand_all()
-expand this: user.ide_expand_region()
+expand that: user.ide_expand_region()
 collapse deep: user.ide_collapse_deep()
 collapse all: user.ide_collapse_all()
-collapse this: user.ide_collapse_region()
+collapse that: user.ide_collapse_region()
 # Splits
 split right: user.ide_split_right()
 split left: user.ide_split_left()
