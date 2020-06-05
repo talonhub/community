@@ -49,6 +49,15 @@ find (everywhere | all): user.ide_find_everywhere()
 (search | find) class: user.ide_find_class()
 (search | find) file: user.ide_find_file()
 (search | find) path: user.ide_find_in_path()
+
+replace it: user.ide_replace_local()
+replace (everywhere | all): user.ide_replace_everywhere()
+[replace] confirm that: user.ide_replace_confirm_current()
+[replace] confirm all: user.ide_replace_confirm_all()
+toggle [find by] case : user.ide_find_match_by_case()
+toggle [find by] word : user.ide_find_match_by_word()
+toggle [find by] expression : user.ide_find_match_by_regex()
+
 recent: user.ide_recent()
 
 create (template|snippet): user.ide_create_template()

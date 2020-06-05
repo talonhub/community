@@ -95,6 +95,26 @@ class Actions:
     def ide_find_file():
         """Open search for file functionality of ide"""
 
+    def ide_replace_everywhere():
+        """Search and replaces in the entire project"""
+
+    def ide_replace_local():
+        """Search and replaces in the active editor"""
+
+    def ide_replace_confirm_current():
+        """Confirm replaces at current position"""
+    def ide_replace_confirm_all():
+        """Confirm replaces all"""
+
+    def ide_find_match_by_case():
+        """Toggles find match by case sensitivity"""
+
+    def ide_find_match_by_word():
+        """Toggles find match by whole words"""
+
+    def ide_find_match_by_regex():
+        """Toggles find match by regex"""
+
     def ide_recent():
         """Open recent files list"""
 
