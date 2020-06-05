@@ -38,7 +38,6 @@ delete [message]: key("ctrl-shift-d")
 # Composer
 send message: key("ctrl-enter")
 expand chat: key("ctrl-shift-x")
-send message: key("ctrl-enter")
 attach [file]: key("ctrl-u")
 remove [link] preview: key("ctrl-p")
 remove [link] attachment: key("ctrl-shift-p")

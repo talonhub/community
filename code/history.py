@@ -1,7 +1,6 @@
 from talon import imgui, Module, speech_system, actions
 
 hist_len = 10
-is_showing = False
 history = []
 def parse_phrase(word_list):
     return ' '.join(word.split('\\')[0] for word in word_list)
@@ -9,14 +8,18 @@ def parse_phrase(word_list):
 def on_phrase(j):
     global hist_len
     global history
-    #print(str(actions.dictate.parse_words(j)))
-    val = parse_phrase(j['phrase'])
+
+    try:
+        val = parse_phrase(getattr(j['parsed'], '_unmapped', j['phrase']))
+    except:
+        val = parse_phrase(j['phrase'])
+    
     if val != "":
         history.append(val)
         history = history[-hist_len:]
 
-    if is_showing:
-        gui.freeze()
+        if gui.showing:
+            gui.freeze()
    
 #todo: dynamic rect?
 @imgui.open(y=0)
@@ -35,16 +38,11 @@ mod = Module()
 class Actions:           
     def history_enable():
         """Enables the history"""
-        global is_showing
-        gui.show()
         gui.freeze()
-        is_showing = True
 
     def history_disable():
         """Disables the history"""
-        global is_showing
         gui.hide()
-        is_showing = False
 
     def history_clear():
         """Clear the history"""

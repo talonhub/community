@@ -1,7 +1,10 @@
 os: windows
 app: Windows Command Processor
 app: cmd.exe
+app: WindowsTerminal.exe
 -
+tag(): terminal
+
 run last: key(up enter)
 
 kill all:

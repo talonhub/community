@@ -1,5 +1,6 @@
 from talon import Module, Context, actions, ui, imgui
 from talon.grammar import Phrase
+from typing import List, Union
 
 ctx = Context()
 key = actions.key
@@ -16,18 +17,22 @@ def surround(by):
 
     return func
 
-def FormatText(m, fmtrs: str):
-    if m.words[-1] == "over":
-        m.words = m.words[:-1]
-    try:
-        words = actions.dictate.parse_words(m)
-        words = actions.dictate.replace_words(words)
-    except AttributeError:
-        with clip.capture() as s:
-            edit.copy()
-        words = s.get().split(" ")
-        if not words:
-            return
+def FormatText(m: Union[str, Phrase], fmtrs: str):
+    words = []
+    if isinstance(m, str):
+        words = m.split(' ')
+    else:
+        if m.words[-1] == "over":
+            m.words = m.words[:-1]
+        try:
+            words = actions.dictate.parse_words(m)
+            words = actions.dictate.replace_words(words)
+        except AttributeError:
+            with clip.capture() as s:
+                edit.copy()
+                words = s.get().split(" ")
+            if not words:
+                return
     
     return format_text_helper(words, fmtrs)
 
@@ -141,7 +146,7 @@ def format_text(m) -> str:
 
 @mod.action_class
 class Actions:
-    def formatted_text(phrase: Phrase, formatters: str) -> str:
+    def formatted_text(phrase: Union[str, Phrase], formatters: str) -> str:
         """Formats a phrase according to formatters. formatters is a comma-separated string of formatters (e.g. 'CAPITALIZE_ALL_WORDS,DOUBLE_QUOTED_STRING')"""
         return FormatText(phrase, formatters)
 
@@ -158,9 +163,9 @@ class Actions:
 def formatters(m):
     return ','.join(m.formatters_list)
 
-@ctx.capture(rule='<self.formatters> <phrase>')
+@ctx.capture(rule='<self.formatters> <user.text>')
 def format_text(m):
-    return FormatText(m.phrase, m.formatters)
+    return FormatText(m.text, m.formatters)
 
 ctx.lists['self.formatters'] = formatters_words.keys()
 

@@ -10,9 +10,9 @@ previous workspace: key(ctrl-shift-tab)
 next workspace: key(ctrl-tab)
 # Channel
 channel: key(ctrl-k)
-channel <phrase>: 
+channel <user.text>:
     key(ctrl-k)
-    dictate.lower(phrase)
+    insert(user.formatted_text(user.text, "ALL_LOWERCASE"))
 ([channel] unread last | gopreev): key(alt-shift-up)
 ([channel] unread next | goneck): key(alt-shift-down)
 (slack | lack) [channel] info: key(ctrl-shift-i)
@@ -65,4 +65,4 @@ mark channel read: key(esc)
 (slack | lack) invite: key(a)
     # Miscellaneous
 (slack | lack) shortcuts: key(ctrl-/)
-emote <phrase>: "{phrase}"
+emote <user.text>: "{text}"

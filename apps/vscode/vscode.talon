@@ -1,4 +1,14 @@
+
+os: linux
 app: Code
+app: Code - OSS
+
+os: mac
+app: Code
+
+os: windows
+app: Visual Studio Code
+app: Code.exe
 -
 
 # editing

@@ -1,9 +1,9 @@
 # Microsoft - Visual Studio Code
 # see app/vscode.talon for voice commands
 
-os: linux
-app: Code
-app: Code - OSS
+os: windows
+app: Visual Studio Code
+app: Code.exe
 -
 
 action(user.ide_refactor):
