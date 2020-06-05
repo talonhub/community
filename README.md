@@ -54,7 +54,7 @@ The folder structure should look like:
 
 ## Getting started with Talon for coding with this depot
 
-Use the “help context,” "help active," and “help alphabet” commands to browse avaiable commands. Available commands can change with the application or window title that has focus.
+Use the “help context,” "help active," and “help alphabet” commands to browse available commands. Available commands can change with the application or window title that has focus.
 
 It's recommended to learn the alphabet first, then get familiar with the keys, symbols, and formatters. 
 
