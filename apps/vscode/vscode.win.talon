@@ -132,6 +132,22 @@ action(user.ide_toggle_find):
   key(ctrl-shift-f)
 action(user.ide_find_everywhere):
   key(ctrl-shift-f)
+action(user.ide_replace_everywhere):
+  key(ctrl-shift-h)
+action(user.ide_replace_local):
+  key(ctrl-h)
+action(user.ide_replace_confirm_current):
+  key(ctrl-shift-1)
+action(user.ide_replace_confirm_all):
+  key(ctrl-alt-enter)
+
+
+action(user.ide_find_match_by_case):
+  key(alt-c)
+action(user.ide_find_match_by_word):
+  key(alt-w)
+action(user.ide_find_match_by_regex):
+  key(alt-r)
 
 action(user.ide_toggle_git):
   key(ctrl-shift-g)
