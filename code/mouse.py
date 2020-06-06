@@ -1,7 +1,6 @@
-from talon import cron, ctrl, ui, Module, Context, actions, noise, settings, imgui
+from talon import cron, ctrl, ui, Module, Context, actions, noise, settings, imgui, app
 from talon.engine import engine
 from talon_plugins import speech, eye_mouse, eye_zoom_mouse
-import platform
 import subprocess
 import os
 import pathlib
@@ -166,7 +165,7 @@ class Actions:
         
 def show_cursor_helper(show):
     """Show/hide the cursor"""
-    if "Windows-10" in platform.platform(terse=True):
+    if app.platform == "windows":
         import winreg, win32con
         import ctypes
 

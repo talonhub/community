@@ -1,8 +1,7 @@
-from talon import Module, screen, ui, actions, clip
+from talon import Module, screen, ui, actions, clip, app
 import os
-import platform
 
-active_platform = platform.platform(terse=True)
+active_platform = app.platform
 
 mod = Module()
 @mod.action_class
@@ -21,9 +20,9 @@ class Actions:
 
     def screenshot_selection():
         '''triggers an application is capable of taking a screenshot of a portion of the screen'''
-        if "Windows-10" in active_platform:
+        if active_platform == "windows":
             actions.key("super-shift-s")       
-        elif "Darwin" in active_platform:
+        elif active_platform == "mac":
             actions.key("ctrl-shift-cmd-4")
 
     def screenshot_clipboard():

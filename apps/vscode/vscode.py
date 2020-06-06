@@ -1,9 +1,6 @@
-from talon import Context, actions, ui, Module
-import platform
-platform = platform.platform(terse=True)
-is_mac = "Darwin" in platform
+from talon import Context, actions, ui, Module, app
+is_mac = app.platform == 'mac'
 
-print(platform)
 ctx = Context()
 ctx.matches = r'''
 app: Code

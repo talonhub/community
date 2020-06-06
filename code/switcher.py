@@ -3,7 +3,6 @@ from talon.voice import Capture
 import re
 import time
 import os
-import platform
 
 app_cache = {}
 overrides = {

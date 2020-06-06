@@ -1,16 +1,13 @@
-from talon import app, Module, Context, actions, ui, imgui, settings
+from talon import app, Module, Context, actions, ui, imgui, settings, app
 from os.path import expanduser
 from subprocess import Popen
 from pathlib import Path
 from typing import List, Union
 import os
 import math
-import platform
 import re
 from itertools import islice
 
-platform = platform.platform(terse=True)
-#print("platform = " + platform)
 selection_numbers = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty',]
 selection_map = {n: i for i, n in enumerate(selection_numbers)}
 
@@ -34,7 +31,7 @@ is_terminal = False
 is_linux = False
 cached_title = None
 
-if "Windows-10" in platform:
+if app.platform == "windows":
     is_windows = True
     import ctypes
     GetUserNameEx = ctypes.windll.secur32.GetUserNameExW
@@ -69,7 +66,7 @@ if "Windows-10" in platform:
     supported_programs = ["explorer.exe", "cmd.exe",]
     terminal_programs = ["cmd.exe"]
 
-elif "Darwin" in platform:
+elif app.platform == "mac":
     ###
     #print("Mac OS X!!")
     is_mac = True
@@ -78,7 +75,7 @@ elif "Darwin" in platform:
     supported_programs = ["com.apple.Terminal", "com.apple.finder"]
     terminal_programs = ["com.apple.Terminal",]
 
-elif "linux" in platform.lower():
+elif app.platform == "linux":
     is_linux = True
     ctx.lists['user.file_manager_directory_remap'] = {}
     ctx.lists['user.file_manager_directory_exclusions'] = {}
