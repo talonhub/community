@@ -57,20 +57,28 @@ action(user.ide_split_down):
   insert("workbench.action.splitEditorDown")
   key(enter)
 
+#Refactor
+
 action(user.ide_refactor):
   key(ctrl-a)
   key(ctrl-shift-i)
+  #Format Document
   key(ctrl-s)
 
 action(user.ide_refactor_in_line):
   key(ctrl-shift-i)
-  key(ctrl-s)
+  #Format Document
+  key(ctrl-s) 
+  #TODO are we happy to save everytime ?
 
 action(user.ide_refactor_rename):
-  key(f2)
+  # Rename Symbol
+  key(f2) 
 
+# Navigate
 action(user.ide_follow):
-  key(f12)
+  # Go to Definition
+  key(f12) 
 
 action(user.ide_go_back):
   key(alt-left)
@@ -79,22 +87,29 @@ action(user.ide_go_forward):
   key(alt-right)
 
 action(user.ide_up_cursor):
+  # cursorUpSelect
   key(ctrl-shift-up)
 
 action(user.ide_down_cursor):
+  # cursorDownSelect
   key(ctrl-shift-down)
 
+# Terminal
 action(user.ide_toggle_terminal):
-  key(ctrl-`)
+  # View:Toggle Integrated Terminal
+  key(ctrl-`) 
 
 action(user.ide_terminal_new):
   key(ctrl-shift-`)
+  # Terminal: Created New Integrated Terminal
 
 action(user.ide_terminal_focus_previous):
   key(alt-left)
+  # Terminal: Focus Previous Pane
 
 action(user.ide_terminal_focus_next):
   key(alt-right)
+  # Terminal: Focus Next Pane
 
 action(user.ide_terminal_trash):
   key(ctrl-shift-delete)
@@ -105,71 +120,115 @@ action(user.ide_terminal_scroll_down):
 action(user.ide_terminal_scroll_up):
   key(shift-pgup)
 
+# Code Editor
 action(user.ide_toggle_comment):
   key(ctrl-/)
 
 action(user.ide_smart):
-  #user.ide_intellisense_suggest_parameters
+
+  # Trigger Suggest, editor.action.triggerParameterHints
   key(ctrl-space)
 
 action(user.ide_intellisense_suggest_parameters):
+  # Trigger Parameter Hints, editor.action.triggerParameterHints
   key(ctrl-shift-space)
 
 action(user.ide_done):
   key(tab)
 
+# Editing
+action(user.ide_editor_copylines_down):
+  # Copy Line Down, editor.action.copyLinesDownAction
+  key(shift-alt-down)
+
+action(user.ide_editor_copylines_up):
+    # Copy Line Up, editor.action.copyLinesUpAction
+    key(shift-alt-up)
+
+# Workbench Focus Areas
 action(user.ide_toggle_project):
   #FIX works manually with caplock on ctrl-shift-E typed works but not key(ctrl-shift-E) -  Linux Mint 19 (Vagrant VirtualBox),
   #key(ctrl-shift-E)
   user.ide_command_palette()
+  # View: Show Explorer, workbench.view.explorer
   insert("workbench.files.action.focusFilesExplorer")
   key(enter)
 
+action(user.ide_toggle_git):
+  # View: Show SCM, workbench.view.scm
+  key(ctrl-shift-g)
+
+action(user.ide_toggle_extensions):
+  # View: Show Extensions, workbench.view.extensions
+  key(ctrl-shift-x)
+
+
+action(user.ide_toggle_run):
+  # View: Show Run and Debug, workbench.view.debug
+  key(ctrl-shift-d)
+action(user.ide_toggle_debug):
+  # View: Show Run and Debug, workbench.view.debug
+  key(ctrl-shift-d)
+
+# Find and Replace
 action(user.ide_toggle_find):
+  # Search: Find in Files, workbench.action.findInFiles
   key(ctrl-shift-f)
 action(user.ide_find_everywhere):
+  # Search: Find in Files, workbench.action.findInFiles
   key(ctrl-shift-f)
 action(user.ide_replace_everywhere):
+  # Search: Replace in Files, workbench.action.replaceInFiles
   key(ctrl-shift-h)
+
 action(user.ide_replace_local):
+  # Replace, editor.action.startFindReplaceAction
   key(ctrl-h)
 action(user.ide_replace_confirm_current):
+  # ,editor.action.replaceOne
   key(ctrl-shift-1)
 action(user.ide_replace_confirm_all):
+  # ,editor.action.replaceAll
   key(ctrl-alt-enter)
 
 action(user.ide_find_match_by_case):
+  # Terminal: Toggle Find Using Case Sensitive, workbench.action.terminal.toggleFindCaseSensitive
   key(alt-c)
 action(user.ide_find_match_by_word):
+  # Terminal: Toggle Find Using Whole Word, toggleFindWholeWord
   key(alt-w)
 action(user.ide_find_match_by_regex):
+  # Terminal: Toggle Find Using Regex, workbench.action.terminal.toggleFindRegex
   key(alt-r)
 
-action(user.ide_toggle_git):
-  key(ctrl-shift-g)
 
-action(user.ide_toggle_run):
-  key(ctrl-shift-d)
-action(user.ide_toggle_debug):
-  key(ctrl-shift-d)
 
 action(user.ide_toggle_breakpoint):
+  # Debug: Toggle Breakpoint, editor.debug.action.toggleBreakpoint
   key(f9)
 action(user.ide_step_over):
+  # Debug: Step Over, workbench.action.debug.stepOver
   key(f10)
 action(user.ide_step_into):
+  # Debug: Step Into, workbench.action.debug.stepInto
   key(f11)
 action(user.ide_step_out):
+  # Debug: Step Out, workbench.action.debug.stepOut
   key(shift-f11)
 
-action(user.ide_toggle_extensions):
-  key(ctrl-shift-x)
-
+# Window and File Management
 action(app.window_open):
+  # New Window, workbench.action.newWindow
   key(ctrl-shift-n)
 
 action(user.ide_create_file):
+  # File: New and Titled File, workbench.action.files.newUntitledFile
   key(ctrl-n)
 
 action(user.ide_reveal_in_file_manager):
+  # , workbench.action.files.revealActiveFileInWindows
   key(ctrl-k r)
+
+action(user.ide_find_file):
+  # Go to File... , workbench.action.quickOpen
+  key(ctrl-p)

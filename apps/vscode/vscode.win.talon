@@ -58,19 +58,27 @@ action(user.ide_split_down):
   insert("workbench.action.splitEditorDown")
   key(enter)
 
+#Refactor
+
 action(user.ide_refactor):
   key(ctrl-a)
-  key(ctrl-shift-i)
+  # Format Document
+  key(alt-shift-f)
   key(ctrl-s)
 
 action(user.ide_refactor_in_line):
-  key(ctrl-shift-i)
+  # Format Document
+  key(alt-shift-f)
+  #TODO are we happy to save everytime ?
   key(ctrl-s)
 
 action(user.ide_refactor_rename):
+  # Rename Symbol
   key(f2)
 
+# Navigate
 action(user.ide_follow):
+  # Go to Definition
   key(f12)
 
 action(user.ide_go_back):
@@ -80,15 +88,20 @@ action(user.ide_go_forward):
   key(alt-right)
 
 action(user.ide_up_cursor):
+  # cursorUpSelect
   key(ctrl-shift-up)
 
 action(user.ide_down_cursor):
+  # cursorDownSelect
   key(ctrl-shift-down)
 
+# Terminal
 action(user.ide_toggle_terminal):
+  # View:Toggle Integrated Terminal
   key(ctrl-`)
 
 action(user.ide_terminal_new):
+  # Terminal: Created New Integrated Terminal
   key(ctrl-shift-`)
 
 action(user.ide_terminal_focus_previous):
@@ -107,16 +120,17 @@ action(user.ide_terminal_trash):
   key(enter)
 
 action(user.ide_terminal_scroll_down):
-  key(shift-pgdown)
+  key(pgdown)
 
 action(user.ide_terminal_scroll_up):
-  key(shift-pgup)
+  key(pgup)
 
+# Code Editor
 action(user.ide_toggle_comment):
   key(ctrl-/)
 
 action(user.ide_smart):
-  #user.ide_intellisense_suggest_parameters
+  # Trigger Suggest, editor.action.triggerParameterHints
   key(ctrl-space)
 
 action(user.ide_intellisense_suggest_parameters):
@@ -125,55 +139,97 @@ action(user.ide_intellisense_suggest_parameters):
 action(user.ide_done):
   key(tab)
 
+# Editing
+action(user.ide_editor_copylines_down):
+  # Copy Line Down, editor.action.copyLinesDownAction
+  key(shift-alt-down)
+
+action(user.ide_editor_copylines_up):
+    # Copy Line Up, editor.action.copyLinesUpAction
+    key(shift-alt-up)
+
+
+# Workbench Focus Areas
 action(user.ide_toggle_project):
+  # View: Show Explorer, workbench.view.explorer
   key(ctrl-shift-e)
-
-action(user.ide_toggle_find):
-  key(ctrl-shift-f)
-action(user.ide_find_everywhere):
-  key(ctrl-shift-f)
-action(user.ide_replace_everywhere):
-  key(ctrl-shift-h)
-action(user.ide_replace_local):
-  key(ctrl-h)
-action(user.ide_replace_confirm_current):
-  key(ctrl-shift-1)
-action(user.ide_replace_confirm_all):
-  key(ctrl-alt-enter)
-
-
-action(user.ide_find_match_by_case):
-  key(alt-c)
-action(user.ide_find_match_by_word):
-  key(alt-w)
-action(user.ide_find_match_by_regex):
-  key(alt-r)
+  user.ide_command_palette()
 
 action(user.ide_toggle_git):
+  # View: Show SCM, workbench.view.scm
   key(ctrl-shift-g)
 
-action(user.ide_toggle_run):
-  key(ctrl-shift-d)
-action(user.ide_toggle_debug):
-  key(ctrl-shift-d)
-
-action(user.ide_toggle_breakpoint):
-  key(f9)
-action(user.ide_step_over):
-  key(f10)
-action(user.ide_step_into):
-  key(f11)
-action(user.ide_step_out):
-  key(shift-f11)
-
 action(user.ide_toggle_extensions):
+  # View: Show Extensions, workbench.view.extensions
   key(ctrl-shift-x)
 
+
+action(user.ide_toggle_run):
+  # View: Show Run and Debug, workbench.view.debug
+  key(ctrl-shift-d)
+action(user.ide_toggle_debug):
+  # View: Show Run and Debug, workbench.view.debug
+  key(ctrl-shift-d)
+
+# Find and Replace
+action(user.ide_toggle_find):
+  # Search: Find in Files, workbench.action.findInFiles
+  key(ctrl-shift-f)
+action(user.ide_find_everywhere):
+  # Search: Find in Files, workbench.action.findInFiles
+  key(ctrl-shift-f)
+action(user.ide_replace_everywhere):
+  # Search: Replace in Files, workbench.action.replaceInFiles
+  key(ctrl-shift-h)
+
+action(user.ide_replace_local):
+  # Replace, editor.action.startFindReplaceAction
+  key(ctrl-h)
+action(user.ide_replace_confirm_current):
+  # ,editor.action.replaceOne
+  key(ctrl-shift-1)
+action(user.ide_replace_confirm_all):
+  # ,editor.action.replaceAll
+  key(ctrl-alt-enter)
+
+action(user.ide_find_match_by_case):
+  # Terminal: Toggle Find Using Case Sensitive, workbench.action.terminal.toggleFindCaseSensitive
+  key(alt-c)
+action(user.ide_find_match_by_word):
+  # Terminal: Toggle Find Using Whole Word, toggleFindWholeWord
+  key(alt-w)
+action(user.ide_find_match_by_regex):
+  # Terminal: Toggle Find Using Regex, workbench.action.terminal.toggleFindRegex
+  key(alt-r)
+
+
+
+action(user.ide_toggle_breakpoint):
+  # Debug: Toggle Breakpoint, editor.debug.action.toggleBreakpoint
+  key(f9)
+action(user.ide_step_over):
+  # Debug: Step Over, workbench.action.debug.stepOver
+  key(f10)
+action(user.ide_step_into):
+  # Debug: Step Into, workbench.action.debug.stepInto
+  key(f11)
+action(user.ide_step_out):
+  # Debug: Step Out, workbench.action.debug.stepOut
+  key(shift-f11)
+
+# Window and File Management
 action(app.window_open):
+  # New Window, workbench.action.newWindow
   key(ctrl-shift-n)
 
 action(user.ide_create_file):
+  # File: New and Titled File, workbench.action.files.newUntitledFile
   key(ctrl-n)
 
 action(user.ide_reveal_in_file_manager):
+  # , workbench.action.files.revealActiveFileInWindows
   key(ctrl-k r)
+
+action(user.ide_find_file):
+  # Go to File... , workbench.action.quickOpen
+  key(ctrl-p)
