@@ -169,7 +169,7 @@ def format_text(m):
 
 ctx.lists['self.formatters'] = formatters_words.keys()
 
-@imgui.open()
+@imgui.open(software=False)
 def gui(gui: imgui.GUI):
     gui.text("List formatters")
     gui.line()

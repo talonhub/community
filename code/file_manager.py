@@ -401,8 +401,9 @@ def file_manager_directories(m):
 def file_manager_files(m):
     return m.file_manager_files
 
+    
 current_folder_page = 1
-@imgui.open(y=10,x=900)
+@imgui.open(y=10,x=900, software=False)
 def gui_folders(gui: imgui.GUI):
     global current_folder_page, total_folder_pages
     total_folder_pages = math.ceil(len(ctx.lists["self.file_manager_directories"]) / len(selection_numbers))
@@ -427,7 +428,7 @@ def gui_folders(gui: imgui.GUI):
          #   actions.user.file_manager_previous_folder_page()
 
 current_file_page = 1
-@imgui.open(y=10,x=1300)
+@imgui.open(y=10,x=1300,software=False)
 def gui_files(gui: imgui.GUI):
     global file_selections, current_file_page, total_file_pages
     total_file_pages = math.ceil(len(file_selections) / len(selection_numbers))
