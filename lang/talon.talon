@@ -14,7 +14,7 @@ action(user.code_operator_assignment): " = "
 action(user.code_comment): "#"
 
 insert: 
-	insert('insert("")')
+	insert("insert('')")
 	edit.left()
 	edit.left()
 key:
