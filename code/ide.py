@@ -26,6 +26,12 @@ class Actions:
     def ide_toggle_tools():
         """Hide all windows"""
 
+    def ide_editor_copylines_down():
+        """Editor copy line down"""
+
+    def ide_editor_copylines_up():
+        """Editor copy line up"""
+
     def ide_extract_variable():
         """Trigger extract variable functionality of IDE"""
 

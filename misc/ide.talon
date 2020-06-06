@@ -220,11 +220,15 @@ continue: user.ide_continue()
 (grow | shrink) window up: user.ide_resize_window_up()
 (grow | shrink) window down: user.ide_resize_window_down()
 
+# Editing
 drag up:
 	edit.line_swap_up()
 
 drag down:
 	edit.line_swap_down()
+
+copy [line] down: user.ide_editor_copylines_down()
+copy [line] up: user.ide_editor_copylines_up()
 
 clone (line|this):
 	edit.line_clone()
