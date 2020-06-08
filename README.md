@@ -80,6 +80,21 @@ After that, explore using ordinal repetition for easily repeating a command with
 
 If you use vim, just start with the numbers and alphabet, otherwise look at generic_editor.talon as well at jetbrains, vscode, and any other integrations).  
 
+### Activating Programming Languages
+
+Specific programming languages may be activated by voice commands, or via title tracking.
+
+Activating languages via commands will enable the commands globally, e.g. they'll work in any application. This will also disable the title tracking method (code.language in .talon files) until the "clear language modes" voice command is used.
+
+The commands are defined here: 
+https://github.com/knausj85/knausj_talon/blob/69d0207c873e860002b137f985dd7cb001183a47/modes/modes.talon#L29
+
+By default, title tracking activates coding languages in supported applications such as VSCode and Notepad++. 
+
+To enable title tracking for your application: 
+1. The active filename (including extension) must be included in the editor's title
+2. Implement the required Talon-defined actions to correctly extract the filename and extension from the programs's title. See https://github.com/knausj85/knausj_talon/blob/69d0207c873e860002b137f985dd7cb001183a47/apps/vscode/vscode.py#L12 for an example. 
+
 ## File Manager commands
 For the following file manager commands to work, your file manager must display the full folder path in the title bar. https://github.com/knausj85/knausj_talon/blob/baa323fcd34d8a1124658a425abe8eed59cf2ee5/apps/file_manager.talon
 
