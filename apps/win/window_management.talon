@@ -8,7 +8,7 @@ maximize window: user.window_maximize()
 minimize window: user.window_minimize()
 
 next window: app.window_next()
-previous window: app.window_previous()
+(prior | previous | last) window: app.window_previous()
 select window: user.window_select()
 
 close window: app.window_close()
