@@ -98,13 +98,10 @@ clear line:
     edit.delete_line()
 
 clear left:
-
-    edit.extend_line_start()
-    edit.delete()
+    key(backspace)
 
 clear right:
-    edit.extend_line_end()
-    edit.delete()
+    key(delete)
 
 clear up:
     edit.extend_line_up()
