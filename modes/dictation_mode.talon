@@ -1,7 +1,7 @@
 mode: dictation
 -
-<phrase>:
-    dictate.natural(phrase)
+<user.text>:
+    insert(user.text)
     insert(" ")
 enter: key(enter)
 period: key(backspace . space)

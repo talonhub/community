@@ -3,11 +3,9 @@ from talon.voice import Capture
 import re
 import time
 import os
-import platform
 
 app_cache = {}
 overrides = {
-    'code': 'Code', #'code': 'VSCode' 
     'grip': 'DataGrip', 
     'term': 'iTerm2'
 }
@@ -66,7 +64,7 @@ class Actions:
         """Hides list of running applications"""
         gui.hide()
 
-@imgui.open()
+@imgui.open(software=False)
 def gui(gui: imgui.GUI):
     gui.text("Names of running applications")
     gui.line()
@@ -74,38 +72,41 @@ def gui(gui: imgui.GUI):
         gui.text(line)
 
 def update_lists():
-    new = {}
+    running = {}
+    launch = {}
+
     for cur_app in ui.apps(background=False):
         name = cur_app.name
         if name.endswith('.exe'):
             name = name.rsplit('.', 1)[0]
         words = get_words(name)
         for word in words:
-            if word and not word in new:
-                new[word.lower()] = cur_app.name
-        new[name.lower()] = cur_app.name
+            if word and not word in running:
+                running[word.lower()] = cur_app.name
+        running[name.lower()] = cur_app.name
     for override in overrides:
-        new[override] = overrides[override]
-        
-    ctx.lists['self.running'] = new
-    
-    #print(str(new))
-    new = {}
+        running[override] = overrides[override] 
     
     if app.platform == "mac":
         for base in '/Applications', '/Applications/Utilities':
             for name in os.listdir(base):
                 path = os.path.join(base, name)
                 name = name.rsplit('.', 1)[0].lower()
-                new[name] = path
+                launch[name] = path
                 words = name.split(' ')
                 for word in words:
-                    if word and word not in new:
+                    if word and word not in launch:
                         if len(name) > 6 and len(word) < 3:
                             continue
-                        new[word] = path
+                        launch[word] = path
     
-        ctx.lists['self.launch'] = new
+    lists = {
+        'self.running': running,
+        'self.launch': launch,
+    }
+
+    #batch update lists 
+    ctx.lists.update(lists)
 
 def ui_event(event, arg):
     if event in ('app_activate', 'app_launch', 'app_close', 'win_open', 'win_close'):

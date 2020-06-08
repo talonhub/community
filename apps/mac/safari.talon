@@ -1,9 +1,8 @@
 os: mac
 app: Safari
 -
-#todo tags
-# settings():
-	# tags = browser
+tag(): browser
+
 #action(browser.address):
 
 action(browser.bookmark):

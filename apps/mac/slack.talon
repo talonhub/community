@@ -7,9 +7,9 @@ previous workspace: key(cmd-shift-[)
 next workspace: key(cmd-shift-])
 # Channel
 channel: key(cmd-k)
-channel <phrase>: 
+channel <user.text>:
     key(cmd-k)
-    dictate.lower(phrase)
+    insert(user.formatted_text(user.text, "ALL_LOWERCASE"))
 ([channel] unread last | gopreev): key(alt-shift-up)
 ([channel] unread next | goneck): key(alt-shift-down)
 (slack | lack) [channel] info: key(cmd-shift-i)
@@ -35,10 +35,10 @@ channel down: key(alt-down)
 grab left: key(shift-up)
 grab right: key(shift-down)
 add line: key(shift-enter)
-(slack | lack) (slap | slaw | slapper): key(cmd-right shift-enter) 
+(slack | lack) (slap | slaw | slapper): key(cmd-right shift-enter)
 (slack | lack) (react | reaction): key(cmd-shift-\\)
 (insert command | commandify): key(cmd-shift-c)
-insert code: 
+insert code:
     insert("``````")
     key(left left left)
     key(shift-enter)
@@ -62,4 +62,4 @@ mark channel read: key(esc)
 (slack | lack) invite: key(a)
     # Miscellaneous
 (slack | lack) shortcuts: key(cmd-/)
-emote <phrase>: insert("{phrase}")
+emote <user.text>: "{text}"

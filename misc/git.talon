@@ -1,50 +1,84 @@
-app: /terminal/
-app: cmd.exe
-app: iTerm2
-app: Terminal
-app: Windows Command Processor
+tag: terminal
 -
-git add patch: insert("git add . -p\n")
-git add: insert("git add ")
-git bisect: insert("git bisect ")
-git branch: insert("git branch ")
-git checkout: insert("git checkout ")
-git cherry pick: insert("git cherry-pick ")
-git clone: insert("git clone ")
+
+# Standard commands
+git add patch: "git add . -p\n"
+git add: "git add "
+git add everything: "git add -u\n"
+git bisect: "git bisect "
+git blame: "git alame "
+git branch: "git branch "
+git branch <user.text>: "git branch {text}"
+git checkout: "git checkout "
+git checkout master: "git checkout master\n"
+git checkout <user.text>: "git checkout {text}"
+git cherry pick: "git cherry-pick "
+git clone: "git clone "
+git commit message <user.text>: "git commit -m '{text}'"
+git commit: "git commit\n"
+git diff (colour|color) words: "git diff --color-words "
+git diff: "git diff "
+git diff cached: "git diff --cached\n"
+git fetch: "git fetch\n"
+git fetch <user.text>: "git fetch {text}"
+git in it: "git init\n"
+git log: "git log\n"
+git merge: "git merge "
+git merge <user.text>:"git merge {text}"
+git move: "git mv "
+git new branch: "git checkout -b "
+git pull: "git pull\n"
+git pull origin: "git pull origin "
+git pull rebase: "git pull --rebase\n"
+git pull fast forward: "git pull --ff-only\n"
+git pull <user.text>: "git pull {text} "
+git push: "git push\n"
+git push origin: "git push origin "
+git push up stream origin: "git push -u origin"
+git push <user.text>: "git push {text} "
+git push tags: "git push --tags\n"
+git rebase: "git rebase\n"
+git rebase continue: "git rebase --continue"
+git rebase skip: "git rebase --skip"
+git remove: "git rm "
+git (remove|delete) branch: "git branch -d "
+git (remove|delete) remote branch: "git push --delete "
+git reset: "git reset "
+git reset soft: "git reset --soft "
+git reset hard: "git reset --hard "
+git show: "git show "
+git stash pop: "git stash pop\n"
+git stash: "git stash\n"
+git status: "git status\n"
+git tag: "git tag "
+
+# Convenience
+git edit config: "git config --local -e\n"
+
 git clone clipboard:
   insert("git clone ")
   edit.paste()
   key(enter)
-git commit message <phrase>: insert("git commit -m '{phrase}'")
-git commit: insert("git commit\n")
-git diff (colour|color) words: insert("git diff --color-words ")
-git diff: insert("git diff ")
-git fetch: insert("git fetch\n")
-git fetch <phrase>: insert("git fetch {phrase}")
-git in it: insert("git init\n")
-git log: insert("git log\n")
-git merge: insert("git merge ")
-git merge <phrase>:insert("git merge {phrase}")
-git move: insert("git mv ")
-git new branch: insert("git checkout -b ")
-git pull: insert("git pull\n")
-git pull origin: insert("git pull origin ")
-git pull rebase: insert("git pull --rebase\n")
-git pull <phrase>: insert("git pull {phrase} ")
-git push: insert("git push\n")
-git push origin: insert("git push origin ")
-git push <phrase>: insert("git push {phrase} ")
-git push tags: insert("git push --tags\n")
-git rebase: insert("git rebase\n")
-git rebase continue: insert("git rebase --continue")
-git rebase skip: insert("git rebase --skip")
-git remove: insert("git rm ")
-git reset: insert("git reset ")
-git reset soft: insert("git reset --soft ")
-git reset hard: insert("git reset --hard ")
-git show: insert("git show ")
-git stash pop: insert("git stash pop\n")
-git stash: insert("git stash\n")
-git status: insert("git status\n")
-git tag: insert("git tag ")
-
+git diff highlighted:
+    edit.copy()
+    insert("git diff ")
+    edit.paste()
+    key(enter)
+git diff clipboard:
+    insert("git diff ")
+    edit.paste()
+    key(enter)
+git add highlighted:
+    edit.copy()
+    insert("git add ")
+    edit.paste()
+    key(enter)
+git add clipboard:
+    insert("git add ")
+    edit.paste()
+    key(enter)
+git commit highlighted:
+    edit.copy()
+    insert("git add ")
+    edit.paste()
+    insert("\ngit commit\n")

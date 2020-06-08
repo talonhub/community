@@ -2,31 +2,59 @@
 
 Talon configs for Mac, Windows, and Linux. Very much in progress. This is also intended to work with both Dragon Naturally Speaking and wav2letter.
 
+## Linux & Mac setup
+
 Clone repo into `~/.talon/user`
 
-    `cd ~/.talon/user`
-    `git clone git@github.com:knausj85/knausj_talon.git knausj_talon`
+```insert code:
+cd ~/.talon/user
+git clone git@github.com:knausj85/knausj_talon.git knausj_talon
+```
     
-Alternatively, access the directory by right clicking the Talon icon in taskbar, and clicking `Scripting>Open ~/talon`, then navigating to `user`.
+Alternatively, access the directory by right clicking the Talon icon in taskbar, clicking Scripting>Open ~/talon, and navigating to user.
 
 The folder structure should look like:
 
-`~/.talon/user/knausj_talon`
-
-`~/.talon/user/knausj_talon/code`
-
-`~/.talon/user/knausj_talon/lang`
+```insert code:
+~/.talon/user/knausj_talon
+~/.talon/user/knausj_talon/code
+~/.talon/user/knausj_talon/lang
+```
 
 If using wav2letter, extract the entire contents of the tarball (found pinned in Talon's @beta slack channel) in `~/.talon`. The resulting tree should be:
 
-```
+```insert code:
 ~/.talon/w2l/en_US
 ~/.talon/user/w2l.py
 ```
 
+
+## Windows setup
+
+Note: Talon for Windows should be placed in the Program Files directory (or another 'secure' directory): `C:\Program Files\talon` Talon has been signed and utilizes uiAccess for several goodies: this will allow Talon to work with applications that are run as admin.
+
+Clone repo into `%AppData%\Talon\user` 
+
+```insert code:
+cd %AppData%\Talon\user
+git clone git@github.com:knausj85/knausj_talon.git knausj_talon
+```
+    
+Alternatively, access the directory by right clicking the Talon icon in taskbar, clicking Scripting>Open ~/talon, and navigating to user.
+    
+The folder structure should look like:
+
+```insert code:
+%AppData%\Talon\user\knausj_talon
+%AppData%\Talon\user\knausj_talon\code
+%AppData%\Talon\user\knausj_talon\lang
+```
+
+
+
 ## Getting started with Talon for coding with this depot
 
-Use the “help all,” "help active," and “help alphabet” commands to browse avaiable commands. Available commands can change with the application or window title that has focus.
+Use the “help context,” "help active," and “help alphabet” commands to browse available commands. Available commands can change with the application or window title that has focus.
 
 It's recommended to learn the alphabet first, then get familiar with the keys, symbols, and formatters. 
 
@@ -52,6 +80,21 @@ After that, explore using ordinal repetition for easily repeating a command with
 
 If you use vim, just start with the numbers and alphabet, otherwise look at generic_editor.talon as well at jetbrains, vscode, and any other integrations).  
 
+### Activating Programming Languages
+
+Specific programming languages may be activated by voice commands, or via title tracking.
+
+Activating languages via commands will enable the commands globally, e.g. they'll work in any application. This will also disable the title tracking method (code.language in .talon files) until the "clear language modes" voice command is used.
+
+The commands are defined here: 
+https://github.com/knausj85/knausj_talon/blob/69d0207c873e860002b137f985dd7cb001183a47/modes/modes.talon#L29
+
+By default, title tracking activates coding languages in supported applications such as VSCode and Notepad++. 
+
+To enable title tracking for your application: 
+1. The active filename (including extension) must be included in the editor's title
+2. Implement the required Talon-defined actions to correctly extract the filename and extension from the programs's title. See https://github.com/knausj85/knausj_talon/blob/69d0207c873e860002b137f985dd7cb001183a47/apps/vscode/vscode.py#L12 for an example. 
+
 ## File Manager commands
 For the following file manager commands to work, your file manager must display the full folder path in the title bar. https://github.com/knausj85/knausj_talon/blob/baa323fcd34d8a1124658a425abe8eed59cf2ee5/apps/file_manager.talon
 
@@ -74,20 +117,6 @@ For Jetbrains commands to work you must install https://plugins.jetbrains.com/pl
 into each editor.
 
 ...
-
-## Windows
-
-Talon should be located in the Program Files directory (or another 'secure' directory). Talon has been signed and now utilizes uiAccess.
-
-C:\Program Files\talon
-
-Note this is required for
-
-(1) eye tracking to work with applications that are run as admin (e.g., regedit) on Windows; and
-
-(2) the zoom mouse to appear over the start menu, and other applications with uiAccess; and
-
-(3) Talon to interact with User Account Control dialogs
 
 ## .talon file
 

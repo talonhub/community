@@ -8,6 +8,8 @@ app: Microsoft Edge
 app: MicrosoftEdge.exe
 app: Safari
 app: Code
+app: Visual Studio Code
+app: Code.exe
 app: /terminal/
 app: /jetbrains/
 -

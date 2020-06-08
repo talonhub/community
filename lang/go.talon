@@ -1,11 +1,13 @@
-code.language: go
+mode: user.go
+mode: command 
+and code.language: go
 -
-variadic: insert("...")
-logical and: insert(" && ")
-logical or: insert(" || ")
+variadic: "..."
+logical and: " && "
+logical or: " || "
 # Many of these add extra terrible spacing under the assumption that
 # gofmt/goimports will erase it.
-state comment: insert("// ")
+state comment: "// "
 [line] comment <phrase>:
     key("cmd-right")
     insert(" // ")
@@ -16,8 +18,8 @@ state comment: insert("// ")
 #     text_with_leading(" // ")
 # ]
 # "[state] context: insert("ctx")
-state (funk | func | fun): insert("func ")
-function (Annette | init) [over]: insert("func init() {\n")
+state (funk | func | fun): "func "
+function (Annette | init) [over]: "func init() {\n"
 function <phrase> [over]:
     insert("func ")
     insert(user.formatted_text(phrase, "PRIVATE_CAMEL_CASE"))
@@ -29,7 +31,7 @@ method <phrase> [over]:
     insert(user.formatted_text(phrase, "PRIVATE_CAMEL_CASE"))
     sleep(100ms)
 
-state var: insert("var ")
+state var: "var "
 variable [<phrase>] [over]:
     insert("var ")
     insert(user.formatted_text(phrase, "PRIVATE_CAMEL_CASE"))
@@ -45,71 +47,71 @@ of type [<phrase>] [over]:
 #     insert(" := ")
 #     sleep(100ms)
 # ]
-state break: insert("break")
-state (chan | channel): insert(" chan ")
-state go: insert("go ")
-state if: insert("if ")
+state break: "break"
+state (chan | channel): " chan "
+state go: "go "
+state if: "if "
 if <phrase> [over]:
   insert("if ")
   insert(user.formatted_text(phrase, "PRIVATE_CAMEL_CASE"))
 spawn <phrase> [over]:
   insert("go ")
   insert(user.formatted_text(phrase, "PRIVATE_CAMEL_CASE"))
-state else if: insert(" else if ")
+state else if: " else if "
 else if <phrase> [over]:
     insert(" else if ")
     insert(user.formatted_text(phrase, "PRIVATE_CAMEL_CASE"))
 
-state else: insert(" else ")
+state else: " else "
 else <phrase> [over]:
     insert(" else {")
     key("enter")
     insert(user.formatted_text(phrase, "PRIVATE_CAMEL_CASE"))
 
-state while: insert("while ")
+state while: "while "
 while <phrase> [over]:
     insert("while ")
     insert(user.formatted_text(phrase, "PRIVATE_CAMEL_CASE"))
 
-state for: insert("for ")
+state for: "for "
 for <phrase> [over]:
     insert("for ")
     insert(user.formatted_text(phrase, "PRIVATE_CAMEL_CASE"))
 
-state for range: insert("forr ")
+state for range: "forr "
 range <phrase> [over]:
     insert("forr ")
     insert(user.formatted_text(phrase, "PRIVATE_CAMEL_CASE"))
 
-state format: insert("fmt")
+state format: "fmt"
 format <phrase> [over]:
     insert("fmt.")
     insert(user.formatted_text(phrase, "PUBLIC_CAMEL_CASE"))
 
-state switch: insert("switch ")
+state switch: "switch "
 switch <phrase> [over]:
     insert("switch ")
     insert(user.formatted_text(phrase, "PRIVATE_CAMEL_CASE"))
 
-state select: insert("select ")
+state select: "select "
 # "select <phrase>:insert("select "), insert(user.formatted_text(phrase, "PRIVATE_CAMEL_CASE")]
-state (const | constant): insert(" const ")
+state (const | constant): " const "
 constant <phrase> [over]:
     insert("const ")
     insert(user.formatted_text(phrase, "PUBLIC_CAMEL_CASE"))
 
-state case: insert(" case ")
-state default: insert(" default:")
+state case: " case "
+state default: " default:"
 case <phrase> [over]:
     insert("case ")
     insert(user.formatted_text(phrase, "PRIVATE_CAMEL_CASE"))
 
-state type: insert(" type ")
+state type: " type "
 type <phrase> [over]:
     insert("type ")
     insert(user.formatted_text(phrase, "PUBLIC_CAMEL_CASE"))
-state true: insert(" true ")
-state false: insert(" false ")
+state true: " true "
+state false: " false "
 state (start | struct | struck):
   insert(" struct {")
   key("enter")
@@ -118,7 +120,7 @@ state (start | struct | struck):
     key("enter")
     insert(user.formatted_text(phrase, "PUBLIC_CAMEL_CASE"))
 
-[state] empty interface: insert(" interface{} ")
+[state] empty interface: " interface{} "
 state interface:
   insert(" interface {")
   key("enter")
@@ -127,12 +129,12 @@ interface <phrase> [over]:
     key("enter")
     insert(user.formatted_text(phrase, "PUBLIC_CAMEL_CASE"))
 
-state string: insert(" string ")
-[state] (int | integer | ant): insert("int")
-state slice: insert(" []")
-slice of: insert("[]")
-[state] (no | nil): insert("nil")
-state (int | integer | ant) 64: insert(" int64 ")
+state string: " string "
+[state] (int | integer | ant): "int"
+state slice: " []"
+slice of: "[]"
+[state] (no | nil): "nil"
+state (int | integer | ant) 64: " int64 "
 state tag:
   insert(" ``")
   key("left")
@@ -144,20 +146,20 @@ field tag <phrase> [over]:
     insert(" ")
     sleep(100ms)
 
-state return: insert(" return ")
+state return: " return "
 return  <phrase> [over]:
     insert("return ")
     insert(user.formatted_text(phrase, "PRIVATE_CAMEL_CASE"))
 
-map of string to string: insert(" map[string]string ")
+map of string to string: " map[string]string "
 map of <phrase> [over]:
     insert("map[")
     insert(user.formatted_text(phrase, "PRIVATE_CAMEL_CASE"))
     key("right")
     sleep(100ms)
 
-receive: insert(" <- ")
-make: insert("make(")
+receive: " <- "
+make: "make("
 loggers [<phrase>] [over]:
     insert("logrus.")
     insert(user.formatted_text(phrase, "PUBLIC_CAMEL_CASE"))
@@ -170,8 +172,8 @@ append <phrase> [over]:
     insert("append(")
     insert(user.formatted_text(phrase, "PRIVATE_CAMEL_CASE"))
 
-state (air | err): insert("err")
-error: insert(" err ")
+state (air | err): "err"
+error: " err "
 loop over [<phrase>] [over]:
     insert("forr ")
     insert(user.formatted_text(phrase, "PRIVATE_CAMEL_CASE"))

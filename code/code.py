@@ -1,37 +1,307 @@
-from talon import Context, actions, ui, Module
+from talon import Context, actions, ui, Module, settings
 import re
 import os 
 ctx = Context()
+mod = Module()
+setting_private_function_formatter   = mod.setting('code_private_function_formatter', str)
+setting_protected_function_formatter = mod.setting('code_protected_function_formatter', str)
+setting_public_function_formatter    = mod.setting('code_public_function_formatter', str)
+setting_private_variable_formatter   = mod.setting('code_private_variable_formatter', str)
+setting_protected_variable_formatter = mod.setting('code_protected_variable_formatter', str)
+setting_public_variable_formatter    = mod.setting('code_public_variable_formatter', str)
+
+mod.tag("code_comment", desc='Tag for enabling generic comment commands')
+mod.tag("code_operators", desc='Tag for enabling generic operator commands')
+mod.tag("code_generic", desc='Tag for enabling other basic programming commands (loops, functions, etc)')
 key = actions.key
 
 extension_lang_map = {
-"py"   : "python",
-"cs"   : "csharp",
-"cpp"  : "cplusplus",
-"h"    : "cplusplus",
-"talon": "talon",
+    "py": "python",
+    "cs": "csharp",
+    "cpp": "cplusplus",
+    "h": "cplusplus",
+    "talon": "talon",
+    "gdb": "gdb",
+    "md": "markdown",
+    "sh": "bash",
+    "go": "go"
 }
 
-# The [^\\\/] is specifically to avoid matching something like a .talon folder
-# that would otherwise cause the .talon file action to load
-regex_ext = re.compile("[^\\\/]\.(\S*)\s*")
+#flag indicates whether or not the title tracking is enabled
+forced_language = False
 
 @ctx.action_class('code')
-class CodeActions:
+class code_actions:
     def language(): 
-        title = ui.active_window().title
-        #print(str(ui.active_app()))
-        #workaround for VS Code on Mac. The title is "",
-        #but the doc is correct.
-        if title == "":
-            title = ui.active_window().doc
+        result = ""
+        if not forced_language:
+            file_extension = actions.win.file_ext()
+            file_name = actions.win.filename()
 
-        m = regex_ext.search(title)
-        if m:
-            extension = m.group(1)
-            if extension in extension_lang_map:
+            if file_extension != "":
+                result = file_extension
+            #it should always be the last split...
+            elif file_name != "" and "." in file_name:
+                result = file_name.split(".")[-1]
 
-                return extension_lang_map[extension]
+            if result in extension_lang_map:
+                result = extension_lang_map[result]
+        
+        #print("code.language: " + result)
+        return result
+
+#create a mode for each defined language
+for __, lang in extension_lang_map.items():
+    mod.mode(lang)
+
+@mod.action_class
+class Actions:
+    def code_set_language_mode(language: str):
+        """Sets the active language mode, and disables extension matching"""
+        global forced_language
+        for __, lang in extension_lang_map.items():
+            if lang != language:
+                actions.mode.disable("user.{}".format(lang))
             else:
-                return extension
-        return ""
+                actions.mode.enable("user.{}".format(lang))
+
+        forced_language = True
+
+    def code_clear_language_mode():
+        """Clears the active language mode, and re-enables code.language: extension matching"""
+        global forced_language
+        forced_language = False
+
+        for __, lang in extension_lang_map.items():
+            actions.mode.disable("user.{}".format(lang))
+
+    def code_operator_indirection():
+        """code_operator_indirection"""
+
+    def code_operator_address_of():
+        """code_operator_address_of (e.g., C++ & op)"""
+
+    def code_operator_structure_deference():
+        """code_operator_structure_deference (e.g., C++ -> op)"""
+
+    def code_operator_lambda():
+        """code_operator_lambda"""
+
+    def code_operator_subscript():
+        """code_operator_subscript (e.g., C++ [])"""
+
+    def code_operator_assignment():
+        """code_operator_assignment"""
+
+    def code_operator_subtraction():
+        """code_operator_subtraction"""
+
+    def code_operator_subtraction_assignment():
+        """code_operator_subtraction_equals"""
+    
+    def code_operator_addition():
+        """code_operator_addition"""
+
+    def code_operator_addition_assignment():
+        """code_operator_addition_assignment"""
+
+    def code_operator_multiplication():
+        """code_operator_multiplication"""
+
+    def code_operator_multiplication_assignment():
+        """code_operator_multiplication_assignment"""
+
+    def code_operator_exponent():
+        """code_operator_exponent"""
+
+    def code_operator_division():
+        """code_operator_division"""
+
+    def code_operator_division_assignment():
+        """code_operator_division_assignment"""
+
+    def code_operator_modulo():
+        """code_operator_modulo"""
+
+    def code_operator_modulo_assignment():
+        """code_operator_modulo_assignment"""
+
+    def code_operator_equal():
+        """code_operator_equal"""
+    
+    def code_operator_not_equal():
+        """code_operator_not_equal"""
+
+    def code_operator_greater_than():
+        """code_operator_greater_than"""
+
+    def code_operator_greater_than_or_equal_to(): 
+        """code_operator_greater_than_or_equal_to"""
+
+    def code_operator_less_than():
+        """code_operator_less_than"""
+
+    def code_operator_less_than_or_equal_to(): 
+        """code_operator_less_than_or_equal_to"""
+    
+    def code_operator_and():
+        """codee_operator_and"""
+
+    def code_operator_or():
+        """code_operator_or"""
+
+    def code_operator_bitwise_and():
+        """code_operator_bitwise_and"""
+
+    def code_operator_bitwise_and_assignment():
+        """code_operator_and"""
+
+    def code_operator_bitwise_or(): 
+        """code_operator_bitwise_or"""
+
+    def code_operator_bitwise_or_assignment(): 
+        """code_operator_or_assignment"""
+    
+    def code_operator_bitwise_exlcusive_or(): 
+        """code_operator_bitwise_exlcusive_or"""
+
+    def code_operator_bitwise_exlcusive_or_assignment(): 
+        """code_operator_bitwise_exlcusive_or_assignment"""
+
+    def code_operator_bitwise_left_shift(): 
+        """code_operator_bitwise_left_shift"""
+
+    def code_operator_bitwise_left_shift_assignment(): 
+        """code_operator_bitwise_left_shift_assigment"""
+
+    def code_operator_bitwise_right_shift(): 
+        """code_operator_bitwise_right_shift"""
+
+    def code_operator_bitwise_right_shift_assignment(): 
+        """code_operator_bitwise_right_shift_assignment"""
+
+    def code_self():
+        """Inserts the equivalent of "this" in C++ or self in python"""
+        
+    def code_null():
+        """inserts null equivalent"""
+        
+    def code_is_null():
+        """inserts check for == null"""
+
+    def code_is_not_null():
+        """inserts check for == null"""
+
+    def code_state_in():
+        """Inserts python "in" equivalent"""
+
+    def code_state_if():
+        """Inserts if statement"""
+
+    def code_state_else_if():
+        """Inserts else if statement"""
+
+    def code_state_else():
+        """Inserts else statement"""
+
+    def code_state_switch():
+        """Inserts switch statement"""
+
+    def code_state_case():
+        """Inserts case statement"""
+
+    def code_state_for():
+        """Inserts for statement"""
+
+    def code_state_for_each():
+        """Inserts for each equivalent statement"""
+    
+    def code_state_go_to():
+        """inserts go-to statement"""
+
+    def code_state_while():
+        """Inserts while statement"""
+    
+    def code_try_catch():
+        """Inserts try/catch. If selection is true, does so around the selecion"""
+
+    def code_private_function():
+        """Inserts private function declaration w/o name"""
+         #todo: once .talon action definitiones can take parameters, combine with code_private_function_formatter
+         #same for all the rest
+
+    def code_private_static_function():
+        """Inserts private static function"""
+        
+    def code_protected_function():
+        """Inserts protected function declaration w/o name"""
+
+    def code_protected_static_function():
+        """Inserts public function"""
+    
+    def code_public_function():
+        """Inserts public function"""
+
+    def code_public_static_function():
+        """Inserts public function"""
+
+    def code_private_function_formatter(name: str):
+        """Inserts private function name with formatter"""
+        actions.insert(actions.user.formatted_text(name, settings.get("user.code_private_function_formatter")))
+
+    def code_protected_function_formatter(name: str):
+        """inserts properly formatted private function name"""
+        actions.insert(actions.user.formatted_text(name, settings.get("user.code_protected_function_formatter")))
+
+    def code_public_function_formatter(name: str):
+        """inserts properly formatted private function name"""
+        actions.insert(actions.user.formatted_text(name, settings.get("user.code_public_function_formatter")))
+
+    def code_private_variable_formatter(name: str):
+        """inserts properly formatted private function name"""
+        actions.insert(actions.user.formatted_text(name, settings.get("user.code_private_variable_formatter")))
+
+    def code_protected_variable_formatter(name: str):
+        """inserts properly formatted private function name"""
+        actions.insert(actions.user.formatted_text(name, settings.get("user.code_protected_variable_formatter")))
+
+    def code_public_variable_formatter(name: str):
+        """inserts properly formatted private function name"""
+        actions.insert(actions.user.formatted_text(name, settings.get("user.code_public_variable_formatter")))
+
+    def code_comment():
+        """Inserts comment at current cursor location"""
+
+    def code_block_comment():
+        """Block comment"""
+
+    def code_type_definition():
+        """code_type_definition (typedef)"""
+
+    def code_typedef_struct():
+        """code_typedef_struct (typedef)"""
+
+    def code_type_class():
+        """code_type_class"""
+
+    def code_type_struct():
+        """code_type_struct"""
+
+    def code_include():
+        """code_include"""
+
+    def code_include_system():
+        """code_include_system"""
+
+    def code_include_local():
+        """code_include_local"""
+    
+    def code_import():
+        """import/using equivalent"""
+
+    def code_from_import():
+        """from import python equivalent"""
+    
+
+
+    
