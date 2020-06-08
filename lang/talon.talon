@@ -21,16 +21,7 @@ insert:
 key:
 	insert('key()')
 	edit.left()
-control key:
-	insert('ctrl')
-super key:
-	insert('super')
-command key:
-	insert('cmd')
-alt key:
-	insert('alt')
-shift key:
-	insert('shift')
+<user.modifiers> key: "{modifiers}"
 
 action:
 	insert("action():")
