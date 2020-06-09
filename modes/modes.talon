@@ -35,6 +35,6 @@ disable debug mode:
 ^force see plus plus$: user.code_set_language_mode("cplusplus")
 ^force python$: user.code_set_language_mode("python")
 ^force go (lang|language)$: user.code_set_language_mode("go")
-^force (talon | talent) language$: user.code_set_language_mode("talon")
+^force talon language$: user.code_set_language_mode("talon")
 ^force markdown$: user.code_set_language_mode("markdown")
 ^clear language modes$: user.code_clear_language_mode()
