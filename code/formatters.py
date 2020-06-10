@@ -7,6 +7,7 @@ key = actions.key
 
 words_to_keep_lowercase = "a,an,the,at,by,for,in,is,of,on,to,up,and,as,but,or,nor".split(",")
 
+last_formatted_phrase = ""
 last_phrase = ""
 
 def surround(by):
@@ -20,6 +21,8 @@ def surround(by):
     return func
 
 def FormatText(m: Union[str, Phrase], fmtrs: str):
+    global last_phrase
+    last_phrase = m
     words = []
     if isinstance(m, str):
         words = m.split(' ')
@@ -55,9 +58,8 @@ def format_text_helper(word_list, fmtrs: str):
         sep = ""
     result = sep.join(words)
 
-    global last_phrase
-    last_phrase = result
-
+    global last_formatted_phrase
+    last_formatted_phrase = result
     return result
 
 NOSEP = True
@@ -171,10 +173,14 @@ class Actions:
 
     def clear_last_phrase():
         """Clears the last formatted phrase"""
+        global last_formatted_phrase
+        for character in last_formatted_phrase:
+            actions.edit.delete()
+
+    def reformat_last_phrase(formatters: str) -> str:
+        """Reformats last formatted phrase"""
         global last_phrase
-        for character in last_phrase:
-            actions.edit.extend_left()
-        actions.edit.delete()
+        return FormatText(last_phrase, formatters)
 
 @ctx.capture(rule='{self.formatters}+')
 def formatters(m):
