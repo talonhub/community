@@ -56,7 +56,7 @@ def update_title():
                 update_active_contexts_cache(registry.active_contexts())
 
 #todo: dynamic rect?
-@imgui.open(y=0)
+@imgui.open(y=0,software=False)
 def gui_alphabet(gui: imgui.GUI):
     global alphabet
     gui.text("Alphabet help")
@@ -126,7 +126,7 @@ def get_pages(item_line_counts: List[int]) -> List[int]:
         pages.append(page)
     return pages
 
-@imgui.open(y=0)
+@imgui.open(y=0,software=False)
 def gui_context_help(gui: imgui.GUI):
     global context_command_map
     global current_context_page

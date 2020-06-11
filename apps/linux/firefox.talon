@@ -1,7 +1,9 @@
 os: linux
 app: Firefox
+app: firefox
 -
 tag(): browser
+tag(): firefox
 
 #action(browser.address):
 

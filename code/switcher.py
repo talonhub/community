@@ -3,7 +3,6 @@ from talon.voice import Capture
 import re
 import time
 import os
-import platform
 
 app_cache = {}
 overrides = {
@@ -76,7 +75,7 @@ class Actions:
         """Hides list of running applications"""
         gui.hide()
 
-@imgui.open()
+@imgui.open(software=False)
 def gui(gui: imgui.GUI):
     gui.text("Names of running applications")
     gui.line()
