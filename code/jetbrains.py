@@ -42,6 +42,7 @@ port_mapping = {
     "jetbrains-pycharm-ce": 8658,
     "jetbrains-rider": 8660,
     "jetbrains-rubymine": 8661,
+    "jetbrains-studio": 8652,
     "jetbrains-webstorm": 8663,
     "google-android-studio": 8652,
 
