@@ -49,6 +49,7 @@ mux move <user.arrow>:
 mux close pane:
     key(ctrl-b)
     key(x)
+#Say a number right after this command, to switch to pane
 mux pane numbers:
     key(ctrl-b)
     key(q)
