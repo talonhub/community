@@ -11,7 +11,7 @@ class win_actions:
         title = actions.win.title()
         result = title.split(" - ")[0]
         if "." in result:
-            print(result.split("\\")[-1])
+            #print(result.split("\\")[-1])
             return result.split("\\")[-1]
         return ""
 
