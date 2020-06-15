@@ -203,6 +203,9 @@ class Actions:
 
     def code_state_else():
         """Inserts else statement"""
+        
+    def code_state_do():
+        """Inserts do statement"""
 
     def code_state_switch():
         """Inserts switch statement"""
