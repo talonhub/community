@@ -17,6 +17,14 @@ line feed: "\\r\\n"
 empty dubstring:
     '""'
     key(left)
-empty string: 
+empty escaped (dubstring|dub quotes):
+    '\\"\\"'
+    key(left)
+    key(left)
+empty string:
     "''"
+    key(left)
+empty escaped string:
+    "\\'\\'"
+    key(left)
     key(left)
