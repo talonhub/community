@@ -19,6 +19,7 @@ mod.list('file_manager_directory_exclusions', desc='list of titles that are excl
 setting_auto_show_pickers = mod.setting('file_manager_auto_show_pickers', type=int, default=0, desc="Enable to show the file/directories pickers automatically")
 setting_folder_limit = mod.setting('file_manager_folder_limit', type=int, default=1000,desc="Maximum number of files/folders to iterate")
 setting_file_limit = mod.setting('file_manager_file_limit', type=int, default=1000,desc="Maximum number of files to iterate")
+mod.tag("file_manager", desc='Tag for enabling generic file management commands')
 
 user_path = os.path.expanduser('~')
 
@@ -272,6 +273,40 @@ class Actions:
                 actions.insert(folder_selections[index])
         else:
             actions.insert(path)
+
+    def file_manager_new_folder():
+        """Creates a new folder in a gui filemanager or inserts the command to do so for terminals"""
+        if is_windows:
+            if is_terminal:
+                actions.insert("mkdir ")
+            else:
+                #print("fo iy...")
+                actions.key("ctrl-shift-n")
+        elif is_mac:
+            if is_terminal:
+                actions.insert("mkdir ")
+            else:
+                actions.key("cmd-shift-n")
+        #tbd
+        #else is_linux:
+
+    def file_manager_show_properties():
+        """Shows the properties for the file"""
+        #todo: does this make sense for terminals? also, linux support
+        if not is_terminal:
+            if is_windows:
+                actions.key("alt-enter")
+            elif is_mac:
+                actions.key("cmd-i")
+            #else:
+
+    def file_manager_terminal_here():
+        """Opens terminal at current location"""
+        if not is_terminal:
+            if is_windows:  
+                actions.key("ctrl-l")
+                actions.insert("cmd.exe")
+                actions.key("enter")
 
 pattern = re.compile(r"[A-Z][a-z]*|[a-z]+|\d")
 def create_spoken_forms(symbols, max_len=10):
