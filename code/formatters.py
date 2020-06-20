@@ -7,6 +7,9 @@ key = actions.key
 
 words_to_keep_lowercase = "a,an,the,at,by,for,in,is,of,on,to,up,and,as,but,or,nor".split(",")
 
+last_formatted_phrase = ""
+last_phrase = ""
+
 def surround(by):
     def func(i, word, last):
         if i == 0:
@@ -18,6 +21,8 @@ def surround(by):
     return func
 
 def FormatText(m: Union[str, Phrase], fmtrs: str):
+    global last_phrase
+    last_phrase = m
     words = []
     if isinstance(m, str):
         words = m.split(' ')
@@ -51,7 +56,11 @@ def format_text_helper(word_list, fmtrs: str):
     sep = " "
     if not spaces:
         sep = ""
-    return sep.join(words)
+    result = sep.join(words)
+
+    global last_formatted_phrase
+    last_formatted_phrase = result
+    return result
 
 NOSEP = True
 SEP   = False
@@ -83,6 +92,7 @@ def every_word(word_func):
     return formatter_function
 
 formatters_dict = {
+    "NOOP": (SEP, lambda i, word, _: word),
     "DOUBLE_UNDERSCORE": (NOSEP, first_vs_rest(lambda w: "__%s__" % w)),
     "PRIVATE_CAMEL_CASE": (NOSEP, first_vs_rest(lambda w: w, lambda w: w.capitalize())),
     "PUBLIC_CAMEL_CASE": (NOSEP, every_word(lambda w: w.capitalize())),
@@ -106,6 +116,8 @@ formatters_dict = {
 
 # This is the mapping from spoken phrases to formatters
 formatters_words = {
+    "say": formatters_dict["NOOP"],
+    "speak": formatters_dict["NOOP"],
     "dunder": formatters_dict["DOUBLE_UNDERSCORE"],
     "camel": formatters_dict["PRIVATE_CAMEL_CASE"],
     "hammer": formatters_dict["PUBLIC_CAMEL_CASE"],
@@ -157,6 +169,17 @@ class Actions:
     def hide_formatters():
         """Hides list of formatters"""
         gui.hide()
+
+    def clear_last_phrase():
+        """Clears the last formatted phrase"""
+        global last_formatted_phrase
+        for character in last_formatted_phrase:
+            actions.edit.delete()
+
+    def reformat_last_phrase(formatters: str) -> str:
+        """Reformats last formatted phrase"""
+        global last_phrase
+        return FormatText(last_phrase, formatters)
 
 @ctx.capture(rule='{self.formatters}+')
 def formatters(m):
