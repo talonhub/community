@@ -48,7 +48,7 @@ go page up:
     edit.page_up()
 
 # selecting
-select line:
+select [line]:
     edit.line_start()
     edit.extend_line_end()
 
