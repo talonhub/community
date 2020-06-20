@@ -24,7 +24,8 @@ extension_lang_map = {
     "gdb": "gdb",
     "md": "markdown",
     "sh": "bash",
-    "go": "go"
+    "go": "go",
+    "js": "javascript"
 }
 
 #flag indicates whether or not the title tracking is enabled
