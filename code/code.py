@@ -224,6 +224,9 @@ class Actions:
 
     def code_state_while():
         """Inserts while statement"""
+
+    def code_state_return():
+        """Inserts return statement"""
     
     def code_try_catch():
         """Inserts try/catch. If selection is true, does so around the selecion"""
