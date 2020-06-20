@@ -1,5 +1,4 @@
 from talon import app, Context, Module
-from talon.engine import engine
 
 mod = Module()
 @mod.action_class

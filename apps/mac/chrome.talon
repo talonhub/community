@@ -1,9 +1,7 @@
 os: mac
 app: Google Chrome
 -
-#todo tags
-# settings():
-	# tags = browser
+tag(): browser
 	
 #action(browser.address):
 

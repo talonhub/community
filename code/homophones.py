@@ -113,7 +113,8 @@ def raise_homophones(word, forced=False, selection=False):
 
     show_help = False
     gui.show()
-
+    gui.freeze()
+    
 @imgui.open(y=0,x=main_screen.width/2.6)
 def gui(gui: imgui.GUI):
     global active_word_list
@@ -154,6 +155,7 @@ class Actions:
     def homophones_show_help():
         """Shows help"""
         show_help_gui()
+        gui.freeze()
 
     def homophones_hide():
         """Hides the homophones display"""

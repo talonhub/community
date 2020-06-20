@@ -1,10 +1,12 @@
+#defines the various mode commands 
 mode: all
 -
 welcome back: 
 	user.mouse_wake()
 	user.history_enable()
-	speech.enable()	
+	speech.enable()
 sleep all: 
+	user.switcher_hide_running()
 	user.history_disable()
 	user.homophones_hide()
 	user.help_hide()
@@ -22,4 +24,11 @@ talon mode: speech.enable()
 ^command mode$:
     mode.disable("sleep")
     mode.disable("dictation")
-    mode.enable("command")
+	mode.enable("command")
+
+^force see sharp$: user.code_set_language_mode("csharp")
+^force see plus plus$: user.code_set_language_mode("cplusplus")
+^force python$: user.code_set_language_mode("python")
+^force go language$: user.code_set_language_mode("go")
+^force (talon | talent) language$: user.code_set_language_mode("talon")
+^clear language modes$: user.code_clear_language_mode()

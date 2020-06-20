@@ -1,5 +1,4 @@
-from talon import Module, screen, ui, actions
-from talon.engine import engine
+from talon import Module, screen, ui, actions, clip
 import os
 import platform
 
@@ -29,17 +28,10 @@ class Actions:
 
     def screenshot_clipboard():
         '''takes a screenshot of the entire screen and saves it to the clipboard'''
-
-        if "Windows-10" in active_platform:
-            engine.mimic("press print screen")
-        elif "Darwin" in active_platform:
-            actions.key("ctrl-shift-cmd-3")
+        img = screen.capture_rect(screen.main_screen().rect)
+        clip.set_image(img)
 
     def screenshot_window_clipboard():
         '''takes a screenshot of the window and saves it to the clipboard'''
-        if "Windows-10" in active_platform:
-            engine.mimic("press control alt print screen")
-        elif "Darwin" in active_platform:
-            actions.key("ctrl-shift-cmd-4")
-            actions.sleep("50ms")
-            actions.key("space")
+        img = screen.capture_rect(ui.active_window().rect)
+        clip.set_image(img)
