@@ -40,6 +40,9 @@ action(user.code_state_while):
   insert("while ()")
   key(left)
 
+action(user.code_state_return):
+  insert("return ")
+
 action(user.code_state_for):
   insert("for ()")
   key(left)
@@ -70,7 +73,7 @@ action(user.code_type_definition): ""
 
 action(user.code_typedef_struct): ""
 
-action(user.code_for_each):
+action(user.code_state_for_each):
   insert(".forEach()")
   key(left)
 
