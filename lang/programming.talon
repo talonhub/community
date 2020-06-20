@@ -17,6 +17,7 @@ self dot:
     insert(".")
 state while: user.code_state_while()
 state for: user.code_state_for()
+state for in: user.code_state_for_each()
 state switch: user.code_state_switch()
 state case: user.code_state_case()
 state do: user.code_state_do()
@@ -30,7 +31,6 @@ state include system: user.code_include_system()
 state include local: user.code_include_local()
 state type deaf: user.code_type_definition()
 state type deaf struct: user.code_typedef_struct()
-state for in: user.code_for_each()
 state (no | nil): user.code_null()
 ^funky <user.text>$:
     #todo: once .talon action definitions can take parameters, combine these functions

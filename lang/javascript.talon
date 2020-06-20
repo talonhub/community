@@ -73,7 +73,7 @@ action(user.code_type_definition): ""
 
 action(user.code_typedef_struct): ""
 
-action(user.code_for_each):
+action(user.code_state_for_each):
   insert(".forEach()")
   key(left)
 
