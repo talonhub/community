@@ -40,6 +40,9 @@ action(user.code_state_while):
   insert("while ()")
   key(left)
 
+action(user.code_state_return):
+  insert("return ")
+
 action(user.code_state_for):
   insert("for ()")
   key(left)

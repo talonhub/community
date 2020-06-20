@@ -78,6 +78,7 @@ action(user.code_state_go_to): "go to "
 action(user.code_state_while): 
 	insert("while()")
 	edit.left()
+action(user.code_state_return): "return "
 #action(user.code_type_definition): "typedef "	
 #action(user.code_typedef_struct):	
 #	insert("typedef struct")
