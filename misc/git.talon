@@ -1,4 +1,5 @@
 tag: terminal
+tag: git
 -
 
 # Standard commands
