@@ -59,10 +59,7 @@ action(user.ide_split_down):
 #Refactor
 
 action(user.ide_refactor):
-  key(ctrl-a)
-  key(ctrl-shift-i)
-  #Format Document
-  key(ctrl-s)
+  key(ctrl-shift-r)
 
 action(user.ide_refactor_in_line):
   key(ctrl-shift-r)
