@@ -66,19 +66,20 @@ action(user.ide_follow):
   # Go to Definition
   key(f12)
 
-action(user.ide_go_back):
-  key(alt-left)
+action(user.ide_go_back):  key(alt-left)
+action(user.ide_go_forward): key(alt-right)
+action(user.ide_recent): key(ctrl-r)
 
-action(user.ide_go_forward):
-  key(alt-right)
+#there is no separate "mode" for VSCode
+#action(user.ide_multi_cursor): skip()
+action(user.ide_multi_cursor_stop): key(escape)
+action(user.ide_up_cursor):key(ctrl-alt-up)
+action(user.ide_down_cursor): key(ctrl-alt-down)
+action(user.ide_multi_select_more): key(ctrl-d)
+action(user.ide_multi_select_all): key(ctrl-shift-l)
 
-action(user.ide_up_cursor):
-  # cursorUpSelect
-  key(ctrl-alt-up)
-
-action(user.ide_down_cursor):
-  # cursorDownSelect
-  key(ctrl-alt-down)
+action(user.ide_select_less): key(shift-alt-left)
+action(user.ide_select_more): key(shift-alt-right)
 
 # Terminal
 action(user.ide_toggle_terminal):
@@ -138,8 +139,7 @@ action(user.ide_editor_copylines_up):
 action(user.ide_toggle_project):
   # View: Show Explorer, workbench.view.explorer
   key(ctrl-shift-e)
-  user.ide_command_palette()
-
+                  
 action(user.ide_toggle_git):
   # View: Show SCM, workbench.view.scm
   key(ctrl-shift-g)
@@ -148,6 +148,10 @@ action(user.ide_toggle_extensions):
   # View: Show Extensions, workbench.view.extensions
   key(ctrl-shift-x)
 
+action(user.ide_toggle_status_bar):
+  user.ide_command_palette()
+  insert("View: Toggle Status Bar Visibility")
+  key(enter)
 
 action(user.ide_toggle_run):
   # View: Show Run and Debug, workbench.view.debug

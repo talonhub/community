@@ -71,18 +71,18 @@ action(user.ide_follow):
   # Go to Definition
   key(f12)
 
-action(user.ide_go_back):
-  key(ctrl-minus)
+action(user.ide_go_back): key(cmd-minus)
+action(user.ide_go_forward): key(cmd-shift-minus)
+action(user.ide_recent): key(cmd-r)
 
-action(user.ide_go_forward):
-  key(ctrl-shift-minus)
+action(user.ide_multi_cursor_stop): key(escape)
+action(user.ide_up_cursor):key(cmd-alt-up)
+action(user.ide_down_cursor): key(cmd-alt-down)
+action(user.ide_multi_select_more): key(cmd-d)
+action(user.ide_multi_select_all): key(cmd-shift-l)
 
-action(user.ide_up_cursor):
-  key(ctrl-alt-up)
-    
-action(user.ide_down_cursor):
-  # cursorDownSelect
-  key(ctrl-alt-down)
+action(user.ide_select_less): key(shift-alt-left)
+action(user.ide_select_more): key(shift-alt-right)
 
 # Terminal
 action(user.ide_toggle_terminal):
@@ -149,6 +149,10 @@ action(user.ide_toggle_extensions):
   # View: Show Extensions, workbench.view.extensions
   key(shift-cmd-x)
 
+action(user.ide_toggle_status_bar):
+  user.ide_command_palette()
+  insert("View: Toggle Status Bar Visibility")
+  key(enter)
 
 action(user.ide_toggle_run):
   # View: Show Run and Debug, workbench.view.debug
@@ -187,9 +191,7 @@ action(user.ide_find_match_by_word):
 action(user.ide_find_match_by_regex):
   # Terminal: Toggle Find Using Regex, workbench.action.terminal.toggleFindRegex
   key(alt-cmd-r)
-
-
-
+  
 action(user.ide_toggle_breakpoint):
   # Debug: Toggle Breakpoint, editor.debug.action.toggleBreakpoint
   key(f9)
