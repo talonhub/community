@@ -1,20 +1,6 @@
-app: /jetbrains/
-
-app: IntelliJ IDEA
-app: PyCharm
-app: PyCharm64.exe
-app: Visual Studio Code
-app: Code - OSS
-app: Code
-app: Code.exe
-app: Atom
-app: atom.exe
-
-# TODO When tags are supported
-#tags: ide
+tag: ide
 -
 refactor: user.ide_refactor()
-
 
 #Intellisense, Rich language support
 suggest (parameters | (args | arguments)): user.ide_intellisense_suggest_parameters()
@@ -134,10 +120,9 @@ trash terminal: user.ide_terminal_trash()
 terminal scroll up: user.ide_terminal_scroll_up()
 terminal scroll down: user.ide_terminal_scroll_down()
 
-
 # Tool windows:
 command palette: user.ide_command_palette()
-reveal in manager: user.ide_reveal_in_file_manager()
+open containing folder | show in explorer | show in finder: user.ide_reveal_in_file_manager()
 
 # Toggling various tool windows
 toggle project: user.ide_toggle_project()

@@ -1,13 +1,17 @@
+# Microsoft - Visual Studio Code
+# see app/vscode.talon for custom voice commands
+# see ide.talon for common voice commands
 app: Code
 os: mac
 -
-# TODO When tags are supported
-# tag(): ide
-
+tag(): ide
 # General
 action(user.ide_command_palette):
   key(cmd-shift-p)
-
+action(edit.indent_less):
+  key(cmd-[)
+action(edit.indent_more):
+  key(cmd-])
 action(app.tab_next):
   key(cmd-k)
   key(alt-cmd-right)
@@ -52,23 +56,16 @@ action(user.ide_split_down):
   key(enter)
 
 #Refactor
-
 action(user.ide_refactor):
-  key(cmd-a)
-  # Format Document
-  key(shift-alt-f)
-  key(cmd-s) 
+  key(cmd-shift-r)
 action(user.ide_refactor_in_line):
-  # Format Document
-  key(shift-alt-f)
-  #TODO are we happy to save everytime ?
-  key(cmd-s) 
-
+  key(cmd-shift-r)
 action(user.ide_refactor_rename):
   # Rename Symbol
   key(f2)
-
-
+action(user.ide_fix_format): 
+    # Format Document
+    key(alt-shift-f)
 # Navigate
 action(user.ide_follow):
   # Go to Definition
@@ -81,12 +78,11 @@ action(user.ide_go_forward):
   key(ctrl-shift-minus)
 
 action(user.ide_up_cursor):
-  # cursorUpSelect
-  key(shift-up)
-
+  key(ctrl-alt-up)
+    
 action(user.ide_down_cursor):
   # cursorDownSelect
-  key(shift-down)
+  key(ctrl-alt-down)
 
 # Terminal
 action(user.ide_toggle_terminal):
@@ -223,3 +219,14 @@ action(user.ide_reveal_in_file_manager):
 action(user.ide_find_file):
   # Go to File... , workbench.action.quickOpen
   key(cmd-p)
+
+#tabs 
+action(user.ide_go_first_tab): key(cmd-1)
+action(user.ide_go_second_tab): key(cmd-2)
+action(user.ide_go_third_tab): key(cmd-3)
+action(user.ide_go_fourth_tab): key(cmd-4)
+action(user.ide_go_fifth_tab): key(cmd-5)
+action(user.ide_go_sixth_tab): key(cmd-6)
+action(user.ide_go_seventh_tab): key(cmd-7)
+action(user.ide_go_eighth_tab): key(cmd-8)
+action(user.ide_go_ninth_tab): key(cmd-9)

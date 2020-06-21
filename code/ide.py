@@ -1,7 +1,7 @@
 from talon import Module
 
 mod = Module()
-
+mod.tag("ide", desc='Tag for enabling generic ide commands')
 
 @mod.action_class
 class Actions:

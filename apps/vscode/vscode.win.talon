@@ -4,21 +4,20 @@ os: windows
 app: Visual Studio Code
 app: Code.exe
 -
-# TODO When tags are supported
-# tag(): ide
-
+tag(): ide
 # General
 action(user.ide_command_palette):
   key(ctrl-shift-p)
-
+action(edit.indent_less):
+  key(ctrl-[)
+action(edit.indent_more):
+  key(ctrl-])
 action(app.tab_next):
   key(ctrl-k)
   key(ctrl-pagedown)
-  
 action(app.tab_previous):
   key(ctrl-k)
   key(ctrl-pageup)
-  
 # Folding
 action(user.ide_expand_deep):
   key(ctrl-k ctrl-])
@@ -56,22 +55,12 @@ action(user.ide_split_down):
 
 #Refactor
 
-action(user.ide_refactor):
-  key(ctrl-a)
+action(user.ide_refactor): key(ctrl-shift-r)
+action(user.ide_refactor_in_line): key(ctrl-shift-r)
+action(user.ide_refactor_rename): key(f2)
+action(user.ide_fix_format): 
   # Format Document
   key(alt-shift-f)
-  key(ctrl-s)
-
-action(user.ide_refactor_in_line):
-  # Format Document
-  key(alt-shift-f)
-  #TODO are we happy to save everytime ?
-  key(ctrl-s)
-
-action(user.ide_refactor_rename):
-  # Rename Symbol
-  key(f2)
-
 # Navigate
 action(user.ide_follow):
   # Go to Definition
@@ -85,11 +74,11 @@ action(user.ide_go_forward):
 
 action(user.ide_up_cursor):
   # cursorUpSelect
-  key(ctrl-shift-up)
+  key(ctrl-alt-up)
 
 action(user.ide_down_cursor):
   # cursorDownSelect
-  key(ctrl-shift-down)
+  key(ctrl-alt-down)
 
 # Terminal
 action(user.ide_toggle_terminal):
@@ -229,3 +218,14 @@ action(user.ide_reveal_in_file_manager):
 action(user.ide_find_file):
   # Go to File... , workbench.action.quickOpen
   key(ctrl-p)
+
+#tabs 
+action(user.ide_go_first_tab): key(alt-1)
+action(user.ide_go_second_tab): key(alt-2)
+action(user.ide_go_third_tab): key(alt-3)
+action(user.ide_go_fourth_tab): key(alt-4)
+action(user.ide_go_fifth_tab): key(alt-5)
+action(user.ide_go_sixth_tab): key(alt-6)
+action(user.ide_go_seventh_tab): key(alt-7)
+action(user.ide_go_eighth_tab): key(alt-8)
+action(user.ide_go_ninth_tab): key(alt-9)

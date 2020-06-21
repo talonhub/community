@@ -5,9 +5,8 @@ app: /jetbrains/
 app: IntelliJ IDEA
 app: PyCharm
 app: PyCharm64.exe
-# When tags are supported
-#tags: ide
 -
+tag(): ide
 
 # Auto complete
 action(code.complete): user.idea("action CodeCompletion")
