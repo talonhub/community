@@ -1,13 +1,9 @@
 # Microsoft - Visual Studio Code
 # see app/vscode.talon for voice commands
-
 os: windows
 app: Visual Studio Code
 app: Code.exe
 -
-
-
-tag(): git
 # TODO When tags are supported
 # tag(): ide
 

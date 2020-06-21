@@ -1,8 +1,6 @@
 app: Code
 os: mac
-
 -
-tag(): git
 # TODO When tags are supported
 # tag(): ide
 
