@@ -3,7 +3,8 @@ app: Firefox
 app: firefox.exe
 -
 tag(): browser
-	
+tag(): tabs
+
 #action(browser.address):
 
 action(browser.bookmark):

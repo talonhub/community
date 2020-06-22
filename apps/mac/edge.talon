@@ -2,7 +2,7 @@ os: mac
 app: Microsoft Edge
 -
 tag(): browser
-	
+tag(): tabs
 #action(browser.address):
 
 action(browser.bookmark):

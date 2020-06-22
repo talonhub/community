@@ -3,7 +3,7 @@ app: Microsoft Edge
 app: MicrosoftEdge.exe
 -
 tag(): browser
-	
+tag(): tabs
 #action(browser.address):
 
 action(browser.bookmark):

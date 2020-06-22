@@ -7,7 +7,7 @@ app: PyCharm
 app: PyCharm64.exe
 -
 tag(): ide
-
+tag(): tabs
 # Auto complete
 action(code.complete): user.idea("action CodeCompletion")
 action(user.ide_perfect): user.idea("action CodeCompletion,action CodeCompletion")
