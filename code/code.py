@@ -9,6 +9,8 @@ setting_public_function_formatter    = mod.setting('code_public_function_formatt
 setting_private_variable_formatter   = mod.setting('code_private_variable_formatter', str)
 setting_protected_variable_formatter = mod.setting('code_protected_variable_formatter', str)
 setting_public_variable_formatter    = mod.setting('code_public_variable_formatter', str)
+setting_type_formatter               = mod.setting('code_type_formatter', str)
+setting_interface_formatter          = mod.setting('code_interface_formatter', str)
 
 mod.tag("code_comment", desc='Tag for enabling generic comment commands')
 mod.tag("code_operators", desc='Tag for enabling generic operator commands')
@@ -276,6 +278,14 @@ class Actions:
     def code_public_variable_formatter(name: str):
         """inserts properly formatted private function name"""
         actions.insert(actions.user.formatted_text(name, settings.get("user.code_public_variable_formatter")))
+    
+    def code_type_formatter(name: str):
+        """inserts properly formatted type name"""
+        actions.insert(actions.user.formatted_text(name, settings.get("user.code_type_formatter")))
+    
+    def code_interface_formatter(name: str):
+        """inserts properly formatted interface name"""
+        actions.insert(actions.user.formatted_text(name, settings.get("user.code_interface_formatter")))
 
     def code_comment():
         """Inserts comment at current cursor location"""
