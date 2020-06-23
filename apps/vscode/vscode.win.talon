@@ -18,6 +18,15 @@ action(app.tab_next):
 action(app.tab_previous):
   key(ctrl-k)
   key(ctrl-pageup)
+
+# Toggleable views
+action(user.ide_toggle_fullscreen): 
+  user.ide_command_palette()
+  insert("View: Toggle Full Screen")
+  key(enter)
+#action(user.ide_toggle_distraction_free): user.idea("action ToggleDistractionFreeMode")
+#action(user.ide_toggle_presentation_mode): user.idea("action TogglePresentationMode")
+
 # Folding
 action(user.ide_expand_deep):
   key(ctrl-k ctrl-])
@@ -53,11 +62,23 @@ action(user.ide_split_down):
   insert("workbench.action.splitEditorDown")
   key(enter)
 
+action(user.ide_split_flip): key(alt-ctrl-0)
+action(user.ide_split_window): key(ctrl-\)
+action(user.ide_clear_split): user.ide_clear_all_splits()
+action(user.ide_clear_all_splits): 
+  user.ide_command_palette()
+  insert("View: Single Column Editor Layout")
+  key(enter)
+action(user.ide_go_next_split): key(ctrl-k ctrl-right)
+action(user.ide_go_last_split): key(ctrl-k ctrl-left)
 #Refactor
 
 action(user.ide_refactor): key(ctrl-shift-r)
 action(user.ide_refactor_in_line): key(ctrl-shift-r)
 action(user.ide_refactor_rename): key(f2)
+action(user.ide_rename_file): 
+  key(ctrl-shift-e)
+  key(f2)
 action(user.ide_fix_format): 
   # Format Document
   key(alt-shift-f)
@@ -152,6 +173,28 @@ action(user.ide_toggle_status_bar):
   user.ide_command_palette()
   insert("View: Toggle Status Bar Visibility")
   key(enter)
+action(user.ide_toggle_status_bar):
+  user.ide_command_palette()
+  insert("View: Toggle Status Bar Visibility")
+  key(enter)
+#action(user.ide_toggle_power_save): user.idea("action TogglePowerSave")
+action(user.ide_toggle_whitespace): 
+  user.ide_command_palette()
+  insert("View: Toggle Render Whitespace")
+  key(enter)
+action(user.ide_toggle_indents): user ide_toggle_whitespace()
+#requires an extension
+#action(user.ide_toggle_line_numbers):
+action(user.ide_toggle_breadcrumbs): 
+  user.ide_command_palette()
+  insert("View: Toggle Breadcrumbs")
+  key(enter)
+#action(user.ide_toggle_gutter_icons): user.idea("action EditorToggleShowGutterIcons")
+action(user.ide_toggle_wrap): 
+  user.ide_command_palette()
+  insert("View: Toggle Word Wrap")
+  key(enter)
+#action(user.ide_toggle_parameters): user.idea("action ToggleInlineHintsAction")
 
 action(user.ide_toggle_run):
   # View: Show Run and Debug, workbench.view.debug
@@ -211,6 +254,11 @@ action(app.window_open):
   # New Window, workbench.action.newWindow
   key(ctrl-shift-n)
 
+action(user.ide_create_sibling):
+  user.ide_command_palette()
+  insert("File: New File")
+  key(enter)
+
 action(user.ide_create_file):
   # File: New and Titled File, workbench.action.files.newUntitledFile
   key(ctrl-n)
@@ -233,3 +281,4 @@ action(user.ide_go_sixth_tab): key(alt-6)
 action(user.ide_go_seventh_tab): key(alt-7)
 action(user.ide_go_eighth_tab): key(alt-8)
 action(user.ide_go_ninth_tab): key(alt-9)
+action(user.ide_clear_tab): key(ctrl-w)
