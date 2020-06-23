@@ -173,16 +173,12 @@ action(user.ide_toggle_status_bar):
   user.ide_command_palette()
   insert("View: Toggle Status Bar Visibility")
   key(enter)
-action(user.ide_toggle_status_bar):
-  user.ide_command_palette()
-  insert("View: Toggle Status Bar Visibility")
-  key(enter)
 #action(user.ide_toggle_power_save): user.idea("action TogglePowerSave")
 action(user.ide_toggle_whitespace): 
   user.ide_command_palette()
   insert("View: Toggle Render Whitespace")
   key(enter)
-action(user.ide_toggle_indents): user ide_toggle_whitespace()
+action(user.ide_toggle_indents): user.ide_toggle_whitespace()
 #requires an extension
 #action(user.ide_toggle_line_numbers):
 action(user.ide_toggle_breadcrumbs): 
