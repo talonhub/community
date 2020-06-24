@@ -4,7 +4,9 @@
 app: Code
 os: mac
 -
+tag(): tabs
 tag(): ide
+tag(): line_commands
 # General
 action(user.ide_command_palette):
   key(cmd-shift-p)

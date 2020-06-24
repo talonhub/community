@@ -35,10 +35,7 @@ class win_actions:
 @ctx.action_class('user')
 class Actions:
     def go_to_line(line: int):
-        if is_mac:
-            actions.key("cmd-g")
-        else:
-            actions.key("ctrl-g")
+        actions.key("ctrl-g")
         actions.insert(str(line))
         actions.key("enter")
 

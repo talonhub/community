@@ -1,11 +1,12 @@
 # Microsoft - Visual Studio Code
-# see app/vscode.talon for custom voice commands
-# see ide.talon for common voice commands
-os: linux
-app: Code
-app: Code - OSS
+# see app/vscode.talon for voice commands
+os: windows
+app: Visual Studio Code
+app: Code.exe
 -
+tag(): tabs
 tag(): ide
+tag(): line_commands
 # General
 action(user.ide_command_palette):
   key(ctrl-shift-p)
@@ -16,7 +17,6 @@ action(edit.indent_more):
 action(app.tab_next):
   key(ctrl-k)
   key(ctrl-pagedown)
-  
 action(app.tab_previous):
   key(ctrl-k)
   key(ctrl-pageup)
@@ -28,7 +28,7 @@ action(user.ide_toggle_fullscreen):
   key(enter)
 #action(user.ide_toggle_distraction_free): user.idea("action ToggleDistractionFreeMode")
 #action(user.ide_toggle_presentation_mode): user.idea("action TogglePresentationMode")
-  
+
 # Folding
 action(user.ide_expand_deep):
   key(ctrl-k ctrl-])
@@ -73,30 +73,29 @@ action(user.ide_clear_all_splits):
   key(enter)
 action(user.ide_go_next_split): key(ctrl-k ctrl-right)
 action(user.ide_go_last_split): key(ctrl-k ctrl-left)
-
 #Refactor
 
 action(user.ide_refactor): key(ctrl-shift-r)
 action(user.ide_refactor_in_line): key(ctrl-shift-r)
-action(user.ide_refactor_rename): key(f2) 
+action(user.ide_refactor_rename): key(f2)
 action(user.ide_rename_file): 
   user.ide_command_palette()
   insert("File: Reveal Active File In Side Bar")
   key(enter f2)
 action(user.ide_fix_format): 
-    # Format Document
-    key(alt-shift-f)
+  # Format Document
+  key(alt-shift-f)
 # Navigate
 action(user.ide_follow):
   # Go to Definition
-  key(f12) 
+  key(f12)
 
-action(user.ide_go_back):
-  key(alt-left)
+action(user.ide_go_back):  key(alt-left)
+action(user.ide_go_forward): key(alt-right)
+action(user.ide_recent): key(ctrl-r)
 
-action(user.ide_go_forward):
-  key(alt-right)
-
+#there is no separate "mode" for VSCode
+#action(user.ide_multi_cursor): skip()
 action(user.ide_multi_cursor_stop): key(escape)
 action(user.ide_up_cursor):key(ctrl-alt-up)
 action(user.ide_down_cursor): key(ctrl-alt-down)
@@ -109,40 +108,42 @@ action(user.ide_select_more): key(shift-alt-right)
 # Terminal
 action(user.ide_toggle_terminal):
   # View:Toggle Integrated Terminal
-  key(ctrl-`) 
+  key(ctrl-`)
 
 action(user.ide_terminal_new):
-  key(ctrl-shift-`)
   # Terminal: Created New Integrated Terminal
+  key(ctrl-shift-`)
 
 action(user.ide_terminal_focus_previous):
-  key(alt-left)
-  # Terminal: Focus Previous Pane
+  user.ide_command_palette()
+  insert("Terminal:Focus Previous Terminal")
+  key(enter)
 
 action(user.ide_terminal_focus_next):
-  key(alt-right)
-  # Terminal: Focus Next Pane
+  user.ide_command_palette()
+  insert("Terminal:Focus Next Terminal")
+  key(enter)
 
 action(user.ide_terminal_trash):
-  key(ctrl-shift-delete)
+  user.ide_command_palette()
+  insert("Terminal:Kill")
+  key(enter)
 
 action(user.ide_terminal_scroll_down):
-  key(shift-pgdown)
+  key(pgdown)
 
 action(user.ide_terminal_scroll_up):
-  key(shift-pgup)
+  key(pgup)
 
 # Code Editor
 action(user.ide_toggle_comment):
   key(ctrl-/)
 
 action(user.ide_smart):
-
   # Trigger Suggest, editor.action.triggerParameterHints
   key(ctrl-space)
 
 action(user.ide_intellisense_suggest_parameters):
-  # Trigger Parameter Hints, editor.action.triggerParameterHints
   key(ctrl-shift-space)
 
 action(user.ide_done):
@@ -157,15 +158,12 @@ action(user.ide_editor_copylines_up):
     # Copy Line Up, editor.action.copyLinesUpAction
     key(shift-alt-up)
 
+
 # Workbench Focus Areas
 action(user.ide_toggle_project):
-  #FIX works manually with caplock on ctrl-shift-E typed works but not key(ctrl-shift-E) -  Linux Mint 19 (Vagrant VirtualBox),
-  #key(ctrl-shift-E)
-  user.ide_command_palette()
   # View: Show Explorer, workbench.view.explorer
-  insert("workbench.files.action.focusFilesExplorer")
-  key(enter)
-
+  key(ctrl-shift-e)
+                  
 action(user.ide_toggle_git):
   # View: Show SCM, workbench.view.scm
   key(ctrl-shift-g)
@@ -178,6 +176,24 @@ action(user.ide_toggle_status_bar):
   user.ide_command_palette()
   insert("View: Toggle Status Bar Visibility")
   key(enter)
+#action(user.ide_toggle_power_save): user.idea("action TogglePowerSave")
+action(user.ide_toggle_whitespace): 
+  user.ide_command_palette()
+  insert("View: Toggle Render Whitespace")
+  key(enter)
+action(user.ide_toggle_indents): user.ide_toggle_whitespace()
+#requires an extension
+#action(user.ide_toggle_line_numbers):
+action(user.ide_toggle_breadcrumbs): 
+  user.ide_command_palette()
+  insert("View: Toggle Breadcrumbs")
+  key(enter)
+#action(user.ide_toggle_gutter_icons): user.idea("action EditorToggleShowGutterIcons")
+action(user.ide_toggle_wrap): 
+  user.ide_command_palette()
+  insert("View: Toggle Word Wrap")
+  key(enter)
+#action(user.ide_toggle_parameters): user.idea("action ToggleInlineHintsAction")
 
 action(user.ide_toggle_run):
   # View: Show Run and Debug, workbench.view.debug
