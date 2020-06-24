@@ -45,9 +45,11 @@ port_mapping = {
     "jetbrains-studio": 8652,
     "jetbrains-webstorm": 8663,
     "google-android-studio": 8652,
-
     "IntelliJ IDEA": 8653,
-    "PyCharm": 8658
+    "idea64.exe": 8653,
+    "PyCharm": 8658,
+    "pycharm64.exe": 8658,
+    "webstorm64.exe": 8663
 }
 
 select_verbs_map = {

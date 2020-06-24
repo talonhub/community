@@ -1,10 +1,11 @@
 # Requires https://plugins.jetbrains.com/plugin/10504-voice-code-idea
-
 app: /jetbrains/
-
 app: IntelliJ IDEA
+app: idea64.exe
 app: PyCharm
 app: PyCharm64.exe
+app: pycharm64.exe
+app: webstorm64.exe
 -
 tag(): ide
 tag(): tabs
