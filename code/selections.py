@@ -143,7 +143,7 @@ class Actions:
         perform_selection_action(verb) 
 
 @ctx.capture(rule='{self.selection_verbs}')
-def select_verbs(m):
+def selection_verbs(m):
     return m.selection_verbs
 
 @ctx.capture(rule='{self.navigation_verbs}')
@@ -151,5 +151,5 @@ def navigation_verbs(m):
     return m.navigation_verbs
 
 
-ctx.lists['self.select_verbs'] = select_verbs_map.keys()
-ctx.lists['self.movement_verbs'] = movement_verbs_map.keys()
+ctx.lists['self.selection_verbs'] = select_verbs_map.keys()
+ctx.lists['self.navigation_verbs'] = movement_verbs_map.keys()

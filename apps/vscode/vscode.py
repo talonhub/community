@@ -32,10 +32,9 @@ class win_actions:
     def file_ext():
         return actions.win.filename().split(".")[-1]
 
-@ctx.action_class('user')
+@ctx.action_class
 class Actions:
     def go_to_line(line: int):
-        """test"""
         if is_mac:
             actions.key("cmd-g")
         else:
