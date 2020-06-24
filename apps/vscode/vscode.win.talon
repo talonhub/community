@@ -5,6 +5,7 @@ app: Visual Studio Code
 app: Code.exe
 -
 tag(): ide
+tag(): line_commands
 # General
 action(user.ide_command_palette):
   key(ctrl-shift-p)
@@ -77,8 +78,9 @@ action(user.ide_refactor): key(ctrl-shift-r)
 action(user.ide_refactor_in_line): key(ctrl-shift-r)
 action(user.ide_refactor_rename): key(f2)
 action(user.ide_rename_file): 
-  key(ctrl-shift-e)
-  key(f2)
+  user.ide_command_palette()
+  insert("File: Reveal Active File In Side Bar")
+  key(enter f2)
 action(user.ide_fix_format): 
   # Format Document
   key(alt-shift-f)

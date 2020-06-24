@@ -18,7 +18,6 @@ action(app.tab_next):
 action(app.tab_previous):
   key(cmd-k)
   key(alt-cmd-left)
-
 # Toggleable views
 action(user.ide_toggle_fullscreen): 
   user.ide_command_palette()
@@ -80,7 +79,8 @@ action(user.ide_refactor_rename):
   # Rename Symbol
   key(f2)
 action(user.ide_rename_file): 
-  key(cmd-shift-e)
+  user.ide_command_palette()
+  insert("File: Reveal Active File In Side Bar")
   key(enter)
 action(user.ide_fix_format): 
     # Format Document
