@@ -2,6 +2,8 @@ from talon import Context, actions, ui, Module, app
 is_mac = app.platform == 'mac'
 
 ctx = Context()
+mod = Module()
+
 ctx.matches = r'''
 app: Code
 app: Code - OSS
@@ -29,3 +31,14 @@ class win_actions:
 
     def file_ext():
         return actions.win.filename().split(".")[-1]
+
+@ctx.action_class('user')
+class Actions:
+    def go_to_line(line: int):
+        """test"""
+        if is_mac:
+            actions.key("cmd-g")
+        else:
+            actions.key("ctrl-g")
+        actions.insert(str(line))
+        actions.key("enter")

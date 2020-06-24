@@ -17,3 +17,10 @@ class win_actions:
 
     def file_ext():
         return actions.win.filename().split(".")[-1]
+
+@ctx.action_class('user')
+class win_actions:
+    def go_to_line(line: int):
+        actions.key("ctrl-g")
+        actions.insert(str(line))
+        actions.key("enter")
