@@ -33,9 +33,33 @@ class win_actions:
         return actions.win.filename().split(".")[-1]
 
 @ctx.action_class('user')
-class Actions:
+class user_actions:
     def go_to_line(line: int):
         actions.key("ctrl-g")
         actions.insert(str(line))
         actions.key("enter")
 
+    def ide_copy_path():
+        actions.user.ide_command_palette()
+        actions.insert("File: Copy Path of Active File")
+        actions.key("enter")
+
+    def ide_go_mark():
+        actions.user.ide_command_palette()
+        actions.insert("View: Show Bookmarks")
+        actions.key("enter")
+
+    def ide_toggle_mark():
+        actions.user.ide_command_palette()
+        actions.insert("Bookmarks: Toggle")
+        actions.key("enter")
+
+    def ide_go_next_mark():
+        actions.user.ide_command_palette()
+        actions.insert("Bookmarks: Jump to Next")
+        actions.key("enter")
+
+    def ide_go_last_mark():
+        actions.user.ide_command_palette()
+        actions.insert("Bookmarks: Jump to Previous")
+        actions.key("enter")
