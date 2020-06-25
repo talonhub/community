@@ -1,4 +1,6 @@
 code.language: csharp
+mode: command 
+and code.language: csharp
 -
 tag(): user.code_operators
 tag(): user.code_comment
