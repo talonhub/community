@@ -323,7 +323,12 @@ def refresh_context_command_map(enabled_only = False):
         
     context_command_map = {}
     for context_name, context in registry.contexts.items():
-        short_name = context_name.replace('(Context', '').replace('.talon', '').replace(')', '').split('.')[-1].replace('_', " ")
+        splits = context_name.split('.')
+        if "talon" in splits[-1]:
+            short_name = splits[-2].replace("_", " ")
+        else:
+            short_name = splits[-1].replace("_", " ")
+
         #print("short name: " + short_name)
         if short_name in overrides:
             short_name = overrides[short_name]
