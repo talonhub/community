@@ -2,7 +2,8 @@ os: mac
 app: Firefox
 -
 tag(): browser
-	
+tag(): tabs
+
 #action(browser.address):
 
 action(browser.bookmark):

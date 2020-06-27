@@ -1,16 +1,9 @@
-app: /jetbrains/
-
-app: IntelliJ IDEA
-app: idea64.exe
-app: PyCharm
-app: PyCharm64.exe
-app: pycharm64.exe
-app: webstorm64.exe
-# When tags are supported
-#tags: ide
+tag: ide
 -
 refactor: user.ide_refactor()
 
+#Intellisense, Rich language support
+suggest (parameters | (args | arguments)): user.ide_intellisense_suggest_parameters()
 complete: code.complete()
 perfect: user.ide_perfect()
 smart: user.ide_smart()
@@ -42,6 +35,15 @@ find (everywhere | all): user.ide_find_everywhere()
 (search | find) class: user.ide_find_class()
 (search | find) file: user.ide_find_file()
 (search | find) path: user.ide_find_in_path()
+
+replace it: user.ide_replace_local()
+replace (everywhere | all): user.ide_replace_everywhere()
+[replace] confirm that: user.ide_replace_confirm_current()
+[replace] confirm all: user.ide_replace_confirm_all()
+toggle [find by] case : user.ide_find_match_by_case()
+toggle [find by] word : user.ide_find_match_by_word()
+toggle [find by] expression : user.ide_find_match_by_regex()
+
 recent: user.ide_recent()
 
 create (template|snippet): user.ide_create_template()
@@ -61,11 +63,15 @@ go last mark: user.ide_go_last_mark()
 # Folding
 expand deep: user.ide_expand_deep()
 expand all: user.ide_expand_all()
+expand that: user.ide_expand_region()
 collapse deep: user.ide_collapse_deep()
 collapse all: user.ide_collapse_all()
+collapse that: user.ide_collapse_region()
 # Splits
 split right: user.ide_split_right()
+split left: user.ide_split_left()
 split down: user.ide_split_down()
+split up: user.ide_split_up()
 split vertically: user.ide_split_vertically()
 split horizontally: user.ide_split_horizontally()
 split flip: user.ide_split_flip()
@@ -105,12 +111,25 @@ git (pull request | request): user.ide_git_pull_request()
 git (view | show | list) (requests | request): user.ide_git_list_requests()
 git (annotate | blame): user.ide_git_annotate()
 git menu: user.ide_git_menu()
+
+# Terminal
+new terminal: user.ide_terminal_new()
+next terminal: user.ide_terminal_focus_next()
+trash terminal: user.ide_terminal_trash()
+(previous | last) terminal: user.ide_terminal_focus_previous()
+terminal scroll up: user.ide_terminal_scroll_up()
+terminal scroll down: user.ide_terminal_scroll_down()
+
 # Tool windows:
+command palette: user.ide_command_palette()
+open containing folder | show in explorer | show in finder: user.ide_reveal_in_file_manager()
+
 # Toggling various tool windows
 toggle project: user.ide_toggle_project()
 toggle find: user.ide_toggle_find()
 toggle run: user.ide_toggle_run()
 toggle debug: user.ide_toggle_debug()
+toggle extensions: user.ide_toggle_extensions()
 toggle events: user.ide_toggle_events()
 toggle terminal: user.ide_toggle_terminal()
 toggle git: user.ide_toggle_git()
@@ -138,14 +157,17 @@ toggle power save: user.ide_toggle_power_save()
 toggle whitespace: user.ide_toggle_whitespace()
 toggle indents: user.ide_toggle_indents()
 toggle line numbers: user.ide_toggle_line_numbers()
-toggle bread crumbs: user.ide_toggle_breadcrumbs()
+toggle (bread crumbs | breadcrumbs): user.ide_toggle_breadcrumbs()
 toggle gutter icons: user.ide_toggle_gutter_icons()
 toggle wrap: user.ide_toggle_wrap()
 toggle parameters: user.ide_toggle_parameters()
+
 # Toggleable views
 toggle fullscreen: user.ide_toggle_fullscreen()
 toggle distraction [free mode]: user.ide_toggle_distraction_free()
 toggle presentation [mode]: user.ide_toggle_presentation_mode()
+# Toggle additionals
+toggle comment: user.ide_toggle_comment()
 # Tabs
 go first tab: user.ide_go_first_tab()
 go second tab: user.ide_go_second_tab()
@@ -173,6 +195,7 @@ run test again: user.ide_run_test_again()
 debug test: user.ide_debug_test()
 step over: user.ide_step_over()
 step into: user.ide_step_into()
+step out: user.ide_step_out()
 step smart: user.ide_step_smart()
 step to line: user.ide_step_to_line()
 continue: user.ide_continue()
@@ -182,11 +205,15 @@ continue: user.ide_continue()
 (grow | shrink) window up: user.ide_resize_window_up()
 (grow | shrink) window down: user.ide_resize_window_down()
 
+# Editing
 drag up:
 	edit.line_swap_up()
 
 drag down:
 	edit.line_swap_down()
+
+copy [line] down: user.ide_editor_copylines_down()
+copy [line] up: user.ide_editor_copylines_up()
 
 clone (line|this):
 	edit.line_clone()

@@ -1,17 +1,14 @@
 # Requires https://plugins.jetbrains.com/plugin/10504-voice-code-idea
-
 app: /jetbrains/
-
 app: IntelliJ IDEA
 app: idea64.exe
 app: PyCharm
 app: PyCharm64.exe
 app: pycharm64.exe
 app: webstorm64.exe
-# When tags are supported
-#tags: ide
 -
-
+tag(): ide
+tag(): tabs
 # Auto complete
 action(code.complete): user.idea("action CodeCompletion")
 action(user.ide_perfect): user.idea("action CodeCompletion,action CodeCompletion")

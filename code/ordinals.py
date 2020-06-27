@@ -65,22 +65,22 @@ def ordinal(n):
         suffix = "th"
     return str(n) + suffix
 
-
 def ordinal_word(n):
     n = int(n)
-    result = ""
+    ordinal_list = []
     if n > 19:
         if n % 10 == 0:
-            result += ordinal_tens[floor((n / 10)) - 2]
+            ordinal_list.append(ordinal_tens[floor((n / 10)) - 2])
         else:
-            result += ordinal_tenty[floor(n / 10) - 2]
-            result += ordinal_ones[(n % 10) - 1]
+            ordinal_list.append(ordinal_tenty[floor(n / 10) - 2])
+            ordinal_list.append(ordinal_ones[(n % 10) - 1])
     elif n > 9:
-        result += ordinal_teens[n - 11]
+        ordinal_list.append(ordinal_teens[n - 11])
     else:
-        result += ordinal_ones[n - 1]
-    return result
+        ordinal_list.append(ordinal_ones[n - 1])
 
+    result = ' '.join(ordinal_list)
+    return result
 
 for n in range(1, 100):
     # This was initially minus one to compensate for its only use as a command
@@ -95,16 +95,13 @@ mod.list("ordinal_words", desc="list of ordinals")
 
 ctx = Context()
 
-
 @mod.capture
 def ordinals(m) -> int:
     "Returns a single ordinial as a digit"
-
 
 @ctx.capture(rule="{self.ordinal_words}")
 def ordinals(m):
     o = m[0]
     return int(ordinal_words[o])
-
 
 ctx.lists["self.ordinal_words"] = ordinal_words.keys()

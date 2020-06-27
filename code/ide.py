@@ -1,7 +1,7 @@
 from talon import Module
 
 mod = Module()
-
+mod.tag("ide", desc='Tag for enabling generic ide commands')
 
 @mod.action_class
 class Actions:
@@ -12,7 +12,7 @@ class Actions:
         """Trigger better auto complete in the ide"""
 
     def ide_smart():
-        """Trigger type completion in the ide"""
+        """Trigger suggestion / type completion in the ide"""
 
     def ide_finish():
         """Select auto complete statement"""
@@ -20,11 +20,17 @@ class Actions:
     def ide_done():
         """Select auto complete statement"""
 
-    def ide_parameter_hints():
+    def ide_intellisense_suggest_parameters():
         """Trigger parameter hints"""
 
     def ide_toggle_tools():
         """Hide all windows"""
+
+    def ide_editor_copylines_down():
+        """Editor copy line down"""
+
+    def ide_editor_copylines_up():
+        """Editor copy line up"""
 
     def ide_extract_variable():
         """Trigger extract variable functionality of IDE"""
@@ -95,6 +101,26 @@ class Actions:
     def ide_find_file():
         """Open search for file functionality of ide"""
 
+    def ide_replace_everywhere():
+        """Search and replaces in the entire project"""
+
+    def ide_replace_local():
+        """Search and replaces in the active editor"""
+
+    def ide_replace_confirm_current():
+        """Confirm replaces at current position"""
+    def ide_replace_confirm_all():
+        """Confirm replaces all"""
+
+    def ide_find_match_by_case():
+        """Toggles find match by case sensitivity"""
+
+    def ide_find_match_by_word():
+        """Toggles find match by whole words"""
+
+    def ide_find_match_by_regex():
+        """Toggles find match by regex"""
+
     def ide_recent():
         """Open recent files list"""
 
@@ -161,17 +187,29 @@ class Actions:
     def ide_expand_all():
         """Expand all blocks in file"""
 
+    def ide_expand_region():
+        """Expand current block in file"""
+
     def ide_collapse_deep():
         """Collapse code recursively"""
 
     def ide_collapse_all():
         """Collapse all code in file"""
 
+    def ide_collapse_region():
+        """Collapse current block in file"""
+
     def ide_split_right():
-        """Move current tab to the right pane"""
+        """Copy current tab to the right pane"""
+
+    def ide_split_left():
+        """Copy current tab to the left pane"""
 
     def ide_split_down():
-        """Move tab to the pane below"""
+        """Copy tab to the pane below"""
+
+    def ide_split_up():
+        """Copy tab to the pane above"""
 
     def ide_split_vertically():
         """Split the view into panes vertically"""
@@ -202,6 +240,9 @@ class Actions:
 
     def ide_go_last_method():
         """Go to the previous method in the file"""
+
+    def ide_command_palette():
+        """Open the command palette"""
 
     def ide_clippings():
         """Show copy history"""
@@ -266,6 +307,9 @@ class Actions:
     def ide_git_menu():
         """Show the git menu for IDE"""
 
+    def ide_reveal_in_file_manager():
+        """Reveal in OS file manager. window"""
+
     def ide_toggle_project():
         """Hide/Show project (file system) browser window"""
 
@@ -283,6 +327,9 @@ class Actions:
 
     def ide_toggle_terminal():
         """Hide/Show terminal window"""
+
+    def ide_toggle_extensions():
+        """Hide/Show extensions window"""
 
     def ide_terminal_new():
         """Create new terminal"""
@@ -460,6 +507,8 @@ class Actions:
 
     def ide_step_into():
         """Step into current statement"""
+    def ide_step_out():
+        """Step out of current execution level"""
 
     def ide_step_smart():
         """Trigger smart step into"""
@@ -485,17 +534,5 @@ class Actions:
     def ide_toggle_comment():
         """Toggle comment for selected text"""
 
-    def ide_show_explorer():
-        """Show Explorer"""
 
-    def ide_show_search():
-        """Show Search"""
 
-    def ide_show_source_control():
-        """Show Source Control"""
-
-    def ide_show_debug():
-        """Show Debug"""
-
-    def ide_show_extensions():
-        """Show Extensions"""

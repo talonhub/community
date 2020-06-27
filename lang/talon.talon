@@ -42,4 +42,6 @@ tag require:
 	insert("tag: ")
 user:
 	insert("user.")
-
+repeat:
+	insert("repeat()")
+	edit.left()

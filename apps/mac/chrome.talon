@@ -2,7 +2,7 @@ os: mac
 app: Google Chrome
 -
 tag(): browser
-	
+tag(): tabs
 #action(browser.address):
 
 action(browser.bookmark):
