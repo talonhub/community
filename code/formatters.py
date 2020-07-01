@@ -29,16 +29,10 @@ def FormatText(m: Union[str, Phrase], fmtrs: str):
     else:
         if m.words[-1] == "over":
             m.words = m.words[:-1]
-        try:
-            words = actions.dictate.parse_words(m)
-            words = actions.dictate.replace_words(words)
-        except AttributeError:
-            with clip.capture() as s:
-                edit.copy()
-                words = s.get().split(" ")
-            if not words:
-                return
-    
+
+        words = actions.dictate.parse_words(m)
+        words = actions.dictate.replace_words(words)
+
     return format_text_helper(words, fmtrs)
 
 def format_text_helper(word_list, fmtrs: str):
