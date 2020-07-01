@@ -55,6 +55,13 @@ class Actions:
     def go_to_line(line: int):
         """Goes to a line"""
 
+    def select_whole_line(verb: str, line: int):
+        """Selects entire line"""
+        actions.user.go_to_line(line)
+        actions.edit.extend_line_start()
+        actions.edit.extend_line_end()
+        perform_selection_action(verb)
+
     def select_current_line(verb: str):
         """Select current line"""
         actions.edit.line_start()
@@ -68,7 +75,7 @@ class Actions:
         perform_selection_action(verb)
     
     def select_until_line(verb: str, line: int):
-        """Performs action on selection from current line to the specified line"""
+        """Performs action on selection from current line to the specified line."""
 
     def select_range(verb: str, line_start: int, line_end: int):
         """Performs action on selection from line line_start to line line_end"""
@@ -142,6 +149,12 @@ class Actions:
         actions.edit.extend_word_left()
         perform_selection_action(verb) 
 
+    def move_camel_left(verb: str):
+        """Moves and performs action on camel left"""
+
+    def move_camel_right(verb: str):
+        """Moves and performs action on camel left"""   
+
 @ctx.capture(rule='{self.selection_verbs}')
 def selection_verbs(m):
     return m.selection_verbs
@@ -149,7 +162,6 @@ def selection_verbs(m):
 @ctx.capture(rule='{self.navigation_verbs}')
 def navigation_verbs(m):
     return m.navigation_verbs
-
 
 ctx.lists['self.selection_verbs'] = select_verbs_map.keys()
 ctx.lists['self.navigation_verbs'] = movement_verbs_map.keys()
