@@ -328,10 +328,16 @@ def refresh_context_command_map(enabled_only = False):
     context_command_map = {}
     for context_name, context in registry.contexts.items():
         splits = context_name.split('.')
-        if "talon" in splits[-1]:
-            short_name = splits[-2].replace("_", " ")
+        index = -1
+        if "talon" in splits[index]:
+            index = -2
+            short_name = splits[index].replace("_", " ")
         else:
-            short_name = splits[-1].replace("_", " ")
+            short_name = splits[index].replace("_", " ")
+
+        if "mac" == short_name or "win" == short_name or "linux" == short_name:
+            index = index - 1
+            short_name = splits[index].replace("_", " ")
 
         #print("short name: " + short_name)
         if short_name in overrides:
