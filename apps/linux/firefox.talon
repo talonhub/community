@@ -4,6 +4,7 @@ app: firefox
 -
 tag(): browser
 tag(): firefox
+tag(): tabs
 
 #action(browser.address):
 
