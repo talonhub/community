@@ -93,7 +93,15 @@ By default, title tracking activates coding languages in supported applications 
 
 To enable title tracking for your application: 
 1. The active filename (including extension) must be included in the editor's title
-2. Implement the required Talon-defined actions to correctly extract the filename and extension from the programs's title. See https://github.com/knausj85/knausj_talon/blob/69d0207c873e860002b137f985dd7cb001183a47/apps/vscode/vscode.py#L12 for an example. 
+2. Implement the required Talon-defined actions to correctly extract the filename and extension from the programs's title. See https://github.com/knausj85/knausj_talon/blob/69d0207c873e860002b137f985dd7cb001183a47/apps/vscode/vscode.py#L12 for an example.
+
+Python, C#, Talon and javascript language support is currently broken up into ~four contexts in an attempt to define a common grammar where possible between languages
+• operators.talon - operator commands
+• comment.talon - commenting commands
+• programming.talon - function, loop commands, etc
+• {your-language-here}.talon - for implementation of the actions for the above, and any language-specific stuff
+
+
 
 ## File Manager commands
 For the following file manager commands to work, your file manager must display the full folder path in the title bar. https://github.com/knausj85/knausj_talon/blob/baa323fcd34d8a1124658a425abe8eed59cf2ee5/apps/file_manager.talon
