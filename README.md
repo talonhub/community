@@ -96,11 +96,14 @@ To enable title tracking for your application:
 2. Implement the required Talon-defined actions to correctly extract the filename and extension from the programs's title. See https://github.com/knausj85/knausj_talon/blob/69d0207c873e860002b137f985dd7cb001183a47/apps/vscode/vscode.py#L12 for an example.
 
 Python, C#, Talon and javascript language support is currently broken up into ~four contexts in an attempt to define a common grammar where possible between languages
-• operators.talon - operator commands
-• comment.talon - commenting commands
-• programming.talon - function, loop commands, etc
-• {your-language-here}.talon - for implementation of the actions for the above, and any language-specific stuff
 
+• operators.talon - operator commands
+
+• comment.talon - commenting commands
+
+• programming.talon - function, loop commands, etc
+
+• {your-language-here}.talon - for implementation of the actions for the above, and any language-specific stuff
 
 
 ## File Manager commands
