@@ -61,11 +61,8 @@ class Actions:
     def code_set_language_mode(language: str):
         """Sets the active language mode, and disables extension matching"""
         global forced_language
-        for __, lang in extension_lang_map.items():
-            if lang != language:
-                actions.mode.disable("user.{}".format(lang))
-            else:
-                actions.mode.enable("user.{}".format(lang))
+        actions.user.code_clear_language_mode()
+        actions.mode.enable("user.{}".format(language))
 
         forced_language = True
 
