@@ -10,15 +10,17 @@ simple_vocabulary = [
     "minecraft",
 ]
 
-mapping_vocabulary = {
+mapping_vocabulary = dict(zip(simple_vocabulary, simple_vocabulary))
+
+mapping_vocabulary.update({
     "i": "I",
     "i'm": "I'm",
     "i've": "I've",
     "i'll": "I'll",
     "i'd": "I'd",
-}
+})
 
-mapping_vocabulary.update(dict(zip(simple_vocabulary, simple_vocabulary)))
+mapping_vocabulary = dict((k.lower(), v) for k, v in mapping_vocabulary.iteritems())
 
 mod = Module()
 
