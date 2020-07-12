@@ -168,18 +168,6 @@ toggle distraction [free mode]: user.ide_toggle_distraction_free()
 toggle presentation [mode]: user.ide_toggle_presentation_mode()
 # Toggle additionals
 toggle comment: user.ide_toggle_comment()
-# Tabs
-go first tab: user.ide_go_first_tab()
-go second tab: user.ide_go_second_tab()
-go third tab: user.ide_go_third_tab()
-go fourth tab: user.ide_go_fourth_tab()
-go fifth tab: user.ide_go_fifth_tab()
-go sixth tab: user.ide_go_sixth_tab()
-go seventh tab: user.ide_go_seventh_tab()
-go eighth tab: user.ide_go_eighth_tab()
-go ninth tab: user.ide_go_ninth_tab()
-go final tab: user.ide_go_final_tab()
-clear tab: user.ide_clear_tab()
 # Quick popups
 change scheme: user.ide_change_scheme()
 (toggle | pop) (doc | documentation): user.ide_toggle_documentation()

@@ -19,8 +19,17 @@ class win_actions:
         return actions.win.filename().split(".")[-1]
 
 @ctx.action_class('user')
-class win_actions:
+class user_actions:
     def go_to_line(line: int):
         actions.key("ctrl-g")
         actions.insert(str(line))
         actions.key("enter")
+
+    def tab_jump(number: int):
+        if number < 10:
+            actions.key("ctrl-keypad_{}".format(number))
+
+    def tab_final():
+        """Jumps to the final tab"""
+        print("Notepad doesn't support this...")
+        #actions.key("ctrl-numpad_0")

@@ -436,39 +436,6 @@ class Actions:
     def ide_toggle_presentation_mode():
         """Enable/Disable presentation mode """
 
-    def ide_go_first_tab():
-        """Go to first tab"""
-
-    def ide_go_second_tab():
-        """Go to second tab"""
-
-    def ide_go_third_tab():
-        """Go to third tab"""
-
-    def ide_go_fourth_tab():
-        """Go to fourth tab"""
-
-    def ide_go_fifth_tab():
-        """Go to fifth tab"""
-
-    def ide_go_sixth_tab():
-        """Go to sixth tab"""
-
-    def ide_go_seventh_tab():
-        """Go to seventh tab"""
-
-    def ide_go_eighth_tab():
-        """Go to eighth tab"""
-
-    def ide_go_ninth_tab():
-        """Go to ninth tab"""
-
-    def ide_go_final_tab():
-        """Go to the final tab in the list"""
-
-    def ide_clear_tab():
-        """Close current open view"""
-
     def ide_change_scheme():
         """Trigger scheme menu (e.g. to change colour scheme)"""
 
@@ -507,6 +474,7 @@ class Actions:
 
     def ide_step_into():
         """Step into current statement"""
+    
     def ide_step_out():
         """Step out of current execution level"""
 

@@ -63,3 +63,16 @@ class user_actions:
         actions.user.ide_command_palette()
         actions.insert("Bookmarks: Jump to Previous")
         actions.key("enter")
+
+    def tab_jump(number: int):
+        if number < 10:
+            if is_mac:
+                actions.key("cmd-{}".format(number))
+            else:
+                actions.key("alt-{}".format(number))
+
+    def tab_final():
+        if is_mac:
+            actions.key("cmd-0")
+        else:
+            actions.key("alt-0")

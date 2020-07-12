@@ -1,6 +1,7 @@
 os: windows
 app: Microsoft Edge
 app: MicrosoftEdge.exe
+app: msedge.exe
 -
 tag(): browser
 tag(): tabs

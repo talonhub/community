@@ -18,11 +18,11 @@ action(edit.indent_more):
 action(app.tab_next):
   key(ctrl-k)
   key(ctrl-pagedown)
-  
 action(app.tab_previous):
   key(ctrl-k)
   key(ctrl-pageup)
-
+action(app.tab_close):
+  key(ctrl-w)
 # Toggleable views
 action(user.ide_toggle_fullscreen): 
   user.ide_command_palette()
@@ -256,14 +256,3 @@ action(user.ide_find_file):
   # Go to File... , workbench.action.quickOpen
   key(ctrl-p)
 
-#tabs 
-action(user.ide_go_first_tab): key(alt-1)
-action(user.ide_go_second_tab): key(alt-2)
-action(user.ide_go_third_tab): key(alt-3)
-action(user.ide_go_fourth_tab): key(alt-4)
-action(user.ide_go_fifth_tab): key(alt-5)
-action(user.ide_go_sixth_tab): key(alt-6)
-action(user.ide_go_seventh_tab): key(alt-7)
-action(user.ide_go_eighth_tab): key(alt-8)
-action(user.ide_go_ninth_tab): key(alt-9)
-action(user.ide_clear_tab): key(ctrl-w)

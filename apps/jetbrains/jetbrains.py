@@ -147,7 +147,6 @@ def select_verbs(m) -> list:
 def movement_verbs(m) -> list:
     """Returns a list of verbs"""
 
-
 @mod.action_class
 class Actions:
     def idea(commands: str):
@@ -194,6 +193,21 @@ class Actions:
         set_extend(commands.split(","))
 
 
+ctx.matches = r'''
+app: /jetbrains/
+app: IntelliJ IDEA
+app: idea64.exe
+app: PyCharm
+app: PyCharm64.exe
+app: pycharm64.exe
+app: webstorm64.exe
+'''
+@ctx.action_class('user')
+class user_actions:
+    def tab_jump(number: int):
+        if number < 10:
+            actions.user.idea("action GoToTab{}".format(number))
+
 @ctx.capture(rule='{self.select_verbs}')
 def select_verbs(m):
     return m.select_verbs
@@ -203,7 +217,6 @@ def select_verbs(m):
 def movement_verbs(m):
     print(m)
     return m.movement_verbs
-
 
 ctx.lists['self.select_verbs'] = select_verbs_map.keys()
 ctx.lists['self.movement_verbs'] = movement_verbs_map.keys()

@@ -20,6 +20,8 @@ action(app.tab_next):
 action(app.tab_previous):
   key(cmd-k)
   key(alt-cmd-left)
+action(app.tab_close):
+  key(cmd-w)
 # Toggleable views
 action(user.ide_toggle_fullscreen): 
   user.ide_command_palette()
@@ -265,15 +267,3 @@ action(user.ide_reveal_in_file_manager):
 action(user.ide_find_file):
   # Go to File... , workbench.action.quickOpen
   key(cmd-p)
-
-#tabs 
-action(user.ide_go_first_tab): key(ctrl-1)
-action(user.ide_go_second_tab): key(ctrl-2)
-action(user.ide_go_third_tab): key(ctrl-3)
-action(user.ide_go_fourth_tab): key(ctrl-4)
-action(user.ide_go_fifth_tab): key(ctrl-5)
-action(user.ide_go_sixth_tab): key(ctrl-6)
-action(user.ide_go_seventh_tab): key(ctrl-7)
-action(user.ide_go_eighth_tab): key(ctrl-8)
-action(user.ide_go_ninth_tab): key(ctrl-9)
-action(user.ide_clear_tab): key(cmd-w)
