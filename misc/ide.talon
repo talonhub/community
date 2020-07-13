@@ -67,19 +67,7 @@ expand that: user.ide_expand_region()
 collapse deep: user.ide_collapse_deep()
 collapse all: user.ide_collapse_all()
 collapse that: user.ide_collapse_region()
-# Splits
-split right: user.ide_split_right()
-split left: user.ide_split_left()
-split down: user.ide_split_down()
-split up: user.ide_split_up()
-split vertically: user.ide_split_vertically()
-split horizontally: user.ide_split_horizontally()
-split flip: user.ide_split_flip()
-split window: user.ide_split_window()
-clear split: user.ide_clear_split()
-clear all splits: user.ide_clear_all_splits()
-go next split: user.ide_go_next_split()
-go last split: user.ide_go_last_split()
+
 # miscellaneous
 # XXX These might be better than the structural ones depending on language.
 go next (method | function): user.ide_go_next_method()
