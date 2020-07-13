@@ -102,12 +102,12 @@ class user_actions:
     def tab_jump(number: int):
         if number < 10:
             if is_mac:
-                actions.key("cmd-{}".format(number))
+                actions.key("ctrl-{}".format(number))
             else:
                 actions.key("alt-{}".format(number))
 
     def tab_final():
         if is_mac:
-            actions.key("cmd-0")
+            actions.key("ctrl-0")
         else:
             actions.key("alt-0")
