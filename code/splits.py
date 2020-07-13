@@ -1,6 +1,7 @@
 from talon import Module, actions, app
 
 mod = Module()
+mod.tag("splits", desc='Tag for enabling generic window split commands')
 @mod.action_class
 class Actions:
     def split_window_right():
