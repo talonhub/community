@@ -9,3 +9,4 @@ app: Code.exe
 tag(): tabs
 tag(): ide
 tag(): line_commands
+tag(): splits

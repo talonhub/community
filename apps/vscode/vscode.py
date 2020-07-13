@@ -111,3 +111,12 @@ class user_actions:
             actions.key("ctrl-0")
         else:
             actions.key("alt-0")
+
+    #splits.py support
+    def split_number(index: int):
+        """Navigates to a the specified split"""
+        if index < 9:
+            if is_mac:
+                actions.key("cmd-{}".format(index))
+            else:
+                actions.key("ctrl-{}".format(index))

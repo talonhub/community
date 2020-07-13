@@ -199,42 +199,6 @@ class Actions:
     def ide_collapse_region():
         """Collapse current block in file"""
 
-    def ide_split_right():
-        """Copy current tab to the right pane"""
-
-    def ide_split_left():
-        """Copy current tab to the left pane"""
-
-    def ide_split_down():
-        """Copy tab to the pane below"""
-
-    def ide_split_up():
-        """Copy tab to the pane above"""
-
-    def ide_split_vertically():
-        """Split the view into panes vertically"""
-
-    def ide_split_horizontally():
-        """Split the view into panes horizontally"""
-
-    def ide_split_flip():
-        """Change split orientation"""
-
-    def ide_split_window():
-        """Open the current file in a new window"""
-
-    def ide_clear_split():
-        """Unsplit the current view (collapse this and previous pane into one)"""
-
-    def ide_clear_all_splits():
-        """Unsplit all views (back to single pane)"""
-
-    def ide_go_next_split():
-        """Go to next pane"""
-
-    def ide_go_last_split():
-        """Go to the previous pane"""
-
     def ide_go_next_method():
         """Go to the next method in the file"""
 

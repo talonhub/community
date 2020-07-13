@@ -10,6 +10,7 @@ app: webstorm64.exe
 tag(): ide
 tag(): tabs
 tag(): line_commands
+tag(): splits 
 
 # Auto complete
 action(code.complete): user.idea("action CodeCompletion")
@@ -130,17 +131,6 @@ action(user.ide_expand_deep): user.idea("action ExpandRegionRecursively")
 action(user.ide_expand_all): user.idea("action ExpandAllRegions")
 action(user.ide_collapse_deep): user.idea("action CollapseRegionRecursively")
 action(user.ide_collapse_all): user.idea("action CollapseAllRegions")
-# Splits
-action(user.ide_split_right): user.idea("action MoveTabRight")
-action(user.ide_split_down): user.idea("action MoveTabDown")
-action(user.ide_split_vertically): user.idea("action SplitVertically")
-action(user.ide_split_horizontally): user.idea("action SplitHorizontally")
-action(user.ide_split_flip): user.idea("action ChangeSplitOrientation")
-action(user.ide_split_window): user.idea("action EditSourceInNewWindow")
-action(user.ide_clear_split): user.idea("action Unsplit")
-action(user.ide_clear_all_splits): user.idea("action UnsplitAll")
-action(user.ide_go_next_split): user.idea("action NextSplitter")
-action(user.ide_go_last_split): user.idea("action LastSplitter")
 # miscellaneous
 # XXX These might be better than the structural ones depending on language.
 action(user.ide_go_next_method): user.idea("action MethodDown")
@@ -248,6 +238,20 @@ action(user.ide_resize_window_right): user.idea("action ResizeToolWindowRight")
 action(user.ide_resize_window_left): user.idea("action ResizeToolWindowLeft")
 action(user.ide_resize_window_up): user.idea("action ResizeToolWindowUp")
 action(user.ide_resize_window_down): user.idea("action ResizeToolWindowDown")
+
+# splits.py support
+#action(user.split_window_left): user.idea("action MoveTabLeft")
+action(user.split_window_right): user.idea("action MoveTabRight")
+action(user.split_window_down): user.idea("action MoveTabDown")
+#action(user.split_window_up): user.idea("action MoveTabUp")
+action(user.split_window_vertically): user.idea("action SplitVertically")
+action(user.split_window_horizontally): user.idea("action SplitHorizontally")
+action(user.split_flip): user.idea("action ChangeSplitOrientation")
+action(user.split_window): user.idea("action EditSourceInNewWindow")
+action(user.split_clear): user.idea("action Unsplit")
+action(user.split_clear_all): user.idea("action UnsplitAll")
+action(user.split_next): user.idea("action NextSplitter")
+action(user.split_last): user.idea("action LastSplitter")
 
 # Movement
 <user.navigation_verbs> next (error | air): user.idea_movement(navigation_verbs, "action GotoNextError")
