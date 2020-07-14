@@ -10,3 +10,4 @@ tag(): tabs
 tag(): ide
 tag(): line_commands
 tag(): splits
+tag(): snippets

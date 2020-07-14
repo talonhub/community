@@ -8,6 +8,7 @@ tag(): tabs
 tag(): ide
 tag(): line_commands
 tag(): splits
+tag(): snippets
 # General
 action(user.ide_command_palette):
   key(ctrl-shift-p)

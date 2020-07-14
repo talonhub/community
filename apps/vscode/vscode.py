@@ -44,6 +44,20 @@ class edit_actions:
 
 @ctx.action_class('user')
 class user_actions:
+    def snippet_search(text: str):
+        actions.user.ide_command_palette()
+        actions.insert("Insert Snippet")
+        actions.key("enter")
+        actions.insert(text)
+        
+    def snippet_insert(text: str):
+        """Inserts a snippet"""
+        actions.user.ide_command_palette()
+        actions.insert("Insert Snippet")
+        actions.key("enter")
+        actions.insert(text)
+        actions.key("enter")
+
     def select_word(verb: str):
         if not is_mac:
             actions.key("ctrl-d")
@@ -120,3 +134,4 @@ class user_actions:
                 actions.key("cmd-{}".format(index))
             else:
                 actions.key("ctrl-{}".format(index))
+                
