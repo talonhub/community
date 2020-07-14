@@ -256,4 +256,4 @@ action(user.split_last): user.idea("action LastSplitter")
 # Movement
 <user.navigation_verbs> next (error | air): user.idea_movement(navigation_verbs, "action GotoNextError")
 <user.navigation_verbs> last (error | air): user.idea_movement(navigation_verbs, "action GotoPreviousError")
-
+<user.navigation_verbs> this: user.idea_movement(navigation_verbs, "")

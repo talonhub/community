@@ -34,7 +34,8 @@ tag: line_commands
 <user.selection_verbs> last clippy: user.select_previous_occurrence(selection_verbs, clip.text())
 
 # Movement
-<user.navigation_verbs> this: user.idea_movement(navigation_verbs, "")
+#todo
+#<user.navigation_verbs> this: user.idea_movement(navigation_verbs, "")
 <user.navigation_verbs> [line] <number>: user.go_to_line(navigation_verbs, number)
 <user.navigation_verbs> [line] <number> end: user.go_to_line_end(navigation_verbs, number)
 
