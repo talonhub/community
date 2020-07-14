@@ -19,7 +19,7 @@ comment <user.text> over:
     #.talon supports implementing actions with parameters?
 	user.code_comment()
     insert(user.text)
-^comment <user.text>$: 
+comment <user.text>$: 
     #todo: this should probably be a single function once
     #.talon supports implementing actions with parameters?
     user.code_comment()
@@ -30,7 +30,7 @@ comment <user.text> over:
 	edit.line_end()
    	user.code_comment()
     insert(user.text)
-^(line | inline) comment <user.text>$:
+(line | inline) comment <user.text>$:
     #todo: this should probably be a single function once
     #.talon supports implementing actions with parameters?
 	edit.line_end()
