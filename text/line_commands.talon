@@ -34,8 +34,6 @@ tag: line_commands
 <user.selection_verbs> last clippy: user.select_previous_occurrence(selection_verbs, clip.text())
 
 # Movement
-#todo
-#<user.navigation_verbs> this: user.idea_movement(navigation_verbs, "")
 <user.navigation_verbs> [line] <number>: user.go_to_line(navigation_verbs, number)
 <user.navigation_verbs> [line] <number> end: user.go_to_line_end(navigation_verbs, number)
 
@@ -48,5 +46,14 @@ tag: line_commands
 #camel movement, may not be supported by all applications that opt-in.
 <user.navigation_verbs> camel left: user.move_camel_left(navigation_verbs)
 <user.navigation_verbs> camel right: user.move_camel_right(navigation_verbs)
+
+lend: edit.line_end()
+bend: edit.line_start()
+drag [line] up: edit.line_swap_up()
+drag [line] down: edit.line_swap_down()
+clone (line|this): edit.line_clone()
+
+#may not be supportable without some sort of RPC?
+clone [line] <number>: user.line_clone(number)
 
 
