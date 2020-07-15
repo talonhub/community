@@ -65,6 +65,8 @@ select_verbs_map = {
     "rename": ["action RenameElement"],
     "indent": ["action EditorIndentLineOrSelection"],
     "unindent": ["action EditorUnindentSelection"],
+    "drag up": ["action MoveLineUp"],
+    "drag down": ["action MoveLineDown"],
 }
 
 movement_verbs_map = {
@@ -150,12 +152,12 @@ class Actions:
         print(command_list)
         idea_commands(command_list)
 
-    def idea_grab(times: str = "1"):
+    def idea_grab(times: int):
         """Copies specified number of words to the left"""
         old_clip = clip.get()
         try:
             original_line, original_column = get_idea_location()
-            for _ in range(int(times)):
+            for _ in range(times):
                 send_idea_command("action EditorSelectWord")
             send_idea_command("action EditorCopy")
             send_idea_command("goto {} {}".format(original_line, original_column))
@@ -233,7 +235,6 @@ class user_actions:
         actions.user.idea_select(verb, "action EditorLineStart, action EditorLineEndWithSelection")
 
     def select_line(verb: str, line: int):
-        print("select_line - jetbrains")
         actions.user.idea_select(verb, "goto {} 0, action EditorLineStart, action EditorLineEndWithSelection".format(line))
     
     def select_until_line(verb: str, line: int):
@@ -286,6 +287,9 @@ class user_actions:
 
     def move_camel_right(verb: str):
         actions.user.idea_movement(verb, "action EditorNextWordInDifferentHumpsMode")
+
+    def line_clone(line: int):
+        actions.user.idea("clone {}".format(line))
 
 ctx.lists['user.selection_verbs'] = select_verbs_map.keys()
 ctx.lists['user.navigation_verbs'] = movement_verbs_map.keys()

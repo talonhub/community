@@ -29,7 +29,6 @@ action(user.ide_down_cursor): user.idea("action EditorCloneCaretBelow")
 
 # Copying
 action(edit.line_clone):  user.idea("action EditorDuplicate")
-clone <number>: user.idea("clone {number}")
 grab <number>: user.idea_grab(number)
 
 # Actions

@@ -19,6 +19,8 @@ select_verbs_map = {
     "rename": [actions.user.ide_refactor_rename],
     "indent": [actions.edit.indent_more],
     "unindent": [actions.edit.indent_less],
+    "drag up": [actions.edit.line_swap_up],
+    "drag down": [actions.edit.line_swap_down],
 }
 
 movement_verbs_map = {
@@ -103,7 +105,6 @@ class Actions:
 
     def select_line(verb: str, line: int):
         """Performs action on selection of specified line"""
-        print("select_line - selections")
         actions.user.go_to_line(None, line)
         actions.edit.extend_line_end()
         actions.user.perform_selection_action(verb)
@@ -184,10 +185,13 @@ class Actions:
         actions.user.perform_selection_action(verb) 
 
     def move_camel_left(verb: str):
-        """Moves and performs action on camel left"""
+        """Moves and performs action on camel (or subword, depending on program) left"""
 
     def move_camel_right(verb: str):
-        """Moves and performs action on camel left"""   
+        """Moves and performs action on camel (or subword, depending on program) right"""  
+
+    def line_clone(line: int):
+        """Clones specified line at current position"""
 
 @ctx.capture(rule='{user.selection_verbs}')
 def selection_verbs(m):

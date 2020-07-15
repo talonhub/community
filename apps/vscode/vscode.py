@@ -42,6 +42,15 @@ class edit_actions:
         
         actions.insert(text)
 
+    def line_swap_up():
+        actions.key("alt-up")
+
+    def line_swap_down():
+        actions.key("alt-down")
+
+    def line_clone():
+        actions.key("shift-alt-down")
+
 @ctx.action_class('user')
 class user_actions:
     def snippet_search(text: str):
@@ -79,7 +88,7 @@ class user_actions:
         actions.key("esc")
         if verbs is not None:
             actions.user.perform_selection_action(verbs)
-
+        
     def go_to_line(verb: str, line: int):
         actions.key("ctrl-g")
         actions.insert(str(line))
@@ -134,4 +143,4 @@ class user_actions:
                 actions.key("cmd-{}".format(index))
             else:
                 actions.key("ctrl-{}".format(index))
-                
+    
