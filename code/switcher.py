@@ -8,7 +8,7 @@ import os
 # the list is a comma seperated `<Recognized Words>, <Overide>`
 #TODO: Consider put list csv's (homophones.csv, app_name_overrides.csv) files together in a seperate directory,`knausj_talon/lists`
 cwd = os.path.dirname(os.path.realpath(__file__))
-overrides_file = os.path.join(cwd, "app_name_overrides.csv")
+overrides_file = os.path.join(cwd, "app_names", f"app_name_overrides.{app.platform}.csv")
 overrides ={}
 with open(overrides_file, "r") as f:
     for line in f:
