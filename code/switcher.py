@@ -97,9 +97,6 @@ def update_lists():
     for override in overrides:
         running[override] = overrides[override]
 
-    running = {(friendly_names.get(friendly_name) or friendly_name): app_name
-               for (friendly_name, app_name) in running.items()}
-
     if app.platform == "mac":
         for base in '/Applications', '/Applications/Utilities':
             for name in os.listdir(base):
