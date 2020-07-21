@@ -1,5 +1,6 @@
 # technical terms
-my sequel: 'mysql'
+my sequel: 'mysql '
+pie charm: 'PyCharm '
 
 # python tools
 pip install: 'pip install'
