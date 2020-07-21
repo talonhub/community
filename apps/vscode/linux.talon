@@ -8,6 +8,7 @@ app: Code - OSS
 tag(): tabs
 tag(): ide
 tag(): line_commands
+tag(): splits
 # General
 action(user.ide_command_palette):
   key(ctrl-shift-p)
@@ -18,11 +19,11 @@ action(edit.indent_more):
 action(app.tab_next):
   key(ctrl-k)
   key(ctrl-pagedown)
-  
 action(app.tab_previous):
   key(ctrl-k)
   key(ctrl-pageup)
-
+action(app.tab_close):
+  key(ctrl-w)
 # Toggleable views
 action(user.ide_toggle_fullscreen): 
   user.ide_command_palette()
@@ -44,37 +45,6 @@ action(user.ide_collapse_all):
   key(ctrl-k ctrl-0)
 action(user.ide_collapse_region):
   key(ctrl-shift-[)
-
-# Splits
-action(user.ide_split_right):
-  user.ide_command_palette()
-  insert("workbench.action.splitEditorRight")
-  key(enter)
-
-action(user.ide_split_left):
-  user.ide_command_palette()
-  insert("workbench.action.splitEditorLeft")
-  key(enter)
-
-action(user.ide_split_up):
-  user.ide_command_palette()
-  insert("workbench.action.splitEditorUp")
-  key(enter)
-
-action(user.ide_split_down):
-  user.ide_command_palette()
-  insert("workbench.action.splitEditorDown")
-  key(enter)
-
-action(user.ide_split_flip): key(alt-ctrl-0)
-action(user.ide_split_window): key(ctrl-\)
-action(user.ide_clear_split): user.ide_clear_all_splits()
-action(user.ide_clear_all_splits): 
-  user.ide_command_palette()
-  insert("View: Single Column Editor Layout")
-  key(enter)
-action(user.ide_go_next_split): key(ctrl-k ctrl-right)
-action(user.ide_go_last_split): key(ctrl-k ctrl-left)
 
 #Refactor
 
@@ -256,14 +226,37 @@ action(user.ide_find_file):
   # Go to File... , workbench.action.quickOpen
   key(ctrl-p)
 
-#tabs 
-action(user.ide_go_first_tab): key(alt-1)
-action(user.ide_go_second_tab): key(alt-2)
-action(user.ide_go_third_tab): key(alt-3)
-action(user.ide_go_fourth_tab): key(alt-4)
-action(user.ide_go_fifth_tab): key(alt-5)
-action(user.ide_go_sixth_tab): key(alt-6)
-action(user.ide_go_seventh_tab): key(alt-7)
-action(user.ide_go_eighth_tab): key(alt-8)
-action(user.ide_go_ninth_tab): key(alt-9)
-action(user.ide_clear_tab): key(ctrl-w)
+# splits.py support
+action(user.split_window_right):
+  user.ide_command_palette()
+  insert("workbench.action.moveEditorRight")
+  key(enter)
+action(user.split_window_left):
+  user.ide_command_palette()
+  insert("workbench.action.moveEditorLeft")
+  key(enter)
+action(user.split_window_up):
+  user.ide_command_palette()
+  insert("workbench.action.moveEditorUp")
+  key(enter)
+action(user.split_window_down):
+  user.ide_command_palette()
+  insert("workbench.action.moveEditorDown")
+  key(enter)
+action(user.split_window_vertically): 
+  user.ide_command_palette()
+  insert("View: Split Editor")
+  key(enter)
+action(user.split_window_horizontally): 
+  user.ide_command_palette()
+  insert("View: Split Editor Orthogonal")
+  key(enter)
+action(user.split_flip): key(alt-shift-0)
+action(user.split_window): key(ctrl-\)
+action(user.split_clear): user.split_clear_all()
+action(user.split_clear_all): 
+  user.ide_command_palette()
+  insert("View: Single Column Editor Layout")
+  key(enter)
+action(user.split_next): key(ctrl-k ctrl-right)
+action(user.split_last): key(ctrl-k ctrl-left)

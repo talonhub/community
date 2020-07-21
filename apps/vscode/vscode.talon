@@ -7,4 +7,7 @@ app: Visual Studio Code
 app: Code.exe
 -
 tag(): tabs
-
+tag(): ide
+tag(): line_commands
+tag(): splits
+tag(): snippets

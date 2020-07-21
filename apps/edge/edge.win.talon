@@ -1,10 +1,10 @@
-os: linux
-app: Firefox
-app: firefox
+os: windows
+app: Microsoft Edge
+app: MicrosoftEdge.exe
+app: msedge.exe
 -
 tag(): browser
-tag(): firefox
-
+tag(): tabs
 #action(browser.address):
 
 action(browser.bookmark):
@@ -12,15 +12,17 @@ action(browser.bookmark):
 
 action(browser.bookmark_tabs):
 	key(ctrl-shift-d)
-
+	
 action(browser.bookmarks):
 	key(ctrl-shift-o)
-
+  
 action(browser.bookmarks_bar):
-	key(ctrl-b)
+	key(ctrl-shift-b)
 
-action(browser.focus_address):
+action(browser.focus_address): 
 	key(ctrl-l)
+	
+#action(browser.focus_page):
 
 action(browser.focus_search):
 	browser.focus_address()
@@ -32,13 +34,13 @@ action(browser.go):
 
 action(browser.go_blank):
 	key(ctrl-n)
-
+	
 action(browser.go_back):
 	key(alt-left)
 
 action(browser.go_forward):
 	key(alt-right)
-
+	
 action(browser.go_home):
 	key(alt-home)
 
@@ -49,22 +51,21 @@ action(browser.reload):
 	key(ctrl-r)
 
 action(browser.reload_hard):
-	key(ctrl-shift-r)
+	key(shift-f5)
 
 #action(browser.reload_hardest):
-
+	
 action(browser.show_clear_cache):
-	key(ctrl-shift-del)
-
+	key(ctrl-shift-delete)
+  
 action(browser.show_downloads):
-	key(ctrl-shift-y)
+	key(ctrl-j)
 
-action(browser.show_extensions):
-	key(ctrl-shift-a)
+#action(browser.show_extensions)
 
 action(browser.show_history):
 	key(ctrl-h)
-
+	
 action(browser.submit_form):
 	key(enter)
 

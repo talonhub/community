@@ -9,6 +9,9 @@ app: webstorm64.exe
 -
 tag(): ide
 tag(): tabs
+tag(): line_commands
+tag(): splits 
+
 # Auto complete
 action(code.complete): user.idea("action CodeCompletion")
 action(user.ide_perfect): user.idea("action CodeCompletion,action CodeCompletion")
@@ -26,7 +29,6 @@ action(user.ide_down_cursor): user.idea("action EditorCloneCaretBelow")
 
 # Copying
 action(edit.line_clone):  user.idea("action EditorDuplicate")
-clone <number>: user.idea("clone {number}")
 grab <number>: user.idea_grab(number)
 
 # Actions
@@ -128,17 +130,6 @@ action(user.ide_expand_deep): user.idea("action ExpandRegionRecursively")
 action(user.ide_expand_all): user.idea("action ExpandAllRegions")
 action(user.ide_collapse_deep): user.idea("action CollapseRegionRecursively")
 action(user.ide_collapse_all): user.idea("action CollapseAllRegions")
-# Splits
-action(user.ide_split_right): user.idea("action MoveTabRight")
-action(user.ide_split_down): user.idea("action MoveTabDown")
-action(user.ide_split_vertically): user.idea("action SplitVertically")
-action(user.ide_split_horizontally): user.idea("action SplitHorizontally")
-action(user.ide_split_flip): user.idea("action ChangeSplitOrientation")
-action(user.ide_split_window): user.idea("action EditSourceInNewWindow")
-action(user.ide_clear_split): user.idea("action Unsplit")
-action(user.ide_clear_all_splits): user.idea("action UnsplitAll")
-action(user.ide_go_next_split): user.idea("action NextSplitter")
-action(user.ide_go_last_split): user.idea("action LastSplitter")
 # miscellaneous
 # XXX These might be better than the structural ones depending on language.
 action(user.ide_go_next_method): user.idea("action MethodDown")
@@ -218,19 +209,10 @@ action(user.ide_toggle_fullscreen): user.idea("action ToggleFullScreen")
 action(user.ide_toggle_distraction_free): user.idea("action ToggleDistractionFreeMode")
 action(user.ide_toggle_presentation_mode): user.idea("action TogglePresentationMode")
 # Tabs
-action(user.ide_go_first_tab): user.idea("action GoToTab1")
-action(user.ide_go_second_tab): user.idea("action GoToTab2")
-action(user.ide_go_third_tab): user.idea("action GoToTab3")
-action(user.ide_go_fourth_tab): user.idea("action GoToTab4")
-action(user.ide_go_fifth_tab): user.idea("action GoToTab5")
-action(user.ide_go_sixth_tab): user.idea("action GoToTab6")
-action(user.ide_go_seventh_tab): user.idea("action GoToTab7")
-action(user.ide_go_eighth_tab): user.idea("action GoToTab8")
-action(user.ide_go_ninth_tab): user.idea("action GoToTab9")
+action(user.tab_final): user.idea("action GoToLastTab")
 action(app.tab_next): user.idea("action NextTab")
 action(app.tab_previous): user.idea("action PreviousTab")
-action(user.ide_go_final_tab): user.idea("action GoToLastTab")
-action(user.ide_clear_tab): user.idea("action CloseActiveTab")
+action(app.tab_close): user.idea("action CloseActiveTab")
 # Quick popups
 action(user.ide_change_scheme): user.idea("action QuickChangeScheme")
  # Always javadoc
@@ -256,39 +238,21 @@ action(user.ide_resize_window_left): user.idea("action ResizeToolWindowLeft")
 action(user.ide_resize_window_up): user.idea("action ResizeToolWindowUp")
 action(user.ide_resize_window_down): user.idea("action ResizeToolWindowDown")
 
-# Select verb/object
-
-<user.select_verbs> this: user.idea_select(select_verbs, "action EditorSelectWord")
-<user.select_verbs> whole line <number>: user.idea_select(select_verbs, "goto {number} 0, action EditorSelectLine")
-<user.select_verbs> way left: user.idea_select(select_verbs, "action EditorLineStartWithSelection")
-<user.select_verbs> way right: user.idea_select(select_verbs, "action EditorLineEndWithSelection")
-<user.select_verbs> way up: user.idea_select(select_verbs, "action EditorTextStartWithSelection")
-<user.select_verbs> way down: user.idea_select(select_verbs, "action EditorTextEndWithSelection")
-<user.select_verbs> camel left: user.idea_select(select_verbs, "action EditorPreviousWordInDifferentHumpsModeWithSelection")
-<user.select_verbs> camel right: user.idea_select(select_verbs, "action EditorNextWordInDifferentHumpsModeWithSelection")
-
-<user.select_verbs> all: user.idea_select(select_verbs, "action $SelectAll")
-<user.select_verbs> left: user.idea_select(select_verbs, "action EditorLeftWithSelection")
-<user.select_verbs> right: user.idea_select(select_verbs, "action EditorRightWithSelection")
-<user.select_verbs> up: user.idea_select(select_verbs, "action EditorUpWithSelection")
-<user.select_verbs> down: user.idea_select(select_verbs, "action EditorDownWithSelection")
-<user.select_verbs> word left: user.idea_select(select_verbs, "action EditorPreviousWordWithSelection")
-<user.select_verbs> word right: user.idea_select(select_verbs, "action EditorNextWordWithSelection")
-
-<user.select_verbs> until line <number>: user.idea_select(select_verbs, "extend {number}")
-<user.select_verbs> <number> until <number>: user.idea_select(select_verbs, "range {number_1} {number_2}")
-<user.select_verbs> line <number>: user.idea_select(select_verbs, "goto {number} 0, action EditorLineStart, action EditorLineEndWithSelection")
-<user.select_verbs> line: user.idea_select(select_verbs, "action EditorLineStart, action EditorLineEndWithSelection")
-<user.select_verbs> next <phrase> [over]: user.idea_select(select_verbs, "find next {phrase}")
-<user.select_verbs> last <phrase> [over]: user.idea_select(select_verbs, "find prev {phrase}")
+# splits.py support
+#action(user.split_window_left): user.idea("action MoveTabLeft")
+action(user.split_window_right): user.idea("action MoveTabRight")
+action(user.split_window_down): user.idea("action MoveTabDown")
+#action(user.split_window_up): user.idea("action MoveTabUp")
+action(user.split_window_vertically): user.idea("action SplitVertically")
+action(user.split_window_horizontally): user.idea("action SplitHorizontally")
+action(user.split_flip): user.idea("action ChangeSplitOrientation")
+action(user.split_window): user.idea("action EditSourceInNewWindow")
+action(user.split_clear): user.idea("action Unsplit")
+action(user.split_clear_all): user.idea("action UnsplitAll")
+action(user.split_next): user.idea("action NextSplitter")
+action(user.split_last): user.idea("action LastSplitter")
 
 # Movement
-<user.movement_verbs> this: user.idea_movement(movement_verbs, "")
-<user.movement_verbs> next (error | air): user.idea_movement(movement_verbs, "action GotoNextError")
-<user.movement_verbs> last (error | air): user.idea_movement(movement_verbs, "action GotoPreviousError")
-<user.movement_verbs> camel left: user.idea_movement(movement_verbs, "action EditorPreviousWordInDifferentHumpsMode")
-<user.movement_verbs> camel right: user.idea_movement(movement_verbs, "action EditorNextWordInDifferentHumpsMode")
-<user.movement_verbs> line <number>: user.idea_movement(movement_verbs, "goto {number} 0")
-<user.movement_verbs> line <number> end: user.idea_movement(movement_verbs, "goto {number} 9999")
-<user.movement_verbs> next <phrase> [over]: user.idea_movement(movement_verbs, "find next {phrase}, action EditorRight")
-<user.movement_verbs> last <phrase> [over]: user.idea_movement(movement_verbs, "find prev {phrase}, action EditorRight")
+<user.navigation_verbs> next (error | air): user.idea_movement(navigation_verbs, "action GotoNextError")
+<user.navigation_verbs> last (error | air): user.idea_movement(navigation_verbs, "action GotoPreviousError")
+<user.navigation_verbs> this: user.idea_movement(navigation_verbs, "")

@@ -199,42 +199,6 @@ class Actions:
     def ide_collapse_region():
         """Collapse current block in file"""
 
-    def ide_split_right():
-        """Copy current tab to the right pane"""
-
-    def ide_split_left():
-        """Copy current tab to the left pane"""
-
-    def ide_split_down():
-        """Copy tab to the pane below"""
-
-    def ide_split_up():
-        """Copy tab to the pane above"""
-
-    def ide_split_vertically():
-        """Split the view into panes vertically"""
-
-    def ide_split_horizontally():
-        """Split the view into panes horizontally"""
-
-    def ide_split_flip():
-        """Change split orientation"""
-
-    def ide_split_window():
-        """Open the current file in a new window"""
-
-    def ide_clear_split():
-        """Unsplit the current view (collapse this and previous pane into one)"""
-
-    def ide_clear_all_splits():
-        """Unsplit all views (back to single pane)"""
-
-    def ide_go_next_split():
-        """Go to next pane"""
-
-    def ide_go_last_split():
-        """Go to the previous pane"""
-
     def ide_go_next_method():
         """Go to the next method in the file"""
 
@@ -436,39 +400,6 @@ class Actions:
     def ide_toggle_presentation_mode():
         """Enable/Disable presentation mode """
 
-    def ide_go_first_tab():
-        """Go to first tab"""
-
-    def ide_go_second_tab():
-        """Go to second tab"""
-
-    def ide_go_third_tab():
-        """Go to third tab"""
-
-    def ide_go_fourth_tab():
-        """Go to fourth tab"""
-
-    def ide_go_fifth_tab():
-        """Go to fifth tab"""
-
-    def ide_go_sixth_tab():
-        """Go to sixth tab"""
-
-    def ide_go_seventh_tab():
-        """Go to seventh tab"""
-
-    def ide_go_eighth_tab():
-        """Go to eighth tab"""
-
-    def ide_go_ninth_tab():
-        """Go to ninth tab"""
-
-    def ide_go_final_tab():
-        """Go to the final tab in the list"""
-
-    def ide_clear_tab():
-        """Close current open view"""
-
     def ide_change_scheme():
         """Trigger scheme menu (e.g. to change colour scheme)"""
 
@@ -507,6 +438,7 @@ class Actions:
 
     def ide_step_into():
         """Step into current statement"""
+    
     def ide_step_out():
         """Step out of current execution level"""
 
