@@ -8,7 +8,7 @@ import os
 # the list is a comma seperated `<Recognized Words>, <Overide>`
 #TODO: Consider put list csv's (homophones.csv, app_name_overrides.csv) files together in a seperate directory,`knausj_talon/lists`
 cwd = os.path.dirname(os.path.realpath(__file__))
-overrides_file = os.path.join(cwd, "app_name_overrides.csv")
+overrides_file = os.path.join(cwd, "app_names", f"app_name_overrides.{app.platform}.csv")
 overrides ={}
 with open(overrides_file, "r") as f:
     for line in f:
@@ -28,7 +28,7 @@ mod.list('launch', desc='all launchable applications')
 @mod.capture
 def running_applications(m) -> str:
     "Returns a single application name"
-    
+
 @mod.capture
 def launch_applications(m) -> Capture:
     "Returns a single application name"
@@ -37,11 +37,11 @@ ctx = Context()
 @ctx.capture(rule='{self.running}')
 def running_applications(m):
     return m.running
-    
+
 @ctx.capture(rule='{self.launch}')
 def launch_applications(m):
     return m.launch
-    
+
 def split_camel(word):
     return re.findall(r'[0-9A-Z]*[a-z]+(?=[A-Z]|$)', word)
 
@@ -95,8 +95,8 @@ def update_lists():
                 running[word.lower()] = cur_app.name
         running[name.lower()] = cur_app.name
     for override in overrides:
-        running[override] = overrides[override] 
-    
+        running[override] = overrides[override]
+
     if app.platform == "mac":
         for base in '/Applications', '/Applications/Utilities':
             for name in os.listdir(base):
@@ -109,13 +109,13 @@ def update_lists():
                         if len(name) > 6 and len(word) < 3:
                             continue
                         launch[word] = path
-    
+
     lists = {
         'self.running': running,
         'self.launch': launch,
     }
 
-    #batch update lists 
+    #batch update lists
     ctx.lists.update(lists)
 
 def ui_event(event, arg):
