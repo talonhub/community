@@ -65,3 +65,8 @@ state (no | nil): user.code_null()
     #todo: once .talon action definitions can take parameters, combine these functions
 	user.code_public_static_function()
     user.code_public_function_formatter(user.text)
+
+# show and print functions
+toggle fun: user.code_toggle_functions()
+fun <user.code_functions>: user.code_insert_function(code_functions)
+

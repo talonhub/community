@@ -113,11 +113,3 @@ action(user.code_state_return):
 dunder in it: insert("__init__")
 state (def | deaf | deft): "def "
 pie test: "pytest"
-
-# show and print python functions
-list python: user.list_python_functions()
-hide python: user.hide_python_functions()
-fun <user.print_function>:
-    insert(print_function)
-    insert("()")
-    key(left)
