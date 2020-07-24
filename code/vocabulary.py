@@ -8,6 +8,8 @@ simple_vocabulary = [
     "VPN",
     "DNS",
     "minecraft",
+    "GeoDataFrame",
+    "DataFrame"
 ]
 
 mapping_vocabulary = {
