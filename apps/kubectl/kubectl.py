@@ -4,6 +4,7 @@ mod = Module()
 
 kubectl = "kubectl"
 
+
 @mod.action_class
 class Actions:
     """Map the first level CLI for kubernetes ``kubectl --help``"""
@@ -30,7 +31,6 @@ class Actions:
         """Set specific features on objects"""
         return f"{kubectl} set "
 
-
     # Basic Commands (Intermediate):
 
     def kubectl_explain() -> str:
@@ -49,7 +49,6 @@ class Actions:
         """Delete resources by filenames, stdin, resources and names, or by resources and label selector"""
         return f"{kubectl} delete "
 
-
     # Deploy Commands:
 
     def kubectl_rollout() -> str:
@@ -63,7 +62,6 @@ class Actions:
     def kubectl_autoscale() -> str:
         """Auto-scale a Deployment, ReplicaSet, or ReplicationController"""
         return f"{kubectl} autoscale "
-
 
     # Cluster Management Commands:
 
@@ -94,7 +92,6 @@ class Actions:
     def kubectl_taint() -> str:
         """Update the taints on one or more nodes"""
         return f"{kubectl} taint "
-
 
     # Troubleshooting and Debugging Commands:
 
@@ -130,7 +127,6 @@ class Actions:
         """Inspect authorization"""
         return f"{kubectl} auth "
 
-
     # Advanced Commands:
 
     def kubectl_diff() -> str:
@@ -160,7 +156,6 @@ class Actions:
     def kubectl_kustomize() -> str:
         """Build a kustomization target from a directory or a remote url."""
         return f"{kubectl} kustomize "
-
 
     # Settings Commands:
 

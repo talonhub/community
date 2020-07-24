@@ -1,7 +1,8 @@
 from talon import Module
 
 mod = Module()
-mod.tag("ide", desc='Tag for enabling generic ide commands')
+mod.tag("ide", desc="Tag for enabling generic ide commands")
+
 
 @mod.action_class
 class Actions:
@@ -109,6 +110,7 @@ class Actions:
 
     def ide_replace_confirm_current():
         """Confirm replaces at current position"""
+
     def ide_replace_confirm_all():
         """Confirm replaces all"""
 
@@ -438,7 +440,7 @@ class Actions:
 
     def ide_step_into():
         """Step into current statement"""
-    
+
     def ide_step_out():
         """Step out of current execution level"""
 
@@ -465,6 +467,4 @@ class Actions:
 
     def ide_toggle_comment():
         """Toggle comment for selected text"""
-
-
 

@@ -4,9 +4,11 @@ delay_mod = Module()
 
 delayed_enabled = False
 
+
 def do_disable(e):
     speech_system.unregister("post:phrase", do_disable)
     actions.speech.disable()
+
 
 @delay_mod.action_class
 class DelayedSpeechOffActions:
