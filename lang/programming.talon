@@ -68,8 +68,14 @@ state (no | nil): user.code_null()
 
 # show and print functions
 toggle funk: user.code_toggle_functions()
-funk <user.code_functions>: user.code_insert_function(code_functions, "")
-funk cell <number>: user.code_select_function(number - 1, "")
+funk <user.code_functions>: 
+    old_clip = clip.text()
+    user.code_insert_function(code_functions, "")
+    clip.set_text(old_clip)
+funk cell <number>: 
+    old_clip = clip.text()
+    user.code_select_function(number - 1, "")
+    clip.set_text(old_clip)
 funk wrap <user.code_functions>: 
     old_clip = clip.text()
     edit.copy()
