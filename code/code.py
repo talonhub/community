@@ -1,4 +1,4 @@
-from talon import Context, actions, ui, Module, settings, registry, imgui
+from talon import Context, actions, ui, Module, settings, registry, imgui, fs
 import re
 import os
 
@@ -27,7 +27,7 @@ mod.tag(
 )
 
 key = actions.key
-
+function_list = []
 extension_lang_map = {
     "py": "python",
     "cs": "csharp",
@@ -367,24 +367,53 @@ class Actions:
 
     def code_toggle_functions():
         """GUI: List functions for active language"""
+        global function_list
         if gui.showing:
+            function_list = []
             gui.hide()
         else:
-            gui.show()
-            gui.freeze()
+            update_list_and_freeze()
 
-    def code_insert_function(text: str):
+    def code_select_function(number: int, selection: str):
+        """Inserts the selected function when the imgui is open"""
+        if gui.showing and number < len(function_list):
+            actions.user.code_insert_function(
+                registry.lists["user.code_functions"][0][function_list[number]],
+                selection,
+            )
+
+    def code_insert_function(text: str, selection: str):
         """Inserts a function and positions the cursor appropriately"""
 
-    # def code_select_function(number: int):
-    # if gui.showing:
+
+def update_list_and_freeze():
+    global function_list
+    if "user.code_functions" in registry.lists:
+        function_list = sorted(registry.lists["user.code_functions"][0].keys())
+    else:
+        function_list = []
+
+    gui.freeze()
 
 
 @imgui.open(software=False)
 def gui(gui: imgui.GUI):
     gui.text("Functions")
     gui.line()
-    print(str(registry.lists["user.code_functions"]))
-    for entry in registry.lists["user.code_functions"]:
-        for item in entry.items():
-            gui.text(f"{item[0]}: {item[1]}")
+
+    # print(str(registry.lists["user.code_functions"]))
+    for i, entry in enumerate(function_list, 1):
+        gui.text(
+            "{}. {}: {}".format(
+                i, entry, registry.lists["user.code_functions"][0][entry]
+            )
+        )
+
+
+def commands_updated(_):
+    if gui.showing:
+        update_list_and_freeze()
+
+
+registry.register("update_commands", commands_updated)
+

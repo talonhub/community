@@ -1,4 +1,4 @@
-from talon import Module, Context, actions, ui, imgui
+from talon import Module, Context, actions, ui, imgui, clip
 
 ctx = Context()
 ctx.matches = r"""
@@ -22,6 +22,8 @@ ctx.lists["user.code_functions"] = {
 
 @ctx.action_class("user")
 class user_actions:
-    def code_insert_function(text: str):
-        actions.insert(text + "()")
+    def code_insert_function(text: str, selection: str):
+        actions.clip.set_text(text + "({})".format(selection))
+        actions.edit.paste()
         actions.edit.left()
+
