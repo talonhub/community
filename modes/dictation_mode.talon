@@ -1,6 +1,5 @@
 mode: dictation
 -
-
 enter: key(enter)
 period: key(backspace . space)
 comma: key(backspace , space)
