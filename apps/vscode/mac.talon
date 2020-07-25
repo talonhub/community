@@ -8,6 +8,7 @@ tag(): tabs
 tag(): ide
 tag(): line_commands
 tag(): splits
+tag(): multiple_cursors
 # General
 action(user.ide_command_palette):
   key(cmd-shift-p)
@@ -238,7 +239,7 @@ action(user.ide_find_file):
   # Go to File... , workbench.action.quickOpen
   key(cmd-p)
 
-# splits.py support
+# splits.py support begin
 action(user.split_window_right):
   user.ide_command_palette()
   insert("workbench.action.moveEditorToRightGroup")
@@ -272,3 +273,15 @@ action(user.split_clear_all):
   key(enter)
 action(user.split_next): key(cmd-k cmd-right)
 action(user.split_last): key(cmd-k cmd-left)
+# splits.py support end
+
+#multiple_cursor.py support begin
+#note: vscode has no explicit mode for multiple cursors
+action(user.multi_cursor_enable): skip()
+action(user.multi_cursor_disable): key(escape)
+action(user.multi_cursor_add_above):key(cmd-alt-up)
+action(user.multi_cursor_add_below): key(cmd-alt-down)
+action(user.multi_cursor_select_fewer_occurrences): key(cmd-u)
+action(user.multi_cursor_select_more_occurrences): key(cmd-d)
+action(user.multi_cursor_select_all_occurrences): key(cmd-shift-l)
+#multiple_cursor.py support end

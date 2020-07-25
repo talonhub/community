@@ -140,7 +140,7 @@ class user_actions:
         else:
             actions.key("alt-0")
 
-    # splits.py support
+    # splits.py support begin
     def split_number(index: int):
         """Navigates to a the specified split"""
         if index < 9:
@@ -148,3 +148,6 @@ class user_actions:
                 actions.key("cmd-{}".format(index))
             else:
                 actions.key("ctrl-{}".format(index))
+
+    # splits.py support end
+

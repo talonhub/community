@@ -11,6 +11,7 @@ tag(): ide
 tag(): tabs
 tag(): line_commands
 tag(): splits 
+tag(): multiple_cursors
 
 # Auto complete
 action(code.complete): user.idea("action CodeCompletion")
@@ -22,10 +23,6 @@ action(user.ide_toggle_tools):  user.idea("action HideAllWindows")
 # Movement
 action(edit.line_swap_up):  user.idea("action MoveLineUp")
 action(edit.line_swap_down):  user.idea("action MoveLineDown")
-action(user.ide_multi_cursor): key(shift-alt-insert)
-action(user.ide_multi_cursor_stop): key(escape)
-action(user.ide_up_cursor): user.idea("action EditorCloneCaretAbove")
-action(user.ide_down_cursor): user.idea("action EditorCloneCaretBelow")
 
 # Copying
 action(edit.line_clone):  user.idea("action EditorDuplicate")
@@ -68,9 +65,6 @@ action(user.ide_go_forward): user.idea("action Forward")
 # Special Selects
 action(user.ide_select_less): user.idea("action EditorUnSelectWord")
 action(user.ide_select_more): user.idea("action EditorSelectWord")
-action(user.ide_multi_select_fewer): user.idea("action UnselectPreviousOccurrence")
-action(user.ide_multi_select_more): user.idea("action SelectNextOccurrence")
-action(user.ide_multi_select_all): user.idea("action SelectAllOccurrences")
 
 # Search
 action(edit.find): user.idea("action Find")
@@ -238,7 +232,7 @@ action(user.ide_resize_window_left): user.idea("action ResizeToolWindowLeft")
 action(user.ide_resize_window_up): user.idea("action ResizeToolWindowUp")
 action(user.ide_resize_window_down): user.idea("action ResizeToolWindowDown")
 
-# splits.py support
+# splits.py support begin
 #action(user.split_window_left): user.idea("action MoveTabLeft")
 action(user.split_window_right): user.idea("action MoveTabRight")
 action(user.split_window_down): user.idea("action MoveTabDown")
@@ -251,6 +245,17 @@ action(user.split_clear): user.idea("action Unsplit")
 action(user.split_clear_all): user.idea("action UnsplitAll")
 action(user.split_next): user.idea("action NextSplitter")
 action(user.split_last): user.idea("action LastSplitter")
+# splits.py support end
+
+# multiple_cursors.py support begin
+action(user.multi_cursor_enable): key(shift-alt-insert)
+action(user.multi_cursor_disable): key(escape)
+action(user.multi_cursor_add_above): user.idea("action EditorCloneCaretAbove")
+action(user.multi_cursor_add_below): user.idea("action EditorCloneCaretBelow")
+action(user.multi_cursor_select_fewer_occurrences): user.idea("action UnselectPreviousOccurrence")
+action(user.multi_cursor_select_more_occurrences): user.idea("action SelectNextOccurrence")
+action(user.multi_cursor_select_all_occurrences): user.idea("action SelectAllOccurrences")
+# multiple_cursors.py support end
 
 # Movement
 <user.navigation_verbs> next (error | air): user.idea_movement(navigation_verbs, "action GotoNextError")

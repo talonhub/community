@@ -181,39 +181,8 @@ continue: user.ide_continue()
 (grow | shrink) window up: user.ide_resize_window_up()
 (grow | shrink) window down: user.ide_resize_window_down()
 
-# Editing
-drag up:
-	edit.line_swap_up()
-
-drag down:
-	edit.line_swap_down()
-
 copy [line] down: user.ide_editor_copylines_down()
 copy [line] up: user.ide_editor_copylines_up()
-
-clone (line|this):
-	edit.line_clone()
-
-multiple cursor:
-	user.ide_multi_cursor()
-
-(end|stop) multiple cursor:
-	user.ide_multi_cursor_stop()
-
-multi select up:
-	user.ide_up_cursor()
-
-multi select down:
-	user.ide_down_cursor()
-
-multi select fewer:
-	user.ide_multi_select_fewer()
-
-multi select more:
-	user.ide_multi_select_more()
-
-multi select all:
-	user.ide_multi_select_all()
 
 select less:
 	user.ide_select_less()

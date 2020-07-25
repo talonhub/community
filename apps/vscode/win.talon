@@ -9,6 +9,7 @@ tag(): ide
 tag(): line_commands
 tag(): splits
 tag(): snippets
+tag(): multiple_cursors
 # General
 action(user.ide_command_palette):
   key(ctrl-shift-p)
@@ -64,14 +65,6 @@ action(user.ide_follow):
 action(user.ide_go_back):  key(alt-left)
 action(user.ide_go_forward): key(alt-right)
 action(user.ide_recent): key(ctrl-r)
-
-#there is no separate "mode" for VSCode
-#action(user.ide_multi_cursor): skip()
-action(user.ide_multi_cursor_stop): key(escape)
-action(user.ide_up_cursor):key(ctrl-alt-up)
-action(user.ide_down_cursor): key(ctrl-alt-down)
-action(user.ide_multi_select_more): key(ctrl-d)
-action(user.ide_multi_select_all): key(ctrl-shift-l)
 
 action(user.ide_select_less): key(shift-alt-left)
 action(user.ide_select_more): key(shift-alt-right)
@@ -241,7 +234,7 @@ action(user.ide_find_file):
   # Go to File... , workbench.action.quickOpen
   key(ctrl-p)
   
-# splits.py support
+# splits.py support begin
 action(user.split_window_right):
   user.ide_command_palette()
   insert("workbench.action.moveEditorToRightGroup")
@@ -275,3 +268,15 @@ action(user.split_clear_all):
   key(enter)
 action(user.split_next): key(ctrl-k ctrl-right)
 action(user.split_last): key(ctrl-k ctrl-left)
+# splits.py support end
+
+#multiple_cursor.py support begin
+#note: vscode has no explicit mode for multiple cursors
+action(user.multi_cursor_enable): skip()
+action(user.multi_cursor_disable): key(escape)
+action(user.multi_cursor_add_above):key(ctrl-alt-up)
+action(user.multi_cursor_add_below): key(ctrl-alt-down)
+action(user.multi_cursor_select_fewer_occurrences): key(ctrl-u)
+action(user.multi_cursor_select_more_occurrences): key(ctrl-d)
+action(user.multi_cursor_select_all_occurrences): key(ctrl-shift-l)
+#multiple_cursor.py support end
