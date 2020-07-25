@@ -31,18 +31,9 @@ go test: user.ide_go_test()
 go back: user.ide_go_back()
 go forward: user.ide_go_forward()
 
-find (everywhere | all): user.ide_find_everywhere()
 (search | find) class: user.ide_find_class()
 (search | find) file: user.ide_find_file()
 (search | find) path: user.ide_find_in_path()
-
-replace it: user.ide_replace_local()
-replace (everywhere | all): user.ide_replace_everywhere()
-[replace] confirm that: user.ide_replace_confirm_current()
-[replace] confirm all: user.ide_replace_confirm_all()
-toggle [find by] case : user.ide_find_match_by_case()
-toggle [find by] word : user.ide_find_match_by_word()
-toggle [find by] expression : user.ide_find_match_by_regex()
 
 recent: user.ide_recent()
 
@@ -180,12 +171,7 @@ continue: user.ide_continue()
 (grow | shrink) window left: user.ide_resize_window_left()
 (grow | shrink) window up: user.ide_resize_window_up()
 (grow | shrink) window down: user.ide_resize_window_down()
-
 copy [line] down: user.ide_editor_copylines_down()
 copy [line] up: user.ide_editor_copylines_up()
-
-select less:
-	user.ide_select_less()
-
-select (more|this):
-	user.ide_select_more()
+select less: user.ide_select_less()
+select (more|this): user.ide_select_more()

@@ -5,11 +5,12 @@ os: linux
 app: Code
 app: Code - OSS
 -
-tag(): tabs
+tag(): find_and_replace
 tag(): ide
 tag(): line_commands
-tag(): splits
 tag(): multiple_cursors
+tag(): splits
+tag(): tabs
 # General
 action(user.ide_command_palette):
   key(ctrl-shift-p)
@@ -152,39 +153,6 @@ action(user.ide_toggle_run):
 action(user.ide_toggle_debug):
   # View: Show Run and Debug, workbench.view.debug
   key(ctrl-shift-d)
-
-# Find and Replace
-action(user.ide_toggle_find):
-  # Search: Find in Files, workbench.action.findInFiles
-  key(ctrl-shift-f)
-action(user.ide_find_everywhere):
-  # Search: Find in Files, workbench.action.findInFiles
-  key(ctrl-shift-f)
-action(user.ide_replace_everywhere):
-  # Search: Replace in Files, workbench.action.replaceInFiles
-  key(ctrl-shift-h)
-
-action(user.ide_replace_local):
-  # Replace, editor.action.startFindReplaceAction
-  key(ctrl-h)
-action(user.ide_replace_confirm_current):
-  # ,editor.action.replaceOne
-  key(ctrl-shift-1)
-action(user.ide_replace_confirm_all):
-  # ,editor.action.replaceAll
-  key(ctrl-alt-enter)
-
-action(user.ide_find_match_by_case):
-  # Terminal: Toggle Find Using Case Sensitive, workbench.action.terminal.toggleFindCaseSensitive
-  key(alt-c)
-action(user.ide_find_match_by_word):
-  # Terminal: Toggle Find Using Whole Word, toggleFindWholeWord
-  key(alt-w)
-action(user.ide_find_match_by_regex):
-  # Terminal: Toggle Find Using Regex, workbench.action.terminal.toggleFindRegex
-  key(alt-r)
-
-
 
 action(user.ide_toggle_breakpoint):
   # Debug: Toggle Breakpoint, editor.debug.action.toggleBreakpoint

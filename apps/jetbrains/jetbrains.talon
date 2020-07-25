@@ -8,10 +8,10 @@ app: pycharm64.exe
 app: webstorm64.exe
 -
 tag(): ide
-tag(): tabs
 tag(): line_commands
-tag(): splits 
 tag(): multiple_cursors
+tag(): splits 
+tag(): tabs
 
 # Auto complete
 action(code.complete): user.idea("action CodeCompletion")
@@ -68,7 +68,7 @@ action(user.ide_select_more): user.idea("action EditorSelectWord")
 
 # Search
 action(edit.find): user.idea("action Find")
-action(user.ide_find_everywhere): user.idea("action SearchEverywhere")
+find (everywhere | all): user.idea("action SearchEverywhere")
 find (everywhere | all) <phrase> [over]:
   user.idea("action SearchEverywhere")
   sleep(500ms)

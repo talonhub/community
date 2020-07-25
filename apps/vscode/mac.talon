@@ -4,11 +4,12 @@
 app: Code
 os: mac
 -
-tag(): tabs
+tag(): find_and_replace
 tag(): ide
 tag(): line_commands
-tag(): splits
 tag(): multiple_cursors
+tag(): splits
+tag(): tabs
 # General
 action(user.ide_command_palette):
   key(cmd-shift-p)
@@ -172,37 +173,6 @@ action(user.ide_toggle_run):
 action(user.ide_toggle_debug):
   # View: Show Run and Debug, workbench.view.debug
   key(shift-cmd-d)
-
-# Find and Replace
-action(user.ide_toggle_find):
-  # Search: Find in Files, workbench.action.findInFiles
-  key(shift-cmd-f)
-action(user.ide_find_everywhere):
-  # Search: Find in Files, workbench.action.findInFiles
-  key(shift-cmd-f)
-action(user.ide_replace_everywhere):
-  # Search: Replace in Files, workbench.action.replaceInFiles
-  key(shift-cmd-h)
-
-action(user.ide_replace_local):
-  # Replace, editor.action.startFindReplaceAction
-  key(alt-cmd-f)
-action(user.ide_replace_confirm_current):
-  # ,editor.action.replaceOne
-  key(shift-cmd-1)
-action(user.ide_replace_confirm_all):
-  # ,editor.action.replaceAll
-  key(cmd-enter)
-
-action(user.ide_find_match_by_case):
-  # Terminal: Toggle Find Using Case Sensitive, workbench.action.terminal.toggleFindCaseSensitive
-  key(alt-cmd-c)
-action(user.ide_find_match_by_word):
-  # Terminal: Toggle Find Using Whole Word, toggleFindWholeWord
-  key(alt-cmd-w)
-action(user.ide_find_match_by_regex):
-  # Terminal: Toggle Find Using Regex, workbench.action.terminal.toggleFindRegex
-  key(alt-cmd-r)
   
 action(user.ide_toggle_breakpoint):
   # Debug: Toggle Breakpoint, editor.debug.action.toggleBreakpoint
