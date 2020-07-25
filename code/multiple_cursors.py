@@ -6,7 +6,7 @@ mod.tag("multiple_cursors", desc="Tag for enabling generic multiple cursor comma
 
 @mod.action_class
 class multiple_cursor_actions:
-    def multi_cursor_enable(number: int):
+    def multi_cursor_enable():
         """Enables multi-cursor mode"""
 
     def multi_cursor_disable():
