@@ -9,6 +9,7 @@ tag(): find_and_replace
 tag(): ide
 tag(): line_commands
 tag(): multiple_cursors
+tag(): snippets
 tag(): splits
 tag(): tabs
 # General
