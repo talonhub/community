@@ -8,6 +8,20 @@ simple_vocabulary = [
     "VPN",
     "DNS",
     "minecraft",
+    "edit",
+    "paste",
+    "letter",
+    "key",
+    "delete",
+    "plot",
+    "high",
+    "algorithm",
+    "variable",
+    "comma",
+    "git",
+    "user",
+    "pandas",
+    "add"
 ]
 
 mapping_vocabulary = {
