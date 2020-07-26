@@ -1,7 +1,7 @@
 from talon import Context, actions, ui, Module, app
 
 ctx = Context()
-ctx.matches = r'''
+ctx.matches = r"""
 app: Code
 app: Code - OSS
 app: Code
@@ -10,8 +10,8 @@ app: Code.exe
 mode: user.python
 mode: command 
 and code.language: python
-'''
-#short name -> ide clip name
+"""
+# short name -> ide clip name
 ctx.lists["user.snippets"] = {
     "funky": "def",
     "for": "for",
