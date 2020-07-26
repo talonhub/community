@@ -41,12 +41,12 @@ def remove_dragon_junk(word):
     return str(word).lstrip("\\").split("\\")[0]
 
 
-@mod.capture(rule='({user.vocabulary})')
+@mod.capture(rule="({user.vocabulary})")
 def vocabulary(m) -> str:
     return m.vocabulary
 
 
-@mod.capture(rule='(<user.vocabulary> | <word>)')
+@mod.capture(rule="(<user.vocabulary> | <word>)")
 def word(m) -> str:
     try:
         return m.vocabulary
@@ -54,22 +54,22 @@ def word(m) -> str:
         return remove_dragon_junk(m.word)
 
 
-@mod.capture(rule='(<user.vocabulary> | <phrase>)+')
+@mod.capture(rule="(<user.vocabulary> | <phrase>)+")
 def text(m) -> str:
     # todo: use actions.dicate.parse_words for better dragon support once supported
-    words = str(m).split(' ')
+    words = str(m).split(" ")
     i = 0
     while i < len(words):
         words[i] = remove_dragon_junk(words[i])
         i += 1
 
-    return ' '.join(words)
+    return " ".join(words)
 
 
-mod.list('vocabulary', desc='user vocabulary')
+mod.list("vocabulary", desc="user vocabulary")
 
 ctx = Context()
 
 # setup the word map too
-ctx.settings['dictate.word_map'] = mapping_vocabulary
-ctx.lists['user.vocabulary'] = mapping_vocabulary
+ctx.settings["dictate.word_map"] = mapping_vocabulary
+ctx.lists["user.vocabulary"] = mapping_vocabulary

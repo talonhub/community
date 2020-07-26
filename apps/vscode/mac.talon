@@ -4,10 +4,13 @@
 app: Code
 os: mac
 -
-tag(): tabs
+tag(): find_and_replace
 tag(): ide
 tag(): line_commands
+tag(): multiple_cursors
+tag(): snippets
 tag(): splits
+tag(): tabs
 # General
 action(user.ide_command_palette):
   key(cmd-shift-p)
@@ -171,37 +174,6 @@ action(user.ide_toggle_run):
 action(user.ide_toggle_debug):
   # View: Show Run and Debug, workbench.view.debug
   key(shift-cmd-d)
-
-# Find and Replace
-action(user.ide_toggle_find):
-  # Search: Find in Files, workbench.action.findInFiles
-  key(shift-cmd-f)
-action(user.ide_find_everywhere):
-  # Search: Find in Files, workbench.action.findInFiles
-  key(shift-cmd-f)
-action(user.ide_replace_everywhere):
-  # Search: Replace in Files, workbench.action.replaceInFiles
-  key(shift-cmd-h)
-
-action(user.ide_replace_local):
-  # Replace, editor.action.startFindReplaceAction
-  key(alt-cmd-f)
-action(user.ide_replace_confirm_current):
-  # ,editor.action.replaceOne
-  key(shift-cmd-1)
-action(user.ide_replace_confirm_all):
-  # ,editor.action.replaceAll
-  key(cmd-enter)
-
-action(user.ide_find_match_by_case):
-  # Terminal: Toggle Find Using Case Sensitive, workbench.action.terminal.toggleFindCaseSensitive
-  key(alt-cmd-c)
-action(user.ide_find_match_by_word):
-  # Terminal: Toggle Find Using Whole Word, toggleFindWholeWord
-  key(alt-cmd-w)
-action(user.ide_find_match_by_regex):
-  # Terminal: Toggle Find Using Regex, workbench.action.terminal.toggleFindRegex
-  key(alt-cmd-r)
   
 action(user.ide_toggle_breakpoint):
   # Debug: Toggle Breakpoint, editor.debug.action.toggleBreakpoint
@@ -238,7 +210,7 @@ action(user.ide_find_file):
   # Go to File... , workbench.action.quickOpen
   key(cmd-p)
 
-# splits.py support
+# splits.py support begin
 action(user.split_window_right):
   user.ide_command_palette()
   insert("workbench.action.moveEditorToRightGroup")
@@ -272,3 +244,15 @@ action(user.split_clear_all):
   key(enter)
 action(user.split_next): key(cmd-k cmd-right)
 action(user.split_last): key(cmd-k cmd-left)
+# splits.py support end
+
+#multiple_cursor.py support begin
+#note: vscode has no explicit mode for multiple cursors
+action(user.multi_cursor_enable): skip()
+action(user.multi_cursor_disable): key(escape)
+action(user.multi_cursor_add_above):key(cmd-alt-up)
+action(user.multi_cursor_add_below): key(cmd-alt-down)
+action(user.multi_cursor_select_fewer_occurrences): key(cmd-u)
+action(user.multi_cursor_select_more_occurrences): key(cmd-d)
+action(user.multi_cursor_select_all_occurrences): key(cmd-shift-l)
+#multiple_cursor.py support end

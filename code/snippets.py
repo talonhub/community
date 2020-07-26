@@ -1,14 +1,16 @@
-#defines placeholder actions and captures for ide-specific snippet functionality
+# defines placeholder actions and captures for ide-specific snippet functionality
 from talon import Module, actions, app, Context
 
 mod = Module()
 ctx = Context()
-mod.tag('snippets', desc='Tag for enabling code snippet-related commands')
-mod.list('snippets', desc='List of code snippets')
+mod.tag("snippets", desc="Tag for enabling code snippet-related commands")
+mod.list("snippets", desc="List of code snippets")
+
 
 @mod.capture
 def snippets(m) -> list:
     """Returns a snippet name"""
+
 
 @mod.action_class
 class Actions:
@@ -18,7 +20,8 @@ class Actions:
     def snippet_insert(text: str):
         """Inserts a snippet"""
 
-@ctx.capture(rule='{user.snippets}')
+
+@ctx.capture(rule="{user.snippets}")
 def snippets(m):
     return m.snippets
-    
+
