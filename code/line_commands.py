@@ -31,17 +31,23 @@ movement_verbs_map = {
 ctx = Context()
 mod = Module()
 
-mod.list('selection_verbs', desc='Verbs for selecting in the editor')
-mod.list('navigation_verbs', desc='Verbs for navigating lines in the editor')
-mod.tag("line_commands", desc='Tag for enabling generic line navigation and selection commands')
+mod.list("selection_verbs", desc="Verbs for selecting in the editor")
+mod.list("navigation_verbs", desc="Verbs for navigating lines in the editor")
+mod.tag(
+    "line_commands",
+    desc="Tag for enabling generic line navigation and selection commands",
+)
+
 
 @mod.capture
 def selection_verbs(m) -> list:
     """Returns a list of verbs"""
 
+
 @mod.capture
 def navigation_verbs(m) -> list:
     """Returns a list of verbs"""
+
 
 @mod.action_class
 class Actions:
@@ -71,7 +77,7 @@ class Actions:
         """Finds next occurrence and performs action"""
 
     def select_previous_occurrence(verbs: str, text: str):
-         """Finds previous occurrence and performs action"""
+        """Finds previous occurrence and performs action"""
 
     def move_next_occurrence(verbs: str, text: str):
         """Finds next occurrence, moves to the right and performs action"""
@@ -108,7 +114,7 @@ class Actions:
         actions.user.go_to_line(None, line)
         actions.edit.extend_line_end()
         actions.user.perform_selection_action(verb)
-    
+
     def select_until_line(verb: str, line: int):
         """Performs action on selection from current line to the specified line."""
 
@@ -116,7 +122,7 @@ class Actions:
         """Performs action on selection from line line_start to line line_end"""
         actions.user.go_to_line(None, line_start)
         actions.edit.extend_line_end()
-        
+
         number_of_lines = line_end - line_start
         for i in range(0, number_of_lines):
             actions.edit.extend_line_down()
@@ -134,12 +140,12 @@ class Actions:
         actions.user.perform_selection_action(verb)
 
     def select_way_up(verb: str):
-        """Performs action on selection from cursor to file start""" 
+        """Performs action on selection from cursor to file start"""
         actions.edit.extend_file_start()
         actions.user.perform_selection_action(verb)
 
     def select_way_down(verb: str):
-        """Performs action on selection from cursor to file end""" 
+        """Performs action on selection from cursor to file end"""
         actions.edit.extend_file_end()
         actions.user.perform_selection_action(verb)
 
@@ -172,34 +178,38 @@ class Actions:
     def select_down(verb: str):
         """Perform action on downward selection"""
         actions.edit.extend_down()
-        actions.user.perform_selection_action(verb)    
+        actions.user.perform_selection_action(verb)
 
     def select_word_left(verb: str):
         """Perform action on left word selection"""
         actions.edit.extend_word_left()
-        actions.user.perform_selection_action(verb)    
+        actions.user.perform_selection_action(verb)
 
     def select_word_right(verb: str):
         """Perform action on right word selection"""
         actions.edit.extend_word_left()
-        actions.user.perform_selection_action(verb) 
+        actions.user.perform_selection_action(verb)
 
     def move_camel_left(verb: str):
         """Moves and performs action on camel (or subword, depending on program) left"""
 
     def move_camel_right(verb: str):
-        """Moves and performs action on camel (or subword, depending on program) right"""  
+        """Moves and performs action on camel (or subword, depending on program) right"""
 
     def line_clone(line: int):
         """Clones specified line at current position"""
 
-@ctx.capture(rule='{user.selection_verbs}')
+
+@ctx.capture(rule="{user.selection_verbs}")
 def selection_verbs(m):
     return m.selection_verbs
 
-@ctx.capture(rule='{user.navigation_verbs}')
+
+@ctx.capture(rule="{user.navigation_verbs}")
 def navigation_verbs(m):
     return m.navigation_verbs
 
-ctx.lists['user.selection_verbs'] = select_verbs_map.keys()
-ctx.lists['user.navigation_verbs'] = movement_verbs_map.keys()
+
+ctx.lists["user.selection_verbs"] = select_verbs_map.keys()
+ctx.lists["user.navigation_verbs"] = movement_verbs_map.keys()
+

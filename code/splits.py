@@ -1,7 +1,9 @@
 from talon import Module, actions, app
 
 mod = Module()
-mod.tag("splits", desc='Tag for enabling generic window split commands')
+mod.tag("splits", desc="Tag for enabling generic window split commands")
+
+
 @mod.action_class
 class Actions:
     def split_window_right():
@@ -29,13 +31,13 @@ class Actions:
         """Splits the window"""
 
     def split_clear():
-        """Clears the current split"""      
+        """Clears the current split"""
 
     def split_clear_all():
         """Clears all splits"""
 
     def split_next():
-        """Goes to next split"""       
+        """Goes to next split"""
 
     def split_last():
         """Goes to last split"""
