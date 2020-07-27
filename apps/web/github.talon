@@ -2,8 +2,7 @@
 
 os:linux
 tag: browser
-# xxx - github doesn't list itself in the tab title
-win.title: /github/
+win.title: /github.com/
 -
 
 # site wide shortcuts
