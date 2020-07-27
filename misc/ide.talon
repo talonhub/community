@@ -1,14 +1,9 @@
-app: /jetbrains/
-
-app: IntelliJ IDEA
-app: PyCharm
-app: PyCharm64.exe
-
-# When tags are supported
-#tags: ide
+tag: ide
 -
 refactor: user.ide_refactor()
 
+#Intellisense, Rich language support
+suggest (parameters | (args | arguments)): user.ide_intellisense_suggest_parameters()
 complete: code.complete()
 perfect: user.ide_perfect()
 smart: user.ide_smart()
@@ -36,10 +31,10 @@ go test: user.ide_go_test()
 go back: user.ide_go_back()
 go forward: user.ide_go_forward()
 
-find (everywhere | all): user.ide_find_everywhere()
 (search | find) class: user.ide_find_class()
 (search | find) file: user.ide_find_file()
 (search | find) path: user.ide_find_in_path()
+
 recent: user.ide_recent()
 
 create (template|snippet): user.ide_create_template()
@@ -59,19 +54,11 @@ go last mark: user.ide_go_last_mark()
 # Folding
 expand deep: user.ide_expand_deep()
 expand all: user.ide_expand_all()
+expand that: user.ide_expand_region()
 collapse deep: user.ide_collapse_deep()
 collapse all: user.ide_collapse_all()
-# Splits
-split right: user.ide_split_right()
-split down: user.ide_split_down()
-split vertically: user.ide_split_vertically()
-split horizontally: user.ide_split_horizontally()
-split flip: user.ide_split_flip()
-split window: user.ide_split_window()
-clear split: user.ide_clear_split()
-clear all splits: user.ide_clear_all_splits()
-go next split: user.ide_go_next_split()
-go last split: user.ide_go_last_split()
+collapse that: user.ide_collapse_region()
+
 # miscellaneous
 # XXX These might be better than the structural ones depending on language.
 go next (method | function): user.ide_go_next_method()
@@ -103,12 +90,25 @@ git (pull request | request): user.ide_git_pull_request()
 git (view | show | list) (requests | request): user.ide_git_list_requests()
 git (annotate | blame): user.ide_git_annotate()
 git menu: user.ide_git_menu()
+
+# Terminal
+new terminal: user.ide_terminal_new()
+next terminal: user.ide_terminal_focus_next()
+trash terminal: user.ide_terminal_trash()
+(previous | last) terminal: user.ide_terminal_focus_previous()
+terminal scroll up: user.ide_terminal_scroll_up()
+terminal scroll down: user.ide_terminal_scroll_down()
+
 # Tool windows:
+command palette: user.ide_command_palette()
+open containing folder | show in explorer | show in finder: user.ide_reveal_in_file_manager()
+
 # Toggling various tool windows
 toggle project: user.ide_toggle_project()
 toggle find: user.ide_toggle_find()
 toggle run: user.ide_toggle_run()
 toggle debug: user.ide_toggle_debug()
+toggle extensions: user.ide_toggle_extensions()
 toggle events: user.ide_toggle_events()
 toggle terminal: user.ide_toggle_terminal()
 toggle git: user.ide_toggle_git()
@@ -136,26 +136,17 @@ toggle power save: user.ide_toggle_power_save()
 toggle whitespace: user.ide_toggle_whitespace()
 toggle indents: user.ide_toggle_indents()
 toggle line numbers: user.ide_toggle_line_numbers()
-toggle bread crumbs: user.ide_toggle_breadcrumbs()
+toggle (bread crumbs | breadcrumbs): user.ide_toggle_breadcrumbs()
 toggle gutter icons: user.ide_toggle_gutter_icons()
 toggle wrap: user.ide_toggle_wrap()
 toggle parameters: user.ide_toggle_parameters()
+
 # Toggleable views
 toggle fullscreen: user.ide_toggle_fullscreen()
 toggle distraction [free mode]: user.ide_toggle_distraction_free()
 toggle presentation [mode]: user.ide_toggle_presentation_mode()
-# Tabs
-go first tab: user.ide_go_first_tab()
-go second tab: user.ide_go_second_tab()
-go third tab: user.ide_go_third_tab()
-go fourth tab: user.ide_go_fourth_tab()
-go fifth tab: user.ide_go_fifth_tab()
-go sixth tab: user.ide_go_sixth_tab()
-go seventh tab: user.ide_go_seventh_tab()
-go eighth tab: user.ide_go_eighth_tab()
-go ninth tab: user.ide_go_ninth_tab()
-go final tab: user.ide_go_final_tab()
-clear tab: user.ide_clear_tab()
+# Toggle additionals
+toggle comment: user.ide_toggle_comment()
 # Quick popups
 change scheme: user.ide_change_scheme()
 (toggle | pop) (doc | documentation): user.ide_toggle_documentation()
@@ -171,6 +162,7 @@ run test again: user.ide_run_test_again()
 debug test: user.ide_debug_test()
 step over: user.ide_step_over()
 step into: user.ide_step_into()
+step out: user.ide_step_out()
 step smart: user.ide_step_smart()
 step to line: user.ide_step_to_line()
 continue: user.ide_continue()
@@ -179,39 +171,7 @@ continue: user.ide_continue()
 (grow | shrink) window left: user.ide_resize_window_left()
 (grow | shrink) window up: user.ide_resize_window_up()
 (grow | shrink) window down: user.ide_resize_window_down()
-
-drag up:
-	edit.line_swap_up()
-
-drag down:
-	edit.line_swap_down()
-
-clone (line|this):
-	edit.line_clone()
-
-multiple cursor:
-	user.ide_multi_cursor()
-
-(end|stop) multiple cursor:
-	user.ide_multi_cursor_stop()
-
-multi select up:
-	user.ide_up_cursor()
-
-multi select down:
-	user.ide_down_cursor()
-
-multi select fewer:
-	user.ide_multi_select_fewer()
-
-multi select more:
-	user.ide_multi_select_more()
-
-multi select all:
-	user.ide_multi_select_all()
-
-select less:
-	user.ide_select_less()
-
-select (more|this):
-	user.ide_select_more()
+copy [line] down: user.ide_editor_copylines_down()
+copy [line] up: user.ide_editor_copylines_up()
+select less: user.ide_select_less()
+select (more|this): user.ide_select_more()

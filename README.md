@@ -54,7 +54,7 @@ The folder structure should look like:
 
 ## Getting started with Talon for coding with this depot
 
-Use the “help context,” "help active," and “help alphabet” commands to browse avaiable commands. Available commands can change with the application or window title that has focus.
+Use the “help context,” "help active," and “help alphabet” commands to browse available commands. Available commands can change with the application or window title that has focus.
 
 It's recommended to learn the alphabet first, then get familiar with the keys, symbols, and formatters. 
 
@@ -79,6 +79,32 @@ Once you have the basics of text input down, try copying some code from one wind
 After that, explore using ordinal repetition for easily repeating a command without pausing (e.g., saying “go up fifth” will go up five lines), window switching (“focus chrome”), and moving around in your text editor of choice. 
 
 If you use vim, just start with the numbers and alphabet, otherwise look at generic_editor.talon as well at jetbrains, vscode, and any other integrations).  
+
+### Activating Programming Languages
+
+Specific programming languages may be activated by voice commands, or via title tracking.
+
+Activating languages via commands will enable the commands globally, e.g. they'll work in any application. This will also disable the title tracking method (code.language in .talon files) until the "clear language modes" voice command is used.
+
+The commands are defined here: 
+https://github.com/knausj85/knausj_talon/blob/69d0207c873e860002b137f985dd7cb001183a47/modes/modes.talon#L29
+
+By default, title tracking activates coding languages in supported applications such as VSCode and Notepad++. 
+
+To enable title tracking for your application: 
+1. The active filename (including extension) must be included in the editor's title
+2. Implement the required Talon-defined actions to correctly extract the filename and extension from the programs's title. See https://github.com/knausj85/knausj_talon/blob/69d0207c873e860002b137f985dd7cb001183a47/apps/vscode/vscode.py#L12 for an example.
+
+Python, C#, Talon and javascript language support is currently broken up into ~four contexts in an attempt to define a common grammar where possible between languages
+
+• operators.talon - operator commands
+
+• comment.talon - commenting commands
+
+• programming.talon - function, loop commands, etc
+
+• {your-language-here}.talon - for implementation of the actions for the above, and any language-specific stuff
+
 
 ## File Manager commands
 For the following file manager commands to work, your file manager must display the full folder path in the title bar. https://github.com/knausj85/knausj_talon/blob/baa323fcd34d8a1124658a425abe8eed59cf2ee5/apps/file_manager.talon
