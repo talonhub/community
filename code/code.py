@@ -1,6 +1,7 @@
-from talon import Context, actions, ui, Module, settings, registry, imgui, fs
-import re
 import os
+import re
+
+from talon import Context, Module, actions, fs, imgui, registry, settings, ui
 
 ctx = Context()
 mod = Module()
@@ -29,15 +30,24 @@ mod.tag(
 key = actions.key
 function_list = []
 extension_lang_map = {
-    "py": "python",
-    "cs": "csharp",
+    "asm": "assembly",
+    "c": "c",
     "cpp": "cplusplus",
-    "h": "cplusplus",
-    "talon": "talon",
+    "cs": "csharp",
     "gdb": "gdb",
-    "md": "markdown",
-    "sh": "bash",
     "go": "go",
+    "h": "c",
+    "hpp": "cplusplus",
+    "lua": "lua",
+    "md": "markdown",
+    "pl": "perl",
+    "py": "python",
+    "rb": "ruby",
+    "s": "assembly",
+    "sh": "bash",
+    "snippets": "snippets",
+    "talon": "talon",
+    "vim": "vim",
     "js": "javascript",
     "ts": "typescript",
 }
@@ -97,7 +107,7 @@ class Actions:
         global forced_language
         actions.user.code_clear_language_mode()
         actions.mode.enable("user.{}".format(language))
-
+        # app.notify("Enabled {} mode".format(language))
         forced_language = True
 
     def code_clear_language_mode():
@@ -107,6 +117,7 @@ class Actions:
 
         for __, lang in extension_lang_map.items():
             actions.mode.disable("user.{}".format(lang))
+        # app.notify("Cleared language modes")
 
     def code_operator_indirection():
         """code_operator_indirection"""
@@ -114,8 +125,8 @@ class Actions:
     def code_operator_address_of():
         """code_operator_address_of (e.g., C++ & op)"""
 
-    def code_operator_structure_deference():
-        """code_operator_structure_deference (e.g., C++ -> op)"""
+    def code_operator_structure_dereference():
+        """code_operator_structure_dereference (e.g., C++ -> op)"""
 
     def code_operator_lambda():
         """code_operator_lambda"""
@@ -195,11 +206,11 @@ class Actions:
     def code_operator_bitwise_or_assignment():
         """code_operator_or_assignment"""
 
-    def code_operator_bitwise_exlcusive_or():
-        """code_operator_bitwise_exlcusive_or"""
+    def code_operator_bitwise_exclusive_or():
+        """code_operator_bitwise_exclusive_or"""
 
-    def code_operator_bitwise_exlcusive_or_assignment():
-        """code_operator_bitwise_exlcusive_or_assignment"""
+    def code_operator_bitwise_exclusive_or_assignment():
+        """code_operator_bitwise_exclusive_or_assignment"""
 
     def code_operator_bitwise_left_shift():
         """code_operator_bitwise_left_shift"""
@@ -338,6 +349,12 @@ class Actions:
     def code_block_comment():
         """Block comment"""
 
+    def code_block_comment_prefix():
+        """Block comment start syntax"""
+
+    def code_block_comment_suffix():
+        """Block comment end syntax"""
+
     def code_type_definition():
         """code_type_definition (typedef)"""
 
@@ -416,4 +433,3 @@ def commands_updated(_):
 
 
 registry.register("update_commands", commands_updated)
-
