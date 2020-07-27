@@ -1,4 +1,3 @@
-os:linux
 tag: browser
 win.title: /ProtonMail/
 -

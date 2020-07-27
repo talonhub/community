@@ -1,7 +1,6 @@
 # Shortcuts taken from: https://docs.gitlab.com/ee/user/shortcuts.html
 #
 
-os:linux
 tag: browser
 win.title: /gitlab.com/
 #win.title: /GitLab/

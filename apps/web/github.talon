@@ -1,6 +1,4 @@
 # https://help.github.com/en/github/getting-started-with-github/keyboard-shortcuts
-
-os:linux
 tag: browser
 win.title: /github.com/
 -
