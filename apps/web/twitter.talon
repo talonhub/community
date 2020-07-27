@@ -1,6 +1,6 @@
 os: linux
 tag: firefox
-win.title: /Twitter/
+win.title: /twitter.com/
 -
 
 # navigation
