@@ -1,5 +1,5 @@
 os: linux
-tag: firefox
+tag: browser
 win.title: /twitter.com/
 -
 
