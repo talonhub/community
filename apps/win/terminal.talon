@@ -4,6 +4,7 @@ app: cmd.exe
 app: WindowsTerminal.exe
 -
 tag(): terminal
+tag(): file_manager
 
 run last: key(up enter)
 

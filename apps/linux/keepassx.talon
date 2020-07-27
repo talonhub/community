@@ -23,6 +23,6 @@ copy password: key(ctrl-c)
 open (earl|url|link): key(ctrl-u)
 copy (earl|url|link): key(ctrl-alt-u)
 find: key(ctrl-f)
-find <phrase>:
+find <user.text>:
     key(ctrl-f)
-    insert("{phrase}")
+    insert("{text}")

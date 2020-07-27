@@ -1,18 +1,4 @@
-os: windows
-app: Windows Explorer
-app: explorer.exe
-app: Windows Command Processor
-app: cmd.exe
-
-os: mac
-app: com.apple.finder
-app: Terminal
-app: iTerm2
-app: com.apple.Terminal
-
-os: linux
-app: Caja
-app: /terminal/
+tag: file_manager
 -
 settings():
     # enable if you'd like the picker gui to automatically appear when explorer has focus
@@ -25,9 +11,6 @@ go pictures: user.file_manager_open_user_directory("Pictures")
 go downloads: user.file_manager_open_user_directory("Downloads")
 go profile: user.file_manager_open_user_directory("")
 go docks: user.file_manager_open_user_directory("Documents")
-#go data: user.file_manager_open_directory("%AppData%")
-#go talon: user.file_manager_open_directory("%AppData%\Talon")
-^go <user.letter>$: user.file_manager_open_volume("{letter}:")
 go back: user.file_manager_go_back()
 go forward: user.file_manager_go_forward()
 daddy: user.file_manager_open_parent()
@@ -36,6 +19,15 @@ daddy: user.file_manager_open_parent()
 ^open <number>$: user.file_manager_open_file(number - 1)
 ^(cell | sell | select) folder <number>$: user.file_manager_select_directory(number - 1)
 ^(cell | sell | select) file <number>$: user.file_manager_select_file(number - 1)
+
+#new folder
+new folder: user.file_manager_new_folder()
+
+#show properties
+show properties: user.file_manager_show_properties()
+
+# open terminal at location
+terminal here: user.file_manager_terminal_here()
 
 next folders: user.file_manager_next_folder_page()
 previous folders: user.file_manager_previous_folder_page()
