@@ -59,3 +59,23 @@ code.language: python
 # Place your private snippets here that other Talon users won't be able to
 # use
 ###
+
+(snip|snippet) print success:
+    user.vim_insert_mode("psuccess")
+    key(tab)
+
+(snip|snippet) print fail:
+    user.vim_insert_mode("pfail")
+    key(tab)
+
+(snip|snippet) dick string:
+    user.vim_insert_mode("dstr")
+    key(tab)
+
+(snip|snippet) new arg parser:
+    user.vim_insert_mode("argparse")
+    key(tab)
+
+(snip|snippet) add (arg|argument):
+    user.vim_insert_mode("narg")
+    key(tab)
