@@ -13,15 +13,18 @@ action(user.code_operator_division): " / "
 action(user.code_operator_assignment): " = "
 action(user.code_comment): "#"
 
+dot talon: insert(".talon")
 insert: 
-	insert('insert("")')
+	insert("insert('')")
 	edit.left()
 	edit.left()
 key:
 	insert('key()')
 	edit.left()
+<user.modifiers> key: "{modifiers}"
+
 action:
-	insert("action()")
+	insert("action():")
 	edit.left()
 os win:
 	insert("os: windows")
@@ -39,4 +42,6 @@ tag require:
 	insert("tag: ")
 user:
 	insert("user.")
-
+repeat:
+	insert("repeat()")
+	edit.left()

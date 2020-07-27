@@ -1,6 +1,7 @@
 from talon import Module
 
 mod = Module()
+mod.tag("ide", desc="Tag for enabling generic ide commands")
 
 
 @mod.action_class
@@ -12,7 +13,7 @@ class Actions:
         """Trigger better auto complete in the ide"""
 
     def ide_smart():
-        """Trigger type completion in the ide"""
+        """Trigger suggestion / type completion in the ide"""
 
     def ide_finish():
         """Select auto complete statement"""
@@ -20,11 +21,17 @@ class Actions:
     def ide_done():
         """Select auto complete statement"""
 
-    def ide_parameter_hints():
+    def ide_intellisense_suggest_parameters():
         """Trigger parameter hints"""
 
     def ide_toggle_tools():
         """Hide all windows"""
+
+    def ide_editor_copylines_down():
+        """Editor copy line down"""
+
+    def ide_editor_copylines_up():
+        """Editor copy line up"""
 
     def ide_extract_variable():
         """Trigger extract variable functionality of IDE"""
@@ -82,9 +89,6 @@ class Actions:
 
     def ide_go_forward():
         """Go to next"""
-
-    def ide_find_everywhere():
-        """Searches the entire project"""
 
     def ide_find_class():
         """Open search for class functionality of ide"""
@@ -161,47 +165,26 @@ class Actions:
     def ide_expand_all():
         """Expand all blocks in file"""
 
+    def ide_expand_region():
+        """Expand current block in file"""
+
     def ide_collapse_deep():
         """Collapse code recursively"""
 
     def ide_collapse_all():
         """Collapse all code in file"""
 
-    def ide_split_right():
-        """Move current tab to the right pane"""
-
-    def ide_split_down():
-        """Move tab to the pane below"""
-
-    def ide_split_vertically():
-        """Split the view into panes vertically"""
-
-    def ide_split_horizontally():
-        """Split the view into panes horizontally"""
-
-    def ide_split_flip():
-        """Change split orientation"""
-
-    def ide_split_window():
-        """Open the current file in a new window"""
-
-    def ide_clear_split():
-        """Unsplit the current view (collapse this and previous pane into one)"""
-
-    def ide_clear_all_splits():
-        """Unsplit all views (back to single pane)"""
-
-    def ide_go_next_split():
-        """Go to next pane"""
-
-    def ide_go_last_split():
-        """Go to the previous pane"""
+    def ide_collapse_region():
+        """Collapse current block in file"""
 
     def ide_go_next_method():
         """Go to the next method in the file"""
 
     def ide_go_last_method():
         """Go to the previous method in the file"""
+
+    def ide_command_palette():
+        """Open the command palette"""
 
     def ide_clippings():
         """Show copy history"""
@@ -266,6 +249,9 @@ class Actions:
     def ide_git_menu():
         """Show the git menu for IDE"""
 
+    def ide_reveal_in_file_manager():
+        """Reveal in OS file manager. window"""
+
     def ide_toggle_project():
         """Hide/Show project (file system) browser window"""
 
@@ -283,6 +269,9 @@ class Actions:
 
     def ide_toggle_terminal():
         """Hide/Show terminal window"""
+
+    def ide_toggle_extensions():
+        """Hide/Show extensions window"""
 
     def ide_terminal_new():
         """Create new terminal"""
@@ -389,39 +378,6 @@ class Actions:
     def ide_toggle_presentation_mode():
         """Enable/Disable presentation mode """
 
-    def ide_go_first_tab():
-        """Go to first tab"""
-
-    def ide_go_second_tab():
-        """Go to second tab"""
-
-    def ide_go_third_tab():
-        """Go to third tab"""
-
-    def ide_go_fourth_tab():
-        """Go to fourth tab"""
-
-    def ide_go_fifth_tab():
-        """Go to fifth tab"""
-
-    def ide_go_sixth_tab():
-        """Go to sixth tab"""
-
-    def ide_go_seventh_tab():
-        """Go to seventh tab"""
-
-    def ide_go_eighth_tab():
-        """Go to eighth tab"""
-
-    def ide_go_ninth_tab():
-        """Go to ninth tab"""
-
-    def ide_go_final_tab():
-        """Go to the final tab in the list"""
-
-    def ide_clear_tab():
-        """Close current open view"""
-
     def ide_change_scheme():
         """Trigger scheme menu (e.g. to change colour scheme)"""
 
@@ -461,6 +417,9 @@ class Actions:
     def ide_step_into():
         """Step into current statement"""
 
+    def ide_step_out():
+        """Step out of current execution level"""
+
     def ide_step_smart():
         """Trigger smart step into"""
 
@@ -485,17 +444,3 @@ class Actions:
     def ide_toggle_comment():
         """Toggle comment for selected text"""
 
-    def ide_show_explorer():
-        """Show Explorer"""
-
-    def ide_show_search():
-        """Show Search"""
-
-    def ide_show_source_control():
-        """Show Source Control"""
-
-    def ide_show_debug():
-        """Show Debug"""
-
-    def ide_show_extensions():
-        """Show Extensions"""
