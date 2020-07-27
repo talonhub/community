@@ -1,8 +1,10 @@
-# https://docs.gitlab.com/ee/user/shortcuts.html
+# Shortcuts taken from: https://docs.gitlab.com/ee/user/shortcuts.html
+#
 
 os:linux
 tag: browser
-win.title: /GitLab/
+win.title: /gitlab.com/
+#win.title: /GitLab/
 -
 
 # global shortcuts
