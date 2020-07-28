@@ -79,7 +79,7 @@ class Actions:
             return
 
         for cur_app in ui.apps():
-            if cur_app.name == wanted_app and not app.background:
+            if cur_app.name == wanted_app and not cur_app.background:
                 cur_app.focus()
                 break
 
