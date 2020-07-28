@@ -2,7 +2,7 @@ import os
 import re
 import time
 
-from talon import Context, Module, actions, app, imgui, ui
+from talon import Context, Module, app, imgui, ui
 from talon.voice import Capture
 
 # Construct at startup a list of overides for application names (similar to how homophone list is managed)
@@ -78,9 +78,9 @@ class Actions:
         if wanted_app is None:
             return
 
-        for app in ui.apps():
-            if app.name == wanted_app and not app.background:
-                app.focus()
+        for cur_app in ui.apps():
+            if cur_app.name == wanted_app and not app.background:
+                cur_app.focus()
                 break
 
     def switcher_launch(path: str):
@@ -114,7 +114,7 @@ def update_lists():
             name = name.rsplit(".", 1)[0]
         words = get_words(name)
         for word in words:
-            if word and not word in running:
+            if word and word not in running:
                 running[word.lower()] = cur_app.name
         running[name.lower()] = cur_app.name
     for override in overrides:
