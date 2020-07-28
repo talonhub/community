@@ -20,7 +20,7 @@ with open(overrides_file, "r") as f:
         line = line.split(",")
         overrides[line[0].lower()] = line[1].strip()
 
-print(f"knausj_talon.switcher------------ app name overrides:{overrides}")
+# print(f"knausj_talon.switcher------------ app name overrides:{overrides}")
 
 app_cache = {}
 
@@ -71,15 +71,19 @@ class Actions:
         """Focus a new application by  name"""
         running = ctx.lists["self.running"]
         wanted_app = None
+
+        # todo: fix this for windows properly
+        name = name.replace(".exe", "")
         for running_name in running.keys():
+
             if running_name == name or running_name.lower().startswith(name.lower()):
                 wanted_app = running[running_name]
                 break
         if wanted_app is None:
-            return
+            returnm
 
         for cur_app in ui.apps():
-            if cur_app.name == wanted_app and not cur_app.background:
+            if cur_app.name == wanted_app:  # and not cur_app.background:
                 cur_app.focus()
                 break
 
@@ -110,12 +114,15 @@ def update_lists():
 
     for cur_app in ui.apps(background=False):
         name = cur_app.name
+
         if name.endswith(".exe"):
             name = name.rsplit(".", 1)[0]
+
         words = get_words(name)
         for word in words:
             if word and word not in running:
                 running[word.lower()] = cur_app.name
+
         running[name.lower()] = cur_app.name
     for override in overrides:
         running[override] = overrides[override]
