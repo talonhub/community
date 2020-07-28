@@ -80,10 +80,10 @@ class Actions:
                 wanted_app = running[running_name]
                 break
         if wanted_app is None:
-            returnm
+            return
 
         for cur_app in ui.apps():
-            if cur_app.name == wanted_app:  # and not cur_app.background:
+            if cur_app.name == wanted_app and not cur_app.background:
                 cur_app.focus()
                 break
 
