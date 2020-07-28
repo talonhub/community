@@ -43,9 +43,12 @@ def launch_applications(m) -> Capture:
 ctx = Context()
 
 
-@ctx.capture(rule="{self.running}")
+@ctx.capture(rule="({self.running} | <user.text>)")
 def running_applications(m):
-    return m.running
+    try:
+        return m.running
+    except AttributeError:
+        return m.text
 
 
 @ctx.capture(rule="{self.launch}")
