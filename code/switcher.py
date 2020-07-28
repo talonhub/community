@@ -72,7 +72,7 @@ class Actions:
         running = ctx.lists["self.running"]
         wanted_app = None
         for running_name in running.keys():
-            if running_name == name or running_name.lower().startswith(name):
+            if running_name == name or running_name.lower().startswith(name.lower()):
                 wanted_app = running[running_name]
                 break
         if wanted_app is None:
