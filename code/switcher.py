@@ -1,8 +1,9 @@
-from talon import app, Module, Context, actions, ui, imgui
-from talon.voice import Capture
+import os
 import re
 import time
-import os
+
+from talon import Context, Module, actions, app, imgui, ui
+from talon.voice import Capture
 
 # Construct at startup a list of overides for application names (similar to how homophone list is managed)
 # ie for a given talon recognition word set  `one note`, recognized this in these switcher functions as `ONENOTE`
@@ -79,8 +80,7 @@ class Actions:
 
         for app in ui.apps():
             if app.name == wanted_app and not app.background:
-                os.system("i3-msg '[class=\"(?)%s\"] focus'" % app.name)
-                # app.focus()
+                app.focus()
                 break
 
     def switcher_launch(path: str):
