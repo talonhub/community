@@ -1,8 +1,9 @@
-from talon import app, Module, Context, actions, ui, imgui
-from talon.voice import Capture
+import os
 import re
 import time
-import os
+
+from talon import Context, Module, app, imgui, ui
+from talon.voice import Capture
 
 # Construct at startup a list of overides for application names (similar to how homophone list is managed)
 # ie for a given talon recognition word set  `one note`, recognized this in these switcher functions as `ONENOTE`
@@ -68,10 +69,18 @@ def get_words(name):
 class Actions:
     def switcher_focus(name: str):
         """Focus a new application by  name"""
-        for app in ui.apps():
-            # print(f"--------- app.name:{app.name}  app.bundler:{app.bundle}")
-            if name in app.name and not app.background:
-                app.focus()
+        running = ctx.lists["self.running"]
+        wanted_app = None
+        for running_name in running.keys():
+            if running_name == name or running_name.lower().startswith(name):
+                wanted_app = running[running_name]
+                break
+        if wanted_app is None:
+            return
+
+        for cur_app in ui.apps():
+            if cur_app.name == wanted_app and not cur_app.background:
+                cur_app.focus()
                 break
 
     def switcher_launch(path: str):
@@ -105,7 +114,7 @@ def update_lists():
             name = name.rsplit(".", 1)[0]
         words = get_words(name)
         for word in words:
-            if word and not word in running:
+            if word and word not in running:
                 running[word.lower()] = cur_app.name
         running[name.lower()] = cur_app.name
     for override in overrides:
