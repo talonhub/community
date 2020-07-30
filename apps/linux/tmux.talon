@@ -33,23 +33,24 @@ mux rename window:
 mux close window:
     key(ctrl-b)
     key(&)
-#pane management
-mux split horizontal:
+mux split horizontal: user.split_window_horizontally()
+action(user.split_window_horizontally):
     key(ctrl-b)
     key(%)
-mux split vertical:
+mux split vertical: user.split_window_vertically()
+action(user.split_window_vertically):
     key(ctrl-b)
     key(")
-mux next pane:
+mux next pane: user.split_next()
+action(user.split_next):
     key(ctrl-b)
     key(o)
 mux move <user.arrow>:
     key(ctrl-b)
     key(arrow)
-mux close pane:
+mux close pane: user.split_clear()
+action(user.split_clear):
     key(ctrl-b)
     key(x)
-#Say a number right after this command, to switch to pane
-mux pane numbers:
-    key(ctrl-b)
-    key(q)
+mux pane <number>: user.split_number(number)
+
