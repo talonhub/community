@@ -1,10 +1,9 @@
-from talon import Context, actions, ui, Module 
+from talon import Context, actions, Module 
 from time import sleep
 ctx = Context()
 mod = Module()
 
 ctx.matches = r'''
-tag: splits
 tag: tmux
 '''
 @ctx.action_class('user')
