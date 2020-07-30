@@ -1,4 +1,5 @@
-from talon import Context, Module
+from talon import Context, Module, actions, grammar
+
 
 simple_vocabulary = [
     "nmap",
@@ -40,16 +41,26 @@ def word(m) -> str:
         return remove_dragon_junk(m.word)
 
 
+punctuation = set(".,-!?;:")
+
+
 @mod.capture(rule="(<user.vocabulary> | <phrase>)+")
 def text(m) -> str:
-    # todo: use actions.dicate.parse_words for better dragon support once supported
-    words = str(m).split(" ")
-    i = 0
-    while i < len(words):
-        words[i] = remove_dragon_junk(words[i])
-        i += 1
+    words = []
+    result = ""
+    for item in m:
+        if isinstance(item, grammar.vm.Phrase):
+            words = words + actions.dictate.parse_words(item)
+        else:
+            words = words + item.split(" ")
 
-    return " ".join(words)
+    for i, word in enumerate(words):
+        if i > 0 and word not in punctuation:
+            result += " "
+
+        result += word
+
+    return result
 
 
 mod.list("vocabulary", desc="user vocabulary")
