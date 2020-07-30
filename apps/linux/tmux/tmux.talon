@@ -1,6 +1,7 @@
 os: linux
 tag: tmux
 -
+tag(): splits
 mux: "tmux "
 
 #session management
