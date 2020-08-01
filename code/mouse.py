@@ -82,11 +82,9 @@ setting_mouse_wheel_down_amount = mod.setting(
 
 ctx = Context()
 ctx.lists["self.mouse_button"] = {
-    # right click
-    "righty": "1",
-    "rickle": "1",
-    # left click
-    "chiff": "0",
+    "chiff": "0",  # left click
+    "rickle": "1",  # right click
+    "righty": "1",  # right click
 }
 
 continuous_scoll_mode = ""

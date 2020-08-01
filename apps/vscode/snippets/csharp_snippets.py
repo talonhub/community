@@ -13,15 +13,15 @@ and code.language: csharp
 """
 # short name -> ide clip name
 ctx.lists["user.snippets"] = {
-    # "funky": "def",
-    # "for": "for",
-    "for each": "foreach",
-    "while": "while",
     "class": "class",
-    # "class funky": "def(class method)",
-    # "class static funky": "def(class static method)",
-    "if": "if",
     "else": "else",
+    "for each": "foreach",
+    "if": "if",
     "try except": "try",
     "try finally": "tryf",
+    "while": "while",
+    # "class funky": "def(class method)",
+    # "class static funky": "def(class static method)",
+    # "for": "for",
+    # "funky": "def",
 }
