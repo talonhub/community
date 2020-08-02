@@ -92,7 +92,7 @@ def update_lists():
         ):
             if os.path.isdir(base):
                 for name in os.listdir(base):
-                    print(name)
+                    # print(name)
                     path = os.path.join(base, name)
                     name = name.rsplit(".", 1)[0].lower()
                     launch[name] = path
