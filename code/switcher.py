@@ -84,18 +84,25 @@ def update_lists():
         running[override] = overrides[override]
 
     if app.platform == "mac":
-        for base in "/Applications", "/Applications/Utilities":
-            for name in os.listdir(base):
-                path = os.path.join(base, name)
-                name = name.rsplit(".", 1)[0].lower()
-                launch[name] = path
-                words = name.split(" ")
-                for word in words:
-                    if word and word not in launch:
-                        if len(name) > 6 and len(word) < 3:
-                            continue
-                        launch[word] = path
+        for base in (
+            "/Applications",
+            "/Applications/Utilities",
+            "/System/Applications",
+            "/System/Applications/Utilities",
+        ):
+            if os.path.isdir(base):
+                for name in os.listdir(base):
+                    print(name)
+                    path = os.path.join(base, name)
+                    name = name.rsplit(".", 1)[0].lower()
+                    launch[name] = path
+                    words = name.split(" ")
+                    for word in words:
+                        if word and word not in launch:
+                            if len(name) > 6 and len(word) < 3:
+                                continue
 
+                            launch[word] = path
     lists = {
         "self.running": running,
         "self.launch": launch,
