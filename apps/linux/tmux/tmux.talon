@@ -17,9 +17,9 @@ mux kill session: 'tmux kill-session -t'
 mux new window:
     key(ctrl-b)
     key(c)
-mux window <number>:
+mux window <number_smal>:
     key(ctrl-b )
-    key('{number}')
+    key('{number_small}')
 mux previous window:
     key(ctrl-b)
     key(p)
@@ -51,4 +51,4 @@ mux close pane: user.split_clear()
 action(user.split_clear):
     key(ctrl-b)
     key(x)
-mux pane <number>: user.split_number(number)
+mux pane <number_small>: user.split_number(number_small)
