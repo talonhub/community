@@ -17,7 +17,7 @@ mux kill session: 'tmux kill-session -t'
 mux new window:
     key(ctrl-b)
     key(c)
-mux window <number_smal>:
+mux window <number_small>:
     key(ctrl-b )
     key('{number_small}')
 mux previous window:
