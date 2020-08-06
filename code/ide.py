@@ -183,9 +183,6 @@ class Actions:
     def ide_go_last_method():
         """Go to the previous method in the file"""
 
-    def ide_command_palette():
-        """Open the command palette"""
-
     def ide_clippings():
         """Show copy history"""
 
@@ -248,9 +245,6 @@ class Actions:
 
     def ide_git_menu():
         """Show the git menu for IDE"""
-
-    def ide_reveal_in_file_manager():
-        """Reveal in OS file manager. window"""
 
     def ide_toggle_project():
         """Hide/Show project (file system) browser window"""

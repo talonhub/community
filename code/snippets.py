@@ -20,6 +20,9 @@ class Actions:
     def snippet_insert(text: str):
         """Inserts a snippet"""
 
+    def snippet_create():
+        """Triggers snippet creation"""
+
 
 @ctx.capture(rule="{user.snippets}")
 def snippets(m):

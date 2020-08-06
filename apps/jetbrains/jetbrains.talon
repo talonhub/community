@@ -13,6 +13,8 @@ tag(): multiple_cursors
 tag(): splits 
 tag(): tabs
 
+action(code.toggle_comment): user.idea("action CommentByLineComment")
+
 # Auto complete
 action(code.complete): user.idea("action CodeCompletion")
 action(user.ide_perfect): user.idea("action CodeCompletion,action CodeCompletion")
