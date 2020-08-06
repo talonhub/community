@@ -103,13 +103,15 @@ def update_lists():
                                 continue
 
                             launch[word] = path
-    lists = {
-        "self.running": running,
-        "self.launch": launch,
-    }
+    # lists = {
+    #     "self.running": running,
+    #     "self.launch": launch,
+    # }
 
     # batch update lists
-    ctx.lists.update(lists)
+    # print(str(running))
+    ctx.lists["user.running"] = running
+    ctx.lists["user.launch"] = launch
 
 
 def update_overrides(name, flags):
