@@ -64,7 +64,11 @@ class Actions:
         # Clip is noticeably faster than insert
         original_clipboard = clip.text()
         clip.set_text(f"{command}")
-        actions.key("ctrl-shift-p")
+        if not is_mac:
+            actions.key("ctrl-shift-p")
+        else:
+            actions.key("cmd-shift-p")
+
         actions.edit.paste()
         actions.key("enter")
         actions.sleep("200ms")
@@ -73,7 +77,10 @@ class Actions:
     def vscode_ignore_clipboard(command: str):
         """Execute command via command palette. Does NOT preserve the clipboard for commands like copyFilePath"""
         clip.set_text(f"{command}")
-        actions.key("ctrl-shift-p")
+        if not is_mac:
+            actions.key("ctrl-shift-p")
+        else:
+            actions.key("cmd-shift-p")
         actions.edit.paste()
         actions.key("enter")
 
