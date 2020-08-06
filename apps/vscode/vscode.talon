@@ -30,7 +30,7 @@ action(edit.save_all): user.vscode("workbench.action.files.saveAll")
 # splits.py support begin
 action(user.split_clear_all): user.vscode("View: Single Column Editor Layout")
 action(user.split_clear): user.vscode("View: Join Editor Group with Next Group")
-action(user.split_flip): user.vscode("View: Toggle Vertical/Horizonal Editor Layout") 
+action(user.split_flip): user.vscode("View: Toggle Vertical/Horizontal Editor Layout") 
 action(user.split_last): user.vscode("View: Focus Previous Editor Group")
 action(user.split_next):  user.vscode("View: Focus Next Editor Group")
 action(user.split_window_down): user.vscode("workbench.action.moveEditorToBelowGroup")
