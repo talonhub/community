@@ -87,7 +87,9 @@ wrap switch: user.vscode("editor.action.toggleWordWrap")
 zen switch: user.vscode("workbench.action.toggleZenMode")
 
 # File Commands
-file hunt: user.vscode("Go to File")
+file hunt [<user.text>]: 
+  user.vscode("Go to File")
+  insert(text or "")
 file copy path: user.vscode_ignore_clipboard("File: Copy Path of Active File") 
 file create sibling: user.vscode("File: New File")  
 file create: user.vscode("File: New Untitled File")
@@ -168,7 +170,7 @@ git stage all: user.vscode("git.stageAll")
 git unstage: user.vscode("git.unstage")
 git unstage all: user.vscode("git.unstageAll")
 
-#DebuggingToggle fullscreen
+#Debugging
 break point: user.vscode("editor.debug.action.toggleBreakpoint")
 step over: user.vscode("workbench.action.debug.stepOver")
 debug step into: user.vscode("workbench.action.debug.stepInto")
