@@ -5,6 +5,8 @@ app: devenv.exe
 tag(): tabs
 tag(): line_commands
 tag(): find_and_replace
+tag(): snippets
+tag(): multiple_cursors
 
 #talon app actions
 action(app.tab_close): key(ctrl-f4)
@@ -17,8 +19,20 @@ action(code.toggle_comment): key(ctrl-k ctrl-/)
 
 #talon edit actions
 action(edit.indent_more): key(tab)
-action(edit.indent_less): skip()
+action(edit.indent_less): key(shift-tab)
 action(edit.save_all): key(ctrl-shift-s)
+
+#multiple_cursor.py support begin
+#note: visual studio has no explicit mode for multiple cursors; requires https://marketplace.visualstudio.com/items?itemName=VaclavNadrasky.MultiCaretBooster
+action(user.multi_cursor_add_above): key(shift-alt-up)
+action(user.multi_cursor_add_below): key(shift-alt-down)
+#action(user.multi_cursor_add_to_line_ends): does not exist :(
+action(user.multi_cursor_disable): key(escape)
+action(user.multi_cursor_enable): skip()
+action(user.multi_cursor_select_all_occurrences): key(shift-alt-;)
+action(user.multi_cursor_select_fewer_occurrences): key(shift-alt-k)
+action(user.multi_cursor_select_more_occurrences): key(shift-alt->)
+#multiple_cursor.py support end
 
 # Panels
 panel solution: key(ctrl-alt-l)

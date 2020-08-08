@@ -63,18 +63,13 @@ class user_actions:
     # snippet.py support beginHelp close
     def snippet_search(text: str):
         """TEST"""
-        # actions.user.vscode("Insert Snippet")
-        # actions.insert(text)
+        actions.key("ctrl-k ctrl-x")
 
-    def snippet_insert(text: str):
-        """Inserts a snippet"""
-        # actions.user.vscode("Insert Snippet")
-        # actions.insert(text)
-        # actions.key("enter")
+    # def snippet_insert(text: str):
+    #     """Inserts a snippet"""
 
-    def snippet_create():
-        """Triggers snippet creation"""
-        # actions.user.vscode("Preferences: Configure User Snippets")
+    # def snippet_create():
+    #     """Triggers snippet creation"""
 
     # snippet.py support end
 
