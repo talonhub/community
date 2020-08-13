@@ -21,7 +21,10 @@ simple_vocabulary = [
     "git",
     "user",
     "pandas",
-    "add"
+    "add",
+    "screenshot",
+    "tobii",
+    "the"
 ]
 
 mapping_vocabulary = {
