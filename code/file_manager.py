@@ -89,25 +89,25 @@ if app.platform == "windows":
     # todo use expanduser for cross platform support
     ctx.lists["user.file_manager_directory_remap"] = {
         "Desktop": os.path.join(user_path, "Desktop"),
-        "Downloads": os.path.join(user_path, "Downloads"),
         "Documents": os.path.join(user_path, "Documents"),
-        "Pictures": os.path.join(user_path, "Pictures"),
+        "Downloads": os.path.join(user_path, "Downloads"),
         "Music": os.path.join(user_path, "Music"),
+        "Pictures": os.path.join(user_path, "Pictures"),
     }
 
     if nameBuffer.value:
         ctx.lists["user.file_manager_directory_remap"][nameBuffer.value] = user_path
 
     ctx.lists["user.file_manager_directory_exclusions"] = [
-        "Run",
-        "Task View",
         "",
+        "Run",
         "Task Switching",
+        "Task View",
         "This PC" "File Explorer",
     ]
     supported_programs = [
-        "explorer.exe",
         "cmd.exe",
+        "explorer.exe",
     ]
     terminal_programs = ["cmd.exe"]
 

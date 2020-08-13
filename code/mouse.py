@@ -82,11 +82,9 @@ setting_mouse_wheel_down_amount = mod.setting(
 
 ctx = Context()
 ctx.lists["self.mouse_button"] = {
-    # right click
-    "righty": "1",
-    "rickle": "1",
-    # left click
-    "chiff": "0",
+    "chiff": "0",  # left click
+    "rickle": "1",  # right click
+    "righty": "1",  # right click
 }
 
 continuous_scoll_mode = ""
@@ -117,8 +115,8 @@ class Actions:
 
     def mouse_wake():
         """Enable control mouse, zoom mouse, and disables cursor"""
-        eye_zoom_mouse.zoom_mouse.enable()
-        eye_mouse.control_mouse.enable()
+        eye_zoom_mouse.toggle_zoom_mouse(True)
+        # eye_mouse.control_mouse.enable()
         if setting_mouse_wake_hides_cursor.get() >= 1:
             show_cursor_helper(False)
 
@@ -155,8 +153,8 @@ class Actions:
     def mouse_sleep():
         """Disables control mouse, zoom mouse, and re-enables cursor"""
         global dragging
-        eye_zoom_mouse.zoom_mouse.disable()
-        eye_mouse.control_mouse.disable()
+        eye_zoom_mouse.toggle_zoom_mouse(False)
+        # eye_mouse.control_mouse.disable()
         show_cursor_helper(True)
         stop_scroll()
         if dragging:

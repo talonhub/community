@@ -92,16 +92,12 @@ git (annotate | blame): user.ide_git_annotate()
 git menu: user.ide_git_menu()
 
 # Terminal
-new terminal: user.ide_terminal_new()
-next terminal: user.ide_terminal_focus_next()
-trash terminal: user.ide_terminal_trash()
-(previous | last) terminal: user.ide_terminal_focus_previous()
-terminal scroll up: user.ide_terminal_scroll_up()
-terminal scroll down: user.ide_terminal_scroll_down()
-
-# Tool windows:
-command palette: user.ide_command_palette()
-open containing folder | show in explorer | show in finder: user.ide_reveal_in_file_manager()
+#new terminal: user.ide_terminal_new()
+#next terminal: user.ide_terminal_focus_next()
+#trash terminal: user.ide_terminal_trash()
+#(previous | last) terminal: user.ide_terminal_focus_previous()
+#terminal scroll up: user.ide_terminal_scroll_up()
+#terminal scroll down: user.ide_terminal_scroll_down()
 
 # Toggling various tool windows
 toggle project: user.ide_toggle_project()
