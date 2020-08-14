@@ -222,7 +222,6 @@ def gui_context_help(gui: imgui.GUI):
 
     # if there's a selected context, draw the commands for it
     else:
-        commands = None
         if selected_context is not None:
             draw_context_commands(gui)
         elif search_phrase is not None:
@@ -416,6 +415,7 @@ def refresh_context_command_map(enabled_only=False):
     refresh_rule_word_map(context_command_map)
 
     ctx.lists["self.help_contexts"] = cached_short_context_names
+    # print(str(ctx.lists["self.help_contexts"]))
     sorted_context_map_keys = sorted(cached_short_context_names)
 
 
@@ -529,19 +529,20 @@ class Actions:
     def help_select_index(index: int):
         """Select the context by a number"""
         global sorted_context_map_keys, selected_context
-        if index < setting_help_max_contexts_per_page.get() and (
-            (current_context_page - 1) * setting_help_max_contexts_per_page.get()
-            + index
-            < len(sorted_context_map_keys)
-        ):
-            if selected_context is None:
-                selected_context = ctx.lists["self.help_contexts"][
-                    sorted_context_map_keys[
-                        (current_context_page - 1)
-                        * setting_help_max_contexts_per_page.get()
-                        + index
+        if gui_context_help.showing:
+            if index < setting_help_max_contexts_per_page.get() and (
+                (current_context_page - 1) * setting_help_max_contexts_per_page.get()
+                + index
+                < len(sorted_context_map_keys)
+            ):
+                if selected_context is None:
+                    selected_context = ctx.lists["self.help_contexts"][
+                        sorted_context_map_keys[
+                            (current_context_page - 1)
+                            * setting_help_max_contexts_per_page.get()
+                            + index
+                        ]
                     ]
-                ]
 
     def help_previous():
         """Navigates to previous page"""
