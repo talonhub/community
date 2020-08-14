@@ -215,7 +215,7 @@ class Actions:
     def formatters_clear_last():
         """Clears the last formatted phrase"""
         if len(formatted_phrase_history) > 0:
-            for character in formatted_phrase_history[-1]:
+            for character in formatted_phrase_history[0]:
                 actions.edit.delete()
 
     def formatters_reformat_last(formatters: str) -> str:
