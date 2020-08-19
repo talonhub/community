@@ -1,5 +1,6 @@
 import os
 import re
+import shlex
 import time
 
 from talon import Context, Module, app, imgui, ui, fs
@@ -171,9 +172,11 @@ class Actions:
                 cur_app.focus()
                 break
 
-    def switcher_launch(path: str):
-        """Launch a new application by path"""
-        ui.launch(path=path)
+    def switcher_launch(command: str):
+        """Launch a new application by path and arguments"""
+        paths, *args == shlex.split(command)
+        # TODO: notify the user if this fails (returns False) somehow
+        ui.launch(path=path, args=args)
 
     def switcher_list_running():
         """Lists all running applications"""
