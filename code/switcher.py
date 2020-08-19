@@ -174,7 +174,7 @@ class Actions:
 
     def switcher_launch(command: str):
         """Launch a new application by path and arguments"""
-        paths, *args == shlex.split(command)
+        path, *args == shlex.split(command)
         # TODO: notify the user if this fails (returns False) somehow
         ui.launch(path=path, args=args)
 
