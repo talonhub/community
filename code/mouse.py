@@ -80,13 +80,6 @@ setting_mouse_wheel_down_amount = mod.setting(
     desc="The amount to scroll up/down (equivalent to mouse wheel on Windows by default)",
 )
 
-ctx = Context()
-ctx.lists["self.mouse_button"] = {
-    "chiff": "0",  # left click
-    "rickle": "1",  # right click
-    "righty": "1",  # right click
-}
-
 continuous_scoll_mode = ""
 
 
@@ -96,11 +89,6 @@ def gui_wheel(gui: imgui.GUI):
     gui.line()
     if gui.button("Wheel Stop [stop scrolling]"):
         actions.user.mouse_scroll_stop()
-
-
-@mod.capture
-def mouse_index(m) -> int:
-    "One mouse button index"
 
 
 @mod.action_class
@@ -325,8 +313,3 @@ def start_cursor_scrolling():
     gaze_job = cron.interval("60ms", gaze_scroll)
     # if eye_zoom_mouse.zoom_mouse.enabled and eye_mouse.mouse.attached_tracker is not None:
     #    eye_zoom_mouse.zoom_mouse.sleep(True)
-
-
-@ctx.capture(rule="{self.mouse_button}")
-def mouse_index(m) -> int:
-    return int(m.mouse_button)
