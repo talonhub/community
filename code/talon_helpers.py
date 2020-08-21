@@ -20,7 +20,7 @@ class Actions:
 
         executable = actions.app.executable().split(os.path.sep)[-1]
         if app.platform != "windows" or friendly_name == executable:
-            result = 'mod.app.{} = """\nos: {}\nand app: {}\n"""'.format(
+            result = 'mod.app.{} = """\nos: {}\nand app.name: {}\n"""'.format(
                 create_name(friendly_name), app.platform, friendly_name
             )
 
