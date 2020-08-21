@@ -19,14 +19,18 @@ class Actions:
         friendly_name = actions.app.name()
 
         executable = actions.app.executable().split(os.path.sep)[-1]
-        if app.platform != "windows" or friendly_name == executable:
-            result = 'mod.app.{} = """\nos: {}\nand app.name: {}\n"""'.format(
+        if app.platform == "mac":
+            result = 'mod.apps.{} = """\nos: {}\nand app.bundle: {}\n"""'.format(
+                create_name(friendly_name), app.platform, actions.app.bundle()
+            )
+        elif app.platform != "windows" or friendly_name == executable:
+            result = 'mod.apps.{} = """\nos: {}\nand app.name: {}\n"""'.format(
                 create_name(friendly_name), app.platform, friendly_name
             )
 
         # on windows, it's best to include both the friendly name and executable name in case the muicache breaks....
         else:
-            result = 'mod.app.{} = """\nos: {}\nand app: {}\nos: {}\nand app: {}\n"""'.format(
+            result = 'mod.apps.{} = """\nos: {}\nand app: {}\nos: {}\nand app: {}\n"""'.format(
                 create_name(friendly_name),
                 app.platform,
                 friendly_name,
