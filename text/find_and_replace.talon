@@ -1,4 +1,4 @@
-tag: find_and_replace
+tag: user.find_and_replace
 -
 hunt this: user.find("")
 hunt this <user.text>: user.find(text)

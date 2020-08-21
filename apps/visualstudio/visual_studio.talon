@@ -2,11 +2,11 @@ os: windows
 app: Microsoft Visual Studio 2019
 app: devenv.exe
 -
-tag(): tabs
-tag(): line_commands
-tag(): find_and_replace
-tag(): snippets
-tag(): multiple_cursors
+tag(): user.tabs
+tag(): user.line_commands
+tag(): user.find_and_replace
+tag(): user.snippets
+tag(): user.multiple_cursors
 
 #talon app actions
 action(app.tab_close): key(ctrl-f4)

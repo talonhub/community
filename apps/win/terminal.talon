@@ -4,7 +4,7 @@ app: cmd.exe
 app: WindowsTerminal.exe
 -
 tag(): terminal
-tag(): file_manager
+tag(): user.file_manager
 
 run last: key(up enter)
 
@@ -27,3 +27,4 @@ action(user.file_manager_open_parent):
     insert("cd ..")
     key(enter)
     user.file_manager_refresh_title()
+

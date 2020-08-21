@@ -4,7 +4,7 @@ os: linux
 tag: terminal
 mode: user.gdb
 -
-tag(): gdb
+tag(): user.gdb
 
 # information
 list [source]: "list\n"

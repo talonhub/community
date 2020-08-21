@@ -21,7 +21,6 @@ go settings: insert("gs")
 go book marks: insert("gb")
 go to user: insert("gu")
 display settings: insert("gd")
-
 # actions
 new tweet: key(n)
 send tweet: key(ctrl-enter)

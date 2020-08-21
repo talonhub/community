@@ -1,4 +1,4 @@
-tag: tabs
+tag: user.tabs
 -
 tab (open | new): app.tab_open()
 tab last: app.tab_previous()

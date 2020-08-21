@@ -1,9 +1,9 @@
 app: Notepad++ : a free (GNU) source code editor
 app: notepad++.exe
 -
-tag(): find_and_replace
-tag(): line_commands
-tag(): tabs
+tag(): user.find_and_replace
+tag(): user.line_commands
+tag(): user.tabs
 action(app.tab_previous):
 	key(ctrl-pageup)
 action(app.tab_next):

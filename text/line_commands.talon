@@ -1,4 +1,4 @@
-tag: line_commands
+tag: user.line_commands
 -
 <user.selection_verbs> word: user.select_word(selection_verbs)
 <user.selection_verbs> whole line <number>: user.select_whole_line(selection_verbs, number)

@@ -4,7 +4,7 @@ app: MicrosoftEdge.exe
 app: msedge.exe
 -
 tag(): browser
-tag(): tabs
+tag(): user.tabs
 #action(browser.address):
 
 action(browser.bookmark):

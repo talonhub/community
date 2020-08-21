@@ -4,7 +4,7 @@ app: iTerm2
 app: com.apple.Terminal
 -
 tag(): terminal
-tag(): file_manager
+tag(): user.file_manager
 action(user.file_manager_open_parent):
     insert("cd ..")
     key(enter)
