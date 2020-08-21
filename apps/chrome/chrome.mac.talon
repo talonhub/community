@@ -1,5 +1,5 @@
 os: mac
-app: Google Chrome
+app: chrome
 -
 tag(): browser
 tag(): user.tabs

@@ -1,9 +1,5 @@
 #custom vscode commands go here
-app: Code
-app: Code - OSS
-app: Code
-app: Visual Studio Code
-app: Code.exe
+app: vscode
 -
 tag(): user.find_and_replace
 tag(): user.line_commands
@@ -193,8 +189,8 @@ terminal scroll up: user.vscode("Terminal:ScrollUp")
 terminal scroll down: user.vscode("Terminal:ScrollDown")
 
 #TODO: should this be added to linecommands?
-copy [line] down: user.vscode("editor.action.copyLinesDownAction")
-copy [line] up: user.vscode("editor.action.copyLinesUpAction")
+copy line down: user.vscode("editor.action.copyLinesDownAction")
+copy line up: user.vscode("editor.action.copyLinesUpAction")
 
 #todo: wtf?
 #select less: user.vscode("Shrink Selection")

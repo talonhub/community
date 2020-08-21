@@ -1,6 +1,4 @@
-app: 1Password.exe
-app: 1Password for Windows desktop
-app: com.agilebits.onepassword7
+app: one_password
 -
 password new: user.password_new()
 password dup: user.password_duplicate()

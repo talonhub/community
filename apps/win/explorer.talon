@@ -1,6 +1,4 @@
-os: windows
-app: Windows Explorer
-app: explorer.exe
+app: windows_explorer
 -
 tag(): user.file_manager
 action(user.file_manager_go_back):

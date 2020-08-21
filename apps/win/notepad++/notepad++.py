@@ -1,10 +1,18 @@
 from talon import Context, actions, ui, Module
 
+mod = Module()
 ctx = Context()
 
+apps = mod.apps
+apps.notepad_plus_plus = """
+os: windows
+and app.name: Notepad++ : a free (GNU) source code editor
+os: windows
+and app.name: notepad++.exe
+"""
+
 ctx.matches = r"""
-app: Notepad++ : a free (GNU) source code editor
-app: notepad++.exe
+app: notepad_plus_plus
 """
 
 

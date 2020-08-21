@@ -1,7 +1,4 @@
-os: mac
-app: Terminal
-app: iTerm2
-app: com.apple.Terminal
+app: apple_terminal
 -
 tag(): terminal
 tag(): user.file_manager

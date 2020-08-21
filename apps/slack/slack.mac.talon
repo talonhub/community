@@ -1,5 +1,5 @@
 os: mac
-app: Slack
+app: slack
 -
 # Workspace
 workspace <number>: key("cmd-{number}")

@@ -1,5 +1,5 @@
 os: mac
-app: com.apple.finder
+app: finder
 -
 tag(): user.file_manager
 

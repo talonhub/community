@@ -1,6 +1,4 @@
-os: linux
-app: /termite/
-not win.title: /VIM/
+app: termite
 -
 tag(): user.terminal
 

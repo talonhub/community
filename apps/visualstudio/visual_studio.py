@@ -15,10 +15,17 @@ from typing import List, Union
 ctx = Context()
 mod = Module()
 
-ctx.matches = r"""
+apps = mod.apps
+apps.visual_studio = """
 os: windows
-app: Microsoft Visual Studio 2019
-app: devenv.exe
+and app.name: Microsoft Visual Studio 2019
+os: windows
+and app.name: devenv.exe
+"""
+
+
+ctx.matches = r"""
+app: visual_studio
 """
 
 

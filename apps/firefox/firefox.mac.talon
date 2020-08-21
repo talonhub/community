@@ -1,5 +1,5 @@
 os: mac
-app: Firefox
+app: firefox
 -
 tag(): browser
 tag(): user.tabs

@@ -1,6 +1,5 @@
 os: windows
-app: Google Chrome
-app: chrome.exe
+app: chrome
 -
 tag(): browser
 tag(): user.tabs

@@ -1,6 +1,4 @@
-os: linux
-app: /Teams/
-app: /teams/
+app: microsoft_teams
 -
 
 # Shortcut reference

@@ -137,6 +137,16 @@ mod = Module()
 mod.list("select_verbs", desc="Verbs for selecting in the IDE")
 mod.list("movement_verbs", desc="Verbs for navigating the IDE")
 
+mod.apps.jetbrains = "app.name: /jetbrains/"
+mod.apps.jetbrains = "app.name: IntelliJ IDEA"
+mod.apps.jetbrains = "app.name: PyCharm"
+
+# windows
+mod.apps.jetbrains = "app.name: idea64.exe"
+mod.apps.jetbrains = "app.name: PyCharm64.exe"
+mod.apps.jetbrains = "app.name: pycharm64.exe"
+mod.apps.jetbrains = "app.name: webstorm64.exe"
+
 
 @mod.action_class
 class Actions:
@@ -185,13 +195,7 @@ class Actions:
 
 
 ctx.matches = r"""
-app: /jetbrains/
-app: IntelliJ IDEA
-app: idea64.exe
-app: PyCharm
-app: PyCharm64.exe
-app: pycharm64.exe
-app: webstorm64.exe
+app: jetbrains
 """
 
 

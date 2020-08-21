@@ -1,11 +1,5 @@
 # Requires https://plugins.jetbrains.com/plugin/10504-voice-code-idea
-app: /jetbrains/
-app: IntelliJ IDEA
-app: idea64.exe
-app: PyCharm
-app: PyCharm64.exe
-app: pycharm64.exe
-app: webstorm64.exe
+app: jetbrains
 -
 tag(): user.line_commands
 tag(): user.multiple_cursors

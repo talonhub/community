@@ -1,5 +1,4 @@
-os: mac
-app: Safari
+app: safari
 -
 tag(): user.browser
 tag(): user.tabs

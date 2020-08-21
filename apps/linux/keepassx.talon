@@ -1,11 +1,5 @@
-app: KeePassX2
-app: KeePassXC
-app: Keepassx2
-app: keepassx2
-app: keepassxc
-app: Keepassxc
+app: keepass
 -
-
 # Database
 open database: key(ctrl-o)
 save database: key(ctrl-s)

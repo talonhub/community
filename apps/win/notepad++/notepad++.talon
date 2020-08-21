@@ -1,5 +1,4 @@
-app: Notepad++ : a free (GNU) source code editor
-app: notepad++.exe
+app: notepad_plus_plus
 -
 tag(): user.find_and_replace
 tag(): user.line_commands

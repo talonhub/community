@@ -1,6 +1,5 @@
 os: windows
-app: Firefox
-app: firefox.exe
+app: firefox
 -
 tag(): browser
 tag(): user.tabs

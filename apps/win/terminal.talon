@@ -1,7 +1,5 @@
-os: windows
-app: Windows Command Processor
-app: cmd.exe
-app: WindowsTerminal.exe
+app: windows_terminal
+app: windows_command_processor
 -
 tag(): terminal
 tag(): user.file_manager

@@ -1,11 +1,12 @@
 from talon import ctrl, ui, Module, Context, actions, clip, app
 
 ctx = Context()
-ctx.matches = r"""
-app: Microsoft Edge
-app: MicrosoftEdge.exe
-app: msedge.exe
-"""
+mod = Module()
+
+# 1password
+mod.apps.microsoft_edge = "app.name: Microsoft Edge"
+mod.apps.microsoft_edge = "app.name: MicrosoftEdge.exe"
+mod.apps.microsoft_edge = "app.name: msedge.exe"
 
 
 @ctx.action_class("user")
