@@ -1,5 +1,6 @@
 from talon import Context, actions, ui, Module, app
-from user.knausj_talon.code.snippet_watcher import snippet_watcher
+
+# from user.knausj_talon.code.snippet_watcher import snippet_watcher
 import os
 
 ctx = Context()
