@@ -16,12 +16,21 @@ action(app.tab_close): user.idea("action CloseActiveTab")
 action(code.toggle_comment): user.idea("action CommentByLineComment")
 
 #talon edit actions
+action(edit.copy): user.idea("action EditorCopy")
+action(edit.cut): user.idea("action EditorCut")
+action(edit.delete): user.idea("action EditorBackSpace")
+action(edit.paste): user.idea("action EditorPaste")
 action(edit.find_next): user.idea("action FindNext")
 action(edit.find_previous): user.idea("action FindPrevious")
 action(edit.find): user.idea("action Find")
 action(edit.line_clone):  user.idea("action EditorDuplicate")
 action(edit.line_swap_down):  user.idea("action MoveLineDown")
 action(edit.line_swap_up):  user.idea("action MoveLineUp")
+action(edit.indent_more): user.idea("action EditorIndentLineOrSelection")
+action(edit.indent_less): user.idea("action EditorUnindentSelection")
+action(edit.select_line): user.idea("action EditorLineStart, action EditorLineEndWithSelection")
+action(edit.select_word): user.idea("action EditorSelectWord")
+action(edit.select_all): user.idea("action $SelectAll")
 
 # splits.py support begin
 action(user.split_clear_all): user.idea("action UnsplitAll")
@@ -238,9 +247,32 @@ continue: user.idea("action Resume")
 (grow | shrink) window up: user.idea("action ResizeToolWindowUp")
 (grow | shrink) window down: user.idea("action ResizeToolWindowDown")
 # Movement
-<user.navigation_verbs> next (error | air): user.idea_movement(navigation_verbs, "action GotoNextError")
-<user.navigation_verbs> last (error | air): user.idea_movement(navigation_verbs, "action GotoPreviousError")
-<user.navigation_verbs> this: user.idea_movement(navigation_verbs, "")
+go next (error | air): user.idea("action GotoNextError")
+go last (error | air): user.idea("action GotoPreviousError")
+fix next (error | air): 
+  user.idea("action GotoNextError")
+  user.idea("action ShowIntentionActions")
+fix last (error | air): 
+  user.idea("action GotoPreviousError")
+  user.idea("action ShowIntentionActions")
 # Special Selects
 select less: user.idea("action EditorUnSelectWord")
 select (more|this): user.idea("action EditorSelectWord")
+#jet brains-specific line commands. see line_commands.talon for generic ones
+expand <number> until <number>:
+  user.select_range(number_1, number_2)
+  user.idea("action ExpandRegion")
+collapse <number> until <number>:
+  user.select_range(number_1, number_2)
+  user.idea("action CollapseRegion")
+paste <number> until <number>:
+  user.select_range(number_1, number_2)
+  user.idea("action EditorPaste")
+refactor <number> until <number>:
+  user.select_range(number_1, number_2)
+  user.idea("action Refactorings.QuickListPopupAction")
+clone <number>: user.line_clone(number)
+select camel left: user.extend_camel_left()
+select camel right: user.extend_camel_right()
+go camel left: user.camel_left()
+go camel right: user.camel_right()
