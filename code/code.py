@@ -224,6 +224,9 @@ class Actions:
     def code_operator_bitwise_right_shift_assignment():
         """code_operator_bitwise_right_shift_assignment"""
 
+    def code_block():
+        """Inserts equivalent of {\n} for the active language, and places the cursor appropriately"""
+
     def code_self():
         """Inserts the equivalent of "this" in C++ or self in python"""
 
