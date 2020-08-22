@@ -22,6 +22,10 @@ show cache: browser.show_clear_cache()
 
 dev tools: browser.toggle_dev_tools()
 
+link: key("l")
+my work8 google: key(ctrl-alt-cmd-shift-1)
+my personal google: key(ctrl-alt-cmd-shift-2)
+
 #todo - port to apps
 # navigating current page
 # help: key(?)
