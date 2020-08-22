@@ -139,38 +139,37 @@ clear way down:
 copy all: 
     edit.select_all()
     edit.copy()
-# copy left: 
-#     edit.extend_left()
-#     edit.copy()
-# copy right: 
-#     edit.extend_right()
-#     edit.copy()
-# copy up: 
-#     edit.extend_up()
-#     edit.copy()
-# copy down: 
-#     edit.extend_down()
-#     edit.copy()
+copy left: 
+     edit.extend_left()
+     edit.copy()
+copy right: 
+    edit.extend_right()
+    edit.copy()
+copy up: 
+    edit.extend_up()
+    edit.copy()
+copy down: 
+    edit.extend_down()
+    edit.copy()
 copy word left: 
     edit.extend_word_left()
     edit.copy()
 copy word right: 
     edit.extend_word_right()
     edit.copy()
-
 #cut commands
-cut all: 
+cut everything: 
     edit.select_all()
     edit.cut()
-#to do: do we want these variants? seem u
+#to do: do we want these variant
 # cut left: 
-#     edit.select_all()
-#     edit.cut()
+#      edit.select_all()
+#      edit.cut()
 # cut right: 
-#     edit.select_all()
-#     edit.cut()
+#      edit.select_all()
+#      edit.cut()
 # cut up: 
-#     edit.select_all()
+#      edit.select_all()
 #     edit.cut()
 # cut down: 
 #     edit.select_all()
