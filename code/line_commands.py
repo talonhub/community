@@ -6,30 +6,6 @@ from pathlib import Path
 from talon import ctrl, ui, Module, Context, actions, clip
 import tempfile
 
-select_verbs_map = {
-    "select": [],
-    "copy": [actions.edit.copy],
-    "cut": [actions.edit.cut],
-    "clear": [actions.edit.delete],
-    "comment": [actions.code.toggle_comment],
-    "replace": [actions.edit.paste],
-    # TODO: figure these out
-    # "expand": [actions.user.ide_expand_region],
-    # "collapse": [actions.user.ide_collapse_region],
-    # "refactor": [actions.user.ide_refactor_in_line],
-    # "rename": [actions.user.ide_refactor_rename],
-    "indent": [actions.edit.indent_more],
-    "unindent": [actions.edit.indent_less],
-    "drag up": [actions.edit.line_swap_up],
-    "drag down": [actions.edit.line_swap_down],
-}
-
-movement_verbs_map = {
-    "go": [],
-    "paste": [actions.edit.paste],
-}
-
-ctx = Context()
 mod = Module()
 
 mod.tag(
@@ -52,7 +28,6 @@ class Actions:
         for i in range(0, number_of_lines):
             actions.edit.extend_line_down()
         actions.edit.extend_line_end()
-        # actions.user.perform_selection_action(verb)
 
     def line_clone(line: int):
         """Clones specified line at current position"""

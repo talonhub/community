@@ -28,6 +28,7 @@ action(edit.line_swap_down):  user.idea("action MoveLineDown")
 action(edit.line_swap_up):  user.idea("action MoveLineUp")
 action(edit.indent_more): user.idea("action EditorIndentLineOrSelection")
 action(edit.indent_less): user.idea("action EditorUnindentSelection")
+action(edit.select_line): user.idea("action EditorLineStart, action EditorLineEndWithSelection")
 action(edit.select_word): user.idea("action EditorSelectWord")
 action(edit.select_all): user.idea("action $SelectAll")
 
@@ -257,7 +258,6 @@ fix last (error | air):
 # Special Selects
 select less: user.idea("action EditorUnSelectWord")
 select (more|this): user.idea("action EditorSelectWord")
-
 expand <number> until <number>:
   user.select_range(number_1, number_2)
   user.idea("action ExpandRegion")
@@ -272,4 +272,7 @@ refactor <number> until <number>:
   user.idea("action Refactorings.QuickListPopupAction")
 rename <number> until <number>:
   user.select_range(number_1, number_2)
+  user.idea("action RenameElement")
+rename <number>:
+  user.select_range(number_1, number_1)
   user.idea("action RenameElement")

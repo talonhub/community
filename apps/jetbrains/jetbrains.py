@@ -134,6 +134,10 @@ mod.apps.jetbrains = "app.name: idea64.exe"
 mod.apps.jetbrains = "app.name: PyCharm64.exe"
 mod.apps.jetbrains = "app.name: pycharm64.exe"
 mod.apps.jetbrains = "app.name: webstorm64.exe"
+mod.apps.jetbrains = """
+os: mac
+and app.bundle: com.jetbrains.pycharm
+"""
 
 
 @mod.action_class
@@ -141,12 +145,6 @@ class Actions:
     def idea(commands: str):
         """Send a command to Jetbrains product"""
         idea_commands(commands)
-
-    def idea_movement(movement_verb: str, commands: str):
-        """Do a select movement, then the specified commands"""
-        command_list = ",".join(commands.split(",") + movement_verbs_map[movement_verb])
-        print(command_list)
-        idea_commands(command_list)
 
     def idea_grab(times: int):
         """Copies specified number of words to the left"""
@@ -162,18 +160,6 @@ class Actions:
             clip.set(old_clip)
             global extendCommands
             extendCommands = []
-
-    def extend_action(number: str):
-        """Repeat previous actions up to number of times"""
-        global extendCommands
-        count = max(int(number), 1)
-        for _ in range(count):
-            for cmd in extendCommands:
-                send_idea_command(cmd)
-
-    def set_extended_actions(commands: str):
-        """Adds specified commands to the list of commands to repeat"""
-        set_extend(commands.split(","))
 
 
 ctx.matches = r"""
@@ -204,11 +190,8 @@ class user_actions:
     #         verbs, "find next {}, action EditorRight".format(text)
     #     )
 
-    # def move_previous_occurrence(verbs: str, text: str):
-    #     actions.user.idea_select(verbs, "find prev {}, action EditorRight".format(text))
-
-    # def select_word(verb: str):
-    #     actions.user.idea_select(verb, "action EditorSelectWord")
+    # def move_previous_occurrence(text: str):
+    #     actions.user.idea_select("find prev {}, action EditorRight".format(text))
 
     # def select_whole_line(verb: str, line: int):
     #     actions.user.idea_select(
@@ -229,34 +212,32 @@ class user_actions:
     #     )
 
     def select_until_line(verb: str, line: int):
-        actions.user.idea_select(verb, "extend {}".format(line))
+        actions.user.idea("extend {}".format(line))
 
     def select_range(line_start: int, line_end: int):
-        actions.user.idea_select("range {} {}".format(line_start, line_end))
+        actions.user.idea("range {} {}".format(line_start, line_end))
 
-    def select_camel_left(verb: str):
-        actions.user.idea_select(
-            verb, "action EditorPreviousWordInDifferentHumpsModeWithSelection"
-        )
+    # def select_camel_left(verb: str):
+    #     actions.user.idea("action EditorPreviousWordInDifferentHumpsModeWithSelection")
 
-    def select_camel_right(verb: str):
-        actions.user.idea_select(
-            verb, "action EditorNextWordInDifferentHumpsModeWithSelection"
-        )
+    # def select_camel_right(verb: str):
+    #     actions.user.idea(
+    #         verb, "action EditorNextWordInDifferentHumpsModeWithSelection"
+    #     )
 
-    def select_word_left(verb: str):
-        actions.user.idea_select(verb, "action EditorPreviousWordWithSelection")
+    # def select_word_left(verb: str):
+    #     actions.user.idea_select(verb, "action EditorPreviousWordWithSelection")
 
-    def select_word_right(verb: str):
-        actions.user.idea_select(verb, "action EditorNextWordWithSelection")
+    # def select_word_right(verb: str):
+    #     actions.user.idea_select(verb, "action EditorNextWordWithSelection")
 
-    def move_camel_left(verb: str):
-        actions.user.idea_movement(
-            verb, "action EditorPreviousWordInDifferentHumpsMode"
-        )
+    # def move_camel_left(verb: str):
+    #     actions.user.idea_movement(
+    #         verb, "action EditorPreviousWordInDifferentHumpsMode"
+    #     )
 
-    def move_camel_right(verb: str):
-        actions.user.idea_movement(verb, "action EditorNextWordInDifferentHumpsMode")
+    # def move_camel_right(verb: str):
+    #     actions.user.idea_movement(verb, "action EditorNextWordInDifferentHumpsMode")
 
     def line_clone(line: int):
         actions.user.idea("clone {}".format(line))
