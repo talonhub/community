@@ -80,33 +80,33 @@ class user_actions:
 
     # snippet.py support end
 
-    def select_word(verb: str):
-        actions.key("ctrl-w")
-        actions.user.perform_selection_action(verb)
+    # def select_word(verb: str):
+    #     actions.key("ctrl-w")
+    #     actions.user.perform_selection_action(verb)
 
-    def select_next_occurrence(verbs: str, text: str):
-        actions.edit.find(text)
-        actions.sleep("100ms")
+    # def select_next_occurrence(verbs: str, text: str):
+    #     actions.edit.find(text)
+    #     actions.sleep("100ms")
 
-        actions.key("esc")
-        if verbs is not None:
-            actions.user.perform_selection_action(verbs)
+    #     actions.key("esc")
+    #     if verbs is not None:
+    #         actions.user.perform_selection_action(verbs)
 
-    def select_previous_occurrence(verbs: str, text: str):
-        actions.edit.find(text)
-        actions.key("shift-enter")
-        actions.sleep("100ms")
-        actions.key("esc")
-        if verbs is not None:
-            actions.user.perform_selection_action(verbs)
+    # def select_previous_occurrence(verbs: str, text: str):
+    #     actions.edit.find(text)
+    #     actions.key("shift-enter")
+    #     actions.sleep("100ms")
+    #     actions.key("esc")
+    #     if verbs is not None:
+    #         actions.user.perform_selection_action(verbs)
 
-    def go_to_line(verb: str, line: int):
-        actions.key("ctrl-g")
-        actions.insert(str(line))
-        actions.key("enter")
+    # def go_to_line(verb: str, line: int):
+    #     actions.key("ctrl-g")
+    #     actions.insert(str(line))
+    #     actions.key("enter")
 
-        if verb is not None:
-            actions.user.perform_movement_action(verb)
+    #     if verb is not None:
+    #         actions.user.perform_movement_action(verb)
 
     # def tab_jump(number: int):
     #     if number < 10:

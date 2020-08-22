@@ -51,28 +51,19 @@ port_mapping = {
     "webstorm64.exe": 8663,
 }
 
-select_verbs_map = {
-    "clear": ["action EditorBackSpace"],
-    "collapse": ["action CollapseRegion"],
-    "comment": ["action CommentByLineComment"],
-    "copy": ["action EditorCopy"],
-    "cut": ["action EditorCut"],
-    "drag down": ["action MoveLineDown"],
-    "drag up": ["action MoveLineUp"],
-    "expand": ["action ExpandRegion"],
-    "indent": ["action EditorIndentLineOrSelection"],
-    "refactor": ["action Refactorings.QuickListPopupAction"],
-    "rename": ["action RenameElement"],
-    "replace": ["action EditorPaste"],
-    "select": [],
-    "unindent": ["action EditorUnindentSelection"],
-}
+# select_verbs_map = {
+#     "clear": [],
+#     "collapse": [,
+#     "expand": [],
+#     "refactor": [],
+#     "rename": [,
+# }
 
-movement_verbs_map = {
-    "fix": ["action ShowIntentionActions"],
-    "go": [],
-    "paste": ["action EditorPaste"],
-}
+# movement_verbs_map = {
+#     "fix": ["action ShowIntentionActions"],
+#     "go": [],
+#     "paste": ["action EditorPaste"],
+# }
 
 
 def set_extend(*commands):
@@ -134,9 +125,6 @@ def idea_commands(commands):
 ctx = Context()
 mod = Module()
 
-mod.list("select_verbs", desc="Verbs for selecting in the IDE")
-mod.list("movement_verbs", desc="Verbs for navigating the IDE")
-
 mod.apps.jetbrains = "app.name: /jetbrains/"
 mod.apps.jetbrains = "app.name: IntelliJ IDEA"
 mod.apps.jetbrains = "app.name: PyCharm"
@@ -153,12 +141,6 @@ class Actions:
     def idea(commands: str):
         """Send a command to Jetbrains product"""
         idea_commands(commands)
-
-    def idea_select(select_verb: str, commands: str):
-        """Do a select command, then the specified commands"""
-        command_list = ",".join(commands.split(",") + select_verbs_map[select_verb])
-        print(command_list)
-        idea_commands(command_list)
 
     def idea_movement(movement_verb: str, commands: str):
         """Do a select movement, then the specified commands"""
@@ -199,82 +181,58 @@ app: jetbrains
 """
 
 
+@ctx.action_class("edit")
+class edit_actions:
+    def jump_line(n: int):
+        actions.user.idea("goto {} 0".format(n))
+
+
 @ctx.action_class("user")
 class user_actions:
     def tab_jump(number: int):
         if number < 10:
             actions.user.idea("action GoToTab{}".format(number))
 
-    def perform_selection_action(verb: str):
-        """Performs selection action defined for context"""
-        acts = select_verbs_map[verb]
-        for act in acts:
-            act()
+    # def select_next_occurrence(verbs: str, text: str):
+    #     actions.user.idea_select(verbs, "find next {}".format(text))
 
-    def perform_movement_action(verb: str):
-        """Performs movement action defined for context"""
-        acts = movement_verbs_map[verb]
-        for act in acts:
-            act()
+    # def select_previous_occurrence(verbs: str, text: str):
+    #     actions.user.idea_select(verbs, "find prev {}".format(text))
 
-    def select_next_occurrence(verbs: str, text: str):
-        actions.user.idea_select(verbs, "find next {}".format(text))
+    # def move_next_occurrence(verbs: str, text: str):
+    #     actions.user.idea_movement(
+    #         verbs, "find next {}, action EditorRight".format(text)
+    #     )
 
-    def select_previous_occurrence(verbs: str, text: str):
-        actions.user.idea_select(verbs, "find prev {}".format(text))
+    # def move_previous_occurrence(verbs: str, text: str):
+    #     actions.user.idea_select(verbs, "find prev {}, action EditorRight".format(text))
 
-    def move_next_occurrence(verbs: str, text: str):
-        actions.user.idea_movement(
-            verbs, "find next {}, action EditorRight".format(text)
-        )
+    # def select_word(verb: str):
+    #     actions.user.idea_select(verb, "action EditorSelectWord")
 
-    def move_previous_occurrence(verbs: str, text: str):
-        actions.user.idea_select(verbs, "find prev {}, action EditorRight".format(text))
+    # def select_whole_line(verb: str, line: int):
+    #     actions.user.idea_select(
+    #         verb, "goto {} 0, action EditorSelectLine".format(line)
+    #     )
 
-    def go_to_line(verb: str, line: int):
-        actions.user.idea_movement(verb, "goto {} 0".format(line))
+    # def select_current_line(verb: str):
+    #     actions.user.idea_select(
+    #         verb, "action EditorLineStart, action EditorLineEndWithSelection"
+    #     )
 
-    def go_to_line_end(verb: str, line: int):
-        actions.user.idea_movement(verb, "goto {} 9999".format(line))
-
-    def select_word(verb: str):
-        actions.user.idea_select(verb, "action EditorSelectWord")
-
-    def select_whole_line(verb: str, line: int):
-        actions.user.idea_select(
-            verb, "goto {} 0, action EditorSelectLine".format(line)
-        )
-
-    def select_current_line(verb: str):
-        actions.user.idea_select(
-            verb, "action EditorLineStart, action EditorLineEndWithSelection"
-        )
-
-    def select_line(verb: str, line: int):
-        actions.user.idea_select(
-            verb,
-            "goto {} 0, action EditorLineStart, action EditorLineEndWithSelection".format(
-                line
-            ),
-        )
+    # def select_line(verb: str, line: int):
+    #     actions.user.idea_select(
+    #         verb,
+    #         "goto {} 0, action EditorLineStart, action EditorLineEndWithSelection".format(
+    #             line
+    #         ),
+    #     )
 
     def select_until_line(verb: str, line: int):
         actions.user.idea_select(verb, "extend {}".format(line))
 
     def select_range(line_start: int, line_end: int):
-        actions.user.idea_select(verb, "range {} {}".format(line_start, line_end))
-
-    def select_way_left(verb: str):
-        actions.user.idea_select(verb, "action EditorLineStartWithSelection")
-
-    def select_way_right(verb: str):
-        actions.user.idea_select(verb, "action EditorLineEndWithSelection")
-
-    def select_way_up(verb: str):
-        actions.user.idea_select(verb, "action EditorTextStartWithSelection")
-
-    def select_way_down(verb: str):
-        actions.user.idea_select(verb, "action EditorTextEndWithSelection")
+        actions.user.idea_select("range {} {}".format(line_start, line_end))
 
     def select_camel_left(verb: str):
         actions.user.idea_select(
@@ -285,21 +243,6 @@ class user_actions:
         actions.user.idea_select(
             verb, "action EditorNextWordInDifferentHumpsModeWithSelection"
         )
-
-    def select_all(verb: str):
-        actions.user.idea_select(verb, "action $SelectAll")
-
-    def select_left(verb: str):
-        actions.user.idea_select(verb, "action EditorLeftWithSelection")
-
-    def select_right(verb: str):
-        actions.user.idea_select(verb, "action EditorRightWithSelection")
-
-    def select_up(verb: str):
-        actions.user.idea_select(verb, "action EditorUpWithSelection")
-
-    def select_down(verb: str):
-        actions.user.idea_select(verb, "action EditorDownWithSelection")
 
     def select_word_left(verb: str):
         actions.user.idea_select(verb, "action EditorPreviousWordWithSelection")
@@ -317,8 +260,4 @@ class user_actions:
 
     def line_clone(line: int):
         actions.user.idea("clone {}".format(line))
-
-
-ctx.lists["user.selection_verbs"] = select_verbs_map.keys()
-ctx.lists["user.navigation_verbs"] = movement_verbs_map.keys()
 

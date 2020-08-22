@@ -5,10 +5,10 @@ is_mac = app.platform == "mac"
 
 ctx = Context()
 mod = Module()
-mod.apps.vscode = "app.name: Code.exe"
-mod.apps.vscode = "app.name: Visual Studio Code"
-mod.apps.vscode = "app.name: Code"
-mod.apps.vscode = "app.name: Code - OSS"
+mod.apps.vscode = """
+os: mac
+and app.bundle: com.microsoft.VSCode
+"""
 
 ctx.matches = r"""
 app: vscode
@@ -39,6 +39,11 @@ class win_actions:
 
 @ctx.action_class("edit")
 class edit_actions:
+    def jump_line(n: int):
+        actions.user.vscode("workbench.action.gotoLine")
+        actions.insert(str(n))
+        actions.key("enter")
+
     def find(text: str):
         if is_mac:
             actions.key("cmd-f")
@@ -104,35 +109,27 @@ class user_actions:
 
     # snippet.py support end
 
-    def select_word(verb: str):
-        if not is_mac:
-            actions.key("ctrl-d")
-        else:
-            actions.key("cmd-d")
-        actions.user.perform_selection_action(verb)
+    # def select_word(verb: str):
+    #     if not is_mac:
+    #         actions.key("ctrl-d")
+    #     else:
+    #         actions.key("cmd-d")
+    #     actions.user.perform_selection_action(verb)
 
-    def select_next_occurrence(verbs: str, text: str):
-        actions.edit.find(text)
-        actions.sleep("100ms")
-        actions.key("esc")
-        if verbs is not None:
-            actions.user.perform_selection_action(verbs)
+    # def select_next_occurrence(verbs: str, text: str):
+    #     actions.edit.find(text)
+    #     actions.sleep("100ms")
+    #     actions.key("esc")
+    #     if verbs is not None:
+    #         actions.user.perform_selection_action(verbs)
 
-    def select_previous_occurrence(verbs: str, text: str):
-        actions.edit.find(text)
-        actions.key("shift-enter")
-        actions.sleep("100ms")
-        actions.key("esc")
-        if verbs is not None:
-            actions.user.perform_selection_action(verbs)
-
-    def go_to_line(verb: str, line: int):
-        actions.user.vscode("workbench.action.gotoLine")
-        actions.insert(str(line))
-        actions.key("enter")
-
-        if verb is not None:
-            actions.user.perform_movement_action(verb)
+    # def select_previous_occurrence(verbs: str, text: str):
+    #     actions.edit.find(text)
+    #     actions.key("shift-enter")
+    #     actions.sleep("100ms")
+    #     actions.key("esc")
+    #     if verbs is not None:
+    #         actions.user.perform_selection_action(verbs)
 
     def tab_jump(number: int):
         if number < 10:
