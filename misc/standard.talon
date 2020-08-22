@@ -22,32 +22,32 @@ word iter: "iter"
 word no: "NULL"
 word cmd: "cmd"
 word dup: "dup"
-word streak: 
-	insert("streq()") 
+word streak:
+	insert("streq()")
 	key(left)
 word printf: "printf"
 word shell: "shell"
 dunder in it: "__init__"
-args: 
+arguments:
 	insert("()")
 	key(left)
-[inside] (index | array): 
-	insert("[]") 
+[inside] (index | array):
+	insert("[]")
 	key(left)
 empty array: "[]"
-list in it: 
-	insert("[]") 
+list in it:
+	insert("[]")
 	key(left)
-(dickt in it | inside bracket | in bracket): 
-	insert("{}") 
+(dickt in it | inside bracket | in bracket):
+	insert("{}")
 	key(left)
-block: 
-	insert("{}") 
+block:
+	insert("{}")
 	key(left enter enter up tab)
-(in | inside) percent: 
-	insert("%%") 
+(in | inside) percent:
+	insert("%%")
 	key(left)
-string U T F eight: 
+string U T F eight:
 	insert("'utf8'")
 state past: "pass"
 zoom [in]: edit.zoom_in()
@@ -68,10 +68,10 @@ volume down: key(voldown)
 mute: key(mute)
 play next: key(next)
 play previous: key(prev)
-(play | pause): key(play_pause)  
+(play | pause): key(play_pause)
 wipe: key(backspace)
-(pad | padding): 
-	insert("  ") 
+(pad | padding):
+	insert("  ")
 	key(left)
 funny: "ha ha"
 #menu: key(alt)
