@@ -112,23 +112,23 @@ class Actions:
 
     def select_line(verb: str, line: int):
         """Performs action on selection of specified line"""
-        actions.user.go_to_line(None, line)
+        actions.edit.jump_line(line)
         actions.edit.extend_line_end()
-        actions.user.perform_selection_action(verb)
+        # actions.user.perform_selection_action(verb)
 
     def select_until_line(verb: str, line: int):
         """Performs action on selection from current line to the specified line."""
 
-    def select_range(verb: str, line_start: int, line_end: int):
+    def select_range(line_start: int, line_end: int):
         """Performs action on selection from line line_start to line line_end"""
-        actions.user.go_to_line(None, line_start)
+        actions.edit.jump_line(line_start)
         actions.edit.extend_line_end()
 
         number_of_lines = line_end - line_start
         for i in range(0, number_of_lines):
             actions.edit.extend_line_down()
         actions.edit.extend_line_end()
-        actions.user.perform_selection_action(verb)
+        # actions.user.perform_selection_action(verb)
 
     def select_way_left(verb: str):
         """Performs action on selection from cursor to line start"""

@@ -134,3 +134,50 @@ clear way up:
 clear way down:
     edit.extend_file_end()
     edit.delete()
+
+#copy commands
+copy all: 
+    edit.select_all()
+    edit.copy()
+# copy left: 
+#     edit.extend_left()
+#     edit.copy()
+# copy right: 
+#     edit.extend_right()
+#     edit.copy()
+# copy up: 
+#     edit.extend_up()
+#     edit.copy()
+# copy down: 
+#     edit.extend_down()
+#     edit.copy()
+copy word left: 
+    edit.extend_word_left()
+    edit.copy()
+copy word right: 
+    edit.extend_word_right()
+    edit.copy()
+
+#cut commands
+cut all: 
+    edit.select_all()
+    edit.cut()
+#to do: do we want these variants? seem u
+# cut left: 
+#     edit.select_all()
+#     edit.cut()
+# cut right: 
+#     edit.select_all()
+#     edit.cut()
+# cut up: 
+#     edit.select_all()
+#     edit.cut()
+# cut down: 
+#     edit.select_all()
+#     edit.cut()
+cut word left: 
+    edit.extend_word_left()
+    edit.cut()
+cut word right: 
+    edit.extend_word_right()
+    edit.cut()

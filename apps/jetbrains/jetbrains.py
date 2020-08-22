@@ -261,7 +261,7 @@ class user_actions:
     def select_until_line(verb: str, line: int):
         actions.user.idea_select(verb, "extend {}".format(line))
 
-    def select_range(verb: str, line_start: int, line_end: int):
+    def select_range(line_start: int, line_end: int):
         actions.user.idea_select(verb, "range {} {}".format(line_start, line_end))
 
     def select_way_left(verb: str):
