@@ -56,11 +56,11 @@ clear right <number_small> characters:
     edit.extend_right()
     repeat(number_small - 1)
     edit.delete()
-^formatted <user.format_text>$:
+formatted <user.format_text>:
     user.auto_format_pause()
     auto_insert(format_text)
     user.auto_format_resume()
-format selection <user.formatters>:
+^format selection <user.formatters>$:
     edit.copy()
     sleep(100ms)
     text = clip.text()
@@ -69,4 +69,12 @@ format selection <user.formatters>:
     auto_insert(result)
     user.auto_format_resume()
 scratch that: user.clear_last_utterance()
-
+spell that <user.formatters> <user.letters>:
+    result = dictate.join_words(user.letters, "")
+    result = user.formatted_text(result, formatters)
+    user.auto_format_pause()
+    auto_insert(result)
+    user.auto_format_resume()
+spell that <user.letters>:
+    result = dictate.join_words(user.letters, "")
+    auto_insert(result)
