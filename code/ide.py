@@ -444,3 +444,5 @@ class Actions:
     def ide_toggle_comment():
         """Toggle comment for selected text"""
 
+    def ide_switch_workspace():
+        """change project workspace"""
