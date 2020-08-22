@@ -258,6 +258,7 @@ fix last (error | air):
 # Special Selects
 select less: user.idea("action EditorUnSelectWord")
 select (more|this): user.idea("action EditorSelectWord")
+#jet brains-specific line commands. see line_commands.talon for generic ones
 expand <number> until <number>:
   user.select_range(number_1, number_2)
   user.idea("action ExpandRegion")
@@ -270,9 +271,8 @@ paste <number> until <number>:
 refactor <number> until <number>:
   user.select_range(number_1, number_2)
   user.idea("action Refactorings.QuickListPopupAction")
-rename <number> until <number>:
-  user.select_range(number_1, number_2)
-  user.idea("action RenameElement")
-rename <number>:
-  user.select_range(number_1, number_1)
-  user.idea("action RenameElement")
+clone <number>: user.line_clone(number)
+select camel left: user.extend_camel_left()
+select camel right: user.extend_camel_right()
+go camel left: user.camel_left()
+go camel right: user.camel_right()

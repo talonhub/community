@@ -64,6 +64,12 @@ class edit_actions:
     def line_clone():
         actions.key("ctrl-d")
 
+    def jump_line(n: int):
+        actions.key("ctrl-g")
+        actions.sleep("100ms")
+        actions.insert(str(n))
+        actions.key("enter")
+
 
 @ctx.action_class("user")
 class user_actions:

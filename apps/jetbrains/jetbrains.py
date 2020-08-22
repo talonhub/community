@@ -51,28 +51,6 @@ port_mapping = {
     "webstorm64.exe": 8663,
 }
 
-# select_verbs_map = {
-#     "clear": [],
-#     "collapse": [,
-#     "expand": [],
-#     "refactor": [],
-#     "rename": [,
-# }
-
-# movement_verbs_map = {
-#     "fix": ["action ShowIntentionActions"],
-#     "go": [],
-#     "paste": ["action EditorPaste"],
-# }
-
-
-def set_extend(*commands):
-    def set_inner(_):
-        global extendCommands
-        extendCommands = commands
-
-    return set_inner
-
 
 def _get_nonce(port, file_prefix):
     file_name = file_prefix + str(port)
@@ -179,65 +157,23 @@ class user_actions:
         if number < 10:
             actions.user.idea("action GoToTab{}".format(number))
 
-    # def select_next_occurrence(verbs: str, text: str):
-    #     actions.user.idea_select(verbs, "find next {}".format(text))
-
-    # def select_previous_occurrence(verbs: str, text: str):
-    #     actions.user.idea_select(verbs, "find prev {}".format(text))
-
-    # def move_next_occurrence(verbs: str, text: str):
-    #     actions.user.idea_movement(
-    #         verbs, "find next {}, action EditorRight".format(text)
-    #     )
-
-    # def move_previous_occurrence(text: str):
-    #     actions.user.idea_select("find prev {}, action EditorRight".format(text))
-
-    # def select_whole_line(verb: str, line: int):
-    #     actions.user.idea_select(
-    #         verb, "goto {} 0, action EditorSelectLine".format(line)
-    #     )
-
-    # def select_current_line(verb: str):
-    #     actions.user.idea_select(
-    #         verb, "action EditorLineStart, action EditorLineEndWithSelection"
-    #     )
-
-    # def select_line(verb: str, line: int):
-    #     actions.user.idea_select(
-    #         verb,
-    #         "goto {} 0, action EditorLineStart, action EditorLineEndWithSelection".format(
-    #             line
-    #         ),
-    #     )
-
-    def select_until_line(verb: str, line: int):
+    def extend_until_line(line: int):
         actions.user.idea("extend {}".format(line))
 
     def select_range(line_start: int, line_end: int):
         actions.user.idea("range {} {}".format(line_start, line_end))
 
-    # def select_camel_left(verb: str):
-    #     actions.user.idea("action EditorPreviousWordInDifferentHumpsModeWithSelection")
+    def extend_camel_left():
+        actions.user.idea("action EditorPreviousWordInDifferentHumpsModeWithSelection")
 
-    # def select_camel_right(verb: str):
-    #     actions.user.idea(
-    #         verb, "action EditorNextWordInDifferentHumpsModeWithSelection"
-    #     )
+    def extend_camel_right():
+        actions.user.idea("action EditorNextWordInDifferentHumpsModeWithSelection")
 
-    # def select_word_left(verb: str):
-    #     actions.user.idea_select(verb, "action EditorPreviousWordWithSelection")
+    def camel_left():
+        actions.user.idea("action EditorPreviousWordInDifferentHumpsMode")
 
-    # def select_word_right(verb: str):
-    #     actions.user.idea_select(verb, "action EditorNextWordWithSelection")
-
-    # def move_camel_left(verb: str):
-    #     actions.user.idea_movement(
-    #         verb, "action EditorPreviousWordInDifferentHumpsMode"
-    #     )
-
-    # def move_camel_right(verb: str):
-    #     actions.user.idea_movement(verb, "action EditorNextWordInDifferentHumpsMode")
+    def camel_right():
+        actions.user.idea("action EditorNextWordInDifferentHumpsMode")
 
     def line_clone(line: int):
         actions.user.idea("clone {}".format(line))
