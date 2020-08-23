@@ -216,5 +216,15 @@ class user_actions:
         else:
             actions.key("ctrl-alt-enter")
 
+    def select_previous_occurrence(text: str):
+        actions.edit.find(text)
+        actions.sleep("100ms")
+        actions.key("shift-enter esc")
+
+    def select_next_occurrence(text: str):
+        actions.edit.find(text)
+        actions.sleep("100ms")
+        actions.key("esc")
+
     # find_and_replace.py support end
 

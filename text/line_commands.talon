@@ -31,6 +31,9 @@ cut <number>:
 cut <number> until <number>: 
     user.select_range(number_1, number_2)
     edit.cut()
+paste <number> until <number>:
+  user.select_range(number_1, number_2)
+  edit.paste()
 replace <number> until <number>: 
     user.select_range(number_1, number_2)
     edit.paste()

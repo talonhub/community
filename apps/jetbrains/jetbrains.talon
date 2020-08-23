@@ -69,7 +69,6 @@ grab <number>: user.idea_grab(number)
 (action | please) <user.text>:
   user.idea("action GotoAction")
   insert(text)
-extend <number>: user.extend_action(number)
 # Refactoring
 refactor: user.idea("action Refactorings.QuickListPopupAction")
 refactor <user.text>:
@@ -288,7 +287,6 @@ replace last <user.text> [over]: user.idea("find prev {text}, action EditorPaste
 replace next <user.text> [over]: user.idea("find next {text}, action EditorPaste")
 select last <user.text> [over]: user.idea("find prev {text}")
 select next <user.text> [over]: user.idea("find next {text}")
-
 
 select camel left: user.extend_camel_left()
 select camel right: user.extend_camel_right()
