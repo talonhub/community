@@ -112,7 +112,7 @@ https://github.com/knausj85/knausj_talon/blob/master/misc/formatters.talon#L2
 
 
 ### Mouse commands
-See https://github.com/knausj85/knausj_talon/blob/master/misc/mouse.talon#L22
+See https://github.com/knausj85/knausj_talon/blob/master/misc/mouse.talon
 
 ### Generic editor
 https://github.com/knausj85/knausj_talon/blob/master/text/generic_editor.talon#L7
