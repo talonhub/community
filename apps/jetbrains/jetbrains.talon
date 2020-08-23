@@ -272,6 +272,24 @@ refactor <number> until <number>:
   user.select_range(number_1, number_2)
   user.idea("action Refactorings.QuickListPopupAction")
 clone <number>: user.line_clone(number)
+
+#find/replace
+clear last <user.text> [over]: user.idea("find prev {text}, action EditorBackSpace")
+clear next <user.text> [over]: user.idea("find next {text}, action EditorBackSpace")
+comment last <user.text> [over]: user.idea("find prev {text}, action CommentByLineComment")
+comment next <user.text> [over]: user.idea("find next {text}, action CommentByLineComment")
+go last <user.text> [over]: user.idea("find prev {text}, action EditorRight")
+go next <user.text> [over]: user.idea("find next {text}, action EditorRight")
+paste last <user.text> [over]: user.idea("find prev {text}, action EditorRight, action EditorPaste")
+paste next <user.text> [over]: user.idea("find next {text}, action EditorRight, action EditorPaste")
+refactor last <user.text> [over]: user.idea("find prev {text}, action Refactorings.QuickListPopupAction")
+refactor next <user.text> [over]: user.idea("find next {text}, action Refactorings.QuickListPopupAction")
+replace last <user.text> [over]: user.idea("find prev {text}, action EditorPaste")
+replace next <user.text> [over]: user.idea("find next {text}, action EditorPaste")
+select last <user.text> [over]: user.idea("find prev {text}")
+select next <user.text> [over]: user.idea("find next {text}")
+
+
 select camel left: user.extend_camel_left()
 select camel right: user.extend_camel_right()
 go camel left: user.camel_left()
