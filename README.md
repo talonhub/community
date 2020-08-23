@@ -54,17 +54,17 @@ The folder structure should look like:
 
 ## Getting started with Talon for coding with this depot
 
-1. "help active" will display the available commands for the active application. Available commands can change with the application or window title that has focus.
-2. “help alphabet” will display the alphabet
-3. "command history show" will display the recent command history 
-4. "undo that" and "redo that" are the default undo/redo commands. "paste that", "copy that", and "cut that" for pasting/copy/cutting. These are defined in https://github.com/knausj85/knausj_talon/blob/master/misc/standard.talon#L36
-5. "format help" will display the available formatters with examples.
+1. `help active` will display the available commands for the active application. Available commands can change with the application or window title that has focus.
+2. `help alphabet` will display the alphabet
+3. `command history show` will display the recent command history 
+4. `undo that` and `redo that` are the default undo/redo commands. `paste that`, `copy that`, and `cut that` for pasting/copy/cutting. These are defined in https://github.com/knausj85/knausj_talon/blob/master/misc/standard.talon#L36
+5. `format help` will display the available formatters with examples.
 
 It's recommended to learn the alphabet first, then get familiar with the keys, symbols, formatters, mouse, and generic_editor commands. 
 
 Once you have the basics of text input down, try copying some code from one window to another.
 
-After that, explore using ordinal repetition for easily repeating a command without pausing (e.g., saying “go up fifth” will go up five lines), window switching (“focus chrome”), and moving around in your text editor of choice.
+After that, explore using ordinal repetition for easily repeating a command without pausing (e.g., saying `go up fifth` will go up five lines), window switching (`focus chrome`), and moving around in your text editor of choice.
 
 If you use vim, just start with the numbers and alphabet, otherwise look at generic_editor.talon as well at jetbrains, vscode, and any other integrations.
 
@@ -75,7 +75,7 @@ https://github.com/knausj85/knausj_talon/blob/master/code/keys.py#L6
 https://github.com/knausj85/knausj_talon/blob/master/code/keys.py#L67
 
 ### Symbols Definition
-Some symbols are defined in keys.py, so you can say e.g. "control colon"
+Some symbols are defined in keys.py, so you can say e.g. `control colon` to press those keys.
 https://github.com/knausj85/knausj_talon/blob/master/code/keys.py#L93
 
 Some other symbols are defined here:
@@ -88,7 +88,7 @@ Try using formatters by saying e.g. “snake hello world,” which will insert h
 
 Mutliple formatters can be used togther, e.g. “dubstring snake hello world,” which will insert "hello_world"
 
-"format help" will display the available formatters with examples.
+`format help` will display the available formatters with examples.
 
 Other formatter-related commands are defined here
 https://github.com/knausj85/knausj_talon/blob/master/misc/formatters.talon#L2
@@ -100,13 +100,13 @@ https://github.com/knausj85/knausj_talon/blob/master/misc/mouse.talon#L22
 ### Generic editor:
 https://github.com/knausj85/knausj_talon/blob/master/text/generic_editor.talon#L7
 
-These generic commands are global. Commands such as "go word left" will work in any text box.  
+These generic commands are global. Commands such as `go word left` will work in any text box.  
 
 ### Repeating commmands
 For repeating commands, useful voice commands are defined here:
 https://github.com/knausj85/knausj_talon/blob/ced46aee4b59e6ec5e8545bb01434e27792c830e/misc/repeater.talon#L2
 
-For example, saying “go up fifth” will go up five lines.
+For example, saying `go up fifth` will go up five lines.
 
 ### Window management
 Global window managment commands are defined here:
@@ -153,7 +153,7 @@ defaults write com.apple.finder _FXShowPosixPathInTitle -bool YES
 For Windows Explorer, follow these directions
 https://www.howtogeek.com/121218/beginner-how-to-make-explorer-always-show-the-full-path-in-windows-8/
 
-For the Windows command line, the "refresh title" command will force the title to the current directory, and all directory commands ("follow 1") will automatically update the title. The 
+For the Windows command line, the `refresh title` command will force the title to the current directory, and all directory commands (`follow 1`) will automatically update the title.
 
 
 ## Jetbrains commands
