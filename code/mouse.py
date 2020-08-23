@@ -1,13 +1,13 @@
 from talon import cron, ctrl, ui, Module, Context, actions, noise, settings, imgui, app
 from talon.engine import engine
 from talon_plugins import speech, eye_mouse, eye_zoom_mouse
+from talon_plugins.eye_mouse import toggle_control, config
 import subprocess
 import os
 import pathlib
 
 key = actions.key
 self = actions.self
-dragging = False
 scroll_amount = 0
 click_job = None
 scroll_job = None
@@ -114,7 +114,7 @@ class Actions:
 
     def mouse_toggle_control_mouse():
         """Toggles control mouse"""
-        eye_mouse.control_mouse.toggle()
+        toggle_control(not config.control_mouse)
 
     def mouse_toggle_zoom_mouse():
         """Toggles zoom mouse"""
@@ -130,23 +130,24 @@ class Actions:
 
     def mouse_drag():
         """(TEMPORARY) Press and hold/release button 0 depending on state for dragging"""
-        global dragging
-        if not dragging:
-            dragging = True
+        if 1 not in ctrl.mouse_buttons_down():
+            # print("start drag...")
             ctrl.mouse_click(button=0, down=True)
+            # app.notify("drag started")
         else:
-            dragging = False
-            ctrl.mouse_click(up=True)
+            # print("end drag...")
+            ctrl.mouse_click(button=0, up=True)
+
+        # app.notify("drag stopped")
 
     def mouse_sleep():
         """Disables control mouse, zoom mouse, and re-enables cursor"""
-        global dragging
         eye_zoom_mouse.toggle_zoom_mouse(False)
-        # eye_mouse.control_mouse.disable()
+        toggle_control(False)
         show_cursor_helper(True)
         stop_scroll()
-        if dragging:
-            mouse_drag()
+        if 1 in ctrl.mouse_buttons_down():
+            actions.user.mouse_drag()
 
     def mouse_scroll_down():
         """Scrolls down"""
