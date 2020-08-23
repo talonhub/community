@@ -148,19 +148,3 @@ For the Windows command line, the "refresh title" command will force the title t
 For Jetbrains commands to work you must install https://plugins.jetbrains.com/plugin/10504-voice-code-idea
 into each editor.
 
-
-You may define other useful captures by combining captures too. For example, the below capture will provide formatted text for commands such as "allcaps dubstring something interesting" => "SOMETHING INTERESTING" -
-
-```python:
-@ctx.capture(rule='<self.formatters> <phrase>')
-def format_text(m):
-    return FormatText(m.phrase, m.formatters)
-```
-
-Once defined, you can then use the captures and associated actions in .talon files!
-
-```insert code:
-<user.formatters_format_text> [over]: insert(format_text)
-```
-
-This will simply insert the pre-formatted text into your editor.
