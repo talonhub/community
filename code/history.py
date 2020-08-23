@@ -46,6 +46,13 @@ mod = Module()
 
 @mod.action_class
 class Actions:
+    def history_toggle():
+        """Toggles viewing the history"""
+        if gui.showing:
+            gui.hide()
+        else:
+            gui.show()
+
     def history_enable():
         """Enables the history"""
         gui.freeze()
