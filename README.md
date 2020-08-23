@@ -58,6 +58,7 @@ The folder structure should look like:
 2. “help alphabet” will display the alphabet
 3. "command history show" will display the recent command history 
 4. "undo that" and "redo that" are the default undo/redo commands. "paste that", "copy that", and "cut that" for pasting/copy/cutting. These are defined in https://github.com/knausj85/knausj_talon/blob/master/misc/standard.talon#L36
+5. "format help" will display the available formatters with examples.
 
 It's recommended to learn the alphabet first, then get familiar with the keys, symbols, formatters, mouse, and generic_editor commands. 
 
@@ -87,6 +88,12 @@ Try using formatters by saying e.g. “snake hello world,” which will insert h
 
 Mutliple formatters can be used togther, e.g. “dubstring snake hello world,” which will insert "hello_world"
 
+"format help" will display the available formatters with examples.
+
+Other formatter-related commands are defined here
+https://github.com/knausj85/knausj_talon/blob/master/misc/formatters.talon#L2
+
+
 ### Mouse commands:
 https://github.com/knausj85/knausj_talon/blob/master/misc/mouse.talon#L22
 
@@ -100,6 +107,12 @@ For repeating commands, useful voice commands are defined here:
 https://github.com/knausj85/knausj_talon/blob/ced46aee4b59e6ec5e8545bb01434e27792c830e/misc/repeater.talon#L2
 
 For example, saying “go up fifth” will go up five lines.
+
+### Window management
+Global window managment commands are defined here:
+https://github.com/knausj85/knausj_talon/blob/master/misc/window_management.talon#L1
+
+e.g., `focus chrome` will focus the chrome application.
 
 ### Activating Programming Languages
 
