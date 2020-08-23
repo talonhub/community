@@ -57,8 +57,8 @@ The folder structure should look like:
 1. `help active` will display the available commands for the active application. 
     - Available commands can change with the application, or even window title that has focus. 
     - You may navigate help using the displayed numbers. e.g., `help one one` or `help eleven` to open the 11th item in the help list. 
-    - Without opening help first, You can also search for commands a e.g. `help search tab` to display all tab-related commands
-    - Without opening help first, you can also jump immediately into a particular help context display by recalling the name displayed in help window e.g. `help symbols` or `help visual studio`
+    - Without opening help first, you can also search for commands e.g. `help search tab` to display all tab-related commands
+    - Without opening help first, you can also jump immediately into a particular help context display by recalling the name displayed in help window (based on the name of the .talon file) e.g. `help symbols` or `help visual studio`
     - All help-related commands are defined in misc/help.talon and misc/help_open.talon
 2. `help alphabet` will display the alphabet
 3. `command history` will toggle a display of the recent commands
