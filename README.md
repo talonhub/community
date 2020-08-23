@@ -54,11 +54,18 @@ The folder structure should look like:
 
 ## Getting started with Talon for coding with this depot
 
-1. `help active` will display the available commands for the active application. Available commands can change with the application or window title that has focus.
+1. `help active` will display the available commands for the active application. 
+    - Available commands can change with the application, or even window title that has focus. 
+    - You may navigate help using the displayed numbers. e.g., `help one one` or `help eleven` to open the 11th item in the help list. 
+    - Without opening help first, You can also search for commands a e.g. `help search tab` to display all tab-related commands
+    - Without opening help first, you can also jump immediately into a particular help context display by recalling the name displayed in help window e.g. `help symbols` or `help visual studio`
+    - All help-related commands are defined in misc/help.talon and misc/help_open.talon
 2. `help alphabet` will display the alphabet
-3. `command history show` will display the recent command history 
-4. `undo that` and `redo that` are the default undo/redo commands. `paste that`, `copy that`, and `cut that` for pasting/copy/cutting. These are defined in https://github.com/knausj85/knausj_talon/blob/master/misc/standard.talon#L36
-5. `format help` will display the available formatters with examples.
+3. `command history` will toggle a display of the recent commands
+4. `format help` will display the available formatters with examples.
+5. Many useful, basic commands are defined in https://github.com/knausj85/knausj_talon/blob/master/misc/standard.talon#L36
+    - `undo that` and `redo that` are the default undo/redo commands.
+    - `paste that`, `copy that`, and `cut that` for pasting/copy/cutting, respectively.
 
 It's recommended to learn the alphabet first, then get familiar with the keys, symbols, formatters, mouse, and generic_editor commands. 
 
@@ -68,41 +75,51 @@ After that, explore using ordinal repetition for easily repeating a command with
 
 If you use vim, just start with the numbers and alphabet, otherwise look at generic_editor.talon as well at jetbrains, vscode, and any other integrations.
 
-###  Alphabet Definition
+###  Alphabet
+The alphabet is defined here
 https://github.com/knausj85/knausj_talon/blob/master/code/keys.py#L6
 
-### Keys Definition
+Try saying e.g. `air bat cap` to insert abc.
+
+### Keys
+Keys are defined here
 https://github.com/knausj85/knausj_talon/blob/master/code/keys.py#L67
 
-### Symbols Definition
+Try saying e.g. `control air` to press control-a
+
+All key-related voice commands are defined here
+https://github.com/knausj85/knausj_talon/blob/master/misc/keys.talon
+
+### Symbols
 Some symbols are defined in keys.py, so you can say e.g. `control colon` to press those keys.
 https://github.com/knausj85/knausj_talon/blob/master/code/keys.py#L93
 
 Some other symbols are defined here:
 https://github.com/knausj85/knausj_talon/blob/master/text/symbols.talon
 
-### Formatters: 
+### Formatters
+`format help` will display the available formatters with examples of the output.
+
+Try using formatters by saying e.g. `snake hello world`, which will insert hello_world
+
+Mutliple formatters can be used togther, e.g. `dubstring snake hello world`. This will insert "hello_world"
+
+Formatters (snake, dubstring) are defined here
 https://github.com/knausj85/knausj_talon/blob/master/code/formatters.py#L146
 
-Try using formatters by saying e.g. “snake hello world,” which will insert hello_world
-
-Mutliple formatters can be used togther, e.g. “dubstring snake hello world,” which will insert "hello_world"
-
-`format help` will display the available formatters with examples.
-
-Other formatter-related commands are defined here
+All formatter-related commands are defined here
 https://github.com/knausj85/knausj_talon/blob/master/misc/formatters.talon#L2
 
 
-### Mouse commands:
-https://github.com/knausj85/knausj_talon/blob/master/misc/mouse.talon#L22
+### Mouse commands
+See https://github.com/knausj85/knausj_talon/blob/master/misc/mouse.talon#L22
 
-### Generic editor:
+### Generic editor
 https://github.com/knausj85/knausj_talon/blob/master/text/generic_editor.talon#L7
 
 These generic commands are global. Commands such as `go word left` will work in any text box.  
 
-### Repeating commmands
+### Repeating commands
 For repeating commands, useful voice commands are defined here:
 https://github.com/knausj85/knausj_talon/blob/ced46aee4b59e6ec5e8545bb01434e27792c830e/misc/repeater.talon#L2
 
