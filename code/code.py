@@ -1,7 +1,8 @@
 import os
 import re
 
-from talon import Context, Module, actions, fs, imgui, registry, settings, ui
+from talon import (Context, Module, actions, app, fs, imgui, registry,
+                   settings, ui)
 
 ctx = Context()
 mod = Module()
@@ -31,6 +32,7 @@ key = actions.key
 function_list = []
 extension_lang_map = {
     "asm": "assembly",
+    "bat": "batch",
     "c": "c",
     "cpp": "cplusplus",
     "cs": "csharp",
@@ -41,12 +43,14 @@ extension_lang_map = {
     "lua": "lua",
     "md": "markdown",
     "pl": "perl",
+    "ps1": "powershell",
     "py": "python",
     "rb": "ruby",
     "s": "assembly",
     "sh": "bash",
     "snippets": "snippets",
     "talon": "talon",
+    "vba": "vba",
     "vim": "vim",
     "js": "javascript",
     "ts": "typescript",
