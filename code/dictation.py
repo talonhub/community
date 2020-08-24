@@ -46,6 +46,7 @@ class AutoFormat:
 
     def format(self, text):
         if self.paused:
+            self.last_utterance = text
             return text
 
         result = ""
@@ -106,3 +107,9 @@ class Actions:
         if auto_formatter.last_utterance:
             for c in auto_formatter.last_utterance:
                 actions.edit.delete()
+
+    def select_last_utterance():
+        """Selects the last utterance"""
+        if auto_formatter.last_utterance:
+            for c in auto_formatter.last_utterance:
+                actions.edit.extend_left()

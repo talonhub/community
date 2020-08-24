@@ -10,6 +10,7 @@ question mark: auto_insert("?")
 (bang | exclamation [mark]): auto_insert("!")
 dash: auto_insert("-")
 colon: auto_insert(":")
+space: user.dictate(" ")
 (semi colon | semicolon): auto_insert(";")
 cap <user.text>: 
     result = user.formatted_text(user.text, "CAPITALIZE_FIRST_WORD")
@@ -27,6 +28,8 @@ go left <number_small> words:
 go right <number_small> words: 
     edit.word_right()
     repeat(number_small - 1)
+go line start: edit.line_start()
+go line end: edit.line_end()
 #selection
 select left <number_small> words:
     edit.extend_word_left()
@@ -56,6 +59,7 @@ clear right <number_small> characters:
     edit.extend_right()
     repeat(number_small - 1)
     edit.delete()
+#formatting 
 formatted <user.format_text>:
     user.auto_format_pause()
     auto_insert(format_text)
@@ -68,7 +72,9 @@ formatted <user.format_text>:
     user.auto_format_pause()
     auto_insert(result)
     user.auto_format_resume()
+#corrections
 scratch that: user.clear_last_utterance()
+select that: user.select_last_utterance()
 spell that <user.formatters> <user.letters>:
     result = dictate.join_words(user.letters, "")
     result = user.formatted_text(result, formatters)
@@ -78,3 +84,6 @@ spell that <user.formatters> <user.letters>:
 spell that <user.letters>:
     result = dictate.join_words(user.letters, "")
     auto_insert(result)
+#escape, type things that would otherwise be commands
+^escape <user.text>$:
+    auto_insert(user.text)
