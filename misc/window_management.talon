@@ -5,3 +5,10 @@ close window: app.window_close()
 focus <user.running_applications>: user.switcher_focus(running_applications)
 list running: user.switcher_list_running()
 hide running: user.switcher_hide_running()
+
+put window left: key(ctrl-alt-left)
+put window right: key(ctrl-alt-right)
+put window up: key(ctrl-alt-up)
+put window next: key(ctrl-shift-alt-up)
+
+hello computer: key(cmd-space)
