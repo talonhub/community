@@ -192,8 +192,8 @@ terminal scroll down: user.vscode("Terminal:ScrollDown")
 copy line down: user.vscode("editor.action.copyLinesDownAction")
 copy line up: user.vscode("editor.action.copyLinesUpAction")
 
-#todo: wtf?
-#select less: user.vscode("Shrink Selection")
-#select (more|this): user.vscode("Expand Selection")
+#Expand/Shrink AST Selection
+select less: user.vscode("editor.action.smartSelect.shrink")
+select (more|this): user.vscode("editor.action.smartSelect.expand")
   
   
