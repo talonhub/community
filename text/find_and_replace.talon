@@ -99,7 +99,7 @@ replace next clip:
     edit.paste()
 select last <user.text> [over]: user.select_previous_occurrence(text)
 select next <user.text> [over]: user.select_next_occurrence(text)
-select next clip: user.select_previous_occurrence(clip.text())
+select last clip: user.select_previous_occurrence(clip.text())
 select next clip: user.select_next_occurrence(clip.text())
 
 
