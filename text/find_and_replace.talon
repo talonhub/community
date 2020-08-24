@@ -76,7 +76,7 @@ paste next <user.text> [over]:
     sleep(100ms)
     edit.right()
     edit.paste()
-paste last clip: 
+paste next clip: 
     user.select_next_occurrence(clip.text())
     sleep(100ms)
     edit.right()
