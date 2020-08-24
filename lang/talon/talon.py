@@ -8,9 +8,9 @@ and code.language: talon
 """
 ctx.lists["user.code_functions"] = {
     "insert": "insert",
-    "repeat": "repeat",
-    "print": "print",
     "key": "key",
+    "print": "print",
+    "repeat": "repeat",
 }
 
 
