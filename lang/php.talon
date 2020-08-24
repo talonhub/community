@@ -1,7 +1,6 @@
-mode: user.php
 mode: command
-code.language: php
-
+and code.language: php
+-
 tag(): user.code_operators
 tag(): user.code_comment
 tag(): user.code_generic
