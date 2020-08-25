@@ -379,6 +379,7 @@ def refresh_context_command_map(enabled_only=False):
     show_enabled_contexts_only = enabled_only
     cached_window_title = ui.active_window().title
     active_contexts = registry.active_contexts()
+    # print(str(active_contexts))
     update_active_contexts_cache(active_contexts)
 
     context_command_map = {}
@@ -401,9 +402,13 @@ def refresh_context_command_map(enabled_only=False):
 
         if enabled_only and context in active_contexts or not enabled_only:
             context_command_map[context_name] = {}
-            for __, val in context.commands_get().items():
-                # print(str(val.rule.rule) + ": " + val.target.code)
-                context_command_map[context_name][str(val.rule.rule)] = val.target.code
+            for command_alias, val in context.commands_get().items():
+                # print(str(val))
+                if command_alias in registry.commands:
+                    # print(str(val.rule.rule) + ": " + val.target.code)
+                    context_command_map[context_name][
+                        str(val.rule.rule)
+                    ] = val.target.code
             # print(short_name)
             # print("length: " + str(len(context_command_map[context_name])))
             if len(context_command_map[context_name]) == 0:
@@ -454,7 +459,14 @@ class Actions:
         global alphabet
         alphabet = ab
         reset()
+        # print("help_alphabet - alphabet gui_alphabet: {}".format(gui_alphabet.showing))
+        # print(
+        #     "help_alphabet - gui_context_help showing: {}".format(
+        #         gui_context_help.showing
+        #     )
+        # )
         gui_context_help.hide()
+        gui_alphabet.hide()
         gui_alphabet.show()
         register_events(False)
         actions.mode.enable("user.help")
@@ -589,6 +601,12 @@ class Actions:
     def help_hide():
         """Hides the help"""
         reset()
+
+        # print("help_hide - alphabet gui_alphabet: {}".format(gui_alphabet.showing))
+        # print(
+        #     "help_hide - gui_context_help showing: {}".format(gui_context_help.showing)
+        # )
+
         gui_alphabet.hide()
         gui_context_help.hide()
         refresh_context_command_map()

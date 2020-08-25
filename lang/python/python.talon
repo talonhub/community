@@ -100,3 +100,4 @@ action(user.code_state_return):
 dunder in it: insert("__init__")
 state (def | deaf | deft): "def "
 pie test: "pytest"
+state past: "pass"

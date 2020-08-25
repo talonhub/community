@@ -1,6 +1,6 @@
 app: safari
 -
-tag(): user.browser
+tag(): browser
 tag(): user.tabs
 #action(browser.address):
 

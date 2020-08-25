@@ -1,4 +1,6 @@
 app: termite
+and not win.title: /VIM/
+
 -
 tag(): user.terminal
 
