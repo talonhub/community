@@ -1,7 +1,7 @@
 os: mac
-app: com.apple.finder
+app: finder
 -
-tag(): file_manager
+tag(): user.file_manager
 
 action(user.file_manager_open_parent):
     key(cmd-up)

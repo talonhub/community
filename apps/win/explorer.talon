@@ -1,8 +1,6 @@
-os: windows
-app: Windows Explorer
-app: explorer.exe
+app: windows_explorer
 -
-tag(): file_manager
+tag(): user.file_manager
 action(user.file_manager_go_back):
     key("alt-left")
 action(user.file_manager_go_forward):

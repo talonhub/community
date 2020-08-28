@@ -4,7 +4,7 @@ os: linux
 tag: terminal
 mode: user.gdb
 -
-tag(): gdb
+tag(): user.gdb
 
 # information
 list [source]: "list\n"
@@ -42,7 +42,7 @@ hex dump clipboard:
 break [point] [on]: "break "
 break [point] here: "break\n"
 enable all break points: "enable br\n"
-enable break [point] <number>: "enable br {number}\n"
+enable break [point] <number_small>: "enable br {number_small}\n"
 break [on] clipboard:
     insert("break ")
     key(ctrl-shift-v)
@@ -50,7 +50,7 @@ break [on] clipboard:
 
 # disable
 disable all break points: "disable br\n"
-disable break [point] <number>: "disable br {number}\n"
+disable break [point] <number_small>: "disable br {number_small}\n"
 
 # delete
 delete all break points: "d br\n"
@@ -79,8 +79,8 @@ step [instruction|line]: "stepi\n"
 (list|show|info) display: "info display\n"
 display assembly line$: "display /i $pc\n"
 display source: "display "
-enable display <number>: "enable display {number}\n"
-disable display <number>: "disable display {number}\n"
+enable display <number_small>: "enable display {number_small}\n"
+disable display <number_small>: "disable display {number_small}\n"
 undisplay: "undisplay\n"
 
 # variables
@@ -97,17 +97,17 @@ info threads: "info threads\n"
 restart [program]: "r\n"
 continue: "c\n"
 back trace: "bt\n"
-quit: "quit\n"
+debug quit: "quit\n"
 # more quickly quit when there are inferiors
-force quit: "quit\ny\n"
+debug force quit: "quit\ny\n"
 (show|info) (inf|inferiors): "info inferiors\n"
-inferior <number>$: "inferior {number}\n"
+inferior <number_small>$: "inferior {number_small}\n"
 inferior: "inferior "
 resume main (inf|inferior):
     insert("inferior 1\n")
     insert("c\n")
-resume [from] (inf|inferior) <number>$:
-    insert("inferior {number}\n")
+resume [from] (inf|inferior) <number_small>$:
+    insert("inferior {number_small}\n")
     insert("c\n")
 
 # arguments
@@ -124,7 +124,7 @@ unset detach on fork: "set detach-on-fork off\n"
 
 # list
 show list size: "show listsize\n"
-set list size <number>: "set listsize {number}\n"
+set list size <number_small>: "set listsize {number_small}\n"
 
 # misc
 clear screen: "shell clear\n"

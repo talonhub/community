@@ -40,3 +40,8 @@ class Actions:
     def replace_confirm_all():
         """Confirm replace all"""
 
+    def select_previous_occurrence(text: str):
+        """Selects the previous occurrence of the text, and suppresses any find/replace dialogs."""
+
+    def select_next_occurrence(text: str):
+        """Selects the next occurrence of the text, and suppresses any find/replace dialogs."""

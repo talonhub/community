@@ -1,8 +1,7 @@
-os: mac
-app: Safari
+app: safari
 -
 tag(): browser
-tag(): tabs
+tag(): user.tabs
 #action(browser.address):
 
 action(browser.bookmark):

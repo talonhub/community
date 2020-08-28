@@ -1,9 +1,13 @@
 from talon import ctrl, ui, Module, Context, actions, clip, app
 
 ctx = Context()
+mod = Module()
+
+mod.apps.chrome = "app.name: Google Chrome"
+mod.apps.chrome = "app.name: chrome.exe"
+
 ctx.matches = r"""
-app: Google Chrome
-app: chrome.exe
+app: chrome
 """
 
 

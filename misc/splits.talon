@@ -1,4 +1,4 @@
-tag: splits
+tag: user.splits
 -
 split right: user.split_window_right()
 split left: user.split_window_left()
@@ -8,8 +8,8 @@ split vertically: user.split_window_vertically()
 split horizontally: user.split_window_horizontally()
 split flip: user.split_flip()
 split window: user.split_window()
-clear split: user.split_clear()
-clear all splits: user.split_clear_all()
-go next split: user.split_next()
-go last split: user.split_last()
+split clear: user.split_clear()
+split clear all: user.split_clear_all()
+split next: user.split_next()
+split last: user.split_last()
 go split <number>: user.split_number(number)

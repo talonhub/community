@@ -9,10 +9,23 @@ control mouse: user.mouse_toggle_control_mouse()
 zoom mouse: user.mouse_toggle_zoom_mouse()
 camera overlay: eye_mouse.camera_overlay.toggle()
 run calibration: user.mouse_calibrate()	
-<user.mouse_index>: mouse_click(mouse_index)
-<user.modifiers> <user.mouse_index>: 
+touch: mouse_click(0)
+righty: mouse_click(1)
+
+#see keys.py for modifiers.
+#defaults
+#command
+#control
+#option = alt
+#shift
+#super = windows key
+<user.modifiers> touch: 
 	key("{modifiers}:down")
-	mouse_click(mouse_index)
+	mouse_click(0)
+	key("{modifiers}:up")
+<user.modifiers> righty: 
+	key("{modifiers}:down")
+	mouse_click(1)
 	key("{modifiers}:up")
 (dubclick | duke): 
 	mouse_click()

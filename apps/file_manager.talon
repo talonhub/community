@@ -1,4 +1,4 @@
-tag: file_manager
+tag: user.file_manager
 -
 settings():
     # enable if you'd like the picker gui to automatically appear when explorer has focus

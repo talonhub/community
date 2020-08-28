@@ -1,17 +1,17 @@
-from talon import Context, actions, ui, Module, app
+from talon import Context, actions, ui, Module, app, clip
 from typing import List, Union
 
 is_mac = app.platform == "mac"
 
 ctx = Context()
 mod = Module()
+mod.apps.vscode = "app.name: Code.exe"
+mod.apps.vscode = "app.name: Visual Studio Code"
+mod.apps.vscode = "app.name: Code"
+mod.apps.vscode = "app.name: Code - OSS"
 
 ctx.matches = r"""
-app: Code
-app: Code - OSS
-app: Code
-app: Visual Studio Code
-app: Code.exe
+app: vscode
 """
 
 
@@ -56,77 +56,58 @@ class edit_actions:
     def line_clone():
         actions.key("shift-alt-down")
 
+    def jump_line(n: int):
+        actions.user.vscode("workbench.action.gotoLine")
+        actions.insert(str(n))
+        actions.key("enter")
+
+
+@mod.action_class
+class Actions:
+    def vscode(command: str):
+        """Execute command via command palette. Preserves the clipboard."""
+        # Clip is noticeably faster than insert
+        original_clipboard = clip.text()
+        clip.set_text(f"{command}")
+        if not is_mac:
+            actions.key("ctrl-shift-p")
+        else:
+            actions.key("cmd-shift-p")
+
+        actions.edit.paste()
+        actions.key("enter")
+        actions.sleep("200ms")
+        clip.set_text(original_clipboard)
+
+    def vscode_ignore_clipboard(command: str):
+        """Execute command via command palette. Does NOT preserve the clipboard for commands like copyFilePath"""
+        clip.set_text(f"{command}")
+        if not is_mac:
+            actions.key("ctrl-shift-p")
+        else:
+            actions.key("cmd-shift-p")
+        actions.edit.paste()
+        actions.key("enter")
+
 
 @ctx.action_class("user")
 class user_actions:
+    # snippet.py support beginHelp close
     def snippet_search(text: str):
-        actions.user.ide_command_palette()
-        actions.insert("Insert Snippet")
-        actions.key("enter")
+        actions.user.vscode("Insert Snippet")
         actions.insert(text)
 
     def snippet_insert(text: str):
         """Inserts a snippet"""
-        actions.user.ide_command_palette()
-        actions.insert("Insert Snippet")
-        actions.key("enter")
+        actions.user.vscode("Insert Snippet")
         actions.insert(text)
         actions.key("enter")
 
-    def select_word(verb: str):
-        if not is_mac:
-            actions.key("ctrl-d")
-        else:
-            actions.key("cmd-d")
-        actions.user.perform_selection_action(verb)
+    def snippet_create():
+        """Triggers snippet creation"""
+        actions.user.vscode("Preferences: Configure User Snippets")
 
-    def select_next_occurrence(verbs: str, text: str):
-        actions.edit.find(text)
-        actions.sleep("100ms")
-        actions.key("esc")
-        if verbs is not None:
-            actions.user.perform_selection_action(verbs)
-
-    def select_previous_occurrence(verbs: str, text: str):
-        actions.edit.find(text)
-        actions.key("shift-enter")
-        actions.sleep("100ms")
-        actions.key("esc")
-        if verbs is not None:
-            actions.user.perform_selection_action(verbs)
-
-    def go_to_line(verb: str, line: int):
-        actions.key("ctrl-g")
-        actions.insert(str(line))
-        actions.key("enter")
-
-        if verb is not None:
-            actions.user.perform_movement_action(verb)
-
-    def ide_copy_path():
-        actions.user.ide_command_palette()
-        actions.insert("File: Copy Path of Active File")
-        actions.key("enter")
-
-    def ide_go_mark():
-        actions.user.ide_command_palette()
-        actions.insert("View: Show Bookmarks")
-        actions.key("enter")
-
-    def ide_toggle_mark():
-        actions.user.ide_command_palette()
-        actions.insert("Bookmarks: Toggle")
-        actions.key("enter")
-
-    def ide_go_next_mark():
-        actions.user.ide_command_palette()
-        actions.insert("Bookmarks: Jump to Next")
-        actions.key("enter")
-
-    def ide_go_last_mark():
-        actions.user.ide_command_palette()
-        actions.insert("Bookmarks: Jump to Previous")
-        actions.key("enter")
+    # snippet.py support end
 
     def tab_jump(number: int):
         if number < 10:
@@ -234,6 +215,16 @@ class user_actions:
             actions.key("cmd-enter")
         else:
             actions.key("ctrl-alt-enter")
+
+    def select_previous_occurrence(text: str):
+        actions.edit.find(text)
+        actions.sleep("100ms")
+        actions.key("shift-enter esc")
+
+    def select_next_occurrence(text: str):
+        actions.edit.find(text)
+        actions.sleep("100ms")
+        actions.key("esc")
 
     # find_and_replace.py support end
 

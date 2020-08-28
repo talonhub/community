@@ -1,8 +1,8 @@
 os: mac
-app: Firefox
+app: firefox
 -
 tag(): browser
-tag(): tabs
+tag(): user.tabs
 
 #action(browser.address):
 

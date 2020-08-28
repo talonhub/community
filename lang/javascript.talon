@@ -1,5 +1,5 @@
 mode: user.javascript
-mode: command 
+mode: command
 and code.language: javascript
 -
 tag(): user.code_operators
@@ -32,8 +32,12 @@ action(user.code_state_else_if):
 
 action(user.code_state_else):
   insert(" else {}")
-  key(left enter) 
+  key(left enter)
 
+action(user.code_block): 
+  insert("{}") 
+  key(left enter)
+  
 action(user.code_self): "this"
 
 action(user.code_state_while):
@@ -85,9 +89,9 @@ action(user.code_public_function): "function "
 
 action(user.code_operator_indirection): ""
 action(user.code_operator_address_of): ""
-action(user.code_operator_structure_deference): ""
+action(user.code_operator_structure_dereference): ""
 action(user.code_operator_lambda): " => "
-action(user.code_operator_subscript): 
+action(user.code_operator_subscript):
   insert("[]")
   key(left)
 action(user.code_operator_assignment): " = "
@@ -113,19 +117,15 @@ action(user.code_operator_less_than_or_equal_to): " <= "
 action(user.code_operator_and): " && "
 action(user.code_operator_or): " || "
 action(user.code_operator_bitwise_and): " & "
-action(user.code_operator_bitwise_and_assignment): " &= " 
+action(user.code_operator_bitwise_and_assignment): " &= "
 action(user.code_operator_bitwise_or): " | "
 action(user.code_operator_bitwise_or_assignment): " |= "
-action(user.code_operator_bitwise_exlcusive_or): " ^ "
-action(user.code_operator_bitwise_exlcusive_or_assignment): " ^= "
+action(user.code_operator_bitwise_exclusive_or): " ^ "
+action(user.code_operator_bitwise_exclusive_or_assignment): " ^= "
 action(user.code_operator_bitwise_left_shift): " << "
 action(user.code_operator_bitwise_left_shift_assignment): " <<= "
 action(user.code_operator_bitwise_right_shift): " >> "
 action(user.code_operator_bitwise_right_shift_assignment): " >>= "
-
-state block:
-  insert("{}")
-  key(left enter)
 
 state const: "const "
 
@@ -136,11 +136,11 @@ state var: "var "
 state async: "async "
 
 state await: "await "
-  
+
 state map:
   insert(".map()")
   key(left)
-  
+
 state filter:
   insert(".filter()")
   key(left)

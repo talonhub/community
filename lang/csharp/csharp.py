@@ -7,9 +7,9 @@ mode: command
 and code.language: csharp
 """
 ctx.lists["user.code_functions"] = {
+    "integer": "int.TryParse",
     "print": "Console.WriteLine",
     "string": ".ToString",
-    "integer": "int.TryParse",
 }
 
 

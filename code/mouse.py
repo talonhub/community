@@ -1,13 +1,13 @@
 from talon import cron, ctrl, ui, Module, Context, actions, noise, settings, imgui, app
 from talon.engine import engine
 from talon_plugins import speech, eye_mouse, eye_zoom_mouse
+from talon_plugins.eye_mouse import toggle_control, config
 import subprocess
 import os
 import pathlib
 
 key = actions.key
 self = actions.self
-dragging = False
 scroll_amount = 0
 click_job = None
 scroll_job = None
@@ -80,15 +80,6 @@ setting_mouse_wheel_down_amount = mod.setting(
     desc="The amount to scroll up/down (equivalent to mouse wheel on Windows by default)",
 )
 
-ctx = Context()
-ctx.lists["self.mouse_button"] = {
-    # right click
-    "righty": "1",
-    "rickle": "1",
-    # left click
-    "chiff": "0",
-}
-
 continuous_scoll_mode = ""
 
 
@@ -98,11 +89,6 @@ def gui_wheel(gui: imgui.GUI):
     gui.line()
     if gui.button("Wheel Stop [stop scrolling]"):
         actions.user.mouse_scroll_stop()
-
-
-@mod.capture
-def mouse_index(m) -> int:
-    "One mouse button index"
 
 
 @mod.action_class
@@ -117,8 +103,8 @@ class Actions:
 
     def mouse_wake():
         """Enable control mouse, zoom mouse, and disables cursor"""
-        eye_zoom_mouse.zoom_mouse.enable()
-        eye_mouse.control_mouse.enable()
+        eye_zoom_mouse.toggle_zoom_mouse(True)
+        # eye_mouse.control_mouse.enable()
         if setting_mouse_wake_hides_cursor.get() >= 1:
             show_cursor_helper(False)
 
@@ -128,7 +114,7 @@ class Actions:
 
     def mouse_toggle_control_mouse():
         """Toggles control mouse"""
-        eye_mouse.control_mouse.toggle()
+        toggle_control(not config.control_mouse)
 
     def mouse_toggle_zoom_mouse():
         """Toggles zoom mouse"""
@@ -144,23 +130,24 @@ class Actions:
 
     def mouse_drag():
         """(TEMPORARY) Press and hold/release button 0 depending on state for dragging"""
-        global dragging
-        if not dragging:
-            dragging = True
+        if 1 not in ctrl.mouse_buttons_down():
+            # print("start drag...")
             ctrl.mouse_click(button=0, down=True)
+            # app.notify("drag started")
         else:
-            dragging = False
-            ctrl.mouse_click(up=True)
+            # print("end drag...")
+            ctrl.mouse_click(button=0, up=True)
+
+        # app.notify("drag stopped")
 
     def mouse_sleep():
         """Disables control mouse, zoom mouse, and re-enables cursor"""
-        global dragging
-        eye_zoom_mouse.zoom_mouse.disable()
-        eye_mouse.control_mouse.disable()
+        eye_zoom_mouse.toggle_zoom_mouse(False)
+        toggle_control(False)
         show_cursor_helper(True)
         stop_scroll()
-        if dragging:
-            mouse_drag()
+        if 1 in ctrl.mouse_buttons_down():
+            actions.user.mouse_drag()
 
     def mouse_scroll_down():
         """Scrolls down"""
@@ -325,8 +312,3 @@ def start_cursor_scrolling():
     gaze_job = cron.interval("60ms", gaze_scroll)
     # if eye_zoom_mouse.zoom_mouse.enabled and eye_mouse.mouse.attached_tracker is not None:
     #    eye_zoom_mouse.zoom_mouse.sleep(True)
-
-
-@ctx.capture(rule="{self.mouse_button}")
-def mouse_index(m) -> int:
-    return int(m.mouse_button)

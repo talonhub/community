@@ -2,6 +2,11 @@ from talon import app, Context, Module
 
 mod = Module()
 
+# 1password
+mod.apps.one_password = "app.bundle: com.agilebits.onepassword7"
+mod.apps.one_password = "app.name: 1Password for Windows desktop"
+mod.apps.one_password = "app.name: 1Password.exe"
+
 
 @mod.action_class
 class Actions:

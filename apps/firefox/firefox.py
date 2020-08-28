@@ -1,9 +1,13 @@
 from talon import ctrl, ui, Module, Context, actions, clip, app
 
 ctx = Context()
+mod = Module()
+apps = mod.apps
+apps.firefox = "app.name: Firefox"
+apps.firefox = "app.name: firefox"
+apps.firefox = "app.name: firefox.exe"
+
 ctx.matches = r"""
-app: Firefox
-app: firefox.exe
 app: firefox
 """
 

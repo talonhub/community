@@ -1,14 +1,13 @@
-app: Notepad++ : a free (GNU) source code editor
-app: notepad++.exe
+app: notepad_plus_plus
 -
-tag(): find_and_replace
-tag(): line_commands
-tag(): tabs
+tag(): user.find_and_replace
+tag(): user.line_commands
+tag(): user.tabs
 action(app.tab_previous):
 	key(ctrl-pageup)
 action(app.tab_next):
 	key(ctrl-pagedown)
-action(user.ide_toggle_comment):
+action(code.toggle_comment):
 	key(ctrl-q)
 action(edit.line_clone):
 	key(ctrl-d)

@@ -1,7 +1,6 @@
 os: windows
 os: linux
-app: Slack
-app: slack.exe
+app: slack
 #todo: some sort of plugin, consolidate with teams or something?
 -
 # Workspaces
