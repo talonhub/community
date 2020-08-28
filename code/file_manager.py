@@ -42,6 +42,9 @@ mod.list(
     "file_manager_directory_exclusions",
     desc="list of titles that are excluded/disabled from the picker functionality",
 )
+mod.list("file_manager_directories", desc="List of subdirectories for the current path")
+mod.list("file_manager_files", desc="List of files at the root of the current path")
+
 setting_auto_show_pickers = mod.setting(
     "file_manager_auto_show_pickers",
     type=int,

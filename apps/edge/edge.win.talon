@@ -1,10 +1,8 @@
 os: windows
-app: Microsoft Edge
-app: MicrosoftEdge.exe
-app: msedge.exe
+app: microsoft_edge
 -
 tag(): browser
-tag(): tabs
+tag(): user.tabs
 #action(browser.address):
 
 action(browser.bookmark):

@@ -36,7 +36,7 @@ def launch_applications(m) -> str:
     "Returns a single application name"
 
 
-@ctx.capture(rule="({self.running} | <user.text>)")
+@ctx.capture(rule="{self.running}")  # | <user.text>)")
 def running_applications(m):
     try:
         return m.running

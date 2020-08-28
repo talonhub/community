@@ -1,6 +1,4 @@
-os: mac
-app: DataGrip
-
+app: datagrip
 -
 run: key(cmd-enter)
 run it:

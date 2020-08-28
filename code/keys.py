@@ -88,8 +88,8 @@ ctx.lists["self.modifier"] = {
     "shift": "shift",  #'sky':     'shift',
     "super": "super",
 }
-
-ctx.lists["self.letter"] = dict(zip(default_alphabet, letters_string))
+alphabet = dict(zip(default_alphabet, letters_string))
+ctx.lists["self.letter"] = alphabet
 ctx.lists["self.symbol"] = {
     "back tick": "`",
     "`": "`",
@@ -154,6 +154,7 @@ ctx.lists["self.symbol"] = {
     "dubquote": '"',
     "double quote": '"',
 }
+
 
 ctx.lists["self.number"] = dict(zip(default_digits, numbers))
 ctx.lists["self.arrow"] = {
@@ -252,7 +253,7 @@ class Actions:
         """Inserts uppercase letters from list"""
         actions.insert("".join(m).upper())
 
-    def get_alphabet():
+    def get_alphabet() -> dict:
         """Provides the alphabet dictionary"""
-        return ctx.lists["user.letter"]
+        return alphabet
 

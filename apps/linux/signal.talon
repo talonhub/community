@@ -1,6 +1,4 @@
-os: linux
 app: signal
-app: Signal
 -
 show shortcuts: key("ctrl-/")
 

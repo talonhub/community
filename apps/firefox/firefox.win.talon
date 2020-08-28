@@ -1,9 +1,8 @@
 os: windows
-app: Firefox
-app: firefox.exe
+app: firefox
 -
 tag(): browser
-tag(): tabs
+tag(): user.tabs
 
 #action(browser.address):
 

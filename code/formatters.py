@@ -9,8 +9,9 @@ words_to_keep_lowercase = "a,an,the,at,by,for,in,is,of,on,to,up,and,as,but,or,no
     ","
 )
 
-last_formatted_phrase = ""
 last_phrase = ""
+formatted_phrase_history = []
+formatted_phrase_history_length = 20
 
 
 def surround(by):
@@ -37,10 +38,11 @@ def FormatText(m: Union[str, Phrase], fmtrs: str):
         words = actions.dictate.parse_words(m)
         words = actions.dictate.replace_words(words)
 
-    return format_text_helper(words, fmtrs)
+    return format_text_helper(words, fmtrs, True)
 
 
-def format_text_helper(word_list, fmtrs: str):
+def format_text_helper(word_list, fmtrs: str, tracked: bool):
+    global formatted_phrase_history
     fmtr_list = fmtrs.split(",")
     tmp = []
     spaces = True
@@ -57,8 +59,12 @@ def format_text_helper(word_list, fmtrs: str):
         sep = ""
     result = sep.join(words)
 
-    global last_formatted_phrase
-    last_formatted_phrase = result
+    if tracked:
+        formatted_phrase_history.insert(0, result)
+        formatted_phrase_history = formatted_phrase_history[
+            -formatted_phrase_history_length:
+        ]
+
     return result
 
 
@@ -162,7 +168,6 @@ formatters_words = {
     # "fiver": formatters_dict["FIRST_FIVE"],
 }
 
-
 all_formatters = {}
 all_formatters.update(formatters_dict)
 all_formatters.update(formatters_words)
@@ -187,21 +192,33 @@ class Actions:
         """Formats a phrase according to formatters. formatters is a comma-separated string of formatters (e.g. 'CAPITALIZE_ALL_WORDS,DOUBLE_QUOTED_STRING')"""
         return FormatText(phrase, formatters)
 
-    def list_formatters():
+    def formatters_help_toggle():
         """Lists all formatters"""
-        gui.freeze()
+        if gui.showing:
+            gui.hide()
+        else:
+            gui.show()
 
-    def hide_formatters():
-        """Hides list of formatters"""
-        gui.hide()
+    def formatters_recent_toggle():
+        """Toggles list of recent formatters"""
+        if recent_gui.showing:
+            recent_gui.hide()
+        else:
+            recent_gui.show()
 
-    def clear_last_phrase():
+    def formatters_recent_select(number: int):
+        """Inserts a recent formatter"""
+        if len(formatted_phrase_history) >= number:
+            return formatted_phrase_history[number - 1]
+        return ""
+
+    def formatters_clear_last():
         """Clears the last formatted phrase"""
-        global last_formatted_phrase
-        for character in last_formatted_phrase:
-            actions.edit.delete()
+        if len(formatted_phrase_history) > 0:
+            for character in formatted_phrase_history[0]:
+                actions.edit.delete()
 
-    def reformat_last_phrase(formatters: str) -> str:
+    def formatters_reformat_last(formatters: str) -> str:
         """Reformats last formatted phrase"""
         global last_phrase
         return FormatText(last_phrase, formatters)
@@ -225,4 +242,12 @@ def gui(gui: imgui.GUI):
     gui.text("List formatters")
     gui.line()
     for name in sorted(set(formatters_words.keys())):
-        gui.text(f"{name} | {format_text_helper(['one', 'two', 'three'], name)}")
+        gui.text(f"{name} | {format_text_helper(['one', 'two', 'three'], name, False)}")
+
+
+@imgui.open(software=False)
+def recent_gui(gui: imgui.GUI):
+    gui.text("Recent formatters")
+    gui.line()
+    for index, result in enumerate(formatted_phrase_history, 1):
+        gui.text("{}. {}".format(index, result))

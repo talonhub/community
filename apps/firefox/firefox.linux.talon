@@ -3,8 +3,8 @@ app: Firefox
 app: firefox
 -
 tag(): browser
-tag(): firefox
-tag(): tabs
+tag(): user.firefox
+tag(): user.tabs
 
 #action(browser.address):
 

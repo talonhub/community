@@ -1,16 +1,12 @@
 #custom vscode commands go here
-app: Code
-app: Code - OSS
-app: Code
-app: Visual Studio Code
-app: Code.exe
+app: vscode
 -
-tag(): find_and_replace
-tag(): line_commands
-tag(): multiple_cursors
-tag(): snippets
-tag(): splits
-tag(): tabs
+tag(): user.find_and_replace
+tag(): user.line_commands
+tag(): user.multiple_cursors
+tag(): user.snippets
+tag(): user.splits
+tag(): user.tabs
 #talon app actions
 action(app.tab_close): user.vscode("workbench.action.closeActiveEditor")
 action(app.tab_next): user.vscode("workbench.action.nextEditorInGroup")
@@ -89,6 +85,7 @@ zen switch: user.vscode("workbench.action.toggleZenMode")
 # File Commands
 file hunt [<user.text>]: 
   user.vscode("Go to File")
+  sleep(50ms)
   insert(text or "")
 file copy path: user.vscode_ignore_clipboard("File: Copy Path of Active File") 
 file create sibling: user.vscode("File: New File")  
@@ -192,11 +189,11 @@ terminal scroll up: user.vscode("Terminal:ScrollUp")
 terminal scroll down: user.vscode("Terminal:ScrollDown")
 
 #TODO: should this be added to linecommands?
-copy [line] down: user.vscode("editor.action.copyLinesDownAction")
-copy [line] up: user.vscode("editor.action.copyLinesUpAction")
+copy line down: user.vscode("editor.action.copyLinesDownAction")
+copy line up: user.vscode("editor.action.copyLinesUpAction")
 
-#todo: wtf?
-#select less: user.vscode("Shrink Selection")
-#select (more|this): user.vscode("Expand Selection")
+#Expand/Shrink AST Selection
+select less: user.vscode("editor.action.smartSelect.shrink")
+select (more|this): user.vscode("editor.action.smartSelect.expand")
   
   

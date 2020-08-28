@@ -12,3 +12,4 @@ for entry in tagList:
 
 for key, value in modes.items():
     mod.mode(key, value)
+

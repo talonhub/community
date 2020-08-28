@@ -1,8 +1,8 @@
 os: mac
-app: Microsoft Edge
+app: microsoft_edge
 -
 tag(): browser
-tag(): tabs
+tag(): user.tabs
 #action(browser.address):
 
 action(browser.bookmark):

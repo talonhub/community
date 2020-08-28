@@ -1,3 +1,5 @@
+# XXX - would be nice to be able pipe these through formatters
+
 import sys
 from typing import Set
 
@@ -24,6 +26,7 @@ ctx.lists["user.abbreviation"] = {
     "applications": "apps",
     "argument": "arg",
     "arguments": "args",
+    "assembly": "asm",
     "attribute": "attr",
     "attributes": "attrs",
     "authenticate": "auth",
@@ -41,6 +44,7 @@ ctx.lists["user.abbreviation"] = {
     "configuration": "cfg",
     "context": "ctx",
     "control": "ctrl",
+    "constant": "const",
     "copy": "cpy",
     "database": "db",
     "debug": "dbg",
@@ -70,12 +74,14 @@ ctx.lists["user.abbreviation"] = {
     "extension": "ext",
     "framework": "fw",
     "function": "func",
+    "funny": "lol",
     "image": "img",
     "information": "info",
     "initialize": "init",
     "initializer": "init",
     "instance": "inst",
     "integer": "int",
+    "interrupt": "int",
     "iterate": "iter",
     "java archive": "jar",
     "javascript": "js",
@@ -98,6 +104,7 @@ ctx.lists["user.abbreviation"] = {
     "number": "num",
     "object": "obj",
     "okay": "ok",
+    "original": "orig",
     "package": "pkg",
     "parameter": "param",
     "parameters": "params",
@@ -127,6 +134,7 @@ ctx.lists["user.abbreviation"] = {
     "service pack": "sp",
     "session id": "sid",
     "shell": "sh",
+    "shellcode": "sc",
     "source": "src",
     "special": "spec",
     "specific": "spec",
@@ -146,6 +154,7 @@ ctx.lists["user.abbreviation"] = {
     "temporary": "tmp",
     "text": "txt",
     "token": "tok",
+    "ultimate": "ulti",
     "user": "usr",
     "utilities": "utils",
     "utility": "util",
