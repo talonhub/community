@@ -2,7 +2,7 @@ app: termite
 and not win.title: /VIM/
 
 -
-tag(): user.terminal
+tag(): terminal
 
 # Selection mode
 shell yank: key("y")
