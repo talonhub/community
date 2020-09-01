@@ -149,9 +149,7 @@ class Actions:
 
     def homophones_show_selection():
         """Sentence formatter"""
-        actions.edit.copy()
-        actions.sleep("100ms")
-        raise_homophones(clip.get(), False, True)
+        raise_homophones(actions.edit.selected_text(), False, True)
 
     def homophones_force_show(m: str):
         """Sentence formatter"""
@@ -159,9 +157,7 @@ class Actions:
 
     def homophones_force_show_selection():
         """Sentence formatter"""
-        actions.edit.copy()
-        actions.sleep("100ms")
-        raise_homophones(clip.get(), True, True)
+        raise_homophones(actions.edit.selected_text(), True, True)
 
     def homophones_select(number: int):
         """selects the homophone by number"""
