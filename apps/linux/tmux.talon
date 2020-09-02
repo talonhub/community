@@ -1,5 +1,5 @@
 os: linux
-tag: tmux
+tag: user.tmux
 -
 mux: "tmux "
 
