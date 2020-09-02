@@ -49,6 +49,7 @@ def update_homophones(name, flags):
                         phones[w] = others
 
     all_homophones = phones
+    # print(str(canonical_list))
     ctx.lists["self.homophones_canonicals"] = canonical_list
 
 
@@ -149,9 +150,7 @@ class Actions:
 
     def homophones_show_selection():
         """Sentence formatter"""
-        actions.edit.copy()
-        actions.sleep("100ms")
-        raise_homophones(clip.get(), False, True)
+        raise_homophones(actions.edit.selected_text(), False, True)
 
     def homophones_force_show(m: str):
         """Sentence formatter"""
@@ -159,11 +158,9 @@ class Actions:
 
     def homophones_force_show_selection():
         """Sentence formatter"""
-        actions.edit.copy()
-        actions.sleep("100ms")
-        raise_homophones(clip.get(), True, True)
+        raise_homophones(actions.edit.selected_text(), True, True)
 
-    def homophones_select(number: int):
+    def homophones_select(number: int) -> str:
         """selects the homophone by number"""
         if number <= len(active_word_list) and number > 0:
             return active_word_list[number - 1]

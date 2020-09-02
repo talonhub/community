@@ -11,6 +11,7 @@ camera overlay: eye_mouse.camera_overlay.toggle()
 run calibration: user.mouse_calibrate()	
 touch: mouse_click(0)
 righty: mouse_click(1)
+midclick: mouse_click(2)
 
 #see keys.py for modifiers.
 #defaults

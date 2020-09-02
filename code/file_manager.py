@@ -334,7 +334,7 @@ class Actions:
             if is_terminal:
                 actions.insert("mkdir ")
             else:
-                # print("fo iy...")
+                print("fo iy...")
                 actions.key("ctrl-shift-n")
         elif is_mac:
             if is_terminal:
@@ -441,6 +441,12 @@ def update_maps(window):
         elif is_linux:
             if item in window.app.name:
                 is_terminal = True
+
+    if is_windows and is_terminal:
+        # if cmd or windows terminal is running as admin...
+        # strip it
+        title = title.replace("Administrator:  ", "")
+        # print("title: " + title)
 
     if title in ctx.lists["self.file_manager_directory_remap"]:
         title = ctx.lists["self.file_manager_directory_remap"][title]
