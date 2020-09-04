@@ -34,6 +34,12 @@ state include local: user.code_include_local()
 state type deaf: user.code_type_definition()
 state type deaf struct: user.code_typedef_struct()
 state (no | nil | null): user.code_null()
+state break: user.code_break()
+state next: user.code_next()
+state true: user.code_true()
+state false: user.code_false()
+state na: user.code_na()
+
 ^funky <user.text>$:
     #todo: once .talon action definitions can take parameters, combine these functions
     user.code_private_function()
@@ -68,23 +74,29 @@ state (no | nil | null): user.code_null()
 	user.code_public_static_function()
     user.code_public_function_formatter(user.text)
 
-# show and print functions
+# show and print functions and libraries
 toggle funk: user.code_toggle_functions()
-funk <user.code_functions>: 
+toggle library: user.code_toggle_libraries()
+funk <user.code_functions>:
     old_clip = clip.text()
     user.code_insert_function(code_functions, "")
     clip.set_text(old_clip)
-funk cell <number>: 
+library <user.code_libraries>:
+    insert("library()")
+    key(left)
+    user.code_insert_library(code_libraries, "")
+    key(end enter)
+funk cell <number>:
     old_clip = clip.text()
     user.code_select_function(number - 1, "")
     clip.set_text(old_clip)
-funk wrap <user.code_functions>: 
+funk wrap <user.code_functions>:
     old_clip = clip.text()
     edit.copy()
     sleep(100ms)
     user.code_insert_function(code_functions, clip.text())
     clip.set_text(old_clip)
-funk wrap <number>: 
+funk wrap <number>:
     old_clip = clip.text()
     edit.copy()
     sleep(100ms)

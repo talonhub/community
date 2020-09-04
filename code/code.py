@@ -30,6 +30,7 @@ mod.tag(
 
 key = actions.key
 function_list = []
+library_list = []
 extension_lang_map = {
     "asm": "assembly",
     "bat": "batch",
@@ -54,6 +55,7 @@ extension_lang_map = {
     "vim": "vim",
     "js": "javascript",
     "ts": "typescript",
+    "r": "r"
 }
 
 # flag indicates whether or not the title tracking is enabled
@@ -192,6 +194,9 @@ class Actions:
     def code_operator_less_than_or_equal_to():
         """code_operator_less_than_or_equal_to"""
 
+    def code_operator_in():
+        """code_operator_less_than_or_equal_to"""
+
     def code_operator_and():
         """codee_operator_and"""
 
@@ -278,6 +283,21 @@ class Actions:
 
     def code_state_return():
         """Inserts return statement"""
+
+    def code_break():
+        """Inserts break statement"""
+
+    def code_next():
+        """Inserts next statement"""
+
+    def code_true():
+        """Insert True value"""
+
+    def code_false():
+        """Insert False value"""
+
+    def code_na():
+        """Insert NA value"""
 
     def code_try_catch():
         """Inserts try/catch. If selection is true, does so around the selecion"""
@@ -392,15 +412,17 @@ class Actions:
     def code_toggle_functions():
         """GUI: List functions for active language"""
         global function_list
-        if gui.showing:
+        if gui_libraries.showing:
+            gui_libraries.hide()
+        if gui_functions.showing:
             function_list = []
-            gui.hide()
+            gui_functions.hide()
         else:
-            update_list_and_freeze()
+            update_function_list_and_freeze()
 
     def code_select_function(number: int, selection: str):
         """Inserts the selected function when the imgui is open"""
-        if gui.showing and number < len(function_list):
+        if gui_functions.showing and number < len(function_list):
             actions.user.code_insert_function(
                 registry.lists["user.code_functions"][0][function_list[number]],
                 selection,
@@ -409,19 +431,48 @@ class Actions:
     def code_insert_function(text: str, selection: str):
         """Inserts a function and positions the cursor appropriately"""
 
+    def code_toggle_libraries():
+        """GUI: List libraries for active language"""
+        global library_list
+        if gui_functions.showing:
+            gui_functions.hide()
+        if gui_libraries.showing:
+            library_list = []
+            gui_libraries.hide()
+        else:
+            update_library_list_and_freeze()
 
-def update_list_and_freeze():
+    def code_select_library(number: int, selection: str):
+        """Inserts the selected library when the imgui is open"""
+        if gui_libraries.showing and number < len(library_list):
+            actions.user.code_insert_library(
+                registry.lists["user.code_libraries"][0][library_list[number]],
+                selection,
+            )
+
+    def code_insert_library(text: str, selection: str):
+        """Inserts a library and positions the cursor appropriately"""
+
+def update_library_list_and_freeze():
+    global library_list
+    if "user.code_libraries" in registry.lists:
+        library_list = sorted(registry.lists["user.code_libraries"][0].keys())
+    else:
+        library_list = []
+
+    gui_libraries.freeze()
+
+def update_function_list_and_freeze():
     global function_list
     if "user.code_functions" in registry.lists:
         function_list = sorted(registry.lists["user.code_functions"][0].keys())
     else:
         function_list = []
 
-    gui.freeze()
-
+    gui_functions.freeze()
 
 @imgui.open(software=False)
-def gui(gui: imgui.GUI):
+def gui_functions(gui: imgui.GUI):
     gui.text("Functions")
     gui.line()
 
@@ -433,10 +484,21 @@ def gui(gui: imgui.GUI):
             )
         )
 
+@imgui.open(software=False)
+def gui_libraries(gui: imgui.GUI):
+    gui.text("Libraries")
+    gui.line()
+
+    for i, entry in enumerate(library_list, 1):
+        gui.text(
+            "{}. {}: {}".format(
+                i, entry, registry.lists["user.code_libraries"][0][entry]
+            )
+        )
 
 def commands_updated(_):
-    if gui.showing:
-        update_list_and_freeze()
+    if gui_functions.showing:
+        update_function_list_and_freeze()
 
 
 registry.register("update_commands", commands_updated)
