@@ -499,6 +499,7 @@ def gui_libraries(gui: imgui.GUI):
 def commands_updated(_):
     if gui_functions.showing:
         update_function_list_and_freeze()
-
+    if gui_libraries.showing:
+        update_library_list_and_freeze()
 
 registry.register("update_commands", commands_updated)
