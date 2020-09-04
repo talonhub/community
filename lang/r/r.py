@@ -99,6 +99,21 @@ ctx.lists["user.code_functions"] = {
     "write CSV": "write_csv",
     "ex table": "xtable",
     "un nest": "unnest",
+    # Shiny
+    'shine ui': 'shinyUI',
+    'title panel': 'titlePanel',
+    'main panel': 'mainPanel',
+    'tab panel': 'tabPanel',
+    'navigation list panel': 'navlistPanel',
+    'conditional panel': 'conditionalPanel',
+    'input panel': 'inputPanel',
+    'ui output': 'uiOutput',
+    'text output': 'textOutput',
+    'table output': 'tableOutput',
+    'data table output': 'dataTableOutput',
+    'select size input': 'selectizeInput',
+    'action button': 'actionButton',
+    'download button': 'downloadButton',
 }
 
 ctx.lists["user.code_libraries"] = {

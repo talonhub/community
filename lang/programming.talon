@@ -38,7 +38,6 @@ state break: user.code_break()
 state next: user.code_next()
 state true: user.code_true()
 state false: user.code_false()
-state na: user.code_na()
 
 ^funky <user.text>$:
     #todo: once .talon action definitions can take parameters, combine these functions

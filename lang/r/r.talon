@@ -59,10 +59,11 @@ action(user.code_state_return):
    key(left)
 action(user.code_break): "break"
 action(user.code_next): "next"
-action(user.code_na): "NA"
 
 # R specific commands
 chain:
     key(end)
     " %>%"
     key(enter)
+state na:
+    insert("NA")

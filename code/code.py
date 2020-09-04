@@ -296,9 +296,6 @@ class Actions:
     def code_false():
         """Insert False value"""
 
-    def code_na():
-        """Insert NA value"""
-
     def code_try_catch():
         """Inserts try/catch. If selection is true, does so around the selecion"""
 
