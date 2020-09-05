@@ -56,16 +56,14 @@ def format_phrase(m: Union[str, Phrase], fmtrs: str):
 
 def format_phrase_no_history(word_list, fmtrs: str):
     fmtr_list = fmtrs.split(",")
-    tmp = []
+    words = []
     spaces = True
     for i, w in enumerate(word_list):
         for name in reversed(fmtr_list):
             smash, func = all_formatters[name]
             w = func(i, w, i == len(word_list) - 1)
             spaces = spaces and not smash
-        tmp.append(w)
-    words = tmp
-
+        words.append(w)
     sep = " " if spaces else ""
     return sep.join(words)
 
