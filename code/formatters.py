@@ -9,7 +9,11 @@ words_to_keep_lowercase = "a,an,the,at,by,for,in,is,of,on,to,up,and,as,but,or,no
     ","
 )
 
+# last_phrase has the last phrase spoken, WITHOUT formatting.
+# This is needed for reformatting.
 last_phrase = ""
+
+# formatted_phrase_history keeps the most recent formatted phrases, WITH formatting.
 formatted_phrase_history = []
 formatted_phrase_history_length = 20
 
@@ -25,7 +29,7 @@ def surround(by):
     return func
 
 
-def FormatText(m: Union[str, Phrase], fmtrs: str):
+def format_phrase(m: Union[str, Phrase], fmtrs: str):
     global last_phrase
     last_phrase = m
     words = []
@@ -38,11 +42,19 @@ def FormatText(m: Union[str, Phrase], fmtrs: str):
         words = actions.dictate.parse_words(m)
         words = actions.dictate.replace_words(words)
 
-    return format_text_helper(words, fmtrs, True)
+    result = format_phrase_no_history(words, fmtrs)
 
-
-def format_text_helper(word_list, fmtrs: str, tracked: bool):
+    # Add result to history.
     global formatted_phrase_history
+    formatted_phrase_history.insert(0, result)
+    formatted_phrase_history = formatted_phrase_history[
+        :formatted_phrase_history_length
+    ]
+
+    return result
+
+
+def format_phrase_no_history(word_list, fmtrs: str):
     fmtr_list = fmtrs.split(",")
     tmp = []
     spaces = True
@@ -58,12 +70,6 @@ def format_text_helper(word_list, fmtrs: str, tracked: bool):
     if not spaces:
         sep = ""
     result = sep.join(words)
-
-    if tracked:
-        formatted_phrase_history.insert(0, result)
-        formatted_phrase_history = formatted_phrase_history[
-            :formatted_phrase_history_length
-        ]
 
     return result
 
@@ -190,7 +196,7 @@ def format_text(m) -> str:
 class Actions:
     def formatted_text(phrase: Union[str, Phrase], formatters: str) -> str:
         """Formats a phrase according to formatters. formatters is a comma-separated string of formatters (e.g. 'CAPITALIZE_ALL_WORDS,DOUBLE_QUOTED_STRING')"""
-        return FormatText(phrase, formatters)
+        return format_phrase(phrase, formatters)
 
     def formatters_help_toggle():
         """Lists all formatters"""
@@ -221,7 +227,7 @@ class Actions:
     def formatters_reformat_last(formatters: str) -> str:
         """Reformats last formatted phrase"""
         global last_phrase
-        return FormatText(last_phrase, formatters)
+        return format_phrase(last_phrase, formatters)
 
 
 @ctx.capture(rule="{self.formatters}+")
@@ -231,7 +237,7 @@ def formatters(m):
 
 @ctx.capture(rule="<self.formatters> <user.text>")
 def format_text(m):
-    return FormatText(m.text, m.formatters)
+    return format_phrase(m.text, m.formatters)
 
 
 ctx.lists["self.formatters"] = formatters_words.keys()
@@ -242,7 +248,7 @@ def gui(gui: imgui.GUI):
     gui.text("List formatters")
     gui.line()
     for name in sorted(set(formatters_words.keys())):
-        gui.text(f"{name} | {format_text_helper(['one', 'two', 'three'], name, False)}")
+        gui.text(f"{name} | {format_phrase_no_history(['one', 'two', 'three'], name)}")
 
 
 @imgui.open(software=False)
