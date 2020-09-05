@@ -4,7 +4,7 @@ ctx = Context()
 mod = Module()
 
 
-def get_selected_text(default=None):
+def get_selected_text():
     try:
         with clip.capture() as s:
             actions.edit.copy()
@@ -24,6 +24,9 @@ class edit_actions:
 class Actions:
     def paste(text: str):
         """Pastes text and preserves clipboard"""
+
         with clip.revert():
             clip.set(text)
+            # sleep(0.1)
             actions.edit.paste()
+            actions.sleep("100ms")
