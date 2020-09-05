@@ -62,7 +62,7 @@ def format_text_helper(word_list, fmtrs: str, tracked: bool):
     if tracked:
         formatted_phrase_history.insert(0, result)
         formatted_phrase_history = formatted_phrase_history[
-            -formatted_phrase_history_length:
+            :formatted_phrase_history_length
         ]
 
     return result
