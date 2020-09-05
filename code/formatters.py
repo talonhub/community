@@ -66,12 +66,8 @@ def format_phrase_no_history(word_list, fmtrs: str):
         tmp.append(w)
     words = tmp
 
-    sep = " "
-    if not spaces:
-        sep = ""
-    result = sep.join(words)
-
-    return result
+    sep = " " if spaces else ""
+    return sep.join(words)
 
 
 NOSEP = True
