@@ -51,9 +51,6 @@ action(user.code_import):
     insert("library()")
     key(left)
 action(user.code_comment): "#"
-#action(user.code_private_function):
-#	insert(" <- function() {}")
-#  key(enter up home)
 action(user.code_state_return):
 	 insert("return()")
    key(left)
@@ -67,3 +64,5 @@ chain:
     key(enter)
 state na:
     insert("NA")
+
+^funky <user.text>$: user.code_private_function(text)

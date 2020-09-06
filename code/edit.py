@@ -26,4 +26,5 @@ class Actions:
         """Pastes text and preserves clipboard"""
         with clip.revert():
             clip.set(text)
+            actions.sleep("100ms")
             actions.edit.paste()
