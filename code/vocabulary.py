@@ -36,7 +36,7 @@ capitalize = [
     "December",
 ]
 
-# Add single words here if Talon recognizes, but they need to have their
+# Add single words here if Talon recognizes them, but they need to have their
 # spelling adjusted.
 word_map = {
     # For example:
