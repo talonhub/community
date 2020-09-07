@@ -10,6 +10,8 @@ Talon configs for Mac, Windows, and Linux. Very much in progress. This is also i
 Notes: 
 - commands are subject to change. I do my best to minimize changes, but I am moving to an [object][verb] standard slowly but surely.
 - I make extensive use of Talon's eye tracking features, so my grammar may be much smaller than others.
+- I still mostly use Dragon, so commands are probably mostly still optimized for that engine.
+- I personally use and verify much of the functionality on both Windows and Mac. For Linux, it's largely up to others contributors.  
 
 ## Linux & Mac setup
 
@@ -131,6 +133,9 @@ https://github.com/knausj85/knausj_talon/blob/master/misc/window_management.talo
 
 e.g., `focus chrome` will focus the chrome application.
 
+### Screenshot commands
+
+
 ### Activating Programming Languages
 
 Specific programming languages may be activated by voice commands, or via title tracking.
@@ -172,11 +177,22 @@ https://www.howtogeek.com/121218/beginner-how-to-make-explorer-always-show-the-f
 
 For the Windows command line, the `refresh title` command will force the title to the current directory, and all directory commands (`follow 1`) will automatically update the title.
 
+Notes: 
+• Both Windows Explorer and Finder hide certain files and folder by default, so it's often best to use the imgui to list the options before issuing commands. 
+
+• If there no hidden files or folders, and the items are displayed in alphabetical order, you can typically issue the `follow <number>`, `file <number>` and `open <number>` commands based on the displayed order.
+
+## Jetbrains commands
+
+For Jetbrains commands to work you must install https://plugins.jetbrains.com/plugin/10504-voice-code-idea
+into each editor.
+
 ## Settings
 
 Several options are configurable via a single settings file out of the box. Any setting can be made context specific as needed (e.g., per-OS, per-app, etc). 
 
 https://github.com/knausj85/knausj_talon/blob/master/settings.talon
+
 
 
 ```
@@ -210,7 +226,4 @@ The most commonly adjusted settings are probably
 
 • `user.mouse_wheel_down_amount` and `user.mouse_continuous_scroll_amount` for adjusting the scroll amounts for the various scroll commands.
 
-## Jetbrains commands
 
-For Jetbrains commands to work you must install https://plugins.jetbrains.com/plugin/10504-voice-code-idea
-into each editor.
