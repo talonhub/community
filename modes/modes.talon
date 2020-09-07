@@ -5,7 +5,7 @@ mode: all
     # user.mouse_wake()
     # user.history_enable()
     # speech.enable()
-sleep all:
+voice robot sleep all:
     user.switcher_hide_running()
     user.history_disable()
     user.homophones_hide()
@@ -13,18 +13,15 @@ sleep all:
     user.mouse_sleep()
     speech.disable()
     user.engine_sleep()
-talon sleep: speech.disable()
-talon wake: speech.enable()
-dragon mode: speech.disable()
-talon mode: speech.enable()
-# ^dictation mode$:
-#     mode.disable("sleep")
-#     mode.disable("command")
-#     mode.enable("dictation")
-# ^command mode$:
-#     mode.disable("sleep")
-#     mode.disable("dictation")
-#     mode.enable("command")
+
+voice robot sleep: speech.disable()
+voice robot wake: speech.enable()
+
+voice robot dictation:
+    speech.disable()
+    key(ctrl-0)
+
+
 [enable] debug mode:
     mode.enable("user.gdb")
 disable debug mode:

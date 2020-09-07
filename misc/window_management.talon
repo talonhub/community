@@ -11,4 +11,6 @@ put window right: key(ctrl-alt-right)
 put window up: key(ctrl-alt-up)
 put window next: key(ctrl-shift-alt-up)
 
-hello computer: key(cmd-space)
+put window way left: key(ctrl-cmd-alt-left)
+put window way right: key(ctrl-cmd-alt-right)
+

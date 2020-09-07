@@ -1,5 +1,5 @@
 talon copy context: user.talon_add_context_clipboard()
-talon dump context: 
+talon dump context:
     name = app.name()
     executable =  app.executable()
     bundle = app.bundle()
@@ -8,3 +8,5 @@ talon dump context:
     print("Executable: {executable}")
     print("Bundle: {bundle}")
     print("Title: {title}")
+
+voice command show log: key(f20)

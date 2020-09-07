@@ -1,5 +1,5 @@
 mode: user.talon
-mode: command 
+mode: command
 and code.language: talon
 -
 tag(): user.code_operators
@@ -14,7 +14,7 @@ action(user.code_operator_assignment): " = "
 action(user.code_comment): "#"
 
 dot talon: insert(".talon")
-insert: 
+insert:
 	insert("insert('')")
 	edit.left()
 	edit.left()
@@ -45,3 +45,8 @@ user:
 repeat:
 	insert("repeat()")
 	edit.left()
+
+control: insert('ctrl')
+option: insert('alt')
+shift: insert('shift')
+command: insert('cmd')
