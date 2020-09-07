@@ -273,22 +273,30 @@ def gaze_scroll():
     if (
         eye_zoom_mouse.zoom_mouse.state == eye_zoom_mouse.STATE_IDLE
     ):  # or eye_zoom_mouse.zoom_mouse.state == eye_zoom_mouse.STATE_SLEEP:
-        windows = ui.windows()
-        window = None
         x, y = ctrl.mouse_pos()
-        for w in windows:
-            if w.rect.contains(x, y):
-                window = w.rect
-                break
-        if window is None:
+
+        # the rect for the window containing the mouse
+        rect = None
+
+        # on windows, check the active_window first since ui.windows() is not z-ordered
+        if app.platform == "windows" and ui.active_window().rect.contains(x, y):
+            rect = ui.active_window().rect
+        else:
+            windows = ui.windows()
+            for w in windows:
+                if w.rect.contains(x, y):
+                    rect = w.rect
+                    break
+
+        if rect is None:
             # print("no window found!")
             return
 
-        midpoint = window.y + window.height / 2
-        amount = int(((y - midpoint) / (window.height / 10)) ** 3)
+        midpoint = rect.y + rect.height / 2
+        amount = int(((y - midpoint) / (rect.height / 10)) ** 3)
         actions.mouse_scroll(by_lines=False, y=amount)
 
-    # print(f"gaze_scroll: {midpoint} {window.height} {amount}")
+    # print(f"gaze_scroll: {midpoint} {rect.height} {amount}")
 
 
 def stop_scroll():
