@@ -178,6 +178,7 @@ https://www.howtogeek.com/121218/beginner-how-to-make-explorer-always-show-the-f
 For the Windows command line, the `refresh title` command will force the title to the current directory, and all directory commands (`follow 1`) will automatically update the title.
 
 Notes: 
+
 • Both Windows Explorer and Finder hide certain files and folder by default, so it's often best to use the imgui to list the options before issuing commands. 
 
 • If there no hidden files or folders, and the items are displayed in alphabetical order, you can typically issue the `follow <number>`, `file <number>` and `open <number>` commands based on the displayed order.
