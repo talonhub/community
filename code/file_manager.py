@@ -296,7 +296,7 @@ class Actions:
         if isinstance(path, int):
             index = (current_folder_page - 1) * len(selection_numbers) + path
             if index < len(folder_selections):
-                actions.insert(folder_selections[index])
+                actions.insert('"{}"'.format(folder_selections[index]))
         else:
             actions.insert(path)
 
