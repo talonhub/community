@@ -65,7 +65,7 @@ action(user.code_type_definition): ""
 action(user.code_typedef_struct): ""
 
 action(user.code_state_for_each):
-  insert("forEach()")
+  insert("foreach ()")
   key(left)
 
 action(user.code_null): "null"
@@ -129,7 +129,9 @@ state filter:
 
 
 
-state var <user.text>$: insert("$"text)
+state var <user.text>: insert("${text}")
 
 
 state arrow: insert(" => ")
+
+end statement: key(ctrl-alt-shift-;)
