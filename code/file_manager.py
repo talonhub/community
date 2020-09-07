@@ -383,6 +383,22 @@ class Actions:
                 actions.key("ctrl-l")
                 actions.insert("cmd.exe")
                 actions.key("enter")
+            elif is_mac:
+                from talon import applescript
+
+                applescript.run(
+                    r"""
+                tell application "Finder"
+                    set myWin to window 1
+                    set thePath to (quoted form of POSIX path of (target of myWin as alias))
+                    tell application "Terminal"
+                        activate
+                        tell window 1
+                            do script "cd " & thePath
+                        end tell
+                    end tell
+                end tell"""
+                )
 
 
 pattern = re.compile(r"[A-Z][a-z]*|[a-z]+|\d")
