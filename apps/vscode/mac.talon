@@ -27,7 +27,7 @@ action(app.tab_previous):
 action(app.tab_close):
   key(cmd-w)
 # Toggleable views
-action(user.ide_toggle_fullscreen): 
+action(user.ide_toggle_fullscreen):
   user.ide_command_palette()
   insert("View: Toggle Full Screen")
   key(enter)
@@ -55,11 +55,11 @@ action(user.ide_refactor_in_line):
 action(user.ide_refactor_rename):
   # Rename Symbol
   key(f2)
-action(user.ide_rename_file): 
+action(user.ide_rename_file):
   user.ide_command_palette()
   insert("File: Reveal Active File In Side Bar")
   key(enter)
-action(user.ide_fix_format): 
+action(user.ide_fix_format):
     # Format Document
     key(alt-shift-f)
 # Navigate
@@ -101,7 +101,7 @@ action(user.ide_terminal_trash):
     user.ide_command_palette()
     insert("Terminal:Kill")
     key(enter)
-  
+
 action(user.ide_terminal_scroll_down):
   key(shift-pgdown)
 
@@ -150,19 +150,19 @@ action(user.ide_toggle_status_bar):
   insert("View: Toggle Status Bar Visibility")
   key(enter)
 #action(user.ide_toggle_power_save): user.idea("action TogglePowerSave")
-action(user.ide_toggle_whitespace): 
+action(user.ide_toggle_whitespace):
   user.ide_command_palette()
   insert("View: Toggle Render Whitespace")
   key(enter)
 action(user.ide_toggle_indents): user.ide_toggle_whitespace()
 #requires an extension
 #action(user.ide_toggle_line_numbers):
-action(user.ide_toggle_breadcrumbs): 
+action(user.ide_toggle_breadcrumbs):
   user.ide_command_palette()
   insert("View: Toggle Breadcrumbs")
   key(enter)
 #action(user.ide_toggle_gutter_icons): user.idea("action EditorToggleShowGutterIcons")
-action(user.ide_toggle_wrap): 
+action(user.ide_toggle_wrap):
   user.ide_command_palette()
   insert("View: Toggle Word Wrap")
   key(enter)
@@ -174,7 +174,7 @@ action(user.ide_toggle_run):
 action(user.ide_toggle_debug):
   # View: Show Run and Debug, workbench.view.debug
   key(shift-cmd-d)
-  
+
 action(user.ide_toggle_breakpoint):
   # Debug: Toggle Breakpoint, editor.debug.action.toggleBreakpoint
   key(f9)
@@ -227,18 +227,18 @@ action(user.split_window_down):
   user.ide_command_palette()
   insert("workbench.action.moveEditorToBelowGroup")
   key(enter)
-action(user.split_window_vertically): 
+action(user.split_window_vertically):
   user.ide_command_palette()
   insert("View: Split Editor")
   key(enter)
-action(user.split_window_horizontally): 
+action(user.split_window_horizontally):
   user.ide_command_palette()
   insert("View: Split Editor Orthogonal")
   key(enter)
 action(user.split_flip): key(alt-cmd-0)
 action(user.split_window): key(cmd-\)
 action(user.split_clear): user.split_clear_all()
-action(user.split_clear_all): 
+action(user.split_clear_all):
   user.ide_command_palette()
   insert("View: Single Column Editor Layout")
   key(enter)
