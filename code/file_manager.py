@@ -357,7 +357,6 @@ class Actions:
             if is_terminal:
                 actions.insert("mkdir ")
             else:
-                print("fo iy...")
                 actions.key("ctrl-shift-n")
         elif is_mac:
             if is_terminal:
@@ -389,7 +388,7 @@ class Actions:
 pattern = re.compile(r"[A-Z][a-z]*|[a-z]+|\d")
 
 
-def create_spoken_forms(symbols, max_len=10):
+def create_spoken_forms(symbols, max_len=30):
     return [" ".join(list(islice(pattern.findall(s), max_len))) for s in symbols]
 
 
@@ -414,6 +413,7 @@ def get_file_map(current_path):
         )
         if f.is_file()
     ]
+    # print(str(files))
     spoken_forms = create_spoken_forms([p for p in files])
     return dict(zip(spoken_forms, [f for f in files]))
 
