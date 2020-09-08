@@ -39,5 +39,5 @@ ctx.lists["user.snippets"] = {
 #         "~/Library/Application Support/Code/User/snippets"
 #     )
 # if snippet_path:
-#     watcher = snippet_watcher({snippet_path: ["csharp.json",],}, update_list,)
+#     watcher2 = snippet_watcher({snippet_path: ["csharp.json",],}, update_list,)
 # print("reloaded!")
