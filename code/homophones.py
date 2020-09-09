@@ -33,21 +33,13 @@ def update_homophones(name, flags):
     phones = {}
     canonical_list = []
     with open(homophones_file, "r") as f:
-        for h in f:
-            h = h.rstrip()
-            h = h.split(",")
-            canonical_list.append(max(h, key=len))
-            for w in h:
-                w = w.lower()
-                others = phones.get(w, None)
-                if others is None:
-                    phones[w] = sorted(h)
-                else:
-                    # if there are multiple hits, collapse them into one list
-                    others += h
-                    others = set(others)
-                    others = sorted(others)
-                    phones[w] = others
+        for line in f:
+            words = line.rstrip().split(",")
+            canonical_list.append(max(words, key=len))
+            for word in words:
+                word = word.lower()
+                old_words = phones.get(word, [])
+                phones[word] = sorted(set(old_words + words))
 
     global all_homophones
     all_homophones = phones
