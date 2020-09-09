@@ -30,10 +30,8 @@ def update_homophones(name, flags):
     if name is not None and name != homophones_file:
         return
 
-    global all_homophones
     phones = {}
     canonical_list = []
-
     with open(homophones_file, "r") as f:
         for h in f:
             h = h.rstrip()
@@ -51,8 +49,8 @@ def update_homophones(name, flags):
                     others = sorted(others)
                     phones[w] = others
 
+    global all_homophones
     all_homophones = phones
-    # print(str(canonical_list))
     ctx.lists["self.homophones_canonicals"] = canonical_list
 
 
