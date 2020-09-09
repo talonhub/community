@@ -88,11 +88,11 @@ if app.platform == "windows":
 
     nameBuffer = ctypes.create_unicode_buffer(size.contents.value)
     GetUserNameEx(NameDisplay, nameBuffer, size)
+    one_drive_path = os.path.expanduser(os.path.join("~", "OneDrive"))
 
     # this is probably not the correct way to check for onedrive, quick and dirty
     if os.path.isdir(os.path.expanduser(os.path.join("~", r"OneDrive\Desktop"))):
         default_folder = os.path.join("~", "Desktop")
-        one_drive_path = os.path.expanduser(os.path.join("~", "OneDrive"))
 
         ctx.lists["user.file_manager_directory_remap"] = {
             "Desktop": os.path.join(one_drive_path, "Desktop"),
