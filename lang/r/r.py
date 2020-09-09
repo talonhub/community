@@ -60,7 +60,6 @@ ctx.lists["user.code_functions"] = {
     "mutate": "mutate",
     "names": "names",
     "nest": "nest",
-    "paste": "paste0",
     "print": "print",
     "read CSV": "read_csv",
     "read E views": "readEViews",
@@ -114,6 +113,11 @@ ctx.lists["user.code_functions"] = {
     "select size input": "selectizeInput",
     "action button": "actionButton",
     "download button": "downloadButton",
+    "render ui": "renderUI",
+    "observe event": "observeEvent",
+    # Base
+    "paste": "paste0",
+    "sort": "sort",
 }
 
 ctx.lists["user.code_libraries"] = {
@@ -134,6 +138,7 @@ ctx.lists["user.code_libraries"] = {
     "tidy verse": "tidyverse",
     "vee table": "vtable",
     "viridis": "viridis",
+    "shyn alert": "shinyalert",
 }
 
 
