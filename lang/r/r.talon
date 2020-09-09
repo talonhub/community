@@ -56,6 +56,8 @@ action(user.code_state_return):
    key(left)
 action(user.code_break): "break"
 action(user.code_next): "next"
+action(user.code_true): "TRUE"
+action(user.code_false): "FALSE"
 
 # R specific commands
 chain:

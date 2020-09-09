@@ -89,6 +89,10 @@ action(user.code_from_import):
 action(user.code_comment): "#"
 action(user.code_state_return):
 	insert("return ")
+action(user.code_true): "True"
+action(user.code_false): "False"
+
+
 
 #python-specicic grammars
 dunder in it: insert("__init__")

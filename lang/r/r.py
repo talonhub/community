@@ -138,9 +138,8 @@ ctx.lists["user.code_libraries"] = {
     "tidy verse": "tidyverse",
     "vee table": "vtable",
     "viridis": "viridis",
-    "shyn alert": "shinyalert",
+    "shiny alert": "shinyalert",
 }
-
 
 @ctx.action_class("user")
 class user_actions:
