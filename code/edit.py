@@ -24,7 +24,9 @@ class edit_actions:
 class Actions:
     def paste(text: str):
         """Pastes text and preserves clipboard"""
+
         with clip.revert():
             clip.set(text)
-            actions.sleep("100ms")
+            # sleep(0.1)
             actions.edit.paste()
+            actions.sleep("100ms")

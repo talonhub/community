@@ -152,7 +152,7 @@ class user_actions:
         actions.edit.left()
 
     def code_private_function(text: str):
-        result = "{} <- function ()\n{{\n\n}}".format(
+        result = "{} <- function () {{\n\n}}".format(
             actions.user.formatted_text(
                 text, settings.get("user.code_private_function_formatter")
             )
@@ -160,6 +160,11 @@ class user_actions:
 
         actions.user.paste(result)
         actions.edit.up()
+        actions.edit.up()
+        actions.edit.line_end()
+        actions.edit.left()
+        actions.edit.left()
+        actions.edit.left()
 
     def code_insert_library(text: str, selection: str):
         actions.clip.set_text(text + "{}".format(selection))
