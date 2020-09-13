@@ -88,15 +88,32 @@ if app.platform == "windows":
 
     nameBuffer = ctypes.create_unicode_buffer(size.contents.value)
     GetUserNameEx(NameDisplay, nameBuffer, size)
+    one_drive_path = os.path.expanduser(os.path.join("~", "OneDrive"))
 
-    # todo use expanduser for cross platform support
-    ctx.lists["user.file_manager_directory_remap"] = {
-        "Desktop": os.path.join(user_path, "Desktop"),
-        "Documents": os.path.join(user_path, "Documents"),
-        "Downloads": os.path.join(user_path, "Downloads"),
-        "Music": os.path.join(user_path, "Music"),
-        "Pictures": os.path.join(user_path, "Pictures"),
-    }
+    # this is probably not the correct way to check for onedrive, quick and dirty
+    if os.path.isdir(os.path.expanduser(os.path.join("~", r"OneDrive\Desktop"))):
+        default_folder = os.path.join("~", "Desktop")
+
+        ctx.lists["user.file_manager_directory_remap"] = {
+            "Desktop": os.path.join(one_drive_path, "Desktop"),
+            "Documents": os.path.join(one_drive_path, "Documents"),
+            "Downloads": os.path.join(user_path, "Downloads"),
+            "Music": os.path.join(user_path, "Music"),
+            "OneDrive": one_drive_path,
+            "Pictures": os.path.join(one_drive_path, "Pictures"),
+            "Videos": os.path.join(user_path, "Videos"),
+        }
+    else:
+        # todo use expanduser for cross platform support
+        ctx.lists["user.file_manager_directory_remap"] = {
+            "Desktop": os.path.join(user_path, "Desktop"),
+            "Documents": os.path.join(user_path, "Documents"),
+            "Downloads": os.path.join(user_path, "Downloads"),
+            "Music": os.path.join(user_path, "Music"),
+            "OneDrive": one_drive_path,
+            "Pictures": os.path.join(user_path, "Pictures"),
+            "Videos": os.path.join(user_path, "Videos"),
+        }
 
     if nameBuffer.value:
         ctx.lists["user.file_manager_directory_remap"][nameBuffer.value] = user_path
@@ -106,7 +123,8 @@ if app.platform == "windows":
         "Run",
         "Task Switching",
         "Task View",
-        "This PC" "File Explorer",
+        "This PC",
+        "File Explorer",
     ]
     supported_programs = [
         "cmd.exe",
@@ -165,10 +183,15 @@ class Actions:
     def file_manager_go_back():
         """file_manager_go_forward_directory"""
 
-    def file_manager_show_pickers():
+    def file_manager_toggle_pickers():
         """Shows the pickers"""
-        gui_files.freeze()
-        gui_folders.freeze()
+
+        if gui_files.showing:
+            gui_files.hide()
+            gui_folders.hide()
+        else:
+            gui_files.freeze()
+            gui_folders.freeze()
 
     def file_manager_hide_pickers():
         """Hides the pickers"""
@@ -273,7 +296,7 @@ class Actions:
         if isinstance(path, int):
             index = (current_folder_page - 1) * len(selection_numbers) + path
             if index < len(folder_selections):
-                actions.insert(folder_selections[index])
+                actions.insert('"{}"'.format(folder_selections[index]))
         else:
             actions.insert(path)
 
@@ -334,7 +357,6 @@ class Actions:
             if is_terminal:
                 actions.insert("mkdir ")
             else:
-                print("fo iy...")
                 actions.key("ctrl-shift-n")
         elif is_mac:
             if is_terminal:
@@ -361,12 +383,28 @@ class Actions:
                 actions.key("ctrl-l")
                 actions.insert("cmd.exe")
                 actions.key("enter")
+            elif is_mac:
+                from talon import applescript
+
+                applescript.run(
+                    r"""
+                tell application "Finder"
+                    set myWin to window 1
+                    set thePath to (quoted form of POSIX path of (target of myWin as alias))
+                    tell application "Terminal"
+                        activate
+                        tell window 1
+                            do script "cd " & thePath
+                        end tell
+                    end tell
+                end tell"""
+                )
 
 
 pattern = re.compile(r"[A-Z][a-z]*|[a-z]+|\d")
 
 
-def create_spoken_forms(symbols, max_len=10):
+def create_spoken_forms(symbols, max_len=30):
     return [" ".join(list(islice(pattern.findall(s), max_len))) for s in symbols]
 
 
@@ -391,6 +429,7 @@ def get_file_map(current_path):
         )
         if f.is_file()
     ]
+    # print(str(files))
     spoken_forms = create_spoken_forms([p for p in files])
     return dict(zip(spoken_forms, [f for f in files]))
 
@@ -447,16 +486,17 @@ def update_maps(window):
         # strip it
         title = title.replace("Administrator:  ", "")
         # print("title: " + title)
-
+    excluded_path = False
     if title in ctx.lists["self.file_manager_directory_remap"]:
         title = ctx.lists["self.file_manager_directory_remap"][title]
 
-    if (
-        not is_supported
-        or title in ctx.lists["self.file_manager_directory_exclusions"]
-        or not title
-        or title == ""
-    ):
+    elif title in ctx.lists["self.file_manager_directory_exclusions"]:
+        excluded_path = True
+
+        # set valid path to force an update
+        is_valid_path = True
+
+    if not is_supported or excluded_path or not title or title == "":
         is_terminal = False
     else:
         if is_mac and "~" in title:

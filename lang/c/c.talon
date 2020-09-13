@@ -77,6 +77,10 @@ action(user.code_state_while):
     insert("while ()")
     edit.left()
 action(user.code_state_return): "return "
+action(user.code_break): "break;"
+action(user.code_next): "continue;"
+action(user.code_true): "true"
+action(user.code_false): "false"
 action(user.code_type_definition): "typedef "
 action(user.code_typedef_struct):
     insert("typedef struct")

@@ -27,7 +27,7 @@
 #         for key, val in self.file_snippet_cache.items():
 #             self.snippet_dictionary.update(val)
 
-#         print(str(self.snippet_dictionary))
+#         # print(str(self.snippet_dictionary))
 #         if self.callback_function:
 #             self.callback_function(self.snippet_dictionary)
 
@@ -48,7 +48,7 @@
 #         file_type = path_obj.suffix
 #         self.file_snippet_cache[str(path_obj)] = {}
 
-#         # print("{}, {}, {}, {}".format(name, directory, file_name, file_type))
+#         print("{}, {}, {}, {}".format(name, directory, file_name, file_type))
 #         if directory in self.directories and file_name in self.directories[directory]:
 #             if file_type.lower() == ".json":
 #                 jsonDict = {}
@@ -73,7 +73,8 @@
 #     def __init__(self, dirs, callback):
 #         self.directories = dirs
 #         self.callback_function = callback
-
+#         self.snippet_dictionary = {}
+#         self.file_snippet_cache = {}
 #         # none = process all directories
 #         self.__update_all_snippets()
 

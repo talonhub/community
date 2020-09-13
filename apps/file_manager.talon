@@ -1,12 +1,7 @@
 tag: user.file_manager
 -
-settings():
-    # enable if you'd like the picker gui to automatically appear when explorer has focus
-    user.file_manager_auto_show_pickers = 0
-
 title force: user.file_manager_refresh_title()
-manager show: user.file_manager_show_pickers()
-manager hide: user.file_manager_hide_pickers()
+manager show: user.file_manager_toggle_pickers()
 
 go docks: user.file_manager_open_user_directory("Documents")
 go downloads: user.file_manager_open_user_directory("Downloads")

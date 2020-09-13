@@ -34,57 +34,34 @@ state include local: user.code_include_local()
 state type deaf: user.code_type_definition()
 state type deaf struct: user.code_typedef_struct()
 state (no | nil | null): user.code_null()
-^funky <user.text>$:
-    #todo: once .talon action definitions can take parameters, combine these functions
-    user.code_private_function()
-    user.code_private_function_formatter(user.text)
-    insert("()")
-    edit.left()
-    sleep(100ms)
-^pro funky <user.text>$:
-    #todo: once .talon action definitions can take parameters, combine these functions
-    user.code_protected_function()
-    user.code_protected_function_formatter(user.text)
-    #() surely isn't correct for all languages, will be part of the combined function above
-    insert("()")
-    key(left)
-    sleep(100ms)
-^pub funky <user.text>$:
-    #todo: once .talon action definitions can take parameters, combine these functions
-    user.code_public_function()
-    user.code_public_function_formatter(user.text)
-    sleep(50ms)
-    insert("()")
-^static funky <user.text>$:
-    #todo: once .talon action definitions can take parameters, combine these functions
-    user.code_private_static_function()
-    user.code_private_function_formatter(user.text)
-^pro static funky <user.text>$:
-    #todo: once .talon action definitions can take parameters, combine these functions
-    user.code_protected_static_function()
-    user.code_protected_function_formatter(user.text)
-^pub static funky <user.text>$:
-    #todo: once .talon action definitions can take parameters, combine these functions
-	user.code_public_static_function()
-    user.code_public_function_formatter(user.text)
+state break: user.code_break()
+state next: user.code_next()
+state true: user.code_true()
+state false: user.code_false()
 
-# show and print functions
+# show and print functions and libraries
 toggle funk: user.code_toggle_functions()
-funk <user.code_functions>: 
+toggle library: user.code_toggle_libraries()
+funk <user.code_functions>:
     old_clip = clip.text()
     user.code_insert_function(code_functions, "")
     clip.set_text(old_clip)
-funk cell <number>: 
+library <user.code_libraries>:
+    insert("library()")
+    key(left)
+    user.code_insert_library(code_libraries, "")
+    key(end enter)
+funk cell <number>:
     old_clip = clip.text()
     user.code_select_function(number - 1, "")
     clip.set_text(old_clip)
-funk wrap <user.code_functions>: 
+funk wrap <user.code_functions>:
     old_clip = clip.text()
     edit.copy()
     sleep(100ms)
     user.code_insert_function(code_functions, clip.text())
     clip.set_text(old_clip)
-funk wrap <number>: 
+funk wrap <number>:
     old_clip = clip.text()
     edit.copy()
     sleep(100ms)

@@ -1,4 +1,4 @@
-from talon import Module, Context, actions, ui, imgui, clip
+from talon import Module, Context, actions, ui, imgui, clip, settings
 
 ctx = Context()
 ctx.matches = r"""
@@ -23,7 +23,28 @@ ctx.lists["user.code_functions"] = {
 @ctx.action_class("user")
 class user_actions:
     def code_insert_function(text: str, selection: str):
-        actions.clip.set_text(text + "({})".format(selection))
-        actions.edit.paste()
+        if selection:
+            text = text + "({})".format(selection)
+        else:
+            text = text + "()"
+        actions.user.paste(text)
         actions.edit.left()
+
+    def code_private_function(text: str):
+        """Inserts private function declaration"""
+        result = "def _{}".format(
+            actions.user.formatted_text(
+                text, settings.get("user.code_private_function_formatter")
+            )
+        )
+
+        actions.user.code_insert_function(result, None)
+
+    def code_public_function(text: str):
+        result = "def {}".format(
+            actions.user.formatted_text(
+                text, settings.get("user.code_public_function_formatter")
+            )
+        )
+        actions.user.code_insert_function(result, None)
 

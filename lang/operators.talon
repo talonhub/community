@@ -34,8 +34,9 @@ op mod equals: user.code_operator_modulo_assignment()
 (op | is) (less | below) [than]: user.code_operator_less_than()
 (op | is) greater [than] or equal: user.code_operator_greater_than_or_equal_to()
 (op | is) less [than] or equal: user.code_operator_less_than_or_equal_to()
-#logical operators
+(op | is) in: user.code_operator_in()
 
+#logical operators
 (op | logical) and: user.code_operator_and()
 (op | logical) or: user.code_operator_or()
 
