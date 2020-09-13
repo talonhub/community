@@ -84,6 +84,11 @@ action(user.code_state_for_each):
   insert(".forEach()")
   key(left)
 
+action(user.code_break): "break;"
+action(user.code_next): "continue;"
+action(user.code_true): "true"
+action(user.code_false): "false"
+
 action(user.code_null): "null"
 
 action(user.code_operator_indirection): ""
