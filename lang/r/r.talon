@@ -59,6 +59,7 @@ action(user.code_next): "next"
 action(user.code_true): "TRUE"
 action(user.code_false): "FALSE"
 
+
 # R specific commands
 chain:
     key(end)
@@ -66,5 +67,4 @@ chain:
     key(enter)
 state na:
     insert("NA")
-
 ^funky <user.text>$: user.code_private_function(text)

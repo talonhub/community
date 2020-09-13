@@ -294,7 +294,7 @@ class Actions:
 
     def code_false():
         """Insert False value"""
-
+        
     def code_try_catch():
         """Inserts try/catch. If selection is true, does so around the selecion"""
 
@@ -447,7 +447,6 @@ class Actions:
     def code_insert_library(text: str, selection: str):
         """Inserts a library and positions the cursor appropriately"""
 
-
 def update_library_list_and_freeze():
     global library_list
     if "user.code_libraries" in registry.lists:
@@ -457,7 +456,6 @@ def update_library_list_and_freeze():
 
     gui_libraries.freeze()
 
-
 def update_function_list_and_freeze():
     global function_list
     if "user.code_functions" in registry.lists:
@@ -466,7 +464,6 @@ def update_function_list_and_freeze():
         function_list = []
 
     gui_functions.freeze()
-
 
 @imgui.open(software=False)
 def gui_functions(gui: imgui.GUI):
@@ -481,6 +478,17 @@ def gui_functions(gui: imgui.GUI):
             )
         )
 
+@imgui.open(software=False)
+def gui_libraries(gui: imgui.GUI):
+    gui.text("Libraries")
+    gui.line()
+
+    for i, entry in enumerate(library_list, 1):
+        gui.text(
+            "{}. {}: {}".format(
+                i, entry, registry.lists["user.code_libraries"][0][entry]
+            )
+        )
 
 @imgui.open(software=False)
 def gui_libraries(gui: imgui.GUI):
