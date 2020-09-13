@@ -87,17 +87,22 @@ action(user.code_from_import):
     key(space)
     edit.left()
 action(user.code_comment): "#"
-action(user.code_private_function):
-    insert("def _")
-action(user.code_protected_function):
-    user.code_private_function()
-action(user.code_public_function):
-	insert("def ")
 action(user.code_state_return):
 	insert("return ")
+action(user.code_true): "True"
+action(user.code_false): "False"
+
+
 
 #python-specicic grammars
 dunder in it: insert("__init__")
 state (def | deaf | deft): "def "
 pie test: "pytest"
 state past: "pass"
+
+^funky <user.text>$: user.code_private_function(text)
+#^pro funky <user.text>$: user.code_protected_function(text)
+^pub funky <user.text>$: user.code_public_function(text)
+#^static funky <user.text>$: user.code_private_static_function(text)
+#^pro static funky <user.text>$: user.code_protected_static_function(text)
+#^pub static funky <user.text>$: user.code_public_static_function(text)

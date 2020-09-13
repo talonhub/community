@@ -1,6 +1,6 @@
-mode: user.typescript
+mode: user.javascript
 mode: command
-and code.language: typescript
+and code.language: javascript
 -
 tag(): user.code_operators
 tag(): user.code_comment
@@ -37,15 +37,12 @@ action(user.code_state_else):
 action(user.code_block): 
   insert("{}") 
   key(left enter)
-
+  
 action(user.code_self): "this"
 
 action(user.code_state_while):
   insert("while ()")
   key(left)
-
-action(user.code_state_do):
-  insert("do ")
 
 action(user.code_state_return):
   insert("return ")
@@ -85,10 +82,6 @@ action(user.code_state_for_each):
   key(left)
 
 action(user.code_null): "null"
-
-action(user.code_private_function): "private "
-action(user.code_protected_function): "protected "
-action(user.code_public_function): "public "
 
 action(user.code_operator_indirection): ""
 action(user.code_operator_address_of): ""
@@ -153,3 +146,7 @@ state reduce:
   key(left)
 
 state spread: "..."
+
+^funky <user.text>$: user.code_private_function(text)
+^pro funky <user.text>$: user.code_protected_function(text)
+^pub funky <user.text>$: user.code_public_function(text)
