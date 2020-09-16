@@ -5,13 +5,12 @@ https://talon.wiki/unofficial_talon_docs/ is a great place to learn about Talon 
 
 # knausj_talon
 
-Talon configs for Mac, Windows, and Linux. Very much in progress. This is also intended to work with both Dragon Naturally Speaking and wav2letter.
+Talon configs for Mac, Windows, and Linux. Very much in progress. This is also intended to work with both Dragon Naturally Speaking and wav2letter.\
 
 Notes: 
-- commands are subject to change. I do my best to minimize changes, but I am moving to an [object][verb] standard slowly but surely.
-- I make extensive use of Talon's eye tracking features, so my grammar may be much smaller than others.
-- I still mostly use Dragon, so commands are probably mostly still optimized for that engine.
-- I personally use and verify much of the functionality on both Windows and Mac. For Linux, it's largely up to others contributors.  
+- commands are subject to change. We do our best to minimize changes, but we are moving to an [object][verb] standard slowly but surely.
+- @knausj85 makes extensive use of Talon's eye tracking features, so the grammar for certain programs may be much smaller than you may require.
+- The repository was mostly developed with Dragon, so commands are mostly still optimized for that speech engine.
 
 ## Linux & Mac setup
 
@@ -31,7 +30,6 @@ The folder structure should look like:
 ~/.talon/user/knausj_talon/code
 ~/.talon/user/knausj_talon/lang
 ```
-
 
 ## Windows setup
 
@@ -227,4 +225,65 @@ The most commonly adjusted settings are probably
 
 • `user.mouse_wheel_down_amount` and `user.mouse_continuous_scroll_amount` for adjusting the scroll amounts for the various scroll commands.
 
+# Collaborators
+
+This repository is now officially a team effort. The following contributors have direct access:
+- @dwiel
+- @fidgetingbits
+- @knausj85 
+- @rntz
+
+Collaborators will reply to issues and pull requests as time and health permits. Please be patient.
+
+## Guidelines for collaborators
+
+1. Collaborators prioritize their health and their personal/professional needs first. Their time commitment to this effort is limited.
+2. For "minor" fixes and improvements/bugs/new apps, collaborators are free to contribute without any review
+3. For "significant" new development and refactors, collaborators should seek appropriate input and reviews from each-other. Collaborators are encouraged to open a discussion before committing their time to any major effort.
+
+# Contributing
+
+Anyone is welcome to submit PRs and report issues. 
+
+## Guidelines for contributions
+
+- Any addition to the global grammar will be scrutinized a bit more thoroughly. The more specific a new context, the less scrutiny that is typically applied.
+
+- New grammars should follow the [subject][verb] standard where-ever possible.
+
+- For Mac OS X, the bundle id should be used for defining app contexts, rather than the name. 
+
+- For Windows, both the friendly app name and exe name should be used for defining app contexts when they are different. For some people, the MUICache breaks.
+
+- For new web apps, ensure the domain is used to minimize potential mismatches
+https://github.com/knausj85/knausj_talon/blob/master/apps/web/window_titles.md
+
+- New applications should support the appropriate 'generic' grammars where possible
+
+```
+generic_browser.talon
+find_and_replace.talon
+line_commands.talon
+multiple_cursors.talon
+snippets.talon
+splits.talon
+tabs.talon
+```
+
+- New programming languages should support the appropriate 'generic' grammars where possible as well
+```
+operators.talon
+programming.talon
+comment.talon
+block_comment.talon
+```
+
+and should support the lists
+
+```
+user.code_functions
+user.code_libraries
+```
+
+where appropriate. See e.g. csharp.py/csharp.talon. At least, until we come up with something better 👍 
 
