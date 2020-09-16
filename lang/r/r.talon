@@ -67,4 +67,4 @@ chain:
 state na:
     insert("NA")
 
-^funky <user.text>$: user.code_private_function(text)
+^function define <user.text>$: user.code_private_function(text)
