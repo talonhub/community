@@ -43,7 +43,7 @@ action(edit.extend_left):
 #action(edit.extend_line): 
 
 action(edit.extend_line_down):       
-	key(shift-down cmd-shift-right)
+	key(shift-down)
 
 action(edit.extend_line_end): 
 	key(cmd-shift-right)
@@ -52,7 +52,7 @@ action(edit.extend_line_start):
 	key(cmd-shift-left)
 
 action(edit.extend_line_up): 
-	key(shift-up cmd-shift-left)
+	key(shift-up)
 	
 action(edit.extend_page_down): 
 	key(cmd-shift-pagedown)
