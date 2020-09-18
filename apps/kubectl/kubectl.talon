@@ -1,6 +1,6 @@
 tag: terminal
 -
-cube: insert(user.kubectl())
+cube [control]: insert(user.kubectl())
 
 cube create: insert(user.kubectl_create())
 cube expose: insert(user.kubectl_expose())
@@ -17,10 +17,10 @@ cube scale: insert(user.kubectl_scale())
 cube auto scale: insert(user.kubectl_autoscale())
 
 cube certificate: insert(user.kubectl_certificate())
-cube cluster information: insert(user.kubectl_cluster_info())
+cube cluster (info | information): insert(user.kubectl_cluster_info())
 cube top: insert(user.kubectl_top())
-cube cord: insert(user.kubectl_cordon())
-cube uncord: insert(user.kubectl_uncordon())
+cube (cord | cordon): insert(user.kubectl_cordon())
+cube (uncord | uncordon): insert(user.kubectl_uncordon())
 cube drain: insert(user.kubectl_drain())
 cube taint: insert(user.kubectl_taint())
 
@@ -50,3 +50,24 @@ cube interface versions: insert(user.kubectl_api_versions())
 cube config: insert(user.kubectl_config())
 cube plugin: insert(user.kubectl_plugin())
 cube version: insert(user.kubectl_version())
+
+cube {user.kubectl_action} {user.kubectl_object}: "kubectl {kubectl_action} {kubectl_object}"
+
+cube detach:
+    key("ctrl-p")
+    key("ctrl-q")
+cube shell:
+    insert("kubectl exec -it  -- /bin/bash")
+    key("left")
+    key("left")
+    key("left")
+    key("left")
+    key("left")
+    key("left")
+    key("left")
+    key("left")
+    key("left")
+    key("left")
+    key("left")
+    key("left")
+    key("left")
