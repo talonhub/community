@@ -86,7 +86,7 @@ action(user.code_from_import):
     edit.word_left()
     key(space)
     edit.left()
-action(user.code_comment): "#"
+action(user.code_comment): "# "
 action(user.code_state_return):
 	insert("return ")
 action(user.code_true): "True"
@@ -106,3 +106,5 @@ state past: "pass"
 #^static funky <user.text>$: user.code_private_static_function(text)
 #^pro static funky <user.text>$: user.code_protected_static_function(text)
 #^pub static funky <user.text>$: user.code_public_static_function(text)
+raise {user.python_exception}: user.insert_cursor("raise {python_exception}([|])")
+

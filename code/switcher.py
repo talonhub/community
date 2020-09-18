@@ -169,6 +169,12 @@ class Actions:
         for cur_app in ui.apps():
             if cur_app.name == wanted_app and not cur_app.background:
                 cur_app.focus()
+
+                # there is currently only a reliable way to do this on mac
+                if app.platform == "mac":
+                    while cur_app != ui.active_app():
+                        time.sleep(0.1)
+
                 break
 
     def switcher_launch(path: str):

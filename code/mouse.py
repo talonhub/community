@@ -191,6 +191,15 @@ class Actions:
         if setting_mouse_hide_mouse_gui.get() == 0:
             gui_wheel.show()
 
+    def copy_mouse_position():
+        """Copy the current mouse position coordinates"""
+        position = ctrl.mouse_pos()
+        clip.set(repr(position))
+
+    def mouse_move_center_active_window():
+        """move the mouse cursor to the center of the currently active window"""
+        rect = ui.active_window().rect
+        ctrl.mouse_move(rect.left + (rect.width / 2), rect.top + (rect.height / 2))
 
 def show_cursor_helper(show):
     """Show/hide the cursor"""

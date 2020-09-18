@@ -122,6 +122,10 @@ formatters_dict = {
     ),
     "NO_SPACES": (NOSEP, every_word(lambda w: w)),
     "DASH_SEPARATED": words_with_joiner("-"),
+    "TERMINAL_DASH_SEPARATED": (
+        NOSEP,
+        first_vs_rest(lambda w: " --" + w.lower(), lambda w: "-" + w.lower()),
+    ),
     "DOUBLE_COLON_SEPARATED": words_with_joiner("::"),
     "ALL_CAPS": (SEP, every_word(lambda w: w.upper())),
     "ALL_LOWERCASE": (SEP, every_word(lambda w: w.lower())),
@@ -129,6 +133,7 @@ formatters_dict = {
     "SINGLE_QUOTED_STRING": (SEP, surround("'")),
     "SPACE_SURROUNDED_STRING": (SEP, surround(" ")),
     "DOT_SEPARATED": words_with_joiner("."),
+    "DOT_SNAKE": (NOSEP, lambda i, word, _: "." + word if i == 0 else "_" + word),
     "SLASH_SEPARATED": (NOSEP, every_word(lambda w: "/" + w)),
     "CAPITALIZE_FIRST_WORD": (SEP, first_vs_rest(lambda w: w.capitalize())),
     "CAPITALIZE_ALL_WORDS": (
