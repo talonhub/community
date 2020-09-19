@@ -1,5 +1,9 @@
 from talon import Module, Context, actions, ui, imgui, clip, settings
+import re
 
+from talon import actions, Context, Module
+
+mod = Module()
 ctx = Context()
 ctx.matches = r"""
 mode: user.python
@@ -17,6 +21,78 @@ ctx.lists["user.code_functions"] = {
     "split": "split",
     "string": "str",
     "update": "update",
+}
+
+exception_list = [
+    "BaseException",
+    "SystemExit",
+    "KeyboardInterrupt",
+    "GeneratorExit",
+    "Exception",
+    "StopIteration",
+    "StopAsyncIteration",
+    "ArithmeticError",
+    "FloatingPointError",
+    "OverflowError",
+    "ZeroDivisionError",
+    "AssertionError",
+    "AttributeError",
+    "BufferError",
+    "EOFError",
+    "ImportError",
+    "ModuleNotFoundError",
+    "LookupError",
+    "IndexError",
+    "KeyError",
+    "MemoryError",
+    "NameError",
+    "UnboundLocalError",
+    "OSError",
+    "BlockingIOError",
+    "ChildProcessError",
+    "ConnectionError",
+    "BrokenPipeError",
+    "ConnectionAbortedError",
+    "ConnectionRefusedError",
+    "ConnectionResetError",
+    "FileExistsError",
+    "FileNotFoundError",
+    "InterruptedError",
+    "IsADirectoryError",
+    "NotADirectoryError",
+    "PermissionError",
+    "ProcessLookupError",
+    "TimeoutError",
+    "ReferenceError",
+    "RuntimeError",
+    "NotImplementedError",
+    "RecursionError",
+    "SyntaxError",
+    "IndentationError",
+    "TabError",
+    "SystemError",
+    "TypeError",
+    "ValueError",
+    "UnicodeError",
+    "UnicodeDecodeError",
+    "UnicodeEncodeError",
+    "UnicodeTranslateError",
+    "Warning",
+    "DeprecationWarning",
+    "PendingDeprecationWarning",
+    "RuntimeWarning",
+    "SyntaxWarning",
+    "UserWarning",
+    "FutureWarning",
+    "ImportWarning",
+    "UnicodeWarning",
+    "BytesWarning",
+    "ResourceWarning",
+]
+mod.list("python_exception", desc="python exceptions")
+ctx.lists["user.python_exception"] = {
+    " ".join(re.findall("[A-Z][^A-Z]*", exception)).lower(): exception
+    for exception in exception_list
 }
 
 
@@ -47,4 +123,18 @@ class user_actions:
             )
         )
         actions.user.code_insert_function(result, None)
+
+
+@mod.action_class
+class module_actions:
+    # TODO this could go somewhere else
+    def insert_cursor(text: str):
+        """Insert a string. Leave the cursor wherever [|] is in the text"""
+        if "[|]" in text:
+            end_pos = text.find("[|]")
+            s = text.replace("[|]", "")
+            actions.insert(s)
+            actions.key(f"left:{len(s) - end_pos}")
+        else:
+            actions.insert(text)
 

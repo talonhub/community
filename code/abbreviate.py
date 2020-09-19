@@ -1,9 +1,6 @@
 # XXX - would be nice to be able pipe these through formatters
 
-import sys
-from typing import Set
-
-from talon import Context, Module, actions
+from talon import Context, Module
 
 mod = Module()
 mod.list("abbreviation", desc="Common abbreviation")
