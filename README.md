@@ -95,7 +95,7 @@ Try saying e.g. `air bat cap` to insert abc.
 Keys are defined in keys.py from line 83 - 182. The alphabet is used for A-Z.
 https://github.com/knausj85/knausj_talon/blob/84c6f637ba8304352aa15e01b030e8fa36f4f1a2/code/keys.py#L83
 
-All key commands are mapped defined in keys.talon
+All key commands are defined in keys.talon
 https://github.com/knausj85/knausj_talon/blob/master/misc/keys.talon
 
 On Windows, try commands such as 
@@ -109,7 +109,7 @@ On Mac, try commands such as
 `control shift command 4` to press ` ctrl-shift-cmd-4` to trigger the screenshot application. Then try `escape` to exit the screenshot application. Please note the order of the modifiers doesn't matter.
 
 
-Any combination of the modifiers, symbols, alphabet, numbers and function keys can be executed via voice to press key. Out of the box, only the modifier keys (command, shift, alt, super) cannot be triggered by themselves. 
+Any combination of the modifiers, symbols, alphabet, numbers and function keys can be executed via voice to execute shorcuts. Out of the box, only the modifier keys (command, shift, alt, super) cannot be triggered by themselves. 
 
 ### Symbols
 Some symbols are defined in keys.py, so you can say e.g. `control colon` to press those keys.
