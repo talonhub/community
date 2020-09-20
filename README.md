@@ -99,11 +99,14 @@ All key commands are defined in keys.talon
 https://github.com/knausj85/knausj_talon/blob/master/misc/keys.talon
 
 On Windows, try commands such as 
+
 `control air` to press `control-a` and select all.
 
 `super-shift-sun` to press `windows-shift-s` to trigger the screenshot application (Windows 10). Then try `escape` to exit the screenshot application.
 
+
 On Mac, try commands such as 
+
 `command air` to press `command-a` and select all.
 
 `control shift command 4` to press ` ctrl-shift-cmd-4` to trigger the screenshot application. Then try `escape` to exit the screenshot application. Please note the order of the modifiers doesn't matter.
