@@ -52,7 +52,14 @@ The folder structure should look like:
 %AppData%\Talon\user\knausj_talon\lang
 ```
 
-## Getting started with Talon for coding with this depot
+## wav2letter setup
+
+If you're using wav2letter (aka NOT Dragon), uncomment this line in sleep_mode.talon.
+https://github.com/knausj85/knausj_talon/blob/master/modes/sleep_mode.talon#L9
+
+This helps avoid unexpected "Talon wake" commands. Depending on the specific model you're using, you may need to adjust the talon wake/talon sleep commands in modes.talon 
+
+## Getting started with Talon
 
 1. `help active` will display the available commands for the active application. 
     - Available commands can change with the application, or even window title that has focus. 
@@ -79,16 +86,30 @@ If you use vim, just start with the numbers and alphabet, otherwise look at gene
 The alphabet is defined here
 https://github.com/knausj85/knausj_talon/blob/master/code/keys.py#L6
 
+`help alphabet` will toggle a window that displays the alphabet
+
 Try saying e.g. `air bat cap` to insert abc.
 
+
 ### Keys
-Keys are defined here
-https://github.com/knausj85/knausj_talon/blob/master/code/keys.py#L67
+Keys are defined in keys.py from line 83 - 182. The alphabet is used for A-Z.
+https://github.com/knausj85/knausj_talon/blob/84c6f637ba8304352aa15e01b030e8fa36f4f1a2/code/keys.py#L83
 
-Try saying e.g. `control air` to press control-a
-
-All key-related voice commands are defined here
+All key commands are mapped defined in keys.talon
 https://github.com/knausj85/knausj_talon/blob/master/misc/keys.talon
+
+On Windows, try commands such as 
+`control air` to press `control-a` and select all.
+
+`super-shift-sun` to press `windows-shift-s` to trigger the screenshot application (Windows 10). Then try `escape` to exit the screenshot application.
+
+On Mac, try commands such as 
+`command air` to press `command-a` and select all.
+
+`control shift command 4` to press ` ctrl-shift-cmd-4` to trigger the screenshot application. Then try `escape` to exit the screenshot application. Please note the order of the modifiers doesn't matter.
+
+
+Any combination of the modifiers, symbols, alphabet, numbers and function keys can be executed via voice to press key. Out of the box, only the modifier keys (command, shift, alt, super) cannot be triggered by themselves. 
 
 ### Symbols
 Some symbols are defined in keys.py, so you can say e.g. `control colon` to press those keys.
@@ -123,18 +144,22 @@ These generic commands are global. Commands such as `go word left` will work in 
 For repeating commands, useful voice commands are defined here:
 https://github.com/knausj85/knausj_talon/blob/ced46aee4b59e6ec5e8545bb01434e27792c830e/misc/repeater.talon#L2
 
-For example, saying `go up fifth` will go up five lines.
+Try saying e.g. `go up fifth` will go up five lines.
+Try saying e.g. `select up third` to hit `shift-up` three times to select some lines in a text field.
 
 ### Window management
 Global window managment commands are defined here:
 https://github.com/knausj85/knausj_talon/blob/master/misc/window_management.talon#L1
 
-e.g., `focus chrome` will focus the chrome application.
+`running list` will toggle a GUI list of words you can say to switch to running applications.
+`focus chrome` will focus the chrome application.
+`launch music` will launch the music application. Note this is currently only implemented on Mac OS X.
 
 ### Screenshot commands
 
+https://github.com/knausj85/knausj_talon/blob/master/misc/screenshot.talon
 
-### Activating Programming Languages
+### Programming Languages
 
 Specific programming languages may be activated by voice commands, or via title tracking.
 
@@ -157,7 +182,7 @@ Python, C#, Talon and javascript language support is currently broken up into ~f
 
 • programming.talon - function, loop commands, etc
 
-• {your-language-here}.talon - for implementation of the actions for the above, and any language-specific stuff
+• {your-language-here}.talon - for implementation of the actioIans for the above, and any language-specific stuff
 
 
 ## File Manager commands
@@ -193,7 +218,6 @@ Several options are configurable via a single settings file out of the box. Any 
 https://github.com/knausj85/knausj_talon/blob/master/settings.talon
 
 
-
 ```
 #adjust the scale of the imgui to my liking
 imgui.scale = 1.3
@@ -224,6 +248,9 @@ The most commonly adjusted settings are probably
 • `user.help_max_command_lines_per_page` and `user.help_max_contexts_per_page` to ensure all help information is visible.
 
 • `user.mouse_wheel_down_amount` and `user.mouse_continuous_scroll_amount` for adjusting the scroll amounts for the various scroll commands.
+
+• Uncomment `tag(): user.mouse_grid_enabled` to enable the mouse grid.
+
 
 # Collaborators
 
