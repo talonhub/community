@@ -145,14 +145,15 @@ push brackets:
     insert("{variable} {letter} ")
 
 # Ex. int * testFunction
-fun <user.function> <phrase>:
-    insert("{function} ")
-    insert(user.formatted_text(phrase, "PRIVATE_CAMEL_CASE,NO_SPACES"))
-    insert("()")
-    edit.left()
+# TODO: these clearly don't want to use function_key, so what do they want to use?
+# fun <user.function> <phrase>:
+#     insert("{function} ")
+#     insert(user.formatted_text(phrase, "PRIVATE_CAMEL_CASE,NO_SPACES"))
+#     insert("()")
+#     edit.left()
 
-<user.function>:
-    insert("{function} ")
+# <user.function>:
+#     insert("{function} ")
 
 # Ex. (int *)
 cast to <user.cast>: "{cast}"
