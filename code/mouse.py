@@ -1,7 +1,6 @@
 from talon import cron, ctrl, ui, Module, Context, actions, noise, settings, imgui, app
-from talon.engine import engine
 from talon_plugins import speech, eye_mouse, eye_zoom_mouse
-from talon_plugins.eye_mouse import toggle_control, config
+from talon_plugins.eye_mouse import toggle_control, toggle_camera_overlay, config
 import subprocess
 import os
 import pathlib
@@ -28,7 +27,7 @@ default_cursor = {
     "SizeNS": "%SystemRoot%\\Cursors\\aero_ns.cur",
     "SizeNWSE": "%SystemRoot%\\Cursors\\aero_nwse.cur",
     "SizeWE": "%SystemRoot%\\Cursors\\aero_ew.cur",
-    "UpArrow": "%SystemRoot%\Cursors\\aero_up.cur",
+    "UpArrow": "%SystemRoot%\\Cursors\\aero_up.cur",
     "Wait": "%SystemRoot%\\Cursors\\aero_busy.ani",
     "Crosshair": "",
     "IBeam": "",
@@ -115,6 +114,10 @@ class Actions:
     def mouse_toggle_control_mouse():
         """Toggles control mouse"""
         toggle_control(not config.control_mouse)
+
+    def mouse_toggle_camera_overlay():
+        """Toggles camera overlay"""
+        toggle_camera_overlay(not config.show_camera)        
 
     def mouse_toggle_zoom_mouse():
         """Toggles zoom mouse"""
