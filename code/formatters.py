@@ -259,6 +259,11 @@ class Actions:
         actions.insert(text)
         return text
 
+    def insert_many(strings: List[str]) -> None:
+        """Insert a list of strings, sequentially."""
+        for string in strings:
+            actions.insert(string)
+
 
 @ctx.capture(rule="{self.formatters}+")
 def formatters(m):
