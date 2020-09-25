@@ -107,4 +107,4 @@ state past: "pass"
 #^pro static funky <user.text>$: user.code_protected_static_function(text)
 #^pub static funky <user.text>$: user.code_public_static_function(text)
 raise {user.python_exception}: user.insert_cursor("raise {python_exception}([|])")
-
+dock string: user.insert_cursor("\"\"\"[|]\"\"\"")
