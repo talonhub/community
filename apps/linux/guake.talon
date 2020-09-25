@@ -4,9 +4,6 @@ app: Guake
 tag(): terminal
 tag(): user.tabs
 
-quake show: user.system_command("guake --show")
-quake hide: user.system_command("guake --hide")
-
 action(app.tab_open):
   key(ctrl-shift-t)
 action(app.tab_close):
