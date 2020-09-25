@@ -6,6 +6,7 @@ cube create:         "kubectl create "
 cube expose:         "kubectl expose "
 cube run:            "kubectl run "
 cube set:            "kubectl set "
+cube run container:  "kubectl run-container "
 
 cube explain:        "kubectl explain "
 cube get:            "kubectl get "
@@ -13,6 +14,7 @@ cube edit:           "kubectl edit "
 cube delete:         "kubectl delete "
 
 cube rollout:        "kubectl rollout "
+cube rolling-update: "kubectl rolling-update "
 cube scale:          "kubectl scale "
 cube auto scale:     "kubectl autoscale "
 
@@ -45,9 +47,11 @@ cube label:        "kubectl label "
 cube annotate:     "kubectl annotate "
 cube completion:   "kubectl completion "
 
+cube (interface | API):   "kubectl api "
 cube interface resources: "kubectl api-resources "
 cube interface versions:  "kubectl api-versions "
 cube config:       "kubectl config "
+cube help:         "kubectl help "
 cube plugin:       "kubectl plugin "
 cube version:      "kubectl version "
 
