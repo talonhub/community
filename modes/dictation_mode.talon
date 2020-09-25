@@ -65,13 +65,7 @@ formatted <user.format_text>:
     auto_insert(format_text)
     user.auto_format_resume()
 ^format selection <user.formatters>$:
-    edit.copy()
-    sleep(100ms)
-    text = clip.text()
-    result = user.formatted_text(text, formatters)
-    user.auto_format_pause()
-    auto_insert(result)
-    user.auto_format_resume()
+    user.formatters_reformat_selection(formatters)
 #corrections
 scratch that: user.clear_last_utterance()
 scratch selection: edit.delete()

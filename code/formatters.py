@@ -1,9 +1,11 @@
 from talon import Module, Context, actions, ui, imgui
 from talon.grammar import Phrase
 from typing import List, Union
+import re
 
 ctx = Context()
 key = actions.key
+edit = actions.edit
 
 words_to_keep_lowercase = "a,an,the,at,by,for,in,is,of,on,to,up,and,as,but,or,nor".split(
     ","
@@ -227,6 +229,19 @@ class Actions:
         """Reformats last formatted phrase"""
         global last_phrase
         return format_phrase(last_phrase, formatters)
+
+    def formatters_reformat_selection(formatters: str) -> str:
+        """Reformats the current selection."""
+        selected = edit.selected_text()
+        unformatted = re.sub(r"[^a-zA-Z0-9]+", " ", selected).lower()
+        # TODO: Separate out camelcase & studleycase vars
+
+        # Delete separately for compatibility with programs that don't overwrite
+        # selected text (e.g. Emacs)
+        edit.delete()
+        text = actions.self.formatted_text(unformatted, formatters)
+        actions.insert(text)
+        return text
 
 
 @ctx.capture(rule="{self.formatters}+")
