@@ -3,7 +3,7 @@ import itertools
 import math
 from typing import Dict, List, Iterable, Set, Tuple, Union
 
-from talon import Module, Context, actions, imgui, Module, registry, ui
+from talon import Module, Context, actions, imgui, Module, registry, ui, app
 from talon.grammar import Phrase
 
 mod = Module()
@@ -628,5 +628,5 @@ def commands_updated(_):
     update_title()
 
 
-refresh_context_command_map()
+app.register("launch", refresh_context_command_map)
 
