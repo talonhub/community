@@ -65,7 +65,6 @@ def update_lists():
     global running_application_dict
     running_application_dict = {}
     running = {}
-    launch = {}
     for cur_app in ui.apps(background=False):
         name = cur_app.name
 
@@ -83,35 +82,7 @@ def update_lists():
     for override in overrides:
         running[override] = overrides[override]
 
-    if app.platform == "mac":
-        for base in (
-            "/Applications",
-            "/Applications/Utilities",
-            "/System/Applications",
-            "/System/Applications/Utilities",
-        ):
-            if os.path.isdir(base):
-                for name in os.listdir(base):
-                    # print(name)
-                    path = os.path.join(base, name)
-                    name = name.rsplit(".", 1)[0].lower()
-                    launch[name] = path
-                    words = name.split(" ")
-                    for word in words:
-                        if word and word not in launch:
-                            if len(name) > 6 and len(word) < 3:
-                                continue
-
-                            launch[word] = path
-    # lists = {
-    #     "self.running": running,
-    #     "self.launch": launch,
-    # }
-
-    # batch update lists
-    # print(str(running))
     ctx.lists["user.running"] = running
-    ctx.lists["user.launch"] = launch
 
 
 def update_overrides(name, flags):
@@ -120,7 +91,7 @@ def update_overrides(name, flags):
     overrides = {}
 
     if name is None or name == override_file_path:
-        print("update_overrides")
+        # print("update_overrides")
         with open(override_file_path, "r") as f:
             for line in f:
                 line = line.rstrip()
@@ -201,10 +172,37 @@ def gui(gui: imgui.GUI):
         gui.text(line)
 
 
+def update_launch_list():
+    if app.platform == "mac":
+        launch = {}
+        for base in (
+            "/Applications",
+            "/Applications/Utilities",
+            "/System/Applications",
+            "/System/Applications/Utilities",
+        ):
+            if os.path.isdir(base):
+                for name in os.listdir(base):
+                    # print(name)
+                    path = os.path.join(base, name)
+                    name = name.rsplit(".", 1)[0].lower()
+                    launch[name] = path
+                    words = name.split(" ")
+                    for word in words:
+                        if word and word not in launch:
+                            if len(name) > 6 and len(word) < 3:
+                                continue
+
+                            launch[word] = path
+
+        ctx.lists["user.launch"] = launch
+
+
 def ui_event(event, arg):
-    if event in ("app_activate", "app_launch", "app_close", "win_open", "win_close"):
-        # print(f'------------------ event:{event}  arg:{arg}')
+    if event in ("app_launch", "app_close"):
         update_lists()
 
 
+update_launch_list()
 ui.register("", ui_event)
+
