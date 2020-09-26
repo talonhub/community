@@ -9,7 +9,6 @@ import math, time
 import typing
 
 mod = Module()
-
 shimmer_effect_enabled = mod.setting(
     "grid_shimmer_effect_enabled",
     type=bool,
@@ -405,7 +404,6 @@ mg = MouseSnapNine()
 class GridActions:
     def grid_activate():
         """Brings up a/the grid (mouse grid or otherwise)"""
-
         if mg.start():
             ctx.tags = ["user.mouse_grid_showing"]
 
@@ -453,4 +451,4 @@ def check_shimmer_setting_at_startup():
         mg.stop()
 
 
-cron.after("100ms", check_shimmer_setting_at_startup)
+app.register("launch", check_shimmer_setting_at_startup)
