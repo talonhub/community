@@ -127,11 +127,35 @@ state filter:
   insert("filter()")
   key(left)
 
-
+class path <user.text>:
+    insert(user.formatted_text(text, "title"))
+    insert('::class')
 
 state var <user.text>: insert("${text}")
-
-
 state arrow: insert(" => ")
 
 end statement: key(ctrl-alt-shift-;)
+list slap:
+    edit.line_end()
+    insert(',')
+    key(enter)
+
+end slap:
+    edit.line_end()
+    insert(';')
+    key(enter)
+
+
+backpack column:
+    insert('CRUD::column(\'\')')
+    key(left left)
+
+backpack field:
+    insert('CRUD::field(\'\')')
+    key(left left)
+
+backpack widget:
+    insert('Widget::add()')
+    key(enter)
+    insert('->to(\'\')')
+    key(left left)

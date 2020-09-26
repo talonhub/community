@@ -1,6 +1,6 @@
 #defines the various mode commands
 mode: all
--
+    -
 # welcome back:
     # user.mouse_wake()
     # user.history_enable()

@@ -83,6 +83,8 @@ def first_vs_rest(first_func, rest_func=lambda w: w):
     through unchanged.
     Set first argument to None if you want the first word to be passed
     through unchanged."""
+    print(rest_func)
+
     if first_func is None:
         first_func = lambda w: w
 
@@ -131,6 +133,7 @@ formatters_dict = {
         if i == 0 or word not in words_to_keep_lowercase
         else word,
     ),
+    "FIRST_ONE": (NOSEP, first_vs_rest(lambda w: w.capitalize(), lambda w: '')),
     "FIRST_THREE": (NOSEP, lambda i, word, _: word[0:3]),
     "FIRST_FOUR": (NOSEP, lambda i, word, _: word[0:4]),
     "FIRST_FIVE": (NOSEP, lambda i, word, _: word[0:5]),

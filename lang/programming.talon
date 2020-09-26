@@ -32,14 +32,14 @@ state include local: user.code_include_local()
 state type deaf: user.code_type_definition()
 state type deaf struct: user.code_typedef_struct()
 state (no | nil | null): user.code_null()
-^funky <user.text>$:
+^function <user.text>$:
     #todo: once .talon action definitions can take parameters, combine these functions
     user.code_private_function()
     user.code_private_function_formatter(user.text)
     insert("()")
     edit.left()
     sleep(100ms)
-^pro funky <user.text>$:
+^pro function <user.text>$:
     #todo: once .talon action definitions can take parameters, combine these functions
     user.code_protected_function()
     user.code_protected_function_formatter(user.text)
@@ -47,42 +47,42 @@ state (no | nil | null): user.code_null()
     insert("()")
     key(left)
     sleep(100ms)
-^pub funky <user.text>$:
-    #todo: once .talon action definitions can take parameters, combine these functions
+^public function <user.text>$:
+    #todo: once 1.talon action definitions can take parameters, combine these functions
     user.code_public_function()
     user.code_public_function_formatter(user.text)
     sleep(50ms)
     insert("()")
-^static funky <user.text>$:
+^static function <user.text>$:
     #todo: once .talon action definitions can take parameters, combine these functions
     user.code_private_static_function()
     user.code_private_function_formatter(user.text)
-^pro static funky <user.text>$:
+^pro static function <user.text>$:
     #todo: once .talon action definitions can take parameters, combine these functions
     user.code_protected_static_function()
     user.code_protected_function_formatter(user.text)
-^pub static funky <user.text>$:
+^pub static function <user.text>$:
     #todo: once .talon action definitions can take parameters, combine these functions
 	user.code_public_static_function()
     user.code_public_function_formatter(user.text)
 
 # show and print functions
-toggle funk: user.code_toggle_functions()
-funk <user.code_functions>: 
+toggle function: user.code_toggle_functions()
+function <user.code_functions>:
     old_clip = clip.text()
     user.code_insert_function(code_functions, "")
     clip.set_text(old_clip)
-funk cell <number>: 
+function cell <number>:
     old_clip = clip.text()
     user.code_select_function(number - 1, "")
     clip.set_text(old_clip)
-funk wrap <user.code_functions>: 
+function wrap <user.code_functions>:
     old_clip = clip.text()
     edit.copy()
     sleep(100ms)
     user.code_insert_function(code_functions, clip.text())
     clip.set_text(old_clip)
-funk wrap <number>: 
+function wrap <number>:
     old_clip = clip.text()
     edit.copy()
     sleep(100ms)

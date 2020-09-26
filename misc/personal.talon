@@ -8,4 +8,4 @@ my test email: insert("test@example.com")
 my test password: insert("password")
 
 thats for rusty: insert("stats4sd")
-title thats for rusty: insert('Stats4SD')
+capital thats for rusty: insert('Stats4SD')
