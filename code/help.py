@@ -402,7 +402,7 @@ def refresh_context_command_map(enabled_only=False):
 
         if enabled_only and context in active_contexts or not enabled_only:
             context_command_map[context_name] = {}
-            for command_alias, val in context.commands_get().items():
+            for command_alias, val in context.commands.items():
                 # print(str(val))
                 if command_alias in registry.commands:
                     # print(str(val.rule.rule) + ": " + val.target.code)
