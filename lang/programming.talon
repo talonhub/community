@@ -67,3 +67,4 @@ funk wrap <number>:
     sleep(100ms)
     user.code_select_function(number - 1, clip.text())
     clip.set_text(old_clip)
+dock string: user.code_document_string()

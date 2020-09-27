@@ -91,8 +91,7 @@ action(user.code_state_return):
 	insert("return ")
 action(user.code_true): "True"
 action(user.code_false): "False"
-
-
+action(user.code_document_string): user.insert_cursor("\"\"\"[|]\"\"\"")
 
 #python-specicic grammars
 dunder in it: insert("__init__")
@@ -107,4 +106,3 @@ state past: "pass"
 #^pro static funky <user.text>$: user.code_protected_static_function(text)
 #^pub static funky <user.text>$: user.code_public_static_function(text)
 raise {user.python_exception}: user.insert_cursor("raise {python_exception}([|])")
-
