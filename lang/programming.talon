@@ -48,5 +48,9 @@ funk cell <number>:
 funk wrap <user.code_functions>:
     user.code_insert_function(code_functions, edit.selected_text())
 funk wrap <number>:
-    user.code_select_function(number - 1, edit.selected_text())
+    old_clip = clip.text()
+    edit.copy()
+    sleep(100ms)
+    user.code_select_function(number - 1, clip.text())
+    clip.set_text(old_clip)
 dock string: user.code_document_string()
