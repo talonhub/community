@@ -283,7 +283,7 @@ def formatter_immune(m) -> ImmuneString:
     # Note that if the user speaks something like "snake dot", it will
     # insert "dot" - otherwise, they wouldn't be able to insert punctuation
     # words directly.
-    rule="<self.formatters> <user.text> [<user.text> | <user.formatter_immune>]+"
+    rule="<self.formatters> <user.text> (<user.text> | <user.formatter_immune>)*"
 )
 def format_text(m):
     out = ""
