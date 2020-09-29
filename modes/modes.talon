@@ -5,7 +5,7 @@ mode: all
     # user.mouse_wake()
     # user.history_enable()
     # speech.enable()
-voice robot sleep all:
+okay talon sleep all:
     user.switcher_hide_running()
     user.history_disable()
     user.homophones_hide()
@@ -14,10 +14,10 @@ voice robot sleep all:
     speech.disable()
     user.engine_sleep()
 
-voice robot sleep: speech.disable()
-voice robot wake: speech.enable()
+okay talon sleep: speech.disable()
+okay talon wake: speech.enable()
 
-voice robot dictation:
+okay talon dictation:
     speech.disable()
     key(ctrl-0)
 
