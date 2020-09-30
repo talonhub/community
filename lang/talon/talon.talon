@@ -11,7 +11,7 @@ action(user.code_operator_addition): " + "
 action(user.code_operator_multiplication): " * "
 action(user.code_operator_division): " / "
 action(user.code_operator_assignment): " = "
-action(user.code_comment): "#"
+action(user.code_comment): "# "
 
 dot talon: insert(".talon")
 #defintion blocks for the context
