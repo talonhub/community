@@ -155,6 +155,9 @@ class win_actions:
 class edit_actions:
     def jump_line(n: int):
         actions.user.idea("goto {} 0".format(n))
+        # move the cursor to the first nonwhite space character of the line
+        actions.user.idea("action EditorLineEnd")
+        actions.user.idea("action EditorLineStart")
 
 
 @ctx.action_class("user")
