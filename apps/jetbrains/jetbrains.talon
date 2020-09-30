@@ -32,6 +32,10 @@ action(edit.indent_less): user.idea("action EditorUnindentSelection")
 action(edit.select_line): user.idea("action EditorSelectLine")
 action(edit.select_word): user.idea("action EditorSelectWord")
 action(edit.select_all): user.idea("action $SelectAll")
+action(edit.file_start): user.idea("action EditorTextStart")
+action(edit.file_end): user.idea("action EditorTextEnd")
+action(edit.extend_file_start): user.idea("action EditorTextStartWithSelection")
+action(edit.extend_file_end): user.idea("action EditorTextEndWithSelection")
 
 # splits.py support begin
 action(user.split_clear_all): user.idea("action UnsplitAll")
