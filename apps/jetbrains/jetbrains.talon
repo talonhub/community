@@ -10,8 +10,9 @@ tag(): user.tabs
 action(user.tab_final): user.idea("action GoToLastTab")
 action(app.tab_next): user.idea("action NextTab")
 action(app.tab_previous): user.idea("action PreviousTab")
-action(app.tab_close): user.idea("action CloseActiveTab")
 
+action(app.tab_close): user.idea("action CloseContent")
+action(app.tab_reopen): user.idea("action ReopenClosedTab")
 #talon code actions
 action(code.toggle_comment): user.idea("action CommentByLineComment")
 
