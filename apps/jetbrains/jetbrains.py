@@ -169,6 +169,7 @@ class edit_actions:
 @ctx.action_class("user")
 class user_actions:
     def tab_jump(number: int):
+        # depends on plugin GoToTabs
         if number < 10:
             actions.user.idea("action GoToTab{}".format(number))
 
