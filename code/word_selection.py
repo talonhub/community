@@ -72,12 +72,13 @@ def word_neck(word_index, valid_characters=alphanumeric):
     with clip.revert():
         stop_selection("right")
 
-        actions.edit.extend_line_end()
-        time.sleep(0.25)
-        actions.edit.copy()
+        with clip.capture() as s:
+            actions.edit.extend_line_end()
+            time.sleep(0.25)
+            actions.edit.copy()
         actions.edit.left()
         time.sleep(0.25)
-        text_right = clip.get().lower()
+        text_right = s.get().lower()
 
     print(text_right)
     print(word_index, type(word_index))
@@ -118,12 +119,13 @@ def word_prev(word_index, valid_characters=alphanumeric):
     with clip.revert():
         stop_selection("left")
 
-        actions.edit.extend_line_start()
-        time.sleep(0.25)
-        actions.edit.copy()
+        with clip.capture() as s:
+            actions.edit.extend_line_start()
+            time.sleep(0.25)
+            actions.edit.copy()
         actions.edit.right()
         time.sleep(0.25)
-        text_right = clip.get().lower()
+        text_right = s.get().lower()
 
     text_right = list(reversed(text_right))
 
