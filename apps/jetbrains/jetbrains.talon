@@ -29,7 +29,7 @@ action(edit.line_swap_down):  user.idea("action MoveLineDown")
 action(edit.line_swap_up):  user.idea("action MoveLineUp")
 action(edit.indent_more): user.idea("action EditorIndentLineOrSelection")
 action(edit.indent_less): user.idea("action EditorUnindentSelection")
-action(edit.select_line): user.idea("action EditorLineStart, action EditorLineEndWithSelection")
+action(edit.select_line): user.idea("action EditorSelectLine")
 action(edit.select_word): user.idea("action EditorSelectWord")
 action(edit.select_all): user.idea("action $SelectAll")
 
