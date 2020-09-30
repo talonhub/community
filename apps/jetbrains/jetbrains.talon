@@ -108,6 +108,11 @@ find (everywhere | all) <user.text> [over]:
 (search | find) class: user.idea("action GotoClass")
 (search | find) file: user.idea("action GotoFile")
 (search | find) path: user.idea("action FindInPath")
+(search | find) symbol: user.idea("action GotoSymbol")
+(search | find) symbol <user.text>$:
+    user.idea("action GotoSymbol")
+    insert(text)
+    key("enter")
 recent: user.idea("action RecentFiles")
 
 surround [this] with <user.text> [over]:
