@@ -202,7 +202,10 @@ def ui_event(event, arg):
     if event in ("app_launch", "app_close"):
         update_lists()
 
-
+# Currently update_launch_list only does anything on mac, so we should make sure
+# to initialize user launch to avoid getting "List not found: user.launch"
+# errors on other platforms.
+ctx.lists["user.launch"] = {}
 update_launch_list()
 ui.register("", ui_event)
 
