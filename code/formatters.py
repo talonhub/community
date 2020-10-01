@@ -273,10 +273,14 @@ def formatters(m):
 @ctx.capture(
     # Add anything else into this that you want to be able to speak during a
     # formatter.
-    rule="(<user.symbol> | <user.letter> | <user.number>)"
+    rule="(<user.symbol_key> | <user.letter> | numb <number>)"
 )
 def formatter_immune(m) -> ImmuneString:
-    return ImmuneString(m[0])
+    if hasattr(m, "number"):
+        value = m.number
+    else:
+        value = m[0]
+    return ImmuneString(str(value))
 
 
 @ctx.capture(
