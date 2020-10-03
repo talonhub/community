@@ -2,7 +2,7 @@ import os
 import re
 import time
 
-from talon import Context, Module, app, imgui, ui, fs
+from talon import Context, Module, app, imgui, ui, fs, actions
 
 # Construct at startup a list of overides for application names (similar to how homophone list is managed)
 # ie for a given talon recognition word set  `one note`, recognized this in these switcher functions as `ONENOTE`
@@ -108,45 +108,42 @@ fs.watch(overrides_directory, update_overrides)
 
 @mod.action_class
 class Actions:
-    def switcher_focus(name: str):
-        """Focus a new application by  name"""
-
-        wanted_app = name
-
-        # we should use the capture result directly if it's already in the
-        # list of running applications
-        # otherwise, name is from <user.text> and we can be a bit fuzzier
-        if name not in running_application_dict:
-
-            # don't process silly things like "focus i"
+    def get_running_app(name: str) -> ui.App:
+        """Get the first available running app with `name`."""
+        # We should use the capture result directly if it's already in the list
+        # of running applications. Otherwise, name is from <user.text> and we
+        # can be a bit fuzzier
+        if name in running_application_dict:
+            for app in ui.apps():
+                if app.name == name and not app.background:
+                    return app
+            raise RuntimeError(f'App not running: "{name}"')
+        else:
+            # Don't process silly things like "focus i"
             if len(name) < 3:
-                print("switcher_focus skipped: len({}) < 3".format(name))
-                return
+                raise RuntimeError(
+                    f'Skipped getting app: "{name}" has less than 3 chars.'
+                )
 
-            running = ctx.lists["self.running"]
-            wanted_app = None
-
-            for running_name in running.keys():
-
+            for running_name, app in ctx.lists["self.running"].items():
                 if running_name == name or running_name.lower().startswith(
                     name.lower()
                 ):
-                    wanted_app = running[running_name]
-                    break
+                    return app
 
-            if wanted_app is None:
-                return
+            raise RuntimeError(f'Could not find app "{name}"')
 
-        for cur_app in ui.apps():
-            if cur_app.name == wanted_app and not cur_app.background:
-                cur_app.focus()
+    def switcher_focus(name: str):
+        """Focus a new application by  name"""
+        app = actions.self.get_running_app(name)
+        app.focus()
 
-                # there is currently only a reliable way to do this on mac
-                if app.platform == "mac":
-                    while cur_app != ui.active_app():
-                        time.sleep(0.1)
-
-                break
+        # Hacky solution to do this reliably on Mac.
+        timeout = 5
+        t1 = time.monotonic()
+        if app.platform == "mac":
+            while ui.active_app() != app and time.monotonic() - t1 < timeout:
+                time.sleep(0.1)
 
     def switcher_launch(path: str):
         """Launch a new application by path"""
