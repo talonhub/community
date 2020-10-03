@@ -1,8 +1,9 @@
 from talon import Context, Module, actions, grammar
+from .user_settings import bind_list_to_csv, bind_word_map_to_csv
 
-# Add single words here if Talon recognizes them, but they need to have their
-# capitalization adjusted.
-capitalize = [
+
+# Default words that will need to be capitalized (particularly under w2l).
+_capitalize_defaults = [
     "I",
     "I'm",
     "I've",
@@ -36,26 +37,21 @@ capitalize = [
     "December",
 ]
 
-# Add single words here if Talon recognizes them, but they need to have their
-# spelling adjusted.
-word_map = {
-    # For example:
-    # "color": "colour",
+# Default words that need to be remapped.
+_word_map_defaults = {
+    # E.g:
+    # "cash": "cache",
 }
-word_map.update({x.lower(): x for x in capitalize})
 
-# Add words (or phrases you want treated as words) here if Talon doesn't
-# recognize them at all.
-simple_vocabulary = ["nmap", "admin", "Cisco", "Citrix", "VPN", "DNS", "minecraft"]
+# Default words that should be added to Talon's vocabulary.
+_simple_vocab_default = ["nmap", "admin", "Cisco", "Citrix", "VPN", "DNS", "Minecraft"]
 
-# Add vocabulary words (or phrases you want treated as words) here that aren't
-# recognized by Talon and are written differently than they're pronounced.
-mapping_vocabulary = {
-    # For example:
-    # "enn map": "nmap",
-    # "under documented": "under-documented",
+# Defaults for different pronounciations of words that need to be added to
+# Talon's vocabulary.
+_mapping_vocab_default = {
+    "N map": "nmap",
+    "under documented": "under-documented",
 }
-mapping_vocabulary.update(dict(zip(simple_vocabulary, simple_vocabulary)))
 
 
 mod = Module()
@@ -106,12 +102,28 @@ mod.list("vocabulary", desc="user vocabulary")
 
 ctx = Context()
 
-# dictate.word_map is used by actions.dictate.replace_words to rewrite words
+
+_default_word_map = {}
+_default_word_map.update(_word_map_defaults)
+_default_word_map.update({word.lower(): word for word in _capitalize_defaults})
+# "dictate.word_map" is used by `actions.dictate.replace_words` to rewrite words
 # Talon recognized. Entries in word_map don't change the priority with which
 # Talon recognizes some words over others.
-ctx.settings["dictate.word_map"] = word_map
+bind_word_map_to_csv(
+    "words_to_replace.csv",
+    csv_headers=("Replacement", "Original"),
+    default_values=_default_word_map,
+)
 
-# user.vocabulary is used to explicitly add words/phrases that Talon doesn't
+_default_vocabulary = {}
+_default_vocabulary.update({word: word for word in _simple_vocab_default})
+_default_vocabulary.update(_mapping_vocab_default)
+# "user.vocabulary" is used to explicitly add words/phrases that Talon doesn't
 # recognize. Words in user.vocabulary (or other lists and captures) are
 # "command-like" and their recognition is prioritized over ordinary words.
-ctx.lists["user.vocabulary"] = mapping_vocabulary
+bind_list_to_csv(
+    "user.vocabulary",
+    "additional_words.csv",
+    csv_headers=("Word(s)", "Spoken Form (If Different)"),
+    default_values=_default_vocabulary,
+)
