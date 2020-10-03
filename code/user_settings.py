@@ -22,7 +22,6 @@ def _load_csv_dict(
     file_name: str, headers=Tuple[str, str], default: Dict[str, str] = {}
 ) -> Dict[str, str]:
     """Load a word mapping from a CSV file. If it doesn't exist, create it."""
-    # TODO: utf-8
     assert file_name.endswith(".csv")
     path = SETTINGS_DIR / file_name
 
