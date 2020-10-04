@@ -141,6 +141,7 @@ class Actions:
         # Hacky solution to do this reliably on Mac.
         timeout = 5
         t1 = time.monotonic()
+        # This line is producing an AttributeError for me on linux -rntz, 2020-10-04
         if app.platform == "mac":
             while ui.active_app() != app and time.monotonic() - t1 < timeout:
                 time.sleep(0.1)
