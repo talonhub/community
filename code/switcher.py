@@ -2,7 +2,8 @@ import os
 import re
 import time
 
-from talon import Context, Module, app, imgui, ui, fs, actions
+import talon
+from talon import Context, Module, imgui, ui, fs, actions
 
 # Construct at startup a list of overides for application names (similar to how homophone list is managed)
 # ie for a given talon recognition word set  `one note`, recognized this in these switcher functions as `ONENOTE`
@@ -10,7 +11,7 @@ from talon import Context, Module, app, imgui, ui, fs, actions
 # TODO: Consider put list csv's (homophones.csv, app_name_overrides.csv) files together in a seperate directory,`knausj_talon/lists`
 cwd = os.path.dirname(os.path.realpath(__file__))
 overrides_directory = os.path.join(cwd, "app_names")
-override_file_name = f"app_name_overrides.{app.platform}.csv"
+override_file_name = f"app_name_overrides.{talon.app.platform}.csv"
 override_file_path = os.path.join(overrides_directory, override_file_name)
 
 
@@ -141,8 +142,7 @@ class Actions:
         # Hacky solution to do this reliably on Mac.
         timeout = 5
         t1 = time.monotonic()
-        # This line is producing an AttributeError for me on linux -rntz, 2020-10-04
-        if app.platform == "mac":
+        if talon.app.platform == "mac":
             while ui.active_app() != app and time.monotonic() - t1 < timeout:
                 time.sleep(0.1)
 
@@ -171,7 +171,7 @@ def gui(gui: imgui.GUI):
 
 
 def update_launch_list():
-    if app.platform == "mac":
+    if talon.app.platform == "mac":
         launch = {}
         for base in (
             "/Applications",
