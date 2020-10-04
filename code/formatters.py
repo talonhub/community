@@ -193,6 +193,22 @@ def format_text(m) -> str:
     "Formats the text and returns a string"
 
 
+class ImmuneString(object):
+    """Wrapper that makes a string immune from formatting."""
+
+    def __init__(self, string):
+        self.string = string
+
+
+@mod.capture
+def formatter_immune(m) -> ImmuneString:
+    """Text that can be interspersed into a formatter, e.g. characters.
+
+    It will be inserted directly, without being formatted.
+
+    """
+
+
 @mod.action_class
 class Actions:
     def formatted_text(phrase: Union[str, Phrase], formatters: str) -> str:
@@ -243,15 +259,45 @@ class Actions:
         actions.insert(text)
         return text
 
+    def insert_many(strings: List[str]) -> None:
+        """Insert a list of strings, sequentially."""
+        for string in strings:
+            actions.insert(string)
+
 
 @ctx.capture(rule="{self.formatters}+")
 def formatters(m):
     return ",".join(m.formatters_list)
 
 
-@ctx.capture(rule="<self.formatters> <user.text>")
+@ctx.capture(
+    # Add anything else into this that you want to be able to speak during a
+    # formatter.
+    rule="(<user.symbol_key> | <user.letter> | numb <number>)"
+)
+def formatter_immune(m) -> ImmuneString:
+    if hasattr(m, "number"):
+        value = m.number
+    else:
+        value = m[0]
+    return ImmuneString(str(value))
+
+
+@ctx.capture(
+    # Note that if the user speaks something like "snake dot", it will
+    # insert "dot" - otherwise, they wouldn't be able to insert punctuation
+    # words directly.
+    rule="<self.formatters> <user.text> (<user.text> | <user.formatter_immune>)*"
+)
 def format_text(m):
-    return format_phrase(m.text, m.formatters)
+    out = ""
+    formatters = m[0]
+    for chunk in m[1:]:
+        if isinstance(chunk, ImmuneString):
+            out += chunk.string
+        else:
+            out += format_phrase(chunk, formatters)
+    return out
 
 
 ctx.lists["self.formatters"] = formatters_words.keys()
