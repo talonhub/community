@@ -1,6 +1,7 @@
+# NOTE: If you want to use i3wm you must enable the tag settings.talon. ex: `tag(): user.i3wm`
 os: linux
+tag: user.i3wm
 -
-tag(): user.i3wm
 settings():
     user.i3_config_path = "~/.i3/config"
     user.i3_mod_key = "super"
