@@ -1,7 +1,4 @@
-import os
-import re
-
-from talon import Context, Module, actions, app, fs, imgui, registry, settings, ui
+from talon import Context, Module, actions, app, imgui, registry, settings
 
 ctx = Context()
 mod = Module()
@@ -21,6 +18,7 @@ setting_protected_variable_formatter = mod.setting(
 setting_public_variable_formatter = mod.setting("code_public_variable_formatter", str)
 
 mod.tag("code_comment", desc="Tag for enabling generic comment commands")
+mod.tag("code_block_comment", desc="Tag for enabling generic block comment commands")
 mod.tag("code_operators", desc="Tag for enabling generic operator commands")
 mod.tag(
     "code_generic",
@@ -34,27 +32,30 @@ extension_lang_map = {
     "asm": "assembly",
     "bat": "batch",
     "c": "c",
+    "cmake": "cmake",
     "cpp": "cplusplus",
     "cs": "csharp",
     "gdb": "gdb",
     "go": "go",
     "h": "c",
     "hpp": "cplusplus",
+    "js": "javascript",
+    "json": "json",
     "lua": "lua",
     "md": "markdown",
     "pl": "perl",
     "ps1": "powershell",
     "py": "python",
+    "r": "r",
     "rb": "ruby",
     "s": "assembly",
     "sh": "bash",
     "snippets": "snippets",
     "talon": "talon",
-    "vba": "vba",
-    "vim": "vim",
-    "js": "javascript",
     "ts": "typescript",
-    "r": "r",
+    "vba": "vba",
+    "vim": "vimscript",
+    "vimrc": "vimscript",
 }
 
 # flag indicates whether or not the title tracking is enabled
@@ -112,7 +113,7 @@ class Actions:
         global forced_language
         actions.user.code_clear_language_mode()
         actions.mode.enable("user.{}".format(language))
-        # app.notify("Enabled {} mode".format(language))
+        app.notify(subtitle="Enabled {} mode".format(language))
         forced_language = True
 
     def code_clear_language_mode():
@@ -122,7 +123,7 @@ class Actions:
 
         for __, lang in extension_lang_map.items():
             actions.mode.disable("user.{}".format(lang))
-        # app.notify("Cleared language modes")
+        app.notify(subtitle="Cleared language modes")
 
     def code_operator_indirection():
         """code_operator_indirection"""
