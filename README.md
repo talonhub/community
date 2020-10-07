@@ -1,6 +1,16 @@
+# Talon documentation
+For up-to-date documentation on Talon's API and features, please visit https://talon.wiki/. 
+
+https://talon.wiki/unofficial_talon_docs/ is a great place to learn about Talon files, actions, and voice command definitions.
+
 # knausj_talon
 
-Talon configs for Mac, Windows, and Linux. Very much in progress. This is also intended to work with both Dragon Naturally Speaking and wav2letter.
+Talon configs for Mac, Windows, and Linux. Very much in progress. This is also intended to work with both Dragon Naturally Speaking and wav2letter.\
+
+Notes: 
+- commands are subject to change. We do our best to minimize changes, but we are moving to an [object][verb] standard slowly but surely.
+- @knausj85 makes extensive use of Talon's eye tracking features, so the grammar for certain programs may be much smaller than you may require.
+- The repository was mostly developed with Dragon, so commands are mostly still optimized for that speech engine.
 
 ## Linux & Mac setup
 
@@ -20,14 +30,6 @@ The folder structure should look like:
 ~/.talon/user/knausj_talon/code
 ~/.talon/user/knausj_talon/lang
 ```
-
-If using wav2letter, extract the entire contents of the tarball (found pinned in Talon's @beta slack channel) in `~/.talon`. The resulting tree should be:
-
-```insert code:
-~/.talon/w2l/en_US
-~/.talon/user/w2l.py
-```
-
 
 ## Windows setup
 
@@ -50,35 +52,141 @@ The folder structure should look like:
 %AppData%\Talon\user\knausj_talon\lang
 ```
 
+## wav2letter setup
 
+If you're using wav2letter (aka NOT Dragon), uncomment this line in sleep_mode.talon.
+https://github.com/knausj85/knausj_talon/blob/master/modes/sleep_mode.talon#L9
 
-## Getting started with Talon for coding with this depot
+This helps avoid unexpected "Talon wake" commands. Depending on the specific model you're using, you may need to adjust the talon wake/talon sleep commands in modes.talon 
 
-Use the “help context,” "help active," and “help alphabet” commands to browse avaiable commands. Available commands can change with the application or window title that has focus.
+## Getting started with Talon
 
-It's recommended to learn the alphabet first, then get familiar with the keys, symbols, and formatters. 
+1. `help active` will display the available commands for the active application. 
+    - Available commands can change with the application, or even window title that has focus. 
+    - You may navigate help using the displayed numbers. e.g., `help one one` or `help eleven` to open the 11th item in the help list. 
+    - Without opening help first, you can also search for commands e.g. `help search tab` to display all tab-related commands
+    - Without opening help first, you can also jump immediately into a particular help context display by recalling the name displayed in help window (based on the name of the .talon file) e.g. `help symbols` or `help visual studio`
+    - All help-related commands are defined in misc/help.talon and misc/help_open.talon
+2. `help alphabet` will display the alphabet
+3. `command history` will toggle a display of the recent commands
+4. `format help` will display the available formatters with examples.
+5. Many useful, basic commands are defined in https://github.com/knausj85/knausj_talon/blob/master/misc/standard.talon#L36
+    - `undo that` and `redo that` are the default undo/redo commands.
+    - `paste that`, `copy that`, and `cut that` for pasting/copy/cutting, respectively.
 
-The alphabet is defined here
-https://github.com/knausj85/knausj_talon/blob/master/code/keys.py#L6
-
-Keys are defined later in the same file: 
-https://github.com/knausj85/knausj_talon/blob/master/code/keys.py#L67
-
-Symbols: 
-https://github.com/knausj85/knausj_talon/blob/master/text/symbols.talon
-
-Formatters: 
-https://github.com/knausj85/knausj_talon/blob/master/code/formatters.py#L102
-
-Try using formatters by saying e.g. “snake hello world,” which will insert hello_world
-
-Mutliple formatters can be used togther, e.g. “dubstring snake hello world,” which will insert "hello_world" 
+It's recommended to learn the alphabet first, then get familiar with the keys, symbols, formatters, mouse, and generic_editor commands. 
 
 Once you have the basics of text input down, try copying some code from one window to another.
 
-After that, explore using ordinal repetition for easily repeating a command without pausing (e.g., saying “go up fifth” will go up five lines), window switching (“focus chrome”), and moving around in your text editor of choice. 
+After that, explore using ordinal repetition for easily repeating a command without pausing (e.g., saying `go up fifth` will go up five lines), window switching (`focus chrome`), and moving around in your text editor of choice.
 
-If you use vim, just start with the numbers and alphabet, otherwise look at generic_editor.talon as well at jetbrains, vscode, and any other integrations).  
+If you use vim, just start with the numbers and alphabet, otherwise look at generic_editor.talon as well at jetbrains, vscode, and any other integrations.
+
+###  Alphabet
+The alphabet is defined here
+https://github.com/knausj85/knausj_talon/blob/master/code/keys.py#L6
+
+`help alphabet` will open a window that displays the alphabet. `help close` to hide the window.
+
+Try saying e.g. `air bat cap` to insert abc.
+
+
+### Keys
+Keys are defined in keys.py from line 83 - 182. The alphabet is used for A-Z.
+https://github.com/knausj85/knausj_talon/blob/84c6f637ba8304352aa15e01b030e8fa36f4f1a2/code/keys.py#L83
+
+All key commands are defined in keys.talon
+https://github.com/knausj85/knausj_talon/blob/master/misc/keys.talon
+
+On Windows, try commands such as 
+
+`control air` to press `control-a` and select all.
+
+`super-shift-sun` to press `windows-shift-s` to trigger the screenshot application (Windows 10). Then try `escape` to exit the screenshot application.
+
+
+On Mac, try commands such as 
+
+`command air` to press `command-a` and select all.
+
+`control shift command 4` to press ` ctrl-shift-cmd-4` to trigger the screenshot application. Then try `escape` to exit the screenshot application. Please note the order of the modifiers doesn't matter.
+
+
+Any combination of the modifiers, symbols, alphabet, numbers and function keys can be executed via voice to execute shorcuts. Out of the box, only the modifier keys (command, shift, alt, super) cannot be triggered by themselves. 
+
+### Symbols
+Some symbols are defined in keys.py, so you can say e.g. `control colon` to press those keys.
+https://github.com/knausj85/knausj_talon/blob/master/code/keys.py#L93
+
+Some other symbols are defined here:
+https://github.com/knausj85/knausj_talon/blob/master/text/symbols.talon
+
+### Formatters
+`format help` will display the available formatters with examples of the output.
+
+Try using formatters by saying e.g. `snake hello world`, which will insert hello_world
+
+Mutliple formatters can be used togther, e.g. `dubstring snake hello world`. This will insert "hello_world"
+
+Formatters (snake, dubstring) are defined here
+https://github.com/knausj85/knausj_talon/blob/master/code/formatters.py#L146
+
+All formatter-related commands are defined here
+https://github.com/knausj85/knausj_talon/blob/master/misc/formatters.talon#L2
+
+
+### Mouse commands
+See https://github.com/knausj85/knausj_talon/blob/master/misc/mouse.talon
+
+### Generic editor
+https://github.com/knausj85/knausj_talon/blob/master/text/generic_editor.talon#L7
+
+These generic commands are global. Commands such as `go word left` will work in any text box.  
+
+### Repeating commands
+For repeating commands, useful voice commands are defined here:
+https://github.com/knausj85/knausj_talon/blob/ced46aee4b59e6ec5e8545bb01434e27792c830e/misc/repeater.talon#L2
+
+Try saying e.g. `go up fifth` will go up five lines.
+Try saying e.g. `select up third` to hit `shift-up` three times to select some lines in a text field.
+
+### Window management
+Global window managment commands are defined here:
+https://github.com/knausj85/knausj_talon/blob/master/misc/window_management.talon#L1
+
+`running list` will toggle a GUI list of words you can say to switch to running applications.
+`focus chrome` will focus the chrome application.
+`launch music` will launch the music application. Note this is currently only implemented on Mac OS X.
+
+### Screenshot commands
+
+https://github.com/knausj85/knausj_talon/blob/master/misc/screenshot.talon
+
+### Programming Languages
+
+Specific programming languages may be activated by voice commands, or via title tracking.
+
+Activating languages via commands will enable the commands globally, e.g. they'll work in any application. This will also disable the title tracking method (code.language in .talon files) until the "clear language modes" voice command is used.
+
+The commands are defined here: 
+https://github.com/knausj85/knausj_talon/blob/69d0207c873e860002b137f985dd7cb001183a47/modes/modes.talon#L29
+
+By default, title tracking activates coding languages in supported applications such as VSCode, Visual Studio (requires plugin),  and Notepad++. 
+
+To enable title tracking for your application: 
+1. The active filename (including extension) must be included in the editor's title
+2. Implement the required Talon-defined actions (filename, file_ext) to correctly extract the filename and extension from the programs's title. See https://github.com/knausj85/knausj_talon/blob/master/apps/vscode/vscode.py#L18 for an example.
+
+Python, C#, Talon and javascript language support is currently broken up into ~four contexts in an attempt to define a common grammar where possible between languages
+
+• operators.talon - operator commands
+
+• comment.talon - commenting commands
+
+• programming.talon - function, loop commands, etc
+
+• {your-language-here}.talon - for implementation of the actioIans for the above, and any language-specific stuff
+
 
 ## File Manager commands
 For the following file manager commands to work, your file manager must display the full folder path in the title bar. https://github.com/knausj85/knausj_talon/blob/baa323fcd34d8a1124658a425abe8eed59cf2ee5/apps/file_manager.talon
@@ -93,209 +201,119 @@ defaults write com.apple.finder _FXShowPosixPathInTitle -bool YES
 For Windows Explorer, follow these directions
 https://www.howtogeek.com/121218/beginner-how-to-make-explorer-always-show-the-full-path-in-windows-8/
 
-For the Windows command line, the "refresh title" command will force the title to the current directory, and all directory commands ("follow 1") will automatically update the title. The 
+For the Windows command line, the `refresh title` command will force the title to the current directory, and all directory commands (`follow 1`) will automatically update the title.
 
+Notes: 
+
+• Both Windows Explorer and Finder hide certain files and folder by default, so it's often best to use the imgui to list the options before issuing commands. 
+
+• If there no hidden files or folders, and the items are displayed in alphabetical order, you can typically issue the `follow <number>`, `file <number>` and `open <number>` commands based on the displayed order.
 
 ## Jetbrains commands
 
 For Jetbrains commands to work you must install https://plugins.jetbrains.com/plugin/10504-voice-code-idea
 into each editor.
 
-...
+## Settings
 
-## .talon file
+Several options are configurable via a single settings file out of the box. Any setting can be made context specific as needed (e.g., per-OS, per-app, etc). 
 
-.talon files may be used for
+https://github.com/knausj85/knausj_talon/blob/master/settings.talon
 
-- implementing actions
-- defining the overall context for commands and actions
-- implementing voice commands
-
-### Context
-
-There is a "header" section in .talon files that defines the context for the commands. This is everything above the hyphen/dash in the .talon file.
-
-```insert code:
-os: windows
-os: linux
-app: Slack
-app: slack.exe
-app: Teams
--
-```
-
-The above restricts the commands:
-
-- Linux or Windows OS; and
-- An app name of Slack, slack.exe, or Teams.
-
-Any commands would not be available on Mac OS, for example.
-
-You can also filter by window title.
 
 ```
-app: Gnome-terminal
-title: /emacs/
--
+#adjust the scale of the imgui to my liking
+imgui.scale = 1.3
+# enable if you'd like the picker gui to automatically appear when explorer has focus
+user.file_manager_auto_show_pickers = 0
+#set the max number of command lines per page in help
+user.help_max_command_lines_per_page = 50
+# set the max number of contexts display per page in help
+user.help_max_contexts_per_page = 20
+# The default amount used when scrolling continuously
+user.mouse_continuous_scroll_amount = 80
+#stop continuous scroll/gaze scroll with a pop
+user.mouse_enable_pop_stops_scroll = 1
+#enable pop click with 'control mouse' mode
+user.mouse_enable_pop_click = 1
+#When enabled, the 'Scroll Mouse' GUI will not be shown.
+user.mouse_hide_mouse_gui = 0
+#hide cursor when mouse_wake is called to enable zoom mouse
+user.mouse_wake_hides_cursor = 0
+#the amount to scroll up/down (equivalent to mouse wheel on Windows by default)
+user.mouse_wheel_down_amount = 120
 ```
 
-In this case the definitions would only be active for the Gnome-terminal app with a window title that contains emacs.
-The /'s around emacs mean it's a regular expression, so you can do all kinds of matching. This should be done sparingly in scripts you intend to share.
+The most commonly adjusted settings are probably
 
-You can get the name or bundle for the app via these actions:
+• `imgui.scale` to improve the visibility of all imgui-based windows (help, history, etc). This is simply a scale factor, 1.3 = 130%.
 
-```
-app.executable() <-- probably best include both the exe and app name for Windows atm
-app.name()
-app.bundle() <-- OS X
-```
+• `user.help_max_command_lines_per_page` and `user.help_max_contexts_per_page` to ensure all help information is visible.
 
-### Defining Voice Commands
+• `user.mouse_wheel_down_amount` and `user.mouse_continuous_scroll_amount` for adjusting the scroll amounts for the various scroll commands.
 
-Going forward, all voice commands will be implemented in .talon files.
+• Uncomment `tag(): user.mouse_grid_enabled` to enable the mouse grid.
 
-```insert code:
-([channel] unread next | goneck): key(alt-shift-down)
-```
 
-() form a group
+# Collaborators
 
-| means or
+This repository is now officially a team effort. The following contributors have direct access:
+- @dwiel
+- @fidgetingbits
+- @knausj85 
+- @rntz
 
-[] means optional
+Collaborators will reply to issues and pull requests as time and health permits. Please be patient.
 
-In the above example, saying any of below voice commands:
+## Guidelines for collaborators
 
-- "channel unread next"
-- "unread next"
-- "goneck"
+1. Collaborators prioritize their health and their personal/professional needs first. Their time commitment to this effort is limited.
+2. For "minor" fixes and improvements/bugs/new apps, collaborators are free to contribute without any review
+3. For "significant" new development and refactors, collaborators should seek appropriate input and reviews from each-other. Collaborators are encouraged to open a discussion before committing their time to any major effort.
 
-will execute the shortcut alt-shift-down.
+# Contributing
 
-You can perform many actions with a single command, as below:
+Anyone is welcome to submit PRs and report issues. 
 
-```insert code:
-    insert("``````")
-    key(left left left)
-    key(shift-enter)
-    key(shift-enter)
-    key(up)
-```
+## Guidelines for contributions
 
-Note that you can also do many key presses in one command, `key(left left left)` will press left three times.
+- Any addition to the global grammar will be scrutinized a bit more thoroughly. The more specific a new context, the less scrutiny that is typically applied.
 
-## Modules: Declaring actions and captures
+- New grammars should follow the [subject][verb] standard where-ever possible.
 
-With python scripts, you may declare and implement new actions and captures.
+- For Mac OS X, the bundle id should be used for defining app contexts, rather than the name. 
 
-Modules declare actions and captures; actions may have a default implementation. Actions and captures then can be combined to compose extremely useful voice commands in .talon files.
+- For Windows, both the friendly app name and exe name should be used for defining app contexts when they are different. For some people, the MUICache breaks.
 
-### Actions
+- For new web apps, ensure the domain is used to minimize potential mismatches
+https://github.com/knausj85/knausj_talon/blob/master/apps/web/window_titles.md
 
-Actions are the functionality assigned to a voice command, e.g. the action for the command "new tab" would implement opening the tab.
-
-All user-defined actions in this repository are prefixed with "user." by talon
-
-```python
-from talon import Module, Context, actions, settings
-
-mod = Module()
-@mod.action_class
-class Actions:
-    def bare_action():
-        """Action prototypes must have a docstring."""
-
-    def capitalize(s: str) -> str:
-    """This capitalizes a string."""
-        return s.capitalize()
-```
-
-In the above example, `bare_action()` is declared, but not implemented. On the other hand, `capitalize()` has a default implementation that could be overridden for some contexts.
-
-Actions may be implemented in a .talon file, allowing the implementation to be customized per-context as needed. The below example for `bare_action()` is active only (1) on Linux and (2) when the Slack application has focus.
-
-```insert code:
-os: linux
-app: Slack
--
-action(user.bare_action):
-    insert("LINUX")
+- New applications should support the appropriate 'generic' grammars where possible
 
 ```
-
-This makes actions very reusable, particularly across OSes, applications, and programming languages. In this way, you could define a single command that works across all programming languages, etc.
-
-For example, window_management.talon leverages this ability to redefine actions per context to make voice commands that do the right thing regardless of operating system (voice commands on the left and actions on the right):
-
-```insert code:
-new window: app.window_open()
-next window: app.window_next()
-last window: app.window_previous()
-close window: app.window_close()
-focus <user.running_applications>: user.switcher_focus(running_applications)
+generic_browser.talon
+find_and_replace.talon
+line_commands.talon
+multiple_cursors.talon
+snippets.talon
+splits.talon
+tabs.talon
 ```
 
-These Talon-declared app actions are then defined per-operating system in separate OS-specific .talon files:
-
-```insert code:
-os: mac
--
-action(app.window_open):
-    key(cmd-n)
+- New programming languages should support the appropriate 'generic' grammars where possible as well
+```
+operators.talon
+programming.talon
+comment.talon
+block_comment.talon
 ```
 
-```insert code
-os: windows
-os: linux
--
-action(app.window_open):
-    key(ctrl-n)
+and should support the lists
+
+```
+user.code_functions
+user.code_libraries
 ```
 
-The voice commands themselves will now work regardless of operating system. For example, "window open" will use `cmd-n` when using mac and `ctrl-n` when using windows or linux.
+where appropriate. See e.g. csharp.py/csharp.talon. At least, until we come up with something better 👍 
 
-Note that if you attempt to use an action in a context that has no implementation for the action, you will see warnings in the Talon log.
-
-### Captures
-
-Captures must be declared in a module, and do not currently support having a default implementation within the module like actions. This is coming soon.
-
-These examples are from `formatters.py`.
-
-```python:
-mod = Module()
-mod.list('formatters', desc='list of formatters')
-
-@mod.capture
-def formatters(m) -> list:
-    "Returns a list of formatters"
-```
-
-The above declares a 'formatters' capture that returns a list. The module also declares a list/mapping of the formatters to capture (snake, camel, etc). These mappings can be static, as in formatters.py, or dynamic, as in switcher.py, which is used to switch between running applications).
-
-To implement a capture, you must create a context in python. Note that contexts are anonymous.
-
-```python:
-ctx = Context()
-@ctx.capture(rule='{self.formatters}+')
-def formatters(m):
-    return m.formatters
-```
-
-When used in .talon, this capture will provide a list of words matching any the module's 'formatters' list defined above. The result can then be provided to another action.
-
-You may define other useful captures by combining captures too. For example, the below capture will provide formatted text for commands such as "allcaps dubstring something interesting" => "SOMETHING INTERESTING" -
-
-```python:
-@ctx.capture(rule='<self.formatters> <phrase>')
-def format_text(m):
-    return FormatText(m.phrase, m.formatters)
-```
-
-Once defined, you can then use the captures and associated actions in .talon files!
-
-```insert code:
-<user.formatters_format_text> [over]: insert(format_text)
-```
-
-This will simply insert the pre-formatted text into your editor.

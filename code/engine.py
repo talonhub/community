@@ -1,17 +1,19 @@
 from talon import Context, Module
-from talon.engine import engine
+from talon import speech_system
 
 mod = Module()
+
+
 @mod.action_class
-class Actions:  
+class Actions:
     def engine_sleep():
         """Sleep the engine"""
-        engine.mimic("go to sleep".split()),
-        
+        speech_system.engine_mimic("go to sleep"),
+
     def engine_wake():
         """Wake the engine"""
-        engine.mimic("wake up".split()),
+        speech_system.engine_mimic("wake up"),
 
     def engine_mimic(cmd: str):
         """Sends phrase to engine"""
-        engine.mimic(cmd.split())
+        speech_system.engine_mimic(cmd)

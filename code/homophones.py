@@ -1,8 +1,5 @@
-from talon import Context, Module, app, clip, cron, imgui, actions, ui
+from talon import Context, Module, app, clip, cron, imgui, actions, ui, fs
 import os
-
-selection_numbers = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty',]
-selection_map = {n: i for i, n in enumerate(selection_numbers)}
 
 ########################################################################
 # global settings
@@ -21,55 +18,55 @@ show_help = False
 ########################################################################
 
 ctx = Context()
+mod = Module()
+mod.mode("homophones")
+mod.list("homophones_canonicals", desc="list of words ")
 
-phones = {}
-canonical_list = []
+
 main_screen = ui.main_screen()
 
-with open(homophones_file, "r") as f:
-    for h in f:
-        h = h.rstrip()
-        h = h.split(",")
-        canonical_list.append(max(h, key=len))
-        for w in h:
-            w = w.lower()
-            others = phones.get(w, None)
-            if others is None:
-                phones[w] = sorted(h)
-            else:
-                # if there are multiple hits, collapse them into one list
-                others += h
-                others = set(others)
-                others = sorted(others)
-                phones[w] = others
 
-all_homophones = phones
+def update_homophones(name, flags):
+    if name is not None and name != homophones_file:
+        return
 
+    phones = {}
+    canonical_list = []
+    with open(homophones_file, "r") as f:
+        for line in f:
+            words = line.rstrip().split(",")
+            canonical_list.append(max(words, key=len))
+            for word in words:
+                word = word.lower()
+                old_words = phones.get(word, [])
+                phones[word] = sorted(set(old_words + words))
+
+    global all_homophones
+    all_homophones = phones
+    ctx.lists["self.homophones_canonicals"] = canonical_list
+
+
+update_homophones(None, None)
+fs.watch(cwd, update_homophones)
 active_word_list = None
 is_selection = False
 
+
 def close_homophones():
-    ctx.lists['self.homophones_selections'] = []
     gui.hide()
+    actions.mode.disable("user.homophones")
 
-def make_selection(index: int):
-    global active_word_list
-    cron.after("0s", close_homophones)
-    if is_selection:
-        clip.set(active_word_list[index - 1])
 
-    actions.insert(active_word_list[index - 1])
-    
 def raise_homophones(word, forced=False, selection=False):
     global quick_replace
     global active_word_list
     global show_help
     global force_raise
-    global is_selection 
+    global is_selection
 
     force_raise = forced
     is_selection = selection
-    
+
     if is_selection:
         word = word.strip()
 
@@ -104,18 +101,12 @@ def raise_homophones(word, forced=False, selection=False):
 
         return
 
-    index = 1
-    selections = []
-    for word in active_word_list:
-        selections.append(str(index))
-        index = index + 1 
-    ctx.lists['self.homophones_selections'] = selection_numbers[:index-1]
-
+    actions.mode.enable("user.homophones")
     show_help = False
-    gui.show()
     gui.freeze()
-    
-@imgui.open(y=0,x=main_screen.width/2.6)
+
+
+@imgui.open(y=0, x=main_screen.width / 2.6, software=False)
 def gui(gui: imgui.GUI):
     global active_word_list
     if show_help:
@@ -125,38 +116,23 @@ def gui(gui: imgui.GUI):
         gui.line()
         index = 1
         for word in active_word_list:
-            gui.text("Pick {}: {} ".format(index,word))
+            gui.text("Pick {}: {} ".format(index, word))
             index = index + 1
+
 
 def show_help_gui():
     global show_help
     show_help = True
-    gui.show()
+    gui.freeze()
 
-mod = Module()
-mod.list('homophones_canonicals', desc='list of words ')
-mod.list('homophones_selections', desc='list of valid selection indexes')
 
 @mod.capture
 def homophones_canonical(m) -> str:
     "Returns a single string"
 
 
-@mod.capture 
-def homophones_selection(m) -> str:
-    "Returns the selected homophone"
-
-@mod.capture
-def homophones_formatted_selection(m) -> str:
-    "Returns the selected homophone with the desired formatter(s) applied"
-
 @mod.action_class
 class Actions:
-    def homophones_show_help():
-        """Shows help"""
-        show_help_gui()
-        gui.freeze()
-
     def homophones_hide():
         """Hides the homophones display"""
         close_homophones()
@@ -167,9 +143,7 @@ class Actions:
 
     def homophones_show_selection():
         """Sentence formatter"""
-        actions.edit.copy()
-        actions.sleep("100ms")
-        raise_homophones(clip.get(), False, True)
+        raise_homophones(actions.edit.selected_text(), False, True)
 
     def homophones_force_show(m: str):
         """Sentence formatter"""
@@ -177,29 +151,20 @@ class Actions:
 
     def homophones_force_show_selection():
         """Sentence formatter"""
-        actions.edit.copy()
-        actions.sleep("100ms")
-        raise_homophones(clip.get(), True, True)
+        raise_homophones(actions.edit.selected_text(), True, True)
 
-    def homophones_format_selection(word: str, fmtrs: list):
-        """Formats the selection using Formatters"""
-        actions.user.formatters_format_text(word, fmtrs)
-        
-@ctx.capture(rule='{self.homophones_canonicals}')
+    def homophones_select(number: int) -> str:
+        """selects the homophone by number"""
+        if number <= len(active_word_list) and number > 0:
+            return active_word_list[number - 1]
+
+        error = "homophones.py index {} is out of range (1-{})".format(
+            number, len(active_word_list)
+        )
+        app.notify(error)
+        raise error
+
+
+@ctx.capture(rule="{self.homophones_canonicals}")
 def homophones_canonical(m):
     return m.homophones_canonicals
-
-@ctx.capture(rule='{self.homophones_selections}')
-def homophones_selection(m):
-    global active_word_list
-    return active_word_list[(selection_map[m.homophones_selections])]
-
-@ctx.capture(rule='<user.formatters> {self.homophones_selections}')
-def homophones_formatted_selection(m):
-    global active_word_list
-    selection = active_word_list[(selection_map[m.homophones_selections])]
-    return actions.user.formatters_format_text(selection, m.formatters) 
-
-ctx.lists['self.homophones_canonicals'] = canonical_list
-ctx.lists['self.homophones_selections'] = []
- 

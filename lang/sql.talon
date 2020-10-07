@@ -1,4 +1,4 @@
-app: DataGrip
+app: datagrip
 
 -
 select: "SELECT "

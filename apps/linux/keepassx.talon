@@ -1,11 +1,5 @@
-app: KeePassX2
-app: KeePassXC
-app: Keepassx2
-app: keepassx2
-app: keepassxc
-app: Keepassxc
+app: keepass
 -
-
 # Database
 open database: key(ctrl-o)
 save database: key(ctrl-s)
@@ -23,6 +17,6 @@ copy password: key(ctrl-c)
 open (earl|url|link): key(ctrl-u)
 copy (earl|url|link): key(ctrl-alt-u)
 find: key(ctrl-f)
-find <phrase>:
+find <user.text>:
     key(ctrl-f)
-    insert("{phrase}")
+    insert("{text}")
