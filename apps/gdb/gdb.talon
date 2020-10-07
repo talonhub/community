@@ -5,6 +5,67 @@ tag: terminal
 mode: user.gdb
 -
 tag(): user.gdb
+tag(): user.debugger
+
+##
+# Generic debugger actions
+##
+
+# Code execution
+action(user.debugger_step_into): "stepi\n"
+action(user.debugger_step_over): "nexti\n"
+action(user.debugger_step_line): "step\n"
+action(user.debugger_step_over_line): "next\n"
+action(user.debugger_step_out): "finish\n"
+until <number>: "until {number}"
+action(user.debugger_continue): "c\n"
+action(user.debugger_stop): key("ctrl-c")
+action(user.debugger_start): "run\n"
+action(user.debugger_restart): "run\n"
+# XXX -
+action(user.debugger_detach): ""
+
+# Registers
+action(user.debugger_show_registers): "info registers\n"
+action(user.debugger_get_register): "r "
+action(user.debugger_set_register):
+    insert("set $=")
+    edit.left()
+
+# Breakpoints
+action(user.debugger_show_breakpoints): "info breakpoints\n"
+action(user.debugger_add_sw_breakpoint): "break "
+# XXX -
+action(user.debugger_add_hw_breakpoint): ""
+action(user.debugger_break_now): key("ctrl-c")
+action(user.debugger_break_here): "break\n"
+action(user.debugger_clear_all_breakpoints): "d br\n"
+force clear all break points:
+    insert("d br\n")
+    insert("y\n")
+action(user.debugger_clear_breakpoint):
+    insert("d br ")
+action(user.debugger_enable_all_breakpoints):
+    insert("enable br\n")
+action(user.debugger_enable_breakpoint):
+    insert("enable br ")
+action(user.debugger_disable_all_breakpoints):
+    insert("disable br\n")
+action(user.debugger_disable_breakpoint):
+    insert("disable br  ")
+
+break [on] clipboard:
+    insert("break ")
+    key(ctrl-shift-v)
+    key(enter)
+
+# Memory inspection
+
+# Type inspection
+
+##
+# gdb specific functionality
+##
 
 # information
 list [source]: "list\n"
@@ -35,44 +96,9 @@ hex dump clipboard:
     edit.paste()
     key(enter)
 
-### Breakpoints ###
-
-# enable
-(list|show|info) breakpoints: "info breakpoints\n"
-break [point] [on]: "break "
-break [point] here: "break\n"
-enable all break points: "enable br\n"
-enable break [point] <number_small>: "enable br {number_small}\n"
-break [on] clipboard:
-    insert("break ")
-    key(ctrl-shift-v)
-    key(enter)
-
-# disable
-disable all break points: "disable br\n"
-disable break [point] <number_small>: "disable br {number_small}\n"
-
-# delete
-delete all break points: "d br\n"
-force delete all break points:
-    insert("d br\n")
-    insert("y\n")
-delete break [point] <number>: "d br {number}"
-
-until <number>: "until {number}"
-finish [function]: "finish\n"
-
-# registers
-(list|show|info) registers: "info registers\n"
 
 # execution
-(rerun|run): "run\n"
 source: "source \t\t"
-
-# stepping
-step [instruction|line]: "stepi\n"
-(step over|next) line: "next\n"
-(step over|next) instruction: "nexti\n"
 
 # displays
 # XXX - move thee invoke command into a python script

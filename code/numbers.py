@@ -172,7 +172,7 @@ def number_small(m):
     rule=f"<number_small> [{alt_scales} ([and] (<number_small> | {alt_scales} | <number_small> {alt_scales}))*]",
 )
 def number_scaled(m):
-    return fuse_num(fuse_scale(fuse_num(fuse_scale(list(m), 3))))[0]
+    return fuse_num(fuse_scale(fuse_num(fuse_scale(list(m), 1000))))[0]
 
 
 # This rule offers more colloquial number speaking when combined with a command

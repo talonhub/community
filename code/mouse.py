@@ -1,7 +1,6 @@
 from talon import cron, ctrl, ui, Module, Context, actions, noise, settings, imgui, app
-from talon.engine import engine
 from talon_plugins import speech, eye_mouse, eye_zoom_mouse
-from talon_plugins.eye_mouse import toggle_control, config
+from talon_plugins.eye_mouse import toggle_control, toggle_camera_overlay, config
 import subprocess
 import os
 import pathlib
@@ -28,7 +27,7 @@ default_cursor = {
     "SizeNS": "%SystemRoot%\\Cursors\\aero_ns.cur",
     "SizeNWSE": "%SystemRoot%\\Cursors\\aero_nwse.cur",
     "SizeWE": "%SystemRoot%\\Cursors\\aero_ew.cur",
-    "UpArrow": "%SystemRoot%\Cursors\\aero_up.cur",
+    "UpArrow": "%SystemRoot%\\Cursors\\aero_up.cur",
     "Wait": "%SystemRoot%\\Cursors\\aero_busy.ani",
     "Crosshair": "",
     "IBeam": "",
@@ -116,6 +115,10 @@ class Actions:
         """Toggles control mouse"""
         toggle_control(not config.control_mouse)
 
+    def mouse_toggle_camera_overlay():
+        """Toggles camera overlay"""
+        toggle_camera_overlay(not config.show_camera)        
+
     def mouse_toggle_zoom_mouse():
         """Toggles zoom mouse"""
         eye_zoom_mouse.toggle_zoom_mouse(not eye_zoom_mouse.zoom_mouse.enabled)
@@ -191,6 +194,15 @@ class Actions:
         if setting_mouse_hide_mouse_gui.get() == 0:
             gui_wheel.show()
 
+    def copy_mouse_position():
+        """Copy the current mouse position coordinates"""
+        position = ctrl.mouse_pos()
+        clip.set(repr(position))
+
+    def mouse_move_center_active_window():
+        """move the mouse cursor to the center of the currently active window"""
+        rect = ui.active_window().rect
+        ctrl.mouse_move(rect.left + (rect.width / 2), rect.top + (rect.height / 2))
 
 def show_cursor_helper(show):
     """Show/hide the cursor"""
@@ -273,22 +285,30 @@ def gaze_scroll():
     if (
         eye_zoom_mouse.zoom_mouse.state == eye_zoom_mouse.STATE_IDLE
     ):  # or eye_zoom_mouse.zoom_mouse.state == eye_zoom_mouse.STATE_SLEEP:
-        windows = ui.windows()
-        window = None
         x, y = ctrl.mouse_pos()
-        for w in windows:
-            if w.rect.contains(x, y):
-                window = w.rect
-                break
-        if window is None:
+
+        # the rect for the window containing the mouse
+        rect = None
+
+        # on windows, check the active_window first since ui.windows() is not z-ordered
+        if app.platform == "windows" and ui.active_window().rect.contains(x, y):
+            rect = ui.active_window().rect
+        else:
+            windows = ui.windows()
+            for w in windows:
+                if w.rect.contains(x, y):
+                    rect = w.rect
+                    break
+
+        if rect is None:
             # print("no window found!")
             return
 
-        midpoint = window.y + window.height / 2
-        amount = int(((y - midpoint) / (window.height / 10)) ** 3)
+        midpoint = rect.y + rect.height / 2
+        amount = int(((y - midpoint) / (rect.height / 10)) ** 3)
         actions.mouse_scroll(by_lines=False, y=amount)
 
-    # print(f"gaze_scroll: {midpoint} {window.height} {amount}")
+    # print(f"gaze_scroll: {midpoint} {rect.height} {amount}")
 
 
 def stop_scroll():

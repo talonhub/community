@@ -7,11 +7,11 @@ tag(): user.code_comment
 tag(): user.code_generic
 settings():
     user.code_private_function_formatter = "PRIVATE_CAMEL_CASE"
-    user.code_protected_function_formatter = "PROTECTED_CAMEL_CASE"
-    user.code_public_function_formatter = "PROTECTED_CAMEL_CASE"
+    user.code_protected_function_formatter = "PUBLIC_CAMEL_CASE"
+    user.code_public_function_formatter = "PUBLIC_CAMEL_CASE"
     user.code_private_variable_formatter = "PRIVATE_CAMEL_CASE"
-    user.code_protected_variable_formatter = "PROTECTED_CAMEL_CASE"
-    user.code_public_variable_formatter = "PROTECTED_CAMEL_CASE"
+    user.code_protected_variable_formatter = "PUBLIC_CAMEL_CASE"
+    user.code_public_variable_formatter = "PUBLIC_CAMEL_CASE"
 
 action(user.code_operator_indirection): "*"
 action(user.code_operator_address_of): "&"
@@ -84,6 +84,11 @@ action(user.code_state_while):
     insert("while()")
     edit.left()
 action(user.code_state_return): "return "
+action(user.code_break): "break;"
+action(user.code_next): "continue;"
+action(user.code_true): "true"
+action(user.code_false): "false"
+
 #action(user.code_type_definition): "typedef "
 #action(user.code_typedef_struct):
 #    insert("typedef struct")
@@ -98,10 +103,9 @@ action(user.code_include_system): insert("using ")
 action(user.code_include_local): insert('using ')
 action(user.code_comment): "//"
 
-#todo: figure out how to handle typing beyond "void"
-action(user.code_private_function): insert("private void ")
-action(user.code_private_static_function): insert("private static void ")
-action(user.code_public_static_function): insert("public static void ")
-action(user.code_protected_function): insert("protected void ")
-action(user.code_protected_static_function): insert ("protected static void ")
-action(user.code_public_function): insert("public void ")
+^funky <user.text>$: user.code_private_function(text)
+^pro funky <user.text>$: user.code_protected_function(text)
+^pub funky <user.text>$: user.code_public_function(text)
+^static funky <user.text>$: user.code_private_static_function(text)
+^pro static funky <user.text>$: user.code_protected_static_function(text)
+^pub static funky <user.text>$: user.code_public_static_function(text)
