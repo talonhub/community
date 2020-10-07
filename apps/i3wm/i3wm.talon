@@ -58,11 +58,11 @@ shrink window:
 
 horizontal (shell|terminal):
     user.system_command("i3-msg split h")
-    key(super-enter)
+    user.i3wm_shell()
 
 vertical (shell|terminal):
     user.system_command("i3-msg split v")
-    key(super-enter)
+    user.i3wm_shell()
 
 # XXX - just replace with shuffle eventually?
 # XXX - like also need to match the generic talon commands
