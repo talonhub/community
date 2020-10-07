@@ -50,7 +50,7 @@ def letter(m) -> str:
 
 
 @mod.capture
-def letters(m) -> list:
+def letters(m) -> str:
     "Multiple letter keys"
 
 
@@ -258,15 +258,11 @@ def keys(m) -> str:
 
 @ctx.capture(rule="{self.letter}+")
 def letters(m):
-    return m.letter_list
+    return ''.join(m.letter_list)
 
 
 @mod.action_class
 class Actions:
-    def keys_uppercase_letters(m: list):
-        """Inserts uppercase letters from list"""
-        actions.insert("".join(m).upper())
-
     def get_alphabet() -> dict:
         """Provides the alphabet dictionary"""
         return alphabet

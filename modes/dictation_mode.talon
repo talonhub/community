@@ -71,15 +71,12 @@ formatted <user.format_text>:
 scratch that: user.clear_last_utterance()
 scratch selection: edit.delete()
 select that: user.select_last_utterance()
+spell that <user.letters>: auto_insert(letters)
 spell that <user.formatters> <user.letters>:
-    result = dictate.join_words(user.letters, "")
-    result = user.formatted_text(result, formatters)
+    result = user.formatted_text(letters, formatters)
     user.auto_format_pause()
     auto_insert(result)
     user.auto_format_resume()
-spell that <user.letters>:
-    result = dictate.join_words(user.letters, "")
-    auto_insert(result)
 #escape, type things that would otherwise be commands
 ^escape <user.text>$:
     auto_insert(user.text)

@@ -215,6 +215,10 @@ class Actions:
         """Formats a phrase according to formatters. formatters is a comma-separated string of formatters (e.g. 'CAPITALIZE_ALL_WORDS,DOUBLE_QUOTED_STRING')"""
         return format_phrase(phrase, formatters)
 
+    def insert_formatted(phrase: Union[str, Phrase], formatters: str):
+        """Inserts a phrase formatted according to formatters. Formatters is a comma separated list of formatters (e.g. 'CAPITALIZE_ALL_WORDS,DOUBLE_QUOTED_STRING')"""
+        actions.insert(format_phrase(phrase, formatters))
+
     def formatters_help_toggle():
         """Lists all formatters"""
         if gui.showing:
