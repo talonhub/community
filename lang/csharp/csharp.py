@@ -1,9 +1,9 @@
-from talon import Module, Context, actions, ui, imgui, settings
+from talon import Context, Module, actions, imgui, settings, ui
 
 ctx = Context()
 ctx.matches = r"""
 mode: user.csharp
-mode: command 
+mode: command
 and code.language: csharp
 """
 ctx.lists["user.code_functions"] = {
@@ -45,7 +45,7 @@ class user_actions:
         actions.user.code_insert_function(result, None)
 
     def code_protected_function(text: str):
-        result = "private static void {}".format(
+        result = "private void {}".format(
             actions.user.formatted_text(
                 text, settings.get("user.code_protected_function_formatter")
             )

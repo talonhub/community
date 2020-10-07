@@ -93,16 +93,32 @@ action(user.code_true): "True"
 action(user.code_false): "False"
 action(user.code_document_string): user.insert_cursor("\"\"\"[|]\"\"\"")
 
-#python-specicic grammars
-dunder in it: insert("__init__")
-state (def | deaf | deft): "def "
-pie test: "pytest"
-state past: "pass"
-
 ^funky <user.text>$: user.code_private_function(text)
 #^pro funky <user.text>$: user.code_protected_function(text)
 ^pub funky <user.text>$: user.code_public_function(text)
 #^static funky <user.text>$: user.code_private_static_function(text)
 #^pro static funky <user.text>$: user.code_protected_static_function(text)
 #^pub static funky <user.text>$: user.code_public_static_function(text)
+
 raise {user.python_exception}: user.insert_cursor("raise {python_exception}([|])")
+
+# for annotating function parameters
+is type {user.python_type_list}:
+    insert(": {python_type_list}")
+returns [type] {user.python_type_list}:
+    insert(" -> {python_type_list}")
+# for generic reference of types
+type {user.python_type_list}:
+    insert("{python_type_list}")
+dock {user.python_docstring_fields}:
+    insert("{python_docstring_fields}")
+    edit.left()
+dock type {user.python_type_list}:
+    user.insert_cursor(":type [|]: {python_type_list}")
+dock returns type {user.python_type_list}:
+    user.insert_cursor(":rtype [|]: {python_type_list}")
+
+dunder in it: "__init__"
+self taught: "self."
+pie test: "pytest"
+state pass: "pass"

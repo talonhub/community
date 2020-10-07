@@ -44,9 +44,7 @@ toggle funk: user.code_toggle_functions()
 toggle library: user.code_toggle_libraries()
 funk <user.code_functions>:
     user.code_insert_function(code_functions, "")
-library <user.code_libraries>:
-    insert("library()")
-    key(left)
+(include|import|library) <user.code_libraries>:
     user.code_insert_library(code_libraries, "")
     key(end enter)
 funk cell <number>:
