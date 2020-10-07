@@ -31,10 +31,13 @@ ctx.lists["user.snippets"] = {
 
 
 # # there's probably a way to do this without
-# # if app.platform == "windows":
-# watcher = snippet_watcher(
-#     {os.path.expandvars(r"%AppData%\Code\User\snippets"): ["csharp.json"],},
-#     update_list,
-# )
-
+# snippet_path = None
+# if app.platform == "windows":
+#     snippet_path = os.path.expandvars(r"%AppData%\Code\User\snippets")
+# elif app.platform == "mac":
+#     snippet_path = os.path.expanduser(
+#         "~/Library/Application Support/Code/User/snippets"
+#     )
+# if snippet_path:
+#     watcher2 = snippet_watcher({snippet_path: ["csharp.json",],}, update_list,)
 # print("reloaded!")
