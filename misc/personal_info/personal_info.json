@@ -1,0 +1,87 @@
+{
+    "first-name": "John",
+    "last-name": "Smith",
+    "birthday": [
+        "01/01/1900",
+        "January 1, 1900"
+    ],
+    "personal-email": [
+        "john.smith@home.com"
+    ],
+    "work-email": [
+        "john.smith@work.com"
+    ],
+    "phone-number": [
+        "999-123-4567",
+        "999-876-5432"
+    ],
+    "work-phone-number": [
+        ""
+    ],
+    "address": [
+        "Some place",
+        ""
+    ],
+    "city": [
+        "",
+        ""
+    ],
+    "province": [
+        ""
+    ],
+    "country": [
+        "",
+        ""
+    ],
+    "postal-code": [
+        "",
+        ""
+    ],
+    "work-address": [
+        ""
+    ],
+    "company": [
+        ""
+    ],
+    "twitter": [
+        ""
+    ],
+    "domain": [
+        ""
+    ],
+    "work-domain": [
+        ""
+    ],
+    "website": [
+        ""
+    ],
+    "passport-number": [],
+    "id-number": [],
+    "work-laptop": [
+        ""
+    ],
+    "personal-laptop": [
+        ""
+    ],
+    "nas": [
+        ""
+    ],
+    "microphone": [
+        "",
+        ""
+    ],
+    "audio-interface": [
+        "",
+        ""
+    ],
+    "router": [
+        ""
+    ],
+    "access-point": [
+        ""
+    ],
+    "headphones": [],
+    "team": "",
+    "editor": "",
+    "distro": ""
+}
