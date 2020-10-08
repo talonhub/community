@@ -22,7 +22,7 @@ ctx.lists["user.code_functions"] = {
     "update": "update",
 }
 
-"""a set of fields used in python dog strings that will follow the
+"""a set of fields used in python docstrings that will follow the
 reStructuredText format"""
 docstring_fields = {
     "class": ":class:",

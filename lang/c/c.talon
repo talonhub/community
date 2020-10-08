@@ -155,3 +155,8 @@ standard <user.stdint_types>: "{stdint_types}"
 int main:
     insert("int main()")
     edit.left()
+
+toggle includes: user.code_toggle_libraries()
+include <user.code_libraries>:
+    user.code_insert_library(code_libraries, "")
+    key(end enter)

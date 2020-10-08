@@ -99,7 +99,6 @@ action(user.code_document_string): user.insert_cursor("\"\"\"[|]\"\"\"")
 #^static funky <user.text>$: user.code_private_static_function(text)
 #^pro static funky <user.text>$: user.code_protected_static_function(text)
 #^pub static funky <user.text>$: user.code_public_static_function(text)
-
 raise {user.python_exception}: user.insert_cursor("raise {python_exception}([|])")
 
 # for annotating function parameters
@@ -121,4 +120,11 @@ dock returns type {user.python_type_list}:
 dunder in it: "__init__"
 self taught: "self."
 pie test: "pytest"
-state pass: "pass"
+state past: "pass"
+
+import <user.code_libraries>: import {code_libraries}
+
+toggle imports: user.code_toggle_libraries()
+import <user.code_libraries>:
+    user.code_insert_library(code_libraries, "")
+    key(end enter)
