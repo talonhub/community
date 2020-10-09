@@ -93,6 +93,12 @@ action(user.code_true): "True"
 action(user.code_false): "False"
 action(user.code_document_string): user.insert_cursor("\"\"\"[|]\"\"\"")
 
+#python-specific grammars
+dunder in it: "__init__"
+self taught: "self."
+pie test: "pytest"
+state past: "pass"
+
 ^funky <user.text>$: user.code_private_function(text)
 #^pro funky <user.text>$: user.code_protected_function(text)
 ^pub funky <user.text>$: user.code_public_function(text)
@@ -116,11 +122,6 @@ dock type {user.python_type_list}:
     user.insert_cursor(":type [|]: {python_type_list}")
 dock returns type {user.python_type_list}:
     user.insert_cursor(":rtype [|]: {python_type_list}")
-
-dunder in it: "__init__"
-self taught: "self."
-pie test: "pytest"
-state past: "pass"
 
 import <user.code_libraries>: import {code_libraries}
 
