@@ -95,6 +95,7 @@ action(user.code_document_string): user.insert_cursor("\"\"\"[|]\"\"\"")
 
 #python-specific grammars
 dunder in it: "__init__"
+state (def | deaf | deft): "def "
 self taught: "self."
 pie test: "pytest"
 state past: "pass"
