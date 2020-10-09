@@ -263,7 +263,5 @@ class user_actions:
         actions.user.code_insert_function(result, None)
 
     def code_insert_library(text: str, selection: str):
-        actions.insert("#include <>")
-        actions.edit.left()
-        actions.clip.set_text(text + "{}".format(selection))
-        actions.edit.paste()
+        actions.user.paste("include <{}>".format(selection))
+
