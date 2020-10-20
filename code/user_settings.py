@@ -10,6 +10,8 @@ import threading
 #   knausj folder.
 SETTINGS_DIR = Path(__file__).parents[1] / "settings"
 
+if not SETTINGS_DIR.is_dir():
+    os.mkdir(SETTINGS_DIR)
 
 mod = Module()
 ctx = Context()
