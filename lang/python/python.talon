@@ -123,9 +123,6 @@ dock type {user.python_type_list}:
     user.insert_cursor(":type [|]: {python_type_list}")
 dock returns type {user.python_type_list}:
     user.insert_cursor(":rtype [|]: {python_type_list}")
-
-import <user.code_libraries>: import {code_libraries}
-
 toggle imports: user.code_toggle_libraries()
 import <user.code_libraries>:
     user.code_insert_library(code_libraries, "")
