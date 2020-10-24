@@ -1,4 +1,5 @@
 tag: terminal
+tag: ide
 -
 # Standard commands
 git add patch: "git add . -p\n"

@@ -197,6 +197,7 @@ class Actions:
         if setting_mouse_hide_mouse_gui.get() == 0:
             gui_wheel.show()
 
+<<<<<<< HEAD
     def copy_mouse_position():
         """Copy the current mouse position coordinates"""
         position = ctrl.mouse_pos()
@@ -206,6 +207,15 @@ class Actions:
         """move the mouse cursor to the center of the currently active window"""
         rect = ui.active_window().rect
         ctrl.mouse_move(rect.left + (rect.width / 2), rect.top + (rect.height / 2))
+=======
+    def mouse_pop_off():
+        """toggles mouse pop off"""
+        user.mouse_enable_pop_click.set(0)
+
+    def mouse_pop_on():
+        """toggles mouse pop on"""
+        user.mouse_enable_pop_click.set(1)
+>>>>>>> master
 
 
 def show_cursor_helper(show):
@@ -244,18 +254,29 @@ def show_cursor_helper(show):
 
 
 def on_pop(active):
-    if gaze_job or scroll_job:
-        if setting_mouse_enable_pop_stops_scroll.get() >= 1:
+    print("YO I am a pop")
+    if (gaze_job or scroll_job):
+        if settings.get("user.mouse_enable_pop_stops_scroll") >= 1:
             stop_scroll()
-    elif (
-        not eye_zoom_mouse.zoom_mouse.enabled
-        and eye_mouse.mouse.attached_tracker is not None
-    ):
-        if setting_mouse_enable_pop_click.get() >= 1:
-            ctrl.mouse_click(button=0, hold=16000)
-
+    else:
+        if settings.get("user.mouse_enable_pop_click") >= 1:
+            print("yo I am about to click")
+            # ctrl.mouse_click(button=0, hold=16000)
+            ctrl.mouse_click()
 
 noise.register("pop", on_pop)
+
+
+# def on_hiss(active):
+#     print("yo I hiss")
+#     if(gaze_job or scroll_job):
+#         if settings.get("user.mouse_enable_pop_stops_scroll") >= 1:
+#             stop_scroll()
+#     else:
+#         if settings.get("user.mouse_enable_pop_click") >= 1:
+#             ctrl.mouse_click(button=0, hold=16000)
+
+#noise.register("hiss", on_hiss)
 
 
 def mouse_scroll(amount):

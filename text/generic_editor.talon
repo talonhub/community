@@ -94,44 +94,44 @@ indent [more]:
     edit.indent_less()
 
 # deleting
-clear line:
+exile line:
     edit.delete_line()
 
-clear left:
+exile left:
     key(backspace)
 
-clear right:
+exile right:
     key(delete)
 
-clear up:
+exile up:
     edit.extend_line_up()
     edit.delete()
 
-clear down:
+exile down:
     edit.extend_line_down()
     edit.delete()
 
-clear word left:
+exile word left:
     edit.extend_word_left()
     edit.delete()
 
-clear word right:
+exile word right:
     edit.extend_word_right()
     edit.delete()
 
-clear way left:
+exile way left:
     edit.extend_line_start()
     edit.delete()
 
-clear way right:
+exile way right:
     edit.extend_line_end()
     edit.delete()
 
-clear way up:
+exile way up:
     edit.extend_file_start()
     edit.delete()
 
-clear way down:
+exile way down:
     edit.extend_file_end()
     edit.delete()
 

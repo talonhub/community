@@ -1,63 +1,80 @@
 os: mac
 -
-action(edit.copy): 
+action(edit.copy):
 	key(cmd-c)
- 
-action(edit.cut): 
+
+action(edit.cut):
 	key(cmd-x)
-	
-action(edit.delete): 
+
+action(edit.delete):
 	key(backspace)
-	
-action(edit.delete_line): 
+
+action(edit.delete_line):
 	edit.select_line()
 	edit.delete()
-	
-#action(edit.delete_paragraph): 
 
-#action(edit.delete_sentence): 
+#action(edit.delete_paragraph):
+
+#action(edit.delete_sentence):
 
 action(edit.delete_word):
 	actions.edit.select_word()
 	actions.edit.delete()
 
-action(edit.down): 
+action(edit.down):
 	key(down)
-	
-#action(edit.extend_again): 
 
-#action(edit.extend_column): 
+#action(edit.extend_again):
+
+#action(edit.extend_column):
 
 action(edit.extend_down):
 	key(shift-down)
-	
+
 action(edit.extend_file_end):
+<<<<<<< HEAD
 	key(cmd-shift-down)
 	
+=======
+	key(shift-ctrl-end)
+
+>>>>>>> master
 action(edit.extend_file_start):
 	key(cmd-shift-up)
-	
+
 action(edit.extend_left):
 	key(shift-left)
-	
-#action(edit.extend_line): 
 
+<<<<<<< HEAD
 action(edit.extend_line_down):       
 	key(shift-down)
+=======
+#action(edit.extend_line):
 
-action(edit.extend_line_end): 
+action(edit.extend_line_down):
+	key(shift-down cmd-shift-right)
+>>>>>>> master
+
+action(edit.extend_line_end):
 	key(cmd-shift-right)
 
-action(edit.extend_line_start): 
+action(edit.extend_line_start):
 	key(cmd-shift-left)
 
+<<<<<<< HEAD
 action(edit.extend_line_up): 
 	key(shift-up)
 	
 action(edit.extend_page_down): 
+=======
+action(edit.extend_line_up):
+	key(shift-up cmd-shift-left)
+
+action(edit.extend_page_down):
+>>>>>>> master
 	key(cmd-shift-pagedown)
 
-action(edit.extend_page_up): 
+action(edit.extend_page_up):
 	key(cmd-shift-pageup)
 
 #action(edit.extend_paragraph_end):
@@ -67,7 +84,7 @@ action(edit.extend_page_up):
 
 action(edit.extend_right):
 	key(shift-right)
-	
+
 #action(edit.extend_sentence_end):
 #action(edit.extend_sentence_next):
 #action(edit.extend_sentence_previous):
@@ -75,7 +92,7 @@ action(edit.extend_right):
 
 action(edit.extend_up):
 	key(shift-up)
-	
+
 action(edit.extend_word_left):
 	key(shift-alt-left)
 
@@ -109,30 +126,30 @@ action(edit.indent_more):
 
 action(edit.left):
 	key(left)
-	
+
 action(edit.line_down):
 	key(down home)
-	
+
 action(edit.line_end):
 	key(cmd-right)
 
 action(edit.line_insert_down):
 	key(end enter)
-	
+
 action(edit.line_insert_up):
 	key(cmd-left enter up)
 
 action(edit.line_start):
 	key(cmd-left)
-	
+
 action(edit.line_up):
 	key(up cmd-left)
-	
+
 #action(edit.move_again):
 
 action(edit.page_down):
 	key(pagedown)
-	
+
 action(edit.page_up):
 	key(pageup)
 
@@ -143,28 +160,28 @@ action(edit.page_up):
 
 action(edit.paste):
 	key(cmd-v)
-	
+
 action(edit.paste_match_style):
 	key(cmd-alt-shift-v)
 
 action(edit.print):
 	key(cmd-p)
-	
+
 action(edit.redo):
 	key(cmd-shift-z)
-	
+
 action(edit.right):
 	key(right)
-	
+
 action(edit.save):
 	key(cmd-s)
 
 action(edit.save_all):
 	key(cmd-shift-s)
-	
+
 action(edit.select_all):
 	key(cmd-a)
-	
+
 action(edit.select_line):
 	key(cmd-right cmd-shift-left)
 
@@ -172,7 +189,7 @@ action(edit.select_line):
 
 action(edit.select_none):
 	key(right)
-	
+
 #action(edit.select_paragraph):
 #action(edit.select_sentence):
 
@@ -187,7 +204,7 @@ action(edit.select_word):
 
 action(edit.undo):
 	key(cmd-z)
-	
+
 action(edit.up):
 	key(up)
 
@@ -202,7 +219,7 @@ action(edit.zoom_in):
 
 action(edit.zoom_out):
 	key(cmd--)
-	
+
 action(edit.zoom_reset):
 	key(cmd-0)
-	
+

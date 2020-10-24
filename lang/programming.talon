@@ -50,3 +50,59 @@ funk wrap <user.code_functions>:
 funk wrap <number>:
     user.code_select_function(number - 1, edit.selected_text())
 dock string: user.code_document_string()
+^function <user.text>$:
+    #todo: once .talon action definitions can take parameters, combine these functions
+    user.code_private_function()
+    user.code_private_function_formatter(user.text)
+    insert("()")
+    edit.left()
+    sleep(100ms)
+^pro function <user.text>$:
+    #todo: once .talon action definitions can take parameters, combine these functions
+    user.code_protected_function()
+    user.code_protected_function_formatter(user.text)
+    #() surely isn't correct for all languages, will be part of the combined function above
+    insert("()")
+    key(left)
+    sleep(100ms)
+^public function <user.text>$:
+    #todo: once 1.talon action definitions can take parameters, combine these functions
+    user.code_public_function()
+    user.code_public_function_formatter(user.text)
+    sleep(50ms)
+    insert("()")
+^static function <user.text>$:
+    #todo: once .talon action definitions can take parameters, combine these functions
+    user.code_private_static_function()
+    user.code_private_function_formatter(user.text)
+^pro static function <user.text>$:
+    #todo: once .talon action definitions can take parameters, combine these functions
+    user.code_protected_static_function()
+    user.code_protected_function_formatter(user.text)
+^pub static function <user.text>$:
+    #todo: once .talon action definitions can take parameters, combine these functions
+	user.code_public_static_function()
+    user.code_public_function_formatter(user.text)
+
+# show and print functions
+toggle function: user.code_toggle_functions()
+function <user.code_functions>:
+    old_clip = clip.text()
+    user.code_insert_function(code_functions, "")
+    clip.set_text(old_clip)
+function cell <number>:
+    old_clip = clip.text()
+    user.code_select_function(number - 1, "")
+    clip.set_text(old_clip)
+function wrap <user.code_functions>:
+    old_clip = clip.text()
+    edit.copy()
+    sleep(100ms)
+    user.code_insert_function(code_functions, clip.text())
+    clip.set_text(old_clip)
+function wrap <number>:
+    old_clip = clip.text()
+    edit.copy()
+    sleep(100ms)
+    user.code_select_function(number - 1, clip.text())
+    clip.set_text(old_clip)

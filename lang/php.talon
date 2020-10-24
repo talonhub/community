@@ -1,6 +1,5 @@
-mode: user.javascript
 mode: command
-and code.language: javascript
+and code.language: php
 -
 tag(): user.code_operators
 tag(): user.code_comment
@@ -34,11 +33,7 @@ action(user.code_state_else):
   insert(" else {}")
   key(left enter)
 
-action(user.code_block):
-  insert("{}")
-  key(left enter)
-
-action(user.code_self): "this"
+action(user.code_self): "$this"
 
 action(user.code_state_while):
   insert("while ()")
@@ -59,14 +54,6 @@ action(user.code_state_case): "case :"
 
 action(user.code_state_go_to): ""
 
-action(user.code_import): "import "
-
-action(user.code_from_import):
-  insert(" from  \"\"")
-  key(left)
-
-action(user.code_type_class): "class "
-
 action(user.code_include): ""
 
 action(user.code_include_system): ""
@@ -78,15 +65,15 @@ action(user.code_type_definition): ""
 action(user.code_typedef_struct): ""
 
 action(user.code_state_for_each):
-  insert(".forEach()")
+  insert("foreach ()")
   key(left)
 
-action(user.code_break): "break;"
-action(user.code_next): "continue;"
-action(user.code_true): "true"
-action(user.code_false): "false"
-
 action(user.code_null): "null"
+
+action(user.code_private_function): "private function "
+action(user.code_protected_function): "protected function "
+action(user.code_public_function): "public function "
+
 
 action(user.code_operator_indirection): ""
 action(user.code_operator_address_of): ""
@@ -128,38 +115,47 @@ action(user.code_operator_bitwise_left_shift_assignment): " <<= "
 action(user.code_operator_bitwise_right_shift): " >> "
 action(user.code_operator_bitwise_right_shift_assignment): " >>= "
 
-state const: "const "
-
-state let: "let "
-
-state var: "var "
-
-state async: "async "
-
-state await: "await "
+state block:
+  insert("{}")
+  key(left enter)
 
 state map:
-  insert(".map()")
+  insert("map()")
   key(left)
 
 state filter:
-  insert(".filter()")
+  insert("filter()")
   key(left)
 
-state reduce:
-  insert(".reduce()")
-  key(left)
+class path <user.text>:
+    insert(user.formatted_text(text, "title"))
+    insert('::class')
 
-state spread: "..."
+state var <user.text>: insert("${text}")
+state arrow: insert(" => ")
 
-^funky <user.text>$: user.code_private_function(text)
-^pro funky <user.text>$: user.code_protected_function(text)
-^pub funky <user.text>$: user.code_public_function(text)
-state arrow function:
-    insert("() => {}")
-    key(left)
+end statement: key(ctrl-alt-shift-;)
+list slap:
+    edit.line_end()
+    insert(',')
     key(enter)
 
-state inline arrow:
-    insert("() => ")
+end slap:
+    edit.line_end()
+    insert(';')
+    key(enter)
 
+
+backpack column:
+    insert('CRUD::column(\'\')')
+    key(left left)
+
+backpack field:
+    insert('CRUD::field(\'\')')
+    key(left left)
+
+backpack widget:
+    insert('Widget::add()')
+    key(enter)
+    insert('->to(\'\')')
+    key(left left)

@@ -224,3 +224,7 @@ class user_actions:
 
     # find_and_replace.py support end
 
+    def ide_switch_workspace():
+        """change project workspace"""
+        actions.key("ctrl-alt-`")
+        actions.key("ctrl-r")

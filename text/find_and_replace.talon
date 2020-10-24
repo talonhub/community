@@ -1,87 +1,88 @@
 tag: user.find_and_replace
 -
-hunt this: user.find("")
-hunt this <user.text>: user.find(text)
-hunt all: user.find_everywhere("")
-hunt all <user.text>: user.find_everywhere(text)
-hunt case : user.find_toggle_match_by_case()
-hunt word : user.find_toggle_match_by_word()
-hunt expression : user.find_toggle_match_by_regex()
-hunt next: user.find_next()
-hunt previous: user.find_previous()
-replace this [<user.text>]: user.replace(text or "")
+search this: user.find("")
+search this <user.text>: user.find(text)
+search all: user.find_everywhere("")
+search all <user.text>: user.find_everywhere(text)
+search case : user.find_toggle_match_by_case()
+search word : user.find_toggle_match_by_word()
+search expression : user.find_toggle_match_by_regex()
+search next: user.find_next()
+search previous: user.find_previous()
+replace this: user.replace("")
+replace this <user.text>: user.replace(text or "")
 replace all: user.replace_everywhere("")
 replace <user.text> all: user.replace_everywhere(text)
 replace confirm that: user.replace_confirm()
 replace confirm all: user.replace_confirm_all()
 
 #quick replace commands, modeled after jetbrains
-clear last <user.text> [over]: 
+clear last <user.text> [over]:
     user.select_previous_occurrence(text)
     sleep(100ms)
     edit.delete()
-clear next <user.text> [over]: 
+clear next <user.text> [over]:
     user.select_next_occurrence(text)
     sleep(100ms)
     edit.delete()
-clear last clip: 
+clear last clip:
     user.select_previous_occurrence(clip.text())
     edit.delete()
-clear next clip: 
+clear next clip:
     user.select_next_occurrence(clip.text())
     sleep(100ms)
     edit.delete()
-comment last <user.text> [over]: 
+comment last <user.text> [over]:
     user.select_previous_occurrence(text)
     sleep(100ms)
     code.toggle_comment()
-comment last clip: 
+comment last clip:
     user.select_previous_occurrence(clip.text())
     sleep(100ms)
     code.toggle_comment()
-comment next <user.text> [over]: 
+comment next <user.text> [over]:
     user.select_next_occurrence(text)
     sleep(100ms)
     code.toggle_comment()
-comment next clip: 
+comment next clip:
     user.select_next_occurrence(clip.text())
     sleep(100ms)
     code.toggle_comment()
-go last <user.text> [over]: 
+go last <user.text> [over]:
     user.select_previous_occurrence(text)
     sleep(100ms)
     edit.right()
-go last clip: 
+go last clip:
     user.select_previous_occurrence(clip.text())
     sleep(100ms)
     edit.right()
-go next <user.text> [over]: 
+go next <user.text> [over]:
     user.select_next_occurrence(text)
     edit.right()
-go next clip: 
+go next clip:
     user.select_next_occurrence(clip.text())
     edit.right()
-paste last <user.text> [over]: 
+paste last <user.text> [over]:
     user.select_previous_occurrence(text)
     sleep(100ms)
     edit.right()
     edit.paste()
-paste last clip: 
+paste last clip:
     user.select_previous_occurrence(clip.text())
     sleep(100ms)
     edit.right()
     edit.paste()
-paste next <user.text> [over]: 
+paste next <user.text> [over]:
     user.select_next_occurrence(text)
     sleep(100ms)
     edit.right()
     edit.paste()
-paste next clip: 
+paste next clip:
     user.select_next_occurrence(clip.text())
     sleep(100ms)
     edit.right()
     edit.paste()
-replace last <user.text> [over]: 
+replace last <user.text> [over]:
     user.select_previous_occurrence(text)
     sleep(100ms)
     edit.paste()
@@ -89,7 +90,7 @@ replace next <user.text> [over]:
     user.select_next_occurrence(text)
     sleep(100ms)
     edit.paste()
-replace last clip: 
+replace last clip:
     user.select_previous_occurrence(clip.text())
     sleep(100ms)
     edit.paste()

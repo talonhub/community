@@ -1,5 +1,6 @@
 control mouse: user.mouse_toggle_control_mouse()
 zoom mouse: user.mouse_toggle_zoom_mouse()
+<<<<<<< HEAD
 camera overlay: user.mouse_toggle_camera_overlay()
 run calibration: user.mouse_calibrate()	
 touch: 
@@ -25,9 +26,16 @@ midclick:
 #shift
 #super = windows key
 <user.modifiers> touch: 
+=======
+camera overlay: eye_mouse.camera_overlay.toggle()
+run calibration: user.mouse_calibrate()
+<user.mouse_index>: mouse_click(mouse_index)
+<user.modifiers> <user.mouse_index>:
+>>>>>>> master
 	key("{modifiers}:down")
 	mouse_click(0)
 	key("{modifiers}:up")
+<<<<<<< HEAD
 	# close the mouse grid
 	user.grid_close()
 <user.modifiers> righty: 
@@ -42,6 +50,12 @@ midclick:
 	# close the mouse grid
 	user.grid_close()
 (tripclick | triplick): 
+=======
+(dubclick | duke):
+	mouse_click()
+	mouse_click()
+(tripclick | triplick):
+>>>>>>> master
 	mouse_click()
 	mouse_click()
 	mouse_click()
@@ -100,4 +114,10 @@ wheel tiny right here:
     mouse_scroll(0, 20)
 curse yes: user.mouse_show_cursor()
 curse no: user.mouse_hide_cursor()
+<<<<<<< HEAD
 copy mouse position: user.copy_mouse_position()
+=======
+drag: user.mouse_drag()
+
+click: mouse_click()
+>>>>>>> master
