@@ -384,7 +384,7 @@ class Actions:
                 actions.insert("cmd.exe")
                 actions.key("enter")
             elif is_mac:
-                from talon import applescript
+                from talon.mac import applescript
 
                 applescript.run(
                     r"""
