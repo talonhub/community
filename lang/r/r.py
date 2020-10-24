@@ -1,4 +1,4 @@
-from talon import Module, Context, actions, ui, imgui, clip, settings
+from talon import Context, Module, actions, clip, imgui, settings, ui
 
 ctx = Context()
 
@@ -207,6 +207,7 @@ ctx.lists["user.code_libraries"] = {
     "shiny alert": "shinyalert",
 }
 
+
 @ctx.action_class("user")
 class user_actions:
     def code_insert_function(text: str, selection: str):
@@ -233,5 +234,7 @@ class user_actions:
         actions.edit.left()
 
     def code_insert_library(text: str, selection: str):
+        actions.insert("library()")
+        actions.edit.left()
         actions.clip.set_text(text + "{}".format(selection))
         actions.edit.paste()

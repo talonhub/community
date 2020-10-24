@@ -1,5 +1,5 @@
 mode: user.talon
-mode: command 
+mode: command
 and code.language: talon
 -
 tag(): user.code_operators
@@ -41,12 +41,11 @@ key <user.keys> over: "{keys}"
 key <user.modifiers> over: "{modifiers}"
 #funk commands, consistent with other languages
 toggle funk: user.code_toggle_functions()
-funk <user.code_functions>: 
+funk <user.code_functions>:
     user.code_insert_function(code_functions, "")
-funk cell <number>: 
+funk cell <number>:
     user.code_select_function(number - 1, "")
-funk wrap <user.code_functions>: 
+funk wrap <user.code_functions>:
     user.code_insert_function(code_functions, edit.selected_text())
-funk wrap <number>: 
+funk wrap <number>:
     user.code_select_function(number - 1, edit.selected_text())
-	

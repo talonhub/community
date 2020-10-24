@@ -1,14 +1,19 @@
-# XXX - reorder some dicts for human readability so we see functions and libraries
-# first
-
 from talon import Context, Module, actions, settings
 
 mod = Module()
 mod.setting(
-    "use_stdint_datatypes ", type=int, default=1, desc="beep",
+    "use_stdint_datatypes ",
+    type=int,
+    default=1,
+    desc="Use the stdint datatype naming in commands by default",
 )
 
 ctx = Context()
+ctx.matches = r"""
+mode: user.c
+mode: command
+and code.language: c
+"""
 
 ctx.lists["self.c_pointers"] = {
     "pointer": "*",
@@ -64,7 +69,7 @@ ctx.lists["self.c_types"] = {
     "float": "float",
 }
 
-ctx.lists["self.c_libraries"] = {
+ctx.lists["user.code_libraries"] = {
     "assert": "assert.h",
     "type": "ctype.h",
     "error": "errno.h",
@@ -84,7 +89,7 @@ ctx.lists["self.c_libraries"] = {
     "standard int": "stdint.h",
 }
 
-ctx.lists["self.c_functions"] = {
+ctx.lists["user.code_functions"] = {
     "mem copy": "memcpy",
     "mem set": "memset",
     "string cat": "strcat",
@@ -131,19 +136,17 @@ ctx.lists["self.c_functions"] = {
 mod.list("c_pointers", desc="Common C pointers")
 mod.list("c_signed", desc="Common C datatype signed modifiers")
 mod.list("c_types", desc="Common C types")
-mod.list("c_libraries", desc="Standard C library")
-mod.list("c_functions", desc="Standard C functions")
 mod.list("stdint_types", desc="Common stdint C types")
 mod.list("stdint_signed", desc="Common stdint C datatype signed modifiers")
 
 
 @mod.capture
-def cast(m) -> str:
+def c_cast(m) -> str:
     "Returns a string"
 
 
 @mod.capture
-def stdint_cast(m) -> str:
+def c_stdint_cast(m) -> str:
     "Returns a string"
 
 
@@ -163,11 +166,6 @@ def c_types(m) -> str:
 
 
 @mod.capture
-def c_functions(m) -> str:
-    "Returns a string"
-
-
-@mod.capture
 def stdint_types(m) -> str:
     "Returns a string"
 
@@ -178,17 +176,7 @@ def stdint_signed(m) -> str:
 
 
 @mod.capture
-def variable(m) -> str:
-    "Returns a string"
-
-
-@mod.capture
-def function(m) -> str:
-    "Returns a string"
-
-
-@mod.capture
-def library(m) -> str:
+def c_variable(m) -> str:
     "Returns a string"
 
 
@@ -212,11 +200,6 @@ def c_types(m) -> str:
     return m.c_types
 
 
-@ctx.capture(rule="{self.c_functions}")
-def c_functions(m) -> str:
-    return m.c_functions
-
-
 @ctx.capture(rule="{self.stdint_types}")
 def stdint_types(m) -> str:
     return m.stdint_types
@@ -227,25 +210,58 @@ def stdint_signed(m) -> str:
     return m.stdint_signed
 
 
-@ctx.capture(rule="{self.c_libraries}")
-def library(m) -> str:
-    return m.c_libraries
-
-
 # NOTE: we purposely we don't have a space after signed, to faciltate stdint
 # style uint8_t constructions
 @ctx.capture(rule="[<self.c_signed>]<self.c_types> [<self.c_pointers>+]")
-def cast(m) -> str:
+def c_cast(m) -> str:
     return "(" + " ".join(list(m)) + ")"
 
 
 # NOTE: we purposely we don't have a space after signed, to faciltate stdint
 # style uint8_t constructions
 @ctx.capture(rule="[<self.stdint_signed>]<self.stdint_types> [<self.c_pointers>+]")
-def stdint_cast(m) -> str:
+def c_stdint_cast(m) -> str:
     return "(" + "".join(list(m)) + ")"
 
 
 @ctx.capture(rule="[<self.c_signed>]<self.c_types>[<self.c_pointers>]")
-def variable(m) -> str:
+def c_variable(m) -> str:
     return " ".join(list(m))
+
+
+@ctx.action_class("user")
+class user_actions:
+    def code_insert_function(text: str, selection: str):
+        if selection:
+            text = text + "({})".format(selection)
+        else:
+            text = text + "()"
+
+        actions.user.paste(text)
+        actions.edit.left()
+
+    # TODO - it would be nice that you integrate that types from c_cast
+    # instead of defaulting to void
+    def code_private_function(text: str):
+        """Inserts private function declaration"""
+        result = "void {}".format(
+            actions.user.formatted_text(
+                text, settings.get("user.code_private_function_formatter")
+            )
+        )
+
+        actions.user.code_insert_function(result, None)
+
+    def code_private_static_function(text: str):
+        """Inserts private static function"""
+        result = "static void {}".format(
+            actions.user.formatted_text(
+                text, settings.get("user.code_private_function_formatter")
+            )
+        )
+
+        actions.user.code_insert_function(result, None)
+
+    def code_insert_library(text: str, selection: str):
+        actions.user.paste("include <{}>".format(selection))
+

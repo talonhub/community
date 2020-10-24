@@ -41,14 +41,8 @@ state false: user.code_false()
 
 # show and print functions and libraries
 toggle funk: user.code_toggle_functions()
-toggle library: user.code_toggle_libraries()
 funk <user.code_functions>:
     user.code_insert_function(code_functions, "")
-library <user.code_libraries>:
-    insert("library()")
-    key(left)
-    user.code_insert_library(code_libraries, "")
-    key(end enter)
 funk cell <number>:
     user.code_select_function(number - 1, "")
 funk wrap <user.code_functions>:
