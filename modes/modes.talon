@@ -5,7 +5,7 @@ mode: all
     # user.mouse_wake()
     # user.history_enable()
     # speech.enable()
-okay talon sleep all:
+talon sleep all:
     user.switcher_hide_running()
     user.history_disable()
     user.homophones_hide()
@@ -13,9 +13,15 @@ okay talon sleep all:
     user.mouse_sleep()
     speech.disable()
     user.engine_sleep()
+    user.mouse_pop_off()
 
-okay talon sleep: speech.disable()
-okay talon wake: speech.enable()
+
+
+talon sleep: speech.disable()
+
+talon awaken:
+    speech.enable()
+    user.mouse_pop_on()
 
 okay talon dictation:
     speech.disable()

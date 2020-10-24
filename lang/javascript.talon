@@ -150,3 +150,12 @@ state reduce:
   key(left)
 
 state spread: "..."
+
+state arrow function:
+    insert("() => {}")
+    key(left)
+    key(enter)
+
+state inline arrow:
+    insert("() => ")
+

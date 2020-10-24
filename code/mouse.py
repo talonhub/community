@@ -204,6 +204,14 @@ class Actions:
         if setting_mouse_hide_mouse_gui.get() == 0:
             gui_wheel.show()
 
+    def mouse_pop_off():
+        """toggles mouse pop off"""
+        user.mouse_enable_pop_click.set(0)
+
+    def mouse_pop_on():
+        """toggles mouse pop on"""
+        user.mouse_enable_pop_click.set(1)
+
 
 def show_cursor_helper(show):
     """Show/hide the cursor"""
