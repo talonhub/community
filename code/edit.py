@@ -8,19 +8,12 @@ mod = Module()
 @ctx.action_class("edit")
 class edit_actions:
     def selected_text() -> str:
-        # try:
-        #     text = ui.focused_element().AXSelectedText
-        #     if text:
-        #         return text
-        # except Exception:
-        #     pass
-
+        with clip.capture() as s:
+            actions.edit.copy()
         try:
-            with clip.capture() as s:
-                actions.edit.copy()
             return s.get()
         except clip.NoChange:
-            return clip.get()
+            return ""
 
 
 @mod.action_class
