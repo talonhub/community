@@ -27,6 +27,7 @@ port_mapping = {
     "com.jetbrains.pycharm": 8658,
     "com.jetbrains.rider": 8660,
     "com.jetbrains.rubymine": 8661,
+    "com.jetbrains.rubymine-EAP": 8661,
     "com.jetbrains.WebStorm": 8663,
     "google-android-studio": 8652,
     "idea64.exe": 8653,
@@ -44,8 +45,11 @@ port_mapping = {
     "jetbrains-pycharm": 8658,
     "jetbrains-rider": 8660,
     "jetbrains-rubymine": 8661,
+    "jetbrains-rubymine-eap": 8661,
     "jetbrains-studio": 8652,
     "jetbrains-webstorm": 8663,
+    "RubyMine": 8661,
+    "RubyMine-EAP": 8661,
     "PyCharm": 8658,
     "pycharm64.exe": 8658,
     "webstorm64.exe": 8663,
@@ -106,6 +110,8 @@ mod = Module()
 mod.apps.jetbrains = "app.name: /jetbrains/"
 mod.apps.jetbrains = "app.name: IntelliJ IDEA"
 mod.apps.jetbrains = "app.name: PyCharm"
+mod.apps.jetbrains = "app.name: RubyMine"
+mod.apps.jetbrains = "app.name: RubyMine-EAP"
 
 # windows
 mod.apps.jetbrains = "app.name: idea64.exe"
@@ -177,4 +183,3 @@ class user_actions:
 
     def line_clone(line: int):
         actions.user.idea("clone {}".format(line))
-
