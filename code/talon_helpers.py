@@ -30,7 +30,7 @@ class Actions:
 
         # on windows, it's best to include both the friendly name and executable name in case the muicache breaks....
         else:
-            result = 'mod.apps.{} = """\nos: {}\nand app: {}\nos: {}\nand app: {}\n"""'.format(
+            result = 'mod.apps.{} = """\nos: {}\nand app.name: {}\nos: {}\nand app.name: {}\n"""'.format(
                 create_name(friendly_name),
                 app.platform,
                 friendly_name,
