@@ -183,14 +183,28 @@ mod = Module()
 mod.list("formatters", desc="list of formatters")
 
 
-@mod.capture
+@mod.capture(rule="{self.formatters}+")
 def formatters(m) -> str:
     "Returns a comma-separated string of formatters e.g. 'SNAKE,DUBSTRING'"
+    return ",".join(m.formatters_list)
 
 
-@mod.capture
+@mod.capture(
+    # Note that if the user speaks something like "snake dot", it will
+    # insert "dot" - otherwise, they wouldn't be able to insert punctuation
+    # words directly.
+    rule="<self.formatters> <user.text> (<user.text> | <user.formatter_immune>)*"
+)
 def format_text(m) -> str:
     "Formats the text and returns a string"
+    out = ""
+    formatters = m[0]
+    for chunk in m[1:]:
+        if isinstance(chunk, ImmuneString):
+            out += chunk.string
+        else:
+            out += format_phrase(chunk, formatters)
+    return out
 
 
 class ImmuneString(object):
@@ -200,13 +214,22 @@ class ImmuneString(object):
         self.string = string
 
 
-@mod.capture
+@mod.capture(
+    # Add anything else into this that you want to be able to speak during a
+    # formatter.
+    rule="(<user.symbol_key> | <user.letter> | numb <number>)"
+)
 def formatter_immune(m) -> ImmuneString:
     """Text that can be interspersed into a formatter, e.g. characters.
 
     It will be inserted directly, without being formatted.
 
     """
+    if hasattr(m, "number"):
+        value = m.number
+    else:
+        value = m[0]
+    return ImmuneString(str(value))
 
 
 @mod.action_class
@@ -267,41 +290,6 @@ class Actions:
         """Insert a list of strings, sequentially."""
         for string in strings:
             actions.insert(string)
-
-
-@ctx.capture(rule="{self.formatters}+")
-def formatters(m):
-    return ",".join(m.formatters_list)
-
-
-@ctx.capture(
-    # Add anything else into this that you want to be able to speak during a
-    # formatter.
-    rule="(<user.symbol_key> | <user.letter> | numb <number>)"
-)
-def formatter_immune(m) -> ImmuneString:
-    if hasattr(m, "number"):
-        value = m.number
-    else:
-        value = m[0]
-    return ImmuneString(str(value))
-
-
-@ctx.capture(
-    # Note that if the user speaks something like "snake dot", it will
-    # insert "dot" - otherwise, they wouldn't be able to insert punctuation
-    # words directly.
-    rule="<self.formatters> <user.text> (<user.text> | <user.formatter_immune>)*"
-)
-def format_text(m):
-    out = ""
-    formatters = m[0]
-    for chunk in m[1:]:
-        if isinstance(chunk, ImmuneString):
-            out += chunk.string
-        else:
-            out += format_phrase(chunk, formatters)
-    return out
 
 
 ctx.lists["self.formatters"] = formatters_words.keys()

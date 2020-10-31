@@ -24,64 +24,83 @@ mod.list("function_key", desc="All function keys")
 mod.list("special_key", desc="All special keys")
 
 
-@mod.capture
+@mod.capture(rule="{self.modifier_key}+")
 def modifiers(m) -> str:
     "One or more modifier keys"
+    return "-".join(m.modifier_key_list)
 
 
-@mod.capture
+@mod.capture(rule="{self.arrow_key}")
 def arrow_key(m) -> str:
     "One directional arrow key"
+    return m.arrow_key
 
 
-@mod.capture
+@mod.capture(rule="<self.arrow_key>+")
 def arrow_keys(m) -> str:
     "One or more arrow keys separated by a space"
+    return str(m)
 
 
-@mod.capture
+@mod.capture(rule="{self.number_key}")
 def number_key(m) -> str:
     "One number key"
+    return m.number_key
 
 
-@mod.capture
+@mod.capture(rule="{self.letter}")
 def letter(m) -> str:
     "One letter key"
+    return m.letter
 
 
-@mod.capture
-def letters(m) -> str:
-    "Multiple letter keys"
-
-
-@mod.capture
-def symbol_key(m) -> str:
-    "One symbol key"
-
-
-@mod.capture
-def function_key(m) -> str:
-    "One function key"
-
-
-@mod.capture
+@mod.capture(rule="{self.special_key}")
 def special_key(m) -> str:
     "One special key"
+    return m.special_key
 
 
-@mod.capture
+@mod.capture(rule="{self.symbol_key}")
+def symbol_key(m) -> str:
+    "One symbol key"
+    return m.symbol_key
+
+
+@mod.capture(rule="{self.function_key}")
+def function_key(m) -> str:
+    "One function key"
+    return m.function_key
+
+
+@mod.capture(
+    rule="( <self.letter> | <self.number_key> | <self.symbol_key> "
+    "| <self.arrow_key> | <self.function_key> | <self.special_key> )"
+)
 def unmodified_key(m) -> str:
     "A single key with no modifiers"
+    return str(m)
 
 
-@mod.capture
+@mod.capture(rule="{self.modifier_key}* <self.unmodified_key>")
 def key(m) -> str:
     "A single key with optional modifiers"
+    try:
+        mods = m.modifier_key_list
+    except AttributeError:
+        mods = []
+    return "-".join(mods + [m.unmodified_key])
 
 
-@mod.capture
+@mod.capture(rule="<self.key>+")
 def keys(m) -> str:
     "A sequence of one or more keys with optional modifiers"
+    return " ".join(m.key_list)
+
+
+@mod.capture(rule="{self.letter}+")
+def letters(m) -> str:
+    "Multiple letter keys"
+    return "".join(m.letter_list)
 
 
 ctx = Context()
@@ -192,73 +211,6 @@ ctx.lists["self.special_key"] = keys
 ctx.lists["self.function_key"] = {
     f"F {default_f_digits[i]}": f"f{i + 1}" for i in range(12)
 }
-
-
-@ctx.capture(rule="{self.modifier_key}+")
-def modifiers(m):
-    return "-".join(m.modifier_key_list)
-
-
-@ctx.capture(rule="{self.arrow_key}")
-def arrow_key(m) -> str:
-    return m.arrow_key
-
-
-@ctx.capture(rule="<self.arrow_key>+")
-def arrow_keys(m) -> str:
-    return str(m)
-
-
-@ctx.capture(rule="{self.number_key}")
-def number_key(m):
-    return m.number_key
-
-
-@ctx.capture(rule="{self.letter}")
-def letter(m):
-    return m.letter
-
-
-@ctx.capture(rule="{self.special_key}")
-def special_key(m):
-    return m.special_key
-
-
-@ctx.capture(rule="{self.symbol_key}")
-def symbol_key(m):
-    return m.symbol_key
-
-
-@ctx.capture(rule="{self.function_key}")
-def function_key(m):
-    return m.function_key
-
-
-@ctx.capture(
-    rule="( <self.letter> | <self.number_key> | <self.symbol_key> "
-         "| <self.arrow_key> | <self.function_key> | <self.special_key> )"
-)
-def unmodified_key(m) -> str:
-    return str(m)
-
-
-@ctx.capture(rule="{self.modifier_key}* <self.unmodified_key>")
-def key(m) -> str:
-    try:
-        mods = m.modifier_key_list
-    except AttributeError:
-        mods = []
-    return "-".join(mods + [m.unmodified_key])
-
-
-@ctx.capture(rule="<self.key>+")
-def keys(m) -> str:
-    return " ".join(m.key_list)
-
-
-@ctx.capture(rule="{self.letter}+")
-def letters(m):
-    return ''.join(m.letter_list)
 
 
 @mod.action_class

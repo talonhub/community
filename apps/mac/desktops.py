@@ -43,7 +43,7 @@ def _drag_window_mac(win=None):
     ctrl.mouse_click(button=0, up=True)
 
 
-@ctx.action_class
+@ctx.action_class("self")
 class MacActions:
     def desktop(number: int):
         if number < 10:

@@ -151,26 +151,6 @@ elif app.platform == "linux":
     terminal_programs = ["terminal"]
 
 
-@mod.capture
-def file_manager_directories(m) -> str:
-    "Returns a single string"
-
-
-@mod.capture
-def file_manager_files(m) -> str:
-    "Returns the selected file"
-
-
-@mod.capture
-def file_manager_directory_index(m) -> int:
-    "Directory selection index"
-
-
-@mod.capture
-def file_manager_file_index(m) -> int:
-    "File selection index"
-
-
 @mod.action_class
 class Actions:
     def file_manager_open_parent():
@@ -556,17 +536,6 @@ ui.register("win_focus", update_maps)
 
 ctx.lists["self.file_manager_directories"] = []
 ctx.lists["self.file_manager_files"] = []
-
-
-@ctx.capture(rule="{self.file_manager_directories}")
-def file_manager_directories(m):
-    return m.file_manager_directories
-
-
-@ctx.capture(rule="{self.file_manager_files}")
-def file_manager_files(m):
-    return m.file_manager_files
-
 
 current_folder_page = 1
 

@@ -614,16 +614,6 @@ class Actions:
         actions.mode.disable("user.help")
 
 
-@mod.capture
-def help_contexts(m) -> str:
-    "Returns a context name"
-
-
-@ctx.capture(rule="{self.help_contexts}")
-def help_contexts(m):
-    return m.help_contexts
-
-
 def commands_updated(_):
     update_title()
 

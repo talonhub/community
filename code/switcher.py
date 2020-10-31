@@ -27,26 +27,18 @@ overrides = {}
 running_application_dict = {}
 
 
-@mod.capture
+@mod.capture(rule="{self.running}")  # | <user.text>)")
 def running_applications(m) -> str:
     "Returns a single application name"
-
-
-@mod.capture
-def launch_applications(m) -> str:
-    "Returns a single application name"
-
-
-@ctx.capture(rule="{self.running}")  # | <user.text>)")
-def running_applications(m):
     try:
         return m.running
     except AttributeError:
         return m.text
 
 
-@ctx.capture(rule="{self.launch}")
-def launch_applications(m):
+@mod.capture(rule="{self.launch}")
+def launch_applications(m) -> str:
+    "Returns a single application name"
     return m.launch
 
 
@@ -199,6 +191,7 @@ def update_launch_list():
 def ui_event(event, arg):
     if event in ("app_launch", "app_close"):
         update_lists()
+
 
 # Currently update_launch_list only does anything on mac, so we should make sure
 # to initialize user launch to avoid getting "List not found: user.launch"

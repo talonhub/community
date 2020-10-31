@@ -140,92 +140,61 @@ mod.list("stdint_types", desc="Common stdint C types")
 mod.list("stdint_signed", desc="Common stdint C datatype signed modifiers")
 
 
-@mod.capture
-def c_cast(m) -> str:
-    "Returns a string"
-
-
-@mod.capture
-def c_stdint_cast(m) -> str:
-    "Returns a string"
-
-
-@mod.capture
+@mod.capture(rule="{self.c_pointers}")
 def c_pointers(m) -> str:
     "Returns a string"
-
-
-@mod.capture
-def c_signed(m) -> str:
-    "Returns a string"
-
-
-@mod.capture
-def c_types(m) -> str:
-    "Returns a string"
-
-
-@mod.capture
-def stdint_types(m) -> str:
-    "Returns a string"
-
-
-@mod.capture
-def stdint_signed(m) -> str:
-    "Returns a string"
-
-
-@mod.capture
-def c_variable(m) -> str:
-    "Returns a string"
-
-
-@ctx.capture(rule="{self.c_pointers}")
-def c_pointers(m) -> str:
     return m.c_pointers
 
 
-@ctx.capture(rule="{self.c_signed}")
+@mod.capture(rule="{self.c_signed}")
 def c_signed(m) -> str:
+    "Returns a string"
     return m.c_signed
 
 
-@ctx.capture(rule="{self.c_types}")
+@mod.capture(rule="{self.c_types}")
 def c_types(m) -> str:
+    "Returns a string"
     return m.c_types
 
 
-@ctx.capture(rule="{self.c_types}")
+@mod.capture(rule="{self.c_types}")
 def c_types(m) -> str:
+    "Returns a string"
     return m.c_types
 
 
-@ctx.capture(rule="{self.stdint_types}")
+@mod.capture(rule="{self.stdint_types}")
 def stdint_types(m) -> str:
+    "Returns a string"
     return m.stdint_types
 
 
-@ctx.capture(rule="{self.stdint_signed}")
+@mod.capture(rule="{self.stdint_signed}")
 def stdint_signed(m) -> str:
+    "Returns a string"
     return m.stdint_signed
 
 
 # NOTE: we purposely we don't have a space after signed, to faciltate stdint
 # style uint8_t constructions
-@ctx.capture(rule="[<self.c_signed>]<self.c_types> [<self.c_pointers>+]")
+@mod.capture(rule="[<self.c_signed>]<self.c_types> [<self.c_pointers>+]")
 def c_cast(m) -> str:
+    "Returns a string"
     return "(" + " ".join(list(m)) + ")"
 
 
 # NOTE: we purposely we don't have a space after signed, to faciltate stdint
 # style uint8_t constructions
-@ctx.capture(rule="[<self.stdint_signed>]<self.stdint_types> [<self.c_pointers>+]")
+@mod.capture(rule="[<self.stdint_signed>]<self.stdint_types> [<self.c_pointers>+]")
 def c_stdint_cast(m) -> str:
+    "Returns a string"
     return "(" + "".join(list(m)) + ")"
 
 
-@ctx.capture(rule="[<self.c_signed>]<self.c_types>[<self.c_pointers>]")
+@mod.capture(rule="[<self.c_signed>]<self.c_types>[<self.c_pointers>]")
 def c_variable(m) -> str:
+    "Returns a string"
     return " ".join(list(m))
 
 
