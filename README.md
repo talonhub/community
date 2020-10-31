@@ -168,10 +168,10 @@ Specific programming languages may be activated by voice commands, or via title 
 
 Activating languages via commands will enable the commands globally, e.g. they'll work in any application. This will also disable the title tracking method (code.language in .talon files) until the "clear language modes" voice command is used.
 
-The commands are defined here: 
-https://github.com/knausj85/knausj_talon/blob/69d0207c873e860002b137f985dd7cb001183a47/modes/modes.talon#L29
+The commands for enabling languages are defined here: 
+https://github.com/knausj85/knausj_talon/blob/master/modes/language_modes.talon
 
-By default, title tracking activates coding languages in supported applications such as VSCode, Visual Studio (requires plugin),  and Notepad++. 
+By default, title tracking activates coding languages in supported applications such as VSCode, Visual Studio (requires plugin), and Notepad++. 
 
 To enable title tracking for your application: 
 1. The active filename (including extension) must be included in the editor's title
