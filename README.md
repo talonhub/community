@@ -209,6 +209,22 @@ Notes:
 
 • If there no hidden files or folders, and the items are displayed in alphabetical order, you can typically issue the `follow <number>`, `file <number>` and `open <number>` commands based on the displayed order.
 
+## Terminal commands
+
+Many terminal programs are supported out of the box, but you may not want all the commands enabled. 
+
+To disable various commandsets in your terminal, find the relevant talon file and enable/disable the tags for command sets as appropriate.
+
+```
+tag(): user.file_manager
+tag(): user.git
+tag(): user.kubectl
+tag(): user.tabs
+```
+
+For instance, kubectl commands (kubernetes) aren't relevant to everyone.
+
+
 ## Jetbrains commands
 
 For Jetbrains commands to work you must install https://plugins.jetbrains.com/plugin/10504-voice-code-idea
