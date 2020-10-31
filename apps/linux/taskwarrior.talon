@@ -1,7 +1,7 @@
 os: linux
 tag: terminal
+and tag: user.taskwarrior
 -
-
 # general
 task version: "task --version\n"
 task commands: "task commands\n"
