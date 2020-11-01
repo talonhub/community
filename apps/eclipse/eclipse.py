@@ -161,12 +161,12 @@ class user_actions:
     def select_previous_occurrence(text: str):
         actions.edit.find(text)
         actions.sleep("100ms")
-        actions.key("alt-b alt-f esc")
+        actions.key("alt-b alt-f enter esc")
 
     def select_next_occurrence(text: str):
         actions.edit.find(text)
         actions.sleep("100ms")
-        actions.key("alt-b alt-o esc")
+        actions.key("alt-f alt-o enter esc")
 
     # find_and_replace.py support end
 
