@@ -5,7 +5,7 @@ tag(): user.find_and_replace
 tag(): user.line_commands
 # tag(): user.multiple_cursors
 # tag(): user.snippets
-# tag(): user.splits
+tag(): user.splits
 tag(): user.tabs
 #talon app actions
 action(app.tab_close): key(ctrl-w)
@@ -23,18 +23,18 @@ action(edit.indent_less): key(shift-tab)
 action(edit.save_all): key(ctrl-shift-s)
 
 # splits.py support begin
-# action(user.split_clear_all): 
-# action(user.split_clear):
+# requires https://marketplace.eclipse.org/content/handysplit
+action(user.split_clear_all): key(alt-shift-s f)
+action(user.split_clear): key(alt-shift-s f)
 # action(user.split_flip): 
-# action(user.split_last): 
-# action(user.split_next): 
-# action(user.split_window_down): 
-action(user.split_window_horizontally): key(ctrl-_)
-# action(user.split_window_left): 
-# action(user.split_window_right): 
-# action(user.split_window_up): 
-action(user.split_window_vertically): key(ctrl-[)
-# action(user.split_window): 
+action(user.split_last): key(alt-shift-s t)
+action(user.split_next): key(alt-shift-s t)
+action(user.split_window_down): key(alt-shift-s m)
+action(user.split_window_horizontally): key(alt-ctrl-s s)
+action(user.split_window_right): key(alt-shift-s m)
+action(user.split_window_up): key(alt-shift-s m)
+action(user.split_window_vertically): key(alt-shift-s s)
+action(user.split_window): key(alt-ctrl-s s)
 # splits.py support end
 
 #multiple_cursor.py support begin
@@ -54,7 +54,7 @@ please [<user.text>]:
   insert(user.text or "")
 
 # Sidebar
-# bar explore: 
+bar explore: key(alt-shift-w p)
 # bar extensions: 
 bar outline: key(alt-shift-q o)
 
@@ -127,18 +127,18 @@ file reveal: key(alt-shift-w p enter)
 # references find: 
 # format that: 
 # format selection: 
-# imports fix: 
+imports fix: key(ctrl-shift-o)
 # problem last: 
 # problem fix: 
 # rename that: 
 # refactor that: 
 # whitespace trim: 
 # language switch: 
-# refactor rename: 
-# refactor this: 
+refactor rename: key(alt-shift-r)
+refactor this: key(alt-shift-i)
 
 #code navigation
-# (go declaration | follow): 
+(go declaration | follow): key(f3)
 go back: key(alt-left)
 go forward:  key(alt-right) 
 # go implementation: 
@@ -147,10 +147,11 @@ go forward:  key(alt-right)
 # go usage: 
 
 # Bookmarks.
-# go marks: 
-# toggle mark: 
-# go next mark: 
-# go last mark: 
+#requires https://marketplace.eclipse.org/content/quick-bookmarks
+go marks: key(alt-end)
+toggle mark: key(ctrl-alt-b down enter)
+go next mark: key(alt-pagedown)
+go last mark: key(alt-pageup)
 
 # Folding
 # fold that: 
