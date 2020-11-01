@@ -4,8 +4,7 @@ mode: all
 welcome back:
     user.mouse_wake()
     user.history_enable()
-    speech.enable()
-    #user.engine_mimic("switch to command mode")
+    user.talon_mode()
 sleep all:
     user.switcher_hide_running()
     user.history_disable()
