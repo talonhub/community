@@ -38,5 +38,5 @@ class Actions:
                 executable,
             )
 
-        clip.set(result)
+        clip.set_text(result)
 
