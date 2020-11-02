@@ -51,6 +51,7 @@ tens_words = "zero ten twenty thirty forty fifty sixty seventy eighty ninety".sp
 
 # ordinal_numbers maps ordinal words into their corresponding numbers.
 ordinal_numbers = {}
+ordinal_small = {}
 for n in range(1, 100):
     if n in ordinal_words:
         word = ordinal_words[n]
@@ -59,16 +60,28 @@ for n in range(1, 100):
         assert 1 < tens < 10, "we have already handled all ordinals < 20"
         assert 0 < units, "we have already handled all ordinals divisible by ten"
         word = f"{tens_words[tens]} {ordinal_words[units]}"
+
+    if n <= 20:
+        ordinal_small[word] = n
     ordinal_numbers[word] = n
 
 
 mod = Module()
 ctx = Context()
 mod.list("ordinals", desc="list of ordinals")
+mod.list("ordinals_small", desc="list of ordinals small (1-20)")
+
 ctx.lists["self.ordinals"] = ordinal_numbers.keys()
+ctx.lists["self.ordinals_small"] = ordinal_small.keys()
 
 
 @mod.capture(rule="{self.ordinals}")
 def ordinals(m) -> int:
+    """Returns a single ordinal as a digit"""
+    return int(ordinal_numbers[m[0]])
+
+
+@mod.capture(rule="{self.ordinals_small}")
+def ordinals_small(m) -> int:
     """Returns a single ordinal as a digit"""
     return int(ordinal_numbers[m[0]])
