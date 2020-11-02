@@ -2,11 +2,9 @@ import os
 import pathlib
 import subprocess
 
-from talon import (Context, Module, actions, app, cron, ctrl, imgui, noise,
-                   settings, ui)
+from talon import Context, Module, actions, app, cron, ctrl, imgui, noise, settings, ui
 from talon_plugins import eye_mouse, eye_zoom_mouse, speech
-from talon_plugins.eye_mouse import (config, toggle_camera_overlay,
-                                     toggle_control)
+from talon_plugins.eye_mouse import config, toggle_camera_overlay, toggle_control
 
 key = actions.key
 self = actions.self
@@ -134,6 +132,11 @@ class Actions:
         ):
             eye_zoom_mouse.zoom_mouse.cancel()
 
+    def mouse_trigger_zoom_mouse():
+        """Trigger zoom mouse if enabled"""
+        if eye_zoom_mouse.zoom_mouse.enabled:
+            eye_zoom_mouse.zoom_mouse.on_pop(eye_zoom_mouse.zoom_mouse.state)
+
     def mouse_drag():
         """(TEMPORARY) Press and hold/release button 0 depending on state for dragging"""
         if 1 not in ctrl.mouse_buttons_down():
@@ -200,7 +203,7 @@ class Actions:
     def copy_mouse_position():
         """Copy the current mouse position coordinates"""
         position = ctrl.mouse_pos()
-        clip.set(repr(position))
+        clip.set_text((repr(position)))
 
     def mouse_move_center_active_window():
         """move the mouse cursor to the center of the currently active window"""
