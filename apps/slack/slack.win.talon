@@ -3,6 +3,7 @@ os: linux
 app: slack
 #todo: some sort of plugin, consolidate with teams or something?
 -
+tag(): user.messaging
 # Workspaces
 workspace <number>: key("ctrl-{number}")
 previous workspace: key(ctrl-shift-tab)
@@ -12,11 +13,11 @@ channel: key(ctrl-k)
 channel <user.text>:
     key(ctrl-k)
     insert(user.formatted_text(user.text, "ALL_LOWERCASE"))
-([channel] unread last | gopreev): key(alt-shift-up)
-([channel] unread next | goneck): key(alt-shift-down)
 (slack | lack) [channel] info: key(ctrl-shift-i)
-channel up: key(alt-up)
-channel down: key(alt-down)
+action(user.messaging_channel_previous): key(alt-up)
+action(user.messaging_channel_next): key(alt-down)
+action(user.messaging_unread_previous): key(alt-shift-up)
+action(user.messaging_unread_next): key(alt-shift-down)
 # Navigation
 (move | next) focus: key(ctrl-`)
 [next] (section | zone): key(f6)
