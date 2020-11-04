@@ -4,14 +4,11 @@ app: slack
 tag(): user.messaging
 # Workspace
 workspace <number>: key("cmd-{number}")
-previous workspace: key(cmd-shift-[)
-next workspace: key(cmd-shift-])
+action(user.messaging_workspace_previous): key(cmd-shift-[)
+action(user.messaging_workspace_next): key(cmd-shift-])
 # Channel
-channel: key(cmd-k)
-channel <user.text>:
-    key(cmd-k)
-    insert(user.formatted_text(user.text, "ALL_LOWERCASE"))
 (slack | lack) [channel] info: key(cmd-shift-i)
+action(user.messaging_open_channel_picker): key(cmd-k)
 action(user.messaging_channel_previous): key(alt-up)
 action(user.messaging_channel_next): key(alt-down)
 action(user.messaging_unread_previous): key(alt-shift-up)
@@ -31,7 +28,7 @@ action(user.messaging_unread_next): key(alt-shift-down)
 (slack | lack) (starred [items] | stars): key(cmd-shift-s)
 (slack | lack) unread [messages]: key(cmd-j)
 (go | undo | toggle) full: key(ctrl-cmd-f)
-(slack | lack) (find | search): key(cmd-f)
+action(user.messaging_open_search): key(cmd-f)
     # Messaging
 grab left: key(shift-up)
 grab right: key(shift-down)
@@ -51,11 +48,11 @@ insert code:
 bold: key(cmd-b)
 (italic | italicize): key(cmd-i)
 (strike | strikethrough): key(cmd-shift-x)
-mark all read: key(shift-esc)
-mark channel read: key(esc)
+action(user.messaging_mark_workspace_read): key(shift-esc)
+action(user.messaging_mark_channel_read): key(esc)
 (clear | scrap | scratch): key(cmd-a backspace)
     # Files and Snippets
-(slack | lack) upload: key(cmd-u)
+action(user.messaging_upload_file): key(cmd-u)
 (slack | lack) snippet: key(cmd-shift-enter)
     # Calls
 ([toggle] mute | unmute): key(m)
