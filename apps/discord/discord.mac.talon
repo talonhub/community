@@ -20,7 +20,7 @@ action(user.discord_oldest_unread): key(shift-paegup)
 # UI
 action(user.discord_toggle_pins): key(cmd-p)
 action(user.discord_toggle_inbox): key(cmd-i)
-action(user.discord_toggle_members): key(mcd-u)
+action(user.discord_toggle_members): key(cmd-u)
 action(user.discord_emoji_picker): key(cmd-e)
 action(user.discord_gif_picker): key(cmd-g)
 

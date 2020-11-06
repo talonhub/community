@@ -21,7 +21,7 @@ action(user.discord_oldest_unread): key(shift-paegup)
 # UI
 action(user.discord_toggle_pins): key(ctrl-p)
 action(user.discord_toggle_inbox): key(ctrl-i)
-action(user.discord_toggle_members): key(mcd-u)
+action(user.discord_toggle_members): key(ctrl-u)
 action(user.discord_emoji_picker): key(ctrl-e)
 action(user.discord_gif_picker): key(ctrl-g)
 
