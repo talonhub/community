@@ -3,20 +3,18 @@ os: linux
 app: slack
 #todo: some sort of plugin, consolidate with teams or something?
 -
+tag(): user.messaging
 # Workspaces
 workspace <number>: key("ctrl-{number}")
-previous workspace: key(ctrl-shift-tab)
-next workspace: key(ctrl-tab)
+action(user.messaging_workspace_previous): key(ctrl-shift-tab)
+action(user.messaging_workspace_next): key(ctrl-tab)
 # Channel
-channel: key(ctrl-k)
-channel <user.text>:
-    key(ctrl-k)
-    insert(user.formatted_text(user.text, "ALL_LOWERCASE"))
-([channel] unread last | gopreev): key(alt-shift-up)
-([channel] unread next | goneck): key(alt-shift-down)
 (slack | lack) [channel] info: key(ctrl-shift-i)
-channel up: key(alt-up)
-channel down: key(alt-down)
+action(user.messaging_open_channel_picker): key(ctrl-k)
+action(user.messaging_channel_previous): key(alt-up)
+action(user.messaging_channel_next): key(alt-down)
+action(user.messaging_unread_previous): key(alt-shift-up)
+action(user.messaging_unread_next): key(alt-shift-down)
 # Navigation
 (move | next) focus: key(ctrl-`)
 [next] (section | zone): key(f6)
@@ -32,7 +30,7 @@ channel down: key(alt-down)
 (slack | lack) (starred [items] | stars): key(ctrl-shift-s)
 (slack | lack) unread [messages]: key(ctrl-j)
 #(go | undo | toggle) full: key(ctrl-cmd-f)
-(slack | lack) (find | search): key(ctrl-f)
+action(user.messaging_open_search): key(ctrl-f)
 # Messaging
 grab left: key(shift-up)
 grab right: key(shift-down)
@@ -52,11 +50,11 @@ insert code:
 bold: key(ctrl-b)
 (italic | italicize): key(ctrl-i)
 (strike | strikethrough): key(ctrl-shift-x)
-mark all read: key(shift-esc)
-mark channel read: key(esc)
+action(user.messaging_mark_workspace_read): key(shift-esc)
+action(user.messaging_mark_channel_read): key(esc)
 (clear | scrap | scratch): key(ctrl-a backspace)
     # Files and Snippets
-(slack | lack) upload: key(ctrl-u)
+action(user.messaging_upload_file): key(ctrl-u)
 (slack | lack) snippet: key(ctrl-shift-enter)
     # Calls
 ([toggle] mute | unmute): key(m)
