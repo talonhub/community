@@ -2,7 +2,6 @@ tag: user.file_manager
 -
 title force: user.file_manager_refresh_title()
 manager show: user.file_manager_toggle_pickers()
-
 go docks: user.file_manager_open_user_directory("Documents")
 go downloads: user.file_manager_open_user_directory("Downloads")
 go pictures: user.file_manager_open_user_directory("Pictures")
@@ -15,9 +14,11 @@ go forward: user.file_manager_go_forward()
 daddy: user.file_manager_open_parent()
 
 ^follow <number>$: user.file_manager_open_directory(number - 1)
+^follow {user.file_manager_directories}$: user.file_manager_open_directory(file_manager_directories)
 ^open <number>$: user.file_manager_open_file(number - 1)
 ^folder <number>$: user.file_manager_select_directory(number - 1)
 ^file <number>$: user.file_manager_select_file(number - 1)
+^file {user.file_manager_files}$: user.file_manager_select_file(file_manager_files)
 
 #new folder
 folder new: user.file_manager_new_folder()

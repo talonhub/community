@@ -506,13 +506,15 @@ def update_maps(window):
 
         current_folder_page = current_file_page = 1
 
-    lists = {
-        "user.file_manager_directories": directories,
-        "user.file_manager_files": files,
-    }
-
+    # lists = {
+    #     "self.file_manager_directories": directories,
+    #     "self.file_manager_files": files,
+    # }
+    # print(str(directories))
     # batch update lists for performance
-    ctx.lists.update(lists)
+    # ctx.lists.update(lists)
+    ctx.lists["self.file_manager_directories"] = directories
+    ctx.lists["self.file_manager_files"] = files
 
     # if we made it this far, either it's showing and we need to force an update
     # or we need to hide the gui
@@ -531,11 +533,13 @@ def update_maps(window):
     # print("hiding: is_valid_path {}, gui_folders.showing {}, title  {}".format(str(is_valid_path), str(gui_folders.showing), str(cached_title)))
 
 
+ctx.lists["self.file_manager_directories"] = []
+ctx.lists["self.file_manager_files"] = []
+
+
 ui.register("win_title", update_maps)
 ui.register("win_focus", update_maps)
 
-ctx.lists["self.file_manager_directories"] = []
-ctx.lists["self.file_manager_files"] = []
 
 current_folder_page = 1
 
