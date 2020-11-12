@@ -79,7 +79,7 @@ def word(m) -> str:
 punctuation = set(".,-!?;:")
 
 
-@mod.capture(rule="(<user.vocabulary> | <phrase>)+")
+@mod.capture(rule="(<user.vocabulary> | <phrase> | <user.symbol_key>)+")
 def text(m) -> str:
     words = []
     for item in m:
