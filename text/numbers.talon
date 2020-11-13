@@ -1,3 +1,3 @@
 not tag: user.mouse_grid_showing
 -
-<number>: insert("{number}")
+<user.number_string>: "{number_string}"
