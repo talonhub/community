@@ -1,23 +1,19 @@
-from talon import Context, Module, actions, clip
+import time
+from talon import Context, Module, actions, clip, ui
 
 ctx = Context()
 mod = Module()
 
 
-def get_selected_text():
-    try:
-        with clip.capture() as s:
-            actions.edit.copy()
-        return s.get()
-    except clip.NoChange:
-        return clip.get()
-
-
 @ctx.action_class("edit")
 class edit_actions:
     def selected_text() -> str:
-        selected_text = get_selected_text()
-        return selected_text or ""
+        with clip.capture() as s:
+            actions.edit.copy()
+        try:
+            return s.get()
+        except clip.NoChange:
+            return ""
 
 
 @mod.action_class
@@ -26,7 +22,7 @@ class Actions:
         """Pastes text and preserves clipboard"""
 
         with clip.revert():
-            clip.set(text)
-            # sleep(0.1)
+            clip.set_text(text)
             actions.edit.paste()
-            actions.sleep("100ms")
+            # sleep here so that clip.revert doesn't revert the clipboard too soon
+            actions.sleep("150ms")

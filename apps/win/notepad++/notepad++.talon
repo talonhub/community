@@ -15,3 +15,5 @@ action(edit.line_swap_up):
 	key(ctrl-shift-up)
 action(edit.line_swap_down):
 	key(ctrl-shift-down)
+action(edit.indent_more): key(tab)
+action(edit.indent_less): key(shift-tab)

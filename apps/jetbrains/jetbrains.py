@@ -27,6 +27,7 @@ port_mapping = {
     "com.jetbrains.pycharm": 8658,
     "com.jetbrains.rider": 8660,
     "com.jetbrains.rubymine": 8661,
+    "com.jetbrains.rubymine-EAP": 8661,
     "com.jetbrains.WebStorm": 8663,
     "google-android-studio": 8652,
     "idea64.exe": 8653,
@@ -44,8 +45,11 @@ port_mapping = {
     "jetbrains-pycharm": 8658,
     "jetbrains-rider": 8660,
     "jetbrains-rubymine": 8661,
+    "jetbrains-rubymine-eap": 8661,
     "jetbrains-studio": 8652,
     "jetbrains-webstorm": 8663,
+    "RubyMine": 8661,
+    "RubyMine-EAP": 8661,
     "PyCharm": 8658,
     "pycharm64.exe": 8658,
     "webstorm64.exe": 8663,
@@ -106,6 +110,8 @@ mod = Module()
 mod.apps.jetbrains = "app.name: /jetbrains/"
 mod.apps.jetbrains = "app.name: IntelliJ IDEA"
 mod.apps.jetbrains = "app.name: PyCharm"
+mod.apps.jetbrains = "app.name: RubyMine"
+mod.apps.jetbrains = "app.name: RubyMine-EAP"
 
 # windows
 mod.apps.jetbrains = "app.name: idea64.exe"
@@ -145,15 +151,25 @@ app: jetbrains
 """
 
 
+@ctx.action_class("win")
+class win_actions:
+    def file_ext():
+        return actions.win.title().split(".")[-1]
+
+
 @ctx.action_class("edit")
 class edit_actions:
     def jump_line(n: int):
         actions.user.idea("goto {} 0".format(n))
+        # move the cursor to the first nonwhite space character of the line
+        actions.user.idea("action EditorLineEnd")
+        actions.user.idea("action EditorLineStart")
 
 
 @ctx.action_class("user")
 class user_actions:
     def tab_jump(number: int):
+        # depends on plugin GoToTabs
         if number < 10:
             actions.user.idea("action GoToTab{}".format(number))
 
@@ -161,7 +177,12 @@ class user_actions:
         actions.user.idea("extend {}".format(line))
 
     def select_range(line_start: int, line_end: int):
-        actions.user.idea("range {} {}".format(line_start, line_end))
+        # if it's a single line, select the entire thing including the ending new-line5
+        if line_start == line_end:
+            actions.user.idea("goto {} 0".format(line_start))
+            actions.user.idea("action EditorSelectLine"),
+        else:
+            actions.user.idea("range {} {}".format(line_start, line_end))
 
     def extend_camel_left():
         actions.user.idea("action EditorPreviousWordInDifferentHumpsModeWithSelection")
@@ -177,4 +198,3 @@ class user_actions:
 
     def line_clone(line: int):
         actions.user.idea("clone {}".format(line))
-

@@ -86,17 +86,17 @@ action(user.code_from_import):
     edit.word_left()
     key(space)
     edit.left()
-action(user.code_comment): "#"
+action(user.code_comment): "# "
 action(user.code_state_return):
 	insert("return ")
 action(user.code_true): "True"
 action(user.code_false): "False"
+action(user.code_document_string): user.insert_cursor("\"\"\"[|]\"\"\"")
 
-
-
-#python-specicic grammars
-dunder in it: insert("__init__")
+#python-specific grammars
+dunder in it: "__init__"
 state (def | deaf | deft): "def "
+self taught: "self."
 pie test: "pytest"
 state past: "pass"
 
@@ -106,3 +106,24 @@ state past: "pass"
 #^static funky <user.text>$: user.code_private_static_function(text)
 #^pro static funky <user.text>$: user.code_protected_static_function(text)
 #^pub static funky <user.text>$: user.code_public_static_function(text)
+raise {user.python_exception}: user.insert_cursor("raise {python_exception}([|])")
+
+# for annotating function parameters
+is type {user.python_type_list}:
+    insert(": {python_type_list}")
+returns [type] {user.python_type_list}:
+    insert(" -> {python_type_list}")
+# for generic reference of types
+type {user.python_type_list}:
+    insert("{python_type_list}")
+dock {user.python_docstring_fields}:
+    insert("{python_docstring_fields}")
+    edit.left()
+dock type {user.python_type_list}:
+    user.insert_cursor(":type [|]: {python_type_list}")
+dock returns type {user.python_type_list}:
+    user.insert_cursor(":rtype [|]: {python_type_list}")
+toggle imports: user.code_toggle_libraries()
+import <user.code_libraries>:
+    user.code_insert_library(code_libraries, "")
+    key(end enter)

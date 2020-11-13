@@ -3,7 +3,7 @@ import itertools
 import math
 from typing import Dict, List, Iterable, Set, Tuple, Union
 
-from talon import Module, Context, actions, imgui, Module, registry, ui
+from talon import Module, Context, actions, imgui, Module, registry, ui, app
 from talon.grammar import Phrase
 
 mod = Module()
@@ -402,7 +402,7 @@ def refresh_context_command_map(enabled_only=False):
 
         if enabled_only and context in active_contexts or not enabled_only:
             context_command_map[context_name] = {}
-            for command_alias, val in context.commands_get().items():
+            for command_alias, val in context.commands.items():
                 # print(str(val))
                 if command_alias in registry.commands:
                     # print(str(val.rule.rule) + ": " + val.target.code)
@@ -614,19 +614,9 @@ class Actions:
         actions.mode.disable("user.help")
 
 
-@mod.capture
-def help_contexts(m) -> str:
-    "Returns a context name"
-
-
-@ctx.capture(rule="{self.help_contexts}")
-def help_contexts(m):
-    return m.help_contexts
-
-
 def commands_updated(_):
     update_title()
 
 
-refresh_context_command_map()
+app.register("launch", refresh_context_command_map)
 

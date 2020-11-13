@@ -27,7 +27,7 @@ main_screen = ui.main_screen()
 
 
 def update_homophones(name, flags):
-    if name is not None and name != homophones_file:
+    if name != homophones_file:
         return
 
     phones = {}
@@ -46,7 +46,7 @@ def update_homophones(name, flags):
     ctx.lists["self.homophones_canonicals"] = canonical_list
 
 
-update_homophones(None, None)
+update_homophones(homophones_file, None)
 fs.watch(cwd, update_homophones)
 active_word_list = None
 is_selection = False
@@ -126,9 +126,10 @@ def show_help_gui():
     gui.freeze()
 
 
-@mod.capture
+@mod.capture(rule="{self.homophones_canonicals}")
 def homophones_canonical(m) -> str:
     "Returns a single string"
+    return m.homophones_canonicals
 
 
 @mod.action_class
@@ -139,6 +140,7 @@ class Actions:
 
     def homophones_show(m: str):
         """Sentence formatter"""
+        print(m)
         raise_homophones(m, False, False)
 
     def homophones_show_selection():
@@ -164,7 +166,3 @@ class Actions:
         app.notify(error)
         raise error
 
-
-@ctx.capture(rule="{self.homophones_canonicals}")
-def homophones_canonical(m):
-    return m.homophones_canonicals

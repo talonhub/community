@@ -32,6 +32,11 @@ class win_actions:
 
 @ctx.action_class("edit")
 class edit_actions:
+    def jump_line(n: int):
+        actions.key("ctrl-g")
+        actions.insert(str(n))
+        actions.key("enter")
+
     def find(text: str):
         actions.key("ctrl-f")
         actions.insert(text)

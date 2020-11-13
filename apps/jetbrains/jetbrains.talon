@@ -10,8 +10,9 @@ tag(): user.tabs
 action(user.tab_final): user.idea("action GoToLastTab")
 action(app.tab_next): user.idea("action NextTab")
 action(app.tab_previous): user.idea("action PreviousTab")
-action(app.tab_close): user.idea("action CloseActiveTab")
 
+action(app.tab_close): user.idea("action CloseContent")
+action(app.tab_reopen): user.idea("action ReopenClosedTab")
 #talon code actions
 action(code.toggle_comment): user.idea("action CommentByLineComment")
 
@@ -28,9 +29,13 @@ action(edit.line_swap_down):  user.idea("action MoveLineDown")
 action(edit.line_swap_up):  user.idea("action MoveLineUp")
 action(edit.indent_more): user.idea("action EditorIndentLineOrSelection")
 action(edit.indent_less): user.idea("action EditorUnindentSelection")
-action(edit.select_line): user.idea("action EditorLineStart, action EditorLineEndWithSelection")
+action(edit.select_line): user.idea("action EditorSelectLine")
 action(edit.select_word): user.idea("action EditorSelectWord")
 action(edit.select_all): user.idea("action $SelectAll")
+action(edit.file_start): user.idea("action EditorTextStart")
+action(edit.file_end): user.idea("action EditorTextEnd")
+action(edit.extend_file_start): user.idea("action EditorTextStartWithSelection")
+action(edit.extend_file_end): user.idea("action EditorTextEndWithSelection")
 
 # splits.py support begin
 action(user.split_clear_all): user.idea("action UnsplitAll")
@@ -103,6 +108,11 @@ find (everywhere | all) <user.text> [over]:
 (search | find) class: user.idea("action GotoClass")
 (search | find) file: user.idea("action GotoFile")
 (search | find) path: user.idea("action FindInPath")
+(search | find) symbol: user.idea("action GotoSymbol")
+(search | find) symbol <user.text>$:
+    user.idea("action GotoSymbol")
+    insert(text)
+    key("enter")
 recent: user.idea("action RecentFiles")
 
 surround [this] with <user.text> [over]:
@@ -292,3 +302,6 @@ select camel left: user.extend_camel_left()
 select camel right: user.extend_camel_right()
 go camel left: user.camel_left()
 go camel right: user.camel_right()
+
+# requires plug-in: black-pycharm
+blacken: user.idea("action BLACKReformatCode")

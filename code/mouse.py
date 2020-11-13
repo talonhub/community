@@ -1,10 +1,10 @@
-from talon import cron, ctrl, ui, Module, Context, actions, noise, settings, imgui, app
-from talon.engine import engine
-from talon_plugins import speech, eye_mouse, eye_zoom_mouse
-from talon_plugins.eye_mouse import toggle_control, config
-import subprocess
 import os
 import pathlib
+import subprocess
+
+from talon import Context, Module, actions, app, cron, ctrl, imgui, noise, settings, ui
+from talon_plugins import eye_mouse, eye_zoom_mouse, speech
+from talon_plugins.eye_mouse import config, toggle_camera_overlay, toggle_control
 
 key = actions.key
 self = actions.self
@@ -15,28 +15,28 @@ gaze_job = None
 cancel_scroll_on_pop = True
 
 default_cursor = {
-    "AppStarting": "%SystemRoot%\\Cursors\\aero_working.ani",
-    "Arrow": "%SystemRoot%\\Cursors\\aero_arrow.cur",
-    "Hand": "%SystemRoot%\\Cursors\\aero_link.cur",
-    "Help": "%SystemRoot%\\Cursors\\aero_helpsel.cur",
-    "No": "%SystemRoot%\\Cursors\\aero_unavail.cur",
-    "NWPen": "%SystemRoot%\\Cursors\\aero_pen.cur",
-    "Person": "%SystemRoot%\\Cursors\\aero_person.cur",
-    "Pin": "%SystemRoot%\\Cursors\\aero_pin.cur",
-    "SizeAll": "%SystemRoot%\\Cursors\\aero_move.cur",
-    "SizeNESW": "%SystemRoot%\\Cursors\\aero_nesw.cur",
-    "SizeNS": "%SystemRoot%\\Cursors\\aero_ns.cur",
-    "SizeNWSE": "%SystemRoot%\\Cursors\\aero_nwse.cur",
-    "SizeWE": "%SystemRoot%\\Cursors\\aero_ew.cur",
-    "UpArrow": "%SystemRoot%\Cursors\\aero_up.cur",
-    "Wait": "%SystemRoot%\\Cursors\\aero_busy.ani",
+    "AppStarting": r"%SystemRoot%\Cursors\aero_working.ani",
+    "Arrow": r"%SystemRoot%\Cursors\aero_arrow.cur",
+    "Hand": r"%SystemRoot%\Cursors\aero_link.cur",
+    "Help": r"%SystemRoot%\Cursors\aero_helpsel.cur",
+    "No": r"%SystemRoot%\Cursors\aero_unavail.cur",
+    "NWPen": r"%SystemRoot%\Cursors\aero_pen.cur",
+    "Person": r"%SystemRoot%\Cursors\aero_person.cur",
+    "Pin": r"%SystemRoot%\Cursors\aero_pin.cur",
+    "SizeAll": r"%SystemRoot%\Cursors\aero_move.cur",
+    "SizeNESW": r"%SystemRoot%\Cursors\aero_nesw.cur",
+    "SizeNS": r"%SystemRoot%\Cursors\aero_ns.cur",
+    "SizeNWSE": r"%SystemRoot%\Cursors\aero_nwse.cur",
+    "SizeWE": r"%SystemRoot%\Cursors\aero_ew.cur",
+    "UpArrow": r"%SystemRoot%\Cursors\aero_up.cur",
+    "Wait": r"%SystemRoot%\Cursors\aero_busy.ani",
     "Crosshair": "",
     "IBeam": "",
 }
 
 # todo figure out why notepad++ still shows the cursor sometimes.
 hidden_cursor = os.path.join(
-    os.path.dirname(os.path.realpath(__file__)), "Resources\HiddenCursor.cur"
+    os.path.dirname(os.path.realpath(__file__)), r"Resources\HiddenCursor.cur"
 )
 
 mod = Module()
@@ -116,6 +116,10 @@ class Actions:
         """Toggles control mouse"""
         toggle_control(not config.control_mouse)
 
+    def mouse_toggle_camera_overlay():
+        """Toggles camera overlay"""
+        toggle_camera_overlay(not config.show_camera)
+
     def mouse_toggle_zoom_mouse():
         """Toggles zoom mouse"""
         eye_zoom_mouse.toggle_zoom_mouse(not eye_zoom_mouse.zoom_mouse.enabled)
@@ -127,6 +131,11 @@ class Actions:
             and eye_zoom_mouse.zoom_mouse.state != eye_zoom_mouse.STATE_IDLE
         ):
             eye_zoom_mouse.zoom_mouse.cancel()
+
+    def mouse_trigger_zoom_mouse():
+        """Trigger zoom mouse if enabled"""
+        if eye_zoom_mouse.zoom_mouse.enabled:
+            eye_zoom_mouse.zoom_mouse.on_pop(eye_zoom_mouse.zoom_mouse.state)
 
     def mouse_drag():
         """(TEMPORARY) Press and hold/release button 0 depending on state for dragging"""
@@ -191,16 +200,28 @@ class Actions:
         if setting_mouse_hide_mouse_gui.get() == 0:
             gui_wheel.show()
 
+    def copy_mouse_position():
+        """Copy the current mouse position coordinates"""
+        position = ctrl.mouse_pos()
+        clip.set_text((repr(position)))
+
+    def mouse_move_center_active_window():
+        """move the mouse cursor to the center of the currently active window"""
+        rect = ui.active_window().rect
+        ctrl.mouse_move(rect.left + (rect.width / 2), rect.top + (rect.height / 2))
+
 
 def show_cursor_helper(show):
     """Show/hide the cursor"""
     if app.platform == "windows":
-        import winreg, win32con
         import ctypes
+        import winreg
+
+        import win32con
 
         try:
             Registrykey = winreg.OpenKey(
-                winreg.HKEY_CURRENT_USER, "Control Panel\Cursors", 0, winreg.KEY_WRITE
+                winreg.HKEY_CURRENT_USER, r"Control Panel\Cursors", 0, winreg.KEY_WRITE
             )
 
             for value_name, value in default_cursor.items():

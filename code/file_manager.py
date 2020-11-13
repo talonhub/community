@@ -151,26 +151,6 @@ elif app.platform == "linux":
     terminal_programs = ["terminal"]
 
 
-@mod.capture
-def file_manager_directories(m) -> str:
-    "Returns a single string"
-
-
-@mod.capture
-def file_manager_files(m) -> str:
-    "Returns the selected file"
-
-
-@mod.capture
-def file_manager_directory_index(m) -> int:
-    "Directory selection index"
-
-
-@mod.capture
-def file_manager_file_index(m) -> int:
-    "File selection index"
-
-
 @mod.action_class
 class Actions:
     def file_manager_open_parent():
@@ -384,7 +364,7 @@ class Actions:
                 actions.insert("cmd.exe")
                 actions.key("enter")
             elif is_mac:
-                from talon import applescript
+                from talon.mac import applescript
 
                 applescript.run(
                     r"""
@@ -526,13 +506,15 @@ def update_maps(window):
 
         current_folder_page = current_file_page = 1
 
-    lists = {
-        "user.file_manager_directories": directories,
-        "user.file_manager_files": files,
-    }
-
+    # lists = {
+    #     "self.file_manager_directories": directories,
+    #     "self.file_manager_files": files,
+    # }
+    # print(str(directories))
     # batch update lists for performance
-    ctx.lists.update(lists)
+    # ctx.lists.update(lists)
+    ctx.lists["self.file_manager_directories"] = directories
+    ctx.lists["self.file_manager_files"] = files
 
     # if we made it this far, either it's showing and we need to force an update
     # or we need to hide the gui
@@ -551,21 +533,12 @@ def update_maps(window):
     # print("hiding: is_valid_path {}, gui_folders.showing {}, title  {}".format(str(is_valid_path), str(gui_folders.showing), str(cached_title)))
 
 
-ui.register("win_title", update_maps)
-ui.register("win_focus", update_maps)
-
 ctx.lists["self.file_manager_directories"] = []
 ctx.lists["self.file_manager_files"] = []
 
 
-@ctx.capture(rule="{self.file_manager_directories}")
-def file_manager_directories(m):
-    return m.file_manager_directories
-
-
-@ctx.capture(rule="{self.file_manager_files}")
-def file_manager_files(m):
-    return m.file_manager_files
+ui.register("win_title", update_maps)
+ui.register("win_focus", update_maps)
 
 
 current_folder_page = 1

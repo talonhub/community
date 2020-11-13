@@ -47,12 +47,16 @@ action(user.code_state_for):
 action(user.code_state_while):
     insert("while () {}")
     key(left enter up end left:3)
+toggle library: user.code_toggle_libraries()
+library <user.code_libraries>:
+    user.code_insert_library(code_libraries, "")
+    key(end enter)
 action(user.code_import):
     insert("library()")
     key(left)
 action(user.code_comment): "#"
 action(user.code_state_return):
-	 insert("return()")
+   insert("return()")
    key(left)
 action(user.code_break): "break"
 action(user.code_next): "next"
@@ -61,10 +65,11 @@ action(user.code_false): "FALSE"
 
 
 # R specific commands
-chain:
+(chain|pipe that):
     key(end)
     " %>%"
     key(enter)
 state na:
     insert("NA")
-^funky <user.text>$: user.code_private_function(text)
+
+^function define <user.text>$: user.code_private_function(text)

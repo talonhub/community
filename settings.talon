@@ -1,3 +1,4 @@
+-
 settings():
     #adjust the scale of the imgui to my liking
     imgui.scale = 1.3
@@ -19,3 +20,6 @@ settings():
     user.mouse_wake_hides_cursor = 0
     #the amount to scroll up/down (equivalent to mouse wheel on Windows by default)
     user.mouse_wheel_down_amount = 120
+	
+# uncomment tag to enable mouse grid
+# tag(): user.mouse_grid_enabled
