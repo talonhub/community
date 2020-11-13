@@ -13,8 +13,8 @@ digits_map = {n: i for i, n in enumerate(digits)}
 digits_map["oh"] = 0
 teens_map = {n: i + 11 for i, n in enumerate(teens)}
 tens_map = {n: 10 * (i + 1) for i, n in enumerate(tens)}
-scales_map = {"hundred": 100}
-scales_map.update({n: 10 ** (3 * (i+1)) for i, n in enumerate(scales[1:])})
+scales_map = {n: 10 ** (3 * (i+1)) for i, n in enumerate(scales[1:])}
+scales_map["hundred"] = 100
 
 numbers_map = digits_map.copy()
 numbers_map.update(teens_map)
@@ -39,13 +39,15 @@ def scan_small_numbers(l: List[str]) -> Iterator[Union[str,int]]:
       ["fifty", "zero"] -> [50, 0]
     Does nothing to scale words ("hundred", "thousand", "million", etc).
     """
-    l.reverse()
+    # reversed so that repeated pop() visits in left-to-right order
+    l = [x for x in reversed(l) if x != "and"]
     while l:
         n = l.pop()
-        if n == "and": continue
-        if n in tens and n != "ten" and l and digits_map.get(l[-1], 0) != 0:
+        # fuse tens onto digits, eg. "twenty", "one" -> 21
+        if n in tens_map and n != "ten" and l and digits_map.get(l[-1], 0) != 0:
             d = l.pop()
             yield numbers_map[n] + numbers_map[d]
+        # turn small number terms into corresponding numbers
         elif n not in scales_map:
             yield numbers_map[n]
         else:
@@ -135,6 +137,7 @@ def split_list(value, l: list) -> Iterator:
 # test_number(1066, "ten sixty six") # a common way of saying years
 # test_number(1906, "nineteen oh six") # year
 # test_number(2001, "twenty oh one") # year
+# test_number(2020, "twenty twenty")
 # test_number(1001, "one thousand one")
 # test_number(1010, "one thousand ten")
 # test_number(123456, "one hundred and twenty three thousand and four hundred and fifty six")
