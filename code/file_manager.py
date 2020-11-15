@@ -303,7 +303,9 @@ def win_event_handler(window):
     if not window.app.exe or window != ui.active_window():
         return
 
-    if not "user.file_manager" in registry.tags:
+    path = actions.user.file_manager_current_path()
+
+    if not "user.file_manager" in registry.tags or not path:
         if gui_folders.showing:
             gui_folders.hide()
             gui_files.hide()
@@ -321,7 +323,6 @@ def win_event_handler(window):
         cached_path = None
         return
     else:
-        path = actions.user.file_manager_current_path()
         if cached_path != path:
             update_lists()
 
