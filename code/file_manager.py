@@ -310,11 +310,8 @@ def win_event_handler(window):
             len(ctx.lists["self.file_manager_directories"]) > 0
             or len(ctx.lists["self.file_manager_files"]) > 0
         ):
-            lists = {
-                "self.file_manager_directories": [],
-                "self.file_manager_files": [],
-            }
-            ctx.lists.update(lists)
+            ctx.lists["self.file_manager_directories"] = directories
+            ctx.lists["self.file_manager_files"] = files
 
         cached_path = None
         return
