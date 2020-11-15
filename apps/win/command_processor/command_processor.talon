@@ -29,3 +29,4 @@ action(user.file_manager_open_parent):
     key(enter)
     user.file_manager_refresh_title()
 
+action(edit.delete_line): key(esc)

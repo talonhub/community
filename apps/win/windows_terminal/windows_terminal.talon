@@ -15,7 +15,7 @@ kill all:
   key(enter)
   
 action(user.file_manager_refresh_title):
-	insert("title %CD%")
+	insert("$Host.UI.RawUI.WindowTitle = $(get-location)")
 	key(enter)
 
 #action(user.file_manager_go_back):
@@ -29,3 +29,4 @@ action(user.file_manager_open_parent):
     key(enter)
     user.file_manager_refresh_title()
 
+action(edit.delete_line): key(esc)
