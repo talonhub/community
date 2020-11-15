@@ -281,12 +281,8 @@ def update_lists():
 
     current_folder_page = current_file_page = 1
 
-    lists = {
-        "self.file_manager_directories": directories,
-        "self.file_manager_files": files,
-    }
-    # print(str(directories))
-    ctx.lists.update(lists)
+    ctx.lists["self.file_manager_directories"] = directories
+    ctx.lists["self.file_manager_files"] = files
 
     # if we made it this far, either it's showing and we need to force an update
     # or we need to hide the gui
