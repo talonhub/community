@@ -16,6 +16,7 @@ directories_to_exclude = {}
 class user_actions:
     def file_manager_current_path():
         path = ui.active_window().title
+        path = path.replace("Administrator:  ", "")
 
         if path in directories_to_remap:
             path = directories_to_remap[path]
