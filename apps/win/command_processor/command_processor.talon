@@ -1,4 +1,3 @@
-app: windows_terminal
 app: windows_command_processor
 -
 # comment or remove tags for command sets you don't want

@@ -203,78 +203,6 @@ def get_file_map(current_path):
     return dict(zip(spoken_forms, [f for f in files]))
 
 
-def update_lists():
-    global folder_selections, file_selections, current_folder_page, current_file_page
-    is_valid_path = False
-    path = actions.user.file_manager_current_path()
-    directories = {}
-    files = {}
-    folder_selections = []
-    file_selections = []
-
-    try:
-        current_path = Path(path)
-        is_valid_path = current_path.is_dir()
-    except:
-        is_valid_path = False
-
-    if is_valid_path:
-        try:
-            directories = get_directory_map(current_path)
-            files = get_file_map(current_path)
-        except:
-            directories = {}
-            files = {}
-        folder_selections = sorted(directories.values(), key=str.casefold)
-        file_selections = sorted(files.values(), key=str.casefold)
-
-    current_folder_page = current_file_page = 1
-
-    ctx.lists["self.file_manager_directories"] = directories
-    ctx.lists["self.file_manager_files"] = files
-
-    # if we made it this far, either it's showing and we need to force an update
-    # or we need to hide the gui
-    if not is_valid_path:
-        if gui_folders.showing:
-            gui_folders.hide()
-            gui_files.hide()
-    elif gui_folders.showing or setting_auto_show_pickers.get() >= 1:
-        gui_folders.freeze()
-        gui_files.freeze()
-
-
-def win_event_handler(window):
-    global cached_path
-
-    # on windows, we get events from the clock
-    # and such, so this check is important
-    if not window.app.exe or window != ui.active_window():
-        return
-
-    if not "user.file_manager" in registry.tags:
-        if gui_folders.showing:
-            gui_folders.hide()
-            gui_files.hide()
-
-        if len(ctx.lists["self.file_manager_directories"]) > 0:
-            ctx.lists["self.file_manager_directories"] = []
-        if len(ctx.lists["self.file_manager_files"]) > 0:
-            ctx.lists["self.file_manager_files"] = []
-
-        cached_path = None
-        return
-    else:
-        path = actions.user.file_manager_current_path()
-        if cached_path != path:
-            update_lists()
-        cached_path = path
-
-
-ui.register("win_title", win_event_handler)
-ui.register("win_focus", win_event_handler)
-
-
 @imgui.open(y=10, x=900, software=False)
 def gui_folders(gui: imgui.GUI):
     global current_folder_page, total_folder_pages
@@ -327,4 +255,81 @@ def gui_files(gui: imgui.GUI):
 
     #   if gui.button("Previous..."):
     #        actions.user.file_manager_previous_file_page()
+
+
+def update_lists():
+    global folder_selections, file_selections, current_folder_page, current_file_page
+    is_valid_path = False
+    path = actions.user.file_manager_current_path()
+    directories = {}
+    files = {}
+    folder_selections = []
+    file_selections = []
+    # print(path)
+    try:
+        current_path = Path(path)
+        is_valid_path = current_path.is_dir()
+    except:
+        is_valid_path = False
+
+    if is_valid_path:
+        try:
+            directories = get_directory_map(current_path)
+            files = get_file_map(current_path)
+        except:
+            directories = {}
+            files = {}
+        folder_selections = sorted(directories.values(), key=str.casefold)
+        file_selections = sorted(files.values(), key=str.casefold)
+
+    current_folder_page = current_file_page = 1
+
+    lists = {
+        "self.file_manager_directories": directories,
+        "self.file_manager_files": files,
+    }
+    ctx.lists.update(lists)
+
+    # if we made it this far, either it's showing and we need to force an update
+    # or we need to hide the gui
+    if gui_folders.showing or setting_auto_show_pickers.get() >= 1:
+        gui_folders.freeze()
+        gui_files.freeze()
+
+
+def win_event_handler(window):
+    global cached_path
+
+    # on windows, we get events from the clock
+    # and such, so this check is important
+    if not window.app.exe or window != ui.active_window():
+        return
+
+    if not "user.file_manager" in registry.tags:
+        if gui_folders.showing:
+            gui_folders.hide()
+            gui_files.hide()
+
+        if (
+            len(ctx.lists["self.file_manager_directories"]) > 0
+            or len(ctx.lists["self.file_manager_files"]) > 0
+        ):
+            lists = {
+                "self.file_manager_directories": [],
+                "self.file_manager_files": [],
+            }
+            ctx.lists.update(lists)
+
+        cached_path = None
+        return
+    else:
+        path = actions.user.file_manager_current_path()
+        if cached_path != path:
+            update_lists()
+
+        cached_path = path
+
+
+ui.register("win_title", win_event_handler)
+ui.register("win_focus", win_event_handler)
 
