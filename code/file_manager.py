@@ -76,8 +76,6 @@ class Actions:
 
     def file_manager_new_folder(name: str):
         """Creates a new folder in a gui filemanager or inserts the command to do so for terminals"""
-        # tbd
-        # else is_linux:
 
     def file_manager_show_properties():
         """Shows the properties for the file"""
@@ -92,8 +90,7 @@ class Actions:
         """selects the file"""
 
     def file_manager_refresh_title():
-        """Refreshes the title to match current directory"""
-        # todo: this is for e.g. windows command prompt that will need to do some magic.
+        """Refreshes the title to match current directory. this is for e.g. windows command prompt that will need to do some magic. """
         return
 
     def file_manager_update_lists():
@@ -288,6 +285,7 @@ def update_lists():
         "self.file_manager_directories": directories,
         "self.file_manager_files": files,
     }
+    # print(str(directories))
     ctx.lists.update(lists)
 
     # if we made it this far, either it's showing and we need to force an update
