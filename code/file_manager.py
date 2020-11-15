@@ -105,6 +105,12 @@ class Actions:
         else:
             gui_files.freeze()
             gui_folders.freeze()
+        
+    def file_manager_hide_pickers():
+        """Hides the pickers"""
+        if gui_files.showing:
+            gui_files.hide()
+            gui_folders.hide()
 
     def file_manager_open_user_directory(path: str):
         """expands and opens the user directory"""
@@ -253,6 +259,19 @@ def gui_files(gui: imgui.GUI):
     #   if gui.button("Previous..."):
     #        actions.user.file_manager_previous_file_page()
 
+def clear_lists():
+    global folder_selections, file_selections
+    if (len(ctx.lists["self.file_manager_directories"]) > 0 or len(ctx.lists["self.file_manager_files"]) > 0):
+        current_folder_page = current_file_page = 1
+        ctx.lists["self.file_manager_directories"] = []
+        ctx.lists["self.file_manager_files"] = []
+        folder_selections = []
+        file_selections = []
+
+def update_gui():
+    if gui_folders.showing or setting_auto_show_pickers.get() >= 1:
+        gui_folders.freeze()
+        gui_files.freeze()
 
 def update_lists():
     global folder_selections, file_selections, current_folder_page, current_file_page
@@ -276,19 +295,14 @@ def update_lists():
         except:
             directories = {}
             files = {}
-        folder_selections = sorted(directories.values(), key=str.casefold)
-        file_selections = sorted(files.values(), key=str.casefold)
 
     current_folder_page = current_file_page = 1
-
     ctx.lists["self.file_manager_directories"] = directories
     ctx.lists["self.file_manager_files"] = files
+    folder_selections = sorted(directories.values(), key=str.casefold)
+    file_selections = sorted(files.values(), key=str.casefold)
 
-    # if we made it this far, either it's showing and we need to force an update
-    # or we need to hide the gui
-    if gui_folders.showing or setting_auto_show_pickers.get() >= 1:
-        gui_folders.freeze()
-        gui_files.freeze()
+    update_gui()
 
 
 def win_event_handler(window):
@@ -301,25 +315,17 @@ def win_event_handler(window):
 
     path = actions.user.file_manager_current_path()
 
-    if not "user.file_manager" in registry.tags or not path:
-        if gui_folders.showing:
-            gui_folders.hide()
-            gui_files.hide()
-
-        if (
-            len(ctx.lists["self.file_manager_directories"]) > 0
-            or len(ctx.lists["self.file_manager_files"]) > 0
-        ):
-            ctx.lists["self.file_manager_directories"] = []
-            ctx.lists["self.file_manager_files"] = []
-
-        cached_path = None
-        return
-    else:
+    if not "user.file_manager" in registry.tags:
+        actions.user.file_manager_hide_pickers()
+        clear_lists()
+    elif path:
         if cached_path != path:
             update_lists()
+    elif cached_path: 
+        clear_lists()
+        actions.user.file_manager_hide_pickers()
 
-        cached_path = path
+    cached_path = path
 
 
 ui.register("win_title", win_event_handler)

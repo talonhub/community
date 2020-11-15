@@ -60,6 +60,7 @@ if app.platform == "windows":
         "Task View",
         "This PC",
         "File Explorer",
+        "Program Manager",
     ]
 
 
@@ -72,6 +73,7 @@ class user_actions:
             path = directories_to_remap[path]
 
         if path in directories_to_exclude:
+            actions.user.file_manager_hide_pickers()
             path = ""
 
         return path
