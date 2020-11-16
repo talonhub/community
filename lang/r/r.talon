@@ -63,7 +63,6 @@ action(user.code_next): "next"
 action(user.code_true): "TRUE"
 action(user.code_false): "FALSE"
 
-
 # R specific commands
 (chain|pipe that):
     key(end)

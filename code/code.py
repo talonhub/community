@@ -461,6 +461,7 @@ def update_library_list_and_freeze():
 
     gui_libraries.freeze()
 
+
 def update_function_list_and_freeze():
     global function_list
     if "user.code_functions" in registry.lists:
@@ -469,6 +470,7 @@ def update_function_list_and_freeze():
         function_list = []
 
     gui_functions.freeze()
+
 
 @imgui.open(software=False)
 def gui_functions(gui: imgui.GUI):
@@ -483,17 +485,6 @@ def gui_functions(gui: imgui.GUI):
             )
         )
 
-@imgui.open(software=False)
-def gui_libraries(gui: imgui.GUI):
-    gui.text("Libraries")
-    gui.line()
-
-    for i, entry in enumerate(library_list, 1):
-        gui.text(
-            "{}. {}: {}".format(
-                i, entry, registry.lists["user.code_libraries"][0][entry]
-            )
-        )
 
 @imgui.open(software=False)
 def gui_libraries(gui: imgui.GUI):

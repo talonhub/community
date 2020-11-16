@@ -8,3 +8,4 @@
 # elif app.platform == "windows":
 #     eye_zoom_mouse.config.screen_area = Point2d(200, 150)
 #     eye_zoom_mouse.config.img_scale = 4.5
+
