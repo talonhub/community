@@ -67,7 +67,7 @@ select up:
 select down:
     edit.extend_line_down()
 
-select this:
+select word:
     edit.word_right()
     edit.extend_word_left()
 
@@ -114,7 +114,7 @@ clear down:
     edit.extend_line_down()
     edit.delete()
 
-clear this:
+clear word:
     edit.word_right()
     edit.extend_word_left()
     edit.delete()
@@ -161,7 +161,7 @@ copy all:
 #     edit.extend_down()
 #     edit.copy()
 
-copy this:
+copy word:
     edit.word_right()
     edit.extend_word_left()
     edit.copy()
@@ -197,7 +197,7 @@ cut everything:
 #     edit.select_all()
 #     edit.cut()
 
-cut this:
+cut word:
     edit.word_right()
     edit.extend_word_left()
     edit.cut()
