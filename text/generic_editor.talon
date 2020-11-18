@@ -49,8 +49,7 @@ go page up:
 
 # selecting
 select line:
-    edit.line_start()
-    edit.extend_line_end()
+    edit.select_line()
 
 select all:
     edit.select_all()
@@ -68,8 +67,7 @@ select down:
     edit.extend_line_down()
 
 select word:
-    edit.word_right()
-    edit.extend_word_left()
+    edit.select_word()
 
 select word left:
     edit.extend_word_left()
@@ -115,9 +113,7 @@ clear down:
     edit.delete()
 
 clear word:
-    edit.word_right()
-    edit.extend_word_left()
-    edit.delete()
+    edit.delete_word()
 
 clear word left:
     edit.extend_word_left()
@@ -162,8 +158,7 @@ copy all:
 #     edit.copy()
 
 copy word:
-    edit.word_right()
-    edit.extend_word_left()
+    edit.select_word()
     edit.copy()
 
 copy word left:
@@ -175,8 +170,7 @@ copy word right:
     edit.copy()
 
 copy line:
-    edit.line_start()
-    edit.extend_line_end()
+    edit.select_line()
     edit.copy()
 
 #cut commands
@@ -198,8 +192,7 @@ cut everything:
 #     edit.cut()
 
 cut word:
-    edit.word_right()
-    edit.extend_word_left()
+    edit.select_word()
     edit.cut()
 
 cut word left:
@@ -211,6 +204,5 @@ cut word right:
     edit.cut()
 
 cut line:
-    edit.line_start()
-    edit.extend_line_end()
+    edit.select_line()
     edit.cut()
