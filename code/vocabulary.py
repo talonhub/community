@@ -7,27 +7,6 @@ ctx = Context()
 mod.list("vocabulary", desc="additional vocabulary words")
 mod.list("punctuation", desc="words for inserting punctuation into text")
 
-# TODO: unify this formatting code with the dictation formatting code, so that
-# user.prose behaves the same way as dictation mode.
-punctuation = set(".,-!?;:")
-def format_phrase(m):
-    words = capture_to_word_list(m)
-    result = ""
-    for i, word in enumerate(words):
-        if i > 0 and word not in punctuation and words[i - 1][-1] not in ("/-("):
-            result += " "
-        result += word
-    return result
-
-def capture_to_word_list(m):
-    words = []
-    for item in m:
-        words.extend(
-            actions.dictate.replace_words(actions.dictate.parse_words(item))
-            if isinstance(item, grammar.vm.Phrase) else
-            item.split(" "))
-    return words
-
 @mod.capture(rule="({user.vocabulary} | <word>)")
 def word(m) -> str:
     try:
@@ -41,24 +20,44 @@ def text(m) -> str: return format_phrase(m)
 @mod.capture(rule="({user.vocabulary} | {user.punctuation} | <phrase>)+")
 def prose(m) -> str: return format_phrase(m)
 
-
-# ---------- LISTS ----------
-# Default punctuation words.
-default_punctuation = {
-    "period": ".",
-    "comma": ",",
-    "colon": ":",
-    "semicolon": ";", "semi colon": ";",
-    "question mark": "?",
-    "exclamation mark": "!",
-}
+# TODO: unify this formatting code with the dictation formatting code, so that
+# user.prose behaves the same way as dictation mode.
+punctuation = set(".,-!?;:")
+no_space_after = set("/-(")
+def format_phrase(m):
+    words = capture_to_word_list(m)
+    result = ""
+    for i, word in enumerate(words):
+        if i > 0 and word not in punctuation and words[i - 1][-1] not in no_space_after:
+            result += " "
+        result += word
+    return result
 
+def capture_to_word_list(m):
+    words = []
+    for item in m:
+        words.extend(
+            actions.dictate.replace_words(actions.dictate.parse_words(item))
+            if isinstance(item, grammar.vm.Phrase) else
+            item.split(" "))
+    return words
+
+
+# ---------- LISTS (punctuation, additional/replacement words) ----------
 bind_list_to_csv(
     "user.punctuation",
     "punctuation.csv",
     csv_headers=("Punctuation Mark", "Word or Phrase"),
-    default_values=default_punctuation,
+    default_values={
+        "period": ".",
+        "comma": ",",
+        "colon": ":",
+        "semicolon": ";", "semi colon": ";",
+        "question mark": "?",
+        "exclamation mark": "!",
+    }
 )
+
 
 # Default words that will need to be capitalized (particularly under w2l).
 capitalize = [
@@ -114,7 +113,7 @@ bind_word_map_to_csv(
 
 
 # Default words that should be added to Talon's vocabulary.
-simple_vocabulary = ["admin", "VPN", "DNS", "USB", "FAQ", "PhD", "Minecraft"]
+simple_vocabulary = ["admin", "LCD", "VPN", "DNS", "USB", "FAQ", "PhD", "Minecraft"]
 
 # Defaults for different pronounciations of words that need to be added to
 # Talon's vocabulary.
