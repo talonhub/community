@@ -7,40 +7,11 @@ ctx = Context()
 mod.list("vocabulary", desc="additional vocabulary words")
 mod.list("punctuation", desc="words for inserting punctuation into text")
 
-
-@mod.capture(rule="{user.vocabulary}")
-def vocabulary(m) -> str:
-    return m.vocabulary
-
-
-@mod.capture(rule="({user.vocabulary} | <word>)")
-def word(m) -> str:
-    try:
-        return m.vocabulary
-    except AttributeError:
-        # TODO: if the word is both a regular word AND user.vocabulary, then in
-        # principle it may parse as <word> instead; we ought to pass it through
-        # mapping_vocabulary to be sure. But we should be doing that in
-        # user.text, below, too.
-        words = actions.dictate.replace_words(actions.dictate.parse_words(m.word))
-        assert len(words) == 1
-        return words[0]
-
-
+# TODO: unify this formatting code with the dictation formatting code, so that
+# user.prose behaves the same way as dictation mode.
 punctuation = set(".,-!?;:")
-
-
-@mod.capture(rule="({user.vocabulary} | {user.punctuation} | <phrase>)+")
-def text(m) -> str:
-    words = []
-    for item in m:
-        if isinstance(item, grammar.vm.Phrase):
-            words.extend(
-                actions.dictate.replace_words(actions.dictate.parse_words(item))
-            )
-        else:
-            words.extend(item.split(" "))
-
+def format_phrase(m):
+    words = capture_to_word_list(m)
     result = ""
     for i, word in enumerate(words):
         if i > 0 and word not in punctuation and words[i - 1][-1] not in ("/-("):
@@ -48,6 +19,27 @@ def text(m) -> str:
         result += word
     return result
 
+def capture_to_word_list(m):
+    words = []
+    for item in m:
+        words.extend(
+            actions.dictate.replace_words(actions.dictate.parse_words(item))
+            if isinstance(item, grammar.vm.Phrase) else
+            item.split(" "))
+    return words
+
+@mod.capture(rule="({user.vocabulary} | <word>)")
+def word(m) -> str:
+    try:
+        return m.vocabulary
+    except AttributeError:
+        return " ".join(actions.dictate.replace_words(actions.dictate.parse_words(m.word)))
+
+@mod.capture(rule="({user.vocabulary} | <phrase>)+")
+def text(m) -> str: return format_phrase(m)
+
+@mod.capture(rule="({user.vocabulary} | {user.punctuation} | <phrase>)+")
+def prose(m) -> str: return format_phrase(m)
 
 
 # ---------- LISTS ----------
