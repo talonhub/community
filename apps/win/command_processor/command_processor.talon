@@ -1,4 +1,3 @@
-app: windows_terminal
 app: windows_command_processor
 -
 # comment or remove tags for command sets you don't want
@@ -30,3 +29,4 @@ action(user.file_manager_open_parent):
     key(enter)
     user.file_manager_refresh_title()
 
+action(edit.delete_line): key(esc)
