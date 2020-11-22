@@ -120,13 +120,13 @@ class clickless_mouse:
             # print("y + 65 < self.height and x + 70 < self.width")
             self.button_positions.append(dwell_button(x - 45, y - 40, "su"))
             self.button_positions.append(dwell_button(x + 45, y - 40, "sd"))
-            self.button_positions.append(dwell_button(x, y - 65, "ka"))
+            self.button_positions.append(dwell_button(x, y - 65, "lt"))
 
             self.button_positions.append(dwell_button(x - 70, y, "lh"))
             self.button_positions.append(dwell_button(x - 45, y + 40, "l"))
             self.button_positions.append(dwell_button(x, y + 65, "ld"))
             self.button_positions.append(dwell_button(x + 45, y + 40, "r"))
-            # self.button_positions.append(dwell_button(x + 70, y, "rh"))
+            self.button_positions.append(dwell_button(x + 70, y, "ka"))
 
     def draw(self, canvas):
         x, y = ctrl.mouse_pos()
@@ -195,17 +195,18 @@ class clickless_mouse:
 
                 if item_hit.action == "lh":
                     # print("left hold")
-                    print(str(ctrl.mouse_buttons_down()))
                     index = 0
                     if app.platform == "windows":
                         index = 1
-                    if 1 not in ctrl.mouse_buttons_down():
-                        print("pressing button 0 down")
+                    if index not in ctrl.mouse_buttons_down():
+                        # print("pressing button 0 down")
                         ctrl.mouse_click(button=0, down=True)
                     else:
-                        print("pressing button 0 up")
+                        # print("pressing button 0 up")
                         actions.sleep("50ms")
                         ctrl.mouse_click(button=0, up=True)
+
+                    print(str(ctrl.mouse_buttons_down()))
 
                 elif item_hit.action == "l":
                     ctrl.mouse_click(button=0, hold=16000)
@@ -214,11 +215,15 @@ class clickless_mouse:
                     ctrl.mouse_click(button=0, hold=16000)
                     ctrl.mouse_click(button=0, hold=16000)
 
+                elif item_hit.action == "lt":
+                    ctrl.mouse_click(button=0, hold=16000)
+                    ctrl.mouse_click(button=0, hold=16000)
+                    ctrl.mouse_click(button=0, hold=16000)
+
                 elif item_hit.action == "r":
                     ctrl.mouse_click(button=1, hold=16000)
 
                 elif item_hit.action == "rh":
-                    print(str(ctrl.mouse_buttons_down()))
                     index = 1
                     if app.platform == "windows":
                         index = 2
@@ -227,6 +232,7 @@ class clickless_mouse:
                     else:
                         actions.sleep("50ms")
                         ctrl.mouse_click(button=1, up=True)
+                        # print(str(ctrl.mouse_buttons_down()))
                 elif item_hit.action == "su":
                     actions.mouse_scroll(y=-10)
                     draw_options = True
