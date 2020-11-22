@@ -1,11 +1,11 @@
-# prototype of a clickless mouse mode using Talon. This does not coexist with the zoom or control mouse modes
+# prototype of a clickless mouse mode using Talon. This does not coexist with the zoom, control mouse or mouse grid
 # l = left click
 # lh = left hold
 # ld = left double click
 # su = scroll up
 # sd = scroll down
 # r = right click
-# rh = right click old
+# rh = right click old, DISABLED, doesn't work yet.
 # ka = keep alive for e.g. leaving the thing up for easy scroll down/up on webpages. no action
 
 from talon import Module, Context, app, canvas, screen, ui, ctrl, cron, actions
@@ -49,8 +49,8 @@ class clickless_mouse:
         self.offset_y = self.screen.y
         self.width = self.screen.width
         self.height = self.screen.height
-        self.mcanvas = canvas.Canvas.from_screen(self.screen)
         # self.mcanvas.register("draw", self.draw)
+        self.mcanvas = None
         self.x, self.y = ctrl.mouse_pos()
         self._dwell_x, self._dwell_y = ctrl.mouse_pos()
         self.state = STATE_MOUSE_IDLE
@@ -65,9 +65,11 @@ class clickless_mouse:
         self.enabled = enable
 
         if self.enabled:
+            self.mcanvas = canvas.Canvas.from_screen(self.screen)
             self.mcanvas.register("draw", self.draw)
         else:
             self.mcanvas.unregister("draw", self.draw)
+            self.mcanvas = None
 
     def set_button_positions(self):
         self.button_positions = []
@@ -100,18 +102,18 @@ class clickless_mouse:
             self.button_positions.append(dwell_button(x - 45, y - 40, "l"))
             self.button_positions.append(dwell_button(x, y - 65, "ld"))
             self.button_positions.append(dwell_button(x + 45, y - 40, "r"))
-            self.button_positions.append(dwell_button(x + 70, y, "rh"))
+            # self.button_positions.append(dwell_button(x + 70, y, "rh"))
         elif x <= 70:
             # print("x<= 70")
             self.button_positions.append(dwell_button(x, y + 65, "ld"))
             self.button_positions.append(dwell_button(x + 45, y + 40, "r"))
-            self.button_positions.append(dwell_button(x + 70, y, "rh"))
+            # self.button_positions.append(dwell_button(x + 70, y, "rh"))
             self.button_positions.append(dwell_button(x + 45, y - 40, "lh"))
             self.button_positions.append(dwell_button(x, y - 65, "l"))
         elif x + 70 >= self.width:
             self.button_positions.append(dwell_button(x, y + 65, "ld"))
             self.button_positions.append(dwell_button(x - 45, y + 40, "r"))
-            self.button_positions.append(dwell_button(x - 70, y, "rh"))
+            # self.button_positions.append(dwell_button(x - 70, y, "rh"))
             self.button_positions.append(dwell_button(x - 45, y - 40, "lh"))
             self.button_positions.append(dwell_button(x, y - 65, "l"))
         elif y + 65 <= self.height and x + 70 <= self.width:
@@ -124,7 +126,7 @@ class clickless_mouse:
             self.button_positions.append(dwell_button(x - 45, y + 40, "l"))
             self.button_positions.append(dwell_button(x, y + 65, "ld"))
             self.button_positions.append(dwell_button(x + 45, y + 40, "r"))
-            self.button_positions.append(dwell_button(x + 70, y, "rh"))
+            # self.button_positions.append(dwell_button(x + 70, y, "rh"))
 
     def draw(self, canvas):
         x, y = ctrl.mouse_pos()
@@ -237,7 +239,6 @@ class clickless_mouse:
 
                 if action != "su" and action != "sd" and action != "ka":
                     self.x, self.y = ctrl.mouse_pos()
-
                     self.state = STATE_MOUSE_IDLE
 
             elif (
