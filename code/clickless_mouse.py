@@ -193,10 +193,15 @@ class clickless_mouse:
 
                 if item_hit.action == "lh":
                     # print("left hold")
+                    print(str(ctrl.mouse_buttons_down()))
+                    index = 0
+                    if app.platform == "windows":
+                        index = 1
                     if 1 not in ctrl.mouse_buttons_down():
-                        # print("pressing button 1 down")
+                        print("pressing button 0 down")
                         ctrl.mouse_click(button=0, down=True)
                     else:
+                        print("pressing button 0 up")
                         actions.sleep("50ms")
                         ctrl.mouse_click(button=0, up=True)
 
@@ -211,7 +216,11 @@ class clickless_mouse:
                     ctrl.mouse_click(button=1, hold=16000)
 
                 elif item_hit.action == "rh":
-                    if 2 not in ctrl.mouse_buttons_down():
+                    print(str(ctrl.mouse_buttons_down()))
+                    index = 1
+                    if app.platform == "windows":
+                        index = 2
+                    if index not in ctrl.mouse_buttons_down():
                         ctrl.mouse_click(button=1, down=True)
                     else:
                         actions.sleep("50ms")
