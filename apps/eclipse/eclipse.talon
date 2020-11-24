@@ -9,7 +9,7 @@ tag(): user.splits
 tag(): user.tabs
 #talon app actions
 action(app.tab_close): key(ctrl-w)
-action(app.tab_next): key(ctrl-pageup)
+action(app.tab_next): key(ctrl-pagedown)
 action(app.tab_previous): key(ctrl-pageup)
 #action(app.tab_reopen): 
 action(app.window_close): key(alt-f4)
