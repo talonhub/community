@@ -60,7 +60,7 @@ bind_list_to_csv(
 
 
 # Default words that will need to be capitalized (particularly under w2l).
-capitalize = [
+_capitalize_defaults = [
     "I",
     "I'm",
     "I've",
@@ -95,12 +95,11 @@ capitalize = [
 ]
 
 # Default words that need to be remapped.
-default_word_map = {
+_word_map_defaults = {
     # E.g:
     # "cash": "cache",
-    # "centre": "center",
 }
-default_word_map.update({word.lower(): word for word in capitalize})
+_word_map_defaults.update({word.lower(): word for word in _capitalize_defaults})
 
 # "dictate.word_map" is used by `actions.dictate.replace_words` to rewrite words
 # Talon recognized. Entries in word_map don't change the priority with which
@@ -108,20 +107,20 @@ default_word_map.update({word.lower(): word for word in capitalize})
 bind_word_map_to_csv(
     "words_to_replace.csv",
     csv_headers=("Replacement", "Original"),
-    default_values=default_word_map,
+    default_values=_word_map_defaults,
 )
 
 
 # Default words that should be added to Talon's vocabulary.
-simple_vocabulary = ["admin", "LCD", "VPN", "DNS", "USB", "FAQ", "PhD", "Minecraft"]
+_simple_vocab_default = ["nmap", "admin", "Cisco", "Citrix", "VPN", "DNS", "Minecraft"]
 
 # Defaults for different pronounciations of words that need to be added to
 # Talon's vocabulary.
-default_vocabulary = {
+_default_vocabulary = {
     "N map": "nmap",
     "under documented": "under-documented",
 }
-default_vocabulary.update({word: word for word in simple_vocabulary})
+_default_vocabulary.update({word: word for word in _simple_vocab_default})
 
 # "user.vocabulary" is used to explicitly add words/phrases that Talon doesn't
 # recognize. Words in user.vocabulary (or other lists and captures) are
@@ -130,5 +129,5 @@ bind_list_to_csv(
     "user.vocabulary",
     "additional_words.csv",
     csv_headers=("Word(s)", "Spoken Form (If Different)"),
-    default_values=default_vocabulary,
+    default_values=_default_vocabulary,
 )
