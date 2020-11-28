@@ -5,7 +5,6 @@ mod = Module()
 ctx = Context()
 
 mod.list("vocabulary", desc="additional vocabulary words")
-mod.list("punctuation", desc="words for inserting punctuation into text")
 
 @mod.capture(rule="({user.vocabulary} | <word>)")
 def word(m) -> str:
@@ -44,21 +43,6 @@ def capture_to_word_list(m):
 
 
 # ---------- LISTS (punctuation, additional/replacement words) ----------
-bind_list_to_csv(
-    "user.punctuation",
-    "punctuation.csv",
-    csv_headers=("Punctuation Mark", "Word or Phrase"),
-    default_values={
-        "period": ".",
-        "comma": ",",
-        "colon": ":",
-        "semicolon": ";", "semi colon": ";",
-        "question mark": "?",
-        "exclamation mark": "!",
-    }
-)
-
-
 # Default words that will need to be capitalized (particularly under w2l).
 _capitalize_defaults = [
     "I",
