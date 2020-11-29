@@ -78,6 +78,9 @@ class user_actions:
 
     def file_manager_open_directory(path: str):
         """opens the directory that's already visible in the view"""
+        if ":" in str(path):
+            path = get_wsl_path(path)
+
         actions.insert('cd "{}"'.format(path))
         actions.key("enter")
         actions.user.file_manager_refresh_title()

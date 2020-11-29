@@ -1,6 +1,9 @@
 app: ubuntu
 -
 tag(): user.file_manager
+tag(): user.git
+tag(): user.kubectl
+tag(): terminal
 
 action(user.file_manager_refresh_title): skip()
 action(user.file_manager_open_parent):
