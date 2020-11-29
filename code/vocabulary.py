@@ -21,13 +21,13 @@ def prose(m) -> str: return format_phrase(m)
 
 # TODO: unify this formatting code with the dictation formatting code, so that
 # user.prose behaves the same way as dictation mode.
-punctuation = set(".,-!?;:")
-no_space_after = set("/-(")
+no_space_before = set(".,-!?;:#$)]}")
+no_space_after = set("/-([{")
 def format_phrase(m):
     words = capture_to_word_list(m)
     result = ""
     for i, word in enumerate(words):
-        if i > 0 and word not in punctuation and words[i - 1][-1] not in no_space_after:
+        if i > 0 and word not in no_space_before and words[i - 1][-1] not in no_space_after:
             result += " "
         result += word
     return result
