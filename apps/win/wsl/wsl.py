@@ -15,6 +15,46 @@ app: ubuntu
 directories_to_remap = {}
 directories_to_exclude = {}
 
+user_path = os.path.expanduser("~")
+if app.platform == "windows":
+    is_windows = True
+    import ctypes
+
+    GetUserNameEx = ctypes.windll.secur32.GetUserNameExW
+    NameDisplay = 3
+
+    size = ctypes.pointer(ctypes.c_ulong(0))
+    GetUserNameEx(NameDisplay, None, size)
+
+    nameBuffer = ctypes.create_unicode_buffer(size.contents.value)
+    GetUserNameEx(NameDisplay, nameBuffer, size)
+    one_drive_path = os.path.expanduser(os.path.join("~", "OneDrive"))
+
+    # this is probably not the correct way to check for onedrive, quick and dirty
+    if os.path.isdir(os.path.expanduser(os.path.join("~", r"OneDrive\Desktop"))):
+        default_folder = os.path.join("~", "Desktop")
+
+        directories_to_remap = {
+            "Desktop": os.path.join(one_drive_path, "Desktop"),
+            "Documents": os.path.join(one_drive_path, "Documents"),
+            "Downloads": os.path.join(user_path, "Downloads"),
+            "Music": os.path.join(user_path, "Music"),
+            "OneDrive": one_drive_path,
+            "Pictures": os.path.join(one_drive_path, "Pictures"),
+            "Videos": os.path.join(user_path, "Videos"),
+        }
+    else:
+        # todo use expanduser for cross platform support
+        directories_to_remap = {
+            "Desktop": os.path.join(user_path, "Desktop"),
+            "Documents": os.path.join(user_path, "Documents"),
+            "Downloads": os.path.join(user_path, "Downloads"),
+            "Music": os.path.join(user_path, "Music"),
+            "OneDrive": one_drive_path,
+            "Pictures": os.path.join(user_path, "Pictures"),
+            "Videos": os.path.join(user_path, "Videos"),
+        }
+
 
 def get_win_path(wsl_path):
     path = ""
@@ -23,6 +63,18 @@ def get_win_path(wsl_path):
             subprocess.check_output(["wsl", "wslpath", "-w", wsl_path])
             .strip(b"\n")
             .decode()
+        )
+    except:
+        path = ""
+
+    return path
+
+
+def get_usr_path():
+    path = ""
+    try:
+        path = (
+            subprocess.check_output(["wsl", "wslpath", "-a", "~"]).strip(b"\n").decode()
         )
     except:
         path = ""
@@ -47,16 +99,25 @@ def get_wsl_path(win_path):
 @ctx.action_class("user")
 class user_actions:
     def file_manager_current_path():
-        # print("title = " + ui.active_window().title)
         path = ui.active_window().title
-        path = get_win_path(path.split(":")[1].lstrip())
+        path = path.split(":")[1].lstrip()
+
+        # print("current: " + path)
+        if "~" in path:
+            # the only way I could find to correctly support the user folder:
+            # get absolute path of ~, and strip /mnt/x from the string
+            abs_usr_path = get_usr_path()
+            abs_usr_path = abs_usr_path[abs_usr_path.find("/home") : len(abs_usr_path)]
+            path = path.replace("~", abs_usr_path)
+
+        path = get_win_path(path)
 
         if path in directories_to_remap:
             path = directories_to_remap[path]
 
         if path in directories_to_exclude:
             path = ""
-        # print(path)
+
         return path
 
     # def file_manager_terminal_here():
@@ -69,10 +130,12 @@ class user_actions:
     #     actions.key("alt-enter")
     def file_manager_open_user_directory(path: str):
         """expands and opens the user directory"""
+        if path in directories_to_remap:
+            path = directories_to_remap[path]
+
         path = os.path.expanduser(os.path.join("~", path))
         if ":" in path:
             path = get_wsl_path(path)
-        # print("after: " + path)
 
         actions.user.file_manager_open_directory(path)
 
