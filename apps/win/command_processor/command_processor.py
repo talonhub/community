@@ -5,6 +5,8 @@ import os
 ctx = Context()
 ctx.matches = r"""
 app: windows_command_processor
+app: windows_terminal 
+and win.title: /Command Prompt/
 """
 
 user_path = os.path.expanduser("~")
@@ -16,13 +18,12 @@ directories_to_exclude = {}
 class user_actions:
     def file_manager_current_path():
         path = ui.active_window().title
-        path = path.replace("Administrator:  ", "")
+        path = path.replace("Administrator:  ", "").replace("Command Prompt: ", "")
         if path in directories_to_remap:
             path = directories_to_remap[path]
 
         if path in directories_to_exclude:
             path = ""
-
         return path
 
     # def file_manager_terminal_here():

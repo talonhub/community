@@ -11,6 +11,8 @@ and app.name: ubuntu.exe
 ctx = Context()
 ctx.matches = r"""
 app: ubuntu
+app: windows_terminal
+and win.title: /Ubuntu/ 
 """
 directories_to_remap = {}
 directories_to_exclude = {}
@@ -98,9 +100,15 @@ def get_wsl_path(win_path):
 
 @ctx.action_class("user")
 class user_actions:
+    def file_manager_refresh_title():
+        actions.skip()
+
     def file_manager_current_path():
         path = ui.active_window().title
-        path = path.split(":")[1].lstrip()
+        try:
+            path = path.split(":")[1].lstrip()
+        except:
+            path = ""
 
         # print("current: " + path)
         if "~" in path:

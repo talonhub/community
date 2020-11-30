@@ -1,32 +1,30 @@
 app: windows_terminal
 -
-# comment or remove tags for command sets you don't want
-tag(): user.file_manager
-tag(): user.git
-tag(): user.kubectl
 tag(): user.tabs
 tag(): terminal
 
-run last: key(up enter)
+# commands that work regardless of active terminal should go here.
 
+# windows terminal config based on mrob95's
+# https://github.com/mrob95/WindowsTerminal-config/blob/master/settings.json
+
+action(edit.paste): key(ctrl-shift-v)
+action(edit.copy): key(ctrl-shift-c)
+action(app.tab_close): key(ctrl-shift-w)
+action(app.tab_open): key(ctrl-shift-t)
+
+settings open : key(ctrl-,)
+focus left: key(ctrl-alt-shift-left)
+focus right: key(ctrl-alt-shift-right)
+focus up: key(ctrl-alt-shift-up)
+focus down: key(ctrl-alt-shift-down)
+split right: key(ctrl-shift-h)
+split down: key(ctrl-h)
+term menu: key(ctrl-shift-f1)
+
+run last: key(up enter)
 kill all:
   key(ctrl-c)
   insert("y")
   key(enter)
   
-action(user.file_manager_refresh_title):
-	insert("$Host.UI.RawUI.WindowTitle = $(get-location)")
-	key(enter)
-
-#action(user.file_manager_go_back):
-#    key("alt-left")
-
-#action(user.file_manager_go_forward):
-#    key("alt-right")
-
-action(user.file_manager_open_parent):
-    insert("cd ..")
-    key(enter)
-    user.file_manager_refresh_title()
-
-action(edit.delete_line): key(esc)

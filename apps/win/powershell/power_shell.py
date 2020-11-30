@@ -5,7 +5,9 @@ import os
 ctx = Context()
 mod = Module()
 ctx.matches = r"""
+app: windows_power_shell
 app: windows_terminal
+and win.title: /PowerShell/
 """
 
 user_path = os.path.expanduser("~")
@@ -17,11 +19,7 @@ directories_to_exclude = {}
 class user_actions:
     def file_manager_current_path():
         path = ui.active_window().title
-        path = (
-            path.replace("Administrator:  ", "")
-            .replace("Windows PowerShell: ", "")
-            .replace("Command Prompt: ", "")
-        )
+        path = path.replace("Administrator:  ", "").replace("Windows PowerShell: ", "")
 
         if path in directories_to_remap:
             path = directories_to_remap[path]
@@ -29,15 +27,6 @@ class user_actions:
         if path in directories_to_exclude:
             path = ""
         return path
-
-    # def file_manager_terminal_here():
-    #     actions.key("ctrl-l")
-    #     actions.insert("cmd.exe")
-    #     actions.key("enter")
-
-    # def file_manager_show_properties():
-    #     """Shows the properties for the file"""
-    #     actions.key("alt-enter")
 
     def file_manager_open_directory(path: str):
         """opens the directory that's already visible in the view"""
@@ -66,7 +55,4 @@ class user_actions:
         """file_manager_open_volume"""
         actions.user.file_manager_open_directory(volume)
         actions.user.file_manager_refresh_title()
-
-    def tab_jump(number: int):
-        actions.key("ctrl-alt-{}".format(number))
 

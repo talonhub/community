@@ -1,22 +1,14 @@
-app: windows_command_processor
+app: windows_power_shell
 app: windows_terminal
-and win.title: /Command Prompt/
+and win.title: /PowerShell/
 -
-# comment or remove tags for command sets you don't want
 tag(): user.file_manager
 tag(): user.git
 tag(): user.kubectl
 tag(): terminal
 
-run last: key(up enter)
-
-kill all:
-  key(ctrl-c)
-  insert("y")
-  key(enter)
-  
 action(user.file_manager_refresh_title):
-	insert("title Command Prompt: %CD%")
+  insert('$Host.UI.RawUI.WindowTitle = "Windows PowerShell: " +  $(get-location)')
 	key(enter)
 
 #action(user.file_manager_go_back):
