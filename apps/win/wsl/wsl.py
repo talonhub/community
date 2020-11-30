@@ -176,5 +176,4 @@ class user_actions:
     def file_manager_open_volume(volume: str):
         """file_manager_open_volume"""
         actions.user.file_manager_open_directory(volume)
-        actions.user.file_manager_refresh_title()
 
