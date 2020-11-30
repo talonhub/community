@@ -3,6 +3,7 @@ app: mintty
 tag(): terminal
 tag(): user.kubectl
 tag(): user.file_manager
+tag(): user.git
 
 action(user.file_manager_open_parent):
     insert("cd ..")
