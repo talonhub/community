@@ -7,13 +7,6 @@ tag(): user.file_manager
 tag(): user.git
 tag(): user.kubectl
 tag(): terminal
-
-run last: key(up enter)
-
-kill all:
-  key(ctrl-c)
-  insert("y")
-  key(enter)
   
 action(user.file_manager_refresh_title):
 	insert("title Command Prompt: %CD%")

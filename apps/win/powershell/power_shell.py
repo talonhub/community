@@ -54,3 +54,24 @@ class user_actions:
     def file_manager_open_volume(volume: str):
         """file_manager_open_volume"""
         actions.user.file_manager_open_directory(volume)
+
+    def terminal_list_directories():
+        """Lists directories"""
+        actions.insert("ls")
+        actions.key("enter")
+
+    def terminal_change_directory(path: str):
+        actions.insert("cd {}".format(path))
+        if path:
+            actions.key("enter")
+
+    def terminal_change_directory_root():
+        """Root of current drive"""
+        actions.insert("cd /")
+        actions.key("enter")
+
+    def terminal_clear_screen():
+        """Clear screen"""
+        actions.insert("ctrl-l")
+        actions.key("enter")
+

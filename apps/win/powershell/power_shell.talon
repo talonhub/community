@@ -8,7 +8,7 @@ tag(): user.kubectl
 tag(): terminal
 
 action(user.file_manager_refresh_title):
-  insert('$Host.UI.RawUI.WindowTitle = "Windows PowerShell: " +  $(get-location)')
+  insert("$Host.UI.RawUI.WindowTitle = 'Windows PowerShell: ' +  $(get-location)")
 	key(enter)
 
 #action(user.file_manager_go_back):
