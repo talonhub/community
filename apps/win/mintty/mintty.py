@@ -3,6 +3,13 @@ import os
 import subprocess
 
 mod = Module()
+mod.apps.mintty = """
+os: windows
+and app.name: Terminal
+os: windows
+and app.name: mintty.exe
+"""
+
 ctx = Context()
 ctx.matches = r"""
 app: mintty
@@ -17,13 +24,19 @@ setting_cyg_path = mod.setting(
     desc="Path to  cygpath.exe",
 )
 
+
 def get_win_path(cyg_path):
     path = ""
     try:
-        path = subprocess.check_output([setting_cyg_path.get(), "-w", cyg_path]).strip(b"\n").decode()
+        path = (
+            subprocess.check_output([setting_cyg_path.get(), "-w", cyg_path])
+            .strip(b"\n")
+            .decode()
+        )
     except:
         path = ""
     return path
+
 
 @ctx.action_class("user")
 class user_actions:
