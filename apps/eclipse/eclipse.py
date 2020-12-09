@@ -32,7 +32,6 @@ class win_actions:
         if "." in result:
             return result
 
-        print(result)
         return ""
 
     def file_ext():
