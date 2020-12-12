@@ -57,6 +57,9 @@ class edit_actions:
         actions.key("ctrl-l")
         actions.insert(str(n))
         actions.key("enter")
+        
+    def delete_line():
+        actions.key("ctrl-d")
 
 
 @ctx.action_class("user")
