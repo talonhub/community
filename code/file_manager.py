@@ -397,6 +397,12 @@ def win_event_handler(window):
     cached_path = path
 
 
-ui.register("win_title", win_event_handler)
-ui.register("win_focus", win_event_handler)
+def register_events():
+    ui.register("win_title", win_event_handler)
+    ui.register("win_focus", win_event_handler)
+
+
+# prevent scary errors in the log by waiting for talon to be fully loaded
+# before registering the events
+app.register("launch", register_events)
 
