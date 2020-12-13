@@ -38,7 +38,7 @@ auto_hide = mod.setting(
 mouse_idle = mod.setting(
     "clickless_mouse_idle_time_before_display",
     type=float,
-    default=0.80,
+    default=0.35,
     desc="The time the mouse must be idle before the clickless mouse options are displayed",
 )
 
