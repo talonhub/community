@@ -1,6 +1,7 @@
 # prototype of a clickless mouse mode using Talon. This does not coexist with the zoom, control mouse or mouse grid
 # l = left click
 # lh = left hold
+# lr = left release. when left is down, all options become lr
 # ld = left double click
 # su = scroll up
 # sd = scroll down
@@ -20,6 +21,34 @@ STATE_MOUSE_MOVING = 1
 STATE_MOUSE_STOPPED = 2
 STATE_DISPLAYING_OPTIONS = 3
 
+dwell_time = mod.setting(
+    "clickless_mouse_dwell_time",
+    type=float,
+    default=0.250,
+    desc="The required dwell time before triggering the action",
+)
+
+auto_hide = mod.setting(
+    "clickless_mouse_auto_hide_time",
+    type=float,
+    default=0.8,
+    desc="The time before the clickless mouse is auto-hidden",
+)
+
+mouse_idle = mod.setting(
+    "clickless_mouse_idle_time_before_display",
+    type=float,
+    default=0.80,
+    desc="The time the mouse must be idle before the clickless mouse options are displayed",
+)
+
+radius = mod.setting(
+    "clickless_mouse_radius",
+    type=int,
+    default=15 if app.platform == "mac" else 20,
+    desc="The size of the options in the clickless mouse",
+)
+
 
 class dwell_button:
     def __init__(self, x, y, action="l"):
@@ -28,6 +57,7 @@ class dwell_button:
         self.hit = False
         self.action = action
         self.last_hit_time = None
+        self.scroll_progress = 0
 
     def hit_check(self, hit):
         if hit:
@@ -56,10 +86,16 @@ class clickless_mouse:
         self.state = STATE_MOUSE_IDLE
         self.last_time = 0
         self.enabled = False
-        self.auto_hide_time = 0.8
-        self.mouse_idle_time = 0.150
-        self.item_selection_time = 0.200
-        self.radius = 20
+
+    def __del__(self):
+        self.mcanvas = None
+
+    def is_left_down(self):
+        left_index = 0
+
+        if app.platform == "windows":
+            left_index = 1
+        return left_index in ctrl.mouse_buttons_down()
 
     def enable(self, enable):
         self.enabled = enable
@@ -73,60 +109,215 @@ class clickless_mouse:
 
     def set_button_positions(self):
         self.button_positions = []
+        self.scroll_progress = 0
         self.x, self.y = ctrl.mouse_pos()
         self._dwell_x, self._dwell_y = self.x, self.y
         x = self.x
         y = self.y
 
+        if self.is_left_down():
+            # print("case 8")
+            # print("y + 65 < self.height and x + 70 < self.width")
+            self.button_positions.append(
+                dwell_button(
+                    x - math.ceil(radius.get() * 2.25),
+                    y - math.ceil(radius.get() * 2),
+                    "lr",
+                )
+            )
+            self.button_positions.append(
+                dwell_button(
+                    x + math.ceil(radius.get() * 2.25),
+                    y - math.ceil(radius.get() * 2),
+                    "lr",
+                )
+            )
+            self.button_positions.append(
+                dwell_button(x, y - math.ceil(radius.get() * 3.25), "lr")
+            )
+
+            self.button_positions.append(
+                dwell_button(x - math.ceil(radius.get() * 3.5), y, "lr")
+            )
+            self.button_positions.append(
+                dwell_button(
+                    x - math.ceil(radius.get() * 2.25),
+                    y + math.ceil(radius.get() * 2),
+                    "lr",
+                )
+            )
+            self.button_positions.append(
+                dwell_button(x, y + math.ceil(radius.get() * 3.25), "lr")
+            )
+            self.button_positions.append(
+                dwell_button(
+                    x + math.ceil(radius.get() * 2.25),
+                    y + math.ceil(radius.get() * 2),
+                    "lr",
+                )
+            )
+            self.button_positions.append(
+                dwell_button(x + math.ceil(radius.get() * 3.5), y, "lr")
+            )
+
         # to best handle menus and such, we're going to prefer to draw things
         # downward by default wherever possible
-        if x <= 70 and y <= 65:
+        elif x <= radius.get() * 3.5 and y <= radius.get() * 3.25:
+            # print("case 1")
             # print("x <= 70 and y <= 65")
-            self.button_positions.append(dwell_button(x, y + 65, "l"))
-            self.button_positions.append(dwell_button(x + 70, y, "r"))
-        elif x + 70 >= self.width and y <= 65:
-            self.button_positions.append(dwell_button(x - 70, y, "l"))
-            self.button_positions.append(dwell_button(x, y + 65, "r"))
-        elif x <= 70 and y + 65 >= self.height:
+            self.button_positions.append(
+                dwell_button(x, y + math.ceil(radius.get() * 3.5), "l")
+            )
+            self.button_positions.append(
+                dwell_button(x + math.ceil(radius.get() * 3.25), y, "r")
+            )
+        elif x + radius.get() * 3.5 >= self.width and y <= radius.get() * 3.25:
+            # print("case 2")
+            self.button_positions.append(
+                dwell_button(x - math.ceil(radius.get() * 3.5), y, "l")
+            )
+            self.button_positions.append(
+                dwell_button(x, y + math.ceil(radius.get() * 3.25), "r")
+            )
+        elif x <= radius.get() * 3.5 and y + radius.get() * 3.25 >= self.height:
             # print("x <= 70 and y + 65 >= self.height")
-
-            self.button_positions.append(dwell_button(x + 70, y, "r"))
-            self.button_positions.append(dwell_button(x, y - 65, "l"))
-        elif x + 70 >= self.width and y + 65 >= self.height:
+            # print("case 3")
+            self.button_positions.append(
+                dwell_button(x + math.ceil(radius.get() * 3.5), y, "r")
+            )
+            self.button_positions.append(
+                dwell_button(x, y - math.ceil(radius.get() * 3.25), "l")
+            )
+        elif (
+            x + radius.get() * 3.5 >= self.width
+            and y + math.ceil(radius.get() * 3.25) >= self.height
+        ):
+            # print("case 4")
             # print("x + 70 >= self.width and y + 65 >= self.height")
-            self.button_positions.append(dwell_button(x - 70, y, "l"))
-            self.button_positions.append(dwell_button(x, y - 65, "r"))
-        elif y + 65 >= self.height:
+            self.button_positions.append(
+                dwell_button(x - math.ceil(radius.get() * 3.5), y, "l")
+            )
+            self.button_positions.append(
+                dwell_button(x, y - math.ceil(radius.get() * 3.25), "r")
+            )
+        elif y + math.ceil(radius.get() * 3.25) >= self.height:
+            # print("case 5")
             # print("y + 65 >= self.height")
-            self.button_positions.append(dwell_button(x - 70, y, "lh"))
-            self.button_positions.append(dwell_button(x - 45, y - 40, "l"))
-            self.button_positions.append(dwell_button(x, y - 65, "ld"))
-            self.button_positions.append(dwell_button(x + 45, y - 40, "r"))
+            self.button_positions.append(
+                dwell_button(x - math.ceil(radius.get() * 3.5), y, "lh")
+            )
+            self.button_positions.append(
+                dwell_button(
+                    x - math.ceil(radius.get() * 2.25),
+                    y - math.ceil(radius.get() * 2),
+                    "l",
+                )
+            )
+            self.button_positions.append(
+                dwell_button(x, y - math.ceil(radius.get() * 3.25), "ld")
+            )
+            self.button_positions.append(
+                dwell_button(
+                    x + math.ceil(radius.get() * 2.25),
+                    y - math.ceil(radius.get() * 2),
+                    "r",
+                )
+            )
             # self.button_positions.append(dwell_button(x + 70, y, "rh"))
-        elif x <= 70:
+        elif x <= radius.get() * 3.5:
+            # print("case 6")
             # print("x<= 70")
-            self.button_positions.append(dwell_button(x, y + 65, "ld"))
-            self.button_positions.append(dwell_button(x + 45, y + 40, "r"))
+            self.button_positions.append(
+                dwell_button(x, y + math.ceil(radius.get() * 3.25), "ld")
+            )
+            self.button_positions.append(
+                dwell_button(
+                    x + math.ceil(radius.get() * 2.25),
+                    y + math.ceil(radius.get() * 2),
+                    "r",
+                )
+            )
             # self.button_positions.append(dwell_button(x + 70, y, "rh"))
-            self.button_positions.append(dwell_button(x + 45, y - 40, "lh"))
-            self.button_positions.append(dwell_button(x, y - 65, "l"))
-        elif x + 70 >= self.width:
-            self.button_positions.append(dwell_button(x, y + 65, "ld"))
-            self.button_positions.append(dwell_button(x - 45, y + 40, "r"))
+            self.button_positions.append(
+                dwell_button(
+                    x + math.ceil(radius.get() * 2.25),
+                    y - math.ceil(radius.get() * 2),
+                    "lh",
+                )
+            )
+            self.button_positions.append(
+                dwell_button(x, y - math.ceil(radius.get() * 3.25), "l")
+            )
+        elif x + radius.get() * 2 >= self.width:
+            # print("case 7")
+            self.button_positions.append(
+                dwell_button(x, y + math.ceil(radius.get() * 3.25), "ld")
+            )
+            self.button_positions.append(
+                dwell_button(
+                    x - math.ceil(radius.get() * 2.25),
+                    y + math.ceil(radius.get() * 2),
+                    "r",
+                )
+            )
             # self.button_positions.append(dwell_button(x - 70, y, "rh"))
-            self.button_positions.append(dwell_button(x - 45, y - 40, "lh"))
-            self.button_positions.append(dwell_button(x, y - 65, "l"))
-        elif y + 65 <= self.height and x + 70 <= self.width:
+            self.button_positions.append(
+                dwell_button(
+                    x - math.ceil(radius.get() * 2.25),
+                    y - math.ceil(radius.get() * 2),
+                    "lh",
+                )
+            )
+            self.button_positions.append(
+                dwell_button(x, y - math.ceil(radius.get() * 3.25), "l")
+            )
+        elif (
+            y + math.ceil(radius.get() * 3.25) <= self.height
+            and x + radius.get() * 3.5 <= self.width
+        ):
+            # print("case 8")
             # print("y + 65 < self.height and x + 70 < self.width")
-            self.button_positions.append(dwell_button(x - 45, y - 40, "su"))
-            self.button_positions.append(dwell_button(x + 45, y - 40, "sd"))
-            self.button_positions.append(dwell_button(x, y - 65, "lt"))
+            self.button_positions.append(
+                dwell_button(
+                    x - math.ceil(radius.get() * 2.25),
+                    y - math.ceil(radius.get() * 2),
+                    "su",
+                )
+            )
+            self.button_positions.append(
+                dwell_button(
+                    x + math.ceil(radius.get() * 2.25),
+                    y - math.ceil(radius.get() * 2),
+                    "sd",
+                )
+            )
+            self.button_positions.append(
+                dwell_button(x, y - math.ceil(radius.get() * 3.25), "lt")
+            )
 
-            self.button_positions.append(dwell_button(x - 70, y, "lh"))
-            self.button_positions.append(dwell_button(x - 45, y + 40, "l"))
-            self.button_positions.append(dwell_button(x, y + 65, "ld"))
-            self.button_positions.append(dwell_button(x + 45, y + 40, "r"))
-            self.button_positions.append(dwell_button(x + 70, y, "ka"))
+            self.button_positions.append(
+                dwell_button(x - math.ceil(radius.get() * 3.5), y, "lh")
+            )
+            self.button_positions.append(
+                dwell_button(
+                    x - math.ceil(radius.get() * 2.25),
+                    y + math.ceil(radius.get() * 2),
+                    "ld",
+                )
+            )
+            self.button_positions.append(
+                dwell_button(x, y + math.ceil(radius.get() * 3.25), "l")
+            )
+            self.button_positions.append(
+                dwell_button(
+                    x + math.ceil(radius.get() * 2.25),
+                    y + math.ceil(radius.get() * 2),
+                    "r",
+                )
+            )
+            self.button_positions.append(
+                dwell_button(x + math.ceil(radius.get() * 3.5), y, "ka")
+            )
 
     def draw(self, canvas):
         x, y = ctrl.mouse_pos()
@@ -152,7 +343,7 @@ class clickless_mouse:
             # print("stopped")
 
             if x == self.x and y == self.y:
-                if time.time() - self.last_time >= self.mouse_idle_time:
+                if time.time() - self.last_time >= mouse_idle.get():
                     self.last_time = time.time()
                     self.set_button_positions()
                     self.state = STATE_DISPLAYING_OPTIONS
@@ -166,8 +357,8 @@ class clickless_mouse:
             draw_options = True
 
             for b in self.button_positions:
-                if (x <= b.x + self.radius and b.x - self.radius <= x) and (
-                    y <= b.y + self.radius and b.y - self.radius <= y
+                if (x <= b.x + radius.get() and b.x - radius.get() <= x) and (
+                    y <= b.y + radius.get() and b.y - radius.get() <= y
                 ):
                     # print("hit")
                     b.hit_check(True)
@@ -178,14 +369,11 @@ class clickless_mouse:
 
             if (
                 not item_hit
-                and time.time() - self.last_time >= self.auto_hide_time
+                and time.time() - self.last_time >= auto_hide.get()
                 and (self._dwell_x == x or self._dwell_y == y)
             ):
                 self.state = STATE_MOUSE_IDLE
-            elif (
-                item_hit
-                and time.time() - item_hit.last_hit_time >= self.item_selection_time
-            ):
+            elif item_hit and time.time() - item_hit.last_hit_time >= dwell_time.get():
                 draw_options = False
 
                 # print("performing action...")
@@ -195,10 +383,7 @@ class clickless_mouse:
 
                 if item_hit.action == "lh":
                     # print("left hold")
-                    index = 0
-                    if app.platform == "windows":
-                        index = 1
-                    if index not in ctrl.mouse_buttons_down():
+                    if not self.is_left_down():
                         # print("pressing button 0 down")
                         ctrl.mouse_click(button=0, down=True)
                     else:
@@ -206,7 +391,11 @@ class clickless_mouse:
                         actions.sleep("50ms")
                         ctrl.mouse_click(button=0, up=True)
 
-                    print(str(ctrl.mouse_buttons_down()))
+                    # print(str(ctrl.mouse_buttons_down()))
+                elif item_hit.action == "lr":
+                    if self.is_left_down():
+                        actions.sleep("50ms")
+                        ctrl.mouse_click(button=0, up=True)
 
                 elif item_hit.action == "l":
                     ctrl.mouse_click(button=0, hold=16000)
@@ -246,9 +435,11 @@ class clickless_mouse:
                 if action != "su" and action != "sd" and action != "ka":
                     self.x, self.y = ctrl.mouse_pos()
                     self.state = STATE_MOUSE_IDLE
+                    self.scroll_progress = 0
 
             elif (
-                abs(x - self.x) >= self.radius * 4 or abs(y - self.y) >= self.radius * 4
+                abs(x - self.x) >= radius.get() * 7
+                or abs(y - self.y) >= radius.get() * 7
             ):
                 draw_options = False
                 self.state = STATE_MOUSE_IDLE
@@ -264,23 +455,35 @@ class clickless_mouse:
         paint = canvas.paint
 
         for b in self.button_positions:
-            paint.color = "ff0000"
+            # draw outer circle
+            paint.color = "ffffff"
             paint.style = paint.Style.STROKE
-            canvas.draw_circle(b.x, b.y, self.radius + 1)
+            canvas.draw_circle(b.x, b.y, radius.get() + 1)
 
-            if b.hit:
+            # draw inner circle
+            paint.color = "000000"
+            paint.style = paint.Style.STROKE
+            paint.style = paint.Style.FILL
+            canvas.draw_circle(b.x, b.y, radius.get())
+
+            # draw hit circle
+            if b.last_hit_time:
                 paint.color = "00FF00"
                 paint.style = paint.Style.FILL
-            else:
-                paint.color = "000000"
-                paint.style = paint.Style.STROKE
 
-            paint.style = paint.Style.FILL
-            canvas.draw_circle(b.x, b.y, self.radius)
+                _radius = min(
+                    math.ceil(
+                        radius.get()
+                        * (time.time() - b.last_hit_time)
+                        / dwell_time.get()
+                    ),
+                    radius.get(),
+                )
+                canvas.draw_circle(b.x, b.y, _radius)
 
             canvas.paint.text_align = canvas.paint.TextAlign.CENTER
             text_string = b.action
-            paint.textsize = 20
+            paint.textsize = radius.get()
             paint.color = "ffffff"
 
             # text_rect = canvas.paint.measure_text(text_string)[1]
