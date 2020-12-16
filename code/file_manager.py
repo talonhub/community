@@ -1,4 +1,4 @@
-from talon import app, Module, Context, actions, ui, imgui, settings, app
+from talon import app, Module, Context, actions, ui, imgui, settings, app, registry
 from os.path import expanduser
 from subprocess import Popen
 from pathlib import Path
@@ -8,42 +8,13 @@ import math
 import re
 from itertools import islice
 
-selection_numbers = [
-    "one",
-    "two",
-    "three",
-    "four",
-    "five",
-    "six",
-    "seven",
-    "eight",
-    "nine",
-    "ten",
-    "eleven",
-    "twelve",
-    "thirteen",
-    "fourteen",
-    "fifteen",
-    "sixteen",
-    "seventeen",
-    "eighteen",
-    "nineteen",
-    "twenty",
-]
-selection_map = {n: i for i, n in enumerate(selection_numbers)}
-
 mod = Module()
 ctx = Context()
 
-mod.list(
-    "file_manager_directory_remap", desc="list of titles remapped to the absolute path"
-)
-mod.list(
-    "file_manager_directory_exclusions",
-    desc="list of titles that are excluded/disabled from the picker functionality",
-)
+mod.tag("file_manager", desc="Tag for enabling generic file management commands")
 mod.list("file_manager_directories", desc="List of subdirectories for the current path")
 mod.list("file_manager_files", desc="List of files at the root of the current path")
+
 
 setting_auto_show_pickers = mod.setting(
     "file_manager_auto_show_pickers",
@@ -63,19 +34,22 @@ setting_file_limit = mod.setting(
     default=1000,
     desc="Maximum number of files to iterate",
 )
-mod.tag("file_manager", desc="Tag for enabling generic file management commands")
+setting_imgui_limit = mod.setting(
+    "file_manager_imgui_limit",
+    type=int,
+    default=20,
+    desc="Maximum number of files/folders to display in the imgui",
+)
 
+cached_path = None
+file_selections = folder_selections = []
+current_file_page = current_folder_page = 1
+
+ctx.lists["self.file_manager_directories"] = []
+ctx.lists["self.file_manager_files"] = []
+
+directories_to_remap = {}
 user_path = os.path.expanduser("~")
-
-folder_selections = []
-file_selections = []
-
-is_windows = False
-is_mac = False
-is_terminal = False
-is_linux = False
-cached_title = None
-
 if app.platform == "windows":
     is_windows = True
     import ctypes
@@ -94,7 +68,7 @@ if app.platform == "windows":
     if os.path.isdir(os.path.expanduser(os.path.join("~", r"OneDrive\Desktop"))):
         default_folder = os.path.join("~", "Desktop")
 
-        ctx.lists["user.file_manager_directory_remap"] = {
+        directories_to_remap = {
             "Desktop": os.path.join(one_drive_path, "Desktop"),
             "Documents": os.path.join(one_drive_path, "Documents"),
             "Downloads": os.path.join(user_path, "Downloads"),
@@ -105,7 +79,7 @@ if app.platform == "windows":
         }
     else:
         # todo use expanduser for cross platform support
-        ctx.lists["user.file_manager_directory_remap"] = {
+        directories_to_remap = {
             "Desktop": os.path.join(user_path, "Desktop"),
             "Documents": os.path.join(user_path, "Documents"),
             "Downloads": os.path.join(user_path, "Downloads"),
@@ -115,44 +89,13 @@ if app.platform == "windows":
             "Videos": os.path.join(user_path, "Videos"),
         }
 
-    if nameBuffer.value:
-        ctx.lists["user.file_manager_directory_remap"][nameBuffer.value] = user_path
-
-    ctx.lists["user.file_manager_directory_exclusions"] = [
-        "",
-        "Run",
-        "Task Switching",
-        "Task View",
-        "This PC",
-        "File Explorer",
-    ]
-    supported_programs = [
-        "cmd.exe",
-        "explorer.exe",
-    ]
-    terminal_programs = ["cmd.exe"]
-
-elif app.platform == "mac":
-    ###
-    # print("Mac OS X!!")
-    is_mac = True
-    ctx.lists["user.file_manager_directory_remap"] = {"": "/Volumes"}
-    ctx.lists["user.file_manager_directory_exclusions"] = {}
-    supported_programs = ["com.apple.Terminal", "com.apple.finder"]
-    terminal_programs = [
-        "com.apple.Terminal",
-    ]
-
-elif app.platform == "linux":
-    is_linux = True
-    ctx.lists["user.file_manager_directory_remap"] = {}
-    ctx.lists["user.file_manager_directory_exclusions"] = {}
-    supported_programs = ["Caja", "terminal"]
-    terminal_programs = ["terminal"]
-
 
 @mod.action_class
 class Actions:
+    def file_manager_current_path() -> str:
+        """Returns the current path for the active file manager."""
+        return ""
+
     def file_manager_open_parent():
         """file_manager_open_parent"""
         return
@@ -163,9 +106,40 @@ class Actions:
     def file_manager_go_back():
         """file_manager_go_forward_directory"""
 
+    def file_manager_open_volume(volume: str):
+        """file_manager_open_volume"""
+
+    def file_manager_open_directory(path: str):
+        """opens the directory that's already visible in the view"""
+
+    def file_manager_select_directory(path: str):
+        """selects the directory"""
+
+    def file_manager_new_folder(name: str):
+        """Creates a new folder in a gui filemanager or inserts the command to do so for terminals"""
+
+    def file_manager_show_properties():
+        """Shows the properties for the file"""
+
+    def file_manager_terminal_here():
+        """Opens terminal at current location"""
+
+    def file_manager_open_file(path: str):
+        """opens the file"""
+
+    def file_manager_select_file(path: str):
+        """selects the file"""
+
+    def file_manager_refresh_title():
+        """Refreshes the title to match current directory. this is for e.g. windows command prompt that will need to do some magic. """
+        return
+
+    def file_manager_update_lists():
+        """Forces an update of the lists (e.g., when file or folder created)"""
+        update_lists()
+
     def file_manager_toggle_pickers():
         """Shows the pickers"""
-
         if gui_files.showing:
             gui_files.hide()
             gui_folders.hide()
@@ -175,46 +149,31 @@ class Actions:
 
     def file_manager_hide_pickers():
         """Hides the pickers"""
-        gui_files.hide()
-        gui_folders.hide()
+        if gui_files.showing:
+            gui_files.hide()
+            gui_folders.hide()
 
-    def file_manager_open_file(path: Union[str, int]):
-        """opens the file"""
-        if is_windows:
-            # print("file_manager_open_file")
-            actions.key("home")
-            if isinstance(path, int):
-                index = (current_file_page - 1) * len(selection_numbers) + path
-                if path < len(file_selections):
-                    actions.insert(file_selections[index])
-            else:
-                actions.insert(path)
+    def file_manager_open_user_directory(path: str):
+        """expands and opens the user directory"""
+        # this functionality exists mostly for windows.
+        # since OneDrive does strange stuff...
+        if path in directories_to_remap:
+            path = directories_to_remap[path]
 
-            actions.key("enter")
-        elif is_mac:
-            actions.key("home")
-            if isinstance(path, int):
-                actions.insert(m[path])
-            else:
-                actions.insert(path)
-            actions.key("cmd-o")
+        path = os.path.expanduser(os.path.join("~", path))
+        actions.user.file_manager_open_directory(path)
 
-    def file_manager_select_file(path: Union[str, int]):
-        """selects the file"""
-        actions.key("home")
-        if isinstance(path, int):
-            # print(str(file_selections))
-            # print('select file = ' + str(path) + ' ' + file_selections[path])
-            index = (current_file_page - 1) * len(selection_numbers) + path
-            if index < len(file_selections):
-                actions.insert(file_selections[index])
-        else:
-            actions.insert(path)
+    def file_manager_get_directory_by_index(index: int) -> str:
+        """Returns the requested directory for the imgui display by index"""
+        index = (current_folder_page - 1) * setting_imgui_limit.get() + index
+        assert index < len(folder_selections)
+        return folder_selections[index]
 
-    def file_manager_refresh_title():
-        """Refreshes the title to match current directory"""
-        return
-        # todo: this is for e.g. windows command prompt that will need to do some magic.
+    def file_manager_get_file_by_index(index: int) -> str:
+        """Returns the requested directory for the imgui display by index"""
+        index = (current_file_page - 1) * setting_imgui_limit.get() + index
+        assert index < len(file_selections)
+        return file_selections[index]
 
     def file_manager_next_file_page():
         """next_file_page"""
@@ -259,127 +218,6 @@ class Actions:
 
             gui_folders.freeze()
 
-    def file_manager_open_volume(volume: str):
-        """file_manager_open_volume"""
-        if is_windows:
-            if is_terminal:
-                actions.insert(volume)
-                actions.key("enter")
-                actions.user.file_manager_refresh_title()
-            else:
-                actions.user.file_manager_open_directory(volume)
-        # todo: mac etc
-
-    def file_manager_terminal_open_directory(path: Union[str, int]):
-        """file_manager_terminal_open_directory TODO: remove once we can implement that take parameters in .talon"""
-        actions.insert("cd ")
-        if isinstance(path, int):
-            index = (current_folder_page - 1) * len(selection_numbers) + path
-            if index < len(folder_selections):
-                actions.insert('"{}"'.format(folder_selections[index]))
-        else:
-            actions.insert(path)
-
-        actions.key("enter")
-        actions.user.file_manager_refresh_title()
-
-    def file_manager_open_user_directory(path: str):
-        """expands and opens the user directory"""
-        path = os.path.expanduser(os.path.join("~", path))
-        actions.user.file_manager_open_directory(path)
-
-    def file_manager_open_directory(path: Union[str, int]):
-        """opens the directory that's already visible in the view"""
-        if is_terminal:
-            actions.user.file_manager_terminal_open_directory(path)
-        else:
-
-            if is_windows:
-                actions.key("ctrl-l")
-                if isinstance(path, int):
-                    index = (current_folder_page - 1) * len(selection_numbers) + path
-                    if index < len(folder_selections):
-                        actions.insert(folder_selections[index])
-                else:
-                    actions.insert(path)
-
-                actions.key("enter")
-            elif is_mac:
-                actions.key("cmd-shift-g")
-                actions.sleep("50ms")
-                if isinstance(path, int):
-                    index = (current_folder_page - 1) * len(selection_numbers) + path
-                    if index < len(folder_selections):
-                        actions.insert(folder_selections[index])
-                else:
-                    actions.insert(path)
-                actions.key("enter")
-            elif is_linux:
-                actions.key("ctrl-l")
-                actions.insert(path)
-                actions.key("enter")
-
-    def file_manager_select_directory(path: Union[str, int]):
-        """selects the directory"""
-        if is_windows and not is_terminal:
-            actions.key("home")
-
-        if isinstance(path, int):
-            index = (current_folder_page - 1) * len(selection_numbers) + path
-            if index < len(folder_selections):
-                actions.insert(folder_selections[index])
-        else:
-            actions.insert(path)
-
-    def file_manager_new_folder():
-        """Creates a new folder in a gui filemanager or inserts the command to do so for terminals"""
-        if is_windows:
-            if is_terminal:
-                actions.insert("mkdir ")
-            else:
-                actions.key("ctrl-shift-n")
-        elif is_mac:
-            if is_terminal:
-                actions.insert("mkdir ")
-            else:
-                actions.key("cmd-shift-n")
-        # tbd
-        # else is_linux:
-
-    def file_manager_show_properties():
-        """Shows the properties for the file"""
-        # todo: does this make sense for terminals? also, linux support
-        if not is_terminal:
-            if is_windows:
-                actions.key("alt-enter")
-            elif is_mac:
-                actions.key("cmd-i")
-            # else:
-
-    def file_manager_terminal_here():
-        """Opens terminal at current location"""
-        if not is_terminal:
-            if is_windows:
-                actions.key("ctrl-l")
-                actions.insert("cmd.exe")
-                actions.key("enter")
-            elif is_mac:
-                from talon.mac import applescript
-
-                applescript.run(
-                    r"""
-                tell application "Finder"
-                    set myWin to window 1
-                    set thePath to (quoted form of POSIX path of (target of myWin as alias))
-                    tell application "Terminal"
-                        activate
-                        tell window 1
-                            do script "cd " & thePath
-                        end tell
-                    end tell
-                end tell"""
-                )
-
 
 pattern = re.compile(r"[A-Z][a-z]*|[a-z]+|\d")
 
@@ -388,13 +226,27 @@ def create_spoken_forms(symbols, max_len=30):
     return [" ".join(list(islice(pattern.findall(s), max_len))) for s in symbols]
 
 
+def is_dir(f):
+    try:
+        return f.is_dir()
+    except:
+        return False
+
+
+def is_file(f):
+    try:
+        return f.is_file()
+    except:
+        return False
+
+
 def get_directory_map(current_path):
     directories = [
         f.name
         for f in islice(
             current_path.iterdir(), settings.get("user.file_manager_folder_limit", 1000)
         )
-        if f.is_dir()
+        if is_dir(f)
     ]
     # print(len(directories))
     spoken_forms = create_spoken_forms(directories)
@@ -407,148 +259,18 @@ def get_file_map(current_path):
         for f in islice(
             current_path.iterdir(), settings.get("user.file_manager_file_limit", 1000)
         )
-        if f.is_file()
+        if is_file(f)
     ]
     # print(str(files))
     spoken_forms = create_spoken_forms([p for p in files])
     return dict(zip(spoken_forms, [f for f in files]))
 
 
-def update_maps(window):
-    global is_showing, folder_selections, file_selections, current_folder_page, current_file_page, is_terminal, cached_title
-    if (
-        not window.app.exe
-        or window != ui.active_window()
-        or window.title == cached_title
-    ):
-        return
-
-    title = window.title
-    cached_title = title
-
-    directories = {}
-    files = {}
-    folder_selections = []
-    file_selections = []
-
-    is_supported = False
-    is_terminal = False
-    is_valid_path = False
-
-    for item in supported_programs:
-        if is_windows:
-            if item in window.app.exe.lower():
-                is_supported = True
-                break
-        elif is_mac:
-            if item in window.app.bundle:
-                is_supported = True
-                break
-        elif is_linux:
-            if item in window.app.name:
-                is_supported = True
-                break
-    for item in terminal_programs:
-        if is_windows:
-            if item in window.app.exe.lower():
-                is_terminal = True
-                break
-        elif is_mac:
-            if item in window.app.bundle:
-                is_terminal = True
-                break
-        elif is_linux:
-            if item in window.app.name:
-                is_terminal = True
-
-    if is_windows and is_terminal:
-        # if cmd or windows terminal is running as admin...
-        # strip it
-        title = title.replace("Administrator:  ", "")
-        # print("title: " + title)
-    excluded_path = False
-    if title in ctx.lists["self.file_manager_directory_remap"]:
-        title = ctx.lists["self.file_manager_directory_remap"][title]
-
-    elif title in ctx.lists["self.file_manager_directory_exclusions"]:
-        excluded_path = True
-
-        # set valid path to force an update
-        is_valid_path = True
-
-    if not is_supported or excluded_path or not title or title == "":
-        is_terminal = False
-    else:
-        if is_mac and "~" in title:
-            title = os.path.expanduser(title)
-
-        # Handle hostname before path
-        if is_linux and ":" in title:
-            title = title.split(":")[1].strip()
-            title = os.path.expanduser(title)
-
-        try:
-            current_path = Path(title)
-            is_valid_path = current_path.is_dir()
-        except:
-            is_supported = False
-
-        if is_valid_path:
-            try:
-                directories = get_directory_map(current_path)
-                files = get_file_map(current_path)
-            except Exception as e:
-                directories = {"ERROR": str(e)}
-                files = {"ERROR": str(e)}
-
-            folder_selections = sorted(directories.values(), key=str.casefold)
-            file_selections = sorted(files.values(), key=str.casefold)
-
-        current_folder_page = current_file_page = 1
-
-    # lists = {
-    #     "self.file_manager_directories": directories,
-    #     "self.file_manager_files": files,
-    # }
-    # print(str(directories))
-    # batch update lists for performance
-    # ctx.lists.update(lists)
-    ctx.lists["self.file_manager_directories"] = directories
-    ctx.lists["self.file_manager_files"] = files
-
-    # if we made it this far, either it's showing and we need to force an update
-    # or we need to hide the gui
-    if not is_supported:
-        if gui_folders.showing:
-            gui_folders.hide()
-            gui_files.hide()
-    elif is_valid_path and (
-        gui_folders.showing
-        or settings.get("user.file_manager_auto_show_pickers", 0) >= 1
-    ):
-        gui_folders.freeze()
-        gui_files.freeze()
-
-    # todo: figure out what changed in 1320
-    # print("hiding: is_valid_path {}, gui_folders.showing {}, title  {}".format(str(is_valid_path), str(gui_folders.showing), str(cached_title)))
-
-
-ctx.lists["self.file_manager_directories"] = []
-ctx.lists["self.file_manager_files"] = []
-
-
-ui.register("win_title", update_maps)
-ui.register("win_focus", update_maps)
-
-
-current_folder_page = 1
-
-
 @imgui.open(y=10, x=900, software=False)
 def gui_folders(gui: imgui.GUI):
     global current_folder_page, total_folder_pages
     total_folder_pages = math.ceil(
-        len(ctx.lists["self.file_manager_directories"]) / len(selection_numbers)
+        len(ctx.lists["self.file_manager_directories"]) / setting_imgui_limit.get()
     )
     gui.text(
         "Select a directory ({}/{})".format(current_folder_page, total_folder_pages)
@@ -556,9 +278,9 @@ def gui_folders(gui: imgui.GUI):
     gui.line()
 
     index = 1
-    current_index = (current_folder_page - 1) * len(selection_numbers)
+    current_index = (current_folder_page - 1) * setting_imgui_limit.get()
 
-    while index <= len(selection_numbers) and current_index < len(folder_selections):
+    while index <= setting_imgui_limit.get() and current_index < len(folder_selections):
         gui.text("{}: {} ".format(index, folder_selections[current_index]))
         current_index += 1
         index = index + 1
@@ -573,20 +295,17 @@ def gui_folders(gui: imgui.GUI):
     #   actions.user.file_manager_previous_folder_page()
 
 
-current_file_page = 1
-
-
 @imgui.open(y=10, x=1300, software=False)
 def gui_files(gui: imgui.GUI):
     global file_selections, current_file_page, total_file_pages
-    total_file_pages = math.ceil(len(file_selections) / len(selection_numbers))
+    total_file_pages = math.ceil(len(file_selections) / setting_imgui_limit.get())
 
     gui.text("Select a file ({}/{})".format(current_file_page, total_file_pages))
     gui.line()
     index = 1
-    current_index = (current_file_page - 1) * len(selection_numbers)
+    current_index = (current_file_page - 1) * setting_imgui_limit.get()
 
-    while index <= len(selection_numbers) and current_index < len(file_selections):
+    while index <= setting_imgui_limit.get() and current_index < len(file_selections):
         gui.text("{}: {} ".format(index, file_selections[current_index]))
         current_index = current_index + 1
         index = index + 1
@@ -599,4 +318,91 @@ def gui_files(gui: imgui.GUI):
 
     #   if gui.button("Previous..."):
     #        actions.user.file_manager_previous_file_page()
+
+
+def clear_lists():
+    global folder_selections, file_selections
+    if (
+        len(ctx.lists["self.file_manager_directories"]) > 0
+        or len(ctx.lists["self.file_manager_files"]) > 0
+    ):
+        current_folder_page = current_file_page = 1
+        ctx.lists["self.file_manager_directories"] = []
+        ctx.lists["self.file_manager_files"] = []
+        folder_selections = []
+        file_selections = []
+
+
+def update_gui():
+    if gui_folders.showing or setting_auto_show_pickers.get() >= 1:
+        gui_folders.freeze()
+        gui_files.freeze()
+
+
+def update_lists():
+    global folder_selections, file_selections, current_folder_page, current_file_page
+    is_valid_path = False
+    path = actions.user.file_manager_current_path()
+    directories = {}
+    files = {}
+    folder_selections = []
+    file_selections = []
+    # print(path)
+    try:
+        current_path = Path(path)
+        is_valid_path = current_path.is_dir()
+    except:
+        is_valid_path = False
+
+    if is_valid_path:
+        # print("valid..." + str(current_path))
+        try:
+            directories = get_directory_map(current_path)
+            files = get_file_map(current_path)
+        except:
+            # print("invalid path...")
+
+            directories = {}
+            files = {}
+
+    current_folder_page = current_file_page = 1
+    ctx.lists["self.file_manager_directories"] = directories
+    ctx.lists["self.file_manager_files"] = files
+    folder_selections = sorted(directories.values(), key=str.casefold)
+    file_selections = sorted(files.values(), key=str.casefold)
+
+    update_gui()
+
+
+def win_event_handler(window):
+    global cached_path
+
+    # on windows, we get events from the clock
+    # and such, so this check is important
+    if not window.app.exe or window != ui.active_window():
+        return
+
+    path = actions.user.file_manager_current_path()
+
+    if not "user.file_manager" in registry.tags:
+        actions.user.file_manager_hide_pickers()
+        clear_lists()
+    elif path:
+        if cached_path != path:
+            update_lists()
+    elif cached_path:
+        clear_lists()
+        actions.user.file_manager_hide_pickers()
+
+    cached_path = path
+
+
+def register_events():
+    ui.register("win_title", win_event_handler)
+    ui.register("win_focus", win_event_handler)
+
+
+# prevent scary errors in the log by waiting for talon to be fully loaded
+# before registering the events
+app.register("launch", register_events)
 

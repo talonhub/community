@@ -72,3 +72,8 @@ apps.windows_terminal = """
 os: windows
 and app.name: WindowsTerminal.exe 
 """
+
+mod.apps.windows_power_shell = """
+os: windows
+and app.name: powershell.exe
+"""
