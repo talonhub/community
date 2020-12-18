@@ -1,4 +1,4 @@
-from talon import Context, Module, app, actions
+from talon import Context, Module, app, actions, speech_system
 
 mod = Module()
 
@@ -18,23 +18,30 @@ for key, value in modes.items():
 @mod.action_class
 class Actions:
     def talon_mode():
-        """For windows and Mac, enables Talon commands and enables command mode or equivalent."""
-
+        """For windows and Mac with Dragon, enables Talon commands and Dragon's command mode."""
         actions.speech.enable()
-        if app.platform == "mac":
-            actions.user.engine_sleep()
-        elif app.platform == "windows":
-            actions.user.engine_wake()
 
-            # note: this may not do anything for all versions of Dragon. Requires Pro.
-            actions.user.engine_mimic("switch to command mode")
+        engine = speech_system.engine.name
+        # app.notify(engine)
+        if "dragon" in engine:
+            if app.platform == "mac":
+                actions.user.engine_sleep()
+            elif app.platform == "windows":
+                actions.user.engine_wake()
+                # note: this may not do anything for all versions of Dragon. Requires Pro.
+                actions.user.engine_mimic("switch to command mode")
 
     def dragon_mode():
-        """For windows and Mac, disables Talon commands and exits command mode or equivalent."""
-        actions.speech.disable()
-        if app.platform == "mac":
-            actions.user.engine_wake()
-        elif app.platform == "windows":
-            actions.user.engine_wake()
-            # note: this may not do anything for all versions of Dragon. Requires Pro.
-            actions.user.engine_mimic("start normal mode")
+        """For windows and Mac with Dragon, disables Talon commands and exits Dragon's command mode"""
+        engine = speech_system.engine.name
+        # app.notify(engine)
+
+        if "dragon" in engine:
+            # app.notify("dragon mode")
+            actions.speech.disable()
+            if app.platform == "mac":
+                actions.user.engine_wake()
+            elif app.platform == "windows":
+                actions.user.engine_wake()
+                # note: this may not do anything for all versions of Dragon. Requires Pro.
+                actions.user.engine_mimic("start normal mode")
