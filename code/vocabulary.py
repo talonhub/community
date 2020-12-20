@@ -1,4 +1,4 @@
-from talon import Context, Module, actions, grammar
+from talon import Context, Module, actions, grammar, registry
 from .user_settings import bind_list_to_csv, bind_word_map_to_csv
 
 mod = Module()
@@ -17,14 +17,21 @@ def word(m) -> str:
 def text(m) -> str: return format_phrase(m)
 
 @mod.capture(rule="({user.vocabulary} | {user.punctuation} | <phrase>)+")
-def prose(m) -> str: return format_phrase(m)
+def prose(m) -> str:
+    # registry.lists["user.punctuation"] returns a priority-ordered list of all
+    # definitions of user.punctuation in active contexts; we want the currently
+    # active value, so we take the last (highest priority).
+    return format_phrase(m, registry.lists.get("user.punctuation", [{}])[-1])
 
 # TODO: unify this formatting code with the dictation formatting code, so that
 # user.prose behaves the same way as dictation mode.
-no_space_before = set(".,-!?;:#$)]}")
-no_space_after = set("/-([{")
-def format_phrase(m):
+no_space_before = set(".,/-!?;:)]}")
+no_space_after = set("/-#$([{")
+def format_phrase(m, replacements=None):
     words = capture_to_word_list(m)
+    if replacements:
+        assert isinstance(replacements, dict)
+        words = replace_word_sequences(replacements, words)
     result = ""
     for i, word in enumerate(words):
         if i > 0 and word not in no_space_before and words[i - 1][-1] not in no_space_after:
@@ -40,6 +47,27 @@ def capture_to_word_list(m):
             if isinstance(item, grammar.vm.Phrase) else
             item.split(" "))
     return words
+
+def replace_word_sequences(replacements, words):
+    # bucket replacements by how many words they contain
+    buckets = {}
+    for pattern, replacement in replacements.items():
+        pattern = tuple(pattern.split())
+        buckets.setdefault(len(pattern), {})[pattern] = replacement
+    # go through `words` position by position, replacing matching sequences
+    result = []
+    i = 0
+    while i < len(words):
+        consumed, emitted = 1, [words[i]]
+        for (n, bucket) in buckets.items():
+            if i + n > len(words): continue
+            fragment = tuple(words[i:i+n])
+            if fragment in bucket:
+                consumed, emitted = n, bucket[fragment].split(" ")
+                break
+        i += consumed
+        result.extend(emitted)
+    return result
 
 
 # ---------- LISTS (punctuation, additional/replacement words) ----------
