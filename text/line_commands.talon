@@ -1,4 +1,5 @@
 tag: user.line_commands
+tag: user.navigation_commands
 -
 #this defines some common line commands. More may be defined that are ide-specific.
 lend: edit.line_end()
@@ -15,17 +16,27 @@ comment <number> until <number>:
     code.toggle_comment()
 clear [line] <number>:
     edit.jump_line(number)
-    user.select_range(number, number)
-    edit.delete()
+    edit.delete_line()
 clear <number> until <number>: 
     user.select_range(number_1, number_2)
     edit.delete()
 copy [line] <number>: 
     user.select_range(number, number)
     edit.copy()
+copy [line] <number> here: 
+    user.select_range(number, number)
+    edit.copy()
+    user.jump_back()
+    edit.paste()
 copy <number> until <number>: 
     user.select_range(number_1, number_2)
     edit.copy()
+copy <number> until <number> here:
+    user.select_range(number_1, number_2) 
+    edit.copy()
+    user.jump_back()
+    edit.paste()
+    
 cut [line] <number>: 
     user.select_range(number, number)
     edit.cut()
