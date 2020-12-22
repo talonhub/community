@@ -20,3 +20,5 @@ class Actions:
     def go_inside():
         """Go inside the selected method, variable or class"""
 
+    def go_bracket():
+        """Go to the next bracket or the matching bracket if the cursor is already on a bracket"""

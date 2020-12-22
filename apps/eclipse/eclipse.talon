@@ -142,8 +142,7 @@ refactor this: key(alt-shift-i)
 go back: user.jump_back()
 go forward: user.jump_forward()
 go inside: user.go_inside() 
-# go implementation: 
-# go recent: 
+action(user.go_bracket): key(ctrl-shift-p)
 # go type: 
 # go usage: 
 
