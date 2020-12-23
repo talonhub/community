@@ -6,7 +6,7 @@ from talon import ctrl, ui, Module, Context, actions, clip
 mod = Module()
 mod.tag(
     "navigation_commands",
-    desc="Tag for enabling generic editor commands",
+    desc="Tag for enabling generic editor cursor navigation commands",
 )
 #Do we need to at" user"To the annotation?
 @mod.action_class
