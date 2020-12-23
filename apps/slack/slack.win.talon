@@ -1,6 +1,6 @@
 os: windows
 os: linux
-app: slack
+app: slack.exe
 #todo: some sort of plugin, consolidate with teams or something?
 -
 tag(): user.messaging
