@@ -139,9 +139,9 @@ refactor this: key(alt-shift-i)
 
 #code navigation
 (go declaration | follow): key(f3)
-go back: user.jump_back()
-go forward: user.jump_forward()
-go inside: user.go_inside() 
+action(user.jump_back): key(alt-left)
+action(user.jump_forward): key(alt-right)
+action(user.go_inside): key(f3)
 action(user.go_bracket): key(ctrl-shift-p)
 # go type: 
 # go usage: 

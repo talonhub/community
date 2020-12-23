@@ -1,5 +1,4 @@
 tag: user.line_commands
-tag: user.navigation_commands
 -
 #this defines some common line commands. More may be defined that are ide-specific.
 lend: edit.line_end()

@@ -65,14 +65,6 @@ class edit_actions:
 @ctx.action_class("user")
 class user_actions:
             
-    def jump_back():
-        actions.key("alt-left")
-
-    def jump_forward():
-        actions.key("alt-right")
-                
-    def go_inside():
-        actions.key("f3")
     # snippet.py support beginHelp close
     # def snippet_search(text: str):
     #     actions.user.vscode("Insert Snippet")

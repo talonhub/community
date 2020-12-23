@@ -208,4 +208,6 @@ cut line:
     edit.cut()
 
 #Navigation
-go bracket: user.go_bracket()
+go back: user.jump_back()
+go forward: user.jump_forward()
+go inside: user.go_inside()

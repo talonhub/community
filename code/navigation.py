@@ -3,11 +3,6 @@
 # prefixing the method name with "user." and adding "tag: user.navigation_commands".
 
 from talon import ctrl, ui, Module, Context, actions, clip
-mod = Module()
-mod.tag(
-    "navigation_commands",
-    desc="Tag for enabling generic editor cursor navigation commands",
-)
 
 @mod.action_class
 class Actions:
