@@ -8,7 +8,7 @@ mod.tag(
     "navigation_commands",
     desc="Tag for enabling generic editor cursor navigation commands",
 )
-#Do we need to at" user"To the annotation?
+
 @mod.action_class
 class Actions:
     def jump_back():
