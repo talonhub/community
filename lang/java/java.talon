@@ -21,7 +21,7 @@ action(user.code_operator_addition): " + "
 action(user.code_operator_addition_assignment): " += "
 action(user.code_operator_multiplication): " * "
 action(user.code_operator_multiplication_assignment): " *= "
-action(user.code_operator_exponent): " ** "
+action(user.code_operator_exponent): " ^ "
 action(user.code_operator_division): " / "
 action(user.code_operator_division_assignment): " /= "
 action(user.code_operator_modulo): " % "
@@ -44,10 +44,10 @@ action(user.code_operator_bitwise_left_shift): " << "
 action(user.code_operator_bitwise_left_shift_assignment): " <<= "
 action(user.code_operator_bitwise_right_shift): " >> "
 action(user.code_operator_bitwise_right_shift_assignment): " >>= "
-action(user.code_self): "self"
+action(user.code_self): "this"
 action(user.code_null): "null"
-action(user.code_is_null): " is None"
-action(user.code_is_not_null): " is not None"
+action(user.code_is_null): " == null"
+action(user.code_is_not_null): " != null"
 action(user.code_state_if): 
     insert("if () ")
     key(left)
@@ -85,10 +85,3 @@ action(user.code_public_function):
 action(user.code_state_return):
     insert("return ")
     
-state break: 
-    insert('break;')
-    key(enter) 
-state none: "None "
-
-push:
-    edit.line_end()
