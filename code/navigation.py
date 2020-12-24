@@ -1,6 +1,6 @@
 # This file contains interfaces for navigation actions that can typically be executed within an editor. 
 # These interfaces can then be implemented per editor and called directly from .talon files by 
-# prefixing the method name with "user." and adding "tag: user.navigation_commands".
+# prefixing the method name with "user.".
 
 from talon import ctrl, ui, Module, Context, actions, clip
 

@@ -206,8 +206,3 @@ cut word right:
 cut line:
     edit.select_line()
     edit.cut()
-
-#Navigation
-go back: user.jump_back()
-go forward: user.jump_forward()
-go inside: user.go_inside()
