@@ -4,6 +4,8 @@
 
 from talon import ctrl, ui, Module, Context, actions, clip
 
+mod = Module()
+
 @mod.action_class
 class Actions:
     def jump_back():
