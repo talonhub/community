@@ -217,7 +217,7 @@ class ImmuneString(object):
 @mod.capture(
     # Add anything else into this that you want to be able to speak during a
     # formatter.
-    rule="(<user.symbol_key> | <user.letter> | numb <number>)"
+    rule="(<user.symbol_key> | numb <number>)"
 )
 def formatter_immune(m) -> ImmuneString:
     """Text that can be interspersed into a formatter, e.g. characters.
