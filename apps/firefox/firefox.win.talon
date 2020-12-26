@@ -15,8 +15,12 @@ action(browser.bookmark_tabs):
 action(browser.bookmarks):
 	key(ctrl-shift-b)
   
-#action(browser.bookmarks_bar):
-#	key(ctrl-shift-b)
+action(browser.bookmarks_bar):
+	key(alt-v)
+	sleep(50ms)
+	key(t)
+	sleep(50ms)
+	key(b)
 
 action(browser.focus_address): 
 	key(ctrl-l)
