@@ -197,6 +197,9 @@ class user_actions:
         actions.key("ctrl-l")
 
     def terminal_run_last():
+        actions.key("up enter")
+
+    def terminal_kill_all():
         actions.key("ctrl-c")
         actions.insert("y")
         actions.key("enter")

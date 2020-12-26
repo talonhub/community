@@ -54,3 +54,34 @@ class user_actions:
     def file_manager_select_file(path: str):
         """selects the file"""
         actions.insert(path)
+
+    def terminal_list_directories():
+        actions.insert("ls")
+        actions.key("enter")
+
+    def terminal_list_all_directories():
+        actions.insert("ls -a")
+        actions.key("enter")
+
+    def terminal_change_directory(path: str):
+        actions.insert("cd {}".format(path))
+        if path:
+            actions.key("enter")
+
+    def terminal_change_directory_root():
+        """Root of current drive"""
+        actions.insert("cd /")
+        actions.key("enter")
+
+    def terminal_clear_screen():
+        """Clear screen"""
+        actions.key("ctrl-l")
+
+    def terminal_run_last():
+        actions.key("up enter")
+
+    def terminal_kill_all():
+        actions.key("ctrl-c")
+        actions.insert("y")
+        actions.key("enter")
+
