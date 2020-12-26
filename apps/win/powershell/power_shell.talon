@@ -4,6 +4,7 @@ and win.title: /PowerShell/
 -
 tag(): user.file_manager
 tag(): user.git
+tag(): user.generic_terminal
 tag(): user.kubectl
 tag(): terminal
 

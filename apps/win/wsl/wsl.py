@@ -165,21 +165,21 @@ class user_actions:
         actions.insert('mkdir "{}"'.format(name))
 
     def file_manager_open_file(path: str):
-        """opens the file"""
         actions.insert(path)
         # actions.key("enter")
 
     def file_manager_select_file(path: str):
-        """selects the file"""
         actions.insert(path)
 
     def file_manager_open_volume(volume: str):
-        """file_manager_open_volume"""
         actions.user.file_manager_open_directory(volume)
 
     def terminal_list_directories():
-        """Lists directories"""
         actions.insert("ls")
+        actions.key("enter")
+
+    def terminal_list_all_directories():
+        actions.insert("ls -a")
         actions.key("enter")
 
     def terminal_change_directory(path: str):
@@ -195,3 +195,8 @@ class user_actions:
     def terminal_clear_screen():
         """Clear screen"""
         actions.key("ctrl-l")
+
+    def terminal_run_last():
+        actions.key("ctrl-c")
+        actions.insert("y")
+        actions.key("enter")

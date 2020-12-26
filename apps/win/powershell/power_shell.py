@@ -56,8 +56,11 @@ class user_actions:
         actions.user.file_manager_open_directory(volume)
 
     def terminal_list_directories():
-        """Lists directories"""
         actions.insert("ls")
+        actions.key("enter")
+
+    def terminal_list_all_directories():
+        actions.insert("ls -force")
         actions.key("enter")
 
     def terminal_change_directory(path: str):
@@ -72,6 +75,13 @@ class user_actions:
 
     def terminal_clear_screen():
         """Clear screen"""
-        actions.insert("ctrl-l")
+        actions.insert("cls")
         actions.key("enter")
 
+    def terminal_run_last():
+        actions.key("up enter")
+
+    def terminal_kill_all():
+        actions.key("ctrl-c")
+        actions.insert("y")
+        actions.key("enter")
