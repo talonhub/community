@@ -34,7 +34,7 @@ search_phrase = None
 context_map = {}
 
 current_context_page = 1
-sorted_context_map_keys = None
+sorted_context_map_keys = []
 
 selected_context = None
 selected_context_page = 1
