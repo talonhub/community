@@ -55,7 +55,7 @@ action(browser.reload_hard):
 #action(browser.reload_hardest):
 	
 action(browser.show_clear_cache):
-	key(ctrl-shift-del)
+	key(ctrl-shift-delete)
   
 action(browser.show_downloads):
 	key(ctrl-j)
