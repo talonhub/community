@@ -106,7 +106,7 @@ def raise_homophones(word, forced=False, selection=False):
     gui.show()
 
 
-@imgui.open(y=0, x=main_screen.width / 2.6, software=False)
+@imgui.open(y=0, x=main_screen.width / 2.6, software=app.platform == "linux")
 def gui(gui: imgui.GUI):
     global active_word_list
     if show_help:

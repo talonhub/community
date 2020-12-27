@@ -472,7 +472,7 @@ def update_function_list_and_freeze():
     gui_functions.show()
 
 
-@imgui.open(software=False)
+@imgui.open(software=app.platform == "linux")
 def gui_functions(gui: imgui.GUI):
     gui.text("Functions")
     gui.line()
@@ -487,7 +487,7 @@ def gui_functions(gui: imgui.GUI):
             )
 
 
-@imgui.open(software=False)
+@imgui.open(software=app.platform == "linux")
 def gui_libraries(gui: imgui.GUI):
     gui.text("Libraries")
     gui.line()

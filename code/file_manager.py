@@ -266,7 +266,7 @@ def get_file_map(current_path):
     return dict(zip(spoken_forms, [f for f in files]))
 
 
-@imgui.open(y=10, x=900, software=False)
+@imgui.open(y=10, x=900, software=app.platform == "linux")
 def gui_folders(gui: imgui.GUI):
     global current_folder_page, total_folder_pages
     total_folder_pages = math.ceil(
@@ -295,7 +295,7 @@ def gui_folders(gui: imgui.GUI):
     #   actions.user.file_manager_previous_folder_page()
 
 
-@imgui.open(y=10, x=1300, software=False)
+@imgui.open(y=10, x=1300, software=app.platform == "linux")
 def gui_files(gui: imgui.GUI):
     global file_selections, current_file_page, total_file_pages
     total_file_pages = math.ceil(len(file_selections) / setting_imgui_limit.get())
