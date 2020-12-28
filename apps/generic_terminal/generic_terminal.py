@@ -27,34 +27,3 @@ class Actions:
     def terminal_kill_all():
         """kills the running command"""
 
-
-ctx = Context()
-
-ctx.matches = r"""
-tag: user.generic_terminal
-"""
-
-history = []
-
-
-@ctx.action_class("main")
-class Actions:
-    def auto_format(text: str) -> str:
-        """"""
-        global history
-        history.append(len(text))
-        actions.next(text)
-
-    def insert(text: str):
-        global history
-        history.append(len(text))
-        actions.next(text)
-
-
-@ctx.action_class("edit")
-class Actions:
-    def undo():
-        """"""
-        global history
-        if history:
-            actions.key(f"backspace:{history.pop()}")
