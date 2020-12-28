@@ -2,7 +2,19 @@ import os
 import pathlib
 import subprocess
 
-from talon import Context, Module, actions, app, cron, ctrl, imgui, noise, settings, ui
+from talon import (
+    Context,
+    Module,
+    actions,
+    app,
+    cron,
+    ctrl,
+    imgui,
+    noise,
+    settings,
+    ui,
+    tap,
+)
 from talon_plugins import eye_mouse, eye_zoom_mouse, speech
 from talon_plugins.eye_mouse import config, toggle_camera_overlay, toggle_control
 
@@ -123,7 +135,6 @@ class Actions:
     def mouse_toggle_zoom_mouse():
         """Toggles zoom mouse"""
         eye_zoom_mouse.toggle_zoom_mouse(not eye_zoom_mouse.zoom_mouse.enabled)
-        noise.unregister("pop", eye_zoom_mouse.zoom_mouse.on_pop)
 
     def mouse_cancel_zoom_mouse():
         """Cancel zoom mouse if pending"""
@@ -246,6 +257,25 @@ def show_cursor_helper(show):
             print("Unable to show_cursor({})".format(str(show)))
     else:
         ctrl.cursor_visible(show)
+
+
+def custom_zoom_enable(self):
+    # print("custom zoom enable hit")
+    if self.enabled:
+        return
+
+    # intentionally don't register pop, handled in on_pop.
+    # noise.register("pop", self.on_pop)
+    tap.register(tap.MCLICK | tap.KEY | tap.HOOK, self.on_key)
+    # app.register('overlay', self.draw_gaze)
+    self.enabled = True
+
+
+# monkey patch for allowing continuous scrolling to be stopped via a pop
+# and coexist well with the zoom mouse.
+eye_zoom_mouse.ZoomMouse.enable = custom_zoom_enable
+if eye_zoom_mouse.zoom_mouse.enabled:
+    noise.unregister("pop", eye_zoom_mouse.zoom_mouse.on_pop)
 
 
 def on_pop(active):
