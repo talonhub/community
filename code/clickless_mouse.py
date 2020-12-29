@@ -248,7 +248,7 @@ class clickless_mouse:
             self.button_positions.append(
                 dwell_button(x, y - math.ceil(radius.get() * 3.25), "l")
             )
-        elif x + radius.get() * 2 >= self.width:
+        elif x + radius.get() * 3.5 >= self.width:
             # print("case 7")
             self.button_positions.append(
                 dwell_button(x, y + math.ceil(radius.get() * 3.25), "ld")
@@ -318,6 +318,8 @@ class clickless_mouse:
             self.button_positions.append(
                 dwell_button(x + math.ceil(radius.get() * 3.5), y, "ka")
             )
+        else:
+            print("not handled: {},{}".format(x, y))
 
     def draw(self, canvas):
         x, y = ctrl.mouse_pos()
