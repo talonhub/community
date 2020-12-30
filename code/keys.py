@@ -1,6 +1,6 @@
 from typing import Set
 
-from talon import Module, Context, actions
+from talon import Module, Context, actions, app
 import sys
 
 default_alphabet = "air bat cap drum each fine gust harp sit jury crunch look made near odd pit quench red sun trap urge vest whale plex yank zip".split(
@@ -217,6 +217,10 @@ alternate_keys = {
     "forward delete": "delete",
     #'junk': 'backspace',
 }
+# mac apparently doesn't have the menu key.
+if app.platform in ("windows", "linux"):
+    alternate_keys["menu key"] = "menu"
+
 keys = {k: k for k in simple_keys}
 keys.update(alternate_keys)
 ctx.lists["self.special_key"] = keys
