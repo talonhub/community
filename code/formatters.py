@@ -181,7 +181,7 @@ all_formatters.update(formatters_words)
 
 mod = Module()
 mod.list("formatters", desc="list of formatters")
-mod.list("prose_formatter", desc="list of formatters to apply to prose")
+mod.list("prose_formatter", desc="words to start dictating prose, and the formatter they apply")
 
 
 @mod.capture(rule="{self.formatters}+")
