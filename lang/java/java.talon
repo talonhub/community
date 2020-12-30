@@ -4,13 +4,11 @@ and code.language: java
 
 -
 tag(): user.code_operators
-tag(): user.code_comment
 tag(): user.code_generic
 
-action(user.code_operator_indirection): ""
-action(user.code_operator_address_of): ""
-action(user.code_operator_structure_deference): ""
-action(user.code_operator_lambda): ""
+action(user.code_operator_indirection): skip()
+action(user.code_operator_address_of): skip()
+action(user.code_operator_lambda): " -> "
 action(user.code_operator_subscript): 
 	insert("[]")
 	key(left)
@@ -35,11 +33,8 @@ action(user.code_operator_less_than_or_equal_to): " <= "
 action(user.code_operator_and): " && "
 action(user.code_operator_or): " || "
 action(user.code_operator_bitwise_and): " & "
-action(user.code_operator_bitwise_and_equals): " &= " 
 action(user.code_operator_bitwise_or): " | "
-action(user.code_operator_bitwise_or_equals): " |= "
-action(user.code_operator_bitwise_exlcusive_or): " ^ "
-action(user.code_operator_bitwise_exlcusive_or_assignment): " ^= "
+action(user.code_operator_bitwise_exclusive_or): " ^ "
 action(user.code_operator_bitwise_left_shift): " << "
 action(user.code_operator_bitwise_left_shift_assignment): " <<= "
 action(user.code_operator_bitwise_right_shift): " >> "
@@ -75,7 +70,6 @@ action(user.code_state_while):
     edit.left()
 	edit.left()
 action(user.code_type_class): "class "
-action(user.code_comment): "//"
 action(user.code_private_function):
 	insert("private")
 action(user.code_protected_function):
