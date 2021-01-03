@@ -20,6 +20,8 @@ settings():
     user.mouse_wake_hides_cursor = 0
     #the amount to scroll up/down (equivalent to mouse wheel on Windows by default)
     user.mouse_wheel_down_amount = 120
+    #mouse grid and friends put the number one on the bottom left (vs on the top left)
+    user.grids_put_one_bottom_left = 1
 	
 # uncomment tag to enable mouse grid
 # tag(): user.mouse_grid_enabled

@@ -1,7 +1,8 @@
 # courtesy of https://github.com/timo/
 # see https://github.com/timo/talon_scripts
-from talon import Module, Context, app, canvas, screen, ui, ctrl, cron
-from talon.skia import Shader, Color, Rect
+from talon import Module, Context, app, canvas, screen, settings, ui, ctrl, cron
+from talon.skia import Shader, Color, Paint, Rect
+from talon.types.point import Point2d
 from talon_plugins import eye_mouse, eye_zoom_mouse
 from typing import Union
 
@@ -253,8 +254,21 @@ class MouseSnapNine:
             canvas.paint.text_align = canvas.paint.TextAlign.CENTER
             for row in range(3):
                 for col in range(3):
-                    text_string = f"{row*3+col+1}"
+                    text_string = ""
+                    if settings["user.grids_put_one_bottom_left"]:
+                        text_string = f"{(2 - row)*3+col+1}"
+                    else:
+                        text_string = f"{row*3+col+1}"
                     text_rect = canvas.paint.measure_text(text_string)[1]
+                    background_rect = text_rect.copy()
+                    background_rect.center = Point2d(
+                            offset_x + width / 6 + col * width / 3,
+                            offset_y + height / 6 + row * height / 3)
+                    background_rect = background_rect.inset(-4)
+                    paint.color = "9999995f"
+                    paint.style = Paint.Style.FILL
+                    canvas.draw_rect(background_rect)
+                    paint.color = "00ff00ff"
                     canvas.draw_text(
                         text_string,
                         offset_x + width / 6 + col * width / 3,
@@ -294,13 +308,15 @@ class MouseSnapNine:
         else:
             draw_grid(self.offset_x, self.offset_y, self.width, self.height)
 
-            paint.textsize += 6 - self.count * 3
+            paint.textsize += 12 - self.count * 3
             draw_text(self.offset_x, self.offset_y, self.width, self.height)
 
     def calc_narrow(self, which, offset_x, offset_y, width, height):
         bdr = narrow_expansion.get()
         row = int(which - 1) // 3
         col = int(which - 1) % 3
+        if settings["user.grids_put_one_bottom_left"]:
+            row = 2 - row
         offset_x += int(col * width // 3) - bdr
         offset_y += int(row * height // 3) - bdr
         width //= 3
