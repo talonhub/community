@@ -294,10 +294,11 @@ class Actions:
 
 ctx.lists["self.formatters"] = formatters_words.keys()
 ctx.lists["self.prose_formatter"] = {
-    "say": "NOOP", "speak": "NOOP",
-    "sentence": "CAPITALIZE_FIRST_WORD",
+    "oh": "NOOP",
+    "line": "CAPITALIZE_FIRST_WORD",
 }
 
+# "say": "NOOP", 
 
 @imgui.open(software=app.platform == "linux")
 def gui(gui: imgui.GUI):
