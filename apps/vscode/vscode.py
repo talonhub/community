@@ -85,6 +85,20 @@ class Actions:
         actions.edit.paste()
         actions.key("enter")
 
+    def vscode_terminal(number: int):
+        """Activate a terminal by number"""
+        actions.user.vscode_by_id(f"workbench.action.terminal.focusAtIndex{number}")
+
+    def vscode_by_id(command: str):
+        """Execute command via run-command-by-id. Preserves the clipboard."""
+        if not is_mac:
+            actions.key("ctrl-shift-alt-p")
+        else:
+            actions.key("cmd-shift-alt-p")
+
+        actions.user.paste(f"{command}")
+        actions.key("enter")
+
 
 @ctx.action_class("user")
 class user_actions:
@@ -223,4 +237,3 @@ class user_actions:
         actions.key("esc")
 
     # find_and_replace.py support end
-
