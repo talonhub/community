@@ -35,7 +35,7 @@ def update_homophones(name, flags):
     with open(homophones_file, "r") as f:
         for line in f:
             words = line.rstrip().split(",")
-            canonical_list.append(max(words, key=len))
+            canonical_list.append(words[0])
             for word in words:
                 word = word.lower()
                 old_words = phones.get(word, [])
