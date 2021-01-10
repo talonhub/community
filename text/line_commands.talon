@@ -38,9 +38,8 @@ paste <number> until <number>:
 replace <number> until <number>: 
     user.select_range(number_1, number_2)
     edit.paste()
-
-select [line] <number>: user.select_range(number, number)
-select <number> until <number>: user.select_range(number_1, number_2)
+(select | cell | sell) [line] <number>: user.select_range(number, number)
+(select | cell | sell) <number> until <number>: user.select_range(number_1, number_2)
 tab that: edit.indent_more()
 tab [line] <number>:
     edit.jump_line(number)
@@ -69,4 +68,4 @@ drag down [line] <number>:
 drag down <number> until <number>: 
     user.select_range(number_1, number_2)
     edit.line_swap_down()
-clone it: edit.line_clone()
+clone (line|that): edit.line_clone()
