@@ -5,10 +5,20 @@ is_mac = app.platform == "mac"
 
 ctx = Context()
 mod = Module()
-mod.apps.vscode = "app.name: Code.exe"
-mod.apps.vscode = "app.name: Visual Studio Code"
-mod.apps.vscode = "app.name: Code"
-mod.apps.vscode = "app.name: Code - OSS"
+mod.apps.vscode = """
+os: mac
+and app.bundle: com.microsoft.VSCode
+"""
+mod.apps.vscode = """
+os: linux
+and app.name: Code - OSS
+"""
+mod.apps.vscode = """
+os: windows
+and app.name: Visual Studio Code
+os: windows
+and app.exe: Code.exe
+"""
 
 ctx.matches = r"""
 app: vscode
