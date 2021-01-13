@@ -186,11 +186,17 @@ terminal new: user.vscode("workbench.action.terminal.new")
 terminal next: user.vscode("workbench.action.terminal.focusNextPane")
 terminal last:user.vscode("workbench.action.terminal.focusPreviousPane")
 terminal split: user.vscode("workbench.action.terminal.split")
+terminal zoom: user.vscode_by_id("workbench.action.toggleMaximizedPanel")
 terminal trash: user.vscode("Terminal:Kill")
 terminal toggle: user.vscode_by_id("workbench.action.terminal.toggleTerminal")
 terminal scroll up: user.vscode("Terminal:ScrollUp")
 terminal scroll down: user.vscode("Terminal:ScrollDown")
 terminal <number>: user.vscode_terminal(number)
+
+# easymotion
+jump:
+  key(ctrl-q)
+  key(s)
 
 #TODO: should this be added to linecommands?
 copy line down: user.vscode("editor.action.copyLinesDownAction")
