@@ -6,6 +6,9 @@ tag(): browser
 tag(): user.firefox
 tag(): user.tabs
 
+action(app.tab_next): key(ctrl-pagedown)
+action(app.tab_previous): key(ctrl-pageup)
+
 #action(browser.address):
 
 action(browser.bookmark):
