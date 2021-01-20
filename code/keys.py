@@ -3,15 +3,15 @@ from typing import Set
 from talon import Module, Context, actions, app
 import sys
 
-default_alphabet = "air bat cap drum each fine gust harp sit jury crunch look made near odd pit quench red sun trap urge vest whale plex yank zip".split(
+default_alphabet = "air bat cap drum each fine gust harp sit jay crunch look made near odd pit quench red sun trap urge vest way plex yank zip".split(
     " "
 )
 letters_string = "abcdefghijklmnopqrstuvwxyz"
 
 default_digits = "zero one two three four five six seven eight nine".split(" ")
 numbers = [str(i) for i in range(10)]
-default_f_digits = "one two three four five six seven eight nine ten eleven twelve".split(
-    " "
+default_f_digits = (
+    "one two three four five six seven eight nine ten eleven twelve".split(" ")
 )
 
 mod = Module()
@@ -123,7 +123,8 @@ ctx.lists["self.letter"] = alphabet
 punctuation_words = {
     # TODO: I'm not sure why we need these, I think it has something to do with
     # Dragon. Possibly it has been fixed by later improvements to talon? -rntz
-    "`": "`", ",": ",", # <== these things
+    "`": "`",
+    ",": ",",  # <== these things
     "back tick": "`",
     "comma": ",",
     "period": ".",
@@ -234,4 +235,3 @@ class Actions:
     def get_alphabet() -> dict:
         """Provides the alphabet dictionary"""
         return alphabet
-

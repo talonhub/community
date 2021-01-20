@@ -177,6 +177,7 @@ git stage: user.vscode("git.stage")
 git stage all: user.vscode("git.stageAll")
 git unstage: user.vscode("git.unstage")
 git unstage all: user.vscode("git.unstageAll")
+pull request: user.vscode_by_id("pr.create")
 
 #Debugging
 break point: user.vscode("editor.debug.action.toggleBreakpoint")

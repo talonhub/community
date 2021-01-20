@@ -13,11 +13,11 @@ comment [line] <number>:
 comment <number> until <number>: 
     user.select_range(number_1, number_2)
     code.toggle_comment()
-clear [line] <number>:
+junk line <number>:
     edit.jump_line(number)
     user.select_range(number, number)
     edit.delete()
-clear <number> until <number>: 
+junk <number> until <number>: 
     user.select_range(number_1, number_2)
     edit.delete()
 copy [line] <number>: 
@@ -26,10 +26,10 @@ copy [line] <number>:
 copy <number> until <number>: 
     user.select_range(number_1, number_2)
     edit.copy()
-cut [line] <number>: 
+cut line <number>: 
     user.select_range(number, number)
     edit.cut()
-cut [line] <number> until <number>: 
+cut line <number> until <number>: 
     user.select_range(number_1, number_2)
     edit.cut()
 paste <number> until <number>:
@@ -41,7 +41,7 @@ replace <number> until <number>:
 (select | cell | sell) [line] <number>: user.select_range(number, number)
 (select | cell | sell) <number> until <number>: user.select_range(number_1, number_2)
 tab that: edit.indent_more()
-tab [line] <number>:
+tab line <number>:
     edit.jump_line(number)
     edit.indent_more()
 tab <number> until <number>:
@@ -54,8 +54,8 @@ retab [line] <number>:
 retab <number> until <number>:
     user.select_range(number_1, number_2)
     edit.indent_less()
-drag [line] down: edit.line_swap_down()
-drag [line] up: edit.line_swap_up()
+drag line down: edit.line_swap_down()
+drag line up: edit.line_swap_up()
 drag up [line] <number>:
     user.select_range(number, number)
     edit.line_swap_up()

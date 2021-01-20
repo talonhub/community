@@ -95,47 +95,47 @@ indent [more]:
     edit.indent_less()
 
 # deleting
-clear line:
+junk line:
     edit.delete_line()
 
-clear left:
+junk left:
     key(backspace)
 
-clear right:
+junk right:
     key(delete)
 
-clear up:
+junk up:
     edit.extend_line_up()
     edit.delete()
 
-clear down:
+junk down:
     edit.extend_line_down()
     edit.delete()
 
-clear word:
+junk word:
     edit.delete_word()
 
-clear word left:
+junk word left:
     edit.extend_word_left()
     edit.delete()
 
-clear word right:
+junk word right:
     edit.extend_word_right()
     edit.delete()
 
-clear way left:
+junk way left:
     edit.extend_line_start()
     edit.delete()
 
-clear way right:
+junk way right:
     edit.extend_line_end()
     edit.delete()
 
-clear way up:
+junk way up:
     edit.extend_file_start()
     edit.delete()
 
-clear way down:
+junk way down:
     edit.extend_file_end()
     edit.delete()
 
