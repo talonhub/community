@@ -150,6 +150,14 @@ state reduce:
   insert(".reduce()")
   key(left)
 
+state log:
+  insert("console.log()")
+  key(left)
+
+state quote var:
+  insert("${}")
+  key(left)
+
 state spread: "..."
 
 ^funky <user.text>$: user.code_private_function(text)

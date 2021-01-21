@@ -3,15 +3,15 @@ from typing import Set
 from talon import Module, Context, actions, app
 import sys
 
-default_alphabet = "air bat cap drum each fine gust harp sit jay crunch look made near odd pit quench red sun trap urge vest way plex yank zip".split(
+default_alphabet = "air bat cap drum each fine gust harp sit jay crunch look made near odd pit quench red sun trap urge vest way box yes zoo".split(
     " "
 )
 letters_string = "abcdefghijklmnopqrstuvwxyz"
 
-default_digits = "zero one two three four five six seven eight nine".split(" ")
+default_digits = "zero whoopie two three four five six seven eight nine".split(" ")
 numbers = [str(i) for i in range(10)]
 default_f_digits = (
-    "one two three four five six seven eight nine ten eleven twelve".split(" ")
+    "whoopie two three four five six seven eight nine ten eleven twelve".split(" ")
 )
 
 mod = Module()
@@ -108,10 +108,10 @@ ctx = Context()
 ctx.lists["self.modifier_key"] = {
     # If you find 'alt' is often misrecognized, try using 'alter'.
     "alt": "alt",  #'alter': 'alt',
-    "command": "cmd",
-    "control": "ctrl",  #'troll':   'ctrl',
+    "many": "cmd",
+    "troll": "ctrl",  #'troll':   'ctrl',
     "option": "alt",
-    "shift": "shift",  #'sky':     'shift',
+    "ship": "shift",  #'sky':     'shift',
     "super": "super",
 }
 alphabet = dict(zip(default_alphabet, letters_string))
@@ -128,7 +128,7 @@ punctuation_words = {
     "back tick": "`",
     "comma": ",",
     "period": ".",
-    "semicolon": ";",
+    "semi": ";",
     "colon": ":",
     "forward slash": "/",
     "question mark": "?",
@@ -144,7 +144,7 @@ punctuation_words = {
     "ampersand": "&",
 }
 symbol_key_words = {
-    "dot": ".",
+    "doc": ".",
     "quote": "'",
     "L square": "[",
     "left square": "[",
@@ -167,7 +167,7 @@ symbol_key_words = {
     "left paren": "(",
     "R paren": ")",
     "right paren": ")",
-    "brace": "{",
+    "brace": "}",
     "left brace": "{",
     "R brace": "}",
     "right brace": "}",
@@ -186,7 +186,6 @@ symbol_key_words = {
     "amper": "&",
     "pipe": "|",
     "dubquote": '"',
-    "double quote": '"',
 }
 
 # make punctuation words also included in {user.symbol_keys}
@@ -204,19 +203,19 @@ ctx.lists["self.arrow_key"] = {
 simple_keys = [
     "end",
     "enter",
-    "escape",
     "home",
     "insert",
     "pagedown",
     "pageup",
-    "space",
     "tab",
 ]
 
 alternate_keys = {
     "delete": "backspace",
     "forward delete": "delete",
-    #'junk': 'backspace',
+    "junk": "backspace",
+    "scraper": "escape",
+    "base": "space",
 }
 # mac apparently doesn't have the menu key.
 if app.platform in ("windows", "linux"):

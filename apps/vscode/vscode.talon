@@ -69,6 +69,11 @@ search [<user.text>]:
   sleep(50ms)
   insert(text or "")
 
+local [<user.text>]:
+  key(cmd-f)
+  sleep(50ms)
+  insert(text or "")
+
 # Panels
 panel control: user.vscode("workbench.panel.repl.view.focus")
 panel output: user.vscode("workbench.panel.output.focus")
@@ -204,7 +209,7 @@ term scroll down: user.vscode("Terminal:ScrollDown")
 term <number>: user.vscode_terminal(number)
 
 # easymotion
-jump:
+spring:
   key(ctrl-q)
   key(s)
 
@@ -216,4 +221,4 @@ copy line up: user.vscode("editor.action.copyLinesUpAction")
 select less: user.vscode("editor.action.smartSelect.shrink")
 select (more|this): user.vscode("editor.action.smartSelect.expand")
   
-  
+creature: 'ce'
