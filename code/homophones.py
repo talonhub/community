@@ -116,7 +116,7 @@ def gui(gui: imgui.GUI):
         gui.line()
         index = 1
         for word in active_word_list:
-            gui.text("Pick {}: {} ".format(index, word))
+            gui.text("Choose {}: {} ".format(index, word))
             index = index + 1
 
 
