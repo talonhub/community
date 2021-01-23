@@ -199,7 +199,7 @@ action(edit.word_right):
 	key(alt-right)
 
 action(edit.zoom_in):
-	key(cmd-+)
+	key(cmd-=)
 
 action(edit.zoom_out):
 	key(cmd--)
