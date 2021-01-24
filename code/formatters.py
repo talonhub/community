@@ -299,7 +299,7 @@ ctx.lists["self.prose_formatter"] = {
 }
 
 
-@imgui.open(software=app.platform == "linux")
+@imgui.open()
 def gui(gui: imgui.GUI):
     gui.text("List formatters")
     gui.line()
@@ -307,7 +307,7 @@ def gui(gui: imgui.GUI):
         gui.text(f"{name} | {format_phrase_no_history(['one', 'two', 'three'], name)}")
 
 
-@imgui.open(software=app.platform == "linux")
+@imgui.open()
 def recent_gui(gui: imgui.GUI):
     gui.text("Recent formatters")
     gui.line()

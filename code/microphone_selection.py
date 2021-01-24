@@ -23,7 +23,7 @@ def update_microphone_list():
             microphone_device_list.append(device)
 
 
-@imgui.open(software=app.platform == "linux")
+@imgui.open()
 def gui(gui: imgui.GUI):
     gui.text("Select a Microphone")
     gui.line()

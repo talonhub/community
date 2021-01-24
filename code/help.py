@@ -62,7 +62,7 @@ def update_title():
 
 
 # todo: dynamic rect?
-@imgui.open(y=0, software=app.platform == "linux")
+@imgui.open(y=0)
 def gui_alphabet(gui: imgui.GUI):
     global alphabet
     gui.text("Alphabet help")
@@ -165,7 +165,7 @@ def get_pages(item_line_counts: List[int]) -> List[int]:
     return pages
 
 
-@imgui.open(y=0, software=app.platform == "linux")
+@imgui.open(y=0)
 def gui_context_help(gui: imgui.GUI):
     global context_command_map
     global current_context_page
