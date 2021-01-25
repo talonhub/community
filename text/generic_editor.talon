@@ -95,47 +95,47 @@ indent [more]:
     edit.indent_less()
 
 # deleting
-junk line:
+chuck line:
     edit.delete_line()
 
-junk left:
+chuck left:
     key(backspace)
 
-junk right:
+chuck right:
     key(delete)
 
-junk up:
+chuck up:
     edit.extend_line_up()
     edit.delete()
 
-junk down:
+chuck down:
     edit.extend_line_down()
     edit.delete()
 
-junk word:
+chuck word:
     edit.delete_word()
 
-junk word left:
+chuck word left:
     edit.extend_word_left()
     edit.delete()
 
-junk word right:
+chuck word right:
     edit.extend_word_right()
     edit.delete()
 
-junk way left:
+chuck way left:
     edit.extend_line_start()
     edit.delete()
 
-junk way right:
+chuck way right:
     edit.extend_line_end()
     edit.delete()
 
-junk way up:
+chuck way up:
     edit.extend_file_start()
     edit.delete()
 
-junk way down:
+chuck way down:
     edit.extend_file_end()
     edit.delete()
 
@@ -206,3 +206,5 @@ cut word right:
 cut line:
     edit.select_line()
     edit.cut()
+
+Pokey mail: "pokey.rule@gmail.com"

@@ -111,7 +111,7 @@ ctx.lists["self.modifier_key"] = {
     "many": "cmd",
     "troll": "ctrl",  #'troll':   'ctrl',
     "option": "alt",
-    "ship": "shift",  #'sky':     'shift',
+    "sky": "shift",  #'sky':     'shift',
     "super": "super",
 }
 alphabet = dict(zip(default_alphabet, letters_string))
@@ -139,7 +139,7 @@ punctuation_words = {
     "hash sign": "#",
     "number sign": "#",
     "percent sign": "%",
-    "at sign": "@",
+    "ash": "@",
     "and sign": "&",
     "ampersand": "&",
 }
@@ -213,9 +213,9 @@ simple_keys = [
 alternate_keys = {
     "delete": "backspace",
     "forward delete": "delete",
-    "junk": "backspace",
+    "chuck": "backspace",
     "scraper": "escape",
-    "base": "space",
+    "drip": "space",
 }
 # mac apparently doesn't have the menu key.
 if app.platform in ("windows", "linux"):
