@@ -144,7 +144,7 @@ punctuation_words = {
     "ampersand": "&",
 }
 symbol_key_words = {
-    "doc": ".",
+    "dot": ".",
     "quote": "'",
     "L square": "[",
     "left square": "[",
