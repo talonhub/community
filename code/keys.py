@@ -8,10 +8,10 @@ default_alphabet = "air bat cap drum each fine gust harp sit jay crunch look mad
 )
 letters_string = "abcdefghijklmnopqrstuvwxyz"
 
-default_digits = "zero whoopie two three four five six seven eight nine".split(" ")
+default_digits = "zero one two three four five six seven eight nine".split(" ")
 numbers = [str(i) for i in range(10)]
 default_f_digits = (
-    "whoopie two three four five six seven eight nine ten eleven twelve".split(" ")
+    "one two three four five six seven eight nine ten eleven twelve".split(" ")
 )
 
 mod = Module()
@@ -215,7 +215,7 @@ alternate_keys = {
     "forward delete": "delete",
     "chuck": "backspace",
     "scraper": "escape",
-    "drip": "space",
+    "space": "space",
 }
 # mac apparently doesn't have the menu key.
 if app.platform in ("windows", "linux"):

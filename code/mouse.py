@@ -248,7 +248,8 @@ def show_cursor_helper(show):
 
 
 def on_pop(active):
-    actions.core.repeat_command()
+    pass
+    # actions.core.repeat_command()
 
 
 noise.register("pop", on_pop)

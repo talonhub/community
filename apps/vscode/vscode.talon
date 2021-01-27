@@ -7,6 +7,13 @@ tag(): user.multiple_cursors
 tag(): user.snippets
 tag(): user.splits
 tag(): user.tabs
+
+action(edit.select_line):
+	key(ctrl-e cmd-shift-left)
+
+settings():
+  key_wait = 10
+
 #talon app actions
 action(app.tab_close): user.vscode("workbench.action.closeActiveEditor")
 action(app.tab_next): user.vscode("workbench.action.nextEditorInGroup")
@@ -62,15 +69,21 @@ bar extensions: user.vscode("workbench.view.extensions")
 bar outline: user.vscode("outline.focus")
 bar run: user.vscode("workbench.view.debug")
 bar search: user.vscode("workbench.view.search")
-bar source: user.vscode("workbench.view.scm")
+bar source: user.vscode_by_id("workbench.view.scm")
 bar switch: user.vscode("workbench.action.toggleSidebarVisibility")
 search [<user.text>]: 
   user.vscode_by_id("workbench.action.findInFiles")
   sleep(50ms)
   insert(text or "")
+search next: user.vscode("search.action.focusNextSearchResult")
 
 local [<user.text>]:
   key(cmd-f)
+  sleep(50ms)
+  insert(text or "")
+
+symbol [<user.text>]:
+  user.vscode("workbench.action.gotoSymbol")
   sleep(50ms)
   insert(text or "")
 
@@ -136,7 +149,7 @@ refactor this: user.vscode("editor.action.refactor")
 go back: user.vscode("workbench.action.navigateBack") 
 go forward:  user.vscode("workbench.action.navigateForward")  
 go implementation: user.vscode("Go to Implementation")
-go recent: user.vscode("File: Open Recent")
+session: user.vscode("File: Open Recent")
 go type: user.vscode("editor.action.goToTypeDefinition")
 go usage: user.vscode("References: Find All References")
 
@@ -183,6 +196,8 @@ git stage all: user.vscode("git.stageAll")
 git unstage: user.vscode("git.unstage")
 git unstage all: user.vscode("git.unstageAll")
 pull request: user.vscode_by_id("pr.create")
+change next: key(alt-f5)
+change last: key(shift-alt-f5)
 
 #Debugging
 break point: user.vscode("editor.debug.action.toggleBreakpoint")
@@ -206,7 +221,7 @@ term trash: user.vscode("Terminal:Kill")
 term dog: user.vscode_by_id("workbench.action.terminal.toggleTerminal")
 term scroll up: user.vscode("Terminal:ScrollUp")
 term scroll down: user.vscode("Terminal:ScrollDown")
-term <number>: user.vscode_terminal(number)
+term <number_small>: user.vscode_terminal(number_small)
 
 # easymotion
 spring:
@@ -222,3 +237,5 @@ select less: user.vscode("editor.action.smartSelect.shrink")
 select (more|this): user.vscode("editor.action.smartSelect.expand")
   
 creature: 'ce'
+
+minimap: user.vscode_by_id("editor.action.toggleMinimap")
