@@ -149,11 +149,15 @@ refactor this: user.vscode("editor.action.refactor")
 go back: user.vscode("workbench.action.navigateBack") 
 go forward:  user.vscode("workbench.action.navigateForward")  
 go implementation: user.vscode("Go to Implementation")
-session: user.vscode("File: Open Recent")
 go type: user.vscode("editor.action.goToTypeDefinition")
 go usage: user.vscode("References: Find All References")
 
 # Bookmarks. Requires Bookmarks plugin
+session [<user.text>]: 
+  user.vscode("File: Open Recent")
+  sleep(50ms)
+  insert(text or "")
+
 go marks: user.vscode("View: Show Bookmarks")
 toggle mark: user.vscode("Bookmarks: Toggle")
 go next mark: user.vscode("Bookmarks: Jump to Next")
@@ -239,3 +243,4 @@ select (more|this): user.vscode("editor.action.smartSelect.expand")
 creature: 'ce'
 
 minimap: user.vscode_by_id("editor.action.toggleMinimap")
+maximize: user.vscode_by_id("workbench.action.minimizeOtherEditors")

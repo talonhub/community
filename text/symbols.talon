@@ -1,7 +1,6 @@
 question [mark]: "?"
 (downscore | underscore): "_"
 double dash: "--"
-dote: "\""
 lace: "{"
 (rbrack | are bracket | right bracket): "}"
 triple quote: "'''"
