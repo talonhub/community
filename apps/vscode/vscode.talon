@@ -244,3 +244,4 @@ creature: 'ce'
 
 minimap: user.vscode_by_id("editor.action.toggleMinimap")
 maximize: user.vscode_by_id("workbench.action.minimizeOtherEditors")
+restore: user.vscode_by_id("workbench.action.evenEditorWidths")
