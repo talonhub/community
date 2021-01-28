@@ -1,3 +1,5 @@
+import socket
+from time import sleep
 from talon import Context, actions, ui, Module, app, clip
 from typing import List, Union
 
@@ -13,6 +15,38 @@ mod.apps.vscode = "app.name: Code - OSS"
 ctx.matches = r"""
 app: vscode
 """
+
+
+class VSCodeSocket:
+    def __init__(self):
+        self.connect()
+
+    def connect(self):
+        try:
+            self.client = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+            self.client.connect("/tmp/vscode_commander.sock")
+        except FileNotFoundError:
+            print("VSCodeSocket: Connection failed. Socket does not exist.")
+        else:
+            print("VSCodeSocket: Connected.")
+
+    def send(self, command):
+        try:
+            self.client.sendall(command.encode("utf-8"))
+        except Exception as error:
+            print(f"VSCodeSocket: {error}")
+            self.client.close()
+            print("VSCodeSocket: Reconnecting...")
+            self.connect()
+            try:
+                self.client.send(command.encode("utf-8"))
+            except Exception:
+                app.notify("VSCode Socket Failed")
+        else:
+            sleep(0.1)
+
+
+vscode_socket = VSCodeSocket()
 
 
 @ctx.action_class("win")
@@ -65,39 +99,20 @@ class edit_actions:
 @mod.action_class
 class Actions:
     def vscode(command: str):
-        """Execute command via command palette. Preserves the clipboard."""
-        # Clip is noticeably faster than insert
-        if not is_mac:
-            actions.key("ctrl-shift-p")
-        else:
-            actions.key("cmd-shift-p")
-
-        actions.user.paste(f"{command}")
-        actions.key("enter")
+        """Execute command via Unix domain socket."""
+        vscode_socket.send(command)
 
     def vscode_ignore_clipboard(command: str):
-        """Execute command via command palette. Does NOT preserve the clipboard for commands like copyFilePath"""
-        clip.set_text(f"{command}")
-        if not is_mac:
-            actions.key("ctrl-shift-p")
-        else:
-            actions.key("cmd-shift-p")
-        actions.edit.paste()
-        actions.key("enter")
+        """Preserved for ease of compatibility."""
+        vscode_socket.send(command)
 
     def vscode_terminal(number: int):
         """Activate a terminal by number"""
         actions.user.vscode_by_id(f"workbench.action.terminal.focusAtIndex{number}")
 
     def vscode_by_id(command: str):
-        """Execute command via run-command-by-id. Preserves the clipboard."""
-        if not is_mac:
-            actions.key("ctrl-shift-alt-p")
-        else:
-            actions.key("cmd-shift-alt-p")
-
-        actions.user.paste(f"{command}")
-        actions.key("enter")
+        """Preserved for ease of compatibility."""
+        vscode_socket.send(command)
 
 
 @ctx.action_class("user")

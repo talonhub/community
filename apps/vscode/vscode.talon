@@ -33,34 +33,52 @@ action(edit.indent_less): user.vscode("editor.action.outdentLines")
 action(edit.save_all): user.vscode("workbench.action.files.saveAll")
 
 # splits.py support begin
-action(user.split_clear_all): user.vscode("View: Single Column Editor Layout")
-action(user.split_clear): user.vscode("View: Join Editor Group with Next Group")
-action(user.split_flip): user.vscode("View: Toggle Vertical/Horizontal Editor Layout") 
-action(user.split_last): user.vscode("View: Focus Previous Editor Group")
-action(user.split_next):  user.vscode("View: Focus Next Editor Group")
-action(user.split_window_down): user.vscode("workbench.action.moveEditorToBelowGroup")
-action(user.split_window_horizontally): user.vscode("View: Split Editor Orthogonal")
-action(user.split_window_left): user.vscode("workbench.action.moveEditorToLeftGroup")
-action(user.split_window_right): user.vscode("workbench.action.moveEditorToRightGroup")
-action(user.split_window_up): user.vscode("workbench.action.moveEditorToAboveGroup")
-action(user.split_window_vertically): user.vscode("View: Split Editor")
-action(user.split_window): user.vscode("View: Split Editor")
+action(user.split_clear_all):
+	user.vscode("workbench.action.editorLayoutSingle")
+action(user.split_clear):
+	user.vscode("workbench.action.joinTwoGroups")
+action(user.split_flip):
+	user.vscode("workbench.action.toggleEditorGroupLayout") 
+action(user.split_last):
+	user.vscode("workbench.action.focusLeftGroup")
+action(user.split_next): 
+	user.vscode("workbench.action.focusRightGroup")
+action(user.split_window_down):
+	user.vscode("workbench.action.moveEditorToBelowGroup")
+action(user.split_window_horizontally):
+	user.vscode("workbench.action.splitEditorOrthogonal")
+action(user.split_window_left):
+	user.vscode("workbench.action.moveEditorToLeftGroup")
+action(user.split_window_right):
+	user.vscode("workbench.action.moveEditorToRightGroup")
+action(user.split_window_up):
+	user.vscode("workbench.action.moveEditorToAboveGroup")
+action(user.split_window_vertically):
+	user.vscode("workbench.action.splitEditor")
+action(user.split_window):
+	user.vscode("workbench.action.splitEditor")
 # splits.py support end
 
 #multiple_cursor.py support begin
 #note: vscode has no explicit mode for multiple cursors
-action(user.multi_cursor_add_above): user.vscode("Add Cursor Above")
-action(user.multi_cursor_add_below): user.vscode("Add Cursor Below")
-action(user.multi_cursor_add_to_line_ends): user.vscode("Add Cursor to Line Ends")
+action(user.multi_cursor_add_above):
+	user.vscode("editor.action.insertCursorAbove")
+action(user.multi_cursor_add_below):
+	user.vscode("editor.action.insertCursorBelow")
+action(user.multi_cursor_add_to_line_ends):
+	user.vscode("editor.action.insertCursorAtEndOfEachLineSelected")
 action(user.multi_cursor_disable): key(escape)
 action(user.multi_cursor_enable): skip()
-action(user.multi_cursor_select_all_occurrences): user.vscode("Select All Occurrences of Find Match")
-action(user.multi_cursor_select_fewer_occurrences): user.vscode("Cursor Undo")
-action(user.multi_cursor_select_more_occurrences): user.vscode("Add Selection To Next Find Match")
+action(user.multi_cursor_select_all_occurrences):
+	user.vscode("editor.action.selectHighlights")
+action(user.multi_cursor_select_fewer_occurrences):
+	user.vscode("cursorUndo")
+action(user.multi_cursor_select_more_occurrences):
+	user.vscode("editor.action.addSelectionToNextFindMatch")
 #multiple_cursor.py support end
 
 please [<user.text>]: 
-  user.vscode("Show All Commands")
+  user.vscode("workbench.action.showCommands")
   insert(user.text or "")
 
 # Sidebar
@@ -109,19 +127,24 @@ zen switch: user.vscode("workbench.action.toggleZenMode")
 
 # File Commands
 file hunt [<user.text>]: 
-  user.vscode("Go to File")
+  user.vscode("workbench.action.quickOpen")
   sleep(50ms)
   insert(text or "")
-file copy path: user.vscode_ignore_clipboard("File: Copy Path of Active File") 
-file create sibling: user.vscode("File: New File")  
-file create: user.vscode("File: New Untitled File")
-file open folder: user.vscode("File: Reveal in File Explorer")
+file copy path:
+	user.vscode_ignore_clipboard("copyFilePath") 
+file create sibling: user.vscode("explorer.newFile")  
+file create: user.vscode("workbench.action.files.newUntitledFile")
 #todo: rename isn't working.
 #file rename active: 
 #  user.vscode("File: Reveal Active File In Side Bar")
 #  user.vscode("renameFile")
-#file rename: user.vscode("renameFile")
-file reveal: user.vscode("File: Reveal Active File In Side Bar") 
+file rename:
+	user.vscode("renameFile")
+file open folder:
+	user.vscode("revealFileInOS")
+file reveal: user.vscode("workbench.files.action.showActiveFileInExplorer") 
+save ugly:
+    user.vscode("workbench.action.files.saveWithoutFormatting")
 
 # Language Features
 suggest show: user.vscode("editor.action.triggerSuggest")
@@ -145,23 +168,28 @@ refactor rename: user.vscode("editor.action.rename")
 refactor this: user.vscode("editor.action.refactor")
 
 #code navigation
-(go declaration | follow): user.vscode("Go to Declaration")
-go back: user.vscode("workbench.action.navigateBack") 
+(go declaration | follow):
+	user.vscode("editor.action.revealDefinition")
+go back:
+	user.vscode("workbench.action.navigateBack") 
 go forward:  user.vscode("workbench.action.navigateForward")  
-go implementation: user.vscode("Go to Implementation")
-go type: user.vscode("editor.action.goToTypeDefinition")
-go usage: user.vscode("References: Find All References")
+go implementation:
+	user.vscode("editor.action.goToImplementation")
+go type:
+	user.vscode("editor.action.goToTypeDefinition")
+go usage:
+	user.vscode("references-view.find")
 
 # Bookmarks. Requires Bookmarks plugin
 session [<user.text>]: 
-  user.vscode("File: Open Recent")
+  user.vscode("workbench.action.openRecent")
   sleep(50ms)
   insert(text or "")
 
-go marks: user.vscode("View: Show Bookmarks")
-toggle mark: user.vscode("Bookmarks: Toggle")
-go next mark: user.vscode("Bookmarks: Jump to Next")
-go last mark: user.vscode("Bookmarks: Jump to Previous")
+go marks: user.vscode("workbench.view.extension.bookmarks")
+toggle mark: user.vscode("bookmarks.toggle")
+go next mark: user.vscode("bookmarks.jumpToNext")
+go last mark: user.vscode("bookmarks.jumpToPrevious")
 
 # Folding
 fold that: user.vscode("editor.fold")
@@ -221,10 +249,10 @@ term next: user.vscode("workbench.action.terminal.focusNextPane")
 term last:user.vscode("workbench.action.terminal.focusPreviousPane")
 term split: user.vscode("workbench.action.terminal.split")
 term zoom: user.vscode_by_id("workbench.action.toggleMaximizedPanel")
-term trash: user.vscode("Terminal:Kill")
+term trash: user.vscode("workbench.action.terminal.kill")
 term dog: user.vscode_by_id("workbench.action.terminal.toggleTerminal")
-term scroll up: user.vscode("Terminal:ScrollUp")
-term scroll down: user.vscode("Terminal:ScrollDown")
+term scroll up: user.vscode("workbench.action.terminal.scrollUp")
+term scroll down: user.vscode("workbench.action.terminal.scrollDown")
 term <number_small>: user.vscode_terminal(number_small)
 
 # easymotion
