@@ -28,7 +28,7 @@ action(app.window_hide):
 	key(cmd-m)
 	
 action(app.window_hide_others):
-	key(cmd-option-h)
+	key(cmd-alt-h)
 	
 action(app.window_next):
 	key(cmd-`)

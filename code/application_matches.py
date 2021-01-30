@@ -63,22 +63,22 @@ apps.windows_explorer = """
 os: windows
 and app.name: Windows Explorer
 os: windows
-and app.name: explorer.exe
+and app.exe: explorer.exe
 """
 
 apps.windows_command_processor = """
 os: windows
 and app.name: Windows Command Processor
 os: windows
-and app.name: cmd.exe
+and app.exe: cmd.exe
 """
 
 apps.windows_terminal = """
 os: windows
-and app.name: WindowsTerminal.exe 
+and app.exe: WindowsTerminal.exe 
 """
 
 mod.apps.windows_power_shell = """
 os: windows
-and app.name: powershell.exe
+and app.exe: powershell.exe
 """
