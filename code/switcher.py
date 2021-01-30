@@ -335,7 +335,7 @@ def update_launch_list():
             # name = path.rsplit("\\")[-1].split(".")[0].lower()
             if "install" not in name:
                 spoken_form = create_spoken_forms(name)
-                print(spoken_form)
+                # print(spoken_form)
                 launch[spoken_form] = name
                 words = spoken_form.split(" ")
                 for word in words:
@@ -367,4 +367,4 @@ def on_ready():
 
 
 # NOTE: please update this from "launch" to "ready" in Talon v0.1.5
-app.register("ready", on_ready)
+app.register("launch", on_ready)
