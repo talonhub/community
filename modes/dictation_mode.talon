@@ -1,5 +1,6 @@
 mode: dictation
 -
+^press <user.keys>$: key("{keys}")
 #everything here should call auto_insert to preserve the state to correctly auto-capitalize/auto-space.
 <user.text>: auto_insert(text)
 enter: auto_insert("new-line")
