@@ -244,29 +244,27 @@ class Actions:
         # We should use the capture result directly if it's already in the list
         # of running applications. Otherwise, name is from <user.text> and we
         # can be a bit fuzzier
-        if name in running_application_dict:
-            for app in ui.apps():
-                if app.name == name and not app.background:
-                    return app
-            raise RuntimeError(f'App not running: "{name}"')
-        else:
-            # Don't process silly things like "focus i"
+        if name not in running_application_dict:
             if len(name) < 3:
                 raise RuntimeError(
                     f'Skipped getting app: "{name}" has less than 3 chars.'
                 )
-
-            for running_name, app in ctx.lists["self.running"].items():
+            for running_name, full_application_name in ctx.lists[
+                "self.running"
+            ].items():
                 if running_name == name or running_name.lower().startswith(
                     name.lower()
                 ):
-                    return app
-
-            raise RuntimeError(f'Could not find app "{name}"')
+                    name = full_application_name
+                    break
+        for app in ui.apps():
+            if app.name == name and not app.background:
+                return app
+        raise RuntimeError(f'App not running: "{name}"')
 
     def switcher_focus(name: str):
         """Focus a new application by  name"""
-        app = actions.self.get_running_app(name)
+        app = actions.user.get_running_app(name)
         app.focus()
 
         # Hacky solution to do this reliably on Mac.
