@@ -51,7 +51,7 @@ go page up:
 select line:
     edit.select_line()
 
-select all:
+select everything:
     edit.select_all()
 
 select left:
@@ -140,7 +140,7 @@ clear way down:
     edit.delete()
 
 #copy commands
-copy all:
+copy everything:
     edit.select_all()
     edit.copy()
 #to do: do we want these variants, seem to conflict
