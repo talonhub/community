@@ -11,47 +11,47 @@ cap <user.text>:
     auto_insert(result)
 
 # Navigation
-go up <number_small> lines:
+go up <number_small> (line|lines):
     edit.up()
     repeat(number_small - 1)
-go down <number_small> lines:
+go down <number_small> (line|lines):
     edit.down()
     repeat(number_small - 1)
-go left <number_small> words:
+go left <number_small> (word|words):
     edit.word_left()
     repeat(number_small - 1)
-go right <number_small> words:
+go right <number_small> (word|words):
     edit.word_right()
     repeat(number_small - 1)
 go line start: edit.line_start()
 go line end: edit.line_end()
 
 # Selection
-select left <number_small> words:
+select left <number_small> (word|words):
     edit.extend_word_left()
     repeat(number_small - 1)
-select right <number_small> words:
+select right <number_small> (word|words):
     edit.extend_word_right()
     repeat(number_small - 1)
-select left <number_small> characters:
+select left <number_small> (character|characters):
     edit.extend_left()
     repeat(number_small - 1)
-select right <number_small> characters:
+select right <number_small> (character|characters):
     edit.extend_right()
     repeat(number_small - 1)
-clear left <number_small> words:
+clear left <number_small> (word|words):
     edit.extend_word_left()
     repeat(number_small - 1)
     edit.delete()
-clear right <number_small> words:
+clear right <number_small> (word|words):
     edit.extend_word_right()
     repeat(number_small - 1)
     edit.delete()
-clear left <number_small> characters:
+clear left <number_small> (character|characters):
     edit.extend_left()
     repeat(number_small - 1)
     edit.delete()
-clear right <number_small> characters:
+clear right <number_small> (character|characters):
     edit.extend_right()
     repeat(number_small - 1)
     edit.delete()
