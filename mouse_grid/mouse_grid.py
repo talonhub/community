@@ -94,6 +94,7 @@ class MouseSnapNine:
             print("unregistering a canvas")
             self.mcanvas.unregister("draw", self.draw)
         self.mcanvas.register("draw", self.draw)
+        self.mcanvas.freeze()
         print("grid activating")
         self.active = True
         return True
