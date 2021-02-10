@@ -27,7 +27,7 @@ class Actions:
         # those phrases from the history entirely, so that they were still
         # accessible for copying, for example.
         if not phrase_history:
-            logging.warn("clear_last_phrase(): No last phrase to clear!")
+            logging.warning("clear_last_phrase(): No last phrase to clear!")
             return
         for _ in phrase_history[0]:
             actions.edit.delete()
@@ -36,7 +36,7 @@ class Actions:
     def select_last_phrase():
         """Selects the last phrase"""
         if not phrase_history:
-            logging.warn("select_last_phrase(): No last phrase to select!")
+            logging.warning("select_last_phrase(): No last phrase to select!")
             return
         for _ in phrase_history[0]:
             actions.edit.extend_left()
