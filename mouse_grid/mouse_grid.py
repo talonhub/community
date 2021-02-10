@@ -26,7 +26,6 @@ ctx = Context()
 class MouseSnapNine:
     def __init__(self):
         self.states = []
-        # self.screen_index = 0
         self.screen = ui.screens()[0]
         self.offset_x = self.screen.x
         self.offset_y = self.screen.y
@@ -41,18 +40,6 @@ class MouseSnapNine:
         self.count = 0
         self.was_control_mouse_active = False
         self.was_zoom_mouse_active = False
-
-    #     tap.register(tap.MMOVE, self.on_move)
-    #
-    # def on_move(self, typ, e):
-    #     if typ != tap.MMOVE or not self.active:
-    #         return
-    #     x, y = self.pos()
-    #     last_pos = self.states[-1]
-    #     x2, y2 = last_pos[0] + last_pos[2]//2, last_pos[1] + last_pos[3]//2
-    #     # print("moved ", e, x, y)
-    #     if (e.x, e.y) != (x, y) and (e.x, e.y) != (x2, y2):
-    #         self.stop(None)
 
     def start(self, *_):
         if self.active:
@@ -158,35 +145,6 @@ class MouseSnapNine:
                     canvas.draw_line(cx - 10, cy, cx + 10, cy)
                     canvas.draw_line(cx, cy - 10, cx, cy + 10)
 
-        # def draw_grid(offset_x, offset_y, width, height, dxp = 0, dyp = 0):
-        # dx = (dxp / 100) * width
-        # dy = (dyp / 100) * height
-        # canvas.draw_line(
-        # offset_x + width // 3,
-        # offset_y + dy,
-        # offset_x + width // 3,
-        # offset_y + height - dy,
-        # )
-        # canvas.draw_line(
-        # offset_x + 2 * width // 3,
-        # offset_y + dy,
-        # offset_x + 2 * width // 3,
-        # offset_y + height - dy,
-        # )
-
-        # canvas.draw_line(
-        # offset_x + dx,
-        # offset_y + height // 3,
-        # offset_x + width - dx,
-        # offset_y + height // 3,
-        # )
-        # canvas.draw_line(
-        # offset_x + dx,
-        # offset_y + 2 * height // 3,
-        # offset_x + width - dx,
-        # offset_y + 2 * height // 3,
-        # )
-
         grid_stroke = 1
 
         def draw_text(offset_x, offset_y, width, height):
@@ -277,7 +235,7 @@ class MouseSnapNine:
         if self.count >= 2:
             self.wants_capture = 1
         # if self.count >= 4:
-        # self.reset(None)
+        # self.reset()
         self.mcanvas.freeze()
 
     def draw_zoom(self, c, x, y, w, h):
@@ -290,39 +248,30 @@ class MouseSnapNine:
         return self.offset_x + self.width // 2, self.offset_y + self.height // 2
 
     def reset(self, pos=-1):
-        def _reset(m):
-            self.save_state()
-            self.count = 0
-            x, y = ctrl.mouse_pos()
+        self.save_state()
+        self.count = 0
+        x, y = ctrl.mouse_pos()
 
-            if pos >= 0:
-                self.screen = ui.screens()[pos]
-            else:
-                self.screen = ui.screen_containing(x, y)
+        if pos >= 0:
+            self.screen = ui.screens()[pos]
+        else:
+            self.screen = ui.screen_containing(x, y)
 
-            # print(screens)
-            # self.screen = screens[self.screen_index]
-            self.offset_x = self.screen.x
-            self.offset_y = self.screen.y
-            self.width = self.screen.width
-            self.height = self.screen.height
-            if self.mcanvas is not None:
-                self.mcanvas.unregister("draw", self.draw)
-            self.mcanvas = canvas.Canvas.from_screen(self.screen)
-            # self.mcanvas.register("draw", self.draw)
-            if eye_mouse.control_mouse.enabled:
-                self.was_control_mouse_active = True
-                eye_mouse.control_mouse.toggle()
-            if self.was_control_mouse_active and self.screen == ui.screens()[0]:
-                # if self.screen == ui.screens()[0]:
-                self.narrow_to_pos(x, y)
-                self.narrow_to_pos(x, y)
-                # self.narrow_to_pos(x, y)
-            # print(self.offset_x, self.offset_y, self.width, self.height)
-            # print(*self.pos())
-            self.mcanvas.freeze()
-
-        return _reset
+        self.offset_x = self.screen.x
+        self.offset_y = self.screen.y
+        self.width = self.screen.width
+        self.height = self.screen.height
+        if self.mcanvas is not None:
+            self.mcanvas.unregister("draw", self.draw)
+        self.mcanvas = canvas.Canvas.from_screen(self.screen)
+        # self.mcanvas.register("draw", self.draw)
+        if eye_mouse.control_mouse.enabled:
+            self.was_control_mouse_active = True
+            eye_mouse.control_mouse.toggle()
+        if self.was_control_mouse_active and self.screen == ui.screens()[0]:
+            self.narrow_to_pos(x, y)
+            self.narrow_to_pos(x, y)
+        self.mcanvas.freeze()
 
     def reset_to_current_window(self):
         win = ui.active_window()
@@ -340,7 +289,6 @@ class MouseSnapNine:
         row_size = int(self.height // 3)
         col = math.floor((x - self.offset_x) / col_size)
         row = math.floor((y - self.offset_y) / row_size)
-        # print(f"Narrow to {row} {col} {1 + col + 3 * row}")
         self.narrow(1 + col + 3 * row, move=False)
 
     def save_state(self):
@@ -368,23 +316,20 @@ class GridActions:
 
     def grid_reset():
         """Resets the grid to fill the whole screen again"""
-        mg.reset()(None)
+        mg.reset()
 
     def grid_select_screen(screen: int):
         """Brings up a/the grid (mouse grid or otherwise)"""
-        mg.reset(screen - 1)(None)
+        mg.reset(screen - 1)
         mg.start()
 
     def grid_narrow_list(digit_list: typing.List[str]):
         """Choose fields multiple times in a row"""
-        # print("narrow many", repr(digit))
-        # print(str(digit_list))
         for d in digit_list:
             GridActions.grid_narrow(int(d))
 
     def grid_narrow(digit: Union[int, str]):
         """Choose a field of the grid and narrow the selection down"""
-        # print("narrow one", repr(digit))
         mg.narrow(int(digit))
 
     def grid_go_back():
@@ -395,5 +340,5 @@ class GridActions:
         """Close the active grid"""
         if len(ctx.tags) > 0 or mg.active:
             ctx.tags = []
-            mg.reset()(None)
+            mg.reset()
             mg.stop()
