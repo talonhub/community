@@ -274,7 +274,6 @@ class MouseSnapNine:
         if move:
             ctrl.mouse_move(*self.pos())
         self.count += 1
-        self.mcanvas.freeze()
         if self.count >= 2:
             self.wants_capture = 1
         # if self.count >= 4:
