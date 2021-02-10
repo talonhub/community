@@ -29,7 +29,7 @@ def surround(by):
 
 
 def format_phrase(m: Union[str, Phrase], fmtrs: str):
-    global last_phrase
+    global last_phrase, last_phrase_formatted
     last_phrase = m
     words = []
     if isinstance(m, str):
@@ -42,7 +42,7 @@ def format_phrase(m: Union[str, Phrase], fmtrs: str):
         words = actions.dictate.parse_words(m)
         words = actions.dictate.replace_words(words)
 
-    result = format_phrase_no_history(words, fmtrs)
+    result = last_phrase_formatted = format_phrase_no_history(words, fmtrs)
     actions.user.add_phrase_to_history(result)
     # Arguably, we shouldn't be dealing with history here, but somewhere later
     # down the line. But we have a bunch of code that relies on doing it this
