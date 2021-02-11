@@ -26,7 +26,7 @@ ctx = Context()
 class MouseSnapNine:
     def __init__(self):
         self.screen = None
-        self.rect   = None
+        self.rect = None
         self.history = []
         self.img = None
         self.mcanvas = None
@@ -35,7 +35,7 @@ class MouseSnapNine:
         self.was_control_mouse_active = False
         self.was_zoom_mouse_active = False
 
-    def setup(self, *, rect: Rect=None, screen_num: int=None):
+    def setup(self, *, rect: Rect = None, screen_num: int = None):
         screens = ui.screens()
         # each if block here might set the rect to None to indicate failure
         if rect is not None:
@@ -145,8 +145,9 @@ class MouseSnapNine:
                     text_rect = canvas.paint.measure_text(text_string)[1]
                     background_rect = text_rect.copy()
                     background_rect.center = Point2d(
-                            offset_x + width / 6 + col * width / 3,
-                            offset_y + height / 6 + row * height / 3)
+                        offset_x + width / 6 + col * width / 3,
+                        offset_y + height / 6 + row * height / 3,
+                    )
                     background_rect = background_rect.inset(-4)
                     paint.color = "9999995f"
                     paint.style = Paint.Style.FILL
@@ -179,8 +180,8 @@ class MouseSnapNine:
             else:
                 h = self.screen.height / 3
                 w = h * aspect
-            x = (self.screen.width - w) / 2
-            y = (self.screen.height - h) / 2
+            x = self.screen.x + (self.screen.width - w) / 2
+            y = self.screen.y + (self.screen.height - h) / 2
             self.draw_zoom(canvas, x, y, w, h)
             draw_grid(x, y, w, h)
             draw_text(x, y, w, h)
@@ -199,7 +200,7 @@ class MouseSnapNine:
             row = 2 - row
         rect.x += int(col * rect.width // 3) - bdr
         rect.y += int(row * rect.height // 3) - bdr
-        rect.width  = (rect.width  // 3) + bdr * 2
+        rect.width = (rect.width // 3) + bdr * 2
         rect.height = (rect.height // 3) + bdr * 2
         return rect
 
@@ -223,6 +224,7 @@ class MouseSnapNine:
         def finish_capture():
             self.img = screen.capture_rect(self.rect)
             self.mcanvas.freeze()
+
         self.mcanvas.hide()
         cron.after("16ms", finish_capture)
 
@@ -271,7 +273,7 @@ class GridActions:
 
     def grid_select_screen(screen: int):
         """Brings up mouse grid"""
-        mg.setup(screen_num=screen-1)
+        mg.setup(screen_num=screen - 1)
         mg.show()
 
     def grid_narrow_list(digit_list: typing.List[str]):
