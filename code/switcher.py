@@ -312,7 +312,7 @@ def gui(gui: imgui.GUI):
 def update_launch_list():
     launch = {}
     if app.platform == "mac":
-        for base in "/Applications", "/Applications/Utilities":
+        for base in mac_application_directories:
             for name in os.listdir(base):
                 path = os.path.join(base, name)
                 name = name.rsplit(".", 1)[0].lower()
