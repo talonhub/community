@@ -6,8 +6,8 @@ mode: dictation
 <user.text>: auto_insert(text)
 enter: auto_insert("new-line")
 {user.punctuation}: auto_insert(punctuation)
-cap <user.text>:
-    result = user.formatted_text(user.text, "CAPITALIZE_FIRST_WORD")
+cap <user.word>:
+    result = user.formatted_text(word, "CAPITALIZE_FIRST_WORD")
     auto_insert(result)
 
 # Navigation
