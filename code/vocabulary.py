@@ -1,49 +1,15 @@
-from talon import Context, Module, actions, grammar
+from talon import Module
 from .user_settings import bind_list_to_csv, bind_word_map_to_csv
 
 mod = Module()
-ctx = Context()
 
 mod.list("vocabulary", desc="additional vocabulary words")
 
-@mod.capture(rule="({user.vocabulary} | <word>)")
-def word(m) -> str:
-    try:
-        return m.vocabulary
-    except AttributeError:
-        return " ".join(actions.dictate.replace_words(actions.dictate.parse_words(m.word)))
-
-@mod.capture(rule="({user.vocabulary} | <phrase>)+")
-def text(m) -> str: return format_phrase(m)
-
-@mod.capture(rule="({user.vocabulary} | {user.punctuation} | <phrase>)+")
-def prose(m) -> str: return format_phrase(m)
-
-# TODO: unify this formatting code with the dictation formatting code, so that
-# user.prose behaves the same way as dictation mode.
-no_space_before = set("\n .,!?;:-/%)]}")
-no_space_after = set("\n -/#([{$£€¥₩₽₹")
-def format_phrase(m):
-    words = capture_to_word_list(m)
-    result = ""
-    for i, word in enumerate(words):
-        if i > 0 and word not in no_space_before and words[i - 1][-1] not in no_space_after:
-            result += " "
-        result += word
-    return result
-
-def capture_to_word_list(m):
-    words = []
-    for item in m:
-        words.extend(
-            actions.dictate.replace_words(actions.dictate.parse_words(item))
-            if isinstance(item, grammar.vm.Phrase) else
-            item.split(" "))
-    return words
-
-
-# ---------- LISTS (punctuation, additional/replacement words) ----------
 # Default words that will need to be capitalized (particularly under w2l).
+# NB. These defaults and those later in this file are ONLY used when
+# auto-creating the corresponding settings/*.csv files. Those csv files
+# determine the contents of user.vocabulary and dictate.word_map. Once they
+# exist, the contents of the lists/dictionaries below are irrelevant.
 _capitalize_defaults = [
     "I",
     "I'm",
