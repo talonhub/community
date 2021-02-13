@@ -313,16 +313,17 @@ def update_launch_list():
     launch = {}
     if app.platform == "mac":
         for base in mac_application_directories:
-            for name in os.listdir(base):
-                path = os.path.join(base, name)
-                name = name.rsplit(".", 1)[0].lower()
-                launch[name] = path
-                words = name.split(" ")
-                for word in words:
-                    if word and word not in launch:
-                        if len(name) > 6 and len(word) < 3:
-                            continue
-                        launch[word] = path
+            if os.path.isdir(base):
+                for name in os.listdir(base):
+                    path = os.path.join(base, name)
+                    name = name.rsplit(".", 1)[0].lower()
+                    launch[name] = path
+                    words = name.split(" ")
+                    for word in words:
+                        if word and word not in launch:
+                            if len(name) > 6 and len(word) < 3:
+                                continue
+                            launch[word] = path
 
     elif app.platform == "windows":
         shortcuts = enum_known_folder(FOLDERID_AppsFolder)
