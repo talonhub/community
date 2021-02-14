@@ -83,7 +83,7 @@ setting_mouse_wheel_down_amount = mod.setting(
 continuous_scoll_mode = ""
 
 
-@imgui.open(x=700, y=0, software=False)
+@imgui.open(x=700, y=0, software=app.platform == "linux")
 def gui_wheel(gui: imgui.GUI):
     gui.text("Scroll mode: {}".format(continuous_scoll_mode))
     gui.line()
@@ -139,7 +139,9 @@ class Actions:
 
     def mouse_drag():
         """(TEMPORARY) Press and hold/release button 0 depending on state for dragging"""
-        if 1 not in ctrl.mouse_buttons_down():
+        # todo: fixme temporary fix for drag command
+        button_down = len(list(ctrl.mouse_buttons_down())) > 0
+        if not button_down:
             # print("start drag...")
             ctrl.mouse_click(button=0, down=True)
             # app.notify("drag started")
@@ -155,8 +157,11 @@ class Actions:
         toggle_control(False)
         show_cursor_helper(True)
         stop_scroll()
-        if 1 in ctrl.mouse_buttons_down():
-            actions.user.mouse_drag()
+
+        # todo: fixme temporary fix for drag command
+        button_down = len(list(ctrl.mouse_buttons_down())) > 0
+        if button_down:
+            ctrl.mouse_click(button=0, up=True)
 
     def mouse_scroll_down():
         """Scrolls down"""
@@ -171,7 +176,8 @@ class Actions:
         if scroll_job is None:
             start_scroll()
 
-        gui_wheel.show()
+        if setting_mouse_hide_mouse_gui.get() == 0:
+            gui_wheel.show()
 
     def mouse_scroll_up():
         """Scrolls up"""

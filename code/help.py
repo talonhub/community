@@ -34,7 +34,7 @@ search_phrase = None
 context_map = {}
 
 current_context_page = 1
-sorted_context_map_keys = None
+sorted_context_map_keys = []
 
 selected_context = None
 selected_context_page = 1
@@ -62,7 +62,7 @@ def update_title():
 
 
 # todo: dynamic rect?
-@imgui.open(y=0, software=False)
+@imgui.open(y=0, software=app.platform == "linux")
 def gui_alphabet(gui: imgui.GUI):
     global alphabet
     gui.text("Alphabet help")
@@ -165,7 +165,7 @@ def get_pages(item_line_counts: List[int]) -> List[int]:
     return pages
 
 
-@imgui.open(y=0, software=False)
+@imgui.open(y=0, software=app.platform == "linux")
 def gui_context_help(gui: imgui.GUI):
     global context_command_map
     global current_context_page
@@ -199,18 +199,21 @@ def gui_context_help(gui: imgui.GUI):
         current_item_index = 1
         current_selection_index = 1
         for key in sorted_context_map_keys:
-            target_page = get_context_page(current_item_index)
+            if key in ctx.lists["self.help_contexts"]:
+                target_page = get_context_page(current_item_index)
 
-            if current_context_page == target_page:
-                button_name = format_context_button(
-                    current_selection_index, key, ctx.lists["self.help_contexts"][key]
-                )
+                if current_context_page == target_page:
+                    button_name = format_context_button(
+                        current_selection_index,
+                        key,
+                        ctx.lists["self.help_contexts"][key],
+                    )
 
-                if gui.button(button_name):
-                    selected_context = ctx.lists["self.help_contexts"][key]
-                current_selection_index = current_selection_index + 1
+                    if gui.button(button_name):
+                        selected_context = ctx.lists["self.help_contexts"][key]
+                    current_selection_index = current_selection_index + 1
 
-            current_item_index += 1
+                current_item_index += 1
 
         if total_page_count > 1:
             gui.spacer()

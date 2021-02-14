@@ -33,9 +33,9 @@ kill all:
 action(edit.find):
   key(ctrl-shift-f)
 action(edit.word_left):
-  key(ctrl-w-left)
+  key(ctrl-w left)
 action(edit.word_right):
-  key(ctrl-w-right)
+  key(ctrl-w right)
 action(app.tab_open):
   key(ctrl-shift-t)
 action(app.tab_close):

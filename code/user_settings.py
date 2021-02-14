@@ -51,14 +51,17 @@ def _load_csv_dict(
                 # Windows newlines are sometimes read as empty rows. :champagne:
                 continue
             if len(row) == 1:
-                mapping[row[0]] = row[0]
+                output = spoken_form = row[0]
             else:
-                mapping[row[1]] = row[0]
+                output, spoken_form = row[:2]
                 if len(row) > 2:
                     print(
                         f'"{file_name}": More than two values in row: {row}.'
                         + " Ignoring the extras."
                     )
+            # Leading/trailing whitespace in spoken form can prevent recognition.
+            spoken_form = spoken_form.strip()
+            mapping[spoken_form] = output
     return mapping
 
 

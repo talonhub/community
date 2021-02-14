@@ -1,6 +1,7 @@
-from talon import Module, Context, actions, ui, imgui
+from talon import Module, Context, actions, ui, imgui, app
 from talon.grammar import Phrase
 from typing import List, Union
+import logging
 import re
 
 ctx = Context()
@@ -11,13 +12,9 @@ words_to_keep_lowercase = "a,an,the,at,by,for,in,is,of,on,to,up,and,as,but,or,no
     ","
 )
 
-# last_phrase has the last phrase spoken, WITHOUT formatting.
-# This is needed for reformatting.
+# The last phrase spoken, without & with formatting. Used for reformatting.
 last_phrase = ""
-
-# formatted_phrase_history keeps the most recent formatted phrases, WITH formatting.
-formatted_phrase_history = []
-formatted_phrase_history_length = 20
+last_phrase_formatted = ""
 
 
 def surround(by):
@@ -32,27 +29,24 @@ def surround(by):
 
 
 def format_phrase(m: Union[str, Phrase], fmtrs: str):
-    global last_phrase
+    global last_phrase, last_phrase_formatted
     last_phrase = m
     words = []
     if isinstance(m, str):
         words = m.split(" ")
     else:
+        # TODO: is this still necessary, and if so why?
         if m.words[-1] == "over":
             m.words = m.words[:-1]
 
         words = actions.dictate.parse_words(m)
         words = actions.dictate.replace_words(words)
 
-    result = format_phrase_no_history(words, fmtrs)
-
-    # Add result to history.
-    global formatted_phrase_history
-    formatted_phrase_history.insert(0, result)
-    formatted_phrase_history = formatted_phrase_history[
-        :formatted_phrase_history_length
-    ]
-
+    result = last_phrase_formatted = format_phrase_no_history(words, fmtrs)
+    actions.user.add_phrase_to_history(result)
+    # Arguably, we shouldn't be dealing with history here, but somewhere later
+    # down the line. But we have a bunch of code that relies on doing it this
+    # way and I don't feel like rewriting it just now. -rntz, 2020-11-04
     return result
 
 
@@ -162,7 +156,7 @@ formatters_words = {
     "packed": formatters_dict["DOUBLE_COLON_SEPARATED"],
     "padded": formatters_dict["SPACE_SURROUNDED_STRING"],
     # "say": formatters_dict["NOOP"],
-    "sentence": formatters_dict["CAPITALIZE_FIRST_WORD"],
+    # "sentence": formatters_dict["CAPITALIZE_FIRST_WORD"],
     "slasher": formatters_dict["SLASH_SEPARATED"],
     "smash": formatters_dict["NO_SPACES"],
     "snake": formatters_dict["SNAKE_CASE"],
@@ -181,13 +175,13 @@ all_formatters.update(formatters_words)
 
 mod = Module()
 mod.list("formatters", desc="list of formatters")
+mod.list("prose_formatter", desc="words to start dictating prose, and the formatter they apply")
 
 
 @mod.capture(rule="{self.formatters}+")
 def formatters(m) -> str:
     "Returns a comma-separated string of formatters e.g. 'SNAKE,DUBSTRING'"
     return ",".join(m.formatters_list)
-
 
 @mod.capture(
     # Note that if the user speaks something like "snake dot", it will
@@ -217,7 +211,7 @@ class ImmuneString(object):
 @mod.capture(
     # Add anything else into this that you want to be able to speak during a
     # formatter.
-    rule="(<user.symbol_key> | <user.letter> | numb <number>)"
+    rule="(<user.symbol_key> | numb <number>)"
 )
 def formatter_immune(m) -> ImmuneString:
     """Text that can be interspersed into a formatter, e.g. characters.
@@ -249,29 +243,16 @@ class Actions:
         else:
             gui.show()
 
-    def formatters_recent_toggle():
-        """Toggles list of recent formatters"""
-        if recent_gui.showing:
-            recent_gui.hide()
-        else:
-            recent_gui.show()
-
-    def formatters_recent_select(number: int):
-        """Inserts a recent formatter"""
-        if len(formatted_phrase_history) >= number:
-            return formatted_phrase_history[number - 1]
-        return ""
-
-    def formatters_clear_last():
-        """Clears the last formatted phrase"""
-        if len(formatted_phrase_history) > 0:
-            for character in formatted_phrase_history[0]:
-                actions.edit.delete()
-
     def formatters_reformat_last(formatters: str) -> str:
-        """Reformats last formatted phrase"""
-        global last_phrase
-        return format_phrase(last_phrase, formatters)
+        """Clears and reformats last formatted phrase"""
+        global last_phrase, last_phrase_formatted
+        if actions.user.get_last_phrase() != last_phrase_formatted:
+            # The last thing we inserted isn't the same as the last thing we
+            # formatted, so abort.
+            logging.warning("formatters_reformat_last(): Last phrase wasn't a formatter!")
+            return
+        actions.user.clear_last_phrase()
+        actions.user.insert_formatted(last_phrase, formatters)
 
     def formatters_reformat_selection(formatters: str) -> str:
         """Reformats the current selection."""
@@ -293,19 +274,15 @@ class Actions:
 
 
 ctx.lists["self.formatters"] = formatters_words.keys()
+ctx.lists["self.prose_formatter"] = {
+    "say": "NOOP", "speak": "NOOP",
+    "sentence": "CAPITALIZE_FIRST_WORD",
+}
 
 
-@imgui.open(software=False)
+@imgui.open(software=app.platform == "linux")
 def gui(gui: imgui.GUI):
     gui.text("List formatters")
     gui.line()
     for name in sorted(set(formatters_words.keys())):
         gui.text(f"{name} | {format_phrase_no_history(['one', 'two', 'three'], name)}")
-
-
-@imgui.open(software=False)
-def recent_gui(gui: imgui.GUI):
-    gui.text("Recent formatters")
-    gui.line()
-    for index, result in enumerate(formatted_phrase_history, 1):
-        gui.text("{}. {}".format(index, result))

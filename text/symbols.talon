@@ -43,19 +43,19 @@ inside percent:
 inside quotes:
 	insert('""')
 	key(left)
-angle this: 
+angle that: 
     text = edit.selected_text()
     user.paste("<{text}>")
-(bracket | brace) this: 
+(bracket | brace) that: 
     text = edit.selected_text()
     user.paste("{{{text}}}")
-(parens | args) this: 
+(parens | args) that: 
     text = edit.selected_text()
     user.paste("({text})")
-percent this: 
+percent that: 
     text = edit.selected_text()
     user.paste("%{text}%")
-quote this:
+quote that:
     text = edit.selected_text()
     user.paste('"{text}"')
 

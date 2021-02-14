@@ -4,6 +4,9 @@ app: firefox
 tag(): browser
 tag(): user.tabs
 
+action(app.tab_next): key(ctrl-pagedown)
+action(app.tab_previous): key(ctrl-pageup)
+
 #action(browser.address):
 
 action(browser.bookmark):
@@ -15,8 +18,12 @@ action(browser.bookmark_tabs):
 action(browser.bookmarks):
 	key(ctrl-shift-b)
   
-#action(browser.bookmarks_bar):
-#	key(ctrl-shift-b)
+action(browser.bookmarks_bar):
+	key(alt-v)
+	sleep(50ms)
+	key(t)
+	sleep(50ms)
+	key(b)
 
 action(browser.focus_address): 
 	key(ctrl-l)
@@ -55,7 +62,7 @@ action(browser.reload_hard):
 #action(browser.reload_hardest):
 	
 action(browser.show_clear_cache):
-	key(ctrl-shift-del)
+	key(ctrl-shift-delete)
   
 action(browser.show_downloads):
 	key(ctrl-j)

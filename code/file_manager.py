@@ -144,8 +144,8 @@ class Actions:
             gui_files.hide()
             gui_folders.hide()
         else:
-            gui_files.freeze()
-            gui_folders.freeze()
+            gui_files.show()
+            gui_folders.show()
 
     def file_manager_hide_pickers():
         """Hides the pickers"""
@@ -183,7 +183,7 @@ class Actions:
                 current_file_page += 1
             else:
                 current_file_page = 1
-            gui_files.freeze()
+            gui_files.show()
 
     def file_manager_previous_file_page():
         """previous_file_page"""
@@ -194,7 +194,7 @@ class Actions:
             else:
                 current_file_page = total_file_pages
 
-            gui_files.freeze()
+            gui_files.show()
 
     def file_manager_next_folder_page():
         """next_folder_page"""
@@ -205,7 +205,7 @@ class Actions:
             else:
                 current_folder_page = 1
 
-            gui_folders.freeze()
+            gui_folders.show()
 
     def file_manager_previous_folder_page():
         """previous_folder_page"""
@@ -216,7 +216,7 @@ class Actions:
             else:
                 current_folder_page = total_folder_pages
 
-            gui_folders.freeze()
+            gui_folders.show()
 
 
 pattern = re.compile(r"[A-Z][a-z]*|[a-z]+|\d")
@@ -266,7 +266,7 @@ def get_file_map(current_path):
     return dict(zip(spoken_forms, [f for f in files]))
 
 
-@imgui.open(y=10, x=900, software=False)
+@imgui.open(y=10, x=900, software=app.platform == "linux")
 def gui_folders(gui: imgui.GUI):
     global current_folder_page, total_folder_pages
     total_folder_pages = math.ceil(
@@ -295,7 +295,7 @@ def gui_folders(gui: imgui.GUI):
     #   actions.user.file_manager_previous_folder_page()
 
 
-@imgui.open(y=10, x=1300, software=False)
+@imgui.open(y=10, x=1300, software=app.platform == "linux")
 def gui_files(gui: imgui.GUI):
     global file_selections, current_file_page, total_file_pages
     total_file_pages = math.ceil(len(file_selections) / setting_imgui_limit.get())
@@ -335,8 +335,8 @@ def clear_lists():
 
 def update_gui():
     if gui_folders.showing or setting_auto_show_pickers.get() >= 1:
-        gui_folders.freeze()
-        gui_files.freeze()
+        gui_folders.show()
+        gui_files.show()
 
 
 def update_lists():
