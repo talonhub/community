@@ -66,9 +66,9 @@ formatted <user.format_text>:
     user.formatters_reformat_selection(formatters)
 
 # Corrections
-scratch that: user.clear_last_utterance()
+scratch that: user.clear_last_phrase()
 scratch selection: edit.delete()
-select that: user.select_last_utterance()
+select that: user.select_last_phrase()
 spell that <user.letters>: auto_insert(letters)
 spell that <user.formatters> <user.letters>:
     result = user.formatted_text(letters, formatters)
