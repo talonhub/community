@@ -4,8 +4,8 @@ from typing import Optional, Tuple, Literal
 
 mod = Module()
 
-setting_dictation_context_sensitive = mod.setting(
-    "dictation_context_sensitive",
+setting_context_sensitive_dictation = mod.setting(
+    "context_sensitive_dictation",
     type=bool,
     default=False,
     desc="Look at surrounding text to improve auto-capitalization/spacing in dictation mode. By default, this works by selecting that text & copying it to the clipboard, so it may be slow or fail in some applications.",
@@ -135,7 +135,7 @@ class Actions:
         # do_the_dance = whether we should try to be context-sensitive. Since
         # whitespace is not affected by formatter state, if text.isspace() is
         # True we don't need context-sensitivity.
-        do_the_dance = (setting_dictation_context_sensitive.get()
+        do_the_dance = (setting_context_sensitive_dictation.get()
                         and not text.isspace())
         if do_the_dance:
             dictation_formatter.update_context(
