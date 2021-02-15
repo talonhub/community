@@ -27,7 +27,7 @@ def text(m) -> str:
 @mod.capture(rule="({user.vocabulary} | {user.punctuation} | <phrase>)+")
 def prose(m) -> str:
     """Mixed words and punctuation, auto-spaced & capitalized."""
-    text, *_state = auto_capitalize(format_phrase(m))
+    text, _state = auto_capitalize(format_phrase(m))
     return text
 
 
