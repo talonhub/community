@@ -181,6 +181,7 @@ def update_lists():
         words = get_words(name)
         for word in words:
             if word and word not in running:
+            # if word and word not in running and len(name) > 3:
                 running[word.lower()] = cur_app.name
 
         running[name.lower()] = cur_app.name
@@ -265,12 +266,6 @@ class Actions:
     def switcher_focus(name: str):
         """Focus a new application by  name"""
         app = actions.user.get_running_app(name)
-
-        # don't process silly things like "focus i"
-        if len(name) < 3:
-            print("switcher_focus skipped: len({}) < 3".format(name))
-            return
-
         app.focus()
 
         # Hacky solution to do this reliably on Mac.
