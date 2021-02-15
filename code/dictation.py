@@ -83,7 +83,7 @@ def auto_capitalize(text, state = None):
         elif charge and (c.isalnum() or c in ",:"):
             charge = False
             c = c.capitalize()
-        # Otherwise the charge passes through (charge is unchanged).
+        # Otherwise the charge just passes through.
         output += c
         newline = c == "\n"
     return output, ("sentence start" if charge else
