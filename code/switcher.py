@@ -180,7 +180,7 @@ def update_lists():
 
         words = get_words(name)
         for word in words:
-            if word and word not in running:
+            if word and word not in running and len(word) >= 3:
                 running[word.lower()] = cur_app.name
 
         running[name.lower()] = cur_app.name
