@@ -2,7 +2,7 @@ import os
 import pathlib
 import subprocess
 
-from talon import Context, Module, actions, app, cron, ctrl, imgui, noise, settings, ui
+from talon import Context, Module, actions, app, cron, ctrl, clip, imgui, noise, settings, ui
 from talon_plugins import eye_mouse, eye_zoom_mouse, speech
 from talon_plugins.eye_mouse import config, toggle_camera_overlay, toggle_control
 
