@@ -139,6 +139,10 @@ clear way down:
     edit.extend_file_end()
     edit.delete()
 
+clear all:
+    edit.select_all()
+    edit.delete()
+
 #copy commands
 copy all:
     edit.select_all()
@@ -174,7 +178,7 @@ copy line:
     edit.copy()
 
 #cut commands
-cut everything:
+cut all:
     edit.select_all()
     edit.cut()
 #to do: do we want these variants
