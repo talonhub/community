@@ -10,3 +10,14 @@ grid reset:
 
 grid back:
     user.grid_go_back()
+
+mouse grid help:
+    user.mouse_grid_help_overlay_force_show()
+mouse grid help close:
+    user.mouse_grid_help_overlay_close()
+mouse grid help disable:
+    user.mouse_grid_help_overlay_disable()
+    user.mouse_grid_help_overlay_close()
+mouse grid help enable:
+    user.mouse_grid_help_overlay_enable()
+    user.mouse_grid_help_overlay_show()

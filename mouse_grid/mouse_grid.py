@@ -1,6 +1,6 @@
 # courtesy of https://github.com/timo/
 # see https://github.com/timo/talon_scripts
-from talon import Module, Context, app, canvas, screen, settings, ui, ctrl, cron
+from talon import Module, Context, app, actions, canvas, screen, settings, ui, ctrl, cron
 from talon.skia import Shader, Color, Paint, Rect
 from talon.types.point import Point2d
 from talon_plugins import eye_mouse, eye_zoom_mouse
@@ -73,6 +73,9 @@ class MouseSnapNine:
         self.mcanvas.register("draw", self.draw)
         self.mcanvas.freeze()
         self.active = True
+
+        actions.user.mouse_grid_help_overlay_show()
+
         return
 
     def close(self):
@@ -82,6 +85,8 @@ class MouseSnapNine:
         self.mcanvas.close()
         self.mcanvas = None
         self.img = None
+
+        actions.user.mouse_grid_help_overlay_close()
 
         self.active = False
         if self.was_control_mouse_active and not eye_mouse.control_mouse.enabled:
@@ -279,7 +284,7 @@ class GridActions:
     def grid_narrow_list(digit_list: typing.List[str]):
         """Choose fields multiple times in a row"""
         for d in digit_list:
-            GridActions.grid_narrow(int(d))
+            actions.user.grid_narrow(int(d))
 
     def grid_narrow(digit: Union[int, str]):
         """Choose a field of the grid and narrow the selection down"""
