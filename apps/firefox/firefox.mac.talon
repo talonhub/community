@@ -20,12 +20,7 @@ action(browser.bookmarks):
 
 action(browser.focus_address): 
 	key(cmd-l)
-
-tab search <user.text>:
-	browser.focus_address()
-	"% {text}"
-	key(down)
-
+	
 #action(browser.focus_page):
 
 action(browser.focus_search):
