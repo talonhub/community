@@ -180,7 +180,7 @@ def update_lists():
 
         words = get_words(name)
         for word in words:
-            if word and word not in running:
+            if word and word not in running and len(word) >= 3:
                 running[word.lower()] = cur_app.name
 
         running[name.lower()] = cur_app.name
@@ -244,29 +244,27 @@ class Actions:
         # We should use the capture result directly if it's already in the list
         # of running applications. Otherwise, name is from <user.text> and we
         # can be a bit fuzzier
-        if name in running_application_dict:
-            for app in ui.apps():
-                if app.name == name and not app.background:
-                    return app
-            raise RuntimeError(f'App not running: "{name}"')
-        else:
-            # Don't process silly things like "focus i"
+        if name not in running_application_dict:
             if len(name) < 3:
                 raise RuntimeError(
                     f'Skipped getting app: "{name}" has less than 3 chars.'
                 )
-
-            for running_name, app in ctx.lists["self.running"].items():
+            for running_name, full_application_name in ctx.lists[
+                "self.running"
+            ].items():
                 if running_name == name or running_name.lower().startswith(
                     name.lower()
                 ):
-                    return app
-
-            raise RuntimeError(f'Could not find app "{name}"')
+                    name = full_application_name
+                    break
+        for app in ui.apps():
+            if app.name == name and not app.background:
+                return app
+        raise RuntimeError(f'App not running: "{name}"')
 
     def switcher_focus(name: str):
         """Focus a new application by  name"""
-        app = actions.self.get_running_app(name)
+        app = actions.user.get_running_app(name)
         app.focus()
 
         # Hacky solution to do this reliably on Mac.
@@ -314,17 +312,18 @@ def gui(gui: imgui.GUI):
 def update_launch_list():
     launch = {}
     if app.platform == "mac":
-        for base in "/Applications", "/Applications/Utilities":
-            for name in os.listdir(base):
-                path = os.path.join(base, name)
-                name = name.rsplit(".", 1)[0].lower()
-                launch[name] = path
-                words = name.split(" ")
-                for word in words:
-                    if word and word not in launch:
-                        if len(name) > 6 and len(word) < 3:
-                            continue
-                        launch[word] = path
+        for base in mac_application_directories:
+            if os.path.isdir(base):
+                for name in os.listdir(base):
+                    path = os.path.join(base, name)
+                    name = name.rsplit(".", 1)[0].lower()
+                    launch[name] = path
+                    words = name.split(" ")
+                    for word in words:
+                        if word and word not in launch:
+                            if len(name) > 6 and len(word) < 3:
+                                continue
+                            launch[word] = path
 
     elif app.platform == "windows":
         shortcuts = enum_known_folder(FOLDERID_AppsFolder)

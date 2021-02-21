@@ -73,6 +73,12 @@ def function_key(m) -> str:
     return m.function_key
 
 
+@mod.capture(rule="( <self.letter> | <self.number_key> | <self.symbol_key> )")
+def any_alphanumeric_key(m) -> str:
+    "any alphanumeric key"
+    return str(m)
+
+
 @mod.capture(
     rule="( <self.letter> | <self.number_key> | <self.symbol_key> "
     "| <self.arrow_key> | <self.function_key> | <self.special_key> )"
@@ -123,7 +129,8 @@ ctx.lists["self.letter"] = alphabet
 punctuation_words = {
     # TODO: I'm not sure why we need these, I think it has something to do with
     # Dragon. Possibly it has been fixed by later improvements to talon? -rntz
-    "`": "`", ",": ",", # <== these things
+    "`": "`",
+    ",": ",",  # <== these things
     "back tick": "`",
     "comma": ",",
     "period": ".",

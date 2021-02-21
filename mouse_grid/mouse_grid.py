@@ -11,31 +11,6 @@ import math, time
 import typing
 
 mod = Module()
-shimmer_effect_enabled = mod.setting(
-    "grid_shimmer_effect_enabled",
-    type=bool,
-    default=False,
-    desc="""Enable the "shimmer effect" that regularly displays a faint hint of the first two layers of the 3x3 grid.""",
-)
-shimmer_effect_duration = mod.setting(
-    "grid_shimmer_effect_duration",
-    type=float,
-    default=10,
-    desc="""How long should the shimmer effect take to pass across the screen.""",
-)
-shimmer_effect_pause = mod.setting(
-    "grid_shimmer_effect_pause",
-    type=float,
-    default=420,
-    desc="""How long should it take for the shimmer effect to come back.""",
-)
-shimmer_effect_width = mod.setting(
-    "grid_shimmer_effect_stroke_width",
-    type=float,
-    default=1,
-    desc="""How thick should the grid lines be that show up during the shimmer effect.""",
-)
-
 narrow_expansion = mod.setting(
     "grid_narrow_expansion",
     type=int,
@@ -50,38 +25,43 @@ ctx = Context()
 
 class MouseSnapNine:
     def __init__(self):
-        self.states = []
-        # self.screen_index = 0
-        self.screen = ui.screens()[0]
-        self.offset_x = self.screen.x
-        self.offset_y = self.screen.y
-        self.width = self.screen.width
-        self.height = self.screen.height
-        self.states.append((self.offset_x, self.offset_y, self.width, self.height))
-        self.mcanvas = canvas.Canvas.from_screen(self.screen)
+        self.screen = None
+        self.rect = None
+        self.history = []
         self.img = None
-        self.wants_capture = 0
+        self.mcanvas = None
         self.active = False
-        self.moving = False
         self.count = 0
         self.was_control_mouse_active = False
         self.was_zoom_mouse_active = False
 
-    #     tap.register(tap.MMOVE, self.on_move)
-    #
-    # def on_move(self, typ, e):
-    #     if typ != tap.MMOVE or not self.active:
-    #         return
-    #     x, y = self.pos()
-    #     last_pos = self.states[-1]
-    #     x2, y2 = last_pos[0] + last_pos[2]//2, last_pos[1] + last_pos[3]//2
-    #     # print("moved ", e, x, y)
-    #     if (e.x, e.y) != (x, y) and (e.x, e.y) != (x2, y2):
-    #         self.stop(None)
-
-    def start(self, *_):
+    def setup(self, *, rect: Rect = None, screen_num: int = None):
+        screens = ui.screens()
+        # each if block here might set the rect to None to indicate failure
+        if rect is not None:
+            try:
+                screen = ui.screen_containing(*rect.center)
+            except Exception:
+                rect = None
+        if rect is None and screen_num is not None:
+            screen = screens[screen_num % len(screens)]
+            rect = screen.rect
+        if rect is None:
+            screen = screens[0]
+            rect = screen.rect
+        self.rect = rect.copy()
+        self.screen = screen
+        self.count = 0
+        self.img = None
+        if self.mcanvas is not None:
+            self.mcanvas.close()
+        self.mcanvas = canvas.Canvas.from_screen(screen)
         if self.active:
-            print("already active - won't start")
+            self.mcanvas.register("draw", self.draw)
+            self.mcanvas.freeze()
+
+    def show(self):
+        if self.active:
             return
         # noinspection PyUnresolvedReferences
         if eye_zoom_mouse.zoom_mouse.enabled:
@@ -90,17 +70,19 @@ class MouseSnapNine:
         if eye_mouse.control_mouse.enabled:
             self.was_control_mouse_active = True
             eye_mouse.control_mouse.toggle()
-        if self.mcanvas is not None:
-            print("unregistering a canvas")
-            self.mcanvas.unregister("draw", self.draw)
         self.mcanvas.register("draw", self.draw)
-        print("grid activating")
+        self.mcanvas.freeze()
         self.active = True
-        return True
+        return
 
-    def stop(self, *_):
-        if not shimmer_effect_enabled.get():
-            self.mcanvas.unregister("draw", self.draw)
+    def close(self):
+        if not self.active:
+            return
+        self.mcanvas.unregister("draw", self.draw)
+        self.mcanvas.close()
+        self.mcanvas = None
+        self.img = None
+
         self.active = False
         if self.was_control_mouse_active and not eye_mouse.control_mouse.enabled:
             eye_mouse.control_mouse.toggle()
@@ -111,40 +93,6 @@ class MouseSnapNine:
         self.was_control_mouse_active = False
 
     def draw(self, canvas):
-        if self.wants_capture == 1:
-            self.wants_capture = 2
-            self.mcanvas.freeze()
-            return
-        elif self.wants_capture == 2:
-
-            def finish_capture():
-                print("capture finished")
-                self.mcanvas.allows_capture = True
-                self.wants_capture = 0
-                self.mcanvas.register("paint", self.draw)
-                self.mcanvas.freeze()
-
-            def do_capture():
-                print(
-                    "capturing area",
-                    self.offset_x,
-                    self.offset_y,
-                    self.width,
-                    self.height,
-                )
-                self.img = screen.capture(
-                    self.offset_x, self.offset_y, self.width, self.height
-                )
-                cron.after("5ms", finish_capture)
-
-            self.mcanvas.allows_capture = False
-            cron.after("5ms", do_capture)
-            self.wants_capture = 3
-            self.mcanvas.freeze()
-            self.mcanvas.unregister("paint", self.draw)
-        elif self.wants_capture == 3:
-            return
-
         paint = canvas.paint
 
         def draw_grid(offset_x, offset_y, width, height):
@@ -183,72 +131,7 @@ class MouseSnapNine:
                     canvas.draw_line(cx - 10, cy, cx + 10, cy)
                     canvas.draw_line(cx, cy - 10, cx, cy + 10)
 
-        # def draw_grid(offset_x, offset_y, width, height, dxp = 0, dyp = 0):
-        # dx = (dxp / 100) * width
-        # dy = (dyp / 100) * height
-        # canvas.draw_line(
-        # offset_x + width // 3,
-        # offset_y + dy,
-        # offset_x + width // 3,
-        # offset_y + height - dy,
-        # )
-        # canvas.draw_line(
-        # offset_x + 2 * width // 3,
-        # offset_y + dy,
-        # offset_x + 2 * width // 3,
-        # offset_y + height - dy,
-        # )
-
-        # canvas.draw_line(
-        # offset_x + dx,
-        # offset_y + height // 3,
-        # offset_x + width - dx,
-        # offset_y + height // 3,
-        # )
-        # canvas.draw_line(
-        # offset_x + dx,
-        # offset_y + 2 * height // 3,
-        # offset_x + width - dx,
-        # offset_y + 2 * height // 3,
-        # )
-
         grid_stroke = 1
-
-        if not self.active and shimmer_effect_enabled.get():
-            remainder_time = time.time() % (
-                shimmer_effect_duration.get() + shimmer_effect_pause.get()
-            )
-            if remainder_time < shimmer_effect_duration.get():
-                alpha = "60"
-                animpos = remainder_time / shimmer_effect_duration.get()
-                # fromcnt = (animpos - 0.5) * 2
-                stops = [
-                    animpos - 0.1,
-                    animpos - 0.05,
-                    animpos,
-                    animpos + 0.05,
-                    animpos + 0.1,
-                ]
-                stops = list(map(lambda c: min(max(c, 0), 1), stops))
-                paint.shader = Shader.linear_gradient(
-                    0,
-                    self.height / 9,
-                    self.width,
-                    8 * self.height / 9,
-                    [
-                        "00000000",
-                        "ff0000" + alpha,
-                        "0000ff" + alpha,
-                        "00ff00" + alpha,
-                        "00000000",
-                    ],
-                    stops,
-                    Shader.TileMode.CLAMP,
-                )
-                grid_stroke = shimmer_effect_width.get()
-                paint.stroke_width = 1
-            else:
-                return
 
         def draw_text(offset_x, offset_y, width, height):
             canvas.paint.text_align = canvas.paint.TextAlign.CENTER
@@ -262,8 +145,9 @@ class MouseSnapNine:
                     text_rect = canvas.paint.measure_text(text_string)[1]
                     background_rect = text_rect.copy()
                     background_rect.center = Point2d(
-                            offset_x + width / 6 + col * width / 3,
-                            offset_y + height / 6 + row * height / 3)
+                        offset_x + width / 6 + col * width / 3,
+                        offset_y + height / 6 + row * height / 3,
+                    )
                     background_rect = background_rect.inset(-4)
                     paint.color = "9999995f"
                     paint.style = Paint.Style.FILL
@@ -281,11 +165,7 @@ class MouseSnapNine:
                 gap = 35 - self.count * 10
                 if not self.active:
                     gap = 45
-                draw_crosses(
-                    *self.calc_narrow(
-                        which, self.offset_x, self.offset_y, self.width, self.height
-                    )
-                )
+                draw_crosses(*self.calc_narrow(which, self.rect))
 
         paint.stroke_width = grid_stroke
         if self.active:
@@ -293,125 +173,81 @@ class MouseSnapNine:
         else:
             paint.color = "000000ff"
         if self.count >= 2:
-            aspect = self.width / self.height
+            aspect = self.rect.width / self.rect.height
             if aspect >= 1:
                 w = self.screen.width / 3
                 h = w / aspect
             else:
                 h = self.screen.height / 3
                 w = h * aspect
-            x = (self.screen.width - w) / 2
-            y = (self.screen.height - h) / 2
+            x = self.screen.x + (self.screen.width - w) / 2
+            y = self.screen.y + (self.screen.height - h) / 2
             self.draw_zoom(canvas, x, y, w, h)
             draw_grid(x, y, w, h)
             draw_text(x, y, w, h)
         else:
-            draw_grid(self.offset_x, self.offset_y, self.width, self.height)
+            draw_grid(self.rect.x, self.rect.y, self.rect.width, self.rect.height)
 
             paint.textsize += 12 - self.count * 3
-            draw_text(self.offset_x, self.offset_y, self.width, self.height)
+            draw_text(self.rect.x, self.rect.y, self.rect.width, self.rect.height)
 
-    def calc_narrow(self, which, offset_x, offset_y, width, height):
+    def calc_narrow(self, which, rect):
+        rect = rect.copy()
         bdr = narrow_expansion.get()
         row = int(which - 1) // 3
         col = int(which - 1) % 3
         if settings["user.grids_put_one_bottom_left"]:
             row = 2 - row
-        offset_x += int(col * width // 3) - bdr
-        offset_y += int(row * height // 3) - bdr
-        width //= 3
-        height //= 3
-        width += bdr * 2
-        height += bdr * 2
-        return [offset_x, offset_y, width, height]
+        rect.x += int(col * rect.width // 3) - bdr
+        rect.y += int(row * rect.height // 3) - bdr
+        rect.width = (rect.width // 3) + bdr * 2
+        rect.height = (rect.height // 3) + bdr * 2
+        return rect
 
     def narrow(self, which, move=True):
         if which < 1 or which > 9:
             return
         self.save_state()
-        self.offset_x, self.offset_y, self.width, self.height = self.calc_narrow(
-            which, self.offset_x, self.offset_y, self.width, self.height
-        )
+        rect = self.calc_narrow(which, self.rect)
+        # check count so we don't bother zooming in _too_ far
+        if self.count < 5:
+            self.rect = rect.copy()
+            self.count += 1
         if move:
-            ctrl.mouse_move(*self.pos())
-        self.count += 1
-        self.mcanvas.freeze()
+            ctrl.mouse_move(*rect.center)
         if self.count >= 2:
-            self.wants_capture = 1
-        # if self.count >= 4:
-        # self.reset(None)
-        self.mcanvas.freeze()
+            self.update_screenshot()
+        else:
+            self.mcanvas.freeze()
 
-    def draw_zoom(self, c, x, y, w, h):
+    def update_screenshot(self):
+        def finish_capture():
+            self.img = screen.capture_rect(self.rect)
+            self.mcanvas.freeze()
+
+        self.mcanvas.hide()
+        cron.after("16ms", finish_capture)
+
+    def draw_zoom(self, canvas, x, y, w, h):
         if self.img:
             src = Rect(0, 0, self.img.width, self.img.height)
             dst = Rect(x, y, w, h)
-            c.draw_image_rect(self.img, src, dst)
-
-    def pos(self):
-        return self.offset_x + self.width // 2, self.offset_y + self.height // 2
-
-    def reset(self, pos=-1):
-        def _reset(m):
-            self.save_state()
-            self.count = 0
-            x, y = ctrl.mouse_pos()
-
-            if pos >= 0:
-                self.screen = ui.screens()[pos]
-            else:
-                self.screen = ui.screen_containing(x, y)
-
-            # print(screens)
-            # self.screen = screens[self.screen_index]
-            self.offset_x = self.screen.x
-            self.offset_y = self.screen.y
-            self.width = self.screen.width
-            self.height = self.screen.height
-            if self.mcanvas is not None:
-                self.mcanvas.unregister("draw", self.draw)
-            self.mcanvas = canvas.Canvas.from_screen(self.screen)
-            # self.mcanvas.register("draw", self.draw)
-            if eye_mouse.control_mouse.enabled:
-                self.was_control_mouse_active = True
-                eye_mouse.control_mouse.toggle()
-            if self.was_control_mouse_active and self.screen == ui.screens()[0]:
-                # if self.screen == ui.screens()[0]:
-                self.narrow_to_pos(x, y)
-                self.narrow_to_pos(x, y)
-                # self.narrow_to_pos(x, y)
-            # print(self.offset_x, self.offset_y, self.width, self.height)
-            # print(*self.pos())
-            self.mcanvas.freeze()
-
-        return _reset
-
-    def reset_to_current_window(self):
-        win = ui.active_window()
-        rect = win.rect
-
-        self.offset_x = rect.x
-        self.offset_y = rect.y
-        self.width = rect.width
-        self.height = rect.height
-
-        self.count = 0
+            canvas.draw_image_rect(self.img, src, dst)
 
     def narrow_to_pos(self, x, y):
         col_size = int(self.width // 3)
         row_size = int(self.height // 3)
-        col = math.floor((x - self.offset_x) / col_size)
-        row = math.floor((y - self.offset_y) / row_size)
-        # print(f"Narrow to {row} {col} {1 + col + 3 * row}")
+        col = math.floor((x - self.rect.x) / col_size)
+        row = math.floor((y - self.rect.x) / row_size)
         self.narrow(1 + col + 3 * row, move=False)
 
     def save_state(self):
-        self.states.append((self.offset_x, self.offset_y, self.width, self.height))
+        self.history.append((self.count, self.rect.copy()))
 
     def go_back(self):
-        last_state = self.states.pop()
-        self.offset_x, self.offset_y, self.width, self.height = last_state
-        self.count -= 1
+        # FIXME: need window and screen tracking
+        self.count, self.rect = self.history.pop()
+        self.mcanvas.freeze()
 
 
 mg = MouseSnapNine()
@@ -420,33 +256,33 @@ mg = MouseSnapNine()
 @mod.action_class
 class GridActions:
     def grid_activate():
-        """Brings up a/the grid (mouse grid or otherwise)"""
-        if mg.start():
-            ctx.tags = ["user.mouse_grid_showing"]
+        """Show mouse grid"""
+        if not mg.mcanvas:
+            mg.setup()
+        mg.show()
+        ctx.tags = ["user.mouse_grid_showing"]
 
     def grid_place_window():
         """Places the grid on the currently active window"""
-        mg.reset_to_current_window()
+        mg.setup(rect=ui.active_window().rect)
 
     def grid_reset():
         """Resets the grid to fill the whole screen again"""
-        mg.reset()(None)
+        if mg.active:
+            mg.setup()
 
     def grid_select_screen(screen: int):
-        """Brings up a/the grid (mouse grid or otherwise)"""
-        mg.reset(screen - 1)(None)
-        mg.start()
+        """Brings up mouse grid"""
+        mg.setup(screen_num=screen - 1)
+        mg.show()
 
     def grid_narrow_list(digit_list: typing.List[str]):
         """Choose fields multiple times in a row"""
-        # print("narrow many", repr(digit))
-        # print(str(digit_list))
         for d in digit_list:
             GridActions.grid_narrow(int(d))
 
     def grid_narrow(digit: Union[int, str]):
         """Choose a field of the grid and narrow the selection down"""
-        # print("narrow one", repr(digit))
         mg.narrow(int(digit))
 
     def grid_go_back():
@@ -455,17 +291,5 @@ class GridActions:
 
     def grid_close():
         """Close the active grid"""
-        if len(ctx.tags) > 0 or mg.active:
-            ctx.tags = []
-            mg.reset()(None)
-            mg.stop()
-
-
-def check_shimmer_setting_at_startup():
-    if shimmer_effect_enabled.get():
-        mg.start()
-        mg.reset()
-        mg.stop()
-
-
-app.register("launch", check_shimmer_setting_at_startup)
+        ctx.tags = []
+        mg.close()

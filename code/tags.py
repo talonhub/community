@@ -5,7 +5,6 @@ mod = Module()
 tagList = [
     "debugger",
     "disassembler",
-    "firefox",
     "gdb",
     "git",  # commandline tag for git commands
     "ida",
