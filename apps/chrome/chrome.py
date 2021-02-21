@@ -4,8 +4,16 @@ ctx = Context()
 mod = Module()
 
 mod.apps.chrome = "app.name: Google Chrome"
-mod.apps.chrome = "app.name: chrome.exe"
-
+mod.apps.chrome = """
+os: windows
+and app.name: Google Chrome
+os: windows
+and app.exe: chrome.exe
+"""
+mod.apps.chrome = """
+os: mac
+and app.bundle: com.google.Chrome
+"""
 ctx.matches = r"""
 app: chrome
 """

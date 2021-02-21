@@ -3,9 +3,9 @@ from talon import ctrl, ui, Module, Context, actions, clip, app
 ctx = Context()
 mod = Module()
 apps = mod.apps
-apps.safari = """
+mod.apps.safari = """
 os: mac
-and app.name: Safari
+and app.bundle: com.apple.Safari
 """
 ctx.matches = r"""
 app: safari
