@@ -17,3 +17,12 @@ action(browser.focus_search):
 
 action(browser.submit_form):
 	key(enter)
+
+tab search:
+  browser.focus_address()
+  insert("% ")
+tab search <user.text>$:
+  browser.focus_address()
+  insert("% text")
+  key(down)
+
