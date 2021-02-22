@@ -34,3 +34,11 @@ class user_actions:
         else:
             actions.key("ctrl-9")
 
+
+@ctx.action_class("browser")
+class browser_actions:
+    def go(url: str):
+        actions.browser.focus_address()
+        actions.sleep("50ms")
+        actions.insert(url)
+        actions.key("enter")
