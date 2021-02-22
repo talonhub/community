@@ -23,6 +23,6 @@ tab search:
   insert("% ")
 tab search <user.text>$:
   browser.focus_address()
-  insert("% text")
+  insert("% {text}")
   key(down)
 
