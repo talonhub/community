@@ -4,23 +4,35 @@ find it:
 next one:
     edit.find_next()
 
-go word left:
+claimer:
     edit.word_left()
 
-go word right:
+kiter:
     edit.word_right()
 
-go left:
+claim <number>:
+    user.left_n(number)
+
+claimie:
     edit.left()
+   
+kite <number>:
+    user.right_n(number)
 
-go right:
+kitey:
     edit.right()
+    
+burn <number>:
+    user.up_n(number)
 
-go up:
-    edit.up()
+burney:
+    user.up_n(1)
+   
+crown <number>:
+    user.down_n(number)
 
-go down:
-    edit.down()
+crownie:
+    user.down_n(1)
 
 go line start:
     edit.line_start()
@@ -69,10 +81,10 @@ select down:
 select word:
     edit.select_word()
 
-select word left:
+take lefter:
     edit.extend_word_left()
 
-select word right:
+take writer:
     edit.extend_word_right()
 
 select way left:
@@ -115,11 +127,11 @@ chuck down:
 chuck word:
     edit.delete_word()
 
-chuck word left:
+chuck lefter:
     edit.extend_word_left()
     edit.delete()
 
-chuck word right:
+chuck righter:
     edit.extend_word_right()
     edit.delete()
 
@@ -137,6 +149,10 @@ chuck way up:
 
 chuck way down:
     edit.extend_file_end()
+    edit.delete()
+
+chuck all:
+    edit.select_all()
     edit.delete()
 
 #copy commands
@@ -161,11 +177,11 @@ copy word:
     edit.select_word()
     edit.copy()
 
-copy word left:
+copy lefter:
     edit.extend_word_left()
     edit.copy()
 
-copy word right:
+copy righter:
     edit.extend_word_right()
     edit.copy()
 
@@ -195,11 +211,11 @@ cut word:
     edit.select_word()
     edit.cut()
 
-cut word left:
+cut lefter:
     edit.extend_word_left()
     edit.cut()
 
-cut word right:
+cut righter:
     edit.extend_word_right()
     edit.cut()
 

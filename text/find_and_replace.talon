@@ -58,7 +58,9 @@ go last clip:
 go next <user.text> [over]: 
     user.select_next_occurrence(text)
     edit.right()
-go next clip: 
+go next token: 
+    user.select_next_token()
+go next clip:
     user.select_next_occurrence(clip.text())
     edit.right()
 paste last <user.text> [over]: 

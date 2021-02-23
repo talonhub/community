@@ -11,8 +11,11 @@ tag(): user.tabs
 action(edit.select_line):
 	key(ctrl-e cmd-shift-left)
 
+action(edit.delete_line):
+	user.vscode("editor.action.deleteLines")
+
 settings():
-  key_wait = 10
+  key_wait = 0
 
 #talon app actions
 action(app.tab_close): user.vscode("workbench.action.closeActiveEditor")
@@ -57,6 +60,11 @@ action(user.split_window_vertically):
 	user.vscode("workbench.action.splitEditor")
 action(user.split_window):
 	user.vscode("workbench.action.splitEditor")
+splint:
+	user.vscode("vscode-neovim.escape")
+	sleep(25ms)
+	user.split_next()
+	key(a)
 # splits.py support end
 
 #multiple_cursor.py support begin
@@ -94,16 +102,23 @@ search [<user.text>]:
   sleep(50ms)
   insert(text or "")
 search next: user.vscode("search.action.focusNextSearchResult")
+search last: user.vscode("search.action.focusPreviousSearchResult")
 
-local [<user.text>]:
-  key(cmd-f)
-  sleep(50ms)
-  insert(text or "")
-
-symbol [<user.text>]:
+symbol hunt [<user.text>]:
   user.vscode("workbench.action.gotoSymbol")
   sleep(50ms)
   insert(text or "")
+
+symbol last: user.vscode("gotoNextPreviousMember.previousMember")
+symbol next: user.vscode("gotoNextPreviousMember.nextMember")
+go symbol: user.vscode("semantic-movement.jumpToContainingSymbol")
+go funk: user.vscode("semantic-movement.jumpToContainingFunction")
+go named funk: user.vscode("semantic-movement.jumpToContainingNamedFunction")
+go class: user.vscode("semantic-movement.jumpToContainingClass")
+take symbol: user.vscode("semantic-movement.selectContainingSymbol")
+take funk: user.vscode("semantic-movement.selectContainingFunction")
+take named funk: user.vscode("semantic-movement.selectContainingNamedFunction")
+take class: user.vscode("semantic-movement.selectContainingClass")
 
 # Panels
 panel control: user.vscode("workbench.panel.repl.view.focus")
@@ -134,12 +149,7 @@ file copy path:
 	user.vscode_ignore_clipboard("copyFilePath") 
 file create sibling: user.vscode("explorer.newFile")  
 file create: user.vscode("workbench.action.files.newUntitledFile")
-#todo: rename isn't working.
-#file rename active: 
-#  user.vscode("File: Reveal Active File In Side Bar")
-#  user.vscode("renameFile")
-file rename:
-	user.vscode("renameFile")
+file rename: user.vscode("fileutils.renameFile")
 file open folder:
 	user.vscode("revealFileInOS")
 file reveal: user.vscode("workbench.files.action.showActiveFileInExplorer") 
@@ -149,14 +159,14 @@ save ugly:
 # Language Features
 suggest show: user.vscode("editor.action.triggerSuggest")
 hint show: user.vscode("editor.action.triggerParameterHints")
-definition show: user.vscode("editor.action.revealDefinition")
+def show: user.vscode("editor.action.revealDefinition")
 definition peek: user.vscode("editor.action.peekDefinition")
 definition side: user.vscode("editor.action.revealDefinitionAside")
 references show: user.vscode("editor.action.goToReferences")
-references find: user.vscode("references-view.find")
+reffer show: user.vscode("references-view.find")
 format that: user.vscode("editor.action.formatDocument")
 format selection: user.vscode("editor.action.formatSelection")
-imports fix: user.vscode("Organize Imports")
+imports fix: user.vscode("editor.action.organizeImports")
 problem next: user.vscode("editor.action.marker.nextInFiles")
 problem last: user.vscode("editor.action.marker.prevInFiles")
 problem fix: user.vscode("problems.action.showQuickFixes")
@@ -166,6 +176,12 @@ whitespace trim: user.vscode("editor.action.trimTrailingWhitespace")
 language switch: user.vscode("workbench.action.editor.changeLanguageMode")
 refactor rename: user.vscode("editor.action.rename")
 refactor this: user.vscode("editor.action.refactor")
+ref next:
+   user.vscode("references-view.tree.focus")
+   key(down enter)
+ref last:
+   user.vscode("references-view.tree.focus")
+   key(up enter)
 
 #code navigation
 (go declaration | follow):
@@ -241,6 +257,7 @@ debug pause: user.vscode("workbench.action.debug.pause")
 debug stopper: user.vscode("workbench.action.debug.stop")
 debug continue: user.vscode("workbench.action.debug.continue")
 debug restart: user.vscode("workbench.action.debug.restart")
+debug console: user.vscode("workbench.debug.action.toggleRepl")
 
 # Terminal
 term external: user.vscode("workbench.action.terminal.openNativeConsole")
@@ -255,21 +272,44 @@ term scroll up: user.vscode("workbench.action.terminal.scrollUp")
 term scroll down: user.vscode("workbench.action.terminal.scrollDown")
 term <number_small>: user.vscode_terminal(number_small)
 
-# easymotion
-spring:
-  key(ctrl-q)
-  key(s)
-
 #TODO: should this be added to linecommands?
 copy line down: user.vscode("editor.action.copyLinesDownAction")
 copy line up: user.vscode("editor.action.copyLinesUpAction")
 
 #Expand/Shrink AST Selection
-select less: user.vscode("editor.action.smartSelect.shrink")
-select (more|this): user.vscode("editor.action.smartSelect.expand")
-  
-creature: 'ce'
+take less: user.vscode("editor.action.smartSelect.shrink")
+take (more|this): user.vscode("editor.action.smartSelect.expand")
 
 minimap: user.vscode_by_id("editor.action.toggleMinimap")
 maximize: user.vscode_by_id("workbench.action.minimizeOtherEditors")
 restore: user.vscode_by_id("workbench.action.evenEditorWidths")
+
+hover show: user.vscode("editor.action.showHover")
+
+edit last: user.vscode("editsHistory.moveCursorToPreviousEdit")
+edit next: user.vscode("editsHistory.moveCursorToNextEdit")
+edit last here: user.vscode("editsHistory.moveCursorToPreviousEditInSameFile")
+edit next here: user.vscode("editsHistory.moveCursorToNextEditInSameFile")
+
+join lines: user.vscode("editor.action.joinLines")
+
+commode:
+	user.vscode("vscode-neovim.escape")
+	sleep(25ms)
+
+insert: key(i)
+
+replace smart:
+	key(:)
+	sleep(50ms)
+	key(S)
+	key(/)
+
+swap this: user.vscode("extension.swap")
+
+full screen: user.vscode("workbench.action.toggleFullScreen")
+reload window: user.vscode("workbench.action.reloadWindow")
+
+curse undo: user.vscode("cursorUndo")
+
+take word: user.vscode("editor.action.addSelectionToNextFindMatch")

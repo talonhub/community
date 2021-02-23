@@ -26,3 +26,25 @@ class Actions:
             actions.edit.paste()
             # sleep here so that clip.revert doesn't revert the clipboard too soon
             actions.sleep("150ms")
+
+    def down_n(n: int):
+        """Goes down n lines"""
+        for _ in range(n):
+            actions.edit.down()
+            actions.sleep("10ms")
+
+    def up_n(n: int):
+        """Goes up n lines"""
+        for _ in range(n):
+            actions.edit.up()
+            actions.sleep("10ms")
+
+    def left_n(n: int):
+        """Goes left n lines"""
+        for _ in range(n):
+            actions.edit.left()
+
+    def right_n(n: int):
+        """Goes right n lines"""
+        for _ in range(n):
+            actions.edit.right()

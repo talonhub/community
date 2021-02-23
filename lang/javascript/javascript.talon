@@ -109,8 +109,8 @@ action(user.code_operator_modulo): " % "
 action(user.code_operator_modulo_assignment): " %= "
 action(user.code_operator_equal): " == "
 action(user.code_operator_not_equal): " != "
-(op | is) strict equal: " === "
-(op | is) strict not equal: " !== "
+op treek: " === "
+op nottreek: " !== "
 action(user.code_operator_greater_than): " > "
 action(user.code_operator_greater_than_or_equal_to): " >= "
 action(user.code_operator_less_than): " < "
@@ -150,6 +150,12 @@ state reduce:
   insert(".reduce()")
   key(left)
 
+state length: insert(".length")
+
+state quote var:
+  insert("${}")
+  key(left)
+  
 state log:
   insert("console.log()")
   key(left)

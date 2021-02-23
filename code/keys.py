@@ -3,7 +3,7 @@ from typing import Set
 from talon import Module, Context, actions, app
 import sys
 
-default_alphabet = "air bat cap drum each fine gust harp sit jay crunch look made near odd pit quench red sun trap urge vest way box yes zoo".split(
+default_alphabet = "air bat cap drum each fine gust harp sit jay crunch look made near odd pit quench red spy trap urge vest way box yes zoo".split(
     " "
 )
 letters_string = "abcdefghijklmnopqrstuvwxyz"
@@ -17,6 +17,7 @@ default_f_digits = (
 mod = Module()
 mod.list("letter", desc="The spoken phonetic alphabet")
 mod.list("symbol_key", desc="All symbols from the keyboard")
+mod.list("immune_symbol_key", desc="Symbols that can appear in a formatter")
 mod.list("arrow_key", desc="All arrow keys")
 mod.list("number_key", desc="All number keys")
 mod.list("modifier_key", desc="All modifier keys")
@@ -67,6 +68,12 @@ def symbol_key(m) -> str:
     return m.symbol_key
 
 
+@mod.capture(rule="{self.immune_symbol_key}")
+def immune_symbol_key(m) -> str:
+    "A symbol key that is allowed to appear within a format string"
+    return m.immune_symbol_key
+
+
 @mod.capture(rule="{self.function_key}")
 def function_key(m) -> str:
     "One function key"
@@ -111,7 +118,7 @@ ctx.lists["self.modifier_key"] = {
     "many": "cmd",
     "troll": "ctrl",  #'troll':   'ctrl',
     "option": "alt",
-    "sky": "shift",  #'sky':     'shift',
+    "ship": "shift",  #'sky':     'shift',
     "super": "super",
 }
 alphabet = dict(zip(default_alphabet, letters_string))
@@ -143,19 +150,21 @@ punctuation_words = {
     "and sign": "&",
     "ampersand": "&",
 }
-symbol_key_words = {
+
+immune_symbol_key_words = {
     "dot": ".",
+    "dash": "-",
+}
+
+symbol_key_words = {
+    "brick": "`",
     "quote": '"',
     "sote": "'",
-    "L square": "[",
-    "left square": "[",
     "square": "[",
-    "R square": "]",
-    "right square": "]",
-    "slash": "/",
+    "rare": "]",
+    "slatch": "/",
     "backslash": "\\",
     "minus": "-",
-    "dash": "-",
     "equals": "=",
     "plus": "+",
     "tilde": "~",
@@ -165,22 +174,17 @@ symbol_key_words = {
     "under score": "_",
     "larry": "(",
     "party": ")",
-    "brace": "}",
-    "left brace": "{",
-    "R brace": "}",
-    "right brace": "}",
+    "brace": "{",
+    "face": "}",
     "angle": "<",
-    "left angle": "<",
     "less than": "<",
     "rangle": ">",
-    "R angle": ">",
-    "right angle": ">",
     "greater than": ">",
     "star": "*",
     "pound": "#",
     "hash": "#",
     "percent": "%",
-    "hatter": "^",
+    "tangle": "^",
     "amper": "&",
     "pipe": "|",
     "dubquote": '"',
@@ -188,8 +192,10 @@ symbol_key_words = {
 
 # make punctuation words also included in {user.symbol_keys}
 symbol_key_words.update(punctuation_words)
+symbol_key_words.update(immune_symbol_key_words)
 ctx.lists["self.punctuation"] = punctuation_words
 ctx.lists["self.symbol_key"] = symbol_key_words
+ctx.lists["self.immune_symbol_key"] = immune_symbol_key_words
 ctx.lists["self.number_key"] = dict(zip(default_digits, numbers))
 ctx.lists["self.arrow_key"] = {
     "down": "down",
@@ -199,10 +205,10 @@ ctx.lists["self.arrow_key"] = {
 }
 
 simple_keys = [
-    "end",
+    # "end",
     "enter",
-    "home",
-    "insert",
+    # "home",
+    # "insert",
     "pagedown",
     "pageup",
     "tab",
@@ -210,9 +216,9 @@ simple_keys = [
 
 alternate_keys = {
     "delete": "backspace",
-    "forward delete": "delete",
+    "delhi": "delete",
     "chuck": "backspace",
-    "scraper": "escape",
+    "scrape": "escape",
     "space": "space",
 }
 # mac apparently doesn't have the menu key.
@@ -223,7 +229,7 @@ keys = {k: k for k in simple_keys}
 keys.update(alternate_keys)
 ctx.lists["self.special_key"] = keys
 ctx.lists["self.function_key"] = {
-    f"F {default_f_digits[i]}": f"f{i + 1}" for i in range(12)
+    f"fun {default_f_digits[i]}": f"f{i + 1}" for i in range(12)
 }
 
 

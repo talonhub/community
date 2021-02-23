@@ -53,4 +53,4 @@ op mod equals: user.code_operator_modulo_assignment()
 [(op | logical | bitwise)] (left right | shift right) equals: user.code_operator_bitwise_right_shift_equals()
 
 #tbd
-(op | pad) colon: " : "
+(op | pad) colon: ": "

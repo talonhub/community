@@ -94,6 +94,7 @@ class edit_actions:
         actions.user.vscode("workbench.action.gotoLine")
         actions.insert(str(n))
         actions.key("enter")
+        actions.edit.line_start()
 
 
 @mod.action_class
@@ -114,23 +115,28 @@ class Actions:
         """Preserved for ease of compatibility."""
         vscode_socket.send(command)
 
+    def jump(action: str, token: str):
+        """Jumps to token using metago"""
+        actions.user.vscode(action)
+        actions.insert(token[:3])
+
 
 @ctx.action_class("user")
 class user_actions:
     # snippet.py support beginHelp close
     def snippet_search(text: str):
-        actions.user.vscode("Insert Snippet")
+        actions.user.vscode("editor.action.insertSnippet")
         actions.insert(text)
 
     def snippet_insert(text: str):
         """Inserts a snippet"""
-        actions.user.vscode("Insert Snippet")
+        actions.user.vscode("editor.action.insertSnippet")
         actions.insert(text)
         actions.key("enter")
 
     def snippet_create():
         """Triggers snippet creation"""
-        actions.user.vscode("Preferences: Configure User Snippets")
+        actions.user.vscode("workbench.action.openSnippets")
 
     # snippet.py support end
 
@@ -171,10 +177,10 @@ class user_actions:
             actions.insert(text)
 
     def find_next():
-        actions.key("enter")
+        actions.user.vscode("editor.action.nextMatchFindAction")
 
     def find_previous():
-        actions.key("shift-enter")
+        actions.user.vscode("editor.action.previousMatchFindAction")
 
     def find_everywhere(text: str):
         """Triggers find across project"""
@@ -249,6 +255,12 @@ class user_actions:
     def select_next_occurrence(text: str):
         actions.edit.find(text)
         actions.sleep("100ms")
+        actions.key("esc")
+
+    def select_next_token():
+        actions.edit.find("")
+        actions.key("enter")
+        actions.key("enter")
         actions.key("esc")
 
     # find_and_replace.py support end

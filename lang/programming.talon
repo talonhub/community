@@ -50,3 +50,18 @@ funk wrap <user.code_functions>:
 funk wrap <number>:
     user.code_select_function(number - 1, edit.selected_text())
 dock string: user.code_document_string()
+
+clapper:
+	edit.line_end()
+	insert(",")
+    key(enter)
+
+breaker:
+	edit.line_end()
+	insert(" {")
+    key(enter)
+
+chronic:
+	edit.line_end()
+	insert(":")
+    key(enter)

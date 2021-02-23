@@ -16,4 +16,4 @@ snap <user.running_applications> [screen] <number>:
     user.move_app_to_screen(running_applications, number)
 browser: user.switcher_focus("Google Chrome")
 coder: user.switcher_focus("Code")
-chatter: user.switcher_focus("Slack")
+slacker: user.switcher_focus("Slack")
