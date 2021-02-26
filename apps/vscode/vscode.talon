@@ -318,3 +318,4 @@ curse undo: user.vscode("cursorUndo")
 take word: user.vscode("editor.action.addSelectionToNextFindMatch")
 
 hello world: user.vscode_via_command_pipe("workbench.action.openRecent")
+testing testing: user.vscode_via_command_pipe("editor.action.deleteLines")

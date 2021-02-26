@@ -1,5 +1,6 @@
-from queue import SimpleQueue
+from queue import Queue
 from threading import Thread
+from time import sleep
 from typing import Any, List, Optional
 from talon import Context, actions, ui, Module, app, clip
 import datetime
@@ -16,6 +17,9 @@ from enum import Enum, auto
 from dataclasses import dataclass
 
 
+MAX_DELAY = 500
+
+
 class QueueItemType(Enum):
     DIE = auto()
     COMMAND = auto()
@@ -27,18 +31,26 @@ class QueueItem:
     payload: Any = None
 
 
+@dataclass
+class CommandInfo:
+    command: str
+    args: List[Any]
+    timestamp: datetime.datetime
+
+
 class VSCodeCommandPipe:
-    def __init__(self, queue: SimpleQueue):
-        self.mkfifo()
+    def __init__(self, queue: Queue):
         self.queue = queue
+        self.output_fifo_path = Path("/tmp/vscode-command-pipe-in")
+        self.input_fifo_path = Path("/tmp/vscode-command-pipe-out")
+        self.mkfifo(self.output_fifo_path)
+        self.mkfifo(self.input_fifo_path)
 
-    def mkfifo(self):
-        self.fifo_path = Path("/tmp/vscode-command-pipe-in")
-
-        if not self.fifo_path.exists():
-            mkfifo(self.fifo_path)
-        elif not self.fifo_path.is_fifo():
-            raise Exception(f"Path {self.fifo_path} exists but is not a fifo")
+    def mkfifo(self, fifo_path):
+        if not fifo_path.exists():
+            mkfifo(fifo_path)
+        elif not fifo_path.is_fifo():
+            raise Exception(f"Path {fifo_path} exists but is not a fifo")
 
     def __call__(self):
         print("Starting vscode command pipe thread")
@@ -49,21 +61,26 @@ class VSCodeCommandPipe:
                 break
             payload = item.payload
             print(f"Working on {item}")
-            self.send(*payload)
+            self.send(payload.command, payload.args, payload.timestamp)
             print(f"Finished {item}")
+            # queue.task_done()
 
-    def send(self, command, *args):
-        with self.fifo_path.open("w") as out:
+    def send(self, command, args, timestamp: datetime.datetime):
+        with self.output_fifo_path.open("w") as out:
             out.write(
                 json.dumps(
                     {
                         "commandId": command,
                         "args": args,
                         "expectResponse": False,
-                        "timestamp": datetime.datetime.utcnow().isoformat(),
+                        "timestamp": timestamp.isoformat(),
                     }
                 )
             )
+
+        with self.input_fifo_path.open("r") as input_fifo:
+            response = input_fifo.read()
+            print(response)
 
 
 try:
@@ -71,7 +88,7 @@ try:
 except KeyError:
     pass
 
-queue = SimpleQueue()
+queue = Queue()
 vscode_command_pipe = VSCodeCommandPipe(queue)
 
 # # turn-on the worker thread
@@ -99,7 +116,17 @@ class Actions:
         else:
             actions.key("cmd-shift-alt-p")
 
-        queue.put(QueueItem(type=QueueItemType.COMMAND, payload=[command, *args]))
+        queue.put(
+            QueueItem(
+                type=QueueItemType.COMMAND,
+                payload=CommandInfo(
+                    command=command, args=args, timestamp=datetime.datetime.utcnow()
+                ),
+            )
+        )
+
+        actions.sleep("50ms")
+        # queue.join()
 
     def kill_vscode_command_pipe_thread():
         """Kill existing vscode command pipe thread"""
