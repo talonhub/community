@@ -38,6 +38,6 @@ actum: user.vscode("metaGo.scrollCurrentLineToBottom")
 take rightest: user.vscode("metaGo.cursorSpaceWordRightSelect")
 take leftest: user.vscode("metaGo.cursorSpaceWordLeftSelect")
 kitest: user.vscode("metaGo.cursorSpaceWordRight")
-klavest: user.vscode("metaGo.cursorSpaceWordLeft")
+claymist: user.vscode("metaGo.cursorSpaceWordLeft")
 
 swap anchor: user.vscode("metaGo.selectionSwitchActiveWithAnchor")

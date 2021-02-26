@@ -7,8 +7,13 @@ go <number> start: edit.jump_line(number)
 go <number> end: 
     edit.jump_line(number)
     edit.line_end()
-comment line:
+comment (line | this):
     code.toggle_comment()
+add comment <user.text>$:
+    #todo: this should probably be a single function once
+    #.talon supports implementing actions with parameters?
+    code.toggle_comment()
+    insert(user.text)
 comment <number> until <number>: 
     user.select_range(number_1, number_2)
     code.toggle_comment()

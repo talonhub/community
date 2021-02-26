@@ -44,6 +44,16 @@ class Actions:
         for _ in range(n):
             actions.edit.left()
 
+    def delete_left_n(n: int):
+        """Goes left n lines"""
+        for _ in range(n):
+            actions.key("backspace")
+
+    def delete_right_n(n: int):
+        """Goes left n lines"""
+        for _ in range(n):
+            actions.key("delete")
+
     def right_n(n: int):
         """Goes right n lines"""
         for _ in range(n):

@@ -175,7 +175,7 @@ symbol_key_words = {
     "larry": "(",
     "party": ")",
     "brace": "{",
-    "face": "}",
+    "squiggle": "}",
     "angle": "<",
     "less than": "<",
     "rangle": ">",

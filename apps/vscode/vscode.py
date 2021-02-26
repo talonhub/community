@@ -1,4 +1,5 @@
 import socket
+
 from time import sleep
 from talon import Context, actions, ui, Module, app, clip
 from typing import List, Union

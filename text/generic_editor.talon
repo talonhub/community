@@ -116,6 +116,12 @@ chuck left:
 chuck right:
     key(delete)
 
+chuck <number>:
+    user.delete_left_n(number)
+
+dell <number>:
+    user.delete_right_n(number)
+    
 chuck up:
     edit.extend_line_up()
     edit.delete()

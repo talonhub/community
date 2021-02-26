@@ -22,3 +22,8 @@ lodash
 debounced
 debounce
 timeout
+fifo
+mkfifo,make fifo
+args
+node.js,node jay yes
+enum,eenum

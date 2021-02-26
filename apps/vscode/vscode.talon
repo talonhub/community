@@ -96,7 +96,7 @@ bar outline: user.vscode("outline.focus")
 bar run: user.vscode("workbench.view.debug")
 bar search: user.vscode("workbench.view.search")
 bar source: user.vscode_by_id("workbench.view.scm")
-bar switch: user.vscode("workbench.action.toggleSidebarVisibility")
+bar dog: user.vscode("workbench.action.toggleSidebarVisibility")
 search [<user.text>]: 
   user.vscode_by_id("workbench.action.findInFiles")
   sleep(50ms)
@@ -124,7 +124,7 @@ take class: user.vscode("semantic-movement.selectContainingClass")
 panel control: user.vscode("workbench.panel.repl.view.focus")
 panel output: user.vscode("workbench.panel.output.focus")
 panel problems: user.vscode("workbench.panel.markers.view.focus")
-panel switch: user.vscode("workbench.action.togglePanel")
+pan dog: user.vscode("workbench.action.togglePanel")
 panel terminal: user.vscode("workbench.panel.terminal.focus")
 panel editor: user.vscode_by_id("workbench.action.focusActiveEditorGroup")
 
@@ -288,6 +288,7 @@ hover show: user.vscode("editor.action.showHover")
 
 edit last: user.vscode("editsHistory.moveCursorToPreviousEdit")
 edit next: user.vscode("editsHistory.moveCursorToNextEdit")
+edit add: user.vscode("editsHistory.createEditAtCursor")
 edit last here: user.vscode("editsHistory.moveCursorToPreviousEditInSameFile")
 edit next here: user.vscode("editsHistory.moveCursorToNextEditInSameFile")
 
@@ -297,7 +298,9 @@ commode:
 	user.vscode("vscode-neovim.escape")
 	sleep(25ms)
 
-insert: key(i)
+insert:
+	key(i)
+	sleep(25ms)
 
 replace smart:
 	key(:)
@@ -313,3 +316,5 @@ reload window: user.vscode("workbench.action.reloadWindow")
 curse undo: user.vscode("cursorUndo")
 
 take word: user.vscode("editor.action.addSelectionToNextFindMatch")
+
+hello world: user.vscode_via_command_pipe("workbench.action.openRecent")
