@@ -1,4 +1,5 @@
 from queue import Queue
+import requests
 from threading import Thread
 from time import sleep
 from typing import Any, List, Optional
@@ -92,7 +93,7 @@ queue = Queue()
 vscode_command_pipe = VSCodeCommandPipe(queue)
 
 # # turn-on the worker thread
-Thread(target=vscode_command_pipe, daemon=True).start()
+# Thread(target=vscode_command_pipe, daemon=True).start()
 
 # # send thirty task requests to the worker
 # for item in range(30):
@@ -111,21 +112,25 @@ class Actions:
         if args is None:
             args = []
 
-        if not is_mac:
-            actions.key("ctrl-shift-alt-p")
-        else:
-            actions.key("cmd-shift-alt-p")
+        # if not is_mac:
+        #     actions.key("ctrl-shift-alt-p")
+        # else:
+        #     actions.key("cmd-shift-alt-p")
 
-        queue.put(
-            QueueItem(
-                type=QueueItemType.COMMAND,
-                payload=CommandInfo(
-                    command=command, args=args, timestamp=datetime.datetime.utcnow()
-                ),
-            )
+        with open("/tmp/vscode-host") as host_file:
+            host = host_file.read()
+        response = requests.post(
+            f"http://{host}",
+            json={
+                "commandId": command,
+                "args": args,
+                "expectResponse": False,
+                # "timestamp": timestamp.isoformat(),
+            },
+            timeout=(0.05, 3.05),
         )
-
-        actions.sleep("50ms")
+        response.raise_for_status()
+        print(response.text)
         # queue.join()
 
     def kill_vscode_command_pipe_thread():
