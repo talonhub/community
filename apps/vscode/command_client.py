@@ -107,7 +107,7 @@ vscode_command_pipe = VSCodeCommandPipe(queue)
 
 @mod.action_class
 class Actions:
-    def vscode_via_command_pipe(command: str, args: Optional[List[Any]] = None):
+    def vscode(command: str, args: Optional[List[Any]] = None):
         """Execute command via vscode command pipe."""
         if args is None:
             args = []

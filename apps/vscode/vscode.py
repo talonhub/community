@@ -100,9 +100,9 @@ class edit_actions:
 
 @mod.action_class
 class Actions:
-    def vscode(command: str):
-        """Execute command via Unix domain socket."""
-        vscode_socket.send(command)
+    # def vscode(command: str):
+    #     """Execute command via Unix domain socket."""
+    #     vscode_socket.send(command)
 
     def vscode_ignore_clipboard(command: str):
         """Preserved for ease of compatibility."""

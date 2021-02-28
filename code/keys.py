@@ -219,7 +219,7 @@ alternate_keys = {
     "delhi": "delete",
     "chuck": "backspace",
     "scrape": "escape",
-    "space": "space",
+    "void": "space",
 }
 # mac apparently doesn't have the menu key.
 if app.platform in ("windows", "linux"):
