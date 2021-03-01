@@ -1,6 +1,7 @@
 import re
 from talon import ctrl, ui, Module, Context, actions, clip
 import itertools
+from typing import Union
 
 ctx = Context()
 mod = Module()
@@ -59,7 +60,7 @@ class Actions:
         occurrence_number: int,
     ):
         """navigate in the given direction to the occurrence_number-th time that the input text occurs, then execute the navigation_option at the given cursor_location"""
-        navigation(
+        actions.user.navigation_regex(
             navigation_option,
             direction,
             cursor_location,
@@ -67,11 +68,13 @@ class Actions:
             int(occurrence_number),
         )
 
+    # All other navigation commands dispatch to this one, so if you want to
+    # override its behavior, this is the one to override.
     def navigation_regex(
         navigation_option: str,
         direction: str,
         cursor_location: str,
-        regex: str,
+        regex: Union[str, re.Pattern],
         occurrence_number: int,
     ):
         """navigate in the given direction to the occurrence_number-th time that the input regex occurs, then execute the navigation_option at the given cursor_location"""
@@ -79,7 +82,7 @@ class Actions:
             navigation_option,
             direction,
             cursor_location,
-            re.compile(regex),
+            regex if isinstance(regex, re.Pattern) else re.compile(regex),
             int(occurrence_number),
         )
 
@@ -91,11 +94,11 @@ class Actions:
         occurrence_number: int,
     ):
         """navigate in the given direction to the occurrence_number-th time that the input search_option occurs, then execute the navigation_option at the given cursor_location"""
-        navigation(
+        actions.user.navigation_regex(
             navigation_option,
             direction,
             cursor_location,
-            re.compile(search_option_list[search_option]),
+            search_option_list[search_option],
             int(occurrence_number),
         )
 
