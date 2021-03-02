@@ -15,7 +15,7 @@ action(user.messaging_unread_previous): key(alt-shift-up)
 action(user.messaging_unread_next): key(alt-shift-down)
 action(user.discord_mentions_last): key(cmd-alt-shift-up)
 action(user.discord_mentions_next): key(cmd-alt-shift-down)
-action(user.discord_oldest_unread): key(shift-paegup)
+action(user.discord_oldest_unread): key(shift-pageup)
 
 # UI
 action(user.discord_toggle_pins): key(cmd-p)
