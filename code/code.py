@@ -87,10 +87,10 @@ class code_actions:
     def language():
         result = ""
         if not forced_language:
-            result = actions.win.file_ext()
+            file_extension = actions.win.file_ext()
 
-            if result and result in extension_lang_map:
-                result = extension_lang_map[result]
+            if file_extension and file_extension in extension_lang_map:
+                result = extension_lang_map[file_extension]
 
         # print("code.language: " + result)
         return result
