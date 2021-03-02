@@ -17,6 +17,16 @@ ctx.matches = r"""
 app: vscode
 """
 
+mod.list("symbol_color", desc="Supported symbol colors for token jumping")
+ctx.lists["self.symbol_color"] = {
+    "gray": "default",
+    "blue": "blue",
+    "green": "green",
+    "bull": "red",
+    "yell": "yellow",
+    "mauve": "mauve",
+}
+
 
 class VSCodeSocket:
     def __init__(self):

@@ -107,24 +107,41 @@ vscode_command_pipe = VSCodeCommandPipe(queue)
 
 @mod.action_class
 class Actions:
-    def vscode(command: str, args: Optional[List[Any]] = None):
+    def vscode(
+        command: str,
+        arg1: Optional[Any] = None,
+        arg2: Optional[Any] = None,
+        arg3: Optional[Any] = None,
+        arg4: Optional[Any] = None,
+        arg5: Optional[Any] = None,
+    ):
         """Execute command via vscode command pipe."""
-        if args is None:
-            args = []
+        args = list(
+            filter(
+                lambda x: x is not None,
+                [
+                    arg1,
+                    arg2,
+                    arg3,
+                    arg4,
+                    arg5,
+                ],
+            )
+        )
 
         # if not is_mac:
         #     actions.key("ctrl-shift-alt-p")
         # else:
         #     actions.key("cmd-shift-alt-p")
 
-        with open("/tmp/vscode-host") as host_file:
-            host = host_file.read()
+        with open("/tmp/vscode-port") as port_file:
+            port = port_file.read()
         response = requests.post(
-            f"http://{host}",
+            f"http://localhost:{port}/execute-command",
             json={
                 "commandId": command,
                 "args": args,
-                "expectResponse": False,
+                "waitForReturnValue": False,
                 # "timestamp": timestamp.isoformat(),
             },
             timeout=(0.05, 3.05),

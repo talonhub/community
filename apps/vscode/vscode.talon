@@ -317,5 +317,9 @@ curse undo: user.vscode("cursorUndo")
 
 take word: user.vscode("editor.action.addSelectionToNextFindMatch")
 
-hello world: user.vscode_via_command_pipe("workbench.action.openRecent")
-testing testing: user.vscode_via_command_pipe("editor.action.deleteLines")
+take [{user.symbol_color}] <user.any_alphanumeric_key>:
+	user.vscode("decorative-navigation.selectToken", symbol_color or "default", any_alphanumeric_key)
+
+go [{user.symbol_color}] <user.any_alphanumeric_key>:
+	user.vscode("decorative-navigation.selectToken", symbol_color or "default", any_alphanumeric_key)
+	key(left)
