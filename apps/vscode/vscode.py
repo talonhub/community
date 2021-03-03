@@ -12,6 +12,8 @@ and app.bundle: com.microsoft.VSCode
 mod.apps.vscode = """
 os: linux
 and app.name: Code
+os: linux
+and app.name: code-oss
 """
 mod.apps.vscode = """
 os: windows
