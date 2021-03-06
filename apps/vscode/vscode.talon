@@ -155,6 +155,7 @@ file open folder:
 file reveal: user.vscode("workbench.files.action.showActiveFileInExplorer") 
 save ugly:
     user.vscode("workbench.action.files.saveWithoutFormatting")
+file clone: user.vscode("fileutils.duplicateFile")
 
 # Language Features
 suggest show: user.vscode("editor.action.triggerSuggest")
@@ -163,7 +164,7 @@ def show: user.vscode("editor.action.revealDefinition")
 definition peek: user.vscode("editor.action.peekDefinition")
 definition side: user.vscode("editor.action.revealDefinitionAside")
 references show: user.vscode("editor.action.goToReferences")
-reffer show: user.vscode("references-view.find")
+ref show: user.vscode("references-view.find")
 format that: user.vscode("editor.action.formatDocument")
 format selection: user.vscode("editor.action.formatSelection")
 imports fix: user.vscode("editor.action.organizeImports")
@@ -284,6 +285,10 @@ minimap: user.vscode_by_id("editor.action.toggleMinimap")
 maximize: user.vscode_by_id("workbench.action.minimizeOtherEditors")
 restore: user.vscode_by_id("workbench.action.evenEditorWidths")
 
+replace here:
+	user.replace("")
+	key(cmd-alt-l)
+
 hover show: user.vscode("editor.action.showHover")
 
 edit last: user.vscode("editsHistory.moveCursorToPreviousEdit")
@@ -323,3 +328,9 @@ take [{user.symbol_color}] <user.any_alphanumeric_key>:
 go [{user.symbol_color}] <user.any_alphanumeric_key>:
 	user.vscode("decorative-navigation.selectToken", symbol_color or "default", any_alphanumeric_key)
 	key(left)
+
+def show [{user.symbol_color}] <user.any_alphanumeric_key>:
+	user.vscode("decorative-navigation.selectToken", symbol_color or "default", any_alphanumeric_key)
+	user.vscode("editor.action.revealDefinition")
+
+action(user.alveolar_click): user.vscode("decorative-navigation.toggleDecorations")
