@@ -156,13 +156,14 @@ app: jetbrains
 class win_actions:
     def filename():
         title = actions.win.title()
-        result = re.search(r"[A-Za-z-_]+\.java", title)
+        result = title.split(" ")
+        
+        for word in result:
+            if "." in word:
+                print(word)
+                return word
 
-        if result != None:
-            return result.group()
-    
         return ""
-
 
     def file_ext():
         return actions.win.filename().split(".")[-1]
