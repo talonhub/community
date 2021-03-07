@@ -1,6 +1,5 @@
 import os
 import os.path
-import re
 import requests
 import time
 from pathlib import Path
