@@ -1,5 +1,6 @@
 import os
 import os.path
+import re
 import requests
 import time
 from pathlib import Path
@@ -153,8 +154,18 @@ app: jetbrains
 
 @ctx.action_class("win")
 class win_actions:
+    def filename():
+        title = actions.win.title()
+        result = re.search(r"[A-Za-z-_]+\.java", title)
+
+        if result != None:
+            return result.group()
+    
+        return ""
+
+
     def file_ext():
-        return actions.win.title().split(".")[-1]
+        return actions.win.filename().split(".")[-1]
 
 
 @ctx.action_class("edit")
