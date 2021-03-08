@@ -159,7 +159,6 @@ class win_actions:
         
         for word in result:
             if "." in word:
-                print(word)
                 return word
 
         return ""
