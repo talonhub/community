@@ -59,13 +59,6 @@ os: linux
 and app.name: /termite/
 """
 
-apps.windows_explorer = """
-os: windows
-and app.name: Windows Explorer
-os: windows
-and app.exe: explorer.exe
-"""
-
 apps.windows_command_processor = """
 os: windows
 and app.name: Windows Command Processor
@@ -82,3 +75,4 @@ mod.apps.windows_power_shell = """
 os: windows
 and app.exe: powershell.exe
 """
+
