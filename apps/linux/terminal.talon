@@ -12,11 +12,11 @@ action(edit.paste):
   key(ctrl-shift-v)
 action(edit.copy):
   key(ctrl-shift-c)
-
-scroll up:
+action(edit.page_up):
   key(shift-pageup)
-scroll down:
+action(edit.page_down):
   key(shift-pagedown)
+
 run last:
   key(up)
   key(enter)
