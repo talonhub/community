@@ -11,96 +11,75 @@ text_navigation_max_line_search = mod.setting(
     "text_navigation_max_line_search",
     type=int,
     default=10,
-    desc="With this you can set the maximum number of rows that will be included in the search for the keywords above and below in <user direction>",
+    desc="the maximum number of rows that will be included in the search for the keywords above and below in <user direction>",
 )
 
 mod.list(
-    "cursor_location",
+    "navigation_action",
+    desc="actions to perform, for instance move, select, cut, etc",
+)
+mod.list(
+    "before_or_after",
     desc="words to indicate if the cursor should be moved before or after a given reference point",
 )
-
 mod.list(
-    "navigation_option",
-    desc="words to indicate type of navigation, for instance moving or selecting",
-)
-mod.list(
-    "search_option",
-    desc="words to indicate type of search, for instance matching a word with or without underscores",
+    "navigation_target_name",
+    desc="names for regular expressions for common things to navigate to, for instance a word with or without underscores",
 )
 
-ctx.lists["self.cursor_location"] = {
+ctx.lists["self.navigation_action"] = {
+    "move": "GO",
+    "extend": "EXTEND",
+    "select": "SELECT",
+    "clear": "DELETE",
+    "cut": "CUT",
+    "copy": "COPY",
+}
+ctx.lists["self.before_or_after"] = {
     "before": "BEFORE",
     "after": "AFTER",
     # DEFAULT is also a valid option as input for this capture, but is not directly accessible for the user.
 }
-
-ctx.lists["self.navigation_option"] = {
-    "move": "GO",
-    "extend": "EXTEND",
-    "select": "SELECT",
-    "delete": "DELETE",
-    "cut": "CUT",
-    "copy": "COPY",
-}
-search_option_list = {
+navigation_target_names = {
     "word": r"\w+",
     "small": r"[A-Z]?[a-z0-9]+",
     "big": r"[\S]+",
 }
-ctx.lists["self.search_option"] = search_option_list
+ctx.lists["self.navigation_target_name"] = navigation_target_names
 
+@mod.capture(rule="<user.any_alphanumeric_key> | {user.navigation_target_name} | phrase <user.text>")
+def navigation_target(m) -> re.Pattern:
+    """A target to navigate to. Returns a regular expression."""
+    if hasattr(m, 'any_alphanumeric_key'):
+        return re.compile(re.escape(m.any_alphanumeric_key), re.IGNORECASE)
+    if hasattr(m, 'navigation_target_name'):
+        return re.compile(m.navigation_target_name)
+    return re.compile(re.escape(m.text), re.IGNORECASE)
 
 @mod.action_class
 class Actions:
     def navigation(
-        navigation_option: str,
-        direction: str,
-        cursor_location: str,
-        text: str,
-        occurrence_number: int,
+            navigation_action: str, # GO, EXTEND, SELECT, DELETE, CUT, COPY
+            direction: str,         # up, down, left, right
+            before_or_after: str,   # BEFORE, AFTER, DEFAULT
+            regex: re.Pattern,
+            occurrence_number: int,
     ):
-        """navigate in the given direction to the occurrence_number-th time that the input text occurs, then execute the navigation_option at the given cursor_location"""
-        actions.user.navigation_regex(
-            navigation_option,
-            direction,
-            cursor_location,
-            re.compile(re.escape(text), re.IGNORECASE),
-            int(occurrence_number),
-        )
+        """Navigate in `direction` to the occurrence_number-th time that `regex` occurs, then execute `navigation_action` at the given `before_or_after` position."""
+        direction = direction.upper()
+        function = navigate_left if direction in ("UP", "LEFT") else navigate_right
+        function(navigation_action, before_or_after, regex, occurrence_number, direction)
 
-    # All other navigation commands dispatch to this one, so if you want to
-    # override its behavior, this is the one to override.
-    def navigation_regex(
-        navigation_option: str,
-        direction: str,
-        cursor_location: str,
-        regex: Union[str, re.Pattern],
-        occurrence_number: int,
+    def navigation_by_name(
+            navigation_action: str, # GO, EXTEND, SELECT, DELETE, CUT, COPY
+            direction: str,         # up, down, left, right
+            before_or_after: str,   # BEFORE, AFTER, DEFAULT
+            navigation_target_name: str, # word, big, small
+            occurrence_number: int,
     ):
-        """navigate in the given direction to the occurrence_number-th time that the input regex occurs, then execute the navigation_option at the given cursor_location"""
-        navigation(
-            navigation_option,
-            direction,
-            cursor_location,
-            regex if isinstance(regex, re.Pattern) else re.compile(regex),
-            int(occurrence_number),
-        )
-
-    def navigation_search_option(
-        navigation_option: str,
-        direction: str,
-        cursor_location: str,
-        search_option: str,
-        occurrence_number: int,
-    ):
-        """navigate in the given direction to the occurrence_number-th time that the input search_option occurs, then execute the navigation_option at the given cursor_location"""
-        actions.user.navigation_regex(
-            navigation_option,
-            direction,
-            cursor_location,
-            search_option_list[search_option],
-            int(occurrence_number),
-        )
+        """Like user.navigation, but to a named target."""
+        r = re.compile(navigation_target_names[navigation_target_name])
+        actions.user.navigation(navigation_action, direction, before_or_after, r, occurrence_number)
 
 def get_text_left():
     actions.edit.extend_line_start()
@@ -171,20 +150,8 @@ def select(direction, start, end, length):
         extend_left(end - start)
 
 
-def navigation(navigation_option, direction, cursor_location, regex, occurrence_number):
-    direction = direction.upper()
-    if direction == "LEFT" or direction == "UP":
-        navigate_left(
-            navigation_option, cursor_location, regex, occurrence_number, direction,
-        )
-    else:
-        navigate_right(
-            navigation_option, cursor_location, regex, occurrence_number, direction,
-        )
-
-
 def navigate_left(
-    navigation_option, cursor_location, regex, occurrence_number, direction
+    navigation_action, before_or_after, regex, occurrence_number, direction
 ):
     current_selection_length = get_current_selection_size()
     if current_selection_length > 0:
@@ -201,13 +168,13 @@ def navigate_left(
         return
     start = match.start()
     end = match.end()
-    handle_navigation_option(
-        navigation_option, cursor_location, direction, text, start, end
+    handle_navigation_action(
+        navigation_action, before_or_after, direction, text, start, end
     )
 
 
 def navigate_right(
-    navigation_option, cursor_location, regex, occurrence_number, direction
+    navigation_action, before_or_after, regex, occurrence_number, direction
 ):
     current_selection_length = get_current_selection_size()
     if current_selection_length > 0:
@@ -223,34 +190,34 @@ def navigate_right(
         return
     start = current_selection_length + match.start()
     end = current_selection_length + match.end()
-    handle_navigation_option(
-        navigation_option, cursor_location, direction, text, start, end
+    handle_navigation_action(
+        navigation_action, before_or_after, direction, text, start, end
     )
 
 
-def handle_navigation_option(
-    navigation_option, cursor_location, direction, text, start, end
+def handle_navigation_action(
+    navigation_action, before_or_after, direction, text, start, end
 ):
     length = len(text)
-    if navigation_option == "GO":
-        handle_move(direction, cursor_location, start, end, length)
-    elif navigation_option == "SELECT":
-        handle_select(cursor_location, direction, text, start, end, length)
-    elif navigation_option == "DELETE":
-        handle_select(cursor_location, direction, text, start, end, length)
+    if navigation_action == "GO":
+        handle_move(direction, before_or_after, start, end, length)
+    elif navigation_action == "SELECT":
+        handle_select(before_or_after, direction, text, start, end, length)
+    elif navigation_action == "DELETE":
+        handle_select(before_or_after, direction, text, start, end, length)
         actions.edit.delete()
-    elif navigation_option == "CUT":
-        handle_select(cursor_location, direction, text, start, end, length)
+    elif navigation_action == "CUT":
+        handle_select(before_or_after, direction, text, start, end, length)
         actions.edit.cut()
-    elif navigation_option == "COPY":
-        handle_select(cursor_location, direction, text, start, end, length)
+    elif navigation_action == "COPY":
+        handle_select(before_or_after, direction, text, start, end, length)
         actions.edit.copy()
-    elif navigation_option == "EXTEND":
-        handle_extend(cursor_location, direction, start, end, length)
+    elif navigation_action == "EXTEND":
+        handle_extend(before_or_after, direction, start, end, length)
 
 
-def handle_select(cursor_location, direction, text, start, end, length):
-    if cursor_location == "BEFORE":
+def handle_select(before_or_after, direction, text, start, end, length):
+    if before_or_after == "BEFORE":
         select_left = length - start
         text_left = text[:-select_left]
         match2 = match_backwards(re.compile(search_option_list["word"]), 1, text_left)
@@ -260,7 +227,7 @@ def handle_select(cursor_location, direction, text, start, end, length):
         else:
             start = match2.start()
             end = match2.end()
-    elif cursor_location == "AFTER":
+    elif before_or_after == "AFTER":
         text_right = text[end:]
         match2 = match_forward(re.compile(search_option_list["word"]), 1, text_right)
         if match2 == None:
@@ -272,27 +239,27 @@ def handle_select(cursor_location, direction, text, start, end, length):
     select(direction, start, end, length)
 
 
-def handle_move(direction, cursor_location, start, end, length):
+def handle_move(direction, before_or_after, start, end, length):
     if direction == "RIGHT" or direction == "DOWN":
-        if cursor_location == "BEFORE":
+        if before_or_after == "BEFORE":
             go_right(start)
         else:
             go_right(end)
     else:
-        if cursor_location == "AFTER":
+        if before_or_after == "AFTER":
             go_left(length - end)
         else:
             go_left(length - start)
 
 
-def handle_extend(cursor_location, direction, start, end, length):
+def handle_extend(before_or_after, direction, start, end, length):
     if direction == "RIGHT" or direction == "DOWN":
-        if cursor_location == "BEFORE":
+        if before_or_after == "BEFORE":
             extend_right(start)
         else:
             extend_right(end)
     else:
-        if cursor_location == "AFTER":
+        if before_or_after == "AFTER":
             extend_left(length - end)
         else:
             extend_left(length - start)
