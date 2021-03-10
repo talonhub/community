@@ -41,8 +41,7 @@ class Actions:
         )
 
         port_file_path = Path(gettempdir()) / "vscode-port"
-        with port_file_path.open("r") as port_file:
-            port = port_file.read()
+        port = port_file_path.read_text()
 
         response = requests.post(
             f"http://localhost:{port}/execute-command",
