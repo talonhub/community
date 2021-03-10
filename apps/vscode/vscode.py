@@ -23,41 +23,9 @@ ctx.lists["self.symbol_color"] = {
     "blue": "blue",
     "green": "green",
     "bull": "red",
-    "yell": "yellow",
-    "mauve": "mauve",
+    "low": "yellow",
+    "perp": "mauve",
 }
-
-
-class VSCodeSocket:
-    def __init__(self):
-        self.connect()
-
-    def connect(self):
-        try:
-            self.client = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-            self.client.connect("/tmp/vscode_commander.sock")
-        except FileNotFoundError:
-            print("VSCodeSocket: Connection failed. Socket does not exist.")
-        else:
-            print("VSCodeSocket: Connected.")
-
-    def send(self, command):
-        try:
-            self.client.sendall(command.encode("utf-8"))
-        except Exception as error:
-            print(f"VSCodeSocket: {error}")
-            self.client.close()
-            print("VSCodeSocket: Reconnecting...")
-            self.connect()
-            try:
-                self.client.send(command.encode("utf-8"))
-            except Exception:
-                app.notify("VSCode Socket Failed")
-        else:
-            sleep(0.1)
-
-
-vscode_socket = VSCodeSocket()
 
 
 @ctx.action_class("win")
@@ -110,26 +78,9 @@ class edit_actions:
 
 @mod.action_class
 class Actions:
-    # def vscode(command: str):
-    #     """Execute command via Unix domain socket."""
-    #     vscode_socket.send(command)
-
-    def vscode_ignore_clipboard(command: str):
-        """Preserved for ease of compatibility."""
-        vscode_socket.send(command)
-
     def vscode_terminal(number: int):
         """Activate a terminal by number"""
-        actions.user.vscode_by_id(f"workbench.action.terminal.focusAtIndex{number}")
-
-    def vscode_by_id(command: str):
-        """Preserved for ease of compatibility."""
-        vscode_socket.send(command)
-
-    def jump(action: str, token: str):
-        """Jumps to token using metago"""
-        actions.user.vscode(action)
-        actions.insert(token[:3])
+        actions.user.vscode(f"workbench.action.terminal.focusAtIndex{number}")
 
 
 @ctx.action_class("user")
