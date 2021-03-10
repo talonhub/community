@@ -29,36 +29,36 @@ key = actions.key
 function_list = []
 library_list = []
 extension_lang_map = {
-    "asm": "assembly",
-    "bat": "batch",
-    "c": "c",
-    "cmake": "cmake",
-    "cpp": "cplusplus",
-    "cs": "csharp",
-    "gdb": "gdb",
-    "go": "go",
-    "h": "c",
-    "hpp": "cplusplus",
-    "java": "java",
-    "js": "javascript",
-    "jsx": "javascript",
-    "json": "json",
-    "lua": "lua",
-    "md": "markdown",
-    "pl": "perl",
-    "ps1": "powershell",
-    "py": "python",
-    "r": "r",
-    "rb": "ruby",
-    "s": "assembly",
-    "sh": "bash",
-    "snippets": "snippets",
-    "talon": "talon",
-    "ts": "typescript",
-    "tsx": "typescript",
-    "vba": "vba",
-    "vim": "vimscript",
-    "vimrc": "vimscript",
+    ".asm": "assembly",
+    ".bat": "batch",
+    ".c": "c",
+    ".cmake": "cmake",
+    ".cpp": "cplusplus",
+    ".cs": "csharp",
+    ".gdb": "gdb",
+    ".go": "go",
+    ".h": "c",
+    ".hpp": "cplusplus",
+    ".java": "java",
+    ".js": "javascript",
+    ".jsx": "javascript",
+    ".json": "json",
+    ".lua": "lua",
+    ".md": "markdown",
+    ".pl": "perl",
+    ".ps1": "powershell",
+    ".py": "python",
+    ".r": "r",
+    ".rb": "ruby",
+    ".s": "assembly",
+    ".sh": "bash",
+    ".snippets": "snippets",
+    ".talon": "talon",
+    ".ts": "typescript",
+    ".tsx": "typescript",
+    ".vba": "vba",
+    ".vim": "vimscript",
+    ".vimrc": "vimscript",
 }
 
 # flag indicates whether or not the title tracking is enabled
@@ -468,7 +468,7 @@ def update_function_list_and_freeze():
     gui_functions.show()
 
 
-@imgui.open(software=app.platform == "linux")
+@imgui.open()
 def gui_functions(gui: imgui.GUI):
     gui.text("Functions")
     gui.line()
@@ -483,7 +483,7 @@ def gui_functions(gui: imgui.GUI):
             )
 
 
-@imgui.open(software=app.platform == "linux")
+@imgui.open()
 def gui_libraries(gui: imgui.GUI):
     gui.text("Libraries")
     gui.line()

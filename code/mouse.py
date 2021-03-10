@@ -2,7 +2,19 @@ import os
 import pathlib
 import subprocess
 
-from talon import Context, Module, actions, app, cron, ctrl, clip, imgui, noise, settings, ui
+from talon import (
+    Context,
+    Module,
+    actions,
+    app,
+    cron,
+    ctrl,
+    clip,
+    imgui,
+    noise,
+    settings,
+    ui,
+)
 from talon_plugins import eye_mouse, eye_zoom_mouse, speech
 from talon_plugins.eye_mouse import config, toggle_camera_overlay, toggle_control
 
@@ -83,7 +95,7 @@ setting_mouse_wheel_down_amount = mod.setting(
 continuous_scoll_mode = ""
 
 
-@imgui.open(x=700, y=0, software=app.platform == "linux")
+@imgui.open(x=700, y=0)
 def gui_wheel(gui: imgui.GUI):
     gui.text("Scroll mode: {}".format(continuous_scoll_mode))
     gui.line()

@@ -23,7 +23,7 @@ class win_actions:
         # this doesn't seem to be necessary on VSCode for Mac
         # if title == "":
         #    title = ui.active_window().doc
-        
+
         if " - " in title:
             result = title.split(" - ")[1]
         else:
@@ -33,9 +33,6 @@ class win_actions:
             return result
 
         return ""
-
-    def file_ext():
-        return actions.win.filename().split(".")[-1]
 
 
 @ctx.action_class("edit")
@@ -57,7 +54,7 @@ class edit_actions:
         actions.key("ctrl-l")
         actions.insert(str(n))
         actions.key("enter")
-        
+
     def delete_line():
         actions.key("ctrl-d")
 
