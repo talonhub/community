@@ -1,8 +1,8 @@
 ## (2021-03-09) This syntax is experimental and may change. See below for an explanation.
-navigate [{user.arrow_key}] [{user.navigation_action}] [{user.before_or_after}] [<user.ordinals>] <user.navigation_target>:
-## If you use this command a lot, you may wish to have a shorter syntax that omits the navigate keyword:
-#{user.navigation_action} [{user.arrow_key}] [{user.before_or_after}] [<user.ordinals>] <user.navigation_target>:
-    user.navigation(navigation_action or "GO", arrow_key or "RIGHT", before_or_after or "DEFAULT", navigation_target, ordinals or 1)
+navigate [{user.arrow_key}] [{user.navigation_action}] [{user.navigation_target_name}] [{user.before_or_after}] [<user.ordinals>] <user.navigation_target>:
+## If you use this command a lot, you may wish to have a shorter syntax that omits the navigate keyword. Note that you then at least have to say either a navigation_action or before_or_after:
+#({user.navigation_action} [{user.arrow_key}] [{user.navigation_target_name}] [{user.before_or_after}] | [{user.arrow_key}] {user.before_or_after}) [<user.ordinals>] <user.navigation_target>: 
+	user.navigation(navigation_action or "GO", arrow_key or "RIGHT", navigation_target_name or "DEFAULT", before_or_after or "DEFAULT", navigation_target, ordinals or 1)
 
 # ===== Examples of use =====
 #
@@ -31,6 +31,12 @@ navigate [{user.arrow_key}] [{user.navigation_action}] [{user.before_or_after}] 
 #   navigate down clear phrase I think: delete the next occurrence of "I think" on the following lines.
 #   navigate up select colon: select the closest colon on the preceeding lines.
 #
+# We can specify what gets selected before or after the given input:
+#
+#	navigate select parens after equals: Select the first "(" and everything until the first ")" after the "="
+#	navigate left copy all before equals: Copy everything from the start of the line until the first "=" you encounter while moving left
+#	navigate clear constant before semicolon: Delete the last word consisting of only uppercase characters or underscores before a ";"  
+#
 # ===== Explanation of the grammar =====
 #
 # [{user.arrow_key}]: left, right, up, down (default: right)
@@ -41,12 +47,16 @@ navigate [{user.arrow_key}] [{user.navigation_action}] [{user.before_or_after}] 
 # [{user.navigation_action}]: move, extend, select, clear, cut, copy (default: move)
 #   What action to perform.
 #
+# [{user.navigation_target_name}]: word, small, big, parens, squares, braces, quotes, angles, all, method, constant (default: word)
+#	The predetermined unit to select if before_or_after was specified. 
+#	Defaults to "word" 
+#
 # [{user.before_or_after}]: before, after (default: special behavior)
 #   For move/extend: where to leave the cursor, before or after the target.
 #   Defaults to "after" for right/down and "before" for left/up.
 #
-#   For select/copy/cut: if absent, select/copy/cut the target iself. if
-#   present, the word before/after the target instead.
+#   For select/copy/cut: if absent, select/copy/cut the target iself. If
+#   present, the navigation_target_name before/after the target.
 #
 # [<user.ordinals>]: an english ordinal, like "second" (default: first)
 #   Which occurrence of the target to navigate to.
