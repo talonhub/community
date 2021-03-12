@@ -24,8 +24,8 @@ action(app.tab_previous): user.vscode("workbench.action.previousEditorInGroup")
 action(app.tab_reopen): user.vscode("workbench.action.reopenClosedEditor")
 action(app.window_close): user.vscode("workbench.action.closeWindow")
 action(app.window_open): user.vscode("workbench.action.newWindow")
-go last: user.vscode_by_id("workbench.action.openPreviousRecentlyUsedEditorInGroup")
-go next: user.vscode_by_id("workbench.action.openNextRecentlyUsedEditorInGroup")
+<user.teleport> last: user.vscode("workbench.action.openPreviousRecentlyUsedEditorInGroup")
+<user.teleport> next: user.vscode("workbench.action.openNextRecentlyUsedEditorInGroup")
 
 #talon code actions
 action(code.toggle_comment): user.vscode("editor.action.commentLine")
@@ -95,12 +95,8 @@ bar extensions: user.vscode("workbench.view.extensions")
 bar outline: user.vscode("outline.focus")
 bar run: user.vscode("workbench.view.debug")
 bar search: user.vscode("workbench.view.search")
-bar source: user.vscode_by_id("workbench.view.scm")
+bar source: user.vscode("workbench.view.scm")
 bar dog: user.vscode("workbench.action.toggleSidebarVisibility")
-search [<user.text>]: 
-  user.vscode_by_id("workbench.action.findInFiles")
-  sleep(50ms)
-  insert(text or "")
 search next: user.vscode("search.action.focusNextSearchResult")
 search last: user.vscode("search.action.focusPreviousSearchResult")
 
@@ -111,14 +107,14 @@ symbol hunt [<user.text>]:
 
 symbol last: user.vscode("gotoNextPreviousMember.previousMember")
 symbol next: user.vscode("gotoNextPreviousMember.nextMember")
-go symbol: user.vscode("semantic-movement.jumpToContainingSymbol")
-go funk: user.vscode("semantic-movement.jumpToContainingFunction")
-go named funk: user.vscode("semantic-movement.jumpToContainingNamedFunction")
-go class: user.vscode("semantic-movement.jumpToContainingClass")
-take symbol: user.vscode("semantic-movement.selectContainingSymbol")
-take funk: user.vscode("semantic-movement.selectContainingFunction")
-take named funk: user.vscode("semantic-movement.selectContainingNamedFunction")
-take class: user.vscode("semantic-movement.selectContainingClass")
+<user.teleport> symbol: user.vscode("semantic-movement.jumpToContainingSymbol")
+<user.teleport> funk: user.vscode("semantic-movement.jumpToContainingFunction")
+<user.teleport> named funk: user.vscode("semantic-movement.jumpToContainingNamedFunction")
+<user.teleport> class: user.vscode("semantic-movement.jumpToContainingClass")
+<user.select> symbol: user.vscode("semantic-movement.selectContainingSymbol")
+<user.select> funk: user.vscode("semantic-movement.selectContainingFunction")
+<user.select> named funk: user.vscode("semantic-movement.selectContainingNamedFunction")
+<user.select> class: user.vscode("semantic-movement.selectContainingClass")
 
 # Panels
 panel control: user.vscode("workbench.panel.repl.view.focus")
@@ -126,7 +122,7 @@ panel output: user.vscode("workbench.panel.output.focus")
 panel problems: user.vscode("workbench.panel.markers.view.focus")
 pan dog: user.vscode("workbench.action.togglePanel")
 panel terminal: user.vscode("workbench.panel.terminal.focus")
-panel editor: user.vscode_by_id("workbench.action.focusActiveEditorGroup")
+pan edit: user.vscode("workbench.action.focusActiveEditorGroup")
 
 # Settings
 show settings: user.vscode("workbench.action.openGlobalSettings")
@@ -146,7 +142,7 @@ file hunt [<user.text>]:
   sleep(50ms)
   insert(text or "")
 file copy path:
-	user.vscode_ignore_clipboard("copyFilePath") 
+	user.vscode("copyFilePath") 
 file create sibling: user.vscode("explorer.newFile")  
 file create: user.vscode("workbench.action.files.newUntitledFile")
 file rename: user.vscode("fileutils.renameFile")
@@ -185,16 +181,16 @@ ref last:
    key(up enter)
 
 #code navigation
-(go declaration | follow):
+(<user.teleport> declaration | follow):
 	user.vscode("editor.action.revealDefinition")
-go back:
+<user.teleport> back:
 	user.vscode("workbench.action.navigateBack") 
-go forward:  user.vscode("workbench.action.navigateForward")  
-go implementation:
+<user.teleport> forward:  user.vscode("workbench.action.navigateForward")  
+<user.teleport> implementation:
 	user.vscode("editor.action.goToImplementation")
-go type:
+<user.teleport> type:
 	user.vscode("editor.action.goToTypeDefinition")
-go usage:
+<user.teleport> usage:
 	user.vscode("references-view.find")
 
 # Bookmarks. Requires Bookmarks plugin
@@ -203,10 +199,10 @@ session [<user.text>]:
   sleep(50ms)
   insert(text or "")
 
-go marks: user.vscode("workbench.view.extension.bookmarks")
+<user.teleport> marks: user.vscode("workbench.view.extension.bookmarks")
 toggle mark: user.vscode("bookmarks.toggle")
-go next mark: user.vscode("bookmarks.jumpToNext")
-go last mark: user.vscode("bookmarks.jumpToPrevious")
+<user.teleport> next mark: user.vscode("bookmarks.jumpToNext")
+<user.teleport> last mark: user.vscode("bookmarks.jumpToPrevious")
 
 # Folding
 fold that: user.vscode("editor.fold")
@@ -221,7 +217,7 @@ fold comments: user.vscode("editor.foldAllBlockComments")
 git branch: user.vscode("git.branchFrom")
 git branch this: user.vscode("git.branch")
 git checkout [<user.text>]: 
-  user.vscode_by_id("git.checkout")
+  user.vscode("git.checkout")
   sleep(50ms)
   insert(text or "")
 git commit: user.vscode("git.commitStaged")
@@ -239,12 +235,12 @@ git reveal: user.vscode("git.revealInExplorer")
 git revert: user.vscode("git.revertChange")
 git stash: user.vscode("git.stash")
 git stash pop: user.vscode("git.stashPop")
-git status: user.vscode_by_id("workbench.scm.focus")
+git status: user.vscode("workbench.scm.focus")
 git stage: user.vscode("git.stage")
 git stage all: user.vscode("git.stageAll")
 git unstage: user.vscode("git.unstage")
 git unstage all: user.vscode("git.unstageAll")
-pull request: user.vscode_by_id("pr.create")
+pull request: user.vscode("pr.create")
 change next: key(alt-f5)
 change last: key(shift-alt-f5)
 
@@ -263,12 +259,12 @@ debug console: user.vscode("workbench.debug.action.toggleRepl")
 # Terminal
 term external: user.vscode("workbench.action.terminal.openNativeConsole")
 term new: user.vscode("workbench.action.terminal.new")
-term next: user.vscode("workbench.action.terminal.focusNextPane")
-term last:user.vscode("workbench.action.terminal.focusPreviousPane")
+term next: user.vscode("workbench.action.terminal.focusNext")
+term last:user.vscode("workbench.action.terminal.focusPrevious")
 term split: user.vscode("workbench.action.terminal.split")
-term zoom: user.vscode_by_id("workbench.action.toggleMaximizedPanel")
+term zoom: user.vscode("workbench.action.toggleMaximizedPanel")
 term trash: user.vscode("workbench.action.terminal.kill")
-term dog: user.vscode_by_id("workbench.action.terminal.toggleTerminal")
+term dog: user.vscode("workbench.action.terminal.toggleTerminal")
 term scroll up: user.vscode("workbench.action.terminal.scrollUp")
 term scroll down: user.vscode("workbench.action.terminal.scrollDown")
 term <number_small>: user.vscode_terminal(number_small)
@@ -278,12 +274,12 @@ copy line down: user.vscode("editor.action.copyLinesDownAction")
 copy line up: user.vscode("editor.action.copyLinesUpAction")
 
 #Expand/Shrink AST Selection
-take less: user.vscode("editor.action.smartSelect.shrink")
-take (more|this): user.vscode("editor.action.smartSelect.expand")
+<user.select> less: user.vscode("editor.action.smartSelect.shrink")
+<user.select> (more|this): user.vscode("editor.action.smartSelect.expand")
 
-minimap: user.vscode_by_id("editor.action.toggleMinimap")
-maximize: user.vscode_by_id("workbench.action.minimizeOtherEditors")
-restore: user.vscode_by_id("workbench.action.evenEditorWidths")
+minimap: user.vscode("editor.action.toggleMinimap")
+maximize: user.vscode("workbench.action.minimizeOtherEditors")
+restore: user.vscode("workbench.action.evenEditorWidths")
 
 replace here:
 	user.replace("")
@@ -317,20 +313,10 @@ swap this: user.vscode("extension.swap")
 
 full screen: user.vscode("workbench.action.toggleFullScreen")
 reload window: user.vscode("workbench.action.reloadWindow")
+close window: user.vscode("workbench.action.closeWindow")
 
 curse undo: user.vscode("cursorUndo")
 
-take word: user.vscode("editor.action.addSelectionToNextFindMatch")
+<user.select> word: user.vscode("editor.action.addSelectionToNextFindMatch")
 
-take [{user.symbol_color}] <user.any_alphanumeric_key>:
-	user.vscode("decorative-navigation.selectToken", symbol_color or "default", any_alphanumeric_key)
-
-go [{user.symbol_color}] <user.any_alphanumeric_key>:
-	user.vscode("decorative-navigation.selectToken", symbol_color or "default", any_alphanumeric_key)
-	key(left)
-
-def show [{user.symbol_color}] <user.any_alphanumeric_key>:
-	user.vscode("decorative-navigation.selectToken", symbol_color or "default", any_alphanumeric_key)
-	user.vscode("editor.action.revealDefinition")
-
-action(user.alveolar_click): user.vscode("decorative-navigation.toggleDecorations")
+Github open: user.vscode("openInGithub.openInGitHubFile")

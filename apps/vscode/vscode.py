@@ -1,8 +1,4 @@
-import socket
-
-from time import sleep
 from talon import Context, actions, ui, Module, app, clip
-from typing import List, Union
 
 is_mac = app.platform == "mac"
 
@@ -16,16 +12,6 @@ mod.apps.vscode = "app.name: Code - OSS"
 ctx.matches = r"""
 app: vscode
 """
-
-mod.list("symbol_color", desc="Supported symbol colors for token jumping")
-ctx.lists["self.symbol_color"] = {
-    "gray": "default",
-    "blue": "blue",
-    "green": "green",
-    "bull": "red",
-    "low": "yellow",
-    "perp": "mauve",
-}
 
 
 @ctx.action_class("win")

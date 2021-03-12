@@ -1,4 +1,3 @@
-from queue import Queue
 import requests
 from typing import Any
 from talon import Module
