@@ -79,6 +79,8 @@ class Actions:
         tag_list = [tag_map[tag_uuid] for tag_uuid in things_tags.split(",")]
 
         for tag in tag_list:
+            if tag.shortcut is None:
+                raise Exception("Can only filter by tags with assigned shortcuts")
             actions.key(f"ctrl-alt-{tag.shortcut}")
 
     def show_tag(things_tag: str):

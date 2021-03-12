@@ -4,34 +4,34 @@ find it:
 next one:
     edit.find_next()
 
-claimer:
-    edit.word_left()
-
-kiter:
-    edit.word_right()
-
-claim <number>:
+tug <number>:
     user.left_n(number)
 
-claimie:
+tugging:
     edit.left()
-   
-kite <number>:
+
+tugger:
+    edit.word_left()
+
+push <number>:
     user.right_n(number)
 
-kitey:
+pushing:
     edit.right()
+
+pusher:
+    edit.word_right()
     
-burn <number>:
+raise <number>:
     user.up_n(number)
 
-burney:
+raising:
     user.up_n(1)
    
-crown <number>:
+drop <number>:
     user.down_n(number)
 
-crownie:
+dropping:
     user.down_n(1)
 
 go line start:
@@ -81,10 +81,10 @@ select down:
 select word:
     edit.select_word()
 
-take lefter:
+<user.select> lefter:
     edit.extend_word_left()
 
-take writer:
+<user.select> writer:
     edit.extend_word_right()
 
 select way left:
@@ -119,7 +119,7 @@ chuck right:
 chuck <number>:
     user.delete_left_n(number)
 
-dell <number>:
+drill <number>:
     user.delete_right_n(number)
     
 chuck up:
@@ -137,7 +137,7 @@ chuck lefter:
     edit.extend_word_left()
     edit.delete()
 
-chuck righter:
+chuck writer:
     edit.extend_word_right()
     edit.delete()
 

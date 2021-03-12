@@ -3,7 +3,7 @@ from typing import Set
 from talon import Module, Context, actions, app
 import sys
 
-default_alphabet = "air bat cap drum each fine gust harp sit jay crunch look made near odd pit quench red spy trap urge vest way box yes zoo".split(
+default_alphabet = "air bat cap drum each fine gust harp sit jury crunch look made near odd pit quench red sun trap urge vest whale plex yank zip".split(
     " "
 )
 letters_string = "abcdefghijklmnopqrstuvwxyz"
@@ -78,6 +78,12 @@ def immune_symbol_key(m) -> str:
 def function_key(m) -> str:
     "One function key"
     return m.function_key
+
+
+@mod.capture(rule="( <self.letter> | <self.number_key> | <self.symbol_key> )")
+def any_alphanumeric_key(m) -> str:
+    "any alphanumeric key"
+    return str(m)
 
 
 @mod.capture(
@@ -159,7 +165,7 @@ immune_symbol_key_words = {
 symbol_key_words = {
     "brick": "`",
     "quote": '"',
-    "sote": "'",
+    "soap": "'",
     "square": "[",
     "rare": "]",
     "slatch": "/",
@@ -206,7 +212,6 @@ ctx.lists["self.arrow_key"] = {
 
 simple_keys = [
     # "end",
-    "enter",
     # "home",
     # "insert",
     "pagedown",
@@ -215,7 +220,7 @@ simple_keys = [
 ]
 
 alternate_keys = {
-    "delete": "backspace",
+    "clap": "enter",
     "delhi": "delete",
     "chuck": "backspace",
     "scrape": "escape",

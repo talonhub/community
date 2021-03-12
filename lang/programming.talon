@@ -51,7 +51,7 @@ funk wrap <number>:
     user.code_select_function(number - 1, edit.selected_text())
 dock string: user.code_document_string()
 
-clapper:
+slider:
 	edit.line_end()
 	insert(",")
     key(enter)

@@ -320,3 +320,11 @@ curse undo: user.vscode("cursorUndo")
 <user.select> word: user.vscode("editor.action.addSelectionToNextFindMatch")
 
 Github open: user.vscode("openInGithub.openInGitHubFile")
+
+stage on:
+	user.vscode("git.stage")
+	key(cmd-w)
+	user.vscode("workbench.scm.focus")
+	key(down:100)
+	sleep(25ms)
+	key(enter)

@@ -17,3 +17,5 @@ snap <user.running_applications> [screen] <number>:
 browser: user.switcher_focus("Google Chrome")
 coder: user.switcher_focus("Code")
 slacker: user.switcher_focus("Slack")
+folk things: user.switcher_focus("Things")
+folk sim: user.switcher_focus("Simulator")

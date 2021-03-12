@@ -159,7 +159,7 @@ formatters_words = {
     "dunder": formatters_dict["DOUBLE_UNDERSCORE"],
     "hammer": formatters_dict["PUBLIC_CAMEL_CASE"],
     "kebab": formatters_dict["DASH_SEPARATED"],
-    "packed": formatters_dict["DOUBLE_COLON_SEPARATED"],
+    # "packed": formatters_dict["DOUBLE_COLON_SEPARATED"],
     "padded": formatters_dict["SPACE_SURROUNDED_STRING"],
     # "say": formatters_dict["NOOP"],
     # "sentence": formatters_dict["CAPITALIZE_FIRST_WORD"],
@@ -298,9 +298,8 @@ class Actions:
 
 ctx.lists["self.formatters"] = formatters_words.keys()
 ctx.lists["self.prose_formatter"] = {
-    "say": "NOOP",
     "speak": "NOOP",
-    "sentence": "CAPITALIZE_FIRST_WORD",
+    "sense": "CAPITALIZE_FIRST_WORD",
 }
 
 

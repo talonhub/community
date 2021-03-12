@@ -71,3 +71,5 @@ action(browser.submit_form):
 
 action(browser.toggle_dev_tools):
 	key(cmd-alt-i)
+
+action(user.dental_click): key(escape f)

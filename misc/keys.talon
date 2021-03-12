@@ -1,4 +1,3 @@
-go <user.arrow_keys>: key(arrow_keys)
 <user.letter>: key(letter)
 uppercase <user.letters> [(lowercase | sunk)]: 
     user.insert_formatted(letters, "ALL_CAPS")

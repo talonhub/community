@@ -14,6 +14,9 @@ overrides_directory = os.path.join(cwd, "app_names")
 override_file_name = f"app_name_overrides.{talon.app.platform}.csv"
 override_file_path = os.path.join(overrides_directory, override_file_name)
 
+exclude_list = [
+    "us",
+]
 
 mod = Module()
 mod.list("running", desc="all running applications")
@@ -66,7 +69,7 @@ def update_lists():
 
         words = get_words(name)
         for word in words:
-            if word and word not in running:
+            if word and word not in running and word not in exclude_list:
                 running[word.lower()] = cur_app.name
 
         running[name.lower()] = cur_app.name
@@ -199,4 +202,3 @@ def ui_event(event, arg):
 ctx.lists["user.launch"] = {}
 update_launch_list()
 ui.register("", ui_event)
-

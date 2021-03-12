@@ -1,8 +1,17 @@
 tag: user.line_commands
 -
 #this defines some common line commands. More may be defined that are ide-specific.
-lendie: edit.line_end()
-bendie: edit.line_start()
+lender: edit.line_end()
+bender: edit.line_start()
+paste line:
+    edit.line_end()
+	key(enter)
+    edit.paste()
+paste line up:
+    edit.line_start()
+    key(left)
+	key(enter)
+    edit.paste()
 go <number> start: edit.jump_line(number)
 go <number> end: 
     edit.jump_line(number)
