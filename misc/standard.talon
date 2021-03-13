@@ -34,3 +34,5 @@ clap up:
 	edit.line_start()
 	key(left)
 	key(enter)
+
+slow mode: mode.enable("user.slow")

@@ -60,7 +60,7 @@ action(user.split_window_vertically):
 	user.vscode("workbench.action.splitEditor")
 action(user.split_window):
 	user.vscode("workbench.action.splitEditor")
-splint:
+cross:
 	user.vscode("vscode-neovim.escape")
 	sleep(25ms)
 	user.split_next()
