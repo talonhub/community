@@ -16,6 +16,13 @@ snap <user.running_applications> [screen] <number>:
     user.move_app_to_screen(running_applications, number)
 browser: user.switcher_focus("Google Chrome")
 coder: user.switcher_focus("Code")
+voice code:
+    user.switcher_focus("Code")
+    user.vscode("workbench.action.openRecent")
+    sleep(50ms)
+    insert("talon")
+    key(enter)
+   
 slacker: user.switcher_focus("Slack")
 folk things: user.switcher_focus("Things")
 folk sim: user.switcher_focus("Simulator")
