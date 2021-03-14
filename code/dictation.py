@@ -95,7 +95,7 @@ class DictationFormat:
     def __init__(self):
         self.reset()
 
-    def reset(self, before=None):
+    def reset(self):
         self.before = ""
         self.state = "sentence start"
 
