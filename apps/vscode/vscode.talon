@@ -107,14 +107,14 @@ symbol hunt [<user.text>]:
 
 symbol last: user.vscode("gotoNextPreviousMember.previousMember")
 symbol next: user.vscode("gotoNextPreviousMember.nextMember")
-<user.teleport> symbol: user.vscode("semantic-movement.jumpToContainingSymbol")
-<user.teleport> funk: user.vscode("semantic-movement.jumpToContainingFunction")
-<user.teleport> named funk: user.vscode("semantic-movement.jumpToContainingNamedFunction")
-<user.teleport> class: user.vscode("semantic-movement.jumpToContainingClass")
-<user.select> symbol: user.vscode("semantic-movement.selectContainingSymbol")
-<user.select> funk: user.vscode("semantic-movement.selectContainingFunction")
-<user.select> named funk: user.vscode("semantic-movement.selectContainingNamedFunction")
-<user.select> class: user.vscode("semantic-movement.selectContainingClass")
+<user.teleport> symbol: user.vscode_and_wait("semantic-movement.jumpToContainingSymbol")
+<user.teleport> funk: user.vscode_and_wait("semantic-movement.jumpToContainingFunction")
+<user.teleport> named funk: user.vscode_and_wait("semantic-movement.jumpToContainingNamedFunction")
+<user.teleport> class: user.vscode_and_wait("semantic-movement.jumpToContainingClass")
+<user.select> symbol: user.vscode_and_wait("semantic-movement.selectContainingSymbol")
+<user.select> funk: user.vscode_and_wait("semantic-movement.selectContainingFunction")
+<user.select> named funk: user.vscode_and_wait("semantic-movement.selectContainingNamedFunction")
+<user.select> class: user.vscode_and_wait("semantic-movement.selectContainingClass")
 
 # Panels
 panel control: user.vscode("workbench.panel.repl.view.focus")
@@ -328,3 +328,9 @@ stage on:
 	key(down:100)
 	sleep(25ms)
 	key(enter)
+
+# jupyter
+cell next: user.vscode("jupyter.gotoNextCellInFile")
+cell last: user.vscode("jupyter.gotoPrevCellInFile")
+cell run above: user.vscode("jupyter.runallcellsabove.palette")
+cell run: user.vscode("jupyter.runcurrentcell")

@@ -110,12 +110,6 @@ indent [more]:
 chuck line:
     edit.delete_line()
 
-chuck left:
-    key(backspace)
-
-chuck right:
-    key(delete)
-
 chuck <number>:
     user.delete_left_n(number)
 

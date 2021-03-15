@@ -6,21 +6,21 @@ app: vscode
 
 bracket switch: user.vscode("metaGo.changeSurroundingPair")
 
-# jump to: user.vscode("metaGo.gotoSmart")
-# jump word <word>: user.jump("metaGo.gotoSmart", word)
+# <user.teleport> to: user.vscode("metaGo.gotoSmart")
+# <user.teleport> word <word>: user.jump("metaGo.gotoSmart", word)
 <user.select> before: user.vscode("metaGo.gotoBefore")
 <user.select> after: user.vscode("metaGo.gotoAfter")
-jump block up: user.vscode("metaGo.gotoEmptyLineUp")
-jump block [down]: user.vscode("metaGo.gotoEmptyLineDown")
-jump bracket: user.vscode("metaGo.jumpToBracket")
-jump very:
+razor: user.vscode("metaGo.gotoEmptyLineUp")
+dropper: user.vscode("metaGo.gotoEmptyLineDown")
+<user.teleport> bracket: user.vscode("metaGo.jumpToBracket")
+<user.teleport> very:
     key(cmd-shift-. enter)
 
 # <user.select> to: user.vscode("metaGo.selectSmart")
 tasty: user.vscode("metaGo.selectBefore")
 toasty: user.vscode("metaGo.selectAfter")
-<user.select> block up: user.vscode("metaGo.selectEmptyLineUp")
-<user.select> block [down]: user.vscode("metaGo.selectEmptyLineDown")
+<user.select> upper: user.vscode("metaGo.selectEmptyLineUp")
+<user.select> downer: user.vscode("metaGo.selectEmptyLineDown")
 <user.select> outside: user.vscode("metaGo.inSurroundingPairSelectionWithPairs")
 <user.select> inside <user.symbol_key>:
     user.vscode("metaGo.inSurroundingPairSelection")
