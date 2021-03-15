@@ -27,6 +27,13 @@ settings():
     # the number of lines of command history to keep in total;
     # "command history more" to display all of them, "command history less" to restore
     user.command_history_size = 50
+
+    # Uncomment the below to enable context-sensitive dictation. This determines
+    # how to format (capitalize, space) dictation-mode speech by selecting &
+    # copying surrounding text before inserting. This can be slow and may not
+    # work in some applications. You may wish to enable this on a
+    # per-application basis.
+    #user.context_sensitive_dictation = 1
 	
 # uncomment tag to enable mouse grid
 # tag(): user.mouse_grid_enabled
