@@ -1,9 +1,8 @@
-from talon import Module, Context, resource
-from typing import Dict, List, Tuple
-import os
 import csv
+import os
 from pathlib import Path
 from typing import Dict, List, Tuple
+from talon import resource
 
 # NOTE: This method requires this module to be one folder below the top-level
 #   knausj folder.

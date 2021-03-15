@@ -1,11 +1,5 @@
-from talon import Module, Context, resource
-from typing import Dict, List, Tuple
-import os
-import csv
-from pathlib import Path
-from typing import Dict, List, Tuple
+from talon import Context, Module
 from .user_settings import get_list_from_csv
-
 
 mod = Module()
 ctx = Context()
