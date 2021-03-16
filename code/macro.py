@@ -21,6 +21,13 @@ class Actions:
         global recording
         recording = False
 
+    def macro_insert_wait(number_small: int):
+        """Insert wait for given number of seconds"""
+        if not number_small:
+            actions.sleep("250ms")
+        else:
+            actions.sleep(f"{number_small}s")
+
     def macro_play():
         """player recorded macro"""
         actions.user.macro_stop()
