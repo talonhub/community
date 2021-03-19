@@ -1,6 +1,7 @@
 -
 settings():
     # heres a conflicting test change made in origin/master
+    # This is a change made to the knausj_origin that you want in branch ark.
     #adjust the scale of the imgui to my liking
     imgui.scale = 1.3
     # enable if you'd like the picker gui to automatically appear when explorer has focus
