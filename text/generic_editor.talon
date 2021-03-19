@@ -1,13 +1,35 @@
-find it:
-    edit.find()
+zoom in: edit.zoom_in()
 
-next one:
-    edit.find_next()
+zoom out: edit.zoom_out()
 
-go word left:
+page up: key(pgup)
+
+page down: key(pgdown)
+
+copy: edit.copy()
+
+slice: edit.cut()
+
+spark: edit.paste()
+
+undo: edit.undo()
+
+redo: edit.redo()
+
+file save: edit.save() 
+
+tell sink:
+	edit.line_end()
+	insert(";")
+	key(enter) 
+
+enter:
+    key(enter)
+
+bird:
     edit.word_left()
 
-go word right:
+birch:
     edit.word_right()
 
 go left:
@@ -22,33 +44,27 @@ go up:
 go down:
     edit.down()
 
-go line start:
+go end:
     edit.line_start()
 
-go line end:
-    edit.line_end()
-
-go way left:
-    edit.line_start()
+go home:
     edit.line_start()
 
-go way right:
-    edit.line_end()
-
-go way down:
+go way end:
     edit.file_end()
+    edit.line_end()
 
-go way up:
+go way home:
     edit.file_start()
 
-go page down:
+page down:
     edit.page_down()
 
-go page up:
+page up:
     edit.page_up()
 
 # selecting
-select line:
+shackle:
     edit.select_line()
 
 select all:
@@ -69,22 +85,22 @@ select down:
 select word:
     edit.select_word()
 
-select word left:
+blitch:
     edit.extend_word_left()
 
-select word right:
+rich:
     edit.extend_word_right()
 
-select way left:
+select home:
     edit.extend_line_start()
 
-select way right:
+select end:
     edit.extend_line_end()
 
-select way up:
+select way home:
     edit.extend_file_start()
 
-select way down:
+select way end:
     edit.extend_file_end()
 
 # editing
@@ -98,10 +114,10 @@ indent [more]:
 clear line:
     edit.delete_line()
 
-clear left:
+junk:
     key(backspace)
 
-clear right:
+deli:
     key(delete)
 
 clear up:
@@ -139,10 +155,6 @@ clear way down:
     edit.extend_file_end()
     edit.delete()
 
-clear all:
-    edit.select_all()
-    edit.delete()
-
 #copy commands
 copy all:
     edit.select_all()
@@ -178,7 +190,7 @@ copy line:
     edit.copy()
 
 #cut commands
-cut all:
+cut everything:
     edit.select_all()
     edit.cut()
 #to do: do we want these variants
