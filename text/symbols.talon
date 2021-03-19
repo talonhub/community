@@ -1,61 +1,82 @@
-question [mark]: "?"
-(downscore | underscore): "_"
+questo: "?"
+underbar: "_"
 double dash: "--"
-(bracket | brack | left bracket): "{"
-(rbrack | are bracket | right bracket): "}"
-triple quote: "'''"
+(curly | left curly): "{"
+right curly: "}"
+triple tick: "'''"
 (dot dot | dotdot): ".."
-#ellipses: "…"
 ellipses: "..."
-(comma and | spamma): ", "
+spamma: ", "
+semi: ";" 
+comma: ","  
+spacey: " " 
+quote: "\""
+ticky: "'"
+back tick: "`"
+dollar: "$"     
+dotty: "."
 plus: "+"
+minus: "-"
 arrow: "->"
-dub arrow: "=>"
+fat arrow: " => "
 new line: "\\n"
 carriage return: "\\r"
 line feed: "\\r\\n"
-empty dubstring:
-    '""'
-    key(left)
+
 empty escaped (dubstring|dub quotes):
     '\\"\\"'
     key(left)
-    key(left)
-empty string:
-    "''"
     key(left)
 empty escaped string:
     "\\'\\'"
     key(left)
     key(left)
-(inside parens | args):
+(inside ticks | ticks):
+    "''"
+    key(left)
+(inside back ticks | back ticks):
+    "``"
+    key(left)
+(inside prekris | prekris):
 	insert("()")
 	key(left)
-inside (squares | list): 
+(inside squares | squares): 
 	insert("[]") 
 	key(left)
-inside (bracket | braces): 
+(inside curlys | curlys): 
 	insert("{}") 
 	key(left)
-inside percent: 
+(inside percents | percents): 
 	insert("%%") 
 	key(left)
-inside quotes:
+(inside quotes | quotes):
 	insert('""')
 	key(left)
-angle that: 
+(inside angles | angles):
+	insert('<>')
+	key(left)
+hug angles: 
     text = edit.selected_text()
     user.paste("<{text}>")
-(bracket | brace) that: 
+hug curlys: 
     text = edit.selected_text()
     user.paste("{{{text}}}")
-(parens | args) that: 
+hug squares: 
+    text = edit.selected_text()
+    user.paste("[{text}]")
+hug prekris: 
     text = edit.selected_text()
     user.paste("({text})")
-percent that: 
+hug percents: 
     text = edit.selected_text()
     user.paste("%{text}%")
-quote that:
+hug quotes:
     text = edit.selected_text()
     user.paste('"{text}"')
+hug ticks:
+    text = edit.selected_text()
+    user.paste("'{text}'")
+hug back ticks:
+    text = edit.selected_text()
+    user.paste("`{text}`")
 
