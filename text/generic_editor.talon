@@ -1,3 +1,5 @@
+# Added new functionality (merge test)
+
 find it:
     edit.find()
 
