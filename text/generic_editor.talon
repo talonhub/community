@@ -1,3 +1,5 @@
+# Added new functionality (merge test)
+
 zoom in: edit.zoom_in()
 
 zoom out: edit.zoom_out()
