@@ -5,7 +5,7 @@ settings():
     # enable if you'd like the picker gui to automatically appear when explorer has focus
     user.file_manager_auto_show_pickers = 0
     #set the max number of command lines per page in help
-    user.help_max_command_lines_per_page = 50
+    user.help_max_command_lines_per_page = 30
     # set the max number of contexts display per page in help
     user.help_max_contexts_per_page = 20
     # The default amount used when scrolling continuously
@@ -19,14 +19,18 @@ settings():
     #hide cursor when mouse_wake is called to enable zoom mouse
     user.mouse_wake_hides_cursor = 0
     #the amount to scroll up/down (equivalent to mouse wheel on Windows by default)
-    user.mouse_wheel_down_amount = 120
+    user.mouse_wheel_down_amount = 200
     #mouse grid and friends put the number one on the bottom left (vs on the top left)
-    user.grids_put_one_bottom_left = 1
+    user.grids_put_one_bottom_left = 0
     # the number of lines of command history to display by default
-    user.command_history_display = 10
+    user.command_history_display = 1
     # the number of lines of command history to keep in total;
     # "command history more" to display all of them, "command history less" to restore
-    user.command_history_size = 50
+    user.command_history_size = 10
+    # (unstable) minimum silence time (in seconds) before speech is cut off, default 0.150
+    speech.timeout = 0.4
+    # record speech for training dataset
+    speech.record_all = 1
 
     # Uncomment the below to enable context-sensitive dictation. This determines
     # how to format (capitalize, space) dictation-mode speech by selecting &
