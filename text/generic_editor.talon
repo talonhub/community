@@ -47,7 +47,7 @@ go down:
     edit.down()
 
 go end:
-    edit.line_start()
+    edit.line_end()
 
 go home:
     edit.line_start()
