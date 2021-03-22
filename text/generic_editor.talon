@@ -119,6 +119,9 @@ clear line:
 junk:
     key(backspace)
 
+tabby:
+    key(tab)
+
 deli:
     key(delete)
 
