@@ -104,7 +104,7 @@ elm table row:
   "<tr></tr>"
   key(left:5)
 
-elm table cell:
+elm table data:
   "<td></td>"
   key(left:5)
 
