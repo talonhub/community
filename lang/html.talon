@@ -30,7 +30,7 @@ elm anchor:
 
 elm div:
   "<div>"
-  key(enter enter)
+  key(enter:2)
   "</div>"
   key(up tab)
 
@@ -85,13 +85,17 @@ elm five list items:
   key(left:5)
 
 elm table:
-  "<table></table>"
-  key(left:8)
+  "<table>"
+  key(enter:2)
+  "</table>"
+  key(up)
 
 elm table header:
-  "<thead></thead>"
-  key(left:8)
-  
+  "<thead>"
+  key(enter:2)
+  "</thead>"
+  key(up)
+
 elm table header cell:
   "<th></th>"
   key(left:5)
@@ -105,8 +109,12 @@ elm table cell:
   key(left:5)
 
 elm table body:
-  "<tbody></tbody>"
-  key(left:8)
+  "<tbody>"
+  key(enter:2)
+  "</tbody>"
+  key(up)
+
+  
 
 elm table caption:
   "<caption></caption>"
