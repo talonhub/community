@@ -84,6 +84,35 @@ elm five list items:
   "<li></li>"
   key(left:5)
 
+elm table:
+  "<table></table>"
+  key(left:8)
+
+elm table header:
+  "<thead></thead>"
+  key(left:8)
+  
+elm table header cell:
+  "<th></th>"
+  key(left:5)
+
+elm table row:
+  "<tr></tr>"
+  key(left:5)
+
+elm table cell:
+  "<td></td>"
+  key(left:5)
+
+elm table body:
+  "<tbody></tbody>"
+  key(left:8)
+
+elm table caption:
+  "<caption></caption>"
+  key(left:10)
+
+
 
 # HTML Attributes
 
