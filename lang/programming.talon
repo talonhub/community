@@ -1,6 +1,6 @@
 tag: user.code_generic
 -
-block: user.code_block()
+code block: user.code_block()
 
 #todo should we have a keyword list? type list capture? stick with "word"?
 #state in: insert(" in ")
