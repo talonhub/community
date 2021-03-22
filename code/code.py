@@ -447,6 +447,9 @@ class Actions:
     def code_insert_library(text: str, selection: str):
         """Inserts a library and positions the cursor appropriately"""
 
+    def code_document_string():
+        """Inserts a document string and positions the cursor appropriately"""
+
 
 def update_library_list_and_freeze():
     global library_list
