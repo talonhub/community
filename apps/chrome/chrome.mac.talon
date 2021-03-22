@@ -34,8 +34,8 @@ action(browser.go_back):
 action(browser.go_forward):
 	key(cmd-])
 	
-action(browser.go_home):
-	key(cmd-shift-h)
+# action(browser.go_home):
+# 	key(cmd-shift-h)
 
 action(browser.open_private_window):
 	key(cmd-shift-n)
