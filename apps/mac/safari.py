@@ -3,10 +3,11 @@ from talon import ctrl, ui, Module, Context, actions, clip, app
 ctx = Context()
 mod = Module()
 apps = mod.apps
-apps.safari = """
+mod.apps.safari = """
 os: mac
-and app.name: Safari
+and app.bundle: com.apple.Safari
 """
+
 ctx.matches = r"""
 app: safari
 """
@@ -20,3 +21,12 @@ class user_actions:
 
     def tab_final():
         actions.key("cmd-9")
+
+
+@ctx.action_class("browser")
+class browser_actions:
+    def go(url: str):
+        actions.browser.focus_address()
+        actions.sleep("50ms")
+        actions.insert(url)
+        actions.key("enter")

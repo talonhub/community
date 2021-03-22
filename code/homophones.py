@@ -27,7 +27,7 @@ main_screen = ui.main_screen()
 
 
 def update_homophones(name, flags):
-    if name is not None and name != homophones_file:
+    if name != homophones_file:
         return
 
     phones = {}
@@ -35,7 +35,7 @@ def update_homophones(name, flags):
     with open(homophones_file, "r") as f:
         for line in f:
             words = line.rstrip().split(",")
-            canonical_list.append(max(words, key=len))
+            canonical_list.append(words[0])
             for word in words:
                 word = word.lower()
                 old_words = phones.get(word, [])
@@ -46,7 +46,7 @@ def update_homophones(name, flags):
     ctx.lists["self.homophones_canonicals"] = canonical_list
 
 
-update_homophones(None, None)
+update_homophones(homophones_file, None)
 fs.watch(cwd, update_homophones)
 active_word_list = None
 is_selection = False
@@ -103,10 +103,10 @@ def raise_homophones(word, forced=False, selection=False):
 
     actions.mode.enable("user.homophones")
     show_help = False
-    gui.freeze()
+    gui.show()
 
 
-@imgui.open(y=0, x=main_screen.width / 2.6, software=False)
+@imgui.open(x=main_screen.x + main_screen.width / 2.6, y=main_screen.y)
 def gui(gui: imgui.GUI):
     global active_word_list
     if show_help:
@@ -116,19 +116,20 @@ def gui(gui: imgui.GUI):
         gui.line()
         index = 1
         for word in active_word_list:
-            gui.text("Pick {}: {} ".format(index, word))
+            gui.text("Choose {}: {} ".format(index, word))
             index = index + 1
 
 
 def show_help_gui():
     global show_help
     show_help = True
-    gui.freeze()
+    gui.show()
 
 
-@mod.capture
+@mod.capture(rule="{self.homophones_canonicals}")
 def homophones_canonical(m) -> str:
     "Returns a single string"
+    return m.homophones_canonicals
 
 
 @mod.action_class
@@ -139,6 +140,7 @@ class Actions:
 
     def homophones_show(m: str):
         """Sentence formatter"""
+        print(m)
         raise_homophones(m, False, False)
 
     def homophones_show_selection():
@@ -164,7 +166,3 @@ class Actions:
         app.notify(error)
         raise error
 
-
-@ctx.capture(rule="{self.homophones_canonicals}")
-def homophones_canonical(m):
-    return m.homophones_canonicals

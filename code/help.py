@@ -3,7 +3,7 @@ import itertools
 import math
 from typing import Dict, List, Iterable, Set, Tuple, Union
 
-from talon import Module, Context, actions, imgui, Module, registry, ui
+from talon import Module, Context, actions, imgui, Module, registry, ui, app
 from talon.grammar import Phrase
 
 mod = Module()
@@ -34,7 +34,7 @@ search_phrase = None
 context_map = {}
 
 current_context_page = 1
-sorted_context_map_keys = None
+sorted_context_map_keys = []
 
 selected_context = None
 selected_context_page = 1
@@ -62,7 +62,7 @@ def update_title():
 
 
 # todo: dynamic rect?
-@imgui.open(y=0, software=False)
+@imgui.open(y=0)
 def gui_alphabet(gui: imgui.GUI):
     global alphabet
     gui.text("Alphabet help")
@@ -165,7 +165,7 @@ def get_pages(item_line_counts: List[int]) -> List[int]:
     return pages
 
 
-@imgui.open(y=0, software=False)
+@imgui.open(y=0)
 def gui_context_help(gui: imgui.GUI):
     global context_command_map
     global current_context_page
@@ -199,18 +199,21 @@ def gui_context_help(gui: imgui.GUI):
         current_item_index = 1
         current_selection_index = 1
         for key in sorted_context_map_keys:
-            target_page = get_context_page(current_item_index)
+            if key in ctx.lists["self.help_contexts"]:
+                target_page = get_context_page(current_item_index)
 
-            if current_context_page == target_page:
-                button_name = format_context_button(
-                    current_selection_index, key, ctx.lists["self.help_contexts"][key]
-                )
+                if current_context_page == target_page:
+                    button_name = format_context_button(
+                        current_selection_index,
+                        key,
+                        ctx.lists["self.help_contexts"][key],
+                    )
 
-                if gui.button(button_name):
-                    selected_context = ctx.lists["self.help_contexts"][key]
-                current_selection_index = current_selection_index + 1
+                    if gui.button(button_name):
+                        selected_context = ctx.lists["self.help_contexts"][key]
+                    current_selection_index = current_selection_index + 1
 
-            current_item_index += 1
+                current_item_index += 1
 
         if total_page_count > 1:
             gui.spacer()
@@ -402,7 +405,7 @@ def refresh_context_command_map(enabled_only=False):
 
         if enabled_only and context in active_contexts or not enabled_only:
             context_command_map[context_name] = {}
-            for command_alias, val in context.commands_get().items():
+            for command_alias, val in context.commands.items():
                 # print(str(val))
                 if command_alias in registry.commands:
                     # print(str(val.rule.rule) + ": " + val.target.code)
@@ -614,19 +617,9 @@ class Actions:
         actions.mode.disable("user.help")
 
 
-@mod.capture
-def help_contexts(m) -> str:
-    "Returns a context name"
-
-
-@ctx.capture(rule="{self.help_contexts}")
-def help_contexts(m):
-    return m.help_contexts
-
-
 def commands_updated(_):
     update_title()
 
 
-refresh_context_command_map()
+app.register("ready", refresh_context_command_map)
 

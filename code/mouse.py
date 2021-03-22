@@ -1,9 +1,22 @@
-from talon import cron, ctrl, ui, Module, Context, actions, noise, settings, imgui, app
-from talon_plugins import speech, eye_mouse, eye_zoom_mouse
-from talon_plugins.eye_mouse import toggle_control, toggle_camera_overlay, config
-import subprocess
 import os
 import pathlib
+import subprocess
+
+from talon import (
+    Context,
+    Module,
+    actions,
+    app,
+    cron,
+    ctrl,
+    clip,
+    imgui,
+    noise,
+    settings,
+    ui,
+)
+from talon_plugins import eye_mouse, eye_zoom_mouse, speech
+from talon_plugins.eye_mouse import config, toggle_camera_overlay, toggle_control
 
 key = actions.key
 self = actions.self
@@ -14,28 +27,28 @@ gaze_job = None
 cancel_scroll_on_pop = True
 
 default_cursor = {
-    "AppStarting": "%SystemRoot%\\Cursors\\aero_working.ani",
-    "Arrow": "%SystemRoot%\\Cursors\\aero_arrow.cur",
-    "Hand": "%SystemRoot%\\Cursors\\aero_link.cur",
-    "Help": "%SystemRoot%\\Cursors\\aero_helpsel.cur",
-    "No": "%SystemRoot%\\Cursors\\aero_unavail.cur",
-    "NWPen": "%SystemRoot%\\Cursors\\aero_pen.cur",
-    "Person": "%SystemRoot%\\Cursors\\aero_person.cur",
-    "Pin": "%SystemRoot%\\Cursors\\aero_pin.cur",
-    "SizeAll": "%SystemRoot%\\Cursors\\aero_move.cur",
-    "SizeNESW": "%SystemRoot%\\Cursors\\aero_nesw.cur",
-    "SizeNS": "%SystemRoot%\\Cursors\\aero_ns.cur",
-    "SizeNWSE": "%SystemRoot%\\Cursors\\aero_nwse.cur",
-    "SizeWE": "%SystemRoot%\\Cursors\\aero_ew.cur",
-    "UpArrow": "%SystemRoot%\\Cursors\\aero_up.cur",
-    "Wait": "%SystemRoot%\\Cursors\\aero_busy.ani",
+    "AppStarting": r"%SystemRoot%\Cursors\aero_working.ani",
+    "Arrow": r"%SystemRoot%\Cursors\aero_arrow.cur",
+    "Hand": r"%SystemRoot%\Cursors\aero_link.cur",
+    "Help": r"%SystemRoot%\Cursors\aero_helpsel.cur",
+    "No": r"%SystemRoot%\Cursors\aero_unavail.cur",
+    "NWPen": r"%SystemRoot%\Cursors\aero_pen.cur",
+    "Person": r"%SystemRoot%\Cursors\aero_person.cur",
+    "Pin": r"%SystemRoot%\Cursors\aero_pin.cur",
+    "SizeAll": r"%SystemRoot%\Cursors\aero_move.cur",
+    "SizeNESW": r"%SystemRoot%\Cursors\aero_nesw.cur",
+    "SizeNS": r"%SystemRoot%\Cursors\aero_ns.cur",
+    "SizeNWSE": r"%SystemRoot%\Cursors\aero_nwse.cur",
+    "SizeWE": r"%SystemRoot%\Cursors\aero_ew.cur",
+    "UpArrow": r"%SystemRoot%\Cursors\aero_up.cur",
+    "Wait": r"%SystemRoot%\Cursors\aero_busy.ani",
     "Crosshair": "",
     "IBeam": "",
 }
 
 # todo figure out why notepad++ still shows the cursor sometimes.
 hidden_cursor = os.path.join(
-    os.path.dirname(os.path.realpath(__file__)), "Resources\HiddenCursor.cur"
+    os.path.dirname(os.path.realpath(__file__)), r"Resources\HiddenCursor.cur"
 )
 
 mod = Module()
@@ -82,7 +95,7 @@ setting_mouse_wheel_down_amount = mod.setting(
 continuous_scoll_mode = ""
 
 
-@imgui.open(x=700, y=0, software=False)
+@imgui.open(x=700, y=0)
 def gui_wheel(gui: imgui.GUI):
     gui.text("Scroll mode: {}".format(continuous_scoll_mode))
     gui.line()
@@ -117,7 +130,7 @@ class Actions:
 
     def mouse_toggle_camera_overlay():
         """Toggles camera overlay"""
-        toggle_camera_overlay(not config.show_camera)        
+        toggle_camera_overlay(not config.show_camera)
 
     def mouse_toggle_zoom_mouse():
         """Toggles zoom mouse"""
@@ -131,9 +144,17 @@ class Actions:
         ):
             eye_zoom_mouse.zoom_mouse.cancel()
 
+    def mouse_trigger_zoom_mouse():
+        """Trigger zoom mouse if enabled"""
+        if eye_zoom_mouse.zoom_mouse.enabled:
+            eye_zoom_mouse.zoom_mouse.on_pop(eye_zoom_mouse.zoom_mouse.state)
+
     def mouse_drag():
         """(TEMPORARY) Press and hold/release button 0 depending on state for dragging"""
-        if 1 not in ctrl.mouse_buttons_down():
+        # todo: fixme temporary fix for drag command
+        button_down = len(list(ctrl.mouse_buttons_down())) > 0
+        print(str(ctrl.mouse_buttons_down()))
+        if not button_down:
             # print("start drag...")
             ctrl.mouse_click(button=0, down=True)
             # app.notify("drag started")
@@ -149,8 +170,11 @@ class Actions:
         toggle_control(False)
         show_cursor_helper(True)
         stop_scroll()
-        if 1 in ctrl.mouse_buttons_down():
-            actions.user.mouse_drag()
+
+        # todo: fixme temporary fix for drag command
+        button_down = len(list(ctrl.mouse_buttons_down())) > 0
+        if button_down:
+            ctrl.mouse_click(button=0, up=True)
 
     def mouse_scroll_down():
         """Scrolls down"""
@@ -165,7 +189,8 @@ class Actions:
         if scroll_job is None:
             start_scroll()
 
-        gui_wheel.show()
+        if setting_mouse_hide_mouse_gui.get() == 0:
+            gui_wheel.show()
 
     def mouse_scroll_up():
         """Scrolls up"""
@@ -197,22 +222,25 @@ class Actions:
     def copy_mouse_position():
         """Copy the current mouse position coordinates"""
         position = ctrl.mouse_pos()
-        clip.set(repr(position))
+        clip.set_text((repr(position)))
 
     def mouse_move_center_active_window():
         """move the mouse cursor to the center of the currently active window"""
         rect = ui.active_window().rect
         ctrl.mouse_move(rect.left + (rect.width / 2), rect.top + (rect.height / 2))
 
+
 def show_cursor_helper(show):
     """Show/hide the cursor"""
     if app.platform == "windows":
-        import winreg, win32con
         import ctypes
+        import winreg
+
+        import win32con
 
         try:
             Registrykey = winreg.OpenKey(
-                winreg.HKEY_CURRENT_USER, "Control Panel\Cursors", 0, winreg.KEY_WRITE
+                winreg.HKEY_CURRENT_USER, r"Control Panel\Cursors", 0, winreg.KEY_WRITE
             )
 
             for value_name, value in default_cursor.items():
@@ -334,3 +362,19 @@ def start_cursor_scrolling():
     gaze_job = cron.interval("60ms", gaze_scroll)
     # if eye_zoom_mouse.zoom_mouse.enabled and eye_mouse.mouse.attached_tracker is not None:
     #    eye_zoom_mouse.zoom_mouse.sleep(True)
+
+
+if app.platform == "mac":
+    from talon import tap
+
+    def on_move(e):
+        if not config.control_mouse:
+            buttons = ctrl.mouse_buttons_down()
+            # print(str(ctrl.mouse_buttons_down()))
+            if not e.flags & tap.DRAG and buttons:
+                e.flags |= tap.DRAG
+                # buttons is a set now
+                e.button = list(buttons)[0]
+                e.modify()
+
+    tap.register(tap.MMOVE | tap.HOOK, on_move)

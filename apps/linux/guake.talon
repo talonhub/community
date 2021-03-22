@@ -1,8 +1,18 @@
 os: linux
 app: Guake
 -
+<<<<<<< HEAD
 tag(): terminal
 tag(): user.tabs
+=======
+#comment or remove tags for command sets you don't want
+#quake doesn't support the file_manager stuff
+#tag(): user.file_manager
+tag(): user.git
+tag(): user.kubectl
+tag(): user.tabs
+tag(): terminal
+>>>>>>> upstream/master
 
 action(app.tab_open):
   key(ctrl-shift-t)

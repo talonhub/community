@@ -47,6 +47,10 @@ action(user.code_state_for):
 action(user.code_state_while):
     insert("while () {}")
     key(left enter up end left:3)
+toggle library: user.code_toggle_libraries()
+library <user.code_libraries>:
+    user.code_insert_library(code_libraries, "")
+    key(end enter)
 action(user.code_import):
     insert("library()")
     key(left)

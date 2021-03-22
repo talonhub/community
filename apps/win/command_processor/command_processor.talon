@@ -1,18 +1,16 @@
-app: windows_terminal
 app: windows_command_processor
+app: windows_terminal
+and win.title: /Command Prompt/
 -
-tag(): terminal
+# comment or remove tags for command sets you don't want
 tag(): user.file_manager
-
-run last: key(up enter)
-
-kill all:
-  key(ctrl-c)
-  insert("y")
-  key(enter)
+tag(): user.generic_terminal
+tag(): user.git
+tag(): user.kubectl
+tag(): terminal
   
 action(user.file_manager_refresh_title):
-	insert("title %CD%")
+	insert("title Command Prompt: %CD%")
 	key(enter)
 
 #action(user.file_manager_go_back):
@@ -26,3 +24,4 @@ action(user.file_manager_open_parent):
     key(enter)
     user.file_manager_refresh_title()
 
+action(edit.delete_line): key(esc)

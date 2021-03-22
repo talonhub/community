@@ -1,22 +1,16 @@
 #provide both anchored and unachored commands via 'over'
-(say | speak | phrase) <user.text>$: 
-  result = user.formatted_text(text, "NOOP")
-  insert(result)
-(say | speak | phrase) <user.text> over: 
-  result = user.formatted_text(text, "NOOP")
-  insert(result)
-<user.format_text>$: insert(format_text)
-<user.format_text> over: insert(format_text)
-word <user.word>: insert(user.word)
+phrase <user.text>$: user.insert_formatted(text, "NOOP")
+phrase <user.text> over: user.insert_formatted(text, "NOOP")
+{user.prose_formatter} <user.prose>$: user.insert_formatted(prose, prose_formatter)
+{user.prose_formatter} <user.prose> over: user.insert_formatted(prose, prose_formatter)
+<user.format_text>+$: user.insert_many(format_text_list)
+<user.format_text>+ over: user.insert_many(format_text_list)
+<user.formatters> that: user.formatters_reformat_selection(user.formatters)
+word <user.word>: user.insert_formatted(user.word, "NOOP")
 format help: user.formatters_help_toggle()
-format recent: user.formatters_recent_toggle()
-format repeat <number>: 
-  result = user.formatters_recent_select(number)
-  insert(result)
-format copy <number>:
-  result = user.formatters_recent_select(number)
-  clip.set_text(result)
-^nope that$: user.formatters_clear_last()
-^nope that was <user.formatters>$:
-  user.formatters_clear_last()
-  insert(user.formatters_reformat_last(user.formatters))
+recent list: user.toggle_phrase_history()
+recent repeat <number_small>: insert(user.get_recent_phrase(number_small))
+recent copy <number_small>: clip.set_text(user.get_recent_phrase(number_small))
+select that: user.select_last_phrase()
+nope that | scratch that: user.clear_last_phrase()
+nope that was <user.formatters>: user.formatters_reformat_last(formatters)

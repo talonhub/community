@@ -1,90 +1,78 @@
 mode: dictation
 -
-#everything here should call auto_insert to preserve the state to correctly auto-capitalize/auto-space.
-<user.text>: auto_insert(text)
-enter: auto_insert("new-line")
-period: auto_insert(".")
-(comma | kama): 
-    auto_insert(",")
-question mark: auto_insert("?")
-(bang | exclamation [mark]): auto_insert("!")
-dash: auto_insert("-")
-colon: auto_insert(":")
-space: user.dictate(" ")
-(semi colon | semicolon): auto_insert(";")
-cap <user.text>: 
-    result = user.formatted_text(user.text, "CAPITALIZE_FIRST_WORD")
+^press <user.keys>$: key("{keys}")
+
+# Everything here should call auto_insert to preserve the state to correctly auto-capitalize/auto-space.
+<user.prose>: auto_insert(prose)
+new line: "\n"
+new paragraph: "\n\n"
+cap <user.word>:
+    result = user.formatted_text(word, "CAPITALIZE_FIRST_WORD")
     auto_insert(result)
-#navigation
-go up <number_small> lines:
+    
+# Navigation
+go up <number_small> (line|lines):
     edit.up()
     repeat(number_small - 1)
-go down <number_small> lines:
+go down <number_small> (line|lines):
     edit.down()
     repeat(number_small - 1)
-go left <number_small> words: 
+go left <number_small> (word|words):
     edit.word_left()
     repeat(number_small - 1)
-go right <number_small> words: 
+go right <number_small> (word|words):
     edit.word_right()
     repeat(number_small - 1)
 go line start: edit.line_start()
 go line end: edit.line_end()
-#selection
-select left <number_small> words:
+
+# Selection
+select left <number_small> (word|words):
     edit.extend_word_left()
     repeat(number_small - 1)
-select right <number_small> words:
+select right <number_small> (word|words):
     edit.extend_word_right()
     repeat(number_small - 1)
-select left <number_small> characters:
+select left <number_small> (character|characters):
     edit.extend_left()
     repeat(number_small - 1)
-select right <number_small> characters:
+select right <number_small> (character|characters):
     edit.extend_right()
     repeat(number_small - 1)
-clear left <number_small> words:
+clear left <number_small> (word|words):
     edit.extend_word_left()
     repeat(number_small - 1)
     edit.delete()
-clear right <number_small> words:
+clear right <number_small> (word|words):
     edit.extend_word_right()
     repeat(number_small - 1)
     edit.delete()
-clear left <number_small> characters:
+clear left <number_small> (character|characters):
     edit.extend_left()
     repeat(number_small - 1)
     edit.delete()
-clear right <number_small> characters:
+clear right <number_small> (character|characters):
     edit.extend_right()
     repeat(number_small - 1)
     edit.delete()
-#formatting 
+
+# Formatting
 formatted <user.format_text>:
-    user.auto_format_pause()
-    auto_insert(format_text)
-    user.auto_format_resume()
+    user.dictation_insert_raw(format_text)
 ^format selection <user.formatters>$:
-    edit.copy()
-    sleep(100ms)
-    text = clip.text()
-    result = user.formatted_text(text, formatters)
-    user.auto_format_pause()
-    auto_insert(result)
-    user.auto_format_resume()
-#corrections
-scratch that: user.clear_last_utterance()
+    user.formatters_reformat_selection(formatters)
+
+# Corrections
+scratch that: user.clear_last_phrase()
 scratch selection: edit.delete()
-select that: user.select_last_utterance()
+select that: user.select_last_phrase()
+spell that <user.letters>: auto_insert(letters)
 spell that <user.formatters> <user.letters>:
-    result = dictate.join_words(user.letters, "")
-    result = user.formatted_text(result, formatters)
+    result = user.formatted_text(letters, formatters)
     user.auto_format_pause()
     auto_insert(result)
     user.auto_format_resume()
-spell that <user.letters>:
-    result = dictate.join_words(user.letters, "")
-    auto_insert(result)
-#escape, type things that would otherwise be commands
+
+# Escape, type things that would otherwise be commands
 ^escape <user.text>$:
     auto_insert(user.text)

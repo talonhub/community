@@ -1,8 +1,16 @@
-from talon import Context, Module, actions, grammar
+from talon import Module
+from .user_settings import bind_list_to_csv, bind_word_map_to_csv
 
-# Add single words here if Talon recognizes them, but they need to have their
-# capitalization adjusted.
-capitalize = [
+mod = Module()
+
+mod.list("vocabulary", desc="additional vocabulary words")
+
+# Default words that will need to be capitalized (particularly under w2l).
+# NB. These defaults and those later in this file are ONLY used when
+# auto-creating the corresponding settings/*.csv files. Those csv files
+# determine the contents of user.vocabulary and dictate.word_map. Once they
+# exist, the contents of the lists/dictionaries below are irrelevant.
+_capitalize_defaults = [
     "I",
     "I'm",
     "I've",
@@ -36,82 +44,40 @@ capitalize = [
     "December",
 ]
 
-# Add single words here if Talon recognizes them, but they need to have their
-# spelling adjusted.
-word_map = {
-    # For example:
-    # "color": "colour",
+# Default words that need to be remapped.
+_word_map_defaults = {
+    # E.g:
+    # "cash": "cache",
 }
-word_map.update({x.lower(): x for x in capitalize})
+_word_map_defaults.update({word.lower(): word for word in _capitalize_defaults})
 
-# Add words (or phrases you want treated as words) here if Talon doesn't
-# recognize them at all.
-simple_vocabulary = ["nmap", "admin", "Cisco", "Citrix", "VPN", "DNS", "minecraft"]
-
-# Add vocabulary words (or phrases you want treated as words) here that aren't
-# recognized by Talon and are written differently than they're pronounced.
-mapping_vocabulary = {
-    # For example:
-    # "enn map": "nmap",
-    # "under documented": "under-documented",
-}
-mapping_vocabulary.update(dict(zip(simple_vocabulary, simple_vocabulary)))
-
-
-mod = Module()
-
-
-@mod.capture(rule="{user.vocabulary}")
-def vocabulary(m) -> str:
-    return m.vocabulary
-
-
-@mod.capture(rule="(<user.vocabulary> | <word>)")
-def word(m) -> str:
-    try:
-        return m.vocabulary
-    except AttributeError:
-        # TODO: if the word is both a regular word AND user.vocabulary, then in
-        # principle it may parse as <word> instead; we ought to pass it through
-        # mapping_vocabulary to be sure. But we should be doing that in
-        # user.text, below, too.
-        words = actions.dictate.replace_words(actions.dictate.parse_words(m.word))
-        assert len(words) == 1
-        return words[0]
-
-
-punctuation = set(".,-!?;:")
-
-
-@mod.capture(rule="(<user.vocabulary> | <phrase>)+")
-def text(m) -> str:
-    words = []
-    for item in m:
-        if isinstance(item, grammar.vm.Phrase):
-            words.extend(
-                actions.dictate.replace_words(actions.dictate.parse_words(item))
-            )
-        else:
-            words.extend(item.split(" "))
-
-    result = ""
-    for i, word in enumerate(words):
-        if i > 0 and word not in punctuation and words[i - 1][-1] not in ("/-("):
-            result += " "
-        result += word
-    return result
-
-
-mod.list("vocabulary", desc="user vocabulary")
-
-ctx = Context()
-
-# dictate.word_map is used by actions.dictate.replace_words to rewrite words
+# "dictate.word_map" is used by `actions.dictate.replace_words` to rewrite words
 # Talon recognized. Entries in word_map don't change the priority with which
 # Talon recognizes some words over others.
-ctx.settings["dictate.word_map"] = word_map
+bind_word_map_to_csv(
+    "words_to_replace.csv",
+    csv_headers=("Replacement", "Original"),
+    default_values=_word_map_defaults,
+)
 
-# user.vocabulary is used to explicitly add words/phrases that Talon doesn't
+
+# Default words that should be added to Talon's vocabulary.
+_simple_vocab_default = ["nmap", "admin", "Cisco", "Citrix", "VPN", "DNS", "Minecraft"]
+
+# Defaults for different pronounciations of words that need to be added to
+# Talon's vocabulary.
+_default_vocabulary = {
+    "N map": "nmap",
+    "under documented": "under-documented",
+}
+_default_vocabulary.update({word: word for word in _simple_vocab_default})
+
+# "user.vocabulary" is used to explicitly add words/phrases that Talon doesn't
 # recognize. Words in user.vocabulary (or other lists and captures) are
 # "command-like" and their recognition is prioritized over ordinary words.
-ctx.lists["user.vocabulary"] = mapping_vocabulary
+bind_list_to_csv(
+    "user.vocabulary",
+    "additional_words.csv",
+    csv_headers=("Word(s)", "Spoken Form (If Different)"),
+    default_values=_default_vocabulary,
+)

@@ -1,5 +1,5 @@
 mode: user.go
-mode: command 
+mode: command
 and code.language: go
 -
 variadic: "..."

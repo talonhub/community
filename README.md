@@ -52,13 +52,6 @@ The folder structure should look like:
 %AppData%\Talon\user\knausj_talon\lang
 ```
 
-## wav2letter setup
-
-If you're using wav2letter (aka NOT Dragon), uncomment this line in sleep_mode.talon.
-https://github.com/knausj85/knausj_talon/blob/master/modes/sleep_mode.talon#L9
-
-This helps avoid unexpected "Talon wake" commands. Depending on the specific model you're using, you may need to adjust the talon wake/talon sleep commands in modes.talon 
-
 ## Getting started with Talon
 
 1. `help active` will display the available commands for the active application. 
@@ -168,10 +161,10 @@ Specific programming languages may be activated by voice commands, or via title 
 
 Activating languages via commands will enable the commands globally, e.g. they'll work in any application. This will also disable the title tracking method (code.language in .talon files) until the "clear language modes" voice command is used.
 
-The commands are defined here: 
-https://github.com/knausj85/knausj_talon/blob/69d0207c873e860002b137f985dd7cb001183a47/modes/modes.talon#L29
+The commands for enabling languages are defined here: 
+https://github.com/knausj85/knausj_talon/blob/master/modes/language_modes.talon
 
-By default, title tracking activates coding languages in supported applications such as VSCode, Visual Studio (requires plugin),  and Notepad++. 
+By default, title tracking activates coding languages in supported applications such as VSCode, Visual Studio (requires plugin), and Notepad++. 
 
 To enable title tracking for your application: 
 1. The active filename (including extension) must be included in the editor's title
@@ -208,6 +201,22 @@ Notes:
 • Both Windows Explorer and Finder hide certain files and folder by default, so it's often best to use the imgui to list the options before issuing commands. 
 
 • If there no hidden files or folders, and the items are displayed in alphabetical order, you can typically issue the `follow <number>`, `file <number>` and `open <number>` commands based on the displayed order.
+
+## Terminal commands
+
+Many terminal programs are supported out of the box, but you may not want all the commands enabled. 
+
+To disable various commandsets in your terminal, find the relevant talon file and enable/disable the tags for command sets as appropriate.
+
+```
+tag(): user.file_manager
+tag(): user.git
+tag(): user.kubectl
+tag(): user.tabs
+```
+
+For instance, kubectl commands (kubernetes) aren't relevant to everyone.
+
 
 ## Jetbrains commands
 

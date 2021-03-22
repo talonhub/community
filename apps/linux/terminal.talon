@@ -13,10 +13,6 @@ action(edit.paste):
 action(edit.copy):
   key(ctrl-shift-c)
 
-scroll up:
-  key(shift-pageup)
-scroll down:
-  key(shift-pagedown)
 run last:
   key(up)
   key(enter)
@@ -33,9 +29,9 @@ kill all:
 action(edit.find):
   key(ctrl-shift-f)
 action(edit.word_left):
-  key(ctrl-w-left)
+  key(ctrl-w left)
 action(edit.word_right):
-  key(ctrl-w-right)
+  key(ctrl-w right)
 action(app.tab_open):
   key(ctrl-shift-t)
 action(app.tab_close):

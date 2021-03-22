@@ -1,5 +1,5 @@
 mode: user.csharp
-mode: command 
+mode: command
 and code.language: csharp
 -
 tag(): user.code_operators
@@ -50,8 +50,8 @@ action(user.code_operator_bitwise_left_shift): " << "
 action(user.code_operator_bitwise_left_shift_assignment): " <<= "
 action(user.code_operator_bitwise_right_shift): " >> "
 action(user.code_operator_bitwise_right_shift_assignment): " >>= "
-action(user.code_block): 
-    insert("{}") 
+action(user.code_block):
+    insert("{}")
 	key(left enter enter up tab)
 action(user.code_self): "this"
 action(user.code_null): "null"
