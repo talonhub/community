@@ -12,6 +12,13 @@ elm paragraph:
   "<p></p>"
   key(left:4)
 
+elm link:
+  "<link></link>"
+  key(left:7)
+
+elm link style sheet:
+  "<link href=\"style/style.css\" type=\"text/css\" rel=\"stylesheet\">"
+
 elm strong:
   "<strong></strong>"
   key(left:9)
