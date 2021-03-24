@@ -48,7 +48,7 @@ elm video long:
   "</video>"
   key(up:2 right:7)
   
- elm video short:
+elm video short:
   "<video src=\"\" controls>"
   key(left:11)
  

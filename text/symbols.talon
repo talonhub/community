@@ -9,12 +9,13 @@ ellipses: "..."
 spamma: ", "
 semi: ";" 
 comma: ","  
-spacey: " " 
+space: " " 
 quote: "\""
 ticky: "'"
 back tick: "`"
 dollar: "$"     
-dotty: "."
+dot: "."
+dotty: ". "
 plus: "+"
 minus: "-"
 arrow: "->"
@@ -37,7 +38,7 @@ empty escaped string:
 (inside back ticks | back ticks):
     "``"
     key(left)
-(inside prekris | prekris):
+(inside parens | parens):
 	insert("()")
 	key(left)
 (inside squares | squares): 
@@ -64,7 +65,7 @@ hug curlys:
 hug squares: 
     text = edit.selected_text()
     user.paste("[{text}]")
-hug prekris: 
+hug parens: 
     text = edit.selected_text()
     user.paste("({text})")
 hug percents: 
