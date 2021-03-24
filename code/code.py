@@ -295,6 +295,10 @@ class Actions:
     def code_try_catch():
         """Inserts try/catch. If selection is true, does so around the selecion"""
 
+    def code_default_function(text: str):
+        """Inserts function declaration"""
+        actions.user.code_private_function(text)
+
     def code_private_function(text: str):
         """Inserts private function declaration"""
 
