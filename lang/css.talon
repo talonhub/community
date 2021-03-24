@@ -8,9 +8,6 @@ style new rule:
   "}"
   key(up delete up left:2)
 
-h1 {
-  : ;
- }
 
 style prop:
   ": ;"
