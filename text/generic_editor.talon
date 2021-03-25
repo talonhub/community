@@ -1,5 +1,8 @@
 # Added new functionality (merge test)
 
+spacey:
+  key(space)
+
 slant: 
   key(enter tab)
 
