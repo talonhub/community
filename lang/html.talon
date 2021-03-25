@@ -95,13 +95,13 @@ elm table:
   "<table>"
   key(enter:2)
   "</table>"
-  key(up)
+  key(up tab)
 
 elm table header:
   "<thead>"
   key(enter:2)
   "</thead>"
-  key(up)
+  key(up tab)
 
 elm table header cell:
   "<th></th>"
@@ -119,7 +119,7 @@ elm table body:
   "<tbody>"
   key(enter:2)
   "</tbody>"
-  key(up) 
+  key(up tab) 
 
 elm table caption:
   "<caption></caption>"
