@@ -129,7 +129,7 @@ elm footer:
   "<footer>"
   key(enter:2)
   "</footer>"
-  key(up)
+  key(up tab)
 
 
 # HTML Attributes
