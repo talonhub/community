@@ -1,5 +1,11 @@
 # Added new functionality (merge test)
 
+slant: 
+  key(enter tab)
+
+slanter:
+  key(enter shift-tab)
+
 zoom in: edit.zoom_in()
 
 zoom out: edit.zoom_out()
