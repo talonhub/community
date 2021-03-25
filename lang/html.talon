@@ -119,14 +119,17 @@ elm table body:
   "<tbody>"
   key(enter:2)
   "</tbody>"
-  key(up)
-
-  
+  key(up) 
 
 elm table caption:
   "<caption></caption>"
   key(left:10)
 
+elm footer:
+  "<footer>"
+  key(enter:2)
+  "</footer>"
+  key(up)
 
 
 # HTML Attributes
