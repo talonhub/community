@@ -184,5 +184,6 @@ elm boilerplate:
   "</body>"
   key(enter shift-tab)
   "</html>"
+  key(up:2 tab)
 
 
