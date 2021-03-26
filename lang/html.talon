@@ -23,6 +23,10 @@ elm strong:
   "<strong></strong>"
   key(left:9)
 
+elm script:
+  "<script></script>"
+  key(left:9)
+
 elm emphasize:
   "<em></em>"
   key(left:5)
