@@ -1,5 +1,8 @@
 # Added new functionality (merge test)
 
+you bun to:
+  "Ubuntu"
+
 spacey:
   key(space)
 
