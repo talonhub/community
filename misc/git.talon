@@ -15,7 +15,8 @@ git checkout master: "git checkout master\n"
 git checkout <user.text>: "git checkout {text}"
 git cherry pick: "git cherry-pick "
 git clone: "git clone "
-git clean everything: "git clean -dfx" # Leave \n out for confirmation since the operation is destructive
+# Leave \n out for confirmation since the operation is destructive
+git clean everything: "git clean -dfx"
 git commit message <user.text>: "git commit -m '{text}'"
 git commit: "git commit\n"
 git diff (colour|color) words: "git diff --color-words "
