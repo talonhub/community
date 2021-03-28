@@ -35,8 +35,6 @@ The folder structure should look something like the below:
 
 ## Windows setup
 
-Note: Talon for Windows should be placed in the Program Files directory (or another 'secure' directory): `C:\Program Files\talon` Talon has been signed and utilizes uiAccess for several goodies: this will allow Talon to work with applications that are run as admin.
-
 Clone repo into `%AppData%\Talon\user` 
 
 ```insert code:
