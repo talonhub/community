@@ -11,8 +11,8 @@ letters_string = "abcdefghijklmnopqrstuvwxyz"
 
 default_digits = "zero one two three four five six seven eight nine".split(" ")
 numbers = [str(i) for i in range(10)]
-default_f_digits = (
-    "one two three four five six seven eight nine ten eleven twelve".split(" ")
+default_f_digits = "one two three four five six seven eight nine ten eleven twelve".split(
+    " "
 )
 
 mod = Module()
@@ -119,7 +119,7 @@ def letters(m) -> str:
 
 
 ctx = Context()
-ctx.lists["self.modifier_key"] = {
+modifier_keys = {
     # If you find 'alt' is often misrecognized, try using 'alter'.
     "alt": "alt",  #'alter': 'alt',
     "many": "cmd",
@@ -128,6 +128,10 @@ ctx.lists["self.modifier_key"] = {
     "ship": "shift",  #'sky':     'shift',
     "super": "super",
 }
+if app.platform == "mac":
+    modifier_keys["command"] = "cmd"
+    modifier_keys["option"] = "alt"
+ctx.lists["self.modifier_key"] = modifier_keys
 alphabet = dict(zip(default_alphabet, letters_string))
 ctx.lists["self.letter"] = alphabet
 
@@ -226,10 +230,13 @@ alternate_keys = {
     DELETE: "backspace",
     "scrape": "escape",
     "void": "space",
+    "page up": "pageup",
+    "page down": "pagedown",
 }
 # mac apparently doesn't have the menu key.
 if app.platform in ("windows", "linux"):
     alternate_keys["menu key"] = "menu"
+    alternate_keys["print screen"] = "printscr"
 
 keys = {k: k for k in simple_keys}
 keys.update(alternate_keys)

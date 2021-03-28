@@ -8,6 +8,5 @@ grid off:
 grid reset:
     user.grid_reset()
 
-#to do: doesn't do anything
-#grid back:
-#    user.grid_go_back()
+grid back:
+    user.grid_go_back()

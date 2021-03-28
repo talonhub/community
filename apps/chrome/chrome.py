@@ -5,8 +5,16 @@ ctx = Context()
 mod = Module()
 
 mod.apps.chrome = "app.name: Google Chrome"
-mod.apps.chrome = "app.name: chrome.exe"
-
+mod.apps.chrome = """
+os: windows
+and app.name: Google Chrome
+os: windows
+and app.exe: chrome.exe
+"""
+mod.apps.chrome = """
+os: mac
+and app.bundle: com.google.Chrome
+"""
 ctx.matches = r"""
 app: chrome
 """
@@ -33,3 +41,12 @@ class Actions:
     def fill_password():
         """Move mouse to last pass fill password button"""
         locate_hover("templates/fill-password.png")
+
+
+@ctx.action_class("browser")
+class browser_actions:
+    def go(url: str):
+        actions.browser.focus_address()
+        actions.sleep("50ms")
+        actions.insert(url)
+        actions.key("enter")

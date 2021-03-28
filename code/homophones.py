@@ -35,7 +35,7 @@ def update_homophones(name, flags):
     with open(homophones_file, "r") as f:
         for line in f:
             words = line.rstrip().split(",")
-            canonical_list.append(max(words, key=len))
+            canonical_list.append(words[0])
             for word in words:
                 word = word.lower()
                 old_words = phones.get(word, [])
@@ -106,7 +106,7 @@ def raise_homophones(word, forced=False, selection=False):
     gui.show()
 
 
-@imgui.open(y=0, x=main_screen.width / 2.6, software=app.platform == "linux")
+@imgui.open(x=main_screen.x + main_screen.width / 2.6, y=main_screen.y)
 def gui(gui: imgui.GUI):
     global active_word_list
     if show_help:
@@ -116,7 +116,7 @@ def gui(gui: imgui.GUI):
         gui.line()
         index = 1
         for word in active_word_list:
-            gui.text("Pick {}: {} ".format(index, word))
+            gui.text("Choose {}: {} ".format(index, word))
             index = index + 1
 
 

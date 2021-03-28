@@ -68,18 +68,8 @@ paste last <user.text> [over]:
     sleep(100ms)
     edit.right()
     edit.paste()
-paste last clip: 
-    user.select_previous_occurrence(clip.text())
-    sleep(100ms)
-    edit.right()
-    edit.paste()
 paste next <user.text> [over]: 
     user.select_next_occurrence(text)
-    sleep(100ms)
-    edit.right()
-    edit.paste()
-paste next clip: 
-    user.select_next_occurrence(clip.text())
     sleep(100ms)
     edit.right()
     edit.paste()
@@ -89,14 +79,6 @@ replace last <user.text> [over]:
     edit.paste()
 replace next <user.text> [over]:
     user.select_next_occurrence(text)
-    sleep(100ms)
-    edit.paste()
-replace last clip: 
-    user.select_previous_occurrence(clip.text())
-    sleep(100ms)
-    edit.paste()
-replace next clip:
-    user.select_next_occurrence(clip.text())
     sleep(100ms)
     edit.paste()
 select last <user.text> [over]: user.select_previous_occurrence(text)

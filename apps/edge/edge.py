@@ -3,10 +3,18 @@ from talon import ctrl, ui, Module, Context, actions, clip, app
 ctx = Context()
 mod = Module()
 
-# 1password
-mod.apps.microsoft_edge = "app.name: Microsoft Edge"
-mod.apps.microsoft_edge = "app.name: MicrosoftEdge.exe"
-mod.apps.microsoft_edge = "app.name: msedge.exe"
+mod.apps.microsoft_edge = """
+os: windows
+and app.name: msedge.exe
+os: windows
+and app.name: Microsoft Edge
+os: windows
+and app.exe: msedge.exe
+"""
+
+ctx.matches = r"""
+app: microsoft_edge
+"""
 
 
 @ctx.action_class("user")
@@ -23,3 +31,12 @@ class user_actions:
             actions.key("cmd-9")
         else:
             actions.key("ctrl-9")
+
+
+@ctx.action_class("browser")
+class browser_actions:
+    def go(url: str):
+        actions.browser.focus_address()
+        actions.sleep("50ms")
+        actions.insert(url)
+        actions.key("enter")

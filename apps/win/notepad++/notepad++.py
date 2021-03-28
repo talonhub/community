@@ -26,9 +26,6 @@ class win_actions:
             return result.split("\\")[-1]
         return ""
 
-    def file_ext():
-        return actions.win.filename().split(".")[-1]
-
 
 @ctx.action_class("edit")
 class edit_actions:

@@ -13,10 +13,6 @@ action(edit.paste):
 action(edit.copy):
   key(ctrl-shift-c)
 
-scroll up:
-  key(shift-pageup)
-scroll down:
-  key(shift-pagedown)
 run last:
   key(up)
   key(enter)

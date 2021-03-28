@@ -1,9 +1,10 @@
 app: mintty
 -
 tag(): terminal
-tag(): user.kubectl
 tag(): user.file_manager
+tag(): user.generic_terminal
 tag(): user.git
+tag(): user.kubectl
 
 action(user.file_manager_open_parent):
     insert("cd ..")
@@ -14,9 +15,3 @@ action(edit.copy): key(ctrl-insert)
 
 action(edit.delete_line): key(ctrl-u)
 
-run last: key(up enter)
-
-kill all:
-    key(ctrl-c)
-    insert("y")
-    key(enter)

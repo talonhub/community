@@ -52,13 +52,6 @@ The folder structure should look like:
 %AppData%\Talon\user\knausj_talon\lang
 ```
 
-## wav2letter setup
-
-If you're using wav2letter (aka NOT Dragon), uncomment this line in sleep_mode.talon.
-https://github.com/knausj85/knausj_talon/blob/master/modes/sleep_mode.talon#L9
-
-This helps avoid unexpected "Talon wake" commands. Depending on the specific model you're using, you may need to adjust the talon wake/talon sleep commands in modes.talon 
-
 ## Getting started with Talon
 
 1. `help active` will display the available commands for the active application. 

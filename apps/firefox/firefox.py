@@ -5,7 +5,16 @@ mod = Module()
 apps = mod.apps
 apps.firefox = "app.name: Firefox"
 apps.firefox = "app.name: firefox"
-apps.firefox = "app.name: firefox.exe"
+apps.firefox = """
+os: windows
+and app.name: Firefox
+os: windows
+and app.exe: firefox.exe
+"""
+apps.firefox = """
+os: mac
+and app.bundle: org.mozilla.firefox
+"""
 
 ctx.matches = r"""
 app: firefox
@@ -26,3 +35,12 @@ class user_actions:
             actions.key("cmd-9")
         else:
             actions.key("ctrl-9")
+
+
+@ctx.action_class("browser")
+class browser_actions:
+    def go(url: str):
+        actions.browser.focus_address()
+        actions.sleep("50ms")
+        actions.insert(url)
+        actions.key("enter")

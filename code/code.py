@@ -29,33 +29,36 @@ key = actions.key
 function_list = []
 library_list = []
 extension_lang_map = {
-    "asm": "assembly",
-    "bat": "batch",
-    "c": "c",
-    "cmake": "cmake",
-    "cpp": "cplusplus",
-    "cs": "csharp",
-    "gdb": "gdb",
-    "go": "go",
-    "h": "c",
-    "hpp": "cplusplus",
-    "js": "javascript",
-    "json": "json",
-    "lua": "lua",
-    "md": "markdown",
-    "pl": "perl",
-    "ps1": "powershell",
-    "py": "python",
-    "r": "r",
-    "rb": "ruby",
-    "s": "assembly",
-    "sh": "bash",
-    "snippets": "snippets",
-    "talon": "talon",
-    "ts": "typescript",
-    "vba": "vba",
-    "vim": "vimscript",
-    "vimrc": "vimscript",
+    ".asm": "assembly",
+    ".bat": "batch",
+    ".c": "c",
+    ".cmake": "cmake",
+    ".cpp": "cplusplus",
+    ".cs": "csharp",
+    ".gdb": "gdb",
+    ".go": "go",
+    ".h": "c",
+    ".hpp": "cplusplus",
+    ".java": "java",
+    ".js": "javascript",
+    ".jsx": "javascript",
+    ".json": "json",
+    ".lua": "lua",
+    ".md": "markdown",
+    ".pl": "perl",
+    ".ps1": "powershell",
+    ".py": "python",
+    ".r": "r",
+    ".rb": "ruby",
+    ".s": "assembly",
+    ".sh": "bash",
+    ".snippets": "snippets",
+    ".talon": "talon",
+    ".ts": "typescript",
+    ".tsx": "typescript",
+    ".vba": "vba",
+    ".vim": "vimscript",
+    ".vimrc": "vimscript",
 }
 
 # flag indicates whether or not the title tracking is enabled
@@ -86,16 +89,9 @@ class code_actions:
         result = ""
         if not forced_language:
             file_extension = actions.win.file_ext()
-            file_name = actions.win.filename()
 
-            if file_extension != "":
-                result = file_extension
-            # it should always be the last split...
-            elif file_name != "" and "." in file_name:
-                result = file_name.split(".")[-1]
-
-            if result in extension_lang_map:
-                result = extension_lang_map[result]
+            if file_extension and file_extension in extension_lang_map:
+                result = extension_lang_map[file_extension]
 
         # print("code.language: " + result)
         return result
@@ -299,6 +295,10 @@ class Actions:
     def code_try_catch():
         """Inserts try/catch. If selection is true, does so around the selecion"""
 
+    def code_default_function(text: str):
+        """Inserts function declaration"""
+        actions.user.code_private_function(text)
+
     def code_private_function(text: str):
         """Inserts private function declaration"""
 
@@ -472,7 +472,7 @@ def update_function_list_and_freeze():
     gui_functions.show()
 
 
-@imgui.open(software=app.platform == "linux")
+@imgui.open()
 def gui_functions(gui: imgui.GUI):
     gui.text("Functions")
     gui.line()
@@ -487,7 +487,7 @@ def gui_functions(gui: imgui.GUI):
             )
 
 
-@imgui.open(software=app.platform == "linux")
+@imgui.open()
 def gui_libraries(gui: imgui.GUI):
     gui.text("Libraries")
     gui.line()

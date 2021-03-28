@@ -1,3 +1,4 @@
+talon copy context pie: user.talon_add_context_clipboard_python()
 talon copy context: user.talon_add_context_clipboard()
 talon copy title: 
     title = win.title()

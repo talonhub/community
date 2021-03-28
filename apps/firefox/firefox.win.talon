@@ -1,10 +1,8 @@
 os: windows
 app: firefox
 -
-tag(): browser
-tag(): user.tabs
-
-#action(browser.address):
+action(app.tab_next): key(ctrl-pagedown)
+action(app.tab_previous): key(ctrl-pageup)
 
 action(browser.bookmark):
 	key(ctrl-d)
@@ -26,14 +24,6 @@ action(browser.focus_address):
 	key(ctrl-l)
 	
 #action(browser.focus_page):
-
-action(browser.focus_search):
-	browser.focus_address()
-
-action(browser.go):
-	browser.focus_address()
-	insert(url)
-	key(enter)
 
 action(browser.go_blank):
 	key(ctrl-n)
@@ -70,10 +60,5 @@ action(browser.show_extensions):
 action(browser.show_history):
 	key(ctrl-h)
 	
-action(browser.submit_form):
-	key(enter)
-
-#action(browser.title)
-
 action(browser.toggle_dev_tools):
 	key(ctrl-shift-i)
