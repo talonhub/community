@@ -49,15 +49,15 @@ Alternatively, access the directory by right clicking the Talon icon in taskbar,
 The folder structure should look something like the below:
 
 ```insert code:
-%AppData%\user\knausj_talon
-%AppData%\user\knausj_talon\apps
-%AppData%\user\knausj_talon\code
-%AppData%\user\knausj_talon\lang
-%AppData%\user\knausj_talon\misc
-%AppData%\user\knausj_talon\modes
-%AppData%\user\knausj_talon\mouse_grid
-%AppData%\user\knausj_talon\talon_draft_window
-%AppData%\user\knausj_talon\text
+%AppData%\Talon\user\knausj_talon
+%AppData%\Talon\user\knausj_talon\apps
+%AppData%\Talon\user\knausj_talon\code
+%AppData%\Talon\user\knausj_talon\lang
+%AppData%\Talon\user\knausj_talon\misc
+%AppData%\Talon\user\knausj_talon\modes
+%AppData%\Talon\user\knausj_talon\mouse_grid
+%AppData%\Talon\user\knausj_talon\talon_draft_window
+%AppData%\Talon\user\knausj_talon\text
 ...
 ```
 
