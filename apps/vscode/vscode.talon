@@ -137,13 +137,17 @@ wrap switch: user.vscode("editor.action.toggleWordWrap")
 zen switch: user.vscode("workbench.action.toggleZenMode")
 
 # File Commands
-file hunt [<user.text>]: 
+(file hunt | violent) [<user.text>] [{user.file_extension}]: 
   user.vscode("workbench.action.quickOpen")
   sleep(50ms)
   insert(text or "")
+  insert(file_extension or "")
+  sleep(150ms)
 file copy path:
 	user.vscode("copyFilePath") 
-file create sibling: user.vscode("explorer.newFile")  
+file create sibling:
+	user.vscode("explorer.newFile")  
+	sleep(1000ms)
 file create: user.vscode("workbench.action.files.newUntitledFile")
 file rename: user.vscode("fileutils.renameFile")
 file open folder:
@@ -220,7 +224,10 @@ git checkout [<user.text>]:
   user.vscode("git.checkout")
   sleep(50ms)
   insert(text or "")
-git commit: user.vscode("git.commitStaged")
+git commit [<user.text>]:
+  user.vscode("git.commitStaged")
+  sleep(50ms)
+  user.insert_formatted(text or "", "CAPITALIZE_FIRST_WORD")
 git commit undo: user.vscode("git.undoCommit")
 git commit ammend: user.vscode("git.commitStagedAmend")
 git diff: user.vscode("git.openChange")
@@ -322,11 +329,11 @@ curse undo: user.vscode("cursorUndo")
 Github open: user.vscode("openInGithub.openInGitHubFile")
 
 stage on:
-	user.vscode("git.stage")
+	user.vscode_and_wait("git.stage")
 	key(cmd-w)
-	user.vscode("workbench.scm.focus")
+	user.vscode_and_wait("workbench.scm.focus")
 	key(down:100)
-	sleep(25ms)
+	sleep(100ms)
 	key(enter)
 
 # jupyter

@@ -21,6 +21,12 @@ tasty: user.vscode("metaGo.selectBefore")
 toasty: user.vscode("metaGo.selectAfter")
 <user.select> upper: user.vscode("metaGo.selectEmptyLineUp")
 <user.select> downer: user.vscode("metaGo.selectEmptyLineDown")
+<user.delete> downer:
+    user.vscode("metaGo.selectEmptyLineDown")
+    key(backspace)
+<user.delete> upper:
+    user.vscode("metaGo.selectEmptyLineUp")
+    key(backspace)
 <user.select> outside: user.vscode("metaGo.inSurroundingPairSelectionWithPairs")
 <user.select> inside <user.symbol_key>:
     user.vscode("metaGo.inSurroundingPairSelection")

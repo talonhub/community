@@ -26,11 +26,11 @@ add comment <user.text>$:
 comment <number> until <number>: 
     user.select_range(number_1, number_2)
     code.toggle_comment()
-chuck line <number>:
+<user.delete> line <number>:
     edit.jump_line(number)
     user.select_range(number, number)
     edit.delete()
-chuck <number> until <number>: 
+<user.delete> <number> until <number>: 
     user.select_range(number_1, number_2)
     edit.delete()
 copy [line] <number>: 

@@ -1,8 +1,10 @@
 from talon import Context, Module, actions, imgui, settings, ui
+from talon.experimental.locate import locate
 from talon.mac import applescript
 
 import os
 
+mod = Module()
 ctx = Context()
 ctx.matches = r"""
 app: finder
@@ -72,3 +74,10 @@ class user_actions:
         """selects the file"""
         actions.key("home")
         actions.insert(path)
+
+
+@mod.action_class
+class Actions:
+    def resize_finder_column():
+        """Move mouse to resize a finder column"""
+        print(locate("templates/finder-resize.png"))

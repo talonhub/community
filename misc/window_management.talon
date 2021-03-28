@@ -20,7 +20,7 @@ voice code:
     user.switcher_focus("Code")
     user.vscode("workbench.action.openRecent")
     sleep(50ms)
-    insert("talon")
+    insert("pokey_talon")
     key(enter)
    
 slacker: user.switcher_focus("Slack")

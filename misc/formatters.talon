@@ -1,10 +1,10 @@
 #provide both anchored and unachored commands via 'over'
 phrase <user.text>$: user.insert_formatted(text, "NOOP")
-phrase <user.text> over: user.insert_formatted(text, "NOOP")
+phrase <user.text> stop: user.insert_formatted(text, "NOOP")
 {user.prose_formatter} <user.prose>$: user.insert_formatted(prose, prose_formatter)
-{user.prose_formatter} <user.prose> over: user.insert_formatted(prose, prose_formatter)
+{user.prose_formatter} <user.prose> stop: user.insert_formatted(prose, prose_formatter)
 <user.format_text>+$: user.insert_many(format_text_list)
-<user.format_text>+ over: user.insert_many(format_text_list)
+<user.format_text>+ stop: user.insert_many(format_text_list)
 <user.formatters> that: user.formatters_reformat_selection(user.formatters)
 word <user.word>: insert(user.word)
 format help: user.formatters_help_toggle()

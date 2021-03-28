@@ -6,8 +6,9 @@ from talon import Module
 mod = Module()
 
 SELECT = "take"
-TELEPORT = "hop"
+TELEPORT = "pop"
 OPERATOR = "do"
+DELETE = "chuck"
 
 
 @mod.capture(rule=SELECT)
@@ -25,4 +26,10 @@ def teleport(m) -> str:
 @mod.capture(rule=OPERATOR)
 def operator(m) -> str:
     """Prefix for operators"""
+    return str(m)
+
+
+@mod.capture(rule=DELETE)
+def delete(m) -> str:
+    """Verb to use for commands that delete things"""
     return str(m)

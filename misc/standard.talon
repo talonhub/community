@@ -22,11 +22,10 @@ show clip: key(cmd-shift-v)
 (redo that | yes indeed): edit.redo()
 paste match: edit.paste_match_style()
 file save: edit.save()
-wipe: key(backspace)    
-padding: 
+padding:
 	insert("  ") 
 	key(left)
-clap it:
+clapper:
 	edit.line_end()
 	key(enter)
 clap up:
@@ -36,3 +35,16 @@ clap up:
 	key(enter)
 
 slow mode: mode.enable("user.slow")
+
+emoji hunt [<user.text>]:
+	key(cmd-ctrl-space)
+	sleep(100ms)
+	insert(user.text or "")
+
+^dictate <user.text>$:
+    auto_insert(text)
+    mode.disable("sleep")
+    mode.disable("command")
+    mode.enable("dictation")
+    user.code_clear_language_mode()
+    mode.disable("user.gdb")

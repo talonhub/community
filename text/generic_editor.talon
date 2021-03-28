@@ -107,51 +107,51 @@ indent [more]:
     edit.indent_less()
 
 # deleting
-chuck line:
+<user.delete> line:
     edit.delete_line()
 
-chuck <number>:
+<user.delete> <number>:
     user.delete_left_n(number)
 
 drill <number>:
     user.delete_right_n(number)
     
-chuck up:
+<user.delete> up:
     edit.extend_line_up()
     edit.delete()
 
-chuck down:
+<user.delete> down:
     edit.extend_line_down()
     edit.delete()
 
-chuck word:
+<user.delete> word:
     edit.delete_word()
 
-chuck lefter:
+<user.delete> lefter:
     edit.extend_word_left()
     edit.delete()
 
-chuck writer:
+<user.delete> writer:
     edit.extend_word_right()
     edit.delete()
 
-chuck way left:
+<user.delete> way left:
     edit.extend_line_start()
     edit.delete()
 
-chuck way right:
+<user.delete> way right:
     edit.extend_line_end()
     edit.delete()
 
-chuck way up:
+<user.delete> way up:
     edit.extend_file_start()
     edit.delete()
 
-chuck way down:
+<user.delete> way down:
     edit.extend_file_end()
     edit.delete()
 
-chuck all:
+<user.delete> all:
     edit.select_all()
     edit.delete()
 

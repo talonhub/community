@@ -44,7 +44,8 @@ def run_vscode_command(
     )
     response.raise_for_status()
 
-    actions.sleep("1ms")
+    actions.sleep("25ms")
+
     if expect_response:
         return response.json()
 

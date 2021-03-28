@@ -11,3 +11,5 @@ action(user.file_manager_go_forward):
 
 action(user.file_manager_go_back):
     key("cmd-[")
+
+re size column: user.resize_finder_column()

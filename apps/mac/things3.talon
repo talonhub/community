@@ -42,3 +42,5 @@ filter [tag] <user.things_tags>: user.filter_by_tag(things_tags)
 clear filter: key(ctrl-escape)
 
 action(user.dental_click): key(cmd-enter)
+
+add checklist: key(cmd-shift-c)

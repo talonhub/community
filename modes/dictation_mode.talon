@@ -71,3 +71,11 @@ spell that <user.formatters> <user.letters>:
 #escape, type things that would otherwise be commands
 ^escape <user.text>$:
     auto_insert(user.text)
+
+numb <user.number_string>: "{number_string}"
+numb <user.number_string> (dot | point) <digit_string>: "{number_string}.{digit_string}"
+
+^commander$:
+    mode.disable("sleep")
+    mode.disable("dictation")
+    mode.enable("command")

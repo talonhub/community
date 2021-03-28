@@ -1,4 +1,5 @@
 from typing import Set
+from user.pokey_talon.code.terms import DELETE
 
 from talon import Module, Context, actions, app
 import sys
@@ -221,8 +222,8 @@ simple_keys = [
 
 alternate_keys = {
     "clap": "enter",
-    "delhi": "delete",
-    "chuck": "backspace",
+    "deli": "delete",
+    DELETE: "backspace",
     "scrape": "escape",
     "void": "space",
 }
