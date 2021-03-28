@@ -159,11 +159,6 @@ state quote var:
 state log:
   insert("console.log()")
   key(left)
-
-state quote var:
-  insert("${}")
-  key(left)
-
 state spread: "..."
 
 ^funky <user.text>$: user.code_default_function(text)
