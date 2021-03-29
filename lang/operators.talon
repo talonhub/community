@@ -28,7 +28,7 @@ op mod equals: user.code_operator_modulo_assignment()
 (op (power | exponent) | to the power [of]): user.code_operator_exponent()
 
 #comparison operators
-(op | is) equal: user.code_operator_equal()
+(op | is) is equal: user.code_operator_equal()
 (op | is) not equal: user.code_operator_not_equal()
 (op | is) (greater | more): user.code_operator_greater_than()
 (op | is) (less | below) [than]: user.code_operator_less_than()
