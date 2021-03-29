@@ -7,6 +7,8 @@ tag(): user.multiple_cursors
 tag(): user.snippets
 tag(): user.splits
 tag(): user.tabs
+tag(): terminal
+
 #talon app actions
 action(app.tab_close): user.vscode("workbench.action.closeActiveEditor")
 action(app.tab_next): user.vscode("workbench.action.nextEditorInGroup")
@@ -26,7 +28,7 @@ action(edit.save_all): user.vscode("workbench.action.files.saveAll")
 # splits.py support begin
 action(user.split_clear_all): user.vscode("View: Single Column Editor Layout")
 action(user.split_clear): user.vscode("View: Join Editor Group with Next Group")
-action(user.split_flip): user.vscode("View: Toggle Vertical/Horizontal Editor Layout") 
+action(user.split_flip): user.vscode("View: Toggle Vertical/Horizontal Editor Layout")
 action(user.split_last): user.vscode("View: Focus Previous Editor Group")
 action(user.split_next):  user.vscode("View: Focus Next Editor Group")
 action(user.split_window_down): user.vscode("workbench.action.moveEditorToBelowGroup")
@@ -50,7 +52,7 @@ action(user.multi_cursor_select_fewer_occurrences): user.vscode("Cursor Undo")
 action(user.multi_cursor_select_more_occurrences): user.vscode("Add Selection To Next Find Match")
 #multiple_cursor.py support end
 
-please [<user.text>]: 
+please [<user.text>]:
   user.vscode("Show All Commands")
   insert(user.text or "")
 
@@ -83,20 +85,20 @@ wrap switch: user.vscode("editor.action.toggleWordWrap")
 zen switch: user.vscode("workbench.action.toggleZenMode")
 
 # File Commands
-file hunt [<user.text>]: 
+file hunt [<user.text>]:
   user.vscode("Go to File")
   sleep(50ms)
   insert(text or "")
-file copy path: user.vscode_ignore_clipboard("File: Copy Path of Active File") 
-file create sibling: user.vscode("File: New File")  
+file copy path: user.vscode_ignore_clipboard("File: Copy Path of Active File")
+file create sibling: user.vscode("File: New File")
 file create: user.vscode("File: New Untitled File")
 file open folder: user.vscode("File: Reveal in File Explorer")
 #todo: rename isn't working.
-#file rename active: 
+#file rename active:
 #  user.vscode("File: Reveal Active File In Side Bar")
 #  user.vscode("renameFile")
 #file rename: user.vscode("renameFile")
-file reveal: user.vscode("File: Reveal Active File In Side Bar") 
+file reveal: user.vscode("File: Reveal Active File In Side Bar")
 
 # Language Features
 suggest show: user.vscode("editor.action.triggerSuggest")
@@ -121,8 +123,8 @@ refactor this: user.vscode("editor.action.refactor")
 
 #code navigation
 (go declaration | follow): user.vscode("Go to Declaration")
-go back: user.vscode("workbench.action.navigateBack") 
-go forward:  user.vscode("workbench.action.navigateForward")  
+go back: user.vscode("workbench.action.navigateBack")
+go forward:  user.vscode("workbench.action.navigateForward")
 go implementation: user.vscode("Go to Implementation")
 go recent: user.vscode("File: Open Recent")
 go type: user.vscode("editor.action.goToTypeDefinition")
@@ -195,5 +197,4 @@ copy line up: user.vscode("editor.action.copyLinesUpAction")
 #Expand/Shrink AST Selection
 select less: user.vscode("editor.action.smartSelect.shrink")
 select (more|this): user.vscode("editor.action.smartSelect.expand")
-  
-  
+
