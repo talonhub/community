@@ -8,9 +8,8 @@ tag(): user.code_generic
 
 arrow function:
   " = () => {"
-  key(enter:2)
-  "}"
-  key(up tab)
+  key(enter)
+  key(tab)
 
 settings():
     user.code_private_function_formatter = "PRIVATE_CAMEL_CASE"
