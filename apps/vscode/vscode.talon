@@ -15,7 +15,7 @@ action(edit.delete_line):
 	user.vscode("editor.action.deleteLines")
 
 settings():
-  key_wait = 0
+  key_wait = 1
 
 #talon app actions
 action(app.tab_close): user.vscode("workbench.action.closeActiveEditor")
