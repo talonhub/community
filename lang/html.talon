@@ -135,11 +135,55 @@ elm footer:
   "</footer>"
   key(up tab)
 
+
+
+# HTML FORMS
+
 elm form:
   "<form>"
   key(enter:2)
   "</form>"
   key(up tab)
+
+elm input:
+  "<input type=\"text\" name=\"\" id=\"\">"
+  key(left:8)
+
+elm label:
+  "<label for=\"\"></label>"
+  key(left:10)
+ 
+elm dropdown input:
+  "<select id=\"\" name=\"\">"
+  key(enter tab)
+  "<option value=\"\"></option>"
+  key(enter)
+  "<option value=\"\"></option>"
+  key(enter)
+  "<option value=\"\"></option>"
+  key(enter shift-tab)
+  "</select>"
+  key(up:4)
+  edit.line_end()
+  key(left:10)
+
+elm data list input:
+  "<input type=\"text\" list=\"\" id=\"\" name=\"\">"
+  key(enter)
+  "<datalist id=\"\" name=\"\">"
+  key(enter tab)
+  "<option value=\"\"></option>"
+  key(enter)
+  "<option value=\"\"></option>"
+  key(enter)
+  "<option value=\"\"></option>"
+  key(enter shift-tab)
+  "</datalist>"
+  key(up:5)
+  edit.line_end()
+  key(left:16)
+
+
 
 # HTML Attributes
 
