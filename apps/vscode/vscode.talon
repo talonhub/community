@@ -8,6 +8,7 @@ tag(): user.snippets
 tag(): user.splits
 tag(): user.tabs
 tag(): user.git
+tag(): user.kubectl
 tag(): terminal
 
 #talon app actions
