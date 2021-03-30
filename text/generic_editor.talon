@@ -11,7 +11,8 @@ slanter:
   key(enter shift-tab)
 
 slap:
-  key(end enter)
+  edit.line_end()
+  key(enter)
 
 zoom in: edit.zoom_in()
 
