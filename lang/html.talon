@@ -135,6 +135,11 @@ elm footer:
   "</footer>"
   key(up tab)
 
+elm form:
+  "<form>"
+  key(enter:2)
+  "</form>"
+  key(up tab)
 
 # HTML Attributes
 
