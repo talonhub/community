@@ -1,5 +1,3 @@
-# Added new functionality (merge test)
-
 you bun to:
   "Ubuntu"
 
@@ -11,6 +9,9 @@ slant:
 
 slanter:
   key(enter shift-tab)
+
+slap:
+  key(end enter)
 
 zoom in: edit.zoom_in()
 
