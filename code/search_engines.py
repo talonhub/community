@@ -1,3 +1,4 @@
+from .user_settings import get_list_from_csv
 from talon import Module, Context
 from urllib.parse import quote_plus
 import webbrowser
@@ -9,13 +10,10 @@ mod.list(
 )
 
 ctx = Context()
-ctx.lists["self.search_engine"] = {
-    "google": "https://www.google.com/search?sclient=psy-ab&hl=en&site=&source=hp&q=%s&btnG=Search&pbx=1&oq=&aq=&aqi=&aql=&gs_sm=&gs_upl=",
-    "wiki": "http://en.wikipedia.org/w/index.php?title=Special%3ASearch&search=%s&button=",
-    "amazon": "http://smile.amazon.co.uk/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords=%s",
-    "map": "http://maps.google.com/maps?f=q&source=s_q&hl=en&q=%s",
-    "scholar": "http://scholar.google.com/scholar?hl=en&q=%s&btnG=&as_sdt=1%2C5&as_sdtp=",
-}
+ctx.lists["self.search_engine"] = get_list_from_csv(
+    "search_engines.csv",
+    headers=("URL Template", "Name"),
+)
 
 
 @mod.action_class
