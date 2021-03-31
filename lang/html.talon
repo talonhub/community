@@ -1,5 +1,6 @@
 # HTML Basic Tags
 
+
 elm header <number_small>:
   "<h"
   insert(number_small)
@@ -34,6 +35,10 @@ elm emphasize:
 elm break:
   "<br>"
   key(enter)
+
+elm span:
+  "<span></span>"
+  key(left:7)
 
 elm anchor:
   "<a href=\"\"></a>"
@@ -170,7 +175,7 @@ elm dropdown input:
 elm data list input:
   "<input type=\"text\" list=\"\" id=\"\" name=\"\">"
   key(enter)
-  "<datalist id=\"\" name=\"\">"
+  "<datalist id=\"\">"
   key(enter tab)
   "<option value=\"\"></option>"
   key(enter)
@@ -183,6 +188,11 @@ elm data list input:
   edit.line_end()
   key(left:16)
 
+elm text area input:
+  "<textarea id=\"\" name=\"\" rows=\"\" cols=\"\"></textarea>"
+  key(left:37)
+
+  
 
 
 # HTML Attributes
