@@ -1,6 +1,6 @@
 URL Template,Name
-https://www.google.com/search?sclient=psy-ab&hl=en&site=&source=hp&q=%s&btnG=Search&pbx=1&oq=&aq=&aqi=&aql=&gs_sm=&gs_upl=",google
-http://en.wikipedia.org/w/index.php?title=Special%3ASearch&search=%s&button=",wiki
-http://smile.amazon.co.uk/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords=%s",amazon
-http://maps.google.com/maps?f=q&source=s_q&hl=en&q=%s",map
-http://scholar.google.com/scholar?hl=en&q=%s&btnG=&as_sdt=1%2C5&as_sdtp=",scholar
+https://smile.amazon.co.uk/s/?field-keywords=%s,amazon
+https://www.google.com/search?q=%s,google
+https://maps.google.com/maps?q=%s,map
+https://scholar.google.com/scholar?q=%s,scholar
+https://en.wikipedia.org/w/index.php?search=%s,wiki

@@ -53,4 +53,3 @@ tag: user.code_operators
 [(<user.operator> | logical | bitwise)] (left right | shift right) equals: user.code_operator_bitwise_right_shift_equals()
 
 #tbd
-(<user.operator> | pad) colon: ": "
