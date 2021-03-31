@@ -33,7 +33,7 @@ def run_vscode_command(
     )
 
     port_file_path = Path(gettempdir()) / "vscode-port"
-    original_contents = json.loads(port_file_path.read_text())
+    original_contents = port_file_path.read_text()
 
     # Issue command to VSCode telling it to update the port file.  Because only
     # the active VSCode instance will accept keypresses, we can be sure that
@@ -47,14 +47,14 @@ def run_vscode_command(
     # happens within the first millisecond, but we give it 3 seconds just in
     # case.
     start_time = time.monotonic()
-    new_contents = json.loads(port_file_path.read_text())
+    new_contents = port_file_path.read_text()
     while original_contents == new_contents:
         time.sleep(0.001)
-        new_contents = json.loads(port_file_path.read_text())
         if time.monotonic() - start_time > 3.0:
             raise Exception("Timed out waiting for VSCode to update port file")
+        new_contents = port_file_path.read_text()
 
-    port = new_contents["port"]
+    port = json.loads(new_contents)["port"]
 
     response = requests.post(
         f"http://localhost:{port}/execute-command",
