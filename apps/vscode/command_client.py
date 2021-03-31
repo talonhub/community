@@ -1,9 +1,12 @@
 import requests
+import time
+import json
 from typing import Any
-from talon import Module, actions
+from talon import Module, actions, app
 from pathlib import Path
 from tempfile import gettempdir
 
+is_mac = app.platform == "mac"
 
 mod = Module()
 
@@ -30,7 +33,28 @@ def run_vscode_command(
     )
 
     port_file_path = Path(gettempdir()) / "vscode-port"
-    port = port_file_path.read_text()
+    original_contents = json.loads(port_file_path.read_text())
+
+    # Issue command to VSCode telling it to update the port file.  Because only
+    # the active VSCode instance will accept keypresses, we can be sure that
+    # the active VSCode instance will be the one to write the port.
+    if is_mac:
+        actions.key("cmd-shift-alt-p")
+    else:
+        actions.key("ctrl-shift-alt-p")
+
+    # Wait for the VSCode instance to update the port file.  This generally
+    # happens within the first millisecond, but we give it 3 seconds just in
+    # case.
+    start_time = time.monotonic()
+    new_contents = json.loads(port_file_path.read_text())
+    while original_contents == new_contents:
+        time.sleep(0.001)
+        new_contents = json.loads(port_file_path.read_text())
+        if time.monotonic() - start_time > 3.0:
+            raise Exception("Timed out waiting for VSCode to update port file")
+
+    port = new_contents["port"]
 
     response = requests.post(
         f"http://localhost:{port}/execute-command",
