@@ -48,8 +48,10 @@ def run_vscode_command(
     # case.
     start_time = time.monotonic()
     new_contents = port_file_path.read_text()
+    sleep_time = 0.0005
     while original_contents == new_contents:
-        time.sleep(0.001)
+        time.sleep(sleep_time)
+        sleep_time *= 2
         if time.monotonic() - start_time > 3.0:
             raise Exception("Timed out waiting for VSCode to update port file")
         new_contents = port_file_path.read_text()
