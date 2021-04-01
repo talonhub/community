@@ -25,11 +25,6 @@ action(browser.focus_address):
 action(browser.focus_search):
 	browser.focus_address()
 
-action(browser.go):
-	browser.focus_address()
-	insert(url)
-	key(enter)
-
 action(browser.go_blank):
 	key(cmd-n)
 	

@@ -26,7 +26,7 @@ win require:
 	insert("os: windows\n")
 mac require:
 	insert("os: mac\n")
-lunix require:
+linux require:
 	insert("os: linux\n")
 title require:
 	insert("win.title: ")

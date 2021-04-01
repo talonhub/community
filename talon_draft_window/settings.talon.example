@@ -1,0 +1,8 @@
+# Put some settings like this in one of your Talon files to override the styling
+# of the draft window.
+-
+settings():
+    user.draft_window_theme = "dark" # or light
+    user.draft_window_text_size = 20
+    user.draft_window_label_size = 20
+    user.draft_window_label_color = "ff0000" # Any hex code RGB value, e.g. this is red

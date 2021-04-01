@@ -175,13 +175,17 @@ all_formatters.update(formatters_words)
 
 mod = Module()
 mod.list("formatters", desc="list of formatters")
-mod.list("prose_formatter", desc="words to start dictating prose, and the formatter they apply")
+mod.list(
+    "prose_formatter",
+    desc="words to start dictating prose, and the formatter they apply",
+)
 
 
 @mod.capture(rule="{self.formatters}+")
 def formatters(m) -> str:
     "Returns a comma-separated string of formatters e.g. 'SNAKE,DUBSTRING'"
     return ",".join(m.formatters_list)
+
 
 @mod.capture(
     # Note that if the user speaks something like "snake dot", it will
@@ -249,7 +253,9 @@ class Actions:
         if actions.user.get_last_phrase() != last_phrase_formatted:
             # The last thing we inserted isn't the same as the last thing we
             # formatted, so abort.
-            logging.warning("formatters_reformat_last(): Last phrase wasn't a formatter!")
+            logging.warning(
+                "formatters_reformat_last(): Last phrase wasn't a formatter!"
+            )
             return
         actions.user.clear_last_phrase()
         actions.user.insert_formatted(last_phrase, formatters)
@@ -275,12 +281,13 @@ class Actions:
 
 ctx.lists["self.formatters"] = formatters_words.keys()
 ctx.lists["self.prose_formatter"] = {
-    "say": "NOOP", "speak": "NOOP",
+    "say": "NOOP",
+    "speak": "NOOP",
     "sentence": "CAPITALIZE_FIRST_WORD",
 }
 
 
-@imgui.open(software=app.platform == "linux")
+@imgui.open()
 def gui(gui: imgui.GUI):
     gui.text("List formatters")
     gui.line()
