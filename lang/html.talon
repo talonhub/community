@@ -50,6 +50,12 @@ elm nav:
   "</nav>"
   key(up tab)
 
+elm section:
+  "<section>"
+  key(enter:2)
+  "</section>"
+  key(up tab)
+
 elm div:
   "<div>"
   key(enter:2)
