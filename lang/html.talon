@@ -44,6 +44,12 @@ elm anchor:
   "<a href=\"\"></a>"
   key(left:6)
 
+elm nav:
+  "<nav>"
+  key(enter:2)
+  "</nav>"
+  key(up tab)
+
 elm div:
   "<div>"
   key(enter:2)
