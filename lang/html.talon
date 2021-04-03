@@ -63,8 +63,8 @@ elm div:
   key(up tab)
 
 elm image:
-  "<img src=\"\" alt=\"\"></img>"
-  key(left:15)
+  "<img src=\"\" alt=\"\">"
+  key(left:9)
 
 elm video long:
   "<video autoplay mute controls>"
