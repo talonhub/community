@@ -1,5 +1,6 @@
 tag: terminal
 app: vscode
+app: iTerm2
 and tag: user.git
 -
 # Standard commands
