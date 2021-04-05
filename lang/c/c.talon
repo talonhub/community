@@ -105,7 +105,7 @@ action(user.code_block_comment):
 action(user.code_block_comment_prefix): "/*"
 action(user.code_block_comment_suffix): "*/"
 
-^funky <user.text>$: user.code_private_function(text)
+^funky <user.text>$: user.code_default_function(text)
 ^static funky <user.text>$: user.code_private_static_function(text)
 
 

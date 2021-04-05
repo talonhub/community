@@ -1,11 +1,6 @@
-# Talon documentation
-For up-to-date documentation on Talon's API and features, please visit https://talon.wiki/. 
-
-https://talon.wiki/unofficial_talon_docs/ is a great place to learn about Talon files, actions, and voice command definitions.
-
 # knausj_talon
 
-Talon configs for Mac, Windows, and Linux. Very much in progress. This is also intended to work with both Dragon Naturally Speaking and wav2letter.\
+Talon configs for Mac, Windows, and Linux. Very much in progress. This is also intended to work with both Dragon Naturally Speaking and wav2letter.
 
 Notes: 
 - commands are subject to change. We do our best to minimize changes, but we are moving to an [object][verb] standard slowly but surely.
@@ -23,17 +18,22 @@ git clone git@github.com:knausj85/knausj_talon.git knausj_talon
     
 Alternatively, access the directory by right clicking the Talon icon in taskbar, clicking Scripting>Open ~/talon, and navigating to user.
 
-The folder structure should look like:
+The folder structure should look something like the below:
 
 ```insert code:
 ~/.talon/user/knausj_talon
+~/.talon/user/knausj_talon/apps
 ~/.talon/user/knausj_talon/code
 ~/.talon/user/knausj_talon/lang
+~/.talon/user/knausj_talon/misc
+~/.talon/user/knausj_talon/modes
+~/.talon/user/knausj_talon/mouse_grid
+~/.talon/user/knausj_talon/talon_draft_window
+~/.talon/user/knausj_talon/text
+...
 ```
 
 ## Windows setup
-
-Note: Talon for Windows should be placed in the Program Files directory (or another 'secure' directory): `C:\Program Files\talon` Talon has been signed and utilizes uiAccess for several goodies: this will allow Talon to work with applications that are run as admin.
 
 Clone repo into `%AppData%\Talon\user` 
 
@@ -44,12 +44,19 @@ git clone git@github.com:knausj85/knausj_talon.git knausj_talon
     
 Alternatively, access the directory by right clicking the Talon icon in taskbar, clicking Scripting>Open ~/talon, and navigating to user.
     
-The folder structure should look like:
+The folder structure should look something like the below:
 
 ```insert code:
 %AppData%\Talon\user\knausj_talon
+%AppData%\Talon\user\knausj_talon\apps
 %AppData%\Talon\user\knausj_talon\code
 %AppData%\Talon\user\knausj_talon\lang
+%AppData%\Talon\user\knausj_talon\misc
+%AppData%\Talon\user\knausj_talon\modes
+%AppData%\Talon\user\knausj_talon\mouse_grid
+%AppData%\Talon\user\knausj_talon\talon_draft_window
+%AppData%\Talon\user\knausj_talon\text
+...
 ```
 
 ## Getting started with Talon
@@ -271,6 +278,8 @@ This repository is now officially a team effort. The following contributors have
 - @fidgetingbits
 - @knausj85 
 - @rntz
+- @splondike
+- @pokey
 
 Collaborators will reply to issues and pull requests as time and health permits. Please be patient.
 
@@ -326,3 +335,7 @@ user.code_libraries
 
 where appropriate. See e.g. csharp.py/csharp.talon. At least, until we come up with something better 👍 
 
+# Talon documentation
+For official documentation on Talon's API and features, please visit https://talonvoice.com/docs/. 
+
+For community-generated documentation on Talon, please visit https://talon.wiki/

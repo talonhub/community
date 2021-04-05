@@ -1,9 +1,11 @@
-from talon import Module
-from .user_settings import bind_list_to_csv, bind_word_map_to_csv
+from talon import Context, Module
+from .user_settings import get_list_from_csv
 
 mod = Module()
+ctx = Context()
 
 mod.list("vocabulary", desc="additional vocabulary words")
+
 
 # Default words that will need to be capitalized (particularly under w2l).
 # NB. These defaults and those later in this file are ONLY used when
@@ -51,13 +53,15 @@ _word_map_defaults = {
 }
 _word_map_defaults.update({word.lower(): word for word in _capitalize_defaults})
 
+
 # "dictate.word_map" is used by `actions.dictate.replace_words` to rewrite words
 # Talon recognized. Entries in word_map don't change the priority with which
 # Talon recognizes some words over others.
-bind_word_map_to_csv(
+
+ctx.settings["dictate.word_map"] = get_list_from_csv(
     "words_to_replace.csv",
-    csv_headers=("Replacement", "Original"),
-    default_values=_word_map_defaults,
+    headers=("Replacement", "Original"),
+    default=_word_map_defaults,
 )
 
 
@@ -75,9 +79,12 @@ _default_vocabulary.update({word: word for word in _simple_vocab_default})
 # "user.vocabulary" is used to explicitly add words/phrases that Talon doesn't
 # recognize. Words in user.vocabulary (or other lists and captures) are
 # "command-like" and their recognition is prioritized over ordinary words.
-bind_list_to_csv(
-    "user.vocabulary",
+ctx.lists["user.vocabulary"] = get_list_from_csv(
     "additional_words.csv",
-    csv_headers=("Word(s)", "Spoken Form (If Different)"),
-    default_values=_default_vocabulary,
+    headers=("Word(s)", "Spoken Form (If Different)"),
+    default=_default_vocabulary,
 )
+
+# for quick verification of the reload
+# print(str(ctx.settings["dictate.word_map"]))
+# print(str(ctx.lists["user.vocabulary"]))
