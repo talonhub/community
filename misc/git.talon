@@ -1,4 +1,5 @@
 tag: terminal
+app: vscode
 and tag: user.git
 -
 # Standard commands
