@@ -9,6 +9,7 @@ tag(): user.splits
 tag(): user.tabs
 tag(): user.git
 tag(): user.kubectl
+tag(): user.anaconda
 tag(): terminal
 
 #talon app actions
