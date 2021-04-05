@@ -1,4 +1,5 @@
 from user.pokey_talon.code.terms import SELECT, TELEPORT, DELETE, FIND
+from dataclasses import dataclass
 from user.pokey_talon.code.keys import symbol_key_words
 import json
 
@@ -16,9 +17,9 @@ ctx.lists["self.symbol_color"] = {
     "gray": "default",
     "blue": "blue",
     "green": "green",
-    "bull": "red",
-    "low": "yellow",
-    "perp": "mauve",
+    "rose": "red",
+    "squash": "yellow",
+    "plum": "mauve",
 }
 
 # TODO A lot of these could be supported by supporting a proper "pop back"
@@ -78,18 +79,70 @@ ctx.lists["self.decorative_action"] = {
 @mod.capture(
     rule=(
         "[{user.decorative_position}] "
-        "[{user.decorative_line_mode}] "
+        "[{user.decorative_line_mode} [of | in]] "
         "[<user.decorated_range_transformation>] "
         "(<user.decorated_symbol> | {user.decorative_mark})"
-        "[<user.decorative_indexer>]"
+        "[<user.decorative_indexer> | {user.decorative_matching}]"
     )
 )
 def decorative_target(m) -> str:
     """Supported extents for decorative navigation"""
+    print([foo for foo in m])
     return json.dumps(
-        {key: value for capture in m for key, value in json.loads(capture).items()}
+        {
+            key: value
+            for capture in m
+            if capture not in ["at", "of", "in"]
+            for key, value in json.loads(capture).items()
+        }
     )
 
+
+@dataclass
+class ModifierTerm:
+    term: str
+    info: dict
+
+    @property
+    def value(self):
+        return json.dumps(self.info)
+
+
+def make_simple_transformation(type: str):
+    return {"transformation": {"type": type}}
+
+
+matching_transformation = ModifierTerm(
+    "matching", make_simple_transformation("matching")
+)
+block_transformation = ModifierTerm("block", make_simple_transformation("block"))
+
+mod.list("decorative_matching", desc="Supported symbol extent types")
+ctx.lists["self.decorative_matching"] = {
+    matching_transformation.term: matching_transformation.value
+}
+
+symbol_extent_map = {
+    "funk": "function",
+    "named funk": "namedFunction",
+    "class": "class",
+    "symbol": "symbol",
+}
+
+symbol_extent_types = {
+    term: {
+        "transformation": {
+            "type": "containingSymbol",
+            "symbolType": symbol_extent_type,
+        }
+    }
+    for term, symbol_extent_type in symbol_extent_map.items()
+}
+
+mod.list("symbol_extent_type", desc="Supported symbol extent types")
+ctx.lists["self.symbol_extent_type"] = {
+    key: json.dumps(value) for key, value in symbol_extent_types.items()
+}
 
 cursor_mark = {"type": "cursor"}
 
@@ -99,8 +152,16 @@ marks = {
     "this token": {"lines": False, "mark": cursor_mark},
     "this line": {"lines": True, "mark": cursor_mark},
     "these lines": {"lines": True, "mark": cursor_mark},
-    "last edit range ": {"lines": True, "mark": {"type": "last_edit_range"}},
-    "last cursor position": {"lines": True, "mark": {"type": "last_cursor_position"}},
+    "last edit range ": {"mark": {"type": "last_edit_range"}},
+    "last cursor position": {"mark": {"type": "last_cursor_position"}},
+    f"this {block_transformation.term}": {
+        "mark": cursor_mark,
+        **block_transformation.info,
+    },
+    **{
+        f"this {extent_type}": {"mark": cursor_mark, **value}
+        for extent_type, value in symbol_extent_types.items()
+    },
 }
 
 mod.list("decorative_mark", desc="Types of marks")
@@ -167,7 +228,15 @@ ctx.lists["self.decorative_sub_component_type"] = {
 @mod.capture(rule=("<user.ordinals> {user.decorative_sub_component_type}"))
 def decorative_indexer(m) -> str:
     """Supported extents for decorative navigation"""
-    return json.dumps({m.decorative_sub_component_type: m.ordinals})
+    return json.dumps(
+        {
+            "transformation": {
+                "type": "subpiece",
+                "pieceType": m.decorative_sub_component_type,
+                "index": m.ordinals,
+            }
+        }
+    )
 
 
 pair_symbols = {
@@ -218,36 +287,21 @@ def decorative_surrounding_pair(m) -> str:
 
 
 simple_transformations = [
-    "matching",
-    "block",
+    matching_transformation,
+    block_transformation,
 ]
 
 mod.list("decorative_simple_transformations", desc="simple transformations")
 ctx.lists["self.decorative_simple_transformations"] = {
-    transformation: json.dumps({"transformation": {"type": transformation}})
+    transformation.term: transformation.value
     for transformation in simple_transformations
-}
-
-mod.list("symbol_extent_type", desc="Supported symbol extent types")
-ctx.lists["self.symbol_extent_type"] = {
-    "funk": "function",
-    "named funk": "namedFunction",
-    "class": "class",
-    "symbol": "symbol",
 }
 
 
 @mod.capture(rule=("{user.symbol_extent_type} [containing]"))
 def decorative_containing_symbol(m) -> str:
     """Supported extents for decorative navigation"""
-    return json.dumps(
-        {
-            "transformation": {
-                "type": "containingSymbol",
-                "symbolType": m.symbol_extent_type,
-            }
-        }
-    )
+    return m.symbol_extent_type
 
 
 @mod.capture(
