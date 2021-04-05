@@ -172,6 +172,8 @@ ctx.lists["self.decorative_mark"] = {
 positions = {
     "after": {"position": "after"},
     "before": {"position": "before"},
+    "start of line": {"position": "lineStart"},
+    "end of line": {"position": "lineEnd"},
     "above": {"position": "before", "lines": True},
     "below": {"position": "after", "lines": True},
 }
