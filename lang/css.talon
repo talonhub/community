@@ -20,4 +20,3 @@ style media query:
   key(up:2)
   edit.line_end()
   key(left:3)
-
