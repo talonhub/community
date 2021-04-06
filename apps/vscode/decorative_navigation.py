@@ -1,4 +1,5 @@
 from user.pokey_talon.code.terms import SELECT, TELEPORT, DELETE, FIND
+from enum import Enum
 from dataclasses import dataclass
 from user.pokey_talon.code.keys import symbol_key_words
 import json
@@ -79,7 +80,7 @@ ctx.lists["self.decorative_action"] = {
 @mod.capture(
     rule=(
         "[{user.decorative_position}] "
-        "[{user.decorative_line_mode} [of | in]] "
+        "[{user.decorative_selection_type} [of | in]] "
         "[<user.decorated_range_transformation>] "
         "(<user.decorated_symbol> | {user.decorative_mark})"
         "[<user.decorative_indexer> | {user.decorative_matching}]"
@@ -169,6 +170,39 @@ ctx.lists["self.decorative_mark"] = {
     key: json.dumps(value) for key, value in marks.items()
 }
 
+
+class SelectionType(Enum):
+    def __new__(cls, json_name, rank):
+        obj = object.__new__(cls)
+        obj._value_ = json_name
+        obj.rank = rank
+        return obj
+
+    def __ge__(self, other):
+        if self.__class__ is other.__class__:
+            return self.rank >= other.rank
+        return NotImplemented
+
+    def __gt__(self, other):
+        if self.__class__ is other.__class__:
+            return self.rank > other.rank
+        return NotImplemented
+
+    def __le__(self, other):
+        if self.__class__ is other.__class__:
+            return self.rank <= other.rank
+        return NotImplemented
+
+    def __lt__(self, other):
+        if self.__class__ is other.__class__:
+            return self.rank < other.rank
+        return NotImplemented
+
+    TOKEN = ("token", 0)
+    LINE = ("line", 1)
+    BLOCK = ("block", 2)
+
+
 positions = {
     "after": {"position": "after"},
     "before": {"position": "before"},
@@ -183,16 +217,18 @@ ctx.lists["self.decorative_position"] = {
     key: json.dumps(value) for key, value in positions.items()
 }
 
-line_modes = {
-    "line": {"lines": True},
-    "lines": {"lines": True},
-    "token": {"lines": False},
-    "tokens": {"lines": False},
+selection_types = {
+    "line": {"selectionType": "line"},
+    "lines": {"selectionType": "line"},
+    "token": {"selectionType": "token"},
+    "tokens": {"selectionType": "token"},
+    "block": {"selectionType": "block"},
+    "blocks": {"selectionType": "block"},
 }
 
-mod.list("decorative_line_mode", desc="Types of line_modes")
-ctx.lists["self.decorative_line_mode"] = {
-    key: json.dumps(value) for key, value in line_modes.items()
+mod.list("decorative_selection_type", desc="Types of selection_types")
+ctx.lists["self.decorative_selection_type"] = {
+    key: json.dumps(value) for key, value in selection_types.items()
 }
 
 
