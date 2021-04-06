@@ -1,5 +1,5 @@
 tag: terminal
-app: vscode
+# app: vscode
 app: iTerm2
 and tag: user.git
 -
