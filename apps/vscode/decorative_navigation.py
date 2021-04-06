@@ -76,6 +76,8 @@ ctx.lists["self.decorative_action"] = {
 }
 "<user.search_engine>"
 
+CONNECTIVES = ["at", "of", "in"]
+
 
 @mod.capture(
     rule=(
@@ -88,15 +90,20 @@ ctx.lists["self.decorative_action"] = {
 )
 def decorative_target(m) -> str:
     """Supported extents for decorative navigation"""
-    print([foo for foo in m])
-    return json.dumps(
-        {
-            key: value
-            for capture in m
-            if capture not in ["at", "of", "in"]
-            for key, value in json.loads(capture).items()
-        }
-    )
+    object = {}
+    for capture in m:
+        if capture in CONNECTIVES:
+            continue
+        for key, value in json.loads(capture).items():
+            if (
+                key in object
+                and key == SELECTION_TYPE_KEY
+                and ranked_selection_types[value] < ranked_selection_types[object[key]]
+            ):
+                continue
+            object[key] = value
+
+    return json.dumps(object)
 
 
 @dataclass
@@ -116,52 +123,81 @@ def make_simple_transformation(type: str):
 matching_transformation = ModifierTerm(
     "matching", make_simple_transformation("matching")
 )
-block_transformation = ModifierTerm("block", make_simple_transformation("block"))
 
 mod.list("decorative_matching", desc="Supported symbol extent types")
 ctx.lists["self.decorative_matching"] = {
     matching_transformation.term: matching_transformation.value
 }
 
-symbol_extent_map = {
+symbol_definition_type_map = {
     "funk": "function",
     "named funk": "namedFunction",
     "class": "class",
     "symbol": "symbol",
 }
 
-symbol_extent_types = {
+symbol_definition_types = {
     term: {
         "transformation": {
-            "type": "containingSymbol",
-            "symbolType": symbol_extent_type,
+            "type": "containingSymbolDefinition",
+            "symbolType": symbol_definition_type,
         }
     }
-    for term, symbol_extent_type in symbol_extent_map.items()
+    for term, symbol_definition_type in symbol_definition_type_map.items()
 }
 
-mod.list("symbol_extent_type", desc="Supported symbol extent types")
-ctx.lists["self.symbol_extent_type"] = {
-    key: json.dumps(value) for key, value in symbol_extent_types.items()
+mod.list("symbol_definition_type", desc="Supported symbol extent types")
+ctx.lists["self.symbol_definition_type"] = {
+    key: json.dumps(value) for key, value in symbol_definition_types.items()
 }
 
-cursor_mark = {"type": "cursor"}
+SELECTION_TYPE_KEY = "selectionType"
+
+
+@dataclass
+class SelectionType:
+    singular: str
+    plural: str
+    json_name: str
+    rank: int
+
+    @property
+    def json_repr(self):
+        return {SELECTION_TYPE_KEY: self.json_name}
+
+
+TOKEN = SelectionType("token", "tokens", "token", 0)
+LINE = SelectionType("line", "lines", "line", 1)
+BLOCK = SelectionType("block", "blocks", "block", 2)
+
+SELECTION_TYPES = [
+    TOKEN,
+    LINE,
+    BLOCK,
+]
+
+ranked_selection_types = {
+    selection_type.json_name: selection_type.rank for selection_type in SELECTION_TYPES
+}
+
+cursor_mark = {"mark": {"type": "cursor"}}
 
 marks = {
-    "here": {"mark": cursor_mark},
-    "this": {"mark": cursor_mark},
-    "this token": {"lines": False, "mark": cursor_mark},
-    "this line": {"lines": True, "mark": cursor_mark},
-    "these lines": {"lines": True, "mark": cursor_mark},
-    "last edit range ": {"mark": {"type": "last_edit_range"}},
-    "last cursor position": {"mark": {"type": "last_cursor_position"}},
-    f"this {block_transformation.term}": {
-        "mark": cursor_mark,
-        **block_transformation.info,
+    "here": cursor_mark,
+    "this": cursor_mark,
+    **{
+        f"this {selection_type.singular}": {**selection_type.json_repr, **cursor_mark}
+        for selection_type in SELECTION_TYPES
     },
     **{
-        f"this {extent_type}": {"mark": cursor_mark, **value}
-        for extent_type, value in symbol_extent_types.items()
+        f"these {selection_type.plural}": {**selection_type.json_repr, **cursor_mark}
+        for selection_type in SELECTION_TYPES
+    },
+    "last edit range ": {"mark": {"type": "last_edit_range"}},
+    "last cursor position": {"mark": {"type": "last_cursor_position"}},
+    **{
+        f"this {symbol_definition_type}": {**cursor_mark, **value}
+        for symbol_definition_type, value in symbol_definition_types.items()
     },
 }
 
@@ -171,45 +207,13 @@ ctx.lists["self.decorative_mark"] = {
 }
 
 
-class SelectionType(Enum):
-    def __new__(cls, json_name, rank):
-        obj = object.__new__(cls)
-        obj._value_ = json_name
-        obj.rank = rank
-        return obj
-
-    def __ge__(self, other):
-        if self.__class__ is other.__class__:
-            return self.rank >= other.rank
-        return NotImplemented
-
-    def __gt__(self, other):
-        if self.__class__ is other.__class__:
-            return self.rank > other.rank
-        return NotImplemented
-
-    def __le__(self, other):
-        if self.__class__ is other.__class__:
-            return self.rank <= other.rank
-        return NotImplemented
-
-    def __lt__(self, other):
-        if self.__class__ is other.__class__:
-            return self.rank < other.rank
-        return NotImplemented
-
-    TOKEN = ("token", 0)
-    LINE = ("line", 1)
-    BLOCK = ("block", 2)
-
-
 positions = {
     "after": {"position": "after"},
     "before": {"position": "before"},
     "start of": {"position": "start"},
     "end of": {"position": "end"},
-    "above": {"position": "before", "lines": True},
-    "below": {"position": "after", "lines": True},
+    "above": {"position": "before", **LINE.json_repr},
+    "below": {"position": "after", **LINE.json_repr},
 }
 
 mod.list("decorative_position", desc="Types of positions")
@@ -217,18 +221,15 @@ ctx.lists["self.decorative_position"] = {
     key: json.dumps(value) for key, value in positions.items()
 }
 
-selection_types = {
-    "line": {"selectionType": "line"},
-    "lines": {"selectionType": "line"},
-    "token": {"selectionType": "token"},
-    "tokens": {"selectionType": "token"},
-    "block": {"selectionType": "block"},
-    "blocks": {"selectionType": "block"},
-}
+selection_type_map = {}
+
+for selection_type in SELECTION_TYPES:
+    selection_type_map[selection_type.singular] = selection_type.json_repr
+    selection_type_map[selection_type.plural] = selection_type.json_repr
 
 mod.list("decorative_selection_type", desc="Types of selection_types")
 ctx.lists["self.decorative_selection_type"] = {
-    key: json.dumps(value) for key, value in selection_types.items()
+    key: json.dumps(value) for key, value in selection_type_map.items()
 }
 
 
@@ -326,7 +327,6 @@ def decorative_surrounding_pair(m) -> str:
 
 simple_transformations = [
     matching_transformation,
-    block_transformation,
 ]
 
 mod.list("decorative_simple_transformations", desc="simple transformations")
@@ -336,10 +336,10 @@ ctx.lists["self.decorative_simple_transformations"] = {
 }
 
 
-@mod.capture(rule=("{user.symbol_extent_type} [containing]"))
+@mod.capture(rule=("{user.symbol_definition_type} [containing]"))
 def decorative_containing_symbol(m) -> str:
     """Supported extents for decorative navigation"""
-    return m.symbol_extent_type
+    return m.symbol_definition_type
 
 
 @mod.capture(
