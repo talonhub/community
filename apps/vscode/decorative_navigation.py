@@ -76,13 +76,13 @@ ctx.lists["self.decorative_action"] = {
 }
 "<user.search_engine>"
 
-CONNECTIVES = ["at", "of", "in"]
+CONNECTIVES = ["at", "of", "in", "containing"]
 
 
 @mod.capture(
     rule=(
         "[{user.decorative_position}] "
-        "[{user.decorative_selection_type} [of | in]] "
+        "[{user.decorative_selection_type} [of | in | containing]] "
         "[<user.decorated_range_transformation>] "
         "(<user.decorated_symbol> | {user.decorative_mark})"
         "[<user.decorative_indexer> | {user.decorative_matching}]"
@@ -193,8 +193,8 @@ marks = {
         f"these {selection_type.plural}": {**selection_type.json_repr, **cursor_mark}
         for selection_type in SELECTION_TYPES
     },
-    "last edit range ": {"mark": {"type": "last_edit_range"}},
-    "last cursor position": {"mark": {"type": "last_cursor_position"}},
+    "change": {"mark": {"type": "lastEditRange"}},
+    "last cursor": {"mark": {"type": "lastCursorPosition"}},
     **{
         f"this {symbol_definition_type}": {**cursor_mark, **value}
         for symbol_definition_type, value in symbol_definition_types.items()
