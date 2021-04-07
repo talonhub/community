@@ -71,9 +71,13 @@ flex grow <number_small>:
   ";"
   key(enter)
 
-
 flex shrink <number_small>:
   "flex-shrink: "
   insert(number_small)
   ";"
   key(enter)
+
+
+flex basis:
+  "flex-basis: ;"
+  key(left)
