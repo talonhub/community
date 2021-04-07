@@ -41,6 +41,7 @@ ctx.lists["self.decorative_action"] = {
     "post": "decorative-navigation.moveCursorAfter",
     "cursor": "decorative-navigation.addCursorAt",
     "cursor all": "decorative-navigation.addCursorToAllLines",
+    "remove cursor": "decorative-navigation.removeCursor",
     f"{SELECT} past": "decorative-navigation.selectPast",
     f"{SELECT} till": "decorative-navigation.selectUntil",
     "phones": "phones",
