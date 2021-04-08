@@ -65,6 +65,31 @@ flex align self:
   key(left)
 
 
+flex align content start:
+  "align-content: flex-start;"
+  key(enter)
+
+flex align content (and | end):
+  "align-content: flex-end;"
+  key(enter)
+
+flex align content center:
+  "align-content: center;"
+  key(enter)
+
+flex align content stretch:
+  "align-content: stretch;"
+  key(enter)
+
+flex align content space between:
+  "align-content: space-between;"
+  key(enter)
+
+flex align content space around:
+  "align-content: space-around;"
+  key(enter)
+
+
 flex grow <number_small>:
   "flex-grow: "
   insert(number_small)
@@ -81,3 +106,18 @@ flex shrink <number_small>:
 flex basis:
   "flex-basis: ;"
   key(left)
+
+flex wrap:
+  "flex-wrap: wrap;"
+  key(enter)
+
+flex wrap reverse:
+  "flex-wrap: wrap-reverse;"
+  key(enter)
+
+flex wrap no wrap:
+  "flex-wrap: nowrap;"
+  key(enter)
+
+flex align content:
+  "flex-align: 
