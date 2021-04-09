@@ -16,7 +16,7 @@ ctx.lists["self.simple_cursorless_action"] = {
     TELEPORT: "moveCursor",
     "cut": "cut",
     "copy": "copy",
-    DELETE: "delete",
+    "delete": "delete",
     FIND: "findInFile",
     f"{FIND} last": "findBackwardsInFile",
     f"{FIND} all": "findAll",

@@ -27,19 +27,21 @@ ctx.lists["self.symbol_color"] = {
 
 CONNECTIVES = ["at", "of", "in", "containing"]
 
+BASE_TARGET = {"type": "primitiveTarget"}
+
 
 @mod.capture(
     rule=(
         "[{user.cursorless_position}] "
         "[{user.cursorless_selection_type} [of | in | containing]] "
         "[<user.cursorless_range_transformation>] "
-        "(<user.decorated_symbol> | {user.cursorless_mark})"
+        "(<user.decorated_symbol> | {user.cursorless_mark} | {user.unmarked_core})"
         "[<user.cursorless_indexer> | {user.cursorless_matching}]"
     )
 )
 def cursorless_target(m) -> str:
     """Supported extents for cursorless navigation"""
-    object = {}
+    object = BASE_TARGET.copy()
     for capture in m:
         if capture in CONNECTIVES:
             continue
@@ -70,7 +72,7 @@ def make_simple_transformation(type: str):
 
 
 matching_transformation = ModifierTerm(
-    "matching", make_simple_transformation("matching")
+    "matching", make_simple_transformation("matchingPairSymbol")
 )
 
 mod.list("cursorless_matching", desc="Supported symbol extent types")
@@ -153,6 +155,20 @@ marks = {
 mod.list("cursorless_mark", desc="Types of marks")
 ctx.lists["self.cursorless_mark"] = {
     key: json.dumps(value) for key, value in marks.items()
+}
+
+unmarked_cores = {
+    **symbol_definition_types,
+    **{
+        selection_type.singular: selection_type.json_repr
+        for selection_type in SELECTION_TYPES
+    },
+    matching_transformation.term: matching_transformation.info,
+}
+
+mod.list("unmarked_core", desc="Core terms whose mark must be inferred")
+ctx.lists["self.unmarked_core"] = {
+    key: json.dumps(value) for key, value in unmarked_cores.items()
 }
 
 
@@ -287,10 +303,10 @@ ctx.lists["self.cursorless_simple_transformations"] = {
 }
 
 
-@mod.capture(rule=("[in | inside] {user.symbol_definition_type} [containing]"))
+@mod.capture(rule=("[inside] {user.symbol_definition_type} [containing]"))
 def cursorless_containing_symbol(m) -> str:
     """Supported extents for cursorless navigation"""
-    if m[0] in ["in", "inside"]:
+    if m[0] in ["inside"]:
         current_target = json.loads(m.symbol_definition_type)
         current_target["transformation"]["valueOnly"] = True
         return json.dumps(current_target)
