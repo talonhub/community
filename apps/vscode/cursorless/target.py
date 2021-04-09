@@ -1,4 +1,5 @@
 from user.pokey_talon.code.terms import SELECT, TELEPORT, DELETE, FIND
+
 from enum import Enum
 from dataclasses import dataclass
 from user.pokey_talon.code.keys import symbol_key_words
@@ -29,15 +30,15 @@ CONNECTIVES = ["at", "of", "in", "containing"]
 
 @mod.capture(
     rule=(
-        "[{user.decorative_position}] "
-        "[{user.decorative_selection_type} [of | in | containing]] "
-        "[<user.decorated_range_transformation>] "
-        "(<user.decorated_symbol> | {user.decorative_mark})"
-        "[<user.decorative_indexer> | {user.decorative_matching}]"
+        "[{user.cursorless_position}] "
+        "[{user.cursorless_selection_type} [of | in | containing]] "
+        "[<user.cursorless_range_transformation>] "
+        "(<user.decorated_symbol> | {user.cursorless_mark})"
+        "[<user.cursorless_indexer> | {user.cursorless_matching}]"
     )
 )
-def decorative_target(m) -> str:
-    """Supported extents for decorative navigation"""
+def cursorless_target(m) -> str:
+    """Supported extents for cursorless navigation"""
     object = {}
     for capture in m:
         if capture in CONNECTIVES:
@@ -72,8 +73,8 @@ matching_transformation = ModifierTerm(
     "matching", make_simple_transformation("matching")
 )
 
-mod.list("decorative_matching", desc="Supported symbol extent types")
-ctx.lists["self.decorative_matching"] = {
+mod.list("cursorless_matching", desc="Supported symbol extent types")
+ctx.lists["self.cursorless_matching"] = {
     matching_transformation.term: matching_transformation.value
 }
 
@@ -149,8 +150,8 @@ marks = {
     },
 }
 
-mod.list("decorative_mark", desc="Types of marks")
-ctx.lists["self.decorative_mark"] = {
+mod.list("cursorless_mark", desc="Types of marks")
+ctx.lists["self.cursorless_mark"] = {
     key: json.dumps(value) for key, value in marks.items()
 }
 
@@ -164,8 +165,8 @@ positions = {
     "below": {"position": "after", **LINE.json_repr},
 }
 
-mod.list("decorative_position", desc="Types of positions")
-ctx.lists["self.decorative_position"] = {
+mod.list("cursorless_position", desc="Types of positions")
+ctx.lists["self.cursorless_position"] = {
     key: json.dumps(value) for key, value in positions.items()
 }
 
@@ -175,8 +176,8 @@ for selection_type in SELECTION_TYPES:
     selection_type_map[selection_type.singular] = selection_type.json_repr
     selection_type_map[selection_type.plural] = selection_type.json_repr
 
-mod.list("decorative_selection_type", desc="Types of selection_types")
-ctx.lists["self.decorative_selection_type"] = {
+mod.list("cursorless_selection_type", desc="Types of selection_types")
+ctx.lists["self.cursorless_selection_type"] = {
     key: json.dumps(value) for key, value in selection_type_map.items()
 }
 
@@ -202,8 +203,8 @@ def decorated_symbol(m) -> str:
     )
 
 
-mod.list("decorative_sub_component_type", desc="Supported subcomponent types")
-ctx.lists["self.decorative_sub_component_type"] = {
+mod.list("cursorless_sub_component_type", desc="Supported subcomponent types")
+ctx.lists["self.cursorless_sub_component_type"] = {
     "small": "subtoken",
     "subtoken": "subtoken",
     "subword": "subtoken",
@@ -212,14 +213,14 @@ ctx.lists["self.decorative_sub_component_type"] = {
 }
 
 
-@mod.capture(rule=("<user.ordinals> {user.decorative_sub_component_type}"))
-def decorative_indexer(m) -> str:
-    """Supported extents for decorative navigation"""
+@mod.capture(rule=("<user.ordinals> {user.cursorless_sub_component_type}"))
+def cursorless_indexer(m) -> str:
+    """Supported extents for cursorless navigation"""
     return json.dumps(
         {
             "transformation": {
                 "type": "subpiece",
-                "pieceType": m.decorative_sub_component_type,
+                "pieceType": m.cursorless_sub_component_type,
                 "index": m.ordinals,
             }
         }
@@ -229,6 +230,8 @@ def decorative_indexer(m) -> str:
 pair_symbols = {
     "[": "squareBrackets",
     "]": "squareBrackets",
+    "{": "curlyBrackets",
+    "}": "curlyBrackets",
     "<": "angleBrackets",
     ">": "angleBrackets",
     "(": "parentheses",
@@ -244,7 +247,7 @@ ctx.lists["self.pair_symbol"] = {
     if character in pair_symbols
 }
 
-decorative_pair_surround_types = {
+cursorless_pair_surround_types = {
     "out": {"includePairDelimiter": True},
     "outer": {"includePairDelimiter": True},
     "outside": {"includePairDelimiter": True},
@@ -253,21 +256,21 @@ decorative_pair_surround_types = {
     "inside": {"includePairDelimiter": False},
 }
 
-mod.list("decorative_pair_surround_type", desc="Supported pair surround types")
-ctx.lists["self.decorative_pair_surround_type"] = {
-    key: json.dumps(value) for key, value in decorative_pair_surround_types.items()
+mod.list("cursorless_pair_surround_type", desc="Supported pair surround types")
+ctx.lists["self.cursorless_pair_surround_type"] = {
+    key: json.dumps(value) for key, value in cursorless_pair_surround_types.items()
 }
 
 
-@mod.capture(rule=("{user.decorative_pair_surround_type} {user.pair_symbol}"))
-def decorative_surrounding_pair(m) -> str:
-    """Supported extents for decorative navigation"""
+@mod.capture(rule=("{user.cursorless_pair_surround_type} {user.pair_symbol}"))
+def cursorless_surrounding_pair(m) -> str:
+    """Supported extents for cursorless navigation"""
     return json.dumps(
         {
             "transformation": {
                 "type": "surroundingPair",
                 "delimiter": m.pair_symbol,
-                **json.loads(m.decorative_pair_surround_type),
+                **json.loads(m.cursorless_pair_surround_type),
             }
         }
     )
@@ -277,28 +280,32 @@ simple_transformations = [
     matching_transformation,
 ]
 
-mod.list("decorative_simple_transformations", desc="simple transformations")
-ctx.lists["self.decorative_simple_transformations"] = {
+mod.list("cursorless_simple_transformations", desc="simple transformations")
+ctx.lists["self.cursorless_simple_transformations"] = {
     transformation.term: transformation.value
     for transformation in simple_transformations
 }
 
 
-@mod.capture(rule=("{user.symbol_definition_type} [containing]"))
-def decorative_containing_symbol(m) -> str:
-    """Supported extents for decorative navigation"""
+@mod.capture(rule=("[in | inside] {user.symbol_definition_type} [containing]"))
+def cursorless_containing_symbol(m) -> str:
+    """Supported extents for cursorless navigation"""
+    if m[0] in ["in", "inside"]:
+        current_target = json.loads(m.symbol_definition_type)
+        current_target["transformation"]["valueOnly"] = True
+        return json.dumps(current_target)
     return m.symbol_definition_type
 
 
 @mod.capture(
     rule=(
-        "<user.decorative_surrounding_pair> |"
-        "{user.decorative_simple_transformations} |"
-        "<user.decorative_containing_symbol>"
+        "<user.cursorless_surrounding_pair> |"
+        "{user.cursorless_simple_transformations} |"
+        "<user.cursorless_containing_symbol>"
     )
 )
-def decorated_range_transformation(m) -> str:
-    """Supported positions for decorative navigation"""
+def cursorless_range_transformation(m) -> str:
+    """Supported positions for cursorless navigation"""
     return str(m)
 
 
