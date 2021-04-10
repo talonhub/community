@@ -1,16 +1,16 @@
-from talon import Context, Module, app, clip, cron, imgui, actions, ui, fs
+import logging
 import os
+import shutil
+import warnings
+from pathlib import Path
+
+from talon import Context, Module, actions, app, clip, cron, imgui, resource, ui
+
+from .user_settings import DATA_DIR, SETTINGS_DIR
 
 ########################################################################
 # global settings
 ########################################################################
-
-# a list of homophones where each line is a comma separated list
-# e.g. where,wear,ware
-# a suitable one can be found here:
-# https://github.com/pimentel/homophones
-cwd = os.path.dirname(os.path.realpath(__file__))
-homophones_file = os.path.join(cwd, "homophones.csv")
 # if quick_replace, then when a word is selected and only one homophone exists,
 # replace it without bringing up the options
 quick_replace = True
@@ -22,17 +22,35 @@ mod = Module()
 mod.mode("homophones")
 mod.list("homophones_canonicals", desc="list of words ")
 
-
 main_screen = ui.main_screen()
 
 
-def update_homophones(name, flags):
-    if name != homophones_file:
-        return
+def get_homophones_from_csv(filename: str):
+    """Retrieves homophones from CSV"""
+    # todo this code could be consolidated, save for parsing, with user_settings.
+    path = SETTINGS_DIR / filename
+    template_name = filename + ".template"
+    template_path = DATA_DIR / template_name
+    cwd = os.path.dirname(os.path.realpath(__file__))
+    legacy_path = Path(os.path.join(cwd, "homophones.csv"))
+    # print(str(legacy_path))
+    assert filename.endswith(".csv")
+    if not path.is_file():
+        if legacy_path and legacy_path.is_file():
+            shutil.move(legacy_path, path)
+            warnings.warn(
+                "Support for the legacy CSVs location (i.e. outside /Settings) will be removed in the Talon v0.2.0 timeframe. Moving file from {} to {}".format(
+                    legacy_path, path
+                ),
+                DeprecationWarning,
+            )
+        else:
+            assert template_path.is_file()
+            shutil.copyfile(template_path, path)
 
     phones = {}
     canonical_list = []
-    with open(homophones_file, "r") as f:
+    with resource.open(path, "r") as f:
         for line in f:
             words = line.rstrip().split(",")
             canonical_list.append(words[0])
@@ -43,11 +61,9 @@ def update_homophones(name, flags):
 
     global all_homophones
     all_homophones = phones
-    ctx.lists["self.homophones_canonicals"] = canonical_list
+    return canonical_list
 
 
-update_homophones(homophones_file, None)
-fs.watch(cwd, update_homophones)
 active_word_list = None
 is_selection = False
 
@@ -166,3 +182,9 @@ class Actions:
         app.notify(error)
         raise error
 
+
+def on_ready():
+    ctx.lists["self.homophones_canonicals"] = get_homophones_from_csv("homophones.csv")
+
+
+app.register("ready", on_ready)

@@ -1,6 +1,7 @@
 import os
 import pathlib
 import subprocess
+from .user_settings import DATA_DIR
 
 from talon import (
     Context,
@@ -47,9 +48,7 @@ default_cursor = {
 }
 
 # todo figure out why notepad++ still shows the cursor sometimes.
-hidden_cursor = os.path.join(
-    os.path.dirname(os.path.realpath(__file__)), r"Resources\HiddenCursor.cur"
-)
+hidden_cursor = DATA_DIR / "HiddenCursor.cur"
 
 mod = Module()
 mod.list(

@@ -1,22 +1,18 @@
+import csv
 import os
 import re
+import shutil
 import time
-
-import talon
-from talon import Context, Module, app, imgui, ui, fs, actions
 from glob import glob
 from itertools import islice
 from pathlib import Path
 
-# Construct at startup a list of overides for application names (similar to how homophone list is managed)
-# ie for a given talon recognition word set  `one note`, recognized this in these switcher functions as `ONENOTE`
-# the list is a comma seperated `<Recognized Words>, <Overide>`
-# TODO: Consider put list csv's (homophones.csv, app_name_overrides.csv) files together in a seperate directory,`knausj_talon/lists`
-cwd = os.path.dirname(os.path.realpath(__file__))
-overrides_directory = os.path.join(cwd, "app_names")
-override_file_name = f"app_name_overrides.{talon.app.platform}.csv"
-override_file_path = os.path.join(overrides_directory, override_file_name)
+import talon
+from talon import Context, Module, actions, app, imgui, resource, ui
 
+from .user_settings import get_list_from_csv
+
+override_file_name = f"app_name_overrides.{talon.app.platform}.csv"
 
 mod = Module()
 mod.list("running", desc="all running applications")
@@ -63,10 +59,11 @@ words_to_exclude = [
 
 # windows-specific logic
 if app.platform == "windows":
-    import os
     import ctypes
-    import pywintypes
+    import os
+
     import pythoncom
+    import pywintypes
     import winerror
 
     try:
@@ -78,8 +75,9 @@ if app.platform == "windows":
         bytes = lambda x: str(buffer(x))
 
     from ctypes import wintypes
-    from win32com.shell import shell, shellcon
+
     from win32com.propsys import propsys, pscon
+    from win32com.shell import shell, shellcon
 
     # KNOWNFOLDERID
     # https://msdn.microsoft.com/en-us/library/dd378457
@@ -169,7 +167,7 @@ def get_words(name):
     return out
 
 
-def update_lists():
+def update_running_list():
     global running_application_dict
     running_application_dict = {}
     running = {}
@@ -192,28 +190,10 @@ def update_lists():
 
     lists = {
         "self.running": running,
-        # "self.launch": launch,
     }
 
     # batch update lists
     ctx.lists.update(lists)
-
-
-def update_overrides(name, flags):
-    """Updates the overrides list"""
-    global overrides
-    overrides = {}
-
-    if name is None or name == override_file_path:
-        # print("update_overrides")
-        with open(override_file_path, "r") as f:
-            for line in f:
-                line = line.rstrip()
-                line = line.split(",")
-                if len(line) == 2:
-                    overrides[line[0].lower()] = line[1].strip()
-
-        update_lists()
 
 
 pattern = re.compile(r"[A-Z][a-z]*|[a-z]+|\d|[+]")
@@ -362,7 +342,7 @@ def update_launch_list():
 
 def ui_event(event, arg):
     if event in ("app_launch", "app_close"):
-        update_lists()
+        update_running_list()
 
 
 # Currently update_launch_list only does anything on mac, so we should make sure
@@ -370,14 +350,23 @@ def ui_event(event, arg):
 # errors on other platforms.
 ctx.lists["user.launch"] = {}
 ctx.lists["user.running"] = {}
-
 # Talon starts faster if you don't use the `talon.ui` module during launch
 def on_ready():
-    update_overrides(None, None)
-    fs.watch(overrides_directory, update_overrides)
     update_launch_list()
+    update_running_list()
     ui.register("", ui_event)
 
 
-# NOTE: please update this from "launch" to "ready" in Talon v0.1.5
+# construct the legacy path name. todo: remove in Talon v0.2 timeframe
+cwd = os.path.dirname(os.path.realpath(__file__))
+legacy_path = Path(os.path.join(cwd, "app_names", override_file_name))
+
+overrides = get_list_from_csv(
+    override_file_name,
+    headers=None,
+    spoken_form_first=True,
+    strip_whitepsace_from_output=True,
+    legacy_path=legacy_path,
+)
+
 app.register("ready", on_ready)

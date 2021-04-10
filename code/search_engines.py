@@ -9,19 +9,10 @@ mod.list(
     desc="A search engine.  Any instance of %s will be replaced by query text",
 )
 
-_search_engine_defaults = {
-    "amazon": "https://www.amazon.com/s/?field-keywords=%s",
-    "google": "https://www.google.com/search?q=%s",
-    "map": "https://maps.google.com/maps?q=%s",
-    "scholar": "https://scholar.google.com/scholar?q=%s",
-    "wiki": "https://en.wikipedia.org/w/index.php?search=%s",
-}
 
 ctx = Context()
 ctx.lists["self.search_engine"] = get_list_from_csv(
-    "search_engines.csv",
-    headers=("URL Template", "Name"),
-    default=_search_engine_defaults,
+    "search_engines.csv", headers=("URL Template", "Name"),
 )
 
 
