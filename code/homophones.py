@@ -50,7 +50,7 @@ def get_homophones_from_csv(filename: str):
 
     phones = {}
     canonical_list = []
-    with resource.open(path, "r") as f:
+    with resource.open(str(path), "r") as f:
         for line in f:
             words = line.rstrip().split(",")
             canonical_list.append(words[0])
