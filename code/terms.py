@@ -9,6 +9,7 @@ SELECT = "take"
 TELEPORT = "pop"
 OPERATOR = "do"
 DELETE = "chuck"
+FIND = "scout"
 
 
 @mod.capture(rule=SELECT)
@@ -32,4 +33,10 @@ def operator(m) -> str:
 @mod.capture(rule=DELETE)
 def delete(m) -> str:
     """Verb to use for commands that delete things"""
+    return str(m)
+
+
+@mod.capture(rule=FIND)
+def find(m) -> str:
+    """Verb to use for commands that find things"""
     return str(m)

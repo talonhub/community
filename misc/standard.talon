@@ -21,18 +21,12 @@ show clip: key(cmd-shift-v)
 (undo that | nope): edit.undo()
 (redo that | yes indeed): edit.redo()
 paste match: edit.paste_match_style()
-file save: edit.save()
+disc: edit.save()
 padding:
 	insert("  ") 
 	key(left)
-clapper:
-	edit.line_end()
-	key(enter)
-clap up:
-	edit.line_start()
-	edit.line_start()
-	key(left)
-	key(enter)
+clapper: user.new_line_below()
+clap up: user.new_line_above()
 
 slow mode: mode.enable("user.slow")
 

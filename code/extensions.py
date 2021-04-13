@@ -21,5 +21,12 @@ ctx.lists["self.file_extension"] = {
     "dot jason": ".json",
     "dot jay son": ".json",
     "dot J S": ".js",
+    "dot java script": ".js",
     "dot TS": ".ts",
+    "dot type script": ".ts",
+    "dot csv": ".csv",
+    "totssv": ".csv",
+    "tot csv": ".csv",
+    "dot cassie": ".csv",
+    "dot text": ".txt",
 }

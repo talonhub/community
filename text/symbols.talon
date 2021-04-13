@@ -1,62 +1,75 @@
-question [mark]: "?"
-(downscore | underscore): "_"
 double dash: "--"
-(rbrack | are bracket | right bracket): "}"
 triple quote: "'''"
 (dot dot | dotdot): ".."
 #ellipses: "…"
 ellipses: "..."
 spamma: ", "
 coal gap: ": "
+pipe gap: " | "
 boom: ". "
-plus: "+"
 arrow: "->"
 dub arrow: "=>"
 new line: "\\n"
 carriage return: "\\r"
 line feed: "\\r\\n"
-empty dubstring:
+empty round: "()"
+empty square: "[]"
+empty curly: "{}"
+empty ring: "<>"
+empty quad: '""'
+empty twin: "''"
+empty escaped quad: '\\"\\"'
+empty escaped twin: "\\'\\'"
+quad:
     '""'
     key(left)
-empty escaped (dubstring|dub quotes):
+twin:
+    "''"
+    key(left)
+eyes:
+    '``'
+    key(left)
+escaped quad:
     '\\"\\"'
     key(left)
     key(left)
-empty string:
-    "''"
-    key(left)
-empty escaped string:
+escaped twin:
     "\\'\\'"
     key(left)
     key(left)
-(inside parens | args):
+round:
 	insert("()")
 	key(left)
-inside (squares | list): 
+square: 
 	insert("[]") 
 	key(left)
-inside (bracket | braces): 
+curly: 
 	insert("{}") 
 	key(left)
-inside percent: 
-	insert("%%") 
+ring: 
+	insert("<>") 
 	key(left)
-inside quotes:
-	insert('""')
-	key(left)
-angle that: 
+(ring | angle) that: 
     text = edit.selected_text()
     user.paste("<{text}>")
-(bracket | brace) that: 
+(curly | lace) that: 
     text = edit.selected_text()
     user.paste("{{{text}}}")
-(parens | args) that: 
+(round | leper) that: 
     text = edit.selected_text()
     user.paste("({text})")
-percent that: 
-    text = edit.selected_text()
-    user.paste("%{text}%")
-quote that:
+(double | quad) that:
     text = edit.selected_text()
     user.paste('"{text}"')
+(single | twin) that:
+    text = edit.selected_text()
+    user.paste("'{text}'")
 
+slicer:
+	edit.line_end()
+	key(enter)
+    insert("- ")
+
+end gap:
+    edit.line_end()
+    key(space)

@@ -8,8 +8,8 @@ ctx = Context()
 key = actions.key
 edit = actions.edit
 
-words_to_keep_lowercase = "a,an,the,at,by,for,in,is,of,on,to,up,and,as,but,or,nor".split(
-    ","
+words_to_keep_lowercase = (
+    "a,an,the,at,by,for,in,is,of,on,to,up,and,as,but,or,nor".split(",")
 )
 
 # The last phrase spoken, without & with formatting. Used for reformatting.
@@ -130,7 +130,7 @@ formatters_dict = {
     "SPACE_SURROUNDED_STRING": (SEP, surround(" ")),
     "DOT_SEPARATED": words_with_joiner("."),
     "DOT_SNAKE": (NOSEP, lambda i, word, _: "." + word if i == 0 else "_" + word),
-    "SLASH_SEPARATED": (NOSEP, every_word(lambda w: "/" + w)),
+    "SLASH_SEPARATED": (NOSEP, words_with_joiner("/")),
     "CAPITALIZE_FIRST_WORD": (SEP, first_vs_rest(lambda w: w.capitalize())),
     "CAPITALIZE_ALL_WORDS": (
         SEP,

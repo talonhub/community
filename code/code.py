@@ -29,6 +29,7 @@ key = actions.key
 function_list = []
 library_list = []
 extension_lang_map = {
+    ".elm": "elm",
     ".asm": "assembly",
     ".bat": "batch",
     ".c": "c",

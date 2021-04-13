@@ -63,12 +63,15 @@ action(user.code_state_case): "case :"
 action(user.code_state_go_to): ""
 
 action(user.code_import): "import "
+state export: "export "
 
 action(user.code_from_import):
   insert(" from  \"\"")
   key(left)
 
 action(user.code_type_class): "class "
+state interface: "interface "
+state type: "type "
 
 action(user.code_include): ""
 
@@ -165,8 +168,8 @@ state quote var:
 
 state spread: "..."
 
-^funky <user.text>$: user.code_default_function(text)
-^pro funky <user.text>$: user.code_protected_function(text)
-^pub funky <user.text>$: user.code_public_function(text)
+funky <user.text>$: user.code_default_function(text)
+pro funky <user.text>$: user.code_protected_function(text)
+pub funky <user.text>$: user.code_public_function(text)
 
 op new: insert("new ")  

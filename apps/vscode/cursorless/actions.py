@@ -13,7 +13,8 @@ app: vscode
 mod.list("simple_cursorless_action", desc="Supported actions for cursorless navigation")
 ctx.lists["self.simple_cursorless_action"] = {
     # Accepts any single extent
-    TELEPORT: "moveCursor",
+    "spring": "moveCursor",
+    "sort": "sortLines",
     "cut": "cut",
     "copy": "copy",
     "delete": "delete",
@@ -27,6 +28,8 @@ ctx.lists["self.simple_cursorless_action"] = {
     "tab": "indent",
     "retab": "dedent",
     "comment": "comment",
+    "github open": "openInGithub",
+    "smear": "cloneLineDown",
     # Accepts only single token
     "rename": "rename",
     "ref show": "showReferences",

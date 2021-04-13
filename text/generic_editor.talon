@@ -4,47 +4,46 @@ find it:
 next one:
     edit.find_next()
 
-tug <number>:
-    user.left_n(number)
-
-tugging:
+tug:
     edit.left()
 
-tugger:
+tug <number_small> now:
+    user.left_n(number_small)
+
+draw:
     edit.word_left()
 
-push <number>:
-    user.right_n(number)
+draw <number_small> now:
+    user.word_left_n(number_small)
 
-pushing:
+push:
     edit.right()
 
-pusher:
+push <number_small> now:
+    user.right_n(number_small)
+
+step:
     edit.word_right()
-    
-raise <number>:
-    user.up_n(number)
 
-raising:
+step <number_small> now:
+    user.word_right_n(number_small)
+
+raise:
     user.up_n(1)
-   
-drop <number>:
-    user.down_n(number)
 
-dropping:
+raise <number_small> now:
+    user.up_n(number_small)
+
+drop:
     user.down_n(1)
 
-go line start:
+drop <number_small> now:
+    user.down_n(number_small)
+
+head:
     edit.line_start()
 
-go line end:
-    edit.line_end()
-
-go way left:
-    edit.line_start()
-    edit.line_start()
-
-go way right:
+tail:
     edit.line_end()
 
 go way down:
@@ -110,11 +109,11 @@ indent [more]:
 <user.delete> line:
     edit.delete_line()
 
-<user.delete> <number>:
-    user.delete_left_n(number)
+wipe <number_small> now:
+    user.delete_left_n(number_small)
 
-drill <number>:
-    user.delete_right_n(number)
+drill <number_small> now:
+    user.delete_right_n(number_small)
     
 <user.delete> up:
     edit.extend_line_up()
@@ -127,19 +126,23 @@ drill <number>:
 <user.delete> word:
     edit.delete_word()
 
-<user.delete> lefter:
-    edit.extend_word_left()
-    edit.delete()
+scratch:
+    user.delete_word_left_n(1)
 
-<user.delete> writer:
-    edit.extend_word_right()
-    edit.delete()
+scratch <number_small> now:
+    user.delete_word_left_n(number_small)
 
-<user.delete> way left:
+swallow:
+    user.delete_word_right_n(1)
+
+swallow <number_small> now:
+    user.delete_word_right_n(number_small)
+
+<user.delete> start:
     edit.extend_line_start()
     edit.delete()
 
-<user.delete> way right:
+<user.delete> close:
     edit.extend_line_end()
     edit.delete()
 

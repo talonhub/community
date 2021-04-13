@@ -4,15 +4,15 @@ from user.pokey_talon.code.terms import DELETE
 from talon import Module, Context, actions, app
 import sys
 
-default_alphabet = "air bat cap drum each fine gust harp sit jury crunch look made near odd pit quench red sun trap urge vest whale plex yank zip".split(
+default_alphabet = "air bat cap drum each fine gust harp sit jane crunch look made near odd pit quench red sun trap urge vest whale plex yank zip".split(
     " "
 )
 letters_string = "abcdefghijklmnopqrstuvwxyz"
 
 default_digits = "zero one two three four five six seven eight nine".split(" ")
 numbers = [str(i) for i in range(10)]
-default_f_digits = "one two three four five six seven eight nine ten eleven twelve".split(
-    " "
+default_f_digits = (
+    "one two three four five six seven eight nine ten eleven twelve".split(" ")
 )
 
 mod = Module()
@@ -169,36 +169,34 @@ immune_symbol_key_words = {
 
 symbol_key_words = {
     "brick": "`",
-    "quote": '"',
-    "soap": "'",
-    "square": "[",
-    "rare": "]",
-    "slatch": "/",
-    "backslash": "\\",
+    "stroke": "/",
+    "backstroke": "\\",
     "minus": "-",
-    "equals": "=",
+    "equal": "=",
     "plus": "+",
     "tilde": "~",
     "bang": "!",
     "dollar": "$",
     "down score": "_",
-    "under score": "_",
-    "larry": "(",
-    "party": ")",
-    "brace": "{",
-    "squiggle": "}",
+    "question": "?",
+    "single": "'",
+    "double": '"',
+    "leper": "(",
+    "repper": ")",
+    "lack": "[",
+    "rack": "]",
+    "lace": "{",
+    "race": "}",
     "angle": "<",
     "less than": "<",
-    "rangle": ">",
+    "wrangle": ">",
     "greater than": ">",
-    "star": "*",
+    "snow": "*",
     "pound": "#",
-    "hash": "#",
-    "percent": "%",
+    "percy": "%",
     "tangle": "^",
     "amper": "&",
     "pipe": "|",
-    "dubquote": '"',
 }
 
 # make punctuation words also included in {user.symbol_keys}
@@ -227,7 +225,9 @@ simple_keys = [
 alternate_keys = {
     "clap": "enter",
     "deli": "delete",
-    DELETE: "backspace",
+    "drill": "delete",
+    "chuck that": "backspace",
+    "wipe": "backspace",
     "scrape": "escape",
     "void": "space",
     "page up": "pageup",

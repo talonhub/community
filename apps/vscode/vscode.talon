@@ -8,11 +8,21 @@ tag(): user.snippets
 tag(): user.splits
 tag(): user.tabs
 
+# TODO remove this once implemented in cursorless
+cut line:
+	key(cmd-x)
+
 action(edit.select_line):
 	key(ctrl-e cmd-shift-left)
 
 action(edit.delete_line):
-	user.vscode("editor.action.deleteLines")
+	user.vscode_and_wait("editor.action.deleteLines")
+
+action(user.new_line_below):
+	user.vscode_and_wait("editor.action.insertLineAfter")
+
+action(user.new_line_above):
+	user.vscode_and_wait("editor.action.insertLineBefore")
 
 settings():
   key_wait = 1
@@ -45,7 +55,7 @@ action(user.split_flip):
 action(user.split_last):
 	user.vscode("workbench.action.focusLeftGroup")
 action(user.split_next): 
-	user.vscode("workbench.action.focusRightGroup")
+	user.vscode_and_wait("workbench.action.focusRightGroup")
 action(user.split_window_down):
 	user.vscode("workbench.action.moveEditorToBelowGroup")
 action(user.split_window_horizontally):
@@ -94,7 +104,6 @@ bar explore: user.vscode("workbench.view.explorer")
 bar extensions: user.vscode("workbench.view.extensions")
 bar outline: user.vscode("outline.focus")
 bar run: user.vscode("workbench.view.debug")
-bar search: user.vscode("workbench.view.search")
 bar source: user.vscode("workbench.view.scm")
 bar dog: user.vscode("workbench.action.toggleSidebarVisibility")
 search next: user.vscode("search.action.focusNextSearchResult")
@@ -137,25 +146,45 @@ wrap switch: user.vscode("editor.action.toggleWordWrap")
 zen switch: user.vscode("workbench.action.toggleZenMode")
 
 # File Commands
-(file hunt | violent) [<user.text>] [{user.file_extension}]: 
+<user.find> dock [<user.text>] [{user.file_extension}]: 
   user.vscode("workbench.action.quickOpen")
   sleep(50ms)
   insert(text or "")
   insert(file_extension or "")
-  sleep(150ms)
+  sleep(300ms)
+<user.teleport> dock [<user.text>] [{user.file_extension}]: 
+  user.vscode("workbench.action.quickOpen")
+  sleep(50ms)
+  insert(text or "")
+  insert(file_extension or "")
+  sleep(300ms)
+  key(enter)
 file copy path:
 	user.vscode("copyFilePath") 
-file create sibling:
-	user.vscode("explorer.newFile")  
-	sleep(1000ms)
+file create sibling <user.format_text>* [<user.word>] [{user.file_extension}]: 
+  user.vscode_and_wait("explorer.newFile")
+  sleep(500ms)
+  user.insert_many(format_text_list or "")
+  user.insert_formatted(user.word or "", "NOOP")
+  insert(file_extension or "")
 file create: user.vscode("workbench.action.files.newUntitledFile")
-file rename: user.vscode("fileutils.renameFile")
+file rename:
+	user.vscode("fileutils.renameFile")
+	sleep(150ms)
+file move:
+	user.vscode("fileutils.moveFile")
+	sleep(150ms)
 file open folder:
 	user.vscode("revealFileInOS")
 file reveal: user.vscode("workbench.files.action.showActiveFileInExplorer") 
 save ugly:
     user.vscode("workbench.action.files.saveWithoutFormatting")
-file clone: user.vscode("fileutils.duplicateFile")
+file clone:
+	user.vscode("fileutils.duplicateFile")
+	sleep(150ms)
+action(edit.save):
+	key(cmd-s)
+	sleep(50ms)
 
 # Language Features
 suggest show: user.vscode("editor.action.triggerSuggest")
@@ -187,9 +216,9 @@ ref last:
 #code navigation
 (<user.teleport> declaration | follow):
 	user.vscode("editor.action.revealDefinition")
-<user.teleport> back:
+spring back:
 	user.vscode("workbench.action.navigateBack") 
-<user.teleport> forward:  user.vscode("workbench.action.navigateForward")  
+spring forward:  user.vscode("workbench.action.navigateForward")  
 <user.teleport> implementation:
 	user.vscode("editor.action.goToImplementation")
 <user.teleport> type:
@@ -198,10 +227,17 @@ ref last:
 	user.vscode("references-view.find")
 
 # Bookmarks. Requires Bookmarks plugin
-session [<user.text>]: 
+<user.find> sesh [<user.text>]: 
   user.vscode("workbench.action.openRecent")
   sleep(50ms)
   insert(text or "")
+  sleep(250ms)
+<user.teleport> sesh [<user.text>]: 
+  user.vscode("workbench.action.openRecent")
+  sleep(50ms)
+  insert(text or "")
+  key(enter)
+  sleep(250ms)
 
 <user.teleport> marks: user.vscode("workbench.view.extension.bookmarks")
 toggle mark: user.vscode("bookmarks.toggle")
@@ -226,7 +262,7 @@ git checkout [<user.text>]:
   insert(text or "")
 git commit [<user.text>]:
   user.vscode("git.commitStaged")
-  sleep(50ms)
+  sleep(100ms)
   user.insert_formatted(text or "", "CAPITALIZE_FIRST_WORD")
 git commit undo: user.vscode("git.undoCommit")
 git commit ammend: user.vscode("git.commitStagedAmend")
@@ -271,7 +307,7 @@ term last:user.vscode("workbench.action.terminal.focusPrevious")
 term split: user.vscode("workbench.action.terminal.split")
 term zoom: user.vscode("workbench.action.toggleMaximizedPanel")
 term trash: user.vscode("workbench.action.terminal.kill")
-term dog: user.vscode("workbench.action.terminal.toggleTerminal")
+term dog: user.vscode_and_wait("workbench.action.terminal.toggleTerminal")
 term scroll up: user.vscode("workbench.action.terminal.scrollUp")
 term scroll down: user.vscode("workbench.action.terminal.scrollDown")
 term <number_small>: user.vscode_terminal(number_small)
@@ -325,6 +361,7 @@ close window: user.vscode("workbench.action.closeWindow")
 curse undo: user.vscode("cursorUndo")
 
 <user.select> word: user.vscode("editor.action.addSelectionToNextFindMatch")
+skip word: user.vscode("editor.action.moveSelectionToNextFindMatch")
 
 Github open: user.vscode("openInGithub.openInGitHubFile")
 

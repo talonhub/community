@@ -22,6 +22,7 @@ voice code:
     sleep(50ms)
     insert("pokey_talon")
     key(enter)
+    sleep(250ms)
    
 slacker: user.switcher_focus("Slack")
 folk things: user.switcher_focus("Things")
