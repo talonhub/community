@@ -15,7 +15,7 @@ cut line:
 action(edit.select_line):
 	key(ctrl-e cmd-shift-left)
 
-action(edit.delete_line):
+<user.delete> line:
 	user.vscode_and_wait("editor.action.deleteLines")
 
 action(user.new_line_below):

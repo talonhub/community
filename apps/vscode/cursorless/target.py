@@ -25,9 +25,9 @@ ctx.lists["self.symbol_color"] = {
 }
 
 
-CONNECTIVES = ["at", "of", "in", "containing"]
+CONNECTIVES = {"at", "of", "in", "containing"}
 
-BASE_TARGET = {"type": "primitiveTarget"}
+BASE_TARGET = {"type": "primitive"}
 
 
 @mod.capture(
@@ -35,7 +35,8 @@ BASE_TARGET = {"type": "primitiveTarget"}
         "[{user.cursorless_position}] "
         "[{user.cursorless_selection_type} [of | in | containing]] "
         "[<user.cursorless_range_transformation>] "
-        "(<user.decorated_symbol> | {user.cursorless_mark} | {user.unmarked_core})"
+        "[<user.cursorless_indexer> [at]]"
+        "(<user.decorated_symbol> | {user.cursorless_mark} | {user.unmarked_core} | <user.cursorless_surrounding_pair> | <user.cursorless_indexer>)"
         "[<user.cursorless_indexer> | {user.cursorless_matching}]"
     )
 )
@@ -223,13 +224,23 @@ mod.list("cursorless_sub_component_type", desc="Supported subcomponent types")
 ctx.lists["self.cursorless_sub_component_type"] = {
     "small": "subtoken",
     "subtoken": "subtoken",
+    "subtokens": "subtoken",
     "subword": "subtoken",
+    "subwords": "subtoken",
     "car": "character",
+    "cars": "character",
+    "character": "character",
+    "characters": "character",
     "letter": "character",
+    "letters": "character",
 }
 
 
-@mod.capture(rule=("<user.ordinals> {user.cursorless_sub_component_type}"))
+@mod.capture(
+    rule=(
+        "<user.ordinals> [through <user.ordinals>] {user.cursorless_sub_component_type}"
+    )
+)
 def cursorless_indexer(m) -> str:
     """Supported extents for cursorless navigation"""
     return json.dumps(
@@ -237,7 +248,8 @@ def cursorless_indexer(m) -> str:
             "transformation": {
                 "type": "subpiece",
                 "pieceType": m.cursorless_sub_component_type,
-                "index": m.ordinals,
+                "startIndex": m.ordinals_list[0],
+                "endIndex": m.ordinals_list[-1] + 1,
             }
         }
     )

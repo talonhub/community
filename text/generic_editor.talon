@@ -106,7 +106,7 @@ indent [more]:
     edit.indent_less()
 
 # deleting
-<user.delete> line:
+clear line:
     edit.delete_line()
 
 wipe <number_small> now:

@@ -115,14 +115,15 @@ action(user.code_operator_modulo): " % "
 action(user.code_operator_modulo_assignment): " %= "
 action(user.code_operator_equal): " == "
 action(user.code_operator_not_equal): " != "
-op treek: " === "
-op nottreek: " !== "
+<user.operator> treek: " === "
+<user.operator> nottreek: " !== "
 action(user.code_operator_greater_than): " > "
 action(user.code_operator_greater_than_or_equal_to): " >= "
 action(user.code_operator_less_than): " < "
 action(user.code_operator_less_than_or_equal_to): " <= "
 action(user.code_operator_and): " && "
 action(user.code_operator_or): " || "
+<user.operator> null coal: " ?? "
 action(user.code_operator_bitwise_and): " & "
 action(user.code_operator_bitwise_and_assignment): " &= "
 action(user.code_operator_bitwise_or): " | "
@@ -133,6 +134,7 @@ action(user.code_operator_bitwise_left_shift): " << "
 action(user.code_operator_bitwise_left_shift_assignment): " <<= "
 action(user.code_operator_bitwise_right_shift): " >> "
 action(user.code_operator_bitwise_right_shift_assignment): " >>= "
+<user.operator> cast: " as "
 
 state const: "const "
 
@@ -154,6 +156,10 @@ state filter:
 
 state reduce:
   insert(".reduce()")
+  key(left)
+
+state concat:
+  insert(".concat()")
   key(left)
 
 state length: insert(".length")
