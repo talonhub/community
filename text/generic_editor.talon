@@ -4,6 +4,9 @@ you bun to:
 spacey:
   key(space)
 
+gap: 
+  key(space)
+
 slant: 
   key(enter tab)
 
