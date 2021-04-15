@@ -1,10 +1,10 @@
+from .user_settings import get_list_from_csv
 from talon import Module, Context, actions, app
 
 mod = Module()
 mod.list("file_extension", desc="A file extension, such as .py")
 
-ctx = Context()
-ctx.lists["self.file_extension"] = {
+_file_extensions_defaults = {
     "dot pie": ".py",
     "dot talon": ".talon",
     "dot mark down": ".md",
@@ -30,3 +30,12 @@ ctx.lists["self.file_extension"] = {
     "dot cassie": ".csv",
     "dot text": ".txt",
 }
+
+file_extensions = get_list_from_csv(
+    "file_extensions.csv",
+    headers=("File extension", "Name"),
+    default=_file_extensions_defaults,
+)
+
+ctx = Context()
+ctx.lists["self.file_extension"] = file_extensions

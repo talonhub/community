@@ -3,6 +3,7 @@ import re
 import time
 
 import talon
+from .create_spoken_forms import create_spoken_forms
 from talon import Context, Module, app, imgui, ui, fs, actions
 from glob import glob
 from itertools import islice
@@ -156,18 +157,6 @@ def launch_applications(m) -> str:
     return m.launch
 
 
-def split_camel(word):
-    return re.findall(r"[0-9A-Z]*[a-z]+(?=[A-Z]|$)", word)
-
-
-def get_words(name):
-    words = re.findall(r"[0-9A-Za-z]+", name)
-    out = []
-    for word in words:
-        out += split_camel(word)
-    return out
-
-
 def update_lists():
     global running_application_dict
     running_application_dict = {}
@@ -175,16 +164,13 @@ def update_lists():
     for cur_app in ui.apps(background=False):
         name = cur_app.name
 
-        if name.endswith(".exe"):
-            name = name.rsplit(".", 1)[0]
+        spoken_forms = create_spoken_forms(name, words_to_exclude=words_to_exclude)
+        for spoken_form in spoken_forms:
+            if spoken_form not in running:
+                running[spoken_form] = cur_app.name
 
-        words = get_words(name)
-        for word in words:
-            if word and word not in running and len(word) >= 3:
-                running[word.lower()] = cur_app.name
-
-        running[name.lower()] = cur_app.name
         running_application_dict[cur_app.name] = True
+    print(running)
 
     for override in overrides:
         running[override] = overrides[override]
@@ -213,28 +199,6 @@ def update_overrides(name, flags):
                     overrides[line[0].lower()] = line[1].strip()
 
         update_lists()
-
-
-pattern = re.compile(r"[A-Z][a-z]*|[a-z]+|\d|[+]")
-
-# todo: this is garbage
-def create_spoken_forms(name, max_len=30):
-    result = " ".join(list(islice(pattern.findall(name), max_len)))
-
-    result = (
-        result.replace("0", "zero")
-        .replace("1", "one")
-        .replace("2", "two")
-        .replace("3", "three")
-        .replace("4", "four")
-        .replace("5", "five")
-        .replace("6", "six")
-        .replace("7", "seven")
-        .replace("8", "eight")
-        .replace("9", "nine")
-        .replace("+", "plus")
-    )
-    return result
 
 
 @mod.action_class
