@@ -13,7 +13,7 @@ Clone repo into `~/.talon/user`
 
 ```insert code:
 cd ~/.talon/user
-git clone git@github.com:knausj85/knausj_talon.git knausj_talon
+git clone https://github.com/knausj85/knausj_talon knausj_talon
 ```
     
 Alternatively, access the directory by right clicking the Talon icon in taskbar, clicking Scripting>Open ~/talon, and navigating to user.
@@ -39,7 +39,7 @@ Clone repo into `%AppData%\Talon\user`
 
 ```insert code:
 cd %AppData%\Talon\user
-git clone git@github.com:knausj85/knausj_talon.git knausj_talon
+git clone https://github.com/knausj85/knausj_talon knausj_talon
 ```
     
 Alternatively, access the directory by right clicking the Talon icon in taskbar, clicking Scripting>Open ~/talon, and navigating to user.
