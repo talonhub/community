@@ -1,8 +1,8 @@
-from user.pokey_talon.code.terms import SELECT, TELEPORT, DELETE, FIND
+from ....code.terms import SELECT, TELEPORT, DELETE, FIND
 
 from enum import Enum
 from dataclasses import dataclass
-from user.pokey_talon.code.keys import symbol_key_words
+from ....code.keys import symbol_key_words
 import json
 
 from talon import Context, actions, ui, Module, app, clip
