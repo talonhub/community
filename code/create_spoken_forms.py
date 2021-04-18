@@ -65,13 +65,16 @@ def create_spoken_forms(
     ).split(" ")
     # print(term_sequence)
 
-    terms = [
-        term.strip()
-        for term in set(
-            term_sequence
-            + list(itertools.accumulate([f"{term} " for term in term_sequence]))
-        )
-    ]
+    terms = list(
+        {
+            term.strip()
+            for term in (
+                term_sequence
+                + list(itertools.accumulate([f"{term} " for term in term_sequence]))
+                + [source]
+            )
+        }
+    )
 
     terms = [
         term

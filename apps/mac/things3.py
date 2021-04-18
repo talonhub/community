@@ -3,6 +3,7 @@ import webbrowser
 from talon import ctrl, ui, Module, Context, actions, clip, app
 from dataclasses import dataclass
 from things3.things3 import Things3
+from ...code.create_spoken_forms import create_spoken_forms
 import io
 import csv
 
@@ -51,11 +52,24 @@ projects = [
 tag_map: Dict[str, Tag] = {tag.uuid: tag for tag in tags}
 project_map = {project.uuid: project for project in projects}
 
-ctx.lists["self.things_tag"] = {tag.title: tag.uuid for tag in tags}
-ctx.lists["self.things_tag_with_shortcut"] = {
-    tag.title: tag.uuid for tag in tags if tag.shortcut is not None
+ctx.lists["self.things_tag"] = {
+    spoken_form: tag.uuid
+    for tag in tags
+    for spoken_form in create_spoken_forms(tag.title)
 }
-ctx.lists["self.things_project"] = {project.title: project.uuid for project in projects}
+ctx.lists["self.things_tag_with_shortcut"] = {
+    spoken_form: tag.uuid
+    for tag in tags
+    if tag.shortcut is not None
+    for spoken_form in create_spoken_forms(tag.title)
+}
+things_projects = {
+    spoken_form: project.uuid
+    for project in projects
+    for spoken_form in create_spoken_forms(project.title)
+}
+print(things_projects)
+ctx.lists["self.things_project"] = things_projects
 
 
 @mod.action_class

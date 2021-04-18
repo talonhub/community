@@ -15,6 +15,8 @@ _file_extensions_defaults = {
     "dot com": ".com",
     "dot net": ".net",
     "dot org": ".org",
+    "dot us": ".us",
+    "dot U S": ".us",
     "dot exe": ".exe",
     "dot bin": ".bin",
     "dot bend": ".bin",

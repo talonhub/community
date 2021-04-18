@@ -44,3 +44,8 @@ clear filter: key(ctrl-escape)
 action(user.dental_click): key(cmd-enter)
 
 add checklist: key(cmd-shift-c)
+
+drag [this] way up: key(cmd-alt-up)
+drag [this] way down: key(cmd-alt-down)
+drag [this] up: key(cmd-up)
+drag [this] down: key(cmd-down)
