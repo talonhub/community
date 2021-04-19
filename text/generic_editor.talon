@@ -21,10 +21,6 @@ zoom in: edit.zoom_in()
 
 zoom out: edit.zoom_out()
 
-page up: key(pgup)
-
-page down: key(pgdown)
-
 copy: edit.copy()
 
 slice: edit.cut()
