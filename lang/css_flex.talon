@@ -120,4 +120,5 @@ flex wrap no wrap:
   key(enter)
 
 flex align content:
-  "flex-align: 
+  "flex-align: center;"
+  key(enter)
