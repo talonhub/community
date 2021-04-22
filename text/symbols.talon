@@ -19,7 +19,10 @@ empty ring: "<>"
 empty quad: '""'
 empty twin: "''"
 empty escaped quad: '\\"\\"'
-empty escaped twin: "\\'\\'"
+empty escaped twin: "\\'\\'
+tween <user.symbol_key>:
+    '{symbol_key}{symbol_key}'
+    key(left)
 quad:
     '""'
     key(left)

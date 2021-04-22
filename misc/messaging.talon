@@ -8,6 +8,11 @@ channel <user.text>:
     user.messaging_open_channel_picker()
     insert(user.formatted_text(user.text, "ALL_LOWERCASE"))
     sleep(100ms)
+<user.teleport> chan <user.text>:
+    user.messaging_open_channel_picker()
+    insert(user.formatted_text(user.text, "ALL_LOWERCASE"))
+    sleep(100ms)
+    key(enter)
 channel up: user.messaging_channel_previous()
 channel down: user.messaging_channel_next()
 ([channel] unread last | gopreev): user.messaging_unread_previous()

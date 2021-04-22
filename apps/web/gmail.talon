@@ -9,3 +9,4 @@ email sign off:
     insert("Best,")
     key(enter)
     insert("Pokey")
+forward this: key(escape i f)

@@ -28,16 +28,16 @@ step:
 step <number_small> now:
     user.word_right_n(number_small)
 
-raise:
+north:
     user.up_n(1)
 
-raise <number_small> now:
+north <number_small> now:
     user.up_n(number_small)
 
-drop:
+south:
     user.down_n(1)
 
-drop <number_small> now:
+south <number_small> now:
     user.down_n(number_small)
 
 head:
@@ -86,10 +86,10 @@ select word:
 <user.select> writer:
     edit.extend_word_right()
 
-select way left:
+take start:
     edit.extend_line_start()
 
-select way right:
+take close:
     edit.extend_line_end()
 
 select way up:

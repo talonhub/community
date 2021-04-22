@@ -25,8 +25,8 @@ disc: edit.save()
 padding:
 	insert("  ") 
 	key(left)
-clapper: user.new_line_below()
-clap up: user.new_line_above()
+pour this: user.new_line_below()
+drink this: user.new_line_above()
 
 slow mode: mode.enable("user.slow")
 

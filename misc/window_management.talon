@@ -27,3 +27,16 @@ voice code:
 slacker: user.switcher_focus("Slack")
 folk things: user.switcher_focus("Things")
 folk sim: user.switcher_focus("Simulator")
+<user.teleport> site [<user.text>] [{user.file_extension}]:
+    user.switcher_focus("Google Chrome")
+    key(cmd-t l p space)
+    insert(text or "")
+    insert(file_extension or "")
+    sleep(500ms)
+    key(down enter)
+<user.find> site [<user.text>] [{user.file_extension}]:
+    user.switcher_focus("Google Chrome")
+    key(cmd-t l p space)
+    insert(text or "")
+    insert(file_extension or "")
+    sleep(500ms)

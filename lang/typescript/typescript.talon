@@ -58,7 +58,9 @@ action(user.code_state_switch):
   insert("switch ()")
   key(left)
 
-action(user.code_state_case): "case :"
+action(user.code_state_case):
+  insert("case :")
+  key(left)
 
 action(user.code_state_go_to): ""
 
@@ -144,7 +146,7 @@ state var: "var "
 
 state async: "async "
 
-state await: "await "
+<user.operator> await: "await "
 
 state map:
   insert(".map()")
@@ -178,4 +180,4 @@ funky <user.text>$: user.code_default_function(text)
 pro funky <user.text>$: user.code_protected_function(text)
 pub funky <user.text>$: user.code_public_function(text)
 
-op new: insert("new ")  
+<user.operator> new: insert("new ")  
