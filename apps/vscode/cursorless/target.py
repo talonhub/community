@@ -81,26 +81,26 @@ ctx.lists["self.cursorless_matching"] = {
     matching_transformation.term: matching_transformation.value
 }
 
-symbol_definition_type_map = {
-    "funk": "function",
-    "named funk": "namedFunction",
+containing_scope_type_map = {
+    "funk": "namedFunction",
+    "lambda": "arrowFunction",
     "class": "class",
-    "symbol": "symbol",
+    "if": "ifStatement",
 }
 
-symbol_definition_types = {
+containing_scope_types = {
     term: {
         "transformation": {
-            "type": "containingSymbolDefinition",
-            "symbolType": symbol_definition_type,
+            "type": "containingScope",
+            "scopeType": containing_scope_type,
         }
     }
-    for term, symbol_definition_type in symbol_definition_type_map.items()
+    for term, containing_scope_type in containing_scope_type_map.items()
 }
 
-mod.list("symbol_definition_type", desc="Supported symbol extent types")
-ctx.lists["self.symbol_definition_type"] = {
-    key: json.dumps(value) for key, value in symbol_definition_types.items()
+mod.list("containing_scope_type", desc="Supported symbol extent types")
+ctx.lists["self.containing_scope_type"] = {
+    key: json.dumps(value) for key, value in containing_scope_types.items()
 }
 
 SELECTION_TYPE_KEY = "selectionType"
@@ -148,8 +148,8 @@ marks = {
     "change": {"mark": {"type": "lastEditRange"}},
     "last cursor": {"mark": {"type": "lastCursorPosition"}},
     **{
-        f"this {symbol_definition_type}": {**cursor_mark, **value}
-        for symbol_definition_type, value in symbol_definition_types.items()
+        f"this {containing_scope_type}": {**cursor_mark, **value}
+        for containing_scope_type, value in containing_scope_types.items()
     },
 }
 
@@ -159,7 +159,7 @@ ctx.lists["self.cursorless_mark"] = {
 }
 
 unmarked_cores = {
-    **symbol_definition_types,
+    **containing_scope_types,
     **{
         selection_type.singular: selection_type.json_repr
         for selection_type in SELECTION_TYPES
@@ -315,26 +315,23 @@ ctx.lists["self.cursorless_simple_transformations"] = {
 }
 
 
-@mod.capture(rule=("[inside] {user.symbol_definition_type} [containing]"))
-def cursorless_containing_symbol(m) -> str:
+@mod.capture(rule=("[inside] {user.containing_scope_type} [containing]"))
+def cursorless_containing_scope(m) -> str:
     """Supported extents for cursorless navigation"""
     if m[0] in ["inside"]:
-        current_target = json.loads(m.symbol_definition_type)
+        current_target = json.loads(m.containing_scope_type)
         current_target["transformation"]["valueOnly"] = True
         return json.dumps(current_target)
-    return m.symbol_definition_type
+    return m.containing_scope_type
 
 
 @mod.capture(
     rule=(
         "<user.cursorless_surrounding_pair> |"
         "{user.cursorless_simple_transformations} |"
-        "<user.cursorless_containing_symbol>"
+        "<user.cursorless_containing_scope>"
     )
 )
 def cursorless_range_transformation(m) -> str:
     """Supported positions for cursorless navigation"""
     return str(m)
-
-
-"range <user.decorated_symbol> through <user.decorated_symbol> | "

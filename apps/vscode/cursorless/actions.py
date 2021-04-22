@@ -19,13 +19,17 @@ ctx.lists["self.simple_cursorless_action"] = {
     "post": "setSelectionAfter",
     DELETE: "delete",
     # "sort": "sortLines",
+    # "float": "insertEmptyLineBelow",
+    # "drop": "insertEmptyLineBelow",
+    # Sort children?? (would need to sort only named ones to avoid commas)
+    # Reverse children
     # "cut": "cut",
     # "copy": "copy",
     # FIND: "findInFile",
     # f"{FIND} last": "findBackwardsInFile",
     # f"{FIND} all": "findAll",
     # "fold": "fold",
-    # "cursor": "addCursorAt",
+    # "stack": "addCursorAt",
     # "cursor all": "addCursorToAllLines",
     # "remove cursor": "removeCursor",
     # "tab": "indent",
@@ -41,6 +45,7 @@ ctx.lists["self.simple_cursorless_action"] = {
     # "act up": "scrollToTop",
     # "act eat": "scrollToMid",
     # "act down": "scrollToBottom",
+    # "breakpoint": "addBreakPoint",
     # # Accepts position
     # "paste": "paste",
 }
