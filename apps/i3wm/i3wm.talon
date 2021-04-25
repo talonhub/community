@@ -2,11 +2,6 @@
 os: linux
 tag: user.i3wm
 -
-settings():
-    user.i3_config_path = "~/.i3/config"
-    user.i3_mod_key = "super"
-
-
 port <number_small>: user.system_command("i3-msg workspace {number_small}")
 port ten: user.system_command("i3-msg workspace 10")
 (port flip|flipper): user.system_command("i3-msg workspace back_and_forth")
