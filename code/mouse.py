@@ -215,6 +215,11 @@ class Actions:
         """Starts gaze scroll"""
         global continuous_scoll_mode
         continuous_scoll_mode = "gaze scroll"
+
+        # enable 'control mouse' if eye tracker is present and not enabled already
+        if eye_mouse.tracker is not None and not config.control_mouse:
+            toggle_control(not config.control_mouse)
+
         start_cursor_scrolling()
         if setting_mouse_hide_mouse_gui.get() == 0:
             gui_wheel.show()
