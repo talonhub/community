@@ -25,6 +25,7 @@ click_job = None
 scroll_job = None
 gaze_job = None
 cancel_scroll_on_pop = True
+control_mouse_forced = False
 
 default_cursor = {
     "AppStarting": r"%SystemRoot%\Cursors\aero_working.ani",
@@ -209,16 +210,22 @@ class Actions:
 
     def mouse_scroll_stop():
         """Stops scrolling"""
+        global control_mouse_forced
         stop_scroll()
+        if control_mouse_forced and config.control_mouse:
+            toggle_control(not config.control_mouse)
+            control_mouse_forced = False
 
     def mouse_gaze_scroll():
         """Starts gaze scroll"""
         global continuous_scoll_mode
+        global control_mouse_forced
         continuous_scoll_mode = "gaze scroll"
 
         # enable 'control mouse' if eye tracker is present and not enabled already
         if eye_mouse.tracker is not None and not config.control_mouse:
             toggle_control(not config.control_mouse)
+            control_mouse_forced = True
 
         start_cursor_scrolling()
         if setting_mouse_hide_mouse_gui.get() == 0:
