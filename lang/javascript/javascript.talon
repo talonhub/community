@@ -6,6 +6,10 @@ tag(): user.code_operators
 tag(): user.code_comment
 tag(): user.code_generic
 
+state log:
+  insert("console.log()")
+  key(left)
+
 arrow function:
   " = () => {"
   key(enter)
