@@ -53,9 +53,9 @@ drag:
 	# close the mouse grid
 	user.grid_close()
 
-track downer: user.mouse_scroll_down_continuous()
-track upper: user.mouse_scroll_up_continuous()
-track stop: user.mouse_scroll_stop()
+dropping: user.mouse_scroll_down_continuous()
+rising: user.mouse_scroll_up_continuous()
+wheel stop: user.mouse_scroll_stop()
 
 drop: user.mouse_scroll_down()
 drop tiny: mouse_scroll(20)
