@@ -21,3 +21,5 @@ tab search <user.text>$:
   insert("% {text}")
   key(down)
 
+tab restore:
+  key(ctrl-shift-t)
