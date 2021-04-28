@@ -10,6 +10,8 @@ tag(): user.tabs
 tag(): user.git
 tag(): terminal
 
+quokka: key(shift-cmd-k)
+
 #talon app actions
 action(app.tab_close): user.vscode("workbench.action.closeActiveEditor")
 action(app.tab_next): user.vscode("workbench.action.nextEditorInGroup")
