@@ -11,6 +11,7 @@ tag(): user.git
 tag(): terminal
 
 quokka: key(shift-cmd-k)
+comment: key(cmd-/)
 
 #talon app actions
 action(app.tab_close): user.vscode("workbench.action.closeActiveEditor")
