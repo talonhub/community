@@ -18,7 +18,9 @@ ctx.lists["self.simple_cursorless_action"] = {
     "pree": "setSelectionBefore",
     "post": "setSelectionAfter",
     DELETE: "delete",
+    "clear": "clear",
     # "sort": "sortLines",
+    # "join": "joinLines",
     # "float": "insertEmptyLineBelow",
     # "drop": "insertEmptyLineBelow",
     # Sort children?? (would need to sort only named ones to avoid commas)

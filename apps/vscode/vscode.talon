@@ -71,10 +71,10 @@ action(user.split_window_vertically):
 action(user.split_window):
 	user.vscode("workbench.action.splitEditor")
 cross:
-	user.vscode("vscode-neovim.escape")
-	sleep(25ms)
+	# user.vscode("vscode-neovim.escape")
+	# sleep(25ms)
 	user.split_next()
-	key(a)
+	# key(a)
 # splits.py support end
 
 #multiple_cursor.py support begin

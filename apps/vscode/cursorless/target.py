@@ -33,6 +33,7 @@ BASE_TARGET = {"type": "primitive"}
 @mod.capture(
     rule=(
         "[{user.cursorless_position}] "
+        "[{user.cursorless_pair_surround_type}] "
         "[{user.cursorless_selection_type} [of | in | containing]] "
         "[<user.cursorless_range_transformation>] "
         "[<user.cursorless_indexer> [at]]"
@@ -84,8 +85,11 @@ ctx.lists["self.cursorless_matching"] = {
 containing_scope_type_map = {
     "funk": "namedFunction",
     "lambda": "arrowFunction",
+    "arrow": "arrowFunction",
     "class": "class",
     "if": "ifStatement",
+    "pair": "pair",
+    "arg": "argumentOrParameter",
 }
 
 containing_scope_types = {
@@ -176,8 +180,8 @@ ctx.lists["self.unmarked_core"] = {
 positions = {
     "after": {"position": "after"},
     "before": {"position": "before"},
-    "start of": {"position": "start"},
-    "end of": {"position": "end"},
+    "start of": {"position": "before", "insideOutsideType": "inside"},
+    "end of": {"position": "after", "insideOutsideType": "inside"},
     "above": {"position": "before", **LINE.json_repr},
     "below": {"position": "after", **LINE.json_repr},
 }
@@ -276,12 +280,12 @@ ctx.lists["self.pair_symbol"] = {
 }
 
 cursorless_pair_surround_types = {
-    "out": {"includePairDelimiter": True},
-    "outer": {"includePairDelimiter": True},
-    "outside": {"includePairDelimiter": True},
-    "in": {"includePairDelimiter": False},
-    "inner": {"includePairDelimiter": False},
-    "inside": {"includePairDelimiter": False},
+    "out": {"insideOutsideType": "outside"},
+    "outer": {"insideOutsideType": "outside"},
+    "outside": {"insideOutsideType": "outside"},
+    "in": {"insideOutsideType": "inside"},
+    "inner": {"insideOutsideType": "inside"},
+    "inside": {"insideOutsideType": "inside"},
 }
 
 mod.list("cursorless_pair_surround_type", desc="Supported pair surround types")
@@ -298,8 +302,8 @@ def cursorless_surrounding_pair(m) -> str:
             "transformation": {
                 "type": "surroundingPair",
                 "delimiter": m.pair_symbol,
-                **json.loads(m.cursorless_pair_surround_type),
             }
+            ** json.loads(m.cursorless_pair_surround_type),
         }
     )
 
