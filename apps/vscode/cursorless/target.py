@@ -90,6 +90,7 @@ containing_scope_type_map = {
     "if": "ifStatement",
     "pair": "pair",
     "arg": "argumentOrParameter",
+    "map": "dictionary",
 }
 
 containing_scope_types = {

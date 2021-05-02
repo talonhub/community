@@ -7,11 +7,11 @@ mode: command
 and code.language: typescript
 """
 # tbd
-# ctx.lists["user.code_functions"] = {
+ctx.lists["user.code_functions"] = {
 #     "integer": "int.TryParse",
-#     "print": "Console.WriteLine",
+    "print": "console.log",
 #     "string": ".ToString",
-# }
+}
 
 
 @ctx.action_class("user")

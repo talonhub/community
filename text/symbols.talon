@@ -15,7 +15,7 @@ line feed: "\\r\\n"
 empty round: "()"
 empty square: "[]"
 empty curly: "{}"
-empty ring: "<>"
+empty diamond: "<>"
 empty quad: '""'
 empty twin: "''"
 empty escaped quad: '\\"\\"'
@@ -49,10 +49,10 @@ square:
 curly: 
 	insert("{}") 
 	key(left)
-ring: 
+diamond: 
 	insert("<>") 
 	key(left)
-(ring | angle) that: 
+(diamond | angle) that: 
     text = edit.selected_text()
     user.paste("<{text}>")
 (curly | lace) that: 
