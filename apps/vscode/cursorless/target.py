@@ -37,7 +37,7 @@ BASE_TARGET = {"type": "primitive"}
         "[{user.cursorless_selection_type} [of | in | containing]] "
         "[<user.cursorless_range_transformation>] "
         "[<user.cursorless_indexer> [at]]"
-        "(<user.decorated_symbol> | {user.cursorless_mark} | {user.unmarked_core} | <user.cursorless_surrounding_pair> | <user.cursorless_indexer>)"
+        "(<user.decorated_symbol> | {user.cursorless_mark} | {user.unmarked_core} | <user.cursorless_surrounding_pair> | <user.cursorless_containing_scope> | <user.cursorless_indexer>)"
         "[<user.cursorless_indexer> | {user.cursorless_matching}]"
     )
 )
@@ -83,14 +83,16 @@ ctx.lists["self.cursorless_matching"] = {
 }
 
 containing_scope_type_map = {
-    "funk": "namedFunction",
-    "lambda": "arrowFunction",
+    "arg": "argumentOrParameter",
     "arrow": "arrowFunction",
     "class": "class",
+    "funk": "namedFunction",
     "if": "ifStatement",
-    "pair": "pair",
-    "arg": "argumentOrParameter",
+    "lambda": "arrowFunction",
     "map": "dictionary",
+    "pair": "pair",
+    "value": "pairValue",
+    "key": "pairKey",
 }
 
 containing_scope_types = {
@@ -320,12 +322,12 @@ ctx.lists["self.cursorless_simple_transformations"] = {
 }
 
 
-@mod.capture(rule=("[inside] {user.containing_scope_type} [containing]"))
+@mod.capture(rule=("[every] {user.containing_scope_type} [containing]"))
 def cursorless_containing_scope(m) -> str:
     """Supported extents for cursorless navigation"""
-    if m[0] in ["inside"]:
+    if m[0] in ["every"]:
         current_target = json.loads(m.containing_scope_type)
-        current_target["transformation"]["valueOnly"] = True
+        current_target["transformation"]["includeSiblings"] = True
         return json.dumps(current_target)
     return m.containing_scope_type
 
