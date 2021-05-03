@@ -8,9 +8,10 @@ and code.language: typescript
 """
 # tbd
 ctx.lists["user.code_functions"] = {
-#     "integer": "int.TryParse",
+    #     "integer": "int.TryParse",
     "print": "console.log",
-#     "string": ".ToString",
+    "flatten": "flatten",
+    #     "string": ".ToString",
 }
 
 
@@ -80,4 +81,3 @@ class user_actions:
     #     )
 
     #     actions.user.code_insert_function(result, None)
-

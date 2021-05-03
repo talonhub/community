@@ -86,13 +86,17 @@ containing_scope_type_map = {
     "arg": "argumentOrParameter",
     "arrow": "arrowFunction",
     "class": "class",
+    "elm": "listElement",
     "funk": "namedFunction",
     "if": "ifStatement",
+    "invoke": "functionCall",
+    "key": "pairKey",
     "lambda": "arrowFunction",
+    "list": "list",
     "map": "dictionary",
     "pair": "pair",
-    "value": "pairValue",
-    "key": "pairKey",
+    "state": "statement",
+    "value": "value",
 }
 
 containing_scope_types = {
@@ -140,6 +144,7 @@ ranked_selection_types = {
 }
 
 cursor_mark = {"mark": {"type": "cursor"}}
+that_mark = {"mark": {"type": "that"}}
 
 marks = {
     "here": cursor_mark,
@@ -152,10 +157,15 @@ marks = {
         f"these {selection_type.plural}": {**selection_type.json_repr, **cursor_mark}
         for selection_type in SELECTION_TYPES
     },
-    "change": {"mark": {"type": "lastEditRange"}},
+    "there": that_mark,
+    "that": that_mark,
     "last cursor": {"mark": {"type": "lastCursorPosition"}},
     **{
         f"this {containing_scope_type}": {**cursor_mark, **value}
+        for containing_scope_type, value in containing_scope_types.items()
+    },
+    **{
+        f"that {containing_scope_type}": {**that_mark, **value}
         for containing_scope_type, value in containing_scope_types.items()
     },
 }
