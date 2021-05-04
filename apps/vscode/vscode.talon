@@ -339,10 +339,12 @@ edit next here: user.vscode("editsHistory.moveCursorToNextEditInSameFile")
 join lines: user.vscode("editor.action.joinLines")
 
 commode:
+	user.vscode_and_wait("vscode-neovim.enable")
 	user.vscode("vscode-neovim.escape")
 	sleep(25ms)
 
 insert:
+	user.vscode_and_wait("vscode-neovim.disable")
 	key(i)
 	sleep(25ms)
 
