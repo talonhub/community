@@ -170,7 +170,6 @@ def update_lists():
                 running[spoken_form] = cur_app.name
 
         running_application_dict[cur_app.name] = True
-    print(running)
 
     for override in overrides:
         running[override] = overrides[override]
