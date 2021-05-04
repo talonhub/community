@@ -1,4 +1,3 @@
-from user.pokey_talon.code.terms import SELECT, TELEPORT, DELETE, FIND
 from talon import Context, actions, ui, Module, app, clip
 
 mod = Module()
@@ -14,10 +13,10 @@ mod.list("simple_cursorless_action", desc="Supported actions for cursorless navi
 ctx.lists["self.simple_cursorless_action"] = {
     # Accepts any single extent
     "spring": "setSelection",
-    SELECT: "setSelection",
+    "take": "setSelection",
     "pree": "setSelectionBefore",
     "post": "setSelectionAfter",
-    DELETE: "delete",
+    "chuck": "delete",
     "clear": "clear",
     # "sort": "sortLines",
     # "join": "joinLines",

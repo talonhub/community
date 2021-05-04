@@ -1,11 +1,7 @@
-from ....code.terms import SELECT, TELEPORT, DELETE, FIND
-
-from enum import Enum
 from dataclasses import dataclass
-from ....code.keys import symbol_key_words
 import json
 
-from talon import Context, actions, ui, Module, app, clip
+from talon import Context, Module
 
 ctx = Context()
 mod = Module()
@@ -273,30 +269,21 @@ def cursorless_indexer(m) -> str:
 
 
 pair_symbols = {
-    "[": "squareBrackets",
-    "]": "squareBrackets",
-    "{": "curlyBrackets",
-    "}": "curlyBrackets",
-    "<": "angleBrackets",
-    ">": "angleBrackets",
-    "(": "parentheses",
-    ")": "parentheses",
-    '"': "doubleQuotes",
-    "'": "singleQuotes",
+    "angle": "angleBrackets",
+    "curly": "curlyBrackets",
+    "diamond": "angleBrackets",
+    "quad": "doubleQuotes",
+    "round": "parentheses",
+    "square": "squareBrackets",
+    "twin": "singleQuotes",
 }
 
 mod.list("pair_symbol", desc="A pair symbol")
-ctx.lists["self.pair_symbol"] = {
-    phrase: pair_symbols[character]
-    for phrase, character in symbol_key_words.items()
-    if character in pair_symbols
-}
+ctx.lists["self.pair_symbol"] = pair_symbols
 
 cursorless_pair_surround_types = {
-    "out": {"insideOutsideType": "outside"},
     "outer": {"insideOutsideType": "outside"},
     "outside": {"insideOutsideType": "outside"},
-    "in": {"insideOutsideType": "inside"},
     "inner": {"insideOutsideType": "inside"},
     "inside": {"insideOutsideType": "inside"},
 }
