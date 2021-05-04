@@ -3,7 +3,19 @@ from talon.scripting import global_speech_system
 from talon import actions, canvas, ui, ctrl, cron
 from talon.types import Rect
 
-display_canvas = False
+# Can be no-overlay, gif-capture, or screenshare
+mode = "no-overlay"
+# mode = "gif-capture"
+# mode = "screenshare"
+
+display_canvas = mode != "no-overlay"
+
+if mode == "gif-capture":
+    action_wait = "1s"
+    canvas_hide_wait = "1500ms"
+elif mode == "screenshare":
+    action_wait = "0s"
+    canvas_hide_wait = "1000ms"
 
 
 def _draw(canvas):
@@ -21,7 +33,7 @@ def reposition_canvas():
 
 
 if display_canvas:
-    can = canvas.Canvas.from_rect(Rect(453, 766, 800, 50))
+    can = canvas.Canvas.from_rect(Rect(617, 388, 800, 50))
     can.register("draw", _draw)
     can.show()
     can.freeze()
@@ -40,7 +52,8 @@ def _log(args):
     text = f"\"{' '.join(args['text'])}\""
     can.show()
     can.freeze()
-    cron.after("1s", hide_canvas)
+    actions.sleep(action_wait)
+    cron.after(canvas_hide_wait, hide_canvas)
 
 
 if display_canvas:

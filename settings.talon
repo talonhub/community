@@ -2,7 +2,7 @@
 settings():
     speech.record_all = 1
     speech.debug = 1
-    speech.timeout = 0.15
+    speech.timeout = 0.175
     #adjust the scale of the imgui to my liking
     imgui.scale = 1.3
     # enable if you'd like the picker gui to automatically appear when explorer has focus
