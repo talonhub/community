@@ -139,20 +139,20 @@ class Actions:
         close_homophones()
 
     def homophones_show(m: str):
-        """Sentence formatter"""
+        """Show the homophones display"""
         print(m)
         raise_homophones(m, False, False)
 
     def homophones_show_selection():
-        """Sentence formatter"""
+        """Show the homophones display for the selected text"""
         raise_homophones(actions.edit.selected_text(), False, True)
 
     def homophones_force_show(m: str):
-        """Sentence formatter"""
+        """Show the homophones display forcibly"""
         raise_homophones(m, True, False)
 
     def homophones_force_show_selection():
-        """Sentence formatter"""
+        """Show the homophones display for the selected text forcibly"""
         raise_homophones(actions.edit.selected_text(), True, True)
 
     def homophones_select(number: int) -> str:
@@ -165,4 +165,3 @@ class Actions:
         )
         app.notify(error)
         raise error
-

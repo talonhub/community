@@ -47,13 +47,13 @@ class win_actions:
 
 @ctx.action_class("edit")
 class edit_actions:
-    def find(text: str):
+    def find(text = None):
         if is_mac:
             actions.key("cmd-f")
         else:
             actions.key("ctrl-f")
-
-        actions.insert(text)
+        if text is not None:
+            actions.insert(text)
 
     def line_swap_up():
         actions.key("alt-up")

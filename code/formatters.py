@@ -263,6 +263,9 @@ class Actions:
     def formatters_reformat_selection(formatters: str) -> str:
         """Reformats the current selection."""
         selected = edit.selected_text()
+        if not selected:
+            print("Asked to reformat selection, but nothing selected!")
+            return
         unformatted = re.sub(r"[^a-zA-Z0-9]+", " ", selected).lower()
         # TODO: Separate out camelcase & studleycase vars
 
