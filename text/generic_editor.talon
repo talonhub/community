@@ -86,10 +86,10 @@ select word:
 <user.select> writer:
     edit.extend_word_right()
 
-take start:
+take head:
     edit.extend_line_start()
 
-take close:
+take tail:
     edit.extend_line_end()
 
 select way up:
@@ -138,11 +138,11 @@ swallow:
 swallow <number_small> now:
     user.delete_word_right_n(number_small)
 
-<user.delete> start:
+<user.delete> head:
     edit.extend_line_start()
     edit.delete()
 
-<user.delete> close:
+<user.delete> tail:
     edit.extend_line_end()
     edit.delete()
 
