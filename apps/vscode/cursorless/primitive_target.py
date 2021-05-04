@@ -41,7 +41,7 @@ BASE_TARGET = {"type": "primitive"}
         "[<user.cursorless_indexer> | {user.cursorless_matching}]"
     )
 )
-def cursorless_target(m) -> str:
+def cursorless_primitive_target(m) -> str:
     """Supported extents for cursorless navigation"""
     object = BASE_TARGET.copy()
     for capture in m:

@@ -1,15 +1,15 @@
 import json
-from .target import BASE_TARGET, cursor_mark
-from talon import Context, actions, ui, Module, app, clip
+from .primitive_target import BASE_TARGET
+from talon import Module
 
 mod = Module()
 
 
 @mod.capture(
     rule=(
-        "<user.cursorless_target> | "
-        "through <user.cursorless_target> | "
-        "[range] <user.cursorless_target> through <user.cursorless_target>"
+        "<user.cursorless_primitive_target> | "
+        "through <user.cursorless_primitive_target> | "
+        "[range] <user.cursorless_primitive_target> through <user.cursorless_primitive_target>"
     )
 )
 def cursorless_range(m) -> str:
@@ -18,7 +18,7 @@ def cursorless_range(m) -> str:
         if m[0] == "through":
             start = BASE_TARGET.copy()
         else:
-            start = json.loads(m.cursorless_target_list[0])
+            start = json.loads(m.cursorless_primitive_target_list[0])
         return json.dumps(
             {
                 "type": "range",
@@ -31,7 +31,7 @@ def cursorless_range(m) -> str:
 
 
 @mod.capture(rule=("<user.cursorless_range> (and <user.cursorless_range>)*"))
-def cursorless_arg(m) -> str:
+def cursorless_target(m) -> str:
     if len(m.cursorless_range_list) == 1:
         return m.cursorless_range
     return json.dumps(
