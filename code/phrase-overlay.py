@@ -1,6 +1,6 @@
 # From splondike
 from talon.scripting import global_speech_system
-from talon import canvas, ui, ctrl, cron
+from talon import actions, canvas, ui, ctrl, cron
 from talon.types import Rect
 
 display_canvas = False
@@ -21,7 +21,7 @@ def reposition_canvas():
 
 
 if display_canvas:
-    can = canvas.Canvas.from_rect(Rect(500, 850, 600, 50))
+    can = canvas.Canvas.from_rect(Rect(453, 766, 800, 50))
     can.register("draw", _draw)
     can.show()
     can.freeze()
@@ -31,10 +31,16 @@ text = ""
 # reposition_canvas()
 
 
+def hide_canvas():
+    can.hide()
+
+
 def _log(args):
     global text, can
     text = f"\"{' '.join(args['text'])}\""
+    can.show()
     can.freeze()
+    cron.after("1s", hide_canvas)
 
 
 if display_canvas:
