@@ -20,7 +20,7 @@ voice code:
     user.switcher_focus("Code")
     user.vscode("workbench.action.openRecent")
     sleep(50ms)
-    insert("pokey_talon")
+    insert("pokey-talon")
     key(enter)
     sleep(250ms)
    
