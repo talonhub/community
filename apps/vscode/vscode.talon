@@ -26,48 +26,30 @@ action(edit.indent_less): user.vscode("editor.action.outdentLines")
 action(edit.save_all): user.vscode("workbench.action.files.saveAll")
 
 # splits.py support begin
-action(user.split_clear_all):
-	user.vscode("workbench.action.editorLayoutSingle")
-action(user.split_clear):
-	user.vscode("workbench.action.joinTwoGroups")
-action(user.split_flip):
-	user.vscode("workbench.action.toggleEditorGroupLayout") 
-action(user.split_last):
-	user.vscode("workbench.action.focusLeftGroup")
-action(user.split_next): 
-	user.vscode_and_wait("workbench.action.focusRightGroup")
-action(user.split_window_down):
-	user.vscode("workbench.action.moveEditorToBelowGroup")
-action(user.split_window_horizontally):
-	user.vscode("workbench.action.splitEditorOrthogonal")
-action(user.split_window_left):
-	user.vscode("workbench.action.moveEditorToLeftGroup")
-action(user.split_window_right):
-	user.vscode("workbench.action.moveEditorToRightGroup")
-action(user.split_window_up):
-	user.vscode("workbench.action.moveEditorToAboveGroup")
-action(user.split_window_vertically):
-	user.vscode("workbench.action.splitEditor")
-action(user.split_window):
-	user.vscode("workbench.action.splitEditor")
+action(user.split_clear_all): user.vscode("workbench.action.editorLayoutSingle")
+action(user.split_clear): user.vscode("workbench.action.joinTwoGroups")
+action(user.split_flip): user.vscode("workbench.action.toggleEditorGroupLayout") 
+action(user.split_last): user.vscode("workbench.action.focusLeftGroup")
+action(user.split_next): user.vscode_and_wait("workbench.action.focusRightGroup")
+action(user.split_window_down): user.vscode("workbench.action.moveEditorToBelowGroup")
+action(user.split_window_horizontally): user.vscode("workbench.action.splitEditorOrthogonal")
+action(user.split_window_left): user.vscode("workbench.action.moveEditorToLeftGroup")
+action(user.split_window_right): user.vscode("workbench.action.moveEditorToRightGroup")
+action(user.split_window_up): user.vscode("workbench.action.moveEditorToAboveGroup")
+action(user.split_window_vertically): user.vscode("workbench.action.splitEditor")
+action(user.split_window): user.vscode("workbench.action.splitEditor")
 # splits.py support end
 
 #multiple_cursor.py support begin
 #note: vscode has no explicit mode for multiple cursors
-action(user.multi_cursor_add_above):
-	user.vscode("editor.action.insertCursorAbove")
-action(user.multi_cursor_add_below):
-	user.vscode("editor.action.insertCursorBelow")
-action(user.multi_cursor_add_to_line_ends):
-	user.vscode("editor.action.insertCursorAtEndOfEachLineSelected")
+action(user.multi_cursor_add_above): user.vscode("editor.action.insertCursorAbove")
+action(user.multi_cursor_add_below): user.vscode("editor.action.insertCursorBelow")
+action(user.multi_cursor_add_to_line_ends): user.vscode("editor.action.insertCursorAtEndOfEachLineSelected")
 action(user.multi_cursor_disable): key(escape)
 action(user.multi_cursor_enable): skip()
-action(user.multi_cursor_select_all_occurrences):
-	user.vscode("editor.action.selectHighlights")
-action(user.multi_cursor_select_fewer_occurrences):
-	user.vscode("cursorUndo")
-action(user.multi_cursor_select_more_occurrences):
-	user.vscode("editor.action.addSelectionToNextFindMatch")
+action(user.multi_cursor_select_all_occurrences): user.vscode("editor.action.selectHighlights")
+action(user.multi_cursor_select_fewer_occurrences): user.vscode("cursorUndo")
+action(user.multi_cursor_select_more_occurrences): user.vscode("editor.action.addSelectionToNextFindMatch")
 #multiple_cursor.py support end
 
 please [<user.text>]: 
@@ -122,11 +104,9 @@ file rename:
 file move:
 	user.vscode("fileutils.moveFile")
 	sleep(150ms)
-file open folder:
-	user.vscode("revealFileInOS")
+file open folder: user.vscode("revealFileInOS")
 file reveal: user.vscode("workbench.files.action.showActiveFileInExplorer") 
-save ugly:
-    user.vscode("workbench.action.files.saveWithoutFormatting")
+save ugly: user.vscode("workbench.action.files.saveWithoutFormatting")
 
 # Language Features
 suggest show: user.vscode("editor.action.triggerSuggest")
