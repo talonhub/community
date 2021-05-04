@@ -35,10 +35,12 @@ def devices_changed(device_type):
             if name in PREFERRED_MICROPHONES:
                 print(f"Setting microphone to {name}")
                 actions.speech.set_microphone(device.name)
-                actions.speech.enable()
+                # actions.speech.enable()
+                app.notify(f"Microphone set to '{name}'")
                 return
         print(f"Setting microphone to None")
         actions.speech.set_microphone("None")
+        app.notify("Microphone set to None")
 
 
 ctx.register("devices_changed", devices_changed)
