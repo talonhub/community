@@ -56,6 +56,7 @@ mod = Module()
 mod.list(
     "mouse_button", desc="List of mouse button words to mouse_click index parameter"
 )
+mod.tag("my_mouse_debug", desc="a tag to flag control mouse events in log")
 setting_mouse_enable_pop_click = mod.setting(
     "mouse_enable_pop_click",
     type=int,
