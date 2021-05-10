@@ -1,3 +1,6 @@
+shock:
+  key(cmd-enter)
+
 you bun to:
   "Ubuntu"
 
