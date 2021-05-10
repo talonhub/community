@@ -13,4 +13,11 @@
 (grid | greed | great) template columns:
   "grid-template-columns: ;"
   key(left)
-  
+
+(grid | greed | great) row gap:
+  "grid-row-gap: ;"
+  key(left)  
+
+(grid | greed | great) column gap:
+  "grid-column-gap: ;"
+  key(left)  
