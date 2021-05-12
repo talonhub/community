@@ -65,3 +65,4 @@ action(user.messaging_upload_file): key(ctrl-u)
 emote <user.text>: "{text}"
 toggle left sidebar: key(ctrl-shift-d)
 toggle right sidebar: key(ctrl-.)
+all unread: key(ctrl-shift-a)
