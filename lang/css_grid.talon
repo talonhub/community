@@ -21,3 +21,35 @@
 (grid | greed | great) column gap:
   "grid-column-gap: ;"
   key(left)  
+
+(grid | greed | great) gap:
+  "grid-gap: ;"
+  key(left)  
+
+(grid | greed | great) row start:
+  "grid-row-start: ;"
+  key(left)  
+
+(grid | greed | great) column start:
+  "grid-column-start: ;"
+  key(left)  
+
+(grid | greed | great) row end:
+  "grid-row-end: ;"
+  key(left)  
+
+(grid | greed | great) column end:
+  "grid-column-end: ;"
+  key(left)  
+
+(grid | greed | great) column:
+  "grid-column: ;"
+  key(left)  
+
+(grid | greed | great) row:
+  "grid-row: ;"
+  key(left)
+
+(grid | greed | great) area:
+  "grid-area: ;"
+  key(left)
