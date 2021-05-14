@@ -257,16 +257,21 @@ class Actions:
 
     def dictation_peek_right() -> Optional[str]:
         """
-        Tries to get the character after the cursor for auto-spacing purposes.
+        Tries to get a few characters after the cursor for auto-spacing.
         Results are not guaranteed; dictation_peek_right() may return None to
         indicate no information. (Note that returning the empty string ""
         indicates there is nothing after cursor, ie. we are at the end of the
         document.)
         """
+        # We grab two characters because I think that's what no_space_before
+        # needs in the worst case. An example where the second character matters
+        # is inserting before (1) "' hello" vs (2) "'hello". In case (1) we
+        # don't want to add space, in case (2) we do.
         actions.edit.extend_right()
-        char = actions.edit.selected_text()
-        if char: actions.edit.left()
-        return char
+        actions.edit.extend_right()
+        after = actions.edit.selected_text()
+        if after: actions.edit.left()
+        return after
 
 # Use the dictation formatter in dictation mode.
 dictation_ctx = Context()
