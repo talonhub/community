@@ -53,3 +53,7 @@
 (grid | greed | great) area:
   "grid-area: ;"
   key(left)
+
+(grid | greed | great) template areas:
+  "grid-template-areas: \"\" ;"
+  key(left:3)
