@@ -57,3 +57,7 @@
 (grid | greed | great) template areas:
   "grid-template-areas: \"\" ;"
   key(left:3)
+
+min max:
+  "minmax()"
+  key(left)
