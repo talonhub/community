@@ -61,3 +61,7 @@
 min max:
   "minmax()"
   key(left)
+
+(grid | greed | great) template:
+  "grid-template: ;"
+  key(left)
