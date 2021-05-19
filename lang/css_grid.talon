@@ -65,3 +65,15 @@ min max:
 (grid | greed | great) template:
   "grid-template: ;"
   key(left)
+
+(grid | greed | great) auto flow column:
+  "grid-auto-flow: column;"
+  key(enter)
+
+(grid | greed | great) auto flow sparse:
+  "grid-auto-flow: sparse;"
+  key(enter)
+
+(grid | greed | great) auto flow dense:
+  "grid-auto-flow: dense;"
+  key(enter)
