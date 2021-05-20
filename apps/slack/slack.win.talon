@@ -28,7 +28,7 @@ action(user.messaging_unread_next): key(alt-shift-down)
 (slack | lack) (my stuff | activity): key(ctrl-shift-m)
 (slack | lack) directory: key(ctrl-shift-e)
 (slack | lack) (starred [items] | stars): key(ctrl-shift-s)
-(slack | lack) unread [messages]: key(ctrl-j)
+(slack | lack) unread [messages]: key(ctrl-shift-a)
 #(go | undo | toggle) full: key(ctrl-cmd-f)
 action(user.messaging_open_search): key(ctrl-f)
 # Messaging
