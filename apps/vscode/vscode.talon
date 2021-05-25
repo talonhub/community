@@ -126,19 +126,19 @@ refactor rename: user.vscode("editor.action.rename")
 refactor this: user.vscode("editor.action.refactor")
 
 #code navigation
-(go declaration | follow): user.vscode("Go to Declaration")
-go back: user.vscode("workbench.action.navigateBack") 
-go forward:  user.vscode("workbench.action.navigateForward")  
-go implementation: user.vscode("Go to Implementation")
-go recent: user.vscode("File: Open Recent")
-go type: user.vscode("editor.action.goToTypeDefinition")
-go usage: user.vscode("References: Find All References")
+#(go declaration | follow): user.vscode("Go to Declaration")
+#go back: user.vscode("workbench.action.navigateBack") 
+#go forward:  user.vscode("workbench.action.navigateForward")  
+#go implementation: user.vscode("Go to Implementation")
+#go recent: user.vscode("File: Open Recent")
+#go type: user.vscode("editor.action.goToTypeDefinition")
+#go usage: user.vscode("References: Find All References")
 
 # Bookmarks. Requires Bookmarks plugin
-go marks: user.vscode("View: Show Bookmarks")
-toggle mark: user.vscode("Bookmarks: Toggle")
-go next mark: user.vscode("Bookmarks: Jump to Next")
-go last mark: user.vscode("Bookmarks: Jump to Previous")
+#go marks: user.vscode("View: Show Bookmarks")
+#toggle mark: user.vscode("Bookmarks: Toggle")
+#go next mark: user.vscode("Bookmarks: Jump to Next")
+#go last mark: user.vscode("Bookmarks: Jump to Previous")
 
 # Folding
 fold that: user.vscode("editor.fold")
