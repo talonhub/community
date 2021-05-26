@@ -49,7 +49,7 @@ _capitalize_defaults = [
 # Default words that need to be remapped.
 _word_map_defaults = {
     # E.g:
-    # "cash": "cache",
+    # "cache": "cash",
 }
 _word_map_defaults.update({word.lower(): word for word in _capitalize_defaults})
 
