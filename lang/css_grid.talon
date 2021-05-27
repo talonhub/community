@@ -80,6 +80,8 @@ min max:
 
 (grid | greed | great) auto columns:
   "grid-auto-columns: ;"
+  key(left)
 
 (grid | greed | great) auto rows:
   "grid-auto-rows: ;"
+  key(left)
