@@ -77,3 +77,9 @@ min max:
 (grid | greed | great) auto flow dense:
   "grid-auto-flow: dense;"
   key(enter)
+
+(grid | greed | great) auto columns:
+  "grid-auto-columns: ;"
+
+(grid | greed | great) auto rows:
+  "grid-auto-rows: ;"
