@@ -1,3 +1,9 @@
+fantasizes:
+  "font sizes"
+
+fantasize:
+  "font size"
+
 shock:
   key(cmd-enter)
 
