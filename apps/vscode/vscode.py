@@ -234,11 +234,3 @@ class user_actions:
         actions.edit.find(text)
         actions.sleep("100ms")
         actions.key("esc")
-
-    def select_next_token():
-        actions.edit.find("")
-        actions.key("enter")
-        actions.key("enter")
-        actions.key("esc")
-
-    # find_and_replace.py support end
