@@ -17,9 +17,15 @@ show list {user.things_project}: user.show_things_list(things_project)
 
 follow link: key(cmd-alt-enter)
 
-tag this <user.things_tags>: user.tag_todo(things_tags)
-move this [to] {user.things_project}: user.move_todo(things_project)
-move this [to] inbox: user.move_todo("Inbox")
+tag this <user.things_tags>:
+    user.tag_todo(things_tags)
+    sleep(100ms)
+move this [to] {user.things_project}:
+    user.move_todo(things_project)
+    sleep(100ms)
+move this [to] inbox:
+    user.move_todo("Inbox")
+    sleep(100ms)
 
 do this today: key(cmd-t)
 do this evening: key(cmd-e)

@@ -5,7 +5,7 @@
 #     user.mouse_wake()
 #     user.history_enable()
 #     user.talon_mode()
-snore [<phrase>]$:
+drowse [<phrase>]$:
     user.switcher_hide_running()
     user.history_disable()
     user.homophones_hide()

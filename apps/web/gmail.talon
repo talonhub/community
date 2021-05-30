@@ -1,7 +1,6 @@
 tag: browser
-win.title: /gmail.com/
+win.title: /mail\.google\.com/
 -
-
 show inbox: key(escape i g i escape)
 email sign off:
     edit.line_end()

@@ -109,7 +109,7 @@ side dog: user.vscode("workbench.action.toggleSidebarVisibility")
 search next: user.vscode("search.action.focusNextSearchResult")
 search last: user.vscode("search.action.focusPreviousSearchResult")
 
-symbol hunt [<user.text>]:
+<user.find> symbol[<user.text>]:
   user.vscode("workbench.action.gotoSymbol")
   sleep(50ms)
   insert(text or "")
@@ -245,8 +245,8 @@ toggle mark: user.vscode("bookmarks.toggle")
 <user.teleport> last mark: user.vscode("bookmarks.jumpToPrevious")
 
 # Folding
-fold that: user.vscode("editor.fold")
-unfold that: user.vscode("editor.unfold")
+# fold that: user.vscode("editor.fold")
+# unfold that: user.vscode("editor.unfold")
 fold those: user.vscode("editor.foldAllMarkerRegions")
 unfold those: user.vscode("editor.unfoldRecursively")
 fold all: user.vscode("editor.foldAll")
@@ -371,6 +371,7 @@ stage on:
 	user.vscode_and_wait("git.stage")
 	key(cmd-w)
 	user.vscode_and_wait("workbench.scm.focus")
+	key(shift-tab)
 	key(down:100)
 	sleep(100ms)
 	key(enter)
@@ -387,3 +388,11 @@ yes:
 	key(tab)
 
 install local: user.vscode("workbench.extensions.action.installVSIX")
+
+zoom (talk | demo | big):
+	user.set_zoom_level(4)
+
+zoom (normal | regular):
+	user.set_zoom_level(1)
+
+make executable: user.vscode("chmod.plusX")

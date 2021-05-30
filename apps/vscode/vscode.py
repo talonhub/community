@@ -1,4 +1,7 @@
 from talon import Context, actions, ui, Module, app, clip
+import re
+from pathlib import Path
+from os.path import expanduser
 
 is_mac = app.platform == "mac"
 
@@ -47,7 +50,7 @@ class win_actions:
 
 @ctx.action_class("edit")
 class edit_actions:
-    def find(text = None):
+    def find(text=None):
         if is_mac:
             actions.key("cmd-f")
         else:
@@ -71,11 +74,25 @@ class edit_actions:
         actions.edit.line_start()
 
 
+zoom_level_regex = re.compile(r'"window.zoomLevel": \d')
+
+
 @mod.action_class
 class Actions:
     def vscode_terminal(number: int):
         """Activate a terminal by number"""
         actions.user.vscode(f"workbench.action.terminal.focusAtIndex{number}")
+
+    def set_zoom_level(level: int):
+        """Set zoom level"""
+        original_settings_path = Path(
+            expanduser("~/Library/Application Support/Code/User/settings.json")
+        )
+        original_settings = original_settings_path.read_text()
+        new_settings = zoom_level_regex.sub(
+            f'"window.zoomLevel": {level}', original_settings
+        )
+        original_settings_path.write_text(new_settings)
 
 
 @ctx.action_class("user")

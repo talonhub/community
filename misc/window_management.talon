@@ -14,7 +14,7 @@ snap <user.running_applications> <user.window_snap_position>:
     user.snap_app(running_applications, window_snap_position)
 snap <user.running_applications> [screen] <number>:
     user.move_app_to_screen(running_applications, number)
-browser: user.switcher_focus("Google Chrome")
+portal: user.switcher_focus("Google Chrome")
 coder: user.switcher_focus("Code")
 voice code:
     user.switcher_focus("Code")
