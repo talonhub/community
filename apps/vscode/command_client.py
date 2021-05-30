@@ -49,7 +49,7 @@ def run_vscode_command(
     port_file_path = Path(gettempdir()) / "vscode-port"
 
     if not port_file_path.exists():
-        if args or wait_for_finish or expect_response or decode_json_arguments:
+        if args or expect_response or decode_json_arguments:
             raise Exception("Must use command-server extension for advanced commands")
         print("Port file not found; using command palette")
         run_vscode_command_by_command_palette(command)
@@ -111,7 +111,15 @@ def run_vscode_command(
 
 @mod.action_class
 class Actions:
-    def vscode(
+    def vscode(command: str):
+        """Execute command via vscode command server, if available."""
+        run_vscode_command(command)
+
+    def vscode_and_wait(command: str):
+        """Execute command via vscode command server, if available, and wait for command to finish."""
+        run_vscode_command(command, wait_for_finish=True)
+
+    def vscode_with_plugin(
         command: str,
         arg1: Any = NotSet,
         arg2: Any = NotSet,
@@ -129,7 +137,7 @@ class Actions:
             arg5,
         )
 
-    def vscode_and_wait(
+    def vscode_with_plugin_and_wait(
         command: str,
         arg1: Any = NotSet,
         arg2: Any = NotSet,
