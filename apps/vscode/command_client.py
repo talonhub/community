@@ -69,6 +69,7 @@ def run_vscode_command(
         new_contents = port_file_path.read_text()
 
     port = decoded_contents["port"]
+    nonce = decoded_contents["nonce"]
 
     response = requests.post(
         f"http://localhost:{port}/execute-command",
@@ -77,6 +78,7 @@ def run_vscode_command(
             "args": args,
             "waitForFinish": wait_for_finish,
             "expectResponse": expect_response,
+            "nonce": nonce,
         },
         timeout=(0.05, 3.05),
     )
