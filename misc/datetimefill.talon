@@ -1,6 +1,0 @@
-date fill: user.date_fill()
-date fill UTC: user.date_fill_utc()
-timestamp fill: user.timestamp_fill()
-timestamp fill high resolution: user.timestamp_fill_hires()
-timestamp fill UTC: user.timestamp_fill_utc()
-timestamp fill UTC high resolution: user.timestamp_fill_utc_hires()

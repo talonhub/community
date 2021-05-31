@@ -1,0 +1,6 @@
+date insert: insert(user.date_now())
+date insert UTC: insert(user.date_now_utc())
+timestamp insert: insert(user.timestamp_now())
+timestamp insert high resolution: insert(user.timestamp_now_hires())
+timestamp insert UTC: insert(user.timestamp_now_utc())
+timestamp insert UTC high resolution: insert(user.timestamp_now_utc_hires())
