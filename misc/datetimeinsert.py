@@ -7,21 +7,20 @@ ctx = Context()
 
 @mod.action_class
 class Actions:
-    def date_now() -> str:
-        """Return the current date"""
-        return str( datetime.date.today() )
-    def date_now_utc() -> str:
-        """Return the current UTC date"""
-        return str( datetime.datetime.utcnow().date() )
-    def timestamp_now() -> str:
-        """Return the current timestamp"""
-        return str( datetime.datetime.now() ).split( '.' )[ 0 ]
-    def timestamp_now_hires() -> str:
-        """Return the current timestamp with fractional second"""
-        return str( datetime.datetime.now() )
-    def timestamp_now_utc() -> str:
-        """Return the current UTC timestamp"""
-        return str( datetime.datetime.utcnow() ).split( '.' )[ 0 ]
-    def timestamp_now_utc_hires() -> str:
-        """Return the current UTC timestamp with fractional second"""
-        return str( datetime.datetime.utcnow() )
+    def time_format(fmt: str=None) -> str:
+        """Return current local date or datetime formatted as a str using 'fmt', which
+should be a .strftime() style format string; if 'fmt' is not
+specified, iso format is used"""
+        now = datetime.datetime.now()
+        if fmt is None:
+            return now.isoformat()
+        return now.strftime(fmt)
+
+    def time_format_utc(fmt: str=None) -> str:
+        """Return current UTC date or datetime formatted as a str using 'fmt', which
+should be a .strftime() style format string; if 'fmt' is not
+specified, iso format is used"""
+        now = datetime.datetime.utcnow()
+        if fmt is None:
+            return now.isoformat()
+        return now.strftime(fmt)
