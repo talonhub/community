@@ -136,6 +136,7 @@ punctuation_words = {
     "back tick": "`",
     "comma": ",",
     "period": ".",
+    "full stop": ".",
     "semicolon": ";",
     "colon": ":",
     "forward slash": "/",
