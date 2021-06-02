@@ -66,6 +66,7 @@ ctx.settings["dictate.word_map"] = get_list_from_csv(
 
 
 # Default words that should be added to Talon's vocabulary.
+# Don't edit this. Edit additional_vocabulary.csv instead
 _simple_vocab_default = ["nmap", "admin", "Cisco", "Citrix", "VPN", "DNS", "Minecraft"]
 
 # Defaults for different pronounciations of words that need to be added to
