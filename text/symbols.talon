@@ -5,7 +5,7 @@ double dash: "--"
 (rbrack | are bracket | right bracket): "}"
 triple quote: "'''"
 (triple grave | triple grave accent):
-	insert("```")
+    insert("```")
 (grave | grave accent):
     insert("`")
 (dot dot | dotdot): ".."
