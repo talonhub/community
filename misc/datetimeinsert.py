@@ -3,7 +3,6 @@ from talon import Context, actions, Module
 
 mod = Module()
 apps = mod.apps
-ctx = Context()
 
 @mod.action_class
 class Actions:
