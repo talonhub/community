@@ -49,7 +49,8 @@ _capitalize_defaults = [
 # Default words that need to be remapped.
 _word_map_defaults = {
     # E.g:
-    # "cache": "cash",
+    # "cash": "cache",
+    # This is the opposite ordering to words_to_replace.csv (the latter has the target word first)
 }
 _word_map_defaults.update({word.lower(): word for word in _capitalize_defaults})
 
