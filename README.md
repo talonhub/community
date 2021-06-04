@@ -339,6 +339,10 @@ user.code_libraries
 
 where appropriate. See e.g. csharp.py/csharp.talon. At least, until we come up with something better 👍 
 
+## Automated tests
+
+There are a number of automated tests in the repository which are run outside of the Talon environment. To run them make sure you have the `pytest` python package installed. You can then just run the `pytest` command from the repository root to execute all the tests.
+
 # Talon documentation
 For official documentation on Talon's API and features, please visit https://talonvoice.com/docs/. 
 
