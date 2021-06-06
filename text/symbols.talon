@@ -7,7 +7,6 @@ triple quote: "'''"
 (triple grave | triple back tick | gravy):
     insert("```")
 (dot dot | dotdot): ".."
-#ellipses: "…"
 ellipses: "..."
 (comma and | spamma): ", "
 plus: "+"
