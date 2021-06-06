@@ -73,6 +73,27 @@ class edit_actions:
 
 @mod.action_class
 class Actions:
+    def vscode(command: str):
+        """Execute command via command palette. Preserves the clipboard."""
+        # Clip is noticeably faster than insert
+        if not is_mac:
+            actions.key("ctrl-shift-p")
+        else:
+            actions.key("cmd-shift-p")
+
+        actions.user.paste(f"{command}")
+        actions.key("enter")
+
+    def vscode_ignore_clipboard(command: str):
+        """Execute command via command palette. Does NOT preserve the clipboard for commands like copyFilePath"""
+        clip.set_text(f"{command}")
+        if not is_mac:
+            actions.key("ctrl-shift-p")
+        else:
+            actions.key("cmd-shift-p")
+        actions.edit.paste()
+        actions.key("enter")
+
     def vscode_terminal(number: int):
         """Activate a terminal by number"""
         actions.user.vscode(f"workbench.action.terminal.focusAtIndex{number}")
@@ -213,11 +234,3 @@ class user_actions:
         actions.edit.find(text)
         actions.sleep("100ms")
         actions.key("esc")
-
-    def select_next_token():
-        actions.edit.find("")
-        actions.key("enter")
-        actions.key("enter")
-        actions.key("esc")
-
-    # find_and_replace.py support end
