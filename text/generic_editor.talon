@@ -210,3 +210,8 @@ cut word right:
 cut line:
     edit.select_line()
     edit.cut()
+
+copypaste:
+    edit.copy()
+    sleep(10ms)
+    edit.paste()
