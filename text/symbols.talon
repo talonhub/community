@@ -4,10 +4,8 @@ double dash: "--"
 (bracket | brack | left bracket): "{"
 (rbrack | are bracket | right bracket): "}"
 triple quote: "'''"
-(triple grave | triple grave accent):
+(triple grave | triple back tick | gravy):
     insert("```")
-(grave | grave accent):
-    insert("`")
 (dot dot | dotdot): ".."
 #ellipses: "…"
 ellipses: "..."
@@ -35,31 +33,31 @@ empty escaped string:
 (inside parens | args):
 	insert("()")
 	key(left)
-inside (squares | list): 
-	insert("[]") 
+inside (squares | list):
+	insert("[]")
 	key(left)
-inside (bracket | braces): 
-	insert("{}") 
+inside (bracket | braces):
+	insert("{}")
 	key(left)
-inside percent: 
-	insert("%%") 
+inside percent:
+	insert("%%")
 	key(left)
 inside quotes:
 	insert('""')
 	key(left)
-inside (graves | grave accents):
+inside (graves | back ticks):
 	insert("``")
 	key(left)
-angle that: 
+angle that:
     text = edit.selected_text()
     user.paste("<{text}>")
-(bracket | brace) that: 
+(bracket | brace) that:
     text = edit.selected_text()
     user.paste("{{{text}}}")
-(parens | args) that: 
+(parens | args) that:
     text = edit.selected_text()
     user.paste("({text})")
-percent that: 
+percent that:
     text = edit.selected_text()
     user.paste("%{text}%")
 quote that:
