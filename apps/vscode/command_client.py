@@ -10,7 +10,12 @@ from uuid import uuid4
 from talon import Module, actions, Context
 
 
+# How old a request file needs to be before we declare it stale and are willing
+# to remove it
 STALE_TIMEOUT_MS = 10_000
+
+# The amount of time to wait for VSCode to perform a command, in seconds
+VSCODE_COMMAND_TIMEOUT = 3.0
 
 mod = Module()
 
@@ -99,18 +104,17 @@ def run_vscode_command(
     *args: str,
     wait_for_finish: bool = False,
     return_command_output: bool = False,
-    decode_json_arguments: bool = False,
 ):
     """Runs a VSCode command, using command server if available
 
     Args:
-        command (str): The ID of the VSCode command to run
+        command_id (str): The ID of the VSCode command to run
         wait_for_finish (bool, optional): Whether to wait for the command to finish before returning. Defaults to False.
         return_command_output (bool, optional): Whether to return the output of the command. Defaults to False.
-        decode_json_arguments (bool, optional): Whether to decode JSON arguments. Defaults to False.
 
     Raises:
-        Exception: If there is an issue with the file-based communication
+        Exception: If there is an issue with the file-based communication, or
+        VSCode raises an exception
 
     Returns:
         Object: The response from the command, if requested.
@@ -119,23 +123,22 @@ def run_vscode_command(
     # variable argument lists
     args = [x for x in args if x is not NotSet]
 
-    if decode_json_arguments:
-        args = [json.loads(arg) for arg in args]
-
     username = getpass.getuser()
 
     communication_dir_path = Path(gettempdir()) / f"vscode-command-server-{username}"
 
     if not communication_dir_path.exists():
-        if args or return_command_output or decode_json_arguments:
+        if args or return_command_output:
             raise Exception("Must use command-server extension for advanced commands")
-        print("Port file not found; using command palette")
+        print("Communication dir not found; falling back to command palette")
         run_vscode_command_by_command_palette(command_id)
         return
 
     request_path = communication_dir_path / "request.json"
     response_path = communication_dir_path / "response.json"
 
+    # Generate uuid that will be mirrored back to us by command server for
+    # sanity checking
     uuid = str(uuid4())
 
     unlink_if_exists(response_path)
@@ -148,14 +151,13 @@ def run_vscode_command(
         uuid=uuid,
     )
 
-    write_request(
-        request,
-        request_path,
-    )
+    # First, write the request to the request file
+    write_request(request, request_path)
 
-    # Issue command to VSCode telling it to update the port file.  Because only
-    # the active VSCode instance will accept keypresses, we can be sure that
-    # the active VSCode instance will be the one to write the port.
+    # Then, perform keystroke telling VSCode to execute the command in the
+    # request file.  Because only the active VSCode instance will accept
+    # keypresses, we can be sure that the active VSCode instance will be the
+    # one to execute the command.
     actions.user.trigger_command_server_command_execution()
 
     try:
@@ -183,10 +185,11 @@ def unlink_if_exists(path):
 
 
 def read_json_with_timeout(path: str) -> Any:
-    """Repeatedly tries to read a json object from the given path, waiting until there is a trailing new line indicating that the write is complete
+    """Repeatedly tries to read a json object from the given path, waiting
+    until there is a trailing new line indicating that the write is complete
 
     Args:
-        path (str): The path to write to
+        path (str): The path to read from
 
     Raises:
         Exception: If we timeout waiting for a response
@@ -208,7 +211,7 @@ def read_json_with_timeout(path: str) -> Any:
 
         actions.sleep(sleep_time)
         sleep_time *= 2
-        if time.perf_counter() - start_time > 3.0:
+        if time.perf_counter() - start_time > VSCODE_COMMAND_TIMEOUT:
             raise Exception("Timed out waiting for response")
 
     return json.loads(raw_text)
@@ -217,15 +220,15 @@ def read_json_with_timeout(path: str) -> Any:
 @mod.action_class
 class Actions:
     def vscode(command_id: str):
-        """Execute command via vscode command server, if available."""
+        """Execute command via vscode command server, if available, or fallback
+        to command palette."""
         run_vscode_command(command_id)
 
-    def trigger_command_server_command_execution():
-        """Issue keystroke to trigger command server to execute command that was written to the file."""
-        actions.key("ctrl-shift-alt-p")
-
     def vscode_and_wait(command_id: str):
-        """Execute command via vscode command server, if available, and wait for command to finish."""
+        """Execute command via vscode command server, if available, and wait
+        for command to finish.  If command server not available, uses command
+        palette and doesn't guarantee that it will wait for command to
+        finish."""
         run_vscode_command(command_id, wait_for_finish=True)
 
     def vscode_with_plugin(
@@ -283,6 +286,11 @@ class Actions:
             arg5,
             return_command_output=True,
         )
+
+    def trigger_command_server_command_execution():
+        """Issue keystroke to trigger command server to execute command that
+        was written to the file.  For internal use only"""
+        actions.key("ctrl-shift-alt-p")
 
 
 @mac_ctx.action_class("user")
