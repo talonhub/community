@@ -12,10 +12,14 @@ from talon import Module, actions, Context
 
 # How old a request file needs to be before we declare it stale and are willing
 # to remove it
-STALE_TIMEOUT_MS = 10_000
+STALE_TIMEOUT_MS = 20_000
 
 # The amount of time to wait for VSCode to perform a command, in seconds
-VSCODE_COMMAND_TIMEOUT = 3.0
+VSCODE_COMMAND_TIMEOUT_SECONDS = 3.0
+
+# When doing exponential back off waiting for vscode to perform a command, how
+# long to sleep the first time
+INITIAL_SLEEP_TIME_SECONDS = 0.0005
 
 mod = Module()
 
@@ -85,18 +89,26 @@ def write_request(request: Request, path: Path):
     """
     try:
         write_json_exclusive(path, request.to_dict())
+        request_file_exists = False
     except FileExistsError:
-        stats = path.stat()
+        request_file_exists = True
 
-        modified_time_ms = stats.st_mtime_ns / 1e6
-        current_time_ms = time.time() * 1e3
+    if request_file_exists:
+        handle_existing_request_file(path)
+        write_json_exclusive(path, request.to_dict())
 
-        if abs(modified_time_ms - current_time_ms) < STALE_TIMEOUT_MS:
-            raise Exception("Another process has an active request file")
-        else:
-            print("Removing stale request file")
-            path.unlink()
-            write_json_exclusive(path, request.to_dict())
+
+def handle_existing_request_file(path):
+    stats = path.stat()
+
+    modified_time_ms = stats.st_mtime_ns / 1e6
+    current_time_ms = time.time() * 1e3
+
+    if abs(modified_time_ms - current_time_ms) < STALE_TIMEOUT_MS:
+        raise Exception("Another process has an active request file")
+    else:
+        print("Removing stale request file")
+        path.unlink()
 
 
 def run_vscode_command(
@@ -197,8 +209,8 @@ def read_json_with_timeout(path: str) -> Any:
     Returns:
         Any: The json-decoded contents of the file
     """
-    start_time = time.perf_counter()
-    sleep_time = 0.0005
+    timeout_time = time.perf_counter() + VSCODE_COMMAND_TIMEOUT_SECONDS
+    sleep_time = INITIAL_SLEEP_TIME_SECONDS
     while True:
         try:
             raw_text = path.read_text()
@@ -210,9 +222,13 @@ def read_json_with_timeout(path: str) -> Any:
             pass
 
         actions.sleep(sleep_time)
-        sleep_time *= 2
-        if time.perf_counter() - start_time > VSCODE_COMMAND_TIMEOUT:
+
+        time_left = timeout_time - time.perf_counter()
+
+        if time_left < 0:
             raise Exception("Timed out waiting for response")
+
+        sleep_time = min(sleep_time * 2, time_left)
 
     return json.loads(raw_text)
 
