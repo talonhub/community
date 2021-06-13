@@ -1,6 +1,7 @@
 import getpass
 from dataclasses import dataclass
 import json
+import os
 import time
 from pathlib import Path
 from tempfile import gettempdir
@@ -12,14 +13,14 @@ from talon import Module, actions, Context
 
 # How old a request file needs to be before we declare it stale and are willing
 # to remove it
-STALE_TIMEOUT_MS = 20_000
+STALE_TIMEOUT_MS = 60_000
 
 # The amount of time to wait for VSCode to perform a command, in seconds
 VSCODE_COMMAND_TIMEOUT_SECONDS = 3.0
 
 # When doing exponential back off waiting for vscode to perform a command, how
 # long to sleep the first time
-INITIAL_SLEEP_TIME_SECONDS = 0.0005
+MINIMUM_SLEEP_TIME_SECONDS = 0.0005
 
 mod = Module()
 
@@ -103,9 +104,15 @@ def handle_existing_request_file(path):
 
     modified_time_ms = stats.st_mtime_ns / 1e6
     current_time_ms = time.time() * 1e3
+    time_difference_ms = abs(modified_time_ms - current_time_ms)
 
-    if abs(modified_time_ms - current_time_ms) < STALE_TIMEOUT_MS:
-        raise Exception("Another process has an active request file")
+    if time_difference_ms < STALE_TIMEOUT_MS:
+        if time_difference_ms < VSCODE_COMMAND_TIMEOUT_SECONDS:
+            raise Exception(
+                "Found recent request file; another Talon process is probably running"
+            )
+        else:
+            raise Exception("Found recent request file; vscode is probably hung")
     else:
         print("Removing stale request file")
         path.unlink()
@@ -137,7 +144,7 @@ def run_vscode_command(
 
     username = getpass.getuser()
 
-    communication_dir_path = Path(gettempdir()) / f"vscode-command-server-{username}"
+    communication_dir_path = get_communication_dir_path()
 
     if not communication_dir_path.exists():
         if args or return_command_output:
@@ -175,7 +182,6 @@ def run_vscode_command(
     try:
         decoded_contents = read_json_with_timeout(response_path)
     finally:
-        unlink_if_exists(request_path)
         unlink_if_exists(response_path)
 
     if decoded_contents["uuid"] != uuid:
@@ -187,6 +193,22 @@ def run_vscode_command(
     actions.sleep("25ms")
 
     return decoded_contents["returnValue"]
+
+
+def get_communication_dir_path():
+    """Returns directory that is used by command-server for communication
+
+    Returns:
+        Path: The path to the communication dir
+    """
+    suffix = ""
+
+    # NB: We don't suffix on Windows, because the temp dir is user-specific
+    # anyways
+    if hasattr(os, "getuid"):
+        suffix = f"-{os.getuid()}"
+
+    return Path(gettempdir()) / f"vscode-command-server{suffix}"
 
 
 def unlink_if_exists(path):
@@ -210,7 +232,7 @@ def read_json_with_timeout(path: str) -> Any:
         Any: The json-decoded contents of the file
     """
     timeout_time = time.perf_counter() + VSCODE_COMMAND_TIMEOUT_SECONDS
-    sleep_time = INITIAL_SLEEP_TIME_SECONDS
+    sleep_time = MINIMUM_SLEEP_TIME_SECONDS
     while True:
         try:
             raw_text = path.read_text()
@@ -228,7 +250,9 @@ def read_json_with_timeout(path: str) -> Any:
         if time_left < 0:
             raise Exception("Timed out waiting for response")
 
-        sleep_time = min(sleep_time * 2, time_left)
+        # NB: We use minimum sleep time here to ensure that we don't spin with
+        # small sleeps due to clock slip
+        sleep_time = max(min(sleep_time * 2, time_left), MINIMUM_SLEEP_TIME_SECONDS)
 
     return json.loads(raw_text)
 
