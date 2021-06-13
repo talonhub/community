@@ -160,8 +160,6 @@ def run_vscode_command(
     # sanity checking
     uuid = str(uuid4())
 
-    unlink_if_exists(response_path)
-
     request = Request(
         command_id=command_id,
         args=args,
