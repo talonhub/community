@@ -1,15 +1,13 @@
-import getpass
-from dataclasses import dataclass
 import json
 import os
 import time
+from dataclasses import dataclass
 from pathlib import Path
 from tempfile import gettempdir
 from typing import Any, List
 from uuid import uuid4
 
-from talon import Module, actions, Context
-
+from talon import Context, Module, actions
 
 # How old a request file needs to be before we declare it stale and are willing
 # to remove it
@@ -141,8 +139,6 @@ def run_vscode_command(
     # NB: This is a hack to work around the fact that talon doesn't support
     # variable argument lists
     args = [x for x in args if x is not NotSet]
-
-    username = getpass.getuser()
 
     communication_dir_path = get_communication_dir_path()
 
