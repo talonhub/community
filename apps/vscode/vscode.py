@@ -3,6 +3,7 @@ from talon import Context, actions, ui, Module, app, clip
 is_mac = app.platform == "mac"
 
 ctx = Context()
+mac_ctx = Context()
 mod = Module()
 mod.apps.vscode = """
 os: mac
@@ -22,6 +23,10 @@ and app.exe: Code.exe
 """
 
 ctx.matches = r"""
+app: vscode
+"""
+mac_ctx.matches = r"""
+os: mac
 app: vscode
 """
 
@@ -47,7 +52,7 @@ class win_actions:
 
 @ctx.action_class("edit")
 class edit_actions:
-    def find(text = None):
+    def find(text=None):
         if is_mac:
             actions.key("cmd-f")
         else:
@@ -76,6 +81,16 @@ class Actions:
     def vscode_terminal(number: int):
         """Activate a terminal by number"""
         actions.user.vscode(f"workbench.action.terminal.focusAtIndex{number}")
+
+    def command_palette():
+        """Show command palette"""
+        actions.key("ctrl-shift-p")
+
+
+@mac_ctx.action_class("user")
+class MacUserActions:
+    def command_palette():
+        actions.key("cmd-shift-p")
 
 
 @ctx.action_class("user")
