@@ -44,7 +44,8 @@ def run_vscode_command(
     if is_mac:
         actions.key("cmd-shift-alt-p")
     else:
-        actions.key("ctrl-shift-alt-p")
+        # actions.key("ctrl-shift-alt-p")
+        actions.key("super-y")
 
     # Wait for the VSCode instance to update the port file.  This generally
     # happens within the first millisecond, but we give it 3 seconds just in

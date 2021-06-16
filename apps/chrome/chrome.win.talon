@@ -1,3 +1,4 @@
+os: linux
 os: windows
 app: chrome
 -
@@ -66,3 +67,6 @@ action(browser.submit_form):
 
 action(browser.toggle_dev_tools):
 	key(ctrl-shift-i)
+
+show links: key("f")
+links: key("f")

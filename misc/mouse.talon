@@ -16,6 +16,8 @@ midclick:
 	mouse_click(2)
 	# close the mouse grid
 	user.grid_close()
+oh:
+    user.mouse_trigger_zoom_mouse()
 
 #see keys.py for modifiers.
 #defaults

@@ -62,14 +62,20 @@ bar extensions: user.vscode("workbench.view.extensions")
 bar outline: user.vscode("outline.focus")
 bar run: user.vscode("workbench.view.debug")
 bar search: user.vscode("workbench.view.search")
+show search: user.vscode("workbench.view.search")
 bar source: user.vscode("workbench.view.scm")
 bar switch: user.vscode("workbench.action.toggleSidebarVisibility")
 
-symbol hunt [<user.text>]:
+# show recent: user.vscode("workbench.action.showAllEditorsByMostRecentlyUsed")
+search [<user.text>]: 
+    user.vscode("workbench.action.findInFiles")
+    sleep(50ms)
+    insert(text or "")
+    
+symbol [<user.text>]:
   user.vscode("workbench.action.gotoSymbol")
   sleep(50ms)
   insert(text or "")
-
 # Panels
 panel control: user.vscode("workbench.panel.repl.view.focus")
 panel output: user.vscode("workbench.panel.output.focus")
@@ -79,6 +85,9 @@ panel terminal: user.vscode("workbench.panel.terminal.focus")
 
 toggle terminal: user.vscode("workbench.action.terminal.toggleTerminal")
 focus editor: user.vscode("workbench.action.focusActiveEditorGroup")
+focus one: user.vscode("workbench.action.focusFirstEditorGroup")
+focus two: user.vscode("workbench.action.focusSecondEditorGroup")
+focus side: user.vscode("workbench.action.focusSideBar")
 # focus editor: user.vscode("workbench.action.focusActiveEditorGroup")
 
 # Settings
@@ -94,15 +103,16 @@ wrap switch: user.vscode("editor.action.toggleWordWrap")
 zen switch: user.vscode("workbench.action.toggleZenMode")
 
 # File Commands
-file hunt [<user.text>]: 
+file [<user.text>]: 
   user.vscode("workbench.action.quickOpen")
   sleep(50ms)
   insert(text or "")
+
 file copy path: user.vscode("copyFilePath") 
 file create sibling: user.vscode_and_wait("explorer.newFile")
 file create: user.vscode("workbench.action.files.newUntitledFile")
 file rename:
-	user.vscode("fileutils.renameFile")
+    user.vscode("fileutils.renameFile")
 	sleep(150ms)
 file move:
 	user.vscode("fileutils.moveFile")
@@ -114,9 +124,20 @@ save ugly: user.vscode("workbench.action.files.saveWithoutFormatting")
 # Language Features
 suggest show: user.vscode("editor.action.triggerSuggest")
 hint show: user.vscode("editor.action.triggerParameterHints")
+
+show: user.vscode("editor.action.revealDefinition")
+bishop: user.vscode("editor.action.revealDefinition")
 definition show: user.vscode("editor.action.revealDefinition")
+def show: user.vscode("editor.action.revealDefinition")
+dev show: user.vscode("editor.action.revealDefinition")
+
+peek: user.vscode("editor.action.peekDefinition")
 definition peek: user.vscode("editor.action.peekDefinition")
+
 definition side: user.vscode("editor.action.revealDefinitionAside")
+dev side: user.vscode("editor.action.revealDefinitionAside")
+def side: user.vscode("editor.action.revealDefinitionAside")
+
 references show: user.vscode("editor.action.goToReferences")
 references find: user.vscode("references-view.find")
 format that: user.vscode("editor.action.formatDocument")

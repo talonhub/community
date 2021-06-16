@@ -96,6 +96,14 @@ class user_actions:
         actions.user.vscode("workbench.action.openSnippets")
 
     # snippet.py support end
+    def tab_next(number: int):
+        print(number)
+        for i in range(number):
+           actions.user.vscode("workbench.action.nextEditorInGroup") 
+            
+    def tab_previous(number: int):
+        for i in range(number):
+           actions.user.vscode("workbench.action.previousEditorInGroup") 
 
     def tab_jump(number: int):
         if number < 10:

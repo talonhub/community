@@ -1,0 +1,4 @@
+.idea
+.venv
+.vscode
+talon_draft_window/__pycache__/

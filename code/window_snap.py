@@ -37,6 +37,7 @@ def _set_window_pos(window, x, y, width, height):
     #   hacky solution merged, so for now just repeat the command.
     #
     # TODO: Audit once upstream Talon is bug-free on MS Windows
+    print("HERE", window, x, y, width, height)
     window.rect = ui.Rect(round(x), round(y), round(width), round(height))
 
 

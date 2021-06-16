@@ -2,6 +2,7 @@
 settings():
     #adjust the scale of the imgui to my liking
     imgui.scale = 1.3
+    imgui.dark_mode = 1
     # enable if you'd like the picker gui to automatically appear when explorer has focus
     user.file_manager_auto_show_pickers = 0
     #set the max number of command lines per page in help
@@ -26,8 +27,12 @@ settings():
     user.command_history_display = 10
     # the number of lines of command history to keep in total;
     # "command history more" to display all of them, "command history less" to restore
+
     user.command_history_size = 50
     speech.record_all = 1 
+    #speech.normalize = 1
+    speech.threshold = 0.4
+    speech.timeout = 0.150
 
     # Uncomment the below to enable context-sensitive dictation. This determines
     # how to format (capitalize, space) dictation-mode speech by selecting &
