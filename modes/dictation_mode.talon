@@ -69,9 +69,7 @@ select that: user.select_last_phrase()
 spell that <user.letters>: auto_insert(letters)
 spell that <user.formatters> <user.letters>:
     result = user.formatted_text(letters, formatters)
-    user.auto_format_pause()
-    auto_insert(result)
-    user.auto_format_resume()
+    user.dictation_insert_raw(result)
 
 # Escape, type things that would otherwise be commands
 ^escape <user.text>$:
