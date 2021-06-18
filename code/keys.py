@@ -3,7 +3,7 @@ from typing import Set
 from talon import Module, Context, actions, app
 import sys
 
-default_alphabet = "alpha bake cap drum edge fine gust harp sit jury crunch look made near odd pit quench red soil trap uber vest wag plex yell zip".split(
+default_alphabet = "as bun cap drum edge fun gust hot ink jury crunch look man nap opt pet quench rod sad trap uber vet wok plex yen zip".split(
     " "
 )
 letters_string = "abcdefghijklmnopqrstuvwxyz"
@@ -167,6 +167,7 @@ symbol_key_words = {
     "plus": "+",
     "tilde": "~",
     "bang": "!",
+    "remi": ";",
     "dollar": "$",
     "down score": "_",
     "under score": "_",

@@ -49,7 +49,7 @@ x = threading.Thread(target=f, args=())
 x.start()
 print(100 * 'done')
 speech_system.register("phrase", history_view.on_phrase)
-# core.start_dearpygui()
+# core.start_dearpy1gui()
 
 
 @mod.action_class

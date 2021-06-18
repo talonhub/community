@@ -13,6 +13,10 @@ mode: all
     user.mouse_sleep()
     speech.disable()
     user.engine_sleep()
+    
 ^talon sleep$: speech.disable()
+^dot slap$: speech.disable()
 ^talon wake$: speech.enable()
+^wake$: speech.enable()
+
 

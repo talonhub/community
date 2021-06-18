@@ -21,8 +21,13 @@ undo that: edit.undo()
 redo that: edit.redo()
 paste match: edit.paste_match_style()
 file save: edit.save()
+go:
+	key(enter)
 wipe: key(backspace)    
-(pad | padding): 
+wipe all: 
+    key("ctrl-a")    
+    key(backspace)    
+padding: 
 	insert("  ") 
 	key(left)
 slap:

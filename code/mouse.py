@@ -274,6 +274,7 @@ def show_cursor_helper(show):
 
 
 def on_pop(active):
+    print('!!!! On pop')
     if setting_mouse_enable_pop_stops_scroll.get() >= 1 and (gaze_job or scroll_job):
             stop_scroll()
     elif (

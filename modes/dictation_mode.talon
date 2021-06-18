@@ -2,6 +2,10 @@ mode: dictation
 -
 ^press <user.keys>$: key("{keys}")
 
+^command$:
+    mode.disable("sleep")
+    mode.disable("dictation")
+    mode.enable("command")
 # Everything here should call auto_insert to preserve the state to correctly auto-capitalize/auto-space.
 <user.prose>: auto_insert(prose)
 new line: "\n"

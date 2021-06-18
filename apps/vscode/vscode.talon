@@ -57,18 +57,24 @@ please [<user.text>]:
   insert(user.text or "")
 
 # Sidebar
-bar explore: user.vscode("workbench.view.explorer")
+explore: user.vscode("workbench.view.explorer")
+focus explore: user.vscode("workbench.files.action.focusFilesExplorer")
 bar extensions: user.vscode("workbench.view.extensions")
 bar outline: user.vscode("outline.focus")
 bar run: user.vscode("workbench.view.debug")
-bar search: user.vscode("workbench.view.search")
-show search: user.vscode("workbench.view.search")
-bar source: user.vscode("workbench.view.scm")
+# bar search: user.vscode("workbench.view.search")
+#show search: user.vscode("workbench.view.search")
+source: user.vscode("workbench.view.scm")
 bar switch: user.vscode("workbench.action.toggleSidebarVisibility")
 
-# show recent: user.vscode("workbench.action.showAllEditorsByMostRecentlyUsed")
+# show recent: user.vscode("work55bench.action.showAllEditorsByMostRecentlyUsed")
 search [<user.text>]: 
     user.vscode("workbench.action.findInFiles")
+    sleep(50ms)
+    insert(text or "")
+    
+find [<user.text>]: 
+    user.vscode("actions.find")
     sleep(50ms)
     insert(text or "")
     
@@ -83,11 +89,15 @@ panel problems: user.vscode("workbench.panel.markers.view.focus")
 panel switch: user.vscode("workbench.action.togglePanel")
 panel terminal: user.vscode("workbench.panel.terminal.focus")
 
-toggle terminal: user.vscode("workbench.action.terminal.toggleTerminal")
+console: user.vscode("workbench.action.terminal.toggleTerminal")
+# terminal: user.vscode("workbench.action.terminal.toggleTerminal")
+# toggle terminal: user.vscode("workbench.action.terminal.toggleTerminal")
+
 focus editor: user.vscode("workbench.action.focusActiveEditorGroup")
 focus one: user.vscode("workbench.action.focusFirstEditorGroup")
 focus two: user.vscode("workbench.action.focusSecondEditorGroup")
 focus side: user.vscode("workbench.action.focusSideBar")
+
 # focus editor: user.vscode("workbench.action.focusActiveEditorGroup")
 
 # Settings
@@ -103,7 +113,8 @@ wrap switch: user.vscode("editor.action.toggleWordWrap")
 zen switch: user.vscode("workbench.action.toggleZenMode")
 
 # File Commands
-file [<user.text>]: 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+file [<user.text>]:  
   user.vscode("workbench.action.quickOpen")
   sleep(50ms)
   insert(text or "")
@@ -125,13 +136,15 @@ save ugly: user.vscode("workbench.action.files.saveWithoutFormatting")
 suggest show: user.vscode("editor.action.triggerSuggest")
 hint show: user.vscode("editor.action.triggerParameterHints")
 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 show: user.vscode("editor.action.revealDefinition")
 bishop: user.vscode("editor.action.revealDefinition")
 definition show: user.vscode("editor.action.revealDefinition")
 def show: user.vscode("editor.action.revealDefinition")
 dev show: user.vscode("editor.action.revealDefinition")
 
-peek: user.vscode("editor.action.peekDefinition")
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+peek: user.vscode("editor.action.peekDefinition") 
 definition peek: user.vscode("editor.action.peekDefinition")
 
 definition side: user.vscode("editor.action.revealDefinitionAside")
@@ -139,8 +152,11 @@ dev side: user.vscode("editor.action.revealDefinitionAside")
 def side: user.vscode("editor.action.revealDefinitionAside")
 
 references show: user.vscode("editor.action.goToReferences")
-references find: user.vscode("references-view.find")
-format that: user.vscode("editor.action.formatDocument")
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+refs: user.vscode("editor.action.goToReferences")
+# references find: user.vscode("references-view.find")
+
+format that: user.vscode("editor.action.formatDocument") 
 format selection: user.vscode("editor.action.formatSelection")
 imports fix: user.vscode("editor.action.organizeImports")
 problem next: user.vscode("editor.action.marker.nextInFiles")
@@ -241,8 +257,12 @@ terminal scroll down: user.vscode("workbench.action.terminal.scrollDown")
 terminal <number_small>: user.vscode_terminal(number_small)
 
 #TODO: should this be added to linecommands?
-copy line down: user.vscode("editor.action.copyLinesDownAction")
-copy line up: user.vscode("editor.action.copyLinesUpAction")
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+copy line down: user.vscode("editor.action.copyLinesDownAction") 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+copy line: user.vscode("editor.action.copyLinesDownAction") 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+copy line up: user.vscode("editor.action.copyLinesUpAction") 
 
 #Expand/Shrink AST Selection
 select less: user.vscode("editor.action.smartSelect.shrink")
@@ -274,3 +294,5 @@ cell run above: user.vscode("jupyter.runallcellsabove.palette")
 cell run: user.vscode("jupyter.runcurrentcell")
 
 install local: user.vscode("workbench.extensions.action.installVSIX")
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+toggle comment: code.toggle_comment()   
