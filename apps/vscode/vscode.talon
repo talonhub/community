@@ -57,28 +57,29 @@ please [<user.text>]:
   insert(user.text or "")
 
 # Sidebar
-explore: user.vscode("workbench.view.explorer")
+# what is the difference with workbench.view.explorer vs action.focusFilesExplorer?
+go explore: user.vscode("workbench.view.explorer")
 focus explore: user.vscode("workbench.files.action.focusFilesExplorer")
 bar extensions: user.vscode("workbench.view.extensions")
 bar outline: user.vscode("outline.focus")
 bar run: user.vscode("workbench.view.debug")
 # bar search: user.vscode("workbench.view.search")
 #show search: user.vscode("workbench.view.search")
-source: user.vscode("workbench.view.scm")
+go source: user.vscode("workbench.view.scm")
 bar switch: user.vscode("workbench.action.toggleSidebarVisibility")
 
 # show recent: user.vscode("work55bench.action.showAllEditorsByMostRecentlyUsed")
-search [<user.text>]: 
+go search [<user.text>]: 
     user.vscode("workbench.action.findInFiles")
     sleep(50ms)
     insert(text or "")
     
-find [<user.text>]: 
+go find [<user.text>]: 
     user.vscode("actions.find")
     sleep(50ms)
     insert(text or "")
     
-symbol [<user.text>]:
+go symbol [<user.text>]:
   user.vscode("workbench.action.gotoSymbol")
   sleep(50ms)
   insert(text or "")
@@ -114,7 +115,7 @@ zen switch: user.vscode("workbench.action.toggleZenMode")
 
 # File Commands
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-file [<user.text>]:  
+go file [<user.text>]:  
   user.vscode("workbench.action.quickOpen")
   sleep(50ms)
   insert(text or "")
