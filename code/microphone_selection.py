@@ -16,8 +16,9 @@ def update_microphone_list():
     # On Windows, it's presently necessary to check the state, or
     # we will get any and every microphone that was ever connected.
     devices = [
-        dev.name for dev in ctx.inputs() if str(dev.state) == "DeviceState.ENABLED"
+        dev.name for dev in ctx.inputs() if dev.state == cubeb.DeviceState.ENABLED
     ]
+
     devices.sort()
     microphone_device_list += devices
 
