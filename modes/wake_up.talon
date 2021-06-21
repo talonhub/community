@@ -14,9 +14,10 @@ mode: all
     speech.disable()
     user.engine_sleep()
     
+^go to sleep$: speech.disable()
 ^talon sleep$: speech.disable()
 ^dot slap$: speech.disable()
 ^talon wake$: speech.enable()
-^wake$: speech.enable()
+^wake up$: speech.enable()
 
 
