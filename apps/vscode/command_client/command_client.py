@@ -190,6 +190,9 @@ def run_vscode_command(
     if decoded_contents["uuid"] != uuid:
         raise Exception("uuids did not match")
 
+    for warning in decoded_contents["warnings"]:
+        print(f"Warning: {warning}")
+
     if decoded_contents["error"] is not None:
         raise Exception(decoded_contents["error"])
 
