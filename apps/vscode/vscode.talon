@@ -115,7 +115,8 @@ zen switch: user.vscode("workbench.action.toggleZenMode")
 
 # File Commands
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-go file [<user.text>]:  
+
+lion [<user.text>]:  
   user.vscode("workbench.action.quickOpen")
   sleep(50ms)
   insert(text or "")

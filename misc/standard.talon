@@ -15,8 +15,12 @@ zoom out: edit.zoom_out()
 scroll up: edit.page_up()
 scroll down: edit.page_down()
 copy that: edit.copy()
+kitten: edit.copy()
+
 cut that: edit.cut()
 paste that: edit.paste()
+ship: edit.paste()
+
 undo that: edit.undo()
 redo that: edit.redo()
 paste match: edit.paste_match_style()
