@@ -2,6 +2,10 @@ mode: dictation
 -
 ^press <user.keys>$: key("{keys}")
 
+^stop$:
+    mode.disable("sleep")
+    mode.disable("dictation")
+    mode.enable("command")
 ^command$:
     mode.disable("sleep")
     mode.disable("dictation")
