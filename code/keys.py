@@ -3,15 +3,15 @@ from typing import Set
 from talon import Module, Context, actions, app
 import sys
 
-default_alphabet = "as bun cap drum edge fun gust hot ink jury crunch look man nap opt pet quench rod soft trap uber vet wok plex yen zip".split(
+default_alphabet = "art bun cap drum edge fun gust hot ink jury crunch look man nap opt pet quench rod soft trap uber vet wok plex yen zip".split(
     " "
 )
 letters_string = "abcdefghijklmnopqrstuvwxyz"
 
 default_digits = "zero one two three four five six seven eight nine".split(" ")
 numbers = [str(i) for i in range(10)]
-default_f_digits = "one two three four five six seven eight nine ten eleven twelve".split(
-    " "
+default_f_digits = (
+    "one two three four five six seven eight nine ten eleven twelve".split(" ")
 )
 
 mod = Module()
@@ -118,7 +118,7 @@ modifier_keys = {
     "shift": "shift",  #'sky':     'shift',
     "super": "super",
 }
-if app.platform  == "mac":
+if app.platform == "mac":
     modifier_keys["command"] = "cmd"
     modifier_keys["option"] = "alt"
 ctx.lists["self.modifier_key"] = modifier_keys
@@ -247,4 +247,3 @@ class Actions:
     def get_alphabet() -> dict:
         """Provides the alphabet dictionary"""
         return alphabet
-
