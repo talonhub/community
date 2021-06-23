@@ -102,8 +102,8 @@ focus side: user.vscode("workbench.action.focusSideBar")
 # focus editor: user.vscode("workbench.action.focusActiveEditorGroup")
 
 # Settings
-show settings: user.vscode("workbench.action.openGlobalSettings")
-show shortcuts: user.vscode("workbench.action.openGlobalKeybindings")
+settings show: user.vscode("workbench.action.openGlobalSettings")
+shortcuts show: user.vscode("workbench.action.openGlobalKeybindings")
 show snippets: user.vscode("workbench.action.openSnippets")
 
 # Displaythe.minnow
