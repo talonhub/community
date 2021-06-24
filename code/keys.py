@@ -228,8 +228,9 @@ alternate_keys = {
     #'junk': 'backspace',
     "page up": "pageup",
     "page down": "pagedown",
+    "scrape": "escape",
 }
-# mac apparently doesn't have the menu key.
+# mac apparently doesn't have the menu keyshow .
 if app.platform in ("windows", "linux"):
     alternate_keys["menu key"] = "menu"
     alternate_keys["print screen"] = "printscr"
