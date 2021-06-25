@@ -43,11 +43,11 @@ class Actions:
 
     def before_last_phrase():
         """Moves left before the last phrase"""
-        if not phrase_history:
+        try:
+            for _ in phrase_history.pop(0):
+                actions.edit.left()
+        except IndexError:
             logging.warning("before_last_phrase(): No last phrase to move before!")
-            return
-        for _ in phrase_history[0]:
-            actions.edit.left()
 
     def add_phrase_to_history(text: str):
         """Adds a phrase to the phrase history"""
