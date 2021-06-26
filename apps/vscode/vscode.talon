@@ -65,7 +65,7 @@ bar outline: user.vscode("outline.focus")
 bar run: user.vscode("workbench.view.debug")
 # bar search: user.vscode("workbench.view.search")
 #show search: user.vscode("workbench.view.search")
-go source: user.vscode("workbench.view.scm")
+go git: user.vscode("workbench.view.scm")
 bar switch: user.vscode("workbench.action.toggleSidebarVisibility")
 
 # show recent: user.vscode("work55bench.action.showAllEditorsByMostRecentlyUsed")
@@ -122,6 +122,8 @@ lion [<user.text>]:
   insert(text or "")
 
 file copy path: user.vscode("copyFilePath") 
+file copy relative: user.vscode("copyRelativeFilePath") 
+file copy link: user.vscode("gitlens.copyRemoteFileUrlToClipboard") 
 file create sibling: user.vscode_and_wait("explorer.newFile")
 file create: user.vscode("workbench.action.files.newUntitledFile")
 file rename:
@@ -131,7 +133,7 @@ file move:
 	user.vscode("fileutils.moveFile")
 	sleep(150ms)
 file open folder: user.vscode("revealFileInOS")
-file reveal: user.vscode("workbench.files.action.showActiveFileInExplorer") 
+(file reveal|show in tree): user.vscode("workbench.files.action.showActiveFileInExplorer") 
 save ugly: user.vscode("workbench.action.files.saveWithoutFormatting")
 
 # Language Features

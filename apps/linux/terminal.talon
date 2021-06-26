@@ -12,7 +12,7 @@ action(edit.paste):
   key(ctrl-shift-v)
 action(edit.copy):
   key(ctrl-shift-c)
-
+sudo: insert("sudo ")
 run last:
   key(up)
   key(enter)
