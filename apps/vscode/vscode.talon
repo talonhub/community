@@ -214,6 +214,8 @@ git commit [<user.text>]:
 git commit undo: user.vscode("git.undoCommit")
 git commit ammend: user.vscode("git.commitStagedAmend")
 git diff: user.vscode("git.openChange")
+git discard: user.vscode("git.clean")
+git discard all: user.vscode("git.cleanAll")
 git ignore: user.vscode("git.ignore")
 git merge: user.vscode("git.merge")
 git output: user.vscode("git.showOutput")
