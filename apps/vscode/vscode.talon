@@ -298,4 +298,5 @@ cell run: user.vscode("jupyter.runcurrentcell")
 
 install local: user.vscode("workbench.extensions.action.installVSIX")
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-toggle comment: code.toggle_comment()   
+toggle comment: code.toggle_comment()  
+return: insert("return ") 

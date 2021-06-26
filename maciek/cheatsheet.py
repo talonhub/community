@@ -72,19 +72,9 @@ def write_context_commands(file, commands):
         file.write("\n - **" + rule + "**  `" + implementation + "`\n")
 
 
-def pretty_print_context_name(file, name):
-    ## The logic here is intended to only print from talon files that have actual voice commands.
+def create_short_name(name):
     splits = name.split(".")
     index = -1
-
-    os = ""
-
-    if "mac" in name:
-        os = "mac"
-    if "win" in name:
-        os = "win"
-    if "linux" in name:
-        os = "linux"
 
     if "talon" in splits[index]:
         index = -2
@@ -95,7 +85,21 @@ def pretty_print_context_name(file, name):
     if "mac" == short_name or "win" == short_name or "linux" == short_name:
         index = index - 1
         short_name = splits[index].replace("_", " ")
+    return short_name
 
+
+def pretty_print_context_name(file, name):
+    ## The logic here is intended to only print from talon files that have actual voice commands.
+
+    os = ""
+
+    if "mac" in name:
+        os = "mac"
+    if "win" in name:
+        os = "win"
+    if "linux" in name:
+        os = "linux"
+    short_name = create_short_name(name)
     file.write("\n\n\n" + "# " + os + " " + short_name + "\n\n")
 
 
@@ -137,11 +141,14 @@ class user_actions:
             "generic editor",
             "kubectl",
             "line commands",
-            "symbols"
+            "symbols",
         ]
 
         list_of_contexts = registry.contexts.items()
         for key, value in list_of_contexts:
+            print(key, value)
+            if create_short_name(key) not in interesting_contexts:
+                continue
 
             commands = value.commands  # Get all the commands from a context
             if len(commands) > 0:
