@@ -284,14 +284,14 @@ def gui(gui: imgui.GUI):
 
 
 def update_launch_list():
-    applications = {}
+    launch = {}
     if app.platform == "mac":
         for base in mac_application_directories:
             if os.path.isdir(base):
                 for name in os.listdir(base):
                     path = os.path.join(base, name)
                     name = name.rsplit(".", 1)[0].lower()
-                    applications[name] = path
+                    launch[name] = path
 
     elif app.platform == "windows":
         shortcuts = enum_known_folder(FOLDERID_AppsFolder)
@@ -301,10 +301,10 @@ def update_launch_list():
             # print(name)
             # name = path.rsplit("\\")[-1].split(".")[0].lower()
             if "install" not in name:
-                applications[name] = name
+                launch[name] = name
 
     ctx.lists["self.launch"] = actions.user.create_spoken_forms_from_map(
-        applications, words_to_exclude
+        launch, words_to_exclude
     )
 
 
