@@ -141,24 +141,15 @@ suggest show: user.vscode("editor.action.triggerSuggest")
 hint show: user.vscode("editor.action.triggerParameterHints")
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-show: user.vscode("editor.action.revealDefinition")
-bishop: user.vscode("editor.action.revealDefinition")
-definition show: user.vscode("editor.action.revealDefinition")
-def show: user.vscode("editor.action.revealDefinition")
-dev show: user.vscode("editor.action.revealDefinition")
+(show|bishop|definition show|def show|dev show): user.vscode("editor.action.revealDefinition")
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-peek: user.vscode("editor.action.peekDefinition") 
-definition peek: user.vscode("editor.action.peekDefinition")
+(peek|definition peek): user.vscode("editor.action.peekDefinition") 
 
-definition side: user.vscode("editor.action.revealDefinitionAside")
-dev side: user.vscode("editor.action.revealDefinitionAside")
-def side: user.vscode("editor.action.revealDefinitionAside")
+(definition side|dev side|def side): user.vscode("editor.action.revealDefinitionAside")
 
-references show: user.vscode("editor.action.goToReferences")
+(references show|refs): user.vscode("editor.action.goToReferences")
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-refs: user.vscode("editor.action.goToReferences")
-# references find: user.vscode("references-view.find")
 
 format that: user.vscode("editor.action.formatDocument") 
 format selection: user.vscode("editor.action.formatSelection")
