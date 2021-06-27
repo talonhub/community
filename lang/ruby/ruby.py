@@ -3,7 +3,7 @@ from talon import Context, actions, settings
 ctx = Context()
 ctx.matches = r"""
 mode: user.ruby
-mode: command
+mode: user.auto_lang
 and code.language: ruby
 """
 
