@@ -17,29 +17,21 @@ class Actions:
         if has_selected_text:
             actions.edit.copy()
         focus_window(editor)
-        new_file()
+        # Wait for context to change.
+        actions.sleep("100ms")
+        actions.app.tab_open()
         if has_selected_text:
             actions.edit.paste()
         actions.mode.enable("user.draft_editor")
 
-    def draft_editor_save():
-        """Save draft editor"""
-        close_editor(True)
+    def draft_editor_submit():
+        """Submit/save draft editor"""
+        close_editor(submit_draft=True)
 
     def draft_editor_discard():
         """Discard draft editor"""
-        close_editor(False)
+        close_editor(submit_draft=False)
 
-
-def close_editor(save: bool):
-    actions.mode.disable("user.draft_editor")
-    actions.edit.select_all()
-    if save:
-        actions.edit.copy()
-    close_file()
-    focus_window(active_window)
-    if save:
-        actions.edit.paste()
 
 def get_editor():
     editor_names = {
@@ -49,17 +41,21 @@ def get_editor():
         "Codium",
         "code-oss"
     }
-    for w in ui.windows():
-        if w.app.name in editor_names:
-            return w
+    for app in ui.apps(background=False):
+        if app.name in editor_names:
+            return app.windows()[0]
     raise RuntimeError("VSCode is not running")
 
-def new_file():
-    actions.user.vscode("workbench.action.files.newUntitledFile")
-
-def close_file():
+def close_editor(submit_draft: bool):
+    actions.mode.disable("user.draft_editor")
+    actions.edit.select_all()
+    if submit_draft:
+        actions.edit.copy()
     actions.edit.delete()
     actions.app.tab_close()
+    focus_window(active_window)
+    if submit_draft:
+        actions.edit.paste()
 
 def focus_window(window: ui.Window):
     """Focus window and wait until finished"""
