@@ -4,6 +4,7 @@ tag: browser
 go home: browser.go_home()
 [go] forward: browser.go_forward()
 go (back | backward): browser.go_back()
+go to {user.website}: browser.go(website)
 
 go private: browser.open_private_window()
 
