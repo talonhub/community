@@ -14,12 +14,20 @@ os: linux
 and app.name: Code
 os: linux
 and app.name: code-oss
+os: linux
+and app.name: VSCodium
+os: linux
+and app.name: Codium
 """
 mod.apps.vscode = """
 os: windows
 and app.name: Visual Studio Code
 os: windows
 and app.exe: Code.exe
+os: windows
+and app.name: VSCodium
+os: windows
+and app.exe: VSCodium.exe
 """
 
 ctx.matches = r"""
