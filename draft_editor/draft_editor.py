@@ -2,7 +2,7 @@ from talon import Module, actions, ui
 import time
 
 mod = Module()
-mod.mode("draft_editor", "Mode to show if the draft editor is open")
+mod.mode("draft_editor", "Indicates whether the draft editor has been activated")
 
 active_window = None
 
