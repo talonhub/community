@@ -16,6 +16,7 @@ sudo: insert("sudo ")
 add sudo: 
     key(home)
     insert("sudo ")
+add help: insert(" --help ")
 run last:
   key(up)
   key(enter)

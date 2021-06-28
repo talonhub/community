@@ -1,5 +1,5 @@
 from dearpygui import core, simple
-from talon import imgui, Module, speech_system, actions, app
+from talon import Module, actions, app, imgui, speech_system
 
 # We keep command_history_size lines of history, but by default display only
 # command_history_display of them.
@@ -18,6 +18,7 @@ def parse_phrase(word_list):
 
 # todo: dynamic rect?
 
+import json
 import pprint
 
 
@@ -25,12 +26,19 @@ class HistoryView(object):
     def __init__(self) -> None:
         super().__init__()
         self.history = []
-        with simple.window("Example Window"):
-            core.add_text("Hello world")
+        # with simple.window("Example Window"):
+        # core.add_text("Hello world")
 
     def on_phrase(self, j):
-        print("got", pprint.pprint(j))
-        to_display = ["audio_ms", "emit_ms", "compile_ms"]
+        # print("got", pprint.pprint(j))
+        # to_display = ["audio_ms", "emit_ms", "compile_ms"]
+        # print(j["_metadata"])
+        # print(j.items())
+        if "_metadata" in j.keys():
+            with open("/home/maciek/.talon_maciek/logs", mode="a") as f:
+                f.write(json.dumps(j["_metadata"]))
+                f.write("\n")
+
         try:
             val = parse_phrase(getattr(j["parsed"], "_unmapped", j["phrase"]))
         except:
@@ -44,15 +52,15 @@ class HistoryView(object):
 history_view = HistoryView()
 
 
-def f():
-    core.start_dearpygui()
-
+# def f():
+#    core.start_dearpygui()
+#
 
 import threading
 
-x = threading.Thread(target=f, args=())
-x.start()
-print(100 * "done")
+# x = threading.Thread(target=f, args=())
+# x.start()
+# print(100 * "done")
 speech_system.register("phrase", history_view.on_phrase)
 # core.start_dearpy1gui()
 
