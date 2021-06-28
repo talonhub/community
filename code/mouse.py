@@ -152,7 +152,7 @@ class Actions:
         """(TEMPORARY) Press and hold/release button 0 depending on state for dragging"""
         # todo: fixme temporary fix for drag command
         button_down = len(list(ctrl.mouse_buttons_down())) > 0
-        print(str(ctrl.mouse_buttons_down()))
+        # print(str(ctrl.mouse_buttons_down()))
         if not button_down:
             # print("start drag...")
             ctrl.mouse_click(button=0, down=True)
@@ -273,7 +273,7 @@ def show_cursor_helper(show):
 
 def on_pop(active):
     if setting_mouse_enable_pop_stops_scroll.get() >= 1 and (gaze_job or scroll_job):
-            stop_scroll()
+        stop_scroll()
     elif (
         not eye_zoom_mouse.zoom_mouse.enabled
         and eye_mouse.mouse.attached_tracker is not None

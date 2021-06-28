@@ -1,7 +1,6 @@
 from talon import Context, actions
 ctx = Context()
 ctx.matches = r"""
-#custom vscode commands go here
 app: vscode
 """
 
