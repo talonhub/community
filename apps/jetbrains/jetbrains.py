@@ -80,10 +80,11 @@ def send_idea_command(cmd):
     bundle = active_app.bundle or active_app.name
     port = port_mapping.get(bundle, None)
     nonce = _get_nonce(port, ".vcidea_") or _get_nonce(port, "vcidea_")
+    proxies = {"http": None, "https": None}
     print(f"sending {bundle} {port} {nonce}")
     if port and nonce:
         response = requests.get(
-            "http://localhost:{}/{}/{}".format(port, nonce, cmd), timeout=(0.05, 3.05)
+            "http://localhost:{}/{}/{}".format(port, nonce, cmd), proxies=proxies, timeout=(0.05, 3.05)
         )
         response.raise_for_status()
         return response.text
