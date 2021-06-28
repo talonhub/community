@@ -1,15 +1,16 @@
 not mode: sleep
 -
-^dictate$:
+^(dictate|dictation mode)$:
     mode.disable("sleep")
     mode.disable("command")
     mode.enable("dictation")
     user.code_clear_language_mode()
     mode.disable("user.gdb")
-^dictation mode$:
+^dictate polish$:
     mode.disable("sleep")
     mode.disable("command")
     mode.enable("dictation")
+    mode.enable("user.polish_dictation")
     user.code_clear_language_mode()
     mode.disable("user.gdb")
 ^command mode$:

@@ -4,6 +4,7 @@ app: vscode
 tag(): user.find_and_replace
 tag(): user.line_commands
 tag(): user.multiple_cursors
+
 tag(): user.snippets
 tag(): user.splits
 tag(): user.tabs
@@ -150,7 +151,8 @@ hint show: user.vscode("editor.action.triggerParameterHints")
 
 (references show|refs): user.vscode("editor.action.goToReferences")
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+# open side: user.vscode("search.action.openResultToSide")
+open side: key(ctrl-enter)
 format that: user.vscode("editor.action.formatDocument") 
 format selection: user.vscode("editor.action.formatSelection")
 imports fix: user.vscode("editor.action.organizeImports")

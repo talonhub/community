@@ -13,6 +13,9 @@ action(edit.paste):
 action(edit.copy):
   key(ctrl-shift-c)
 sudo: insert("sudo ")
+add sudo: 
+    key(home)
+    insert("sudo ")
 run last:
   key(up)
   key(enter)
