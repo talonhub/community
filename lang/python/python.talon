@@ -127,3 +127,9 @@ toggle imports: user.code_toggle_libraries()
 import <user.code_libraries>:
     user.code_insert_library(code_libraries, "")
     key(end enter)
+
+for <user.text> in:
+    insert("for  in ")
+    key(left:4)
+    user.code_public_variable_formatter(text)
+    key(right:4)

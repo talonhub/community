@@ -2,7 +2,10 @@ window (new|open): app.window_open()
 window next: app.window_next()
 window last: app.window_previous()
 window close: app.window_close()
-focus <user.running_applications>: user.switcher_focus(running_applications)
+focus <user.running_applications> [<phrase>]$:
+    user.switcher_focus(running_applications)
+    sleep(200ms)
+    user.parse_phrase(phrase or "")
 running list: user.switcher_toggle_running()
 launch <user.launch_applications>: user.switcher_launch(launch_applications)
 
@@ -14,19 +17,35 @@ snap <user.running_applications> <user.window_snap_position>:
     user.snap_app(running_applications, window_snap_position)
 snap <user.running_applications> [screen] <number>:
     user.move_app_to_screen(running_applications, number)
-portal: user.switcher_focus("Google Chrome")
-coder: user.switcher_focus("Code")
-voice code:
+portal [<phrase>]$:
+    user.switcher_focus("Google Chrome")
+    sleep(200ms)
+    user.parse_phrase(phrase or "")
+coder [<phrase>]$:
+    user.switcher_focus("Code")
+    sleep(200ms)
+    user.parse_phrase(phrase or "")
+voice code [<phrase>]$:
     user.switcher_focus("Code")
     user.vscode("workbench.action.openRecent")
     sleep(50ms)
     insert("pokey-talon")
     key(enter)
     sleep(250ms)
-   
-slacker: user.switcher_focus("Slack")
-folk things: user.switcher_focus("Things")
-folk sim: user.switcher_focus("Simulator")
+    user.parse_phrase(phrase or "")
+slacker [<phrase>]$:
+    user.switcher_focus("Slack")
+    sleep(200ms)
+    user.parse_phrase(phrase or "")
+folk things [<phrase>]$:
+    user.switcher_focus("Things")
+    sleep(200ms)
+    user.parse_phrase(phrase or "")
+folk sim [<phrase>]$:
+    user.switcher_focus("Simulator")
+    sleep(200ms)
+    user.parse_phrase(phrase or "")
+
 <user.teleport> site [<user.text>] [{user.file_extension}]:
     user.switcher_focus("Google Chrome")
     key(cmd-t l p space)

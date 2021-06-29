@@ -56,3 +56,4 @@ emoji scout [<user.text>]:
 show numbers: key(cmd-ctrl-alt-f)
 
 move overlay: user.move_overlay()
+ring save: user.ring_save()

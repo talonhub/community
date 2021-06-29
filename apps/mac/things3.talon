@@ -41,6 +41,9 @@ deadline <user.text>:
     insert(text)
     key(enter)
 
+repeat this:
+    key(cmd-shift-r)
+
 clear deadline:
     key(cmd-shift-d backspace enter)
 

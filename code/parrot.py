@@ -7,7 +7,8 @@ mod = Module()
 class Actions:
     def dental_click():
         """Responds to an alveolar click"""
-        app.notify("Dental click")
+        pass
+        # app.notify("Dental click")
 
     def postalveolar_click():
         """Responds to an postalveolar click"""

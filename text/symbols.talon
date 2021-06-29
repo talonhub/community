@@ -55,7 +55,7 @@ diamond:
 (diamond | angle) that: 
     text = edit.selected_text()
     user.paste("<{text}>")
-(curly | lace) that: 
+(curly | lace) that:
     text = edit.selected_text()
     user.paste("{{{text}}}")
 (round | leper) that: 
@@ -76,3 +76,18 @@ slicer:
 end gap:
     edit.line_end()
     key(space)
+
+slider:
+	edit.line_end()
+	insert(",")
+    key(enter)
+
+breaker:
+	edit.line_end()
+	insert(" {")
+    key(enter)
+
+chronic:
+	edit.line_end()
+	insert(":")
+    key(enter)

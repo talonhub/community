@@ -130,7 +130,7 @@ panel control: user.vscode("workbench.panel.repl.view.focus")
 panel output: user.vscode("workbench.panel.output.focus")
 panel problems: user.vscode("workbench.panel.markers.view.focus")
 low dog: user.vscode("workbench.action.togglePanel")
-panel terminal: user.vscode("workbench.panel.terminal.focus")
+panel terminal: user.vscode("workbench.action.terminal.focus")
 pan edit: user.vscode("workbench.action.focusActiveEditorGroup")
 
 # Settings
@@ -200,7 +200,9 @@ imports fix: user.vscode("editor.action.organizeImports")
 problem next: user.vscode("editor.action.marker.nextInFiles")
 problem last: user.vscode("editor.action.marker.prevInFiles")
 problem fix: user.vscode("problems.action.showQuickFixes")
-rename that: user.vscode("editor.action.rename")
+rename that:
+	user.vscode("editor.action.rename")
+	sleep(100ms)
 refactor that: user.vscode("editor.action.refactor")
 whitespace trim: user.vscode("editor.action.trimTrailingWhitespace")
 language switch: user.vscode("workbench.action.editor.changeLanguageMode")
@@ -238,6 +240,25 @@ spring forward:  user.vscode("workbench.action.navigateForward")
   insert(text or "")
   key(enter)
   sleep(250ms)
+new sesh [<user.text>]: 
+  user.vscode("workbench.action.newWindow")
+  sleep(3s)
+  user.vscode("workbench.action.openRecent")
+  sleep(50ms)
+  insert(text or "")
+  sleep(250ms)
+
+<user.find> win [<user.text>]: 
+	user.vscode("workbench.action.switchWindow")
+	sleep(50ms)
+	insert(text or "")
+	sleep(250ms)
+<user.teleport> win [<user.text>]: 
+	user.vscode("workbench.action.switchWindow")
+	sleep(50ms)
+	insert(text or "")
+	key(enter)
+	sleep(250ms)
 
 <user.teleport> marks: user.vscode("workbench.view.extension.bookmarks")
 toggle mark: user.vscode("bookmarks.toggle")
@@ -284,6 +305,7 @@ git stage all: user.vscode("git.stageAll")
 git unstage: user.vscode("git.unstage")
 git unstage all: user.vscode("git.unstageAll")
 pull request: user.vscode("pr.create")
+(open | show) pull request: user.vscode("pr.openPullRequestOnGitHub")
 change next: key(alt-f5)
 change last: key(shift-alt-f5)
 
@@ -381,6 +403,7 @@ cell next: user.vscode("jupyter.gotoNextCellInFile")
 cell last: user.vscode("jupyter.gotoPrevCellInFile")
 cell run above: user.vscode("jupyter.runallcellsabove.palette")
 cell run: user.vscode("jupyter.runcurrentcell")
+cell run all: user.vscode("jupyter.runallcells")
 
 jest: key(ctrl-space)
 yes:
@@ -396,3 +419,15 @@ zoom (normal | regular):
 	user.set_zoom_level(1)
 
 make executable: user.vscode("chmod.plusX")
+
+add dock string: user.vscode("autoDocstring.generateDocstring")
+
+issue create: user.vscode("issue.createIssue")
+issue submit: user.vscode("issue.createIssueFromFile")
+
+draft (save | submit):
+	user.draft_editor_save()
+draft discard:
+	user.draft_editor_discard()
+
+dev tools: user.vscode("workbench.action.toggleDevTools")

@@ -26,7 +26,7 @@ fifo
 mkfifo,make fifo
 args
 arg
-node.js,node jay yes
+node.js,no js
 enum,eenum
 todo,to do
 flashcard,flash card
@@ -54,3 +54,7 @@ matchers
 node
 async
 nonce
+dir
+css
+svg
+html

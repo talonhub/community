@@ -1,11 +1,17 @@
-from typing import List, Optional
+from dataclasses import dataclass
+from typing import Dict, Generic, List, Mapping, Optional, TypeVar
+from collections import defaultdict
 import itertools
-from talon import registry
+
+from talon import actions, registry
+from talon import Context, Module, app, imgui, ui, fs
 import re
 
 from .extensions import file_extensions
 from .numbers import digits_map
 from .abbreviate import abbreviations
+
+mod = Module()
 
 # TODO: 'Whats application': 'WhatsApp' (Should keep "whats app" as well?)
 # TODO: 'V O X': 'VOX' (should keep "VOX" as well?)
@@ -49,38 +55,89 @@ def create_single_spoken_form(source: str):
     return mapped_source
 
 
-def create_spoken_forms(
-    source: str,
-    words_to_exclude: Optional[List[str]] = None,
-    minimum_term_length=DEFAULT_MINIMUM_TERM_LENGTH,
-) -> List[str]:
-    if words_to_exclude is None:
-        words_to_exclude = []
+T = TypeVar("T")
 
-    pieces = list(FULL_REGEX.finditer(source))
-    # print([piece.group(0) for piece in pieces])
 
-    term_sequence = " ".join(
-        [create_single_spoken_form(piece.group(0)) for piece in pieces]
-    ).split(" ")
-    # print(term_sequence)
+@dataclass
+class SpeakableItem(Generic[T]):
+    name: str
+    value: T
 
-    terms = list(
-        {
-            term.strip()
-            for term in (
-                term_sequence
-                + list(itertools.accumulate([f"{term} " for term in term_sequence]))
-                + [source]
+
+@mod.action_class
+class Actions:
+    def create_spoken_forms(
+        source: str,
+        words_to_exclude: Optional[List[str]] = None,
+        minimum_term_length: int = DEFAULT_MINIMUM_TERM_LENGTH,
+    ) -> List[str]:
+        """Create spoken forms for a given source"""
+        if words_to_exclude is None:
+            words_to_exclude = []
+
+        pieces = list(FULL_REGEX.finditer(source))
+        # print([piece.group(0) for piece in pieces])
+
+        term_sequence = " ".join(
+            [create_single_spoken_form(piece.group(0)) for piece in pieces]
+        ).split(" ")
+        # print(term_sequence)
+
+        terms = list(
+            {
+                term.lower().strip()
+                for term in (
+                    term_sequence
+                    + list(itertools.accumulate([f"{term} " for term in term_sequence]))
+                    + [source]
+                )
+            }
+        )
+
+        terms = [
+            term
+            for term in terms
+            if term not in words_to_exclude and len(term) >= minimum_term_length
+        ]
+        # print(terms)
+
+        return terms
+
+    def create_spoken_forms_from_list(
+        sources: List[str],
+        words_to_exclude: Optional[List[str]] = None,
+        minimum_term_length: int = DEFAULT_MINIMUM_TERM_LENGTH,
+    ) -> Dict[str, str]:
+        """Create spoken forms for all sources in a list, doing conflict resolution"""
+        return actions.user.create_spoken_forms_from_map(
+            {source: source for source in sources},
+            words_to_exclude,
+            minimum_term_length,
+        )
+
+    def create_spoken_forms_from_map(
+        sources: Mapping[str, T],
+        words_to_exclude: Optional[List[str]] = None,
+        minimum_term_length: int = DEFAULT_MINIMUM_TERM_LENGTH,
+    ) -> Dict[str, T]:
+        """Create spoken forms for all sources in a map, doing conflict resolution"""
+        all_spoken_forms: defaultdict[str, List[SpeakableItem[T]]] = defaultdict(list)
+
+        for name, value in sources.items():
+            spoken_forms = actions.user.create_spoken_forms(
+                name, words_to_exclude, minimum_term_length
             )
-        }
-    )
+            for spoken_form in spoken_forms:
+                all_spoken_forms[spoken_form].append(SpeakableItem(name, value))
 
-    terms = [
-        term
-        for term in terms
-        if term not in words_to_exclude and len(term) >= minimum_term_length
-    ]
-    # print(terms)
+        final_spoken_forms = {}
+        for spoken_form, spoken_form_sources in all_spoken_forms.items():
+            if len(spoken_form_sources) > 1:
+                final_spoken_forms[spoken_form] = min(
+                    spoken_form_sources,
+                    key=lambda speakable_item: len(speakable_item.name),
+                ).value
+            else:
+                final_spoken_forms[spoken_form] = spoken_form_sources[0].value
 
-    return terms
+        return final_spoken_forms
