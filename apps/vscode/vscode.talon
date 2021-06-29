@@ -260,8 +260,6 @@ terminal <number_small>: user.vscode_terminal(number_small)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 copy line down: user.vscode("editor.action.copyLinesDownAction") 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-copy line: user.vscode("editor.action.copyLinesDownAction") 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 copy line up: user.vscode("editor.action.copyLinesUpAction") 
 
 #Expand/Shrink AST Selection

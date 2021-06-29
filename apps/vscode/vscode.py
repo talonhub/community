@@ -114,11 +114,11 @@ class user_actions:
     def tab_next(number: int):
         print(number)
         for i in range(number):
-           actions.user.vscode("workbench.action.nextEditorInGroup") 
-            
+            actions.user.vscode("workbench.action.nextEditorInGroup")
+
     def tab_previous(number: int):
         for i in range(number):
-           actions.user.vscode("workbench.action.previousEditorInGroup") 
+            actions.user.vscode("workbench.action.previousEditorInGroup")
 
     def tab_jump(number: int):
         if number < 10:
