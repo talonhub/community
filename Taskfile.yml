@@ -3,7 +3,7 @@ tasks:
   deploy:
     desc: "."
     cmds:
-      - rsync -avz /home/maciek/projects/knausj_talon/ /home/maciek/.talon/user/knausj_talon
+      - rsync -avz --delete /home/maciek/projects/knausj_talon/ /home/maciek/.talon/user/knausj_talon
   pandoc:
     desc: "."
     cmds:

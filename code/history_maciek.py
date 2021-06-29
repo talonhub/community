@@ -1,3 +1,4 @@
+import os
 from dearpygui import core, simple
 from talon import Module, actions, app, imgui, speech_system
 
@@ -21,6 +22,8 @@ def parse_phrase(word_list):
 import json
 import pprint
 
+import psutil
+
 
 class HistoryView(object):
     def __init__(self) -> None:
@@ -33,11 +36,17 @@ class HistoryView(object):
         # print("got", pprint.pprint(j))
         # to_display = ["audio_ms", "emit_ms", "compile_ms"]
         # print(j["_metadata"])
-        # print(j.items())
+        # print(j.items()
         if "_metadata" in j.keys():
+            to_dump = j["_metadata"]
+            diagnostics = self.create_diagnostics()
+            to_dump["diagnostics"] = diagnostics
+
             with open("/home/maciek/.talon_maciek/logs", mode="a") as f:
-                f.write(json.dumps(j["_metadata"]))
+                f.write(json.dumps(to_dump))
+
                 f.write("\n")
+                f.write("---\n")
 
         try:
             val = parse_phrase(getattr(j["parsed"], "_unmapped", j["phrase"]))
@@ -47,6 +56,16 @@ class HistoryView(object):
         if val != "":
             self.history.append(val)
             self.history = self.history[-setting_command_history_size.get() :]
+
+    def create_diagnostics(self):
+        load1, load5, load15 = os.getloadavg()
+        diagnostics = {}
+        diagnostics["load1"] = load1
+        diagnostics["load5"] = load5
+        diagnostics["load15"] = load15
+        diagnostics["swap_used"] = psutil.swap_memory().percent
+
+        return diagnostics
 
 
 history_view = HistoryView()
