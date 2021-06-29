@@ -224,13 +224,6 @@ class Actions:
             gui_folders.show()
 
 
-pattern = re.compile(r"[A-Z][a-z]*|[a-z]+|\d")
-
-
-def create_spoken_forms(symbols, max_len=30):
-    return [" ".join(list(islice(pattern.findall(s), max_len))) for s in symbols]
-
-
 def is_dir(f):
     try:
         return f.is_dir()
@@ -253,9 +246,9 @@ def get_directory_map(current_path):
         )
         if is_dir(f)
     ]
+    # directories.sort()
     # print(len(directories))
-    spoken_forms = create_spoken_forms(directories)
-    return dict(zip(spoken_forms, directories))
+    return actions.user.create_spoken_forms_from_list(directories)
 
 
 def get_file_map(current_path):
@@ -266,9 +259,10 @@ def get_file_map(current_path):
         )
         if is_file(f)
     ]
+    # files.sort()
     # print(str(files))
-    spoken_forms = create_spoken_forms([p for p in files])
-    return dict(zip(spoken_forms, [f for f in files]))
+
+    return actions.user.create_spoken_forms_from_list(files)
 
 
 @imgui.open(y=10, x=900)
@@ -387,8 +381,11 @@ def update_lists():
     current_folder_page = current_file_page = 1
     ctx.lists["self.file_manager_directories"] = directories
     ctx.lists["self.file_manager_files"] = files
-    folder_selections = sorted(directories.values(), key=str.casefold)
-    file_selections = sorted(files.values(), key=str.casefold)
+
+    folder_selections = list(set(directories.values()))
+    folder_selections.sort(key=str.casefold)
+    file_selections = list(set(files.values()))
+    file_selections.sort(key=str.casefold)
 
     update_gui()
 
@@ -424,4 +421,3 @@ def register_events():
 # prevent scary errors in the log by waiting for talon to be fully loaded
 # before registering the events
 app.register("ready", register_events)
-
