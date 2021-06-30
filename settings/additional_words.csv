@@ -12,13 +12,16 @@ Minecraft
 neovim
 match,march
 vim
+ctrl,control
 API
 pdf
 yell
-mouth,mode
+mode,mouth
+talon,tom
 yaml
 npm
 PAM
+proc
 eval
 head,had
 bash,bush
@@ -35,8 +38,10 @@ dict
 keystroke
 gnome
 import,in port
+repl,repel
 keystrokes
 roam
+roam,rome
 mode,monte
 mode,mouth
 linux
@@ -49,18 +54,26 @@ vscode,he is cold
 vscode,he as cold
 vscode,vcode
 vscode,cold
-roamresearch
+roamresear
+chrome
+todo
+todos
+todos,to thus
+talon,talent
 roamresearch,rome research
+chromium
 vscode,we cold
 vscode,the cold
 dir,dear
 login,logan
+files,piles
 yen
 wok
 remi
 yubikey
 yubikey,you be key
 as
+set,said
 debug
 echo
 alpha
