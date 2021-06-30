@@ -72,6 +72,9 @@ bar switch: user.vscode("workbench.action.toggleSidebarVisibility")
 # show recent: user.vscode("work55bench.action.showAllEditorsByMostRecentlyUsed")
 go search [<user.text>]: 
     user.vscode("workbench.action.findInFiles")
+    
+    
+    
     sleep(50ms)
     insert(text or "")
     
@@ -134,6 +137,7 @@ file move:
 	user.vscode("fileutils.moveFile")
 	sleep(150ms)
 file open folder: user.vscode("revealFileInOS")
+file duplicate: user.vscode("fileutils.duplicateFile")
 (file reveal|show in tree): user.vscode("workbench.files.action.showActiveFileInExplorer") 
 save ugly: user.vscode("workbench.action.files.saveWithoutFormatting")
 
@@ -295,3 +299,4 @@ install local: user.vscode("workbench.extensions.action.installVSIX")
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 toggle comment: code.toggle_comment()  
 return: insert("return ") 
+close others: user.vscode("workbench.action.closeOtherEditors") 

@@ -60,7 +60,6 @@ words_to_exclude = [
     "windows",
     "Windows",
 ]
-
 # windows-specific logic
 if app.platform == "windows":
     import os
@@ -170,10 +169,12 @@ def get_words(name):
 
 
 def update_lists():
+    print(100 * "update_lists\n")
     global running_application_dict
     running_application_dict = {}
     running = {}
     for cur_app in ui.apps(background=False):
+        print(cur_app.name, cur_app.pid)
         name = cur_app.name
 
         if name.endswith(".exe"):
@@ -361,6 +362,7 @@ def update_launch_list():
 
 
 def ui_event(event, arg):
+    print("ui_event", event, arg)
     if event in ("app_launch", "app_close"):
         update_lists()
 

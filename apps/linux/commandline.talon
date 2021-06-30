@@ -33,6 +33,7 @@ file copy: "cp "
 file type: "file "
 file show <user.text>: "cat {text}"
 file show: "cat "
+file stat: "stat "
 file edit: insert("edit ")
 file edit here: insert("edit .\n")
 file remove: "rm -I "

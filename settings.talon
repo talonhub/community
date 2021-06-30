@@ -30,9 +30,10 @@ settings():
 
     user.command_history_size = 50
     speech.record_all = 1 
+    speech.record_labels = 1
     speech.normalize = 0
     speech.threshold = 0.75
-    # speech.threshold = 1.0
+    # speech.threshold = 1.
     speech.timeout = 0.250
 
     # Uncomment the below to enable context-sensitive dictation. This determines

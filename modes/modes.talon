@@ -8,7 +8,7 @@ not mode: sleep
     mode.disable("user.gdb")
 ^dictate polish$:
     mode.disable("sleep")
-    mode.disable("command")
+    mode.disable("comicknd")
     mode.enable("dictation")
     mode.enable("user.polish_dictation")
     user.code_clear_language_mode()

@@ -1,4 +1,4 @@
-os: windows
+os: linux
 app: chrome
 -
 tag(): browser
@@ -70,4 +70,7 @@ action(browser.toggle_dev_tools):
 show links: key("f")
 links: key("f")
 big links: key(shift-f)
-go search: key(ctrl-f)
+go search [<user.text>]: 
+    key("o")
+    sleep(50ms)
+    insert(text or "")
