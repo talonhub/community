@@ -13,9 +13,6 @@ shock:
 you bun to:
   "Ubuntu"
 
-spacey:
-  key(space)
-
 gap: 
   key(space)
 
