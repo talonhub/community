@@ -94,7 +94,7 @@ elm unordered list:
   "<li></li>"
   key(enter shift-tab)
   "</ul>"
-  key(up right)
+  key(up right:3)
 
 elm list item:
   "<li></li>"
