@@ -153,6 +153,7 @@ def split_list(value, l: list) -> Iterator:
 alt_digits = "(" + ("|".join(digits_map.keys())) + ")"
 alt_teens = "(" + ("|".join(teens_map.keys())) + ")"
 alt_tens = "(" + ("|".join(tens_map.keys())) + ")"
+alt_tens_above_ten = "(" + ("|".join(n for n,v in tens_map.items() if v != 10)) + ")"
 alt_scales = "(" + ("|".join(scales_map.keys())) + ")"
 number_word = "(" + "|".join(numbers_map.keys()) + ")"
 
@@ -181,6 +182,6 @@ def number_signed(m):
     return -number if (m[0] in ["negative", "minus"]) else number
 
 @ctx.capture(
-    "number_small", rule=f"({alt_digits} | {alt_teens} | {alt_tens} [{alt_digits}])"
+    "number_small", rule=f"({alt_digits} | {alt_teens} | ten | {alt_tens_above_ten} [{alt_digits}])"
 )
 def number_small(m): return int(parse_number(list(m)))
