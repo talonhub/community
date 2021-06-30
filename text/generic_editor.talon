@@ -1,3 +1,6 @@
+comet:
+  ","
+
 fantasizes:
   "font sizes"
 
