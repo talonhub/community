@@ -5,14 +5,14 @@ mod = Module()
 ctx = Context()
 
 digits = "zero one two three four five six seven eight nine".split()
-teens = "eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen".split()
-tens = "ten twenty thirty forty fifty sixty seventy eighty ninety".split()
+teens = "ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen".split()
+tens = "twenty thirty forty fifty sixty seventy eighty ninety".split()
 scales = "hundred thousand million billion trillion quadrillion quintillion sextillion septillion octillion nonillion decillion".split()
 
 digits_map = {n: i for i, n in enumerate(digits)}
 digits_map["oh"] = 0
-teens_map = {n: i + 11 for i, n in enumerate(teens)}
-tens_map = {n: 10 * (i + 1) for i, n in enumerate(tens)}
+teens_map = {n: i + 10 for i, n in enumerate(teens)}
+tens_map = {n: 10 * (i + 2) for i, n in enumerate(tens)}
 scales_map = {n: 10 ** (3 * (i+1)) for i, n in enumerate(scales[1:])}
 scales_map["hundred"] = 100
 
@@ -153,7 +153,6 @@ def split_list(value, l: list) -> Iterator:
 alt_digits = "(" + ("|".join(digits_map.keys())) + ")"
 alt_teens = "(" + ("|".join(teens_map.keys())) + ")"
 alt_tens = "(" + ("|".join(tens_map.keys())) + ")"
-alt_tens_above_ten = "(" + ("|".join(n for n,v in tens_map.items() if v != 10)) + ")"
 alt_scales = "(" + ("|".join(scales_map.keys())) + ")"
 number_word = "(" + "|".join(numbers_map.keys()) + ")"
 
@@ -182,6 +181,6 @@ def number_signed(m):
     return -number if (m[0] in ["negative", "minus"]) else number
 
 @ctx.capture(
-    "number_small", rule=f"({alt_digits} | {alt_teens} | ten | {alt_tens_above_ten} [{alt_digits}])"
+    "number_small", rule=f"({alt_digits} | {alt_teens} | {alt_tens} [{alt_digits}])"
 )
 def number_small(m): return int(parse_number(list(m)))
