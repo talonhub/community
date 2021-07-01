@@ -44,7 +44,7 @@ def scan_small_numbers(l: List[str]) -> Iterator[Union[str,int]]:
     while l:
         n = l.pop()
         # fuse tens onto digits, eg. "twenty", "one" -> 21
-        if n in tens_map and n != "ten" and l and digits_map.get(l[-1], 0) != 0:
+        if n in tens_map and l and digits_map.get(l[-1], 0) != 0:
             d = l.pop()
             yield numbers_map[n] + numbers_map[d]
         # turn small number terms into corresponding numbers
