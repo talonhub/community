@@ -75,7 +75,7 @@ history_view = HistoryView()
 #    core.start_dearpygui()
 #
 
-import threading
+# import threading
 
 # x = threading.Thread(target=f, args=())
 # x.start()
