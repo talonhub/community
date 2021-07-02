@@ -173,6 +173,7 @@ head: "head "
 head <number_small>: "head -n {number_small} "
 (where am I|print working directory): "pwd\n"
 
+in home: insert(" ~/")
 
 # XXX - ~/.edit/sessions/<tab>
 edit session:

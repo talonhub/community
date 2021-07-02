@@ -8,3 +8,7 @@ tasks:
     desc: "."
     cmds:
       - pandoc -s /home/maciek/.talon/user/knausj_talon/maciek/cheatsheet.md -c maciek/cheatsheet.css -f markdown-raw_html -t html -o cheatsheet.html
+  show-cheatsheet:
+    desc: "."
+    cmds:
+      - google-chrome-unstable cheatsheet.html

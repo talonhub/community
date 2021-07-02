@@ -142,11 +142,28 @@ class user_actions:
             "kubectl",
             "line commands",
             "symbols",
+            "linux commandline",
+            "linux fish fzf",
+            "python",
+            "programming",
+            "block comment",
+            "operators",
+            "sql",
+            "talon",
+            "extensions",
+            "help",
+            "screenshot",
+            "splits",
+            "win window management",
+            "language modes",
+            "modes",
+            "homophones",
+            "symbols",
         ]
 
         list_of_contexts = registry.contexts.items()
         for key, value in list_of_contexts:
-            print(key, value)
+            print(create_short_name(key), key, value)
             if create_short_name(key) not in interesting_contexts:
                 continue
 

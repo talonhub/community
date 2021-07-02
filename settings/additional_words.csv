@@ -1,111 +1,119 @@
 Word(s),Spoken Form (If Different)
-nmap,N map
-under-documented,under documented
-nmap
+mkdir,make directory
 admin
+allegro,libra
+alpha
+API
+apt,a pity
+as
+bash,bush
+cd,change directory
+chrome
+chromium
 Cisco
 Citrix
-VPN
-REST
-DNS
-Minecraft
-neovim
-match,march
-vim
+code,cold
+csv
 ctrl,control
-API
-pdf
-yell
-mode,mouth
-talon,tom
-yaml
-npm
-PAM
-proc
-eval
-head,had
-bash,bush
-json
-dump,dumb
-json,jason
-tag,tack
-tags,tugs
-vscode
-to,too
-refs
-redis
+debug
+debug,de bug
+debug,the bag
+debugger
+debugger,the beggar
+debugger,the beggar
 dict
-keystroke
-gnome
-import,in port
-repl,repel
-keystrokes
-roam
-roam,rome
-mode,monte
-mode,mouth
-linux
+dir,dear
+DNS
+dump,dumb
+echo
+eval
+files,piles
+fullscreen,full screen
+generic,genetic
 github
-Taskfile
-Taskfile,tusk file
+gnome
+golang
+google-chrome
+google-chrome,google home
+head,had
+import,in port
+install,in stall
+json
+json,jason
+keystroke
+keystrokes
+linux
+login,logan
 maciek
 maciek,magic
-vscode,he is cold
-vscode,he as cold
-vscode,vcode
-vscode,cold
+match,march
+Minecraft
+mode,monte
+mode,mould
+mode,mouth
+mode,mouth
+neovim
+neovim,me of him
+nmap
+nmap,N map
+npm
+nvim,an vim
+PAM
+pdf
+proc
+pycharm
+recent,resent
+redis
+refs
+regexp
+remi
+repl,repel
+resolvectl,resolve cattle
+REST
+ripgrep
+roam
+roam,rome
 roamresear
-chrome
+roamresearch,rome research
+set,said
+settings,say things
+settings,sittings
+shell,shall
+shortcut,short cut
+shortcuts,short cuts
+sudo,so do
+sudo,so the
+sudo,sudo
+tag,tack
+tags,tugs
+talon,talent
+talon,tom
+Taskfile
+Taskfile,tusk file
+to,too
 todo
 todos
 todos,to thus
-talon,talent
-roamresearch,rome research
-chromium
-vscode,we cold
+uber
+uber,oh bats
+ubuntu
+ubuntu,want to
+ubuntu,you unto
+under-documented,under documented
+unofficial
+vim
+VPN
+vscode
+vscode,cold
+vscode,he cold
+vscode,he as cold
+vscode,he is cold
 vscode,the cold
-dir,dear
-login,logan
-files,piles
-yen
+vscode,vcode
+vscode,we cold
 wok
-remi
+yaml
+yell
+yen
 yubikey
 yubikey,you be key
-as
-set,said
-debug
-echo
-alpha
-uber
-pycharm
-ubuntu
-ubuntu,you unto
-ubuntu,want to
-allegro,libra
-generic,genetic
-mode,mould
-settings,sittings
-recent,resent
-settings,say things
-uber,oh bats
-debug,the bag
-debug,de bug
-debugger
-debugger,the beggar
-code,cold
-debugger,the beggar
-sudo,sudo
-sudo,so do
-sudo,so the
-apt,a pity
-shortcut,short cut
-shortcuts,short cuts
-install,in stall
-neovim,me of him
-nvim,an vim
-1mkdir,make directory
-cd,change directory
-fullscreen,full screen
-shell,shall
-resolvectl,resolve cattle

@@ -72,5 +72,5 @@ links: key("f")
 big links: key(shift-f)
 go search [<user.text>]: 
     key("o")
-    sleep(50ms)
+    sleep(200ms)
     insert(text or "")

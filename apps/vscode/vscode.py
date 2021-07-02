@@ -30,6 +30,8 @@ os: mac
 app: vscode
 """
 
+ctx.settings["insert_wait"] = 5.0
+
 
 @ctx.action_class("win")
 class win_actions:
