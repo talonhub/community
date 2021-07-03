@@ -24,7 +24,7 @@ SMALL_WORD = r"[A-Z]?[a-z]+"
 # TODO: We want "AXEvery" to be ["AX", "Every"]
 UPPERCASE_WORD = r"[A-Z]+"
 FILE_EXTENSIONS_REGEX = "|".join(
-    file_extension.strip() for file_extension in file_extensions.values()
+    re.escape(file_extension.strip()) for file_extension in file_extensions.values()
 )
 DIGITS_REGEX = r"\d"
 SYMBOLS_REGEX = "|".join(re.escape(symbol) for symbol in set(symbol_key_words.values()))
