@@ -15,6 +15,25 @@ mod.tag("file_manager", desc="Tag for enabling generic file management commands"
 mod.list("file_manager_directories", desc="List of subdirectories for the current path")
 mod.list("file_manager_files", desc="List of files at the root of the current path")
 
+words_to_exclude = [
+    "and",
+    "zero",
+    "one",
+    "two",
+    "three",
+    "for",
+    "four",
+    "five",
+    "six",
+    "seven",
+    "eight",
+    "nine",
+    "microsoft",
+    "windows",
+    "Windows",
+    "dot",
+    "exe",
+]
 
 setting_auto_show_pickers = mod.setting(
     "file_manager_auto_show_pickers",
@@ -246,9 +265,10 @@ def get_directory_map(current_path):
         )
         if is_dir(f)
     ]
-    # directories.sort()
-    # print(len(directories))
-    return actions.user.create_spoken_forms_from_list(directories)
+    directories.sort(key=str.casefold)
+    return actions.user.create_spoken_forms_from_list(
+        directories, words_to_exclude=words_to_exclude
+    )
 
 
 def get_file_map(current_path):
@@ -259,10 +279,10 @@ def get_file_map(current_path):
         )
         if is_file(f)
     ]
-    # files.sort()
-    # print(str(files))
-
-    return actions.user.create_spoken_forms_from_list(files)
+    files.sort(key=str.casefold)
+    return actions.user.create_spoken_forms_from_list(
+        files, words_to_exclude=words_to_exclude
+    )
 
 
 @imgui.open(y=10, x=900)

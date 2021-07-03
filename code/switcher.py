@@ -44,7 +44,6 @@ mac_application_directories = [
 # ]
 
 words_to_exclude = [
-    "and",
     "zero",
     "one",
     "two",
@@ -56,9 +55,19 @@ words_to_exclude = [
     "seven",
     "eight",
     "nine",
+    "and",
+    "dot",
+    "exe",
+    "help",
+    "install",
+    "installer",
     "microsoft",
+    "nine",
+    "readme",
+    "studio",
+    "terminal",
+    "visual",
     "windows",
-    "Windows",
 ]
 
 # windows-specific logic
