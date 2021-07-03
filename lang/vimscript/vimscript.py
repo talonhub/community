@@ -2,6 +2,12 @@ from talon import Context, Module, actions, settings
 
 mod = Module()
 ctx = Context()
+ctx.matches = r"""
+mode: user.vimscript
+mode: user.auto_lang
+and code.language: vimscript
+"""
+
 ctx.lists["self.vimscript_functions"] = {
     "string len": "strlen",
     "get line": "getline",
@@ -38,28 +44,56 @@ def vimscript_scope(m) -> str:
     "Returns a string"
     return m.vimscript_scope
 
-@ctx.action_class('user')
+
+@ctx.action_class("user")
 class UserActions:
-    def code_operator_assignment():                actions.auto_insert(' = ')
-    def code_operator_subtraction():               actions.auto_insert(' - ')
-    def code_operator_subtraction_assignment():    actions.auto_insert(' -= ')
-    def code_operator_addition():                  actions.auto_insert(' + ')
-    def code_operator_addition_assignment():       actions.auto_insert(' += ')
-    def code_operator_multiplication():            actions.auto_insert(' * ')
-    def code_operator_multiplication_assignment(): actions.auto_insert(' *= ')
-    def code_operator_division():                  actions.auto_insert(' / ')
-    def code_operator_division_assignment():       actions.auto_insert(' /= ')
-    
+    def code_operator_assignment():
+        actions.auto_insert(" = ")
+
+    def code_operator_subtraction():
+        actions.auto_insert(" - ")
+
+    def code_operator_subtraction_assignment():
+        actions.auto_insert(" -= ")
+
+    def code_operator_addition():
+        actions.auto_insert(" + ")
+
+    def code_operator_addition_assignment():
+        actions.auto_insert(" += ")
+
+    def code_operator_multiplication():
+        actions.auto_insert(" * ")
+
+    def code_operator_multiplication_assignment():
+        actions.auto_insert(" *= ")
+
+    def code_operator_division():
+        actions.auto_insert(" / ")
+
+    def code_operator_division_assignment():
+        actions.auto_insert(" /= ")
+
     # comments - see lang/code_comment.talon
-    def code_comment():                            actions.auto_insert('"')
-    
+    def code_comment():
+        actions.auto_insert('"')
+
     # conditionals - see lang/programming.talon
     def code_state_if():
-        actions.insert('if ')
+        actions.insert("if ")
+
     def code_state_else_if():
-        actions.insert('elseif ')
+        actions.insert("elseif ")
+
     def code_state_else():
-        actions.insert('else')
-    def code_private_function(text: str):   actions.auto_insert('function ')
-    def code_protected_function(text: str): actions.auto_insert('function ')
-    def code_public_function(text: str):    actions.auto_insert('function ')
+        actions.insert("else")
+
+    def code_private_function(text: str):
+        actions.auto_insert("function ")
+
+    def code_protected_function(text: str):
+        actions.auto_insert("function ")
+
+    def code_public_function(text: str):
+        actions.auto_insert("function ")
+
