@@ -1,5 +1,5 @@
 mode: user.typescript
-mode: command
+mode: user.auto_lang
 and code.language: typescript
 -
 tag(): user.code_operators

@@ -1,5 +1,5 @@
 mode: user.batch
-mode: command
+mode: user.auto_lang
 and code.language: batch
 -
 #tag(): user.code_operators

@@ -1,5 +1,5 @@
 mode: user.java
-mode: command
+mode: user.auto_lang
 and code.language: java
 
 -

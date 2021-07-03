@@ -3,7 +3,7 @@ from talon import Context, Module, actions, imgui, settings, ui
 ctx = Context()
 ctx.matches = r"""
 mode: user.csharp
-mode: command
+mode: user.auto_lang
 and code.language: csharp
 """
 ctx.lists["user.code_functions"] = {
