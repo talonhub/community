@@ -11,7 +11,7 @@ mod.setting(
 ctx = Context()
 ctx.matches = r"""
 mode: user.c
-mode: command
+mode: user.auto_lang
 and code.language: c
 """
 

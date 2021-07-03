@@ -1,5 +1,5 @@
 mode: user.talon
-mode: command
+mode: user.auto_lang
 and code.language: talon
 -
 tag(): user.code_operators

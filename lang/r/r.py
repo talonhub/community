@@ -4,7 +4,7 @@ ctx = Context()
 
 ctx.matches = r"""
 mode: user.r
-mode: command
+mode: user.auto_lang
 and code.language: r
 """
 

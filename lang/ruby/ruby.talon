@@ -1,5 +1,5 @@
 mode: user.ruby
-mode: command
+mode: user.auto_lang
 and code.language: ruby
 -
 tag(): user.code_operators

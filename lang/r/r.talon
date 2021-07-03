@@ -1,5 +1,5 @@
 mode: user.r
-mode: command
+mode: user.auto_lang
 and code.language: r
 -
 # TODO: functions

@@ -6,7 +6,7 @@ mod = Module()
 ctx = Context()
 ctx.matches = r"""
 mode: user.python
-mode: command
+mode: user.auto_lang
 and code.language: python
 """
 ctx.lists["user.code_functions"] = {
