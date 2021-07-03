@@ -24,6 +24,20 @@ action(code.toggle_comment): user.vscode("editor.action.commentLine")
 action(edit.indent_more): user.vscode("editor.action.indentLines")
 action(edit.indent_less): user.vscode("editor.action.outdentLines")
 action(edit.save_all): user.vscode("workbench.action.files.saveAll")
+action(edit.jump_line): user.vscode("workbench.action.gotoLine")
+action(edit.delete_word): actions.edit.select_word()
+	actions.edit.delete()
+action(edit.delete_line):  user.vscode("editor.action.deleteLines")
+action(edit.line_insert_down): user.vscode("editor.action.insertLineAfter")
+action(edit.line_insert_up): user.vscode("editor.action.insertLineBefore")
+action(edit.line_swap_up): user.vscode("editor.action.moveLinesUpAction")
+action(edit.line_swap_down): user.vscode("editor.action.moveLinesDownAction")
+# action(edit.select_line): # metago
+# 	user.vscode("expandLineSelection")
+action(edit.select_none):
+	user.vscode("cancelSelection")
+action(edit.select_word):
+	user.vscode("editor.action.addSelectionToNextFindMatch")
 
 # splits.py support begin
 action(user.split_clear_all): user.vscode("workbench.action.editorLayoutSingle")
@@ -60,7 +74,7 @@ please [<user.text>]:
 bar explore: user.vscode("workbench.view.explorer")
 bar extensions: user.vscode("workbench.view.extensions")
 bar outline: user.vscode("outline.focus")
-bar run: user.vscode("workbench.view.debug")
+bar (debug|run): user.vscode("workbench.view.debug")
 bar search: user.vscode("workbench.view.search")
 bar source: user.vscode("workbench.view.scm")
 bar switch: user.vscode("workbench.action.toggleSidebarVisibility")
@@ -91,6 +105,9 @@ wrap switch: user.vscode("editor.action.toggleWordWrap")
 zen switch: user.vscode("workbench.action.toggleZenMode")
 
 # File Commands
+file open: user.vscode("workbench.action.files.openFile")
+folder open: user.vscode("workbench.action.files.openFolder")
+(folder|file) recent: user.vscode("workbench.action.openRecent")
 file hunt [<user.text>]: 
   user.vscode("workbench.action.quickOpen")
   sleep(50ms)
@@ -221,8 +238,8 @@ copy line down: user.vscode("editor.action.copyLinesDownAction")
 copy line up: user.vscode("editor.action.copyLinesUpAction")
 
 #Expand/Shrink AST Selection
-select less: user.vscode("editor.action.smartSelect.shrink")
-select (more|this): user.vscode("editor.action.smartSelect.expand")
+take less: user.vscode("editor.action.smartSelect.shrink")
+take (more|this): user.vscode("editor.action.smartSelect.expand")
 
 minimap: user.vscode("editor.action.toggleMinimap")
 maximize: user.vscode("workbench.action.minimizeOtherEditors")
@@ -237,10 +254,12 @@ hover show: user.vscode("editor.action.showHover")
 join lines: user.vscode("editor.action.joinLines")
 
 full screen: user.vscode("workbench.action.toggleFullScreen")
+reload window: user.vscode("workbench.action.reloadWindow")
+close window: user.vscode("workbench.action.closeWindow")
 
 curse undo: user.vscode("cursorUndo")
 
-select word: user.vscode("editor.action.addSelectionToNextFindMatch")
+take word: user.vscode("editor.action.addSelectionToNextFindMatch")
 skip word: user.vscode("editor.action.moveSelectionToNextFindMatch")
 
 # jupyter
@@ -250,3 +269,50 @@ cell run above: user.vscode("jupyter.runallcellsabove.palette")
 cell run: user.vscode("jupyter.runcurrentcell")
 
 install local: user.vscode("workbench.extensions.action.installVSIX")
+
+edit last: user.vscode("editsHistory.moveCursorToPreviousEdit")
+edit next: user.vscode("editsHistory.moveCursorToNextEdit")
+edit add: user.vscode("editsHistory.createEditAtCursor")
+edit last here: user.vscode("editsHistory.moveCursorToPreviousEditInSameFile")
+edit next here: user.vscode("editsHistory.moveCursorToNextEditInSameFile")
+
+# Emmet
+emmet out: user.vscode("editor.emmet.action.balanceOut")
+emmet in: user.vscode("editor.emmet.action.balanceIn")
+emmet expand: user.vscode("editor.emmet.action.expandAbbreviation")
+emmet match: user.vscode("editor.emmet.action.matchTag")
+emmet next: user.vscode("editor.emmet.action.nextEditPoint")
+emmet last: user.vscode("editor.emmet.action.prevEditPoint")
+emmet remove: user.vscode("editor.emmet.action.removeTag")
+emmet (split|join): user.vscode("editor.emmet.action.splitJoinTag")
+emmet update: user.vscode("editor.emmet.action.updateTag")
+emmet wrap: user.vscode("editor.emmet.action.wrapWithAbbreviation")
+emmet wrap lines: user.vscode("editor.emmet.action.wrapIndividualLinesWithAbbreviation")
+emmet evaluate: user.vscode("editor.emmet.action.evaluateMathExpression")
+emmet increment: user.vscode("editor.emmet.action.incrementNumberByOne")
+emmet increment big: user.vscode("editor.emmet.action.incrementNumberByTen")
+emmet increment small: user.vscode("editor.emmet.action.incrementNumberByOneTenth")
+emmet decrement: user.vscode("editor.emmet.action.decrementNumberByOne")
+emmet decrement big: user.vscode("editor.emmet.action.decrementNumberByTen")
+emmet decrement small: user.vscode("editor.emmet.action.decrementNumberByOneTenth")
+emmet show: user.vscode("workbench.action.showEmmetCommands")
+
+# Git Lens (eamodio.gitlens)
+git commit search: user.vscode("gitlens.showCommitSearch")
+git commit details: user.vscode("gitlens.showQuickCommitFileDetails")
+git branch history: user.vscode("gitlens.showQuickRepoHistory")
+git file history: user.vscode("gitlens.showQuickFileHistory")
+git status: user.vscode("gitlens.showQuickRepoStatus")
+git blame show: user.vscode("gitlens.toggleFileBlame")
+git blame switch: user.vscode("gitlens.toggleLineBlame")
+git lens switch: user.show("gitlens.toggleCodeLens")
+git zen switch: user.vscode("gitlens.toggleZenMode")
+git review switch: user.vscode("gitlens.toggleReviewMode")
+
+marks toggle: user.vscode("cursorless.toggleDecorations")
+
+draft (save | submit):
+	user.draft_editor_save()
+draft discard:
+	user.draft_editor_discard()
+

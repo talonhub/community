@@ -12,22 +12,23 @@ op lambda: user.code_operator_lambda()
 op subscript: user.code_operator_subscript()
 
 #assignment
-op (equals | assign): user.code_operator_assignment()
+assign: user.code_operator_assignment()
 
 #math operators
-op (minus | subtract): user.code_operator_subtraction()
-op (minus | subtract) equals: user.code_operator_subtraction_assignment()
-op (plus | add): user.code_operator_addition()
-op (plus | add) equals: user.code_operator_addition_assignment()
-op (times | multiply): user.code_operator_multiplication()
-op (times | multiply) equals: user.code_operator_multiplication_assignment()
-op divide: user.code_operator_division()
-op divide equals: user.code_operator_division_assignment()
-op mod: user.code_operator_modulo()
-op mod equals: user.code_operator_modulo_assignment()
+minus: user.code_operator_subtraction()
+minus equals: user.code_operator_subtraction_assignment()
+plus: user.code_operator_addition()
+plus equals: user.code_operator_addition_assignment()
+times: user.code_operator_multiplication()
+times equals: user.code_operator_multiplication_assignment()
+divide: user.code_operator_division()
+divide equals: user.code_operator_division_assignment()
+mod: user.code_operator_modulo()
+mod equals: user.code_operator_modulo_assignment()
 (op (power | exponent) | to the power [of]): user.code_operator_exponent()
 
 #comparison operators
+equals: user.code_operator_equal()
 (op | is) equal: user.code_operator_equal()
 (op | is) not equal: user.code_operator_not_equal()
 (op | is) (greater | more): user.code_operator_greater_than()
@@ -51,4 +52,4 @@ op mod equals: user.code_operator_modulo_assignment()
 [(op | logical | bitwise)] (left right | shift right) equals: user.code_operator_bitwise_right_shift_equals()
 
 #tbd
-(op | pad) colon: " : "
+# (op | pad) colon: " : "

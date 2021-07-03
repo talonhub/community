@@ -2,17 +2,17 @@ control mouse: user.mouse_toggle_control_mouse()
 zoom mouse: user.mouse_toggle_zoom_mouse()
 camera overlay: user.mouse_toggle_camera_overlay()
 run calibration: user.mouse_calibrate()	
-touch: 
+kick: 
 	mouse_click(0)
 	# close the mouse grid if open
 	user.grid_close()
 
-righty: 
+psychic: 
 	mouse_click(1)
 	# close the mouse grid if open
 	user.grid_close()
 
-midclick: 
+midkick: 
 	mouse_click(2)
 	# close the mouse grid
 	user.grid_close()
@@ -24,13 +24,13 @@ midclick:
 #option = alt
 #shift
 #super = windows key
-<user.modifiers> touch: 
+<user.modifiers> kick: 
 	key("{modifiers}:down")
 	mouse_click(0)
 	key("{modifiers}:up")
 	# close the mouse grid
 	user.grid_close()
-<user.modifiers> righty: 
+<user.modifiers> psychic: 
 	key("{modifiers}:down")
 	mouse_click(1)
 	key("{modifiers}:up")
