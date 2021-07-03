@@ -27,8 +27,7 @@ class Actions:
     def screenshot_window():
         """Takes a screenshot of the active window and saves it to the pictures folder"""
         win = ui.active_window()
-        title = f"{win.app.name} | {win.title}"
-        screenshot_rect(win.rect, title)
+        screenshot_rect(win.rect, win.app.name)
 
     def screenshot_selection():
         """Triggers an application is capable of taking a screenshot of a portion of the screen"""
@@ -61,7 +60,7 @@ def clipboard_rect(rect: ui.Rect):
 
 def get_screenshot_path(title: str = ""):
     if title:
-        title = f" | {title}"
+        title = f" | {title.replace('.', '_')}"
     date = datetime.now().strftime("%Y-%m-%dT%H-%M-%S")
     filename = f"Screenshot | {date}{title}.png"
     folder_path = screenshot_folder.get()
