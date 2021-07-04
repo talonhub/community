@@ -15,14 +15,6 @@ break [on] clipboard:
     key(ctrl-shift-v)
     key(enter)
     
-# Memory inspection
-    
-# Type inspection
-    
-##
-# gdb specific functionality
-##
-    
 # information
 list [source]: "list\n"
 info source: "info source\n"
