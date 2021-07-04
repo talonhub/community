@@ -15,7 +15,7 @@ please [<user.text>]:
     user.vscode("workbench.action.showCommands")
     insert(user.text or "")
     
-    # Sidebar
+# Sidebar
 bar explore: user.vscode("workbench.view.explorer")
 bar extensions: user.vscode("workbench.view.extensions")
 bar outline: user.vscode("outline.focus")
@@ -29,7 +29,7 @@ symbol hunt [<user.text>]:
     sleep(50ms)
     insert(text or "")
     
-    # Panels
+# Panels
 panel control: user.vscode("workbench.panel.repl.view.focus")
 panel output: user.vscode("workbench.panel.output.focus")
 panel problems: user.vscode("workbench.panel.markers.view.focus")
@@ -101,7 +101,7 @@ go recent [<user.text>]:
     insert(text or "")
     sleep(250ms)
     
-    # Bookmarks. Requires Bookmarks plugin
+# Bookmarks. Requires Bookmarks plugin
 go marks: user.vscode("workbench.view.extension.bookmarks")
 toggle mark: user.vscode("bookmarks.toggle")
 go next mark: user.vscode("bookmarks.jumpToNext")

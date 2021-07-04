@@ -13,7 +13,7 @@ please [<user.text>]:
     key(ctrl-3)
     insert(user.text or "")
     
-    # Sidebar
+# Sidebar
 bar explore: key(alt-shift-w p)
 # bar extensions:
 bar outline: key(alt-shift-q o)
@@ -49,10 +49,10 @@ panel variables:
     key(alt-shift-q)
     sleep(200ms)
     key(v)
-    # panel switch:
-    # panel terminal:
+# panel switch:
+# panel terminal:
     
-    # Settings
+# Settings
 show settings: key(alt-w p)
 show shortcuts: key(ctrl-shift-l)
 #show snippets:
@@ -69,8 +69,8 @@ file hunt [<user.text>]:
     key(ctrl-shift-r)
     sleep(50ms)
     insert(text or "")
-    # file copy path:
-    # file create sibling:
+# file copy path:
+# file create sibling:
 file create: key(ctrl-n)
 file open folder: key(alt-shift-w x)
 file rename:

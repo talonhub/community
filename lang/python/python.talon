@@ -33,7 +33,7 @@ is type {user.python_type_list}:
     insert(": {python_type_list}")
 returns [type] {user.python_type_list}:
     insert(" -> {python_type_list}")
-    # for generic reference of types
+# for generic reference of types
 type {user.python_type_list}:
     insert("{python_type_list}")
 dock {user.python_docstring_fields}:

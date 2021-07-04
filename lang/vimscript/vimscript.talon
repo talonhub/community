@@ -13,14 +13,6 @@ settings():
     user.code_private_variable_formatter = "SNAKE_CASE"
     user.code_protected_variable_formatter = "SNAKE_CASE"
     user.code_public_variable_formatter = "SNAKE_CASE"
-    
-    
-    ###
-    # Generic Actions - see appropriate generic talon file for spoken command
-    ###
-    
-    # operators - see lang/operators.talon
-
 
 ###
 # VIM Script Specific
@@ -34,11 +26,11 @@ assign [<user.vimscript_scope>] (variable|var) [<user.text>] [over]:
     insert(vimscript_scope or '')
     user.code_private_variable_formatter(text)
     
-    # see lang/vimscript/vimscript.py for list
+# see lang/vimscript/vimscript.py for list
 <user.vimscript_functions>:
     insert("{vimscript_functions} ")
     
-    # XXX - possibly overlap with some programming.talon
+# XXX - possibly overlap with some programming.talon
 state command: "command! "
 state end if: "endif"
 state end for: "endfor"

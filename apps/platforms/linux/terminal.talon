@@ -13,7 +13,7 @@ rerun search:
 kill all:
     key(ctrl-c)
     
-    # XXX - these are specific to certain terminals only and should move into their
-    # own <term name>.talon file
+# XXX - these are specific to certain terminals only and should move into their
+# own <term name>.talon file
 go tab <number>:
     key("alt-{number}")

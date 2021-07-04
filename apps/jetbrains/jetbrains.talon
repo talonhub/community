@@ -19,7 +19,7 @@ grab <number>: user.idea_grab(number)
 (action | please) <user.text>:
     user.idea("action GotoAction")
     insert(text)
-    # Refactoring
+# Refactoring
 refactor: user.idea("action Refactorings.QuickListPopupAction")
 refactor <user.text>:
     user.idea("action Refactorings.QuickListPopupAction")
@@ -64,7 +64,7 @@ surround [this] with <user.text> [over]:
     idea("action SurroundWith")
     sleep(500ms)
     insert(text)
-    # Making these longer to reduce collisions with real code dictation.
+# Making these longer to reduce collisions with real code dictation.
 insert generated <user.text> [over]:
     user.idea("action Generate")
     sleep(500ms)
@@ -83,7 +83,7 @@ play recording <user.text> [over]:
     insert(text)
     sleep(500ms)
     Key("enter")
-    # Marks
+# Marks
 go mark: user.idea("action ShowBookmarks")
 toggle mark: user.idea("action ToggleBookmark")
 go next mark: user.idea("action GotoNextBookmark")
@@ -115,7 +115,7 @@ create file <user.text> [over]:
     user.idea("action NewElement")
     sleep(500ms)
     insert(text)
-    # Task Management
+# Task Management
 go task: user.idea("action tasks.goto")
 go browser task: user.idea("action tasks.open.in.browser")
 switch task: user.idea("action tasks.switch")
@@ -209,7 +209,7 @@ fix next (error | air):
 fix last (error | air):
     user.idea("action GotoPreviousError")
     user.idea("action ShowIntentionActions")
-    # Special Selects
+# Special Selects
 select less: user.idea("action EditorUnSelectWord")
 select (more|this): user.idea("action EditorSelectWord")
 #jet brains-specific line commands. see line_commands.talon for generic ones

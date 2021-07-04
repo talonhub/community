@@ -13,7 +13,7 @@ action block:
     edit.left()
 setting block:
     insert("settings():\n\t")
-    #context requirements
+#context requirements
 win require:
     insert("os: windows\n")
 mac require:

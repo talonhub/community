@@ -49,8 +49,8 @@ push brackets:
     key(enter)
     edit.up()
     
-    # Declare variables or structs etc.
-    # Ex. * int myList
+# Declare variables or structs etc.
+# Ex. * int myList
 <user.c_variable> <phrase>:
     insert("{c_variable} ")
     insert(user.formatted_text(phrase, "PRIVATE_CAMEL_CASE,NO_SPACES"))
@@ -58,7 +58,7 @@ push brackets:
 <user.c_variable> <user.letter>:
     insert("{c_variable} {letter} ")
     
-    # Ex. (int *)
+# Ex. (int *)
 cast to <user.c_cast>: "{c_cast}"
 standard cast to <user.stdint_cast>: "{stdint_cast}"
 <user.c_types>: "{c_types}"
