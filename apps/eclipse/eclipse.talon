@@ -9,18 +9,6 @@ tag(): user.splits
 tag(): user.tabs
 # splits.py support end
 
-#multiple_cursor.py support begin
-#note: vscode has no explicit mode for multiple cursors
-# action(user.multi_cursor_add_above):
-# action(user.multi_cursor_add_below):
-# action(user.multi_cursor_add_to_line_ends):
-# action(user.multi_cursor_disable):
-# action(user.multi_cursor_enable):
-# action(user.multi_cursor_select_all_occurrences):
-# action(user.multi_cursor_select_fewer_occurrences):
-# action(user.multi_cursor_select_more_occurrences):
-#multiple_cursor.py support end
-
 please [<user.text>]:
     key(ctrl-3)
     insert(user.text or "")

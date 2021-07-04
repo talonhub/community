@@ -74,11 +74,9 @@ class UserActions:
     def code_operator_division_assignment():
         actions.auto_insert(" /= ")
 
-    # comments - see lang/code_comment.talon
     def code_comment():
         actions.auto_insert('"')
 
-    # conditionals - see lang/programming.talon
     def code_state_if():
         actions.insert("if ")
 
@@ -96,4 +94,3 @@ class UserActions:
 
     def code_public_function(text: str):
         actions.auto_insert("function ")
-

@@ -10,10 +10,19 @@ os: windows
 and app.name: mintty.exe
 """
 
+
 ctx = Context()
 ctx.matches = r"""
 app: mintty
 """
+ctx.tags = [
+    "terminal",
+    "user.file_manager",
+    "user.generic_terminal",
+    "user.git",
+    "user.kubectl",
+]
+
 directories_to_remap = {}
 directories_to_exclude = {}
 
@@ -37,19 +46,25 @@ def get_win_path(cyg_path):
         path = ""
     return path
 
-@ctx.action_class('edit')
+
+@ctx.action_class("edit")
 class EditActions:
-    def paste():       actions.key('shift-insert')
-    def copy():        actions.key('ctrl-insert')
-    
-    def delete_line(): actions.key('ctrl-u')
+    def paste():
+        actions.key("shift-insert")
+
+    def copy():
+        actions.key("ctrl-insert")
+
+    def delete_line():
+        actions.key("ctrl-u")
 
 
-@ctx.action_class('user')
+@ctx.action_class("user")
 class UserActions:
     def file_manager_open_parent():
-        actions.insert('cd ..')
-        actions.key('enter')
+        actions.insert("cd ..")
+        actions.key("enter")
+
     def file_manager_current_path():
         path = ui.active_window().title
         path = get_win_path(path)

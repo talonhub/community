@@ -10,7 +10,6 @@ register <user.registers>:
     key(@)
     insert("{registers}")
     
-    # Type inspection
 open help: insert(".hh\n")
 
 # xxx - add window switching
