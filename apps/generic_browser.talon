@@ -45,19 +45,19 @@ dev tools: browser.toggle_dev_tools()
 # insert mode: key(i)
 # next frame: key(g f)
 # main frame: key(g F)
-    # navigating to new pages
+# navigating to new pages
 # (open | go) (url | history): key(o)
 # (open | go) (url | history) new: key(O)
 # (open | go) bookmark: key(b)
 # (open | go) bookmark new: key(B)
-    # using find
+# using find
 # find mode: key(/)
 # next match: key(n)
 # previous match: key(N)
-    # navigating history
+# navigating history
 # history back: key(H)
 # history forward: key(L)
-    # manipulating tabs
+# manipulating tabs
 # last visited: key(^)
 # dupe tab: key(y t)
 # restore: key(X)
