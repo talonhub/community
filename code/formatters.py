@@ -266,8 +266,11 @@ class Actions:
         if not selected:
             print("Asked to reformat selection, but nothing selected!")
             return
-        unformatted = re.sub(r"[^a-zA-Z0-9]+", " ", selected).lower()
-        # TODO: Separate out camelcase & studleycase vars
+        unformatted = re.sub(r"[^a-zA-Z0-9]+", " ", selected)
+        # Split on camelCase, including numbes
+        unformatted = re.sub(r"(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|(?<=[a-zA-Z])(?=[0-9])|(?<=[0-9])(?=[a-zA-Z])", " ", unformatted)
+        unformatted = unformatted.lower()
+        # TODO: Separate out studleycase vars
 
         # Delete separately for compatibility with programs that don't overwrite
         # selected text (e.g. Emacs)
