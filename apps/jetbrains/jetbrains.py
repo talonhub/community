@@ -112,6 +112,7 @@ mod.apps.jetbrains = "app.name: IntelliJ IDEA"
 mod.apps.jetbrains = "app.name: PyCharm"
 mod.apps.jetbrains = "app.name: RubyMine"
 mod.apps.jetbrains = "app.name: RubyMine-EAP"
+mod.apps.jetbrains = "app.name: Android Studio"
 
 # windows
 mod.apps.jetbrains = "app.name: idea64.exe"
