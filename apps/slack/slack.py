@@ -5,7 +5,7 @@ apps = mod.apps
 apps.slack = "app.name: Slack"
 mod.apps.slack = """
 os: windows
-and app.name: slack.exe
+and app.name: Slack
 os: windows
 and app.exe: slack.exe
 """
