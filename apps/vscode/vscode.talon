@@ -56,10 +56,10 @@ action(user.multi_cursor_select_fewer_occurrences): user.vscode("Cursor Undo")
 action(user.multi_cursor_select_more_occurrences): user.vscode("Add Selection To Next Find Match")
 #multiple_cursor.py support end
 
-please [<user.text>]: 
-  user.vscode("Show All Commands")
-  insert(user.text or "")
-
+please [<user.text>]:
+    user.vscode("workbench.action.showCommands")
+    insert(user.text or "")
+    
 # Sidebar
 bar explore: user.vscode("workbench.view.explorer")
 bar extensions: user.vscode("workbench.view.extensions")
@@ -69,12 +69,18 @@ bar search: user.vscode("workbench.view.search")
 bar source: user.vscode("workbench.view.scm")
 bar switch: user.vscode("workbench.action.toggleSidebarVisibility")
 
+symbol hunt [<user.text>]:
+    user.vscode("workbench.action.gotoSymbol")
+    sleep(50ms)
+    insert(text or "")
+    
 # Panels
 panel control: user.vscode("workbench.panel.repl.view.focus")
 panel output: user.vscode("workbench.panel.output.focus")
 panel problems: user.vscode("workbench.panel.markers.view.focus")
 panel switch: user.vscode("workbench.action.togglePanel")
-panel terminal: user.vscode("workbench.panel.terminal.focus")
+panel terminal: user.vscode("workbench.action.terminal.focus")
+focus editor: user.vscode("workbench.action.focusActiveEditorGroup")
 
 # Settings
 show settings: user.vscode("workbench.action.openGlobalSettings")
@@ -89,20 +95,22 @@ wrap switch: user.vscode("editor.action.toggleWordWrap")
 zen switch: user.vscode("workbench.action.toggleZenMode")
 
 # File Commands
-file hunt [<user.text>]: 
-  user.vscode("Go to File")
-  sleep(50ms)
-  insert(text or "")
-file copy path: user.vscode_ignore_clipboard("File: Copy Path of Active File") 
-file create sibling: user.vscode("File: New File")  
-file create: user.vscode("File: New Untitled File")
-file open folder: user.vscode("File: Reveal in File Explorer")
-#todo: rename isn't working.
-#file rename active: 
-#  user.vscode("File: Reveal Active File In Side Bar")
-#  user.vscode("renameFile")
-#file rename: user.vscode("renameFile")
-file reveal: user.vscode("File: Reveal Active File In Side Bar") 
+file hunt [<user.text>]:
+    user.vscode("workbench.action.quickOpen")
+    sleep(50ms)
+    insert(text or "")
+file copy path: user.vscode("copyFilePath")
+file create sibling: user.vscode_and_wait("explorer.newFile")
+file create: user.vscode("workbench.action.files.newUntitledFile")
+file rename:
+    user.vscode("fileutils.renameFile")
+    sleep(150ms)
+file move:
+    user.vscode("fileutils.moveFile")
+    sleep(150ms)
+file open folder: user.vscode("revealFileInOS")
+file reveal: user.vscode("workbench.files.action.showActiveFileInExplorer")
+save ugly: user.vscode("workbench.action.files.saveWithoutFormatting")
 
 # Language Features
 suggest show: user.vscode("editor.action.triggerSuggest")
@@ -114,7 +122,7 @@ references show: user.vscode("editor.action.goToReferences")
 references find: user.vscode("references-view.find")
 format that: user.vscode("editor.action.formatDocument")
 format selection: user.vscode("editor.action.formatSelection")
-imports fix: user.vscode("Organize Imports")
+imports fix: user.vscode("editor.action.organizeImports")
 problem next: user.vscode("editor.action.marker.nextInFiles")
 problem last: user.vscode("editor.action.marker.prevInFiles")
 problem fix: user.vscode("problems.action.showQuickFixes")
@@ -152,8 +160,14 @@ fold comments: user.vscode("editor.foldAllBlockComments")
 # Git / Github (not using verb-noun-adjective pattern, mirroring terminal commands.)
 git branch: user.vscode("git.branchFrom")
 git branch this: user.vscode("git.branch")
-git checkout: user.vscode("git.checkout")
-git commit: user.vscode("git.commitStaged")
+git checkout [<user.text>]:
+    user.vscode("git.checkout")
+    sleep(50ms)
+    insert(text or "")
+git commit [<user.text>]:
+    user.vscode("git.commitStaged")
+    sleep(100ms)
+    user.insert_formatted(text or "", "CAPITALIZE_FIRST_WORD")
 git commit undo: user.vscode("git.undoCommit")
 git commit ammend: user.vscode("git.commitStagedAmend")
 git diff: user.vscode("git.openChange")
@@ -168,10 +182,14 @@ git reveal: user.vscode("git.revealInExplorer")
 git revert: user.vscode("git.revertChange")
 git stash: user.vscode("git.stash")
 git stash pop: user.vscode("git.stashPop")
+git status: user.vscode("workbench.scm.focus")
 git stage: user.vscode("git.stage")
 git stage all: user.vscode("git.stageAll")
 git unstage: user.vscode("git.unstage")
 git unstage all: user.vscode("git.unstageAll")
+pull request: user.vscode("pr.create")
+change next: key(alt-f5)
+change last: key(shift-alt-f5)
 
 #Debugging
 break point: user.vscode("editor.debug.action.toggleBreakpoint")
@@ -183,16 +201,20 @@ debug pause: user.vscode("workbench.action.debug.pause")
 debug stopper: user.vscode("workbench.action.debug.stop")
 debug continue: user.vscode("workbench.action.debug.continue")
 debug restart: user.vscode("workbench.action.debug.restart")
+debug console: user.vscode("workbench.debug.action.toggleRepl")
 
 # Terminal
 terminal external: user.vscode("workbench.action.terminal.openNativeConsole")
 terminal new: user.vscode("workbench.action.terminal.new")
-terminal next: user.vscode("workbench.action.terminal.focusNextPane")
-terminal last:user.vscode("workbench.action.terminal.focusPreviousPane")
+terminal next: user.vscode("workbench.action.terminal.focusNext")
+terminal last: user.vscode("workbench.action.terminal.focusPrevious")
 terminal split: user.vscode("workbench.action.terminal.split")
-terminal trash: user.vscode("Terminal:Kill")
-terminal scroll up: user.vscode("Terminal:ScrollUp")
-terminal scroll down: user.vscode("Terminal:ScrollDown")
+terminal zoom: user.vscode("workbench.action.toggleMaximizedPanel")
+terminal trash: user.vscode("workbench.action.terminal.kill")
+terminal toggle: user.vscode_and_wait("workbench.action.terminal.toggleTerminal")
+terminal scroll up: user.vscode("workbench.action.terminal.scrollUp")
+terminal scroll down: user.vscode("workbench.action.terminal.scrollDown")
+terminal <number_small>: user.vscode_terminal(number_small)
 
 #TODO: should this be added to linecommands?
 copy line down: user.vscode("editor.action.copyLinesDownAction")
@@ -201,5 +223,30 @@ copy line up: user.vscode("editor.action.copyLinesUpAction")
 #Expand/Shrink AST Selection
 select less: user.vscode("editor.action.smartSelect.shrink")
 select (more|this): user.vscode("editor.action.smartSelect.expand")
-  
-  
+
+minimap: user.vscode("editor.action.toggleMinimap")
+maximize: user.vscode("workbench.action.minimizeOtherEditors")
+restore: user.vscode("workbench.action.evenEditorWidths")
+
+replace here:
+    user.replace("")
+    key(cmd-alt-l)
+    
+hover show: user.vscode("editor.action.showHover")
+
+join lines: user.vscode("editor.action.joinLines")
+
+full screen: user.vscode("workbench.action.toggleFullScreen")
+
+curse undo: user.vscode("cursorUndo")
+
+select word: user.vscode("editor.action.addSelectionToNextFindMatch")
+skip word: user.vscode("editor.action.moveSelectionToNextFindMatch")
+
+# jupyter
+cell next: user.vscode("jupyter.gotoNextCellInFile")
+cell last: user.vscode("jupyter.gotoPrevCellInFile")
+cell run above: user.vscode("jupyter.runallcellsabove.palette")
+cell run: user.vscode("jupyter.runcurrentcell")
+
+install local: user.vscode("workbench.extensions.action.installVSIX")

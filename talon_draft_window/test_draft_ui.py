@@ -1,35 +1,17 @@
-try:
-    import talon.experimental.textarea
-    running_in_talon = True
-except ModuleNotFoundError:
-    # Some shenanigans to stub out the Talon imports
-    import imp, sys
-    name = "talon.experimental.textarea"
-    module = imp.new_module(name)
-    sys.modules[name] = module
-    exec(
-        "\n".join([
-            "TextArea = 1",
-            "Span = 1",
-            "DarkThemeLabels = 1",
-            "LightThemeLabels = 1"
-        ]),
-        module.__dict__
-    )
-    running_in_talon = False
+import talon
 
-from unittest import TestCase
-from functools import wraps
+if hasattr(talon, "test_mode"):
+    # Only include this when we're running tests
 
-from .draft_ui import calculate_text_anchors
+    from talon import actions
+
+    from unittest import TestCase
+    from functools import wraps
+
+    from .draft_ui import calculate_text_anchors
 
 
-class CalculateAnchorsTest(TestCase):
-    """
-    Tests calculate_text_anchors
-    """
-
-    def test_finds_anchors(self):
+    def test_finds_anchors():
         examples = [
             ("one-word", [("a", 0, 8, 8)]),
             ("two words", [("a", 0, 3, 4), ("b", 4, 9, 9)]),
@@ -43,9 +25,9 @@ class CalculateAnchorsTest(TestCase):
             result = list(calculate_text_anchors(text, 0, anchor_labels=anchor_labels))
 
             # Then it matches what we expect
-            self.assertEqual(result, expected, text)
+            assert result == expected, text
 
-    def test_positions_anchors_around_cursor(self):
+    def test_positions_anchors_around_cursor():
         # In these examples the cursor is at the asterisk which is stripped by the test
         # code. Indicies after the asterisk have to take this into account.
         examples = [
@@ -83,4 +65,4 @@ class CalculateAnchorsTest(TestCase):
             ))
 
             # Then it matches what we expect
-            self.assertEqual(result, expected, text)
+            assert result == expected, text

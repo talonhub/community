@@ -1,6 +1,7 @@
 # Descended from https://github.com/dwiel/talon_community/blob/master/misc/dictation.py
 from talon import Module, Context, ui, actions, clip, app, grammar
 from typing import Optional, Tuple, Literal
+import re
 
 mod = Module()
 
@@ -50,12 +51,61 @@ def capture_to_words(m):
             item.split(" "))
     return words
 
-no_space_before = set("\n .,!?;:-/%)]}\"")
-no_space_after = set("\n -/#@([{$£€¥₩₽₹\"")
+# There must be a simpler way to do this, but I don't see it right now.
+no_space_after = re.compile(r"""
+  (?:
+    [\s\-_/#@([{‘“]     # characters that never need space after them
+  | (?<!\w)[$£€¥₩₽₹]    # currency symbols not preceded by a word character
+  # quotes preceded by beginning of string, space, opening braces, dash, or other quotes
+  | (?: ^ | [\s([{\-'"] ) ['"]
+  )$""", re.VERBOSE)
+no_space_before = re.compile(r"""
+  ^(?:
+    [\s\-_.,!?;:/%)\]}’”]   # characters that never need space before them
+  | [$£€¥₩₽₹](?!\w)         # currency symbols not followed by a word character
+  # quotes followed by end of string, space, closing braces, dash, other quotes, or some punctuation.
+  | ['"] (?: $ | [\s)\]}\-'".,!?;:/] )
+  )""", re.VERBOSE)
+
+# no_space_before = set("\n .,!?;:-_/%)]}")
+# no_space_after = set("\n -_/#@([{")
 def needs_space_between(before: str, after: str) -> bool:
-    return (before != "" and after != ""
-            and before[-1] not in no_space_after
-            and after[0] not in no_space_before)
+    return (before and after
+            and not no_space_after.search(before)
+            and not no_space_before.search(after))
+    # return (before != "" and after != ""
+    #         and before[-1] not in no_space_after
+    #         and after[0] not in no_space_before)
+
+# # TESTS, uncomment to enable
+# assert needs_space_between("a", "break")
+# assert needs_space_between("break", "a")
+# assert needs_space_between(".", "a")
+# assert needs_space_between("said", "'hello")
+# assert needs_space_between("hello'", "said")
+# assert needs_space_between("hello.", "'John")
+# assert needs_space_between("John.'", "They")
+# assert needs_space_between("paid", "$50")
+# assert needs_space_between("50$", "payment")
+# assert not needs_space_between("", "")
+# assert not needs_space_between("a", "")
+# assert not needs_space_between("a", " ")
+# assert not needs_space_between("", "a")
+# assert not needs_space_between(" ", "a")
+# assert not needs_space_between("a", ",")
+# assert not needs_space_between("'", "a")
+# assert not needs_space_between("a", "'")
+# assert not needs_space_between("and-", "or")
+# assert not needs_space_between("mary", "-kate")
+# assert not needs_space_between("$", "50")
+# assert not needs_space_between("US", "$")
+# assert not needs_space_between("(", ")")
+# assert not needs_space_between("(", "e.g.")
+# assert not needs_space_between("example", ")")
+# assert not needs_space_between("example", '".')
+# assert not needs_space_between("example", '."')
+# assert not needs_space_between("hello'", ".")
+# assert not needs_space_between("hello.", "'")
 
 def auto_capitalize(text, state = None):
     """
@@ -144,7 +194,7 @@ class Actions:
         actions.user.add_phrase_to_history(text)
         actions.insert(text)
         # Add a space after cursor if necessary.
-        if not do_the_dance or not text or text[-1] in no_space_after:
+        if not do_the_dance or not text or no_space_after.search(text):
             return
         char = actions.user.dictation_peek_right()
         if char is not None and needs_space_between(text, char):
@@ -207,16 +257,21 @@ class Actions:
 
     def dictation_peek_right() -> Optional[str]:
         """
-        Tries to get the character after the cursor for auto-spacing purposes.
+        Tries to get a few characters after the cursor for auto-spacing.
         Results are not guaranteed; dictation_peek_right() may return None to
         indicate no information. (Note that returning the empty string ""
         indicates there is nothing after cursor, ie. we are at the end of the
         document.)
         """
+        # We grab two characters because I think that's what no_space_before
+        # needs in the worst case. An example where the second character matters
+        # is inserting before (1) "' hello" vs (2) "'hello". In case (1) we
+        # don't want to add space, in case (2) we do.
         actions.edit.extend_right()
-        char = actions.edit.selected_text()
-        if char: actions.edit.left()
-        return char
+        actions.edit.extend_right()
+        after = actions.edit.selected_text()
+        if after: actions.edit.left()
+        return after
 
 # Use the dictation formatter in dictation mode.
 dictation_ctx = Context()
