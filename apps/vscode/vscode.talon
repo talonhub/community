@@ -70,9 +70,6 @@ bar switch: user.vscode("workbench.action.toggleSidebarVisibility")
 # show recent: user.vscode("work55bench.action.showAllEditorsByMostRecentlyUsed")
 go search [<user.text>]: 
     user.vscode("workbench.action.findInFiles")
-    
-    
-    
     sleep(50ms)
     insert(text or "")
     
@@ -93,6 +90,12 @@ panel switch: user.vscode("workbench.action.togglePanel")
 panel terminal: user.vscode("workbench.panel.terminal.focus")
 
 console: user.vscode("workbench.action.terminal.toggleTerminal")
+deploy:
+    user.vscode("workbench.action.terminal.toggleTerminal")
+    sleep(50ms)
+    key("ctrl-c")
+    insert("task deploy\n")
+
 # terminal: user.vscode("workbench.action.terminal.toggleTerminal")
 # toggle terminal: user.vscode("workbench.action.terminal.toggleTerminal")
 
@@ -127,6 +130,7 @@ file copy path: user.vscode("copyFilePath")
 file copy relative: user.vscode("copyRelativeFilePath") 
 file copy link: user.vscode("gitlens.copyRemoteFileUrlToClipboard") 
 file create sibling: user.vscode_and_wait("explorer.newFile")
+file new: user.vscode_and_wait("explorer.newFile")
 file create: user.vscode("workbench.action.files.newUntitledFile")
 file rename:
     user.vscode("fileutils.renameFile")

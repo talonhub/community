@@ -2,12 +2,13 @@ os: linux
 tag: terminal
 -
 tag(): user.file_manager
- 
+gitignore: insert(".gitignore ") 
 sudo: insert("sudo ")
+unzip: insert("unzip ")
 add sudo: 
     key(home)
     insert("sudo ")
-add help: insert(" --help ")
+add help: insert("--help ")
 run last:
   key(up)
   key(enter)

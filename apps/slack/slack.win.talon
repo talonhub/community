@@ -3,6 +3,8 @@ os: linux
 app: slack
 #todo: some sort of plugin, consolidate with teams or something?
 -
+go search: key(ctrl-g)
+
 tag(): user.messaging
 # Workspaces
 workspace <number>: key("ctrl-{number}")
@@ -65,3 +67,6 @@ action(user.messaging_upload_file): key(ctrl-u)
 emote <user.text>: "{text}"
 toggle left sidebar: key(ctrl-shift-d)
 toggle right sidebar: key(ctrl-.)
+
+go back:key(alt-left)
+go front:key(alt-right)

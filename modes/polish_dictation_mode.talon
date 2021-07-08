@@ -5,11 +5,7 @@ mode: user.polish_dictation
 kropka: "."
 przecinek: ","
 nowa linia: "\n"
-^zatrzymaj$:
-    mode.disable("sleep")
-    mode.disable("dictation")
-    mode.disable("user.polish_dictation")
-    mode.enable("command")
+(koniec) [<phrase>]$:   user.command_mode(phrase or "")
 
 # Everything here should call auto_insert to preserve the state to correctly auto-capitalize/auto-space.
 <user.prose>: auto_insert(prose)

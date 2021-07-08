@@ -3,23 +3,28 @@ mkdir,make directory
 admin
 allegro,libra
 alpha
+alias
 API
-apt,a pity
-as
 bash,bush
-cd,change directory
+init
 chrome
 chromium
+bin
 Cisco
 Citrix
+dotfiles
 code,cold
 csv
+conf
 ctrl,control
 debug
 debugger
 dict
 dir,dear
 DNS
+pageup,page up
+pagedown,page down
+macOS,mac O S
 dump,dumb
 echo
 eval
@@ -27,6 +32,9 @@ files,piles
 fullscreen,full screen
 generic,genetic
 github
+git
+tabs
+slack
 gnome
 golang
 google-chrome
@@ -35,6 +43,8 @@ head,had
 import,in port
 install,in stall
 json
+markdown
+obsidian
 json,jason
 keystroke
 keystrokes
@@ -49,7 +59,6 @@ mode,mould
 mode,mouth
 mode,mouth
 neovim
-neovim,me of him
 nmap
 nmap,N map
 npm

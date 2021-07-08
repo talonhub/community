@@ -23,6 +23,15 @@ call list latest: "$(ls -Art | tail -n1)"
 # TODO - somehow make this scriptable to print anything
 file edit latest: "edit $(ls -Art | tail -n1)\n"
 file latest: "$(ls -Art | tail -n1)"
+
+# added by maciek
+parent: "../"
+here: "./"
+python: "python "
+in home: insert(" ~/")
+describe: insert("tldr ")
+talon play latest: insert("talon-play-latest\n")
+
 file link: "ln -s "
 file link force: "ln -sf "
 file hard link: "ln "
@@ -68,6 +77,8 @@ echo param <user.text>:
     insert(upper)
     insert("}")
 
+get link:
+    insert("readlink -f ")
 # directory and files
 pivot: "cd "
 pivot clip:
@@ -78,12 +89,12 @@ pivot <user.paths>:
     insert("cd {paths}\n")
     insert("ls\n")
 # pivot up doesn't work with talon
-pivot back: "cd ../\n"
+(go parent|pivot back): "cd ../\n"
 pivot <number_small> back: 
     insert("cd ")
     insert(user.path_traverse(number_small))
     key(enter)
-pivot home: "cd\n"
+(go home|pivot home): "cd\n"
 pivot next:
     insert("cd ")
     key(tab)
@@ -119,6 +130,10 @@ less: "less "
 now less [that]:
     edit.up()
     insert("| less\n")
+
+now clip [that]:
+    edit.up()
+    insert("| xclip -sel clipboard\n")
 
 clear [screen|page]: "clear\n"
 
@@ -173,7 +188,6 @@ head: "head "
 head <number_small>: "head -n {number_small} "
 (where am I|print working directory): "pwd\n"
 
-in home: insert(" ~/")
 
 # XXX - ~/.edit/sessions/<tab>
 edit session:

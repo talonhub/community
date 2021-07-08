@@ -16,7 +16,9 @@ def get_list_from_csv(
     filename: str, headers: Tuple[str, str], default: Dict[str, str] = {}
 ):
     """Retrieves list from CSV"""
+    print(100 * "get_list_from_csv\n", filename)
     path = SETTINGS_DIR / filename
+    print(path)
     assert filename.endswith(".csv")
 
     if not path.is_file():
@@ -30,7 +32,7 @@ def get_list_from_csv(
     # ability to reload this script for us when the resource changes
     with resource.open(str(path), "r") as f:
         rows = list(csv.reader(f))
-
+    print(rows)
     # print(str(rows))
     mapping = {}
     if len(rows) >= 2:

@@ -68,9 +68,15 @@ action(browser.toggle_dev_tools):
 	key(ctrl-shift-i)
 
 show links: key("f")
-links: key("f")
-big links: key(shift-f)
+link: key("f")
+new link: key(shift-f)
 go search [<user.text>]: 
     key("o")
     sleep(200ms)
     insert(text or "")
+copy link: key(y f)
+copy (address | url): key(escape y y)
+close: app.tab_close()
+go front: browser.go_forward()
+next: app.tab_next()
+last: app.tab_previous()
