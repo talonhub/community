@@ -31,10 +31,10 @@ empty escaped string:
     "\\'\\'"
     key(left)
     key(left)
-(inside ticks | ticks):
+(inside ticks | inside tickys | ticks | tickys):
     "''"
     key(left)
-(inside back ticks | back ticks):
+(inside back ticks | inside back tickys | back ticks | back tickys):
     "``"
     key(left)
 (inside parens | parens):
@@ -73,10 +73,10 @@ hug percents:
 hug quotes:
     text = edit.selected_text()
     user.paste('"{text}"')
-hug ticks:
+(hug ticks | hug tickys):
     text = edit.selected_text()
     user.paste("'{text}'")
-hug back ticks:
+(hug back ticks | hug back tickys):
     text = edit.selected_text()
     user.paste("`{text}`")
 
