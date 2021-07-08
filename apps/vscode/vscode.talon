@@ -217,7 +217,7 @@ terminal scroll down: user.vscode("workbench.action.terminal.scrollDown")
 terminal <number_small>: user.vscode_terminal(number_small)
 
 #TODO: should this be added to linecommands?
-(copy line down || shingles): user.vscode("editor.action.copyLinesDownAction")
+(copy line down | shingles): user.vscode("editor.action.copyLinesDownAction")
 copy line up: user.vscode("editor.action.copyLinesUpAction")
 
 #Expand/Shrink AST Selection
