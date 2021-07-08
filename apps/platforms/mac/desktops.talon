@@ -7,11 +7,11 @@ window move desk <number>: user.window_move_desktop(number)
 window move desk left: user.window_move_desktop_left()
 window move desk right: user.window_move_desktop_right()
 
-desk right: 
+desky right: 
 	key(ctrl-right)
 
-desk left: 
+desky left: 
 	key(ctrl-left)
 
-desk show:
+desky show:
   key(ctrl-up)
