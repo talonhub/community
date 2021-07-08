@@ -16,13 +16,6 @@ open settings: key(ctrl-,)
 open help: key(f1)
 close: key(escape)
 
-#zoom in: key(ctrl-=)
-#zoom out: key(ctrl--)
-#reset zoom: key(ctrl-0)
-action(edit.zoom_in): key(ctrl-=)
-action(edit.zoom_out): key(ctrl--)
-action(edit.zoom_reset): key(ctrl-0)
-
 # navigations
 open activity: key(ctrl-1)
 open chat: key(ctrl-2)

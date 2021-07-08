@@ -112,7 +112,10 @@ mod.apps.jetbrains = "app.name: IntelliJ IDEA"
 mod.apps.jetbrains = "app.name: PyCharm"
 mod.apps.jetbrains = "app.name: RubyMine"
 mod.apps.jetbrains = "app.name: RubyMine-EAP"
-
+mod.apps.jetbrains = """
+os: mac
+and app.bundle: com.google.android.studio
+"""
 # windows
 mod.apps.jetbrains = "app.name: idea64.exe"
 mod.apps.jetbrains = "app.name: PyCharm64.exe"
@@ -150,9 +153,49 @@ ctx.matches = r"""
 app: jetbrains
 """
 
+class AppActions:
+    def tab_next():     actions.user.idea('action NextTab')
+    def tab_previous(): actions.user.idea('action PreviousTab')
+    
+    def tab_close():    actions.user.idea('action CloseContent')
+    def tab_reopen():   actions.user.idea('action ReopenClosedTab')
+
+        
+@ctx.action_class('code')
+class CodeActions:
+    #talon code actions
+    def toggle_comment(): actions.user.idea('action CommentByLineComment')
+
+@ctx.action_class('edit')
+class EditActions:
+    #talon edit actions
+    def copy():                   actions.user.idea('action EditorCopy')
+    def cut():                    actions.user.idea('action EditorCut')
+    def delete():                 actions.user.idea('action EditorBackSpace')
+    def paste():                  actions.user.idea('action EditorPaste')
+    def find_next():              actions.user.idea('action FindNext')
+    def find_previous():          actions.user.idea('action FindPrevious')
+    def find(text: str=None):     actions.user.idea('action Find')
+    def line_clone():             actions.user.idea('action EditorDuplicate')
+    def line_swap_down():         actions.user.idea('action MoveLineDown')
+    def line_swap_up():           actions.user.idea('action MoveLineUp')
+    def indent_more():            actions.user.idea('action EditorIndentLineOrSelection')
+    def indent_less():            actions.user.idea('action EditorUnindentSelection')
+    def select_line(n: int=None): actions.user.idea('action EditorSelectLine')
+    def select_word():            actions.user.idea('action EditorSelectWord')
+    def select_all():             actions.user.idea('action $SelectAll')
+    def file_start():             actions.user.idea('action EditorTextStart')
+    def file_end():               actions.user.idea('action EditorTextEnd')
+    def extend_file_start():      actions.user.idea('action EditorTextStartWithSelection')
+    def extend_file_end():        actions.user.idea('action EditorTextEndWithSelection')
+    def jump_line(n: int):
+        actions.user.idea("goto {} 0".format(n))
+        # move the cursor to the first nonwhite space character of the line
+        actions.user.idea("action EditorLineEnd")
+        actions.user.idea("action EditorLineStart")
 
 @ctx.action_class("win")
-class win_actions:
+class WinActions:
     def filename():
         title = actions.win.title()
         result = title.split(" ")
@@ -163,17 +206,8 @@ class win_actions:
 
         return ""
 
-@ctx.action_class("edit")
-class edit_actions:
-    def jump_line(n: int):
-        actions.user.idea("goto {} 0".format(n))
-        # move the cursor to the first nonwhite space character of the line
-        actions.user.idea("action EditorLineEnd")
-        actions.user.idea("action EditorLineStart")
-
-
 @ctx.action_class("user")
-class user_actions:
+class UserActions:
     def tab_jump(number: int):
         # depends on plugin GoToTabs
         if number < 10:
@@ -204,3 +238,4 @@ class user_actions:
 
     def line_clone(line: int):
         actions.user.idea("clone {}".format(line))
+

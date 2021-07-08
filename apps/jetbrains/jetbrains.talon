@@ -3,82 +3,27 @@ app: jetbrains
 -
 tag(): user.line_commands
 tag(): user.multiple_cursors
-tag(): user.splits 
+tag(): user.splits
 tag(): user.tabs
-
-#talon app actions (+custom tab actions)
-action(user.tab_final): user.idea("action GoToLastTab")
-action(app.tab_next): user.idea("action NextTab")
-action(app.tab_previous): user.idea("action PreviousTab")
-
-action(app.tab_close): user.idea("action CloseContent")
-action(app.tab_reopen): user.idea("action ReopenClosedTab")
-#talon code actions
-action(code.toggle_comment): user.idea("action CommentByLineComment")
-
-#talon edit actions
-action(edit.copy): user.idea("action EditorCopy")
-action(edit.cut): user.idea("action EditorCut")
-action(edit.delete): user.idea("action EditorBackSpace")
-action(edit.paste): user.idea("action EditorPaste")
-action(edit.find_next): user.idea("action FindNext")
-action(edit.find_previous): user.idea("action FindPrevious")
-action(edit.find): user.idea("action Find")
-action(edit.line_clone):  user.idea("action EditorDuplicate")
-action(edit.line_swap_down):  user.idea("action MoveLineDown")
-action(edit.line_swap_up):  user.idea("action MoveLineUp")
-action(edit.indent_more): user.idea("action EditorIndentLineOrSelection")
-action(edit.indent_less): user.idea("action EditorUnindentSelection")
-action(edit.select_line): user.idea("action EditorSelectLine")
-action(edit.select_word): user.idea("action EditorSelectWord")
-action(edit.select_all): user.idea("action $SelectAll")
-action(edit.file_start): user.idea("action EditorTextStart")
-action(edit.file_end): user.idea("action EditorTextEnd")
-action(edit.extend_file_start): user.idea("action EditorTextStartWithSelection")
-action(edit.extend_file_end): user.idea("action EditorTextEndWithSelection")
-
-# splits.py support begin
-action(user.split_clear_all): user.idea("action UnsplitAll")
-action(user.split_clear): user.idea("action Unsplit")
-action(user.split_flip): user.idea("action ChangeSplitOrientation")
-action(user.split_last): user.idea("action LastSplitter")
-action(user.split_next): user.idea("action NextSplitter")
-action(user.split_window_down): user.idea("action MoveTabDown")
-action(user.split_window_horizontally): user.idea("action SplitHorizontally")
-#action(user.split_window_left): user.idea("action MoveTabLeft")
-action(user.split_window_right): user.idea("action MoveTabRight")
-#action(user.split_window_up): user.idea("action MoveTabUp")
-action(user.split_window_vertically): user.idea("action SplitVertically")
-action(user.split_window): user.idea("action EditSourceInNewWindow")
-# splits.py support end
-
-# multiple_cursors.py support begin
-action(user.multi_cursor_add_above): user.idea("action EditorCloneCaretAbove")
-action(user.multi_cursor_add_below): user.idea("action EditorCloneCaretBelow")
-action(user.multi_cursor_disable): key(escape)
-action(user.multi_cursor_enable): key(shift-alt-insert)
-action(user.multi_cursor_select_all_occurrences): user.idea("action SelectAllOccurrences")
-action(user.multi_cursor_select_fewer_occurrences): user.idea("action UnselectPreviousOccurrence")
-action(user.multi_cursor_select_more_occurrences): user.idea("action SelectNextOccurrence")
 # multiple_cursors.py support end
 
 # Auto complete
 complete: user.idea("action CodeCompletion")
 perfect: user.idea("action CodeCompletion,action CodeCompletion")
 smart: user.idea("action SmartTypeCompletion")
-(done | finish):  user.idea("action EditorCompleteStatement")
+(done | finish): user.idea("action EditorCompleteStatement")
 # Copying
 grab <number>: user.idea_grab(number)
 # Actions
 (action | please): user.idea("action GotoAction")
 (action | please) <user.text>:
-  user.idea("action GotoAction")
-  insert(text)
+    user.idea("action GotoAction")
+    insert(text)
 # Refactoring
 refactor: user.idea("action Refactorings.QuickListPopupAction")
 refactor <user.text>:
-  user.idea("action Refactorings.QuickListPopupAction")
-  insert(text)
+    user.idea("action Refactorings.QuickListPopupAction")
+    insert(text)
 extract variable: user.idea("action IntroduceVariable")
 extract field: user.idea("action IntroduceField")
 extract constant: user.idea("action IntroduceConstant")
@@ -102,9 +47,9 @@ go forward: user.idea("action Forward")
 # Search
 find (everywhere | all): user.idea("action SearchEverywhere")
 find (everywhere | all) <user.text> [over]:
-  user.idea("action SearchEverywhere")
-  sleep(500ms)
-  insert(text)
+    user.idea("action SearchEverywhere")
+    sleep(500ms)
+    insert(text)
 (search | find) class: user.idea("action GotoClass")
 (search | find) file: user.idea("action GotoFile")
 (search | find) path: user.idea("action FindInPath")
@@ -167,9 +112,9 @@ create sibling <user.text> [over]:
     insert(text)
 create file: user.idea("action NewElement")
 create file <user.text> [over]:
-  user.idea("action NewElement")
-  sleep(500ms)
-  insert(text)
+    user.idea("action NewElement")
+    sleep(500ms)
+    insert(text)
 # Task Management
 go task: user.idea("action tasks.goto")
 go browser task: user.idea("action tasks.open.in.browser")
@@ -232,7 +177,7 @@ toggle presentation [mode]: user.idea("action TogglePresentationMode")
 toggle comment: code.toggle_comment()
 # Quick popups
 change scheme: user.idea("action QuickChangeScheme")
- # Always javadoc
+# Always javadoc
 (toggle | pop) (doc | documentation): user.idea("action QuickJavaDoc")
 (pop deaf | toggle definition): user.idea("action QuickImplementations")
 pop type: user.idea("action ExpressionTypeInfo")
@@ -258,28 +203,28 @@ continue: user.idea("action Resume")
 # Movement
 go next (error | air): user.idea("action GotoNextError")
 go last (error | air): user.idea("action GotoPreviousError")
-fix next (error | air): 
-  user.idea("action GotoNextError")
-  user.idea("action ShowIntentionActions")
-fix last (error | air): 
-  user.idea("action GotoPreviousError")
-  user.idea("action ShowIntentionActions")
+fix next (error | air):
+    user.idea("action GotoNextError")
+    user.idea("action ShowIntentionActions")
+fix last (error | air):
+    user.idea("action GotoPreviousError")
+    user.idea("action ShowIntentionActions")
 # Special Selects
 select less: user.idea("action EditorUnSelectWord")
 select (more|this): user.idea("action EditorSelectWord")
 #jet brains-specific line commands. see line_commands.talon for generic ones
 expand <number> until <number>:
-  user.select_range(number_1, number_2)
-  user.idea("action ExpandRegion")
+    user.select_range(number_1, number_2)
+    user.idea("action ExpandRegion")
 collapse <number> until <number>:
-  user.select_range(number_1, number_2)
-  user.idea("action CollapseRegion")
+    user.select_range(number_1, number_2)
+    user.idea("action CollapseRegion")
 paste <number> until <number>:
-  user.select_range(number_1, number_2)
-  user.idea("action EditorPaste")
+    user.select_range(number_1, number_2)
+    user.idea("action EditorPaste")
 refactor <number> until <number>:
-  user.select_range(number_1, number_2)
-  user.idea("action Refactorings.QuickListPopupAction")
+    user.select_range(number_1, number_2)
+    user.idea("action Refactorings.QuickListPopupAction")
 clone <number>: user.line_clone(number)
 
 #find/replace

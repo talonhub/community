@@ -105,12 +105,9 @@ def handle_existing_request_file(path):
     time_difference_ms = abs(modified_time_ms - current_time_ms)
 
     if time_difference_ms < STALE_TIMEOUT_MS:
-        if time_difference_ms < VSCODE_COMMAND_TIMEOUT_SECONDS:
-            raise Exception(
-                "Found recent request file; another Talon process is probably running"
-            )
-        else:
-            raise Exception("Found recent request file; vscode is probably hung")
+        raise Exception(
+            "Found recent request file; another Talon process is probably running"
+        )
     else:
         print("Removing stale request file")
         robust_unlink(path)
