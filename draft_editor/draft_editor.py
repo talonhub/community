@@ -13,15 +13,13 @@ class Actions:
         global active_window
         active_window = ui.active_window()
         editor = get_editor()
-        has_selected_text = actions.edit.selected_text() != ""
-        if has_selected_text:
-            actions.edit.copy()
+        selected_text = actions.edit.selected_text()
         focus_window(editor)
         # Wait for context to change.
         actions.sleep("100ms")
         actions.app.tab_open()
-        if has_selected_text:
-            actions.edit.paste()
+        if selected_text != "":
+            actions.user.paste(selected_text)
         actions.mode.enable("user.draft_editor")
 
     def draft_editor_submit():
@@ -49,13 +47,12 @@ def get_editor():
 def close_editor(submit_draft: bool):
     actions.mode.disable("user.draft_editor")
     actions.edit.select_all()
-    if submit_draft:
-        actions.edit.copy()
+    selected_text = actions.edit.selected_text()
     actions.edit.delete()
     actions.app.tab_close()
     focus_window(active_window)
     if submit_draft:
-        actions.edit.paste()
+        actions.user.paste(selected_text)
 
 def focus_window(window: ui.Window):
     """Focus window and wait until finished"""
