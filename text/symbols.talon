@@ -32,7 +32,7 @@ empty escaped string:
 (inside parens | args):
 	insert("()")
 	key(left)
-inside (squares | list):
+inside (squares | square brackets | list):
 	insert("[]")
 	key(left)
 inside (bracket | braces):
