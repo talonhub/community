@@ -1,4 +1,5 @@
-#custom vscode commands go here
+
+group last: user.vscode("workbench.action.focusPreviousGroup")#custom vscode commands go here
 app: vscode
 -
 tag(): user.multiple_cursors
@@ -16,7 +17,7 @@ action(app.window_open): user.vscode("workbench.action.newWindow")
 window reload: user.vscode("workbench.action.reloadWindow")
 window close: user.vscode("workbench.action.closeWindow")
 
-#talon code actions
+#talon code actRight
 action(code.toggle_comment): user.vscode("editor.action.commentLine")
 
 #talon edit actions
@@ -82,6 +83,12 @@ go symbol [<user.text>]:
   user.vscode("workbench.action.gotoSymbol")
   sleep(50ms)
   insert(text or "")
+
+search symbol [<user.text>]:
+  user.vscode("workbench.action.showAllSymbols")
+  sleep(50ms)
+  insert(text or "")
+
 # Panels
 panel control: user.vscode("workbench.panel.repl.view.focus")
 panel output: user.vscode("workbench.panel.output.focus")
@@ -102,6 +109,7 @@ deploy:
 focus editor: user.vscode("workbench.action.focusActiveEditorGroup")
 focus one: user.vscode("workbench.action.focusFirstEditorGroup")
 focus two: user.vscode("workbench.action.focusSecondEditorGroup")
+
 focus side: user.vscode("workbench.action.focusSideBar")
 
 # focus editor: user.vscode("workbench.action.focusActiveEditorGroup")
@@ -120,7 +128,6 @@ zen switch: user.vscode("workbench.action.toggleZenMode")
 
 # File Commands
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 lion [<user.text>]:  
   user.vscode("workbench.action.quickOpen")
   sleep(50ms)
@@ -226,6 +233,7 @@ git push focus: user.vscode("git.pushForce")
 git rebase abort: user.vscode("git.rebaseAbort")
 git reveal: user.vscode("git.revealInExplorer")
 git revert: user.vscode("git.revertChange")
+revert range: user.vscode("git.revertSelectedRanges")
 git stash: user.vscode("git.stash")
 git stash pop: user.vscode("git.stashPop")
 git status: user.vscode("workbench.scm.focus")
@@ -302,3 +310,15 @@ install local: user.vscode("workbench.extensions.action.installVSIX")
 toggle comment: code.toggle_comment()  
 return: insert("return ") 
 close others: user.vscode("workbench.action.closeOtherEditors") 
+
+# move editor
+move last: user.vscode("workbench.action.moveEditorToPreviousGroup")
+move next: user.vscode("workbench.action.moveEditorToNextGroup")
+
+move left: user.vscode("workbench.action.moveEditorLeftInGroup")
+move right: user.vscode("workbench.action.moveEditorRightInGroup")
+focus group: user.vscode("workbench.action.toggleEditorWidths")
+close group: user.vscode("workbench.action.closeEditorsInGroup")
+one group: user.vscode("workbench.action.closeEditorsInOtherGroups")
+group next: user.vscode("workbench.action.focusNextGroup")
+group last: user.vscode("workbench.action.focusPreviousGroup")

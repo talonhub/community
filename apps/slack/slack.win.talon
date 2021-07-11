@@ -3,7 +3,10 @@ os: linux
 app: slack
 #todo: some sort of plugin, consolidate with teams or something?
 -
-go search: key(ctrl-g)
+go search [<user.text>]:
+    key(ctrl-g)
+    sleep(50ms)
+    insert(text or "")
 
 tag(): user.messaging
 # Workspaces

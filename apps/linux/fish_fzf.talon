@@ -6,6 +6,11 @@ fuzzy [<user.text>]:
     sleep(100ms) 
     insert(text or "")
 
+story [<user.text>]: 
+    key(ctrl-r)
+    sleep(100ms) 
+    insert(text or "")
+
 buzzy [<user.text>]: 
     insert("~/")
     key(ctrl-t)
@@ -13,3 +18,6 @@ buzzy [<user.text>]:
     insert(text or "")
     
 fuzzy var: key(ctrl-v) 
+
+cancel [that]: key(ctrl-c)
+fucker: key(ctrl-c)

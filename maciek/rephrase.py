@@ -1,3 +1,4 @@
+from typing import Union
 from talon import Module, actions, speech_system, cron
 from talon.grammar import Phrase
 
@@ -17,11 +18,15 @@ def on_post_phrase(d):
 speech_system.register("pre:phrase", on_pre_phrase)
 speech_system.register("post:phrase", on_post_phrase)
 
+from typing import Union
+
 
 @mod.action_class
 class Actions:
-    def rephrase(phrase: Phrase, run_async: bool = False):
+    def rephrase(phrase: Union[Phrase, str], run_async: bool = True):
         """Re-evaluate and run phrase"""
+        if not phrase:
+            return
         print("rephrase ", phrase)
         current_phrase = phrase_stack[-1]
         print("current_phrase", current_phrase)

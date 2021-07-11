@@ -3,7 +3,7 @@ from typing import Set
 from talon import Module, Context, actions, app
 import sys
 
-default_alphabet = "ace bun cape dish edge fun gust hope ink jury crunch look man nap out pet quench race soft trap ush volt wife plex yet zip".split(
+default_alphabet = "ask bus cape dish east fun gust hope ink jury crunch look man nap out pen quench race soft trap ush vice wife flex yet zip".split(
     " "
 )
 letters_string = "abcdefghijklmnopqrstuvwxyz"
@@ -153,7 +153,7 @@ punctuation_words = {
 }
 symbol_key_words = {
     "dot": ".",
-    "quote": "'",
+    "quote": '"',
     "L square": "[",
     "left square": "[",
     "square": "[",
@@ -194,8 +194,7 @@ symbol_key_words = {
     "caret": "^",
     "amper": "&",
     "pipe": "|",
-    "dubquote": '"',
-    "double quote": '"',
+    "solo quote": "'",
 }
 
 # make punctuation words also included in {user.symbol_keys}
