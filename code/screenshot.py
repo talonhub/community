@@ -1,6 +1,7 @@
 from talon import Module, screen, ui, cron, app, actions, clip
-from datetime import datetime
 from talon.canvas import Canvas
+from typing import Optional
+from datetime import datetime
 import os
 
 mod = Module()
@@ -18,11 +19,14 @@ screenshot_folder = mod.setting(
     desc="Where to save screenshots. Note this folder must exist.",
 )
 
+
 @mod.action_class
 class Actions:
-    def screenshot():
-        """Takes a screenshot of the entire screen and saves it to the pictures folder"""
-        screenshot_rect(screen.main_screen().rect)
+    def screenshot(screen_number: Optional[int] = None):
+        """Takes a screenshot of the entire screen and saves it to the pictures folder.
+        Optional screen number can be given to use screen other than main."""
+        screen = get_screen(screen_number)
+        screenshot_rect(screen.rect)
 
     def screenshot_window():
         """Takes a screenshot of the active window and saves it to the pictures folder"""
@@ -38,13 +42,16 @@ class Actions:
         elif app.platform == "linux":
             actions.key("shift-printscr")
 
-    def screenshot_clipboard():
-        """Takes a screenshot of the entire screen and saves it to the clipboard"""
-        clipboard_rect(screen.main_screen().rect)
+    def screenshot_clipboard(screen_number: Optional[int] = None):
+        """Takes a screenshot of the entire screen and saves it to the clipboard.
+        Optional screen number can be given to use screen other than main."""
+        screen = get_screen(screen_number)
+        clipboard_rect(screen.rect)
 
     def screenshot_window_clipboard():
         """Takes a screenshot of the active window and saves it to the clipboard"""
-        clipboard_rect(ui.active_window().rect)
+        win = ui.active_window()
+        clipboard_rect(win.rect)
 
 
 def screenshot_rect(rect: ui.Rect, title: str = ""):
@@ -53,10 +60,12 @@ def screenshot_rect(rect: ui.Rect, title: str = ""):
     path = get_screenshot_path(title)
     img.write_file(path)
 
-def clipboard_rect(rect: ui.Rect):      
+
+def clipboard_rect(rect: ui.Rect):
     flash_rect(rect)
     img = screen.capture_rect(rect)
     clip.set_image(img)
+
 
 def get_screenshot_path(title: str = ""):
     if title:
@@ -66,6 +75,7 @@ def get_screenshot_path(title: str = ""):
     folder_path = screenshot_folder.get()
     path = os.path.expanduser(os.path.join(folder_path, filename))
     return os.path.normpath(path)
+
 
 def flash_rect(rect: ui.Rect):
     def on_draw(c):
@@ -77,3 +87,9 @@ def flash_rect(rect: ui.Rect):
     canvas = Canvas.from_rect(rect)
     canvas.register("draw", on_draw)
     canvas.freeze()
+
+
+def get_screen(screen_number: Optional[int] = None) -> ui.Screen:
+    if screen_number == None:
+        return screen.main_screen()
+    return actions.user.screens_get_by_number(screen_number)
