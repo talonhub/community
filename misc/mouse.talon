@@ -89,7 +89,7 @@ copy mouse position: user.copy_mouse_position()
 #    user.mouse_move_center_active_window()
 #    user.mouse_scroll_up_continuous()
 
-#wheel gaze: user.mouse_gaze_scroll()
+wheel gaze: user.mouse_gaze_scroll()
 
 #wheel gaze here:
 #    user.mouse_move_center_active_window()
