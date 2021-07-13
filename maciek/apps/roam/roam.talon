@@ -7,5 +7,5 @@ heading medium: key(ctrl-alt-2)
 heading big: key(ctrl-alt-1)
 today: 
     insert("/Today")
-    wait(100ms)
+    sleep(100ms)
     key(enter)

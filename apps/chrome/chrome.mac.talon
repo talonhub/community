@@ -66,3 +66,23 @@ action(browser.submit_form):
 
 action(browser.toggle_dev_tools):
 	key(cmd-alt-i)
+
+show links: key("f")
+link: key("f")
+new link: key(shift-f)
+go search [<user.text>]: 
+    key("o")
+    sleep(200ms)
+    insert(text or "")
+copy link: key(y f)
+copy (address | url): key(escape y y)
+close: app.tab_close()
+go front: browser.go_forward()
+next: app.tab_next()
+last: app.tab_previous()
+back: browser.go_back()
+front: browser.go_forward()
+go find [<user.text>]: 
+    key(cmd-f)
+    sleep(200ms)
+    insert(text or "")

@@ -1,3 +1,5 @@
+os:linux
+-
 horse [<phrase>]$: 
     key("super-1") 
     sleep(1000ms)
