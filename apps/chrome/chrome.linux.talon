@@ -82,3 +82,7 @@ next: app.tab_next()
 last: app.tab_previous()
 back: browser.go_back()
 front: browser.go_forward()
+go find [<user.text>]: 
+    key(ctrl-f)
+    sleep(200ms)
+    insert(text or "")

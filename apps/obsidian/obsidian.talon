@@ -6,7 +6,7 @@ go search [<user.text>]:
     key(ctrl-u)
     sleep(50ms)
     insert(text or "")
-
+bullet: insert("- ")
 open [<user.text>]: 
     key(ctrl-o)
     sleep(50ms)
@@ -47,7 +47,7 @@ create link [<user.text>]:
 
 switch: key(ctrl-e)
 
-sync all: key(ctrl-shift-k)
+git sync: key(ctrl-shift-k)
 
 backlinks: key(ctrl-y)
 go back:key(alt-left)

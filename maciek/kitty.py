@@ -8,6 +8,14 @@ app: kitty
 """
 
 
+@ctx.action_class("user")
+class user_actions:
+    def tab_jump(number: int):
+        if number < 0 or number > 9:
+            raise RuntimeError(f"number should be in range 1-9")
+        actions.key(f"alt-{number}")
+
+
 @ctx.action_class("edit")
 class edit_actions:
     def page_down():

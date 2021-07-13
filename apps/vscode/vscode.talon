@@ -186,6 +186,9 @@ go forward:  user.vscode("workbench.action.navigateForward")
 go implementation: user.vscode("editor.action.goToImplementation")
 go type: user.vscode("editor.action.goToTypeDefinition")
 go usage: user.vscode("references-view.find")
+go replace: user.vscode("editor.action.startFindReplaceAction")
+
+# It will show  folders  to open,  not recent open files.
 go recent [<user.text>]: 
   user.vscode("workbench.action.openRecent")
   sleep(50ms)
