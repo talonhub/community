@@ -32,7 +32,7 @@ settings():
     user.command_history_display = 1
     # the number of lines of command history to keep in total;
     # "command history more" to display all of them, "command history less" to restore
-    user.command_history_size = 10
+    user.command_history_size = 1
     # (unstable) minimum silence time (in seconds) before speech is cut off, default 0.150
     speech.timeout = 0.2
     # record speech for training dataset

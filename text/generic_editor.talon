@@ -50,12 +50,6 @@ tell sink:
 enter:
     key(enter)
 
-bird:
-    edit.word_left()
-
-birch:
-    edit.word_right()
-
 go left:
     edit.left()
 
@@ -115,10 +109,16 @@ select down:
 select word:
     edit.select_word()
 
+bird:
+    edit.word_left()
+
+birch:
+    edit.word_right()
+
 blitch:
     edit.extend_word_left()
 
-rich:
+blitcher:
     edit.extend_word_right()
 
 select home:
