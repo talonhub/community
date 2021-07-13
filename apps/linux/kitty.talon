@@ -1,5 +1,3 @@
-os: linux
-# app.name: Gnome-terminal
 app: kitty
 -
 tag(): terminal
