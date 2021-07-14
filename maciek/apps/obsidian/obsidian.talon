@@ -2,6 +2,7 @@ os: linux
 app: obsidian
 #todo: some sort of plugin, consolidate with teams or something?
 -
+#It would be nice to have  one file both for linux and mac.
 go search [<user.text>]: 
     key(ctrl-u)
     sleep(50ms)

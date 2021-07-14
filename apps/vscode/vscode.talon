@@ -133,6 +133,7 @@ lion [<user.text>]:
   sleep(50ms)
   insert(text or "")
 
+file create copy: user.vscode("fileutils.duplicateFile")
 file copy path: user.vscode("copyFilePath") 
 file copy relative: user.vscode("copyRelativeFilePath") 
 file copy link: user.vscode("gitlens.copyRemoteFileUrlToClipboard") 
