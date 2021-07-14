@@ -31,6 +31,7 @@ in home: insert(" ~/")
 describe: insert("tldr ")
 talon play latest: insert("talon-play-latest\n")
 
+lisa: insert("ls ")
 
 file link: "ln -s "
 file move: "mv "

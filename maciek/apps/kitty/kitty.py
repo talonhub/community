@@ -62,7 +62,7 @@ class edit_actions:
 @ctx.action_class("app")
 class user_actions:
     def tab_next():
-        actions.key(f"{ckey()}-pageup")
+        actions.key(f"{ckey()}-pagedown")
 
     def tab_open():
         if on_mac():
@@ -77,4 +77,4 @@ class user_actions:
             actions.key(f"{ckey()}-shift-w")
 
     def tab_previous():
-        actions.key(f"{ckey()}-pagedown")
+        actions.key(f"{ckey()}-pageup")

@@ -8,7 +8,8 @@ tasks:
     desc: "."
     cmds:
       - pandoc -s ~/.talon/user/knausj_talon/maciek/cheatsheet.md -c maciek/cheatsheet.css -f markdown-raw_html -t html -o cheatsheet.html
+      - pandoc -s ~/.talon/user/knausj_talon/maciek/cheatsheet_shorter.md -c maciek/cheatsheet.css -f markdown-raw_html -t html -o cheatsheet_shorter.html
   show-cheatsheet:
     desc: "."
     cmds:
-      - google-chrome-unstable cheatsheet.html
+      - /opt/homebrew/bin/fish -c "google-chrome cheatsheet.html"
