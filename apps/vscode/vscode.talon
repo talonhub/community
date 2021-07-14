@@ -312,6 +312,7 @@ install local: user.vscode("workbench.extensions.action.installVSIX")
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 toggle comment: code.toggle_comment()  
 return: insert("return ") 
+close everything: user.vscode("workbench.action.closeAllGroups")
 close others: user.vscode("workbench.action.closeOtherEditors") 
 close all others: 
     user.vscode("workbench.action.closeOtherEditors") 
