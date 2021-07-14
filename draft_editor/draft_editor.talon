@@ -1,3 +1,6 @@
+user.draft_editor_running: True
+-
+
 draft this:
 	user.draft_editor_open()
 

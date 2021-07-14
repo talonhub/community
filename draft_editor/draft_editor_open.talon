@@ -1,5 +1,5 @@
 mode: user.draft_editor
-app: vscode
+app: draft_editor
 -
 
 draft submit:    user.draft_editor_submit()
