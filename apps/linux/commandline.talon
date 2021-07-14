@@ -329,21 +329,3 @@ python module: "python -m "
 (activate|enter python environment): "source env/bin/activate\n"
 (deactivate|leave python environment): "deactivate\n"
 
-
-###
-# Screen recording
-###
-screen record: insert("recordmydesktop")
-
-###
-# X11 stuff
-###
-screen dimensions: "xdpyinfo | grep dimensions\n"
-screen resolution: "xdpyinfo | awk '/dimensions/{{print $2}}'\n"
-
-###
-# Arch Linux
-# https://wiki.archlinux.org/index.php/Arch_Build_System#Retrieve_PKGBUILD_source_using_Git
-###
-arch source check out: "asp checkout "
-arch source export: "asp export "

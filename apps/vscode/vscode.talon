@@ -106,9 +106,9 @@ deploy:
 # terminal: user.vscode("workbench.action.terminal.toggleTerminal")
 # toggle terminal: user.vscode("workbench.action.terminal.toggleTerminal")
 
-focus editor: user.vscode("workbench.action.focusActiveEditorGroup")
-focus one: user.vscode("workbench.action.focusFirstEditorGroup")
-focus two: user.vscode("workbench.action.focusSecondEditorGroup")
+go editor: user.vscode("workbench.action.focusActiveEditorGroup")
+group one: user.vscode("workbench.action.focusFirstEditorGroup")
+group two: user.vscode("workbench.action.focusSecondEditorGroup")
 
 focus side: user.vscode("workbench.action.focusSideBar")
 
@@ -313,6 +313,9 @@ install local: user.vscode("workbench.extensions.action.installVSIX")
 toggle comment: code.toggle_comment()  
 return: insert("return ") 
 close others: user.vscode("workbench.action.closeOtherEditors") 
+close all others: 
+    user.vscode("workbench.action.closeOtherEditors") 
+    user.vscode("workbench.action.closeEditorsInOtherGroups")
 
 # move editor
 move last: user.vscode("workbench.action.moveEditorToPreviousGroup")

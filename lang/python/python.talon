@@ -130,3 +130,6 @@ import <user.code_libraries>:
 justify:
     key(up end)
     insert("\n")
+print:
+    insert("print()")
+    key(left)

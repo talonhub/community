@@ -3,7 +3,7 @@ from typing import Set
 from talon import Module, Context, actions, app
 import sys
 
-default_alphabet = "ask bus cape dish east fun gust hope ink jury crunch look man nap out pen quench race soft trap ush vice wife flex yet zip".split(
+default_alphabet = "ask bus cape dish east fun gust hope ink jury crunch look man nap out pet quench race soft trap ush vice wife flex yet zip".split(
     " "
 )
 letters_string = "abcdefghijklmnopqrstuvwxyz"
@@ -189,7 +189,7 @@ symbol_key_words = {
     "greater than": ">",
     "star": "*",
     "pound": "#",
-    # "hash": "#",
+    "hashtag": "#",
     "percent": "%",
     "caret": "^",
     "amper": "&",

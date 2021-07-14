@@ -34,7 +34,8 @@ settings():
     speech.normalize = 0
     speech.threshold = 0.75
     # speech.threshold = 1.
-    speech.timeout = 0.300
+    # speech.timeout = 0.300
+    speech.timeout = 0.200
 
     # Uncomment the below to enable context-sensitive dictation. This determines
     # how to format (capitalize, space) dictation-mode speech by selecting &

@@ -1,4 +1,4 @@
-os: mac
+os: 
 tag: user.fish_fzf
 -
 fuzzy [<user.text>]: 
@@ -6,7 +6,7 @@ fuzzy [<user.text>]:
     sleep(100ms) 
     insert(text or "")
 
-story [<user.text>]: 
+(history|story) [<user.text>]: 
     key(ctrl-r)
     sleep(100ms) 
     insert(text or "")

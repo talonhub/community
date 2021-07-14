@@ -142,8 +142,6 @@ class user_actions:
             "kubectl",
             "line commands",
             "symbols",
-            "linux commandline",
-            "linux fish fzf",
             "python",
             "programming",
             "block comment",
@@ -159,16 +157,25 @@ class user_actions:
             "modes",
             "homophones",
             "symbols",
+            "kitty",
+            "fish fzf",
+            "polish dictation mode",
+            "cursorless",
+            "inside outside",
+            "text navigation",
         ]
-
+        omitted = []
         list_of_contexts = registry.contexts.items()
         for key, value in list_of_contexts:
             print(create_short_name(key), key, value)
             if create_short_name(key) not in interesting_contexts:
-                continue
+                omitted.append(create_short_name(key))
 
             commands = value.commands  # Get all the commands from a context
             if len(commands) > 0:
                 pretty_print_context_name(file, key)
                 write_context_commands(file, commands)
+        print("omitted")
+        print(omitted)
+
         file.close()
