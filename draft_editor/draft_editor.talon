@@ -1,4 +1,5 @@
 user.draft_editor_running: True
+not app: draft_editor
 -
 
 draft this:
