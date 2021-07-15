@@ -1,12 +1,13 @@
 tag: user.code_comment
 -
-comment: user.code_comment()
-comment line:
-    #todo: this should probably be a single function once
-    #.talon supports implementing actions with parameters?
-	edit.line_start()
-    user.code_comment()
+# comment: user.code_comment()
+# comment line:
+#     #todo: this should probably be a single function once
+#     #.talon supports implementing actions with parameters?
+# 	edit.line_start()
+#     user.code_comment()
 #adds comment to the start of the line
+
 comment line <user.text> over:
     #todo: this should probably be a single function once
     #.talon supports implementing actions with parameters?

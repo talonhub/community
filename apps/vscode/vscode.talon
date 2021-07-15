@@ -63,8 +63,6 @@ focus explore: user.vscode("workbench.files.action.focusFilesExplorer")
 bar extensions: user.vscode("workbench.view.extensions")
 bar outline: user.vscode("outline.focus")
 bar run: user.vscode("workbench.view.debug")
-# bar search: user.vscode("workbench.view.search")
-#show search: user.vscode("workbench.view.search")
 go git: user.vscode("workbench.view.scm")
 bar switch: user.vscode("workbench.action.toggleSidebarVisibility")
 
@@ -78,6 +76,8 @@ go find [<user.text>]:
     user.vscode("actions.find")
     sleep(50ms)
     insert(text or "")
+
+go replace: user.vscode("editor.action.startFindReplaceAction")
     
 go symbol [<user.text>]:
   user.vscode("workbench.action.gotoSymbol")
@@ -174,11 +174,12 @@ problem next: user.vscode("editor.action.marker.nextInFiles")
 problem last: user.vscode("editor.action.marker.prevInFiles")
 problem fix: user.vscode("problems.action.showQuickFixes")
 rename that: user.vscode("editor.action.rename")
-refactor that: user.vscode("editor.action.refactor")
+
 whitespace trim: user.vscode("editor.action.trimTrailingWhitespace")
 language switch: user.vscode("workbench.action.editor.changeLanguageMode")
-refactor rename: user.vscode("editor.action.rename")
-refactor this: user.vscode("editor.action.refactor")
+
+refactor (this|that): user.vscode("editor.action.refactor")
+
 
 #code navigation
 (go declaration | follow): user.vscode("editor.action.revealDefinition")
@@ -187,7 +188,7 @@ go forward:  user.vscode("workbench.action.navigateForward")
 go implementation: user.vscode("editor.action.goToImplementation")
 go type: user.vscode("editor.action.goToTypeDefinition")
 go usage: user.vscode("references-view.find")
-go replace: user.vscode("editor.action.startFindReplaceAction")
+
 
 # It will show  folders  to open,  not recent open files.
 go recent [<user.text>]: 
@@ -197,19 +198,19 @@ go recent [<user.text>]:
   sleep(250ms)
 
 # Bookmarks. Requires Bookmarks plugin
-go marks: user.vscode("workbench.view.extension.bookmarks")
-toggle mark: user.vscode("bookmarks.toggle")
-go next mark: user.vscode("bookmarks.jumpToNext")
-go last mark: user.vscode("bookmarks.jumpToPrevious")
+# go marks: user.vscode("workbench.view.extension.bookmarks")
+# toggle mark: user.vscode("bookmarks.toggle")
+# go next mark: user.vscode("bookmarks.jumpToNext")
+# go last mark: user.vscode("bookmarks.jumpToPrevious")
 
 # Folding
-fold that: user.vscode("editor.fold")
-unfold that: user.vscode("editor.unfold")
-fold those: user.vscode("editor.foldAllMarkerRegions")
-unfold those: user.vscode("editor.unfoldRecursively")
-fold all: user.vscode("editor.foldAll")
-unfold all: user.vscode("editor.unfoldAll")
-fold comments: user.vscode("editor.foldAllBlockComments")
+# fold that: user.vscode("editor.fold")
+# unfold that: user.vscode("editor.unfold")
+# fold those: user.vscode("editor.foldAllMarkerRegions")
+# unfold those: user.vscode("editor.unfoldRecursively")
+# fold all: user.vscode("editor.foldAll")
+# unfold all: user.vscode("editor.unfoldAll")
+# fold comments: user.vscode("editor.foldAllBlockComments")
 
 # Git / Github (not using verb-noun-adjective pattern, mirroring terminal commands.)
 lense branches: user.vscode("gitlens.showBranchesView")
@@ -250,16 +251,16 @@ change next: key(alt-f5)
 change last: key(shift-alt-f5)
 
 #Debugging
-break point: user.vscode("editor.debug.action.toggleBreakpoint")
-step over: user.vscode("workbench.action.debug.stepOver")
-debug step into: user.vscode("workbench.action.debug.stepInto")
-debug step out [of]: user.vscode("workbench.action.debug.stepOut")
-debug start: user.vscode("workbench.action.debug.start")
-debug pause: user.vscode("workbench.action.debug.pause")
-debug stopper: user.vscode("workbench.action.debug.stop")
-debug continue: user.vscode("workbench.action.debug.continue")
-debug restart: user.vscode("workbench.action.debug.restart")
-debug console: user.vscode("workbench.debug.action.toggleRepl")
+# break point: user.vscode("editor.debug.action.toggleBreakpoint")
+# step over: user.vscode("workbench.action.debug.stepOver")
+# debug step into: user.vscode("workbench.action.debug.stepInto")
+# debug step out [of]: user.vscode("workbench.action.debug.stepOut")
+# debug start: user.vscode("workbench.action.debug.start")
+# debug pause: user.vscode("workbench.action.debug.pause")
+# debug stopper: user.vscode("workbench.action.debug.stop")
+# debug continue: user.vscode("workbench.action.debug.continue")
+# debug restart: user.vscode("workbench.action.debug.restart")
+# debug console: user.vscode("workbench.debug.action.toggleRepl")
 
 # Terminal
 terminal external: user.vscode("workbench.action.terminal.openNativeConsole")
@@ -275,14 +276,14 @@ terminal scroll down: user.vscode("workbench.action.terminal.scrollDown")
 terminal <number_small>: user.vscode_terminal(number_small)
 
 #TODO: should this be added to linecommands?
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 copy line down: user.vscode("editor.action.copyLinesDownAction") 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 copy line up: user.vscode("editor.action.copyLinesUpAction") 
 
 #Expand/Shrink AST Selection
 select less: user.vscode("editor.action.smartSelect.shrink")
 select (more|this): user.vscode("editor.action.smartSelect.expand")
+# tina: user.vscode("editor.action.smartSelect.expand")
+
 
 minimap: user.vscode("editor.action.toggleMinimap")
 maximize: user.vscode("workbench.action.minimizeOtherEditors")
@@ -304,15 +305,16 @@ select word: user.vscode("editor.action.addSelectionToNextFindMatch")
 skip word: user.vscode("editor.action.moveSelectionToNextFindMatch")
 
 # jupyter
-cell next: user.vscode("jupyter.gotoNextCellInFile")
-cell last: user.vscode("jupyter.gotoPrevCellInFile")
-cell run above: user.vscode("jupyter.runallcellsabove.palette")
-cell run: user.vscode("jupyter.runcurrentcell")
+# cell next: user.vscode("jupyter.gotoNextCellInFile")
+# cell last: user.vscode("jupyter.gotoPrevCellInFile")
+# cell run above: user.vscode("jupyter.runallcellsabove.palette")
+# cell run: user.vscode("jupyter.runcurrentcell")
 
 install local: user.vscode("workbench.extensions.action.installVSIX")
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-toggle comment: code.toggle_comment()  
-return: insert("return ") 
+
+comment: code.toggle_comment()  
+
+
 close everything: user.vscode("workbench.action.closeAllGroups")
 close others: user.vscode("workbench.action.closeOtherEditors") 
 close all others: 
@@ -320,11 +322,13 @@ close all others:
     user.vscode("workbench.action.closeEditorsInOtherGroups")
 
 # move editor
+move left: user.vscode("workbench.action.moveEditorLeftInGroup")
+move right: user.vscode("workbench.action.moveEditorRightInGroup")
+
 move last: user.vscode("workbench.action.moveEditorToPreviousGroup")
 move next: user.vscode("workbench.action.moveEditorToNextGroup")
 
-move left: user.vscode("workbench.action.moveEditorLeftInGroup")
-move right: user.vscode("workbench.action.moveEditorRightInGroup")
+
 focus group: user.vscode("workbench.action.toggleEditorWidths")
 close group: user.vscode("workbench.action.closeEditorsInGroup")
 one group: user.vscode("workbench.action.closeEditorsInOtherGroups")

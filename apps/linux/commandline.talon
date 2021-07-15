@@ -35,6 +35,7 @@ talon play latest: insert("talon-play-latest\n")
 file link: "ln -s "
 file link force: "ln -sf "
 file hard link: "ln "
+
 file move: "mv "
 file open: "vim "
 file touch: "touch "

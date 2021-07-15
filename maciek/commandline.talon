@@ -31,7 +31,7 @@ in home: insert(" ~/")
 describe: insert("tldr ")
 talon play latest: insert("talon-play-latest\n")
 
-lisa: insert("ls ")
+lisa: insert("ls\n")
 
 file link: "ln -s "
 file move: "mv "
@@ -40,6 +40,26 @@ file type: "file
 file show: "cat "
 file stat: "stat " 
 
+# directories
+
+get link:
+    insert("readlink -f ")
+# directory and files
+pivot: "cd "
+pivot clip:
+    insert("cd ")
+    edit.paste()
+    key(enter)
+pivot <user.paths>:
+    insert("cd {paths}\n")
+    insert("ls\n")
+# pivot up doesn't work with talon
+(go parent|pivot back): "cd ../\n"
+pivot <number_small> back: 
+    insert("cd ")
+    insert(user.path_traverse(number_small))
+    key(enter)
+folder (create|new): "mkdir -p  "
 (go home|pivot home): "cd\n"
 # grepping
 
@@ -52,10 +72,19 @@ now rip:
 
 run top: "htop\n"
 run vim: "vim "
+run code: "code "
 
-folder yank: "pwd | tr -d \\\\n\\\\r | pbcopy\n"
+current folder copy: "pwd | tr -d \\\\n\\\\r | pbcopy\n"
+current folder: "pwd\n"
 
 # brew
 brew install: insert("brew install ")
 brew search: insert("brew search ")
 brew info: insert("brew info ")
+
+# dotfiles
+dotfiles status: insert("yadm status\n")
+dotfiles sync: 
+    insert("yadm add -u\n")
+    insert("yadm commit -m 'Changes'\n")
+    insert("yadm push -u origin master\n")

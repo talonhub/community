@@ -36,12 +36,10 @@ add line: key(shift-enter)
 (slack | lack) (slap | slaw | slapper): key(cmd-right shift-enter)
 (slack | lack) (react | reaction): key(cmd-shift-\\)
 (insert command | commandify): key(cmd-shift-c)
+
 insert code:
-    insert("``````")
-    key(left left left)
-    key(shift-enter)
-    key(shift-enter)
-    key(up)
+    insert("```")
+
 (slack | lack) (bull | bullet | bulleted) [list]: key(cmd-shift-8)
 (slack | lack) (number | numbered) [list]: key(cmd-shift-7)
 (slack | lack) (quotes | quotation): key(cmd-shift->)

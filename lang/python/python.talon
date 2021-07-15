@@ -133,3 +133,4 @@ justify:
 print:
     insert("print()")
     key(left)
+return: insert("return ") 
