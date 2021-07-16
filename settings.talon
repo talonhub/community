@@ -31,10 +31,10 @@ settings():
     user.command_history_size = 50
     speech.record_all = 1 
     speech.record_labels = 1
-    speech.normalize = 1
-    speech.threshold = 0.3
-    speech.timeout = 0.250
-    # speech.timeout = 0.200
+    # speech.normalize = 1           
+    speech.threshold = 0.2
+    # speech.timeout = 0.250
+    speech.timeout = 0.200
 
     # Uncomment the below to enable context-sensitive dictation. This determines
     # how to format (capitalize, space) dictation-mode speech by selecting &

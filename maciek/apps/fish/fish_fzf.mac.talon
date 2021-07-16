@@ -1,19 +1,23 @@
-os: 
+os: mac
 tag: user.fish_fzf
 -
+action(edit.delete_word):
+	edit.word_right()
+	key(ctrl-w)
+
 fuzzy [<user.text>]: 
-    key(ctrl-t)
+    key(cmd-e)
     sleep(100ms) 
     insert(text or "")
 
 (history|story) [<user.text>]: 
-    key(ctrl-r)
+    key(cmd-r)
     sleep(100ms) 
     insert(text or "")
 
 buzzy [<user.text>]: 
     insert("~/")
-    key(ctrl-t)
+    key(cmd-e)
     sleep(100ms) 
     insert(text or "")
     
@@ -21,3 +25,6 @@ fuzzy var: key(ctrl-v)
 
 cancel [that]: key(ctrl-c)
 fucker: key(ctrl-c)
+
+# (clear board|clear big word):
+#     fzf.delete_big_word()

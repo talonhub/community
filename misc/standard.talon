@@ -22,7 +22,7 @@ cut that: edit.cut()
 paste that: edit.paste()
 ship: edit.paste()
 
-undo that: edit.undo()
+(undo that|tina): edit.undo()
 redo that: edit.redo()
 paste match: edit.paste_match_style()
 file save: edit.save()

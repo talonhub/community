@@ -1,3 +1,6 @@
 os: mac
 --
-spotlight: key(cmd-space)
+spotlight [<user.text>]:
+    key(cmd-alt-space)
+    sleep(50ms)
+    insert(text or "")

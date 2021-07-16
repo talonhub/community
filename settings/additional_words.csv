@@ -17,17 +17,19 @@ dotfiles
 desktop,desk top
 code,cold
 csv
-conf
 ctrl,control
 debug
 debugger
 dict
 dir,dear
 DNS
+sync
 pageup,page up
 pagedown,page down
 macOS,mac O S
 macOS,marcos
+macOS,marco as
+bitwarden
 dump,dumb
 echo
 eval
@@ -42,7 +44,6 @@ gnome
 golang
 google-chrome
 google-chrome,google home
-head,had
 import,in port
 install,in stall
 json
@@ -79,10 +80,6 @@ repl,repel
 resolvectl,resolve cattle
 REST
 ripgrep
-roam
-roam,rome
-roamresear
-roamresearch,rome research
 set,said
 shell,shall
 shortcut,short cut
@@ -105,11 +102,12 @@ under-documented,under
 unofficial
 vim
 VPN
+file,fire
 vscode,V S code
 vscode,he has cold
 vscode,as cold
-vscode,ha as cold
+vscode,he as cold
+vscode,we as cold
 yaml
-yell
 yubikey
 yubikey,you be key

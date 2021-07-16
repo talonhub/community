@@ -152,7 +152,7 @@ punctuation_words = {
     "ampersand": "&",
 }
 symbol_key_words = {
-    "dot": ".",
+    # "dot": ".",
     "quote": '"',
     "L square": "[",
     "left square": "[",
@@ -166,8 +166,8 @@ symbol_key_words = {
     "equals": "=",
     "plus": "+",
     "tilde": "~",
-    "bang": "!",
-    "remi": ";",
+    "exclaim": "!",
+    "semicolon": ";",
     "dollar": "$",
     "down score": "_",
     "under score": "_",

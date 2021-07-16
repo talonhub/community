@@ -160,6 +160,11 @@ copy all:
 # copy down:
 #     edit.extend_down()
 #     edit.copy()
+# added by maciek
+change word [<user.text>]: 
+    edit.select_word()
+    sleep(50ms)
+    insert(text or "")
 
 copy word:
     edit.select_word()
@@ -197,7 +202,7 @@ cut all:
 
 cut word:
     edit.select_word()
-    edit.cut()
+    edit.cut()              
 
 cut word left:
     edit.extend_word_left()

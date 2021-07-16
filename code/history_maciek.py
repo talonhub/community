@@ -23,6 +23,7 @@ import json
 import pprint
 
 import psutil
+from pathlib import Path
 
 
 class HistoryView(object):
@@ -41,8 +42,8 @@ class HistoryView(object):
             to_dump = j["_metadata"]
             diagnostics = self.create_diagnostics()
             to_dump["diagnostics"] = diagnostics
-
-            with open("/home/maciek/.talon_maciek/logs", mode="a") as f:
+            # raise RuntimeError
+            with open(str(Path.home() / ".talon_maciek/logs"), mode="a") as f:
                 f.write(json.dumps(to_dump))
 
                 f.write("\n")

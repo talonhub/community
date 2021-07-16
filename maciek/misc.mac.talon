@@ -10,7 +10,7 @@ panda [<phrase>]$:
     sleep(1000ms)
     user.rephrase(phrase or "")
 
-kitty [<phrase>]$: 
+puppy [<phrase>]$: 
     key("ctrl-3") 
     sleep(1000ms)
     user.rephrase(phrase or "")

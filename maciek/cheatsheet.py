@@ -170,7 +170,9 @@ class user_actions:
         omitted = []
         list_of_contexts = registry.contexts.items()
         for key, value in list_of_contexts:
-            print(create_short_name(key), key, value)
+            print(
+                f"shorter name = {create_short_name(key)} key = {key} value = {value}"
+            )
 
             commands = value.commands  # Get all the commands from a context
             if len(commands) > 0:

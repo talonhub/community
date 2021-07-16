@@ -33,6 +33,7 @@ talon play latest: insert("talon-play-latest\n")
 
 lisa: insert("ls\n")
 
+file list: "ls "
 file link: "ln -s "
 file move: "mv "
 file copy: "cp "
@@ -61,6 +62,7 @@ pivot <number_small> back:
     key(enter)
 folder (create|new): "mkdir -p  "
 (go home|pivot home): "cd\n"
+go projects: "cd ~/projects\nls\n"
 # grepping
 
 rip: "rg -i "
@@ -70,6 +72,7 @@ now rip:
     edit.up()
     insert("| rg -i ")
 
+make executable: "chmod +x "
 run top: "htop\n"
 run vim: "vim "
 run code: "code "
@@ -83,8 +86,13 @@ brew search: insert("brew search ")
 brew info: insert("brew info ")
 
 # dotfiles
+dotfiles add: insert("yadm add ")
 dotfiles status: insert("yadm status\n")
 dotfiles sync: 
     insert("yadm add -u\n")
     insert("yadm commit -m 'Changes'\n")
     insert("yadm push -u origin master\n")
+
+copy paste:
+    edit.copy()
+    edit.paste()
