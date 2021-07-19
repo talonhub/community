@@ -8,6 +8,10 @@ tag(): user.snippets
 tag(): user.splits
 tag(): user.tabs
 #talon app actions
+
+settings():
+    speech.timeout = 0.300
+
 action(app.tab_close): user.vscode("workbench.action.closeActiveEditor")
 action(app.tab_next): user.vscode("workbench.action.nextEditorInGroup")
 action(app.tab_previous): user.vscode("workbench.action.previousEditorInGroup")
@@ -52,7 +56,7 @@ action(user.multi_cursor_select_fewer_occurrences): user.vscode("cursorUndo")
 action(user.multi_cursor_select_more_occurrences): user.vscode("editor.action.addSelectionToNextFindMatch")
 #multiple_cursor.py support end
 
-please [<user.text>]: 
+please [<user.text>]$: 
   user.vscode("workbench.action.showCommands")
   insert(user.text or "")
 
@@ -67,34 +71,35 @@ go git: user.vscode("workbench.view.scm")
 bar switch: user.vscode("workbench.action.toggleSidebarVisibility")
 
 # show recent: user.vscode("work55bench.action.showAllEditorsByMostRecentlyUsed")
-go search [<user.text>]: 
+go search [<user.text>]$: 
     user.vscode("workbench.action.findInFiles")
     sleep(50ms)
     insert(text or "")
     
-go find [<user.text>]: 
+go find [<user.text>]$: 
     user.vscode("actions.find")
     sleep(50ms)
     insert(text or "")
 
 go replace: user.vscode("editor.action.startFindReplaceAction")
     
-go symbol [<user.text>]:
+go symbol [<user.text>]$:
   user.vscode("workbench.action.gotoSymbol")
   sleep(50ms)
   insert(text or "")
 
-search symbol [<user.text>]:
+search symbol [<user.text>]$:
   user.vscode("workbench.action.showAllSymbols")
   sleep(50ms)
   insert(text or "")
 
 # Panels
-panel control: user.vscode("workbench.panel.repl.view.focus")
+panel debug: user.vscode("workbench.panel.repl.view.focus")
 panel output: user.vscode("workbench.panel.output.focus")
 panel problems: user.vscode("workbench.panel.markers.view.focus")
 panel switch: user.vscode("workbench.action.togglePanel")
 panel terminal: user.vscode("workbench.panel.terminal.focus")
+panel close: user.vscode("workbench.action.closePanel")
 
 console: user.vscode("workbench.action.terminal.toggleTerminal")
 deploy:
@@ -188,6 +193,7 @@ go forward:  user.vscode("workbench.action.navigateForward")
 go implementation: user.vscode("editor.action.goToImplementation")
 go type: user.vscode("editor.action.goToTypeDefinition")
 go usage: user.vscode("references-view.find")
+folder open: user.vscode("workbench.action.files.openFileFolder")
 
 
 # It will show  folders  to open,  not recent open files.
@@ -327,10 +333,43 @@ move right: user.vscode("workbench.action.moveEditorRightInGroup")
 
 move last: user.vscode("workbench.action.moveEditorToPreviousGroup")
 move next: user.vscode("workbench.action.moveEditorToNextGroup")
-
-
+   
 focus group: user.vscode("workbench.action.toggleEditorWidths")
 close group: user.vscode("workbench.action.closeEditorsInGroup")
 one group: user.vscode("workbench.action.closeEditorsInOtherGroups")
 group next: user.vscode("workbench.action.focusNextGroup")
 group last: user.vscode("workbench.action.focusPreviousGroup")
+
+next: app.tab_next()
+last: app.tab_previous()
+
+# copied from line_commands.talon
+go <number>: edit.jump_line(number)
+go <number> end: 
+    edit.jump_line(number)
+    edit.line_end()
+
+lend: edit.line_end()
+bend: edit.line_start()
+take <number> line:
+    user.select_next_lines(number)
+cut <number> line:
+    user.select_next_lines(number)
+    sleep(100ms)
+    key(cmd-x)
+copy <number> line:
+    user.select_next_lines(number)
+    key(cmd-c)
+    sleep(100ms)
+    key(esc)
+
+# is it better to use vscode commands or just keyboard shortcuts?
+# Or I could hide these details and create talon actions and only call these here.
+take it:
+    key(cmd-d)  
+search it:
+    key(cmd-d)     
+    key(cmd-shift-f) 
+find it:
+    key(cmd-d)     
+    key(cmd-f) 

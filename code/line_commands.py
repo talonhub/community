@@ -16,6 +16,9 @@ mod.tag(
 
 @mod.action_class
 class Actions:
+    # def select_next_lines(nof_lines: int):
+    #     pass
+
     def extend_until_line(line: int):
         """Extends the selection from current line to the specified line"""
 
@@ -43,4 +46,3 @@ class Actions:
 
     def line_clone(line: int):
         """Clones specified line at current position"""
-

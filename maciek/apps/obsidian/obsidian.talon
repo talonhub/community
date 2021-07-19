@@ -3,22 +3,22 @@ app: obsidian
 #todo: some sort of plugin, consolidate with teams or something?
 -
 #It would be nice to have  one file both for linux and mac.
-go search [<user.text>]: 
+go search [<user.text>]$: 
     key(ctrl-u)
     sleep(50ms)
     insert(text or "")
 bullet: insert("- ")
-open [<user.text>]: 
+open [<user.text>]$: 
     key(ctrl-o)
     sleep(50ms)
     insert(text or "")
 
-create [<user.text>]: 
+create [<user.text>]$: 
     key(ctrl-n)
     sleep(150ms)
     insert(text or "")
 
-please [<user.text>]: 
+please [<user.text>]$: 
     key(ctrl-p)
     sleep(50ms)
     insert(text or "")
@@ -42,7 +42,7 @@ code python:
     key(up)
     
     
-create link [<user.text>]: 
+create link [<user.text>]$: 
     insert("[[")
     insert(text or "")
 

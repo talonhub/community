@@ -3,27 +3,27 @@ app: obsidian
 #todo: some sort of plugin, consolidate with teams or something?
 -
 #It would be nice to have  one file both for linux and mac.
-go search [<user.text>]: 
+go search [<user.text>]$: 
     key(cmd-u)
     sleep(50ms)
     insert(text or "")
 bullet: insert("- ")
-open [<user.text>]: 
+open [<user.text>]$: 
     key(cmd-o)
     sleep(50ms)
     insert(text or "")
 
-create [<user.text>]: 
+create [<user.text>]$: 
     key(cmd-n)
     sleep(150ms)
     insert(text or "")
 
-please [<user.text>]: 
+please [<user.text>]$: 
     key(cmd-p)
     sleep(50ms)
     insert(text or "")
 
-code block:
+code insert:
     insert('```\n')
     insert('```')
     key(left left left)
@@ -53,3 +53,8 @@ git sync: key(cmd-shift-k)
 backlinks: key(cmd-y)
 go back:key(cmd-left)
 go front:key(cmd-right)
+
+header one: "# "
+header two: "## "
+header three: "### "
+header four: "#### "

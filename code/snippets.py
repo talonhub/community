@@ -38,4 +38,3 @@ class Actions:
             gui.hide()
         else:
             gui.show()
-

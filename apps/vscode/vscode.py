@@ -84,6 +84,13 @@ class Actions:
         """Activate a terminal by number"""
         actions.user.vscode(f"workbench.action.terminal.focusAtIndex{number}")
 
+    #  to use it I have to call it  user.select_next_lines(number),
+    #  why is it placed under user?
+    def select_next_lines(nof_lines: int):
+        """Docstring is required"""
+        for i in range(nof_lines):
+            actions.key("cmd-l")
+
     def command_palette():
         """Show command palette"""
         actions.key("ctrl-shift-p")
@@ -125,13 +132,13 @@ class user_actions:
     def tab_jump(number: int):
         if number < 10:
             if is_mac:
-                actions.key("ctrl-{}".format(number))
+                actions.key("cmd-{}".format(number))
             else:
                 actions.key("alt-{}".format(number))
 
     def tab_final():
         if is_mac:
-            actions.key("ctrl-0")
+            actions.key("cmd-0")
         else:
             actions.key("alt-0")
 

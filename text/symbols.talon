@@ -3,7 +3,7 @@ question [mark]: "?"
 double dash: "--"
 (bracket | brack | left bracket): "{"
 (rbrack | are bracket | right bracket): "}"
-triple quote: "'''"
+triple quote: "'''
 (dot dot | dotdot): ".."
 #ellipses: "…"
 ellipses: "..."
@@ -14,15 +14,15 @@ dub arrow: "=>"
 new line: "\\n"
 carriage return: "\\r"
 line feed: "\\r\\n"
-empty dubstring:
-    '""'
+empty solostring:
+    "''"
     key(left)
 empty escaped (dubstring|dub quotes):
     '\\"\\"'
     key(left)
     key(left)
 empty string:
-    "''"
+    '""'
     key(left)
 empty escaped string:
     "\\'\\'"
@@ -37,6 +37,9 @@ inside (squares | list):
 inside (bracket | braces): 
 	insert("{}") 
 	key(left)
+inside angle: 
+    insert("<>")
+    key(left)
 inside percent: 
 	insert("%%") 
 	key(left)

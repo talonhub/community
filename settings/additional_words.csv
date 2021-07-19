@@ -15,8 +15,8 @@ Citrix
 brew
 dotfiles
 desktop,desk top
-code,cold
 csv
+AppStore,app store
 ctrl,control
 debug
 debugger
@@ -25,6 +25,8 @@ dir,dear
 DNS
 sync
 pageup,page up
+c++,see plus plus
+bluetooth
 pagedown,page down
 macOS,mac O S
 macOS,marcos
@@ -39,7 +41,6 @@ generic,genetic
 github
 git
 tabs
-slack,luck
 gnome
 golang
 google-chrome
@@ -86,8 +87,6 @@ shortcut,short cut
 shortcuts,short cuts
 cursorless
 sudo,su du
-tag,tack
-tags,tugs
 talon,talent
 talon,tom
 Taskfile

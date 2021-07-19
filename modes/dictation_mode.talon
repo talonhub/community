@@ -2,7 +2,7 @@ mode: dictation
 -
 ^press <user.keys>$: key("{keys}")
 
-(command|over) [<phrase>]$:   user.command_mode(phrase or "")
+over [<phrase>]$:   user.command_mode(phrase or "")
     
 # Everything here should call auto_insert to preserve the state to correctly auto-capitalize/auto-space.
 <user.prose>: auto_insert(prose)

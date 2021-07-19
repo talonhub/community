@@ -37,9 +37,10 @@ file list: "ls "
 file link: "ln -s "
 file move: "mv "
 file copy: "cp "
-file type: "file
+file type: "file "
 file show: "cat "
 file stat: "stat " 
+file which: "which "
 
 # directories
 
@@ -63,6 +64,7 @@ pivot <number_small> back:
 folder (create|new): "mkdir -p  "
 (go home|pivot home): "cd\n"
 go projects: "cd ~/projects\nls\n"
+force remove: "rm -rf "
 # grepping
 
 rip: "rg -i "

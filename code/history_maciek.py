@@ -1,5 +1,4 @@
 import os
-from dearpygui import core, simple
 from talon import Module, actions, app, imgui, speech_system
 
 # We keep command_history_size lines of history, but by default display only
@@ -43,7 +42,11 @@ class HistoryView(object):
             diagnostics = self.create_diagnostics()
             to_dump["diagnostics"] = diagnostics
             # raise RuntimeError
-            with open(str(Path.home() / ".talon_maciek/logs"), mode="a") as f:
+            path = str(Path.home() / ".talon_maciek/logs")
+
+            print(f"path =  {path}")
+
+            with open(path, mode="a") as f:
                 f.write(json.dumps(to_dump))
 
                 f.write("\n")

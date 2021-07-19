@@ -1,21 +1,21 @@
 os:mac
 -
-horse [<phrase>]$: 
+^horse [<phrase>]$: 
     key("ctrl-1") 
     sleep(1000ms)
     user.rephrase(phrase or "")
     
-panda [<phrase>]$: 
+^panda [<phrase>]$: 
     key("ctrl-2") 
     sleep(1000ms)
     user.rephrase(phrase or "")
 
-puppy [<phrase>]$: 
+^puppy [<phrase>]$: 
     key("ctrl-3") 
     sleep(1000ms)
     user.rephrase(phrase or "")
 
-goat [<phrase>]$: 
+^goat [<phrase>]$: 
     key("ctrl-4") 
     sleep(1000ms)
     user.rephrase(phrase or "")

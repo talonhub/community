@@ -70,7 +70,7 @@ action(browser.toggle_dev_tools):
 show links: key("f")
 link: key("f")
 new link: key(shift-f)
-go search [<user.text>]: 
+go search [<user.text>]$: 
     key("o")
     sleep(200ms)
     insert(text or "")
@@ -82,7 +82,7 @@ next: app.tab_next()
 last: app.tab_previous()
 back: browser.go_back()
 front: browser.go_forward()
-go find [<user.text>]: 
+go find [<user.text>]$: 
     key(ctrl-f)
     sleep(200ms)
     insert(text or "")

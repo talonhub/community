@@ -3,7 +3,7 @@ from typing import Set
 from talon import Module, Context, actions, app
 import sys
 
-default_alphabet = "ask bus cape dish east fun gust hope ink jury crunch look man nap out pet quench race soft trap ush vice wife flex yet zip".split(
+default_alphabet = "air bat cup dish east fun gust hope ink jury crunch look man nap out pet quench race soft trap ush vice wife flex yet zip".split(
     " "
 )
 letters_string = "abcdefghijklmnopqrstuvwxyz"
@@ -202,6 +202,7 @@ symbol_key_words.update(punctuation_words)
 ctx.lists["self.punctuation"] = punctuation_words
 ctx.lists["self.symbol_key"] = symbol_key_words
 ctx.lists["self.number_key"] = dict(zip(default_digits, numbers))
+
 ctx.lists["self.arrow_key"] = {
     "down": "down",
     "left": "left",
@@ -211,10 +212,10 @@ ctx.lists["self.arrow_key"] = {
 
 simple_keys = [
     "end",
-    "enter",
+    # "enter",
     "escape",
     "home",
-    "insert",
+    # "insert",
     "pagedown",
     "pageup",
     "space",

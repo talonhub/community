@@ -95,51 +95,51 @@ indent [more]:
     edit.indent_less()
 
 # deleting
-[clear|wipe] line:
+(clear|wipe) line:
     edit.delete_line()
 
-[clear|wipe] left:
+(clear|wipe) left:
     key(backspace)
 
-[clear|wipe] right:
+(clear|wipe) right:
     key(delete)
 
-[clear|wipe] up:
+(clear|wipe) up:
     edit.extend_line_up()
     edit.delete()
 
-[clear|wipe] down:
+(clear|wipe) down:
     edit.extend_line_down()
     edit.delete()
 
-[clear|wipe] word:
+(clear|wipe) word:
     edit.delete_word()
 
-[clear|wipe] word left:
+(clear|wipe) word left:
     edit.extend_word_left()
     edit.delete()
 
-[clear|wipe] word right:
+(clear|wipe) word right:
     edit.extend_word_right()
     edit.delete()
 
-[clear|wipe] way left:
+(clear|wipe) way left:
     edit.extend_line_start()
     edit.delete()
 
-[clear|wipe] way right:
+(clear|wipe) way right:
     edit.extend_line_end()
     edit.delete()
 
-[clear|wipe] way up:
+(clear|wipe) way up:
     edit.extend_file_start()
     edit.delete()
 
-[clear|wipe] way down:
+(clear|wipe) way down:
     edit.extend_file_end()
     edit.delete()
 
-[clear|wipe] all:
+(clear|wipe) all:
     edit.select_all()
     edit.delete()
 
@@ -161,7 +161,7 @@ copy all:
 #     edit.extend_down()
 #     edit.copy()
 # added by maciek
-change word [<user.text>]: 
+change word [<user.text>]$: 
     edit.select_word()
     sleep(50ms)
     insert(text or "")

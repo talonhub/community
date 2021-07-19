@@ -8,6 +8,7 @@ phrase_history = []
 phrase_history_length = 40
 phrase_history_display_length = 40
 
+
 @mod.action_class
 class Actions:
     def get_last_phrase() -> str:
@@ -16,8 +17,10 @@ class Actions:
 
     def get_recent_phrase(number: int) -> str:
         """Gets the nth most recent phrase"""
-        try: return phrase_history[number-1]
-        except IndexError: return ""
+        try:
+            return phrase_history[number - 1]
+        except IndexError:
+            return ""
 
     def clear_last_phrase():
         """Clears the last phrase"""
@@ -49,8 +52,11 @@ class Actions:
 
     def toggle_phrase_history():
         """Toggles list of recent phrases"""
-        if gui.showing: gui.hide()
-        else: gui.show()
+        if gui.showing:
+            gui.hide()
+        else:
+            gui.show()
+
 
 @imgui.open()
 def gui(gui: imgui.GUI):
