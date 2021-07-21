@@ -152,7 +152,7 @@ class Actions:
         """(TEMPORARY) Press and hold/release button 0 depending on state for dragging"""
         ctrl.mouse_click(button=button, down=True)
 
-    def end_drag(button: int):
+    def end_mouse_drag(button: int):
         """ Releases the specified mouse button """
         ctrl.mouse_click(button=button, up=True)
 
