@@ -126,7 +126,7 @@ https://github.com/knausj85/knausj_talon/blob/master/text/symbols.talon
 
 Try using formatters by saying e.g. `snake hello world`, which will insert hello_world
 
-Mutliple formatters can be used togther, e.g. `dubstring snake hello world`. This will insert "hello_world"
+Multiple formatters can be used together, e.g. `dubstring snake hello world`. This will insert "hello_world"
 
 Formatters (snake, dubstring) are defined here
 https://github.com/knausj85/knausj_talon/blob/master/code/formatters.py#L146
