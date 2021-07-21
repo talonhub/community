@@ -7,22 +7,21 @@ go (back | backward): browser.go_back()
 go to {user.website}: browser.go(website)
 go private: browser.open_private_window()
 
-bookmark show: browser.bookmarks()
-bookmark bar show: browser.bookmarks_bar()
 bookmark it: browser.bookmark()
 bookmark tabs: browser.bookmark_tabs()
-
 (refresh | reload) it: browser.reload()
 (refresh | reload) it hard: browser.reload_hard()
 
+dev tools: browser.toggle_dev_tools()
+bookmark bar: browser.bookmarks_bar()
+
+bookmark show: browser.bookmarks()
+bookmark bar show: browser.bookmarks_bar()
 downloads show: browser.show_downloads()
 extensions show: browser.show_extensions()
 history show: browser.show_history()
 cache show: browser.show_clear_cache()
 dev tools show: browser.toggle_dev_tools()
-
-dev tools: browser.toggle_dev_tools()
-bookmark bar: browser.bookmarks_bar()
 
 # Legacy [verb noun] commands to be removed at a later time
 show downloads: browser.show_downloads()
