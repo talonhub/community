@@ -6,8 +6,10 @@ touch:
 	mouse_click(0)
 	# close the mouse grid if open
 	user.grid_close()
+    # End right drag if open so that touch ends both types of drags
+	user.end_drag(1)
 
-righty: 
+righty:
 	mouse_click(1)
 	# close the mouse grid if open
 	user.grid_close()
@@ -47,8 +49,12 @@ midclick:
 	mouse_click()
 	# close the mouse grid
 	user.grid_close()
-drag: 
-	user.mouse_drag()
+drag:
+	user.mouse_drag(0)
+	# close the mouse grid
+	user.grid_close()
+right drag:
+	user.mouse_drag(1)
 	# close the mouse grid
 	user.grid_close()
 wheel down: user.mouse_scroll_down()

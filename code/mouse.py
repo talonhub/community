@@ -148,20 +148,25 @@ class Actions:
         if eye_zoom_mouse.zoom_mouse.enabled:
             eye_zoom_mouse.zoom_mouse.on_pop(eye_zoom_mouse.zoom_mouse.state)
 
-    def mouse_drag():
+    def mouse_drag(button: int):
         """(TEMPORARY) Press and hold/release button 0 depending on state for dragging"""
         # todo: fixme temporary fix for drag command
         button_down = len(list(ctrl.mouse_buttons_down())) > 0
         # print(str(ctrl.mouse_buttons_down()))
         if not button_down:
             # print("start drag...")
-            ctrl.mouse_click(button=0, down=True)
+            ctrl.mouse_click(button=button, down=True)
             # app.notify("drag started")
         else:
+            # End any active drags
             # print("end drag...")
-            ctrl.mouse_click(button=0, up=True)
+            self.end_drag(0)
+            self.end_drag(1)
 
         # app.notify("drag stopped")
+    def end_drag(button: int):
+        """ Releases the specified mouse button """
+        ctrl.mouse_click(button=button, up=True)
 
     def mouse_sleep():
         """Disables control mouse, zoom mouse, and re-enables cursor"""
