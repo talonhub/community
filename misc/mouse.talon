@@ -57,6 +57,9 @@ right drag:
 	user.mouse_drag(1)
 	# close the mouse grid
 	user.grid_close()
+end (left | right) drag:
+    user.end_drag(0)
+    user.end_drag(1)
 wheel down: user.mouse_scroll_down()
 wheel down here:
     user.mouse_move_center_active_window()
