@@ -52,6 +52,7 @@ port_mapping = {
     "RubyMine-EAP": 8661,
     "PyCharm": 8658,
     "pycharm64.exe": 8658,
+    "WebStorm": 8663,
     "webstorm64.exe": 8663,
 }
 
@@ -154,6 +155,7 @@ ctx.matches = r"""
 app: jetbrains
 """
 
+@ctx.action_class('app')
 class AppActions:
     def tab_next():     actions.user.idea('action NextTab')
     def tab_previous(): actions.user.idea('action PreviousTab')
