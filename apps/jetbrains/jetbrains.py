@@ -52,6 +52,7 @@ port_mapping = {
     "RubyMine-EAP": 8661,
     "PyCharm": 8658,
     "pycharm64.exe": 8658,
+    "WebStorm": 8663,
     "webstorm64.exe": 8663,
 }
 
@@ -80,10 +81,11 @@ def send_idea_command(cmd):
     bundle = active_app.bundle or active_app.name
     port = port_mapping.get(bundle, None)
     nonce = _get_nonce(port, ".vcidea_") or _get_nonce(port, "vcidea_")
+    proxies = {"http": None, "https": None}
     print(f"sending {bundle} {port} {nonce}")
     if port and nonce:
         response = requests.get(
-            "http://localhost:{}/{}/{}".format(port, nonce, cmd), timeout=(0.05, 3.05)
+            "http://localhost:{}/{}/{}".format(port, nonce, cmd), proxies=proxies, timeout=(0.05, 3.05)
         )
         response.raise_for_status()
         return response.text
@@ -153,6 +155,7 @@ ctx.matches = r"""
 app: jetbrains
 """
 
+@ctx.action_class('app')
 class AppActions:
     def tab_next():     actions.user.idea('action NextTab')
     def tab_previous(): actions.user.idea('action PreviousTab')
