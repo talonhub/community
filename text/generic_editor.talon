@@ -1,3 +1,6 @@
+timer (start | stop):
+    key(cmd-shift-r)
+
 comet:
   ","
 

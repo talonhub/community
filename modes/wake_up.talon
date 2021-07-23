@@ -15,4 +15,9 @@ mode: all
     user.engine_sleep()
 ^go to sleep$: speech.disable()
 ^wake up$: speech.enable()
-
+^go to sleep timer$: 
+  key(cmd-shift-r)
+  speech.disable()
+^wake up timer$:
+  speech.enable()  
+  key(cmd-shift-r)
