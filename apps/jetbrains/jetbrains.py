@@ -44,6 +44,7 @@ port_mapping = {
     "jetbrains-pycharm-ce": 8658,
     "jetbrains-pycharm": 8658,
     "jetbrains-rider": 8660,
+    "JetBrains Rider": 8660,
     "jetbrains-rubymine": 8661,
     "jetbrains-rubymine-eap": 8661,
     "jetbrains-studio": 8652,
@@ -85,7 +86,9 @@ def send_idea_command(cmd):
     print(f"sending {bundle} {port} {nonce}")
     if port and nonce:
         response = requests.get(
-            "http://localhost:{}/{}/{}".format(port, nonce, cmd), proxies=proxies, timeout=(0.05, 3.05)
+            "http://localhost:{}/{}/{}".format(port, nonce, cmd),
+            proxies=proxies,
+            timeout=(0.05, 3.05),
         )
         response.raise_for_status()
         return response.text
@@ -127,6 +130,12 @@ mod.apps.jetbrains = """
 os: mac
 and app.bundle: com.jetbrains.pycharm
 """
+mod.apps.jetbrains = """
+os: windows
+and app.name: JetBrains Rider
+os: windows
+and app.exe: rider64.exe
+"""
 
 
 @mod.action_class
@@ -155,59 +164,108 @@ ctx.matches = r"""
 app: jetbrains
 """
 
-@ctx.action_class('app')
+
+@ctx.action_class("app")
 class AppActions:
-    def tab_next():     actions.user.idea('action NextTab')
-    def tab_previous(): actions.user.idea('action PreviousTab')
-    
-    def tab_close():    actions.user.idea('action CloseContent')
-    def tab_reopen():   actions.user.idea('action ReopenClosedTab')
+    def tab_next():
+        actions.user.idea("action NextTab")
 
-        
-@ctx.action_class('code')
+    def tab_previous():
+        actions.user.idea("action PreviousTab")
+
+    def tab_close():
+        actions.user.idea("action CloseContent")
+
+    def tab_reopen():
+        actions.user.idea("action ReopenClosedTab")
+
+
+@ctx.action_class("code")
 class CodeActions:
-    #talon code actions
-    def toggle_comment(): actions.user.idea('action CommentByLineComment')
+    # talon code actions
+    def toggle_comment():
+        actions.user.idea("action CommentByLineComment")
 
-@ctx.action_class('edit')
+
+@ctx.action_class("edit")
 class EditActions:
-    #talon edit actions
-    def copy():                   actions.user.idea('action EditorCopy')
-    def cut():                    actions.user.idea('action EditorCut')
-    def delete():                 actions.user.idea('action EditorBackSpace')
-    def paste():                  actions.user.idea('action EditorPaste')
-    def find_next():              actions.user.idea('action FindNext')
-    def find_previous():          actions.user.idea('action FindPrevious')
-    def find(text: str=None):     actions.user.idea('action Find')
-    def line_clone():             actions.user.idea('action EditorDuplicate')
-    def line_swap_down():         actions.user.idea('action MoveLineDown')
-    def line_swap_up():           actions.user.idea('action MoveLineUp')
-    def indent_more():            actions.user.idea('action EditorIndentLineOrSelection')
-    def indent_less():            actions.user.idea('action EditorUnindentSelection')
-    def select_line(n: int=None): actions.user.idea('action EditorSelectLine')
-    def select_word():            actions.user.idea('action EditorSelectWord')
-    def select_all():             actions.user.idea('action $SelectAll')
-    def file_start():             actions.user.idea('action EditorTextStart')
-    def file_end():               actions.user.idea('action EditorTextEnd')
-    def extend_file_start():      actions.user.idea('action EditorTextStartWithSelection')
-    def extend_file_end():        actions.user.idea('action EditorTextEndWithSelection')
+    # talon edit actions
+    def copy():
+        actions.user.idea("action EditorCopy")
+
+    def cut():
+        actions.user.idea("action EditorCut")
+
+    def delete():
+        actions.user.idea("action EditorBackSpace")
+
+    def paste():
+        actions.user.idea("action EditorPaste")
+
+    def find_next():
+        actions.user.idea("action FindNext")
+
+    def find_previous():
+        actions.user.idea("action FindPrevious")
+
+    def find(text: str = None):
+        actions.user.idea("action Find")
+
+    def line_clone():
+        actions.user.idea("action EditorDuplicate")
+
+    def line_swap_down():
+        actions.user.idea("action MoveLineDown")
+
+    def line_swap_up():
+        actions.user.idea("action MoveLineUp")
+
+    def indent_more():
+        actions.user.idea("action EditorIndentLineOrSelection")
+
+    def indent_less():
+        actions.user.idea("action EditorUnindentSelection")
+
+    def select_line(n: int = None):
+        actions.user.idea("action EditorSelectLine")
+
+    def select_word():
+        actions.user.idea("action EditorSelectWord")
+
+    def select_all():
+        actions.user.idea("action $SelectAll")
+
+    def file_start():
+        actions.user.idea("action EditorTextStart")
+
+    def file_end():
+        actions.user.idea("action EditorTextEnd")
+
+    def extend_file_start():
+        actions.user.idea("action EditorTextStartWithSelection")
+
+    def extend_file_end():
+        actions.user.idea("action EditorTextEndWithSelection")
+
     def jump_line(n: int):
         actions.user.idea("goto {} 0".format(n))
         # move the cursor to the first nonwhite space character of the line
         actions.user.idea("action EditorLineEnd")
         actions.user.idea("action EditorLineStart")
 
+
 @ctx.action_class("win")
 class WinActions:
     def filename():
         title = actions.win.title()
         result = title.split(" ")
-        
+
         for word in result:
             if "." in word:
                 return word
 
         return ""
+
 
 @ctx.action_class("user")
 class UserActions:
