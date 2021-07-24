@@ -20,7 +20,7 @@ action(browser.bookmarks_bar):
 action(browser.focus_address): 
 	key(cmd-l)
 	
-#action(browser.focus_page):
+#action(browser.focus_page): 
 
 action(browser.focus_search):
 	browser.focus_address()
@@ -29,10 +29,10 @@ action(browser.go_blank):
 	key(cmd-n)
 	
 action(browser.go_back):
-	key(cmd-[)
+	key(cmd-left)
 
 action(browser.go_forward):
-	key(cmd-])
+	key(cmd-right)
 	
 action(browser.go_home):
 	key(cmd-shift-h)
@@ -74,6 +74,8 @@ go search [<user.text>]$:
     key("o")
     sleep(200ms)
     insert(text or "")
+    user.text_field_mode(phrase or "")
+
 copy link: key(y f)
 copy (address | url): key(escape y y)
 close: app.tab_close()
@@ -86,3 +88,4 @@ go find [<user.text>]$:
     key(cmd-f)
     sleep(200ms)
     insert(text or "")
+    # user.text_field_mode(phrase or "")

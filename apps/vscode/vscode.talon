@@ -1,5 +1,3 @@
-
-group last: user.vscode("workbench.action.focusPreviousGroup")#custom vscode commands go here
 app: vscode
 -
 tag(): user.multiple_cursors
@@ -353,23 +351,41 @@ lend: edit.line_end()
 bend: edit.line_start()
 take <number> line:
     user.select_next_lines(number)
+
 cut <number> line:
     user.select_next_lines(number)
     sleep(100ms)
     key(cmd-x)
+
 copy <number> line:
     user.select_next_lines(number)
     key(cmd-c)
     sleep(100ms)
     key(esc)
 
+clone <number> line:
+        user.select_next_lines(number)
+        key(cmd-c)
+        sleep(100ms)
+        key(right cmd-v)
+        
+clone that:
+    key(cmd-c)
+    sleep(100ms)
+    key(right enter cmd-v)
+
+clear <number> line:
+        user.select_next_lines(number)
+        key(delete)
+
+    
 # is it better to use vscode commands or just keyboard shortcuts?
 # Or I could hide these details and create talon actions and only call these here.
-take it:
+take it$:
     key(cmd-d)  
-search it:
+search it$:
     key(cmd-d)     
     key(cmd-shift-f) 
-find it:
+find it$:
     key(cmd-d)     
     key(cmd-f) 

@@ -10,6 +10,7 @@ modes = {
     "presentation": "a more strict form of sleep where only a more strict wake up command works",
     "windbg": "a way to force windbg commands to be loaded",
     "polish_dictation": "polish dictation mode",
+    "text_field": "This is for commands like 'go_search', where we are in a text field and want to press enter  upon word 'go'",
 }
 
 for key, value in modes.items():

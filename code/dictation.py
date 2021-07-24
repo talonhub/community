@@ -278,7 +278,12 @@ dictation_ctx = Context()
 dictation_ctx.matches = r"""
 mode: dictation
 """
+# dictation_ctx.matches = r"""
+# mode: text_field
+# """
 
 @dictation_ctx.action_class("main")
 class main_action:
-    def auto_insert(text): actions.user.dictation_insert(text)
+    def auto_insert(text):
+        print(f"text =  {text}")
+        actions.user.dictation_insert(text)

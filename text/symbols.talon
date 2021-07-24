@@ -3,7 +3,7 @@ question [mark]: "?"
 double dash: "--"
 (bracket | brack | left bracket): "{"
 (rbrack | are bracket | right bracket): "}"
-triple quote: "'''
+triple quote: "'''"
 (dot dot | dotdot): ".."
 #ellipses: "…"
 ellipses: "..."
