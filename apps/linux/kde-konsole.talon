@@ -1,5 +1,5 @@
 os: linux
-app.name: Konsole
+app.name: konsole
 -
 tag(): terminal
 tag(): user.git
