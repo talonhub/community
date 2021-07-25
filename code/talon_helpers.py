@@ -1,4 +1,17 @@
-from talon import Context, actions, ui, Module, app, clip
+from talon import (
+    Context,
+    actions,
+    ui,
+    Module,
+    app,
+    clip,
+    speech_system,
+    registry,
+    scope,
+)
+from talon.grammar import Phrase
+from typing import Union
+
 import os
 import re
 from itertools import islice
@@ -53,3 +66,57 @@ class Actions:
 
         clip.set_text(result)
 
+    def talon_sim_phrase(phrase: Union[str, Phrase]):
+        """Sims the phrase in the active app and dumps to the log"""
+        print("**** Simulated Phrse **** ")
+        print(speech_system._sim(str(phrase)))
+        print("*************************")
+
+    def talon_action_find(action: str):
+        """Runs action.find for the provided action and dumps to the log"""
+        print("**** action.find{} **** ".format(action))
+        print(actions.find(action))
+        print("***********************")
+
+    def talon_debug_list(name: str):
+        """Dumps the contents of list to the console"""
+        print("**** Dumping list {} **** ".format(name))
+
+        print(str(registry.lists[name]))
+        print("***********************")
+
+    def talon_debug_tags():
+        """Dumps the active tags to the console"""
+        print("**** Dumping active tags *** ")
+        print(str(registry.tags))
+        print("***********************")
+
+    def talon_debug_modes():
+        """Dumps active modes to the console"""
+        print("**** Active modes ****")
+        print(scope.get("mode"))
+        print("***********************")
+
+    def talon_debug_scope(name: str):
+        """Dumps the active scope information to the console"""
+        print("**** Dumping {} scope ****".format(name))
+        print(scope.get(name))
+        print("***********************")
+
+    def talon_copy_list(name: str):
+        """Dumps the contents of list to the console"""
+        print("**** Copied list {} **** ".format(name))
+        clip.set_text(registry.lists[name])
+        print("***********************")
+
+    def talon_debug_setting(name: str):
+        """Dumps the current setting to the console"""
+        print("**** Dumping setting {} **** ".format(name))
+        print(registry.settings[name])
+        print("***********************")
+
+    def talon_debug_all_settings():
+        """Dumps all settings to the console"""
+        print("**** Dumping settings **** ")
+        print(str(registry.settings))
+        print("***********************")
