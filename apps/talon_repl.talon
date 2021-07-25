@@ -13,7 +13,6 @@ tag(): user.talon_python
     key(enter)
 ^test numb <number_small>$:
     phrase = user.history_get(number_small)
-    phrase = user.history_get(1)
     command = "sim('{phrase}')"
     #to do: shouldn't this work?
     #user.paste("sim({phrase})")
