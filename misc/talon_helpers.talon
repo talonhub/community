@@ -27,14 +27,10 @@ talon dump context:
     print("Title: {title}")
 ^talon test last$:
     phrase = user.history_get(1)
-    print(phrase)
     user.talon_sim_phrase(phrase)
 ^talon test numb <number_small>$:
     phrase = user.history_get(number_small)
-    print(phrase)
-    command = "sim('" + phrase
-    command = command + "')"
-    user.paste(command)
+    user.talon_sim_phrase(phrase)
 ^talon test <phrase>$:
     user.talon_sim_phrase(phrase)
 ^talon debug action {user.talon_actions}$: 
