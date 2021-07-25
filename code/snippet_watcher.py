@@ -1,4 +1,4 @@
-# from talon import app, fs
+# from talon import app, fs, actions
 # import os, csv, re
 # from os.path import isfile, join
 # from itertools import islice
@@ -8,26 +8,20 @@
 
 # parser = JsonComment(json)
 
-# pattern = re.compile(r"[A-Z][a-z]*|[a-z]+|\d")
-
-# # todo: should this be an action that lives elsewhere??
-# def create_spoken_form(text, max_len=15):
-#     return " ".join(list(islice(pattern.findall(text), max_len)))
-
 
 # class snippet_watcher:
 #     directories = {}
 #     snippet_dictionary = {}
 #     callback_function = None
 #     file_snippet_cache = {}
+#     create_spoken_forms = False
 
 #     def __notify(self):
-#         # print("NOTIFY")
+#         #print("NOTIFY")
 #         self.snippet_dictionary = {}
 #         for key, val in self.file_snippet_cache.items():
 #             self.snippet_dictionary.update(val)
 
-#         # print(str(self.snippet_dictionary))
 #         if self.callback_function:
 #             self.callback_function(self.snippet_dictionary)
 
@@ -59,10 +53,17 @@
 #                 # else:
 #                 #     print("snippet_watcher.py: File {}  does not exist".format(directory))
 
+#                 map_to_process = {}
 #                 for key, data in jsonDict.items():
-#                     self.file_snippet_cache[str(path_obj)][
-#                         create_spoken_form(key)
-#                     ] = data["prefix"]
+#                     map_to_process[key] = data["prefix"]
+
+#                 if self.create_spoken_forms:
+#                     spoken_forms = actions.user.create_spoken_forms_from_map(
+#                         map_to_process
+#                     )
+#                     self.file_snippet_cache[str(path_obj)] = spoken_forms
+#                 else:
+#                     self.file_snippet_cache[str(path_obj)] = map_to_process
 
 #     def __on_fs_change(self, name, flags):
 #         self.__process_file(name)
@@ -70,21 +71,28 @@
 #         # print(str(self.snippet_dictionary))
 #         self.__notify()
 
-#     def __init__(self, dirs, callback):
+#     def __init__(self, dirs, callback, create_spoken_forms=False):
 #         self.directories = dirs
 #         self.callback_function = callback
 #         self.snippet_dictionary = {}
 #         self.file_snippet_cache = {}
-#         # none = process all directories
-#         self.__update_all_snippets()
+#         self.create_spoken_forms = create_spoken_forms
 
+#         # on ready is used so we know create_spoken_forms is available.
+#         app.register("ready", self.on_ready)
+
+#         # none = process all directories
+
+#         # else:
+#         #     print(
+#         #         "snippet_watcher.py: directory {} does not exist".format(directory)
+#         #     )
+
+#     def on_ready(self):
+#         self.__update_all_snippets()
 #         for directory in self.directories.keys():
 #             if os.path.isdir(directory):
 #                 fs.watch(directory, self.__on_fs_change)
-#             # else:
-#             #     print(
-#             #         "snippet_watcher.py: directory {} does not exist".format(directory)
-#             #     )
 
 
 # # Test = snippet_watcher(
