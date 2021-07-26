@@ -41,6 +41,13 @@ code python:
     insert('\n')
     key(up)
     
+code typescript:
+    insert('```typescript\n')
+    insert('```')
+    key(left left left)
+    insert('\n')
+    key(up)
+        
     
 create link [<user.text>]$: 
     insert("[[")

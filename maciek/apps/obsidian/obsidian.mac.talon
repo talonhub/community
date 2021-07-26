@@ -23,7 +23,7 @@ please [<user.text>]$:
     sleep(50ms)
     insert(text or "")
 
-code insert:
+code block:
     insert('```\n')
     insert('```')
     key(left left left)
@@ -41,7 +41,12 @@ code python:
     insert('\n')
     key(up)
     
-    
+code typescript:
+    insert('```typescript\n')
+    insert('```')
+    key(left left left)
+    insert('\n')
+    key(up) 
 create link [<user.text>]: 
     insert("[[")
     insert(text or "")
