@@ -16,6 +16,9 @@ settings():
 #python-specific grammars
 dunder in it: "__init__"
 state (def | deaf | deft): "def "
+state try: "try:\n"
+state except: "except "
+state raise: "raise "
 self taught: "self."
 pie test: "pytest"
 state past: "pass"
@@ -27,6 +30,7 @@ state past: "pass"
 #^pro static funky <user.text>$: user.code_protected_static_function(text)
 #^pub static funky <user.text>$: user.code_public_static_function(text)
 raise {user.python_exception}: user.insert_cursor("raise {python_exception}([|])")
+except {user.python_exception}: "except {python_exception}:"
 
 # for annotating function parameters
 is type {user.python_type_list}:
