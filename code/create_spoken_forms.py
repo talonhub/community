@@ -13,12 +13,7 @@ from .abbreviate import abbreviations
 from .keys import symbol_key_words
 
 mod = Module()
-setting_defer_numbers_to_engine = mod.setting(
-    "spoken_forms_defer_numbers_to_engine",
-    type=bool,
-    default=False,
-    desc="Whether or not to let the engine (e.g. dragon) parse numbers when in a list",
-)
+
 
 # TODO: 'Whats application': 'WhatsApp' (Should keep "whats app" as well?)
 # TODO: 'V O X': 'VOX' (should keep "VOX" as well?)
@@ -113,7 +108,8 @@ def create_spoken_form_for_number(num: int):
         if b3 > 0:
             words = [ones[b3], scales[0]] + words
 
-    return " ".join(words).strip()
+    # filter out the empty strings and join
+    return " ".join(filter(None, words))
 
 
 def create_spoken_form_years(num: str):
@@ -181,6 +177,7 @@ def create_spoken_form_years(num: str):
 # test_year("2085", "twenty eighty five")
 # test_year("2100", "twenty one hundred")
 # test_year("2105", "twenty one five")
+# test_year("9999", "ninety nine ninety nine")
 # print("************* test_year tests done**************")
 
 
@@ -232,28 +229,24 @@ def create_spoken_forms_from_regex(source: str, pattern: re.Pattern):
         substring = piece.group(0)
         length = len(substring)
 
-        # the length is currently capped at 34 digits for decillion
-        # since that's the max in numbers.py...
-        if length > 1 and length < 34 and substring.isnumeric():
-            if not setting_defer_numbers_to_engine.get():
-                has_fancy_number_version = True
-                val = int(substring)
-                spoken_form_years = create_spoken_form_years(val)
-                spoken_form = create_spoken_form_for_number(val)
+        # the length is currently capped at 31 digits
+        if length > 1 and length <= 31 and substring.isnumeric():
+            has_fancy_number_version = True
+            val = int(substring)
+            spoken_form_years = create_spoken_form_years(val)
+            spoken_form = create_spoken_form_for_number(val)
 
-                if spoken_form_years:
-                    has_spoken_form_years = True
-                    full_form_spoken_form_years.append(spoken_form_years)
-                else:
-                    full_form_spoken_form_years.append(spoken_form)
-
-                full_form_fancy_numbers.append(spoken_form)
-
-                # build the serial digit version
-                for digit in substring:
-                    full_form_digit_wise.append(create_single_spoken_form(digit))
+            if spoken_form_years:
+                has_spoken_form_years = True
+                full_form_spoken_form_years.append(spoken_form_years)
             else:
-                full_form_digit_wise.append(substring)
+                full_form_spoken_form_years.append(spoken_form)
+
+            full_form_fancy_numbers.append(spoken_form)
+
+            # build the serial digit version
+            for digit in substring:
+                full_form_digit_wise.append(create_single_spoken_form(digit))
 
         else:
             spoken_form = create_single_spoken_form(substring)
