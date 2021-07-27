@@ -1,6 +1,7 @@
 app: apple_terminal
 -
 #comment or remove tags for command sets you don't want
+# TODO: fit this to generic_terminal
 tag(): user.file_manager
 tag(): user.generic_terminal
 tag(): user.git
