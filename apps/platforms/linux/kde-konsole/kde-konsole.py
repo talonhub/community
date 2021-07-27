@@ -8,10 +8,6 @@ ctx.matches = r"""
 app.name: konsole
 """
 
-user_path = os.path.expanduser("~") # is this important?
-directories_to_remap = {} # is this important?
-directories_to_exclude = {} # is this important?
-
 @ctx.action_class("user")
 class user_actions:
     # terminal-tag functions implementation
@@ -43,6 +39,11 @@ class user_actions:
         actions.key("ctrl-c")
         actions.insert("y")
         actions.key("enter")
+
+    def terminal_rerun_search(command: str):
+        actions.key("ctrl-r")
+        actions.insert(command)
+
 
     # tabs-tag functions implementations
     def tab_jump(number):

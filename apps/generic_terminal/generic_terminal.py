@@ -24,6 +24,9 @@ class Actions:
     def terminal_run_last():
         """Repeats the last command"""
 
+    def terminal_rerun_search(command: str):
+        """Searches through the previously executed commands"""
+
     def terminal_kill_all():
         """kills the running command"""
 
