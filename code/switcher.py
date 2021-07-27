@@ -3,6 +3,7 @@ import re
 import time
 
 import talon
+
 from talon import Context, Module, app, imgui, ui, fs, actions
 from glob import glob
 from itertools import islice
@@ -16,7 +17,6 @@ cwd = os.path.dirname(os.path.realpath(__file__))
 overrides_directory = os.path.join(cwd, "app_names")
 override_file_name = f"app_name_overrides.{talon.app.platform}.csv"
 override_file_path = os.path.join(overrides_directory, override_file_name)
-
 
 mod = Module()
 mod.list("running", desc="all running applications")
@@ -44,7 +44,6 @@ mac_application_directories = [
 # ]
 
 words_to_exclude = [
-    "and",
     "zero",
     "one",
     "two",
@@ -56,9 +55,19 @@ words_to_exclude = [
     "seven",
     "eight",
     "nine",
+    "and",
+    "dot",
+    "exe",
+    "help",
+    "install",
+    "installer",
     "microsoft",
+    "nine",
+    "readme",
+    "studio",
+    "terminal",
+    "visual",
     "windows",
-    "Windows",
 ]
 
 # windows-specific logic
@@ -159,35 +168,17 @@ def launch_applications(m) -> str:
     return m.launch
 
 
-def split_camel(word):
-    return re.findall(r"[0-9A-Z]*[a-z]+(?=[A-Z]|$)", word)
-
-
-def get_words(name):
-    words = re.findall(r"[0-9A-Za-z]+", name)
-    out = []
-    for word in words:
-        out += split_camel(word)
-    return out
-
-
 def update_lists():
     global running_application_dict
     running_application_dict = {}
     running = {}
     for cur_app in ui.apps(background=False):
-        name = cur_app.name
-
-        if name.endswith(".exe"):
-            name = name.rsplit(".", 1)[0]
-
-        words = get_words(name)
-        for word in words:
-            if word and word not in running and len(word) >= 3:
-                running[word.lower()] = cur_app.name
-
-        running[name.lower()] = cur_app.name
         running_application_dict[cur_app.name] = True
+
+    running = actions.user.create_spoken_forms_from_list(
+        [curr_app.name for curr_app in ui.apps(background=False)],
+        words_to_exclude=words_to_exclude,
+    )
 
     for override in overrides:
         running[override] = overrides[override]
@@ -216,31 +207,6 @@ def update_overrides(name, flags):
                     overrides[line[0].lower()] = line[1].strip()
 
         update_lists()
-
-
-pattern = re.compile(r"[A-Z][a-z]*|[a-z]+|\d|[+]")
-
-# todo: this is garbage
-
-
-def create_spoken_forms(name, max_len=30):
-    result = " ".join(list(islice(pattern.findall(name), max_len)))
-
-    result = (
-        result.replace("0", "zero")
-        .replace("1", "one")
-        .replace("2", "two")
-        .replace("3", "three")
-        .replace("4", "four")
-        .replace("5", "five")
-        .replace("6", "six")
-        .replace("7", "seven")
-        .replace("8", "eight")
-        .replace("9", "nine")
-        .replace("+", "plus")
-    )
-    return result
-
 
 @mod.action_class
 class Actions:
@@ -347,12 +313,6 @@ def update_launch_list():
                     path = os.path.join(base, name)
                     name = name.rsplit(".", 1)[0].lower()
                     launch[name] = path
-                    words = name.split(" ")
-                    for word in words:
-                        if word and word not in launch:
-                            if len(name) > 6 and len(word) < 3:
-                                continue
-                            launch[word] = path
 
     elif app.platform == "windows":
         shortcuts = enum_known_folder(FOLDERID_AppsFolder)
@@ -362,17 +322,11 @@ def update_launch_list():
             # print(name)
             # name = path.rsplit("\\")[-1].split(".")[0].lower()
             if "install" not in name:
-                spoken_form = create_spoken_forms(name)
-                # print(spoken_form)
-                launch[spoken_form] = name
-                words = spoken_form.split(" ")
-                for word in words:
-                    if word not in words_to_exclude and word not in launch:
-                        if len(name) > 6 and len(word) < 3:
-                            continue
-                        launch[word] = name
+                launch[name] = name
 
-    ctx.lists["self.launch"] = launch
+    ctx.lists["self.launch"] = actions.user.create_spoken_forms_from_map(
+        launch, words_to_exclude
+    )
 
 
 def ui_event(event, arg):

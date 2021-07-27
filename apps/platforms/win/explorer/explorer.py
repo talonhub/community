@@ -9,6 +9,8 @@ apps.windows_explorer = """
 os: windows
 and app.name: Windows Explorer
 os: windows
+and app.name: Windows-Explorer
+os: windows
 and app.exe: explorer.exe
 """
 
@@ -84,14 +86,17 @@ if app.platform == "windows":
     ]
 
 
-@ctx.action_class('user')
+@ctx.action_class("user")
 class UserActions:
     def file_manager_go_back():
-        actions.key('alt-left')
+        actions.key("alt-left")
+
     def file_manager_go_forward():
-        actions.key('alt-right')
+        actions.key("alt-right")
+
     def file_manager_open_parent():
-        actions.key('alt-up')
+        actions.key("alt-up")
+
     def file_manager_current_path():
         path = ui.active_window().title
 
