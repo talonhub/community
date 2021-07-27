@@ -1,5 +1,7 @@
-tag: user.generic_terminal
+tag: terminal
 -
+# TODO: decide which tags to activate
+
 lisa: 
     user.terminal_list_directories()
 lisa all: 
