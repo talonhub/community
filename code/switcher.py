@@ -84,7 +84,7 @@ if app.platform == "windows":
         # Python 2
         import _winreg as winreg
 
-        bytes = lambda x: str(buffer(x))
+        def bytes(x): return str(buffer(x))
 
     from ctypes import wintypes
     from win32com.shell import shell, shellcon
@@ -93,7 +93,8 @@ if app.platform == "windows":
     # KNOWNFOLDERID
     # https://msdn.microsoft.com/en-us/library/dd378457
     # win32com defines most of these, except the ones added in Windows 8.
-    FOLDERID_AppsFolder = pywintypes.IID("{1e87508d-89c2-42f0-8a7e-645a0f50ca58}")
+    FOLDERID_AppsFolder = pywintypes.IID(
+        "{1e87508d-89c2-42f0-8a7e-645a0f50ca58}")
 
     # win32com is missing SHGetKnownFolderIDList, so use ctypes.
 
@@ -118,7 +119,8 @@ if app.platform == "windows":
             folder_id = bytes(folder_id)
         pidl = ctypes.c_void_p()
         try:
-            _shell32.SHGetKnownFolderIDList(folder_id, 0, htoken, ctypes.byref(pidl))
+            _shell32.SHGetKnownFolderIDList(
+                folder_id, 0, htoken, ctypes.byref(pidl))
             return shell.AddressAsPIDL(pidl.value)
         except WindowsError as e:
             if e.winerror & 0x80070000 == 0x80070000:
@@ -206,7 +208,6 @@ def update_overrides(name, flags):
 
         update_lists()
 
-
 @mod.action_class
 class Actions:
     def get_running_app(name: str) -> ui.App:
@@ -235,14 +236,25 @@ class Actions:
     def switcher_focus(name: str):
         """Focus a new application by name"""
         app = actions.user.get_running_app(name)
-        app.focus()
+        actions.user.switcher_focus_app(app)
 
-        # Hacky solution to do this reliably on Mac.
-        timeout = 5
+    def switcher_focus_app(app: ui.App):
+        """Focus application and wait until switch is made"""
+        app.focus()
         t1 = time.monotonic()
-        if talon.app.platform == "mac":
-            while ui.active_app() != app and time.monotonic() - t1 < timeout:
-                time.sleep(0.1)
+        while ui.active_app() != app:
+            if time.monotonic() - t1 > 1:
+                raise RuntimeError(f"Can't focus app: {app.name}")
+            actions.sleep(0.1)
+
+    def switcher_focus_window(window: ui.Window):
+        """Focus window and wait until switch is made"""
+        window.focus()
+        t1 = time.monotonic()
+        while ui.active_window() != window:
+            if time.monotonic() - t1 > 1:
+                raise RuntimeError(f"Can't focus window: {window.title}")
+            actions.sleep(0.1)
 
     def switcher_launch(path: str):
         """Launch a new application by path"""
@@ -329,6 +341,8 @@ ctx.lists["user.launch"] = {}
 ctx.lists["user.running"] = {}
 
 # Talon starts faster if you don't use the `talon.ui` module during launch
+
+
 def on_ready():
     update_overrides(None, None)
     fs.watch(overrides_directory, update_overrides)
