@@ -8,19 +8,24 @@ from talon import (
     speech_system,
     registry,
     scope,
+    ui,
 )
 from talon.grammar import Phrase
 from typing import Union
 
 import os
 import re
+import platform
 from itertools import islice
+import pprint
+
+pp = pprint.PrettyPrinter()
 
 
 mod = Module()
 pattern = re.compile(r"[A-Z][a-z]*|[a-z]+|\d")
 
-# todo: should this be an action that lives elsewhere??
+
 def create_name(text, max_len=20):
     return "_".join(list(islice(pattern.findall(text), max_len))).lower()
 
@@ -120,3 +125,42 @@ class Actions:
         print("**** Dumping settings **** ")
         print(str(registry.settings))
         print("***********************")
+
+    def talon_get_active_context() -> str:
+        """Returns active context info"""
+        name = actions.app.name()
+        executable = actions.app.executable()
+        bundle = actions.app.bundle()
+        title = actions.win.title()
+        result = (
+            f"Name: {name}\nExecutable: {executable}\nBundle: {bundle}\nTitle: {title}"
+        )
+        return result
+
+    def talon_get_active_application_info() -> str:
+        """Returns all active app info to the cliboard"""
+        result = str(ui.active_app())
+        result += "\nActive window: " + str(ui.active_window())
+        result += "\nWindows: " + str(ui.active_app().windows())
+        result += "\nName: " + actions.app.name()
+        result += "\nExecutable: " + actions.app.executable()
+        result += "\nBundle: " + actions.app.bundle()
+        result += "\nTitle: " + actions.win.title()
+        return result
+
+    def talon_version_info() -> str:
+        """Returns talon & operation system verison information"""
+        result = (
+            f"Version: {app.version}, Branch: {app.branch}, OS: {platform.platform()}"
+        )
+        return result
+
+    def talon_pretty_print(string: str):
+        """Uses pretty print to dump something"""
+        pp.pprint(string)
+
+    def talon_debug_app_windows(app: str):
+        """Pretty prints the application windows"""
+        apps = ui.apps(name=app, background=False)
+        for app in apps:
+            pp.pprint(app.windows())

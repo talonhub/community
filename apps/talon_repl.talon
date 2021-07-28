@@ -22,19 +22,26 @@ tag(): user.talon_python
     insert("actions.find('{user.talon_actions}')")
     key(enter)
 ^debug list {user.talon_lists}$:
-    insert("registry.lists['{talon_lists}']")
+    insert("actions.user.talon_pretty_print(registry.lists['{talon_lists}'])")
     key(enter)
 ^debug tags$:
-    insert("registry.tags")
+    insert("actions.user.talon_pretty_print(registry.tags)")
     key(enter)
 ^debug settings$:
-    insert("registry.settings")
+    insert("actions.user.talon_pretty_print(registry.settings)")
     key(enter)
 ^debug modes$:
-    insert("scope.get('mode')")
+    insert("actions.user.talon_pretty_print(scope.get('mode'))")
     key(enter)
-
-
-
-
-
+^debug scope {user.talon_scopes}$:
+    insert("actions.user.talon_pretty_print(scope.get('{talon_scopes}'))")
+    key(enter)    
+^debug running apps$: 
+    insert("actions.user.talon_pretty_print(ui.apps(background=False))")
+    key(enter)
+^debug all windows$: 
+    insert("actions.user.talon_pretty_print(ui.windows())")
+    key(enter)
+^debug {user.running} windows$:
+    insert("actions.user.talon_debug_app_windows('{running}')")
+    key(enter)

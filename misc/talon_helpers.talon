@@ -16,15 +16,15 @@ talon copy bundle:
 talon copy title: 
     title = win.title()
     clip.set_text(title)
+talon dump version: 
+    result = user.talon_version_info()
+    print(result)
+talon insert version: 
+    result = user.talon_version_info()
+    user.paste(result)
 talon dump context: 
-    name = app.name()
-    executable =  app.executable()
-    bundle = app.bundle()
-    title = win.title()
-    print("Name: {name}")
-    print("Executable: {executable}")
-    print("Bundle: {bundle}")
-    print("Title: {title}")
+    result = user.talon_get_active_context()
+    print(result)
 ^talon test last$:
     phrase = user.history_get(1)
     user.talon_sim_phrase(phrase)
@@ -49,3 +49,11 @@ talon dump context:
     user.talon_debug_setting(talon_settings)
 ^talon debug all settings$: 
     user.talon_debug_all_settings()
+^talon debug active app$: 
+    result = user.talon_get_active_application_info()
+    print("**** Dumping active application **** ")
+    print(result)
+    print("***********************")
+^talon copy active app$:
+    result = user.talon_get_active_application_info()
+    clip.set_text(result)
