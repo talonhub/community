@@ -12,7 +12,6 @@ and win.title: /PowerShell/
 
 ctx.tags = ['user.file_manager', 'user.git', 'user.kubectl', 'terminal']
 
-user_path = os.path.expanduser("~")
 directories_to_remap = {}
 directories_to_exclude = {}
 
