@@ -71,6 +71,8 @@ class UserActions:
         """file_manager_open_volume"""
         actions.user.file_manager_open_directory(volume)
 
+    # generic_terminal function implementations
+
     def terminal_list_directories():
         actions.insert("ls")
         actions.key("enter")
@@ -96,6 +98,10 @@ class UserActions:
 
     def terminal_run_last():
         actions.key("up enter")
+
+    def terminal_rerun_search(command: str):
+        actions.key("ctrl-r")
+        actions.insert(command)
 
     def terminal_kill_all():
         actions.key("ctrl-c")
