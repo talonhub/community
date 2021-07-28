@@ -1,7 +1,5 @@
 from talon import Context, Module, actions, imgui, settings, ui, app
 
-import os
-
 ctx = Context()
 mod = Module()
 ctx.matches = r"""
