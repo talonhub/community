@@ -20,9 +20,9 @@ class EditActions:
     def find(text: str=None):
         actions.key('ctrl-shift-f')
     def word_left():
-        actions.key('ctrl-w left')
+        actions.key('ctrl-left')
     def word_right():
-        actions.key('ctrl-w right')
+        actions.key('ctrl-right')
 
 @ctx.action_class('app')
 class AppActions:
