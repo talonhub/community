@@ -1,7 +1,5 @@
 from talon import Context, Module, actions, imgui, settings, ui, app
 
-import os
-
 ctx = Context()
 mod = Module()
 ctx.matches = r"""
@@ -10,9 +8,6 @@ app: windows_terminal
 and win.title: /PowerShell/
 """
 
-ctx.tags = ['user.file_manager', 'user.generic_terminal', 'user.git', 'user.kubectl', 'terminal']
-
-user_path = os.path.expanduser("~")
 directories_to_remap = {}
 directories_to_exclude = {}
 
@@ -71,6 +66,8 @@ class UserActions:
         """file_manager_open_volume"""
         actions.user.file_manager_open_directory(volume)
 
+    # generic_terminal function implementations
+
     def terminal_list_directories():
         actions.insert("ls")
         actions.key("enter")
@@ -96,6 +93,10 @@ class UserActions:
 
     def terminal_run_last():
         actions.key("up enter")
+
+    def terminal_rerun_search(command: str):
+        actions.key("ctrl-r")
+        actions.insert(command)
 
     def terminal_kill_all():
         actions.key("ctrl-c")
