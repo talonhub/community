@@ -266,12 +266,7 @@ class Actions:
         if not selected:
             print("Asked to reformat selection, but nothing selected!")
             return
-        unformatted = re.sub(r"[^a-zA-Z0-9]+", " ", selected)
-        # Split on camelCase, including numbes
-        unformatted = re.sub(r"(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|(?<=[a-zA-Z])(?=[0-9])|(?<=[0-9])(?=[a-zA-Z])", " ", unformatted)
-        unformatted = unformatted.lower()
-        # TODO: Separate out studleycase vars
-
+        unformatted = unformat_text(selected)
         # Delete separately for compatibility with programs that don't overwrite
         # selected text (e.g. Emacs)
         edit.delete()
@@ -279,10 +274,23 @@ class Actions:
         actions.insert(text)
         return text
 
+    def reformat_text(text: str, formatters: str) -> str:
+        """Reformat the text."""
+        unformatted = unformat_text(text)
+        return actions.user.formatted_text(unformatted, formatters)
+
     def insert_many(strings: List[str]) -> None:
         """Insert a list of strings, sequentially."""
         for string in strings:
             actions.insert(string)
+
+def unformat_text(text: str) -> str:
+    """Remove format from text"""
+    unformatted = re.sub(r"[^a-zA-Z0-9]+", " ", text)
+    # Split on camelCase, including numbes
+    unformatted = re.sub(r"(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|(?<=[a-zA-Z])(?=[0-9])|(?<=[0-9])(?=[a-zA-Z])", " ", unformatted)
+    # TODO: Separate out studleycase vars
+    return unformatted.lower()
 
 
 ctx.lists["self.formatters"] = formatters_words.keys()
