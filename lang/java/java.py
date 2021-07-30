@@ -1,6 +1,7 @@
-from talon import Context, actions
+from talon import Context, Module, actions
 
 ctx = Context()
+mod = Module()
 ctx.matches = r"""
 mode: user.java
 mode: user.auto_lang
@@ -8,6 +9,32 @@ and code.language: java
 """
 ctx.tags = ["user.code_operators", "user.code_generic"]
 
+java_primitive_types = {
+    "boolean": "boolean",
+    "int": "int",
+    "string": "String",
+    "float": "float",
+    "byte": "byte",
+    "double": "double",
+    "short": "short",
+    "long": "long",
+    "char": "char",
+    "void": "void"
+}
+
+mod.list("java_primitive_types", desc="Java types")
+ctx.lists["self.java_primitive_types"] = java_primitive_types
+
+java_access_modifiers = {
+   "public": "public",
+   "private": "private",
+   "protected": "protected",
+
+}
+
+
+mod.list("java_access_modifiers", desc="Java Access Modifiers")
+ctx.lists["self.java_access_modifiers"] = java_access_modifiers
 
 @ctx.action_class("user")
 class UserActions:
