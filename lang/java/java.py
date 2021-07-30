@@ -29,12 +29,22 @@ java_access_modifiers = {
    "public": "public",
    "private": "private",
    "protected": "protected",
-
 }
-
 
 mod.list("java_access_modifiers", desc="Java Access Modifiers")
 ctx.lists["self.java_access_modifiers"] = java_access_modifiers
+
+java_other_modifiers = {
+   "static": "static",
+   "synchronized": "synchronized",
+   "volatile": "volatile",
+   "transient": "transient",
+   "abstract": "abstract",
+   "interface": "interface",
+}
+
+mod.list("java_other_modifiers", desc="Java Other Modifiers")
+ctx.lists["self.java_other_modifiers"] = java_other_modifiers
 
 @ctx.action_class("user")
 class UserActions:

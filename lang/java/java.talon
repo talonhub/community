@@ -21,3 +21,6 @@ action(user.code_state_import):
 [state] {user.java_primitive_types}: 
     insert(user.java_primitive_types)
     key("space")
+[state] {user.java_other_modifiers}: 
+    insert(user.java_other_modifiers)
+    key("space")  
