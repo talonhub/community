@@ -3,6 +3,7 @@ import re
 import time
 
 import talon
+
 from talon import Context, Module, app, imgui, ui, fs, actions
 from glob import glob
 from itertools import islice
@@ -16,7 +17,6 @@ cwd = os.path.dirname(os.path.realpath(__file__))
 overrides_directory = os.path.join(cwd, "app_names")
 override_file_name = f"app_name_overrides.{talon.app.platform}.csv"
 override_file_path = os.path.join(overrides_directory, override_file_name)
-
 
 mod = Module()
 mod.list("running", desc="all running applications")
@@ -44,7 +44,6 @@ mac_application_directories = [
 # ]
 
 words_to_exclude = [
-    "and",
     "zero",
     "one",
     "two",
@@ -56,9 +55,19 @@ words_to_exclude = [
     "seven",
     "eight",
     "nine",
+    "and",
+    "dot",
+    "exe",
+    "help",
+    "install",
+    "installer",
     "microsoft",
+    "nine",
+    "readme",
+    "studio",
+    "terminal",
+    "visual",
     "windows",
-    "Windows",
 ]
 
 # windows-specific logic
@@ -75,7 +84,7 @@ if app.platform == "windows":
         # Python 2
         import _winreg as winreg
 
-        bytes = lambda x: str(buffer(x))
+        def bytes(x): return str(buffer(x))
 
     from ctypes import wintypes
     from win32com.shell import shell, shellcon
@@ -84,7 +93,8 @@ if app.platform == "windows":
     # KNOWNFOLDERID
     # https://msdn.microsoft.com/en-us/library/dd378457
     # win32com defines most of these, except the ones added in Windows 8.
-    FOLDERID_AppsFolder = pywintypes.IID("{1e87508d-89c2-42f0-8a7e-645a0f50ca58}")
+    FOLDERID_AppsFolder = pywintypes.IID(
+        "{1e87508d-89c2-42f0-8a7e-645a0f50ca58}")
 
     # win32com is missing SHGetKnownFolderIDList, so use ctypes.
 
@@ -109,7 +119,8 @@ if app.platform == "windows":
             folder_id = bytes(folder_id)
         pidl = ctypes.c_void_p()
         try:
-            _shell32.SHGetKnownFolderIDList(folder_id, 0, htoken, ctypes.byref(pidl))
+            _shell32.SHGetKnownFolderIDList(
+                folder_id, 0, htoken, ctypes.byref(pidl))
             return shell.AddressAsPIDL(pidl.value)
         except WindowsError as e:
             if e.winerror & 0x80070000 == 0x80070000:
@@ -157,35 +168,17 @@ def launch_applications(m) -> str:
     return m.launch
 
 
-def split_camel(word):
-    return re.findall(r"[0-9A-Z]*[a-z]+(?=[A-Z]|$)", word)
-
-
-def get_words(name):
-    words = re.findall(r"[0-9A-Za-z]+", name)
-    out = []
-    for word in words:
-        out += split_camel(word)
-    return out
-
-
 def update_lists():
     global running_application_dict
     running_application_dict = {}
     running = {}
     for cur_app in ui.apps(background=False):
-        name = cur_app.name
-
-        if name.endswith(".exe"):
-            name = name.rsplit(".", 1)[0]
-
-        words = get_words(name)
-        for word in words:
-            if word and word not in running and len(word) >= 3:
-                running[word.lower()] = cur_app.name
-
-        running[name.lower()] = cur_app.name
         running_application_dict[cur_app.name] = True
+
+    running = actions.user.create_spoken_forms_from_list(
+        [curr_app.name for curr_app in ui.apps(background=False)],
+        words_to_exclude=words_to_exclude,
+    )
 
     for override in overrides:
         running[override] = overrides[override]
@@ -215,29 +208,6 @@ def update_overrides(name, flags):
 
         update_lists()
 
-
-pattern = re.compile(r"[A-Z][a-z]*|[a-z]+|\d|[+]")
-
-# todo: this is garbage
-def create_spoken_forms(name, max_len=30):
-    result = " ".join(list(islice(pattern.findall(name), max_len)))
-
-    result = (
-        result.replace("0", "zero")
-        .replace("1", "one")
-        .replace("2", "two")
-        .replace("3", "three")
-        .replace("4", "four")
-        .replace("5", "five")
-        .replace("6", "six")
-        .replace("7", "seven")
-        .replace("8", "eight")
-        .replace("9", "nine")
-        .replace("+", "plus")
-    )
-    return result
-
-
 @mod.action_class
 class Actions:
     def get_running_app(name: str) -> ui.App:
@@ -266,14 +236,25 @@ class Actions:
     def switcher_focus(name: str):
         """Focus a new application by name"""
         app = actions.user.get_running_app(name)
-        app.focus()
+        actions.user.switcher_focus_app(app)
 
-        # Hacky solution to do this reliably on Mac.
-        timeout = 5
+    def switcher_focus_app(app: ui.App):
+        """Focus application and wait until switch is made"""
+        app.focus()
         t1 = time.monotonic()
-        if talon.app.platform == "mac":
-            while ui.active_app() != app and time.monotonic() - t1 < timeout:
-                time.sleep(0.1)
+        while ui.active_app() != app:
+            if time.monotonic() - t1 > 1:
+                raise RuntimeError(f"Can't focus app: {app.name}")
+            actions.sleep(0.1)
+
+    def switcher_focus_window(window: ui.Window):
+        """Focus window and wait until switch is made"""
+        window.focus()
+        t1 = time.monotonic()
+        while ui.active_window() != window:
+            if time.monotonic() - t1 > 1:
+                raise RuntimeError(f"Can't focus window: {window.title}")
+            actions.sleep(0.1)
 
     def switcher_launch(path: str):
         """Launch a new application by path"""
@@ -332,12 +313,6 @@ def update_launch_list():
                     path = os.path.join(base, name)
                     name = name.rsplit(".", 1)[0].lower()
                     launch[name] = path
-                    words = name.split(" ")
-                    for word in words:
-                        if word and word not in launch:
-                            if len(name) > 6 and len(word) < 3:
-                                continue
-                            launch[word] = path
 
     elif app.platform == "windows":
         shortcuts = enum_known_folder(FOLDERID_AppsFolder)
@@ -347,17 +322,11 @@ def update_launch_list():
             # print(name)
             # name = path.rsplit("\\")[-1].split(".")[0].lower()
             if "install" not in name:
-                spoken_form = create_spoken_forms(name)
-                # print(spoken_form)
-                launch[spoken_form] = name
-                words = spoken_form.split(" ")
-                for word in words:
-                    if word not in words_to_exclude and word not in launch:
-                        if len(name) > 6 and len(word) < 3:
-                            continue
-                        launch[word] = name
+                launch[name] = name
 
-    ctx.lists["self.launch"] = launch
+    ctx.lists["self.launch"] = actions.user.create_spoken_forms_from_map(
+        launch, words_to_exclude
+    )
 
 
 def ui_event(event, arg):
@@ -372,6 +341,8 @@ ctx.lists["user.launch"] = {}
 ctx.lists["user.running"] = {}
 
 # Talon starts faster if you don't use the `talon.ui` module during launch
+
+
 def on_ready():
     update_overrides(None, None)
     fs.watch(overrides_directory, update_overrides)
