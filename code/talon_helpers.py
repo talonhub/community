@@ -63,8 +63,10 @@ class Actions:
                 app.platform, actions.app.bundle()
             )
         elif app.platform == "windows":
-            result = "os: windows\nand app.name: {}\nos: windows\nand app.exe: {}\n".format(
-                friendly_name, executable
+            result = (
+                "os: windows\nand app.name: {}\nos: windows\nand app.exe: {}\n".format(
+                    friendly_name, executable
+                )
             )
         else:
             result = "os: {}\nand app.name: {}\n".format(app.platform, friendly_name)
@@ -111,7 +113,7 @@ class Actions:
     def talon_copy_list(name: str):
         """Dumps the contents of list to the console"""
         print("**** Copied list {} **** ".format(name))
-        clip.set_text(registry.lists[name])
+        clip.set_text(pp.pformat(registry.lists[name]))
         print("***********************")
 
     def talon_debug_setting(name: str):
@@ -155,9 +157,13 @@ class Actions:
         )
         return result
 
-    def talon_pretty_print(string: str):
-        """Uses pretty print to dump something"""
-        pp.pprint(string)
+    def talon_pretty_print(obj: object):
+        """Uses pretty print to dump an object"""
+        pp.pprint(obj)
+
+    def talon_pretty_format(obj: object):
+        """Pretty formats an object"""
+        return pp.pformat(obj)
 
     def talon_debug_app_windows(app: str):
         """Pretty prints the application windows"""
