@@ -28,8 +28,3 @@ wipe: key(backspace)
 slap:
 	edit.line_end()
 	key(enter)
-# my custom commands
-stamp: edit.paste()
-smash:
-	edit.extend_line_start()
-	key(backspace)
