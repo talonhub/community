@@ -168,20 +168,29 @@ def launch_applications(m) -> str:
     return m.launch
 
 
-def update_lists():
+def update_running_list():
     global running_application_dict
     running_application_dict = {}
     running = {}
     for cur_app in ui.apps(background=False):
         running_application_dict[cur_app.name] = True
 
+        if app.platform == "windows":
+            #print("hit....")
+            running_application_dict[
+                actions.app.executable().split(os.path.sep)[-1]
+            ] = True
+
     running = actions.user.create_spoken_forms_from_list(
         [curr_app.name for curr_app in ui.apps(background=False)],
         words_to_exclude=words_to_exclude,
     )
 
+    # print(str(running_application_dict))
+    # todo: should the overrides remove the other spoken forms for an application?
     for override in overrides:
-        running[override] = overrides[override]
+        if overrides[override] in running_application_dict:
+            running[override] = overrides[override]
 
     lists = {
         "self.running": running,
@@ -228,9 +237,14 @@ class Actions:
                 ):
                     name = full_application_name
                     break
-        for app in ui.apps():
-            if app.name == name and not app.background:
-                return app
+        for application in ui.apps():
+            if (
+                application.name == name
+                or app.platform == "windows"
+                and application.exe.split(os.path.sep)[-1] == name
+                and not application.background
+            ):
+                return application
         raise RuntimeError(f'App not running: "{name}"')
 
     def switcher_focus(name: str):
@@ -316,7 +330,7 @@ def update_launch_list():
 
     elif app.platform == "windows":
         shortcuts = enum_known_folder(FOLDERID_AppsFolder)
-        # str(shortcuts)
+        shortcuts.sort()
         for name in shortcuts:
             # print("hit: " + name)
             # print(name)
@@ -331,7 +345,7 @@ def update_launch_list():
 
 def ui_event(event, arg):
     if event in ("app_launch", "app_close"):
-        update_lists()
+        update_running_list()
 
 
 # Currently update_launch_list only does anything on mac, so we should make sure
@@ -347,8 +361,6 @@ def on_ready():
     update_overrides(None, None)
     fs.watch(overrides_directory, update_overrides)
     update_launch_list()
+    update_running_list()
     ui.register("", ui_event)
-
-
-# NOTE: please update this from "launch" to "ready" in Talon v0.1.5
 app.register("ready", on_ready)
