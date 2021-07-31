@@ -176,10 +176,9 @@ def update_running_list():
         running_application_dict[cur_app.name] = True
 
         if app.platform == "windows":
-            #print("hit....")
-            running_application_dict[
-                actions.app.executable().split(os.path.sep)[-1]
-            ] = True
+            # print("hit....")
+            # print(cur_app.exe)
+            running_application_dict[cur_app.exe.split(os.path.sep)[-1]] = True
 
     running = actions.user.create_spoken_forms_from_list(
         [curr_app.name for curr_app in ui.apps(background=False)],
@@ -238,14 +237,11 @@ class Actions:
                 ):
                     name = full_application_name
                     break
-        for application in ui.apps():
-            if (
-                application.name == name
-                or (
-                    app.platform == "windows"
-                    and application.exe.split(os.path.sep)[-1] == name
-                )
-            ) and not application.background:
+        for application in ui.apps(background=False):
+            if application.name == name or (
+                app.platform == "windows"
+                and application.exe.split(os.path.sep)[-1] == name
+            ):
                 return application
         raise RuntimeError(f'App not running: "{name}"')
 
