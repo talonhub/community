@@ -7,11 +7,6 @@ tag(): user.code_comment
 tag(): user.code_block_comment
 tag(): user.code_generic
 
-action(user.code_public_function):
- 	insert("public ")
-action(user.code_state_return):
-    insert("return ")
-
 action(user.code_state_import):
     insert("import ")
 
@@ -23,4 +18,12 @@ action(user.code_state_import):
     key("space")
 [state] {user.java_other_modifiers}: 
     insert(user.java_other_modifiers)
-    key("space")  
+    key("space") 
+
+op array:
+    user.code_operator_subscript()
+[state] {user.java_primitive_types} array:
+    insert(user.java_primitive_types)
+    user.code_operator_subscript()
+op new:
+    insert("new ")

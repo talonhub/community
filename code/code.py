@@ -202,6 +202,9 @@ class Actions:
     def code_operator_bitwise_and_assignment():
         """code_operator_and"""
 
+    def code_operator_increment():        
+        """code_operator_increment"""
+
     def code_operator_bitwise_or():
         """code_operator_bitwise_or"""
 

@@ -124,6 +124,12 @@ class UserActions:
     def code_operator_bitwise_and():
         actions.auto_insert(" & ")
 
+    def code_operator_bitwise_and_assignment():
+        actions.auto_insert(' &= ')
+
+    def code_operator_increment():        
+        actions.auto_insert('++')
+
     def code_operator_bitwise_or():
         actions.auto_insert(" | ")
 
