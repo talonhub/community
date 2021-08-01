@@ -130,6 +130,8 @@ ctx.lists["self.letter"] = alphabet
 # `symbol_key_words` is for key names that should be
 # available in command mode, but NOT during dictation.
 punctuation_words = {
+    # TODO: I'm not sure why we need these, I think it has something to do with
+    # Dragon. Possibly it has been fixed by later improvements to talon? -rntz
     "`": "`",
     ",": ",",  # <== these things
     "back tick": "`",
