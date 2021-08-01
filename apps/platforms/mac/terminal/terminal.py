@@ -10,7 +10,7 @@ directories_to_exclude = {}
 
 @ctx.action_class('edit')
 class EditActions:
-    # Required (August 1 2021_ allow terminal copy-paste on Mac with zsh (default Mac terminal)
+    # Currently required (August 1 2021) to allow terminal copy-paste on Mac with zsh (default Mac terminal)
     # https://github.com/knausj85/knausj_talon/issues/521
     def copy(): actions.key('cmd-c')
     def paste(): actions.key('cmd-v')
