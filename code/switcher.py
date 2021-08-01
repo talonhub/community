@@ -215,7 +215,7 @@ def update_overrides(name, flags):
                 if len(line) == 2:
                     overrides[line[0].lower()] = line[1].strip()
 
-        update_lists()
+        update_running_list()
 
 @mod.action_class
 class Actions:
