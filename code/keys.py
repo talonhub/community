@@ -171,7 +171,6 @@ symbol_key_words = {
     "plus": "+",
     "tilde": "~",
     "bang": "!",
-    "dollar": "$",
     "down score": "_",
     "under score": "_",
     "paren": "(",
@@ -191,7 +190,6 @@ symbol_key_words = {
     "right angle": ">",
     "greater than": ">",
     "star": "*",
-    "pound": "#",
     "hash": "#",
     "percent": "%",
     "caret": "^",
@@ -199,6 +197,12 @@ symbol_key_words = {
     "pipe": "|",
     "dubquote": '"',
     "double quote": '"',
+
+    # Currencies
+    "dollar": "$",
+    "dollar sign": "$",
+    "pound": "£",
+    "pound sign": "£",
 }
 
 # make punctuation words also included in {user.symbol_keys}
