@@ -10,7 +10,6 @@ app: slack
 @ctx.action_class("user")
 class UserActions:
     def slap():
-        print('trigger slap')
         actions.edit.line_end()
         actions.key("shift-enter")
 
