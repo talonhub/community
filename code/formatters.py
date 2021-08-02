@@ -112,6 +112,13 @@ formatters_dict = {
         first_vs_rest(lambda w: w, lambda w: w.capitalize()),
     ),
     "PUBLIC_CAMEL_CASE": (NOSEP, every_word(lambda w: w.capitalize())),
+    "STRIKETHROUGH": (
+        NOSEP,
+        first_vs_rest(
+            lambda w: strikethrough_word(w),
+            lambda w: strikethrough_character(" ") + strikethrough_word(w),
+        )
+    ),
     "SNAKE_CASE": (
         NOSEP,
         first_vs_rest(lambda w: w.lower(), lambda w: "_" + w.lower()),
@@ -162,6 +169,7 @@ formatters_words = {
     "snake": formatters_dict["SNAKE_CASE"],
     # "speak": formatters_dict["NOOP"],
     "string": formatters_dict["SINGLE_QUOTED_STRING"],
+    "strikethrough": formatters_dict["STRIKETHROUGH"],
     "title": formatters_dict["CAPITALIZE_ALL_WORDS"],
     # disable a few formatters for now
     # "tree": formatters_dict["FIRST_THREE"],
@@ -281,6 +289,8 @@ class Actions:
 
     def insert_many(strings: List[str]) -> None:
         """Insert a list of strings, sequentially."""
+        print("strings xd")
+        print(strings)
         for string in strings:
             actions.insert(string)
 
@@ -292,6 +302,11 @@ def unformat_text(text: str) -> str:
     # TODO: Separate out studleycase vars
     return unformatted.lower()
 
+def strikethrough_character(character):
+    return character + u'\u0336'
+
+def strikethrough_word(word):
+    return "".join([strikethrough_character(character) for character in word])
 
 ctx.lists["self.formatters"] = formatters_words.keys()
 ctx.lists["self.prose_formatter"] = {
