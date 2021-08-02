@@ -1,11 +1,11 @@
-from talon import Context, actions, Module
+from talon import Context, actions
 
 ctx = Context()
-mod = Module()
 ctx.matches = r"""
 os: mac
 app: slack
 """
+
 
 @ctx.action_class("user")
 class UserActions:
