@@ -50,3 +50,8 @@ class BrowserActions:
         #action(browser.title)
     def toggle_dev_tools():
         actions.key('cmd-alt-i')
+    def copy_address():
+        print('triggered address copy')
+        actions.browser.focus_address()
+        actions.sleep("50ms")
+        actions.edit.copy()
