@@ -1,14 +1,32 @@
-from talon import Context, actions
+from talon import Context, actions, Module
 
 ctx = Context()
+mod = Module()
 ctx.matches = r"""
 os: mac
 app: slack
 """
 
+# @ctx.action('user.slap')
+# def slap():
+#     actions.edit.line_end()
+#     actions.key("shift-enter")
+@ctx.action('slap')
+def slap():
+    print('trigger slap')
+    actions.edit.line_end()
+    actions.key("shift-enter")
+
+@mod.action_class
+class Actions:
+    def slap(commands: str):
+        """Send a command to Jetbrains product"""
+        idea_commands(commands)
 
 @ctx.action_class("user")
 class UserActions:
+
+
     def messaging_workspace_previous():
         actions.key("cmd-shift-[")
 

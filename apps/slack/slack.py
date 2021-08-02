@@ -13,3 +13,5 @@ apps.slack = """
 os: mac
 and app.bundle: com.tinyspeck.slackmacgap
 """
+
+
