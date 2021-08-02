@@ -1,7 +1,7 @@
 tag: browser
 -
 (address bar | go address | go url): browser.focus_address()
-(address copy | url copy | copy address | copy url ): browser.copy_address()
+(address copy | url copy | copy address | copy url ): user.address_copy()
 go home: browser.go_home()
 [go] forward: browser.go_forward()
 go (back | backward): browser.go_back()

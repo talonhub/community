@@ -33,6 +33,11 @@ class user_actions:
         else:
             actions.key("ctrl-9")
 
+    # TODO move to generic browser implementation to be shared by all browsers once we have one
+    def address_copy():
+        actions.browser.focus_address()
+        actions.sleep("50ms")
+        actions.edit.copy()
 
 @ctx.action_class("browser")
 class browser_actions:
@@ -42,8 +47,3 @@ class browser_actions:
         actions.insert(url)
         actions.key("enter")
 
-    # def copy_address():
-    #     print('triggered address copy')
-    #     actions.browser.focus_address()
-    #     actions.sleep("50ms")
-    #     actions.edit.copy()
