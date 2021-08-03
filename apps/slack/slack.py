@@ -1,5 +1,6 @@
-from talon import Module
+from talon import Context, Module, actions
 
+ctx = Context()
 mod = Module()
 apps = mod.apps
 apps.slack = "app.name: Slack"
@@ -13,3 +14,9 @@ apps.slack = """
 os: mac
 and app.bundle: com.tinyspeck.slackmacgap
 """
+
+@ctx.action_class("user")
+class UserActions:
+    def create_blank_line():
+        actions.edit.line_end()
+        actions.key("shift-enter")

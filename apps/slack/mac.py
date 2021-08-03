@@ -9,10 +9,6 @@ app: slack
 
 @ctx.action_class("user")
 class UserActions:
-    def create_blank_line():
-        actions.edit.line_end()
-        actions.key("shift-enter")
-
     def messaging_workspace_previous():
         actions.key("cmd-shift-[")
 
