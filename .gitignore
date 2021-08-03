@@ -2,4 +2,4 @@
 __pycache__
 *.sw?
 # Locally generated
-settings
+/settings
