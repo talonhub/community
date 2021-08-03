@@ -14,19 +14,6 @@ from typing import Optional
 from talon import ui, Module, Context, actions
 
 
-def sorted_screens():
-    """Return screens sorted by their topmost, then leftmost, edge.
-
-    Screens will be sorted left-to-right, then top-to-bottom as a tiebreak.
-
-    """
-
-    return sorted(
-        sorted(ui.screens(), key=lambda screen: screen.visible_rect.top),
-        key=lambda screen: screen.visible_rect.left,
-    )
-
-
 def _set_window_pos(window, x, y, width, height):
     """Helper to set the window position."""
     # TODO: Special case for full screen move - use os-native maximize, rather
@@ -70,14 +57,15 @@ def _move_to_screen(
     ), "Provide exactly one of `screen_number` or `offset`."
 
     src_screen = window.screen
-    screens = sorted_screens()
-    if offset:
-        screen_number = (screens.index(src_screen) + offset) % len(screens)
-    else:
-        # Human to array index
-        screen_number -= 1
 
-    dest_screen = screens[screen_number]
+    if offset:
+        if offset < 0:
+            dest_screen = actions.user.screens_get_previous(src_screen)
+        else:
+            dest_screen = actions.user.screens_get_next(src_screen)
+    else:
+        dest_screen = actions.user.screens_get_by_number(screen_number)
+
     if src_screen == dest_screen:
         return
 
