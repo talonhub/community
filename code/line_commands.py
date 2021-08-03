@@ -45,6 +45,6 @@ class Actions:
         """Clones specified line at current position"""
 
     def slap():
-        """Move cursor to the right by camel case/subword"""
+        """Create a new line below the current one"""
         actions.edit.line_end()
         actions.key("enter")
