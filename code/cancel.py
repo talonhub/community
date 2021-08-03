@@ -2,6 +2,7 @@
 # you may also wish to adjust the commands in misc/cancel.talon.
 from talon import speech_system, actions
 
+# To change the phrase used to cancel commands, you must also adjust misc/cancel.talon
 cancel_phrase = "cancel cancel".split()
 
 def pre_phrase(d):
