@@ -20,3 +20,4 @@ class UserActions:
     def create_blank_line():
         actions.edit.line_end()
         actions.key("shift-enter")
+        
