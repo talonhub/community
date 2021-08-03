@@ -51,6 +51,14 @@ class win_actions:
 
         return ""
 
+@ctx.action_class("app")
+class AppActions:
+    # talon app actions
+    def tab_open():
+        actions.user.vscode("workbench.action.files.newUntitledFile")
+
+    def tab_close():
+        actions.user.vscode("workbench.action.closeActiveEditor")
 
 @ctx.action_class("edit")
 class edit_actions:
