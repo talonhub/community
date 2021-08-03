@@ -103,6 +103,7 @@ def every_word(word_func):
     return formatter_function
 
 
+# TODO - these tuples getting quite complicated, we should make a class with a clear, documented structure instead
 formatters_dict = {
     "NOOP": (SEP, lambda i, word, _: word),
     "DOUBLE_UNDERSCORE": (NOSEP, first_vs_rest(lambda w: "__%s__" % w)),
@@ -297,25 +298,30 @@ class Actions:
 def strikethrough_character(character):
     return character + u'\u0336'
 
+
 def strikethrough_word(word):
     return "".join([strikethrough_character(character) for character in word])
 
+
 symbols_to_ignore_when_unformatting = [
-    u'\u0336' # Strikethrough character
+    u'\u0336'  # Strikethrough character
 ]
+
 
 def unformat_text(text: str) -> str:
     """Remove format from text"""
 
     # Remove certain symbols which don't signify a new word
+    unformatted = text
     for symbol in symbols_to_ignore_when_unformatting:
         unformatted = text.replace(symbol, '')
 
-    # Replace all remaining symbols with spaces
+    # Replace symbols with spaces
     unformatted = re.sub(r"[^a-zA-Z0-9]+", " ", unformatted)
 
     # Split on camelCase, including numbers
-    unformatted = re.sub(r"(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|(?<=[a-zA-Z])(?=[0-9])|(?<=[0-9])(?=[a-zA-Z])", " ", unformatted)
+    unformatted = re.sub(r"(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|(?<=[a-zA-Z])(?=[0-9])|(?<=[0-9])(?=[a-zA-Z])",
+                         " ", unformatted)
     # TODO: Separate out studleycase vars
     return unformatted.lower()
 
