@@ -24,6 +24,9 @@ class multiple_cursor_actions:
     def multi_cursor_select_more_occurrences():
         """Adds cursor at next occurrence of selection"""
 
+    def multi_cursor_select_skip_occurrences():
+        """Skips adding a cursor at next occurrence of selection"""
+
     def multi_cursor_select_all_occurrences():
         """Adds cursor at every occurrence of selection"""
 
