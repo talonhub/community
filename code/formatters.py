@@ -103,7 +103,7 @@ def every_word(word_func):
     return formatter_function
 
 
-# TODO - these tuples getting quite complicated, we should make a class with a clear, documented structure instead
+# TODO - these tuples getting quite complicated, we should make a formatter class instead
 formatters_dict = {
     "NOOP": (SEP, lambda i, word, _: word),
     "DOUBLE_UNDERSCORE": (NOSEP, first_vs_rest(lambda w: "__%s__" % w)),
@@ -156,6 +156,7 @@ formatters_words = {
     "allcaps": formatters_dict["ALL_CAPS"],
     "alldown": formatters_dict["ALL_LOWERCASE"],
     "camel": formatters_dict["PRIVATE_CAMEL_CASE"],
+    "no format": formatters_dict["NOOP"],
     "dotted": formatters_dict["DOT_SEPARATED"],
     "dubstring": formatters_dict["DOUBLE_QUOTED_STRING"],
     "dunder": formatters_dict["DOUBLE_UNDERSCORE"],
@@ -280,7 +281,7 @@ class Actions:
         # selected text (e.g. Emacs)
         edit.delete()
 
-        text = actions.user.formatted_text(selected, formatters)
+        text = actions.user.formatted_text(unformatted, formatters)
         actions.user.paste(text)
         return text
 
@@ -311,10 +312,10 @@ symbols_to_ignore_when_unformatting = [
 def unformat_text(text: str) -> str:
     """Remove format from text"""
 
-    # Remove certain symbols which don't signify a new word
+    # Remove symbols which should be ignored rather than used as word splits
     unformatted = text
     for symbol in symbols_to_ignore_when_unformatting:
-        unformatted = text.replace(symbol, '')
+        unformatted = unformatted.replace(symbol, "")
 
     # Replace symbols with spaces
     unformatted = re.sub(r"[^a-zA-Z0-9]+", " ", unformatted)
