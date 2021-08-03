@@ -18,8 +18,9 @@ go to code: insert("gc")
 go to issues: insert("gi")
 go to pull requests: insert("gp")
 go to wiki: insert("gw")
-
-# network graph
+go to actions: insert("ga")
+go to projects: insert("gb")
+go to discussions: insert("gg")
 
 # source code browsing
 find file: key(t)
@@ -27,6 +28,8 @@ jump to line: key(l)
 switch (branch|tag): key(w)
 expand url: key(y)
 (show|hide) [all] in line notes: key(i)
+open blame [view]: key(b)
+(show|hide) annotations: key(a)
 
 # issues
 create [an] issue: key(c)
@@ -53,5 +56,17 @@ other parent commit: key(o)
 mark as read: key(y)
 mute thread: key(shift-m)
 
-# pull request list
+# issue or pull request list
 open issue: key(o)
+create issue: key(c)
+
+# issues and pull requests
+request reviewer: key(q)
+set milestone: key(m)
+set assignee: key(a)
+set label: key(l)
+
+# actions
+go to workflow [file]: insert("gf")
+toggle timestamps [in logs]: key(shift-t)
+toggle fullscreen [logs]: key(shift-f)

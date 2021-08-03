@@ -1,3 +1,7 @@
 # Dev stuff
 __pycache__
 *.sw?
+
+# editor stuff
+.idea
+.vscode
