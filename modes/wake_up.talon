@@ -21,7 +21,7 @@ mode: all
 ^timer wake$:
   speech.enable()  
   key(cmd-shift-r)
-^time are wake$:
+^time (are | or) wake$:
   speech.enable()  
   key(cmd-shift-r)
 
