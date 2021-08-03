@@ -1,3 +1,5 @@
+# to disable command cancellation, comment out this entire file.
+# you may also wish to adjust the commands in misc/cancel.talon.
 from talon import speech_system, actions
 
 cancel_phrase = "cancel cancel".split()
