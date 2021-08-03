@@ -279,7 +279,6 @@ class Actions:
         # Delete separately for compatibility with programs that don't overwrite
         # selected text (e.g. Emacs)
         edit.delete()
-
         text = actions.user.formatted_text(unformatted, formatters)
         actions.user.paste(text)
         return text
