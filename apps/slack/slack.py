@@ -17,6 +17,6 @@ and app.bundle: com.tinyspeck.slackmacgap
 
 @ctx.action_class("user")
 class UserActions:
-    def create_blank_line():
+    def insert_blank_line_below():
         actions.edit.line_end()
         actions.key("shift-enter")

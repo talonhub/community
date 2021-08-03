@@ -37,7 +37,7 @@ class Actions:
         for _ in range(n):
             actions.edit.word_right()
 
-    def create_blank_line():
+    def insert_blank_line_below():
         """Create a new blank line below the current one"""
         actions.edit.line_end()
         actions.key("enter")
