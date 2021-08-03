@@ -9,7 +9,7 @@ app: slack
 
 @ctx.action_class("user")
 class UserActions:
-    def slap():
+    def create_blank_line():
         actions.edit.line_end()
         actions.key("shift-enter")
 

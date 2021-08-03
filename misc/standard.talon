@@ -25,4 +25,4 @@ wipe: key(backspace)
 (pad | padding): 
 	insert("  ") 
 	key(left)
-slap: user.slap()
+slap: user.create_blank_line()

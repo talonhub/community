@@ -44,7 +44,3 @@ class Actions:
     def line_clone(line: int):
         """Clones specified line at current position"""
 
-    def slap():
-        """Create a new line below the current one"""
-        actions.edit.line_end()
-        actions.key("enter")

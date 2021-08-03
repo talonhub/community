@@ -36,3 +36,8 @@ class Actions:
         """Moves right by n words."""
         for _ in range(n):
             actions.edit.word_right()
+
+    def create_blank_line():
+        """Create a new blank line below the current one"""
+        actions.edit.line_end()
+        actions.key("enter")
