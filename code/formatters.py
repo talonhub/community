@@ -278,8 +278,9 @@ class Actions:
         # Delete separately for compatibility with programs that don't overwrite
         # selected text (e.g. Emacs)
         edit.delete()
-        text = actions.self.formatted_text(unformatted, formatters)
-        actions.insert(text)
+
+        text = actions.user.formatted_text(selected, formatters)
+        actions.user.paste(text)
         return text
 
     def reformat_text(text: str, formatters: str) -> str:
@@ -289,15 +290,14 @@ class Actions:
 
     def insert_many(strings: List[str]) -> None:
         """Insert a list of strings, sequentially."""
-        print("strings xd")
-        print(strings)
         for string in strings:
-            actions.insert(string)
+            actions.user.paste(string)
 
 def unformat_text(text: str) -> str:
     """Remove format from text"""
+    # Strip all symbols and replace with spaces
     unformatted = re.sub(r"[^a-zA-Z0-9]+", " ", text)
-    # Split on camelCase, including numbes
+    # Split on camelCase, including numbers
     unformatted = re.sub(r"(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|(?<=[a-zA-Z])(?=[0-9])|(?<=[0-9])(?=[a-zA-Z])", " ", unformatted)
     # TODO: Separate out studleycase vars
     return unformatted.lower()
