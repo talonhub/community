@@ -1,83 +1,95 @@
-from talon import Module, screen, ui, actions, clip, app, settings
+from talon import Module, screen, ui, cron, app, actions, clip
+from talon.canvas import Canvas
+from typing import Optional
 from datetime import datetime
-import os, subprocess
-
-active_platform = app.platform
-default_command = None
-if active_platform == "windows":
-
-    default_folder = os.path.expanduser(os.path.join("~", r"OneDrive\Desktop"))
-    # this is probably not the correct way to check for onedrive, quick and dirty
-    if not os.path.isdir(default_folder):
-        default_folder = os.path.join("~", "Desktop")
-elif active_platform == "mac":
-    default_folder = os.path.join("~", "Desktop")
-elif active_platform == "linux":
-    default_folder = "~"
-    default_command = "scrot -s"
+import os
 
 mod = Module()
+
+default_folder = ""
+if app.platform == "windows":
+    default_folder = os.path.expanduser(os.path.join("~", r"OneDrive\Pictures"))
+if not os.path.isdir(default_folder):
+    default_folder = os.path.join("~", "Pictures")
+
 screenshot_folder = mod.setting(
     "screenshot_folder",
     type=str,
     default=default_folder,
     desc="Where to save screenshots. Note this folder must exist.",
 )
-screenshot_selection_command = mod.setting(
-    "screenshot_selection_command",
-    type=str,
-    default=default_command,
-    desc="Commandline trigger for taking a selection of the screen. By default, only linux uses this.",
-)
 
 
-def get_screenshot_path():
-    filename = "screenshot-%s.png" % datetime.now().strftime("%Y%m%d%H%M%S")
+@mod.action_class
+class Actions:
+    def screenshot(screen_number: Optional[int] = None):
+        """Takes a screenshot of the entire screen and saves it to the pictures folder.
+        Optional screen number can be given to use screen other than main."""
+        screen = get_screen(screen_number)
+        screenshot_rect(screen.rect)
+
+    def screenshot_window():
+        """Takes a screenshot of the active window and saves it to the pictures folder"""
+        win = ui.active_window()
+        screenshot_rect(win.rect, win.app.name)
+
+    def screenshot_selection():
+        """Triggers an application is capable of taking a screenshot of a portion of the screen"""
+        if app.platform == "windows":
+            actions.key("super-shift-s")
+        elif app.platform == "mac":
+            actions.key("ctrl-shift-cmd-4")
+        elif app.platform == "linux":
+            actions.key("shift-printscr")
+
+    def screenshot_clipboard(screen_number: Optional[int] = None):
+        """Takes a screenshot of the entire screen and saves it to the clipboard.
+        Optional screen number can be given to use screen other than main."""
+        screen = get_screen(screen_number)
+        clipboard_rect(screen.rect)
+
+    def screenshot_window_clipboard():
+        """Takes a screenshot of the active window and saves it to the clipboard"""
+        win = ui.active_window()
+        clipboard_rect(win.rect)
+
+
+def screenshot_rect(rect: ui.Rect, title: str = ""):
+    flash_rect(rect)
+    img = screen.capture_rect(rect)
+    path = get_screenshot_path(title)
+    img.write_file(path)
+
+
+def clipboard_rect(rect: ui.Rect):
+    flash_rect(rect)
+    img = screen.capture_rect(rect)
+    clip.set_image(img)
+
+
+def get_screenshot_path(title: str = ""):
+    if title:
+        title = f" - {title.replace('.', '_')}"
+    date = datetime.now().strftime("%Y-%m-%dT%H-%M-%S")
+    filename = f"Screenshot {date}{title}.png"
     folder_path = screenshot_folder.get()
     path = os.path.expanduser(os.path.join(folder_path, filename))
     return os.path.normpath(path)
 
 
-@mod.action_class
-class Actions:
-    def screenshot():
-        """takes a screenshot of the entire screen and saves it to the desktop as screenshot.png"""
-        img = screen.capture_rect(screen.main_screen().rect)
-        path = get_screenshot_path()
+def flash_rect(rect: ui.Rect):
+    def on_draw(c):
+        c.paint.style = c.paint.Style.FILL
+        c.paint.color = "ffffff"
+        c.draw_rect(rect)
+        cron.after("150ms", canvas.close)
 
-        img.write_file(path)
-        app.notify(subtitle="Screenshot: %s" % path)
+    canvas = Canvas.from_rect(rect)
+    canvas.register("draw", on_draw)
+    canvas.freeze()
 
-    def screenshot_window():
-        """takes a screenshot of the current window and says it to the desktop as screenshot.png"""
-        img = screen.capture_rect(ui.active_window().rect)
-        path = get_screenshot_path()
-        img.write_file(path)
-        app.notify(subtitle="Screenshot: %s" % path)
 
-    def screenshot_selection():
-        """triggers an application is capable of taking a screenshot of a portion of the screen"""
-        command = screenshot_selection_command.get()
-        if command:
-            path = get_screenshot_path()
-            command = command.split()
-            command.append(path)
-            subprocess.Popen(command)
-            app.notify(subtitle="Screenshot: %s" % path)
-        else:
-            if active_platform == "windows":
-                actions.key("super-shift-s")
-            elif active_platform == "mac":
-                actions.key("ctrl-shift-cmd-4")
-            # linux is handled by the command by default
-            # elif active_platform == "linux":
-
-    def screenshot_clipboard():
-        """takes a screenshot of the entire screen and saves it to the clipboard"""
-        img = screen.capture_rect(screen.main_screen().rect)
-        clip.set_image(img)
-
-    def screenshot_window_clipboard():
-        """takes a screenshot of the window and saves it to the clipboard"""
-        img = screen.capture_rect(ui.active_window().rect)
-        clip.set_image(img)
+def get_screen(screen_number: Optional[int] = None) -> ui.Screen:
+    if screen_number == None:
+        return screen.main_screen()
+    return actions.user.screens_get_by_number(screen_number)

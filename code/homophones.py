@@ -165,3 +165,10 @@ class Actions:
         )
         app.notify(error)
         raise error
+
+    def homophones_get(word: str) -> [str] or None:
+        """Get homophones for the given word"""
+        word = word.lower()
+        if word in all_homophones:
+            return all_homophones[word]
+        return None

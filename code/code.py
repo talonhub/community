@@ -113,7 +113,6 @@ class Actions:
 
     def code_clear_language_mode():
         """Clears the active language mode, and re-enables code.language: extension matching"""
-        print("code_clear_language_mode")
         actions.mode.enable("user.auto_lang")
         for __, lang in extension_lang_map.items():
             actions.mode.disable("user.{}".format(lang))
