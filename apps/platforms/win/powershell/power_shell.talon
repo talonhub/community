@@ -8,4 +8,6 @@ and app.exe: powershell.exe
 tag(): user.file_manager
 tag(): user.git
 tag(): user.kubectl
+
 tag(): terminal
+tag(): generic_window_shell
