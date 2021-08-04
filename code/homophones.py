@@ -1,8 +1,6 @@
 from talon import Context, Module, app, clip, cron, imgui, actions, ui, fs
 import os
 
-# from formatters import formatters_words, format_phrase
-
 ########################################################################
 # global settings
 ########################################################################
