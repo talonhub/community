@@ -1,6 +1,8 @@
 from talon import Context, Module, app, clip, cron, imgui, actions, ui, fs
 import os
 
+# from formatters import formatters_words, format_phrase
+
 ########################################################################
 # global settings
 ########################################################################
@@ -21,7 +23,6 @@ ctx = Context()
 mod = Module()
 mod.mode("homophones")
 mod.list("homophones_canonicals", desc="list of words ")
-
 
 main_screen = ui.main_screen()
 
@@ -57,6 +58,22 @@ def close_homophones():
     actions.mode.disable("user.homophones")
 
 
+PHONES_FORMATTERS = [
+    lambda word: word.capitalize(),
+    lambda word: word.upper(),
+]
+
+def determine_format_function_to_apply(word_to_find_phones_for, formatters):
+    """ Find the formatter used for the word being 'phoned' in order to know how to format its homophones """
+    for formatter in formatters:
+        formatted_word = formatter(word_to_find_phones_for)
+        if word_to_find_phones_for == formatted_word:
+            return formatter
+
+    # If no formatters work, don't format the options
+    return lambda word: word
+
+
 def raise_homophones(word, forced=False, selection=False):
     global quick_replace
     global active_word_list
@@ -70,8 +87,7 @@ def raise_homophones(word, forced=False, selection=False):
     if is_selection:
         word = word.strip()
 
-    is_capitalized = word == word.capitalize()
-    is_upper = word.isupper()
+    formatter = determine_format_function_to_apply(word, PHONES_FORMATTERS)
 
     word = word.lower()
 
@@ -79,22 +95,21 @@ def raise_homophones(word, forced=False, selection=False):
         app.notify("homophones.py", '"%s" not in homophones list' % word)
         return
 
-    active_word_list = all_homophones[word]
+    # Lookup valid homophones and format them to match the current selection
+    valid_homophones = all_homophones[word];
+    valid_homophones = list(map(lambda homophone: formatter(homophone), valid_homophones))
+    active_word_list = valid_homophones
+
     if (
-        is_selection
-        and len(active_word_list) == 2
-        and quick_replace
-        and not force_raise
+            is_selection
+            and len(active_word_list) == 2
+            and quick_replace
+            and not force_raise
     ):
         if word == active_word_list[0].lower():
             new = active_word_list[1]
         else:
             new = active_word_list[0]
-
-        if is_capitalized:
-            new = new.capitalize()
-        elif is_upper:
-            new = new.upper()
 
         clip.set(new)
         actions.edit.paste()
