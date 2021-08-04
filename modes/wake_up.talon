@@ -5,6 +5,7 @@ mode: all
     user.mouse_wake()
     user.history_enable()
     user.talon_mode()
+
 ^sleep all [<phrase>]$:
     user.switcher_hide_running()
     user.history_disable()
@@ -13,15 +14,15 @@ mode: all
     user.mouse_sleep()
     speech.disable()
     user.engine_sleep()
+
 ^go to sleep$: speech.disable()
+
 ^wake up$: speech.enable()
-^timer sleep$: 
+
+^(timer | time) (are | or) sleep$: 
   key(cmd-shift-r)
   speech.disable()
-^timer wake$:
+  
+^(timer | time)  (are | or) (wake | weak)$:
   speech.enable()  
   key(cmd-shift-r)
-^time (are | or) wake$:
-  speech.enable()  
-  key(cmd-shift-r)
-
