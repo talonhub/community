@@ -69,7 +69,6 @@ def find_matching_format_function(word_with_formatting, format_functions):
         if word_with_formatting == formatted_word:
             return formatter
 
-    # If no formatters work, don't format the options
     return lambda word: word
 
 
