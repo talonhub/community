@@ -61,11 +61,12 @@ PHONES_FORMATTERS = [
     lambda word: word.upper(),
 ]
 
-def determine_format_function_to_apply(word_to_find_formatter_for, formatters):
-    """ Find the formatter used for the word being 'phoned'"""
-    for formatter in formatters:
-        formatted_word = formatter(word_to_find_formatter_for)
-        if word_to_find_formatter_for == formatted_word:
+def find_matching_format_function(word_with_formatting, format_functions):
+    """ Finds the formatter function from a list of formatter functions which transforms a word into itself.
+     Returns an identity function if none exists """
+    for formatter in format_functions:
+        formatted_word = formatter(word_with_formatting)
+        if word_with_formatting == formatted_word:
             return formatter
 
     # If no formatters work, don't format the options
@@ -85,7 +86,8 @@ def raise_homophones(word, forced=False, selection=False):
     if is_selection:
         word = word.strip()
 
-    formatter = determine_format_function_to_apply(word, PHONES_FORMATTERS)
+    # Find the formatter used for the word being 'phoned'
+    formatter = find_matching_format_function(word, PHONES_FORMATTERS)
 
     word = word.lower()
 
@@ -95,7 +97,7 @@ def raise_homophones(word, forced=False, selection=False):
 
     # Lookup valid homophones and format them to match the current selection
     valid_homophones = all_homophones[word]
-    active_word_list = list(map(lambda homophone: formatter(homophone), valid_homophones))
+    active_word_list = list(map(formatter, valid_homophones))
 
     if (
             is_selection
