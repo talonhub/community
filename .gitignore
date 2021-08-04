@@ -5,3 +5,6 @@ __pycache__
 # editor stuff
 .idea
 .vscode
+
+# Locally generated
+/settings
