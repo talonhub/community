@@ -41,7 +41,7 @@ inside (bracket | braces):
 inside percent:
 	insert("%%")
 	key(left)
-inside quotes:
+inside (quotes | string):
 	insert("''")
 	key(left)
 inside (double quotes | dubquotes):
