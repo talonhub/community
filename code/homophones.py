@@ -61,11 +61,11 @@ PHONES_FORMATTERS = [
     lambda word: word.upper(),
 ]
 
-def determine_format_function_to_apply(word_to_find_phones_for, formatters):
-    """ Find the formatter used for the word being 'phoned' in order to know how to format its homophones """
+def determine_format_function_to_apply(word_to_find_formatter_for, formatters):
+    """ Find the formatter used for the word being 'phoned'"""
     for formatter in formatters:
-        formatted_word = formatter(word_to_find_phones_for)
-        if word_to_find_phones_for == formatted_word:
+        formatted_word = formatter(word_to_find_formatter_for)
+        if word_to_find_formatter_for == formatted_word:
             return formatter
 
     # If no formatters work, don't format the options
