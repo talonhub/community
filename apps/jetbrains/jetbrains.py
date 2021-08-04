@@ -260,7 +260,10 @@ class WinActions:
         title = actions.win.title()
         result = title.split(" ")
 
-        for word in result:
+        # iterate over reversed result
+        # to support titles such as
+        # Class.Library2 – a.js
+        for word in reversed(result):
             if "." in word:
                 return word
 

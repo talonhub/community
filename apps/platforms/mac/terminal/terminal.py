@@ -12,9 +12,6 @@ directories_to_exclude = {}
 
 @ctx.action_class('edit')
 class EditActions:
-    def paste():       actions.key('shift-insert')
-    def copy():        actions.key('ctrl-insert')
-    
     def delete_line(): actions.key('ctrl-u')
 
 
