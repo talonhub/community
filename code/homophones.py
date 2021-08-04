@@ -96,9 +96,8 @@ def raise_homophones(word, forced=False, selection=False):
         return
 
     # Lookup valid homophones and format them to match the current selection
-    valid_homophones = all_homophones[word];
-    valid_homophones = list(map(lambda homophone: formatter(homophone), valid_homophones))
-    active_word_list = valid_homophones
+    valid_homophones = all_homophones[word]
+    active_word_list = list(map(lambda homophone: formatter(homophone), valid_homophones))
 
     if (
             is_selection
