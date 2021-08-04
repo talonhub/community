@@ -117,7 +117,7 @@ formatters_dict = {
         NOSEP,
         first_vs_rest(
             lambda w: strikethrough_word(w),
-            lambda w: strikethrough_character(" ") + strikethrough_word(w),
+            lambda w: strikethrough_word(" ") + strikethrough_word(w),
         )
     ),
     "SNAKE_CASE": (
