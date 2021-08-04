@@ -65,7 +65,7 @@ angle that:
 percent that:
     text = edit.selected_text()
     user.paste("%{text}%")
-(quote | string) that:
+quote that:
     text = edit.selected_text()
     user.paste("'{text}'")
 (double quote | dubquote) that:
