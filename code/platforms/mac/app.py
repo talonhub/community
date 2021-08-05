@@ -1,4 +1,4 @@
-from talon import Context, actions
+from talon import Context, actions, ui
 ctx = Context()
 ctx.matches = r"""
 os: mac
@@ -26,9 +26,32 @@ class AppActions:
         actions.key('cmd-m')
     def window_hide_others():
         actions.key('cmd-alt-h')
+
+    # Custom behavior to handle Mac desktop 'Spaces'
     def window_next():
-        actions.key('cmd-`')
+        switch_window_by_offset_from_current(1)
+
+    # Custom behavior to handle Mac desktop 'Spaces'
+    def window_previous():
+        switch_window_by_offset_from_current(-1)
+
     def window_open():
         actions.key('cmd-n')
     def window_previous():
         actions.key('cmd-shift-`')
+
+
+def switch_window_by_offset_from_current(offset):
+    active_window = ui.active_window()
+    windows = ui.active_app().windows()
+
+    # Handle case where empty windows with no title show up in the results
+    windows = list(filter(lambda lambda_window: len(lambda_window.title) > 0, windows))
+
+    # Sort by title since they get reordered on every switch and we want to switch windows in a fixed order
+    windows.sort(key=lambda lambda_window: lambda_window.title)
+
+    for (index, window) in enumerate(windows):
+        if window is active_window:
+            index_of_new_window = (index + offset) % len(windows)
+            windows[index_of_new_window].focus()
