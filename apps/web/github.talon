@@ -7,11 +7,17 @@ win.title: /github.com/
 focus search: key(s)
 go to notifications: insert("gn")
 go to dashboard: insert("gd")
-show keyboard shortcuts: key(?)
+keyboard shortcuts show: key(?)
+selection move down: key(j)
+selection move up: key(k)
+selection toggle: key(x)
+selection open: key(o)
+# legacy [verb noun] commands to be removed at a later time
 move selection down: key(j)
 move selection up: key(k)
 toggle selection: key(x)
 open selection: key(o)
+show keyboard shortcuts: key(?)
 
 # repositories
 go to code: insert("gc")
@@ -23,48 +29,63 @@ go to projects: insert("gb")
 go to discussions: insert("gg")
 
 # source code browsing
-find file: key(t)
+file find: key(t)
 jump to line: key(l)
-switch (branch|tag): key(w)
-expand url: key(y)
+(branch|tag) switch: key(w)
+url expand: key(y)
 (show|hide) [all] in line notes: key(i)
-open blame [view]: key(b)
+blame [view] open: key(b)
 (show|hide) annotations: key(a)
+# legacy [verb noun] commands to be removed at a later time
+expand url: key(y)
+switch (branch|tag): key(w)
+find file: key(t)
 
 # issues
-create [an] issue: key(c)
+[an] issue create: key(c)
 search (issues|[pull] requests): key(/)
 (filter by|edit) labels: key(l)
 (filter by|edit) milestones: key(m)
 (filter by|edit) assignee: key(a)
 reply: key(r)
-submit comment: key(ctrl-enter)
-preview comment: key(ctrl-shift-p)
+comment submit: key(ctrl-enter)
+comment preview: key(ctrl-shift-p)
 #go fullscreen: key(ctrl-shift-l)
 git hub full screen: key(ctrl-shift-l)
+# legacy [verb noun] commands to be removed at a later time
+submit comment: key(ctrl-enter)
+preview comment: key(ctrl-shift-p)
+create [an] issue: key(c)
 
 # browsing commit
 #submit comment: key(ctrl-enter)
-close form: key(escape)
+form close: key(escape)
 parent commit: key(p)
 other parent commit: key(o)
+# legacy [verb noun] commands to be removed at a later time
+close form: key(escape)
 
 # commit list
 #expand url: key(y)
 
 # notifications
 mark as read: key(y)
+thread mute: key(shift-m)
+# legacy [verb noun] commands to be removed at a later time
 mute thread: key(shift-m)
 
 # issue or pull request list
+issue open: key(o)
+issue create: key(c)
+# legacy [verb noun] commands to be removed at a later time
 open issue: key(o)
 create issue: key(c)
 
 # issues and pull requests
-request reviewer: key(q)
-set milestone: key(m)
-set assignee: key(a)
-set label: key(l)
+reviewer request: key(q)
+milestone set: key(m)
+assignee set: key(a)
+label set: key(l)
 
 # actions
 go to workflow [file]: insert("gf")
