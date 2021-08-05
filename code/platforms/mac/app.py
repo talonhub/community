@@ -26,6 +26,10 @@ class AppActions:
         actions.key('cmd-m')
     def window_hide_others():
         actions.key('cmd-alt-h')
+    def window_open():
+        actions.key('cmd-n')
+    def window_previous():
+        actions.key('cmd-shift-`')
 
     # Custom behavior to handle Mac desktop 'Spaces'
     def window_next():
@@ -34,11 +38,6 @@ class AppActions:
     # Custom behavior to handle Mac desktop 'Spaces'
     def window_previous():
         switch_window_by_offset_from_current(-1)
-
-    def window_open():
-        actions.key('cmd-n')
-    def window_previous():
-        actions.key('cmd-shift-`')
 
 
 def switch_window_by_offset_from_current(offset):
