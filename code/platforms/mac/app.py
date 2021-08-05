@@ -56,7 +56,7 @@ def switch_window_by_offset_from_current(offset):
     # Handle case where empty windows with no title show up in the results
     windows = list(filter(lambda local_window: len(local_window.title) > 0, windows))
 
-    # Sort by title since they get reordered on every switch and we want to switch windows in a fixed order
+    # Sort by title as the windows get reordered on every switch and we want to switch windows in a fixed order
     windows.sort(key=lambda local_window: local_window.title)
 
     for (index, window) in enumerate(windows):
