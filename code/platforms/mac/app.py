@@ -63,3 +63,4 @@ def switch_window_by_offset_from_current(offset):
         if window is active_window:
             index_of_new_window = (index + offset) % len(windows)
             windows[index_of_new_window].focus()
+            return
