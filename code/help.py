@@ -178,6 +178,8 @@ def gui_context_help(gui: imgui.GUI):
     global total_page_count
     global search_phrase
 
+    refresh_context_command_map(show_enabled_contexts_only)
+
     # if no selected context, draw the contexts
     if selected_context is None and search_phrase is None:
         total_page_count = get_total_context_pages()
