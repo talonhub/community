@@ -40,9 +40,6 @@ class AppActions:
     def window_open():
         actions.key('cmd-n')
 
-    def window_previous():
-        actions.key('cmd-shift-`')
-
     # Custom behavior to handle Mac desktop 'Spaces'
     def window_next():
         switch_window_by_offset_from_current(1)
