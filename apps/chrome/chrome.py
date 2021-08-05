@@ -18,6 +18,7 @@ ctx.matches = r"""
 app: chrome
 """
 
+
 @ctx.action_class("user")
 class user_actions:
     def tab_jump(number: int):
