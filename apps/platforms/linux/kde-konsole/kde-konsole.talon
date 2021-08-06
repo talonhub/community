@@ -13,5 +13,6 @@ tag(): user.git
 tag(): user.anaconda
 # tag(): user.kubectl
 
-
+# TODO: explain
 tag(): user.tabs
+# TODO: think about implementing file manager
