@@ -183,7 +183,7 @@ symbol_key_words = {
     "star": "*",
     "hash": "#",
     "percent": "%",
-    "caret": "^",
+    "caret symbol": "^",
     "amper": "&",
     "pipe": "|",
     "quote": '"',
