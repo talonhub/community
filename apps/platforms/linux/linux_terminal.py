@@ -7,8 +7,6 @@ tag: terminal
 
 @ctx.action_class('edit')
 class EditActions:
-    #todo: generic tab commands
-    #tag(): tabs
     def page_down():
         actions.key('shift-pagedown')
     def page_up():
