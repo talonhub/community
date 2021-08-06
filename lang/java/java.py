@@ -9,22 +9,50 @@ and code.language: java
 """
 ctx.tags = ["user.code_operators", "user.code_generic"]
 
+# Primitive Types
 java_primitive_types = {
     "boolean": "boolean",
     "int": "int",
-    "string": "String",
     "float": "float",
     "byte": "byte",
     "double": "double",
     "short": "short",
     "long": "long",
     "char": "char",
-    "void": "void"
+    "void": "void",
 }
 
 mod.list("java_primitive_types", desc="Java types")
 ctx.lists["self.java_primitive_types"] = java_primitive_types
 
+# Java Boxed Types
+java_boxed_types = {
+    "Byte": "Byte",
+    "Integer": "Integer",
+    "Double": "Double",
+    "Short": "Short",
+    "Float": "Float",
+    "Long": "Long",
+    "Boolean": "Boolean",
+    "Character": "Character",
+    "Void": "Void",
+}
+
+mod.list("java_boxed_types", desc="Java Boxed Types")
+ctx.lists["self.java_boxed_types"] = java_boxed_types
+
+# Common Classes
+java_common_classes = {
+    "Object": "Object",
+    "string": "String",
+    "thread": "Thread",
+    "exception": "Exception",
+}
+
+mod.list("java_common_classes", desc="Java Common Classes")
+ctx.lists["self.java_common_classes"] = java_common_classes
+
+# Java Modifies
 java_access_modifiers = {
    "public": "public",
    "private": "private",
