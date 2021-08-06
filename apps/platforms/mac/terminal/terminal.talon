@@ -14,4 +14,3 @@ suspend:
 resume:
     insert("fg")
     key(enter)
-    
