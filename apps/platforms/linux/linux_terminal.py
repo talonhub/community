@@ -17,7 +17,5 @@ class EditActions:
         actions.key('ctrl-shift-c')
     def find(text: str=None):
         actions.key('ctrl-shift-f')
-    def word_left():
-        actions.key('ctrl-left')
-    def word_right():
-        actions.key('ctrl-right')
+        # TODO: make insertion working correctly
+        
