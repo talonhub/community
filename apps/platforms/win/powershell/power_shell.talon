@@ -10,4 +10,4 @@ tag(): user.git
 tag(): user.kubectl
 
 tag(): terminal
-tag(): generic_window_shell
+tag(): generic_windows_shell

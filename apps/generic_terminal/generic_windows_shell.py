@@ -1,7 +1,7 @@
 from talon import app, Module, Context, actions, ui, imgui, settings, app, registry
 
 mod = Module()
-mod.tag("generic_unix_shell")
+mod.tag("generic_windows_shell")
 
 
 @mod.action_class
