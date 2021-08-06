@@ -23,16 +23,3 @@ class EditActions:
         actions.key('ctrl-left')
     def word_right():
         actions.key('ctrl-right')
-
-@ctx.action_class('app')
-class AppActions:
-    def tab_open():
-        actions.key('ctrl-shift-t')
-    def tab_close():
-        actions.key('ctrl-shift-w')
-    def tab_next():
-        actions.key('ctrl-pagedown')
-    def tab_previous():
-        actions.key('ctrl-pageup')
-    def window_open():
-        actions.key('ctrl-shift-n')

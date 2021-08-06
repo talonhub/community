@@ -35,3 +35,6 @@ class app_actions:
 
     # tab_reopen is not supported by konsole
 
+    def window_open():
+        actions.key('ctrl-shift-n')
+
