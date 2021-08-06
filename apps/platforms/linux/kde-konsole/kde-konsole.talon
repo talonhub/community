@@ -1,15 +1,17 @@
 os: linux
 and app.name: konsole
 -
-# now activates generic_terminal
+# makes the commands in generic_terminal available
 tag(): terminal 
 
-# activates the implementation of the function of the terminal tag
+# activates the implementation of the commands/functions in generic_terminal
 tag(): user.generic_unix_shell
 
+# makes commands for certain applications available
+# you can deactivate them if you do not use the application
 tag(): user.git
-tag(): user.tabs
 tag(): user.anaconda
 # tag(): user.kubectl
 
 
+tag(): user.tabs
