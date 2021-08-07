@@ -103,3 +103,6 @@ git commit highlighted:
     insert("git add ")
     edit.paste()
     insert("\ngit commit\n")
+
+# Convenience to start any other git commands not in this list
+git command: "git "
