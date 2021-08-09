@@ -52,6 +52,24 @@ java_common_classes = {
 mod.list("java_common_classes", desc="Java Common Classes")
 ctx.lists["self.java_common_classes"] = java_common_classes
 
+# Java Generic Data Structures
+java_generic_data_structures = {
+    # Interfaces
+    "set": "Set",
+    "list": "List",
+    "queue": "Queue",
+    "deque": "Deque",
+    "map": "Map",
+    
+    # Classes
+    "hash set": "HashSet",
+    "array list": "ArrayList",
+    "hash map": "HashMap",
+}
+
+mod.list("java_generic_data_structures", desc="Java Generic Data Structures")
+ctx.lists["self.java_generic_data_structures"] = java_generic_data_structures
+
 # Java Modifies
 java_access_modifiers = {
    "public": "public",
