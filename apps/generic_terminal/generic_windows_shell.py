@@ -1,10 +1,12 @@
 from talon import app, Module, Context, actions, ui, imgui, settings, app, registry
 
+ctx = Context()
 mod = Module()
-mod.tag("generic_windows_shell")
+ctx.matches = r"""
+tag: user.generic_windows_shell
+"""
 
-
-@mod.action_class
+@ctx.action_class("user")
 class Actions:
     # implements the function from generic_terminal.talon for unix shells
 
