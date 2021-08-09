@@ -15,3 +15,4 @@ tag(): user.anaconda
 
 
 tag(): user.tabs
+# TODO: add file_manager support

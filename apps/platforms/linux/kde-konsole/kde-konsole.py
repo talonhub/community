@@ -33,7 +33,10 @@ class app_actions:
     def tab_close():
         actions.key("ctrl-shift-w")
 
-    # tab_reopen is not supported by konsole
+    def tab_reopen():
+        # TODO: decide whether this notification is good style
+        # (if this function wouldn't be defined here a wrong default would be activated)
+        actions.app.notify("tab reopen is not possible in kde konsole")
 
     def window_open():
         actions.key('ctrl-shift-n')
