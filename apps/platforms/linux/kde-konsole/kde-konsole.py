@@ -53,3 +53,7 @@ class EditActions:
         actions.key('ctrl-shift-f')
         if str:
             actions.insert(text)
+
+    # TODO: fix select line and other selection (like shift-right)
+    # see: https://unix.stackexchange.com/questions/485536/kde-konsole-swallows-shift-left-and-shift-right
+    #  also fix extend_left and co 
