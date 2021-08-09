@@ -1,9 +1,6 @@
-from talon import Context, Module, actions
-
-import os
+from talon import Context, actions
 
 ctx = Context()
-mod = Module()
 ctx.matches = r"""
 app.name: konsole
 """
