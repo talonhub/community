@@ -136,6 +136,7 @@ punctuation_words = {
     "back tick": "`",
     "grave": "`",
     "comma": ",",
+    "pause": ",",  # added
     "period": ".",
     "full stop": ".",
     "semicolon": ";",
@@ -194,7 +195,8 @@ symbol_key_words = {
     "pound": "#",
     "hash": "#",
     "percent": "%",
-    "caret": "^",
+    # "caret": "^",
+    "caret sign": "^",
     "amper": "&",
     "pipe": "|",
     "dubquote": '"',
