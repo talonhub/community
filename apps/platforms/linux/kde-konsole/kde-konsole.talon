@@ -15,4 +15,4 @@ tag(): user.anaconda
 
 # TODO: explain
 tag(): user.tabs
-# TODO: think about implementing file manager
+# TODO: add file_manager support
