@@ -28,10 +28,10 @@ kill all:
 # own <term name>.talon file
 action(edit.find):
   key(ctrl-shift-f)
-action(edit.word_left):
-  key(ctrl-w left)
-action(edit.word_right):
-  key(ctrl-w right)
+# action(edit.word_left):
+#   key(ctrl-w left)
+# action(edit.word_right):
+#   key(ctrl-w right)
 action(app.tab_open):
   key(ctrl-shift-t)
 action(app.tab_close):
