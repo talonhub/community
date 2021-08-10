@@ -14,13 +14,11 @@ tag(): user.anaconda
     
 tag(): user.tabs
 # TODO: file_manager
-# TODO: decide wether to use user.splits
+tag(): user.splits
 
 settings open : key(ctrl-,)
-focus left: key(ctrl-alt-shift-left)
-focus right: key(ctrl-alt-shift-right)
-focus up: key(ctrl-alt-shift-up)
-focus down: key(ctrl-alt-shift-down)
-split right: key(ctrl-shift-h)
-split down: key(ctrl-h)
+focus left: key(alt-left)
+focus right: key(alt-right)
+focus up: key(alt-up)
+focus down: key(alt-down)
 term menu: key(ctrl-shift-f1) # doesn't seem to work-> TODO: fix or remove
