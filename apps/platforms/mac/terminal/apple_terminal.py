@@ -1,7 +1,5 @@
-from talon import Context, Module, actions, imgui, settings, ui
+from talon import Context, actions
 import os
-
-# TODO: fit this to generic_terminal
 
 ctx = Context()
 ctx.matches = r"""
