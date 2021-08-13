@@ -138,6 +138,28 @@ and app.exe: rider64.exe
 """
 
 
+@mod.scope
+def is_real_jetbrains_editor():
+
+    window = ui.active_window()
+    active_app = ui.active_app()
+    is_editor = False
+    bundle = active_app.bundle or active_app.name
+    if bundle in port_mapping:
+        # XXX Expose "does editor have focus" as plugin endpoint.
+        # XXX Window title empty in full screen.
+        title = window.title
+        if len(title) == 0 or title == " ":
+            print(f"Window is Jetbrains product but not an editor: {window}")
+        else:
+            is_editor = True
+
+    return {"is_jetbrains_editor": is_editor}
+
+
+ui.register('', is_real_jetbrains_editor.update)
+
+
 @mod.action_class
 class Actions:
     def idea(commands: str):
@@ -162,6 +184,7 @@ class Actions:
 
 ctx.matches = r"""
 app: jetbrains
+user.is_jetbrains_editor: True
 """
 
 

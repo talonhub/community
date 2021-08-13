@@ -1,5 +1,6 @@
 # Requires https://plugins.jetbrains.com/plugin/10504-voice-code-idea
 app: jetbrains
+user.is_jetbrains_editor: True
 -
 tag(): user.line_commands
 tag(): user.multiple_cursors
