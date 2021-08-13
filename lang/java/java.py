@@ -87,6 +87,7 @@ java_other_modifiers = {
    "transient": "transient",
    "abstract": "abstract",
    "interface": "interface",
+   "final": "final",
 }
 
 mod.list("java_other_modifiers", desc="Java Other Modifiers")
@@ -239,6 +240,18 @@ class UserActions:
         actions.edit.left()
         actions.edit.left()
 
+    def code_break():           
+        actions.auto_insert('break;')
+
+    def code_next():
+        actions.auto_insert('continue;')
+    
+    def code_true():          
+        actions.auto_insert('true')
+
+    def code_false():           
+        actions.auto_insert('false')
+
     def code_type_class():
         actions.auto_insert("class ")
 
@@ -253,3 +266,19 @@ class UserActions:
 
     def code_state_return():
         actions.insert("return ")
+
+    def code_comment(): 
+        actions.auto_insert('// ')
+
+    def code_block_comment():
+        actions.insert('/*')
+        actions.key('enter')
+        actions.key('enter')
+        actions.insert('*/')
+        actions.edit.up()
+
+    def code_block_comment_prefix(): 
+        actions.auto_insert('/*')
+
+    def code_block_comment_suffix(): 
+        actions.auto_insert('*/')

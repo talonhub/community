@@ -30,7 +30,6 @@ generic [type] {user.java_generic_data_structures}:
     key("left")
 
 # Arrays
-
 type {user.java_primitive_types} array:
     insert(user.java_primitive_types)
     user.code_operator_subscript()
@@ -38,7 +37,7 @@ type {user.java_primitive_types} array:
 type ({user.java_common_classes}|{user.java_generic_data_structures}) array:
     insert(java_common_classes or java_generic_data_structures)
     user.code_operator_subscript()    
-   
+
 [state] {user.java_access_modifiers}: 
     insert(user.java_access_modifiers)
     key("space")
@@ -54,3 +53,5 @@ op new:
     insert("new ")
 op plus plus:
     insert("++")
+
+code_block_comment 
