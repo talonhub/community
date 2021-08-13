@@ -34,7 +34,7 @@ jump to line: key(l)
 (branch|tag) switch: key(w)
 url expand: key(y)
 (show|hide) [all] in line notes: key(i)
-blame [view] open: key(b)
+blame view open: key(b)
 (show|hide) annotations: key(a)
 # legacy [verb noun] commands to be removed at a later time
 expand url: key(y)
@@ -42,7 +42,7 @@ switch (branch|tag): key(w)
 find file: key(t)
 
 # issues
-[an] issue create: key(c)
+issue create: key(c)
 search (issues|[pull] requests): key(/)
 (filter by|edit) labels: key(l)
 (filter by|edit) milestones: key(m)
@@ -88,6 +88,6 @@ assignee set: key(a)
 label set: key(l)
 
 # actions
-go to workflow [file]: insert("gf")
-toggle timestamps [in logs]: key(shift-t)
-toggle fullscreen [logs]: key(shift-f)
+go to workflow: insert("gf")
+timestamps toggle: key(shift-t)
+fullscreen toggle: key(shift-f)
