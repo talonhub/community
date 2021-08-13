@@ -2,9 +2,5 @@
 __pycache__
 *.sw?
 
-# editor stuff
-.idea
-.vscode
-
 # Locally generated
 /settings
