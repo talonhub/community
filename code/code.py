@@ -79,12 +79,28 @@ def code_libraries(m) -> str:
     """Returns a type"""
     return m.code_libraries
 
+def get_file_ext():
+    """Returns file name extension. If default method fails, try to extract the extension from the window title."""
+    """To override the fallback behavior, override the win.file_ext() action in the target context."""
+    file_extension = actions.win.file_ext()
+
+    if not file_extension:
+        filename = actions.win.title()
+
+        if filename:
+            if '.' in filename:
+                # we require the file name to be in the rightmost position in the window title
+                pos = filename.rindex('.')
+                file_extension = filename[pos:]
+
+    return file_extension
 
 @ctx.action_class("code")
 class code_actions:
     def language():
         result = ""
-        file_extension = actions.win.file_ext()
+        file_extension = get_file_ext()
+
         if file_extension and file_extension in extension_lang_map:
             result = extension_lang_map[file_extension]
 
