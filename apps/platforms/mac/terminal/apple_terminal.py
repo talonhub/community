@@ -69,10 +69,11 @@ class app_actions:
     # code/platforms/mac/app.py
 
     def tab_previous():
-        actions.key("ctrl-tab")
+        actions.key("ctrl-shift-tab")
 
     def tab_next():
-        actions.key("ctrl-shift-tab")
+        actions.key("ctrl-tab")
+        
 
 
 
