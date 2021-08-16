@@ -1,5 +1,7 @@
-mode: user.python
-mode: user.auto_lang
+mode: command
+and mode: user.python
+mode: command
+and mode: user.auto_lang
 and code.language: python
 -
 tag(): user.code_operators
