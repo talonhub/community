@@ -36,3 +36,13 @@ class Actions:
         """Moves right by n words."""
         for _ in range(n):
             actions.edit.word_right()
+
+    def reverse_lines():
+        """ Reverse the order of the currently selected lines."""
+        actions.edit.extend_line_start()
+        actions.edit.extend_line_end()
+        
+        text = actions.edit.selected_text()
+        lines = text.split('\n')
+        lines.reverse()
+        actions.insert('\n'.join(lines))

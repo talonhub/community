@@ -216,3 +216,6 @@ cut word right:
 cut line:
     edit.select_line()
     edit.cut()
+
+reverse list | reverse lines:
+    user.reverse_lines()
