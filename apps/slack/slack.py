@@ -14,9 +14,12 @@ apps.slack = """
 os: mac
 and app.bundle: com.tinyspeck.slackmacgap
 """
+ctx.matches = r"""
+app: slack
+"""
 
-@ctx.action_class("user")
-class UserActions:
-    def insert_blank_line_below():
+@ctx.action_class("edit")
+class Edit:
+    def line_insert_down():
         actions.edit.line_end()
         actions.key("shift-enter")
