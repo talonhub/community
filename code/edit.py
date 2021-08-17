@@ -45,4 +45,4 @@ class Actions:
         text = actions.edit.selected_text()
         lines = text.split('\n')
         lines.reverse()
-        actions.insert('\n'.join(lines))
+        actions.user.paste('\n'.join(lines))
