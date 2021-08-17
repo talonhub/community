@@ -322,6 +322,7 @@ multiple_cursors.talon
 snippets.talon
 splits.talon
 tabs.talon
+generic_terminal.talon
 ```
 
 - New programming languages should support the appropriate 'generic' grammars where possible as well
