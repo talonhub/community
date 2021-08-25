@@ -85,8 +85,6 @@ class EditActions:
         actions.key('down home')
     def line_end():
         actions.key('end')
-    def line_insert_down():
-        actions.key('end enter')
     def line_insert_up():
         actions.key('home enter up')
     def line_start():

@@ -34,6 +34,10 @@ class user_actions:
         else:
             actions.key("ctrl-9")
 
+    def tab_close_wrapper():
+        actions.sleep("180ms")
+        actions.app.tab_close()
+
 
 @ctx.action_class("browser")
 class browser_actions:
