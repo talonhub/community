@@ -146,7 +146,12 @@ _snap_positions = {
     "left third": RelativeScreenPos(0, 0, 1 / 3, 1),
     "right third": RelativeScreenPos(2 / 3, 0, 1, 1),
     "left two thirds": RelativeScreenPos(0, 0, 2 / 3, 1),
-    "right two thirds": RelativeScreenPos(1 / 3, 0, 1, 1,),
+    "right two thirds": RelativeScreenPos(
+        1 / 3,
+        0,
+        1,
+        1,
+    ),
     # Quarters
     # .---.---.
     # |---|---|
@@ -218,5 +223,6 @@ class Actions:
         print(window)
         _bring_forward(window)
         _move_to_screen(
-            window, screen_number=screen_number,
+            window,
+            screen_number=screen_number,
         )

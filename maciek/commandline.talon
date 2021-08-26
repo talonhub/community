@@ -32,11 +32,12 @@ describe: insert("tldr ")
 talon play latest: insert("talon-play-latest\n")
 
 lisa: insert("ls\n")
-
+    
 file list: "ls "
 file link: "ln -s "
 file move: "mv "
 file copy: "cp "
+dir copy: "cp -r "
 file type: "file "
 file show: "cat "
 file stat: "stat " 
@@ -47,8 +48,9 @@ file which: "which "
 get link:
     insert("readlink -f ")
 # directory and files
-pivot: "cd "
-pivot clip:
+
+  
+pivot that:
     insert("cd ")
     edit.paste()
     key(enter)
@@ -56,13 +58,14 @@ pivot <user.paths>:
     insert("cd {paths}\n")
     insert("ls\n")
 # pivot up doesn't work with talon
-(go parent|pivot back): "cd ../\n"
+go parent: "cd ../\n"
 pivot <number_small> back: 
     insert("cd ")
     insert(user.path_traverse(number_small))
     key(enter)
-folder (create|new): "mkdir -p  "
-(go home|pivot home): "cd\n"
+
+make dir: "mkdir -p  "
+go home: "cd\n"
 go projects: "cd ~/projects\nls\n"
 force remove: "rm -rf "
 # grepping
@@ -73,6 +76,9 @@ rip (exact|precise): "rg "
 now rip:
     edit.up()
     insert("| rg -i ")
+now copy:
+    edit.up()
+    insert("| pbcopy\n")
 
 make executable: "chmod +x "
 run top: "htop\n"
@@ -82,10 +88,12 @@ run code: "code "
 current folder copy: "pwd | tr -d \\\\n\\\\r | pbcopy\n"
 current folder: "pwd\n"
 
-# brew
-brew install: insert("brew install ")
-brew search: insert("brew search ")
-brew info: insert("brew info ")
+fish reload config: 
+    insert("fish-reload-config\n")
+fish config:
+    insert("fish-config\n")
+s q lite browser:
+    insert("sqlite-browser ")
 
 # dotfiles
 dotfiles add: insert("yadm add ")
@@ -94,7 +102,33 @@ dotfiles sync:
     insert("yadm add -u\n")
     insert("yadm commit -m 'Changes'\n")
     insert("yadm push -u origin master\n")
-
+# npm stuff
+npm test: 
+    insert("npm run test\n")
 copy paste:
     edit.copy()
     edit.paste()
+
+talon repl:     
+    insert("talon-repl\n")
+pip freeze:
+    insert("pip freeze\n")
+pip:
+    insert("pip ")
+which [<user.text>]:
+    insert("which ")
+    insert(text or "")
+cube: insert("k9s\n")
+
+vars show:
+    insert("env\n")
+# Taskfile
+task: 
+    insert("task ")
+    key(tab)
+add help: insert(" --help\n")
+
+# vd command
+vidi: 
+    insert("vd ")
+    key(tab)

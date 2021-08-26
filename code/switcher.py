@@ -84,7 +84,8 @@ if app.platform == "windows":
         # Python 2
         import _winreg as winreg
 
-        def bytes(x): return str(buffer(x))
+        def bytes(x):
+            return str(buffer(x))
 
     from ctypes import wintypes
     from win32com.shell import shell, shellcon
@@ -93,8 +94,7 @@ if app.platform == "windows":
     # KNOWNFOLDERID
     # https://msdn.microsoft.com/en-us/library/dd378457
     # win32com defines most of these, except the ones added in Windows 8.
-    FOLDERID_AppsFolder = pywintypes.IID(
-        "{1e87508d-89c2-42f0-8a7e-645a0f50ca58}")
+    FOLDERID_AppsFolder = pywintypes.IID("{1e87508d-89c2-42f0-8a7e-645a0f50ca58}")
 
     # win32com is missing SHGetKnownFolderIDList, so use ctypes.
 
@@ -119,8 +119,7 @@ if app.platform == "windows":
             folder_id = bytes(folder_id)
         pidl = ctypes.c_void_p()
         try:
-            _shell32.SHGetKnownFolderIDList(
-                folder_id, 0, htoken, ctypes.byref(pidl))
+            _shell32.SHGetKnownFolderIDList(folder_id, 0, htoken, ctypes.byref(pidl))
             return shell.AddressAsPIDL(pidl.value)
         except WindowsError as e:
             if e.winerror & 0x80070000 == 0x80070000:
@@ -216,6 +215,7 @@ def update_overrides(name, flags):
                     overrides[line[0].lower()] = line[1].strip()
 
         update_running_list()
+
 
 @mod.action_class
 class Actions:
@@ -361,4 +361,6 @@ def on_ready():
     update_launch_list()
     update_running_list()
     ui.register("", ui_event)
+
+
 app.register("ready", on_ready)

@@ -127,10 +127,30 @@ toggle imports: user.code_toggle_libraries()
 import <user.code_libraries>:
     user.code_insert_library(code_libraries, "")
     key(end enter)
-justify:
-    key(up end)
-    insert("\n")
+
+# print [<user.text>]:
+#     insert("print()")
+#     key(left)
+#     insert(\"text\" or "")
+# print:
+#     insert("print(\"\")")
+#     key(left left)
 print:
     insert("print()")
     key(left)
 return: insert("return ") 
+await: insert("await ")
+a sync: insert("async ")
+import: insert("import ")
+# type:
+#     insert("type()")
+#     key(left)
+state del: insert("del ")
+help:
+    insert("help()")
+    key(left)
+self: insert("self")
+def: insert("def")
+
+
+run this: user.vscode("python.execInTerminal")

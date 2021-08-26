@@ -1,6 +1,9 @@
 os: mac
-tag: user.fish_fzf
+tag: user.fish
 -
+tag(): user.brew
+tag(): user.poetry
+
 action(edit.delete_word):
 	edit.word_right()
 	key(ctrl-w)
@@ -23,8 +26,19 @@ buzzy [<user.text>]:
     
 fuzzy var: key(ctrl-v) 
 
-cancel [that]: key(ctrl-c)
-fucker: key(ctrl-c)
+cancel|fucker: key(ctrl-c)
+
+go dir:
+    key(cmd-d)
+    
+go dir home:
+    key(cmd-shift-d)
+podo: 
+    key(cmd-g)  
+
+
+wipe lord:
+    user.delete_big_word()
 
 # (clear board|clear big word):
 #     fzf.delete_big_word()

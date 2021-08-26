@@ -8,7 +8,6 @@ phrase_history = []
 phrase_history_length = 40
 phrase_history_display_length = 40
 
-
 @mod.action_class
 class Actions:
     def get_last_phrase() -> str:

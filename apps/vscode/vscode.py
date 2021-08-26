@@ -51,6 +51,7 @@ class win_actions:
 
         return ""
 
+
 @ctx.action_class("app")
 class AppActions:
     # talon app actions
@@ -59,6 +60,7 @@ class AppActions:
 
     def tab_close():
         actions.user.vscode("workbench.action.closeActiveEditor")
+
 
 @ctx.action_class("edit")
 class edit_actions:
@@ -89,6 +91,7 @@ class edit_actions:
 @mod.action_class
 class Actions:
     def vscode_terminal(number: int):
+
         """Activate a terminal by number"""
         actions.user.vscode(f"workbench.action.terminal.focusAtIndex{number}")
 

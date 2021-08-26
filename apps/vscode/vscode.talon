@@ -7,8 +7,6 @@ tag(): user.splits
 tag(): user.tabs
 #talon app actions
 
-settings():
-    speech.timeout = 0.300
 
 action(app.tab_close): user.vscode("workbench.action.closeActiveEditor")
 action(app.tab_next): user.vscode("workbench.action.nextEditorInGroup")
@@ -59,12 +57,14 @@ please [<user.text>]$:
   insert(user.text or "")
 
 # Sidebar
+
 # what is the difference with workbench.view.explorer vs action.focusFilesExplorer?
-go explore: user.vscode("workbench.view.explorer")
+[go] explore: user.vscode("workbench.view.explorer")
 focus explore: user.vscode("workbench.files.action.focusFilesExplorer")
 bar extensions: user.vscode("workbench.view.extensions")
-bar outline: user.vscode("outline.focus")
-bar run: user.vscode("workbench.view.debug")
+[go] outline: user.vscode("outline.focus")
+go debug: user.vscode("workbench.view.debug")
+
 go git: user.vscode("workbench.view.scm")
 bar switch: user.vscode("workbench.action.toggleSidebarVisibility")
 
@@ -74,10 +74,10 @@ go search [<user.text>]$:
     sleep(50ms)
     insert(text or "")
     
-go find [<user.text>]$: 
+go find [<user.word>]$: 
     user.vscode("actions.find")
     sleep(50ms)
-    insert(text or "")
+    insert(word or "")
 
 go replace: user.vscode("editor.action.startFindReplaceAction")
     
@@ -102,7 +102,7 @@ panel close: user.vscode("workbench.action.closePanel")
 console: user.vscode("workbench.action.terminal.toggleTerminal")
 deploy:
     user.vscode("workbench.action.terminal.toggleTerminal")
-    sleep(50ms)
+    sleep(150ms)
     key("ctrl-c")
     insert("task deploy\n")
 
@@ -118,9 +118,11 @@ focus side: user.vscode("workbench.action.focusSideBar")
 # focus editor: user.vscode("workbench.action.focusActiveEditorGroup")
 
 # Settings
-settings show: user.vscode("workbench.action.openGlobalSettings")
-shortcuts show: user.vscode("workbench.action.openGlobalKeybindings")
-show snippets: user.vscode("workbench.action.openSnippets")
+go settings ui: user.vscode("workbench.action.openGlobalSettings")
+go settings: user.vscode("workbench.action.openSettingsJson")
+default settings: user.vscode("workbench.action.openRawDefaultSettings")
+go shortcuts: user.vscode("workbench.action.openGlobalKeybindings")
+go snippets: user.vscode("editing-snippets-by-yaml.configureUserSnippets")
 
 # Displaythe.minnow
 centered switch: user.vscode("workbench.action.toggleCenteredLayout")
@@ -136,37 +138,45 @@ lion [<user.text>]:
   sleep(50ms)
   insert(text or "")
 
-file create copy: user.vscode("fileutils.duplicateFile")
+file duplicate: user.vscode("fileutils.duplicateFile")
 file copy path: user.vscode("copyFilePath") 
 file copy relative: user.vscode("copyRelativeFilePath") 
 file copy link: user.vscode("gitlens.copyRemoteFileUrlToClipboard") 
-file create sibling: user.vscode_and_wait("explorer.newFile")
+file create sibiling: user.vscode_and_wait("fileutils.newFile")
 file new: user.vscode_and_wait("explorer.newFile")
+folder new: user.vscode_and_wait("explorer.newFolder")
 file create: user.vscode("workbench.action.files.newUntitledFile")
+# Why do I have  all this sleeps here
 file rename:
     user.vscode("fileutils.renameFile")
 	sleep(150ms)
 file move:
 	user.vscode("fileutils.moveFile")
 	sleep(150ms)
+file remove:
+    user.vscode("fileutils.removeFile")    
 file open folder: user.vscode("revealFileInOS")
-file duplicate: user.vscode("fileutils.duplicateFile")
 (file reveal|show in tree): user.vscode("workbench.files.action.showActiveFileInExplorer") 
 save ugly: user.vscode("workbench.action.files.saveWithoutFormatting")
 
 # Language Features
-suggest show: user.vscode("editor.action.triggerSuggest")
-hint show: user.vscode("editor.action.triggerParameterHints")
+sense [<user.word>] : 
+    insert(user.word or "")
+    sleep(10ms)
+    user.vscode("editor.action.triggerSuggest")
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-(show|bishop|definition show|def show|dev show): user.vscode("editor.action.revealDefinition")
+hint: user.vscode("editor.action.triggerParameterHints")
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-(peek|definition peek): user.vscode("editor.action.peekDefinition") 
+(show|bishop|def show|dev show): user.vscode("editor.action.revealDefinition")
 
-(definition side|dev side|def side): user.vscode("editor.action.revealDefinitionAside")
 
-(references show|refs): user.vscode("editor.action.goToReferences")
+(peek|def peek): user.vscode("editor.action.peekDefinition") 
+# refs peek: user.vscode("editor.action.referenceSearch.trigger") 
+
+(dev side|def side): user.vscode("editor.action.revealDefinitionAside")
+type show: user.vscode("editor.action.peekTypeDefinition")
+refs: user.vscode("editor.action.goToReferences")
+
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # open side: user.vscode("search.action.openResultToSide")
 open side: key(ctrl-enter)
@@ -178,6 +188,7 @@ problem last: user.vscode("editor.action.marker.prevInFiles")
 problem fix: user.vscode("problems.action.showQuickFixes")
 rename that: user.vscode("editor.action.rename")
 
+
 whitespace trim: user.vscode("editor.action.trimTrailingWhitespace")
 language switch: user.vscode("workbench.action.editor.changeLanguageMode")
 
@@ -185,7 +196,7 @@ refactor (this|that): user.vscode("editor.action.refactor")
 
 
 #code navigation
-(go declaration | follow): user.vscode("editor.action.revealDefinition")
+# (go declaration | follow): user.vscode("editor.action.revealDefinition")
 go back: user.vscode("workbench.action.navigateBack") 
 go forward:  user.vscode("workbench.action.navigateForward")  
 go implementation: user.vscode("editor.action.goToImplementation")
@@ -229,9 +240,9 @@ git commit [<user.text>]:
   sleep(100ms)
   user.insert_formatted(text or "", "CAPITALIZE_FIRST_WORD")
 git commit undo: user.vscode("git.undoCommit")
-git commit ammend: user.vscode("git.commitStagedAmend")
+git commit amend: user.vscode("git.commitStagedAmend")
 git diff: user.vscode("git.openChange")
-git discard: user.vscode("git.clean")
+(git discard|go discard): user.vscode("git.clean")
 git discard all: user.vscode("git.cleanAll")
 git ignore: user.vscode("git.ignore")
 git merge: user.vscode("git.merge")
@@ -239,6 +250,8 @@ git output: user.vscode("git.showOutput")
 git pull: user.vscode("git.pullRebase")
 git push: user.vscode("git.push")
 git push focus: user.vscode("git.pushForce")
+git rebase: user.vscode("git.rebase")
+git fetch all: user.vscode("git.fetchAll")
 git rebase abort: user.vscode("git.rebaseAbort")
 git reveal: user.vscode("git.revealInExplorer")
 git revert: user.vscode("git.revertChange")
@@ -246,8 +259,8 @@ revert range: user.vscode("git.revertSelectedRanges")
 git stash: user.vscode("git.stash")
 git stash pop: user.vscode("git.stashPop")
 git status: user.vscode("workbench.scm.focus")
-git stage: user.vscode("git.stage")
-git stage all: user.vscode("git.stageAll")
+(git stage|stage this): user.vscode("git.stage")
+# git stage all: user.vscode("git.stageAll")
 git unstage: user.vscode("git.unstage")
 git unstage all: user.vscode("git.unstageAll")
 pull request: user.vscode("pr.create")
@@ -255,16 +268,17 @@ change next: key(alt-f5)
 change last: key(shift-alt-f5)
 
 #Debugging
-# break point: user.vscode("editor.debug.action.toggleBreakpoint")
-# step over: user.vscode("workbench.action.debug.stepOver")
-# debug step into: user.vscode("workbench.action.debug.stepInto")
-# debug step out [of]: user.vscode("workbench.action.debug.stepOut")
-# debug start: user.vscode("workbench.action.debug.start")
-# debug pause: user.vscode("workbench.action.debug.pause")
-# debug stopper: user.vscode("workbench.action.debug.stop")
-# debug continue: user.vscode("workbench.action.debug.continue")
-# debug restart: user.vscode("workbench.action.debug.restart")
-# debug console: user.vscode("workbench.debug.action.toggleRepl")
+break point remove all: user.vscode("workbench.debug.viewlet.action.removeAllBreakpoints")
+break point: user.vscode("editor.debug.action.toggleBreakpoint")
+step over: user.vscode("workbench.action.debug.stepOver")
+debug step into: user.vscode("workbench.action.debug.stepInto")
+debug step out [of]: user.vscode("workbench.action.debug.stepOut")
+debug start: user.vscode("workbench.action.debug.start")
+debug pause: user.vscode("workbench.action.debug.pause")
+debug stop: user.vscode("workbench.action.debug.stop")
+debug continue: user.vscode("workbench.action.debug.continue")
+debug restart: user.vscode("workbench.action.debug.restart")
+debug console: user.vscode("workbench.debug.action.toggleRepl")
 
 # Terminal
 terminal external: user.vscode("workbench.action.terminal.openNativeConsole")
@@ -292,12 +306,12 @@ select (more|this): user.vscode("editor.action.smartSelect.expand")
 minimap: user.vscode("editor.action.toggleMinimap")
 maximize: user.vscode("workbench.action.minimizeOtherEditors")
 restore: user.vscode("workbench.action.evenEditorWidths")
-
+keep editor: user.vscode("workbench.action.keepEditor")
 replace here:
 	user.replace("")
 	key(cmd-alt-l)
 
-hover show: user.vscode("editor.action.showHover")
+hover [show]: user.vscode("editor.action.showHover")
 
 join lines: user.vscode("editor.action.joinLines")
 
@@ -308,7 +322,7 @@ curse undo: user.vscode("cursorUndo")
 select word: user.vscode("editor.action.addSelectionToNextFindMatch")
 skip word: user.vscode("editor.action.moveSelectionToNextFindMatch")
 
-# jupyter
+# jupyter   
 # cell next: user.vscode("jupyter.gotoNextCellInFile")
 # cell last: user.vscode("jupyter.gotoPrevCellInFile")
 # cell run above: user.vscode("jupyter.runallcellsabove.palette")
@@ -338,8 +352,8 @@ one group: user.vscode("workbench.action.closeEditorsInOtherGroups")
 group next: user.vscode("workbench.action.focusNextGroup")
 group last: user.vscode("workbench.action.focusPreviousGroup")
 
-next: app.tab_next()
-last: app.tab_previous()
+# next: app.tab_next()
+# last: app.tab_previous()
 
 # copied from line_commands.talon
 go <number>: edit.jump_line(number)
@@ -354,7 +368,7 @@ take <number> line:
 
 cut <number> line:
     user.select_next_lines(number)
-    sleep(100ms)
+    sleep(10ms)
     key(cmd-x)
 
 copy <number> line:
@@ -366,26 +380,58 @@ copy <number> line:
 clone <number> line:
         user.select_next_lines(number)
         key(cmd-c)
-        sleep(100ms)
+        sleep(10ms)
         key(right cmd-v)
         
+indent <number> line:
+    user.select_next_lines(number)
+    edit.indent_more()
+    
+dis dent <number> line:
+    user.select_next_lines(number)
+    edit.indent_less()
+    
+comment <number> line:
+    user.select_next_lines(number)
+    sleep(10ms)
+    user.vscode("editor.action.commentLine")   
+            
 clone that:
     key(cmd-c)
-    sleep(100ms)
+    sleep(10ms)
     key(right enter cmd-v)
 
-clear <number> line:
+(clear|wipe) <number> line:
         user.select_next_lines(number)
         key(delete)
 
     
 # is it better to use vscode commands or just keyboard shortcuts?
 # Or I could hide these details and create talon actions and only call these here.
-take it$:
+take this$:
     key(cmd-d)  
-search it$:
+
+search this$:
     key(cmd-d)     
     key(cmd-shift-f) 
-find it$:
+    key(enter)
+find this$:
     key(cmd-d)     
     key(cmd-f) 
+    key(enter)
+folders collapse:
+    user.vscode("workbench.files.action.collapseExplorerFolders")
+fix this: user.vscode("editor.action.quickFix")
+justify:
+    key(up end)
+    insert("\n")
+cursorless record: user.vscode("cursorless.recordTestCase")    
+
+code time dashboard: user.vscode("codetime.viewDashboard")
+index: 
+    insert("[]")
+    key(left)
+call this: 
+    insert("()")
+    key(left)
+    

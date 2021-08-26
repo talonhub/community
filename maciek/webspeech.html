@@ -1,0 +1,120 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Talon WebSpeech Proxy</title>
+<script type="text/javascript">var VERSION = "db30a0b46729370aa0807320fcf79cb88b92f6f384e6eb4a52068930505f7a36";
+
+var active = false;
+var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+if (!SpeechRecognition) {
+  document.write("This browser does not appear to support Web Speech.<br/>");
+} else {
+  var final = "";
+  
+  function connect() {
+    var ws = new WebSocket('ws://localhost:7419/ws');
+    ws.onopen = function(e) {
+      textconnected.innerText = "connected";
+      texterror.innerText = "";
+      ws.send(JSON.stringify({"cmd": "hello", "version": VERSION}));
+    }
+    ws.onclose = function(e) {
+      active = false;
+      textconnected.innerText = "disconnected";
+      speech.stop();
+    }
+    ws.onerror = function(e) {
+      texterror.innerText = "cannot connect to Talon (it may not be running, or you may have more than one WebSpeech page open)";
+      speech.stop();
+    }
+    ws.onmessage = function(e) {
+      var data = JSON.parse(e.data);
+      if (data.cmd == "start") {
+        speech.lang = data.lang;
+        textlang.innerText = data.lang;
+        if (! active) {
+          active = true;
+          speech.start();
+        }
+      } else if (data.cmd == "stop") {
+        active = false;
+        speech.stop();
+      } else if (data.cmd == "reload") {
+        window.location.reload();
+      }
+    }
+    return ws;
+  }
+  var ws;
+  function reconnect() {
+    ws = connect();
+    ws.addEventListener('close', function(e) {
+      setTimeout(reconnect, 500);
+    });
+  }
+  reconnect();
+
+  var speech = new SpeechRecognition();
+  speech.lang = 'en-US';
+  speech.continuous = true;
+  speech.interimResults = true;
+
+  speech.onstart = function(e) {
+    if (final) final += " ";
+    textrecording.innerText = "recording";
+    ws.send(JSON.stringify({"cmd": "start"}));
+  }
+  speech.onend = function(e) {
+    textrecording.innerText = "not recording";
+    ws.send(JSON.stringify({"cmd": "end"}));
+    setTimeout(function() {
+      if (active) {
+        speech.start();
+      }
+    }, 250);
+  }
+  speech.onerror = function(e) {
+    texterror.innerText = `error: ${e.error}`;
+    ws.send(JSON.stringify({"cmd": "error", "error": e.error}));
+  }
+  speech.onsoundstart  = function(e) { ws.send(JSON.stringify({"cmd": "soundstart"})); }
+  speech.onsoundend    = function(e) { ws.send(JSON.stringify({"cmd": "soundend"})); }
+  speech.onspeechstart = function(e) { ws.send(JSON.stringify({"cmd": "speechstart"})); }
+  speech.onspeechend   = function(e) { ws.send(JSON.stringify({"cmd": "speechend"})); }
+  speech.onresult = function(e) {
+    var interim = "";
+    var final = "";
+    var results = [];
+    for (var i = e.resultIndex; i < e.results.length; i++) {
+      var r = e.results[i];
+      var result = {
+        "final": r.isFinal,
+        "transcript": r[0].transcript,
+        "confidence": r[0].confidence,
+      };
+      results.push(result);
+      if (result.isFinal) {
+        final += result.transcript;
+      } else {
+        interim += result.transcript;
+      }
+    }
+    if (results) {
+      ws.send(JSON.stringify({"cmd": "phrase", "results": results}));
+    }
+    textstatus.innerText = final + interim;
+  }
+}
+</script>
+</head>
+<body>
+<span>Talon WebSpeech Proxy:</span>
+<span id="textlang">en_US</span><span>,</span>
+<span id="textconnected">disconnected</span><span>,</span>
+<span id="textrecording">not recording</span><span>,</span>
+<span id="texterror"></span>
+<div id="textstatus"></div>
+</body>
+</html>

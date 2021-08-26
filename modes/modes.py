@@ -9,7 +9,8 @@ modes = {
     "ida": "a way to force ida commands to be loaded",
     "presentation": "a more strict form of sleep where only a more strict wake up command works",
     "windbg": "a way to force windbg commands to be loaded",
-    "polish_dictation": "polish dictation mode",
+    "webspeech_polish_dictation": "polish dictation mode",
+    "webspeech_english_dictation": "dictation using web speech engine",
     "text_field": "This is for commands like 'go_search', where we are in a text field and want to press enter  upon word 'go'",
 }
 

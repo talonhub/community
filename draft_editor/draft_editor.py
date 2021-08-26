@@ -4,13 +4,7 @@ import time
 mod = Module()
 mod.mode("draft_editor", "Indicates whether the draft editor has been activated")
 
-default_names = [
-    "Visual Studio Code",
-    "Code",
-    "VSCodium",
-    "Codium",
-    "code-oss"
-]
+default_names = ["Visual Studio Code", "Code", "VSCodium", "Codium", "code-oss"]
 
 setting_editor_names = mod.setting(
     "draft_editor",
@@ -25,6 +19,7 @@ editor_names = {}
 @mod.scope
 def scope():
     for app in ui.apps(background=False):
+        print(app.name)
         if app.name in editor_names:
             return {"draft_editor_running": True}
     return {"draft_editor_running": False}
@@ -35,7 +30,7 @@ def on_ready():
     names_csv = setting_editor_names.get()
     editor_names = names_csv.split(", ") if names_csv else default_names
 
-    names_str = '\n'.join({f"app.name: {name}" for name in editor_names})
+    names_str = "\n".join({f"app.name: {name}" for name in editor_names})
     mod.apps.draft_editor = f"""{names_str}"""
 
     ui.register("app_launch", scope.update)

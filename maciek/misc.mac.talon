@@ -1,30 +1,32 @@
 os:mac
 -
-^horse [<phrase>]$: 
+horse [<phrase>]$: 
     key("ctrl-1") 
-    sleep(1000ms)
+    user.switcher_focus("google chrome")
     user.rephrase(phrase or "")
     
-^panda [<phrase>]$: 
+panda [<phrase>]$: 
     key("ctrl-2") 
-    sleep(1000ms)
+    user.switcher_focus("code")
     user.rephrase(phrase or "")
 
-^puppy [<phrase>]$: 
+puppy [<phrase>]$:
     key("ctrl-3") 
-    sleep(1000ms)
+    user.switcher_focus("kitty")
     user.rephrase(phrase or "")
 
-^goat [<phrase>]$: 
+# switcher_focus wait until ui.active_app() == app, 
+# But does this mean that talon made the context switch,  so that we can use rephrase?
+park [<phrase>]$:
     key("ctrl-4") 
-    sleep(1000ms)
     user.rephrase(phrase or "")
 
-hold shift:
-    key(shift:down)
+# this doesn't work. I have asked on slack about it and got some sensible answer why it doesn't work.
+# hold shift:
+#     key(shift:down)
 
-release shift:
-    key(shift:up)
+# release shift:
+#     key(shift:up)
 
 
   

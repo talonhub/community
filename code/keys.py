@@ -3,7 +3,7 @@ from typing import Set
 from talon import Module, Context, actions, app
 import sys
 
-default_alphabet = "air bat cup dish east fun gust hope ink jury crunch look man nap out pet quench race soft trap ush vice wife flex yet zip".split(
+default_alphabet = "air bat cup dish edge fun gust hope ink jury crunch look man nap out pit quench race soft trap ush vice wife flex yet zip".split(
     " "
 )
 letters_string = "abcdefghijklmnopqrstuvwxyz"
@@ -119,7 +119,7 @@ modifier_keys = {
     "super": "super",
 }
 if app.platform == "mac":
-    modifier_keys["command"] = "cmd"
+    # modifier_keys["command"] = "cmd"
     modifier_keys["option"] = "alt"
 ctx.lists["self.modifier_key"] = modifier_keys
 alphabet = dict(zip(default_alphabet, letters_string))
@@ -137,7 +137,7 @@ punctuation_words = {
     "comma": ",",
     "period": ".",
     "semicolon": ";",
-    "colon": ":",
+    "colo": ":",
     "forward slash": "/",
     "question mark": "?",
     "exclamation mark": "!",
@@ -191,7 +191,7 @@ symbol_key_words = {
     "pound": "#",
     "hashtag": "#",
     "percent": "%",
-    "caret": "^",
+    # "caret": "^",
     "amper": "&",
     "pipe": "|",
     "solo quote": "'",

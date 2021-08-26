@@ -4,6 +4,8 @@ find it:
 next one:
     edit.find_next()
 
+    
+
 go word left:
     edit.word_left()
 
@@ -74,11 +76,11 @@ select word left:
 
 select word right:
     edit.extend_word_right()
-
-select way left:
+# Should we use take instead of select?
+select (way left|west):
     edit.extend_line_start()
 
-select way right:
+select (way right|east):
     edit.extend_line_end()
 
 select way up:
@@ -91,7 +93,7 @@ select way down:
 indent [more]:
     edit.indent_more()
 
-(indent less | out dent):
+(indent less | d dent):
     edit.indent_less()
 
 # deleting
@@ -123,19 +125,19 @@ indent [more]:
     edit.extend_word_right()
     edit.delete()
 
-(clear|wipe) way left:
+(clear|wipe) west:
     edit.extend_line_start()
     edit.delete()
 
-(clear|wipe) way right:
+(clear|wipe) east:
     edit.extend_line_end()
     edit.delete()
 
-(clear|wipe) way up:
+(clear|wipe) north:
     edit.extend_file_start()
     edit.delete()
 
-(clear|wipe) way down:
+(clear|wipe) south:
     edit.extend_file_end()
     edit.delete()
 

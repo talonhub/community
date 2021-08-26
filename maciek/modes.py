@@ -20,7 +20,7 @@ class Actions:
         """Enter command mode and re-evaluate phrase"""
         # I checked and I couldn't find a method to get the current mode. so as a hack we are disabling all possible modes.
         actions.mode.disable("dictation")
-        actions.mode.disable("user.polish_dictation")
+        actions.mode.disable("user.webspeech_polish_dictation")
         actions.mode.disable("user.text_field")
 
         actions.mode.enable("command")
@@ -34,9 +34,16 @@ class Actions:
         if phrase:
             actions.user.rephrase(phrase, run_async=True)
 
-    def polish_dictation_mode(phrase: Union[Phrase, str] = None):
+    def webspeech_polish_dictation_mode(phrase: Union[Phrase, str] = None):
         """Enter dictation mode and re-evaluate phrase"""
         actions.mode.disable("command")
-        actions.mode.enable("user.polish_dictation")
+        actions.mode.enable("user.webspeech_polish_dictation")
+        if phrase:
+            actions.user.rephrase(phrase, run_async=False)
+
+    def webspeech_english_dictation_mode(phrase: Union[Phrase, str] = None):
+        """Enter dictation mode and re-evaluate phrase"""
+        actions.mode.disable("command")
+        actions.mode.enable("user.webspeech_english_dictation")
         if phrase:
             actions.user.rephrase(phrase, run_async=False)

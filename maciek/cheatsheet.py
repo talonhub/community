@@ -108,7 +108,7 @@ mod = Module()
 
 @mod.action_class
 class user_actions:
-    def cheatsheet():
+    def cheatsheet():  # sourcery skip: ensure-file-closed, extract-method
         """Print out a sheet of talon commands"""
         # open file
 

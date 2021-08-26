@@ -1,5 +1,5 @@
 mode: dictation
-mode: user.polish_dictation
+mode: user.webspeech_polish_dictation
 -
 ^press <user.keys>$: key("{keys}")
 kropka: "."

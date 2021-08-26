@@ -16,12 +16,14 @@ def get_list_from_csv(
     filename: str, headers: Tuple[str, str], default: Dict[str, str] = {}
 ):
     """Retrieves list from CSV"""
-    print(100 * "get_list_from_csv\n", filename)
+    # print(100 * "get_list_from_csv\n", filename)
     path = SETTINGS_DIR / filename
-    print(path)
+    # print(path)
     assert filename.endswith(".csv")
 
     if not path.is_file():
+        # print(100 * "333\n")
+        # print(f"filepath is not existing {path}")
         with open(path, "w", encoding="utf-8") as file:
             writer = csv.writer(file)
             writer.writerow(headers)

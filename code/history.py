@@ -47,7 +47,6 @@ speech_system.register("phrase", on_phrase)
 
 @mod.action_class
 class Actions:
-    
     def history_toggle():
         """Toggles viewing the history"""
         if gui.showing:

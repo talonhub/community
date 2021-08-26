@@ -1,5 +1,5 @@
+
 Word(s),Spoken Form (If Different)
-mkdir,make directory
 admin
 allegro,libra
 alpha
@@ -32,13 +32,11 @@ macOS,mac O S
 macOS,marcos
 macOS,marco as
 bitwarden
-dump,dumb
 echo
 eval
-files,piles
 fullscreen,full screen
-generic,genetic
-github
+webspeech,web speech
+github,git hub
 git
 tabs
 gnome
@@ -58,28 +56,19 @@ login,logan
 maciek
 maciek,magic
 match,march
-Minecraft
-mode,monte
-mode,mould
-mode,mouth
-mode,mouth
 neovim
 nmap
 nmap,N map
 npm
 nvim,an vim
-PAM
 pdf
 proc
 pycharm
-recent,resent
 redis
 refs
 regexp
+regex
 remi
-repl,repel
-resolvectl,resolve cattle
-REST
 ripgrep
 set,said
 shell,shall
@@ -87,26 +76,36 @@ shortcut,short cut
 shortcuts,short cuts
 cursorless
 sudo,su du
-talon,talent
 talon,tom
+talon,alon
 Taskfile
 to,too
 todo
 todos
 todos,to thus
-ubuntu
-ubuntu,want to
-ubuntu,you unto
-under-documented,under 
-unofficial
 vim
+anki
 VPN
 file,fire
-vscode,V S code
-vscode,he has cold
-vscode,as cold
-vscode,he as cold
-vscode,we as cold
+vscode,vicode
+vscode,the cold
 yaml
-yubikey
-yubikey,you be key
+yamls
+treesitter
+null
+suptype
+switcher
+bug
+kanban
+MacBook,mac book
+flac
+fzf, f z f
+config
+snippets
+info
+cursor
+docker
+sqlite,s q lite
+hackernews,hacker news
+sql,sequel
+CLI,c l i
