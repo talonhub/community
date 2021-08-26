@@ -14,6 +14,14 @@ mod.apps.chrome = """
 os: mac
 and app.bundle: com.google.Chrome
 """
+
+# this is github, But I would rather use something that contains the name "GitHub" here, because
+# this chrome identifier might change after I reinstall the app
+mod.apps.chrome = """
+os: mac
+and app.bundle: com.google.Chrome.app.mjoklplbddabcmpepnokjaffbmgbkkgg
+"""
+
 ctx.matches = r"""
 app: chrome
 """

@@ -1,4 +1,5 @@
 mode: dictation
+mode: user.webspeech_english_dictation
 -
 ^press <user.keys>$: key("{keys}")
 
@@ -78,3 +79,6 @@ spell that <user.formatters> <user.letters>:
 # Escape, type things that would otherwise be commands
 ^escape <user.text>$:
     auto_insert(user.text)
+
+numb <user.number_string>: "{number_string}"
+numb <user.number_string> (dot | point) <digit_string>: "{number_string}.{digit_string}"

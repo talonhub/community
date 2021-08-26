@@ -28,7 +28,11 @@ action(user.messaging_unread_next): key(alt-shift-down)
 (slack | lack) (starred [items] | stars): key(cmd-shift-s)
 (slack | lack) unread [messages]: key(cmd-j)
 (go | undo | toggle) full: key(ctrl-cmd-f)
-action(user.messaging_open_search): key(cmd-f)
+action(user.messaging_open_search): 
+    key(cmd-f)
+    sleep(100ms)
+    edit.select_line()
+    edit.delete()
     # Messaging
 grab left: key(shift-up)
 grab right: key(shift-down)
