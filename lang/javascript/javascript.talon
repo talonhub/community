@@ -1,5 +1,7 @@
-mode: user.javascript
-mode: user.auto_lang
+mode: command
+and mode: user.javascript
+mode: command
+and mode: user.auto_lang
 and code.language: javascript
 -
 tag(): user.code_operators
