@@ -132,3 +132,15 @@ add help: insert(" --help\n")
 vidi: 
     insert("vd ")
     key(tab)
+sense:
+    key(tab)
+
+# this is for broot
+brute:
+    insert("br\n")
+brute home:
+    insert("br ~/\n")
+  
+
+oxy:
+    insert("zi\n")

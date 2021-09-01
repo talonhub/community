@@ -158,6 +158,10 @@ file remove:
 file open folder: user.vscode("revealFileInOS")
 (file reveal|show in tree): user.vscode("workbench.files.action.showActiveFileInExplorer") 
 save ugly: user.vscode("workbench.action.files.saveWithoutFormatting")
+new terminal:
+    user.vscode("workbench.action.createTerminalEditor")
+new side terminal:
+    user.vscode("workbench.action.createTerminalEditorSide")
 
 # Language Features
 sense [<user.word>] : 
@@ -382,6 +386,9 @@ clone <number> line:
         key(cmd-c)
         sleep(10ms)
         key(right cmd-v)
+        sleep(10ms)
+        key(cmd-z)
+        user.go_up(number)
         
 indent <number> line:
     user.select_next_lines(number)

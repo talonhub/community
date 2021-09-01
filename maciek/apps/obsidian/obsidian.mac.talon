@@ -34,11 +34,12 @@ code block:
     insert('\n')
     key(up)
     # Daily notes:
-daily notes:
-    
+(daily notes|go daily):
     user.obsidian_run_command("Daily notes:")
 anki sync:
     user.obsidian_run_command("Obsidian_to_anki")
+go settings:
+    user.obsidian_run_command("Open settings")
 
 code line:
     insert('``')
@@ -111,3 +112,6 @@ header three: "### "
 header four: "#### "
 header five: "##### "
 header six: "###### "
+bold: key(cmd-b)
+
+
