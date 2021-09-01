@@ -3,7 +3,7 @@ from talon import Context, Module, actions, app, imgui, registry, settings
 ctx = Context()
 mod = Module()
 mod.list("code_functions", desc="List of functions for active language")
-mod.list("code_types", desc="List of types for active language")
+mod.list("code_type", desc="List of types for active language")
 mod.list("code_libraries", desc="List of libraries for active language")
 
 setting_private_function_formatter = mod.setting("code_private_function_formatter", str)
@@ -66,12 +66,6 @@ extension_lang_map = {
 def code_functions(m) -> str:
     """Returns a function name"""
     return m.code_functions
-
-
-@mod.capture(rule="{user.code_types}")
-def code_types(m) -> str:
-    """Returns a type"""
-    return m.code_types
 
 
 @mod.capture(rule="{user.code_libraries}")
@@ -422,6 +416,12 @@ class Actions:
 
     def code_insert_function(text: str, selection: str):
         """Inserts a function and positions the cursor appropriately"""
+
+    def code_insert_type_annotation(type: str):
+        """Inserts a type annotation"""
+
+    def code_insert_return_type(type: str):
+        """Inserts a return type"""
 
     def code_toggle_libraries():
         """GUI: List libraries for active language"""
