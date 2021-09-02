@@ -22,9 +22,10 @@ class AppActions:
 class EditActions:
     def paste(): actions.key('ctrl-shift-v')
     def copy():  actions.key('ctrl-shift-c')
-    def find(text: str):
+    def find(text: str = None):
         actions.key('ctrl-shift-f')
-        actions.insert(text)
+        if text:
+            actions.insert(text)
 
 @ctx.action_class("user")
 class UserActions:

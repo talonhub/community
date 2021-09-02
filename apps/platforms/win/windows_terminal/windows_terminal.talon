@@ -19,10 +19,10 @@ kill all:
     key(enter)
     
 
-(find it | buffy | queer eye)$:
-    key(ctrl-shift-f)
+find it:
+    edit.find()
 
-(find it | buffy | queer eye) <phrase>$:
+find it <phrase>$:
     # handle consecutive finds by first escaping out of any previous one
     key(escape)
     # make it so
