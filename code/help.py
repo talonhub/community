@@ -711,9 +711,7 @@ class Actions:
         #     "help_hide - gui_context_help showing: {}".format(gui_context_help.showing)
         # )
 
-        gui_alphabet.hide()
-        gui_context_help.hide()
-        gui_symbol_key_words.hide()
+        hide_all_help_guis()
         refresh_context_command_map()
         register_events(False)
         actions.mode.disable("user.help")
