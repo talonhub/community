@@ -8,8 +8,8 @@ help alternate keys:
 	user.help_alternate_keys(user.get_alternate_keys())
 help formatters:
 	user.help_formatters(user.get_formatters_words())
-
-
+help arrows:
+	user.help_arrow_keys(user.get_arrow_keys())
 help context$: user.help_context()
 help active$: user.help_context_enabled()
 help search <user.text>$: user.help_search(text)

@@ -155,6 +155,22 @@ def gui_formatters(gui: imgui.GUI):
     if gui.button("close"):
         formatters_words.hide()
 
+@imgui.open(y=0)
+def gui_arrows(gui: imgui.GUI):
+    global help_arrows
+    gui.text("formatters help")
+    gui.line()
+
+    for key, val in help_arrows.items():
+        gui.text("{}: {}".format(val, key))
+
+    gui.spacer()
+    if gui.button("close"):
+        help_arrows.hide()
+
+
+
+
 
 def format_context_title(context_name: str) -> str:
     global cached_active_contexts_list
@@ -544,6 +560,7 @@ def hide_all_help_guis():
     gui_simple_keys.hide()
     gui_alternate_words.hide()
     gui_formatters.hide()
+    gui_arrows.hide()
 
 
 @mod.action_class
@@ -664,6 +681,16 @@ class Actions:
         # )
         hide_all_help_guis()
         gui_formatters.show()
+        register_events(False)
+        actions.mode.enable("user.help")
+
+    def help_arrow_keys(ab:dict):
+        """provides list of arrow keywords"""
+        global help_arrows
+        help_arrows = ab
+        reset()
+        hide_all_help_guis()
+        gui_arrows.show()
         register_events(False)
         actions.mode.enable("user.help")
 

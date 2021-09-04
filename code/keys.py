@@ -276,6 +276,10 @@ class Actions:
         """Provides simple keys"""
         return alternate_keys
 
+    def get_arrow_keys() -> dict:
+        """ Provides dictoary of arrow keys"""
+        arrow_keys = ctx.lists["self.arrow_key"]
+        return arrow_keys
 
 
 
