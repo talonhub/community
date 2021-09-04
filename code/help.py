@@ -91,6 +91,20 @@ def gui_symbol_key_words(gui: imgui.GUI):
         gui_symbol_key_words.hide()
 
 @imgui.open(y=0)
+def gui_numbers(gui: imgui.GUI):
+    global help_numbers
+    gui.text("numbers help")
+    gui.line()
+
+    for key, val in help_numbers.items():
+        gui.text("{}: {}".format(val, key))
+
+    gui.spacer()
+    if gui.button("close"):
+        gui_numbers.hide()
+
+
+@imgui.open(y=0)
 def gui_punctuation_words(gui: imgui.GUI):
     global punctuation_words
     gui.text("Punctuation help")
@@ -561,6 +575,7 @@ def hide_all_help_guis():
     gui_alternate_words.hide()
     gui_formatters.hide()
     gui_arrows.hide()
+    gui_numbers.hide()
 
 
 @mod.action_class
@@ -579,6 +594,23 @@ class Actions:
         # )
         hide_all_help_guis()
         gui_alphabet.show()
+        register_events(False)
+        actions.mode.enable("user.help")
+
+    def help_number_key_words(ab: dict):
+        """Provides the words for the number keys"""
+        # what you say is stored as a trigger
+        global help_numbers
+        help_numbers = ab
+        reset()
+        # print("help_alphabet - alphabet gui_alphabet: {}".format(gui_alphabet.showing))
+        # print(
+        #     "help_alphabet - gui_context_help showing: {}".format(
+        #         gui_context_help.showing
+        #     )
+        # )
+        hide_all_help_guis()
+        gui_numbers.show()
         register_events(False)
         actions.mode.enable("user.help")
 
@@ -622,12 +654,6 @@ class Actions:
         global modifier_words
         modifier_words = ab
         reset()
-        # print("help_alphabet - alphabet gui_alphabet: {}".format(gui_alphabet.showing))
-        # print(
-        #     "help_alphabet - gui_context_help showing: {}".format(
-        #         gui_context_help.showing
-        #     )
-        # )
         hide_all_help_guis()
         gui_modifier_words.show()
         register_events(False)
@@ -639,12 +665,6 @@ class Actions:
         global simple_keys
         simple_keys = ab
         reset()
-        # print("help_alphabet - alphabet gui_alphabet: {}".format(gui_alphabet.showing))
-        # print(
-        #     "help_alphabet - gui_context_help showing: {}".format(
-        #         gui_context_help.showing
-        #     )
-        # )
         hide_all_help_guis()
         gui_simple_keys.show()
         register_events(False)

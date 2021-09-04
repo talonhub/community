@@ -281,5 +281,8 @@ class Actions:
         arrow_keys = ctx.lists["self.arrow_key"]
         return arrow_keys
 
-
+    def get_number_key_words() -> dict: 
+        """provides dictionary of number key words"""
+        number_keys = dict(zip(default_digits, numbers))
+        return number_keys
 
