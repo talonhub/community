@@ -167,7 +167,7 @@ def gui_formatters(gui: imgui.GUI):
 
     gui.spacer()
     if gui.button("close"):
-        formatters_words.hide()
+        gui_formatters.hide()
 
 @imgui.open(y=0)
 def gui_arrows(gui: imgui.GUI):
@@ -180,7 +180,7 @@ def gui_arrows(gui: imgui.GUI):
 
     gui.spacer()
     if gui.button("close"):
-        help_arrows.hide()
+        gui_arrows.hide()
 
 @imgui.open(y=0)
 def gui_function_keys(gui: imgui.GUI):

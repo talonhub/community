@@ -13,7 +13,6 @@ help arrows:
 	user.help_arrow_keys(user.get_arrow_keys())
 help f keys: 
 	user.help_function_keys(user.get_function_key_words())
-
 help context$: user.help_context()
 help active$: user.help_context_enabled()
 help search <user.text>$: user.help_search(text)
