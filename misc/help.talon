@@ -1,4 +1,5 @@
 help alphabet: user.help_alphabet(user.get_alphabet())
+help symbols: user.help_symbol_key_words(user.get_symbol_key_words())
 help context$: user.help_context()
 help active$: user.help_context_enabled()
 help search <user.text>$: user.help_search(text)

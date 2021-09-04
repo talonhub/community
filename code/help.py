@@ -77,6 +77,19 @@ def gui_alphabet(gui: imgui.GUI):
     if gui.button("close"):
         gui_alphabet.hide()
 
+@imgui.open(y=0)
+def gui_symbol_key_words(gui: imgui.GUI):
+    global alphabet
+    gui.text("Symbol help")
+    gui.line()
+
+    for key, val in symbol_key_words.items():
+        gui.text("{}: {}".format(val, key))
+
+    gui.spacer()
+    if gui.button("close"):
+        gui_symbol_key_words.hide()
+
 
 def format_context_title(context_name: str) -> str:
     global cached_active_contexts_list
@@ -474,7 +487,26 @@ class Actions:
         # )
         gui_context_help.hide()
         gui_alphabet.hide()
+        gui_symbol_key_words.hide()
         gui_alphabet.show()
+        register_events(False)
+        actions.mode.enable("user.help")
+
+    def help_symbol_key_words(ab: dict):
+        """Provides the alphabet dictionary"""
+        # what you say is stored as a trigger
+        global symbol_key_words
+        symbol_key_words = ab
+        reset()
+        # print("help_alphabet - alphabet gui_alphabet: {}".format(gui_alphabet.showing))
+        # print(
+        #     "help_alphabet - gui_context_help showing: {}".format(
+        #         gui_context_help.showing
+        #     )
+        # )
+        gui_context_help.hide()
+        gui_alphabet.hide()
+        gui_symbol_key_words.show()
         register_events(False)
         actions.mode.enable("user.help")
 
@@ -482,7 +514,9 @@ class Actions:
         """Display contextual command info"""
         reset()
         refresh_context_command_map(enabled_only=True)
+        gui_context_help.hide()
         gui_alphabet.hide()
+        gui_symbol_key_words.hide()
         gui_context_help.show()
         register_events(True)
         actions.mode.enable("user.help")
@@ -491,7 +525,9 @@ class Actions:
         """Display contextual command info"""
         reset()
         refresh_context_command_map()
+        gui_context_help.hide()
         gui_alphabet.hide()
+        gui_symbol_key_words.hide()
         gui_context_help.show()
         register_events(True)
         actions.mode.enable("user.help")
@@ -616,6 +652,7 @@ class Actions:
 
         gui_alphabet.hide()
         gui_context_help.hide()
+        gui_symbol_key_words.hide()
         refresh_context_command_map()
         register_events(False)
         actions.mode.disable("user.help")

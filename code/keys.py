@@ -255,3 +255,7 @@ class Actions:
         """Provides the alphabet dictionary"""
         return alphabet
 
+    def get_symbol_key_words() -> dict:
+        """Provides the symbol dictionary"""
+        return symbol_key_words
+
