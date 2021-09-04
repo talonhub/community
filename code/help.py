@@ -470,6 +470,11 @@ def register_events(register: bool):
         # registry.unregister('post:update_contexts', contexts_updated)
         registry.unregister("update_commands", commands_updated)
 
+def hide_all_help_guis():
+    gui_alphabet.hide()
+    gui_context_help.hide()
+    gui_symbol_key_words.hide()
+
 
 @mod.action_class
 class Actions:
@@ -485,9 +490,7 @@ class Actions:
         #         gui_context_help.showing
         #     )
         # )
-        gui_context_help.hide()
-        gui_alphabet.hide()
-        gui_symbol_key_words.hide()
+        hide_all_help_guis()
         gui_alphabet.show()
         register_events(False)
         actions.mode.enable("user.help")
@@ -504,8 +507,7 @@ class Actions:
         #         gui_context_help.showing
         #     )
         # )
-        gui_context_help.hide()
-        gui_alphabet.hide()
+        hide_all_help_guis()
         gui_symbol_key_words.show()
         register_events(False)
         actions.mode.enable("user.help")
@@ -514,9 +516,7 @@ class Actions:
         """Display contextual command info"""
         reset()
         refresh_context_command_map(enabled_only=True)
-        gui_context_help.hide()
-        gui_alphabet.hide()
-        gui_symbol_key_words.hide()
+        hide_all_help_guis()
         gui_context_help.show()
         register_events(True)
         actions.mode.enable("user.help")
@@ -525,9 +525,7 @@ class Actions:
         """Display contextual command info"""
         reset()
         refresh_context_command_map()
-        gui_context_help.hide()
-        gui_alphabet.hide()
-        gui_symbol_key_words.hide()
+        hide_all_help_guis()
         gui_context_help.show()
         register_events(True)
         actions.mode.enable("user.help")
@@ -539,7 +537,7 @@ class Actions:
         reset()
         search_phrase = phrase
         refresh_context_command_map()
-        gui_alphabet.hide()
+        hide_all_help_guis()
         gui_context_help.show()
         register_events(True)
         actions.mode.enable("user.help")
@@ -557,7 +555,7 @@ class Actions:
             update_active_contexts_cache(registry.active_contexts())
 
         selected_context = m
-        gui_alphabet.hide()
+        hide_all_help_guis()
         gui_context_help.show()
         register_events(True)
         actions.mode.enable("user.help")
