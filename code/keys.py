@@ -271,3 +271,7 @@ class Actions:
     def get_simple_keys() -> list:
         """Provides simple keys"""
         return simple_keys
+
+    def get_alternate_keys() -> list:
+        """Provides simple keys"""
+        return alternate_keys

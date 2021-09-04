@@ -129,6 +129,18 @@ def gui_simple_keys(gui: imgui.GUI):
     if gui.button("close"):
         gui_simple_keys.hide()
 
+@imgui.open(y=0)
+def gui_alternate_words(gui: imgui.GUI):
+    global alternate_words
+    gui.text("alternate key help")
+    gui.line()
+
+    for key, val in alternate_words.items():
+        gui.text("{}: {}".format(val, key))
+
+    gui.spacer()
+    if gui.button("close"):
+        gui_alternate_words.hide()
 
 
 def format_context_title(context_name: str) -> str:
@@ -517,6 +529,7 @@ def hide_all_help_guis():
     gui_punctuation_words.hide()
     gui_modifier_words.hide()
     gui_simple_keys.hide()
+    gui_alternate_words.hide()
 
 
 @mod.action_class
@@ -603,6 +616,23 @@ class Actions:
         # )
         hide_all_help_guis()
         gui_simple_keys.show()
+        register_events(False)
+        actions.mode.enable("user.help")
+
+    def help_alternate_keys(ab: dict):
+        """Provides the list of modifier keywords"""
+        # what you say is stored as a trigger
+        global alternate_words
+        alternate_words = ab
+        reset()
+        # print("help_alphabet - alphabet gui_alphabet: {}".format(gui_alphabet.showing))
+        # print(
+        #     "help_alphabet - gui_context_help showing: {}".format(
+        #         gui_context_help.showing
+        #     )
+        # )
+        hide_all_help_guis()
+        gui_alternate_words.show()
         register_events(False)
         actions.mode.enable("user.help")
 
