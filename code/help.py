@@ -182,8 +182,18 @@ def gui_arrows(gui: imgui.GUI):
     if gui.button("close"):
         help_arrows.hide()
 
+@imgui.open(y=0)
+def gui_function_keys(gui: imgui.GUI):
+    global help_function_keys
+    gui.text("function keys help")
+    gui.line()
 
+    for key, val in help_function_keys.items():
+        gui.text("{}: {}".format(val, key))
 
+    gui.spacer()
+    if gui.button("close"):
+        gui_function_keys.hide()
 
 
 def format_context_title(context_name: str) -> str:
@@ -576,6 +586,7 @@ def hide_all_help_guis():
     gui_formatters.hide()
     gui_arrows.hide()
     gui_numbers.hide()
+    gui_function_keys.hide()
 
 
 @mod.action_class
@@ -713,6 +724,17 @@ class Actions:
         gui_arrows.show()
         register_events(False)
         actions.mode.enable("user.help")
+
+    def help_function_keys(ab:dict):
+        """provides list of function key keywords"""
+        global help_function_keys
+        help_function_keys = ab
+        reset()
+        hide_all_help_guis()
+        gui_function_keys.show()
+        register_events(False)
+        actions.mode.enable("user.help")
+
 
 
     def help_context_enabled():

@@ -286,3 +286,9 @@ class Actions:
         number_keys = dict(zip(default_digits, numbers))
         return number_keys
 
+    def get_function_key_words() -> dict: 
+        """provides dictionary of number key words"""
+        function_keys = {
+            f"F {default_f_digits[i]}": f"f{i + 1}" for i in range(12)
+        }
+        return function_keys
