@@ -267,3 +267,7 @@ class Actions:
     def get_modifier_words() -> dict:
         """Provides the  modiefier keys dictionary"""
         return modifier_keys
+
+    def get_simple_keys() -> list:
+        """Provides simple keys"""
+        return simple_keys

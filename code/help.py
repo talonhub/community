@@ -116,6 +116,19 @@ def gui_modifier_words(gui: imgui.GUI):
     if gui.button("close"):
         gui_modifier_words.hide()
 
+@imgui.open(y=0)
+def gui_simple_keys(gui: imgui.GUI):
+    global simple_keys
+    gui.text("simple key help")
+    gui.line()
+
+    for val in simple_keys:
+        gui.text("{}".format(val))
+
+    gui.spacer()
+    if gui.button("close"):
+        gui_simple_keys.hide()
+
 
 
 def format_context_title(context_name: str) -> str:
@@ -503,6 +516,7 @@ def hide_all_help_guis():
     gui_symbol_key_words.hide()
     gui_punctuation_words.hide()
     gui_modifier_words.hide()
+    gui_simple_keys.hide()
 
 
 @mod.action_class
@@ -574,6 +588,24 @@ class Actions:
         gui_modifier_words.show()
         register_events(False)
         actions.mode.enable("user.help")
+
+    def help_simple_keys(ab: list):
+        """Provides the list of modifier keywords"""
+        # what you say is stored as a trigger
+        global simple_keys
+        simple_keys = ab
+        reset()
+        # print("help_alphabet - alphabet gui_alphabet: {}".format(gui_alphabet.showing))
+        # print(
+        #     "help_alphabet - gui_context_help showing: {}".format(
+        #         gui_context_help.showing
+        #     )
+        # )
+        hide_all_help_guis()
+        gui_simple_keys.show()
+        register_events(False)
+        actions.mode.enable("user.help")
+
 
     def help_context_enabled():
         """Display contextual command info"""
