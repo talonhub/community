@@ -259,3 +259,6 @@ class Actions:
         """Provides the symbol dictionary"""
         return symbol_key_words
 
+    def get_punctuation_words() -> dict:
+        "provides the puctuation word dictionary"
+        return punctuation_words

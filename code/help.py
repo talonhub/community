@@ -90,6 +90,20 @@ def gui_symbol_key_words(gui: imgui.GUI):
     if gui.button("close"):
         gui_symbol_key_words.hide()
 
+@imgui.open(y=0)
+def gui_punctuation_words(gui: imgui.GUI):
+    global punctuation_words
+    gui.text("Punctuation help")
+    gui.line()
+
+    for key, val in punctuation_words.items():
+        gui.text("{}: {}".format(val, key))
+
+    gui.spacer()
+    if gui.button("close"):
+        gui_punctuation_words.hide()
+
+
 
 def format_context_title(context_name: str) -> str:
     global cached_active_contexts_list
@@ -474,6 +488,7 @@ def hide_all_help_guis():
     gui_alphabet.hide()
     gui_context_help.hide()
     gui_symbol_key_words.hide()
+    gui_punctuation_words.hide()
 
 
 @mod.action_class
@@ -509,6 +524,23 @@ class Actions:
         # )
         hide_all_help_guis()
         gui_symbol_key_words.show()
+        register_events(False)
+        actions.mode.enable("user.help")
+
+    def help_punctuation_words(ab: dict):
+        """Provides the alphabet dictionary"""
+        # what you say is stored as a trigger
+        global punctuation_words
+        punctuation_words = ab
+        reset()
+        # print("help_alphabet - alphabet gui_alphabet: {}".format(gui_alphabet.showing))
+        # print(
+        #     "help_alphabet - gui_context_help showing: {}".format(
+        #         gui_context_help.showing
+        #     )
+        # )
+        hide_all_help_guis()
+        gui_punctuation_words.show()
         register_events(False)
         actions.mode.enable("user.help")
 
