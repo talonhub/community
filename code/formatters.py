@@ -240,7 +240,7 @@ class Actions:
         """Inserts a phrase formatted according to formatters. Formatters is a comma separated list of formatters (e.g. 'CAPITALIZE_ALL_WORDS,DOUBLE_QUOTED_STRING')"""
         actions.insert(format_phrase(phrase, formatters))
 
-    def formatters_help_toggle():
+    def formatters_help_show():
         """Lists all formatters"""
         if gui.showing:
             gui.hide()
@@ -273,6 +273,13 @@ class Actions:
         text = actions.self.formatted_text(unformatted, formatters)
         actions.insert(text)
         return text
+
+    def get_formatters_words():
+        """returns a list of words currently used as formatters, and a demonstration string using those formatters"""
+        formatters_help_demo = {}
+        for name in sorted(set(formatters_words.keys())):
+            formatters_help_demo[name] = format_phrase_no_history(['one', 'two', 'three'], name)
+        return  formatters_help_demo
 
     def reformat_text(text: str, formatters: str) -> str:
         """Reformat the text."""
@@ -307,3 +314,6 @@ def gui(gui: imgui.GUI):
     gui.line()
     for name in sorted(set(formatters_words.keys())):
         gui.text(f"{name} | {format_phrase_no_history(['one', 'two', 'three'], name)}")
+    gui.spacer()
+    if gui.button("close"):
+        gui.hide()

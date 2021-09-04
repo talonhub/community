@@ -142,6 +142,19 @@ def gui_alternate_words(gui: imgui.GUI):
     if gui.button("close"):
         gui_alternate_words.hide()
 
+@imgui.open(y=0)
+def gui_formatters(gui: imgui.GUI):
+    global formatters_words
+    gui.text("formatters help")
+    gui.line()
+
+    for key, val in formatters_words.items():
+        gui.text("{}: {}".format(val, key))
+
+    gui.spacer()
+    if gui.button("close"):
+        formatters_words.hide()
+
 
 def format_context_title(context_name: str) -> str:
     global cached_active_contexts_list
@@ -530,6 +543,7 @@ def hide_all_help_guis():
     gui_modifier_words.hide()
     gui_simple_keys.hide()
     gui_alternate_words.hide()
+    gui_formatters.hide()
 
 
 @mod.action_class
@@ -633,6 +647,23 @@ class Actions:
         # )
         hide_all_help_guis()
         gui_alternate_words.show()
+        register_events(False)
+        actions.mode.enable("user.help")
+
+    def help_formatters(ab: dict):
+        """Provides the list of modifier keywords"""
+        # what you say is stored as a trigger
+        global formatters_words
+        formatters_words = ab
+        reset()
+        # print("help_alphabet - alphabet gui_alphabet: {}".format(gui_alphabet.showing))
+        # print(
+        #     "help_alphabet - gui_context_help showing: {}".format(
+        #         gui_context_help.showing
+        #     )
+        # )
+        hide_all_help_guis()
+        gui_formatters.show()
         register_events(False)
         actions.mode.enable("user.help")
 

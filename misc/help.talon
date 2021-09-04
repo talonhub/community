@@ -6,6 +6,8 @@ help simple keys: user.help_simple_keys(user.get_simple_keys())
 help alternate keys:
 	#these are keys that this script set has renamed to make more sense.  They are called 'alternate' because they rewrite the standard keyboard. 
 	user.help_alternate_keys(user.get_alternate_keys())
+help formatters:
+	user.help_formatters(user.get_formatters_words())
 
 
 help context$: user.help_context()
