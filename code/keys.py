@@ -262,3 +262,8 @@ class Actions:
     def get_punctuation_words() -> dict:
         "provides the puctuation word dictionary"
         return punctuation_words
+
+
+    def get_modifier_words() -> dict:
+        """Provides the  modiefier keys dictionary"""
+        return modifier_keys
