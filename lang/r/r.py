@@ -207,10 +207,38 @@ ctx.lists["user.code_libraries"] = {
     "shiny alert": "shinyalert",
 }
 
-# TODO: Make some real names here
 ctx.lists["user.code_parameter_name"] = {
-    "foo": "bar.baz",
-    "bongo": "bongo",
+    "alpha": "alpha",
+    "breaks": "breaks",
+    "colour": "colour",
+    "data": "data",
+    "fill": "fill",
+    "H just": "hjust",
+    "keep": ".keep",
+    "label": "label",
+    "labels": "labels",
+    "log": "log",
+    "main": "main",
+    "mapping": "mapping",
+    "method": "method",
+    "NA remove": "na.rm",
+    "path": "path",
+    "position": "position",
+    "plex label": "xlab",
+    "plex limit": "xlim",
+    "scales": "scales",
+    "size": "size",
+    "show legend": "show.legend",
+    "sort": "sort",
+    "title": "title",
+    "type": "type",
+    "vee just": "vjust",
+    "width": "width",
+    "with ties": "with_ties",
+    "why label": "ylab",
+    "why limit": "ylim",
+    "why max": "ymax",
+    "why min": "ymin",
 }
 
 
