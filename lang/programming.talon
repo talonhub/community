@@ -50,3 +50,5 @@ funk wrap <user.code_functions>:
 funk wrap <number>:
     user.code_select_function(number - 1, edit.selected_text())
 dock string: user.code_document_string()
+
+named arg {user.code_parameter_name}: user.code_insert_named_argument(code_parameter_name)

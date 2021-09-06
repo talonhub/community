@@ -207,6 +207,12 @@ ctx.lists["user.code_libraries"] = {
     "shiny alert": "shinyalert",
 }
 
+# TODO: Make some real names here
+ctx.lists["user.code_parameter_name"] = {
+    "foo": "bar.baz",
+    "bongo": "bongo",
+}
+
 
 @ctx.action_class('user')
 class UserActions:
@@ -282,3 +288,6 @@ class UserActions:
         actions.edit.left()
         actions.clip.set_text(text + "{}".format(selection))
         actions.edit.paste()
+
+    def code_insert_named_argument(parameter_name: str):
+        actions.insert(f"{parameter_name} = ")
