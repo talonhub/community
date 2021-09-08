@@ -1,3 +1,9 @@
+my email:
+  "alexrkoch@gmail.com"
+
+my phone:
+  "919-749-3667"
+
 timer (start | stop):
     key(cmd-shift-r)
 
