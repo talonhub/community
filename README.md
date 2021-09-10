@@ -98,6 +98,12 @@ https://github.com/knausj85/knausj_talon/blob/84c6f637ba8304352aa15e01b030e8fa36
 All key commands are defined in keys.talon
 https://github.com/knausj85/knausj_talon/blob/master/misc/keys.talon
 
+
+For example, say
+
+`shift air` to press `shift-a`, which types a capital `A`.
+
+
 On Windows, try commands such as 
 
 `control air` to press `control-a` and select all.
