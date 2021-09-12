@@ -1,4 +1,5 @@
 app: evernote
+os: mac
 -
 settings():
     # Necessary to stop commands like 'slap' getting jumbled
