@@ -118,7 +118,6 @@ def raise_homophones(word, forced=False, selection=False):
     show_help = False
     gui.show()
 
-
 @imgui.open(x=main_screen.x + main_screen.width / 2.6, y=main_screen.y)
 def gui(gui: imgui.GUI):
     global active_word_list
@@ -131,6 +130,8 @@ def gui(gui: imgui.GUI):
         for word in active_word_list:
             gui.text("Choose {}: {} ".format(index, word))
             index = index + 1
+        if gui.button("Close window"):
+            actions.user.homophones_hide()
 
 
 def show_help_gui():
