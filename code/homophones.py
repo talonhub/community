@@ -129,8 +129,13 @@ def gui(gui: imgui.GUI):
         gui.line()
         index = 1
         for word in active_word_list:
-            gui.text("Choose {}: {} ".format(index, word))
+            if gui.button("Choose {}: {}".format(index, word)):
+                actions.insert(actions.user.homophones_select(index))
+                actions.user.homophones_hide()
             index = index + 1
+
+        if gui.button("Phones hide"):
+            actions.user.homophones_hide()
 
 
 def show_help_gui():
