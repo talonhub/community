@@ -118,6 +118,7 @@ def raise_homophones(word, forced=False, selection=False):
     show_help = False
     gui.show()
 
+
 @imgui.open(x=main_screen.x + main_screen.width / 2.6, y=main_screen.y)
 def gui(gui: imgui.GUI):
     global active_word_list
