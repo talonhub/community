@@ -61,6 +61,7 @@ PHONES_FORMATTERS = [
     lambda word: word.upper(),
 ]
 
+
 def find_matching_format_function(word_with_formatting, format_functions):
     """ Finds the formatter function from a list of formatter functions which transforms a word into itself.
      Returns an identity function if none exists """
@@ -72,7 +73,7 @@ def find_matching_format_function(word_with_formatting, format_functions):
     return lambda word: word
 
 
-def raise_homophones(word, forced=False, selection=False):
+def raise_homophones(word_to_find_homophones_for, forced=False, selection=False):
     global quick_replace
     global active_word_list
     global show_help
@@ -83,28 +84,33 @@ def raise_homophones(word, forced=False, selection=False):
     is_selection = selection
 
     if is_selection:
-        word = word.strip()
+        word_to_find_homophones_for = word_to_find_homophones_for.strip()
 
-    # Find the formatter used for the word being 'phoned'
-    formatter = find_matching_format_function(word, PHONES_FORMATTERS)
+    formatter = find_matching_format_function(word_to_find_homophones_for, PHONES_FORMATTERS)
 
-    word = word.lower()
+    word_to_find_homophones_for = word_to_find_homophones_for.lower()
 
-    if word not in all_homophones:
-        app.notify("homophones.py", '"%s" not in homophones list' % word)
+    if word_to_find_homophones_for not in all_homophones:
+        app.notify("homophones.py", '"%s" not in homophones list' % word_to_find_homophones_for)
         return
 
-    # Lookup valid homophones and format them to match the current selection
-    valid_homophones = all_homophones[word]
-    active_word_list = list(map(formatter, valid_homophones))
+    valid_homophones = all_homophones[word_to_find_homophones_for]
+    valid_homophones_excluding_current_word = (
+        list(
+            filter(
+                lambda word_from_list: word_from_list != word_to_find_homophones_for,
+                valid_homophones)
+        )
+    )
+    active_word_list = list(map(formatter, valid_homophones_excluding_current_word))
 
     if (
             is_selection
-            and len(active_word_list) == 2
+            and len(active_word_list) == 1
             and quick_replace
             and not force_raise
     ):
-        if word == active_word_list[0].lower():
+        if word_to_find_homophones_for == active_word_list[0].lower():
             new = active_word_list[1]
         else:
             new = active_word_list[0]
