@@ -98,7 +98,7 @@ def raise_homophones(word_to_find_homophones_for, forced=False, selection=False)
     valid_homophones_excluding_current_word = (
         list(
             filter(
-                lambda word_from_list: word_from_list != word_to_find_homophones_for,
+                lambda word_from_list: word_from_list.lower() != word_to_find_homophones_for,
                 valid_homophones)
         )
     )
