@@ -95,14 +95,15 @@ def raise_homophones(word_to_find_homophones_for, forced=False, selection=False)
         return
 
     valid_homophones = all_homophones[word_to_find_homophones_for]
-    valid_homophones_excluding_current_word = (
+
+    # Move current word to end of list to reduce searcher's cognitive load
+    valid_homophones_reordered = (
         list(
             filter(
-                lambda word_from_list: word_from_list.lower() != word_to_find_homophones_for,
-                valid_homophones)
-        )
+                lambda word_from_list: word_from_list.lower() != word_to_find_homophones_for, valid_homophones)
+        ) + [word_to_find_homophones_for]
     )
-    active_word_list = list(map(formatter, valid_homophones_excluding_current_word))
+    active_word_list = list(map(formatter, valid_homophones_reordered))
 
     if (
             is_selection
