@@ -107,7 +107,7 @@ def raise_homophones(word_to_find_homophones_for, forced=False, selection=False)
 
     if (
             is_selection
-            and len(active_word_list) == 1
+            and len(active_word_list) == 2
             and quick_replace
             and not force_raise
     ):
