@@ -1,9 +1,12 @@
-ph tag:
+ph (tag | tags):
   "<?php"
   key(enter:2)
   "?>"
   key(up)
   key(tab)
+
+(word) and cu:
+  "enqueue"
 
 word press loop template:
   "<?php"
@@ -29,4 +32,3 @@ word press loop template:
   "get_footer();"
   key(enter)
   "?>"
-
