@@ -123,12 +123,9 @@ class EditActions:
         #action(edit.select_paragraph):
         #action(edit.select_sentence):
     def select_word():
-        actions.key('ctrl-left ctrl-shift-right')
-        #action(edit.selected_text): -> str
-        #action(edit.sentence_end):
-        #action(edit.sentence_next):
-        #action(edit.sentence_previous):
-        #action(edit.sentence_start):
+        actions.edit.right()
+        actions.edit.word_left()
+        actions.edit.extend_word_right()
     def undo():
         actions.key('ctrl-z')
     def up():

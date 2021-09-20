@@ -13,3 +13,8 @@ run last: user.terminal_run_last()
 rerun [<user.text>]: user.terminal_rerun_search(text or "")
 rerun search: user.terminal_rerun_search("")
 kill all: user.terminal_kill_all()
+
+copy paste:
+    edit.copy()
+    sleep(50ms)
+    edit.paste()
