@@ -67,15 +67,12 @@ no_space_before = re.compile(r"""
   | ['"] (?: $ | [\s)\]}\-'".,!?;:/] )
   )""", re.VERBOSE)
 
-# no_space_before = set("\n .,!?;:-_/%)]}")
-# no_space_after = set("\n -_/#@([{")
+def omit_space_before(text: str) -> bool:
+    return not text or no_space_before.search(text)
+def omit_space_after(text: str) -> bool:
+    return not text or no_space_after.search(text)
 def needs_space_between(before: str, after: str) -> bool:
-    return (before and after
-            and not no_space_after.search(before)
-            and not no_space_before.search(after))
-    # return (before != "" and after != ""
-    #         and before[-1] not in no_space_after
-    #         and after[0] not in no_space_before)
+    return not (omit_space_after(before) or omit_space_before(after))
 
 # # TESTS, uncomment to enable
 # assert needs_space_between("a", "break")
