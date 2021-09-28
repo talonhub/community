@@ -84,6 +84,10 @@ wheel upper here:
     user.mouse_move_center_active_window()
     user.mouse_scroll_up_continuous()
 wheel gaze: user.mouse_gaze_scroll()
+wheel gaze cursor: user.mouse_gaze_scroll_cursor()
+wheel gaze cursor here: 
+    user.mouse_move_center_active_window()
+	user.mouse_gaze_scroll_cursor()
 wheel gaze here:
     user.mouse_move_center_active_window()
     user.mouse_gaze_scroll()
