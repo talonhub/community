@@ -14,7 +14,7 @@ from talon import (
     ui,
 )
 from talon_plugins import eye_mouse, eye_zoom_mouse
-from talon_plugins.eye_mouse import mouse
+from talon_plugins.eye_mouse import config, toggle_camera_overlay, toggle_control, mouse
 
 main_screen = ui.main_screen()
 key = actions.key
