@@ -298,4 +298,4 @@ class UserActions:
         actions.insert(f": {type}")
 
     def code_insert_return_type(type: str):
-        actions.insert(f" => {type}")
+        actions.insert(f": {type}")
