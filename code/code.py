@@ -5,7 +5,7 @@ mod = Module()
 mod.list("code_functions", desc="List of functions for active language")
 mod.list("code_types", desc="List of types for active language")
 mod.list("code_libraries", desc="List of libraries for active language")
-mod.list("code_parameter_name", desc="List of parameter names for active language")
+mod.list("code_parameter_name", desc="List of common parameter names for active language")
 
 setting_private_function_formatter = mod.setting("code_private_function_formatter", str)
 setting_protected_function_formatter = mod.setting(
