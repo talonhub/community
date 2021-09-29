@@ -5,6 +5,7 @@ mod = Module()
 mod.list("code_functions", desc="List of functions for active language")
 mod.list("code_types", desc="List of types for active language")
 mod.list("code_libraries", desc="List of libraries for active language")
+mod.list("code_parameter_name", desc="List of common parameter names for active language")
 
 setting_private_function_formatter = mod.setting("code_private_function_formatter", str)
 setting_protected_function_formatter = mod.setting(
@@ -101,6 +102,7 @@ mod.mode("auto_lang")
 
 # Auto lang is enabled by default
 app.register("ready", lambda: actions.user.code_clear_language_mode())
+
 
 @mod.action_class
 class Actions:
@@ -444,6 +446,9 @@ class Actions:
 
     def code_insert_library(text: str, selection: str):
         """Inserts a library and positions the cursor appropriately"""
+
+    def code_insert_named_argument(parameter_name: str):
+        """Inserts a named argument"""
 
     def code_document_string():
         """Inserts a document string and positions the cursor appropriately"""
