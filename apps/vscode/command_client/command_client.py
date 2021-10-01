@@ -195,6 +195,10 @@ def run_vscode_command(
 
     actions.sleep("25ms")
 
+    # trigger command command server to update state in case it has changed as
+    # a result of the command we just ran
+    actions.user.vscode_save_state_debounced()
+
     return decoded_contents["returnValue"]
 
 
