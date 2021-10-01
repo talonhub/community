@@ -354,10 +354,10 @@ class Actions:
     def trigger_command_server_command_execution():
         """Issue keystroke to trigger command server to execute command that
         was written to the file.  For internal use only"""
-        actions.key("ctrl-shift-f17")
+        actions.key("ctrl-shift-f11")
 
 
 @mac_ctx.action_class("user")
 class MacUserActions:
     def trigger_command_server_command_execution():
-        actions.key("cmd-shift-f17")
+        actions.key("cmd-shift-f11")
