@@ -34,11 +34,11 @@ class Actions:
         """Issue keystroke to trigger command server to save state"""
         pass
 
-    def vscode_update_client_state_debounced(update_core_state: bool = True):
+    def vscode_update_client_state_debounced():
         """Ask vscode to save state, debouncing.  Only implemented in vscode"""
         pass
 
-    def vscode_update_client_state_and_wait(update_core_state: bool = True):
+    def vscode_update_client_state_and_wait():
         """Ask vscode to save state and wait for update to complete.  Only implemented in vscode"""
         pass
 
@@ -69,7 +69,7 @@ class UserActions:
     def trigger_command_server_update_core_state():
         actions.key("ctrl-shift-f10")
 
-    def vscode_update_client_state_debounced(update_core_state: bool = True):
+    def vscode_update_client_state_debounced():
         global save_state_job
 
         if save_state_job is not None:
@@ -77,14 +77,13 @@ class UserActions:
 
         save_state_job = cron.after(
             "250ms",
-            lambda: actions.user.vscode_update_client_state_and_wait(update_core_state),
+            lambda: actions.user.vscode_update_client_state_and_wait(),
         )
 
-    def vscode_update_client_state_and_wait(update_core_state: bool = True):
+    def vscode_update_client_state_and_wait():
         global listeners
 
-        if update_core_state:
-            actions.user.trigger_command_server_update_core_state()
+        actions.user.trigger_command_server_update_core_state()
 
         result = actions.user.vscode_get(
             "command-server.getState", [{"key": key} for key in listeners.keys()]
@@ -100,17 +99,16 @@ class MacUserActions:
         actions.key("cmd-shift-f10")
 
 
-def update_state_if_vscode(update_core_state=True):
+def update_state_if_vscode():
     try:
-        actions.user.vscode_update_client_state_and_wait(update_core_state)
+        actions.user.vscode_update_client_state_and_wait()
     except NotImplementedError:
         pass
 
 
-def update_state_if_vscode_debounced(update_core_state=True):
-    print("watch fired")
+def update_state_if_vscode_debounced():
     try:
-        actions.user.vscode_update_client_state_debounced(update_core_state)
+        actions.user.vscode_update_client_state_debounced()
     except NotImplementedError:
         pass
 
@@ -122,10 +120,9 @@ def get_state_updated_signal_path():
 def on_ready():
     ui.register("app_activate", lambda _: update_state_if_vscode())
     path = get_state_updated_signal_path().resolve()
-    print(f"state_updated_signal_path: {path}")
     fs.watch(
         path,
-        lambda _1, _2: update_state_if_vscode_debounced(False),
+        lambda _1, _2: update_state_if_vscode_debounced(),
     )
 
 
