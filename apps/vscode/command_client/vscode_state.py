@@ -100,7 +100,7 @@ class MacUserActions:
 
 def on_app_activate(_):
     try:
-        actions.user.vscode_update_client_state_debounced()
+        actions.user.vscode_update_client_state_and_wait()
     except NotImplementedError:
         pass
 

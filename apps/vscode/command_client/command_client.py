@@ -1,3 +1,4 @@
+from abc import ABC, abstractmethod
 import json
 import os
 import time
@@ -100,7 +101,14 @@ def write_request(request: Request, path: Path):
         write_json_exclusive(path, request.to_dict())
 
 
-def handle_existing_request_file(path):
+class ConcurrentVSCodeRequestError(Exception):
+    pass
+
+
+MAX_RETRY_COUNT = 3
+
+
+def handle_existing_request_file(path: Path):
     stats = path.stat()
 
     modified_time_ms = stats.st_mtime_ns / 1e6
@@ -108,9 +116,13 @@ def handle_existing_request_file(path):
     time_difference_ms = abs(modified_time_ms - current_time_ms)
 
     if time_difference_ms < STALE_TIMEOUT_MS:
-        raise Exception(
-            "Found recent request file; another Talon process is probably running"
-        )
+        try:
+            print("WARNING: Found existing request file; trying again")
+            wait_for_condition(ExistingRequestFileWaitee(path))
+        except TimeoutError:
+            raise ConcurrentVSCodeRequestError(
+                "Found recent request file; another Talon process is probably running"
+            )
     else:
         print("Removing stale request file")
         robust_unlink(path)
@@ -247,7 +259,49 @@ def robust_unlink(path: Path):
             raise e
 
 
-def read_json_with_timeout(path: str) -> Any:
+class Waitee(ABC):
+    @abstractmethod
+    def is_ready(self) -> bool:
+        pass
+
+    @abstractmethod
+    def get_result(self) -> Any:
+        pass
+
+
+class ExistingRequestFileWaitee(Waitee):
+    def __init__(self, path: Path):
+        self.path = path
+
+    def is_ready(self) -> bool:
+        return not self.path.exists()
+
+    def get_result(self) -> Any:
+        return None
+
+
+class ReadJSONWaitee(Waitee):
+    def __init__(self, path: Path):
+        self.path = path
+        self.raw_text = None
+
+    def is_ready(self) -> bool:
+        try:
+            self.raw_text = self.path.read_text()
+
+            if self.raw_text.endswith("\n"):
+                return True
+        except FileNotFoundError:
+            # If not found, keep waiting
+            pass
+
+        return False
+
+    def get_result(self) -> Any:
+        return json.loads(self.raw_text)
+
+
+def read_json_with_timeout(path: Path) -> Any:
     """Repeatedly tries to read a json object from the given path, waiting
     until there is a trailing new line indicating that the write is complete
 
@@ -260,30 +314,31 @@ def read_json_with_timeout(path: str) -> Any:
     Returns:
         Any: The json-decoded contents of the file
     """
+    try:
+        return wait_for_condition(ReadJSONWaitee(path))
+    except TimeoutError:
+        raise Exception("Timed out waiting for response")
+
+
+def wait_for_condition(waitee: Waitee) -> Any:
     timeout_time = time.perf_counter() + VSCODE_COMMAND_TIMEOUT_SECONDS
     sleep_time = MINIMUM_SLEEP_TIME_SECONDS
     while True:
-        try:
-            raw_text = path.read_text()
-
-            if raw_text.endswith("\n"):
-                break
-        except FileNotFoundError:
-            # If not found, keep waiting
-            pass
+        if waitee.is_ready():
+            break
 
         actions.sleep(sleep_time)
 
         time_left = timeout_time - time.perf_counter()
 
         if time_left < 0:
-            raise Exception("Timed out waiting for response")
+            raise TimeoutError("Timed out waiting for condition")
 
         # NB: We use minimum sleep time here to ensure that we don't spin with
         # small sleeps due to clock slip
         sleep_time = max(min(sleep_time * 2, time_left), MINIMUM_SLEEP_TIME_SECONDS)
 
-    return json.loads(raw_text)
+    return waitee.get_result()
 
 
 @mod.action_class
