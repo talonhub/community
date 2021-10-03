@@ -7,7 +7,7 @@ from tempfile import gettempdir
 from typing import Any, List
 from uuid import uuid4
 
-from talon import Context, Module, actions
+from talon import Context, Module, actions, app, fs
 
 # How old a request file needs to be before we declare it stale and are willing
 # to remove it
@@ -21,6 +21,9 @@ VSCODE_COMMAND_TIMEOUT_SECONDS = 3.0
 MINIMUM_SLEEP_TIME_SECONDS = 0.0005
 
 mod = Module()
+mod.tag(
+    "vscode_command_server", "Indicates that user has installed VSCode command server"
+)
 
 ctx = Context()
 mac_ctx = Context()
@@ -118,6 +121,7 @@ def run_vscode_command(
     *args: str,
     wait_for_finish: bool = False,
     return_command_output: bool = False,
+    no_state_update: bool = False,
 ):
     """Runs a VSCode command, using command server if available
 
@@ -197,7 +201,8 @@ def run_vscode_command(
 
     # trigger command command server to update state in case it has changed as
     # a result of the command we just ran
-    actions.user.vscode_save_state_debounced()
+    if not no_state_update:
+        actions.user.vscode_update_client_state_debounced()
 
     return decoded_contents["returnValue"]
 
@@ -349,6 +354,7 @@ class Actions:
             arg4,
             arg5,
             return_command_output=True,
+            no_state_update=True,
         )
 
     def trigger_command_server_command_execution():
@@ -361,3 +367,21 @@ class Actions:
 class MacUserActions:
     def trigger_command_server_command_execution():
         actions.key("cmd-shift-f11")
+
+
+def update_tags():
+    communication_dir_path = get_communication_dir_path()
+
+    if communication_dir_path.exists():
+        ctx.tags = ["user.vscode_command_server"]
+    else:
+        ctx.tags = []
+
+
+def on_ready():
+    update_tags()
+
+    fs.watch(get_communication_dir_path(), lambda path, flags: update_tags())
+
+
+app.register("ready", on_ready)
