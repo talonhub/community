@@ -207,6 +207,40 @@ ctx.lists["user.code_libraries"] = {
     "shiny alert": "shinyalert",
 }
 
+ctx.lists["user.code_parameter_name"] = {
+    "alpha": "alpha",
+    "breaks": "breaks",
+    "colour": "colour",
+    "data": "data",
+    "fill": "fill",
+    "H just": "hjust",
+    "keep": ".keep",
+    "label": "label",
+    "labels": "labels",
+    "log": "log",
+    "main": "main",
+    "mapping": "mapping",
+    "method": "method",
+    "NA remove": "na.rm",
+    "path": "path",
+    "position": "position",
+    "plex label": "xlab",
+    "plex limit": "xlim",
+    "scales": "scales",
+    "size": "size",
+    "show legend": "show.legend",
+    "sort": "sort",
+    "title": "title",
+    "type": "type",
+    "vee just": "vjust",
+    "width": "width",
+    "with ties": "with_ties",
+    "why label": "ylab",
+    "why limit": "ylim",
+    "why max": "ymax",
+    "why min": "ymin",
+}
+
 
 @ctx.action_class('user')
 class UserActions:
@@ -282,3 +316,6 @@ class UserActions:
         actions.edit.left()
         actions.clip.set_text(text + "{}".format(selection))
         actions.edit.paste()
+
+    def code_insert_named_argument(parameter_name: str):
+        actions.insert(f"{parameter_name} = ")

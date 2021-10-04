@@ -10,3 +10,4 @@ padding <user.symbol_key>:
     insert(" ")
     key(symbol_key)
     insert(" ")
+press <user.modifiers>: key(modifiers)

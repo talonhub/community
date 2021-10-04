@@ -8,12 +8,18 @@ mod = Module()
 mod.apps.vscode = """
 os: mac
 and app.bundle: com.microsoft.VSCode
+os: mac
+and app.bundle: com.microsoft.VSCodeInsiders
+os: mac
+and app.bundle: com.visualstudio.code.oss
 """
 mod.apps.vscode = """
 os: linux
 and app.name: Code
 os: linux
 and app.name: code-oss
+os: linux
+and app.name: code-insiders
 os: linux
 and app.name: VSCodium
 os: linux
@@ -23,7 +29,11 @@ mod.apps.vscode = """
 os: windows
 and app.name: Visual Studio Code
 os: windows
+and app.name: Visual Studio Code Insiders
+os: windows
 and app.exe: Code.exe
+os: windows
+and app.exe: Code-Insiders.exe
 os: windows
 and app.name: VSCodium
 os: windows
@@ -209,6 +219,9 @@ class UserActions:
 
     def multi_cursor_select_more_occurrences():
         actions.user.vscode("editor.action.addSelectionToNextFindMatch")
+
+    def multi_cursor_skip_occurrence():
+        actions.user.vscode("editor.action.moveSelectionToNextFindMatch")
 
     # snippet.py support beginHelp close
     def snippet_search(text: str):

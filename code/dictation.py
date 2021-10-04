@@ -67,15 +67,12 @@ no_space_before = re.compile(r"""
   | ['"] (?: $ | [\s)\]}\-'".,!?;:/] )
   )""", re.VERBOSE)
 
-# no_space_before = set("\n .,!?;:-_/%)]}")
-# no_space_after = set("\n -_/#@([{")
+def omit_space_before(text: str) -> bool:
+    return not text or no_space_before.search(text)
+def omit_space_after(text: str) -> bool:
+    return not text or no_space_after.search(text)
 def needs_space_between(before: str, after: str) -> bool:
-    return (before and after
-            and not no_space_after.search(before)
-            and not no_space_before.search(after))
-    # return (before != "" and after != ""
-    #         and before[-1] not in no_space_after
-    #         and after[0] not in no_space_before)
+    return not (omit_space_after(before) or omit_space_before(after))
 
 # # TESTS, uncomment to enable
 # assert needs_space_between("a", "break")
@@ -182,19 +179,18 @@ class Actions:
 
     def dictation_insert(text: str) -> str:
         """Inserts dictated text, formatted appropriately."""
-        # do_the_dance = whether we should try to be context-sensitive. Since
-        # whitespace is not affected by formatter state, if text.isspace() is
-        # True we don't need context-sensitivity.
-        do_the_dance = (setting_context_sensitive_dictation.get()
-                        and not text.isspace())
-        if do_the_dance:
+        context_sensitive = setting_context_sensitive_dictation.get()
+        # Omit peeking left if we don't need left space or capitalization.
+        if (context_sensitive
+            and not (omit_space_before(text)
+                     and auto_capitalize(text, "sentence start")[0] == text)):
             dictation_formatter.update_context(
                 actions.user.dictation_peek_left(clobber=True))
         text = dictation_formatter.format(text)
         actions.user.add_phrase_to_history(text)
         actions.insert(text)
         # Add a space after cursor if necessary.
-        if not do_the_dance or not text or no_space_after.search(text):
+        if not context_sensitive or omit_space_after(text):
             return
         char = actions.user.dictation_peek_right()
         if char is not None and needs_space_between(text, char):
