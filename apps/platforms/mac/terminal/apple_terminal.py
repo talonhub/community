@@ -1,4 +1,4 @@
-from talon import Context, actions
+from talon import Context, actions, ui
 import os
 
 # TODO: fit this to generic_terminal
@@ -14,11 +14,14 @@ directories_to_exclude = {}
 class EditActions:
     def delete_line(): actions.key('ctrl-u')
 
-
 @ctx.action_class('user')
 class UserActions:
     def file_manager_current_path():
         title = ui.active_window().title
+
+        #take the first split for the zsh-based terminal
+        if " — " in title:
+            title = title.split(" — ")[0]
 
         if "~" in title:
             title = os.path.expanduser(title)
@@ -40,7 +43,9 @@ class UserActions:
         path = '"{}"'.format(path)
         actions.insert(path)
         actions.key("enter")
-        actions.user.file_manager_refresh_title()
+
+        #jtk - refresh title isn't necessary since the apple terminal does it for us
+        #actions.user.file_manager_refresh_title()
         
     def file_manager_open_parent():
         actions.insert('cd ..')
@@ -64,6 +69,9 @@ class UserActions:
     def file_manager_select_file(path: str):
         """selects the file"""
         actions.insert(path)
+
+    def file_manager_refresh_title():
+        return
 
 @ctx.action_class("app")
 class app_actions:
