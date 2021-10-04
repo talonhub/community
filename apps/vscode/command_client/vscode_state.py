@@ -7,6 +7,7 @@ from .command_client import get_communication_dir_path, read_json_with_timeout
 mod = Module()
 
 ctx = Context()
+global_ctx = Context()
 mac_ctx = Context()
 
 ctx.matches = r"""
@@ -61,6 +62,18 @@ class Actions:
         return unsubscribe
 
 
+@global_ctx.action_class("user")
+class UserActions:
+    def trigger_command_server_update_core_state():
+        pass
+
+    def vscode_update_client_state_debounced():
+        pass
+
+    def vscode_update_client_state_and_wait():
+        pass
+
+
 save_state_job = None
 
 
@@ -76,7 +89,7 @@ class UserActions:
             cron.cancel(save_state_job)
 
         save_state_job = cron.after(
-            "250ms",
+            "25ms",
             lambda: actions.user.vscode_update_client_state_and_wait(),
         )
 
@@ -99,30 +112,18 @@ class MacUserActions:
         actions.key("cmd-shift-f10")
 
 
-def update_state_if_vscode():
-    try:
-        actions.user.vscode_update_client_state_and_wait()
-    except NotImplementedError:
-        pass
-
-
-def update_state_if_vscode_debounced():
-    try:
-        actions.user.vscode_update_client_state_debounced()
-    except NotImplementedError:
-        pass
-
-
 def get_state_updated_signal_path():
     return get_communication_dir_path() / "stateUpdatedSignal"
 
 
 def on_ready():
-    ui.register("app_activate", lambda _: update_state_if_vscode())
+    ui.register(
+        "app_activate", lambda _: actions.user.vscode_update_client_state_debounced()
+    )
     path = get_state_updated_signal_path().resolve()
     fs.watch(
         path,
-        lambda _1, _2: update_state_if_vscode_debounced(),
+        lambda _1, _2: actions.user.vscode_update_client_state_debounced(),
     )
 
 

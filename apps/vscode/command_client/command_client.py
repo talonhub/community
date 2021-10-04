@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import threading
 import json
 import os
 import time
@@ -105,9 +106,6 @@ class ConcurrentVSCodeRequestError(Exception):
     pass
 
 
-MAX_RETRY_COUNT = 3
-
-
 def handle_existing_request_file(path: Path):
     stats = path.stat()
 
@@ -116,16 +114,15 @@ def handle_existing_request_file(path: Path):
     time_difference_ms = abs(modified_time_ms - current_time_ms)
 
     if time_difference_ms < STALE_TIMEOUT_MS:
-        try:
-            print("WARNING: Found existing request file; trying again")
-            wait_for_condition(ExistingRequestFileWaitee(path))
-        except TimeoutError:
-            raise ConcurrentVSCodeRequestError(
-                "Found recent request file; another Talon process is probably running"
-            )
+        raise ConcurrentVSCodeRequestError(
+            "Found recent request file; another Talon process is probably running"
+        )
     else:
         print("Removing stale request file")
         robust_unlink(path)
+
+
+vscode_command_lock = threading.Lock()
 
 
 def run_vscode_command(
@@ -134,6 +131,7 @@ def run_vscode_command(
     wait_for_finish: bool = False,
     return_command_output: bool = False,
     no_state_update: bool = False,
+    no_sleep: bool = False,
 ):
     """Runs a VSCode command, using command server if available
 
@@ -177,28 +175,29 @@ def run_vscode_command(
         uuid=uuid,
     )
 
-    # First, write the request to the request file, which makes us the sole
-    # owner because all other processes will try to open it with 'x'
-    write_request(request, request_path)
+    with vscode_command_lock:
+        # First, write the request to the request file, which makes us the sole
+        # owner because all other processes will try to open it with 'x'
+        write_request(request, request_path)
 
-    # We clear the response file if it does exist, though it shouldn't
-    if response_path.exists():
-        print("WARNING: Found old response file")
-        robust_unlink(response_path)
+        # We clear the response file if it does exist, though it shouldn't
+        if response_path.exists():
+            print("WARNING: Found old response file")
+            robust_unlink(response_path)
 
-    # Then, perform keystroke telling VSCode to execute the command in the
-    # request file.  Because only the active VSCode instance will accept
-    # keypresses, we can be sure that the active VSCode instance will be the
-    # one to execute the command.
-    actions.user.trigger_command_server_command_execution()
+        # Then, perform keystroke telling VSCode to execute the command in the
+        # request file.  Because only the active VSCode instance will accept
+        # keypresses, we can be sure that the active VSCode instance will be the
+        # one to execute the command.
+        actions.user.trigger_command_server_command_execution()
 
-    try:
-        decoded_contents = read_json_with_timeout(response_path)
-    finally:
-        # NB: We remove response file first because we want to do this while we
-        # still own the request file
-        robust_unlink(response_path)
-        robust_unlink(request_path)
+        try:
+            decoded_contents = read_json_with_timeout(response_path)
+        finally:
+            # NB: We remove response file first because we want to do this while we
+            # still own the request file
+            robust_unlink(response_path)
+            robust_unlink(request_path)
 
     if decoded_contents["uuid"] != uuid:
         raise Exception("uuids did not match")
@@ -209,7 +208,8 @@ def run_vscode_command(
     if decoded_contents["error"] is not None:
         raise Exception(decoded_contents["error"])
 
-    actions.sleep("25ms")
+    if not no_sleep:
+        actions.sleep("25ms")
 
     # trigger command command server to update state in case it has changed as
     # a result of the command we just ran
@@ -259,48 +259,6 @@ def robust_unlink(path: Path):
             raise e
 
 
-class Waitee(ABC):
-    @abstractmethod
-    def is_ready(self) -> bool:
-        pass
-
-    @abstractmethod
-    def get_result(self) -> Any:
-        pass
-
-
-class ExistingRequestFileWaitee(Waitee):
-    def __init__(self, path: Path):
-        self.path = path
-
-    def is_ready(self) -> bool:
-        return not self.path.exists()
-
-    def get_result(self) -> Any:
-        return None
-
-
-class ReadJSONWaitee(Waitee):
-    def __init__(self, path: Path):
-        self.path = path
-        self.raw_text = None
-
-    def is_ready(self) -> bool:
-        try:
-            self.raw_text = self.path.read_text()
-
-            if self.raw_text.endswith("\n"):
-                return True
-        except FileNotFoundError:
-            # If not found, keep waiting
-            pass
-
-        return False
-
-    def get_result(self) -> Any:
-        return json.loads(self.raw_text)
-
-
 def read_json_with_timeout(path: Path) -> Any:
     """Repeatedly tries to read a json object from the given path, waiting
     until there is a trailing new line indicating that the write is complete
@@ -315,17 +273,28 @@ def read_json_with_timeout(path: Path) -> Any:
         Any: The json-decoded contents of the file
     """
     try:
-        return wait_for_condition(ReadJSONWaitee(path))
+        for _ in exponential_backoff(VSCODE_COMMAND_TIMEOUT_SECONDS):
+            try:
+                raw_text = path.read_text()
+
+                if raw_text.endswith("\n"):
+                    break
+            except FileNotFoundError:
+                # If not found, keep waiting
+                continue
+        return json.loads(raw_text)
     except TimeoutError:
         raise Exception("Timed out waiting for response")
 
 
-def wait_for_condition(waitee: Waitee) -> Any:
-    timeout_time = time.perf_counter() + VSCODE_COMMAND_TIMEOUT_SECONDS
-    sleep_time = MINIMUM_SLEEP_TIME_SECONDS
+def exponential_backoff(
+    timeout_seconds: float, minimum_sleep_time: float = MINIMUM_SLEEP_TIME_SECONDS
+) -> Any:
+    timeout_time = time.perf_counter() + timeout_seconds
+    sleep_time = minimum_sleep_time
+
     while True:
-        if waitee.is_ready():
-            break
+        yield
 
         actions.sleep(sleep_time)
 
@@ -336,9 +305,7 @@ def wait_for_condition(waitee: Waitee) -> Any:
 
         # NB: We use minimum sleep time here to ensure that we don't spin with
         # small sleeps due to clock slip
-        sleep_time = max(min(sleep_time * 2, time_left), MINIMUM_SLEEP_TIME_SECONDS)
-
-    return waitee.get_result()
+        sleep_time = max(min(sleep_time * 2, time_left), minimum_sleep_time)
 
 
 @mod.action_class
@@ -409,6 +376,7 @@ class Actions:
             arg4,
             arg5,
             return_command_output=True,
+            no_sleep=True,
             no_state_update=True,
         )
 
