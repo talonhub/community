@@ -273,7 +273,7 @@ def read_json_with_timeout(path: Path) -> Any:
         Any: The json-decoded contents of the file
     """
     try:
-        for _ in exponential_backoff(VSCODE_COMMAND_TIMEOUT_SECONDS):
+        for _ in exponential_backoff():
             try:
                 raw_text = path.read_text()
 
@@ -288,10 +288,11 @@ def read_json_with_timeout(path: Path) -> Any:
 
 
 def exponential_backoff(
-    timeout_seconds: float, minimum_sleep_time: float = MINIMUM_SLEEP_TIME_SECONDS
+    timeout_seconds: float = VSCODE_COMMAND_TIMEOUT_SECONDS,
+    minimum_sleep_time_seconds: float = MINIMUM_SLEEP_TIME_SECONDS,
 ) -> Any:
     timeout_time = time.perf_counter() + timeout_seconds
-    sleep_time = minimum_sleep_time
+    sleep_time = minimum_sleep_time_seconds
 
     while True:
         yield
@@ -305,7 +306,7 @@ def exponential_backoff(
 
         # NB: We use minimum sleep time here to ensure that we don't spin with
         # small sleeps due to clock slip
-        sleep_time = max(min(sleep_time * 2, time_left), minimum_sleep_time)
+        sleep_time = max(min(sleep_time * 2, time_left), minimum_sleep_time_seconds)
 
 
 @mod.action_class

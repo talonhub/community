@@ -4,6 +4,8 @@ is_mac = app.platform == "mac"
 
 ctx = Context()
 mac_ctx = Context()
+command_server_ctx = Context()
+
 mod = Module()
 mod.apps.vscode = """
 os: mac
@@ -40,12 +42,17 @@ os: windows
 and app.exe: VSCodium.exe
 """
 
+
 ctx.matches = r"""
 app: vscode
 """
 mac_ctx.matches = r"""
 os: mac
 app: vscode
+"""
+command_server_ctx.matches = r"""
+app: vscode
+and tag: user.vscode_command_server
 """
 
 
@@ -146,6 +153,10 @@ class Actions:
         """Show command palette"""
         actions.key("ctrl-shift-p")
 
+    def vscode_wait_for_quick_open_focus():
+        """Wait for quick open to be focused"""
+        pass
+
 
 @mac_ctx.action_class("user")
 class MacUserActions:
@@ -153,9 +164,25 @@ class MacUserActions:
         actions.key("cmd-shift-p")
 
 
+@command_server_ctx.action_class("user")
+class CommandServerUserActions:
+    def vscode_wait_for_quick_open_focus():
+        try:
+            for focus in actions.user.vscode_wait_for_key_condition("core.focus"):
+                print(f"Current focus is {focus}")
+                if focus == "quickOpen":
+                    break
+                print("Waiting")
+        except TimeoutError:
+            raise TimeoutError("Timed out waiting for quick open focus")
+
+
 @ctx.action_class("user")
 class UserActions:
     # splits.py support begin
+    def vscode_wait_for_quick_open_focus():
+        actions.sleep("350ms")
+
     def split_clear_all():
         actions.user.vscode("workbench.action.editorLayoutSingle")
 

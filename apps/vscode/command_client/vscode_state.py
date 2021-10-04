@@ -2,7 +2,7 @@ from collections import defaultdict
 from dataclasses import dataclass
 from talon import Context, Module, actions, app, ui, cron, fs
 
-from .command_client import get_communication_dir_path, read_json_with_timeout
+from .command_client import get_communication_dir_path, exponential_backoff
 
 mod = Module()
 
@@ -42,6 +42,9 @@ class Actions:
     def vscode_update_client_state_and_wait():
         """Ask vscode to save state and wait for update to complete.  Only implemented in vscode"""
         pass
+
+    def vscode_wait_for_key_condition(key: str):
+        """Repeatedly yields key until it matches condition"""
 
     def watch_vscode_state(key: str, callback: callable):
         """Watch a particular vscode state key"""
@@ -104,6 +107,17 @@ class UserActions:
         for key, value in result.items():
             for listener in listeners[key]:
                 listener.callback(value["newValue"])
+
+    def vscode_wait_for_key_condition(key: str):
+        try:
+            for _ in exponential_backoff(minimum_sleep_time_seconds=0.025):
+                actions.user.trigger_command_server_update_core_state()
+                result = actions.user.vscode_get(
+                    "command-server.getState", [{"key": key}]
+                )
+                yield result[key]["newValue"]
+        except TimeoutError:
+            raise TimeoutError("Timed out waiting for key condition")
 
 
 @mac_ctx.action_class("user")
