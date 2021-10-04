@@ -13,6 +13,6 @@ tag(): user.git
 tag(): user.anaconda
 # tag(): user.kubectl
 
-# TODO: explain
+
 tag(): user.tabs
 # TODO: add file_manager support
