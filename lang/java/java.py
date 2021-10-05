@@ -1,4 +1,4 @@
-from talon import Context, Module, actions
+from talon import Context, Module, actions, settings
 
 ctx = Context()
 mod = Module()
@@ -10,7 +10,7 @@ and code.language: java
 ctx.tags = ["user.code_operators", "user.code_generic"]
 
 # Primitive Types
-ctx.lists["user.code_types"] = {
+java_primitive_types = {
     "boolean": "boolean",
     "int": "int",
     "float": "float",
@@ -49,6 +49,8 @@ java_common_classes = {
 mod.list("java_common_classes", desc="Java Common Classes")
 ctx.lists["self.java_common_classes"] = java_common_classes
 
+
+
 # Java Generic Data Structures
 java_generic_data_structures = {
     # Interfaces
@@ -64,31 +66,31 @@ java_generic_data_structures = {
     "hash map": "HashMap",
 }
 
+unboxed_types = java_primitive_types.copy()
+unboxed_types.update(java_common_classes)
+unboxed_types.update(java_generic_data_structures)
+
+ctx.lists["user.code_type"] = unboxed_types
+
 mod.list("java_generic_data_structures", desc="Java Generic Data Structures")
 ctx.lists["self.java_generic_data_structures"] = java_generic_data_structures
 
 # Java Modifies
-java_access_modifiers = {
-   "public": "public",
-   "private": "private",
-   "protected": "protected",
+java_modifiers = {
+    "public": "public",
+    "private": "private",
+    "protected": "protected",
+    "static": "static",
+    "synchronized": "synchronized",
+    "volatile": "volatile",
+    "transient": "transient",
+    "abstract": "abstract",
+    "interface": "interface",
+    "final": "final",
 }
 
-mod.list("java_access_modifiers", desc="Java Access Modifiers")
-ctx.lists["self.java_access_modifiers"] = java_access_modifiers
-
-java_other_modifiers = {
-   "static": "static",
-   "synchronized": "synchronized",
-   "volatile": "volatile",
-   "transient": "transient",
-   "abstract": "abstract",
-   "interface": "interface",
-   "final": "final",
-}
-
-mod.list("java_other_modifiers", desc="Java Other Modifiers")
-ctx.lists["self.java_other_modifiers"] = java_other_modifiers
+mod.list("java_modifiers", desc="Java Modifiers")
+ctx.lists["self.java_modifiers"] = java_modifiers
 
 @ctx.action_class("user")
 class UserActions:
@@ -252,6 +254,9 @@ class UserActions:
     def code_type_class():
         actions.auto_insert("class ")
 
+    def code_import():         
+        actions.auto_insert("import ")
+
     def code_private_function(text: str):
         actions.insert("private")
 
@@ -279,3 +284,68 @@ class UserActions:
 
     def code_block_comment_suffix(): 
         actions.auto_insert('*/')
+
+    def code_insert_function(text: str, selection: str):
+        if selection:
+            text = text + "({})".format(selection)
+        else:
+            text = text + "()"
+
+        actions.user.paste(text)
+        actions.edit.left()
+
+    def code_private_function(text: str):
+        """Inserts private function declaration"""
+        result = "private void {}".format(
+            actions.user.formatted_text(
+                text, settings.get("user.code_private_function_formatter")
+            )
+        )
+
+        actions.user.code_insert_function(result, None)
+
+    def code_private_static_function(text: str):
+        """Inserts private static function"""
+        result = "private static void {}".format(
+            actions.user.formatted_text(
+                text, settings.get("user.code_private_function_formatter")
+            )
+        )
+
+        actions.user.code_insert_function(result, None)
+
+    def code_protected_function(text: str):
+        result = "void {}".format(
+            actions.user.formatted_text(
+                text, settings.get("user.code_protected_function_formatter")
+            )
+        )
+
+        actions.user.code_insert_function(result, None)
+
+    def code_protected_static_function(text: str):
+        result = "static void {}".format(
+            actions.user.formatted_text(
+                text, settings.get("user.code_protected_function_formatter")
+            )
+        )
+
+        actions.user.code_insert_function(result, None)
+
+    def code_public_function(text: str):
+        result = "public void {}".format(
+            actions.user.formatted_text(
+                text, settings.get("user.code_public_function_formatter")
+            )
+        )
+
+        actions.user.code_insert_function(result, None)
+
+    def code_public_static_function(text: str):
+        result = "public static void {}".format(
+            actions.user.formatted_text(
+                text, settings.get("user.code_public_function_formatter")
+            )
+        )
+
+        actions.user.code_insert_function(result, None)

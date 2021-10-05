@@ -7,18 +7,15 @@ tag(): user.code_comment
 tag(): user.code_block_comment
 tag(): user.code_generic
 
-action(user.code_state_import):
-    insert("import ")
+settings():
+    user.code_private_function_formatter = "PRIVATE_CAMEL_CASE"
+    user.code_protected_function_formatter = "PRIVATE_CAMEL_CASE"
+    user.code_public_function_formatter = "PRIVATE_CAMEL_CASE"
+    user.code_private_variable_formatter = "PRIVATE_CAMEL_CASE"
+    user.code_protected_variable_formatter = "PRIVATE_CAMEL_CASE"
+    user.code_public_variable_formatter = "PRIVATE_CAMEL_CASE"
 
 # Types Commands
-type {user.code_types}: 
-    insert(code_types)
-    key("space")
-
-type ({user.java_common_classes}|{user.java_generic_data_structures}): 
-    insert(java_common_classes or java_generic_data_structures)
-    key("space")
-
 boxed [type] {user.java_boxed_types}: 
     insert(user.java_boxed_types)
     key("space")
@@ -29,20 +26,16 @@ generic [type] {user.java_generic_data_structures}:
     key("left")
 
 # Arrays
-type {user.code_types} array:
-    insert(user.code_types)
+type {user.code_type} array:
+    insert(user.code_type)
     user.code_operator_subscript()
-
-type ({user.java_common_classes}|{user.java_generic_data_structures}) array:
-    insert(java_common_classes or java_generic_data_structures)
-    user.code_operator_subscript()    
 
 [state] {user.java_access_modifiers}: 
     insert(user.java_access_modifiers)
     key("space")
 
-[state] {user.java_other_modifiers}: 
-    insert(user.java_other_modifiers)
+[state] {user.java_modifiers}: 
+    insert(user.java_modifiers)
     key("space") 
 
 op array:
@@ -50,7 +43,11 @@ op array:
 
 op new:
     insert("new ")
-op plus plus:
-    insert("++")
 
-code_block_comment 
+# Methods    
+^method <user.text>$: user.code_default_function(text)
+^pro method <user.text>$: user.code_protected_function(text)
+^pub method <user.text>$: user.code_public_function(text)
+^static method <user.text>$: user.code_private_static_function(text)
+^pro static method <user.text>$: user.code_protected_static_function(text)
+^pub static method <user.text>$: user.code_public_static_function(text)
