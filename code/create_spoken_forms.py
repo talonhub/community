@@ -49,14 +49,9 @@ ones = [""] + [
     REVERSE_PRONUNCIATION_MAP[str(index)] for index in range(10) if index != 0
 ]
 
-# ["ten ", "eleven ",... "nineteen"] or equivalents
-teen = [tens[0]] + [val for val in teens]
-
-# print("tens = " + str(ten))
-
 # ["","","twenty","thirty","forty",..."ninety"]
 # or equivalent
-twenties = ["", ""] + [val for index, val in enumerate(tens) if index != 0]
+twenties = ["", ""] + [val for val in tens]
 # print("twenties = " + str(twenties))
 
 thousands = [""] + [val for index, val in enumerate(scales) if index != 0]
@@ -102,7 +97,7 @@ def create_spoken_form_for_number(num: int):
         if b2 == 0:
             words = [ones[b1], t] + words
         elif b2 == 1:
-            words = [teen[b1], t] + words
+            words = [teens[b1], t] + words
         elif b2 > 1:
             words = [twenties[b2], ones[b1], t] + words
         if b3 > 0:

@@ -34,21 +34,13 @@ state past: "pass"
 raise {user.python_exception}: user.insert_cursor("raise {python_exception}([|])")
 except {user.python_exception}: "except {python_exception}:"
 
-# for annotating function parameters
-is type {user.python_type_list}:
-    insert(": {python_type_list}")
-returns [type] {user.python_type_list}:
-    insert(" -> {python_type_list}")
-# for generic reference of types
-type {user.python_type_list}:
-    insert("{python_type_list}")
 dock {user.python_docstring_fields}:
     insert("{python_docstring_fields}")
     edit.left()
-dock type {user.python_type_list}:
-    user.insert_cursor(":type [|]: {python_type_list}")
-dock returns type {user.python_type_list}:
-    user.insert_cursor(":rtype [|]: {python_type_list}")
+dock type {user.code_type}:
+    user.insert_cursor(":type [|]: {code_type}")
+dock returns type {user.code_type}:
+    user.insert_cursor(":rtype [|]: {code_type}")
 toggle imports: user.code_toggle_libraries()
 import <user.code_libraries>:
     user.code_insert_library(code_libraries, "")
