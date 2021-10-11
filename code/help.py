@@ -405,7 +405,6 @@ def refresh_context_command_map(enabled_only=False):
                     local_context_map[context_name] = context
 
 
-    local_rule_word_map = refresh_rule_word_map(local_context_command_map)
 
     # Update all the global state after we've performed our calculations
     global context_map
@@ -413,12 +412,14 @@ def refresh_context_command_map(enabled_only=False):
     global sorted_display_list
     global show_enabled_contexts_only
     global display_name_to_context_name_map
+    global rule_word_map
 
     context_map = local_context_map
     context_command_map = local_context_command_map
     sorted_display_list = sorted(local_display_name_to_context_name_map.keys())
     show_enabled_contexts_only = enabled_only
     display_name_to_context_name_map = local_display_name_to_context_name_map
+    rule_word_map = refresh_rule_word_map(local_context_command_map)
 
     ctx.lists["self.help_contexts"] = cached_short_context_names
     update_active_contexts_cache(active_contexts)
