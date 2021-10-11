@@ -46,14 +46,12 @@ total_page_count = 1
 cached_active_contexts_list = []
 
 live_update = True
-cached_window_title = None
 show_enabled_contexts_only = False
 
 
 def update_title():
     global live_update
     global show_enabled_contexts_only
-    global cached_window_title
 
     if live_update:
         if gui_context_help.showing:
@@ -343,16 +341,14 @@ def reset():
     global selected_context
     global search_phrase
     global selected_context_page
-    global cached_window_title
     global show_enabled_contexts_only
     global display_name_to_context_name_map
 
     current_context_page = 1
-    sorted_display_list = None
+    sorted_display_list = []
     selected_context = None
     search_phrase = None
     selected_context_page = 1
-    cached_window_title = None
     show_enabled_contexts_only = False
     display_name_to_context_name_map = {}
 
@@ -369,25 +365,13 @@ overrides = {}
 
 
 def refresh_context_command_map(enabled_only=False):
-    global rule_word_map
-    global context_command_map
-    global context_map
-    global sorted_display_list
-    global show_enabled_contexts_only
-    global cached_window_title
-    global context_map
-    global display_name_to_context_name_map
-
-    context_map = {}
-    cached_short_context_names = {}
-    display_name_to_context_name_map = {}
-    show_enabled_contexts_only = enabled_only
-    cached_window_title = ui.active_window().title
     active_contexts = registry.active_contexts()
-    # print(str(active_contexts))
-    update_active_contexts_cache(active_contexts)
 
-    context_command_map = {}
+    local_context_map = {}
+    local_display_name_to_context_name_map = {}
+    local_context_command_map = {}
+    cached_short_context_names = {}
+
     for context_name, context in registry.contexts.items():
         splits = context_name.split(".")
 
@@ -404,35 +388,44 @@ def refresh_context_command_map(enabled_only=False):
                 short_names = [overrides[short_names[1]]]
 
             if enabled_only and context in active_contexts or not enabled_only:
-                context_command_map[context_name] = {}
+                local_context_command_map[context_name] = {}
                 for command_alias, val in context.commands.items():
-                    # print(str(val))
                     if command_alias in registry.commands or not enabled_only:
-                        # print(str(val.rule.rule) + ": " + val.target.code)
-                        context_command_map[context_name][
+                        local_context_command_map[context_name][
                             str(val.rule.rule)
                         ] = val.target.code
-                # print(short_name)
-                # print("length: " + str(len(context_command_map[context_name])))
-                if len(context_command_map[context_name]) == 0:
-                    context_command_map.pop(context_name)
+                if len(local_context_command_map[context_name]) == 0:
+                    local_context_command_map.pop(context_name)
                 else:
                     for short_name in short_names:
                         cached_short_context_names[short_name] = context_name
 
                     # the last entry will contain no symbols
-                    display_name_to_context_name_map[display_name] = context_name
-                    context_map[context_name] = context
+                    local_display_name_to_context_name_map[display_name] = context_name
+                    local_context_map[context_name] = context
 
-    refresh_rule_word_map(context_command_map)
+
+
+    # Update all the global state after we've performed our calculations
+    global context_map
+    global context_command_map
+    global sorted_display_list
+    global show_enabled_contexts_only
+    global display_name_to_context_name_map
+    global rule_word_map
+
+    context_map = local_context_map
+    context_command_map = local_context_command_map
+    sorted_display_list = sorted(local_display_name_to_context_name_map.keys())
+    show_enabled_contexts_only = enabled_only
+    display_name_to_context_name_map = local_display_name_to_context_name_map
+    rule_word_map = refresh_rule_word_map(local_context_command_map)
 
     ctx.lists["self.help_contexts"] = cached_short_context_names
-    # print(str(ctx.lists["self.help_contexts"]))
-    sorted_display_list = sorted(display_name_to_context_name_map.keys())
+    update_active_contexts_cache(active_contexts)
 
 
 def refresh_rule_word_map(context_command_map):
-    global rule_word_map
     rule_word_map = defaultdict(set)
 
     for context_name, commands in context_command_map.items():
@@ -440,6 +433,8 @@ def refresh_rule_word_map(context_command_map):
             tokens = set(token for token in rule.split(" ") if token.isalpha())
             for token in tokens:
                 rule_word_map[token].add((context_name, rule))
+
+    return rule_word_map
 
 
 events_registered = False
@@ -623,6 +618,3 @@ class Actions:
 
 def commands_updated(_):
     update_title()
-
-
-app.register("ready", refresh_context_command_map)
