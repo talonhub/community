@@ -617,6 +617,3 @@ class Actions:
 
 def commands_updated(_):
     update_title()
-
-
-app.register("ready", refresh_context_command_map)
