@@ -3,8 +3,9 @@ from talon import Context, Module, actions, app, imgui, registry, settings
 ctx = Context()
 mod = Module()
 mod.list("code_functions", desc="List of functions for active language")
-mod.list("code_types", desc="List of types for active language")
+mod.list("code_type", desc="List of types for active language")
 mod.list("code_libraries", desc="List of libraries for active language")
+mod.list("code_parameter_name", desc="List of common parameter names for active language")
 
 setting_private_function_formatter = mod.setting("code_private_function_formatter", str)
 setting_protected_function_formatter = mod.setting(
@@ -68,12 +69,6 @@ def code_functions(m) -> str:
     return m.code_functions
 
 
-@mod.capture(rule="{user.code_types}")
-def code_types(m) -> str:
-    """Returns a type"""
-    return m.code_types
-
-
 @mod.capture(rule="{user.code_libraries}")
 def code_libraries(m) -> str:
     """Returns a type"""
@@ -101,6 +96,7 @@ mod.mode("auto_lang")
 
 # Auto lang is enabled by default
 app.register("ready", lambda: actions.user.code_clear_language_mode())
+
 
 @mod.action_class
 class Actions:
@@ -423,6 +419,12 @@ class Actions:
     def code_insert_function(text: str, selection: str):
         """Inserts a function and positions the cursor appropriately"""
 
+    def code_insert_type_annotation(type: str):
+        """Inserts a type annotation"""
+
+    def code_insert_return_type(type: str):
+        """Inserts a return type"""
+
     def code_toggle_libraries():
         """GUI: List libraries for active language"""
         global library_list
@@ -444,6 +446,9 @@ class Actions:
 
     def code_insert_library(text: str, selection: str):
         """Inserts a library and positions the cursor appropriately"""
+
+    def code_insert_named_argument(parameter_name: str):
+        """Inserts a named argument"""
 
     def code_document_string():
         """Inserts a document string and positions the cursor appropriately"""
