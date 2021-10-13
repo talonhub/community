@@ -372,10 +372,11 @@ def update_gui():
         gui_files.show()
 
 
-def update_lists():
+def update_lists(path=None):
     global folder_selections, file_selections, current_folder_page, current_file_page
     is_valid_path = False
-    path = actions.user.file_manager_current_path()
+    if not path:
+        path = actions.user.file_manager_current_path()
     directories = {}
     files = {}
     folder_selections = []
@@ -425,7 +426,7 @@ def win_event_handler(window):
         clear_lists()
     elif path:
         if cached_path != path:
-            update_lists()
+            update_lists(path)
     elif cached_path:
         clear_lists()
         actions.user.file_manager_hide_pickers()

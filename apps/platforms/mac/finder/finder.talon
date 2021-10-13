@@ -2,6 +2,7 @@ os: mac
 app: finder
 -
 tag(): user.file_manager
+tag(): user.tabs
 preferences: key(cmd-,)
 options: key(cmd-j)
 search: key(cmd-alt-f)
