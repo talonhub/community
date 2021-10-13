@@ -159,7 +159,7 @@ formatters_words = {
     # "sentence": formatters_dict["CAPITALIZE_FIRST_WORD"],
     "slasher": formatters_dict["SLASH_SEPARATED"],
     "smash": formatters_dict["NO_SPACES"],
-    "snake": formatters_dict["SNAKE_CASE"],
+    "downunder": formatters_dict["SNAKE_CASE"],	
     # "speak": formatters_dict["NOOP"],
     "string": formatters_dict["SINGLE_QUOTED_STRING"],
     "title": formatters_dict["CAPITALIZE_ALL_WORDS"],

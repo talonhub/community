@@ -59,8 +59,8 @@ run replace:                     key("cmd-shift-j")
 run spell check:                 key("f7")
 
 # Navigation and panels
-go to source:                    key("ctrl-1")
-go to console:                   key("ctrl-2")
+go source:                       key("ctrl-1")
+go console:                      key("ctrl-2")
 go to help:                      key("ctrl-3")
 go to history:                   key("ctrl-4")
 go to files:                     key("ctrl-5")
@@ -74,21 +74,32 @@ go to omni:                      key("ctrl-.")
 go to line:                      key("cmd-shift-alt-g")
 go to section:                   key("cmd-shift-alt-j")
 go to tab:                       key("ctrl-shift-.")
-go to previous tab:              key("ctrl-f11")
-go to next tab:                  key("ctrl-f12")
-go to first tab:                 key("ctrl-shift-f11")
-go to last tab:                  key("ctrl-shift-f12")
+tab pree:                        key("ctrl-f11")
+tab next:                        key("ctrl-f12")
+tab first:                       key("ctrl-shift-f11")
+tab last:                        key("ctrl-shift-f12")
+tab new:                         key("cmd-shift-n") ## Custom shortcut
+tab save:                        key("cmd-s")
+tab save all:                    key("alt-cmd-s")
+tab save as:                     key("shift-cmd-s") ## Custom shortcut
+
+# Session
+force kill session:              key("ctrl-shift-c") ## Custom shortcut
+start new session:               key("ctrl-shift-n") 
+quit current session:            key("cmd-q")
+restart R session:               key("cmd-shift-f10")
 
 zoom source:                     key("ctrl-shift-1")
 (zoom|show) all:                 key("ctrl-shift-0")
 
 help that:                       key("f1")
 define that:                     key("f2")
-previous plot:                   key("cmd-alt-f11")
-next plot:                       key("cmd-alt-f12")
+plot pree:                       key("cmd-alt-f11")
+plot next:                       key("cmd-alt-f12")
+plot save:                       key("ctrl-alt-shift-s") ## Custom shortcut
+
 
 # devtools, package development, and session management
-restart R session:               key("cmd-shift-f10")
 dev tools build:                 key("cmd-shift-b")
 dev tools load all:              key("cmd-shift-l")
 dev tools test:                  key("cmd-shift-t")
@@ -120,7 +131,7 @@ run git commit:                  key("ctrl-alt-m")
 # clear console:                 key("ctrl-l")
 # popup history:                 key("cmd-up")
 # change working directory:      key("ctrl-shift-h")
-# new document:                  key("cmd-shift-n")
+# tab new:                  key("cmd-shift-n")
 # new document (chrome only):    key("cmd-shift-alt-n")
 # insert code section:           key("cmd-shift-r")
 # scroll diff view:              key("ctrl-up/down")

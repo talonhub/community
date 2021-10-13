@@ -1,7 +1,8 @@
 question [mark]: "?"
 (downscore | underscore): "_"
 double dash: "--"
-(bracket | brack | left bracket): "{"
+#(bracket | brack | left bracket): "{"
+(el bracket | left bracket): "{"
 (rbrack | are bracket | right bracket): "}"
 triple quote: "'''"
 (triple grave | triple back tick | gravy):

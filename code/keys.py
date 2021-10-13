@@ -3,9 +3,12 @@ from typing import Set
 from talon import Module, Context, actions, app
 import sys
 
-default_alphabet = "air bat cap drum each fine gust harp sit jury crunch look made near odd pit quench red sun trap urge vest whale plex yank zip".split(
+default_alphabet = "air best cap drum each flow gear harp ivy just kale look made near odd play quick ring side trap urge vine whale plex yank zoo".split(
     " "
 )
+#default_alphabet = "air bat cap drum each fine gust harp sit jury crunch look made near odd pit quench red sun trap urge vest whale plex yank zip".split(
+#    " "
+#)
 letters_string = "abcdefghijklmnopqrstuvwxyz"
 
 default_digits = "zero one two three four five six seven eight nine".split(" ")
@@ -114,9 +117,10 @@ ctx = Context()
 modifier_keys = {
     # If you find 'alt' is often misrecognized, try using 'alter'.
     "alt": "alt",  #'alter': 'alt',
-    "control": "ctrl",  #'troll':   'ctrl',
-    "shift": "shift",  #'sky':     'shift',
+    "control": "ctrl",  
+    'troll':   'ctrl',
     "super": "super",
+    "shift": "shift" ## added EH
 }
 if app.platform  == "mac":
     modifier_keys["command"] = "cmd"
