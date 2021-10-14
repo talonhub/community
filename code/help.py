@@ -6,6 +6,8 @@ from typing import Dict, List, Iterable, Set, Tuple, Union
 from talon import Module, Context, actions, imgui, Module, registry, ui, app
 from talon.grammar import Phrase
 
+from itertools import islice
+
 mod = Module()
 mod.list("help_contexts", desc="list of available contexts")
 mod.mode("help", "mode for commands that are available only when help is visible")
@@ -49,6 +51,8 @@ live_update = True
 cached_window_title = None
 show_enabled_contexts_only = False
 
+selected_list = None
+current_list_page = 1
 
 def update_title():
     global live_update
@@ -63,99 +67,6 @@ def update_title():
                 update_active_contexts_cache(registry.active_contexts())
 
 
-# todo: dynamic rect?
-@imgui.open(y=0)
-def gui_alphabet(gui: imgui.GUI):
-    global alphabet
-    gui.text("Alphabet help")
-    gui.line()
-
-    for key, val in alphabet.items():
-        gui.text("{}: {}".format(val, key))
-
-    gui.spacer()
-    if gui.button("close"):
-        gui_alphabet.hide()
-
-@imgui.open(y=0)
-def gui_symbol_key_words(gui: imgui.GUI):
-    global alphabet
-    gui.text("Symbol help")
-    gui.line()
-
-    for key, val in symbol_key_words.items():
-        gui.text("{}: {}".format(val, key))
-
-    gui.spacer()
-    if gui.button("close"):
-        gui_symbol_key_words.hide()
-
-@imgui.open(y=0)
-def gui_numbers(gui: imgui.GUI):
-    global help_numbers
-    gui.text("numbers help")
-    gui.line()
-
-    for key, val in help_numbers.items():
-        gui.text("{}: {}".format(val, key))
-
-    gui.spacer()
-    if gui.button("close"):
-        gui_numbers.hide()
-
-
-@imgui.open(y=0)
-def gui_punctuation_words(gui: imgui.GUI):
-    global punctuation_words
-    gui.text("Punctuation help")
-    gui.line()
-
-    for key, val in punctuation_words.items():
-        gui.text("{}: {}".format(val, key))
-
-    gui.spacer()
-    if gui.button("close"):
-        gui_punctuation_words.hide()
-
-@imgui.open(y=0)
-def gui_modifier_words(gui: imgui.GUI):
-    global modifier_words
-    gui.text("modifier help")
-    gui.line()
-
-    for key, val in modifier_words.items():
-        gui.text("{}: {}".format(val, key))
-
-    gui.spacer()
-    if gui.button("close"):
-        gui_modifier_words.hide()
-
-@imgui.open(y=0)
-def gui_simple_keys(gui: imgui.GUI):
-    global simple_keys
-    gui.text("simple key help")
-    gui.line()
-
-    for val in simple_keys:
-        gui.text("{}".format(val))
-
-    gui.spacer()
-    if gui.button("close"):
-        gui_simple_keys.hide()
-
-@imgui.open(y=0)
-def gui_alternate_words(gui: imgui.GUI):
-    global alternate_words
-    gui.text("alternate key help")
-    gui.line()
-
-    for key, val in alternate_words.items():
-        gui.text("{}: {}".format(val, key))
-
-    gui.spacer()
-    if gui.button("close"):
-        gui_alternate_words.hide()
-
 @imgui.open(y=0)
 def gui_formatters(gui: imgui.GUI):
     global formatters_words
@@ -169,31 +80,6 @@ def gui_formatters(gui: imgui.GUI):
     if gui.button("close"):
         gui_formatters.hide()
 
-@imgui.open(y=0)
-def gui_arrows(gui: imgui.GUI):
-    global help_arrows
-    gui.text("formatters help")
-    gui.line()
-
-    for key, val in help_arrows.items():
-        gui.text("{}: {}".format(val, key))
-
-    gui.spacer()
-    if gui.button("close"):
-        gui_arrows.hide()
-
-@imgui.open(y=0)
-def gui_function_keys(gui: imgui.GUI):
-    global help_function_keys
-    gui.text("function keys help")
-    gui.line()
-
-    for key, val in help_function_keys.items():
-        gui.text("{}: {}".format(val, key))
-
-    gui.spacer()
-    if gui.button("close"):
-        gui_function_keys.hide()
 
 
 def format_context_title(context_name: str) -> str:
@@ -464,6 +350,8 @@ def reset():
     global cached_window_title
     global show_enabled_contexts_only
     global display_name_to_context_name_map
+    global selected_list
+    global current_list_page
 
     current_context_page = 1
     sorted_display_list = None
@@ -473,6 +361,8 @@ def reset():
     cached_window_title = None
     show_enabled_contexts_only = False
     display_name_to_context_name_map = {}
+    selected_list = None
+    current_list_page = 1
 
 
 def update_active_contexts_cache(active_contexts):
@@ -562,7 +452,6 @@ def refresh_rule_word_map(context_command_map):
 
 events_registered = False
 
-
 def register_events(register: bool):
     global events_registered
     if register:
@@ -576,130 +465,85 @@ def register_events(register: bool):
         registry.unregister("update_commands", commands_updated)
 
 def hide_all_help_guis():
-    gui_alphabet.hide()
-    gui_context_help.hide()
-    gui_symbol_key_words.hide()
-    gui_punctuation_words.hide()
-    gui_modifier_words.hide()
-    gui_simple_keys.hide()
-    gui_alternate_words.hide()
+    gui_context_help.hide()    
     gui_formatters.hide()
-    gui_arrows.hide()
-    gui_numbers.hide()
-    gui_function_keys.hide()
+    gui_list_help.hide()
+
+def paginate_list(data, SIZE=setting_help_max_command_lines_per_page.get()):
+    it = iter(data)
+    for i in range(0, len(data), SIZE):
+        yield {k:data[k] for k in islice(it, SIZE)}
+
+def draw_list_commands(gui: imgui.GUI):
+    global selected_list
+    global total_page_count
+    global selected_context_page
+
+    talon_list = registry.lists[selected_list][0]
+    #numpages = math.ceil(len(talon_list) / SIZE)
+    
+    pages_list = []
+
+    for item in paginate_list(talon_list):
+        pages_list.append(item)
+    #print(pages_list)
+
+    total_page_count = len(pages_list)
+    return pages_list  
+
+@imgui.open(y=0)
+def gui_list_help(gui: imgui.GUI):
+    global total_page_count
+    global current_list_page
+    global selected_list
+
+    pages_list = draw_list_commands(gui)
+    total_page_count = len(pages_list)
+    #print(pages_list[current_page])
+
+    gui.text("{} {}/{}".format(selected_list, current_list_page, total_page_count))
+
+    gui.line()
+    
+    for key, value in pages_list[current_list_page - 1].items():
+        gui.text("{}: {}".format(value, key))
+
+    gui.spacer()
+    
+    if total_page_count > 1:
+        if gui.button("Next..."):
+            actions.user.help_next()
+
+        if gui.button("Previous..."):
+            actions.user.help_previous()
+
+        if gui.button("Return"):
+            actions.user.help_return()
+
+    if gui.button("Refresh"):
+        actions.user.help_refresh()
+
+    if gui.button("Close"):
+        actions.user.help_hide()
 
 
 @mod.action_class
 class Actions:
-    def help_alphabet(ab: dict):
-        """Provides the alphabet dictionary"""
+
+    def help_list(ab: str):
+        """Provides the symbol dictionary"""
         # what you say is stored as a trigger
-        global alphabet
-        alphabet = ab
+        global selected_list
         reset()
-        # print("help_alphabet - alphabet gui_alphabet: {}".format(gui_alphabet.showing))
-        # print(
-        #     "help_alphabet - gui_context_help showing: {}".format(
-        #         gui_context_help.showing
-        #     )
-        # )
-        hide_all_help_guis()
-        gui_alphabet.show()
-        register_events(False)
+        selected_list = ab
+        gui_list_help.show()
+        register_events(True)
         actions.mode.enable("user.help")
 
-    def help_number_key_words(ab: dict):
-        """Provides the words for the number keys"""
-        # what you say is stored as a trigger
-        global help_numbers
-        help_numbers = ab
-        reset()
-        # print("help_alphabet - alphabet gui_alphabet: {}".format(gui_alphabet.showing))
-        # print(
-        #     "help_alphabet - gui_context_help showing: {}".format(
-        #         gui_context_help.showing
-        #     )
-        # )
-        hide_all_help_guis()
-        gui_numbers.show()
-        register_events(False)
-        actions.mode.enable("user.help")
 
-    def help_symbol_key_words(ab: dict):
-        """Provides the alphabet dictionary"""
-        # what you say is stored as a trigger
-        global symbol_key_words
-        symbol_key_words = ab
-        reset()
-        # print("help_alphabet - alphabet gui_alphabet: {}".format(gui_alphabet.showing))
-        # print(
-        #     "help_alphabet - gui_context_help showing: {}".format(
-        #         gui_context_help.showing
-        #     )
-        # )
-        hide_all_help_guis()
-        gui_symbol_key_words.show()
-        register_events(False)
-        actions.mode.enable("user.help")
-
-    def help_punctuation_words(ab: dict):
-        """Provides the alphabet dictionary"""
-        # what you say is stored as a trigger
-        global punctuation_words
-        punctuation_words = ab
-        reset()
-        # print("help_alphabet - alphabet gui_alphabet: {}".format(gui_alphabet.showing))
-        # print(
-        #     "help_alphabet - gui_context_help showing: {}".format(
-        #         gui_context_help.showing
-        #     )
-        # )
-        hide_all_help_guis()
-        gui_punctuation_words.show()
-        register_events(False)
-        actions.mode.enable("user.help")
-
-    def help_modifier_words(ab: dict):
-        """Provides the list of modifier keywords"""
-        # what you say is stored as a trigger
-        global modifier_words
-        modifier_words = ab
-        reset()
-        hide_all_help_guis()
-        gui_modifier_words.show()
-        register_events(False)
-        actions.mode.enable("user.help")
-
-    def help_simple_keys(ab: list):
-        """Provides the list of modifier keywords"""
-        # what you say is stored as a trigger
-        global simple_keys
-        simple_keys = ab
-        reset()
-        hide_all_help_guis()
-        gui_simple_keys.show()
-        register_events(False)
-        actions.mode.enable("user.help")
-
-    def help_alternate_keys(ab: dict):
-        """Provides the list of modifier keywords"""
-        # what you say is stored as a trigger
-        global alternate_words
-        alternate_words = ab
-        reset()
-        # print("help_alphabet - alphabet gui_alphabet: {}".format(gui_alphabet.showing))
-        # print(
-        #     "help_alphabet - gui_context_help showing: {}".format(
-        #         gui_context_help.showing
-        #     )
-        # )
-        hide_all_help_guis()
-        gui_alternate_words.show()
-        register_events(False)
-        actions.mode.enable("user.help")
 
     def help_formatters(ab: dict):
-        """Provides the list of modifier keywords"""
+        """Provides the list of formatter keywords"""
         # what you say is stored as a trigger
         global formatters_words
         formatters_words = ab
@@ -712,26 +556,6 @@ class Actions:
         # )
         hide_all_help_guis()
         gui_formatters.show()
-        register_events(False)
-        actions.mode.enable("user.help")
-
-    def help_arrow_keys(ab:dict):
-        """provides list of arrow keywords"""
-        global help_arrows
-        help_arrows = ab
-        reset()
-        hide_all_help_guis()
-        gui_arrows.show()
-        register_events(False)
-        actions.mode.enable("user.help")
-
-    def help_function_keys(ab:dict):
-        """provides list of function key keywords"""
-        global help_function_keys
-        help_function_keys = ab
-        reset()
-        hide_all_help_guis()
-        gui_function_keys.show()
         register_events(False)
         actions.mode.enable("user.help")
 
@@ -792,6 +616,8 @@ class Actions:
         global selected_context_page
         global total_page_count
 
+        global current_list_page
+
         if gui_context_help.showing:
             if selected_context is None and search_phrase is None:
                 if current_context_page != total_page_count:
@@ -803,6 +629,12 @@ class Actions:
                     selected_context_page += 1
                 else:
                     selected_context_page = 1
+
+        if gui_list_help.showing:
+            if current_list_page != total_page_count:
+                current_list_page += 1
+            else:
+                current_list_page = 1
 
     def help_select_index(index: int):
         """Select the context by a number"""
@@ -827,7 +659,9 @@ class Actions:
         global current_context_page
         global selected_context
         global selected_context_page
-        global total_page_count
+        global total_page_count 
+
+        global current_list_page
 
         if gui_context_help.showing:
             if selected_context is None and search_phrase is None:
@@ -841,6 +675,12 @@ class Actions:
                     selected_context_page -= 1
                 else:
                     selected_context_page = total_page_count
+
+        if gui_list_help.showing:
+            if current_list_page != total_page_count:
+                current_list_page -= 1
+            else:
+                current_list_page = 1
 
     def help_return():
         """Returns to the main help window"""
@@ -877,7 +717,6 @@ class Actions:
         refresh_context_command_map()
         register_events(False)
         actions.mode.disable("user.help")
-
 
 def commands_updated(_):
     update_title()
