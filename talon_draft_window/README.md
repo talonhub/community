@@ -1,4 +1,4 @@
-This reposiory is a [Talon](https://talonvoice.com/) script that allows you to more easily edit prose style text via a task-specific UI.
+The draft window allows you to more easily edit prose style text via a task-specific UI.
 
 # Usage
 
@@ -19,10 +19,6 @@ An session might go like this for example:
 Here's a video of me going through the above commands:
 
 ![Video of talon draft window in action](doc/talon-draft-demo.gif)
-
-# Installation
-
-The `draft_window.talon` file depends on functions and lists defined by the [knausj\_talon](https://github.com/knausj85/knausj_talon) repo. Once you have knausj set up you can just drop this folder in next to it in the Talon user scripts directory (~/.talon/user/ under Linux). So you might end up with ~/.talon/user/ containing a `knausj_talon` folder, a `talon_draft_window` folder, and an engines.py.
 
 # Customising
 

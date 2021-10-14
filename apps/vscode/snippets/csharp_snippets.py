@@ -7,7 +7,7 @@ ctx = Context()
 ctx.matches = r"""
 app: vscode
 mode: user.csharp
-mode: command 
+mode: user.auto_lang 
 and code.language: csharp
 """
 # short name -> ide clip name

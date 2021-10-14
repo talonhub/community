@@ -3,8 +3,9 @@ from talon import Context, Module, actions, app, imgui, registry, settings
 ctx = Context()
 mod = Module()
 mod.list("code_functions", desc="List of functions for active language")
-mod.list("code_types", desc="List of types for active language")
+mod.list("code_type", desc="List of types for active language")
 mod.list("code_libraries", desc="List of libraries for active language")
+mod.list("code_parameter_name", desc="List of common parameter names for active language")
 
 setting_private_function_formatter = mod.setting("code_private_function_formatter", str)
 setting_protected_function_formatter = mod.setting(
@@ -61,20 +62,11 @@ extension_lang_map = {
     ".vimrc": "vimscript",
 }
 
-# flag indicates whether or not the title tracking is enabled
-forced_language = False
-
 
 @mod.capture(rule="{user.code_functions}")
 def code_functions(m) -> str:
     """Returns a function name"""
     return m.code_functions
-
-
-@mod.capture(rule="{user.code_types}")
-def code_types(m) -> str:
-    """Returns a type"""
-    return m.code_types
 
 
 @mod.capture(rule="{user.code_libraries}")
@@ -87,11 +79,9 @@ def code_libraries(m) -> str:
 class code_actions:
     def language():
         result = ""
-        if not forced_language:
-            file_extension = actions.win.file_ext()
-
-            if file_extension and file_extension in extension_lang_map:
-                result = extension_lang_map[file_extension]
+        file_extension = actions.win.file_ext()
+        if file_extension and file_extension in extension_lang_map:
+            result = extension_lang_map[file_extension]
 
         # print("code.language: " + result)
         return result
@@ -101,22 +91,25 @@ class code_actions:
 for __, lang in extension_lang_map.items():
     mod.mode(lang)
 
+# Create a mode for the automated language detection. This is active when no lang is forced.
+mod.mode("auto_lang")
+
+# Auto lang is enabled by default
+app.register("ready", lambda: actions.user.code_clear_language_mode())
+
 
 @mod.action_class
 class Actions:
     def code_set_language_mode(language: str):
         """Sets the active language mode, and disables extension matching"""
-        global forced_language
         actions.user.code_clear_language_mode()
+        actions.mode.disable("user.auto_lang")
         actions.mode.enable("user.{}".format(language))
         # app.notify("Enabled {} mode".format(language))
-        forced_language = True
 
     def code_clear_language_mode():
         """Clears the active language mode, and re-enables code.language: extension matching"""
-        global forced_language
-        forced_language = False
-
+        actions.mode.enable("user.auto_lang")
         for __, lang in extension_lang_map.items():
             actions.mode.disable("user.{}".format(lang))
         # app.notify("Cleared language modes")
@@ -204,6 +197,9 @@ class Actions:
 
     def code_operator_bitwise_and_assignment():
         """code_operator_and"""
+
+    def code_operator_increment():        
+        """code_operator_increment"""
 
     def code_operator_bitwise_or():
         """code_operator_bitwise_or"""
@@ -426,6 +422,12 @@ class Actions:
     def code_insert_function(text: str, selection: str):
         """Inserts a function and positions the cursor appropriately"""
 
+    def code_insert_type_annotation(type: str):
+        """Inserts a type annotation"""
+
+    def code_insert_return_type(type: str):
+        """Inserts a return type"""
+
     def code_toggle_libraries():
         """GUI: List libraries for active language"""
         global library_list
@@ -447,6 +449,9 @@ class Actions:
 
     def code_insert_library(text: str, selection: str):
         """Inserts a library and positions the cursor appropriately"""
+
+    def code_insert_named_argument(parameter_name: str):
+        """Inserts a named argument"""
 
     def code_document_string():
         """Inserts a document string and positions the cursor appropriately"""

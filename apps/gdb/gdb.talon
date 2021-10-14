@@ -6,67 +6,15 @@ mode: user.gdb
 -
 tag(): user.gdb
 tag(): user.debugger
-
-##
-# Generic debugger actions
-##
-
-# Code execution
-action(user.debugger_step_into): "stepi\n"
-action(user.debugger_step_over): "nexti\n"
-action(user.debugger_step_line): "step\n"
-action(user.debugger_step_over_line): "next\n"
-action(user.debugger_step_out): "finish\n"
 until <number>: "until {number}"
-action(user.debugger_continue): "c\n"
-action(user.debugger_stop): key("ctrl-c")
-action(user.debugger_start): "run\n"
-action(user.debugger_restart): "run\n"
-# XXX -
-action(user.debugger_detach): ""
-
-# Registers
-action(user.debugger_show_registers): "info registers\n"
-action(user.debugger_get_register): "r "
-action(user.debugger_set_register):
-    insert("set $=")
-    edit.left()
-
-# Breakpoints
-action(user.debugger_show_breakpoints): "info breakpoints\n"
-action(user.debugger_add_sw_breakpoint): "break "
-# XXX -
-action(user.debugger_add_hw_breakpoint): ""
-action(user.debugger_break_now): key("ctrl-c")
-action(user.debugger_break_here): "break\n"
-action(user.debugger_clear_all_breakpoints): "d br\n"
 force clear all break points:
     insert("d br\n")
     insert("y\n")
-action(user.debugger_clear_breakpoint):
-    insert("d br ")
-action(user.debugger_enable_all_breakpoints):
-    insert("enable br\n")
-action(user.debugger_enable_breakpoint):
-    insert("enable br ")
-action(user.debugger_disable_all_breakpoints):
-    insert("disable br\n")
-action(user.debugger_disable_breakpoint):
-    insert("disable br  ")
-
 break [on] clipboard:
     insert("break ")
     key(ctrl-shift-v)
     key(enter)
-
-# Memory inspection
-
-# Type inspection
-
-##
-# gdb specific functionality
-##
-
+    
 # information
 list [source]: "list\n"
 info source: "info source\n"
@@ -95,8 +43,8 @@ hex dump clipboard:
     insert("x/100gx ")
     edit.paste()
     key(enter)
-
-
+    
+    
 # execution
 source: "source \t\t"
 
@@ -135,7 +83,7 @@ resume main (inf|inferior):
 resume [from] (inf|inferior) <number_small>$:
     insert("inferior {number_small}\n")
     insert("c\n")
-
+    
 # arguments
 set args: "set args "
 

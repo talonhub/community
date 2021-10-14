@@ -34,8 +34,10 @@ search_phrase = None
 context_map = {}
 
 current_context_page = 1
-sorted_context_map_keys = []
-
+# sorted list of diplay names
+sorted_display_list = []
+# display names -> context name
+display_name_to_context_name_map = {}
 selected_context = None
 selected_context_page = 1
 
@@ -44,14 +46,12 @@ total_page_count = 1
 cached_active_contexts_list = []
 
 live_update = True
-cached_window_title = None
 show_enabled_contexts_only = False
 
 
 def update_title():
     global live_update
     global show_enabled_contexts_only
-    global cached_window_title
 
     if live_update:
         if gui_context_help.showing:
@@ -109,22 +109,21 @@ def get_context_page(index: int) -> int:
 
 def get_total_context_pages() -> int:
     return math.ceil(
-        len(sorted_context_map_keys) / setting_help_max_contexts_per_page.get()
+        len(sorted_display_list) / setting_help_max_contexts_per_page.get()
     )
 
 
 def get_current_context_page_length() -> int:
     start_index = (current_context_page - 1) * setting_help_max_contexts_per_page.get()
     return len(
-        sorted_context_map_keys[
+        sorted_display_list[
             start_index : start_index + setting_help_max_contexts_per_page.get()
         ]
     )
 
 
 def get_command_line_count(command: Tuple[str, str]) -> int:
-    """This should be kept in sync with draw_commands
-    """
+    """This should be kept in sync with draw_commands"""
     _, body = command
     lines = len(body.split("\n"))
     if lines == 1:
@@ -171,7 +170,7 @@ def gui_context_help(gui: imgui.GUI):
     global current_context_page
     global selected_context
     global selected_context_page
-    global sorted_context_map_keys
+    global sorted_display_list
     global show_enabled_contexts_only
     global cached_active_contexts_list
     global total_page_count
@@ -198,22 +197,19 @@ def gui_context_help(gui: imgui.GUI):
 
         current_item_index = 1
         current_selection_index = 1
-        for key in sorted_context_map_keys:
-            if key in ctx.lists["self.help_contexts"]:
-                target_page = get_context_page(current_item_index)
+        for display_name in sorted_display_list:
+            target_page = get_context_page(current_item_index)
+            context_name = display_name_to_context_name_map[display_name]
+            if current_context_page == target_page:
+                button_name = format_context_button(
+                    current_selection_index, display_name, context_name,
+                )
 
-                if current_context_page == target_page:
-                    button_name = format_context_button(
-                        current_selection_index,
-                        key,
-                        ctx.lists["self.help_contexts"][key],
-                    )
+                if gui.button(button_name):
+                    selected_context = context_name
+                current_selection_index = current_selection_index + 1
 
-                    if gui.button(button_name):
-                        selected_context = ctx.lists["self.help_contexts"][key]
-                    current_selection_index = current_selection_index + 1
-
-                current_item_index += 1
+            current_item_index += 1
 
         if total_page_count > 1:
             gui.spacer()
@@ -341,20 +337,20 @@ def draw_commands(gui: imgui.GUI, commands: Iterable[Tuple[str, str]]):
 
 def reset():
     global current_context_page
-    global sorted_context_map_keys
+    global sorted_display_list
     global selected_context
     global search_phrase
     global selected_context_page
-    global cached_window_title
     global show_enabled_contexts_only
+    global display_name_to_context_name_map
 
     current_context_page = 1
-    sorted_context_map_keys = None
+    sorted_display_list = []
     selected_context = None
     search_phrase = None
     selected_context_page = 1
-    cached_window_title = None
     show_enabled_contexts_only = False
+    display_name_to_context_name_map = {}
 
 
 def update_active_contexts_cache(active_contexts):
@@ -364,71 +360,72 @@ def update_active_contexts_cache(active_contexts):
 
 
 # example usage todo: make a list definable in .talon
-# overrides = {"generic browser" : "broswer"}
+# overrides = {"generic browser": "broswer"}
 overrides = {}
 
 
 def refresh_context_command_map(enabled_only=False):
-    global rule_word_map
-    global context_command_map
-    global context_map
-    global sorted_context_map_keys
-    global show_enabled_contexts_only
-    global cached_window_title
-    global context_map
-
-    context_map = {}
-    cached_short_context_names = {}
-    show_enabled_contexts_only = enabled_only
-    cached_window_title = ui.active_window().title
     active_contexts = registry.active_contexts()
-    # print(str(active_contexts))
-    update_active_contexts_cache(active_contexts)
 
-    context_command_map = {}
+    local_context_map = {}
+    local_display_name_to_context_name_map = {}
+    local_context_command_map = {}
+    cached_short_context_names = {}
+
     for context_name, context in registry.contexts.items():
         splits = context_name.split(".")
-        index = -1
-        if "talon" in splits[index]:
-            index = -2
-            short_name = splits[index].replace("_", " ")
-        else:
-            short_name = splits[index].replace("_", " ")
 
-        if "mac" == short_name or "win" == short_name or "linux" == short_name:
-            index = index - 1
-            short_name = splits[index].replace("_", " ")
+        if "talon" == splits[-1]:
+            display_name = splits[-2].replace("_", " ")
 
-        # print("short name: " + short_name)
-        if short_name in overrides:
-            short_name = overrides[short_name]
+            short_names = actions.user.create_spoken_forms(
+                display_name, generate_subsequences=False,
+            )
 
-        if enabled_only and context in active_contexts or not enabled_only:
-            context_command_map[context_name] = {}
-            for command_alias, val in context.commands.items():
-                # print(str(val))
-                if command_alias in registry.commands:
-                    # print(str(val.rule.rule) + ": " + val.target.code)
-                    context_command_map[context_name][
-                        str(val.rule.rule)
-                    ] = val.target.code
-            # print(short_name)
-            # print("length: " + str(len(context_command_map[context_name])))
-            if len(context_command_map[context_name]) == 0:
-                context_command_map.pop(context_name)
-            else:
-                cached_short_context_names[short_name] = context_name
-                context_map[context_name] = context
+            if short_names[0] in overrides:
+                short_names = [overrides[short_names[0]]]
+            elif len(short_names) == 2 and short_names[1] in overrides:
+                short_names = [overrides[short_names[1]]]
 
-    refresh_rule_word_map(context_command_map)
+            if enabled_only and context in active_contexts or not enabled_only:
+                local_context_command_map[context_name] = {}
+                for command_alias, val in context.commands.items():
+                    if command_alias in registry.commands or not enabled_only:
+                        local_context_command_map[context_name][
+                            str(val.rule.rule)
+                        ] = val.target.code
+                if len(local_context_command_map[context_name]) == 0:
+                    local_context_command_map.pop(context_name)
+                else:
+                    for short_name in short_names:
+                        cached_short_context_names[short_name] = context_name
+
+                    # the last entry will contain no symbols
+                    local_display_name_to_context_name_map[display_name] = context_name
+                    local_context_map[context_name] = context
+
+
+
+    # Update all the global state after we've performed our calculations
+    global context_map
+    global context_command_map
+    global sorted_display_list
+    global show_enabled_contexts_only
+    global display_name_to_context_name_map
+    global rule_word_map
+
+    context_map = local_context_map
+    context_command_map = local_context_command_map
+    sorted_display_list = sorted(local_display_name_to_context_name_map.keys())
+    show_enabled_contexts_only = enabled_only
+    display_name_to_context_name_map = local_display_name_to_context_name_map
+    rule_word_map = refresh_rule_word_map(local_context_command_map)
 
     ctx.lists["self.help_contexts"] = cached_short_context_names
-    # print(str(ctx.lists["self.help_contexts"]))
-    sorted_context_map_keys = sorted(cached_short_context_names)
+    update_active_contexts_cache(active_contexts)
 
 
 def refresh_rule_word_map(context_command_map):
-    global rule_word_map
     rule_word_map = defaultdict(set)
 
     for context_name, commands in context_command_map.items():
@@ -436,6 +433,8 @@ def refresh_rule_word_map(context_command_map):
             tokens = set(token for token in rule.split(" ") if token.isalpha())
             for token in tokens:
                 rule_word_map[token].add((context_name, rule))
+
+    return rule_word_map
 
 
 events_registered = False
@@ -543,16 +542,16 @@ class Actions:
 
     def help_select_index(index: int):
         """Select the context by a number"""
-        global sorted_context_map_keys, selected_context
+        global sorted_display_list, selected_context
         if gui_context_help.showing:
             if index < setting_help_max_contexts_per_page.get() and (
                 (current_context_page - 1) * setting_help_max_contexts_per_page.get()
                 + index
-                < len(sorted_context_map_keys)
+                < len(sorted_display_list)
             ):
                 if selected_context is None:
-                    selected_context = ctx.lists["self.help_contexts"][
-                        sorted_context_map_keys[
+                    selected_context = display_name_to_context_name_map[
+                        sorted_display_list[
                             (current_context_page - 1)
                             * setting_help_max_contexts_per_page.get()
                             + index
@@ -619,7 +618,3 @@ class Actions:
 
 def commands_updated(_):
     update_title()
-
-
-app.register("ready", refresh_context_command_map)
-
