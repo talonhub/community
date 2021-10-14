@@ -25,10 +25,12 @@ you bun to:
 gap: 
   key(space)
 
-slant: 
+slant:
+  edit.line_end()
   key(enter tab)
 
 slanter:
+  edit.line_end()
   key(enter shift-tab)
 
 slap:
