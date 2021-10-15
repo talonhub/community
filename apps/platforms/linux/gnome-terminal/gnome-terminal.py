@@ -16,7 +16,7 @@ app: gnome_terminal
 """
 
 # Set tags
-ctx.tags = ["terminal", "user.generic_unix_shell", "user.tabs", "user.git", "user.docker"]
+ctx.tags = ["terminal", "user.generic_unix_shell", "user.tabs", "user.git", "user.kubectl"]
 
 
 # --- Implement actions ---
