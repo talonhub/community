@@ -307,13 +307,3 @@ ctx.lists["self.prose_formatter"] = {
     "sentence": "CAPITALIZE_FIRST_WORD",
 }
 
-
-@imgui.open()
-def gui(gui: imgui.GUI):
-    gui.text("List formatters")
-    gui.line()
-    for name in sorted(set(formatters_words.keys())):
-        gui.text(f"{name} | {format_phrase_no_history(['one', 'two', 'three'], name)}")
-    gui.spacer()
-    if gui.button("close"):
-        gui.hide()
