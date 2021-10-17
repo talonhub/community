@@ -464,10 +464,11 @@ def hide_all_help_guis():
     gui_formatters.hide()
     gui_list_help.hide()
 
-def paginate_list(data, SIZE=setting_help_max_command_lines_per_page.get()):
+def paginate_list(data, SIZE=None):
+    chunk_size = SIZE or setting_help_max_command_lines_per_page.get()
     it = iter(data)
-    for i in range(0, len(data), SIZE):
-        yield {k:data[k] for k in islice(it, SIZE)}
+    for i in range(0, len(data), chunk_size):
+        yield {k:data[k] for k in islice(it, chunk_size)}
 
 def draw_list_commands(gui: imgui.GUI):
     global selected_list
