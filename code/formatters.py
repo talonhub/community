@@ -240,12 +240,7 @@ class Actions:
         """Inserts a phrase formatted according to formatters. Formatters is a comma separated list of formatters (e.g. 'CAPITALIZE_ALL_WORDS,DOUBLE_QUOTED_STRING')"""
         actions.insert(format_phrase(phrase, formatters))
 
-    def formatters_help_show():
-        """Lists all formatters"""
-        if gui.showing:
-            gui.hide()
-        else:
-            gui.show()
+
 
     def formatters_reformat_last(formatters: str) -> str:
         """Clears and reformats last formatted phrase"""
