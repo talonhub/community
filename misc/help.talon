@@ -8,7 +8,7 @@ help function keys: user.help_list("user.function_key")
 help arrows: user.help_list("user.arrow_key")
 
 help formatters: user.help_formatters(user.get_formatters_words())
-pbhelp context$: user.help_context()
+help context$: user.help_context()
 help active$: user.help_context_enabled()
 help search <user.text>$: user.help_search(text)
 help context {user.help_contexts}$: user.help_selected_context(help_contexts)
