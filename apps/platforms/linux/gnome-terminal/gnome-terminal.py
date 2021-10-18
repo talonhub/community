@@ -15,16 +15,13 @@ ctx.matches = r"""
 app: gnome_terminal
 """
 
-# Set tags
-ctx.tags = ["terminal", "user.generic_unix_shell", "user.tabs", "user.git", "user.kubectl"]
-
 
 # --- Implement actions ---
 @ctx.action_class("user")
 class user_actions:
     # user.tabs
     def tab_jump(number):
-        actions.key("alt-{}".format(number))
+        actions.key(f"alt-{number}")
 
 
 @ctx.action_class("app")
@@ -46,9 +43,9 @@ class EditActions:
     def page_up(): actions.key('shift-pageup')
     def paste(): actions.key('ctrl-shift-v')
     def copy(): actions.key('ctrl-shift-c')
-    def find(text: str):
+    def find(text: str = None):
         actions.key('ctrl-shift-f')
-        if str:
+        if text:
             actions.insert(text)
     def delete_line():
         actions.edit.line_start()
