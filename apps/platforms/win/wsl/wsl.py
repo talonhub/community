@@ -25,6 +25,12 @@ and win.title: /Ubuntu/
 """
 directories_to_remap = {}
 directories_to_exclude = {}
+
+# some definitions used for error handling
+termination_error = 'The Windows Subsystem for Linux instance has terminated.'
+restart_message = 'wsl path detection is offline, you need to restart your wsl session, e.g. "wsl --terminate <distro>; wsl"'
+path_detection_disable_title="Talon - WSL path detection disabled"
+path_detection_disable_notice = 'WSL path detection has been disabled because new WSL sessions cannot be started. See the log for more detail.'
 path_detection_disabled = False
 
 user_path = os.path.expanduser("~")
@@ -82,6 +88,15 @@ def get_wsl_path(win_path):
     #print(f"WSLPATH: {win_path}")
     return run_wslpath(["-u"], "'{}'".format(win_path))
 
+def _disable_path_detection(notify=True):
+    global path_detection_disabled
+    path_detection_disabled  = True
+    if notify:
+        app.notify(
+            title=path_detection_disable_title,
+            body=path_detection_disable_notice
+        )
+
 # this command fails every once in a while, with no indication why.
 # so, when that happens we just retry.
 MAX_ATTEMPTS = 2
@@ -98,9 +113,9 @@ def run_wslpath(args, in_path):
             if error:
                 logging.error(f'run_wslpath(): failed to translate given path - attempt: {loop_num}, error: {error}')
                 path = ""
-                if error == 'The Windows Subsystem for Linux instance has terminated.':
+                if error == termination_error:
                     # disable this code until the user resets it
-                    path_detection_disabled  = True
+                    _disable_path_detection()
                     break
             elif path:
                 # got it, no need to loop and try again
@@ -161,12 +176,11 @@ def _decode(value: bytes) -> str:
     return decoded.strip()
 
 def _run_cmd(command_line):
-    global path_detection_disabled
     result = error = ""
     #print(f"_run_cmd(): RUNNING - command line is {command_line}.")
     try:
         # for testing
-        #raise subprocess.CalledProcessError(-4294967295, command_line, 'The Windows Subsystem for Linux instance has terminated.'.encode('UTF-16-LE'))
+        #raise subprocess.CalledProcessError(-4294967295, command_line, termination_error.encode('UTF-16-LE'))
 
         tmp = subprocess.check_output(command_line, stderr=subprocess.STDOUT)
         result = _decode(tmp)
@@ -178,10 +192,9 @@ def _run_cmd(command_line):
         error = _decode(exc.output)
 
         # log additional info for this particular case
-        if error == 'The Windows Subsystem for Linux instance has terminated.':
+        if error == termination_error:
             logging.error(f'_run_cmd(): failed to run command - error: {error}')
-            logging.error(f'_run_cmd(): - wsl path detection is offline')
-            logging.error(f'_run_cmd(): - you need to restart your wsl session, e.g. "wsl --terminate <distro>; wsl"')
+            logging.error(f'_run_cmd(): - {restart_message}')
     except:
         result = ""
         log_exception(f'[_run_cmd()] {sys.exc_info()[1]}')
