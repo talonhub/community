@@ -25,6 +25,7 @@ and win.title: /Ubuntu/
 """
 directories_to_remap = {}
 directories_to_exclude = {}
+path_detection_disabled = False
 
 user_path = os.path.expanduser("~")
 if app.platform == "windows":
@@ -85,20 +86,27 @@ def get_wsl_path(win_path):
 # so, when that happens we just retry.
 MAX_ATTEMPTS = 2
 def run_wslpath(args, in_path):
+    global path_detection_disabled
     path = ""
-    loop_num = 0
 
-    while loop_num < MAX_ATTEMPTS:
-        (path, error) = run_wsl(['wslpath', *args, in_path])
-        if error:
-            logging.error(f'run_wslpath(): failed to translate given path - attempt: {loop_num}, error: {error}')
+    if not path_detection_disabled:
+        loop_num = 0
 
-            path = ""
-        elif path:
-            # got it, no need to loop and try again
-            break
+        while loop_num < MAX_ATTEMPTS:
+            #print(f"_run_wslpath(): {path_detection_disabled=}.")
+            (path, error) = run_wsl(['wslpath', *args, in_path])
+            if error:
+                logging.error(f'run_wslpath(): failed to translate given path - attempt: {loop_num}, error: {error}')
+                path = ""
+                if error == 'The Windows Subsystem for Linux instance has terminated.':
+                    # disable this code until the user resets it
+                    path_detection_disabled  = True
+                    break
+            elif path:
+                # got it, no need to loop and try again
+                break
 
-        loop_num += 1
+            loop_num += 1
 
     return path
 
@@ -124,6 +132,20 @@ def run_wslpath(args, in_path):
 # source of their "talon problems". For more information, see https://github.com/microsoft/WSL/issues/5110
 # and https://github.com/microsoft/WSL/issues/5318.
 #
+# Once the WSL distro is hung, every attempt to use it results in many repeated log messages like these:
+# 
+# 2021-10-15 11:15:49 WARNING [watchdog] "talon.windows.ui._on_event" @30.0s (stalled)
+# 2021-10-15 11:15:49 WARNING [watchdog] "user.knausj_talon.code.file_manager.win_event_handler"
+#
+# These messages are from code used to detect the current path from the window title, and it every time the
+# focus shifts to a wsl context or the current path changes. This gets tiresome if you don't want to restart
+# wsl immediately (because your existing sessions are still running and you want to finish working before
+# restarting wsl).
+# 
+# So, wsl path detection is disabled when this condition is first detected. The user
+# must then re-enable the feature once the underlying problem has been resolved. This can be done by
+# using the 'weasel reset path detection' voice command or simply reloading this file.
+
 def _decode(value: bytes) -> str:
     # check to see if the given byte string looks like utf-16-le. results may not be correct for all
     # possible cases, but if there's a problem this code can be replaced with chardet (once that module
@@ -139,6 +161,7 @@ def _decode(value: bytes) -> str:
     return decoded.strip()
 
 def _run_cmd(command_line):
+    global path_detection_disabled
     result = error = ""
     #print(f"_run_cmd(): RUNNING - command line is {command_line}.")
     try:
@@ -187,6 +210,11 @@ class UserActions:
         actions.insert('cd ..')
         actions.key('enter')
     def file_manager_current_path():
+        global path_detection_disabled
+        if path_detection_disabled:
+            logging.warning('Skipping WSL path detection - try "weasel reset path detection"')
+            return ""
+
         path = ui.active_window().title
         try:
             path = path.split(":")[1].lstrip()
@@ -286,3 +314,10 @@ class UserActions:
         actions.key("ctrl-c")
         actions.insert("y")
         actions.key("enter")
+
+@mod.action_class
+class Actions:
+    def wsl_reset_path_detection():
+        """reset wsl path detection"""
+        global path_detection_disabled
+        path_detection_disabled  = False
