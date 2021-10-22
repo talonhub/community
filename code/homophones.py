@@ -90,6 +90,8 @@ def raise_homophones(word_to_find_homophones_for, forced=False, selection=False)
 
     word_to_find_homophones_for = word_to_find_homophones_for.lower()
 
+    # We support plurals, but very naively. If we can't find your word but your word ends in an s, presume its plural
+    # and attempt to find the singular, then present the presumed plurals back. This could be improved!
     if word_to_find_homophones_for in all_homophones:
         valid_homophones = all_homophones[word_to_find_homophones_for]
     elif word_to_find_homophones_for[-1] == 's' and word_to_find_homophones_for[:-1] in all_homophones:
