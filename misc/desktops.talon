@@ -1,4 +1,4 @@
-desk <number>: user.desktop(number)
+desk <number_small>: user.desktop(number_small)
 desk next: user.desktop_next()
 desk last: user.desktop_last()
 desk show: user.desktop_show()
