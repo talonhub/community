@@ -1,5 +1,6 @@
 os: mac
 -
+
 spotlight [<user.text>]:
     key(cmd-alt-space)
     sleep(50ms)
@@ -39,9 +40,16 @@ talon anki basic:
     key(cmd-down)
     key(enter)
 
-insert my email:
+insert email:
     insert("maciej.klimek@gmail.com")
-insert my name:
+insert full name:
     insert("Maciej Klimek")
+
+windows:
+    key(ctrl-down)
+all windows:
+    key(ctrl-up)
+
+
     
     

@@ -5,7 +5,11 @@ tag(): user.multiple_cursors
 tag(): user.snippets
 tag(): user.splits
 tag(): user.tabs
-#talon app actions
+
+# TODO(maciejk): this is temporary until we are able to report if terminal is active in vscode to talon
+tag(): terminal
+tag(): user.git
+tag(): user.fish
 
 
 action(app.tab_close): user.vscode("workbench.action.closeActiveEditor")
@@ -16,6 +20,7 @@ action(app.window_close): user.vscode("workbench.action.closeWindow")
 action(app.window_open): user.vscode("workbench.action.newWindow")
 window reload: user.vscode("workbench.action.reloadWindow")
 window close: user.vscode("workbench.action.closeWindow")
+
 
 #talon code actRight
 action(code.toggle_comment): user.vscode("editor.action.commentLine")
@@ -73,11 +78,18 @@ go search [<user.text>]$:
     user.vscode("workbench.action.findInFiles")
     sleep(50ms)
     insert(text or "")
+
     
 go find [<user.word>]$: 
     user.vscode("actions.find")
     sleep(50ms)
     insert(word or "")
+go find that$: 
+    user.vscode("actions.find")
+    sleep(50ms)
+    edit.paste()
+    key(enter)
+    
 
 go replace: user.vscode("editor.action.startFindReplaceAction")
     
@@ -131,7 +143,7 @@ theme switch: user.vscode("workbench.action.selectTheme")
 wrap switch: user.vscode("editor.action.toggleWordWrap")
 zen switch: user.vscode("workbench.action.toggleZenMode")
 
-# File Commands
+# File Commands bash
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 lion [<user.text>]:  
   user.vscode("workbench.action.quickOpen")
@@ -171,7 +183,7 @@ sense [<user.word>] :
 
 hint: user.vscode("editor.action.triggerParameterHints")
 
-(show|bishop|def show|dev show): user.vscode("editor.action.revealDefinition")
+follow: user.vscode("editor.action.revealDefinition")
 
 
 (peek|def peek): user.vscode("editor.action.peekDefinition") 
@@ -264,7 +276,7 @@ git stash: user.vscode("git.stash")
 git stash pop: user.vscode("git.stashPop")
 git status: user.vscode("workbench.scm.focus")
 (git stage|stage this): user.vscode("git.stage")
-# git stage all: user.vscode("git.stageAll")
+git stage everything: user.vscode("git.stageAll")
 git unstage: user.vscode("git.unstage")
 git unstage all: user.vscode("git.unstageAll")
 pull request: user.vscode("pr.create")
@@ -297,9 +309,6 @@ terminal scroll up: user.vscode("workbench.action.terminal.scrollUp")
 terminal scroll down: user.vscode("workbench.action.terminal.scrollDown")
 terminal <number_small>: user.vscode_terminal(number_small)
 
-#TODO: should this be added to linecommands?
-copy line down: user.vscode("editor.action.copyLinesDownAction") 
-copy line up: user.vscode("editor.action.copyLinesUpAction") 
 
 #Expand/Shrink AST Selection
 select less: user.vscode("editor.action.smartSelect.shrink")
@@ -334,32 +343,28 @@ skip word: user.vscode("editor.action.moveSelectionToNextFindMatch")
 
 install local: user.vscode("workbench.extensions.action.installVSIX")
 
-comment: code.toggle_comment()  
-
-
+# Editor tabs and editor groups stuff.
 close everything: user.vscode("workbench.action.closeAllGroups")
 close others: user.vscode("workbench.action.closeOtherEditors") 
 close all others: 
     user.vscode("workbench.action.closeOtherEditors") 
     user.vscode("workbench.action.closeEditorsInOtherGroups")
-
-# move editor
 move left: user.vscode("workbench.action.moveEditorLeftInGroup")
 move right: user.vscode("workbench.action.moveEditorRightInGroup")
-
 move last: user.vscode("workbench.action.moveEditorToPreviousGroup")
 move next: user.vscode("workbench.action.moveEditorToNextGroup")
-   
 focus group: user.vscode("workbench.action.toggleEditorWidths")
 close group: user.vscode("workbench.action.closeEditorsInGroup")
 one group: user.vscode("workbench.action.closeEditorsInOtherGroups")
-group next: user.vscode("workbench.action.focusNextGroup")
+
+(cross|group next): user.vscode("workbench.action.focusNextGroup")
 group last: user.vscode("workbench.action.focusPreviousGroup")
 
 # next: app.tab_next()
 # last: app.tab_previous()
 
 # copied from line_commands.talon
+# Cursor navigation
 go <number>: edit.jump_line(number)
 go <number> end: 
     edit.jump_line(number)
@@ -367,6 +372,11 @@ go <number> end:
 
 lend: edit.line_end()
 bend: edit.line_start()
+
+# Coping, cutting, cloning, selecting stuff
+copy line down: user.vscode("editor.action.copyLinesDownAction") 
+copy line up: user.vscode("editor.action.copyLinesUpAction") 
+
 take <number> line:
     user.select_next_lines(number)
 
@@ -389,19 +399,6 @@ clone <number> line:
         sleep(10ms)
         key(cmd-z)
         user.go_up(number)
-        
-indent <number> line:
-    user.select_next_lines(number)
-    edit.indent_more()
-    
-dis dent <number> line:
-    user.select_next_lines(number)
-    edit.indent_less()
-    
-comment <number> line:
-    user.select_next_lines(number)
-    sleep(10ms)
-    user.vscode("editor.action.commentLine")   
             
 clone that:
     key(cmd-c)
@@ -411,6 +408,21 @@ clone that:
 (clear|wipe) <number> line:
         user.select_next_lines(number)
         key(delete)
+
+        
+# indentation stuff        
+justify:
+    key(up end)
+    insert("\n")
+                
+indent <number> line:
+    user.select_next_lines(number)
+    edit.indent_more()
+    
+dis dent <number> line:
+    user.select_next_lines(number)
+    edit.indent_less()
+    
 
     
 # is it better to use vscode commands or just keyboard shortcuts?
@@ -429,16 +441,45 @@ find this$:
 folders collapse:
     user.vscode("workbench.files.action.collapseExplorerFolders")
 fix this: user.vscode("editor.action.quickFix")
-justify:
-    key(up end)
-    insert("\n")
 cursorless record: user.vscode("cursorless.recordTestCase")    
 
 code time dashboard: user.vscode("codetime.viewDashboard")
+
 index: 
     insert("[]")
     key(left)
 call this: 
     insert("()")
     key(left)
+
+# Commenting stuff
+to do [<phrase>]$:   
+    insert("# TODO(maciejk): ")
+    user.dictation_mode(phrase or "")
+
+comment [<phrase>]$:   
+    insert("# ")
+    user.dictation_mode(phrase or "")
+
+comment <number> line:
+    user.select_next_lines(number)
+    sleep(10ms)
+    user.vscode("editor.action.commentLine")   
+
+comment this: code.toggle_comment()    
+
+
+sesh [<user.text>]:
+    user.vscode("workbench.action.quickOpenRecent")
+    sleep(50ms)
+    insert(text or "")    
     
+pop sesh [<user.text>]:
+    user.vscode("workbench.action.quickOpenRecent")
+    sleep(50ms)
+    insert(text or "")    
+    user.maybe_sleep(50, text or "")
+    
+    key(enter)
+
+vex: user.vscode("search.action.focusNextSearchResult")    

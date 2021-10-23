@@ -27,7 +27,7 @@ def sorted_screens():
     )
 
 
-def _set_window_pos(window, x, y, width, height):
+def set_window_pos(window, x, y, width, height):
     """Helper to set the window position."""
     # TODO: Special case for full screen move - use os-native maximize, rather
     #   than setting the position?
@@ -51,11 +51,16 @@ def _bring_forward(window):
         print(f"Couldn't bring window to front: {e}")
 
 
-def _get_app_window(app_name: str) -> ui.Window:
+def get_app_window(app_name: str) -> ui.Window:
     return actions.self.get_running_app(app_name).active_window
 
 
-def _move_to_screen(
+def get_screen_number(screen):
+    screens = sorted_screens()
+    return screens.index(screen) + 1
+
+
+def move_to_screen(
     window, offset: Optional[int] = None, screen_number: Optional[int] = None
 ):
     """Move a window to a different screen.
@@ -91,7 +96,7 @@ def _move_to_screen(
     #   not.
     proportional_width = dest.width / src.width
     proportional_height = dest.height / src.height
-    _set_window_pos(
+    set_window_pos(
         window,
         x=dest.left + (window.rect.left - src.left) * proportional_width,
         y=dest.top + (window.rect.top - src.top) * proportional_height,
@@ -103,7 +108,7 @@ def _move_to_screen(
 def _snap_window_helper(window, pos):
     screen = window.screen.visible_rect
 
-    _set_window_pos(
+    set_window_pos(
         window,
         x=screen.x + (screen.width * pos.left),
         y=screen.y + (screen.height * pos.top),
@@ -175,7 +180,7 @@ _snap_positions = {
     "bottom center third": RelativeScreenPos(1 / 3, 0.5, 2 / 3, 1),
     # Special
     "center": RelativeScreenPos(1 / 8, 1 / 6, 7 / 8, 5 / 6),
-    "full": RelativeScreenPos(0, 0, 1, 1),
+    # "full": RelativeScreenPos(0, 0, 1, 1),
     "fullscreen": RelativeScreenPos(0, 0, 1, 1),
 }
 
@@ -199,30 +204,34 @@ class Actions:
         """
         _snap_window_helper(ui.active_window(), pos)
 
+    def snap_window_full():
+        """move window to full screen position"""
+        _snap_window_helper(ui.active_window(), RelativeScreenPos(0, 0, 1, 1))
+
     def move_window_next_screen() -> None:
         """Move the active window to a specific screen."""
-        _move_to_screen(ui.active_window(), offset=1)
+        move_to_screen(ui.active_window(), offset=1)
 
     def move_window_previous_screen() -> None:
         """Move the active window to the previous screen."""
-        _move_to_screen(ui.active_window(), offset=-1)
+        move_to_screen(ui.active_window(), offset=-1)
 
     def move_window_to_screen(screen_number: int) -> None:
         """Move the active window leftward by one."""
-        _move_to_screen(ui.active_window(), screen_number=screen_number)
+        move_to_screen(ui.active_window(), screen_number=screen_number)
 
     def snap_app(app_name: str, pos: RelativeScreenPos):
         """Snap a specific application to another screen."""
-        window = _get_app_window(app_name)
+        window = get_app_window(app_name)
         _bring_forward(window)
         _snap_window_helper(window, pos)
 
     def move_app_to_screen(app_name: str, screen_number: int):
         """Move a specific application to another screen."""
-        window = _get_app_window(app_name)
+        window = get_app_window(app_name)
         print(window)
         _bring_forward(window)
-        _move_to_screen(
+        move_to_screen(
             window,
             screen_number=screen_number,
         )

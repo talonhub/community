@@ -19,6 +19,10 @@ git cherry pick continue: "git cherry-pick --continue "
 git cherry pick abort: "git cherry-pick --abort "
 git cherry pick skip: "git cherry-pick --skip "
 git clone: "git clone "
+git clone (that|clipboard): 
+    insert("git clone ")
+    edit.paste()
+    key(enter)
 # Leave \n out for confirmation since the operation is destructive
 git clean everything: "git clean -dfx"
 git commit message <user.text>: "git commit -m '{text}'"
@@ -71,13 +75,10 @@ git status: "git status\n"
 git submodule add:  "git submodule add "
 git tag: "git tag "
 
+
 # Convenience
 git edit config: "git config --local -e\n"
 
-git clone clipboard:
-  insert("git clone ")
-  edit.paste()
-  key(enter)
 git diff highlighted:
     edit.copy()
     insert("git diff ")
@@ -101,3 +102,5 @@ git commit highlighted:
     insert("git add ")
     edit.paste()
     insert("\ngit commit\n")
+
+    

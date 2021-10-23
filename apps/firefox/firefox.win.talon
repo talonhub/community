@@ -10,7 +10,7 @@ action(browser.bookmark):
 action(browser.bookmark_tabs):
 	key(ctrl-shift-d)
 	
-action(browser.bookmarks):
+action(browser.bookmarks):Ź
 	key(ctrl-shift-b)
   
 action(browser.bookmarks_bar):

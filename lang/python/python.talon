@@ -150,7 +150,13 @@ help:
     insert("help()")
     key(left)
 self: insert("self")
-def: insert("def")
+# def: insert("def")
+
+insert {user.snippets}:
+    user.vscode("editor.action.insertSnippet")
+    sleep(30ms)
+    insert("{user.snippets}")
+    key(enter)
 
 
 run this: user.vscode("python.execInTerminal")

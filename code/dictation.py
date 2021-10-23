@@ -1,4 +1,5 @@
 # Descended from https://github.com/dwiel/talon_community/blob/master/misc/dictation.py
+from time import sleep
 from talon import Module, Context, ui, actions, clip, app, grammar
 from typing import Optional, Tuple, Literal
 import re
@@ -187,6 +188,7 @@ class Actions:
         # True we don't need context-sensitivity.
         do_the_dance = (setting_context_sensitive_dictation.get()
                         and not text.isspace())
+        print(f"do_the_dance =  {do_the_dance}")
         if do_the_dance:
             dictation_formatter.update_context(
                 actions.user.dictation_peek_left(clobber=True))
@@ -194,12 +196,15 @@ class Actions:
         actions.user.add_phrase_to_history(text)
         actions.insert(text)
         # Add a space after cursor if necessary.
-        if not do_the_dance or not text or no_space_after.search(text):
-            return
-        char = actions.user.dictation_peek_right()
-        if char is not None and needs_space_between(text, char):
-            actions.insert(" ")
-            actions.edit.left()
+        
+        # if not do_the_dance or not text or no_space_after.search(text):
+        #     return
+        # sleep(0.1)
+        # char = actions.user.dictation_peek_right()
+        # print(f"char = {char}, l = {len(char)}")
+        # if char is not None and needs_space_between(text, char):
+        #     actions.insert(" ")
+        #     actions.edit.left()
 
     def dictation_peek_left(clobber: bool = False) -> Optional[str]:
         """
@@ -277,6 +282,8 @@ class Actions:
 dictation_ctx = Context()
 dictation_ctx.matches = r"""
 mode: dictation
+mode: user.webspeech_polish_dictation
+mode: user.webspeech_english_dictation
 """
 # dictation_ctx.matches = r"""
 # mode: text_field

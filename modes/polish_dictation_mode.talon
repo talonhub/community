@@ -1,4 +1,3 @@
-mode: dictation
 mode: user.webspeech_polish_dictation
 -
 ^press <user.keys>$: key("{keys}")

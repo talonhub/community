@@ -136,6 +136,16 @@ ctx.lists["user.python_exception"] = {
     for exception in exception_list
 }
 
+mod.list("snippets", desc="Snippets from vscode")
+snippets = {
+    "funk": "def",
+    "method": "defs",
+    "while": "while",
+    "try except": "try"
+    # "while true":
+}
+ctx.lists["self.snippets"] = snippets
+
 
 @ctx.action_class("user")
 class user_actions:

@@ -5,64 +5,68 @@ tag(): browser
 tag(): user.tabs
 #action(browser.address):
 
+
 action(browser.bookmark):
-	key(ctrl-d)
+    key(cmd-d)
 
 action(browser.bookmark_tabs):
-	key(ctrl-shift-d)
-	
+    key(cmd-shift-d)
+    
 action(browser.bookmarks):
-	key(ctrl-shift-o)
-  
+    key(cmd-alt-b)
+    
 action(browser.bookmarks_bar):
-	key(ctrl-shift-b)
+    key(cmd-shift-b)
 
 action(browser.focus_address): 
-	key(ctrl-l)
-	
-#action(browser.focus_page):
+    key(cmd-l)
+    
+#action(browser.focus_page): 
 
 action(browser.focus_search):
-	browser.focus_address()
+    browser.focus_address()
 
 action(browser.go_blank):
-	key(ctrl-n)
-	
+    key(cmd-n)
+    
 action(browser.go_back):
-	key(alt-left)
+    key(cmd-left)
 
 action(browser.go_forward):
-	key(alt-right)
-	
+    key(cmd-right)
+    
 action(browser.go_home):
-	key(alt-home)
+    key(cmd-shift-h)
 
 action(browser.open_private_window):
-	key(ctrl-shift-p)
+    key(cmd-shift-n)
 
 action(browser.reload):
-	key(ctrl-r)
+    key(cmd-r)
 
 action(browser.reload_hard):
-	key(shift-f5)
+    key(cmd-shift-r)
 
 #action(browser.reload_hardest):
-	
+    
 action(browser.show_clear_cache):
-	key(ctrl-shift-delete)
-  
+    key(cmd-shift-delete)
+    
 action(browser.show_downloads):
-	key(ctrl-j)
+    key(cmd-shift-j)
 
 #action(browser.show_extensions)
 
 action(browser.show_history):
-	key(ctrl-h)
-	
+    key(cmd-y)
+    
 action(browser.submit_form):
-	key(enter)
+    key(enter)
 
 #action(browser.title)
 
 action(browser.toggle_dev_tools):
-	key(ctrl-shift-i)
+    key(cmd-alt-i)
+
+        
+    

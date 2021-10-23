@@ -36,16 +36,18 @@ settings():
 
     # when this was set to 0.3,  the normal speech was cut off sometimes.  this assumes that normalize = 1,  and input volume on macOS settings is 50%
     # But when I set it to = 0.25  the sound of keyboard clicks is being picked up as activity
-    speech.threshold = 0.25                                                      
+    speech.threshold = 0.20                                                      
 
     speech.timeout = 0.250
+    # speech.debug = 1
     # speech.timeout = 0.180
     # Uncomment the below to enable context-sensitive dictation. This determines
     # how to format (capitalize, space) dictation-mode speech by selecting &
     # copying surrounding text before inserting. This can be slow and may not
     # work in some applications. You may wish to enable this on a
     # per-application basis.
-    #user.context_sensitive_dictation = 1
+    user.context_sensitive_dictation = 1
+   
 	
 # uncomment tag to enable mouse grid
 # tag(): user.mouse_grid_enabled

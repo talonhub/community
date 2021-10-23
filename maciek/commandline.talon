@@ -88,8 +88,8 @@ run code: "code "
 current folder copy: "pwd | tr -d \\\\n\\\\r | pbcopy\n"
 current folder: "pwd\n"
 
-fish reload config: 
-    insert("fish-reload-config\n")
+fish config reload: 
+    insert("fish-config-reload\n")
 fish config:
     insert("fish-config\n")
 s q lite browser:
@@ -140,7 +140,7 @@ brute:
     insert("br\n")
 brute home:
     insert("br ~/\n")
-  
+git ui: "gitui\n"
 
 oxy:
     insert("zi\n")

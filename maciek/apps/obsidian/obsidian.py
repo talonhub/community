@@ -15,3 +15,11 @@ class Actions:
         actions.insert(cmd)
         actions.sleep("40ms")
         actions.key("enter")
+
+    def obsidian_open_note(name: str):
+        """This comment is mandatory"""
+        actions.key("cmd-o")
+        actions.sleep("20ms")
+        actions.insert(name)
+        actions.sleep("40ms")
+        actions.key("enter")

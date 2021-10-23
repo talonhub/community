@@ -12,6 +12,11 @@ os: windows
 and app.exe: msedge.exe
 """
 
+mod.apps.microsoft_edge = """
+os: mac
+and app.bundle: com.microsoft.edgemac
+"""
+
 ctx.matches = r"""
 app: microsoft_edge
 """

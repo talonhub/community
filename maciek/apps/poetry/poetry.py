@@ -8,9 +8,9 @@ tag: user.poetry
 mod.list("poetry_commands", desc="poetry CLI Commands")
 
 commands = {
-    # "add": "add",
-    "search": "search",
-    "show": "show",
+    "add": "add ",
+    "search": "search ",
+    "show": "show ",
     "help": "--help\n",
     "shell": "shell\n",
     "install": "install\n",

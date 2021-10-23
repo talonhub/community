@@ -37,7 +37,7 @@ podo:
     key(cmd-g)  
 
 
-wipe lord:
+(wipe|clear) lord:
     user.delete_big_word()
 
 # (clear board|clear big word):

@@ -12,7 +12,7 @@ bullet:
     insert("- ")
 # bullet: user.obsidian_run_command("Toggle bullet list")
 
-lion [<user.text>]$: 
+lion [<user.text>]$:
     key(cmd-o)
     sleep(50ms)
     insert(text or "")
@@ -41,7 +41,7 @@ anki sync:
 go settings:
     user.obsidian_run_command("Open settings")
 
-code line:
+code insert:
     insert('``')
     key(left)
 
@@ -78,6 +78,10 @@ tomorrow:
     insert("@tomorrow")
     sleep(50ms)
     key(enter)
+yesterday:
+    insert("@yesterday")
+    sleep(50ms)
+    key(enter)
     
 insert link [<user.text>]: 
     insert("[[")
@@ -93,9 +97,12 @@ git sync: key(cmd-shift-k)
 [show] backlinks: key(cmd-y)
 go back:key(cmd-alt-left)
 go front:key(cmd-alt-right)
+
+# TODO: tranche to talon lists
 hash tag talon: insert("#talon ")
 hash tag code: insert("#vscode ")
 hash tag bug: insert("#bug ")
+
 image extra small:
     insert("|#x-small")
     key(escape)
@@ -105,13 +112,48 @@ image small:
     insert("|#small")
     key(escape)
     edit.line_end()
+close:
+    key(cmd-w)
+
+header one  [<user.text>]$:
+    insert("# ")
+    insert(user.formatted_text(text or "", "CAPITALIZE_FIRST_WORD"))
     
-header one: "# "
-header two: "## "
-header three: "### "
-header four: "#### "
-header five: "##### "
-header six: "###### "
+header two  [<user.text>]$:
+    insert("## ")
+    insert(user.formatted_text(text or "", "CAPITALIZE_FIRST_WORD"))
+
+header three  [<user.text>]$:
+    insert("### ")
+    insert(user.formatted_text(text or "", "CAPITALIZE_FIRST_WORD"))
+
+header four  [<user.text>]$:
+    insert("#### ")
+    insert(user.formatted_text(text or "", "CAPITALIZE_FIRST_WORD"))
+
+header five  [<user.text>]$:
+    insert("###### ")
+    insert(user.formatted_text(text or "", "CAPITALIZE_FIRST_WORD"))
+
+header six  [<user.text>]$:
+    insert("####### ")
+    insert(user.formatted_text(text or "", "CAPITALIZE_FIRST_WORD"))
+
+split vert:
+    user.obsidian_run_command("Split vertically")
+
 bold: key(cmd-b)
 
+# shortcuts to specific pages
+go kanban:
+    user.obsidian_open_note("kanban")
+go massage:
+    user.obsidian_open_note("Masa Aktualny nowy")
 
+follow:
+    key(alt-enter)
+
+# TODO: this doesn't work
+unbullet:
+    key("alt-delete")
+    

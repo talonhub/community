@@ -4,7 +4,7 @@ mode: user.webspeech_english_dictation
 ^press <user.keys>$: key("{keys}")
 
 over [<phrase>]$:   user.command_mode(phrase or "")
-    
+
 # Everything here should call auto_insert to preserve the state to correctly auto-capitalize/auto-space.
 <user.prose>: auto_insert(prose)
 new line: "\n"
@@ -82,3 +82,5 @@ spell that <user.formatters> <user.letters>:
 
 numb <user.number_string>: "{number_string}"
 numb <user.number_string> (dot | point) <digit_string>: "{number_string}.{digit_string}"
+
+

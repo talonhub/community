@@ -18,7 +18,7 @@ file find all folders: "find . -maxdepth 1 -type d  -ls\n"
 file fine all files: "find . -maxdepth 1 -type f  -ls\n"
 
 # TODO - revisit the grammar for $() commands
-call list latest: "$(ls -Art | tail -n1)"
+# call list latest: "$(ls -Art | tail -n1)"
 
 # TODO - somehow make this scriptable to print anything
 file edit latest: "edit $(ls -Art | tail -n1)\n"
