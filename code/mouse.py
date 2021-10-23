@@ -18,7 +18,7 @@ from talon_plugins.eye_mouse import config, toggle_camera_overlay, toggle_contro
 
 key = actions.key
 self = actions.self
-scroll_amount = 0
+scroll_amount = 50
 click_job = None
 scroll_job = None
 gaze_job = None
@@ -57,7 +57,7 @@ mod.list(
 setting_mouse_enable_pop_click = mod.setting(
     "mouse_enable_pop_click",
     type=int,
-    default=0,
+    default=1, #0,
     desc="Enable pop to click when control mouse is enabled.",
 )
 setting_mouse_enable_pop_stops_scroll = mod.setting(
@@ -87,7 +87,8 @@ setting_mouse_continuous_scroll_amount = mod.setting(
 setting_mouse_wheel_down_amount = mod.setting(
     "mouse_wheel_down_amount",
     type=int,
-    default=120,
+    #default=120,
+    default=96,
     desc="The amount to scroll up/down (equivalent to mouse wheel on Windows by default)",
 )
 
@@ -271,12 +272,12 @@ def show_cursor_helper(show):
 
 
 def on_pop(active):
-    if setting_mouse_enable_pop_stops_scroll.get() >= 1 and (gaze_job or scroll_job):
-        stop_scroll()
-    elif (
-        not eye_zoom_mouse.zoom_mouse.enabled
-        and eye_mouse.mouse.attached_tracker is not None
-    ):
+    #if setting_mouse_enable_pop_stops_scroll.get() >= 1 and (gaze_job or scroll_job):
+    #    stop_scroll()
+    #elif (
+    #    not eye_zoom_mouse.zoom_mouse.enabled
+    #    and eye_mouse.mouse.attached_tracker is not None
+    #):
         if setting_mouse_enable_pop_click.get() >= 1:
             ctrl.mouse_click(button=0, hold=16000)
 

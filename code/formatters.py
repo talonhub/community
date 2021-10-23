@@ -141,6 +141,7 @@ formatters_dict = {
     "FIRST_THREE": (NOSEP, lambda i, word, _: word[0:3]),
     "FIRST_FOUR": (NOSEP, lambda i, word, _: word[0:4]),
     "FIRST_FIVE": (NOSEP, lambda i, word, _: word[0:5]),
+    "DATAFRAME_CASE": (NOSEP, first_vs_rest(lambda w: w.lower() + ".", lambda w: w.lower() + "_"),),
 }
 
 # This is the mapping from spoken phrases to formatters
@@ -161,12 +162,15 @@ formatters_words = {
     "smash": formatters_dict["NO_SPACES"],
     "downunder": formatters_dict["SNAKE_CASE"],	
     # "speak": formatters_dict["NOOP"],
-    "string": formatters_dict["SINGLE_QUOTED_STRING"],
+    #"string": formatters_dict["SINGLE_QUOTED_STRING"],
+    "string": formatters_dict["DOUBLE_QUOTED_STRING"],
+    "singstring": formatters_dict["SINGLE_QUOTED_STRING"],
     "title": formatters_dict["CAPITALIZE_ALL_WORDS"],
     # disable a few formatters for now
     # "tree": formatters_dict["FIRST_THREE"],
     # "quad": formatters_dict["FIRST_FOUR"],
     # "fiver": formatters_dict["FIRST_FIVE"],
+    "deedoo": formatters_dict["DATAFRAME_CASE"],
 }
 
 all_formatters = {}

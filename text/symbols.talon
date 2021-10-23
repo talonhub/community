@@ -43,8 +43,11 @@ inside percent:
 	insert("%%")
 	key(left)
 inside (quotes | string):
-	insert("''")
+	insert('""')
 	key(left)
+inside (single quotes):
+        insert("''")
+        key(left)
 inside (double quotes | dubquotes):
     insert('""')
 	key(left)
