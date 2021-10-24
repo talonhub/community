@@ -42,7 +42,7 @@ def _get_app_window(app_name: str) -> ui.Window:
 
 
 def _move_to_screen(
-    window, offset: Optional[int] = None, screen_number: Optional[int] = None
+    window: ui.Window, offset: Optional[int] = None, screen_number: Optional[int] = None
 ):
     """Move a window to a different screen.
 
@@ -79,15 +79,24 @@ def _move_to_screen(
         proportional_height = dest.height / src.width
         if src.width / src.height > 1:
             # Horizontal to vertical
-            width = window.rect.width * proportional_width
-            height = window.rect.height * proportional_height
-        else:
-            # Vertical to horizontal
             width = window.rect.width * proportional_height
             height = window.rect.height * proportional_width
+        else:
+            # Vertical to horizontal
+            width = window.rect.width * proportional_width
+            height = window.rect.height * proportional_height
         # Rotated position
         x = dest.left + (window.rect.top - src.top) * proportional_width
         y = dest.top + (window.rect.left - src.left) * proportional_height
+        # Deform window if it's too big
+        if width > dest.width:
+            over = (width - dest.width) * height
+            width = dest.width
+            height += over / width
+        if height > dest.height:
+            over = (height - dest.height) * width
+            height = dest.height
+            width += over / height
         # Adjust position if it reaches outside of screen
         x = max(dest.left, min(x, dest.left + dest.width - width))
         y = max(dest.top, min(y, dest.top + dest.height - height))
