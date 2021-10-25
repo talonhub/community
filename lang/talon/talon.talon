@@ -6,6 +6,11 @@ and code.language: talon
 -
 tag(): user.code_operators
 tag(): user.code_comment
+# uncomment user.talon_populate_lists tag to activate talon-specific lists of actions, scopes, modes etcetera. 
+# Do not enable this tag with dragon, as it will be unusable.
+# with conformer, the latency increase may also be unacceptable depending on your cpu
+# see https://github.com/knausj85/knausj_talon/issues/600
+# tag(): user.talon_populate_lists
 
 dot talon: insert(".talon")
 #defintion blocks for the context
@@ -38,7 +43,9 @@ tag require [{user.talon_tags}]:
 tag set [{user.talon_tags}]: 
     tag = talon_tags or ""
     user.paste("tag(): {tag}")
+# requires user.talon_populate_lists tag. do not use with dragon
 list {user.talon_lists}: "{{{talon_lists}}}"
+# requires user.talon_populate_lists tag. do not use with dragon
 capture {user.talon_captures}: "<{talon_captures}>"
 
 #commands for dictating key combos

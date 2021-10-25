@@ -90,11 +90,15 @@ def raise_homophones(word_to_find_homophones_for, forced=False, selection=False)
 
     word_to_find_homophones_for = word_to_find_homophones_for.lower()
 
-    if word_to_find_homophones_for not in all_homophones:
+    # We support plurals, but very naively. If we can't find your word but your word ends in an s, presume its plural
+    # and attempt to find the singular, then present the presumed plurals back. This could be improved!
+    if word_to_find_homophones_for in all_homophones:
+        valid_homophones = all_homophones[word_to_find_homophones_for]
+    elif word_to_find_homophones_for[-1] == 's' and word_to_find_homophones_for[:-1] in all_homophones:
+        valid_homophones = map(lambda w : w + 's', all_homophones[word_to_find_homophones_for[:-1]])
+    else:
         app.notify("homophones.py", '"%s" not in homophones list' % word_to_find_homophones_for)
         return
-
-    valid_homophones = all_homophones[word_to_find_homophones_for]
 
     # Move current word to end of list to reduce searcher's cognitive load
     valid_homophones_reordered = (

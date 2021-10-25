@@ -101,7 +101,7 @@ brewed,brood
 browse,brows
 brute,brut
 build,billed
-bullion,bouillon
+bullion,bouillon,boolean
 boy,buoy
 burger,burgher
 borough,burrow,burro
@@ -152,6 +152,7 @@ complacent,complaisant
 complement,compliment
 conceded,conceited
 consonants,consonance
+consul,console,consol
 continents,continence
 coup,coo
 coulee,coolie
@@ -310,6 +311,7 @@ I'll,aisle,isle
 islet,eyelet
 its,it's
 jam,jamb
+json,jason
 jinx,jinks
 kernel,colonel
 nap,knap
