@@ -85,9 +85,6 @@ def _move_to_screen(
             # Vertical to horizontal
             width = window.rect.width * proportional_width
             height = window.rect.height * proportional_height
-        # Rotated position
-        x = dest.left + (window.rect.top - src.top) * proportional_width
-        y = dest.top + (window.rect.left - src.left) * proportional_height
         # Deform window if it's too big
         if width > dest.width:
             over = (width - dest.width) * height
@@ -97,9 +94,15 @@ def _move_to_screen(
             over = (height - dest.height) * width
             height = dest.height
             width += over / height
-        # Adjust position if it reaches outside of screen
-        x = max(dest.left, min(x, dest.left + dest.width - width))
-        y = max(dest.top, min(y, dest.top + dest.height - height))
+        # Relative position TODO: Refactor positioning without division
+        if src.height == window.rect.height:
+            x = dest.left + (dest.width - width) / 2
+        else:
+            x = dest.left + (window.rect.top - src.top) * (dest.width - width) / (src.height - window.rect.height)
+        if src.width == window.rect.width:
+            y = dest.top + (dest.height - height) / 2
+        else:
+            y = dest.top + (window.rect.left - src.left) * (dest.height - height) / (src.width - window.rect.width)
     else:
         # Retain proportional size and position
         proportional_width = dest.width / src.width
