@@ -1,5 +1,3 @@
-# XXX - would be nice to be able pipe these through formatters
-
 from talon import Context, Module
 
 mod = Module()
@@ -64,6 +62,7 @@ abbreviations = {
     "device": "dev",
     "dictation": "dict",
     "dictionary": "dict",
+    "difference": "diff",
     "direction": "dir",
     "directory": "dir",
     "distribution": "dist",
@@ -78,6 +77,7 @@ abbreviations = {
     "enumerate": "enum",
     "environment": "env",
     "escape": "esc",
+    "estimate": "est",
     "etcetera": "etc",
     "example": "ex",
     "exception": "exc",
@@ -216,3 +216,14 @@ abbreviations = {
 
 ctx = Context()
 ctx.lists["user.abbreviation"] = abbreviations
+
+# In command mode, recognize abbreviations inside formatters and other commands
+#   'all caps snake brief command something' -> CMD_SOMETHING
+#   'funky open brief text' -> def open_txt():
+from .vocabulary import additional_words
+ctx_cmd = Context()
+ctx_cmd.matches = "mode: command"
+ctx_cmd.lists["user.vocabulary"] = {
+    **additional_words,
+    **{"brief " + spoken_form: abbreviation
+       for spoken_form, abbreviation in abbreviations.items()}}
