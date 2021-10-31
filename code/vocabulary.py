@@ -81,11 +81,11 @@ _default_vocabulary.update({word: word for word in _simple_vocab_default})
 # "user.vocabulary" is used to explicitly add words/phrases that Talon doesn't
 # recognize. Words in user.vocabulary (or other lists and captures) are
 # "command-like" and their recognition is prioritized over ordinary words.
-additional_words = get_list_from_csv(
+ctx.lists["user.vocabulary"] = get_list_from_csv(
     "additional_words.csv",
     headers=("Word(s)", "Spoken Form (If Different)"),
-    default=_default_vocabulary)
-ctx.lists["user.vocabulary"] = additional_words
+    default=_default_vocabulary,
+)
 
 # for quick verification of the reload
 # print(str(ctx.settings["dictate.word_map"]))

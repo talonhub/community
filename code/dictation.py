@@ -12,7 +12,7 @@ setting_context_sensitive_dictation = mod.setting(
     desc="Look at surrounding text to improve auto-capitalization/spacing in dictation mode. By default, this works by selecting that text & copying it to the clipboard, so it may be slow or fail in some applications.",
 )
 
-@mod.capture(rule="({user.vocabulary} | <word>)")
+@mod.capture(rule="({user.vocabulary} | <user.abbreviated> | <word>)")
 def word(m) -> str:
     """A single word, including user-defined vocabulary."""
     try:
@@ -20,18 +20,23 @@ def word(m) -> str:
     except AttributeError:
         return " ".join(actions.dictate.replace_words(actions.dictate.parse_words(m.word)))
 
-@mod.capture(rule="({user.vocabulary} | <phrase>)+")
+@mod.capture(rule="({user.vocabulary} | <user.abbreviated> | <phrase>)+")
 def text(m) -> str:
     """A sequence of words, including user-defined vocabulary."""
     return format_phrase(m)
 
-@mod.capture(rule="({user.vocabulary} | {user.punctuation} | <phrase>)+")
+@mod.capture(rule="({user.vocabulary} | <user.abbreviated> | {user.punctuation} | <phrase>)+")
 def prose(m) -> str:
     """Mixed words and punctuation, auto-spaced & capitalized."""
     text, _state = auto_capitalize(format_phrase(m))
     return text
 
-
+@mod.capture(rule="brief {user.abbreviation}")
+def abbreviated(m) -> str:
+    """A reverse abbreviation inside another command"""
+    return m.abbreviation
+
+
 # ---------- FORMATTING ---------- #
 def format_phrase(m):
     words = capture_to_words(m)
