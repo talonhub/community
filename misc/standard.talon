@@ -22,8 +22,8 @@ redo that: edit.redo()
 paste match: edit.paste_match_style()
 file save: edit.save()
 wipe: key(backspace)    
-(pad | padding): 
-	insert("  ") 
-	key(left)
+# (pad | padding): 
+# 	insert("  ") 
+# 	key(left)
 slap: edit.line_insert_down()
 

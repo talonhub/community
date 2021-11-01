@@ -3,7 +3,7 @@ from typing import Set
 from talon import Module, Context, actions, app
 import sys
 
-default_alphabet = "air bat cap drum each fine gust harp sit judge kilo look made near odd pit quench red sun time you vest whale plex yank zip".split(
+default_alphabet = "air bat cap drum each fine gust harp ice judge kilo look made near odd pit quench red sun tock you vest win plex yank zip".split(
     " "
 )
 letters_string = "abcdefghijklmnopqrstuvwxyz"
@@ -232,7 +232,7 @@ simple_keys = [
 alternate_keys = {
     "delete": "backspace",
     "forward delete": "delete",
-    'junk': 'backspace',
+#     'junk': 'backspace',
     "page up": "pageup",
     "page down": "pagedown",
     "flee": "escape",
