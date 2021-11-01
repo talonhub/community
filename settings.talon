@@ -1,7 +1,7 @@
 -
 settings():
     # Adjust the scale of the imgui to my liking
-    imgui.scale = 2
+    imgui.scale = 1.2
 
     # Enable if you'd like the picker gui to automatically appear when explorer has focus
     user.file_manager_auto_show_pickers = 0
@@ -45,7 +45,7 @@ settings():
     # copying surrounding text before inserting. This can be slow and may not
     # work in some applications. You may wish to enable this on a
     # per-application basis.
-    # user.context_sensitive_dictation = 1
+    user.context_sensitive_dictation = 1
 
 # uncomment tag to enable mouse grid
 # tag(): user.mouse_grid_enabled
