@@ -51,18 +51,18 @@ retab [line] <number>:
 retab <number> until <number>:
     user.select_range(number_1, number_2)
     edit.indent_less()
-drag [line] down: edit.line_swap_down()
-drag [line] up: edit.line_swap_up()
-drag up [line] <number>:
-    user.select_range(number, number)
-    edit.line_swap_up()
-drag up <number> until <number>: 
-    user.select_range(number_1, number_2)
-    edit.line_swap_up()
-drag down [line] <number>: 
-    user.select_range(number, number)
-    edit.line_swap_down()
-drag down <number> until <number>: 
-    user.select_range(number_1, number_2)
-    edit.line_swap_down()
+# drag [line] down: edit.line_swap_down()
+# drag [line] up: edit.line_swap_up()
+# drag up [line] <number>:
+#     user.select_range(number, number)
+#     edit.line_swap_up()
+# drag up <number> until <number>: 
+#     user.select_range(number_1, number_2)
+#     edit.line_swap_up()
+# drag down [line] <number>: 
+#     user.select_range(number, number)
+#     edit.line_swap_down()
+# drag down <number> until <number>: 
+#     user.select_range(number_1, number_2)
+#     edit.line_swap_down()
 clone (line|that): edit.line_clone()

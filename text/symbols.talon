@@ -4,7 +4,7 @@ double dash: "--"
 (bracket | brack | left bracket): "{"
 (rbrack | are bracket | right bracket): "}"
 triple quote: "'''"
-(triple grave | triple back tick | gravy):
+(triple back tick):
     insert("```")
 (dot dot | dotdot): ".."
 ellipses: "..."
@@ -47,7 +47,7 @@ inside (quotes | string):
 inside (double quotes | dubquotes):
     insert('""')
 	key(left)
-inside (graves | back ticks):
+inside (back ticks):
 	insert("``")
 	key(left)
 angle that:
@@ -71,6 +71,6 @@ quote that:
 (double quote | dubquote) that:
     text = edit.selected_text()
     user.paste('"{text}"')
-(grave | back tick) that:
+(back tick) that:
     text = edit.selected_text()
     user.paste('`{text}`')
