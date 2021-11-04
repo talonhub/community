@@ -1,5 +1,6 @@
 from talon import Context, Module
 from .user_settings import get_list_from_csv
+from .phrase_replacer import PhraseReplacer
 
 mod = Module()
 ctx = Context()
@@ -54,16 +55,29 @@ _word_map_defaults = {
 }
 _word_map_defaults.update({word.lower(): word for word in _capitalize_defaults})
 
+# Setup `actions.user.replace_phrases` to rewrite words and phrases
+# Talon recognized. This does not change the priority with which
+# Talon recognizes particular phrases over others.
 
-# "dictate.word_map" is used by `actions.dictate.replace_words` to rewrite words
-# Talon recognized. Entries in word_map don't change the priority with which
-# Talon recognizes some words over others.
-
-ctx.settings["dictate.word_map"] = get_list_from_csv(
+phrases_to_replace = get_list_from_csv(
     "words_to_replace.csv",
     headers=("Replacement", "Original"),
-    default=_word_map_defaults,
+    default=_word_map_defaults
 )
+
+setting_phrase_replacer = mod.setting(
+    'phrase_replacer',
+    type=PhraseReplacer,
+    default=PhraseReplacer(phrases_to_replace),
+    desc="PhraseReplacer of phrases to replace post-recognition"
+)
+
+@mod.action_class
+class Actions:
+
+    def replace_phrases(input_text: str):
+        """Replace phrases in input_text"""
+        return setting_phrase_replacer.get().replace_phrases(input_text)
 
 
 # Default words that should be added to Talon's vocabulary.

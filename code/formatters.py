@@ -40,7 +40,7 @@ def format_phrase(m: Union[str, Phrase], fmtrs: str):
             m.words = m.words[:-1]
 
         words = actions.dictate.parse_words(m)
-        words = actions.dictate.replace_words(words)
+        words = actions.user.replace_phrases(words)
 
     result = last_phrase_formatted = format_phrase_no_history(words, fmtrs)
     actions.user.add_phrase_to_history(result)
