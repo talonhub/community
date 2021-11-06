@@ -1,4 +1,5 @@
 from talon import ctrl, ui, Module, Context, actions, clip, app
+from talon.mac import applescript
 
 ctx = Context()
 mod = Module()
@@ -38,9 +39,27 @@ class user_actions:
         actions.sleep("180ms")
         actions.app.tab_close()
 
+def chrome_app():
+    return ui.apps(bundle="com.google.Chrome")[0]
 
 @ctx.action_class("browser")
 class browser_actions:
+    def address() -> str:
+        try:
+            window = chrome_app().windows()[0]
+        except IndexError:
+            return ''
+        try:
+            web_area = window.element.children.find_one(AXRole='AXWebArea')
+            address = web_area.AXURL
+        except (ui.UIErr, AttributeError):
+            address = applescript.run('''
+                tell application id "com.google.Chrome"
+                    if not (exists (window 1)) then return ""
+                    return window 1's active tab's URL
+                end tell
+            ''')
+        return address
     def go(url: str):
         actions.browser.focus_address()
         actions.sleep("50ms")
