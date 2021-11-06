@@ -45,7 +45,7 @@ settings():
     # copying surrounding text before inserting. This can be slow and may not
     # work in some applications. You may wish to enable this on a
     # per-application basis.
-    user.context_sensitive_dictation = 1
+    # user.context_sensitive_dictation = 1
 
 # uncomment tag to enable mouse grid
-# tag(): user.mouse_grid_enabled
+tag(): user.mouse_grid_enabled
