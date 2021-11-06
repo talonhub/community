@@ -74,18 +74,17 @@ def _move_to_screen(
     # TODO: Test vertical screen with different aspect ratios
     # Does the orientation between the screens change? (vertical/horizontal)
     if (src.width / src.height > 1) != (dest.width / dest.height > 1):
-        # Rotate proportional size and position with screen
-        proportional_width = dest.width / src.height
-        proportional_height = dest.height / src.width
+        # Horizontal -> vertical or vertical -> horizontal
+        # Retain proportional window size, but flip x/y of the vertical monitor to account for the monitors rotation.
         if src.width / src.height > 1:
-            # Horizontal to vertical
-            width = window.rect.width * proportional_height
-            height = window.rect.height * proportional_width
+            # horizontal -> vertical
+            width = window.rect.width * dest.height / src.width
+            height = window.rect.height * dest.width / src.height
         else:
-            # Vertical to horizontal
-            width = window.rect.width * proportional_width
-            height = window.rect.height * proportional_height
-        # Deform window if it's too big
+            # vertical -> horizontal
+            width = window.rect.width * dest.width / src.height
+            height = window.rect.height * dest.height / src.width
+        # Deform window if width or height is bigger than the target monitors while keeping the window area the same.
         if width > dest.width:
             over = (width - dest.width) * height
             width = dest.width
@@ -94,7 +93,12 @@ def _move_to_screen(
             over = (height - dest.height) * width
             height = dest.height
             width += over / height
-        # Relative position TODO: Refactor positioning without division
+        # Proportional position:
+        # Since the window size in respect to the monitor size is not proportional (x/y was flipped),
+        # the positioning is more complicated than proportionally scaling the x/y coordinates.
+        # It is computed by keeping the free space to the left of the window proportional to the right
+        # and respectively for the top/bottom free space.
+        # The if conditions account for division by 0. TODO: Refactor positioning without division by 0
         if src.height == window.rect.height:
             x = dest.left + (dest.width - width) / 2
         else:
@@ -104,6 +108,7 @@ def _move_to_screen(
         else:
             y = dest.top + (window.rect.left - src.left) * (dest.height - height) / (src.width - window.rect.width)
     else:
+        # Horizontal -> horizontal or vertical -> vertical
         # Retain proportional size and position
         proportional_width = dest.width / src.width
         proportional_height = dest.height / src.height
