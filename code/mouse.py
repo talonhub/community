@@ -1,6 +1,4 @@
 import os
-import pathlib
-import subprocess
 
 from talon import (
     Module,
@@ -90,6 +88,12 @@ setting_mouse_wheel_down_amount = mod.setting(
     default=120,
     desc="The amount to scroll up/down (equivalent to mouse wheel on Windows by default)",
 )
+setting_mouse_wheel_horizontal_amount = mod.setting(
+    "mouse_wheel_horizontal_amount",
+    type=int,
+    default=40,
+    desc="The amount to scroll left/right",
+)
 
 continuous_scoll_mode = ""
 
@@ -174,9 +178,9 @@ class Actions:
         if button_down:
             ctrl.mouse_click(button=0, up=True)
 
-    def mouse_scroll_down():
+    def mouse_scroll_down(amount: float = 1):
         """Scrolls down"""
-        mouse_scroll(setting_mouse_wheel_down_amount.get())()
+        mouse_scroll(amount * setting_mouse_wheel_down_amount.get())()
 
     def mouse_scroll_down_continuous():
         """Scrolls down continuously"""
@@ -190,9 +194,9 @@ class Actions:
         if setting_mouse_hide_mouse_gui.get() == 0:
             gui_wheel.show()
 
-    def mouse_scroll_up():
+    def mouse_scroll_up(amount: float = 1):
         """Scrolls up"""
-        mouse_scroll(-setting_mouse_wheel_down_amount.get())()
+        mouse_scroll(-amount * setting_mouse_wheel_down_amount.get())()
 
     def mouse_scroll_up_continuous():
         """Scrolls up continuously"""
@@ -204,6 +208,14 @@ class Actions:
             start_scroll()
         if setting_mouse_hide_mouse_gui.get() == 0:
             gui_wheel.show()
+
+    def mouse_scroll_left(amount: float = 1):
+        """Scrolls left"""
+        actions.mouse_scroll(0, -amount * setting_mouse_wheel_horizontal_amount.get())
+
+    def mouse_scroll_right(amount: float = 1):
+        """Scrolls right"""
+        actions.mouse_scroll(0, amount * setting_mouse_wheel_horizontal_amount.get())
 
     def mouse_scroll_stop():
         """Stops scrolling"""
