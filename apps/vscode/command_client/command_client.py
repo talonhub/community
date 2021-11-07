@@ -352,6 +352,21 @@ class Actions:
             return_command_output=True,
         )
 
+    def communication_dir_named_subdir(name: str) -> Path:
+        """
+        Get a named communication dir subdirectory.
+
+        Args:
+            name (str): The name of the subdir
+
+        Returns:
+            Path: The communication subdir
+        """
+        path = get_communication_dir_path() / "namedSubdirs" / name
+        path.mkdir(parents=True, exist_ok=True)
+
+        return path
+
     def trigger_command_server_command_execution():
         """Issue keystroke to trigger command server to execute command that
         was written to the file.  For internal use only"""
