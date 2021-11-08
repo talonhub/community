@@ -7,7 +7,7 @@ from tempfile import gettempdir
 from typing import Any, List
 from uuid import uuid4
 
-from talon import Context, Module, actions
+from talon import Context, Module, actions, speech_system
 
 # How old a request file needs to be before we declare it stale and are willing
 # to remove it
@@ -352,21 +352,6 @@ class Actions:
             return_command_output=True,
         )
 
-    def communication_dir_named_subdir(name: str) -> Path:
-        """
-        Get a named communication dir subdirectory.
-
-        Args:
-            name (str): The name of the subdir
-
-        Returns:
-            Path: The communication subdir
-        """
-        path = get_communication_dir_path() / "namedSubdirs" / name
-        path.mkdir(parents=True, exist_ok=True)
-
-        return path
-
     def trigger_command_server_command_execution():
         """Issue keystroke to trigger command server to execute command that
         was written to the file.  For internal use only"""
@@ -383,3 +368,26 @@ class MacUserActions:
 class LinuxUserActions:
     def trigger_command_server_command_execution():
         actions.key("ctrl-shift-alt-p")
+
+
+def get_signal_path(name: str) -> Path:
+    """
+    Get the path to a signal in the signal subdirectory.
+
+    Args:
+        name (str): The name of the subdir
+
+    Returns:
+        Path: The signal path
+    """
+    signal_dir = get_communication_dir_path() / "signals"
+    signal_dir.mkdir(parents=True, exist_ok=True)
+
+    return signal_dir / name
+
+
+def pre_phrase(_: any):
+    get_signal_path("prePhrase").touch()
+
+
+speech_system.register("pre:phrase", pre_phrase)
