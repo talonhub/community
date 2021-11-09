@@ -52,9 +52,11 @@ capture {user.talon_captures}: "<{talon_captures}>"
 key <user.keys> over: "{keys}"
 key <user.modifiers> over: "{modifiers}"
 
+# basic list of actions (e.g., insert, key)
+funk <user.code_functions>:
+    user.code_insert_function(code_functions, "")
 
-#funk commands, consistent with other languages
-
+# all actions (requires uncommenting user.talon_populate_lists tag above)
 funk {user.talon_actions}: user.code_insert_function(talon_actions, edit.selected_text())
 funk cell <number>:
     user.code_select_function(number - 1, "")

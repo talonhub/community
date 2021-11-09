@@ -1,4 +1,5 @@
 from talon import ctrl, ui, Module, Context, actions, clip, app
+from talon.mac import applescript
 
 ctx = Context()
 mod = Module()
@@ -13,10 +14,28 @@ app: safari
 """
 ctx.tags = ['browser', 'user.tabs']
 
+def safari_app():
+    return ui.apps(bundle="com.apple.Safari")[0]
+
 @ctx.action_class('browser')
 class BrowserActions:
-    #action(browser.address):
-    
+    def address() -> str:
+        try:
+            window = safari_app().windows()[0]
+        except IndexError:
+            return ''
+        try:
+            address_field = window.element.children.find_one(
+                AXRole='AXTextField', AXIdentifier='WEB_BROWSER_ADDRESS_AND_SEARCH_FIELD')
+            address = address_field.AXValue
+        except (ui.UIErr, AttributeError):
+            address = applescript.run('''
+            tell application id "com.apple.Safari"
+                if not (exists (window 1)) then return ""
+                return window 1's current tab's URL
+            end tell
+            ''')
+        return address
     def bookmark():
         actions.key('cmd-d')
     def bookmark_tabs():
