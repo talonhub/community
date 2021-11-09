@@ -187,11 +187,11 @@ class UserActions:
         actions.insert('else:')
         actions.key('enter')
     def code_state_switch():
-        actions.insert('switch ()')
+        actions.insert('match :')
         actions.edit.left()
     def code_state_case():
-        actions.insert('case \nbreak;')
-        actions.edit.up()
+        actions.insert('case :')
+        actions.edit.left()
     def code_state_for(): actions.auto_insert('for ')
     def code_state_for_each():
         actions.insert('for in ')

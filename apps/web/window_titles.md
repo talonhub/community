@@ -1,6 +1,6 @@
 These talon files mostly match based on the url of the target site, however by
 default talon cannot find these URLs. To get the URL listed in the tab name,
-and thus the win.title, you need to use a plug in:
+and thus the win.title and browser.url, you need to use a plug in:
 Firefox: https://addons.mozilla.org/en-US/firefox/addon/domain-in-title/
 Chrome: https://chrome.google.com/webstore/detail/url-in-title/ignpacbgnbnkaiooknalneoeladjnfgb?hl=en
 

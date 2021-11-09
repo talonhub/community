@@ -280,8 +280,6 @@ The most commonly adjusted settings are probably
 
 • `user.mouse_wheel_down_amount` and `user.mouse_continuous_scroll_amount` for adjusting the scroll amounts for the various scroll commands.
 
-• Uncomment `tag(): user.mouse_grid_enabled` to enable the mouse grid.
-
 
 # Collaborators
 
