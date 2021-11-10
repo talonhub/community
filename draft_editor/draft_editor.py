@@ -5,6 +5,7 @@ mod = Module()
 mod.mode("draft_editor", "Indicates whether the draft editor has been activated")
 
 default_names = [
+    "code",
     "Visual Studio Code",
     "Code",
     "VSCodium",
