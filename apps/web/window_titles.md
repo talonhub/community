@@ -1,18 +1,9 @@
-These talon files mostly match based on the URL of the target site, by looking
-for the URL in the window title. However by default most browsers do not show
-the URL in the title.
+Some of the files (e.g. github.talon) use a browser.host matcher. These talon files should work out of the box for Safari and Chrome on Mac, but require additional configuration on other browsers/operating systems. `knasuj_talon` is set up so that if a URL is found in the titlebar of an application matching the 'browser' tag it will be used to populate the browser.host matcher (see `code/browser.py`). This probably means that you will need an extension to make the browser.host based scripts work.
 
-Browser extensions can add the URL to the win.title and thus browser.url.
+Browser extensions that can add the protocol and hostname or even the entire URL to the window title:
 
 Firefox:
 - https://addons.mozilla.org/en-US/firefox/addon/keepass-helper-url-in-title/
 
 Chrome:
 - https://chrome.google.com/webstore/detail/url-in-title/ignpacbgnbnkaiooknalneoeladjnfgb
-
-The scripts here look for a word with the scheme (protocol) and hostname.
-Please ensure your browser extension is configured appropriately.
-
-Alternatively if you are comfortable with using a name that's possibly more
-prone to false positives, you can optionally use the commented out name-based
-match that is present in many of the files.
