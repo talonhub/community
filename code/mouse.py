@@ -299,10 +299,11 @@ noise.register("pop", on_pop)
 def mouse_scroll(amount):
     def scroll():
         global scroll_amount
-        if (scroll_amount >= 0) == (amount >= 0):
-            scroll_amount += amount
-        else:
-            scroll_amount = amount
+        if continuous_scoll_mode:
+            if (scroll_amount >= 0) == (amount >= 0):
+                scroll_amount += amount
+            else:
+                scroll_amount = amount
         actions.mouse_scroll(y=int(amount))
 
     return scroll
@@ -356,7 +357,7 @@ def gaze_scroll():
 
 
 def stop_scroll():
-    global scroll_amount, scroll_job, gaze_job
+    global scroll_amount, scroll_job, gaze_job, continuous_scoll_mode
     scroll_amount = 0
     if scroll_job:
         cron.cancel(scroll_job)
@@ -372,6 +373,8 @@ def stop_scroll():
     scroll_job = None
     gaze_job = None
     gui_wheel.hide()
+
+    continuous_scoll_mode = ""
 
     # if eye_zoom_mouse.zoom_mouse.enabled and eye_mouse.mouse.attached_tracker is not None:
     #    eye_zoom_mouse.zoom_mouse.sleep(False)
