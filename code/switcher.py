@@ -160,7 +160,10 @@ if app.platform == "windows":
 
             name = item.GetDisplayName(shellcon.SIGDN_NORMALDISPLAY)
 
-            items[name] = app_user_model_id
+            # exclude anything with install/uninstall...
+            # 'cause I don't think we don't want 'em
+            if "install" not in name.lower():
+                items[name] = app_user_model_id
 
         return items
 
@@ -281,12 +284,21 @@ class Actions:
             actions.sleep(0.1)
 
     def switcher_launch(path: str):
-        """Launch a new application by path"""
-        if app.platform == "windows":
-            cmd = "explorer.exe shell:AppsFolder\\{}".format(path)
-            subprocess.Popen(cmd, shell=False)
-        else:
+        """Launch a new application by path (all OSes), or AppUserModel_ID path on Windows"""
+        if app.platform != "windows":
             ui.launch(path=path)
+        else:
+            is_valid_path = False
+            try:
+                current_path = Path(path)
+                is_valid_path = current_path.is_file()
+            except:
+                is_valid_path = False
+            if is_valid_path:
+                ui.launch(path=path)
+            else:
+                cmd = "explorer.exe shell:AppsFolder\\{}".format(path)
+                subprocess.Popen(cmd, shell=False)
 
     def switcher_menu():
         """Open a menu of running apps to switch to"""
