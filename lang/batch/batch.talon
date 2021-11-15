@@ -4,7 +4,6 @@ mode: command
 and mode: user.auto_lang
 and code.language: batch
 -
-#tag(): user.code_operators
 tag(): user.code_comment
 
 # exit without killing cmd shell

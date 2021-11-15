@@ -4,9 +4,12 @@ mode: command
 and mode: user.auto_lang
 and code.language: python
 -
+tag(): user.code_imperative
 tag(): user.code_operators
+tag(): user.code_operators_imperative
 tag(): user.code_comment
-tag(): user.code_generic
+tag(): user.code_gui_functions
+tag(): user.code_gui_libraries
 settings():
     user.code_private_function_formatter = "SNAKE_CASE"
     user.code_protected_function_formatter = "SNAKE_CASE"
@@ -41,6 +44,7 @@ dock type {user.code_type}:
     user.insert_cursor(":type [|]: {code_type}")
 dock returns type {user.code_type}:
     user.insert_cursor(":rtype [|]: {code_type}")
+
 toggle imports: user.code_toggle_libraries()
 import <user.code_libraries>:
     user.code_insert_library(code_libraries, "")

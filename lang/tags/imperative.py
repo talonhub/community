@@ -3,25 +3,8 @@ from talon import Context, Module, actions, imgui, registry, settings
 ctx = Context()
 mod = Module()
 
-mod.list("code_functions", desc="List of functions for active language")
 mod.list("code_type", desc="List of types for active language")
-mod.list("code_libraries", desc="List of libraries for active language")
 mod.list("code_parameter_name", desc="List of common parameter names for active language")
-
-# global variables
-function_list = []
-library_list = []
-
-@mod.capture(rule="{user.code_functions}")
-def code_functions(m) -> str:
-    """Returns a function name"""
-    return m.code_functions
-
-
-@mod.capture(rule="{user.code_libraries}")
-def code_libraries(m) -> str:
-    """Returns a type"""
-    return m.code_libraries
 
 setting_private_function_formatter = mod.setting("code_private_function_formatter", str)
 setting_protected_function_formatter = mod.setting(
@@ -36,7 +19,6 @@ setting_public_variable_formatter = mod.setting("code_public_variable_formatter"
 
 # TODO: rename this tag to imperative
 # TODO: factor out object oriented commands from this tag
-# TODO: factor out GUI for selecting common functions and libraries
 
 mod.tag(
     "code_generic",
@@ -208,116 +190,14 @@ class Actions:
     def code_from_import():
         """from import python equivalent"""
 
-    def code_toggle_functions():
-        """GUI: List functions for active language"""
-        global function_list
-        if gui_libraries.showing:
-            gui_libraries.hide()
-        if gui_functions.showing:
-            function_list = []
-            gui_functions.hide()
-        else:
-            update_function_list_and_freeze()
-
-    def code_select_function(number: int, selection: str):
-        """Inserts the selected function when the imgui is open"""
-        if gui_functions.showing and number < len(function_list):
-            actions.user.code_insert_function(
-                registry.lists["user.code_functions"][0][function_list[number]],
-                selection,
-            )
-
-    def code_insert_function(text: str, selection: str):
-        """Inserts a function and positions the cursor appropriately"""
-
     def code_insert_type_annotation(type: str):
         """Inserts a type annotation"""
 
     def code_insert_return_type(type: str):
         """Inserts a return type"""
 
-    def code_toggle_libraries():
-        """GUI: List libraries for active language"""
-        global library_list
-        if gui_functions.showing:
-            gui_functions.hide()
-        if gui_libraries.showing:
-            library_list = []
-            gui_libraries.hide()
-        else:
-            update_library_list_and_freeze()
-
-    def code_select_library(number: int, selection: str):
-        """Inserts the selected library when the imgui is open"""
-        if gui_libraries.showing and number < len(library_list):
-            actions.user.code_insert_library(
-                registry.lists["user.code_libraries"][0][library_list[number]],
-                selection,
-            )
-
-    def code_insert_library(text: str, selection: str):
-        """Inserts a library and positions the cursor appropriately"""
-
     def code_insert_named_argument(parameter_name: str):
         """Inserts a named argument"""
 
     def code_document_string():
         """Inserts a document string and positions the cursor appropriately"""
-
-
-def update_library_list_and_freeze():
-    global library_list
-    if "user.code_libraries" in registry.lists:
-        library_list = sorted(registry.lists["user.code_libraries"][0].keys())
-    else:
-        library_list = []
-
-    gui_libraries.show()
-
-
-def update_function_list_and_freeze():
-    global function_list
-    if "user.code_functions" in registry.lists:
-        function_list = sorted(registry.lists["user.code_functions"][0].keys())
-    else:
-        function_list = []
-
-    gui_functions.show()
-
-
-@imgui.open()
-def gui_functions(gui: imgui.GUI):
-    gui.text("Functions")
-    gui.line()
-
-    # print(str(registry.lists["user.code_functions"]))
-    for i, entry in enumerate(function_list, 1):
-        if entry in registry.lists["user.code_functions"][0]:
-            gui.text(
-                "{}. {}: {}".format(
-                    i, entry, registry.lists["user.code_functions"][0][entry]
-                )
-            )
-
-
-@imgui.open()
-def gui_libraries(gui: imgui.GUI):
-    gui.text("Libraries")
-    gui.line()
-
-    for i, entry in enumerate(library_list, 1):
-        gui.text(
-            "{}. {}: {}".format(
-                i, entry, registry.lists["user.code_libraries"][0][entry]
-            )
-        )
-
-
-def commands_updated(_):
-    if gui_functions.showing:
-        update_function_list_and_freeze()
-    if gui_libraries.showing:
-        update_library_list_and_freeze()
-
-
-registry.register("update_commands", commands_updated)

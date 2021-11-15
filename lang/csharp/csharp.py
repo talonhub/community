@@ -1,4 +1,4 @@
-from talon import Context, Module, actions, imgui, settings, ui
+from talon import Context, Module, actions, settings
 
 ctx = Context()
 ctx.matches = r"""
@@ -90,7 +90,7 @@ class UserActions:
     def code_next():           actions.auto_insert('continue;')
     def code_true():           actions.auto_insert('true')
     def code_false():          actions.auto_insert('false')
-    
+
     #action(user.code_type_definition): "typedef "
     #action(user.code_typedef_struct):
     #    insert("typedef struct")

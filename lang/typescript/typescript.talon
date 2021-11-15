@@ -4,9 +4,11 @@ mode: command
 and mode: user.auto_lang
 and code.language: typescript
 -
+tag(): user.code_imperative
 tag(): user.code_operators
+tag(): user.code_operators_imperative
 tag(): user.code_comment
-tag(): user.code_generic
+tag(): user.code_gui_functions
 
 settings():
     user.code_private_function_formatter = "PRIVATE_CAMEL_CASE"
@@ -15,7 +17,7 @@ settings():
     user.code_private_variable_formatter = "PRIVATE_CAMEL_CASE"
     user.code_protected_variable_formatter = "PRIVATE_CAMEL_CASE"
     user.code_public_variable_formatter = "PRIVATE_CAMEL_CASE"
-    
+
 (op | is) strict equal: " === "
 (op | is) strict not equal: " !== "
 
@@ -32,15 +34,15 @@ state await: "await "
 state map:
     insert(".map()")
     key(left)
-    
+
 state filter:
     insert(".filter()")
     key(left)
-    
+
 state reduce:
     insert(".reduce()")
     key(left)
-    
+
 state spread: "..."
 
 ^funky <user.text>$: user.code_default_function(text)

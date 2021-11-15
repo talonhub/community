@@ -7,7 +7,7 @@ mode: user.java
 mode: user.auto_lang
 and code.language: java
 """
-ctx.tags = ["user.code_operators", "user.code_generic"]
+ctx.tags = ["user.code_operators", "user.code_generic", "user.code_gui_functions"]
 
 # Primitive Types
 java_primitive_types = {
@@ -59,7 +59,7 @@ java_generic_data_structures = {
     "queue": "Queue",
     "deque": "Deque",
     "map": "Map",
-    
+
     # Classes
     "hash set": "HashSet",
     "array list": "ArrayList",
@@ -173,7 +173,7 @@ class UserActions:
     def code_operator_bitwise_and_assignment():
         actions.auto_insert(' &= ')
 
-    def code_operator_increment():        
+    def code_operator_increment():
         actions.auto_insert('++')
 
     def code_operator_bitwise_or():
@@ -239,22 +239,22 @@ class UserActions:
         actions.edit.left()
         actions.edit.left()
 
-    def code_break():           
+    def code_break():
         actions.auto_insert('break;')
 
     def code_next():
         actions.auto_insert('continue;')
-    
-    def code_true():          
+
+    def code_true():
         actions.auto_insert('true')
 
-    def code_false():           
+    def code_false():
         actions.auto_insert('false')
 
     def code_type_class():
         actions.auto_insert("class ")
 
-    def code_import():         
+    def code_import():
         actions.auto_insert("import ")
 
     def code_private_function(text: str):
@@ -269,7 +269,7 @@ class UserActions:
     def code_state_return():
         actions.insert("return ")
 
-    def code_comment(): 
+    def code_comment():
         actions.auto_insert('// ')
 
     def code_block_comment():
@@ -279,10 +279,10 @@ class UserActions:
         actions.insert('*/')
         actions.edit.up()
 
-    def code_block_comment_prefix(): 
+    def code_block_comment_prefix():
         actions.auto_insert('/*')
 
-    def code_block_comment_suffix(): 
+    def code_block_comment_suffix():
         actions.auto_insert('*/')
 
     def code_insert_function(text: str, selection: str):
