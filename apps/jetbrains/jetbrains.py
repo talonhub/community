@@ -118,6 +118,7 @@ mod.apps.jetbrains = "app.name: PyCharm"
 mod.apps.jetbrains = "app.name: WebStorm"
 mod.apps.jetbrains = "app.name: RubyMine"
 mod.apps.jetbrains = "app.name: RubyMine-EAP"
+mod.apps.jetbrains = "app.name: DataGrip"
 mod.apps.jetbrains = """
 os: mac
 and app.bundle: com.google.android.studio
