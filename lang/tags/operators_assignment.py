@@ -4,7 +4,7 @@ ctx = Context()
 mod = Module()
 
 # TODO: rename this tag to 'code_operator_imperative'
-mod.tag("code_operators_imperative", desc="Tag for enabling assignment commands")
+mod.tag("code_operators_assignment", desc="Tag for enabling assignment commands")
 
 
 @mod.action_class

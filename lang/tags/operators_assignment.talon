@@ -1,4 +1,4 @@
-tag: user.code_operators_imperative
+tag: user.code_operators_assignment
 -
 # assignment
 op (equals | assign): user.code_operator_assignment()

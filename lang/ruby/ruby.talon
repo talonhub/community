@@ -6,7 +6,7 @@ and code.language: ruby
 -
 tag(): user.code_imperative
 tag(): user.code_operators
-tag(): user.code_operators_imperative
+tag(): user.code_operators_assignment
 tag(): user.code_comment
 settings():
     user.code_private_function_formatter = "SNAKE_CASE"
