@@ -94,12 +94,6 @@ ctx.lists["self.java_modifiers"] = java_modifiers
 
 @ctx.action_class("user")
 class UserActions:
-    def code_operator_indirection():
-        actions.skip()
-
-    def code_operator_address_of():
-        actions.skip()
-
     def code_operator_lambda():
         actions.auto_insert(" -> ")
 

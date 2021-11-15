@@ -3,7 +3,7 @@ from talon import Module, Context, actions, ui, imgui, settings
 ctx = Context()
 ctx.matches = r"""
 mode: user.javascript
-mode: user.auto_lang 
+mode: user.auto_lang
 and code.language: javascript
 """
 # tbd
@@ -109,15 +109,6 @@ class UserActions:
 
     def code_null():
         actions.auto_insert("null")
-
-    def code_operator_indirection():
-        actions.auto_insert("")
-
-    def code_operator_address_of():
-        actions.auto_insert("")
-
-    def code_operator_structure_dereference():
-        actions.auto_insert("")
 
     def code_operator_lambda():
         actions.auto_insert(" => ")
@@ -280,4 +271,3 @@ class UserActions:
     #     )
 
     #     actions.user.code_insert_function(result, None)
-

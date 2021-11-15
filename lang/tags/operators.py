@@ -10,17 +10,6 @@ mod.tag("code_operators", desc="Tag for enabling generic operator commands")
 @mod.action_class
 class Actions:
 
-    # TODO: move into pointer tag?
-
-    def code_operator_indirection():
-        """code_operator_indirection"""
-
-    def code_operator_address_of():
-        """code_operator_address_of (e.g., C++ & op)"""
-
-    def code_operator_structure_dereference():
-        """code_operator_structure_dereference (e.g., C++ -> op)"""
-
     def code_operator_lambda():
         """code_operator_lambda"""
 
@@ -64,7 +53,7 @@ class Actions:
         """code_operator_less_than_or_equal_to"""
 
     def code_operator_in():
-        """code_operator_less_than_or_equal_to"""
+        """code_operator_in"""
 
     def code_operator_and():
         """code_operator_and"""

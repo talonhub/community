@@ -136,9 +136,6 @@ ctx.lists["user.python_exception"] = {
 
 @ctx.action_class("user")
 class UserActions:
-    def code_operator_indirection():           actions.auto_insert('')
-    def code_operator_address_of():            actions.auto_insert('')
-    def code_operator_structure_dereference(): actions.auto_insert('')
     def code_operator_lambda():                actions.auto_insert('')
     def code_operator_subscript():
         actions.insert('[]')
