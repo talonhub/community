@@ -30,6 +30,7 @@ key = actions.key
 function_list = []
 library_list = []
 extension_lang_map = {
+    ".agda": "agda",
     ".asm": "assembly",
     ".bat": "batch",
     ".c": "c",
@@ -40,6 +41,7 @@ extension_lang_map = {
     ".go": "go",
     ".h": "c",
     ".hpp": "cplusplus",
+    ".hs": "haskell",
     ".java": "java",
     ".js": "javascript",
     ".jsx": "javascript",
@@ -198,7 +200,7 @@ class Actions:
     def code_operator_bitwise_and_assignment():
         """code_operator_and"""
 
-    def code_operator_increment():        
+    def code_operator_increment():
         """code_operator_increment"""
 
     def code_operator_bitwise_or():
