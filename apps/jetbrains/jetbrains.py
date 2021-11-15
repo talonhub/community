@@ -305,3 +305,19 @@ class UserActions:
     def line_clone(line: int):
         actions.user.idea("clone {}".format(line))
 
+    # multi-cursor tag functions
+    # def multi_cursor_enable():
+    # def multi_cursor_disable():
+    def multi_cursor_add_above():
+        actions.user.idea("action EditorCloneCaretAbove")
+    def multi_cursor_add_below():
+        actions.user.idea("action EditorCloneCaretBelow")
+    def multi_cursor_select_fewer_occurrences():
+        actions.user.idea("action UnselectPreviousOccurrence")
+    def multi_cursor_select_more_occurrences():
+        actions.user.idea("action SelectNextOccurrence")
+    # def multi_cursor_skip_occurrence():
+    def multi_cursor_select_all_occurrences():
+        actions.user.idea("action SelectAllOccurrences")
+    def multi_cursor_add_to_line_ends():
+        actions.user.idea("action EditorAddCaretPerSelectedLine")
