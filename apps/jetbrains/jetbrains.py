@@ -248,6 +248,11 @@ class EditActions:
 
     def extend_file_end():
         actions.user.idea("action EditorTextEndWithSelection")
+    
+    def extend_word_left():
+        actions.user.idea("action EditorPreviousWordWithSelection")
+    def extend_word_right():
+        actions.user.idea("action EditorNextWordWithSelection")
 
     def jump_line(n: int):
         actions.user.idea("goto {} 0".format(n))
