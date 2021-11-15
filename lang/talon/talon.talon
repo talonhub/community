@@ -4,7 +4,7 @@ mode: command
 and mode: user.auto_lang
 and code.language: talon
 -
-tag(): user.code_operators
+tag(): user.code_operators_math
 tag(): user.code_comment
 tag(): user.code_gui_functions
 # uncomment user.talon_populate_lists tag to activate talon-specific lists of actions, scopes, modes etcetera.

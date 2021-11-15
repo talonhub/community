@@ -3,9 +3,7 @@ from talon import Context, Module
 ctx = Context()
 mod = Module()
 
-# TODO: rename this tag to 'code_operator_imperative'
 mod.tag("code_operators_assignment", desc="Tag for enabling assignment commands")
-
 
 @mod.action_class
 class Actions:
@@ -19,6 +17,9 @@ class Actions:
     def code_operator_addition_assignment():
         """code_operator_addition_assignment"""
 
+    def code_operator_increment():
+        """code_operator_increment"""
+
     def code_operator_multiplication_assignment():
         """code_operator_multiplication_assignment"""
 
@@ -30,9 +31,6 @@ class Actions:
 
     def code_operator_bitwise_and_assignment():
         """code_operator_and"""
-
-    def code_operator_increment():
-        """code_operator_increment"""
 
     def code_operator_bitwise_or_assignment():
         """code_operator_or_assignment"""

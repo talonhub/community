@@ -1,4 +1,4 @@
-tag: user.code_generic
+tag: user.code_base_imperative
 -
 block: user.code_block()
 

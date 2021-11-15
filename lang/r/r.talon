@@ -4,14 +4,15 @@ mode: command
 and mode: user.auto_lang
 and code.language: r
 -
-# TODO: functions
-
-tag(): user.code_imperative
-tag(): user.code_operators
+tag(): user.code_base_imperative
 tag(): user.code_operators_assignment
+tag(): user.code_operators_bitwise
+tag(): user.code_operators_collection
+tag(): user.code_operators_math
 tag(): user.code_comment
 tag(): user.code_gui_functions
 tag(): user.code_gui_libraries
+
 settings():
     user.code_private_function_formatter = "SNAKE_CASE"
     user.code_protected_function_formatter = "SNAKE_CASE"
@@ -19,6 +20,8 @@ settings():
     user.code_private_variable_formatter = "SNAKE_CASE"
     user.code_protected_variable_formatter = "SNAKE_CASE"
     user.code_public_variable_formatter = "SNAKE_CASE"
+
+# TODO: functions
 
 toggle library: user.code_toggle_libraries()
 library <user.code_libraries>:

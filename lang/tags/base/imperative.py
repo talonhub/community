@@ -17,12 +17,11 @@ setting_protected_variable_formatter = mod.setting(
 )
 setting_public_variable_formatter = mod.setting("code_public_variable_formatter", str)
 
-# TODO: rename this tag to imperative
 # TODO: factor out object oriented commands from this tag
 
 mod.tag(
-    "code_generic",
-    desc="Tag for enabling other basic programming commands (loops, functions, etc)",
+    "code_base_imperative",
+    desc="Tag for enabling other basic imperative programming commands (loops, functions, etc)",
 )
 
 @mod.action_class

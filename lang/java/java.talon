@@ -2,9 +2,12 @@ mode: user.java
 mode: user.auto_lang
 and code.language: java
 -
-tag(): user.code_imperative
-tag(): user.code_operators
+tag(): user.code_base_imperative
+tag(): user.code_operators_array
 tag(): user.code_operators_assignment
+tag(): user.code_operators_bitwise
+tag(): user.code_operators_lambda
+tag(): user.code_operators_math
 tag(): user.code_comment
 tag(): user.code_block_comment
 tag(): user.code_gui_functions
