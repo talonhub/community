@@ -5,7 +5,6 @@ mod = Module()
 
 key = actions.key
 extension_lang_map = {
-    ".agda": "agda",
     ".asm": "assembly",
     ".bat": "batch",
     ".c": "c",
@@ -16,7 +15,6 @@ extension_lang_map = {
     ".go": "go",
     ".h": "c",
     ".hpp": "cplusplus",
-    ".hs": "haskell",
     ".java": "java",
     ".js": "javascript",
     ".jsx": "javascript",

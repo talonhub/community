@@ -8,8 +8,6 @@
 ^force python$: user.code_set_language_mode("python")
 ^force are language$: user.code_set_language_mode("r")
 ^force talon [language]$: user.code_set_language_mode("talon")
-^force high school$: user.code_set_language_mode("haskell")
-^force hen$: user.code_set_language_mode("agda")
 ^clear language modes$: user.code_clear_language_mode()
 [enable] debug mode:
     mode.enable("user.gdb")
