@@ -29,9 +29,6 @@ class Actions:
     def code_block():
         """Inserts equivalent of {\n} for the active language, and places the cursor appropriately"""
 
-    def code_self():
-        """Inserts the equivalent of "this" in C++ or self in python"""
-
     def code_null():
         """inserts null equivalent"""
 
@@ -161,9 +158,6 @@ class Actions:
                 name, settings.get("user.code_public_variable_formatter")
             )
         )
-
-    def code_type_class():
-        """code_type_class"""
 
     def code_import():
         """import/using equivalent"""

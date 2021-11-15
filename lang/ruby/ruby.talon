@@ -5,6 +5,7 @@ and mode: user.auto_lang
 and code.language: ruby
 -
 tag(): user.code_base_imperative
+tag(): user.code_base_object_oriented
 tag(): user.code_operators_array
 tag(): user.code_operators_assignment
 tag(): user.code_operators_bitwise

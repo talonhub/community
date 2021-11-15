@@ -55,7 +55,13 @@ class UserActions:
     def code_block():
         actions.insert('{}')
         actions.key('left enter enter up tab')
-    def code_self():        actions.auto_insert('this')
+
+    def code_data_self():
+        actions.auto_insert('this')
+
+    def code_operator_object_accessor():
+        actions.auto_insert(".")
+
     def code_null():        actions.auto_insert('null')
     def code_is_null():     actions.auto_insert(' == null ')
     def code_is_not_null(): actions.auto_insert(' != null')
@@ -90,7 +96,7 @@ class UserActions:
     def code_next():           actions.auto_insert('continue;')
     def code_true():           actions.auto_insert('true')
     def code_false():          actions.auto_insert('false')
-    def code_type_class():     actions.auto_insert('class ')
+    def code_define_class():     actions.auto_insert('class ')
     def code_import():         actions.auto_insert('using  ')
     def code_from_import():    actions.auto_insert('using ')
     def code_comment():        actions.auto_insert('//')

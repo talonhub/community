@@ -43,7 +43,8 @@ class UserActions:
     def code_operator_bitwise_left_shift_assignment(): actions.auto_insert(' <<= ')
     def code_operator_bitwise_right_shift(): actions.auto_insert(' >> ')
     def code_operator_bitwise_right_shift_assignment(): actions.auto_insert(' >>= ')
-    def code_self(): actions.auto_insert('self')
+    def code_data_self(): actions.auto_insert('self')
+    def code_operator_object_accessor(): actions.auto_insert('.')
     def code_null(): actions.auto_insert('nil')
     def code_is_null(): actions.auto_insert('.nil?')
     # Technically .present? is provided by Rails
@@ -62,7 +63,7 @@ class UserActions:
     def code_state_for_each():
         actions.insert('.each do ||')
         actions.key('left')
-    def code_type_class(): actions.auto_insert('class ')
+    def code_define_class(): actions.auto_insert('class ')
     def code_import():
         actions.auto_insert('require ""')
         actions.key('left')

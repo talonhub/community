@@ -1,22 +1,14 @@
 tag: user.code_base_imperative
 -
-block: user.code_block()
+# TODO: should we have a keyword list? type list capture? stick with "word"?
+# TODO: types?
 
-#todo should we have a keyword list? type list capture? stick with "word"?
-#state in: insert(" in ")
+block: user.code_block()
 is not (none|null): user.code_is_not_null()
 is (none|null): user.code_is_null()
-#todo: types?
-#word (dickt | dictionary): user.code_type_dictionary()
 state if: user.code_state_if()
 state else if: user.code_state_else_if()
 state else: user.code_state_else()
-state self: user.code_self()
-#todo: this is valid for many languages,
-# but probably not all
-self dot:
-    user.code_self()
-    insert(".")
 state while: user.code_state_while()
 state for: user.code_state_for()
 state for in: user.code_state_for_each()
@@ -27,7 +19,6 @@ state goto: user.code_state_go_to()
 state return: user.code_state_return()
 state import: user.code_import()
 from import: user.code_from_import()
-state class: user.code_type_class()
 state (no | nil | null): user.code_null()
 state break: user.code_break()
 state next: user.code_next()

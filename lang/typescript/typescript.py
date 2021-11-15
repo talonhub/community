@@ -52,8 +52,11 @@ class UserActions:
         actions.insert("{}")
         actions.key("left enter")
 
-    def code_self():
+    def code_data_self():
         actions.auto_insert("this")
+
+    def code_operator_object_accessor():
+        actions.auto_insert('.')
 
     def code_state_while():
         actions.insert("while ()")
@@ -86,7 +89,7 @@ class UserActions:
         actions.insert(' from  ""')
         actions.key("left")
 
-    def code_type_class():
+    def code_define_class():
         actions.auto_insert("class ")
 
     def code_state_for_each():

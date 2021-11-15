@@ -169,7 +169,8 @@ class UserActions:
     def code_operator_bitwise_left_shift_assignment():   actions.auto_insert(' <<= ')
     def code_operator_bitwise_right_shift():             actions.auto_insert(' >> ')
     def code_operator_bitwise_right_shift_assignment():  actions.auto_insert(' >>= ')
-    def code_self():                                     actions.auto_insert('self')
+    def code_data_self():                                actions.auto_insert('self')
+    def code_operator_object_accessor():                 actions.auto_insert('.')
     def code_null():                                     actions.auto_insert('None')
     def code_is_null():                                  actions.auto_insert(' is None')
     def code_is_not_null():                              actions.auto_insert(' is not None')
@@ -198,7 +199,7 @@ class UserActions:
     def code_state_while():
         actions.insert('while :')
         actions.edit.left()
-    def code_type_class(): actions.auto_insert('class ')
+    def code_define_class(): actions.auto_insert('class ')
     def code_import():     actions.auto_insert('import ')
     def code_from_import():
         actions.insert('from import ')
