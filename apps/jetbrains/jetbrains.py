@@ -323,3 +323,25 @@ class UserActions:
         actions.user.idea("action SelectAllOccurrences")
     def multi_cursor_add_to_line_ends():
         actions.user.idea("action EditorAddCaretPerSelectedLine")
+
+    # splits tag functions
+    # def split_window_right():
+    #     actions.user.idea("action OpenInRightSplit")
+    # def split_window_left():
+    # def split_window_down():
+    # def split_window_up():
+    def split_window_vertically():
+        actions.user.idea("action SplitVertically")
+    def split_window_horizontally():
+        actions.user.idea("action SplitHorizontally")
+    def split_flip():
+        actions.user.idea("action ChangeSplitOrientation")
+    # def split_window():
+    def split_clear():
+        actions.user.idea("action Unsplit")
+    def split_clear_all():
+        actions.user.idea("action UnsplitAll")
+    def split_next():
+        actions.user.idea("action NextSplitter")
+    # def split_last():
+    # def split_number(index: int):
