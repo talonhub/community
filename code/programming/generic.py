@@ -1,69 +1,16 @@
-from talon import Context, Module, actions, app, imgui, registry, settings
+from talon import Context, Module, actions, imgui, registry, settings
 
 ctx = Context()
 mod = Module()
+
 mod.list("code_functions", desc="List of functions for active language")
 mod.list("code_type", desc="List of types for active language")
 mod.list("code_libraries", desc="List of libraries for active language")
 mod.list("code_parameter_name", desc="List of common parameter names for active language")
 
-setting_private_function_formatter = mod.setting("code_private_function_formatter", str)
-setting_protected_function_formatter = mod.setting(
-    "code_protected_function_formatter", str
-)
-setting_public_function_formatter = mod.setting("code_public_function_formatter", str)
-setting_private_variable_formatter = mod.setting("code_private_variable_formatter", str)
-setting_protected_variable_formatter = mod.setting(
-    "code_protected_variable_formatter", str
-)
-setting_public_variable_formatter = mod.setting("code_public_variable_formatter", str)
-
-mod.tag("code_comment", desc="Tag for enabling generic comment commands")
-mod.tag("code_block_comment", desc="Tag for enabling generic block comment commands")
-mod.tag("code_operators", desc="Tag for enabling generic operator commands")
-mod.tag(
-    "code_generic",
-    desc="Tag for enabling other basic programming commands (loops, functions, etc)",
-)
-
-key = actions.key
+# global variables
 function_list = []
 library_list = []
-extension_lang_map = {
-    ".agda": "agda",
-    ".asm": "assembly",
-    ".bat": "batch",
-    ".c": "c",
-    ".cmake": "cmake",
-    ".cpp": "cplusplus",
-    ".cs": "csharp",
-    ".gdb": "gdb",
-    ".go": "go",
-    ".h": "c",
-    ".hpp": "cplusplus",
-    ".hs": "haskell",
-    ".java": "java",
-    ".js": "javascript",
-    ".jsx": "javascript",
-    ".json": "json",
-    ".lua": "lua",
-    ".md": "markdown",
-    ".pl": "perl",
-    ".ps1": "powershell",
-    ".py": "python",
-    ".r": "r",
-    ".rb": "ruby",
-    ".s": "assembly",
-    ".sh": "bash",
-    ".snippets": "snippets",
-    ".talon": "talon",
-    ".ts": "typescript",
-    ".tsx": "typescript",
-    ".vba": "vba",
-    ".vim": "vimscript",
-    ".vimrc": "vimscript",
-}
-
 
 @mod.capture(rule="{user.code_functions}")
 def code_functions(m) -> str:
@@ -76,157 +23,28 @@ def code_libraries(m) -> str:
     """Returns a type"""
     return m.code_libraries
 
+setting_private_function_formatter = mod.setting("code_private_function_formatter", str)
+setting_protected_function_formatter = mod.setting(
+    "code_protected_function_formatter", str
+)
+setting_public_function_formatter = mod.setting("code_public_function_formatter", str)
+setting_private_variable_formatter = mod.setting("code_private_variable_formatter", str)
+setting_protected_variable_formatter = mod.setting(
+    "code_protected_variable_formatter", str
+)
+setting_public_variable_formatter = mod.setting("code_public_variable_formatter", str)
 
-@ctx.action_class("code")
-class code_actions:
-    def language():
-        result = ""
-        file_extension = actions.win.file_ext()
-        if file_extension and file_extension in extension_lang_map:
-            result = extension_lang_map[file_extension]
+# TODO: rename this tag to imperative
+# TODO: factor out object oriented commands from this tag
+# TODO: factor out GUI for selecting common functions and libraries
 
-        # print("code.language: " + result)
-        return result
-
-
-# create a mode for each defined language
-for __, lang in extension_lang_map.items():
-    mod.mode(lang)
-
-# Create a mode for the automated language detection. This is active when no lang is forced.
-mod.mode("auto_lang")
-
-# Auto lang is enabled by default
-app.register("ready", lambda: actions.user.code_clear_language_mode())
-
+mod.tag(
+    "code_generic",
+    desc="Tag for enabling other basic programming commands (loops, functions, etc)",
+)
 
 @mod.action_class
 class Actions:
-    def code_set_language_mode(language: str):
-        """Sets the active language mode, and disables extension matching"""
-        actions.user.code_clear_language_mode()
-        actions.mode.disable("user.auto_lang")
-        actions.mode.enable("user.{}".format(language))
-        # app.notify("Enabled {} mode".format(language))
-
-    def code_clear_language_mode():
-        """Clears the active language mode, and re-enables code.language: extension matching"""
-        actions.mode.enable("user.auto_lang")
-        for __, lang in extension_lang_map.items():
-            actions.mode.disable("user.{}".format(lang))
-        # app.notify("Cleared language modes")
-
-    def code_operator_indirection():
-        """code_operator_indirection"""
-
-    def code_operator_address_of():
-        """code_operator_address_of (e.g., C++ & op)"""
-
-    def code_operator_structure_dereference():
-        """code_operator_structure_dereference (e.g., C++ -> op)"""
-
-    def code_operator_lambda():
-        """code_operator_lambda"""
-
-    def code_operator_subscript():
-        """code_operator_subscript (e.g., C++ [])"""
-
-    def code_operator_assignment():
-        """code_operator_assignment"""
-
-    def code_operator_subtraction():
-        """code_operator_subtraction"""
-
-    def code_operator_subtraction_assignment():
-        """code_operator_subtraction_equals"""
-
-    def code_operator_addition():
-        """code_operator_addition"""
-
-    def code_operator_addition_assignment():
-        """code_operator_addition_assignment"""
-
-    def code_operator_multiplication():
-        """code_operator_multiplication"""
-
-    def code_operator_multiplication_assignment():
-        """code_operator_multiplication_assignment"""
-
-    def code_operator_exponent():
-        """code_operator_exponent"""
-
-    def code_operator_division():
-        """code_operator_division"""
-
-    def code_operator_division_assignment():
-        """code_operator_division_assignment"""
-
-    def code_operator_modulo():
-        """code_operator_modulo"""
-
-    def code_operator_modulo_assignment():
-        """code_operator_modulo_assignment"""
-
-    def code_operator_equal():
-        """code_operator_equal"""
-
-    def code_operator_not_equal():
-        """code_operator_not_equal"""
-
-    def code_operator_greater_than():
-        """code_operator_greater_than"""
-
-    def code_operator_greater_than_or_equal_to():
-        """code_operator_greater_than_or_equal_to"""
-
-    def code_operator_less_than():
-        """code_operator_less_than"""
-
-    def code_operator_less_than_or_equal_to():
-        """code_operator_less_than_or_equal_to"""
-
-    def code_operator_in():
-        """code_operator_less_than_or_equal_to"""
-
-    def code_operator_and():
-        """codee_operator_and"""
-
-    def code_operator_or():
-        """code_operator_or"""
-
-    def code_operator_bitwise_and():
-        """code_operator_bitwise_and"""
-
-    def code_operator_bitwise_and_assignment():
-        """code_operator_and"""
-
-    def code_operator_increment():
-        """code_operator_increment"""
-
-    def code_operator_bitwise_or():
-        """code_operator_bitwise_or"""
-
-    def code_operator_bitwise_or_assignment():
-        """code_operator_or_assignment"""
-
-    def code_operator_bitwise_exclusive_or():
-        """code_operator_bitwise_exclusive_or"""
-
-    def code_operator_bitwise_exclusive_or_assignment():
-        """code_operator_bitwise_exclusive_or_assignment"""
-
-    def code_operator_bitwise_left_shift():
-        """code_operator_bitwise_left_shift"""
-
-    def code_operator_bitwise_left_shift_assignment():
-        """code_operator_bitwise_left_shift_assigment"""
-
-    def code_operator_bitwise_right_shift():
-        """code_operator_bitwise_right_shift"""
-
-    def code_operator_bitwise_right_shift_assignment():
-        """code_operator_bitwise_right_shift_assignment"""
-
     def code_block():
         """Inserts equivalent of {\n} for the active language, and places the cursor appropriately"""
 
@@ -362,18 +180,6 @@ class Actions:
                 name, settings.get("user.code_public_variable_formatter")
             )
         )
-
-    def code_comment():
-        """Inserts comment at current cursor location"""
-
-    def code_block_comment():
-        """Block comment"""
-
-    def code_block_comment_prefix():
-        """Block comment start syntax"""
-
-    def code_block_comment_suffix():
-        """Block comment end syntax"""
 
     def code_type_definition():
         """code_type_definition (typedef)"""
