@@ -90,19 +90,9 @@ class UserActions:
     def code_next():           actions.auto_insert('continue;')
     def code_true():           actions.auto_insert('true')
     def code_false():          actions.auto_insert('false')
-
-    #action(user.code_type_definition): "typedef "
-    #action(user.code_typedef_struct):
-    #    insert("typedef struct")
-    #    insert("{{\n\n}}")
-    #    edit.up()
-    #    key(tab)
     def code_type_class():     actions.auto_insert('class ')
     def code_import():         actions.auto_insert('using  ')
     def code_from_import():    actions.auto_insert('using ')
-    def code_include():        actions.insert('using ')
-    def code_include_system(): actions.insert('using ')
-    def code_include_local():  actions.insert('using ')
     def code_comment():        actions.auto_insert('//')
     def code_insert_function(text: str, selection: str):
         if selection:

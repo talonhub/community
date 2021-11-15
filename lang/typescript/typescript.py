@@ -89,21 +89,6 @@ class UserActions:
     def code_type_class():
         actions.auto_insert("class ")
 
-    def code_include():
-        actions.auto_insert("")
-
-    def code_include_system():
-        actions.auto_insert("")
-
-    def code_include_local():
-        actions.auto_insert("")
-
-    def code_type_definition():
-        actions.auto_insert("")
-
-    def code_typedef_struct():
-        actions.auto_insert("")
-
     def code_state_for_each():
         actions.insert(".forEach()")
         actions.key("left")

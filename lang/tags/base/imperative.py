@@ -162,26 +162,8 @@ class Actions:
             )
         )
 
-    def code_type_definition():
-        """code_type_definition (typedef)"""
-
-    def code_typedef_struct():
-        """code_typedef_struct (typedef)"""
-
     def code_type_class():
         """code_type_class"""
-
-    def code_type_struct():
-        """code_type_struct"""
-
-    def code_include():
-        """code_include"""
-
-    def code_include_system():
-        """code_include_system"""
-
-    def code_include_local():
-        """code_include_local"""
 
     def code_import():
         """import/using equivalent"""

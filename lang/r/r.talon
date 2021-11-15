@@ -7,7 +7,6 @@ and code.language: r
 tag(): user.code_base_imperative
 tag(): user.code_operators_assignment
 tag(): user.code_operators_bitwise
-tag(): user.code_operators_collection
 tag(): user.code_operators_math
 tag(): user.code_comment
 tag(): user.code_gui_functions
@@ -22,6 +21,9 @@ settings():
     user.code_public_variable_formatter = "SNAKE_CASE"
 
 # TODO: functions
+
+# NOTE: migrated from generic as it is only use here
+(op | is) in: user.code_operator_in()
 
 toggle library: user.code_toggle_libraries()
 library <user.code_libraries>:
