@@ -6,11 +6,12 @@ and code.language: python
 -
 tag(): user.code_base_imperative
 tag(): user.code_base_object_oriented
+tag(): user.code_comment
+tag(): user.code_documentation
 tag(): user.code_operators_array
 tag(): user.code_operators_assignment
 tag(): user.code_operators_bitwise
 tag(): user.code_operators_math
-tag(): user.code_comment
 tag(): user.code_gui_functions
 tag(): user.code_gui_libraries
 

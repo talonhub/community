@@ -173,6 +173,3 @@ class Actions:
 
     def code_insert_named_argument(parameter_name: str):
         """Inserts a named argument"""
-
-    def code_document_string():
-        """Inserts a document string and positions the cursor appropriately"""
