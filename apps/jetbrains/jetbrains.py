@@ -306,8 +306,10 @@ class UserActions:
         actions.user.idea("clone {}".format(line))
 
     # multi-cursor tag functions
-    # def multi_cursor_enable():
-    # def multi_cursor_disable():
+    def multi_cursor_enable():
+        actions.skip()
+    def multi_cursor_disable():
+        actions.key("escape")
     def multi_cursor_add_above():
         actions.user.idea("action EditorCloneCaretAbove")
     def multi_cursor_add_below():
