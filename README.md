@@ -185,10 +185,19 @@ To enable title tracking for your application:
 
 Python, C#, Talon and javascript language support is currently broken up into several tags in an attempt to define a common grammar where possible between languages. Each tag is defined by a .talon file, which defines the voice commands, and a Python file which declares the actions that should be implemented by each concrete language implementation to support those voice commands. Currently, the tags which are available are:
 
-• `lang/tags/block_comment.{talon,py}` - block commenting commands
-• `lang/tags/comment.{talon,py}`       - line commenting commands
-• `lang/tags/operators.{talon,py}`     - operator commands
-• `lang/tags/generic.{talon,py}`       - functions, loops, etc
+• `lang/tags/base/imperative.{talon,py}`       - statements (e.g., `if`, `while`, `switch`)
+• `lang/tags/base/object_oriented.{talon,py}`  - objects and classes (e.g., `this`)
+• `lang/tags/gui/functions.{talon,py}`         - helper for common functions
+• `lang/tags/gui/libraries.{talon,py}`         - helper for common libraries
+• `lang/tags/comment/block.{talon,py}`         - block comments (e.g., C++'s `/* */`)
+• `lang/tags/comment/documentation.{talon,py}` - documentation comments (e.g., Java's `/** */`)
+• `lang/tags/comment/line.{talon,py}`          - line comments (e.g., Python's `#`)
+• `lang/tags/operators_array.{talon,py}`       - array operators (e.g., Ruby's `x[0]`)
+• `lang/tags/operators_assignment.{talon,py}`  - assignment operators (e.g., C++'s `x += 5`)
+• `lang/tags/operators_bitwise.{talon,py}`     - bitwise operators (e.g., C's `x >> 1`)
+• `lang/tags/operators_lambda.{talon,py}`      - anonymous functions (e.g., JavaScript's `x => x + 1`)
+• `lang/tags/operators_math.{talon,py}`        - numeric, comparison, and logical operators
+• `lang/tags/operators_pointer.{talon,py}`     - pointer operators (e.g., C's `&x`)
 
 The support for the language-specific implementations of actions are then located in:
 

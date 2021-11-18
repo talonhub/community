@@ -6,7 +6,7 @@ and code.language: ruby
 -
 tag(): user.code_base_imperative
 tag(): user.code_base_object_oriented
-tag(): user.code_comment
+tag(): user.code_comment_line
 tag(): user.code_documentation
 tag(): user.code_operators_array
 tag(): user.code_operators_assignment
@@ -27,6 +27,10 @@ settings():
 args pipe:
     insert("||")
     key(left)
+
+# NOTE: This command is created for backward compatibility, but the documentation comments are not actually strings in Ruby.
+dock string:
+    user.code_comment_documentation()
 
 # TODO: duplicate from tag code_base_imperative?
 state do: "do "

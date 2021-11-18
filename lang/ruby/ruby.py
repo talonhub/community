@@ -72,7 +72,7 @@ class UserActions:
         actions.insert('return ')
     def code_true(): actions.auto_insert('true')
     def code_false(): actions.auto_insert('false')
-    def code_document_string():
+    def code_comment_documentation():
         actions.insert('##')
         actions.key('enter')
         actions.key('space')

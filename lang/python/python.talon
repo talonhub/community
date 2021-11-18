@@ -6,8 +6,8 @@ and code.language: python
 -
 tag(): user.code_base_imperative
 tag(): user.code_base_object_oriented
-tag(): user.code_comment
-tag(): user.code_documentation
+tag(): user.code_comment_line
+tag(): user.code_comment_documentation
 tag(): user.code_operators_array
 tag(): user.code_operators_assignment
 tag(): user.code_operators_bitwise
@@ -42,6 +42,8 @@ state past: "pass"
 raise {user.python_exception}: user.insert_cursor("raise {python_exception}([|])")
 except {user.python_exception}: "except {python_exception}:"
 
+dock string:
+    user.code_comment_documentation()
 dock {user.python_docstring_fields}:
     insert("{python_docstring_fields}")
     edit.left()

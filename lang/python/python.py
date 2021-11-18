@@ -212,7 +212,7 @@ class UserActions:
         actions.insert('return ')
     def code_true():            actions.auto_insert('True')
     def code_false():           actions.auto_insert('False')
-    def code_document_string(): actions.user.insert_cursor('"""[|]"""')
+    def code_comment_documentation(): actions.user.insert_cursor('"""[|]"""')
     def code_insert_function(text: str, selection: str):
         if selection:
             text = text + "({})".format(selection)
