@@ -292,13 +292,10 @@ def generate_string_subsequences(
     return terms
 
 
-T = TypeVar("T")
-
-
 @dataclass
-class SpeakableItem(Generic[T]):
+class SpeakableItem:
     name: str
-    value: T
+    value: Any
 
 
 @mod.action_class
@@ -368,7 +365,7 @@ class Actions:
         generate_subsequences: bool = True,
     ) -> Dict[str, Any]:
         """Create spoken forms for all sources in a map, doing conflict resolution"""
-        all_spoken_forms: defaultdict[str, List[SpeakableItem[Any]]] = defaultdict(list)
+        all_spoken_forms: defaultdict[str, List[SpeakableItem]] = defaultdict(list)
 
         for name, value in sources.items():
             spoken_forms = actions.user.create_spoken_forms(
