@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Dict, Generic, List, Mapping, Optional, TypeVar
+from typing import Dict, Generic, List, Mapping, Optional, TypeVar, Any
 from collections import defaultdict
 import itertools
 
@@ -362,13 +362,13 @@ class Actions:
         )
 
     def create_spoken_forms_from_map(
-        sources: Mapping[str, T],
+        sources: Mapping[str, Any],
         words_to_exclude: Optional[List[str]] = None,
         minimum_term_length: int = DEFAULT_MINIMUM_TERM_LENGTH,
         generate_subsequences: bool = True,
-    ) -> Dict[str, T]:
+    ) -> Dict[str, Any]:
         """Create spoken forms for all sources in a map, doing conflict resolution"""
-        all_spoken_forms: defaultdict[str, List[SpeakableItem[T]]] = defaultdict(list)
+        all_spoken_forms: defaultdict[str, List[SpeakableItem[Any]]] = defaultdict(list)
 
         for name, value in sources.items():
             spoken_forms = actions.user.create_spoken_forms(
