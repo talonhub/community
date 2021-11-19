@@ -26,8 +26,7 @@ class UserActions:
     def page_next(): actions.key("ctrl-pagedown")
     def page_previous(): actions.key("ctrl-pageup")
     def page_jump(number: int):
-        if number > 0:
-            actions.key("ctrl-l")
-            actions.insert(str(number))
-            actions.key("enter")
+        actions.key("ctrl-l")
+        actions.insert(str(number))
+        actions.key("enter")
     def page_final(): actions.key("ctrl-end")

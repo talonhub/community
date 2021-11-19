@@ -15,7 +15,7 @@ class Actions:
         actions.user.chapter_jump(actions.user.chapter_current() + 1)
     def chapter_previous():
         """Go to previous chapter"""
-        actions.user.chapter_jump(min(actions.user.chapter_current() - 1, 1))
+        actions.user.chapter_jump(actions.user.chapter_current() - 1)
     def chapter_jump(number: int):
         """Go to chapter number"""
     def chapter_final():

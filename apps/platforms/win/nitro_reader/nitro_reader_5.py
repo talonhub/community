@@ -29,12 +29,8 @@ class UserActions:
     def page_next(): actions.key("right")
     def page_previous(): actions.key("left")
     def page_jump(number: int):
-        if number > 0:
-            actions.key("ctrl-g")
-            actions.edit.select_line()
-            actions.insert(str(number))
-            actions.key("enter alt:2")
+        actions.key("ctrl-g")
+        actions.edit.select_line()
+        actions.insert(str(number))
+        actions.key("enter alt:2")
     def page_final(): actions.key("end")
-    # user.tabs
-    def tab_jump(number: int): pass
-    def tab_final(): pass
