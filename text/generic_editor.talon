@@ -184,9 +184,9 @@ copy line:
     edit.copy()
 
 #cut commands
-cut all:
-    edit.select_all()
-    edit.cut()
+# cut all:
+#     edit.select_all()
+#     edit.cut()
 #to do: do we want these variants
 # cut left:
 #      edit.select_all()
