@@ -1,6 +1,9 @@
 os: mac
 and app: notes
 -
+tag(): user.edit
+tag(): user.line_commands
+
 new note: key(cmd-n)
 duplicate note: key(cmd-d)
 new folder: key(shift-cmd-n)
@@ -25,12 +28,5 @@ apply number: key(shift-cmd-9)
 apply checklist: key(shift-cmd-l)
 increase font: key(cmd-+)
 decrease font: key(cmd--)
-indent: key(cmd-])
-unindent: key(cmd-[)
 line break: key(ctrl-enter)
 mark: key(shift-cmd-u)
-move up: key(ctrl-cmd-up)
-move down: key(ctrl-cmd-down)
-zoom in: key(shift-cmd->)
-zoom out: key(shift-cmd-<)
-reset zoom: key(shift-cmd-0)
