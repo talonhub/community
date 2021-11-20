@@ -4,7 +4,7 @@ ctx = Context()
 mod = Module()
 
 mod.tag(
-    "code_base_object_oriented",
+    "code_object_oriented",
     desc="Tag for enabling basic object oriented programming commands (objects, classes, etc)",
 )
 
@@ -14,7 +14,7 @@ class Actions:
     def code_operator_object_accessor():
         """Inserts the object accessor operator (e.g., Java's "." or PHP's "->)"""
 
-    def code_data_self():
+    def code_self():
         """Inserts a reference to the current object (e.g., C++ "this" or Python's "self")"""
 
     def code_define_class():

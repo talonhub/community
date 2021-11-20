@@ -7,7 +7,7 @@ mode: user.java
 mode: user.auto_lang
 and code.language: java
 """
-ctx.tags = ["user.code_operators", "user.code_generic", "user.code_gui_functions"]
+ctx.tags = ["user.code_operators", "user.code_generic", "user.code_functions_gui"]
 
 # Primitive Types
 java_primitive_types = {
@@ -188,19 +188,19 @@ class UserActions:
     def code_operator_bitwise_right_shift_assignment():
         actions.auto_insert(" >>= ")
 
-    def code_data_self():
+    def code_self():
         actions.auto_insert("this")
 
     def code_operator_object_accessor():
         actions.auto_insert(".")
 
-    def code_null():
+    def code_insert_null():
         actions.auto_insert("null")
 
-    def code_is_null():
+    def code_insert_is_null():
         actions.auto_insert(" == null")
 
-    def code_is_not_null():
+    def code_insert_is_not_null():
         actions.auto_insert(" != null")
 
     def code_state_if():
@@ -242,10 +242,10 @@ class UserActions:
     def code_next():
         actions.auto_insert('continue;')
 
-    def code_true():
+    def code_insert_true():
         actions.auto_insert('true')
 
-    def code_false():
+    def code_insert_false():
         actions.auto_insert('false')
 
     def code_define_class():
@@ -266,7 +266,7 @@ class UserActions:
     def code_state_return():
         actions.insert("return ")
 
-    def code_comment():
+    def code_comment_line_prefix():
         actions.auto_insert('// ')
 
     def code_block_comment():

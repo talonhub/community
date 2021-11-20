@@ -13,7 +13,7 @@ def code_functions(m) -> str:
     """Returns a function name"""
     return m.code_functions
 
-mod.tag("code_gui_functions", desc="Tag for enabling GUI support for common functions")
+mod.tag("code_functions_gui", desc="Tag for enabling GUI support for common functions")
 
 @mod.action_class
 class Actions:
@@ -21,8 +21,6 @@ class Actions:
     def code_toggle_functions():
         """GUI: List functions for active language"""
         global function_list
-        if gui_libraries.showing:
-            gui_libraries.hide()
         if gui_functions.showing:
             function_list = []
             gui_functions.hide()
@@ -36,6 +34,9 @@ class Actions:
                 registry.lists["user.code_functions"][0][function_list[number]],
                 selection,
             )
+
+    # TODO: clarify the relation between `code_insert_function`
+    #       and the various functions declared in the functions
 
     def code_insert_function(text: str, selection: str):
         """Inserts a function and positions the cursor appropriately"""

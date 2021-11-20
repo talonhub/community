@@ -169,11 +169,11 @@ class UserActions:
     def code_operator_bitwise_left_shift_assignment():   actions.auto_insert(' <<= ')
     def code_operator_bitwise_right_shift():             actions.auto_insert(' >> ')
     def code_operator_bitwise_right_shift_assignment():  actions.auto_insert(' >>= ')
-    def code_data_self():                                actions.auto_insert('self')
+    def code_self():                                actions.auto_insert('self')
     def code_operator_object_accessor():                 actions.auto_insert('.')
-    def code_null():                                     actions.auto_insert('None')
-    def code_is_null():                                  actions.auto_insert(' is None')
-    def code_is_not_null():                              actions.auto_insert(' is not None')
+    def code_insert_null():                                     actions.auto_insert('None')
+    def code_insert_is_null():                                  actions.auto_insert(' is None')
+    def code_insert_is_not_null():                              actions.auto_insert(' is not None')
     def code_state_if():
         actions.insert('if :')
         actions.key('left')
@@ -207,11 +207,11 @@ class UserActions:
         actions.edit.word_left()
         actions.key('space')
         actions.edit.left()
-    def code_comment(): actions.auto_insert('# ')
+    def code_comment_line_prefix(): actions.auto_insert('# ')
     def code_state_return():
         actions.insert('return ')
-    def code_true():            actions.auto_insert('True')
-    def code_false():           actions.auto_insert('False')
+    def code_insert_true():            actions.auto_insert('True')
+    def code_insert_false():           actions.auto_insert('False')
     def code_comment_documentation(): actions.user.insert_cursor('"""[|]"""')
     def code_insert_function(text: str, selection: str):
         if selection:

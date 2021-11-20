@@ -3,91 +3,28 @@ from talon import Context, Module, actions, imgui, registry, settings
 ctx = Context()
 mod = Module()
 
+# TODO: abstract visibilities using a list (#663)
+
+mod.tag("code_functions", desc="Tag for enabling commands for functions")
+
 mod.list("code_type", desc="List of types for active language")
 mod.list("code_parameter_name", desc="List of common parameter names for active language")
 
-setting_private_function_formatter = mod.setting("code_private_function_formatter", str)
-setting_protected_function_formatter = mod.setting(
-    "code_protected_function_formatter", str
-)
-setting_public_function_formatter = mod.setting("code_public_function_formatter", str)
-setting_private_variable_formatter = mod.setting("code_private_variable_formatter", str)
-setting_protected_variable_formatter = mod.setting(
-    "code_protected_variable_formatter", str
-)
-setting_public_variable_formatter = mod.setting("code_public_variable_formatter", str)
-
-# TODO: factor out object oriented commands from this tag
-
-mod.tag(
-    "code_base_imperative",
-    desc="Tag for enabling other basic imperative programming commands (loops, functions, etc)",
-)
+setting_private_function_formatter = \
+    mod.setting("code_private_function_formatter", str)
+setting_protected_function_formatter = \
+    mod.setting("code_protected_function_formatter", str)
+setting_public_function_formatter = \
+    mod.setting("code_public_function_formatter", str)
+setting_private_variable_formatter = \
+    mod.setting("code_private_variable_formatter", str)
+setting_protected_variable_formatter = \
+    mod.setting("code_protected_variable_formatter", str)
+setting_public_variable_formatter = \
+    mod.setting("code_public_variable_formatter", str)
 
 @mod.action_class
 class Actions:
-    def code_block():
-        """Inserts equivalent of {\n} for the active language, and places the cursor appropriately"""
-
-    def code_null():
-        """inserts null equivalent"""
-
-    def code_is_null():
-        """inserts check for == null"""
-
-    def code_is_not_null():
-        """inserts check for == null"""
-
-    def code_state_in():
-        """Inserts python "in" equivalent"""
-
-    def code_state_if():
-        """Inserts if statement"""
-
-    def code_state_else_if():
-        """Inserts else if statement"""
-
-    def code_state_else():
-        """Inserts else statement"""
-
-    def code_state_do():
-        """Inserts do statement"""
-
-    def code_state_switch():
-        """Inserts switch statement"""
-
-    def code_state_case():
-        """Inserts case statement"""
-
-    def code_state_for():
-        """Inserts for statement"""
-
-    def code_state_for_each():
-        """Inserts for each equivalent statement"""
-
-    def code_state_go_to():
-        """inserts go-to statement"""
-
-    def code_state_while():
-        """Inserts while statement"""
-
-    def code_state_return():
-        """Inserts return statement"""
-
-    def code_break():
-        """Inserts break statement"""
-
-    def code_next():
-        """Inserts next statement"""
-
-    def code_true():
-        """Insert True value"""
-
-    def code_false():
-        """Insert False value"""
-
-    def code_try_catch():
-        """Inserts try/catch. If selection is true, does so around the selection"""
 
     def code_default_function(text: str):
         """Inserts function declaration"""
@@ -158,12 +95,6 @@ class Actions:
                 name, settings.get("user.code_public_variable_formatter")
             )
         )
-
-    def code_import():
-        """import/using equivalent"""
-
-    def code_from_import():
-        """from import python equivalent"""
 
     def code_insert_type_annotation(type: str):
         """Inserts a type annotation"""

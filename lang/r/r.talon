@@ -4,13 +4,18 @@ mode: command
 and mode: user.auto_lang
 and code.language: r
 -
-tag(): user.code_base_imperative
+tag(): user.code_imperative
+
+tag(): user.code_comment_line
+tag(): user.code_data_bool
+tag(): user.code_data_null
+tag(): user.code_functions
+tag(): user.code_functions_gui
+tag(): user.code_libraries
+tag(): user.code_libraries_gui
 tag(): user.code_operators_assignment
 tag(): user.code_operators_bitwise
 tag(): user.code_operators_math
-tag(): user.code_comment_line
-tag(): user.code_gui_functions
-tag(): user.code_gui_libraries
 
 settings():
     user.code_private_function_formatter = "SNAKE_CASE"
@@ -19,8 +24,6 @@ settings():
     user.code_private_variable_formatter = "SNAKE_CASE"
     user.code_protected_variable_formatter = "SNAKE_CASE"
     user.code_public_variable_formatter = "SNAKE_CASE"
-
-# TODO: functions
 
 # NOTE: migrated from generic as it is only use here
 (op | is) in: user.code_operator_in()
@@ -38,6 +41,7 @@ library <user.code_libraries>:
 state na:
     insert("NA")
 
+# TODO: migrate to function tag
 ^function define <user.text>$: user.code_private_function(text)
 
 named arg {user.code_parameter_name}: user.code_insert_named_argument(code_parameter_name)

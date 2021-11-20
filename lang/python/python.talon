@@ -4,16 +4,21 @@ mode: command
 and mode: user.auto_lang
 and code.language: python
 -
-tag(): user.code_base_imperative
-tag(): user.code_base_object_oriented
+tag(): user.code_imperative
+tag(): user.code_object_oriented
+
 tag(): user.code_comment_line
 tag(): user.code_comment_documentation
+tag(): user.code_data_bool
+tag(): user.code_data_null
+tag(): user.code_functions
+tag(): user.code_functions_gui
+tag(): user.code_libraries
+tag(): user.code_libraries_gui
 tag(): user.code_operators_array
 tag(): user.code_operators_assignment
 tag(): user.code_operators_bitwise
 tag(): user.code_operators_math
-tag(): user.code_gui_functions
-tag(): user.code_gui_libraries
 
 settings():
     user.code_private_function_formatter = "SNAKE_CASE"
@@ -33,12 +38,6 @@ self taught: "self."
 pie test: "pytest"
 state past: "pass"
 
-^funky <user.text>$: user.code_default_function(text)
-#^pro funky <user.text>$: user.code_protected_function(text)
-^pub funky <user.text>$: user.code_public_function(text)
-#^static funky <user.text>$: user.code_private_static_function(text)
-#^pro static funky <user.text>$: user.code_protected_static_function(text)
-#^pub static funky <user.text>$: user.code_public_static_function(text)
 raise {user.python_exception}: user.insert_cursor("raise {python_exception}([|])")
 except {user.python_exception}: "except {python_exception}:"
 
@@ -56,3 +55,5 @@ toggle imports: user.code_toggle_libraries()
 import <user.code_libraries>:
     user.code_insert_library(code_libraries, "")
     key(end enter)
+
+from import: user.code_from_import()

@@ -1,4 +1,4 @@
-tag: user.code_gui_libraries
+tag: user.code_libraries_gui
 -
 # NOTE: This file does not define any commands, as the commands vary from
 #       language to language, e.g., Python uses 'import', C uses 'include',

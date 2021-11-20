@@ -4,15 +4,20 @@ mode: command
 and mode: user.auto_lang
 and code.language: javascript
 -
-tag(): user.code_base_imperative
-tag(): user.code_base_object_oriented
+tag(): user.code_imperative
+tag(): user.code_object_oriented
+
+tag(): user.code_comment_line
+tag(): user.code_data_bool
+tag(): user.code_data_null
+tag(): user.code_functions
+tag(): user.code_functions_gui
+tag(): user.code_libraries
 tag(): user.code_operators_array
 tag(): user.code_operators_assignment
 tag(): user.code_operators_bitwise
 tag(): user.code_operators_lambda
 tag(): user.code_operators_math
-tag(): user.code_comment_line
-tag(): user.code_gui_functions
 
 settings():
     user.code_private_function_formatter = "PRIVATE_CAMEL_CASE"
@@ -49,6 +54,4 @@ state reduce:
 
 state spread: "..."
 
-^funky <user.text>$: user.code_default_function(text)
-^pro funky <user.text>$: user.code_protected_function(text)
-^pub funky <user.text>$: user.code_public_function(text)
+from import: user.code_from_import()

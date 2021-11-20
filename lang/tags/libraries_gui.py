@@ -14,7 +14,8 @@ def code_libraries(m) -> str:
     return m.code_libraries
 
 
-mod.tag("code_gui_libraries", desc="Tag for enabling GUI support for common libraries")
+mod.tag("code_libraries_gui",
+        desc="Tag for enabling GUI support for common libraries")
 
 
 @mod.action_class
@@ -23,8 +24,6 @@ class Actions:
     def code_toggle_libraries():
         """GUI: List libraries for active language"""
         global library_list
-        if gui_functions.showing:
-            gui_functions.hide()
         if gui_libraries.showing:
             library_list = []
             gui_libraries.hide()
@@ -38,6 +37,9 @@ class Actions:
                 registry.lists["user.code_libraries"][0][library_list[number]],
                 selection,
             )
+
+    # TODO: clarify the relation between `code_insert_library`
+    #       and `code_import`
 
     def code_insert_library(text: str, selection: str):
         """Inserts a library and positions the cursor appropriately"""

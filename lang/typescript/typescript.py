@@ -26,10 +26,10 @@ ctx.lists["user.code_type"] = {
 
 @ctx.action_class("user")
 class UserActions:
-    def code_is_not_null():
+    def code_insert_is_not_null():
         actions.auto_insert(" !== null")
 
-    def code_is_null():
+    def code_insert_is_null():
         actions.auto_insert(" === null")
 
     def code_type_dictionary():
@@ -52,7 +52,7 @@ class UserActions:
         actions.insert("{}")
         actions.key("left enter")
 
-    def code_data_self():
+    def code_self():
         actions.auto_insert("this")
 
     def code_operator_object_accessor():
@@ -102,13 +102,13 @@ class UserActions:
     def code_next():
         actions.auto_insert("continue;")
 
-    def code_true():
+    def code_insert_true():
         actions.auto_insert("true")
 
-    def code_false():
+    def code_insert_false():
         actions.auto_insert("false")
 
-    def code_null():
+    def code_insert_null():
         actions.auto_insert("null")
 
     def code_operator_lambda():

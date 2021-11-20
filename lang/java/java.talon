@@ -2,16 +2,21 @@ mode: user.java
 mode: user.auto_lang
 and code.language: java
 -
-tag(): user.code_base_imperative
-tag(): user.code_base_object_oriented
+tag(): user.code_imperative
+tag(): user.code_object_oriented
+
+tag(): user.code_comment_line
+tag(): user.code_comment_block
+tag(): user.code_data_bool
+tag(): user.code_data_null
+tag(): user.code_functions
+tag(): user.code_functions_gui
+tag(): user.code_libraries
 tag(): user.code_operators_array
 tag(): user.code_operators_assignment
 tag(): user.code_operators_bitwise
 tag(): user.code_operators_lambda
 tag(): user.code_operators_math
-tag(): user.code_comment_line
-tag(): user.code_comment_block
-tag(): user.code_gui_functions
 
 settings():
     user.code_private_function_formatter = "PRIVATE_CAMEL_CASE"
@@ -49,11 +54,3 @@ op array:
 
 op new:
     insert("new ")
-
-# Methods
-^method <user.text>$: user.code_default_function(text)
-^pro method <user.text>$: user.code_protected_function(text)
-^pub method <user.text>$: user.code_public_function(text)
-^static method <user.text>$: user.code_private_static_function(text)
-^pro static method <user.text>$: user.code_protected_static_function(text)
-^pub static method <user.text>$: user.code_public_static_function(text)
