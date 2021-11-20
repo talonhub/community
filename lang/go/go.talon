@@ -1,5 +1,7 @@
-mode: user.go
-mode: user.auto_lang
+mode: command
+and mode: user.go
+mode: command
+and mode: user.auto_lang
 and code.language: go
 -
 variadic: "..."
