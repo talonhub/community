@@ -24,12 +24,17 @@ mod = Module()
 
 ctx = Context()
 mac_ctx = Context()
+linux_ctx = Context()
 
 ctx.matches = r"""
 app: vscode
 """
 mac_ctx.matches = r"""
 os: mac
+app: vscode
+"""
+linux_ctx.matches = r"""
+os: linux
 app: vscode
 """
 
@@ -357,3 +362,9 @@ class Actions:
 class MacUserActions:
     def trigger_command_server_command_execution():
         actions.key("cmd-shift-f17")
+
+
+@linux_ctx.action_class("user")
+class LinuxUserActions:
+    def trigger_command_server_command_execution():
+        actions.key("ctrl-shift-alt-p")

@@ -182,7 +182,11 @@ def _run_cmd(command_line):
         # for testing
         #raise subprocess.CalledProcessError(-4294967295, command_line, termination_error.encode('UTF-16-LE'))
 
-        tmp = subprocess.check_output(command_line, stderr=subprocess.STDOUT)
+        startupinfo = subprocess.STARTUPINFO()
+        startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+        startupinfo.wShowWindow = subprocess.SW_HIDE
+
+        tmp = subprocess.check_output(command_line, stderr=subprocess.STDOUT, startupinfo=startupinfo)
         result = _decode(tmp)
         #print(f"RESULT: command: {' '.join(command_line)}, result: {result}")
     except subprocess.CalledProcessError as exc:

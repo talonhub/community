@@ -1,4 +1,5 @@
 from talon import ctrl, ui, Module, Context, actions, clip, app
+from talon.mac import applescript
 
 ctx = Context()
 mod = Module()
@@ -13,16 +14,34 @@ app: safari
 """
 ctx.tags = ['browser', 'user.tabs']
 
+def safari_app():
+    return ui.apps(bundle="com.apple.Safari")[0]
+
 @ctx.action_class('browser')
 class BrowserActions:
-    #action(browser.address):
-    
+    def address() -> str:
+        try:
+            window = safari_app().windows()[0]
+        except IndexError:
+            return ''
+        try:
+            address_field = window.element.children.find_one(
+                AXRole='AXTextField', AXIdentifier='WEB_BROWSER_ADDRESS_AND_SEARCH_FIELD')
+            address = address_field.AXValue
+        except (ui.UIErr, AttributeError):
+            address = applescript.run('''
+            tell application id "com.apple.Safari"
+                if not (exists (window 1)) then return ""
+                return window 1's current tab's URL
+            end tell
+            ''')
+        return address
     def bookmark():
         actions.key('cmd-d')
     def bookmark_tabs():
         actions.key('cmd-shift-d')
     def bookmarks():
-        actions.key('cmd-alt-b')
+        actions.key('ctrl-cmd-1')
         #action(browser.bookmarks_bar):
         #	key(ctrl-shift-b)
     def focus_address():
@@ -38,9 +57,9 @@ class BrowserActions:
     def go_blank():
         actions.key('cmd-n')
     def go_back():
-        actions.key('cmd-left')
+        actions.key('cmd-[')
     def go_forward():
-        actions.key('cmd-right')
+        actions.key('cmd-]')
     def go_home():
         actions.key('cmd-shift-h')
     def open_private_window():
@@ -53,9 +72,9 @@ class BrowserActions:
         #action(browser.show_clear_cache):
         #	key(cmd-shift-delete)
     def show_downloads():
-        actions.key('cmd-shift-j')
-    def show_extensions():
-        actions.key('ctrl-shift-a')
+        actions.key('cmd-alt-l')
+    # def show_extensions():
+    #     actions.key('ctrl-shift-a')
     def show_history():
         actions.key('cmd-y')
     def submit_form():
@@ -72,4 +91,3 @@ class UserActions:
 
     def tab_final():
         actions.key("cmd-9")
-

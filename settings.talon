@@ -1,7 +1,7 @@
 -
 settings():
     # Adjust the scale of the imgui to my liking
-    imgui.scale = 2
+    imgui.scale = 1.2
 
     # Enable if you'd like the picker gui to automatically appear when explorer has focus
     user.file_manager_auto_show_pickers = 0
@@ -29,6 +29,9 @@ settings():
 
     # The amount to scroll up/down (equivalent to mouse wheel on Windows by default)
     user.mouse_wheel_down_amount = 120
+
+    # The amount to scroll left/right
+    user.mouse_wheel_horizontal_amount = 40
 
     # Mouse grid and friends put the number one on the bottom left (vs on the top left)
     user.grids_put_one_bottom_left = 1
