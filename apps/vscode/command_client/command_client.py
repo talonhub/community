@@ -22,6 +22,7 @@ MINIMUM_SLEEP_TIME_SECONDS = 0.0005
 
 mod = Module()
 
+global_ctx = Context()
 ctx = Context()
 mac_ctx = Context()
 linux_ctx = Context()
@@ -357,6 +358,14 @@ class Actions:
         was written to the file.  For internal use only"""
         actions.key("ctrl-shift-f17")
 
+    def emit_pre_phrase_signal():
+        """Touches a file to indicate that a phrase is about to begin execution"""
+        pass
+
+    def did_emit_pre_phrase_signal() -> bool:
+        """Indicates whether the pre-phrase signal was emitted at the start of this phrase"""
+        return did_emit_pre_phrase_signal
+
 
 @mac_ctx.action_class("user")
 class MacUserActions:
@@ -370,24 +379,59 @@ class LinuxUserActions:
         actions.key("ctrl-shift-alt-p")
 
 
+@global_ctx.action_class("user")
+class GlobalUserActions:
+    def emit_pre_phrase_signal():
+        pass
+
+
+@ctx.action_class("user")
+class UserActions:
+    def emit_pre_phrase_signal():
+        try:
+            global did_emit_pre_phrase_signal
+            get_signal_path("prePhrase").touch()
+            did_emit_pre_phrase_signal = True
+        except MissingCommunicationDir:
+            pass
+
+
+class MissingCommunicationDir(Exception):
+    pass
+
+
 def get_signal_path(name: str) -> Path:
     """
     Get the path to a signal in the signal subdirectory.
 
     Args:
-        name (str): The name of the subdir
+        name (str): The name of the signal
 
     Returns:
         Path: The signal path
     """
-    signal_dir = get_communication_dir_path() / "signals"
+    communication_dir_path = get_communication_dir_path()
+
+    if not communication_dir_path.exists():
+        raise MissingCommunicationDir()
+
+    signal_dir = communication_dir_path / "signals"
     signal_dir.mkdir(parents=True, exist_ok=True)
 
     return signal_dir / name
 
 
+did_emit_pre_phrase_signal = False
+
+
 def pre_phrase(_: any):
-    get_signal_path("prePhrase").touch()
+    actions.user.emit_pre_phrase_signal()
+
+
+def post_phrase(_: any):
+    global did_emit_pre_phrase_signal
+    did_emit_pre_phrase_signal = False
 
 
 speech_system.register("pre:phrase", pre_phrase)
+speech_system.register("post:phrase", post_phrase)
