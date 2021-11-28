@@ -3,7 +3,7 @@ from typing import Set
 from talon import Module, Context, actions, app
 import sys
 
-default_alphabet = "air bat cap drum each fine gust harp ivy judge kill look made now odd pit quench red sun tock you vest win plex yank zip".split(
+default_alphabet = "air bat cap do each fine gust ham ivy judge kill look made now odd pit quench red sun tock you vest well plex yank zip".split(
     " "
 )
 letters_string = "abcdefghijklmnopqrstuvwxyz"
@@ -153,7 +153,7 @@ punctuation_words = {
 
     # Currencies
     "dollar sign": "$",
-    "pound sign": "£",
+#     "pound sign": "£",
 }
 symbol_key_words = {
     "dot": ".",
@@ -184,7 +184,7 @@ symbol_key_words = {
     "left brace": "{",
     "R brace": "}",
     "right brace": "}",
-    "angle": "<",
+    "langle": "<",
     "left angle": "<",
     "less than": "<",
     "rangle": ">",
@@ -195,14 +195,14 @@ symbol_key_words = {
     "hash": "#",
     "percent": "%",
     "exponent": "^",
-    "amper": "&",
+    # "amper": "&",
     "pipeline": "|",
     "dubquote": '"',
     "double quote": '"',
 
     # Currencies
     "dollar": "$",
-    "pound": "£",
+#     "pound": "£",
 }
 
 # make punctuation words also included in {user.symbol_keys}
@@ -230,8 +230,8 @@ simple_keys = [
 ]
 
 alternate_keys = {
-    "delete": "backspace",
-    "forward delete": "delete",
+    "destroy": "backspace",
+    "forward destroy": "delete",
 #     'junk': 'backspace',
     "page up": "pageup",
     "page down": "pagedown",
