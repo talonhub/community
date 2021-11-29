@@ -5,7 +5,7 @@ app: devenv.exe
 tag(): user.tabs
 tag(): user.line_commands
 tag(): user.find_and_replace
-tag(): user.snippets
+tag(): user.generic_snippets
 tag(): user.multiple_cursors
 #multiple_cursor.py support end
 

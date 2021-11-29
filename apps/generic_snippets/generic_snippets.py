@@ -2,8 +2,8 @@
 from talon import Module, actions, app, Context, imgui, registry
 
 mod = Module()
-mod.tag("snippets", desc="Tag for enabling code snippet-related commands")
-mod.list("snippets", desc="List of code snippets")
+mod.tag("generic_snippets", desc="Tag for enabling code snippet-related commands")
+mod.list("generic_snippets", desc="List of code snippets")
 
 
 @imgui.open()
