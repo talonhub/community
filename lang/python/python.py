@@ -201,12 +201,6 @@ class UserActions:
         actions.edit.left()
     def code_define_class(): actions.auto_insert('class ')
     def code_import():     actions.auto_insert('import ')
-    def code_from_import():
-        actions.insert('from import ')
-        actions.key('left')
-        actions.edit.word_left()
-        actions.key('space')
-        actions.edit.left()
     def code_comment_line_prefix(): actions.auto_insert('# ')
     def code_state_return():
         actions.insert('return ')

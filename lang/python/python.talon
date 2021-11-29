@@ -56,4 +56,9 @@ import <user.code_libraries>:
     user.code_insert_library(code_libraries, "")
     key(end enter)
 
-from import: user.code_from_import()
+from import:
+    insert('from import ')
+    key('left')
+    edit.word_left()
+    key('space')
+    edit.left()
