@@ -40,8 +40,7 @@ ctx.lists["user.code_functions"] = {
 }
 
 
-def update_lists(decls):
-    # print("update_lists")
+def on_update_decls(decls):
     # todo modes?
     for thing in [
         "actions",
@@ -66,8 +65,8 @@ def update_lists(decls):
 
 def on_ready():
     # print("on_ready")
-    update_lists(registry.decls)
-    registry.register("update_decls", update_lists)
+    on_update_decls(registry.decls)
+    registry.register("update_decls", on_update_decls)
 
 
 app.register("ready", on_ready)
