@@ -388,12 +388,7 @@ class GlobalUserActions:
 @ctx.action_class("user")
 class UserActions:
     def emit_pre_phrase_signal():
-        try:
-            global did_emit_pre_phrase_signal
-            get_signal_path("prePhrase").touch()
-            did_emit_pre_phrase_signal = True
-        except MissingCommunicationDir:
-            pass
+        get_signal_path("prePhrase").touch()
 
 
 class MissingCommunicationDir(Exception):
@@ -425,7 +420,14 @@ did_emit_pre_phrase_signal = False
 
 
 def pre_phrase(_: any):
-    actions.user.emit_pre_phrase_signal()
+    try:
+        global did_emit_pre_phrase_signal
+
+        actions.user.emit_pre_phrase_signal()
+
+        did_emit_pre_phrase_signal = True
+    except MissingCommunicationDir:
+        pass
 
 
 def post_phrase(_: any):
