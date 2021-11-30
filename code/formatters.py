@@ -288,8 +288,9 @@ class Actions:
 
 def unformat_text(text: str) -> str:
     """Remove format from text"""
-    unformatted = re.sub(r"[^a-zA-Z0-9]+", " ", text)
-    # Split on camelCase, including numbes
+    unformatted = re.sub(r"[^\w]+", " ", text)
+    # Split on camelCase, including numbers
+    # FIXME: handle non-ASCII letters!
     unformatted = re.sub(r"(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|(?<=[a-zA-Z])(?=[0-9])|(?<=[0-9])(?=[a-zA-Z])", " ", unformatted)
     # TODO: Separate out studleycase vars
     return unformatted.lower()
