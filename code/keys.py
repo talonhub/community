@@ -239,6 +239,9 @@ alternate_keys = {
     #'junk': 'backspace',
     "page up": "pageup",
     "page down": "pagedown",
+    "shifty": "shift:down",
+    "unshift": "shift:up"
+
 }
 # mac apparently doesn't have the menu key.
 if app.platform in ("windows", "linux"):
