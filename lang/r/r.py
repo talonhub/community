@@ -257,7 +257,6 @@ class UserActions:
     def code_operator_greater_than_or_equal_to(): actions.auto_insert(' >= ')
     def code_operator_less_than():                actions.auto_insert(' < ')
     def code_operator_less_than_or_equal_to():    actions.auto_insert(' <= ')
-    def code_operator_in():                       actions.auto_insert(' %in% ')
     def code_operator_and():                      actions.auto_insert(' & ')
     def code_operator_or():                       actions.auto_insert(' | ')
     def code_operator_bitwise_and():              actions.auto_insert(' & ')

@@ -54,4 +54,6 @@ state reduce:
 
 state spread: "..."
 
-from import: user.code_from_import()
+from import:
+    insert(' from  ""')
+    key("left")

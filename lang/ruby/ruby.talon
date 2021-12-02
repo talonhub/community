@@ -43,5 +43,3 @@ state module: "module "
 ^instance <user.text>$:
     insert("@")
     user.code_public_variable_formatter(text)
-
-from import: user.code_from_import()

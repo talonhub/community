@@ -264,19 +264,6 @@ class UserActions:
     def code_next():            actions.auto_insert('continue;')
     def code_insert_true():            actions.auto_insert('true')
     def code_insert_false():           actions.auto_insert('false')
-    def code_type_definition(): actions.auto_insert('typedef ')
-    def code_typedef_struct():
-        actions.insert('typedef struct')
-        actions.insert('{\n\n}')
-        actions.edit.up()
-        actions.key('tab')
-    def code_include():     actions.insert('#include ')
-    def code_include_system():
-        actions.insert('#include <>')
-        actions.edit.left()
-    def code_include_local():
-        actions.insert('#include ""')
-        actions.edit.left()
     def code_comment_line_prefix(): actions.auto_insert('//')
     def code_block_comment():
         actions.insert('/*')

@@ -36,11 +36,21 @@ settings():
 ^static funky <user.text>$: user.code_private_static_function(text)
 
 # NOTE: migrated from generic, as they were only used here, though once cpp support is added, perhaps these should be migrated to a tag together with the commands below
-state include: user.code_include()
-state include system: user.code_include_system()
-state include local: user.code_include_local()
-state type deaf: user.code_type_definition()
-state type deaf struct: user.code_typedef_struct()
+state include:
+    insert('#include ')
+state include system:
+    insert('#include <>')
+    edit.left()
+state include local:
+    insert('#include ""')
+    edit.left()
+state type deaf:
+    insert('typedef ')
+state type deaf struct:
+    insert('typedef struct')
+    insert('{\n\n}')
+    edit.up()
+    key('tab')
 
 
 # XXX - create a preprocessor tag for these, as they will match cpp, etc

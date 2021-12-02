@@ -85,10 +85,6 @@ class UserActions:
     def code_import():
         actions.auto_insert("import ")
 
-    def code_from_import():
-        actions.insert(' from  ""')
-        actions.key("left")
-
     def code_define_class():
         actions.auto_insert("class ")
 
