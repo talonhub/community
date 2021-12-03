@@ -92,6 +92,16 @@ java_modifiers = {
 mod.list("java_modifiers", desc="Java Modifiers")
 ctx.lists["self.java_modifiers"] = java_modifiers
 
+java_keywords = {
+    "extends": "extends",
+    "instance of": "instanceof",
+    "throw": "throw",
+    "implements": "implements"
+}
+
+mod.list("java_keywords", desc="Java Keywords")
+ctx.lists["self.java_keywords"] = java_keywords
+
 @ctx.action_class("user")
 class UserActions:
     def code_operator_indirection():
@@ -271,6 +281,11 @@ class UserActions:
 
     def code_comment(): 
         actions.auto_insert('// ')
+
+    def code_block():
+        actions.key("space")
+        actions.insert("{}")
+        actions.key("left enter")
 
     def code_block_comment():
         actions.insert('/*')

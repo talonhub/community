@@ -16,6 +16,7 @@ settings():
     user.code_public_variable_formatter = "PRIVATE_CAMEL_CASE"
 
 # Types Commands
+
 boxed [type] {user.java_boxed_types}: 
     insert(user.java_boxed_types)
     key("space")
@@ -30,8 +31,8 @@ type {user.code_type} array:
     insert(user.code_type)
     user.code_operator_subscript()
 
-[state] {user.java_access_modifiers}: 
-    insert(user.java_access_modifiers)
+[state] {user.java_access_modifiers}|{user.java_keywords}: 
+    insert(user.java_access_modifiers or user.java_keywords)
     key("space")
 
 [state] {user.java_modifiers}: 
@@ -43,6 +44,8 @@ op array:
 
 op new:
     insert("new ")
+
+^annotate with$: insert("@")
 
 # Methods    
 ^method <user.text>$: user.code_default_function(text)
