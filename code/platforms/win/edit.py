@@ -102,7 +102,8 @@ class EditActions:
         #action(edit.paragraph_start):
     def paste():
         actions.key('ctrl-v')
-        #action(paste_match_style):
+    def paste_match_style():
+        actions.key('ctrl-shift-v')
     def print():
         actions.key('ctrl-p')
     def redo():
