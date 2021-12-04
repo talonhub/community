@@ -10,3 +10,8 @@ not mode: sleep
     mode.disable("sleep")
     mode.disable("dictation")
     mode.enable("command")
+
+^(private | privacy) mode$:
+    mode.enable("user.private")
+^(recording | recorded) mode$:
+    mode.disable("user.private")
