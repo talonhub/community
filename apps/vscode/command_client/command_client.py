@@ -20,6 +20,10 @@ VSCODE_COMMAND_TIMEOUT_SECONDS = 3.0
 # long to sleep the first time
 MINIMUM_SLEEP_TIME_SECONDS = 0.0005
 
+# Indicates whether a pre-phrase signal was emitted during the course of the
+# current phrase 
+did_emit_pre_phrase_signal = False
+
 mod = Module()
 
 global_ctx = Context()
@@ -382,6 +386,9 @@ class LinuxUserActions:
 @global_ctx.action_class("user")
 class GlobalUserActions:
     def emit_pre_phrase_signal():
+        # NB: We explicitly define a noop version of this action in the global
+        # scope so that it doesn't do anything before phrases if you're not in
+        # vscode.
         pass
 
 
@@ -416,10 +423,7 @@ def get_signal_path(name: str) -> Path:
     return signal_dir / name
 
 
-did_emit_pre_phrase_signal = False
-
-
-def pre_phrase(_: any):
+def pre_phrase(_: Any):
     try:
         global did_emit_pre_phrase_signal
 
@@ -430,7 +434,7 @@ def pre_phrase(_: any):
         pass
 
 
-def post_phrase(_: any):
+def post_phrase(_: Any):
     global did_emit_pre_phrase_signal
     did_emit_pre_phrase_signal = False
 
