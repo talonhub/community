@@ -387,7 +387,7 @@ class LinuxUserActions:
 class GlobalUserActions:
     def emit_pre_phrase_signal():
         # NB: We explicitly define a noop version of this action in the global
-        # scope here so that it doesn't do anything before phrases if you're not
+        # context here so that it doesn't do anything before phrases if you're not
         # in vscode.
         pass
 
