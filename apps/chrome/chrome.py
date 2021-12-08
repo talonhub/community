@@ -43,7 +43,6 @@ class user_actions:
         Long-term we want a better shortcut from browsers.
         """
         actions.browser.focus_address()
-        actions.sleep("25ms")
         actions.key("alt-enter")
 
 
