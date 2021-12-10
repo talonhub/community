@@ -50,6 +50,3 @@ prompt <phrase>:
   insert(phrase)
   insert("\n")
   key('alt-ctrl-i')
-
-
-

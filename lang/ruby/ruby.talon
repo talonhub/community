@@ -37,6 +37,7 @@ state include: "include "
     insert("include ")
     insert(user.formatted_text(text, "PUBLIC_CAMEL_CASE"))
 ^symbolize <user.text> [over]:
+^symbol <user.text> [over]:
     insert(":")
     insert(user.formatted_text(text, "snake"))
 ^instance <user.text>$:

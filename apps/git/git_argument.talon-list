@@ -21,6 +21,8 @@ fast forward only: --ff-only
 force: --force
 force create: --force-create
 force with lease: --force-with-lease
+force if includes: --force-if-includes
+force safely: --force-with-lease --force-if-includes
 global: --global
 global: --global
 hard: --hard
