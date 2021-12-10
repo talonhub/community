@@ -47,7 +47,7 @@ def format_phrase(m: Union[str, Phrase], formatters: str):
         words = actions.dictate.parse_words(m)
         words = actions.dictate.replace_words(words)
 
-    result = last_phrase_formatted = format_phrase_no_history(words, formatters)
+    result = last_phrase_formatted = format_phrase_without_adding_to_history(words, formatters)
     actions.user.add_phrase_to_history(result)
     # Arguably, we shouldn't be dealing with history here, but somewhere later
     # down the line. But we have a bunch of code that relies on doing it this
@@ -55,7 +55,7 @@ def format_phrase(m: Union[str, Phrase], formatters: str):
     return result
 
 
-def format_phrase_no_history(word_list, formatters: str):
+def format_phrase_without_adding_to_history(word_list, formatters: str):
     formatter_list = formatters.split(",")
     words = []
     separator = DEFAULT_SEPARATOR
@@ -294,7 +294,7 @@ class Actions:
         """returns a list of words currently used as formatters, and a demonstration string using those formatters"""
         formatters_help_demo = {}
         for name in sorted(set(formatters_words.keys())):
-            formatters_help_demo[name] = format_phrase_no_history(['one', 'two', 'three'], name)
+            formatters_help_demo[name] = format_phrase_without_adding_to_history(['one', 'two', 'three'], name)
         return  formatters_help_demo
 
     def reformat_text(text: str, formatters: str) -> str:
