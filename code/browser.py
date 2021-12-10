@@ -1,8 +1,7 @@
 from urllib.parse import urlparse
 
-from talon import Context, actions, Module
+from talon import Context, actions
 
-mod = Module()
 ctx = Context()
 ctx.matches = r"""
 tag: browser
