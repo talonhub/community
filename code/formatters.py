@@ -14,6 +14,8 @@ words_to_keep_lowercase = "a,an,the,at,by,for,in,is,of,on,to,up,and,as,but,or,no
 
 DEFAULT_SEPARATOR = ' '
 SMASH_SEPARATOR = ''
+SEP = False
+NOSEP = True
 
 # The last phrase spoken, without & with formatting. Used for reformatting.
 last_phrase = ""
@@ -67,10 +69,6 @@ def format_phrase_no_history(word_list, formatters: str):
     return separator.join(words)
 
 
-NOSEP = True
-SEP = False
-
-
 def words_with_joiner(joiner):
     """Pass through words unchanged, but add a separator between them."""
 
@@ -94,6 +92,24 @@ def first_vs_rest(first_func, rest_func=lambda w: w):
 
     def formatter_function(i, word, _):
         return first_func(word) if i == 0 else rest_func(word)
+
+    return formatter_function
+
+
+def last_vs_rest(last_func, rest_func=lambda w: w):
+    """Supply one or two transformer functions for the last and rest of
+    words respectively.
+
+    Leave second argument out if you want all but the last word to be passed
+    through unchanged.
+    Set first argument to None if you want the last word to be passed
+    through unchanged.
+    """
+    if last_func is None:
+        last_func = lambda w: w
+
+    def formatter_function(_, word, is_last_word):
+        return last_func(word) if is_last_word else rest_func(word)
 
     return formatter_function
 
@@ -136,6 +152,7 @@ formatters_dict = {
     "DOT_SNAKE": (NOSEP, lambda i, word, _: "." + word if i == 0 else "_" + word),
     "SLASH_SEPARATED": (NOSEP, every_word(lambda w: "/" + w)),
     "CAPITALIZE_FIRST_WORD": (SEP, first_vs_rest(lambda w: w.capitalize())),
+    "QUESTION": (SEP, last_vs_rest(lambda w: w + '?')),
     "CAPITALIZE_ALL_WORDS": (
         SEP,
         lambda i, word, _: word.capitalize()
@@ -151,6 +168,7 @@ formatters_dict = {
 formatters_words = {
     "allcaps": formatters_dict["ALL_CAPS"],
     "alldown": formatters_dict["ALL_LOWERCASE"],
+    "ask": formatters_dict["QUESTION"],
     "camel": formatters_dict["PRIVATE_CAMEL_CASE"],
     "dotted": formatters_dict["DOT_SEPARATED"],
     "dubstring": formatters_dict["DOUBLE_QUOTED_STRING"],
@@ -305,4 +323,3 @@ ctx.lists["self.prose_formatter"] = {
     "speak": "NOOP",
     "sentence": "CAPITALIZE_FIRST_WORD",
 }
-
