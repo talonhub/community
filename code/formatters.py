@@ -14,8 +14,8 @@ words_to_keep_lowercase = "a,an,the,at,by,for,in,is,of,on,to,up,and,as,but,or,no
 
 DEFAULT_SEPARATOR = ' '
 SMASH_SEPARATOR = ''
-SEP = False
-NOSEP = True
+SEP = True
+NOSEP = False
 
 # The last phrase spoken, without & with formatting. Used for reformatting.
 last_phrase = ""
@@ -58,14 +58,14 @@ def format_phrase(m: Union[str, Phrase], formatters: str):
 def format_phrase_no_history(word_list, formatters: str):
     formatter_list = formatters.split(",")
     words = []
-    spaces = True
-    for i, w in enumerate(word_list):
+    separator = DEFAULT_SEPARATOR
+    for i, word in enumerate(word_list):
         for name in reversed(formatter_list):
-            smash, func = all_formatters[name]
-            w = func(i, w, i == len(word_list) - 1)
-            spaces = spaces and not smash
-        words.append(w)
-    separator = DEFAULT_SEPARATOR if spaces else SMASH_SEPARATOR
+            does_formatter_use_separator, formatter_function = all_formatters[name]
+            word = formatter_function(i, word, i == len(word_list) - 1)
+            if not does_formatter_use_separator:
+                separator = SMASH_SEPARATOR
+        words.append(word)
     return separator.join(words)
 
 
@@ -121,7 +121,6 @@ def every_word(word_func):
         return word_func(word)
 
     return formatter_function
-
 
 formatters_dict = {
     "NOOP": (SEP, lambda i, word, _: word),
