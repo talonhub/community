@@ -32,7 +32,13 @@ state end: "end"
 state begin: "begin"
 state rescue: "rescue "
 state module: "module "
-
+state include: "include "
+^include <user.text> [over]:
+    insert("include ")
+    insert(user.formatted_text(text, "PUBLIC_CAMEL_CASE"))
+^symbol <user.text> [over]:
+    insert(":")
+    insert(user.formatted_text(text, "snake"))
 ^instance <user.text>$:
     insert("@")
     user.code_public_variable_formatter(text)
