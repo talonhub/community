@@ -1,6 +1,7 @@
 from collections import defaultdict
 import itertools
 import math
+import re
 from typing import Dict, List, Iterable, Set, Tuple, Union
 
 from talon import Module, Context, actions, imgui, Module, registry, ui, app
@@ -438,7 +439,7 @@ def refresh_rule_word_map(context_command_map):
 
     for context_name, commands in context_command_map.items():
         for rule in commands:
-            tokens = set(token for token in rule.split(" ") if token.isalpha())
+            tokens = set(token for token in re.split(r'\W+', rule) if token.isalpha())
             for token in tokens:
                 rule_word_map[token].add((context_name, rule))
 
