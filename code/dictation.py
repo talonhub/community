@@ -59,14 +59,13 @@ def apply_formatting(m):
     for item in m:
         words = None
         if item == "cap":
-            formatter.force_cap = True
-            formatter.force_no_cap = False
+            formatter.force_capitalization = "caps"
         elif item == "no caps":
-            formatter.force_no_cap = True
-            formatter.force_cap = False
+            formatter.force_capitalization = "no caps"
         elif item == "no space":
-            # Typically helpful to reset capitalization as well.
-            formatter.reset()
+            # This is typically used when manually repositioned the cursor,
+            # so it is helpful to reset capitalization as well.
+            formatter.reset_context()
             formatter.force_no_space = True
         elif isinstance(item, grammar.vm.Phrase):
             words = actions.dictate.replace_words(actions.dictate.parse_words(item))
@@ -171,18 +170,17 @@ class DictationFormat:
         self.reset()
 
     def reset(self):
-        self.reset_except_forced()
+        self.reset_context()
         self.force_no_space = False
-        self.force_cap = False
-        self.force_no_cap = False
+        self.force_capitalization = None  # Can also be "caps" or "no caps".
 
-    def reset_except_forced(self):
+    def reset_context(self):
         self.before = ""
         self.state = None
 
     def update_context(self, before):
         if before is None: return
-        self.reset_except_forced()
+        self.reset_context()
         self.pass_through(before)
 
     def pass_through(self, text):
@@ -195,12 +193,12 @@ class DictationFormat:
         self.force_no_space = False
         if auto_cap:
             text, self.state = auto_capitalize(text, self.state)
-        if self.force_cap:
+        if self.force_capitalization == "caps":
             text = format_first_letter(text, lambda s: s.capitalize())
-            self.force_cap = False
-        if self.force_no_cap:
+            self.force_capitalization = None
+        if self.force_capitalization == "no caps":
             text = format_first_letter(text, lambda s: s.lower())
-            self.force_no_cap = False
+            self.force_capitalization = None
         self.before = text or self.before
         return text
 
@@ -232,18 +230,17 @@ class Actions:
 
     def dictation_format_cap():
         """Sets the dictation formatter to capitalize"""
-        dictation_formatter.force_cap = True
-        dictation_formatter.force_no_cap = False
+        dictation_formatter.force_capitalization = "caps"
 
     def dictation_format_no_caps():
         """Sets the dictation formatter to not capitalize"""
-        dictation_formatter.force_no_cap = True
-        dictation_formatter.force_cap = False
+        dictation_formatter.force_capitalization = "no caps"
 
     def dictation_format_no_space():
         """Sets the dictation formatter to not prepend a space"""
-        # Typically helpful to reset capitalization as well.
-        dictation_formatter.reset()
+        # This is typically used when manually repositioned the cursor,
+        # so it is helpful to reset capitalization as well.
+        dictation_formatter.reset_context()
         dictation_formatter.force_no_space = True
 
     def dictation_reformat_cap():
