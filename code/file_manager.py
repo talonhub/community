@@ -321,6 +321,10 @@ def gui_folders(gui: imgui.GUI):
     # if gui.button("Previous..."):
     #   actions.user.file_manager_previous_folder_page()
 
+    gui.spacer()
+    if gui.button("Manager close"):
+        actions.user.file_manager_hide_pickers()
+
 
 @imgui.open(y=10, x=1300)
 def gui_files(gui: imgui.GUI):
