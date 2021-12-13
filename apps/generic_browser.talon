@@ -1,7 +1,6 @@
 tag: browser
 -
 address bar | go address | go url: browser.focus_address()
-duplicate tab | tab duplicate: user.duplicate_tab()
 address copy | url copy | copy address | copy url:
     browser.focus_address()
     sleep(50ms)

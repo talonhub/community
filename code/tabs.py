@@ -16,5 +16,5 @@ class tab_actions:
         """
         actions.app.tab_close()
 
-    def duplicate_tab():
+    def tab_duplicate():
         """Duplicates the current tab."""

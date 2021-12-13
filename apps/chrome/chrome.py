@@ -37,7 +37,7 @@ class user_actions:
         actions.sleep("180ms")
         actions.app.tab_close()
 
-    def duplicate_tab():
+    def tab_duplicate():
         """Limitation: this will not work if the text in your address bar has been manually edited.
         Long-term we want a better shortcut from browsers.
         """
