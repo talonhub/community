@@ -3,7 +3,6 @@ from talon import Context, Module
 ctx = Context()
 mod = Module()
 
-# TODO: rename this tag to 'code_operators_pointer' for consistency?
 mod.tag("code_operators_pointer", desc="Tag for enabling pointer operator commands")
 
 @mod.action_class
