@@ -14,6 +14,11 @@ mod.apps.chrome = """
 os: mac
 and app.bundle: com.google.Chrome
 """
+mod.apps.chrome = """
+os: linux
+app.exe: chrome
+app.exe: chromium-browser
+"""
 ctx.matches = r"""
 app: chrome
 """
