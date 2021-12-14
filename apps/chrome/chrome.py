@@ -14,6 +14,11 @@ mod.apps.chrome = """
 os: mac
 and app.bundle: com.google.Chrome
 """
+mod.apps.chrome = """
+os: linux
+app.exe: chrome
+app.exe: chromium-browser
+"""
 ctx.matches = r"""
 app: chrome
 """
@@ -42,6 +47,7 @@ class user_actions:
         Long-term we want a better shortcut from browsers.
         """
         actions.browser.focus_address()
+        actions.sleep("180ms")
         actions.key("alt-enter")
 
 
