@@ -35,16 +35,24 @@ def gui(gui: imgui.GUI):
         if gui.button("{}. {}".format(index, item)):
             actions.user.microphone_select(index)
 
+    gui.spacer()
+    if gui.button("Microphone close"):
+        actions.user.microphone_selection_hide()
+
 
 @mod.action_class
 class Actions:
     def microphone_selection_toggle():
-        """"""
+        """Show GUI for choosing the Talon microphone"""
         if gui.showing:
             gui.hide()
         else:
             update_microphone_list()
             gui.show()
+
+    def microphone_selection_hide():
+        """Hide the microphone selection GUI"""
+        gui.hide()
 
     def microphone_select(index: int):
         """Selects a micropohone"""

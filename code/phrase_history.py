@@ -59,9 +59,18 @@ class Actions:
         if gui.showing: gui.hide()
         else: gui.show()
 
+    def phrase_history_hide():
+        """Hides the recent phrases window"""
+
+        gui.hide()
+
 @imgui.open()
 def gui(gui: imgui.GUI):
     gui.text("Recent phrases")
     gui.line()
     for index, text in enumerate(phrase_history[:phrase_history_display_length], 1):
         gui.text(f"{index}: {text}")
+
+    gui.spacer()
+    if gui.button("Recent close"):
+        actions.user.phrase_history_hide()
