@@ -1,5 +1,3 @@
-# XXX - would be nice to be able pipe these through formatters
-
 from talon import Context, Module
 
 mod = Module()
@@ -64,6 +62,7 @@ abbreviations = {
     "device": "dev",
     "dictation": "dict",
     "dictionary": "dict",
+    "difference": "diff",
     "direction": "dir",
     "directory": "dir",
     "distribution": "dist",
@@ -78,6 +77,7 @@ abbreviations = {
     "enumerate": "enum",
     "environment": "env",
     "escape": "esc",
+    "estimate": "est",
     "etcetera": "etc",
     "example": "ex",
     "exception": "exc",
