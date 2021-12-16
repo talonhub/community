@@ -1,4 +1,7 @@
 app: microsoft_teams
+os: windows
+os: linux
+
 -
 
 # Shortcut reference

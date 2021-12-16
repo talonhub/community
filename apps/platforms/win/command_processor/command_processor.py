@@ -13,7 +13,7 @@ user_path = os.path.expanduser("~")
 directories_to_remap = {}
 directories_to_exclude = {}
 
-ctx.tags = ['user.file_manager', 'user.generic_terminal', 'user.git', 'user.kubectl', 'terminal']
+ctx.tags = ['user.file_manager', 'user.git', 'user.kubectl', 'terminal']
 
 @ctx.action_class('edit')
 class EditActions:
