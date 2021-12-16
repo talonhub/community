@@ -71,7 +71,17 @@ track right tiny: mouse_scroll(0, 20)
 
 curse yes: user.mouse_show_cursor()
 curse no: user.mouse_hide_cursor()
+curse no:
+    # Command added 2021-12-13, can remove after 2022-06-01
+    app.notify("Please activate the user.mouse_cursor_commands_enable tag to enable this command")
 copy mouse position: user.copy_mouse_position()
+
+#right drag | righty drag:
+#	user.mouse_drag(1)
+	# close the mouse grid
+#	user.grid_close()
+#end drag | drag end:
+#    user.mouse_drag_end()
 
 #wheel down here:
 #    user.mouse_move_center_active_window()

@@ -83,3 +83,6 @@ class UserActions:
 
     def tab_jump(number: int):
         actions.key("ctrl-alt-{}".format(number))
+
+    def tab_final():
+        actions.key("ctrl-alt-9")

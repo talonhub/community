@@ -1,4 +1,4 @@
-from talon import Context, Module, actions, imgui, settings, ui
+from talon import Context, actions, ui
 import os
 
 # TODO: fit this to generic_terminal
@@ -14,11 +14,14 @@ directories_to_exclude = {}
 class EditActions:
     def delete_line(): actions.key('ctrl-u')
 
-
 @ctx.action_class('user')
 class UserActions:
     def file_manager_current_path():
         title = ui.active_window().title
+
+        #take the first split for the zsh-based terminal
+        if " — " in title:
+            title = title.split(" — ")[0]
 
         if "~" in title:
             title = os.path.expanduser(title)
@@ -40,7 +43,9 @@ class UserActions:
         path = '"{}"'.format(path)
         actions.insert(path)
         actions.key("enter")
-        actions.user.file_manager_refresh_title()
+
+        #jtk - refresh title isn't necessary since the apple terminal does it for us
+        #actions.user.file_manager_refresh_title()
         
     def file_manager_open_parent():
         actions.insert('cd ..')
@@ -65,33 +70,20 @@ class UserActions:
         """selects the file"""
         actions.insert(path)
 
-    def terminal_list_directories():
-        actions.insert("ls")
-        actions.key("enter")
+    def file_manager_refresh_title():
+        return
 
-    def terminal_list_all_directories():
-        actions.insert("ls -a")
-        actions.key("enter")
+@ctx.action_class("app")
+class app_actions:
+    # other tab functions should already be implemented in 
+    # code/platforms/mac/app.py
 
-    def terminal_change_directory(path: str):
-        actions.insert("cd {}".format(path))
-        if path:
-            actions.key("enter")
+    def tab_previous():
+        actions.key("ctrl-shift-tab")
 
-    def terminal_change_directory_root():
-        """Root of current drive"""
-        actions.insert("cd /")
-        actions.key("enter")
+    def tab_next():
+        actions.key("ctrl-tab")
+        
 
-    def terminal_clear_screen():
-        """Clear screen"""
-        actions.key("ctrl-l")
 
-    def terminal_run_last():
-        actions.key("up enter")
-
-    def terminal_kill_all():
-        actions.key("ctrl-c")
-        actions.insert("y")
-        actions.key("enter")
 

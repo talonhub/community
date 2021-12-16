@@ -1,57 +1,70 @@
 # https://help.github.com/en/github/getting-started-with-github/keyboard-shortcuts
 tag: browser
-win.title: /github.com/
+browser.host: github.com
 -
 
 # site wide shortcuts
 focus search: key(s)
 go to notifications: insert("gn")
 go to dashboard: insert("gd")
-show keyboard shortcuts: key(?)
-move selection down: key(j)
-move selection up: key(k)
-toggle selection: key(x)
-open selection: key(o)
+(keyboard shortcuts show | show keyboard shortcuts): key(?)
+(selection move down | move selection down): key(j)
+(selection move up | move selection up): key(k)
+(selection toggle | toggle selection): key(x)
+(selection open | open selection): key(o)
 
 # repositories
 go to code: insert("gc")
 go to issues: insert("gi")
 go to pull requests: insert("gp")
 go to wiki: insert("gw")
+go to actions: insert("ga")
+go to projects: insert("gb")
+go to discussions: insert("gg")
 
-# network graph
+# source code editing
+[web] editor open: key(.)
 
 # source code browsing
-find file: key(t)
+(file find | find file): key(t)
 jump to line: key(l)
-switch (branch|tag): key(w)
-expand url: key(y)
-(show|hide) [all] in line notes: key(i)
+((branch|tag) switch | switch (branch|tag)): key(w)
+(url expand | expand url): key(y)
+(show|hide) comments: key(i)
+blame view open: key(b)
+(show|hide) annotations: key(a)
 
 # issues
-create [an] issue: key(c)
+(issue create | create [an] issue): key(c)
 search (issues|[pull] requests): key(/)
 (filter by|edit) labels: key(l)
 (filter by|edit) milestones: key(m)
 (filter by|edit) assignee: key(a)
 reply: key(r)
-submit comment: key(ctrl-enter)
-preview comment: key(ctrl-shift-p)
-#go fullscreen: key(ctrl-shift-l)
+(comment submit | submit comment): key(ctrl-enter)
+(comment preview | preview comment): key(ctrl-shift-p)
 git hub full screen: key(ctrl-shift-l)
 
 # browsing commit
-#submit comment: key(ctrl-enter)
-close form: key(escape)
+(form close | close form): key(escape)
 parent commit: key(p)
 other parent commit: key(o)
 
-# commit list
-#expand url: key(y)
-
 # notifications
 mark as read: key(y)
-mute thread: key(shift-m)
+(thread mute | mute thread): key(shift-m)
 
-# pull request list
-open issue: key(o)
+# issue or pull request list
+(issue open | open issue): key(o)
+(issue create | create issue): key(c)
+
+# issues and pull requests
+reviewer request: key(q)
+milestone set: key(m)
+assignee set: key(a)
+label set: key(l)
+
+# actions
+go to workflow: insert("gf")
+timestamps toggle: key(shift-t)
+fullscreen toggle: key(shift-f)

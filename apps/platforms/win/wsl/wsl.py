@@ -1,8 +1,17 @@
 from talon import Context, Module, actions, imgui, settings, ui, app
+from talon.debug import log_exception
 import os
 import subprocess
+import logging
+import sys
 
 mod = Module()
+# Note: these context matches are specific to ubuntu, but there are other
+# distros one can run under wsl, e.g. docker. for that matter, there are
+# multiple ubuntu distros available. we need a more general way of detecting
+# the current distro, and a way for the user to specify which distro to use
+# for any particular operation. perhaps implement a generic_wsl module and
+# then layer various distros on top of that?
 mod.apps.ubuntu = """
 os: windows
 and app.name: ubuntu.exe
@@ -16,6 +25,13 @@ and win.title: /Ubuntu/
 """
 directories_to_remap = {}
 directories_to_exclude = {}
+
+# some definitions used for error handling
+termination_error = 'The Windows Subsystem for Linux instance has terminated.'
+restart_message = 'wsl path detection is offline, you need to restart your wsl session, e.g. "wsl --terminate <distro>; wsl"'
+path_detection_disable_title="Talon - WSL path detection disabled"
+path_detection_disable_notice = 'WSL path detection has been disabled because new WSL sessions cannot be started. See the log for more detail.'
+path_detection_disabled = False
 
 user_path = os.path.expanduser("~")
 if app.platform == "windows":
@@ -57,46 +73,152 @@ if app.platform == "windows":
             "Videos": os.path.join(user_path, "Videos"),
         }
 
-
 def get_win_path(wsl_path):
-    path = ""
-    try:
-        path = (
-            subprocess.check_output(["wsl", "wslpath", "-w", wsl_path])
-            .strip(b"\n")
-            .decode()
-        )
-    except:
-        path = ""
-
-    return path
-
+    # for testing
+    #wsl_path = 'Ubuntu-20.04'
+    #wsl_path = '/mnt/qube/woobee/woobee/woobit'
+    #print(f"WINPATH: {wsl_path}")
+    return run_wslpath(["-w"], wsl_path)
 
 def get_usr_path():
-    path = ""
-    try:
-        path = (
-            subprocess.check_output(["wsl", "wslpath", "-a", "~"]).strip(b"\n").decode()
-        )
-    except:
-        path = ""
-
-    return path
-
+    #print(f'USRPATH: {"~"}')
+    return run_wslpath(["-a"], "~")
 
 def get_wsl_path(win_path):
-    path = ""
-    try:
-        path = (
-            subprocess.check_output(["wsl", "wslpath", "-u", "'{}'".format(win_path)])
-            .strip(b"\n")
-            .decode()
+    #print(f"WSLPATH: {win_path}")
+    return run_wslpath(["-u"], "'{}'".format(win_path))
+
+def _disable_path_detection(notify=True):
+    global path_detection_disabled
+    path_detection_disabled  = True
+    if notify:
+        app.notify(
+            title=path_detection_disable_title,
+            body=path_detection_disable_notice
         )
-    except:
-        path = ""
+
+# this command fails every once in a while, with no indication why.
+# so, when that happens we just retry.
+MAX_ATTEMPTS = 2
+def run_wslpath(args, in_path):
+    global path_detection_disabled
+    path = ""
+
+    if not path_detection_disabled:
+        loop_num = 0
+
+        while loop_num < MAX_ATTEMPTS:
+            #print(f"_run_wslpath(): {path_detection_disabled=}.")
+            (path, error) = run_wsl(['wslpath', *args, in_path])
+            if error:
+                logging.error(f'run_wslpath(): failed to translate given path - attempt: {loop_num}, error: {error}')
+                path = ""
+                if error == termination_error:
+                    # disable this code until the user resets it
+                    _disable_path_detection()
+                    break
+            elif path:
+                # got it, no need to loop and try again
+                break
+
+            loop_num += 1
 
     return path
 
+# Note: seems WSL itself generates utf-16-le errors, whereas your guest os probably does not.
+# - see https://github.com/microsoft/WSL/issues/4607 and related issures. Not sure how this
+# behavior might differ when the system locale has been changed from the default.
+#
+# Anyways, these WSL errors require special handling so they are logged clearly. This is presumably
+# worthwhile given the likely importance of any such messages. For example, which would you rather
+# see in the log?
+#
+#   1. Nothing at all, even though there might be serious problems.
+#
+#   2. b'T\x00h\x00e\x00 \x00W\x00i\x00n\x00d\x00o\x00w\x00s\x00 \x00S\x00u\x00b\x00s\x00y\x00s\x00t\x00e\x00m\x00 \x00f\x00o\x00r\x00 \x00L\x00i\x00n\x00u\x00x\x00 \x00i\x00n\x00s\x00t\x00a\x00n\x00c\x00e\x00 \x00h\x00a\x00s\x00 \x00t\x00e\x00r\x00m\x00i\x00n\x00a\x00t\x00e\x00d\x00.\x00\r\x00\r\x00\n\x00'
+#
+#   3. The Windows Subsystem for Linux instance has terminated.
+#
+# The error above indicates the WSL distro is hung and this result detection mechanism is offline. When
+# that happens, it takes a while for the command to return and the talon watchdog generates messages
+# in the log that indicate a hang but we can provide more contextual detail. The prime thing to do here
+# is to get word to the user that WSL is not responding normally. Note that, even after reaching this
+# state, existing interactive wsl sessions continue to run and so the user may be unaware of the true
+# source of their "talon problems". For more information, see https://github.com/microsoft/WSL/issues/5110
+# and https://github.com/microsoft/WSL/issues/5318.
+#
+# Once the WSL distro is hung, every attempt to use it results in many repeated log messages like these:
+# 
+# 2021-10-15 11:15:49 WARNING [watchdog] "talon.windows.ui._on_event" @30.0s (stalled)
+# 2021-10-15 11:15:49 WARNING [watchdog] "user.knausj_talon.code.file_manager.win_event_handler"
+#
+# These messages are from code used to detect the current path from the window title, and it every time the
+# focus shifts to a wsl context or the current path changes. This gets tiresome if you don't want to restart
+# wsl immediately (because your existing sessions are still running and you want to finish working before
+# restarting wsl).
+# 
+# So, wsl path detection is disabled when this condition is first detected. The user
+# must then re-enable the feature once the underlying problem has been resolved. This can be done by
+# using the 'weasel reset path detection' voice command or simply reloading this file.
+
+def _decode(value: bytes) -> str:
+    # check to see if the given byte string looks like utf-16-le. results may not be correct for all
+    # possible cases, but if there's a problem this code can be replaced with chardet (once that module
+    # covers utf-16-le - see https://github.com/chardet/chardet/pull/109#discussion_r119149003). of
+    # course, by that time wsl might not have the same problem anyways.
+    if (len(value) % 2 == 0) and sum(value[1::2]) == 0:
+        # looks like utf-16-le, see https://github.com/microsoft/WSL/issues/4607 (and related issues).
+        decoded = value.decode('UTF-16-LE')
+    else:
+        decoded = value.decode()
+    #print(f"_decode(): value is {value}")
+    #print(f"_decode(): decoded is {decoded}.")
+    return decoded.strip()
+
+def _run_cmd(command_line):
+    result = error = ""
+    #print(f"_run_cmd(): RUNNING - command line is {command_line}.")
+    try:
+        # for testing
+        #raise subprocess.CalledProcessError(-4294967295, command_line, termination_error.encode('UTF-16-LE'))
+
+        startupinfo = subprocess.STARTUPINFO()
+        startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+        startupinfo.wShowWindow = subprocess.SW_HIDE
+
+        tmp = subprocess.check_output(command_line, stderr=subprocess.STDOUT, startupinfo=startupinfo)
+        result = _decode(tmp)
+        #print(f"RESULT: command: {' '.join(command_line)}, result: {result}")
+    except subprocess.CalledProcessError as exc:
+        result = ""
+
+        # decode the error
+        error = _decode(exc.output)
+
+        # log additional info for this particular case
+        if error == termination_error:
+            logging.error(f'_run_cmd(): failed to run command - error: {error}')
+            logging.error(f'_run_cmd(): - {restart_message}')
+    except:
+        result = ""
+        log_exception(f'[_run_cmd()] {sys.exc_info()[1]}')
+
+    # return results for the last attempt
+    #print(f'_run_cmd(): RETURNING - result: {result}, error: {error}')
+    return [result, error]
+
+def run_wsl(args):
+    # for testing
+    if False:
+        wsl_cmd_str = "nosuchcommand"
+    else:
+        wsl_cmd_str = "wsl"
+
+    # now run the caller's command
+    command_line = [ wsl_cmd_str ] + args
+    result = _run_cmd(command_line)
+    #print(f'run_wsl(): RETURNING - result: {result}')
+    return result
 
 @ctx.action_class('user')
 class UserActions:
@@ -105,6 +227,11 @@ class UserActions:
         actions.insert('cd ..')
         actions.key('enter')
     def file_manager_current_path():
+        global path_detection_disabled
+        if path_detection_disabled:
+            logging.warning('Skipping WSL path detection - try "weasel reset path detection"')
+            return ""
+
         path = ui.active_window().title
         try:
             path = path.split(":")[1].lstrip()
@@ -204,3 +331,10 @@ class UserActions:
         actions.key("ctrl-c")
         actions.insert("y")
         actions.key("enter")
+
+@mod.action_class
+class Actions:
+    def wsl_reset_path_detection():
+        """reset wsl path detection"""
+        global path_detection_disabled
+        path_detection_disabled  = False

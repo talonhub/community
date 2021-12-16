@@ -42,6 +42,7 @@ op mod equals: user.code_operator_modulo_assignment()
 
 #bitwise operators
 [op] bitwise and: user.code_operator_bitwise_and()
+[op] increment: user.code_operator_increment()
 [op] bitwise or: user.code_operator_bitwise_or()
 (op | logical | bitwise) (ex | exclusive) or: user.code_operator_bitwise_exclusive_or()
 (op | logical | bitwise) (left shift | shift left): user.code_operator_bitwise_left_shift()

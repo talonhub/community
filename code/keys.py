@@ -234,9 +234,3 @@ ctx.lists["self.function_key"] = {
 }
 
 
-@mod.action_class
-class Actions:
-    def get_alphabet() -> dict:
-        """Provides the alphabet dictionary"""
-        return alphabet
-

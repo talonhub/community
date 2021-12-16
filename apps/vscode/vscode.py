@@ -223,7 +223,7 @@ class UserActions:
     def multi_cursor_skip_occurrence():
         actions.user.vscode("editor.action.moveSelectionToNextFindMatch")
 
-    # snippet.py support beginHelp close
+    # snippet.py support begin
     def snippet_search(text: str):
         actions.user.vscode("editor.action.insertSnippet")
         actions.insert(text)
