@@ -4,6 +4,9 @@ my email:
 my phone:
   "919-749-3667"
 
+my name:
+  "Alex Koch"
+
 timer (start | stop):
     key(cmd-shift-r)
 
