@@ -41,9 +41,10 @@ def gui(gui: imgui.GUI):
     for line in text:
         gui.text(line)
 
-    gui.spacer()
-    if gui.button("Command history close"):
-        actions.user.history_disable()
+    # Comment this out to remove the "Command history close" Button
+    # gui.spacer()
+    # if gui.button("Command history close"):
+    #     actions.user.history_disable()
 
 
 speech_system.register("phrase", on_phrase)
