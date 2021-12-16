@@ -7,6 +7,12 @@ my phone:
 my name:
   "Alex Koch"
 
+portfolio site:
+  "alexrkoch-portfolio-2.com"
+
+civi see are em:
+  "CiviCRM"
+
 timer (start | stop):
     key(cmd-shift-r)
 
