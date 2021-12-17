@@ -1,3 +1,5 @@
+from collections import OrderedDict
+import logging
 from typing import Dict, Union
 
 from talon import Context, Module
@@ -113,6 +115,10 @@ class PhraseReplacer:
         phrase_index = dict()
         for spoken_form, written_form in phrase_dict.items():
             words = spoken_form.split()
+            if not words:
+                logging.warning("Found empty spoken form for written form"
+                                f"{written_form}, ignored")
+                continue
             first_word, n_next = words[0], len(words) - 1
             phrase_index.setdefault(first_word, dict())
             same_first_word = phrase_index[first_word]
@@ -120,10 +126,10 @@ class PhraseReplacer:
             same_first_word[n_next][tuple(words[1:])] = written_form
 
         # Sort n_next index so longer phrases have priority
-        self.phrase_index = {
-            first_word: dict(sorted(same_first_word.items(), key=lambda x: -x[0]))
+        self.phrase_index = OrderedDict([
+            (first_word, dict(sorted(same_first_word.items(), key=lambda x: -x[0])))
             for first_word, same_first_word in phrase_index.items()
-        }
+        ])
 
     def replace_phrases(self, input_text: Union[str, list, tuple]):
         """Return input_text with phrases replaced"""
