@@ -126,10 +126,10 @@ class PhraseReplacer:
             same_first_word[n_next][tuple(words[1:])] = written_form
 
         # Sort n_next index so longer phrases have priority
-        self.phrase_index = OrderedDict([
-            (first_word, dict(sorted(same_first_word.items(), key=lambda x: -x[0])))
+        self.phrase_index = {
+            first_word: OrderedDict(sorted(same_first_word.items(), key=lambda x: -x[0]))
             for first_word, same_first_word in phrase_index.items()
-        ])
+        }
 
     def replace_phrases(self, input_text: Union[str, list, tuple]):
         """Return input_text with phrases replaced"""
