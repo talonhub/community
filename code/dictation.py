@@ -20,6 +20,7 @@ ctx.lists["user.prose_snippets"] = {
     "spacebar": " ",
     "new line": "\n",
     "new paragraph": "\n\n",
+    # Curly quotes are used to obtain proper spacing for left and right quotes, but will later be straightened.
     "open quote": "“",
     "close quote": "”",
     "smiley": ":-)",
@@ -43,6 +44,7 @@ def text(m) -> str:
 @mod.capture(rule="({user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <phrase> | {user.prose_modifiers})+")
 def prose(m) -> str:
     """Mixed words and punctuation, auto-spaced & capitalized."""
+    # Straighten curly quotes that were introduced to obtain proper spacing.
     return apply_formatting(m).replace("“", "\"").replace("”", "\"")
 
 @mod.capture(rule="({user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <phrase>)+")
@@ -70,7 +72,7 @@ def apply_formatting(m):
         elif isinstance(item, grammar.vm.Phrase):
             words = actions.dictate.replace_words(actions.dictate.parse_words(item))
         else:
-            words = item.split(" ") if item != " " else [" "]
+            words = [item]
         if words:
             for word in words:
                 word = formatter.format(word)
@@ -271,6 +273,9 @@ class Actions:
             dictation_formatter.update_context(
                 actions.user.dictation_peek_left(clobber=True))
         text = dictation_formatter.format(text, auto_cap)
+        # Straighten curly quotes that were introduced to obtain proper
+        # spacing. The formatter context still has the original curly quotes
+        # so that future dictation is properly formatted.
         text = text.replace("“", "\"").replace("”", "\"")
         actions.user.add_phrase_to_history(text)
         actions.insert(text)
