@@ -6,8 +6,6 @@ mod = Module()
 mod.apps.chrome = "app.name: Google Chrome"
 mod.apps.chrome = """
 os: windows
-and app.name: Google Chrome
-os: windows
 and app.exe: chrome.exe
 """
 mod.apps.chrome = """
@@ -18,6 +16,10 @@ mod.apps.chrome = """
 os: linux
 app.exe: chrome
 app.exe: chromium-browser
+"""
+mod.apps.chrome = """
+os: linux
+and app.name: Google-chrome
 """
 ctx.matches = r"""
 app: chrome
