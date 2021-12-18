@@ -1,8 +1,7 @@
-from collections import OrderedDict
 import logging
-from typing import Dict, Union
+from typing import Dict, Sequence
 
-from talon import Context, Module
+from talon import Context, Module, actions
 from .user_settings import get_list_from_csv
 
 mod = Module()
@@ -100,7 +99,6 @@ ctx.lists["user.vocabulary"] = get_list_from_csv(
 # print(str(ctx.settings["dictate.word_map"]))
 # print(str(ctx.lists["user.vocabulary"]))
 
-
 class PhraseReplacer:
     """Utility for replacing phrases by other phrases inside text or word lists.
 
@@ -120,31 +118,24 @@ class PhraseReplacer:
                                 f"{written_form}, ignored")
                 continue
             first_word, n_next = words[0], len(words) - 1
-            phrase_index.setdefault(first_word, dict())
-            same_first_word = phrase_index[first_word]
-            same_first_word.setdefault(n_next, dict())
-            same_first_word[n_next][tuple(words[1:])] = written_form
+            phrase_index.setdefault(first_word, {}) \
+                        .setdefault(n_next, {})[tuple(words[1:])] = written_form
 
         # Sort n_next index so longer phrases have priority
         self.phrase_index = {
-            first_word: OrderedDict(sorted(same_first_word.items(), key=lambda x: -x[0]))
+            first_word: list(sorted(same_first_word.items(), key=lambda x: -x[0]))
             for first_word, same_first_word in phrase_index.items()
         }
 
-    def replace_phrases(self, input_text: Union[str, list, tuple]):
-        """Return input_text with phrases replaced"""
-        got_string = isinstance(input_text, str)
-        if got_string:
-            input_text = input_text.split()
-        input_words = tuple(input_text)
-
+    def replace(self, input_words: Sequence[str]) -> Sequence[str]:
+        input_words = tuple(input_words) # tuple to ensure hashability of slices
         output_words = []
         first_word_i = 0
-        while first_word_i <= len(input_words) - 1:
+        while first_word_i < len(input_words):
             first_word = input_words[first_word_i]
             next_word_i = first_word_i + 1
             # Could this word be the first of a phrase we should replace?
-            for n_next, phrases_n_next in self.phrase_index.get(first_word, dict()).items():
+            for n_next, phrases_n_next in self.phrase_index.get(first_word, []):
                 # Yes. Perhaps a phrase with n_next subsequent words?
                 continuation = input_words[next_word_i : next_word_i + n_next]
                 if continuation in phrases_n_next:
@@ -156,11 +147,11 @@ class PhraseReplacer:
                 # No match, just add the word to the result
                 output_words.append(first_word)
                 first_word_i += 1
-
-        if got_string:
-            return ' '.join(output_words)
         return output_words
 
+    # Wrapper used for testing.
+    def replace_string(self, text: str) -> str:
+        return ' '.join(self.replace(text.split()))
 
 # Unit tests for PhraseReplacer
 rep = PhraseReplacer({
@@ -169,20 +160,23 @@ rep = PhraseReplacer({
     'this is': 'stopping early',
     'this is a test': 'it worked!',
 })
-assert rep.replace_phrases('gnork') == 'gnork'
-assert rep.replace_phrases('this') == 'foo'
-assert rep.replace_phrases('this that this') == 'foo bar foo'
-assert rep.replace_phrases('this is a test') == 'it worked!'
-assert rep.replace_phrases('well this is a test really') == 'well it worked! really'
-assert rep.replace_phrases('try this is too') == 'try stopping early too'
-assert rep.replace_phrases('this is a tricky one') == 'stopping early a tricky one'
-
+assert rep.replace_string('gnork') == 'gnork'
+assert rep.replace_string('this') == 'foo'
+assert rep.replace_string('this that this') == 'foo bar foo'
+assert rep.replace_string('this is a test') == 'it worked!'
+assert rep.replace_string('well this is a test really') == 'well it worked! really'
+assert rep.replace_string('try this is too') == 'try stopping early too'
+assert rep.replace_string('this is a tricky one') == 'stopping early a tricky one'
 
 phrase_replacer = PhraseReplacer(phrases_to_replace)
 
 @mod.action_class
 class Actions:
-
-    def replace_phrases(input_text: str):
-        """Replace phrases in input_text"""
-        return phrase_replacer.replace_phrases(input_text)
+    def replace_phrases(words: Sequence[str]) -> Sequence[str]:
+        """Replace phrases according to words_to_replace.csv"""
+        try:
+            return phrase_replacer.replace(words)
+        except:
+            # fall back to dictate.replace_words for error-robustness
+            logging.error("phrase replacer failed!")
+            return actions.dictate.replace_words(words)
