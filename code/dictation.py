@@ -70,7 +70,7 @@ def apply_formatting(m):
             formatter.reset_context()
             formatter.force_no_space = True
         elif isinstance(item, grammar.vm.Phrase):
-            words = actions.dictate.replace_words(actions.dictate.parse_words(item))
+            words = actions.user.replace_phrases(actions.dictate.parse_words(item))
         else:
             words = [item]
         if words:
