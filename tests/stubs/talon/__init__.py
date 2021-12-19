@@ -52,6 +52,9 @@ class Module:
     def list(self, *args, **kwargs):
         pass
 
+    def setting(self, *args, **kwargs):
+        pass
+
     def capture(self, rule=None):
         def __funcwrapper(func):
             def __inner(*args, **kwargs):
@@ -73,6 +76,11 @@ class Context:
 
     lists = {}
 
+    def action_class(self, path=None):
+        def __funcwrapper(clazz):
+            return clazz
+        return __funcwrapper
+
 
 class ImgUI:
     """
@@ -90,11 +98,19 @@ class ImgUI:
 
         return __funcwrapper
 
+class UI:
+    """
+    Stub out UI so we don't get crashes
+    """
+    
+    def register(*args, **kwargs):
+        pass
 
 actions = Actions()
 app = None
-ui = None
+clip = None
 imgui = ImgUI()
+ui = UI()
 
 # Indicate to test files that they should load
 test_mode = True
