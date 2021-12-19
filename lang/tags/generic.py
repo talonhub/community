@@ -3,6 +3,8 @@ from talon import Context, Module, actions, imgui, registry, settings
 ctx = Context()
 mod = Module()
 
+mod.tag("code_functions_ui_showing", desc="Active when the function picker UI is showing")
+mod.tag("code_libraries_ui_showing", desc="Active when the library picker UI is showing")
 mod.list("code_functions", desc="List of functions for active language")
 mod.list("code_type", desc="List of types for active language")
 mod.list("code_libraries", desc="List of libraries for active language")
@@ -213,11 +215,19 @@ class Actions:
         global function_list
         if gui_libraries.showing:
             gui_libraries.hide()
+            ctx.tags.discard("user.code_libraries_ui_showing")
         if gui_functions.showing:
             function_list = []
             gui_functions.hide()
+            ctx.tags.discard("user.code_functions_ui_showing")
         else:
             update_function_list_and_freeze()
+
+    def code_toggle_functions_hide():
+        """Close the function selector GUI"""
+
+        gui_functions.hide()
+        ctx.tags.discard("user.code_functions_ui_showing")
 
     def code_select_function(number: int, selection: str):
         """Inserts the selected function when the imgui is open"""
@@ -241,11 +251,18 @@ class Actions:
         global library_list
         if gui_functions.showing:
             gui_functions.hide()
+            ctx.tags.discard("user.code_functions_ui_showing")
         if gui_libraries.showing:
             library_list = []
             gui_libraries.hide()
+            ctx.tags.discard("user.code_libraries_ui_showing")
         else:
             update_library_list_and_freeze()
+
+    def code_toggle_libraries_hide():
+        """Closes the library selector GUI"""
+        gui_libraries.hide()
+        ctx.tags.discard("user.code_libraries_ui_showing")
 
     def code_select_library(number: int, selection: str):
         """Inserts the selected library when the imgui is open"""
@@ -273,6 +290,7 @@ def update_library_list_and_freeze():
         library_list = []
 
     gui_libraries.show()
+    ctx.tags.add("user.code_libraries_ui_showing")
 
 
 def update_function_list_and_freeze():
@@ -283,6 +301,7 @@ def update_function_list_and_freeze():
         function_list = []
 
     gui_functions.show()
+    ctx.tags.add("user.code_functions_ui_showing")
 
 
 @imgui.open()
@@ -299,6 +318,10 @@ def gui_functions(gui: imgui.GUI):
                 )
             )
 
+    gui.spacer()
+    if gui.button("Toggle funk close"):
+        actions.user.code_toggle_functions_hide()
+
 
 @imgui.open()
 def gui_libraries(gui: imgui.GUI):
@@ -311,6 +334,10 @@ def gui_libraries(gui: imgui.GUI):
                 i, entry, registry.lists["user.code_libraries"][0][entry]
             )
         )
+
+    gui.spacer()
+    if gui.button("Toggle libraries close"):
+        actions.user.code_toggle_libraries_hide()
 
 
 def commands_updated(_):

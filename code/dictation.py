@@ -34,7 +34,7 @@ def word(m) -> str:
     try:
         return m.vocabulary
     except AttributeError:
-        return " ".join(actions.dictate.replace_words(actions.dictate.parse_words(m.word)))
+        return " ".join(actions.user.replace_phrases(actions.dictate.parse_words(m.word)))
 
 @mod.capture(rule="({user.vocabulary} | <phrase>)+")
 def text(m) -> str:

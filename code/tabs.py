@@ -11,5 +11,10 @@ class tab_actions:
         """Jumps to the final tab"""
 
     def tab_close_wrapper():
-        """Closes the current tab"""
+        """Closes the current tab.
+        Exists so that apps can implement their own delay before running tab_close() to handle repetitions better.
+        """
         actions.app.tab_close()
+
+    def tab_duplicate():
+        """Duplicates the current tab."""
