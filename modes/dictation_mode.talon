@@ -7,11 +7,11 @@ mode: dictation
 <user.raw_prose>: auto_insert(raw_prose)
 cap: user.dictation_format_cap()
 # Hyphenated variants are for Dragon.
-(no-caps | no caps): user.dictation_format_no_caps()
-(no-space | no space): user.dictation_format_no_space()
+(no cap | no-caps): user.dictation_format_no_cap()
+(no space | no-space): user.dictation_format_no_space()
 ^cap that$: user.dictation_reformat_cap()
-^(no-caps | no caps) that$: user.dictation_reformat_no_caps()
-^(no-space | no space) that$: user.dictation_reformat_no_space()
+^(no cap | no-caps) that$: user.dictation_reformat_no_cap()
+^(no space | no-space) that$: user.dictation_reformat_no_space()
     
 # Navigation
 go up <number_small> (line|lines):
