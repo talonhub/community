@@ -40,7 +40,7 @@ def format_phrase(m: Union[str, Phrase], fmtrs: str):
             m.words = m.words[:-1]
 
         words = actions.dictate.parse_words(m)
-        words = actions.dictate.replace_words(words)
+        words = actions.user.replace_phrases(words)
 
     result = last_phrase_formatted = format_phrase_no_history(words, fmtrs)
     actions.user.add_phrase_to_history(result)
@@ -155,18 +155,11 @@ formatters_words = {
     "kebab": formatters_dict["DASH_SEPARATED"],
     "packed": formatters_dict["DOUBLE_COLON_SEPARATED"],
     "padded": formatters_dict["SPACE_SURROUNDED_STRING"],
-    # "say": formatters_dict["NOOP"],
-    # "sentence": formatters_dict["CAPITALIZE_FIRST_WORD"],
     "slasher": formatters_dict["SLASH_SEPARATED"],
     "smash": formatters_dict["NO_SPACES"],
     "snake": formatters_dict["SNAKE_CASE"],
-    # "speak": formatters_dict["NOOP"],
     "string": formatters_dict["SINGLE_QUOTED_STRING"],
     "title": formatters_dict["CAPITALIZE_ALL_WORDS"],
-    # disable a few formatters for now
-    # "tree": formatters_dict["FIRST_THREE"],
-    # "quad": formatters_dict["FIRST_FOUR"],
-    # "fiver": formatters_dict["FIRST_FIVE"],
 }
 
 all_formatters = {}

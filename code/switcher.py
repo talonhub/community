@@ -326,6 +326,10 @@ def gui_running(gui: imgui.GUI):
     for line in ctx.lists["self.running"]:
         gui.text(line)
 
+    gui.spacer()
+    if gui.button("Running close"):
+        actions.user.switcher_hide_running()
+
 
 def update_launch_list():
     launch = {}

@@ -1,5 +1,5 @@
 user.draft_editor_running: True
-not app: draft_editor
+not tag: user.draft_editor_app_focused
 -
 
 draft this:
