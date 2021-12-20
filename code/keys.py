@@ -7,7 +7,7 @@ import sys
 #     " "
 # )
 # "alfa bravo charlie delta echo foxtrot golf hotel india juliett kilo lima mike november oscar papa quebec romeo sierra tango uniform victor whiskey x-ray yankee zulu"
-default_alphabet = "alfa bat cap drum each fine gust hotel sit jury crunch look made near odd pit quench red sun trap urge vest whiskey plex yank zulu".split(
+default_alphabet = "alfa bat cap drum each fine gust hotel sit jury crunch look made near odd pit quench red sun trap urge vest whale plex yank zulu".split(
     " "
 )
 letters_string = "abcdefghijklmnopqrstuvwxyz"
