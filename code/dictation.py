@@ -68,7 +68,8 @@ def capture_to_words(m):
     for item in m:
         words.extend(
             actions.user.replace_phrases(actions.dictate.parse_words(item))
-            if isinstance(item, grammar.vm.Phrase) else item)
+            if isinstance(item, grammar.vm.Phrase)
+            else [item])
     return words
 
 def apply_formatting(m):
