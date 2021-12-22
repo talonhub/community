@@ -178,6 +178,7 @@ _snap_positions = {
     # .--.--.--.
     # |--|--|--|
     # '--'--'--'
+    "top left third": RelativeScreenPos(0, 0, 1 / 3, 0.5),
     "top right third": RelativeScreenPos(2 / 3, 0, 1, 0.5),
     "top left two thirds": RelativeScreenPos(0, 0, 2 / 3, 0.5),
     "top right two thirds": RelativeScreenPos(1 / 3, 0, 1, 0.5),

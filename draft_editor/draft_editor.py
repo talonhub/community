@@ -1,8 +1,23 @@
-from talon import Module, actions, ui, app
-import time
+from talon import Module, actions, ui, Context
+
 
 mod = Module()
-mod.mode("draft_editor", "Indicates whether the draft editor has been activated")
+mod.tag("draft_editor_active", "Indicates whether the draft editor has been activated")
+mod.tag("draft_editor_app_focused", "Indicates that the draft editor app currently has focus")
+
+ctx = Context()
+tags: set[str] = set()
+
+
+def add_tag(tag: str):
+    tags.add(tag)
+    ctx.tags = list(tags)
+
+
+def remove_tag(tag: str):
+    tags.discard(tag)
+    ctx.tags = list(tags)
+
 
 default_names = [
     "Visual Studio Code",
@@ -19,30 +34,34 @@ setting_editor_names = mod.setting(
     desc="List of application names to use for draft editor",
 )
 
-editor_names = {}
+
+def get_editor_names():
+    names_csv = setting_editor_names.get()
+    return names_csv.split(", ") if names_csv else default_names
+    
 
 
 @mod.scope
 def scope():
+    editor_names = get_editor_names()
+
     for app in ui.apps(background=False):
         if app.name in editor_names:
             return {"draft_editor_running": True}
+
     return {"draft_editor_running": False}
 
 
-def on_ready():
-    global editor_names
-    names_csv = setting_editor_names.get()
-    editor_names = names_csv.split(", ") if names_csv else default_names
-
-    names_str = '\n'.join({f"app.name: {name}" for name in editor_names})
-    mod.apps.draft_editor = f"""{names_str}"""
-
-    ui.register("app_launch", scope.update)
-    ui.register("app_close", scope.update)
+def handle_app_activate(app):
+    if app.name in get_editor_names():
+        add_tag("user.draft_editor_app_focused")
+    else:
+        remove_tag("user.draft_editor_app_focused")
 
 
-app.register("ready", on_ready)
+ui.register("app_launch", scope.update)
+ui.register("app_close", scope.update)
+ui.register("app_activate", handle_app_activate)
 
 
 original_window = None
@@ -62,7 +81,7 @@ class Actions:
         actions.app.tab_open()
         if selected_text != "":
             actions.user.paste(selected_text)
-        actions.mode.enable("user.draft_editor")
+        add_tag("user.draft_editor_active")        
 
     def draft_editor_submit():
         """Submit/save draft editor"""
@@ -74,18 +93,22 @@ class Actions:
 
 
 def get_editor_app() -> ui.App:
+    editor_names = get_editor_names()
+
     for app in ui.apps(background=False):
         if app.name in editor_names:
             return app
+
     raise RuntimeError("Draft editor is not running")
 
 
 def close_editor(submit_draft: bool):
-    actions.mode.disable("user.draft_editor")
+    remove_tag("user.draft_editor_active")
     actions.edit.select_all()
     selected_text = actions.edit.selected_text()
     actions.edit.delete()
     actions.app.tab_close()
     actions.user.switcher_focus_window(original_window)
+    actions.sleep("200ms")
     if submit_draft:
         actions.user.paste(selected_text)

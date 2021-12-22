@@ -1,7 +1,7 @@
 tag: browser
 -
-(address bar | go address | go url): browser.focus_address()
-(address copy | url copy | copy address | copy url):
+address bar | go address | go url: browser.focus_address()
+address copy | url copy | copy address | copy url:
     browser.focus_address()
     sleep(50ms)
     edit.copy()
