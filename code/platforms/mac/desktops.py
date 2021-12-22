@@ -1,32 +1,11 @@
 import contextlib
 import time
 
-from talon import actions, ctrl, Module, ui, Context
-
-
-mod = Module()
-
-
-@mod.action_class
-class ModuleActions:
-    def desktop(number: int):
-        "change the current desktop"
-
-    def window_move_desktop_left():
-        """move the current window to the desktop to the left"""
-
-    def window_move_desktop_right():
-        """move the current window to the desktop to the right"""
-
-    def window_move_desktop(desktop_number: int):
-        """move the current window to a different desktop"""
-
-
+from talon import actions, ctrl, ui, Context
 ctx = Context()
 ctx.matches = r"""
 os: mac
 """
-
 
 @contextlib.contextmanager
 def _drag_window_mac(win=None):
@@ -42,12 +21,20 @@ def _drag_window_mac(win=None):
     time.sleep(0.1)
     ctrl.mouse_click(button=0, up=True)
 
-
-@ctx.action_class("self")
+@ctx.action_class("user")
 class MacActions:
     def desktop(number: int):
         if number < 10:
             actions.key("ctrl-{}".format(number))
+
+    def desktop_next():
+        actions.key("ctrl-right")
+
+    def desktop_last():
+        actions.key("ctrl-left")
+
+    def desktop_show():
+        actions.key("ctrl-up")
 
     def window_move_desktop_left():
         with _drag_window_mac():

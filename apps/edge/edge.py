@@ -10,6 +10,8 @@ os: windows
 and app.name: Microsoft Edge
 os: windows
 and app.exe: msedge.exe
+os: mac
+and app.bundle: com.microsoft.edgemac
 """
 
 ctx.matches = r"""

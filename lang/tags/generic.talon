@@ -50,3 +50,9 @@ funk wrap <user.code_functions>:
 funk wrap <number>:
     user.code_select_function(number - 1, edit.selected_text())
 dock string: user.code_document_string()
+
+# for annotating function parameters
+is type {user.code_type}: user.code_insert_type_annotation(code_type)
+returns [type] {user.code_type}: user.code_insert_return_type(code_type)
+# for generic reference of types
+type {user.code_type}: insert("{code_type}")
