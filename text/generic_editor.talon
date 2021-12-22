@@ -216,3 +216,4 @@ cut word right:
 cut line:
     edit.select_line()
     edit.cut()
+

@@ -126,11 +126,6 @@ class EditActions:
         actions.edit.right()
         actions.edit.word_left()
         actions.edit.extend_word_right()
-        #action(edit.selected_text): -> str
-        #action(edit.sentence_end):
-        #action(edit.sentence_next):
-        #action(edit.sentence_previous):
-        #action(edit.sentence_start):
     def undo():
         actions.key('cmd-z')
     def up():

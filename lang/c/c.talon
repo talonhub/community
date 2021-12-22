@@ -1,5 +1,7 @@
-mode: user.c
-mode: user.auto_lang
+mode: command
+and mode: user.c
+mode: command
+and mode: user.auto_lang
 and code.language: c
 -
 tag(): user.code_operators

@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Dict, Generic, List, Mapping, Optional, TypeVar
+from typing import Dict, Generic, List, Mapping, Optional, TypeVar, Any
 from collections import defaultdict
 import itertools
 
@@ -22,11 +22,16 @@ mod = Module()
 DEFAULT_MINIMUM_TERM_LENGTH = 3
 FANCY_REGULAR_EXPRESSION = r"[A-Z]?[a-z]+|[A-Z]+(?![a-z])|[0-9]+"
 FILE_EXTENSIONS_REGEX = "|".join(
-    file_extension.strip() + "$" for file_extension in file_extensions.values()
+    re.escape(file_extension.strip()) + "$" for file_extension in file_extensions.values()
 )
 SYMBOLS_REGEX = "|".join(re.escape(symbol) for symbol in set(symbol_key_words.values()))
 REGEX_NO_SYMBOLS = re.compile(
-    "|".join([FANCY_REGULAR_EXPRESSION, FILE_EXTENSIONS_REGEX,])
+    "|".join(
+        [
+            FANCY_REGULAR_EXPRESSION,
+            FILE_EXTENSIONS_REGEX,
+        ]
+    )
 )
 
 REGEX_WITH_SYMBOLS = re.compile(
@@ -49,14 +54,9 @@ ones = [""] + [
     REVERSE_PRONUNCIATION_MAP[str(index)] for index in range(10) if index != 0
 ]
 
-# ["ten ", "eleven ",... "nineteen"] or equivalents
-teen = [tens[0]] + [val for val in teens]
-
-# print("tens = " + str(ten))
-
 # ["","","twenty","thirty","forty",..."ninety"]
 # or equivalent
-twenties = ["", ""] + [val for index, val in enumerate(tens) if index != 0]
+twenties = ["", ""] + [val for val in tens]
 # print("twenties = " + str(twenties))
 
 thousands = [""] + [val for index, val in enumerate(scales) if index != 0]
@@ -102,7 +102,7 @@ def create_spoken_form_for_number(num: int):
         if b2 == 0:
             words = [ones[b1], t] + words
         elif b2 == 1:
-            words = [teen[b1], t] + words
+            words = [teens[b1], t] + words
         elif b2 > 1:
             words = [twenties[b2], ones[b1], t] + words
         if b3 > 0:
@@ -292,13 +292,10 @@ def generate_string_subsequences(
     return terms
 
 
-T = TypeVar("T")
-
-
 @dataclass
-class SpeakableItem(Generic[T]):
+class SpeakableItem:
     name: str
-    value: T
+    value: Any
 
 
 @mod.action_class
@@ -362,13 +359,13 @@ class Actions:
         )
 
     def create_spoken_forms_from_map(
-        sources: Mapping[str, T],
+        sources: Mapping[str, Any],
         words_to_exclude: Optional[List[str]] = None,
         minimum_term_length: int = DEFAULT_MINIMUM_TERM_LENGTH,
         generate_subsequences: bool = True,
-    ) -> Dict[str, T]:
+    ) -> Dict[str, Any]:
         """Create spoken forms for all sources in a map, doing conflict resolution"""
-        all_spoken_forms: defaultdict[str, List[SpeakableItem[T]]] = defaultdict(list)
+        all_spoken_forms: defaultdict[str, List[SpeakableItem]] = defaultdict(list)
 
         for name, value in sources.items():
             spoken_forms = actions.user.create_spoken_forms(

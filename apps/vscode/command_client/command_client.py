@@ -7,7 +7,7 @@ from tempfile import gettempdir
 from typing import Any, List
 from uuid import uuid4
 
-from talon import Context, Module, actions
+from talon import Context, Module, actions, speech_system
 
 # How old a request file needs to be before we declare it stale and are willing
 # to remove it
@@ -20,16 +20,26 @@ VSCODE_COMMAND_TIMEOUT_SECONDS = 3.0
 # long to sleep the first time
 MINIMUM_SLEEP_TIME_SECONDS = 0.0005
 
+# Indicates whether a pre-phrase signal was emitted during the course of the
+# current phrase 
+did_emit_pre_phrase_signal = False
+
 mod = Module()
 
+global_ctx = Context()
 ctx = Context()
 mac_ctx = Context()
+linux_ctx = Context()
 
 ctx.matches = r"""
 app: vscode
 """
 mac_ctx.matches = r"""
 os: mac
+app: vscode
+"""
+linux_ctx.matches = r"""
+os: linux
 app: vscode
 """
 
@@ -352,8 +362,82 @@ class Actions:
         was written to the file.  For internal use only"""
         actions.key("ctrl-shift-f17")
 
+    def emit_pre_phrase_signal():
+        """Touches a file to indicate that a phrase is about to begin execution"""
+        pass
+
+    def did_emit_pre_phrase_signal() -> bool:
+        """Indicates whether the pre-phrase signal was emitted at the start of this phrase"""
+        return did_emit_pre_phrase_signal
+
 
 @mac_ctx.action_class("user")
 class MacUserActions:
     def trigger_command_server_command_execution():
         actions.key("cmd-shift-f17")
+
+
+@linux_ctx.action_class("user")
+class LinuxUserActions:
+    def trigger_command_server_command_execution():
+        actions.key("ctrl-shift-alt-p")
+
+
+@global_ctx.action_class("user")
+class GlobalUserActions:
+    def emit_pre_phrase_signal():
+        # NB: We explicitly define a noop version of this action in the global
+        # context here so that it doesn't do anything before phrases if you're not
+        # in vscode.
+        pass
+
+
+@ctx.action_class("user")
+class UserActions:
+    def emit_pre_phrase_signal():
+        get_signal_path("prePhrase").touch()
+
+
+class MissingCommunicationDir(Exception):
+    pass
+
+
+def get_signal_path(name: str) -> Path:
+    """
+    Get the path to a signal in the signal subdirectory.
+
+    Args:
+        name (str): The name of the signal
+
+    Returns:
+        Path: The signal path
+    """
+    communication_dir_path = get_communication_dir_path()
+
+    if not communication_dir_path.exists():
+        raise MissingCommunicationDir()
+
+    signal_dir = communication_dir_path / "signals"
+    signal_dir.mkdir(parents=True, exist_ok=True)
+
+    return signal_dir / name
+
+
+def pre_phrase(_: Any):
+    try:
+        global did_emit_pre_phrase_signal
+
+        actions.user.emit_pre_phrase_signal()
+
+        did_emit_pre_phrase_signal = True
+    except MissingCommunicationDir:
+        pass
+
+
+def post_phrase(_: Any):
+    global did_emit_pre_phrase_signal
+    did_emit_pre_phrase_signal = False
+
+
+speech_system.register("pre:phrase", pre_phrase)
+speech_system.register("post:phrase", post_phrase)
