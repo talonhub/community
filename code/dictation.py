@@ -12,10 +12,21 @@ setting_context_sensitive_dictation = mod.setting(
     desc="Look at surrounding text to improve auto-capitalization/spacing in dictation mode. By default, this works by selecting that text & copying it to the clipboard, so it may be slow or fail in some applications.",
 )
 
+# prose_modifiers gives actions that can be triggered within prose to alter
+# formatting of subsequent text. It maps spoken forms to DictationFormat method
+# names (see DictationFormat, below).
+prose_modifiers = {
+    "cap": "cap",
+    "no cap": "no_cap",
+    "no caps": "no_cap", # "no caps" variant for Dragon
+    "no space": "no_space",
+}
+
 mod.list("prose_modifiers", desc="Modifiers that can be used within prose")
 mod.list("prose_snippets", desc="Snippets that can be used within prose")
 ctx = Context()
-ctx.lists["user.prose_modifiers"] = ["cap", "no cap", "no caps", "no space"]  # "no caps" variant is for Dragon.
+# we use the keys in case any method name is a legitimate speakable phrase.
+ctx.lists["user.prose_modifiers"] = prose_modifiers.keys()
 ctx.lists["user.prose_snippets"] = {
     "spacebar": " ",
     "new line": "\n",
@@ -77,24 +88,14 @@ def apply_formatting(m):
     formatter.state = None
     result = ""
     for item in m:
-        words = None
-        if item == "cap":
-            formatter.force_capitalization = "cap"
-        elif item == "no cap" or item == "no caps":
-            formatter.force_capitalization = "no cap"
-        elif item == "no space":
-            # This is typically used when manually repositioned the cursor,
-            # so it is helpful to reset capitalization as well.
-            formatter.reset_context()
-            formatter.force_no_space = True
-        elif isinstance(item, grammar.vm.Phrase):
-            words = actions.user.replace_phrases(actions.dictate.parse_words(item))
+        if item in prose_modifiers:
+            getattr(formatter, prose_modifiers[item])()
         else:
-            words = [item]
-        if words:
+            words = (actions.user.replace_phrases(actions.dictate.parse_words(item))
+                     if isinstance(item, grammar.vm.Phrase)
+                     else [item])
             for word in words:
-                word = formatter.format(word)
-                result += word
+                result += formatter.format(word)
     return result
 
 # There must be a simpler way to do this, but I don't see it right now.
@@ -224,6 +225,19 @@ class DictationFormat:
         self.before = text or self.before
         return text
 
+    # These are used as callbacks by prose modifiers / dictation_mode commands.
+    def cap(self): self.force_capitalization = "cap"
+    def no_cap(self): self.force_capitalization = "no cap"
+    def no_space(self):
+        # This is typically used after repositioning the cursor, so it is helpful to
+        # reset capitalization as well.
+        #
+        # FIXME: this sets state to "sentence start", capitalizing the next
+        # word. probably undesirable, since most places are not the start of
+        # sentences?
+        self.reset_context()
+        self.force_no_space = True
+
 def format_first_letter(text, formatter):
     i = -1
     for i, c in enumerate(text):
@@ -252,18 +266,15 @@ class Actions:
 
     def dictation_format_cap():
         """Sets the dictation formatter to capitalize"""
-        dictation_formatter.force_capitalization = "cap"
+        dictation_formatter.cap()
 
     def dictation_format_no_cap():
         """Sets the dictation formatter to not capitalize"""
-        dictation_formatter.force_capitalization = "no cap"
+        dictation_formatter.no_cap()
 
     def dictation_format_no_space():
         """Sets the dictation formatter to not prepend a space"""
-        # This is typically used when manually repositioned the cursor,
-        # so it is helpful to reset capitalization as well.
-        dictation_formatter.reset_context()
-        dictation_formatter.force_no_space = True
+        dictation_formatter.no_space()
 
     def dictation_reformat_cap():
         """Capitalizes the last utterance"""
