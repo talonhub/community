@@ -2,7 +2,7 @@
 from talon import Module, actions, app, Context, imgui, registry
 
 mod = Module()
-mod.tag("generic_snippets", desc="Tag for enabling code snippet-related commands")
+mod.tag("snippets", desc="Tag for enabling code snippet-related commands")
 mod.list("snippets", desc="List of code snippets")
 
 
