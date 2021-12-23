@@ -5,6 +5,7 @@ and mode: user.auto_lang
 and code.language: typescript
 -
 tag(): user.code_imperative
+tag(): user.code_object_oriented
 
 tag(): user.code_comment_line
 tag(): user.code_data_bool
