@@ -1,4 +1,4 @@
-from talon import Context, Module, actions, imgui, settings, ui
+from talon import Context, Module, actions, settings
 
 ctx = Context()
 ctx.matches = r"""
@@ -55,10 +55,16 @@ class UserActions:
     def code_block():
         actions.insert('{}')
         actions.key('left enter enter up tab')
-    def code_self():        actions.auto_insert('this')
-    def code_null():        actions.auto_insert('null')
-    def code_is_null():     actions.auto_insert(' == null ')
-    def code_is_not_null(): actions.auto_insert(' != null')
+
+    def code_self():
+        actions.auto_insert('this')
+
+    def code_operator_object_accessor():
+        actions.auto_insert(".")
+
+    def code_insert_null():        actions.auto_insert('null')
+    def code_insert_is_null():     actions.auto_insert(' == null ')
+    def code_insert_is_not_null(): actions.auto_insert(' != null')
     def code_state_if():
         actions.insert('if()')
         actions.key('left')
@@ -88,22 +94,11 @@ class UserActions:
     def code_state_return():   actions.auto_insert('return ')
     def code_break():          actions.auto_insert('break;')
     def code_next():           actions.auto_insert('continue;')
-    def code_true():           actions.auto_insert('true')
-    def code_false():          actions.auto_insert('false')
-    
-    #action(user.code_type_definition): "typedef "
-    #action(user.code_typedef_struct):
-    #    insert("typedef struct")
-    #    insert("{{\n\n}}")
-    #    edit.up()
-    #    key(tab)
-    def code_type_class():     actions.auto_insert('class ')
+    def code_insert_true():           actions.auto_insert('true')
+    def code_insert_false():          actions.auto_insert('false')
+    def code_define_class():     actions.auto_insert('class ')
     def code_import():         actions.auto_insert('using  ')
-    def code_from_import():    actions.auto_insert('using ')
-    def code_include():        actions.insert('using ')
-    def code_include_system(): actions.insert('using ')
-    def code_include_local():  actions.insert('using ')
-    def code_comment():        actions.auto_insert('//')
+    def code_comment_line_prefix():        actions.auto_insert('//')
     def code_insert_function(text: str, selection: str):
         if selection:
             text = text + "({})".format(selection)

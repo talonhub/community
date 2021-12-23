@@ -3,7 +3,7 @@ from talon import Module, Context, actions, ui, imgui, settings
 ctx = Context()
 ctx.matches = r"""
 mode: user.typescript
-mode: user.auto_lang 
+mode: user.auto_lang
 and code.language: typescript
 """
 # tbd
@@ -26,10 +26,10 @@ ctx.lists["user.code_type"] = {
 
 @ctx.action_class("user")
 class UserActions:
-    def code_is_not_null():
+    def code_insert_is_not_null():
         actions.auto_insert(" !== null")
 
-    def code_is_null():
+    def code_insert_is_null():
         actions.auto_insert(" === null")
 
     def code_type_dictionary():
@@ -54,6 +54,9 @@ class UserActions:
 
     def code_self():
         actions.auto_insert("this")
+
+    def code_operator_object_accessor():
+        actions.auto_insert('.')
 
     def code_state_while():
         actions.insert("while ()")
@@ -82,27 +85,8 @@ class UserActions:
     def code_import():
         actions.auto_insert("import ")
 
-    def code_from_import():
-        actions.insert(' from  ""')
-        actions.key("left")
-
-    def code_type_class():
+    def code_define_class():
         actions.auto_insert("class ")
-
-    def code_include():
-        actions.auto_insert("")
-
-    def code_include_system():
-        actions.auto_insert("")
-
-    def code_include_local():
-        actions.auto_insert("")
-
-    def code_type_definition():
-        actions.auto_insert("")
-
-    def code_typedef_struct():
-        actions.auto_insert("")
 
     def code_state_for_each():
         actions.insert(".forEach()")
@@ -114,23 +98,14 @@ class UserActions:
     def code_next():
         actions.auto_insert("continue;")
 
-    def code_true():
+    def code_insert_true():
         actions.auto_insert("true")
 
-    def code_false():
+    def code_insert_false():
         actions.auto_insert("false")
 
-    def code_null():
+    def code_insert_null():
         actions.auto_insert("null")
-
-    def code_operator_indirection():
-        actions.auto_insert("")
-
-    def code_operator_address_of():
-        actions.auto_insert("")
-
-    def code_operator_structure_dereference():
-        actions.auto_insert("")
 
     def code_operator_lambda():
         actions.auto_insert(" => ")

@@ -236,9 +236,9 @@ class UserActions:
     def code_operator_bitwise_left_shift_assignment():   actions.auto_insert(' <<= ')
     def code_operator_bitwise_right_shift():             actions.auto_insert(' >> ')
     def code_operator_bitwise_right_shift_assignment():  actions.auto_insert(' >>= ')
-    def code_null():                                     actions.auto_insert('NULL')
-    def code_is_null():                                  actions.auto_insert(' == NULL ')
-    def code_is_not_null():                              actions.auto_insert(' != NULL')
+    def code_insert_null():                                     actions.auto_insert('NULL')
+    def code_insert_is_null():                                  actions.auto_insert(' == NULL ')
+    def code_insert_is_not_null():                              actions.auto_insert(' != NULL')
     def code_state_if():
         actions.insert('if () {\n}\n')
         actions.key('up:2 left:3')
@@ -262,23 +262,9 @@ class UserActions:
     def code_state_return():    actions.auto_insert('return ')
     def code_break():           actions.auto_insert('break;')
     def code_next():            actions.auto_insert('continue;')
-    def code_true():            actions.auto_insert('true')
-    def code_false():           actions.auto_insert('false')
-    def code_type_definition(): actions.auto_insert('typedef ')
-    def code_typedef_struct():
-        actions.insert('typedef struct')
-        actions.insert('{\n\n}')
-        actions.edit.up()
-        actions.key('tab')
-    def code_from_import(): actions.auto_insert('using ')
-    def code_include():     actions.insert('#include ')
-    def code_include_system():
-        actions.insert('#include <>')
-        actions.edit.left()
-    def code_include_local():
-        actions.insert('#include ""')
-        actions.edit.left()
-    def code_comment(): actions.auto_insert('//')
+    def code_insert_true():            actions.auto_insert('true')
+    def code_insert_false():           actions.auto_insert('false')
+    def code_comment_line_prefix(): actions.auto_insert('//')
     def code_block_comment():
         actions.insert('/*')
         actions.key('enter')
@@ -320,4 +306,3 @@ class UserActions:
 
     def code_insert_library(text: str, selection: str):
         actions.user.paste("include <{}>".format(selection))
-
