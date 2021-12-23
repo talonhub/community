@@ -16,11 +16,11 @@ go left:
 go right:
     edit.right()
 
-go up:
-    edit.up()
+# go up:
+#     edit.up()
 
-go down:
-    edit.down()
+# go down:
+#     edit.down()
 
 go line start:
     edit.line_start()
@@ -44,7 +44,7 @@ go way up:
 go bottom:
     edit.file_end()
     
-go top:
+go topper:
     edit.file_start()
 
 go page down:
