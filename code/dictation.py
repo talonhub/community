@@ -1,6 +1,6 @@
 # Descended from https://github.com/dwiel/talon_community/blob/master/misc/dictation.py
 from talon import Module, Context, ui, actions, clip, app, grammar
-from typing import Optional, Tuple, Literal
+from typing import Optional, Tuple, Literal, Callable
 import re
 
 mod = Module()
@@ -39,6 +39,10 @@ ctx.lists["user.prose_snippets"] = {
     "frowny": ":-(",
 }
 
+@mod.capture(rule="{user.prose_modifiers}")
+def prose_modifier(m) -> Callable:
+    return getattr(DictationFormat, prose_modifiers[m.prose_modifiers])
+
 @mod.capture(rule="({user.vocabulary} | <word>)")
 def word(m) -> str:
     """A single word, including user-defined vocabulary."""
@@ -52,7 +56,7 @@ def text(m) -> str:
     """A sequence of words, including user-defined vocabulary."""
     return format_phrase(m)
 
-@mod.capture(rule="({user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <phrase> | {user.prose_modifiers})+")
+@mod.capture(rule="({user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <phrase> | <user.prose_modifier>)+")
 def prose(m) -> str:
     """Mixed words and punctuation, auto-spaced & capitalized."""
     # Straighten curly quotes that were introduced to obtain proper spacing.
@@ -88,8 +92,8 @@ def apply_formatting(m):
     formatter.state = None
     result = ""
     for item in m:
-        if item in prose_modifiers:
-            getattr(formatter, prose_modifiers[item])()
+        if isinstance(item, Callable):
+            item(formatter)
         else:
             words = (actions.user.replace_phrases(actions.dictate.parse_words(item))
                      if isinstance(item, grammar.vm.Phrase)
