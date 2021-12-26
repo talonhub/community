@@ -87,6 +87,7 @@ def apply_formatting(m):
     formatter.state = None
     result = ""
     for item in m:
+        # prose modifiers (cap/no cap/no space) produce formatter callbacks.
         if isinstance(item, Callable):
             item(formatter)
         else:
