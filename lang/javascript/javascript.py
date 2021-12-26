@@ -1,10 +1,19 @@
-from talon import Module, Context, actions, ui, imgui, settings
+from talon import Module, Context, actions, settings
 
-ctx = Context()
-ctx.matches = r"""
+mod = Module()
+mod.tag("javascript", desc="Enables commands for JavaScript and JS-like languages")
+
+mode_ctx = Context()
+mode_ctx.matches = r"""
 mode: user.javascript
 mode: user.auto_lang
 and code.language: javascript
+"""
+mode_ctx.tags = ["user.javascript"]
+
+ctx = Context()
+ctx.matches = """
+tag: user.javascript
 """
 # tbd
 # ctx.lists["user.code_functions"] = {
@@ -51,6 +60,9 @@ class UserActions:
     def code_state_while():
         actions.insert("while ()")
         actions.key("left")
+
+    def code_state_do():
+        actions.auto_insert("do ")
 
     def code_state_return():
         actions.insert("return ")
