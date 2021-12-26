@@ -12,21 +12,16 @@ setting_context_sensitive_dictation = mod.setting(
     desc="Look at surrounding text to improve auto-capitalization/spacing in dictation mode. By default, this works by selecting that text & copying it to the clipboard, so it may be slow or fail in some applications.",
 )
 
-# prose_modifiers gives actions that can be triggered within prose to alter
-# formatting of subsequent text. It maps spoken forms to DictationFormat method
-# names (see DictationFormat, below).
-prose_modifiers = {
+mod.list("prose_modifiers", desc="Modifiers that can be used within prose")
+mod.list("prose_snippets", desc="Snippets that can be used within prose")
+ctx = Context()
+# Maps spoken forms to DictationFormat method names (see DictationFormat below).
+ctx.lists["user.prose_modifiers"] = {
     "cap": "cap",
     "no cap": "no_cap",
     "no caps": "no_cap", # "no caps" variant for Dragon
     "no space": "no_space",
 }
-
-mod.list("prose_modifiers", desc="Modifiers that can be used within prose")
-mod.list("prose_snippets", desc="Snippets that can be used within prose")
-ctx = Context()
-# we use the keys in case any method name is a legitimate speakable phrase.
-ctx.lists["user.prose_modifiers"] = prose_modifiers.keys()
 ctx.lists["user.prose_snippets"] = {
     "spacebar": " ",
     "new line": "\n",
@@ -41,7 +36,7 @@ ctx.lists["user.prose_snippets"] = {
 
 @mod.capture(rule="{user.prose_modifiers}")
 def prose_modifier(m) -> Callable:
-    return getattr(DictationFormat, prose_modifiers[m.prose_modifiers])
+    return getattr(DictationFormat, m.prose_modifiers)
 
 @mod.capture(rule="({user.vocabulary} | <word>)")
 def word(m) -> str:
