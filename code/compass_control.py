@@ -314,7 +314,7 @@ class CompassControl:
 
                 self.compass_control._continuous_reset()
 
-                self.compass_control.continuous_old_rect = rect
+                self.compass_control.continuous_old_rect = rect.copy()
                 self.compass_control.continuous_rect = rect
                 self.compass_control.continuous_rect_id = rect_id
                 self.compass_control.continuous_parent_rect = parent_rect
@@ -871,7 +871,7 @@ class CompassControl:
                 self.continuous_height_increment *= multiplier
 
                 # initialize
-                self.compass_control.continuous_old_rect = rect
+                self.compass_control.continuous_old_rect = rect.copy()
                 self.compass_control.continuous_rect = rect
                 self.compass_control.continuous_rect_id = rect_id
                 self.compass_control.continuous_parent_rect = parent_rect
@@ -1559,7 +1559,6 @@ class CompassControl:
                         print(f'continuous_stop: {self.continuous_old_rect=}')
 
                     self._save_last_rect()
-                    self.continuous_old_rect = None
 
                 self._continuous_reset()
 
@@ -1627,7 +1626,9 @@ class CompassControl:
         target_width = (parent_rect.width * (percent/100))
         target_height = (parent_rect.height * (percent/100))
 
-        old_rect = rect
+        old_rect = rect.copy()
+        if self.testing:
+            print(f'snap: starting - {old_rect=}')
 
         if (rect.x, rect.y) != (parent_rect.center.x, parent_rect.center.y):
             # move rectangle center to parent rectangle center
@@ -1636,6 +1637,9 @@ class CompassControl:
                 if self.testing:
                     print(f'snap: move to center failed, {rect=}')
 
+        if self.testing:
+            print(f'snap: after move - {old_rect=}')
+
         if (rect.width, rect.height) != (parent_rect.width, parent_rect.height):
             # set rectangle size
             result, rect = self.sizer.resize_absolute(rect, rect_id, target_width, target_height, direction)
@@ -1643,7 +1647,11 @@ class CompassControl:
                 if self.testing:
                     print(f'snap: resize failed, {rect=}')
 
-        self.continuous_old_rect = old_rect
+        if self.testing:
+            print(f'snap: after resize - {old_rect=}')
+
+        # remember old rectangle, for 'revert'
+        self._save_last_rect(rect_id, old_rect)
 
     def get_center_to_center_rect(self, rect: ui.Rect, rect_id: int, other_rect: ui.Rect) -> Tuple[ui.Rect, bool, bool]:
         """Return rectangle whose diagonal is the line connecting the centers of the two given rectangles"""
