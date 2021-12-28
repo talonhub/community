@@ -18,7 +18,7 @@ win move <user.compass_direction>$:
 # move the current window some percentage of its own size toward the center of the screen
 win move <number> percent$:
     user.win_move_percent(number)
-    
+
 # move the current window some percentage of its own size in the given direction
 win move <user.compass_direction> <number> percent$:
     user.win_move_percent(number, compass_direction)
@@ -26,7 +26,7 @@ win move <user.compass_direction> <number> percent$:
 # move the current window some number of pixels toward the center of the screen
 win move <number_signed> pixels$:
     user.win_move_pixels(number_signed)
-    
+
 # move the current window some number of pixels in the given direction
 win move <user.compass_direction> <number_signed> pixels$:
     user.win_move_pixels(number_signed, compass_direction)
@@ -42,6 +42,15 @@ win move <number_signed> at <number_signed>$:
 win move <user.compass_direction> <number_signed> at <number_signed>$:
     user.win_move_absolute(number_signed_1, number_signed_2, compass_direction)
 
+# move the current window to the position indicated by the mouse pointer
+win move to pointer$:
+    user.win_move_to_pointer()
+
+# move the current window so that the point indicated by the given direction
+# is positioned at the mouse pointer coordinates.
+win move <user.compass_direction> to pointer$:
+    user.win_move_to_pointer(compass_direction)
+
 # increase both the size and width of the current window simultaneously
 win stretch$:
     user.win_stretch()
@@ -50,7 +59,7 @@ win stretch$:
 win stretch <user.compass_direction>$:
     user.win_stretch(compass_direction)
 
-# increase both the size and width of the current window by some percentage of its own size 
+# increase both the size and width of the current window by some percentage of its own size
 win stretch <number> percent$:
     user.win_resize_percent(number)
 
@@ -74,7 +83,7 @@ win shrink$:
 win shrink <user.compass_direction>$:
     user.win_shrink(compass_direction)
 
-# decrease both the size and width of the current window by some percentage of its own size 
+# decrease both the size and width of the current window by some percentage of its own size
 win shrink <number> percent$:
     user.win_resize_percent(-1 * number)
 
@@ -85,12 +94,12 @@ win shrink <user.compass_direction> <number> percent$:
 # decrease both the size and width of the current window by some number of pixels
 win shrink <number> pixels$:
     user.win_resize_pixels(-1 * number)
-    
+
 # decrease the size of the current window by some number of pixels in the given direction
 win shrink <user.compass_direction> <number> pixels$:
     user.win_resize_pixels(-1 * number, compass_direction)
 
-# move current window to center of screen and adjust the size to some percentage of the screen size 
+# move current window to center of screen and adjust the size to some percentage of the screen size
 win snap <number> percent [of screen]$:
     user.win_snap_percent(number)
 
@@ -101,6 +110,11 @@ win size <number> by <number>$:
 # change window size by stretching or shrinking in the given direction
 win size <user.compass_direction> <number> by <number>$:
     user.win_resize_absolute(number_1, number_2, compass_direction)
+
+# stretch or shrink the current window to match the position indicated by the mouse pointer
+# non_dual_direction is 'horizontal' or 'flat', 'vertical' or 'sharp', 'diagonal' or 'slant'
+win size <user.non_dual_direction> [to pointer]$:
+    user.win_resize_to_pointer(non_dual_direction)
 
 # restore current window's last remembered size and position
 win revert$:

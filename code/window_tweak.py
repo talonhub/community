@@ -17,17 +17,13 @@ import queue
 import logging
 import time
 
-from talon import ui, Module, Context, actions, imgui, settings, app
+from talon import ui, Module, Context, actions, imgui, settings, app, ctrl
 
 # globals
-from .compass_control import CompassControl, Direction, compass_direction
+from .compass_control import CompassControl, Direction, compass_direction, NonDualDirection, non_dual_direction
 
 # # turn debug messages on and off
-<<<<<<< HEAD
-testing: bool = False
-=======
 testing: bool = True
->>>>>>> 0d3ce91aa50dcb2583c1ab0b3f3876ca99b79248
 
 win_compass_control = None
 compass_control = None
@@ -133,6 +129,12 @@ def _win_show_gui(gui: imgui.GUI) -> None:
 
     gui.line()
 
+    gui.text(f"== Mouse ==")
+
+    gui.text(f"Position: {ctrl.mouse_pos()}")
+
+    gui.line()
+
     screen = w.screen
     gui.text(f"== Screen ==")
     gui.spacer()
@@ -230,19 +232,11 @@ class WinCompassControl:
         while retries >= 0:
             event_count = 0
             if (rect_in.x, rect_in.y) != (w.rect.x, w.rect.y):
-<<<<<<< HEAD
-                print(f'_win_set_rect: register win_move')
-                ui.register('win_move', on_move)
-                event_count += 1
-            if (rect_in.width, rect_in.height) != (w.rect.width, w.rect.height):
-                print(f'_win_set_rect: register win_resize')
-=======
                 # print(f'_win_set_rect: register win_move')
                 ui.register('win_move', on_move)
                 event_count += 1
             if (rect_in.width, rect_in.height) != (w.rect.width, w.rect.height):
                 # print(f'_win_set_rect: register win_resize')
->>>>>>> 0d3ce91aa50dcb2583c1ab0b3f3876ca99b79248
                 ui.register('win_resize', on_resize)
                 event_count += 1
             if event_count == 0:
@@ -251,11 +245,7 @@ class WinCompassControl:
                 # fall through to this block. so, the result we return is based on whether this is
                 # our first time through the loop or not.
                 success = retries < max_retries
-<<<<<<< HEAD
-                    
-=======
 
->>>>>>> 0d3ce91aa50dcb2583c1ab0b3f3876ca99b79248
                 # no real work to do
                 result = success, rect_in
 
@@ -266,11 +256,7 @@ class WinCompassControl:
 
             # do it to it
             start_time_rect = time.time_ns()
-<<<<<<< HEAD
-            w.rect = rect_in
-=======
             w.rect = rect_in.copy()
->>>>>>> 0d3ce91aa50dcb2583c1ab0b3f3876ca99b79248
             try:
                 # for testing
                 #raise queue.Empty()
@@ -416,6 +402,13 @@ class Actions:
 
         compass_control.mover.move_absolute(w.rect, w.id, x, y, region)
 
+    def win_move_to_pointer(region: Optional[NonDualDirection] = non_dual_direction(['north', 'west'])):
+        "Move window to pointer position, centered on the point indicated by the given region"
+
+        w = ui.active_window()
+
+        compass_control.mover.resize_to_pointer(w.rect, w.id, w.screen.visible_rect, region)
+
     def win_stretch(direction: Optional[Direction] = None) -> None:
         "Stretch window in small increments until stopped, optionally in the given direction"
 
@@ -449,6 +442,13 @@ class Actions:
         w = ui.active_window()
 
         compass_control.sizer.resize_absolute(w.rect, w.id, target_width, target_height, region)
+
+    def win_resize_to_pointer(nd_direction: NonDualDirection) -> None:
+        "Stretch or shrink window to pointer position, centered on the point indicated by the given region"
+
+        w = ui.active_window()
+
+        compass_control.sizer.resize_to_pointer(w.rect, w.id, w.screen.visible_rect, nd_direction)
 
     def win_move_pixels(distance: int, direction: Optional[Direction] = None) -> None:
         "Move window some number of pixels"

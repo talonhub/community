@@ -115,6 +115,25 @@ def compass_direction(m: List) -> Direction:
 
     return result
 
+# a type for representing "non-dual" directions
+NonDualDirection = Dict[str, bool]
+
+# mod.list("non_dual_direction", desc="Horizontal, vertical or diagonal")
+# ctx.lists["user.non_dual_direction"] = [ 'horizontal', 'flat', 'vertical', 'sharp', 'diagonal', 'slant' ]
+@mod.capture(rule="horizontal | flat | vertical | sharp | diagonal | slant")
+def non_dual_direction(m: List) -> NonDualDirection:
+    """
+    Matches on a basic compass direction to return which keys should
+    be pressed.
+    """
+    result = {
+        "horizontal": "horizontal" in m or "flat" in m,
+        "vertical": "vertical" in m or "sharp" in m,
+        "diagonal": "diagonal" in m or "slant" in m,
+    }
+
+    return result
+
 class CompassControl:
 
     def __init__(self, continuous_tag_name: str, set_method: Callable, stop_method: Callable, settings_map: Dict, testing: bool):
@@ -681,12 +700,14 @@ class CompassControl:
 
             return result, rect
 
+        def resize_to_pointer(self, rect: ui.Rect, rect_id: int, parent_rect: ui.Rect, region: Direction) -> Tuple[bool, ui.Rect]:
+            x, y = ctrl.mouse_pos()
+            return self.move_absolute(rect, rect_id, x, y, region)
+
         def translate_top_left_by_region(self, rect: ui.Rect, rect_id: int,
                             target_x: float, target_y: float, region_in: Direction) -> Tuple[int, int]:
-            """
-            Move rectangle in given direction to match the given values. Note: this method is used by move_absolute(),
-            which interprets the Direction argument differently than elsewhere in this module.
-            """
+            """This code figures out what the top left coordinates should be for moving in the given direction"""
+
             width = rect.width
             height = rect.height
 
@@ -1220,6 +1241,62 @@ class CompassControl:
 
             return result, rect, resize_left_limit_reached, resize_up_limit_reached, resize_right_limit_reached, resize_down_limit_reached
 
+        def resize_to_pointer(self, rect: ui.Rect, rect_id: int, parent_rect: ui.Rect, nd_direction: non_dual_direction) -> Tuple[bool, ui.Rect, bool, bool, bool, bool]:
+            if self.testing:
+                print(f'resize_to_pointer: starting - {rect=}, {nd_direction=}')
+
+            mouse_x, mouse_y = ctrl.mouse_pos()
+            if self.testing:
+                print(f'resize_to_pointer: mouse position - {mouse_x, mouse_y}')
+
+            direction = compass_direction([])
+            delta_width = 0
+            if nd_direction['horizontal'] or nd_direction['diagonal']:
+                if mouse_x >= rect.x and mouse_x <= rect.x + rect.width:
+                    # we are shrinking
+                    if mouse_x < rect.center.x:
+                        delta_width = rect.x - mouse_x
+                        direction['right'] = True
+                    elif mouse_x > rect.center.x:
+                        # WIP - why are the parentheses required below?
+                        delta_width = mouse_x - (rect.x + rect.width)
+                        direction['left'] = True
+                else:
+                    # we are stretching
+                    if mouse_x < rect.x:
+                        delta_width = rect.x - mouse_x
+                        direction['left'] = True
+                    else:
+                        # WIP - why are the parentheses required below?
+                        delta_width = mouse_x - (rect.x + rect.width)
+                        direction['right'] = True
+
+            delta_height = 0
+            if nd_direction['vertical'] or nd_direction['diagonal']:
+                if mouse_y >= rect.y and mouse_y <= rect.y + rect.height:
+                    # we are shrinking
+                    if mouse_y < rect.center.y:
+                        delta_height = rect.y - mouse_y
+                        direction['down'] = True
+                    elif mouse_y > rect.center.y:
+                        # WIP - why are the parentheses required below?
+                        delta_height = mouse_y - (rect.y + rect.height)
+                        direction['up'] = True
+                else:
+                    # we are stretching
+                    if mouse_y < rect.y:
+                        delta_height = rect.y - mouse_y
+                        direction['up'] = True
+                    else:
+                        # WIP - why are the parentheses required below?
+                        delta_height = mouse_y - (rect.y + rect.height)
+                        direction['down'] = True
+
+            if self.testing:
+                print(f'resize_to_pointer: {delta_width=}, {delta_height=}, {direction=}')
+
+            return self.resize_pixels_relative(rect, rect_id, parent_rect, delta_width, delta_height, direction)
+
         def _check_change_for_max_shrinkage(self, rect: ui.Rect, new_x: float, new_y: float, new_width: float, new_height: float, old_rect: ui.Rect):
             # shrink is a special case, need to detect when the rectangle has shrunk to a minimum by
             # watching expected values to see when they stop changing as requested.
@@ -1290,7 +1367,7 @@ class CompassControl:
 
         def translate_top_left_by_region(self, rect: ui.Rect, rect_id: int,
                         target_width: float, target_height: float, direction: Direction) -> Tuple[int, int]:
-            """This could figures out what the top left coordinates should be for resizing in the given direction"""
+            """This code figures out what the top left coordinates should be for resizing in the given direction"""
 
             x = rect.x
             y = rect.y
