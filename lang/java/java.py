@@ -269,19 +269,6 @@ class UserActions:
     def code_comment_line_prefix():
         actions.auto_insert('// ')
 
-    def code_block_comment():
-        actions.insert('/*')
-        actions.key('enter')
-        actions.key('enter')
-        actions.insert('*/')
-        actions.edit.up()
-
-    def code_block_comment_prefix():
-        actions.auto_insert('/*')
-
-    def code_block_comment_suffix():
-        actions.auto_insert('*/')
-
     def code_insert_function(text: str, selection: str):
         if selection:
             text = text + "({})".format(selection)
