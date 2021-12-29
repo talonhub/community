@@ -32,6 +32,8 @@ state let: "let "
 
 state var: "var "
 
+state export: "export "
+
 state async: "async "
 
 state await: "await "
