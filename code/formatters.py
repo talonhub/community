@@ -138,9 +138,6 @@ formatters_dict = {
         if i == 0 or word not in words_to_keep_lowercase
         else word,
     ),
-    "FIRST_THREE": (NOSEP, lambda i, word, _: word[0:3]),
-    "FIRST_FOUR": (NOSEP, lambda i, word, _: word[0:4]),
-    "FIRST_FIVE": (NOSEP, lambda i, word, _: word[0:5]),
 }
 
 # This is the mapping from spoken phrases to formatters
