@@ -58,15 +58,15 @@ def format_phrase(m: Union[str, Phrase], formatters: str):
 def format_phrase_without_adding_to_history(word_list, formatters: str):
     formatter_list = formatters.split(",")
     words = []
-    separator = DEFAULT_SEPARATOR
+    separator_to_use = DEFAULT_SEPARATOR
     for i, word in enumerate(word_list):
         for name in reversed(formatter_list):
             does_formatter_use_separator, formatter_function = all_formatters[name]
             word = formatter_function(i, word, i == len(word_list) - 1)
             if not does_formatter_use_separator:
-                separator = SMASH_SEPARATOR
+                separator_to_use = SMASH_SEPARATOR
         words.append(word)
-    return separator.join(words)
+    return separator_to_use.join(words)
 
 
 def words_with_joiner(joiner):
@@ -94,25 +94,6 @@ def first_vs_rest(first_func, rest_func=lambda w: w):
         return first_func(word) if i == 0 else rest_func(word)
 
     return formatter_function
-
-
-def last_vs_rest(last_func, rest_func=lambda w: w):
-    """Supply one or two transformer functions for the last and rest of
-    words respectively.
-
-    Leave second argument out if you want all but the last word to be passed
-    through unchanged.
-    Set first argument to None if you want the last word to be passed
-    through unchanged.
-    """
-    if last_func is None:
-        last_func = lambda w: w
-
-    def formatter_function(_, word, is_last_word):
-        return last_func(word) if is_last_word else rest_func(word)
-
-    return formatter_function
-
 
 def every_word(word_func):
     """Apply one function to every word."""
@@ -151,7 +132,6 @@ formatters_dict = {
     "DOT_SNAKE": (NOSEP, lambda i, word, _: "." + word if i == 0 else "_" + word),
     "SLASH_SEPARATED": (NOSEP, every_word(lambda w: "/" + w)),
     "CAPITALIZE_FIRST_WORD": (SEP, first_vs_rest(lambda w: w.capitalize())),
-    "QUESTION": (SEP, last_vs_rest(lambda w: w + '?')),
     "CAPITALIZE_ALL_WORDS": (
         SEP,
         lambda i, word, _: word.capitalize()
@@ -164,7 +144,6 @@ formatters_dict = {
 formatters_words = {
     "allcaps": formatters_dict["ALL_CAPS"],
     "alldown": formatters_dict["ALL_LOWERCASE"],
-    "ask": formatters_dict["QUESTION"],
     "camel": formatters_dict["PRIVATE_CAMEL_CASE"],
     "dotted": formatters_dict["DOT_SEPARATED"],
     "dubstring": formatters_dict["DOUBLE_QUOTED_STRING"],
