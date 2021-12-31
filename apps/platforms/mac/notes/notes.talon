@@ -1,8 +1,6 @@
 os: mac
 and app: notes
 -
-tag(): user.edit
-tag(): user.line_commands
 
 new note: key(cmd-n)
 duplicate note: key(cmd-d)
@@ -30,3 +28,5 @@ increase font: key(cmd-+)
 decrease font: key(cmd--)
 line break: key(ctrl-enter)
 mark: key(shift-cmd-u)
+drag [line] down: key('ctrl-cmd-down')
+drag [line] up: key('ctrl-cmd-up')
