@@ -294,27 +294,29 @@ class Actions:
 
     def dictation_insert(text: str, auto_cap: bool=True) -> str:
         """Inserts dictated text, formatted appropriately."""
-        context_sensitive = setting_context_sensitive_dictation.get()
-        # Omit peeking left if we don't need left space or capitalization.
-        if (context_sensitive
-            and not (omit_space_before(text)
-                     and auto_capitalize(text, "sentence start")[0] == text)):
-            dictation_formatter.update_context(
-                actions.user.dictation_peek_left(clobber=True))
+        add_space_after = False
+        if setting_context_sensitive_dictation.get():
+            # Peek left if we might need leading space or auto-capitalization.
+            if (not omit_space_before(text)
+                or text != auto_capitalize(text, "sentence start")[0]):
+                dictation_formatter.update_context(
+                    actions.user.dictation_peek_left(clobber=True))
+            # Peek right if we might need trailing space. NB. We peek right
+            # BEFORE insertion to avoid breaking the undo-chain between the
+            # inserted text and the trailing space.
+            if not omit_space_after(text):
+                char = actions.user.dictation_peek_right()
+                add_space_after = char is not None and needs_space_between(text, char)
         text = dictation_formatter.format(text, auto_cap)
         # Straighten curly quotes that were introduced to obtain proper
         # spacing. The formatter context still has the original curly quotes
         # so that future dictation is properly formatted.
         text = text.replace("“", "\"").replace("”", "\"")
         actions.user.add_phrase_to_history(text)
-        actions.insert(text)
-        # Add a space after cursor if necessary.
-        if not context_sensitive or omit_space_after(text):
-            return
-        char = actions.user.dictation_peek_right()
-        if char is not None and needs_space_between(text, char):
-            actions.insert(" ")
-            actions.edit.left()
+        # we insert the text all at once in case we have an implementation of
+        # insert that is more efficient for long strings, eg. paste-to-insert
+        actions.insert(text + (" " if add_space_after else ""))
+        if add_space_after: actions.edit.left()
 
     def dictation_peek_left(clobber: bool = False) -> Optional[str]:
         """
