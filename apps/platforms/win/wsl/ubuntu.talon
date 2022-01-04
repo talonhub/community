@@ -1,4 +1,3 @@
-app: ubuntu
 app: windows_terminal
 win.title: /^WSL:/
 -
