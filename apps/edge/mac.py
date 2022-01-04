@@ -13,62 +13,62 @@ class BrowserActions:
     # action(browser.address):
 
     def bookmark():
-        actions.key("ctrl-d")
+        actions.key("cmd-d")
 
     def bookmark_tabs():
-        actions.key("ctrl-shift-d")
+        actions.key("cmd-shift-d")
 
     def bookmarks():
-        actions.key("ctrl-shift-o")
+        actions.key("cmd-alt-b")
 
     def bookmarks_bar():
-        actions.key("ctrl-shift-b")
+        actions.key("cmd-shift-b")
 
     def focus_address():
-        actions.key("ctrl-l")
+        actions.key("cmd-l")
         # action(browser.focus_page):
 
     def focus_search():
         actions.browser.focus_address()
 
     def go_blank():
-        actions.key("ctrl-n")
+        actions.key("cmd-n")
 
     def go_back():
-        actions.key("alt-left")
+        actions.key("cmd-left")
 
     def go_forward():
-        actions.key("alt-right")
+        actions.key("cmd-right")
 
     def go_home():
-        actions.key("alt-home")
+        actions.key("cmd-shift-h")
 
     def open_private_window():
-        actions.key("ctrl-shift-p")
+        actions.key("cmd-shift-n")
 
     def reload():
-        actions.key("ctrl-r")
+        actions.key("cmd-r")
 
     def reload_hard():
-        actions.key("shift-f5")
+        actions.key("shift-cmd-r")
         # action(browser.reload_hardest):
 
     def show_clear_cache():
-        actions.key("ctrl-shift-delete")
+        actions.key("cmd-shift-delete")
 
     def show_downloads():
-        actions.key("ctrl-j")
+        actions.key("cmd-shift-j")
         # action(browser.show_extensions)
 
     def show_history():
-        actions.key("ctrl-h")
+        actions.key("cmd-y")
 
     def submit_form():
         actions.key("enter")
         # action(browser.title)
 
     def toggle_dev_tools():
-        actions.key("ctrl-shift-i")
+        actions.key("cmd-alt-i")
 
 
 @ctx.action_class("user")

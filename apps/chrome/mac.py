@@ -1,4 +1,6 @@
-from talon import Context, actions
+from talon import Context, actions, ui
+from talon.mac import applescript
+
 ctx = Context()
 ctx.matches = r"""
 os: mac
@@ -6,10 +8,27 @@ app: chrome
 """
 ctx.tags = ['browser', 'user.tabs']
 
+def chrome_app():
+    return ui.apps(bundle="com.google.Chrome")[0]
+
 @ctx.action_class('browser')
 class BrowserActions:
-    #action(browser.address):
-    
+    def address() -> str:
+        try:
+            window = chrome_app().windows()[0]
+        except IndexError:
+            return ''
+        try:
+            web_area = window.element.children.find_one(AXRole='AXWebArea')
+            address = web_area.AXURL
+        except (ui.UIErr, AttributeError):
+            address = applescript.run('''
+                tell application id "com.google.Chrome"
+                    if not (exists (window 1)) then return ""
+                    return window 1's active tab's URL
+                end tell
+            ''')
+        return address
     def bookmark():
         actions.key('cmd-d')
     def bookmark_tabs():
