@@ -2,6 +2,18 @@ os: mac
 app: RStudio
 -
 
+#paint <user.arrow_key>: 
+#    key(shift:down)
+#    key(arrow_key)
+#    key(shift:up)
+
+paint <user.arrow_key>: key("shift-{arrow_key}")
+
+set as: " = "
+subtract: " - "
+add: " + "
+absolute: "abs("
+
 run that: key("cmd-enter")
 run document:                    key("cmd-alt-r")
 run from top:                    key("cmd-alt-b")
