@@ -143,7 +143,7 @@ formatters_dict = {
 }
 
 # This is the mapping from spoken phrases to formatters
-formatter_words = {
+formatters_words = {
     "allcaps": formatters_dict["ALL_CAPS"],
     "alldown": formatters_dict["ALL_LOWERCASE"],
     "camel": formatters_dict["PRIVATE_CAMEL_CASE"],
@@ -163,7 +163,7 @@ formatter_words = {
 
 all_formatters = {}
 all_formatters.update(formatters_dict)
-all_formatters.update(formatter_words)
+all_formatters.update(formatters_words)
 
 mod = Module()
 mod.list("formatters", desc="list of formatters")
@@ -264,7 +264,7 @@ class Actions:
     def get_formatters_words():
         """returns a list of words currently used as formatters, and a demonstration string using those formatters"""
         formatters_help_demo = {}
-        for name in sorted(set(formatter_words.keys())):
+        for name in sorted(set(formatters_words.keys())):
             formatters_help_demo[name] = format_phrase_without_adding_to_history(['one', 'two', 'three'], name)
         return  formatters_help_demo
 
@@ -288,7 +288,7 @@ def unformat_text(text: str) -> str:
     return unformatted.lower()
 
 
-ctx.lists["self.formatters"] = formatter_words.keys()
+ctx.lists["self.formatters"] = formatters_words.keys()
 ctx.lists["self.prose_formatter"] = {
     "say": "NOOP",
     "speak": "NOOP",
