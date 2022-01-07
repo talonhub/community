@@ -132,7 +132,7 @@ class UserActions:
 
     def split_clear_all():
         """Clears all splits"""
-        actions.app.notify("TODO: decide whether to implement it at all since it either doesn't makes sense or closes the window/whole tab")
+        # TODO: decide whether to implement it at all since it either doesn't makes sense or closes the window/whole tab
 
     def split_next():
         """Goes to next split"""
