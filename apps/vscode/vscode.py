@@ -243,7 +243,7 @@ class UserActions:
     def tab_jump(number: int):
         if number < 10:
             if is_mac:
-                actions.user.vscode(f"workbench.action.openEditorAtIndex{number}")
+                actions.user.vscode_with_plugin(f"workbench.action.openEditorAtIndex{number}")
             else:
                 actions.key("alt-{}".format(number))
 
