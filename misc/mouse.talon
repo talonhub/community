@@ -4,6 +4,7 @@ camera overlay: user.mouse_toggle_camera_overlay()
 run calibration: user.mouse_calibrate()	
 kick: 
 	mouse_click(0)
+  user.mouse_cancel_zoom_mouse()
 	# close the mouse grid if open
 	user.grid_close()
     	# End any open drags
@@ -11,17 +12,20 @@ kick:
 	user.mouse_drag_end()
 
 (psychic | righty): 
+    user.mouse_cancel_zoom_mouse()
 	mouse_click(1)
 	# close the mouse grid if open
 	user.grid_close()
 
 dubclick: 
+  user.mouse_cancel_zoom_mouse()
 	mouse_click()
 	mouse_click()
 	# close the mouse grid
 	user.grid_close()
 
 midclick: 
+  user.mouse_cancel_zoom_mouse()
 	mouse_click(2)
 	# close the mouse grid
 	user.grid_close()
@@ -52,6 +56,7 @@ midclick:
 	# close the mouse grid
 	user.grid_close()
 left drag | drag:
+  user.mouse_cancel_zoom_mouse()
 	user.mouse_drag(0)
 	# close the mouse grid
 	user.grid_close()

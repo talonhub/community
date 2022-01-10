@@ -10,7 +10,7 @@ my name:
 portfolio site:
   "alexrkoch-portfolio-2.com"
 
-civi see are em:
+civic crumb:
   "CiviCRM"
 
 timer (start | stop):
