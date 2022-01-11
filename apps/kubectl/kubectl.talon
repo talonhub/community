@@ -15,7 +15,7 @@ cube edit:           "kubectl edit "
 cube delete:         "kubectl delete "
 
 cube rollout:        "kubectl rollout "
-cube rolling-update: "kubectl rolling-update "
+cube rolling update: "kubectl rolling-update "
 cube scale:          "kubectl scale "
 cube auto scale:     "kubectl autoscale "
 

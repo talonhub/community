@@ -207,6 +207,40 @@ ctx.lists["user.code_libraries"] = {
     "shiny alert": "shinyalert",
 }
 
+ctx.lists["user.code_parameter_name"] = {
+    "alpha": "alpha",
+    "breaks": "breaks",
+    "colour": "colour",
+    "data": "data",
+    "fill": "fill",
+    "H just": "hjust",
+    "keep": ".keep",
+    "label": "label",
+    "labels": "labels",
+    "log": "log",
+    "main": "main",
+    "mapping": "mapping",
+    "method": "method",
+    "NA remove": "na.rm",
+    "path": "path",
+    "position": "position",
+    "plex label": "xlab",
+    "plex limit": "xlim",
+    "scales": "scales",
+    "size": "size",
+    "show legend": "show.legend",
+    "sort": "sort",
+    "title": "title",
+    "type": "type",
+    "vee just": "vjust",
+    "width": "width",
+    "with ties": "with_ties",
+    "why label": "ylab",
+    "why limit": "ylim",
+    "why max": "ymax",
+    "why min": "ymin",
+}
+
 
 @ctx.action_class('user')
 class UserActions:
@@ -223,11 +257,10 @@ class UserActions:
     def code_operator_greater_than_or_equal_to(): actions.auto_insert(' >= ')
     def code_operator_less_than():                actions.auto_insert(' < ')
     def code_operator_less_than_or_equal_to():    actions.auto_insert(' <= ')
-    def code_operator_in():                       actions.auto_insert(' %in% ')
     def code_operator_and():                      actions.auto_insert(' & ')
     def code_operator_or():                       actions.auto_insert(' | ')
     def code_operator_bitwise_and():              actions.auto_insert(' & ')
-    def code_null():                              actions.auto_insert('NULL')
+    def code_insert_null():                              actions.auto_insert('NULL')
     def code_state_if():
         actions.insert('if () {}')
         actions.key('left enter up end left:3')
@@ -246,14 +279,14 @@ class UserActions:
     def code_import():
         actions.insert('library()')
         actions.key('left')
-    def code_comment(): actions.auto_insert('#')
+    def code_comment_line_prefix(): actions.auto_insert('#')
     def code_state_return():
         actions.insert('return()')
         actions.key('left')
     def code_break(): actions.auto_insert('break')
     def code_next():  actions.auto_insert('next')
-    def code_true():  actions.auto_insert('TRUE')
-    def code_false(): actions.auto_insert('FALSE')
+    def code_insert_true():  actions.auto_insert('TRUE')
+    def code_insert_false(): actions.auto_insert('FALSE')
     def code_insert_function(text: str, selection: str):
         if selection:
             text = text + "({})".format(selection)
@@ -282,3 +315,6 @@ class UserActions:
         actions.edit.left()
         actions.clip.set_text(text + "{}".format(selection))
         actions.edit.paste()
+
+    def code_insert_named_argument(parameter_name: str):
+        actions.insert(f"{parameter_name} = ")

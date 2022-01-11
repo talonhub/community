@@ -115,17 +115,19 @@ mod = Module()
 mod.apps.jetbrains = "app.name: /jetbrains/"
 mod.apps.jetbrains = "app.name: IntelliJ IDEA"
 mod.apps.jetbrains = "app.name: PyCharm"
+mod.apps.jetbrains = "app.name: WebStorm"
 mod.apps.jetbrains = "app.name: RubyMine"
 mod.apps.jetbrains = "app.name: RubyMine-EAP"
+mod.apps.jetbrains = "app.name: DataGrip"
 mod.apps.jetbrains = """
 os: mac
 and app.bundle: com.google.android.studio
 """
 # windows
-mod.apps.jetbrains = "app.name: idea64.exe"
-mod.apps.jetbrains = "app.name: PyCharm64.exe"
-mod.apps.jetbrains = "app.name: pycharm64.exe"
-mod.apps.jetbrains = "app.name: webstorm64.exe"
+mod.apps.jetbrains = "app.exe: idea64.exe"
+mod.apps.jetbrains = "app.exe: PyCharm64.exe"
+mod.apps.jetbrains = "app.exe: pycharm64.exe"
+mod.apps.jetbrains = "app.exe: webstorm64.exe"
 mod.apps.jetbrains = """
 os: mac
 and app.bundle: com.jetbrains.pycharm
@@ -246,6 +248,11 @@ class EditActions:
 
     def extend_file_end():
         actions.user.idea("action EditorTextEndWithSelection")
+    
+    def extend_word_left():
+        actions.user.idea("action EditorPreviousWordWithSelection")
+    def extend_word_right():
+        actions.user.idea("action EditorNextWordWithSelection")
 
     def jump_line(n: int):
         actions.user.idea("goto {} 0".format(n))
@@ -256,15 +263,15 @@ class EditActions:
 
 @ctx.action_class("win")
 class WinActions:
-    def filename():
-        title = actions.win.title()
-        result = title.split(" ")
+    def filename() -> str:
+        title: str = actions.win.title()
+        result = title.split()
 
         # iterate over reversed result
         # to support titles such as
-        # Class.Library2 – a.js
+        # Class.Library2 – a.js [.workspace]
         for word in reversed(result):
-            if "." in word:
+            if not word.startswith("[") and "." in word:
                 return word
 
         return ""
@@ -303,3 +310,43 @@ class UserActions:
     def line_clone(line: int):
         actions.user.idea("clone {}".format(line))
 
+    # multi-cursor tag functions
+    def multi_cursor_enable():
+        actions.skip()
+    def multi_cursor_disable():
+        actions.key("escape")
+    def multi_cursor_add_above():
+        actions.user.idea("action EditorCloneCaretAbove")
+    def multi_cursor_add_below():
+        actions.user.idea("action EditorCloneCaretBelow")
+    def multi_cursor_select_fewer_occurrences():
+        actions.user.idea("action UnselectPreviousOccurrence")
+    def multi_cursor_select_more_occurrences():
+        actions.user.idea("action SelectNextOccurrence")
+    # def multi_cursor_skip_occurrence():
+    def multi_cursor_select_all_occurrences():
+        actions.user.idea("action SelectAllOccurrences")
+    def multi_cursor_add_to_line_ends():
+        actions.user.idea("action EditorAddCaretPerSelectedLine")
+
+    # splits tag functions
+    # def split_window_right():
+    #     actions.user.idea("action OpenInRightSplit")
+    # def split_window_left():
+    # def split_window_down():
+    # def split_window_up():
+    def split_window_vertically():
+        actions.user.idea("action SplitVertically")
+    def split_window_horizontally():
+        actions.user.idea("action SplitHorizontally")
+    def split_flip():
+        actions.user.idea("action ChangeSplitOrientation")
+    # def split_window():
+    def split_clear():
+        actions.user.idea("action Unsplit")
+    def split_clear_all():
+        actions.user.idea("action UnsplitAll")
+    def split_next():
+        actions.user.idea("action NextSplitter")
+    # def split_last():
+    # def split_number(index: int):
