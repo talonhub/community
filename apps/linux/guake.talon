@@ -7,6 +7,7 @@ app: Guake
 tag(): user.git
 tag(): user.kubectl
 tag(): user.anaconda
+tag(): user.mamba
 tag(): user.tabs
 tag(): terminal
 

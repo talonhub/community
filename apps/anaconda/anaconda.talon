@@ -1,5 +1,6 @@
-tag: terminal
-and tag: user.anaconda
+# tag: terminal
+# and tag: user.anaconda
+tag: user.anaconda
 -
 anaconda:         "conda "
 anaconda help:    "conda --help\n"

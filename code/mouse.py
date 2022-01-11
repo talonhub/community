@@ -282,10 +282,10 @@ def show_cursor_helper(show):
 #         if setting_mouse_enable_pop_click.get() >= 1:
 #             ctrl.mouse_click(button=0, hold=16000)
 
-def on_pop(active):
-    ctrl.mouse_click(button=0, hold=16000)
+# def on_pop(active):
+#     ctrl.mouse_click(button=0, hold=16000)
 
-noise.register("pop", on_pop)
+# noise.register("pop", on_pop)
 
 
 def mouse_scroll(amount):
