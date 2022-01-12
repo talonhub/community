@@ -38,3 +38,6 @@ anaconda render:      "conda render "
 anaconda server:      "conda server "
 anaconda skeleton:    "conda skeleton "
 anaconda verify:      "conda verify "
+
+jupiter notebook:     "jupyter notebook\n"
+jupiter lab:          "jupyter lab\n"
