@@ -1,6 +1,6 @@
 # Descended from https://github.com/dwiel/talon_community/blob/master/misc/dictation.py
 from talon import Module, Context, ui, actions, clip, app, grammar
-from typing import Optional, Tuple, Literal
+from typing import Optional, Tuple, Literal, Callable
 import re
 
 mod = Module()
@@ -15,7 +15,13 @@ setting_context_sensitive_dictation = mod.setting(
 mod.list("prose_modifiers", desc="Modifiers that can be used within prose")
 mod.list("prose_snippets", desc="Snippets that can be used within prose")
 ctx = Context()
-ctx.lists["user.prose_modifiers"] = ["cap", "no cap", "no caps", "no space"]  # "no caps" variant is for Dragon.
+# Maps spoken forms to DictationFormat method names (see DictationFormat below).
+ctx.lists["user.prose_modifiers"] = {
+    "cap": "cap",
+    "no cap": "no_cap",
+    "no caps": "no_cap", # "no caps" variant for Dragon
+    "no space": "no_space",
+}
 ctx.lists["user.prose_snippets"] = {
     "spacebar": " ",
     "new line": "\n",
@@ -27,6 +33,10 @@ ctx.lists["user.prose_snippets"] = {
     "winky": ";-)",
     "frowny": ":-(",
 }
+
+@mod.capture(rule="{user.prose_modifiers}")
+def prose_modifier(m) -> Callable:
+    return getattr(DictationFormat, m.prose_modifiers)
 
 @mod.capture(rule="({user.vocabulary} | <word>)")
 def word(m) -> str:
@@ -41,7 +51,7 @@ def text(m) -> str:
     """A sequence of words, including user-defined vocabulary."""
     return format_phrase(m)
 
-@mod.capture(rule="({user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <phrase> | {user.prose_modifiers})+")
+@mod.capture(rule="({user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <phrase> | <user.prose_modifier>)+")
 def prose(m) -> str:
     """Mixed words and punctuation, auto-spaced & capitalized."""
     # Straighten curly quotes that were introduced to obtain proper spacing.
@@ -77,24 +87,15 @@ def apply_formatting(m):
     formatter.state = None
     result = ""
     for item in m:
-        words = None
-        if item == "cap":
-            formatter.force_capitalization = "cap"
-        elif item == "no cap" or item == "no caps":
-            formatter.force_capitalization = "no cap"
-        elif item == "no space":
-            # This is typically used when manually repositioned the cursor,
-            # so it is helpful to reset capitalization as well.
-            formatter.reset_context()
-            formatter.force_no_space = True
-        elif isinstance(item, grammar.vm.Phrase):
-            words = actions.user.replace_phrases(actions.dictate.parse_words(item))
+        # prose modifiers (cap/no cap/no space) produce formatter callbacks.
+        if isinstance(item, Callable):
+            item(formatter)
         else:
-            words = [item]
-        if words:
+            words = (actions.user.replace_phrases(actions.dictate.parse_words(item))
+                     if isinstance(item, grammar.vm.Phrase)
+                     else [item])
             for word in words:
-                word = formatter.format(word)
-                result += word
+                result += formatter.format(word)
     return result
 
 # There must be a simpler way to do this, but I don't see it right now.
@@ -224,6 +225,19 @@ class DictationFormat:
         self.before = text or self.before
         return text
 
+    # These are used as callbacks by prose modifiers / dictation_mode commands.
+    def cap(self): self.force_capitalization = "cap"
+    def no_cap(self): self.force_capitalization = "no cap"
+    def no_space(self):
+        # This is typically used after repositioning the cursor, so it is helpful to
+        # reset capitalization as well.
+        #
+        # FIXME: this sets state to "sentence start", capitalizing the next
+        # word. probably undesirable, since most places are not the start of
+        # sentences?
+        self.reset_context()
+        self.force_no_space = True
+
 def format_first_letter(text, formatter):
     i = -1
     for i, c in enumerate(text):
@@ -252,18 +266,15 @@ class Actions:
 
     def dictation_format_cap():
         """Sets the dictation formatter to capitalize"""
-        dictation_formatter.force_capitalization = "cap"
+        dictation_formatter.cap()
 
     def dictation_format_no_cap():
         """Sets the dictation formatter to not capitalize"""
-        dictation_formatter.force_capitalization = "no cap"
+        dictation_formatter.no_cap()
 
     def dictation_format_no_space():
         """Sets the dictation formatter to not prepend a space"""
-        # This is typically used when manually repositioned the cursor,
-        # so it is helpful to reset capitalization as well.
-        dictation_formatter.reset_context()
-        dictation_formatter.force_no_space = True
+        dictation_formatter.no_space()
 
     def dictation_reformat_cap():
         """Capitalizes the last utterance"""
@@ -283,27 +294,29 @@ class Actions:
 
     def dictation_insert(text: str, auto_cap: bool=True) -> str:
         """Inserts dictated text, formatted appropriately."""
-        context_sensitive = setting_context_sensitive_dictation.get()
-        # Omit peeking left if we don't need left space or capitalization.
-        if (context_sensitive
-            and not (omit_space_before(text)
-                     and auto_capitalize(text, "sentence start")[0] == text)):
-            dictation_formatter.update_context(
-                actions.user.dictation_peek_left(clobber=True))
+        add_space_after = False
+        if setting_context_sensitive_dictation.get():
+            # Peek left if we might need leading space or auto-capitalization.
+            if (not omit_space_before(text)
+                or text != auto_capitalize(text, "sentence start")[0]):
+                dictation_formatter.update_context(
+                    actions.user.dictation_peek_left(clobber=True))
+            # Peek right if we might need trailing space. NB. We peek right
+            # BEFORE insertion to avoid breaking the undo-chain between the
+            # inserted text and the trailing space.
+            if not omit_space_after(text):
+                char = actions.user.dictation_peek_right()
+                add_space_after = char is not None and needs_space_between(text, char)
         text = dictation_formatter.format(text, auto_cap)
         # Straighten curly quotes that were introduced to obtain proper
         # spacing. The formatter context still has the original curly quotes
         # so that future dictation is properly formatted.
         text = text.replace("“", "\"").replace("”", "\"")
         actions.user.add_phrase_to_history(text)
-        actions.insert(text)
-        # Add a space after cursor if necessary.
-        if not context_sensitive or omit_space_after(text):
-            return
-        char = actions.user.dictation_peek_right()
-        if char is not None and needs_space_between(text, char):
-            actions.insert(" ")
-            actions.edit.left()
+        # we insert the text all at once in case we have an implementation of
+        # insert that is more efficient for long strings, eg. paste-to-insert
+        actions.insert(text + (" " if add_space_after else ""))
+        if add_space_after: actions.edit.left()
 
     def dictation_peek_left(clobber: bool = False) -> Optional[str]:
         """

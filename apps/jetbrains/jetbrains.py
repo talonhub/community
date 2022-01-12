@@ -263,15 +263,15 @@ class EditActions:
 
 @ctx.action_class("win")
 class WinActions:
-    def filename():
-        title = actions.win.title()
-        result = title.split(" ")
+    def filename() -> str:
+        title: str = actions.win.title()
+        result = title.split()
 
         # iterate over reversed result
         # to support titles such as
-        # Class.Library2 – a.js
+        # Class.Library2 – a.js [.workspace]
         for word in reversed(result):
-            if "." in word:
+            if not word.startswith("[") and "." in word:
                 return word
 
         return ""
