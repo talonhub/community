@@ -69,7 +69,7 @@ The folder structure should look something like the below:
     - All help-related commands are defined in misc/help.talon and misc/help_open.talon
 2. `help alphabet` will display the alphabet
 3. `command history` will toggle a display of the recent commands
-4. `format help` will display the available formatters with examples.
+4. `help format` will display the available formatters with examples.
 5. Many useful, basic commands are defined in https://github.com/knausj85/knausj_talon/blob/master/misc/standard.talon#L36
     - `undo that` and `redo that` are the default undo/redo commands.
     - `paste that`, `copy that`, and `cut that` for pasting/copy/cutting, respectively.
@@ -128,7 +128,7 @@ Some other symbols are defined here:
 https://github.com/knausj85/knausj_talon/blob/master/text/symbols.talon
 
 ### Formatters
-`format help` will display the available formatters with examples of the output.
+`help format` will display the available formatters with examples of the output.
 
 Try using formatters by saying e.g. `snake hello world`, which will insert hello_world
 
