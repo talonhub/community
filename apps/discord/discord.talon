@@ -1,5 +1,8 @@
 app: discord
 -
+tag(): user.messaging
+tag(): user.emoji
+
 # Navigation: Channels
 [channel] mentions last: user.discord_mentions_last()
 [channel] mentions next: user.discord_mentions_next()

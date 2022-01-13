@@ -4,7 +4,6 @@ ctx.matches = r"""
 os: mac
 app: discord
 """
-ctx.tags = ['user.messaging', 'user.emoji']
 
 @ctx.action_class('user')
 class UserActions:
