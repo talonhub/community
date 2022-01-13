@@ -31,9 +31,6 @@ fantasize:
 shock:
   key(cmd-enter)
 
-execute:
-  key(shift-enter)
-
 you bun to:
   "Ubuntu"
 
