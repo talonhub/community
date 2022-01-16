@@ -398,4 +398,5 @@ mode: dictation
 
 @dictation_ctx.action_class("main")
 class main_action:
-    def auto_insert(text): actions.user.dictation_insert(text)
+    def auto_insert(text):
+        actions.user.dictation_insert(actions.auto_format(text))
