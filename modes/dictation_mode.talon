@@ -65,11 +65,6 @@ formatted <user.format_text>:
 ^format selection <user.formatters>$:
     user.formatters_reformat_selection(formatters)
 
-# Numbers
-numb <user.number_string>: "{number_string}"
-numb <user.number_string> colon <user.number_string>: "{number_string_1}:{number_string_2}"
-numb <user.number_string> (dot | point) <digit_string>: "{number_string}.{digit_string}"
-
 # Corrections
 scratch that: user.clear_last_phrase()
 scratch selection: edit.delete()
