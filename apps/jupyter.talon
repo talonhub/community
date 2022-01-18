@@ -3,10 +3,10 @@ app: chrome
 tag(): browser
 tag(): user.tabs
 
-insert cell below:      
+insert cell after:      
   key(escape)
   "b"
-insert cell above:      
+insert cell before:      
   key(escape)
   "a"
 run cell:           
