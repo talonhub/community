@@ -12,7 +12,7 @@ cap: user.dictation_format_cap()
 ^cap that$: user.dictation_reformat_cap()
 ^(no cap | no-caps) that$: user.dictation_reformat_no_cap()
 ^(no space | no-space) that$: user.dictation_reformat_no_space()
-    
+
 # Navigation
 go up <number_small> (line|lines):
     edit.up()
