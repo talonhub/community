@@ -8,9 +8,7 @@ ctx = Context()
 key = actions.key
 edit = actions.edit
 
-words_to_keep_lowercase = "a,an,the,at,by,for,in,is,of,on,to,up,and,as,but,or,nor".split(
-    ","
-)
+words_to_keep_lowercase = "a an the at by for in is of on to up and as but or nor".split()
 
 # The last phrase spoken, without & with formatting. Used for reformatting.
 last_phrase = ""
