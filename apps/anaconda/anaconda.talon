@@ -40,4 +40,15 @@ anaconda skeleton:    "conda skeleton "
 anaconda verify:      "conda verify "
 
 jupiter notebook:     "jupyter notebook\n"
+
+launch jupiter:
+  "conda activate sample_environment\n"
+  sleep(100ms)
+  "jupyter lab\n"
+
 jupiter lab:          "jupyter lab\n"
+jupiter <user.text>:
+  "conda activate "
+  insert(text)
+  key(enter)
+  "jupyter lab\n"

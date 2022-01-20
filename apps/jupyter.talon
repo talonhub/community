@@ -6,17 +6,30 @@ tag(): user.tabs
 insert cell after:      
   key(escape)
   "b"
+  key(enter)
+
 insert cell before:      
   key(escape)
   "a"
-run cell:           
+  key(enter)
+
+execute:           
   key(shift-enter)
+
 code cell:              
   key(escape)
   "y"
+  key(enter)
+
 markdown cell:          
   key(escape)
   "m"
+  key(enter)
+
 raw cell:               
   key(escape)
   "r"
+  key(enter)
+
+dock string:
+  key(shift-tab)
