@@ -12,6 +12,8 @@ words_to_keep_lowercase = "a an the at by for in is of on to up and as but or no
 
 DEFAULT_SEPARATOR = ' '
 SMASH_SEPARATOR = ''
+
+# SEP and NOSEP are used when defining formatters to determine whether the formatter should put a separator between words.
 SEP = True
 NOSEP = False
 
