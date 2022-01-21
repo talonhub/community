@@ -10,6 +10,11 @@ edit = actions.edit
 
 words_to_keep_lowercase = "a an the at by for in is of on to up and as but or nor".split()
 
+DEFAULT_SEPARATOR = ' '
+SMASH_SEPARATOR = ''
+SEP = True
+NOSEP = False
+
 # The last phrase spoken, without & with formatting. Used for reformatting.
 last_phrase = ""
 last_phrase_formatted = ""
@@ -26,7 +31,7 @@ def surround(by):
     return func
 
 
-def format_phrase(m: Union[str, Phrase], fmtrs: str):
+def format_phrase(m: Union[str, Phrase], formatters: str):
     global last_phrase, last_phrase_formatted
     last_phrase = m
     words = []
@@ -40,7 +45,7 @@ def format_phrase(m: Union[str, Phrase], fmtrs: str):
         words = actions.dictate.parse_words(m)
         words = actions.user.replace_phrases(words)
 
-    result = last_phrase_formatted = format_phrase_no_history(words, fmtrs)
+    result = last_phrase_formatted = format_phrase_without_adding_to_history(words, formatters)
     actions.user.add_phrase_to_history(result)
     # Arguably, we shouldn't be dealing with history here, but somewhere later
     # down the line. But we have a bunch of code that relies on doing it this
@@ -48,22 +53,18 @@ def format_phrase(m: Union[str, Phrase], fmtrs: str):
     return result
 
 
-def format_phrase_no_history(word_list, fmtrs: str):
-    fmtr_list = fmtrs.split(",")
+def format_phrase_without_adding_to_history(word_list, formatters: str):
+    formatter_list = formatters.split(",")
     words = []
-    spaces = True
-    for i, w in enumerate(word_list):
-        for name in reversed(fmtr_list):
-            smash, func = all_formatters[name]
-            w = func(i, w, i == len(word_list) - 1)
-            spaces = spaces and not smash
-        words.append(w)
-    sep = " " if spaces else ""
-    return sep.join(words)
-
-
-NOSEP = True
-SEP = False
+    separator_to_use = DEFAULT_SEPARATOR
+    for i, word in enumerate(word_list):
+        for name in reversed(formatter_list):
+            does_formatter_use_separator, formatter_function = all_formatters[name]
+            word = formatter_function(i, word, i == len(word_list) - 1)
+            if not does_formatter_use_separator:
+                separator_to_use = SMASH_SEPARATOR
+        words.append(word)
+    return separator_to_use.join(words)
 
 
 def words_with_joiner(joiner):
@@ -82,7 +83,8 @@ def first_vs_rest(first_func, rest_func=lambda w: w):
     Leave second argument out if you want all but the first word to be passed
     through unchanged.
     Set first argument to None if you want the first word to be passed
-    through unchanged."""
+    through unchanged.
+    """
     if first_func is None:
         first_func = lambda w: w
 
@@ -261,7 +263,7 @@ class Actions:
         """returns a list of words currently used as formatters, and a demonstration string using those formatters"""
         formatters_help_demo = {}
         for name in sorted(set(formatters_words.keys())):
-            formatters_help_demo[name] = format_phrase_no_history(['one', 'two', 'three'], name)
+            formatters_help_demo[name] = format_phrase_without_adding_to_history(['one', 'two', 'three'], name)
         return  formatters_help_demo
 
     def reformat_text(text: str, formatters: str) -> str:
