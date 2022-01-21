@@ -26,10 +26,5 @@ markdown cell:
   "m"
   key(enter)
 
-raw cell:               
-  key(escape)
-  "r"
-  key(enter)
-
 dock string:
   key(shift-tab)
