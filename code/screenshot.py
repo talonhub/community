@@ -42,6 +42,14 @@ class Actions:
         elif app.platform == "linux":
             actions.key("shift-printscr")
 
+    def screenshot_settings():
+        """Opens the settings UI for screenshots.
+        Only applies to Mac for now
+        """
+        if app.platform == "mac":
+            actions.key("cmd-shift-5")
+
+
     def screenshot_clipboard(screen_number: Optional[int] = None):
         """Takes a screenshot of the entire screen and saves it to the clipboard.
         Optional screen number can be given to use screen other than main."""
