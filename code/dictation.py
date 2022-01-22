@@ -38,6 +38,22 @@ ctx.lists["user.prose_snippets"] = {
 def prose_modifier(m) -> Callable:
     return getattr(DictationFormat, m.prose_modifiers)
 
+@mod.capture(rule="numeral <user.number_string>")
+def prose_simple_number(m) -> str:
+    return m.number_string
+
+@mod.capture(rule="numeral <user.number_string> (dot | point) <digit_string>")
+def prose_number_with_dot(m) -> str:
+    return m.number_string + "." + m.digit_string
+
+@mod.capture(rule="numeral <user.number_string> colon <user.number_string>")
+def prose_number_with_colon(m) -> str:
+    return m.number_string_1 + ":" + m.number_string_2
+
+@mod.capture(rule="<user.prose_simple_number> | <user.prose_number_with_dot> | <user.prose_number_with_colon>")
+def prose_number(m) -> str:
+    return str(m)
+
 @mod.capture(rule="({user.vocabulary} | <word>)")
 def word(m) -> str:
     """A single word, including user-defined vocabulary."""
@@ -51,13 +67,13 @@ def text(m) -> str:
     """A sequence of words, including user-defined vocabulary."""
     return format_phrase(m)
 
-@mod.capture(rule="({user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <phrase> | <user.prose_modifier>)+")
+@mod.capture(rule="({user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <phrase> | <user.prose_number> | <user.prose_modifier>)+")
 def prose(m) -> str:
     """Mixed words and punctuation, auto-spaced & capitalized."""
     # Straighten curly quotes that were introduced to obtain proper spacing.
     return apply_formatting(m).replace("“", "\"").replace("”", "\"")
 
-@mod.capture(rule="({user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <phrase>)+")
+@mod.capture(rule="({user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <phrase> | <user.prose_number>)+")
 def raw_prose(m) -> str:
     """Mixed words and punctuation, auto-spaced & capitalized, without quote straightening and commands (for use in dictation mode)."""
     return apply_formatting(m)
@@ -294,27 +310,29 @@ class Actions:
 
     def dictation_insert(text: str, auto_cap: bool=True) -> str:
         """Inserts dictated text, formatted appropriately."""
-        context_sensitive = setting_context_sensitive_dictation.get()
-        # Omit peeking left if we don't need left space or capitalization.
-        if (context_sensitive
-            and not (omit_space_before(text)
-                     and auto_capitalize(text, "sentence start")[0] == text)):
-            dictation_formatter.update_context(
-                actions.user.dictation_peek_left(clobber=True))
+        add_space_after = False
+        if setting_context_sensitive_dictation.get():
+            # Peek left if we might need leading space or auto-capitalization.
+            if (not omit_space_before(text)
+                or text != auto_capitalize(text, "sentence start")[0]):
+                dictation_formatter.update_context(
+                    actions.user.dictation_peek_left(clobber=True))
+            # Peek right if we might need trailing space. NB. We peek right
+            # BEFORE insertion to avoid breaking the undo-chain between the
+            # inserted text and the trailing space.
+            if not omit_space_after(text):
+                char = actions.user.dictation_peek_right()
+                add_space_after = char is not None and needs_space_between(text, char)
         text = dictation_formatter.format(text, auto_cap)
         # Straighten curly quotes that were introduced to obtain proper
         # spacing. The formatter context still has the original curly quotes
         # so that future dictation is properly formatted.
         text = text.replace("“", "\"").replace("”", "\"")
         actions.user.add_phrase_to_history(text)
-        actions.insert(text)
-        # Add a space after cursor if necessary.
-        if not context_sensitive or omit_space_after(text):
-            return
-        char = actions.user.dictation_peek_right()
-        if char is not None and needs_space_between(text, char):
-            actions.insert(" ")
-            actions.edit.left()
+        # we insert the text all at once in case we have an implementation of
+        # insert that is more efficient for long strings, eg. paste-to-insert
+        actions.insert(text + (" " if add_space_after else ""))
+        if add_space_after: actions.edit.left()
 
     def dictation_peek_left(clobber: bool = False) -> Optional[str]:
         """
@@ -396,4 +414,5 @@ mode: dictation
 
 @dictation_ctx.action_class("main")
 class main_action:
-    def auto_insert(text): actions.user.dictation_insert(text)
+    def auto_insert(text):
+        actions.user.dictation_insert(actions.auto_format(text))

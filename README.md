@@ -69,7 +69,7 @@ The folder structure should look something like the below:
     - All help-related commands are defined in misc/help.talon and misc/help_open.talon
 2. `help alphabet` will display the alphabet
 3. `command history` will toggle a display of the recent commands
-4. `format help` will display the available formatters with examples.
+4. `help format` will display the available formatters with examples.
 5. Many useful, basic commands are defined in https://github.com/knausj85/knausj_talon/blob/master/misc/standard.talon#L36
     - `undo that` and `redo that` are the default undo/redo commands.
     - `paste that`, `copy that`, and `cut that` for pasting/copy/cutting, respectively.
@@ -128,7 +128,7 @@ Some other symbols are defined here:
 https://github.com/knausj85/knausj_talon/blob/master/text/symbols.talon
 
 ### Formatters
-`format help` will display the available formatters with examples of the output.
+`help format` will display the available formatters with examples of the output.
 
 Try using formatters by saying e.g. `snake hello world`, which will insert hello_world
 
@@ -354,9 +354,12 @@ generic_terminal.talon
 
 ## Automated tests
 
-There are a number of automated tests in the repository which are run outside of the Talon environment. To run them make sure you have the `pytest` python package installed. You can then just run the `pytest` command from the repository root to execute all the tests.
+There are a number of automated unit tests in the repository. These are all run *outside* of the Talon environment (e.g. we don't have access to Talon's window management APIs). These make use of a set of stubbed out Talon APIs in `tests/stubs/` and a bit of class loader trickery in `conftest.py`.
+
+To run the test suite you just need to install the `pytest` python package in to a non-Talon Python runtime you want to use for tests (i.e. don't install in the `~/.talon/.venv directory`). You can then just run the `pytest` command from the repository root to execute all the tests.
 
 # Talon documentation
+
 For official documentation on Talon's API and features, please visit https://talonvoice.com/docs/.
 
 For community-generated documentation on Talon, please visit https://talon.wiki/
