@@ -12,6 +12,8 @@ words_to_keep_lowercase = "a an the at by for in is of on to up and as but or no
 
 DEFAULT_SEPARATOR = ' '
 SMASH_SEPARATOR = ''
+
+# SEP and NOSEP are used when defining formatters to determine whether the formatter should put a separator between words.
 SEP = True
 NOSEP = False
 
@@ -106,11 +108,8 @@ def every_word(word_func):
 formatters_dict = {
     "NOOP": (SEP, lambda i, word, _: word),
     "DOUBLE_UNDERSCORE": (NOSEP, first_vs_rest(lambda w: "__%s__" % w)),
-    "PRIVATE_CAMEL_CASE": (NOSEP, first_vs_rest(lambda w: w, lambda w: w.capitalize())),
-    "PROTECTED_CAMEL_CASE": (
-        NOSEP,
-        first_vs_rest(lambda w: w, lambda w: w.capitalize()),
-    ),
+    "PRIVATE_CAMEL_CASE": (NOSEP, first_vs_rest(lambda w: w.lower(), lambda w: w.capitalize())),
+    "PROTECTED_CAMEL_CASE": (NOSEP, first_vs_rest(lambda w: w.lower(), lambda w: w.capitalize())),
     "PUBLIC_CAMEL_CASE": (NOSEP, every_word(lambda w: w.capitalize())),
     "SNAKE_CASE": (
         NOSEP,
