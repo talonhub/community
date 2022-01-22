@@ -27,14 +27,9 @@ grab left: key(shift-up)
 grab right: key(shift-down)
 add line: key(shift-enter)
 #"(slack | lack) (slap | slaw | slapper): [key(cmd-right) key(shift-enter")],
-(slack | lack) (react | reaction): key(ctrl-shift-\\)
+(slack | lack) (react | reaction): key(ctrl-shift-\)
 (insert command | commandify): key(ctrl-shift-c)
-insert code:
-    insert("``````")
-    key(left left left)
-    key(shift-enter)
-    key(shift-enter)
-    key(up)
+insert code: insert("```")
 (slack | lack) (bull | bullet | bulleted) [list]: key(ctrl-shift-8)
 (slack | lack) (number | numbered) [list]: key(ctrl-shift-7)
 (slack | lack) (quotes | quotation): key(ctrl-shift-9)
@@ -51,3 +46,20 @@ bold: key(ctrl-b)
 emote <user.text>: "{text}"
 toggle left sidebar: key(ctrl-shift-d)
 toggle right sidebar: key(ctrl-.)
+
+# DEPRECATED
+(move | next) focus:
+    app.notify("please use the voice command 'focus next' instead of 'next focus'")
+    key(ctrl-`)
+[next] (section | zone):
+    app.notify("please use the voice command 'section next' instead of 'next section'")
+    key(f6)
+(previous | last) (section | zone):
+    app.notify("please use the voice command 'section last' instead of 'last section'")
+    key(shift-f6)
+[next] (element | bit):
+    app.notify("please use the voice command 'element next' instead of 'next element'")
+    key(tab)
+(previous | last) (element | bit):
+    app.notify("please use the voice command 'element last' instead of 'last element'")
+    key(shift-tab)
