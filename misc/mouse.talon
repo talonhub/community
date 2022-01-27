@@ -60,30 +60,30 @@ right drag | righty drag:
 	user.grid_close()
 end drag | drag end:
     user.mouse_drag_end()
-wheel down: user.mouse_scroll_down()
+wheel down: user.mouse_scroll_up()
 wheel down here:
     user.mouse_move_center_active_window()
-    user.mouse_scroll_down()
-wheel tiny [down]: user.mouse_scroll_down(0.2)
+    user.mouse_scroll_up()
+wheel tiny [down]: user.mouse_scroll_up(0.2)
 wheel tiny [down] here:
     user.mouse_move_center_active_window()
-    user.mouse_scroll_down(0.2)
-wheel downer: user.mouse_scroll_down_continuous()
+    user.mouse_scroll_up(0.2)
+wheel downer: user.mouse_scroll_up_continuous()
 wheel downer here:
     user.mouse_move_center_active_window()
-    user.mouse_scroll_down_continuous()
-wheel up: user.mouse_scroll_up()
+    user.mouse_scroll_up_continuous()
+wheel up: user.mouse_scroll_down()
 wheel up here:
     user.mouse_move_center_active_window()
-    user.mouse_scroll_up()
-wheel tiny up: user.mouse_scroll_up(0.2)
+    user.mouse_scroll_down()
+wheel tiny up: user.mouse_scroll_down(0.2)
 wheel tiny up here:
     user.mouse_move_center_active_window()
-    user.mouse_scroll_up(0.2)
-wheel upper: user.mouse_scroll_up_continuous()
+    user.mouse_scroll_down(0.2)
+wheel upper: user.mouse_scroll_down_continuous()
 wheel upper here:
     user.mouse_move_center_active_window()
-    user.mouse_scroll_up_continuous()
+    user.mouse_scroll_down_continuous()
 wheel gaze: user.mouse_gaze_scroll()
 wheel gaze here:
     user.mouse_move_center_active_window()
