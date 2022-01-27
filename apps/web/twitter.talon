@@ -1,5 +1,5 @@
 tag: browser
-win.title: /twitter.com/
+browser.host: twitter.com
 #win.title: /Twitter/
 -
 

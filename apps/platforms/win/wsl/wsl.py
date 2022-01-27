@@ -26,6 +26,13 @@ and win.title: /Ubuntu/
 directories_to_remap = {}
 directories_to_exclude = {}
 
+# some definitions used for error handling
+termination_error = 'The Windows Subsystem for Linux instance has terminated.'
+restart_message = 'wsl path detection is offline, you need to restart your wsl session, e.g. "wsl --terminate <distro>; wsl"'
+path_detection_disable_title="Talon - WSL path detection disabled"
+path_detection_disable_notice = 'WSL path detection has been disabled because new WSL sessions cannot be started. See the log for more detail.'
+path_detection_disabled = False
+
 user_path = os.path.expanduser("~")
 if app.platform == "windows":
     is_windows = True
@@ -81,24 +88,40 @@ def get_wsl_path(win_path):
     #print(f"WSLPATH: {win_path}")
     return run_wslpath(["-u"], "'{}'".format(win_path))
 
+def _disable_path_detection(notify=True):
+    global path_detection_disabled
+    path_detection_disabled  = True
+    if notify:
+        app.notify(
+            title=path_detection_disable_title,
+            body=path_detection_disable_notice
+        )
+
 # this command fails every once in a while, with no indication why.
 # so, when that happens we just retry.
 MAX_ATTEMPTS = 2
 def run_wslpath(args, in_path):
+    global path_detection_disabled
     path = ""
-    loop_num = 0
 
-    while loop_num < MAX_ATTEMPTS:
-        (path, error) = run_wsl(['wslpath', *args, in_path])
-        if error:
-            logging.error(f'run_wslpath(): failed to translate given path - attempt: {loop_num}, error: {error}')
+    if not path_detection_disabled:
+        loop_num = 0
 
-            path = ""
-        elif path:
-            # got it, no need to loop and try again
-            break
+        while loop_num < MAX_ATTEMPTS:
+            #print(f"_run_wslpath(): {path_detection_disabled=}.")
+            (path, error) = run_wsl(['wslpath', *args, in_path])
+            if error:
+                logging.error(f'run_wslpath(): failed to translate given path - attempt: {loop_num}, error: {error}')
+                path = ""
+                if error == termination_error:
+                    # disable this code until the user resets it
+                    _disable_path_detection()
+                    break
+            elif path:
+                # got it, no need to loop and try again
+                break
 
-        loop_num += 1
+            loop_num += 1
 
     return path
 
@@ -124,6 +147,20 @@ def run_wslpath(args, in_path):
 # source of their "talon problems". For more information, see https://github.com/microsoft/WSL/issues/5110
 # and https://github.com/microsoft/WSL/issues/5318.
 #
+# Once the WSL distro is hung, every attempt to use it results in many repeated log messages like these:
+# 
+# 2021-10-15 11:15:49 WARNING [watchdog] "talon.windows.ui._on_event" @30.0s (stalled)
+# 2021-10-15 11:15:49 WARNING [watchdog] "user.knausj_talon.code.file_manager.win_event_handler"
+#
+# These messages are from code used to detect the current path from the window title, and it every time the
+# focus shifts to a wsl context or the current path changes. This gets tiresome if you don't want to restart
+# wsl immediately (because your existing sessions are still running and you want to finish working before
+# restarting wsl).
+# 
+# So, wsl path detection is disabled when this condition is first detected. The user
+# must then re-enable the feature once the underlying problem has been resolved. This can be done by
+# using the 'weasel reset path detection' voice command or simply reloading this file.
+
 def _decode(value: bytes) -> str:
     # check to see if the given byte string looks like utf-16-le. results may not be correct for all
     # possible cases, but if there's a problem this code can be replaced with chardet (once that module
@@ -143,9 +180,13 @@ def _run_cmd(command_line):
     #print(f"_run_cmd(): RUNNING - command line is {command_line}.")
     try:
         # for testing
-        #raise subprocess.CalledProcessError(-4294967295, command_line, 'The Windows Subsystem for Linux instance has terminated.'.encode('UTF-16-LE'))
+        #raise subprocess.CalledProcessError(-4294967295, command_line, termination_error.encode('UTF-16-LE'))
 
-        tmp = subprocess.check_output(command_line, stderr=subprocess.STDOUT)
+        startupinfo = subprocess.STARTUPINFO()
+        startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+        startupinfo.wShowWindow = subprocess.SW_HIDE
+
+        tmp = subprocess.check_output(command_line, stderr=subprocess.STDOUT, startupinfo=startupinfo)
         result = _decode(tmp)
         #print(f"RESULT: command: {' '.join(command_line)}, result: {result}")
     except subprocess.CalledProcessError as exc:
@@ -155,10 +196,9 @@ def _run_cmd(command_line):
         error = _decode(exc.output)
 
         # log additional info for this particular case
-        if error == 'The Windows Subsystem for Linux instance has terminated.':
+        if error == termination_error:
             logging.error(f'_run_cmd(): failed to run command - error: {error}')
-            logging.error(f'_run_cmd(): - wsl path detection is offline')
-            logging.error(f'_run_cmd(): - you need to restart your wsl session, e.g. "wsl --terminate <distro>; wsl"')
+            logging.error(f'_run_cmd(): - {restart_message}')
     except:
         result = ""
         log_exception(f'[_run_cmd()] {sys.exc_info()[1]}')
@@ -187,6 +227,11 @@ class UserActions:
         actions.insert('cd ..')
         actions.key('enter')
     def file_manager_current_path():
+        global path_detection_disabled
+        if path_detection_disabled:
+            logging.warning('Skipping WSL path detection - try "weasel reset path detection"')
+            return ""
+
         path = ui.active_window().title
         try:
             path = path.split(":")[1].lstrip()
@@ -286,3 +331,10 @@ class UserActions:
         actions.key("ctrl-c")
         actions.insert("y")
         actions.key("enter")
+
+@mod.action_class
+class Actions:
+    def wsl_reset_path_detection():
+        """reset wsl path detection"""
+        global path_detection_disabled
+        path_detection_disabled  = False

@@ -223,7 +223,7 @@ class UserActions:
     def multi_cursor_skip_occurrence():
         actions.user.vscode("editor.action.moveSelectionToNextFindMatch")
 
-    # snippet.py support beginHelp close
+    # snippet.py support begin
     def snippet_search(text: str):
         actions.user.vscode("editor.action.insertSnippet")
         actions.insert(text)
@@ -243,13 +243,13 @@ class UserActions:
     def tab_jump(number: int):
         if number < 10:
             if is_mac:
-                actions.key("ctrl-{}".format(number))
+                actions.user.vscode_with_plugin(f"workbench.action.openEditorAtIndex{number}")
             else:
                 actions.key("alt-{}".format(number))
 
     def tab_final():
         if is_mac:
-            actions.key("ctrl-0")
+            actions.user.vscode("workbench.action.lastEditorInGroup")
         else:
             actions.key("alt-0")
 
