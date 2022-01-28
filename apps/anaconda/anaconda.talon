@@ -42,8 +42,10 @@ anaconda verify:      "conda verify "
 jupiter notebook:     "jupyter notebook\n"
 
 launch jupiter:
+  "cd Documents/Projects/pangeo\n"
+  sleep(500ms)
   "conda activate sample_environment\n"
-  sleep(100ms)
+  sleep(500ms)
   "jupyter lab\n"
 
 jupiter lab:          "jupyter lab\n"

@@ -3,12 +3,12 @@ app: chrome
 tag(): browser
 tag(): user.tabs
 
-insert cell after:      
+insert cell (below | after):      
   key(escape)
   "b"
   key(enter)
 
-insert cell before:      
+insert cell (above | before):      
   key(escape)
   "a"
   key(enter)
