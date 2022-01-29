@@ -12,12 +12,27 @@ cathy [<user.text>]: user.terminal_change_directory(text or "")
 cathy root: user.terminal_change_directory_root()
 victor: insert("vim ")
 victor safe: insert("vim -R ")
-greta: insert("grep -nr ") 
+greta: 
+    insert('grep -nr "" .')
+    key(left)
+    key(left)
+    key(left)  
+fiona:
+    insert('find . -type f -name ""')
+    key(left)
+
 clear screen: user.terminal_clear_screen()
 run last: user.terminal_run_last()
 rerun [<user.text>]: user.terminal_rerun_search(text or "")
 rerun search: user.terminal_rerun_search("")
 kill all: user.terminal_kill_all()
+
+go talon: user.terminal_change_directory("~/.talon/user/knausj_talon/")
+save and exit:
+    key(escape)
+    insert(":x")
+    key(enter)
+
 
 copy paste:
     edit.copy()
