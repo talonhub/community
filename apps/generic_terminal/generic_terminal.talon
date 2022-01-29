@@ -12,14 +12,16 @@ cathy [<user.text>]: user.terminal_change_directory(text or "")
 cathy root: user.terminal_change_directory_root()
 victor: insert("vim ")
 victor safe: insert("vim -R ")
-greta: 
+greta [<user.text>]: 
     insert('grep -nr "" .')
     key(left)
     key(left)
     key(left)  
-fiona:
+    insert(text or "")
+fiona [<user.text>]:
     insert('find . -type f -name ""')
     key(left)
+    insert(text or "")
 
 clear screen: user.terminal_clear_screen()
 run last: user.terminal_run_last()
