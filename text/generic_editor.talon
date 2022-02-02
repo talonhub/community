@@ -16,8 +16,8 @@ portfolio site:
 civic crumb:
   "CiviCRM"
 
-timer (start | stop):
-    key(cmd-shift-r)
+# timer (start | stop):
+#     key(cmd-shift-r)
 
 fantasizes:
   "font sizes"
@@ -30,9 +30,6 @@ shock:
 
 you bun to:
   "Ubuntu"
-
-gap: 
-  key(space)
 
 slant:
   edit.line_end()
@@ -50,7 +47,7 @@ zoom in: edit.zoom_in()
 
 zoom out: edit.zoom_out()
 
-copy: edit.copy()
+snippet: edit.copy()
 
 slice: edit.cut()
 
@@ -67,7 +64,7 @@ tell sink:
 	insert(";")
 	key(enter) 
 
-enter:
+return:
     key(enter)
 
 go left:
@@ -167,8 +164,11 @@ clear line:
 junk:
     key(backspace)
 
-tabby:
+indent:
     key(tab)
+
+dedent:
+    key(shift-tab)
 
 deli:
     key(delete)
