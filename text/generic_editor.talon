@@ -19,9 +19,6 @@ civic crumb:
 timer (start | stop):
     key(cmd-shift-r)
 
-comet:
-  ","
-
 fantasizes:
   "font sizes"
 

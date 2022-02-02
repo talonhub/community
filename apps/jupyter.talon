@@ -3,12 +3,12 @@ app: chrome
 tag(): browser
 tag(): user.tabs
 
-insert cell (below | after):      
+insert box (below | after):      
   key(escape)
   "b"
   key(enter)
 
-insert cell (above | before):      
+insert box (above | before):      
   key(escape)
   "a"
   key(enter)
@@ -16,14 +16,19 @@ insert cell (above | before):
 execute:           
   key(shift-enter)
 
-code cell:              
+code box:              
   key(escape)
   "y"
   key(enter)
 
-markdown cell:          
+markdown box:          
   key(escape)
   "m"
+  key(enter)
+
+raw box:          
+  key(escape)
+  "r"
   key(enter)
 
 dock string:
