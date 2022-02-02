@@ -85,12 +85,6 @@ go up:
 go down:
     edit.down()
 
-go end:
-    edit.line_end()
-
-go home:
-    edit.line_start()
-
 line end:
     edit.line_end()
 
