@@ -164,7 +164,7 @@ indent [more]:
     edit.indent_less()
 
 # deleting
-clear line:
+deli line:
     edit.delete_line()
 
 junk:
