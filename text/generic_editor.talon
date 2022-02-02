@@ -43,6 +43,12 @@ slap:
   edit.line_end()
   key(enter)
 
+indent:
+    key(tab)
+
+dedent:
+    key(shift-tab)
+
 zoom in: edit.zoom_in()
 
 zoom out: edit.zoom_out()
@@ -164,52 +170,54 @@ clear line:
 junk:
     key(backspace)
 
-indent:
-    key(tab)
-
-dedent:
-    key(shift-tab)
-
 deli:
     key(delete)
 
-clear up:
+deli up:
     edit.extend_line_up()
     edit.delete()
 
-clear down:
+deli down:
     edit.extend_line_down()
     edit.delete()
 
-clear word:
+spark word:
+    edit.select_word()
+    edit.paste()
+
+spark line:
+    edit.select_line()
+    edit.paste()
+
+deli word:
     edit.delete_word()
 
-clear word left:
+deli word left:
     edit.extend_word_left()
     edit.delete()
 
-clear word right:
+deli word right:
     edit.extend_word_right()
     edit.delete()
 
-clear way left:
+deli way left:
     edit.extend_line_start()
     edit.delete()
 
-clear way right:
+deli way right:
     edit.extend_line_end()
     edit.delete()
 
-clear way up:
+deli way up:
     edit.extend_file_start()
     edit.delete()
 
-clear way down:
+deli way down:
     edit.extend_file_end()
     edit.delete()
 
 #copy commands
-copy all:
+snippet all:
     edit.select_all()
     edit.copy()
 #to do: do we want these variants, seem to conflict
@@ -226,24 +234,24 @@ copy all:
 #     edit.extend_down()
 #     edit.copy()
 
-copy word:
+snippet word:
     edit.select_word()
     edit.copy()
 
-copy word left:
+snippet word left:
     edit.extend_word_left()
     edit.copy()
 
-copy word right:
+snippet word right:
     edit.extend_word_right()
     edit.copy()
 
-copy line:
+snippet line:
     edit.select_line()
     edit.copy()
 
 #cut commands
-cut everything:
+slice everything:
     edit.select_all()
     edit.cut()
 #to do: do we want these variants
@@ -260,19 +268,19 @@ cut everything:
 #     edit.select_all()
 #     edit.cut()
 
-cut word:
+slice word:
     edit.select_word()
     edit.cut()
 
-cut word left:
+slice word left:
     edit.extend_word_left()
     edit.cut()
 
-cut word right:
+slice word right:
     edit.extend_word_right()
     edit.cut()
 
-cut line:
+slice line:
     edit.select_line()
     edit.cut()
 
