@@ -91,6 +91,12 @@ go end:
 go home:
     edit.line_start()
 
+line end:
+    edit.line_end()
+
+line start:
+    edit.line_start()
+
 go way end:
     edit.file_end()
     edit.line_end()
