@@ -16,6 +16,9 @@ history = []
 def on_phrase(j):
     global history
 
+    if not actions.speech.enabled():
+        return
+    
     words = j.get('text')
 
     if text := actions.user.history_transform_phrase_text(words):
