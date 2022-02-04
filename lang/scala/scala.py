@@ -7,7 +7,6 @@ mode: user.scala
 mode: user.auto_lang
 and code.language: scala
 """
-ctx.tags = ["user.code_operators", "user.code_generic"]
 
 # Scala Common Types
 scala_common_types = {
@@ -22,8 +21,6 @@ scala_common_types = {
     "String": "String",
     "None": "None"
 }
-mod.list("scala_common_types", desc="Scala Common Types")
-ctx.lists["self.scala_common_types"] = scala_common_types
 
 # Scala Common Generic Types
 scala_common_generic_types = {
@@ -34,8 +31,6 @@ scala_common_generic_types = {
     "map": "Map",
     "stack": "Stack"
 }
-mod.list("scala_common_generic_types", desc="Scala Common Generic Types")
-ctx.lists["self.scala_common_generic_types"] = scala_common_generic_types
 
 scala_types = scala_common_types.copy()
 scala_types.update(scala_common_generic_types)
@@ -64,7 +59,7 @@ class UserActions:
         actions.auto_insert(" = ")
 
     def code_operator_subtraction():
-        actions.auto_insert(" - ")
+        actions.insert(" - ")
 
     def code_operator_subtraction_assignment():
         actions.auto_insert(" -= ")
@@ -150,13 +145,13 @@ class UserActions:
     def code_self():
         actions.auto_insert("this")
 
-    def code_null():
+    def code_insert_null():
         actions.auto_insert("null")
 
-    def code_is_null():
+    def code_insert_is_null():
         actions.auto_insert(" == null")
 
-    def code_is_not_null():
+    def code_insert_is_not_null():
         actions.auto_insert(" != null")
 
     def code_state_if():
@@ -199,31 +194,22 @@ class UserActions:
     def code_next():
         actions.auto_insert('continue')
 
-    def code_true():
+    def code_insert_true():
         actions.auto_insert('true')
 
-    def code_false():
+    def code_insert_false():
         actions.auto_insert('false')
 
-    def code_type_class():
+    def code_define_class():
         actions.auto_insert("class ")
 
     def code_import():
         actions.auto_insert("import ")
 
-    def code_private_function(text: str):
-        actions.insert("private")
-
-    def code_protected_function(text: str):
-        actions.user.code_private_function()
-
-    def code_public_function(text: str):
-        actions.insert("public ")
-
     def code_state_return():
         actions.insert("return ")
 
-    def code_comment():
+    def code_comment_line_prefix():
         actions.auto_insert('// ')
 
     def code_block_comment():
@@ -238,6 +224,15 @@ class UserActions:
 
     def code_block_comment_suffix():
         actions.auto_insert('*/')
+
+    def code_insert_type_annotation(type: str):
+        actions.insert(f": {type}")
+
+    def code_insert_return_type(type: str):
+        actions.insert(f": {type}")
+
+    def code_operator_object_accessor():
+        actions.insert(".")
 
     def code_default_function(text: str):
         """Inserts function declaration"""
@@ -280,9 +275,10 @@ class UserActions:
 
         actions.user.code_insert_function(result, None)
 
+    # skipping these: in scala static functions are just functions in objects
     def code_private_static_function(text: str):
         actions.skip()
     def code_protected_static_function(text: str):
-      actions.skip()
+        actions.skip()
     def code_public_static_function(text: str):
-      actions.skip()
+        actions.skip()
