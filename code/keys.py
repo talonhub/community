@@ -236,6 +236,10 @@ alternate_keys = {
     'backspace': 'backspace',
     "page up": "pageup",
     "page down": "pagedown",
+    "return": "enter",
+    "end star": "enter",
+
+
 }
 # mac apparently doesn't have the menu key.
 if app.platform in ("windows", "linux"):
