@@ -2,6 +2,7 @@ app: windows_terminal
 -
 tag(): user.tabs
 tag(): terminal
+tag(): user.git
 
 settings open : key(ctrl-,)
 focus left: key(ctrl-alt-shift-left)
