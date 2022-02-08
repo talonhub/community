@@ -169,7 +169,6 @@ class Actions:
 
     def homophones_show(m: str):
         """Show the homophones display"""
-        print(m)
         raise_homophones(m, False, False)
 
     def homophones_show_selection():
