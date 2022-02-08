@@ -16,9 +16,6 @@ history = []
 def on_phrase(j):
     global history
 
-    if not actions.speech.enabled():
-        return
-    
     words = j.get('text')
 
     if text := actions.user.history_transform_phrase_text(words):
@@ -85,4 +82,8 @@ class Actions:
 
     def history_transform_phrase_text(words: list[str]) -> Optional[str]:
         """Transforms phrase text for presentation in history. Return `None` to omit from history"""
+
+        if not actions.speech.enabled():
+            return None
+
         return ' '.join(words) if words else None
