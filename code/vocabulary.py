@@ -10,31 +10,15 @@ ctx = Context()
 mod.list("vocabulary", desc="additional vocabulary words")
 
 
-# Default words that will need to be capitalized (particularly under w2l).
-# NB. These defaults and those later in this file are ONLY used when
+# Default words that will need to be capitalized.
+# DON'T EDIT THIS. Edit settings/words_to_replace.csv instead.
+# These defaults and those later in this file are ONLY used when
 # auto-creating the corresponding settings/*.csv files. Those csv files
 # determine the contents of user.vocabulary and dictate.word_map. Once they
 # exist, the contents of the lists/dictionaries below are irrelevant.
 _capitalize_defaults = [
-    "I",
-    "I'm",
-    "I've",
-    "I'll",
-    "I'd",
-    "Monday",
-    "Mondays",
-    "Tuesday",
-    "Tuesdays",
-    "Wednesday",
-    "Wednesdays",
-    "Thursday",
-    "Thursdays",
-    "Friday",
-    "Fridays",
-    "Saturday",
-    "Saturdays",
-    "Sunday",
-    "Sundays",
+    # NB. the lexicon now capitalizes January/February by default, but not the
+    # others below. Not sure why.
     "January",
     "February",
     # March omitted because it's a regular word too
@@ -42,7 +26,7 @@ _capitalize_defaults = [
     # May omitted because it's a regular word too
     "June",
     "July",
-    "August",
+    "August", # technically also an adjective but the month is far more common
     "September",
     "October",
     "November",
