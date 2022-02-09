@@ -2,6 +2,7 @@ os: mac
 app: slack
 -
 tag(): user.messaging
+tag(): user.emoji
 # Workspace
 workspace <number>: key("cmd-{number}")
 # Channel
