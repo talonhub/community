@@ -1,3 +1,4 @@
+from typing import List
 from talon import actions, Module, speech_system
 
 mod = Module()
@@ -30,6 +31,10 @@ class Actions:
             print(words)
             actions.mimic(words)
 
+    def macro_append_command(command: List[str]):
+        """Called when a new voice command is uttered while recording a macro"""
+        macro.append(command)
+
 
 def fn(d):
     if not recording:
@@ -38,7 +43,7 @@ def fn(d):
     if "parsed" not in d:
         return
 
-    macro.append(d["parsed"]._unmapped)
+    actions.user.macro_append_command(d["parsed"]._unmapped)
 
 
 speech_system.register("pre:phrase", fn)
