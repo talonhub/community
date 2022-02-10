@@ -31,9 +31,10 @@ class Actions:
             print(words)
             actions.mimic(words)
 
-    def macro_append_command(command: List[str]):
-        """Called when a new voice command is uttered while recording a macro"""
-        macro.append(command)
+    def macro_append_command(words: List[str]):
+        """Appends a command to the current macro; called when a voice command is uttered while recording a macro."""
+        assert recording, "Not currently recording a macro"
+        macro.append(words)
 
 
 def fn(d):
