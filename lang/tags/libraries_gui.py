@@ -4,6 +4,7 @@ ctx = Context()
 mod = Module()
 
 mod.list("code_libraries", desc="List of libraries for active language")
+mod.tag("code_libraries_gui_showing", desc="Active when the library picker GUI is showing")
 
 # global
 library_list = []
@@ -27,6 +28,7 @@ class Actions:
         if gui_libraries.showing:
             library_list = []
             gui_libraries.hide()
+            ctx.tags.discard("user.code_libraries_gui_showing")
         else:
             update_library_list_and_freeze()
 
@@ -58,6 +60,10 @@ def gui_libraries(gui: imgui.GUI):
             )
         )
 
+    gui.spacer()
+    if gui.button("Toggle libraries close"):
+        actions.user.code_toggle_libraries_hide()
+
 def update_library_list_and_freeze():
     global library_list
     if "user.code_libraries" in registry.lists:
@@ -66,6 +72,7 @@ def update_library_list_and_freeze():
         library_list = []
 
     gui_libraries.show()
+    ctx.tags.add("user.code_libraries_gui_showing")
 
 
 def commands_updated(_):

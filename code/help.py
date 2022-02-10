@@ -76,7 +76,7 @@ def gui_formatters(gui: imgui.GUI):
         gui.text("{}: {}".format(val, key))
 
     gui.spacer()
-    if gui.button("close"):
+    if gui.button("Help close"):
         gui_formatters.hide()
 
 
@@ -218,10 +218,10 @@ def gui_context_help(gui: imgui.GUI):
 
         if total_page_count > 1:
             gui.spacer()
-            if gui.button("Next..."):
+            if gui.button("Help next"):
                 actions.user.help_next()
 
-            if gui.button("Previous..."):
+            if gui.button("Help previous"):
                 actions.user.help_previous()
 
     # if there's a selected context, draw the commands for it
@@ -233,19 +233,19 @@ def gui_context_help(gui: imgui.GUI):
 
         gui.spacer()
         if total_page_count > 1:
-            if gui.button("Next..."):
+            if gui.button("Help next"):
                 actions.user.help_next()
 
-            if gui.button("Previous..."):
+            if gui.button("Help previous"):
                 actions.user.help_previous()
 
-        if gui.button("Return"):
+        if gui.button("Help return"):
             actions.user.help_return()
 
-    if gui.button("Refresh"):
+    if gui.button("Help refresh"):
         actions.user.help_refresh()
 
-    if gui.button("Close"):
+    if gui.button("Help close"):
         actions.user.help_hide()
 
 
@@ -508,19 +508,19 @@ def gui_list_help(gui: imgui.GUI):
     gui.spacer()
     
     if total_page_count > 1:
-        if gui.button("Next..."):
+        if gui.button("Help next"):
             actions.user.help_next()
 
-        if gui.button("Previous..."):
+        if gui.button("Help previous"):
             actions.user.help_previous()
 
-        if gui.button("Return"):
+        if gui.button("Help return"):
             actions.user.help_return()
 
-    if gui.button("Refresh"):
+    if gui.button("Help refresh"):
         actions.user.help_refresh()
 
-    if gui.button("Close"):
+    if gui.button("Help close"):
         actions.user.help_hide()
 
 

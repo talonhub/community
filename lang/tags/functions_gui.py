@@ -14,6 +14,7 @@ def code_functions(m) -> str:
     return m.code_functions
 
 mod.tag("code_functions_gui", desc="Tag for enabling GUI support for common functions")
+mod.tag("code_functions_gui_showing", desc="Active when the function picker GUI is showing")
 
 @mod.action_class
 class Actions:
@@ -24,6 +25,7 @@ class Actions:
         if gui_functions.showing:
             function_list = []
             gui_functions.hide()
+            ctx.tags.discard("user.code_functions_gui_showing")
         else:
             update_function_list_and_freeze()
 
@@ -50,6 +52,7 @@ def update_function_list_and_freeze():
         function_list = []
 
     gui_functions.show()
+    ctx.tags.add("user.code_functions_gui_showing")
 
 
 @imgui.open()
@@ -65,6 +68,10 @@ def gui_functions(gui: imgui.GUI):
                     i, entry, registry.lists["user.code_functions"][0][entry]
                 )
             )
+
+    gui.spacer()
+    if gui.button("Toggle funk (close window)"):
+        actions.user.code_toggle_functions_hide()
 
 
 def commands_updated(_):
