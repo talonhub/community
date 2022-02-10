@@ -10,7 +10,7 @@ recording = False
 @mod.action_class
 class Actions:
     def macro_record():
-        """record a new macro"""
+        """Begin recording a new voice command macro."""
         global macro
         global recording
 
@@ -18,15 +18,15 @@ class Actions:
         recording = True
 
     def macro_stop():
-        """stop recording"""
+        """Stop recording the macro."""
         global recording
         recording = False
 
     def macro_play():
-        """player recorded macro"""
+        """Execute the commands in the last recorded macro."""
         actions.user.macro_stop()
 
-        # :-1 because we don't want to replay `macro play`
+        # :-1 because we don't want to replay `macro stop`/`macro play`
         for words in macro[:-1]:
             print(words)
             actions.mimic(words)
@@ -38,12 +38,7 @@ class Actions:
 
 
 def fn(d):
-    if not recording:
-        return
-
-    if "parsed" not in d:
-        return
-
+    if not recording or "parsed" not in d: return
     actions.user.macro_append_command(d["parsed"]._unmapped)
 
 
