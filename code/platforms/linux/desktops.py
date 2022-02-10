@@ -10,16 +10,20 @@ class Actions:
         ui.switch_workspace(number)
 
     def desktop_next():
-        ui.switch_workspace(ui.active_workspace() + 1)
+        actions.user.desktop(ui.active_workspace() + 1)
 
     def desktop_last():
-        ui.switch_workspace(ui.active_workspace() - 1)
+        actions.user.desktop(ui.active_workspace() - 1)
 
     def desktop_show():
         actions.key("super")
 
-    # def window_move_desktop_left():
+    def window_move_desktop(desktop_number: int):
+        ui.active_window().workspace = desktop_number
+        actions.user.desktop(desktop_number)
 
-    # def window_move_desktop_right():
+    def window_move_desktop_left():
+        actions.user.window_move_desktop(ui.active_workspace() - 1)
 
-    # def window_move_desktop(desktop_number: int):
+    def window_move_desktop_right():
+        actions.user.window_move_desktop(ui.active_workspace() + 1)
