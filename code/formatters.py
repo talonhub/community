@@ -43,9 +43,7 @@ def format_phrase(m: Union[str, Phrase], formatters: str):
         # TODO: is this still necessary, and if so why?
         if m.words[-1] == "over":
             m.words = m.words[:-1]
-
-        words = actions.dictate.parse_words(m)
-        words = actions.user.replace_phrases(words)
+        words = actions.dictate.replace_words(actions.dictate.parse_words(m))
 
     result = last_phrase_formatted = format_phrase_without_adding_to_history(words, formatters)
     actions.user.add_phrase_to_history(result)
