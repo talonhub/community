@@ -13,6 +13,10 @@ os: mac
 and app.bundle: com.google.Chrome
 """
 mod.apps.chrome = """
+os: mac
+and app.bundle: org.chromium.Chromium
+"""
+mod.apps.chrome = """
 os: linux
 app.exe: chrome
 app.exe: chromium-browser
