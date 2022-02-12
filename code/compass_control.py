@@ -29,7 +29,11 @@
 
 # WIP - here are some quirks that need work:
 #
-# # - need help with 'win shrink' automatic stop mechanisms. both mechanisms I've implemented are hindered
+# - continuous operations are sometimes choppy and randomly stop, due to API delay and timeouts.
+# increasing the queue time out doesn't seem to help (this may be more noticeable when debug logging
+# is enabled). see https://github.com/talonvoice/talon/issues/470
+#
+# - timeout issues with 'win shrink' automatic stop mechanisms. both mechanisms I've implemented are hindered
 # by the API timeouts that happen when the window hits a minimum size. the 'change checking' approach also
 # fails because rect assignment will sometimes partially fail even before the window has reached its
 # minimum size. can repro with 'win shrink' command. see use_resize_history_for_shrink and
@@ -50,9 +54,6 @@
 # screen, at the end it of the shrink it jumps to the left edge of the screen to the right. same thing
 # swapping west for east, left for right, etc.
 #
-# - continuous operations are sometimes choppy and randomly stop, due to API delay and timeouts.
-# increasing the queue time out doesn't seem to help (this may be more noticeable when debug logging
-# is enabled).
 #
 # - behavior while stretching or shrinking a rectangle which is not fully contained by the parent
 # rectangle is a bit funky...not terrible, I guess...but could be improved.
@@ -209,8 +210,7 @@ class CompassControl:
             if hasattr(caller, local_name):
                 caller.__setattr__(local_name, talon_setting.get())
 
-                if caller.testing:
-                    print(f'{caller_id}._update_all_settings: received updated value for {talon_setting.path}: {getattr(caller, local_name, None)}')
+                print(f'{caller_id}._update_all_settings: received updated value for {talon_setting.path}: {getattr(caller, local_name, None)}')
 
     @classmethod
     def _update_setting(cls, caller, caller_id: str, args):
@@ -224,8 +224,7 @@ class CompassControl:
         else:
             caller.__setattr__(local_name, args[1])
 
-            if caller.testing:
-                print(f'{caller_id}._update_setting: received updated value for {talon_name}: {getattr(caller, local_name, None)}')
+            print(f'{caller_id}._update_setting: received updated value for {talon_name}: {getattr(caller, local_name, None)}')
 
     # error thrown when a move or resize request is not completely successful
     class RectUpdateError(Exception):
@@ -1796,7 +1795,7 @@ class CompassControl:
             new_y = (((1 - ratio_of_differences) * rect_center.y) + (ratio_of_differences * parent_center.y))
 
             if self.testing:
-                print(f"_get_component_dimensions: {diagonal_length=}, {new_x=}, {new_y=}")
+                print(f"get_component_dimensions: {diagonal_length=}, {new_x=}, {new_y=}")
 
             delta_width = abs(new_x - rect_center.x) * horizontal_multiplier
             delta_height = abs(new_y - rect_center.y) * vertical_multiplier
@@ -1805,12 +1804,12 @@ class CompassControl:
                 x_steps = 0
                 if delta_width != 0:
                     x_steps = rect.width/delta_width
-                print(f"_get_component_dimensions: x steps={x_steps}")
+                print(f"get_component_dimensions: x steps={x_steps}")
 
                 y_steps = 0
                 if delta_height != 0:
                     y_steps = rect.height/delta_height
-                print(f"_get_component_dimensions: y steps={y_steps}")
+                print(f"get_component_dimensions: y steps={y_steps}")
         else:
             if direction_count == 1:    # horizontal or vertical
                 if direction["left"] or direction["right"]:
@@ -1824,7 +1823,7 @@ class CompassControl:
                 delta_height = rect.height * ratio
 
         if self.testing:
-            print(f"_get_component_dimensions: returning {delta_width}, {delta_height}")
+            print(f"get_component_dimensions: returning {delta_width}, {delta_height}")
 
         return round(delta_width), round(delta_height)
 
