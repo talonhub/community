@@ -154,6 +154,7 @@ formatters_words = {
     "padded": formatters_dict["SPACE_SURROUNDED_STRING"],
     "slasher": formatters_dict["SLASH_SEPARATED"],
     "smash": formatters_dict["NO_SPACES"],
+    "smush": formatters_dict["NO_SPACES"],
     "snake": formatters_dict["SNAKE_CASE"],
     "string": formatters_dict["SINGLE_QUOTED_STRING"],
     "title": formatters_dict["CAPITALIZE_ALL_WORDS"],
