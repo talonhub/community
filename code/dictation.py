@@ -161,7 +161,8 @@ no_cap_after = re.compile(r"""(
 
 def auto_capitalize(text, state = None):
     """
-    Auto-capitalizes text. `state` argument means:
+    Auto-capitalizes text. Text must contain complete words, abbreviations, and
+    formatted expressions. `state` argument means:
 
     - None: Don't capitalize initial word.
     - "sentence start": Capitalize initial word.
