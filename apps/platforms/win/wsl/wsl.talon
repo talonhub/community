@@ -16,12 +16,15 @@
 #    app: windows_terminal
 #    title: /^WSL:/
 #    -
+#    tag(): user.wsl
 #
 # then, you will need to find a way to set the window title accordingly. for example, to match
 # the title pattern above, you can set the prompt in your .bashrc file like this:
 #
 #    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}WSL:${WSL_DISTRO_NAME} \u@\h: \w\a\]$PS1"
 #
+# ALSO: if you do populate your window title with your distro name, make sure the 'wsl_title_regex'
+# value in wsl.py is set accordingly.
 tag: user.wsl
 -
 
