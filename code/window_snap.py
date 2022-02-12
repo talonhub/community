@@ -14,19 +14,6 @@ from typing import Optional
 from talon import ui, Module, Context, actions
 
 
-def sorted_screens():
-    """Return screens sorted by their topmost, then leftmost, edge.
-
-    Screens will be sorted left-to-right, then top-to-bottom as a tiebreak.
-
-    """
-
-    return sorted(
-        sorted(ui.screens(), key=lambda screen: screen.visible_rect.top),
-        key=lambda screen: screen.visible_rect.left,
-    )
-
-
 def _set_window_pos(window, x, y, width, height):
     """Helper to set the window position."""
     # TODO: Special case for full screen move - use os-native maximize, rather
@@ -55,7 +42,7 @@ def _get_app_window(app_name: str) -> ui.Window:
 
 
 def _move_to_screen(
-    window, offset: Optional[int] = None, screen_number: Optional[int] = None
+    window: ui.Window, offset: Optional[int] = None, screen_number: Optional[int] = None
 ):
     """Move a window to a different screen.
 
@@ -70,33 +57,66 @@ def _move_to_screen(
     ), "Provide exactly one of `screen_number` or `offset`."
 
     src_screen = window.screen
-    screens = sorted_screens()
-    if offset:
-        screen_number = (screens.index(src_screen) + offset) % len(screens)
-    else:
-        # Human to array index
-        screen_number -= 1
 
-    dest_screen = screens[screen_number]
+    if offset:
+        if offset < 0:
+            dest_screen = actions.user.screens_get_previous(src_screen)
+        else:
+            dest_screen = actions.user.screens_get_next(src_screen)
+    else:
+        dest_screen = actions.user.screens_get_by_number(screen_number)
+
     if src_screen == dest_screen:
         return
 
-    # Retain the same proportional position on the new screen.
     dest = dest_screen.visible_rect
     src = src_screen.visible_rect
-    # TODO: Test this on different-sized screens
-    #
-    # TODO: Is this the best behaviour for moving to a vertical screen? Probably
-    #   not.
-    proportional_width = dest.width / src.width
-    proportional_height = dest.height / src.height
-    _set_window_pos(
-        window,
-        x=dest.left + (window.rect.left - src.left) * proportional_width,
-        y=dest.top + (window.rect.top - src.top) * proportional_height,
-        width=window.rect.width * proportional_width,
-        height=window.rect.height * proportional_height,
-    )
+    # TODO: Test vertical screen with different aspect ratios
+    # Does the orientation between the screens change? (vertical/horizontal)
+    if (src.width / src.height > 1) != (dest.width / dest.height > 1):
+        # Horizontal -> vertical or vertical -> horizontal
+        # Retain proportional window size, but flip x/y of the vertical monitor to account for the monitors rotation.
+        if src.width / src.height > 1:
+            # horizontal -> vertical
+            width = window.rect.width * dest.height / src.width
+            height = window.rect.height * dest.width / src.height
+        else:
+            # vertical -> horizontal
+            width = window.rect.width * dest.width / src.height
+            height = window.rect.height * dest.height / src.width
+        # Deform window if width or height is bigger than the target monitors while keeping the window area the same.
+        if width > dest.width:
+            over = (width - dest.width) * height
+            width = dest.width
+            height += over / width
+        if height > dest.height:
+            over = (height - dest.height) * width
+            height = dest.height
+            width += over / height
+        # Proportional position:
+        # Since the window size in respect to the monitor size is not proportional (x/y was flipped),
+        # the positioning is more complicated than proportionally scaling the x/y coordinates.
+        # It is computed by keeping the free space to the left of the window proportional to the right
+        # and respectively for the top/bottom free space.
+        # The if conditions account for division by 0. TODO: Refactor positioning without division by 0
+        if src.height == window.rect.height:
+            x = dest.left + (dest.width - width) / 2
+        else:
+            x = dest.left + (window.rect.top - src.top) * (dest.width - width) / (src.height - window.rect.height)
+        if src.width == window.rect.width:
+            y = dest.top + (dest.height - height) / 2
+        else:
+            y = dest.top + (window.rect.left - src.left) * (dest.height - height) / (src.width - window.rect.width)
+    else:
+        # Horizontal -> horizontal or vertical -> vertical
+        # Retain proportional size and position
+        proportional_width = dest.width / src.width
+        proportional_height = dest.height / src.height
+        x = dest.left + (window.rect.left - src.left) * proportional_width
+        y = dest.top + (window.rect.top - src.top) * proportional_height
+        width = window.rect.width * proportional_width
+        height = window.rect.height * proportional_height
+    _set_window_pos(window, x=x, y=y, width=width, height=height)
 
 
 def _snap_window_helper(window, pos):
@@ -158,6 +178,7 @@ _snap_positions = {
     # .--.--.--.
     # |--|--|--|
     # '--'--'--'
+    "top left third": RelativeScreenPos(0, 0, 1 / 3, 0.5),
     "top right third": RelativeScreenPos(2 / 3, 0, 1, 0.5),
     "top left two thirds": RelativeScreenPos(0, 0, 2 / 3, 0.5),
     "top right two thirds": RelativeScreenPos(1 / 3, 0, 1, 0.5),

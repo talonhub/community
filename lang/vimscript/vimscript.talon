@@ -1,11 +1,14 @@
-
-mode: user.vimscript
-mode: user.auto_lang
+mode: command
+and mode: user.vimscript
+mode: command
+and mode: user.auto_lang
 and code.language: vimscript
 -
-tag(): user.code_operators
-tag(): user.code_comment
-tag(): user.code_generic
+tag(): user.code_imperative
+tag(): user.code_operators_assignment
+tag(): user.code_operators_math
+tag(): user.code_comment_line
+
 # XXX - revisit these
 settings():
     user.code_private_function_formatter = "SNAKE_CASE"
@@ -14,38 +17,6 @@ settings():
     user.code_private_variable_formatter = "SNAKE_CASE"
     user.code_protected_variable_formatter = "SNAKE_CASE"
     user.code_public_variable_formatter = "SNAKE_CASE"
-
-
-###
-# Generic Actions - see appropriate generic talon file for spoken command
-###
-
-# operators - see lang/operators.talon
-action(user.code_operator_assignment): " = "
-action(user.code_operator_subtraction): " - "
-action(user.code_operator_subtraction_assignment): " -= "
-action(user.code_operator_addition): " + "
-action(user.code_operator_addition_assignment): " += "
-action(user.code_operator_multiplication): " * "
-action(user.code_operator_multiplication_assignment): " *= "
-action(user.code_operator_division): " / "
-action(user.code_operator_division_assignment): " /= "
-
-# comments - see lang/code_comment.talon
-action(user.code_comment): "\""
-
-# conditionals - see lang/programming.talon
-action(user.code_state_if):
-  insert("if ")
-action(user.code_state_else_if):
-  insert("elseif ")
-action(user.code_state_else):
-  insert("else")
-
-action(user.code_private_function): "function "
-action(user.code_protected_function): "function "
-action(user.code_public_function): "function "
-
 
 ###
 # VIM Script Specific

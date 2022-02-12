@@ -3,7 +3,7 @@ from talon import Module, Context, actions, ui, imgui, settings
 ctx = Context()
 ctx.matches = r"""
 mode: user.typescript
-mode: command 
+mode: user.auto_lang
 and code.language: typescript
 """
 # tbd
@@ -13,18 +13,19 @@ and code.language: typescript
 #     "string": ".ToString",
 # }
 
+ctx.lists["user.code_type"] = {
+    "boolean": "boolean",
+    "integer": "int",
+    "string": "string",
+    "null": "null",
+    "undefined": "undefined",
+    "number": "number",
+    "any": "any",
+}
+
 
 @ctx.action_class("user")
-class user_actions:
-    def code_insert_function(text: str, selection: str):
-        if selection:
-            text = text + "({})".format(selection)
-        else:
-            text = text + "()"
-
-        actions.user.paste(text)
-        actions.edit.left()
-
+class UserActions:
     def code_private_function(text: str):
         """Inserts private function declaration"""
         result = "private function {}".format(
@@ -81,3 +82,8 @@ class user_actions:
 
     #     actions.user.code_insert_function(result, None)
 
+    def code_insert_type_annotation(type: str):
+        actions.insert(f": {type}")
+
+    def code_insert_return_type(type: str):
+        actions.insert(f": {type}")

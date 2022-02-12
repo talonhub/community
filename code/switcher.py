@@ -3,10 +3,12 @@ import re
 import time
 
 import talon
+
 from talon import Context, Module, app, imgui, ui, fs, actions
 from glob import glob
 from itertools import islice
 from pathlib import Path
+import subprocess
 
 # Construct at startup a list of overides for application names (similar to how homophone list is managed)
 # ie for a given talon recognition word set  `one note`, recognized this in these switcher functions as `ONENOTE`
@@ -16,7 +18,6 @@ cwd = os.path.dirname(os.path.realpath(__file__))
 overrides_directory = os.path.join(cwd, "app_names")
 override_file_name = f"app_name_overrides.{talon.app.platform}.csv"
 override_file_path = os.path.join(overrides_directory, override_file_name)
-
 
 mod = Module()
 mod.list("running", desc="all running applications")
@@ -37,14 +38,7 @@ mac_application_directories = [
     "/System/Applications/Utilities",
 ]
 
-# windows_application_directories = [
-#     "%AppData%/Microsoft/Windows/Start Menu/Programs",
-#     "%ProgramData%/Microsoft/Windows/Start Menu/Programs",
-#     "%AppData%/Microsoft/Internet Explorer/Quick Launch/User Pinned/TaskBar",
-# ]
-
 words_to_exclude = [
-    "and",
     "zero",
     "one",
     "two",
@@ -56,12 +50,25 @@ words_to_exclude = [
     "seven",
     "eight",
     "nine",
+    "and",
+    "dot",
+    "exe",
+    "help",
+    "install",
+    "installer",
     "microsoft",
+    "nine",
+    "readme",
+    "studio",
+    "terminal",
+    "visual",
     "windows",
-    "Windows",
 ]
 
-# windows-specific logic
+# on Windows, WindowsApps are not like normal applications, so
+# we use the shell:AppsFolder to populate the list of applications
+# rather than via e.g. the start menu. This way, all apps, including "modern" apps are
+# launchable. To easily retrieve the apps this makes available, navigate to shell:AppsFolder in Explorer
 if app.platform == "windows":
     import os
     import ctypes
@@ -127,12 +134,8 @@ if app.platform == "windows":
         items_enum = folder_shell_item.BindToHandler(
             None, shell.BHID_EnumItems, shell.IID_IEnumShellItems
         )
-        result = []
         for item in items_enum:
-            # print(item.GetDisplayName(shellcon.SIGDN_NORMALDISPLAY))
-            result.append(item.GetDisplayName(shellcon.SIGDN_NORMALDISPLAY))
-
-        return result
+            yield item
 
     def list_known_folder(folder_id, htoken=None):
         result = []
@@ -140,6 +143,29 @@ if app.platform == "windows":
             result.append(item.GetDisplayName(shellcon.SIGDN_NORMALDISPLAY))
         result.sort(key=lambda x: x.upper())
         return result
+
+    def get_windows_apps():
+        items = {}
+        for item in enum_known_folder(FOLDERID_AppsFolder):
+            try:
+                property_store = item.BindToHandler(
+                    None, shell.BHID_PropertyStore, propsys.IID_IPropertyStore
+                )
+                app_user_model_id = property_store.GetValue(
+                    pscon.PKEY_AppUserModel_ID
+                ).ToString()
+
+            except pywintypes.error:
+                continue
+
+            name = item.GetDisplayName(shellcon.SIGDN_NORMALDISPLAY)
+
+            # exclude anything with install/uninstall...
+            # 'cause I don't think we don't want 'em
+            if "install" not in name.lower():
+                items[name] = app_user_model_id
+
+        return items
 
 
 @mod.capture(rule="{self.running}")  # | <user.text>)")
@@ -157,42 +183,32 @@ def launch_applications(m) -> str:
     return m.launch
 
 
-def split_camel(word):
-    return re.findall(r"[0-9A-Z]*[a-z]+(?=[A-Z]|$)", word)
-
-
-def get_words(name):
-    words = re.findall(r"[0-9A-Za-z]+", name)
-    out = []
-    for word in words:
-        out += split_camel(word)
-    return out
-
-
-def update_lists():
+def update_running_list():
     global running_application_dict
     running_application_dict = {}
     running = {}
     for cur_app in ui.apps(background=False):
-        name = cur_app.name
-
-        if name.endswith(".exe"):
-            name = name.rsplit(".", 1)[0]
-
-        words = get_words(name)
-        for word in words:
-            if word and word not in running and len(word) >= 3:
-                running[word.lower()] = cur_app.name
-
-        running[name.lower()] = cur_app.name
         running_application_dict[cur_app.name] = True
 
+        if app.platform == "windows":
+            # print("hit....")
+            # print(cur_app.exe)
+            running_application_dict[cur_app.exe.split(os.path.sep)[-1]] = True
+
+    running = actions.user.create_spoken_forms_from_list(
+        [curr_app.name for curr_app in ui.apps(background=False)],
+        words_to_exclude=words_to_exclude,
+        generate_subsequences=True,
+    )
+
+    # print(str(running_application_dict))
+    # todo: should the overrides remove the other spoken forms for an application?
     for override in overrides:
-        running[override] = overrides[override]
+        if overrides[override] in running_application_dict:
+            running[override] = overrides[override]
 
     lists = {
         "self.running": running,
-        # "self.launch": launch,
     }
 
     # batch update lists
@@ -213,29 +229,7 @@ def update_overrides(name, flags):
                 if len(line) == 2:
                     overrides[line[0].lower()] = line[1].strip()
 
-        update_lists()
-
-
-pattern = re.compile(r"[A-Z][a-z]*|[a-z]+|\d|[+]")
-
-# todo: this is garbage
-def create_spoken_forms(name, max_len=30):
-    result = " ".join(list(islice(pattern.findall(name), max_len)))
-
-    result = (
-        result.replace("0", "zero")
-        .replace("1", "one")
-        .replace("2", "two")
-        .replace("3", "three")
-        .replace("4", "four")
-        .replace("5", "five")
-        .replace("6", "six")
-        .replace("7", "seven")
-        .replace("8", "eight")
-        .replace("9", "nine")
-        .replace("+", "plus")
-    )
-    return result
+        update_running_list()
 
 
 @mod.action_class
@@ -258,69 +252,83 @@ class Actions:
                 ):
                     name = full_application_name
                     break
-        for app in ui.apps():
-            if app.name == name and not app.background:
-                return app
+        for application in ui.apps(background=False):
+            if application.name == name or (
+                app.platform == "windows"
+                and application.exe.split(os.path.sep)[-1] == name
+            ):
+                return application
         raise RuntimeError(f'App not running: "{name}"')
 
     def switcher_focus(name: str):
         """Focus a new application by name"""
         app = actions.user.get_running_app(name)
-        app.focus()
+        actions.user.switcher_focus_app(app)
 
-        # Hacky solution to do this reliably on Mac.
-        timeout = 5
+    def switcher_focus_app(app: ui.App):
+        """Focus application and wait until switch is made"""
+        app.focus()
         t1 = time.monotonic()
-        if talon.app.platform == "mac":
-            while ui.active_app() != app and time.monotonic() - t1 < timeout:
-                time.sleep(0.1)
+        while ui.active_app() != app:
+            if time.monotonic() - t1 > 1:
+                raise RuntimeError(f"Can't focus app: {app.name}")
+            actions.sleep(0.1)
+
+    def switcher_focus_window(window: ui.Window):
+        """Focus window and wait until switch is made"""
+        window.focus()
+        t1 = time.monotonic()
+        while ui.active_window() != window:
+            if time.monotonic() - t1 > 1:
+                raise RuntimeError(f"Can't focus window: {window.title}")
+            actions.sleep(0.1)
 
     def switcher_launch(path: str):
-        """Launch a new application by path"""
-        if app.platform == "windows":
+        """Launch a new application by path (all OSes), or AppUserModel_ID path on Windows"""
+        if app.platform != "windows":
+            ui.launch(path=path)
+        else:
             is_valid_path = False
             try:
                 current_path = Path(path)
                 is_valid_path = current_path.is_file()
-                # print("valid path: {}".format(is_valid_path))
-
             except:
-                # print("invalid path")
                 is_valid_path = False
-
             if is_valid_path:
-                # print("path: " + path)
                 ui.launch(path=path)
-
             else:
-                # print("envelop")
-                actions.key("super-s")
-                actions.sleep("300ms")
-                actions.insert("apps: {}".format(path))
-                actions.sleep("150ms")
-                actions.key("enter")
+                cmd = "explorer.exe shell:AppsFolder\\{}".format(path)
+                subprocess.Popen(cmd, shell=False)
 
+    def switcher_menu():
+        """Open a menu of running apps to switch to"""
+        if app.platform == "windows":
+            actions.key("alt-ctrl-tab")
         else:
-            ui.launch(path=path)
+            print("Persistent Switcher Menu not supported on " + app.platform)
 
     def switcher_toggle_running():
         """Shows/hides all running applications"""
-        if gui.showing:
-            gui.hide()
+        if gui_running.showing:
+            gui_running.hide()
         else:
-            gui.show()
+            gui_running.show()
 
     def switcher_hide_running():
         """Hides list of running applications"""
-        gui.hide()
+        gui_running.hide()
 
 
 @imgui.open()
-def gui(gui: imgui.GUI):
+def gui_running(gui: imgui.GUI):
     gui.text("Names of running applications")
     gui.line()
     for line in ctx.lists["self.running"]:
         gui.text(line)
+
+    gui.spacer()
+    if gui.button("Running close"):
+        actions.user.switcher_hide_running()
 
 
 def update_launch_list():
@@ -332,37 +340,19 @@ def update_launch_list():
                     path = os.path.join(base, name)
                     name = name.rsplit(".", 1)[0].lower()
                     launch[name] = path
-                    words = name.split(" ")
-                    for word in words:
-                        if word and word not in launch:
-                            if len(name) > 6 and len(word) < 3:
-                                continue
-                            launch[word] = path
 
     elif app.platform == "windows":
-        shortcuts = enum_known_folder(FOLDERID_AppsFolder)
-        # str(shortcuts)
-        for name in shortcuts:
-            # print("hit: " + name)
-            # print(name)
-            # name = path.rsplit("\\")[-1].split(".")[0].lower()
-            if "install" not in name:
-                spoken_form = create_spoken_forms(name)
-                # print(spoken_form)
-                launch[spoken_form] = name
-                words = spoken_form.split(" ")
-                for word in words:
-                    if word not in words_to_exclude and word not in launch:
-                        if len(name) > 6 and len(word) < 3:
-                            continue
-                        launch[word] = name
+        launch = get_windows_apps()
+        # actions.user.talon_pretty_print(launch)
 
-    ctx.lists["self.launch"] = launch
+    ctx.lists["self.launch"] = actions.user.create_spoken_forms_from_map(
+        launch, words_to_exclude
+    )
 
 
 def ui_event(event, arg):
     if event in ("app_launch", "app_close"):
-        update_lists()
+        update_running_list()
 
 
 # Currently update_launch_list only does anything on mac, so we should make sure
@@ -372,12 +362,14 @@ ctx.lists["user.launch"] = {}
 ctx.lists["user.running"] = {}
 
 # Talon starts faster if you don't use the `talon.ui` module during launch
+
+
 def on_ready():
     update_overrides(None, None)
     fs.watch(overrides_directory, update_overrides)
     update_launch_list()
+    update_running_list()
     ui.register("", ui_event)
 
 
-# NOTE: please update this from "launch" to "ready" in Talon v0.1.5
 app.register("ready", on_ready)

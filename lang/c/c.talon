@@ -1,11 +1,25 @@
-mode: user.c
-mode: user.auto_lang
+mode: command
+and mode: user.c
+mode: command
+and mode: user.auto_lang
 and code.language: c
 -
-tag(): user.code_operators
-tag(): user.code_comment
-tag(): user.code_block_comment
-tag(): user.code_generic
+tag(): user.code_imperative
+
+tag(): user.code_comment_line
+tag(): user.code_comment_block_c_like
+tag(): user.code_data_bool
+tag(): user.code_data_null
+tag(): user.code_functions
+tag(): user.code_functions_gui
+tag(): user.code_libraries
+tag(): user.code_libraries_gui
+tag(): user.code_operators_array
+tag(): user.code_operators_assignment
+tag(): user.code_operators_bitwise
+tag(): user.code_operators_math
+tag(): user.code_operators_pointer
+
 settings():
     user.code_private_function_formatter = "SNAKE_CASE"
     user.code_protected_function_formatter = "SNAKE_CASE"
@@ -17,99 +31,29 @@ settings():
     #    user.use_stdint_datatypes = 1
 
 
-action(user.code_operator_indirection): "*"
-action(user.code_operator_address_of): "&"
-action(user.code_operator_structure_dereference): "->"
-action(user.code_operator_subscript):
-    insert("[]")
-    key(left)
-action(user.code_operator_assignment): " = "
-action(user.code_operator_subtraction): " - "
-action(user.code_operator_subtraction_assignment): " -= "
-action(user.code_operator_addition): " + "
-action(user.code_operator_addition_assignment): " += "
-action(user.code_operator_multiplication): " * "
-action(user.code_operator_multiplication_assignment): " *= "
-#action(user.code_operator_exponent): " ** "
-action(user.code_operator_division): " / "
-action(user.code_operator_division_assignment): " /= "
-action(user.code_operator_modulo): " % "
-action(user.code_operator_modulo_assignment): " %= "
-action(user.code_operator_equal): " == "
-action(user.code_operator_not_equal): " != "
-action(user.code_operator_greater_than): " > "
-action(user.code_operator_greater_than_or_equal_to): " >= "
-action(user.code_operator_less_than): " < "
-action(user.code_operator_less_than_or_equal_to): " <= "
-action(user.code_operator_and): " && "
-action(user.code_operator_or): " || "
-action(user.code_operator_bitwise_and): " & "
-action(user.code_operator_bitwise_and_assignment): " &= "
-action(user.code_operator_bitwise_or): " | "
-action(user.code_operator_bitwise_or_assignment): " |= "
-action(user.code_operator_bitwise_exclusive_or): " ^ "
-action(user.code_operator_bitwise_exclusive_or_assignment): " ^= "
-action(user.code_operator_bitwise_left_shift): " << "
-action(user.code_operator_bitwise_left_shift_assignment): " <<= "
-action(user.code_operator_bitwise_right_shift): " >> "
-action(user.code_operator_bitwise_right_shift_assignment): " >>= "
-action(user.code_null): "NULL"
-action(user.code_is_null): " == NULL "
-action(user.code_is_not_null): " != NULL"
-action(user.code_state_if):
-    insert("if () {\n}\n")
-    key(up:2 left:3)
-action(user.code_state_else_if):
-    insert("else if () {\n}\n")
-    key(up:2 left:3)
-action(user.code_state_else):
-    insert("else\n{\n}\n")
-    key(up:2)
-action(user.code_state_switch):
-    insert("switch ()")
-    edit.left()
-action(user.code_state_case):
-    insert("case \nbreak;")
-    edit.up()
-action(user.code_state_for): "for "
-action(user.code_state_go_to): "goto "
-action(user.code_state_while):
-    insert("while ()")
-    edit.left()
-action(user.code_state_return): "return "
-action(user.code_break): "break;"
-action(user.code_next): "continue;"
-action(user.code_true): "true"
-action(user.code_false): "false"
-action(user.code_type_definition): "typedef "
-action(user.code_typedef_struct):
-    insert("typedef struct")
-    insert("{\n\n}")
-    edit.up()
-    key(tab)
-action(user.code_from_import): "using "
-action(user.code_include): insert("#include ")
-action(user.code_include_system):
-    insert("#include <>")
-    edit.left()
-action(user.code_include_local):
-    insert('#include ""')
-    edit.left()
-action(user.code_comment): "//"
-action(user.code_block_comment):
-    insert("/*")
-    key(enter)
-    key(enter)
-    insert("*/")
-    edit.up()
-action(user.code_block_comment_prefix): "/*"
-action(user.code_block_comment_suffix): "*/"
 
 ^funky <user.text>$: user.code_default_function(text)
 ^static funky <user.text>$: user.code_private_static_function(text)
 
+# NOTE: migrated from generic, as they were only used here, though once cpp support is added, perhaps these should be migrated to a tag together with the commands below
+state include:
+    insert('#include ')
+state include system:
+    insert('#include <>')
+    edit.left()
+state include local:
+    insert('#include ""')
+    edit.left()
+state type deaf:
+    insert('typedef ')
+state type deaf struct:
+    insert('typedef struct')
+    insert('{\n\n}')
+    edit.up()
+    key('tab')
 
-# XXX - make these generic in programming, as they will match cpp, etc
+
+# XXX - create a preprocessor tag for these, as they will match cpp, etc
 state define: "#define "
 state undefine: "#undef "
 state if define: "#ifdef "
@@ -150,6 +94,7 @@ cast to <user.c_cast>: "{c_cast}"
 standard cast to <user.stdint_cast>: "{stdint_cast}"
 <user.c_types>: "{c_types}"
 <user.c_pointers>: "{c_pointers}"
+<user.c_keywords>: "{c_keywords}"
 <user.c_signed>: "{c_signed}"
 standard <user.stdint_types>: "{stdint_types}"
 int main:

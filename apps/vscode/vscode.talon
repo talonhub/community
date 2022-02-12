@@ -7,13 +7,6 @@ tag(): user.multiple_cursors
 tag(): user.snippets
 tag(): user.splits
 tag(): user.tabs
-#talon app actions
-action(app.tab_close): user.vscode("workbench.action.closeActiveEditor")
-action(app.tab_next): user.vscode("workbench.action.nextEditorInGroup")
-action(app.tab_previous): user.vscode("workbench.action.previousEditorInGroup")
-action(app.tab_reopen): user.vscode("workbench.action.reopenClosedEditor")
-action(app.window_close): user.vscode("workbench.action.closeWindow")
-action(app.window_open): user.vscode("workbench.action.newWindow")
 window reload: user.vscode("workbench.action.reloadWindow")
 window close: user.vscode("workbench.action.closeWindow")
 
@@ -66,10 +59,10 @@ action(user.multi_cursor_select_fewer_occurrences): user.vscode("cursorUndo")
 action(user.multi_cursor_select_more_occurrences): user.vscode("editor.action.addSelectionToNextFindMatch")
 #multiple_cursor.py support end
 
-please [<user.text>]: 
-  user.vscode("workbench.action.showCommands")
-  insert(user.text or "")
-
+please [<user.text>]:
+    user.vscode("workbench.action.showCommands")
+    insert(user.text or "")
+    
 # Sidebar
 bar explore: user.vscode("workbench.view.explorer")
 bar extensions: user.vscode("workbench.view.extensions")
@@ -80,10 +73,10 @@ bar source: user.vscode("workbench.view.scm")
 bar switch: user.vscode("workbench.action.toggleSidebarVisibility")
 
 symbol hunt [<user.text>]:
-  user.vscode("workbench.action.gotoSymbol")
-  sleep(50ms)
-  insert(text or "")
-
+    user.vscode("workbench.action.gotoSymbol")
+    sleep(50ms)
+    insert(text or "")
+    
 # Panels
 panel control: user.vscode("workbench.panel.repl.view.focus")
 panel output: user.vscode("workbench.panel.output.focus")
@@ -116,13 +109,13 @@ file copy path: user.vscode("copyFilePath")
 file create sibling: user.vscode_and_wait("explorer.newFile")
 file create: user.vscode("workbench.action.files.newUntitledFile")
 file rename:
-	user.vscode("fileutils.renameFile")
-	sleep(150ms)
+    user.vscode("fileutils.renameFile")
+    sleep(150ms)
 file move:
-	user.vscode("fileutils.moveFile")
-	sleep(150ms)
+    user.vscode("fileutils.moveFile")
+    sleep(150ms)
 file open folder: user.vscode("revealFileInOS")
-file reveal: user.vscode("workbench.files.action.showActiveFileInExplorer") 
+file reveal: user.vscode("workbench.files.action.showActiveFileInExplorer")
 save ugly: user.vscode("workbench.action.files.saveWithoutFormatting")
 
 # Language Features
@@ -148,17 +141,17 @@ refactor this: user.vscode("editor.action.refactor")
 
 #code navigation
 (go declaration | follow): user.vscode("editor.action.revealDefinition")
-go back: user.vscode("workbench.action.navigateBack") 
-go forward:  user.vscode("workbench.action.navigateForward")  
+go back: user.vscode("workbench.action.navigateBack")
+go forward: user.vscode("workbench.action.navigateForward")
 go implementation: user.vscode("editor.action.goToImplementation")
 go type: user.vscode("editor.action.goToTypeDefinition")
 go usage: user.vscode("references-view.find")
-go recent [<user.text>]: 
-  user.vscode("workbench.action.openRecent")
-  sleep(50ms)
-  insert(text or "")
-  sleep(250ms)
-
+go recent [<user.text>]:
+    user.vscode("workbench.action.openRecent")
+    sleep(50ms)
+    insert(text or "")
+    sleep(250ms)
+    
 # Bookmarks. Requires Bookmarks plugin
 go marks: user.vscode("workbench.view.extension.bookmarks")
 toggle mark: user.vscode("bookmarks.toggle")
@@ -177,14 +170,14 @@ fold comments: user.vscode("editor.foldAllBlockComments")
 # Git / Github (not using verb-noun-adjective pattern, mirroring terminal commands.)
 git branch: user.vscode("git.branchFrom")
 git branch this: user.vscode("git.branch")
-git checkout [<user.text>]: 
-  user.vscode("git.checkout")
-  sleep(50ms)
-  insert(text or "")
+git checkout [<user.text>]:
+    user.vscode("git.checkout")
+    sleep(50ms)
+    insert(text or "")
 git commit [<user.text>]:
-  user.vscode("git.commitStaged")
-  sleep(100ms)
-  user.insert_formatted(text or "", "CAPITALIZE_FIRST_WORD")
+    user.vscode("git.commitStaged")
+    sleep(100ms)
+    user.insert_formatted(text or "", "CAPITALIZE_FIRST_WORD")
 git commit undo: user.vscode("git.undoCommit")
 git commit ammend: user.vscode("git.commitStagedAmend")
 git diff: user.vscode("git.openChange")
@@ -224,7 +217,7 @@ debug console: user.vscode("workbench.debug.action.toggleRepl")
 terminal external: user.vscode("workbench.action.terminal.openNativeConsole")
 terminal new: user.vscode("workbench.action.terminal.new")
 terminal next: user.vscode("workbench.action.terminal.focusNext")
-terminal last:user.vscode("workbench.action.terminal.focusPrevious")
+terminal last: user.vscode("workbench.action.terminal.focusPrevious")
 terminal split: user.vscode("workbench.action.terminal.split")
 terminal zoom: user.vscode("workbench.action.toggleMaximizedPanel")
 terminal trash: user.vscode("workbench.action.terminal.kill")
@@ -246,9 +239,9 @@ maximize: user.vscode("workbench.action.minimizeOtherEditors")
 restore: user.vscode("workbench.action.evenEditorWidths")
 
 replace here:
-	user.replace("")
-	key(cmd-alt-l)
-
+    user.replace("")
+    key(cmd-alt-l)
+    
 hover show: user.vscode("editor.action.showHover")
 
 join lines: user.vscode("editor.action.joinLines")

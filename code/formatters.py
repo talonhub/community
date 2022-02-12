@@ -8,9 +8,14 @@ ctx = Context()
 key = actions.key
 edit = actions.edit
 
-words_to_keep_lowercase = (
-    "a,an,the,at,by,for,in,is,of,on,to,up,and,as,but,or,nor".split(",")
-)
+words_to_keep_lowercase = "a an the at by for in is of on to up and as but or nor".split()
+
+DEFAULT_SEPARATOR = ' '
+SMASH_SEPARATOR = ''
+
+# SEP and NOSEP are used when defining formatters to determine whether the formatter should put a separator between words.
+SEP = True
+NOSEP = False
 
 # The last phrase spoken, without & with formatting. Used for reformatting.
 last_phrase = ""
@@ -28,7 +33,7 @@ def surround(by):
     return func
 
 
-def format_phrase(m: Union[str, Phrase], fmtrs: str):
+def format_phrase(m: Union[str, Phrase], formatters: str):
     global last_phrase, last_phrase_formatted
     last_phrase = m
     words = []
@@ -38,11 +43,9 @@ def format_phrase(m: Union[str, Phrase], fmtrs: str):
         # TODO: is this still necessary, and if so why?
         if m.words[-1] == "over":
             m.words = m.words[:-1]
+        words = actions.dictate.replace_words(actions.dictate.parse_words(m))
 
-        words = actions.dictate.parse_words(m)
-        words = actions.dictate.replace_words(words)
-
-    result = last_phrase_formatted = format_phrase_no_history(words, fmtrs)
+    result = last_phrase_formatted = format_phrase_without_adding_to_history(words, formatters)
     actions.user.add_phrase_to_history(result)
     # Arguably, we shouldn't be dealing with history here, but somewhere later
     # down the line. But we have a bunch of code that relies on doing it this
@@ -50,22 +53,18 @@ def format_phrase(m: Union[str, Phrase], fmtrs: str):
     return result
 
 
-def format_phrase_no_history(word_list, fmtrs: str):
-    fmtr_list = fmtrs.split(",")
+def format_phrase_without_adding_to_history(word_list, formatters: str):
+    formatter_list = formatters.split(",")
     words = []
-    spaces = True
-    for i, w in enumerate(word_list):
-        for name in reversed(fmtr_list):
-            smash, func = all_formatters[name]
-            w = func(i, w, i == len(word_list) - 1)
-            spaces = spaces and not smash
-        words.append(w)
-    sep = " " if spaces else ""
-    return sep.join(words)
-
-
-NOSEP = True
-SEP = False
+    separator_to_use = DEFAULT_SEPARATOR
+    for i, word in enumerate(word_list):
+        for name in reversed(formatter_list):
+            does_formatter_use_separator, formatter_function = all_formatters[name]
+            word = formatter_function(i, word, i == len(word_list) - 1)
+            if not does_formatter_use_separator:
+                separator_to_use = SMASH_SEPARATOR
+        words.append(word)
+    return separator_to_use.join(words)
 
 
 def words_with_joiner(joiner):
@@ -84,7 +83,8 @@ def first_vs_rest(first_func, rest_func=lambda w: w):
     Leave second argument out if you want all but the first word to be passed
     through unchanged.
     Set first argument to None if you want the first word to be passed
-    through unchanged."""
+    through unchanged.
+    """
     if first_func is None:
         first_func = lambda w: w
 
@@ -106,11 +106,8 @@ def every_word(word_func):
 formatters_dict = {
     "NOOP": (SEP, lambda i, word, _: word),
     "DOUBLE_UNDERSCORE": (NOSEP, first_vs_rest(lambda w: "__%s__" % w)),
-    "PRIVATE_CAMEL_CASE": (NOSEP, first_vs_rest(lambda w: w, lambda w: w.capitalize())),
-    "PROTECTED_CAMEL_CASE": (
-        NOSEP,
-        first_vs_rest(lambda w: w, lambda w: w.capitalize()),
-    ),
+    "PRIVATE_CAMEL_CASE": (NOSEP, first_vs_rest(lambda w: w.lower(), lambda w: w.capitalize())),
+    "PROTECTED_CAMEL_CASE": (NOSEP, first_vs_rest(lambda w: w.lower(), lambda w: w.capitalize())),
     "PUBLIC_CAMEL_CASE": (NOSEP, every_word(lambda w: w.capitalize())),
     "SNAKE_CASE": (
         NOSEP,
@@ -138,9 +135,6 @@ formatters_dict = {
         # if i == 0 or word not in words_to_keep_lowercase
         # else word,
     ),
-    "FIRST_THREE": (NOSEP, lambda i, word, _: word[0:3]),
-    "FIRST_FOUR": (NOSEP, lambda i, word, _: word[0:4]),
-    "FIRST_FIVE": (NOSEP, lambda i, word, _: word[0:5]),
 }
 
 # This is the mapping from spoken phrases to formatters
@@ -160,13 +154,8 @@ formatters_words = {
     "incline": formatters_dict["SLASH_SEPARATED"],
     "gum": formatters_dict["NO_SPACES"],
     "snake": formatters_dict["SNAKE_CASE"],
-    # "speak": formatters_dict["NOOP"],
     "string": formatters_dict["SINGLE_QUOTED_STRING"],
     "title": formatters_dict["CAPITALIZE_ALL_WORDS"],
-    # disable a few formatters for now
-    # "tree": formatters_dict["FIRST_THREE"],
-    # "quad": formatters_dict["FIRST_FOUR"],
-    # "fiver": formatters_dict["FIRST_FIVE"],
 }
 
 all_formatters = {}
@@ -240,12 +229,7 @@ class Actions:
         """Inserts a phrase formatted according to formatters. Formatters is a comma separated list of formatters (e.g. 'CAPITALIZE_ALL_WORDS,DOUBLE_QUOTED_STRING')"""
         actions.insert(format_phrase(phrase, formatters))
 
-    def formatters_help_toggle():
-        """Lists all formatters"""
-        if gui.showing:
-            gui.hide()
-        else:
-            gui.show()
+
 
     def formatters_reformat_last(formatters: str) -> str:
         """Clears and reformats last formatted phrase"""
@@ -266,9 +250,7 @@ class Actions:
         if not selected:
             print("Asked to reformat selection, but nothing selected!")
             return
-        unformatted = re.sub(r"[^a-zA-Z0-9]+", " ", selected).lower()
-        # TODO: Separate out camelcase & studleycase vars
-
+        unformatted = unformat_text(selected)
         # Delete separately for compatibility with programs that don't overwrite
         # selected text (e.g. Emacs)
         edit.delete()
@@ -276,10 +258,31 @@ class Actions:
         actions.insert(text)
         return text
 
+    def get_formatters_words():
+        """returns a list of words currently used as formatters, and a demonstration string using those formatters"""
+        formatters_help_demo = {}
+        for name in sorted(set(formatters_words.keys())):
+            formatters_help_demo[name] = format_phrase_without_adding_to_history(['one', 'two', 'three'], name)
+        return  formatters_help_demo
+
+    def reformat_text(text: str, formatters: str) -> str:
+        """Reformat the text."""
+        unformatted = unformat_text(text)
+        return actions.user.formatted_text(unformatted, formatters)
+
     def insert_many(strings: List[str]) -> None:
         """Insert a list of strings, sequentially."""
         for string in strings:
             actions.insert(string)
+
+def unformat_text(text: str) -> str:
+    """Remove format from text"""
+    unformatted = re.sub(r"[^\w]+", " ", text)
+    # Split on camelCase, including numbers
+    # FIXME: handle non-ASCII letters!
+    unformatted = re.sub(r"(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|(?<=[a-zA-Z])(?=[0-9])|(?<=[0-9])(?=[a-zA-Z])", " ", unformatted)
+    # TODO: Separate out studleycase vars
+    return unformatted.lower()
 
 
 ctx.lists["self.formatters"] = formatters_words.keys()
@@ -288,10 +291,3 @@ ctx.lists["self.prose_formatter"] = {
     "speak": "CAPITALIZE_FIRST_WORD",
 }
 
-
-@imgui.open()
-def gui(gui: imgui.GUI):
-    gui.text("List formatters")
-    gui.line()
-    for name in sorted(set(formatters_words.keys())):
-        gui.text(f"{name} | {format_phrase_no_history(['one', 'two', 'three'], name)}")
