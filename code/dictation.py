@@ -170,9 +170,15 @@ def needs_space_between(before: str, after: str) -> bool:
 # assert not needs_space_between("hello'", ".")
 # assert not needs_space_between("hello.", "'")
 
+no_cap_after = re.compile(r"""(
+    e\.g\.
+    | i\.e\.
+    )$""", re.VERBOSE)
+
 def auto_capitalize(text, state = None):
     """
-    Auto-capitalizes text. `state` argument means:
+    Auto-capitalizes text. Text must contain complete words, abbreviations, and
+    formatted expressions. `state` argument means:
 
     - None: Don't capitalize initial word.
     - "sentence start": Capitalize initial word.
@@ -186,9 +192,10 @@ def auto_capitalize(text, state = None):
     # string left-to-right.
     charge = state == "sentence start"
     newline = state == "after newline"
+    sentence_end = False
     for c in text:
-        # Sentence endings & double newlines create a charge.
-        if c in ".!?" or (newline and c == "\n"):
+        # Sentence endings followed by space & double newlines create a charge.
+        if (sentence_end and c in " \n\t") or (newline and c == "\n"):
             charge = True
         # Alphanumeric characters and commas/colons absorb charge & try to
         # capitalize (for numbers & punctuation this does nothing, which is what
@@ -199,7 +206,8 @@ def auto_capitalize(text, state = None):
         # Otherwise the charge just passes through.
         output += c
         newline = c == "\n"
-    return output, ("sentence start" if charge else
+        sentence_end = c in ".!?" and not no_cap_after.search(output)
+    return output, ("sentence start" if charge or sentence_end else
                     "after newline" if newline else None)
 
 
