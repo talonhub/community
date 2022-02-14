@@ -1,8 +1,6 @@
 from talon import Module, Context, actions, settings
 
 mod = Module()
-mod.tag("javascript", desc="Enables commands for JavaScript and JS-like languages")
-
 ctx = Context()
 ctx.matches = """
 tag: user.javascript
