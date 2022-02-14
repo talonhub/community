@@ -2,9 +2,7 @@ from talon import Module, Context, actions, ui, imgui, settings
 
 ctx = Context()
 ctx.matches = r"""
-mode: user.typescript
-mode: user.auto_lang
-and code.language: typescript
+tag: user.typescript
 """
 # tbd
 # ctx.lists["user.code_functions"] = {
