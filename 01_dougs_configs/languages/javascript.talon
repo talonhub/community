@@ -10,3 +10,5 @@ return true: "return true"
 return [<user.text>]: 
     insert("return ")
     insert(text)
+
+state in: "in"
