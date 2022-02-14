@@ -28,8 +28,8 @@ settings():
 
 
 
-^funky <user.text>$:                   user.code_default_function(text)
-^static funky <user.text>$:            user.code_private_static_function(text)
+^funky <user.text>$: user.code_default_function(text)
+^static funky <user.text>$: user.code_private_static_function(text)
 
 # NOTE: migrated from generic, as they were only used here, though once cpp support is added, perhaps these should be migrated to a tag together with the commands below
 state include:
@@ -50,17 +50,17 @@ state type deaf struct:
 
 
 # XXX - create a preprocessor tag for these, as they will match cpp, etc
-state define:                          "#define "
-state undefine:                        "#undef "
-state if define:                       "#ifdef "
+state define: "#define "
+state undefine: "#undef "
+state if define: "#ifdef "
 
 # XXX - preprocessor instead of pre?
-state pre if:                          "#if "
-state error:                           "#error "
-state pre else if:                     "#elif "
-state pre end:                         "#endif "
-state pragma:                          "#pragma "
-state default:                         "default:\nbreak;"
+state pre if: "#if "
+state error: "#error "
+state pre else if: "#elif "
+state pre end: "#endif "
+state pragma: "#pragma "
+state default: "default:\nbreak;"
 
 #control flow
 #best used with a push like command
@@ -86,18 +86,18 @@ push brackets:
     insert("{c_variable} {letter} ")
 
 # Ex. (int *)
-cast to <user.c_cast>:                 "{c_cast}"
-standard cast to <user.stdint_cast>:   "{stdint_cast}"
-<user.c_types>:                        "{c_types}"
-<user.c_pointers>:                     "{c_pointers}"
-<user.c_keywords>:                     "{c_keywords}"
-<user.c_signed>:                       "{c_signed}"
-standard <user.stdint_types>:          "{stdint_types}"
+cast to <user.c_cast>: "{c_cast}"
+standard cast to <user.stdint_cast>: "{stdint_cast}"
+<user.c_types>: "{c_types}"
+<user.c_pointers>: "{c_pointers}"
+<user.c_keywords>: "{c_keywords}"
+<user.c_signed>: "{c_signed}"
+standard <user.stdint_types>: "{stdint_types}"
 int main:
     insert("int main()")
     edit.left()
 
-toggle includes:                       user.code_toggle_libraries()
+toggle includes: user.code_toggle_libraries()
 include <user.code_libraries>:
     user.code_insert_library(code_libraries, "")
     key(end enter)
