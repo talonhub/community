@@ -1,0 +1,72 @@
+{
+	"ts-throw-error": {
+		"prefix": ["ts-throw-error"],
+		"body": [
+			"throw new Error('${1}');"
+		],
+		"description": "An error throw"
+	},
+	"ts-field": {
+		"prefix": ["ts-field"],
+		"body": [
+			"${1|private,public|} ${2:name}: ${3:Type}"
+		],
+		"description": "A field"
+	},
+	"ts-record-field": {
+		"prefix": ["ts-record-field"],
+		"body": [
+			"${1|private,public|} ${2:name}: Record<${3:string}, ${4:ValueType}>"
+		],
+		"description": "A record field"
+	},
+
+
+	"ts-method": {
+		"prefix": ["ts-method"],
+		"body": [
+			"${1|private,public|} ${2:name}(${3:params}: ${4:type}) {",
+			"\t${5}",
+			"}"
+		],
+		"description": "A private field"
+	},
+
+
+
+	"ts-private-field": {
+		"prefix": ["ts-private-field"],
+		"body": [
+			"private ${1:name}: ${2:Type}"
+		],
+		"description": "A private field"
+	},
+	"ts-private-record": {
+		"prefix": ["ts-private-record"],
+		"body": [
+			"private ${1:name}: Record<${2:string}, ${3:ValueType}>"
+		],
+		"description": "A private field as a record type"
+	},
+
+	"ts-enum": {
+		"prefix": ["enum", "ts-enum"],
+		"body": [
+			"enum ${1:name} {",
+			"\t$0",
+			"}"
+		],
+		"description": "An "
+	},
+	"ts-const-enum": {
+		"prefix": ["const-enum", "ts-const-enum"],
+		"body": [
+			"const ${1:name} = {",
+			"\t$0",
+			"} as const;",
+			"",
+			"type ${1:name} = ValuesOf<typeof ${1:name}>;"
+		],
+		"description": "An enum-like object constant"
+	}
+}
