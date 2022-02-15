@@ -10,20 +10,14 @@ my phone:
 my name:
   "Alex Koch"
 
-portfolio site:
-  "alexrkoch-portfolio-2.com"
+my user name:
+  "alexrkoch"
 
 civic crumb:
   "CiviCRM"
 
 # timer (start | stop):
 #     key(cmd-shift-r)
-
-fantasizes:
-  "font sizes"
-
-fantasize:
-  "font size"
 
 shock:
   key(cmd-enter)
@@ -144,10 +138,10 @@ blitch:
 blitcher:
     edit.extend_word_right()
 
-select home:
+select line start:
     edit.extend_line_start()
 
-select end:
+select line end:
     edit.extend_line_end()
 
 select way home:
