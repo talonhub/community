@@ -38,7 +38,7 @@ class Actions:
         if app.platform == "windows":
             actions.key("super-shift-s")
         elif app.platform == "mac":
-            actions.key("ctrl-shift-cmd-4")
+            actions.key("cmd-shift-4")
         elif app.platform == "linux":
             actions.key("shift-printscr")
 
