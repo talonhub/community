@@ -63,6 +63,12 @@ ctx.lists["self.cpp_simple_types"] = {
     "typename": "typename",
 }
 
+# Words that trigger the standard namespace logic
+ctx.lists["self.cpp_standard"] = {
+    "standard": "std",
+    "stood": "std",
+}
+
 # Types in std namespace
 ctx.lists["self.cpp_standard_types"] = {
     # Language Support / Utility Library
@@ -606,6 +612,7 @@ mod.list(
     "cpp_type_bit_width", desc="Typical bit-width of C++ fixed width integer types"
 )
 mod.list("cpp_simple_types", desc="Common C/C++ types")
+mod.list("cpp_standard", desc="Words that trigger the standard namespace logic")
 mod.list("cpp_standard_types", desc="C++ types in namespace std")
 mod.list(
     "cpp_user_types",
@@ -665,8 +672,8 @@ def cpp_fixed_width_integer_type(m) -> str:
     rule=rm_newlines(
         """
             [{self.cpp_type_sign_modifiers}] {self.cpp_simple_types}
-          | standard {self.cpp_standard_types}
-          | standard <self.cpp_fixed_width_integer_type>
+          | {self.cpp_standard} {self.cpp_standard_types}
+          | {self.cpp_standard} <self.cpp_fixed_width_integer_type>
           | {self.cpp_user_types}
           | <self.cpp_fixed_width_integer_type>
         """
@@ -674,7 +681,7 @@ def cpp_fixed_width_integer_type(m) -> str:
 )
 def cpp_simple_type(m) -> str:
     "Returns a string"
-    if m[0] == "standard":
+    if m[0] == "std":
         return "std::" + m[1]
     else:
         return " ".join(list(m))
@@ -831,16 +838,16 @@ def cpp_unqualified_standard_generic_type(m) -> str:
     rule=rm_newlines(
         """
         {user.code_functions}
-        | standard {user.cpp_standard_functions}
-        | standard {user.cpp_standard_range_algorithms}
-        | standard ranges {user.cpp_standard_range_algorithms}
+        | {user.cpp_standard} {user.cpp_standard_functions}
+        | {user.cpp_standard} {user.cpp_standard_range_algorithms}
+        | {user.cpp_standard} ranges {user.cpp_standard_range_algorithms}
         | {user.cpp_user_functions}
         """
     ),
 )
 def code_functions(m) -> str:
     """Returns a function name"""
-    if m[0] == "standard":
+    if m[0] == "std":
         if m[1] == "ranges":
             return "std::ranges" + m[2]
         else:

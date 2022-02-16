@@ -95,20 +95,20 @@ type <user.cpp_type>: "{cpp_type} "
 <user.cpp_type_prefix> <user.cpp_raw_type>:
     ty = user.cpp_build_declarator_with_prefix(cpp_type_prefix, cpp_raw_type, '')
     insert("{ty} ")
-standard <user.cpp_unqualified_standard_generic_type>: "std::{cpp_unqualified_standard_generic_type} "
+{user.cpp_standard} <user.cpp_unqualified_standard_generic_type>: "std::{cpp_unqualified_standard_generic_type} "
 # 'auto' is common enough that we allow skipping the "type" prefix
 auto: "auto "
 call <user.code_functions>:
     user.cpp_insert_call("{code_functions}")
-standard double colon: "std::"
-standard {user.cpp_standard_functions}:
+{user.cpp_standard} double colon: "std::"
+{user.cpp_standard} {user.cpp_standard_functions}:
     user.cpp_insert_call("std::{cpp_standard_functions}")
-standard {user.cpp_standard_range_algorithms}:
+{user.cpp_standard} {user.cpp_standard_range_algorithms}:
     user.cpp_insert_call("std::{cpp_standard_range_algorithms}")
-standard ranges {user.cpp_standard_range_algorithms}:
+{user.cpp_standard} ranges {user.cpp_standard_range_algorithms}:
     user.cpp_insert_call("std::ranges::{cpp_standard_range_algorithms}")
 
-standard {user.cpp_standard_objects}: "std::{cpp_standard_objects}"
+{user.cpp_standard} {user.cpp_standard_objects}: "std::{cpp_standard_objects}"
 access {user.cpp_access_specifiers}: "{cpp_access_specifiers}:\n"
 {user.cpp_declaration_specifiers}: "{cpp_declaration_specifiers} "
 
@@ -127,7 +127,11 @@ toggle includes: user.code_toggle_libraries()
 include <user.code_libraries>:
     user.code_insert_library(code_libraries, "")
 
-(null|no) pointer: user.paste("nullptr")
+# Variants of data_null.talon that allow saying "null pointer"
+# without it resulting in "nullptr*"
+[state] (no | nil | null) pointer: user.code_insert_null()
+is not (none|null) pointer: user.code_insert_is_not_null()
+is (none|null) pointer: user.code_insert_is_null()
 
 member <user.prose>$:
     name = user.formatted_text(prose, "SNAKE_CASE")
