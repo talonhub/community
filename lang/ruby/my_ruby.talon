@@ -24,6 +24,9 @@ binding pry: "binding.pry"
 binding pry remote: "binding.pry_remote"
 pry binding: "binding.pry"
 binding break: "binding.break"
+pry (wear|where): "whereami"
+pry next: "next"
+pry continue: "continue"
 
 assert equals: 'assert_equals '
 
