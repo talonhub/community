@@ -12,3 +12,10 @@ tag(): user.code_generic
 #
 # substitute since recognition mismatches the way i pronounce 'boolean' as 'billion'
 billion: "Boolean"
+
+binding pry: "binding.pry"
+pry (wear|where): "whereami"
+pry next: "next"
+pry continue: "continue"
+
+assert equals: 'assert_equals '
