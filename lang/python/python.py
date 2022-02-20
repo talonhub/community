@@ -206,10 +206,7 @@ class UserActions:
     def code_insert_false():           actions.auto_insert('False')
     def code_comment_documentation(): actions.user.insert_cursor('"""[|]"""')
     def code_insert_function(text: str, selection: str):
-        if selection:
-            text = text + "({})".format(selection)
-        else:
-            text = text + "()"
+        text += f"({selection or ''})"
         actions.user.paste(text)
         actions.edit.left()
 
