@@ -34,9 +34,7 @@ boxed [type] {user.java_boxed_type}:
     key("space")
 
 generic [type] {user.java_generic_data_structure}:
-    insert(java_generic_data_structure)
-    insert("<>")
-    key("left")
+    user.insert_between(java_generic_data_structure + "<", ">")
 
 # Arrays
 type {user.code_type} array:
