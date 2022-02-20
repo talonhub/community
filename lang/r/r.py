@@ -3,9 +3,7 @@ from talon import Context, Module, actions, clip, imgui, settings, ui
 ctx = Context()
 
 ctx.matches = r"""
-mode: user.r
-mode: user.auto_lang
-and code.language: r
+tag: user.r
 """
 
 ctx.lists["user.code_functions"] = {

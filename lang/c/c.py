@@ -10,9 +10,7 @@ mod.setting(
 
 ctx = Context()
 ctx.matches = r"""
-mode: user.c
-mode: user.auto_lang
-and code.language: c
+tag: user.c
 """
 
 ctx.lists["self.c_pointers"] = {

@@ -5,9 +5,7 @@ from talon import Context, Module, actions, settings
 mod = Module()
 ctx = Context()
 ctx.matches = r"""
-mode: user.python
-mode: user.auto_lang
-and code.language: python
+tag: user.python
 """
 ctx.lists["user.code_functions"] = {
     "enumerate": "enumerate",

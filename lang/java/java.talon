@@ -1,8 +1,4 @@
-mode: command
-and mode: user.java
-mode: command
-and mode: user.auto_lang
-and code.language: java
+tag: user.java
 -
 tag(): user.code_imperative
 tag(): user.code_object_oriented

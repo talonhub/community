@@ -1,8 +1,4 @@
-mode: command
-and mode: user.vimscript
-mode: command
-and mode: user.auto_lang
-and code.language: vimscript
+tag: user.vimscript
 -
 tag(): user.code_imperative
 tag(): user.code_operators_assignment
