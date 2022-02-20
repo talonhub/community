@@ -206,7 +206,7 @@ class UserActions:
         actions.insert('return ')
     def code_insert_true():            actions.auto_insert('True')
     def code_insert_false():           actions.auto_insert('False')
-    def code_comment_documentation(): actions.user.insert_cursor('"""[|]"""')
+    def code_comment_documentation(): actions.user.insert_between('"""', '"""')
     def code_insert_function(text: str, selection: str):
         if selection:
             text = text + "({})".format(selection)
@@ -245,17 +245,3 @@ class UserActions:
 
     def code_insert_return_type(type: str):
         actions.insert(f" -> {type}")
-
-
-@mod.action_class
-class module_actions:
-    # TODO this could go somewhere else
-    def insert_cursor(text: str):
-        """Insert a string. Leave the cursor wherever [|] is in the text"""
-        if "[|]" in text:
-            end_pos = text.find("[|]")
-            s = text.replace("[|]", "")
-            actions.insert(s)
-            actions.key(f"left:{len(s) - end_pos}")
-        else:
-            actions.insert(text)
