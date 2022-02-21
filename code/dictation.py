@@ -38,26 +38,42 @@ ctx.lists["user.prose_snippets"] = {
 def prose_modifier(m) -> Callable:
     return getattr(DictationFormat, m.prose_modifiers)
 
+@mod.capture(rule="numeral <user.number_string>")
+def prose_simple_number(m) -> str:
+    return m.number_string
+
+@mod.capture(rule="numeral <user.number_string> (dot | point) <digit_string>")
+def prose_number_with_dot(m) -> str:
+    return m.number_string + "." + m.digit_string
+
+@mod.capture(rule="numeral <user.number_string> colon <user.number_string>")
+def prose_number_with_colon(m) -> str:
+    return m.number_string_1 + ":" + m.number_string_2
+
+@mod.capture(rule="<user.prose_simple_number> | <user.prose_number_with_dot> | <user.prose_number_with_colon>")
+def prose_number(m) -> str:
+    return str(m)
+
 @mod.capture(rule="({user.vocabulary} | <word>)")
 def word(m) -> str:
     """A single word, including user-defined vocabulary."""
     try:
         return m.vocabulary
     except AttributeError:
-        return " ".join(actions.user.replace_phrases(actions.dictate.parse_words(m.word)))
+        return " ".join(actions.dictate.replace_words(actions.dictate.parse_words(m.word)))
 
 @mod.capture(rule="({user.vocabulary} | <phrase>)+")
 def text(m) -> str:
     """A sequence of words, including user-defined vocabulary."""
     return format_phrase(m)
 
-@mod.capture(rule="({user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <phrase> | <user.prose_modifier>)+")
+@mod.capture(rule="({user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <phrase> | <user.prose_number> | <user.prose_modifier>)+")
 def prose(m) -> str:
     """Mixed words and punctuation, auto-spaced & capitalized."""
     # Straighten curly quotes that were introduced to obtain proper spacing.
     return apply_formatting(m).replace("“", "\"").replace("”", "\"")
 
-@mod.capture(rule="({user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <phrase>)+")
+@mod.capture(rule="({user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <phrase> | <user.prose_number>)+")
 def raw_prose(m) -> str:
     """Mixed words and punctuation, auto-spaced & capitalized, without quote straightening and commands (for use in dictation mode)."""
     return apply_formatting(m)
@@ -77,7 +93,7 @@ def capture_to_words(m):
     words = []
     for item in m:
         words.extend(
-            actions.user.replace_phrases(actions.dictate.parse_words(item))
+            actions.dictate.replace_words(actions.dictate.parse_words(item))
             if isinstance(item, grammar.vm.Phrase)
             else [item])
     return words
@@ -91,7 +107,7 @@ def apply_formatting(m):
         if isinstance(item, Callable):
             item(formatter)
         else:
-            words = (actions.user.replace_phrases(actions.dictate.parse_words(item))
+            words = (actions.dictate.replace_words(actions.dictate.parse_words(item))
                      if isinstance(item, grammar.vm.Phrase)
                      else [item])
             for word in words:
@@ -154,9 +170,15 @@ def needs_space_between(before: str, after: str) -> bool:
 # assert not needs_space_between("hello'", ".")
 # assert not needs_space_between("hello.", "'")
 
+no_cap_after = re.compile(r"""(
+    e\.g\.
+    | i\.e\.
+    )$""", re.VERBOSE)
+
 def auto_capitalize(text, state = None):
     """
-    Auto-capitalizes text. `state` argument means:
+    Auto-capitalizes text. Text must contain complete words, abbreviations, and
+    formatted expressions. `state` argument means:
 
     - None: Don't capitalize initial word.
     - "sentence start": Capitalize initial word.
@@ -170,9 +192,10 @@ def auto_capitalize(text, state = None):
     # string left-to-right.
     charge = state == "sentence start"
     newline = state == "after newline"
+    sentence_end = False
     for c in text:
-        # Sentence endings & double newlines create a charge.
-        if c in ".!?" or (newline and c == "\n"):
+        # Sentence endings followed by space & double newlines create a charge.
+        if (sentence_end and c in " \n\t") or (newline and c == "\n"):
             charge = True
         # Alphanumeric characters and commas/colons absorb charge & try to
         # capitalize (for numbers & punctuation this does nothing, which is what
@@ -183,7 +206,8 @@ def auto_capitalize(text, state = None):
         # Otherwise the charge just passes through.
         output += c
         newline = c == "\n"
-    return output, ("sentence start" if charge else
+        sentence_end = c in ".!?" and not no_cap_after.search(output)
+    return output, ("sentence start" if charge or sentence_end else
                     "after newline" if newline else None)
 
 
@@ -398,4 +422,5 @@ mode: dictation
 
 @dictation_ctx.action_class("main")
 class main_action:
-    def auto_insert(text): actions.user.dictation_insert(text)
+    def auto_insert(text):
+        actions.user.dictation_insert(actions.auto_format(text))
