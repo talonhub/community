@@ -3,9 +3,7 @@ from talon import Context, Module, actions, settings
 ctx = Context()
 mod = Module()
 ctx.matches = r"""
-mode: user.scala
-mode: user.auto_lang
-and code.language: scala
+user.tag: scala
 """
 
 # Scala Common Types
