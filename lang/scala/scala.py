@@ -38,22 +38,17 @@ ctx.lists["user.code_type"] = scala_types
 
 @ctx.action_class("user")
 class UserActions:
-    def code_operator_indirection():
-        actions.skip()
-
-    def code_operator_address_of():
-        actions.skip()
-
     def code_block():
         actions.insert('{}')
-        actions.key('left enter')
+        actions.edit.left()
+        actions.key('enter')
 
     def code_operator_lambda():
         actions.auto_insert(" => ")
 
     def code_operator_subscript():
         actions.insert("()")
-        actions.key("left")
+        actions.edit.left()
 
     def code_operator_assignment():
         actions.auto_insert(" = ")
@@ -156,13 +151,13 @@ class UserActions:
 
     def code_state_if():
         actions.insert("if () ")
-        actions.key("left")
-        actions.key("left")
+        actions.edit.left()
+        actions.edit.left()
 
     def code_state_else_if():
         actions.insert("else if () ")
-        actions.key("left")
-        actions.key("left")
+        actions.edit.left()
+        actions.edit.left()
 
     def code_state_else():
         actions.insert("else ")
@@ -180,8 +175,8 @@ class UserActions:
 
     def code_state_for():
         actions.insert("for () ")
-        actions.key("left")
-        actions.key("left")
+        actions.edit.left()
+        actions.edit.left()
 
     def code_state_while():
         actions.insert("while () ")
@@ -274,11 +269,3 @@ class UserActions:
         )
 
         actions.user.code_insert_function(result, None)
-
-    # skipping these: in scala static functions are just functions in objects
-    def code_private_static_function(text: str):
-        actions.skip()
-    def code_protected_static_function(text: str):
-        actions.skip()
-    def code_public_static_function(text: str):
-        actions.skip()

@@ -1,5 +1,7 @@
-mode: user.scala
-mode: user.auto_lang
+mode: command
+and mode: user.scala
+mode: command
+and mode: user.auto_lang
 and code.language: scala
 -
 tag(): user.code_imperative
@@ -36,7 +38,6 @@ state match: user.code_state_switch()
 state case class: "case class "
 state object: "object "
 
-char: key("'")
 block string:
   insert('""""""')
   key("left left left")
