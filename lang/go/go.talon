@@ -1,8 +1,4 @@
-mode: command
-and mode: user.go
-mode: command
-and mode: user.auto_lang
-and code.language: go
+tag: user.go
 -
 variadic: "..."
 logical and: " && "

@@ -2,9 +2,7 @@ from talon import Context, actions
 
 ctx = Context()
 ctx.matches = r"""
-mode: user.batch
-mode: user.auto_lang
-and code.language: batch
+tag: user.batch
 """
 
 

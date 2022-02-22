@@ -10,9 +10,7 @@ mod.setting(
 
 ctx = Context()
 ctx.matches = r"""
-mode: user.c
-mode: user.auto_lang
-and code.language: c
+tag: user.c
 """
 
 ctx.lists["self.c_pointers"] = {
@@ -30,7 +28,7 @@ ctx.lists["self.c_signed"] = {
     "unsigned": "unsigned ",
 }
 
-common_types = {
+ctx.lists["self.c_keywords"] = {
     "static": "static",
     "volatile": "volatile",
     "register": "register",
@@ -135,6 +133,7 @@ ctx.lists["user.code_functions"] = {
 
 mod.list("c_pointers", desc="Common C pointers")
 mod.list("c_signed", desc="Common C datatype signed modifiers")
+mod.list("c_keywords", desc="C keywords")
 mod.list("c_types", desc="Common C types")
 mod.list("stdint_types", desc="Common stdint C types")
 mod.list("stdint_signed", desc="Common stdint C datatype signed modifiers")
@@ -151,6 +150,10 @@ def c_signed(m) -> str:
     "Returns a string"
     return m.c_signed
 
+@mod.capture(rule="{self.c_keywords}")
+def c_keywords(m) -> str:
+    "Returns a string"
+    return m.c_keywords
 
 @mod.capture(rule="{self.c_types}")
 def c_types(m) -> str:

@@ -128,7 +128,7 @@ git commit [<user.text>]:
     sleep(100ms)
     user.insert_formatted(text or "", "CAPITALIZE_FIRST_WORD")
 git commit undo: user.vscode("git.undoCommit")
-git commit ammend: user.vscode("git.commitStagedAmend")
+git commit amend: user.vscode("git.commitStagedAmend")
 git diff: user.vscode("git.openChange")
 git ignore: user.vscode("git.ignore")
 git merge: user.vscode("git.merge")

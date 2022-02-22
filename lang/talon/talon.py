@@ -28,9 +28,7 @@ mod.list("talon_scopes")
 mod.list("talon_modes")
 
 ctx.matches = r"""
-mode: user.talon
-mode: user.auto_lang 
-and code.language: talon
+tag: user.talon
 """
 ctx.lists["user.code_functions"] = {
     "insert": "insert",
