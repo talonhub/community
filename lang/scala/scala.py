@@ -3,7 +3,7 @@ from talon import Context, Module, actions, settings
 ctx = Context()
 mod = Module()
 ctx.matches = r"""
-user.tag: scala
+tag: user.scala
 """
 
 # Scala Common Types
@@ -205,17 +205,17 @@ class UserActions:
     def code_comment_line_prefix():
         actions.auto_insert('// ')
 
-    def code_block_comment():
+    def code_comment_block():
         actions.insert('/*')
         actions.key('enter')
         actions.key('enter')
         actions.insert('*/')
         actions.edit.up()
 
-    def code_block_comment_prefix():
+    def code_comment_block_prefix():
         actions.auto_insert('/*')
 
-    def code_block_comment_suffix():
+    def code_comment_block_suffix():
         actions.auto_insert('*/')
 
     def code_insert_type_annotation(type: str):
