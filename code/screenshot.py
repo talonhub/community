@@ -48,7 +48,8 @@ class Actions:
         """
         if app.platform == "mac":
             actions.key("cmd-shift-5")
-
+        else:
+            app.notify("Not supported on this operating system")
 
     def screenshot_clipboard(screen_number: Optional[int] = None):
         """Takes a screenshot of the entire screen and saves it to the clipboard.
