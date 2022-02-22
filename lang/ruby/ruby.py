@@ -2,9 +2,7 @@ from talon import Context, actions, settings
 
 ctx = Context()
 ctx.matches = r"""
-mode: user.ruby
-mode: user.auto_lang
-and code.language: ruby
+tag: user.ruby
 """
 
 @ctx.action_class('user')
