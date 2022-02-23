@@ -10,7 +10,7 @@ talon copy name:
 talon copy executable:
     executable = app.executable()
     clip.set_text(executable)
-talon copy bundle:[Talon](talonvoice.com)
+talon copy bundle:
     bundle = app.bundle()
     clip.set_text(bundle)
 talon copy title: 
