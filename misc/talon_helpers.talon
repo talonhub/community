@@ -10,7 +10,7 @@ talon copy name:
 talon copy executable:
     executable = app.executable()
     clip.set_text(executable)
-talon copy bundle:
+talon copy bundle:[Talon](talonvoice.com)
     bundle = app.bundle()
     clip.set_text(bundle)
 talon copy title: 
@@ -57,3 +57,7 @@ talon dump context:
 ^talon copy active app$:
     result = user.talon_get_active_application_info()
     clip.set_text(result)
+
+^report talon bug$: 'https://github.com/talonvoice/talon/issues'
+^report knausj bug$:'https://github.com/knausj85/knausj_talon/issues'
+
