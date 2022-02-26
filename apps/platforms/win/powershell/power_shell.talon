@@ -7,7 +7,7 @@ and app.exe: powershell.exe
 tag(): terminal 
 
 # activates the implementation of the commands/functions in generic_terminal
-tag(): generic_windows_shell
+tag(): user.generic_windows_shell
 
 # makes commands for certain applications available
 # you can deactivate them if you do not use the application
