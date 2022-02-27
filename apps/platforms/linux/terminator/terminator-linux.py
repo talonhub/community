@@ -28,7 +28,7 @@ ctx.tags = [
 # --- Implement actions ---
 @ctx.action_class("user")
 class user_actions:
-    # tag: user.splits
+    # user.splits
     def split_window_right(): actions.key("alt-right")
     def split_window_left(): actions.key("alt-left")
     def split_window_down(): actions.key("alt-down")
