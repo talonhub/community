@@ -26,6 +26,7 @@ extension_lang_map = {
     ".ps1": "powershell",
     ".py": "python",
     ".r": "r",
+    ".rs": "rust",
     ".rb": "ruby",
     ".s": "assembly",
     ".scala": "scala",
