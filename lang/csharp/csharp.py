@@ -98,11 +98,7 @@ class UserActions:
     def code_import():         actions.auto_insert('using  ')
     def code_comment_line_prefix():        actions.auto_insert('//')
     def code_insert_function(text: str, selection: str):
-        if selection:
-            text = text + "({})".format(selection)
-        else:
-            text = text + "()"
-
+        text += f"({selection or ''})"
         actions.user.paste(text)
         actions.edit.left()
 
