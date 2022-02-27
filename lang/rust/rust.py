@@ -52,14 +52,18 @@ ctx.matches = r"""
 tag: user.rust
 """
 
-
-unsafe_functions = {
-    "catch unwind": "std::panic::catch_unwind",
+# tag: libraries_gui
+ctx.lists['user.code_libraries'] = {
+    'eye oh': 'std::io',
+    'file system': 'std::fs',
+    'envy': 'std::env',
+    'collections': 'std::collections',
 }
 
 # tag: functions_gui
 ctx.lists["user.code_functions"] = {
-    **unsafe_functions,
+    "drop": "drop",
+    "catch unwind": "catch_unwind",
 }
 
 scalar_types = {
@@ -463,6 +467,9 @@ class UserActions:
 
     def code_operator_or():
         actions.auto_insert(' || ')
+
+    def code_operator_increment():
+        actions.insert(' += 1')
 
     # rust specific grammar
 

@@ -30,16 +30,47 @@ settings():
     user.code_public_variable_formatter = "SNAKE_CASE"
 
 # rust-specific grammars
+
+## for unsafe rust
+state unsafe: "unsafe "
+unsafe block: user.code_state_unsafe()
+
+## rust centric struct and enum definitions
+state (struct | structure) <user.text>:
+    insert("struct ")
+    insert(user.formatted_text(text, "PUBLIC_CAMEL_CASE"))
+
+state enum <user.text>:
+    insert("enum ")
+    insert(user.formatted_text(text, "PUBLIC_CAMEL_CASE"))
+
+toggle use: user.code_toggle_libraries()
+
+## Simple aliases
 borrow: "&"
 borrow mutable: "&mut "
+state (pub | public): "pub "
+state (pub | public) crate: "pub(crate) "
+state (dyn | dynamic): "dyn "
 state constant: "const "
-state dynamic: "dyn "
 state (funk | func | function): "fn "
-state implements: "impl "
-state mutable: "mut "
+state (imp | implements): "impl "
+state let mute: "let mut "
+state let: "let "
+state (mute | mutable): "mut "
+state ref (mute | mutable): "ref mut "
+state ref: "ref "
+state trait: "trait "
+state match: "match "
 state static: "static "
-state (struct | structure): "struct "
 self taught: "self."
+state use: user.code_import()
+
+use <user.code_libraries>:
+    user.code_insert_library(code_libraries, "")
+    key(semicolon enter)
+
+
 
 ## specialist flow control
 if let some: user.code_insert_if_let_some()
@@ -76,15 +107,4 @@ macro array wrap <user.code_macros>:
 macro block wrap <user.code_macros>:
     user.code_insert_macro_block(code_macros, edit.selected_text())
 
-## for unsafe rust
-state unsafe: "unsafe "
-unsafe block: user.code_state_unsafe()
 
-toggle imports: user.code_toggle_libraries()
-import <user.code_libraries>:
-    user.code_insert_library(code_libraries, "")
-    key(end enter)
-state use: user.code_import()
-use library <user.code_libraries>:
-    user.code_insert_library(code_libraries, "")
-    key(end enter)
