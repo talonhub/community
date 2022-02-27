@@ -4,11 +4,11 @@ from talon import Context, Module, actions, settings
 
 mod = Module()
 # rust specific grammar
-mod.list("code_macros", desc="List of macros for active language")
-mod.list("code_trait", desc="List of traits for active language")
+mod.list('code_macros', desc='List of macros for active language')
+mod.list('code_trait', desc='List of traits for active language')
 
 
-@mod.capture(rule="{user.code_macros}")
+@mod.capture(rule='{user.code_macros}')
 def code_macros(m) -> str:
     """Returns a macro name"""
     return m.code_macros
@@ -61,62 +61,62 @@ ctx.lists['user.code_libraries'] = {
 }
 
 # tag: functions_gui
-ctx.lists["user.code_functions"] = {
-    "drop": "drop",
-    "catch unwind": "catch_unwind",
+ctx.lists['user.code_functions'] = {
+    'drop': 'drop',
+    'catch unwind': 'catch_unwind',
 }
 
 scalar_types = {
-    "eye eight": "i8",
-    "you eight": "u8",
-    "bytes": "u8",
-    "eye sixteen": "i16",
-    "you sixteen": "u16",
-    "eye thirty two": "i32",
-    "you thirty two": "u32",
-    "eye sixty four": "i64",
-    "you sixty four": "u64",
-    "eye one hundred and twenty eight": "i128",
-    "you one hundred and twenty eight": "u128",
-    "eye size": "isize",
-    "you size": "usize",
-    "float thirty two": "f32",
-    "float sixty four": "f64",
-    "boolean": "bool",
-    "character": "char",
+    'eye eight': 'i8',
+    'you eight': 'u8',
+    'bytes': 'u8',
+    'eye sixteen': 'i16',
+    'you sixteen': 'u16',
+    'eye thirty two': 'i32',
+    'you thirty two': 'u32',
+    'eye sixty four': 'i64',
+    'you sixty four': 'u64',
+    'eye one hundred and twenty eight': 'i128',
+    'you one hundred and twenty eight': 'u128',
+    'eye size': 'isize',
+    'you size': 'usize',
+    'float thirty two': 'f32',
+    'float sixty four': 'f64',
+    'boolean': 'bool',
+    'character': 'char',
 }
 
 compound_types = {
-    "tuple": "()",
-    "array": "[]",
+    'tuple': '()',
+    'array': '[]',
 }
 
 standard_library_types = {
-    "box": "Box",
-    "vector": "Vec",
-    "string": "String",
-    "string slice": "&str",
-    "os string": "OsString",
-    "os string slice": "&OsStr",
-    "see string": "CString",
-    "see string slice": "&CStr",
-    "option": "Option",
-    "result": "Result",
-    "hashmap": "HashMap",
-    "hash set": "HashSet",
-    "reference count": "Rc",
+    'box': 'Box',
+    'vector': 'Vec',
+    'string': 'String',
+    'string slice': '&str',
+    'os string': 'OsString',
+    'os string slice': '&OsStr',
+    'see string': 'CString',
+    'see string slice': '&CStr',
+    'option': 'Option',
+    'result': 'Result',
+    'hashmap': 'HashMap',
+    'hash set': 'HashSet',
+    'reference count': 'Rc',
 }
 
 standard_sync_types = {
-    "arc": "Arc",
-    "barrier": "Barrier",
-    "condition variable": "Condvar",
-    "mutex": "Mutex",
-    "once": "Once",
-    "read write lock": "RwLock",
-    "receiver": "Receiver",
-    "sender": "Sender",
-    "sink sender": "SyncSender",
+    'arc': 'Arc',
+    'barrier': 'Barrier',
+    'condition variable': 'Condvar',
+    'mutex': 'Mutex',
+    'once': 'Once',
+    'read write lock': 'RwLock',
+    'receiver': 'Receiver',
+    'sender': 'Sender',
+    'sink sender': 'SyncSender',
 }
 
 
@@ -126,7 +126,7 @@ def append_key_value_to_dict(
     value_prefix: str,
 ) -> Dict[str, str]:
     return {
-        f"{key_prefix}{k}": f"{value_prefix}{v}"
+        f'{key_prefix}{k}': f'{value_prefix}{v}'
         for k, v in a_dict.items()
     }
 
@@ -134,12 +134,12 @@ def append_key_value_to_dict(
 def duplicate_for_all_type_modifies(types: Dict[str, str]) -> Dict[str, str]:
     return {
         **types,
-        **append_key_value_to_dict(types, "mutable ", "mut "),
-        **append_key_value_to_dict(types, "mute ", "mut "),
-        **append_key_value_to_dict(types, "borrowed ", "&"),
-        **append_key_value_to_dict(types, "borrowed mutable ", "&mut "),
-        **append_key_value_to_dict(types, "borrowed mute ", "&mut "),
-        **append_key_value_to_dict(types, "mute borrowed ", "&mut "),
+        **append_key_value_to_dict(types, 'mutable ', 'mut '),
+        **append_key_value_to_dict(types, 'mute ', 'mut '),
+        **append_key_value_to_dict(types, 'borrowed ', '&'),
+        **append_key_value_to_dict(types, 'borrowed mutable ', '&mut '),
+        **append_key_value_to_dict(types, 'borrowed mute ', '&mut '),
+        **append_key_value_to_dict(types, 'mute borrowed ', '&mut '),
     }
 
 
@@ -151,55 +151,56 @@ all_types = {
 }
 
 # tag: functions
-ctx.lists["user.code_type"] = {
+ctx.lists['user.code_type'] = {
     **all_types,
 }
 
 # rust specific grammar
 
 standard_macros = {
-    "macro rules": "macro_rules!",
-    "panic": "panic!",
-    "format": "format!",
-    "concatenate": "concat!",
-    "print": "print!",
-    "print line": "println!",
-    "to do": "todo!",
-    "vector": "vec!",
+    'macro rules': 'macro_rules!',
+    'panic': 'panic!',
+    'format': 'format!',
+    'concatenate': 'concat!',
+    'print': 'print!',
+    'print line': 'println!',
+    'error print line': 'eprintln!',
+    'to do': 'todo!',
+    'vector': 'vec!',
 }
 
 logging_macros = {
-    "debug": "debug!",
-    "info": "info!",
-    "warning": "warn!",
-    "error": "error!",
+    'debug': 'debug!',
+    'info': 'info!',
+    'warning': 'warn!',
+    'error': 'error!',
 }
 
 testing_macros = {
-    "assert": "assert!",
-    "assert equal": "assert_eq!",
-    "assert not equal": "assert_ne!",
+    'assert': 'assert!',
+    'assert equal': 'assert_eq!',
+    'assert not equal': 'assert_ne!',
 
 }
 
-ctx.lists["user.code_macros"] = {
+ctx.lists['user.code_macros'] = {
     **standard_macros,
     **logging_macros,
     **testing_macros,
 }
 
 closure_traits = {
-    "closure": "Fn",
-    "closure once": "FnOnce",
-    "closure mutable": "FnMut",
+    'closure': 'Fn',
+    'closure once': 'FnOnce',
+    'closure mutable': 'FnMut',
 }
 
-ctx.lists["user.code_trait"] = {
+ctx.lists['user.code_trait'] = {
     **closure_traits,
 }
 
 
-@ctx.action_class("user")
+@ctx.action_class('user')
 class UserActions:
 
     # tag: comment_line
@@ -246,16 +247,16 @@ class UserActions:
     # tag: imperative
 
     def code_block():
-        actions.insert("{}")
-        actions.key("left enter")
+        actions.insert('{}')
+        actions.key('left enter')
 
     def code_state_if():
         actions.insert('if  {  }')
-        actions.key('end left:5')
+        actions.key('left:5')
 
     def code_state_else_if():
         actions.insert(' else if  {  }')
-        actions.key('end left:5')
+        actions.key('left:5')
 
     def code_state_else():
         actions.insert(' else {  }')
@@ -263,7 +264,7 @@ class UserActions:
 
     def code_state_switch():
         actions.insert('match  {  }')
-        actions.key('end left:5')
+        actions.key('left:5')
 
     def code_state_for():
         actions.insert('for  in  {\n}\n')
@@ -327,28 +328,26 @@ class UserActions:
         actions.user.code_private_function(text)
 
     def code_private_function(text: str):
-        result = "fn {}() {{\n}}\n".format(
-            actions.user.formatted_text(
-                text, settings.get("user.code_private_function_formatter")
-            )
+        name = actions.user.formatted_text(
+            text, settings.get('user.code_private_function_formatter')
         )
+        result = f'fn {name}() {{\n}}\n'
         actions.user.paste(result)
         actions.key('up:2 right:3')
 
     def code_public_function(text: str):
-        result = "pub fn {}() {{\n}}\n".format(
-            actions.user.formatted_text(
-                text, settings.get("user.code_public_function_formatter")
-            )
+        name = actions.user.formatted_text(
+            text, settings.get('user.code_public_function_formatter')
         )
+        result = f'pub fn {name}() {{\n}}\n'
         actions.user.paste(result)
         actions.key('up:2 right:7')
 
     def code_insert_type_annotation(type: str):
-        actions.insert(f": {type}")
+        actions.insert(f': {type}')
 
     def code_insert_return_type(type: str):
-        actions.insert(f" -> {type}")
+        actions.insert(f' -> {type}')
 
     # tag: functions_gui
 
@@ -363,7 +362,7 @@ class UserActions:
     # tag: libraries_gui
 
     def code_insert_library(text: str, selection: str):
-        actions.user.paste("use {}".format(selection))
+        actions.user.paste(f'use {selection}')
 
     # tag: operators_array
 
@@ -478,21 +477,21 @@ class UserActions:
 
     def code_insert_if_let_some():
         actions.insert('if let Some() =  {  }')
-        actions.key('end left:9')
+        actions.key('left:9')
 
     def code_insert_if_let_error():
         actions.insert('if let Err() =  {  }')
-        actions.key('end left:9')
+        actions.key('left:9')
 
     def code_state_implements():
         actions.insert('impl  {\n}\n')
         actions.key('up:2 right:5')
 
     def code_insert_trait_annotation(type: str):
-        actions.insert(f": impl {type}")
+        actions.insert(f': impl {type}')
 
     def code_insert_return_trait(type: str):
-        actions.insert(f" -> impl {type}")
+        actions.insert(f' -> impl {type}')
 
     def code_insert_macro(text: str, selection: str):
         code_insert_function_or_macro(text, selection, '(', ')')
@@ -515,10 +514,9 @@ def code_insert_function_or_macro(
         right_delim: str,
 ):
     if selection:
-        out_text = text + "{}{}{}".format(
-            left_delim, selection, right_delim)
+        out_text = text + f'{left_delim}{selection}{right_delim}'
     else:
-        out_text = text + "{}{}".format(left_delim, right_delim)
+        out_text = text + f'{left_delim}{right_delim}'
     actions.user.paste(out_text)
     actions.edit.left()
 
