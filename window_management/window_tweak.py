@@ -20,7 +20,7 @@ import time
 from talon import ui, Module, Context, actions, imgui, settings, app, ctrl
 
 # globals
-from .compass_control import CompassControl, Direction, compass_direction, NonDualDirection, non_dual_direction
+from . import CompassControl, Direction, compass_direction, NonDualDirection, non_dual_direction
 
 # # turn debug messages on and off
 testing: bool = True
@@ -182,7 +182,7 @@ def _win_show_gui(gui: imgui.GUI) -> None:
 
     gui.line()
 
-    gui.text(f"Say 'win hide' to close this window.")
+    gui.text(f"Say 'window traits hide' to close this window.")
 
     gui.line()
 
