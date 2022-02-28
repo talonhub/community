@@ -72,11 +72,3 @@ class EditActions:
     def delete_line():
         actions.edit.line_start()
         actions.key('ctrl-a ctrl-k')
-
-    # afaik not possible in gnome-terminal
-    def extend_left(): pass
-    def extend_right(): pass
-    def extend_up(): pass
-    def extend_down(): pass
-    def extend_word_left(): pass
-    def extend_word_right(): pass
