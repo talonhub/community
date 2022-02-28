@@ -97,7 +97,7 @@ setting_verbose_warnings = mod.setting(
 
 @imgui.open(y=0)
 def win_stop_gui(gui: imgui.GUI) -> None:
-    gui.text(f"Say 'win stop' or click below.")
+    gui.text(f"Say 'window stop' or click below.")
     gui.line()
     if gui.button("Stop moving/resizing"):
         actions.user.win_stop()
