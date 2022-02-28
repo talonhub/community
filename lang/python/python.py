@@ -5,9 +5,7 @@ from talon import Context, Module, actions, settings
 mod = Module()
 ctx = Context()
 ctx.matches = r"""
-mode: user.python
-mode: user.auto_lang
-and code.language: python
+tag: user.python
 """
 ctx.lists["user.code_functions"] = {
     "enumerate": "enumerate",
@@ -208,10 +206,7 @@ class UserActions:
     def code_insert_false():           actions.auto_insert('False')
     def code_comment_documentation(): actions.user.insert_cursor('"""[|]"""')
     def code_insert_function(text: str, selection: str):
-        if selection:
-            text = text + "({})".format(selection)
-        else:
-            text = text + "()"
+        text += f"({selection or ''})"
         actions.user.paste(text)
         actions.edit.left()
 

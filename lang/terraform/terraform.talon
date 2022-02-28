@@ -1,8 +1,4 @@
-mode: command
-and mode: user.terraform
-mode: command
-and mode: user.auto_lang
-and code.language: terraform
+tag: user.terraform
 -
 tag(): user.code_comment_block_c_like
 tag(): user.code_comment_line

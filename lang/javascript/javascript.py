@@ -1,16 +1,6 @@
 from talon import Module, Context, actions, settings
 
 mod = Module()
-mod.tag("javascript", desc="Enables commands for JavaScript and JS-like languages")
-
-mode_ctx = Context()
-mode_ctx.matches = r"""
-mode: user.javascript
-mode: user.auto_lang
-and code.language: javascript
-"""
-mode_ctx.tags = ["user.javascript"]
-
 ctx = Context()
 ctx.matches = """
 tag: user.javascript
@@ -204,11 +194,7 @@ class UserActions:
         actions.auto_insert(" >>= ")
 
     def code_insert_function(text: str, selection: str):
-        if selection:
-            text = text + "({})".format(selection)
-        else:
-            text = text + "()"
-
+        text += f"({selection or ''})"
         actions.user.paste(text)
         actions.edit.left()
 

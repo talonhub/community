@@ -8,7 +8,9 @@
 ^force python$: user.code_set_language_mode("python")
 ^force terraform$: user.code_set_language_mode("terraform")
 ^force are language$: user.code_set_language_mode("r")
+^force rust$: user.code_set_language_mode("rust")
 ^force talon [language]$: user.code_set_language_mode("talon")
+^force scala$: user.code_set_language_mode("scala")
 ^clear language modes$: user.code_clear_language_mode()
 [enable] debug mode:
     mode.enable("user.gdb")

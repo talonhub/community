@@ -1,8 +1,4 @@
-mode: command
-and mode: user.csharp
-mode: command
-and mode: user.auto_lang
-and code.language: csharp
+tag: user.csharp
 -
 tag(): user.code_imperative
 tag(): user.code_object_oriented
