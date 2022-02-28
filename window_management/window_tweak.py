@@ -20,7 +20,7 @@ import time
 from talon import ui, Module, Context, actions, imgui, settings, app, ctrl
 
 # globals
-from . import CompassControl, Direction, compass_direction, NonDualDirection, non_dual_direction
+from .compass_control import CompassControl, Direction, compass_direction, NonDualDirection, non_dual_direction
 
 # # turn debug messages on and off
 testing: bool = True
