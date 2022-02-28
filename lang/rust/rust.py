@@ -8,12 +8,6 @@ mod.list('code_macros', desc='List of macros for active language')
 mod.list('code_trait', desc='List of traits for active language')
 
 
-@mod.capture(rule='{user.code_macros}')
-def code_macros(m) -> str:
-    """Returns a macro name"""
-    return m.code_macros
-
-
 @mod.action_class
 class Actions:
     def code_operator_structure_dereference():
@@ -208,47 +202,29 @@ class UserActions:
     def code_comment_line_prefix():
         actions.insert('// ')
 
-    # tag: comment_block
-
-    def code_comment_block():
-        actions.insert('/*')
-        actions.key('enter')
-        actions.key('enter')
-        actions.insert('*/')
-        actions.edit.up()
-
-    def code_comment_block_prefix():
-        actions.auto_insert('/*')
-
-    def code_comment_block_suffix():
-        actions.auto_insert('*/')
-
     # tag: comment_documentation
 
     def code_comment_documentation():
         actions.insert('/// ')
 
     def code_comment_documentation_block():
-        actions.insert('/**')
-        actions.key('enter')
-        actions.key('enter')
-        actions.insert('*/')
+        actions.insert("/**\n\n*/")
         actions.edit.up()
 
     def code_comment_documentation_inner():
         actions.insert('//! ')
 
     def code_comment_documentation_block_inner():
-        actions.insert('/*!')
-        actions.key('enter')
-        actions.key('enter')
-        actions.insert('*/')
+        actions.insert("/*!\n\n*/")
+        actions.edit.up()
 
     # tag: imperative
 
     def code_block():
-        actions.insert('{}')
-        actions.key('left enter')
+        actions.auto('{\n\n}')
+        actions.edit.left()
+        actions.edit.up()
+        actions.key('tab')
 
     def code_state_if():
         actions.insert('if  {  }')
@@ -311,7 +287,6 @@ class UserActions:
         actions.auto_insert('false')
 
     # tag: data_null
-    # Convenience function, however, Option technically isn't null
 
     def code_insert_null():
         actions.auto_insert('None')
@@ -328,20 +303,22 @@ class UserActions:
         actions.user.code_private_function(text)
 
     def code_private_function(text: str):
-        name = actions.user.formatted_text(
-            text, settings.get('user.code_private_function_formatter')
-        )
-        result = f'fn {name}() {{\n}}\n'
-        actions.user.paste(result)
-        actions.key('up:2 right:3')
+        actions.insert('fn ')
+        formatter = settings.get('user.code_private_function_formatter')
+        function_name = actions.user.formatted_text(text, formatter)
+        actions.user.code_insert_function(function_name, None)
+
+    def code_protected_function(text: str):
+        actions.insert('pub(crate) fn ')
+        formatter = settings.get('user.code_protected_function_formatter')
+        function_name = actions.user.formatted_text(text, formatter)
+        actions.user.code_insert_function(function_name, None)
 
     def code_public_function(text: str):
-        name = actions.user.formatted_text(
-            text, settings.get('user.code_public_function_formatter')
-        )
-        result = f'pub fn {name}() {{\n}}\n'
-        actions.user.paste(result)
-        actions.key('up:2 right:7')
+        actions.insert('pub fn ')
+        formatter = settings.get('user.code_public_function_formatter')
+        function_name = actions.user.formatted_text(text, formatter)
+        actions.user.code_insert_function(function_name, None)
 
     def code_insert_type_annotation(type: str):
         actions.insert(f': {type}')
@@ -368,7 +345,7 @@ class UserActions:
 
     def code_operator_subscript():
         actions.insert('[]')
-        actions.key('left')
+        actions.edit.left()
 
     # tag: code_operators_assignment
 
@@ -435,7 +412,7 @@ class UserActions:
 
     def code_operator_exponent():
         actions.auto_insert('.pow()')
-        actions.key('left')
+        actions.edit.left()
 
     def code_operator_division():
         actions.auto_insert(' / ')
