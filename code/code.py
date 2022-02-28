@@ -1,5 +1,4 @@
 from talon import Context, Module, actions
-from pathlib import Path
 
 ctx = Context()
 mod = Module()
