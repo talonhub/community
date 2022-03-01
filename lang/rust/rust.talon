@@ -75,7 +75,7 @@ if let some: user.code_insert_if_let_some()
 if let error: user.code_insert_if_let_error()
 
 ## rust centric synonyms
-is (some|sum): user.code_insert_is_not_null()
+is some: user.code_insert_is_not_null()
 
 ## for implementing
 implement (struct | structure): user.code_state_implements()
