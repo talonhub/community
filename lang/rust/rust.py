@@ -236,20 +236,21 @@ class UserActions:
         actions.key('left:5')
 
     def code_state_for():
-        actions.insert('for  in  {\n}\n')
-        actions.key('up:2 end left:6')
+        actions.insert('for  in  {\n\n}\n')
+        actions.key('up:3 end left:6')
 
     def code_state_for_each():
-        actions.insert('for  in  {\n}\n')
-        actions.key('up:2 end left:6')
+        actions.insert('for  in  {\n\n}\n')
+        actions.key('up:3 end left:6')
 
     def code_state_while():
-        actions.insert('while  {\n}\n')
-        actions.key('up:2 end left:2')
+        actions.insert('while  {\n\n}\n')
+        actions.key('up:3 end left:2')
 
-    def code_state_loop():
-        actions.insert('loop  {\n}\n')
-        actions.key('up:2 end')
+    def code_state_infinite_loop():
+        actions.insert('loop {\n\n}\n')
+        actions.edit.up()
+        actions.edit.up()
 
     def code_state_return():
         actions.auto_insert('return ')
