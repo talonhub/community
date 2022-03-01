@@ -102,7 +102,7 @@ macro wrap {user.code_macros}:
     user.code_insert_macro(code_macros, edit.selected_text())
 macro array wrap {user.code_macros}:
     user.code_insert_macro_array(code_macros, edit.selected_text())
-macro block wrap {user.code_macros:
+macro block wrap {user.code_macros}:
     user.code_insert_macro_block(code_macros, edit.selected_text())
 
 
