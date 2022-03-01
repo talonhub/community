@@ -16,7 +16,6 @@ app: terminator
 """
 ctx.tags = [
     'terminal',
-    'user.terminal',
     'user.tabs',
     'user.splits',
     'user.generic_unix_shell',
