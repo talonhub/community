@@ -1,9 +1,10 @@
-from typing import Dict
+import logging
 
 from talon import Context, Module, actions, settings
 
 mod = Module()
 # rust specific grammar
+mod.list('code_type_modifier', desc='List of type modifiers for active language')
 mod.list('code_macros', desc='List of macros for active language')
 mod.list('code_trait', desc='List of traits for active language')
 
@@ -45,6 +46,7 @@ ctx = Context()
 ctx.matches = r"""
 tag: user.rust
 """
+
 
 # tag: libraries_gui
 ctx.lists['user.code_libraries'] = {
@@ -114,42 +116,33 @@ standard_sync_types = {
 }
 
 
-def append_key_value_to_dict(
-    a_dict: Dict[str, str],
-    key_prefix: str,
-    value_prefix: str,
-) -> Dict[str, str]:
-    return {
-        f'{key_prefix}{k}': f'{value_prefix}{v}'
-        for k, v in a_dict.items()
-    }
-
-
-def duplicate_for_all_type_modifies(types: Dict[str, str]) -> Dict[str, str]:
-    return {
-        **types,
-        **append_key_value_to_dict(types, 'mutable ', 'mut '),
-        **append_key_value_to_dict(types, 'mute ', 'mut '),
-        **append_key_value_to_dict(types, 'borrowed ', '&'),
-        **append_key_value_to_dict(types, 'borrowed mutable ', '&mut '),
-        **append_key_value_to_dict(types, 'borrowed mute ', '&mut '),
-        **append_key_value_to_dict(types, 'mute borrowed ', '&mut '),
-    }
-
-
 all_types = {
-    **duplicate_for_all_type_modifies(scalar_types),
-    **duplicate_for_all_type_modifies(compound_types),
-    **duplicate_for_all_type_modifies(standard_library_types),
-    **duplicate_for_all_type_modifies(standard_sync_types),
+    **scalar_types,
+    **compound_types,
+    **standard_library_types,
+    **standard_sync_types,
 }
 
 # tag: functions
-ctx.lists['user.code_type'] = {
-    **all_types,
-}
+ctx.lists['user.code_type'] = all_types
 
 # rust specific grammar
+ctx.lists['user.code_type_modifier'] = {
+    'mutable': 'mut ',
+    'mute': 'mut ',
+    'borrowed': '&',
+    'borrowed mutable': '&mut ',
+    'borrowed mute': '&mut ',
+    'mutable borrowed': '&mut ',
+    'mute borrowed': '&mut ',
+}
+
+
+@ctx.capture("user.code_type", rule='[{user.code_type_modifier}]{user.code_type}')
+def code_type(m) -> str:
+    """Returns a macro name"""
+    return ''.join(m)
+
 
 standard_macros = {
     'macro rules': 'macro_rules!',
