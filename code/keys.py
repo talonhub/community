@@ -3,7 +3,7 @@ from typing import Set
 from talon import Module, Context, actions, app
 import sys
 
-default_alphabet = "air bat cap doo each fine gust ham ivy judge kill look mike naow odd pit quench red sun tock you vest well plex yank zip".split(
+default_alphabet = "air bat cap doo each fine gust ham ivy judge kill look mike naow odd pit quench red sun tock yew vest well plex yank zip".split(
     " "
 )
 letters_string = "abcdefghijklmnopqrstuvwxyz"
@@ -113,10 +113,10 @@ def letters(m) -> str:
 ctx = Context()
 modifier_keys = {
     # If you find 'alt' is often misrecognized, try using 'alter'.
-    "alto": "alt",  #'alter': 'alt',
+    "alteria": "alt",  #'alter': 'alt',
     "control": "ctrl",  #'troll':   'ctrl',
     "shift": "shift",  #'sky':     'shift',
-    "super": "super",
+    # "super": "super",
 }
 if app.platform  == "mac":
     modifier_keys["command"] = "cmd"
@@ -136,13 +136,13 @@ punctuation_words = {
     # "grave": "`",
     "comma": ",",
     "period": ".",
-    "full stop": ".",
+    # "full stop": ".",
     "semicolon": ";",
     "colon": ":",
     "forward slash": "/",
     "question mark": "?",
     "exclamation mark": "!",
-    "exclamation point": "!",
+    # "exclamation point": "!",
     "asterisk": "*",
     "hash sign": "#",
     # "number sign": "#",

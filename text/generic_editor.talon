@@ -94,11 +94,11 @@ select way down:
     edit.extend_file_end()
 
 # editing
-indent [more]:
-    edit.indent_more()
+# indent [more]:
+#    edit.indent_more()
 
-(indent less | out dent):
-    edit.indent_less()
+#(indent less | out dent):
+#    edit.indent_less()
 
 # deleting
 clear line:

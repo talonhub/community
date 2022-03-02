@@ -6,6 +6,7 @@ double dash: "--"
 triple quote: "'''"
 (triple back tick):
     insert("```")
+semi end: ";;"
 # (dot dot | dotdot): ".."
 ellipses: "..."
 (comma and | spamma): ", "

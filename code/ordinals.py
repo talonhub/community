@@ -1,19 +1,19 @@
 from talon import Context, Module, actions, app, ui
 
 
-def ordinal(n):
-    """
-    Convert an integer into its ordinal representation::
-        ordinal(0)   => '0th'
-        ordinal(3)   => '3rd'
-        ordinal(122) => '122nd'
-        ordinal(213) => '213th'
-    """
-    n = int(n)
-    suffix = ["th", "st", "nd", "rd", "th"][min(n % 10, 4)]
-    if 11 <= (n % 100) <= 13:
-        suffix = "th"
-    return str(n) + suffix
+# def ordinal(n):
+#     """
+#     Convert an integer into its ordinal representation::
+#         ordinal(0)   => '0th'
+#         ordinal(3)   => '3rd'
+#         ordinal(122) => '122nd'
+#         ordinal(213) => '213th'
+#     """
+#     n = int(n)
+#     suffix = ["th", "st", "nd", "rd", "th"][min(n % 10, 4)]
+#     if 11 <= (n % 100) <= 13:
+#         suffix = "th"
+#     return str(n) + suffix
 
 
 # The primitive ordinal words in English below a hundred.
@@ -28,26 +28,26 @@ ordinal_words = {
     7: "seventh",
     8: "eighth",
     9: "ninth",
-    10: "tenth",
-    11: "eleventh",
-    12: "twelfth",
-    13: "thirteenth",
-    14: "fourteenth",
-    15: "fifteenth",
-    16: "sixteenth",
-    17: "seventeenth",
-    18: "eighteenth",
-    19: "nineteenth",
-    20: "twentieth",
-    30: "thirtieth",
-    40: "fortieth",
-    50: "fiftieth",
-    60: "sixtieth",
-    70: "seventieth",
-    80: "eightieth",
-    90: "ninetieth",
+    10: "numtenth",
+    11: "numeleventh",
+    12: "numtwelfth",
+    13: "numthirteenth",
+    14: "numfourteenth",
+    15: "numfifteenth",
+    16: "numsixteenth",
+    17: "numseventeenth",
+    18: "numeighteenth",
+    19: "numnineteenth",
+    20: "numtwentieth",
+    30: "numthirtieth",
+    40: "numfortieth",
+    50: "numfiftieth",
+    60: "numsixtieth",
+    70: "numseventieth",
+    80: "numeightieth",
+    90: "numninetieth",
 }
-tens_words = "zero ten twenty thirty forty fifty sixty seventy eighty ninety".split()
+tens_words = "numzero numten numtwenty numthirty numforty numfifty numsixty numseventy numeighty numninety".split()
 
 # ordinal_numbers maps ordinal words into their corresponding numbers.
 ordinal_numbers = {}
