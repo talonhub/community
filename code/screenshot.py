@@ -36,6 +36,15 @@ class Actions:
     def screenshot_selection():
         """Triggers an application that is capable of taking a screenshot of a portion of the screen"""
 
+    def screenshot_settings():
+        """Opens the settings UI for screenshots.
+        Only applies to Mac for now
+        """
+        if app.platform == "mac":
+            actions.key("cmd-shift-5")
+        else:
+            app.notify("Not supported on this operating system")
+
     def screenshot_clipboard(screen_number: Optional[int] = None):
         """Takes a screenshot of the entire screen and saves it to the clipboard.
         Optional screen number can be given to use screen other than main."""
