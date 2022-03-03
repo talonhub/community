@@ -58,10 +58,11 @@ state (imp | implements): "impl "
 state let mute: "let mut "
 state let: "let "
 state (mute | mutable): "mut "
+state (mod | module): "mod "
 state ref (mute | mutable): "ref mut "
 state ref: "ref "
 state trait: "trait "
-state match: "match "
+state match: user.code_state_switch()
 state static: "static "
 self taught: "self."
 state use: user.code_import()
