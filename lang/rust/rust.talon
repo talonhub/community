@@ -63,6 +63,7 @@ state ref (mute | mutable): "ref mut "
 state ref: "ref "
 state trait: "trait "
 state match: user.code_state_switch()
+state (some | sum): "Some"
 state static: "static "
 self taught: "self."
 state use: user.code_import()

@@ -60,6 +60,9 @@ ctx.lists['user.code_libraries'] = {
 ctx.lists['user.code_functions'] = {
     'drop': 'drop',
     'catch unwind': 'catch_unwind',
+    'iterator': 'iter',
+    'into iterator': 'into_iter',
+    'from iterator': 'from_iter',
 }
 
 scalar_types = {
@@ -114,7 +117,6 @@ standard_sync_types = {
     'sender': 'Sender',
     'sink sender': 'SyncSender',
 }
-
 
 all_types = {
     **scalar_types,
@@ -182,8 +184,19 @@ closure_traits = {
     'closure mutable': 'FnMut',
 }
 
+conversion_traits = {
+    'into': 'Into',
+    'from': 'From',
+}
+
+iterator_traits = {
+    'iterator': 'Iterator',
+}
+
 ctx.lists['user.code_trait'] = {
     **closure_traits,
+    **conversion_traits,
+    **iterator_traits,
 }
 
 
