@@ -143,6 +143,7 @@ formatters_dict = {
 formatters_words = {
     "allcaps": formatters_dict["ALL_CAPS"],
     "alldown": formatters_dict["ALL_LOWERCASE"],
+    "lower": formatters_dict["ALL_LOWERCASE"],
     "camel": formatters_dict["PRIVATE_CAMEL_CASE"],
     "pascal": formatters_dict["PUBLIC_CAMEL_CASE"],
     "dotted": formatters_dict["DOT_SEPARATED"],

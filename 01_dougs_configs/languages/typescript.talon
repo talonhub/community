@@ -11,9 +11,11 @@ tag(): user.javascript
 (type | typed) as string: ": string"
 (type | typed) as null: ": null"
 
-def private [<user.text>]:
+state private [<user.text>]:
     insert("private ")
     insert(user.text or "")
+
+state type: "type "
 
 (type | typed) as record:
     insert(": Record<>")

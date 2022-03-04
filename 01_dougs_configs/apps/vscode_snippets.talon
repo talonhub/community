@@ -13,4 +13,9 @@ insert for loop:
     insert("for loop")
     key("enter")
 
+insert function:
+    user.vscode("editor.action.insertSnippet")
+    insert("function")
+    key("enter")
+
 null coalesce: " ?? "
