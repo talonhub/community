@@ -11,5 +11,5 @@ padding <user.symbol_key>:
     key(symbol_key)
     insert(" ")
 press <user.modifiers>: key(modifiers)
-key(f5): 
-    speech.toggle()
+# key(f5): 
+#     speech.toggle()
