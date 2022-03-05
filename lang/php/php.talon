@@ -21,8 +21,8 @@ settings():
     user.code_protected_variable_formatter = "PRIVATE_CAMEL_CASE"
     user.code_public_variable_formatter = "PRIVATE_CAMEL_CASE"
 
-(op | is) same: " === "
-(op | is) not same: " !== "
+(op | is) loosely equal: " == "
+(op | is) loosely not equal: " != "
 
 state try: "try {\n"
 state catch: "catch (\\Throwable $exception) {\n"
