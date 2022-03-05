@@ -60,8 +60,11 @@ right drag | righty drag:
 	user.grid_close()
 end drag | drag end:
     user.mouse_drag_end()
-scroll down: user.mouse_scroll_down(5)
-scroll up: user.mouse_scroll_up(5)
+#scroll down: user.mouse_scroll_down(5)
+#scroll up: user.mouse_scroll_up(5)
+
+scroll down: user.mouse_scroll_down_smooth(5)
+scroll up: user.mouse_scroll_up_smooth(5)
 
 wheel down: user.mouse_scroll_down()
 wheel down here:
