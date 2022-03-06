@@ -22,6 +22,7 @@ extension_lang_map = {
     ".jsx": "javascriptreact",
     ".lua": "lua",
     ".md": "markdown",
+    ".php": "php",
     ".pl": "perl",
     ".ps1": "powershell",
     ".py": "python",
