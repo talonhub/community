@@ -70,4 +70,4 @@ class EditActions:
 
     def delete_line():
         actions.edit.line_start()
-        actions.key('ctrl-u')
+        actions.key('ctrl-k')
