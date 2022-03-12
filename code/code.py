@@ -3,43 +3,44 @@ from talon import Context, Module, actions
 ctx = Context()
 mod = Module()
 
-# Maps language mode names to the extensions that activate them.
-# TODO: make this a csv file?
+# Maps language mode names to the extensions that activate them. Only put things
+# here which have a supported language mode; that's why there are so many
+# commented out entries. TODO: make this a csv file?
 language_extensions = {
-    'assembly': 'asm s',
-    'bash': 'bashbook sh',
+    # 'assembly': 'asm s',
+    # 'bash': 'bashbook sh',
     'batch': 'bat',
     'c': 'c h',
-    'cmake': 'cmake',
-    'cplusplus': 'cpp hpp',
+    # 'cmake': 'cmake',
+    # 'cplusplus': 'cpp hpp',
     'csharp': 'cs',
-    'css': 'css',
-    'elisp': 'el',
-    'elm': 'elm',
+    # 'css': 'css',
+    # 'elisp': 'el',
+    # 'elm': 'elm',
     'gdb': 'gdb',
     'go': 'go',
-    'html': 'html',
+    # 'html': 'html',
     'java': 'java',
     'javascript': 'js',
     'javascriptreact': 'jsx',
-    'json': 'json',
-    'lua': 'lua',
+    # 'json': 'json',
+    # 'lua': 'lua',
     'markdown': 'md',
-    'perl': 'pl',
-    'powershell': 'ps1',
+    # 'perl': 'pl',
+    # 'powershell': 'ps1',
     'python': 'py',
     'r': 'r',
-    'racket': 'rkt',
+    # 'racket': 'rkt',
     'ruby': 'rb',
     'rust': 'rs',
-    'sass': 'sass',
+    # 'sass': 'sass',
     'scala': 'scala',
-    'snippets': 'snippets',
+    # 'snippets': 'snippets',
     'talon': 'talon',
     'terraform': 'tf',
     'typescript': 'ts',
     'typescriptreact': 'tsx',
-    'vba': 'vba',
+    # 'vba': 'vba',
     'vimscript': 'vim vimrc',
 }
 
@@ -51,6 +52,7 @@ language_name_overrides = {
     "css": ["c s s"],
     "gdb": ["g d b"],
     "go": ["go", "go lang", "go language"],
+    "r": ["are"],
 }
 mod.list("language_mode", desc="Name of a programming language mode.")
 ctx.lists["self.language_mode"] = {
