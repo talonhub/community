@@ -52,7 +52,7 @@ language_name_overrides = {
     "css": ["c s s"],
     "gdb": ["g d b"],
     "go": ["go", "go lang", "go language"],
-    "r": ["are"],
+    "r": ["are language"],
 }
 mod.list("language_mode", desc="Name of a programming language mode.")
 ctx.lists["self.language_mode"] = {
