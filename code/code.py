@@ -3,48 +3,73 @@ from talon import Context, Module, actions
 ctx = Context()
 mod = Module()
 
-extension_lang_map = {
-    ".asm": "assembly",
-    ".bashbook": "bash",
-    ".bat": "batch",
-    ".c": "c",
-    ".cmake": "cmake",
-    ".cpp": "cplusplus",
-    ".cs": "csharp",
-    ".gdb": "gdb",
-    ".go": "go",
-    ".h": "c",
-    ".hpp": "cplusplus",
-    ".html": "html",
-    ".java": "java",
-    ".js": "javascript",
-    ".json": "json",
-    ".jsx": "javascriptreact",
-    ".lua": "lua",
-    ".md": "markdown",
-    ".php": "php",
-    ".pl": "perl",
-    ".ps1": "powershell",
-    ".py": "python",
-    ".r": "r",
-    ".rs": "rust",
-    ".rb": "ruby",
-    ".s": "assembly",
-    ".scala": "scala",
-    ".sh": "bash",
-    ".snippets": "snippets",
-    ".talon": "talon",
-    ".tf": "terraform",
-    ".ts": "typescript",
-    ".tsx": "typescriptreact",
-    ".vba": "vba",
-    ".vim": "vimscript",
-    ".vimrc": "vimscript",
+# Maps language mode names to the extensions that activate them. Only put things
+# here which have a supported language mode; that's why there are so many
+# commented out entries. TODO: make this a csv file?
+language_extensions = {
+    # 'assembly': 'asm s',
+    # 'bash': 'bashbook sh',
+    'batch': 'bat',
+    'c': 'c h',
+    # 'cmake': 'cmake',
+    # 'cplusplus': 'cpp hpp',
+    'csharp': 'cs',
+    # 'css': 'css',
+    # 'elisp': 'el',
+    # 'elm': 'elm',
+    'gdb': 'gdb',
+    'go': 'go',
+    # 'html': 'html',
+    'java': 'java',
+    'javascript': 'js',
+    'javascriptreact': 'jsx',
+    # 'json': 'json',
+    # 'lua': 'lua',
+    'markdown': 'md',
+    # 'perl': 'pl',
+    # 'powershell': 'ps1',
+    'python': 'py',
+    'r': 'r',
+    # 'racket': 'rkt',
+    'ruby': 'rb',
+    'rust': 'rs',
+    # 'sass': 'sass',
+    'scala': 'scala',
+    # 'snippets': 'snippets',
+    'talon': 'talon',
+    'terraform': 'tf',
+    'typescript': 'ts',
+    'typescriptreact': 'tsx',
+    # 'vba': 'vba',
+    'vimscript': 'vim vimrc',
 }
 
+# Override speakable forms for language modes. If not present, a language mode's
+# name is used directly.
+language_name_overrides = {
+    "cplusplus": ["see plus plus"],
+    "csharp": ["see sharp"],
+    "css": ["c s s"],
+    "gdb": ["g d b"],
+    "go": ["go", "go lang", "go language"],
+    "r": ["are language"],
+}
+mod.list("language_mode", desc="Name of a programming language mode.")
+ctx.lists["self.language_mode"] = {
+    name: language
+    for language in language_extensions
+    for name in language_name_overrides.get(language, [language])
+}
+
+# Maps extension to languages.
+extension_lang_map = {
+    '.' + ext: language
+    for language, extensions in language_extensions.items()
+    for ext in extensions.split()
+}
 
 # Create a context for each defined language
-for lang in extension_lang_map.values():
+for lang in language_extensions.keys():
     mod.tag(lang)
     mod.tag(f"{lang}_forced")
     c = Context()
@@ -75,6 +100,7 @@ class code_actions:
 class Actions:
     def code_set_language_mode(language: str):
         """Sets the active language mode, and disables extension matching"""
+        assert language in language_extensions
         ctx.tags = [f"user.{language}_forced"]
 
     def code_clear_language_mode():
