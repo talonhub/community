@@ -351,8 +351,8 @@ class CompassControl:
                 if direction_count == 0 or direction_count == 4:    # move in/out (special case)
                     # follow path from rectangle center to the target point
 
-                    x0 = rect.x
-                    y0 = rect.y
+                    x0 = round(rect.x)
+                    y0 = round(rect.y)
 
                     x1, y1 = self.compass_control.get_target_point(rect, rect_id, parent_rect, direction)
 
