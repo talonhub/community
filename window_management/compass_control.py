@@ -701,7 +701,7 @@ class CompassControl:
 
         def resize_to_pointer(self, rect: ui.Rect, rect_id: int, parent_rect: ui.Rect, region: Direction) -> Tuple[bool, ui.Rect]:
             x, y = ctrl.mouse_pos()
-            return self.move_absolute(rect, rect_id, x, y, region)
+            return self.move_absolute(rect, rect_id, round(x), round(y), region)
 
         def translate_top_left_by_region(self, rect: ui.Rect, rect_id: int,
                             target_x: float, target_y: float, region_in: Direction) -> Tuple[int, int]:
@@ -1245,6 +1245,8 @@ class CompassControl:
                 print(f'resize_to_pointer: starting - {rect=}, {nd_direction=}')
 
             mouse_x, mouse_y = ctrl.mouse_pos()
+            mouse_x = round(mouse_x)
+            mouse_y = round(mouse_y)
             if self.testing:
                 print(f'resize_to_pointer: mouse position - {mouse_x, mouse_y}')
 
