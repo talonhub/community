@@ -96,8 +96,7 @@ class UserActions:
         actions.insert(" -> ")
 
     def code_operator_subscript():
-        actions.insert("[]")
-        actions.key("left")
+        actions.user.insert_between("[", "]")
 
     def code_operator_assignment():
         actions.insert(" = ")
@@ -202,37 +201,27 @@ class UserActions:
         actions.insert(" != null")
 
     def code_state_if():
-        actions.insert("if () ")
-        actions.key("left")
-        actions.key("left")
+        actions.user.insert_between("if (", ") ")
 
     def code_state_else_if():
-        actions.insert("else if () ")
-        actions.key("left")
-        actions.key("left")
+        actions.user.insert_between("else if (", ") ")
 
     def code_state_else():
         actions.insert("else ")
         actions.key("enter")
 
     def code_state_switch():
-        actions.insert("switch () ")
-        actions.key("left")
-        actions.edit.left()
+        actions.user.insert_between("switch (", ") ")
 
     def code_state_case():
         actions.insert("case \nbreak;")
         actions.edit.up()
 
     def code_state_for():
-        actions.insert("for () ")
-        actions.key("left")
-        actions.key("left")
+        actions.user.insert_between("for (", ") ")
 
     def code_state_while():
-        actions.insert("while () ")
-        actions.edit.left()
-        actions.edit.left()
+        actions.user.insert_between("while (", ") ")
 
     def code_break():
         actions.insert('break;')
