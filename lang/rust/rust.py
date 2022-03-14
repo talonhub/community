@@ -278,14 +278,6 @@ class UserActions:
         actions.edit.line_end()
         repeat_call(6, actions.edit.left)
 
-    def code_state_for_each():
-        actions.auto_insert('for  in  {}')
-        actions.edit.left()
-        actions.key('enter')
-        actions.edit.up()
-        actions.edit.line_end()
-        repeat_call(6, actions.edit.left)
-
     def code_state_while():
         actions.auto_insert('while  {}')
         actions.edit.left()
