@@ -73,8 +73,8 @@ use <user.code_libraries>:
     key(semicolon enter)
 
 ## specialist flow control
-if let some: user.code_insert_if_let_some()
-if let error: user.code_insert_if_let_error()
+state if let some: user.code_insert_if_let_some()
+state if let error: user.code_insert_if_let_error()
 
 ## rust centric synonyms
 is some: user.code_insert_is_not_null()
@@ -96,15 +96,10 @@ dynamic trait {user.code_trait}: insert("dyn {code_trait}")
 ## for generic reference of macro
 macro {user.code_macros}:
     user.code_insert_macro(code_macros, "")
-macro array {user.code_macros}:
-    user.code_insert_macro_array(code_macros, "")
-macro block {user.code_macros}:
-    user.code_insert_macro_block(code_macros, "")
 macro wrap {user.code_macros}:
     user.code_insert_macro(code_macros, edit.selected_text())
-macro array wrap {user.code_macros}:
-    user.code_insert_macro_array(code_macros, edit.selected_text())
-macro block wrap {user.code_macros}:
-    user.code_insert_macro_block(code_macros, edit.selected_text())
 
-
+## rust specific document comments
+block dock comment: user.code_comment_documentation_block()
+inner dock comment: user.code_comment_documentation_inner()
+inner block dock comment: user.code_comment_documentation_block_inner()

@@ -1,4 +1,4 @@
-import logging
+from typing import TypeVar, Callable, Any
 
 from talon import Context, Module, actions, settings
 
@@ -41,29 +41,20 @@ class Actions:
     def code_state_unsafe():
         """Inserts an unsafe block and positions the cursor appropriately"""
 
+    def code_comment_documentation_block():
+        """Inserts a block document comment and positions the cursor appropriately"""
+
+    def code_comment_documentation_inner():
+        """Inserts an inner document comment and positions the cursor appropriately"""
+
+    def code_comment_documentation_block_inner():
+        """Inserts an inner block document comment and positions the cursor appropriately"""
+
 
 ctx = Context()
 ctx.matches = r"""
 tag: user.rust
 """
-
-
-# tag: libraries_gui
-ctx.lists['user.code_libraries'] = {
-    'eye oh': 'std::io',
-    'file system': 'std::fs',
-    'envy': 'std::env',
-    'collections': 'std::collections',
-}
-
-# tag: functions_gui
-ctx.lists['user.code_functions'] = {
-    'drop': 'drop',
-    'catch unwind': 'catch_unwind',
-    'iterator': 'iter',
-    'into iterator': 'into_iter',
-    'from iterator': 'from_iter',
-}
 
 scalar_types = {
     'eye eight': 'i8',
@@ -125,6 +116,102 @@ all_types = {
     **standard_sync_types,
 }
 
+standard_function_macros = {
+    'panic': 'panic!',
+    'format': 'format!',
+    'concatenate': 'concat!',
+    'print': 'print!',
+    'print line': 'println!',
+    'error print line': 'eprintln!',
+    'to do': 'todo!',
+}
+
+standard_array_macros = {
+    'vector': 'vec!',
+}
+
+standard_block_macros = {
+    'macro rules': 'macro_rules!',
+}
+
+logging_macros = {
+    'debug': 'debug!',
+    'info': 'info!',
+    'warning': 'warn!',
+    'error': 'error!',
+}
+
+testing_macros = {
+    'assert': 'assert!',
+    'assert equal': 'assert_eq!',
+    'assert not equal': 'assert_ne!',
+
+}
+
+all_function_macros = {
+    **standard_function_macros,
+    **logging_macros,
+    **testing_macros,
+}
+
+all_array_macros = {
+    **standard_array_macros,
+}
+
+all_block_macros = {
+    **standard_block_macros,
+}
+
+all_macros = {
+    **all_function_macros,
+    **all_array_macros,
+    **all_block_macros,
+}
+
+all_function_macro_values = set(all_function_macros.values())
+all_array_macro_values = set(all_array_macros.values())
+all_block_macro_values = set(all_block_macros.values())
+
+closure_traits = {
+    'closure': 'Fn',
+    'closure once': 'FnOnce',
+    'closure mutable': 'FnMut',
+}
+
+conversion_traits = {
+    'into': 'Into',
+    'from': 'From',
+}
+
+iterator_traits = {
+    'iterator': 'Iterator',
+}
+
+all_traits = {
+    **closure_traits,
+    **conversion_traits,
+    **iterator_traits,
+}
+
+
+# tag: libraries_gui
+ctx.lists['user.code_libraries'] = {
+    'eye oh': 'std::io',
+    'file system': 'std::fs',
+    'envy': 'std::env',
+    'collections': 'std::collections',
+}
+
+# tag: functions_gui
+ctx.lists['user.code_functions'] = {
+    'drop': 'drop',
+    'catch unwind': 'catch_unwind',
+    'iterator': 'iter',
+    'into iterator': 'into_iter',
+    'from iterator': 'from_iter',
+    **all_macros,
+}
+
 # tag: functions
 ctx.lists['user.code_type'] = all_types
 
@@ -146,58 +233,9 @@ def code_type(m) -> str:
     return ''.join(m)
 
 
-standard_macros = {
-    'macro rules': 'macro_rules!',
-    'panic': 'panic!',
-    'format': 'format!',
-    'concatenate': 'concat!',
-    'print': 'print!',
-    'print line': 'println!',
-    'error print line': 'eprintln!',
-    'to do': 'todo!',
-    'vector': 'vec!',
-}
+ctx.lists['user.code_macros'] = all_macros
 
-logging_macros = {
-    'debug': 'debug!',
-    'info': 'info!',
-    'warning': 'warn!',
-    'error': 'error!',
-}
-
-testing_macros = {
-    'assert': 'assert!',
-    'assert equal': 'assert_eq!',
-    'assert not equal': 'assert_ne!',
-
-}
-
-ctx.lists['user.code_macros'] = {
-    **standard_macros,
-    **logging_macros,
-    **testing_macros,
-}
-
-closure_traits = {
-    'closure': 'Fn',
-    'closure once': 'FnOnce',
-    'closure mutable': 'FnMut',
-}
-
-conversion_traits = {
-    'into': 'Into',
-    'from': 'From',
-}
-
-iterator_traits = {
-    'iterator': 'Iterator',
-}
-
-ctx.lists['user.code_trait'] = {
-    **closure_traits,
-    **conversion_traits,
-    **iterator_traits,
-}
+ctx.lists['user.code_trait'] = all_traits
 
 
 @ctx.action_class('user')
@@ -206,64 +244,64 @@ class UserActions:
     # tag: comment_line
 
     def code_comment_line_prefix():
-        actions.insert('// ')
+        actions.auto_insert('// ')
 
     # tag: comment_documentation
 
     def code_comment_documentation():
-        actions.insert('/// ')
-
-    def code_comment_documentation_block():
-        actions.insert("/**\n\n*/")
-        actions.edit.up()
-
-    def code_comment_documentation_inner():
-        actions.insert('//! ')
-
-    def code_comment_documentation_block_inner():
-        actions.insert("/*!\n\n*/")
-        actions.edit.up()
+        actions.auto_insert('/// ')
 
     # tag: imperative
 
     def code_block():
-        actions.auto('{\n\n}')
+        actions.auto_insert('{}')
         actions.edit.left()
-        actions.edit.up()
-        actions.key('tab')
+        actions.key('enter')
 
     def code_state_if():
-        actions.insert('if  {  }')
-        actions.key('left:5')
+        actions.auto_insert('if  {  }')
+        repeat_call(5, actions.edit.left)
 
     def code_state_else_if():
-        actions.insert(' else if  {  }')
-        actions.key('left:5')
+        actions.auto_insert(' else if  {  }')
+        repeat_call(5, actions.edit.left)
 
     def code_state_else():
-        actions.insert(' else {  }')
-        actions.key('left:2')
+        actions.auto_insert(' else {  }')
+        repeat_call(2, actions.edit.left)
 
     def code_state_switch():
-        actions.insert('match  {  }')
-        actions.key('left:5')
+        actions.auto_insert('match  {  }')
+        repeat_call(5, actions.edit.left)
 
     def code_state_for():
-        actions.insert('for  in  {\n\n}\n')
-        actions.key('up:3 end left:6')
+        actions.auto_insert('for  in  {}')
+        actions.edit.left()
+        actions.key('enter')
+        actions.edit.up()
+        actions.edit.line_end()
+        repeat_call(6, actions.edit.left)
 
     def code_state_for_each():
-        actions.insert('for  in  {\n\n}\n')
-        actions.key('up:3 end left:6')
+        actions.auto_insert('for  in  {}')
+        actions.edit.left()
+        actions.key('enter')
+        actions.edit.up()
+        actions.edit.line_end()
+        repeat_call(6, actions.edit.left)
 
     def code_state_while():
-        actions.insert('while  {\n\n}\n')
-        actions.key('up:3 end left:2')
+        actions.auto_insert('while  {}')
+        actions.edit.left()
+        actions.key('enter')
+        actions.edit.up()
+        actions.edit.line_end()
+        repeat_call(2, actions.edit.left)
 
     def code_state_infinite_loop():
-        actions.insert('loop {\n\n}\n')
-        actions.edit.up()
-        actions.edit.up()
+        actions.auto_insert('loop {}')
+        actions.edit.left()
+        actions.key('enter')
 
     def code_state_return():
         actions.auto_insert('return ')
@@ -310,28 +348,28 @@ class UserActions:
         actions.user.code_private_function(text)
 
     def code_private_function(text: str):
-        actions.insert('fn ')
+        actions.auto_insert('fn ')
         formatter = settings.get('user.code_private_function_formatter')
         function_name = actions.user.formatted_text(text, formatter)
         actions.user.code_insert_function(function_name, None)
 
     def code_protected_function(text: str):
-        actions.insert('pub(crate) fn ')
+        actions.auto_insert('pub(crate) fn ')
         formatter = settings.get('user.code_protected_function_formatter')
         function_name = actions.user.formatted_text(text, formatter)
         actions.user.code_insert_function(function_name, None)
 
     def code_public_function(text: str):
-        actions.insert('pub fn ')
+        actions.auto_insert('pub fn ')
         formatter = settings.get('user.code_public_function_formatter')
         function_name = actions.user.formatted_text(text, formatter)
         actions.user.code_insert_function(function_name, None)
 
     def code_insert_type_annotation(type: str):
-        actions.insert(f': {type}')
+        actions.auto_insert(f': {type}')
 
     def code_insert_return_type(type: str):
-        actions.insert(f' -> {type}')
+        actions.auto_insert(f' -> {type}')
 
     # tag: functions_gui
 
@@ -351,7 +389,7 @@ class UserActions:
     # tag: operators_array
 
     def code_operator_subscript():
-        actions.insert('[]')
+        actions.auto_insert('[]')
         actions.edit.left()
 
     # tag: code_operators_assignment
@@ -452,7 +490,7 @@ class UserActions:
         actions.auto_insert(' || ')
 
     def code_operator_increment():
-        actions.insert(' += 1')
+        actions.auto_insert(' += 1')
 
     # rust specific grammar
 
@@ -460,35 +498,52 @@ class UserActions:
         actions.auto_insert('*')
 
     def code_insert_if_let_some():
-        actions.insert('if let Some() =  {  }')
-        actions.key('left:9')
+        actions.auto_insert('if let Some() =  {  }')
+        repeat_call(9, actions.edit.left)
 
     def code_insert_if_let_error():
-        actions.insert('if let Err() =  {  }')
-        actions.key('left:9')
+        actions.auto_insert('if let Err() =  {  }')
+        repeat_call(9, actions.edit.left)
 
     def code_state_implements():
-        actions.insert('impl  {\n}\n')
-        actions.key('up:2 right:5')
+        actions.auto_insert('impl  {}')
+        actions.edit.left()
+        actions.key('enter')
+        actions.edit.up()
+        actions.edit.line_end()
+        repeat_call(2, actions.edit.left)
 
     def code_insert_trait_annotation(type: str):
-        actions.insert(f': impl {type}')
+        actions.auto_insert(f': impl {type}')
 
     def code_insert_return_trait(type: str):
-        actions.insert(f' -> impl {type}')
+        actions.auto_insert(f' -> impl {type}')
 
     def code_insert_macro(text: str, selection: str):
-        code_insert_function_or_macro(text, selection, '(', ')')
-
-    def code_insert_macro_array(text: str, selection: str):
-        code_insert_function_or_macro(text, selection, '[', ']')
-
-    def code_insert_macro_block(text: str, selection: str):
-        code_insert_function_or_macro(text, selection, '{', '}')
+        if text in all_array_macro_values:
+            code_insert_function_or_macro(text, selection, '[', ']')
+        elif text in all_block_macro_values:
+            code_insert_function_or_macro(text, selection, '{', '}')
+        else:
+            code_insert_function_or_macro(text, selection, '(', ')')
 
     def code_state_unsafe():
-        actions.insert('unsafe {\n}\n')
-        actions.key('up')
+        actions.auto_insert('unsafe {}')
+        actions.edit.left()
+        actions.key('enter')
+
+    def code_comment_documentation_block():
+        actions.auto_insert("/***/")
+        repeat_call(2, actions.edit.left)
+        actions.key('enter')
+
+    def code_comment_documentation_inner():
+        actions.auto_insert('//! ')
+
+    def code_comment_documentation_block_inner():
+        actions.auto_insert("/*!*/")
+        repeat_call(2, actions.edit.left)
+        actions.key('enter')
 
 
 def code_insert_function_or_macro(
@@ -504,3 +559,10 @@ def code_insert_function_or_macro(
     actions.user.paste(out_text)
     actions.edit.left()
 
+
+RT = TypeVar('RT')  # return type
+
+
+def repeat_call(n: int, f: Callable[..., RT], *args: Any, **kwargs: Any):
+    for i in range(n):
+        f(*args, **kwargs)
