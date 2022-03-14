@@ -259,20 +259,16 @@ class UserActions:
         actions.key('enter')
 
     def code_state_if():
-        actions.auto_insert('if  {  }')
-        repeat_call(5, actions.edit.left)
+        actions.auto_insert('if ')
 
     def code_state_else_if():
-        actions.auto_insert(' else if  {  }')
-        repeat_call(5, actions.edit.left)
+        actions.auto_insert(' else if ')
 
     def code_state_else():
-        actions.auto_insert(' else {  }')
-        repeat_call(2, actions.edit.left)
+        actions.user.insert_between(' else { ', ' }')
 
     def code_state_switch():
-        actions.auto_insert('match  {  }')
-        repeat_call(5, actions.edit.left)
+        actions.auto_insert('match ')
 
     def code_state_for():
         actions.auto_insert('for  in  {}')
@@ -299,8 +295,7 @@ class UserActions:
         repeat_call(2, actions.edit.left)
 
     def code_state_infinite_loop():
-        actions.auto_insert('loop {}')
-        actions.edit.left()
+        actions.user.insert_between('loop {', '}')
         actions.key('enter')
 
     def code_state_return():
@@ -498,12 +493,10 @@ class UserActions:
         actions.auto_insert('*')
 
     def code_insert_if_let_some():
-        actions.auto_insert('if let Some() =  {  }')
-        repeat_call(9, actions.edit.left)
+        actions.user.insert_between('if let Some(', ')')
 
     def code_insert_if_let_error():
-        actions.auto_insert('if let Err() =  {  }')
-        repeat_call(9, actions.edit.left)
+        actions.user.insert_between('if let Err(', ')')
 
     def code_state_implements():
         actions.auto_insert('impl  {}')
@@ -528,21 +521,18 @@ class UserActions:
             code_insert_function_or_macro(text, selection, '(', ')')
 
     def code_state_unsafe():
-        actions.auto_insert('unsafe {}')
-        actions.edit.left()
+        actions.user.insert_between('unsafe {', '}')
         actions.key('enter')
 
     def code_comment_documentation_block():
-        actions.auto_insert("/***/")
-        repeat_call(2, actions.edit.left)
+        actions.user.insert_between('/**', '*/')
         actions.key('enter')
 
     def code_comment_documentation_inner():
         actions.auto_insert('//! ')
 
     def code_comment_documentation_block_inner():
-        actions.auto_insert("/*!*/")
-        repeat_call(2, actions.edit.left)
+        actions.user.insert_between('/*!', '*/')
         actions.key('enter')
 
 
