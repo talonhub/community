@@ -1,11 +1,11 @@
 
 # show size and position information about the current window
 window traits show:
-    user.win_show()
+    user.win_show_info()
 
 # hide the window information window
 window traits hide:
-    user.win_hide()
+    user.win_hide_info()
 
 # move the current window toward the center of the screen
 window move:

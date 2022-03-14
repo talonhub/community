@@ -371,11 +371,11 @@ app.register("ready", on_ready)
 
 @mod.action_class
 class Actions:
-    def win_show() -> None:
+    def win_show_info() -> None:
         "Shows information about current window position and size"
         _win_show_gui.show()
 
-    def win_hide() -> None:
+    def win_hide_info() -> None:
         "Hides the window information window"
         _win_show_gui.hide()
 
