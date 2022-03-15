@@ -7,7 +7,7 @@ mouse: user.mouse_toggle_control_mouse()
 zoom mouse: user.mouse_toggle_zoom_mouse()
 camera overlay: user.mouse_toggle_camera_overlay()
 run calibration: user.mouse_calibrate()	
-(touch | click | per | te | de | wu | be | la):
+(touch | click | per | de | be | la | eb | ek ):
 	mouse_click(0)
 	# close the mouse grid if open
 	user.grid_close()
@@ -55,7 +55,7 @@ midclick:
 	mouse_click()
 	# close the mouse grid
 	user.grid_close()
-left drag | drag:
+left drag | drag | hold:
 	user.mouse_drag(0)
 	# close the mouse grid
 	user.grid_close()
@@ -63,7 +63,7 @@ right drag | righty drag:
 	user.mouse_drag(1)
 	# close the mouse grid
 	user.grid_close()
-end drag | drag end:
+end drag | drag end | stop:
     user.mouse_drag_end()
 wheel down: user.mouse_scroll_down()
 wheel down here:

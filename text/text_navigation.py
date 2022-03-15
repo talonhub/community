@@ -122,7 +122,7 @@ def get_text_down():
     actions.edit.line_start()
     for j in range(0, text_navigation_max_line_search.get()):
         actions.edit.extend_down()
-    actions.edit.extend_line_end()
+    actions.edit.ext_line_end()
     text = actions.edit.selected_text()
     actions.edit.left()
     return text

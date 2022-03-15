@@ -238,6 +238,10 @@ alternate_keys = {
     "page down": "pagedown",
     "return": "enter",
     "end star": "enter",
+    "hold tab": "alt tab",
+
+
+    
 
 
 }

@@ -13,7 +13,20 @@ mode: all
     user.mouse_sleep()
     speech.disable()
     user.engine_sleep()
-^talon sleep [<phrase>]$: speech.disable()
-^wake up [<phrase>]$: speech.disable()
-^talon wake$: speech.enable()
+^talon sleep [<phrase>]$:
+    user.switcher_hide_running()
+    user.history_disable()
+    user.homophones_hide()
+    user.help_hide()
+    user.mouse_sleep()
+    speech.disable()
+    user.engine_sleep()
+^talon speech sleep {[<phrase>]$: speech.disable()
+^wake up [<phrase>]$: 
+    speech.disable()
+    user.mouse_sleep()
+^talon wake$:
+    speech.enable()
+    user.mouse_wake()
+
 
