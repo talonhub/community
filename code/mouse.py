@@ -340,6 +340,7 @@ def scroll_continuous_helper():
 
 def smooth_scroll_helper(amount, count):
     if(count == amount):
+        stop_scroll()
         return
 
     global scroll_amount
@@ -358,11 +359,6 @@ def start_smooth_scroll(amount):
     global scroll_job
 
     smooth_scroll_helper(abs(amount), 1)
-
-    # scroll_job = cron.interval("45ms", smooth_scroll_helper)
-    # cancel_time = max(abs(amount) - 1, 0) * setting_mouse_wheel_smooth_scroll_speed.get() # -1 since we already scrolled 1 line when starting this
-    # print(f'cancel time: {cancel_time}')
-    # cron.after(f'{cancel_time}ms', stop_scroll)
 
 def start_scroll():
     global scroll_job
