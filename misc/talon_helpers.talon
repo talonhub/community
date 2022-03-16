@@ -57,3 +57,5 @@ talon dump context:
 ^talon copy active app$:
     result = user.talon_get_active_application_info()
     clip.set_text(result)
+
+talon (bug report|report bug): user.open_url('https://github.com/knausj85/knausj_talon/issues')
