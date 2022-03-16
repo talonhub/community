@@ -97,7 +97,12 @@ setting_mouse_wheel_horizontal_amount = mod.setting(
     default=40,
     desc="The amount to scroll left/right",
 )
-
+setting_mouse_wheel_smooth_scroll_speed = mod.setting(
+    "mouse_wheel_smooth_scroll_speed",
+    type=int,
+    default=35,
+    desc="The speed in which smooth scrolling occurs, ms per line",
+)
 continuous_scoll_mode = ""
 
 
@@ -185,6 +190,13 @@ class Actions:
         """Scrolls down"""
         mouse_scroll(amount * setting_mouse_wheel_down_amount.get())()
 
+    def mouse_scroll_down_smooth(amount: float = 1):
+        """Scrolls down smoothly"""
+        global continuous_scoll_mode
+        continuous_scoll_mode = "scroll down smooth"
+        mouse_scroll(setting_mouse_wheel_down_amount.get())()
+        start_smooth_scroll(amount)
+
     def mouse_scroll_down_continuous():
         """Scrolls down continuously"""
         global continuous_scoll_mode
@@ -200,6 +212,13 @@ class Actions:
     def mouse_scroll_up(amount: float = 1):
         """Scrolls up"""
         mouse_scroll(-amount * setting_mouse_wheel_down_amount.get())()
+
+    def mouse_scroll_up_smooth(amount: float = 1):
+        """Scrolls down smoothly"""
+        global continuous_scoll_mode
+        continuous_scoll_mode = "scroll up smooth"
+        mouse_scroll(-1 * setting_mouse_wheel_down_amount.get())()
+        start_smooth_scroll(-amount)
 
     def mouse_scroll_up_continuous():
         """Scrolls up continuously"""
@@ -311,7 +330,6 @@ def mouse_scroll(amount):
 
     return scroll
 
-
 def scroll_continuous_helper():
     global scroll_amount
     # print("scroll_continuous_helper")
@@ -320,6 +338,27 @@ def scroll_continuous_helper():
     ):  # or eye_zoom_mouse.zoom_mouse.state == eye_zoom_mouse.STATE_SLEEP):
         actions.mouse_scroll(by_lines=False, y=int(scroll_amount / 10))
 
+def smooth_scroll_helper(amount, count):
+    if(count == amount):
+        stop_scroll()
+        return
+
+    global scroll_amount
+    if scroll_amount and (
+        eye_zoom_mouse.zoom_mouse.state == eye_zoom_mouse.STATE_IDLE
+    ):  # or eye_zoom_mouse.zoom_mouse.state == eye_zoom_mouse.STATE_SLEEP):
+        actions.mouse_scroll(y=int(scroll_amount))
+
+    def callback():
+        smooth_scroll_helper(amount, count + 1)
+    
+    cron.after(f'{setting_mouse_wheel_smooth_scroll_speed.get()}ms', callback)
+
+def start_smooth_scroll(amount):
+    print(f'start_smooth_scroll {amount}')
+    global scroll_job
+
+    smooth_scroll_helper(abs(amount), 1)
 
 def start_scroll():
     global scroll_job
