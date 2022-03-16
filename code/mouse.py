@@ -214,7 +214,7 @@ class Actions:
         mouse_scroll(-amount * setting_mouse_wheel_down_amount.get())()
 
     def mouse_scroll_up_smooth(amount: float = 1):
-        """Scrolls down smoothly"""
+        """Scrolls up smoothly"""
         global continuous_scoll_mode
         continuous_scoll_mode = "scroll up smooth"
         mouse_scroll(-1 * setting_mouse_wheel_down_amount.get())()
