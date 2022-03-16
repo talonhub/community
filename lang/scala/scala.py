@@ -3,100 +3,99 @@ from talon import Context, Module, actions, settings
 ctx = Context()
 mod = Module()
 ctx.matches = r"""
-tag: user.java
+tag: user.scala
 """
-ctx.tags = ["user.code_operators", "user.code_generic", "user.code_functions_gui"]
 
-# Primitive Types
-java_primitive_types = {
-    "boolean": "boolean",
-    "int": "int",
-    "float": "float",
-    "byte": "byte",
-    "double": "double",
-    "short": "short",
-    "long": "long",
-    "char": "char",
-    "void": "void",
-}
-
-# Java Boxed Types
-java_boxed_types = {
-    "Byte": "Byte",
-    "Integer": "Integer",
-    "Double": "Double",
-    "Short": "Short",
-    "Float": "Float",
-    "Long": "Long",
-    "Boolean": "Boolean",
-    "Character": "Character",
-    "Void": "Void",
-}
-
-mod.list("java_boxed_type", desc="Java Boxed Types")
-ctx.lists["self.java_boxed_type"] = java_boxed_types
-
-# Common Classes
-java_common_classes = {
-    "Object": "Object",
+# Scala Common Types
+scala_common_types = {
+    "boolean": "Boolean",
+    "int": "Int",
+    "float": "Float",
+    "byte": "Byte",
+    "double": "Double",
+    "short": "Short",
+    "long": "Long",
+    "char": "Char",
+    "unit": "Unit",
+    "any": "Any",
+    "any val": "AnyVal",
     "string": "String",
     "thread": "Thread",
     "exception": "Exception",
+    "throwable": "Throwable",
+    "none": "None",
+    "success": "Success",
+    "failure": "Failure",
 }
 
-mod.list("java_common_class", desc="Java Common Classes")
-ctx.lists["self.java_common_class"] = java_common_classes
-
-
-
-# Java Generic Data Structures
-java_generic_data_structures = {
-    # Interfaces
-    "set": "Set",
+# Scala Common Generic Types
+scala_common_generic_types = {
+    "array": "Array",
+    "deck": "Deque",
+    "future": "Future",
     "list": "List",
-    "queue": "Queue",
-    "deque": "Deque",
     "map": "Map",
-
-    # Classes
-    "hash set": "HashSet",
-    "array list": "ArrayList",
-    "hash map": "HashMap",
+    "nil": "Nil",
+    "option": "Option",
+    "queue": "Queue",
+    "seek": "Seq",
+    "set": "Set",
+    "some": "Some",
+    "stack": "Stack",
+    "try": "Try",
 }
 
-unboxed_types = java_primitive_types.copy()
-unboxed_types.update(java_common_classes)
-unboxed_types.update(java_generic_data_structures)
+scala_types = scala_common_types.copy()
+scala_types.update(scala_common_generic_types)
+ctx.lists["user.code_type"] = scala_types
 
-ctx.lists["user.code_type"] = unboxed_types
-
-mod.list("java_generic_data_structure", desc="Java Generic Data Structures")
-ctx.lists["self.java_generic_data_structure"] = java_generic_data_structures
-
-# Java Modifies
-java_modifiers = {
+# Scala Modifies
+scala_modifiers = {
     "public": "public",
     "private": "private",
     "protected": "protected",
-    "static": "static",
-    "synchronized": "synchronized",
-    "volatile": "volatile",
-    "transient": "transient",
-    "abstract": "abstract",
-    "interface": "interface",
-    "final": "final",
 }
 
-mod.list("java_modifier", desc="Java Modifiers")
-ctx.lists["self.java_modifier"] = java_modifiers
+mod.list("scala_modifier", desc="Scala Modifiers")
+ctx.lists["user.scala_modifier"] = scala_modifiers
+
+scala_keywords = {
+    "abstract": "abstract",
+    "case class": "case class",
+    "def": "def",
+    "extends": "extends",
+    "implicit": "implicit",
+    "lazy val": "lazy val",
+    "new": "new",
+    "object": "object",
+    "override": "override",
+    "package": "package",
+    "sealed": "sealed",
+    "throw": "throw",
+    "trait": "trait",
+    "type": "type",
+    "val": "val",
+    "var": "var",
+    "with": "with",
+    "yield": "yield",
+}
+
+mod.list("scala_keyword", desc="Scala Keywords")
+ctx.lists["user.scala_keyword"] = scala_keywords
 
 @ctx.action_class("user")
 class UserActions:
+    def code_block():
+        actions.insert('{}')
+        actions.edit.left()
+        actions.key('enter')
+
     def code_operator_lambda():
-        actions.insert(" -> ")
+        actions.insert(" => ")
 
     def code_operator_subscript():
-        actions.user.insert_between("[", "]")
+        actions.insert("()")
+        actions.edit.left()
 
     def code_operator_assignment():
         actions.insert(" = ")
@@ -188,9 +187,6 @@ class UserActions:
     def code_self():
         actions.insert("this")
 
-    def code_operator_object_accessor():
-        actions.insert(".")
-
     def code_insert_null():
         actions.insert("null")
 
@@ -201,33 +197,43 @@ class UserActions:
         actions.insert(" != null")
 
     def code_state_if():
-        actions.user.insert_between("if (", ") ")
+        actions.insert("if () ")
+        actions.edit.left()
+        actions.edit.left()
 
     def code_state_else_if():
-        actions.user.insert_between("else if (", ") ")
+        actions.insert("else if () ")
+        actions.edit.left()
+        actions.edit.left()
 
     def code_state_else():
         actions.insert("else ")
-        actions.key("enter")
 
     def code_state_switch():
-        actions.user.insert_between("switch (", ") ")
+        actions.insert("match {\n")
 
     def code_state_case():
-        actions.insert("case \nbreak;")
-        actions.edit.up()
+        actions.insert("case  => ")
+        actions.edit.left()
+        actions.edit.left()
+        actions.edit.left()
+        actions.edit.left()
 
     def code_state_for():
-        actions.user.insert_between("for (", ") ")
+        actions.insert("for () ")
+        actions.edit.left()
+        actions.edit.left()
 
     def code_state_while():
-        actions.user.insert_between("while (", ") ")
+        actions.insert("while () ")
+        actions.edit.left()
+        actions.edit.left()
 
     def code_break():
-        actions.insert('break;')
+        actions.insert('break')
 
     def code_next():
-        actions.insert('continue;')
+        actions.insert('continue')
 
     def code_insert_true():
         actions.insert('true')
@@ -241,39 +247,50 @@ class UserActions:
     def code_import():
         actions.insert("import ")
 
-    def code_private_function(text: str):
-        actions.insert("private")
-
-    def code_protected_function(text: str):
-        actions.user.code_private_function()
-
-    def code_public_function(text: str):
-        actions.insert("public ")
-
     def code_state_return():
         actions.insert("return ")
 
     def code_comment_line_prefix():
         actions.insert('// ')
 
+    def code_comment_block():
+        actions.insert('/*')
+        actions.key('enter')
+        actions.key('enter')
+        actions.insert('*/')
+        actions.edit.up()
+
+    def code_comment_block_prefix():
+        actions.insert('/*')
+
+    def code_comment_block_suffix():
+        actions.insert('*/')
+
+    def code_insert_type_annotation(type: str):
+        actions.insert(f": {type}")
+
+    def code_insert_return_type(type: str):
+        actions.insert(f": {type}")
+
+    def code_operator_object_accessor():
+        actions.insert(".")
+
+    def code_default_function(text: str):
+        """Inserts function declaration"""
+        actions.user.code_public_function(text)
+
     def code_insert_function(text: str, selection: str):
-        text += f"({selection or ''})"
+        if selection:
+            text = text + "({})".format(selection)
+        else:
+            text = text + "()"
+
         actions.user.paste(text)
         actions.edit.left()
 
     def code_private_function(text: str):
         """Inserts private function declaration"""
-        result = "private void {}".format(
-            actions.user.formatted_text(
-                text, settings.get("user.code_private_function_formatter")
-            )
-        )
-
-        actions.user.code_insert_function(result, None)
-
-    def code_private_static_function(text: str):
-        """Inserts private static function"""
-        result = "private static void {}".format(
+        result = "private def {}".format(
             actions.user.formatted_text(
                 text, settings.get("user.code_private_function_formatter")
             )
@@ -282,16 +299,7 @@ class UserActions:
         actions.user.code_insert_function(result, None)
 
     def code_protected_function(text: str):
-        result = "void {}".format(
-            actions.user.formatted_text(
-                text, settings.get("user.code_protected_function_formatter")
-            )
-        )
-
-        actions.user.code_insert_function(result, None)
-
-    def code_protected_static_function(text: str):
-        result = "static void {}".format(
+        result = "protected def {}".format(
             actions.user.formatted_text(
                 text, settings.get("user.code_protected_function_formatter")
             )
@@ -300,16 +308,7 @@ class UserActions:
         actions.user.code_insert_function(result, None)
 
     def code_public_function(text: str):
-        result = "public void {}".format(
-            actions.user.formatted_text(
-                text, settings.get("user.code_public_function_formatter")
-            )
-        )
-
-        actions.user.code_insert_function(result, None)
-
-    def code_public_static_function(text: str):
-        result = "public static void {}".format(
+        result = "def {}".format(
             actions.user.formatted_text(
                 text, settings.get("user.code_public_function_formatter")
             )

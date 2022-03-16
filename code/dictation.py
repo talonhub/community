@@ -60,7 +60,7 @@ def word(m) -> str:
     try:
         return m.vocabulary
     except AttributeError:
-        return " ".join(actions.user.replace_phrases(actions.dictate.parse_words(m.word)))
+        return " ".join(actions.dictate.replace_words(actions.dictate.parse_words(m.word)))
 
 @mod.capture(rule="({user.vocabulary} | <phrase>)+")
 def text(m) -> str:
@@ -93,7 +93,7 @@ def capture_to_words(m):
     words = []
     for item in m:
         words.extend(
-            actions.user.replace_phrases(actions.dictate.parse_words(item))
+            actions.dictate.replace_words(actions.dictate.parse_words(item))
             if isinstance(item, grammar.vm.Phrase)
             else [item])
     return words
@@ -107,7 +107,7 @@ def apply_formatting(m):
         if isinstance(item, Callable):
             item(formatter)
         else:
-            words = (actions.user.replace_phrases(actions.dictate.parse_words(item))
+            words = (actions.dictate.replace_words(actions.dictate.parse_words(item))
                      if isinstance(item, grammar.vm.Phrase)
                      else [item])
             for word in words:
@@ -170,9 +170,15 @@ def needs_space_between(before: str, after: str) -> bool:
 # assert not needs_space_between("hello'", ".")
 # assert not needs_space_between("hello.", "'")
 
+no_cap_after = re.compile(r"""(
+    e\.g\.
+    | i\.e\.
+    )$""", re.VERBOSE)
+
 def auto_capitalize(text, state = None):
     """
-    Auto-capitalizes text. `state` argument means:
+    Auto-capitalizes text. Text must contain complete words, abbreviations, and
+    formatted expressions. `state` argument means:
 
     - None: Don't capitalize initial word.
     - "sentence start": Capitalize initial word.
@@ -186,9 +192,10 @@ def auto_capitalize(text, state = None):
     # string left-to-right.
     charge = state == "sentence start"
     newline = state == "after newline"
+    sentence_end = False
     for c in text:
-        # Sentence endings & double newlines create a charge.
-        if c in ".!?" or (newline and c == "\n"):
+        # Sentence endings followed by space & double newlines create a charge.
+        if (sentence_end and c in " \n\t") or (newline and c == "\n"):
             charge = True
         # Alphanumeric characters and commas/colons absorb charge & try to
         # capitalize (for numbers & punctuation this does nothing, which is what
@@ -199,7 +206,8 @@ def auto_capitalize(text, state = None):
         # Otherwise the charge just passes through.
         output += c
         newline = c == "\n"
-    return output, ("sentence start" if charge else
+        sentence_end = c in ".!?" and not no_cap_after.search(output)
+    return output, ("sentence start" if charge or sentence_end else
                     "after newline" if newline else None)
 
 
@@ -329,10 +337,7 @@ class Actions:
         # so that future dictation is properly formatted.
         text = text.replace("“", "\"").replace("”", "\"")
         actions.user.add_phrase_to_history(text)
-        # we insert the text all at once in case we have an implementation of
-        # insert that is more efficient for long strings, eg. paste-to-insert
-        actions.insert(text + (" " if add_space_after else ""))
-        if add_space_after: actions.edit.left()
+        actions.user.insert_between(text, " " if add_space_after else "")
 
     def dictation_peek_left(clobber: bool = False) -> Optional[str]:
         """

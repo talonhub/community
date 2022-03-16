@@ -10,27 +10,20 @@ edit = actions.edit
 
 words_to_keep_lowercase = "a an the at by for in is of on to up and as but or nor".split()
 
-DEFAULT_SEPARATOR = ' '
-SMASH_SEPARATOR = ''
-
-# SEP and NOSEP are used when defining formatters to determine whether the formatter should put a separator between words.
-SEP = True
-NOSEP = False
-
 # The last phrase spoken, without & with formatting. Used for reformatting.
 last_phrase = ""
 last_phrase_formatted = ""
 
-
-def surround(by):
-    def func(i, word, last):
-        if i == 0:
-            word = by + word
-        if last:
-            word += by
-        return word
-
-    return func
+# Internally, a formatter is a pair (sep, fn).
+#
+# - sep: a boolean, true iff the formatter should leave spaces between words.
+#   We use SEP & NOSEP for this for clarity.
+#
+# - fn: a function (i, word, is_end) --> formatted_word, called on each `word`.
+#   `i` is the word's index in the list, and `is_end` is True iff it's the
+#   last word in the list.
+SEP = True
+NOSEP = False
 
 
 def format_phrase(m: Union[str, Phrase], formatters: str):
@@ -40,12 +33,10 @@ def format_phrase(m: Union[str, Phrase], formatters: str):
     if isinstance(m, str):
         words = m.split(" ")
     else:
-        # TODO: is this still necessary, and if so why?
+        # FIXME: I believe this is no longer necessary. -rntz, 2022-02-10
         if m.words[-1] == "over":
             m.words = m.words[:-1]
-
-        words = actions.dictate.parse_words(m)
-        words = actions.user.replace_phrases(words)
+        words = actions.dictate.replace_words(actions.dictate.parse_words(m))
 
     result = last_phrase_formatted = format_phrase_without_adding_to_history(words, formatters)
     actions.user.add_phrase_to_history(result)
@@ -56,26 +47,27 @@ def format_phrase(m: Union[str, Phrase], formatters: str):
 
 
 def format_phrase_without_adding_to_history(word_list, formatters: str):
-    formatter_list = formatters.split(",")
+    # A formatter is a pair (keep_spaces, function). We drop spaces if any
+    # formatter does; we apply their functions in reverse order.
+    formatters = [all_formatters[name] for name in formatters.split(',')]
+    separator = ' ' if all(x[0] for x in formatters) else ''
+    functions = [x[1] for x in reversed(formatters)]
     words = []
-    separator_to_use = DEFAULT_SEPARATOR
     for i, word in enumerate(word_list):
-        for name in reversed(formatter_list):
-            does_formatter_use_separator, formatter_function = all_formatters[name]
-            word = formatter_function(i, word, i == len(word_list) - 1)
-            if not does_formatter_use_separator:
-                separator_to_use = SMASH_SEPARATOR
+        for f in functions:
+            word = f(i, word, i == len(word_list) - 1)
         words.append(word)
-    return separator_to_use.join(words)
+    return separator.join(words)
+
+
+# Formatter helpers
+def surround(by):
+    return lambda i, word, last: (by if i == 0 else '') + word + (by if last else '')
 
 
 def words_with_joiner(joiner):
     """Pass through words unchanged, but add a separator between them."""
-
-    def formatter_function(i, word, _):
-        return word if i == 0 else joiner + word
-
-    return (NOSEP, formatter_function)
+    return (NOSEP, lambda i, word, _: ('' if i == 0 else joiner) + word)
 
 
 def first_vs_rest(first_func, rest_func=lambda w: w):
@@ -87,22 +79,13 @@ def first_vs_rest(first_func, rest_func=lambda w: w):
     Set first argument to None if you want the first word to be passed
     through unchanged.
     """
-    if first_func is None:
-        first_func = lambda w: w
-
-    def formatter_function(i, word, _):
-        return first_func(word) if i == 0 else rest_func(word)
-
-    return formatter_function
+    first_func = first_func or (lambda w: w)
+    return lambda i, word, _: first_func(word) if i == 0 else rest_func(word)
 
 
 def every_word(word_func):
     """Apply one function to every word."""
-
-    def formatter_function(i, word, _):
-        return word_func(word)
-
-    return formatter_function
+    return lambda i, word, _: word_func(word)
 
 
 formatters_dict = {
