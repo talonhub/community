@@ -22,6 +22,9 @@ fiona [<user.text>]:
     insert('find . -type f -name ""')
     key(left)
     insert(text or "")
+mickie [<user.text>]:
+    insert('mkdir ')
+    insert(text or "")
 
 clear screen: user.terminal_clear_screen()
 run last: user.terminal_run_last()
