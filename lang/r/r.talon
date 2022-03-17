@@ -1,8 +1,4 @@
-mode: command
-and mode: user.r
-mode: command
-and mode: user.auto_lang
-and code.language: r
+tag: user.r
 -
 tag(): user.code_imperative
 

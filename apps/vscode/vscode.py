@@ -31,6 +31,8 @@ and app.name: Visual Studio Code
 os: windows
 and app.name: Visual Studio Code Insiders
 os: windows
+and app.name: Visual Studio Code - Insiders
+os: windows
 and app.exe: Code.exe
 os: windows
 and app.exe: Code-Insiders.exe
