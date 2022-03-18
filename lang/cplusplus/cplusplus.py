@@ -579,7 +579,7 @@ ctx.lists["user.cpp_cast_style"] = {
     "see cast": "(TYPE)VAL",
     "static cast": "static_cast<TYPE>(VAL)",
     "dynamic cast": "dynamic_cast<TYPE>(VAL)",
-    "reinterpret cast": "reinterpret<TYPE>(VAL)",
+    "reinterpret cast": "reinterpret_cast<TYPE>(VAL)",
 }
 
 ctx.lists["user.cpp_access_specifiers"] = {
@@ -1003,8 +1003,8 @@ class UserActions:
         actions.edit.left()
 
     def code_state_case():
-        actions.insert("case \n")
-        actions.edit.up()
+        actions.insert("case :")
+        actions.edit.left()
 
     def code_state_for():
         actions.insert("for ()\n{}\n")
