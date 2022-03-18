@@ -257,7 +257,23 @@ class WinCompassControl:
 
             # do it to it
             start_time_rect = time.time_ns()
-            w.rect = rect_in.copy()
+            try:
+                # uncomment for testing
+                # raise ValueError('screen not found containing point -430, -375')
+
+                w.rect = rect_in.copy()
+            except ValueError as e:
+                if app.platform == "mac" and 'screen not found containing point' in str(e):
+                    # on mac, talon complains if the coordinates are not actually on the screen.
+                    
+                    # uncomment for testing
+                    # print(f'_win_set_rect: caught ignored exception - {e}')
+                    
+                    # just fail in this case
+                    break
+                else:
+                    raise
+                
             try:
                 # for testing
                 #raise queue.Empty()
