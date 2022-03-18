@@ -72,8 +72,8 @@ state assert:
 #   variable int air -> "int a"
 #   declare standard string function get text -> "std::string get_text()"
 #   declare void function pointer callback -> "void(* callback)()"
-(variable|declare) <user.cpp_raw_type> <phrase>$:
-    var_name = user.formatted_text(phrase, "SNAKE_CASE")
+(variable|declare) <user.cpp_raw_type> <user.text>$:
+    var_name = user.formatted_text(text, "SNAKE_CASE")
     insert(user.cpp_build_declarator(cpp_raw_type, var_name))
 
 (variable|declare) <user.cpp_raw_type> <user.letter>:
