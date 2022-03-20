@@ -13,9 +13,7 @@ tag(): user.code_functions_gui
 dot talon: insert(".talon")
 #defintion blocks for the context
 action block:
-    insert("action():")
-    edit.left()
-    edit.left()
+    user.insert_between("action(", "):")
 setting block:
     insert("settings():\n\t")
 setting {user.talon_settings}:
