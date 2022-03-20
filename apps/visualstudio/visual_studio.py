@@ -1,5 +1,6 @@
 # vs title tracking requires an extension
 # https://marketplace.visualstudio.com/items?itemName=mayerwin.RenameVisualStudioWindowTitle
+# https://github.com/mayerwin/vs-customize-window-title (VS 2022 support in releases)
 # I currently configure the extension as below
 # Document (no solution) open: [documentName] - [ideName]
 # No document or solution open: [idleName]
@@ -18,6 +19,8 @@ mod = Module()
 apps = mod.apps
 apps.visual_studio = """
 os: windows
+and app.name: Microsoft Visual Studio 2022
+os: windows
 and app.name: Microsoft Visual Studio 2019
 os: windows
 and app.name: devenv.exe
@@ -32,8 +35,7 @@ from talon import Context, actions
 ctx = Context()
 ctx.matches = r"""
 os: windows
-app: Microsoft Visual Studio 2019
-app: devenv.exe
+app: visual_studio
 """
 
 @ctx.action_class('app')

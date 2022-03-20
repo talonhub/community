@@ -28,8 +28,7 @@ display pointers:
     
 # XXX - should be generic
 dereference pointer:
-    insert("poi()")
-    edit.left()
+    user.insert_between("poi(", ")")
     
 show version: key(ctrl-alt-w)
 

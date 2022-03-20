@@ -35,11 +35,9 @@ settings():
 state include:
     insert('#include ')
 state include system:
-    insert('#include <>')
-    edit.left()
+    user.insert_between("#include <", ">")
 state include local:
-    insert('#include ""')
-    edit.left()
+    user.insert_between('#include "', '"')
 state type deaf:
     insert('typedef ')
 state type deaf struct:
@@ -94,8 +92,7 @@ standard cast to <user.stdint_cast>: "{stdint_cast}"
 <user.c_signed>: "{c_signed}"
 standard <user.stdint_types>: "{stdint_types}"
 int main:
-    insert("int main()")
-    edit.left()
+    user.insert_between("int main(", ")")
 
 toggle includes: user.code_toggle_libraries()
 include <user.code_libraries>:

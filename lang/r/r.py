@@ -275,21 +275,16 @@ class UserActions:
         actions.insert('while () {}')
         actions.key('left enter up end left:3')
     def code_import():
-        actions.insert('library()')
-        actions.key('left')
+        actions.user.insert_between('library(', ')')
     def code_comment_line_prefix(): actions.auto_insert('#')
     def code_state_return():
-        actions.insert('return()')
-        actions.key('left')
+        actions.user.insert_between('return(', ')')
     def code_break(): actions.auto_insert('break')
     def code_next():  actions.auto_insert('next')
     def code_insert_true():  actions.auto_insert('TRUE')
     def code_insert_false(): actions.auto_insert('FALSE')
     def code_insert_function(text: str, selection: str):
-        if selection:
-            text = text + "({})".format(selection)
-        else:
-            text = text + "()"
+        text += f"({selection or ''})"
         actions.user.paste(text)
         actions.edit.left()
 
@@ -309,10 +304,8 @@ class UserActions:
         actions.edit.left()
 
     def code_insert_library(text: str, selection: str):
-        actions.insert("library()")
-        actions.edit.left()
-        actions.clip.set_text(text + "{}".format(selection))
-        actions.edit.paste()
+        actions.user.insert_between("library(", ")")
+        actions.user.paste(text + selection)
 
     def code_insert_named_argument(parameter_name: str):
         actions.insert(f"{parameter_name} = ")

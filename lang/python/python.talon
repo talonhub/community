@@ -34,7 +34,7 @@ self taught: "self."
 pie test: "pytest"
 state past: "pass"
 
-raise {user.python_exception}: user.insert_cursor("raise {python_exception}([|])")
+raise {user.python_exception}: user.insert_between("raise {python_exception}(", ")")
 except {user.python_exception}: "except {python_exception}:"
 
 dock string:
@@ -43,18 +43,13 @@ dock {user.python_docstring_fields}:
     insert("{python_docstring_fields}")
     edit.left()
 dock type {user.code_type}:
-    user.insert_cursor(":type [|]: {code_type}")
+    user.insert_between(":type ", ": {code_type}")
 dock returns type {user.code_type}:
-    user.insert_cursor(":rtype [|]: {code_type}")
+    user.insert_between(":rtype ", ": {code_type}")
 
 toggle imports: user.code_toggle_libraries()
 import <user.code_libraries>:
     user.code_insert_library(code_libraries, "")
     key(end enter)
 
-from import:
-    insert('from import ')
-    key('left')
-    edit.word_left()
-    key('space')
-    edit.left()
+from import: user.insert_between("from ", " import ")
