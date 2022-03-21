@@ -23,7 +23,7 @@ from talon import ui, Module, Context, actions, imgui, settings, app, ctrl
 from .compass_control import CompassControl, Direction, compass_direction, NonDualDirection, non_dual_direction
 
 # # turn debug messages on and off
-testing: bool = True
+testing: bool = False
 
 win_compass_control = None
 compass_control = None
