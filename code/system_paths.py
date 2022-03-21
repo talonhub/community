@@ -9,7 +9,9 @@ mod.list("system_paths", desc="List of system paths")
 
 user_path = os.path.expanduser("~")
 
-def populate_system_paths():
+# We need to wait for ready before we can call "actions.path.talon_home()" and
+# "actions.path.talon_user()"
+def on_ready():
     default_system_paths = {
         "user": user_path,
         "profile": user_path,
@@ -52,4 +54,4 @@ def populate_system_paths():
 def system_path(m) -> str:
     return m.system_paths
 
-app.register("ready", populate_system_paths)
+app.register("ready", on_ready)
