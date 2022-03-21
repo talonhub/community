@@ -72,20 +72,6 @@ current_file_page = current_folder_page = 1
 ctx.lists["self.file_manager_directories"] = []
 ctx.lists["self.file_manager_files"] = []
 
-if app.platform == "windows":
-    is_windows = True
-    import ctypes
-
-    GetUserNameEx = ctypes.windll.secur32.GetUserNameExW
-    NameDisplay = 3
-
-    size = ctypes.pointer(ctypes.c_ulong(0))
-    GetUserNameEx(NameDisplay, None, size)
-
-    nameBuffer = ctypes.create_unicode_buffer(size.contents.value)
-    GetUserNameEx(NameDisplay, nameBuffer, size)
-
-
 @mod.action_class
 class Actions:
     def file_manager_current_path() -> str:
