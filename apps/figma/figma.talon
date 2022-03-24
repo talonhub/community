@@ -74,3 +74,7 @@ style copy: user.figma_style_copy()
 style paste: user.figma_style_paste()
 
 run plugin: user.figma_run_plugin()
+
+collapse: user.figma_collapse()
+
+remove: user.figma_remove()

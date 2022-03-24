@@ -33,3 +33,4 @@ link copy: key("yf")
 #Simple Shortcuts
 duplicate: key("cmd-d")
 clicker: key("cmd-shift-d")
+grab all: key("cmd-a")

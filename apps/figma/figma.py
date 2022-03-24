@@ -174,3 +174,9 @@ class figma_actions:
 
     def figma_run_plugin():
         """Run the last plugin"""
+
+    def figma_collapse():
+        """Collapse layers"""
+
+    def figma_remove():
+        """Remove"""

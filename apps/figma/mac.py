@@ -85,4 +85,9 @@ class UserActions:
 
     def figma_style_copy(): actions.key('alt-cmd-c')
     def figma_style_paste(): actions.key('alt-cmd-v')
+
     def figma_run_plugin(): actions.key('alt-cmd-p')
+
+    def figma_collapse(): actions.key('alt-l')
+
+    def figma_remove(): actions.key('del')
