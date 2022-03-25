@@ -1,10 +1,46 @@
 # defines the default app actions for windows
 
-from talon import Context, actions
+import win32gui
+from talon import Context, actions, ui
 ctx = Context()
 ctx.matches = r"""
 os: windows
 """
+
+# adapted this from code posted by @PeterLinder
+# return list of top level windows
+def get_top_level_windows():
+    def enumHandler(hwnd, resultList):
+        resultList.append(hwnd)
+
+    top_level_windows = []
+
+    win32gui.EnumWindows(enumHandler, top_level_windows)
+    return top_level_windows
+
+# focuses the n-th next or n-th previous instance of the current
+# app, depending on the magnitude and sign of the 'direction' arg
+def _focus_neighbor_window(direction: int) -> ui.Window:
+    active_window = ui.active_window()
+    active_app = active_window.app
+
+    top_level_windows = get_top_level_windows()
+    
+    # don't use .hidden for now, as the cached value may be stale (https://github.com/talonvoice/talon/issues/494#issuecomment-1059517184)
+    # app_windows = [w for w in ui.windows() if w.app.name == active_app.name and not w.hidden and w.id in top_level_windows]
+    app_windows = [w for w in ui.windows() if w.app.name == active_app.name and win32gui.IsWindowVisible(w.id) and w.id in top_level_windows]
+    app_windows.sort(key=lambda w: w.id)
+    window_count = len(app_windows)
+    # print(f'_focus_neighbor_window: app_windows: {len(app_windows)=}, {[w.id for w in app_windows]}')
+    
+    for i in range(window_count):
+        if app_windows[i].id == active_window.id:
+            target_idx = (i + direction) % window_count
+            target_window = app_windows[target_idx]
+            
+            actions.user.switcher_focus_window(target_window)
+
+            break
 
 @ctx.action_class('app')
 class AppActions:
@@ -28,11 +64,10 @@ class AppActions:
         actions.key('alt-space n')
     def window_hide_others():
         actions.key('win-d alt-tab')
-        #requires easy window switcher or equivalent (built into most Linux)
     def window_next():
-        actions.key('alt-`')
+        _focus_neighbor_window(1)
     def window_open():
         actions.key('ctrl-n')
         #requires easy window switcher or equivalent (built into most Linux)
     def window_previous():
-        actions.key('alt-shift-`')
+        _focus_neighbor_window(-1)
