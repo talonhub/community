@@ -1,14 +1,22 @@
 # defines the default app actions for windows
 
-import win32gui
-from talon import Context, actions, ui
+
+from talon import Context, actions, ui, app
+
+# we expect this import to succeed on windows (only)
+if app.platform == 'windows':
+    import win32gui
+
 ctx = Context()
 ctx.matches = r"""
 os: windows
 """
 
 # adapted this from code posted by @PeterLinder
-# return list of top level windows
+# this is a wrapper around the win32 EnumWindows() function, which is documented
+# here - https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-enumwindows.
+# you might think that 'top level windows' are non-hidden, non-background windows that are
+# not child windows...but you'd be wrong.
 def get_top_level_windows():
     def enumHandler(hwnd, resultList):
         resultList.append(hwnd)
@@ -18,9 +26,11 @@ def get_top_level_windows():
     win32gui.EnumWindows(enumHandler, top_level_windows)
     return top_level_windows
 
-# focuses the n-th next or n-th previous instance of the current
-# app, depending on the magnitude and sign of the 'direction' arg
 def _focus_neighbor_window(direction: int) -> ui.Window:
+    """
+    focuses the n-th next or n-th previous instance of the current
+    app, depending on the magnitude and sign of the 'direction' arg.
+    """
     active_window = ui.active_window()
     active_app = active_window.app
 
