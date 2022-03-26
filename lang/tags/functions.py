@@ -10,6 +10,13 @@ mod.tag("code_functions", desc="Tag for enabling commands for functions")
 mod.list("code_type", desc="List of types for active language")
 mod.list("code_parameter_name", desc="List of common parameter names for active language")
 
+
+@mod.capture(rule='{user.code_type}')
+def code_type(m) -> str:
+    """Returns a macro name"""
+    return m.code_type
+
+
 setting_private_function_formatter = \
     mod.setting("code_private_function_formatter", str)
 setting_protected_function_formatter = \
