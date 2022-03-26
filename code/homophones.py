@@ -1,3 +1,5 @@
+from .user_settings import SETTINGS_DIR
+
 from talon import Context, Module, app, clip, cron, imgui, actions, ui, fs
 import os
 
@@ -11,6 +13,7 @@ import os
 # https://github.com/pimentel/homophones
 cwd = os.path.dirname(os.path.realpath(__file__))
 homophones_file = os.path.join(cwd, "homophones.csv")
+user_homophones_file = os.path.join(SETTINGS_DIR, "homophones.csv")
 # if quick_replace, then when a word is selected and only one homophone exists,
 # replace it without bringing up the options
 quick_replace = True
@@ -31,14 +34,15 @@ def update_homophones(name, flags):
 
     phones = {}
     canonical_list = []
-    with open(homophones_file, "r") as f:
-        for line in f:
-            words = line.rstrip().split(",")
-            canonical_list.append(words[0])
-            for word in words:
-                word = word.lower()
-                old_words = phones.get(word, [])
-                phones[word] = sorted(set(old_words + words))
+    for path in [homophones_file, user_homophones_file]:
+        with open(path, "r") as f:
+            for line in f:
+                words = line.rstrip().split(",")
+                canonical_list.append(words[0])
+                for word in words:
+                    word = word.lower()
+                    old_words = phones.get(word, [])
+                    phones[word] = sorted(set(old_words + words))
 
     global all_homophones
     all_homophones = phones
@@ -47,6 +51,8 @@ def update_homophones(name, flags):
 
 update_homophones(homophones_file, None)
 fs.watch(cwd, update_homophones)
+if os.path.exists(user_homophones_file):
+    fs.watch(user_homophones_file, update_homophones)
 active_word_list = None
 is_selection = False
 
