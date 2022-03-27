@@ -59,13 +59,19 @@ class Actions:
     def edit_talon_user_csv(talon_user_file_path: str) -> None:
         """Opens a .csv file under the talon user folder using the default application"""
 
-        if not os.path.relpath(talon_user_file_path):
-            print('edit_talon_user_csv: can only open files under the talon user folder!')
-
         if not talon_user_file_path.endswith(".csv"):
             print('edit_talon_user_csv: can only open .csv files!')
 
-        path = os.path.join(actions.path.talon_user(), talon_user_file_path)
+        if os.path.isabs(talon_user_file_path):
+            if not talon_user_file_path.startswith(str(actions.path.talon_user())):
+                raise ValueError('edit_talon_user_csv: can only open files under the talon user folder!')
+            else:
+                path = talon_user_file_path
+        else:
+            path = os.path.join(actions.path.talon_user(), talon_user_file_path)
+
+        if not os.path.exists(path):
+            raise FileNotFoundError(path)
 
         eof_keys = settings.get('user.csv_eof_keys')
 
