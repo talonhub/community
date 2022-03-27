@@ -1,6 +1,6 @@
 # defines the default app actions for windows
 
-
+import os
 from talon import Context, actions, ui, app
 
 # we expect this import to succeed on windows (only)
@@ -39,6 +39,14 @@ def _focus_neighbor_window(direction: int) -> ui.Window:
     # don't use .hidden for now, as the cached value may be stale (https://github.com/talonvoice/talon/issues/494#issuecomment-1059517184)
     # app_windows = [w for w in ui.windows() if w.app.name == active_app.name and not w.hidden and w.id in top_level_windows]
     app_windows = [w for w in ui.windows() if w.app.name == active_app.name and win32gui.IsWindowVisible(w.id) and w.id in top_level_windows]
+
+    # Windows Explorer is a special case
+    if active_app.name == 'Windows Explorer':
+        app_windows = [w for w in app_windows if len(w.title) > 0 and os.path.exists(w.title)]
+        # for w in app_windows:
+        #     if len(w.title) > 0:
+        #         pass
+        
     app_windows.sort(key=lambda w: w.id)
     window_count = len(app_windows)
     # print(f'_focus_neighbor_window: app_windows: {len(app_windows)=}, {[w.id for w in app_windows]}')
