@@ -191,7 +191,6 @@ symbol_key_words = {
     "R angle": ">",
     "right angle": ">",
     "greater than": ">",
-    "star": "*",
     "hash": "#",
     "percent": "%",
     "caret": "^",
