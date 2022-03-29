@@ -42,10 +42,38 @@ def _focus_neighbor_window(direction: int) -> ui.Window:
 
     # Windows Explorer is a special case
     if active_app.name == 'Windows Explorer':
-        app_windows = [w for w in app_windows if len(w.title) > 0 and os.path.exists(w.title)]
-        # for w in app_windows:
-        #     if len(w.title) > 0:
-        #         pass
+        libraries_path = os.path.join(actions.path.user_home(), 'AppData\\Roaming\\Microsoft\\Windows\\Libraries')
+        user_libraries = [os.path.splitext(i)[0] for i in os.listdir(libraries_path)]
+        # print(f'_focus_neighbor_window: {user_libraries=}')
+        user_libraries_long = ['Libraries\\' + i for i in user_libraries]
+
+        user_home_folders = []
+        for f in os.listdir(actions.path.user_home()):
+            full_path = os.path.join(actions.path.user_home(), f)
+            if os.path.isdir(full_path):
+                user_home_folders.append(f)
+        
+        # filter list of explore windows down to those that are filesystem browser windows
+        temp = []
+        for w in app_windows:
+            if len(w.title) > 0:
+                mangled_title = w.title.replace(' ', '')
+                title_home_path = os.path.join(actions.path.user_home(), w.title)
+                if (
+                    w.title == 'Libraries' or
+                    mangled_title in user_libraries or
+                    mangled_title in user_libraries_long or
+                    w.title in user_home_folders or
+                    os.path.exists(w.title) or
+                    os.path.exists(title_home_path)
+                ):
+                    # print(f'_focus_neighbor_window: including explorer window {w.title}')
+                    temp.append(w)
+            #     else:
+            #         print(f'_focus_neighbor_window: excluding explorer window {w.title}')
+            # else:
+            #     print(f'_focus_neighbor_window: excluding explorer window {w.title}')
+        app_windows = temp
         
     app_windows.sort(key=lambda w: w.id)
     window_count = len(app_windows)
