@@ -3,8 +3,7 @@ ctx = Context()
 
 ctx.matches = r"""
 os: windows
-app: Microsoft Visual Studio 2019
-app: devenv.exe
+app: visual_studio
 """
 
 @ctx.action_class('app')
