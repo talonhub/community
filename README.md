@@ -62,7 +62,7 @@ The folder structure should look something like the below:
 ## Getting started with Talon
 
 1. `help active` will display the available commands for the active application.
-    - Available commands can change with the application, or even window title that has focus.
+#     - Available commands can change with the application, or even window title that has focus.
     - You may navigate help using the displayed numbers. e.g., `help one one` or `help eleven` to open the 11th item in the help list.
     - Without opening help first, you can also search for commands e.g. `help search tab` to display all tab-related commands
     - Without opening help first, you can also jump immediately into a particular help context display by recalling the name displayed in help window (based on the name of the .talon file) e.g. `help symbols` or `help visual studio`
