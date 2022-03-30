@@ -14,4 +14,3 @@ split clear all: user.split_clear_all()
 split next: user.split_next()
 split last: user.split_last()
 go split <number>: user.split_number(number)
-
