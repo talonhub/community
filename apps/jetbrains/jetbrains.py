@@ -341,6 +341,8 @@ class UserActions:
         actions.user.idea("action SplitHorizontally")
     def split_flip():
         actions.user.idea("action ChangeSplitOrientation")
+    def split_maximize():
+        actions.key("ctrl-shift-f12")
     # def split_window():
     def split_clear():
         actions.user.idea("action Unsplit")
