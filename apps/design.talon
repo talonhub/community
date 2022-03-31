@@ -28,7 +28,7 @@ link new: key("shift-f")
 link copy: key("yf")
 
 # Vimac
-(hint | fly | get): key("ctrl-f")
+(fly | get): key("ctrl-f")
 
 #Simple Shortcuts
 duplicate: key("cmd-d")

@@ -171,6 +171,8 @@ class figma_actions:
         """Copy the style properties"""
     def figma_style_paste():
         """Paste the style properties"""
+    def figma_paste_replace():
+        """Paste to replace"""
 
     def figma_run_plugin():
         """Run the last plugin"""
