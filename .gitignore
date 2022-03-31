@@ -1,6 +1,7 @@
 # Dev stuff
 __pycache__
 *.sw?
+.idea/
 # Locally generated
 /settings
 .vscode/settings.json
