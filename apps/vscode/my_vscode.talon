@@ -31,3 +31,6 @@ switch user:
   sleep(100ms)
   "user"
   key('enter')
+
+file (search|forage):
+  user.vscode("workbench.action.findInFiles")
