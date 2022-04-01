@@ -8,12 +8,14 @@ Edited standard.talon
 Edited mouse.talon
   (wheel gaze | gaze): user.mouse_gaze_scroll()
 
-Made design.talon
-  # Design System
-
+Made dylan.talon
+  # Eye Tracking
+  (control | see) fusion: experimental.fusion1_toggle()
+  (control | see) gazing: experimental.gaze1_toggle()
+  (control | see) head: experimental.head1_toggle()
 
   # Deep Clicks
-  deep: key("ctrl-cmd-t")
+  (deep | deeper | further) : key("ctrl-cmd-t")
   layer menu: key("ctrl-cmd-l")
 
   # Push Pixels
@@ -39,11 +41,12 @@ Made design.talon
   link copy: key("yf")
 
   # Vimac
-  (hint | fly | get): key("ctrl-f")
+  (fly | get): key("ctrl-f")
 
   #Simple Shortcuts
   duplicate: key("cmd-d")
   clicker: key("cmd-shift-d")
+  grab all: key("cmd-a")
 
 Made /figma
 

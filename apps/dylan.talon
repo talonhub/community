@@ -1,8 +1,10 @@
-# Design System
-
+# Eye Tracking
+(control | see) fusion: experimental.fusion1_toggle()
+(control | see) gazing: experimental.gaze1_toggle()
+(control | see) head: experimental.head1_toggle()
 
 # Deep Clicks
-(deep | deeper | further) : key("ctrl-cmd-t")
+(deep | deeper | further): key("ctrl-cmd-t")
 layer menu: key("ctrl-cmd-l")
 
 # Push Pixels
