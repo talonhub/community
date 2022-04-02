@@ -2,6 +2,8 @@ os: mac
 app: slack
 -
 tag(): user.messaging
+#settings(): speech._subtitles = 0
+
 # Workspace
 workspace <number>: key("cmd-{number}")
 # Channel
@@ -37,9 +39,9 @@ insert code:
 (slack | lack) (bull | bullet | bulleted) [list]: key(cmd-shift-8)
 (slack | lack) (number | numbered) [list]: key(cmd-shift-7)
 (slack | lack) (quotes | quotation): key(cmd-shift->)
-bold: key(cmd-b)
+bold that: key(cmd-b)
 (italic | italicize): key(cmd-i)
-(strike | strikethrough): key(cmd-shift-x)
+(strike that| strikethrough): key(cmd-shift-x)
 (clear | scrap | scratch): key(cmd-a backspace)
 (slack | lack) snippet: key(cmd-shift-enter)
 # Calls
