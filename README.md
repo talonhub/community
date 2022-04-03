@@ -352,6 +352,23 @@ generic_terminal.talon
 
 - New programming languages should support the appropriate 'generic' grammars where possible, see above.
 
+## Automatic formatting/linters
+
+This repository uses [`pre-commit`](https://pre-commit.com/) to run manage its formatters/linters. To set up `pre-commit`:
+
+```bash
+$ pip install pre-commit
+```
+
+You then have a few options as to when to run it:
+
+- Run at any time, on your locally changed files: `pre-commit run`
+- Run on all files in the repository: `pre-commit run --all-files`
+- Install a git pre-commit hook, so `pre-commit` runs automatically before creating local commits: `pre-commit install`, and will block then if the formatting is wrong.
+- Run automatically on your PR branches (fixes will be pushed automatically): Visit https://pre-commit.ci/ and authorize the app to connect to your knausj repo(s).
+
+For formatters, running `pre-commit` will automatically reformat the files that were formatted incorrectly. Hence, if it fails, it should pass automatically on the second time.
+
 ## Automated tests
 
 There are a number of automated unit tests in the repository. These are all run *outside* of the Talon environment (e.g. we don't have access to Talon's window management APIs). These make use of a set of stubbed out Talon APIs in `tests/stubs/` and a bit of class loader trickery in `conftest.py`.
