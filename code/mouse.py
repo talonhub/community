@@ -220,6 +220,17 @@ class Actions:
         """Scrolls right"""
         actions.mouse_scroll(0, amount * setting_mouse_wheel_horizontal_amount.get())
 
+    # def mouse_scroll_right_continuous():
+    #     """Scrolls right continuously"""
+    #     global continuous_scoll_mode
+    #     continuous_scoll_mode = "scroll right continuous"
+    #     mouse_scroll(setting_mouse_wheel_horizontal_amount.get())()
+    #
+    #     if scroll_job is None:
+    #         start_scroll()
+    #     if setting_mouse_hide_mouse_gui.get() == 0:
+    #         gui_wheel.show()
+
     def mouse_scroll_stop():
         """Stops scrolling"""
         stop_scroll()

@@ -65,7 +65,6 @@ as: user.figma_find_next_frame()
 place image: user.figma_place_image()
 paste here: user.figma_paste_here()
 replace here: user.figma_paste_replace()
-
 deep: user.figma_deep_select()
 layer menu: user.figma_layer_menu_select()
 
