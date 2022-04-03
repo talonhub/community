@@ -35,7 +35,17 @@ directories_to_exclude = {}
 
 if app.platform == "windows":
     is_windows = True
+    import ctypes
+
+    GetUserNameEx = ctypes.windll.secur32.GetUserNameExW
+    NameDisplay = 3
+
+    size = ctypes.pointer(ctypes.c_ulong(0))
+    GetUserNameEx(NameDisplay, None, size)
+
+    nameBuffer = ctypes.create_unicode_buffer(size.contents.value)
     one_drive_path = os.path.expanduser(os.path.join("~", "OneDrive"))
+    
 
     # this is probably not the correct way to check for onedrive, quick and dirty
     if os.path.isdir(os.path.expanduser(os.path.join("~", r"OneDrive\Desktop"))):
