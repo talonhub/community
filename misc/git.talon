@@ -21,8 +21,7 @@ git cherry pick skip: "git cherry-pick --skip "
 git clone: "git clone "
 # Leave \n out for confirmation since the operation is destructive
 git clean everything: "git clean -dfx"
-git commit message <user.text>: "git commit -m '{text}'"
-git commit: "git commit\n"
+# git commit message <user.text>: "git commit -m '{text}'"
 git diff (colour|color) words: "git diff --color-words "
 git diff: "git diff "
 git diff cached: "git diff --cached\n"
@@ -37,7 +36,7 @@ git log changes: "git log -c "
 git merge: "git merge "
 git merge <user.text>:"git merge {text}"
 git move: "git mv "
-git new branch: "git checkout -b "
+git new: "git checkout -b "
 git pull: "git pull\n"
 git pull origin: "git pull origin "
 git pull rebase: "git pull --rebase\n"
@@ -96,8 +95,20 @@ git add clipboard:
     insert("git add ")
     edit.paste()
     key(enter)
-git commit highlighted:
-    edit.copy()
-    insert("git add ")
-    edit.paste()
-    insert("\ngit commit\n")
+#git commit highlighted:
+#   edit.copy()
+#   insert("git add ")
+#   edit.paste()
+#   insert("\ngit commit\n")
+
+git me: "git fetch && git pull origin && git status\n"
+git all: "git add .\n"
+git commit:
+    insert("git commit -m ''")
+    key(left)
+
+git update form: "git add . && git commit --amend --no-edit && git branch --show-current | git push aprascak -u -f\n"
+git update me: "git add . && git commit --amend --no-edit && git branch --show-current | git push origin -u -f\n"
+git stream: "git branch --show-current\n git push --set-upstream origin "
+git master to main: "git branch -m master main && git push -u origin main && git symbolic-ref refs/remotes/origin/HEAD refs/remotes/origin/main\n"
+git delete master: "git push origin --delete master\n"

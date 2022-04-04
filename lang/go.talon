@@ -198,3 +198,84 @@ swipe [<user.text>] [over]:
     key("right")
     insert(", ")
     insert(user.formatted_text(text, "PRIVATE_CAMEL_CASE"))
+
+pickle: "if err != nil {\n"
+
+pickle return air:
+    insert("if err != nil {\nreturn fmt.Errorf(\": %w")
+    key("right")
+    insert(", err")
+    key(left:10)
+
+pickle return two air:
+    insert("if err != nil {\nreturn nil, fmt.Errorf(\": %w")
+    key("right")
+    insert(", err")
+    key(left:10)
+
+octopus: "ocrolus"
+
+jason open: "err := json.Unmarshal(b, &"
+jason close: "b, err := json.Marshal(b"
+
+client default: "httpClient := http.DefaultClient"
+client do: "response, err := httpClient.Do(request"
+
+read all: "respBody, err := ioutil.ReadAll(response.Body"
+
+check status code: "if response.StatusCode != http.StatusOK {\n"
+
+unit test:
+    insert("func TestName_Case(t *testing.T) {\n")
+
+rope: ", err := "
+
+catch air: "err := "
+catch: " := "
+
+(funk | func | fun) no return:
+    insert("func (ctx context.Context, test string, num int, ) {\n")
+
+(funk | func | fun) two air:
+    insert("func (ctx context.Context, ) (string, error) {\n")
+
+boolean: "bool"
+
+return true: "return true"
+return false: "return false"
+return nil: "return nil"
+
+context input: "ctx context.Context"
+context background: "context.Background(), "
+
+next param: "i, "
+
+set env: "os.Setenv(\"\", server.URL)\n"
+get env: "os.Getenv(\"\", server.URL)\n"
+reset env: "os.Clearenv()\n"
+
+mock test server:
+    insert("mux := http.NewServeMux()\n")
+    insert("server := httptest.NewServer(mux)\n")
+    insert("defer server.Close()\n")
+    insert("os.Setenv(\"\", server.URL)\n")
+    insert("\n")
+
+mock handle:
+    insert("mux.HandleFunc(\"/plaid\", func(w http.ResponseWriter, r *http.Request) {\nw.WriteHeader(http.StatusInternalServerError)")
+
+require nil: "require.Nil(t, response)\n"
+require not nil: "require.NotNil(t, response)\n"
+require no air: "require.NoError(t, err)\n"
+require air: "require.Error(t, err)\n"
+require air contains: "require.Contains(t, err.Error(), \"\")\n"
+
+print here: "fmt.Println(\"here\")"
+print line:
+    insert("fmt.Println()")
+    key("left")
+    edit.paste_match_style()
+
+write body: "w.Write([]byte(`{}`))"
+
+bool: "bool"
