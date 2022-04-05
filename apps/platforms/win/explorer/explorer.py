@@ -44,8 +44,8 @@ if app.platform == "windows":
     GetUserNameEx(NameDisplay, None, size)
 
     nameBuffer = ctypes.create_unicode_buffer(size.contents.value)
+    GetUserNameEx(NameDisplay, nameBuffer, size)
     one_drive_path = os.path.expanduser(os.path.join("~", "OneDrive"))
-    
 
     # this is probably not the correct way to check for onedrive, quick and dirty
     if os.path.isdir(os.path.expanduser(os.path.join("~", r"OneDrive\Desktop"))):
