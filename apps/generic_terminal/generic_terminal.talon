@@ -10,7 +10,11 @@ lisa all:
 #katie root: user.terminal_change_directory_root()
 cathy [<user.text>]: user.terminal_change_directory(text or "")
 cathy root: user.terminal_change_directory_root()
-victor: insert("vim ")
+victor [<user.text>]: 
+    insert("vim ")
+    insert(text or "")
+    sleep(50ms)
+    key(tab)
 victor safe: insert("vim -R ")
 greta [<user.text>]: 
     insert('grep -nr "" .')
