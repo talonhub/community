@@ -55,12 +55,50 @@ link new: key("shift-f")
 link copy: key("yf")
 
 # Vimac
-(fly | get): key("ctrl-f")
+get: key("ctrl-f")
+
+# Vim Motion
+moe: key("cmd-;")
+
+# Shortcat
+cliff <user.letter>:
+  key("cmd-shift-space")
+  sleep(200ms)
+  insert(letter)
+
+cling <user.text>:
+  key("cmd-shift-space")
+  sleep(200ms)
+  insert(text)
+
+climb <user.text>:
+  key("cmd-shift-space")
+  sleep(200ms)
+  insert(text)
+  sleep(200ms)
+  key("enter")
+
+top <user.letter>:
+  key("ctrl-{letter}")
+
+toll <user.letter>:
+  key("ctrl-{letter} enter")
 
 # Simple Shortcuts
 duplicate: key("cmd-d")
 clicker: key("cmd-shift-d")
 grab all: key("cmd-a")
 
+# Clear all and Replace word 
+lose <user.text>:
+    edit.select_all()
+    edit.delete()
+    sleep(200ms)
+    insert(user.formatted_text(text, "CAPITALIZE_ALL_WORDS"))
+
+ant: key("enter")
+dellz: key("delete")
+
 # General
 (petes | peas): core.repeat_command(1)
+sequel: " = "

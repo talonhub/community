@@ -319,7 +319,7 @@ noise.register("pop", on_pop)
 #         if setting_mouse_enable_pop_click.get() >= 1:
 #             if active == 1:
 #                 ctrl.mouse_click(button=0, hold=16000)
-#
+
 # noise.register("hiss", on_hiss)
 
 

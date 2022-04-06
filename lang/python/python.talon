@@ -34,6 +34,20 @@ self taught: "self."
 pie test: "pytest"
 state past: "pass"
 
+#dylan's snippets
+class funky: "def(class method)"
+class static funky: "def(class static method)"
+class: "class"
+else if: "elif"
+for: "for"
+funky: "def"
+if else: "if/else"
+if: "if"
+lambda: "lambda"
+try except: "try/except"
+while: "while"
+with: "with"
+
 raise {user.python_exception}: user.insert_between("raise {python_exception}(", ")")
 except {user.python_exception}: "except {python_exception}:"
 
