@@ -354,7 +354,9 @@ generic_terminal.talon
 
 ## Automatic formatting/linters
 
-This repository uses [`pre-commit`](https://pre-commit.com/) to run manage its formatters/linters. To set up `pre-commit`:
+This repository uses [`pre-commit`](https://pre-commit.com/) to run manage its formatters/linters.
+
+First, [install](https://pre-commit.com/#install) `pre-commit`:
 
 ```bash
 $ pip install pre-commit
@@ -362,12 +364,20 @@ $ pip install pre-commit
 
 You then have a few options as to when to run it:
 
-- Run at any time, on your locally changed files: `pre-commit run`
-- Run on all files in the repository: `pre-commit run --all-files`
-- Install a git pre-commit hook, so `pre-commit` runs automatically before creating local commits: `pre-commit install`, and will block then if the formatting is wrong.
-- Run automatically on your PR branches (fixes will be pushed automatically): Visit https://pre-commit.ci/ and authorize the app to connect to your knausj repo(s).
+- Run yourself at any time on your locally changed files: `pre-commit run`
+- Run yourself on all files in the repository: `pre-commit run --all-files`
+- Run automatically on your PRs (fixes will be pushed automatically to your branch):
+  - Option 1: Visit https://pre-commit.ci/ and authorize the app to connect to your knausj fork.
+  - Option 2: Simply check the "allow edits by maintainers" checkbox when opening your PR.
+- Set up an editor hook to run on save:
+  - You could follow the instructions for [Black](https://black.readthedocs.io/en/stable/integrations/editors.html), which are well written; simply replace `black <path>` with `pre-commit run --files <file>`.
+  - It's more performant to only reformat the specific file you're editing, rather than all changed files.
+- Install a git pre-commit hook with `pre-commit install` (optional)
+  - This essentially runs `pre-commit run` automatically before creating local commits, applying formatters/linters on all changed files. If it "fails", the commit will be blocked.
+  - Note that because many of the rules automatically apply fixes, typically you just need to stage the changes that they made, then reattempt your commit.
+  - Whether to use the hook comes down to personal taste. If you like to make many small incremental "work" commits developing a feature, it may be too much overhead.
 
-For formatters, running `pre-commit` will automatically reformat the files that were formatted incorrectly. Hence, if it fails, it should pass automatically on the second time.
+If you run into setup difficulty with `pre-commit`, you might want to ensure that you have a modern Python 3 local environment first. [pyenv](https://github.com/pyenv/pyenv) is good way to install such Python versions without affecting your system Python (recommend installing 3.9 to match Talon's current version). On macOS you can also `brew install pre-commit`.
 
 ## Automated tests
 
