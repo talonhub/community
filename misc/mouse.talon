@@ -20,15 +20,15 @@ midclick:
 	# close the mouse grid
 	user.grid_close()
 
-displayone:
+displaythree:
   mouse_move(691, 11)
 	mouse_click(0)
 
-displaytwo:
+displayone:
   mouse_move(2167, 319)
 	mouse_click(0)
 
-displaythree:
+displaytwo:
   mouse_move(2229, 1384)
 	mouse_click(0)
 
