@@ -4,24 +4,22 @@ mod = Module()
 
 ctx = Context()
 ctx.matches = r'''
-mode: user.protobuf
-mode: user.auto_lang
-and code.language: protobuf
+tag: user.protobuf
 '''
 
 ctx.lists['user.code_type'] = {
     'string': 'string',
     'bytes': 'bytes',
-    'you 64': 'uint64',
-    'you 32': 'uint32',
-    'eye 64': 'int64',
-    'eye 32': 'int32',
-    'sin 64': 'sint64',
-    'sin 32': 'sint32',
-    'fixed 64': 'fixed64',
-    'fixed 32': 'fixed32',
-    'asfixed 64': 'sfixed64',
-    'asfixed 32': 'sfixed32',
+    'you sixty four': 'uint64',
+    'you thirty two': 'uint32',
+    'eye sixty four': 'int64',
+    'eye thirty two': 'int32',
+    'sin sixty four': 'sint64',
+    'sin thirty two': 'sint32',
+    'fixed sixty four': 'fixed64',
+    'fixed thirty two': 'fixed32',
+    'as fixed sixty four': 'sfixed64',
+    'as fixed thirty two': 'sfixed32',
     'boolean': 'bool',
     'double': 'double',
     'float': 'float',
