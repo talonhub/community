@@ -24,12 +24,3 @@ ctx.lists['user.code_type'] = {
     'double': 'double',
     'float': 'float',
 }
-
-@mod.capture(rule='[repeated] type {user.code_type}')
-def code_insert_type(match) -> str:
-    '''Returns type'''
-    t = getattr(match, 'code_type')
-    if len(match) == 2:
-        return f'{t} '
-    else:
-        return f'repeated {t} '
