@@ -5,9 +5,7 @@ from talon import Context, Module, actions, settings
 mod = Module()
 ctx = Context()
 ctx.matches = r"""
-mode: user.python
-mode: user.auto_lang
-and code.language: python
+tag: user.python
 """
 ctx.lists["user.code_functions"] = {
     "enumerate": "enumerate",
@@ -137,8 +135,7 @@ ctx.lists["user.python_exception"] = {
 @ctx.action_class("user")
 class UserActions:
     def code_operator_subscript():
-        actions.insert('[]')
-        actions.key('left')
+        actions.user.insert_between('[', ']')
     def code_operator_assignment():                      actions.auto_insert(' = ')
     def code_operator_subtraction():                     actions.auto_insert(' - ')
     def code_operator_subtraction_assignment():          actions.auto_insert(' -= ')
@@ -175,30 +172,21 @@ class UserActions:
     def code_insert_is_null():                                  actions.auto_insert(' is None')
     def code_insert_is_not_null():                              actions.auto_insert(' is not None')
     def code_state_if():
-        actions.insert('if :')
-        actions.key('left')
+        actions.user.insert_between('if ', ':')
     def code_state_else_if():
-        actions.insert('elif :')
-        actions.key('left')
+        actions.user.insert_between('elif ', ':')
     def code_state_else():
         actions.insert('else:')
         actions.key('enter')
     def code_state_switch():
-        actions.insert('match :')
-        actions.edit.left()
+        actions.user.insert_between('match ', ':')
     def code_state_case():
-        actions.insert('case :')
-        actions.edit.left()
+        actions.user.insert_between('case ', ':')
     def code_state_for(): actions.auto_insert('for ')
     def code_state_for_each():
-        actions.insert('for in ')
-        actions.key('left')
-        actions.edit.word_left()
-        actions.key('space')
-        actions.edit.left()
+        actions.user.insert_between('for ', ' in ')
     def code_state_while():
-        actions.insert('while :')
-        actions.edit.left()
+        actions.user.insert_between('while ', ':')
     def code_define_class(): actions.auto_insert('class ')
     def code_import():     actions.auto_insert('import ')
     def code_comment_line_prefix(): actions.auto_insert('# ')
@@ -206,12 +194,9 @@ class UserActions:
         actions.insert('return ')
     def code_insert_true():            actions.auto_insert('True')
     def code_insert_false():           actions.auto_insert('False')
-    def code_comment_documentation(): actions.user.insert_cursor('"""[|]"""')
+    def code_comment_documentation(): actions.user.insert_between('"""', '"""')
     def code_insert_function(text: str, selection: str):
-        if selection:
-            text = text + "({})".format(selection)
-        else:
-            text = text + "()"
+        text += f"({selection or ''})"
         actions.user.paste(text)
         actions.edit.left()
 
@@ -245,17 +230,3 @@ class UserActions:
 
     def code_insert_return_type(type: str):
         actions.insert(f" -> {type}")
-
-
-@mod.action_class
-class module_actions:
-    # TODO this could go somewhere else
-    def insert_cursor(text: str):
-        """Insert a string. Leave the cursor wherever [|] is in the text"""
-        if "[|]" in text:
-            end_pos = text.find("[|]")
-            s = text.replace("[|]", "")
-            actions.insert(s)
-            actions.key(f"left:{len(s) - end_pos}")
-        else:
-            actions.insert(text)

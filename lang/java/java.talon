@@ -1,8 +1,4 @@
-mode: command
-and mode: user.java
-mode: command
-and mode: user.auto_lang
-and code.language: java
+tag: user.java
 -
 tag(): user.code_imperative
 tag(): user.code_object_oriented
@@ -30,13 +26,10 @@ settings():
 
 # Types Commands
 boxed [type] {user.java_boxed_type}:
-    insert(user.java_boxed_type)
-    key("space")
+    insert(user.java_boxed_type + " ")
 
 generic [type] {user.java_generic_data_structure}:
-    insert(java_generic_data_structure)
-    insert("<>")
-    key("left")
+    user.insert_between(java_generic_data_structure + "<", ">")
 
 # Arrays
 type {user.code_type} array:
@@ -44,8 +37,7 @@ type {user.code_type} array:
     user.code_operator_subscript()
 
 [state] {user.java_modifier}:
-    insert(user.java_modifier)
-    key("space")
+    insert(user.java_modifier + " ")
 
 op array:
     user.code_operator_subscript()

@@ -30,8 +30,7 @@ class UserActions:
     def debugger_show_registers(): actions.auto_insert('info registers\n')
     def debugger_get_register(): actions.auto_insert('r ')
     def debugger_set_register():
-        actions.insert('set $=')
-        actions.edit.left()
+        actions.user.insert_between('set $', '=')
         # Breakpoints
     def debugger_show_breakpoints(): actions.auto_insert('info breakpoints\n')
     def debugger_add_sw_breakpoint(): actions.auto_insert('break ')

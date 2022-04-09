@@ -29,6 +29,18 @@ if hasattr(talon, "test_mode"):
         assert result == " Third("
         result = format.format("fourth")
         assert result == "fourth"
+        result = format.format("e.g.")
+        assert result == " e.g."
+        result = format.format("fifth")
+        assert result == " fifth"
+        result = format.format("i.e.")
+        assert result == " i.e."
+        result = format.format("sixth")
+        assert result == " sixth"
+        result = format.format("with.\nspace")
+        assert result == " with.\nSpace"
+        result = format.format("new.\nline")
+        assert result == " new.\nLine"
 
     def test_force_spacing_and_capitalization():
         format = dictation.DictationFormat()
