@@ -352,6 +352,32 @@ generic_terminal.talon
 
 - New programming languages should support the appropriate 'generic' grammars where possible, see above.
 
+## Automatic formatting/linters
+
+This repository uses [`pre-commit`](https://pre-commit.com/) to run manage its formatters/linters.
+
+First, [install](https://pre-commit.com/#install) `pre-commit`:
+
+```bash
+$ pip install pre-commit
+```
+
+You then have a few options as to when to run it:
+
+- Run yourself at any time on your locally changed files: `pre-commit run`
+- Run yourself on all files in the repository: `pre-commit run --all-files`
+- Run automatically on your PRs (fixes will be pushed automatically to your branch):
+  - Visit https://pre-commit.ci/ and authorize the app to connect to your knausj fork.
+- Set up an editor hook to run on save:
+  - You could follow the instructions for [Black](https://black.readthedocs.io/en/stable/integrations/editors.html), which are well written; simply replace `black <path>` with `pre-commit run --files <file>`.
+  - It's more performant to only reformat the specific file you're editing, rather than all changed files.
+- Install a git pre-commit hook with `pre-commit install` (optional)
+  - This essentially runs `pre-commit run` automatically before creating local commits, applying formatters/linters on all changed files. If it "fails", the commit will be blocked.
+  - Note that because many of the rules automatically apply fixes, typically you just need to stage the changes that they made, then reattempt your commit.
+  - Whether to use the hook comes down to personal taste. If you like to make many small incremental "work" commits developing a feature, it may be too much overhead.
+
+If you run into setup difficulty with `pre-commit`, you might want to ensure that you have a modern Python 3 local environment first. [pyenv](https://github.com/pyenv/pyenv) is good way to install such Python versions without affecting your system Python (recommend installing 3.9 to match Talon's current version). On macOS you can also `brew install pre-commit`.
+
 ## Automated tests
 
 There are a number of automated unit tests in the repository. These are all run *outside* of the Talon environment (e.g. we don't have access to Talon's window management APIs). These make use of a set of stubbed out Talon APIs in `tests/stubs/` and a bit of class loader trickery in `conftest.py`.
