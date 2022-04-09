@@ -182,21 +182,10 @@ path_detection_disabled = False
 user_path = os.path.expanduser("~")
 if app.platform == "windows":
     is_windows = True
-    import ctypes
-
-    GetUserNameEx = ctypes.windll.secur32.GetUserNameExW
-    NameDisplay = 3
-
-    size = ctypes.pointer(ctypes.c_ulong(0))
-    GetUserNameEx(NameDisplay, None, size)
-
-    nameBuffer = ctypes.create_unicode_buffer(size.contents.value)
-    GetUserNameEx(NameDisplay, nameBuffer, size)
     one_drive_path = os.path.expanduser(os.path.join("~", "OneDrive"))
 
     # this is probably not the correct way to check for onedrive, quick and dirty
     if os.path.isdir(os.path.expanduser(os.path.join("~", r"OneDrive\Desktop"))):
-        default_folder = os.path.join("~", "Desktop")
 
         directories_to_remap = {
             "Desktop": os.path.join(one_drive_path, "Desktop"),
@@ -432,16 +421,6 @@ class UserActions:
     # def file_manager_show_properties():
     #     """Shows the properties for the file"""
     #     actions.key("alt-enter")
-    def file_manager_open_user_directory(path: str):
-        """expands and opens the user directory"""
-        if path in directories_to_remap:
-            path = directories_to_remap[path]
-
-        path = os.path.expanduser(os.path.join("~", path))
-        if ":" in path:
-            path = get_wsl_path(path)
-
-        actions.user.file_manager_open_directory(path)
 
     def file_manager_open_directory(path: str):
         """opens the directory that's already visible in the view"""
