@@ -52,7 +52,7 @@ key <user.modifiers> over: "{modifiers}"
 funk {user.talon_actions}: user.code_insert_function(talon_actions, edit.selected_text())
 funk cell <number>:
     user.code_select_function(number - 1, "")
-funk wrap <user.code_functions>:
-    user.code_insert_function(code_functions, edit.selected_text())
+funk wrap <user.code_common_function>:
+    user.code_insert_function(code_common_function, edit.selected_text())
 funk wrap <number>:
     user.code_select_function(number - 1, edit.selected_text())

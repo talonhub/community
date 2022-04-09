@@ -9,7 +9,7 @@ mod.list("code_common_function", desc="List of common functions for active langu
 function_list = []
 
 @mod.capture(rule="{user.code_common_function}")
-def code_functions(m) -> str:
+def code_common_function(m) -> str:
     """Returns a function name"""
     return m.code_common_function
 
