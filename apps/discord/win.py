@@ -11,7 +11,7 @@ class UserActions:
     # Navigation: Servers
     def messaging_workspace_previous():  actions.key('ctrl-alt-up')
     def messaging_workspace_next():      actions.key('ctrl-alt-down')
-    
+
     # Navigation: Channels
     def messaging_open_channel_picker(): actions.key('ctrl-k')
     def messaging_channel_previous():    actions.key('alt-up')
@@ -21,14 +21,14 @@ class UserActions:
     def discord_mentions_last():         actions.key('ctrl-alt-shift-up')
     def discord_mentions_next():         actions.key('ctrl-alt-shift-down')
     def discord_oldest_unread():         actions.key('shift-paegup')
-    
+
     # UI
     def discord_toggle_pins():           actions.key('ctrl-p')
     def discord_toggle_inbox():          actions.key('ctrl-i')
     def discord_toggle_members():        actions.key('ctrl-u')
     def discord_emoji_picker():          actions.key('ctrl-e')
     def discord_gif_picker():            actions.key('ctrl-g')
-    
+
     # Misc
     def messaging_mark_workspace_read(): actions.key('shift-esc')
     def messaging_mark_channel_read():   actions.key('esc')

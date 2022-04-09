@@ -6,7 +6,7 @@ ctx = Context()
 
 ctx_talon_lists = Context()
 
-# restrict all the talon_* lists to when the user.talon_populate_lists tag 
+# restrict all the talon_* lists to when the user.talon_populate_lists tag
 # is active to prevent them from being active in contexts where they are not wanted.
 # Do not enable this tag with dragon, as it will be unusable.
 # with conformer, the latency increase may also be unacceptable depending on your cpu

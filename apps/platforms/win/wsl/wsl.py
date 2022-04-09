@@ -293,7 +293,7 @@ def run_wslpath(args, in_path, in_distro=None):
 # and https://github.com/microsoft/WSL/issues/5318.
 #
 # Once the WSL distro is hung, every attempt to use it results in many repeated log messages like these:
-# 
+#
 # 2021-10-15 11:15:49 WARNING [watchdog] "talon.windows.ui._on_event" @30.0s (stalled)
 # 2021-10-15 11:15:49 WARNING [watchdog] "user.knausj_talon.code.file_manager.win_event_handler"
 #
@@ -301,7 +301,7 @@ def run_wslpath(args, in_path, in_distro=None):
 # focus shifts to a wsl context or the current path changes. This gets tiresome if you don't want to restart
 # wsl immediately (because your existing sessions are still running and you want to finish working before
 # restarting wsl).
-# 
+#
 # So, wsl path detection is disabled when this condition is first detected. The user
 # must then re-enable the feature once the underlying problem has been resolved. This can be done by
 # using the 'weasel reset path detection' voice command or simply reloading this file.

@@ -44,7 +44,7 @@ def on_ready():
                 "one drive": one_drive_path,
                 "pictures": os.path.join(one_drive_path, "Pictures"),
             }
-        
+
             default_system_paths.update(onedrive_paths)
 
     system_paths = get_list_from_csv(

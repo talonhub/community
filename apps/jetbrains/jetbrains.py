@@ -249,7 +249,7 @@ class EditActions:
 
     def extend_file_end():
         actions.user.idea("action EditorTextEndWithSelection")
-    
+
     def extend_word_left():
         actions.user.idea("action EditorPreviousWordWithSelection")
     def extend_word_right():

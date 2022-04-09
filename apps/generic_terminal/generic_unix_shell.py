@@ -14,7 +14,7 @@ class Actions:
         """Lists directories"""
         actions.insert("ls")
         actions.key("enter")
-        
+
     def terminal_list_all_directories():
         """Lists all directories including hidden"""
         actions.insert("ls -a")
