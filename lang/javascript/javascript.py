@@ -5,12 +5,6 @@ ctx = Context()
 ctx.matches = """
 tag: user.javascript
 """
-# tbd
-# ctx.lists["user.code_functions"] = {
-#     "integer": "int.TryParse",
-#     "print": "Console.WriteLine",
-#     "string": ".ToString",
-# }
 
 
 @ctx.action_class("user")

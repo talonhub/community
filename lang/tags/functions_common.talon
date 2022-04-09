@@ -1,4 +1,4 @@
-tag: user.code_functions_gui
+tag: user.code_functions_common
 -
 toggle funk: user.code_toggle_functions()
 funk <user.code_functions>:
