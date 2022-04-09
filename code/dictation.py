@@ -78,7 +78,7 @@ def raw_prose(m) -> str:
     """Mixed words and punctuation, auto-spaced & capitalized, without quote straightening and commands (for use in dictation mode)."""
     return apply_formatting(m)
 
-
+
 # ---------- FORMATTING ---------- #
 def format_phrase(m):
     words = capture_to_words(m)
@@ -210,7 +210,7 @@ def auto_capitalize(text, state = None):
     return output, ("sentence start" if charge or sentence_end else
                     "after newline" if newline else None)
 
-
+
 # ---------- DICTATION AUTO FORMATTING ---------- #
 class DictationFormat:
     def __init__(self):

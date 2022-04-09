@@ -29,7 +29,7 @@ class Actions:
 
     def split_maximize():
         """Maximizes the active split"""
-    
+
     def split_reset():
         """Resets the split sizes"""
 

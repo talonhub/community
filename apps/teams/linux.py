@@ -19,4 +19,3 @@ class EditActions:
 
     def zoom_reset():
         actions.key("ctrl-0")
-

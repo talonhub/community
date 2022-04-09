@@ -21,7 +21,7 @@ VSCODE_COMMAND_TIMEOUT_SECONDS = 3.0
 MINIMUM_SLEEP_TIME_SECONDS = 0.0005
 
 # Indicates whether a pre-phrase signal was emitted during the course of the
-# current phrase 
+# current phrase
 did_emit_pre_phrase_signal = False
 
 mod = Module()

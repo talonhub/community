@@ -1,4 +1,4 @@
-tag: terminal 
+tag: terminal
 and tag: user.git
 title: /git add .*\-p/
 -

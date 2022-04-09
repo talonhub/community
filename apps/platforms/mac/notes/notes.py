@@ -14,6 +14,3 @@ class EditActions:
         actions.key('shift-cmd-0')
     def indent_less():
         actions.key('cmd-[')
-
-
-    
