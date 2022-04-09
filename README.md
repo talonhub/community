@@ -191,7 +191,7 @@ Python, C#, Talon and javascript language support is currently broken up into se
 • `lang/tags/data_null.{talon,py}`             - null & null checks (e.g., Python's `None`)
 • `lang/tags/data_bool.{talon,py}`             - booleans (e.g., Haskell's `True`)
 • `lang/tags/functions.{talon,py}`             - functions and definitions
-• `lang/tags/functions_gui.{talon,py}`         - graphical helper for common functions
+• `lang/tags/functions_common.{talon,py}`      - common functions (also includes a GUI for picking functions)
 • `lang/tags/imperative.{talon,py}`            - statements (e.g., `if`, `while`, `switch`)
 • `lang/tags/libraries.{talon,py}`             - libraries and imports
 • `lang/tags/libraries_gui.{talon,py}`         - graphical helper for common libraries
