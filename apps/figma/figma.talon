@@ -50,23 +50,35 @@ color: user.figma_pick_color()
 slice: user.figma_slice()
 rulers: user.figma_rulers()
 
-zoom in: user.figma_zoom_in()
+# Zooming in and out
+zoom in |: user.figma_zoom_in()
 zoom out: user.figma_zoom_out()
-zoom (for | fall | full): user.figma_zoom_hundred()
-zoom fit: user.figma_zoom_fit()
-zoom select: user.figma_zoom_selection()
-zoom pre: user.figma_zoom_previous_frame()
-zoom next: user.figma_zoom_next_frame()
+
+zout [<number>]: 
+    key('-')
+    repeat(number - 1)
+
+zoon [<number>]:
+    key('+')
+    repeat(number - 1)
+
+(zoom | zoo) (for | fall | full): user.figma_zoom_hundred()
+(zoom | zoo) fit: user.figma_zoom_fit()
+(zoom | zoo) select: user.figma_zoom_selection()
+(zoom | zoo) pre: user.figma_zoom_previous_frame()
+(zoom | zoo) next: user.figma_zoom_next_frame()
+
 down page: user.figma_previous_page()
 up page: user.figma_next_page()
+
 be: user.figma_find_previous_frame()
 as: user.figma_find_next_frame()
 
 place image: user.figma_place_image()
 paste here: user.figma_paste_here()
-replace here: user.figma_paste_replace()
+place here: user.figma_paste_replace()
 deep: user.figma_deep_select()
-layer menu: user.figma_layer_menu_select()
+(layer menu | laymen): user.figma_layer_menu_select()
 
 rename: user.figma_rename()
 

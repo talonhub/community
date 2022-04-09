@@ -4,8 +4,18 @@
 (control | see) head: experimental.head1_toggle()
 
 # Deep Clicks
-(deep | deeper | further): key("ctrl-cmd-t")
-layer menu: key("ctrl-cmd-l")
+deep: key("ctrl-cmd-t")
+
+(deeper | further):
+    key("ctrl-cmd-t")
+    mouse_click()
+	  mouse_click()
+
+# Triple click
+flock:
+    mouse_click()
+	  mouse_click()
+    mouse_click()
 
 # Push Pixels
 push up <number>:
@@ -85,20 +95,76 @@ toll <user.letter>:
   key("ctrl-{letter} enter")
 
 # Simple Shortcuts
-duplicate: key("cmd-d")
-clicker: key("cmd-shift-d")
+(duplicate | duce): key("cmd-d")
+(clicker | clicks): key("cmd-shift-d")
 grab all: key("cmd-a")
 
-# Clear all and Replace word 
+# Clear all and Replace with Titles 
 lose <user.text>:
     edit.select_all()
     edit.delete()
     sleep(200ms)
     insert(user.formatted_text(text, "CAPITALIZE_ALL_WORDS"))
 
-ant: key("enter")
-dellz: key("delete")
+# Copy, paste, enter and delete
+(coffee | crop): edit.copy()
+(pasta | path): edit.paste()
+
+# Select all delete and then paste
+clear paste:
+    edit.select_all()
+    edit.delete()
+    edit.paste()
+
+# Click on words select all delete and paste
+stacy:
+    mouse_click(0)
+    key("enter")
+    edit.select_all()
+    edit.delete()
+    edit.paste()
+
+# Double click and select all to copy
+scold:
+    mouse_click(0)
+    mouse_click(0)
+    edit.select_all()
+    edit.copy()
+
+# Select all and then copy
+coals:
+    edit.select_all()
+    edit.copy()
+
+# Multi select by doing shift click
+stick:
+    key("shift:down")
+    mouse_click(0)
+    key("shift:up")
+
+# Command individual select objects
+strike:
+    key("cmd:down")
+    mouse_click(0)
+    key("cmd:up")
+
+# Enter key
+drop [<number>]:
+    key("enter")
+    repeat(number - 1)
+
+# Delete key
+dellz [<number>]:
+    key("backspace")
+    repeat(number - 1)
 
 # General
 (petes | peas): core.repeat_command(1)
 sequel: " = "
+
+# Measuring with alt key
+mease in: key(alt:down)
+mease out: key(alt:up)
+
+# Add an asterik with a space
+spaz: " *"
