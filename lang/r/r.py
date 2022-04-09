@@ -6,7 +6,7 @@ ctx.matches = r"""
 tag: user.r
 """
 
-ctx.lists["user.code_functions"] = {
+ctx.lists["user.code_common_function"] = {
     # base R
     "as character": "as.character",
     "as data frame": "as.data.frame",

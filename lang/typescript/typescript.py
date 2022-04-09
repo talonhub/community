@@ -4,12 +4,6 @@ ctx = Context()
 ctx.matches = r"""
 tag: user.typescript
 """
-# tbd
-# ctx.lists["user.code_functions"] = {
-#     "integer": "int.TryParse",
-#     "print": "Console.WriteLine",
-#     "string": ".ToString",
-# }
 
 ctx.lists["user.code_type"] = {
     "boolean": "boolean",
