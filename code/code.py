@@ -29,6 +29,7 @@ language_extensions = {
     # 'perl': 'pl',
     # 'powershell': 'ps1',
     'python': 'py',
+    'protobuf': 'proto',
     'r': 'r',
     # 'racket': 'rkt',
     'ruby': 'rb',
