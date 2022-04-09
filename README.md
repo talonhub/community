@@ -368,7 +368,6 @@ You then have a few options as to when to run it:
 - Run yourself on all files in the repository: `pre-commit run --all-files`
 - Run automatically on your PRs (fixes will be pushed automatically to your branch):
   - Option 1: Visit https://pre-commit.ci/ and authorize the app to connect to your knausj fork.
-  - Option 2: Simply check the "allow edits by maintainers" checkbox when opening your PR.
 - Set up an editor hook to run on save:
   - You could follow the instructions for [Black](https://black.readthedocs.io/en/stable/integrations/editors.html), which are well written; simply replace `black <path>` with `pre-commit run --files <file>`.
   - It's more performant to only reformat the specific file you're editing, rather than all changed files.
