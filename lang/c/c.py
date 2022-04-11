@@ -87,7 +87,7 @@ ctx.lists["user.code_libraries"] = {
     "standard int": "stdint.h",
 }
 
-ctx.lists["user.code_functions"] = {
+ctx.lists["user.code_common_function"] = {
     "mem copy": "memcpy",
     "mem set": "memset",
     "string cat": "strcat",

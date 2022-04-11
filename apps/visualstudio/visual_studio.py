@@ -227,7 +227,7 @@ class UserActions:
         actions.key("esc")
 
     # find_and_replace.py support end
-    
+
     #multiple_cursor.py support begin
     #note: visual studio has no explicit mode for multiple cursors; requires https://marketplace.visualstudio.com/items?itemName=VaclavNadrasky.MultiCaretBooster
     def multi_cursor_add_above():                actions.key('shift-alt-up')
@@ -238,8 +238,3 @@ class UserActions:
     def multi_cursor_select_all_occurrences():   actions.key('shift-alt-;')
     def multi_cursor_select_fewer_occurrences(): actions.key('shift-alt-k')
     def multi_cursor_select_more_occurrences():  actions.key('shift-alt->')
-
-
-
-
-

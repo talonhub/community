@@ -202,8 +202,8 @@ ctx.lists['user.code_libraries'] = {
     'collections': 'std::collections',
 }
 
-# tag: functions_gui
-ctx.lists['user.code_functions'] = {
+# tag: functions_common
+ctx.lists['user.code_common_function'] = {
     'drop': 'drop',
     'catch unwind': 'catch_unwind',
     'iterator': 'iter',

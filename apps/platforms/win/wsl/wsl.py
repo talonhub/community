@@ -182,21 +182,10 @@ path_detection_disabled = False
 user_path = os.path.expanduser("~")
 if app.platform == "windows":
     is_windows = True
-    import ctypes
-
-    GetUserNameEx = ctypes.windll.secur32.GetUserNameExW
-    NameDisplay = 3
-
-    size = ctypes.pointer(ctypes.c_ulong(0))
-    GetUserNameEx(NameDisplay, None, size)
-
-    nameBuffer = ctypes.create_unicode_buffer(size.contents.value)
-    GetUserNameEx(NameDisplay, nameBuffer, size)
     one_drive_path = os.path.expanduser(os.path.join("~", "OneDrive"))
 
     # this is probably not the correct way to check for onedrive, quick and dirty
     if os.path.isdir(os.path.expanduser(os.path.join("~", r"OneDrive\Desktop"))):
-        default_folder = os.path.join("~", "Desktop")
 
         directories_to_remap = {
             "Desktop": os.path.join(one_drive_path, "Desktop"),
@@ -304,7 +293,7 @@ def run_wslpath(args, in_path, in_distro=None):
 # and https://github.com/microsoft/WSL/issues/5318.
 #
 # Once the WSL distro is hung, every attempt to use it results in many repeated log messages like these:
-# 
+#
 # 2021-10-15 11:15:49 WARNING [watchdog] "talon.windows.ui._on_event" @30.0s (stalled)
 # 2021-10-15 11:15:49 WARNING [watchdog] "user.knausj_talon.code.file_manager.win_event_handler"
 #
@@ -312,7 +301,7 @@ def run_wslpath(args, in_path, in_distro=None):
 # focus shifts to a wsl context or the current path changes. This gets tiresome if you don't want to restart
 # wsl immediately (because your existing sessions are still running and you want to finish working before
 # restarting wsl).
-# 
+#
 # So, wsl path detection is disabled when this condition is first detected. The user
 # must then re-enable the feature once the underlying problem has been resolved. This can be done by
 # using the 'weasel reset path detection' voice command or simply reloading this file.
@@ -432,16 +421,6 @@ class UserActions:
     # def file_manager_show_properties():
     #     """Shows the properties for the file"""
     #     actions.key("alt-enter")
-    def file_manager_open_user_directory(path: str):
-        """expands and opens the user directory"""
-        if path in directories_to_remap:
-            path = directories_to_remap[path]
-
-        path = os.path.expanduser(os.path.join("~", path))
-        if ":" in path:
-            path = get_wsl_path(path)
-
-        actions.user.file_manager_open_directory(path)
 
     def file_manager_open_directory(path: str):
         """opens the directory that's already visible in the view"""

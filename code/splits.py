@@ -27,6 +27,12 @@ class Actions:
     def split_flip():
         """Flips the orietation of the active split"""
 
+    def split_maximize():
+        """Maximizes the active split"""
+
+    def split_reset():
+        """Resets the split sizes"""
+
     def split_window():
         """Splits the window"""
 
