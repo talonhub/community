@@ -2,7 +2,7 @@ os: linux
 and app.name: konsole
 -
 # makes the commands in generic_terminal available
-tag(): terminal 
+tag(): terminal
 
 # activates the implementation of the commands/functions in generic_terminal
 tag(): user.generic_unix_shell

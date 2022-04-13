@@ -40,6 +40,9 @@ class Actions:
     def code_state_while():
         """Inserts while statement"""
 
+    def code_state_infinite_loop():
+        """Inserts infinite loop statement"""
+
     def code_state_return():
         """Inserts return statement"""
 

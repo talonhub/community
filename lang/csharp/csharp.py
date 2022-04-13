@@ -4,7 +4,7 @@ ctx = Context()
 ctx.matches = r"""
 tag: user.csharp
 """
-ctx.lists["user.code_functions"] = {
+ctx.lists["user.code_common_function"] = {
     "integer": "int.TryParse",
     "print": "Console.WriteLine",
     "string": ".ToString",

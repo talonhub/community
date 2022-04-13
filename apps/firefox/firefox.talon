@@ -9,4 +9,3 @@ tab search <user.text>$:
     browser.focus_address()
     insert("% {text}")
     key(down)
-    

@@ -39,4 +39,3 @@ ctx.lists["user.snippets"] = {
 #     )
 # if snippet_path:
 #     watcher = snippet_watcher({snippet_path: ["python.json",],}, update_list,)
-
