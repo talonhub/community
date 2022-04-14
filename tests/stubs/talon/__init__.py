@@ -102,7 +102,7 @@ class UI:
     """
     Stub out UI so we don't get crashes
     """
-    
+
     def register(*args, **kwargs):
         pass
 

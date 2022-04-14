@@ -13,7 +13,7 @@ word_matcher = re.compile(r"([^\s]+)(\s*)")
 def calculate_text_anchors(text, cursor_position, anchor_labels=None):
     """
     Produces an iterator of (anchor, start_word_index, end_word_index, last_space_index)
-    tuples from the given text. Each tuple indicates a particular point you may want to 
+    tuples from the given text. Each tuple indicates a particular point you may want to
     reference when editing along with some useful ranges you may want to operate on.
 
     - text is the text you want to process.

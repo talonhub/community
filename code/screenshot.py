@@ -126,4 +126,3 @@ os: linux
 class UserActionsLinux:
     def screenshot_selection():
         actions.key("shift-printscr")
-

@@ -46,11 +46,11 @@ class UserActions:
 
         #jtk - refresh title isn't necessary since the apple terminal does it for us
         #actions.user.file_manager_refresh_title()
-        
+
     def file_manager_open_parent():
         actions.insert('cd ..')
         actions.key('enter')
-        
+
     def file_manager_select_directory(path: str):
         """selects the directory"""
         actions.insert(path)
@@ -75,7 +75,7 @@ class UserActions:
 
 @ctx.action_class("app")
 class app_actions:
-    # other tab functions should already be implemented in 
+    # other tab functions should already be implemented in
     # code/platforms/mac/app.py
 
     def tab_previous():
@@ -83,7 +83,3 @@ class app_actions:
 
     def tab_next():
         actions.key("ctrl-tab")
-        
-
-
-
