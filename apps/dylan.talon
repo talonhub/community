@@ -17,6 +17,13 @@ flock:
 	  mouse_click()
     mouse_click()
 
+# Quad click
+quad:
+  mouse_click()
+  mouse_click()
+  mouse_click()
+  mouse_click()
+
 # Push Pixels
 push up <number>:
   edit.up()
@@ -35,7 +42,7 @@ push right <number>:
     repeat(number - 1)
 
 # Wheel Down/Up
-(we down | wown) <number>:
+(we down | dao) <number>:
   user.mouse_scroll_down()
   repeat(number - 1)
 

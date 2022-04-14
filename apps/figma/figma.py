@@ -182,3 +182,12 @@ class figma_actions:
 
     def figma_remove():
         """Remove"""
+
+    def figma_paneldesign():
+        """Design panel"""
+
+    def figma_panelprototype():
+        """Prototype panel"""
+
+    def figma_panelinspect():
+        """Inspect panel"""

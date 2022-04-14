@@ -90,3 +90,7 @@ run plugin: user.figma_run_plugin()
 collapse: user.figma_collapse()
 
 remove: user.figma_remove()
+
+panel design: user.figma_paneldesign()
+panel proto: user.figma_panelprototype()
+panel inspect: user.figma_panelinspect()

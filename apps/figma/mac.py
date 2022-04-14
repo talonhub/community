@@ -92,3 +92,7 @@ class UserActions:
     def figma_collapse(): actions.key('alt-l')
 
     def figma_remove(): actions.key('del')
+
+    def figma_paneldesign(): actions.key('alt-8')
+    def figma_panelprototype(): actions.key('alt-9')
+    def figma_panelinspect(): actions.key('alt-0')
