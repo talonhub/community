@@ -51,7 +51,7 @@ settings():
     # user.context_sensitive_dictation = 1
 
     # Uncomment below to capture clipboard history.
-    # This will start polling your clipboard at fixed time intervals 
+    # This will start polling your clipboard at fixed time intervals
     # configured by clipboard_history_polling_intervals
     # user.clipboard_history_enabled = 1
 

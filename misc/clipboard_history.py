@@ -12,9 +12,9 @@ mod = Module()
 mod.mode("clipboard_history", "Indicates that the clipboard history is visible")
 
 setting_clipboard_history_enabled = mod.setting(
-    "clipboard_history_enabled", 
-    bool, 
-    default=False, 
+    "clipboard_history_enabled",
+    bool,
+    default=False,
 )
 setting_clipboard_history_max_rows = mod.setting(
     "clipboard_history_max_rows",
@@ -27,9 +27,9 @@ setting_clipboard_history_max_cols = mod.setting(
     default=50,
 )
 setting_clipboard_history_polling_intervals = mod.setting(
-    "clipboard_history_polling_intervals", 
-    int, 
-    default=500, 
+    "clipboard_history_polling_intervals",
+    int,
+    default=500,
     desc="Interval in ms between polling clip content",
 )
 
@@ -52,14 +52,14 @@ def poll_and_update_if_needed():
     last_captured = clipboard_history[0] if len(clipboard_history) > 0 else None
     current_clipboard = get_current_clipboard()
     if last_captured == current_clipboard:
-        return 
+        return
     elif current_clipboard:
         clipboard_history.insert(0, current_clipboard)
 
     shrink()
 
 if setting_clipboard_history_enabled.get():
-    cron.interval(f"{setting_clipboard_history_polling_intervals.get()}ms", poll_and_update_if_needed)   
+    cron.interval(f"{setting_clipboard_history_polling_intervals.get()}ms", poll_and_update_if_needed)
 
 @imgui.open()
 def gui(gui: imgui.GUI):
@@ -68,7 +68,7 @@ def gui(gui: imgui.GUI):
         gui.text(f"and is disabled by default.")
         gui.text(f"To use globally add the following line to settings.talon:")
         gui.text(f"`user.clipboard_history_enabled = 1`")
-        return 
+        return
 
     max_rows = setting_clipboard_history_max_rows.get()
     max_cols = setting_clipboard_history_max_cols.get()
@@ -93,9 +93,9 @@ def gui(gui: imgui.GUI):
 class Actions:
     def clipboard_history_toggle():
         """Toggle clipboard manager"""
-        if gui.showing: 
+        if gui.showing:
             gui.hide()
-        else: 
+        else:
             actions.mode.enable("user.clipboard_history")
             gui.show()
 
