@@ -50,5 +50,10 @@ settings():
     # per-application basis.
     # user.context_sensitive_dictation = 1
 
+    # Uncomment below to capture clipboard history.
+    # This will start polling your clipboard at fixed time intervals 
+    # configured by clipboard_history_polling_intervals
+    # user.clipboard_history_enabled = 1
+
 # Uncomment this to enable the curse yes/curse no commands (show hide mouse cursor). See issue #688.
 # tag(): user.mouse_cursor_commands_enable
