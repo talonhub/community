@@ -28,7 +28,7 @@ class UserActions:
     ##
     # Generic debugger actions
     ##
-    
+
     # Code execution
     def debugger_step_into():
         actions.key('f8')
@@ -37,7 +37,7 @@ class UserActions:
         # XXX -
     def debugger_step_line(): actions.auto_insert('')
     def debugger_step_over_line(): actions.auto_insert('')
-    
+
     def debugger_step_out():
         actions.key('shift-f11')
     def debugger_continue():

@@ -17,7 +17,7 @@ kill all:
     key(ctrl-c)
     insert("y")
     key(enter)
-    
+
 
 find it:
     edit.find()
@@ -27,4 +27,3 @@ find it <phrase>$:
     key(escape)
     # make it so
     edit.find("{phrase}\n")
-

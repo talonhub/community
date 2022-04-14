@@ -6,7 +6,7 @@ and not win.title: /VIM/
 #tag(): user.file_manager
 tag(): user.kubectl
 tag(): user.git
-tag(): user.taskwarrior 
+tag(): user.taskwarrior
 tag(): terminal
 
 # Selection mode

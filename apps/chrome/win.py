@@ -9,7 +9,7 @@ ctx.tags = ['browser', 'user.tabs']
 @ctx.action_class('browser')
 class BrowserActions:
     #action(browser.address):
-    
+
     def bookmark():
         actions.key('ctrl-d')
     def bookmark_tabs():

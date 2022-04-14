@@ -35,6 +35,8 @@ class user_actions:
     def split_window_vertically(): actions.key('shift-ctrl-e')
     def split_window_horizontally(): actions.key('shift-ctrl-o')
     def split_flip(): actions.key('super-r')
+    def split_maximize(): actions.key('shift-ctrl-x')
+    def split_reset(): actions.key('shift-ctrl-x')
     def split_window(): actions.key('shift-ctrl-o')
     def split_clear(): actions.key('shift-ctrl-r')
     def split_clear_all(): actions.key('shift-ctrl-g')

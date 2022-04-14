@@ -50,7 +50,7 @@ class EditActions:
 
     def delete_line():
         actions.key("ctrl-d")
-        
+
     def indent_more(): actions.key('tab')
     def indent_less(): actions.key('shift-tab')
     def save_all():    actions.key('ctrl-shift-s')
@@ -159,4 +159,3 @@ class UserActions:
         actions.key("alt-f alt-o esc")
 
     # find_and_replace.py support end
-
