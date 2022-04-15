@@ -1,5 +1,5 @@
 from typing import Any, List, Optional
-from talon import Module, imgui, clip, cron, actions, settings
+from talon import Module, imgui, clip, cron, actions
 from talon.skia.image import Image
 from dataclasses import dataclass
 
@@ -7,6 +7,17 @@ from dataclasses import dataclass
 class ClipItem:
     text: str
     image: Image
+
+    def __eq__(self, other):
+        return (
+            other != None
+            and self.text == other.text 
+            and self.image_description() == other.image_description()
+        )
+
+    def image_description(self):
+        if not self.image: return ""
+        return f"Image(width={self.image.width}, height={self.image.height})"
 
 mod = Module()
 mod.mode("clipboard_history", "Indicates that the clipboard history is visible")
@@ -22,7 +33,7 @@ setting_clipboard_history_max_rows = mod.setting(
     default=20,
 )
 setting_clipboard_history_max_cols = mod.setting(
-    "clipboard_manager_max_cols",
+    "clipboard_history_max_cols",
     type=int,
     default=50,
 )
@@ -54,6 +65,10 @@ def poll_and_update_if_needed():
     if last_captured == current_clipboard:
         return
     elif current_clipboard:
+        # To avoid duplicates
+        try: clipboard_history.remove(current_clipboard)
+        except: None
+
         clipboard_history.insert(0, current_clipboard)
 
     shrink()
@@ -77,7 +92,7 @@ def gui(gui: imgui.GUI):
 
     for i, item in enumerate(clipboard_history):
         if item.image:
-            text = f"Image(width={item.image.width}, height={item.image.height})"
+            text = item.image_description()
         else:
             text = item.text.replace("\n", "\\n")
             if len(text) > max_cols + 4:
@@ -85,27 +100,28 @@ def gui(gui: imgui.GUI):
         gui.text(f"{i+1}: {text}")
 
     gui.spacer()
-    if gui.button("Clipboard hide"):
-        actions.user.clipboard_manager_hide()
+    if gui.button("Clipboard close"):
+        actions.user.clipboard_history_hide()
 
 
 @mod.action_class
 class Actions:
     def clipboard_history_toggle():
-        """Toggle clipboard manager"""
-        if gui.showing:
-            gui.hide()
-        else:
+        """Toggle clipboard history"""
+        if gui.showing: 
+            actions.user.clipboard_history_hide()
+        else: 
             actions.mode.enable("user.clipboard_history")
             gui.show()
 
     def clipboard_history_hide():
-        """Hide clipboard manager"""
+        """Hide clipboard history"""
         actions.mode.disable("user.clipboard_history")
         gui.hide()
 
     def clipboard_history_split(numbers: List[int]):
-        """Split clipboard content on new line to add new items to clipboard manager history"""
+        """Split clipboard content on new line to add new items to clipboard history history"""
+        global clipboard_history
         for number in numbers:
             validate_number(number)
         new_history = []
@@ -117,6 +133,8 @@ class Actions:
                         new_history.append(ClipItem(line, None))
             else:
                 new_history.append(item)
+        
+        clipboard_history = new_history
         shrink()
 
     def clipboard_history_copy(numbers: List[int]):
@@ -175,11 +193,11 @@ def get_content(numbers: List[int]):
 
 def validate_number(number: range):
     if number < 1 or number > len(clipboard_history):
-        error(f"Clipboard manager #{number} is out of range (1-{len(clipboard_history)})")
+        error(f"Clipboard history #{number} is out of range (1-{len(clipboard_history)})")
 
 def shrink():
     global clipboard_history
-    max_rows = clip.get()
+    max_rows = setting_clipboard_history_max_rows.get()
     if len(clipboard_history) > max_rows:
         clipboard_history = clipboard_history[-max_rows:]
 
