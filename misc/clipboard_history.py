@@ -11,7 +11,7 @@ class ClipItem:
     def __eq__(self, other):
         return (
             other != None
-            and self.text == other.text 
+            and self.text == other.text
             and self.image_description() == other.image_description()
         )
 
@@ -108,9 +108,9 @@ def gui(gui: imgui.GUI):
 class Actions:
     def clipboard_history_toggle():
         """Toggle clipboard history"""
-        if gui.showing: 
+        if gui.showing:
             actions.user.clipboard_history_hide()
-        else: 
+        else:
             actions.mode.enable("user.clipboard_history")
             gui.show()
 
@@ -133,7 +133,7 @@ class Actions:
                         new_history.append(ClipItem(line, None))
             else:
                 new_history.append(item)
-        
+
         clipboard_history = new_history
         shrink()
 
