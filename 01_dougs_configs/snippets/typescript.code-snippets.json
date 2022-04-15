@@ -21,6 +21,24 @@
 		"description": "A record field"
 	},
 
+	"ts-getter": {
+		"prefix": ["ts-getter"],
+		"body": [
+			"get ${1:name}() {",
+			"\t${5}",
+			"}"
+		],
+		"description": "A getter"
+	},
+	"ts-setter": {
+		"prefix": ["ts-setter"],
+		"body": [
+			"set ${1:name}() {",
+			"\t${5}",
+			"}"
+		],
+		"description": "A setter"
+	},
 
 	"ts-method": {
 		"prefix": ["ts-method"],

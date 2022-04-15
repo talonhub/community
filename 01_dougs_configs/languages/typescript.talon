@@ -52,6 +52,18 @@ insert method:
     sleep(50ms)
     key("enter")
 
+insert getter:
+    user.vscode("editor.action.insertSnippet")
+    insert("ts-getter")
+    sleep(50ms)
+    key("enter")
+
+insert setter:
+    user.vscode("editor.action.insertSnippet")
+    insert("ts-setter")
+    sleep(50ms)
+    key("enter")
+
 insert private field:
     user.vscode("editor.action.insertSnippet")
     insert("ts-private-field")

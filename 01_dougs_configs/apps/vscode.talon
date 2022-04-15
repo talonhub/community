@@ -10,6 +10,7 @@ save file: key(ctrl-s)
 (find file | hunt file): key(ctrl-p)
 
 comment selection: key(ctrl-/)
+insert comment: key(ctrl-/)
 
 quick fix: user.vscode_and_wait("editor.action.quickFix")
 go to terminal: user.vscode_and_wait("workbench.action.terminal.toggleTerminal")

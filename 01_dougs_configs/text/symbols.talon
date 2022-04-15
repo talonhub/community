@@ -6,6 +6,6 @@ inside (squares | square brackets | list | array):
     insert("[]")
     key(left)
 
-def indexer:
+state indexer:
     insert("[]")
     key(left)

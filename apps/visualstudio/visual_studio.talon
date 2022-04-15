@@ -35,6 +35,7 @@ file create: key(ctrl-n)
 #file open folder:
 file rename: key(ctrl-[ s f2)
 file reveal: key(ctrl-[ s)
+file close: key(ctrl-f4)
 
 # Language Features
 hint show: key(ctrl-shift-space)
