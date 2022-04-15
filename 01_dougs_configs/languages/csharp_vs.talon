@@ -14,3 +14,7 @@ insert property:
 
 [state] (int | integer | ant): "int"
 state string: "string"
+
+insert get set: 
+    insert(" {")
+    insert(" get; set; }")
