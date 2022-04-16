@@ -25,9 +25,9 @@ class UserActions:
                 text, settings.get("user.code_private_function_formatter")
             )
         )
-        
+
         actions.user.code_insert_function(result, None)
-        
+
     def code_private_function(text: str):
         """Inserts private function declaration"""
         result = "private function {}".format(
