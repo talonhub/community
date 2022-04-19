@@ -1,5 +1,5 @@
 # meet.talon
-app: meet
+app: google meet
 -
 
 toggle (mute|microphone):

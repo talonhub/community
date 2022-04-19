@@ -16,8 +16,10 @@ class GoogleMeetActions:
         ctrl.key_press("d", app=app, cmd=True)
         if not actions.speech.enabled():
             actions.speech.enable()
+            actions.mode.enable("noise")
         else:
             actions.speech.disable()
+            actions.mode.disable("noise")
 
     def toggle_microphone():
         """toggle google meet microphone"""

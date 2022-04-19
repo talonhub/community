@@ -79,17 +79,17 @@ moe: key("cmd-;")
 
 # Shortcat
 cliff <user.letter>:
-  key("cmd-shift-space")
+  key("cmd-shift-`")
   sleep(200ms)
   insert(letter)
 
 cling <user.text>:
-  key("cmd-shift-space")
+  key("cmd-shift-`")
   sleep(200ms)
   insert(text)
 
 climb <user.text>:
-  key("cmd-shift-space")
+  key("cmd-shift-`")
   sleep(200ms)
   insert(text)
   sleep(200ms)
@@ -173,5 +173,12 @@ sequel: " = "
 mease in: key(alt:down)
 mease out: key(alt:up)
 
+# Duplicate and drag
+dupe lig:
+  key(alt:down)
+  mouse_drag(0)
+  sleep(3500ms)
+  key(alt:up)
+  
 # Add an asterik with a space
 spaz: " *"
