@@ -69,7 +69,7 @@ class EditActions:
         actions.key('ctrl-home')
     def find(text: str=None):
         actions.key('ctrl-f')
-        actions.actions.insert(text)
+        actions.insert(text or "")
     def find_next():
         actions.key('f3')
         #action(edit.find_previous):
