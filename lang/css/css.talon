@@ -41,6 +41,6 @@ at {user.css_at_rule}: "@{css_at_rule} "
 unit {user.css_unit}: insert(css_unit)
 
 [value] current color: "currentColor"
-important: " !important"
+op important: " !important"
 
 border box model: "box-sizing: border-box;\n"
