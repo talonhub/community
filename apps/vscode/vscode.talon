@@ -22,7 +22,7 @@ bar outline: user.vscode("outline.focus")
 bar run: user.vscode("workbench.view.debug")
 bar search: user.vscode("workbench.view.search")
 bar source: user.vscode("workbench.view.scm")
-bar testing: user.vscode("workbench.view.testing.focus")
+bar test: user.vscode("workbench.view.testing.focus")
 bar switch: user.vscode("workbench.action.toggleSidebarVisibility")
 
 symbol hunt [<user.text>]:
@@ -106,7 +106,7 @@ go recent [<user.text>]:
     sleep(50ms)
     insert(text or "")
     sleep(250ms)
-go change: user.vscode("workbench.action.navigateToLastEditLocation")
+go edit: user.vscode("workbench.action.navigateToLastEditLocation")
 
 # Bookmarks. Requires Bookmarks plugin
 go marks: user.vscode("workbench.view.extension.bookmarks")
@@ -157,8 +157,10 @@ git sync: user.vscode("git.sync")
 git unstage: user.vscode("git.unstage")
 git unstage all: user.vscode("git.unstageAll")
 pull request: user.vscode("pr.create")
-change next: user.vscode("workbench.action.compareEditor.nextChange")
-change last: user.vscode("workbench.action.compareEditor.previousChange")
+# Use keyboard shortcuts because VSCode relies on when clause contexts to choose the appropriate 
+# action: https://code.visualstudio.com/api/references/when-clause-contexts
+change next: key(alt-f5)
+change last: key(shift-alt-f5)
 
 #Debugging
 break point: user.vscode("editor.debug.action.toggleBreakpoint")
