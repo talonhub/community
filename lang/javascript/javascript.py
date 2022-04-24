@@ -86,8 +86,7 @@ class UserActions:
         actions.user.insert_between("switch (", ")")
 
     def code_state_case():
-        actions.auto_insert("case :")
-        actions.key("left")
+        actions.user.insert_between("case ", ":")
 
     def code_state_go_to():
         actions.auto_insert("")
