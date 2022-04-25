@@ -1,11 +1,21 @@
 # Requires https://plugins.jetbrains.com/plugin/10504-voice-code-idea
 app: jetbrains
 -
-tag(): user.line_commands
+#tag(): user.line_commands
 tag(): user.multiple_cursors
 tag(): user.splits
 tag(): user.tabs
 # multiple_cursors.py support end
+
+
+# right click intellij - must bind "show context menu" to shift-cmd-W in the keymap
+jet kick: 
+    key(shift-cmd-w)
+run file: 
+    key(ctrl-r)
+shackle:
+    edit.line_end()
+    edit.extend_line_start()
 
 # Auto complete
 complete: user.idea("action CodeCompletion")
@@ -15,8 +25,8 @@ smart: user.idea("action SmartTypeCompletion")
 # Copying
 grab <number>: user.idea_grab(number)
 # Actions
-(action | please): user.idea("action GotoAction")
-(action | please) <user.text>:
+find action: user.idea("action GotoAction")
+find action <user.text>:
     user.idea("action GotoAction")
     insert(text)
 # Refactoring
@@ -91,10 +101,10 @@ go last mark: user.idea("action GotoPreviousBookmark")
 toggle mark <number>: user.idea("action ToggleBookmark{number}")
 go mark <number>: user.idea("action GotoBookmark{number}")
 # Folding
-expand deep: user.idea("action ExpandRegionRecursively")
-expand all: user.idea("action ExpandAllRegions")
-collapse deep: user.idea("action CollapseRegionRecursively")
-collapse all: user.idea("action CollapseAllRegions")
+unfold that: user.idea("action ExpandRegionRecursively")
+unfold all: user.idea("action ExpandAllRegions")
+fold that: user.idea("action CollapseRegionRecursively")
+fold all: user.idea("action CollapseAllRegions")
 # miscellaneous
 # XXX These might be better than the structural ones depending on language.
 go next (method | function): user.idea("action MethodDown")
@@ -174,7 +184,7 @@ toggle fullscreen: user.idea("action ToggleFullScreen")
 toggle distraction [free mode]: user.idea("action ToggleDistractionFreeMode")
 toggle presentation [mode]: user.idea("action TogglePresentationMode")
 # Toggle additionals
-toggle comment: code.toggle_comment()
+comment: code.toggle_comment()
 # Quick popups
 change scheme: user.idea("action QuickChangeScheme")
 # Always javadoc
@@ -213,21 +223,23 @@ fix last (error | air):
 select less: user.idea("action EditorUnSelectWord")
 select (more|this): user.idea("action EditorSelectWord")
 #jet brains-specific line commands. see line_commands.talon for generic ones
-expand <number> until <number>:
-    user.select_range(number_1, number_2)
-    user.idea("action ExpandRegion")
-collapse <number> until <number>:
-    user.select_range(number_1, number_2)
-    user.idea("action CollapseRegion")
-paste <number> until <number>:
-    user.select_range(number_1, number_2)
-    user.idea("action EditorPaste")
-refactor <number> until <number>:
-    user.select_range(number_1, number_2)
-    user.idea("action Refactorings.QuickListPopupAction")
-clone <number>: user.line_clone(number)
+#expand <number> until <number>:
+ #   user.select_range(number_1, number_2)
+  #  user.idea("action ExpandRegion")
+#collapse <number> until <number>:
+ #   user.select_range(number_1, number_2)
+  #  user.idea("action CollapseRegion")
+#paste <number> until <number>:
+ #   user.select_range(number_1, number_2)
+  #  user.idea("action EditorPaste")
+#refactor <number> until <number>:
+ #   user.select_range(number_1, number_2)
+  #  user.idea("action Refactorings.QuickListPopupAction")
+#clone <number>: user.line_clone(number)
 
 #find/replace
+open replace: 
+    key(shift-cmd-r)
 clear last <user.text> [over]: user.idea("find prev {text}, action EditorBackSpace")
 clear next <user.text> [over]: user.idea("find next {text}, action EditorBackSpace")
 comment last <user.text> [over]: user.idea("find prev {text}, action CommentByLineComment")

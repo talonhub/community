@@ -4,7 +4,7 @@ camera overlay: user.mouse_toggle_camera_overlay()
 run calibration: user.mouse_calibrate()	
 cricket: 
 	mouse_click(0)
-  user.mouse_cancel_zoom_mouse()
+  	user.mouse_cancel_zoom_mouse()
 	# close the mouse grid if open
 	user.grid_close()
     	# End any open drags
@@ -12,8 +12,8 @@ cricket:
 	user.mouse_drag_end()
 
 (psychic | righty): 
-    user.mouse_cancel_zoom_mouse()
 	mouse_click(1)
+    user.mouse_cancel_zoom_mouse()
 	# close the mouse grid if open
 	user.grid_close()
 
