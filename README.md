@@ -389,3 +389,4 @@ To run the test suite you just need to install the `pytest` python package in to
 For official documentation on Talon's API and features, please visit https://talonvoice.com/docs/.
 
 For community-generated documentation on Talon, please visit https://talon.wiki/
+
