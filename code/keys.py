@@ -3,7 +3,7 @@ from typing import Set
 from talon import Module, Context, actions, app
 import sys
 
-default_alphabet = "air best cat drum ease flow gear harp ivy just kale look made near odd play quick ring side trip urge vine whale plex yank zoo".split(
+default_alphabet = "air best cat drum ease flow gear harp ivy jug kale look made near odd play quick ring side trip urge vine whale plex yank zoo".split(
     " "
 )
 #default_alphabet = "air bat cap drum each fine gust harp sit jury crunch look made near odd pit quench red sun trap urge vest whale plex yank zip".split(
