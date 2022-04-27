@@ -1,3 +1,4 @@
+experiment: anchor-file
 mode: dictation
 -
 ^press <user.keys>$: key("{keys}")
