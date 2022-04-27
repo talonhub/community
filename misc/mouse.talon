@@ -61,7 +61,11 @@ right drag | righty drag:
 	user.grid_close()
 end drag | drag end:
     user.mouse_drag_end()
-wheel down: user.mouse_scroll_up()
+#wheel down: user.mouse_scroll_up()
+wheel down: 
+    user.mouse_scroll_up_continuous()
+    sleep(300ms)
+    user.mouse_scroll_stop()
 wheel down here:
     user.mouse_move_center_active_window()
     user.mouse_scroll_up()
