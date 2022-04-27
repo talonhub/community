@@ -64,12 +64,12 @@ push right <number>:
   key("shift-alt-]")
   repeat(number - 1)
 
-(we out | outs): user.mouse_scroll_stop()
+outs: user.mouse_scroll_stop()
 
 # Vimium
-link: key("f")
-link new: key("shift-f")
-link copy: key("yf")
+#link: key("f")
+#link new: key("shift-f")
+#link copy: key("yf")
 
 # Vimac
 get: key("ctrl-f")
@@ -113,6 +113,15 @@ lose <user.text>:
     sleep(200ms)
     insert(user.formatted_text(text, "CAPITALIZE_ALL_WORDS"))
 
+# Click into, select all, clear and Replace with Titles 
+blew <user.text>:
+  mouse_click(0)
+  key("enter")
+  edit.select_all()
+  edit.delete()
+  sleep(200ms)
+  insert(user.formatted_text(text, "CAPITALIZE_ALL_WORDS"))
+
 # Copy, paste, enter and delete
 (coffee | crop): edit.copy()
 (pasta | path): edit.paste()
@@ -149,8 +158,8 @@ stick:
     mouse_click(0)
     key("shift:up")
 
-# Command individual select objects
-strike:
+# Command individual select objects and open link new tab
+(strike | linker):
     key("cmd:down")
     mouse_click(0)
     key("cmd:up")
@@ -168,17 +177,39 @@ dellz [<number>]:
 # General
 (petes | peas): core.repeat_command(1)
 sequel: " = "
+quit this: key("cmd-q")
+
+# Open slack and go to all unreads
+slack unread: key(cmd-alt-2)
+
+# Open Work Email
+fire mail: key("alt-cmd-1")
 
 # Measuring with alt key
 mease in: key(alt:down)
 mease out: key(alt:up)
 
 # Duplicate and drag
-dupe lig:
+dupes:
   key(alt:down)
   mouse_drag(0)
   sleep(3500ms)
   key(alt:up)
-  
+
+# Drag
+da: mouse_drag(0)
+
+# Double Click Drag
+dag:
+  mouse_drag(0)
+  mouse_drag(0)
+
 # Add an asterik with a space
 spaz: " *"
+
+# Webflow
+quickie: key("cmd-k")
+
+# zoom 
+zoomer: user.mouse_trigger_zoom_mouse()
+

@@ -2,5 +2,5 @@
 key(cmd-ctrl-b):
     user.toggle_slack_and_talon()
 
-toggle huddle:
+(toggle | tog) (huddle | hud):
     user.toggle_slack_and_talon()

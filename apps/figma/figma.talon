@@ -13,7 +13,7 @@ set right: user.figma_set_right()
 set (up | top): user.figma_set_top()
 set (down | bottom): user.figma_set_bottom()
 set (center | horizontal): user.figma_set_horizontal()
-set (middle | vertical): user.figma_set_vertical()
+set (mid | middle | vertical): user.figma_set_vertical()
 
 text center: user.figma_text_center()
 text left: user.figma_text_left()
@@ -62,6 +62,12 @@ zoon [<number>]:
     key('+')
     repeat(number - 1)
 
+# Zoom in area then 100%
+(scan | scale):
+    key("2")
+    sleep(100ms)
+    key("0")
+
 (zoom | zoo) (for | fall | full): user.figma_zoom_hundred()
 (zoom | zoo) fit: user.figma_zoom_fit()
 (zoom | zoo) select: user.figma_zoom_selection()
@@ -71,8 +77,8 @@ zoon [<number>]:
 down page: user.figma_previous_page()
 up page: user.figma_next_page()
 
-be: user.figma_find_previous_frame()
-as: user.figma_find_next_frame()
+# be: user.figma_find_previous_frame()
+# as: user.figma_find_next_frame()
 
 place image: user.figma_place_image()
 paste here: user.figma_paste_here()
@@ -98,3 +104,6 @@ panel inspect: user.figma_panelinspect()
 # FigJam - Join + New Shape
 joins:
     key("cmd-return")
+
+# Words
+modal: "modal"

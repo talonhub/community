@@ -3,7 +3,7 @@ app: slack
 -
 
 mute huddle:
-    user.toggle_microphone()
+    user.toggle_huddle()
 
 leave huddle:
-    user.leave_meeting()
+    user.leave_huddle()
