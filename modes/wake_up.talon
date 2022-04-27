@@ -13,9 +13,12 @@ mode: all
     user.mouse_sleep()
     speech.disable()
     user.engine_sleep()
+    mode.disable("face")
 ^talon sleep [<phrase>]$: speech.disable()
 ^drowse [<phrase>]$: 
     speech.disable()
     user.mouse_sleep()
-^talon wake$: speech.enable()
-^jolt$: speech.enable()
+    mode.disable("face")
+#^talon wake$: speech.enable()
+^jolt$: 
+    speech.enable()
