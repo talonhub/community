@@ -25,7 +25,8 @@ paste match: edit.paste_match_style()
 file save: edit.save()
 back: key(backspace)    
 #wipe: key(backspace)    
-(pad | padding): 
+#(pad | padding): 
+(padding): 
 	insert("  ") 
 	key(left)
 slap: edit.line_insert_down()
