@@ -1,6 +1,6 @@
 question [mark]: "?"
 (downscore | underscore): "_"
-double dash: "--"
+# double dash: "--"
 (bracket | left bracket): "{"
 (are bracket | right bracket): "}"
 triple quote: "'''"
@@ -30,9 +30,9 @@ empty escaped string:
     "\\'\\'"
     key(left)
     key(left)
-(inside parens | args):
-	insert("()")
-	key(left)
+# (inside parens | args):
+# 	insert("()")
+# 	key(left)
 inside (squares | square brackets | list):
 	insert("[]")
 	key(left)

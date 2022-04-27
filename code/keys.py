@@ -3,7 +3,7 @@ from typing import Set
 from talon import Module, Context, actions, app
 import sys
 
-default_alphabet = "air bat cap doo each fine gust ham ivy judge kill look mike naow odd pit quench red sun tock yew vest well plex yank zip".split(
+default_alphabet = "air bat cap doo each fine gust ham ivy judge kill look mike naow off pit quench red sun tock yew vest well plex yank zip".split(
     " "
 )
 letters_string = "abcdefghijklmnopqrstuvwxyz"
@@ -113,7 +113,7 @@ def letters(m) -> str:
 ctx = Context()
 modifier_keys = {
     # If you find 'alt' is often misrecognized, try using 'alter'.
-    "alteria": "alt",  #'alter': 'alt',
+    "xalt": "alt",  #'alter': 'alt',
     "control": "ctrl",  #'troll':   'ctrl',
     "shift": "shift",  #'sky':     'shift',
     # "super": "super",
@@ -170,6 +170,7 @@ symbol_key_words = {
     "minus": "-",
     "dash": "-",
     "equals": "=",
+    "relation": "=",
     "plus": "+",
     "tilde": "~",
     "bang": "!",
