@@ -171,7 +171,7 @@ mod.list(
 )
 
 
-@mod.capture(rule="{self.formatters}+")
+@mod.capture(rule="{self.formatters}+[quit]")
 def formatters(m) -> str:
     "Returns a comma-separated string of formatters e.g. 'SNAKE,DUBSTRING'"
     return ",".join(m.formatters_list)
