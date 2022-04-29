@@ -118,6 +118,20 @@ class EditActions:
         actions.key("enter")
         actions.edit.line_start()
 
+    def selected_text() -> str:
+        with clip.capture() as s:
+            actions.edit.copy()
+        try:
+            txt = s.text()
+        except clip.NoChange:
+            return ""
+        if txt and txt[-1] == '\n' and sum(1 for c in txt if c == '\n') == 1 and txt not in ('\n', '\r\n'):
+            # This looks like the special case where VSCode copies the full line
+            # when given an empty selection.
+            return ""
+        else:
+            return txt
+
 
 @ctx.action_class("win")
 class WinActions:
