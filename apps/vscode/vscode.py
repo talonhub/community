@@ -112,6 +112,12 @@ class EditActions:
     def line_clone():
         actions.key("shift-alt-down")
 
+    def line_insert_down():
+        actions.user.vscode("editor.action.insertLineAfter")
+
+    def line_insert_up():
+        actions.user.vscode("editor.action.insertLineBefore")
+
     def jump_line(n: int):
         actions.user.vscode("workbench.action.gotoLine")
         actions.insert(str(n))
