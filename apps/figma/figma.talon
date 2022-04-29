@@ -77,8 +77,8 @@ zoon [<number>]:
 down page: user.figma_previous_page()
 up page: user.figma_next_page()
 
-# be: user.figma_find_previous_frame()
-# as: user.figma_find_next_frame()
+(di | dee): user.figma_find_previous_frame()
+fee: user.figma_find_next_frame()
 
 place image: user.figma_place_image()
 paste here: user.figma_paste_here()
@@ -101,9 +101,34 @@ panel design: user.figma_paneldesign()
 panel proto: user.figma_panelprototype()
 panel inspect: user.figma_panelinspect()
 
+# Typography
+bold: user.figma_bold()
+underline: user.figma_underline()
+strike through: user.figma_strikethrough()
+turn list: user.figma_transform_list()
+text left: user.figma_text_align_left()
+text right: user.figma_text_align_right()
+text center: user.figma_text_align_center()
+text justify: user.figma_text_align_justified()
+font up: user.figma_adjust_font_size_up()
+font down: user.figma_adjust_font_size_down()
+thicker: user.figma_adjust_font_weight_up()
+thinner: user.figma_adjust_font_weight_down()
+spacing up: user.figma_adjust_letter_spacing_up()
+spacing down: user.figma_adjust_letter_spacing_down()
+(high | height) up: user.figma_adjust_line_height_up()
+(high | height) down: user.figma_adjust_line_height_down()
+
 # FigJam - Join + New Shape
 joins:
     key("cmd-return")
 
 # Words
 modal: "modal"
+
+# Flip
+flip (up | down):
+    key("shift-v")
+
+flip (left | right):
+    key("shift-h")

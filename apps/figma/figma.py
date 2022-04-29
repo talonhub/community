@@ -191,3 +191,53 @@ class figma_actions:
 
     def figma_panelinspect():
         """Inspect panel"""
+
+    # Typography
+
+    def figma_bold():
+        """Bold"""
+
+    def figma_underline():
+        """Underline"""
+
+    def figma_strikethrough():
+        """Strike Through"""
+
+    def figma_transform_list():
+        """Turn into a list"""
+
+    def figma_text_align_left():
+        """Text align left"""
+
+    def figma_text_align_right():
+        """Text align right"""
+
+    def figma_text_align_center():
+        """Text align center"""
+
+    def figma_text_align_justified():
+        """Text align justified"""
+
+    def figma_adjust_font_size_up():
+        """Adjust font size bigger"""
+
+    def figma_adjust_font_size_down():
+        """Adjust font size smaller"""
+
+    def figma_adjust_font_weight_up():
+        """Adjust font weight bigger"""
+
+    def figma_adjust_font_weight_down():
+        """Adjust font weight smaller"""
+
+    def figma_adjust_letter_spacing_up():
+        """Adjust letter spacing bigger"""
+
+    def figma_adjust_letter_spacing_down():
+        """Adjust letter spacing smaller"""
+
+    def figma_adjust_line_height_up():
+        """Adjust line height bigger"""
+
+    def figma_adjust_line_height_down():
+        """Adjust line height smaller"""

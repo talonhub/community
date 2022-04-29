@@ -197,7 +197,7 @@ dupes:
   key(alt:up)
 
 # Drag
-da: mouse_drag(0)
+# da: mouse_drag(0)
 
 # Double Click Drag
 dag:
