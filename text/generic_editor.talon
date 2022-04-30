@@ -1,5 +1,11 @@
-flow tran:
-  "PFLOTRAN"
+lorem short:
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+
+lorem long:
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+
+lorem very long:
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
 
 my email:
   "alexrkoch@gmail.com"
@@ -33,7 +39,7 @@ slanter:
   edit.line_end()
   key(enter shift-tab)
 
-slap:
+slappy:
   edit.line_end()
   key(enter)
 
@@ -143,6 +149,8 @@ select line start:
 
 select line end:
     edit.extend_line_end()
+
+
 
 select way home:
     edit.extend_file_start()

@@ -13,7 +13,7 @@ state log:
   key(left)
 
 arrow function:
-  " = () => {"
+  " () => {"
   key(enter)
   key(tab)
 
