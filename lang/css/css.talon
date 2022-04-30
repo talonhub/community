@@ -42,5 +42,3 @@ unit {user.css_unit}: insert(css_unit)
 
 [value] current color: "currentColor"
 op important: " !important"
-
-border box model: "box-sizing: border-box;\n"
