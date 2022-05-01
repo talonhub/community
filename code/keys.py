@@ -234,11 +234,11 @@ simple_keys = [
 alternate_keys = {
     "delete": "backspace",
     "forward delete": "delete",
-    #'junk': 'backspace',
+    'junk': 'backspace',
     "page up": "pageup",
     "page down": "pagedown",
     "leave": "escape",
-    "deli": "backspace",
+    # "deli": "backspace",
     
 }
 # mac apparently doesn't have the menu key.
