@@ -204,6 +204,7 @@ symbol_key_words = {
     # Currencies
     "dollar": "$",
     "pound": "£",
+    "shekel sign": "₪",
 }
 
 # make punctuation words also included in {user.symbol_keys}
@@ -236,6 +237,9 @@ alternate_keys = {
     #'junk': 'backspace',
     "page up": "pageup",
     "page down": "pagedown",
+    "leave": "escape",
+    "deli": "backspace",
+    
 }
 # mac apparently doesn't have the menu key.
 if app.platform in ("windows", "linux"):
