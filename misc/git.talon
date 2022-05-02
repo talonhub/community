@@ -77,7 +77,7 @@ git remote show origin: "git remote show origin\n"
 git show: "git show "
 git stash pop: "git stash pop\n"
 git stash: "git stash\n"
-git stash push: 
+git stash push:
   insert("git stash push -m ''")
   key(left)
 git stash apply: "git stash apply\n"
