@@ -161,9 +161,10 @@ punctuation_words = {
 }
 symbol_key_words = {
     "dot": ".",
-    "point": ".",
-    "quote": "'",
+    #"point": ".",
+    "quote": """,
     "apostrophe": "'",
+    "tick": "'",
     "L square": "[",
     "left square": "[",
     "square": "[",
@@ -185,6 +186,8 @@ symbol_key_words = {
     "R paren": ")",
     "right paren": ")",
     "brace": "{",
+    "curly": "{",
+    "right curly": "}",
     "left brace": "{",
     "R brace": "}",
     "right brace": "}",
