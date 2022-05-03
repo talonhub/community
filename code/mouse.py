@@ -182,6 +182,17 @@ class Actions:
         if button_down:
             ctrl.mouse_click(button=0, up=True)
 
+    def smooth_wheel_scroll(direction: str):
+        """Scrolls small amount smoothly"""
+        pixels = 15
+        if direction == "up":
+          pixels *= -1
+        elif direction != "down":
+          print(f"treating {direction} as 'down'")
+        for i in range(50):
+          actions.mouse_scroll(pixels)
+          actions.sleep("8ms")
+
     def mouse_scroll_down(amount: float = 1):
         """Scrolls down"""
         mouse_scroll(amount * setting_mouse_wheel_down_amount.get())()

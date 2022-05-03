@@ -62,10 +62,11 @@ right drag | righty drag:
 end drag | drag end:
     user.mouse_drag_end()
 #wheel down: user.mouse_scroll_up()
-wheel down: 
-    user.mouse_scroll_up_continuous()
-    sleep(300ms)
-    user.mouse_scroll_stop()
+#wheel down: 
+#    user.mouse_scroll_up_continuous()
+#    sleep(300ms)
+#    user.mouse_scroll_stop()
+wheel down: user.smooth_wheel_scroll("up")
 wheel down here:
     user.mouse_move_center_active_window()
     user.mouse_scroll_up()
@@ -77,7 +78,8 @@ wheel downer: user.mouse_scroll_up_continuous()
 wheel downer here:
     user.mouse_move_center_active_window()
     user.mouse_scroll_up_continuous()
-wheel up: user.mouse_scroll_down()
+#wheel up: user.mouse_scroll_down()
+wheel up: user.smooth_wheel_scroll("down")
 wheel up here:
     user.mouse_move_center_active_window()
     user.mouse_scroll_down()
