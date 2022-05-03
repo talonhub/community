@@ -3,4 +3,5 @@
 #<number_small> times: core.repeat_command(number_small-1)
 (repeat that|twice): core.repeat_command(1)
 repeat that <number_small> [times]: core.repeat_command(number_small)
-reap: core.repeat_command(1)
+read: core.repeat_command(1)
+
