@@ -70,7 +70,7 @@ file rename:
 file move:
     user.vscode("fileutils.moveFile")
     sleep(150ms)
-file duplicate:
+file clone:
 	  user.vscode("fileutils.duplicateFile")
 	  sleep(150ms)
 file delete:
