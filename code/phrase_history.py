@@ -16,7 +16,10 @@ class Actions:
 
     def get_recent_phrase(number: int) -> str:
         """Gets the nth most recent phrase"""
-        try: return phrase_history[number-1]
+        try: 
+            get_phrase = phrase_history[number-1]
+            actions.user.add_phrase_to_history(get_phrase)
+            return get_phrase
         except IndexError: return ""
 
     def clear_last_phrase():
@@ -53,6 +56,7 @@ class Actions:
         global phrase_history
         phrase_history.insert(0, text)
         phrase_history = phrase_history[:phrase_history_length]
+        
 
     def toggle_phrase_history():
         """Toggles list of recent phrases"""
@@ -67,6 +71,8 @@ class Actions:
 @imgui.open()
 def gui(gui: imgui.GUI):
     gui.text("Recent phrases")
+    gui.text("Say 'recent repeat <number>' retype a phrase on this list.")
+    gui.text("Say 'recent copy <number>' to copy a phrase from this list.")
     gui.line()
     for index, text in enumerate(phrase_history[:phrase_history_display_length], 1):
         gui.text(f"{index}: {text}")
