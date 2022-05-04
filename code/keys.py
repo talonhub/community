@@ -162,7 +162,7 @@ punctuation_words = {
 symbol_key_words = {
     "dot": ".",
     #"point": ".",
-    "quote": """,
+    "quote": '"',
     "apostrophe": "'",
     "tick": "'",
     "L square": "[",
