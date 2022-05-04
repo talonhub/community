@@ -11,7 +11,7 @@ cricket:
 	# Touch automatically ends left drags so this is for right drags specifically
 	user.mouse_drag_end()
 
-(psychic | righty): 
+psychic: 
 	mouse_click(1)
     user.mouse_cancel_zoom_mouse()
 	# close the mouse grid if open
