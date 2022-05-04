@@ -18,8 +18,8 @@ shackle:
     edit.extend_line_start()
 
 arrow function:
-  " () => {"
-#  key(enter)
+  "() => {"
+  key(enter)
 
 # Auto complete
 complete: user.idea("action CodeCompletion")
