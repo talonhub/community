@@ -24,4 +24,4 @@ def add_word_to_additional_words(word: str):
 class Actions:
     def add_custom_vocabulary(word: str):
         """ Adds a word to additional_words.csv"""
-        add_word_to_additional_words(word) 
+        add_word_to_additional_words(word)
