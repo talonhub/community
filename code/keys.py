@@ -184,7 +184,7 @@ symbol_key_words = {
     "star": "*",
     "hash tag": "#",
     "percent": "%",
-    "caret": "^",
+    "caret sign": "^",
     "amper": "&",
     "pipe": "|",
     "quote": '"',
