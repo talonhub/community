@@ -1,8 +1,10 @@
 import logging
-from typing import Dict, Sequence
+import re
+from typing import Dict, Sequence, Tuple, Union
 
 from talon import Context, Module, actions
-from .user_settings import get_list_from_csv
+from talon.grammar import Phrase
+from .user_settings import append_to_csv, get_list_from_csv
 
 mod = Module()
 ctx = Context()
@@ -159,3 +161,54 @@ class OverwrittenActions:
             # fall back to default implementation for error-robustness
             logging.error("phrase replacer failed!")
             return actions.next(words)
+
+def _create_vocabulary_entries(spoken_form, written_form, type):
+    """Expands the provided spoken form and written form into multiple variants based on
+    the provided type, which can be either "name" to add a possessive variant or "noun"
+    to add plural.
+    """
+    entries = {spoken_form: written_form}
+    if type == "name":
+        entries[f"{spoken_form}s"] = f"{written_form}'s"
+    elif type == "noun":
+        entries[f"{spoken_form}s"] = f"{written_form}s"
+    return entries
+
+# See https://github.com/wolfmanstout/talon-vocabulary-editor for an experimental version
+# of this which tests if the default spoken form can be used instead of the provided phrase.
+def _add_selection_to_csv(
+    phrase: Union[Phrase, str], type: str, csv: str, headers: Tuple[str, str]
+):
+    written_form = actions.edit.selected_text().strip()
+    if phrase:
+        spoken_form = " ".join(actions.dictate.parse_words(phrase))
+    else:
+        is_acronym = re.fullmatch(r"[A-Z]+", written_form)
+        spoken_form = " ".join(written_form) if is_acronym else written_form
+    phrases = get_list_from_csv(csv, headers=headers, write_default=False)
+    entries = _create_vocabulary_entries(spoken_form, written_form, type)
+    new_entries = {}
+    for spoken_form, written_form in entries.items():
+        if spoken_form in phrases:
+            logging.info(f'Spoken form "{spoken_form}" is already in {csv}')
+        else:
+            new_entries[spoken_form] = written_form
+    append_to_csv(csv, new_entries)
+
+@mod.action_class
+class Actions:
+    def add_selection_to_vocabulary(phrase: Union[Phrase, str] = "", type: str = ""):
+        """Permanently adds the currently selected text to the vocabulary with the provided
+        spoken form and adds variants based on the type ("noun" or "name").
+        """
+        _add_selection_to_csv(
+            phrase, type, "additional_words.csv", ("Word(s)", "Spoken Form (If Different)")
+        )
+
+    def add_selection_to_words_to_replace(phrase: Phrase, type: str = ""):
+        """Permanently adds the currently selected text as replacement for the provided
+        original form and adds variants based on the type ("noun" or "name").
+        """
+        _add_selection_to_csv(
+            phrase, type, "words_to_replace.csv", ("Replacement", "Original")
+        )
