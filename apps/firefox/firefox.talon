@@ -2,6 +2,7 @@ app: firefox
 -
 tag(): browser
 tag(): user.tabs
+tag(): user.vimium
 tab search:
     browser.focus_address()
     insert("% ")

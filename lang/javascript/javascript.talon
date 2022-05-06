@@ -56,3 +56,7 @@ state spread: "..."
 from import:
     insert(' from  ""')
     key("left")
+
+state error:
+    insert("throw new Error()")
+    key("left")

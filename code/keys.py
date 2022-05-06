@@ -147,8 +147,8 @@ punctuation_words = {
     "hash sign": "#",
     "number sign": "#",
     "percent sign": "%",
-    "at sign": "@",
-    "and sign": "&",
+    # "at sign": "@",
+    # "and sign": "&",
     "ampersand": "&",
 
     # Currencies
@@ -175,7 +175,7 @@ symbol_key_words = {
     "quest": "?",
     "tilde": "~",
     "bang": "!",
-    "doll": "$",
+    "cash": "$",
     "scout": "_",
     "cot": ":",
     "caught": ":",

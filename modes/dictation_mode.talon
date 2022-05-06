@@ -1,4 +1,5 @@
 mode: dictation
+experiment: anchor-file
 -
 ^press <user.modifiers>$: key(modifiers)
 ^press <user.keys>$: key(keys)

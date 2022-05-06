@@ -10,3 +10,14 @@ not mode: sleep
     mode.disable("sleep")
     mode.disable("dictation")
     mode.enable("command")
+^mixed mode$:
+    mode.disable("sleep")
+    mode.enable("dictation")
+    mode.enable("command")
+
+^meeting mode on$:
+    app.notify("Meeting mode on")
+    mode.enable("user.meeting")
+^meeting mode off$:
+    app.notify("Meeting mode off")
+    mode.disable("user.meeting")

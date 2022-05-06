@@ -8,7 +8,6 @@ fso
 docker
 lambda
 api
-zappa
 postgres
 localhost
 api
@@ -30,15 +29,13 @@ cognito
 html
 pdf
 covid
-eds
 json,jayson
 vscode,V S code
 postgres,post grass
 y'all,yall
-esignature,E signature
-edsviewer,E D S Viewer
 ip address,I P address
 graphql,graph Q L
+graphql,graph quell
 schema
 debian
 cursorless
@@ -48,3 +45,14 @@ today,to day
 matcher
 matchers
 subword
+URL,U R L
+UI,U I
+AST,A S T
+args
+serverless
+stringify
+leetcode
+yeah
+reddit
+dendron
+portainer

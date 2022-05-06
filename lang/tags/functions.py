@@ -28,7 +28,7 @@ class Actions:
 
     def code_default_function(text: str):
         """Inserts function declaration"""
-        actions.user.code_private_function(text)
+        actions.user.code_protected_function(text)
 
     def code_private_function(text: str):
         """Inserts private function declaration"""
