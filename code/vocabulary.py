@@ -182,6 +182,7 @@ def _add_selection_to_csv(
     type: str,
     csv: str,
     csv_contents: dict[str, str],
+    skip_identical_replacement: bool,
 ):
     written_form = actions.edit.selected_text().strip()
     if phrase:
@@ -191,15 +192,17 @@ def _add_selection_to_csv(
         spoken_form = " ".join(written_form) if is_acronym else written_form
     entries = _create_vocabulary_entries(spoken_form, written_form, type)
     new_entries = {}
-    added_all_phrases = True
+    added_some_phrases = False
     for spoken_form, written_form in entries.items():
-        if spoken_form in csv_contents:
+        if skip_identical_replacement and spoken_form == written_form:
+            actions.app.notify(f'Skipping identical replacement: "{spoken_form}"')
+        elif spoken_form in csv_contents:
             actions.app.notify(f'Spoken form "{spoken_form}" is already in {csv}')
-            added_all_phrases = False
         else:
             new_entries[spoken_form] = written_form
+            added_some_phrases = True
     append_to_csv(csv, new_entries)
-    if added_all_phrases:
+    if added_some_phrases:
         actions.app.notify(f'Added to {csv}')
 
 @mod.action_class
@@ -213,6 +216,7 @@ class Actions:
             type,
             "additional_words.csv",
             vocabulary,
+            False,
         )
 
     def add_selection_to_words_to_replace(phrase: Phrase, type: str = ""):
@@ -224,4 +228,5 @@ class Actions:
             type,
             "words_to_replace.csv",
             phrases_to_replace,
+            True,
         )
