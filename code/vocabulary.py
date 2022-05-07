@@ -188,12 +188,16 @@ def _add_selection_to_csv(
     phrases = get_list_from_csv(csv, headers=headers, write_default=False)
     entries = _create_vocabulary_entries(spoken_form, written_form, type)
     new_entries = {}
+    added_all_phrases = True
     for spoken_form, written_form in entries.items():
         if spoken_form in phrases:
-            logging.info(f'Spoken form "{spoken_form}" is already in {csv}')
+            actions.app.notify(f'Spoken form "{spoken_form}" is already in {csv}')
+            added_all_phrases = False
         else:
             new_entries[spoken_form] = written_form
     append_to_csv(csv, new_entries)
+    if added_all_phrases:
+        actions.app.notify(f'Added to {csv}')
 
 @mod.action_class
 class Actions:

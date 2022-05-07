@@ -69,8 +69,8 @@ def append_to_csv(filename: str, rows: Dict[str, str]):
             pass
         needs_newline = line is not None and not line.endswith("\n")
     with open(path, "a", encoding="utf-8", newline="") as file:
-        if needs_newline:
-            file.write("\n")
         writer = csv.writer(file)
+        if needs_newline:
+            writer.writerow([])
         for key, value in rows.items():
             writer.writerow([key] if key == value else [value, key])
