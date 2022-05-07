@@ -13,13 +13,13 @@ if not SETTINGS_DIR.is_dir():
 
 
 def get_list_from_csv(
-    filename: str, headers: Tuple[str, str], default: Dict[str, str] = {}, write_default=True
+    filename: str, headers: Tuple[str, str], default: Dict[str, str] = {}
 ):
     """Retrieves list from CSV"""
     path = SETTINGS_DIR / filename
     assert filename.endswith(".csv")
 
-    if write_default and not path.is_file():
+    if not path.is_file():
         with open(path, "w", encoding="utf-8", newline="") as file:
             writer = csv.writer(file)
             writer.writerow(headers)
