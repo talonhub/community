@@ -26,7 +26,7 @@ settings():
 
 (op | is) strict equal: " === "
 (op | is) strict not equal: " !== "
-op null coal: " ?? "
+op null or: " ?? "
 
 state const: "const "
 
@@ -40,9 +40,12 @@ state async: "async "
 
 state await: "await "
 
-state {user.code_chain_function}:
+chain {user.code_chain_function}:
     user.insert_between(".{code_chain_function}(", ")")
 
+state map: app.notify('ERROR: Command deprecated; please use "chain map"')
+state filter: app.notify('ERROR: Command deprecated; please use "chain filter"')
+state reduce: app.notify('ERROR: Command deprecated; please use "chain reduce"')
 
 state spread: "..."
 
