@@ -238,10 +238,13 @@ alternate_keys = {
     "forward delete": "delete",
     'junk': 'backspace',
     "page up": "pageup",
+    "flow up": "pageup",
+    "roll up": "pageup",
     "page down": "pagedown",
+    "flow down": "pagedown",
+    "roll down": "pagedown",
     "leave": "escape",
     "ace": "space",
-    # "deli": "backspace",
     
 }
 # mac apparently doesn't have the menu key.
