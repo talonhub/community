@@ -170,8 +170,14 @@ def _create_vocabulary_entries(spoken_form, written_form, type):
     """
     entries = {spoken_form: written_form}
     if type == "name":
+        # Note that we use the spoken form without apostrophe because this seems to generally lead
+        # to better recognition on Conformer b108.
         entries[f"{spoken_form}s"] = f"{written_form}'s"
     elif type == "noun":
+        # Note that we simply append an "s", but we could use something more sophisticated like
+        # https://github.com/jpvanhal/inflection. The downside is that this is less predictable,
+        # and this feature is likely to be used in ways that are unlike common English prose, which
+        # is already included in the lexicon. For example, made up identifiers used in programming.
         entries[f"{spoken_form}s"] = f"{written_form}s"
     return entries
 
@@ -203,7 +209,7 @@ def _add_selection_to_csv(
             added_some_phrases = True
     append_to_csv(csv, new_entries)
     if added_some_phrases:
-        actions.app.notify(f'Added to {csv}')
+        actions.app.notify(f'Added to {csv}: {new_entries}')
 
 @mod.action_class
 class Actions:
