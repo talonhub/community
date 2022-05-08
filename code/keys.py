@@ -3,7 +3,9 @@ from typing import Set
 from talon import Module, Context, actions, app
 import sys
 
-default_alphabet = "air bat cap drum each fine gust harp sit jury crunch look made near odd pit quench red sun trap urge vest whale plex yank zip".split(
+# default_alphabet = "air bat cap drum each fine gust harp sit jury crunch look made near odd pit quench red sun trap urge vest whale plex yank zip".split(
+#     " "
+default_alphabet = "air bug cat drum each fly glen harp sit jack kale lime made near oak play quill red sun toast urge vest wind flex why zip".split(
     " "
 )
 letters_string = "abcdefghijklmnopqrstuvwxyz"
@@ -238,6 +240,7 @@ alternate_keys = {
     "page up": "pageup",
     "page down": "pagedown",
     "leave": "escape",
+    "ace": "space",
     # "deli": "backspace",
     
 }
