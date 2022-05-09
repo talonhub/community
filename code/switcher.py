@@ -277,6 +277,7 @@ class Actions:
     def switcher_focus_window(window: ui.Window):
         """Focus window and wait until switch is made"""
         window.focus()
+        window.app.focus()
         t1 = time.monotonic()
         while ui.active_window() != window:
             if time.monotonic() - t1 > 1:
