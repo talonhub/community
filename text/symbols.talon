@@ -8,7 +8,7 @@ triple quote: "'''"
     insert("```")
 (dot dot | dotdot): ".."
 ellipses: "..."
-(comma and | spamma): ", "
+(comma and | spamma | comspace): ", "
 plus: "+"
 arrow: "->"
 dub arrow: "=>"
@@ -74,3 +74,5 @@ quote that:
 (grave | back tick) that:
     text = edit.selected_text()
     user.paste('`{text}`')
+double paren:
+    insert("()")

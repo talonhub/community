@@ -5,7 +5,7 @@ import sys
 
 # default_alphabet = "air bat cap drum each fine gust harp sit jury crunch look made near odd pit quench red sun trap urge vest whale plex yank zip".split(
 #     " "
-default_alphabet = "air bug cat drum each fly glen harp sit jack kale lime made near oak play quill red sun toast urge vest wind flex why zip".split(
+default_alphabet = "air bug corn drum each fly glen harp sit jack kale lime made near oak play quill red sun toast urge vest wind flex why zip".split(
     " "
 )
 letters_string = "abcdefghijklmnopqrstuvwxyz"
@@ -155,7 +155,7 @@ punctuation_words = {
 
     # Currencies
     "dollar sign": "$",
-    "pound sign": "£",
+    # "pound sign": "£",
     "shekel sign": "₪",
 }
 symbol_key_words = {
