@@ -1,8 +1,10 @@
 import logging
-from typing import Dict, Sequence
+import re
+from typing import Dict, Sequence, Tuple, Union
 
 from talon import Context, Module, actions
-from .user_settings import get_list_from_csv
+from talon.grammar import Phrase
+from .user_settings import append_to_csv, get_list_from_csv
 
 mod = Module()
 ctx = Context()
@@ -73,11 +75,12 @@ _default_vocabulary.update({word: word for word in _simple_vocab_default})
 # "user.vocabulary" is used to explicitly add words/phrases that Talon doesn't
 # recognize. Words in user.vocabulary (or other lists and captures) are
 # "command-like" and their recognition is prioritized over ordinary words.
-ctx.lists["user.vocabulary"] = get_list_from_csv(
+vocabulary = get_list_from_csv(
     "additional_words.csv",
     headers=("Word(s)", "Spoken Form (If Different)"),
     default=_default_vocabulary,
 )
+ctx.lists["user.vocabulary"] = vocabulary
 
 class PhraseReplacer:
     """Utility for replacing phrases by other phrases inside text or word lists.
@@ -159,3 +162,77 @@ class OverwrittenActions:
             # fall back to default implementation for error-robustness
             logging.error("phrase replacer failed!")
             return actions.next(words)
+
+def _create_vocabulary_entries(spoken_form, written_form, type):
+    """Expands the provided spoken form and written form into multiple variants based on
+    the provided type, which can be either "name" to add a possessive variant or "noun"
+    to add plural.
+    """
+    entries = {spoken_form: written_form}
+    if type == "name":
+        # Note that we use the spoken form without apostrophe because this seems to generally lead
+        # to better recognition on Conformer b108.
+        entries[f"{spoken_form}s"] = f"{written_form}'s"
+    elif type == "noun":
+        # Note that we simply append an "s", but we could use something more sophisticated like
+        # https://github.com/jpvanhal/inflection. The downside is that this is less predictable,
+        # and this feature is likely to be used in ways that are unlike common English prose, which
+        # is already included in the lexicon. For example, made up identifiers used in programming.
+        entries[f"{spoken_form}s"] = f"{written_form}s"
+    return entries
+
+# See https://github.com/wolfmanstout/talon-vocabulary-editor for an experimental version
+# of this which tests if the default spoken form can be used instead of the provided phrase.
+def _add_selection_to_csv(
+    phrase: Union[Phrase, str],
+    type: str,
+    csv: str,
+    csv_contents: dict[str, str],
+    skip_identical_replacement: bool,
+):
+    written_form = actions.edit.selected_text().strip()
+    if phrase:
+        spoken_form = " ".join(actions.dictate.parse_words(phrase))
+    else:
+        is_acronym = re.fullmatch(r"[A-Z]+", written_form)
+        spoken_form = " ".join(written_form) if is_acronym else written_form
+    entries = _create_vocabulary_entries(spoken_form, written_form, type)
+    new_entries = {}
+    added_some_phrases = False
+    for spoken_form, written_form in entries.items():
+        if skip_identical_replacement and spoken_form == written_form:
+            actions.app.notify(f'Skipping identical replacement: "{spoken_form}"')
+        elif spoken_form in csv_contents:
+            actions.app.notify(f'Spoken form "{spoken_form}" is already in {csv}')
+        else:
+            new_entries[spoken_form] = written_form
+            added_some_phrases = True
+    append_to_csv(csv, new_entries)
+    if added_some_phrases:
+        actions.app.notify(f'Added to {csv}: {new_entries}')
+
+@mod.action_class
+class Actions:
+    def add_selection_to_vocabulary(phrase: Union[Phrase, str] = "", type: str = ""):
+        """Permanently adds the currently selected text to the vocabulary with the provided
+        spoken form and adds variants based on the type ("noun" or "name").
+        """
+        _add_selection_to_csv(
+            phrase,
+            type,
+            "additional_words.csv",
+            vocabulary,
+            False,
+        )
+
+    def add_selection_to_words_to_replace(phrase: Phrase, type: str = ""):
+        """Permanently adds the currently selected text as replacement for the provided
+        original form and adds variants based on the type ("noun" or "name").
+        """
+        _add_selection_to_csv(
+            phrase,
+            type,
+            "words_to_replace.csv",
+            phrases_to_replace,
+            True,
+        )
