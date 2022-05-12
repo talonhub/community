@@ -5,7 +5,7 @@ import sys
 
 # default_alphabet = "air bat cap drum each fine gust harp sit jury crunch look made near odd pit quench red sun trap urge vest whale plex yank zip".split(
 #     " "
-default_alphabet = "air burr corn drum each fly glen harp sit jay key lime made near oak play quill red sun toast ute vest wind flex why zip".split(
+default_alphabet = "air burr corn drum each fly glen harp sit jay key lime made near oak play quill red sun toast ute vest wind flex why zoo".split(
     " "
 )
 letters_string = "abcdefghijklmnopqrstuvwxyz"
@@ -234,7 +234,7 @@ simple_keys = [
 ]
 
 alternate_keys = {
-    "delete": "backspace",
+    # "delete": "backspace",
     "forward delete": "delete",
     'junk': 'backspace',
     "page up": "pageup",

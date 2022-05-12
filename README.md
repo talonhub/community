@@ -162,7 +162,7 @@ https://github.com/knausj85/knausj_talon/blob/master/misc/window_management.talo
 
 `running list` will toggle a GUI list of words you can say to switch to running applications.
 `focus chrome` will focus the chrome application.
-`launch music` will launch the music application. Note this is currently only implemented on Mac OS X.
+`launch music` will 'launch' the music application. Note this is currently only implemented on Mac OS X.
 
 ### Screenshot commands
 
