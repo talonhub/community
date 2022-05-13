@@ -21,6 +21,10 @@ settings():
     # Enable pop click with 'control mouse' mode
     user.mouse_enable_pop_click = 1
 
+    # Enable pop click even if 'control mouse' mode is not enabled and
+    # even if there is no eye tracker present.
+    user.mouse_enable_unconditional_pop_click = 0
+
     # When enabled, the 'Scroll Mouse' GUI will not be shown.
     user.mouse_hide_mouse_gui = 0
 
