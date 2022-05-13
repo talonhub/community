@@ -179,23 +179,19 @@ def stdint_signed(m) -> str:
     return m.stdint_signed
 
 
-# NOTE: we purposely we don't have a space after signed, to faciltate stdint
-# style uint8_t constructions
-@mod.capture(rule="[<self.c_signed>]<self.c_types> [<self.c_pointers>+]")
+@mod.capture(rule="[<self.c_signed>] <self.c_types> [<self.c_pointers>+]")
 def c_cast(m) -> str:
     "Returns a string"
     return "(" + " ".join(list(m)) + ")"
 
 
-# NOTE: we purposely we don't have a space after signed, to faciltate stdint
-# style uint8_t constructions
-@mod.capture(rule="[<self.stdint_signed>]<self.stdint_types> [<self.c_pointers>+]")
+@mod.capture(rule="[<self.stdint_signed>] <self.stdint_types> [<self.c_pointers>+]")
 def c_stdint_cast(m) -> str:
     "Returns a string"
     return "(" + "".join(list(m)) + ")"
 
 
-@mod.capture(rule="[<self.c_signed>]<self.c_types>[<self.c_pointers>]")
+@mod.capture(rule="[<self.c_signed>] <self.c_types> [<self.c_pointers>]")
 def c_variable(m) -> str:
     "Returns a string"
     return " ".join(list(m))
