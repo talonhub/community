@@ -61,6 +61,12 @@ setting_mouse_enable_pop_click = mod.setting(
     default=0,
     desc="Enable pop to click when control mouse is enabled.",
 )
+setting_mouse_enable_unconditional_pop_click = mod.setting(
+    "mouse_enable_unconditional_pop_click",
+    type=int,
+    default=0,
+    desc="Enable pop click even if 'control mouse' mode is not enabled and even if there is no eye tracker present.",
+)
 setting_mouse_enable_pop_stops_scroll = mod.setting(
     "mouse_enable_pop_stops_scroll",
     type=int,
@@ -289,11 +295,12 @@ def on_pop(active):
     if setting_mouse_enable_pop_stops_scroll.get() >= 1 and (gaze_job or scroll_job):
         stop_scroll()
     elif (
-        not eye_zoom_mouse.zoom_mouse.enabled
+        setting_mouse_enable_unconditional_pop_click.get() >= 1 or
+        (not eye_zoom_mouse.zoom_mouse.enabled
         and eye_mouse.mouse.attached_tracker is not None
+        and setting_mouse_enable_pop_click.get() >= 1)
     ):
-        if setting_mouse_enable_pop_click.get() >= 1:
-            ctrl.mouse_click(button=0, hold=16000)
+        ctrl.mouse_click(button=0, hold=16000)
 
 
 noise.register("pop", on_pop)
