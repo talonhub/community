@@ -212,7 +212,10 @@ class Actions:
         """Inserts a phrase formatted according to formatters. Formatters is a comma separated list of formatters (e.g. 'CAPITALIZE_ALL_WORDS,DOUBLE_QUOTED_STRING')"""
         actions.insert(format_phrase(phrase, formatters))
 
-
+    def insert_with_history(text: str):
+        """Inserts some text, remembering it in the phrase history."""
+        actions.user.add_phrase_to_history(text)
+        actions.insert(text)
 
     def formatters_reformat_last(formatters: str) -> str:
         """Clears and reformats last formatted phrase"""
