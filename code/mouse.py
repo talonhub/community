@@ -121,8 +121,9 @@ class Actions:
 
     def mouse_wake():
         """Enable control mouse, zoom mouse, and disables cursor"""
-        eye_zoom_mouse.toggle_zoom_mouse(True)
+        # eye_zoom_mouse.toggle_zoom_mouse(True)
         # eye_mouse.control_mouse.enable()
+        eye_mouse.toggle_control(True)
         if setting_mouse_wake_hides_cursor.get() >= 1:
             show_cursor_helper(False)
 
