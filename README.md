@@ -301,6 +301,7 @@ The most commonly adjusted settings are probably
 
 • `user.mouse_wheel_down_amount` and `user.mouse_continuous_scroll_amount` for adjusting the scroll amounts for the various scroll commands.
 
+Also, you can add additional vocabulary words, words to replace, search engines and more. Complete the knausj_talon setup instructions above, then open the `settings` folder to see the provided CSV files and customize them as needed.
 
 # Collaborators
 
