@@ -5,7 +5,7 @@ mode: command
 next match: key(enter)
 previous match: key(shift-enter)
 
-save file: key(ctrl-s)
+file close: key(ctrl-f4)
 
 (find file | hunt file): key(ctrl-p)
 
