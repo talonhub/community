@@ -111,6 +111,11 @@ def gui_wheel(gui: imgui.GUI):
 
 @mod.action_class
 class Actions:
+    
+    def toggle_hiss_click():
+        """Toggles hiss left mouse click"""
+        toggle_control(setting_mouse_enable_pop_click)
+
     def mouse_show_cursor():
         """Shows the cursor"""
         show_cursor_helper(True)

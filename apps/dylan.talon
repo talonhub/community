@@ -11,6 +11,20 @@ deep: key("ctrl-cmd-t")
     mouse_click()
 	  mouse_click()
 
+# Insane Click Into
+(deepest | dive in):
+    key("cmd")
+    mouse_click()
+    mouse_click()
+    mouse_click()
+    mouse_click()
+    mouse_click()
+    mouse_click()
+    mouse_click()
+    mouse_click()
+    mouse_click()
+    mouse_click()
+
 # Triple click
 flock:
     mouse_click()
@@ -113,6 +127,13 @@ lose <user.text>:
     sleep(200ms)
     insert(user.formatted_text(text, "CAPITALIZE_ALL_WORDS"))
 
+sent <user.text>:
+    edit.select_all()
+    edit.delete()
+    sleep(200ms)
+    insert(user.formatted_text(text, "CAPITALIZE_FIRST_WORD"))
+
+
 # Click into, select all, clear and Replace with Titles 
 blew <user.text>:
   mouse_click(0)
@@ -159,7 +180,7 @@ stick:
     key("shift:up")
 
 # Command individual select objects and open link new tab
-(strike | linker):
+(strike | linker | link new):
     key("cmd:down")
     mouse_click(0)
     key("cmd:up")
@@ -179,6 +200,10 @@ dellz [<number>]:
 sequel: " = "
 quit this: key("cmd-q")
 
+# Emoji
+emoji:
+  key("cmd-ctrl-space")
+  
 # Open slack and go to all unreads
 slack unread: key(cmd-alt-2)
 

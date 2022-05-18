@@ -15,6 +15,10 @@ set (down | bottom): user.figma_set_bottom()
 set (center | horizontal): user.figma_set_horizontal()
 set (mid | middle | vertical): user.figma_set_vertical()
 
+center it:
+    user.figma_set_horizontal()
+    user.figma_set_vertical()
+
 text center: user.figma_text_center()
 text left: user.figma_text_left()
 text right: user.figma_text_right()
@@ -82,7 +86,7 @@ fee: user.figma_find_next_frame()
 
 place image: user.figma_place_image()
 paste here: user.figma_paste_here()
-place here: user.figma_paste_replace()
+place it: user.figma_paste_replace()
 deep: user.figma_deep_select()
 (layer menu | laymen): user.figma_layer_menu_select()
 
@@ -132,3 +136,28 @@ flip (up | down):
 
 flip (left | right):
     key("shift-h")
+
+# Lock and Unlock
+(lock | unlock):
+    key("cmd-shift-l")
+
+lip sum:
+    insert("lorem1")
+    key("space")
+
+# Outlines
+outlines:
+    key("shift-o")
+
+# Auto Layout Spacing - Drag
+auto side:
+    key(alt:down)
+    mouse_drag(0)
+    sleep(3500ms)
+    key(alt:up)
+
+auto all:
+    key(alt-shift:down)
+    mouse_drag(0)
+    sleep(3500ms)
+    key(alt-shift:up)
