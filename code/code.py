@@ -27,6 +27,7 @@ language_extensions = {
     # 'lua': 'lua',
     'markdown': 'md',
     # 'perl': 'pl',
+    'php': 'php',
     # 'powershell': 'ps1',
     'python': 'py',
     'protobuf': 'proto',

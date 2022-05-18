@@ -67,6 +67,8 @@ class Actions:
 @imgui.open()
 def gui(gui: imgui.GUI):
     gui.text("Recent phrases")
+    gui.text("Say 'recent repeat <number>' retype a phrase on this list.")
+    gui.text("Say 'recent copy <number>' to copy a phrase from this list.")
     gui.line()
     for index, text in enumerate(phrase_history[:phrase_history_display_length], 1):
         gui.text(f"{index}: {text}")
