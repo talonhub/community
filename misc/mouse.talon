@@ -51,7 +51,7 @@ midclick:
 	mouse_click()
 	# close the mouse grid
 	user.grid_close()
-left drag | drag:
+left drag | drag on:
 	user.mouse_drag(0)
 	# close the mouse grid
 	user.grid_close()
