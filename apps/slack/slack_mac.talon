@@ -1,8 +1,8 @@
-os: mac
-app: slack
 -
 tag(): user.messaging
 #settings(): speech._subtitles = 0
+
+next unread: key(shift-alt-down)
 
 # Workspace
 workspace <number>: key("cmd-{number}")
