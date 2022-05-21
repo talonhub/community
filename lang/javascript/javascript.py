@@ -9,6 +9,7 @@ tag: user.javascript
 ctx.lists["user.code_common_function"] = {
     "abs": "Math.abs",
     "entries": "Object.entries",
+    "fetch": "fetch",
     "floor": "Math.floor",
     "from entries": "Object.fromEntries",
     "keys": "Object.keys",
