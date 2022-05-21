@@ -23,7 +23,7 @@ ctx.lists["user.code_common_function"] = {
 
 mod.list("code_chain_function", "Function to use in a dotted chain, eg .foo()")
 
-ctx.lists["user.code_chain_function"] = {
+ctx.lists["user.code_common_member_function"] = {
     "concat": "concat",
     "filter": "filter",
     "find": "find",

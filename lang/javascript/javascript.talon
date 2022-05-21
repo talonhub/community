@@ -40,12 +40,12 @@ state async: "async "
 
 state await: "await "
 
-dot {user.code_chain_function}:
-    user.insert_between(".{code_chain_function}(", ")")
+dot {user.code_common_member_function}:
+    user.insert_between(".{code_common_member_function}(", ")")
 
-state map: app.notify('ERROR: Command deprecated; please use "chain map"')
-state filter: app.notify('ERROR: Command deprecated; please use "chain filter"')
-state reduce: app.notify('ERROR: Command deprecated; please use "chain reduce"')
+state map: app.notify('ERROR: Command deprecated; please use "dot map"')
+state filter: app.notify('ERROR: Command deprecated; please use "dot filter"')
+state reduce: app.notify('ERROR: Command deprecated; please use "dot reduce"')
 
 state spread: "..."
 
