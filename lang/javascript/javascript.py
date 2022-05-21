@@ -9,7 +9,6 @@ tag: user.javascript
 ctx.lists["user.code_common_function"] = {
     "abs": "Math.abs",
     "entries": "Object.entries",
-    "flatten": "flatten",
     "floor": "Math.floor",
     "from entries": "Object.fromEntries",
     "keys": "Object.keys",
@@ -24,8 +23,10 @@ ctx.lists["user.code_common_function"] = {
 mod.list("code_common_member_function", "Function to use in a dotted chain, eg .foo()")
 
 ctx.lists["user.code_common_member_function"] = {
+    "catch": "catch",
     "concat": "concat",
     "filter": "filter",
+    "finally": "finally",
     "find": "find",
     "flat map": "flatMap",
     "for each": "forEach",
