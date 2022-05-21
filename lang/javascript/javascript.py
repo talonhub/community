@@ -31,6 +31,7 @@ ctx.lists["user.code_common_member_function"] = {
     "find": "find",
     "flat map": "flatMap",
     "for each": "forEach",
+    "join": "join",
     "includes": "includes",
     "map": "map",
     "pop": "pop",
