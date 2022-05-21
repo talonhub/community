@@ -40,7 +40,7 @@ state async: "async "
 
 state await: "await "
 
-chain {user.code_chain_function}:
+dot {user.code_chain_function}:
     user.insert_between(".{code_chain_function}(", ")")
 
 state map: app.notify('ERROR: Command deprecated; please use "chain map"')
