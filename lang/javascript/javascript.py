@@ -21,7 +21,7 @@ ctx.lists["user.code_common_function"] = {
     "values": "Object.values",
 }
 
-mod.list("code_chain_function", "Function to use in a dotted chain, eg .foo()")
+mod.list("code_common_member_function", "Function to use in a dotted chain, eg .foo()")
 
 ctx.lists["user.code_common_member_function"] = {
     "concat": "concat",
