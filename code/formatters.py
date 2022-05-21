@@ -124,7 +124,7 @@ formatters_dict = {
 
 # This is the mapping from spoken phrases to formatters
 formatters_words = {
-    "all caps": formatters_dict["ALL_CAPS"],
+    "all cap": formatters_dict["ALL_CAPS"],
     "all down": formatters_dict["ALL_LOWERCASE"],
     "camel": formatters_dict["PRIVATE_CAMEL_CASE"],
     "dotted": formatters_dict["DOT_SEPARATED"],
