@@ -36,5 +36,7 @@ key(shift-ctrl-alt-q):
 ^talon wake$:
     speech.enable()
     user.mouse_wake()
-
-
+^mouse wake$:
+    user.mouse_toggle_control_mouse()
+key(shift-ctrl-alt-w):
+    user.mouse_toggle_control_mouse()
