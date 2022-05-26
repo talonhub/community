@@ -1,7 +1,7 @@
 import csv
 import os
 from pathlib import Path
-from typing import Dict, List, Tuple
+from typing import Dict, Tuple
 from talon import resource
 
 # NOTE: This method requires this module to be one folder below the top-level
@@ -58,3 +58,19 @@ def get_list_from_csv(
             mapping[spoken_form] = output
 
     return mapping
+
+def append_to_csv(filename: str, rows: Dict[str, str]):
+    path = SETTINGS_DIR / filename
+    assert filename.endswith(".csv")
+
+    with open(str(path), "r") as file:
+        line = None
+        for line in file:
+            pass
+        needs_newline = line is not None and not line.endswith("\n")
+    with open(path, "a", encoding="utf-8", newline="") as file:
+        writer = csv.writer(file)
+        if needs_newline:
+            writer.writerow([])
+        for key, value in rows.items():
+            writer.writerow([key] if key == value else [value, key])

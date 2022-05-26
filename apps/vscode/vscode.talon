@@ -61,6 +61,7 @@ file hunt [<user.text>]:
     sleep(50ms)
     insert(text or "")
 file copy path: user.vscode("copyFilePath")
+file copy local [path]: user.vscode("copyRelativeFilePath")
 file create sibling: user.vscode_and_wait("explorer.newFile")
 file create: user.vscode("workbench.action.files.newUntitledFile")
 file rename:
@@ -68,6 +69,12 @@ file rename:
     sleep(150ms)
 file move:
     user.vscode("fileutils.moveFile")
+    sleep(150ms)
+file clone:
+	  user.vscode("fileutils.duplicateFile")
+	  sleep(150ms)
+file delete:
+    user.vscode("fileutils.removeFile")
     sleep(150ms)
 file open folder: user.vscode("revealFileInOS")
 file reveal: user.vscode("workbench.files.action.showActiveFileInExplorer")
@@ -114,6 +121,11 @@ toggle mark: user.vscode("bookmarks.toggle")
 go next mark: user.vscode("bookmarks.jumpToNext")
 go last mark: user.vscode("bookmarks.jumpToPrevious")
 
+close other tabs: user.vscode("workbench.action.closeOtherEditors")
+close all tabs: user.vscode("workbench.action.closeAllEditors")
+close tabs way right: user.vscode("workbench.action.closeEditorsToTheRight")
+close tabs way left: user.vscode("workbench.action.closeEditorsToTheLeft")
+
 # Folding
 fold that: user.vscode("editor.fold")
 unfold that: user.vscode("editor.unfold")
@@ -122,6 +134,13 @@ unfold those: user.vscode("editor.unfoldRecursively")
 fold all: user.vscode("editor.foldAll")
 unfold all: user.vscode("editor.unfoldAll")
 fold comments: user.vscode("editor.foldAllBlockComments")
+fold one: user.vscode("editor.foldLevel1")
+fold two: user.vscode("editor.foldLevel2")
+fold three: user.vscode("editor.foldLevel3")
+fold four: user.vscode("editor.foldLevel4")
+fold five: user.vscode("editor.foldLevel5")
+fold six: user.vscode("editor.foldLevel6")
+fold seven: user.vscode("editor.foldLevel7")
 
 # Git / Github (not using verb-noun-adjective pattern, mirroring terminal commands.)
 git branch: user.vscode("git.branchFrom")
@@ -198,6 +217,10 @@ select (more|this): user.vscode("editor.action.smartSelect.expand")
 minimap: user.vscode("editor.action.toggleMinimap")
 maximize: user.vscode("workbench.action.minimizeOtherEditors")
 restore: user.vscode("workbench.action.evenEditorWidths")
+
+#breadcrumb
+select breadcrumb: user.vscode('breadcrumbs.focusAndSelect')
+# Use `alt-left` and `alt-right` to navigate the bread crumb
 
 replace here:
     user.replace("")
