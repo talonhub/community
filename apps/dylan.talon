@@ -180,7 +180,7 @@ stick:
     key("shift:up")
 
 # Command individual select objects and open link new tab
-(strike | linker | link new):
+(strike | linker | link new | lynx):
     key("cmd:down")
     mouse_click(0)
     key("cmd:up")
@@ -231,6 +231,13 @@ dag:
 
 # Add an asterik with a space
 spaz: " *"
+
+# Add an ... with a space
+three dot: " ..."
+
+# Add an > with a space between
+nex: " > "
+
 
 # Webflow
 quickie: key("cmd-k")
