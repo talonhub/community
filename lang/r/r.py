@@ -90,6 +90,7 @@ ctx.lists["user.code_functions"] = {
     "starts with": "starts_with",
     "summarise": "summarise",
     "tibble": "tibble",
+    "tribble": "tribble",
     "ungroup": "ungroup",
     # ggplot2
     "coord cartesian": "coor_cartesian",
