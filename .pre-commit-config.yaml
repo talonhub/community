@@ -7,3 +7,13 @@ repos:
       - id: trailing-whitespace
       - id: end-of-file-fixer
       - id: check-merge-conflict
+  - repo: https://github.com/ikamensh/flynt/
+    rev: "0.76"
+    hooks:
+      - id: flynt
+  - repo: https://github.com/Zac-HD/shed
+    rev: 0.9.5
+    hooks:
+      - id: shed
+        args: [--refactor, --py39-plus]
+        types_or: [python, markdown, rst]
