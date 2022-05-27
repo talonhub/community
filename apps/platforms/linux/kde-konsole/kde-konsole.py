@@ -5,15 +5,17 @@ ctx.matches = r"""
 app.name: konsole
 """
 
+
 @ctx.action_class("user")
 class user_actions:
 
     # tabs-tag functions implementations
     def tab_jump(number):
-        actions.key("alt-{}".format(number))
+        actions.key(f"alt-{number}")
 
     # tab_final is not supported by konsole by default
     # but short cut can be configured
+
 
 @ctx.action_class("app")
 class app_actions:
@@ -36,21 +38,26 @@ class app_actions:
         actions.app.notify("tab reopen is not possible in kde konsole")
 
     def window_open():
-        actions.key('ctrl-shift-n')
+        actions.key("ctrl-shift-n")
+
 
 # this overwrites the unfitting parts of linux/edit.py
-@ctx.action_class('edit')
+@ctx.action_class("edit")
 class EditActions:
     def page_down():
-        actions.key('shift-pagedown')
+        actions.key("shift-pagedown")
+
     def page_up():
-        actions.key('shift-pageup')
+        actions.key("shift-pageup")
+
     def paste():
-        actions.key('ctrl-shift-v')
+        actions.key("ctrl-shift-v")
+
     def copy():
-        actions.key('ctrl-shift-c')
+        actions.key("ctrl-shift-c")
+
     def find(text: str):
-        actions.key('ctrl-shift-f')
+        actions.key("ctrl-shift-f")
         if str:
             actions.insert(text)
 

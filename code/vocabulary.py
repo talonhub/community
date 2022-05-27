@@ -1,9 +1,10 @@
 import logging
 import re
-from typing import Dict, Sequence, Tuple, Union
+from typing import Sequence, Union
 
 from talon import Context, Module, actions
 from talon.grammar import Phrase
+
 from .user_settings import append_to_csv, get_list_from_csv
 
 mod = Module()
@@ -28,7 +29,7 @@ _capitalize_defaults = [
     # May omitted because it's a regular word too
     "June",
     "July",
-    "August", # technically also an adjective but the month is far more common
+    "August",  # technically also an adjective but the month is far more common
     "September",
     "October",
     "November",
@@ -51,7 +52,7 @@ _word_map_defaults.update({word.lower(): word for word in _capitalize_defaults})
 phrases_to_replace = get_list_from_csv(
     "words_to_replace.csv",
     headers=("Replacement", "Original"),
-    default=_word_map_defaults
+    default=_word_map_defaults,
 )
 
 # "dictate.word_map" is used by Talon's built-in default implementation of
@@ -82,6 +83,7 @@ vocabulary = get_list_from_csv(
 )
 ctx.lists["user.vocabulary"] = vocabulary
 
+
 class PhraseReplacer:
     """Utility for replacing phrases by other phrases inside text or word lists.
 
@@ -91,27 +93,30 @@ class PhraseReplacer:
       - phrase_dict: dictionary mapping recognized/spoken forms to written forms
     """
 
-    def __init__(self, phrase_dict: Dict[str, str]):
+    def __init__(self, phrase_dict: dict[str, str]):
         # Index phrases by first word, then number of subsequent words n_next
         phrase_index = dict()
         for spoken_form, written_form in phrase_dict.items():
             words = spoken_form.split()
             if not words:
-                logging.warning("Found empty spoken form for written form"
-                                f"{written_form}, ignored")
+                logging.warning(
+                    "Found empty spoken form for written form"
+                    f"{written_form}, ignored"
+                )
                 continue
             first_word, n_next = words[0], len(words) - 1
-            phrase_index.setdefault(first_word, {}) \
-                        .setdefault(n_next, {})[tuple(words[1:])] = written_form
+            phrase_index.setdefault(first_word, {}).setdefault(n_next, {})[
+                tuple(words[1:])
+            ] = written_form
 
         # Sort n_next index so longer phrases have priority
         self.phrase_index = {
-            first_word: list(sorted(same_first_word.items(), key=lambda x: -x[0]))
+            first_word: sorted(same_first_word.items(), key=lambda x: -x[0])
             for first_word, same_first_word in phrase_index.items()
         }
 
     def replace(self, input_words: Sequence[str]) -> Sequence[str]:
-        input_words = tuple(input_words) # tuple to ensure hashability of slices
+        input_words = tuple(input_words)  # tuple to ensure hashability of slices
         output_words = []
         first_word_i = 0
         while first_word_i < len(input_words):
@@ -134,26 +139,30 @@ class PhraseReplacer:
 
     # Wrapper used for testing.
     def replace_string(self, text: str) -> str:
-        return ' '.join(self.replace(text.split()))
+        return " ".join(self.replace(text.split()))
+
 
 # Unit tests for PhraseReplacer
-rep = PhraseReplacer({
-    'this': 'foo',
-    'that': 'bar',
-    'this is': 'stopping early',
-    'this is a test': 'it worked!',
-})
-assert rep.replace_string('gnork') == 'gnork'
-assert rep.replace_string('this') == 'foo'
-assert rep.replace_string('this that this') == 'foo bar foo'
-assert rep.replace_string('this is a test') == 'it worked!'
-assert rep.replace_string('well this is a test really') == 'well it worked! really'
-assert rep.replace_string('try this is too') == 'try stopping early too'
-assert rep.replace_string('this is a tricky one') == 'stopping early a tricky one'
+rep = PhraseReplacer(
+    {
+        "this": "foo",
+        "that": "bar",
+        "this is": "stopping early",
+        "this is a test": "it worked!",
+    }
+)
+assert rep.replace_string("gnork") == "gnork"
+assert rep.replace_string("this") == "foo"
+assert rep.replace_string("this that this") == "foo bar foo"
+assert rep.replace_string("this is a test") == "it worked!"
+assert rep.replace_string("well this is a test really") == "well it worked! really"
+assert rep.replace_string("try this is too") == "try stopping early too"
+assert rep.replace_string("this is a tricky one") == "stopping early a tricky one"
 
 phrase_replacer = PhraseReplacer(phrases_to_replace)
 
-@ctx.action_class('dictate')
+
+@ctx.action_class("dictate")
 class OverwrittenActions:
     def replace_words(words: Sequence[str]) -> Sequence[str]:
         try:
@@ -162,6 +171,7 @@ class OverwrittenActions:
             # fall back to default implementation for error-robustness
             logging.error("phrase replacer failed!")
             return actions.next(words)
+
 
 def _create_vocabulary_entries(spoken_form, written_form, type):
     """Expands the provided spoken form and written form into multiple variants based on
@@ -180,6 +190,7 @@ def _create_vocabulary_entries(spoken_form, written_form, type):
         # is already included in the lexicon. For example, made up identifiers used in programming.
         entries[f"{spoken_form}s"] = f"{written_form}s"
     return entries
+
 
 # See https://github.com/wolfmanstout/talon-vocabulary-editor for an experimental version
 # of this which tests if the default spoken form can be used instead of the provided phrase.
@@ -209,7 +220,8 @@ def _add_selection_to_csv(
             added_some_phrases = True
     append_to_csv(csv, new_entries)
     if added_some_phrases:
-        actions.app.notify(f'Added to {csv}: {new_entries}')
+        actions.app.notify(f"Added to {csv}: {new_entries}")
+
 
 @mod.action_class
 class Actions:

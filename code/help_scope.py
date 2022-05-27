@@ -1,4 +1,4 @@
-from talon import Module, actions, imgui, Module, scope, ui
+from talon import Module, actions, imgui, scope, ui
 
 mod = Module()
 mod.mode("help_scope", "Mode for showing the scope help gui")

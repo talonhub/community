@@ -1,16 +1,6 @@
 import os
 
-from talon import (
-    Module,
-    actions,
-    app,
-    clip,
-    cron,
-    ctrl,
-    imgui,
-    noise,
-    ui,
-)
+from talon import Module, actions, app, clip, cron, ctrl, imgui, noise, ui
 from talon_plugins import eye_mouse, eye_zoom_mouse
 from talon_plugins.eye_mouse import config, toggle_camera_overlay, toggle_control
 
@@ -103,7 +93,7 @@ continuous_scoll_mode = ""
 
 @imgui.open(x=700, y=0)
 def gui_wheel(gui: imgui.GUI):
-    gui.text("Scroll mode: {}".format(continuous_scoll_mode))
+    gui.text(f"Scroll mode: {continuous_scoll_mode}")
     gui.line()
     if gui.button("Wheel Stop [stop scrolling]"):
         actions.user.mouse_scroll_stop()
@@ -164,7 +154,7 @@ class Actions:
         ctrl.mouse_click(button=button, down=True)
 
     def mouse_drag_end():
-        """ Releases any held mouse buttons """
+        """Releases any held mouse buttons"""
         buttons_held_down = list(ctrl.mouse_buttons_down())
         for button in buttons_held_down:
             ctrl.mouse_click(button=button, up=True)
@@ -242,7 +232,7 @@ class Actions:
     def copy_mouse_position():
         """Copy the current mouse position coordinates"""
         position = ctrl.mouse_pos()
-        clip.set_text((repr(position)))
+        clip.set_text(repr(position))
 
     def mouse_move_center_active_window():
         """move the mouse cursor to the center of the currently active window"""
@@ -279,8 +269,8 @@ def show_cursor_helper(show):
                 win32con.SPI_SETCURSORS, 0, None, 0
             )
 
-        except WindowsError:
-            print("Unable to show_cursor({})".format(str(show)))
+        except OSError:
+            print(f"Unable to show_cursor({str(show)})")
     else:
         ctrl.cursor_visible(show)
 

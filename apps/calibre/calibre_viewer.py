@@ -1,4 +1,4 @@
-from talon import Module, Context, actions
+from talon import Context, Module, actions
 
 # --- App definition ---
 mod = Module()
@@ -22,9 +22,18 @@ app: calibre_viewer
 @ctx.action_class("user")
 class UserActions:
     # user.pages
-    def page_next(): actions.key("pagedown")
-    def page_previous(): actions.key("pageup")
-    def page_final(): actions.key("ctrl-end")
+    def page_next():
+        actions.key("pagedown")
+
+    def page_previous():
+        actions.key("pageup")
+
+    def page_final():
+        actions.key("ctrl-end")
+
     # user.chapters
-    def chapter_next(): actions.key("ctrl-pagedown")
-    def chapter_previous(): actions.key("ctrl-pageup")
+    def chapter_next():
+        actions.key("ctrl-pagedown")
+
+    def chapter_previous():
+        actions.key("ctrl-pageup")

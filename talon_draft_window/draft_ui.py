@@ -1,15 +1,16 @@
-from typing import Optional
 import re
+from typing import Optional
 
 from talon.experimental.textarea import (
-    TextArea,
-    Span,
     DarkThemeLabels,
-    LightThemeLabels
+    LightThemeLabels,
+    Span,
+    TextArea,
 )
 
-
 word_matcher = re.compile(r"([^\s]+)(\s*)")
+
+
 def calculate_text_anchors(text, cursor_position, anchor_labels=None):
     """
     Produces an iterator of (anchor, start_word_index, end_word_index, last_space_index)
@@ -34,11 +35,7 @@ def calculate_text_anchors(text, cursor_position, anchor_labels=None):
     matches = []
     cursor_idx = None
     for match in word_matcher.finditer(text):
-        matches.append((
-            match.start(),
-            match.end() - len(match.group(2)),
-            match.end()
-        ))
+        matches.append((match.start(), match.end() - len(match.group(2)), match.end()))
         if matches[-1][0] <= cursor_position and matches[-1][2] >= cursor_position:
             cursor_idx = len(matches) - 1
 
@@ -53,12 +50,7 @@ def calculate_text_anchors(text, cursor_position, anchor_labels=None):
     # Now add anchors to the selected matches
     for i, anchor in zip(range(anchor_start_idx, anchor_end_idx), anchor_labels):
         word_start, word_end, whitespace_end = matches[i]
-        yield (
-            anchor,
-            word_start,
-            word_end,
-            whitespace_end
-        )
+        yield (anchor, word_start, word_end, whitespace_end)
 
 
 class DraftManager:
@@ -73,13 +65,7 @@ class DraftManager:
         self.area.register("label", self._update_labels)
         self.set_styling()
 
-    def set_styling(
-        self,
-        theme="dark",
-        text_size=20,
-        label_size=20,
-        label_color=None
-    ):
+    def set_styling(self, theme="dark", text_size=20, label_size=20, label_color=None):
         """
         Allow settings the style of the draft window. Will dynamically
         update the style based on the passed in parameters.
@@ -180,7 +166,9 @@ class DraftManager:
         self.area.sel = index
 
     def anchor_to_range(self, anchor):
-        anchors_data = calculate_text_anchors(self._get_visible_text(), self.area.sel.left)
+        anchors_data = calculate_text_anchors(
+            self._get_visible_text(), self.area.sel.left
+        )
         for loop_anchor, start_index, end_index, last_space_index in anchors_data:
             if anchor == loop_anchor:
                 return (start_index, end_index, last_space_index)
@@ -192,7 +180,9 @@ class DraftManager:
         Updates the position of the labels displayed on top of each word
         """
 
-        anchors_data = calculate_text_anchors(self._get_visible_text(), self.area.sel.left)
+        anchors_data = calculate_text_anchors(
+            self._get_visible_text(), self.area.sel.left
+        )
         return [
             (Span(start_index, end_index), anchor)
             for anchor, start_index, end_index, _ in anchors_data

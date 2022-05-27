@@ -1,6 +1,6 @@
-from talon import Context, Module, actions, imgui, settings, ui, app
-
 import os
+
+from talon import Context, Module, actions, app, ui
 
 mod = Module()
 apps = mod.apps
