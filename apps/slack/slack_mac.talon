@@ -2,7 +2,7 @@
 tag(): user.messaging
 #settings(): speech._subtitles = 0
 
-next unread: key(shift-alt-down)
+go unread: key(shift-alt-down)
 
 # Workspace
 workspace <number>: key("cmd-{number}")
@@ -16,8 +16,6 @@ workspace <number>: key("cmd-{number}")
 (slack | lack) threads: key(cmd-shift-t)
 (slack | lack) (history [next] | back | backward): key(cmd-[)
 (slack | lack) forward: key(cmd-])
-[next] (element | bit): key(tab)
-(previous | last) (element | bit): key(shift-tab)
 (slack | lack) (my stuff | activity): key(cmd-shift-m)
 (slack | lack) directory: key(cmd-shift-e)
 (slack | lack) (starred [items] | stars): key(cmd-shift-s)
