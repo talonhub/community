@@ -140,7 +140,7 @@ punctuation_words = {
     "grave": "`",
     "comma": ",",
     "period": ".",
-    "full stop": ".",
+    #"full stop": ".",
     "semicolon": ";",
     "colon": ":",
     "forward slash": "/",
