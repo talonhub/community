@@ -118,7 +118,7 @@ modifier_keys = {
     # If you find 'alt' is often misrecognized, try using 'alter'.
     "alt": "alt",  #'alter': 'alt',
     "control": "ctrl",  
-    'troll':   'ctrl',
+    #'troll':   'ctrl',
     "super": "super",
     "shift": "shift" ## added EH
 }
