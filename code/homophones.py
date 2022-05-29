@@ -36,10 +36,13 @@ def update_homophones(name, flags):
         for line in f:
             words = line.rstrip().split(",")
             canonical_list.append(words[0])
+            merged_words = set(words)
             for word in words:
-                word = word.lower()
-                old_words = phones.get(word, [])
-                phones[word] = sorted(set(old_words + words))
+                old_words = phones.get(word.lower(), [])
+                merged_words.update(old_words)
+            merged_words = sorted(merged_words)
+            for word in merged_words:
+                phones[word.lower()] = merged_words
 
     global all_homophones
     all_homophones = phones
