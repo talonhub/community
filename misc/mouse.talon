@@ -2,7 +2,7 @@ control mouse: user.mouse_toggle_control_mouse()
 zoom mouse: user.mouse_toggle_zoom_mouse()
 camera overlay: user.mouse_toggle_camera_overlay()
 run calibration: user.mouse_calibrate()	
-touch: 
+touchy: 
 	mouse_click(0)
 	# close the mouse grid if open
 	user.grid_close()
@@ -17,7 +17,7 @@ midclick:
 	# close the mouse grid
 	user.grid_close()
 # oh:
-#     user.mouse_trigger_zoom_mouse()
+    # user.mouse_trigger_zoom_mouse()
 
 #see keys.py for modifiers.
 #defaults
@@ -53,7 +53,7 @@ midclick:
 # 	user.mouse_drag()
 # 	# close the mouse grid
 # 	user.grid_close()
-# wheel down: user.mouse_scroll_down()
+wheel down: user.mouse_scroll_down()
 # wheel down here:
 #     user.mouse_move_center_active_window()
 #     user.mouse_scroll_down()
@@ -61,7 +61,7 @@ midclick:
 # wheel tiny [down] here:
 #     user.mouse_move_center_active_window()
 #     mouse_scroll(20)
-# wheel downer: user.mouse_scroll_down_continuous()
+wheel downer: user.mouse_scroll_down_continuous()
 # wheel downer here:
 #     user.mouse_move_center_active_window()
 #     user.mouse_scroll_down_continuous()
@@ -100,6 +100,8 @@ midclick:
 # wheel tiny right here:
 #     user.mouse_move_center_active_window()
 #     mouse_scroll(0, 20)
+wheel center:
+    user.mouse_move_center_active_window()
 # curse yes: user.mouse_show_cursor()
 # curse no: user.mouse_hide_cursor()
 # copy mouse position: user.copy_mouse_position()

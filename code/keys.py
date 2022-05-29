@@ -3,7 +3,7 @@ from typing import Set
 from talon import Module, Context, actions, app
 import sys
 
-default_alphabet = "air bat cup dish edge fun gust hope ink jury crunch look man nap out pit quench race soft trap ush vice wife flex yet zip".split(
+default_alphabet = "aim best cup dish edge fun gust hot ink jury crunch look man nap oust pit quench rush soft trap urge vice wife flex yet zip".split(
     " "
 )
 letters_string = "abcdefghijklmnopqrstuvwxyz"
@@ -113,13 +113,13 @@ def letters(m) -> str:
 ctx = Context()
 modifier_keys = {
     # If you find 'alt' is often misrecognized, try using 'alter'.
-    "alt": "alt",  #'alter': 'alt',
+    # "alter": "alt",  #'alter': 'alt',
     "control": "ctrl",  #'troll':   'ctrl',
     "shift": "shift",  #'sky':     'shift',
     "super": "super",
 }
 if app.platform == "mac":
-    # modifier_keys["command"] = "cmd"
+    modifier_keys["commando"] = "cmd"
     modifier_keys["option"] = "alt"
 ctx.lists["self.modifier_key"] = modifier_keys
 alphabet = dict(zip(default_alphabet, letters_string))
@@ -137,14 +137,14 @@ punctuation_words = {
     "comma": ",",
     "period": ".",
     "semicolon": ";",
-    "colo": ":",
+    "sym colon": ":",
     "forward slash": "/",
     "question mark": "?",
     "exclamation mark": "!",
     "exclamation point": "!",
     "dollar sign": "$",
     "asterisk": "*",
-    "hash sign": "#",
+    "sym hash": "#",
     "number sign": "#",
     "percent sign": "%",
     "at sign": "@",
@@ -162,13 +162,13 @@ symbol_key_words = {
     "slash": "/",
     "backslash": "\\",
     "minus": "-",
-    "dash": "-",
+    # "dash": "-",
     "equals": "=",
-    "plus": "+",
+    "sym plus": "+",
     "tilde": "~",
     "exclaim": "!",
     "semicolon": ";",
-    "dollar": "$",
+    "sym dollar": "$",
     "down score": "_",
     "under score": "_",
     "paren": "(",
@@ -176,7 +176,7 @@ symbol_key_words = {
     "left paren": "(",
     "R paren": ")",
     "right paren": ")",
-    "brace": "{",
+    "sym brace": "{",
     "left brace": "{",
     "R brace": "}",
     "right brace": "}",
@@ -187,12 +187,12 @@ symbol_key_words = {
     "R angle": ">",
     "right angle": ">",
     "greater than": ">",
-    "star": "*",
-    "pound": "#",
+    "sym star": "*",
+    "sym pound": "#",
     "hashtag": "#",
     "percent": "%",
     # "caret": "^",
-    "amper": "&",
+    "sym amper": "&",
     "pipe": "|",
     "solo quote": "'",
 }
@@ -204,15 +204,15 @@ ctx.lists["self.symbol_key"] = symbol_key_words
 ctx.lists["self.number_key"] = dict(zip(default_digits, numbers))
 
 ctx.lists["self.arrow_key"] = {
-    "down": "down",
+    "down": "",
     "left": "left",
     "right": "right",
     "up": "up",
 }
 
 simple_keys = [
-    "end",
-    # "enter",
+    # "end",
+    "enter",
     "escape",
     "home",
     # "insert",
@@ -224,6 +224,7 @@ simple_keys = [
 
 alternate_keys = {
     "delete": "backspace",
+    "backspace": "backspace",
     "forward delete": "delete",
     #'junk': 'backspace',
     "page up": "pageup",

@@ -22,3 +22,11 @@ class Actions:
     def fuzzy_file():
         """."""
         pass
+
+    def fzf_cd_directory_single_level():
+        """."""
+        actions.key("cmd-g")
+
+    def fzf_cd_directory_multi_level():
+        """."""
+        actions.key("cmd-d")

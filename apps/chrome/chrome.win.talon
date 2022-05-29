@@ -68,6 +68,6 @@ action(browser.toggle_dev_tools):
 	key(ctrl-shift-i)
 
 show links: key("f")
-links: key("f")
+# links: key("f")
 big links: key(shift-f)
 go search: key(ctrl-f)

@@ -3,7 +3,7 @@ app: obsidian
 #todo: some sort of plugin, consolidate with teams or something?
 -
 #It would be nice to have  one file both for linux and mac.
-go search [<user.text>]$: 
+search [<user.text>]$: 
     key(cmd-u)
     sleep(50ms)
     insert(text or "")
@@ -12,7 +12,7 @@ bullet:
     insert("- ")
 # bullet: user.obsidian_run_command("Toggle bullet list")
 
-lion [<user.text>]$:
+dock [<user.text>]$:
     key(cmd-o)
     sleep(50ms)
     insert(text or "")
@@ -23,7 +23,7 @@ create[note] [<user.text>]$:
     insert(text or "")
 
 please [<user.text>]$: 
-    key(cmd-p)
+    key(cmd-p
     sleep(50ms)
     insert(text or "")
 
@@ -33,12 +33,13 @@ code block:
     key(left left left)
     insert('\n')
     key(up)
-    # Daily notes:
-(daily notes|go daily):
-    user.obsidian_run_command("Daily notes:")
+
+# Daily notes:
+daily show:
+    user.obsidian_run_command("daily today daily")
 anki sync:
     user.obsidian_run_command("Obsidian_to_anki")
-go settings:
+settings go:
     user.obsidian_run_command("Open settings")
 
 code insert:
@@ -50,6 +51,7 @@ dev tools:
 
 inspect:
     key(cmd-shift-c)
+    
 code python:
     insert('```python\n')
     insert('```')
@@ -70,6 +72,18 @@ code css:
     insert('\n')
     key(up) 
 
+
+    
+# Inserting stuff    
+# because link is very similar to ink, I added 'create' to the front.
+create link [<user.text>]: 
+    insert("[[")
+    insert(text or "")
+insert time:
+    insert(" /time")
+    sleep(50ms)
+    key(enter)
+    
 today:
     insert("@Today")
     sleep(50ms)
@@ -82,12 +96,9 @@ yesterday:
     insert("@yesterday")
     sleep(50ms)
     key(enter)
-    
-insert link [<user.text>]: 
-    insert("[[")
-    insert(text or "")
 # end link:
 #     insert("]]")
+
 
 
 switch: key(cmd-e)
@@ -103,15 +114,16 @@ hash tag talon: insert("#talon ")
 hash tag code: insert("#vscode ")
 hash tag bug: insert("#bug ")
 
-image extra small:
-    insert("|#x-small")
-    key(escape)
-    edit.line_end()
 
-image small:
-    insert("|#small")
-    key(escape)
-    edit.line_end()
+# image extra small:
+#     insert("|#x-small")
+#     key(escape)
+#     edit.line_end()
+
+# image small:
+#     insert("|#small")
+#     key(escape)
+#     edit.line_end()
 close:
     key(cmd-w)
 
@@ -145,13 +157,15 @@ split vert:
 bold: key(cmd-b)
 
 # shortcuts to specific pages
-go kanban:
+kanban go:
     user.obsidian_open_note("kanban")
-go massage:
-    user.obsidian_open_note("Masa Aktualny nowy")
+# go massage:
+#     user.obsidian_open_note("Masa Aktualny nowy")
 
 follow:
     key(alt-enter)
+open side:
+    key(alt-cmd-enter)
 
 # TODO: this doesn't work
 unbullet:

@@ -7,7 +7,7 @@ tag(): user.splits
 tag(): user.tabs
 
 # TODO(maciejk): this is temporary until we are able to report if terminal is active in vscode to talon
-tag(): terminal
+utag(): terminal
 tag(): user.git
 tag(): user.fish
 
@@ -56,52 +56,48 @@ action(user.multi_cursor_select_all_occurrences): user.vscode("editor.action.sel
 action(user.multi_cursor_select_fewer_occurrences): user.vscode("cursorUndo")
 action(user.multi_cursor_select_more_occurrences): user.vscode("editor.action.addSelectionToNextFindMatch")
 #multiple_cursor.py support end
+settings():
+    speech.timeout = 0.400
 
 please [<user.text>]$: 
   user.vscode("workbench.action.showCommands")
   insert(user.text or "")
 
-# Sidebar
-
+# Sidebar & Panels
+bar switch$: user.vscode("workbench.action.toggleSidebarVisibility")
 # what is the difference with workbench.view.explorer vs action.focusFilesExplorer?
-[go] explore: user.vscode("workbench.view.explorer")
-focus explore: user.vscode("workbench.files.action.focusFilesExplorer")
-bar extensions: user.vscode("workbench.view.extensions")
-[go] outline: user.vscode("outline.focus")
-go debug: user.vscode("workbench.view.debug")
+explore$: user.vscode("workbench.view.explorer")
+# focus explore: user.vscode("workbench.files.action.focusFilesExplorer")
 
-go git: user.vscode("workbench.view.scm")
-bar switch: user.vscode("workbench.action.toggleSidebarVisibility")
+bar project$: user.vscode("workbench.view.extension.project-manager")
+^extensions [focus]$: user.vscode("workbench.view.extensions")
+^outline [focus]$: user.vscode("outline.focus")
+debug$: user.vscode("workbench.view.debug")
+editor$: user.vscode("workbench.action.focusActiveEditorGroup")
+git focus$: user.vscode("workbench.view.scm")
+
 
 # show recent: user.vscode("work55bench.action.showAllEditorsByMostRecentlyUsed")
-go search [<user.text>]$: 
+search [<user.text>]$: 
     user.vscode("workbench.action.findInFiles")
     sleep(50ms)
     insert(text or "")
 
     
-go find [<user.word>]$: 
+find [<user.text>]$: 
     user.vscode("actions.find")
     sleep(50ms)
-    insert(word or "")
-go find that$: 
+    insert(text or "")
+find that$: 
     user.vscode("actions.find")
     sleep(50ms)
     edit.paste()
     key(enter)
     
 
-go replace: user.vscode("editor.action.startFindReplaceAction")
+replace: user.vscode("editor.action.startFindReplaceAction")
     
-go symbol [<user.text>]$:
-  user.vscode("workbench.action.gotoSymbol")
-  sleep(50ms)
-  insert(text or "")
 
-search symbol [<user.text>]$:
-  user.vscode("workbench.action.showAllSymbols")
-  sleep(50ms)
-  insert(text or "")
 
 # Panels
 panel debug: user.vscode("workbench.panel.repl.view.focus")
@@ -109,19 +105,17 @@ panel output: user.vscode("workbench.panel.output.focus")
 panel problems: user.vscode("workbench.panel.markers.view.focus")
 panel switch: user.vscode("workbench.action.togglePanel")
 panel terminal: user.vscode("workbench.panel.terminal.focus")
-panel close: user.vscode("workbench.action.closePanel")
+panel (close|hide): user.vscode("workbench.action.closePanel")
 
-console: user.vscode("workbench.action.terminal.toggleTerminal")
+
+
 deploy:
-    user.vscode("workbench.action.terminal.toggleTerminal")
+    user.vscode("workbench.action.terminal.focus")
     sleep(150ms)
     key("ctrl-c")
     insert("task deploy\n")
 
-# terminal: user.vscode("workbench.action.terminal.toggleTerminal")
-# toggle terminal: user.vscode("workbench.action.terminal.toggleTerminal")
 
-go editor: user.vscode("workbench.action.focusActiveEditorGroup")
 group one: user.vscode("workbench.action.focusFirstEditorGroup")
 group two: user.vscode("workbench.action.focusSecondEditorGroup")
 
@@ -130,13 +124,15 @@ focus side: user.vscode("workbench.action.focusSideBar")
 # focus editor: user.vscode("workbench.action.focusActiveEditorGroup")
 
 # Settings
-go settings ui: user.vscode("workbench.action.openGlobalSettings")
-go settings: user.vscode("workbench.action.openSettingsJson")
-default settings: user.vscode("workbench.action.openRawDefaultSettings")
-go shortcuts: user.vscode("workbench.action.openGlobalKeybindings")
-go snippets: user.vscode("editing-snippets-by-yaml.configureUserSnippets")
+settings (go|show): user.vscode("workbench.action.openGlobalSettings")
+settings json: user.vscode("workbench.action.openSettingsJson")
+settings default: user.vscode("workbench.action.openRawDefaultSettings")
 
-# Displaythe.minnow
+shortcuts (go|show): user.vscode("workbench.action.openGlobalKeybindings")
+shortcuts json: user.vscode("workbench.action.openGlobalKeybindingsFile")
+
+
+# Display
 centered switch: user.vscode("workbench.action.toggleCenteredLayout")
 fullscreen switch: user.vscode("workbench.action.toggleFullScreen")
 theme switch: user.vscode("workbench.action.selectTheme")
@@ -145,10 +141,25 @@ zen switch: user.vscode("workbench.action.toggleZenMode")
 
 # File Commands bash
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-lion [<user.text>]:  
+(lion|dock) [<user.word>]:  
   user.vscode("workbench.action.quickOpen")
   sleep(50ms)
-  insert(text or "")
+  insert(word or "")
+
+# # TODO: we would like to limit user.text only to the words appearing in open editors
+# tab [<user.text>]:  
+#     user.vscode("workbench.action.showAllEditors")
+#     sleep(20ms)
+#     insert(text or "")
+#     sleep(300ms)
+#     key(enter)
+    
+pop (lion|dock) [<user.text>]:  
+  user.vscode("workbench.action.quickOpen")
+  sleep(50ms)
+  user.maybe_sleep(50, text or "")
+  key(enter)
+
 
 file duplicate: user.vscode("fileutils.duplicateFile")
 file copy path: user.vscode("copyFilePath") 
@@ -156,12 +167,13 @@ file copy relative: user.vscode("copyRelativeFilePath")
 file copy link: user.vscode("gitlens.copyRemoteFileUrlToClipboard") 
 file create sibiling: user.vscode_and_wait("fileutils.newFile")
 file new: user.vscode_and_wait("explorer.newFile")
-folder new: user.vscode_and_wait("explorer.newFolder")
 file create: user.vscode("workbench.action.files.newUntitledFile")
-# Why do I have  all this sleeps here
 file rename:
     user.vscode("fileutils.renameFile")
 	sleep(150ms)
+# Why do I have  all this sleeps here
+folder new: user.vscode_and_wait("explorer.newFolder")
+
 file move:
 	user.vscode("fileutils.moveFile")
 	sleep(150ms)
@@ -170,14 +182,27 @@ file remove:
 file open folder: user.vscode("revealFileInOS")
 (file reveal|show in tree): user.vscode("workbench.files.action.showActiveFileInExplorer") 
 save ugly: user.vscode("workbench.action.files.saveWithoutFormatting")
-new terminal:
-    user.vscode("workbench.action.createTerminalEditor")
-new side terminal:
-    user.vscode("workbench.action.createTerminalEditorSide")
+###############################################################################
+### Language Features
+###############################################################################
+pop symbol:
+    user.vscode("workbench.action.showAllSymbols")
+    sleep(200ms)
+    key(enter)
 
-# Language Features
-sense [<user.word>] : 
-    insert(user.word or "")
+symbol:
+    user.vscode("workbench.action.showAllSymbols")
+symbol find [<user.text>]$:
+    user.vscode("workbench.action.gotoSymbol")
+    sleep(50ms)
+    insert(text or "")
+  
+symbol search [<user.text>]$:
+    user.vscode("workbench.action.showAllSymbols")
+    sleep(50ms)
+    insert(text or "")
+sense [<user.text>]$: 
+    insert(user.text or "")
     sleep(10ms)
     user.vscode("editor.action.triggerSuggest")
 
@@ -213,11 +238,13 @@ refactor (this|that): user.vscode("editor.action.refactor")
 
 #code navigation
 # (go declaration | follow): user.vscode("editor.action.revealDefinition")
-go back: user.vscode("workbench.action.navigateBack") 
-go forward:  user.vscode("workbench.action.navigateForward")  
-go implementation: user.vscode("editor.action.goToImplementation")
-go type: user.vscode("editor.action.goToTypeDefinition")
-go usage: user.vscode("references-view.find")
+back$: user.vscode("workbench.action.navigateBack") 
+front$:  user.vscode("workbench.action.navigateForward")  
+
+# implementation: user.vscode("editor.action.goToImplementation")
+# type: user.vscode("editor.action.goToTypeDefinition")
+# usage: user.vscode("references-view.find")
+
 folder open: user.vscode("workbench.action.files.openFileFolder")
 
 
@@ -276,14 +303,16 @@ git stash: user.vscode("git.stash")
 git stash pop: user.vscode("git.stashPop")
 git status: user.vscode("workbench.scm.focus")
 (git stage|stage this): user.vscode("git.stage")
-git stage everything: user.vscode("git.stageAll")
+git stage all: user.vscode("git.stageAll")
 git unstage: user.vscode("git.unstage")
 git unstage all: user.vscode("git.unstageAll")
 pull request: user.vscode("pr.create")
 change next: key(alt-f5)
 change last: key(shift-alt-f5)
 
-#Debugging
+###############################################################################
+### Debugging
+###############################################################################
 break point remove all: user.vscode("workbench.debug.viewlet.action.removeAllBreakpoints")
 break point: user.vscode("editor.debug.action.toggleBreakpoint")
 step over: user.vscode("workbench.action.debug.stepOver")
@@ -296,7 +325,9 @@ debug continue: user.vscode("workbench.action.debug.continue")
 debug restart: user.vscode("workbench.action.debug.restart")
 debug console: user.vscode("workbench.debug.action.toggleRepl")
 
-# Terminal
+###############################################################################
+### Terminal panel
+###############################################################################
 terminal external: user.vscode("workbench.action.terminal.openNativeConsole")
 terminal new: user.vscode("workbench.action.terminal.new")
 terminal next: user.vscode("workbench.action.terminal.focusNext")
@@ -308,6 +339,26 @@ terminal toggle: user.vscode_and_wait("workbench.action.terminal.toggleTerminal"
 terminal scroll up: user.vscode("workbench.action.terminal.scrollUp")
 terminal scroll down: user.vscode("workbench.action.terminal.scrollDown")
 terminal <number_small>: user.vscode_terminal(number_small)
+terminal: user.vscode("workbench.action.terminal.toggleTerminal")
+shell: user.vscode("workbench.action.terminal.focus")
+
+
+###############################################################################
+### Terminal in editor tab
+###############################################################################
+console new:
+    user.vscode("workbench.action.createTerminalEditor")
+console side new:
+    user.vscode("workbench.action.createTerminalEditorSide")
+
+# Find a better way to switch to terminal in editor tab.
+console switch:
+    user.vscode("workbench.action.quickOpen")
+    sleep(50ms)
+    insert("fish")
+    sleep(50ms)
+    key(enter)
+
 
 
 #Expand/Shrink AST Selection
@@ -360,6 +411,15 @@ one group: user.vscode("workbench.action.closeEditorsInOtherGroups")
 (cross|group next): user.vscode("workbench.action.focusNextGroup")
 group last: user.vscode("workbench.action.focusPreviousGroup")
 
+###############################################################################
+### Navigation between editors
+###############################################################################
+# pop:
+#     user.vscode("workbench.action.quickOpenPreviousRecentlyUsedEditorInGroup")
+#     sleep(10ms)
+#     key(enter)
+# pop wait:
+#     user.vscode("workbench.action.quickOpenPreviousRecentlyUsedEditorInGroup")
 # next: app.tab_next()
 # last: app.tab_previous()
 
@@ -370,10 +430,12 @@ go <number> end:
     edit.jump_line(number)
     edit.line_end()
 
-lend: edit.line_end()
-bend: edit.line_start()
+# lend: edit.line_end()
+# bend: edit.line_start()
 
-# Coping, cutting, cloning, selecting stuff
+###############################################################################
+### Coping, cutting, cloning, selecting stuff
+###############################################################################
 copy line down: user.vscode("editor.action.copyLinesDownAction") 
 copy line up: user.vscode("editor.action.copyLinesUpAction") 
 
@@ -397,14 +459,6 @@ clone <number> line:
         sleep(10ms)
         key(right cmd-v)
         sleep(10ms)
-        key(cmd-z)
-        user.go_up(number)
-            
-clone that:
-    key(cmd-c)
-    sleep(10ms)
-    key(right enter cmd-v)
-
 (clear|wipe) <number> line:
         user.select_next_lines(number)
         key(delete)
@@ -422,7 +476,17 @@ indent <number> line:
 dis dent <number> line:
     user.select_next_lines(number)
     edit.indent_less()
-    
+toast close: user.vscode("notifications.clearAll")
+toast accept:
+    user.vscode("notifications.focusToasts")
+    sleep(100ms)
+    key(tab)
+    key(enter)
+
+toast focus: 
+    user.vscode("notifications.focusToasts")
+    sleep(100ms)
+    key(tab)
 
     
 # is it better to use vscode commands or just keyboard shortcuts?
@@ -430,14 +494,82 @@ dis dent <number> line:
 take this$:
     key(cmd-d)  
 
-search this$:
+###############################################################################
+### Searching within editor or whole workspace
+###############################################################################
+(go search|search) this$:
     key(cmd-d)     
-    key(cmd-shift-f) 
+    key(cmd-shift-f)
     key(enter)
-find this$:
+(go find|find) this$:
     key(cmd-d)     
     key(cmd-f) 
     key(enter)
+
+###############################################################################
+### Commenting stuff
+###############################################################################
+to do [<phrase>]$:   
+    insert("# TODO(maciejk): ")
+    user.dictation_mode(phrase or "")
+
+comment new [<phrase>]$:  
+    code.toggle_comment() 
+    user.dictation_mode(phrase or "")
+
+comment <number> line:
+    user.select_next_lines(number)
+    sleep(10ms)
+    user.vscode("editor.action.commentLine")   
+
+comment this: code.toggle_comment()    
+
+
+###############################################################################
+### project navigation
+###############################################################################
+proj|project [<user.text>]:
+    user.vscode("workbench.action.openRecent")
+    sleep(50ms)
+    insert(text or "")    
+    
+pop (proj|project) [<user.text>]:
+    user.vscode("workbench.action.openRecent")
+    sleep(50ms)
+    insert(text or "")    
+    user.maybe_sleep(100, text or "")
+    key(enter)
+
+# This is for github copilot
+(take it|accept):
+    key(tab)
+###############################################################################
+### explorer tab
+###############################################################################
+folder new: 
+    user.vscode("explorer.newFolder")
+finder show: user.vscode("revealFileInOS")
+###############################################################################
+### Misc
+###############################################################################
+
+###############################################################################
+### KeyPad shortcuts
+###############################################################################    
+key(shift-cmd-alt-ctrl-9):
+    key(cmd-alt-right)
+key(shift-cmd-alt-ctrl-8):
+    key(cmd-alt-left)
+# asterisk
+key(shift-cmd-alt-ctrl-a):
+    key(cmd-pagedown)
+    # user.vscode("workbench.action.nextEditorInGroup")
+key(shift-cmd-alt-ctrl-/):
+    key(cmd-pageup)
+    # user.vscode("workbench.action.previousEditorInGroup")
+# hyphen
+key(shift-cmd-alt-ctrl-m):
+    key(cmd-w)
 folders collapse:
     user.vscode("workbench.files.action.collapseExplorerFolders")
 fix this: user.vscode("editor.action.quickFix")
@@ -452,34 +584,33 @@ call this:
     insert("()")
     key(left)
 
-# Commenting stuff
-to do [<phrase>]$:   
-    insert("# TODO(maciejk): ")
-    user.dictation_mode(phrase or "")
-
-comment [<phrase>]$:   
-    insert("# ")
-    user.dictation_mode(phrase or "")
-
-comment <number> line:
-    user.select_next_lines(number)
-    sleep(10ms)
-    user.vscode("editor.action.commentLine")   
-
-comment this: code.toggle_comment()    
+context:
+    key(shift-f10)
 
 
-sesh [<user.text>]:
-    user.vscode("workbench.action.quickOpenRecent")
-    sleep(50ms)
-    insert(text or "")    
     
-pop sesh [<user.text>]:
-    user.vscode("workbench.action.quickOpenRecent")
-    sleep(50ms)
-    insert(text or "")    
-    user.maybe_sleep(50, text or "")
-    
-    key(enter)
+snippets go: user.vscode("snippetExplorer.open")
+snippet create:user.vscode("easySnippet.run")
+copy command id:         user.copy_command_id()
 
-vex: user.vscode("search.action.focusNextSearchResult")    
+###############################################################################
+### search view
+###############################################################################
+^result next:
+    user.vscode("search.action.focusNextSearchResult")
+
+# TODO: there was a program with command "search limit talon" it was mis recognized.
+# I had to change to "limit search talon" it is a wider problem
+
+limit search talon: user.vscode_limit_search("talon")
+limit search python: user.vscode_limit_search("python")
+limit search none: user.vscode_limit_sort("")
+
+    
+
+
+   
+    
+
+    
+    

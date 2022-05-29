@@ -17,9 +17,12 @@ snap last full:
     user.snap_window_full()
 
 # fido: user.snap_window() 
-snap next [screen]: user.move_window_next_screen()
-snap last [screen]: user.move_window_previous_screen()
-snap screen <number>: user.move_window_to_screen(number)
+(snap|star|nap|slap) next [screen]: user.move_window_next_screen()
+(snap|star|nap|slap) last [screen]: user.move_window_previous_screen()
+(snap|star|nap|slap) one: user.move_window_to_screen(1)
+(snap|star|nap|slap) best: user.move_window_to_screen(2)
+(snap|star|nap|slap) cup: user.move_window_to_screen(3)
+# snap screen <number>: user.move_window_to_screen(number)
 snap <user.running_applications> <user.window_snap_position>:
     user.snap_app(running_applications, window_snap_position)
 snap <user.running_applications> [screen] <number>:

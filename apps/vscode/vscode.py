@@ -1,3 +1,4 @@
+import json
 from talon import Context, actions, ui, Module, app, clip
 
 is_mac = app.platform == "mac"
@@ -31,6 +32,11 @@ app: vscode
 """
 
 ctx.settings["insert_wait"] = 5.0
+user = actions.user
+sleep = actions.sleep
+key = actions.key
+repeat = actions.repeat
+insert = actions.insert
 
 
 @ctx.action_class("win")
@@ -90,6 +96,25 @@ class edit_actions:
 
 @mod.action_class
 class Actions:
+    def copy_command_id():
+        """Copy the command id of the focused menu item"""
+        actions.key("tab:2 enter")
+        actions.sleep("500ms")
+        json_text = actions.edit.selected_text()
+        command_id = json.loads(json_text)["command"]
+        actions.app.tab_close()
+        actions.clip.set_text(command_id)
+
+    def vscode_limit_search(query: str):
+        """Limit search"""
+        user.vscode("workbench.action.findInFiles")
+        sleep(0.1)
+        key("tab")
+        repeat(4)
+        key("backspace")
+        insert(query)
+        key("enter")
+
     def vscode_terminal(number: int):
 
         """Activate a terminal by number"""
@@ -115,6 +140,7 @@ class MacUserActions:
 
 @ctx.action_class("user")
 class user_actions:
+
     # snippet.py support beginHelp close
     def snippet_search(text: str):
         actions.user.vscode("editor.action.insertSnippet")

@@ -78,6 +78,7 @@ class HistoryLogger(object):
 
     def on_phrase(self, j):
         print("type of j", type(j))
+        print("j", j)
         print(j.keys())
         if "_metadata" in j.keys():
             print(j["samples"])
@@ -112,21 +113,6 @@ class HistoryLogger(object):
         print(100 * "=")
 
         print(type(val))
-
-        if val != "":
-            self.history.append(val)
-            self.history = self.history[-setting_command_history_size.get() :]
-
-
-# def create_diagnostics():
-#     load1, load5, load15 = os.getloadavg()
-#     diagnostics = {}
-#     diagnostics["load1"] = load1
-#     diagnostics["load5"] = load5
-#     diagnostics["load15"] = load15
-#     diagnostics["swap_used"] = psutil.swap_memory().percent
-
-#     return diagnostics
 
 
 history_logger = HistoryLogger()

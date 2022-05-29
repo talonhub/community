@@ -1,0 +1,32 @@
+Spoken form, Cursorless identifier
+arg, argumentOrParameter
+attribute, attribute
+block, paragraph
+call, functionCall
+cell, notebookCell
+char, character
+class, class
+class name, className
+comment, comment
+element, xmlElement
+end tag, xmlEndTag
+file, document
+funk, namedFunction
+funk name, functionName
+if state, ifStatement
+item, collectionItem
+key, collectionKey
+lambda, anonymousFunction
+line, line
+list, list
+map, map
+name, name
+regex, regularExpression
+start tag, xmlStartTag
+state, statement
+string, string
+tags, xmlBothTags
+token, token
+type, type
+value, value
+word, word

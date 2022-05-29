@@ -26,7 +26,7 @@ website_defaults = {
 
 _search_engine_defaults = {
     "amazon": "https://www.amazon.com/s/?field-keywords=%s",
-    "google": "https://www.oogle.com/search?q=%s",
+    "google": "https://www.google.com/search?q=%s",
     "map": "https://maps.google.com/maps?q=%s",
     "scholar": "https://scholar.google.com/scholar?q=%s",
     "wiki": "https://en.wikipedia.org/w/index.php?search=%s",
@@ -53,5 +53,6 @@ class Actions:
 
     def search_with_search_engine(search_template: str, search_text: str):
         """Search a search engine for given text"""
+        print(search_template, search_text)
         url = search_template.replace("%s", quote_plus(search_text))
         webbrowser.open(url)

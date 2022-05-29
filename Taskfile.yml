@@ -1,9 +1,18 @@
 version: "3"
+
 tasks:
+  upload-cheatsheet:
+    desc: '.'
+    cmds:
+      - echo "mimic('cheat sheet')" |/Users/maciek/.talon/.venv/bin/repl 
+      - algolia deleteindicespattern -a TSMFGMK167 -k `doppler secrets get --plain ALGOLIA_API_KEY -p casa-del-maciek -c dev_maciej` -r 'talon' -x false 
+      - algolia i -s /Users/maciek/.talon/user/knausj_talon/maciek/cheatsheet.json  -a TSMFGMK167 -k `doppler secrets get --plain ALGOLIA_API_KEY -p casa-del-maciek -c dev_maciej`  -n talon 
+
   deploy:
     desc: "."
     cmds:
       - rsync -avz --delete --exclude=maciek/experimental --exclude=.venv ~/projects/knausj_talon/ ~/.talon/user/knausj_talon
+      - rsync -avz --delete --exclude=.git cursorless-settings ~/.talon/user/
   pandoc:
     desc: "."
     cmds:

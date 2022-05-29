@@ -9,17 +9,17 @@ apps.obsidian = "app.name: Obsidian"
 class Actions:
     def obsidian_run_command(cmd: str):
         """This comment is mandatory"""
-
-        actions.key("cmd-p")
+        actions.key("alt-p")
         actions.sleep("20ms")
         actions.insert(cmd)
         actions.sleep("40ms")
         actions.key("enter")
 
-    def obsidian_open_note(name: str):
+    def obsidian_open_note(name: str, should_enter: int):
         """This comment is mandatory"""
-        actions.key("cmd-o")
+        actions.key("cmd-p")
         actions.sleep("20ms")
         actions.insert(name)
         actions.sleep("40ms")
-        actions.key("enter")
+        if should_enter:
+            actions.key("enter")

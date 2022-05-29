@@ -37,6 +37,7 @@ abbreviations = {
     "class": "cls",
     "client": "cli",
     "command": "cmd",
+    "commando": "cmd",
     "comment": "cmt",
     "compare": "cmp",
     "conference": "conf",

@@ -141,6 +141,7 @@ def run_vscode_command(
     args = [x for x in args if x is not NotSet]
 
     communication_dir_path = get_communication_dir_path()
+    print(communication_dir_path)
 
     if not communication_dir_path.exists():
         if args or return_command_output:

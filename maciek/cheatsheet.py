@@ -1,3 +1,4 @@
+import json
 from talon import Module, actions, registry
 import sys, os
 
@@ -61,6 +62,31 @@ def write_formatters(file):
         )
 
 
+def get_context_commands(commands):
+    results = []
+    for key, value in commands.items():
+        try:
+            print(dir(value))
+            print(100 * "=")
+            print(dir(value.ctx))
+            print(100 * "=")
+            print(value.ctx.path)
+
+            print(dir(value.target))
+            rule = value.rule.rule
+            d = {
+                "rule": str(rule),
+                "implementation": str(value.target.code),
+                "path": str(value.ctx.path),
+            }
+            results.append(d)
+
+        except Exception as e:
+            print("exception")
+            continue
+    return results
+
+
 def write_context_commands(file, commands):
     # write out each command and it's implementation
     for key in commands:
@@ -113,10 +139,11 @@ class user_actions:
         # open file
 
         this_dir = os.path.dirname(os.path.realpath(__file__))
-        file_path = os.path.join(this_dir, "cheatsheet.md")
+        md_file_path = os.path.join(this_dir, "cheatsheet.md")
+        json_file_path = os.path.join(this_dir, "cheatsheet.json")
         file_shorter_path = os.path.join(this_dir, "cheatsheet_shorter.md")
-        print(file_path)
-        file = open(file_path, "w")
+        print(md_file_path)
+        file = open(md_file_path, "w")
         file_shorter = open(file_shorter_path, "w")
 
         write_alphabet(file)
@@ -169,12 +196,17 @@ class user_actions:
         ]
         omitted = []
         list_of_contexts = registry.contexts.items()
+        all_commands = []
         for key, value in list_of_contexts:
-            print(
-                f"shorter name = {create_short_name(key)} key = {key} value = {value}"
-            )
+            print(f"key =  {key}")
+            print(f"value =  {value}")
+
+            # print(
+            #     f"shorter name = {create_short_name(key)} key = {key} value = {value}"
+            # )
 
             commands = value.commands  # Get all the commands from a context
+
             if len(commands) > 0:
                 pretty_print_context_name(file, key)
                 write_context_commands(file, commands)
@@ -182,10 +214,20 @@ class user_actions:
                 if create_short_name(key) not in interesting_contexts:
                     omitted.append(create_short_name(key))
                 else:
+                    all_commands.extend(get_context_commands(commands))
                     pretty_print_context_name(file_shorter, key)
                     write_context_commands(file_shorter, commands)
 
+        print()
         print("omitted")
         print(omitted)
+        print("all commands")
+        # print(all_commands)
+        with open(json_file_path, "w") as f:
+
+            print("Writing json to file")
+            json.dump(all_commands, f, indent=2)
+
+        print(100 * "\n")
 
         file.close()

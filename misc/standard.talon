@@ -15,10 +15,10 @@ zoom out: edit.zoom_out()
 scroll up: edit.page_up()
 scroll down: edit.page_down()
 
-(copy that|bun): edit.copy()
+copy that: edit.copy()
 
 cut that: edit.cut()
-(paste it|polo): edit.paste()
+paste it: edit.paste()
 
 nope: edit.undo()
 redo that: edit.redo()
@@ -26,9 +26,9 @@ paste match: edit.paste_match_style()
 
 # TODO(maciejk): at one word command, like disk but I can't use this because it conflicts with dish in my alphabet
 file save: edit.save()
-go:
+go$:
 	key(enter)
-wipe: key(backspace)    
+   
   
 padding: 
 	insert("  ") 

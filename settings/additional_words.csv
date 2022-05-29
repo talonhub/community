@@ -1,4 +1,3 @@
-
 Word(s),Spoken Form (If Different)
 admin
 allegro,libra
@@ -15,7 +14,7 @@ Citrix
 brew
 dotfiles
 desktop,desk top
-csv
+csv,c s v
 AppStore,app store
 ctrl,control
 debug
@@ -55,7 +54,6 @@ linux
 login,logan
 maciek
 maciek,magic
-match,march
 neovim
 nmap
 nmap,N map
@@ -76,6 +74,8 @@ shortcut,short cut
 shortcuts,short cuts
 cursorless
 sudo,su du
+talon,polo
+talon,paulo
 talon,tom
 talon,alon
 Taskfile
@@ -87,8 +87,7 @@ vim
 anki
 VPN
 file,fire
-vscode,vi code
-vscode,the cold
+vscode,visual
 yaml
 yamls
 treesitter
@@ -115,3 +114,62 @@ http,h t t p
 Firefox
 knausj,knaus
 Typescript,type script
+webpack,web pack
+argsparse,arg parse
+discord,this court
+xcode,ex code
+jquery,j query
+root,root
+k0s, cube zero
+doppler,doppler
+esphome,e s p home
+gcp,g c p
+pulumi
+openssl, open s s l
+USB, u s b
+bluetooth, blue tooth
+bluetooth, bluetooth
+bluetooth, blot of
+jetbrains,jet brains
+knausj,knaus
+knausj,nous
+vimium
+finder
+definition, the finishing
+definition, the finish on
+raspberry, raspberry
+nixos,nix o s
+nix,nix
+karabiner
+hammerspoon
+keypad
+raycast
+quicklink,quick link
+reddit
+crunchbase,crunch base
+vscode, visual studio
+kinesis
+kubectl, cube c t l
+Dockerfile,docker file
+zfs, z f s
+SDK,as decay
+marlin
+marlin,Marlene
+creality
+creality,orality
+kaleidoscope
+platformio,platform i o
+3d,three d
+3d,free de
+GitLens,git lense
+rango
+
+kitty
+encoder
+command,commando
+cronjob,cron job
+cronjob,cronjob
+cronjob,chrome drop
+cronjob,crown drop
+gitlab,git lap
+tmux,t mux

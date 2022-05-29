@@ -13,14 +13,21 @@ fuzzy [<user.text>]:
     sleep(100ms) 
     insert(text or "")
 
-(history|story) [<user.text>]: 
-    key(cmd-r)
+fuzzy root [<user.text>]: 
+    insert("/")
+    key(cmd-e)
     sleep(100ms) 
     insert(text or "")
-
-buzzy [<user.text>]: 
+fuzzy home [<user.text>]: 
     insert("~/")
     key(cmd-e)
+    sleep(100ms) 
+    insert(text or "")
+    
+
+# star is here because of misrecognition
+(history|story) [<user.text>]: 
+    key(cmd-r)
     sleep(100ms) 
     insert(text or "")
     
@@ -29,12 +36,12 @@ fuzzy var: key(ctrl-v)
 cancel|fucker: key(ctrl-c)
 
 go dir:
-    key(cmd-d)
+    user.fzf_cd_directory_multi_level()
     
 go dir home:
     key(cmd-shift-d)
-podo: 
-    key(cmd-g)  
+# podo: 
+    # user.fzf_cd_directory_single_level()
 
 
 (wipe|clear) lord:

@@ -18,8 +18,7 @@ action(edit.delete_line):
 #action(edit.delete_sentence):
 
 action(edit.delete_word):
-	edit.select_word()
-	edit.delete()
+	key(alt-backspace)
 
 action(edit.down):
 	key(down)

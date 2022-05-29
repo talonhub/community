@@ -58,3 +58,11 @@ key:
 sleep:
     insert("sleep()")    
     key(left)
+user:
+    insert("user.")    
+
+sleep fifty: "sleep(50ms)"
+sleep hundred: "sleep(100ms)"
+sleep two hundred: "sleep(200ms)"
+actions: insert("actions.\t")    
+key enter: "key(enter)\n"

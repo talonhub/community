@@ -67,4 +67,6 @@ action(browser.submit_form):
 action(browser.toggle_dev_tools):
 	key(cmd-alt-i)
 
+key(cmd-shift-s):
+    edit.copy()
     

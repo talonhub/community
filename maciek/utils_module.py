@@ -1,4 +1,5 @@
 from talon import Context, actions, ui, Module, app
+import time
 
 mod = Module()
 
@@ -8,7 +9,7 @@ class Actions:
     def maybe_sleep(miliseconds: int, text: str):
         """this description is mandatory"""
         if len(text) > 0:
-            actions.sleep(miliseconds)
+            time.sleep(miliseconds / 1000)
 
     def go_up(n: int):
         """This description is mandatory"""
