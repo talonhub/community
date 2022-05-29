@@ -1,4 +1,4 @@
-from talon import Context, Module, actions, imgui, registry, settings
+from talon import Context, Module, actions, imgui, registry
 
 ctx = Context()
 mod = Module()
@@ -8,17 +8,22 @@ mod.list("code_common_function", desc="List of common functions for active langu
 # global
 function_list = []
 
+
 @mod.capture(rule="{user.code_common_function}")
 def code_common_function(m) -> str:
     """Returns a function name"""
     return m.code_common_function
 
+
 mod.tag("code_functions_common", desc="Tag for enabling support for common functions")
-mod.tag("code_functions_common_gui_active", desc="Active when the function picker GUI is showing")
+mod.tag(
+    "code_functions_common_gui_active",
+    desc="Active when the function picker GUI is showing",
+)
+
 
 @mod.action_class
 class Actions:
-
     def code_toggle_functions():
         """GUI: List functions for active language"""
         global function_list
@@ -64,9 +69,7 @@ def gui_functions(gui: imgui.GUI):
     for i, entry in enumerate(function_list, 1):
         if entry in registry.lists["user.code_common_function"][0]:
             gui.text(
-                "{}. {}: {}".format(
-                    i, entry, registry.lists["user.code_common_function"][0][entry]
-                )
+                f"{i}. {entry}: {registry.lists['user.code_common_function'][0][entry]}"
             )
 
     gui.spacer()

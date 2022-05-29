@@ -1,5 +1,6 @@
+from talon import Context, Module
+
 from .user_settings import get_list_from_csv
-from talon import Module, Context, actions, app
 
 mod = Module()
 mod.list("file_extension", desc="A file extension, such as .py")

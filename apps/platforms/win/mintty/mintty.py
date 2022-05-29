@@ -1,6 +1,6 @@
-from talon import Context, Module, actions, imgui, settings, ui
-import os
 import subprocess
+
+from talon import Context, Module, actions, ui
 
 mod = Module()
 mod.apps.mintty = """
@@ -82,7 +82,7 @@ class UserActions:
     def file_manager_open_directory(path: str):
         """opens the directory that's already visible in the view"""
         actions.insert("cd ")
-        path = '"{}"'.format(path)
+        path = f'"{path}"'
         actions.insert(path)
         actions.key("enter")
 
@@ -92,7 +92,7 @@ class UserActions:
 
     def file_manager_new_folder(name: str):
         """Creates a new folder in a gui filemanager or inserts the command to do so for terminals"""
-        name = '"{}"'.format(name)
+        name = f'"{name}"'
 
         actions.insert("mkdir " + name)
 
@@ -118,7 +118,7 @@ class UserActions:
         actions.key("enter")
 
     def terminal_change_directory(path: str):
-        actions.insert("cd {}".format(path))
+        actions.insert(f"cd {path}")
         if path:
             actions.key("enter")
 

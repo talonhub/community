@@ -26,7 +26,7 @@ If you want to change the display of the window you can do by adding some settin
 
 # Running tests
 
-There are unit tests that you can run from the repository root like this (assuming your directory is called talon\_draft\_window):
+There are unit tests that you can run from the repository root like this (assuming your directory is called talon_draft_window):
 
     (cd ../ && python -m unittest talon_draft_window.test_draft_ui)
 

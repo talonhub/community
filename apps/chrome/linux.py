@@ -5,39 +5,55 @@ ctx.matches = """
 os: linux
 app: chrome
 """
-ctx.tags = ['browser', 'user.tabs']
+ctx.tags = ["browser", "user.tabs"]
 
-@ctx.action_class('browser')
+
+@ctx.action_class("browser")
 class BrowserActions:
     def bookmark():
-        actions.key('ctrl-d')
+        actions.key("ctrl-d")
+
     def bookmarks():
-        actions.key('ctrl-shift-o')
+        actions.key("ctrl-shift-o")
+
     def bookmarks_bar():
-        actions.key('ctrl-shift-b')
+        actions.key("ctrl-shift-b")
+
     def focus_address():
-        actions.key('ctrl-l')
+        actions.key("ctrl-l")
+
     def focus_search():
         actions.browser.focus_address()
+
     def go_blank():
-        actions.key('ctrl-n')
+        actions.key("ctrl-n")
+
     def go_back():
-        actions.key('alt-left')
+        actions.key("alt-left")
+
     def go_forward():
-        actions.key('alt-right')
+        actions.key("alt-right")
+
     def go_home():
-        actions.key('alt-home')
+        actions.key("alt-home")
+
     def open_private_window():
-        actions.key('ctrl-shift-n')
+        actions.key("ctrl-shift-n")
+
     def reload():
-        actions.key('ctrl-r')
+        actions.key("ctrl-r")
+
     def reload_hard():
-        actions.key('ctrl-shift-r')
+        actions.key("ctrl-shift-r")
+
     def show_downloads():
-        actions.key('ctrl-j')
+        actions.key("ctrl-j")
+
     def show_history():
-        actions.key('ctrl-h')
+        actions.key("ctrl-h")
+
     def submit_form():
-        actions.key('enter')
+        actions.key("enter")
+
     def toggle_dev_tools():
-        actions.key('ctrl-shift-i')
+        actions.key("ctrl-shift-i")

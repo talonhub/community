@@ -2,7 +2,9 @@
 # stub it here as a blank class, since there are (for example) functions which
 # check isinstance(some_input, Phrase), and for testing we want these tests to
 # return False.
-class Phrase: pass
+class Phrase:
+    pass
+
 
 # grammar.vm.Phrase is also used sometimes.
 class vm:

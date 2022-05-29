@@ -1,8 +1,10 @@
-from talon import Context, Module, actions
+from talon import Context, actions
+
 ctx = Context()
 ctx.matches = r"""
 os: windows
 """
+
 
 @ctx.action_class("user")
 class Actions:

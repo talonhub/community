@@ -5,6 +5,7 @@ apps = mod.apps
 apps.discord = "app.name: Discord"
 apps.discord = "app.name: Discord.exe"
 
+
 @mod.action_class
 class discord_actions:
     def discord_mentions_last():

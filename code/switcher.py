@@ -1,14 +1,10 @@
 import os
-import re
+import subprocess
 import time
+from pathlib import Path
 
 import talon
-
-from talon import Context, Module, app, imgui, ui, fs, actions
-from glob import glob
-from itertools import islice
-from pathlib import Path
-import subprocess
+from talon import Context, Module, actions, app, fs, imgui, ui
 
 # Construct at startup a list of overides for application names (similar to how homophone list is managed)
 # ie for a given talon recognition word set  `one note`, recognized this in these switcher functions as `ONENOTE`
@@ -70,23 +66,23 @@ words_to_exclude = [
 # rather than via e.g. the start menu. This way, all apps, including "modern" apps are
 # launchable. To easily retrieve the apps this makes available, navigate to shell:AppsFolder in Explorer
 if app.platform == "windows":
-    import os
     import ctypes
+    import os
+
     import pywintypes
-    import pythoncom
-    import winerror
 
     try:
-        import winreg
+        pass
     except ImportError:
         # Python 2
-        import _winreg as winreg
+        pass
 
         bytes = lambda x: str(buffer(x))
 
     from ctypes import wintypes
-    from win32com.shell import shell, shellcon
+
     from win32com.propsys import propsys, pscon
+    from win32com.shell import shell, shellcon
 
     # KNOWNFOLDERID
     # https://msdn.microsoft.com/en-us/library/dd378457
@@ -118,7 +114,7 @@ if app.platform == "windows":
         try:
             _shell32.SHGetKnownFolderIDList(folder_id, 0, htoken, ctypes.byref(pidl))
             return shell.AddressAsPIDL(pidl.value)
-        except WindowsError as e:
+        except OSError as e:
             if e.winerror & 0x80070000 == 0x80070000:
                 # It's a WinAPI error, so re-raise it, letting Python
                 # raise a specific exception such as FileNotFoundError.
@@ -134,8 +130,7 @@ if app.platform == "windows":
         items_enum = folder_shell_item.BindToHandler(
             None, shell.BHID_EnumItems, shell.IID_IEnumShellItems
         )
-        for item in items_enum:
-            yield item
+        yield from items_enum
 
     def list_known_folder(folder_id, htoken=None):
         result = []
@@ -222,7 +217,7 @@ def update_overrides(name, flags):
 
     if name is None or name == override_file_path:
         # print("update_overrides")
-        with open(override_file_path, "r") as f:
+        with open(override_file_path) as f:
             for line in f:
                 line = line.rstrip()
                 line = line.split(",")
@@ -297,7 +292,7 @@ class Actions:
             if is_valid_path:
                 ui.launch(path=path)
             else:
-                cmd = "explorer.exe shell:AppsFolder\\{}".format(path)
+                cmd = f"explorer.exe shell:AppsFolder\\{path}"
                 subprocess.Popen(cmd, shell=False)
 
     def switcher_menu():
@@ -353,6 +348,7 @@ def update_launch_list():
 def ui_event(event, arg):
     if event in ("app_launch", "app_close"):
         update_running_list()
+
 
 # Talon starts faster if you don't use the `talon.ui` module during launch
 

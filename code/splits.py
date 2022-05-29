@@ -1,4 +1,4 @@
-from talon import Module, actions, app
+from talon import Module
 
 mod = Module()
 mod.tag("splits", desc="Tag for enabling generic window split commands")

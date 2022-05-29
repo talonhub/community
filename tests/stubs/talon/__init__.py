@@ -38,8 +38,6 @@ class Actions:
         Stub out actions.key
         """
 
-        pass
-
     def _build_namespace_accessor(self, key):
         return DictAccessor(self.registered_actions[key])
 
@@ -79,6 +77,7 @@ class Context:
     def action_class(self, path=None):
         def __funcwrapper(clazz):
             return clazz
+
         return __funcwrapper
 
 
@@ -98,6 +97,7 @@ class ImgUI:
 
         return __funcwrapper
 
+
 class UI:
     """
     Stub out UI so we don't get crashes
@@ -105,6 +105,7 @@ class UI:
 
     def register(*args, **kwargs):
         pass
+
 
 actions = Actions()
 app = None

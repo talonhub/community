@@ -83,12 +83,13 @@ scala_keywords = {
 mod.list("scala_keyword", desc="Scala Keywords")
 ctx.lists["user.scala_keyword"] = scala_keywords
 
+
 @ctx.action_class("user")
 class UserActions:
     def code_block():
-        actions.insert('{}')
+        actions.insert("{}")
         actions.edit.left()
-        actions.key('enter')
+        actions.key("enter")
 
     def code_operator_lambda():
         actions.insert(" => ")
@@ -161,10 +162,10 @@ class UserActions:
         actions.insert(" & ")
 
     def code_operator_bitwise_and_assignment():
-        actions.insert(' &= ')
+        actions.insert(" &= ")
 
     def code_operator_increment():
-        actions.insert('++')
+        actions.insert("++")
 
     def code_operator_bitwise_or():
         actions.insert(" | ")
@@ -230,16 +231,16 @@ class UserActions:
         actions.edit.left()
 
     def code_break():
-        actions.insert('break')
+        actions.insert("break")
 
     def code_next():
-        actions.insert('continue')
+        actions.insert("continue")
 
     def code_insert_true():
-        actions.insert('true')
+        actions.insert("true")
 
     def code_insert_false():
-        actions.insert('false')
+        actions.insert("false")
 
     def code_define_class():
         actions.insert("class ")
@@ -251,20 +252,20 @@ class UserActions:
         actions.insert("return ")
 
     def code_comment_line_prefix():
-        actions.insert('// ')
+        actions.insert("// ")
 
     def code_comment_block():
-        actions.insert('/*')
-        actions.key('enter')
-        actions.key('enter')
-        actions.insert('*/')
+        actions.insert("/*")
+        actions.key("enter")
+        actions.key("enter")
+        actions.insert("*/")
         actions.edit.up()
 
     def code_comment_block_prefix():
-        actions.insert('/*')
+        actions.insert("/*")
 
     def code_comment_block_suffix():
-        actions.insert('*/')
+        actions.insert("*/")
 
     def code_insert_type_annotation(type: str):
         actions.insert(f": {type}")
@@ -281,7 +282,7 @@ class UserActions:
 
     def code_insert_function(text: str, selection: str):
         if selection:
-            text = text + "({})".format(selection)
+            text = text + f"({selection})"
         else:
             text = text + "()"
 
