@@ -4,6 +4,7 @@ os: mac
 ### general editing commands
 ###############################################################################
 
+coder <user.vscode_project_names>: insert(vscode_project_names)
 wipe: key(alt-backspace)
 (clear|wipe) all:
     edit.select_all()
@@ -26,6 +27,7 @@ spotlight [<user.text>]:
     sleep(50ms)
     insert(text or "")
 
+talon restart: user.run_in_fish_shell("talon-restart")
     
 polo knaus:
     key(cmd-shift-f2)

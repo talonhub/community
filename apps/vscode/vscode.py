@@ -37,6 +37,21 @@ sleep = actions.sleep
 key = actions.key
 repeat = actions.repeat
 insert = actions.insert
+global_ctx = Context()
+mod.list("vscode_projects", desc="VSCode projects")
+
+vscode_projects = {
+    "knausj": "knausj_talon",
+    "fish": "fish-config",
+    "cube": "my-kubernetes",
+}
+
+global_ctx.lists["user.vscode_projects"] = vscode_projects.keys()
+
+
+@mod.capture(rule="{user.vscode_projects}")
+def vscode_project_names(m) -> str:
+    return vscode_projects[m.vscode_projects]
 
 
 @ctx.action_class("win")
@@ -126,6 +141,10 @@ class Actions:
         """Docstring is required"""
         for i in range(nof_lines):
             actions.key("cmd-l")
+
+    def open_project():
+        """This is attest"""
+        pass
 
     def command_palette():
         """Show command palette"""

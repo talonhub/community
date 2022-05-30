@@ -5,10 +5,10 @@ and tag: terminal
 and win.title: /vim/
 -
 # vim stuff    
-quit vim save:
+vim quit save:
     key(escape)
     insert(":qw!\n")
-quit vim:
+vim quit:
     key(escape)
     insert(":q!\n")
 

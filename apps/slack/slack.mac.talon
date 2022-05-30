@@ -19,8 +19,6 @@ action(user.messaging_unread_next): key(alt-shift-down)
 (previous | last) (section | zone): key(shift-f6)
 (slack | lack) [direct] messages: key(cmd-shift-k)
 (slack | lack) threads: key(cmd-shift-t)
-(slack | lack) (history [next] | back | backward): key(cmd-[)
-(slack | lack) forward: key(cmd-])
 [next] (element | bit): key(tab)
 (previous | last) (element | bit): key(shift-tab)
 (slack | lack) (my stuff | activity): key(cmd-shift-m)
@@ -65,3 +63,9 @@ action(user.messaging_upload_file): key(cmd-u)
 emote <user.text>: "{text}"
 toggle left sidebar: key(cmd-shift-d)
 toggle right sidebar: key(cmd-.)
+
+###############################################################################
+### maciek
+###############################################################################
+back: key(cmd-[)
+front: key(cmd-])
