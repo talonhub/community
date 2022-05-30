@@ -26,7 +26,7 @@ settings():
 
 (op | is) strict equal: " === "
 (op | is) strict not equal: " !== "
-op null or: " ?? "
+op null else: " ?? "
 
 state const: "const "
 
