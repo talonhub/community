@@ -6,6 +6,44 @@ ctx.matches = """
 tag: user.javascript
 """
 
+ctx.lists["user.code_common_function"] = {
+    "abs": "Math.abs",
+    "entries": "Object.entries",
+    "fetch": "fetch",
+    "floor": "Math.floor",
+    "from entries": "Object.fromEntries",
+    "keys": "Object.keys",
+    "log": "console.log",
+    "max": "Math.max",
+    "min": "Math.min",
+    "print": "console.log",
+    "round": "Math.round",
+    "values": "Object.values",
+}
+
+mod.list("code_common_member_function", "Function to use in a dotted chain, eg .foo()")
+
+ctx.lists["user.code_common_member_function"] = {
+    "catch": "catch",
+    "concat": "concat",
+    "filter": "filter",
+    "finally": "finally",
+    "find": "find",
+    "flat map": "flatMap",
+    "for each": "forEach",
+    "join": "join",
+    "includes": "includes",
+    "map": "map",
+    "pop": "pop",
+    "push": "push",
+    "reduce": "reduce",
+    "slice": "slice",
+    "some": "some",
+    "split": "split",
+    "substring": "substring",
+    "then": "then",
+}
+
 
 @ctx.action_class("user")
 class UserActions:
@@ -54,7 +92,7 @@ class UserActions:
         actions.user.insert_between("switch (", ")")
 
     def code_state_case():
-        actions.auto_insert("case :")
+        actions.user.insert_between("case ", ":")
 
     def code_state_go_to():
         actions.auto_insert("")
