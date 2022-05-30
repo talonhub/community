@@ -263,18 +263,18 @@ class Actions:
     def switcher_focus_app(app: ui.App):
         """Focus application and wait until switch is made"""
         app.focus()
-        t1 = time.monotonic()
+        t1 = time.perf_counter()
         while ui.active_app() != app:
-            if time.monotonic() - t1 > 1:
+            if time.perf_counter() - t1 > 1:
                 raise RuntimeError(f"Can't focus app: {app.name}")
             actions.sleep(0.1)
 
     def switcher_focus_window(window: ui.Window):
         """Focus window and wait until switch is made"""
         window.focus()
-        t1 = time.monotonic()
+        t1 = time.perf_counter()
         while ui.active_window() != window:
-            if time.monotonic() - t1 > 1:
+            if time.perf_counter() - t1 > 1:
                 raise RuntimeError(f"Can't focus window: {window.title}")
             actions.sleep(0.1)
 
