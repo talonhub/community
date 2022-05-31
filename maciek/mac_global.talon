@@ -4,7 +4,7 @@ os: mac
 ### general editing commands
 ###############################################################################
 
-coder <user.vscode_project_names>: insert(vscode_project_names)
+coder <user.vscode_project_names>: user.vscode_open_project(vscode_project_names)
 wipe: key(alt-backspace)
 (clear|wipe) all:
     edit.select_all()

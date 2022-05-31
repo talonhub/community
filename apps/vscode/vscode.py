@@ -39,11 +39,13 @@ repeat = actions.repeat
 insert = actions.insert
 global_ctx = Context()
 mod.list("vscode_projects", desc="VSCode projects")
+mod.list("vscode_file_shortcuts", desc="VSCode file shortcuts")
 
 vscode_projects = {
-    "knausj": "knausj_talon",
+    "knaus": "knausj_talon",
     "fish": "fish-config",
     "cube": "my-kubernetes",
+    "updater": "dns-updater",
 }
 
 global_ctx.lists["user.vscode_projects"] = vscode_projects.keys()
@@ -142,9 +144,16 @@ class Actions:
         for i in range(nof_lines):
             actions.key("cmd-l")
 
-    def open_project():
-        """This is attest"""
-        pass
+    def vscode_open_project(project_name: str):
+        """Open a project using project manager names.
+        Please see '/Library/Application Support/Code/User/globalStorage/alefragnani.project-manager/projects.json \'
+        for the list of project names.
+        """
+        # user.vscode("projectManager.listProjects")
+        user.vscode("projectManager.listProjectsNewWindow")
+        sleep(0.1)
+        insert(project_name)
+        key("enter")
 
     def command_palette():
         """Show command palette"""

@@ -18,7 +18,9 @@ go left:
 go right:
     edit.right()
 
-go up:
+# go up:
+#     edit.up()
+upper:
     edit.up()
 
 go down:

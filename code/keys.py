@@ -3,7 +3,7 @@ from typing import Set
 from talon import Module, Context, actions, app
 import sys
 
-default_alphabet = "aim best cup dish edge fun gust hot ink jury crunch look man nap oust pit quench rush soft trap urge vice wife flex yet zip".split(
+default_alphabet = "aim best cup dish elo fun gust hot ink jury crunch look man nap oust pit quench rush soft trap urge vice wife flex yet zip".split(
     " "
 )
 letters_string = "abcdefghijklmnopqrstuvwxyz"

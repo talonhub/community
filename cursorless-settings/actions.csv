@@ -16,7 +16,7 @@ dedent, outdentLine
 define, revealDefinition
 drink, editNewLineBefore
 drop, insertEmptyLineBefore
-extract, extractVariablea
+extract, extractVariable
 float, insertEmptyLineAfter
 fold, foldRegion
 format, applyFormatter

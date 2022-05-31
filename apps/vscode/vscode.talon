@@ -7,7 +7,7 @@ tag(): user.splits
 tag(): user.tabs
 
 # TODO(maciejk): this is temporary until we are able to report if terminal is active in vscode to talon
-utag(): terminal
+tag(): terminal
 tag(): user.git
 tag(): user.fish
 

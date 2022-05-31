@@ -189,5 +189,7 @@ run last:
     key(enter)
 
 navi: insert("navi\n")
-
+command copy:key(cmd-alt-shift-c)
+lazy docker: "lazydocker\n"
+sudo reboot: "sudo reboot\n"
         

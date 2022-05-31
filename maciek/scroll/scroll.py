@@ -1,4 +1,4 @@
-cp from talon import Module, actions, cron
+from talon import Module, actions, cron
 
 mod = Module()
 mod.tag("scroll")
@@ -7,22 +7,30 @@ scroll_direction = None
 scroll_job = None
 scroll_speed = 100
 
+
 @mod.action_class
 class Actions:
     def scroll_up():
         """Scroll up"""
+
     def scroll_down():
         """Scroll down"""
+
     def scroll_left():
         """Scroll left"""
+
     def scroll_right():
         """Scroll right"""
+
     def scroll_up_page():
         """Scroll up page"""
+
     def scroll_down_page():
         """Scroll down page"""
+
     def scroll_up_half_page():
         """Scroll up half page"""
+
     def scroll_down_half_page():
         """Scroll down half page"""
 
@@ -68,11 +76,13 @@ def set_scroll_speed(speed: int):
     actions.user.scroll_speed_show()
     start_scroll_interval()
 
+
 def scroll_continuous(direction: str):
     global scroll_direction
     scroll_direction = direction
     if not scroll_job:
         start_scroll_interval()
+
 
 def start_scroll_interval():
     global scroll_job
@@ -81,6 +91,7 @@ def start_scroll_interval():
     scroll_continuous_helper()
     time = round(10000 / scroll_speed)
     scroll_job = cron.interval(f"{time}ms", scroll_continuous_helper)
+
 
 def scroll_continuous_helper():
     if scroll_direction == "up":
