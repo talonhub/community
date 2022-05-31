@@ -141,11 +141,11 @@ formatters_dict = {
 
 # This is the mapping from spoken phrases to formatters
 formatters_words = {
-    "allcaps": formatters_dict["ALL_CAPS"],
-    "alldown": formatters_dict["ALL_LOWERCASE"],
+    "all caps": formatters_dict["ALL_CAPS"],
+    "all down": formatters_dict["ALL_LOWERCASE"],
     "camel": formatters_dict["PRIVATE_CAMEL_CASE"],
     "dotted": formatters_dict["DOT_SEPARATED"],
-    "downunder": formatters_dict["SNAKE_CASE"],  
+    "down under": formatters_dict["SNAKE_CASE"],  
     "string": formatters_dict["DOUBLE_QUOTED_STRING"],
     "dunder": formatters_dict["DOUBLE_UNDERSCORE"],
     "hammer": formatters_dict["PUBLIC_CAMEL_CASE"],
@@ -155,7 +155,7 @@ formatters_words = {
     "slasher": formatters_dict["SLASH_SEPARATED"],
     "smash": formatters_dict["NO_SPACES"],
     "snake": formatters_dict["SNAKE_CASE"],
-    "singstring": formatters_dict["SINGLE_QUOTED_STRING"],
+    "sing string": formatters_dict["SINGLE_QUOTED_STRING"],
     "title": formatters_dict["CAPITALIZE_ALL_WORDS"],
 }
 
