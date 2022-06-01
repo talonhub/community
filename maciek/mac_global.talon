@@ -4,7 +4,10 @@ os: mac
 ### general editing commands
 ###############################################################################
 
-coder <user.vscode_project_names>: user.vscode_open_project(vscode_project_names)
+coder <user.vscode_project_names>: 
+    user.switcher_focus("code")
+    sleep(100ms)
+    user.vscode_open_project(vscode_project_names)
 wipe: key(alt-backspace)
 (clear|wipe) all:
     edit.select_all()
@@ -28,7 +31,7 @@ spotlight [<user.text>]:
     insert(text or "")
 
 talon restart: user.run_in_fish_shell("talon-restart")
-    
+puppy talon: user.focus_talon_window()
 polo knaus:
     key(cmd-shift-f2)
     sleep(200ms)

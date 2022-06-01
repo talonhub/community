@@ -58,7 +58,8 @@ action(user.multi_cursor_select_more_occurrences): user.vscode("editor.action.ad
 #multiple_cursor.py support end
 settings():
     speech.timeout = 0.400
-
+coder <user.vscode_project_names>: 
+    user.vscode_open_project(vscode_project_names)
 please [<user.text>]$: 
   user.vscode("workbench.action.showCommands")
   insert(user.text or "")

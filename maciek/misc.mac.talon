@@ -4,33 +4,19 @@ os:mac
 # There are two versions of these comments. The problem with the one allowing additional phrase
 # is that it conflicts with commands like "coder project".
 
-horse [<phrase>]$: 
+horse$: 
     key("ctrl-1") 
     user.switcher_focus("google chrome")
-    user.rephrase(phrase or "")
+    # user.rephrase(phrase or "")
     
-panda|coder [<phrase>]$: 
+coder$: 
     key("ctrl-2") 
     user.switcher_focus("code")
-    user.rephrase(phrase or "")
+    # user.rephrase(phrase or "")
 
-puppy [<phrase>]$:
-    key("ctrl-3") 
-    user.switcher_focus("kitty")
-    user.rephrase(phrase or "")
+puppy$:user.focus_puppy()
 
 
-# horse$: 
-#     key("ctrl-1") 
-#     user.switcher_focus("google chrome")
-    
-# panda|coder$: 
-#     key("ctrl-2") 
-#     user.switcher_focus("code")
-
-# puppy$:
-#     key("ctrl-3") 
-#     user.switcher_focus("kitty")
 
 ###############################################################################
 ### KeyPad

@@ -219,6 +219,18 @@ def update_overrides(name, flags):
 
 @mod.action_class
 class Actions:
+    def find_window(bundle: str, window_name_regex: str, negate_regex: bool = False):
+        """Finds the first window matching the given bundle id and window name regex"""
+        for window in ui.windows():
+            if window.app.bundle == bundle:
+                if negate_regex:
+                    if not re.search(window_name_regex, window.title):
+                        return window
+                else:
+                    if re.search(window_name_regex, window.title):
+                        return window
+        return None
+
     def get_running_app(name: str) -> ui.App:
         """Get the first available running app with `name`."""
         # We should use the capture result directly if it's already in the list
