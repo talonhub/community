@@ -2,8 +2,8 @@
 os: linux
 tag: user.i3wm
 -
-port <number_small>: user.system_command("i3-msg workspace {number_small}")
-port ten: user.system_command("i3-msg workspace 10")
+port <number_small>: user.system_command("i3-msg workspace number {number_small}")
+port ten: user.system_command("i3-msg workspace number 10")
 (port flip|flipper): user.system_command("i3-msg workspace back_and_forth")
 port right: user.system_command("i3-msg workspace next")
 port left: user.system_command("i3-msg workspace prev")
