@@ -206,7 +206,7 @@ ctx.lists["self.arrow_key"] = {
     "down": "",
     "left": "left",
     "right": "right",
-    "up": "up",
+    "upper": "up",
 }
 
 simple_keys = [

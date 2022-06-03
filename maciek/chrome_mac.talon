@@ -45,10 +45,10 @@ close:
     sleep(40ms)
 go front: browser.go_forward()
 
-next: app.tab_next()
-last: app.tab_previous()
-back: browser.go_back()
-front: browser.go_forward()
+next$: app.tab_next()
+last$: app.tab_previous()
+back$: browser.go_back()
+front$: browser.go_forward()
 
 google [<user.text>]$: 
 password fill:

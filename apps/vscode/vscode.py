@@ -113,6 +113,14 @@ class edit_actions:
 
 @mod.action_class
 class Actions:
+    def vscode_quick_open(text: str):
+        """."""
+        user.vscode("workbench.action.quickOpen")
+        sleep("50ms")
+        insert(text)
+        sleep("100ms")
+        key("enter")
+
     def copy_command_id():
         """Copy the command id of the focused menu item"""
         actions.key("tab:2 enter")

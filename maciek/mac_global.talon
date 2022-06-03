@@ -4,6 +4,7 @@ os: mac
 ### general editing commands
 ###############################################################################
 
+notes toggle:key(cmd-shift-f6)
 coder <user.vscode_project_names>: 
     user.switcher_focus("code")
     sleep(100ms)
@@ -30,19 +31,15 @@ spotlight [<user.text>]:
     sleep(50ms)
     insert(text or "")
 
+talon play:user.run_in_fish_shell("talon-play-pre-last")    
 talon restart: user.run_in_fish_shell("talon-restart")
 puppy talon: user.focus_talon_window()
-polo knaus:
-    key(cmd-shift-f2)
-    sleep(200ms)
-    insert("knausj")
-    sleep(200ms)
-    key(enter)
 
 ###########################################    
 # Open specific files in knausj_talon
 ###########################################
 polo mac o s:
+    user.vscode_open_project("knausj_talon")
     user.run_in_fish_shell("code /Users/maciek/projects/knausj_talon/maciek/macOS.talon")
     user.switcher_focus("code")
     key(cmd-down)

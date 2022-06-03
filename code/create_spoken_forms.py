@@ -26,7 +26,12 @@ FILE_EXTENSIONS_REGEX = "|".join(
 )
 SYMBOLS_REGEX = "|".join(re.escape(symbol) for symbol in set(symbol_key_words.values()))
 REGEX_NO_SYMBOLS = re.compile(
-    "|".join([FANCY_REGULAR_EXPRESSION, FILE_EXTENSIONS_REGEX,])
+    "|".join(
+        [
+            FANCY_REGULAR_EXPRESSION,
+            FILE_EXTENSIONS_REGEX,
+        ]
+    )
 )
 
 REGEX_WITH_SYMBOLS = re.compile(

@@ -104,7 +104,7 @@ code run: "code "
 current folder copy: "pwd | tr -d \\\\n\\\\r | pbcopy\n"
 current folder: "pwd\n"
 
-fish config reload: 
+fish reload: 
     insert("fish-config-reload\n")
 fish config:
     insert("fish-config\n")
@@ -142,7 +142,6 @@ cube nine: insert("k9s\n")
 vars show: "env\n"
 # Taskfile
 task: insert("task \t")
-add help: insert(" --help\n")
 
 # vd command
 # vidi: insert("vd ") 
@@ -179,7 +178,8 @@ z pool: insert("zpool \t")
 add sudo: 
     key(home)
     insert("sudo ")
-add help: insert("--help ")
+add help: insert(" --help ")
+pager: " | less "
 run last:
     key(up)
     key(enter)

@@ -607,11 +607,13 @@ limit search talon: user.vscode_limit_search("talon")
 limit search python: user.vscode_limit_search("python")
 limit search none: user.vscode_limit_sort("")
 
-    
+^jump {user.file_shortcuts}$: user.vscode_quick_open(user.file_shortcuts)
 
 
    
     
 
+
     
+
     
