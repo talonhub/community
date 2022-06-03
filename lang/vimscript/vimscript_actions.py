@@ -1,7 +1,6 @@
 from talon import Context, actions
 ctx = Context()
 ctx.matches = r"""
-r
 mode: user.vimscript
 mode: command
 and code.language: vimscript

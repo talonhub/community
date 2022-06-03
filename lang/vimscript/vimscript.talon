@@ -1,4 +1,3 @@
-r
 mode: user.vimscript
 mode: command
 and code.language: vimscript
