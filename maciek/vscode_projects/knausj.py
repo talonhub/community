@@ -14,4 +14,5 @@ ctx.lists["user.file_shortcuts"] = {
     "global": "maciek/mac_global.talon",
     "chrome": "maciek/chrome_mac.talon",
     "command": "maciek/commandline.talon",
+    "Taskfile":"Taskfile.yml"
 }

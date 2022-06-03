@@ -11,7 +11,7 @@ tasks:
   deploy:
     desc: "."
     cmds:
-      - rsync -avz --delete --exclude=maciek/experimental --exclude=.venv ~/projects/knausj_talon/ ~/.talon/user/knausj_talon
+      - rsync -avz --delete --exclude=.git --exclude=maciek/experimental --exclude=.venv ~/projects/knausj_talon/ ~/.talon/user/knausj_talon
       - rsync -avz --delete --exclude=.git cursorless-settings ~/.talon/user/
   pandoc:
     desc: "."
