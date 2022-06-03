@@ -2,18 +2,8 @@ os: mac
 app: finder
 -
 tag(): user.file_manager
-
-action(user.file_manager_open_parent):
-    key(cmd-up)
-        
-action(user.file_manager_go_forward):
-    key("cmd-]")
-
-action(user.file_manager_go_back):
-    key("cmd-[")
-
 preferences: key(cmd-,)
-options: key(cmd-j) 
+options: key(cmd-j)
 search: key(cmd-alt-f)
 
 # bit of a mouthful, but it's probably not the kind of thing you'd be saying frequently

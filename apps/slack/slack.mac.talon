@@ -4,16 +4,9 @@ app: slack
 tag(): user.messaging
 # Workspace
 workspace <number>: key("cmd-{number}")
-action(user.messaging_workspace_previous): key(cmd-shift-[)
-action(user.messaging_workspace_next): key(cmd-shift-])
 # Channel
 (slack | lack) [channel] info: key(cmd-shift-i)
-action(user.messaging_open_channel_picker): key(cmd-k)
-action(user.messaging_channel_previous): key(alt-up)
-action(user.messaging_channel_next): key(alt-down)
-action(user.messaging_unread_previous): key(alt-shift-up)
-action(user.messaging_unread_next): key(alt-shift-down)
-    # Navigation
+# Navigation
 (move | next) focus: key(ctrl-`)
 [next] (section | zone): key(f6)
 (previous | last) (section | zone): key(shift-f6)
@@ -26,12 +19,6 @@ action(user.messaging_unread_next): key(alt-shift-down)
 (slack | lack) (starred [items] | stars): key(cmd-shift-s)
 (slack | lack) unread [messages]: key(cmd-j)
 (go | undo | toggle) full: key(ctrl-cmd-f)
-action(user.messaging_open_search): 
-    key(cmd-f)
-    sleep(100ms)
-    edit.select_line()
-    edit.delete()
-    # Messaging
 grab left: key(shift-up)
 grab right: key(shift-down)
 add line: key(shift-enter)
@@ -41,24 +28,20 @@ add line: key(shift-enter)
 
 insert code:
     insert("```")
-
+    
 (slack | lack) (bull | bullet | bulleted) [list]: key(cmd-shift-8)
 (slack | lack) (number | numbered) [list]: key(cmd-shift-7)
 (slack | lack) (quotes | quotation): key(cmd-shift->)
 bold: key(cmd-b)
 (italic | italicize): key(cmd-i)
 (strike | strikethrough): key(cmd-shift-x)
-action(user.messaging_mark_workspace_read): key(shift-esc)
-action(user.messaging_mark_channel_read): key(esc)
 (clear | scrap | scratch): key(cmd-a backspace)
-    # Files and Snippets
-action(user.messaging_upload_file): key(cmd-u)
 (slack | lack) snippet: key(cmd-shift-enter)
-    # Calls
+# Calls
 ([toggle] mute | unmute): key(m)
 (slack | lack) ([toggle] video): key(v)
 (slack | lack) invite: key(a)
-    # Miscellaneous
+# Miscellaneous
 (slack | lack) shortcuts: key(cmd-/)
 emote <user.text>: "{text}"
 toggle left sidebar: key(cmd-shift-d)

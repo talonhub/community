@@ -4,39 +4,31 @@ and code.language: talon
 -
 tag(): user.code_operators
 tag(): user.code_comment
-action(user.code_operator_and): " and "
-action(user.code_operator_or): " or "
-action(user.code_operator_subtraction): " - "
-action(user.code_operator_addition): " + "
-action(user.code_operator_multiplication): " * "
-action(user.code_operator_division): " / "
-action(user.code_operator_assignment): " = "
-action(user.code_comment): "# "
 
 dot talon: insert(".talon")
 #defintion blocks for the context
 action block:
-	insert("action():")
-	edit.left()
-	edit.left()
+    insert("action():")
+    edit.left()
+    edit.left()
 setting block:
-	insert("settings():\n\t")
-#context requirements
+    insert("settings():\n\t")
+    #context requirements
 win require:
-	insert("os: windows\n")
+    insert("os: windows\n")
 mac require:
-	insert("os: mac\n")
+    insert("os: mac\n")
 linux require:
-	insert("os: linux\n")
+    insert("os: linux\n")
 title require:
-	insert("win.title: ")
+    insert("win.title: ")
 app require:
-	insert("app: ")
+    insert("app: ")
 tag require:
-	insert("tag: ")
+    insert("tag: ")
 tag set:
-	insert("tag(): ")
-#commands for dictating key combos
+    insert("tag(): ")
+    #commands for dictating key combos
 key <user.keys> over: "{keys}"
 key <user.modifiers> over: "{modifiers}"
 #funk commands, consistent with other languages
@@ -56,13 +48,13 @@ key:
     insert("key()")
     key(left )
 sleep:
-    insert("sleep()")    
+    insert("sleep()")
     key(left)
 user:
-    insert("user.")    
-
+    insert("user.")
+    
 sleep fifty: "sleep(50ms)"
 sleep hundred: "sleep(100ms)"
 sleep two hundred: "sleep(200ms)"
-actions: insert("actions.\t")    
+actions: insert("actions.\t")
 key enter: "key(enter)\n"

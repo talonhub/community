@@ -4,10 +4,6 @@ and code.language: batch
 -
 #tag(): user.code_operators
 tag(): user.code_comment
-#tag(): user.code_generic
-
-
-action(user.code_comment): "REM "
 
 # exit without killing cmd shell
 soft exit: "exit /B 1\n"

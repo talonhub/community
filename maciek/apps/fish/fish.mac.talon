@@ -3,35 +3,30 @@ tag: user.fish
 -
 tag(): user.brew
 tag(): user.poetry
-
-action(edit.delete_word):
-	edit.word_right()
-	key(ctrl-w)
-
-fuzzy [<user.text>]: 
+fuzzy [<user.text>]:
     key(cmd-e)
-    sleep(100ms) 
+    sleep(100ms)
     insert(text or "")
-
-fuzzy root [<user.text>]: 
+    
+fuzzy root [<user.text>]:
     insert("/")
     key(cmd-e)
-    sleep(100ms) 
+    sleep(100ms)
     insert(text or "")
-fuzzy home [<user.text>]: 
+fuzzy home [<user.text>]:
     insert("~/")
     key(cmd-e)
-    sleep(100ms) 
+    sleep(100ms)
     insert(text or "")
     
-
-# star is here because of misrecognition
-(history|story) [<user.text>]: 
+    
+    # star is here because of misrecognition
+(history|story) [<user.text>]:
     key(cmd-r)
-    sleep(100ms) 
+    sleep(100ms)
     insert(text or "")
     
-fuzzy var: key(ctrl-v) 
+fuzzy var: key(ctrl-v)
 
 cancel|fucker: key(ctrl-c)
 
@@ -40,12 +35,12 @@ go dir:
     
 go dir home:
     key(cmd-shift-d)
-# podo: 
+    # podo:
     # user.fzf_cd_directory_single_level()
-
-
+    
+    
 (wipe|clear) lord:
     user.delete_big_word()
-
-# (clear board|clear big word):
-#     fzf.delete_big_word()
+    
+    # (clear board|clear big word):
+    #     fzf.delete_big_word()
