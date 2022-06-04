@@ -11,9 +11,14 @@ ctx = Context()
 
 mod.list('talon_settings_csv', desc="Absolute paths to talon user settings csv files.")
 _csvs = {
-    x: os.path.join(SETTINGS_DIR, '_'.join(x.split()) + ".csv")
-    for x in ["file extensions", "search engines", "system paths",
-              "websites", "words to replace", "additional words"]
+    name: os.path.join(SETTINGS_DIR, file_name)
+    for name, file_name in
+    { "file extensions": "file_extensions.csv",
+      "search engines": "search_engines.csv",
+      "system paths": "system_paths.csv",
+      "websites": "websites.csv",
+      "words to replace": "words_to_replace.csv",
+      "additional words": "additional_words.csv" }.items()
 }
 _csvs.update({
     "homophones": os.path.join(REPO_DIR, 'code', 'homophones.csv'),
@@ -31,10 +36,13 @@ class ModuleActions:
         if not os.path.exists(path):
             app.notify(f"No file found at {path}")
             raise FileNotFoundError(path)
+        # TODO:
+        # 1. error handling if ui.launch/whatever fails?
+        # 2. should we use ui.launch or subprocess? since open/xdg-open is short-lived.
         if app.platform == "windows":
             os.startfile(path, 'open')
         elif app.platform == "mac":
-            ui.launch(path="open", args=[path])
+            ui.launch(path="/usr/bin/open", args=[path])
         elif app.platform == "linux":
             ui.launch(path='/usr/bin/xdg-open', args=[path])
         else:
