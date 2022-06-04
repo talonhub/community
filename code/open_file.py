@@ -39,8 +39,7 @@ class ModuleActions:
             app.notify(f"No file found at {path}")
             raise FileNotFoundError(path)
 
-        # tries to open file using a subprocess
-        def subproc(args):
+        def open_with_subprocess(args):
             try: return subprocess.run(args, timeout=0.5, check=True)
             except subprocess.TimeoutExpired:
                 app.notify(f"Timeout trying to open file for editing: {path}")
@@ -58,14 +57,16 @@ class ModuleActions:
                 os.startfile(path, "open")
         elif app.platform == "mac":
             # -t means try to open in a text editor.
-            subproc(["/usr/bin/open", "-t", path])
+            open_with_subprocess(["/usr/bin/open", "-t", path])
         elif app.platform == "linux":
             # we use xdg-open for this even though it might not open a text
             # editor. we could use $EDITOR, but that might be something that
             # requires a terminal (eg nano, vi).
-            subproc(["/usr/bin/xdg-open", path])
+            open_with_subprocess(["/usr/bin/xdg-open", path])
         else:
             raise Exception(f"unknown platform: {app.platform}")
+
+        # Wait for app to open so later actions go to that app.
         actions.sleep("500ms")
 
     # def open_file(path: str, directory: str = None):
