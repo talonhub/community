@@ -3,7 +3,6 @@ import os
 
 from talon import Context, Module, actions, app, ui
 
-
 # path to knausj root directory
 REPO_DIR = os.path.dirname(os.path.dirname(__file__))
 SETTINGS_DIR = os.path.join(REPO_DIR, "settings")
@@ -23,11 +22,7 @@ _csvs = {
         "additional words": "additional_words.csv",
     }.items()
 }
-_csvs.update(
-    {
-        "homophones": os.path.join(REPO_DIR, "code", "homophones.csv"),
-    }
-)
+_csvs["homophones"] = os.path.join(REPO_DIR, "code", "homophones.csv")
 ctx.lists["self.talon_settings_csv"] = _csvs
 
 
