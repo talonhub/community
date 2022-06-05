@@ -1,5 +1,6 @@
 from talon import Context, Module, actions, settings
 
+
 ctx = Context()
 mod = Module()
 
@@ -11,12 +12,24 @@ mod.list("code_type", desc="List of types for active language")
 mod.list(
     "code_parameter_name", desc="List of common parameter names for active language"
 )
+mod.list(
+    "code_function_modifiers",
+    desc="List of function modifiers (e.g. private, async, static)"
+)
+
+ctx.lists["user.code_function_modifiers"] = ["pub", "pro", "private", "static"]
 
 
 @mod.capture(rule="{user.code_type}")
 def code_type(m) -> str:
     """Returns a macro name"""
     return m.code_type
+
+
+@mod.capture(rule="{user.code_function_modifiers}+")
+def code_function_modifiers(m) -> str:
+    """Returns a space separated string of function modifiers"""
+    return " ".join(m)
 
 
 setting_private_function_formatter = mod.setting("code_private_function_formatter", str)
@@ -33,6 +46,29 @@ setting_public_variable_formatter = mod.setting("code_public_variable_formatter"
 
 @mod.action_class
 class Actions:
+    def code_modified_function(modifiers: str, text: str):
+        """Inserts function declaration with the given modifiers"""
+        mods = set(modifiers.split(" "))
+
+        if mods == set([""]):
+            return actions.user.code_default_function(text)
+        elif mods == set(["static"]):
+            return actions.user.code_private_static_function(text)
+        elif mods == set(["private"]):
+            return actions.user.code_private_function(text)
+        elif mods == set(["private", "static"]):
+            return actions.user.code_private_static_function(text)
+        elif mods == set(["pro"]):
+            return actions.user.code_protected_function(text)
+        elif mods == set(["pro", "static"]):
+            return actions.user.code_protected_static_function(text)
+        elif mods == set(["pub"]):
+            return actions.user.code_public_function(text)
+        elif mods == set(["pub", "static"]):
+            return actions.user.code_public_static_function(text)
+        else:
+            raise RuntimeError(f"Unhandled modifier set: {modifiers}")
+
     def code_default_function(text: str):
         """Inserts function declaration"""
         actions.user.code_private_function(text)
