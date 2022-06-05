@@ -1,6 +1,5 @@
 from talon import Context, Module, actions, settings
 
-
 ctx = Context()
 mod = Module()
 
@@ -14,7 +13,7 @@ mod.list(
 )
 mod.list(
     "code_function_modifiers",
-    desc="List of function modifiers (e.g. private, async, static)"
+    desc="List of function modifiers (e.g. private, async, static)",
 )
 
 ctx.lists["user.code_function_modifiers"] = ["pub", "pro", "private", "static"]
@@ -50,21 +49,21 @@ class Actions:
         """Inserts function declaration with the given modifiers"""
         mods = set(modifiers.split(" "))
 
-        if mods == set([""]):
+        if mods == {""}:
             return actions.user.code_default_function(text)
-        elif mods == set(["static"]):
+        elif mods == {"static"}:
             return actions.user.code_private_static_function(text)
-        elif mods == set(["private"]):
+        elif mods == {"private"}:
             return actions.user.code_private_function(text)
-        elif mods == set(["private", "static"]):
+        elif mods == {"private", "static"}:
             return actions.user.code_private_static_function(text)
-        elif mods == set(["pro"]):
+        elif mods == {"pro"}:
             return actions.user.code_protected_function(text)
-        elif mods == set(["pro", "static"]):
+        elif mods == {"pro", "static"}:
             return actions.user.code_protected_static_function(text)
-        elif mods == set(["pub"]):
+        elif mods == {"pub"}:
             return actions.user.code_public_function(text)
-        elif mods == set(["pub", "static"]):
+        elif mods == {"pub", "static"}:
             return actions.user.code_public_static_function(text)
         else:
             raise RuntimeError(f"Unhandled modifier set: {modifiers}")

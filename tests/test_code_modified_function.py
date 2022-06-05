@@ -1,12 +1,10 @@
 import talon
 
-
 if hasattr(talon, "test_mode"):
     from unittest.mock import MagicMock
-    from talon import actions
 
     # Load our code under test (register code_* actions)
-    import knausj_talon_pkg.lang.tags.functions
+    from talon import actions
 
     def setup_function():
         actions.reset_test_actions()

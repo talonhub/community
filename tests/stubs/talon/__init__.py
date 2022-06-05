@@ -1,6 +1,5 @@
-from typing import Callable
-
 import inspect
+from typing import Callable
 
 
 class RegisteredActionsAccessor:
