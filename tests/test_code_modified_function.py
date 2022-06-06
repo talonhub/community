@@ -3,8 +3,10 @@ import talon
 if hasattr(talon, "test_mode"):
     from unittest.mock import MagicMock
 
-    # Load our code under test (register code_* actions)
     from talon import actions
+
+    # Load our code under test (register code_* actions)
+    import knausj_talon_pkg.lang.tags.functions  # isort:skip
 
     def setup_function():
         actions.reset_test_actions()
@@ -16,14 +18,14 @@ if hasattr(talon, "test_mode"):
         """
 
         examples = [
-            ("", "code_default_function"),
-            ("static", "code_private_static_function"),
-            ("private", "code_private_function"),
-            ("private static", "code_private_static_function"),
-            ("pro", "code_protected_function"),
-            ("pro static", "code_protected_static_function"),
-            ("pub", "code_public_function"),
-            ("pub static", "code_public_static_function"),
+            (0, "code_default_function"),
+            (["static"], "code_private_static_function"),
+            (["private"], "code_private_function"),
+            (["private", "static"], "code_private_static_function"),
+            (["pro"], "code_protected_function"),
+            (["pro", "static"], "code_protected_static_function"),
+            (["pub"], "code_public_function"),
+            (["pub", "static"], "code_public_static_function"),
         ]
         for modifiers, target_action in examples:
             mock = MagicMock()
