@@ -2,8 +2,8 @@
 os: linux
 tag: user.i3wm
 -
-port <number_small>: user.system_command("i3-msg workspace {number_small}")
-port ten: user.system_command("i3-msg workspace 10")
+port <number_small>: user.system_command("i3-msg workspace number {number_small}")
+port ten: user.system_command("i3-msg workspace number 10")
 (port flip|flipper): user.system_command("i3-msg workspace back_and_forth")
 port right: user.system_command("i3-msg workspace next")
 port left: user.system_command("i3-msg workspace prev")
@@ -61,8 +61,8 @@ vertical (shell|terminal):
 
 # XXX - just replace with shuffle eventually?
 # XXX - like also need to match the generic talon commands
-(shuffle|move (win|window) [to] port) <number_small>:  user.system_command("i3-msg move container to workspace {number_small}")
-(shuffle|move (win|window) [to] port ten): user.system_command("i3-msg move container to workspace 10")
+(shuffle|move (win|window) [to] port) <number_small>:  user.system_command("i3-msg move container to workspace number {number_small}")
+(shuffle|move (win|window) [to] port ten): user.system_command("i3-msg move container to workspace number 10")
 (shuffle|move (win|window) [to] last port): user.system_command("i3-msg move container to workspace back_and_forth")
 (shuffle|move (win|window) left): user.system_command("i3-msg move left")
 (shuffle|move (win|window) right): user.system_command("i3-msg move right")

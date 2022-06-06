@@ -75,7 +75,7 @@ class BrowserActions:
 class UserActions:
     def tab_jump(number: int):
         if number < 9:
-            actions.key("cmd-{}".format(number))
+            actions.key(f"cmd-{number}")
 
     def tab_final():
         actions.key("cmd-9")

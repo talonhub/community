@@ -8,9 +8,9 @@ mod = Module()
 
 mod.tag("code_operators_math", desc="Tag for enabling mathematical operator commands")
 
+
 @mod.action_class
 class Actions:
-
     def code_operator_subtraction():
         """code_operator_subtraction"""
 
