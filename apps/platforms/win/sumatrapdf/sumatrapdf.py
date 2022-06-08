@@ -1,4 +1,4 @@
-from talon import Module, Context, actions
+from talon import Context, Module, actions
 
 # --- App definition ---
 mod = Module()
@@ -20,13 +20,17 @@ app: sumatrapdf
 @ctx.action_class("app")
 class app_actions:
     # app.tabs
-    def tab_open(): actions.key("ctrl-o")
+    def tab_open():
+        actions.key("ctrl-o")
 
 
-@ctx.action_class('edit')
+@ctx.action_class("edit")
 class EditActions:
-    def zoom_in(): actions.key("+")
-    def zoom_out(): actions.key("-")
+    def zoom_in():
+        actions.key("+")
+
+    def zoom_out():
+        actions.key("-")
 
 
 @ctx.action_class("user")
@@ -37,15 +41,25 @@ class UserActions:
         page = actions.edit.selected_text()
         actions.key("escape")
         return int(page)
-    def page_next(): actions.key("n")
-    def page_previous(): actions.key("p")
+
+    def page_next():
+        actions.key("n")
+
+    def page_previous():
+        actions.key("p")
+
     def page_jump(number: int):
         actions.key("ctrl-g")
         actions.insert(str(number))
         actions.key("enter")
-    def page_final(): actions.key("end")
+
+    def page_final():
+        actions.key("end")
+
     # user.tabs
     def tab_jump(number: int):
         if number < 9:
             actions.key(f"alt-{number}")
-    def tab_final(): actions.key("alt-9")
+
+    def tab_final():
+        actions.key("alt-9")

@@ -1,23 +1,12 @@
-from talon import (
-    Context,
-    actions,
-    ui,
-    Module,
-    app,
-    clip,
-    speech_system,
-    registry,
-    scope,
-    ui,
-)
-from talon.grammar import Phrase
+import os
+import platform
+import pprint
+import re
+from itertools import islice
 from typing import Union
 
-import os
-import re
-import platform
-from itertools import islice
-import pprint
+from talon import Module, actions, app, clip, registry, scope, speech_system, ui
+from talon.grammar import Phrase
 
 pp = pprint.PrettyPrinter()
 
@@ -59,9 +48,7 @@ class Actions:
         # print(actions.app.executable())
         executable = actions.app.executable().split(os.path.sep)[-1]
         if app.platform == "mac":
-            result = "os: {}\nand app.bundle: {}\n".format(
-                app.platform, actions.app.bundle()
-            )
+            result = f"os: {app.platform}\nand app.bundle: {actions.app.bundle()}\n"
         elif app.platform == "windows":
             result = (
                 "os: windows\nand app.name: {}\nos: windows\nand app.exe: {}\n".format(
@@ -69,7 +56,7 @@ class Actions:
                 )
             )
         else:
-            result = "os: {}\nand app.name: {}\n".format(app.platform, friendly_name)
+            result = f"os: {app.platform}\nand app.name: {friendly_name}\n"
 
         clip.set_text(result)
 
@@ -81,13 +68,13 @@ class Actions:
 
     def talon_action_find(action: str):
         """Runs action.find for the provided action and dumps to the log"""
-        print("**** action.find{} **** ".format(action))
+        print(f"**** action.find{action} **** ")
         print(actions.find(action))
         print("***********************")
 
     def talon_debug_list(name: str):
         """Dumps the contents of list to the console"""
-        print("**** Dumping list {} **** ".format(name))
+        print(f"**** Dumping list {name} **** ")
 
         print(str(registry.lists[name]))
         print("***********************")
@@ -106,19 +93,19 @@ class Actions:
 
     def talon_debug_scope(name: str):
         """Dumps the active scope information to the console"""
-        print("**** Dumping {} scope ****".format(name))
+        print(f"**** Dumping {name} scope ****")
         print(scope.get(name))
         print("***********************")
 
     def talon_copy_list(name: str):
         """Dumps the contents of list to the console"""
-        print("**** Copied list {} **** ".format(name))
+        print(f"**** Copied list {name} **** ")
         clip.set_text(pp.pformat(registry.lists[name]))
         print("***********************")
 
     def talon_debug_setting(name: str):
         """Dumps the current setting to the console"""
-        print("**** Dumping setting {} **** ".format(name))
+        print(f"**** Dumping setting {name} **** ")
         print(registry.settings[name])
         print("***********************")
 

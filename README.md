@@ -3,6 +3,7 @@
 Talon configs for Mac, Windows, and Linux. Very much in progress. This is also intended to work with both Dragon Naturally Speaking and wav2letter.
 
 Notes:
+
 - commands are subject to change. We do our best to minimize changes, but we are moving to an [object][verb] standard slowly but surely.
 - @knausj85 makes extensive use of Talon's eye tracking features, so the grammar for certain programs may be much smaller than you may require.
 - The repository was mostly developed with Dragon, so commands are mostly still optimized for that speech engine.
@@ -62,17 +63,17 @@ The folder structure should look something like the below:
 ## Getting started with Talon
 
 1. `help active` will display the available commands for the active application.
-    - Available commands can change with the application, or even window title that has focus.
-    - You may navigate help using the displayed numbers. e.g., `help one one` or `help eleven` to open the 11th item in the help list.
-    - Without opening help first, you can also search for commands e.g. `help search tab` to display all tab-related commands
-    - Without opening help first, you can also jump immediately into a particular help context display by recalling the name displayed in help window (based on the name of the .talon file) e.g. `help symbols` or `help visual studio`
-    - All help-related commands are defined in misc/help.talon and misc/help_open.talon
+   - Available commands can change with the application, or even window title that has focus.
+   - You may navigate help using the displayed numbers. e.g., `help one one` or `help eleven` to open the 11th item in the help list.
+   - Without opening help first, you can also search for commands e.g. `help search tab` to display all tab-related commands
+   - Without opening help first, you can also jump immediately into a particular help context display by recalling the name displayed in help window (based on the name of the .talon file) e.g. `help symbols` or `help visual studio`
+   - All help-related commands are defined in misc/help.talon and misc/help_open.talon
 2. `help alphabet` will display the alphabet
 3. `command history` will toggle a display of the recent commands
 4. `help format` will display the available formatters with examples.
 5. Many useful, basic commands are defined in https://github.com/knausj85/knausj_talon/blob/master/misc/standard.talon#L36
-    - `undo that` and `redo that` are the default undo/redo commands.
-    - `paste that`, `copy that`, and `cut that` for pasting/copy/cutting, respectively.
+   - `undo that` and `redo that` are the default undo/redo commands.
+   - `paste that`, `copy that`, and `cut that` for pasting/copy/cutting, respectively.
 
 It's recommended to learn the alphabet first, then get familiar with the keys, symbols, formatters, mouse, and generic_editor commands.
 
@@ -82,7 +83,8 @@ After that, explore using ordinal repetition for easily repeating a command with
 
 If you use vim, just start with the numbers and alphabet, otherwise look at generic_editor.talon as well at jetbrains, vscode, and any other integrations.
 
-###  Alphabet
+### Alphabet
+
 The alphabet is defined here
 https://github.com/knausj85/knausj_talon/blob/master/code/keys.py#L6
 
@@ -90,19 +92,17 @@ https://github.com/knausj85/knausj_talon/blob/master/code/keys.py#L6
 
 Try saying e.g. `air bat cap` to insert abc.
 
-
 ### Keys
+
 Keys are defined in keys.py from line 83 - 182. The alphabet is used for A-Z.
 https://github.com/knausj85/knausj_talon/blob/84c6f637ba8304352aa15e01b030e8fa36f4f1a2/code/keys.py#L83
 
 All key commands are defined in keys.talon
 https://github.com/knausj85/knausj_talon/blob/master/misc/keys.talon
 
-
 For example, say
 
 `shift air` to press `shift-a`, which types a capital `A`.
-
 
 On Windows, try commands such as
 
@@ -110,17 +110,16 @@ On Windows, try commands such as
 
 `super-shift-sun` to press `windows-shift-s` to trigger the screenshot application (Windows 10). Then try `escape` to exit the screenshot application.
 
-
 On Mac, try commands such as
 
 `command air` to press `command-a` and select all.
 
 `control shift command 4` to press ` ctrl-shift-cmd-4` to trigger the screenshot application. Then try `escape` to exit the screenshot application. Please note the order of the modifiers doesn't matter.
 
-
 Any combination of the modifiers, symbols, alphabet, numbers and function keys can be executed via voice to execute shorcuts. Out of the box, only the modifier keys (command, shift, alt, super) cannot be triggered by themselves.
 
 ### Symbols
+
 Some symbols are defined in keys.py, so you can say e.g. `control colon` to press those keys.
 https://github.com/knausj85/knausj_talon/blob/master/code/keys.py#L93
 
@@ -128,6 +127,7 @@ Some other symbols are defined here:
 https://github.com/knausj85/knausj_talon/blob/master/text/symbols.talon
 
 ### Formatters
+
 `help format` will display the available formatters with examples of the output.
 
 Try using formatters by saying e.g. `snake hello world`, which will insert hello_world
@@ -140,16 +140,18 @@ https://github.com/knausj85/knausj_talon/blob/master/code/formatters.py#L146
 All formatter-related commands are defined here
 https://github.com/knausj85/knausj_talon/blob/master/misc/formatters.talon#L2
 
-
 ### Mouse commands
+
 See https://github.com/knausj85/knausj_talon/blob/master/misc/mouse.talon
 
 ### Generic editor
+
 https://github.com/knausj85/knausj_talon/blob/master/text/generic_editor.talon#L7
 
 These generic commands are global. Commands such as `go word left` will work in any text box.
 
 ### Repeating commands
+
 For repeating commands, useful voice commands are defined here:
 https://github.com/knausj85/knausj_talon/blob/ced46aee4b59e6ec5e8545bb01434e27792c830e/misc/repeater.talon#L2
 
@@ -157,6 +159,7 @@ Try saying e.g. `go up fifth` will go up five lines.
 Try saying e.g. `select up third` to hit `shift-up` three times to select some lines in a text field.
 
 ### Window management
+
 Global window managment commands are defined here:
 https://github.com/knausj85/knausj_talon/blob/master/misc/window_management.talon#L1
 
@@ -180,28 +183,29 @@ https://github.com/knausj85/knausj_talon/blob/master/modes/language_modes.talon
 By default, title tracking activates coding languages in supported applications such as VSCode, Visual Studio (requires plugin), and Notepad++.
 
 To enable title tracking for your application:
+
 1. The active filename (including extension) must be included in the editor's title
 2. Implement the required Talon-defined `filename` action to correctly extract the filename from the programs's title. See https://github.com/knausj85/knausj_talon/blob/8fc3ca75874398806b42d972c28dad91f1399653/apps/vscode/vscode.py#L109 for an example.
 
 Python, C#, Talon and javascript language support is currently broken up into several tags in an attempt to define a common grammar where possible between languages. Each tag is defined by a .talon file, which defines the voice commands, and a Python file which declares the actions that should be implemented by each concrete language implementation to support those voice commands. Currently, the tags which are available are:
 
-• `lang/tags/comment_block.{talon,py}`         - block comments (e.g., C++'s `/* */`)
+• `lang/tags/comment_block.{talon,py}` - block comments (e.g., C++'s `/* */`)
 • `lang/tags/comment_documentation.{talon,py}` - documentation comments (e.g., Java's `/** */`)
-• `lang/tags/comment_line.{talon,py}`          - line comments (e.g., Python's `#`)
-• `lang/tags/data_null.{talon,py}`             - null & null checks (e.g., Python's `None`)
-• `lang/tags/data_bool.{talon,py}`             - booleans (e.g., Haskell's `True`)
-• `lang/tags/functions.{talon,py}`             - functions and definitions
-• `lang/tags/functions_common.{talon,py}`      - common functions (also includes a GUI for picking functions)
-• `lang/tags/imperative.{talon,py}`            - statements (e.g., `if`, `while`, `switch`)
-• `lang/tags/libraries.{talon,py}`             - libraries and imports
-• `lang/tags/libraries_gui.{talon,py}`         - graphical helper for common libraries
-• `lang/tags/object_oriented.{talon,py}`       - objects and classes (e.g., `this`)
-• `lang/tags/operators_array.{talon,py}`       - array operators (e.g., Ruby's `x[0]`)
-• `lang/tags/operators_assignment.{talon,py}`  - assignment operators (e.g., C++'s `x += 5`)
-• `lang/tags/operators_bitwise.{talon,py}`     - bitwise operators (e.g., C's `x >> 1`)
-• `lang/tags/operators_lambda.{talon,py}`      - anonymous functions (e.g., JavaScript's `x => x + 1`)
-• `lang/tags/operators_math.{talon,py}`        - numeric, comparison, and logical operators
-• `lang/tags/operators_pointer.{talon,py}`     - pointer operators (e.g., C's `&x`)
+• `lang/tags/comment_line.{talon,py}` - line comments (e.g., Python's `#`)
+• `lang/tags/data_null.{talon,py}` - null & null checks (e.g., Python's `None`)
+• `lang/tags/data_bool.{talon,py}` - booleans (e.g., Haskell's `True`)
+• `lang/tags/functions.{talon,py}` - functions and definitions
+• `lang/tags/functions_common.{talon,py}` - common functions (also includes a GUI for picking functions)
+• `lang/tags/imperative.{talon,py}` - statements (e.g., `if`, `while`, `switch`)
+• `lang/tags/libraries.{talon,py}` - libraries and imports
+• `lang/tags/libraries_gui.{talon,py}` - graphical helper for common libraries
+• `lang/tags/object_oriented.{talon,py}` - objects and classes (e.g., `this`)
+• `lang/tags/operators_array.{talon,py}` - array operators (e.g., Ruby's `x[0]`)
+• `lang/tags/operators_assignment.{talon,py}` - assignment operators (e.g., C++'s `x += 5`)
+• `lang/tags/operators_bitwise.{talon,py}` - bitwise operators (e.g., C's `x >> 1`)
+• `lang/tags/operators_lambda.{talon,py}` - anonymous functions (e.g., JavaScript's `x => x + 1`)
+• `lang/tags/operators_math.{talon,py}` - numeric, comparison, and logical operators
+• `lang/tags/operators_pointer.{talon,py}` - pointer operators (e.g., C's `&x`)
 
 The support for the language-specific implementations of actions are then located in:
 
@@ -218,8 +222,8 @@ If you wish to add additional voice commands for your language, put those in `{y
 You may also want to add a force command to `language_modes.talon`.
 
 ## File Manager commands
-For the following file manager commands to work, your file manager must display the full folder path in the title bar. https://github.com/knausj85/knausj_talon/blob/baa323fcd34d8a1124658a425abe8eed59cf2ee5/apps/file_manager.talon
 
+For the following file manager commands to work, your file manager must display the full folder path in the title bar. https://github.com/knausj85/knausj_talon/blob/baa323fcd34d8a1124658a425abe8eed59cf2ee5/apps/file_manager.talon
 
 For Mac OS X's Finder, run this command in terminal to display the full path in the title.
 
@@ -239,8 +243,9 @@ Notes:
 • If there no hidden files or folders, and the items are displayed in alphabetical order, you can typically issue the `follow <number>`, `file <number>` and `open <number>` commands based on the displayed order.
 
 To implement support for a new program, you need to implement the relevant file manager actions for your application and assert the user.file_manager tag.
+
 - There are a number of example implementations in the repository. Finder is a good example to copy and customize to your application as needed.
-https://github.com/knausj85/knausj_talon/blob/5eae0b6a8f2269f24265e77feddbcc4bcf437c36/apps/mac/finder/finder.py#L16
+  https://github.com/knausj85/knausj_talon/blob/5eae0b6a8f2269f24265e77feddbcc4bcf437c36/apps/mac/finder/finder.py#L16
 
 ## Terminal commands
 
@@ -257,7 +262,6 @@ tag(): user.tabs
 
 For instance, kubectl commands (kubernetes) aren't relevant to everyone.
 
-
 ## Jetbrains commands
 
 For Jetbrains commands to work you must install https://plugins.jetbrains.com/plugin/10504-voice-code-idea
@@ -268,7 +272,6 @@ into each editor.
 Several options are configurable via a single settings file out of the box. Any setting can be made context specific as needed (e.g., per-OS, per-app, etc).
 
 https://github.com/knausj85/knausj_talon/blob/master/settings.talon
-
 
 ```
 #adjust the scale of the imgui to my liking
@@ -306,6 +309,7 @@ Also, you can add additional vocabulary words, words to replace, search engines 
 # Collaborators
 
 This repository is now officially a team effort. The following contributors have direct access:
+
 - @dwiel
 - @fidgetingbits
 - @knausj85
@@ -336,7 +340,7 @@ Anyone is welcome to submit PRs and report issues.
 - For Windows, both the friendly app name and exe name should be used for defining app contexts when they are different. For some people, the MUICache breaks.
 
 - For new web apps, ensure the domain is used to minimize potential mismatches
-https://github.com/knausj85/knausj_talon/blob/master/apps/web/window_titles.md
+  https://github.com/knausj85/knausj_talon/blob/master/apps/web/window_titles.md
 
 - New applications should support the appropriate 'generic' grammars where possible
 
@@ -381,7 +385,7 @@ If you run into setup difficulty with `pre-commit`, you might want to ensure tha
 
 ## Automated tests
 
-There are a number of automated unit tests in the repository. These are all run *outside* of the Talon environment (e.g. we don't have access to Talon's window management APIs). These make use of a set of stubbed out Talon APIs in `tests/stubs/` and a bit of class loader trickery in `conftest.py`.
+There are a number of automated unit tests in the repository. These are all run _outside_ of the Talon environment (e.g. we don't have access to Talon's window management APIs). These make use of a set of stubbed out Talon APIs in `tests/stubs/` and a bit of class loader trickery in `conftest.py`.
 
 To run the test suite you just need to install the `pytest` python package in to a non-Talon Python runtime you want to use for tests (i.e. don't install in the `~/.talon/.venv directory`). You can then just run the `pytest` command from the repository root to execute all the tests.
 

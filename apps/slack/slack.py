@@ -18,6 +18,7 @@ ctx.matches = r"""
 app: slack
 """
 
+
 @ctx.action_class("edit")
 class EditActions:
     def line_insert_down():

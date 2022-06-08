@@ -1,4 +1,4 @@
-from talon import Context, Module, actions, imgui, registry, settings
+from talon import Context, Module, actions, settings
 
 ctx = Context()
 mod = Module()
@@ -8,31 +8,31 @@ mod = Module()
 mod.tag("code_functions", desc="Tag for enabling commands for functions")
 
 mod.list("code_type", desc="List of types for active language")
-mod.list("code_parameter_name", desc="List of common parameter names for active language")
+mod.list(
+    "code_parameter_name", desc="List of common parameter names for active language"
+)
 
 
-@mod.capture(rule='{user.code_type}')
+@mod.capture(rule="{user.code_type}")
 def code_type(m) -> str:
     """Returns a macro name"""
     return m.code_type
 
 
-setting_private_function_formatter = \
-    mod.setting("code_private_function_formatter", str)
-setting_protected_function_formatter = \
-    mod.setting("code_protected_function_formatter", str)
-setting_public_function_formatter = \
-    mod.setting("code_public_function_formatter", str)
-setting_private_variable_formatter = \
-    mod.setting("code_private_variable_formatter", str)
-setting_protected_variable_formatter = \
-    mod.setting("code_protected_variable_formatter", str)
-setting_public_variable_formatter = \
-    mod.setting("code_public_variable_formatter", str)
+setting_private_function_formatter = mod.setting("code_private_function_formatter", str)
+setting_protected_function_formatter = mod.setting(
+    "code_protected_function_formatter", str
+)
+setting_public_function_formatter = mod.setting("code_public_function_formatter", str)
+setting_private_variable_formatter = mod.setting("code_private_variable_formatter", str)
+setting_protected_variable_formatter = mod.setting(
+    "code_protected_variable_formatter", str
+)
+setting_public_variable_formatter = mod.setting("code_public_variable_formatter", str)
+
 
 @mod.action_class
 class Actions:
-
     def code_default_function(text: str):
         """Inserts function declaration"""
         actions.user.code_private_function(text)

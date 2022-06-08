@@ -1,11 +1,13 @@
 import contextlib
 import time
 
-from talon import actions, ctrl, ui, Context
+from talon import Context, actions, ctrl, ui
+
 ctx = Context()
 ctx.matches = r"""
 os: mac
 """
+
 
 @contextlib.contextmanager
 def _drag_window_mac(win=None):
@@ -21,11 +23,12 @@ def _drag_window_mac(win=None):
     time.sleep(0.1)
     ctrl.mouse_click(button=0, up=True)
 
+
 @ctx.action_class("user")
 class MacActions:
     def desktop(number: int):
         if number < 10:
-            actions.key("ctrl-{}".format(number))
+            actions.key(f"ctrl-{number}")
 
     def desktop_next():
         actions.key("ctrl-right")
