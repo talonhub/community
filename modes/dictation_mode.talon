@@ -16,7 +16,7 @@ cap: user.dictation_format_cap()
 
 # Navigation
 go up <number_small> (line|lines):
-    edit.up()
+    edit.up()butt
     repeat(number_small - 1)
 go down <number_small> (line|lines):
     edit.down()
