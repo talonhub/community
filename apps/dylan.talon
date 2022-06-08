@@ -208,7 +208,7 @@ emoji:
 slack unread: key(cmd-alt-2)
 
 # Open Work Email
-fire mail: key("alt-cmd-1")
+avant mail: key("alt-cmd-1")
 
 # Measuring with alt key
 mease in: key(alt:down)
