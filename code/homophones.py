@@ -154,6 +154,7 @@ def gui(gui: imgui.GUI):
         gui.line()
         index = 1
         for word in active_word_list:
+            # TODO:
             # if gui.button("{}: {}".format(index, word)):
             # try replacing "f"Choose {index}: {word}"", with "f" {index}: {word}""
             if gui.button(f"Choose {index}: {word}"):
