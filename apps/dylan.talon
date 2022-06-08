@@ -168,6 +168,12 @@ scold:
     edit.select_all()
     edit.copy()
 
+# Double click then copy
+grab:
+  mouse_click(0)
+  mouse_click(0)
+  edit.copy()
+
 # Select all and then copy
 coals:
     edit.select_all()
