@@ -1,4 +1,4 @@
-from talon import Module, Context
+from talon import Context, Module
 
 mod = Module()
 mod.tag("kubectl", desc="tag for enabling kubectl commands in your terminal")

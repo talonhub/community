@@ -1,4 +1,4 @@
-from talon import Context, Module, actions, imgui, settings, ui, app
+from talon import Context, Module, actions, ui
 
 ctx = Context()
 mod = Module()
@@ -11,23 +11,30 @@ and win.title: /PowerShell/
 directories_to_remap = {}
 directories_to_exclude = {}
 
-@ctx.action_class('edit')
-class EditActions:
-    def delete_line(): actions.key('esc')
 
-@ctx.action_class('user')
+@ctx.action_class("edit")
+class EditActions:
+    def delete_line():
+        actions.key("esc")
+
+
+@ctx.action_class("user")
 class UserActions:
     def file_manager_refresh_title():
-        actions.insert("$Host.UI.RawUI.WindowTitle = 'Windows PowerShell: ' +  $(get-location)")
-        actions.key('enter')
-        #action(user.file_manager_go_back):
+        actions.insert(
+            "$Host.UI.RawUI.WindowTitle = 'Windows PowerShell: ' +  $(get-location)"
+        )
+        actions.key("enter")
+        # action(user.file_manager_go_back):
         #    key("alt-left")
-        #action(user.file_manager_go_forward):
+        # action(user.file_manager_go_forward):
         #    key("alt-right")
+
     def file_manager_open_parent():
-        actions.insert('cd ..')
-        actions.key('enter')
+        actions.insert("cd ..")
+        actions.key("enter")
         actions.user.file_manager_refresh_title()
+
     def file_manager_current_path():
         path = ui.active_window().title
         path = path.replace("Administrator:  ", "").replace("Windows PowerShell: ", "")
@@ -41,17 +48,17 @@ class UserActions:
 
     def file_manager_open_directory(path: str):
         """opens the directory that's already visible in the view"""
-        actions.insert('cd "{}"'.format(path))
+        actions.insert(f'cd "{path}"')
         actions.key("enter")
         actions.user.file_manager_refresh_title()
 
     def file_manager_select_directory(path: str):
         """selects the directory"""
-        actions.insert('"{}"'.format(path))
+        actions.insert(f'"{path}"')
 
     def file_manager_new_folder(name: str):
         """Creates a new folder in a gui filemanager or inserts the command to do so for terminals"""
-        actions.insert('mkdir "{}"'.format(name))
+        actions.insert(f'mkdir "{name}"')
 
     def file_manager_open_file(path: str):
         """opens the file"""

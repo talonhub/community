@@ -1,4 +1,4 @@
-from talon import app, Context, Module
+from talon import Module
 
 mod = Module()
 

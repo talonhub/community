@@ -1,10 +1,4 @@
-import os
-import os.path
-import requests
-import time
-from pathlib import Path
-from talon import ctrl, ui, Module, Context, actions, clip
-import tempfile
+from talon import Module, actions
 
 mod = Module()
 

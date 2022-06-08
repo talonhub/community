@@ -1,4 +1,4 @@
-from talon import ctrl, ui, Module, Context, actions, clip, app
+from talon import Context, Module, actions, app
 
 ctx = Context()
 mod = Module()
@@ -29,14 +29,15 @@ ctx.matches = r"""
 app: chrome
 """
 
+
 @ctx.action_class("user")
 class user_actions:
     def tab_jump(number: int):
         if number < 9:
             if app.platform == "mac":
-                actions.key("cmd-{}".format(number))
+                actions.key(f"cmd-{number}")
             else:
-                actions.key("ctrl-{}".format(number))
+                actions.key(f"ctrl-{number}")
 
     def tab_final():
         if app.platform == "mac":

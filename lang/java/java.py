@@ -48,7 +48,6 @@ mod.list("java_common_class", desc="Java Common Classes")
 ctx.lists["self.java_common_class"] = java_common_classes
 
 
-
 # Java Generic Data Structures
 java_generic_data_structures = {
     # Interfaces
@@ -57,7 +56,6 @@ java_generic_data_structures = {
     "queue": "Queue",
     "deque": "Deque",
     "map": "Map",
-
     # Classes
     "hash set": "HashSet",
     "array list": "ArrayList",
@@ -89,6 +87,7 @@ java_modifiers = {
 
 mod.list("java_modifier", desc="Java Modifiers")
 ctx.lists["self.java_modifier"] = java_modifiers
+
 
 @ctx.action_class("user")
 class UserActions:
@@ -162,10 +161,10 @@ class UserActions:
         actions.insert(" & ")
 
     def code_operator_bitwise_and_assignment():
-        actions.insert(' &= ')
+        actions.insert(" &= ")
 
     def code_operator_increment():
-        actions.insert('++')
+        actions.insert("++")
 
     def code_operator_bitwise_or():
         actions.insert(" | ")
@@ -224,16 +223,16 @@ class UserActions:
         actions.user.insert_between("while (", ") ")
 
     def code_break():
-        actions.insert('break;')
+        actions.insert("break;")
 
     def code_next():
-        actions.insert('continue;')
+        actions.insert("continue;")
 
     def code_insert_true():
-        actions.insert('true')
+        actions.insert("true")
 
     def code_insert_false():
-        actions.insert('false')
+        actions.insert("false")
 
     def code_define_class():
         actions.insert("class ")
@@ -254,7 +253,7 @@ class UserActions:
         actions.insert("return ")
 
     def code_comment_line_prefix():
-        actions.insert('// ')
+        actions.insert("// ")
 
     def code_insert_function(text: str, selection: str):
         text += f"({selection or ''})"
