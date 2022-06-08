@@ -1,5 +1,4 @@
-from talon import Context, actions, ui, Module, app
-from typing import Union
+from talon import Module
 
 mod = Module()
 mod.tag("find_and_replace", desc="Tag for enabling generic find and replace commands")

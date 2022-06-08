@@ -1,6 +1,7 @@
-from talon import Context, actions, ui, Module, app
+from talon import Module, actions
 
 mod = Module()
+
 
 @mod.action_class
 class tab_actions:

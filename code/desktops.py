@@ -1,6 +1,7 @@
-from talon import app, Module
+from talon import Module, app
 
 mod = Module()
+
 
 @mod.action_class
 class Actions:

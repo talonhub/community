@@ -7,11 +7,9 @@ Originally from dweil/talon_community - modified for newapi by jcaw.
 # TODO: Map keyboard shortcuts to this manager once Talon has key hooks on all
 #   platforms
 
-import time
-from operator import xor
 from typing import Optional
 
-from talon import ui, Module, Context, actions
+from talon import Context, Module, actions, ui
 
 
 def _set_window_pos(window, x, y, width, height):
@@ -102,11 +100,15 @@ def _move_to_screen(
         if src.height == window.rect.height:
             x = dest.left + (dest.width - width) / 2
         else:
-            x = dest.left + (window.rect.top - src.top) * (dest.width - width) / (src.height - window.rect.height)
+            x = dest.left + (window.rect.top - src.top) * (dest.width - width) / (
+                src.height - window.rect.height
+            )
         if src.width == window.rect.width:
             y = dest.top + (dest.height - height) / 2
         else:
-            y = dest.top + (window.rect.left - src.left) * (dest.height - height) / (src.width - window.rect.width)
+            y = dest.top + (window.rect.left - src.left) * (dest.height - height) / (
+                src.width - window.rect.width
+            )
     else:
         # Horizontal -> horizontal or vertical -> vertical
         # Retain proportional size and position
@@ -131,7 +133,7 @@ def _snap_window_helper(window, pos):
     )
 
 
-class RelativeScreenPos(object):
+class RelativeScreenPos:
     """Represents a window position as a fraction of the screen."""
 
     def __init__(self, left, top, right, bottom):
@@ -165,7 +167,12 @@ _snap_positions = {
     "left third": RelativeScreenPos(0, 0, 1 / 3, 1),
     "right third": RelativeScreenPos(2 / 3, 0, 1, 1),
     "left two thirds": RelativeScreenPos(0, 0, 2 / 3, 1),
-    "right two thirds": RelativeScreenPos(1 / 3, 0, 1, 1,),
+    "right two thirds": RelativeScreenPos(
+        1 / 3,
+        0,
+        1,
+        1,
+    ),
     # Quarters
     # .---.---.
     # |---|---|
@@ -238,5 +245,6 @@ class Actions:
         print(window)
         _bring_forward(window)
         _move_to_screen(
-            window, screen_number=screen_number,
+            window,
+            screen_number=screen_number,
         )
