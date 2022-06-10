@@ -70,6 +70,19 @@ tell sink:
 	insert(";")
 	key(enter) 
 
+stub sink:
+	edit.line_end()
+	insert(";")
+
+tell comma:
+	edit.line_end()
+	insert(",")
+	key(enter) 
+
+stub comma:
+	edit.line_end()
+	insert(",")
+
 return:
     key(enter)
 
