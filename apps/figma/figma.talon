@@ -1,4 +1,5 @@
 app: chrome
+app: Figma
 -
 component: user.figma_component()
 detach: user.figma_detach()
@@ -55,7 +56,7 @@ slice: user.figma_slice()
 rulers: user.figma_rulers()
 
 # Zooming in and out
-zoom in |: user.figma_zoom_in()
+zoom in: user.figma_zoom_in()
 zoom out: user.figma_zoom_out()
 
 zout [<number>]: 
