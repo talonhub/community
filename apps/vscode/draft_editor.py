@@ -1,5 +1,6 @@
-from talon import Module, actions, ui
 import time
+
+from talon import Module, actions, ui
 
 mod = Module()
 active_window = None

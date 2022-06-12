@@ -1,4 +1,4 @@
-from talon import Context, Module, actions, app, speech_system
+from talon import Module, actions, speech_system
 
 delay_mod = Module()
 

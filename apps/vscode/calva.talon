@@ -1,6 +1,6 @@
 title: /.* - Visual Studio Code$/
 mode: user.clojure
-mode: command 
+mode: command
 and code.language: clojure
 -
 

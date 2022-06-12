@@ -26,25 +26,25 @@ struck out:
 
 action(app.tab_open):
   key(ctrl-shift-t)
-  
+
 action(app.tab_close):
   key(ctrl-shift-q)
-  
+
 action(app.tab_next):
   key(ctrl-shift-right)
-  
+
 action(app.tab_previous):
   key(ctrl-shift-left)
-  
+
 tab push:
   key(ctrl-shift-.)
-  
+
 tab shift:
   key(ctrl-shift-,)
-  
+
 tab title:
   key(ctrl-shift-alt-t)
-  
+
 window new:
   key(ctrl-shift-n)
 
@@ -53,19 +53,19 @@ action(user.split_flip):
 
 action(user.split_window):
   key(ctrl-shift-enter)
-  
+
 action(user.split_clear):
   key(ctrl-shift-w)
-  
+
 action(user.split_next):
   key(ctrl-shift-])
-  
+
 action(user.split_last):
   key(ctrl-shift-[)
-  
+
 action(user.split_window_right):
   key(ctrl-shift-f)
-  
+
 action(user.split_window_left):
   key(ctrl-shift-b)
 

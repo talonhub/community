@@ -1,4 +1,4 @@
-from talon import Module, Context, actions, settings
+from talon import Context, Module, actions, settings
 
 mod = Module()
 ctx = Context()
@@ -36,7 +36,7 @@ class UserActions:
         actions.auto_insert("this")
 
     def code_operator_object_accessor():
-        actions.auto_insert('.')
+        actions.auto_insert(".")
 
     def code_state_while():
         actions.user.insert_between("while (", ")")

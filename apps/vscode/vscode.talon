@@ -35,7 +35,7 @@ action(edit.select_word):
 # splits.py support begin
 action(user.split_clear_all): user.vscode("workbench.action.editorLayoutSingle")
 action(user.split_clear): user.vscode("workbench.action.joinTwoGroups")
-action(user.split_flip): user.vscode("workbench.action.toggleEditorGroupLayout") 
+action(user.split_flip): user.vscode("workbench.action.toggleEditorGroupLayout")
 action(user.split_last): user.vscode("workbench.action.focusLeftGroup")
 action(user.split_next): user.vscode_and_wait("workbench.action.focusRightGroup")
 action(user.split_window_down): user.vscode("workbench.action.moveEditorToBelowGroup")
@@ -107,11 +107,11 @@ zen switch: user.vscode("workbench.action.toggleZenMode")
 file open: user.vscode("workbench.action.files.openFile")
 folder open: user.vscode("workbench.action.files.openFolder")
 (folder|file) recent: user.vscode("workbench.action.openRecent")
-file hunt [<user.text>]: 
+file hunt [<user.text>]:
   user.vscode("workbench.action.quickOpen")
   sleep(50ms)
   insert(text or "")
-file copy path: user.vscode("copyFilePath") 
+file copy path: user.vscode("copyFilePath")
 file copy local [path]: user.vscode("copyRelativeFilePath")
 file create sibling: user.vscode_and_wait("explorer.newFile")
 file create: user.vscode("workbench.action.files.newUntitledFile")
@@ -343,4 +343,3 @@ draft (save | submit):
 	user.draft_editor_save()
 draft discard:
 	user.draft_editor_discard()
-

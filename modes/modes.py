@@ -1,4 +1,4 @@
-from talon import Context, Module, app, actions, speech_system
+from talon import Module, actions, app, speech_system
 
 mod = Module()
 
@@ -9,7 +9,7 @@ modes = {
     "ida": "a way to force ida commands to be loaded",
     "presentation": "a more strict form of sleep where only a more strict wake up command works",
     "windbg": "a way to force windbg commands to be loaded",
-    "meeting": "hold tab to pause talon"
+    "meeting": "hold tab to pause talon",
 }
 
 for key, value in modes.items():

@@ -4,7 +4,7 @@ tag: user.line_commands
 # lend: edit.line_end()
 # bend: edit.line_start()
 go line <number>: edit.jump_line(number)
-go line <number> end: 
+go line <number> end:
     edit.jump_line(number)
     edit.line_end()
 comment [line] <number>:

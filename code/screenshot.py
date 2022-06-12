@@ -1,8 +1,9 @@
-from talon import Module, screen, ui, cron, app, actions, clip, Context
-from talon.canvas import Canvas
-from typing import Optional
-from datetime import datetime
 import os
+from datetime import datetime
+from typing import Optional
+
+from talon import Context, Module, actions, app, clip, cron, screen, ui
+from talon.canvas import Canvas
 
 mod = Module()
 
@@ -93,34 +94,40 @@ def flash_rect(rect: ui.Rect):
 
 
 def get_screen(screen_number: Optional[int] = None) -> ui.Screen:
-    if screen_number == None:
+    if screen_number is None:
         return screen.main_screen()
     return actions.user.screens_get_by_number(screen_number)
+
 
 ctx_mac = Context()
 ctx_mac.matches = r"""
 os: mac
 """
 
+
 @ctx_mac.action_class("user")
 class UserActionsMac:
     def screenshot_selection():
         actions.key("cmd-shift-4")
+
 
 ctx_win = Context()
 ctx_win.matches = r"""
 os: windows
 """
 
+
 @ctx_win.action_class("user")
 class UserActionsWin:
     def screenshot_selection():
         actions.key("super-shift-s")
 
+
 ctx_linux = Context()
 ctx_linux.matches = r"""
 os: linux
 """
+
 
 @ctx_linux.action_class("user")
 class UserActionsLinux:

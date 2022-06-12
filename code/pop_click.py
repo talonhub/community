@@ -1,4 +1,4 @@
-from talon import ctrl, noise, actions
+from talon import actions, ctrl, noise
 
 noise.register(
     "pop",

@@ -1,4 +1,4 @@
-from talon import Context, actions, ui, Module, app, clip
+from talon import Context, Module, actions, app
 
 is_mac = app.platform == "mac"
 
@@ -251,9 +251,11 @@ class UserActions:
     def tab_jump(number: int):
         if number < 10:
             if is_mac:
-                actions.user.vscode_with_plugin(f"workbench.action.openEditorAtIndex{number}")
+                actions.user.vscode_with_plugin(
+                    f"workbench.action.openEditorAtIndex{number}"
+                )
             else:
-                actions.key("alt-{}".format(number))
+                actions.key(f"alt-{number}")
 
     def tab_final():
         if is_mac:
@@ -266,9 +268,9 @@ class UserActions:
         """Navigates to a the specified split"""
         if index < 9:
             if is_mac:
-                actions.key("cmd-{}".format(index))
+                actions.key(f"cmd-{index}")
             else:
-                actions.key("ctrl-{}".format(index))
+                actions.key(f"ctrl-{index}")
 
     # splits.py support end
 
