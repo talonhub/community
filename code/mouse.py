@@ -120,9 +120,12 @@ class Actions:
         """Start calibration"""
         eye_mouse.calib_start()
 
-    def mouse_toggle_control_mouse():
-        """Toggles control mouse"""
-        toggle_control(not config.control_mouse)
+    def mouse_toggle_control_mouse(enabled: bool = None):
+        """Toggles control mouse. Pass in a bool to enable it, otherwise toggle the current state"""
+        if enabled is not None:
+            toggle_control(enabled)
+        else:
+            toggle_control(not config.control_mouse)
 
     def mouse_toggle_camera_overlay():
         """Toggles camera overlay"""
