@@ -204,10 +204,10 @@ ctx.lists["self.arrow_key"] = {
 }
 
 simple_keys = [
-    # "end",
+    "end",
     "enter",
     "escape",
-    # "home",
+    "home",
     "insert",
     "pagedown",
     "pageup",
@@ -221,9 +221,6 @@ alternate_keys = {
     # 'junk': 'backspace',
     "page up": "pageup",
     "page down": "pagedown",
-    "home": "strike",
-    "end": "struck",
-    "void": "space",
 }
 # mac apparently doesn't have the menu key.
 if app.platform in ("windows", "linux"):
