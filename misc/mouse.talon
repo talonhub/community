@@ -39,12 +39,12 @@ midkick:
 	key("{modifiers}:up")
 	# close the mouse grid
 	user.grid_close()
-(dubclick | duke): 
+(dubclick | duke):
 	mouse_click()
 	mouse_click()
 	# close the mouse grid
 	user.grid_close()
-(tripclick | triplick): 
+(tripclick | triplick):
 	mouse_click()
 	mouse_click()
 	mouse_click()

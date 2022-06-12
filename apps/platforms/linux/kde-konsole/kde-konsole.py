@@ -56,4 +56,4 @@ class EditActions:
 
     # TODO: fix select line and other selection (like shift-right)
     # see: https://unix.stackexchange.com/questions/485536/kde-konsole-swallows-shift-left-and-shift-right
-    #  also fix extend_left and co 
+    #  also fix extend_left and co

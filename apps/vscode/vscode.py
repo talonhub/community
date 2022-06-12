@@ -31,6 +31,8 @@ and app.name: Visual Studio Code
 os: windows
 and app.name: Visual Studio Code Insiders
 os: windows
+and app.name: Visual Studio Code - Insiders
+os: windows
 and app.exe: Code.exe
 os: windows
 and app.exe: Code-Insiders.exe
@@ -164,6 +166,12 @@ class UserActions:
 
     def split_flip():
         actions.user.vscode("workbench.action.toggleEditorGroupLayout")
+
+    def split_maximize():
+        actions.user.vscode("workbench.action.maximizeEditor")
+
+    def split_reset():
+        actions.user.vscode("workbench.action.evenEditorWidths")
 
     def split_last():
         actions.user.vscode("workbench.action.focusLeftGroup")

@@ -1,5 +1,5 @@
 tag: terminal
-and tag: user.terraform
+and tag: user.terraform_client
 -
 terraform: "terraform "
 

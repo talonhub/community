@@ -3,9 +3,7 @@ from talon import Context, Module, actions, settings
 ctx = Context()
 mod = Module()
 ctx.matches = r"""
-mode: user.terraform
-mode: user.auto_lang
-and code.language: terraform
+tag: user.terraform
 """
 
 types = {
@@ -65,8 +63,7 @@ class Actions:
 class UserActions:
 
     def code_terraform_module_block(text: str):
-        actions.insert(text + ' ""')
-        actions.key("left")
+        actions.user.insert_between(text + ' "', '"')
 
     def code_terraform_resource(text: str):
         result = 'resource "{}" ""'.format(
@@ -152,5 +149,4 @@ class UserActions:
         actions.insert("# ")
 
     def code_state_for():
-        actions.insert("for  in")
-        actions.key("left left left")
+        actions.user.insert_between("for ", " in")

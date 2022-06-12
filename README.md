@@ -191,7 +191,7 @@ Python, C#, Talon and javascript language support is currently broken up into se
 • `lang/tags/data_null.{talon,py}`             - null & null checks (e.g., Python's `None`)
 • `lang/tags/data_bool.{talon,py}`             - booleans (e.g., Haskell's `True`)
 • `lang/tags/functions.{talon,py}`             - functions and definitions
-• `lang/tags/functions_gui.{talon,py}`         - graphical helper for common functions
+• `lang/tags/functions_common.{talon,py}`      - common functions (also includes a GUI for picking functions)
 • `lang/tags/imperative.{talon,py}`            - statements (e.g., `if`, `while`, `switch`)
 • `lang/tags/libraries.{talon,py}`             - libraries and imports
 • `lang/tags/libraries_gui.{talon,py}`         - graphical helper for common libraries
@@ -301,6 +301,7 @@ The most commonly adjusted settings are probably
 
 • `user.mouse_wheel_down_amount` and `user.mouse_continuous_scroll_amount` for adjusting the scroll amounts for the various scroll commands.
 
+Also, you can add additional vocabulary words, words to replace, search engines and more. Complete the knausj_talon setup instructions above, then open the `settings` folder to see the provided CSV files and customize them as needed.
 
 # Collaborators
 
@@ -351,6 +352,32 @@ generic_terminal.talon
 ```
 
 - New programming languages should support the appropriate 'generic' grammars where possible, see above.
+
+## Automatic formatting/linters
+
+This repository uses [`pre-commit`](https://pre-commit.com/) to run manage its formatters/linters.
+
+First, [install](https://pre-commit.com/#install) `pre-commit`:
+
+```bash
+$ pip install pre-commit
+```
+
+You then have a few options as to when to run it:
+
+- Run yourself at any time on your locally changed files: `pre-commit run`
+- Run yourself on all files in the repository: `pre-commit run --all-files`
+- Run automatically on your PRs (fixes will be pushed automatically to your branch):
+  - Visit https://pre-commit.ci/ and authorize the app to connect to your knausj fork.
+- Set up an editor hook to run on save:
+  - You could follow the instructions for [Black](https://black.readthedocs.io/en/stable/integrations/editors.html), which are well written; simply replace `black <path>` with `pre-commit run --files <file>`.
+  - It's more performant to only reformat the specific file you're editing, rather than all changed files.
+- Install a git pre-commit hook with `pre-commit install` (optional)
+  - This essentially runs `pre-commit run` automatically before creating local commits, applying formatters/linters on all changed files. If it "fails", the commit will be blocked.
+  - Note that because many of the rules automatically apply fixes, typically you just need to stage the changes that they made, then reattempt your commit.
+  - Whether to use the hook comes down to personal taste. If you like to make many small incremental "work" commits developing a feature, it may be too much overhead.
+
+If you run into setup difficulty with `pre-commit`, you might want to ensure that you have a modern Python 3 local environment first. [pyenv](https://github.com/pyenv/pyenv) is good way to install such Python versions without affecting your system Python (recommend installing 3.9 to match Talon's current version). On macOS you can also `brew install pre-commit`.
 
 ## Automated tests
 

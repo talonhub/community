@@ -12,7 +12,7 @@ tag(): user.tabs
 please [<user.text>]:
     key(ctrl-3)
     insert(user.text or "")
-    
+
 # Sidebar
 bar explore: key(alt-shift-w p)
 # bar extensions:
@@ -51,7 +51,7 @@ panel variables:
     key(v)
 # panel switch:
 # panel terminal:
-    
+
 # Settings
 show settings: key(alt-w p)
 show shortcuts: key(ctrl-shift-l)
