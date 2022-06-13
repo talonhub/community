@@ -22,10 +22,10 @@ if hasattr(talon, "test_mode"):
             (["static"], "code_private_static_function"),
             (["private"], "code_private_function"),
             (["private", "static"], "code_private_static_function"),
-            (["pro"], "code_protected_function"),
-            (["pro", "static"], "code_protected_static_function"),
-            (["pub"], "code_public_function"),
-            (["pub", "static"], "code_public_static_function"),
+            (["protected"], "code_protected_function"),
+            (["protected", "static"], "code_protected_static_function"),
+            (["public"], "code_public_function"),
+            (["public", "static"], "code_public_static_function"),
         ]
         for modifiers, target_action in examples:
             mock = MagicMock()

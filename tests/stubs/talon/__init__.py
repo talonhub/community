@@ -9,13 +9,15 @@ class RegisteredActionsAccessor:
 
     def __getattr__(self, name):
         for category in ("test", "module"):
-            cat_actions = self.registered_actions[category]["namespaced"]
+            cat_actions = self.registered_actions[category]
             if self.namespace in cat_actions:
                 if name in cat_actions[self.namespace]:
                     return cat_actions[self.namespace][name]
 
-        print(self.registered_actions)
         raise AttributeError(f"Couldn't find action {self.namespace}.{name}")
+
+    def __call__(self, *args, **kwargs):
+        raise RuntimeError(f"actions.{self.namespace}() is not an available action")
 
 
 class Actions:
@@ -26,8 +28,8 @@ class Actions:
 
     def __init__(self):
         self.registered_actions = {
-            "module": {"non_namespaced": {}, "namespaced": {}},
-            "test": {"non_namespaced": {}, "namespaced": {}},
+            "module": {},
+            "test": {},
             # "contexts": []
         }
 
@@ -38,7 +40,7 @@ class Actions:
         self.register_module_action("edit", "selected_text", lambda: "test")
 
     def reset_test_actions(self):
-        self.registered_actions["test"] = {"non_namespaced": {}, "namespaced": {}}
+        self.registered_actions["test"] = {}
 
     def register_module_action(self, namespace: str, name: str, func: Callable):
         """
@@ -63,40 +65,28 @@ class Actions:
     def _register_action(
         self, category: str, namespace: str, name: str, func: Callable
     ):
-        if namespace == "":
-            self.registered_actions[category]["non_namespaced"][name] = func
-        else:
-            if namespace not in self.registered_actions[category]["namespaced"]:
-                self.registered_actions[category]["namespaced"][namespace] = {}
+        if namespace not in self.registered_actions[category]:
+            self.registered_actions[category][namespace] = {}
 
-            self.registered_actions[category]["namespaced"][namespace][name] = func
+        self.registered_actions[category][namespace][name] = func
 
     def __getattr__(self, name):
-        callable = None
         try:
-            callable = object.__getattribute__(self, name)
+            # If name exists as a direct property of this class, then
+            # use that
+            return object.__getattribute__(self, name)
         except AttributeError:
             pass
 
-        if callable:
-            return callable
-
-        found_namespace = False
-        for category in ("test", "module"):
-            # Prefer test to module to allow overriding in tests
-            cat_actions = self.registered_actions[category]
-            if name in cat_actions["non_namespaced"]:
-                return cat_actions["non_namespaced"][name]
-            elif name in cat_actions["namespaced"]:
-                found_namespace = True
-
-        if not found_namespace:
-            raise RuntimeError(
-                f"{name} action namespace not found, have you imported"
-                " your code under test?"
-            )
-
-        return RegisteredActionsAccessor(self.registered_actions, name)
+        try:
+            # Else if name is an action like actions.key
+            # that has no namespace then return that.
+            default_accessor = RegisteredActionsAccessor(self.registered_actions, "")
+            return getattr(default_accessor, name)
+        except AttributeError:
+            # Otherwise treat name as an action namespace
+            # (like actions.user).
+            return RegisteredActionsAccessor(self.registered_actions, name)
 
 
 class Module:

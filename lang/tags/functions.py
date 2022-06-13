@@ -18,7 +18,12 @@ mod.list(
     desc="List of function modifiers (e.g. private, async, static)",
 )
 
-ctx.lists["user.code_function_modifier"] = ["pub", "pro", "private", "static"]
+ctx.lists["user.code_function_modifier"] = {
+    "pub": "public",
+    "pro": "protected",
+    "private": "private",
+    "static": "static",
+}
 
 
 @mod.capture(rule="{user.code_type}")
@@ -57,13 +62,13 @@ class Actions:
             return actions.user.code_private_function(text)
         elif mods == {"private", "static"}:
             return actions.user.code_private_static_function(text)
-        elif mods == {"pro"}:
+        elif mods == {"protected"}:
             return actions.user.code_protected_function(text)
-        elif mods == {"pro", "static"}:
+        elif mods == {"protected", "static"}:
             return actions.user.code_protected_static_function(text)
-        elif mods == {"pub"}:
+        elif mods == {"public"}:
             return actions.user.code_public_function(text)
-        elif mods == {"pub", "static"}:
+        elif mods == {"public", "static"}:
             return actions.user.code_public_static_function(text)
         else:
             raise RuntimeError(f"Unhandled modifier set: {mods}")
