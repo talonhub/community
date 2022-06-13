@@ -1,3 +1,6 @@
+os: linux
+tag: user.regolith
+-
 launch:
     key(super-space)
 launch <user.text>:
