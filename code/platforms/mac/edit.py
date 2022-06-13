@@ -1,4 +1,4 @@
-from talon import Context, actions
+from talon import Context, actions, Module
 
 ctx = Context()
 ctx.matches = r"""
@@ -196,3 +196,16 @@ class EditActions:
 
     def zoom_reset():
         actions.key("cmd-0")
+        
+mod = Module()
+mod.tag("edit", desc="Custom edit actions")
+        
+@mod.action_class
+class UserEditActions:
+    def delete_word_left():
+        """Delete word to left of cursor"""
+        actions.key("alt-backspace")
+        
+    def delete_word_right():
+        """Delete word to right of cursor"""
+        actions.key("alt-delete")

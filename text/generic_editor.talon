@@ -42,10 +42,12 @@ scratch:
 	edit.delete()
 line delete:
 	edit.delete_line()
+# word delete:
+# 	edit.delete_word()
 whack:
-	key(ctrl-backspace)
+	user.delete_word_left()
 bump:
-  key(ctrl-delete)
+  user.delete_word_right()
 move in:
 	edit.indent_more()
 move out:
