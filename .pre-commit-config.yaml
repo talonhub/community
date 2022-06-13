@@ -1,7 +1,7 @@
 minimum_pre_commit_version: "2.9.0"
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.2.0
+    rev: v4.3.0
     hooks:
       - id: check-added-large-files
       - id: check-case-conflict
@@ -24,7 +24,7 @@ repos:
     hooks:
       - id: flynt
   - repo: https://github.com/Zac-HD/shed
-    rev: 0.10.0
+    rev: 0.10.1
     hooks:
       - id: shed
         args: [--refactor, --py39-plus]
