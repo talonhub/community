@@ -118,6 +118,21 @@ class EditActions:
         actions.key("enter")
         actions.edit.line_start()
 
+    def delete_line():
+        actions.user.vscode("editor.action.deleteLines")
+
+    def line_insert_down():
+        actions.user.vscode("editor.action.insertLineAfter")
+
+    def line_insert_up():
+        actions.user.vscode("editor.action.insertLineBefore")
+
+    def select_none():
+        actions.user.vscode("cancelSelection")
+
+    def select_word():
+        actions.user.vscode("editor.action.addSelectionToNextFindMatch")
+
 
 @ctx.action_class("win")
 class WinActions:
