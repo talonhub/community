@@ -17,6 +17,8 @@ class RegisteredActionsAccessor:
         raise AttributeError(f"Couldn't find action {self.namespace}.{name}")
 
     def __call__(self, *args, **kwargs):
+        # Provide a useful error message if people try something like
+        # actions.my_action() when they should do actions.user.my_action()
         raise RuntimeError(f"actions.{self.namespace}() is not an available action")
 
 
@@ -30,7 +32,6 @@ class Actions:
         self.registered_actions = {
             "module": {},
             "test": {},
-            # "contexts": []
         }
 
         # Some built in actions
