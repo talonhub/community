@@ -1,3 +1,5 @@
+from typing import Union
+
 from talon import Context, Module, actions, settings
 
 ctx = Context()
@@ -11,6 +13,17 @@ mod.list("code_type", desc="List of types for active language")
 mod.list(
     "code_parameter_name", desc="List of common parameter names for active language"
 )
+mod.list(
+    "code_function_modifier",
+    desc="List of function modifiers (e.g. private, async, static)",
+)
+
+ctx.lists["user.code_function_modifier"] = {
+    "pub": "public",
+    "pro": "protected",
+    "private": "private",
+    "static": "static",
+}
 
 
 @mod.capture(rule="{user.code_type}")
@@ -33,6 +46,33 @@ setting_public_variable_formatter = mod.setting("code_public_variable_formatter"
 
 @mod.action_class
 class Actions:
+    def code_modified_function(modifiers: Union[list[str], int], text: str):
+        """
+        Inserts function declaration with the given modifiers. modifiers == 0
+        implies no modifiers (.talon files don't have empty list literal
+        syntax)
+        """
+        mods = {} if modifiers == 0 else set(modifiers)
+
+        if mods == {}:
+            return actions.user.code_default_function(text)
+        elif mods == {"static"}:
+            return actions.user.code_private_static_function(text)
+        elif mods == {"private"}:
+            return actions.user.code_private_function(text)
+        elif mods == {"private", "static"}:
+            return actions.user.code_private_static_function(text)
+        elif mods == {"protected"}:
+            return actions.user.code_protected_function(text)
+        elif mods == {"protected", "static"}:
+            return actions.user.code_protected_static_function(text)
+        elif mods == {"public"}:
+            return actions.user.code_public_function(text)
+        elif mods == {"public", "static"}:
+            return actions.user.code_public_static_function(text)
+        else:
+            raise RuntimeError(f"Unhandled modifier set: {mods}")
+
     def code_default_function(text: str):
         """Inserts function declaration"""
         actions.user.code_private_function(text)
