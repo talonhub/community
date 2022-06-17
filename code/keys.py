@@ -231,7 +231,7 @@ simple_keys = [
 alternate_keys = {
     # "delete": "backspace",
     "forward delete": "delete",
-    'junk': 'backspace',
+    "junk": "backspace",
     "page up": "pageup",
     "flow up": "pageup",
     "roll up": "pageup",
@@ -240,7 +240,6 @@ alternate_keys = {
     "roll down": "pagedown",
     "leave": "escape",
     "ace": "space",
-    
 }
 # mac apparently doesn't have the menu key.
 if app.platform in ("windows", "linux"):
