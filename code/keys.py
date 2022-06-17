@@ -2,7 +2,7 @@ from talon import Context, Module, actions, app
 
 # default_alphabet = "air bat cap drum each fine gust harp sit jury crunch look made near odd pit quench red sun trap urge vest whale plex yank zip".split(
 #     " "
-default_alphabet = "air burr corn drum each fly gust harp sit jay kid lime made near oak play quill reel sun toast ute vest wind flex why zoo".split(
+default_alphabet = "air burr corn drum each fly gust harp sit jay kid look made near oak play quill reel sun toast ute vest wind flex why zoo".split(
     " "
 )
 letters_string = "abcdefghijklmnopqrstuvwxyz"
