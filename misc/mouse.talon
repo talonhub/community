@@ -61,6 +61,7 @@ right drag | righty drag:
 end drag | drag end:
     user.mouse_drag_end()
 wheel down: user.mouse_scroll_down()
+wheel down <number_small>: user.mouse_scroll_down(number_small)
 wheel down here:
     user.mouse_move_center_active_window()
     user.mouse_scroll_down()
@@ -73,6 +74,7 @@ wheel downer here:
     user.mouse_move_center_active_window()
     user.mouse_scroll_down_continuous()
 wheel up: user.mouse_scroll_up()
+wheel up <number_small>: user.mouse_scroll_up(number_small)
 wheel up here:
     user.mouse_move_center_active_window()
     user.mouse_scroll_up()
@@ -93,6 +95,7 @@ wheel stop here:
     user.mouse_move_center_active_window()
     user.mouse_scroll_stop()
 wheel left: user.mouse_scroll_left()
+wheel left <number_small>: user.mouse_scroll_left(number_small)
 wheel left here:
     user.mouse_move_center_active_window()
     user.mouse_scroll_left()
@@ -101,6 +104,7 @@ wheel tiny left here:
     user.mouse_move_center_active_window()
     user.mouse_scroll_left(0.5)
 wheel right: user.mouse_scroll_right()
+wheel right <number_small>: user.mouse_scroll_right(number_small)
 wheel right here:
     user.mouse_move_center_active_window()
     user.mouse_scroll_right()
