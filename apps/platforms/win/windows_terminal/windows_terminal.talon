@@ -1,7 +1,7 @@
 app: windows_terminal
 -
 # makes the commands in generic_terminal available
-tag(): terminal 
+tag(): terminal
 
 # activates the implementation of the commands/functions in generic_terminal
 tag(): user.generic_windows_shell
@@ -11,7 +11,7 @@ tag(): user.generic_windows_shell
 tag(): user.git
 tag(): user.anaconda
 # tag(): user.kubectl
-    
+
 tag(): user.tabs
 # TODO: file_manager
 tag(): user.splits
