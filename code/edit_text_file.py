@@ -1,4 +1,3 @@
-# Actions for opening files in appropriate applications.
 import os
 import subprocess
 
