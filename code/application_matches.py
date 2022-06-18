@@ -1,4 +1,4 @@
-from talon import Context, Module
+from talon import Module
 
 mod = Module()
 
@@ -68,7 +68,7 @@ and app.exe: cmd.exe
 
 apps.windows_terminal = """
 os: windows
-and app.exe: WindowsTerminal.exe 
+and app.exe: WindowsTerminal.exe
 """
 
 mod.apps.windows_power_shell = """

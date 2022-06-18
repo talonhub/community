@@ -1,6 +1,7 @@
-from talon import app, Module, Context, actions, ui, imgui, settings, app, registry
+from talon import Module
 
 mod = Module()
+
 
 @mod.action_class
 class Actions:
@@ -8,7 +9,7 @@ class Actions:
 
     def terminal_list_directories():
         """Lists directories"""
-        
+
     def terminal_list_all_directories():
         """Lists all directories including hidden"""
 

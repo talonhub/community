@@ -14,7 +14,7 @@ break [on] clipboard:
     insert("break ")
     key(ctrl-shift-v)
     key(enter)
-    
+
 # information
 list [source]: "list\n"
 info source: "info source\n"
@@ -43,8 +43,8 @@ hex dump clipboard:
     insert("x/100gx ")
     edit.paste()
     key(enter)
-    
-    
+
+
 # execution
 source: "source \t\t"
 
@@ -83,7 +83,7 @@ resume main (inf|inferior):
 resume [from] (inf|inferior) <number_small>$:
     insert("inferior {number_small}\n")
     insert("c\n")
-    
+
 # arguments
 set args: "set args "
 

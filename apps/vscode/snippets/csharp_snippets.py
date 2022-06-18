@@ -1,14 +1,11 @@
-from talon import Context, actions, ui, Module, app
+from talon import Context
 
 # from user.knausj_talon.code.snippet_watcher import snippet_watcher
-import os
 
 ctx = Context()
 ctx.matches = r"""
 app: vscode
-mode: user.csharp
-mode: user.auto_lang 
-and code.language: csharp
+tag: user.csharp
 """
 # short name -> ide clip name
 ctx.lists["user.snippets"] = {

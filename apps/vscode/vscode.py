@@ -1,4 +1,4 @@
-from talon import Context, actions, ui, Module, app, clip
+from talon import Context, Module, actions, app
 
 is_mac = app.platform == "mac"
 
@@ -30,6 +30,8 @@ os: windows
 and app.name: Visual Studio Code
 os: windows
 and app.name: Visual Studio Code Insiders
+os: windows
+and app.name: Visual Studio Code - Insiders
 os: windows
 and app.exe: Code.exe
 os: windows
@@ -165,6 +167,12 @@ class UserActions:
     def split_flip():
         actions.user.vscode("workbench.action.toggleEditorGroupLayout")
 
+    def split_maximize():
+        actions.user.vscode("workbench.action.maximizeEditor")
+
+    def split_reset():
+        actions.user.vscode("workbench.action.evenEditorWidths")
+
     def split_last():
         actions.user.vscode("workbench.action.focusLeftGroup")
 
@@ -243,13 +251,15 @@ class UserActions:
     def tab_jump(number: int):
         if number < 10:
             if is_mac:
-                actions.key("ctrl-{}".format(number))
+                actions.user.vscode_with_plugin(
+                    f"workbench.action.openEditorAtIndex{number}"
+                )
             else:
-                actions.key("alt-{}".format(number))
+                actions.key(f"alt-{number}")
 
     def tab_final():
         if is_mac:
-            actions.key("ctrl-0")
+            actions.user.vscode("workbench.action.lastEditorInGroup")
         else:
             actions.key("alt-0")
 
@@ -258,9 +268,9 @@ class UserActions:
         """Navigates to a the specified split"""
         if index < 9:
             if is_mac:
-                actions.key("cmd-{}".format(index))
+                actions.key(f"cmd-{index}")
             else:
-                actions.key("ctrl-{}".format(index))
+                actions.key(f"ctrl-{index}")
 
     # splits.py support end
 

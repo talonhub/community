@@ -1,11 +1,6 @@
-mode: command
-and mode: user.batch
-mode: command
-and mode: user.auto_lang
-and code.language: batch
+tag: user.batch
 -
-#tag(): user.code_operators
-tag(): user.code_comment
+tag(): user.code_comment_line
 
 # exit without killing cmd shell
 soft exit: "exit /B 1\n"

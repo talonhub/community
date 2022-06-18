@@ -1,14 +1,15 @@
-from talon import Module, screen, ui, cron, app, actions, clip
-from talon.canvas import Canvas
-from typing import Optional
-from datetime import datetime
 import os
+from datetime import datetime
+from typing import Optional
+
+from talon import Context, Module, actions, app, clip, cron, screen, ui
+from talon.canvas import Canvas
 
 mod = Module()
 
 default_folder = ""
 if app.platform == "windows":
-    default_folder = os.path.expanduser(os.path.join("~", r"OneDrive\Pictures"))
+    default_folder = os.path.expanduser(os.path.join("~", r"OneDrive\\Pictures"))
 if not os.path.isdir(default_folder):
     default_folder = os.path.join("~", "Pictures")
 
@@ -34,13 +35,16 @@ class Actions:
         screenshot_rect(win.rect, win.app.name)
 
     def screenshot_selection():
-        """Triggers an application is capable of taking a screenshot of a portion of the screen"""
-        if app.platform == "windows":
-            actions.key("super-shift-s")
-        elif app.platform == "mac":
-            actions.key("ctrl-shift-cmd-4")
-        elif app.platform == "linux":
-            actions.key("shift-printscr")
+        """Triggers an application that is capable of taking a screenshot of a portion of the screen"""
+
+    def screenshot_settings():
+        """Opens the settings UI for screenshots.
+        Only applies to Mac for now
+        """
+        if app.platform == "mac":
+            actions.key("cmd-shift-5")
+        else:
+            app.notify("Not supported on this operating system")
 
     def screenshot_clipboard(screen_number: Optional[int] = None):
         """Takes a screenshot of the entire screen and saves it to the clipboard.
@@ -90,6 +94,42 @@ def flash_rect(rect: ui.Rect):
 
 
 def get_screen(screen_number: Optional[int] = None) -> ui.Screen:
-    if screen_number == None:
+    if screen_number is None:
         return screen.main_screen()
     return actions.user.screens_get_by_number(screen_number)
+
+
+ctx_mac = Context()
+ctx_mac.matches = r"""
+os: mac
+"""
+
+
+@ctx_mac.action_class("user")
+class UserActionsMac:
+    def screenshot_selection():
+        actions.key("cmd-shift-4")
+
+
+ctx_win = Context()
+ctx_win.matches = r"""
+os: windows
+"""
+
+
+@ctx_win.action_class("user")
+class UserActionsWin:
+    def screenshot_selection():
+        actions.key("super-shift-s")
+
+
+ctx_linux = Context()
+ctx_linux.matches = r"""
+os: linux
+"""
+
+
+@ctx_linux.action_class("user")
+class UserActionsLinux:
+    def screenshot_selection():
+        actions.key("shift-printscr")

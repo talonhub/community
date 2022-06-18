@@ -1,4 +1,4 @@
-from talon import Module, actions, ui, cron
+from talon import Module, cron, ui
 from talon.canvas import Canvas
 
 mod = Module()
@@ -44,7 +44,7 @@ def get_sorted_screens():
     Screens will be sorted leftto-right, then top-to-bottom as a tiebreak.
     """
     return sorted(
-        sorted(ui.screens(), key=lambda screen: screen.visible_rect.top),
+        ui.screens(),
         key=lambda screen: screen.visible_rect.left,
     )
 

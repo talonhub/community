@@ -1,67 +1,124 @@
-from talon import Module, Context, actions, ui, imgui, settings
+from talon import Context, Module, actions, settings
 
+mod = Module()
 ctx = Context()
-ctx.matches = r"""
-mode: user.javascript
-mode: user.auto_lang 
-and code.language: javascript
+ctx.matches = """
+tag: user.javascript
 """
-# tbd
-# ctx.lists["user.code_functions"] = {
-#     "integer": "int.TryParse",
-#     "print": "Console.WriteLine",
-#     "string": ".ToString",
-# }
+
+ctx.lists["user.code_common_function"] = {
+    "abs": "Math.abs",
+    "entries": "Object.entries",
+    "fetch": "fetch",
+    "floor": "Math.floor",
+    "from entries": "Object.fromEntries",
+    "keys": "Object.keys",
+    "log": "console.log",
+    "max": "Math.max",
+    "min": "Math.min",
+    "print": "console.log",
+    "round": "Math.round",
+    "values": "Object.values",
+}
+
+mod.list("code_common_member_function", "Function to use in a dotted chain, eg .foo()")
+
+ctx.lists["user.code_common_member_function"] = {
+    "catch": "catch",
+    "concat": "concat",
+    "filter": "filter",
+    "finally": "finally",
+    "find": "find",
+    "flat map": "flatMap",
+    "for each": "forEach",
+    "join": "join",
+    "includes": "includes",
+    "map": "map",
+    "pop": "pop",
+    "push": "push",
+    "reduce": "reduce",
+    "slice": "slice",
+    "some": "some",
+    "split": "split",
+    "substring": "substring",
+    "then": "then",
+}
+
+ctx.lists["user.code_keyword"] = {
+    "a sink": "async ",
+    "await": "await ",
+    "break": "break",
+    "class": "class ",
+    "const": "const ",
+    "continue": "continue",
+    "default": "default ",
+    "export": "export ",
+    "false": "false",
+    "function": "function ",
+    "import": "import ",
+    "let": "let ",
+    "new": "new ",
+    "null": "null",
+    "private": "private ",
+    "protected": "protected ",
+    "public": "public ",
+    "return": "return ",
+    "throw": "throw ",
+    "true": "true",
+    "try": "try ",
+    "undefined": "undefined",
+    "yield": "yield ",
+}
 
 
 @ctx.action_class("user")
 class UserActions:
-    def code_is_not_null():
+    def code_insert_is_not_null():
         actions.auto_insert(" !== null")
 
-    def code_is_null():
+    def code_insert_is_null():
         actions.auto_insert(" === null")
 
     def code_type_dictionary():
-        actions.insert("{}")
-        actions.key("left")
+        actions.user.insert_between("{", "}")
 
     def code_state_if():
-        actions.insert("if ()")
-        actions.key("left")
+        actions.user.insert_between("if (", ")")
 
     def code_state_else_if():
-        actions.insert(" else if ()")
-        actions.key("left")
+        actions.user.insert_between(" else if (", ")")
 
     def code_state_else():
-        actions.insert(" else {}")
-        actions.key("left enter")
+        actions.user.insert_between(" else {", "}")
+        actions.key("enter")
 
     def code_block():
-        actions.insert("{}")
-        actions.key("left enter")
+        actions.user.insert_between("{", "}")
+        actions.key("enter")
 
     def code_self():
         actions.auto_insert("this")
 
+    def code_operator_object_accessor():
+        actions.auto_insert(".")
+
     def code_state_while():
-        actions.insert("while ()")
-        actions.key("left")
+        actions.user.insert_between("while (", ")")
+
+    def code_state_do():
+        actions.auto_insert("do ")
 
     def code_state_return():
         actions.insert("return ")
 
     def code_state_for():
-        actions.insert("for ()")
-        actions.key("left")
+        actions.user.insert_between("for (", ")")
 
     def code_state_switch():
-        actions.insert("switch ()")
-        actions.key("left")
+        actions.user.insert_between("switch (", ")")
 
     def code_state_case():
-        actions.auto_insert("case :")
+        actions.user.insert_between("case ", ":")
 
     def code_state_go_to():
         actions.auto_insert("")
@@ -69,31 +126,11 @@ class UserActions:
     def code_import():
         actions.auto_insert("import ")
 
-    def code_from_import():
-        actions.insert(' from  ""')
-        actions.key("left")
-
-    def code_type_class():
+    def code_define_class():
         actions.auto_insert("class ")
 
-    def code_include():
-        actions.auto_insert("")
-
-    def code_include_system():
-        actions.auto_insert("")
-
-    def code_include_local():
-        actions.auto_insert("")
-
-    def code_type_definition():
-        actions.auto_insert("")
-
-    def code_typedef_struct():
-        actions.auto_insert("")
-
     def code_state_for_each():
-        actions.insert(".forEach()")
-        actions.key("left")
+        actions.user.insert_between(".forEach(", ")")
 
     def code_break():
         actions.auto_insert("break;")
@@ -101,30 +138,20 @@ class UserActions:
     def code_next():
         actions.auto_insert("continue;")
 
-    def code_true():
+    def code_insert_true():
         actions.auto_insert("true")
 
-    def code_false():
+    def code_insert_false():
         actions.auto_insert("false")
 
-    def code_null():
+    def code_insert_null():
         actions.auto_insert("null")
-
-    def code_operator_indirection():
-        actions.auto_insert("")
-
-    def code_operator_address_of():
-        actions.auto_insert("")
-
-    def code_operator_structure_dereference():
-        actions.auto_insert("")
 
     def code_operator_lambda():
         actions.auto_insert(" => ")
 
     def code_operator_subscript():
-        actions.insert("[]")
-        actions.key("left")
+        actions.user.insert_between("[", "]")
 
     def code_operator_assignment():
         actions.auto_insert(" = ")
@@ -217,13 +244,19 @@ class UserActions:
         actions.auto_insert(" >>= ")
 
     def code_insert_function(text: str, selection: str):
-        if selection:
-            text = text + "({})".format(selection)
-        else:
-            text = text + "()"
-
+        text += f"({selection or ''})"
         actions.user.paste(text)
         actions.edit.left()
+
+    def code_default_function(text: str):
+        """Inserts function declaration without modifiers"""
+        result = "function {}".format(
+            actions.user.formatted_text(
+                text, settings.get("user.code_private_function_formatter")
+            )
+        )
+
+        actions.user.code_insert_function(result, None)
 
     def code_private_function(text: str):
         """Inserts private function declaration"""
@@ -280,4 +313,3 @@ class UserActions:
     #     )
 
     #     actions.user.code_insert_function(result, None)
-

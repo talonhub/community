@@ -1,6 +1,6 @@
-from talon import Context, Module, actions, imgui, settings, ui, app
-
 import os
+
+from talon import Context, Module, actions, app, ui
 
 mod = Module()
 apps = mod.apps
@@ -49,7 +49,6 @@ if app.platform == "windows":
 
     # this is probably not the correct way to check for onedrive, quick and dirty
     if os.path.isdir(os.path.expanduser(os.path.join("~", r"OneDrive\Desktop"))):
-        default_folder = os.path.join("~", "Desktop")
 
         directories_to_remap = {
             "Desktop": os.path.join(one_drive_path, "Desktop"),

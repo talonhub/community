@@ -31,4 +31,3 @@ find it <phrase>$:
     key(escape)
     # make it so
     edit.find("{phrase}\n")
-
