@@ -18,6 +18,7 @@ descending: " DESC"
 ascending: " ASC"
 dot i d: ".id"
 inner join: user.insert_between("INNER JOIN ", " ON ")
+inner join using: user.insert_between("INNER JOIN ", " USING ")
 left outer join: user.insert_between("LEFT OUTER JOIN ", " ON ")
 right outer join: user.insert_between("RIGHT OUTER JOIN ", " ON ")
 
