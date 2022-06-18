@@ -39,9 +39,3 @@ column:
 count: user.code_insert_function("Count", "")
 
 date: user.insert_between("DATE '", "'")
-
-funk <user.code_common_function>:
-    user.code_insert_function(code_common_function, "")
-
-funk wrap <user.code_common_function>:
-    user.code_insert_function(code_common_function, edit.selected_text())
