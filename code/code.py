@@ -15,6 +15,7 @@ language_extensions = {
     # 'cplusplus': 'cpp hpp',
     "csharp": "cs",
     "css": "css",
+    "scss": "scss",
     # 'elisp': 'el',
     # 'elm': 'elm',
     "gdb": "gdb",
