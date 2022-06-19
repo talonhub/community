@@ -29,6 +29,10 @@ empty escaped string:
     "\\'\\'"
     key(left)
     key(left)
+empty square:
+  insert("[]")
+empty brace:
+  insert("{}")
 (inside parens | args):
 	insert("()")
 	key(left)

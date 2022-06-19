@@ -60,6 +60,11 @@ file hunt [<user.text>]:
     user.vscode("workbench.action.quickOpen")
     sleep(50ms)
     insert(text or "")
+file hunt (pace | paste):
+  user.vscode("workbench.action.quickOpen")
+  sleep(50ms)
+  edit.paste()
+file copy name: user.vscode("fileutils.copyFileName")
 file copy path: user.vscode("copyFilePath")
 file copy local [path]: user.vscode("copyRelativeFilePath")
 file create sibling: user.vscode_and_wait("explorer.newFile")
@@ -244,3 +249,4 @@ cell run above: user.vscode("jupyter.runallcellsabove.palette")
 cell run: user.vscode("jupyter.runcurrentcell")
 
 install local: user.vscode("workbench.extensions.action.installVSIX")
+preview markdown: user.vscode("markdown.showPreview")
