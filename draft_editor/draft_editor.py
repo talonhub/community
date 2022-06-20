@@ -91,7 +91,7 @@ class Actions:
     def draft_editor_paste_last():
         """Paste last submitted draft"""
         if last_draft:
-            actions.insert(last_draft)
+            actions.user.paste(last_draft)
 
 
 def get_editor_app() -> ui.App:
