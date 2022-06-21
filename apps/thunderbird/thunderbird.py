@@ -22,26 +22,26 @@ title: /@/
 
 # Calendar tab (lightning)
 months = [
-    "January",
+    "January",  # English
     "February",
     "March",
     "April",
     "May",
-    "June",  # English
+    "June",
     "July",
     "August",
     "September",
     "October",
     "November",
     "December",
-    "Januar",
+    "Januar",  # German
     "Februar",
     "März",
     "Mai",
     "Juni",
     "Juli",
     "Oktober",
-    "Dezember",  # German
+    "Dezember",
 ]
 mod.apps.thunderbird_calendar = f"""
 app: thunderbird
