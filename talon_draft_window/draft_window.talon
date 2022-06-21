@@ -6,7 +6,7 @@ settings():
   user.context_sensitive_dictation = 1
 
 # Replace a single word with a phrase
-(change | replace) <user.draft_anchor> (with) <user.text>:
+(change | replace) <user.draft_anchor> with <user.text>:
   user.draft_select("{draft_anchor}")
   result = user.formatted_text(text, "NOOP")
   insert(result)
