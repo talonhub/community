@@ -6,34 +6,34 @@ settings():
   user.context_sensitive_dictation = 1
 
 # Replace a single word with a phrase
-[change | replace] <user.draft_anchor> [with] <user.text>:
+(change | replace) <user.draft_anchor> (with) <user.text>:
   user.draft_select("{draft_anchor}")
   result = user.formatted_text(text, "NOOP")
   insert(result)
 
 # Position cursor before word
-[pre | cursor | cursor before] <user.draft_anchor>:
+(pre | cursor | cursor before) <user.draft_anchor>:
   user.draft_position_caret("{draft_anchor}")
 
 # Position cursor after word
-[post | cursor after] <user.draft_anchor>:
+(post | cursor after) <user.draft_anchor>:
   user.draft_position_caret("{draft_anchor}", 1)
 
 # Select a whole word
-[take | select] <user.draft_anchor>:
+(take | select) <user.draft_anchor>:
   user.draft_select("{draft_anchor}")
 
 # Select a range of words
-[take | select] <user.draft_anchor> [through | past] <user.draft_anchor>:
+(take | select) <user.draft_anchor> (through | past) <user.draft_anchor>:
   user.draft_select("{draft_anchor_1}", "{draft_anchor_2}")
 
 # Delete a word
-[chuck |clear] <user.draft_anchor>:
+(chuck |clear) <user.draft_anchor>:
   user.draft_select("{draft_anchor}", "", 1)
   key(backspace)
 
 # Delete a range of words
-[chuck |clear] <user.draft_anchor> [through | past] <user.draft_anchor>:
+(chuck |clear) <user.draft_anchor> (through | past) <user.draft_anchor>:
   user.draft_select(draft_anchor_1, draft_anchor_2, 1)
   key(backspace)
 
@@ -43,6 +43,6 @@ settings():
   user.formatters_reformat_selection(user.formatters)
 
 # reformat range
-<user.formatters> <user.draft_anchor> [through | past] <user.draft_anchor>:
+<user.formatters> <user.draft_anchor> (through | past) <user.draft_anchor>:
     user.draft_select(draft_anchor_1, draft_anchor_2, 1)
     user.formatters_reformat_selection(user.formatters)
