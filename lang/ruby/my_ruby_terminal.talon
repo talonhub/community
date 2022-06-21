@@ -23,3 +23,5 @@ pry dupe:
   # actions.key("enter")
 pry history: "history\n"
 pry replay <number>: "history --replay {number}"
+
+light user: 'Lti13User.'
