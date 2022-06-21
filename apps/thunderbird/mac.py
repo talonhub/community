@@ -9,10 +9,11 @@ app: thunderbird
 
 
 # --- Implement actions ---
-@ctx.action_class('app')
+@ctx.action_class("app")
 class AppActions:
     # app.tabs
-    def tab_reopen(): actions.key("cmd-shift-t")  # only works from inbox tab
+    def tab_reopen():
+        actions.key("cmd-shift-t")  # only works from inbox tab
 
 
 @ctx.action_class("user")
@@ -22,9 +23,12 @@ class UserActions:
         if number <= 9:
             actions.key(f"cmd-{number}")
 
-    def tab_final(): actions.key("cmd-9")
+    def tab_final():
+        actions.key("cmd-9")
 
     # custom actions
-    def mod(): return "cmd"
+    def mod():
+        return "cmd"
 
-    def thunderbird_calendar_view(number: int): actions.key(f"alt-{number}")
+    def thunderbird_calendar_view(number: int):
+        actions.key(f"alt-{number}")
