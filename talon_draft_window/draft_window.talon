@@ -6,7 +6,7 @@ settings():
   user.context_sensitive_dictation = 1
 
 # Replace a single word with a phrase
-(change | replace) <user.draft_anchor> with <user.text>:
+replace <user.draft_anchor> with <user.text>:
   user.draft_select("{draft_anchor}")
   result = user.formatted_text(text, "NOOP")
   insert(result)
@@ -28,12 +28,12 @@ settings():
   user.draft_select("{draft_anchor_1}", "{draft_anchor_2}")
 
 # Delete a word
-(chuck | clear) <user.draft_anchor>:
+(change | chuck | clear) <user.draft_anchor>:
   user.draft_select("{draft_anchor}", "", 1)
   key(backspace)
 
 # Delete a range of words
-(chuck | clear) <user.draft_anchor> (through | past) <user.draft_anchor>:
+(change | chuck | clear) <user.draft_anchor> (through | past) <user.draft_anchor>:
   user.draft_select(draft_anchor_1, draft_anchor_2, 1)
   key(backspace)
 
