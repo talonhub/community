@@ -81,8 +81,8 @@ app: thunderbird
 # --- Define actions ---
 @mod.action_class
 class UserActions:
-    def mod():
-        """ctrl or cmd"""
+    def thunderbird_mod(keys: str):
+        """Press keys with modifier ctrl or cmd"""
 
     def thunderbird_calendar_view(number: int):
         """Select between calendar view tabs"""

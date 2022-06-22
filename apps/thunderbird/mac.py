@@ -27,8 +27,8 @@ class UserActions:
         actions.key("cmd-9")
 
     # custom actions
-    def mod():
-        return "cmd"
+    def thunderbird_mod(keys: str):
+        actions.key(f"cmd-{keys}")
 
     def thunderbird_calendar_view(number: int):
         actions.key(f"alt-{number}")
