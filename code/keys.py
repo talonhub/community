@@ -172,7 +172,7 @@ symbol_key_words = {
     "tilde": "~",
     "bang": "!",
     "cash": "$",
-    "scout": "_",
+    "flat": "_",
     "cot": ":",
     "caught": ":",
     "bend": "(",
@@ -221,7 +221,7 @@ alternate_keys = {
     # 'junk': 'backspace',
     "page up": "pageup",
     "page down": "pagedown",
-    "void": "space"
+    "void": "space",
 }
 # mac apparently doesn't have the menu key.
 if app.platform in ("windows", "linux"):
