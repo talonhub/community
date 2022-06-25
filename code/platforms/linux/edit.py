@@ -5,6 +5,10 @@ from talon import Context, actions
 ctx = Context()
 ctx.matches = r"""
 os: linux
+
+os: mac
+and tag: terminal
+and win.title: micro
 """
 
 
