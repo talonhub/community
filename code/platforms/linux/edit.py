@@ -198,3 +198,13 @@ class EditActions:
 
     def zoom_reset():
         actions.key("ctrl-0")
+        
+@ctx.action_class("user")
+class UserEditActions:
+    def delete_word_left():
+        """Delete word to left of cursor"""
+        actions.key("ctrl-backspace")
+        
+    def delete_word_right():
+        """Delete word to right of cursor"""
+        actions.key("ctrl-delete")

@@ -200,10 +200,9 @@ class EditActions:
 mod = Module()
 mod.tag("edit", desc="Custom edit actions")
         
-@mod.action_class
+@ctx.action_class("user")
 class UserEditActions:
     def delete_word_left():
-        """Delete word to left of cursor"""
         actions.key("alt-backspace")
         
     def delete_word_right():
