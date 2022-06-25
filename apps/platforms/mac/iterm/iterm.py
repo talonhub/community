@@ -83,3 +83,11 @@ class user_actions:
         actions.key("ctrl-c")
         actions.insert("y")
         actions.key("enter")
+
+@ctx.action_class("edit")
+class EditActions:
+    def line_end():
+        actions.key("end")
+
+    def line_start():
+        actions.key("home")
