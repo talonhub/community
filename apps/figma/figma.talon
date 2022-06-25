@@ -162,3 +162,7 @@ auto all:
     mouse_drag(0)
     sleep(3500ms)
     key(alt-shift:up)
+
+# Export
+export: key("cmd-shift-e")
+    

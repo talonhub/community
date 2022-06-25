@@ -2,6 +2,7 @@
 (control | see) fusion: experimental.fusion1_toggle()
 (control | see) gazing: experimental.gaze1_toggle()
 (control | see) head: experimental.head1_toggle()
+(control | see) troll: experimental.control2_toggle()
 
 # Deep Clicks
 deep: key("ctrl-cmd-t")
@@ -120,19 +121,23 @@ toll <user.letter>:
 (clicker | clicks): key("cmd-shift-d")
 grab all: key("cmd-a")
 
+# Sentence Input
+zee <user.text>:
+  insert(user.formatted_text(text, "CAPITALIZE_FIRST_WORD"))
+
+# Clear all and Replace with Sentence 
+sent <user.text>:
+  edit.select_all()
+  edit.delete()
+  sleep(200ms)
+  insert(user.formatted_text(text, "CAPITALIZE_FIRST_WORD"))
+
 # Clear all and Replace with Titles 
 lose <user.text>:
     edit.select_all()
     edit.delete()
     sleep(200ms)
     insert(user.formatted_text(text, "CAPITALIZE_ALL_WORDS"))
-
-sent <user.text>:
-    edit.select_all()
-    edit.delete()
-    sleep(200ms)
-    insert(user.formatted_text(text, "CAPITALIZE_FIRST_WORD"))
-
 
 # Click into, select all, clear and Replace with Titles 
 blew <user.text>:
@@ -241,8 +246,8 @@ spaz: " *"
 # Add an ... with a space
 three dot: " ..."
 
-# Add an > with a space between
-nex: " > "
+# Add an / with a space between
+nex: " / "
 
 
 # Webflow
@@ -250,4 +255,3 @@ quickie: key("cmd-k")
 
 # zoom 
 zoomer: user.mouse_trigger_zoom_mouse()
-
