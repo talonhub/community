@@ -114,13 +114,13 @@ class EditActions:
         actions.key("down home")
 
     def line_end():
-        actions.key("end")
+        actions.key("cmd-right")
 
     def line_insert_up():
         actions.key("cmd-left enter up")
 
     def line_start():
-        actions.key("home")
+        actions.key("cmd-left")
 
     def line_up():
         actions.key("up cmd-left")
