@@ -61,6 +61,8 @@ ui.register("app_activate", handle_app_activate)
 
 original_window = None
 
+last_draft = None
+
 
 @mod.action_class
 class Actions:
@@ -86,6 +88,11 @@ class Actions:
         """Discard draft editor"""
         close_editor(submit_draft=False)
 
+    def draft_editor_paste_last():
+        """Paste last submitted draft"""
+        if last_draft:
+            actions.user.paste(last_draft)
+
 
 def get_editor_app() -> ui.App:
     editor_names = get_editor_names()
@@ -98,12 +105,14 @@ def get_editor_app() -> ui.App:
 
 
 def close_editor(submit_draft: bool):
+    global last_draft
     remove_tag("user.draft_editor_active")
     actions.edit.select_all()
     selected_text = actions.edit.selected_text()
     actions.edit.delete()
     actions.app.tab_close()
     actions.user.switcher_focus_window(original_window)
-    actions.sleep("200ms")
+    actions.sleep("300ms")
     if submit_draft:
+        last_draft = selected_text
         actions.user.paste(selected_text)

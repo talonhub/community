@@ -52,3 +52,9 @@ class Actions:
 
     def code_operator_or():
         """code_operator_or"""
+
+    def code_operator_in():
+        """code_operator_in"""
+
+    def code_operator_not_in():
+        """code_operator_not_in"""
