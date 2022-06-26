@@ -1,8 +1,10 @@
 os: mac
 -
 
+# todo: talon doesn't seem able to detect when raycast is focused
+
 ^cast [<user.text>]$:
-  user.raycast(text)
+  user.raycast(text or "")
 
 ^cast {user.raycast_command}$:
   user.raycast(user.raycast_command)
@@ -16,7 +18,10 @@ os: mac
   sleep(150ms)
   insert(text or "")
 
-^switch [<user.text>]$:
+^switch [<user.running_applications>]$:
   key(alt-space)
   sleep(150ms)
-  insert(text or "")
+  insert(user.running_applications or "")
+
+^cast go <number_small>$:
+  key("cmd-{number_small}")

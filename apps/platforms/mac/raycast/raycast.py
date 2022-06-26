@@ -15,6 +15,7 @@ ctx.lists["user.raycast_input_command"] = {
     "google": "Search Google",
     "code": "Recent Projects",
     "pulls": "GitHub Enterprise Open Pull Requests",
+    "repos": "GitHub Search Repositories",
     "jira search": "Jira Search Issues",
     "brew search": "Brew Search",
 }
@@ -33,3 +34,8 @@ class Actions:
         if input:
             actions.sleep("150ms")
             actions.insert(input)
+
+
+@ctx.action("user.switcher_menu")
+def open_raycast_switcher():
+    actions.key("alt-space")
