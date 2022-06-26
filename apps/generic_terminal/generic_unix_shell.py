@@ -52,6 +52,7 @@ class Actions:
         actions.insert("y")
         actions.key("enter")
 
+
 @ctx.action_class("edit")
 class EditActions:
     def delete_line():
@@ -75,18 +76,19 @@ class EditActions:
 
     def undo():
         actions.insert("up")
-    
+
     def word_left():
         actions.key("alt-b")
 
     def word_right():
         actions.key("alt-f")
 
+
 @ctx.action_class("user")
 class UserEditActions:
     def delete_word_left():
         actions.key("ctrl-w")
-        
+
     def delete_word_right():
         actions.edit.word_right()
         actions.edit.delete_word_left()

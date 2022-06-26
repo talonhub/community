@@ -83,4 +83,3 @@ class user_actions:
         actions.key("ctrl-c")
         actions.insert("y")
         actions.key("enter")
-
