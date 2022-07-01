@@ -422,16 +422,15 @@ class Actions:
         # take two words left. I also tried taking a line up + a word left, but
         # edit.extend_up() = key(shift-up) doesn't work consistently in the
         # Slack webapp (sometimes escapes the text box).
+        actions.key(" ")
         actions.edit.extend_word_left()
         actions.edit.extend_word_left()
         text = actions.edit.selected_text()
-        # if we're at the beginning of the document/text box, we may not have
-        # selected any text, in which case we shouldn't move the cursor.
-        if text:
-            # Unfortunately, in web Slack, if our selection ends at newline,
-            # this will go right over the newline. Argh.
-            actions.edit.right()
-        return text
+        # Unfortunately, in web Slack, if our selection ends at newline,
+        # this will go right over the newline. Argh.
+        actions.edit.right()
+        actions.key("backspace")
+        return text[:-1]
 
     def clobber_selection_if_exists():
         """Deletes the currently selected text if it exists; otherwise does nothing."""
@@ -466,12 +465,15 @@ class Actions:
         # needs in the worst case. An example where the second character matters
         # is inserting before (1) "' hello" vs (2) "'hello". In case (1) we
         # don't want to add space, in case (2) we do.
+        actions.insert(" ")
+        actions.edit.left()
+        actions.edit.extend_right()
         actions.edit.extend_right()
         actions.edit.extend_right()
         after = actions.edit.selected_text()
-        if after:
-            actions.edit.left()
-        return after
+        actions.edit.left()
+        actions.key("delete")
+        return after[1:]
 
 
 # Use the dictation formatter in dictation mode.
