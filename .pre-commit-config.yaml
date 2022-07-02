@@ -11,10 +11,17 @@ repos:
       - id: check-symlinks
       - id: destroyed-symlinks
       - id: detect-private-key
-      - id: end-of-file-fixer
       - id: fix-byte-order-marker
-      - id: mixed-line-ending
+      # NB. To avoid sometimes needing multiple runs, we need:
+      # - trailing-whitespace BEFORE end-of-file-fixer,
+      #   otherwise trailing newline followed by whitespace, "\n ",
+      #   will need multiple runs.
+      # - end-of-file-fixer   BEFORE mixed-line-ending,
+      #   otherwise a file with CRLF line endings but missing a trailing
+      #   newline will need multiple runs.
       - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
   - repo: https://github.com/pre-commit/mirrors-prettier
     rev: "v2.7.1"
     hooks:
