@@ -111,6 +111,7 @@ formatters_dict = {
         first_vs_rest(lambda w: w.lower(), lambda w: "_" + w.lower()),
     ),
     "NO_SPACES": (NOSEP, every_word(lambda w: w)),
+    "ABBREVIATION": (NOSEP, every_word(lambda w: w[0])),
     "DASH_SEPARATED": words_with_joiner("-"),
     "TERMINAL_DASH_SEPARATED": (
         NOSEP,
@@ -151,6 +152,7 @@ formatters_words = {
     "snake": formatters_dict["SNAKE_CASE"],
     "string": formatters_dict["SINGLE_QUOTED_STRING"],
     "title": formatters_dict["CAPITALIZE_ALL_WORDS"],
+    "abbreviate": formatters_dict["ABBREVIATION"],
 }
 
 all_formatters = {}

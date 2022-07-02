@@ -1,8 +1,44 @@
 tag: user.go
 -
-variadic: "..."
+
+tag(): user.code_imperative
+
+tag(): user.code_comment_line
+tag(): user.code_comment_block_c_like
+tag(): user.code_data_bool
+tag(): user.code_data_null
+tag(): user.code_functions
+tag(): user.code_libraries
+tag(): user.code_operators_array
+tag(): user.code_operators_assignment
+tag(): user.code_operators_bitwise
+tag(): user.code_operators_lambda
+tag(): user.code_operators_math
+tag(): user.code_operators_pointer
+
+settings():
+    user.code_private_function_formatter = "PRIVATE_CAMEL_CASE"
+    user.code_protected_function_formatter = "PRIVATE_CAMEL_CASE"
+    user.code_public_function_formatter = "PUBLIC_CAMEL_CASE"
+    user.code_private_variable_formatter    = "PRIVATE_CAMEL_CASE"
+    user.code_protected_variable_formatter = "PRIVATE_CAMEL_CASE"
+    user.code_public_variable_formatter = "PRIVATE_CAMEL_CASE"
+
+
+(variadic | spread): "..."
 logical and: " && "
 logical or: " || "
+boolean: "bool"
+assign: " := "
+channel (receive|send): " <- "
+
+# Time conveniences
+time dot millisecond: "time.MilliSecond"
+buf i o: "bufio"
+
+<user.go_types>: "{go_types}"
+<user.go_pointers > : "{go_pointers}"
+
 # Many of these add extra terrible spacing under the assumption that
 # gofmt/goimports will erase it.
 state comment: "// "
@@ -16,6 +52,13 @@ state comment: "// "
 #     text_with_leading(" // ")
 # ]
 # "[state] context: insert("ctx")
+
+
+state (package): "package "
+package <user.text> [over]:
+    insert("package ")
+    insert(user.formatted_text(text, "PRIVATE_CAMEL_CASE"))
+
 state (funk | func | fun): "func "
 function (Annette | init) [over]: "func init() {\n"
 function <user.text> [over]:
@@ -49,6 +92,10 @@ state break: "break"
 state (chan | channel): " chan "
 state go: "go "
 state if: "if "
+state defer: "defer "
+string convert: "strconv."
+string convert to int: "strconv.AtoI("
+
 if <user.text> [over]:
   insert("if ")
   insert(user.formatted_text(text, "PRIVATE_CAMEL_CASE"))
@@ -66,25 +113,46 @@ else <user.text> [over]:
     key("enter")
     insert(user.formatted_text(text, "PRIVATE_CAMEL_CASE"))
 
-state while: "while "
+[state] if (err|error):
+    insert("if err != nil {")
+    key("enter")
+
+[state] if not (err|error):
+    insert("if err == nil {")
+    key("enter")
+
 while <user.text> [over]:
-    insert("while ")
-    insert(user.formatted_text(text, "PRIVATE_CAMEL_CASE"))
+    user.insert_between("for "," {}")
 
 state for: "for "
-for <user.text> [over]:
+state for <user.text> [over]:
     insert("for ")
     insert(user.formatted_text(text, "PRIVATE_CAMEL_CASE"))
+
+snip for range: "forr"
 
 state for range: "forr "
 range <user.text> [over]:
     insert("forr ")
     insert(user.formatted_text(text, "PRIVATE_CAMEL_CASE"))
 
+[state] for i:
+    user.insert_between("for i := 0; i< ", "; i++ {")
+
 state format: "fmt"
-format <user.text> [over]:
+state format <user.text> [over]:
     insert("fmt.")
     insert(user.formatted_text(text, "PUBLIC_CAMEL_CASE"))
+    insert("(\"")
+
+format print line [over]:
+    insert("fmt.Println")
+    insert("(\"")
+
+format print format [over]:
+    insert("fmt.Printf")
+    insert("(\"")
+
 
 state switch: "switch "
 switch <user.text> [over]:
@@ -117,6 +185,11 @@ state (start | struct | struck):
     insert(" struct {")
     key("enter")
     insert(user.formatted_text(text, "PUBLIC_CAMEL_CASE"))
+type struct <user.text>:
+    insert("type ")
+    insert(user.formatted_text(text, "PUBLIC_CAMEL_CASE"))
+    insert(" struct {")
+    key("enter")
 
 [state] empty interface: " interface{} "
 state interface:
@@ -128,11 +201,11 @@ interface <user.text> [over]:
     insert(user.formatted_text(text, "PUBLIC_CAMEL_CASE"))
 
 state string: " string "
-[state] (int | integer | ant): "int"
+[state] (int | integer): "int"
 state slice: " []"
 slice of: "[]"
-[state] (no | nil): "nil"
-state (int | integer | ant) 64: " int64 "
+[state] (nil): "nil"
+state (int | integer) 64: " int64 "
 state tag:
   user.insert_between(" `", "`")
 field tag <user.text> [over]:
@@ -154,7 +227,6 @@ map of <user.text> [over]:
     key("right")
     sleep(100ms)
 
-receive: " <- "
 make: "make("
 loggers [<user.text>] [over]:
     insert("logrus.")
@@ -171,7 +243,10 @@ append <user.text> [over]:
 state (air | err): "err"
 error: " err "
 loop over [<user.text>] [over]:
-    insert("forr ")
+    insert("forr")
+    sleep(100ms)
+    key(tab)
+    sleep(100ms)
     insert(user.formatted_text(text, "PRIVATE_CAMEL_CASE"))
 
 item <user.text> [over]:
@@ -194,3 +269,19 @@ swipe [<user.text>] [over]:
     key("right")
     insert(", ")
     insert(user.formatted_text(text, "PRIVATE_CAMEL_CASE"))
+
+type <user.text> struct:
+    insert("type ")
+    insert(user.formatted_text(text, "PRIVATE_CAMEL_CASE"))
+    insert(" struct {")
+    key("Enter")
+
+receiver function <user.text> for <user.text>:
+    insert("func (")
+    insert(user.formatted_text(text_2, "ABBREVIATION"))
+    insert(" *")
+    insert(user.formatted_text(text_2, "PUBLIC_CAMEL_CASE"))
+    insert(") ")
+    insert(user.formatted_text(text_1, "PUBLIC_CAMEL_CASE"))
+    insert("() {")
+    key("Enter")
