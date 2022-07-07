@@ -180,7 +180,7 @@ symbol_key_words = {
     "tilde": "~",
     "bang": "!",
     "down score": "_",
-    "under score": "_",
+    "underscore": "_",
     "paren": "(",
     "L paren": "(",
     "left paren": "(",

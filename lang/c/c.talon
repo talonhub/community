@@ -26,11 +26,6 @@ settings():
     # whether or not to use uint_8 style datatypes
     #    user.use_stdint_datatypes = 1
 
-
-
-^funky <user.text>$: user.code_default_function(text)
-^static funky <user.text>$: user.code_private_static_function(text)
-
 # NOTE: migrated from generic, as they were only used here, though once cpp support is added, perhaps these should be migrated to a tag together with the commands below
 state include:
     insert('#include ')

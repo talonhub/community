@@ -21,5 +21,9 @@ op mod: user.code_operator_modulo()
 (op | logical) and: user.code_operator_and()
 (op | logical) or: user.code_operator_or()
 
+# set operators
+(op | is) in: user.code_operator_in()
+(op | is) not in: user.code_operator_not_in()
+
 # TODO: This operator should either be abstracted into a function or removed.
 (op | pad) colon: " : "
