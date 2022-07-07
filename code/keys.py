@@ -9,7 +9,7 @@ from talon import Context, Module, actions, app
 # default_alphabet = "alfa bat cap drum each fine gust hotel sit jury crunch look made near odd pit quench red sun trap urge vest whale plex yank zulu".split(
 #     " "
 # )
-default_alphabet = "alfa bat cap delta echo fine golf hotel sit jury kilo lima mike near odd papa quebec red sun trap urge vest whiskey plex yank zulu".split(
+default_alphabet = "alfa bat cap delta echo fine golf hotel sit jury kilo look made near odd papa quebec red sun trap urge vest whiskey plex yank zulu".split(
     " "
 )
 
