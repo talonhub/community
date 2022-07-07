@@ -1,5 +1,4 @@
 question [mark]: "?"
-(downscore | underscore): "_"
 double dash: "--"
 (bracket | brack | left bracket): "{"
 (rbrack | are bracket | right bracket): "}"
