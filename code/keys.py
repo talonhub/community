@@ -168,6 +168,7 @@ symbol_key_words = {
     "slash": "/",
     "backslash": "\\",
     "minus": "-",
+    "negative": "-",
     "dash": "-",
     "equals": "=",
     "plus": "+",

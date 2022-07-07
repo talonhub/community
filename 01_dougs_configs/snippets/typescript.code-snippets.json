@@ -1,24 +1,27 @@
 {
 	"ts-throw-error": {
-		"prefix": ["ts-throw-error"],
+		"prefix": ["ts-throw-error"],		
 		"body": [
 			"throw new Error('${1}');"
 		],
-		"description": "An error throw"
+		"description": "An error throw",
+		"scope": "typescript,typescriptreact"
 	},
 	"ts-field": {
 		"prefix": ["ts-field"],
 		"body": [
 			"${1|private,public|} ${2:name}: ${3:Type}"
 		],
-		"description": "A field"
+		"description": "A field",
+		"scope": "typescript,typescriptreact"
 	},
 	"ts-record-field": {
 		"prefix": ["ts-record-field"],
 		"body": [
 			"${1|private,public|} ${2:name}: Record<${3:string}, ${4:ValueType}>"
 		],
-		"description": "A record field"
+		"description": "A record field",
+		"scope": "typescript,typescriptreact"
 	},
 
 	"ts-getter": {
@@ -28,7 +31,8 @@
 			"\t${5}",
 			"}"
 		],
-		"description": "A getter"
+		"description": "A getter",
+		"scope": "typescript,typescriptreact"
 	},
 	"ts-setter": {
 		"prefix": ["ts-setter"],
@@ -37,7 +41,8 @@
 			"\t${5}",
 			"}"
 		],
-		"description": "A setter"
+		"description": "A setter",
+		"scope": "typescript,typescriptreact"
 	},
 
 	"ts-method": {
@@ -47,7 +52,8 @@
 			"\t${5}",
 			"}"
 		],
-		"description": "A private field"
+		"description": "A private field",
+		"scope": "typescript,typescriptreact"
 	},
 
 
@@ -57,14 +63,16 @@
 		"body": [
 			"private ${1:name}: ${2:Type}"
 		],
-		"description": "A private field"
+		"description": "A private field",
+		"scope": "typescript,typescriptreact"
 	},
 	"ts-private-record": {
 		"prefix": ["ts-private-record"],
 		"body": [
 			"private ${1:name}: Record<${2:string}, ${3:ValueType}>"
 		],
-		"description": "A private field as a record type"
+		"description": "A private field as a record type",
+		"scope": "typescript,typescriptreact"
 	},
 
 	"ts-enum": {
@@ -74,7 +82,8 @@
 			"\t$0",
 			"}"
 		],
-		"description": "An "
+		"description": "An ",
+		"scope": "typescript,typescriptreact"
 	},
 	"ts-const-enum": {
 		"prefix": ["const-enum", "ts-const-enum"],
@@ -85,6 +94,7 @@
 			"",
 			"type ${1:name} = ValuesOf<typeof ${1:name}>;"
 		],
-		"description": "An enum-like object constant"
+		"description": "An enum-like object constant",
+		"scope": "typescript,typescriptreact"
 	}
 }
