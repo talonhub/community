@@ -381,9 +381,7 @@ class Actions:
                 not omit_space_before(text)
                 or text != auto_capitalize(text, "sentence start")[0]
             ):
-                dictation_formatter.update_context(
-                    actions.user.dictation_peek_left(clobber=True)
-                )
+                dictation_formatter.update_context(actions.user.dictation_peek_left())
             # Peek right if we might need trailing space. NB. We peek right
             # BEFORE insertion to avoid breaking the undo-chain between the
             # inserted text and the trailing space.
@@ -398,7 +396,7 @@ class Actions:
         actions.user.add_phrase_to_history(text)
         actions.user.insert_between(text, " " if add_space_after else "")
 
-    def dictation_peek_left(clobber: bool = False) -> Optional[str]:
+    def dictation_peek_left() -> Optional[str]:
         """
         Tries to get some text before the cursor, ideally a word or two, for the
         purpose of auto-spacing & -capitalization. Results are not guaranteed;
@@ -406,16 +404,13 @@ class Actions:
         that returning the empty string "" indicates there is nothing before
         cursor, ie. we are at the beginning of the document.)
 
-        If there is currently a selection, dictation_peek_left() must leave it
-        unchanged unless `clobber` is true, in which case it may clobber it.
+        dictation_peek_left() is intended for use before inserting text, so it
+        may delete any currently selected text.
         """
-        # Get rid of the selection if it exists.
-        if clobber:
-            actions.user.clobber_selection_if_exists()
-        # Otherwise, if there's a selection, fail.
-        elif "" != actions.edit.selected_text():
-            return None
-
+        # Inserting a space ensures we select something even if we're at
+        # document start; some editors 'helpfully' copy the current line if we
+        # edit.copy() while nothing is selected.
+        actions.key(" ")
         # In principle the previous word should suffice, but some applications
         # have a funny concept of what the previous word is (for example, they
         # may only take the "`" at the end of "`foo`"). To be double sure we
@@ -429,29 +424,8 @@ class Actions:
         # Unfortunately, in web Slack, if our selection ends at newline,
         # this will go right over the newline. Argh.
         actions.edit.right()
-        actions.key("backspace")
+        actions.key("backspace")  # remove the space we added
         return text[:-1]
-
-    def clobber_selection_if_exists():
-        """Deletes the currently selected text if it exists; otherwise does nothing."""
-        actions.key("space backspace")
-        # This space-backspace trick is fast and reliable but has the
-        # side-effect of cluttering the undo history. Other options:
-        #
-        # 1. Call edit.cut() inside a clip.revert() block. This assumes
-        #    edit.cut() is supported AND will be a no-op if there's no
-        #    selection. Unfortunately, sometimes one or both of these is false,
-        #    eg. the notion webapp makes ctrl-x cut the current block by default
-        #    if nothing is selected.
-        #
-        # 2. Test whether a selection exists by asking whether
-        #    edit.selected_text() is empty; if it does, use edit.delete(). This
-        #    usually uses the clipboard, which can be quite slow. Also, not sure
-        #    how this would interact with switching edit.selected_text() to use
-        #    the selection clipboard on linux, which can be nonempty even if no
-        #    text is selected in the current application.
-        #
-        # Perhaps this ought to be configurable by a setting.
 
     def dictation_peek_right() -> Optional[str]:
         """
@@ -461,18 +435,19 @@ class Actions:
         indicates there is nothing after cursor, ie. we are at the end of the
         document.)
         """
-        # We grab two characters because I think that's what no_space_before
-        # needs in the worst case. An example where the second character matters
-        # is inserting before (1) "' hello" vs (2) "'hello". In case (1) we
-        # don't want to add space, in case (2) we do.
+        # Insert space to ensure something to select (see dictation_peek_left).
         actions.insert(" ")
         actions.edit.left()
-        actions.edit.extend_right()
-        actions.edit.extend_right()
-        actions.edit.extend_right()
+        # We select to end of line because it's usually a single keypress and we
+        # only depend on what's on the current line. Without this trick we might
+        # need to select at least three characters to the right: one for the the
+        # space we inserted, and up to two for no_space_before -- for example,
+        # inserting before "' hello" we don't want to add space, while inserting
+        # before "'hello" we do.
+        actions.edit.extend_line_end()
         after = actions.edit.selected_text()
         actions.edit.left()
-        actions.key("delete")
+        actions.key("delete")  # remove space
         return after[1:]
 
 
