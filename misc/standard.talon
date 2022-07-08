@@ -10,7 +10,5 @@ undo that: edit.undo()
 redo that: edit.redo()
 paste match: edit.paste_match_style()
 file save: edit.save()
-(pad | padding):
-	insert("  ")
-	key(left)
+(pad | padding): user.insert_between(" ", " ")
 slap: edit.line_insert_down()
