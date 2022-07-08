@@ -1,14 +1,10 @@
-question [mark]: "?"
 double dash: "--"
-(bracket | brack | left bracket): "{"
-(rbrack | are bracket | right bracket): "}"
 triple quote: "'''"
 (triple grave | triple back tick | gravy):
     insert("```")
 (dot dot | dotdot): ".."
 ellipses: "..."
 (comma and | spamma): ", "
-plus: "+"
 arrow: "->"
 dub arrow: "=>"
 new line: "\\n"
