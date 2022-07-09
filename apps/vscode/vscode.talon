@@ -69,6 +69,8 @@ file copy path: user.vscode("copyFilePath")
 file copy local [path]: user.vscode("copyRelativeFilePath")
 file create sibling: user.vscode_and_wait("explorer.newFile")
 file create: user.vscode("workbench.action.files.newUntitledFile")
+file create relative: user.vscode("fileutils.newFile")
+file create root: user.vscode("fileutils.newFileAtRoot")
 file rename:
     user.vscode("fileutils.renameFile")
     sleep(150ms)
@@ -197,6 +199,7 @@ debug stopper: user.vscode("workbench.action.debug.stop")
 debug continue: user.vscode("workbench.action.debug.continue")
 debug restart: user.vscode("workbench.action.debug.restart")
 debug console: user.vscode("workbench.debug.action.toggleRepl")
+debug clean: user.vscode("workbench.debug.panel.action.clearReplAction")
 
 # Terminal
 terminal external: user.vscode("workbench.action.terminal.openNativeConsole")

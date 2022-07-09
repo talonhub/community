@@ -32,8 +32,8 @@ value <user.number_string> point <digit_string> [{user.css_unit}]:
 value <user.text>: user.insert_formatted(text, "DASH_SEPARATED")
 
 variable <user.text>:
-    name = user.formatted_text(text, settings.get("user.code_public_variable_formatter"))
-    insert("var(--{name})")
+    name = user.formatted_text(text, "DASH_SEPARATED")
+    insert("var(--{name});")
 
 op var: user.insert_between("var(--", ")")
 
