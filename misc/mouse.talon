@@ -15,7 +15,7 @@ righty:
 	# close the mouse grid if open
 	user.grid_close()
 
-midclick:
+mid click:
 	mouse_click(2)
 	# close the mouse grid
 	user.grid_close()
@@ -39,12 +39,12 @@ midclick:
 	key("{modifiers}:up")
 	# close the mouse grid
 	user.grid_close()
-(dubclick | duke):
+(dub click | duke):
 	mouse_click()
 	mouse_click()
 	# close the mouse grid
 	user.grid_close()
-(tripclick | triplick):
+(trip click | trip lick):
 	mouse_click()
 	mouse_click()
 	mouse_click()

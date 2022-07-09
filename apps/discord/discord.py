@@ -4,6 +4,10 @@ mod = Module()
 apps = mod.apps
 apps.discord = "app.name: Discord"
 apps.discord = "app.name: Discord.exe"
+apps.discord = """
+tag: browser
+browser.host: discord.com
+"""
 
 
 @mod.action_class
