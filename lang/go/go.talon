@@ -132,7 +132,7 @@ state string: " string "
 state slice: " []"
 slice of: "[]"
 [state] (no | nil): "nil"
-state (int | integer | ant) 64: " int64 "
+state (int | integer | ant) sixty four: " int64 "
 state tag:
   user.insert_between(" `", "`")
 field tag <user.text> [over]:
