@@ -82,8 +82,8 @@ zoon [<number>]:
 down page: user.figma_previous_page()
 up page: user.figma_next_page()
 
-(di | dee): user.figma_find_previous_frame()
-fee: user.figma_find_next_frame()
+#(di | dee): user.figma_find_previous_frame()
+#fee: user.figma_find_next_frame()
 
 place image: user.figma_place_image()
 paste here: user.figma_paste_here()
@@ -92,6 +92,11 @@ deep: user.figma_deep_select()
 (layer menu | laymen): user.figma_layer_menu_select()
 
 rename: user.figma_rename()
+
+(cop name | coppin):
+    key("cmd-r")
+    edit.select_all()
+    edit.copy()
 
 style copy: user.figma_style_copy()
 style paste: user.figma_style_paste()

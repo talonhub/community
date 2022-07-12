@@ -13,7 +13,7 @@ deep: key("ctrl-cmd-t")
 	  mouse_click()
 
 # Insane Click Into
-(deepest | dive in):
+(deepest | dive in | dive):
     key("cmd")
     mouse_click()
     mouse_click()
@@ -255,3 +255,6 @@ quickie: key("cmd-k")
 
 # zoom 
 zoomer: user.mouse_trigger_zoom_mouse()
+
+# Focus Figma
+(go fig | figz): "focus figma"

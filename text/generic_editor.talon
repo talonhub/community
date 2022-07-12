@@ -129,11 +129,11 @@ clear word right:
     edit.extend_word_right()
     edit.delete()
 
-clear way left:
+(clear way left | dell lef):
     edit.extend_line_start()
     edit.delete()
 
-clear way right:
+(clear way right | dell rye):
     edit.extend_line_end()
     edit.delete()
 
