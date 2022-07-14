@@ -17,4 +17,4 @@ op mod equals: user.code_operator_modulo_assignment()
 #bitwise operators
 (op | logical | bitwise) (ex | exclusive) or equals: user.code_operator_bitwise_exclusive_or_assignment()
 [(op | logical | bitwise)] (left shift | shift left) equals: user.code_operator_bitwise_left_shift_assignment()
-[(op | logical | bitwise)] (left right | shift right) equals: user.code_operator_bitwise_right_shift_assignment()
+[(op | logical | bitwise)] (right shift | shift right) equals: user.code_operator_bitwise_right_shift_assignment()
