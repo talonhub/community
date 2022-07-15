@@ -1,5 +1,5 @@
 # defines placeholder actions and captures for ide-specific snippet functionality
-from talon import Module, actions, app, Context, imgui, registry
+from talon import Context, Module, actions, imgui, registry
 
 mod = Module()
 mod.tag("snippets", desc="Tag for enabling code snippet-related commands")
@@ -20,7 +20,7 @@ def gui(gui: imgui.GUI):
         # print(str(registry.lists["user.code_common_function"]))
         if function_list:
             for i, entry in enumerate(function_list):
-                gui.text("{}".format(entry, function_list))
+                gui.text(f"{entry}")
 
     gui.spacer()
     if gui.button("Snip close"):

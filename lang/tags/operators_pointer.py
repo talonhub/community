@@ -5,9 +5,9 @@ mod = Module()
 
 mod.tag("code_operators_pointer", desc="Tag for enabling pointer operator commands")
 
+
 @mod.action_class
 class Actions:
-
     def code_operator_indirection():
         """code_operator_indirection"""
 

@@ -3,7 +3,9 @@ Some of the files (e.g. github.talon) use a browser.host matcher. These talon fi
 Browser extensions that can add the protocol and hostname or even the entire URL to the window title:
 
 Firefox:
+
 - https://addons.mozilla.org/en-US/firefox/addon/keepass-helper-url-in-title/
 
 Chrome:
+
 - https://chrome.google.com/webstore/detail/url-in-title/ignpacbgnbnkaiooknalneoeladjnfgb

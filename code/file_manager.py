@@ -1,12 +1,8 @@
-from talon import app, Module, Context, actions, ui, imgui, settings, app, registry
-from os.path import expanduser
-from subprocess import Popen
-from pathlib import Path
-from typing import List, Union
-import os
 import math
-import re
 from itertools import islice
+from pathlib import Path
+
+from talon import Context, Module, actions, app, imgui, registry, settings, ui
 
 mod = Module()
 ctx = Context()
@@ -72,6 +68,7 @@ current_file_page = current_folder_page = 1
 ctx.lists["self.file_manager_directories"] = []
 ctx.lists["self.file_manager_files"] = []
 
+
 @mod.action_class
 class Actions:
     def file_manager_current_path() -> str:
@@ -113,7 +110,7 @@ class Actions:
         """selects the file"""
 
     def file_manager_refresh_title():
-        """Refreshes the title to match current directory. this is for e.g. windows command prompt that will need to do some magic. """
+        """Refreshes the title to match current directory. this is for e.g. windows command prompt that will need to do some magic."""
         return
 
     def file_manager_update_lists():
@@ -239,9 +236,7 @@ def gui_folders(gui: imgui.GUI):
     total_folder_pages = math.ceil(
         len(ctx.lists["self.file_manager_directories"]) / setting_imgui_limit.get()
     )
-    gui.text(
-        "Select a directory ({}/{})".format(current_folder_page, total_folder_pages)
-    )
+    gui.text(f"Select a directory ({current_folder_page}/{total_folder_pages})")
     gui.line()
 
     index = 1
@@ -256,7 +251,7 @@ def gui_folders(gui: imgui.GUI):
             if len(folder_selections[current_index]) > setting_imgui_string_limit.get()
             else folder_selections[current_index]
         )
-        gui.text("{}: {} ".format(index, name))
+        gui.text(f"{index}: {name} ")
         current_index += 1
         index = index + 1
 
@@ -279,7 +274,7 @@ def gui_files(gui: imgui.GUI):
     global file_selections, current_file_page, total_file_pages
     total_file_pages = math.ceil(len(file_selections) / setting_imgui_limit.get())
 
-    gui.text("Select a file ({}/{})".format(current_file_page, total_file_pages))
+    gui.text(f"Select a file ({current_file_page}/{total_file_pages})")
     gui.line()
     index = 1
     current_index = (current_file_page - 1) * setting_imgui_limit.get()
@@ -291,7 +286,7 @@ def gui_files(gui: imgui.GUI):
             else file_selections[current_index]
         )
 
-        gui.text("{}: {} ".format(index, name))
+        gui.text(f"{index}: {name} ")
         current_index = current_index + 1
         index = index + 1
 
@@ -373,7 +368,7 @@ def win_event_handler(window):
 
     path = actions.user.file_manager_current_path()
 
-    if not "user.file_manager" in registry.tags:
+    if "user.file_manager" not in registry.tags:
         actions.user.file_manager_hide_pickers()
         clear_lists()
     elif path:

@@ -1,7 +1,4 @@
-from typing import Set
-
-from talon import Module, Context, actions, app
-import sys
+from talon import Context, Module, actions, app
 
 # default_alphabet = "air bat cap drum each fine gust harp sit jury crunch look made near odd pit quench red sun trap urge vest whale plex yank zip".split(
 #     " "
@@ -13,8 +10,8 @@ letters_string = "abcdefghijklmnopqrstuvwxyz"
 
 default_digits = "zero one two three four five six seven eight nine".split(" ")
 numbers = [str(i) for i in range(10)]
-default_f_digits = "one two three four five six seven eight nine ten eleven twelve".split(
-    " "
+default_f_digits = (
+    "one two three four five six seven eight nine ten eleven twelve".split(" ")
 )
 
 mod = Module()
@@ -121,7 +118,7 @@ modifier_keys = {
     "shift": "shift",  #'sky':     'shift',
     "super": "super",
 }
-if app.platform  == "mac":
+if app.platform == "mac":
     modifier_keys["command"] = "cmd"
     modifier_keys["option"] = "alt"
 ctx.lists["self.modifier_key"] = modifier_keys
@@ -153,7 +150,6 @@ punctuation_words = {
     "at sign": "@",
     "and sign": "&",
     "ampersand": "&",
-
     # Currencies
     "dollar sign": "$",
     "pound sign": "£",
@@ -162,6 +158,7 @@ symbol_key_words = {
     "dot": ".",
     "point": ".",
     "quote": "'",
+    "question": "?",
     "apostrophe": "'",
     "L square": "[",
     "left square": "[",
@@ -177,7 +174,7 @@ symbol_key_words = {
     "tilde": "~",
     "bang": "!",
     "down score": "_",
-    "under score": "_",
+    "underscore": "_",
     "paren": "(",
     "L paren": "(",
     "left paren": "(",
@@ -185,8 +182,14 @@ symbol_key_words = {
     "right paren": ")",
     "brace": "{",
     "left brace": "{",
-    "R brace": "}",
+    "brack": "{",
+    "bracket": "{",
+    "left bracket": "{",
+    "r brace": "}",
     "right brace": "}",
+    "r brack": "}",
+    "r bracket": "}",
+    "right bracket": "}",
     "angle": "<",
     "left angle": "<",
     "less than": "<",
@@ -202,7 +205,6 @@ symbol_key_words = {
     "pipe": "|",
     "dubquote": '"',
     "double quote": '"',
-
     # Currencies
     "dollar": "$",
     "pound": "£",
@@ -233,9 +235,10 @@ simple_keys = [
 ]
 
 alternate_keys = {
+    "wipe": "backspace",
     "delete": "backspace",
-    "forward delete": "delete",
     #'junk': 'backspace',
+    "forward delete": "delete",
     "page up": "pageup",
     "page down": "pagedown",
 }
@@ -257,7 +260,7 @@ class Actions:
     def move_cursor(s: str):
         """Given a sequence of directions, eg. 'left left up', moves the cursor accordingly using edit.{left,right,up,down}."""
         for d in s.split():
-            if d in ('left','right','up','down'):
+            if d in ("left", "right", "up", "down"):
                 getattr(actions.edit, d)()
             else:
-                raise RuntimeError(f'invalid arrow key: {d}')
+                raise RuntimeError(f"invalid arrow key: {d}")

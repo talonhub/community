@@ -1,5 +1,4 @@
-from talon import Context, Module, actions, imgui, settings, ui
-import os
+from talon import Context, actions
 
 ctx = Context()
 ctx.matches = r"""
@@ -64,7 +63,7 @@ class user_actions:
         actions.key("enter")
 
     def terminal_change_directory(path: str):
-        actions.insert("cd {}".format(path))
+        actions.insert(f"cd {path}")
         if path:
             actions.key("enter")
 

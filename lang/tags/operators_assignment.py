@@ -5,9 +5,9 @@ mod = Module()
 
 mod.tag("code_operators_assignment", desc="Tag for enabling assignment commands")
 
+
 @mod.action_class
 class Actions:
-
     def code_operator_assignment():
         """code_operator_assignment"""
 
