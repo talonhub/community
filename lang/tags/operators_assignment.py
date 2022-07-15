@@ -12,7 +12,7 @@ class Actions:
         """code_operator_assignment"""
 
     def code_operator_subtraction_assignment():
-        """code_operator_subtraction_equals"""
+        """code_operator_subtraction_assignment"""
 
     def code_operator_addition_assignment():
         """code_operator_addition_assignment"""
@@ -30,7 +30,7 @@ class Actions:
         """code_operator_modulo_assignment"""
 
     def code_operator_bitwise_and_assignment():
-        """code_operator_and"""
+        """code_operator_and_assignment"""
 
     def code_operator_bitwise_or_assignment():
         """code_operator_or_assignment"""
