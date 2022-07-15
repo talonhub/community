@@ -1,7 +1,7 @@
 import csv
 import os
 from pathlib import Path
-from typing import Dict, Tuple
+
 from talon import resource
 
 # NOTE: This method requires this module to be one folder below the top-level
@@ -13,7 +13,7 @@ if not SETTINGS_DIR.is_dir():
 
 
 def get_list_from_csv(
-    filename: str, headers: Tuple[str, str], default: Dict[str, str] = {}
+    filename: str, headers: tuple[str, str], default: dict[str, str] = {}
 ):
     """Retrieves list from CSV"""
     path = SETTINGS_DIR / filename
@@ -59,11 +59,12 @@ def get_list_from_csv(
 
     return mapping
 
-def append_to_csv(filename: str, rows: Dict[str, str]):
+
+def append_to_csv(filename: str, rows: dict[str, str]):
     path = SETTINGS_DIR / filename
     assert filename.endswith(".csv")
 
-    with open(str(path), "r") as file:
+    with open(str(path)) as file:
         line = None
         for line in file:
             pass

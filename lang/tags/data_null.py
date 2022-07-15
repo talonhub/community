@@ -5,9 +5,9 @@ mod = Module()
 
 mod.tag("code_data_null", desc="Tag for enabling commands relating to null")
 
+
 @mod.action_class
 class Actions:
-
     def code_insert_null():
         """Inserts null"""
 

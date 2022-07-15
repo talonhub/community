@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from talon import Module, Context
+from talon import Context, Module
 
 # --- Tag definition ---
 mod = Module()
@@ -16,13 +16,19 @@ tag: user.emoji
 path = Path(__file__).parents[0]
 
 mod.list("emoticon", desc="Western emoticons (ascii)")
-with open(path / "emoticon.csv", "r") as f:
-    ctx.lists["user.emoticon"] = {k.strip(): v.strip() for k, v in [line.split(",", 1) for line in f]}
+with open(path / "emoticon.csv") as f:
+    ctx.lists["user.emoticon"] = {
+        k.strip(): v.strip() for k, v in [line.split(",", 1) for line in f]
+    }
 
 mod.list("emoji", desc="Emoji (unicode)")
-with open(path / "emoji.csv", "r") as f:
-    ctx.lists["user.emoji"] = {k.strip(): v.strip() for k, v in [line.split(",", 1) for line in f]}
+with open(path / "emoji.csv") as f:
+    ctx.lists["user.emoji"] = {
+        k.strip(): v.strip() for k, v in [line.split(",", 1) for line in f]
+    }
 
 mod.list("kaomoji", desc="Eastern kaomoji (unicode)")
-with open(path / "kaomoji.csv", "r") as f:
-    ctx.lists["user.kaomoji"] = {k.strip(): v.strip() for k, v in [line.split(",", 1) for line in f]}
+with open(path / "kaomoji.csv") as f:
+    ctx.lists["user.kaomoji"] = {
+        k.strip(): v.strip() for k, v in [line.split(",", 1) for line in f]
+    }

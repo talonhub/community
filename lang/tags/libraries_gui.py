@@ -1,13 +1,16 @@
-from talon import Context, Module, actions, imgui, registry, settings
+from talon import Context, Module, actions, imgui, registry
 
 ctx = Context()
 mod = Module()
 
 mod.list("code_libraries", desc="List of libraries for active language")
-mod.tag("code_libraries_gui_showing", desc="Active when the library picker GUI is showing")
+mod.tag(
+    "code_libraries_gui_showing", desc="Active when the library picker GUI is showing"
+)
 
 # global
 library_list = []
+
 
 @mod.capture(rule="{user.code_libraries}")
 def code_libraries(m) -> str:
@@ -15,13 +18,11 @@ def code_libraries(m) -> str:
     return m.code_libraries
 
 
-mod.tag("code_libraries_gui",
-        desc="Tag for enabling GUI support for common libraries")
+mod.tag("code_libraries_gui", desc="Tag for enabling GUI support for common libraries")
 
 
 @mod.action_class
 class Actions:
-
     def code_toggle_libraries():
         """GUI: List libraries for active language"""
         global library_list
@@ -47,22 +48,18 @@ class Actions:
         """Inserts a library and positions the cursor appropriately"""
 
 
-
 @imgui.open()
 def gui_libraries(gui: imgui.GUI):
     gui.text("Libraries")
     gui.line()
 
     for i, entry in enumerate(library_list, 1):
-        gui.text(
-            "{}. {}: {}".format(
-                i, entry, registry.lists["user.code_libraries"][0][entry]
-            )
-        )
+        gui.text(f"{i}. {entry}: {registry.lists['user.code_libraries'][0][entry]}")
 
     gui.spacer()
     if gui.button("Toggle libraries close"):
         actions.user.code_toggle_libraries_hide()
+
 
 def update_library_list_and_freeze():
     global library_list

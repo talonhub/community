@@ -1,4 +1,4 @@
-from talon import Context, Module, actions, imgui, registry, settings
+from talon import Context, Module
 
 ctx = Context()
 mod = Module()
@@ -8,9 +8,9 @@ mod.tag(
     desc="Tag for enabling basic object oriented programming commands (objects, classes, etc)",
 )
 
+
 @mod.action_class
 class Actions:
-
     def code_operator_object_accessor():
         """Inserts the object accessor operator (e.g., Java's "." or PHP's "->)"""
 

@@ -1,14 +1,12 @@
 # courtesy of https://github.com/timo/
 # see https://github.com/timo/talon_scripts
-from talon import Module, Context, actions, app, canvas, screen, settings, ui, ctrl, cron
-from talon.skia import Shader, Color, Paint, Rect
-from talon.types.point import Point2d
-from talon_plugins import eye_mouse, eye_zoom_mouse
+import math
 from typing import Union
 
-import math, time
-
-import typing
+from talon import Context, Module, actions, canvas, cron, ctrl, screen, settings, ui
+from talon.skia import Paint, Rect
+from talon.types.point import Point2d
+from talon_plugins import eye_mouse, eye_zoom_mouse
 
 mod = Module()
 narrow_expansion = mod.setting(
@@ -19,7 +17,10 @@ narrow_expansion = mod.setting(
 )
 
 mod.tag("mouse_grid_showing", desc="Tag indicates whether the mouse grid is showing")
-mod.tag("mouse_grid_enabled", desc="Deprecated: do not use.  Activates legacy m grid command")
+mod.tag(
+    "mouse_grid_enabled",
+    desc="Deprecated: do not use.  Activates legacy m grid command",
+)
 ctx = Context()
 
 
@@ -276,7 +277,7 @@ class GridActions:
         mg.setup(screen_num=screen - 1)
         mg.show()
 
-    def grid_narrow_list(digit_list: typing.List[str]):
+    def grid_narrow_list(digit_list: list[str]):
         """Choose fields multiple times in a row"""
         for d in digit_list:
             actions.self.grid_narrow(int(d))

@@ -1,9 +1,11 @@
-from talon import Module, actions, ui, Context
-
+from talon import Context, Module, actions, ui
 
 mod = Module()
 mod.tag("draft_editor_active", "Indicates whether the draft editor has been activated")
-mod.tag("draft_editor_app_focused", "Indicates that the draft editor app currently has focus")
+mod.tag(
+    "draft_editor_app_focused",
+    "Indicates that the draft editor app currently has focus",
+)
 
 ctx = Context()
 tags: set[str] = set()
@@ -19,13 +21,7 @@ def remove_tag(tag: str):
     ctx.tags = list(tags)
 
 
-default_names = [
-    "Visual Studio Code",
-    "Code",
-    "VSCodium",
-    "Codium",
-    "code-oss"
-]
+default_names = ["Visual Studio Code", "Code", "VSCodium", "Codium", "code-oss"]
 
 setting_editor_names = mod.setting(
     "draft_editor",
@@ -38,7 +34,6 @@ setting_editor_names = mod.setting(
 def get_editor_names():
     names_csv = setting_editor_names.get()
     return names_csv.split(", ") if names_csv else default_names
-
 
 
 @mod.scope
@@ -66,6 +61,8 @@ ui.register("app_activate", handle_app_activate)
 
 original_window = None
 
+last_draft = None
+
 
 @mod.action_class
 class Actions:
@@ -91,6 +88,11 @@ class Actions:
         """Discard draft editor"""
         close_editor(submit_draft=False)
 
+    def draft_editor_paste_last():
+        """Paste last submitted draft"""
+        if last_draft:
+            actions.user.paste(last_draft)
+
 
 def get_editor_app() -> ui.App:
     editor_names = get_editor_names()
@@ -103,12 +105,14 @@ def get_editor_app() -> ui.App:
 
 
 def close_editor(submit_draft: bool):
+    global last_draft
     remove_tag("user.draft_editor_active")
     actions.edit.select_all()
     selected_text = actions.edit.selected_text()
     actions.edit.delete()
     actions.app.tab_close()
     actions.user.switcher_focus_window(original_window)
-    actions.sleep("200ms")
+    actions.sleep("300ms")
     if submit_draft:
+        last_draft = selected_text
         actions.user.paste(selected_text)

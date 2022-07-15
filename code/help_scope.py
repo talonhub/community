@@ -1,4 +1,4 @@
-from talon import Module, actions, imgui, Module, scope, ui
+from talon import Module, actions, imgui, scope, ui
 
 mod = Module()
 mod.mode("help_scope", "Mode for showing the scope help gui")
@@ -49,7 +49,7 @@ def print_value(gui: imgui.GUI, path: str, value, ignore: set[str] = {}):
 
 
 def format_value(value):
-    if isinstance(value, list) or isinstance(value, set):
+    if isinstance(value, (list, set)):
         value = ", ".join(sorted(value))
     if isinstance(value, str) and len(value) > setting_max_length.get() + 4:
         return f"{value[:setting_max_length.get()]} ..."

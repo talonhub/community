@@ -1,4 +1,4 @@
-from talon import Context, Module, actions, settings
+from talon import Context, Module, actions
 
 ctx = Context()
 mod = Module()
@@ -12,7 +12,7 @@ types = {
     "bool": "bool",
     "list": "list",
     "map": "map",
-    "null": "null"
+    "null": "null",
 }
 
 ctx.lists["user.code_type"] = types
@@ -48,7 +48,6 @@ ctx.lists["self.terraform_module_block"] = module_blocks
 
 @mod.action_class
 class Actions:
-
     def code_terraform_module_block(text: str):
         """Inserts a new module-related block of a given type (e.g. variable, output, provider...)"""
 
@@ -61,26 +60,17 @@ class Actions:
 
 @ctx.action_class("user")
 class UserActions:
-
     def code_terraform_module_block(text: str):
         actions.user.insert_between(text + ' "', '"')
 
     def code_terraform_resource(text: str):
-        result = 'resource "{}" ""'.format(
-            actions.user.formatted_text(
-                text, "SNAKE_CASE"
-            )
-        )
+        result = f"resource \"{actions.user.formatted_text(text, 'SNAKE_CASE')}\" \"\""
 
         actions.insert(result)
         actions.key("left")
 
     def code_terraform_data_source(text: str):
-        result = 'data "{}" ""'.format(
-            actions.user.formatted_text(
-                text, "SNAKE_CASE"
-            )
-        )
+        result = f"data \"{actions.user.formatted_text(text, 'SNAKE_CASE')}\" \"\""
 
         actions.insert(result)
         actions.key("left")
