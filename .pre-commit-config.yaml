@@ -30,6 +30,11 @@ repos:
     rev: "0.76"
     hooks:
       - id: flynt
+  - repo: https://github.com/pycqa/isort
+    rev: 5.6.4
+    hooks:
+      - id: isort
+        args: ["--profile", "black", "--filter-files"]
   - repo: https://github.com/psf/black
     rev: 22.6.0
     hooks:
