@@ -1,5 +1,4 @@
-from collections.abc import Iterator
-from typing import Union
+from typing import Iterator, Union
 
 from talon import Context, Module
 
