@@ -48,7 +48,7 @@ toggle use: user.code_toggle_libraries()
 ## Simple aliases
 borrow: "&"
 borrow mutable: "&mut "
-state (async | asynchronous): "async "
+state (a sink | async | asynchronous): "async "
 state (pub | public): "pub "
 state (pub | public) crate: "pub(crate) "
 state (dyn | dynamic): "dyn "
