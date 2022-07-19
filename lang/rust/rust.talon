@@ -69,7 +69,7 @@ state use: user.code_import()
 
 use <user.code_libraries>:
     user.code_insert_library(code_libraries, "")
-    key(semicolon enter)
+    key(; enter)
 
 ## specialist flow control
 state if let some: user.code_insert_if_let_some()
