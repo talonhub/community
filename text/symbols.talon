@@ -10,10 +10,6 @@ dub arrow: "=>"
 new line: "\\n"
 carriage return: "\\r"
 line feed: "\\r\\n"
-empty square:
-  insert("[]")
-empty brace:
-  insert("{}")
 empty dubstring: user.insert_between('"', '"')
 empty escaped (dubstring|dub quotes): user.insert_between('\\"', '\\"')
 empty string: user.insert_between("'", "'")
