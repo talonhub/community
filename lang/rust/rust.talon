@@ -48,6 +48,7 @@ toggle use: user.code_toggle_libraries()
 ## Simple aliases
 borrow: "&"
 borrow mutable: "&mut "
+state (a sink | async | asynchronous): "async "
 state (pub | public): "pub "
 state (pub | public) crate: "pub(crate) "
 state (dyn | dynamic): "dyn "
@@ -73,6 +74,7 @@ use <user.code_libraries>:
 
 ## specialist flow control
 state if let some: user.code_insert_if_let_some()
+state if let (ok|okay): user.code_insert_if_let_okay()
 state if let error: user.code_insert_if_let_error()
 
 ## rust centric synonyms
