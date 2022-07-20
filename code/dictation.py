@@ -410,14 +410,13 @@ class Actions:
         # Inserting a space ensures we select something even if we're at
         # document start; some editors 'helpfully' copy the current line if we
         # edit.copy() while nothing is selected.
-        actions.key(" ")
+        actions.insert(" ")
         # In principle the previous word should suffice, but some applications
         # have a funny concept of what the previous word is (for example, they
         # may only take the "`" at the end of "`foo`"). To be double sure we
         # take two words left. I also tried taking a line up + a word left, but
         # edit.extend_up() = key(shift-up) doesn't work consistently in the
         # Slack webapp (sometimes escapes the text box).
-        actions.key(" ")
         actions.edit.extend_word_left()
         actions.edit.extend_word_left()
         text = actions.edit.selected_text()
