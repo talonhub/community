@@ -202,13 +202,6 @@ class RelativeScreenPos:
         self.right = right
 
 
-mod = Module()
-mod.list(
-    "window_snap_positions",
-    "Predefined window positions for the current window. See `RelativeScreenPos`.",
-)
-
-
 _snap_positions = {
     # Halves
     # .---.---.     .-------.
