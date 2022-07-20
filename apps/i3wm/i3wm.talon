@@ -63,6 +63,7 @@ vertical (shell|terminal):
 # XXX - like also need to match the generic talon commands
 (shuffle|move) [(win|window)] [to] port <number_small>:  user.system_command("i3-msg move container to workspace number {number_small}")
 (shuffle|move) [(win|window)] [to] last port: user.system_command("i3-msg move container to workspace back_and_forth")
+(shuffle|move) flipper: user.system_command("i3-msg move container to workspace back_and_forth")
 (shuffle|move) [(win|window)] left: user.system_command("i3-msg move left")
 (shuffle|move) [(win|window)] right: user.system_command("i3-msg move right")
 (shuffle|move) [(win|window)] up: user.system_command("i3-msg move up")
