@@ -47,7 +47,7 @@ class UserActions:
         text = actions.edit.selected_text()
         actions.key("ctrl-u ctrl-@")
         return text
- 
+
     def dictation_peek_right():
         actions.edit.extend_line_end()
         text = actions.edit.selected_text()

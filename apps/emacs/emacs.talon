@@ -143,7 +143,7 @@ describe symbol <user.text>$:
   user.emacs_help()
   key(o)
   user.insert_formatted(text, "DASH_SEPARATED")
-  key(enter)  
+  key(enter)
 describe variable <user.text>$:
   user.emacs_help()
   key(v)
