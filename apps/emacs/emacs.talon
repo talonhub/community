@@ -243,7 +243,8 @@ graph cut:
   user.emacs_meta("h")
   key(ctrl-w)
 
-# maybe we should call these "drag <X> left/right/up/down"
+# could use these to implement "drag <X> left/right/up/down" commands
+# but note that eg 'transpose line' and 'drag line down' are different
 transpose [word|words]: user.emacs_meta("t")
 transpose (term|terms): user.emacs_meta("ctrl-t")
 transpose (char|chars): key(ctrl-t)
