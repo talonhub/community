@@ -9,20 +9,20 @@ tag(): user.line_commands
 # ----- GENERAL ----- #
 #suplex: key(ctrl-x)
 exchange: key(ctrl-x ctrl-x)
-execute: key(alt-x)
+execute: user.emacs_meta("x")
 execute <user.text>$:
-  key(alt-x)
+  user.emacs_meta("x")
   user.insert_formatted(text, "DASH_SEPARATED")
-evaluate | (evaluate|eval) (exper|expression): key(alt-:)
+evaluate | (evaluate|eval) (exper|expression): user.emacs_meta(":")
 prefix: key(ctrl-u)
 prefix <number_small>: user.emacs_prefix(number_small)
 
 open directory: key(ctrl-x ctrl-j)
 other open directory: key(ctrl-x 4 ctrl-j)
-fill paragraph: key(alt-q)
+fill paragraph: user.emacs_meta("q")
 occurs: key(ctrl-c o)
-other scroll [down]: key(alt-pagedown)
-other scroll up: key(alt-pageup)
+other scroll [down]: user.emacs_meta("pagedown")
+other scroll up: user.emacs_meta("pageup")
 insert unicode: key(ctrl-x 8 enter)
 abort recursive [edit]: key("ctrl-]")
 save some buffers: key(ctrl-x s)
@@ -52,10 +52,14 @@ other switch: key(ctrl-x 4 b)
 display: key(ctrl-x 4 ctrl-o)
 
 # SHELL COMMANDS #
-shell command: key(alt-!)
-shell command inserting: key(ctrl-u alt-!)
-shell command on region: key(alt-|)
-shell command on region replacing: key(ctrl-u alt-|)
+shell command: user.emacs_meta("!")
+shell command inserting:
+  key(ctrl-u)
+  user.emacs_meta("!")
+shell command on region: user.emacs_meta("|")
+shell command on region replacing:
+  key(ctrl-u)
+  user.emacs_meta("|")
 
 # CUSTOMIZE #
 customize face: user.emacs_command("customize-face")
@@ -99,7 +103,10 @@ profiler report: user.emacs_command("profiler-report")
 tab solo: key(ctrl-x 1)
 [split|tab] rebalance: key(ctrl-x +)
 tab shrink: key(ctrl-x -)
-other shrink: key(ctrl-x o ctrl-x - alt-- alt-1 ctrl-x o)
+other shrink:
+  user.split_next()
+  key(ctrl-x -)
+  user.split_last()
 tab grow: key(ctrl-x ^)
 tab grow <number_small>:
   user.emacs_prefix(number_small)
@@ -178,8 +185,11 @@ mark: key(ctrl-space)
 go back: key("ctrl-u ctrl-space")
 global [go] back: key("ctrl-x ctrl-@")
 
-cut line: key(home alt-1 ctrl-k)
-auto indent: key(alt-ctrl-\)
+cut line:
+  edit.line_start()
+  user.emacs_prefix(1)
+  key(ctrl-k)
+auto indent: user.emacs_meta("ctrl-\\")
 indent <user.number_signed_small>:
   user.emacs_prefix(number_signed_small)
   key(ctrl-x tab)
@@ -201,37 +211,41 @@ go <number> bottom:
   user.emacs_prefix(-2)
   key(ctrl-l)
 
-next error | error next: key("alt-g n")
-last error | error last: key("alt-g p")
+next error | error next:
+  user.emacs_meta("g")
+  key(n)
+last error | error last:
+  user.emacs_meta("g")
+  key(p)
 
-term right: key(alt-ctrl-f)
-term left: key(alt-ctrl-b)
-term up: key("esc ctrl-up")
-term end: key("alt-- alt-1 esc ctrl-up")
-term down: key("esc ctrl-down")
-term kill: key(esc ctrl-k)
-term wipe:
-  user.emacs_prefix(-1)
-  key(escape ctrl-k)
-term (mark | select): key(esc ctrl-space)
-term copy: key(escape ctrl-space alt-w)
-term freeze: key(escape ctrl-space ctrl-c ;)
-term [auto] indent: key(esc ctrl-space alt-ctrl-\)
+term right: user.emacs_meta("ctrl-f")
+term left: user.emacs_meta("ctrl-b")
+term up: key(escape ctrl-up)
+term end: key(escape - 1 escape ctrl-up)
+term down: key(escape ctrl-down)
+term kill: key(escape ctrl-k)
+term wipe: key(escape - 1 escape ctrl-k)
+term (mark | select): key(escape ctrl-@)
+term copy: key(escape ctrl-@ escape w)
+term freeze: key(escape ctrl-@ ctrl-c ;)
+term [auto] indent: key(escape ctrl-@ escape ctrl-\)
 
-(sentence|sent) (right | end): key(alt-e)
-(sentence|sent) (left | start): key(alt-a)
-(sentence|sent) kill: key(alt-k)
+(sentence|sent) (right | end): edit.sentence_end()
+(sentence|sent) (left | start): edit.sentence_start()
+(sentence|sent) kill: user.emacs_meta("k")
 
 graph kill: user.emacs_command("kill-par")
-graph up: key(alt-p)
-graph down: key(alt-n)
-graph mark: key(alt-h)
-graph copy: key(alt-h alt-w)
-graph cut: key(alt-h ctrl-w)
+graph up: edit.paragraph_start()
+graph down: edit.paragraph_end()
+graph mark: user.emacs_meta("h")
+graph copy: user.emacs_meta("h w")
+graph cut:
+  user.emacs_meta("h")
+  key(ctrl-w)
 
-# could call these "pull", as they pull the thing behind point forward
-transpose [word|words]: key(alt-t)
-transpose (term|terms): key(ctrl-alt-t)
+# maybe we should call these "drag <X> left/right/up/down"
+transpose [word|words]: user.emacs_meta("t")
+transpose (term|terms): user.emacs_meta("ctrl-t")
 transpose (char|chars): key(ctrl-t)
 transpose (line|lines): key(ctrl-x ctrl-t)
 transpose (sentence|sentences): user.emacs_command("tr-sen")
@@ -241,19 +255,15 @@ register (copy|save): key("ctrl-x r s")
 register (paste|insert): key("ctrl-x r i")
 register jump: key(ctrl-x r j)
 
-(search regex | regex search): key(alt-ctrl-s)
-(search regex | regex search) back: key(alt-ctrl-r)
-replace: key(alt-%)
-replace regex | regex replace: key(alt-ctrl-%)
-top (regex search | search regex): key(ctrl-home alt-ctrl-s)
-top replace: key(ctrl-home alt-%)
-top (regex replace | replace regex): key(ctrl-home ctrl-alt-%)
-bottom search: key(ctrl-end ctrl-r)
-bottom (regex search | search regex): key(ctrl-end alt-ctrl-r)
-# TODO: this only works for search not for replace! :/
-search toggle regex: key(alt-r)
-search toggle word: key(alt-s w)
-search edit: key(alt-e)
+(search regex | regex search): user.emacs_meta("ctrl-s")
+(search regex | regex search) back: user.emacs_meta("ctrl-r")
+replace: user.emacs_meta("%")
+replace regex | regex replace: user.emacs_meta("ctrl-%")
+search edit: user.emacs_meta("e")
+search toggle regex: user.emacs_meta("r")
+search toggle word:
+  user.emacs_meta("s")
+  key(w)
 
 
 # ----- MAJOR & MINOR MODES ----- #
