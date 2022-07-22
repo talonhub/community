@@ -194,6 +194,16 @@ indent <user.number_signed_small>:
   user.emacs_prefix(number_signed_small)
   key(ctrl-x tab)
 
+(search regex | regex search): user.emacs_meta("ctrl-s")
+(search regex | regex search) back: user.emacs_meta("ctrl-r")
+replace: user.emacs_meta("%")
+replace regex | regex replace: user.emacs_meta("ctrl-%")
+search edit: user.emacs_meta("e")
+search toggle regex: user.emacs_meta("r")
+search toggle word:
+  user.emacs_meta("s")
+  key(w)
+
 recenter: key(ctrl-u ctrl-l)
 (center | [center] <number_small> from) top:
   user.emacs_prefix(number_small or 0)
@@ -255,16 +265,18 @@ transpose (graph|graphs|paragraphs): user.emacs_command("tr-par")
 register (copy|save): key("ctrl-x r s")
 register (paste|insert): key("ctrl-x r i")
 register jump: key(ctrl-x r j)
+register (copy|save) rectangle: key(ctrl-x r r)
 
-(search regex | regex search): user.emacs_meta("ctrl-s")
-(search regex | regex search) back: user.emacs_meta("ctrl-r")
-replace: user.emacs_meta("%")
-replace regex | regex replace: user.emacs_meta("ctrl-%")
-search edit: user.emacs_meta("e")
-search toggle regex: user.emacs_meta("r")
-search toggle word:
-  user.emacs_meta("s")
-  key(w)
+rectangle clear: key(ctrl-x r c)
+rectangle delete: key(ctrl-x r d)
+rectangle kill: key(ctrl-x r k)
+rectangle open: key(ctrl-x r o)
+rectangle (copy|save) to register: key(ctrl-x r r)
+rectangle (yank|paste): key(ctrl-x r y)
+rectangle copy:
+  key(ctrl-x r)
+  user.emacs_meta("w")
+rectangle number lines: key(ctrl-x r N)
 
 
 # ----- MAJOR & MINOR MODES ----- #
