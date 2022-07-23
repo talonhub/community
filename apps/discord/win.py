@@ -7,8 +7,14 @@ os: linux
 app: discord
 """
 
+ctx.lists["user.discord_destination"] = {
+    "user": "user",
+    "channel": "channel",
+    "voice": "voice",
+    "server": "server",
+}
 
-@ctx.action_class("user")
+@ctx.action_class('user')
 class UserActions:
     # Navigation: Servers
     def messaging_workspace_previous():
@@ -40,7 +46,7 @@ class UserActions:
         actions.key("ctrl-alt-shift-down")
 
     def discord_oldest_unread():
-        actions.key("shift-paegup")
+        actions.key("shift-pageup")
 
     # UI
     def discord_toggle_pins():
@@ -82,3 +88,23 @@ class UserActions:
 
     def discord_decline_call():
         actions.key("esc")
+    
+    def discord_go_current_call():
+        actions.key('ctrl-shift-alt-v')
+    
+    def discord_toggle_dms():
+        actions.key('ctrl-alt-right')
+    
+    def discord_quick_switcher(dest_type: str, dest_search: str):
+        actions.key('ctrl-k')
+        if dest_type:
+            if dest_type  == 'user':
+                actions.key('@')
+            if dest_type == 'channel':
+                actions.key('#')
+            if dest_type == 'voice':
+                actions.key('!')
+            if dest_type == 'server':
+                actions.key('*')
+        if dest_search:
+            actions.insert(dest_search)
