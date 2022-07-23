@@ -33,7 +33,7 @@ value <user.text>: user.insert_formatted(text, "DASH_SEPARATED")
 
 variable <user.text>:
     name = user.formatted_text(text, "DASH_SEPARATED")
-    insert("var(--{name});")
+    insert("var(--{name})")
 
 op var: user.insert_between("var(--", ")")
 
