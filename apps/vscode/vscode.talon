@@ -60,10 +60,17 @@ file hunt [<user.text>]:
     user.vscode("workbench.action.quickOpen")
     sleep(50ms)
     insert(text or "")
+file hunt (pace | paste):
+  user.vscode("workbench.action.quickOpen")
+  sleep(50ms)
+  edit.paste()
+file copy name: user.vscode("fileutils.copyFileName")
 file copy path: user.vscode("copyFilePath")
 file copy local [path]: user.vscode("copyRelativeFilePath")
 file create sibling: user.vscode_and_wait("explorer.newFile")
 file create: user.vscode("workbench.action.files.newUntitledFile")
+file create relative: user.vscode("fileutils.newFile")
+file create root: user.vscode("fileutils.newFileAtRoot")
 file rename:
     user.vscode("fileutils.renameFile")
     sleep(150ms)
@@ -192,6 +199,7 @@ debug stopper: user.vscode("workbench.action.debug.stop")
 debug continue: user.vscode("workbench.action.debug.continue")
 debug restart: user.vscode("workbench.action.debug.restart")
 debug console: user.vscode("workbench.debug.action.toggleRepl")
+debug clean: user.vscode("workbench.debug.panel.action.clearReplAction")
 
 # Terminal
 terminal external: user.vscode("workbench.action.terminal.openNativeConsole")
@@ -244,3 +252,4 @@ cell run above: user.vscode("jupyter.runallcellsabove.palette")
 cell run: user.vscode("jupyter.runcurrentcell")
 
 install local: user.vscode("workbench.extensions.action.installVSIX")
+preview markdown: user.vscode("markdown.showPreview")
