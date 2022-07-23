@@ -487,7 +487,7 @@ class UserActions:
         actions.user.insert_between("if let Some(", ")")
 
     def code_insert_if_let_okay():
-        actions.user.insert_between('if let Ok(', ')')
+        actions.user.insert_between("if let Ok(", ")")
 
     def code_insert_if_let_error():
         actions.user.insert_between("if let Err(", ")")
