@@ -165,11 +165,12 @@ class UserActions:
         actions.user.insert_between("switch (", ") ")
 
     def code_state_case():
-        actions.user.insert_between("case ", " :")
+        actions.user.insert_between("case ", ":")
 
     def code_state_for():
         actions.user.insert_between("for ", " ")
 
+    # There is no while keyword in go. Closest approximation is a for loop.
     def code_state_while():
         actions.user.insert_between("for ", " ")
 
