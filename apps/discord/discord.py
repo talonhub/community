@@ -11,6 +11,7 @@ browser.host: discord.com
 
 mod.list("discord_destination", desc="discord destination")
 
+
 @mod.action_class
 class discord_actions:
     def discord_mentions_last():
@@ -51,12 +52,12 @@ class discord_actions:
 
     def discord_decline_call():
         """Decline incoming call"""
-        
+
     def discord_quick_switcher(dest_type: str, dest_search: str):
         """Open up the quick switcher, optionally specifying a type of destination"""
 
-    def discord_go_current_call():  
+    def discord_go_current_call():
         """Go to current call"""
-        
+
     def discord_toggle_dms():
         """Toggle between dms and your most recent server"""
