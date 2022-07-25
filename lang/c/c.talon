@@ -49,7 +49,8 @@ state if (define | deaf): "#ifdef "
 [state] define <user.text>$: "#define {user.formatted_text(text, 'ALL_CAPS,SNAKE_CASE')}"
 [state] (undefine | undeaf) <user.text>$:
   "#undef {user.formatted_text(text, 'ALL_CAPS,SNAKE_CASE')}"
-[state] if (define | deaf)$: "#ifdef {user.formatted_text(text, 'ALL_CAPS,SNAKE_CASE')}"
+[state] if (define | deaf) <user.text>$:
+  "#ifdef {user.formatted_text(text, 'ALL_CAPS,SNAKE_CASE')}"
 
 # XXX - preprocessor instead of pre?
 state pre if: "#if "
