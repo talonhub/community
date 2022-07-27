@@ -5,21 +5,21 @@ PHRASE_EXAMPLES = ["", "foo", "foo bar", "lorem ipsum dolor sit amet"]
 if hasattr(talon, "test_mode"):
     # Only include this when we're running tests
 
-    from knausj_talon_pkg.code import dictation
+    from knausj_talon_pkg.core.text import text_and_dictation
 
     def test_format_phrase():
         for x in PHRASE_EXAMPLES:
-            assert dictation.format_phrase([x]) == x
-            assert dictation.format_phrase(x.split()) == x
+            assert text_and_dictation.format_phrase([x]) == x
+            assert text_and_dictation.format_phrase(x.split()) == x
 
     def test_capture_to_words():
         # if l is a list of strings, then (capture_to_words(l) == l) should hold.
         for s in PHRASE_EXAMPLES:
             for l in [[s], s.split(), list(s)]:
-                assert dictation.capture_to_words(l) == l
+                assert text_and_dictation.capture_to_words(l) == l
 
     def test_spacing_and_capitalization():
-        format = dictation.DictationFormat()
+        format = text_and_dictation.DictationFormat()
         format.state = None
         result = format.format("first")
         assert result == "first"
@@ -43,7 +43,7 @@ if hasattr(talon, "test_mode"):
         assert result == " new.\nLine"
 
     def test_force_spacing_and_capitalization():
-        format = dictation.DictationFormat()
+        format = text_and_dictation.DictationFormat()
         format.state = None
         format.force_capitalization = "cap"
         result = format.format("first")

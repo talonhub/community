@@ -3,7 +3,7 @@ import talon
 if hasattr(talon, "test_mode"):
     # Only include this when we're running tests
 
-    from knausj_talon_pkg.code import formatters
+    from knausj_talon_pkg.core.text import formatters
     from talon import actions
 
     def setup_function():
