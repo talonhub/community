@@ -5,7 +5,6 @@ mod = Module()
 ctx.matches = r"""
 tag: user.java
 """
-ctx.tags = ["user.code_operators", "user.code_generic"]
 
 # Primitive Types
 java_primitive_types = {
