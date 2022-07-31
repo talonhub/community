@@ -8,10 +8,10 @@ app: discord
 """
 
 ctx.lists["user.discord_destination"] = {
-    "user": "user",
-    "channel": "channel",
-    "voice": "voice",
-    "server": "server",
+    "user": "@",
+    "channel": "#",
+    "voice": "!",
+    "server": "*",
 }
 
 
@@ -98,14 +98,6 @@ class UserActions:
 
     def discord_quick_switcher(dest_type: str, dest_search: str):
         actions.key("ctrl-k")
-        if dest_type:
-            if dest_type == "user":
-                actions.key("@")
-            if dest_type == "channel":
-                actions.key("#")
-            if dest_type == "voice":
-                actions.key("!")
-            if dest_type == "server":
-                actions.key("*")
+        actions.insert(dest_type)
         if dest_search:
             actions.insert(dest_search)
