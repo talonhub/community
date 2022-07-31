@@ -7,14 +7,6 @@ os: linux
 app: discord
 """
 
-ctx.lists["user.discord_destination"] = {
-    "user": "@",
-    "channel": "#",
-    "voice": "!",
-    "server": "*",
-}
-
-
 @ctx.action_class("user")
 class UserActions:
     # Navigation: Servers

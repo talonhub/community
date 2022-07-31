@@ -1,4 +1,4 @@
-from talon import Module
+from talon import Module, Context
 
 mod = Module()
 apps = mod.apps
@@ -11,6 +11,17 @@ browser.host: discord.com
 
 mod.list("discord_destination", desc="discord destination")
 
+ctx = Context()
+ctx.matches = r"""
+app: discord
+"""
+
+ctx.lists["user.discord_destination"] = {
+    "user": "@",
+    "channel": "#",
+    "voice": "!",
+    "server": "*",
+}
 
 @mod.action_class
 class discord_actions:
