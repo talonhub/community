@@ -7,6 +7,7 @@ os: linux
 app: discord
 """
 
+
 @ctx.action_class("user")
 class UserActions:
     # Navigation: Servers

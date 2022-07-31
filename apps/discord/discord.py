@@ -1,4 +1,4 @@
-from talon import Module, Context
+from talon import Context, Module
 
 mod = Module()
 apps = mod.apps
@@ -22,6 +22,7 @@ ctx.lists["user.discord_destination"] = {
     "voice": "!",
     "server": "*",
 }
+
 
 @mod.action_class
 class discord_actions:
