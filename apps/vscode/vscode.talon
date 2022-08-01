@@ -78,8 +78,8 @@ file move:
     user.vscode("fileutils.moveFile")
     sleep(150ms)
 file clone:
-	  user.vscode("fileutils.duplicateFile")
-	  sleep(150ms)
+    user.vscode("fileutils.duplicateFile")
+    sleep(150ms)
 file delete:
     user.vscode("fileutils.removeFile")
     sleep(150ms)
