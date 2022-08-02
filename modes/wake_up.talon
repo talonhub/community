@@ -21,7 +21,6 @@ key(shift-ctrl-alt-q):
     user.mouse_sleep()
     speech.disable()
     user.engine_sleep()
-<<<<<<< HEAD
 ^talon sleep [<phrase>]$:
     user.switcher_hide_running()
     user.history_disable()
@@ -41,7 +40,3 @@ key(shift-ctrl-alt-q):
     user.mouse_toggle_control_mouse()
 key(shift-ctrl-alt-w):
     user.mouse_toggle_control_mouse()
-=======
-^talon sleep [<phrase>]$: speech.disable()
-^talon wake$: speech.enable()
->>>>>>> bfb282178d78880fad6b69b76f7dd097208f1f65

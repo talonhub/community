@@ -6,13 +6,8 @@ key(f22):
 mouse: user.mouse_toggle_control_mouse()
 zoom mouse: user.mouse_toggle_zoom_mouse()
 camera overlay: user.mouse_toggle_camera_overlay()
-<<<<<<< HEAD
 run calibration: user.mouse_calibrate()	
 (touch | click | per | de | be | la | eb | ek ):
-=======
-run calibration: user.mouse_calibrate()
-touch:
->>>>>>> bfb282178d78880fad6b69b76f7dd097208f1f65
 	mouse_click(0)
 	# close the mouse grid if open
 	user.grid_close()
