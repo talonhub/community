@@ -1,6 +1,6 @@
 tag: user.code_comment_block
 -
-block comment: user.code_comment_block()
+block comment:                   user.code_comment_block()
 block comment line:
     #todo: this should probably be a single function once
     #.talon supports implementing actions with parameters?

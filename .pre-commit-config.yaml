@@ -51,4 +51,10 @@ repos:
     rev: 1.3.5
     hooks:
       - id: talonfmt
-        args: ["--in-place", "--max-line-width=80", "--no-format-comments"]
+        args:
+          [
+            "--in-place",
+            "--max-line-width=80",
+            "--align-short-commands-at=32",
+            "--no-format-comments",
+          ]

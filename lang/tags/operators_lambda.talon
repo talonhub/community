@@ -9,4 +9,4 @@ tag: user.code_operators_lambda
 # Therefore a revision of this command may be in order.
 
 # syntax for anonymous functions
-op lambda: user.code_operator_lambda()
+op lambda:                       user.code_operator_lambda()

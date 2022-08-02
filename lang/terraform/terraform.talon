@@ -12,12 +12,12 @@ tag(): user.code_operators_math
 state {user.terraform_module_block}:
     user.code_terraform_module_block(user.terraform_module_block)
 
-resource <user.text>: user.code_terraform_resource(text)
+resource <user.text>:            user.code_terraform_resource(text)
 
-data [source] <user.text>: user.code_terraform_data_source(text)
+data [source] <user.text>:       user.code_terraform_data_source(text)
 
 [state] prop {user.terraform_common_property}:
     insert(user.terraform_common_property)
     user.code_operator_assignment()
 
-type {user.code_type}: insert("{code_type}")
+type {user.code_type}:           insert("{code_type}")

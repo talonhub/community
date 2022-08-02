@@ -1,17 +1,18 @@
 os: linux
 tag: user.tmux
 -
-mux: "tmux "
+mux:                             "tmux "
 
 #session management
-mux new session: insert("tmux new ")
+mux new session:                 insert("tmux new ")
 mux sessions:
     key(ctrl-b)
     key(s)
 mux name session:
     key(ctrl-b)
     key($)
-mux kill session: insert("tmux kill-session -t ")
+mux kill session:
+    insert("tmux kill-session -t ")
 #window management
 mux new window:
     key(ctrl-b)

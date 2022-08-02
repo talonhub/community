@@ -34,8 +34,8 @@ type {user.code_type} array:
     insert(user.code_type)
     user.code_operator_subscript()
 
-[state] {user.java_modifier}: insert(user.java_modifier + " ")
+[state] {user.java_modifier}:    insert(user.java_modifier + " ")
 
-op array: user.code_operator_subscript()
+op array:                        user.code_operator_subscript()
 
-op new: insert("new ")
+op new:                          insert("new ")

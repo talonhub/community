@@ -14,9 +14,9 @@ please [<user.text>]:
     insert(user.text or "")
 
 # Sidebar
-bar explore: key(alt-shift-w p)
+bar explore:                     key(alt-shift-w p)
 # bar extensions:
-bar outline: key(alt-shift-q o)
+bar outline:                     key(alt-shift-q o)
 
 # bar run:
 
@@ -53,8 +53,8 @@ panel variables:
 # panel terminal:
 
 # Settings
-show settings: key(alt-w p)
-show shortcuts: key(ctrl-shift-l)
+show settings:                   key(alt-w p)
+show shortcuts:                  key(ctrl-shift-l)
 #show snippets:
 
 # Display
@@ -71,10 +71,10 @@ file hunt [<user.text>]:
     insert(text or "")
 # file copy path:
 # file create sibling:
-file create: key(ctrl-n)
-file open folder: key(alt-shift-w x)
-file rename: key(alt-shift-w p enter f2)
-file reveal: key(alt-shift-w p enter)
+file create:                     key(ctrl-n)
+file open folder:                key(alt-shift-w x)
+file rename:                     key(alt-shift-w p enter f2)
+file reveal:                     key(alt-shift-w p enter)
 
 # Language Features
 # suggest show:
@@ -86,20 +86,20 @@ file reveal: key(alt-shift-w p enter)
 # references find:
 # format that:
 # format selection:
-imports fix: key(ctrl-shift-o)
+imports fix:                     key(ctrl-shift-o)
 # problem last:
 # problem fix:
 # rename that:
 # refactor that:
 # whitespace trim:
 # language switch:
-refactor rename: key(alt-shift-r)
-refactor this: key(alt-shift-i)
+refactor rename:                 key(alt-shift-r)
+refactor this:                   key(alt-shift-i)
 
 #code navigation
-(go declaration | follow): key(f3)
-go back: key(alt-left)
-go forward: key(alt-right)
+(go declaration | follow):       key(f3)
+go back:                         key(alt-left)
+go forward:                      key(alt-right)
 # go implementation:
 # go recent:
 # go type:
@@ -107,10 +107,10 @@ go forward: key(alt-right)
 
 # Bookmarks.
 #requires https://marketplace.eclipse.org/content/quick-bookmarks
-go marks: key(alt-end)
-toggle mark: key(ctrl-alt-b down enter)
-go next mark: key(alt-pagedown)
-go last mark: key(alt-pageup)
+go marks:                        key(alt-end)
+toggle mark:                     key(ctrl-alt-b down enter)
+go next mark:                    key(alt-pagedown)
+go last mark:                    key(alt-pageup)
 
 # Folding
 # fold that:
@@ -122,14 +122,14 @@ go last mark: key(alt-pageup)
 # fold comments:
 
 #Debugging
-break point: key(ctrl-shift-b)
-step over: key(f6)
-debug step into: key(f5)
-debug step out [of]: key(f7)
+break point:                     key(ctrl-shift-b)
+step over:                       key(f6)
+debug step into:                 key(f5)
+debug step out [of]:             key(f7)
 #debug start: user.vscode("workbench.action.debug.start")
 #debug pause:
 #debug stopper:
-debug continue: key(f8)
+debug continue:                  key(f8)
 #debug restart:
 
 # Terminal
@@ -144,5 +144,5 @@ debug continue: key(f8)
 # terminal scroll down: user.vscode("Terminal:ScrollDown")
 
 #TODO: should this be added to linecommands?
-copy line down: key(ctrl-alt-down)
-copy line up: key(ctrl-alt-up)
+copy line down:                  key(ctrl-alt-down)
+copy line up:                    key(ctrl-alt-up)

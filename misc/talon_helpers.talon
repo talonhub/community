@@ -1,10 +1,10 @@
 -
-talon check updates: menu.check_for_updates()
-talon open log: menu.open_log()
-talon open rebel: menu.open_repl()
-talon home: menu.open_talon_home()
-talon copy context pie: user.talon_add_context_clipboard_python()
-talon copy context: user.talon_add_context_clipboard()
+talon check updates:             menu.check_for_updates()
+talon open log:                  menu.open_log()
+talon open rebel:                menu.open_repl()
+talon home:                      menu.open_talon_home()
+talon copy context pie:          user.talon_add_context_clipboard_python()
+talon copy context:              user.talon_add_context_clipboard()
 talon copy name:
     name = app.name()
     clip.set_text(name)

@@ -10,16 +10,16 @@ tag(): user.code_functions_common
 # see https://github.com/knausj85/knausj_talon/issues/600
 # tag(): user.talon_populate_lists
 
-dot talon: insert(".talon")
+dot talon:                       insert(".talon")
 #defintion blocks for the context
-action block: user.insert_between("action(", "):")
-setting block: insert("settings():\n\t")
-setting {user.talon_settings}: user.paste("{talon_settings} = ")
+action block:                    user.insert_between("action(", "):")
+setting block:                   insert("settings():\n\t")
+setting {user.talon_settings}:   user.paste("{talon_settings} = ")
 #context requirements
-win require: insert("os: windows\n")
-mac require: insert("os: mac\n")
-linux require: insert("os: linux\n")
-title require: insert("win.title: ")
+win require:                     insert("os: windows\n")
+mac require:                     insert("os: mac\n")
+linux require:                   insert("os: linux\n")
+title require:                   insert("win.title: ")
 application [require] [{user.talon_apps}]:
     app = talon_apps or ""
     user.paste("app: {app}")
@@ -33,13 +33,13 @@ tag set [{user.talon_tags}]:
     tag = talon_tags or ""
     user.paste("tag(): {tag}")
 # requires user.talon_populate_lists tag. do not use with dragon
-list {user.talon_lists}: "{{{talon_lists}}}"
+list {user.talon_lists}:         "{{{talon_lists}}}"
 # requires user.talon_populate_lists tag. do not use with dragon
-capture {user.talon_captures}: "<{talon_captures}>"
+capture {user.talon_captures}:   "<{talon_captures}>"
 
 #commands for dictating key combos
-key <user.keys> over: "{keys}"
-key <user.modifiers> over: "{modifiers}"
+key <user.keys> over:            "{keys}"
+key <user.modifiers> over:       "{modifiers}"
 
 # all actions (requires uncommenting user.talon_populate_lists tag above)
 funk {user.talon_actions}:

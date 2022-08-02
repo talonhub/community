@@ -1,7 +1,7 @@
 mode: command
 mode: dictation
 -
-copy to vocab [as <phrase>]$: user.add_selection_to_vocabulary(phrase or "")
+copy to vocab [as <phrase>]$:    user.add_selection_to_vocabulary(phrase or "")
 # Automatically adds possessive form by appending "'s".
 copy name to vocab [as <phrase>]$:
     user.add_selection_to_vocabulary(phrase or "", "name")

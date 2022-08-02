@@ -31,8 +31,8 @@ settings():
 # rust-specific grammars
 
 ## for unsafe rust
-state unsafe: "unsafe "
-unsafe block: user.code_state_unsafe()
+state unsafe:                    "unsafe "
+unsafe block:                    user.code_state_unsafe()
 
 ## rust centric struct and enum definitions
 state (struct | structure) <user.text>:
@@ -43,45 +43,45 @@ state enum <user.text>:
     insert("enum ")
     insert(user.formatted_text(text, "PUBLIC_CAMEL_CASE"))
 
-toggle use: user.code_toggle_libraries()
+toggle use:                      user.code_toggle_libraries()
 
 ## Simple aliases
-borrow: "&"
-borrow mutable: "&mut "
+borrow:                          "&"
+borrow mutable:                  "&mut "
 state (a sink | async | asynchronous): "async "
-state (pub | public): "pub "
-state (pub | public) crate: "pub(crate) "
-state (dyn | dynamic): "dyn "
-state constant: "const "
-state (funk | func | function): "fn "
-state (imp | implements): "impl "
-state let mute: "let mut "
-state let: "let "
-state (mute | mutable): "mut "
-state (mod | module): "mod "
-state ref (mute | mutable): "ref mut "
-state ref: "ref "
-state trait: "trait "
-state match: user.code_state_switch()
-state (some | sum): "Some"
-state static: "static "
-self taught: "self."
-state use: user.code_import()
+state (pub | public):            "pub "
+state (pub | public) crate:      "pub(crate) "
+state (dyn | dynamic):           "dyn "
+state constant:                  "const "
+state (funk | func | function):  "fn "
+state (imp | implements):        "impl "
+state let mute:                  "let mut "
+state let:                       "let "
+state (mute | mutable):          "mut "
+state (mod | module):            "mod "
+state ref (mute | mutable):      "ref mut "
+state ref:                       "ref "
+state trait:                     "trait "
+state match:                     user.code_state_switch()
+state (some | sum):              "Some"
+state static:                    "static "
+self taught:                     "self."
+state use:                       user.code_import()
 
 use <user.code_libraries>:
     user.code_insert_library(code_libraries, "")
     key(; enter)
 
 ## specialist flow control
-state if let some: user.code_insert_if_let_some()
-state if let (ok | okay): user.code_insert_if_let_okay()
-state if let error: user.code_insert_if_let_error()
+state if let some:               user.code_insert_if_let_some()
+state if let (ok | okay):        user.code_insert_if_let_okay()
+state if let error:              user.code_insert_if_let_error()
 
 ## rust centric synonyms
-is some: user.code_insert_is_not_null()
+is some:                         user.code_insert_is_not_null()
 
 ## for implementing
-implement (struct | structure): user.code_state_implements()
+implement (struct | structure):  user.code_state_implements()
 
 ## for annotating function parameters
 is implemented trait {user.code_trait}:
@@ -94,16 +94,16 @@ returns implemented trait:
     " -> impl "
 
 ## for generic reference of traits
-trait {user.code_trait}: insert("{code_trait}")
+trait {user.code_trait}:         insert("{code_trait}")
 implemented trait {user.code_trait}: insert("impl {code_trait}")
 dynamic trait {user.code_trait}: insert("dyn {code_trait}")
 
 ## for generic reference of macro
-macro {user.code_macros}: user.code_insert_macro(code_macros, "")
+macro {user.code_macros}:        user.code_insert_macro(code_macros, "")
 macro wrap {user.code_macros}:
     user.code_insert_macro(code_macros, edit.selected_text())
 
 ## rust specific document comments
-block dock comment: user.code_comment_documentation_block()
-inner dock comment: user.code_comment_documentation_inner()
-inner block dock comment: user.code_comment_documentation_block_inner()
+block dock comment:              user.code_comment_documentation_block()
+inner dock comment:              user.code_comment_documentation_inner()
+inner block dock comment:        user.code_comment_documentation_block_inner()
