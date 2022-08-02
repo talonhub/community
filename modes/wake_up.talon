@@ -30,7 +30,7 @@ key(shift-ctrl-alt-q):
     speech.disable()
     user.engine_sleep()
 ^talon speech sleep {[<phrase>]$: speech.disable()
-^wake up [<phrase>]$: 
+^wake up [<phrase>]$:
     speech.disable()
     user.mouse_sleep()
 ^talon wake$:
