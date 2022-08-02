@@ -251,7 +251,7 @@ alternate_keys = {
     "switch": "alt tab",
 
 
-    
+
 
 
 }
