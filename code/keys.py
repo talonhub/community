@@ -235,8 +235,8 @@ alternate_keys = {
     "delete": "backspace",
     "forward delete": "delete",
     "forward junk": "delete",
-    'junk': 'backspace',
-    'backspace': 'backspace',
+    "junk": "backspace",
+    "backspace": "backspace",
     "page up": "pageup",
     "page down": "pagedown",
     "return": "enter",
@@ -244,11 +244,6 @@ alternate_keys = {
     "carriage": "enter",
     "hold tab": "alt tab",
     "switch": "alt tab",
-
-
-
-
-
 }
 # mac apparently doesn't have the menu key.
 if app.platform in ("windows", "linux"):
