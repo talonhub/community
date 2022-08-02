@@ -1,4 +1,4 @@
-from talon import Module, Context, actions
+from talon import Context, Module, actions
 
 # --- App definition ---
 mod = Module()
@@ -23,10 +23,17 @@ class UserActions:
         page = actions.edit.selected_text()
         actions.key("right escape")
         return int(page)
-    def page_next(): actions.key("ctrl-pagedown")
-    def page_previous(): actions.key("ctrl-pageup")
+
+    def page_next():
+        actions.key("ctrl-pagedown")
+
+    def page_previous():
+        actions.key("ctrl-pageup")
+
     def page_jump(number: int):
         actions.key("ctrl-l")
         actions.insert(str(number))
         actions.key("enter")
-    def page_final(): actions.key("ctrl-end")
+
+    def page_final():
+        actions.key("ctrl-end")

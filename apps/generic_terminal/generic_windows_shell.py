@@ -1,10 +1,11 @@
-from talon import app, Module, Context, actions, ui, imgui, settings, app, registry
+from talon import Context, Module, actions
 
 ctx = Context()
 mod = Module()
 ctx.matches = r"""
 tag: user.generic_windows_shell
 """
+
 
 @ctx.action_class("user")
 class Actions:
@@ -14,7 +15,7 @@ class Actions:
         """Lists directories"""
         actions.insert("ls")
         actions.key("enter")
-        
+
     def terminal_list_all_directories():
         """Lists all directories including hidden"""
         actions.insert("ls -force")
@@ -22,7 +23,7 @@ class Actions:
 
     def terminal_change_directory(path: str):
         """Lists change directory"""
-        actions.insert("cd {}".format(path))
+        actions.insert(f"cd {path}")
         if path:
             actions.key("enter")
 

@@ -1,8 +1,4 @@
-mode: command
-and mode: user.c
-mode: command
-and mode: user.auto_lang
-and code.language: c
+tag: user.c
 -
 tag(): user.code_imperative
 
@@ -11,7 +7,7 @@ tag(): user.code_comment_block_c_like
 tag(): user.code_data_bool
 tag(): user.code_data_null
 tag(): user.code_functions
-tag(): user.code_functions_gui
+tag(): user.code_functions_common
 tag(): user.code_libraries
 tag(): user.code_libraries_gui
 tag(): user.code_operators_array
@@ -30,20 +26,13 @@ settings():
     # whether or not to use uint_8 style datatypes
     #    user.use_stdint_datatypes = 1
 
-
-
-^funky <user.text>$: user.code_default_function(text)
-^static funky <user.text>$: user.code_private_static_function(text)
-
 # NOTE: migrated from generic, as they were only used here, though once cpp support is added, perhaps these should be migrated to a tag together with the commands below
 state include:
     insert('#include ')
 state include system:
-    insert('#include <>')
-    edit.left()
+    user.insert_between("#include <", ">")
 state include local:
-    insert('#include ""')
-    edit.left()
+    user.insert_between('#include "', '"')
 state type deaf:
     insert('typedef ')
 state type deaf struct:
@@ -94,11 +83,11 @@ cast to <user.c_cast>: "{c_cast}"
 standard cast to <user.stdint_cast>: "{stdint_cast}"
 <user.c_types>: "{c_types}"
 <user.c_pointers>: "{c_pointers}"
+<user.c_keywords>: "{c_keywords}"
 <user.c_signed>: "{c_signed}"
 standard <user.stdint_types>: "{stdint_types}"
 int main:
-    insert("int main()")
-    edit.left()
+    user.insert_between("int main(", ")")
 
 toggle includes: user.code_toggle_libraries()
 include <user.code_libraries>:

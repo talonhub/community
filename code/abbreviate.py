@@ -5,6 +5,8 @@ from talon import Context, Module
 mod = Module()
 mod.list("abbreviation", desc="Common abbreviation")
 
+# TODO: Make this a csv file. Not necessarily a settings/ csv file, it might be
+# better to be like homophones.csv.
 abbreviations = {
     "address": "addr",
     "administrator": "admin",
@@ -170,6 +172,7 @@ abbreviations = {
     "return": "ret",
     "revision": "rev",
     "ruby": "rb",
+    "rust": "rs",
     "saskatchewan": "sk",
     "service pack": "sp",
     "session id": "sid",

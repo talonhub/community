@@ -14,9 +14,9 @@ class EditActions:
     # reset zoom: key(ctrl-0)
     def zoom_in():
         actions.key("ctrl-=")
+
     def zoom_out():
         actions.key("ctrl--")
 
     def zoom_reset():
         actions.key("ctrl-0")
-

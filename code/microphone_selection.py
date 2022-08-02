@@ -32,7 +32,7 @@ def gui(gui: imgui.GUI):
     gui.text("Select a Microphone")
     gui.line()
     for index, item in enumerate(microphone_device_list, 1):
-        if gui.button("{}. {}".format(index, item)):
+        if gui.button(f"{index}. {item}"):
             actions.user.microphone_select(index)
 
     gui.spacer()
@@ -58,9 +58,7 @@ class Actions:
         """Selects a micropohone"""
         if 1 <= index and index <= len(microphone_device_list):
             actions.speech.set_microphone(microphone_device_list[index - 1])
-            app.notify(
-                "Activating microphone: {}".format(microphone_device_list[index - 1])
-            )
+            app.notify(f"Activating microphone: {microphone_device_list[index - 1]}")
             gui.hide()
 
 

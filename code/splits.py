@@ -1,4 +1,4 @@
-from talon import Module, actions, app
+from talon import Module
 
 mod = Module()
 mod.tag("splits", desc="Tag for enabling generic window split commands")
@@ -26,6 +26,12 @@ class Actions:
 
     def split_flip():
         """Flips the orietation of the active split"""
+
+    def split_maximize():
+        """Maximizes the active split"""
+
+    def split_reset():
+        """Resets the split sizes"""
 
     def split_window():
         """Splits the window"""

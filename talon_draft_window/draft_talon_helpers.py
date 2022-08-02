@@ -1,5 +1,7 @@
 from typing import Optional
-from talon import ui, settings, Module, Context, actions
+
+from talon import Context, Module, actions, settings, ui
+
 from .draft_ui import DraftManager
 
 mod = Module()
