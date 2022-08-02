@@ -72,7 +72,8 @@ go member [<user.text>]:
     key(alt-\)
     sleep(100ms)
     insert(text or "")
-go usage: key(shift-f12)
+go usage:
+    key(shift-f12)
 
 # Bookmarks.
 go marks: key(ctrl-k ctrl-w)

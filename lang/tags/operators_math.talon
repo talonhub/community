@@ -1,6 +1,5 @@
 tag: user.code_operators_math
 -
-
 # math operators
 op (minus | subtract): user.code_operator_subtraction()
 op (plus | add): user.code_operator_addition()

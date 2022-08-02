@@ -27,7 +27,6 @@
 # value in wsl.py is set accordingly.
 tag: user.wsl
 -
-
 tag(): terminal
 tag(): user.file_manager
 tag(): user.generic_unix_shell
@@ -36,5 +35,5 @@ tag(): user.kubectl
 
 ^go <user.letter>$: user.file_manager_open_volume("/mnt/{letter}")
 
-(wsl|weasel) reset path detection: user.wsl_reset_path_detection()
-(wsl|weasel) speak: user.wsl_speak()
+(wsl | weasel) reset path detection: user.wsl_reset_path_detection()
+(wsl | weasel) speak: user.wsl_speak()

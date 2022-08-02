@@ -1,5 +1,5 @@
 app: termite
-and not win.title: /VIM/
+and win.title: /VIM/
 -
 #comment or remove tags for command sets you don't want
 #termite doesn't support the file_manager stuff yet

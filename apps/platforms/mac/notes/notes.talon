@@ -1,7 +1,6 @@
 os: mac
 and app: notes
 -
-
 new note: key(cmd-n)
 duplicate note: key(cmd-d)
 new folder: key(shift-cmd-n)

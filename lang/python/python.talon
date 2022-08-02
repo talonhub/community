@@ -35,11 +35,12 @@ self taught: "self."
 pie test: "pytest"
 state past: "pass"
 
-raise {user.python_exception}: user.insert_between("raise {python_exception}(", ")")
-except {user.python_exception}: "except {python_exception}:"
+raise {user.python_exception}:
+    user.insert_between("raise {python_exception}(", ")")
+except {user.python_exception}:
+    "except {python_exception}:"
 
-dock string:
-    user.code_comment_documentation()
+dock string: user.code_comment_documentation()
 dock {user.python_docstring_fields}:
     insert("{python_docstring_fields}")
     edit.left()

@@ -1,6 +1,5 @@
 tag: user.code_operators_lambda
 -
-
 # In many languages, anonymous functions aren't merely infix syntax:
 #
 #       Haskell  '\x -> bla'

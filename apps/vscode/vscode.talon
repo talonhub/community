@@ -42,11 +42,16 @@ focus editor: user.vscode("workbench.action.focusActiveEditorGroup")
 show settings: user.vscode("workbench.action.openGlobalSettings")
 show settings json: user.vscode("workbench.action.openSettingsJson")
 show settings folder: user.vscode("workbench.action.openFolderSettings")
-show settings folder json: user.vscode("workbench.action.openFolderSettingsFile")
-show settings workspace: user.vscode("workbench.action.openWorkspaceSettings")
-show settings workspace json: user.vscode("workbench.action.openWorkspaceSettingsFile")
-show shortcuts: user.vscode("workbench.action.openGlobalKeybindings")
-show snippets: user.vscode("workbench.action.openSnippets")
+show settings folder json:
+    user.vscode("workbench.action.openFolderSettingsFile")
+show settings workspace:
+    user.vscode("workbench.action.openWorkspaceSettings")
+show settings workspace json:
+    user.vscode("workbench.action.openWorkspaceSettingsFile")
+show shortcuts:
+    user.vscode("workbench.action.openGlobalKeybindings")
+show snippets:
+    user.vscode("workbench.action.openSnippets")
 
 # Display
 centered switch: user.vscode("workbench.action.toggleCenteredLayout")
@@ -61,16 +66,23 @@ file hunt [<user.text>]:
     sleep(50ms)
     insert(text or "")
 file hunt (pace | paste):
-  user.vscode("workbench.action.quickOpen")
-  sleep(50ms)
-  edit.paste()
-file copy name: user.vscode("fileutils.copyFileName")
-file copy path: user.vscode("copyFilePath")
-file copy local [path]: user.vscode("copyRelativeFilePath")
-file create sibling: user.vscode_and_wait("explorer.newFile")
-file create: user.vscode("workbench.action.files.newUntitledFile")
-file create relative: user.vscode("fileutils.newFile")
-file create root: user.vscode("fileutils.newFileAtRoot")
+    user.vscode("workbench.action.quickOpen")
+    sleep(50ms)
+    edit.paste()
+file copy name:
+    user.vscode("fileutils.copyFileName")
+file copy path:
+    user.vscode("copyFilePath")
+file copy local [path]:
+    user.vscode("copyRelativeFilePath")
+file create sibling:
+    user.vscode_and_wait("explorer.newFile")
+file create:
+    user.vscode("workbench.action.files.newUntitledFile")
+file create relative:
+    user.vscode("fileutils.newFile")
+file create root:
+    user.vscode("fileutils.newFileAtRoot")
 file rename:
     user.vscode("fileutils.renameFile")
     sleep(150ms)
@@ -83,9 +95,12 @@ file clone:
 file delete:
     user.vscode("fileutils.removeFile")
     sleep(150ms)
-file open folder: user.vscode("revealFileInOS")
-file reveal: user.vscode("workbench.files.action.showActiveFileInExplorer")
-save ugly: user.vscode("workbench.action.files.saveWithoutFormatting")
+file open folder:
+    user.vscode("revealFileInOS")
+file reveal:
+    user.vscode("workbench.files.action.showActiveFileInExplorer")
+save ugly:
+    user.vscode("workbench.action.files.saveWithoutFormatting")
 
 # Language Features
 suggest show: user.vscode("editor.action.triggerSuggest")
@@ -120,7 +135,8 @@ go recent [<user.text>]:
     sleep(50ms)
     insert(text or "")
     sleep(250ms)
-go edit: user.vscode("workbench.action.navigateToLastEditLocation")
+go edit:
+    user.vscode("workbench.action.navigateToLastEditLocation")
 
 # Bookmarks. Requires Bookmarks plugin
 go marks: user.vscode("workbench.view.extension.bookmarks")
@@ -160,29 +176,52 @@ git commit [<user.text>]:
     user.vscode("git.commitStaged")
     sleep(100ms)
     user.insert_formatted(text or "", "CAPITALIZE_FIRST_WORD")
-git commit undo: user.vscode("git.undoCommit")
-git commit amend: user.vscode("git.commitStagedAmend")
-git diff: user.vscode("git.openChange")
-git fetch: user.vscode("git.fetch")
-git fetch all: user.vscode("git.fetchAll")
-git ignore: user.vscode("git.ignore")
-git merge: user.vscode("git.merge")
-git output: user.vscode("git.showOutput")
-git pull: user.vscode("git.pullRebase")
-git push: user.vscode("git.push")
-git push focus: user.vscode("git.pushForce")
-git rebase abort: user.vscode("git.rebaseAbort")
-git reveal: user.vscode("git.revealInExplorer")
-git revert: user.vscode("git.revertChange")
-git stash: user.vscode("git.stash")
-git stash pop: user.vscode("git.stashPop")
-git status: user.vscode("workbench.scm.focus")
-git stage: user.vscode("git.stage")
-git stage all: user.vscode("git.stageAll")
-git sync: user.vscode("git.sync")
-git unstage: user.vscode("git.unstage")
-git unstage all: user.vscode("git.unstageAll")
-pull request: user.vscode("pr.create")
+git commit undo:
+    user.vscode("git.undoCommit")
+git commit amend:
+    user.vscode("git.commitStagedAmend")
+git diff:
+    user.vscode("git.openChange")
+git fetch:
+    user.vscode("git.fetch")
+git fetch all:
+    user.vscode("git.fetchAll")
+git ignore:
+    user.vscode("git.ignore")
+git merge:
+    user.vscode("git.merge")
+git output:
+    user.vscode("git.showOutput")
+git pull:
+    user.vscode("git.pullRebase")
+git push:
+    user.vscode("git.push")
+git push focus:
+    user.vscode("git.pushForce")
+git rebase abort:
+    user.vscode("git.rebaseAbort")
+git reveal:
+    user.vscode("git.revealInExplorer")
+git revert:
+    user.vscode("git.revertChange")
+git stash:
+    user.vscode("git.stash")
+git stash pop:
+    user.vscode("git.stashPop")
+git status:
+    user.vscode("workbench.scm.focus")
+git stage:
+    user.vscode("git.stage")
+git stage all:
+    user.vscode("git.stageAll")
+git sync:
+    user.vscode("git.sync")
+git unstage:
+    user.vscode("git.unstage")
+git unstage all:
+    user.vscode("git.unstageAll")
+pull request:
+    user.vscode("pr.create")
 # Use keyboard shortcuts because VSCode relies on when clause contexts to choose the appropriate
 # action: https://code.visualstudio.com/api/references/when-clause-contexts
 change next: key(alt-f5)
@@ -209,10 +248,14 @@ terminal last: user.vscode("workbench.action.terminal.focusPrevious")
 terminal split: user.vscode("workbench.action.terminal.split")
 terminal zoom: user.vscode("workbench.action.toggleMaximizedPanel")
 terminal trash: user.vscode("workbench.action.terminal.kill")
-terminal toggle: user.vscode_and_wait("workbench.action.terminal.toggleTerminal")
-terminal scroll up: user.vscode("workbench.action.terminal.scrollUp")
-terminal scroll down: user.vscode("workbench.action.terminal.scrollDown")
-terminal <number_small>: user.vscode_terminal(number_small)
+terminal toggle:
+    user.vscode_and_wait("workbench.action.terminal.toggleTerminal")
+terminal scroll up:
+    user.vscode("workbench.action.terminal.scrollUp")
+terminal scroll down:
+    user.vscode("workbench.action.terminal.scrollDown")
+terminal <number_small>:
+    user.vscode_terminal(number_small)
 
 #TODO: should this be added to linecommands?
 copy line down: user.vscode("editor.action.copyLinesDownAction")
@@ -220,14 +263,14 @@ copy line up: user.vscode("editor.action.copyLinesUpAction")
 
 #Expand/Shrink AST Selection
 select less: user.vscode("editor.action.smartSelect.shrink")
-select (more|this): user.vscode("editor.action.smartSelect.expand")
+select (more | this): user.vscode("editor.action.smartSelect.expand")
 
 minimap: user.vscode("editor.action.toggleMinimap")
 maximize: user.vscode("workbench.action.minimizeOtherEditors")
 restore: user.vscode("workbench.action.evenEditorWidths")
 
 #breadcrumb
-select breadcrumb: user.vscode('breadcrumbs.focusAndSelect')
+select breadcrumb: user.vscode("breadcrumbs.focusAndSelect")
 # Use `alt-left` and `alt-right` to navigate the bread crumb
 
 replace here:

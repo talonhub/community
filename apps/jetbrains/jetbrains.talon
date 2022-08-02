@@ -50,15 +50,20 @@ find (everywhere | all) <user.text> [over]:
     user.idea("action SearchEverywhere")
     sleep(500ms)
     insert(text)
-(search | find) class: user.idea("action GotoClass")
-(search | find) file: user.idea("action GotoFile")
-(search | find) path: user.idea("action FindInPath")
-(search | find) symbol: user.idea("action GotoSymbol")
+(search | find) class:
+    user.idea("action GotoClass")
+(search | find) file:
+    user.idea("action GotoFile")
+(search | find) path:
+    user.idea("action FindInPath")
+(search | find) symbol:
+    user.idea("action GotoSymbol")
 (search | find) symbol <user.text>$:
     user.idea("action GotoSymbol")
     insert(text)
     key("enter")
-recent: user.idea("action RecentFiles")
+recent:
+    user.idea("action RecentFiles")
 
 surround [this] with <user.text> [over]:
     idea("action SurroundWith")
@@ -73,7 +78,8 @@ insert template <user.text> [over]:
     idea("action InsertLiveTemplate")
     sleep(500ms)
     insert(text)
-create (template|snippet): user.idea("action SaveAsTemplate")
+create (template | snippet):
+    user.idea("action SaveAsTemplate")
 # Recording
 toggle recording: user.idea("action StartStopMacroRecording")
 change (recording | recordings): user.idea("action EditMacros")
@@ -129,9 +135,12 @@ git log: user.idea("action Vcs.ShowTabbedFileHistory")
 git browse: user.idea("action Github.Open.In.Browser")
 git (gets | gist): user.idea("action Github.Create.Gist")
 git (pull request | request): user.idea("action Github.Create.Pull.Request")
-git (view | show | list) (requests | request): user.idea("action Github.View.Pull.Request")
-git (annotate | blame): user.idea("action Annotate")
-git menu: user.idea("action Vcs.QuickListPopupAction")
+git (view | show | list) (requests | request):
+    user.idea("action Github.View.Pull.Request")
+git (annotate | blame):
+    user.idea("action Annotate")
+git menu:
+    user.idea("action Vcs.QuickListPopupAction")
 # Tool windows:
 # Toggling various tool windows
 toggle project: user.idea("action ActivateProjectToolWindow")
@@ -165,10 +174,14 @@ toggle power save: user.idea("action TogglePowerSave")
 toggle whitespace: user.idea("action EditorToggleShowWhitespaces")
 toggle indents: user.idea("action EditorToggleShowIndentLines")
 toggle line numbers: user.idea("action EditorToggleShowLineNumbers")
-toggle (bread crumbs | breadcrumbs): user.idea("action EditorToggleShowBreadcrumbs")
-toggle gutter icons: user.idea("action EditorToggleShowGutterIcons")
-toggle wrap: user.idea("action EditorToggleUseSoftWraps")
-toggle parameters: user.idea("action ToggleInlineHintsAction")
+toggle (bread crumbs | breadcrumbs):
+    user.idea("action EditorToggleShowBreadcrumbs")
+toggle gutter icons:
+    user.idea("action EditorToggleShowGutterIcons")
+toggle wrap:
+    user.idea("action EditorToggleUseSoftWraps")
+toggle parameters:
+    user.idea("action ToggleInlineHintsAction")
 # Toggleable views
 toggle fullscreen: user.idea("action ToggleFullScreen")
 toggle distraction [free mode]: user.idea("action ToggleDistractionFreeMode")
@@ -211,7 +224,7 @@ fix last (error | air):
     user.idea("action ShowIntentionActions")
 # Special Selects
 select less: user.idea("action EditorUnSelectWord")
-select (more|this): user.idea("action EditorSelectWord")
+select (more | this): user.idea("action EditorSelectWord")
 #jet brains-specific line commands. see line_commands.talon for generic ones
 expand <number> until <number>:
     user.select_range(number_1, number_2)
@@ -225,23 +238,38 @@ paste <number> until <number>:
 refactor <number> until <number>:
     user.select_range(number_1, number_2)
     user.idea("action Refactorings.QuickListPopupAction")
-clone <number>: user.line_clone(number)
+clone <number>:
+    user.line_clone(number)
 
 #find/replace
-clear last <user.text> [over]: user.idea("find prev {text}, action EditorBackSpace")
-clear next <user.text> [over]: user.idea("find next {text}, action EditorBackSpace")
-comment last <user.text> [over]: user.idea("find prev {text}, action CommentByLineComment")
-comment next <user.text> [over]: user.idea("find next {text}, action CommentByLineComment")
-go last <user.text> [over]: user.idea("find prev {text}, action EditorRight")
-go next <user.text> [over]: user.idea("find next {text}, action EditorRight")
-paste last <user.text> [over]: user.idea("find prev {text}, action EditorRight, action EditorPaste")
-paste next <user.text> [over]: user.idea("find next {text}, action EditorRight, action EditorPaste")
-refactor last <user.text> [over]: user.idea("find prev {text}, action Refactorings.QuickListPopupAction")
-refactor next <user.text> [over]: user.idea("find next {text}, action Refactorings.QuickListPopupAction")
-replace last <user.text> [over]: user.idea("find prev {text}, action EditorPaste")
-replace next <user.text> [over]: user.idea("find next {text}, action EditorPaste")
-select last <user.text> [over]: user.idea("find prev {text}")
-select next <user.text> [over]: user.idea("find next {text}")
+clear last <user.text> [over]:
+    user.idea("find prev {text}, action EditorBackSpace")
+clear next <user.text> [over]:
+    user.idea("find next {text}, action EditorBackSpace")
+comment last <user.text> [over]:
+    user.idea("find prev {text}, action CommentByLineComment")
+comment next <user.text> [over]:
+    user.idea("find next {text}, action CommentByLineComment")
+go last <user.text> [over]:
+    user.idea("find prev {text}, action EditorRight")
+go next <user.text> [over]:
+    user.idea("find next {text}, action EditorRight")
+paste last <user.text> [over]:
+    user.idea("find prev {text}, action EditorRight, action EditorPaste")
+paste next <user.text> [over]:
+    user.idea("find next {text}, action EditorRight, action EditorPaste")
+refactor last <user.text> [over]:
+    user.idea("find prev {text}, action Refactorings.QuickListPopupAction")
+refactor next <user.text> [over]:
+    user.idea("find next {text}, action Refactorings.QuickListPopupAction")
+replace last <user.text> [over]:
+    user.idea("find prev {text}, action EditorPaste")
+replace next <user.text> [over]:
+    user.idea("find next {text}, action EditorPaste")
+select last <user.text> [over]:
+    user.idea("find prev {text}")
+select next <user.text> [over]:
+    user.idea("find next {text}")
 
 select camel left: user.extend_camel_left()
 select camel right: user.extend_camel_right()
