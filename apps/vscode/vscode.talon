@@ -111,6 +111,7 @@ file move:
 file open folder: user.vscode("revealFileInOS")
 file reveal: user.vscode("workbench.files.action.showActiveFileInExplorer")
 save ugly: user.vscode("workbench.action.files.saveWithoutFormatting")
+save all: user.vscode("workbench.action.files.saveAll")
 
 # Language Features
 suggest show: user.vscode("editor.action.triggerSuggest")
@@ -211,7 +212,7 @@ terminal last: user.vscode("workbench.action.terminal.focusPrevious")
 terminal split: user.vscode("workbench.action.terminal.split")
 terminal zoom: user.vscode("workbench.action.toggleMaximizedPanel")
 terminal trash: user.vscode("workbench.action.terminal.kill")
-terminal toggle: user.vscode_and_wait("workbench.action.terminal.toggleTerminal")
+toggle terminal : user.vscode_and_wait("workbench.action.terminal.toggleTerminal")
 terminal scroll up: user.vscode("workbench.action.terminal.scrollUp")
 terminal scroll down: user.vscode("workbench.action.terminal.scrollDown")
 terminal <number_small>: user.vscode_terminal(number_small)
