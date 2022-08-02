@@ -1,4 +1,4 @@
-from talon import Context, actions, ui, Module, app
+from talon import Module
 
 mod = Module()
 mod.tag("multiple_cursors", desc="Tag for enabling generic multiple cursor commands")
@@ -32,4 +32,3 @@ class multiple_cursor_actions:
 
     def multi_cursor_add_to_line_ends():
         """Adds cursor at end of every selected line"""
-

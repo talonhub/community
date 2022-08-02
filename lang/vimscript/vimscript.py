@@ -1,11 +1,9 @@
-from talon import Context, Module, actions, settings
+from talon import Context, Module, actions
 
 mod = Module()
 ctx = Context()
 ctx.matches = r"""
-mode: user.vimscript
-mode: user.auto_lang
-and code.language: vimscript
+tag: user.vimscript
 """
 
 ctx.lists["self.vimscript_functions"] = {

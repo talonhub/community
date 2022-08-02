@@ -4,7 +4,7 @@ import time
 from dataclasses import dataclass
 from pathlib import Path
 from tempfile import gettempdir
-from typing import Any, List
+from typing import Any
 from uuid import uuid4
 
 from talon import Context, Module, actions, speech_system
@@ -21,7 +21,7 @@ VSCODE_COMMAND_TIMEOUT_SECONDS = 3.0
 MINIMUM_SLEEP_TIME_SECONDS = 0.0005
 
 # Indicates whether a pre-phrase signal was emitted during the course of the
-# current phrase 
+# current phrase
 did_emit_pre_phrase_signal = False
 
 mod = Module()
@@ -70,7 +70,7 @@ def write_json_exclusive(path: Path, body: Any):
 @dataclass
 class Request:
     command_id: str
-    args: List[Any]
+    args: list[Any]
     wait_for_finish: bool
     return_command_output: bool
     uuid: str
@@ -362,9 +362,8 @@ class Actions:
         was written to the file.  For internal use only"""
         actions.key("ctrl-shift-f17")
 
-    def emit_pre_phrase_signal():
+    def emit_pre_phrase_signal() -> bool:
         """Touches a file to indicate that a phrase is about to begin execution"""
-        pass
 
     def did_emit_pre_phrase_signal() -> bool:
         """Indicates whether the pre-phrase signal was emitted at the start of this phrase"""
@@ -385,17 +384,19 @@ class LinuxUserActions:
 
 @global_ctx.action_class("user")
 class GlobalUserActions:
-    def emit_pre_phrase_signal():
+    def emit_pre_phrase_signal() -> bool:
         # NB: We explicitly define a noop version of this action in the global
         # context here so that it doesn't do anything before phrases if you're not
         # in vscode.
-        pass
+        return False
 
 
 @ctx.action_class("user")
 class UserActions:
-    def emit_pre_phrase_signal():
+    def emit_pre_phrase_signal() -> bool:
         get_signal_path("prePhrase").touch()
+
+        return True
 
 
 class MissingCommunicationDir(Exception):
@@ -427,9 +428,7 @@ def pre_phrase(_: Any):
     try:
         global did_emit_pre_phrase_signal
 
-        actions.user.emit_pre_phrase_signal()
-
-        did_emit_pre_phrase_signal = True
+        did_emit_pre_phrase_signal = actions.user.emit_pre_phrase_signal()
     except MissingCommunicationDir:
         pass
 

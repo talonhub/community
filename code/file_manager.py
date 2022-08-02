@@ -1,12 +1,8 @@
-from talon import app, Module, Context, actions, ui, imgui, settings, app, registry
-from os.path import expanduser
-from subprocess import Popen
-from pathlib import Path
-from typing import List, Union
-import os
 import math
-import re
 from itertools import islice
+from pathlib import Path
+
+from talon import Context, Module, actions, app, imgui, registry, settings, ui
 
 mod = Module()
 ctx = Context()
@@ -72,47 +68,6 @@ current_file_page = current_folder_page = 1
 ctx.lists["self.file_manager_directories"] = []
 ctx.lists["self.file_manager_files"] = []
 
-directories_to_remap = {}
-user_path = os.path.expanduser("~")
-if app.platform == "windows":
-    is_windows = True
-    import ctypes
-
-    GetUserNameEx = ctypes.windll.secur32.GetUserNameExW
-    NameDisplay = 3
-
-    size = ctypes.pointer(ctypes.c_ulong(0))
-    GetUserNameEx(NameDisplay, None, size)
-
-    nameBuffer = ctypes.create_unicode_buffer(size.contents.value)
-    GetUserNameEx(NameDisplay, nameBuffer, size)
-    one_drive_path = os.path.expanduser(os.path.join("~", "OneDrive"))
-
-    # this is probably not the correct way to check for onedrive, quick and dirty
-    if os.path.isdir(os.path.expanduser(os.path.join("~", r"OneDrive\Desktop"))):
-        default_folder = os.path.join("~", "Desktop")
-
-        directories_to_remap = {
-            "Desktop": os.path.join(one_drive_path, "Desktop"),
-            "Documents": os.path.join(one_drive_path, "Documents"),
-            "Downloads": os.path.join(user_path, "Downloads"),
-            "Music": os.path.join(user_path, "Music"),
-            "OneDrive": one_drive_path,
-            "Pictures": os.path.join(one_drive_path, "Pictures"),
-            "Videos": os.path.join(user_path, "Videos"),
-        }
-    else:
-        # todo use expanduser for cross platform support
-        directories_to_remap = {
-            "Desktop": os.path.join(user_path, "Desktop"),
-            "Documents": os.path.join(user_path, "Documents"),
-            "Downloads": os.path.join(user_path, "Downloads"),
-            "Music": os.path.join(user_path, "Music"),
-            "OneDrive": one_drive_path,
-            "Pictures": os.path.join(user_path, "Pictures"),
-            "Videos": os.path.join(user_path, "Videos"),
-        }
-
 
 @mod.action_class
 class Actions:
@@ -155,7 +110,7 @@ class Actions:
         """selects the file"""
 
     def file_manager_refresh_title():
-        """Refreshes the title to match current directory. this is for e.g. windows command prompt that will need to do some magic. """
+        """Refreshes the title to match current directory. this is for e.g. windows command prompt that will need to do some magic."""
         return
 
     def file_manager_update_lists():
@@ -176,16 +131,6 @@ class Actions:
         if gui_files.showing:
             gui_files.hide()
             gui_folders.hide()
-
-    def file_manager_open_user_directory(path: str):
-        """expands and opens the user directory"""
-        # this functionality exists mostly for windows.
-        # since OneDrive does strange stuff...
-        if path in directories_to_remap:
-            path = directories_to_remap[path]
-
-        path = os.path.expanduser(os.path.join("~", path))
-        actions.user.file_manager_open_directory(path)
 
     def file_manager_get_directory_by_index(index: int) -> str:
         """Returns the requested directory for the imgui display by index"""
@@ -291,9 +236,7 @@ def gui_folders(gui: imgui.GUI):
     total_folder_pages = math.ceil(
         len(ctx.lists["self.file_manager_directories"]) / setting_imgui_limit.get()
     )
-    gui.text(
-        "Select a directory ({}/{})".format(current_folder_page, total_folder_pages)
-    )
+    gui.text(f"Select a directory ({current_folder_page}/{total_folder_pages})")
     gui.line()
 
     index = 1
@@ -308,7 +251,7 @@ def gui_folders(gui: imgui.GUI):
             if len(folder_selections[current_index]) > setting_imgui_string_limit.get()
             else folder_selections[current_index]
         )
-        gui.text("{}: {} ".format(index, name))
+        gui.text(f"{index}: {name} ")
         current_index += 1
         index = index + 1
 
@@ -331,7 +274,7 @@ def gui_files(gui: imgui.GUI):
     global file_selections, current_file_page, total_file_pages
     total_file_pages = math.ceil(len(file_selections) / setting_imgui_limit.get())
 
-    gui.text("Select a file ({}/{})".format(current_file_page, total_file_pages))
+    gui.text(f"Select a file ({current_file_page}/{total_file_pages})")
     gui.line()
     index = 1
     current_index = (current_file_page - 1) * setting_imgui_limit.get()
@@ -343,7 +286,7 @@ def gui_files(gui: imgui.GUI):
             else file_selections[current_index]
         )
 
-        gui.text("{}: {} ".format(index, name))
+        gui.text(f"{index}: {name} ")
         current_index = current_index + 1
         index = index + 1
 
@@ -425,7 +368,7 @@ def win_event_handler(window):
 
     path = actions.user.file_manager_current_path()
 
-    if not "user.file_manager" in registry.tags:
+    if "user.file_manager" not in registry.tags:
         actions.user.file_manager_hide_pickers()
         clear_lists()
     elif path:

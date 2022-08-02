@@ -1,8 +1,4 @@
-mode: command
-and mode: user.go
-mode: command
-and mode: user.auto_lang
-and code.language: go
+tag: user.go
 -
 variadic: "..."
 logical and: " && "
@@ -136,13 +132,11 @@ state string: " string "
 state slice: " []"
 slice of: "[]"
 [state] (no | nil): "nil"
-state (int | integer | ant) 64: " int64 "
+state (int | integer | ant) sixty four: " int64 "
 state tag:
-  insert(" ``")
-  key("left")
+  user.insert_between(" `", "`")
 field tag <user.text> [over]:
-    insert(" ``")
-    key("left")
+    user.insert_between(" `", "`")
     sleep(100ms)
     insert(user.formatted_text(text, "snake"))
     insert(" ")

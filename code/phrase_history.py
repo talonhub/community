@@ -1,5 +1,6 @@
-from talon import Module, actions, imgui
 import logging
+
+from talon import Module, actions, imgui
 
 mod = Module()
 
@@ -7,6 +8,7 @@ mod = Module()
 phrase_history = []
 phrase_history_length = 40
 phrase_history_display_length = 40
+
 
 @mod.action_class
 class Actions:
@@ -16,8 +18,10 @@ class Actions:
 
     def get_recent_phrase(number: int) -> str:
         """Gets the nth most recent phrase"""
-        try: return phrase_history[number-1]
-        except IndexError: return ""
+        try:
+            return phrase_history[number - 1]
+        except IndexError:
+            return ""
 
     def clear_last_phrase():
         """Clears the last phrase"""
@@ -56,17 +60,22 @@ class Actions:
 
     def toggle_phrase_history():
         """Toggles list of recent phrases"""
-        if gui.showing: gui.hide()
-        else: gui.show()
+        if gui.showing:
+            gui.hide()
+        else:
+            gui.show()
 
     def phrase_history_hide():
         """Hides the recent phrases window"""
 
         gui.hide()
 
+
 @imgui.open()
 def gui(gui: imgui.GUI):
     gui.text("Recent phrases")
+    gui.text("Say 'recent repeat <number>' retype a phrase on this list.")
+    gui.text("Say 'recent copy <number>' to copy a phrase from this list.")
     gui.line()
     for index, text in enumerate(phrase_history[:phrase_history_display_length], 1):
         gui.text(f"{index}: {text}")

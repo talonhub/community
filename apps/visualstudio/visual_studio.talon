@@ -1,6 +1,5 @@
 os: windows
-app: Microsoft Visual Studio 2019
-app: devenv.exe
+app: visual_studio
 -
 tag(): user.tabs
 tag(): user.line_commands

@@ -8,7 +8,8 @@ tag(): user.code_comment_block_c_like
 tag(): user.code_data_bool
 tag(): user.code_data_null
 tag(): user.code_functions
-tag(): user.code_functions_gui
+tag(): user.code_functions_common
+tag(): user.code_keywords
 tag(): user.code_libraries
 tag(): user.code_operators_array
 tag(): user.code_operators_assignment
@@ -26,6 +27,7 @@ settings():
 
 (op | is) strict equal: " === "
 (op | is) strict not equal: " !== "
+op null else: " ?? "
 
 state const: "const "
 
@@ -39,20 +41,14 @@ state async: "async "
 
 state await: "await "
 
-state map:
-    insert(".map()")
-    key(left)
+dot {user.code_common_member_function}:
+    user.insert_between(".{code_common_member_function}(", ")")
 
-state filter:
-    insert(".filter()")
-    key(left)
-
-state reduce:
-    insert(".reduce()")
-    key(left)
+state map: app.notify('ERROR: Command deprecated; please use "dot map"')
+state filter: app.notify('ERROR: Command deprecated; please use "dot filter"')
+state reduce: app.notify('ERROR: Command deprecated; please use "dot reduce"')
 
 state spread: "..."
 
 from import:
-    insert(' from  ""')
-    key("left")
+    user.insert_between(' from  "', '"')

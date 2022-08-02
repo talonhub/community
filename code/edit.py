@@ -1,5 +1,4 @@
-import time
-from talon import Context, Module, actions, clip, ui
+from talon import Context, Module, actions, clip
 
 ctx = Context()
 mod = Module()
@@ -11,9 +10,10 @@ class EditActions:
         with clip.capture() as s:
             actions.edit.copy()
         try:
-            return s.get()
+            return s.text()
         except clip.NoChange:
             return ""
+
     def line_insert_down():
         actions.edit.line_end()
         actions.key("enter")

@@ -1,8 +1,4 @@
-mode: command
-and mode: user.ruby
-mode: command
-and mode: user.auto_lang
-and code.language: ruby
+tag: user.ruby
 -
 tag(): user.code_imperative
 tag(): user.code_object_oriented
@@ -27,9 +23,7 @@ settings():
     user.code_protected_variable_formatter = "SNAKE_CASE"
     user.code_public_variable_formatter = "SNAKE_CASE"
 
-args pipe:
-    insert("||")
-    key(left)
+args pipe: user.insert_between("|", "|")
 
 # NOTE: this command is created for backward compatibility, but the documentation comments are not actually strings in Ruby.
 dock string:
