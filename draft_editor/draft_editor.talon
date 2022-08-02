@@ -18,5 +18,4 @@ draft top:
 draft bottom:
     edit.extend_file_end()
     user.draft_editor_open()
-
 draft submit: user.draft_editor_paste_last()

@@ -24,30 +24,33 @@ settings():
     user.code_private_variable_formatter = "PRIVATE_CAMEL_CASE"
     user.code_protected_variable_formatter = "PRIVATE_CAMEL_CASE"
     user.code_public_variable_formatter = "PRIVATE_CAMEL_CASE"
-
-(op | is) strict equal: " === "
-(op | is) strict not equal: " !== "
-op null else: " ?? "
-
-state const: "const "
-
-state let: "let "
-
-state var: "var "
-
-state export: "export "
-
-state async: "async "
-
-state await: "await "
-
+(op | is) strict equal:
+    " === "
+(op | is) strict not equal:
+    " !== "
+op null else:
+    " ?? "
+state const:
+    "const "
+state let:
+    "let "
+state var:
+    "var "
+state export:
+    "export "
+state async:
+    "async "
+state await:
+    "await "
 dot {user.code_common_member_function}:
     user.insert_between(".{code_common_member_function}(", ")")
-
-state map: app.notify("ERROR: Command deprecated; please use \"dot map\"")
-state filter: app.notify("ERROR: Command deprecated; please use \"dot filter\"")
-state reduce: app.notify("ERROR: Command deprecated; please use \"dot reduce\"")
-
-state spread: "..."
-
-from import: user.insert_between(" from  \"", "\"")
+state map:
+    app.notify("ERROR: Command deprecated; please use \"dot map\"")
+state filter:
+    app.notify("ERROR: Command deprecated; please use \"dot filter\"")
+state reduce:
+    app.notify("ERROR: Command deprecated; please use \"dot reduce\"")
+state spread:
+    "..."
+from import:
+    user.insert_between(" from  \"", "\"")

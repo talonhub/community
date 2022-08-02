@@ -20,12 +20,10 @@ settings():
     user.code_private_variable_formatter = "PRIVATE_CAMEL_CASE"
     user.code_protected_variable_formatter = "PRIVATE_CAMEL_CASE"
     user.code_public_variable_formatter = "PRIVATE_CAMEL_CASE"
-
-(op | is) loosely equal: " == "
+(op | is) loosely equal:     " == "
 (op | is) loosely not equal: " != "
-
-state try: "try {\n"
-state catch: "catch (\\Throwable $exception) {\n"
+state try:                   "try {\n"
+state catch:                 "catch (\\Throwable $exception) {\n"
 
 var <phrase> [over]:
     insert("$")

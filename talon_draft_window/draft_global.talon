@@ -23,7 +23,6 @@ mode: command
     user.draft_hide()
     user.draft_show()
     user.draft_resize(800, 500)
-
 ^draft empty: user.draft_show("")
 
 ^draft edit:

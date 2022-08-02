@@ -15,7 +15,6 @@ tag(): user.kubectl
 # TODO: explain
 tag(): user.tabs
 tag(): user.file_manager
-
 suspend: key(ctrl-z)
 resume:
     insert("fg")

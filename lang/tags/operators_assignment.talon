@@ -8,11 +8,11 @@ op (equals | assign): user.code_operator_assignment()
 
 # combined computation and assignment
 op (minus | subtract) equals: user.code_operator_subtraction_assignment()
-op (plus | add) equals: user.code_operator_addition_assignment()
+op (plus | add) equals:       user.code_operator_addition_assignment()
 op (times | multiply) equals: user.code_operator_multiplication_assignment()
-op divide equals: user.code_operator_division_assignment()
-op mod equals: user.code_operator_modulo_assignment()
-[op] increment: user.code_operator_increment()
+op divide equals:             user.code_operator_division_assignment()
+op mod equals:                user.code_operator_modulo_assignment()
+[op] increment:               user.code_operator_increment()
 
 #bitwise operators
 (op | logical | bitwise) (ex | exclusive) or equals:

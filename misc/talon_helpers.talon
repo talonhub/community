@@ -1,10 +1,10 @@
 -
-talon check updates: menu.check_for_updates()
-talon open log: menu.open_log()
-talon open rebel: menu.open_repl()
-talon home: menu.open_talon_home()
+talon check updates:    menu.check_for_updates()
+talon open log:         menu.open_log()
+talon open rebel:       menu.open_repl()
+talon home:             menu.open_talon_home()
 talon copy context pie: user.talon_add_context_clipboard_python()
-talon copy context: user.talon_add_context_clipboard()
+talon copy context:     user.talon_add_context_clipboard()
 talon copy name:
     name = app.name()
     clip.set_text(name)
@@ -58,6 +58,5 @@ talon dump context:
 ^talon copy active app$:
     result = user.talon_get_active_application_info()
     clip.set_text(result)
-
 talon (bug report | report bug):
     user.open_url("https://github.com/knausj85/knausj_talon/issues")

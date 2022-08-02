@@ -1,7 +1,9 @@
 -
 #provide both anchored and unachored commands via 'over'
-phrase <user.text>$: user.insert_with_history(text)
-phrase <user.text> over: user.insert_with_history(text)
+phrase <user.text>$:
+    user.insert_with_history(text)
+phrase <user.text> over:
+    user.insert_with_history(text)
 {user.prose_formatter} <user.prose>$:
     user.insert_formatted(prose, prose_formatter)
 {user.prose_formatter} <user.prose> over:

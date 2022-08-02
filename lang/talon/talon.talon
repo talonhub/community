@@ -9,15 +9,14 @@ tag(): user.code_functions_common
 # with conformer, the latency increase may also be unacceptable depending on your cpu
 # see https://github.com/knausj85/knausj_talon/issues/600
 # tag(): user.talon_populate_lists
-
 dot talon: insert(".talon")
 #defintion blocks for the context
-action block: user.insert_between("action(", "):")
-setting block: insert("settings():\n\t")
+action block:                  user.insert_between("action(", "):")
+setting block:                 insert("settings():\n\t")
 setting {user.talon_settings}: user.paste("{talon_settings} = ")
 #context requirements
-win require: insert("os: windows\n")
-mac require: insert("os: mac\n")
+win require:   insert("os: windows\n")
+mac require:   insert("os: mac\n")
 linux require: insert("os: linux\n")
 title require: insert("win.title: ")
 application [require] [{user.talon_apps}]:
@@ -38,7 +37,7 @@ list {user.talon_lists}: "{{{talon_lists}}}"
 capture {user.talon_captures}: "<{talon_captures}>"
 
 #commands for dictating key combos
-key <user.keys> over: "{keys}"
+key <user.keys> over:      "{keys}"
 key <user.modifiers> over: "{modifiers}"
 
 # all actions (requires uncommenting user.talon_populate_lists tag above)

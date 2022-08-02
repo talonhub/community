@@ -19,7 +19,7 @@ tag: user.code_functions
     user.code_modified_function(code_function_modifier_list or 0, text)
 
 # for annotating function parameters
-is type <user.code_type>: user.code_insert_type_annotation(code_type)
+is type <user.code_type>:        user.code_insert_type_annotation(code_type)
 returns [type] <user.code_type>: user.code_insert_return_type(code_type)
 
 # for generic reference of types

@@ -53,7 +53,7 @@ panel variables:
 # panel terminal:
 
 # Settings
-show settings: key(alt-w p)
+show settings:  key(alt-w p)
 show shortcuts: key(ctrl-shift-l)
 #show snippets:
 
@@ -71,10 +71,10 @@ file hunt [<user.text>]:
     insert(text or "")
 # file copy path:
 # file create sibling:
-file create: key(ctrl-n)
+file create:      key(ctrl-n)
 file open folder: key(alt-shift-w x)
-file rename: key(alt-shift-w p enter f2)
-file reveal: key(alt-shift-w p enter)
+file rename:      key(alt-shift-w p enter f2)
+file reveal:      key(alt-shift-w p enter)
 
 # Language Features
 # suggest show:
@@ -94,12 +94,12 @@ imports fix: key(ctrl-shift-o)
 # whitespace trim:
 # language switch:
 refactor rename: key(alt-shift-r)
-refactor this: key(alt-shift-i)
+refactor this:   key(alt-shift-i)
 
 #code navigation
 (go declaration | follow): key(f3)
-go back: key(alt-left)
-go forward: key(alt-right)
+go back:                   key(alt-left)
+go forward:                key(alt-right)
 # go implementation:
 # go recent:
 # go type:
@@ -107,8 +107,8 @@ go forward: key(alt-right)
 
 # Bookmarks.
 #requires https://marketplace.eclipse.org/content/quick-bookmarks
-go marks: key(alt-end)
-toggle mark: key(ctrl-alt-b down enter)
+go marks:     key(alt-end)
+toggle mark:  key(ctrl-alt-b down enter)
 go next mark: key(alt-pagedown)
 go last mark: key(alt-pageup)
 
@@ -122,9 +122,9 @@ go last mark: key(alt-pageup)
 # fold comments:
 
 #Debugging
-break point: key(ctrl-shift-b)
-step over: key(f6)
-debug step into: key(f5)
+break point:         key(ctrl-shift-b)
+step over:           key(f6)
+debug step into:     key(f5)
 debug step out [of]: key(f7)
 #debug start: user.vscode("workbench.action.debug.start")
 #debug pause:
@@ -145,4 +145,4 @@ debug continue: key(f8)
 
 #TODO: should this be added to linecommands?
 copy line down: key(ctrl-alt-down)
-copy line up: key(ctrl-alt-up)
+copy line up:   key(ctrl-alt-up)

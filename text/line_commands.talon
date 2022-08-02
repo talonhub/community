@@ -1,8 +1,8 @@
 tag: user.line_commands
 -
 #this defines some common line commands. More may be defined that are ide-specific.
-lend: edit.line_end()
-bend: edit.line_start()
+lend:        edit.line_end()
+bend:        edit.line_start()
 go <number>: edit.jump_line(number)
 go <number> end:
     edit.jump_line(number)
@@ -73,8 +73,11 @@ drag down <number> until <number>:
     edit.line_swap_down()
 clone (line | that):
     edit.line_clone()
-
-select camel left: user.extend_camel_left()
-select camel right: user.extend_camel_right()
-go camel left: user.camel_left()
-go camel right: user.camel_right()
+select camel left:
+    user.extend_camel_left()
+select camel right:
+    user.extend_camel_right()
+go camel left:
+    user.camel_left()
+go camel right:
+    user.camel_right()

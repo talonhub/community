@@ -26,21 +26,28 @@ settings():
     user.code_public_variable_formatter = "SNAKE_CASE"
 
 #python-specific grammars
-dunder in it: "__init__"
-state (def | deaf | deft): "def "
-state try: "try:\n"
-state except: "except "
-state raise: "raise "
-self taught: "self."
-pie test: "pytest"
-state past: "pass"
-
+dunder in it:
+    "__init__"
+state (def | deaf | deft):
+    "def "
+state try:
+    "try:\n"
+state except:
+    "except "
+state raise:
+    "raise "
+self taught:
+    "self."
+pie test:
+    "pytest"
+state past:
+    "pass"
 raise {user.python_exception}:
     user.insert_between("raise {python_exception}(", ")")
 except {user.python_exception}:
     "except {python_exception}:"
-
-dock string: user.code_comment_documentation()
+dock string:
+    user.code_comment_documentation()
 dock {user.python_docstring_fields}:
     insert("{python_docstring_fields}")
     edit.left()
@@ -48,10 +55,10 @@ dock type {user.code_type}:
     user.insert_between(":type ", ": {code_type}")
 dock returns type {user.code_type}:
     user.insert_between(":rtype ", ": {code_type}")
-
-toggle imports: user.code_toggle_libraries()
+toggle imports:
+    user.code_toggle_libraries()
 import <user.code_libraries>:
     user.code_insert_library(code_libraries, "")
     key(end enter)
-
-from import: user.insert_between("from ", " import ")
+from import:
+    user.insert_between("from ", " import ")

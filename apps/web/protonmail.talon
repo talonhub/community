@@ -3,14 +3,14 @@ win.title: /ProtonMail/
 -
 # General
 ## Application
-open help: key(?)
-[focus] search: key(/)
-confirm active: key(enter)
-close active: key(escape)
+open help:              key(?)
+[focus] search:         key(/)
+confirm active:         key(enter)
+close active:           key(escape)
 open command [palette]: key(shift-space)
 
 ## Composer
-new message: key(c)
+new message:  key(c)
 send message: key(ctrl-enter)
 save message: key(ctrl-s)
 
@@ -39,14 +39,14 @@ save message: key(ctrl-s)
     key(t)
 
 ## Navigation
-(prev | previous) message: key(up)
-next message: key(down)
-exit message: key(left)
-enter message: key(right)
+(prev | previous) message:        key(up)
+next message:                     key(down)
+exit message:                     key(left)
+enter message:                    key(right)
 (show | display) newer [message]: key(k)
 (show | display) older [message]: key(j)
-open message: key(enter)
-go back: key(escape)
+open message:                     key(enter)
+go back:                          key(escape)
 
 ## Threadlist
 select all:
@@ -73,16 +73,16 @@ move to spam:
     key(s)
 
 ## Actions
-reply to (message | conversation): key(shift-r)
+reply to (message | conversation):       key(shift-r)
 reply all [to] (message | conversation): key(shift-a)
-forward (message | conversation): key(shift-f)
+forward (message | conversation):        key(shift-f)
 
 # Contacts
 ## Contact List
 (prev | previous) contact: key(up)
-next contact: key(down)
-enter contact: key(right)
-delete contact: key(t)
+next contact:              key(down)
+enter contact:             key(right)
+delete contact:            key(t)
 
 ## Contact Details
 exit contact: key(left)

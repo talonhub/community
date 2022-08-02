@@ -1,6 +1,7 @@
 tag: user.code_functions_common
 -
-toggle funk: user.code_toggle_functions()
+toggle funk:
+    user.code_toggle_functions()
 funk <user.code_common_function>:
     user.code_insert_function(code_common_function, "")
 funk cell <number>:
