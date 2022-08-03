@@ -1,0 +1,6 @@
+^talon sleep [<phrase>]$:
+    speech.disable()
+    mode.disable("noise")
+^talon wake$:
+    speech.enable()
+    mode.enable("noise")
