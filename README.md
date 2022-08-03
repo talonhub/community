@@ -74,6 +74,7 @@ The folder structure should look something like the below:
 5. Many useful, basic commands are defined in https://github.com/knausj85/knausj_talon/blob/master/misc/standard.talon#L36
    - `undo that` and `redo that` are the default undo/redo commands.
    - `paste that`, `copy that`, and `cut that` for pasting/copy/cutting, respectively.
+6. For community-generated documentation on Talon itself, please visit https://talon.wiki/
 
 It's recommended to learn the alphabet first, then get familiar with the keys, symbols, formatters, mouse, and generic_editor commands.
 
@@ -163,9 +164,9 @@ Try saying e.g. `select up third` to hit `shift-up` three times to select some l
 Global window managment commands are defined here:
 https://github.com/knausj85/knausj_talon/blob/master/misc/window_management.talon#L1
 
-`running list` will toggle a GUI list of words you can say to switch to running applications.
-`focus chrome` will focus the chrome application.
-`launch music` will launch the music application. Note this is currently only implemented on Mac OS X.
+- `running list` will toggle a GUI list of words you can say to switch to running applications.
+- `focus chrome` will focus the chrome application.
+- `launch music` will launch the music application. Note this is currently only implemented on Mac OS X.
 
 ### Screenshot commands
 
@@ -305,6 +306,10 @@ The most commonly adjusted settings are probably
 • `user.mouse_wheel_down_amount` and `user.mouse_continuous_scroll_amount` for adjusting the scroll amounts for the various scroll commands.
 
 Also, you can add additional vocabulary words, words to replace, search engines and more. Complete the knausj_talon setup instructions above, then open the `settings` folder to see the provided CSV files and customize them as needed.
+
+## Other talon user file sets
+
+In addition to this repo, there are [other Talon user file sets](https://talon.wiki/talon_user_file_sets/) containing additional commands that you may want to experiment with if you're feeling adventurous 😊. Many of them are meant to be used alongside knausj, but a few of them are designed as replacements. If it's not clear which, please file an issue against the given GitHub repository for that user file set!
 
 # Collaborators
 
