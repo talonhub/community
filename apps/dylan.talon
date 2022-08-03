@@ -2,7 +2,7 @@
 (control | see) fusion: experimental.fusion1_toggle()
 (control | see) gazing: experimental.gaze1_toggle()
 (control | see) head: experimental.head1_toggle()
-(control | see) troll: experimental.control2_toggle()
+(control | see) troll: tracking.control_toggle()
 
 # Deep Clicks
 deep: key("ctrl-cmd-t")
@@ -25,6 +25,23 @@ deep: key("ctrl-cmd-t")
     mouse_click()
     mouse_click()
     mouse_click()
+
+# Insane Paste Click Into
+replace:
+  key("cmd")
+  mouse_click()
+  mouse_click()
+  mouse_click()
+  mouse_click()
+  mouse_click()
+  mouse_click()
+  mouse_click()
+  mouse_click()
+  mouse_click()
+  key("enter")
+  sleep(200ms)
+  edit.select_all()  
+  edit.paste()
 
 # Triple click
 flock:
@@ -195,6 +212,12 @@ stick:
     key("cmd:down")
     mouse_click(0)
     key("cmd:up")
+
+# Alt mouse click
+alt:
+  key("alt:down")
+  mouse_click(0)
+  key("alt:up")
 
 # Enter key
 drop [<number>]:

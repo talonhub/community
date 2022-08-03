@@ -87,13 +87,13 @@ up page: user.figma_next_page()
 
 place image: user.figma_place_image()
 paste here: user.figma_paste_here()
-place it: user.figma_paste_replace()
+(place it | lay): user.figma_paste_replace()
 deep: user.figma_deep_select()
 (layer menu | laymen): user.figma_layer_menu_select()
 
 rename: user.figma_rename()
 
-(cop name | coppin):
+(cop name | coppin | reap):
     key("cmd-r")
     edit.select_all()
     edit.copy()
@@ -170,4 +170,6 @@ auto all:
 
 # Export
 export: key("cmd-shift-e")
-    
+
+# Resize to Fit
+resize: key("alt-shift-cmd-r")
