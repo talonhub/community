@@ -17,5 +17,6 @@ class UserActions:
       actions.key("enter")
 
     def rails_server():
-      actions.insert('rails s 2>&1 | tee ../arc.log')
+      # actions.insert('rails s 2>&1 | tee ../arc.log')
+      actions.insert('rails s')
       actions.key("enter")

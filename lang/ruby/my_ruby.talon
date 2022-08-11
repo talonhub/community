@@ -24,3 +24,5 @@ assert equals: 'assert_equals '
 # code_my_modles is defined in lang/ruby/ruby.py
 <code_my_models> find last:
   "{code_my_models}.last"
+
+present [a]: "present?"

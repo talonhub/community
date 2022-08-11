@@ -44,3 +44,7 @@ list six:
 link:
     "[]()"
     key(left:3)
+
+# toggle preview is specific to dendron extension
+(toggle|togo) preview: key('super-ctrl-p')
+
