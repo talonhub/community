@@ -25,4 +25,3 @@ class VsCodeAction:
           """Execute command via vscode command server, if available, or fallback
           to command palette."""
           actions.user.post_command(command_id)
-   
