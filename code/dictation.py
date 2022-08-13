@@ -443,7 +443,8 @@ class Actions:
         # space we inserted, and up to two for no_space_before -- for example,
         # inserting before "' hello" we don't want to add space, while inserting
         # before "'hello" we do.
-        actions.edit.extend_line_end()
+        actions.edit.extend_word_right()
+        actions.edit.extend_word_right()
         after = actions.edit.selected_text()
         actions.edit.left()
         actions.key("delete")  # remove space
