@@ -50,6 +50,7 @@ class NotSet:
     def __repr__(self):
         return "<argument not set>"
 
+
 def write_json_exclusive(path: Path, body: Any):
     """Writes jsonified object to file, failing if the file already exists
     Args:
@@ -233,6 +234,7 @@ def robust_unlink(path: Path):
         else:
             raise e
 
+
 def read_json_with_timeout(path: str) -> Any:
     """Repeatedly tries to read a json object from the given path, waiting
     until there is a trailing new line indicating that the write is complete
@@ -341,26 +343,26 @@ class Actions:
 
     def directory() -> string:
         """Return the final directory of the command server"""
- 
+
     def trigger_command_server_command_execution():
         """Issue keystroke to trigger command server to execute command that
         was written to the file.  For internal use only"""
         actions.key("ctrl-shift-f17")
 
     def live_pre_phrase_signal() -> bool:
-      """Used by application contexts emit_pre_phrase_signal to emit a pre phrase signal"""
-      get_signal_path("prePhrase").touch()
-      return True
+        """Used by application contexts emit_pre_phrase_signal to emit a pre phrase signal"""
+        get_signal_path("prePhrase").touch()
+        return True
 
     def emit_pre_phrase_signal() -> bool:
         """Touches a file to indicate that a phrase is about to begin execution"""
-  
+
     def did_emit_pre_phrase_signal() -> bool:
         """Indicates whether the pre-phrase signal was emitted at the start of this phrase"""
         return did_emit_pre_phrase_signal
 
     def command_client_fallback(command_id: str):
-       """The stratagy to use when no command server directory is located for the the application"""
+        """The stratagy to use when no command server directory is located for the the application"""
 
 
 @mac_ctx.action_class("user")
@@ -377,12 +379,12 @@ class LinuxUserActions:
 
 @global_ctx.action_class("user")
 class GlobalUserActions:
-  
     def emit_pre_phrase_signal() -> bool:
         # NB: We explicitly define a noop version of this action in the global
         # context here so that it doesn't do anything before phrases if you're not
         # in vscode.
         return False
+
 
 class MissingCommunicationDir(Exception):
     pass
