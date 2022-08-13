@@ -1,5 +1,6 @@
 import json
 import os
+import string
 import time
 from dataclasses import dataclass
 from pathlib import Path
@@ -13,10 +14,10 @@ from talon import Context, Module, actions, speech_system
 # to remove it
 STALE_TIMEOUT_MS = 60_000
 
-# The amount of time to wait for VSCode to perform a command, in seconds
+# The amount of time to wait for client application to perform a command, in seconds
 VSCODE_COMMAND_TIMEOUT_SECONDS = 3.0
 
-# When doing exponential back off waiting for vscode to perform a command, how
+# When doing exponential back off waiting for client application to perform a command, how
 # long to sleep the first time
 MINIMUM_SLEEP_TIME_SECONDS = 0.0005
 
@@ -33,6 +34,7 @@ linux_ctx = Context()
 
 ctx.matches = r"""
 app: vscode
+app: visual_studio
 """
 mac_ctx.matches = r"""
 os: mac
@@ -48,17 +50,8 @@ class NotSet:
     def __repr__(self):
         return "<argument not set>"
 
-
-def run_vscode_command_by_command_palette(command_id: str):
-    """Execute command via command palette. Preserves the clipboard."""
-    actions.user.command_palette()
-    actions.user.paste(command_id)
-    actions.key("enter")
-
-
 def write_json_exclusive(path: Path, body: Any):
     """Writes jsonified object to file, failing if the file already exists
-
     Args:
         path (Path): The path of the file to write
         body (Any): The object to convert to json and write
@@ -88,11 +81,9 @@ class Request:
 def write_request(request: Request, path: Path):
     """Converts the given request to json and writes it to the file, failing if
     the file already exists unless it is stale in which case it replaces it
-
     Args:
         request (Request): The request to serialize
         path (Path): The path to write to
-
     Raises:
         Exception: If another process has an active request file
     """
@@ -123,23 +114,20 @@ def handle_existing_request_file(path):
         robust_unlink(path)
 
 
-def run_vscode_command(
+def run_command(
     command_id: str,
     *args: str,
     wait_for_finish: bool = False,
     return_command_output: bool = False,
 ):
-    """Runs a VSCode command, using command server if available
-
+    """Runs a command, using command server if available
     Args:
         command_id (str): The ID of the VSCode command to run
         wait_for_finish (bool, optional): Whether to wait for the command to finish before returning. Defaults to False.
         return_command_output (bool, optional): Whether to return the output of the command. Defaults to False.
-
     Raises:
         Exception: If there is an issue with the file-based communication, or
         VSCode raises an exception
-
     Returns:
         Object: The response from the command, if requested.
     """
@@ -153,7 +141,7 @@ def run_vscode_command(
         if args or return_command_output:
             raise Exception("Must use command-server extension for advanced commands")
         print("Communication dir not found; falling back to command palette")
-        run_vscode_command_by_command_palette(command_id)
+        actions.user.command_client_fallback(command_id)
         return
 
     request_path = communication_dir_path / "request.json"
@@ -180,9 +168,9 @@ def run_vscode_command(
         print("WARNING: Found old response file")
         robust_unlink(response_path)
 
-    # Then, perform keystroke telling VSCode to execute the command in the
-    # request file.  Because only the active VSCode instance will accept
-    # keypresses, we can be sure that the active VSCode instance will be the
+    # Then, perform keystroke telling client application to execute the command in the
+    # request file.  Because only the active client application instance will accept
+    # keypresses, we can be sure that the active client application instance will be the
     # one to execute the command.
     actions.user.trigger_command_server_command_execution()
 
@@ -210,7 +198,6 @@ def run_vscode_command(
 
 def get_communication_dir_path():
     """Returns directory that is used by command-server for communication
-
     Returns:
         Path: The path to the communication dir
     """
@@ -221,13 +208,12 @@ def get_communication_dir_path():
     if hasattr(os, "getuid"):
         suffix = f"-{os.getuid()}"
 
-    return Path(gettempdir()) / f"vscode-command-server{suffix}"
+    return Path(gettempdir()) / f"{actions.user.directory()}{suffix}"
 
 
 def robust_unlink(path: Path):
     """Unlink the given file if it exists, and if we're on windows and it is
     currently in use, just rename it
-
     Args:
         path (Path): The path to unlink
     """
@@ -251,13 +237,10 @@ def robust_unlink(path: Path):
 def read_json_with_timeout(path: str) -> Any:
     """Repeatedly tries to read a json object from the given path, waiting
     until there is a trailing new line indicating that the write is complete
-
     Args:
         path (str): The path to read from
-
     Raises:
         Exception: If we timeout waiting for a response
-
     Returns:
         Any: The json-decoded contents of the file
     """
@@ -292,14 +275,14 @@ class Actions:
     def vscode(command_id: str):
         """Execute command via vscode command server, if available, or fallback
         to command palette."""
-        run_vscode_command(command_id)
+        run_command(command_id)
 
     def vscode_and_wait(command_id: str):
         """Execute command via vscode command server, if available, and wait
         for command to finish.  If command server not available, uses command
         palette and doesn't guarantee that it will wait for command to
         finish."""
-        run_vscode_command(command_id, wait_for_finish=True)
+        run_command(command_id, wait_for_finish=True)
 
     def vscode_with_plugin(
         command_id: str,
@@ -310,7 +293,7 @@ class Actions:
         arg5: Any = NotSet,
     ):
         """Execute command via vscode command server."""
-        run_vscode_command(
+        run_command(
             command_id,
             arg1,
             arg2,
@@ -328,7 +311,7 @@ class Actions:
         arg5: Any = NotSet,
     ):
         """Execute command via vscode command server and wait for command to finish."""
-        run_vscode_command(
+        run_command(
             command_id,
             arg1,
             arg2,
@@ -347,7 +330,7 @@ class Actions:
         arg5: Any = NotSet,
     ) -> Any:
         """Execute command via vscode command server and return command output."""
-        return run_vscode_command(
+        return run_command(
             command_id,
             arg1,
             arg2,
@@ -357,17 +340,28 @@ class Actions:
             return_command_output=True,
         )
 
+    def directory() -> string:
+        """Return the final directory of the command server"""
+ 
     def trigger_command_server_command_execution():
         """Issue keystroke to trigger command server to execute command that
         was written to the file.  For internal use only"""
         actions.key("ctrl-shift-f17")
 
+    def live_pre_phrase_signal() -> bool:
+      """Used by application contexts emit_pre_phrase_signal to emit a pre phrase signal"""
+      get_signal_path("prePhrase").touch()
+      return True
+
     def emit_pre_phrase_signal() -> bool:
         """Touches a file to indicate that a phrase is about to begin execution"""
-
+  
     def did_emit_pre_phrase_signal() -> bool:
         """Indicates whether the pre-phrase signal was emitted at the start of this phrase"""
         return did_emit_pre_phrase_signal
+
+    def command_client_fallback(command_id: str):
+       """The stratagy to use when no command server directory is located for the the application"""
 
 
 @mac_ctx.action_class("user")
@@ -384,19 +378,12 @@ class LinuxUserActions:
 
 @global_ctx.action_class("user")
 class GlobalUserActions:
+  
     def emit_pre_phrase_signal() -> bool:
         # NB: We explicitly define a noop version of this action in the global
         # context here so that it doesn't do anything before phrases if you're not
         # in vscode.
         return False
-
-
-@ctx.action_class("user")
-class UserActions:
-    def emit_pre_phrase_signal() -> bool:
-        get_signal_path("prePhrase").touch()
-
-        return True
 
 
 class MissingCommunicationDir(Exception):
@@ -406,10 +393,8 @@ class MissingCommunicationDir(Exception):
 def get_signal_path(name: str) -> Path:
     """
     Get the path to a signal in the signal subdirectory.
-
     Args:
         name (str): The name of the signal
-
     Returns:
         Path: The signal path
     """
