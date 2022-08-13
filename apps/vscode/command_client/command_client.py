@@ -233,7 +233,6 @@ def robust_unlink(path: Path):
         else:
             raise e
 
-
 def read_json_with_timeout(path: str) -> Any:
     """Repeatedly tries to read a json object from the given path, waiting
     until there is a trailing new line indicating that the write is complete
@@ -384,7 +383,6 @@ class GlobalUserActions:
         # context here so that it doesn't do anything before phrases if you're not
         # in vscode.
         return False
-
 
 class MissingCommunicationDir(Exception):
     pass
