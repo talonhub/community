@@ -437,12 +437,18 @@ class Actions:
         # Insert space to ensure something to select (see dictation_peek_left).
         actions.insert(" ")
         actions.edit.left()
-        # We select to end of line because it's usually a single keypress and we
-        # only depend on what's on the current line. Without this trick we might
-        # need to select at least three characters to the right: one for the the
-        # space we inserted, and up to two for no_space_before -- for example,
-        # inserting before "' hello" we don't want to add space, while inserting
-        # before "'hello" we do.
+        # We want to select at least two characters to the right, plus the space
+        # we inserted, because no_space_before needs two characters in the worst
+        # case -- for example, inserting before "' hello" we don't want to add
+        # space, while inserted before "'hello" we do.
+        #
+        # We use 2x extend_word_right() because it's fewer keypresses (lower
+        # latency) than 3x extend_right(). Other options all seem to have
+        # problems. For instance, extend_line_end() might not select all the way
+        # to the next newline if text has been wrapped across multiple lines;
+        # extend_line_down() sometimes escapes the current text box (eg. in a
+        # browser address bar). 1x extend_word_right() _usually_ works, but on
+        # Windows in Firefox it doesn't always select enough characters.
         actions.edit.extend_word_right()
         actions.edit.extend_word_right()
         after = actions.edit.selected_text()
