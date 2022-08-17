@@ -1,8 +1,8 @@
-find it:
-    edit.find()
+# find it:
+#     edit.find()
 
-next one:
-    edit.find_next()
+# next one:
+#     edit.find_next()
 
 go word left:
     edit.word_left()
