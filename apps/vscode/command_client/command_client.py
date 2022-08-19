@@ -33,8 +33,7 @@ mac_ctx = Context()
 linux_ctx = Context()
 
 ctx.matches = r"""
-app: vscode
-app: visual_studio
+tag: command_client
 """
 mac_ctx.matches = r"""
 os: mac
@@ -53,6 +52,7 @@ class NotSet:
 
 def write_json_exclusive(path: Path, body: Any):
     """Writes jsonified object to file, failing if the file already exists
+    
     Args:
         path (Path): The path of the file to write
         body (Any): The object to convert to json and write
@@ -126,9 +126,11 @@ def run_command(
         command_id (str): The ID of the VSCode command to run
         wait_for_finish (bool, optional): Whether to wait for the command to finish before returning. Defaults to False.
         return_command_output (bool, optional): Whether to return the output of the command. Defaults to False.
+
     Raises:
         Exception: If there is an issue with the file-based communication, or
         VSCode raises an exception
+
     Returns:
         Object: The response from the command, if requested.
     """
@@ -199,6 +201,7 @@ def run_command(
 
 def get_communication_dir_path():
     """Returns directory that is used by command-server for communication
+
     Returns:
         Path: The path to the communication dir
     """
@@ -209,12 +212,13 @@ def get_communication_dir_path():
     if hasattr(os, "getuid"):
         suffix = f"-{os.getuid()}"
 
-    return Path(gettempdir()) / f"{actions.user.directory()}{suffix}"
+    return Path(gettempdir()) / f"{actions.user.command_server_directory()}{suffix}"
 
 
 def robust_unlink(path: Path):
     """Unlink the given file if it exists, and if we're on windows and it is
     currently in use, just rename it
+
     Args:
         path (Path): The path to unlink
     """
@@ -238,10 +242,13 @@ def robust_unlink(path: Path):
 def read_json_with_timeout(path: str) -> Any:
     """Repeatedly tries to read a json object from the given path, waiting
     until there is a trailing new line indicating that the write is complete
+    
     Args:
         path (str): The path to read from
+    
     Raises:
         Exception: If we timeout waiting for a response
+
     Returns:
         Any: The json-decoded contents of the file
     """
@@ -341,7 +348,7 @@ class Actions:
             return_command_output=True,
         )
 
-    def directory() -> string:
+    def command_server_directory() -> string:
         """Return the final directory of the command server"""
 
     def trigger_command_server_command_execution():
@@ -349,20 +356,12 @@ class Actions:
         was written to the file.  For internal use only"""
         actions.key("ctrl-shift-f17")
 
-    def live_pre_phrase_signal() -> bool:
-        """Used by application contexts emit_pre_phrase_signal to emit a pre phrase signal"""
-        get_signal_path("prePhrase").touch()
-        return True
-
-    def emit_pre_phrase_signal() -> bool:
-        """Touches a file to indicate that a phrase is about to begin execution"""
-
     def did_emit_pre_phrase_signal() -> bool:
         """Indicates whether the pre-phrase signal was emitted at the start of this phrase"""
         return did_emit_pre_phrase_signal
 
     def command_client_fallback(command_id: str):
-        """The stratagy to use when no command server directory is located for the the application"""
+        """The strategy to use when no command server directory is located for the the application"""
 
 
 @mac_ctx.action_class("user")
@@ -384,6 +383,14 @@ class GlobalUserActions:
         # context here so that it doesn't do anything before phrases if you're not
         # in vscode.
         return False
+
+
+@ctx.action_class("user")
+class UserActions:
+    def emit_pre_phrase_signal() -> bool:
+        get_signal_path("prePhrase").touch()
+
+        return True
 
 
 class MissingCommunicationDir(Exception):
