@@ -23,5 +23,3 @@ class VsCodeAction:
         actions.user.command_palette()
         actions.user.paste(command_id)
         actions.key("enter")
-
-   

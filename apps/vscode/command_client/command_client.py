@@ -52,7 +52,7 @@ class NotSet:
 
 def write_json_exclusive(path: Path, body: Any):
     """Writes jsonified object to file, failing if the file already exists
-    
+
     Args:
         path (Path): The path of the file to write
         body (Any): The object to convert to json and write
@@ -242,10 +242,10 @@ def robust_unlink(path: Path):
 def read_json_with_timeout(path: str) -> Any:
     """Repeatedly tries to read a json object from the given path, waiting
     until there is a trailing new line indicating that the write is complete
-    
+
     Args:
         path (str): The path to read from
-    
+
     Raises:
         Exception: If we timeout waiting for a response
 
