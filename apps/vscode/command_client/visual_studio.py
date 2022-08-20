@@ -15,6 +15,3 @@ ctx.tags = ["user.command_client"]
 class VisualStudioActions:
     def command_server_directory() -> string:
         return "visual-studio-commandServer"
-
-    def emit_pre_phrase_signal() -> bool:
-        return actions.user.live_pre_phrase_signal()
