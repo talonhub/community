@@ -49,6 +49,8 @@ class NotSet:
     def __repr__(self):
         return "<argument not set>"
 
+class NoFileServerException(Exception):
+  pass
 
 def write_json_exclusive(path: Path, body: Any):
     """Writes jsonified object to file, failing if the file already exists
@@ -123,17 +125,18 @@ def run_command(
 ):
     """Runs a command, using command server if available
     Args:
-        command_id (str): The ID of the VSCode command to run
+        command_id (str): The ID of the command to run
         wait_for_finish (bool, optional): Whether to wait for the command to finish before returning. Defaults to False.
         return_command_output (bool, optional): Whether to return the output of the command. Defaults to False.
 
     Raises:
         Exception: If there is an issue with the file-based communication, or
-        VSCode raises an exception
+        application raises an exception
 
     Returns:
         Object: The response from the command, if requested.
     """
+    print("++++++++++++++++++++++Bedger")
     # NB: This is a hack to work around the fact that talon doesn't support
     # variable argument lists
     args = [x for x in args if x is not NotSet]
@@ -143,10 +146,8 @@ def run_command(
     if not communication_dir_path.exists():
         if args or return_command_output:
             raise Exception("Must use command-server extension for advanced commands")
-        print("Communication dir not found; falling back to command palette")
-        actions.user.command_client_fallback(command_id)
-        return
-
+        raise NoFileServerException("Communication dir not found; falling back to command palette")
+ 
     request_path = communication_dir_path / "request.json"
     response_path = communication_dir_path / "response.json"
 
@@ -280,19 +281,19 @@ def read_json_with_timeout(path: str) -> Any:
 
 @mod.action_class
 class Actions:
-    def vscode(command_id: str):
-        """Execute command via vscode command server, if available, or fallback
+    def run_command(command_id: str):
+        """Execute command via application command server, if available, or fallback
         to command palette."""
         run_command(command_id)
 
-    def vscode_and_wait(command_id: str):
-        """Execute command via vscode command server, if available, and wait
+    def run_command_and_wait(command_id: str):
+        """Execute command via application command server, if available, and wait
         for command to finish.  If command server not available, uses command
         palette and doesn't guarantee that it will wait for command to
         finish."""
         run_command(command_id, wait_for_finish=True)
 
-    def vscode_with_plugin(
+    def run_command_with_plugin(
         command_id: str,
         arg1: Any = NotSet,
         arg2: Any = NotSet,
@@ -300,7 +301,7 @@ class Actions:
         arg4: Any = NotSet,
         arg5: Any = NotSet,
     ):
-        """Execute command via vscode command server."""
+        """Execute command via application command server."""
         run_command(
             command_id,
             arg1,
@@ -310,7 +311,7 @@ class Actions:
             arg5,
         )
 
-    def vscode_with_plugin_and_wait(
+    def run_command_with_plugin_and_wait(
         command_id: str,
         arg1: Any = NotSet,
         arg2: Any = NotSet,
@@ -318,7 +319,7 @@ class Actions:
         arg4: Any = NotSet,
         arg5: Any = NotSet,
     ):
-        """Execute command via vscode command server and wait for command to finish."""
+        """Execute command via application command server and wait for command to finish."""
         run_command(
             command_id,
             arg1,
@@ -329,7 +330,7 @@ class Actions:
             wait_for_finish=True,
         )
 
-    def vscode_get(
+    def run_command_get(
         command_id: str,
         arg1: Any = NotSet,
         arg2: Any = NotSet,
@@ -337,7 +338,7 @@ class Actions:
         arg4: Any = NotSet,
         arg5: Any = NotSet,
     ) -> Any:
-        """Execute command via vscode command server and return command output."""
+        """Execute command via application command server and return command output."""
         return run_command(
             command_id,
             arg1,
@@ -359,10 +360,6 @@ class Actions:
     def did_emit_pre_phrase_signal() -> bool:
         """Indicates whether the pre-phrase signal was emitted at the start of this phrase"""
         return did_emit_pre_phrase_signal
-
-    def command_client_fallback(command_id: str):
-        """The strategy to use when no command server directory is located for the the application"""
-
 
 @mac_ctx.action_class("user")
 class MacUserActions:
