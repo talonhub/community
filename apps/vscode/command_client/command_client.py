@@ -49,8 +49,10 @@ class NotSet:
     def __repr__(self):
         return "<argument not set>"
 
+
 class NoFileServerException(Exception):
-  pass
+    pass
+
 
 def write_json_exclusive(path: Path, body: Any):
     """Writes jsonified object to file, failing if the file already exists
@@ -146,8 +148,10 @@ def run_command(
     if not communication_dir_path.exists():
         if args or return_command_output:
             raise Exception("Must use command-server extension for advanced commands")
-        raise NoFileServerException("Communication dir not found; falling back to command palette")
- 
+        raise NoFileServerException(
+            "Communication dir not found; falling back to command palette"
+        )
+
     request_path = communication_dir_path / "request.json"
     response_path = communication_dir_path / "response.json"
 
@@ -360,6 +364,7 @@ class Actions:
     def did_emit_pre_phrase_signal() -> bool:
         """Indicates whether the pre-phrase signal was emitted at the start of this phrase"""
         return did_emit_pre_phrase_signal
+
 
 @mac_ctx.action_class("user")
 class MacUserActions:
