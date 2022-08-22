@@ -18,7 +18,3 @@ class Actions:
     def emit_pre_phrase_signal() -> bool:
         """The command client can touch a signal file at the start of a phrase, function has a default implementation
         which does this, if your implementation does not require this signal file be touched simply return false."""
-
-    def command_client_fallback(command_id: str):
-        """Execute an alternative stratagy for issuing the command, if non exists just implemnt
-        there is not need to implement, the fall back is to do nothing."""
