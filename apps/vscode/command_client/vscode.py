@@ -30,7 +30,8 @@ class VsCodeAction:
     def command_server_directory() -> string:
         return "vscode-command-server"
 
-
+# These commands are shims, to provide backwards compatibility, they may be removed in the fuuture.
+# Prefer the run_command... version in command_client.
 @mod.action_class
 class Actions:
     def vscode(command_id: str):
