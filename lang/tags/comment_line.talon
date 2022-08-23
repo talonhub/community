@@ -28,11 +28,11 @@ comment <user.text>$:
     #todo: this should probably be a single function once
     #.talon supports implementing actions with parameters?
     edit.line_end()
-       user.code_comment_line_prefix()
+    user.code_comment_line_prefix()
     insert(user.text)
 (line | inline) comment <user.text>$:
     #todo: this should probably be a single function once
     #.talon supports implementing actions with parameters?
     edit.line_end()
-       user.code_comment_line_prefix()
+    user.code_comment_line_prefix()
     insert(user.text)

@@ -42,9 +42,11 @@ focus editor: user.vscode("workbench.action.focusActiveEditorGroup")
 show settings: user.vscode("workbench.action.openGlobalSettings")
 show settings json: user.vscode("workbench.action.openSettingsJson")
 show settings folder: user.vscode("workbench.action.openFolderSettings")
-show settings folder json: user.vscode("workbench.action.openFolderSettingsFile")
+show settings folder json:
+    user.vscode("workbench.action.openFolderSettingsFile")
 show settings workspace: user.vscode("workbench.action.openWorkspaceSettings")
-show settings workspace json: user.vscode("workbench.action.openWorkspaceSettingsFile")
+show settings workspace json:
+    user.vscode("workbench.action.openWorkspaceSettingsFile")
 show shortcuts: user.vscode("workbench.action.openGlobalKeybindings")
 show snippets: user.vscode("workbench.action.openSnippets")
 
@@ -61,9 +63,9 @@ file hunt [<user.text>]:
     sleep(50ms)
     insert(text or "")
 file hunt (pace | paste):
-  user.vscode("workbench.action.quickOpen")
-  sleep(50ms)
-  edit.paste()
+    user.vscode("workbench.action.quickOpen")
+    sleep(50ms)
+    edit.paste()
 file copy name: user.vscode("fileutils.copyFileName")
 file copy path: user.vscode("copyFilePath")
 file copy local [path]: user.vscode("copyRelativeFilePath")
@@ -209,7 +211,8 @@ terminal last: user.vscode("workbench.action.terminal.focusPrevious")
 terminal split: user.vscode("workbench.action.terminal.split")
 terminal zoom: user.vscode("workbench.action.toggleMaximizedPanel")
 terminal trash: user.vscode("workbench.action.terminal.kill")
-terminal toggle: user.vscode_and_wait("workbench.action.terminal.toggleTerminal")
+terminal toggle:
+    user.vscode_and_wait("workbench.action.terminal.toggleTerminal")
 terminal scroll up: user.vscode("workbench.action.terminal.scrollUp")
 terminal scroll down: user.vscode("workbench.action.terminal.scrollDown")
 terminal <number_small>: user.vscode_terminal(number_small)
@@ -220,14 +223,14 @@ copy line up: user.vscode("editor.action.copyLinesUpAction")
 
 #Expand/Shrink AST Selection
 select less: user.vscode("editor.action.smartSelect.shrink")
-select (more|this): user.vscode("editor.action.smartSelect.expand")
+select (more | this): user.vscode("editor.action.smartSelect.expand")
 
 minimap: user.vscode("editor.action.toggleMinimap")
 maximize: user.vscode("workbench.action.minimizeOtherEditors")
 restore: user.vscode("workbench.action.evenEditorWidths")
 
 #breadcrumb
-select breadcrumb: user.vscode('breadcrumbs.focusAndSelect')
+select breadcrumb: user.vscode("breadcrumbs.focusAndSelect")
 # Use `alt-left` and `alt-right` to navigate the bread crumb
 
 replace here:

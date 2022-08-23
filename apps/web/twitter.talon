@@ -4,7 +4,7 @@ browser.host: twitter.com
 -
 
 # navigation
-(show shortcuts|shortcuts help): key(?)
+(show shortcuts | shortcuts help): key(?)
 next tweet: key(j)
 previous tweet: key(k)
 page down: key(space)
