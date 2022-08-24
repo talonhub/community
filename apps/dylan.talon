@@ -187,6 +187,14 @@ stacy:
 scold:
     mouse_click(0)
     mouse_click(0)
+    mouse_click(0)
+    mouse_click(0)
+    mouse_click(0)
+    mouse_click(0)
+    mouse_click(0)
+    mouse_click(0)
+    mouse_click(0)
+    mouse_click(0)
     edit.select_all()
     edit.copy()
 
