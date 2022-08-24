@@ -121,13 +121,14 @@ def handle_existing_request_file(path):
 
 def run_command(
     command_id: str,
-    *args: str,
+    *args,
     wait_for_finish: bool = False,
     return_command_output: bool = False,
 ):
     """Runs a command, using command server if available
     Args:
-        command_id (str): The ID of the command to run
+        command_id (str): The ID of the command to run.
+        args: The arguments to the command.
         wait_for_finish (bool, optional): Whether to wait for the command to finish before returning. Defaults to False.
         return_command_output (bool, optional): Whether to return the output of the command. Defaults to False.
 
