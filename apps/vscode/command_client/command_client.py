@@ -27,7 +27,6 @@ did_emit_pre_phrase_signal = False
 
 mod = Module()
 
-global_ctx = Context()
 ctx = Context()
 mac_ctx = Context()
 linux_ctx = Context()
@@ -379,15 +378,6 @@ class LinuxUserActions:
         actions.key("ctrl-shift-alt-p")
 
 
-@global_ctx.action_class("user")
-class GlobalUserActions:
-    def emit_pre_phrase_signal() -> bool:
-        # NB: We explicitly define a noop version of this action in the global
-        # context here so that it doesn't do anything before phrases if you're not
-        # in vscode.
-        return False
-
-
 @ctx.action_class("user")
 class UserActions:
     def emit_pre_phrase_signal() -> bool:
@@ -422,7 +412,6 @@ def get_signal_path(name: str) -> Path:
 def pre_phrase(_: Any):
     try:
         global did_emit_pre_phrase_signal
-
         did_emit_pre_phrase_signal = actions.user.emit_pre_phrase_signal()
     except MissingCommunicationDir:
         pass
