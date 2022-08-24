@@ -138,7 +138,6 @@ def run_command(
     Returns:
         Object: The response from the command, if requested.
     """
-    print("++++++++++++++++++++++Bedger")
     # NB: This is a hack to work around the fact that talon doesn't support
     # variable argument lists
     args = [x for x in args if x is not NotSet]
@@ -393,8 +392,10 @@ class MissingCommunicationDir(Exception):
 def get_signal_path(name: str) -> Path:
     """
     Get the path to a signal in the signal subdirectory.
+
     Args:
         name (str): The name of the signal
+
     Returns:
         Path: The signal path
     """
