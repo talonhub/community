@@ -4,7 +4,7 @@ from typing import Any
 
 from talon import Context, Module, actions
 
-from .command_client import NoFileServerException, NotSet
+from .command_client import NoFileServerException, NotSet, run_command
 
 ctx = Context()
 
@@ -15,14 +15,17 @@ ctx.tags = ["user.command_client"]
 mod = Module()
 
 
-def command_client_fallback(command_id: str):
-    """Execute command via command palette. Preserves the clipboard."""
-    actions.user.command_palette()
-    actions.user.paste(command_id)
-    actions.key("enter")
-    print(
-        "Command issues via command palette for better performance install the VSCode extension for Talon"
-    )
+def command_server_or_client_fallback(command_id: str, wait: bool):
+    """Execute command via command server and us command pallete if directory not present."""
+    try:
+       run_command(command_id, wait_for_finish = wait)
+    except NoFileServerException:
+      actions.user.command_palette()
+      actions.user.paste(command_id)
+      actions.key("enter")
+      print(
+          "Command issues via command palette for better performance install the VSCode extension for Talon"
+      )
 
 
 @ctx.action_class("user")
@@ -38,20 +41,14 @@ class Actions:
     def vscode(command_id: str):
         """Execute command via vscode command server, if available, or fallback
         to command palette."""
-        try:
-            actions.user.run_command(command_id)
-        except NoFileServerException:
-            command_client_fallback(command_id)
+        command_server_or_client_fallback(command_id, False)
 
     def vscode_and_wait(command_id: str):
         """Execute command via vscode command server, if available, and wait
         for command to finish.  If command server not available, uses command
         palette and doesn't guarantee that it will wait for command to
         finish."""
-        try:
-            actions.user.run_command_and_wait(command_id)
-        except NoFileServerException:
-            command_client_fallback(command_id)
+        command_server_or_client_fallback(command_id, True)
 
     def vscode_with_plugin(
         command_id: str,
@@ -80,7 +77,7 @@ class Actions:
         arg5: Any = NotSet,
     ):
         """Execute command via vscode command server and wait for command to finish."""
-        actions.user.run_command_with_plugin_and_wait(
+        actions.user.run_rpc_command_and_wait(
             command_id, arg1, arg2, arg3, arg4, arg5
         )
 
@@ -93,4 +90,4 @@ class Actions:
         arg5: Any = NotSet,
     ) -> Any:
         """Execute command via vscode command server and return command output."""
-        return actions.user.run_command_get(command_id, arg1, arg2, arg3, arg4, arg5)
+        return actions.user.run_rpc_command_get(command_id, arg1, arg2, arg3, arg4, arg5)
