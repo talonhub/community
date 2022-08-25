@@ -18,14 +18,14 @@ mod = Module()
 def command_server_or_client_fallback(command_id: str, wait: bool):
     """Execute command via command server and us command pallete if directory not present."""
     try:
-       run_command(command_id, wait_for_finish = wait)
+        run_command(command_id, wait_for_finish=wait)
     except NoFileServerException:
-      actions.user.command_palette()
-      actions.user.paste(command_id)
-      actions.key("enter")
-      print(
-          "Command issues via command palette for better performance install the VSCode extension for Talon"
-      )
+        actions.user.command_palette()
+        actions.user.paste(command_id)
+        actions.key("enter")
+        print(
+            "Command issues via command palette for better performance install the VSCode extension for Talon"
+        )
 
 
 @ctx.action_class("user")
@@ -77,9 +77,7 @@ class Actions:
         arg5: Any = NotSet,
     ):
         """Execute command via vscode command server and wait for command to finish."""
-        actions.user.run_rpc_command_and_wait(
-            command_id, arg1, arg2, arg3, arg4, arg5
-        )
+        actions.user.run_rpc_command_and_wait(command_id, arg1, arg2, arg3, arg4, arg5)
 
     def vscode_get(
         command_id: str,
@@ -90,4 +88,6 @@ class Actions:
         arg5: Any = NotSet,
     ) -> Any:
         """Execute command via vscode command server and return command output."""
-        return actions.user.run_rpc_command_get(command_id, arg1, arg2, arg3, arg4, arg5)
+        return actions.user.run_rpc_command_get(
+            command_id, arg1, arg2, arg3, arg4, arg5
+        )
