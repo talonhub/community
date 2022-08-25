@@ -284,19 +284,7 @@ def read_json_with_timeout(path: str) -> Any:
 
 @mod.action_class
 class Actions:
-    def run_command(command_id: str):
-        """Execute command via application command server, if available, or fallback
-        to command palette."""
-        run_command(command_id)
-
-    def run_command_and_wait(command_id: str):
-        """Execute command via application command server, if available, and wait
-        for command to finish.  If command server not available, uses command
-        palette and doesn't guarantee that it will wait for command to
-        finish."""
-        run_command(command_id, wait_for_finish=True)
-
-    def run_command_with_plugin(
+    def run_rpc_command(
         command_id: str,
         arg1: Any = NotSet,
         arg2: Any = NotSet,
@@ -314,7 +302,7 @@ class Actions:
             arg5,
         )
 
-    def run_command_with_plugin_and_wait(
+    def run_rpc_command_and_wait(
         command_id: str,
         arg1: Any = NotSet,
         arg2: Any = NotSet,
@@ -333,7 +321,7 @@ class Actions:
             wait_for_finish=True,
         )
 
-    def run_command_get(
+    def run_rpc_command_get(
         command_id: str,
         arg1: Any = NotSet,
         arg2: Any = NotSet,
