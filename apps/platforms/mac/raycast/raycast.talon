@@ -18,10 +18,13 @@ os: mac
   sleep(150ms)
   insert(text or "")
 
-^switch [<user.running_applications>]$:
+^switch [<user.running_applications>] [<user.text>]$:
   key(alt-space)
   sleep(150ms)
-  insert(user.running_applications or "")
+  insert(user.running_applications or user.text)
+
+^switch$:
+  key(alt-space)
 
 ^cast go <number_small>$:
   key("cmd-{number_small}")
