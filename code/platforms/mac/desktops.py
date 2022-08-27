@@ -42,14 +42,16 @@ class MacActions:
     def window_move_desktop_left():
         if ui.apps(bundle="com.amethyst.Amethyst"):
             actions.key(f"ctrl-alt-shift-left")
-        with _drag_window_mac():
-            actions.key("ctrl-cmd-alt-left")
+        else:
+            with _drag_window_mac():
+                actions.key("ctrl-cmd-alt-left")
 
     def window_move_desktop_right():
         if ui.apps(bundle="com.amethyst.Amethyst"):
             actions.key(f"ctrl-alt-shift-right")
-        with _drag_window_mac():
-            actions.key("ctrl-cmd-alt-right")
+        else:
+            with _drag_window_mac():
+                actions.key("ctrl-cmd-alt-right")
 
     def window_move_desktop(desktop_number: int):
         if ui.apps(bundle="com.amethyst.Amethyst"):
