@@ -14,7 +14,7 @@ window close: user.vscode("workbench.action.closeWindow")
 command [<user.text>]:
     user.vscode("workbench.action.showCommands")
     insert(user.text or "")
-    
+
     # Sidebar
 bar explore: user.vscode("workbench.view.explorer")
 bar extensions: user.vscode("workbench.view.extensions")
@@ -29,7 +29,7 @@ symbol hunt [<user.text>]:
     user.vscode("workbench.action.gotoSymbol")
     sleep(50ms)
     insert(text or "")
-    
+
     # Panels
 panel control: user.vscode("workbench.panel.repl.view.focus")
 panel output: user.vscode("workbench.panel.output.focus")
@@ -81,7 +81,7 @@ file delete:
     sleep(150ms)
 file open folder: user.vscode("revealFileInOS")
 file reveal: user.vscode("workbench.files.action.showActiveFileInExplorer")
-save ugly: user.vscode("workbench.action.files.saveWithoutFormatting")
+(save|disk) ugly: user.vscode("workbench.action.files.saveWithoutFormatting")
 
 # Language Features
 suggest show: user.vscode("editor.action.triggerSuggest")
@@ -228,7 +228,7 @@ select breadcrumb: user.vscode('breadcrumbs.focusAndSelect')
 replace here:
     user.replace("")
     key(cmd-alt-l)
-    
+
 hover show: user.vscode("editor.action.showHover")
 
 join lines: user.vscode("editor.action.joinLines")
