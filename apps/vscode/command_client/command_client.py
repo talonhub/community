@@ -362,7 +362,7 @@ class Actions:
         was written to the file.  For internal use only"""
         actions.key("ctrl-shift-f17")
 
-    def emit_pre_phrase_signal():
+    def emit_pre_phrase_signal() -> bool:
         """Touches a file to indicate that a phrase is about to begin execution"""
 
     def did_emit_pre_phrase_signal() -> bool:
@@ -384,17 +384,19 @@ class LinuxUserActions:
 
 @global_ctx.action_class("user")
 class GlobalUserActions:
-    def emit_pre_phrase_signal():
+    def emit_pre_phrase_signal() -> bool:
         # NB: We explicitly define a noop version of this action in the global
         # context here so that it doesn't do anything before phrases if you're not
         # in vscode.
-        pass
+        return False
 
 
 @ctx.action_class("user")
 class UserActions:
-    def emit_pre_phrase_signal():
+    def emit_pre_phrase_signal() -> bool:
         get_signal_path("prePhrase").touch()
+
+        return True
 
 
 class MissingCommunicationDir(Exception):
@@ -426,9 +428,7 @@ def pre_phrase(_: Any):
     try:
         global did_emit_pre_phrase_signal
 
-        actions.user.emit_pre_phrase_signal()
-
-        did_emit_pre_phrase_signal = True
+        did_emit_pre_phrase_signal = actions.user.emit_pre_phrase_signal()
     except MissingCommunicationDir:
         pass
 

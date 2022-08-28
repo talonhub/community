@@ -10,7 +10,7 @@ class EditActions:
         with clip.capture() as s:
             actions.edit.copy()
         try:
-            return s.get()
+            return s.text()
         except clip.NoChange:
             return ""
 
