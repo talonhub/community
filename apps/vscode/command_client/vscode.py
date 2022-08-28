@@ -30,7 +30,7 @@ def command_server_or_client_fallback(command_id: str, wait: bool):
 
 @ctx.action_class("user")
 class VsCodeAction:
-    def command_server_directory() -> string:
+    def command_server_directory() -> str:
         return "vscode-command-server"
 
 

@@ -340,7 +340,7 @@ class Actions:
             return_command_output=True,
         )
 
-    def command_server_directory() -> string:
+    def command_server_directory() -> str:
         """Return the final directory of the command server"""
 
     def trigger_command_server_command_execution():

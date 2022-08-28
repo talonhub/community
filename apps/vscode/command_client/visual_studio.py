@@ -1,4 +1,4 @@
-import string
+
 
 from talon import Context, actions
 
@@ -13,5 +13,5 @@ ctx.tags = ["user.command_client"]
 
 @ctx.action_class("user")
 class VisualStudioActions:
-    def command_server_directory() -> string:
+    def command_server_directory() -> str:
         return "visual-studio-commandServer"
