@@ -298,14 +298,14 @@ def show_cursor_helper(show):
 
 
 def on_pop(active):
-    #if setting_mouse_enable_pop_stops_scroll.get() >= 1 and (gaze_job or scroll_job):
-    #    stop_scroll()
+    if setting_mouse_enable_pop_stops_scroll.get() >= 1 and (gaze_job or scroll_job):
+        stop_scroll()
     #elif (
     #    not eye_zoom_mouse.zoom_mouse.enabled
     #    and eye_mouse.mouse.attached_tracker is not None
     #):
-        if setting_mouse_enable_pop_click.get() >= 1:
-            ctrl.mouse_click(button=0, hold=16000)
+    if setting_mouse_enable_pop_click.get() >= 1:
+        ctrl.mouse_click(button=0, hold=16000)
 
 
 noise.register("pop", on_pop)

@@ -128,7 +128,11 @@ formatters_dict = {
     "SINGLE_QUOTED_STRING": (SEP, surround("'")),
     "SPACE_SURROUNDED_STRING": (SEP, surround(" ")),
     "DOT_SEPARATED": words_with_joiner("."),
-    "DOT_SNAKE": (NOSEP, lambda i, word, _: "." + word if i == 0 else "_" + word),
+    "BRADLEY_TABLE": (
+        NOSEP, 
+        lambda i, word, _: 
+            "d." + word if i == 0 else "_" + word
+    ),
     "SLASH_SEPARATED": (NOSEP, every_word(lambda w: "/" + w)),
     "CAPITALIZE_FIRST_WORD": (SEP, first_vs_rest(lambda w: w.capitalize())),
     "CAPITALIZE_ALL_WORDS": (
@@ -137,6 +141,12 @@ formatters_dict = {
         if i == 0 or word not in words_to_keep_lowercase
         else word,
     ),
+    "QUOTED_LIST": (
+        NOSEP, 
+        lambda i, word, _: 
+        "'" + word + "'" if i == 0 else ", " + "'" + word + "'"
+        )
+          
 }
 
 # This is the mapping from spoken phrases to formatters
@@ -157,6 +167,8 @@ formatters_words = {
     "snake": formatters_dict["SNAKE_CASE"],
     "sing string": formatters_dict["SINGLE_QUOTED_STRING"],
     "title": formatters_dict["CAPITALIZE_ALL_WORDS"],
+    "list it": formatters_dict["QUOTED_LIST"],
+    "data table": formatters_dict["BRADLEY_TABLE"]
 }
 
 all_formatters = {}
