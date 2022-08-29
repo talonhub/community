@@ -16,6 +16,12 @@ victor [<user.text>]:
     sleep(50ms)
     key(tab)
 victor safe: insert("vim -R ")
+gary [<user.text>]:
+    insert('grep -nr --include="*.R" ""')
+    key(left)
+    key(left)
+    key(left)
+    insert(text or "")
 greta [<user.text>]: 
     insert('grep -nr "" .')
     key(left)
@@ -30,6 +36,11 @@ mickie [<user.text>]:
     insert('mkdir ')
     insert(text or "")
 
+copy output:
+    key(cmd-shift-a)
+    edit.copy()
+
+
 clear screen: user.terminal_clear_screen()
 run last: user.terminal_run_last()
 rerun [<user.text>]: user.terminal_rerun_search(text or "")
@@ -41,7 +52,6 @@ save and exit:
     key(escape)
     insert(":x")
     key(enter)
-
 
 copy paste:
     edit.copy()
