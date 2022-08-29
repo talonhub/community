@@ -1,0 +1,36 @@
+A
+B
+X
+Y
+up
+down
+left
+right
+
+L (left bumper)
+R (right bumper)
+Z (ZL)
+C (ZR)
+
+(left stick/stick 2)
+M (100%)
+N (100%)
+J (100%)
+K (100%)
+
+(right stick/stick 1)
+O (100%)
+P (100%)
+U (100%)
+I (100%)
+
++
+-
+H
+(screenshot)
+
+(left stick/stick 2)
+S (50%)
+D (50%)
+F (50%)
+G (50%)

@@ -1,0 +1,18 @@
+#pragma METAINFO("nintendo_switch", 1, 0, "<author_name>")
+#include "mouse.gph"
+#include "keyboard.gph"
+
+main {
+	if(key_status(KEY_S)) {
+        set_val(STICK_2_X, -50.0);
+    }
+	if(key_status(KEY_G)) {
+        set_val(STICK_2_X, 50.0);
+    }
+	if(key_status(KEY_D)) {
+        set_val(STICK_2_Y, 50.0);
+    }
+	if(key_status(KEY_F)) {
+        set_val(STICK_2_Y, -50.0);
+    }
+}
