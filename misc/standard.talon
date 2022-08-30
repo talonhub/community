@@ -9,10 +9,17 @@ cut that: edit.cut()
 (pace | paste) enter:
   edit.paste()
   key(enter)
-undo that: edit.undo()
-redo that: edit.redo()
+(undo that | nope): edit.undo()
+(redo that | yes indeed): edit.redo()
 paste match: edit.paste_match_style()
-file save: edit.save()
-file save all: edit.save_all()
+(disk|file save): edit.save()
+(disk oliver|file save all): edit.save_all()
 (pad | padding): user.insert_between(" ", " ")
 slap: edit.line_insert_down()
+
+pour: edit.line_insert_down()
+drink: edit.line_insert_up()
+
+show clip:
+  key(super-v)
+  sleep(100ms)
