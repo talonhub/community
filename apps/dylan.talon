@@ -247,7 +247,7 @@ emoji:
   key("cmd-ctrl-space")
   
 # Open slack and go to all unreads
-slack unread: key(cmd-alt-2)
+slack feed: key(cmd-alt-2)
 
 # Open Work Email
 avant mail: key("alt-cmd-1")
