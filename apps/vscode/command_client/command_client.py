@@ -84,9 +84,11 @@ class Request:
 def write_request(request: Request, path: Path):
     """Converts the given request to json and writes it to the file, failing if
     the file already exists unless it is stale in which case it replaces it
+   
     Args:
         request (Request): The request to serialize
         path (Path): The path to write to
+   
     Raises:
         Exception: If another process has an active request file
     """
