@@ -126,6 +126,7 @@ def run_command(
     return_command_output: bool = False,
 ):
     """Runs a command, using command server if available
+   
     Args:
         command_id (str): The ID of the command to run.
         args: The arguments to the command.
