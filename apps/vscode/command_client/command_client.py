@@ -149,9 +149,7 @@ def run_command(
     if not communication_dir_path.exists():
         if args or return_command_output:
             raise Exception("Must use command-server extension for advanced commands")
-        raise NoFileServerException(
-            "Communication directory not found"
-        )
+        raise NoFileServerException("Communication directory not found")
 
     request_path = communication_dir_path / "request.json"
     response_path = communication_dir_path / "response.json"
