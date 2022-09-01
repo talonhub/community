@@ -14,7 +14,7 @@ from talon import Context, Module, actions, speech_system
 STALE_TIMEOUT_MS = 60_000
 
 # The amount of time to wait for client application to perform a command, in seconds
-VSCODE_COMMAND_TIMEOUT_SECONDS = 3.0
+RPC_COMMAND_TIMEOUT_SECONDS = 3.0
 
 # When doing exponential back off waiting for client application to perform a command, how
 # long to sleep the first time
@@ -258,7 +258,7 @@ def read_json_with_timeout(path: str) -> Any:
     Returns:
         Any: The json-decoded contents of the file
     """
-    timeout_time = time.perf_counter() + VSCODE_COMMAND_TIMEOUT_SECONDS
+    timeout_time = time.perf_counter() + RPC_COMMAND_TIMEOUT_SECONDS
     sleep_time = MINIMUM_SLEEP_TIME_SECONDS
     while True:
         try:
