@@ -341,7 +341,7 @@ class Actions:
         )
 
     def command_server_directory() -> str:
-        """Return the final directory of the command server"""
+        """Return the directory of the command server"""
 
     def trigger_command_server_command_execution():
         """Issue keystroke to trigger command server to execute command that
