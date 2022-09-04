@@ -13,7 +13,7 @@ from talon import Context, Module, actions, speech_system
 # to remove it
 STALE_TIMEOUT_MS = 60_000
 
-# The amount of time to wait for client application to perform a command, in seconds
+# The amount of time to wait for application to perform a command, in seconds
 RPC_COMMAND_TIMEOUT_SECONDS = 3.0
 
 # When doing exponential back off waiting for client application to perform a command, how
