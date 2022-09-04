@@ -292,7 +292,7 @@ class Actions:
         arg4: Any = NotSet,
         arg5: Any = NotSet,
     ):
-        """Execute command via application command server."""
+        """Execute command via RPC."""
         run_command(
             command_id,
             arg1,
