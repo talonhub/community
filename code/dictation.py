@@ -380,13 +380,14 @@ class Actions:
             # peek right if we might need trailing space. NB. We peek right
             # BEFORE insertion to avoid breaking the undo-chain between the
             # inserted text and the trailing space.
-            need_left = (not omit_space_before(text)
-                         or text != auto_capitalize(text, "sentence start")[0])
+            need_left = (
+                not omit_space_before(text)
+                or text != auto_capitalize(text, "sentence start")[0]
+            )
             need_right = not omit_space_after(text)
             before, after = actions.user.dictation_peek(need_left, need_right)
             dictation_formatter.update_context(before)
-            add_space_after = (after is not None
-                               and needs_space_between(text, after))
+            add_space_after = after is not None and needs_space_between(text, after)
         text = dictation_formatter.format(text, auto_cap)
         # Straighten curly quotes that were introduced to obtain proper
         # spacing. The formatter context still has the original curly quotes
@@ -410,7 +411,8 @@ class Actions:
         dictation_peek() is intended for use before inserting text, so it may
         delete any currently selected text.
         """
-        if not (left or right): return None, None
+        if not (left or right):
+            return None, None
         before, after = None, None
         # Inserting a space ensures we select something even if we're at
         # document start; some editors 'helpfully' copy the current line if we
@@ -429,9 +431,10 @@ class Actions:
             # Unfortunately, in web Slack, if our selection ends at newline,
             # this will go right over the newline. Argh.
             actions.edit.right()
-        if not right: actions.key("backspace") # remove the space
+        if not right:
+            actions.key("backspace")  # remove the space
         else:
-            actions.edit.left() # go left before space
+            actions.edit.left()  # go left before space
             # We want to select at least two characters to the right, plus the space
             # we inserted, because no_space_before needs two characters in the worst
             # case -- for example, inserting before "' hello" we don't want to add
