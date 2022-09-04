@@ -33,7 +33,6 @@ class VsCodeAction:
         return "vscode-command-server"
 
 
-
 @mod.action_class
 class Actions:
     def vscode(command_id: str):
@@ -48,8 +47,8 @@ class Actions:
         finish."""
         command_server_or_client_fallback(command_id, True)
 
-# These commands are shims, to provide backwards compatibility, they may be removed in the fuuture.
-# Prefer the run_command... version in command_client.
+    # These commands are shims, to provide backwards compatibility, they may be removed in the fuuture.
+    # Prefer the run_command... version in command_client.
     def vscode_with_plugin(
         command_id: str,
         arg1: Any = NotSet,
