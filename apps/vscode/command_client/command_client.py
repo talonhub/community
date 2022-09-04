@@ -348,8 +348,17 @@ class Actions:
         was written to the file.  For internal use only"""
         actions.key("ctrl-shift-f17")
 
+    def emit_pre_phrase_signal() -> bool:
+        """
+        If in an application supporting the command client, returns True
+        and touches a file to indicate that a phrase is beginning execution.
+        Otherwise does nothing and returns False.
+        """
+        return False
+
     def did_emit_pre_phrase_signal() -> bool:
         """Indicates whether the pre-phrase signal was emitted at the start of this phrase"""
+        # TODO: is this action actually used anywhere? it appears not to be.
         return did_emit_pre_phrase_signal
 
 
@@ -367,9 +376,8 @@ class LinuxUserActions:
 
 @ctx.action_class("user")
 class UserActions:
-    def emit_pre_phrase_signal() -> bool:
+    def emit_pre_phrase_signal():
         get_signal_path("prePhrase").touch()
-
         return True
 
 
