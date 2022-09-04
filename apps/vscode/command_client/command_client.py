@@ -31,7 +31,7 @@ mac_ctx = Context()
 linux_ctx = Context()
 
 ctx.matches = r"""
-tag: command_client
+tag: user.command_client
 """
 mac_ctx.matches = r"""
 os: mac
