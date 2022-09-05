@@ -1,14 +1,14 @@
-from typing import Any, Callable, Iterator, List, Tuple, TypeVar, Dict
+from itertools import chain
+from typing import Any, Callable, Dict, Iterator, List, Tuple, TypeVar
 
 from talon import Context, Module, actions, settings
-
-from itertools import chain
 
 mod = Module()
 # rust specific grammar
 mod.list("code_type_modifier", desc="List of type modifiers for active language")
 mod.list("code_macros", desc="List of macros for active language")
 mod.list("code_trait", desc="List of traits for active language")
+
 
 @mod.action_class
 class Actions:
@@ -223,7 +223,7 @@ ctx.lists["user.code_common_function"] = {
 # tag: functions
 ctx.lists["user.code_type"] = all_types
 
-# rust specific grammar 
+# rust specific grammar
 ctx.lists["user.code_type_modifier"] = {
     "mutable": "mut ",
     "mute": "mut ",
@@ -251,9 +251,10 @@ generic_argument_counts: Dict[str, int] = {
     "SyncSender": 1,
 }
 
+
 @mod.capture(rule="[{user.code_type_modifier}] {user.code_type}")
 def generic_type(m) -> Tuple[str, int, str]:
-    '''returns (start, arg count, end), negative arg count for n-ary things'''
+    """returns (start, arg count, end), negative arg count for n-ary things"""
     m: List[str] = list(m)
     if m[-1] == TUPLE:
         result = ("(", -1, ")")
@@ -262,7 +263,6 @@ def generic_type(m) -> Tuple[str, int, str]:
     else:
         result = ("".join(m), 0, "")
     return result
-
 
 
 @ctx.capture("user.code_type", rule="<user.generic_type>+")
@@ -290,7 +290,7 @@ def code_type(m) -> str:
     result: List[str] = []
 
     def parse(tokens: Iterator[Tuple[str, int, str]]) -> Iterator[str]:
-        '''Consume some number of tokens, yielding a sequence of strs That can be joined with '' to give a single type.'''
+        """Consume some number of tokens, yielding a sequence of strs That can be joined with '' to give a single type."""
         try:
             start, expected_args, end = next(tokens)
         except StopIteration:
@@ -352,22 +352,37 @@ def code_type(m) -> str:
 def code_type_(*args):
     return code_type([generic_type(arg) for arg in args])
 
+
 assert code_type_(["Vec"]) == "Vec<>"
 assert code_type_(["Vec"], ["i32"]) == "Vec<i32>"
-assert code_type_(["HashMap"], ["&mut ", "i32"], ["String"]) == "HashMap<&mut i32, String>"
+assert (
+    code_type_(["HashMap"], ["&mut ", "i32"], ["String"]) == "HashMap<&mut i32, String>"
+)
 assert code_type_(["HashMap"], ["&mut ", "i32"]) == "HashMap<&mut i32, >"
-assert code_type_(["&mut ", "HashMap"], ["i32"], ["String"]) == "&mut HashMap<i32, String>"
-assert code_type_(["HashMap"], ["Vec"], ["i32"], ["HashMap"], ["String"], ["()"]) == "HashMap<Vec<i32>, HashMap<String, ()>>"
-assert code_type_(["HashMap"], [TUPLE], ["bool"], ["bool"], [FINISH], ["String"]) == "HashMap<(bool, bool), String>"
+assert (
+    code_type_(["&mut ", "HashMap"], ["i32"], ["String"]) == "&mut HashMap<i32, String>"
+)
+assert (
+    code_type_(["HashMap"], ["Vec"], ["i32"], ["HashMap"], ["String"], ["()"])
+    == "HashMap<Vec<i32>, HashMap<String, ()>>"
+)
+assert (
+    code_type_(["HashMap"], [TUPLE], ["bool"], ["bool"], [FINISH], ["String"])
+    == "HashMap<(bool, bool), String>"
+)
 assert code_type_([TUPLE], ["i32"], ["i32"], ["i32"]) == "(i32, i32, i32)"
 assert code_type_([TUPLE], ["i32"]) == "(i32, )"
-assert code_type_([TUPLE], [TUPLE], ["i32"], ["i32"], [FINISH], ["String"]) == "((i32, i32), String)"
+assert (
+    code_type_([TUPLE], [TUPLE], ["i32"], ["i32"], [FINISH], ["String"])
+    == "((i32, i32), String)"
+)
 assert code_type_([TUPLE], [FINISH]) == "()"
 
 
 ctx.lists["user.code_macros"] = all_macros
 
 ctx.lists["user.code_trait"] = all_traits
+
 
 @ctx.action_class("user")
 class UserActions:
