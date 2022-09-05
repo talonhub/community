@@ -282,13 +282,6 @@ def code_type(m) -> str:
     'hash map tuple boolean boolean finish string' -> 'HashMap<(boolean, boolean), String)'
     """
 
-    # parse with a pushdown automaton
-    expected_args: List[int] = []
-    args_so_far: List[int] = []
-    ends: List[str] = []
-    # accumulate into
-    result: List[str] = []
-
     def parse(tokens: Iterator[Tuple[str, int, str]]) -> Iterator[str]:
         """Consume some number of tokens, yielding a sequence of strs That can be joined with '' to give a single type."""
         try:
