@@ -299,14 +299,13 @@ def code_type(m) -> str:
             yield start
 
         elif expected_args > 0:
-            # we expect some concrete number of arguments
+            # a generic type with a concrete number of arguments
             yield start
             for i in range(expected_args):
-                # each yield from corresponds to a single type
-                try:
-                    yield from parse(tokens)
-                except StopIteration:
-                    return
+                # each `yield from` corresponds to a single type.
+                # if we run out of tokens, this won't throw an exception, it'll just do nothing--
+                # which is fine, we still want to insert commas and brangles
+                yield from parse(tokens)
 
                 if i < expected_args - 1:
                     yield ", "
