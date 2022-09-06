@@ -16,7 +16,7 @@ STALE_TIMEOUT_MS = 60_000
 # The amount of time to wait for application to perform a command, in seconds
 RPC_COMMAND_TIMEOUT_SECONDS = 3.0
 
-# When doing exponential back off waiting for client application to perform a command, how
+# When doing exponential back off waiting for application to perform a command, how
 # long to sleep the first time
 MINIMUM_SLEEP_TIME_SECONDS = 0.0005
 
@@ -175,9 +175,9 @@ def run_command(
         print("WARNING: Found old response file")
         robust_unlink(response_path)
 
-    # Then, perform keystroke telling client application to execute the command in the
-    # request file.  Because only the active client application instance will accept
-    # keypresses, we can be sure that the active client application instance will be the
+    # Then, perform keystroke telling application to execute the command in the
+    # request file.  Because only the active application instance will accept
+    # keypresses, we can be sure that the active application instance will be the
     # one to execute the command.
     actions.user.trigger_command_server_command_execution()
 
@@ -358,7 +358,7 @@ class Actions:
 
     def did_emit_pre_phrase_signal() -> bool:
         """Indicates whether the pre-phrase signal was emitted at the start of this phrase"""
-        # TODO: is this action actually used anywhere? it appears not to be.
+        # NB: This action is used by cursorless; please don't delete it :)
         return did_emit_pre_phrase_signal
 
 
@@ -409,6 +409,7 @@ def get_signal_path(name: str) -> Path:
 def pre_phrase(_: Any):
     try:
         global did_emit_pre_phrase_signal
+
         did_emit_pre_phrase_signal = actions.user.emit_pre_phrase_signal()
     except MissingCommunicationDir:
         pass

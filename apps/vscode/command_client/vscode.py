@@ -15,7 +15,7 @@ mod = Module()
 
 
 def command_server_or_client_fallback(command_id: str, wait: bool):
-    """Execute command via command server and us command pallete if directory not present."""
+    """Execute command via command server, falling back to command palette if directory not present."""
     try:
         run_command(command_id, wait_for_finish=wait)
     except NoFileServerException:
@@ -23,7 +23,7 @@ def command_server_or_client_fallback(command_id: str, wait: bool):
         actions.user.paste(command_id)
         actions.key("enter")
         print(
-            "Command issues via command palette for better performance install the VSCode extension for Talon"
+            "Command server directory not found; falling back to command palette.  For better performance, install the VSCode extension for Talon: https://marketplace.visualstudio.com/items?itemName=pokey.talon"
         )
 
 
@@ -58,7 +58,7 @@ class Actions:
         arg5: Any = NotSet,
     ):
         """Execute command via vscode command server."""
-        actions.user.run_command(
+        actions.user.run_rpc_command(
             command_id,
             arg1,
             arg2,
