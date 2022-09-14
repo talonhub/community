@@ -23,12 +23,11 @@ rule <user.text>:
     name = user.formatted_text(text, "DASH_SEPARATED")
     insert("{name}: ")
 
-value <user.number_string> [{user.css_unit}]:
-    "{number_string}{css_unit or ''}"
+value <user.number_string> [{user.css_unit}]: "{number_string}{css_unit or ''}"
 value <user.number_string> point <digit_string> [{user.css_unit}]:
     "{number_string}.{digit_string}{css_unit or ''}"
 
-(value|state) {user.css_global_value}: "{css_global_value}"
+(value | state) {user.css_global_value}: "{css_global_value}"
 value <user.text>: user.insert_formatted(text, "DASH_SEPARATED")
 
 variable <user.text>:
