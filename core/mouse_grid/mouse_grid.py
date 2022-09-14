@@ -15,6 +15,12 @@ narrow_expansion = mod.setting(
     default=0,
     desc="""After narrowing, grow the new region by this many pixels in every direction, to make things immediately on edges easier to hit, and when the grid is at its smallest, it allows you to still nudge it around""",
 )
+grids_put_one_bottom_left = mod.setting(
+    "grids_put_one_bottom_left",
+    type=bool,
+    default=False,
+    desc="""Allows you to switch mouse grid and friends between a computer numpad and a phone numpad (the number one goes on the bottom left or the top left)""",
+)
 
 mod.tag("mouse_grid_showing", desc="Tag indicates whether the mouse grid is showing")
 mod.tag(
