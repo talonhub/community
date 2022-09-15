@@ -5,6 +5,16 @@ os: mac
 app: chrome
 """
 
+@ctx.action_class('user')
+class Actions:
+    def go_back():
+        actions.key('cmd-[')
+@ctx.action_class("main")
+class main_action:
+    #  ideally I would like auto insert to be active only in the text fields
+    def auto_insert(text):
+        print(f"text =  {text}")
+        actions.user.dictation_insert(text)
 @ctx.action_class('browser')
 class BrowserActions:
     #action(browser.address):
@@ -25,9 +35,9 @@ class BrowserActions:
     def go_blank():
         actions.key('cmd-n')
     def go_back():
-        actions.key('cmd-left')
+        actions.key('cmd-[')
     def go_forward():
-        actions.key('cmd-right')
+        actions.key('cmd-]')
     def go_home():
         actions.key('cmd-shift-h')
     def open_private_window():
