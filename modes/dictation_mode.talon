@@ -15,54 +15,53 @@ cap: user.dictation_format_cap()
 ^(no space | no-space) that$: user.dictation_reformat_no_space()
 
 # Navigation
-go up <number_small> (line|lines):
+go up <number_small> (line | lines):
     edit.up()
     repeat(number_small - 1)
-go down <number_small> (line|lines):
+go down <number_small> (line | lines):
     edit.down()
     repeat(number_small - 1)
-go left <number_small> (word|words):
+go left <number_small> (word | words):
     edit.word_left()
     repeat(number_small - 1)
-go right <number_small> (word|words):
+go right <number_small> (word | words):
     edit.word_right()
     repeat(number_small - 1)
 go line start: edit.line_start()
 go line end: edit.line_end()
 
 # Selection
-select left <number_small> (word|words):
+select left <number_small> (word | words):
     edit.extend_word_left()
     repeat(number_small - 1)
-select right <number_small> (word|words):
+select right <number_small> (word | words):
     edit.extend_word_right()
     repeat(number_small - 1)
-select left <number_small> (character|characters):
+select left <number_small> (character | characters):
     edit.extend_left()
     repeat(number_small - 1)
-select right <number_small> (character|characters):
+select right <number_small> (character | characters):
     edit.extend_right()
     repeat(number_small - 1)
-clear left <number_small> (word|words):
+clear left <number_small> (word | words):
     edit.extend_word_left()
     repeat(number_small - 1)
     edit.delete()
-clear right <number_small> (word|words):
+clear right <number_small> (word | words):
     edit.extend_word_right()
     repeat(number_small - 1)
     edit.delete()
-clear left <number_small> (character|characters):
+clear left <number_small> (character | characters):
     edit.extend_left()
     repeat(number_small - 1)
     edit.delete()
-clear right <number_small> (character|characters):
+clear right <number_small> (character | characters):
     edit.extend_right()
     repeat(number_small - 1)
     edit.delete()
 
 # Formatting
-formatted <user.format_text>:
-    user.dictation_insert_raw(format_text)
+formatted <user.format_text>: user.dictation_insert_raw(format_text)
 ^format selection <user.formatters>$:
     user.formatters_reformat_selection(formatters)
 
@@ -76,5 +75,4 @@ spell that <user.formatters> <user.letters>:
     user.dictation_insert_raw(result)
 
 # Escape, type things that would otherwise be commands
-^escape <user.text>$:
-    auto_insert(user.text)
+^escape <user.text>$: auto_insert(user.text)

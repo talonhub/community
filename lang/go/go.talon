@@ -50,11 +50,11 @@ state (chan | channel): " chan "
 state go: "go "
 state if: "if "
 if <user.text> [over]:
-  insert("if ")
-  insert(user.formatted_text(text, "PRIVATE_CAMEL_CASE"))
+    insert("if ")
+    insert(user.formatted_text(text, "PRIVATE_CAMEL_CASE"))
 spawn <user.text> [over]:
-  insert("go ")
-  insert(user.formatted_text(text, "PRIVATE_CAMEL_CASE"))
+    insert("go ")
+    insert(user.formatted_text(text, "PRIVATE_CAMEL_CASE"))
 state else if: " else if "
 else if <user.text> [over]:
     insert(" else if ")
@@ -111,8 +111,8 @@ type <user.text> [over]:
 state true: " true "
 state false: " false "
 state (start | struct | struck):
-  insert(" struct {")
-  key("enter")
+    insert(" struct {")
+    key("enter")
 (struct | struck) <user.text> [over]:
     insert(" struct {")
     key("enter")
@@ -120,8 +120,8 @@ state (start | struct | struck):
 
 [state] empty interface: " interface{} "
 state interface:
-  insert(" interface {")
-  key("enter")
+    insert(" interface {")
+    key("enter")
 interface <user.text> [over]:
     insert(" interface {")
     key("enter")
@@ -133,8 +133,7 @@ state slice: " []"
 slice of: "[]"
 [state] (no | nil): "nil"
 state (int | integer | ant) sixty four: " int64 "
-state tag:
-  user.insert_between(" `", "`")
+state tag: user.insert_between(" `", "`")
 field tag <user.text> [over]:
     user.insert_between(" `", "`")
     sleep(100ms)
@@ -143,7 +142,7 @@ field tag <user.text> [over]:
     sleep(100ms)
 
 state return: " return "
-return  <user.text> [over]:
+return <user.text> [over]:
     insert("return ")
     insert(user.formatted_text(text, "PRIVATE_CAMEL_CASE"))
 
@@ -175,8 +174,8 @@ loop over [<user.text>] [over]:
     insert(user.formatted_text(text, "PRIVATE_CAMEL_CASE"))
 
 item <user.text> [over]:
-  insert(", ")
-  insert(user.formatted_text(text, "PRIVATE_CAMEL_CASE"))
+    insert(", ")
+    insert(user.formatted_text(text, "PRIVATE_CAMEL_CASE"))
 
 value <user.text> [over]:
     insert(": ")
