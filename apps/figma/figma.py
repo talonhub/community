@@ -20,8 +20,6 @@ class figma_actions:
         """Remove group"""
     def figma_frame_that():
         """Frame selection"""
-
-
     def figma_set_left():
         """Align Left"""
     def figma_set_right():
