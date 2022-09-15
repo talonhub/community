@@ -1,7 +1,6 @@
 go <user.arrow_keys>: key(arrow_keys)
-# I don't want to have the possibility to enter a single letter not ending with $, because it leads to to many misrecognitions
-# <user.letter>: key(letter)
-<user.letters>$: insert(letters) 
+<user.letter>: key(letter)
+# ^<user.letters>: insert(letters) 
 <user.letters> <user.special_key>$: 
     insert(letters) 
     key(special_key)  

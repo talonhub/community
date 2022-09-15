@@ -2,9 +2,7 @@
 phrase <user.text>$: user.insert_formatted(text, "NOOP")
 phrase <user.text> over: user.insert_formatted(text, "NOOP")
 
-say <user.prose>$:
-    auto_insert(user.prose)
-
+say <user.prose>$: auto_insert(user.prose)
 {user.prose_formatter} <user.prose>$: user.insert_formatted(prose, prose_formatter)
 {user.prose_formatter} <user.prose> over: user.insert_formatted(prose, prose_formatter)
 <user.format_text>+$: user.insert_many(format_text_list)
