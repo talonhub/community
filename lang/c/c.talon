@@ -27,20 +27,15 @@ settings():
     #    user.use_stdint_datatypes = 1
 
 # NOTE: migrated from generic, as they were only used here, though once cpp support is added, perhaps these should be migrated to a tag together with the commands below
-state include:
-    insert('#include ')
-state include system:
-    user.insert_between("#include <", ">")
-state include local:
-    user.insert_between('#include "', '"')
-state type deaf:
-    insert('typedef ')
+state include: insert("#include ")
+state include system: user.insert_between("#include <", ">")
+state include local: user.insert_between('#include "', '"')
+state type deaf: insert("typedef ")
 state type deaf struct:
-    insert('typedef struct')
-    insert('{\n\n}')
+    insert("typedef struct")
+    insert("{\n\n}")
     edit.up()
     key('tab')
-
 
 # XXX - create a preprocessor tag for these, as they will match cpp, etc
 state define: "#define "
@@ -75,8 +70,7 @@ push brackets:
     insert("{c_variable} ")
     insert(user.formatted_text(phrase, "PRIVATE_CAMEL_CASE,NO_SPACES"))
 
-<user.c_variable> <user.letter>:
-    insert("{c_variable} {letter} ")
+<user.c_variable> <user.letter>: insert("{c_variable} {letter} ")
 
 # Ex. (int *)
 cast to <user.c_cast>: "{c_cast}"
@@ -86,8 +80,7 @@ standard cast to <user.stdint_cast>: "{stdint_cast}"
 <user.c_keywords>: "{c_keywords}"
 <user.c_signed>: "{c_signed}"
 standard <user.stdint_types>: "{stdint_types}"
-int main:
-    user.insert_between("int main(", ")")
+int main: user.insert_between("int main(", ")")
 
 toggle includes: user.code_toggle_libraries()
 include <user.code_libraries>:
