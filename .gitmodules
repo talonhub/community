@@ -1,0 +1,3 @@
+[submodule "maciek/rango"]
+	path = maciek/rango
+	url = git@github.com:maciejklimek/rango.git
