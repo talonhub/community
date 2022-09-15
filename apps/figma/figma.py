@@ -13,15 +13,12 @@ class figma_actions:
         """Detach instance"""
     def figma_insert_component():
         """Insert figma component"""
-
     def figma_group():
         """Group selection"""
     def figma_group_out():
         """Remove group"""
     def figma_frame_that():
         """Frame selection"""
-
-
     def figma_set_left():
         """Align Left"""
     def figma_set_right():
