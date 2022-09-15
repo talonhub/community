@@ -12,7 +12,7 @@ class figma_actions:
     def figma_detach():
         """Detach instance"""
     def figma_insert_component():
-        """Insert component"""
+        """Insert component and find"""
 
     def figma_group():
         """Group selection"""
