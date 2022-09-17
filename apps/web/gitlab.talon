@@ -1,6 +1,5 @@
 # Shortcuts taken from: https://docs.gitlab.com/ee/user/shortcuts.html
 #
-
 tag: browser
 browser.host: /gitlab\.com/
 #win.title: /GitLab/
@@ -17,7 +16,7 @@ search page: key(s)
 go to issues [page]: key(shift-i)
 go to merge requests [page]: key(shift-m)
 go to to do [list] [page]: key(shift-t)
-(show|hide) performance bar: key(p)
+(show | hide) performance bar: key(p)
 
 edit last comment: key(1)
 toggle mark down [preview]: key(ctrl-shift-p)
@@ -28,9 +27,9 @@ go [to] project activity [feed]: insert("gv")
 go [to] project releases [list]: insert("gr")
 go [to] project files [list]: insert("gf")
 go [to] project file search [page]: key(t)
-go [to] project (commit|commits) [list]: insert("gc")
-go [to] (repository|repo) graph [page]: insert("gn")
-go [to] (repository|repo) charts: insert("gd")
+go [to] project (commit | commits) [list]: insert("gc")
+go [to] (repository | repo) graph [page]: insert("gn")
+go [to] (repository | repo) charts: insert("gd")
 go [to] project issues [list]: insert("gi")
 go [to] new issues [list]: insert("i")
 go [to] project issues boards [list]: insert("gb")
