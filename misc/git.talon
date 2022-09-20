@@ -2,15 +2,15 @@ tag: terminal
 and tag: user.git
 -
 git {user.git_command} [<user.git_arguments>]:
-    args = git_arguments or ''
+    args = git_arguments or ""
     "git {git_command}{args} "
 git commit [<user.git_arguments>] message [<user.prose>]:
-    args = git_arguments or ''
-    message = prose or ''
+    args = git_arguments or ""
+    message = prose or ""
     user.insert_between("git commit{args} --message '{message}", "'")
 git stash [push] [<user.git_arguments>] message [<user.prose>]:
-    args = git_arguments or ''
-    message = prose or ''
+    args = git_arguments or ""
+    message = prose or ""
     user.insert_between("git stash push{args} --message '{message}", "'")
 
 # Optimistic execution for frequently used commands that are harmless (don't
