@@ -1,7 +1,7 @@
 import webbrowser
 from urllib.parse import quote_plus
 
-from talon import Context, Module
+from talon import Context, Module, app
 
 from .user_settings import get_list_from_csv
 
@@ -40,16 +40,22 @@ _search_engine_defaults = {
 }
 
 ctx = Context()
-ctx.lists["self.website"] = get_list_from_csv(
-    "websites.csv",
-    headers=("URL", "Spoken name"),
-    default=website_defaults,
-)
-ctx.lists["self.search_engine"] = get_list_from_csv(
-    "search_engines.csv",
-    headers=("URL Template", "Name"),
-    default=_search_engine_defaults,
-)
+
+
+def load_websites_and_search_engines():
+    ctx.lists["self.website"] = get_list_from_csv(
+        "websites.csv",
+        headers=("URL", "Spoken name"),
+        default=website_defaults,
+    )
+    ctx.lists["self.search_engine"] = get_list_from_csv(
+        "search_engines.csv",
+        headers=("URL Template", "Name"),
+        default=_search_engine_defaults,
+    )
+
+
+app.register("ready", load_websites_and_search_engines)
 
 
 @mod.action_class

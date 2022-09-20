@@ -1,4 +1,4 @@
-from talon import Context, Module
+from talon import Context, Module, app
 
 from .user_settings import get_list_from_csv
 
@@ -34,11 +34,24 @@ _file_extensions_defaults = {
     "dot text": ".txt",
 }
 
-file_extensions = get_list_from_csv(
-    "file_extensions.csv",
-    headers=("File extension", "Name"),
-    default=_file_extensions_defaults,
-)
-
 ctx = Context()
-ctx.lists["self.file_extension"] = file_extensions
+
+file_extensions: dict[str, str] = {}
+
+
+def on_ready():
+    global file_extensions
+    assert (
+        not file_extensions
+    ), "global dict 'file_extension' should be empty on 'ready'"
+    file_extensions.update(
+        get_list_from_csv(
+            "file_extensions.csv",
+            headers=("File extension", "Name"),
+            default=_file_extensions_defaults,
+        )
+    )
+    ctx.lists["self.file_extension"] = file_extensions
+
+
+app.register("ready", on_ready)

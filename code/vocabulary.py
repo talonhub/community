@@ -2,7 +2,7 @@ import logging
 import re
 from typing import Sequence, Union
 
-from talon import Context, Module, actions
+from talon import Context, Module, actions, app
 from talon.grammar import Phrase
 
 from .user_settings import append_to_csv, get_list_from_csv
@@ -45,20 +45,33 @@ _word_map_defaults = {
 _word_map_defaults.update({word.lower(): word for word in _capitalize_defaults})
 
 
-# phrases_to_replace is a spoken form -> written form map, used by our
-# implementation of `dictate.replace_words` (at bottom of file) to rewrite words
-# and phrases Talon recognized. This does not change the priority with which
-# Talon recognizes particular phrases over others.
-phrases_to_replace = get_list_from_csv(
-    "words_to_replace.csv",
-    headers=("Replacement", "Original"),
-    default=_word_map_defaults,
-)
+phrases_to_replace: dict[str, str] = {}
 
-# "dictate.word_map" is used by Talon's built-in default implementation of
-# `dictate.replace_words`, but supports only single-word replacements.
-# Multi-word phrases are ignored.
-ctx.settings["dictate.word_map"] = phrases_to_replace
+
+def load_words_to_replace():
+    global phrases_to_replace
+    # phrases_to_replace is a spoken form -> written form map, used by our
+    # implementation of `dictate.replace_words` (at bottom of file) to rewrite words
+    # and phrases Talon recognized. This does not change the priority with which
+    # Talon recognizes particular phrases over others.
+    assert (
+        not phrases_to_replace
+    ), "global dict 'phrases_to_replace' should be empty on 'ready'"
+    phrases_to_replace.update(
+        get_list_from_csv(
+            "words_to_replace.csv",
+            headers=("Replacement", "Original"),
+            default=_word_map_defaults,
+        )
+    )
+
+    # "dictate.word_map" is used by Talon's built-in default implementation of
+    # `dictate.replace_words`, but supports only single-word replacements.
+    # Multi-word phrases are ignored.
+    ctx.settings["dictate.word_map"] = phrases_to_replace
+
+
+app.register("ready", load_words_to_replace)
 
 
 # Default words that should be added to Talon's vocabulary.
@@ -73,15 +86,27 @@ _default_vocabulary = {
 }
 _default_vocabulary.update({word: word for word in _simple_vocab_default})
 
-# "user.vocabulary" is used to explicitly add words/phrases that Talon doesn't
-# recognize. Words in user.vocabulary (or other lists and captures) are
-# "command-like" and their recognition is prioritized over ordinary words.
-vocabulary = get_list_from_csv(
-    "additional_words.csv",
-    headers=("Word(s)", "Spoken Form (If Different)"),
-    default=_default_vocabulary,
-)
-ctx.lists["user.vocabulary"] = vocabulary
+
+vocabulary: dict[str, str] = {}
+
+
+def load_additional_words():
+    global vocabulary
+    # "user.vocabulary" is used to explicitly add words/phrases that Talon doesn't
+    # recognize. Words in user.vocabulary (or other lists and captures) are
+    # "command-like" and their recognition is prioritized over ordinary words.
+    assert not vocabulary, "global dict 'vocabulary' should be empty on 'ready'"
+    vocabulary.update(
+        get_list_from_csv(
+            "additional_words.csv",
+            headers=("Word(s)", "Spoken Form (If Different)"),
+            default=_default_vocabulary,
+        )
+    )
+    ctx.lists["user.vocabulary"] = vocabulary
+
+
+app.register("ready", load_additional_words)
 
 
 class PhraseReplacer:
