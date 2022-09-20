@@ -2,22 +2,41 @@ import csv
 import os
 from pathlib import Path
 
-from talon import resource
+from talon import Module, actions, resource
 
-# NOTE: This method requires this module to be one folder below the top-level
-#   knausj folder.
-SETTINGS_DIR = Path(__file__).parents[1] / "settings"
+mod = Module()
 
-if not SETTINGS_DIR.is_dir():
-    os.mkdir(SETTINGS_DIR)
+DEFAULT_SETTINGS_DIR = Path(__file__).parents[1] / "settings"
+
+# NOTE: Adapted from <https://github.com/cursorless-dev/cursorless/blob/f0db4113dc055aefa4e0f8ccae4f6c6e1349f3da/cursorless-talon/src/csv_overrides.py#L16-L21>
+community_settings_directory = mod.setting(
+    "community_settings_directory",
+    type=str,
+    default=str(DEFAULT_SETTINGS_DIR),
+    desc="The directory to use for settings csvs relative to talon user directory",
+)
+
+# NOTE: Adapted from <https://github.com/cursorless-dev/cursorless/blob/f0db4113dc055aefa4e0f8ccae4f6c6e1349f3da/cursorless-talon/src/csv_overrides.py#L319-L329>
+def get_full_path(filename: str):
+    if not filename.endswith(".csv"):
+        filename = f"{filename}.csv"
+
+    settings_directory = Path(community_settings_directory.get())
+    if not settings_directory.exists():
+        settings_directory.mkdir(parents=True)
+
+    if not settings_directory.is_absolute():
+        user_dir: Path = actions.path.talon_user()
+        settings_directory = user_dir / settings_directory
+
+    return (settings_directory / filename).resolve()
 
 
 def get_list_from_csv(
     filename: str, headers: tuple[str, str], default: dict[str, str] = {}
 ):
     """Retrieves list from CSV"""
-    path = SETTINGS_DIR / filename
-    assert filename.endswith(".csv")
+    path = get_full_path(filename)
 
     if not path.is_file():
         with open(path, "w", encoding="utf-8", newline="") as file:
@@ -61,8 +80,7 @@ def get_list_from_csv(
 
 
 def append_to_csv(filename: str, rows: dict[str, str]):
-    path = SETTINGS_DIR / filename
-    assert filename.endswith(".csv")
+    path = get_full_path(filename)
 
     with open(str(path)) as file:
         line = None
