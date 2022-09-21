@@ -20,3 +20,7 @@ suspend: key(ctrl-z)
 resume:
     insert("fg")
     key(enter)
+
+# avoid moving focus to next window. SPD 2022-09-21
+slap:
+    key(enter)
