@@ -17,6 +17,7 @@ git stash [push] [<user.git_arguments>] message [<user.prose>]:
 # change repository or index state).
 git status$: "git status\n"
 git add patch$: "git add --patch\n"
+git show head$: "git show HEAD\n"
 
 # Convenience
 git clone clipboard:
