@@ -10,11 +10,8 @@ mark onion <number>:
 open onion <number>:
   user.open_url("https://solvhealth.atlassian.net/browse/ONION-{number}")
 
-open repo {user.solv_repositories}:
-  user.open_url("https://github.com/solvhealth/{user.solv_repositories}")
+open repo {user.solv_repository}:
+  user.open_url("https://github.com/solvhealth/{user.solv_repository}")
 
-botler {user.botler_commands} {user.solv_repositories}:
-  insert("@BOTler {user.botler_commands} {user.solv_repositories}")
-
-botler {user.botler_commands} {user.solv_repositories} force:
-  insert("@BOTler {user.botler_commands} {user.solv_repositories} -f")
+botler {user.botler_command} {user.solv_repository}:
+  insert("@BOTler {botler_command} {user.solv_repository}")

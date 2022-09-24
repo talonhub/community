@@ -28,3 +28,7 @@ os: mac
 
 ^cast go <number_small>$:
   key("cmd-{number_small}")
+
+^cast action [<user.text>]$:
+  key(cmd-k)
+  insert(text or "")

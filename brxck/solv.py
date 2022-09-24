@@ -11,14 +11,12 @@ ctx.lists["user.botler_command"] = {
     "livestage": "livestage",
 }
 
-mod.list("solv_repositories", desc="Solv repository names")
-ctx.lists["user.solv_repositories"] = {
+mod.list("solv_repository", desc="Solv repository names")
+ctx.lists["user.solv_repository"] = {
     "dapi tasks": "dapi-tasks",
     "dapi": "dapi",
     "jigsaw": "jigsaw",
-    "manage dev": "manage-dev",
     "manage": "manage-dev",
-    "mapp dev": "mapp-dev",
     "mapp": "mapp-dev",
     "release": "release",
     "schema": "schema",
