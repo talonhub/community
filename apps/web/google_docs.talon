@@ -325,8 +325,8 @@ speak [table] row header:
 open explore tool: key(cmd-alt-shift-i)
 open dictionary: key(cmd-shift-y)
 start voice typing:
-  key(cmd-shift-s)
-  speech.disable()
+    key(cmd-shift-s)
+    speech.disable()
 page up: key(pageup)
 page down: key(pagedown)
 (go | move) [to] next misspelling: key(cmd-\')
