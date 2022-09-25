@@ -134,6 +134,15 @@ class Context:
 
         return __funcwrapper
 
+    def capture(self, name, rule):
+        def __funcwrapper(func):
+            def __inner(*args, **kwargs):
+                return func(*args, **kwargs)
+
+            return __inner
+
+        return __funcwrapper
+
 
 class ImgUI:
     """
@@ -170,6 +179,7 @@ class Settings:
 actions = Actions()
 app = None
 clip = None
+settings = None
 imgui = ImgUI()
 ui = UI()
 settings = Settings()
