@@ -23,39 +23,39 @@ find and replace: key(cmd-shift-h)
 link insert | insert link: key(cmd-k)
 link open | open link: key(alt-enter)
 link next | next link:
-  key(cmd-ctrl-n)
-  key(cmd-ctrl-l)
+    key(cmd-ctrl-n)
+    key(cmd-ctrl-l)
 link (previous | last) | previous link:
-  key(cmd-ctrl-n)
-  key(cmd-ctrl-p)
+    key(cmd-ctrl-n)
+    key(cmd-ctrl-p)
 insert menu | menu insert: key(ctrl-alt-i)
 page break: key(cmd-enter)
 comment (insert | add) | (insert | add) comment: key(cmd-alt-m)
 comment threads (open | view): key(cmd-alt-shift-a)
 comment submit | submit comment: key(ctrl-enter)
 (go | move) [to] (next comment | comment next):
-  key(cmd-ctrl-n)
-  key(cmd-ctrl-c)
+    key(cmd-ctrl-n)
+    key(cmd-ctrl-c)
 (go | move) [to] ((previous | last) comment | comment (previous | last)):
-  key(cmd-ctrl-p)
-  key(cmd-ctrl-c)
+    key(cmd-ctrl-p)
+    key(cmd-ctrl-c)
 (suggesting mode | mode suggesting) | make [a] suggestion: key(cmd-alt-shift-x)
 (go | move) [to] (next suggestion | suggestion next):
-  key(cmd-ctrl-n)
-  key(cmd-ctrl-u)
-(go | move) [to] ((previous | last) suggestion | suggestion (previous | last)): 
-  key(cmd-ctrl-p)
-  key(cmd-ctrl-u)
+    key(cmd-ctrl-n)
+    key(cmd-ctrl-u)
+(go | move) [to] ((previous | last) suggestion | suggestion (previous | last)):
+    key(cmd-ctrl-p)
+    key(cmd-ctrl-u)
 footnote (insert | create | new): key(cmd-alt-f)
 footnote current:
-  key(cmd-ctrl-e)
-  key(cmd-ctrl-f)
+    key(cmd-ctrl-e)
+    key(cmd-ctrl-f)
 footnote next:
-  key(cmd-ctrl-n)
-  key(cmd-ctrl-f)
+    key(cmd-ctrl-n)
+    key(cmd-ctrl-f)
 footnote previous:
-  key(cmd-ctrl-p)
-  key(cmd-ctrl-f)
+    key(cmd-ctrl-p)
+    key(cmd-ctrl-f)
 [show] [common] keyboard shortcuts: key(cmd-/)
 menu hide: key(ctrl-shift-f)
 (menu | help) search | command palette: key(alt-/)
@@ -113,8 +113,8 @@ select line up: key(shift-up)
 [text] focus [to] dock: key(esc)
 [text] focus webpage: key(ctrl-shift-esc)
 [move] focus [to] popup:
-  key(cmd-ctrl-e)
-  key(cmd-ctrl-p)
+    key(cmd-ctrl-e)
+    key(cmd-ctrl-p)
 word count: key(cmd-shift-c)
 extend selection one line down: key(shift-down)
 extend selection to the beginning of the line: key(shift-home)
@@ -124,203 +124,204 @@ extend selection to the end of the line: key(shift-end)
 extend selection to the beginning of the document: key(cmd-shift-up)
 extend selection to the end of the document: key(cmd-shift-down)
 list select current:
-  key(cmd-ctrl-shift-E)
-  key(cmd-ctrl-shift-I)
+    key(cmd-ctrl-shift-E)
+    key(cmd-ctrl-shift-I)
 list select current level:
-  key(cmd-ctrl-shift-E)
-  key(cmd-ctrl-shift-O)
+    key(cmd-ctrl-shift-E)
+    key(cmd-ctrl-shift-O)
 screen reader enable: key(cmd-alt-z)
 speak selection: key(cmd-ctrl-x)
 speak from cursor: key(cmd-ctrl-r)
 cursor location announce:
-  key(cmd-ctrl-a)
-  key(cmd-ctrl-l)
+    key(cmd-ctrl-a)
+    key(cmd-ctrl-l)
 cursor location announce format:
-  key(cmd-ctrl-a)
-  key(cmd-ctrl-f)
+    key(cmd-ctrl-a)
+    key(cmd-ctrl-f)
 speak (table column | row header):
-  key(cmd-ctrl-shift-t)
-  key (cmd-ctrl-shift-h)
+    key(cmd-ctrl-shift-t)
+    key
+    (cmd - ctrl - shift - h)
 speak [table] cell [location]:
-  key(cmd-ctrl-shift-t)
-  key(cmd-ctrl-shift-n)
+    key(cmd-ctrl-shift-t)
+    key(cmd-ctrl-shift-n)
 speak [table] row header:
-  key(cmd-ctrl-shift-t)
-  key(cmd-ctrl-shift-r)
+    key(cmd-ctrl-shift-t)
+    key(cmd-ctrl-shift-r)
 speak [table] column header:
-  key(cmd-ctrl-shift-t)
-  key(cmd-ctrl-shift-c)
+    key(cmd-ctrl-shift-t)
+    key(cmd-ctrl-shift-c)
 (go | move) [to] next heading:
-  key(cmd-ctrl-n)
-  key(cmd-ctrl-h)
+    key(cmd-ctrl-n)
+    key(cmd-ctrl-h)
 (go | move) [to] (previous | last) heading:
-  key(cmd-ctrl-p)
-  key(cmd-ctrl-h)
+    key(cmd-ctrl-p)
+    key(cmd-ctrl-h)
 (go | move) [to] next heading one:
-  key(cmd-ctrl-n)
-  key(cmd-ctrl-1)
+    key(cmd-ctrl-n)
+    key(cmd-ctrl-1)
 (go | move) [to] next heading two:
-  key(cmd-ctrl-n)
-  key(cmd-ctrl-2)
+    key(cmd-ctrl-n)
+    key(cmd-ctrl-2)
 (go | move) [to] next heading three:
-  key(cmd-ctrl-n)
-  key(cmd-ctrl-3)
+    key(cmd-ctrl-n)
+    key(cmd-ctrl-3)
 (go | move) [to] next heading four:
-  key(cmd-ctrl-n)
-  key(cmd-ctrl-4)
+    key(cmd-ctrl-n)
+    key(cmd-ctrl-4)
 (go | move) [to] next heading five:
-  key(cmd-ctrl-n)
-  key(cmd-ctrl-5)
+    key(cmd-ctrl-n)
+    key(cmd-ctrl-5)
 (go | move) [to] next heading six:
-  key(cmd-ctrl-n)
-  key(cmd-ctrl-6)
+    key(cmd-ctrl-n)
+    key(cmd-ctrl-6)
 (go | move) [to] (previous | last) heading one:
-  key(cmd-ctrl-p)
-  key(cmd-ctrl-1)
+    key(cmd-ctrl-p)
+    key(cmd-ctrl-1)
 (go | move) [to] (previous | last) heading two:
-  key(cmd-ctrl-p)
-  key(cmd-ctrl-2)
+    key(cmd-ctrl-p)
+    key(cmd-ctrl-2)
 (go | move) [to] (previous | last) heading three:
-  key(cmd-ctrl-p)
-  key(cmd-ctrl-3)
+    key(cmd-ctrl-p)
+    key(cmd-ctrl-3)
 (go | move) [to] (previous | last) heading four:
-  key(cmd-ctrl-p)
-  key(cmd-ctrl-4)
+    key(cmd-ctrl-p)
+    key(cmd-ctrl-4)
 (go | move) [to] (previous | last) heading five:
-  key(cmd-ctrl-p)
-  key(cmd-ctrl-5)
+    key(cmd-ctrl-p)
+    key(cmd-ctrl-5)
 (go | move) [to] (previous | last) heading six:
-  key(cmd-ctrl-p)
-  key(cmd-ctrl-6)
+    key(cmd-ctrl-p)
+    key(cmd-ctrl-6)
 (go | move) [to] next media:
-  key(cmd-ctrl-n)
-  key(cmd-ctrl-g)
+    key(cmd-ctrl-n)
+    key(cmd-ctrl-g)
 (go | move) [to] (previous | last) media:
-  key(cmd-ctrl-p)
-  key(cmd-ctrl-g)
+    key(cmd-ctrl-p)
+    key(cmd-ctrl-g)
 (go | move) [to] next list:
-  key(cmd-ctrl-n)
-  key(cmd-ctrl-o)
+    key(cmd-ctrl-n)
+    key(cmd-ctrl-o)
 (go | move) [to] (previous | last) list:
-  key(cmd-ctrl-p)
-  key(cmd-ctrl-o)
+    key(cmd-ctrl-p)
+    key(cmd-ctrl-o)
 (go | move) [to] current list [item] next:
-  key(cmd-ctrl-n)
-  key(cmd-ctrl-i)
+    key(cmd-ctrl-n)
+    key(cmd-ctrl-i)
 (go | move) [to] current list [item] (previous | last):
-  key(cmd-ctrl-p)
-  key(cmd-ctrl-i)
+    key(cmd-ctrl-p)
+    key(cmd-ctrl-i)
 (go | move) [to] (bookmark next | next bookmark):
-  key(cmd-ctrl-n)
-  key(cmd-ctrl-b)
+    key(cmd-ctrl-n)
+    key(cmd-ctrl-b)
 (go | move) [to] (bookmark (last | previous) | (last | previous) bookmark):
-  key(cmd-ctrl-p)
-  key(cmd-ctrl-b)
+    key(cmd-ctrl-p)
+    key(cmd-ctrl-b)
 (go | move) [to] (format change next | next format change):
-  key(cmd-ctrl-n)
-  key(cmd-ctrl-w)
+    key(cmd-ctrl-n)
+    key(cmd-ctrl-w)
 (go | move) [to] (format change (last | previous) | (last | previous) format change):
-  key(cmd-ctrl-p)
-  key(cmd-ctrl-w)
+    key(cmd-ctrl-p)
+    key(cmd-ctrl-w)
 (go | move) [to] (edit next | next edit):
-  key(cmd-ctrl-n)
-  key(cmd-ctrl-r)
+    key(cmd-ctrl-n)
+    key(cmd-ctrl-r)
 (go | move) [to] (edit (last | previous) | (last | previous) edit):
-  key(cmd-ctrl-p)
-  key(cmd-ctrl-r)
+    key(cmd-ctrl-p)
+    key(cmd-ctrl-r)
 (go | move) [to] table start:
-  key(cmd-ctrl-t)
-  key(cmd-ctrl-s)
+    key(cmd-ctrl-t)
+    key(cmd-ctrl-s)
 (go | move) [to] table end:
-  key(cmd-ctrl-t)
-  key(cmd-ctrl-d)
+    key(cmd-ctrl-t)
+    key(cmd-ctrl-d)
 (go | move) [to] (table column (start | first) | start [of] table column):
-  key(cmd-ctrl-shift-t)
-  key(cmd-ctrl-shift-i)
+    key(cmd-ctrl-shift-t)
+    key(cmd-ctrl-shift-i)
 (go | move) [to] (table column end | end [of] table column):
-  key(cmd-ctrl-shift-t)
-  key(cmd-ctrl-shift-k)
+    key(cmd-ctrl-shift-t)
+    key(cmd-ctrl-shift-k)
 (go | move) [to] table column next:
-  key(cmd-ctrl-shift-t)
-  key(cmd-ctrl-shift-b)
+    key(cmd-ctrl-shift-t)
+    key(cmd-ctrl-shift-b)
 (go | move) [to] table column (last | previous):
-  key(cmd-ctrl-shift-t)
-  key(cmd-ctrl-shift-v)
+    key(cmd-ctrl-shift-t)
+    key(cmd-ctrl-shift-v)
 (go | move) [to] (table row start | start [of] table row):
-  key(cmd-ctrl-shift-t)
-  key(cmd-ctrl-shift-j)
+    key(cmd-ctrl-shift-t)
+    key(cmd-ctrl-shift-j)
 (go | move) [to] (table row end | end [of] table row):
-  key(cmd-ctrl-shift-t)
-  key(cmd-ctrl-shift-l)
+    key(cmd-ctrl-shift-t)
+    key(cmd-ctrl-shift-l)
 (go | move) [to] table row next:
-  key(cmd-ctrl-shift-t)
-  key(cmd-ctrl-shift-m)
+    key(cmd-ctrl-shift-t)
+    key(cmd-ctrl-shift-m)
 (go | move) [to] table row (last | previous):
-  key(cmd-ctrl-shift-t)
-  key(cmd-ctrl-shift-g)
+    key(cmd-ctrl-shift-t)
+    key(cmd-ctrl-shift-g)
 table (exit | leave) | (exit | leave) table:
-  key(cmd-ctrl-shift-t)
-  key(cmd-ctrl-shift-e)
+    key(cmd-ctrl-shift-t)
+    key(cmd-ctrl-shift-e)
 (go | move) [to] (next table | table next):
-  key(cmd-ctrl-shift-n)
-  key(cmd-ctrl-shift-t)
+    key(cmd-ctrl-shift-n)
+    key(cmd-ctrl-shift-t)
 (go | move) [to] ((previous | last) table | table (previous | last)):
-  key(cmd-ctrl-shift-p)
-  key(cmd-ctrl-shift-t)
+    key(cmd-ctrl-shift-p)
+    key(cmd-ctrl-shift-t)
 speak [table] column and row header:
-  key(cmd-ctrl-shift-t)
-  key(cmd-ctrl-shift-h)
+    key(cmd-ctrl-shift-t)
+    key(cmd-ctrl-shift-h)
 speak [table] cell location:
-  key(cmd-ctrl-shift-t)
-  key(cmd-ctrl-shift-n)
+    key(cmd-ctrl-shift-t)
+    key(cmd-ctrl-shift-n)
 speak [table] row header:
-  key(cmd-ctrl-shift-t)
-  key(cmd-ctrl-shift-r)
+    key(cmd-ctrl-shift-t)
+    key(cmd-ctrl-shift-r)
 (go | move) [to] (next heading | heading next):
-  key(cmd-ctrl-n)
-  key(cmd-ctrl-h)
+    key(cmd-ctrl-n)
+    key(cmd-ctrl-h)
 (go | move) [to] ((previous | last) heading | heading (previous | last)):
-  key(cmd-ctrl-p)
-  key(cmd-ctrl-h)
-(go | move) [to] (next heading one | heading one next): 
-  key(cmd-ctrl-n)
-  key(cmd-ctrl-1)
-(go | move) [to] (next heading two | heading two next): 
-  key(cmd-ctrl-n)
-  key(cmd-ctrl-2)
-(go | move) [to] (next heading three | heading three next): 
-  key(cmd-ctrl-n)
-  key(cmd-ctrl-3)
-(go | move) [to] (next heading four | heading four next): 
-  key(cmd-ctrl-n)
-  key(cmd-ctrl-4)
-(go | move) [to] (next heading five | heading five next): 
-  key(cmd-ctrl-n)
-  key(cmd-ctrl-5)
-(go | move) [to] (next heading six | heading six next): 
-  key(cmd-ctrl-n)
-  key(cmd-ctrl-6)
-(go | move) [to] ((previous | last) heading one | heading one (previous | last)): 
-  key(cmd-ctrl-p)
-  key(cmd-ctrl-1)
-(go | move) [to] ((previous | last) heading two | heading two (previous | last)): 
-  key(cmd-ctrl-p)
-  key(cmd-ctrl-2)
-(go | move) [to] ((previous | last) heading three | heading three (previous | last)): 
-  key(cmd-ctrl-p)
-  key(cmd-ctrl-3)
-(go | move) [to] ((previous | last) heading four | heading four (previous | last)): 
-  key(cmd-ctrl-p)
-  key(cmd-ctrl-4)
-(go | move) [to] ((previous | last) heading five | heading five (previous | last)): 
-  key(cmd-ctrl-p)
-  key(cmd-ctrl-5)
-(go | move) [to] ((previous | last) heading six | heading six (previous | last)): 
-  key(cmd-ctrl-p)
-  key(cmd-ctrl-6)
+    key(cmd-ctrl-p)
+    key(cmd-ctrl-h)
+(go | move) [to] (next heading one | heading one next):
+    key(cmd-ctrl-n)
+    key(cmd-ctrl-1)
+(go | move) [to] (next heading two | heading two next):
+    key(cmd-ctrl-n)
+    key(cmd-ctrl-2)
+(go | move) [to] (next heading three | heading three next):
+    key(cmd-ctrl-n)
+    key(cmd-ctrl-3)
+(go | move) [to] (next heading four | heading four next):
+    key(cmd-ctrl-n)
+    key(cmd-ctrl-4)
+(go | move) [to] (next heading five | heading five next):
+    key(cmd-ctrl-n)
+    key(cmd-ctrl-5)
+(go | move) [to] (next heading six | heading six next):
+    key(cmd-ctrl-n)
+    key(cmd-ctrl-6)
+(go | move) [to] ((previous | last) heading one | heading one (previous | last)):
+    key(cmd-ctrl-p)
+    key(cmd-ctrl-1)
+(go | move) [to] ((previous | last) heading two | heading two (previous | last)):
+    key(cmd-ctrl-p)
+    key(cmd-ctrl-2)
+(go | move) [to] ((previous | last) heading three | heading three (previous | last)):
+    key(cmd-ctrl-p)
+    key(cmd-ctrl-3)
+(go | move) [to] ((previous | last) heading four | heading four (previous | last)):
+    key(cmd-ctrl-p)
+    key(cmd-ctrl-4)
+(go | move) [to] ((previous | last) heading five | heading five (previous | last)):
+    key(cmd-ctrl-p)
+    key(cmd-ctrl-5)
+(go | move) [to] ((previous | last) heading six | heading six (previous | last)):
+    key(cmd-ctrl-p)
+    key(cmd-ctrl-6)
 (go | move) [to] (next media | media next):
-  key(cmd-ctrl-p)
-  key(cmd-ctrl-g)
+    key(cmd-ctrl-p)
+    key(cmd-ctrl-g)
 open explore tool: key(cmd-alt-shift-i)
 open dictionary: key(cmd-shift-y)
 start voice typing: key(cmd-shift-s)
@@ -329,10 +330,10 @@ page down: key(pagedown)
 (go | move) [to] next misspelling: key(cmd-\')
 (go | move) [to] (previous | last) misspelling: key(cmd-;)
 ((go | move) [to] | insert) header:
-  key(cmd-ctrl-o)
-  key(cmd-ctrl-h)
+    key(cmd-ctrl-o)
+    key(cmd-ctrl-h)
 ((go | move) [to] | insert) footer:
-  key(cmd-ctrl-o)
-  key(cmd-ctrl-f)
+    key(cmd-ctrl-o)
+    key(cmd-ctrl-f)
 (editing mode | mode editing): key(cmd-alt-shift-z)
 (viewing mode | mode viewing): key(cmd-alt-shift-c)
