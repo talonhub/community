@@ -6,10 +6,10 @@ from typing import Any, Mapping, Optional
 
 from talon import Module, actions
 
-from .abbreviate import abbreviations
-from .extensions import file_extensions
-from .keys import symbol_key_words
-from .numbers import digits_map, scales, teens, tens
+from .abbreviate.abbreviate import abbreviations
+from .file_extension.file_extension import file_extensions
+from .keys.keys import symbol_key_words
+from .numbers.numbers import digits_map, scales, teens, tens
 
 mod = Module()
 
