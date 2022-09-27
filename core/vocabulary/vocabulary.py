@@ -5,7 +5,7 @@ from typing import Sequence, Union
 from talon import Context, Module, actions
 from talon.grammar import Phrase
 
-from .user_settings import append_to_csv, get_list_from_csv
+from ..user_settings import append_to_csv, get_list_from_csv
 
 mod = Module()
 ctx = Context()
