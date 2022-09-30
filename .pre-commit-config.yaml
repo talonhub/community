@@ -34,12 +34,10 @@ repos:
     rev: 5.10.1
     hooks:
       - id: isort
-        args: ["--profile", "black", "--filter-files"]
   - repo: https://github.com/psf/black
     rev: 22.8.0
     hooks:
       - id: black
-        language_version: python3.9
   - repo: https://github.com/Lucas-C/pre-commit-hooks
     rev: v1.3.1
     hooks:
