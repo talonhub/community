@@ -12,12 +12,10 @@ replace <user.draft_anchor> with <user.text>:
     insert(result)
 
 # Position cursor before word
-(pre | cursor | cursor before) <user.draft_anchor>:
-    user.draft_position_caret("{draft_anchor}")
+(pre | cursor | cursor before) <user.draft_anchor>: user.draft_position_caret("{draft_anchor}")
 
 # Position cursor after word
-(post | cursor after) <user.draft_anchor>:
-    user.draft_position_caret("{draft_anchor}", 1)
+(post | cursor after) <user.draft_anchor>: user.draft_position_caret("{draft_anchor}", 1)
 
 # Select a whole word
 (take | select) <user.draft_anchor>: user.draft_select("{draft_anchor}")

@@ -24,10 +24,8 @@ go forward: user.file_manager_go_forward()
 ^file numb <number_small>$:
     file = user.file_manager_get_file_by_index(number_small - 1)
     user.file_manager_select_file(file)
-^file {user.file_manager_files}$:
-    user.file_manager_select_file(file_manager_files)
-^(select | cell) file {user.file_manager_files}$:
-    user.file_manager_select_file(file_manager_files)
+^file {user.file_manager_files}$: user.file_manager_select_file(file_manager_files)
+^(select | cell) file {user.file_manager_files}$: user.file_manager_select_file(file_manager_files)
 
 #new folder
 folder new <user.text>: user.file_manager_new_folder(text)

@@ -13,8 +13,7 @@ open help: insert(".hh\n")
 
 # xxx - add window switching
 
-add microsoft symbols:
-    insert("srv*C:\\symbols*http://msdl.microsoft.com/download/symbols;\n")
+add microsoft symbols: insert("srv*C:\\symbols*http://msdl.microsoft.com/download/symbols;\n")
 force reload symbols: insert(".reload /f\n")
 reload symbols: insert(".reload\n")
 loaded modules: insert("lm l\n")

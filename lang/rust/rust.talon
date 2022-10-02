@@ -84,11 +84,9 @@ is some: user.code_insert_is_not_null()
 implement (struct | structure): user.code_state_implements()
 
 ## for annotating function parameters
-is implemented trait {user.code_trait}:
-    user.code_insert_trait_annotation(code_trait)
+is implemented trait {user.code_trait}: user.code_insert_trait_annotation(code_trait)
 is implemented trait: ": impl "
-returns implemented trait {user.code_trait}:
-    user.code_insert_return_trait(code_trait)
+returns implemented trait {user.code_trait}: user.code_insert_return_trait(code_trait)
 returns implemented trait: " -> impl "
 
 ## for generic reference of traits
@@ -98,8 +96,7 @@ dynamic trait {user.code_trait}: insert("dyn {code_trait}")
 
 ## for generic reference of macro
 macro {user.code_macros}: user.code_insert_macro(code_macros, "")
-macro wrap {user.code_macros}:
-    user.code_insert_macro(code_macros, edit.selected_text())
+macro wrap {user.code_macros}: user.code_insert_macro(code_macros, edit.selected_text())
 
 ## rust specific document comments
 block dock comment: user.code_comment_documentation_block()

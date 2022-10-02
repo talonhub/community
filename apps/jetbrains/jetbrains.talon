@@ -129,8 +129,7 @@ git log: user.idea("action Vcs.ShowTabbedFileHistory")
 git browse: user.idea("action Github.Open.In.Browser")
 git (gets | gist): user.idea("action Github.Create.Gist")
 git (pull request | request): user.idea("action Github.Create.Pull.Request")
-git (view | show | list) (requests | request):
-    user.idea("action Github.View.Pull.Request")
+git (view | show | list) (requests | request): user.idea("action Github.View.Pull.Request")
 git (annotate | blame): user.idea("action Annotate")
 git menu: user.idea("action Vcs.QuickListPopupAction")
 # Tool windows:
@@ -166,8 +165,7 @@ toggle power save: user.idea("action TogglePowerSave")
 toggle whitespace: user.idea("action EditorToggleShowWhitespaces")
 toggle indents: user.idea("action EditorToggleShowIndentLines")
 toggle line numbers: user.idea("action EditorToggleShowLineNumbers")
-toggle (bread crumbs | breadcrumbs):
-    user.idea("action EditorToggleShowBreadcrumbs")
+toggle (bread crumbs | breadcrumbs): user.idea("action EditorToggleShowBreadcrumbs")
 toggle gutter icons: user.idea("action EditorToggleShowGutterIcons")
 toggle wrap: user.idea("action EditorToggleUseSoftWraps")
 toggle parameters: user.idea("action ToggleInlineHintsAction")
@@ -230,14 +228,10 @@ refactor <number> until <number>:
 clone <number>: user.line_clone(number)
 
 #find/replace
-clear last <user.text> [over]:
-    user.idea("find prev {text}, action EditorBackSpace")
-clear next <user.text> [over]:
-    user.idea("find next {text}, action EditorBackSpace")
-comment last <user.text> [over]:
-    user.idea("find prev {text}, action CommentByLineComment")
-comment next <user.text> [over]:
-    user.idea("find next {text}, action CommentByLineComment")
+clear last <user.text> [over]: user.idea("find prev {text}, action EditorBackSpace")
+clear next <user.text> [over]: user.idea("find next {text}, action EditorBackSpace")
+comment last <user.text> [over]: user.idea("find prev {text}, action CommentByLineComment")
+comment next <user.text> [over]: user.idea("find next {text}, action CommentByLineComment")
 go last <user.text> [over]: user.idea("find prev {text}, action EditorRight")
 go next <user.text> [over]: user.idea("find next {text}, action EditorRight")
 paste last <user.text> [over]:
@@ -248,10 +242,8 @@ refactor last <user.text> [over]:
     user.idea("find prev {text}, action Refactorings.QuickListPopupAction")
 refactor next <user.text> [over]:
     user.idea("find next {text}, action Refactorings.QuickListPopupAction")
-replace last <user.text> [over]:
-    user.idea("find prev {text}, action EditorPaste")
-replace next <user.text> [over]:
-    user.idea("find next {text}, action EditorPaste")
+replace last <user.text> [over]: user.idea("find prev {text}, action EditorPaste")
+replace next <user.text> [over]: user.idea("find next {text}, action EditorPaste")
 select last <user.text> [over]: user.idea("find prev {text}")
 select next <user.text> [over]: user.idea("find next {text}")
 
