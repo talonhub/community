@@ -34,21 +34,19 @@ repos:
     rev: 5.10.1
     hooks:
       - id: isort
-        args: ["--profile", "black", "--filter-files"]
   - repo: https://github.com/psf/black
     rev: 22.8.0
     hooks:
       - id: black
-        language_version: python3.9
   - repo: https://github.com/Lucas-C/pre-commit-hooks
-    rev: v1.3.0
+    rev: v1.3.1
     hooks:
       - id: remove-tabs
         types: [file]
         files: \.talon$
         args: ["--whitespaces-count=4"]
   - repo: https://github.com/wenkokke/talonfmt
-    rev: 1.7.0
+    rev: 1.8.0
     hooks:
       - id: talonfmt
         args: ["--in-place", "--max-line-width=80"]
