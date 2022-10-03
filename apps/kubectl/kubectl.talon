@@ -64,3 +64,8 @@ cube detach:
     key("ctrl-p")
     key("ctrl-q")
 cube shell: user.insert_between("kubectl exec -it ", " -- /bin/bash")
+
+cube pod name: "export POD_NAME=$(kubectl get pods -o go-template --template '{{{{range .items}}}}{{{{.metadata.name}}}}{{{{\"\\n\"}}}}{{{{end}}}}') && echo Name of the Pod: $POD_NAME"
+cube pod environment: "kubectl exec $POD_NAME -- env"
+cube pod (shell|bash): "kubectl exec -ti $POD_NAME -- bash"
+cube node port: "export NODE_PORT=$(kubectl get services/kubernetes-bootcamp -o go-template='{{{{(index .spec.ports 0).nodePort}}}}') && echo NODE_PORT=$NODE_PORT"
