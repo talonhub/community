@@ -16,7 +16,7 @@ class UserActions:
         actions.key("ctrl-\\\\")
 
     def password_show():
-        actions.key("alt-ctrl-\\\\")
+        actions.key("shift-ctrl-space")
 
     def password_new():
         actions.key("ctrl-n")
