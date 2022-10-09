@@ -9,7 +9,8 @@ tag(): user.code_operators_assignment
 tag(): user.code_operators_lambda
 tag(): user.code_operators_math
 
-state {user.terraform_module_block}: user.code_terraform_module_block(user.terraform_module_block)
+state {user.terraform_module_block}:
+    user.code_terraform_module_block(user.terraform_module_block)
 
 resource <user.text>: user.code_terraform_resource(text)
 

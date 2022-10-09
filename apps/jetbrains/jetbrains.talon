@@ -129,7 +129,8 @@ git log: user.idea("action Vcs.ShowTabbedFileHistory")
 git browse: user.idea("action Github.Open.In.Browser")
 git (gets | gist): user.idea("action Github.Create.Gist")
 git (pull request | request): user.idea("action Github.Create.Pull.Request")
-git (view | show | list) (requests | request): user.idea("action Github.View.Pull.Request")
+git (view | show | list) (requests | request):
+    user.idea("action Github.View.Pull.Request")
 git (annotate | blame): user.idea("action Annotate")
 git menu: user.idea("action Vcs.QuickListPopupAction")
 # Tool windows:
@@ -230,8 +231,10 @@ clone <number>: user.line_clone(number)
 #find/replace
 clear last <user.text> [over]: user.idea("find prev {text}, action EditorBackSpace")
 clear next <user.text> [over]: user.idea("find next {text}, action EditorBackSpace")
-comment last <user.text> [over]: user.idea("find prev {text}, action CommentByLineComment")
-comment next <user.text> [over]: user.idea("find next {text}, action CommentByLineComment")
+comment last <user.text> [over]:
+    user.idea("find prev {text}, action CommentByLineComment")
+comment next <user.text> [over]:
+    user.idea("find next {text}, action CommentByLineComment")
 go last <user.text> [over]: user.idea("find prev {text}, action EditorRight")
 go next <user.text> [over]: user.idea("find next {text}, action EditorRight")
 paste last <user.text> [over]:
