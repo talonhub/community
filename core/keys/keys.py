@@ -184,6 +184,8 @@ symbol_key_words = {
     "bang": "!",
     "down score": "_",
     "underscore": "_",
+    "circly": "(",
+    "closing circly": ")",
     "paren": "(",
     "L paren": "(",
     "left paren": "(",

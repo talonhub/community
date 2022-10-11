@@ -1,4 +1,4 @@
-#custom vscode commands go here
+  #custom vscode commands go here
 app: vscode
 -
 tag(): user.find_and_replace
@@ -36,7 +36,7 @@ panel output: user.vscode("workbench.panel.output.focus")
 panel problems: user.vscode("workbench.panel.markers.view.focus")
 panel switch: user.vscode("workbench.action.togglePanel")
 panel terminal: user.vscode("workbench.action.terminal.focus")
-focus editor: user.vscode("workbench.action.focusActiveEditorGroup")
+f ocus editor: user.vscode("workbench.action.focusActiveEditorGroup")
 
 # Settings
 show settings: user.vscode("workbench.action.openGlobalSettings")
@@ -74,7 +74,7 @@ file create: user.vscode("workbench.action.files.newUntitledFile")
 file create relative: user.vscode("fileutils.newFile")
 file create root: user.vscode("fileutils.newFileAtRoot")
 file rename:
-    user.vscode("fileutils.renameFile")
+     user.vscode("fileutils.renameFile")
     sleep(150ms)
 file move:
     user.vscode("fileutils.moveFile")
@@ -112,7 +112,7 @@ refactor this: user.vscode("editor.action.refactor")
 
 #code navigation
 (go declaration | follow): user.vscode("editor.action.revealDefinition")
-go back: user.vscode("workbench.action.navigateBack")
+go  back: user.vscode("workbench.action.navigateBack")
 go forward: user.vscode("workbench.action.navigateForward")
 go implementation: user.vscode("editor.action.goToImplementation")
 go type: user.vscode("editor.action.goToTypeDefinition")
