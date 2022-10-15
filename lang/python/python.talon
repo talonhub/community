@@ -58,8 +58,7 @@ dock {user.python_docstring_fields}:
     insert("{python_docstring_fields}")
     edit.left()
 dock type {user.code_type}: user.insert_between(":type ", ": {code_type}")
-dock returns type {user.code_type}:
-    user.insert_between(":rtype ", ": {code_type}")
+dock returns type {user.code_type}: user.insert_between(":rtype ", ": {code_type}")
 
 toggle imports: user.code_toggle_libraries()
 import <user.code_libraries>:
