@@ -14,8 +14,7 @@ op mod: user.code_operator_modulo()
 (op | is) not equal: user.code_operator_not_equal()
 (op | is) (greater | more): user.code_operator_greater_than()
 (op | is) (less | below) [than]: user.code_operator_less_than()
-(op | is) greater [than] or equal:
-    user.code_operator_greater_than_or_equal_to()
+(op | is) greater [than] or equal: user.code_operator_greater_than_or_equal_to()
 (op | is) less [than] or equal: user.code_operator_less_than_or_equal_to()
 
 # logical operators
