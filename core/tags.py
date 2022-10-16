@@ -3,7 +3,6 @@ from talon import Module
 mod = Module()
 
 tagList = [
-    "debugger",
     "disassembler",
     "gdb",
     "git",  # commandline tag for git commands
