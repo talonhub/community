@@ -15,3 +15,11 @@ mode: all
     user.engine_sleep()
 ^talon sleep [<phrase>]$: speech.disable()
 ^talon wake$: speech.enable()
+
+
+^drowsy [<phrase>]$: speech.disable()
+
+# key(ctrl-alt-;):speech.disable()
+# key(ctrl-shift-alt-;):speech.enable()
+
+key(ctrl-alt-'):speech.toggle()
