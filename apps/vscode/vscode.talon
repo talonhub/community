@@ -22,7 +22,7 @@ bar outline: user.vscode("outline.focus")
 bar run: user.vscode("workbench.view.debug")
 bar search: user.vscode("workbench.view.search")
 bar source: user.vscode("workbench.view.scm")
-bar switch: user.vscode("workbench.action.toggleSidebarVisibility")
+bar toggle: user.vscode("workbench.action.toggleSidebarVisibility")
 
 symbol hunt [<user.text>]:
     user.vscode("workbench.action.gotoSymbol")
@@ -33,7 +33,7 @@ symbol hunt [<user.text>]:
 panel control: user.vscode("workbench.panel.repl.view.focus")
 panel output: user.vscode("workbench.panel.output.focus")
 panel problems: user.vscode("workbench.panel.markers.view.focus")
-panel switch: user.vscode("workbench.action.togglePanel")
+panel toggle: user.vscode("workbench.action.togglePanel")
 panel terminal: user.vscode("workbench.action.terminal.focus")
 focus editor: user.vscode("workbench.action.focusActiveEditorGroup")
 
@@ -43,11 +43,11 @@ show shortcuts: user.vscode("workbench.action.openGlobalKeybindings")
 show snippets: user.vscode("workbench.action.openSnippets")
 
 # Display
-centered switch: user.vscode("workbench.action.toggleCenteredLayout")
-fullscreen switch: user.vscode("workbench.action.toggleFullScreen")
+centered toggle: user.vscode("workbench.action.toggleCenteredLayout")
+fullscreen toggle: user.vscode("workbench.action.toggleFullScreen")
 theme switch: user.vscode("workbench.action.selectTheme")
-wrap switch: user.vscode("editor.action.toggleWordWrap")
-zen switch: user.vscode("workbench.action.toggleZenMode")
+wrap toggle: user.vscode("editor.action.toggleWordWrap")
+zen toggle: user.vscode("workbench.action.toggleZenMode")
 
 # File Commands
 file hunt [<user.text>]:
