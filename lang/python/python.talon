@@ -51,6 +51,8 @@ while: "while"
 with: "with"
 
 raise {user.python_exception}: user.insert_between("raise {python_exception}(", ")")
+raise {user.python_exception}:
+    user.insert_between("raise {python_exception}(", ")")
 except {user.python_exception}: "except {python_exception}:"
 
 dock string: user.code_comment_documentation()
