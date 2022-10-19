@@ -1,0 +1,67 @@
+Edited standard.talon
+  copy (that | it): edit.copy()
+  cut (that | it): edit.cut()
+  paste (that | it): edit.paste()
+  undo (that | it): edit.undo()
+  redo (that | it): edit.redo()
+
+Edited mouse.talon
+  (wheel gaze | gaze): user.mouse_gaze_scroll()
+
+Made dylan.talon
+  # Eye Tracking
+  (control | see) fusion: experimental.fusion1_toggle()
+  (control | see) gazing: experimental.gaze1_toggle()
+  (control | see) head: experimental.head1_toggle()
+
+  # Deep Clicks
+  (deep | deeper | further) : key("ctrl-cmd-t")
+  layer menu: key("ctrl-cmd-l")
+
+  # Push Pixels
+  push up <number>:
+    edit.up()
+    repeat(number - 1)
+
+  push down <number>:
+      edit.down()
+      repeat(number - 1)
+
+  push left <number>:
+      edit.left()
+      repeat(number - 1)
+
+  push right <number>:
+      edit.right()
+      repeat(number - 1)
+
+  # Vimium
+  link: key("f")
+  link new: key("shift-f")
+  link copy: key("yf")
+
+  # Vimac
+  (fly | get): key("ctrl-f")
+
+  #Simple Shortcuts
+  duplicate: key("cmd-d")
+  clicker: key("cmd-shift-d")
+  grab all: key("cmd-a")
+
+Made /figma
+
+mouse.py - hiss click
+  noise.register("pop", on_pop)
+
+  def on_hiss(active):
+      if setting_mouse_enable_pop_stops_scroll.get() >= 1 and (gaze_job or scroll_job):
+          stop_scroll()
+      elif (
+          not eye_zoom_mouse.zoom_mouse.enabled
+          and eye_mouse.mouse.attached_tracker is not None
+      ):
+          if setting_mouse_enable_pop_click.get() >= 1:
+              if active == 1:
+                  ctrl.mouse_click(button=0, hold=16000)
+
+  noise.register("hiss", on_hiss)

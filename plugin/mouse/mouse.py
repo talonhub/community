@@ -101,6 +101,11 @@ def gui_wheel(gui: imgui.GUI):
 
 @mod.action_class
 class Actions:
+    
+    def toggle_hiss_click():
+        """Toggles hiss left mouse click"""
+        toggle_control(setting_mouse_enable_pop_click)
+
     def mouse_show_cursor():
         """Shows the cursor"""
         show_cursor_helper(True)
@@ -213,6 +218,17 @@ class Actions:
         """Scrolls right"""
         actions.mouse_scroll(0, amount * setting_mouse_wheel_horizontal_amount.get())
 
+    # def mouse_scroll_right_continuous():
+    #     """Scrolls right continuously"""
+    #     global continuous_scoll_mode
+    #     continuous_scoll_mode = "scroll right continuous"
+    #     mouse_scroll(setting_mouse_wheel_horizontal_amount.get())()
+    #
+    #     if scroll_job is None:
+    #         start_scroll()
+    #     if setting_mouse_hide_mouse_gui.get() == 0:
+    #         gui_wheel.show()
+
     def mouse_scroll_stop():
         """Stops scrolling"""
         stop_scroll()
@@ -290,6 +306,19 @@ def on_pop(active):
 
 
 noise.register("pop", on_pop)
+
+# def on_hiss(active):
+#     if setting_mouse_enable_pop_stops_scroll.get() >= 1 and (gaze_job or scroll_job):
+#         stop_scroll()
+#     elif (
+#         not eye_zoom_mouse.zoom_mouse.enabled
+#         and eye_mouse.mouse.attached_tracker is not None
+#     ):
+#         if setting_mouse_enable_pop_click.get() >= 1:
+#             if active == 1:
+#                 ctrl.mouse_click(button=0, hold=16000)
+
+# noise.register("hiss", on_hiss)
 
 
 def mouse_scroll(amount):
