@@ -370,7 +370,7 @@ class UserActions:
     # tag: libraries_gui
 
     def code_insert_library(text: str, selection: str):
-        actions.user.paste(f"use {selection}")
+        actions.user.paste(f"use {text}")
 
     # tag: operators_array
 
