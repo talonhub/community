@@ -289,3 +289,18 @@ zoomer: user.mouse_trigger_zoom_mouse()
 
 # Focus Figma
 (go fig | figz): "focus figma"
+
+
+beep:
+  mouse_click()
+  mouse_click()
+  mouse_click()
+  mouse_click()
+  sleep(200ms)
+  key("cmd-c")
+
+heat:
+    mouse_click()
+    mouse_click()
+    sleep(200ms)
+    key("alt-shift-cmd-v")

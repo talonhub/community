@@ -2,7 +2,7 @@ app: chrome
 app: Figma
 -
 component: user.figma_component()
-detach: user.figma_detach()
+(detach | tatch): user.figma_detach()
 insert: user.figma_insert_component()
 
 group: user.figma_group()
