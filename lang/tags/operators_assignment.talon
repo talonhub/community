@@ -15,6 +15,8 @@ op mod equals: user.code_operator_modulo_assignment()
 [op] increment: user.code_operator_increment()
 
 #bitwise operators
+[op] bit [wise] and equals: user.code_operator_bitwise_and_assignment()
+[op] bit [wise] or equals: user.code_operator_bitwise_or_assignment()
 (op | logical | bitwise) (ex | exclusive) or equals:
     user.code_operator_bitwise_exclusive_or_assignment()
 [(op | logical | bitwise)] (left shift | shift left) equals:
