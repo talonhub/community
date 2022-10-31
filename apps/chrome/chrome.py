@@ -29,6 +29,7 @@ ctx.matches = r"""
 app: chrome
 """
 
+
 @mod.action_class
 class Actions:
     def chrome_mod(key: str):
@@ -37,6 +38,7 @@ class Actions:
             actions.key(f"cmd-{key}")
         else:
             actions.key(f"ctrl-{key}")
+
 
 @ctx.action_class("user")
 class user_actions:
