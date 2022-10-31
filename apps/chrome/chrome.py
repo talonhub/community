@@ -29,6 +29,14 @@ ctx.matches = r"""
 app: chrome
 """
 
+@mod.action_class
+class Actions:
+    def chrome_mod(key: str):
+        """Press the specified key with the correct modifier key for the OS"""
+        if app.platform == "mac":
+            actions.key(f"cmd-{key}")
+        else:
+            actions.key(f"ctrl-{key}")
 
 @ctx.action_class("user")
 class user_actions:
