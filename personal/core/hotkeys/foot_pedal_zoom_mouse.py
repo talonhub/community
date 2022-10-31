@@ -1,15 +1,24 @@
 from talon import ui, Module, Context, registry, actions, imgui, cron, track
 import sys
 
+ctx_zoom_mouse_active = Context()
+ctx_zoom_mouse_active.matches = r"""
+tag: talon_plugins.eye_zoom_mouse.zoom_mouse_enabled
+#and tag: talon_plugins.eye_zoom_mouse.zoom_mouse_activated
+"""
+@ctx_zoom_mouse_active.action_class("user")
+class WindowsZoomMouseTriggeredActions:
+    def foot_pedal_left_left():
+        """document string goes here"""
+        actions.talon_plugins.eye_zoom_mouse.mouse_trigger()
+
 ctx_zoom_mouse_triggered = Context()
 ctx_zoom_mouse_triggered.matches = r"""
 tag: talon_plugins.eye_zoom_mouse.zoom_mouse_enabled
 and tag: talon_plugins.eye_zoom_mouse.zoom_mouse_activated
 """
-
-
 @ctx_zoom_mouse_triggered.action_class("user")
-class WindowsZoomMouseActiveActions:
+class WindowsZoomMouseTriggeredActions:
     def foot_pedal_left_left():
         """document string goes here"""
         actions.talon_plugins.eye_zoom_mouse.mouse_trigger()

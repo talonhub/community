@@ -4,7 +4,7 @@ mod = Module()
 ctx_zoom_mouse_enabled_use_pedal = Context()
 ctx_zoom_mouse_enabled_use_pedal.matches = r"""
 not user.running: Optikey Mouse
-not tag: talon_plugins.eye_zoom_mouse.zoom_mouse_activated
+and not tag: talon_plugins.eye_zoom_mouse.zoom_mouse_activated
 #and not tag: talon_plugins.eye_zoom_mouse.zoom_mouse_pedal
 """
 
@@ -32,13 +32,13 @@ class Actions:
     def blue2_s3():
         """document string goes here"""
         # actions.user.mouse_scroll_down()
-        actions.mouse_scroll(20)
+        #actions.mouse_scroll(20)
 
     def blue2_s4():
         """document string goes here"""
         # print('scroll up')
         # actions.user.mouse_scroll_up()
-        actions.mouse_scroll(-20)
+        #actions.mouse_scroll(-20)
 
     def blue2_s5():
         """document string goes here"""
@@ -71,13 +71,13 @@ class WindowsZoomMouseInactiveActions:
 
     def blue2_s3():
         """document string goes here"""
-        # actions.user.mouse_scroll_down()
+        actions.user.mouse_scroll_down()
         actions.mouse_scroll(20)
 
     def blue2_s4():
         """document string goes here"""
         # print('scroll up')
-        # actions.user.mouse_scroll_up()
+        actions.user.mouse_scroll_up()
         actions.mouse_scroll(-20)
 
     def blue2_s5():
@@ -114,6 +114,7 @@ class WindowsZoomMouseActiveActions:
 
     def blue2_s4():
         """document string goes here"""
+        print("triple")
         actions.talon_plugins.eye_zoom_mouse.triple_click()
 
     def blue2_s5():

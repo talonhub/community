@@ -157,3 +157,20 @@ class Actions:
         apps = ui.apps(name=app, background=False)
         for app in apps:
             pp.pprint(app.windows())
+
+    def talon_restart():
+        """restart talon"""
+        if app.platform == "mac":
+            """Quit and relaunch the Talon app"""
+            from subprocess import Popen
+            from shlex import quote
+
+            talon_app = ui.apps(pid=os.getpid())[0]
+            talon_app_path = quote(talon_app.path)
+            Popen(['/bin/sh', '-c',
+                f'/usr/bin/open -W {talon_app_path} ; /usr/bin/open {talon_app_path}'
+            ], start_new_session=True)
+            talon_app.appscript().quit(waitreply=False) # XXX temporary replacement
+            
+        elif app.platform == "windows":
+            actions.user.exec("talon-restart")
