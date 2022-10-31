@@ -302,5 +302,6 @@ beep:
 heat:
     mouse_click()
     mouse_click()
+    mouse_click()
     sleep(200ms)
     key("alt-shift-cmd-v")
