@@ -1,18 +1,27 @@
-zoom in: edit.zoom_in()
-zoom out: edit.zoom_out()
-zoom reset: edit.zoom_reset()
-scroll up: edit.page_up()
-scroll down: edit.page_down()
-copy that: edit.copy()
-cut that: edit.cut()
-(pace | paste) that: edit.paste()
-(pace | paste) enter:
-    edit.paste()
-    key(enter)
-undo that: edit.undo()
-redo that: edit.redo()
+zoom in [<number>]: 
+	numb  = number or 1	
+	edit.zoom_in()
+	repeat(numb - 1)	
+zoom out [<number>]: 
+	numb  = number or 1	
+	edit.zoom_out()
+	repeat(numb - 1)
+copy take: edit.copy()
+snip take: edit.cut()
+pace: edit.paste()
+nope [<number>]: 
+	numb  = number or 1
+	edit.undo()
+	repeat(numb - 1)
+again [<number>]: 
+	numb  = number or 1
+	edit.redo()
+	repeat(numb - 1)
 paste match: edit.paste_match_style()
-file save: edit.save()
-file save all: edit.save_all()
-(pad | padding): user.insert_between(" ", " ")
+disc: edit.save()
+#wipe: key(backspace)    
+#(pad | padding): 
+#	insert("  ") 
+#	key(left)
 slap: edit.line_insert_down()
+

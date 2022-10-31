@@ -1,73 +1,70 @@
 tag: user.line_commands
 -
-#this defines some common line commands. More may be defined that are ide-specific.
-lend: edit.line_end()
-bend: edit.line_start()
-go <number>: edit.jump_line(number)
-go <number> end:
+#this defines some common row commands. More may be defined that are ide-specific.
+# lend: edit.line_end()
+# bend: edit.line_start()
+row <number>: edit.jump_line(number)
+row <number> end: 
     edit.jump_line(number)
     edit.line_end()
-comment [line] <number>:
+note [row] <number>:
     user.select_range(number, number)
     code.toggle_comment()
-comment <number> until <number>:
+note <number> by <number>: 
     user.select_range(number_1, number_2)
     code.toggle_comment()
-clear [line] <number>:
+(mop | wipe row) <number>:
     edit.jump_line(number)
     user.select_range(number, number)
     edit.delete()
-clear <number> until <number>:
+(mop | wipe row) <number> by <number>: 
     user.select_range(number_1, number_2)
     edit.delete()
-copy [line] <number>:
+copy [row] <number>: 
     user.select_range(number, number)
     edit.copy()
-copy <number> until <number>:
+copy <number> by <number>: 
     user.select_range(number_1, number_2)
     edit.copy()
-cut [line] <number>:
+snip [row] <number>: 
     user.select_range(number, number)
     edit.cut()
-cut [line] <number> until <number>:
+snip [row] <number> by <number>: 
     user.select_range(number_1, number_2)
     edit.cut()
-(paste | replace) <number> until <number>:
+paste <number> by <number>:
+  user.select_range(number_1, number_2)
+  edit.paste()
+replace <number> by <number>: 
     user.select_range(number_1, number_2)
     edit.paste()
-(select | cell | sell) [line] <number>: user.select_range(number, number)
-(select | cell | sell) <number> until <number>: user.select_range(number_1, number_2)
-tab that: edit.indent_more()
-tab [line] <number>:
+grab [row] <number>: user.select_range(number, number)
+(grab [row] | row) <number> by <number>: user.select_range(number_1, number_2)
+tab [row] <number>:
     edit.jump_line(number)
-    edit.indent_more()
-tab <number> until <number>:
+    edit.indent_more() 
+tab <number> by <number>:
     user.select_range(number_1, number_2)
     edit.indent_more()
-retab that: edit.indent_less()
-retab [line] <number>:
+# retab that: edit.indent_less()
+retab [row] <number>:
     user.select_range(number, number)
     edit.indent_less()
-retab <number> until <number>:
+retab <number> by <number>:
     user.select_range(number_1, number_2)
     edit.indent_less()
-drag [line] down: edit.line_swap_down()
-drag [line] up: edit.line_swap_up()
-drag up [line] <number>:
+drag [row] down: edit.line_swap_down()
+drag [row] up: edit.line_swap_up()
+drag up [row] <number>:
     user.select_range(number, number)
     edit.line_swap_up()
-drag up <number> until <number>:
+drag up <number> by <number>: 
     user.select_range(number_1, number_2)
     edit.line_swap_up()
-drag down [line] <number>:
+drag down [row] <number>: 
     user.select_range(number, number)
     edit.line_swap_down()
-drag down <number> until <number>:
+drag down <number> by <number>: 
     user.select_range(number_1, number_2)
     edit.line_swap_down()
-clone (line | that): edit.line_clone()
-
-select camel left: user.extend_camel_left()
-select camel right: user.extend_camel_right()
-go camel left: user.camel_left()
-go camel right: user.camel_right()
+clone row: edit.line_clone()
