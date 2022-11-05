@@ -2,8 +2,11 @@ tag: terminal
 -
 # tags should be activated for each specific terminal in the respective talon file
 
-lisa: user.terminal_list_directories()
-lisa all: user.terminal_list_all_directories()
+lisa {user.ls_args}*:
+    args = user.join_strings(ls_args_list or "", " ")
+    insert("ls {args}")
+    key("enter")
+
 katie [<user.text>]: user.terminal_change_directory(text or "")
 katie root: user.terminal_change_directory_root()
 go <user.system_path>: insert('cd "{system_path}"\n')

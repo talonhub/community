@@ -1,4 +1,5 @@
 from talon import Context, Module, actions
+from typing import Union
 
 ctx = Context()
 mod = Module()
@@ -6,20 +7,22 @@ ctx.matches = r"""
 tag: user.generic_unix_shell
 """
 
+mod.list("ls_args", "argument mapping for ls command")
+
+ctx.lists["user.ls_args"] = {
+    'list': '-l',
+    'all': '-a',
+}
+
+@mod.action_class
+class JoinAction:
+    def join_strings(l: Union[str, list[str]], s: str) -> str:
+        """Joins the strings using the given separator"""
+        return s.join(l)
 
 @ctx.action_class("user")
 class Actions:
     # implements the function from generic_terminal.talon for unix shells
-
-    def terminal_list_directories():
-        """Lists directories"""
-        actions.insert("ls")
-        actions.key("enter")
-
-    def terminal_list_all_directories():
-        """Lists all directories including hidden"""
-        actions.insert("ls -a")
-        actions.key("enter")
 
     def terminal_change_directory(path: str):
         """Lists change directory"""
