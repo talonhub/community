@@ -7,7 +7,7 @@ from pathlib import Path
 import requests
 from talon import Context, Module, actions, clip, ui
 
-# Courtesy of https://github.com/anonfunc/talon-user/blob/master/apps/jetbrains.py
+# Courtesy of https://github.com/anonfunc/talon-user/blob/main/apps/jetbrains.py
 
 extendCommands = []
 
