@@ -1,4 +1,4 @@
-# Descended from https://github.com/dwiel/talon_community/blob/main/misc/dictation.py
+# Descended from https://github.com/dwiel/talon_community/blob/master/misc/dictation.py
 import re
 from typing import Callable, Optional
 
