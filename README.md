@@ -67,7 +67,7 @@ The folder structure should look something like the below:
 2. `help alphabet` will display the alphabet
 3. `command history` will toggle a display of the recent commands
 4. `help format` will display the available formatters with examples.
-5. Many useful, basic commands are defined in https://github.com/knausj85/knausj_talon/blob/master/core/edit/standard.talon
+5. Many useful, basic commands are defined in https://github.com/knausj85/knausj_talon/blob/main/core/edit/standard.talon
    - `undo that` and `redo that` are the default undo/redo commands.
    - `paste that`, `copy that`, and `cut that` for pasting/copy/cutting, respectively.
 6. For community-generated documentation on Talon itself, please visit https://talon.wiki/
@@ -233,7 +233,7 @@ Notes:
 To implement support for a new program, you need to implement the relevant file manager actions for your application and assert the user.file_manager tag.
 
 - There are a number of example implementations in the repository. Finder is a good example to copy and customize to your application as needed.
-  https://github.com/knausj85/knausj_talon/blob/master/apps/finder/finder.py
+  https://github.com/knausj85/knausj_talon/blob/main/apps/finder/finder.py
 
 ## Terminal commands
 
