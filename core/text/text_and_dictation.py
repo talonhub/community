@@ -455,16 +455,3 @@ class Actions:
         actions.edit.left()
         actions.key("delete")  # remove space
         return after[1:]
-
-
-# Use the dictation formatter in dictation mode.
-dictation_ctx = Context()
-dictation_ctx.matches = r"""
-mode: dictation
-"""
-
-
-@dictation_ctx.action_class("main")
-class main_action:
-    def auto_insert(text):
-        actions.user.dictation_insert(actions.auto_format(text))
