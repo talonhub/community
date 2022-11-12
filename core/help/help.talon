@@ -6,6 +6,7 @@ help modifier: user.help_list("user.modifier_key")
 help special keys: user.help_list("user.special_key")
 help function keys: user.help_list("user.function_key")
 help arrows: user.help_list("user.arrow_key")
+help list {user.help_lists}$: user.help_list("user." + help_lists)
 (help formatters | help format | format help):
     user.help_formatters(user.get_formatters_words())
 help context$: user.help_context()
