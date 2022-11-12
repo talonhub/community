@@ -9,7 +9,7 @@ from talon import Context, Module, actions, imgui, registry
 
 mod = Module()
 mod.list("help_contexts", desc="list of available contexts")
-mod.list("help_lists", desc="list of lists") # TODO: Better desc
+mod.list("help_lists", desc="list of lists")  # TODO: Better desc
 mod.mode("help", "mode for commands that are available only when help is visible")
 setting_help_max_contexts_per_page = mod.setting(
     "help_max_contexts_per_page",
@@ -26,10 +26,11 @@ setting_help_max_command_lines_per_page = mod.setting(
 
 ctx = Context()
 
+
 def update_lists():
     mapping = {}
     for name in registry.lists.keys():
-        list_name = name.split('.')[-1]
+        list_name = name.split(".")[-1]
         display_name = list_name.replace("_", " ")
 
         short_names = actions.user.create_spoken_forms(
@@ -40,6 +41,7 @@ def update_lists():
             mapping[short_name] = list_name
 
     ctx.lists["user.help_lists"] = mapping
+
 
 update_lists()
 # context name -> commands
