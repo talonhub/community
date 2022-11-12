@@ -6,20 +6,16 @@ ctx.matches = r"""
 tag: user.generic_windows_shell
 """
 
+mod.list("ls_args", "argument mapping for ls command")
+
+ctx.lists["user.ls_args"] = {
+    'all': '-force',
+}
+
 
 @ctx.action_class("user")
 class Actions:
     # implements the function from generic_terminal.talon for unix shells
-
-    def terminal_list_directories():
-        """Lists directories"""
-        actions.insert("ls")
-        actions.key("enter")
-
-    def terminal_list_all_directories():
-        """Lists all directories including hidden"""
-        actions.insert("ls -force")
-        actions.key("enter")
 
     def terminal_change_directory(path: str):
         """Lists change directory"""

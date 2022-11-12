@@ -1,5 +1,3 @@
-from typing import Union
-
 from talon import Context, Module, actions
 
 ctx = Context()
@@ -14,14 +12,6 @@ ctx.lists["user.ls_args"] = {
     "list": "-l",
     "all": "-a",
 }
-
-
-@mod.action_class
-class JoinAction:
-    def join_strings(l: Union[str, list[str]], s: str) -> str:
-        """Joins the strings using the given separator"""
-        return s.join(l)
-
 
 @ctx.action_class("user")
 class Actions:

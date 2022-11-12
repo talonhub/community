@@ -1,7 +1,13 @@
 from talon import Module
+from typing import Union
 
 mod = Module()
 
+@mod.action_class
+class JoinAction:
+    def join_strings(l: Union[str, list[str]], s: str) -> str:
+        """Joins the strings using the given separator"""
+        return s.join(l)
 
 @mod.action_class
 class Actions:
