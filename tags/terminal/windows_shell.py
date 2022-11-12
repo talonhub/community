@@ -9,7 +9,7 @@ tag: user.generic_windows_shell
 mod.list("ls_args", "argument mapping for ls command")
 
 ctx.lists["user.ls_args"] = {
-    'all': '-force',
+    "all": "-force",
 }
 
 

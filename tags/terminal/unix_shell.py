@@ -13,6 +13,7 @@ ctx.lists["user.ls_args"] = {
     "all": "-a",
 }
 
+
 @ctx.action_class("user")
 class Actions:
     # implements the function from generic_terminal.talon for unix shells
