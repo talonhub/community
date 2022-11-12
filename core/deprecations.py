@@ -48,7 +48,6 @@ import datetime
 
 from talon import Module, actions
 
-
 mod = Module()
 
 # Tells us the last time a notification was shown so we can
@@ -83,7 +82,7 @@ class Acions:
 
         id = f"command.{name}.{time_deprecated}"
         msg = (
-            f"The \"{name}\" voice command was deprecated on "
+            f'The "{name}" voice command was deprecated on '
             f"{time_deprecated}. See BREAKING_CHANGES.txt for details."
         )
         actions.user.deprecate_notify(id, msg)
@@ -96,7 +95,7 @@ class Acions:
 
         id = f"capture.{name}.{time_deprecated}"
         msg = (
-            f"The \"{name}\" capture was deprecated on "
+            f'The "{name}" capture was deprecated on '
             f"{time_deprecated}. See BREAKING_CHANGES.txt for details."
         )
         actions.user.deprecate_notify(id, msg)
@@ -109,7 +108,7 @@ class Acions:
 
         id = f"action.{name}.{time_deprecated}"
         msg = (
-            f"The \"{name}\" action was deprecated on "
+            f'The "{name}" action was deprecated on '
             f"{time_deprecated}. See BREAKING_CHANGES.txt for details."
         )
         actions.user.deprecate_notify(id, msg)
