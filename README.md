@@ -250,6 +250,20 @@ tag(): user.tabs
 
 For instance, kubectl commands (kubernetes) aren't relevant to everyone.
 
+### Unix utilities
+
+If you have a Unix (e.g. OSX) or Linux computer, you can enable support for a number of
+common terminal utilities like `cat`, `tail`, or `grep` by uncommenting the following
+line in [unix_shell.py](tags/terminal/unix_shell.py):
+
+```
+# ctx.tags = ["user.unix_utilities"]
+```
+
+Once you have uncommented the line, you can customize your utility commands by editing
+`settings/unix_utilities.csv`. Note: this directory is created when first running Talon
+with knausj_talon enabled.
+
 ## Jetbrains commands
 
 For Jetbrains commands to work you must install https://plugins.jetbrains.com/plugin/10504-voice-code-idea
