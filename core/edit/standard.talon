@@ -16,7 +16,7 @@ file save: edit.save()
 file save all: edit.save_all()
 (pad | padding): user.insert_between(" ", " ")
 (pad | padding) <user.symbol_key>+:
-    insert(" {symbol_key_list} ")
+    insert(" ")
     user.insert_many(symbol_key_list)
     insert(" ")
 slap: edit.line_insert_down()
