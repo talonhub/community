@@ -19,6 +19,7 @@ Option, Spoken form
 --ff-only, fast forward only
 --force, force
 --force-create, force create
+--force-with-lease, force with lease
 --global, global
 --global, global
 --hard, hard
