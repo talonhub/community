@@ -7,4 +7,3 @@ tag(): user.splits
 split move <user.arrow_key>: user.do_tmux_keybind(arrow_key)
 #Say a number right after this command, to switch to pane
 split numbers: user.split_number()
-
