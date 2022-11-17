@@ -12,7 +12,7 @@ tag: user.generic_unix_shell
 
 @ctx.action_class("user")
 class Actions:
-    # implements the function from generic_terminal.talon for unix shells
+    # Implements the functions from terminal.py for unix shells
 
     def terminal_list_directories():
         """Lists directories"""
