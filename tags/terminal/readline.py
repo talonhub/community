@@ -31,6 +31,7 @@ class EditActions:
     # def paste():
     #     actions.key("ctrl-y")
 
+
 @ctx.action_class("user")
 class Actions:
     def cut_line():
