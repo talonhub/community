@@ -176,7 +176,7 @@ clear paste:
     edit.paste()
 
 # Click on words select all delete and paste
-stacy:
+(stacy | hap):
     mouse_click(0)
     key("enter")
     edit.select_all()
