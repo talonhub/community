@@ -1,4 +1,7 @@
-import json
+import re
+from time import sleep
+import uuid
+import ndjson
 from talon import Module, actions, registry
 import sys, os
 
@@ -62,23 +65,61 @@ def write_formatters(file):
         )
 
 
+DEBUG = True
+
+
+def find_line_number(path, text):
+    with open(path, "r") as f:
+        for i, line in enumerate(f):
+            if text in line:
+                return i + 1
+    return -1
+
+
+def generate_url(filename_from_talon, line_number):
+    # Sample filename '/Users/maciek/.talon/user/knausj_talon/text/text_navigation.talon'
+    res = re.match(r"/Users/maciek/.talon/user/knausj_talon(.*)", filename_from_talon)
+    if res:
+        url = f"vscode://file/Users/maciek/projects/knausj_talon{res.group(1)}:{line_number}"
+        print(url)
+        return url
+    else:
+        return ""
+
+
 def get_context_commands(commands):
     results = []
+    k = 0
     for key, value in commands.items():
         try:
-            print(dir(value))
-            print(100 * "=")
-            print(dir(value.ctx))
-            print(100 * "=")
-            print(value.ctx.path)
+            if DEBUG:
+                print(dir(value))
+                print()
+                print(100 * "=")
+                print(dir(value.ctx))
+                print(100 * "=")
+                print(value.ctx.path)
+                print(dir(value.target))
+                print("code", value.target.code)
+                print("code", value.target.filename)
+                print("code", value.target.lines)
+                k += 1
+                # if k > 4:
+                # sleep(1000)
 
-            print(dir(value.target))
             rule = value.rule.rule
+            line_number = find_line_number(value.target.filename, str(rule))
+            print("LINE NUMBER", line_number)
+            url = generate_url(value.target.filename, line_number)
+
             d = {
-                "rule": str(rule),
+                "rule": rule,
                 "implementation": str(value.target.code),
                 "path": str(value.ctx.path),
+                "url": url,
+                "objectID": str(uuid.uuid4()),
             }
+            print(d["objectID"])
             results.append(d)
 
         except Exception as e:
@@ -140,7 +181,7 @@ class user_actions:
 
         this_dir = os.path.dirname(os.path.realpath(__file__))
         md_file_path = os.path.join(this_dir, "cheatsheet.md")
-        json_file_path = os.path.join(this_dir, "cheatsheet.json")
+        ndjson_file_path = os.path.join(this_dir, "cheatsheet.ndjson")
         file_shorter_path = os.path.join(this_dir, "cheatsheet_shorter.md")
         print(md_file_path)
         file = open(md_file_path, "w")
@@ -198,9 +239,9 @@ class user_actions:
         list_of_contexts = registry.contexts.items()
         all_commands = []
         for key, value in list_of_contexts:
-            print(f"key =  {key}")
-            print(f"value =  {value}")
-
+            if DEBUG:
+                print(f"key =  {key}")
+                print(f"value =  {value}")
             # print(
             #     f"shorter name = {create_short_name(key)} key = {key} value = {value}"
             # )
@@ -208,13 +249,14 @@ class user_actions:
             commands = value.commands  # Get all the commands from a context
 
             if len(commands) > 0:
+                all_commands.extend(get_context_commands(commands))
                 pretty_print_context_name(file, key)
                 write_context_commands(file, commands)
 
                 if create_short_name(key) not in interesting_contexts:
                     omitted.append(create_short_name(key))
                 else:
-                    all_commands.extend(get_context_commands(commands))
+
                     pretty_print_context_name(file_shorter, key)
                     write_context_commands(file_shorter, commands)
 
@@ -223,10 +265,13 @@ class user_actions:
         print(omitted)
         print("all commands")
         # print(all_commands)
-        with open(json_file_path, "w") as f:
 
-            print("Writing json to file")
-            json.dump(all_commands, f, indent=2)
+        with open(ndjson_file_path, "w") as f:
+            writer = ndjson.writer(f, ensure_ascii=False)
+
+            for command in all_commands:
+                writer.writerow(command)
+            # ndjson.dump(all_commands, f)
 
         print(100 * "\n")
 

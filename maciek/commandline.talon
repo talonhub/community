@@ -47,8 +47,7 @@ file type: "file "
 file show: "cat "
 file stat: "stat " 
 file which: "which "
-get link:
-    insert("readlink -f ")
+get link: insert("readlink -f ")
 
 
 ###############################################################################
@@ -69,9 +68,13 @@ pivot <number_small> back:
     insert(user.path_traverse(number_small))
     key(enter)
 
-make dir: "mkdir -p  "
+make dir: "mkdir -p  
 go home: "cd\n"
 folder path copy : insert("pwd | tr -d \\\\n\\\\r | pbcopy\n")
+clipboard that:
+    key(up end)
+    " | tr -d \\\\n\\\\r | pbcopy\n"
+
 
 ###############################################################################
 ### projects directory
@@ -80,28 +83,24 @@ projects go:
     insert("cd ~/projects\n")
     user.fzf_cd_directory_single_level()
 
-projects jump: 
-        insert("cd ~/projects\n")
-    
+projects jump: insert("cd ~/projects\n")
 force remove: "rm -rf "
 # grepping
 
 rip around: "rg -B2 -A2 -i "
 rip: "rg -i "
 rip (exact|precise): "rg "
-now rip:
+now rip that:
     edit.up()
     insert("| rg -i ")
-now copy:
-    edit.up()
-    insert("| pbcopy\n")
+
 
 make executable: "chmod +x "
-top run: "htop\n"
+
+top run: "top\n"
 vim run: "vim "
 code run: "code "
 
-current folder copy: "pwd | tr -d \\\\n\\\\r | pbcopy\n"
 current folder: "pwd\n"
 
 fish reload: 
@@ -129,8 +128,7 @@ copy paste:
     edit.paste()
 
 talon repl:insert("talon-repl\n")     
-pip freeze: insert("pip freeze\n")
-pip: insert("pip ")
+
 which [<user.text>]:
     insert("which ")
     insert(text or "")
@@ -153,9 +151,14 @@ pink google: insert("ping www.google.com\n")
 pink google d n s: "ping 8.8.8.8\n"
     
 remote shell tesla:
-    insert("ssh tesla.home\n")
+    insert("ssh tesla.maciejk.dev\n")
     sleep(1000ms)
     insert("fish\n")
+remote shell pie|raspberry:
+    insert("ssh raspberry.maciejk.dev\n")
+    sleep(1000ms)
+    # insert("fish\n")
+    
 shell logout: insert("exit\n")
 
 
@@ -183,7 +186,7 @@ pager: " | less "
 run last:
     key(up)
     key(enter)
-
+manual: "man "
 (take it|accept):
     key(right)
     key(enter)
@@ -191,5 +194,24 @@ run last:
 navi: insert("navi\n")
 command copy:key(cmd-alt-shift-c)
 lazy docker: "lazydocker\n"
-sudo reboot: "sudo reboot\n"
-        
+sudo reboot: "sudo reboot"
+run it:
+    edit.paste()
+    key(enter)
+
+
+pip|peep:insert("python -m pip ")
+(pip|peep) freeze: insert("python -m pip freeze\n")
+(pip|peep) install: insert("python -m pip install ")
+
+virtual env: insert("python -m venv ")
+virtual activate: insert("source .venv/bin/activate")
+virtual activate fish: insert("source .venv/bin/activate.fish")
+
+tar decompress: insert("tar -xvf ")
+
+g util: insert("gsutil ")
+g util copy: insert("gsutil cp ")
+g util move: insert("gsutil mv ")
+
+list: insert("ls ")

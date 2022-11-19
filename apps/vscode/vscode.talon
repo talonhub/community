@@ -15,13 +15,14 @@ window close: user.vscode("workbench.action.closeWindow")
 #multiple_cursor.py support end
 settings():
     speech.timeout = 0.400
+    key_wait = 2
 coder <user.vscode_project_names>:
     user.vscode_open_project(vscode_project_names)
 please [<user.text>]$:
     user.vscode("workbench.action.showCommands")
     insert(user.text or "")
     
-    # Sidebar & Panels
+# Sidebar & Panels
 bar switch$: user.vscode("workbench.action.toggleSidebarVisibility")
 # what is the difference with workbench.view.explorer vs action.focusFilesExplorer?
 explore$: user.vscode("workbench.view.explorer")
@@ -35,13 +36,6 @@ editor$: user.vscode("workbench.action.focusActiveEditorGroup")
 git focus$: user.vscode("workbench.view.scm")
 
 
-# show recent: user.vscode("work55bench.action.showAllEditorsByMostRecentlyUsed")
-search [<user.text>]$:
-    user.vscode("workbench.action.findInFiles")
-    sleep(50ms)
-    insert(text or "")
-    
-    
 find [<user.text>]$:
     user.vscode("actions.find")
     sleep(50ms)
@@ -74,9 +68,6 @@ deploy:
     insert("task deploy\n")
     
     
-group one: user.vscode("workbench.action.focusFirstEditorGroup")
-group two: user.vscode("workbench.action.focusSecondEditorGroup")
-
 focus side: user.vscode("workbench.action.focusSideBar")
 
 # focus editor: user.vscode("workbench.action.focusActiveEditorGroup")
@@ -89,6 +80,11 @@ settings default: user.vscode("workbench.action.openRawDefaultSettings")
 shortcuts (go|show): user.vscode("workbench.action.openGlobalKeybindings")
 shortcuts json: user.vscode("workbench.action.openGlobalKeybindingsFile")
 
+# Notebooks
+# cell exec: user.vscode("jupyter.runcurrentcell")
+cell (exec|execute): key("ctrl-enter")
+cell advance: key("shift-enter")
+# cell advance: user.vscode("jupyter.runcurrentcelladvance")
 
 # Display
 centered switch: user.vscode("workbench.action.toggleCenteredLayout")
@@ -99,10 +95,10 @@ zen switch: user.vscode("workbench.action.toggleZenMode")
 
 # File Commands bash
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-(lion|dock) [<user.word>]:
+(lion|dock) [<user.text>]:
     user.vscode("workbench.action.quickOpen")
-    sleep(50ms)
-    insert(word or "")
+    sleep(100ms)
+    insert(text or "")
     
     # # TODO: we would like to limit user.text only to the words appearing in open editors
     # tab [<user.text>]:
@@ -123,6 +119,7 @@ file duplicate: user.vscode("fileutils.duplicateFile")
 file copy path: user.vscode("copyFilePath")
 file copy relative: user.vscode("copyRelativeFilePath")
 file copy link: user.vscode("gitlens.copyRemoteFileUrlToClipboard")
+file copy name: user.vscode("fileutils.copyFileName")
 file create sibiling: user.vscode_and_wait("fileutils.newFile")
 file new: user.vscode_and_wait("explorer.newFile")
 file create: user.vscode("workbench.action.files.newUntitledFile")
@@ -163,7 +160,7 @@ sense [<user.text>]$:
     insert(user.text or "")
     sleep(10ms)
     user.vscode("editor.action.triggerSuggest")
-    
+# ^sense param$:              user.vscode("editor.action.triggerParameterHints")    
 hint: user.vscode("editor.action.triggerParameterHints")
 
 follow: user.vscode("editor.action.revealDefinition")
@@ -197,6 +194,7 @@ refactor (this|that): user.vscode("editor.action.refactor")
 #code navigation
 # (go declaration | follow): user.vscode("editor.action.revealDefinition")
 back$: user.vscode("workbench.action.navigateBack")
+
 front$: user.vscode("workbench.action.navigateForward")
 
 # implementation: user.vscode("editor.action.goToImplementation")
@@ -265,6 +263,7 @@ git stage all: user.vscode("git.stageAll")
 git unstage: user.vscode("git.unstage")
 git unstage all: user.vscode("git.unstageAll")
 pull request: user.vscode("pr.create")
+
 change next: key(alt-f5)
 change last: key(shift-alt-f5)
 
@@ -295,10 +294,10 @@ terminal zoom: user.vscode("workbench.action.toggleMaximizedPanel")
 terminal trash: user.vscode("workbench.action.terminal.kill")
 terminal toggle: user.vscode_and_wait("workbench.action.terminal.toggleTerminal")
 terminal scroll up: user.vscode("workbench.action.terminal.scrollUp")
-terminal scroll down: user.vscode("workbench.action.terminal.scrollDown")
+terminal scroll down: upser.vscode("workbench.action.terminal.scrollDown")
 terminal <number_small>: user.vscode_terminal(number_small)
 terminal: user.vscode("workbench.action.terminal.toggleTerminal")
-shell: user.vscode("workbench.action.terminal.focus")
+shell|console: user.vscode("workbench.action.terminal.focus")
 
 
 ###############################################################################
@@ -352,23 +351,6 @@ skip word: user.vscode("editor.action.moveSelectionToNextFindMatch")
 
 install local: user.vscode("workbench.extensions.action.installVSIX")
 
-# Editor tabs and editor groups stuff.
-close everything: user.vscode("workbench.action.closeAllGroups")
-close others: user.vscode("workbench.action.closeOtherEditors")
-close all others:
-    user.vscode("workbench.action.closeOtherEditors")
-    user.vscode("workbench.action.closeEditorsInOtherGroups")
-move left: user.vscode("workbench.action.moveEditorLeftInGroup")
-move right: user.vscode("workbench.action.moveEditorRightInGroup")
-move last: user.vscode("workbench.action.moveEditorToPreviousGroup")
-move next: user.vscode("workbench.action.moveEditorToNextGroup")
-focus group: user.vscode("workbench.action.toggleEditorWidths")
-close group: user.vscode("workbench.action.closeEditorsInGroup")
-one group: user.vscode("workbench.action.closeEditorsInOtherGroups")
-
-(cross|group next): user.vscode("workbench.action.focusNextGroup")
-group last: user.vscode("workbench.action.focusPreviousGroup")
-
 ###############################################################################
 ### Navigation between editors
 ###############################################################################
@@ -383,8 +365,8 @@ group last: user.vscode("workbench.action.focusPreviousGroup")
 
 # copied from line_commands.talon
 # Cursor navigation
-go <number>: edit.jump_line(number)
-go <number> end:
+go line <number>: edit.jump_line(number)
+go line <number> end:
     edit.jump_line(number)
     edit.line_end()
     
@@ -452,9 +434,25 @@ toast focus:
 take this$:
     key(cmd-d)
     
-    ###############################################################################
-    ### Searching within editor or whole workspace
-    ###############################################################################
+###############################################################################
+### Searching within editor or whole workspace
+###############################################################################
+# show recent: user.vscode("work55bench.action.showAllEditorsByMostRecentlyUsed")
+
+(go search|search) [<user.text>]$:
+    user.vscode("workbench.action.findInFiles")
+    sleep(50ms)
+    insert(text or "")
+(go search|search) that$:
+    user.vscode("workbench.action.findInFiles")
+    sleep(50ms)
+    edit.paste()
+    
+(go search|search) <user.format_text>$:
+    user.vscode("workbench.action.findInFiles")
+    sleep(50ms)
+    insert(format_text)
+
 (go search|search) this$:
     key(cmd-d)
     key(cmd-shift-f)
@@ -464,9 +462,9 @@ take this$:
     key(cmd-f)
     key(enter)
     
-    ###############################################################################
-    ### Commenting stuff
-    ###############################################################################
+###############################################################################
+### Commenting stuff
+###############################################################################
 to do [<phrase>]$:
     insert("# TODO(maciejk): ")
     user.dictation_mode(phrase or "")
@@ -501,9 +499,6 @@ pop (proj|project) [<user.text>]:
     # This is for github copilot
 (take it|accept):
     key(tab)
-    ###############################################################################
-    ### explorer tab
-    ###############################################################################
 folder new:
     user.vscode("explorer.newFolder")
 finder show: user.vscode("revealFileInOS")
@@ -511,23 +506,6 @@ finder show: user.vscode("revealFileInOS")
 ### Misc
 ###############################################################################
 
-###############################################################################
-### KeyPad shortcuts
-###############################################################################
-key(shift-cmd-alt-ctrl-9):
-    key(cmd-alt-right)
-key(shift-cmd-alt-ctrl-8):
-    key(cmd-alt-left)
-    # asterisk
-key(shift-cmd-alt-ctrl-a):
-    key(cmd-pagedown)
-    # user.vscode("workbench.action.nextEditorInGroup")
-key(shift-cmd-alt-ctrl-/):
-    key(cmd-pageup)
-    # user.vscode("workbench.action.previousEditorInGroup")
-    # hyphen
-key(shift-cmd-alt-ctrl-m):
-    key(cmd-w)
 folders collapse:
     user.vscode("workbench.files.action.collapseExplorerFolders")
 fix this: user.vscode("editor.action.quickFix")
@@ -549,13 +527,13 @@ context:
     
 snippets go: user.vscode("snippetExplorer.open")
 snippet create: user.vscode("easySnippet.run")
-copy command id: user.copy_command_id()
+command copy id: user.command_copy_id()
 
 ###############################################################################
 ### search view
 ###############################################################################
-^result next:
-    user.vscode("search.action.focusNextSearchResult")
+^[result] next: key(f4)
+    # user.vscode("search.action.focusNextSearchResult")
     
     # TODO: there was a program with command "search limit talon" it was mis recognized.
     # I had to change to "limit search talon" it is a wider problem
@@ -565,3 +543,70 @@ limit search python: user.vscode_limit_search("python")
 limit search none: user.vscode_limit_sort("")
 
 ^jump {user.file_shortcuts}$: user.vscode_quick_open(user.file_shortcuts)
+
+bracket jump: user.vscode("editor.action.jumpToBracket")
+# zoom out:user.vscode("workbench.action.zoomOut") 
+# zoom in:user.vscode("workbench.action.zoomIn")
+font smaller:user.vscode("editor.action.fontZoomOut")
+font bigger:user.vscode("editor.action.fontZoomIn")
+
+
+###############################################################################
+### split
+###############################################################################
+# this is taken mainly from andreas, 
+group focus: user.vscode("workbench.action.toggleEditorWidths")
+group one: user.vscode("workbench.action.focusFirstEditorGroup")
+group two: user.vscode("workbench.action.focusSecondEditorGroup")
+group three: user.vscode("workbench.action.focusThirdEditorGroup")
+group next:user.vscode("workbench.action.focusNextGroup")
+group last:user.vscode("workbench.action.focusPreviousGroup")
+
+split flip:              user.vscode("workbench.action.toggleEditorGroupLayout")
+split clear:             user.vscode("workbench.action.joinTwoGroups")
+split up:                user.vscode("workbench.action.moveEditorToAboveGroup")
+split down:              user.vscode("workbench.action.moveEditorToBelowGroup")
+split left:              user.vscode("workbench.action.moveEditorToLeftGroup")
+split right:             user.vscode("workbench.action.moveEditorToRightGroup")
+split open: 
+    key(ctrl-enter)
+    sleep(100ms)
+
+# Editor tabs and editor groups stuff.
+close everything: user.vscode("workbench.action.closeAllGroups")
+close others: user.vscode("workbench.action.closeOtherEditors")
+close all others:
+    user.vscode("workbench.action.closeOtherEditors")
+    user.vscode("workbench.action.closeEditorsInOtherGroups")
+move left: user.vscode("workbench.action.moveEditorLeftInGroup")
+move right: user.vscode("workbench.action.moveEditorRightInGroup")
+move last: user.vscode("workbench.action.moveEditorToPreviousGroup")
+move next: user.vscode("workbench.action.moveEditorToNextGroup")
+focus group: user.vscode("workbench.action.toggleEditorWidths")
+close group: user.vscode("workbench.action.closeEditorsInGroup")
+one group: user.vscode("workbench.action.closeEditorsInOtherGroups")
+
+(cross|group next): user.vscode("workbench.action.focusNextGroup")
+group last: user.vscode("workbench.action.focusPreviousGroup")
+
+
+
+###############################################################################
+### KeyPad shortcuts
+###############################################################################
+key(shift-cmd-alt-ctrl-9):
+    key(cmd-alt-right)
+key(shift-cmd-alt-ctrl-8):
+    key(cmd-alt-left)
+    # asterisk
+key(shift-cmd-alt-ctrl-a):
+    key(cmd-pagedown)
+    # user.vscode("workbench.action.nextEditorInGroup")
+key(shift-cmd-alt-ctrl-/):
+    key(cmd-pageup)
+    # user.vscode("workbench.action.previousEditorInGroup")
+    # hyphen
+key(shift-cmd-alt-ctrl-m):
+    key(cmd-w)
+key(keypad_5):
+    key(ctrl-`)

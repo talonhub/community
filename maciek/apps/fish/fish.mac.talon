@@ -3,6 +3,9 @@ tag: user.fish
 -
 tag(): user.brew
 tag(): user.poetry
+tag(): user.kubectl
+tag(): user.git
+
 fuzzy [<user.text>]:
     key(cmd-e)
     sleep(100ms)

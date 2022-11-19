@@ -262,6 +262,13 @@ class Actions:
         app = actions.user.get_running_app(name)
         actions.user.switcher_focus_app(app)
 
+    def switcher_focus_and_wait(name: str, time_to_sleep: float = 0.0):
+        """Focus a new application by name"""
+        app = actions.user.get_running_app(name)
+        Actions.switcher_focus_app(app)
+        actions.sleep(time_to_sleep)
+        
+
     def switcher_focus_app(app: ui.App):
         """Focus application and wait until switch is made"""
         app.focus()

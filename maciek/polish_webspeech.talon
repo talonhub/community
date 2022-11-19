@@ -1,4 +1,4 @@
-mode: user.webspeech_polish_dictation
+mode: user.polish
 -
 settings():
     speech.engine = 'webspeech'

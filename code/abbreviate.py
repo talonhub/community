@@ -94,6 +94,7 @@ abbreviations = {
     "generate": "gen",
     "hypertext": "http",
     "history": "hist",
+    "hertz": "hz",
     "image": "img",
     "import table": "iat",
     "import address table": "iat",

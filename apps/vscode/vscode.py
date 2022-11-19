@@ -26,10 +26,7 @@ and app.exe: Code.exe
 ctx.matches = r"""
 app: vscode
 """
-mac_ctx.matches = r"""
-os: mac
-app: vscode
-"""
+
 
 ctx.settings["insert_wait"] = 5.0
 user = actions.user
@@ -46,6 +43,7 @@ vscode_projects = {
     "fish": "fish-config",
     "cube": "my-kubernetes",
     "updater": "dns-updater",
+    "andreas":"andreas"
 }
 
 global_ctx.lists["user.vscode_projects"] = vscode_projects.keys()
@@ -121,7 +119,7 @@ class Actions:
         sleep("100ms")
         key("enter")
 
-    def copy_command_id():
+    def command_copy_id():
         """Copy the command id of the focused menu item"""
         actions.key("tab:2 enter")
         actions.sleep("500ms")
@@ -141,7 +139,6 @@ class Actions:
         key("enter")
 
     def vscode_terminal(number: int):
-
         """Activate a terminal by number"""
         actions.user.vscode(f"workbench.action.terminal.focusAtIndex{number}")
 
@@ -167,15 +164,10 @@ class Actions:
         """Show command palette"""
         actions.key("ctrl-shift-p")
 
-
-@mac_ctx.action_class("user")
-class MacUserActions:
-    def command_palette():
-        actions.key("cmd-shift-p")
-
-
 @ctx.action_class("user")
 class user_actions:
+    def command_palette():
+        actions.key("cmd-shift-p")
 
     # snippet.py support beginHelp close
     def snippet_search(text: str):

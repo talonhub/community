@@ -6,6 +6,8 @@ mod = Module()
 
 @mod.action_class
 class Actions:
+    def go_back():
+        """this is out as description"""
     def focus_puppy():
         """this is out as description"""
         window = actions.user.find_window(

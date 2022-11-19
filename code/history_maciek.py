@@ -77,17 +77,21 @@ class HistoryLogger(object):
                 break
 
     def on_phrase(self, j):
-        print("type of j", type(j))
-        print("j", j)
-        print(j.keys())
+        # print("type of j", type(j))
+        # print("j", j)
+        # print(j.keys())
+        print("history_maciek.py: on_phrase")
+        print("phrase = ", j.get("phrase", None))
+        print("parsed = ", j.get("parsed", None))
         if "_metadata" in j.keys():
-            print(j["samples"])
+            # print(j["samples"])
             # print(help(j["samples"]))
             to_dump = j["_metadata"]
             # print(to_dump)
-            to_print = ["audio_ms", "emit_ms", "compile_ms", "decode_ms", "total_ms"]
+            # to_print = ["audio_ms", "emit_ms", "compile_ms", "decode_ms", "total_ms"]
+            to_print = ["audio_ms", "emit_ms"]
             for name in to_print:
-                print(f"{name} =  {to_dump[name]}")
+                print(f"{name} =  {float(to_dump[name]):.1f}")
             # diagnostics = create_diagnostics()
             # to_dump["diagnostics"] = diagnostics
             # raise RuntimeError
@@ -95,24 +99,22 @@ class HistoryLogger(object):
             # flac_filename=
             # flac_path =Path.home() / f".talon_maciek/{filename}"
 
-            print(f"path =  {path}")
+            # print(f"path =  {path}")
             to_dump["samples"] = j["samples"]
             # self.executor.submit(self.send_message_with_retry, to_dump)
             # self.send_message_with_retry(to_dump)
 
-            with open(path, mode="a") as f:
-                f.write(json.dumps(to_dump))
+            # with open(path, mode="a") as f:
+            #     f.write(json.dumps(to_dump))
 
-                f.write("\n")
-                f.write("---\n")
+            #     f.write("\n")
+            #     f.write("---\n")
 
         try:
             val = parse_phrase(getattr(j["parsed"], "_unmapped", j["phrase"]))
         except:
             val = parse_phrase(j["phrase"])
-        print(100 * "=")
-
-        print(type(val))
+        print(25 * "=")
 
 
 history_logger = HistoryLogger()

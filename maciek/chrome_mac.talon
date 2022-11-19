@@ -5,10 +5,12 @@ app: chrome
 ###############################################################################
 ### vimium
 ###############################################################################
-next page: 
-    insert("]]")
-last page: 
-    insert("[[")
+page next: insert("]]")
+page last: insert("[[")
+page crown: key("cmd-up")
+scroll:key(n)
+scroll up:key(u)
+page refresh: key("cmd-r")
     
 show links: key("f")
 link: key("f")
@@ -26,10 +28,16 @@ search that:
     key(cmd-v)
 
 copy link: key(y f)
-(address | url) copy: 
-    key(escape y y)
+u r l copy: 
+    key(cmd-l)
+    key(cmd-c)
+    # key(e§ape y y)
     sleep(100ms)
 
+address [<user.text>]:
+    key(cmd-l)
+    sleep(50ms)
+    insert(text or "")
 address [<user.text>]:
     key(cmd-l)
     sleep(50ms)
@@ -73,8 +81,6 @@ find this:
     sleep(200ms)
     key(cmd-v)
     
-password fill: 
-    key(cmd-shift-l)
 
 ###############################################################################
 ### Keyboard shortcuts
@@ -110,3 +116,4 @@ bookmark:
 
 # This is for the search
 key(cmd-enter): key(ctrl-enter)
+let <user.letters>: insert(letters) 

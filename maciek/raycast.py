@@ -25,6 +25,10 @@ class user_actions:
         wait_for_raycast()
         actions.insert(query)
 
+    def raycast_clipboard():
+        """."""
+        actions.key("cmd-shift-f7")
+
     def raycast_coder_project(project_name: str):
         """."""
         actions.key("cmd-shift-f2")

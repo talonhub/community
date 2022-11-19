@@ -292,5 +292,6 @@ mode: user.webspeech_english_dictation
 @dictation_ctx.action_class("main")
 class main_action:
     def auto_insert(text):
+        print('auto_insert')
         print(f"text =  {text}")
         actions.user.dictation_insert(text)

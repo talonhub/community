@@ -38,10 +38,10 @@ settings():
     # when this was set to 0.3,  the normal speech was cut off sometimes.  this assumes that normalize = 1,  
     # and input volume on macOS settings is 50%
     # But when I set it to = 0.25  the sound of keyboard clicks is being picked up as activity
-    speech.threshold = 0.25                                                      
-
-    speech.timeout = 0.300
-    # speech.debug = 1
+    # speech.threshold = 0.1
+    speech.threshold = 0.3
+    speech.timeout = 0.250
+    speech.debug = 1
     # speech.timeout = 0.180
     # Uncomment the below to enable context-sensitive dictation. This determines
     # how to format (capitalize, space) dictation-mode speech by selecting &

@@ -1,7 +1,7 @@
 Spoken form, Cursorless identifier
-arg, argumentOrParameter
+param, argumentOrParameter
 attribute, attribute
-block, paragraph
+blocko, paragraph
 call, functionCall
 cell, notebookCell
 char, character

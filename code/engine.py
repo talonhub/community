@@ -8,7 +8,7 @@ mod = Module()
 class Actions:
     def engine_sleep():
         """Sleep the engine"""
-        speech_system.engine_mimic("go to sleep"),
+        speech_system.engine_mimic("drowsy"),
 
     def engine_wake():
         """Wake the engine"""

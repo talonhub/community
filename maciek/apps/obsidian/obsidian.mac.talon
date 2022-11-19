@@ -3,7 +3,7 @@ app: obsidian
 #todo: some sort of plugin, consolidate with teams or something?
 -
 #It would be nice to have  one file both for linux and mac.
-search [<user.text>]$: 
+[go] search [<user.text>]$: 
     key(cmd-u)
     sleep(50ms)
     insert(text or "")
@@ -12,8 +12,8 @@ bullet:
     insert("- ")
 # bullet: user.obsidian_run_command("Toggle bullet list")
 
-dock [<user.text>]$:
-    key(cmd-o)
+lion [<user.text>]$:
+    key(cmd-p)
     sleep(50ms)
     insert(text or "")
 
@@ -23,7 +23,7 @@ create[note] [<user.text>]$:
     insert(text or "")
 
 please [<user.text>]$: 
-    key(cmd-p
+    key(alt-p)
     sleep(50ms)
     insert(text or "")
 

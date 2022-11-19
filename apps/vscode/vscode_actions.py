@@ -52,3 +52,5 @@ class UserActions:
     def multi_cursor_select_all_occurrences():   actions.user.vscode('editor.action.selectHighlights')
     def multi_cursor_select_fewer_occurrences(): actions.user.vscode('cursorUndo')
     def multi_cursor_select_more_occurrences():  actions.user.vscode('editor.action.addSelectionToNextFindMatch')
+    def go_back(): actions.user.vscode('workbench.action.navigateBack')
+        

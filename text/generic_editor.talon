@@ -99,51 +99,51 @@ indent [more]:
     edit.indent_less()
 
 # deleting
-(clear|wipe) line:
+(clear|wipe|trash) line:
     edit.delete_line()
 
-(clear|wipe) left:
+(clear|wipe|trash) left:
     key(backspace)
 
-(clear|wipe) right:
+(clear|wipe|trash) right:
     key(delete)
 
-(clear|wipe) up:
+(clear|wipe|trash) up:
     edit.extend_line_up()
     edit.delete()
 
-(clear|wipe) down:
+(clear|wipe|trash) down:
     edit.extend_line_down()
     edit.delete()
 
-(clear|wipe) word:
+(clear|wipe|trash) word:
     edit.delete_word()
 
-(clear|wipe) word left:
+(clear|wipe|trash) word left:
     edit.extend_word_left()
     edit.delete()
 
-(clear|wipe) word right:
+(clear|wipe|trash) word right:
     edit.extend_word_right()
     edit.delete()
 
-(clear|wipe) west:
+(clear|wipe|trash) west:
     edit.extend_line_start()
     edit.delete()
 
-(clear|wipe) east:
+(clear|wipe|trash) east:
     edit.extend_line_end()
     edit.delete()
 
-(clear|wipe) north:
+(clear|wipe|trash) north:
     edit.extend_file_start()
     edit.delete()
 
-(clear|wipe) south:
+(clear|wipe|trash) south:
     edit.extend_file_end()
     edit.delete()
 
-(clear|wipe) all:
+(clear|wipe|trash) all:
     edit.select_all()
     edit.delete()
 

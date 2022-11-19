@@ -1,4 +1,4 @@
-mode: user.webspeech_polish_dictation
+mode: user.polish
 -
 ^press <user.keys>$: key("{keys}")
 (kropka|kropkę): "."

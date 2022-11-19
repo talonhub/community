@@ -14,7 +14,9 @@ mode: all
     speech.disable()
     user.engine_sleep()
     
-^drowsy$: speech.disable()
+drowsy$: speech.disable()
+^[<user.text>] scratch [that]$: 
+    sleep(100ms)
 
 ^wake up  [<phrase>]$: 
     speech.enable()

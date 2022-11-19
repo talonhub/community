@@ -34,12 +34,14 @@ class Actions:
         if phrase:
             actions.user.rephrase(phrase, run_async=True)
 
-    def webspeech_polish_dictation_mode(phrase: Union[Phrase, str] = None):
-        """Enter dictation mode and re-evaluate phrase"""
-        actions.mode.disable("command")
-        actions.mode.enable("user.webspeech_polish_dictation")
-        if phrase:
-            actions.user.rephrase(phrase, run_async=False)
+    # def webspeech_polish_dictation_mode(phrase: Union[Phrase, str] = None):
+    #     """Enter dictation mode and re-evaluate phrase"""
+    #     actions.mode.disable("command")
+    #     actions.mode.enable("user.webspeech_polish_dictation")
+    #     print("turning on polish dictation")
+
+    #     if phrase:
+    #         actions.user.rephrase(phrase, run_async=False)
 
     def webspeech_english_dictation_mode(phrase: Union[Phrase, str] = None):
         """Enter dictation mode and re-evaluate phrase"""

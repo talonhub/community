@@ -6,7 +6,7 @@ from talon import scripting
 
 ctx = cubeb.Context()
 mod = Module()
-
+,
 
 def devices_changed(device_type):
     update_microphone_list()
@@ -56,6 +56,8 @@ class Actions:
                     break
 
             gui.hide()
+    def microphone_show():
+        app.notify()
 
 
 ctx.register("devices_changed", devices_changed)
