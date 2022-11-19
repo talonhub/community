@@ -74,13 +74,12 @@ class ContextSensitiveDictationActions:
     see https://github.com/knausj85/knausj_talon/pull/356
     """
 
-    def dictation_peek_left():
+    def dictation_peek(left, right):
         area = draft_manager.area
-        return area[max(0, area.sel.left - 50) : area.sel.left]
-
-    def dictation_peek_right():
-        area = draft_manager.area
-        return area[area.sel.right : area.sel.right + 50]
+        return (
+            area[max(0, area.sel.left - 50) : area.sel.left],
+            area[area.sel.right : area.sel.right + 50],
+        )
 
     def paste(text: str):
         # todo: remove once user.paste works reliably with the draft window
