@@ -39,3 +39,28 @@ class Actions:
         """Moves right by n words."""
         for _ in range(n):
             actions.edit.word_right()
+
+    def cut_word_left():
+        """Cuts the word to the left."""
+        actions.edit.extend_word_left()
+        actions.edit.cut()
+
+    def cut_word_right():
+        """Cuts the word to the right."""
+        actions.edit.extend_word_right()
+        actions.edit.cut()
+
+    def cut_line():
+        """Cuts the current line."""
+        actions.edit.select_line()
+        actions.edit.cut()
+
+    def copy_word_left():
+        """Copies the word to the left."""
+        actions.edit.extend_word_left()
+        actions.edit.copy()
+
+    def copy_word_right():
+        """Copies the word to the right."""
+        actions.edit.extend_word_right()
+        actions.edit.copy()
