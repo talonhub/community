@@ -101,7 +101,7 @@ def raise_homophones(word_to_find_homophones_for, forced=False, selection=False)
     if word_to_find_homophones_for in all_homophones:
         valid_homophones = all_homophones[word_to_find_homophones_for]
     elif (
-        word_to_find_homophones_for[-1] == "s"
+        word_to_find_homophones_for.endswith("s")
         and word_to_find_homophones_for[:-1] in all_homophones
     ):
         valid_homophones = map(
