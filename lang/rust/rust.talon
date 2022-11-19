@@ -74,7 +74,7 @@ use <user.code_libraries>:
 
 ## specialist flow control
 state if let some: user.code_insert_if_let_some()
-state if let (ok|okay): user.code_insert_if_let_okay()
+state if let (ok | okay): user.code_insert_if_let_okay()
 state if let error: user.code_insert_if_let_error()
 
 ## rust centric synonyms
@@ -95,8 +95,7 @@ implemented trait {user.code_trait}: insert("impl {code_trait}")
 dynamic trait {user.code_trait}: insert("dyn {code_trait}")
 
 ## for generic reference of macro
-macro {user.code_macros}:
-    user.code_insert_macro(code_macros, "")
+macro {user.code_macros}: user.code_insert_macro(code_macros, "")
 macro wrap {user.code_macros}:
     user.code_insert_macro(code_macros, edit.selected_text())
 
