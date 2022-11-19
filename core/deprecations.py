@@ -45,8 +45,8 @@ See https://github.com/knausj85/knausj_talon/issues/940 for original discussion
 """
 
 import datetime
-import warnings
 import os.path
+import warnings
 
 from talon import Module, actions, speech_system
 
@@ -69,9 +69,13 @@ notification_last_shown = {}
 # This gets reset on every phrase, so we avoid notifying more than once per
 # phrase.
 notified_in_phrase = set()
+
+
 def post_phrase(_ignored):
     global notified_in_phrase
     notified_in_phrase = set()
+
+
 speech_system.register("post:phrase", post_phrase)
 
 
@@ -101,11 +105,12 @@ class Actions:
         instead.
         """
 
-        if name in notified_in_phrase: return
+        if name in notified_in_phrase:
+            return
         notified_in_phrase.add(name)
         msg = (
             f'The "{name}" command is deprecated. Instead, say: "{replacement}".'
-            f' See log for more.'
+            f" See log for more."
         )
         actions.app.notify(msg, "Deprecation warning")
         msg = (
