@@ -1,9 +1,9 @@
 app: apple_terminal
 -
-# makes the commands in generic_terminal available
+# makes the commands in terminal.talon available
 tag(): terminal
 
-# activates the implementation of the commands/functions in generic_terminal
+# activates the implementation of the commands/functions in terminal.talon
 tag(): user.generic_unix_shell
 
 # makes commands for certain applications available

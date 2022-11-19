@@ -5,8 +5,6 @@ mod = Module()
 
 @mod.action_class
 class Actions:
-    # implements the function from generic_terminal.talon for unix shells
-
     def terminal_list_directories():
         """Lists directories"""
 
