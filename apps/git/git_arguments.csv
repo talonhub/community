@@ -39,6 +39,7 @@ Option, Spoken form
 --rebase, rebase
 --remote, remote
 --set-upstream, set up stream
+--set-upstream-to, set up stream to
 --short, short
 --shortstat, short stat
 --skip, skip
