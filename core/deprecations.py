@@ -49,6 +49,13 @@ import datetime
 from talon import Module, actions
 
 mod = Module()
+setting_deprecation_warning_interval_hours = mod.setting(
+    "deprecation_warning_interval_hours",
+    type=float,
+    desc="""How long, in hours, to wait before notifying the user again of a
+    deprecated action/command/capture.""",
+    default=24,
+)
 
 # Tells us the last time a notification was shown so we can
 # decide when to re-show it without annoying the user too
@@ -57,7 +64,7 @@ notification_last_shown = {}
 
 
 @mod.action_class
-class Acions:
+class Actions:
     def deprecate_notify(id: str, message: str):
         """
         Notify the user about a deprecation/deactivation. id uniquely
@@ -66,7 +73,8 @@ class Acions:
 
         maybe_last_shown = notification_last_shown.get(id)
         now = datetime.datetime.now()
-        threshold = now - datetime.timedelta(hours=2)
+        interval = setting_deprecation_warning_interval_hours.get()
+        threshold = now - datetime.timedelta(hours=interval)
         if maybe_last_shown is not None and maybe_last_shown > threshold:
             return
 
