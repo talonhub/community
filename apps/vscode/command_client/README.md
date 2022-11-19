@@ -4,9 +4,9 @@ This directory contains the client code for communicating with the [VSCode comma
 
 ## Contributing
 
-The source of truth is in https://github.com/knausj85/knausj_talon/tree/master/apps/vscode/command_client, but the code is also maintained as a subtree at https://github.com/pokey/talon-vscode-command-client.
+The source of truth is in https://github.com/knausj85/knausj_talon/tree/main/apps/vscode/command_client, but the code is also maintained as a subtree at https://github.com/pokey/talon-vscode-command-client.
 
-To contribute, first open a PR on knausj. Once the PR is merged, you can push the changes to the subtree by running the following commands on an up-to-date knausj master: (need write access)
+To contribute, first open a PR on knausj. Once the PR is merged, you can push the changes to the subtree by running the following commands on an up-to-date knausj main: (need write access)
 
 ```sh
 git subtree split --prefix=apps/vscode/command_client --annotate="[split] " -b split

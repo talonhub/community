@@ -79,9 +79,6 @@ class UserActions:
     def code_insert_is_null():
         actions.auto_insert(" === null")
 
-    def code_type_dictionary():
-        actions.user.insert_between("{", "}")
-
     def code_state_if():
         actions.user.insert_between("if (", ")")
 
@@ -247,6 +244,16 @@ class UserActions:
         text += f"({selection or ''})"
         actions.user.paste(text)
         actions.edit.left()
+
+    def code_default_function(text: str):
+        """Inserts function declaration without modifiers"""
+        result = "function {}".format(
+            actions.user.formatted_text(
+                text, settings.get("user.code_private_function_formatter")
+            )
+        )
+
+        actions.user.code_insert_function(result, None)
 
     def code_private_function(text: str):
         """Inserts private function declaration"""
