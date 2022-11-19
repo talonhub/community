@@ -5,16 +5,16 @@ functionality is encouraged.
 
 The normal deprecation process in knausj_talon is as follows:
 
-1. For 4 months from deprecation a deprecated action or command should
+1. For 6 months from deprecation a deprecated action or command should
    continue working. Put an entry in the BREAKING_CHANGES.txt file in the
    project root to mark the deprecation and potentially explain how users can
    migrate. Use the user.deprecate_command, user.deprecate_action, or
    user.deprecate_capture actions to notify users.
-2. After 4 months you can delete the deprecated command, action, or capture.
+2. After 6 months you can delete the deprecated command, action, or capture.
    Leave the note in BREAKING_CHANGES.txt so people who missed the
    notifications can see what happened.
 
-If for some reason you can't keep the functionality working for 4 months,
+If for some reason you can't keep the functionality working for 6 months,
 just put the information in BREAKING_CHANGES.txt so people can look there to
 see what happened.
 
