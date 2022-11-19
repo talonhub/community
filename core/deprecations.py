@@ -94,7 +94,6 @@ class Actions:
         if maybe_last_shown is not None and maybe_last_shown > threshold:
             return
 
-        print("Deprecation warning: " + message)
         actions.app.notify(message, "Deprecation warning")
         notification_last_shown[id] = now
 
@@ -127,11 +126,18 @@ class Actions:
         """
 
         id = f"capture.{name}.{time_deprecated}"
-        msg = (
-            f'The "{name}" capture was deprecated on '
-            f"{time_deprecated}. See BREAKING_CHANGES.txt for details."
+
+        actions.user.deprecate_notify(
+            id, f"The `{name}` capture is deprecated. See log for more."
         )
-        actions.user.deprecate_notify(id, msg)
+
+        msg = (
+            f"The `{name}` capture is deprecated since {time_deprecated}."
+            f' See {os.path.join(REPO_DIR, "BREAKING_CHANGES.txt")}'
+        )
+        warnings.warn(msg, DeprecationWarning, stacklevel=3)
+
+        try_print_rule_info()
 
     def deprecate_action(time_deprecated: str, name: str):
         """
@@ -140,8 +146,26 @@ class Actions:
         """
 
         id = f"action.{name}.{time_deprecated}"
-        msg = (
-            f'The "{name}" action was deprecated on '
-            f"{time_deprecated}. See BREAKING_CHANGES.txt for details."
+
+        actions.user.deprecate_notify(
+            id, f"The `{name}` action is deprecated. See log for more."
         )
-        actions.user.deprecate_notify(id, msg)
+
+        msg = (
+            f"The `{name}` action is deprecated since {time_deprecated}."
+            f' See {os.path.join(REPO_DIR, "BREAKING_CHANGES.txt")}'
+        )
+        warnings.warn(msg, DeprecationWarning, stacklevel=5)
+
+        try_print_rule_info()
+
+
+def try_print_rule_info():
+    try:
+        current_command = actions.core.current_command__unstable()
+        start_line = current_command[0].target.start_line
+        filename = current_command[0].target.filename
+        rule = " ".join(current_command[1]._unmapped)
+        print(f'Triggered from "{rule}" ({filename}:{start_line})')
+    except Exception:
+        pass
