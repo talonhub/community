@@ -185,6 +185,15 @@ class Actions:
         """Show the homophones display"""
         raise_homophones(m, False, False)
 
+    def homophones_show_auto():
+        """Show homophones for selection, or current word if selection is empty."""
+        text = actions.edit.selected_text()
+        if text:
+            actions.user.homophones_show(text)
+        else:
+            actions.edit.select_word()
+            actions.user.homophones_show_selection()
+
     def homophones_show_selection():
         """Show the homophones display for the selected text"""
         raise_homophones(actions.edit.selected_text(), False, True)
