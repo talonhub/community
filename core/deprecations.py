@@ -45,8 +45,12 @@ See https://github.com/knausj85/knausj_talon/issues/940 for original discussion
 """
 
 import datetime
+import warnings
+import os.path
 
-from talon import Module, actions
+from talon import Module, actions, speech_system
+
+REPO_DIR = os.path.dirname(os.path.dirname(__file__))
 
 mod = Module()
 setting_deprecation_warning_interval_hours = mod.setting(
@@ -61,6 +65,14 @@ setting_deprecation_warning_interval_hours = mod.setting(
 # decide when to re-show it without annoying the user too
 # much
 notification_last_shown = {}
+
+# This gets reset on every phrase, so we avoid notifying more than once per
+# phrase.
+notified_in_phrase = set()
+def post_phrase(_ignored):
+    global notified_in_phrase
+    notified_in_phrase = set()
+speech_system.register("post:phrase", post_phrase)
 
 
 @mod.action_class
@@ -82,18 +94,26 @@ class Actions:
         actions.app.notify(message, "Deprecation warning")
         notification_last_shown[id] = now
 
-    def deprecate_command(time_deprecated: str, name: str):
+    def deprecate_command(time_deprecated: str, name: str, replacement: str):
         """
         Notify the user that the given voice command is deprecated and should
-        not be used into the future.
+        not be used into the future; the command `replacement` should be used
+        instead.
         """
 
-        id = f"command.{name}.{time_deprecated}"
+        if name in notified_in_phrase: return
+        notified_in_phrase.add(name)
         msg = (
-            f'The "{name}" voice command was deprecated on '
-            f"{time_deprecated}. See BREAKING_CHANGES.txt for details."
+            f'The "{name}" command is deprecated. Instead, say: "{replacement}".'
+            f' See log for more.'
         )
-        actions.user.deprecate_notify(id, msg)
+        actions.app.notify(msg, "Deprecation warning")
+        msg = (
+            f'The "{name}" command is deprecated since {time_deprecated}.'
+            f' Instead, say: "{replacement}".'
+            f' See {os.path.join(REPO_DIR, "BREAKING_CHANGES.txt")}'
+        )
+        warnings.warn(msg, DeprecationWarning)
 
     def deprecate_capture(time_deprecated: str, name: str):
         """
