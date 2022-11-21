@@ -1,0 +1,208 @@
+Abbreviation,Word
+addr,address
+admin,administrator
+admins,administrators
+adv,advance
+adv,advanced
+ab,alberta
+alt,alternative
+app,application
+apps,applications
+arg,argument
+args,arguments
+afaict,as far as i can tell
+afaik,as far as i know
+asm,assembly
+atm,at the moment
+attr,attribute
+attrs,attributes
+auth,authenticate
+auth,authentication
+afk,away from keyboard
+bin,binary
+bool,boolean
+bc,british columbia
+btn,button
+ca,canada
+cm,centimeter
+chr,char
+char,character
+cls,class
+cli,client
+cmd,command
+cmt,comment
+cmp,compare
+conf,conference
+cfg,config
+cfg,configuration
+ctx,context
+ctrl,control
+const,constant
+coord,coordinate
+coords,coordinates
+cpy,copy
+cnt,count
+ctr,counter
+db,database
+decl,declare
+decl,declaration
+dec,decode
+dec,decrement
+dbg,debug
+def,define
+def,definition
+desc,description
+dev,develop
+dev,development
+dev,device
+dict,dictation
+dict,dictionary
+dir,direction
+dir,directory
+dist,distribution
+doc,document
+docs,documents
+dbl,double
+dup,dupe
+dup,duplicate
+dyn,dynamic
+enc,encode
+ent,entry
+enum,enumerate
+env,environment
+esc,escape
+etc,etcetera
+ex,example
+exc,exception
+exec,execute
+exp,expression
+ext,extend
+ext,extension
+fs,file system
+fw,framework
+func,function
+lol,funny
+gen,generic
+gen,generate
+http,hypertext
+hist,history
+img,image
+iat,import table
+iat,import address table
+inc,increment
+info,information
+init,initialize
+init,initializer
+irl,in real life
+inst,instance
+int,integer
+int,interrupt
+iter,iterate
+jar,java archive
+js,javascript
+json,jason
+jmp,jump
+kbd,keyboard
+kwargs,keyword arguments
+kw,keyword
+kg,kilogram
+km,kilometer
+lng,language
+len,length
+lib,library
+mb,manitoba
+md,markdown
+msg,message
+msf,meta sploit
+msf,meta sploit framework
+mic,microphone
+mg,milligram
+ms,millisecond
+misc,miscellaneous
+mod,module
+mnt,mount
+ns,nano second
+nvim,neo vim
+nb,new brunswick
+ns,nova scotia
+num,number
+obj,object
+ok,okay
+on,ontario
+opt,option
+os,operating system
+orig,original
+pkg,package
+param,parameter
+params,parameters
+ps,pico second
+px,pixel
+pt,point
+ptr,pointer
+pos,position
+pic,position independent code
+pie,position independent executable
+prev,previous
+prop,property
+pub,public
+py,python
+qc,quebec
+qs,query string
+rnd,random
+rcpt,receipt
+ref,reference
+refs,references
+reg,register
+reg,registery
+regex,regular expression
+regex,regular expressions
+repl,repel
+repr,represent
+repr,representation
+req,request
+ret,return
+rev,revision
+rb,ruby
+rs,rust
+sk,saskatchewan
+sp,service pack
+sid,session id
+sh,shell
+sc,shellcode
+src,source
+spec,special
+spec,specific
+spec,specification
+spec,specify
+stdin,standard in
+stdout,standard out
+std,standard
+str,string
+struct,structure
+sync,synchronize
+sync,synchronous
+sys,system
+toc,table of contents
+tbl,table
+tw,taiwan
+tech,technology
+temp,temperature
+tmp,temporary
+tmp,temp
+txt,text
+toctou,time of check time of use
+tok,token
+ulti,ultimate
+uuid,unique id
+usr,user
+utils,utilities
+util,utility
+val,value
+var,variable
+vrfy,verify
+vs,versus
+vis,visual
+msvc,visual studio
+www,web
+wtf,what the fuck
+win,window
