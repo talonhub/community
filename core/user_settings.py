@@ -13,7 +13,10 @@ if not SETTINGS_DIR.is_dir():
 
 
 def get_list_from_csv(
-    filename: str, headers: tuple[str, str], default: dict[str, str] = {}, dir: str = str(SETTINGS_DIR)
+    filename: str,
+    headers: tuple[str, str],
+    default: dict[str, str] = {},
+    dir: str = str(SETTINGS_DIR),
 ):
     """Retrieves list from CSV"""
     path = Path(dir) / filename
