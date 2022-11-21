@@ -1,13 +1,17 @@
-from talon import Module, Context, actions, speech_system, clip, imgui
+from talon import Context, Module, actions, clip, imgui, speech_system
 
 mod = Module()
 
-mod.list("saved_macros", desc="list of macros that have been saved with the 'macro save' command")
+mod.list(
+    "saved_macros",
+    desc="list of macros that have been saved with the 'macro save' command",
+)
 ctx = Context()
 
 macros = {}
 macro = []
 recording = False
+
 
 @imgui.open(y=0)
 def macro_list_gui(gui: imgui.GUI):
@@ -15,6 +19,7 @@ def macro_list_gui(gui: imgui.GUI):
     gui.line()
     for command_name in macros.keys():
         gui.text(command_name)
+
 
 @mod.action_class
 class Actions:
