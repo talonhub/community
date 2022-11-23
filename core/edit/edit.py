@@ -18,6 +18,20 @@ class EditActions:
         actions.edit.line_end()
         actions.key("enter")
 
+    def selection_clone():
+        actions.edit.copy()
+        actions.edit.select_none()
+        actions.edit.paste()
+
+    def line_clone():
+        # This may not work if editor auto-indents. Is there a better way?
+        actions.edit.line_start()
+        actions.edit.extend_line_end()
+        actions.edit.copy()
+        actions.edit.right()
+        actions.key("enter")
+        actions.edit.paste()
+
 
 @mod.action_class
 class Actions:
