@@ -1,15 +1,13 @@
-#control mouse: tracking.control1_toggle()
-#zoom mouse: user.mouse_toggle_zoom_mouse()
-#camera overlay: user.mouse_toggle_camera_overlay()
+zoom mouse: tracking.control_zoom_toggle()
 run calibration: tracking.calibrate()
 
-# touch:
-#     mouse_click(0)
-#     # close the mouse grid if open
-#     user.grid_close()
-#     # End any open drags
-#     # Touch automatically ends left drags so this is for right drags specifically
-#     user.mouse_drag_end()
+touch:
+    mouse_click(0)
+    # close the mouse grid if open
+    user.grid_close()
+    # End any open drags
+    # Touch automatically ends left drags so this is for right drags specifically
+    user.mouse_drag_end()
 
 # righty:
 #     mouse_click(1)
@@ -28,18 +26,18 @@ run calibration: tracking.calibrate()
 # #option = alt
 # #shift
 # #super = windows key
-# <user.modifiers> touch:
-#     key("{modifiers}:down")
-#     mouse_click(0)
-#     key("{modifiers}:up")
-#     # close the mouse grid
-#     user.grid_close()
-# <user.modifiers> righty:
-#     key("{modifiers}:down")
-#     mouse_click(1)
-#     key("{modifiers}:up")
-#     # close the mouse grid
-#     user.grid_close()
+<user.modifiers> touch:
+    key("{modifiers}:down")
+    mouse_click(0)
+    key("{modifiers}:up")
+    # close the mouse grid
+    user.grid_close()
+<user.modifiers> righty:
+    key("{modifiers}:down")
+    mouse_click(1)
+    key("{modifiers}:up")
+    # close the mouse grid
+    user.grid_close()
 # (dub click | duke):
 #     mouse_click()
 #     mouse_click()
