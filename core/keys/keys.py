@@ -116,8 +116,11 @@ modifier_keys = {
     "super": "super",
 }
 if app.platform == "mac":
-    modifier_keys["command"] = "cmd"
+    modifier_keys["man"] = "cmd"
     modifier_keys["option"] = "alt"
+elif app.platform == "win":
+    modifier_keys["man"] = "super"
+
 ctx.lists["self.modifier_key"] = modifier_keys
 alphabet = dict(zip(default_alphabet, letters_string))
 ctx.lists["self.letter"] = alphabet
