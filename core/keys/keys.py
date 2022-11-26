@@ -111,7 +111,8 @@ ctx = Context()
 modifier_keys = {
     # If you find 'alt' is often misrecognized, try using 'alter'.
     "alt": "alt",  #'alter': 'alt',
-    "control": "ctrl",  #'troll':   'ctrl',
+    
+    "troll": "ctrl",  #'troll':   'ctrl',
     "shift": "shift",  #'sky':     'shift',
     "super": "super",
 }
@@ -120,6 +121,9 @@ if app.platform == "mac":
     modifier_keys["option"] = "alt"
 elif app.platform == "win":
     modifier_keys["man"] = "super"
+    modifier_keys["option"] = "alt"
+    modifier_keys["man"] = "super"
+
 
 ctx.lists["self.modifier_key"] = modifier_keys
 alphabet = dict(zip(default_alphabet, letters_string))
