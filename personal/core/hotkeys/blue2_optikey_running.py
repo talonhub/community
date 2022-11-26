@@ -57,7 +57,7 @@ class WindowsZoomMouseInactiveActions:
 
     def blue2_s7():
         """document string goes here"""
-        actions.user.mouse_toggle_zoom_mouse()
+        actions.tracking.control_zoom_toggle()
 
     def blue2_s8():
         """document string goes here"""

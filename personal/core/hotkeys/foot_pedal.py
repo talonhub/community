@@ -20,7 +20,7 @@ class Actions:
 
     def foot_pedal_right_left():
         """document string goes here"""
-        actions.user.mouse_toggle_zoom_mouse()
+        actions.tracking.control_zoom_toggle()
         # actions.key("pageup")
 
     def foot_pedal_right_middle():
