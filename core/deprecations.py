@@ -23,7 +23,12 @@ Usages:
     # myfile.talon - demonstrate voice command deprecation
     ...
     old legacy command:
-        user.deprecate_command("2022-11-10", "old legacy command")
+        # This will show a notification to say use 'new command' instead of
+        # 'old legacy command'. No removal of functionality is allowed.
+        user.deprecate_command("2022-11-10", "old legacy command", "new command")
+        # perform command
+
+    new command:
         # perform command
 
     # myfile.py - demonstrate action deprecation
@@ -54,7 +59,7 @@ REPO_DIR = os.path.dirname(os.path.dirname(__file__))
 
 mod = Module()
 setting_deprecation_warning_interval_hours = mod.setting(
-    "deprecation_warning_interval_hours",
+    "deprecate_warning_interval_hours",
     type=float,
     desc="""How long, in hours, to wait before notifying the user again of a
     deprecated action/command/capture.""",
@@ -71,6 +76,37 @@ notification_last_shown = {}
 notified_in_phrase = set()
 
 
+def calculate_rule_info():
+    """
+    Try to work out the .talon file and line of the command that is executing
+    """
+    try:
+        current_command = actions.core.current_command__unstable()
+        start_line = current_command[0].target.start_line
+        filename = current_command[0].target.filename
+        rule = " ".join(current_command[1]._unmapped)
+        return f'\nTriggered from "{rule}" ({filename}:{start_line})'
+    except Exception as e:
+        return ""
+
+
+def deprecate_notify(id: str, message: str):
+    """
+    Notify the user about a deprecation/deactivation. id uniquely
+    identifies this deprecation.
+    """
+
+    maybe_last_shown = notification_last_shown.get(id)
+    now = datetime.datetime.now()
+    interval = setting_deprecation_warning_interval_hours.get()
+    threshold = now - datetime.timedelta(hours=interval)
+    if maybe_last_shown is not None and maybe_last_shown > threshold:
+        return
+
+    actions.app.notify(message, "Deprecation warning")
+    notification_last_shown[id] = now
+
+
 def post_phrase(_ignored):
     global notified_in_phrase
     notified_in_phrase = set()
@@ -81,22 +117,6 @@ speech_system.register("post:phrase", post_phrase)
 
 @mod.action_class
 class Actions:
-    def deprecate_notify(id: str, message: str):
-        """
-        Notify the user about a deprecation/deactivation. id uniquely
-        identifies this deprecation.
-        """
-
-        maybe_last_shown = notification_last_shown.get(id)
-        now = datetime.datetime.now()
-        interval = setting_deprecation_warning_interval_hours.get()
-        threshold = now - datetime.timedelta(hours=interval)
-        if maybe_last_shown is not None and maybe_last_shown > threshold:
-            return
-
-        actions.app.notify(message, "Deprecation warning")
-        notification_last_shown[id] = now
-
     def deprecate_command(time_deprecated: str, name: str, replacement: str):
         """
         Notify the user that the given voice command is deprecated and should
@@ -106,6 +126,11 @@ class Actions:
 
         if name in notified_in_phrase:
             return
+
+        # Want to tell users every time they use a deprecated command since
+        # they should immediately be retraining to use {replacement}. Also
+        # so if they repeat the command they get another chance to read
+        # the popup message.
         notified_in_phrase.add(name)
         msg = (
             f'The "{name}" command is deprecated. Instead, say: "{replacement}".'
@@ -127,17 +152,16 @@ class Actions:
 
         id = f"capture.{name}.{time_deprecated}"
 
-        actions.user.deprecate_notify(
+        deprecate_notify(
             id, f"The `{name}` capture is deprecated. See log for more."
         )
 
         msg = (
             f"The `{name}` capture is deprecated since {time_deprecated}."
             f' See {os.path.join(REPO_DIR, "BREAKING_CHANGES.txt")}'
+            f"{calculate_rule_info()}"
         )
         warnings.warn(msg, DeprecationWarning, stacklevel=3)
-
-        try_print_rule_info()
 
     def deprecate_action(time_deprecated: str, name: str):
         """
@@ -147,25 +171,13 @@ class Actions:
 
         id = f"action.{name}.{time_deprecated}"
 
-        actions.user.deprecate_notify(
+        deprecate_notify(
             id, f"The `{name}` action is deprecated. See log for more."
         )
 
         msg = (
             f"The `{name}` action is deprecated since {time_deprecated}."
             f' See {os.path.join(REPO_DIR, "BREAKING_CHANGES.txt")}'
+            f"{calculate_rule_info()}"
         )
         warnings.warn(msg, DeprecationWarning, stacklevel=5)
-
-        try_print_rule_info()
-
-
-def try_print_rule_info():
-    try:
-        current_command = actions.core.current_command__unstable()
-        start_line = current_command[0].target.start_line
-        filename = current_command[0].target.filename
-        rule = " ".join(current_command[1]._unmapped)
-        print(f'Triggered from "{rule}" ({filename}:{start_line})')
-    except Exception:
-        pass
