@@ -152,9 +152,7 @@ class Actions:
 
         id = f"capture.{name}.{time_deprecated}"
 
-        deprecate_notify(
-            id, f"The `{name}` capture is deprecated. See log for more."
-        )
+        deprecate_notify(id, f"The `{name}` capture is deprecated. See log for more.")
 
         msg = (
             f"The `{name}` capture is deprecated since {time_deprecated}."
@@ -171,9 +169,7 @@ class Actions:
 
         id = f"action.{name}.{time_deprecated}"
 
-        deprecate_notify(
-            id, f"The `{name}` action is deprecated. See log for more."
-        )
+        deprecate_notify(id, f"The `{name}` action is deprecated. See log for more.")
 
         msg = (
             f"The `{name}` action is deprecated since {time_deprecated}."
