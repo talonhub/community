@@ -11,12 +11,12 @@ tag: user.generic_windows_shell
 class Actions:
     # Implements the functions from terminal.py for unix shells
 
-    def terminal_list_directories():
+    def terminal_list_directories(path: str):
         """Lists directories"""
         actions.insert("ls")
         actions.key("enter")
 
-    def terminal_list_all_directories():
+    def terminal_list_all_directories(path: str):
         """Lists all directories including hidden"""
         actions.insert("ls -force")
         actions.key("enter")

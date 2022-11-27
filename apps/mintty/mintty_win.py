@@ -109,12 +109,12 @@ class UserActions:
         """file_manager_open_volume"""
         actions.user.file_manager_open_directory(volume)
 
-    def terminal_list_directories():
-        actions.insert("ls")
+    def terminal_list_directories(path: str):
+        actions.insert(f"ls {path}")
         actions.key("enter")
 
-    def terminal_list_all_directories():
-        actions.insert("ls -a")
+    def terminal_list_all_directories(path: str):
+        actions.insert(f"ls -a {path}")
         actions.key("enter")
 
     def terminal_change_directory(path: str):
