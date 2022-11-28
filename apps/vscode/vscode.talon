@@ -7,6 +7,7 @@ tag(): user.multiple_cursors
 tag(): user.snippets
 tag(): user.splits
 tag(): user.tabs
+cross: user.split_next()
 window reload: user.vscode("workbench.action.reloadWindow")
 window close: user.vscode("workbench.action.closeWindow")
 #multiple_cursor.py support end
@@ -33,10 +34,10 @@ symbol hunt [<user.text>]:
 # Panels
 panel control: user.vscode("workbench.panel.repl.view.focus")
 panel output: user.vscode("workbench.panel.output.focus")
-panel problems: user.vscode("workbench.panel.markers.view.focus")
-panel switch: user.vscode("workbench.action.togglePanel")
+problem show: user.vscode("workbench.panel.markers.view.focus")
+low dog: user.vscode("workbench.action.togglePanel")
 panel terminal: user.vscode("workbench.action.terminal.focus")
-focus editor: user.vscode("workbench.action.focusActiveEditorGroup")
+pan edit: user.vscode("workbench.action.focusActiveEditorGroup")
 
 # Settings
 show settings: user.vscode("workbench.action.openGlobalSettings")
@@ -56,7 +57,7 @@ wrap switch: user.vscode("editor.action.toggleWordWrap")
 zen switch: user.vscode("workbench.action.toggleZenMode")
 
 # File Commands
-file hunt [<user.text>]:
+go file [<user.text>]:
     user.vscode("workbench.action.quickOpen")
     sleep(50ms)
     insert(text or "")
@@ -64,37 +65,50 @@ file hunt (pace | paste):
     user.vscode("workbench.action.quickOpen")
     sleep(50ms)
     edit.paste()
-file copy name: user.vscode("fileutils.copyFileName")
-file copy path: user.vscode("copyFilePath")
-file copy local [path]: user.vscode("copyRelativeFilePath")
-file create sibling: user.vscode_and_wait("explorer.newFile")
-file create: user.vscode("workbench.action.files.newUntitledFile")
-file create relative: user.vscode("fileutils.newFile")
-file create root: user.vscode("fileutils.newFileAtRoot")
-file rename:
+dock copy name: user.vscode("fileutils.copyFileName")
+dock copy path: user.vscode("copyFilePath")
+dock copy relative: user.vscode("copyRelativeFilePath")
+dock make sibling <user.format_text>* [<user.word>] [{user.file_extension}]:
+    user.vscode_and_wait("explorer.newFile")
+    sleep(500ms)
+    user.insert_many(format_text_list or "")
+    user.insert_formatted(user.word or "", "NOOP")
+    insert(file_extension or "")
+dock make: user.vscode("workbench.action.files.newUntitledFile")
+dock make relative: user.vscode("fileutils.newFile")
+dock make root: user.vscode("fileutils.newFileAtRoot")
+dock rename:
     user.vscode("fileutils.renameFile")
     sleep(150ms)
-file move:
+dock move:
     user.vscode("fileutils.moveFile")
     sleep(150ms)
-file clone:
+dock clone:
     user.vscode("fileutils.duplicateFile")
     sleep(150ms)
-file delete:
-    user.vscode("fileutils.removeFile")
+dock delete: user.vscode("fileutils.removeFile")
+dock open folder: user.vscode("revealFileInOS")
+dock reveal: user.vscode("workbench.files.action.showActiveFileInExplorer")
+disk ugly: user.vscode("workbench.action.files.saveWithoutFormatting")
+disk:
+    edit.save()
     sleep(150ms)
-file open folder: user.vscode("revealFileInOS")
-file reveal: user.vscode("workbench.files.action.showActiveFileInExplorer")
-save ugly: user.vscode("workbench.action.files.saveWithoutFormatting")
+    user.vscode("hideSuggestWidget")
+disclose:
+    key(esc:5)
+    edit.save()
+    sleep(150ms)
+    key(cmd-w)
+disk gentle: edit.save()
 
 # Language Features
 suggest show: user.vscode("editor.action.triggerSuggest")
 hint show: user.vscode("editor.action.triggerParameterHints")
-definition show: user.vscode("editor.action.revealDefinition")
+def show: user.vscode("editor.action.revealDefinition")
 definition peek: user.vscode("editor.action.peekDefinition")
 definition side: user.vscode("editor.action.revealDefinitionAside")
 references show: user.vscode("editor.action.goToReferences")
-references find: user.vscode("references-view.find")
+ref show: user.vscode("references-view.find")
 format that: user.vscode("editor.action.formatDocument")
 format selection: user.vscode("editor.action.formatSelection")
 imports fix: user.vscode("editor.action.organizeImports")
@@ -107,6 +121,12 @@ whitespace trim: user.vscode("editor.action.trimTrailingWhitespace")
 language switch: user.vscode("workbench.action.editor.changeLanguageMode")
 refactor rename: user.vscode("editor.action.rename")
 refactor this: user.vscode("editor.action.refactor")
+ref next:
+    user.vscode("references-view.tree.focus")
+    key(down enter)
+ref last:
+    user.vscode("references-view.tree.focus")
+    key(up enter)
 
 #code navigation
 (go declaration | follow): user.vscode("editor.action.revealDefinition")
@@ -134,8 +154,8 @@ close tabs way right: user.vscode("workbench.action.closeEditorsToTheRight")
 close tabs way left: user.vscode("workbench.action.closeEditorsToTheLeft")
 
 # Folding
-fold that: user.vscode("editor.fold")
-unfold that: user.vscode("editor.unfold")
+# fold that: user.vscode("editor.fold")
+# unfold that: user.vscode("editor.unfold")
 fold those: user.vscode("editor.foldAllMarkerRegions")
 unfold those: user.vscode("editor.unfoldRecursively")
 fold all: user.vscode("editor.foldAll")

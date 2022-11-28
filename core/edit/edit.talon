@@ -18,11 +18,9 @@ go line start: edit.line_start()
 
 go line end: edit.line_end()
 
-go way left:
-    edit.line_start()
-    edit.line_start()
+head: edit.line_start()
 
-go way right: edit.line_end()
+tail: edit.line_end()
 
 go way down: edit.file_end()
 
@@ -55,9 +53,9 @@ select word left: edit.extend_word_left()
 
 select word right: edit.extend_word_right()
 
-select way left: edit.extend_line_start()
+take head: edit.extend_line_start()
 
-select way right: edit.extend_line_end()
+take tail: edit.extend_line_end()
 
 select way up: edit.extend_file_start()
 
@@ -135,11 +133,11 @@ copy word:
     edit.select_word()
     edit.copy()
 
-copy word left:
+copy lefter:
     edit.extend_word_left()
     edit.copy()
 
-copy word right:
+copy righter:
     edit.extend_word_right()
     edit.copy()
 
@@ -169,11 +167,11 @@ cut word:
     edit.select_word()
     edit.cut()
 
-cut word left:
+cut lefter:
     edit.extend_word_left()
     edit.cut()
 
-cut word right:
+cut righter:
     edit.extend_word_right()
     edit.cut()
 

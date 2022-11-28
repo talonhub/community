@@ -117,12 +117,12 @@ modifier_keys = {
     "super": "super",
 }
 if app.platform == "mac":
-    modifier_keys["man"] = "cmd"
+    modifier_keys["many"] = "cmd"
     modifier_keys["option"] = "alt"
 elif app.platform == "win":
-    modifier_keys["man"] = "super"
+    modifier_keys["many"] = "super"
     modifier_keys["option"] = "alt"
-    modifier_keys["man"] = "super"
+
 
 
 ctx.lists["self.modifier_key"] = modifier_keys
@@ -136,8 +136,15 @@ punctuation_words = {
     # Dragon. Possibly it has been fixed by later improvements to talon? -rntz
     "`": "`",
     ",": ",",  # <== these things
+    "at sign": "@",
+    # Currencies
+    "pound sign": "£",
+}
+
+dictation_only_punctuation_words = {
+    "dollar sign": "$",
+    "ampersand": "&",
     "back tick": "`",
-    "grave": "`",
     "comma": ",",
     # Workaround for issue with conformer b-series; see #946
     "coma": ",",
@@ -150,7 +157,6 @@ punctuation_words = {
     "exclamation mark": "!",
     "exclamation point": "!",
     "asterisk": "*",
-    "hash sign": "#",
     "number sign": "#",
     "percent sign": "%",
     "at sign": "@",
@@ -161,59 +167,40 @@ punctuation_words = {
     "pound sign": "£",
 }
 symbol_key_words = {
-    "dot": ".",
-    "point": ".",
-    "quote": "'",
-    "question": "?",
-    "apostrophe": "'",
-    "L square": "[",
-    "left square": "[",
-    "square": "[",
-    "R square": "]",
-    "right square": "]",
-    "slash": "/",
-    "backslash": "\\",
-    "minus": "-",
-    "dash": "-",
-    "equals": "=",
+    "brick": "`",
+    "stroke": "/",
+    "backstroke": "\\",
+	"dash": "-",
+    "equal": "=",
     "plus": "+",
     "tilde": "~",
     "bang": "!",
-    "down score": "_",
-    "underscore": "_",
-    "paren": "(",
-    "L paren": "(",
-    "left paren": "(",
-    "R paren": ")",
-    "right paren": ")",
-    "brace": "{",
-    "left brace": "{",
-    "brack": "{",
-    "bracket": "{",
-    "left bracket": "{",
-    "r brace": "}",
-    "right brace": "}",
-    "r brack": "}",
-    "r bracket": "}",
-    "right bracket": "}",
-    "angle": "<",
-    "left angle": "<",
-    "less than": "<",
-    "rangle": ">",
-    "R angle": ">",
-    "right angle": ">",
-    "greater than": ">",
-    "star": "*",
-    "hash": "#",
-    "percent": "%",
-    "caret": "^",
+    "score": "_",
+    "quest": "?",
+    "single": "'",
+    "double": '"',
+    "leper": "(",
+    "repper": ")",
+    "lacker": "[",
+    "racker": "]",
+    "lacer": "{",
+    "racer": "}",
+    "langle": "<",
+    "wrangle": ">",
+    "snow": "*",
+	"point": ".",
+    "pound": "#",
+    "percy": "%",
+    "tangle": "^",
     "amper": "&",
-    "pipe": "|",
-    "dub quote": '"',
-    "double quote": '"',
-    # Currencies
+    "piper": "|",
     "dollar": "$",
-    "pound": "£",
+    "semi": ";",
+    "stack": ":",
+    "drip": ",",
+    "comma": ",",
+    # Workaround for issue with conformer b-series; see #946
+    "coma": ",",
 }
 
 # make punctuation words also included in {user.symbol_keys}
@@ -229,22 +216,20 @@ ctx.lists["self.arrow_key"] = {
 }
 
 simple_keys = [
-    "end",
-    "enter",
-    "escape",
-    "home",
-    "insert",
+    # "end",
+    # "home",
+    # "insert",
     "pagedown",
     "pageup",
-    "space",
     "tab",
 ]
 
 alternate_keys = {
-    "wipe": "backspace",
-    #"delete": "backspace",
-    #'junk': 'backspace',
-    "junk": "delete",
+    "clap": "enter",
+    "drill": "delete",
+    "scratch": "backspace",
+    "scrape": "escape",
+    "void": "space",
     "page up": "pageup",
     "page down": "pagedown",
 }
