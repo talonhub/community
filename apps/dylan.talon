@@ -2,7 +2,7 @@
 (control | see) fusion: experimental.fusion1_toggle()
 (control | see) gazing: experimental.gaze1_toggle()
 (control | see) head: experimental.head1_toggle()
-(control | see) troll: tracking.control_toggle()
+(control | see) eyes: tracking.control_toggle()
 
 # Deep Clicks
 deep: key("ctrl-cmd-t")
