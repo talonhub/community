@@ -45,10 +45,11 @@ drill <number_small>:
 (drill | scratch) head: 
     key(shift-home)
     key(delete)
-    go line start:
-        edit.line_start()
+
+head:
+    edit.line_start()
     
-go line end:
+tail:
     edit.line_end()
 
 far left:

@@ -1,6 +1,6 @@
 from talon import Context, Module, actions, app
 
-default_alphabet = "air bat cap drum each fine gust harp sit jury crunch look made near odd pit quench red sun trap urge vest whale plex yank zip".split(
+default_alphabet = "air bat cap drum each fine gust harp sit jury crunch look made near odd pit quench risk sun trap urge vest whale plex yank zip".split(
     " "
 )
 letters_string = "abcdefghijklmnopqrstuvwxyz"
@@ -111,7 +111,6 @@ ctx = Context()
 modifier_keys = {
     # If you find 'alt' is often misrecognized, try using 'alter'.
     "alt": "alt",  #'alter': 'alt',
-    
     "troll": "ctrl",  #'troll':   'ctrl',
     "shift": "shift",  #'sky':     'shift',
     "super": "super",
@@ -124,7 +123,6 @@ elif app.platform == "win":
     modifier_keys["option"] = "alt"
 
 
-
 ctx.lists["self.modifier_key"] = modifier_keys
 alphabet = dict(zip(default_alphabet, letters_string))
 ctx.lists["self.letter"] = alphabet
@@ -132,14 +130,13 @@ ctx.lists["self.letter"] = alphabet
 # `punctuation_words` is for words you want available BOTH in dictation and as key names in command mode.
 # `symbol_key_words` is for key names that should be available in command mode, but NOT during dictation.
 punctuation_words = {
-
     "at sign": "@",
     # Currencies
     "pound sign": "£",
     "brick": "`",
     "stroke": "/",
     "backstroke": "\\",
-	"dash": "-",
+    "dash": "-",
     "equal": "=",
     "plus": "+",
     "tilde": "~",
@@ -158,7 +155,7 @@ punctuation_words = {
     "wrangle": ">",
     "snow": "*",
     "period": ".",
-	"point": ".",
+    "point": ".",
     "pound": "#",
     "percy": "%",
     "tangle": "^",
@@ -171,7 +168,6 @@ punctuation_words = {
     "comma": ",",
     # Workaround for issue with conformer b-series; see #946
     "coma": ",",
-    
 }
 
 dictation_only_punctuation_words = {
@@ -199,9 +195,7 @@ dictation_only_punctuation_words = {
     "dollar sign": "$",
     "pound sign": "£",
 }
-symbol_key_words = {
-
-}
+symbol_key_words = {}
 
 # make punctuation words also included in {user.symbol_keys}
 symbol_key_words.update(punctuation_words)
@@ -232,6 +226,8 @@ alternate_keys = {
     "void": "space",
     "page up": "pageup",
     "page down": "pagedown",
+    "home": "home",
+    "end key": "end",
 }
 # mac apparently doesn't have the menu key.
 if app.platform in ("windows", "linux"):
