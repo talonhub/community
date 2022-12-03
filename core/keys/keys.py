@@ -132,13 +132,46 @@ ctx.lists["self.letter"] = alphabet
 # `punctuation_words` is for words you want available BOTH in dictation and as key names in command mode.
 # `symbol_key_words` is for key names that should be available in command mode, but NOT during dictation.
 punctuation_words = {
-    # TODO: I'm not sure why we need these, I think it has something to do with
-    # Dragon. Possibly it has been fixed by later improvements to talon? -rntz
-    "`": "`",
-    ",": ",",  # <== these things
+
     "at sign": "@",
     # Currencies
     "pound sign": "£",
+    "brick": "`",
+    "stroke": "/",
+    "backstroke": "\\",
+	"dash": "-",
+    "equal": "=",
+    "plus": "+",
+    "tilde": "~",
+    "bang": "!",
+    "score": "_",
+    "quest": "?",
+    "single": "'",
+    "double": '"',
+    "leper": "(",
+    "repper": ")",
+    "lacker": "[",
+    "racker": "]",
+    "lacer": "{",
+    "racer": "}",
+    "langle": "<",
+    "wrangle": ">",
+    "snow": "*",
+    "period": ".",
+	"point": ".",
+    "pound": "#",
+    "percy": "%",
+    "tangle": "^",
+    "amper": "&",
+    "piper": "|",
+    "dollar": "$",
+    "semi": ";",
+    "stack": ":",
+    "drip": ",",
+    "comma": ",",
+    # Workaround for issue with conformer b-series; see #946
+    "coma": ",",
+    
 }
 
 dictation_only_punctuation_words = {
@@ -167,40 +200,7 @@ dictation_only_punctuation_words = {
     "pound sign": "£",
 }
 symbol_key_words = {
-    "brick": "`",
-    "stroke": "/",
-    "backstroke": "\\",
-	"dash": "-",
-    "equal": "=",
-    "plus": "+",
-    "tilde": "~",
-    "bang": "!",
-    "score": "_",
-    "quest": "?",
-    "single": "'",
-    "double": '"',
-    "leper": "(",
-    "repper": ")",
-    "lacker": "[",
-    "racker": "]",
-    "lacer": "{",
-    "racer": "}",
-    "langle": "<",
-    "wrangle": ">",
-    "snow": "*",
-	"point": ".",
-    "pound": "#",
-    "percy": "%",
-    "tangle": "^",
-    "amper": "&",
-    "piper": "|",
-    "dollar": "$",
-    "semi": ";",
-    "stack": ":",
-    "drip": ",",
-    "comma": ",",
-    # Workaround for issue with conformer b-series; see #946
-    "coma": ",",
+
 }
 
 # make punctuation words also included in {user.symbol_keys}
