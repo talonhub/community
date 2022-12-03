@@ -1,4 +1,3 @@
-go <user.arrow_keys>: user.move_cursor(arrow_keys)
 <user.letter>: key(letter)
 (ship | uppercase) <user.letters> [(lowercase | sunk)]:
     user.insert_formatted(letters, "ALL_CAPS")
@@ -10,15 +9,4 @@ go <user.arrow_keys>: user.move_cursor(arrow_keys)
 press <user.modifiers>: key(modifiers)
 # for consistency with dictation mode and explicit arrow keys if you need them.
 press <user.keys>: key(keys)
-scratch <number_small>: 
-    key(backspace)
-    repeat(number_small-1)
-drill <number_small>: 
-    key(delete)
-    repeat(number_small-1)
-(drill | scratch) tail: 
-    key(shift-end)
-    key(delete)
-(drill | scratch) head: 
-    key(shift-home)
-    key(delete) 
+ 
