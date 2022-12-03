@@ -8,17 +8,19 @@ def setup_default_alphabet():
 
     no need to modify this here, change your alphabet using alphabet.csv"""
     initial_default_alphabet = "air bat cap drum each fine gust harp sit jury crunch look made near odd pit quench red sun trap urge vest whale plex yank zip".split(
-    " "
-)
+        " "
+    )
     initial_letters_string = "abcdefghijklmnopqrstuvwxyz"
     initial_default_alphabet_dict = dict(
-        zip(initial_default_alphabet, initial_letters_string))
+        zip(initial_default_alphabet, initial_letters_string)
+    )
 
     return initial_default_alphabet_dict
 
 
 alphabet_list = get_list_from_csv(
-    "alphabet.csv", ("Letter", "Spoken Form"), setup_default_alphabet())
+    "alphabet.csv", ("Letter", "Spoken Form"), setup_default_alphabet()
+)
 
 default_digits = "zero one two three four five six seven eight nine".split(" ")
 numbers = [str(i) for i in range(10)]
