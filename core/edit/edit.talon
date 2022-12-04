@@ -48,8 +48,11 @@ drill <number_small>:
     go line start:
         edit.line_start()
     
-go line end:
+tail:
     edit.line_end()
+    
+head:
+    edit.line_start()
 
 far left:
     edit.line_start()
