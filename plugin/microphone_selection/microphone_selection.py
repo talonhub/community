@@ -87,11 +87,12 @@ class Actions:
 
     def microphone_preferred():
         """reverts to preferred microphone"""
-
+        global previous_mic
         mics = actions.sound.microphones()
         for __, preferred_mic in enumerate(preferred_mics):
             if preferred_mic in mics:
                 actions.speech.set_microphone(preferred_mic)
+                previous_mic = preferred_mic
                 actions.app.notify(f"Microphone enabled: {preferred_mic}")
                 break
 
