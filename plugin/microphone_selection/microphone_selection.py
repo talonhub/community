@@ -7,9 +7,10 @@ ctx = cubeb.Context()
 mod = Module()
 
 if app.platform == "windows":
-    previous_mic = "Microphone (d:vice MMA-A)"
+    preferred_mics = ["Microphone (Samson Q9U)", "Microphone (d:vice MMA-A)", "System Default"]
 else:
-    previous_mic = "d:vice MMA-A"
+    preferred_mics = ["Samson Q9U", "d:vice MMA-A", "System Default"]
+
 # previous_mic = "Krisp Microphone (Krisp)"
 microphone_device_list = []
 speaker_device_list = []
@@ -86,7 +87,13 @@ class Actions:
 
     def microphone_preferred():
         """reverts to preferred microphone"""
-        actions.speech.set_microphone(previous_mic)
+
+        mics = actions.sound.microphones()
+        for __, preferred_mic in enumerate(preferred_mics):
+            if preferred_mic in mics:
+                actions.speech.set_microphone(preferred_mic)
+                actions.app.notify(f"Microphone enabled: {preferred_mic}")
+                break
 
     def speaker_selection_toggle():
         """"""
