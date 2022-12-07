@@ -32,8 +32,7 @@ class AppActions:
     def window_close():
         # Try to use accessibility, but fall back on cmd-w.
         try:
-            w = ui.active_window()
-            button = w.element["AXCloseButton"]
+            button = ui.active_window().element.AXCloseButton
             assert button.actions["AXPress"] == "press"
         except Exception as e:
             actions.key("cmd-w")
