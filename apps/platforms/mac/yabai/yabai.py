@@ -30,11 +30,11 @@ ctx.lists["user.yabai_selector"] = {
     "largest": "largest",
     "smallest": "smallest",
     "sibling": "sibling",
-    "first_nephew": "first nephew",
-    "second_nephew": "second nephew",
+    "first nephew": "first_nephew",
+    "second nephew": "second_nephew",
     "uncle": "uncle",
-    "first_cousin": "first cousin",
-    "second_cousin": "second cousin",
+    "first cousin": "first_cousin",
+    "second cousin": "second_cousin",
     **ctx.lists["user.yabai_dir"],
 }
 

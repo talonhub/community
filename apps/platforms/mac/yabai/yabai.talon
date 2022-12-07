@@ -3,13 +3,13 @@ user.running: yabai
 -
 
 win {user.yabai_dir}:
-  user.yabai("window --focus {user.yabai_dir}")
+  user.yabai("window --focus {yabai_dir}")
 
 win swap {user.yabai_selector}:
   user.yabai("window --swap {yabai_selector}")
 
-win move {user.yabai_dir}:
-  user.yabai("window --move {yabai_dir}")
+win (warp|move) {user.yabai_dir}:
+  user.yabai("window --warp {yabai_dir}")
 
 win put {user.yabai_dir}:
   user.yabai("window --put {yabai_dir}")
