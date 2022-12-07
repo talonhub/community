@@ -1,5 +1,5 @@
+import talon.mac.ui  # ActionFailed
 from talon import Context, actions, ui
-import talon.mac.ui # ActionFailed
 
 ctx = Context()
 ctx.matches = r"""
@@ -33,16 +33,18 @@ class AppActions:
         # Try to use accessibility, but fall back on cmd-w.
         try:
             w = ui.active_window()
-            button = w.element['AXCloseButton']
-            assert button.actions['AXPress'] == 'press'
+            button = w.element["AXCloseButton"]
+            assert button.actions["AXPress"] == "press"
         except Exception as e:
             actions.key("cmd-w")
         else:
             # This can fail with talon.mac.ui.ActionFailed if the window opens a
             # confirmation dialog. But pressing cmd-w or clicking the close
             # button would do the same, so we don't regard this as failure.
-            try: button.perform("AXPress")
-            except talon.mac.ui.ActionFailed: pass
+            try:
+                button.perform("AXPress")
+            except talon.mac.ui.ActionFailed:
+                pass
 
     def window_hide():
         actions.key("cmd-m")
