@@ -41,6 +41,8 @@ state async: "async "
 
 state await: "await "
 
+state new: "new "
+
 dot {user.code_common_member_function}:
     user.insert_between(".{code_common_member_function}(", ")")
 
