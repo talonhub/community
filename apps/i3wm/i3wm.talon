@@ -2,8 +2,7 @@
 os: linux
 tag: user.i3wm
 -
-port <number_small>:
-    user.system_command("i3-msg workspace number {number_small}")
+port <number_small>: user.system_command("i3-msg workspace number {number_small}")
 port ten: user.system_command("i3-msg workspace number 10")
 (port flip | flipper): user.system_command("i3-msg workspace back_and_forth")
 port right: user.system_command("i3-msg workspace next")
@@ -87,7 +86,7 @@ launch <user.text>:
     user.i3wm_launch()
     sleep(100ms)
     insert("{text}")
-lock screen: user.i3wm_launch()
+lock screen: user.i3wm_lock()
 
 (launch shell | koopa): user.i3wm_shell()
 

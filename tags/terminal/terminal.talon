@@ -4,7 +4,7 @@ tag: terminal
 
 lisa: user.terminal_list_directories()
 lisa all: user.terminal_list_all_directories()
-katie [<user.text>]: user.terminal_change_directory(text or "")
+katie [dir] [<user.text>]: user.terminal_change_directory(text or "")
 katie root: user.terminal_change_directory_root()
 go <user.system_path>: insert('cd "{system_path}"\n')
 clear screen: user.terminal_clear_screen()

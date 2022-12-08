@@ -39,8 +39,7 @@ talon dump context:
 ^talon debug tags$: user.talon_debug_tags()
 ^talon debug modes$: user.talon_debug_modes()
 ^talon debug scope {user.talon_scopes}$: user.talon_debug_scope(talon_scopes)
-^talon debug setting {user.talon_settings}$:
-    user.talon_debug_setting(talon_settings)
+^talon debug setting {user.talon_settings}$: user.talon_debug_setting(talon_settings)
 ^talon debug all settings$: user.talon_debug_all_settings()
 ^talon debug active app$:
     result = user.talon_get_active_application_info()

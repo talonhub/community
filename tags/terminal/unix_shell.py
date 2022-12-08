@@ -6,10 +6,13 @@ ctx.matches = r"""
 tag: user.generic_unix_shell
 """
 
+# Uncomment the following line to enable common unix utilities from unix_utilities.py
+# ctx.tags = ["user.unix_utilities"]
+
 
 @ctx.action_class("user")
 class Actions:
-    # implements the function from generic_terminal.talon for unix shells
+    # Implements the functions from terminal.py for unix shells
 
     def terminal_list_directories():
         """Lists directories"""

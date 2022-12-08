@@ -11,9 +11,6 @@ mod.list("code_trait", desc="List of traits for active language")
 
 @mod.action_class
 class Actions:
-    def code_operator_structure_dereference():
-        """Inserts a reference operator"""
-
     def code_state_implements():
         """Inserts implements block, positioning the cursor appropriately"""
 
@@ -370,7 +367,7 @@ class UserActions:
     # tag: libraries_gui
 
     def code_insert_library(text: str, selection: str):
-        actions.user.paste(f"use {selection}")
+        actions.user.paste(f"use {text}")
 
     # tag: operators_array
 
