@@ -190,33 +190,33 @@ To enable title tracking for your application:
 
 Python, C#, Talon and javascript language support is currently broken up into several tags in an attempt to define a common grammar where possible between languages. Each tag is defined by a .talon file, which defines the voice commands, and a Python file which declares the actions that should be implemented by each concrete language implementation to support those voice commands. Currently, the tags which are available are:
 
-• `lang/tags/comment_block.{talon,py}` - block comments (e.g., C++'s `/* */`)
-• `lang/tags/comment_documentation.{talon,py}` - documentation comments (e.g., Java's `/** */`)
-• `lang/tags/comment_line.{talon,py}` - line comments (e.g., Python's `#`)
-• `lang/tags/data_null.{talon,py}` - null & null checks (e.g., Python's `None`)
-• `lang/tags/data_bool.{talon,py}` - booleans (e.g., Haskell's `True`)
-• `lang/tags/functions.{talon,py}` - functions and definitions
-• `lang/tags/functions_common.{talon,py}` - common functions (also includes a GUI for picking functions)
-• `lang/tags/imperative.{talon,py}` - statements (e.g., `if`, `while`, `switch`)
-• `lang/tags/libraries.{talon,py}` - libraries and imports
-• `lang/tags/libraries_gui.{talon,py}` - graphical helper for common libraries
-• `lang/tags/object_oriented.{talon,py}` - objects and classes (e.g., `this`)
-• `lang/tags/operators_array.{talon,py}` - array operators (e.g., Ruby's `x[0]`)
-• `lang/tags/operators_assignment.{talon,py}` - assignment operators (e.g., C++'s `x += 5`)
-• `lang/tags/operators_bitwise.{talon,py}` - bitwise operators (e.g., C's `x >> 1`)
-• `lang/tags/operators_lambda.{talon,py}` - anonymous functions (e.g., JavaScript's `x => x + 1`)
-• `lang/tags/operators_math.{talon,py}` - numeric, comparison, and logical operators
-• `lang/tags/operators_pointer.{talon,py}` - pointer operators (e.g., C's `&x`)
+- `lang/tags/comment_block.{talon,py}` - block comments (e.g., C++'s `/* */`)
+- `lang/tags/comment_documentation.{talon,py}` - documentation comments (e.g., Java's `/** */`)
+- `lang/tags/comment_line.{talon,py}` - line comments (e.g., Python's `#`)
+- `lang/tags/data_null.{talon,py}` - null & null checks (e.g., Python's `None`)
+- `lang/tags/data_bool.{talon,py}` - booleans (e.g., Haskell's `True`)
+- `lang/tags/functions.{talon,py}` - functions and definitions
+- `lang/tags/functions_common.{talon,py}` - common functions (also includes a GUI for picking functions)
+- `lang/tags/imperative.{talon,py}` - statements (e.g., `if`, `while`, `switch`)
+- `lang/tags/libraries.{talon,py}` - libraries and imports
+- `lang/tags/libraries_gui.{talon,py}` - graphical helper for common libraries
+- `lang/tags/object_oriented.{talon,py}` - objects and classes (e.g., `this`)
+- `lang/tags/operators_array.{talon,py}` - array operators (e.g., Ruby's `x[0]`)
+- `lang/tags/operators_assignment.{talon,py}` - assignment operators (e.g., C++'s `x += 5`)
+- `lang/tags/operators_bitwise.{talon,py}` - bitwise operators (e.g., C's `x >> 1`)
+- `lang/tags/operators_lambda.{talon,py}` - anonymous functions (e.g., JavaScript's `x => x + 1`)
+- `lang/tags/operators_math.{talon,py}` - numeric, comparison, and logical operators
+- `lang/tags/operators_pointer.{talon,py}` - pointer operators (e.g., C's `&x`)
 
 The support for the language-specific implementations of actions are then located in:
 
-• `lang/{your-language}/{your-language}.py`
+- `lang/{your-language}/{your-language}.py`
 
 To start support for a new language, ensure the appropriate extension is added to the [`extension_lang_map` in `code.py`](https://github.com/knausj85/knausj_talon/blob/12229e932d9d3de85fa2f9d9a7c4f31ed6b6445b/code/code.py#L32).
 Then create the following files:
 
-• `lang/{your-language}/{your-language}.py`
-• `lang/{your-language}/{your-language}.talon`
+- `lang/{your-language}/{your-language}.py`
+- `lang/{your-language}/{your-language}.talon`
 
 Activate the appropriate tags in `{your-language}.talon` and implement the corresponding actions in `{your-language}.py`, following existing language implementations.
 If you wish to add additional voice commands for your language, put those in `{your-language}.talon`.
