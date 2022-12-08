@@ -2,5 +2,5 @@ app: Postico
 -
 
 go to <user.text>:
-  key(cmd-p)
-  insert(text)
+    key(cmd-p)
+    insert(text)

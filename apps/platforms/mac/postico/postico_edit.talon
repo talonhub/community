@@ -3,11 +3,8 @@ win.title: /.sql/
 -
 tag(): user.sql
 
-format that:
-  key(ctrl-f)
+format that: key(ctrl-f)
 
-execute that:
-  user.postico_execute()
+execute that: user.postico_execute()
 
-confirm execute:
-  user.postico_confirm_execute()
+confirm execute: user.postico_confirm_execute()

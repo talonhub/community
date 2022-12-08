@@ -29,27 +29,26 @@ set register: user.debugger_set_register()
 # Breakpoints
 break now: user.debugger_break_now()
 break here: user.debugger_break_here()
-(list|show) (breaks|break points): user.debugger_show_breakpoints()
-(set|add) (break|break point): user.debugger_add_sw_breakpoint()
-(set|add) hardware (break|break point): user.debugger_add_hw_breakpoint()
-clear all (breaks|break points): user.debugger_clear_all_breakpoints()
-clear (break|break point): user.debugger_clear_breakpoint()
-clear (break|break point) <number_small>:
+(list | show) (breaks | break points): user.debugger_show_breakpoints()
+(set | add) (break | break point): user.debugger_add_sw_breakpoint()
+(set | add) hardware (break | break point): user.debugger_add_hw_breakpoint()
+clear all (breaks | break points): user.debugger_clear_all_breakpoints()
+clear (break | break point): user.debugger_clear_breakpoint()
+clear (break | break point) <number_small>:
     user.debugger_clear_breakpoint_id(number_small)
-disable all (breaks|break points): user.debugger_disable_all_breakpoints()
-disable (break|break point): user.debugger_disable_breakpoint()
-disable (break|break point) <number_small>:
+disable all (breaks | break points): user.debugger_disable_all_breakpoints()
+disable (break | break point): user.debugger_disable_breakpoint()
+disable (break | break point) <number_small>:
     user.debugger_disable_breakpoint_id(number_small)
-enable all (breaks|break points): user.debugger_enable_all_breakpoints()
-enable (break|break point): user.debugger_enable_breakpoint()
-enable (break|break point) <number_small>:
+enable all (breaks | break points): user.debugger_enable_all_breakpoints()
+enable (break | break point): user.debugger_enable_breakpoint()
+enable (break | break point) <number_small>:
     user.debugger_enable_breakpoint_id(number_small)
 
 # Navigation
 
-
 # Memory Inspection
-(stack|back) trace: user.debugger_backtrace()
+(stack | back) trace: user.debugger_backtrace()
 disassemble: user.debugger_disassemble()
 disassemble here: user.debugger_disassemble_here()
 disassemble clipboard: user.debugger_disassemble_clipboard()

@@ -36,5 +36,5 @@ tag(): user.kubectl
 
 ^go <user.letter>$: user.file_manager_open_volume("/mnt/{letter}")
 
-(wsl|weasel) reset path detection: user.wsl_reset_path_detection()
-(wsl|weasel) speak: user.wsl_speak()
+(wsl | weasel) reset path detection: user.wsl_reset_path_detection()
+(wsl | weasel) speak: user.wsl_speak()

@@ -19,7 +19,7 @@ command [<user.text>]:
 bar explore: user.vscode("workbench.view.explorer")
 bar extensions: user.vscode("workbench.view.extensions")
 bar outline: user.vscode("outline.focus")
-bar (debug|run): user.vscode("workbench.view.debug")
+bar (debug | run): user.vscode("workbench.view.debug")
 bar search: user.vscode("workbench.view.search")
 bar source: user.vscode("workbench.view.scm")
 bar test: user.vscode("workbench.view.testing.focus")
@@ -35,16 +35,18 @@ panel control: user.vscode("workbench.panel.repl.view.focus")
 panel output: user.vscode("workbench.panel.output.focus")
 panel problems: user.vscode("workbench.panel.markers.view.focus")
 panel switch: user.vscode("workbench.action.togglePanel")
-panel (term|terminal): user.vscode("workbench.action.terminal.focus")
+panel (term | terminal): user.vscode("workbench.action.terminal.focus")
 focus editor: user.vscode("workbench.action.focusActiveEditorGroup")
 
 # Settings
 show settings: user.vscode("workbench.action.openGlobalSettings")
 show settings json: user.vscode("workbench.action.openSettingsJson")
 show settings folder: user.vscode("workbench.action.openFolderSettings")
-show settings folder json: user.vscode("workbench.action.openFolderSettingsFile")
+show settings folder json:
+    user.vscode("workbench.action.openFolderSettingsFile")
 show settings workspace: user.vscode("workbench.action.openWorkspaceSettings")
-show settings workspace json: user.vscode("workbench.action.openWorkspaceSettingsFile")
+show settings workspace json:
+    user.vscode("workbench.action.openWorkspaceSettingsFile")
 show shortcuts: user.vscode("workbench.action.openGlobalKeybindings")
 show snippets: user.vscode("workbench.action.openSnippets")
 
@@ -58,15 +60,15 @@ zen switch: user.vscode("workbench.action.toggleZenMode")
 # File Commands
 file open: user.vscode("workbench.action.files.openFile")
 folder open: user.vscode("workbench.action.files.openFolder")
-(folder|file) recent: user.vscode("workbench.action.openRecent")
+(folder | file) recent: user.vscode("workbench.action.openRecent")
 file hunt [<user.text>]:
     user.vscode("workbench.action.quickOpen")
     sleep(50ms)
     insert(text or "")
 file hunt (pace | paste):
-  user.vscode("workbench.action.quickOpen")
-  sleep(50ms)
-  edit.paste()
+    user.vscode("workbench.action.quickOpen")
+    sleep(50ms)
+    edit.paste()
 file copy name: user.vscode("fileutils.copyFileName")
 file copy path: user.vscode("copyFilePath")
 file copy local [path]: user.vscode("copyRelativeFilePath")
@@ -88,7 +90,7 @@ file delete:
     sleep(150ms)
 file open folder: user.vscode("revealFileInOS")
 file reveal: user.vscode("workbench.files.action.showActiveFileInExplorer")
-(save|disk) ugly: user.vscode("workbench.action.files.saveWithoutFormatting")
+(save | disk) ugly: user.vscode("workbench.action.files.saveWithoutFormatting")
 
 # Language Features
 suggest show: user.vscode("editor.action.triggerSuggest")
@@ -212,7 +214,8 @@ terminal last: user.vscode("workbench.action.terminal.focusPrevious")
 terminal split: user.vscode("workbench.action.terminal.split")
 terminal zoom: user.vscode("workbench.action.toggleMaximizedPanel")
 terminal trash: user.vscode("workbench.action.terminal.kill")
-terminal toggle: user.vscode_and_wait("workbench.action.terminal.toggleTerminal")
+terminal toggle:
+    user.vscode_and_wait("workbench.action.terminal.toggleTerminal")
 terminal scroll up: user.vscode("workbench.action.terminal.scrollUp")
 terminal scroll down: user.vscode("workbench.action.terminal.scrollDown")
 terminal <number_small>: user.vscode_terminal(number_small)
@@ -223,14 +226,14 @@ copy line up: user.vscode("editor.action.copyLinesUpAction")
 
 #Expand/Shrink AST Selection
 take less: user.vscode("editor.action.smartSelect.shrink")
-take (more|this): user.vscode("editor.action.smartSelect.expand")
+take (more | this): user.vscode("editor.action.smartSelect.expand")
 
 minimap: user.vscode("editor.action.toggleMinimap")
 maximize: user.vscode("workbench.action.minimizeOtherEditors")
 restore: user.vscode("workbench.action.evenEditorWidths")
 
 #breadcrumb
-select breadcrumb: user.vscode('breadcrumbs.focusAndSelect')
+select breadcrumb: user.vscode("breadcrumbs.focusAndSelect")
 # Use `alt-left` and `alt-right` to navigate the bread crumb
 
 replace here:
@@ -273,17 +276,20 @@ tag match: user.vscode("editor.emmet.action.matchTag")
 tag next: user.vscode("editor.emmet.action.nextEditPoint")
 tag last: user.vscode("editor.emmet.action.prevEditPoint")
 tag remove: user.vscode("editor.emmet.action.removeTag")
-tag (split|join): user.vscode("editor.emmet.action.splitJoinTag")
+tag (split | join): user.vscode("editor.emmet.action.splitJoinTag")
 tag update: user.vscode("editor.emmet.action.updateTag")
 tag wrap: user.vscode("editor.emmet.action.wrapWithAbbreviation")
-tag wrap lines: user.vscode("editor.emmet.action.wrapIndividualLinesWithAbbreviation")
+tag wrap lines:
+    user.vscode("editor.emmet.action.wrapIndividualLinesWithAbbreviation")
 tag evaluate: user.vscode("editor.emmet.action.evaluateMathExpression")
 tag increment: user.vscode("editor.emmet.action.incrementNumberByOne")
 tag increment big: user.vscode("editor.emmet.action.incrementNumberByTen")
-tag increment small: user.vscode("editor.emmet.action.incrementNumberByOneTenth")
+tag increment small:
+    user.vscode("editor.emmet.action.incrementNumberByOneTenth")
 tag decrement: user.vscode("editor.emmet.action.decrementNumberByOne")
 tag decrement big: user.vscode("editor.emmet.action.decrementNumberByTen")
-tag decrement small: user.vscode("editor.emmet.action.decrementNumberByOneTenth")
+tag decrement small:
+    user.vscode("editor.emmet.action.decrementNumberByOneTenth")
 tag show: user.vscode("workbench.action.showEmmetCommands")
 
 # Git Lens (eamodio.gitlens)
@@ -300,7 +306,5 @@ git review switch: user.vscode("gitlens.toggleReviewMode")
 
 marks toggle: user.vscode("cursorless.toggleDecorations")
 
-draft (save | submit):
-    user.draft_editor_save()
-draft discard:
-    user.draft_editor_discard()
+draft (save | submit): user.draft_editor_save()
+draft discard: user.draft_editor_discard()

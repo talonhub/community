@@ -73,7 +73,6 @@ delete backward: user.vscode("paredit.deleteBackward")
 force delete forward: user.vscode("paredit.forceDeleteForward")
 force delete backward: user.vscode("paredit.forceDeleteBackward")
 
-
 # tellAboutNewChordingKey: user.vscode("calva.tellAboutNewChordingKey")
 # instrument: user.vscode("calva.debug.instrument")
 # jackIn: user.vscode("calva.jackIn")
