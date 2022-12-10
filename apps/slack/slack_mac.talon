@@ -7,6 +7,8 @@ tag(): user.emoji
 workspace <number>: key("cmd-{number}")
 # Channel
 (slack | lack) [channel] info: key(cmd-shift-i)
+channel (next|down): key(alt-down)
+channel (previous|up): key(alt-up)
 # Navigation
 focus (move | next): key(ctrl-`)
 (section | zone) [next]: key(f6)
