@@ -270,7 +270,7 @@ def create_spoken_forms_from_regex(source: str, pattern: re.Pattern):
 def generate_string_subsequences(
     source: str,
     words_to_exclude: list[str],
-    minimum_term_length=DEFAULT_MINIMUM_TERM_LENGTH,
+    minimum_term_length: int,
 ):
     # Includes (lower-cased):
     # 1. Each word in source, eg "foo bar baz" -> "foo", "bar", "baz".
