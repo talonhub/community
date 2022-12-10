@@ -312,9 +312,6 @@ class Actions:
     ) -> list[str]:
         """Create spoken forms for a given source"""
 
-        if words_to_exclude is None:
-            words_to_exclude = []
-
         spoken_forms_without_symbols = create_spoken_forms_from_regex(
             source, REGEX_NO_SYMBOLS
         )
@@ -334,7 +331,7 @@ class Actions:
             spoken_forms.update(
                 generate_string_subsequences(
                     spoken_forms_without_symbols[-1],
-                    words_to_exclude,
+                    words_to_exclude or [],
                     minimum_term_length,
                 )
             )
