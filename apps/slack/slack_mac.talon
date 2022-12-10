@@ -7,6 +7,8 @@ tag(): user.emoji
 workspace <number>: key("cmd-{number}")
 # Channel
 (slack | lack) [channel] info: key(cmd-shift-i)
+channel (next|down): key(alt-down)
+channel (previous|up): key(alt-up)
 # Navigation
 focus (move | next): key(ctrl-`)
 (section | zone) [next]: key(f6)
@@ -40,14 +42,15 @@ bold: key(cmd-b)
 (slack | lack) snippet: key(cmd-shift-enter)
 # Calls
 ([toggle] mute | unmute): key(m)
-(slack | lack) huddle: key(cmd-shift-h)
+# (slack | lack) huddle: key(cmd-shift-h)
 (slack | lack) ([toggle] video): key(v)
 (slack | lack) invite: key(a)
 # Miscellaneous
 (slack | lack) shortcuts: key(cmd-/)
 emote <user.text>: "{text}"
-toggle left sidebar: key(cmd-shift-d)
-toggle right sidebar: key(cmd-.)
+toggle left (sidebar|bar): key(cmd-shift-d)
+toggle right (sidebar|bar): key(cmd-.)
+bar switch: key(cmd-.)
 
 # DEPRECATED
 (move | next) focus:

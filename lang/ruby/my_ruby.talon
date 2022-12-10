@@ -16,6 +16,7 @@ tag(): user.code_my_models
 billion: "Boolean"
 
 binding pry: "binding.pry"
+binding pry remote: "binding.pry_remote"
 pry binding: "binding.pry"
 
 assert equals: 'assert_equals '
