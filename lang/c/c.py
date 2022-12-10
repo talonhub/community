@@ -188,7 +188,7 @@ def c_cast(m) -> str:
 
 
 @mod.capture(rule="[<self.stdint_signed>] <self.stdint_types> [<self.c_pointers>+]")
-def c_stdint_cast(m) -> str:
+def stdint_cast(m) -> str:
     "Returns a string"
     return "(" + "".join(list(m)) + ")"
 
@@ -391,4 +391,4 @@ class UserActions:
         actions.user.code_insert_function(result, None)
 
     def code_insert_library(text: str, selection: str):
-        actions.user.paste(f"include <{selection}>")
+        actions.user.paste(f"include <{text}>")
