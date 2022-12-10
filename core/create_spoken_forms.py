@@ -333,7 +333,9 @@ class Actions:
             # the only one that seems relevant are the full spoken form for
             spoken_forms.update(
                 generate_string_subsequences(
-                    spoken_forms_without_symbols[-1], words_to_exclude, minimum_term_length
+                    spoken_forms_without_symbols[-1],
+                    words_to_exclude,
+                    minimum_term_length,
                 )
             )
 
