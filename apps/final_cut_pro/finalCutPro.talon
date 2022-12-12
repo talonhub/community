@@ -6,6 +6,7 @@ app: Final Cut Pro Trial
 # ----------------------
 
 
+
 # ----------------------
 # FILE COMMANDS
 # ----------------------
@@ -32,6 +33,7 @@ reveal project:
 
 reveal finder:
     key(cmd-shift-r)
+
 
 
 # ----------------------
@@ -92,6 +94,7 @@ snap:
 # Mark timeline/club
 mark it:
     key(m)
+
 
 
 # ----------------------
@@ -179,6 +182,10 @@ blade:
 cut here:
     key(cmd-b)
 
+# Blade All
+cut all:
+    key(cmd-shift-b)
+
 # Trim start
 trim start:
     key(alt-[)
@@ -191,7 +198,106 @@ trim end:
 trim playhead:
     key(alt-\)
 
+# Zoom out
+zout [<number>]: 
+    key('cmd--')
+    repeat(number - 1)
 
+# Zoom in
+zoon [<number>]:
+    key('cmd-=')
+
+# Zoom to fit
+(scan | scale | zoom to fit):
+    key("shift-z")
+
+# Add basic title
+add title:
+    key(ctrl-t)
+
+# Add a lower third title
+add lower third:
+    key(ctrl-shift-t)
+
+# Volume across all
+volume across all:
+    key(cmd-l)
+
+# Expand audio
+expand audio:
+    key(ctrl-s)
+
+# Collapse audio
+collapse audio:
+    key(ctrl-shift-s)
+
+
+
+# ----------------------
+# ORGANIZATION
+# ----------------------
+
+# New event
+new event:
+    key(alt-n)
+
+# New folder
+new folder:
+    key(cmd-shift-n)
+
+# Clip in browser
+clip in browser:
+    key(shift-f)
+
+# Project in browser
+project in browser:
+    key(alt-shift-cmd-f)
+
+# Sync event clips 
+sync event clips:
+    key(alt-cmd-g)
+
+
+
+# ----------------------
+# EFFECTS
+# ----------------------
+
+# Create two second hold segment
+second hold:
+    key(shift-h)
+
+# Open re time editor
+retime editor:
+    key(cmd-r)
+
+# Remove all effects from selection
+(remove fx | dellfix):
+    key(alt-cmd-x)
+
+# Remove attributes from selection
+(remove | dellz) (attributes | bute):
+    key(shift-cmd-x)
+
+# Navigate to the previous text item
+(navigate | nav | go) previous text:
+    key(alt-shift-tab)
+
+# Paste attributes or settings
+paste (attributes | bute):
+    key(cmd-shift-v)
+
+# Paste effects to selection
+(paste fx | pafix):
+    key(alt-cmd-v)
+
+# Balance color corrections on or off
+color correct (on | off):
+    key(cmd-alt-b)
+
+# Reset controls (color board pane)
+reset controls:
+    key(alt-delete)
 
 # 
 test:
@@ -200,8 +306,3 @@ test:
 # 
 test:
     key(f)
-
-# 
-test:
-    key(f)
-
