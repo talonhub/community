@@ -1,5 +1,6 @@
 app: chrome
-app: Figma
+app: Figma Beta
+app: Brave Browser
 -
 component: user.figma_component()
 (detach | tatch): user.figma_detach()

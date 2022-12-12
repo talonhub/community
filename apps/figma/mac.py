@@ -3,7 +3,8 @@ ctx = Context()
 ctx.matches = r"""
 os: mac
 app: Chrome
-app: Figma
+app: Figma Beta
+app: Brave Browser
 """
 
 @ctx.action_class('user')
