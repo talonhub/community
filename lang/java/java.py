@@ -3,9 +3,7 @@ from talon import Context, Module, actions, settings
 ctx = Context()
 mod = Module()
 ctx.matches = r"""
-mode: user.java
-mode: user.auto_lang
-and code.language: java
+tag: user.java
 """
 ctx.tags = ["user.code_operators", "user.code_generic"]
 
@@ -35,8 +33,8 @@ java_boxed_types = {
     "Void": "Void",
 }
 
-mod.list("java_boxed_types", desc="Java Boxed Types")
-ctx.lists["self.java_boxed_types"] = java_boxed_types
+mod.list("java_boxed_type", desc="Java Boxed Types")
+ctx.lists["self.java_boxed_type"] = java_boxed_types
 
 # Common Classes
 java_common_classes = {
@@ -46,8 +44,8 @@ java_common_classes = {
     "exception": "Exception",
 }
 
-mod.list("java_common_classes", desc="Java Common Classes")
-ctx.lists["self.java_common_classes"] = java_common_classes
+mod.list("java_common_class", desc="Java Common Classes")
+ctx.lists["self.java_common_class"] = java_common_classes
 
 
 
@@ -59,7 +57,7 @@ java_generic_data_structures = {
     "queue": "Queue",
     "deque": "Deque",
     "map": "Map",
-    
+
     # Classes
     "hash set": "HashSet",
     "array list": "ArrayList",
@@ -72,8 +70,8 @@ unboxed_types.update(java_generic_data_structures)
 
 ctx.lists["user.code_type"] = unboxed_types
 
-mod.list("java_generic_data_structures", desc="Java Generic Data Structures")
-ctx.lists["self.java_generic_data_structures"] = java_generic_data_structures
+mod.list("java_generic_data_structure", desc="Java Generic Data Structures")
+ctx.lists["self.java_generic_data_structure"] = java_generic_data_structures
 
 # Java Modifies
 java_modifiers = {
@@ -89,173 +87,159 @@ java_modifiers = {
     "final": "final",
 }
 
-mod.list("java_modifiers", desc="Java Modifiers")
-ctx.lists["self.java_modifiers"] = java_modifiers
+mod.list("java_modifier", desc="Java Modifiers")
+ctx.lists["self.java_modifier"] = java_modifiers
 
 @ctx.action_class("user")
 class UserActions:
-    def code_operator_indirection():
-        actions.skip()
-
-    def code_operator_address_of():
-        actions.skip()
-
     def code_operator_lambda():
-        actions.auto_insert(" -> ")
+        actions.insert(" -> ")
 
     def code_operator_subscript():
-        actions.insert("[]")
-        actions.key("left")
+        actions.user.insert_between("[", "]")
 
     def code_operator_assignment():
-        actions.auto_insert(" = ")
+        actions.insert(" = ")
 
     def code_operator_subtraction():
-        actions.auto_insert(" - ")
+        actions.insert(" - ")
 
     def code_operator_subtraction_assignment():
-        actions.auto_insert(" -= ")
+        actions.insert(" -= ")
 
     def code_operator_addition():
-        actions.auto_insert(" + ")
+        actions.insert(" + ")
 
     def code_operator_addition_assignment():
-        actions.auto_insert(" += ")
+        actions.insert(" += ")
 
     def code_operator_multiplication():
-        actions.auto_insert(" * ")
+        actions.insert(" * ")
 
     def code_operator_multiplication_assignment():
-        actions.auto_insert(" *= ")
+        actions.insert(" *= ")
 
     def code_operator_exponent():
-        actions.auto_insert(" ^ ")
+        actions.insert(" ^ ")
 
     def code_operator_division():
-        actions.auto_insert(" / ")
+        actions.insert(" / ")
 
     def code_operator_division_assignment():
-        actions.auto_insert(" /= ")
+        actions.insert(" /= ")
 
     def code_operator_modulo():
-        actions.auto_insert(" % ")
+        actions.insert(" % ")
 
     def code_operator_modulo_assignment():
-        actions.auto_insert(" %= ")
+        actions.insert(" %= ")
 
     def code_operator_equal():
-        actions.auto_insert(" == ")
+        actions.insert(" == ")
 
     def code_operator_not_equal():
-        actions.auto_insert(" != ")
+        actions.insert(" != ")
 
     def code_operator_greater_than():
-        actions.auto_insert(" > ")
+        actions.insert(" > ")
 
     def code_operator_greater_than_or_equal_to():
-        actions.auto_insert(" >= ")
+        actions.insert(" >= ")
 
     def code_operator_less_than():
-        actions.auto_insert(" < ")
+        actions.insert(" < ")
 
     def code_operator_less_than_or_equal_to():
-        actions.auto_insert(" <= ")
+        actions.insert(" <= ")
 
     def code_operator_and():
-        actions.auto_insert(" && ")
+        actions.insert(" && ")
 
     def code_operator_or():
-        actions.auto_insert(" || ")
+        actions.insert(" || ")
 
     def code_operator_bitwise_and():
-        actions.auto_insert(" & ")
+        actions.insert(" & ")
 
     def code_operator_bitwise_and_assignment():
-        actions.auto_insert(' &= ')
+        actions.insert(' &= ')
 
-    def code_operator_increment():        
-        actions.auto_insert('++')
+    def code_operator_increment():
+        actions.insert('++')
 
     def code_operator_bitwise_or():
-        actions.auto_insert(" | ")
+        actions.insert(" | ")
 
     def code_operator_bitwise_exclusive_or():
-        actions.auto_insert(" ^ ")
+        actions.insert(" ^ ")
 
     def code_operator_bitwise_left_shift():
-        actions.auto_insert(" << ")
+        actions.insert(" << ")
 
     def code_operator_bitwise_left_shift_assignment():
-        actions.auto_insert(" <<= ")
+        actions.insert(" <<= ")
 
     def code_operator_bitwise_right_shift():
-        actions.auto_insert(" >> ")
+        actions.insert(" >> ")
 
     def code_operator_bitwise_right_shift_assignment():
-        actions.auto_insert(" >>= ")
+        actions.insert(" >>= ")
 
     def code_self():
-        actions.auto_insert("this")
+        actions.insert("this")
 
-    def code_null():
-        actions.auto_insert("null")
+    def code_operator_object_accessor():
+        actions.insert(".")
 
-    def code_is_null():
-        actions.auto_insert(" == null")
+    def code_insert_null():
+        actions.insert("null")
 
-    def code_is_not_null():
-        actions.auto_insert(" != null")
+    def code_insert_is_null():
+        actions.insert(" == null")
+
+    def code_insert_is_not_null():
+        actions.insert(" != null")
 
     def code_state_if():
-        actions.insert("if () ")
-        actions.key("left")
-        actions.key("left")
+        actions.user.insert_between("if (", ") ")
 
     def code_state_else_if():
-        actions.insert("else if () ")
-        actions.key("left")
-        actions.key("left")
+        actions.user.insert_between("else if (", ") ")
 
     def code_state_else():
         actions.insert("else ")
         actions.key("enter")
 
     def code_state_switch():
-        actions.insert("switch () ")
-        actions.key("left")
-        actions.edit.left()
+        actions.user.insert_between("switch (", ") ")
 
     def code_state_case():
         actions.insert("case \nbreak;")
         actions.edit.up()
 
     def code_state_for():
-        actions.insert("for () ")
-        actions.key("left")
-        actions.key("left")
+        actions.user.insert_between("for (", ") ")
 
     def code_state_while():
-        actions.insert("while () ")
-        actions.edit.left()
-        actions.edit.left()
+        actions.user.insert_between("while (", ") ")
 
-    def code_break():           
-        actions.auto_insert('break;')
+    def code_break():
+        actions.insert('break;')
 
     def code_next():
-        actions.auto_insert('continue;')
-    
-    def code_true():          
-        actions.auto_insert('true')
+        actions.insert('continue;')
 
-    def code_false():           
-        actions.auto_insert('false')
+    def code_insert_true():
+        actions.insert('true')
 
-    def code_type_class():
-        actions.auto_insert("class ")
+    def code_insert_false():
+        actions.insert('false')
 
-    def code_import():         
-        actions.auto_insert("import ")
+    def code_define_class():
+        actions.insert("class ")
+
+    def code_import():
+        actions.insert("import ")
 
     def code_private_function(text: str):
         actions.insert("private")
@@ -269,28 +253,11 @@ class UserActions:
     def code_state_return():
         actions.insert("return ")
 
-    def code_comment(): 
-        actions.auto_insert('// ')
-
-    def code_block_comment():
-        actions.insert('/*')
-        actions.key('enter')
-        actions.key('enter')
-        actions.insert('*/')
-        actions.edit.up()
-
-    def code_block_comment_prefix(): 
-        actions.auto_insert('/*')
-
-    def code_block_comment_suffix(): 
-        actions.auto_insert('*/')
+    def code_comment_line_prefix():
+        actions.insert('// ')
 
     def code_insert_function(text: str, selection: str):
-        if selection:
-            text = text + "({})".format(selection)
-        else:
-            text = text + "()"
-
+        text += f"({selection or ''})"
         actions.user.paste(text)
         actions.edit.left()
 

@@ -113,10 +113,10 @@ go way end:
 
 go way home:
     edit.file_start()
-    
+
 go bottom:
     edit.file_end()
-    
+
 go top:
     edit.file_start()
 
@@ -301,4 +301,3 @@ slice word right:
 slice line:
     edit.select_line()
     edit.cut()
-

@@ -21,10 +21,3 @@ mode: all
 ^wake up$: speech.enable()
 ^awaken$: speech.enable()
 
-# ^(timer | time) (are | or) sleep$: 
-#  key(cmd-shift-r)
-#  speech.disable()
-  
-#^(timer | time)  (are | or) (wake | weak)$:
-#  speech.enable()  
-#  key(cmd-shift-r)

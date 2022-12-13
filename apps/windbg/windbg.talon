@@ -9,7 +9,7 @@ tag(): user.windbg
 register <user.registers>:
     key(@)
     insert("{registers}")
-    
+
 open help: insert(".hh\n")
 
 # xxx - add window switching
@@ -22,15 +22,14 @@ reload symbols:
     insert(".reload\n")
 loaded modules:
     insert("lm l\n")
-    
+
 display pointers:
     insert("dps ")
-    
+
 # XXX - should be generic
 dereference pointer:
-    insert("poi()")
-    edit.left()
-    
+    user.insert_between("poi(", ")")
+
 show version: key(ctrl-alt-w)
 
 ##

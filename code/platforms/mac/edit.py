@@ -116,6 +116,7 @@ class EditActions:
     def select_all():
         actions.key('cmd-a')
     def select_line(n: int=None):
+        if n is not None: actions.edit.jump_line(n)
         actions.key('cmd-right cmd-shift-left')
         #action(edit.select_lines(a: int, b: int)):
     def select_none():

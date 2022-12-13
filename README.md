@@ -69,7 +69,7 @@ The folder structure should look something like the below:
     - All help-related commands are defined in misc/help.talon and misc/help_open.talon
 2. `help alphabet` will display the alphabet
 3. `command history` will toggle a display of the recent commands
-4. `format help` will display the available formatters with examples.
+4. `help format` will display the available formatters with examples.
 5. Many useful, basic commands are defined in https://github.com/knausj85/knausj_talon/blob/master/misc/standard.talon#L36
     - `undo that` and `redo that` are the default undo/redo commands.
     - `paste that`, `copy that`, and `cut that` for pasting/copy/cutting, respectively.
@@ -128,7 +128,7 @@ Some other symbols are defined here:
 https://github.com/knausj85/knausj_talon/blob/master/text/symbols.talon
 
 ### Formatters
-`format help` will display the available formatters with examples of the output.
+`help format` will display the available formatters with examples of the output.
 
 Try using formatters by saying e.g. `snake hello world`, which will insert hello_world
 
@@ -185,22 +185,37 @@ To enable title tracking for your application:
 
 Python, C#, Talon and javascript language support is currently broken up into several tags in an attempt to define a common grammar where possible between languages. Each tag is defined by a .talon file, which defines the voice commands, and a Python file which declares the actions that should be implemented by each concrete language implementation to support those voice commands. Currently, the tags which are available are:
 
-• `lang/tags/block_comment.{talon,py}` - block commenting commands
-• `lang/tags/comment.{talon,py}`       - line commenting commands
-• `lang/tags/operators.{talon,py}`     - operator commands
-• `lang/tags/generic.{talon,py}`       - functions, loops, etc
+• `lang/tags/comment_block.{talon,py}`         - block comments (e.g., C++'s `/* */`)
+• `lang/tags/comment_documentation.{talon,py}` - documentation comments (e.g., Java's `/** */`)
+• `lang/tags/comment_line.{talon,py}`          - line comments (e.g., Python's `#`)
+• `lang/tags/data_null.{talon,py}`             - null & null checks (e.g., Python's `None`)
+• `lang/tags/data_bool.{talon,py}`             - booleans (e.g., Haskell's `True`)
+• `lang/tags/functions.{talon,py}`             - functions and definitions
+• `lang/tags/functions_common.{talon,py}`      - common functions (also includes a GUI for picking functions)
+• `lang/tags/imperative.{talon,py}`            - statements (e.g., `if`, `while`, `switch`)
+• `lang/tags/libraries.{talon,py}`             - libraries and imports
+• `lang/tags/libraries_gui.{talon,py}`         - graphical helper for common libraries
+• `lang/tags/object_oriented.{talon,py}`       - objects and classes (e.g., `this`)
+• `lang/tags/operators_array.{talon,py}`       - array operators (e.g., Ruby's `x[0]`)
+• `lang/tags/operators_assignment.{talon,py}`  - assignment operators (e.g., C++'s `x += 5`)
+• `lang/tags/operators_bitwise.{talon,py}`     - bitwise operators (e.g., C's `x >> 1`)
+• `lang/tags/operators_lambda.{talon,py}`      - anonymous functions (e.g., JavaScript's `x => x + 1`)
+• `lang/tags/operators_math.{talon,py}`        - numeric, comparison, and logical operators
+• `lang/tags/operators_pointer.{talon,py}`     - pointer operators (e.g., C's `&x`)
 
 The support for the language-specific implementations of actions are then located in:
 
-• `lang/{your-language-here}/{your-language-here}.py`
+• `lang/{your-language}/{your-language}.py`
 
-To start support for a new language, ensure the appropriate extension is added to the [`extension_lang_map` in `code.py`](https://github.com/knausj85/knausj_talon/blob/12229e932d9d3de85fa2f9d9a7c4f31ed6b6445b/code/code.py#L32), and implement the actions for these tags as appropriate, following existing language implementations. If you wish to add some further voice commands for your language, put those in a .talon file located in:
+To start support for a new language, ensure the appropriate extension is added to the [`extension_lang_map` in `code.py`](https://github.com/knausj85/knausj_talon/blob/12229e932d9d3de85fa2f9d9a7c4f31ed6b6445b/code/code.py#L32).
+Then create the following files:
 
-• `lang/{your-language-here}/{your-language-here}.talon`
+• `lang/{your-language}/{your-language}.py`
+• `lang/{your-language}/{your-language}.talon`
 
+Activate the appropriate tags in `{your-language}.talon` and implement the corresponding actions in `{your-language}.py`, following existing language implementations.
+If you wish to add additional voice commands for your language, put those in `{your-language}.talon`.
 You may also want to add a force command to `language_modes.talon`.
-
-You may also want to add support for the lists `user.code_functions` and `user.code_libraries` where appropriate. For example, see the language mode for C#. At least, until we come up with something better 👍
 
 ## File Manager commands
 For the following file manager commands to work, your file manager must display the full folder path in the title bar. https://github.com/knausj85/knausj_talon/blob/baa323fcd34d8a1124658a425abe8eed59cf2ee5/apps/file_manager.talon
@@ -286,6 +301,7 @@ The most commonly adjusted settings are probably
 
 • `user.mouse_wheel_down_amount` and `user.mouse_continuous_scroll_amount` for adjusting the scroll amounts for the various scroll commands.
 
+Also, you can add additional vocabulary words, words to replace, search engines and more. Complete the knausj_talon setup instructions above, then open the `settings` folder to see the provided CSV files and customize them as needed.
 
 # Collaborators
 
@@ -337,11 +353,40 @@ generic_terminal.talon
 
 - New programming languages should support the appropriate 'generic' grammars where possible, see above.
 
+## Automatic formatting/linters
+
+This repository uses [`pre-commit`](https://pre-commit.com/) to run manage its formatters/linters.
+
+First, [install](https://pre-commit.com/#install) `pre-commit`:
+
+```bash
+$ pip install pre-commit
+```
+
+You then have a few options as to when to run it:
+
+- Run yourself at any time on your locally changed files: `pre-commit run`
+- Run yourself on all files in the repository: `pre-commit run --all-files`
+- Run automatically on your PRs (fixes will be pushed automatically to your branch):
+  - Visit https://pre-commit.ci/ and authorize the app to connect to your knausj fork.
+- Set up an editor hook to run on save:
+  - You could follow the instructions for [Black](https://black.readthedocs.io/en/stable/integrations/editors.html), which are well written; simply replace `black <path>` with `pre-commit run --files <file>`.
+  - It's more performant to only reformat the specific file you're editing, rather than all changed files.
+- Install a git pre-commit hook with `pre-commit install` (optional)
+  - This essentially runs `pre-commit run` automatically before creating local commits, applying formatters/linters on all changed files. If it "fails", the commit will be blocked.
+  - Note that because many of the rules automatically apply fixes, typically you just need to stage the changes that they made, then reattempt your commit.
+  - Whether to use the hook comes down to personal taste. If you like to make many small incremental "work" commits developing a feature, it may be too much overhead.
+
+If you run into setup difficulty with `pre-commit`, you might want to ensure that you have a modern Python 3 local environment first. [pyenv](https://github.com/pyenv/pyenv) is good way to install such Python versions without affecting your system Python (recommend installing 3.9 to match Talon's current version). On macOS you can also `brew install pre-commit`.
+
 ## Automated tests
 
-There are a number of automated tests in the repository which are run outside of the Talon environment. To run them make sure you have the `pytest` python package installed. You can then just run the `pytest` command from the repository root to execute all the tests.
+There are a number of automated unit tests in the repository. These are all run *outside* of the Talon environment (e.g. we don't have access to Talon's window management APIs). These make use of a set of stubbed out Talon APIs in `tests/stubs/` and a bit of class loader trickery in `conftest.py`.
+
+To run the test suite you just need to install the `pytest` python package in to a non-Talon Python runtime you want to use for tests (i.e. don't install in the `~/.talon/.venv directory`). You can then just run the `pytest` command from the repository root to execute all the tests.
 
 # Talon documentation
+
 For official documentation on Talon's API and features, please visit https://talonvoice.com/docs/.
 
 For community-generated documentation on Talon, please visit https://talon.wiki/

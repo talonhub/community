@@ -141,4 +141,3 @@ class UserActions:
         actions.key("alt-a")
 
     # find_and_replace.py support end
-

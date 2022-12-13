@@ -354,13 +354,6 @@ def ui_event(event, arg):
     if event in ("app_launch", "app_close"):
         update_running_list()
 
-
-# Currently update_launch_list only does anything on mac, so we should make sure
-# to initialize user launch to avoid getting "List not found: user.launch"
-# errors on other platforms.
-ctx.lists["user.launch"] = {}
-ctx.lists["user.running"] = {}
-
 # Talon starts faster if you don't use the `talon.ui` module during launch
 
 
