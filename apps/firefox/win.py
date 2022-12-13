@@ -52,7 +52,7 @@ class BrowserActions:
         actions.key('ctrl-h')
     def toggle_dev_tools():
         actions.key('ctrl-shift-i')
-        
+
 @ctx.action_class("user")
 class UserActions:
     def tab_jump(number: int):

@@ -38,7 +38,7 @@ setting_editor_names = mod.setting(
 def get_editor_names():
     names_csv = setting_editor_names.get()
     return names_csv.split(", ") if names_csv else default_names
-    
+
 
 
 @mod.scope
@@ -81,7 +81,7 @@ class Actions:
         actions.app.tab_open()
         if selected_text != "":
             actions.user.paste(selected_text)
-        add_tag("user.draft_editor_active")        
+        add_tag("user.draft_editor_active")
 
     def draft_editor_submit():
         """Submit/save draft editor"""

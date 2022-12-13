@@ -1,12 +1,10 @@
-from talon import Context, Module, actions, imgui, settings, ui
+from talon import Context, Module, actions, settings
 
 ctx = Context()
 ctx.matches = r"""
-mode: user.csharp
-mode: user.auto_lang
-and code.language: csharp
+tag: user.csharp
 """
-ctx.lists["user.code_functions"] = {
+ctx.lists["user.code_common_function"] = {
     "integer": "int.TryParse",
     "print": "Console.WriteLine",
     "string": ".ToString",
@@ -20,8 +18,7 @@ class UserActions:
     def code_operator_structure_dereference(): actions.auto_insert('->')
     def code_operator_lambda():                actions.auto_insert('=>')
     def code_operator_subscript():
-        actions.insert('[]')
-        actions.key('left')
+        actions.user.insert_between('[', ']')
     def code_operator_assignment():                      actions.auto_insert(' = ')
     def code_operator_subtraction():                     actions.auto_insert(' - ')
     def code_operator_subtraction_assignment():          actions.auto_insert(' -= ')
@@ -55,22 +52,25 @@ class UserActions:
     def code_block():
         actions.insert('{}')
         actions.key('left enter enter up tab')
-    def code_self():        actions.auto_insert('this')
-    def code_null():        actions.auto_insert('null')
-    def code_is_null():     actions.auto_insert(' == null ')
-    def code_is_not_null(): actions.auto_insert(' != null')
+
+    def code_self():
+        actions.auto_insert('this')
+
+    def code_operator_object_accessor():
+        actions.auto_insert(".")
+
+    def code_insert_null():        actions.auto_insert('null')
+    def code_insert_is_null():     actions.auto_insert(' == null ')
+    def code_insert_is_not_null(): actions.auto_insert(' != null')
     def code_state_if():
-        actions.insert('if()')
-        actions.key('left')
+        actions.user.insert_between('if(', ')')
     def code_state_else_if():
-        actions.insert('else if()')
-        actions.key('left')
+        actions.user.insert_between('else if(', ')')
     def code_state_else():
         actions.insert('else\n{\n}\n')
         actions.key('up')
     def code_state_switch():
-        actions.insert('switch()')
-        actions.edit.left()
+        actions.user.insert_between('switch(', ')')
     def code_state_case():
         actions.insert('case \nbreak;')
         actions.edit.up()
@@ -83,33 +83,17 @@ class UserActions:
         actions.edit.left()
     def code_state_go_to(): actions.auto_insert('go to ')
     def code_state_while():
-        actions.insert('while()')
-        actions.edit.left()
+        actions.user.insert_between('while(', ')')
     def code_state_return():   actions.auto_insert('return ')
     def code_break():          actions.auto_insert('break;')
     def code_next():           actions.auto_insert('continue;')
-    def code_true():           actions.auto_insert('true')
-    def code_false():          actions.auto_insert('false')
-    
-    #action(user.code_type_definition): "typedef "
-    #action(user.code_typedef_struct):
-    #    insert("typedef struct")
-    #    insert("{{\n\n}}")
-    #    edit.up()
-    #    key(tab)
-    def code_type_class():     actions.auto_insert('class ')
+    def code_insert_true():           actions.auto_insert('true')
+    def code_insert_false():          actions.auto_insert('false')
+    def code_define_class():     actions.auto_insert('class ')
     def code_import():         actions.auto_insert('using  ')
-    def code_from_import():    actions.auto_insert('using ')
-    def code_include():        actions.insert('using ')
-    def code_include_system(): actions.insert('using ')
-    def code_include_local():  actions.insert('using ')
-    def code_comment():        actions.auto_insert('//')
+    def code_comment_line_prefix():        actions.auto_insert('//')
     def code_insert_function(text: str, selection: str):
-        if selection:
-            text = text + "({})".format(selection)
-        else:
-            text = text + "()"
-
+        text += f"({selection or ''})"
         actions.user.paste(text)
         actions.edit.left()
 

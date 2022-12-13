@@ -3,9 +3,7 @@ from talon import Context, Module, actions, settings
 mod = Module()
 ctx = Context()
 ctx.matches = r"""
-mode: user.vimscript
-mode: user.auto_lang
-and code.language: vimscript
+tag: user.vimscript
 """
 
 ctx.lists["self.vimscript_functions"] = {
@@ -74,7 +72,7 @@ class UserActions:
     def code_operator_division_assignment():
         actions.auto_insert(" /= ")
 
-    def code_comment():
+    def code_comment_line_prefix():
         actions.auto_insert('"')
 
     def code_state_if():

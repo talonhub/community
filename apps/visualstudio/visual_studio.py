@@ -1,5 +1,6 @@
 # vs title tracking requires an extension
 # https://marketplace.visualstudio.com/items?itemName=mayerwin.RenameVisualStudioWindowTitle
+# https://github.com/mayerwin/vs-customize-window-title (VS 2022 support in releases)
 # I currently configure the extension as below
 # Document (no solution) open: [documentName] - [ideName]
 # No document or solution open: [idleName]
@@ -18,6 +19,8 @@ mod = Module()
 apps = mod.apps
 apps.visual_studio = """
 os: windows
+and app.name: Microsoft Visual Studio 2022
+os: windows
 and app.name: Microsoft Visual Studio 2019
 os: windows
 and app.name: devenv.exe
@@ -32,8 +35,7 @@ from talon import Context, actions
 ctx = Context()
 ctx.matches = r"""
 os: windows
-app: Microsoft Visual Studio 2019
-app: devenv.exe
+app: visual_studio
 """
 
 @ctx.action_class('app')
@@ -225,7 +227,7 @@ class UserActions:
         actions.key("esc")
 
     # find_and_replace.py support end
-    
+
     #multiple_cursor.py support begin
     #note: visual studio has no explicit mode for multiple cursors; requires https://marketplace.visualstudio.com/items?itemName=VaclavNadrasky.MultiCaretBooster
     def multi_cursor_add_above():                actions.key('shift-alt-up')
@@ -236,8 +238,3 @@ class UserActions:
     def multi_cursor_select_all_occurrences():   actions.key('shift-alt-;')
     def multi_cursor_select_fewer_occurrences(): actions.key('shift-alt-k')
     def multi_cursor_select_more_occurrences():  actions.key('shift-alt->')
-
-
-
-
-

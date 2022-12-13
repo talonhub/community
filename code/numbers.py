@@ -112,7 +112,7 @@ def split_list(value, l: list) -> Iterator:
         start = i+1
     yield l[start:]
 
-
+
 # # ---------- TESTS (uncomment to run) ----------
 # def test_number(expected, string):
 #     print('testing:', string)
@@ -148,7 +148,7 @@ def split_list(value, l: list) -> Iterator:
 # #test_number(100001010, "one million ten ten")
 # #test_number(1050006000, "one hundred thousand and five thousand and six thousand")
 
-
+
 # ---------- CAPTURES ----------
 alt_digits = "(" + ("|".join(digits_map.keys())) + ")"
 alt_teens = "(" + ("|".join(teens_map.keys())) + ")"

@@ -2,16 +2,11 @@ from talon import Context, actions, settings
 
 ctx = Context()
 ctx.matches = r"""
-mode: user.ruby
-mode: user.auto_lang
-and code.language: ruby
+tag: user.ruby
 """
 
 @ctx.action_class('user')
 class UserActions:
-    def code_operator_indirection(): actions.auto_insert('')
-    def code_operator_address_of(): actions.auto_insert('')
-    def code_operator_structure_dereference(): actions.auto_insert('')
     def code_operator_lambda(): actions.auto_insert('->')
     def code_operator_subscript():
         actions.insert('[]')
@@ -47,10 +42,13 @@ class UserActions:
     def code_operator_bitwise_right_shift(): actions.auto_insert(' >> ')
     def code_operator_bitwise_right_shift_assignment(): actions.auto_insert(' >>= ')
     def code_self(): actions.auto_insert('self')
-    def code_null(): actions.auto_insert('nil')
-    def code_is_null(): actions.auto_insert('.nil?')
+    def code_operator_object_accessor(): actions.auto_insert('.')
+    def code_insert_null(): actions.auto_insert('nil')
+    def code_insert_is_null(): actions.auto_insert('.nil?')
     # Technically .present? is provided by Rails
-    def code_is_not_null(): actions.auto_insert('.present?')
+    def code_insert_is_not_null(): actions.auto_insert('.present?')
+    def code_state_do():
+        actions.insert('do ')
     def code_state_if():
         actions.insert('if ')
     def code_state_else_if():
@@ -65,16 +63,16 @@ class UserActions:
     def code_state_for_each():
         actions.insert('.each do ||')
         actions.key('left')
-    def code_type_class(): actions.auto_insert('class ')
+    def code_define_class(): actions.auto_insert('class ')
     def code_import():
         actions.auto_insert('require ""')
         actions.key('left')
-    def code_comment(): actions.auto_insert('# ')
+    def code_comment_line_prefix(): actions.auto_insert('# ')
     def code_state_return():
         actions.insert('return ')
-    def code_true(): actions.auto_insert('true')
-    def code_false(): actions.auto_insert('false')
-    def code_document_string():
+    def code_insert_true(): actions.auto_insert('true')
+    def code_insert_false(): actions.auto_insert('false')
+    def code_comment_documentation():
         actions.insert('##')
         actions.key('enter')
         actions.key('space')

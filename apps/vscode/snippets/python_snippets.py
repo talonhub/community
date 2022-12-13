@@ -6,9 +6,7 @@ import os
 ctx = Context()
 ctx.matches = r"""
 app: vscode
-mode: user.python
-mode: user.auto_lang 
-and code.language: python
+tag: user.python
 """
 # short name -> ide clip name
 ctx.lists["user.snippets"] = {
@@ -41,4 +39,3 @@ ctx.lists["user.snippets"] = {
 #     )
 # if snippet_path:
 #     watcher = snippet_watcher({snippet_path: ["python.json",],}, update_list,)
-

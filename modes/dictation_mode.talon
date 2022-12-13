@@ -1,15 +1,19 @@
 mode: dictation
 -
-^press <user.keys>$: key("{keys}")
+^press <user.modifiers>$: key(modifiers)
+^press <user.keys>$: key(keys)
 
-# Everything here should call auto_insert to preserve the state to correctly auto-capitalize/auto-space.
-<user.prose>: auto_insert(prose)
-new line: "\n"
-new paragraph: "\n\n"
-cap <user.word>:
-    result = user.formatted_text(word, "CAPITALIZE_FIRST_WORD")
-    auto_insert(result)
-    
+# Everything here should call `auto_insert()` (instead of `insert()`), to preserve the state to correctly auto-capitalize/auto-space.
+# (Talonscript string literals implicitly call `auto_insert`, so there's no need to wrap those)
+<user.raw_prose>: auto_insert(raw_prose)
+cap: user.dictation_format_cap()
+# Hyphenated variants are for Dragon.
+(no cap | no-caps): user.dictation_format_no_cap()
+(no space | no-space): user.dictation_format_no_space()
+^cap that$: user.dictation_reformat_cap()
+^(no cap | no-caps) that$: user.dictation_reformat_no_cap()
+^(no space | no-space) that$: user.dictation_reformat_no_space()
+
 # Navigation
 go up <number_small> (line|lines):
     edit.up()
