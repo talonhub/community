@@ -1,12 +1,19 @@
 # knausj_talon
 
-Talon configs for Mac, Windows, and Linux. Very much in progress. This is also intended to work with both Dragon Naturally Speaking and wav2letter.
+Community-maintained [Talon](https://talonvoice.com/) command grammar.
 
-Notes:
+Can be used on its own, but shines when combined with:
 
-- commands are subject to change. We do our best to minimize changes, but we are moving to an [object][verb] standard slowly but surely.
-- @knausj85 makes extensive use of Talon's eye tracking features, so the grammar for certain programs may be much smaller than you may require.
-- The repository was mostly developed with Dragon, so commands are mostly still optimized for that speech engine.
+- [Cursorless](https://www.cursorless.org/)
+- [Rango](https://github.com/david-tejada/rango)
+- [Other user file sets](https://talon.wiki/talon_user_file_sets/)
+
+## Prerequisites
+
+- Requires [Talon](https://talonvoice.com/)
+- Supports Mac, Windows, and Linux
+- Can work with both Talon's own Conformer engine or Dragon Naturally Speaking.
+- Includes commands for working with an eye tracker, but not required
 
 ## Linux & Mac setup
 
