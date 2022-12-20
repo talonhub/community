@@ -10,9 +10,9 @@ Can be used on its own, but shines when combined with:
 
 ## Prerequisites
 
-- Requires [Talon](https://talonvoice.com/)
-- Supports Mac, Windows, and Linux
-- Can work with both Talon's own Conformer engine or Dragon Naturally Speaking.
+- [Talon](https://talonvoice.com/)
+- Mac, Windows, and Linux
+- Can work with both Talon's own Conformer speech recognition engine or Talon's Dragon Naturally Speaking integration.
 - Includes commands for working with an eye tracker, but not required
 
 ## Linux & Mac setup
