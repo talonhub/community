@@ -27,7 +27,7 @@ It is recommended to install `knausj_talon` using [`git`](https://git-scm.com/).
 
    ```bash
    cd ~/.talon/user
-   git clone https://github.com/knausj85/knausj_talon
+   git clone https://github.com/knausj85/knausj_talon knausj_talon
    ```
 
 Note that it is also possible to install knausj by [downloading and extracting a zip file](#alternate-installation-method-zip-file), but this approach is discouraged because it makes it more difficult to keep track of any changes you may make to your copy of the files.
@@ -42,7 +42,7 @@ It is recommended to install `knausj_talon` using [`git`](https://git-scm.com/).
 
    ```
    cd %AppData%\Talon\user
-   git clone https://github.com/knausj85/knausj_talon
+   git clone https://github.com/knausj85/knausj_talon knausj_talon
    ```
 
 Note that it is also possible to install knausj by [downloading and extracting a zip file](#alternate-installation-method-zip-file), but this approach is discouraged because it makes it more difficult to keep track of any changes you may make to your copy of the files.
