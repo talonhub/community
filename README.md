@@ -4,8 +4,8 @@ Community-maintained [Talon](https://talonvoice.com/) command grammar.
 
 Can be used on its own, but shines when combined with:
 
-- [Cursorless](https://www.cursorless.org/)
-- [Rango](https://github.com/david-tejada/rango)
+- [Cursorless](https://www.cursorless.org/) for programming and text editing
+- [Rango](https://github.com/david-tejada/rango) for browser navigation
 - [Other user file sets](https://talon.wiki/talon_user_file_sets/)
 
 ## Installation
