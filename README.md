@@ -6,6 +6,8 @@ Can be used on its own, but shines when combined with:
 
 - [Cursorless](https://www.cursorless.org/) for programming and text editing
 - [Rango](https://github.com/david-tejada/rango) for browser navigation
+- [gaze-ocr](https://github.com/wolfmanstout/talon-gaze-ocr) for advanced cursor control using eye tracking and text recognition (OCR)
+- [AXKit](https://github.com/phillco/talon-axkit) (macOS only) to enhance Talon with native OS accessibility integrations
 - [Other user file sets](https://talon.wiki/talon_user_file_sets/)
 
 ## Installation
