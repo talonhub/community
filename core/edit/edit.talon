@@ -68,3 +68,7 @@ take struck: edit.extend_line_end()
 take word: edit.select_word()
 take lord: edit.extend_word_left()
 take role: edit.extend_word_right()
+
+# duplication
+clone that: edit.selection_clone()
+clone line: edit.line_clone()

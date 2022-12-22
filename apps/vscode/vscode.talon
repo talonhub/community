@@ -52,6 +52,7 @@ show settings folder json: user.vscode("workbench.action.openFolderSettingsFile"
 show settings workspace: user.vscode("workbench.action.openWorkspaceSettings")
 show settings workspace json: user.vscode("workbench.action.openWorkspaceSettingsFile")
 show shortcuts: user.vscode("workbench.action.openGlobalKeybindings")
+show shortcuts json: user.vscode("workbench.action.openGlobalKeybindingsFile")
 show snippets: user.vscode("workbench.action.openSnippets")
 
 # Display
@@ -298,17 +299,14 @@ tag remove: user.vscode("editor.emmet.action.removeTag")
 tag (split | join): user.vscode("editor.emmet.action.splitJoinTag")
 tag update: user.vscode("editor.emmet.action.updateTag")
 tag wrap: user.vscode("editor.emmet.action.wrapWithAbbreviation")
-tag wrap lines:
-    user.vscode("editor.emmet.action.wrapIndividualLinesWithAbbreviation")
+tag wrap lines: user.vscode("editor.emmet.action.wrapIndividualLinesWithAbbreviation")
 tag evaluate: user.vscode("editor.emmet.action.evaluateMathExpression")
 tag increment: user.vscode("editor.emmet.action.incrementNumberByOne")
 tag increment big: user.vscode("editor.emmet.action.incrementNumberByTen")
-tag increment small:
-    user.vscode("editor.emmet.action.incrementNumberByOneTenth")
+tag increment small: user.vscode("editor.emmet.action.incrementNumberByOneTenth")
 tag decrement: user.vscode("editor.emmet.action.decrementNumberByOne")
 tag decrement big: user.vscode("editor.emmet.action.decrementNumberByTen")
-tag decrement small:
-    user.vscode("editor.emmet.action.decrementNumberByOneTenth")
+tag decrement small: user.vscode("editor.emmet.action.decrementNumberByOneTenth")
 tag show: user.vscode("workbench.action.showEmmetCommands")
 
 # Git Lens (eamodio.gitlens)
