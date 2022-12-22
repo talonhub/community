@@ -81,7 +81,7 @@ class Actions:
         if actions.speech.enabled():
             actions.speech.set_microphone("None")
         else:
-            actions.speech.set_microphone(previous_mic)
+            actions.user.microphone_preferred()
 
         actions.speech.toggle()
 
@@ -93,7 +93,7 @@ class Actions:
             if preferred_mic in mics:
                 actions.speech.set_microphone(preferred_mic)
                 previous_mic = preferred_mic
-                actions.app.notify(f"Microphone enabled: {preferred_mic}")
+                #actions.app.notify(f"Microphone enabled: {preferred_mic}")
                 break
 
     def speaker_selection_toggle():
@@ -144,7 +144,7 @@ class Actions:
 def on_ready():
     ctx.register("devices_changed", devices_changed)
     update_microphone_list()
-    actions.user.microphone_toggle()
+    actions.speech.set_microphone("None")
 
 
-app.register("ready", on_ready)
+#app.register("ready", on_ready)

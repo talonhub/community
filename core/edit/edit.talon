@@ -45,8 +45,6 @@ drill <number_small>:
 (drill | scratch) head: 
     key(shift-home)
     key(delete)
-    go line start:
-        edit.line_start()
     
 tail:
     edit.line_end()
@@ -101,10 +99,10 @@ sell draw:
 sell spring:
     edit.extend_word_right()
 
-sell far left:
+sell head:
     edit.extend_line_start()
 
-sell far right:
+sell tale:
     edit.extend_line_end()
 
 sell far up:
@@ -149,11 +147,11 @@ void spring:
     edit.extend_word_right()
     edit.delete()
     
-void far left:
+void head:
     edit.extend_line_start()
     edit.delete()
     
-void far right:
+void tail:
     edit.extend_line_end()
     edit.delete()
     
