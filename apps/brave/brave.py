@@ -12,7 +12,7 @@ and app.bundle: com.brave.Browser
 ctx.matches = r"""
 app: brave
 """
-
+ctx.tags = ["browser", "user.tabs"]
 
 @ctx.action_class("user")
 class user_actions:
