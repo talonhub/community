@@ -16,7 +16,7 @@ Can be used on its own, but shines when combined with:
 
 - [Talon](https://talonvoice.com/)
 - Mac, Windows, or Linux
-- Can work with both Talon's own Conformer speech recognition engine or Talon's Dragon Naturally Speaking integration.
+- Can work with both Talon's built-in Conformer (wav2letter) speech recognition engine (recommended), or Dragon Naturally Speaking (Windows) / Dragon for Mac (although beware that Dragon for Mac is deprecated).
 - Includes commands for working with an eye tracker, but not required
 
 ### Linux & Mac
