@@ -9,7 +9,7 @@ cut that: edit.cut()
 (pace | paste) enter:
     edit.paste()
     key(enter)
-undo that: edit.undo()
+revert that: edit.undo()
 redo that: edit.redo()
 paste match: edit.paste_match_style()
 file save: edit.save()
