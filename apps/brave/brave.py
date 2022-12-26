@@ -14,6 +14,7 @@ app: brave
 """
 ctx.tags = ["browser", "user.tabs"]
 
+
 @ctx.action_class("user")
 class user_actions:
     def tab_jump(number: int):
