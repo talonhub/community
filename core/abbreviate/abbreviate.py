@@ -178,6 +178,7 @@ abbreviations = {
     "python": "py",
     "quebec": "qc",
     "query string": "qs",
+    "radian": "rad",
     "random": "rnd",
     "receipt": "rcpt",
     "reference": "ref",
