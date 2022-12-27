@@ -41,7 +41,7 @@ _file_extensions_defaults = {
     "dot svg": ".svg",
     "dot png": ".png",
     "dot wave": ".wav",
-    "dot flack": ".flack",
+    "dot flack": ".flac",
     "dot doc": ".doc",
     "dot doc x": ".docx",
     "dot pdf": ".pdf",
