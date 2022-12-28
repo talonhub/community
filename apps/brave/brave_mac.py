@@ -6,7 +6,6 @@ ctx.matches = r"""
 os: mac
 app: brave
 """
-ctx.tags = ["browser", "user.tabs"]
 
 
 def brave_app():
