@@ -1,5 +1,10 @@
 os: windows
 and app: Outlook
+os: windows
+and app.name: Microsoft Outlook
+os: windows
+and app.exe: OUTLOOK.EXE
+
 -
 archive: key(alt h o 1)
 new e-mail: key(ctrl-n)

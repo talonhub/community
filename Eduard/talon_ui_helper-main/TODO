@@ -1,0 +1,5 @@
+* GUI macro mode, perhaps saves the macro as a talon file in a given location.
+* Voice command to open the most likely .talon file that you want to add a voice command to (based on the title).
+* Keyboard commands to adjust the minimum spacing in the blob detector
+* Keyboard commands to adjust the thresholding in the image selector
+* Action to attempt to automatically remove unused templates in the image_templates directory by parsing usage from .talon files.

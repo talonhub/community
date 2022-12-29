@@ -2,10 +2,10 @@
 mode: all
 -
 ^welcome back$:
-    user.mouse_wake()
-    user.history_enable()
+ #   user.mouse_wake()
+#    user.history_enable()
     user.talon_mode()
-^sleep all [<phrase>]$:
+^snore [<phrase>]$:
     user.switcher_hide_running()
     user.history_disable()
     user.homophones_hide()
