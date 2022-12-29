@@ -53,6 +53,7 @@ abbreviations = {
     "context": "ctx",
     "control": "ctrl",
     "constant": "const",
+    "constructor": "ctor",
     "coordinate": "coord",
     "coordinates": "coords",
     "copy": "cpy",
