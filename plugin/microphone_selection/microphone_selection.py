@@ -9,7 +9,7 @@ mod = Module()
 if app.platform == "windows":
     preferred_mics = ["Microphone (Samson Q9U)", "Microphone (d:vice MMA-A)", "System Default"]
 else:
-    preferred_mics = ["Samson Q9U", "d:vice MMA-A", "System Default"]
+    preferred_mics = ["Samson Q9U", "d:vice MMA-A", "MacBook Pro Microphone" "System Default"]
 
 # previous_mic = "Krisp Microphone (Krisp)"
 microphone_device_list = []
@@ -147,4 +147,4 @@ def on_ready():
     actions.speech.set_microphone("None")
 
 
-#app.register("ready", on_ready)
+app.register("ready", on_ready)

@@ -1,5 +1,9 @@
 os: mac
 -
+settings():
+     user.system_portal_name = "safari"
+     user.system_messaging_application_name = "messages"
+
 spy [<user.text>]: 
      txt = text or ""
      user.system_search()

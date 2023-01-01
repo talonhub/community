@@ -1,5 +1,9 @@
 os: windows
 -
+settings():
+    user.system_portal_name = "chrome"
+    user.system_messaging_application_name = "teams"
+
 task view: key(super-tab)
 task manager: key(ctrl-shift-escape)
 switcher: key(ctrl-alt-tab)
