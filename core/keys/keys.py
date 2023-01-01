@@ -225,7 +225,7 @@ simple_keys = [
 ]
 
 alternate_keys = {
-    "clap": "enter",
+    "puff": "enter",
     "drill": "delete",
     "scratch": "backspace",
     "scrape": "escape",
