@@ -39,3 +39,6 @@ dasher: insert(" - ")
 
 over: skip()
 
+
+^talon restart confirm$: user.talon_restart()
+^talon quit confirm$: user.talon_quit()
