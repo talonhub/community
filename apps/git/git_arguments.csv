@@ -24,11 +24,14 @@ Option, Spoken form
 --global, global
 --hard, hard
 --ignore-case, ignore case
+--include-untracked, include untracked
 --interactive, interactive
+--keep-index, keep index
 --list, list
 --local, local
 --mixed, mixed
 --move, move
+--no-keep-index, no keep index
 --no-track, no track
 --no-verify, no verify
 --orphan, orphan
