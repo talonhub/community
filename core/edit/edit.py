@@ -72,24 +72,25 @@ class EditActions:
         character_to_right_of_initial_caret_position = actions.edit.selected_text()
 
         # Occasionally apps won't let you edit.extend_right()
-        # if your caret is on the rightmost character such as in the Chrome URL bar
-        if character_to_right_of_initial_caret_position != '':
-            actions.edit.left()
+        # and therefore won't select text if your caret is on the rightmost character
+        # such as in the Chrome URL bar
+        did_select_text = character_to_right_of_initial_caret_position != ''
 
         # .strip() is to handle newline characters which become an empty string.
-        if (
-            character_to_right_of_initial_caret_position.strip()
-            in PUNCTUATION_SYMBOLS_WHICH_SIGNIFY_THE_END_OF_A_WORD
-        ):
-            # The reason we don't extend directly left
-            # even though we are on the right edge of a word
-            # is that there may be a symbol to the left that it would be
-            # preferable to leave out by going far to the left and extending right
-            actions.edit.word_left()
-            actions.edit.extend_word_right()
-        else:
-            actions.edit.word_right()
-            actions.edit.extend_word_left()
+        if did_select_text:
+            if (
+                (character_to_right_of_initial_caret_position.strip()
+                    in PUNCTUATION_SYMBOLS_WHICH_SIGNIFY_THE_END_OF_A_WORD)
+            ):
+                # Come out of the highlight in the initial position.
+                actions.edit.left()
+            else:
+                # Come out of the highlight one character
+                # to the right of the initial position.
+                actions.edit.right()
+
+        actions.edit.word_left()
+        actions.edit.extend_word_right()
 
 
 @mod.action_class
