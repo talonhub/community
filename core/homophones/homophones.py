@@ -148,7 +148,7 @@ def raise_homophones(word_to_find_homophones_for, forced=False, selection=False)
 def gui(gui: imgui.GUI):
     global active_word_list
     if show_help:
-        gui.text("Homephone help - todo")
+        gui.text("Homophone help - todo")
     else:
         gui.text("Select a homophone")
         gui.line()
