@@ -6,7 +6,7 @@ mod = Module()
 PUNCTUATION_SYMBOLS_WHICH_SIGNIFY_THE_END_OF_A_WORD = \
     ['.', '!', '?', ';', ':', '—', '_', '/', '\\', '|',
      '@', '#', '$', '%', '^', '&', '*', '(', ')', '[', ']',
-     '{', '}', '<', '>', '=', '+', '-', '~', '`', ' ']
+     '{', '}', '<', '>', '=', '+', '-', '~', '`', ' ', '']
 
 @ctx.action_class("edit")
 class EditActions:
@@ -41,7 +41,8 @@ class EditActions:
         character_to_right_of_initial_caret_position = actions.edit.selected_text()
         actions.edit.left()
 
-        if (character_to_right_of_initial_caret_position in
+        # .strip() is to handle newline characters
+        if (character_to_right_of_initial_caret_position.strip() in
                 PUNCTUATION_SYMBOLS_WHICH_SIGNIFY_THE_END_OF_A_WORD):
             actions.edit.extend_word_left()
         else:
