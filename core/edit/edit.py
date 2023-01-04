@@ -3,10 +3,41 @@ from talon import Context, Module, actions, clip
 ctx = Context()
 mod = Module()
 
-PUNCTUATION_SYMBOLS_WHICH_SIGNIFY_THE_END_OF_A_WORD = \
-    ['.', '!', '?', ';', ':', '—', '_', '/', '\\', '|',
-     '@', '#', '$', '%', '^', '&', '*', '(', ')', '[', ']',
-     '{', '}', '<', '>', '=', '+', '-', '~', '`', ' ', '']
+PUNCTUATION_SYMBOLS_WHICH_SIGNIFY_THE_END_OF_A_WORD = [
+    ".",
+    "!",
+    "?",
+    ";",
+    ":",
+    "—",
+    "_",
+    "/",
+    "\\",
+    "|",
+    "@",
+    "#",
+    "$",
+    "%",
+    "^",
+    "&",
+    "*",
+    "(",
+    ")",
+    "[",
+    "]",
+    "{",
+    "}",
+    "<",
+    ">",
+    "=",
+    "+",
+    "-",
+    "~",
+    "`",
+    " ",
+    "",
+]
+
 
 @ctx.action_class("edit")
 class EditActions:
@@ -48,8 +79,10 @@ class EditActions:
             actions.edit.left()
 
         # .strip() is to handle newline characters which become an empty string.
-        if (character_to_right_of_initial_caret_position.strip() in
-                PUNCTUATION_SYMBOLS_WHICH_SIGNIFY_THE_END_OF_A_WORD):
+        if (
+            character_to_right_of_initial_caret_position.strip()
+            in PUNCTUATION_SYMBOLS_WHICH_SIGNIFY_THE_END_OF_A_WORD
+        ):
             actions.edit.extend_word_left()
         else:
             actions.edit.word_right()
