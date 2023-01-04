@@ -76,8 +76,9 @@ class EditActions:
         # such as in the Chrome URL bar
         did_select_text = character_to_right_of_initial_caret_position != ""
 
-        # .strip() is to handle newline characters which become an empty string.
         if did_select_text:
+        
+            # .strip() is to handle newline characters which become an empty string.
             if (
                 (character_to_right_of_initial_caret_position.strip()
                     in SYMBOLS_WHICH_SIGNIFY_THE_END_OF_A_WORD)
