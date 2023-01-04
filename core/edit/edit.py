@@ -92,7 +92,6 @@ class EditActions:
             actions.edit.extend_word_left()
 
 
-
 @mod.action_class
 class Actions:
     def paste(text: str):
