@@ -73,7 +73,7 @@ class EditActions:
 
         # Occasionally apps won't let you edit.extend_right()
         # if your caret is on the rightmost character such as in the Chrome URL bar
-        if character_to_right_of_initial_caret_position != '':
+        if character_to_right_of_initial_caret_position != "":
             actions.edit.left()
 
         # .strip() is to handle newline characters which become an empty string.
