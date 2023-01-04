@@ -23,6 +23,7 @@ def macro_list_gui(gui: imgui.GUI):
     if gui.button("macro list close"):
         actions.user.macro_list_close()
 
+
 @mod.action_class
 class Actions:
     def macro_record():
