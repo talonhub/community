@@ -85,10 +85,16 @@ class EditActions:
             character_to_right_of_initial_caret_position.strip()
             in PUNCTUATION_SYMBOLS_WHICH_SIGNIFY_THE_END_OF_A_WORD
         ):
-            actions.edit.extend_word_left()
+            # The reason we don't extend directly left
+            # even though we are on the right edge of a word
+            # is that there may be a comma to the left that it would be
+            # preferable to skip by going left and extending right
+            actions.edit.word_left()
+            actions.edit.extend_word_right()
         else:
             actions.edit.word_right()
             actions.edit.extend_word_left()
+
 
 
 @mod.action_class
