@@ -65,7 +65,8 @@ vertical (shell | terminal):
     user.system_command("i3-msg move container to workspace number 10")
 (shuffle | move (win | window) [to] last port):
     user.system_command("i3-msg move container to workspace back_and_forth")
-(shuffle|move) flipper: user.system_command("i3-msg move container to workspace back_and_forth")
+(shuffle | move) flipper:
+    user.system_command("i3-msg move container to workspace back_and_forth")
 (shuffle | move (win | window) left): user.system_command("i3-msg move left")
 (shuffle | move (win | window) right): user.system_command("i3-msg move right")
 (shuffle | move (win | window) up): user.system_command("i3-msg move up")
