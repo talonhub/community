@@ -20,6 +20,8 @@ def macro_list_gui(gui: imgui.GUI):
     for command_name in macros.keys():
         gui.text(command_name)
 
+    if gui.button("macro list close"):
+        actions.user.macro_list_close()
 
 @mod.action_class
 class Actions:
