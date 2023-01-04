@@ -3,7 +3,7 @@ from talon import Context, Module, actions, clip
 ctx = Context()
 mod = Module()
 
-PUNCTUATION_SYMBOLS_WHICH_SIGNIFY_THE_END_OF_A_WORD = [
+SYMBOLS_WHICH_SIGNIFY_THE_END_OF_A_WORD = [
     ".",
     "!",
     "?",
@@ -80,7 +80,7 @@ class EditActions:
         if did_select_text:
             if (
                 (character_to_right_of_initial_caret_position.strip()
-                    in PUNCTUATION_SYMBOLS_WHICH_SIGNIFY_THE_END_OF_A_WORD)
+                    in SYMBOLS_WHICH_SIGNIFY_THE_END_OF_A_WORD)
             ):
                 # Come out of the highlight in the initial position.
                 actions.edit.left()
