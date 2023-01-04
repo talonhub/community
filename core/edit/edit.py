@@ -3,6 +3,10 @@ from talon import Context, Module, actions, clip
 ctx = Context()
 mod = Module()
 
+PUNCTUATION_SYMBOLS_WHICH_SIGNIFY_THE_END_OF_A_WORD = \
+    ['.', '!', '?', ';', ':', '—', '_', '/', '\\', '|',
+     '@', '#', '$', '%', '^', '&', '*', '(', ')', '[', ']',
+     '{', '}', '<', '>', '=', '+', '-', '~', '`']
 
 @ctx.action_class("edit")
 class EditActions:
@@ -31,6 +35,18 @@ class EditActions:
         actions.edit.right()
         actions.key("enter")
         actions.edit.paste()
+
+    def select_word():
+        actions.edit.extend_right()
+        character_to_right_of_initial_caret_position = actions.edit.selected_text()
+        actions.edit.left()  # in order to return to original caret position
+
+        if (character_to_right_of_initial_caret_position in
+                PUNCTUATION_SYMBOLS_WHICH_SIGNIFY_THE_END_OF_A_WORD):
+            actions.edit.extend_word_left()
+        else:
+            actions.edit.word_right()
+            actions.edit.extend_word_left()
 
 
 @mod.action_class
