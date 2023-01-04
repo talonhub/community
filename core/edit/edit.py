@@ -39,7 +39,13 @@ class EditActions:
     def select_word():
         actions.edit.extend_right()
         character_to_right_of_initial_caret_position = actions.edit.selected_text()
-        actions.edit.left()
+
+        # Occasionally apps won't let you edit.extend_right()
+        # if your caret is on the rightmost character such as in the Chrome URL bar
+        # Thus, only go back to our original position if we managed to
+        # extend_right() successfully
+        if len(character_to_right_of_initial_caret_position) > 0:
+            actions.edit.left()
 
         # .strip() is to handle newline characters which become an empty string.
         if (character_to_right_of_initial_caret_position.strip() in
