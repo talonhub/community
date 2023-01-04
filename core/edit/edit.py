@@ -6,7 +6,7 @@ mod = Module()
 PUNCTUATION_SYMBOLS_WHICH_SIGNIFY_THE_END_OF_A_WORD = \
     ['.', '!', '?', ';', ':', '—', '_', '/', '\\', '|',
      '@', '#', '$', '%', '^', '&', '*', '(', ')', '[', ']',
-     '{', '}', '<', '>', '=', '+', '-', '~', '`']
+     '{', '}', '<', '>', '=', '+', '-', '~', '`', ' ']
 
 @ctx.action_class("edit")
 class EditActions:
