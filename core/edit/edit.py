@@ -71,14 +71,10 @@ class EditActions:
         actions.edit.extend_right()
         character_to_right_of_initial_caret_position = actions.edit.selected_text()
 
-        # Always go left immediately so highlighting doesn't have time to be shown
-        # to end user even if we might not have selected anything.
-        actions.edit.left()
-
         # Occasionally apps won't let you edit.extend_right()
         # if your caret is on the rightmost character such as in the Chrome URL bar
-        if len(character_to_right_of_initial_caret_position) == 0:
-            actions.edit.right()
+        if character_to_right_of_initial_caret_position != '':
+            actions.edit.left()
 
         # .strip() is to handle newline characters which become an empty string.
         if (
@@ -87,8 +83,8 @@ class EditActions:
         ):
             # The reason we don't extend directly left
             # even though we are on the right edge of a word
-            # is that there may be a comma to the left that it would be
-            # preferable to skip by going left and extending right
+            # is that there may be a symbol to the left that it would be
+            # preferable to leave out by going far to the left and extending right
             actions.edit.word_left()
             actions.edit.extend_word_right()
         else:
