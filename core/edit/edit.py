@@ -71,12 +71,14 @@ class EditActions:
         actions.edit.extend_right()
         character_to_right_of_initial_caret_position = actions.edit.selected_text()
 
+        # Always go left immediately so highlighting doesn't have time to be shown
+        # to end user even if we might not have selected anything.
+        actions.edit.left()
+
         # Occasionally apps won't let you edit.extend_right()
         # if your caret is on the rightmost character such as in the Chrome URL bar
-        # Thus, only go back to our original position if we managed to
-        # extend_right() successfully
-        if len(character_to_right_of_initial_caret_position) > 0:
-            actions.edit.left()
+        if len(character_to_right_of_initial_caret_position) == 0:
+            actions.edit.right()
 
         # .strip() is to handle newline characters which become an empty string.
         if (
