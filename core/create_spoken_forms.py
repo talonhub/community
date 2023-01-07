@@ -337,7 +337,7 @@ class Actions:
             )
 
         # Avoid empty spoken forms.
-        return list(x for x in spoken_forms if x)
+        return [x for x in spoken_forms if x]
 
     def create_spoken_forms_from_list(
         sources: list[str],
