@@ -3,71 +3,41 @@ import talon
 if hasattr(talon, "test_mode"):
     # Only include this when we're running tests
 
+    import itertools
+
     import knausj_talon_pkg.core.create_spoken_forms
     from talon import actions
 
-    import itertools
-
     def test_excludes_words():
-        result = actions.user.create_spoken_forms(
-            "hi world",
-            ["world"],
-            0,
-            True
-        )
+        result = actions.user.create_spoken_forms("hi world", ["world"], 0, True)
 
         assert "world" not in result
         assert "hi world" in result
 
     def test_handles_empty_input():
-        result = actions.user.create_spoken_forms(
-            "",
-            None,
-            0,
-            True
-        )
+        result = actions.user.create_spoken_forms("", None, 0, True)
 
         assert result == []
 
     def test_handles_minimum_term_length():
-        result = actions.user.create_spoken_forms(
-            "hi world",
-            None,
-            3,
-            True
-        )
+        result = actions.user.create_spoken_forms("hi world", None, 3, True)
 
         assert "hi" not in result
         assert "world" in result
 
     def test_handles_generate_subsequences():
-        result = actions.user.create_spoken_forms(
-            "hi world",
-            None,
-            0,
-            False
-        )
+        result = actions.user.create_spoken_forms("hi world", None, 0, False)
 
         assert "world" not in result
         assert "hi world" in result
 
     def test_expands_special_chars():
-        result = actions.user.create_spoken_forms(
-            "hi $world",
-            None,
-            0,
-            True
-        )
+        result = actions.user.create_spoken_forms("hi $world", None, 0, True)
 
         assert "hi dollar sign world" in result
 
     def test_expands_file_extensions():
-        result = actions.user.create_spoken_forms(
-            "hi .cs",
-            None,
-            0,
-            True
-        )
+        result = actions.user.create_spoken_forms("hi .cs", None, 0, True)
 
         assert "hi dot see sharp" in result
 
@@ -82,7 +52,7 @@ if hasattr(talon, "test_mode"):
                 itertools.product(
                     [None, ["world"], ["dot"]],  # Dot is from the expanded ".cs"
                     [0, 3],
-                    [True, False]
+                    [True, False],
                 )
             )
             count = 0
@@ -96,13 +66,12 @@ if hasattr(talon, "test_mode"):
         for tokens, exclude, min_count, subseq in examples:
             source = " ".join(tokens)
             result = actions.user.create_spoken_forms(
-                source,
-                exclude,
-                min_count,
-                subseq
+                source, exclude, min_count, subseq
             )
 
-            statement = f"create_spoken_forms(\"{source}\", {exclude}, {min_count}, {subseq})"
+            statement = (
+                f'create_spoken_forms("{source}", {exclude}, {min_count}, {subseq})'
+            )
 
             # No duplicates in result
             assert len(result) == len(set(result)), statement
