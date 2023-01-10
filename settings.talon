@@ -10,7 +10,7 @@ settings():
     user.help_max_command_lines_per_page = 40
 
     # Set the max number of contexts display per page in help
-    user.help_max_contexts_per_page = 25
+    user.help_max_contexts_per_page = 30
 
     # The default amount used when scrolling continuously
     user.mouse_continuous_scroll_amount = 80
@@ -28,10 +28,10 @@ settings():
     user.mouse_wake_hides_cursor = 0
 
     # The amount to scroll up/down (equivalent to mouse wheel on Windows by default)
-    user.mouse_wheel_down_amount = 350
+    user.mouse_wheel_down_amount = 400
 
     # The amount to scroll left/right
-    user.mouse_wheel_horizontal_amount = 40
+    user.mouse_wheel_horizontal_amount = 80
 
     # Mouse grid and friends put the number one on the bottom left (vs on the top left)
     user.grids_put_one_bottom_left = 1

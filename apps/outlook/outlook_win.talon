@@ -20,3 +20,6 @@ go:
     key(down)
 unread: key(ctrl-u)
 flag: key(insert)
+(search | hunt) <user.text>:
+    key(ctrl-e)
+    insert(user.text)

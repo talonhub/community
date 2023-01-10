@@ -36,3 +36,5 @@ TCR modules:
 katie up:
 	insert("cd ..")
 	key(enter)
+	"ls"
+	key(enter)
