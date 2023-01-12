@@ -38,3 +38,7 @@ katie up:
 	key(enter)
 	"ls"
 	key(enter)
+
+jobs status:
+	"qstat -u ansaldoginee2"
+	key(enter)
