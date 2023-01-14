@@ -12,6 +12,8 @@ os: windows
 and app.name: Windows-Explorer
 os: windows
 and app.exe: explorer.exe
+os: windows
+and app.exe: Explorer.EXE
 """
 
 # many commands should work in most save/open dialog.
