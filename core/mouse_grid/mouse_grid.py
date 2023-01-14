@@ -90,7 +90,7 @@ class MouseSnapNine:
         self.img = None
 
         self.active = False
-        
+
         if self.was_control_mouse_active and not actions.tracking.control1_enabled():
             actions.tracking.control1_toggle()
         if self.was_zoom_mouse_active and not actions.tracking.control_zoom_enabled():
