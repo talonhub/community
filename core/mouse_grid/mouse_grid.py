@@ -72,10 +72,10 @@ class MouseSnapNine:
         # noinspection PyUnresolvedReferences
         if actions.tracking.control_zoom_enabled():
             self.was_zoom_mouse_active = True
-            actions.tracking.control_zoom_toggle()
+            actions.tracking.control_zoom_toggle(False)
         if actions.tracking.control1_enabled():
             self.was_control_mouse_active = True
-            actions.tracking.control1_toggle()
+            actions.tracking.control1_toggle(False)
         self.mcanvas.register("draw", self.draw)
         self.mcanvas.freeze()
         self.active = True
@@ -92,9 +92,9 @@ class MouseSnapNine:
         self.active = False
 
         if self.was_control_mouse_active and not actions.tracking.control1_enabled():
-            actions.tracking.control1_toggle()
+            actions.tracking.control1_toggle(True)
         if self.was_zoom_mouse_active and not actions.tracking.control_zoom_enabled():
-            actions.tracking.control_zoom_toggle()
+            actions.tracking.control_zoom_toggle(True)
 
         self.was_zoom_mouse_active = False
         self.was_control_mouse_active = False
