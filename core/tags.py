@@ -10,6 +10,7 @@ tagList = [
     "tabs",
     "generic_windows_shell",
     "generic_unix_shell",
+    "readline",
     "taskwarrior",  # commandline tag for taskwarrior commands
     "tmux",
     "windbg",

@@ -1,5 +1,5 @@
 from talon import app, ui, screen
-from talon.track.geom import Point2d
+from talon.types import Point2d
 from talon_plugins import eye_zoom_mouse
 
 

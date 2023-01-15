@@ -20,13 +20,14 @@ go left <number_small>:
     repeat(number_small-1)
 
 go right: edit.right()
-go right: 
+go right <number_small>: 
     edit.right()
     repeat(number_small-1)
 
 go up: edit.up()
-go up: 
+go up <number_small>: 
     edit.up()
+    repeat(number_small-1)
 
 go down: edit.down()
 go down <number_small>: 
@@ -259,3 +260,7 @@ cut line:
 (pace | paste) all:
     edit.select_all()
     edit.paste()
+
+# duplication
+clone that: edit.selection_clone()
+clone line: edit.line_clone()

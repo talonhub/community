@@ -69,7 +69,7 @@ class Actions:
         """Selects a micropohone"""
         if 1 <= index and index <= len(microphone_device_list):
 
-            actions.speech.set_microphone(microphone_device_list[index - 1])
+            actions.sound.set_microphone(microphone_device_list[index - 1])
             app.notify(
                 "Activating microphone: {}".format(microphone_device_list[index - 1])
             )
@@ -79,7 +79,7 @@ class Actions:
         """Toggles the microphone and speech"""
         global previous_mic
         if actions.speech.enabled():
-            actions.speech.set_microphone("None")
+            actions.sound.set_microphone("None")
         else:
             actions.user.microphone_preferred()
 
@@ -91,7 +91,7 @@ class Actions:
         mics = actions.sound.microphones()
         for __, preferred_mic in enumerate(preferred_mics):
             if preferred_mic in mics:
-                actions.speech.set_microphone(preferred_mic)
+                actions.sound.set_microphone(preferred_mic)
                 previous_mic = preferred_mic
                 #actions.app.notify(f"Microphone enabled: {preferred_mic}")
                 break
@@ -123,7 +123,7 @@ class Actions:
                 splits = device_name.split("(")
                 device = splits[1].replace(")", "").strip()
                 device_type = splits[0].strip()
-                full_device_path = "{}\Device\\{}\\Render".format(device, device_type)
+                full_device_path = "{}\\Device\\{}\\Render".format(device, device_type)
                 program_files = os.environ["ProgramFiles"]
                 call(
                     [
@@ -144,7 +144,7 @@ class Actions:
 def on_ready():
     ctx.register("devices_changed", devices_changed)
     update_microphone_list()
-    actions.speech.set_microphone("None")
+    actions.sound.set_microphone("None")
 
 
 app.register("ready", on_ready)

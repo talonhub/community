@@ -37,7 +37,7 @@ class Actions:
             # actions.user.clickless_mouse_enable()
         else:
             actions.user.sleep_all()
-            actions.speech.set_microphone("None")
+            actions.sound.set_microphone("None")
             actions.user.mouse_sleep()
             actions.user.hud_disable()
             # actions.user.clickless_mouse_disable()

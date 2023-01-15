@@ -18,6 +18,20 @@ class EditActions:
         actions.edit.line_end()
         actions.key("enter")
 
+    def selection_clone():
+        actions.edit.copy()
+        actions.edit.select_none()
+        actions.edit.paste()
+
+    def line_clone():
+        # This may not work if editor auto-indents. Is there a better way?
+        actions.edit.line_start()
+        actions.edit.extend_line_end()
+        actions.edit.copy()
+        actions.edit.right()
+        actions.key("enter")
+        actions.edit.paste()
+
 
 @mod.action_class
 class Actions:
@@ -39,3 +53,28 @@ class Actions:
         """Moves right by n words."""
         for _ in range(n):
             actions.edit.word_right()
+
+    def cut_word_left():
+        """Cuts the word to the left."""
+        actions.edit.extend_word_left()
+        actions.edit.cut()
+
+    def cut_word_right():
+        """Cuts the word to the right."""
+        actions.edit.extend_word_right()
+        actions.edit.cut()
+
+    def cut_line():
+        """Cuts the current line."""
+        actions.edit.select_line()
+        actions.edit.cut()
+
+    def copy_word_left():
+        """Copies the word to the left."""
+        actions.edit.extend_word_left()
+        actions.edit.copy()
+
+    def copy_word_right():
+        """Copies the word to the right."""
+        actions.edit.extend_word_right()
+        actions.edit.copy()

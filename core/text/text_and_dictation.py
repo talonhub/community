@@ -376,18 +376,18 @@ class Actions:
         """Inserts dictated text, formatted appropriately."""
         add_space_after = False
         if setting_context_sensitive_dictation.get():
-            # Peek left if we might need leading space or auto-capitalization.
-            if (
-                not omit_space_before(text)
-                or text != auto_capitalize(text, "sentence start")[0]
-            ):
-                dictation_formatter.update_context(actions.user.dictation_peek_left())
-            # Peek right if we might need trailing space. NB. We peek right
+            # Peek left if we might need leading space or auto-capitalization;
+            # peek right if we might need trailing space. NB. We peek right
             # BEFORE insertion to avoid breaking the undo-chain between the
             # inserted text and the trailing space.
-            if not omit_space_after(text):
-                char = actions.user.dictation_peek_right()
-                add_space_after = char is not None and needs_space_between(text, char)
+            need_left = (
+                not omit_space_before(text)
+                or text != auto_capitalize(text, "sentence start")[0]
+            )
+            need_right = not omit_space_after(text)
+            before, after = actions.user.dictation_peek(need_left, need_right)
+            dictation_formatter.update_context(before)
+            add_space_after = after is not None and needs_space_between(text, after)
         text = dictation_formatter.format(text, auto_cap)
         # Straighten curly quotes that were introduced to obtain proper
         # spacing. The formatter context still has the original curly quotes
@@ -396,75 +396,60 @@ class Actions:
         actions.user.add_phrase_to_history(text)
         actions.user.insert_between(text, " " if add_space_after else "")
 
-    def dictation_peek_left() -> Optional[str]:
+    def dictation_peek(left: bool, right: bool) -> tuple[Optional[str], Optional[str]]:
         """
-        Tries to get some text before the cursor, ideally a word or two, for the
-        purpose of auto-spacing & -capitalization. Results are not guaranteed;
-        dictation_peek_left() may return None to indicate no information. (Note
-        that returning the empty string "" indicates there is nothing before
-        cursor, ie. we are at the beginning of the document.)
+        Gets text around the cursor to inform auto-spacing and -capitalization.
+        Returns (before, after), where `before` is some text before the cursor,
+        and `after` some text after it. Results are not guaranteed; `before`
+        and/or `after` may be None, indicating no information. If `before` is
+        the empty string, this means there is nothing before the cursor (we are
+        at the beginning of the document); likewise for `after`.
 
-        dictation_peek_left() is intended for use before inserting text, so it
-        may delete any currently selected text.
+        To optimize performance, pass `left = False` if you won't need
+        `before`, and `right = False` if you won't need `after`.
+
+        dictation_peek() is intended for use before inserting text, so it may
+        delete any currently selected text.
         """
+        if not (left or right):
+            return None, None
+        before, after = None, None
         # Inserting a space ensures we select something even if we're at
         # document start; some editors 'helpfully' copy the current line if we
         # edit.copy() while nothing is selected.
         actions.insert(" ")
-        # In principle the previous word should suffice, but some applications
-        # have a funny concept of what the previous word is (for example, they
-        # may only take the "`" at the end of "`foo`"). To be double sure we
-        # take two words left. I also tried taking a line up + a word left, but
-        # edit.extend_up() = key(shift-up) doesn't work consistently in the
-        # Slack webapp (sometimes escapes the text box).
-        actions.edit.extend_word_left()
-        actions.edit.extend_word_left()
-        text = actions.edit.selected_text()
-        # Unfortunately, in web Slack, if our selection ends at newline,
-        # this will go right over the newline. Argh.
-        actions.edit.right()
-        actions.key("backspace")  # remove the space we added
-        return text[:-1]
-
-    def dictation_peek_right() -> Optional[str]:
-        """
-        Tries to get a few characters after the cursor for auto-spacing.
-        Results are not guaranteed; dictation_peek_right() may return None to
-        indicate no information. (Note that returning the empty string ""
-        indicates there is nothing after cursor, ie. we are at the end of the
-        document.)
-        """
-        # Insert space to ensure something to select (see dictation_peek_left).
-        actions.insert(" ")
-        actions.edit.left()
-        # We want to select at least two characters to the right, plus the space
-        # we inserted, because no_space_before needs two characters in the worst
-        # case -- for example, inserting before "' hello" we don't want to add
-        # space, while inserted before "'hello" we do.
-        #
-        # We use 2x extend_word_right() because it's fewer keypresses (lower
-        # latency) than 3x extend_right(). Other options all seem to have
-        # problems. For instance, extend_line_end() might not select all the way
-        # to the next newline if text has been wrapped across multiple lines;
-        # extend_line_down() sometimes escapes the current text box (eg. in a
-        # browser address bar). 1x extend_word_right() _usually_ works, but on
-        # Windows in Firefox it doesn't always select enough characters.
-        actions.edit.extend_word_right()
-        actions.edit.extend_word_right()
-        after = actions.edit.selected_text()
-        actions.edit.left()
-        actions.key("delete")  # remove space
-        return after[1:]
-
-
-# Use the dictation formatter in dictation mode.
-dictation_ctx = Context()
-dictation_ctx.matches = r"""
-mode: dictation
-"""
-
-
-@dictation_ctx.action_class("main")
-class main_action:
-    def auto_insert(text):
-        actions.user.dictation_insert(actions.auto_format(text))
+        if left:
+            # In principle the previous word should suffice, but some applications
+            # have a funny concept of what the previous word is (for example, they
+            # may only take the "`" at the end of "`foo`"). To be double sure we
+            # take two words left. I also tried taking a line up + a word left, but
+            # edit.extend_up() = key(shift-up) doesn't work consistently in the
+            # Slack webapp (sometimes escapes the text box).
+            actions.edit.extend_word_left()
+            actions.edit.extend_word_left()
+            before = actions.edit.selected_text()[:-1]
+            # Unfortunately, in web Slack, if our selection ends at newline,
+            # this will go right over the newline. Argh.
+            actions.edit.right()
+        if not right:
+            actions.key("backspace")  # remove the space
+        else:
+            actions.edit.left()  # go left before space
+            # We want to select at least two characters to the right, plus the space
+            # we inserted, because no_space_before needs two characters in the worst
+            # case -- for example, inserting before "' hello" we don't want to add
+            # space, while inserted before "'hello" we do.
+            #
+            # We use 2x extend_word_right() because it's fewer keypresses (lower
+            # latency) than 3x extend_right(). Other options all seem to have
+            # problems. For instance, extend_line_end() might not select all the way
+            # to the next newline if text has been wrapped across multiple lines;
+            # extend_line_down() sometimes escapes the current text box (eg. in a
+            # browser address bar). 1x extend_word_right() _usually_ works, but on
+            # Windows in Firefox it doesn't always select enough characters.
+            actions.edit.extend_word_right()
+            actions.edit.extend_word_right()
+            after = actions.edit.selected_text()[1:]
+            actions.edit.left()
+            actions.key("delete")  # remove space
+        return before, after
