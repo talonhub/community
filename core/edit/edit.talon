@@ -27,7 +27,6 @@ go right:
 go up: edit.up()
 go up: 
     edit.up()
-    repeat(number_small-1)
 
 go down: edit.down()
 go down <number_small>: 
@@ -114,9 +113,15 @@ sell far down:
 # editing
 tab:
     edit.indent_more()
+tab <number_small>:
+    edit.indent_more()
+    repeat(number_small-1)
 
 retab:
     edit.indent_less()
+retab <number_small>:
+    edit.indent_less()
+    repeat(number_small-1)
 
 # deleting
 void line:

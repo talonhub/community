@@ -252,12 +252,21 @@ class Actions:
                 and application.exe.split(os.path.sep)[-1] == name
             ):
                 return application
-        raise RuntimeError(f'App not running: "{name}"')
+        return None
+        # raise RuntimeError(f'App not running: "{name}"')
 
     def switcher_focus(name: str):
         """Focus a new application by name"""
         app = actions.user.get_running_app(name)
-        actions.user.switcher_focus_app(app)
+
+        if app:
+            actions.user.switcher_focus_app(app)
+            return True
+        elif name in ctx.lists["self.launch"]:
+            actions.user.switcher_launch(ctx.lists["self.launch"][name])
+
+            while name not in ctx.lists["self.running"]:
+                actions.sleep(0.1)
 
     def switcher_focus_app(app: ui.App):
         """Focus application and wait until switch is made"""

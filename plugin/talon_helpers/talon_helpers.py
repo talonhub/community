@@ -179,3 +179,15 @@ class Actions:
             
         elif app.platform == "windows":
             actions.user.exec("talon-restart")
+
+    def talon_kill():
+        """kill talon"""
+        if app.platform == "mac":
+            talon_app = ui.apps(pid=os.getpid())[0]
+            talon_app.appscript().quit(waitreply=False) # XXX temporary replacement
+            
+        elif app.platform == "windows":
+            os.system("taskkill /f /im  talon.exe")
+
+
+            
