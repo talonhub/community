@@ -38,12 +38,12 @@ touch:
     key("{modifiers}:up")
     # close the mouse grid
     user.grid_close()
-(duke):
+(duke)$:
     mouse_click()
     mouse_click()
     # close the mouse grid
     user.grid_close()
-(rip):
+(rip)$:
     mouse_click()
     mouse_click()
     mouse_click()
