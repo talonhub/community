@@ -1,0 +1,6 @@
+tag: user.homerow_search
+-
+<user.letters>: user.homerow_pick(letters, "left")
+duke <user.letters>: user.homerow_pick(letters, "double")
+many <user.letters>: user.homerow_pick(letters, "command")
+rate <user.letters>: user.homerow_pick(letters, "right")

@@ -25,7 +25,8 @@ class Actions:
     def blue2_s2():
         """document string goes here"""
         if app.platform == "mac":
-            actions.key("ctrl-f")
+            # actions.key("ctrl-f")
+            actions.user.homerow_search("""""")
         elif app.platform == "windows":
             actions.key("ctrl-m")
 
@@ -65,7 +66,8 @@ class WindowsZoomMouseInactiveActions:
     def blue2_s2():
         """document string goes here"""
         if app.platform == "mac":
-            actions.key("ctrl-f")
+            # actions.key("cmd-shift-space")
+            actions.user.homerow_search("''")
         elif app.platform == "windows":
             actions.key("ctrl-m")
 
