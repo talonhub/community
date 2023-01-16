@@ -15,7 +15,15 @@ tag: talon_plugins.eye_zoom_mouse.zoom_mouse_enabled
 and tag: talon_plugins.eye_zoom_mouse.zoom_mouse_activated
 #and not tag: talon_plugins.eye_zoom_mouse.zoom_mouse_pedal
 """
-
+def trigger_home_row():
+    if app.platform == "mac":
+        # actions.key("cmd-shift-space")
+        if "user.homerow_search" not in registry.tags:
+            actions.user.homerow_search("")
+        else:
+            actions.key("escape")
+    elif app.platform == "windows":
+        actions.key("ctrl-m")
 
 @mod.action_class
 class Actions:
@@ -24,11 +32,7 @@ class Actions:
 
     def blue2_s2():
         """document string goes here"""
-        if app.platform == "mac":
-            # actions.key("ctrl-f")
-            actions.user.homerow_search("")
-        elif app.platform == "windows":
-            actions.key("ctrl-m")
+        trigger_home_row()
 
     def blue2_s3():
         """document string goes here"""
@@ -65,11 +69,7 @@ class WindowsZoomMouseInactiveActions:
 
     def blue2_s2():
         """document string goes here"""
-        if app.platform == "mac":
-            # actions.key("cmd-shift-space")
-            actions.user.homerow_search("")
-        elif app.platform == "windows":
-            actions.key("ctrl-m")
+        trigger_home_row()
 
     def blue2_s3():
         """document string goes here"""
