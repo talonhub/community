@@ -1,76 +1,69 @@
 # knausj_talon
 
-Talon configs for Mac, Windows, and Linux. Very much in progress. This is also intended to work with both Dragon Naturally Speaking and wav2letter.
+Community-maintained [Talon](https://talonvoice.com/) command grammar.
 
-Notes:
+Can be used on its own, but shines when combined with:
 
-- commands are subject to change. We do our best to minimize changes, but we are moving to an [object][verb] standard slowly but surely.
-- @knausj85 makes extensive use of Talon's eye tracking features, so the grammar for certain programs may be much smaller than you may require.
-- The repository was mostly developed with Dragon, so commands are mostly still optimized for that speech engine.
+- [Cursorless](https://www.cursorless.org/) for programming and text editing
+- [Rango](https://github.com/david-tejada/rango) for browser navigation
+- [gaze-ocr](https://github.com/wolfmanstout/talon-gaze-ocr) for advanced cursor control using eye tracking and text recognition (OCR)
+- [AXKit](https://github.com/phillco/talon-axkit) (macOS only) to enhance Talon with native OS accessibility integrations
+- [Other user file sets](https://talon.wiki/talon_user_file_sets/)
 
-## Linux & Mac setup
+## Installation
 
-Clone repo into `~/.talon/user`
+### Prerequisites
 
-```insert code:
-cd ~/.talon/user
-git clone https://github.com/knausj85/knausj_talon knausj_talon
-```
+- [Talon](https://talonvoice.com/)
+- Mac, Windows, or Linux
+- Can work with both Talon's built-in Conformer (wav2letter) speech recognition engine (recommended), or Dragon Naturally Speaking (Windows) / Dragon for Mac (although beware that Dragon for Mac is deprecated).
+- Includes commands for working with an eye tracker, but not required
 
-Alternatively, access the directory by right clicking the Talon icon in taskbar, clicking Scripting>Open ~/talon, and navigating to user.
+### Linux & Mac
 
-The folder structure should look something like the below:
+It is recommended to install `knausj_talon` using [`git`](https://git-scm.com/).
 
-```insert code:
-~/.talon/user/knausj_talon
-~/.talon/user/knausj_talon/apps
-~/.talon/user/knausj_talon/core
-~/.talon/user/knausj_talon/lang
-~/.talon/user/knausj_talon/plugin
-~/.talon/user/knausj_talon/tags
-~/.talon/user/knausj_talon/test
-...
-```
+1. Install [`git`](https://git-scm.com/)
+2. Open a terminal ([Mac](https://support.apple.com/en-gb/guide/terminal/apd5265185d-f365-44cb-8b09-71a064a42125/mac) / [Ubuntu](https://ubuntu.com/tutorials/command-line-for-beginners#3-opening-a-terminal))
+3. Paste the following into the terminal and hit `enter`:
 
-## Windows setup
+   ```bash
+   cd ~/.talon/user
+   git clone https://github.com/knausj85/knausj_talon knausj_talon
+   ```
 
-Clone repo into `%AppData%\Talon\user`
+Note that it is also possible to install knausj by [downloading and extracting a zip file](#alternate-installation-method-zip-file), but this approach is discouraged because it makes it more difficult to keep track of any changes you may make to your copy of the files.
 
-```insert code:
-cd %AppData%\Talon\user
-git clone https://github.com/knausj85/knausj_talon knausj_talon
-```
+### Windows
 
-Alternatively, access the directory by right clicking the Talon icon in taskbar, clicking Scripting>Open ~/talon, and navigating to user.
+It is recommended to install `knausj_talon` using [`git`](https://git-scm.com/).
 
-The folder structure should look something like the below:
+1. Install [`git`](https://git-scm.com/)
+2. Open a [terminal](https://www.wikihow.com/Open-the-Command-Prompt-in-Windows)
+3. Paste the following into the terminal and hit `enter`:
 
-```insert code:
-%AppData%\Talon\user\knausj_talon
-%AppData%\Talon\user\knausj_talon\apps
-%AppData%\Talon\user\knausj_talon\core
-%AppData%\Talon\user\knausj_talon\lang
-%AppData%\Talon\user\knausj_talon\plugin
-%AppData%\Talon\user\knausj_talon\tags
-%AppData%\Talon\user\knausj_talon\test
-...
-```
+   ```
+   cd %AppData%\Talon\user
+   git clone https://github.com/knausj85/knausj_talon knausj_talon
+   ```
+
+Note that it is also possible to install knausj by [downloading and extracting a zip file](#alternate-installation-method-zip-file), but this approach is discouraged because it makes it more difficult to keep track of any changes you may make to your copy of the files.
 
 ## Getting started with Talon
 
 1. `help active` will display the available commands for the active application.
    - Available commands can change with the application, or even window title that has focus.
    - You may navigate help using the displayed numbers. e.g., `help one one` or `help eleven` to open the 11th item in the help list.
-   - Without opening help first, you can also search for commands e.g. `help search tab` to display all tab-related commands
-   - Without opening help first, you can also jump immediately into a particular help context display by recalling the name displayed in help window (based on the name of the .talon file) e.g. `help symbols` or `help visual studio`
-   - All help-related commands are defined in misc/help.talon and misc/help_open.talon
-2. `help alphabet` will display the alphabet
-3. `command history` will toggle a display of the recent commands
-4. `help format` will display the available formatters with examples.
-5. Many useful, basic commands are defined in https://github.com/knausj85/knausj_talon/blob/main/core/edit/standard.talon
+   - Note that all help-related commands are defined in [`core/help/help.talon`](https://github.com/knausj85/knausj_talon/blob/main/core/help/help.talon) and [`core/help/help_open.talon`](https://github.com/knausj85/knausj_talon/blob/main/core/help/help_open.talon)
+2. You can also search for commands by saying `help search <phrase>`. For example, `help search tab` displays all tab-related commands, and `help search help` displays all help-related commands.
+3. You can also jump immediately into a particular help context display by recalling the name displayed in help window (based on the name of the .talon file) e.g. `help symbols` or `help visual studio`
+4. `help alphabet` will display the alphabet
+5. `command history` will toggle a display of the recent commands
+6. `help format` will display the available formatters with examples.
+7. Many useful, basic commands are defined in https://github.com/knausj85/knausj_talon/blob/main/core/edit/standard.talon
    - `undo that` and `redo that` are the default undo/redo commands.
    - `paste that`, `copy that`, and `cut that` for pasting/copy/cutting, respectively.
-6. For community-generated documentation on Talon itself, please visit https://talon.wiki/
+8. For community-generated documentation on Talon itself, please visit https://talon.wiki/
 
 It's recommended to learn the alphabet first, then get familiar with the keys, symbols, formatters, mouse, and generic_editor commands.
 
@@ -393,8 +386,18 @@ There are a number of automated unit tests in the repository. These are all run 
 
 To run the test suite you just need to install the `pytest` python package in to a non-Talon Python runtime you want to use for tests (i.e. don't install in the `~/.talon/.venv directory`). You can then just run the `pytest` command from the repository root to execute all the tests.
 
-# Talon documentation
+## Talon documentation
 
 For official documentation on Talon's API and features, please visit https://talonvoice.com/docs/.
 
 For community-generated documentation on Talon, please visit https://talon.wiki/
+
+## Alternate installation method: Zip file
+
+It is possible to install knausj by downloading and extracting a zip file instead of using `git`. Note that this approach is discouraged, because it makes it more difficult to keep track of any changes you may make to your copy of the files.
+
+If you wish to install `knausj_talon` by downloading and extracting a zip file, proceed as follows:
+
+1. Download the [zip archive of knausj_talon](https://github.com/knausj85/knausj_talon/archive/refs/heads/main.zip)
+1. Extract the files. If you don’t know how to extract zip files, a quick google search for "extract zip files" may be helpful.
+1. Place these extracted files inside the `user` folder of the Talon Home directory. You can find this folder by right clicking the Talon icon in taskbar, clicking Scripting > Open ~/talon, and navigating to `user`.

@@ -50,6 +50,7 @@ stash list
 stash pop
 stash push
 stash show
+stash save
 status
 submodule
 submodule add
