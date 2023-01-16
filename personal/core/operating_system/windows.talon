@@ -3,7 +3,7 @@ os: windows
 settings():
     user.system_portal_name = "chrome"
     user.system_messaging_application_name = "teams"
-    user.system_settings_application_name = "control panel"
+    user.system_settings_application_name = "settings"
 
 task view: key(super-tab)
 task manager: key(ctrl-shift-escape)
