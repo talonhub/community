@@ -26,7 +26,7 @@ class Actions:
         """document string goes here"""
         if app.platform == "mac":
             # actions.key("ctrl-f")
-            actions.user.homerow_search("""""")
+            actions.user.homerow_search("")
         elif app.platform == "windows":
             actions.key("ctrl-m")
 
@@ -67,7 +67,7 @@ class WindowsZoomMouseInactiveActions:
         """document string goes here"""
         if app.platform == "mac":
             # actions.key("cmd-shift-space")
-            actions.user.homerow_search("''")
+            actions.user.homerow_search("")
         elif app.platform == "windows":
             actions.key("ctrl-m")
 
