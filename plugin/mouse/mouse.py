@@ -130,11 +130,9 @@ class Actions:
 
     def mouse_sleep():
         """Disables control mouse, zoom mouse, and re-enables cursor"""
-        if actions.tracking.control_zoom_enabled():
-            actions.tracking.control_zoom_toggle()
-
-        if actions.tracking.control1_enabled():
-            actions.tracking.control1_toggle()
+        actions.tracking.control_zoom_toggle(False)
+        actions.tracking.control_toggle(False)
+        actions.tracking.control1_toggle(False)
 
         show_cursor_helper(True)
         stop_scroll()
@@ -198,8 +196,8 @@ class Actions:
 
         # enable 'control mouse' if eye tracker is present and not enabled already
         global control_mouse_forced
-        if not actions.tracking.control1_enabled():
-            actions.tracking.control1_toggle()
+        if not actions.tracking.control_enabled():
+            actions.tracking.control_toggle(True)
             control_mouse_forced = True
 
     def copy_mouse_position():
@@ -333,9 +331,7 @@ def stop_scroll():
 
     global control_mouse_forced
     if control_mouse_forced:
-        if actions.tracking.control1_enabled():
-            actions.tracking.control1_toggle()
-
+        actions.tracking.control_toggle(False)
         control_mouse_forced = False
 
     scroll_job = None
