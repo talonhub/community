@@ -1,4 +1,5 @@
 not tag: user.homerow_search
+not tag: user.fluent_search_screen_search
 -
 zoom mouse: tracking.control_zoom_toggle()
 run calibration: tracking.calibrate()

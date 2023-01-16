@@ -1,4 +1,5 @@
 not tag: user.homerow_search
+not tag: user.fluent_search_screen_search
 -
 <user.letter>: key(letter)
 (ship | uppercase) <user.letters> [(lowercase | sunk)]:
