@@ -29,15 +29,19 @@ class Actions:
 
     def foot_pedal_right_right():
         """document string goes here"""
+
         if not actions.speech.enabled():
             actions.speech.enable()
             actions.user.microphone_preferred()
             actions.user.mouse_wake()
             actions.user.hud_enable()
+            actions.user.connect_ocr_eye_tracker()
             # actions.user.clickless_mouse_enable()
         else:
             actions.user.sleep_all()
             actions.sound.set_microphone("None")
             actions.user.mouse_sleep()
             actions.user.hud_disable()
+            actions.user.disconnect_ocr_eye_tracker()
+            actions.user.disconnect_ocr_eye_tracker()
             # actions.user.clickless_mouse_disable()
