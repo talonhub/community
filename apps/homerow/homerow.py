@@ -42,6 +42,8 @@ class Actions:
             actions.key("enter")
         elif "command" == mouse_action:
             actions.key("cmd-enter")
+        elif "hover" == mouse_action:
+            actions.key("shift")
     
         complete_homerow_search()
 
