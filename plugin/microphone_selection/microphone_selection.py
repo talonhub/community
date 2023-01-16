@@ -7,9 +7,10 @@ ctx = cubeb.Context()
 mod = Module()
 
 if app.platform == "windows":
-    previous_mic = "Microphone (d:vice MMA-A)"
+    preferred_mics = ["Microphone (Samson Q9U)", "Microphone (d:vice MMA-A)", "System Default"]
 else:
-    previous_mic = "d:vice MMA-A"
+    preferred_mics = ["Samson Q9U", "d:vice MMA-A", "MacBook Pro Microphone" "System Default"]
+
 # previous_mic = "Krisp Microphone (Krisp)"
 microphone_device_list = []
 speaker_device_list = []
@@ -68,7 +69,7 @@ class Actions:
         """Selects a micropohone"""
         if 1 <= index and index <= len(microphone_device_list):
 
-            actions.speech.set_microphone(microphone_device_list[index - 1])
+            actions.sound.set_microphone(microphone_device_list[index - 1])
             app.notify(
                 "Activating microphone: {}".format(microphone_device_list[index - 1])
             )
@@ -78,15 +79,22 @@ class Actions:
         """Toggles the microphone and speech"""
         global previous_mic
         if actions.speech.enabled():
-            actions.speech.set_microphone("None")
+            actions.sound.set_microphone("None")
         else:
-            actions.speech.set_microphone(previous_mic)
+            actions.user.microphone_preferred()
 
         actions.speech.toggle()
 
     def microphone_preferred():
         """reverts to preferred microphone"""
-        actions.speech.set_microphone(previous_mic)
+        global previous_mic
+        mics = actions.sound.microphones()
+        for __, preferred_mic in enumerate(preferred_mics):
+            if preferred_mic in mics:
+                actions.sound.set_microphone(preferred_mic)
+                previous_mic = preferred_mic
+                #actions.app.notify(f"Microphone enabled: {preferred_mic}")
+                break
 
     def speaker_selection_toggle():
         """"""
@@ -115,7 +123,7 @@ class Actions:
                 splits = device_name.split("(")
                 device = splits[1].replace(")", "").strip()
                 device_type = splits[0].strip()
-                full_device_path = "{}\Device\\{}\\Render".format(device, device_type)
+                full_device_path = "{}\\Device\\{}\\Render".format(device, device_type)
                 program_files = os.environ["ProgramFiles"]
                 call(
                     [
@@ -136,7 +144,7 @@ class Actions:
 def on_ready():
     ctx.register("devices_changed", devices_changed)
     update_microphone_list()
-    actions.user.microphone_toggle()
+    actions.sound.set_microphone("None")
 
 
 app.register("ready", on_ready)

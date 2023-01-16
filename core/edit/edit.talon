@@ -20,12 +20,12 @@ go left <number_small>:
     repeat(number_small-1)
 
 go right: edit.right()
-go right: 
+go right <number_small>: 
     edit.right()
     repeat(number_small-1)
 
 go up: edit.up()
-go up: 
+go up <number_small>: 
     edit.up()
     repeat(number_small-1)
 
@@ -45,12 +45,12 @@ drill <number_small>:
 (drill | scratch) head: 
     key(shift-home)
     key(delete)
-
-head:
-    edit.line_start()
     
 tail:
     edit.line_end()
+    
+head:
+    edit.line_start()
 
 far left:
     edit.line_start()
@@ -99,10 +99,10 @@ sell draw:
 sell spring:
     edit.extend_word_right()
 
-sell far left:
+sell head:
     edit.extend_line_start()
 
-sell far right:
+sell tale:
     edit.extend_line_end()
 
 sell far up:
@@ -114,9 +114,15 @@ sell far down:
 # editing
 tab:
     edit.indent_more()
+tab <number_small>:
+    edit.indent_more()
+    repeat(number_small-1)
 
 retab:
     edit.indent_less()
+retab <number_small>:
+    edit.indent_less()
+    repeat(number_small-1)
 
 # deleting
 void line:
@@ -147,11 +153,11 @@ void spring:
     edit.extend_word_right()
     edit.delete()
     
-void far left:
+void head:
     edit.extend_line_start()
     edit.delete()
     
-void far right:
+void tail:
     edit.extend_line_end()
     edit.delete()
     
@@ -254,3 +260,7 @@ cut line:
 (pace | paste) all:
     edit.select_all()
     edit.paste()
+
+# duplication
+clone that: edit.selection_clone()
+clone line: edit.line_clone()

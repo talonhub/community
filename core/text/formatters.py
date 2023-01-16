@@ -226,6 +226,8 @@ class Actions:
 
     def insert_with_history(text: str):
         """Inserts some text, remembering it in the phrase history."""
+        actions.user.deprecate_action("2022-12-11", "user.insert_with_history")
+
         actions.user.add_phrase_to_history(text)
         actions.insert(text)
 
@@ -256,7 +258,7 @@ class Actions:
         actions.insert(text)
         return text
 
-    def get_formatters_words():
+    def get_formatters_words() -> dict:
         """returns a list of words currently used as formatters, and a demonstration string using those formatters"""
         formatters_help_demo = {}
         for name in sorted(set(formatters_words.keys())):

@@ -14,8 +14,6 @@ class AppActions:
 
     def tab_close():
         actions.key("ctrl-w")
-        # action(app.tab_detach):
-        #  Move the current tab to a new window
 
     def tab_next():
         actions.key("ctrl-tab")

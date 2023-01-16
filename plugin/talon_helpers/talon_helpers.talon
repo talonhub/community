@@ -6,6 +6,7 @@
 tag(): user.talon_populate_lists
 talent check updates: menu.check_for_updates()
 talent restart: user.talon_restart()
+talent kill: user.talon_kill()
 talent [open] log: menu.open_log()
 talent [open] rebel: menu.open_repl()
 talent home: menu.open_talon_home()

@@ -108,6 +108,7 @@ def close_editor(submit_draft: bool):
     global last_draft
     remove_tag("user.draft_editor_active")
     actions.edit.select_all()
+    actions.sleep("300ms")
     selected_text = actions.edit.selected_text()
     actions.edit.delete()
     actions.app.tab_close()

@@ -125,7 +125,7 @@ class Actions:
     def mouse_wake():
         """Enable control mouse, zoom mouse, and disables cursor"""
         try:
-            actions.tracking.control_zoom_toggle()     
+            actions.tracking.control_zoom_toggle(True)     
         except Exception as e:
             actions.app.notify("Failed to access eye tracker, restarting Talon")
             actions.sleep("500ms")

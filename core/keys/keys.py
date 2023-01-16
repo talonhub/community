@@ -1,9 +1,26 @@
 from talon import Context, Module, actions, app
 
-default_alphabet = "air bat cap drum each fine gust harp sit jury crunch look made near odd pit quench risk sun trap urge vest whale plex yank zip".split(
-    " "
+from ..user_settings import get_list_from_csv
+
+
+def setup_default_alphabet():
+    """set up common default alphabet.
+
+    no need to modify this here, change your alphabet using alphabet.csv"""
+    initial_default_alphabet = "air bat cap drum each fine gust harp sit jury crunch look made near odd pit quench red sun trap urge vest whale plex yank zip".split(
+        " "
+    )
+    initial_letters_string = "abcdefghijklmnopqrstuvwxyz"
+    initial_default_alphabet_dict = dict(
+        zip(initial_default_alphabet, initial_letters_string)
+    )
+
+    return initial_default_alphabet_dict
+
+
+alphabet_list = get_list_from_csv(
+    "alphabet.csv", ("Letter", "Spoken Form"), setup_default_alphabet()
 )
-letters_string = "abcdefghijklmnopqrstuvwxyz"
 
 default_digits = "zero one two three four five six seven eight nine".split(" ")
 numbers = [str(i) for i in range(10)]
@@ -124,8 +141,7 @@ elif app.platform == "win":
 
 
 ctx.lists["self.modifier_key"] = modifier_keys
-alphabet = dict(zip(default_alphabet, letters_string))
-ctx.lists["self.letter"] = alphabet
+ctx.lists["self.letter"] = alphabet_list
 
 # `punctuation_words` is for words you want available BOTH in dictation and as key names in command mode.
 # `symbol_key_words` is for key names that should be available in command mode, but NOT during dictation.
@@ -219,7 +235,7 @@ simple_keys = [
 ]
 
 alternate_keys = {
-    "clap": "enter",
+    "puff": "enter",
     "drill": "delete",
     "scratch": "backspace",
     "scrape": "escape",

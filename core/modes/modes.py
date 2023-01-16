@@ -65,7 +65,7 @@ class Actions:
             actions.user.microphone_preferred()
         else:
             actions.user.sleep_all()
-            actions.speech.set_microphone("None")
+            actions.sound.set_microphone("None")
 
     def welcome_back():
         """Enables all things"""

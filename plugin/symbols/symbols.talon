@@ -7,7 +7,7 @@ patch {user.symbol_key}:
     edit.line_end()
     "{symbol_key}"
     edit.line_insert_down()
-spam: ", "
+spam | spammy | spama: ", "
 pipe gap: " | "
 boom: ". "
 arrow: "->"

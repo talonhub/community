@@ -18,5 +18,3 @@ start <user.launch_applications>: user.switcher_launch(launch_applications)
 (pup | pop) <user.running_applications> [screen] <number>:
     user.move_app_to_screen(running_applications, number)
 desk show: user.switcher_show_desktop()
-portal [<phrase>]$: user.system_show_portal(phrase or "")
-coder [<phrase>]$: user.system_show_coder(phrase or "")

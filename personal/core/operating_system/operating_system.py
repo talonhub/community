@@ -11,7 +11,7 @@ mod.list("directories", desc="List of directories")
 portal_name = mod.setting(
     "system_portal_name",
     type=str,
-    default="firefox",
+    default="chrome",
     desc="The default portal to switch to",
 )
 coder_name = mod.setting(
@@ -20,6 +20,20 @@ coder_name = mod.setting(
     default="code",
     desc="The default coder to switch to",
 )
+messaging_application = mod.setting(
+    "system_messaging_application_name",
+    type=str,
+    default="teams",
+    desc="The default messaging application to switch to",
+)
+
+settings_application = mod.setting(
+    "system_settings_application_name",
+    type=str,
+    default="settings",
+    desc="The default messaging application to switch to",
+)
+
 ctx = Context()
 ctx.lists["self.launch_command"] = {}
 ctx.lists["self.directories"] = {}
@@ -66,6 +80,10 @@ class Actions:
 
     def system_show_clipboard():
         """opens the systems default clipboard or equivalent"""
+    
+    def system_show_settings():
+        """opens the systems default settings applications"""
+        actions.user.switcher_focus(settings_application.get())
 
     def system_show_portal(phrase: str = None):
         """Opens the default browser for the up operating system and performs the phrase command"""
@@ -75,6 +93,19 @@ class Actions:
 
     def system_show_coder(phrase: str = None):
         """Opens the default browser for the up operating system and performs the phrase command"""
-        actions.user.switcher_focus(coder_name.get())
+        is_running = actions.user.switcher_focus(coder_name.get())
+        actions.sleep("250ms")
+            
+        actions.user.parse_phrase(phrase or "")
+
+    def system_show_messenger(phrase: str = None):
+        """Opens the default browser for the up operating system and performs the phrase command"""
+        actions.user.switcher_focus(messaging_application.get())
+        actions.sleep("250ms")
+        actions.user.parse_phrase(phrase or "")
+
+    def system_show_slacker(phrase: str = None):
+        """Opens the default browser for the up operating system and performs the phrase command"""
+        actions.user.switcher_focus("slack")
         actions.sleep("250ms")
         actions.user.parse_phrase(phrase or "")
