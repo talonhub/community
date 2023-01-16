@@ -80,7 +80,7 @@ class Actions:
 
     def system_show_clipboard():
         """opens the systems default clipboard or equivalent"""
-    
+
     def system_show_settings():
         """opens the systems default settings applications"""
         actions.user.switcher_focus(settings_application.get())
@@ -89,13 +89,14 @@ class Actions:
         """Opens the default browser for the up operating system and performs the phrase command"""
         actions.user.switcher_focus(portal_name.get())
         actions.sleep("250ms")
-        actions.user.parse_phrase(phrase or "")
+        if phrase:
+            actions.user.parse_phrase(phrase or "")
 
     def system_show_coder(phrase: str = None):
         """Opens the default browser for the up operating system and performs the phrase command"""
         is_running = actions.user.switcher_focus(coder_name.get())
         actions.sleep("250ms")
-            
+
         actions.user.parse_phrase(phrase or "")
 
     def system_show_messenger(phrase: str = None):

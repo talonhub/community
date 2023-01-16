@@ -122,10 +122,9 @@ class Actions:
         bundle = actions.app.bundle()
         title = actions.win.title()
         hostname = scope.get("hostname")
-        result = (
-            f"Name: {name}\nExecutable: {executable}\nBundle: {bundle}\nTitle: {title}\nhostname: {hostname}"
-        )
+        result = f"Name: {name}\nExecutable: {executable}\nBundle: {bundle}\nTitle: {title}\nhostname: {hostname}"
         return result
+
     def talon_get_hostname() -> str:
         """Returns the hostname"""
         hostname = scope.get("hostname")
@@ -172,22 +171,26 @@ class Actions:
 
             talon_app = ui.apps(pid=os.getpid())[0]
             talon_app_path = quote(talon_app.path)
-            Popen(['/bin/sh', '-c',
-                f'/usr/bin/open -W {talon_app_path} ; /usr/bin/open {talon_app_path}'
-            ], start_new_session=True)
-            talon_app.appscript().quit(waitreply=False) # XXX temporary replacement
-            
+            Popen(
+                [
+                    "/bin/sh",
+                    "-c",
+                    f"/usr/bin/open -W {talon_app_path} ; /usr/bin/open {talon_app_path}",
+                ],
+                start_new_session=True,
+            )
+            talon_app.appscript().quit(waitreply=False)  # XXX temporary replacement
+
         elif app.platform == "windows":
             actions.user.exec("talon-restart")
 
     def talon_kill():
         """kill talon"""
+        pid = os.getpid()
         if app.platform == "mac":
-            talon_app = ui.apps(pid=os.getpid())[0]
-            talon_app.appscript().quit(waitreply=False) # XXX temporary replacement
-            
+            talon_app = ui.apps(pid)[0]
+            talon_app.appscript().quit(waitreply=False)  # XXX temporary replacement
+
         elif app.platform == "windows":
-            os.system("taskkill /f /im  talon.exe")
-
-
-            
+            # os.system("taskkill /f /im  talon.exe")
+            os.kill(pid, 0)

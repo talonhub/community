@@ -260,6 +260,7 @@ class Actions:
         app = actions.user.get_running_app(name)
 
         if app:
+            print(name)
             actions.user.switcher_focus_app(app)
             return True
         elif name in ctx.lists["self.launch"]:

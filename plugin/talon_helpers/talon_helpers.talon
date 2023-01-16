@@ -12,6 +12,9 @@ talent [open] rebel: menu.open_repl()
 talent home: menu.open_talon_home()
 talent copy context pie: user.talon_add_context_clipboard_python()
 talent copy context: user.talon_add_context_clipboard()
+talent host:
+    host = user.talon_get_hostname()
+    insert(host)
 talent copy name:
     name = app.name()
     clip.set_text(name)  
