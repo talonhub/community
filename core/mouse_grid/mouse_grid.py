@@ -38,8 +38,9 @@ class MouseSnapNine:
         self.mcanvas = None
         self.active = False
         self.count = 0
-        self.was_control_mouse_active = False
         self.was_zoom_mouse_active = False
+        self.was_control_mouse_active = False
+        self.was_control1_mouse_active = False
 
     def setup(self, *, rect: Rect = None, screen_num: int = None):
         screens = ui.screens()
@@ -73,8 +74,11 @@ class MouseSnapNine:
         if actions.tracking.control_zoom_enabled():
             self.was_zoom_mouse_active = True
             actions.tracking.control_zoom_toggle(False)
-        if actions.tracking.control1_enabled():
+        if actions.tracking.control_enabled():
             self.was_control_mouse_active = True
+            actions.tracking.control_toggle(False)
+        if actions.tracking.control1_enabled():
+            self.was_control1_mouse_active = True
             actions.tracking.control1_toggle(False)
         self.mcanvas.register("draw", self.draw)
         self.mcanvas.freeze()
@@ -91,13 +95,16 @@ class MouseSnapNine:
 
         self.active = False
 
-        if self.was_control_mouse_active and not actions.tracking.control1_enabled():
+        if self.was_control_mouse_active and not actions.tracking.control_enabled():
+            actions.tracking.control_toggle(True)
+        if self.was_control1_mouse_active and not actions.tracking.control1_enabled():
             actions.tracking.control1_toggle(True)
         if self.was_zoom_mouse_active and not actions.tracking.control_zoom_enabled():
             actions.tracking.control_zoom_toggle(True)
 
         self.was_zoom_mouse_active = False
         self.was_control_mouse_active = False
+        self.was_control1_mouse_active = False
 
     def draw(self, canvas):
         paint = canvas.paint

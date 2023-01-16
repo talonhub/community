@@ -130,11 +130,9 @@ class Actions:
 
     def mouse_sleep():
         """Disables control mouse, zoom mouse, and re-enables cursor"""
-        if actions.tracking.control_zoom_enabled():
-            actions.tracking.control_zoom_toggle()
-
-        if actions.tracking.control1_enabled():
-            actions.tracking.control1_toggle()
+        actions.tracking.control_zoom_toggle(False)
+        actions.tracking.control_toggle(False)
+        actions.tracking.control1_toggle(False)
 
         show_cursor_helper(True)
         stop_scroll()
@@ -198,8 +196,8 @@ class Actions:
 
         # enable 'control mouse' if eye tracker is present and not enabled already
         global control_mouse_forced
-        if not actions.tracking.control1_enabled():
-            actions.tracking.control1_toggle()
+        if not actions.tracking.control_enabled():
+            actions.tracking.control_toggle(True)
             control_mouse_forced = True
 
     def copy_mouse_position():
@@ -333,9 +331,7 @@ def stop_scroll():
 
     global control_mouse_forced
     if control_mouse_forced:
-        if actions.tracking.control1_enabled():
-            actions.tracking.control1_toggle()
-
+        actions.tracking.control_toggle(False)
         control_mouse_forced = False
 
     scroll_job = None
@@ -354,19 +350,3 @@ def start_cursor_scrolling():
     gaze_job = cron.interval("60ms", gaze_scroll)
     # if eye_zoom_mouse.zoom_mouse.enabled and eye_mouse.mouse.attached_tracker is not None:
     #    eye_zoom_mouse.zoom_mouse.sleep(True)
-
-
-if app.platform == "mac":
-    from talon import tap
-
-    def on_move(e):
-        if not config.control_mouse:
-            buttons = ctrl.mouse_buttons_down()
-            # print(str(ctrl.mouse_buttons_down()))
-            if not e.flags & tap.DRAG and buttons:
-                e.flags |= tap.DRAG
-                # buttons is a set now
-                e.button = list(buttons)[0]
-                e.modify()
-
-    tap.register(tap.MMOVE | tap.HOOK, on_move)
