@@ -1,3 +1,5 @@
+not tag: user.homerow_search
+-
 <user.letter>: key(letter)
 (ship | uppercase) <user.letters> [(lowercase | sunk)]:
     user.insert_formatted(letters, "ALL_CAPS")

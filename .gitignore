@@ -5,3 +5,4 @@ __pycache__
 # Locally generated
 /settings/system_paths.csv
 .vscode/settings.json
+.DS_Store

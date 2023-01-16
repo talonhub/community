@@ -2,6 +2,10 @@ from talon import Context, Module, actions, app, ui
 
 ctx = Context()
 mod = Module()
+mod.apps.homerow = """
+os: mac
+and app.bundle: com.dexterleng.Homerow
+"""
 
 mod.tag("homerow_search")
 
