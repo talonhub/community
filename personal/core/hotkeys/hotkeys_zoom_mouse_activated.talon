@@ -3,22 +3,22 @@ and tag: talon_plugins.eye_zoom_mouse.zoom_mouse_enabled
 and tag: talon_plugins.eye_zoom_mouse.zoom_mouse_activated
 -
 key(keypad_0): 
-    user.blue2_s1()
+    user.keypad0()
 key(keypad_1): 
-    user.blue2_s1()
+   user.keypad1()
 key(keypad_2): 
-    user.blue2_s2()
+    user.keypad2()
 key(keypad_3): 
-    user.blue2_s3()
-key(keypad_4):  
-    user.blue2_s4()
+    user.keypad3()
+key(keypad_4): 
+    user.keypad4()
 key(keypad_5): 
-    user.blue2_s5()
+    user.keypad5()
 key(keypad_6): 
-    user.blue2_s6()
+    user.keypad6()
 key(keypad_7): 
-    user.blue2_s3()
+    user.keypad7()
 key(keypad_8): 
-    user.blue2_s4()
+    user.keypad8()
 key(keypad_9): 
-    user.blue2_s2()
+    user.keypad9()
