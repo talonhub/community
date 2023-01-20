@@ -110,3 +110,9 @@ class Actions:
         actions.user.switcher_focus("slack")
         actions.sleep("250ms")
         actions.user.parse_phrase(phrase or "")
+    
+    def system_show_email(phrase: str = None):
+        """Opens the default browser for the up operating system and performs the phrase command"""
+        actions.user.switcher_focus("outlook")
+        actions.sleep("250ms")
+        actions.user.parse_phrase(phrase or "")

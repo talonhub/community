@@ -94,27 +94,27 @@ class WindowsZoomMouseInactiveActions:
 
     def keypad2():
         """document string goes here"""
-        actions.tracking.control_zoom_toggle()
+        actions.user.move_cursor_to_gaze_point()
 
     def keypad3():
         """document string goes here"""
-        actions.user.microphone_toggle()
+        actions.user.system_switcher()
 
     def keypad4():
         """document string goes here"""
-        sleep_or_wake()
+        actions.tracking.control_zoom_toggle()
 
     def keypad5():
         """document"""
-        actions.user.system_switcher()
+        actions.user.microphone_toggle()
 
     def keypad6():
         """document string goes here"""
-        actions.tracking.control_zoom_toggle()
+        sleep_or_wake()
 
     def keypad7():
         """document string goes here"""
-        actions.user.microphone_toggle()
+        
 
 
 @ctx_zoom_mouse_triggered.action_class("user")
