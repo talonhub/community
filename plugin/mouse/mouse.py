@@ -111,7 +111,7 @@ class Actions:
     def mouse_wake():
         """Enable control mouse, zoom mouse, and disables cursor"""
         actions.tracking.control_zoom_toggle(True)
-        # eye_mouse.control_mouse.enable()
+        
         if setting_mouse_wake_hides_cursor.get() >= 1:
             show_cursor_helper(False)
 
@@ -278,15 +278,13 @@ def scroll_continuous_helper():
     # print("scroll_continuous_helper")
     if scroll_amount and (
         eye_zoom_mouse.zoom_mouse.state == eye_zoom_mouse.STATE_IDLE
-    ):  # or eye_zoom_mouse.zoom_mouse.state == eye_zoom_mouse.STATE_SLEEP):
+    ):  
         actions.mouse_scroll(by_lines=False, y=int(scroll_amount / 10))
 
 
 def start_scroll():
     global scroll_job
     scroll_job = cron.interval("60ms", scroll_continuous_helper)
-    # if eye_zoom_mouse.zoom_mouse.enabled and eye_mouse.mouse.attached_tracker is not None:
-    #    eye_zoom_mouse.zoom_mouse.sleep(True)
 
 
 def gaze_scroll():
@@ -340,13 +338,9 @@ def stop_scroll():
 
     continuous_scoll_mode = ""
 
-    # if eye_zoom_mouse.zoom_mouse.enabled and eye_mouse.mouse.attached_tracker is not None:
-    #    eye_zoom_mouse.zoom_mouse.sleep(False)
-
 
 def start_cursor_scrolling():
     global scroll_job, gaze_job
     stop_scroll()
     gaze_job = cron.interval("60ms", gaze_scroll)
-    # if eye_zoom_mouse.zoom_mouse.enabled and eye_mouse.mouse.attached_tracker is not None:
-    #    eye_zoom_mouse.zoom_mouse.sleep(True)
+
