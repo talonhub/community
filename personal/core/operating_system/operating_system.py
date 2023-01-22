@@ -101,18 +101,21 @@ class Actions:
 
     def system_show_messenger(phrase: str = None):
         """Opens the default browser for the up operating system and performs the phrase command"""
-        actions.user.switcher_focus(messaging_application.get())
+        is_running = actions.user.switcher_focus(messaging_application.get())
         actions.sleep("250ms")
-        actions.user.parse_phrase(phrase or "")
+        if is_running:
+            actions.user.parse_phrase(phrase or "")
 
     def system_show_slacker(phrase: str = None):
         """Opens the default browser for the up operating system and performs the phrase command"""
-        actions.user.switcher_focus("slack")
+        is_running = actions.user.switcher_focus("slack")
         actions.sleep("250ms")
-        actions.user.parse_phrase(phrase or "")
-    
+        if is_running:
+            actions.user.parse_phrase(phrase or "")
+
     def system_show_email(phrase: str = None):
         """Opens the default browser for the up operating system and performs the phrase command"""
-        actions.user.switcher_focus("outlook")
+        is_running = actions.user.switcher_focus("outlook")
         actions.sleep("250ms")
-        actions.user.parse_phrase(phrase or "")
+        if is_running:
+            actions.user.parse_phrase(phrase or "")
