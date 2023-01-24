@@ -168,6 +168,7 @@ punctuation_words = {
     # Currencies
     "dollar sign": "$",
     "pound sign": "£",
+    "hyphen": "-",
     "L paren": "(",
     "left paren": "(",
     "R paren": ")",
