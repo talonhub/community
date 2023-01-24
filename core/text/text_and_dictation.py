@@ -39,8 +39,8 @@ mod.list("currency_denomination", desc="Currency denominations that can be used 
 ctx.lists["user.currency_denomination"] = {
     "dollar": "$",
     "dollars": "$",
-    "euro": "€",  # XXX doesn't output the correct character.
-    "euros": "€",  # XXX doesn't output the correct character.
+    "euro": "€",
+    "euros": "€",
 }
 
 
