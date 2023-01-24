@@ -35,6 +35,14 @@ ctx.lists["user.prose_snippets"] = {
     "frowny": ":-(",
 }
 
+mod.list("currency_denomination", desc="Currency denominations that can be used within prose")
+ctx.lists["user.currency_denomination"] = {
+    "dollar": "$",
+    "dollars": "$",
+    "euro": "€",  # XXX doesn't output the correct character.
+    "euros": "€",  # XXX doesn't output the correct character.
+}
+
 
 @mod.capture(rule="{user.prose_modifiers}")
 def prose_modifier(m) -> Callable:
@@ -61,6 +69,65 @@ def prose_number_with_colon(m) -> str:
 )
 def prose_number(m) -> str:
     return str(m)
+
+
+@mod.capture(rule="<user.number_string> {user.currency_denomination}")
+def prose_simple_money(m) -> str:
+    return m.currency_denomination + m.number_string
+
+
+@mod.capture(rule="<user.number_string> {user.currency_denomination} [and] <user.number_string> [cents]")
+def prose_money_with_cents(m) -> str:
+    return m.currency_denomination + m.number_string_1 + "." + m.number_string_2
+
+
+@mod.capture(
+    rule="<user.prose_money_with_cents> | <user.prose_simple_money>"
+)
+def prose_money(m) -> str:
+    return str(m)
+
+
+
+mod.list("hours", desc="Time hour names")
+ctx.lists["user.hours"] = {
+    "one": "1",
+    "two": "2",
+    "three": "3",
+    "four": "4",
+    "five": "5",
+    "six": "6",
+    "seven": "7",
+    "eight": "8",
+    "nine": "9",
+    "ten": "10",
+    "eleven": "11",
+    "twelve": "12",
+    "thirteen": "13",
+    "fourteen": "14",
+    "fifteen": "15",
+    "sixteen": "16",
+    "seventeen": "17",
+    "eighteen": "18",
+    "nineteen": "19",
+    "twenty": "20",
+    "twenty one": "21",
+    "twenty two": "22",
+    "twenty three": "23",
+}
+@mod.capture(
+    rule="{user.hours} (<user.minutes_string> | o'clock) [am | pm]"
+)
+def prose_time(m) -> str:
+    print(m)
+    t = m.hours + ":"
+    if m[1] in ["o'clock"]:
+        t += "00"
+    else:
+        t += m.minutes_string
+    if len(m) > 2:
+        t += m[2]
+    return t
 
 
 @mod.capture(rule="({user.vocabulary} | <word>)")
@@ -90,7 +157,7 @@ def prose(m) -> str:
 
 
 @mod.capture(
-    rule="({user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <phrase> | <user.prose_number>)+"
+    rule="({user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <phrase> | <user.prose_money> | <user.prose_time> | <user.prose_number>)+"
 )
 def raw_prose(m) -> str:
     """Mixed words and punctuation, auto-spaced & capitalized, without quote straightening and commands (for use in dictation mode)."""
