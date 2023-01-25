@@ -71,6 +71,15 @@ def prose_number(m) -> str:
     return str(m)
 
 
+@mod.capture(
+    rule="<user.number_string> [(dot | point) <digit_string>] percent [sign|sine]")
+def prose_percent(m) -> str:
+    s = m.number_string
+    if hasattr(m, "digit_string"):
+        s += "." + m.digit_string
+    return s + "%"
+
+
 @mod.capture(rule="<user.number_string> {user.currency_denomination}")
 def prose_simple_money(m) -> str:
     return m.currency_denomination + m.number_string
@@ -157,7 +166,7 @@ def prose(m) -> str:
 
 
 @mod.capture(
-    rule="({user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <phrase> | <user.prose_money> | <user.prose_time> | <user.prose_number>)+"
+    rule="({user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <phrase> | <user.prose_money> | <user.prose_time> | <user.prose_number> | <user.prose_percent>)+"
 )
 def raw_prose(m) -> str:
     """Mixed words and punctuation, auto-spaced & capitalized, without quote straightening and commands (for use in dictation mode)."""
