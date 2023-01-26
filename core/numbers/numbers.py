@@ -23,6 +23,7 @@ numbers_map.update(teens_map)
 numbers_map.update(tens_map)
 numbers_map.update(scales_map)
 
+
 def parse_number(l: list[str]) -> str:
     """Parses a list of words into a number/digit string."""
     l = list(scan_small_numbers(l))
