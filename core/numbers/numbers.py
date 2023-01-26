@@ -23,14 +23,6 @@ numbers_map.update(teens_map)
 numbers_map.update(tens_map)
 numbers_map.update(scales_map)
 
-# Subset of numbers_map that defines valid minute words.  The integer values
-# are not presently used.
-minutes_map = {f"oh {k}": v for (k, v) in digits_map.items()}
-del minutes_map['oh zero']
-minutes_map.update(teens_map)
-minutes_map.update({n: 10 * (i + 2) for i, n in enumerate(tens[0:4])})
-
-
 def parse_number(l: list[str]) -> str:
     """Parses a list of words into a number/digit string."""
     l = list(scan_small_numbers(l))
@@ -171,7 +163,6 @@ alt_teens = "(" + "|".join(teens_map.keys()) + ")"
 alt_tens = "(" + "|".join(tens_map.keys()) + ")"
 alt_scales = "(" + "|".join(scales_map.keys()) + ")"
 number_word = "(" + "|".join(numbers_map.keys()) + ")"
-minutes_word = "(" + "|".join(minutes_map.keys()) + ")"
 # don't allow numbers to start with scale words like "hundred", "thousand", etc
 leading_words = numbers_map.keys() - scales_map.keys()
 leading_words -= {"oh", "o"}  # comment out to enable bare/initial "oh"
@@ -204,12 +195,6 @@ def digits(m) -> int:
 @mod.capture(rule=f"{number_word_leading} ([and] {number_word})*")
 def number_string(m) -> str:
     """Parses a number phrase, returning that number as a string."""
-    return parse_number(list(m))
-
-
-@mod.capture(rule=f"{minutes_word}+")
-def minutes_string(m) -> str:
-    """Parses a minute phrase, returning that number as a string."""
     return parse_number(list(m))
 
 

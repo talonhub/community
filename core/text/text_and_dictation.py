@@ -124,18 +124,83 @@ ctx.lists["user.hours"] = {
     "twenty two": "22",
     "twenty three": "23",
 }
+mod.list("minutes", desc="Time minute names")
+ctx.lists["user.minutes"] = {
+    "oh one": "01",
+    "oh two": "02",
+    "oh three": "03",
+    "oh four": "04",
+    "oh five": "05",
+    "oh six": "06",
+    "oh seven": "07",
+    "oh eight": "08",
+    "oh nine": "09",
+    "ten": "10",
+    "eleven": "11",
+    "twelve": "12",
+    "thirteen": "13",
+    "fourteen": "14",
+    "fifteen": "15",
+    "sixteen": "16",
+    "seventeen": "17",
+    "eighteen": "18",
+    "nineteen": "19",
+    "twenty": "20",
+    "twenty one": "21",
+    "twenty two": "22",
+    "twenty three": "23",
+    "twenty four": "24",
+    "twenty five": "25",
+    "twenty six": "26",
+    "twenty seven": "27",
+    "twenty eight": "28",
+    "twenty nine": "29",
+    "thirty": "30",
+    "thirty one": "31",
+    "thirty two": "32",
+    "thirty three": "33",
+    "thirty four": "34",
+    "thirty five": "35",
+    "thirty six": "36",
+    "thirty seven": "37",
+    "thirty eight": "38",
+    "thirty nine": "39",
+    "fourty": "40",
+    "fourty one": "41",
+    "fourty two": "42",
+    "fourty three": "43",
+    "fourty four": "44",
+    "fourty five": "45",
+    "fourty six": "46",
+    "fourty seven": "47",
+    "fourty eight": "48",
+    "fourty nine": "49",
+    "fifty": "50",
+    "fifty one": "51",
+    "fifty two": "52",
+    "fifty three": "53",
+    "fifty four": "54",
+    "fifty five": "55",
+    "fifty six": "56",
+    "fifty seven": "57",
+    "fifty eight": "58",
+    "fifty nine": "59",
+}
+@mod.capture(rule="am|pm")
+def time_meridian(m) -> str:
+    return str(m)
+
 @mod.capture(
-    rule="{user.hours} (<user.minutes_string> | o'clock) [am | pm]"
+    rule="{user.hours} ({user.minutes} | o'clock) [<user.time_meridian>]"
 )
 def prose_time(m) -> str:
-    print(m)
     t = m.hours + ":"
-    if m[1] in ["o'clock"]:
-        t += "00"
+    if (hasattr(m, 'minutes')):
+        t += m.minutes
     else:
-        t += m.minutes_string
-    if len(m) > 2:
-        t += m[2]
+        t += "00"
+    if hasattr(m, 'time_meridian'):
+        t += m.time_meridian
     return t
 
 
