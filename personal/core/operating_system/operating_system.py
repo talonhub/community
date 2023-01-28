@@ -1,4 +1,4 @@
-from talon import Context, Module, actions, ui
+from talon import Context, Module, actions, ui, app
 import os
 
 #
@@ -83,11 +83,6 @@ class Actions:
 
     def system_kill_focused_application():
         """Kills the focused application"""
-        app = None
-        for application in ui.apps(background=False):
-            if application.name == actions.app.name():
-                app =  application        
-                os.kill(app.pid, 0)
 
     def system_show_settings():
         """opens the systems default settings applications"""

@@ -1,4 +1,4 @@
-app: r_s_i_guard_desktop_ergonomics
+app: rsi_guard
 win.title: RSIGuard  v6.2.0.0SB - Registered
 -
 # key(keypad_0): 

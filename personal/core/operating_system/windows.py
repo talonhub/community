@@ -113,6 +113,12 @@ class UserActionsWin:
     def system_show_clipboard():
         actions.key("super-v")
 
+    def system_kill_focused_application():
+        """Kills the focused application"""
+        for application in ui.apps(background=False):
+            if application.name == actions.app.name():
+                os.kill(application.pid, 0)
+
 
 def shutdown(flag: str):
     actions.key("super-r")

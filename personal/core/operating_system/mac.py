@@ -88,7 +88,12 @@ class UserActionsMac:
 
     def system_show_clipboard():
         actions.key('cmd-shift-c')
-        
+
+    def system_kill_focused_application():
+        """Kills the focused application"""
+        for application in ui.apps(background=False):
+            if application.name == actions.app.name():
+                application.appscript().quit(waitreply=False)        
 
 def on_ready():
     update_preferences_list()
