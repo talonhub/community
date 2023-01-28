@@ -119,3 +119,10 @@ class Actions:
         actions.sleep("250ms")
         if is_running:
             actions.user.parse_phrase(phrase or "")
+
+    def system_show_gitter(phrase: str = None):
+        """Opens the default browser for the up operating system and performs the phrase command"""
+        is_running = actions.user.switcher_focus("git hub")
+        actions.sleep("250ms")
+        if is_running:
+            actions.user.parse_phrase(phrase or "")
