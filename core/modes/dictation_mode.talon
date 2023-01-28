@@ -68,8 +68,8 @@ formatted <user.format_text>:
     user.formatters_reformat_selection(formatters)
 
 # Corrections
-scratch that: user.clear_last_phrase()
-scratch selection: edit.delete()
+wipe that: user.clear_last_phrase()
+wipe selection: edit.delete()
 select that: user.select_last_phrase()
 spell that <user.letters>: auto_insert(letters)
 spell that <user.formatters> <user.letters>:

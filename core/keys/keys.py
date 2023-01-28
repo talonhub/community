@@ -237,7 +237,7 @@ simple_keys = [
 alternate_keys = {
     "puff": "enter",
     "drill": "delete",
-    "scratch": "backspace",
+    "wipe": "backspace",
     "scrape": "escape",
     "void": "space",
     "page up": "pageup",

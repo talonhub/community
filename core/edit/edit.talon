@@ -33,16 +33,16 @@ go down: edit.down()
 go down <number_small>: 
     edit.down()
     repeat(number_small-1)
-scratch <number_small>: 
+wipe <number_small>: 
     key(backspace)
     repeat(number_small-1)
 drill <number_small>: 
     key(delete)
     repeat(number_small-1)
-(drill | scratch) tail: 
+(drill | wipe) tail: 
     key(shift-end)
     key(delete)
-(drill | scratch) head: 
+(drill | wipe) head: 
     key(shift-home)
     key(delete)
     

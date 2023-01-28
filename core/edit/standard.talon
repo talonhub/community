@@ -9,7 +9,7 @@ zoom out [<number>]:
 copy take: edit.copy()
 snip take: edit.cut()
 pace: edit.paste()
-(no | nope) [<number>]: 
+(nay | nope) [<number>]: 
 	numb  = number or 1
 	edit.undo()
 	repeat(numb - 1)
@@ -21,7 +21,7 @@ paste match: edit.paste_match_style()
 disk: edit.save()
 disk oliver: edit.save_all()
 padding: user.insert_between(" ", " ")
-pour | por: edit.line_insert_down()
+pour: edit.line_insert_down()
 drink: edit.line_insert_up()
 
 
