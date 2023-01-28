@@ -8,6 +8,7 @@ task view:          user.system_task_view()
 switcher:           user.system_switcher()
 clip show:          user.system_show_clipboard()
 setter:             user.system_show_settings()
+^kill focused$: user.system_kill_focused_application()
 configure {user.launch_command}:
      user.exec(launch_command)
 summon {user.directories}:
