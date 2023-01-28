@@ -63,9 +63,11 @@ class Actions:
         if not actions.speech.enabled():
             actions.user.welcome_back()
             actions.user.microphone_preferred()
+            actions.user.connect_ocr_eye_tracker()
         else:
             actions.user.sleep_all()
             actions.sound.set_microphone("None")
+            actions.user.disconnect_ocr_eye_tracker()
 
     def welcome_back():
         """Enables all things"""
@@ -86,3 +88,5 @@ class Actions:
         actions.speech.disable()
         actions.user.engine_sleep()
         actions.mode.disable("noise")
+        actions.sound.set_microphone("None")
+        actions.user.disconnect_ocr_eye_tracker()
