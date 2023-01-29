@@ -129,3 +129,19 @@ class Actions:
         actions.sleep("250ms")
         if is_running:
             actions.user.parse_phrase(phrase or "")
+            
+    def system_show_taskmanager(phrase: str = None):
+        """Opens the default browser for the up operating system and performs the phrase command"""
+        is_running = actions.user.switcher_focus("task manager")
+        actions.sleep("250ms")
+        if is_running:
+            actions.user.parse_phrase(phrase or "")
+    
+    def system_taskmanager_find_focused_application(phrase: str = None):
+        """Opens the default browser for the up operating system and performs the phrase command"""
+        current_application = actions.app.executable().split("\\")[-1]
+        is_running = actions.user.switcher_focus("task manager")
+        actions.sleep("250ms")
+        actions.key("ctrl-f")
+        actions.sleep("250ms")
+        actions.user.paste(current_application)

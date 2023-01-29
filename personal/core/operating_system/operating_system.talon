@@ -19,3 +19,6 @@ messer [<phrase>]$: user.system_show_messenger(phrase or "")
 slacker [<phrase>]$: user.system_show_slacker(phrase or "")
 outer [<phrase>]$: user.system_show_email(phrase or "")
 gitter [<phrase>]$: user.system_show_gitter(phrase or "")
+process$: user.system_show_taskmanager(phrase or "")
+process current$: user.system_taskmanager_find_focused_application()
+
