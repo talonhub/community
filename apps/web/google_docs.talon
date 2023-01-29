@@ -1,3 +1,4 @@
+os: mac
 browser.host: docs.google.com
 -
 
