@@ -9,9 +9,11 @@ tag: browser
 browser.host: docs.google.com
 """
 
+
 @ctx.action_class("user")
 class FindAndReplace:
-    """ Override generic find-and-replace """
+    """Override generic find-and-replace"""
+
     def find(text: str):
         actions.key("cmd-f")
         actions.insert(text)
