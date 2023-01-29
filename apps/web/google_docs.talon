@@ -9,12 +9,6 @@ open: key(cmd-o)
 print: key(cmd-p)
 save: key(cmd-s)
 edit menu | menu edit: key(ctrl-alt-e)
-paste without formatting: key(cmd-shift-v)
-# adding keyboard shortcuts here since user.find_and_replace doesn't work
-hunt this: key(cmd-f)
-hunt (again | next): key(cmd-g)
-hunt (last | previous): key(cmd-shift-g)
-(hunt | find) and replace: key(cmd-shift-h)
 link insert | insert link: key(cmd-k)
 link open | open link: key(alt-enter)
 link next | next link:
