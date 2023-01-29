@@ -4,7 +4,7 @@ not tag: user.fluent_search_screen_search
 zoom mouse: tracking.control_zoom_toggle()
 run calibration: tracking.calibrate()
 
-touch:
+touch$:
     mouse_click(0)
     # close the mouse grid if open
     user.grid_close()
@@ -12,7 +12,7 @@ touch:
     # Touch automatically ends left drags so this is for right drags specifically
     user.mouse_drag_end()
 
-rate:
+^rate$:
     mouse_click(1)
     # close the mouse grid if open
     user.grid_close()
@@ -35,7 +35,7 @@ rate:
     key("{modifiers}:up")
     # close the mouse grid
     user.grid_close()
-<user.modifiers> righty:
+<user.modifiers> rate:
     key("{modifiers}:down")
     mouse_click(1)
     key("{modifiers}:up")
