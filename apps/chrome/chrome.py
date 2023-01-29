@@ -30,6 +30,16 @@ app: chrome
 """
 
 
+@mod.action_class
+class Actions:
+    def chrome_mod(key: str):
+        """Press the specified key with the correct modifier key for the OS"""
+        if app.platform == "mac":
+            actions.key(f"cmd-{key}")
+        else:
+            actions.key(f"ctrl-{key}")
+
+
 @ctx.action_class("user")
 class user_actions:
     def tab_jump(number: int):
@@ -50,12 +60,20 @@ class user_actions:
         actions.app.tab_close()
 
     def tab_duplicate():
-        """Limitation: this will not work if the text in your address bar has been manually edited.
-        Long-term we want a better shortcut from browsers.
-        """
         actions.browser.focus_address()
         actions.sleep("180ms")
-        actions.key("alt-enter")
+        possibly_edited_url = actions.edit.selected_text()
+        actions.key("esc")
+        actions.browser.focus_address()
+        actions.sleep("180ms")
+        url_address = actions.edit.selected_text()
+        if possibly_edited_url == url_address:
+            actions.key("alt-enter")
+        else:
+            actions.user.paste(possibly_edited_url)
+            actions.app.tab_open()
+            actions.user.paste(url_address)
+            actions.key("enter")
 
 
 @ctx.action_class("browser")

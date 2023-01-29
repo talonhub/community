@@ -25,8 +25,14 @@ bar source: user.vscode("workbench.view.scm")
 bar test: user.vscode("workbench.view.testing.focus")
 bar switch: user.vscode("workbench.action.toggleSidebarVisibility")
 
+# Symbol search
 symbol hunt [<user.text>]:
     user.vscode("workbench.action.gotoSymbol")
+    sleep(50ms)
+    insert(text or "")
+
+symbol hunt all [<user.text>]:
+    user.vscode("workbench.action.showAllSymbols")
     sleep(50ms)
     insert(text or "")
 
@@ -42,12 +48,11 @@ focus editor: user.vscode("workbench.action.focusActiveEditorGroup")
 show settings: user.vscode("workbench.action.openGlobalSettings")
 show settings json: user.vscode("workbench.action.openSettingsJson")
 show settings folder: user.vscode("workbench.action.openFolderSettings")
-show settings folder json:
-    user.vscode("workbench.action.openFolderSettingsFile")
+show settings folder json: user.vscode("workbench.action.openFolderSettingsFile")
 show settings workspace: user.vscode("workbench.action.openWorkspaceSettings")
-show settings workspace json:
-    user.vscode("workbench.action.openWorkspaceSettingsFile")
+show settings workspace json: user.vscode("workbench.action.openWorkspaceSettingsFile")
 show shortcuts: user.vscode("workbench.action.openGlobalKeybindings")
+show shortcuts json: user.vscode("workbench.action.openGlobalKeybindingsFile")
 show snippets: user.vscode("workbench.action.openSnippets")
 
 # Display
@@ -96,6 +101,7 @@ definition show: user.vscode("editor.action.revealDefinition")
 definition peek: user.vscode("editor.action.peekDefinition")
 definition side: user.vscode("editor.action.revealDefinitionAside")
 references show: user.vscode("editor.action.goToReferences")
+hierarchy peek: user.vscode("editor.showCallHierarchy")
 references find: user.vscode("references-view.find")
 format that: user.vscode("editor.action.formatDocument")
 format selection: user.vscode("editor.action.formatSelection")
@@ -190,7 +196,22 @@ pull request: user.vscode("pr.create")
 change next: key(alt-f5)
 change last: key(shift-alt-f5)
 
-#Debugging
+# Testing
+test run: user.vscode("testing.runAtCursor")
+test run file: user.vscode("testing.runCurrentFile")
+test run all: user.vscode("testing.runAll")
+test run failed: user.vscode("testing.reRunFailTests")
+test run last: user.vscode("testing.reRunLastRun")
+
+test debug: user.vscode("testing.debugAtCursor")
+test debug file: user.vscode("testing.debugCurrentFile")
+test debug all: user.vscode("testing.debugAll")
+test debug failed: user.vscode("testing.debugFailTests")
+test debug last: user.vscode("testing.debugLastRun")
+
+test cancel: user.vscode("testing.cancelRun")
+
+# Debugging
 break point: user.vscode("editor.debug.action.toggleBreakpoint")
 step over: user.vscode("workbench.action.debug.stepOver")
 debug step into: user.vscode("workbench.action.debug.stepInto")
@@ -211,8 +232,7 @@ terminal last: user.vscode("workbench.action.terminal.focusPrevious")
 terminal split: user.vscode("workbench.action.terminal.split")
 terminal zoom: user.vscode("workbench.action.toggleMaximizedPanel")
 terminal trash: user.vscode("workbench.action.terminal.kill")
-terminal toggle:
-    user.vscode_and_wait("workbench.action.terminal.toggleTerminal")
+terminal toggle: user.vscode_and_wait("workbench.action.terminal.toggleTerminal")
 terminal scroll up: user.vscode("workbench.action.terminal.scrollUp")
 terminal scroll down: user.vscode("workbench.action.terminal.scrollDown")
 terminal <number_small>: user.vscode_terminal(number_small)
@@ -249,10 +269,10 @@ select word: user.vscode("editor.action.addSelectionToNextFindMatch")
 skip word: user.vscode("editor.action.moveSelectionToNextFindMatch")
 
 # jupyter
-cell next: user.vscode("jupyter.gotoNextCellInFile")
-cell last: user.vscode("jupyter.gotoPrevCellInFile")
-cell run above: user.vscode("jupyter.runallcellsabove.palette")
-cell run: user.vscode("jupyter.runcurrentcell")
+cell next: user.vscode("notebook.focusNextEditor")
+cell last: user.vscode("notebook.focusPreviousEditor")
+cell run above: user.vscode("notebook.cell.executeCellsAbove")
+cell run: user.vscode("notebook.cell.execute")
 
 install local: user.vscode("workbench.extensions.action.installVSIX")
 preview markdown: user.vscode("markdown.showPreview")

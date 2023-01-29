@@ -32,6 +32,9 @@ tag require [{user.talon_tags}]:
 tag set [{user.talon_tags}]:
     tag = talon_tags or ""
     user.paste("tag(): {tag}")
+host require:
+    hostname = user.talon_get_hostname()
+    user.paste("hostname: {hostname}\n")
 # requires user.talon_populate_lists tag. do not use with dragon
 list {user.talon_lists}: "{{{talon_lists}}}"
 # requires user.talon_populate_lists tag. do not use with dragon
