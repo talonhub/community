@@ -3,6 +3,8 @@ browser.host: docs.google.com
 -
 
 tag(): user.line_commands
+tag(): user.find_and_replace
+tag(): browser
 
 file menu | menu file: key(ctrl-alt-f)
 open: key(cmd-o)
