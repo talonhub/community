@@ -312,8 +312,6 @@ open dictionary: key(cmd-shift-y)
 start voice typing:
     key(cmd-shift-s)
     speech.disable()
-page up: key(pageup)
-page down: key(pagedown)
 (go | move) [to] next misspelling: key(cmd-\')
 (go | move) [to] (previous | last) misspelling: key(cmd-;)
 ((go | move) [to] | insert) header:
