@@ -41,6 +41,8 @@ ctx.lists["user.currency_denomination"] = {
     "dollars": "$",
     "euro": "€",
     "euros": "€",
+    "pound": "£",
+    "pounds": "£",
 }
 
 
@@ -85,7 +87,7 @@ def prose_simple_money(m) -> str:
     return m.currency_denomination + m.number_string
 
 
-@mod.capture(rule="<user.number_string> {user.currency_denomination} [and] <user.number_string> [cents]")
+@mod.capture(rule="<user.number_string> {user.currency_denomination} [and] <user.number_string> [cents|pence]")
 def prose_money_with_cents(m) -> str:
     return m.currency_denomination + m.number_string_1 + "." + m.number_string_2
 
@@ -95,7 +97,6 @@ def prose_money_with_cents(m) -> str:
 )
 def prose_money(m) -> str:
     return str(m)
-
 
 
 mod.list("hours", desc="Time hour names")
@@ -191,7 +192,7 @@ def time_meridian(m) -> str:
     return str(m)
 
 @mod.capture(
-    rule="{user.hours} ({user.minutes} | o'clock) [<user.time_meridian>]"
+    rule="{user.hours} ({user.minutes} | o'clock | hundred) [<user.time_meridian>]"
 )
 def prose_time(m) -> str:
     t = m.hours + ":"
