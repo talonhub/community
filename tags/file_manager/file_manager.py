@@ -367,6 +367,7 @@ def win_event_handler(window):
         return
 
     path = actions.user.file_manager_current_path()
+    print(path)
 
     if "user.file_manager" not in registry.tags:
         actions.user.file_manager_hide_pickers()
@@ -377,6 +378,7 @@ def win_event_handler(window):
     elif cached_path:
         clear_lists()
         actions.user.file_manager_hide_pickers()
+    print(path)
 
     cached_path = path
 
