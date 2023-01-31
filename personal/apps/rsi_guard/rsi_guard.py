@@ -23,4 +23,4 @@ def sleep_talon(win):
         if win.title in windows_titles:
             actions.user.sleep_all()
         
-ui.register("win_focus", sleep_talon)
+# ui.register("win_focus", sleep_talon)
