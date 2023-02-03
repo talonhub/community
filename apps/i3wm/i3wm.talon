@@ -61,8 +61,6 @@ vertical (shell | terminal):
 # XXX - like also need to match the generic talon commands
 (shuffle | move (win | window) [to] port) <number_small>:
     user.system_command("i3-msg move container to workspace number {number_small}")
-(shuffle | move (win | window) [to] port ten):
-    user.system_command("i3-msg move container to workspace number 10")
 (shuffle | move (win | window) [to] last port):
     user.system_command("i3-msg move container to workspace back_and_forth")
 (shuffle | move) flipper:
@@ -98,5 +96,5 @@ new scratch (shell | window):
     user.system_command("i3-msg scratchpad show")
 
 murder:
-    user.deprecate_command("2023-01-04", "murder", "win kill")
+    user.deprecate_command("2023-02-04", "murder", "win kill")
     user.system_command("i3-msg kill")
