@@ -35,7 +35,9 @@ ctx.lists["user.prose_snippets"] = {
     "frowny": ":-(",
 }
 
-mod.list("currency_denomination", desc="Currency denominations that can be used within prose")
+mod.list(
+    "currency_denomination", desc="Currency denominations that can be used within prose"
+)
 ctx.lists["user.currency_denomination"] = {
     "dollar": "$",
     "dollars": "$",
@@ -74,7 +76,8 @@ def prose_number(m) -> str:
 
 
 @mod.capture(
-    rule="<user.number_string> [(dot | point) <digit_string>] percent [sign|sine]")
+    rule="<user.number_string> [(dot | point) <digit_string>] percent [sign|sine]"
+)
 def prose_percent(m) -> str:
     s = m.number_string
     if hasattr(m, "digit_string"):
@@ -87,16 +90,17 @@ def prose_simple_money(m) -> str:
     return m.currency_denomination + m.number_string
 
 
-@mod.capture(rule="<user.number_string> {user.currency_denomination} [and] <user.number_string> [cents|pence]")
+@mod.capture(
+    rule="<user.number_string> {user.currency_denomination} [and] <user.number_string> [cents|pence]"
+)
 def prose_money_with_cents(m) -> str:
     return m.currency_denomination + m.number_string_1 + "." + m.number_string_2
 
 
-@mod.capture(
-    rule="<user.prose_money_with_cents> | <user.prose_simple_money>"
-)
+@mod.capture(rule="<user.prose_money_with_cents> | <user.prose_simple_money>")
 def prose_money(m) -> str:
     return str(m)
+
 
 hours_twelve = {
     "one": "1",
@@ -113,19 +117,21 @@ hours_twelve = {
     "twelve": "12",
 }
 hours_24 = hours_twelve.copy()
-hours_24.update({
-    "thirteen": "13",
-    "fourteen": "14",
-    "fifteen": "15",
-    "sixteen": "16",
-    "seventeen": "17",
-    "eighteen": "18",
-    "nineteen": "19",
-    "twenty": "20",
-    "twenty one": "21",
-    "twenty two": "22",
-    "twenty three": "23"
-    })
+hours_24.update(
+    {
+        "thirteen": "13",
+        "fourteen": "14",
+        "fifteen": "15",
+        "sixteen": "16",
+        "seventeen": "17",
+        "eighteen": "18",
+        "nineteen": "19",
+        "twenty": "20",
+        "twenty one": "21",
+        "twenty two": "22",
+        "twenty three": "23",
+    }
+)
 mod.list("hours_twelve", desc="Time 12-hour names")
 ctx.lists["user.hours_twelve"] = hours_twelve
 mod.list("hours", desc="Time hour names")
@@ -193,20 +199,23 @@ ctx.lists["user.minutes"] = {
     "fifty eight": "58",
     "fifty nine": "59",
 }
+
+
 @mod.capture(rule="am|pm")
 def time_meridian(m) -> str:
     return str(m)
+
 
 @mod.capture(
     rule="{user.hours} ({user.minutes} | o'clock | hundred) [<user.time_meridian>]"
 )
 def prose_time_hours_minutes(m) -> str:
     t = m.hours + ":"
-    if (hasattr(m, 'minutes')):
+    if hasattr(m, "minutes"):
         t += m.minutes
     else:
         t += "00"
-    if hasattr(m, 'time_meridian'):
+    if hasattr(m, "time_meridian"):
         t += m.time_meridian
     return t
 
@@ -216,9 +225,7 @@ def prose_time_hours_meridian(m) -> str:
     return m.hours_twelve + m.time_meridian
 
 
-@mod.capture(
-    rule="<user.prose_time_hours_minutes> | <user.prose_time_hours_meridian>"
-)
+@mod.capture(rule="<user.prose_time_hours_minutes> | <user.prose_time_hours_meridian>")
 def prose_time(m) -> str:
     return str(m)
 
