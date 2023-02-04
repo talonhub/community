@@ -5,6 +5,7 @@ mod = Module()
 
 END_OF_WORD_SYMBOLS = ".!?;:—_/\\|@#$%^&*()[]{}<>=+-~`"
 
+
 @ctx.action_class("edit")
 class EditActions:
     def selected_text() -> str:
