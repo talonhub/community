@@ -85,7 +85,9 @@ def prose_percent(m) -> str:
     return s + "%"
 
 
-@mod.capture(rule="<user.number_string> {user.currency_denomination} [[and] <user.number_string> [cents|pence]]")
+@mod.capture(
+    rule="<user.number_string> {user.currency_denomination} [[and] <user.number_string> [cents|pence]]"
+)
 def prose_money(m) -> str:
     s = m.currency_denomination + m.number_string_1
     if hasattr(m, "number_string_2"):
@@ -237,6 +239,7 @@ def word(m) -> str:
 def text(m) -> str:
     """A sequence of words, including user-defined vocabulary."""
     return format_phrase(m)
+
 
 @mod.capture(
     rule="(<phrase> | {user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <user.prose_money> | <user.prose_time> | <user.prose_number> | <user.prose_percent> | <user.prose_modifier>)+"
