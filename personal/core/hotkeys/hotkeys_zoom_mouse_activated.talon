@@ -1,7 +1,7 @@
 not user.running: Optikey Mouse
 and tag: talon_plugins.eye_zoom_mouse.zoom_mouse_enabled
 and tag: talon_plugins.eye_zoom_mouse.zoom_mouse_activated
-not win.title: RSIGuard  v6.2.0.0SB - Registered
+# not win.title: RSIGuard  v6.2.0.0SB - Registered
 -
 key(keypad_0): 
     user.keypad0()
