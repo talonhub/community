@@ -7,6 +7,7 @@ and merged.
 
 ---
 
+* 2023-02-04 Deprecate `murder` command for i3wm. Use 'win kill' instead.
 * 2022-12-11 Deprecate user.insert_with_history. Just use `user.add_phrase_to_history(text);
 insert(text)` instead. See #939.
 * 2022-10-01 Large refactoring of code base that moves many files into new locations. No
