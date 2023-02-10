@@ -5,6 +5,7 @@ ctx = Context()
 ctx.matches = r"""
 os: mac
 app: chrome
+app: com.google.Chrome.canary
 """
 ctx.tags = ["browser", "user.tabs"]
 
