@@ -5,10 +5,10 @@ mod = Module()
 
 @mod.action_class
 class Actions:
-    def terminal_list_directories():
+    def terminal_list_directories(path: str):
         """Lists directories"""
 
-    def terminal_list_all_directories():
+    def terminal_list_all_directories(path: str):
         """Lists all directories including hidden"""
 
     def terminal_change_directory(path: str):

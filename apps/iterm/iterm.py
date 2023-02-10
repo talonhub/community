@@ -54,12 +54,12 @@ class user_actions:
     #     """selects the file"""
     #     actions.insert(path)
 
-    def terminal_list_directories():
-        actions.insert("ls")
+    def terminal_list_directories(path: str):
+        actions.insert(f"ls {path}")
         actions.key("enter")
 
-    def terminal_list_all_directories():
-        actions.insert("ls -a")
+    def terminal_list_all_directories(path: str):
+        actions.insert(f"ls -a {path}")
         actions.key("enter")
 
     def terminal_change_directory(path: str):
