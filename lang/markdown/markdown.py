@@ -11,5 +11,5 @@ ctx.lists["user.markdown_code_block_language"] = {
     "ruby": "ruby",
     "shell": "shell",
     "bash": "bash",
-    "json": "json"
+    "json": "json",
 }
