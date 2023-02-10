@@ -85,11 +85,11 @@ class UserActions:
 
     def terminal_list_directories(path: str):
         """Lists directories"""
-        actions.insert("dir")
+        actions.insert(f"dir {path}")
         actions.key("enter")
 
     def terminal_list_all_directories(path: str):
-        actions.insert("dir /a")
+        actions.insert(f"dir /a {path}")
         actions.key("enter")
 
     def terminal_change_directory(path: str):
