@@ -1,5 +1,6 @@
 os: mac
 app: dev.warp.Warp-Stable
+app: warp
 -
 tag(): terminal
 # todo: filemanager support
