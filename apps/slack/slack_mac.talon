@@ -7,8 +7,6 @@ tag(): user.emoji
 workspace <number>: key("cmd-{number}")
 # Channel
 (slack | lack) [channel] info: key(cmd-shift-i)
-channel (next|down): key(alt-down)
-channel (previous|up): key(alt-up)
 # Navigation
 focus (move | next): key(ctrl-`)
 (section | zone) [next]: key(f6)
@@ -48,9 +46,13 @@ bold: key(cmd-b)
 # Miscellaneous
 (slack | lack) shortcuts: key(cmd-/)
 emote <user.text>: "{text}"
-toggle left (sidebar|bar): key(cmd-shift-d)
-toggle right (sidebar|bar): key(cmd-.)
-bar switch: key(cmd-.)
+toggle left [sidebar | bar]: key(cmd-shift-d)
+toggle right [sidebar | bar]: key(cmd-.)
+bar switch [left]: key(cmd-shift-d)
+bar switch right: key(cmd-.)
+
+# not sure if this works correctly...
+format message: key(ctrl-shift-f)
 
 # DEPRECATED
 (move | next) focus:
