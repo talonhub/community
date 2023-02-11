@@ -102,5 +102,5 @@ ctx.lists["self.unix_argument"] = unix_arguments
 
 @mod.capture(rule="{user.unix_argument}+")
 def unix_arguments(m) -> str:
-    """A non-empty sequence of git command arguments, preceded by a space."""
+    """A non-empty sequence of unix command arguments, preceded by a space."""
     return " " + " ".join(m.unix_argument_list)
