@@ -1,4 +1,4 @@
-from talon import Context, Module
+from talon import Context, Module, actions
 
 from ...core.user_settings import get_list_from_csv
 
@@ -88,7 +88,7 @@ ctx.lists["self.unix_utility"] = unix_utilities
 
 # 2. arguments
 
-default_unix_arguments = {"--help": "help"}
+default_unix_arguments = {"help": "help"}
 
 unix_arguments = get_list_from_csv(
     "unix_arguments.csv",
@@ -103,4 +103,10 @@ ctx.lists["self.unix_argument"] = unix_arguments
 @mod.capture(rule="{user.unix_argument}+")
 def unix_arguments(m) -> str:
     """A non-empty sequence of unix command arguments, preceded by a space."""
-    return " " + " ".join(m.unix_argument_list)
+    return " --".join([""] + m.unix_argument_list)
+
+
+@mod.capture(rule="( {user.unix_argument} | <user.text> )")
+def unix_free_form_argument(m) -> str:
+    """An argument name in kebab-case, with defined arguments being preferred."""
+    return actions.user.formatted_text(m, 'DASH_SEPARATED')
