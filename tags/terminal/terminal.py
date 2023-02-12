@@ -17,6 +17,15 @@ class Actions:
     def terminal_change_directory_root():
         """Root of current drive"""
 
+    def terminal_change_directory_up(count: int):
+        """Traverse a given number of directories upwards"""
+
+    def terminal_change_directory_back():
+        """Traverse back to the previous directory on the directory stack"""
+
+    def terminal_change_directory_toggle():
+        """Toggle traversal between the two most recent directories"""
+
     def terminal_clear_screen():
         """Clear screen"""
 
