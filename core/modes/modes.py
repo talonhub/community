@@ -72,7 +72,9 @@ class Actions:
     def welcome_back():
         """Enables all things"""
         actions.user.mouse_wake()
-        actions.user.hud_enable()
+        if "user.talon_hud_available" in scope.get("tag"):
+            if "rust" != app.branch:
+                actions.user.hud_enable()
         # user.history_enable()
         actions.user.talon_mode()
         actions.mode.enable("noise")
@@ -80,7 +82,7 @@ class Actions:
     def sleep_all():
         """Disables all things"""
         actions.user.switcher_hide_running()
-        #todo: remove when the talon_hud perf is fixed on rust branch
+        # todo: remove when the talon_hud perf is fixed on rust branch
         if "user.talon_hud_available" in scope.get("tag"):
             if "rust" != app.branch:
                 actions.user.hud_disable()
