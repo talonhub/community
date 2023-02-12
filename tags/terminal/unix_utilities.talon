@@ -13,3 +13,4 @@ param (single|sing) [<user.unix_free_form_argument>]:
     insert(" -{unix_free_form_argument or ''}")
 flag [<user.letter>]: " -{letter or ''}"
 # flag shift/ship/uppercase <letter> produces the uppercase variant
+dubdash: " -- "
