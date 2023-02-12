@@ -1,4 +1,4 @@
-from talon import ui, Module, Context, registry, actions, imgui, cron, app
+from talon import ui, Module, Context, registry, actions, imgui, cron, app, scope
 
 mod = Module()
 ctx_zoom_mouse_enabled = Context()
@@ -21,14 +21,21 @@ def sleep_or_wake():
         actions.speech.enable()
         actions.user.microphone_preferred()
         actions.user.mouse_wake()
-        actions.user.hud_enable()
+        #todo: remove when the talon_hud perf is fixed on rust branch
+        if "user.talon_hud_available" in scope.get("tag"):
+            if "rust" != app.branch:
+                actions.user.hud_enable()
         actions.user.connect_ocr_eye_tracker()
         # actions.user.clickless_mouse_enable()
     else:
         actions.user.sleep_all()
         actions.sound.set_microphone("None")
         actions.user.mouse_sleep()
-        actions.user.hud_disable()
+        #todo: remove when the talon_hud perf is fixed on rust branch
+        if "user.talon_hud_available" in scope.get("tag"):
+            if "rust" != app.branch:
+                actions.user.hud_disable()
+
         actions.user.disconnect_ocr_eye_tracker()
         actions.user.disconnect_ocr_eye_tracker()
         # actions.user.clickless_mouse_disable()
@@ -43,6 +50,7 @@ def trigger_home_row():
             actions.key("escape")
     elif app.platform == "windows":
         actions.key("ctrl-m")
+        
 
 
 @mod.action_class
