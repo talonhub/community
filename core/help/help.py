@@ -401,7 +401,7 @@ def refresh_context_command_map(enabled_only=False):
                     if command_alias in registry.commands or not enabled_only:
                         local_context_command_map[context_name][
                             str(val.rule.rule)
-                        ] = val.script.code
+                        ] = val.target.code
                 if len(local_context_command_map[context_name]) == 0:
                     local_context_command_map.pop(context_name)
                 else:
