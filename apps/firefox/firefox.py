@@ -1,4 +1,4 @@
-from talon import Context, Module, actions
+from talon import Context, Module, actions, app
 
 ctx = Context()
 mod = Module()
@@ -22,19 +22,35 @@ app: firefox
 """
 
 
+cmd_ctrl = "cmd" if app.platform == "mac" else "ctrl"
+
+
+@ctx.action_class("user")
+class UserActions:
+    def tab_close_wrapper():
+        actions.sleep("180ms")
+        actions.app.tab_close()
+
+
 @ctx.action_class("browser")
 class BrowserActions:
-    # TODO
-    # action(browser.address):
-    # action(browser.title):
-    def go(url: str):
-        actions.browser.focus_address()
-        actions.sleep("50ms")
-        actions.insert(url)
-        actions.key("enter")
+    def bookmarks():
+        if app.platform == "mac":
+            actions.key("cmd-shift-o")
+        else:
+            actions.key("ctrl-shift-b")
 
-    def focus_search():
-        actions.browser.focus_address()
+    def bookmarks_bar():
+        actions.key(f"{cmd_ctrl}-b")
 
-    def submit_form():
-        actions.key("enter")
+    def open_private_window():
+        actions.key(f"{cmd_ctrl}-shift-p")
+
+    def show_downloads():
+        if app.platform == "linux":
+            actions.key("ctrl-shift-y")
+        else:
+            actions.key(f"{cmd_ctrl}-j")
+
+    def show_extensions():
+        actions.key(f"{cmd_ctrl}-shift-a")

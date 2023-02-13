@@ -1,22 +1,18 @@
-from talon import Context, actions, ui
-from talon.mac import applescript
+from talon import Context, actions, app
 
 ctx = Context()
 ctx.matches = r"""
 os: mac
-app: brave
+tag: browser
 """
-
-
-def brave_app():
-    return ui.apps(bundle="com.brave.Browser")[0]
 
 
 @ctx.action_class("browser")
 class BrowserActions:
-    def address() -> str:
+    def address():
         try:
-            window = brave_app().windows()[0]
+            mac_app = ui.apps(bundle=actions.app.bundle())[0]
+            window = mac_app.windows()[0]
         except IndexError:
             return ""
         try:
@@ -25,11 +21,12 @@ class BrowserActions:
         except (ui.UIErr, AttributeError):
             address = applescript.run(
                 """
-                tell application id "com.brave.Browser"
+                tell application id "{bundle}"
                     if not (exists (window 1)) then return ""
-                    return window 1's active tab's URL
-                end tell
-            """
+                    return the URL of the active tab of the front window
+                end tell""".format(
+                    bundle=actions.app.bundle()
+                )
             )
         return address
 
@@ -47,22 +44,18 @@ class BrowserActions:
 
     def focus_address():
         actions.key("cmd-l")
-        # action(browser.focus_page):
-
-    def focus_search():
-        actions.browser.focus_address()
 
     def go_blank():
         actions.key("cmd-n")
+
+    def go_home():
+        actions.key("cmd-shift-h")
 
     def go_back():
         actions.key("cmd-[")
 
     def go_forward():
         actions.key("cmd-]")
-
-    def go_home():
-        actions.key("cmd-shift-h")
 
     def open_private_window():
         actions.key("cmd-shift-n")
@@ -72,21 +65,15 @@ class BrowserActions:
 
     def reload_hard():
         actions.key("cmd-shift-r")
-        # action(browser.reload_hardest):
-
-    def show_clear_cache():
-        actions.key("cmd-shift-delete")
 
     def show_downloads():
         actions.key("cmd-shift-j")
-        # action(browser.show_extensions)
+
+    def show_clear_cache():
+        actions.key("cmd-shift-backspace")
 
     def show_history():
         actions.key("cmd-y")
-
-    def submit_form():
-        actions.key("enter")
-        # action(browser.title)
 
     def toggle_dev_tools():
         actions.key("cmd-alt-i")
