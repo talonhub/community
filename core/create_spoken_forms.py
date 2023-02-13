@@ -131,7 +131,6 @@ def create_spoken_form_years(num: str):
         if remainder == 0:
             words.append(scales[0])
     else:
-
         # 200X -> two thousand x
         if remainder < 9:
             words.append(REVERSE_PRONUNCIATION_MAP[str(centuries // 10)])
@@ -144,7 +143,6 @@ def create_spoken_form_years(num: str):
     if remainder != 0:
         # 1906 => "nineteen six"
         if remainder < 10:
-
             # todo: decide if we want nineteen oh five"
             # todo: decide if we want "and"
             # both seem like a waste

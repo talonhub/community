@@ -7,6 +7,7 @@ mod = Module()
 
 microphone_device_list = []
 
+
 # by convention, None and System Default are listed first
 # to match the Talon context menu.
 def update_microphone_list():
