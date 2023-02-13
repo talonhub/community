@@ -2,7 +2,7 @@ import os
 import pathlib
 import subprocess
 
-from talon import Module, actions, app, clip, cron, ctrl, imgui, noise, ui, tap
+from talon import Module, actions, app, clip, cron, ctrl, imgui, noise, ui, tap, registry
 from talon_plugins import eye_zoom_mouse
 
 main_screen = ui.main_screen()
