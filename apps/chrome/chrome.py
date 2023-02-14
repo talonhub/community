@@ -29,7 +29,7 @@ app: chrome
 
 
 @mod.action_class
-class UserActions:
+class Actions:
     def chrome_mod(key: str):
         """Press the specified key with the correct modifier key for the OS"""
         if app.platform == "mac":
@@ -37,6 +37,9 @@ class UserActions:
         else:
             actions.key(f"ctrl-{key}")
 
+
+@ctx.action_class("user")
+class UserActions:
     def tab_close_wrapper():
         actions.sleep("180ms")
         actions.app.tab_close()
