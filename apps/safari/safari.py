@@ -14,6 +14,10 @@ app: safari
 """
 
 
+def safari_app():
+    return ui.apps(bundle="com.apple.Safari")[0]
+
+
 @ctx.action_class("browser")
 class BrowserActions:
     def address() -> str:
