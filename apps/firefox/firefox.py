@@ -42,6 +42,11 @@ class BrowserActions:
     def bookmarks_bar():
         actions.key(f"{cmd_ctrl}-b")
 
+    def focus_page():
+        actions.browser.focus_address()
+        actions.edit.find()
+        actions.key("escape")
+
     def go_home():
         actions.key("alt-home")
 

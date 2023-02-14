@@ -71,6 +71,13 @@ class BrowserActions:
     def focus_address():
         actions.key("alt-d")
 
+    def focus_page():
+        actions.browser.focus_address()
+        actions.sleep("180ms")
+        actions.key("esc:2")
+        actions.sleep("180ms")
+        actions.key("esc:2")
+
     def focus_search():
         actions.browser.focus_address()
 
