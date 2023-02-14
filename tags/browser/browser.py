@@ -1,7 +1,8 @@
 from urllib.parse import urlparse
 
-from talon import Context, actions, app
+from talon import Module, Context, actions, app
 
+mod = Module()
 ctx = Context()
 ctx.matches = r"""
 tag: browser
@@ -18,18 +19,25 @@ def is_url(url):
         return False
 
 
+@mod.action_class
+class Actions:
+    def browser_open_address_in_new_tab():
+        """Open the url in the address bar in a new tab"""
+        actions.key("alt-enter")
+
+
 @ctx.action_class("user")
 class UserActions:
     def tab_duplicate():
         actions.browser.focus_address()
         actions.sleep("180ms")
         possibly_edited_url = actions.edit.selected_text()
-        actions.key("esc")
+        actions.key("esc:2")
         actions.browser.focus_address()
         actions.sleep("180ms")
         url_address = actions.edit.selected_text()
         if possibly_edited_url == url_address:
-            actions.key("alt-enter")
+            actions.user.browser_open_address_in_new_tab()
         else:
             actions.user.paste(possibly_edited_url)
             actions.app.tab_open()

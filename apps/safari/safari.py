@@ -18,6 +18,12 @@ def safari_app():
     return ui.apps(bundle="com.apple.Safari")[0]
 
 
+@ctx.action_class("user")
+class UserActions:
+    def browser_open_address_in_new_tab():
+        actions.key("cmd-enter")
+
+
 @ctx.action_class("browser")
 class BrowserActions:
     def address() -> str:
@@ -46,7 +52,17 @@ class BrowserActions:
         return address
 
     def bookmark_tabs():
-        raise NotImplementedError
+        raise NotImplementedError(
+            "Action 'browser.bookmark_tabs' exists but it is not implemented for this Context"
+        )
+
+    def show_clear_cache():
+        raise NotImplementedError(
+            "Action 'browser.show_clear_cache' exists but it is not implemented for this Context"
+        )
+
+    def reload_hard():
+        actions.key("cmd-alt-r")
 
     def show_downloads():
         actions.key("cmd-alt-l")
