@@ -1,4 +1,4 @@
-from talon import Context, actions, app, ui
+from talon import Context, actions, app, ui, mac
 from talon.mac import applescript
 
 ctx = Context()
@@ -20,15 +20,18 @@ class BrowserActions:
             web_area = window.element.children.find_one(AXRole="AXWebArea")
             address = web_area.AXURL
         except (ui.UIErr, AttributeError):
-            address = applescript.run(
-                """
-                tell application id "{bundle}"
-                    if not (exists (window 1)) then return ""
-                    return the URL of the active tab of the front window
-                end tell""".format(
-                    bundle=actions.app.bundle()
+            try:
+                address = applescript.run(
+                    """
+                    tell application id "{bundle}"
+                        if not (exists (window 1)) then return ""
+                        return the URL of the active tab of the front window
+                    end tell""".format(
+                        bundle=actions.app.bundle()
+                    )
                 )
-            )
+            except mac.applescript.ApplescriptErr:
+                return ""
         return address
 
     def bookmark():
