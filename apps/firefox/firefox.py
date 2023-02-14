@@ -21,7 +21,6 @@ ctx.matches = r"""
 app: firefox
 """
 
-
 cmd_ctrl = "cmd" if app.platform == "mac" else "ctrl"
 
 
@@ -42,6 +41,9 @@ class BrowserActions:
 
     def bookmarks_bar():
         actions.key(f"{cmd_ctrl}-b")
+
+    def go_home():
+        actions.key("alt-home")
 
     def open_private_window():
         actions.key(f"{cmd_ctrl}-shift-p")
