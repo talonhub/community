@@ -9,7 +9,7 @@ core {user.unix_utility} [<user.unix_arguments>] [over]:
 # standalone arguments (predefined arguments preferred)
 param [<user.unix_free_form_argument>] [over]:
     insert(" --{unix_free_form_argument or ''}")
-param (single|sing) [<user.unix_free_form_argument>] [over]:
+param (single | sing) [<user.unix_free_form_argument>] [over]:
     insert(" -{unix_free_form_argument or ''}")
 flag [<user.letter>]: " -{letter or ''}"
 # flag shift/ship/uppercase <letter> produces the uppercase variant
