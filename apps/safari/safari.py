@@ -41,6 +41,9 @@ class BrowserActions:
             )
         return address
 
+    def bookmark_tabs():
+        raise NotImplementedError
+
     def show_downloads():
         actions.key("cmd-alt-l")
 
