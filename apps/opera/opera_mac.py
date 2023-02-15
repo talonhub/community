@@ -23,7 +23,9 @@ class UserActions:
         actions.key("enter")
 
     def tab_final():
-        raise NotImplementedError("Opera doesn't support this functionality")
+        raise NotImplementedError(
+            "Opera doesn't have a default shortcut for this functionality but it can be configured"
+        )
 
 
 @ctx.action_class("app")
