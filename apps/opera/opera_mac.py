@@ -62,3 +62,6 @@ class BrowserActions:
 
     def focus_page():
         actions.key("cmd-alt-l")
+
+    def reload_hard():
+        actions.key("shift-5")

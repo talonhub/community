@@ -13,7 +13,7 @@ os: windows
 and app.exe: opera.exe
 """
 apps.opera = """
-  os: linux
+os: linux
 and app.exe: opera
 """
 

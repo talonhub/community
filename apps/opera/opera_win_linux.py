@@ -1,4 +1,4 @@
-from talon import Context, actions
+from talon import Context, actions, app
 
 ctx = Context()
 ctx.matches = r"""
@@ -22,6 +22,18 @@ class UserActions:
         actions.app.tab_open()
         actions.user.paste(url_address)
         actions.key("enter")
+
+    def tab_jump(number: int):
+        if number < 9:
+            actions.key(f"ctrl-{number}")
+
+    def tab_final():
+        if app.platform == "windows":
+            actions.key("ctrl-9")
+        else:
+            raise NotImplementedError(
+                "Opera doesn't have a default shortcut for this functionality but it can be configured"
+            )
 
 
 @ctx.action_class("app")
@@ -65,3 +77,6 @@ class BrowserActions:
 
     def focus_page():
         actions.key("f9")
+
+    def reload_hard():
+        actions.key("shift-5")
