@@ -37,7 +37,7 @@ class BrowserActions:
         if app.platform == "mac":
             actions.key("cmd-shift-o")
         else:
-            actions.key("ctrl-shift-b")
+            actions.next()
 
     def bookmarks_bar():
         actions.key(f"{cmd_ctrl}-b")
@@ -45,6 +45,7 @@ class BrowserActions:
     def focus_page():
         actions.browser.focus_address()
         actions.edit.find()
+        actions.sleep("180ms")
         actions.key("escape")
 
     def go_home():
