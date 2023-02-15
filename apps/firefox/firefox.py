@@ -24,6 +24,20 @@ app: firefox
 cmd_ctrl = "cmd" if app.platform == "mac" else "ctrl"
 
 
+@mod.action_class
+class Actions:
+    def firefox_bookmarks_sidebar():
+        """Toggles the Firefox bookmark sidebar"""
+        actions.key(f"{cmd_ctrl}-b")
+
+    def firefox_history_sidebar():
+        """Toggles the Firefox history sidebar"""
+        if app.platform == "mac":
+            actions.key("cmd-shift-h")
+        else:
+            actions.key("ctrl-h")
+
+
 @ctx.action_class("user")
 class UserActions:
     def tab_close_wrapper():
@@ -38,9 +52,6 @@ class BrowserActions:
             actions.key("cmd-shift-o")
         else:
             actions.next()
-
-    def bookmarks_bar():
-        actions.key(f"{cmd_ctrl}-b")
 
     def focus_page():
         actions.browser.focus_address()
