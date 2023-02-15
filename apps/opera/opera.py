@@ -1,6 +1,5 @@
-from talon import Module, Context, actions
+from talon import Module
 
-ctx = Context()
 mod = Module()
 apps = mod.apps
 apps.opera = "app.name: Opera"
