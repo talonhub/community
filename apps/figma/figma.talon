@@ -1,5 +1,6 @@
 app: chrome
 app: Figma Beta
+app: Figma
 app: Brave Browser
 -
 component: user.figma_component()

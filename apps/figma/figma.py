@@ -2,7 +2,7 @@ from talon import Module
 
 mod = Module()
 apps = mod.apps
-apps.figma = "app.name: Chrome OR app.name: Figma Beta OR app.name: Brave Browser" 
+apps.figma = "app.name: Chrome OR app.name: Figma Beta OR app.name: Figma OR app.name: Brave Browser" 
 
 
 @mod.action_class

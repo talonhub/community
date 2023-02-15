@@ -4,6 +4,7 @@ ctx.matches = r"""
 os: mac
 app: Chrome
 app: Figma Beta
+app: Figma
 app: Brave Browser
 """
 
