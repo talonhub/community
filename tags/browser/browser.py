@@ -31,7 +31,7 @@ class UserActions:
     def tab_jump(number: int):
         if number < 9:
             if app.platform == "windows":
-                actions.key("ctrl-{number}")
+                actions.key(f"ctrl-{number}")
             else:
                 actions.key(f"alt-{number}")
 
