@@ -84,10 +84,10 @@ class EditActions:
         actions.key("shift-alt-right")
 
     def file_end():
-        actions.key("cmd-down cmd-left")
+        actions.key("cmd-down")
 
     def file_start():
-        actions.key("cmd-up cmd-left")
+        actions.key("cmd-up")
 
     def find(text: str = None):
         actions.key("cmd-f")
@@ -170,11 +170,6 @@ class EditActions:
         actions.key("right")
         # action(edit.select_paragraph):
         # action(edit.select_sentence):
-
-    def select_word():
-        actions.edit.right()
-        actions.edit.word_left()
-        actions.edit.extend_word_right()
 
     def undo():
         actions.key("cmd-z")

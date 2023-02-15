@@ -7,3 +7,4 @@ __pycache__
 .vscode/settings.json
 # Dylan
 /dylan
+.DS_Store

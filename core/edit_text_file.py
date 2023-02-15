@@ -22,7 +22,7 @@ _csvs = {
         "additional words": "additional_words.csv",
     }.items()
 }
-_csvs["homophones"] = os.path.join(REPO_DIR, "code", "homophones.csv")
+_csvs["homophones"] = os.path.join(REPO_DIR, "core", "homophones", "homophones.csv")
 ctx.lists["self.talon_settings_csv"] = _csvs
 
 

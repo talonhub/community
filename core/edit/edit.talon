@@ -135,13 +135,9 @@ copy word:
     edit.select_word()
     edit.copy()
 
-copy word left:
-    edit.extend_word_left()
-    edit.copy()
+copy word left: user.copy_word_left()
 
-copy word right:
-    edit.extend_word_right()
-    edit.copy()
+copy word right: user.copy_word_right()
 
 copy line:
     edit.select_line()
@@ -169,18 +165,16 @@ cut word:
     edit.select_word()
     edit.cut()
 
-cut word left:
-    edit.extend_word_left()
-    edit.cut()
+cut word left: user.cut_word_left()
 
-cut word right:
-    edit.extend_word_right()
-    edit.cut()
+cut word right: user.cut_word_right()
 
-cut line:
-    edit.select_line()
-    edit.cut()
+cut line: user.cut_line()
 
 (pace | paste) all:
     edit.select_all()
     edit.paste()
+
+# duplication
+clone that: edit.selection_clone()
+clone line: edit.line_clone()

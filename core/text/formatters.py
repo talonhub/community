@@ -199,7 +199,7 @@ class ImmuneString:
 @mod.capture(
     # Add anything else into this that you want to be able to speak during a
     # formatter.
-    rule="(<user.symbol_key> | numb <number>)"
+    rule="(<user.symbol_key> | (numb | numeral) <number>)"
 )
 def formatter_immune(m) -> ImmuneString:
     """Text that can be interspersed into a formatter, e.g. characters.
@@ -226,6 +226,8 @@ class Actions:
 
     def insert_with_history(text: str):
         """Inserts some text, remembering it in the phrase history."""
+        actions.user.deprecate_action("2022-12-11", "user.insert_with_history")
+
         actions.user.add_phrase_to_history(text)
         actions.insert(text)
 
@@ -256,7 +258,7 @@ class Actions:
         actions.insert(text)
         return text
 
-    def get_formatters_words():
+    def get_formatters_words() -> dict:
         """returns a list of words currently used as formatters, and a demonstration string using those formatters"""
         formatters_help_demo = {}
         for name in sorted(set(formatters_words.keys())):
