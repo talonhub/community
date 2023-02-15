@@ -37,11 +37,9 @@ class UserActions:
 
     def tab_final():
         if app.platform == "windows":
-            actions.key(f"{cmd_ctrl}-9")
+            actions.key("ctrl-9")
         else:
-            raise NotImplementedError(
-                "Action 'user.tab_final' exists but it is not implemented for this Context"
-            )
+            actions.key("alt-9")
 
     def tab_duplicate():
         actions.browser.focus_address()
