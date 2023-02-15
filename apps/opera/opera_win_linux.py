@@ -32,6 +32,10 @@ class UserActions:
             "Opera doesn't have a default shortcut for this functionality but it can be configured"
         )
 
+    def tab_close_wrapper():
+        actions.sleep("180ms")
+        actions.app.tab_close()
+
 
 @ctx.action_class("app")
 class AppActions:
