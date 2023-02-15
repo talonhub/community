@@ -28,12 +28,9 @@ class UserActions:
             actions.key(f"ctrl-{number}")
 
     def tab_final():
-        if app.platform == "windows":
-            actions.key("ctrl-9")
-        else:
-            raise NotImplementedError(
-                "Opera doesn't have a default shortcut for this functionality but it can be configured"
-            )
+        raise NotImplementedError(
+            "Opera doesn't have a default shortcut for this functionality but it can be configured"
+        )
 
 
 @ctx.action_class("app")
