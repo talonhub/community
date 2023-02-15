@@ -48,10 +48,7 @@ class UserActions:
 @ctx.action_class("browser")
 class BrowserActions:
     def bookmarks():
-        if app.platform == "mac":
-            actions.key("cmd-shift-o")
-        else:
-            actions.key("cmd-alt-b")
+        actions.key(f"{cmd_ctrl}-shift-o")
 
     def focus_page():
         actions.browser.focus_address()
