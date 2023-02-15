@@ -32,15 +32,5 @@ class UserActions:
 
 @ctx.action_class("browser")
 class BrowserActions:
-    def bookmark_tabs():
-        raise NotImplementedError(
-            "Action 'browser.bookmark_tabs' exists but it is not implemented for this Context"
-        )
-
-    def go_home():
-        raise NotImplementedError(
-            "Action 'browser.go_home' exists but it is not implemented for this Context"
-        )
-
     def reload_hard():
         actions.key("shift-f5")
