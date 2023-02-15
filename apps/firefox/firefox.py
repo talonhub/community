@@ -51,7 +51,7 @@ class BrowserActions:
         if app.platform == "mac":
             actions.key("cmd-shift-o")
         else:
-            actions.next()
+            actions.key("cmd-alt-b")
 
     def focus_page():
         actions.browser.focus_address()
@@ -73,3 +73,9 @@ class BrowserActions:
 
     def show_extensions():
         actions.key(f"{cmd_ctrl}-shift-a")
+
+    def show_history():
+        if app.platform == "mac":
+            actions.key("cmd-y")
+        else:
+            actions.key("ctrl-shift-h")
