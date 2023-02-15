@@ -41,7 +41,7 @@ class BrowserActions:
                     )
                 )
             except mac.applescript.ApplescriptErr:
-                return ""
+                return actions.next()
         return address
 
     def bookmark():
