@@ -125,7 +125,7 @@ class BrowserActions:
         actions.key("ctrl-j")
 
     def show_clear_cache():
-        actions.key("ctrl-shift-backspace")
+        actions.key("ctrl-shift-delete")
 
     def show_history():
         actions.key("ctrl-h")
