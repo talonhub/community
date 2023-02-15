@@ -52,12 +52,12 @@ class BrowserActions:
         return address
 
     def bookmark_tabs():
-        print(
+        raise NotImplementedError(
             "Safari doesn't have a default shortcut for this functionality but it can be configured"
         )
 
     def show_clear_cache():
-        print("Safari doesn't support this functionality")
+        raise NotImplementedError("Safari doesn't support this functionality")
 
     def reload_hard():
         actions.key("cmd-alt-r")

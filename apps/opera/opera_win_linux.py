@@ -48,15 +48,15 @@ class AppActions:
 @ctx.action_class("browser")
 class BrowserActions:
     def bookmarks_bar():
-        print(
+        raise NotImplementedError(
             "Opera doesn't have a default shortcut for this functionality but it can be configured"
         )
 
     def bookmark_tabs():
-        print("Opera doesn't support this functionality")
+        raise NotImplementedError("Opera doesn't support this functionality")
 
     def go_home():
-        print("Opera doesn't support this functionality")
+        raise NotImplementedError("Opera doesn't support this functionality")
 
     def go_back():
         actions.browser.focus_page()
