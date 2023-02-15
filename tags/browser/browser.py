@@ -28,6 +28,21 @@ class Actions:
 
 @ctx.action_class("user")
 class UserActions:
+    def tab_jump(number: int):
+        if number < 9:
+            if app.platform == "windows":
+                actions.key("ctrl-{number}")
+            else:
+                actions.key(f"alt-{number}")
+
+    def tab_final():
+        if app.platform == "windows":
+            actions.key(f"{cmd_ctrl}-9")
+        else:
+            raise NotImplementedError(
+                "Action 'user.tab_final' exists but it is not implemented for this Context"
+            )
+
     def tab_duplicate():
         actions.browser.focus_address()
         actions.sleep("180ms")

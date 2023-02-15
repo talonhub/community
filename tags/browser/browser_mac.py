@@ -8,6 +8,16 @@ tag: browser
 """
 
 
+@ctx.action_class("user")
+class UserActions:
+    def tab_jump(number: int):
+        if number < 9:
+            actions.key("cmd-{number}")
+
+    def tab_final():
+        actions.key("cmd-9")
+
+
 @ctx.action_class("browser")
 class BrowserActions:
     def address():

@@ -9,18 +9,9 @@ cmd_ctrl = "cmd" if app.platform == "mac" else "ctrl"
 class tab_actions:
     def tab_jump(number: int):
         """Jumps to the specified tab"""
-        if number < 9:
-            if app.platform == "linux":
-                actions.key(f"alt-{number}")
-            else:
-                actions.key(f"{cmd_ctrl}-{number}")
 
     def tab_final():
         """Jumps to the final tab"""
-        if app.platform == "linux":
-            pass
-        else:
-            actions.key(f"{cmd_ctrl}-9")
 
     def tab_close_wrapper():
         """Closes the current tab.
