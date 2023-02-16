@@ -1,4 +1,4 @@
-from talon import Context, actions, app, ui, mac
+from talon import Context, actions, app, mac, ui
 from talon.mac import applescript
 
 ctx = Context()
