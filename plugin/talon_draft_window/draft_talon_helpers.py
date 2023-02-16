@@ -49,6 +49,7 @@ setting_text_size = mod.setting(
 
 draft_manager = DraftManager()
 
+
 # Update the styling of the draft window dynamically as user settings change
 def _update_draft_style(*args):
     draft_manager.set_styling(
