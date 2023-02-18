@@ -20,6 +20,7 @@ mod.apps.chrome = """
 os: linux
 app.exe: chrome
 app.exe: chromium-browser
+app.exe: chromium
 """
 mod.apps.chrome = """
 os: linux
