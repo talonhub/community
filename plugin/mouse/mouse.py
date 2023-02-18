@@ -247,10 +247,17 @@ def show_cursor_helper(show):
         ctrl.cursor_visible(show)
 
 
-def on_pop(active):
+def on_pop(_active):
+    # Only want the pop noise to click when we're using an eye tracker
+    is_using_eye_tracker = (
+        actions.tracking.control_zoom_enabled() or
+        actions.tracking.control_enabled() or
+        actions.tracking.control1_enabled()
+    )
+
     if setting_mouse_enable_pop_stops_scroll.get() >= 1 and (gaze_job or scroll_job):
         stop_scroll()
-    elif not actions.tracking.control_zoom_enabled():
+    elif is_using_eye_tracker and not actions.tracking.control_zoom_enabled():
         if setting_mouse_enable_pop_click.get() >= 1:
             ctrl.mouse_click(button=0, hold=16000)
 
