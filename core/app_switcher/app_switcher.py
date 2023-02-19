@@ -287,6 +287,18 @@ class Actions:
                 raise RuntimeError(f"Can't focus window: {window.title}")
             actions.sleep(0.1)
 
+    def switcher_focus_window_by_name(application_name: str, window_name: str):
+        """Something here"""
+        app = actions.user.get_running_app(application_name)
+        if app:
+            for window in app.windows():
+                print(window.title)
+                if window_name in window.title:
+
+                    window.focus()
+                    return True
+        return False
+
     def switcher_launch(path: str):
         """Launch a new application by path (all OSes), or AppUserModel_ID path on Windows"""
         if app.platform != "windows":

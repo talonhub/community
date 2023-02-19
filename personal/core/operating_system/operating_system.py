@@ -102,26 +102,38 @@ class Actions:
 
         actions.user.parse_phrase(phrase or "")
 
-    def system_show_messenger(phrase: str = None):
+    def system_show_messenger():
         """Opens the default browser for the up operating system and performs the phrase command"""
-        is_running = actions.user.switcher_focus(messaging_application.get())
-        actions.sleep("250ms")
-        if is_running:
-            actions.user.parse_phrase(phrase or "")
+        # is_running = actions.user.switcher_focus(messaging_application.get())
+        success = actions.user.switcher_focus_window_by_name(
+            portal_name.get(), "https://teams.microsoft.com/"
+        )
+        if not success:
+            actions.user.open_new_url("https://teams.microsoft.com/")
 
-    def system_show_slacker(phrase: str = None):
+    def system_show_slacker():
         """Opens the default browser for the up operating system and performs the phrase command"""
-        is_running = actions.user.switcher_focus("slack")
-        actions.sleep("250ms")
-        if is_running:
-            actions.user.parse_phrase(phrase or "")
+        success = actions.user.switcher_focus_window_by_name(
+            portal_name.get(), "https://app.slack.com/"
+        )
+        if not success:
+            actions.user.open_url("https://app.slack.com/")
+        # is_running = actions.user.switcher_focus("slack")
+        # actions.sleep("250ms")
+        # if is_running:
+        #     actions.user.parse_phrase(phrase or "")
 
     def system_show_email(phrase: str = None):
         """Opens the default browser for the up operating system and performs the phrase command"""
-        is_running = actions.user.switcher_focus("outlook")
-        actions.sleep("250ms")
-        if is_running:
-            actions.user.parse_phrase(phrase or "")
+        success = actions.user.switcher_focus_window_by_name(
+            portal_name.get(), "https://outlook.office.com/"
+        )
+        if not success:
+            actions.user.open_url("https://outlook.office.com/mail/")
+        # is_running = actions.user.switcher_focus("outlook")
+        # actions.sleep("250ms")
+        # if is_running:
+        #     actions.user.parse_phrase(phrase or "")
 
     def system_show_gitter(phrase: str = None):
         """Opens the default browser for the up operating system and performs the phrase command"""
@@ -129,14 +141,14 @@ class Actions:
         actions.sleep("250ms")
         if is_running:
             actions.user.parse_phrase(phrase or "")
-            
+
     def system_show_taskmanager(phrase: str = None):
         """Opens the default browser for the up operating system and performs the phrase command"""
         is_running = actions.user.switcher_focus("task manager")
         actions.sleep("250ms")
         if is_running:
             actions.user.parse_phrase(phrase or "")
-    
+
     def system_taskmanager_find_focused_application(phrase: str = None):
         """Opens the default browser for the up operating system and performs the phrase command"""
         current_application = actions.app.executable().split("\\")[-1]
