@@ -14,6 +14,12 @@ portal_name = mod.setting(
     default="chrome",
     desc="The default portal to switch to",
 )
+email_web_address = mod.setting(
+    "email_web_address",
+    type=str,
+    default="https://mail.google.com/",
+    desc="the default web mail client",
+)
 coder_name = mod.setting(
     "system_coder_name",
     type=str,
@@ -126,10 +132,10 @@ class Actions:
     def system_show_email(phrase: str = None):
         """Opens the default browser for the up operating system and performs the phrase command"""
         success = actions.user.switcher_focus_window_by_name(
-            portal_name.get(), "https://outlook.office.com/"
+            portal_name.get(), email_web_address.get()  # "https://outlook.office.com/"
         )
         if not success:
-            actions.user.open_url("https://outlook.office.com/mail/")
+            actions.user.open_url(email_web_address.get())
         # is_running = actions.user.switcher_focus("outlook")
         # actions.sleep("250ms")
         # if is_running:
