@@ -258,17 +258,21 @@ class Actions:
 
     def switcher_focus(name: str):
         """Focus a new application by name"""
-        app = actions.user.get_running_app(name)
+        # print(name)
+        application = actions.user.get_running_app(name)
 
-        if app:
-            print(name)
-            actions.user.switcher_focus_app(app)
+        if application:
+            actions.user.switcher_focus_app(application)
             return True
         elif name in ctx.lists["self.launch"]:
             actions.user.switcher_launch(ctx.lists["self.launch"][name])
-
-            while name not in ctx.lists["self.running"]:
-                actions.sleep(0.1)
+            t1 = time.perf_counter()
+            # while name != ctx.lists["self.launch"][name]:
+            #     print(ui.active_app().name)
+            #     print(ctx.lists["self.launch"][name])
+            #     if time.perf_counter() - t1 > 3:
+            #         raise RuntimeError(f"Can't focus app: {name}")
+            #     actions.sleep(0.1)
 
     def switcher_focus_app(app: ui.App):
         """Focus application and wait until switch is made"""
@@ -290,10 +294,13 @@ class Actions:
 
     def switcher_focus_window_by_name(application_name: str, window_name: str):
         """Something here"""
-        app = actions.user.get_running_app(application_name)
-        if app:
-            for window in app.windows():
-                print(window.title)
+        # print(application_name)
+        # print(window_name)
+        application = actions.user.get_running_app(application_name)
+        if application:
+            # print("application found")
+            for window in application.windows():
+                # print("title:"  + window.title)
                 if window_name in window.title:
 
                     window.focus()

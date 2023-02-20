@@ -129,13 +129,15 @@ class Actions:
         # if is_running:
         #     actions.user.parse_phrase(phrase or "")
 
-    def system_show_email(phrase: str = None):
-        """Opens the default browser for the up operating system and performs the phrase command"""
+    def system_show_email():
+        """Opens the defaul6t browser for the up operating system and performs the phrase command"""
         success = actions.user.switcher_focus_window_by_name(
             portal_name.get(), email_web_address.get()  # "https://outlook.office.com/"
         )
         if not success:
-            actions.user.open_url(email_web_address.get())
+            actions.user.open_new_url(email_web_address.get())
+            # is_running = actions.user.switcher_focus("gmail")
+
         # is_running = actions.user.switcher_focus("outlook")
         # actions.sleep("250ms")
         # if is_running:
@@ -158,6 +160,7 @@ class Actions:
     def system_taskmanager_find_focused_application(phrase: str = None):
         """Opens the default browser for the up operating system and performs the phrase command"""
         current_application = actions.app.executable().split("\\")[-1]
+
         is_running = actions.user.switcher_focus("task manager")
         actions.sleep("250ms")
         actions.key("ctrl-f")

@@ -1,7 +1,7 @@
 os: mac
 -
 settings():
-     user.system_portal_name = "firefox"
+     user.system_portal_name = "chrome"
      user.system_messaging_application_name = "messages"
      user.system_settings_application_name = "settings"
 

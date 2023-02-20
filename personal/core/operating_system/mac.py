@@ -87,39 +87,40 @@ class UserActionsMac:
         subprocess.Popen(["open", path])
 
     def system_show_clipboard():
-        actions.key('cmd-shift-c')
+        actions.key("cmd-shift-c")
 
     def system_kill_focused_application():
         """Kills the focused application"""
         for application in ui.apps(background=False):
             if application.name == actions.app.name():
-                application.appscript().quit(waitreply=False)        
-                
-    def system_show_email(phrase: str = None):
+                application.appscript().quit(waitreply=False)
+
+    def system_show_email():
         is_running = actions.user.switcher_focus("gmail")
-        
+
     def system_show_slacker():
         is_running = actions.user.switcher_focus("slack")
-        
+
 
 def on_ready():
     update_preferences_list()
 
+
 if app.platform == "mac":
     app.register("ready", on_ready)
-    
+
 ctx.lists["self.directories"] = {
-    'applications': "/Applications",
-    'bootcamp': "/Volumes/BOOTCAMP",
-    'desk': os.path.expanduser("~/Desktop"), 
-    'docks': os.path.expanduser("~/Documents"), 
-    'downloads': os.path.expanduser("~/Downloads"), 
-    'pictures': os.path.expanduser("~/Pictures"), 
-    'user': os.path.expanduser("~"),
-    'profile': os.path.expanduser("~"),
-    'talent home': os.path.expanduser("~/.talon"),
-    'talent user': os.path.expanduser("~/.talon/user"),
-    'talent recordings': os.path.expanduser("~/.talon/recordings"), 
-    'talent plugins': "/Applications/Talon Pro.app/Contents/Resources/talon_plugins",
-    'root': "/"
+    "applications": "/Applications",
+    "bootcamp": "/Volumes/BOOTCAMP",
+    "desk": os.path.expanduser("~/Desktop"),
+    "docks": os.path.expanduser("~/Documents"),
+    "downloads": os.path.expanduser("~/Downloads"),
+    "pictures": os.path.expanduser("~/Pictures"),
+    "user": os.path.expanduser("~"),
+    "profile": os.path.expanduser("~"),
+    "talent home": os.path.expanduser("~/.talon"),
+    "talent user": os.path.expanduser("~/.talon/user"),
+    "talent recordings": os.path.expanduser("~/.talon/recordings"),
+    "talent plugins": "/Applications/Talon Pro.app/Contents/Resources/talon_plugins",
+    "root": "/",
 }

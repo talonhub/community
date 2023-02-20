@@ -119,6 +119,10 @@ class UserActionsWin:
             if application.name == actions.app.name():
                 os.kill(application.pid, 0)
 
+    # def system_show_email():
+
+    #     is_running = actions.user.switcher_focus("gmail")
+
 
 def shutdown(flag: str):
     actions.key("super-r")
