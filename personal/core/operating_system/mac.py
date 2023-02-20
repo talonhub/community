@@ -94,6 +94,13 @@ class UserActionsMac:
         for application in ui.apps(background=False):
             if application.name == actions.app.name():
                 application.appscript().quit(waitreply=False)        
+                
+    def system_show_email(phrase: str = None):
+        is_running = actions.user.switcher_focus("gmail")
+        
+    def system_show_slacker():
+        is_running = actions.user.switcher_focus("slack")
+        
 
 def on_ready():
     update_preferences_list()

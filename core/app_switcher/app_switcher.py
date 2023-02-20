@@ -29,6 +29,7 @@ running_application_dict = {}
 mac_application_directories = [
     "/Applications",
     "/Applications/Utilities",
+    "/Users/knausj/Applications/Chrome Apps.localized",
     "/System/Applications",
     "/System/Applications/Utilities",
 ]

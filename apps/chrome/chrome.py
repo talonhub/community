@@ -3,6 +3,14 @@ from talon import Context, Module, actions, app
 ctx = Context()
 mod = Module()
 
+mod.apps.chrome = """
+os: mac
+and app.bundle: com.google.Chrome.app.fmgjjmmmlfnkbppncabfkddbjimcfncm
+"""
+mod.apps.chrome = """
+os: mac
+and app.bundle: com.google.Chrome.app.nabnijjbhmmgnnohmlablhajenhllcda
+"""
 mod.apps.chrome = "app.name: Google Chrome"
 mod.apps.chrome = """
 os: windows
