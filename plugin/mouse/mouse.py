@@ -2,7 +2,19 @@ import os
 import pathlib
 import subprocess
 
-from talon import Module, actions, app, clip, cron, ctrl, imgui, noise, ui, tap, registry
+from talon import (
+    Module,
+    actions,
+    app,
+    clip,
+    cron,
+    ctrl,
+    imgui,
+    noise,
+    ui,
+    tap,
+    registry,
+)
 from talon_plugins import eye_zoom_mouse
 
 main_screen = ui.main_screen()
@@ -124,7 +136,7 @@ class Actions:
     def mouse_wake():
         """Enable control mouse, zoom mouse, and disables cursor"""
         try:
-            actions.tracking.control_zoom_toggle(True)     
+            actions.tracking.control_zoom_toggle(True)
         except Exception as e:
             actions.app.notify("Failed to access eye tracker, restarting Talon")
             actions.sleep("500ms")
@@ -309,28 +321,26 @@ if eye_zoom_mouse.zoom_mouse.enabled:
 def on_pop(active):
     if setting_mouse_enable_pop_stops_scroll.get() >= 1 and (gaze_job or scroll_job):
         stop_scroll()
-    elif (
-        not actions.tracking.control_zoom_enabled()
-    ):
+    elif not actions.tracking.control_zoom_enabled():
         if setting_mouse_enable_pop_click.get() >= 1:
             ctrl.mouse_click(button=0, hold=16000)
-    elif (
-        actions.tracking.control_zoom_enabled()
-        and "talon_plugins.eye_zoom_mouse.zoom_mouse_noise" in registry.tags
-    ):
-        eye_zoom_mouse.zoom_mouse.on_pop(eye_zoom_mouse.zoom_mouse.state)
+    elif actions.tracking.control_zoom_enabled():
+        if "talon_plugins.eye_zoom_mouse.zoom_mouse_noise" in registry.tags:
+            eye_zoom_mouse.zoom_mouse.on_pop(eye_zoom_mouse.zoom_mouse.state)
+        else:
+            actions.user.move_cursor_to_gaze_point()
 
 
 def on_hiss(active):
-    if (
-        actions.tracking.control_zoom_enabled()
-        and "talon_plugins.eye_zoom_mouse.zoom_mouse_noise" in registry.tags
-    ):
-        eye_zoom_mouse.zoom_mouse.on_hiss(eye_zoom_mouse.zoom_mouse.state)
+    if actions.tracking.control_zoom_enabled():
+        if "talon_plugins.eye_zoom_mouse.zoom_mouse_noise" in registry.tags:
+            eye_zoom_mouse.zoom_mouse.on_hiss(eye_zoom_mouse.zoom_mouse.state)
+        else:
+            actions.skip()
 
 
 noise.register("pop", on_pop)
-#noise.register("hiss", on_hiss)
+# noise.register("hiss", on_hiss)
 
 
 def mouse_scroll(amount):
