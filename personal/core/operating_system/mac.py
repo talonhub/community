@@ -100,6 +100,9 @@ class UserActionsMac:
 
     def system_show_slacker():
         is_running = actions.user.switcher_focus("slack")
+    def system_show_messenger():
+        """Opens the default browser for the up operating system and performs the phrase command"""
+        is_running = actions.user.switcher_focus("messages")
 
 
 def on_ready():
