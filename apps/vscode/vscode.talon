@@ -25,6 +25,9 @@ bar search: user.vscode("workbench.view.search")
 bar source: user.vscode("workbench.view.scm")
 bar test: user.vscode("workbench.view.testing.focus")
 bar switch: user.vscode("workbench.action.toggleSidebarVisibility")
+search next: user.vscode("search.action.focusNextSearchResult")
+search last: user.vscode("search.action.focusPreviousSearchResult")
+bar collapse: user.vscode("workbench.files.action.collapseExplorerFolders")
 
 # Symbol search
 symbol hunt [<user.text>]:
@@ -42,16 +45,24 @@ panel control: user.vscode("workbench.panel.repl.view.focus")
 panel output: user.vscode("workbench.panel.output.focus")
 problem show: user.vscode("workbench.panel.markers.view.focus")
 low dog: user.vscode("workbench.action.togglePanel")
-panel terminal: user.vscode("workbench.action.terminal.focus")
+term show:
+    user.vscode("workbench.action.terminal.focus")
+    sleep(250ms)
+low show: user.vscode("workbench.action.focusPanel")
 pan edit: user.vscode("workbench.action.focusActiveEditorGroup")
 
 # Settings
-show settings: user.vscode("workbench.action.openGlobalSettings")
+show settings:
+    sleep(50ms)
+    user.vscode("workbench.action.openGlobalSettings")
+    sleep(250ms)
 show settings json: user.vscode("workbench.action.openSettingsJson")
 show settings folder: user.vscode("workbench.action.openFolderSettings")
-show settings folder json: user.vscode("workbench.action.openFolderSettingsFile")
+show settings folder json:
+    user.vscode("workbench.action.openFolderSettingsFile")
 show settings workspace: user.vscode("workbench.action.openWorkspaceSettings")
-show settings workspace json: user.vscode("workbench.action.openWorkspaceSettingsFile")
+show settings workspace json:
+    user.vscode("workbench.action.openWorkspaceSettingsFile")
 show shortcuts: user.vscode("workbench.action.openGlobalKeybindings")
 show shortcuts json: user.vscode("workbench.action.openGlobalKeybindingsFile")
 show snippets: user.vscode("workbench.action.openSnippets")
@@ -62,7 +73,9 @@ fullscreen switch: user.vscode("workbench.action.toggleFullScreen")
 theme switch: user.vscode("workbench.action.selectTheme")
 wrap switch: user.vscode("editor.action.toggleWordWrap")
 zen switch: user.vscode("workbench.action.toggleZenMode")
-
+zen mode:
+    user.vscode("workbench.action.closeSidebar")
+    user.vscode("workbench.action.closePanel")
 # File Commands
 go file [<user.text>]:
     user.vscode("workbench.action.quickOpen")
@@ -116,14 +129,16 @@ definition peek: user.vscode("editor.action.peekDefinition")
 definition side: user.vscode("editor.action.revealDefinitionAside")
 references show: user.vscode("editor.action.goToReferences")
 hierarchy peek: user.vscode("editor.showCallHierarchy")
-references find: user.vscode("references-view.find")
+ref show: user.vscode("references-view.find")
 format that: user.vscode("editor.action.formatDocument")
 format selection: user.vscode("editor.action.formatSelection")
 imports fix: user.vscode("editor.action.organizeImports")
 problem next: user.vscode("editor.action.marker.nextInFiles")
 problem last: user.vscode("editor.action.marker.prevInFiles")
 problem fix: user.vscode("problems.action.showQuickFixes")
-rename that: user.vscode("editor.action.rename")
+rename that:
+    user.vscode("editor.action.rename")
+    sleep(100ms)
 refactor that: user.vscode("editor.action.refactor")
 whitespace trim: user.vscode("editor.action.trimTrailingWhitespace")
 language switch: user.vscode("workbench.action.editor.changeLanguageMode")
@@ -230,6 +245,12 @@ test debug failed: user.vscode("testing.debugFailTests")
 test debug last: user.vscode("testing.debugLastRun")
 
 test cancel: user.vscode("testing.cancelRun")
+accept incoming: user.vscode("merge-conflict.accept.incoming")
+accept both: user.vscode("merge-conflict.accept.both")
+accept current: user.vscode("merge-conflict.accept.current")
+accept all current: user.vscode("merge-conflict.accept.all-current")
+accept all incoming: user.vscode("merge-conflict.accept.all-incoming")
+conflict next: user.vscode("merge-conflict.next")
 
 #Debugging
 break point: user.vscode("editor.debug.action.toggleBreakpoint")
@@ -245,17 +266,17 @@ debug console: user.vscode("workbench.debug.action.toggleRepl")
 debug clean: user.vscode("workbench.debug.panel.action.clearReplAction")
 
 # Terminal
-terminal external: user.vscode("workbench.action.terminal.openNativeConsole")
-terminal new: user.vscode("workbench.action.terminal.new")
-terminal next: user.vscode("workbench.action.terminal.focusNext")
-terminal last: user.vscode("workbench.action.terminal.focusPrevious")
-terminal split: user.vscode("workbench.action.terminal.split")
-terminal zoom: user.vscode("workbench.action.toggleMaximizedPanel")
-terminal trash: user.vscode("workbench.action.terminal.kill")
-terminal toggle: user.vscode_and_wait("workbench.action.terminal.toggleTerminal")
-terminal scroll up: user.vscode("workbench.action.terminal.scrollUp")
-terminal scroll down: user.vscode("workbench.action.terminal.scrollDown")
-terminal <number_small>: user.vscode_terminal(number_small)
+term external: user.vscode("workbench.action.terminal.openNativeConsole")
+term new: user.vscode("workbench.action.terminal.new")
+term next: user.vscode("workbench.action.terminal.focusNext")
+term last: user.vscode("workbench.action.terminal.focusPrevious")
+term split: user.vscode("workbench.action.terminal.split")
+term zoom: user.vscode("workbench.action.toggleMaximizedPanel")
+term trash: user.vscode("workbench.action.terminal.kill")
+term dog: user.vscode_and_wait("workbench.action.terminal.toggleTerminal")
+term scroll up: user.vscode("workbench.action.terminal.scrollUp")
+term scroll down: user.vscode("workbench.action.terminal.scrollDown")
+term <number_small>: user.vscode_terminal(number_small)
 
 #TODO: should this be added to linecommands?
 copy line down: user.vscode("editor.action.copyLinesDownAction")
@@ -294,5 +315,17 @@ cell last: user.vscode("notebook.focusPreviousEditor")
 cell run above: user.vscode("notebook.cell.executeCellsAbove")
 cell run: user.vscode("notebook.cell.execute")
 
+add dock string: user.vscode("autoDocstring.generateDocstring")
+next: user.vscode_and_wait("jumpToNextSnippetPlaceholder")
+snip last: user.vscode("jumpToPrevSnippetPlaceholder")
+skip:
+    key("backspace")
+    user.vscode("jumpToNextSnippetPlaceholder")
+comment next: user.vscode("editor.action.nextCommentThreadAction")
 install local: user.vscode("workbench.extensions.action.installVSIX")
+format doc:
+    user.vscode("editor.action.formatDocument")
+    user.vscode("editor.action.organizeImports")
+show extensions:
+    user.vscode("workbench.extensions.action.showEnabledExtensions")
 preview markdown: user.vscode("markdown.showPreview")

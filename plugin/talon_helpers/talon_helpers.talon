@@ -10,6 +10,7 @@ talent kill: user.talon_kill()
 talent [open] log: menu.open_log()
 talent [open] rebel: menu.open_repl()
 talent home: menu.open_talon_home()
+talent debug: menu.open_debug_window()
 talent copy context pie: user.talon_add_context_clipboard_python()
 talent copy context: user.talon_add_context_clipboard()
 talent host:
