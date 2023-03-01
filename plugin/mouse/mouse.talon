@@ -1,16 +1,15 @@
-hissing mode: user.toggle_hiss_click()
+hiss on: user.mouse_enable_pop_click()
+hiss off: user.mouse_disable_pop_click()
 
 (control | see) mouse: user.mouse_toggle_control_mouse()
-(control | see) (zoom | mouse): user.mouse_toggle_zoom_mouse()
-camera overlay: user.mouse_toggle_camera_overlay()
-run calibration: user.mouse_calibrate()
+(control | see) (zoom | mouse): tracking.control_zoom_toggle()
+camera overlay: tracking.control_debug_toggle()
+run calibration: tracking.calibrate()
 
 # New commands / Toggles changed to "tracking"
 # ---------------------------------------------
 #control mouse: tracking.control1_toggle()
 #zoom mouse: tracking.control_zoom_toggle()
-#camera overlay: tracking.control_debug_toggle()
-#run calibration: tracking.calibrate()
 
 touch:
     mouse_click(0)

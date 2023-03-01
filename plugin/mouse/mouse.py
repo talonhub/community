@@ -97,13 +97,16 @@ def gui_wheel(gui: imgui.GUI):
     if gui.button("Wheel Stop [stop scrolling]"):
         actions.user.mouse_scroll_stop()
 
+# Hiss Click
+# def on_hiss(active):
+#     if not actions.speech.enabled():
+#         pass
+#     else:
+#         ctrl.mouse_click(button=0)
+# noise.register("hiss", on_hiss)
 
 @mod.action_class
 class Actions:
-    
-    def toggle_hiss_click():
-        """Toggles hiss left mouse click"""
-        toggle_control(setting_mouse_enable_pop_click)
 
     def mouse_show_cursor():
         """Shows the cursor"""
