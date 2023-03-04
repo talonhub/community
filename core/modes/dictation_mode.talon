@@ -64,8 +64,8 @@ formatted <user.format_text>: user.dictation_insert_raw(format_text)
 ^format selection <user.formatters>$: user.formatters_reformat_selection(formatters)
 
 # Corrections
-scratch that: user.clear_last_phrase()
-scratch selection: edit.delete()
+nope that | scratch that: user.clear_last_phrase()
+(nope | scratch) selection: edit.delete()
 select that: user.select_last_phrase()
 spell that <user.letters>: user.dictation_insert(letters)
 spell that <user.formatters> <user.letters>:
