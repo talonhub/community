@@ -2,8 +2,6 @@ from talon import Module, actions, app
 
 mod = Module()
 
-cmd_ctrl = "cmd" if app.platform == "mac" else "ctrl"
-
 
 @mod.action_class
 class tab_actions:
