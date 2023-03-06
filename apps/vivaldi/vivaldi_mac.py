@@ -24,6 +24,9 @@ class UserActions:
     def vivaldi_toggle_quick_commands():
         actions.key("cmd-e")
 
+    def tab_jump(number: int):
+        actions.key(f"cmd-{number}")
+
 
 @ctx.action_class("app")
 class AppActions:
