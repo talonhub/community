@@ -11,5 +11,5 @@ tab search <user.text>$:
     insert("% {text}")
     key(down)
 
-bookmarks sidebar: user.firefox_bookmarks_sidebar()
-history sidebar: user.firefox_history_sidebar()
+(sidebar | panel) bookmarks: user.firefox_bookmarks_sidebar()
+(sidebar | panel) history: user.firefox_history_sidebar()
