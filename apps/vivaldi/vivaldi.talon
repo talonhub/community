@@ -9,6 +9,6 @@ tag(): user.tabs
 (sidebar | panel) notes: user.vivaldi_notes_panel()
 
 please [<user.text>]:
-  user.vivaldi_toggle_quick_commands()
-  sleep(180ms)
-  insert(user.text or "")
+    user.vivaldi_toggle_quick_commands()
+    sleep(180ms)
+    insert(user.text or "")
