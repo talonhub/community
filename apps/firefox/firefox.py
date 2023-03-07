@@ -30,7 +30,7 @@ class BrowserActions:
     def go(url: str):
         actions.browser.focus_address()
         actions.sleep("50ms")
-        actions.insert(url)
+        actions.user.paste(url)
         actions.key("enter")
 
     def focus_search():
