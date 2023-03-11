@@ -7,9 +7,127 @@ from typing import Any, Mapping, Optional
 from talon import Module, actions
 
 from .abbreviate.abbreviate import abbreviations
-from .file_extension.file_extension import file_extensions
-from .keys.keys import symbol_key_words
 from .numbers.numbers import digits_map, scales, teens, tens
+
+# `punctuation_words` is for words you want available BOTH in dictation and as key names in command mode.
+# `symbol_key_words` is for key names that should be available in command mode, but NOT during dictation.
+punctuation_words = {
+    "at sign": "@",
+    # Currencies
+    "pound sign": "£",
+    "brick": "`",
+    "stroke": "/",
+    "backstroke": "\\",
+    "dash": "-",
+    "equal": "=",
+    "plus": "+",
+    "tilde": "~",
+    "bang": "!",
+    "score": "_",
+    "quest": "?",
+    "single": "'",
+    "double": '"',
+    "leper": "(",
+    "repper": ")",
+    "lacker": "[",
+    "racker": "]",
+    "lacer": "{",
+    "racer": "}",
+    "langle": "<",
+    "wrangle": ">",
+    "snow": "*",
+    "period": ".",
+    "point": ".",
+    "pound": "#",
+    "percy": "%",
+    "tangle": "^",
+    "amper": "&",
+    "piper": "|",
+    "dollar": "$",
+    "semi": ";",
+    "stack": ":",
+    "drip": ",",
+    "comma": ",",
+    # Workaround for issue with conformer b-series; see #946
+    "coma": ",",
+}
+
+dictation_only_punctuation_words = {
+    "dollar sign": "$",
+    "ampersand": "&",
+    "back tick": "`",
+    "comma": ",",
+    # Workaround for issue with conformer b-series; see #946
+    "coma": ",",
+    "period": ".",
+    "full stop": ".",
+    "semicolon": ";",
+    "colon": ":",
+    "forward slash": "/",
+    "question mark": "?",
+    "exclamation mark": "!",
+    "exclamation point": "!",
+    "asterisk": "*",
+    "number sign": "#",
+    "percent sign": "%",
+    "at sign": "@",
+    "and sign": "&",
+    "ampersand": "&",
+    # Currencies
+    "dollar sign": "$",
+    "pound sign": "£",
+}
+symbol_key_words = {}
+
+# make punctuation words also included in {user.symbol_keys}
+symbol_key_words.update(punctuation_words)
+
+file_extensions = {
+    "dot pie": ".py",
+    "dot talon": ".talon",
+    "dot mark down": ".md",
+    "dot shell": ".sh",
+    "dot vim": ".vim",
+    "dot see": ".c",
+    "dot see sharp": ".cs",
+    "dot com": ".com",
+    "dot net": ".net",
+    "dot org": ".org",
+    "dot us": ".us",
+    "dot U S": ".us",
+    "dot co dot UK": ".co.uk",
+    "dot exe": ".exe",
+    "dot bin": ".bin",
+    "dot bend": ".bin",
+    "dot jason": ".json",
+    "dot jay son": ".json",
+    "dot J S": ".js",
+    "dot java script": ".js",
+    "dot TS": ".ts",
+    "dot type script": ".ts",
+    "dot csv": ".csv",
+    "totssv": ".csv",
+    "tot csv": ".csv",
+    "dot cassie": ".csv",
+    "dot text": ".txt",
+    "dot julia": ".jl",
+    "dot J L": ".jl",
+    "dot html": ".html",
+    "dot css": ".css",
+    "dot sass": ".sass",
+    "dot svg": ".svg",
+    "dot png": ".png",
+    "dot wave": ".wav",
+    "dot flack": ".flac",
+    "dot doc": ".doc",
+    "dot doc x": ".docx",
+    "dot pdf": ".pdf",
+    "dot tar": ".tar",
+    "dot g z": ".gz",
+    "dot g zip": ".gzip",
+    "dot zip": ".zip",
+    "dot toml": ".toml",
+}
 
 mod = Module()
 
