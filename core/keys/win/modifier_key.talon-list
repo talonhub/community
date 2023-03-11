@@ -1,0 +1,13 @@
+os: win
+os: linux
+list: user.modifier_key
+-
+alt: alt
+troll: control
+shift: shift
+super: super
+many: super
+option: alt
+
+
+

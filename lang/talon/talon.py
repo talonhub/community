@@ -59,18 +59,18 @@ def on_update_decls(decls):
         ] = actions.user.create_spoken_forms_from_list(
             l.keys(), generate_subsequences=False
         )
-        # print(
-        #     "List: {} \n {}".format(thing, str(ctx_talon_lists.lists[f"user.talon_{thing}"]))
-        # )
+        print(
+            "List: {} \n {}".format(thing, str(ctx_talon_lists.lists[f"user.talon_{thing}"]))
+        )
 
 
 def on_ready():
     # print("on_ready")
-    on_update_decls(registry.decls)
+    # on_update_decls(registry.decls)
     registry.register("update_decls", on_update_decls)
 
 
-app.register("ready", on_ready)
+# app.register("ready", on_ready)
 
 
 @ctx.action_class("user")

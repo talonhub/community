@@ -36,7 +36,7 @@ if app.platform == "windows":
     if os.path.isdir(os.path.expanduser(os.path.join("~", r"OneDrive\Desktop"))):
         default_folder = os.path.join("~", "Desktop")
 
-        ctx.lists["self.directories"] = {
+        ctx.lists["self.system_directories"] = {
             "applications": "shell:AppsFolder",
             "desk": os.path.join(one_drive_path, "Desktop"),
             "docks": os.path.join(one_drive_path, "Documents"),
@@ -56,7 +56,7 @@ if app.platform == "windows":
         }
 
     else:
-        ctx.lists["self.directories"] = {
+        ctx.lists["self.system_directories"] = {
             "applications": "shell:Applications",
             "desk": os.path.expanduser("~/Desktop"),
             "docks": os.path.expanduser("~/Documents"),
@@ -68,9 +68,7 @@ if app.platform == "windows":
             "talent home": os.path.expandvars("%AppData%\\Talon"),
             "talent user": os.path.expandvars("%AppData%\\Talon\\user"),
             "talent recordings": os.path.expandvars("%AppData%\\talon\\recordings"),
-            "talent plugins": os.path.expandvars(
-                "%ProgramFiles%\\Talon\\talon_plugins"
-            ),
+            "talent plugins": os.path.expandvars("%ProgramFiles%\\Talon Rust\\talon_plugins") if app.branch == "rust" else os.path.expandvars("%ProgramFiles%\\Talon\\talon_plugins") ,
             "root": "\\",
         }
 

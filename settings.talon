@@ -56,4 +56,6 @@ settings():
 # tag(): user.mouse_cursor_commands_enable
 # tag():user.mouse_grid_enabled
 tag(): user.cursorless_experimental_snippets
+tag(): user.talon_populate_lists
+
 # tag(): user.mouse_grid_enabled

@@ -1,0 +1,12 @@
+os: mac
+list: user.modifier_key
+-
+alt: alt
+troll: control
+shift: shift
+super: super
+many: cmd
+option: alt
+
+
+

@@ -112,7 +112,7 @@ def on_ready():
 if app.platform == "mac":
     app.register("ready", on_ready)
 
-ctx.lists["self.directories"] = {
+ctx.lists["self.system_directories"] = {
     "applications": "/Applications",
     "bootcamp": "/Volumes/BOOTCAMP",
     "desk": os.path.expanduser("~/Desktop"),
@@ -124,6 +124,6 @@ ctx.lists["self.directories"] = {
     "talent home": os.path.expanduser("~/.talon"),
     "talent user": os.path.expanduser("~/.talon/user"),
     "talent recordings": os.path.expanduser("~/.talon/recordings"),
-    "talent plugins": "/Applications/Talon Pro.app/Contents/Resources/talon_plugins",
+    "talent plugins":  "/Applications/Talon Rust.app/Contents/Resources/talon_plugins" if app.branch == "rust" else "/Applications/Talon.app/Contents/Resources/talon_plugins",
     "root": "/",
 }

@@ -11,8 +11,8 @@ setter:             user.system_show_settings()
 ^kill focused$: user.system_kill_focused_application()
 configure {user.launch_command}:
      user.exec(launch_command)
-summon {user.directories}:
-     user.system_open_directory(directories)
+summon <user.directory>:
+     user.system_open_directory(directory)
 portal [<phrase>]$: user.system_show_portal(phrase or "")
 coder [<phrase>]$: user.system_show_coder(phrase or "")
 messer: user.system_show_messenger()

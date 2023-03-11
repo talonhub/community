@@ -4,7 +4,7 @@ title force: user.file_manager_refresh_title()
 manager show: user.file_manager_toggle_pickers()
 manager close: user.file_manager_hide_pickers()
 manager refresh: user.file_manager_update_lists()
-go <user.system_path>: user.file_manager_open_directory(system_path)
+go <user.directory>: user.file_manager_open_directory(directory)
 go back: user.file_manager_go_back()
 go forward: user.file_manager_go_forward()
 (go parent | daddy) [<number_small>]: 

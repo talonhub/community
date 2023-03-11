@@ -40,6 +40,7 @@ language_extensions = {
     # 'snippets': 'snippets',
     "sql": "sql",
     "talon": "talon",
+    "talonlist": "talon-list",
     "terraform": "tf",
     "typescript": "ts",
     "typescriptreact": "tsx",
@@ -56,6 +57,7 @@ language_name_overrides = {
     "gdb": ["g d b"],
     "go": ["go", "go lang", "go language"],
     "r": ["are language"],
+    "talonlist": ["talent list"],
 }
 mod.list("language_mode", desc="Name of a programming language mode.")
 ctx.lists["self.language_mode"] = {
