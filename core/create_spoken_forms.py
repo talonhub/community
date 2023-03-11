@@ -52,31 +52,6 @@ punctuation_words = {
     "coma": ",",
 }
 
-dictation_only_punctuation_words = {
-    "dollar sign": "$",
-    "ampersand": "&",
-    "back tick": "`",
-    "comma": ",",
-    # Workaround for issue with conformer b-series; see #946
-    "coma": ",",
-    "period": ".",
-    "full stop": ".",
-    "semicolon": ";",
-    "colon": ":",
-    "forward slash": "/",
-    "question mark": "?",
-    "exclamation mark": "!",
-    "exclamation point": "!",
-    "asterisk": "*",
-    "number sign": "#",
-    "percent sign": "%",
-    "at sign": "@",
-    "and sign": "&",
-    "ampersand": "&",
-    # Currencies
-    "dollar sign": "$",
-    "pound sign": "£",
-}
 symbol_key_words = {}
 
 # make punctuation words also included in {user.symbol_keys}
