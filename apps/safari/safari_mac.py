@@ -67,7 +67,7 @@ class BrowserActions:
     def go(url: str):
         actions.browser.focus_address()
         actions.sleep("50ms")
-        actions.user.paste(url)
+        actions.insert(url)
         actions.key("enter")
 
     def go_blank():
