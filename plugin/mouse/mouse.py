@@ -1,6 +1,6 @@
 import os
 
-from talon import Module, Context, actions, app, clip, cron, ctrl, imgui, ui
+from talon import Context, Module, actions, app, clip, cron, ctrl, imgui, ui
 from talon_plugins import eye_zoom_mouse
 
 key = actions.key
@@ -263,13 +263,10 @@ def on_pop():
             or actions.tracking.control_enabled()
             or actions.tracking.control1_enabled()
         )
-        should_click = (
-            setting_val == 2 or
-            (
-                setting_val == 1 and
-                is_using_eye_tracker and
-                not actions.tracking.control_zoom_enabled()
-            )
+        should_click = setting_val == 2 or (
+            setting_val == 1
+            and is_using_eye_tracker
+            and not actions.tracking.control_zoom_enabled()
         )
         if should_click:
             ctrl.mouse_click(button=0, hold=16000)
