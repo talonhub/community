@@ -164,12 +164,11 @@ class Actions:
 
     def talon_restart():
         """restart talon"""
+        talon_app = ui.apps(pid=os.getpid())[0]
         if app.platform == "mac":
-            """Quit and relaunch the Talon app"""
-            from subprocess import Popen
             from shlex import quote
+            from subprocess import Popen
 
-            talon_app = ui.apps(pid=os.getpid())[0]
             talon_app_path = quote(talon_app.path)
             Popen(
                 [
@@ -179,18 +178,15 @@ class Actions:
                 ],
                 start_new_session=True,
             )
-            talon_app.appscript().quit(waitreply=False)  # XXX temporary replacement
-
+            talon_app.quit()
         elif app.platform == "windows":
-            actions.user.exec("talon-restart")
+            os.startfile(talon_app.exe)
+            talon_app.quit()
 
     def talon_kill():
         """kill talon"""
-        pid = os.getpid()
+        talon_app = ui.apps(pid=os.getpid())[0]
         if app.platform == "mac":
-            talon_app = ui.apps(pid)[0]
-            talon_app.appscript().quit(waitreply=False)  # XXX temporary replacement
-
+            talon_app.quit()
         elif app.platform == "windows":
-            # os.system("taskkill /f /im  talon.exe")
-            os.kill(pid, 0)
+            talon_app.quit()
