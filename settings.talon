@@ -18,8 +18,11 @@ settings():
     # Stop continuous scroll/gaze scroll with a pop
     user.mouse_enable_pop_stops_scroll = 1
 
-    # Enable pop click with 'control mouse' mode
-    user.mouse_enable_pop_click = 1
+    # Enable pop click with 'control mouse' mode.
+    # 0 = off
+    # 1 = on with eyetracker but not zoom mode
+    # 2 = on
+    user.mouse_enable_pop_click = 2
 
     # When enabled, the 'Scroll Mouse' GUI will not be shown.
     user.mouse_hide_mouse_gui = 0
