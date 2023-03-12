@@ -1,5 +1,5 @@
-os: mac
 list: user.special_key
+os: mac
 -
 pagedown: pagedown
 pageup: pageup

@@ -1,6 +1,6 @@
-os: win
-os: linux
 list: user.special_key
+os: windows
+os: linux
 -
 pagedown: pagedown
 pageup: pageup
@@ -16,3 +16,5 @@ home:home
 end key:end
 menu key:menu
 print screen: printscr
+
+
