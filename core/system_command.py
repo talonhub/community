@@ -1,7 +1,7 @@
 import os
 import subprocess
-from talon import Module, system
 
+from talon import Module, system
 
 mod = Module()
 
@@ -27,7 +27,7 @@ def split_command(cmd: str):
         ])
     """
 
-    quote_chars = ("\"", "'")
+    quote_chars = ('"', "'")
     terminal_chars = (" ", None)
 
     state = "start"
@@ -55,9 +55,7 @@ def split_command(cmd: str):
                 buffer += c
         elif state == "simple":
             if c in terminal_chars:
-                rtn.append(
-                    (buffer, result_type)
-                )
+                rtn.append((buffer, result_type))
                 state = "start"
                 result_type = None
                 quote_char = None
@@ -79,7 +77,7 @@ def split_command(cmd: str):
             if c == quote_char:
                 state = "simple"
             elif c == "\\":
-                if quote_char == "\"":
+                if quote_char == '"':
                     state = "esc_quoted"
                 else:
                     buffer += c
@@ -102,9 +100,7 @@ def split_command(cmd: str):
             elif c is None:
                 # End of input with trailing slash
                 buffer += "\\"
-                rtn.append(
-                    (buffer, result_type)
-                )
+                rtn.append((buffer, result_type))
             else:
                 buffer += "\\"
                 buffer += c
