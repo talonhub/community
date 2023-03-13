@@ -1,6 +1,7 @@
 # XXX - would be nice to be able pipe these through formatters
 
 from talon import Context, Module
+
 from ..user_settings import get_list_from_csv
 
 mod = Module()
