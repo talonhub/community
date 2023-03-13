@@ -6,7 +6,7 @@ ctx.matches = r"""
 os: windows
 """
 
-ctx.lists["self.launch_command"] = {
+ctx.lists["self.system_setting"] = {
     "sound": "control mmsys.cpl sounds",
     "bluetooth": "control bthprops.cpl",
     "applications": "control appwiz.cpl",

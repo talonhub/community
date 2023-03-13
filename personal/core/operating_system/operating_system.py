@@ -5,7 +5,7 @@ import os
 
 
 mod = Module()
-mod.list("launch_command", desc="List of applications to launch")
+mod.list("system_setting", desc="List of system level configuration setting to launch")
 mod.list("system_directories", desc="List of system directories. By default, these are generated on start per-OS")
 mod.list("user_directories", desc="List of user-defined directories. Empty by default, used to expand the available paths")
 
@@ -43,7 +43,7 @@ settings_application = mod.setting(
 )
 
 ctx = Context()
-ctx.lists["self.launch_command"] = {}
+ctx.lists["self.system_setting"] = {}
 ctx.lists["self.system_directories"] = {}
 
 @mod.capture(rule="{user.system_directories}")

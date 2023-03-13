@@ -9,8 +9,8 @@ switcher:           user.system_switcher()
 clip show:          user.system_show_clipboard()
 setter:             user.system_show_settings()
 ^kill focused$: user.system_kill_focused_application()
-configure {user.launch_command}:
-     user.exec(launch_command)
+configure {user.system_setting}:
+     user.exec(system_setting)
 summon <user.directory>:
      user.system_open_directory(directory)
 portal [<phrase>]$: user.system_show_portal(phrase or "")

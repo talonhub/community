@@ -1,5 +1,6 @@
 tag: user.talonlist
 tag: user.talon
+tag: user.talon_python
 -
 #context requirements
 win require: user.paste("os: windows\n")
@@ -15,9 +16,8 @@ mode require [{user.talon_modes}]:
 tag require [{user.talon_tags}]:
     tag = talon_tags or ""
     user.paste("tag: {tag}")
-stag set [{user.talon_tags}]:
-    tag = talon_tags or ""
-    user.paste("tag(): {tag}")
 host require:
     hostname = user.talon_get_hostname()
     user.paste("hostname: {hostname}\n")
+
+

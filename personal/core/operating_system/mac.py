@@ -8,7 +8,7 @@ ctx.matches = r"""
 os: mac
 """
 
-ctx.lists["self.launch_command"] = {}
+ctx.lists["self.system_setting"] = {}
 
 
 def update_preferences_list():
@@ -23,7 +23,7 @@ def update_preferences_list():
                     os.path.splitext(name)[0]
                 ] = f"open -b com.apple.systempreferences {path}"
 
-    ctx.lists["self.launch_command"] = actions.user.create_spoken_forms_from_map(
+    ctx.lists["self.system_setting"] = actions.user.create_spoken_forms_from_map(
         preferences, generate_subsequences=True
     )
 
@@ -103,6 +103,16 @@ class UserActionsMac:
     def system_show_messenger():
         """Opens the default browser for the up operating system and performs the phrase command"""
         is_running = actions.user.switcher_focus("messages")
+    def system_taskmanager_find_focused_application(phrase: str = None):
+        """Opens the default browser for the up operating system and performs the phrase command"""
+        current_application = actions.app.name()
+
+        actions.user.system_task_manager()
+        actions.sleep("250ms")
+        # actions.key("cmd-f")
+        actions.sleep("250ms")
+        print(current_application)
+        actions.insert(current_application)
 
 
 def on_ready():
