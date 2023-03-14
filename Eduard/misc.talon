@@ -6,7 +6,12 @@ add signature:
 
 kay: key(enter)
 
+drill: key(delete) 
+
+slapper: 
+
 exit: app.window_close()
+
 
 down: key(down)
 up: key(up)

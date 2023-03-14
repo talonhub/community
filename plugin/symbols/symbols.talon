@@ -44,3 +44,12 @@ quote that:
 (grave | back tick) that:
     text = edit.selected_text()
     user.paste("`{text}`")
+
+round: user.insert_between("(", ")")
+round that:
+    text = edit.selected_text()
+    user.paste("({text})")
+
+quad: user.insert_between('"', '"')
+twin: user.insert_between("'", "'")
+

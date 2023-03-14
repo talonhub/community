@@ -94,6 +94,7 @@ top:
 
 rename:
     key(shift-f10)
+    sleep(300ms)
     key(m)
 
 left panel: key(f6:6)

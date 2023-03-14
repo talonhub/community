@@ -9,5 +9,6 @@ attach file: key('alt')
     key('af')
 
 settings():
-    user.context_sensitive_dictation = 1
+    user.context_sensitive_dictation = 0
+
 

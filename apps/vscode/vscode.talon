@@ -288,6 +288,15 @@ cell edit: user.vscode("notebook.cell.edit")
 cell last edit: user.vscode("notebook.focusPreviousEditor")
 cell exit: user.vscode("notebook.cell.quitEdit")
 new cell: user.vscode("jupyter.notebookeditor.addcellbelow")
+new mark:
+    user.vscode("jupyter.notebookeditor.addcellbelow")
+    key("escape")
+    key("m")
+delete cell: 
+    key("escape")
+    key("d:2")
+
+
 
 
 # Splits (Maybe move to splits.py and splits.talon)

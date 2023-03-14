@@ -14,6 +14,18 @@ cap: user.dictation_format_cap()
 ^(no cap | no-caps) that$: user.dictation_reformat_no_cap()
 ^(no space | no-space) that$: user.dictation_reformat_no_space()
 
+# Eduard Commands
+new [graph|block]:
+    edit.line_insert_down()
+    edit.line_insert_down()
+    user.dictation_format_reset()
+
+^bullet: "* "
+placeholder: " PLACEHOLDER"
+
+
+
+
 # Navigation
 go up <number_small> (line | lines):
     edit.up()
