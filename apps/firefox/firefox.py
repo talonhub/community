@@ -56,7 +56,9 @@ class BrowserActions:
         else:
             # Only using "ctrl-l" might fail and clear the console if the user
             # is focused in the devtools
-            actions.key("f6 ctrl-l")
+            actions.key("f6")
+            actions.sleep("100ms")
+            actions.key("ctrl-l")
 
     def focus_page():
         actions.browser.focus_address()
