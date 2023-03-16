@@ -50,6 +50,14 @@ class BrowserActions:
     def bookmarks():
         actions.key(f"{cmd_ctrl}-shift-o")
 
+    def focus_address():
+        if app.platform == "mac":
+            actions.key("cmd-l")
+        else:
+            # Only using "ctrl-l" might fail and clear the console if the user
+            # is focused in the devtools
+            actions.key("f6 ctrl-l")
+
     def focus_page():
         actions.browser.focus_address()
         actions.edit.find()
