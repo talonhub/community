@@ -46,7 +46,7 @@ touch$:
     mouse_click()
     # close the mouse grid
     user.grid_close()
-(rip)$:
+(ripple)$:
     mouse_click()
     mouse_click()
     mouse_click()

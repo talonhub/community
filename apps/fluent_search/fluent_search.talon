@@ -6,7 +6,7 @@ tag(): user.fluent_search_screen_search
 
 <user.letters>: user.fluent_search_screen_search(letters, "left")
 duke <user.letters>: user.fluent_search_screen_search(letters, "double")
-trip <user.letters>: user.fluent_search_screen_search(letters, "triple")
+ripple <user.letters>: user.fluent_search_screen_search(letters, "triple")
 # many <user.letters>: user.fluent_search_screen_search(letters, "command")
 rate <user.letters>: user.fluent_search_screen_search(letters, "right")
 hover <user.letters>: user.fluent_search_screen_search(letters, "hover")

@@ -106,7 +106,7 @@ class UserActionsWin:
         actions.key("alt-tab")
 
     def system_open_directory(path):
-        actions.user.exec(f'explorer.exe "{path}"')
+        #     actions.user.exec(f'explorer.exe "{path}"')
 
         # def system_show_clipboard():
         #     actions.key("super-v")
