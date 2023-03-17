@@ -76,6 +76,7 @@ class Actions:
         if "command" in modes:
             actions.mode.enable("dictation")
             actions.mode.disable("command")
+            actions.user.hide_gaze_ocr_options()
         else:
             actions.mode.enable("command")
             actions.mode.disable("dictation")

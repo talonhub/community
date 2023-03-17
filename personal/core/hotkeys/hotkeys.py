@@ -38,6 +38,7 @@ def sleep_or_wake():
 
         actions.user.disconnect_ocr_eye_tracker()
         actions.user.disconnect_ocr_eye_tracker()
+        actions.user.hide_gaze_ocr_options()
         # actions.user.clickless_mouse_disable()
 
 
@@ -60,21 +61,21 @@ class Actions:
 
     def keypad1():
         """document string goes here"""
-        actions.user.move_cursor_to_gaze_point()
+        trigger_home_row()
 
     def keypad2():
         """document string goes here"""
+        actions.user.system_switcher()
 
     def keypad3():
         """document string goes here"""
 
     def keypad4():
         """document string goes here"""
-        trigger_home_row()
 
     def keypad5():
         """document"""
-        actions.user.system_switcher()
+        actions.user.move_cursor_to_gaze_point()
 
     def keypad6():
         """document string goes here"""
@@ -101,21 +102,21 @@ class WindowsZoomMouseInactiveActions:
 
     def keypad1():
         """document string goes here"""
-        actions.user.move_cursor_to_gaze_point()
+        trigger_home_row()
 
     def keypad2():
         """document string goes here"""
+        actions.user.system_switcher()
 
     def keypad3():
         """document string goes here"""
 
     def keypad4():
         """document string goes here"""
-        trigger_home_row()
 
     def keypad5():
         """document"""
-        actions.user.system_switcher()
+        actions.user.move_cursor_to_gaze_point()
 
     def keypad6():
         """document string goes here"""
