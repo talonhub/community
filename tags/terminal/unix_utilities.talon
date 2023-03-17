@@ -16,4 +16,6 @@ flag [<user.letter>]: " -{letter or ''}"
 # flag shift/ship/uppercase <letter> produces the uppercase variant
 # "-abc" can be created via "flag air bat cap"
 
-dubdash: " -- "
+# double dashes allow signify the end of options in most utilities, to allow e.g.
+# grepping for the string '--help': 'grep -- --help file'
+command sep: " -- "
