@@ -7,7 +7,7 @@ core {user.unix_utility} [<user.unix_arguments>] [over]:
     "{unix_utility}{args}"
 
 # standalone arguments (predefined arguments preferred)
-# TODO: find out why over is sometimes recognized by the unix_free_form_argument 
+# TODO: find out why over is sometimes recognized by the unix_free_form_argument
 # and sometimes not
 param [<user.unix_free_form_argument>] [over]:
     insert(" --{unix_free_form_argument or ''}")
