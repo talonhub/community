@@ -3,8 +3,7 @@ tag: user.unix_utilities
 
 # curated list of commands with defined arguments:
 core {user.unix_utility} [<user.unix_arguments>] [over]:
-    args = unix_arguments or ""
-    "{unix_utility}{args}"
+    "{unix_utility}{unix_arguments or ' '}"
 
 # standalone arguments (predefined arguments preferred)
 # TODO: find out why over is sometimes recognized by the unix_free_form_argument
@@ -17,4 +16,6 @@ flag [<user.letter>]: " -{letter or ''}"
 # flag shift/ship/uppercase <letter> produces the uppercase variant
 # "-abc" can be created via "flag air bat cap"
 
-dubdash: " -- "
+# double dashes allow signify the end of options in most utilities, to allow e.g.
+# grepping for the string '--help': 'grep -- --help file'
+command sep: " -- "
