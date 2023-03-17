@@ -112,9 +112,9 @@ sell far down:
     edit.extend_file_end()
 
 # editing
-tab:
+tabby:
     edit.indent_more()
-tab <number_small>:
+tabby <number_small>:
     edit.indent_more()
     repeat(number_small-1)
 

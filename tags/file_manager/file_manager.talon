@@ -8,9 +8,9 @@ go <user.directory>: user.file_manager_open_directory(directory)
 go back: user.file_manager_go_back()
 go forward: user.file_manager_go_forward()
 (go parent | daddy) [<number_small>]: 
-    number = number_small or 1
+    number = number_small or 0
     user.file_manager_open_parent()
-    repeat(number)
+    repeat(number - 1)
 
 ^follow numb <number_small>$:
     directory = user.file_manager_get_directory_by_index(number_small - 1)
