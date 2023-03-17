@@ -21,7 +21,7 @@ def sleep_or_wake():
         actions.speech.enable()
         actions.user.microphone_preferred()
         actions.user.mouse_wake()
-        #todo: remove when the talon_hud perf is fixed on rust branch
+        # todo: remove when the talon_hud perf is fixed on rust branch
         if "user.talon_hud_available" in scope.get("tag"):
             if "rust" != app.branch:
                 actions.user.hud_enable()
@@ -31,13 +31,14 @@ def sleep_or_wake():
         actions.user.sleep_all()
         actions.sound.set_microphone("None")
         actions.user.mouse_sleep()
-        #todo: remove when the talon_hud perf is fixed on rust branch
+        # todo: remove when the talon_hud perf is fixed on rust branch
         if "user.talon_hud_available" in scope.get("tag"):
             if "rust" != app.branch:
                 actions.user.hud_disable()
 
         actions.user.disconnect_ocr_eye_tracker()
         actions.user.disconnect_ocr_eye_tracker()
+        actions.user.hide_gaze_ocr_options()
         # actions.user.clickless_mouse_disable()
 
 
@@ -50,13 +51,13 @@ def trigger_home_row():
             actions.key("escape")
     elif app.platform == "windows":
         actions.key("ctrl-m")
-        
 
 
 @mod.action_class
 class Actions:
     def keypad0():
         """document string goes here"""
+        actions.talon_plugins.eye_zoom_mouse.mouse_trigger()
 
     def keypad1():
         """document string goes here"""
@@ -64,30 +65,33 @@ class Actions:
 
     def keypad2():
         """document string goes here"""
-        actions.tracking.control_zoom_toggle()
+        actions.user.system_switcher()
 
     def keypad3():
         """document string goes here"""
-        actions.user.microphone_toggle()
 
     def keypad4():
         """document string goes here"""
-        sleep_or_wake()
 
     def keypad5():
-        """document string goes here"""
+        """document"""
+        actions.user.move_cursor_to_gaze_point()
 
     def keypad6():
         """document string goes here"""
+        actions.tracking.control_zoom_toggle()
 
     def keypad7():
         """document string goes here"""
+        actions.user.dictation_or_command_toggle()
 
     def keypad8():
         """document string goes here"""
+        actions.user.microphone_toggle()
 
     def keypad9():
         """document string goes here"""
+        sleep_or_wake()
 
 
 @ctx_zoom_mouse_enabled.action_class("user")
@@ -102,27 +106,33 @@ class WindowsZoomMouseInactiveActions:
 
     def keypad2():
         """document string goes here"""
-        actions.user.move_cursor_to_gaze_point()
+        actions.user.system_switcher()
 
     def keypad3():
         """document string goes here"""
-        actions.user.system_switcher()
 
     def keypad4():
         """document string goes here"""
-        actions.tracking.control_zoom_toggle()
 
     def keypad5():
         """document"""
-        actions.user.microphone_toggle()
+        actions.user.move_cursor_to_gaze_point()
 
     def keypad6():
         """document string goes here"""
-        sleep_or_wake()
+        actions.tracking.control_zoom_toggle()
 
     def keypad7():
         """document string goes here"""
-        
+        actions.user.dictation_or_command_toggle()
+
+    def keypad8():
+        """document string goes here"""
+        actions.user.microphone_toggle()
+
+    def keypad9():
+        """document string goes here"""
+        sleep_or_wake()
 
 
 @ctx_zoom_mouse_triggered.action_class("user")

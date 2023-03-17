@@ -69,6 +69,18 @@ class Actions:
             actions.sound.set_microphone("None")
             actions.user.disconnect_ocr_eye_tracker()
 
+    def dictation_or_command_toggle():
+        """toggles dictation or command"""
+        modes = scope.get("mode")
+        # print(str(modes))
+        if "command" in modes:
+            actions.mode.enable("dictation")
+            actions.mode.disable("command")
+            actions.user.hide_gaze_ocr_options()
+        else:
+            actions.mode.enable("command")
+            actions.mode.disable("dictation")
+
     def welcome_back():
         """Enables all things"""
         actions.user.mouse_wake()
