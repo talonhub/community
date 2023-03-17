@@ -89,19 +89,19 @@ ctx.lists["self.unix_utility"] = unix_utilities
 # 2. arguments
 
 default_unix_arguments = {
-    "all":"all",
-    "debug":"debug",
-    "file":"file",
-    "force":"force",
+    "all": "all",
+    "debug": "debug",
+    "file": "file",
+    "force": "force",
     "help": "help",
-    "output":"output",
-    "quiet":"quiet",
-    "recursive":"recursive",
-    "silent":"silent",
-    "user":"user",
-    "verbose":"verbose",
-    "version":"version"
-    }
+    "output": "output",
+    "quiet": "quiet",
+    "recursive": "recursive",
+    "silent": "silent",
+    "user": "user",
+    "verbose": "verbose",
+    "version": "version",
+}
 
 unix_arguments = get_list_from_csv(
     "unix_arguments.csv",
