@@ -3,8 +3,7 @@ tag: user.unix_utilities
 
 # curated list of commands with defined arguments:
 core {user.unix_utility} [<user.unix_arguments>] [over]:
-    args = unix_arguments or ""
-    "{unix_utility}{args}"
+    "{unix_utility}{unix_arguments or ' '}"
 
 # standalone arguments (predefined arguments preferred)
 # TODO: find out why over is sometimes recognized by the unix_free_form_argument
