@@ -224,7 +224,6 @@ def robust_unlink(path: Path):
         path.unlink(missing_ok=True)
     except OSError as e:
         if hasattr(e, "winerror") and e.winerror == 32:
-
             graveyard_dir = get_communication_dir_path() / "graveyard"
             graveyard_dir.mkdir(parents=True, exist_ok=True)
             graveyard_path = graveyard_dir / str(uuid4())
