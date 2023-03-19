@@ -264,3 +264,9 @@ cut line:
 # duplication
 clone that: edit.selection_clone()
 clone line: edit.line_clone()
+wipe tail: 
+    edit.extend_line_end()
+    edit.delete()
+wipe head: 
+    edit.extend_line_start()
+    edit.delete()
