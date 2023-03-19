@@ -69,9 +69,11 @@ class Actions:
 
     def keypad3():
         """document string goes here"""
+        actions.edit.undo()
 
     def keypad4():
         """document string goes here"""
+        actions.core.repeat_command(1)
 
     def keypad5():
         """document"""
@@ -110,9 +112,11 @@ class WindowsZoomMouseInactiveActions:
 
     def keypad3():
         """document string goes here"""
+        actions.edit.undo()
 
     def keypad4():
         """document string goes here"""
+        actions.core.repeat_command(1)
 
     def keypad5():
         """document"""
