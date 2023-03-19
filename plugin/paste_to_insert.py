@@ -20,8 +20,6 @@ class MainActions:
     def insert(text):
         threshold = paste_to_insert_threshold_setting.get()
         if 0 <= threshold < len(text):
-            print("pasting")
             actions.user.paste(text)
             return
-        print("using insert")
         actions.next(text)
