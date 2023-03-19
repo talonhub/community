@@ -63,3 +63,5 @@ main
 master
 origin
 upstream
+origin/main,origin main
+origin/master,origin master
