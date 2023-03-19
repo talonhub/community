@@ -1,5 +1,6 @@
-from talon import Module, Context, actions
 import logging
+
+from talon import Context, Module, actions
 
 mod = Module()
 ctx = Context()
@@ -10,7 +11,9 @@ paste_to_insert_threshold_setting = mod.setting(
     default=-1,
     desc="""Use paste to insert text longer than this many characters.
 Zero means always paste; -1 means never paste.
-""")
+""",
+)
+
 
 @ctx.action_class("main")
 class MainActions:
