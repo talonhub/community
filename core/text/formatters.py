@@ -2,7 +2,7 @@ import logging
 import re
 from typing import Union
 
-from talon import Context, Module, actions
+from talon import Context, Module, actions, app
 from talon.grammar import Phrase
 
 ctx = Context()
@@ -222,7 +222,10 @@ class Actions:
 
     def insert_formatted(phrase: Union[str, Phrase], formatters: str):
         """Inserts a phrase formatted according to formatters. Formatters is a comma separated list of formatters (e.g. 'CAPITALIZE_ALL_WORDS,DOUBLE_QUOTED_STRING')"""
-        actions.insert(format_phrase(phrase, formatters))
+        if app.branch != "rust":
+            actions.insert(format_phrase(phrase, formatters))
+        else:
+            actions.user.paste(format_phrase(phrase, formatters))
 
     def insert_with_history(text: str):
         """Inserts some text, remembering it in the phrase history."""
