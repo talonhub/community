@@ -23,8 +23,7 @@ def sleep_or_wake():
         actions.user.mouse_wake()
         # todo: remove when the talon_hud perf is fixed on rust branch
         if "user.talon_hud_available" in scope.get("tag"):
-            if "rust" != app.branch:
-                actions.user.hud_enable()
+            actions.user.hud_enable()
         actions.user.connect_ocr_eye_tracker()
         # actions.user.clickless_mouse_enable()
     else:
@@ -33,8 +32,7 @@ def sleep_or_wake():
         actions.user.mouse_sleep()
         # todo: remove when the talon_hud perf is fixed on rust branch
         if "user.talon_hud_available" in scope.get("tag"):
-            if "rust" != app.branch:
-                actions.user.hud_disable()
+            actions.user.hud_disable()
 
         actions.user.disconnect_ocr_eye_tracker()
         actions.user.disconnect_ocr_eye_tracker()
