@@ -35,6 +35,18 @@ ctx.lists["user.prose_snippets"] = {
     "frowny": ":-(",
 }
 
+mod.list(
+    "currency_denomination", desc="Currency denominations that can be used within prose"
+)
+ctx.lists["user.currency_denomination"] = {
+    "dollar": "$",
+    "dollars": "$",
+    "euro": "€",
+    "euros": "€",
+    "pound": "£",
+    "pounds": "£",
+}
+
 
 @mod.capture(rule="{user.prose_modifiers}")
 def prose_modifier(m) -> Callable:
@@ -63,6 +75,164 @@ def prose_number(m) -> str:
     return str(m)
 
 
+@mod.capture(
+    rule="<user.number_string> [(dot | point) <digit_string>] percent [sign|sine]"
+)
+def prose_percent(m) -> str:
+    s = m.number_string
+    if hasattr(m, "digit_string"):
+        s += "." + m.digit_string
+    return s + "%"
+
+
+@mod.capture(
+    rule="<user.number_string> {user.currency_denomination} [[and] <user.number_string> [cents|pence]]"
+)
+def prose_money(m) -> str:
+    s = m.currency_denomination + m.number_string_1
+    if hasattr(m, "number_string_2"):
+        s += "." + m.number_string_2
+    return s
+
+
+hours_12 = {
+    "one": "1",
+    "oh one": "01",
+    "two": "2",
+    "oh two": "02",
+    "three": "3",
+    "oh three": "03",
+    "four": "4",
+    "oh four": "04",
+    "five": "5",
+    "oh five": "05",
+    "six": "6",
+    "oh six": "06",
+    "seven": "7",
+    "oh seven": "07",
+    "eight": "8",
+    "oh eight": "08",
+    "nine": "9",
+    "oh nine": "09",
+    "ten": "10",
+    "eleven": "11",
+    "twelve": "12",
+}
+hours_24 = hours_12.copy()
+hours_24.update(
+    {
+        "thirteen": "13",
+        "fourteen": "14",
+        "fifteen": "15",
+        "sixteen": "16",
+        "seventeen": "17",
+        "eighteen": "18",
+        "nineteen": "19",
+        "twenty": "20",
+        "twenty one": "21",
+        "twenty two": "22",
+        "twenty three": "23",
+    }
+)
+mod.list("hours_twelve", desc="Names for hours up to 12")
+ctx.lists["user.hours_twelve"] = hours_12
+mod.list("hours", desc="Names for hours up to 24")
+ctx.lists["user.hours"] = hours_24
+
+mod.list("minutes", desc="Names for minutes, 01 up to 59")
+ctx.lists["user.minutes"] = {
+    "oh one": "01",
+    "oh two": "02",
+    "oh three": "03",
+    "oh four": "04",
+    "oh five": "05",
+    "oh six": "06",
+    "oh seven": "07",
+    "oh eight": "08",
+    "oh nine": "09",
+    "ten": "10",
+    "eleven": "11",
+    "twelve": "12",
+    "thirteen": "13",
+    "fourteen": "14",
+    "fifteen": "15",
+    "sixteen": "16",
+    "seventeen": "17",
+    "eighteen": "18",
+    "nineteen": "19",
+    "twenty": "20",
+    "twenty one": "21",
+    "twenty two": "22",
+    "twenty three": "23",
+    "twenty four": "24",
+    "twenty five": "25",
+    "twenty six": "26",
+    "twenty seven": "27",
+    "twenty eight": "28",
+    "twenty nine": "29",
+    "thirty": "30",
+    "thirty one": "31",
+    "thirty two": "32",
+    "thirty three": "33",
+    "thirty four": "34",
+    "thirty five": "35",
+    "thirty six": "36",
+    "thirty seven": "37",
+    "thirty eight": "38",
+    "thirty nine": "39",
+    "forty": "40",
+    "forty one": "41",
+    "forty two": "42",
+    "forty three": "43",
+    "forty four": "44",
+    "forty five": "45",
+    "forty six": "46",
+    "forty seven": "47",
+    "forty eight": "48",
+    "forty nine": "49",
+    "fifty": "50",
+    "fifty one": "51",
+    "fifty two": "52",
+    "fifty three": "53",
+    "fifty four": "54",
+    "fifty five": "55",
+    "fifty six": "56",
+    "fifty seven": "57",
+    "fifty eight": "58",
+    "fifty nine": "59",
+}
+
+
+@mod.capture(rule="am|pm")
+def time_am_pm(m) -> str:
+    return str(m)
+
+
+# this matches eg "twelve thirty-four" -> 12:34 and "twelve hundred" -> 12:00. hmmmmm.
+@mod.capture(
+    rule="{user.hours} ({user.minutes} | o'clock | hundred hours) [<user.time_am_pm>]"
+)
+def prose_time_hours_minutes(m) -> str:
+    t = m.hours + ":"
+    if hasattr(m, "minutes"):
+        t += m.minutes
+    else:
+        t += "00"
+    if hasattr(m, "time_am_pm"):
+        t += m.time_am_pm
+    return t
+
+
+@mod.capture(rule="{user.hours_twelve} <user.time_am_pm>")
+def prose_time_hours_am_pm(m) -> str:
+    return m.hours_twelve + m.time_am_pm
+
+
+@mod.capture(rule="<user.prose_time_hours_minutes> | <user.prose_time_hours_am_pm>")
+def prose_time(m) -> str:
+    return str(m)
+
+
 @mod.capture(rule="({user.vocabulary} | <word>)")
 def word(m) -> str:
     """A single word, including user-defined vocabulary."""
@@ -81,7 +251,7 @@ def text(m) -> str:
 
 
 @mod.capture(
-    rule="({user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <phrase> | <user.prose_number> | <user.prose_modifier>)+"
+    rule="(<phrase> | {user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <user.prose_money> | <user.prose_time> | <user.prose_number> | <user.prose_percent> | <user.prose_modifier>)+"
 )
 def prose(m) -> str:
     """Mixed words and punctuation, auto-spaced & capitalized."""
@@ -90,7 +260,7 @@ def prose(m) -> str:
 
 
 @mod.capture(
-    rule="({user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <phrase> | <user.prose_number>)+"
+    rule="(<phrase> | {user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <user.prose_money> | <user.prose_time> | <user.prose_number> | <user.prose_percent>)+"
 )
 def raw_prose(m) -> str:
     """Mixed words and punctuation, auto-spaced & capitalized, without quote straightening and commands (for use in dictation mode)."""
