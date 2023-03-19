@@ -68,7 +68,11 @@ if app.platform == "windows":
             "talent home": os.path.expandvars("%AppData%\\Talon"),
             "talent user": os.path.expandvars("%AppData%\\Talon\\user"),
             "talent recordings": os.path.expandvars("%AppData%\\talon\\recordings"),
-            "talent plugins": os.path.expandvars("%ProgramFiles%\\Talon Rust\\talon_plugins") if app.branch == "rust" else os.path.expandvars("%ProgramFiles%\\Talon\\talon_plugins") ,
+            "talent plugins": os.path.expandvars(
+                "%ProgramFiles%\\Talon Rust\\talon_plugins"
+            )
+            if app.branch == "rust"
+            else os.path.expandvars("%ProgramFiles%\\Talon\\talon_plugins"),
             "root": "\\",
         }
 
@@ -106,7 +110,7 @@ class UserActionsWin:
         actions.key("alt-tab")
 
     def system_open_directory(path):
-        #     actions.user.exec(f'explorer.exe "{path}"')
+        actions.user.exec(f'explorer.exe "{path}"')
 
         # def system_show_clipboard():
         #     actions.key("super-v")
@@ -121,9 +125,9 @@ class UserActionsWin:
         # def system_show_coder(phrase: str = None):
         #     """Opens the default browser for the up operating system and performs the phrase command"""
         #     is_running = actions.user.switcher_focus(coder_name.get())
-        actions.sleep("250ms")
+        # actions.sleep("250ms")
 
-        actions.user.parse_phrase(phrase or "")
+        # actions.user.parse_phrase(phrase or "")
 
     def system_show_email():
         """Opens the defaul6t browser for the up operating system and performs the phrase command"""

@@ -1,5 +1,3 @@
-not tag: talon_plugins.eye_zoom_mouse.zoom_mouse_activated
-# not win.title: RSIGuard  v6.2.0.0SB - Registered
 -
 key(keypad_0): 
     user.keypad0()
@@ -21,3 +19,20 @@ key(keypad_8):
     user.keypad8()
 key(keypad_9): 
     user.keypad9()
+
+#left button
+key(f16): 
+    # print("f16")
+    user.keypad1()
+#middle button
+key(f17): 
+    # print("f17")
+    user.keypad0()
+#right button
+key(f18): 
+    # print("f18")
+    user.keypad2()
+#top button
+key(f19): 
+    # print("f19")
+    user.keypad3()
