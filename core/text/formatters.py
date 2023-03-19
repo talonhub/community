@@ -199,7 +199,7 @@ class ImmuneString:
 @mod.capture(
     # Add anything else into this that you want to be able to speak during a
     # formatter.
-    rule="(<user.symbol_key> | numb <number>)"
+    rule="(<user.symbol_key> | (numb | numeral) <number>)"
 )
 def formatter_immune(m) -> ImmuneString:
     """Text that can be interspersed into a formatter, e.g. characters.
@@ -294,7 +294,7 @@ def unformat_text(text: str) -> str:
 
 ctx.lists["self.formatters"] = formatters_words.keys()
 ctx.lists["self.prose_formatter"] = {
-    # "say": "NOOP",
+    "say": "NOOP",
     "speak": "NOOP",
     "sentence": "CAPITALIZE_FIRST_WORD",
 }

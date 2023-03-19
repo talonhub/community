@@ -236,7 +236,6 @@ ctx.lists["user.code_trait"] = all_traits
 
 @ctx.action_class("user")
 class UserActions:
-
     # tag: comment_line
 
     def code_comment_line_prefix():
