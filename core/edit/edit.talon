@@ -114,7 +114,7 @@ clear all:
     edit.delete()
 
 #copy commands
-copy all:
+snip all:
     edit.select_all()
     edit.copy()
 #to do: do we want these variants, seem to conflict
@@ -131,20 +131,20 @@ copy all:
 #     edit.extend_down()
 #     edit.copy()
 
-copy word:
+snip word:
     edit.select_word()
     edit.copy()
 
-copy word left: user.copy_word_left()
+snip word left: user.copy_word_left()
 
-copy word right: user.copy_word_right()
+snip word right: user.copy_word_right()
 
-copy line:
+snip line:
     edit.select_line()
     edit.copy()
 
 #cut commands
-cut all:
+carve all:
     edit.select_all()
     edit.cut()
 #to do: do we want these variants
@@ -161,17 +161,17 @@ cut all:
 #     edit.select_all()
 #     edit.cut()
 
-cut word:
+carve word:
     edit.select_word()
     edit.cut()
 
-cut word left: user.cut_word_left()
+carve word left: user.cut_word_left()
 
-cut word right: user.cut_word_right()
+carve word right: user.cut_word_right()
 
-cut line: user.cut_line()
+carve line: user.cut_line()
 
-(pace | paste) all:
+snap all:
     edit.select_all()
     edit.paste()
 

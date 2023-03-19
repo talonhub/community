@@ -1,7 +1,7 @@
 tag: user.find_and_replace
 -
 hunt this: user.find("")
-hunt this (pace | paste):
+hunt this snap:
     user.find("")
     sleep(25ms)
     edit.paste()
