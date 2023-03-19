@@ -1,4 +1,4 @@
-os: win
+os: windows
 os: linux
 list: user.modifier_key
 -
@@ -8,6 +8,5 @@ shift: shift
 super: super
 many: super
 option: alt
-
 
 
