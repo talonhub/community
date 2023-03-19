@@ -73,6 +73,17 @@ def on_ready():
 app.register("ready", on_ready)
 
 
+@mod.action_class
+class Actions:
+    def talon_code_insert_function(text: str, selection: str, prepend_actions: bool):
+        """inserts talent specific action with either user prepended or not"""
+        text += f"({selection or ''})"
+        if prepend_actions:
+            text = "actions." + text
+        actions.user.paste(text)
+        actions.edit.left()
+
+
 @ctx.action_class("user")
 class UserActions:
     def code_operator_and():

@@ -18,10 +18,10 @@ key <user.keys> over: "{keys}"
 key <user.modifiers> over: "{modifiers}"
 
 # all actions (requires uncommenting user.talon_populate_lists tag above)
-funk {user.talon_actions}:
-    user.code_insert_function(talon_actions, edit.selected_text())
-funk cell <number>: user.code_select_function(number - 1, "")
+
+funk cell <number>: user.talon_code_insert_function(number - 1, "")
 funk wrap <user.code_common_function>:
-    user.code_insert_function(code_common_function, edit.selected_text())
-funk wrap <number>: user.code_select_function(number - 1, edit.selected_text())
+    user.code_insert_function(code_common_function, edit.selected_text(), False)
+funk wrap <number>: user.talon_code_insert_function(number - 1, edit.selected_text(), False)
+
 
