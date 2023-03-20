@@ -250,12 +250,14 @@ abbreviations = {
     "work in progress": "wip",
 }
 
+
 def get_abbreviations_list():
     return get_list_from_csv(
         "abbreviations.csv",
         headers=("Abbreviation", "Spoken Form"),
         default=abbreviations,
     )
+
 
 ctx = Context()
 ctx.lists["user.abbreviation"] = get_abbreviations_list()
