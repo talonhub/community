@@ -22,7 +22,7 @@ settings():
     # 0 = off
     # 1 = on with eyetracker but not zoom mode
     # 2 = on
-    user.mouse_enable_pop_click = 2
+    user.mouse_enable_pop_click = 1
 
     # When enabled, the 'Scroll Mouse' GUI will not be shown.
     user.mouse_hide_mouse_gui = 0

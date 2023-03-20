@@ -263,7 +263,9 @@ def on_pop():
             or actions.tracking.control_enabled()
             or actions.tracking.control1_enabled()
         )
-        should_click = setting_val == 2 or (
+        should_click = (
+            setting_val == 2 and not actions.tracking.control_zoom_enabled()
+        ) or (
             setting_val == 1
             and is_using_eye_tracker
             and not actions.tracking.control_zoom_enabled()
