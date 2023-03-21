@@ -6,7 +6,8 @@ mod = Module()
 apps = mod.apps
 mod.apps.safari = """
 os: mac
-and app.bundle: com.apple.Safari
+app.bundle: com.apple.Safari
+app.bundle: com.apple.SafariTechnologyPreview
 """
 
 ctx.matches = r"""
