@@ -38,14 +38,14 @@ class BrowserActions:
             address = address_field.AXValue
         except (ui.UIErr, AttributeError):
             address = applescript.run(
-                """
-                tell application id "{bundle}"
+                f"""
+                tell application id "{actions.app.bundle()}"
                     with timeout of 0.1 seconds
                         if not (exists (window 1)) then return ""
                         return window 1's current tab's URL
                     end timeout
                 end tell
-            """.format(bundle=actions.app.bundle())
+            """
             )
         return address
 
