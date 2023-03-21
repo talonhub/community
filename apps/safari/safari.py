@@ -45,7 +45,7 @@ class BrowserActions:
                         return window 1's current tab's URL
                     end timeout
                 end tell
-            """
+            """.format(bundle=actions.app.bundle())
             )
         return address
 
