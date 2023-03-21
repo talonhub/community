@@ -15,10 +15,6 @@ app: safari
 """
 
 
-def safari_app():
-    return ui.apps(bundle="com.apple.Safari")[0]
-
-
 @ctx.action_class("user")
 class UserActions:
     def browser_open_address_in_new_tab():
@@ -29,7 +25,8 @@ class UserActions:
 class BrowserActions:
     def address() -> str:
         try:
-            window = safari_app().windows()[0]
+            mac_app = ui.apps(bundle=actions.app.bundle())[0]
+            window = mac_app.windows()[0]
         except IndexError:
             return ""
         try:
@@ -42,7 +39,7 @@ class BrowserActions:
         except (ui.UIErr, AttributeError):
             address = applescript.run(
                 """
-                tell application id "com.apple.Safari"
+                tell application id "{bundle}"
                     with timeout of 0.1 seconds
                         if not (exists (window 1)) then return ""
                         return window 1's current tab's URL
