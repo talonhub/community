@@ -25,8 +25,7 @@ class UserActions:
 class BrowserActions:
     def address() -> str:
         try:
-            mac_app = ui.apps(bundle=actions.app.bundle())[0]
-            window = mac_app.windows()[0]
+            window = ui.active_app().windows()[0]
         except IndexError:
             return ""
         try:
