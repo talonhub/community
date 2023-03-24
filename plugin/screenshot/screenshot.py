@@ -37,6 +37,9 @@ class Actions:
     def screenshot_selection():
         """Triggers an application that is capable of taking a screenshot of a portion of the screen"""
 
+    def screenshot_selection_clip():
+        """Triggers an application that is capable of taking a screenshot of a portion of the screen and adding to clipboard"""
+
     def screenshot_settings():
         """Opens the settings UI for screenshots.
         Only applies to Mac for now
@@ -109,6 +112,9 @@ os: mac
 class UserActionsMac:
     def screenshot_selection():
         actions.key("cmd-shift-4")
+
+    def screenshot_selection_clip():
+        actions.key("cmd-ctrl-shift-4")
 
 
 ctx_win = Context()
