@@ -267,6 +267,6 @@ clone line: edit.line_clone()
 wipe tail: 
     edit.extend_line_end()
     edit.delete()
-wipe head: 
+wiper | (wipe head): 
     edit.extend_line_start()
     edit.delete()
