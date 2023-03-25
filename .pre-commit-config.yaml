@@ -46,7 +46,7 @@ repos:
         files: \.talon$
         args: ["--whitespaces-count=4"]
   - repo: https://github.com/wenkokke/talonfmt
-    rev: 1.9.0
+    rev: 1.9.5
     hooks:
       - id: talonfmt
         args: ["--in-place"]
