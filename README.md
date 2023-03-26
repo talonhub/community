@@ -326,7 +326,7 @@ Collaborators will reply to issues and pull requests as time and health permits.
 
 # Contributing
 
-See our [CONTRIBUTING.md](CONTRIBUTING.md) for our guidelines for contributors
+See [CONTRIBUTING.md](CONTRIBUTING.md) for our guidelines for contributors
 
 ## Automatic formatting/linters
 
