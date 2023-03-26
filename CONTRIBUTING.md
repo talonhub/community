@@ -24,6 +24,7 @@ Anyone is welcome to submit PRs and report issues.
     tags/splits/
     tags/terminal/
     ```
+### Coding Guidelines
 
 - New programming languages should support the appropriate generic grammars where possible; see the `lang/tags/` directory.
 
