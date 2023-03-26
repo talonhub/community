@@ -127,6 +127,9 @@ os: windows
 class UserActionsWin:
     def screenshot_selection():
         actions.key("super-shift-s")
+        
+    def screenshot_selection_clip():
+        actions.key("super-shift-s")
 
 
 ctx_linux = Context()
