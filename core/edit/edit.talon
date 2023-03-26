@@ -1,7 +1,3 @@
-find it: edit.find()
-
-next one: edit.find_next()
-
 draw:
     edit.word_left()
 draw <number_small>:
