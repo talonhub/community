@@ -6,16 +6,13 @@ mod = Module()
 apps = mod.apps
 mod.apps.safari = """
 os: mac
-and app.bundle: com.apple.Safari
+app.bundle: com.apple.Safari
+app.bundle: com.apple.SafariTechnologyPreview
 """
 
 ctx.matches = r"""
 app: safari
 """
-
-
-def safari_app():
-    return ui.apps(bundle="com.apple.Safari")[0]
 
 
 @ctx.action_class("user")
@@ -28,7 +25,7 @@ class UserActions:
 class BrowserActions:
     def address() -> str:
         try:
-            window = safari_app().windows()[0]
+            window = ui.active_app().windows()[0]
         except IndexError:
             return ""
         try:
@@ -40,8 +37,8 @@ class BrowserActions:
             address = address_field.AXValue
         except (ui.UIErr, AttributeError):
             address = applescript.run(
-                """
-                tell application id "com.apple.Safari"
+                f"""
+                tell application id "{actions.app.bundle()}"
                     with timeout of 0.1 seconds
                         if not (exists (window 1)) then return ""
                         return window 1's current tab's URL
