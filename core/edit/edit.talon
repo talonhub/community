@@ -118,9 +118,9 @@ tabby <number_small>:
     edit.indent_more()
     repeat(number_small-1)
 
-retab:
+retabby:
     edit.indent_less()
-retab <number_small>:
+retabby <number_small>:
     edit.indent_less()
     repeat(number_small-1)
 

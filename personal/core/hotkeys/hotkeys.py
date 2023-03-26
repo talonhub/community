@@ -92,6 +92,22 @@ class Actions:
     def keypad9():
         """document string goes here"""
         sleep_or_wake()
+    
+    def pedal_left():
+        """document string goes here"""
+        trigger_home_row()
+    
+    def pedal_middle():
+        """document string goes here"""
+        actions.talon_plugins.eye_zoom_mouse.mouse_trigger()
+
+    def pedal_right():
+        """document string goes here"""
+        actions.user.system_switcher()
+
+    def pedal_top():
+        """document string goes here"""
+        actions.edit.undo()
 
 
 @ctx_zoom_mouse_enabled.action_class("user")
@@ -135,6 +151,22 @@ class WindowsZoomMouseInactiveActions:
     def keypad9():
         """document string goes here"""
         sleep_or_wake()
+    
+    def pedal_left():
+        """document string goes here"""
+        trigger_home_row()
+    
+    def pedal_middle():
+        """document string goes here"""
+        actions.talon_plugins.eye_zoom_mouse.mouse_trigger()
+
+    def pedal_right():
+        """document string goes here"""
+        actions.user.system_switcher()
+
+    def pedal_top():
+        """document string goes here"""
+        actions.edit.undo()
 
 
 @ctx_zoom_mouse_triggered.action_class("user")
@@ -169,3 +201,19 @@ class WindowsZoomMouseTriggerActions:
 
     def keypad7():
         """document string goes here"""
+    
+    def pedal_left():
+        """document string goes here"""
+        actions.talon_plugins.eye_zoom_mouse.mouse_trigger()
+    
+    def pedal_middle():
+        """document string goes here"""
+        actions.talon_plugins.eye_zoom_mouse.mouse_drag()
+        
+    def pedal_right():
+        """document string goes here"""
+        actions.talon_plugins.eye_zoom_mouse.right_click()
+
+    def pedal_top():
+        """document string goes here"""
+        actions.talon_plugins.eye_zoom_mouse.triple_click()

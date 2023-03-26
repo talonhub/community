@@ -110,10 +110,14 @@ class UserActionsWin:
         actions.key("alt-tab")
 
     def system_open_directory(path):
-        actions.user.exec(f'explorer.exe "{path}"')
+        path = os.path.expanduser(path)
+        if os.path.exists(path):
+            actions.user.exec(f'explorer.exe "{path}"')
+        else:
+            actions.app.notify(f"requested path {path} does not exist")
 
-        # def system_show_clipboard():
-        #     actions.key("super-v")
+    def system_show_clipboard():
+        actions.key("super-v")
 
         # def system_show_portal(phrase: str = None):
         #     """Opens the default browser for the up operating system and performs the phrase command"""

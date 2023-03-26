@@ -40,14 +40,14 @@ replace <number> by <number>:
     edit.paste()
 grab [row] <number>: user.select_range(number, number)
 (grab [row] | row) <number> by <number>: user.select_range(number_1, number_2)
-tab [row] <number>:
+tab row <number>:
     edit.jump_line(number)
     edit.indent_more() 
-tab <number> by <number>:
+tab row <number> by <number>:
     user.select_range(number_1, number_2)
     edit.indent_more()
 # retab that: edit.indent_less()
-retab [row] <number>:
+retab row <number>:
     user.select_range(number, number)
     edit.indent_less()
 retab <number> by <number>:

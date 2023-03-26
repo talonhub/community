@@ -84,7 +84,11 @@ class UserActionsMac:
 
     def system_open_directory(path):
         path = os.path.expanduser(path)
-        subprocess.Popen(["open", path])
+        if os.path.exists(path):
+            print(path)
+            subprocess.call(["open", "-R", path])
+        else:
+            actions.app.notify(f"requested path {path} does not exist")
 
     def system_show_clipboard():
         actions.key("cmd-shift-c")
@@ -134,6 +138,6 @@ ctx.lists["self.system_directories"] = {
     "talent home": os.path.expanduser("~/.talon"),
     "talent user": os.path.expanduser("~/.talon/user"),
     "talent recordings": os.path.expanduser("~/.talon/recordings"),
-    "talent plugins":  "/Applications/Talon Rust.app/Contents/Resources/talon_plugins" if app.branch == "rust" else "/Applications/Talon.app/Contents/Resources/talon_plugins",
+    "talent plugins": "/Applications/Talon.app234/Contents/Resources/talon_plugins",
     "root": "/",
 }
