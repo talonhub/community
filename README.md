@@ -317,38 +317,6 @@ Collaborators will reply to issues and pull requests as time and health permits.
 2. For "minor" fixes and improvements/bugs/new apps, collaborators are free to contribute without any review
 3. For "significant" new development and refactors, collaborators should seek appropriate input and reviews from each-other. Collaborators are encouraged to open a discussion before committing their time to any major effort.
 
-# Contributing
-
-Anyone is welcome to submit PRs and report issues.
-
-## Guidelines for contributions
-
-- Any addition to the global grammar will be scrutinized a bit more thoroughly. The more specific a new context, the less scrutiny that is typically applied.
-
-- New grammars should follow the [subject][verb] standard where-ever possible.
-
-- For Mac OS X, the bundle id should be used for defining app contexts, rather than the name.
-
-- For Windows, both the friendly app name and exe name should be used for defining app contexts when they are different. For some people, the MUICache breaks.
-
-- For new web apps, ensure the domain is used to minimize potential mismatches; see
-  https://github.com/knausj85/knausj_talon/blob/main/apps/README.md.
-
-- New applications should use [tags](https://talon.wiki/unofficial_talon_docs/#tags) to support the appropriate generic command grammars where appropriate:
-
-```
-core/windows_and_tabs/tabs.talon
-tags/browser/
-tags/find_and_replace/
-tags/line_commands/
-tags/multiple_cursors/
-tags/snippets/
-tags/splits/
-tags/terminal/
-```
-
-- New programming languages should support the appropriate generic grammars where possible; see the `lang/tags/` directory.
-
 ## Automatic formatting/linters
 
 This repository uses [`pre-commit`](https://pre-commit.com/) to run and manage its formatters/linters. Running these yourself is optional. If you wish to do so, first [install](https://pre-commit.com/#install) `pre-commit`:
