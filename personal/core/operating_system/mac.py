@@ -114,7 +114,7 @@ class UserActionsMac:
         actions.sleep("250ms")
         # actions.key("cmd-f")
         actions.sleep("250ms")
-        print(current_application)
+        
         actions.insert(current_application)
 
 
