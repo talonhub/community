@@ -138,6 +138,6 @@ ctx.lists["self.system_directories"] = {
     "talent home": os.path.expanduser("~/.talon"),
     "talent user": os.path.expanduser("~/.talon/user"),
     "talent recordings": os.path.expanduser("~/.talon/recordings"),
-    "talent plugins": "/Applications/Talon.app234/Contents/Resources/talon_plugins",
+    "talent plugins": "/Applications/Talon.app/Contents/Resources/talon_plugins",
     "root": "/",
 }
