@@ -85,8 +85,7 @@ class UserActionsMac:
     def system_open_directory(path):
         path = os.path.expanduser(path)
         if os.path.exists(path):
-            print(path)
-            subprocess.call(["open", "-R", path])
+            subprocess.call(["open", path])
         else:
             actions.app.notify(f"requested path {path} does not exist")
 
