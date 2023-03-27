@@ -73,7 +73,6 @@ class user_actions:
 
 @ctx.action_class("app")
 class AppActions:
-
     # app.tabs
     def tab_open():
         actions.key("ctrl-shift-t")
