@@ -6,7 +6,7 @@ from typing import Any, Mapping, Optional
 
 from talon import Module, actions
 
-from .abbreviate.abbreviate import get_abbreviations_list
+from .abbreviate.abbreviate import abbreviations_list
 from .file_extension.file_extension import file_extensions
 from .keys.keys import symbol_key_words
 from .numbers.numbers import digits_map, scales, teens, tens
@@ -39,7 +39,7 @@ REGEX_WITH_SYMBOLS = re.compile(
 )
 
 REVERSE_PRONUNCIATION_MAP = {
-    **{value: key for key, value in get_abbreviations_list().items()},
+    **{value: key for key, value in abbreviations_list.items()},
     **{value.strip(): key for key, value in file_extensions.items()},
     **{str(value): key for key, value in digits_map.items()},
     **{value: key for key, value in symbol_key_words.items()},
