@@ -9,7 +9,7 @@ snap: edit.paste()
 snap enter:
     edit.paste()
     key(enter)
-undo that: edit.undo()
+# undo that: edit.undo()
 redo that: edit.redo()
 snap match: edit.paste_match_style()
 file save: edit.save()
