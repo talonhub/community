@@ -131,7 +131,6 @@ def create_spoken_form_years(num: str):
         if remainder == 0:
             words.append(scales[0])
     else:
-
         # 200X -> two thousand x
         if remainder < 9:
             words.append(REVERSE_PRONUNCIATION_MAP[str(centuries // 10)])
@@ -144,7 +143,6 @@ def create_spoken_form_years(num: str):
     if remainder != 0:
         # 1906 => "nineteen six"
         if remainder < 10:
-
             # todo: decide if we want nineteen oh five"
             # todo: decide if we want "and"
             # both seem like a waste
@@ -270,26 +268,30 @@ def create_spoken_forms_from_regex(source: str, pattern: re.Pattern):
 def generate_string_subsequences(
     source: str,
     words_to_exclude: list[str],
-    minimum_term_length=DEFAULT_MINIMUM_TERM_LENGTH,
+    minimum_term_length: int,
 ):
+    # Includes (lower-cased):
+    # 1. Each word in source, eg "foo bar baz" -> "foo", "bar", "baz".
+    # 2. Each leading subsequence of words from source,
+    #    eg "foo bar baz" -> "foo", "foo bar", "foo bar baz"
+    #    (but not "bar baz" - TODO: is this intentional?)
+    #
+    # Except for:
+    # 3. strings shorter than minimum_term_length
+    # 4. strings in words_to_exclude.
     term_sequence = source.split(" ")
-    terms = list(
-        {
-            term.lower().strip()
-            for term in (
-                term_sequence
-                + list(itertools.accumulate([f"{term} " for term in term_sequence]))
-            )
-        }
-    )
-
-    terms = [
+    terms = {
+        term.lower().strip()
+        for term in (
+            term_sequence
+            + list(itertools.accumulate([f"{term} " for term in term_sequence]))
+        )
+    }
+    return [
         term
         for term in terms
         if (term not in words_to_exclude and len(term) >= minimum_term_length)
     ]
-
-    return terms
 
 
 @dataclass
@@ -308,9 +310,6 @@ class Actions:
     ) -> list[str]:
         """Create spoken forms for a given source"""
 
-        if words_to_exclude is None:
-            words_to_exclude = []
-
         spoken_forms_without_symbols = create_spoken_forms_from_regex(
             source, REGEX_NO_SYMBOLS
         )
@@ -321,28 +320,22 @@ class Actions:
         )
 
         # some may be identical, so ensure the list is reduced
-        full_spoken_forms = list(
-            set(spoken_forms_with_symbols + spoken_forms_without_symbols)
-        )
+        spoken_forms = set(spoken_forms_with_symbols + spoken_forms_without_symbols)
 
         # only generate the subsequences if requested
         if generate_subsequences:
-
             # todo: do we care about the subsequences that are excluded.
             # the only one that seems relevant are the full spoken form for
-            terms = generate_string_subsequences(
-                spoken_forms_without_symbols[-1], words_to_exclude, minimum_term_length
+            spoken_forms.update(
+                generate_string_subsequences(
+                    spoken_forms_without_symbols[-1],
+                    words_to_exclude or [],
+                    minimum_term_length,
+                )
             )
 
-            # always keep the full terms... there's probably a better way to do this
-            for form in full_spoken_forms:
-                if form not in terms:
-                    terms.append(form)
-
-        else:
-            terms = full_spoken_forms
-
-        return terms
+        # Avoid empty spoken forms.
+        return [x for x in spoken_forms if x]
 
     def create_spoken_forms_from_list(
         sources: list[str],

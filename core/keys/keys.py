@@ -146,7 +146,6 @@ punctuation_words = {
     "`": "`",
     ",": ",",  # <== these things
     "back tick": "`",
-    "grave": "`",
     "comma": ",",
     # Workaround for issue with conformer b-series; see #946
     "coma": ",",
@@ -168,6 +167,11 @@ punctuation_words = {
     # Currencies
     "dollar sign": "$",
     "pound sign": "£",
+    "hyphen": "-",
+    "L paren": "(",
+    "left paren": "(",
+    "R paren": ")",
+    "right paren": ")",
 }
 symbol_key_words = {
     "dot": ".",
@@ -186,15 +190,12 @@ symbol_key_words = {
     "dash": "-",
     "equals": "=",
     "plus": "+",
+    "grave": "`",
     "tilde": "~",
     "bang": "!",
     "down score": "_",
     "underscore": "_",
     "paren": "(",
-    "L paren": "(",
-    "left paren": "(",
-    "R paren": ")",
-    "right paren": ")",
     "brace": "{",
     "left brace": "{",
     "brack": "{",
