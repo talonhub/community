@@ -1,8 +1,8 @@
-os: mac
 list: user.modifier_key
+os: mac
 -
 alt: alt
-troll: control
+troll: ctrl
 shift: shift
 super: super
 many: cmd

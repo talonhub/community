@@ -1,9 +1,9 @@
+list: user.modifier_key
 os: windows
 os: linux
-list: user.modifier_key
 -
 alt: alt
-troll: control
+troll: ctrl
 shift: shift
 super: super
 many: super
