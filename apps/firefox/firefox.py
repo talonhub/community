@@ -1,4 +1,4 @@
-from talon import Context, Module, actions
+from talon import Context, Module, actions, app
 
 ctx = Context()
 mod = Module()
@@ -21,20 +21,58 @@ ctx.matches = r"""
 app: firefox
 """
 
+cmd_ctrl = "cmd" if app.platform == "mac" else "ctrl"
+
+
+@mod.action_class
+class Actions:
+    def firefox_bookmarks_sidebar():
+        """Toggles the Firefox bookmark sidebar"""
+        actions.key(f"{cmd_ctrl}-b")
+
+    def firefox_history_sidebar():
+        """Toggles the Firefox history sidebar"""
+        if app.platform == "mac":
+            actions.key("cmd-shift-h")
+        else:
+            actions.key("ctrl-h")
+
+
+@ctx.action_class("user")
+class UserActions:
+    def tab_close_wrapper():
+        actions.sleep("180ms")
+        actions.app.tab_close()
+
 
 @ctx.action_class("browser")
 class BrowserActions:
-    # TODO
-    # action(browser.address):
-    # action(browser.title):
-    def go(url: str):
-        actions.browser.focus_address()
-        actions.sleep("50ms")
-        actions.insert(url)
-        actions.key("enter")
+    def bookmarks():
+        actions.key(f"{cmd_ctrl}-shift-o")
 
-    def focus_search():
+    def focus_page():
         actions.browser.focus_address()
+        actions.edit.find()
+        actions.sleep("180ms")
+        actions.key("escape")
 
-    def submit_form():
-        actions.key("enter")
+    def go_home():
+        actions.key("alt-home")
+
+    def open_private_window():
+        actions.key(f"{cmd_ctrl}-shift-p")
+
+    def show_downloads():
+        if app.platform == "linux":
+            actions.key("ctrl-shift-y")
+        else:
+            actions.key(f"{cmd_ctrl}-j")
+
+    def show_extensions():
+        actions.key(f"{cmd_ctrl}-shift-a")
+
+    def show_history():
+        if app.platform == "mac":
+            actions.key("cmd-y")
+        else:
+            actions.key("ctrl-shift-h")

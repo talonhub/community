@@ -1,3 +1,4 @@
+new line: "\n"
 double dash: "--"
 triple quote: "'''"
 (triple grave | triple back tick | gravy): insert("```")
@@ -6,9 +7,6 @@ ellipses: "..."
 (comma and | spamma): ", "
 arrow: "->"
 dub arrow: "=>"
-new line: "\\n"
-carriage return: "\\r"
-line feed: "\\r\\n"
 empty dub string: user.insert_between('"', '"')
 empty escaped (dub string | dub quotes): user.insert_between('\\"', '\\"')
 empty string: user.insert_between("'", "'")

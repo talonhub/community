@@ -8,6 +8,7 @@ run calibration: tracking.calibrate()
 #control mouse: tracking.control1_toggle()
 zoom mouse: tracking.control_zoom_toggle()
 cancel zoom mouse: tracking.zoom_cancel()
+#control mouse: tracking.control_toggle()
 
 touch:
     mouse_click(0)
