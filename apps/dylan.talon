@@ -290,6 +290,9 @@ zoomer: user.mouse_trigger_zoom_mouse()
 # Focus Figma
 (go fig | figz): "focus figma"
 
+# Raycast AI
+raz: key("alt-g")
+
 
 beep:
   mouse_click()

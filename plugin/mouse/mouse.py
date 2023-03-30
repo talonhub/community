@@ -56,12 +56,12 @@ setting_mouse_enable_pop_stops_scroll = mod.setting(
     default=0,
     desc="When enabled, pop stops continuous scroll modes (wheel upper/downer/gaze)",
 )
-setting_mouse_wake_hides_cursor = mod.setting(
-    "mouse_wake_hides_cursor",
-    type=int,
-    default=0,
-    desc="When enabled, mouse wake will hide the cursor. mouse_wake enables zoom mouse.",
-)
+# setting_mouse_wake_hides_cursor = mod.setting(
+#     "mouse_wake_hides_cursor",
+#     type=int,
+#     default=0,
+#     desc="When enabled, mouse wake will hide the cursor. mouse_wake enables zoom mouse.",
+# )
 setting_mouse_hide_mouse_gui = mod.setting(
     "mouse_hide_mouse_gui",
     type=int,

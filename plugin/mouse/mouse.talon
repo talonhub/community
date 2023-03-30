@@ -1,6 +1,3 @@
-hiss on: user.mouse_enable_pop_click()
-hiss off: user.mouse_disable_pop_click()
-
 (control | see) mouse: user.mouse_toggle_control_mouse()
 (control | see) (zoom | mouse): tracking.control_zoom_toggle()
 camera overlay: tracking.control_debug_toggle()
@@ -9,7 +6,8 @@ run calibration: tracking.calibrate()
 # New commands / Toggles changed to "tracking"
 # ---------------------------------------------
 #control mouse: tracking.control1_toggle()
-#zoom mouse: tracking.control_zoom_toggle()
+zoom mouse: tracking.control_zoom_toggle()
+cancel zoom mouse: tracking.zoom_cancel()
 
 touch:
     mouse_click(0)

@@ -19,7 +19,7 @@ settings():
     user.mouse_enable_pop_stops_scroll = 1
 
     # Enable pop click with 'control mouse' mode
-    user.mouse_enable_pop_click = 1
+    user.mouse_enable_pop_click = 0
 
     # When enabled, the 'Scroll Mouse' GUI will not be shown.
     user.mouse_hide_mouse_gui = 0
