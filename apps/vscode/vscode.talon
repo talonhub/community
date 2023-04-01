@@ -9,9 +9,8 @@ tag(): user.splits
 tag(): user.tabs
 cross: user.split_next()
 window reload: user.vscode("workbench.action.reloadWindow")
-window close: user.vscode("workbench.action.closeWindow")
-#multiple_cursor.py support end
-
+window close: usedter.vscode("workbench.action.closeWindow")
+        #multiple_cursor.py support end
 please [<user.text>]:
     user.vscode("workbench.action.showCommands")
     insert(user.text or "")
@@ -20,7 +19,7 @@ please [<user.text>]:
 bar explore: user.vscode("workbench.view.explorer")
 bar extensions: user.vscode("workbench.view.extensions")
 bar outline: user.vscode("outline.focus")
-bar run: user.vscode("workbench.view.debug")
+bar run: user.vscode("workbench.view.debug")    
 bar search: user.vscode("workbench.view.search")
 bar source: user.vscode("workbench.view.scm")
 bar test: user.vscode("workbench.view.testing.focus")
@@ -77,7 +76,11 @@ zen mode:
     user.vscode("workbench.action.closeSidebar")
     user.vscode("workbench.action.closePanel")
 # File Commands
-go file [<user.text>]:
+go file:
+    user.vscode("workbench.action.quickOpen")
+    sleep(50ms)
+
+^go file <user.text>$:  
     user.vscode("workbench.action.quickOpen")
     sleep(50ms)
     insert(text or "")

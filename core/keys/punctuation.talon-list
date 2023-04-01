@@ -14,7 +14,7 @@ bang: !
 score: _
 quest: ?
 single: '
-double: ''
+double: "
 leper: (
 repper: )
 lacker: [

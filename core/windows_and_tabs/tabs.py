@@ -34,3 +34,5 @@ class tab_actions:
     def tab_close_left():
         """ closes taps to the left"""
 
+    def tab_search(string: str): 
+        """ Executes tab search command"""

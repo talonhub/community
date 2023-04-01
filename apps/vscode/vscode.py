@@ -284,6 +284,11 @@ class UserActions:
 
     def tab_close_left():
         actions.user.vscode("workbench.action.closeEditorsToTheLeft")
+    
+    def tab_search(string: str):
+        actions.user.vscode("workbench.action.quickOpen")
+        actions.sleep("50ms")
+        actions.insert(f"edt {string}")
 
     # splits.py support begin
     def split_number(index: int):
