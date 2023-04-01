@@ -60,24 +60,24 @@ class Actions:
 
 @ctx.action_class('user')
 class UserActions:
-    def split_window(): actions.user.emacs_command("split-window-below")
-    def split_window_vertically(): actions.user.emacs_command("split-window-below")
-    def split_window_up(): actions.user.emacs_command("split-window-below")
+    def split_window(): actions.user.emacs("split-window-below")
+    def split_window_vertically(): actions.user.emacs("split-window-below")
+    def split_window_up(): actions.user.emacs("split-window-below")
     def split_window_down():
-        actions.user.emacs_command("split-window-below")
-        actions.user.emacs_command("other-window")
-    def split_window_horizontally():  actions.user.emacs_command("split-window-right")
-    def split_window_left():          actions.user.emacs_command("split-window-right")
+        actions.user.emacs("split-window-below")
+        actions.user.emacs("other-window")
+    def split_window_horizontally():  actions.user.emacs("split-window-right")
+    def split_window_left():          actions.user.emacs("split-window-right")
     def split_window_right():
-        actions.user.emacs_command("split-window-right")
-        actions.user.emacs_command("other-window")
-    def split_clear(): actions.user.emacs_command("delete-window")
-    def split_clear_all(): actions.user.emacs_command("delete-other-windows")
-    def split_reset(): actions.user.emacs_command("balance-windows")
-    def split_next(): actions.user.emacs_command("other-window")
+        actions.user.emacs("split-window-right")
+        actions.user.emacs("other-window")
+    def split_clear(): actions.user.emacs("delete-window")
+    def split_clear_all(): actions.user.emacs("delete-other-windows")
+    def split_reset(): actions.user.emacs("balance-windows")
+    def split_next(): actions.user.emacs("other-window")
     def split_last():
         actions.user.emacs_prefix(-1)
-        actions.user.emacs_command("other-window")
+        actions.user.emacs("other-window")
     def split_flip():
         # only works reliably if there are only two panes/windows.
         actions.key('ctrl-x b enter ctrl-x o ctrl-x b enter')
@@ -86,7 +86,7 @@ class UserActions:
 
     def select_range(line_start, line_end):
         actions.edit.jump_line(line_start)
-        actions.user.emacs_command("set-mark-command")
+        actions.user.emacs("set-mark-command")
         # If you don't use transient-mark-mode and you want the region highlighted
         # nonetheless, replace set-mark-command with actions.key("ctrl-@ ctrl-@").
         actions.edit.jump_line(line_end)
@@ -110,40 +110,40 @@ class UserActions:
 
 @ctx.action_class('edit')
 class EditActions:
-    def save():       actions.user.emacs_command("save-buffer")
-    def save_all():   actions.user.emacs_command("save-some-buffers")
-    def copy():       actions.user.emacs_command("kill-ring-save")
-    def cut():        actions.user.emacs_command("kill-region")
-    def undo():       actions.user.emacs_command("undo")
-    def paste():      actions.user.emacs_command("yank")
-    def delete():     actions.user.emacs_command("kill-region")
+    def save():       actions.user.emacs("save-buffer")
+    def save_all():   actions.user.emacs("save-some-buffers")
+    def copy():       actions.user.emacs("kill-ring-save")
+    def cut():        actions.user.emacs("kill-region")
+    def undo():       actions.user.emacs("undo")
+    def paste():      actions.user.emacs("yank")
+    def delete():     actions.user.emacs("kill-region")
 
-    def file_start(): actions.user.emacs_command('beginning-of-buffer')
-    def file_end():   actions.user.emacs_command('end-of-buffer')
+    def file_start(): actions.user.emacs('beginning-of-buffer')
+    def file_end():   actions.user.emacs('end-of-buffer')
     # works for eg 'select to top', but not if preceded by other selections :(
-    def extend_file_start(): actions.user.emacs_command('beginning-of-buffer')
-    def extend_file_end(): actions.user.emacs_command('end-of-buffer')
+    def extend_file_start(): actions.user.emacs('beginning-of-buffer')
+    def extend_file_end(): actions.user.emacs('end-of-buffer')
 
-    def select_none(): actions.user.emacs_command("keyboard-quit")
+    def select_none(): actions.user.emacs("keyboard-quit")
     def select_all():
-        actions.user.emacs_command("mark-whole-buffer")
+        actions.user.emacs("mark-whole-buffer")
         # If you don't use transient-mark-mode, maybe do this:
         # actions.key('ctrl-u ctrl-x ctrl-x')
 
-    def word_left():         actions.user.emacs_command("backward-word")
-    def word_right():        actions.user.emacs_command("forward-word")
+    def word_left():         actions.user.emacs("backward-word")
+    def word_right():        actions.user.emacs("forward-word")
     def extend_word_left():  actions.user.emacs_meta('shift-b')
     def extend_word_right(): actions.user.emacs_meta('shift-f')
 
-    def sentence_start(): actions.user.emacs_command("backward-sentence")
-    def sentence_end(): actions.user.emacs_command("forward-sentence")
+    def sentence_start(): actions.user.emacs("backward-sentence")
+    def sentence_end(): actions.user.emacs("forward-sentence")
     def extend_sentence_start(): actions.user.emacs_meta('shift-a')
     def extend_sentence_end(): actions.user.emacs_meta('shift-e')
-    def paragraph_start(): actions.user.emacs_command("backward-paragraph")
-    def paragraph_end(): actions.user.emacs_command("forward-paragraph")
+    def paragraph_start(): actions.user.emacs("backward-paragraph")
+    def paragraph_end(): actions.user.emacs("forward-paragraph")
 
-    def line_start(): actions.user.emacs_command("move-beginning-of-line")
-    def line_end(): actions.user.emacs_command("move-end-of-line")
+    def line_start(): actions.user.emacs("move-beginning-of-line")
+    def line_end(): actions.user.emacs("move-end-of-line")
     def extend_line_start(): actions.key('shift-ctrl-a')
     def extend_line_end(): actions.key('shift-ctrl-e')
 
@@ -154,7 +154,7 @@ class EditActions:
         actions.user.emacs_key('ctrl-a meta-1 ctrl-k ctrl-y ctrl-y up meta-m')
     def jump_line(n):
         actions.user.emacs_prefix(n)
-        actions.user.emacs_command("goto-line")
+        actions.user.emacs("goto-line")
     def select_line(n: int = None):
         if n is not None:
             actions.edit.jump_line(n)
@@ -164,23 +164,23 @@ class EditActions:
         actions.edit.extend_right()
         # This makes it so the cursor is on the same line, which can make
         # subsequent commands more convenient.
-        actions.user.emacs_command('exchange-point-and-mark')
+        actions.user.emacs('exchange-point-and-mark')
 
     def indent_more():
         actions.user.emacs_prefix(4)
-        actions.user.emacs_command("indent-rigidly")
+        actions.user.emacs("indent-rigidly")
     def indent_less():
         actions.user.emacs_prefix(-4)
-        actions.user.emacs_command("indent-rigidly")
+        actions.user.emacs("indent-rigidly")
 
     # These all perform text-scale-adjust, which examines the actual key pressed, so can't
-    # be done with actions.user.emacs_command.
+    # be done with actions.user.emacs.
     def zoom_in():    actions.key('ctrl-x ctrl-+')
     def zoom_out():   actions.key('ctrl-x ctrl--')
     def zoom_reset(): actions.key('ctrl-x ctrl-0')
 
     # Some modes override ctrl-s/r to do something other than isearch-forward, so we
-    # deliberately don't use actions.user.emacs_command.
+    # deliberately don't use actions.user.emacs.
     def find(text: str = None):
         actions.key("ctrl-s")
         if text: actions.insert(text)
@@ -190,15 +190,15 @@ class EditActions:
 @ctx.action_class('app')
 class AppActions:
     def window_open():  actions.key('ctrl-x 5 2')
-    def tab_next():     actions.user.emacs_command("tab-next")
-    def tab_previous(): actions.user.emacs_command("tab-previous")
-    def tab_close():    actions.user.emacs_command("tab-close")
-    def tab_reopen():   actions.user.emacs_command("tab-undo")
-    def tab_open():     actions.user.emacs_command("tab-new")
+    def tab_next():     actions.user.emacs("tab-next")
+    def tab_previous(): actions.user.emacs("tab-previous")
+    def tab_close():    actions.user.emacs("tab-close")
+    def tab_reopen():   actions.user.emacs("tab-undo")
+    def tab_open():     actions.user.emacs("tab-new")
 
 @ctx.action_class('code')
 class CodeActions:
-    def toggle_comment(): actions.user.emacs_command('comment-dwim')
+    def toggle_comment(): actions.user.emacs('comment-dwim')
     def language():
         # Assumes win.filename() gives buffer name.
         if "*scratch*" == actions.win.filename(): return "elisp"

@@ -72,15 +72,15 @@ app.register("ready", load_csv)
 
 @mod.action_class
 class Actions:
-    def emacs_command(name: str):
+    def emacs(command_name: str):
         """
-        Runs the emacs command `name`. Defaults to using M-x, but may use a
-        key binding if known or rpc if available.
+        Runs the emacs command `command_name`. Defaults to using M-x, but may use
+        a key binding if known or rpc if available.
         """
 
 @emacs_ctx.action_class('user')
 class UserActions:
-    def emacs_command(name):
+    def emacs(name):
         command = emacs_commands.by_name.get(name, Command(name))
         if command.keys is not None:
             actions.user.emacs_key(command.keys)
