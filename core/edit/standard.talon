@@ -21,8 +21,14 @@ paste match: edit.paste_match_style()
 disk: edit.save()
 disk oliver: edit.save_all()
 padding: user.insert_between(" ", " ")
-pour: edit.line_insert_down()
-drink: edit.line_insert_up()
+pour [<number_small>]: 
+	numb  = number or 1
+	edit.line_insert_down()
+	repeat(numb - 1)
+drink [<number_small>]: 
+	numb  = number or 1
+	edit.line_insert_up()
+	repeat(numb - 1)
 
 
 
