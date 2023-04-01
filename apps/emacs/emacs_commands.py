@@ -83,8 +83,8 @@ class UserActions:
     def emacs_command(name):
         command = emacs_commands.by_name.get(name, Command(name))
         if command.keys is not None:
-            actions.key(command.keys)
+            actions.user.emacs_key(command.keys)
         else:
-            actions.key("alt-x")
+            actions.user.emacs_meta("x")
             actions.insert(command.short or command.name)
             actions.key("enter")

@@ -23,17 +23,27 @@ def meta(keys):
         logging.error(f"Unrecognized 'emacs_meta' setting: {m!r}. Falling back to 'esc'.")
     return 'esc ' + keys
 
+def meta_fixup(k):
+    if k.startswith('meta-'):
+        k = meta(k[len('meta-'):])
+    elif 'meta-' in k:
+        raise NotImplementedError("user.emacs_key(): please put meta- first")
+    return k
+
 @mod.action_class
 class Actions:
     def emacs_meta(key: str):
         "Presses some keys modified by Emacs' meta key."
         actions.key(meta(key))
 
-    def emacs_command(name: str):
-        "Runs an emacs command."
-        actions.user.emacs_meta("x")
-        actions.insert(name)
-        actions.key("enter")
+    def emacs_key(keys: str):
+        """
+        Presses some keys, translating 'meta-' prefix to the appropriate keys. For
+        example, if the setting user.emacs_meta = 'esc', user.emacs_key("meta-ctrl-a")
+        becomes key("esc ctrl-a").
+        """
+        # TODO: handle corner-cases like key(" ") and key("ctrl- "), etc.
+        actions.key(' '.join(meta_fixup(k) for k in keys.split()))
 
     def emacs_prefix(n: int):
         "Inputs a numeric prefix argument."
@@ -50,95 +60,141 @@ class Actions:
 
 @ctx.action_class('user')
 class UserActions:
-    def split_window():               actions.key('ctrl-x 2')
-    def split_window_vertically():    actions.key('ctrl-x 2')
-    def split_window_up():            actions.key('ctrl-x 2')
-    def split_window_down():          actions.key('ctrl-x 2 ctrl-x o')
-    def split_window_horizontally():  actions.key('ctrl-x 3')
-    def split_window_left():          actions.key('ctrl-x 3')
-    def split_window_right():         actions.key('ctrl-x 3 ctrl-x o')
-    def split_clear():                actions.key('ctrl-x 0')
-    def split_clear_all():            actions.key('ctrl-x 1')
-    # def split_maximize():             actions.key('ctrl-x 1')
-    def split_reset():                actions.key('ctrl-x +')
-    def split_next():                 actions.key("ctrl-x o")
+    def split_window(): actions.user.emacs_command("split-window-below")
+    def split_window_vertically(): actions.user.emacs_command("split-window-below")
+    def split_window_up(): actions.user.emacs_command("split-window-below")
+    def split_window_down():
+        actions.user.emacs_command("split-window-below")
+        actions.user.emacs_command("other-window")
+    def split_window_horizontally():  actions.user.emacs_command("split-window-right")
+    def split_window_left():          actions.user.emacs_command("split-window-right")
+    def split_window_right():
+        actions.user.emacs_command("split-window-right")
+        actions.user.emacs_command("other-window")
+    def split_clear(): actions.user.emacs_command("delete-window")
+    def split_clear_all(): actions.user.emacs_command("delete-other-windows")
+    def split_reset(): actions.user.emacs_command("balance-windows")
+    def split_next(): actions.user.emacs_command("other-window")
     def split_last():
         actions.user.emacs_prefix(-1)
-        actions.key("ctrl-x o")
+        actions.user.emacs_command("other-window")
     def split_flip():
+        # only works reliably if there are only two panes/windows.
         actions.key('ctrl-x b enter ctrl-x o ctrl-x b enter')
         actions.user.split_last()
         actions.key('ctrl-x b enter ctrl-x o')
 
-    def dictation_peek_left():
-        # space-backspace clobbers transient selection if it exists; otherwise
-        # if there's a transient selection we won't overwrite it.
-        actions.key("space backspace")
-        actions.key("ctrl-@")
-        actions.edit.word_left()
-        text = actions.edit.selected_text()
-        actions.key("ctrl-u ctrl-@")
-        return text
-
-    def dictation_peek_right():
-        actions.edit.extend_line_end()
-        text = actions.edit.selected_text()
-        actions.key("ctrl-u ctrl-@")
-        return text
-
     def select_range(line_start, line_end):
         actions.edit.jump_line(line_start)
-        actions.key("ctrl-@ ctrl-@")
+        actions.user.emacs_command("set-mark-command")
+        # If you don't use transient-mark-mode and you want the region highlighted
+        # nonetheless, replace set-mark-command with actions.key("ctrl-@ ctrl-@").
         actions.edit.jump_line(line_end)
         actions.edit.line_end()
         actions.edit.right()
 
+    # dictation_peek() probably won't work in a terminal. PRs welcome.
+    def dictation_peek(left, right):
+        # clobber transient selection if it exists
+        actions.key("space backspace")
+        before, after = None, None
+        if left:
+            actions.edit.extend_word_left()
+            before = actions.edit.selected_text()
+            actions.key("ctrl-u ctrl-@")
+        if right:
+            actions.edit.extend_line_end()
+            after = actions.edit.selected_text()
+            actions.key("ctrl-u ctrl-@")
+        return (before, after)
+
 @ctx.action_class('edit')
 class EditActions:
-    def save():       actions.key('ctrl-x ctrl-s')
-    def save_all():   actions.key('ctrl-x s') # not quite right
-    def copy():       actions.user.emacs_meta('w')
-    def cut():        actions.key('ctrl-w')
-    def undo():       actions.key('ctrl-_')
-    def paste():      actions.key('ctrl-y')
-    def select_all(): actions.key('ctrl-x h ctrl-u ctrl-x ctrl-x')
+    def save():       actions.user.emacs_command("save-buffer")
+    def save_all():   actions.user.emacs_command("save-some-buffers")
+    def copy():       actions.user.emacs_command("kill-ring-save")
+    def cut():        actions.user.emacs_command("kill-region")
+    def undo():       actions.user.emacs_command("undo")
+    def paste():      actions.user.emacs_command("yank")
+    def delete():     actions.user.emacs_command("kill-region")
 
-    def word_left():         actions.user.emacs_meta('b')
-    def word_right():        actions.user.emacs_meta('f')
+    def file_start(): actions.user.emacs_command('beginning-of-buffer')
+    def file_end():   actions.user.emacs_command('end-of-buffer')
+    # works for eg 'select to top', but not if preceded by other selections :(
+    def extend_file_start(): actions.user.emacs_command('beginning-of-buffer')
+    def extend_file_end(): actions.user.emacs_command('end-of-buffer')
+
+    def select_none(): actions.user.emacs_command("keyboard-quit")
+    def select_all():
+        actions.user.emacs_command("mark-whole-buffer")
+        # If you don't use transient-mark-mode, maybe do this:
+        # actions.key('ctrl-u ctrl-x ctrl-x')
+
+    def word_left():         actions.user.emacs_command("backward-word")
+    def word_right():        actions.user.emacs_command("forward-word")
     def extend_word_left():  actions.user.emacs_meta('shift-b')
     def extend_word_right(): actions.user.emacs_meta('shift-f')
-    def sentence_start(): actions.user.emacs_meta('a')
-    def sentence_end(): actions.user.emacs_meta('e')
+
+    def sentence_start(): actions.user.emacs_command("backward-sentence")
+    def sentence_end(): actions.user.emacs_command("forward-sentence")
     def extend_sentence_start(): actions.user.emacs_meta('shift-a')
     def extend_sentence_end(): actions.user.emacs_meta('shift-e')
-    def paragraph_start(): actions.user.emacs_meta('{')
-    def paragraph_end(): actions.user.emacs_meta('}')
+    def paragraph_start(): actions.user.emacs_command("backward-paragraph")
+    def paragraph_end(): actions.user.emacs_command("forward-paragraph")
 
-    def line_swap_down():    actions.key('down ctrl-x ctrl-t up')
-    def line_swap_up():      actions.key('ctrl-x ctrl-t up:2')
-    def line_clone():        actions.key('ctrl-a ctrl-k ctrl-y enter ctrl-y home')
-    def delete_line():       actions.key("ctrl-a ctrl-k")
+    def line_start(): actions.user.emacs_command("move-beginning-of-line")
+    def line_end(): actions.user.emacs_command("move-end-of-line")
+    def extend_line_start(): actions.key('shift-ctrl-a')
+    def extend_line_end(): actions.key('shift-ctrl-e')
+
+    def line_swap_down(): actions.key('down ctrl-x ctrl-t up')
+    def line_swap_up(): actions.key('ctrl-x ctrl-t up:2')
+    def delete_line(): actions.key("ctrl-a ctrl-k")
+    def line_clone():
+        actions.user.emacs_key('ctrl-a meta-1 ctrl-k ctrl-y ctrl-y up meta-m')
     def jump_line(n):
         actions.user.emacs_prefix(n)
-        actions.user.emacs_meta('g')
-        actions.key('g')
+        actions.user.emacs_command("goto-line")
+    def select_line(n: int = None):
+        if n is not None:
+            actions.edit.jump_line(n)
+        else:
+            actions.edit.line_start()
+        actions.edit.extend_line_end()
+        actions.edit.extend_right()
+        # This makes it so the cursor is on the same line, which can make
+        # subsequent commands more convenient.
+        actions.user.emacs_command('exchange-point-and-mark')
 
     def indent_more():
         actions.user.emacs_prefix(4)
-        actions.key('ctrl-x tab')
+        actions.user.emacs_command("indent-rigidly")
     def indent_less():
         actions.user.emacs_prefix(-4)
-        actions.key('ctrl-x tab')
+        actions.user.emacs_command("indent-rigidly")
 
+    # These all perform text-scale-adjust, which examines the actual key pressed, so can't
+    # be done with actions.user.emacs_command.
     def zoom_in():    actions.key('ctrl-x ctrl-+')
     def zoom_out():   actions.key('ctrl-x ctrl--')
     def zoom_reset(): actions.key('ctrl-x ctrl-0')
 
+    # Some modes override ctrl-s/r to do something other than isearch-forward, so we
+    # deliberately don't use actions.user.emacs_command.
     def find(text: str = None):
         actions.key("ctrl-s")
         if text: actions.insert(text)
     def find_next(): actions.key('ctrl-s')
     def find_previous(): actions.key('ctrl-r')
+
+@ctx.action_class('app')
+class AppActions:
+    def window_open():  actions.key('ctrl-x 5 2')
+    def tab_next():     actions.user.emacs_command("tab-next")
+    def tab_previous(): actions.user.emacs_command("tab-previous")
+    def tab_close():    actions.user.emacs_command("tab-close")
+    def tab_reopen():   actions.user.emacs_command("tab-undo")
+    def tab_open():     actions.user.emacs_command("tab-new")
 
 @ctx.action_class('code')
 class CodeActions:
@@ -147,15 +203,6 @@ class CodeActions:
         # Assumes win.filename() gives buffer name.
         if "*scratch*" == actions.win.filename(): return "elisp"
         return actions.next()
-
-@ctx.action_class('app')
-class AppActions:
-    def tab_next():     actions.user.split_next()
-    def tab_previous(): actions.user.split_last()
-    def tab_close():    actions.user.split_clear()
-    def tab_reopen():   actions.key('ctrl-x 4 b enter')
-    def tab_open():     actions.key('ctrl-x 2 ctrl-x o')
-    def window_open():  actions.key('ctrl-x 5 2')
 
 @ctx.action_class('win')
 class WinActions:
