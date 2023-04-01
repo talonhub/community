@@ -1,4 +1,6 @@
 from talon import Module, actions, app
+def tab_close_others():
+        """"""
 
 mod = Module()
 
@@ -19,3 +21,16 @@ class tab_actions:
 
     def tab_duplicate():
         """Duplicates the current tab."""
+
+    def tab_close_others():
+        """Closes all other tabs"""
+        
+    def tab_close_all():
+        """Closes all tabs"""
+
+    def tab_close_right():
+        """Closes all tabs to the right"""
+
+    def tab_close_left():
+        """ closes taps to the left"""
+

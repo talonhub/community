@@ -272,6 +272,18 @@ class UserActions:
             actions.user.vscode("workbench.action.lastEditorInGroup")
         else:
             actions.key("alt-0")
+    
+    def tab_close_others():
+        actions.user.vscode("workbench.action.closeOtherEditors")
+        
+    def tab_close_all():
+        actions.user.vscode("workbench.action.closeAllEditors")
+
+    def tab_close_right():
+        actions.user.vscode("workbench.action.closeEditorsToTheRight")
+
+    def tab_close_left():
+        actions.user.vscode("workbench.action.closeEditorsToTheLeft")
 
     # splits.py support begin
     def split_number(index: int):

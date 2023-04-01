@@ -6,7 +6,7 @@ from typing import Any, Mapping, Optional
 
 from talon import Module, actions
 
-from .abbreviate.abbreviate import abbreviations
+from .abbreviate.abbreviate import abbreviations_list
 from .numbers.numbers import digits_map, scales, teens, tens
 
 # `punctuation_words` is for words you want available BOTH in dictation and as key names in command mode.
@@ -132,7 +132,7 @@ REGEX_WITH_SYMBOLS = re.compile(
 )
 
 REVERSE_PRONUNCIATION_MAP = {
-    **{value: key for key, value in abbreviations.items()},
+    **{value: key for key, value in abbreviations_list.items()},
     **{value.strip(): key for key, value in file_extensions.items()},
     **{str(value): key for key, value in digits_map.items()},
     **{value: key for key, value in symbol_key_words.items()},
