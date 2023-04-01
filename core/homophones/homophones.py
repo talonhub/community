@@ -123,7 +123,7 @@ def raise_homophones(word_to_find_homophones_for, forced=False, selection=False)
         )
     ) + [word_to_find_homophones_for]
     active_word_list = list(map(formatter, valid_homophones_reordered))
-
+    print(f"is_selection: {is_selection} len(active_word_list)= {len(active_word_list)} quick_replace:{quick_replace} force_raise: {force_raise}")
     if (
         is_selection
         and len(active_word_list) == 2
@@ -190,7 +190,7 @@ class Actions:
         """Show homophones for selection, or current word if selection is empty."""
         text = actions.edit.selected_text()
         if text:
-            actions.user.homophones_show(text)
+            raise_homophones(text, False, True)
         else:
             actions.edit.select_word()
             actions.user.homophones_show_selection()
