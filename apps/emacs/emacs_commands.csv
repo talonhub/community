@@ -1,0 +1,94 @@
+Command, Key binding, Short form, Spoken form
+auto-fill-mode,,auto-f
+beginning-of-buffer, alt-<
+browse-kill-ring,,b-k-r
+bury-buffer,,bur
+clone-indirect-buffer,,clo-i
+comment-dwim, alt-;
+comment-line,, comment-l
+comment-region, ctrl-c ;
+compile-defun,,co-def
+describe-character,,desc-char
+diff-buffer-with-file,,d-b-w-f
+dired-jump,ctrl-x ctrl-j
+display-line-numbers-mode,,dis-num
+electric-quote-local-mode
+electric-quote-mode
+end-of-buffer, alt->
+eval-print-last-sexp,,ev-p
+eval-region,,ev-r
+exchange-point-and-mark, ctrl-x ctrl-x
+fileloop-continue,,filel
+fill-paragraph, alt-q
+font-lock-update,ctrl-x x f
+fundamental-mode,,fun-m
+global-display-line-numbers-mode,,g-d-l-n-m
+global-hl-line-mode,,g-hl-l-m
+global-visual-line-mode,,gl-v-l-m
+goto-line,alt-g alt-g
+hl-line-mode,,hl-l-m
+indent-rigidly,ctrl-x tab
+isearch-backward, ctrl-r
+isearch-backward-regexp, alt-ctrl-r
+isearch-forward, ctrl-s
+isearch-forward-regexp, alt-ctrl-s
+kill-paragraph,,kill-par
+narrow-to-region, ctrl-x n n
+occur,ctrl-c o
+other-window, ctrl-x o
+overwrite-mode,,overwr
+pop-mark, ctrl-u ctrl-space
+project-find-file,ctrl-x p f
+project-find-file,ctrl-x p f
+project-find-regexp,ctrl-x p g
+project-find-regexp,ctrl-x p g
+project-query-replace-regexp,ctrl-x p r
+project-search,ctrl-x p ctrl-s
+project-switch-project
+project-vc-dir,ctrl-x p v
+projectile-compile-project,ctrl-x p c
+projectile-dired,ctrl-x p d
+projectile-kill-buffers,ctrl-x p k
+projectile-run-async-shell-command-in-root,ctrl-x p &
+projectile-run-eshell,ctrl-x p e
+projectile-run-shell,ctrl-x p s
+projectile-run-shell-command-in-root,ctrl-x p !
+projectile-switch-to-buffer,ctrl-x p b
+query-replace, alt-%
+query-replace-regexp, ctrl-alt-%
+read-only-mode,ctrl-x ctrl-q
+rename-buffer,ctrl-x x r,ren-b
+rename-uniquely,ctrl-x x u
+revert-buffer,,rev-buf
+revert-buffer-quick,ctrl-x x g
+save-buffer,ctrl-x ctrl-s
+save-buffers-kill-emacs,,s-b-k-e
+smerge-combine-with-next
+smerge-diff-base-lower
+smerge-diff-base-upper
+smerge-diff-upper-lower
+smerge-ediff
+smerge-keep-all
+smerge-keep-base
+smerge-keep-current
+smerge-keep-lower
+smerge-keep-upper
+smerge-next
+smerge-prev
+smerge-refine
+smerge-resolve
+split-window-below, ctrl-x 2
+split-window-right, ctrl-x 3
+text-mode,,text-m
+toggle-input-method, ctrl-\
+toggle-truncate-lines, ctrl-x x t
+transient-mark-mode,,tr-m-m
+transpose-paragraphs,,tr-par
+transpose-sentences,,tr-sen
+undo, ctrl-_
+vc-annotate,ctrl-x v g
+view-lossage,ctrl-h l
+visual-line-mode,,visu-l-m
+whitespace-cleanup,,wh-cl
+whitespace-mode,,white-m
+widen, ctrl-x n w
