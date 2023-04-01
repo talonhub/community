@@ -11,9 +11,9 @@ exchange: user.emacs("exchange-point-and-mark")
 execute: user.emacs_meta("x")
 execute {user.emacs_command}$: user.emacs(emacs_command)
 execute <user.text>$:
-  user.emacs_meta("x")
-  user.insert_formatted(text, "DASH_SEPARATED")
-evaluate | (evaluate|eval) (exper|expression): user.emacs_meta(":")
+    user.emacs_meta("x")
+    user.insert_formatted(text, "DASH_SEPARATED")
+evaluate | (evaluate | eval) (exper | expression): user.emacs_meta(":")
 prefix: key(ctrl-u)
 prefix <number_small>: user.emacs_prefix(number_small)
 
@@ -32,7 +32,7 @@ save some buffers: user.emacs("save-some-buffers")
 save buffers kill emacs: user.emacs("save-buffers-kill-emacs")
 package list | [package] list packages: user.emacs("list-packages")
 package autoremove: user.emacs("package-autoremove")
-reverse (lines|region): user.emacs("reverse-region")
+reverse (lines | region): user.emacs("reverse-region")
 browse kill ring: user.emacs("browse-kill-ring")
 sort lines: user.emacs("sort-lines")
 sort words: user.emacs("sort-words")
@@ -43,8 +43,8 @@ sort words: user.emacs("sort-words")
 
 manual: user.emacs("man")
 manual <user.text>:
-  user.emacs("man")
-  user.insert_formatted(text, "DASH_SEPARATED")
+    user.emacs("man")
+    user.insert_formatted(text, "DASH_SEPARATED")
 
 # BUFFER SWITCHING #
 # many things override these keybindings, so we don't use user.emacs
@@ -55,18 +55,18 @@ display: key(ctrl-x 4 ctrl-o)
 # SHELL COMMANDS #
 shell command: user.emacs("shell-command")
 shell command inserting:
-  key(ctrl-u)
-  user.emacs("shell-command")
+    key(ctrl-u)
+    user.emacs("shell-command")
 shell command on region: user.emacs("shell-command-on-region")
 shell command on region replacing:
-  key(ctrl-u)
-  user.emacs("shell-command-on-region")
+    key(ctrl-u)
+    user.emacs("shell-command-on-region")
 
 # CUSTOMIZE #
 customize face: user.emacs("customize-face")
 customize group: user.emacs("customize-group")
 customize variable: user.emacs("customize-variable")
-(customize|custom) [theme] visit theme: user.emacs("custom-theme-visit-theme")
+(customize | custom) [theme] visit theme: user.emacs("custom-theme-visit-theme")
 
 # MODE COMMANDS #
 auto fill mode: user.emacs("auto-f")
@@ -74,8 +74,7 @@ dired omit mode: user.emacs("dired-omit-mode")
 fundamental mode: user.emacs("fundamental-mode")
 global highlight line mode: user.emacs("global-hl-line-mode")
 global visual line mode: user.emacs("global-visual-line-mode")
-global [display] line numbers [mode]:
-  user.emacs("global-display-line-numbers-mode")
+global [display] line numbers [mode]: user.emacs("global-display-line-numbers-mode")
 highlight line mode: user.emacs("hl-line-mode")
 markdown mode: user.emacs("markdown-mode")
 paredit mode: user.emacs("paredit-mode")
@@ -103,56 +102,54 @@ split solo: user.emacs("delete-other-windows")
 [split] rebalance: user.emacs("balance-windows")
 split shrink: user.emacs("shrink-window-if-larger-than-buffer")
 other [split] shrink:
-  user.split_next()
-  user.emacs("shrink-window-if-larger-than-buffer")
-  user.split_last()
+    user.split_next()
+    user.emacs("shrink-window-if-larger-than-buffer")
+    user.split_last()
 split grow: user.emacs("enlarge-window")
 split grow <number_small>:
-  user.emacs_prefix(number_small)
-  user.emacs("enlarge-window")
+    user.emacs_prefix(number_small)
+    user.emacs("enlarge-window")
 split shrink <number_small>:
-  amount = number_small or 1
-  user.emacs_prefix(0 - amount)
-  user.emacs("enlarge-window")
+    amount = number_small or 1
+    user.emacs_prefix(0 - amount)
+    user.emacs("enlarge-window")
 split widen [<number_small>]:
-  user.emacs_prefix(number_small or 1)
-  user.emacs("enlarge-window-horizontally")
+    user.emacs_prefix(number_small or 1)
+    user.emacs("enlarge-window-horizontally")
 split narrow [<number_small>]:
-  user.emacs_prefix(number_small or 1)
-  user.emacs("shrink-window-horizontally")
-
+    user.emacs_prefix(number_small or 1)
+    user.emacs("shrink-window-horizontally")
 
 # ----- HELP ----- #
 apropos: user.emacs_help("a")
-describe (fun|function): user.emacs_help("f")
+describe (fun | function): user.emacs_help("f")
 describe key: user.emacs_help("k")
 describe key briefly: user.emacs_help("c")
 describe symbol: user.emacs_help("o")
 describe variable: user.emacs_help("v")
 describe mode: user.emacs_help("m")
 describe bindings: user.emacs_help("b")
-describe (char|character): user.emacs("describe-character")
+describe (char | character): user.emacs("describe-character")
 describe text properties: user.emacs("describe-text-properties")
 describe face: user.emacs("describe-face")
 view lossage: user.emacs_help("l")
 
 apropos <user.text>$:
-  user.emacs_help("a")
-  user.insert_formatted(text, "DASH_SEPARATED")
-  key(enter)
-describe (fun|function) <user.text>$:
-  user.emacs_help("f")
-  user.insert_formatted(text, "DASH_SEPARATED")
-  key(enter)
+    user.emacs_help("a")
+    user.insert_formatted(text, "DASH_SEPARATED")
+    key(enter)
+describe (fun | function) <user.text>$:
+    user.emacs_help("f")
+    user.insert_formatted(text, "DASH_SEPARATED")
+    key(enter)
 describe symbol <user.text>$:
-  user.emacs_help("o")
-  user.insert_formatted(text, "DASH_SEPARATED")
-  key(enter)
+    user.emacs_help("o")
+    user.insert_formatted(text, "DASH_SEPARATED")
+    key(enter)
 describe variable <user.text>$:
-  user.emacs_help("v")
-  user.insert_formatted(text, "DASH_SEPARATED")
-  key(enter)
-
+    user.emacs_help("v")
+    user.insert_formatted(text, "DASH_SEPARATED")
+    key(enter)
 
 # ----- FILES & BUFFERS -----
 # many key bindings here are often overridden, so we don't use user.emacs,
@@ -175,9 +172,8 @@ buffer last: key(ctrl-x left)
 buffer rename: user.emacs("rename-buffer")
 
 diff (buffer | [buffer] with file):
-  user.emacs("diff-buffer-with-file")
-  key(enter)
-
+    user.emacs("diff-buffer-with-file")
+    key(enter)
 
 # ----- MOTION AND EDITING ----- #
 mark: user.emacs("set-mark-command")
@@ -185,13 +181,13 @@ go back: user.emacs("pop-mark")
 global [go] back: user.emacs("pop-global-mark")
 
 cut line:
-  edit.line_start()
-  user.emacs_prefix(1)
-  key(ctrl-k)
+    edit.line_start()
+    user.emacs_prefix(1)
+    key(ctrl-k)
 auto indent: user.emacs("indent-region")
 indent <user.number_signed_small>:
-  user.emacs_prefix(number_signed_small)
-  user.emacs("indent-rigidly")
+    user.emacs_prefix(number_signed_small)
+    user.emacs("indent-rigidly")
 
 (search regex | regex search): user.emacs_meta("ctrl-s")
 (search regex | regex search) back: user.emacs_meta("ctrl-r")
@@ -203,20 +199,20 @@ search toggle word: user.emacs_key("meta-s w")
 
 recenter: key(ctrl-u ctrl-l)
 (center | [center] <number_small> from) top:
-  user.emacs_prefix(number_small or 0)
-  key(ctrl-l)
+    user.emacs_prefix(number_small or 0)
+    key(ctrl-l)
 (center | [center] <number_small> from) bottom:
-  number = number_small or 0
-  user.emacs_prefix(-1-number)
-  key(ctrl-l)
+    number = number_small or 0
+    user.emacs_prefix(-1 - number)
+    key(ctrl-l)
 go <number> top:
-  edit.jump_line(number)
-  user.emacs_prefix(0)
-  key(ctrl-l)
+    edit.jump_line(number)
+    user.emacs_prefix(0)
+    key(ctrl-l)
 go <number> bottom:
-  edit.jump_line(number)
-  user.emacs_prefix(-2)
-  key(ctrl-l)
+    edit.jump_line(number)
+    user.emacs_prefix(-2)
+    key(ctrl-l)
 
 next error | error next: user.emacs_key("meta-g n")
 last error | error last: user.emacs_key("meta-g p")
@@ -241,9 +237,9 @@ term [auto] indent:
     user.emacs("mark-sexp")
     user.emacs("indent-region")
 
-(sentence|sent) (right | end): edit.sentence_end()
-(sentence|sent) (left | start): edit.sentence_start()
-(sentence|sent) kill: user.emacs("kill-sentence")
+(sentence | sent) (right | end): edit.sentence_end()
+(sentence | sent) (left | start): edit.sentence_start()
+(sentence | sent) kill: user.emacs("kill-sentence")
 
 graph kill: user.emacs("kill-paragraph")
 graph up: edit.paragraph_start()
@@ -253,32 +249,31 @@ graph copy:
     user.emacs("mark-paragraph")
     edit.copy()
 graph cut:
-  user.emacs("mark-paragraph")
-  edit.cut()
+    user.emacs("mark-paragraph")
+    edit.cut()
 
 # could use these to implement "drag <X> left/right/up/down" commands
 # but note that eg 'transpose line' and 'drag line down' are different
-transpose [word|words]: user.emacs("transpose-words")
-transpose (term|terms): user.emacs("transpose-sexps")
-transpose (char|chars): user.emacs("transpose-chars")
-transpose (line|lines): user.emacs("transpose-lines")
-transpose (sentence|sentences): user.emacs("transpose-sentences")
-transpose (graph|graphs|paragraphs): user.emacs("transpose-paragraphs")
+transpose [word | words]: user.emacs("transpose-words")
+transpose (term | terms): user.emacs("transpose-sexps")
+transpose (char | chars): user.emacs("transpose-chars")
+transpose (line | lines): user.emacs("transpose-lines")
+transpose (sentence | sentences): user.emacs("transpose-sentences")
+transpose (graph | graphs | paragraphs): user.emacs("transpose-paragraphs")
 
-register (copy|save): user.emacs("copy-to-register")
-register (paste|insert): user.emacs("insert-register")
+register (copy | save): user.emacs("copy-to-register")
+register (paste | insert): user.emacs("insert-register")
 register jump: user.emacs("jump-to-register")
-register (copy|save) rectangle: user.emacs("copy-rectangle-to-register")
+register (copy | save) rectangle: user.emacs("copy-rectangle-to-register")
 
 rectangle clear: user.emacs("clear-rectangle")
 rectangle delete: user.emacs("delete-rectangle")
 rectangle kill: user.emacs("kill-rectangle")
 rectangle open: user.emacs("open-rectangle")
-rectangle (copy|save) [to] register: user.emacs("copy-rectangle-to-register")
-rectangle (yank|paste): user.emacs("yank-rectangle")
+rectangle (copy | save) [to] register: user.emacs("copy-rectangle-to-register")
+rectangle (yank | paste): user.emacs("yank-rectangle")
 rectangle copy: user.emacs("copy-rectangle-as-kill")
 rectangle number lines: user.emacs("rectangle-number-lines")
-
 
 # ----- MAJOR & MINOR MODES ----- #
 
@@ -309,9 +304,9 @@ outline hide sublevels: key(ctrl-c @ ctrl-q)
 outline (hide body | [show] (overview | outline)): key(ctrl-c @ ctrl-t)
 outline hide other: key(ctrl-c @ ctrl-o)
 outline forward [same level]: key("ctrl-c @ ctrl-f")
-outline (backward|back) [same level]: key("ctrl-c @ ctrl-b")
+outline (backward | back) [same level]: key("ctrl-c @ ctrl-b")
 outline next [visible heading]: key("ctrl-c @ ctrl-n")
-outline (previous|last) [visible heading]: key("ctrl-c @ ctrl-p")
+outline (previous | last) [visible heading]: key("ctrl-c @ ctrl-p")
 outline insert [heading]: key(ctrl-c @ RET)
 outline up [heading]: key("ctrl-c @ ctrl-u")
 outline promote: key(ctrl-c @ ctrl-<)
