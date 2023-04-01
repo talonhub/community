@@ -148,6 +148,9 @@ ctx.lists["user.python_exception"] = {
 
 @ctx.action_class("user")
 class UserActions:
+    def code_operator_lambda():
+        actions.user.insert_between("lambda ", ": ")
+
     def code_operator_subscript():
         actions.user.insert_between("[", "]")
 
@@ -210,6 +213,12 @@ class UserActions:
 
     def code_operator_or():
         actions.auto_insert(" or ")
+
+    def code_operator_in():
+        actions.auto_insert(" in ")
+
+    def code_operator_not_in():
+        actions.auto_insert(" not in ")
 
     def code_operator_bitwise_and():
         actions.auto_insert(" & ")

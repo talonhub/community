@@ -205,8 +205,25 @@ class UserActions:
         actions.user.paste(result)
         actions.edit.left()
 
+    def code_private_function(text: str):
+        """Inserts private function declaration"""
+        result = "private function {}()".format(
+            actions.user.formatted_text(
+                text, settings.get("user.code_public_function_formatter")
+            )
+        )
+        actions.user.paste(result)
+        actions.edit.left()
+
     def code_private_static_function(text: str):
-        actions.user.code_public_static_function(text)
+        """Inserts private static function declaration"""
+        result = "private static function {}()".format(
+            actions.user.formatted_text(
+                text, settings.get("user.code_protected_function_formatter")
+            )
+        )
+        actions.user.paste(result)
+        actions.edit.left()
 
     def code_protected_static_function(text: str):
         """Inserts protected static function declaration"""

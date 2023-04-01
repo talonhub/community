@@ -1,0 +1,67 @@
+Option, Spoken form
+--abort, abort
+--all, all
+--allow-empty, allow empty
+--amend, amend
+--cached, cached
+--cached, cashed
+--color-words, color words
+--color-words, colour words
+--continue, continue
+--copy, copy
+--create, create
+--delete, delete
+--detach, detach
+--dir-diff, dir diff
+--dir-diff, directory diff
+--dry-run, dry run
+--edit, edit
+--ff-only, fast forward only
+--force, force
+--force-create, force create
+--force-with-lease, force with lease
+--global, global
+--global, global
+--hard, hard
+--ignore-case, ignore case
+--include-untracked, include untracked
+--interactive, interactive
+--keep-index, keep index
+--list, list
+--local, local
+--mixed, mixed
+--move, move
+--no-edit, no edit
+--no-keep-index, no keep index
+--no-track, no track
+--no-verify, no verify
+--orphan, orphan
+--patch, patch
+--prune, prune
+--quiet, quiet
+--quit, quit
+--rebase, rebase
+--remote, remote
+--set-upstream, set up stream
+--set-upstream-to, set up stream to
+--short, short
+--shortstat, short stat
+--skip, skip
+--soft, soft
+--staged, staged
+--stat, stat
+--system, system
+--track, track
+--update, update
+--verbose, verbose
+-b, branch
+-c, combined
+-d, deep
+-vv, very verbose
+HEAD
+main
+master
+origin
+upstream
+origin/main,origin main
+origin/master,origin master
