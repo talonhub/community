@@ -17,6 +17,8 @@ os: mac
 and app.bundle: org.mozilla.firefox
 """
 
+# Make the context match more specifically than anything else. This is important, eg. to
+# override the browser.go_home() implementation in tags/browser/browser_mac.py.
 ctx.matches = r"""
 os: windows
 os: linux
