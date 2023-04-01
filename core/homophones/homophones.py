@@ -123,7 +123,7 @@ def raise_homophones(word_to_find_homophones_for, forced=False, selection=False)
         )
     ) + [word_to_find_homophones_for]
     active_word_list = list(map(formatter, valid_homophones_reordered))
-    print(f"is_selection: {is_selection} len(active_word_list)= {len(active_word_list)} quick_replace:{quick_replace} force_raise: {force_raise}")
+
     if (
         is_selection
         and len(active_word_list) == 2

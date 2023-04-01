@@ -2,7 +2,7 @@ import math
 from itertools import islice
 from pathlib import Path
 
-from talon import Context, Module, actions, app, imgui, registry, settings, ui
+from talon import Context, Module, actions, app, imgui, settings, ui, scope
 
 mod = Module()
 ctx = Context()
@@ -368,7 +368,7 @@ def win_event_handler(window):
 
     path = actions.user.file_manager_current_path()
 
-    if "user.file_manager" not in registry.tags:
+    if "user.file_manager" not in scope.get("tag"):
         actions.user.file_manager_hide_pickers()
         clear_lists()
     elif path:
