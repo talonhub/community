@@ -2,7 +2,7 @@ import os
 from datetime import datetime
 from typing import Optional
 
-from talon import Context, Module, actions, app, clip, cron, registry, screen, ui
+from talon import Context, Module, actions, app, clip, cron, screen, ui
 from talon.canvas import Canvas
 
 mod = Module()
