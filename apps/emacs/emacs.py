@@ -126,15 +126,15 @@ class UserActions:
 
     def select_range(line_start, line_end):
         # Assumes transient mark mode.
-        actions.edit.jump_line(line_end + 1)
         actions.edit.jump_line(line_start)
+        actions.edit.jump_line(line_end + 1)
         actions.user.emacs("exchange-point-and-mark")
 
     # # Version that highlights without transient-mark-mode:
     # def select_range(line_start, line_end):
-    #     actions.edit.jump_line(line_start)
-    #     actions.key("ctrl-@ ctrl-@")
     #     actions.edit.jump_line(line_end + 1)
+    #     actions.key("ctrl-@ ctrl-@")
+    #     actions.edit.jump_line(line_start)
 
     # dictation_peek() probably won't work in a terminal. PRs welcome.
     def dictation_peek(left, right):
