@@ -14,8 +14,8 @@ execute <user.text>$:
     user.emacs_meta_x()
     user.insert_formatted(text, "DASH_SEPARATED")
 evaluate | (evaluate | eval) (exper | expression): user.emacs_meta(":")
-prefix: key(ctrl-u)
-prefix <number_small>: user.emacs_prefix(number_small)
+prefix: user.emacs_command("universal-argument")
+prefix <user.number_signed_small>: user.emacs_prefix(number_signed_small)
 
 open directory: user.emacs("dired-jump")
 other open directory: user.emacs("dired-jump-other-window")

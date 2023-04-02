@@ -158,6 +158,7 @@ transpose-sentences,,tr-sen
 transpose-sexps, meta-ctrl-t
 transpose-words, meta-t
 undo, ctrl-_
+universal-argument, ctrl-u
 vc-annotate,ctrl-x v g
 view-lossage,ctrl-h l
 visual-line-mode,,visu-l-m

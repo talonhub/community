@@ -59,10 +59,12 @@ class Actions:
 
     def emacs_prefix(n: int):
         "Inputs a numeric prefix argument."
-        # Applying meta to each key may be fewer keypresses overall and 'works'
-        # in ansi-term mode.
+        # Applying meta to each key can use fewer keypresses and 'works' in ansi-term
+        # mode.
         actions.user.emacs_meta(" ".join(str(n)))
-        # actions.key(f'ctrl-u {" ".join(str(n))}') # Alternative using ctrl-u.
+        # # Alternative implementation using universal-argument (ctrl-u):
+        # actions.user.emacs("universal-argument")
+        # actions.key(" ".join(str(n)))
 
     def emacs_help(key: str = None):
         "Runs the emacs help command prefix, optionally followed by some keys."
