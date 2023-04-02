@@ -6,6 +6,7 @@ tag(): user.line_commands
 
 # ----- GENERAL ----- #
 #suplex: key(ctrl-x)
+cancel: user.emacs("keyboard-quit")
 exchange: user.emacs("exchange-point-and-mark")
 execute: user.emacs_meta_x()
 execute {user.emacs_command}$: user.emacs(emacs_command)
