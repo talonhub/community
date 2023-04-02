@@ -190,22 +190,20 @@ search edit: user.emacs_meta("e")
 search toggle regex: user.emacs_meta("r")
 search toggle word: user.emacs_key("meta-s w")
 
-recenter: key(ctrl-u ctrl-l)
+recenter:
+    user.emacs_prefix()
+    user.emacs("recenter-top-bottom")
 (center | [center] <number_small> from) top:
-    user.emacs_prefix(number_small or 0)
-    key(ctrl-l)
+    user.emacs("recenter-top-bottom", number_small or 0)
 (center | [center] <number_small> from) bottom:
     number = number_small or 0
-    user.emacs_prefix(-1 - number)
-    key(ctrl-l)
+    user.emacs("recenter-top-bottom", -1 - number)
 go <number> top:
     edit.jump_line(number)
-    user.emacs_prefix(0)
-    key(ctrl-l)
+    user.emacs("recenter-top-bottom", 0)
 go <number> bottom:
     edit.jump_line(number)
-    user.emacs_prefix(-2)
-    key(ctrl-l)
+    user.emacs("recenter-top-bottom", -2)
 
 next error | error next: user.emacs_key("meta-g n")
 last error | error last: user.emacs_key("meta-g p")

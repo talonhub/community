@@ -107,6 +107,7 @@ query-replace, meta-%
 query-replace-regexp, meta-ctrl-%
 read-only-mode,ctrl-x ctrl-q
 recenter-top-bottom, ctrl-l
+recenter-top-bottom, ctrl-l
 rectangle-number-lines, ctrl-x r N
 rename-buffer,ctrl-x x r,ren-b
 rename-uniquely,ctrl-x x u
