@@ -217,8 +217,8 @@ go <number> bottom:
     edit.jump_line(number)
     user.emacs("recenter-top-bottom", -2)
 
-next error | error next: user.emacs_key("meta-g n")
-last error | error last: user.emacs_key("meta-g p")
+next error | error next: user.emacs("next-error")
+last error | error last: user.emacs("previous-error")
 
 term right: user.emacs("forward-sexp")
 term left: user.emacs("backward-sexp")

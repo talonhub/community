@@ -85,6 +85,7 @@ mark-whole-buffer, ctrl-x h
 move-beginning-of-line, ctrl-a
 move-end-of-line, ctrl-e
 narrow-to-region, ctrl-x n n
+next-error, meta-g n
 occur,meta-s o
 open-rectangle, ctrl-x r o
 other-window, ctrl-x o
@@ -92,6 +93,7 @@ overwrite-mode,,overwr
 package-autoremove
 pop-global-mark, ctrl-x ctrl-@
 pop-mark, ctrl-u ctrl-space
+previous-error, meta-g p
 project-find-file,ctrl-x p f
 project-find-regexp,ctrl-x p g
 project-query-replace-regexp,ctrl-x p r
