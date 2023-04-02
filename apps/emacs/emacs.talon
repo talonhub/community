@@ -47,9 +47,12 @@ manual <user.text>:
 
 # BUFFER SWITCHING #
 # many things override these keybindings, so we don't use user.emacs
-switch: key(ctrl-x b)
-other switch: key(ctrl-x 4 b)
-display: key(ctrl-x 4 ctrl-o)
+switch:
+    user.emacs("switch-to-buffer")
+other switch:
+    user.emacs("switch-to-buffer-other-window")
+display:
+    user.emacs("display-buffer")
 
 # SHELL COMMANDS #
 shell command: user.emacs("shell-command")
