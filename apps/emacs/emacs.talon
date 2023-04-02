@@ -69,7 +69,7 @@ customize variable: user.emacs("customize-variable")
 (customize | custom) [theme] visit theme: user.emacs("custom-theme-visit-theme")
 
 # MODE COMMANDS #
-auto fill mode: user.emacs("auto-f")
+auto fill mode: user.emacs("auto-fill-mode")
 dired omit mode: user.emacs("dired-omit-mode")
 fundamental mode: user.emacs("fundamental-mode")
 global highlight line mode: user.emacs("global-hl-line-mode")
