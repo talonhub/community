@@ -291,7 +291,7 @@ class EditActions:
 @ctx.action_class("app")
 class AppActions:
     def window_open():
-        actions.key("ctrl-x 5 2")
+        actions.user.emacs("make-frame-command")
 
     def tab_next():
         actions.user.emacs("tab-next")

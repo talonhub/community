@@ -76,6 +76,7 @@ kmacro-end-and-call-macro, ctrl-x e
 kmacro-end-macro, ctrl-x )
 kmacro-start-macro, ctrl-x (
 list-packages
+make-frame-command, ctrl-x 5 2
 mark-paragraph, meta-h
 mark-sexp, meta-ctrl-@
 mark-whole-buffer, ctrl-x h
