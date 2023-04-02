@@ -36,15 +36,6 @@ class Actions:
 
     def screenshot_selection():
         """Triggers an application that is capable of taking a screenshot of a portion of the screen"""
-        if "user.selection_overlay_enabled" in registry.tags:
-            actions.user.selection_overlay_activate()
-        else:
-            if app.platform == "windows":
-                actions.key("super-shift-s")
-            elif app.platform == "mac":
-                actions.key("ctrl-shift-cmd-4")
-            elif app.platform == "linux":
-                actions.key("shift-printscr")
 
     def screenshot_selection_clip():
         """Triggers an application that is capable of taking a screenshot of a portion of the screen and adding to clipboard"""
