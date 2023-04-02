@@ -24,7 +24,7 @@ language_extensions = {
     "javascript": "js",
     "javascriptreact": "jsx",
     # 'json': 'json',
-    # 'lua': 'lua',
+    "lua": "lua",
     "markdown": "md",
     # 'perl': 'pl',
     "php": "php",
