@@ -116,6 +116,8 @@ revert-buffer-quick,ctrl-x x g
 save-buffer,ctrl-x ctrl-s
 save-buffers-kill-emacs,,s-b-k-e
 save-some-buffers, ctrl-x s
+scroll-other-window, meta-pagedown
+scroll-other-window-down, meta-pageup
 server-edit, ctrl-x #
 set-mark-command, ctrl-@
 shell-command, meta-!
