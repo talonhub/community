@@ -94,8 +94,8 @@ class Actions:
 
 @emacs_ctx.action_class("user")
 class UserActions:
-    def emacs(name):
-        command = emacs_commands.by_name.get(name, Command(name))
+    def emacs(command_name):
+        command = emacs_commands.by_name.get(command_name, Command(command_name))
         if command.keys is not None:
             actions.user.emacs_key(command.keys)
         else:
