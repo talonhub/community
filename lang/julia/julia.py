@@ -14,6 +14,7 @@ ctx.lists["user.code_type"] = {
     "integer": "Int",
 }
 
+
 @ctx.action_class("user")
 class UserActions:
     def code_operator_subscript():
@@ -32,7 +33,9 @@ class UserActions:
     def code_state_else():
         actions.auto_insert("else")
         actions.key("enter")
-    def code_state_else_if(): actions.auto_insert("elseif ")
+
+    def code_state_else_if():
+        actions.auto_insert("elseif ")
 
     def code_state_return():
         actions.insert("return ")
@@ -58,30 +61,54 @@ class UserActions:
             )
         )
         actions.user.paste(result)
-        actions.key("tab")              # auto-indent 'end'
+        actions.key("tab")  # auto-indent 'end'
         actions.edit.up()
         actions.edit.line_end()
         actions.edit.left()
 
-    def code_operator_modulo(): actions.auto_insert(" % ")
-    def code_operator_modulo_assignment(): actions.auto_insert(" %= ")
-    def code_operator_equal(): actions.auto_insert(" == ")
-    def code_operator_not_equal(): actions.auto_insert(" != ")
-    def code_operator_greater_than(): actions.auto_insert(" > ")
-    def code_operator_greater_than_or_equal_to(): actions.auto_insert(" >= ")
-    def code_operator_less_than(): actions.auto_insert(" < ")
-    def code_operator_less_than_or_equal_to(): actions.auto_insert(" <= ")
-    def code_operator_and(): actions.auto_insert(" && ")
-    def code_operator_or(): actions.auto_insert(" || ")
-    def code_operator_in(): actions.auto_insert(" ∈ ")
-    def code_operator_not_in(): actions.auto_insert(" ∉ ")
+    def code_operator_modulo():
+        actions.auto_insert(" % ")
+
+    def code_operator_modulo_assignment():
+        actions.auto_insert(" %= ")
+
+    def code_operator_equal():
+        actions.auto_insert(" == ")
+
+    def code_operator_not_equal():
+        actions.auto_insert(" != ")
+
+    def code_operator_greater_than():
+        actions.auto_insert(" > ")
+
+    def code_operator_greater_than_or_equal_to():
+        actions.auto_insert(" >= ")
+
+    def code_operator_less_than():
+        actions.auto_insert(" < ")
+
+    def code_operator_less_than_or_equal_to():
+        actions.auto_insert(" <= ")
+
+    def code_operator_and():
+        actions.auto_insert(" && ")
+
+    def code_operator_or():
+        actions.auto_insert(" || ")
+
+    def code_operator_in():
+        actions.auto_insert(" ∈ ")
+
+    def code_operator_not_in():
+        actions.auto_insert(" ∉ ")
 
 
 def julia_end():
     actions.insert("\nend")
-    actions.key("tab")                  #auto indent
+    actions.key("tab")  # auto indent
     actions.edit.up()
     actions.edit.line_end()
+
 
 def julia_end_below():
     actions.insert("end")

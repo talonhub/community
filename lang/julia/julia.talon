@@ -13,8 +13,8 @@ tag(): user.code_operators_array
 tag(): user.code_operators_math
 
 settings():
-	user.code_private_function_formatter = "SNAKE_CASE"
-	user.code_public_function_formatter = "SNAKE_CASE"
+    user.code_private_function_formatter = "SNAKE_CASE"
+    user.code_public_function_formatter = "SNAKE_CASE"
     user.code_private_variable_formatter = "SNAKE_CASE"
     user.code_protected_variable_formatter = "SNAKE_CASE"
     user.code_public_variable_formatter = "SNAKE_CASE"
