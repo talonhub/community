@@ -125,13 +125,16 @@ class UserActions:
         actions.key("ctrl-x b enter ctrl-x o")
 
     def select_range(line_start, line_end):
+        # Assumes transient mark mode.
+        actions.edit.jump_line(line_end + 1)
         actions.edit.jump_line(line_start)
-        actions.user.emacs("set-mark-command")
-        # If you don't use transient-mark-mode and you want the region highlighted
-        # nonetheless, replace set-mark-command with actions.key("ctrl-@ ctrl-@").
-        actions.edit.jump_line(line_end)
-        actions.edit.line_end()
-        actions.edit.right()
+        actions.user.emacs("exchange-point-and-mark")
+
+    # # Version that highlights without transient-mark-mode:
+    # def select_range(line_start, line_end):
+    #     actions.edit.jump_line(line_start)
+    #     actions.key("ctrl-@ ctrl-@")
+    #     actions.edit.jump_line(line_end + 1)
 
     # dictation_peek() probably won't work in a terminal. PRs welcome.
     def dictation_peek(left, right):
