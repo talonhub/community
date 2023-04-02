@@ -2,7 +2,7 @@ import itertools
 import re
 from collections import defaultdict
 from dataclasses import dataclass
-from typing import Any, Mapping, Optional, List
+from typing import Any, List, Mapping, Optional
 
 from talon import Module, actions
 
