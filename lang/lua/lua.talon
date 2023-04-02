@@ -35,7 +35,7 @@ state until: "until"
 state return (null | nil): "return nil"
 state return true: "return true"
 state return false: "return false"
-state return table: user.insert_between("return {","}")
+state return table: user.insert_between("return {", "}")
 state append string: " .. "
 
 state label <user.text>:
@@ -47,8 +47,7 @@ require <user.code_libraries>:
     user.code_insert_library("", code_libraries)
     key(end enter)
 
-state (variable | var) [<user.text>] [over]:
-    user.code_public_variable_formatter(text)
+state (variable | var) [<user.text>] [over]: user.code_public_variable_formatter(text)
 
 state local (variable | var) [<user.text>] [over]:
     insert("local ")
