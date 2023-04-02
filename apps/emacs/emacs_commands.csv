@@ -8,7 +8,6 @@ backward-up-list, meta-ctrl-up
 backward-word, meta-b
 balance-windows, ctrl-x +
 beginning-of-buffer, meta-<
-browse-kill-ring
 browse-kill-ring,,b-k-r
 bury-buffer,,bur
 clear-rectangle, ctrl-x r c
@@ -81,7 +80,7 @@ mark-paragraph, meta-h
 mark-sexp, meta-ctrl-@
 mark-whole-buffer, ctrl-x h
 narrow-to-region, ctrl-x n n
-occur,ctrl-c o
+occur,meta-s o
 open-rectangle, ctrl-x r o
 other-window, ctrl-x o
 overwrite-mode,,overwr
@@ -89,8 +88,6 @@ package-autoremove
 pop-global-mark, ctrl-x ctrl-@
 pop-mark, ctrl-u ctrl-space
 project-find-file,ctrl-x p f
-project-find-file,ctrl-x p f
-project-find-regexp,ctrl-x p g
 project-find-regexp,ctrl-x p g
 project-query-replace-regexp,ctrl-x p r
 project-search,ctrl-x p ctrl-s
