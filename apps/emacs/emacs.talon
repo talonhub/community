@@ -203,7 +203,7 @@ search toggle regex: user.emacs_meta("r")
 search toggle word: user.emacs_key("meta-s w")
 
 recenter:
-    user.emacs_prefix()
+    user.emacs("universal-argument")
     user.emacs("recenter-top-bottom")
 (center | [center] <number_small> from) top:
     user.emacs("recenter-top-bottom", number_small or 0)
@@ -293,7 +293,7 @@ project kill buffers: user.emacs("projectile-kill-buffers")
 project switch project: user.emacs("project-switch-project")
 
 # ----- VC/GIT SUPPORT ----- #
-vc (annotate | blame): user.emacs("vc-annotate") ;
+vc (annotate | blame): user.emacs("vc-annotate")
 
 # ----- MAJOR & MINOR MODES ----- #
 # python-mode #
