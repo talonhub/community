@@ -144,11 +144,11 @@ class UserActions:
         if left:
             actions.edit.extend_word_left()
             before = actions.edit.selected_text()
-            actions.key("ctrl-u ctrl-@")
+            actions.user.emacs("pop-mark")
         if right:
             actions.edit.extend_line_end()
             after = actions.edit.selected_text()
-            actions.key("ctrl-u ctrl-@")
+            actions.user.emacs("pop-mark")
         return (before, after)
 
 
