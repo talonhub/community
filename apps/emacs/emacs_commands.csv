@@ -28,6 +28,7 @@ delete-rectangle, ctrl-x r d
 delete-window, ctrl-x 0
 describe-character,, desc-char
 diff-buffer-with-file,, d-b-w-f
+display-buffer, ctrl-x 4 ctrl-o
 dired-jump, ctrl-x ctrl-j
 dired-jump-other-window, ctrl-x 4 ctrl-j
 display-buffer, ctrl-x 4 ctrl-o
@@ -174,6 +175,8 @@ sort-lines
 sort-words
 split-window-below, ctrl-x 2
 split-window-right, ctrl-x 3
+switch-to-buffer, ctrl-x b
+switch-to-buffer-other-window, ctrl-x 4 b
 tab-bar-mode
 tab-close, ctrl-x t 0
 tab-close-other, ctrl-x t 1
