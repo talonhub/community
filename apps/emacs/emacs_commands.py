@@ -85,16 +85,19 @@ app.register("ready", load_csv)
 
 @mod.action_class
 class Actions:
-    def emacs(command_name: str):
+    def emacs(command_name: str, prefix: Optional[int] = None):
         """
         Runs the emacs command `command_name`. Defaults to using M-x, but may use
-        a key binding if known or rpc if available.
+        a key binding if known or rpc if available. Provides numeric prefix argument
+        `prefix` if specified.
         """
 
 
 @emacs_ctx.action_class("user")
 class UserActions:
-    def emacs(command_name):
+    def emacs(command_name, prefix = None):
+        if prefix is not None:
+            actions.user.emacs_prefix(prefix)
         command = emacs_commands.by_name.get(command_name, Command(command_name))
         if command.keys is not None:
             actions.user.emacs_key(command.keys)

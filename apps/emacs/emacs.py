@@ -106,8 +106,7 @@ class UserActions:
         actions.user.emacs("other-window")
 
     def split_last():
-        actions.user.emacs_prefix(-1)
-        actions.user.emacs("other-window")
+        actions.user.emacs("other-window", -1)
 
     def split_flip():
         # only works reliably if there are only two panes/windows.
@@ -239,8 +238,7 @@ class EditActions:
         actions.user.emacs_key("ctrl-a meta-1 ctrl-k ctrl-y ctrl-y up meta-m")
 
     def jump_line(n):
-        actions.user.emacs_prefix(n)
-        actions.user.emacs("goto-line")
+        actions.user.emacs("goto-line", n)
 
     def select_line(n: int = None):
         if n is not None:
@@ -254,12 +252,10 @@ class EditActions:
         actions.user.emacs("exchange-point-and-mark")
 
     def indent_more():
-        actions.user.emacs_prefix(4)
-        actions.user.emacs("indent-rigidly")
+        actions.user.emacs("indent-rigidly", 4)
 
     def indent_less():
-        actions.user.emacs_prefix(-4)
-        actions.user.emacs("indent-rigidly")
+        actions.user.emacs("indent-rigidly", -4)
 
     # These all perform text-scale-adjust, which examines the actual key pressed, so can't
     # be done with actions.user.emacs.

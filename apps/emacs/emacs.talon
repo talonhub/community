@@ -107,18 +107,14 @@ other [split] shrink:
     user.split_last()
 split grow: user.emacs("enlarge-window")
 split grow <number_small>:
-    user.emacs_prefix(number_small)
-    user.emacs("enlarge-window")
+    user.emacs("enlarge-window", number_small)
 split shrink <number_small>:
     amount = number_small or 1
-    user.emacs_prefix(0 - amount)
-    user.emacs("enlarge-window")
+    user.emacs("enlarge-window", 0 - amount)
 split widen [<number_small>]:
-    user.emacs_prefix(number_small or 1)
-    user.emacs("enlarge-window-horizontally")
+    user.emacs("enlarge-window-horizontally", number_small or 1)
 split narrow [<number_small>]:
-    user.emacs_prefix(number_small or 1)
-    user.emacs("shrink-window-horizontally")
+    user.emacs("shrink-window-horizontally", number_small or 1)
 
 # ----- HELP ----- #
 apropos: user.emacs_help("a")
@@ -186,8 +182,7 @@ cut line:
     key(ctrl-k)
 auto indent: user.emacs("indent-region")
 indent <user.number_signed_small>:
-    user.emacs_prefix(number_signed_small)
-    user.emacs("indent-rigidly")
+    user.emacs("indent-rigidly", number_signed_small)
 
 (search regex | regex search): user.emacs_meta("ctrl-s")
 (search regex | regex search) back: user.emacs_meta("ctrl-r")
@@ -223,9 +218,7 @@ term up: user.emacs("backward-up-list")
 term end: user.emacs("up-list")
 term down: user.emacs("down-list")
 term kill: user.emacs("kill-sexp")
-term wipe:
-    user.emacs_prefix(-1)
-    user.emacs("kill-sexp")
+term wipe: user.emacs("kill-sexp", -1)
 term (mark | select): user.emacs("mark-sexp")
 term copy:
     user.emacs("mark-sexp")
