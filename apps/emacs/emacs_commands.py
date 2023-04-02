@@ -95,7 +95,7 @@ class Actions:
 
 @emacs_ctx.action_class("user")
 class UserActions:
-    def emacs(command_name, prefix = None):
+    def emacs(command_name, prefix=None):
         if prefix is not None:
             actions.user.emacs_prefix(prefix)
         command = emacs_commands.by_name.get(command_name, Command(command_name))

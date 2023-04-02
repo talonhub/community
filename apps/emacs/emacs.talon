@@ -13,8 +13,7 @@ execute {user.emacs_command}$: user.emacs(emacs_command)
 execute <user.text>$:
     user.emacs_meta_x()
     user.insert_formatted(text, "DASH_SEPARATED")
-evaluate | (evaluate | eval) (exper | expression):
-    user.emacs("eval-expression")
+evaluate | (evaluate | eval) (exper | expression): user.emacs("eval-expression")
 prefix: user.emacs_command("universal-argument")
 prefix <user.number_signed_small>: user.emacs_prefix(number_signed_small)
 
@@ -107,8 +106,7 @@ other [split] shrink:
     user.emacs("shrink-window-if-larger-than-buffer")
     user.split_last()
 split grow: user.emacs("enlarge-window")
-split grow <number_small>:
-    user.emacs("enlarge-window", number_small)
+split grow <number_small>: user.emacs("enlarge-window", number_small)
 split shrink <number_small>:
     amount = number_small or 1
     user.emacs("enlarge-window", 0 - amount)
@@ -182,8 +180,7 @@ cut line:
     user.emacs_prefix(1)
     key(ctrl-k)
 auto indent: user.emacs("indent-region")
-indent <user.number_signed_small>:
-    user.emacs("indent-rigidly", number_signed_small)
+indent <user.number_signed_small>: user.emacs("indent-rigidly", number_signed_small)
 
 (search regex | regex search): user.emacs_meta("ctrl-s")
 (search regex | regex search) back: user.emacs_meta("ctrl-r")
