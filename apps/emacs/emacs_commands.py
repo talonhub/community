@@ -10,10 +10,7 @@ mod.list("emacs_command", desc="Emacs commands")
 
 ctx = Context()
 emacs_ctx = Context()
-emacs_ctx.matches = r"""
-app: Emacs
-app: emacs
-"""
+emacs_ctx.matches = "app: emacs"
 
 
 class Command(NamedTuple):

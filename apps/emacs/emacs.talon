@@ -1,5 +1,4 @@
 app: emacs
-app: Emacs
 -
 tag(): user.tabs
 tag(): user.splits
