@@ -102,6 +102,6 @@ class UserActions:
         if command.keys is not None:
             actions.user.emacs_key(command.keys)
         else:
-            actions.user.emacs_meta("x")
+            actions.user.emacs_meta_x()
             actions.insert(command.short or command.name)
             actions.key("enter")

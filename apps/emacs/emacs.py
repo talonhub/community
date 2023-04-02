@@ -53,6 +53,10 @@ class Actions:
         # TODO: handle corner-cases like key(" ") and key("ctrl- "), etc.
         actions.key(" ".join(meta_fixup(k) for k in keys.split()))
 
+    def emacs_meta_x():
+        "Prompts user to enter a command name via execute-extended-command (M-x)."
+        actions.user.emacs_meta("x")
+
     def emacs_prefix(n: int):
         "Inputs a numeric prefix argument."
         # Applying meta to each key may be fewer keypresses overall and 'works'
