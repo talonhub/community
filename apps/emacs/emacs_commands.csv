@@ -30,6 +30,7 @@ describe-character,,desc-char
 diff-buffer-with-file,,d-b-w-f
 dired-jump, ctrl-x ctrl-j
 dired-jump-other-window, ctrl-x 4 ctrl-j
+display-buffer, ctrl-x 4 ctrl-o
 display-line-numbers-mode,,dis-num
 down-list, meta-ctrl-down
 electric-quote-local-mode
@@ -65,6 +66,7 @@ isearch-forward, ctrl-s
 isearch-forward-regexp, meta-ctrl-s
 jump-to-register, ctrl-x r j
 keyboard-quit, ctrl-g
+kill-line, ctrl-k
 kill-paragraph,, kill-par
 kill-rectangle, ctrl-x r k
 kill-region, ctrl-w
@@ -80,6 +82,8 @@ make-frame-command, ctrl-x 5 2
 mark-paragraph, meta-h
 mark-sexp, meta-ctrl-@
 mark-whole-buffer, ctrl-x h
+move-beginning-of-line, ctrl-a
+move-end-of-line, ctrl-e
 narrow-to-region, ctrl-x n n
 occur,meta-s o
 open-rectangle, ctrl-x r o

@@ -17,27 +17,26 @@ evaluate | (evaluate | eval) (exper | expression): user.emacs("eval-expression")
 prefix: user.emacs("universal-argument")
 prefix <user.number_signed_small>: user.emacs_prefix(number_signed_small)
 
-go directory: user.emacs("dired-jump")
-other go directory: user.emacs("dired-jump-other-window")
+abort recursive [edit]: user.emacs("abort-recursive-edit")
+browse kill ring: user.emacs("browse-kill-ring")
 fill paragraph: user.emacs("fill-paragraph")
+insert char: user.emacs("insert-char")
 occurs: user.emacs("occur")
 other scroll [down]: user.emacs("scroll-other-window")
 other scroll up: user.emacs("scroll-other-window-down")
-insert char: user.emacs("insert-char")
-abort recursive [edit]: user.emacs("abort-recursive-edit")
-save some buffers: user.emacs("save-some-buffers")
-[toggle] read only [mode]: user.emacs("read-only-mode")
-[toggle] input method: user.emacs("toggle-input-method")
-
-save buffers kill emacs: user.emacs("save-buffers-kill-emacs")
-package list | [package] list packages: user.emacs("list-packages")
 package autoremove: user.emacs("package-autoremove")
+package list | [package] list packages: user.emacs("list-packages")
 reverse (lines | region): user.emacs("reverse-region")
-browse kill ring: user.emacs("browse-kill-ring")
+save buffers kill emacs: user.emacs("save-buffers-kill-emacs")
+save some buffers: user.emacs("save-some-buffers")
 sort lines: user.emacs("sort-lines")
 sort words: user.emacs("sort-words")
-[toggle] [display] line numbers [mode]: user.emacs("display-line-numbers-mode")
+
+go directory: user.emacs("dired-jump")
+other go directory: user.emacs("dired-jump-other-window")
+
 [toggle] debug on error: user.emacs("toggle-debug-on-error")
+[toggle] input method: user.emacs("toggle-input-method")
 [toggle] truncate lines: user.emacs("toggle-truncate-lines")
 [toggle] word wrap: user.emacs("toggle-word-wrap")
 
@@ -64,6 +63,9 @@ shell command on region replacing:
 
 # CUSTOMIZE #
 customize face: user.emacs("customize-face")
+customize face <user.text>$:
+    user.emacs("customize-face")
+    user.insert_formatted(text, "DASH_SEPARATED")
 customize group: user.emacs("customize-group")
 customize variable: user.emacs("customize-variable")
 (customize | custom) [theme] visit theme: user.emacs("custom-theme-visit-theme")
@@ -71,21 +73,29 @@ customize variable: user.emacs("customize-variable")
 # MODE COMMANDS #
 auto fill mode: user.emacs("auto-fill-mode")
 dired omit mode: user.emacs("dired-omit-mode")
+electric quote local mode: user.emacs("electric-quote-local-mode")
+emacs lisp mode: user.emacs("emacs-lisp-mode")
 fundamental mode: user.emacs("fundamental-mode")
+display line numbers mode: user.emacs("display-line-numbers-mode")
+global display line numbers mode: user.emacs("global-display-line-numbers-mode")
 global highlight line mode: user.emacs("global-hl-line-mode")
 global visual line mode: user.emacs("global-visual-line-mode")
-global [display] line numbers [mode]: user.emacs("global-display-line-numbers-mode")
 highlight line mode: user.emacs("hl-line-mode")
+lisp interaction mode: user.emacs("lisp-interaction-mode")
 markdown mode: user.emacs("markdown-mode")
+menu bar mode: user.emacs("menu-bar-mode")
+outline minor mode: user.emacs("outline-minor-mode")
+overwrite mode: user.emacs("overwrite-mode")
 paredit mode: user.emacs("paredit-mode")
 rainbow mode: user.emacs("rainbow-mode")
+read only mode: user.emacs("read-only-mode")
 sub word mode: user.emacs("subword-mode")
-text mode: user.emacs("text-mode")
-visual line mode: user.emacs("visual-line-mode")
-outline minor mode: user.emacs("outline-minor-mode")
-emacs lisp mode: user.emacs("emacs-lisp-mode")
-lisp interaction mode: user.emacs("lisp-interaction-mode")
+tab bar mode: user.emacs("tab-bar-mode")
 talon script mode: user.emacs("talonscript-mode")
+text mode: user.emacs("text-mode")
+transient mark mode: user.emacs("transient-mark-mode")
+visual line mode: user.emacs("visual-line-mode")
+whitespace mode: user.emacs("whitespace-mode")
 
 # MACROS #
 emacs record: user.emacs("kmacro-start-macro")
@@ -98,6 +108,7 @@ profiler stop: user.emacs("profiler-stop")
 profiler report: user.emacs("profiler-report")
 
 # WINDOW/SPLIT MANAGEMENT #
+# What emacs calls windows, we call splits.
 split solo: user.emacs("delete-other-windows")
 [split] rebalance: user.emacs("balance-windows")
 split shrink: user.emacs("shrink-window-if-larger-than-buffer")
@@ -177,10 +188,6 @@ mark: user.emacs("set-mark-command")
 go back: user.emacs("pop-mark")
 global [go] back: user.emacs("pop-global-mark")
 
-cut line:
-    edit.line_start()
-    user.emacs_prefix(1)
-    key(ctrl-k)
 auto indent: user.emacs("indent-region")
 indent <user.number_signed_small>: user.emacs("indent-rigidly", number_signed_small)
 
@@ -243,8 +250,8 @@ graph cut:
     user.emacs("mark-paragraph")
     edit.cut()
 
-# could use these to implement "drag <X> left/right/up/down" commands
-# but note that eg 'transpose line' and 'drag line down' are different
+# NB. can use these to implement "drag <X> left/right/up/down" commands,
+# but note that 'transpose line' and 'drag line down' are different.
 transpose [word | words]: user.emacs("transpose-words")
 transpose (term | terms): user.emacs("transpose-sexps")
 transpose (char | chars): user.emacs("transpose-chars")
@@ -266,9 +273,28 @@ rectangle (yank | paste): user.emacs("yank-rectangle")
 rectangle copy: user.emacs("copy-rectangle-as-kill")
 rectangle number lines: user.emacs("rectangle-number-lines")
 
-# ----- MAJOR & MINOR MODES ----- #
+# ----- PROJECT SUPPORT ----- #
+project [find] file: user.emacs("project-find-file")
+project [find] regexp: user.emacs("project-find-regexp")
+project [query] replace regexp: user.emacs("project-query-replace-regexp")
+project (dired | directory): user.emacs("projectile-dired")
+project [run] shell: user.emacs("projectile-run-shell")
+project [run] eshell: user.emacs("projectile-run-eshell")
+project search: user.emacs("project-search")
+project vc dir: user.emacs("project-vc-dir")
+project compile [project]: user.emacs("projectile-compile-project")
+project [run] shell command: user.emacs("projectile-run-shell-command-in-root")
+project [run] async shell command: user.emacs("projectile-run-async-shell-command-in-root")
+project (switch [to buffer] | buffer | buff): user.emacs("projectile-switch-to-buffer")
+project kill buffers: user.emacs("projectile-kill-buffers")
+project switch project: user.emacs("project-switch-project")
 
+# ----- VC/GIT SUPPORT ----- #
+vc (annotate | blame): user.emacs("vc-annotate") ;
+
+# ----- MAJOR & MINOR MODES ----- #
 # python-mode #
+python mode: user.emacs("python-mode")
 run python: user.emacs("run-python")
 python [shell] send buffer: user.emacs("python-shell-send-buffer")
 python [shell] send file: user.emacs("python-shell-send-file")
@@ -278,6 +304,7 @@ python [shell] send statement: user.emacs("python-shell-send-statement")
 python (shell switch | switch [to] shell): user.emacs("python-shell-switch-to-shell")
 
 # smerge-mode #
+smerge mode: user.emacs("smerge-mode")
 merge next: user.emacs("smerge-next")
 merge last: user.emacs("smerge-prev")
 merge keep upper: user.emacs("smerge-keep-upper")
@@ -288,6 +315,7 @@ merge split: user.emacs("smerge-resolve")
 
 # outline-minor-mode #
 # frequent: overview, show, hide, next, last, forward, backward, up
+outline minor mode: user.emacs("outline-minor-mode")
 outline show all: key(ctrl-c @ ctrl-a)
 outline show entry: key(ctrl-c @ ctrl-e)
 outline hide entry: key(ctrl-c @ ctrl-c)
