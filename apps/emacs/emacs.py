@@ -76,6 +76,10 @@ class Actions:
 
 @ctx.action_class("user")
 class UserActions:
+    def cut_line():
+        actions.edit.line_start()
+        actions.user.emacs("kill-line", 1)
+
     def split_window():
         actions.user.emacs("split-window-below")
 
