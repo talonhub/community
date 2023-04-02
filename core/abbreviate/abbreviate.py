@@ -6,7 +6,7 @@ mod = Module()
 mod.list("abbreviation", desc="Common abbreviation")
 
 
-abbreviations_list = {
+abbreviations = {
     "J peg": "jpg",
     "abbreviate": "abbr",
     "abort": "abrt",
@@ -50,6 +50,7 @@ abbreviations_list = {
     "buffer": "buf",
     "button": "btn",
     "by the way": "btw",
+    "calculate": "calc",
     "calculator": "calc",
     "camera": "cam",
     "canada": "ca",
@@ -152,6 +153,7 @@ abbreviations_list = {
     "executables": "exes",
     "execute": "exec",
     "experience": "exp",
+    "exponent": "exp",
     "expression": "expr",
     "expressions": "exprs",
     "extend": "ext",
@@ -200,6 +202,7 @@ abbreviations_list = {
     "interpreter": "interp",
     "interrupt": "int",
     "iterate": "iter",
+    "jason": "json",
     "jason five": "json5",
     "java archive": "jar",
     "javascript": "js",
@@ -339,7 +342,6 @@ abbreviations_list = {
     "ruby": "rb",
     "rust": "rs",
     "samba D": "smbd",
-    "samba": "smb",
     "samba": "smb",
     "saskatchewan": "sk",
     "schedule": "sched",
