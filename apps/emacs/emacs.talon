@@ -17,8 +17,8 @@ evaluate | (evaluate | eval) (exper | expression): user.emacs("eval-expression")
 prefix: user.emacs("universal-argument")
 prefix <user.number_signed_small>: user.emacs_prefix(number_signed_small)
 
-open directory: user.emacs("dired-jump")
-other open directory: user.emacs("dired-jump-other-window")
+go directory: user.emacs("dired-jump")
+other go directory: user.emacs("dired-jump-other-window")
 fill paragraph: user.emacs("fill-paragraph")
 occurs: user.emacs("occur")
 other scroll [down]: user.emacs("scroll-other-window")
@@ -165,6 +165,8 @@ buffer list: key(ctrl-x ctrl-b)
 buffer next: key(ctrl-x right)
 buffer last: key(ctrl-x left)
 buffer rename: user.emacs("rename-buffer")
+buffer widen: user.emacs("widen")
+buffer narrow | [buffer] narrow to region: user.emacs("narrow-to-region")
 
 diff (buffer | [buffer] with file):
     user.emacs("diff-buffer-with-file")
@@ -268,7 +270,12 @@ rectangle number lines: user.emacs("rectangle-number-lines")
 
 # python-mode #
 run python: user.emacs("run-python")
-python load file: user.emacs("python-shell-send-buffer")
+python [shell] send buffer: user.emacs("python-shell-send-buffer")
+python [shell] send file: user.emacs("python-shell-send-file")
+python [shell] send region: user.emacs("python-shell-send-region")
+python [shell] send (function | defun): user.emacs("python-shell-send-defun")
+python [shell] send statement: user.emacs("python-shell-send-statement")
+python (shell switch | switch [to] shell): user.emacs("python-shell-switch-to-shell")
 
 # smerge-mode #
 merge next: user.emacs("smerge-next")
