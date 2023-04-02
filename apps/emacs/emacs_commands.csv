@@ -37,6 +37,7 @@ electric-quote-mode
 end-of-buffer, meta->
 enlarge-window, ctrl-x ^
 enlarge-window-horizontally,ctrl-x }
+eval-expression, meta-:
 eval-print-last-sexp,,ev-p
 eval-region,,ev-r
 exchange-point-and-mark, ctrl-x ctrl-x

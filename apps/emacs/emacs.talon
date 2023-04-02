@@ -13,7 +13,8 @@ execute {user.emacs_command}$: user.emacs(emacs_command)
 execute <user.text>$:
     user.emacs_meta_x()
     user.insert_formatted(text, "DASH_SEPARATED")
-evaluate | (evaluate | eval) (exper | expression): user.emacs_meta(":")
+evaluate | (evaluate | eval) (exper | expression):
+    user.emacs("eval-expression")
 prefix: user.emacs_command("universal-argument")
 prefix <user.number_signed_small>: user.emacs_prefix(number_signed_small)
 
