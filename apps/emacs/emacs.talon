@@ -46,7 +46,6 @@ manual <user.text>:
     user.insert_formatted(text, "DASH_SEPARATED")
 
 # BUFFER SWITCHING #
-# many things override these keybindings, so we don't use user.emacs
 switch:
     user.emacs("switch-to-buffer")
 other switch:
@@ -57,11 +56,11 @@ display:
 # SHELL COMMANDS #
 shell command: user.emacs("shell-command")
 shell command inserting:
-    key(ctrl-u)
+    user.emacs("universal-argument")
     user.emacs("shell-command")
 shell command on region: user.emacs("shell-command-on-region")
 shell command on region replacing:
-    key(ctrl-u)
+    user.emacs("universal-argument")
     user.emacs("shell-command-on-region")
 
 # CUSTOMIZE #
@@ -161,23 +160,23 @@ describe variable <user.text>$:
     key(enter)
 
 # ----- FILES & BUFFERS -----
-# many key bindings here are often overridden, so we don't use user.emacs,
-# eg: C-x C-f, C-x k, C-x C-b, C-x right, C-x left
-file open: key(ctrl-x ctrl-f)
+file open: user.emacs("find-file")
 file rename: user.emacs("rename-file")
 (file open | find file) at point: user.emacs("ffap")
-other file open: key(ctrl-x 4 ctrl-f)
-(file | buffer) close: key(ctrl-x k enter)
+other file open: user.emacs("find-file-other-window")
+(file | buffer) close:
+    user.emacs("kill-buffer")
+    key(enter)
 
-buffer kill: key(ctrl-x k)
+buffer kill: user.emacs("kill-buffer")
 buffer bury: user.emacs("bury-buffer")
 buffer revert | revert buffer: user.emacs("revert-buffer")
 buffer finish:
     edit.save()
     user.emacs("server-edit")
-buffer list: key(ctrl-x ctrl-b)
-buffer next: key(ctrl-x right)
-buffer last: key(ctrl-x left)
+buffer list: user.emacs("buffer-menu")
+buffer next: user.emacs("next-buffer")
+buffer last: user.emacs("previous-buffer")
 buffer rename: user.emacs("rename-buffer")
 buffer widen: user.emacs("widen")
 buffer narrow | [buffer] narrow to region: user.emacs("narrow-to-region")
@@ -194,13 +193,25 @@ global [go] back: user.emacs("pop-global-mark")
 auto indent: user.emacs("indent-region")
 indent <user.number_signed_small>: user.emacs("indent-rigidly", number_signed_small)
 
-(search regex | regex search): user.emacs_meta("ctrl-s")
-(search regex | regex search) back: user.emacs_meta("ctrl-r")
-replace: user.emacs_meta("%")
-replace regex | regex replace: user.emacs_meta("ctrl-%")
+search back: user.emacs("isearch-backward")
+(search regex | regex search): user.emacs("isearch-forward-regexp")
+(search regex | regex search) back: user.emacs("isearch-backward-regexp")
+replace: user.emacs("query-replace")
+replace regex | regex replace: user.emacs("query-replace-regexp")
+# These start a word/symbol-search or toggle an existing search's mode.
+search [toggle] words: user.emacs("isearch-forward-word")
+search [toggle] symbol: user.emacs("isearch-forward-symbol")
+# These keybindings are only active in isearch-mode.
 search edit: user.emacs_meta("e")
+search toggle case [fold | sensitive]: user.emacs_meta("c")
 search toggle regex: user.emacs_meta("r")
-search toggle word: user.emacs_key("meta-s w")
+
+highlight lines matching [regex]: user.emacs("highlight-lines-matching-regexp")
+highlight regex: user.emacs("highlight-regexp")
+unhighlight regex: user.emacs("unhighlight-regexp")
+unhighlight all:
+    user.emacs("universal-argument")
+    user.emacs("unhighlight-regexp")
 
 recenter:
     user.emacs("universal-argument")
@@ -319,25 +330,25 @@ merge split: user.emacs("smerge-resolve")
 # outline-minor-mode #
 # frequent: overview, show, hide, next, last, forward, backward, up
 outline minor mode: user.emacs("outline-minor-mode")
-outline show all: key(ctrl-c @ ctrl-a)
-outline show entry: key(ctrl-c @ ctrl-e)
-outline hide entry: key(ctrl-c @ ctrl-c)
-outline show [subtree]: key(ctrl-c @ ctrl-s)
-outline hide [subtree]: key(ctrl-c @ ctrl-d)
-outline show children: key(ctrl-c @ tab)
-outline show branches: key(ctrl-c @ ctrl-k)
-outline hide leaves: key(ctrl-c @ ctrl-l)
-outline hide sublevels: key(ctrl-c @ ctrl-q)
-outline (hide body | [show] (overview | outline)): key(ctrl-c @ ctrl-t)
-outline hide other: key(ctrl-c @ ctrl-o)
-outline forward [same level]: key("ctrl-c @ ctrl-f")
-outline (backward | back) [same level]: key("ctrl-c @ ctrl-b")
-outline next [visible heading]: key("ctrl-c @ ctrl-n")
-outline (previous | last) [visible heading]: key("ctrl-c @ ctrl-p")
-outline insert [heading]: key(ctrl-c @ RET)
-outline up [heading]: key("ctrl-c @ ctrl-u")
-outline promote: key(ctrl-c @ ctrl-<)
-outline demote: key(ctrl-c @ ctrl->)
-outline move [subtree] down: key(ctrl-c @ ctrl-v)
-outline move [subtree] up: key(ctrl-c @ ctrl-^)
-outline mark [subtree]: key(ctrl-c @ @)
+outline show all: user.emacs("outline-show-all")
+outline show entry: user.emacs("outline-show-entry")
+outline hide entry: user.emacs("outline-hide-entry")
+outline show [subtree]: user.emacs("outline-show-subtree")
+outline hide [subtree]: user.emacs("outline-hide-subtree")
+outline show children: user.emacs("outline-show-children")
+outline show branches: user.emacs("outline-show-branches")
+outline hide leaves: user.emacs("outline-hide-leaves")
+outline hide sublevels: user.emacs("outline-hide-sublevels")
+outline (hide body | [show] (overview | outline)): user.emacs("outline-hide-body")
+outline hide other: user.emacs("outline-hide-other")
+outline forward [same level]: user.emacs("outline-forward-same-level")
+outline (backward | back) [same level]: user.emacs("outline-backward-same-level")
+outline next [visible heading]: user.emacs("outline-next-visible-heading")
+outline (previous | last) [visible heading]: user.emacs("outline-previous-visible-heading")
+outline insert [heading]: user.emacs("outline-insert-heading")
+outline up [heading]: user.emacs("outline-up-heading")
+outline promote: user.emacs("outline-promote")
+outline demote: user.emacs("outline-demote")
+outline move [subtree] down: user.emacs("outline-move-subtree-down")
+outline move [subtree] up: user.emacs("outline-move-subtree-up")
+outline mark [subtree]: user.emacs("outline-mark-subtree")
