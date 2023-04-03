@@ -98,24 +98,46 @@ class UserActionsMac:
             if application.name == actions.app.name():
                 application.appscript().quit(waitreply=False)
 
-    def system_show_email():
-        is_running = actions.user.switcher_focus("gmail")
+    def system_show_settings():
+        actions.user.launch_or_focus_bundle("com.apple.systempreferences")
 
-    def system_show_slacker():
-        is_running = actions.user.switcher_focus("slack")
-    def system_show_messenger():
-        """Opens the default browser for the up operating system and performs the phrase command"""
-        is_running = actions.user.switcher_focus("messages")
-    def system_taskmanager_find_focused_application(phrase: str = None):
-        """Opens the default browser for the up operating system and performs the phrase command"""
-        current_application = actions.app.name()
+    def system_show_portal(phrase: str = None):
+        actions.user.launch_or_focus_bundle("com.google.Chrome")
+        actions.sleep("250ms")
+        actions.user.parse_phrase(phrase or "")
 
-        actions.user.system_task_manager()
+    def system_show_coder(phrase: str = None):
+        actions.user.launch_or_focus_bundle("com.microsoft.VSCode")
         actions.sleep("250ms")
-        # actions.key("cmd-f")
+        actions.user.parse_phrase(phrase or "")
+
+    def system_show_messenger(phrase: str = None):
+        actions.user.launch_or_focus_bundle("com.apple.MobileSMS")
         actions.sleep("250ms")
+        actions.user.parse_phrase(phrase or "")        
+
+    def system_show_slacker(phrase: str = None):
+        actions.user.launch_or_focus_bundle("com.google.Chrome.app.nabnijjbhmmgnnohmlablhajenhllcda")
+        actions.sleep("250ms")
+        actions.user.parse_phrase(phrase or "")
+
+    def system_show_email(phrase: str = None):
+        actions.user.launch_or_focus_bundle("com.google.Chrome.app.nabnijjbhmmgnnohmlablhajenhllcda")
+        actions.sleep("250ms")
+        actions.user.parse_phrase(phrase or "")
+
+    def system_show_gitter(phrase: str = None):
+        actions.user.launch_or_focus_bundle("com.github.GitHubClient")
+        actions.sleep("250ms")
+        actions.user.parse_phrase(phrase or "")
+
+    def system_show_taskmanager(phrase: str = None):
+        actions.user.launch_or_focus_bundle("com.apple.ActivityMonitor")
+        actions.sleep("250ms")
+        actions.user.parse_phrase(phrase or "")
         
-        actions.insert(current_application)
+    def system_taskmanager_find_focused_application(phrase: str = None):
+        actions.skip()
 
 
 def on_ready():
