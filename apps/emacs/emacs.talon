@@ -46,12 +46,9 @@ manual <user.text>:
     user.insert_formatted(text, "DASH_SEPARATED")
 
 # BUFFER SWITCHING #
-switch:
-    user.emacs("switch-to-buffer")
-other switch:
-    user.emacs("switch-to-buffer-other-window")
-display:
-    user.emacs("display-buffer")
+switch: user.emacs("switch-to-buffer")
+other switch: user.emacs("switch-to-buffer-other-window")
+display: user.emacs("display-buffer")
 
 # SHELL COMMANDS #
 shell command: user.emacs("shell-command")
@@ -297,7 +294,8 @@ project search: user.emacs("project-search")
 project vc dir: user.emacs("project-vc-dir")
 project compile [project]: user.emacs("projectile-compile-project")
 project [run] shell command: user.emacs("projectile-run-shell-command-in-root")
-project [run] async shell command: user.emacs("projectile-run-async-shell-command-in-root")
+project [run] async shell command:
+    user.emacs("projectile-run-async-shell-command-in-root")
 project (switch [to buffer] | buffer | buff): user.emacs("projectile-switch-to-buffer")
 project kill buffers: user.emacs("projectile-kill-buffers")
 project switch project: user.emacs("project-switch-project")
@@ -343,7 +341,8 @@ outline hide other: user.emacs("outline-hide-other")
 outline forward [same level]: user.emacs("outline-forward-same-level")
 outline (backward | back) [same level]: user.emacs("outline-backward-same-level")
 outline next [visible heading]: user.emacs("outline-next-visible-heading")
-outline (previous | last) [visible heading]: user.emacs("outline-previous-visible-heading")
+outline (previous | last) [visible heading]:
+    user.emacs("outline-previous-visible-heading")
 outline insert [heading]: user.emacs("outline-insert-heading")
 outline up [heading]: user.emacs("outline-up-heading")
 outline promote: user.emacs("outline-promote")
