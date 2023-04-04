@@ -64,7 +64,7 @@ indent-rigidly, ctrl-x tab
 insert-char, ctrl-x 8 enter
 insert-register, ctrl-x r i
 isearch-backward, ctrl-r
-isearch-backward-regexpr, meta-ctrl-r
+isearch-backward-regexp, meta-ctrl-r
 isearch-forward, ctrl-s
 isearch-forward-regexp, meta-ctrl-s
 isearch-forward-symbol, meta-s _
