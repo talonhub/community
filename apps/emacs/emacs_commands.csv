@@ -9,6 +9,9 @@ backward-word, meta-b
 balance-windows, ctrl-x +
 beginning-of-buffer, meta-<
 browse-kill-ring,, b-k-r
+buffer-menu, ctrl-x ctrl-b
+buffer-next, ctrl-x right
+buffer-previous, ctrl-x left
 bury-buffer,, bur
 clear-rectangle, ctrl-x r c
 clone-indirect-buffer,, clo-i
@@ -71,6 +74,7 @@ isearch-forward-symbol, meta-s _
 isearch-forward-word, meta-s w
 jump-to-register, ctrl-x r j
 keyboard-quit, ctrl-g
+kill-buffer, ctrl-x k
 kill-line, ctrl-k
 kill-paragraph,, kill-par
 kill-rectangle, ctrl-x r k
