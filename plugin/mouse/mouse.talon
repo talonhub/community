@@ -1,3 +1,19 @@
+# All commands you can call for tracking
+# ---------------------------------------------
+# tracking.calibrate
+# tracking.control1_enabled
+# tracking.control1_toggle
+# tracking.control_debug_toggle
+# tracking.control_enabled
+# tracking.control_gaze_toggle
+# tracking.control_head_toggle
+# tracking.control_mouse_jump_toggle
+# tracking.control_toggle
+# tracking.control_zoom_enabled
+# tracking.control_zoom_toggle
+# tracking.zoom
+# tracking.zoom_cancel
+
 (control | see) mouse: user.mouse_toggle_control_mouse()
 (control | see) (zoom | mouse): tracking.control_zoom_toggle()
 camera overlay: tracking.control_debug_toggle()
