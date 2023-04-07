@@ -85,7 +85,7 @@ clear down:
 
 clear word: edit.delete_word()
 
-clear word left:
+deli:
     edit.extend_word_left()
     edit.delete()
 
