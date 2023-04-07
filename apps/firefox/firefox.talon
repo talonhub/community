@@ -10,6 +10,9 @@ tab search <user.text>$:
     browser.focus_address()
     insert("% {text}")
     key(down)
+    
+tab (last | previous | left): key(ctrl-pageup)
+tab (next | right): key(ctrl-pagedown)
 
 (sidebar | panel) bookmarks: user.firefox_bookmarks_sidebar()
 (sidebar | panel) history: user.firefox_history_sidebar()
