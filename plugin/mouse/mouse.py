@@ -58,12 +58,12 @@ setting_mouse_enable_pop_stops_scroll = mod.setting(
     default=0,
     desc="When enabled, pop stops continuous scroll modes (wheel upper/downer/gaze)",
 )
-# setting_mouse_wake_hides_cursor = mod.setting(
-#     "mouse_wake_hides_cursor",
-#     type=int,
-#     default=0,
-#     desc="When enabled, mouse wake will hide the cursor. mouse_wake enables zoom mouse.",
-# )
+setting_mouse_wake_hides_cursor = mod.setting(
+    "mouse_wake_hides_cursor",
+    type=int,
+    default=0,
+    desc="When enabled, mouse wake will hide the cursor. mouse_wake enables zoom mouse.",
+)
 setting_mouse_hide_mouse_gui = mod.setting(
     "mouse_hide_mouse_gui",
     type=int,
@@ -99,17 +99,9 @@ def gui_wheel(gui: imgui.GUI):
     if gui.button("Wheel Stop [stop scrolling]"):
         actions.user.mouse_scroll_stop()
 
-# Hiss Click
-# def on_hiss(active):
-#     if not actions.speech.enabled():
-#         pass
-#     else:
-#         ctrl.mouse_click(button=0)
-# noise.register("hiss", on_hiss)
 
 @mod.action_class
 class Actions:
-
     def mouse_show_cursor():
         """Shows the cursor"""
         show_cursor_helper(True)
@@ -191,17 +183,6 @@ class Actions:
     def mouse_scroll_right(amount: float = 1):
         """Scrolls right"""
         actions.mouse_scroll(0, amount * setting_mouse_wheel_horizontal_amount.get())
-
-    # def mouse_scroll_right_continuous():
-    #     """Scrolls right continuously"""
-    #     global continuous_scoll_mode
-    #     continuous_scoll_mode = "scroll right continuous"
-    #     mouse_scroll(setting_mouse_wheel_horizontal_amount.get())()
-    #
-    #     if scroll_job is None:
-    #         start_scroll()
-    #     if setting_mouse_hide_mouse_gui.get() == 0:
-    #         gui_wheel.show()
 
     def mouse_scroll_stop():
         """Stops scrolling"""
@@ -291,9 +272,6 @@ def on_pop():
         )
         if should_click:
             ctrl.mouse_click(button=0, hold=16000)
-
-
-noise.register("pop", on_pop)
 
 
 def mouse_scroll(amount):
