@@ -10,7 +10,7 @@ tab search <user.text>$:
     browser.focus_address()
     insert("% {text}")
     key(down)
-    
+
 tab (last | previous | left): key(ctrl-pageup)
 tab (next | right): key(ctrl-pagedown)
 
