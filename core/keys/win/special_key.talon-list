@@ -1,0 +1,20 @@
+list: user.special_key
+os: windows
+os: linux
+-
+pagedown: pagedown
+pageup: pageup
+tab: tab
+puff:enter
+drill:delete
+wipe:backspace
+scrape:escape
+void:space
+page up:pageup
+page down:pagedown
+home:home
+end key:end
+menu key:menu
+print screen: printscr
+
+
