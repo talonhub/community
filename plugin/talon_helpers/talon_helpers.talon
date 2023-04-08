@@ -54,6 +54,8 @@ talent dump context:
 # requires user.talon_populate_lists tag. do not use with dragon
 ^talent copy list {user.talon_lists}$:
     user.talon_copy_list(talon_lists)
+^talent convert list {user.talon_lists}$:
+    user.talon_convert_list(user.talon_lists)
 ^talent dump tags$:
     user.talon_debug_tags()
 ^talent dump modes$:

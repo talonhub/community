@@ -8,3 +8,4 @@ mode: dictation
 # (Talonscript string literals implicitly call `auto_insert`, so there's no need to wrap those)
 <user.raw_prose>: auto_insert(raw_prose)
 # cap: user.dictation_format_cap()
+
