@@ -37,6 +37,8 @@ talon dump context:
     user.talon_action_find("{user.talon_actions}")
 ^talon debug list {user.talon_lists}$: user.talon_debug_list(talon_lists)
 ^talon copy list {user.talon_lists}$: user.talon_copy_list(talon_lists)
+^talon convert list {user.talon_lists}$:
+    user.talon_convert_list(user.talon_lists)
 ^talon debug tags$: user.talon_debug_tags()
 ^talon debug modes$: user.talon_debug_modes()
 ^talon debug scope {user.talon_scopes}$: user.talon_debug_scope(talon_scopes)
