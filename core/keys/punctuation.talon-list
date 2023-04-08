@@ -1,40 +1,29 @@
 list: user.punctuation
 -
-at sign: @
-# Currencies
-pound sign: £
-brick: `
-stroke: /
-backstroke: \
-dash: -
-equal: =
-plus: +
-tilde: ~
-bang: !
-score: _
-quest: ?
-single: '
-double: "
-leper: (
-repper: )
-lacker: [
-racker: ]
-lacer: {
-racer: }
-langle: <
-wrangle: >
-snow: *
-period: .
-point: .
-pound: #
-percy: %
-tangle: ^
-amper: &
-piper: |
-dollar: $
-semi: ;
-stack: :
-drip: ,
+`: `
+,: ,
+back tick: `
 comma: ,
-# Workaround for issue with conformer b-series; see #946
 coma: ,
+period: .
+full stop: .
+semicolon: ;
+colon: :
+forward slash: /
+question mark: ?
+exclamation mark: !
+exclamation point: !
+asterisk: *
+hash sign: #
+number sign: #
+percent sign: %
+at sign: @
+and sign: &
+ampersand: &
+dollar sign: $
+pound sign: £
+hyphen: -
+L paren: (
+left paren: (
+R paren: )
+right paren: )

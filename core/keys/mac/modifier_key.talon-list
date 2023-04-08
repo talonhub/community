@@ -2,10 +2,10 @@ list: user.modifier_key
 os: mac
 -
 alt: alt
-troll: ctrl
+control: ctrl
 shift: shift
 super: super
-many: cmd
+command: cmd
 option: alt
 
 

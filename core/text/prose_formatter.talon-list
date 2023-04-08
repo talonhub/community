@@ -1,5 +1,5 @@
 list: user.prose_formatter
 -
+say: NOOP
 speak: NOOP
 sentence: CAPITALIZE_FIRST_WORD
-  

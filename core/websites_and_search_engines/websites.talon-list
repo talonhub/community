@@ -1,20 +1,21 @@
 list: user.website
 -
-talent home page:http://talonvoice.com
-talent slack:https://app.slack.com/client/T7FPSMV8F/C7EK0P
-talent issues:https://github.com/talonvoice/talon/issues
-talent community:https://github.com/knausj85/knausj_talon
-talent community issues:https://github.com/knausj85/knausj_talon/issues
-talent wiki:https://talon.wiki/
-talent search:https://search.talonvoice.com/search/
-amazon:https://www.amazon.com/
-dropbox:https://dropbox.com/
-google:https://www.google.com/
-google calendar:https://calendar.google.com
-google maps:https://maps.google.com/
-google scholar:https://scholar.google.com/
-gmail:https://mail.google.com/
-github:https://github.com/
-gist:https://gist.github.com/
-wikipedia:https://en.wikipedia.org/
-youtube:https://www.youtube.com/
+talon home page:http://talonvoice.com
+talon slack:https://app.slack.com/client/T7FPSMV8F/C7EK0P
+talon issues:https://github.com/talonvoice/talon/issues
+talon community:https://github.com/knausj85/knausj_talon
+talon community issues:https://github.com/knausj85/knausj_talon/issues
+talon wiki: https://talon.wiki/
+talon practice: https://chaosparrot.github.io/talon_practice/
+talon repository search: https://search.talonvoice.com/search/
+amazon: https://www.amazon.com/
+dropbox: https://dropbox.com/
+google: https://www.google.com/
+google calendar: https://calendar.google.com
+google maps: https://maps.google.com/
+google scholar: https://scholar.google.com/
+gmail: https://mail.google.com/
+github: https://github.com/
+gist: https://gist.github.com/
+wikipedia: https://en.wikipedia.org/
+youtube: https://www.youtube.com/
