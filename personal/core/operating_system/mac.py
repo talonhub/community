@@ -114,15 +114,19 @@ class UserActionsMac:
     def system_show_messenger(phrase: str = None):
         actions.user.launch_or_focus_bundle("com.apple.MobileSMS")
         actions.sleep("250ms")
-        actions.user.parse_phrase(phrase or "")        
+        actions.user.parse_phrase(phrase or "")
 
     def system_show_slacker(phrase: str = None):
-        actions.user.launch_or_focus_bundle("com.google.Chrome.app.nabnijjbhmmgnnohmlablhajenhllcda")
+        actions.user.launch_or_focus_bundle(
+            "com.google.Chrome.app.nabnijjbhmmgnnohmlablhajenhllcda"
+        )
         actions.sleep("250ms")
         actions.user.parse_phrase(phrase or "")
 
     def system_show_email(phrase: str = None):
-        actions.user.launch_or_focus_bundle("com.google.Chrome.app.nabnijjbhmmgnnohmlablhajenhllcda")
+        actions.user.launch_or_focus_bundle(
+            "com.google.Chrome.app.nabnijjbhmmgnnohmlablhajenhllcda"
+        )
         actions.sleep("250ms")
         actions.user.parse_phrase(phrase or "")
 
@@ -135,7 +139,7 @@ class UserActionsMac:
         actions.user.launch_or_focus_bundle("com.apple.ActivityMonitor")
         actions.sleep("250ms")
         actions.user.parse_phrase(phrase or "")
-        
+
     def system_taskmanager_find_focused_application(phrase: str = None):
         actions.skip()
 

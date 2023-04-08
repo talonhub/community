@@ -6,8 +6,14 @@ import os
 
 mod = Module()
 mod.list("system_setting", desc="List of system level configuration setting to launch")
-mod.list("system_directories", desc="List of system directories. By default, these are generated on start per-OS")
-mod.list("user_directories", desc="List of user-defined directories. Empty by default, used to expand the available paths")
+mod.list(
+    "system_directories",
+    desc="List of system directories. By default, these are generated on start per-OS",
+)
+mod.list(
+    "user_directories",
+    desc="List of user-defined directories. Empty by default, used to expand the available paths",
+)
 
 
 portal_name = mod.setting(
@@ -46,23 +52,30 @@ ctx = Context()
 ctx.lists["self.system_setting"] = {}
 ctx.lists["self.system_directories"] = {}
 
+
 @mod.capture(rule="{user.system_directories}")
 def system_diretory(m) -> str:
     return m.system_directories
+
 
 @mod.capture(rule="{user.user_directories}")
 def user_directory(m) -> str:
     return m.user_directories
 
+
 @mod.capture(rule="<user.user_directory> | <user.system_diretory>")
 def directory(m) -> str:
     return str(m)
+
 
 @mod.action_class
 class Actions:
     def exec(command: str):
         """Run command"""
         os.system(command)
+
+    def system_setting(system_setting: str):
+        """Launches a system setting app"""
 
     def system_shutdown():
         """Shutdown operating system"""
@@ -129,4 +142,3 @@ class Actions:
 
     def system_taskmanager_find_focused_application(phrase: str = None):
         """Opens the default browser for the up operating system and performs the phrase command"""
-

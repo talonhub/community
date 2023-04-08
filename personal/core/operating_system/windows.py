@@ -82,6 +82,12 @@ class UserActionsWin:
     def exec(command: str):
         actions.user.system_command_nb(command)
 
+    def system_setting(system_setting: str):
+        actions.key("super-r")
+        actions.sleep("500ms")
+        actions.insert(system_setting)
+        actions.key("enter")
+
     def system_shutdown():
         shutdown("s")
 
@@ -126,44 +132,51 @@ class UserActionsWin:
                 os.kill(application.pid, 0)
 
     def system_show_settings():
-        actions.user.switcher_focus("Settings")
+        if not actions.user.switcher_focus("settings"):
+            actions.user.switcher_launch("settings")
 
     def system_show_email(phrase: str = None):
         """Opens the defaul6t browser for the up operating system and performs the phrase command"""
         actions.key("super-2")
+        actions.sleep("500ms")
         actions.user.parse_phrase(phrase or "")
 
     def system_show_messenger(phrase: str = None):
         """Opens the default browser for the up operating system and performs the phrase command"""
         # is_running = actions.user.switcher_focus(messaging_application.get())
         actions.key("super-3")
+        actions.sleep("500ms")
         actions.user.parse_phrase(phrase or "")
 
     def system_show_slacker(phrase: str = None):
         """Opens the default browser for the up operating system and performs the phrase command"""
         actions.key("super-4")
+        actions.sleep("500ms")
         actions.user.parse_phrase(phrase or "")
 
     def system_show_gitter(phrase: str = None):
         """Opens the default browser for the up operating system and performs the phrase command"""
         actions.key("super-5")
+        actions.sleep("500ms")
         actions.user.parse_phrase(phrase or "")
 
     def system_show_portal(phrase: str = None):
         """Opens the default browser for the up operating system and performs the phrase command"""
         actions.key("super-6")
+        actions.sleep("500ms")
         actions.user.parse_phrase(phrase or "")
 
     def system_show_coder(phrase: str = None):
         """Opens the default browser for the up operating system and performs the phrase command"""
         actions.key("super-7")
+        actions.sleep("500ms")
         actions.user.parse_phrase(phrase or "")
 
     def system_show_taskmanager(phrase: str = None):
         is_running = actions.user.switcher_focus("task manager")
-        actions.sleep("250ms")
+        actions.sleep("500ms")
         if is_running:
-            actions.user.parse_phrase(phrase or "") 
+            actions.user.parse_phrase(phrase or "")
 
 
 def shutdown(flag: str):
