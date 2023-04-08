@@ -161,10 +161,10 @@ class UserActions:
         actions.insert("nil")
 
     def code_insert_is_null():
-        actions.insert("== nil")
+        actions.insert(" == nil")
 
     def code_insert_is_not_null():
-        actions.insert("~= nil")
+        actions.insert(" ~= nil")
 
     ##
     # code_functions
