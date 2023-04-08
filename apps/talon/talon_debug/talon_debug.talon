@@ -16,6 +16,7 @@ list {user.talon_lists}: "{talon_lists}"
 capture {user.talon_captures}: "{talon_captures}"
 set {user.talon_settings}: user.paste("{talon_settings}")
 host:
+    hostname = user.talon_get_hostname()
     user.paste("{hostname}")
 application {user.talon_apps}:
     user.paste("{talon_apps}")
