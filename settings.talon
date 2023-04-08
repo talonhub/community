@@ -64,4 +64,4 @@ settings():
     #user.window_snap_screen = "size aware"
 
 # Uncomment this to enable the curse yes/curse no commands (show hide mouse cursor). See issue #688.
-# tag(): user.mouse_cursor_commands_enable
+tag(): user.mouse_cursor_commands_enable
