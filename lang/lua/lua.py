@@ -16,7 +16,7 @@ mod.tag("stylua", desc="Tag for stylua linting commands")
 
 ctx.lists["user.code_common_function"] = {
     "to number": "tonumber",
-    "eye pairs": "ipairs",
+    "I pairs": "ipairs",
     "print": "print",
     "print F": "printf",
     "type": "type",
@@ -24,9 +24,9 @@ ctx.lists["user.code_common_function"] = {
     "get meta table": "getmetatable",
     "set meta table": "setmetatable",
     # io
-    "eye oh write": "io.write",
-    "eye oh read": "io.read",
-    "eye oh open": "io.open",
+    "I O write": "io.write",
+    "I O read": "io.read",
+    "I O open": "io.open",
     # string
     "format": "string.format",
     "string G find": "string.gfind",
@@ -48,6 +48,7 @@ ctx.lists["user.code_common_function"] = {
     # json
     "jason parse": "json.parse",
     # http
+    "H T T P get": "http.get",
     "web get": "http.get",
     # os
     "O S date": "os.date",
@@ -92,30 +93,25 @@ class UserActions:
     # code_imperative
     ##
     def code_state_if():
-        actions.insert("if  then\n\nend")
-        actions.key("up:2")
+        actions.user.insert_between("if ", " then")
 
     def code_state_else_if():
-        actions.insert("elseif  then\n")
-        actions.key("up:1 right:3")
+        actions.user.insert_between("elseif ", " then")
 
     def code_state_else():
         actions.insert("else\n")
 
     def code_state_do():
-        actions.insert("repeat\n\nuntil ")
-        actions.key("up:1")
+        actions.insert("repeat\n")
 
     def code_state_for():
-        actions.insert("for  do\n\nend")
-        actions.key("up:2 right:1")
+        actions.user.insert_between("for ", " do")
 
     def code_state_go_to():
         actions.insert("goto ")
 
     def code_state_while():
-        actions.insert("while  do\n\nend")
-        actions.key("up:2 right:3")
+        actions.user.insert_between("while ", " do")
 
     def code_state_return():
         actions.insert("return ")
@@ -128,7 +124,7 @@ class UserActions:
         actions.insert("goto continue")
 
     def code_try_catch():
-        actions.insert_between("pcall(", ")")
+        actions.user.insert_between("pcall(", ")")
 
     ##
     # code_comment_line
@@ -221,7 +217,7 @@ class UserActions:
     # code_operators_array
     ##
     def code_operator_subscript():
-        actions.insert_between("[", "]")
+        actions.user.insert_between("[", "]")
 
     ##
     # code_operators_assignment
