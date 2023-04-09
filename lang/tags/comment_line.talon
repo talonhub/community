@@ -1,7 +1,6 @@
 tag: user.code_comment_line
 -
 note: user.code_comment_line_prefix()
-note:
     #todo: this should probably be a single function once
     #.talon supports implementing actions with parameters?
     edit.line_start()
