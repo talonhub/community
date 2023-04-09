@@ -3,6 +3,6 @@ __pycache__
 *.sw?
 .idea/
 # Locally generated
-/settings
+# /settings
 .vscode/settings.json
 .DS_Store

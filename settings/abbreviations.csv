@@ -1,0 +1,241 @@
+Abbreviation,Spoken Form
+abbr,abbreviate
+addr,address
+admin,administrator
+admins,administrators
+adv,advance
+adv,advanced
+ab,alberta
+alt,alternative
+app,application
+apps,applications
+arg,argument
+args,arguments
+afaict,as far as i can tell
+afaik,as far as i know
+asm,assembly
+atm,at the moment
+attr,attribute
+attrs,attributes
+auth,authenticate
+auth,authentication
+avg,average
+afk,away from keyboard
+brb,be right back
+bin,binary
+bool,boolean
+bc,british columbia
+buf,buffer
+btn,button
+calc,calculate
+ca,canada
+cm,centimeter
+chr,char
+char,character
+cls,class
+cli,client
+col,column
+cmd,command
+cmt,comment
+cmp,compare
+conf,conference
+cfg,config
+cfg,configuration
+ctx,context
+ctrl,control
+const,constant
+ctor,constructor
+coord,coordinate
+coords,coordinates
+cpy,copy
+cnt,count
+ctr,counter
+db,database
+decl,declare
+decl,declaration
+dec,decode
+dec,decrement
+dbg,debug
+def,define
+def,definition
+deg,degree
+del,delete
+dep,depend
+deps,depends
+desc,description
+dev,develop
+dev,development
+dev,device
+dict,dictation
+dict,dictionary
+dir,direction
+dir,directory
+dist,distribution
+doc,document
+docs,documents
+dbl,double
+deque,double ended queue
+dup,dupe
+dup,duplicate
+dyn,dynamic
+enc,encode
+ent,entry
+enum,enumerate
+env,environment
+err,error
+esc,escape
+etc,etcetera
+ex,example
+exc,exception
+exec,execute
+exp,exponent
+expr,expression
+ext,extend
+ext,extension
+fs,file system
+fmt,format
+fw,framework
+func,function
+lol,funny
+gen,generic
+gen,generate
+http,hypertext
+hist,history
+img,image
+impl,implement
+iat,import table
+iat,import address table
+inc,increment
+info,information
+init,initialize
+init,initializer
+irl,in real life
+inst,instance
+int,integer
+int,interrupt
+iter,iterate
+jar,java archive
+js,javascript
+json,jason
+jmp,jump
+kbd,keyboard
+kwargs,keyword arguments
+kw,keyword
+kg,kilogram
+km,kilometer
+lng,language
+lol,laugh out loud
+len,length
+lib,library
+lgtm,looks good to me
+mb,manitoba
+md,markdown
+msg,message
+msf,meta sploit
+msf,meta sploit framework
+mic,microphone
+mg,milligram
+ms,millisecond
+mvp,minimum viable product
+misc,miscellaneous
+mod,module
+mnt,mount
+mut,mutate
+ns,nano second
+nvim,neo vim
+nb,new brunswick
+ns,nova scotia
+num,number
+obj,object
+ok,okay
+on,ontario
+opt,option
+opts,options
+os,operating system
+orig,original
+pkg,package
+param,parameter
+params,parameters
+ps,pico second
+px,pixel
+pt,point
+ptr,pointer
+pos,position
+pic,position independent code
+pie,position independent executable
+prev,previous
+props,properties
+prop,property
+pub,public
+py,python
+qc,quebec
+qs,query string
+rad,radian
+rnd,random
+rcpt,receipt
+ref,reference
+refs,references
+reg,register
+reg,registery
+regex,regular expression
+regex,regular expressions
+repl,repel
+repr,represent
+repr,representation
+req,request
+reqs,requests
+res,result
+ret,return
+rev,revision
+rb,ruby
+rs,rust
+sk,saskatchewan
+sp,service pack
+sid,session id
+sh,shell
+sc,shellcode
+src,source
+spec,special
+spec,specific
+spec,specification
+spec,specify
+stderr,standard error
+stdin,standard in
+stdout,standard out
+std,standard
+str,string
+struct,structure
+symlink,symbolic link
+sync,synchronize
+sync,synchronous
+sys,system
+toc,table of contents
+tbl,table
+tw,taiwan
+tech,technology
+temp,temperature
+tmp,temporary
+tmp,temp
+txt,text
+toctou,time of check time of use
+tok,token
+txn,transaction
+ts,typescript
+ulti,ultimate
+uuid,unique id
+usr,user
+uid,user id
+utils,utilities
+util,utility
+val,value
+var,variable
+vrfy,verify
+vs,versus
+vid,video
+vids,videos
+vis,visual
+msvc,visual studio
+www,web
+wtf,what the fuck
+win,window
+wip,work in progress

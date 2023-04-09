@@ -185,6 +185,7 @@ symbol_key_words = {
     "R square": "]",
     "right square": "]",
     "slash": "/",
+    "whack": "/",
     "backslash": "\\",
     "minus": "-",
     "dash": "-",
