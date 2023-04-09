@@ -85,9 +85,13 @@ class Actions:
     def i3wm_move_to_workspace(which: Union[str, int]):
         """Move the focused container to the specified workspace"""
         if isinstance(which, int):
-            subprocess.check_call(("i3-msg", "move", "container", "to", "workspace", "number", str(which)))
+            subprocess.check_call(
+                ("i3-msg", "move", "container", "to", "workspace", "number", str(which))
+            )
         else:
-            subprocess.check_call(("i3-msg", "move", "container", "to", "workspace", which))
+            subprocess.check_call(
+                ("i3-msg", "move", "container", "to", "workspace", which)
+            )
 
     def i3wm_move_to_output(which: str):
         """Move the focused container to the specified output."""

@@ -63,8 +63,7 @@ vertical (shell | terminal):
     user.i3wm_move_to_workspace(number_small)
 (shuffle | move (win | window) [to] last port):
     user.i3wm_move_to_workspace("back_and_forth")
-(shuffle | move) flipper:
-    user.i3wm_move_to_workspace("back_and_forth")
+(shuffle | move) flipper: user.i3wm_move_to_workspace("back_and_forth")
 (shuffle | move (win | window) left): user.i3wm_move("left")
 (shuffle | move (win | window) right): user.i3wm_move("right")
 (shuffle | move (win | window) up): user.i3wm_move("up")
