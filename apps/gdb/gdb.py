@@ -1,4 +1,4 @@
-from talon import Context, actions, Module
+from talon import Context, Module, actions
 
 mod = Module()
 mod.tag("gdb", "Tag to enabled gdb-related functionality")
