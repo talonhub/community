@@ -1,9 +1,8 @@
-# NOTE: If you want to use i3wm you must enable the tag settings.talon. ex: `tag(): user.i3wm`
+# NOTE: If you want to use i3wm you must enable the tag settings.talon. i.e.: `tag(): user.i3wm`
 os: linux
 tag: user.i3wm
 -
 port <number_small>: user.system_command("i3-msg workspace number {number_small}")
-port ten: user.system_command("i3-msg workspace number 10")
 (port flip | flipper): user.system_command("i3-msg workspace back_and_forth")
 port right: user.system_command("i3-msg workspace next")
 port left: user.system_command("i3-msg workspace prev")
@@ -12,7 +11,7 @@ port left: user.system_command("i3-msg workspace prev")
 (win | window) right: user.system_command("i3-msg focus right")
 (win | window) up: user.system_command("i3-msg focus up")
 (win | window) down: user.system_command("i3-msg focus down")
-((win | window) kill | murder): user.system_command("i3-msg kill")
+(win | window) kill: user.system_command("i3-msg kill")
 (win | window) stacking: user.system_command("i3-msg layout stacking")
 (win | window) default: user.system_command("i3-msg layout toggle split")
 (win | window) tabbed: user.system_command("i3-msg layout tabbed")
@@ -62,9 +61,9 @@ vertical (shell | terminal):
 # XXX - like also need to match the generic talon commands
 (shuffle | move (win | window) [to] port) <number_small>:
     user.system_command("i3-msg move container to workspace number {number_small}")
-(shuffle | move (win | window) [to] port ten):
-    user.system_command("i3-msg move container to workspace number 10")
 (shuffle | move (win | window) [to] last port):
+    user.system_command("i3-msg move container to workspace back_and_forth")
+(shuffle | move) flipper:
     user.system_command("i3-msg move container to workspace back_and_forth")
 (shuffle | move (win | window) left): user.system_command("i3-msg move left")
 (shuffle | move (win | window) right): user.system_command("i3-msg move right")
@@ -95,3 +94,7 @@ new scratch (shell | window):
     sleep(200ms)
     user.system_command("i3-msg move scratchpad")
     user.system_command("i3-msg scratchpad show")
+
+murder:
+    user.deprecate_command("2023-02-04", "murder", "win kill")
+    user.system_command("i3-msg kill")

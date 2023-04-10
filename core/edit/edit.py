@@ -3,6 +3,8 @@ from talon import Context, Module, actions, clip
 ctx = Context()
 mod = Module()
 
+END_OF_WORD_SYMBOLS = ".!?;:—_/\\|@#$%^&*()[]{}<>=+-~`"
+
 
 @ctx.action_class("edit")
 class EditActions:
@@ -31,6 +33,39 @@ class EditActions:
         actions.edit.right()
         actions.key("enter")
         actions.edit.paste()
+
+    # # This simpler implementation of select_word mostly works, but in some apps it doesn't.
+    # # See https://github.com/knausj85/knausj_talon/issues/1084.
+    # def select_word():
+    #     actions.edit.right()
+    #     actions.edit.word_left()
+    #     actions.edit.extend_word_right()
+
+    def select_word():
+        actions.edit.extend_right()
+        character_to_right_of_initial_caret_position = actions.edit.selected_text()
+
+        # Occasionally apps won't let you edit.extend_right()
+        # and therefore won't select text if your caret is on the rightmost character
+        # such as in the Chrome URL bar
+        did_select_text = character_to_right_of_initial_caret_position != ""
+
+        if did_select_text:
+            # .strip() turns newline & space characters into empty string; the empty
+            # string is in any other string, so this works.
+            if (
+                character_to_right_of_initial_caret_position.strip()
+                in END_OF_WORD_SYMBOLS
+            ):
+                # Come out of the highlight in the initial position.
+                actions.edit.left()
+            else:
+                # Come out of the highlight one character
+                # to the right of the initial position.
+                actions.edit.right()
+
+        actions.edit.word_left()
+        actions.edit.extend_word_right()
 
 
 @mod.action_class
