@@ -6,7 +6,7 @@ from typing import Any, Mapping, Optional
 
 from talon import Module, actions
 
-from .abbreviate.abbreviate import abbreviations
+from .abbreviate.abbreviate import abbreviations_list
 from .file_extension.file_extension import file_extensions
 from .keys.keys import symbol_key_words
 from .numbers.numbers import digits_map, scales, teens, tens
@@ -39,7 +39,7 @@ REGEX_WITH_SYMBOLS = re.compile(
 )
 
 REVERSE_PRONUNCIATION_MAP = {
-    **{value: key for key, value in abbreviations.items()},
+    **{value: key for key, value in abbreviations_list.items()},
     **{value.strip(): key for key, value in file_extensions.items()},
     **{str(value): key for key, value in digits_map.items()},
     **{value: key for key, value in symbol_key_words.items()},
@@ -131,7 +131,6 @@ def create_spoken_form_years(num: str):
         if remainder == 0:
             words.append(scales[0])
     else:
-
         # 200X -> two thousand x
         if remainder < 9:
             words.append(REVERSE_PRONUNCIATION_MAP[str(centuries // 10)])
@@ -144,7 +143,6 @@ def create_spoken_form_years(num: str):
     if remainder != 0:
         # 1906 => "nineteen six"
         if remainder < 10:
-
             # todo: decide if we want nineteen oh five"
             # todo: decide if we want "and"
             # both seem like a waste
