@@ -22,12 +22,12 @@ please [<user.text>]$:
     user.vscode("workbench.action.showCommands")
     insert(user.text or "")
     
-# Sidebar & Panels
+###############################################################################
+### Side Bar
+###############################################################################
 bar switch$: user.vscode("workbench.action.toggleSidebarVisibility")
 # what is the difference with workbench.view.explorer vs action.focusFilesExplorer?
 explore$: user.vscode("workbench.view.explorer")
-# focus explore: user.vscode("workbench.files.action.focusFilesExplorer")
-
 bar project$: user.vscode("workbench.view.extension.project-manager")
 ^extensions [focus]$: user.vscode("workbench.view.extensions")
 ^outline [focus]$: user.vscode("outline.focus")
@@ -203,6 +203,7 @@ front$: user.vscode("workbench.action.navigateForward")
 
 folder open: user.vscode("workbench.action.files.openFileFolder")
 
+link v s code: user.vscode("remoteHub.copyVscodeDevLinkFile")
 
 # It will show  folders  to open,  not recent open files.
 go recent [<user.text>]:
@@ -227,6 +228,10 @@ go recent [<user.text>]:
     # fold comments: user.vscode("editor.foldAllBlockComments")
     
     # Git / Github (not using verb-noun-adjective pattern, mirroring terminal commands.)
+
+###############################################################################
+### Git
+###############################################################################
 lense branches: user.vscode("gitlens.showBranchesView")
 git branch: user.vscode("git.branchFrom")
 git branch this: user.vscode("git.branch")
@@ -538,7 +543,7 @@ command copy id: user.command_copy_id()
     # TODO: there was a program with command "search limit talon" it was mis recognized.
     # I had to change to "limit search talon" it is a wider problem
     
-limit search talon: user.vscode_limit_search("talon")
+limit search talon: user.vscode_lbimit_search("talon")
 limit search python: user.vscode_limit_search("python")
 limit search none: user.vscode_limit_sort("")
 

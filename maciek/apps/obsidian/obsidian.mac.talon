@@ -27,12 +27,20 @@ please [<user.text>]$:
     sleep(50ms)
     insert(text or "")
 
+###############################################################################
+### code block
+###############################################################################
 code block:
     insert('```\n')
-    insert('```')
-    key(left left left)
-    insert('\n')
-    key(up)
+code block sql:
+    insert('```sql\n')
+code block python:
+    insert('```python\n')
+code block typescript:
+    insert('```typescript\n')
+code block css:
+    insert('```css\n')
+
 
 # Daily notes:
 daily show:
@@ -52,25 +60,8 @@ dev tools:
 inspect:
     key(cmd-shift-c)
     
-code python:
-    insert('```python\n')
-    insert('```')
-    key(left left left)
-    insert('\n')
-    key(up)
-    
-code typescript:
-    insert('```typescript\n')
-    insert('```')
-    key(left left left)
-    insert('\n')
-    key(up) 
-code css:
-    insert('```css\n')
-    insert('```')
-    key(left left left)
-    insert('\n')
-    key(up) 
+
+
 
 
     

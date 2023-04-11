@@ -3,7 +3,7 @@ mode: user.webspeech_english_dictation
 -
 ^press <user.keys>$: key("{keys}")
 
-over [<phrase>]$:   user.command_mode(phrase or "")
+post [<phrase>]$:   user.command_mode(phrase or "")
 
 # Everything here should call auto_insert to preserve the state to correctly auto-capitalize/auto-space.
 <user.prose>: auto_insert(prose)

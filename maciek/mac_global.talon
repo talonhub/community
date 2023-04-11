@@ -99,8 +99,8 @@ polo additional:
     key(cmd-down)
     key(enter)
 
-polo coder code:
-    user.run_in_fish_shell("code /Users/maciek/projggects/knausj_talon/apps/vscode/vscode.talon")
+coder file code:
+    user.run_in_fish_shell("code /Users/maciek/projects/knausj_talon/apps/vscode/vscode.talon")
     user.switcher_focus_and_wait("code", 0.5)
     key(cmd-down)
     key(enter)
@@ -139,6 +139,7 @@ anki basic:
     key(enter)
 
 insert email: insert("maciej.klimek@gmail.com")
+insert fake email: insert("waldemar.bajka@gmail.com")
 insert full name: insert("Maciej Klimek")
 
 windows: key(ctrl-down)
@@ -179,7 +180,8 @@ lend|(line end): key(cmd-right)
 
 zoom in: edit.zoom_in()
 zoom out: edit.zoom_out()
-    
+post$:
+    sleep(1ms)    
 
 
 
@@ -189,3 +191,5 @@ zoom out: edit.zoom_out()
 
 
 
+
+    

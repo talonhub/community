@@ -5,10 +5,12 @@ tasks:
   upload-cheatsheet:
     desc: '.'
     cmds:
-      - echo "mimic('wake up')"
+      - echo "mimic('wake up')" |/Users/maciek/.talon/.venv/bin/repl 
       - echo "mimic('cheat sheet')" |/Users/maciek/.talon/.venv/bin/repl 
       - algolia indices clear talon -y 
       - algolia objects import talon -F /Users/maciek/.talon/user/knausj_talon/maciek/cheatsheet.ndjson
+      # Algolia blocked my application due to no usage. I had to create a new profile with the following command
+      # algolia profile add --name "my-profile" --app-id "A1H5XIVUQ6" --admin-api-key "XXXXXXXXXXXXXXXXXXXXXXXXX" --default
       # Previous CLI I was using is DEPRECATED 
       # - algolia deleteindicespattern -a TSMFGMK167 -k `doppler secrets get --plain ALGOLIA_API_KEY -p casa-del-maciek -c dev_maciej` -r 'talon' -x false 
       # - algolia i -s /Users/maciek/.talon/user/knausj_talon/maciek/cheatsheet.json  -a TSMFGMK167 -k `doppler secrets get --plain ALGOLIA_API_KEY -p casa-del-maciek -c dev_maciej`  -n talon 
@@ -27,3 +29,9 @@ tasks:
     desc: "."
     cmds:
       - /opt/homebrew/bin/fish -c "google-chrome cheatsheet.html"
+  version: "3"
+  deploy-cursorless:
+    desc: "."
+    cmds:
+      - rsync -avz --delete --exclude=.git ~/projects/cursorless-talon ~/.talon/user/
+      # - rsync -avz src/cursorless_trimmed.talon ~/.talon/user/cursorless-talon/src/cursorless.talon

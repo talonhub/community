@@ -68,7 +68,7 @@ pivot <number_small> back:
     insert(user.path_traverse(number_small))
     key(enter)
 
-make dir: "mkdir -p  
+make dir: "mkdir -p"  
 go home: "cd\n"
 folder path copy : insert("pwd | tr -d \\\\n\\\\r | pbcopy\n")
 clipboard that:
@@ -215,3 +215,8 @@ g util copy: insert("gsutil cp ")
 g util move: insert("gsutil mv ")
 
 list: insert("ls ")
+ 
+###############################################################################
+### python stuff
+###############################################################################
+env activate: "source .env/bin/activate.fish"

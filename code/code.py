@@ -50,6 +50,7 @@ extension_lang_map = {
     ".py": "python",
     ".r": "r",
     ".rb": "ruby",
+    ".sql": "sql",
     ".s": "assembly",
     ".sh": "bash",
     ".snippets": "snippets",

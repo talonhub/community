@@ -1,5 +1,4 @@
-app: datagrip
-
+mode: user.sql
 -
 select: "SELECT "
 star: "*"

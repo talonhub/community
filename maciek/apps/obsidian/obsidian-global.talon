@@ -1,6 +1,6 @@
 os: mac
 -
-park$:
+^park$:
     key("ctrl-4") 
     # user.maciek_switch_to_app("obsidian")
     user.switcher_focus("obsidian")

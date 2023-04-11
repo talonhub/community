@@ -19,11 +19,11 @@ editor_names = {}
 @mod.scope
 def scope():
     for app in ui.apps(background=False):
-        print(app.name)
+        # print(app.name)
         if app.name in editor_names:
-            print("draft_editor_running  = true!!!!!!")
+            # print("draft_editor_running  = true!!!!!!")
             return {"draft_editor_running": True}
-    print("draft_editor_running  = faults!!!!!!")
+    # print("draft_editor_running  = faults!!!!!!")
     return {"draft_editor_running": False}
 
 
