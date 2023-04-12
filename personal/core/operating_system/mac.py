@@ -125,7 +125,7 @@ class UserActionsMac:
 
     def system_show_email(phrase: str = None):
         actions.user.launch_or_focus_bundle(
-            "com.google.Chrome.app.nabnijjbhmmgnnohmlablhajenhllcda"
+            "com.google.Chrome.app.fmgjjmmmlfnkbppncabfkddbjimcfncm"
         )
         actions.sleep("250ms")
         actions.user.parse_phrase(phrase or "")
