@@ -157,8 +157,10 @@ scroll-other-window, meta-pagedown
 scroll-other-window-down, meta-pageup
 server-edit, ctrl-x #
 set-mark-command, ctrl-@
+sh-mode
 shell-command, meta-!
 shell-command-on-region, meta-|
+shell-script-mode
 shrink-window-horizontally, ctrl-x {
 shrink-window-if-larger-than-buffer, ctrl-x -
 smerge-combine-with-next
