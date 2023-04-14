@@ -37,6 +37,9 @@ class UserActionsMac:
     #     actions.sleep("150ms")
     #     actions.key("enter")
 
+    def system_setting(system_setting: str):
+        actions.user.exec(system_setting)
+        
     def system_shutdown():
         applescript.run(
             r"""
@@ -142,6 +145,7 @@ class UserActionsMac:
 
     def system_taskmanager_find_focused_application(phrase: str = None):
         actions.skip()
+
 
 
 def on_ready():
