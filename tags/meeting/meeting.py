@@ -6,6 +6,10 @@ mod.tag("meeting", desc="Tag to indicate that the user is in a meeting")
 
 @mod.action_class
 class meeting_actions:
+    def meeting_is_muted() -> bool:
+        """Returns whether the current meeting is muted"""
+        return False
+
     def meeting_mute():
         """Mute the current meeting"""
 
