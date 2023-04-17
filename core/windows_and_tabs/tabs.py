@@ -1,6 +1,4 @@
 from talon import Module, actions, app
-def tab_close_others():
-        """"""
 
 mod = Module()
 
