@@ -11,7 +11,7 @@ port left: user.i3wm_switch_to_workspace("prev")
 (win | window) right: user.i3wm_focus("right")
 (win | window) up: user.i3wm_focus("up")
 (win | window) down: user.i3wm_focus("down")
-(win | window) kill: user.system_command("i3-msg kill")
+(win | window) kill: app.window_close()
 (win | window) stacking: user.i3wm_layout("stacking")
 (win | window) default: user.i3wm_layout()
 (win | window) tabbed: user.i3wm_layout("tabbed")
@@ -96,4 +96,4 @@ new scratch (shell | window):
 
 murder:
     user.deprecate_command("2023-02-04", "murder", "win kill")
-    user.system_command("i3-msg kill")
+    app.window_close()

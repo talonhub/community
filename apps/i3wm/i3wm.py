@@ -1,9 +1,10 @@
 import subprocess
 from typing import Optional, Union
 
-from talon import Module, actions, settings
+from talon import Context, Module, actions, settings
 
 mod = Module()
+ctx = Context()
 
 mod.tag("i3wm", desc="tag for loading i3wm related files")
 mod.setting(
@@ -18,6 +19,16 @@ mod.setting(
     default="super",
     desc="The default key to use for i3wm commands",
 )
+
+ctx.matches = """
+tag: user.i3wm
+"""
+
+
+@ctx.action_class("app")
+class AppActions:
+    def window_close():
+        subprocess.check_call(("i3-msg", "kill"))
 
 
 @mod.action_class
