@@ -11,4 +11,5 @@ os: windows
 and app.name: Talon
 os: windows
 and app.exe: talon.exe   
+win.title: Talon Debug
 """
