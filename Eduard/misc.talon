@@ -47,3 +47,7 @@ over: skip()
 
 ^talon restart confirm$: user.talon_restart()
 ^talon quit confirm$: user.talon_quit()
+
+# Formatting
+formatted <user.format_text>: user.dictation_insert_raw(format_text)
+^format selection <user.formatters>$: user.formatters_reformat_selection(formatters)

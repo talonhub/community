@@ -99,3 +99,8 @@ rename:
 
 left panel: key(f6:6)
 right panel: key(f6)
+
+new job:
+    user.file_manager_terminal_here()
+    sleep(6000ms)
+    insert("python K:\scripts\create_qsub_for_command_EA.py\n")

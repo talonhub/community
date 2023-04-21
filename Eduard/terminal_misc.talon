@@ -33,12 +33,31 @@ TCR modules:
 	"module load Biopython/1.65-goolf-1.7.20-Python-2.7.9"	
 	key(enter)
 
-katie up:
-	insert("cd ..")
-	key(enter)
-	"ls"
-	key(enter)
 
 jobs status:
 	"qstat -u ansaldoginee2"
 	key(enter)
+
+katie upper:
+	"cd .."
+	key(enter)
+	"ls"
+	key(enter)
+
+open:
+	key(tab)
+	key(enter)
+	"ls"
+	key(enter)
+
+remove folder:
+	"rm -rf "
+
+submit job:
+	"qsub jo"
+	key(tab)
+	key(enter)
+	
+new job:
+	"python /nethome/ansaldoginee2/scripts/create_qsub_for_command_EA.py\n"
+	

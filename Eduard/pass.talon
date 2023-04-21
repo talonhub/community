@@ -1,5 +1,5 @@
 pass one:
-	insert("Elpaamboli2789!")
+	insert("Elpaamboli2782!")
 pass two:
 	insert("Wnp*2UAupw$*@L")
 pass mice:
