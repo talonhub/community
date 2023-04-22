@@ -76,7 +76,7 @@ def on_win_close(window):
 
 def on_ready():
     if meeting_window := zoom_meeting_window():
-        actions.user.meeting_started("zoom", window)
+        actions.user.meeting_started("zoom", meeting_window)
 
 
 @ctx.action_class("user")
