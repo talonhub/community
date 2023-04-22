@@ -27,4 +27,4 @@ class meeting_actions:
 
     def meeting_ended(app: str, window: ui.Window):
         """A meeting has started in the specified app and window"""
-        global_ctx.tags ^= {"user.meeting_" + app}
+        global_ctx.tags -= {"user.meeting_" + app}
