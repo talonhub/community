@@ -1,4 +1,4 @@
-from talon import Context, Module, actions, app, cron, ctrl, ui
+from talon import Context, Module, actions, app, cron, ctrl, scope, ui
 
 mod = Module()
 mod.tag("meeting_teams", desc="Tag to indicate that the user is in a Teams meeting")
@@ -92,7 +92,8 @@ def on_win_close(window):
         if teams_window_is_meeting_window(teams_window):
             return
 
-    actions.user.meeting_ended("teams", window)
+    if "user.meeting_teams" in scope["tag"]:
+        actions.user.meeting_ended("teams", window)
 
 
 def on_ready():
