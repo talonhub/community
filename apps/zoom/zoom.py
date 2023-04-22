@@ -4,8 +4,6 @@ from talon.types.size import Size2d
 mod = Module()
 mod.tag("meeting_zoom", desc="Tag to indicate that the user is in a Zoom meeting")
 
-global_ctx = Context()
-
 ctx = Context()
 ctx.matches = r"""
 tag: user.meeting_zoom
@@ -68,17 +66,17 @@ def zoom_toggle_mute():
 
 def on_win_open(window):
     if is_zoom_meeting_window(window):
-        global_ctx.tags = ["user.meeting_zoom"]
+        actions.user.meeting_started("zoom", window)
 
 
 def on_win_close(window):
     if is_zoom_meeting_window(window):
-        global_ctx.tags = []
+        actions.user.meeting_ended("zoom", window)
 
 
 def on_ready():
     if meeting_window := zoom_meeting_window():
-        on_win_open(meeting_window)
+        actions.user.meeting_started("zoom", window)
 
 
 @ctx.action_class("user")

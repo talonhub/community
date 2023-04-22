@@ -3,8 +3,6 @@ from talon import Context, Module, actions, app, cron, ctrl, ui
 mod = Module()
 mod.tag("meeting_teams", desc="Tag to indicate that the user is in a Teams meeting")
 
-global_ctx = Context()
-
 ctx = Context()
 ctx.matches = r"""
 tag: user.meeting_teams
@@ -80,7 +78,7 @@ def on_win_open(window):
             except ui.UIErr:
                 return
             if teams_window_is_meeting_window(window):
-                global_ctx.tags = ["user.meeting_teams"]
+                actions.user.meeting_started("teams", window)
         cron.cancel(job)
 
     job = cron.interval("100ms", set_tag_if_teams_meeting_window)
@@ -94,12 +92,12 @@ def on_win_close(window):
         if teams_window_is_meeting_window(teams_window):
             return
 
-    global_ctx.tags = []
+    actions.user.meeting_ended("teams", window)
 
 
 def on_ready():
     if meeting_window := teams_meeting_window():
-        on_win_open(meeting_window)
+        actions.user.meeting_started("teams", meeting_window)
 
 
 @ctx.action_class("user")
