@@ -67,7 +67,7 @@ def on_win_open(window):
         # wait for the DOM to be constructed inside the window
         attempts -= 1
         if attempts >= 0:
-            if window.title == "Teams" or window.title.startswith("Microsoft Teams"):
+            if window.title == "Teams":
                 return
             try:
                 # Use "at least one button exists inside the web area" as a proxy for "finished loading"
