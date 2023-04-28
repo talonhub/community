@@ -23,7 +23,10 @@ def webex_meetings_app():
 
 
 def webex_meetings_window_is_meeting_window(window):
-    return window.title == "Webex"
+    return window.title == "Webex" or window.element.get("AXIdentifier") in (
+        "Acc_FIT_Win",
+        "Acc_FloatingWidget_Win",
+    )
 
 
 def webex_meetings_window():
