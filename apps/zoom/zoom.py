@@ -82,16 +82,23 @@ def on_ready():
 @ctx.action_class("user")
 class UserActions:
     def meeting_is_muted() -> bool:
-        if meeting_window := zoom_meeting_window_talon_workaround():
+        if zoom := zoom_app():
             try:
-                meeting_window.element.children.find_one(
-                    AXRole="AXImage", AXSize=Size2d(width=16, height=20)
+                mute_menu_item = zoom.element.children.find_one(
+                    AXRole="AXMenuBar", max_depth=0
+                ).children.find_one(
+                    AXRole="AXMenuItem", AXMenuItemCmdChar="A", AXMenuItemCmdModifiers=1
                 )
-                return True
+                # XXX Replace by word for "unmute" if Zoom UI is not in English
+                return mute_menu_item.AXTitle == "Unmute Audio"
             except ui.UIErr:
-                return False
+                pass
 
-        app.notify(title="Zoom", body="Can’t find a Zoom meeting window. Try again?")
+        app.notify(
+            title="Zoom",
+            body="Can’t determine whether Zoom is muted. "
+            + "If Zoom isn’t running in English, edit zoom.py.",
+        )
         return False
 
     def meeting_mute():
