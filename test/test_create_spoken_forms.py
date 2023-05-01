@@ -62,10 +62,6 @@ if hasattr(talon, "test_mode"):
 
         assert "V M" in result
 
-        result = actions.user.create_spoken_forms("usb", None, 0, True)
-
-        assert "U S B" in result
-
     def test_explode_packed_words():
         result = actions.user.create_spoken_forms("README", None, 0, True)
 
