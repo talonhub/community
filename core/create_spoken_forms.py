@@ -205,6 +205,7 @@ def create_exploded_forms(spoken_forms: List[str]):
     for line in spoken_forms:
         exploded_form = []
         # ex: "vm" or "usb" explodes into "V M" or "U S B"
+
         if (
             " " not in line
             and line.islower()
@@ -254,7 +255,7 @@ def create_extension_forms(spoken_forms: List[str]):
             new_spoken_forms.append(" ".join(dotted_extension_form))
         new_spoken_forms.append(" ".join(truncated_forms))
 
-    return list(dict.fromkeys(new_spoken_forms))
+    return set(dict.fromkeys(new_spoken_forms))
 
 
 def create_cased_forms(spoken_forms: List[str]):
@@ -276,7 +277,7 @@ def create_cased_forms(spoken_forms: List[str]):
         new_spoken_forms.append(" ".join(lower_forms))
         new_spoken_forms.append(" ".join(upper_forms))
 
-    return list(dict.fromkeys(new_spoken_forms))
+    return set(dict.fromkeys(new_spoken_forms))
 
 
 def create_abbreviated_forms(spoken_forms: List[str]):
@@ -297,7 +298,7 @@ def create_abbreviated_forms(spoken_forms: List[str]):
         new_spoken_forms.append(" ".join(abbreviated_forms))
         new_spoken_forms.append(" ".join(unabbreviated_forms))
 
-    return list(dict.fromkeys(new_spoken_forms))
+    return set(dict.fromkeys(new_spoken_forms))
 
 
 def create_spoken_number_forms(source: List[str]):
@@ -364,7 +365,7 @@ def create_spoken_number_forms(source: List[str]):
             spoken_forms.append(result)
 
     spoken_forms.append(" ".join(full_form_digit_wise))
-    return list(dict.fromkeys(spoken_forms))
+    return set(dict.fromkeys(spoken_forms))
 
 
 def create_spoken_forms_from_regex(source: str, pattern: re.Pattern):
