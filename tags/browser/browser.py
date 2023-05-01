@@ -9,12 +9,12 @@ tag: browser
 """
 
 
-def is_url(url):
+def is_url(url: str) -> bool:
     try:
         # Valid if url successfully parsed
         result = urlparse(url)
         # and contains both scheme (e.g. http) and netloc (e.g. github.com)
-        return all([result.scheme, result.netloc])
+        return all((result.scheme, result.netloc))
     except ValueError:
         return False
 
@@ -60,14 +60,27 @@ class UserActions:
 
 @ctx.action_class("browser")
 class BrowserActions:
-    def address():
-        # Split title by space, check each token and token[1: -1] (it might be in brackets) for valid url.
-        # Prioritize last one if multiple are valid, return empty string if none is valid.
-        tokens = (
-            url[1:-1] if not is_url(url) else url
-            for url in reversed(actions.win.title().split(" "))
-        )
-        return next((url for url in tokens if is_url(url)), "")
+    def address() -> str:
+        title: str = actions.win.title()
+        if not title:
+            return ""
+
+        # We expect the URL to either be prepended or appended to the page title.
+        first, *tokens = title.split()
+        if is_url(first):
+            return first
+
+        # Prioritize last one if multiple are valid.
+        for url in reversed(tokens):
+            if is_url(url):
+                return url
+            # The URL may be in [brackets].
+            unbracketed = url[1:-1]
+            if is_url(unbracketed):
+                return unbracketed
+
+        # None were valid.
+        return ""
 
     def bookmark():
         actions.key("ctrl-d")
