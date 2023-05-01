@@ -61,7 +61,7 @@ class Actions:
         clipboard_rect(win.rect)
 
     def screenshot_rect(
-        rect: ui.Rect, screen_num: Optional[int] = None, title: str = ""
+        rect: ui.Rect, title: str = "", screen_num: Optional[int] = None
     ):
         """Allow other modules this screenshot a rectangle"""
         selected_screen = get_screen(screen_num)
