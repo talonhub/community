@@ -104,11 +104,6 @@ class Actions:
         actions.edit.extend_word_right()
         actions.edit.cut()
 
-    def cut_line():
-        """Cuts the current line."""
-        actions.edit.select_line()
-        actions.edit.cut()
-
     def copy_word():
         """Copy word under cursor"""
         actions.edit.select_word()
@@ -128,3 +123,42 @@ class Actions:
         """Paste to word under cursor"""
         actions.edit.select_word()
         actions.edit.paste()
+
+    def cut_all():
+        """Cut all text in the current document"""
+        actions.edit.select_all()
+        actions.edit.cut()
+
+    def copy_all():
+        """Copy all text in the current document"""
+        actions.edit.select_all()
+        actions.edit.copy()
+
+    def paste_all():
+        """Paste to the current document"""
+        actions.edit.select_all()
+        actions.edit.paste()
+
+    def delete_all():
+        """Delete all text in the current document"""
+        actions.edit.select_all()
+        actions.edit.delete()
+
+    def cut_line():
+        """Cut current line"""
+        actions.edit.select_line()
+        actions.edit.cut()
+
+    def copy_line():
+        """Copy current line"""
+        actions.edit.select_line()
+        actions.edit.copy()
+
+    def paste_line():
+        """Paste to current line"""
+        actions.edit.select_line()
+        actions.edit.paste()
+
+    def delete_right():
+        """Delete character to the right"""
+        actions.key("delete")
