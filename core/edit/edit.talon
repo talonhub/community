@@ -131,9 +131,7 @@ copy all:
 #     edit.extend_down()
 #     edit.copy()
 
-copy word:
-    edit.select_word()
-    edit.copy()
+copy word: user.copy_word()
 
 copy word left: user.copy_word_left()
 
@@ -161,15 +159,16 @@ cut all:
 #     edit.select_all()
 #     edit.cut()
 
-cut word:
-    edit.select_word()
-    edit.cut()
+cut word: user.cut_word()
 
 cut word left: user.cut_word_left()
 
 cut word right: user.cut_word_right()
 
 cut line: user.cut_line()
+
+# Paste commands
+paste to word: user.paste_word()
 
 (pace | paste) all:
     edit.select_all()

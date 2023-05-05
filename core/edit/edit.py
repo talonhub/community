@@ -89,6 +89,11 @@ class Actions:
         for _ in range(n):
             actions.edit.word_right()
 
+    def cut_word():
+        """Cut word under cursor"""
+        actions.edit.select_word()
+        actions.edit.cut()
+
     def cut_word_left():
         """Cuts the word to the left."""
         actions.edit.extend_word_left()
@@ -104,6 +109,11 @@ class Actions:
         actions.edit.select_line()
         actions.edit.cut()
 
+    def copy_word():
+        """Copy word under cursor"""
+        actions.edit.select_word()
+        actions.edit.copy()
+
     def copy_word_left():
         """Copies the word to the left."""
         actions.edit.extend_word_left()
@@ -113,3 +123,8 @@ class Actions:
         """Copies the word to the right."""
         actions.edit.extend_word_right()
         actions.edit.copy()
+
+    def paste_word():
+        """Paste to word under cursor"""
+        actions.edit.select_word()
+        actions.edit.paste()
