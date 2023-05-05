@@ -453,6 +453,6 @@ ctx = Context()
 
 # Allows the abbreviated/short form to be used as spoken phrase
 ctx.lists["user.abbreviation"] = {
-    **abbreviations_list,
     **{v: v for v in abbreviations_list.values()},
+    **abbreviations_list,
 }
