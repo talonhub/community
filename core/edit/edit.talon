@@ -29,6 +29,8 @@ go page down: edit.page_down()
 # Selecting
 select all: edit.select_all()
 select line: edit.select_line()
+select line start: user.select_line_start()
+select line end: user.select_line_end()
 
 select left: edit.extend_left()
 select right: edit.extend_right()
@@ -51,7 +53,8 @@ indent [more]: edit.indent_more()
 # Delete
 clear all: user.delete_all()
 clear line: edit.delete_line()
-
+clear line start: user.delete_line_start()
+clear line end: user.delete_line_end()
 clear left: edit.delete()
 clear right: user.delete_right()
 
@@ -92,6 +95,8 @@ clear way down:
 # Copy
 copy all: user.copy_all()
 copy line: user.copy_line()
+copy line start: user.copy_line_start()
+copy line end: user.copy_line_end()
 copy word: user.copy_word()
 copy word left: user.copy_word_left()
 copy word right: user.copy_word_right()
@@ -113,6 +118,8 @@ copy word right: user.copy_word_right()
 # Cut
 cut all: user.cut_all()
 cut line: user.cut_line()
+cut line start: user.cut_line_start()
+cut line end: user.cut_line_end()
 cut word: user.cut_word()
 cut word left: user.cut_word_left()
 cut word right: user.cut_word_right()
@@ -134,6 +141,8 @@ cut word right: user.cut_word_right()
 # Paste
 (pace | paste) all: user.paste_all()
 (pace | paste) line: user.paste_line()
+(pace | paste) line start: user.paste_line_start()
+(pace | paste) line end: user.paste_line_end()
 (pace | paste) word: user.paste_word()
 
 # Duplication

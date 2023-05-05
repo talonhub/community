@@ -79,6 +79,10 @@ class Actions:
             # sleep here so that clip.revert doesn't revert the clipboard too soon
             actions.sleep("150ms")
 
+    def delete_right():
+        """Delete character to the right"""
+        actions.key("delete")
+
     def words_left(n: int):
         """Moves left by n words."""
         for _ in range(n):
@@ -159,6 +163,55 @@ class Actions:
         actions.edit.select_line()
         actions.edit.paste()
 
-    def delete_right():
-        """Delete character to the right"""
-        actions.key("delete")
+    # ----- Start / End of line -----
+    def select_line_start():
+        """Select start of current line"""
+        if actions.edit.selected_text():
+            actions.edit.left()
+        actions.edit.extend_line_start()
+
+    def select_line_end():
+        """Select end of current line"""
+        if actions.edit.selected_text():
+            actions.edit.right()
+        actions.edit.extend_line_end()
+
+    def cut_line_start():
+        """Cut start of current line"""
+        actions.user.select_line_start()
+        actions.edit.cut()
+
+    def cut_line_end():
+        """Cut end of current line"""
+        actions.user.select_line_end()
+        actions.edit.cut()
+
+    def copy_line_start():
+        """Copy start of current line"""
+        actions.user.select_line_start()
+        actions.edit.copy()
+
+    def copy_line_end():
+        """Copy end of current line"""
+        actions.user.select_line_end()
+        actions.edit.copy()
+
+    def paste_line_start():
+        """Paste to start ofcurrent  line"""
+        actions.user.select_line_start()
+        actions.edit.paste()
+
+    def paste_line_end():
+        """Paste to end of current line"""
+        actions.user.select_line_end()
+        actions.edit.paste()
+
+    def delete_line_start():
+        """Delete start of current line"""
+        actions.user.select_line_start()
+        actions.edit.delete()
+
+    def delete_line_end():
+        """Delete end of current line"""
+        actions.user.select_line_end()
+        actions.edit.delete()
