@@ -165,34 +165,34 @@ class Actions:
 
     # ----- Start / End of line -----
     def select_line_start():
-        """Select to the start of current line"""
+        """Select to start of current line"""
         if actions.edit.selected_text():
             actions.edit.left()
         actions.edit.extend_line_start()
 
     def select_line_end():
-        """Select end of current line"""
+        """Select to end of current line"""
         if actions.edit.selected_text():
             actions.edit.right()
         actions.edit.extend_line_end()
 
     def cut_line_start():
-        """Cut start of current line"""
+        """Cut to start of current line"""
         actions.user.select_line_start()
         actions.edit.cut()
 
     def cut_line_end():
-        """Cut end of current line"""
+        """Cut to end of current line"""
         actions.user.select_line_end()
         actions.edit.cut()
 
     def copy_line_start():
-        """Copy start of current line"""
+        """Copy to start of current line"""
         actions.user.select_line_start()
         actions.edit.copy()
 
     def copy_line_end():
-        """Copy end of current line"""
+        """Copy to end of current line"""
         actions.user.select_line_end()
         actions.edit.copy()
 
@@ -207,11 +207,11 @@ class Actions:
         actions.edit.paste()
 
     def delete_line_start():
-        """Delete start of current line"""
+        """Delete to start of current line"""
         actions.user.select_line_start()
         actions.edit.delete()
 
     def delete_line_end():
-        """Delete end of current line"""
+        """Delete to end of current line"""
         actions.user.select_line_end()
         actions.edit.delete()
