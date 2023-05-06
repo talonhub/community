@@ -22,7 +22,10 @@ ctx = Context()
 mod = Module()
 
 mod.list("homophones_canonicals", desc="list of words ")
-mod.tag("homophones_open", desc="Tag for enabling homophones commands when the associated gui is open")
+mod.tag(
+    "homophones_open",
+    desc="Tag for enabling homophones commands when the associated gui is open",
+)
 
 main_screen = ui.main_screen()
 
