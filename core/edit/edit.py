@@ -165,7 +165,7 @@ class Actions:
 
     # ----- Start / End of line -----
     def select_line_start():
-        """Select start of current line"""
+        """Select to the start of current line"""
         if actions.edit.selected_text():
             actions.edit.left()
         actions.edit.extend_line_start()
