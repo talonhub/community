@@ -197,7 +197,7 @@ class Actions:
         actions.edit.copy()
 
     def paste_line_start():
-        """Paste to start ofcurrent  line"""
+        """Paste to start of current line"""
         actions.user.select_line_start()
         actions.edit.paste()
 
