@@ -150,5 +150,5 @@ clone that: edit.selection_clone()
 clone line: edit.line_clone()
 
 # Insert new line
-drink line: edit.line_insert_up()
-pour line: edit.line_insert_down()
+new line above: edit.line_insert_up()
+new line below: edit.line_insert_down()
