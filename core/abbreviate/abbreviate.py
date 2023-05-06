@@ -448,5 +448,12 @@ abbreviations_list = get_list_from_csv(
     headers=("Abbreviation", "Spoken Form"),
     default=abbreviations,
 )
+
+# Allows the abbreviated/short form to be used as spoken phrase. eg "brief app" -> app
+abbreviations_list_with_values = {
+    **{v: v for v in abbreviations_list.values()},
+    **abbreviations_list,
+}
+
 ctx = Context()
-ctx.lists["user.abbreviation"] = abbreviations_list
+ctx.lists["user.abbreviation"] = abbreviations_list_with_values
