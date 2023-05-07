@@ -121,47 +121,47 @@ retabby <number_small>:
     repeat(number_small-1)
 
 # deleting
-void line:
+wipe line:
     edit.delete_line()
 
-# void left:
+# wipe left:
 #     key(backspace)
 
-# void right:
+# wipe right:
 #     key(delete)
     
-void up:
+wipe up:
     edit.extend_line_up()
     edit.delete()
     
-void down:
+wipe down:
     edit.extend_line_down()
     edit.delete()
     
-void word:
+wipe word:
     edit.delete_word()
     
-void draw:
+wipe draw:
     edit.extend_word_left()
     edit.delete()
     
-void spring:
+wipe spring:
     edit.extend_word_right()
     edit.delete()
     
-void head:
+wipe head:
     edit.extend_line_start()
     edit.delete()
     
-void tail:
+wipe tail:
     edit.extend_line_end()
     edit.delete()
     
-void far up:
+wipe far up:
     edit.extend_file_start()
     edit.delete()
     
-void far down:
+wipe far down:
     edit.extend_file_end()
     edit.delete()
     
