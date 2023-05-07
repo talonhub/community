@@ -1,9 +1,16 @@
-from talon import Context, actions
+from talon import Context, Module, actions
 
 ctx = Context()
+mod = Module()
+
+mod.apps.iterm2 = """
+os: mac
+and app.bundle: com.googlecode.iterm2
+"""
 ctx.matches = r"""
 app: iterm2
 """
+
 directories_to_remap = {}
 directories_to_exclude = {}
 
