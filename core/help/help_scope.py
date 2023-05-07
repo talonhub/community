@@ -1,7 +1,7 @@
 from talon import Module, Context, actions, imgui, scope, ui
 ctx = Context()
 mod = Module()
-mod.tag("help_scope", "tag for showing the scope help gui")
+mod.tag("help_scope_open", "tag for showing the scope help gui")
 
 setting_max_length = mod.setting(
     "help_scope_max_length",
@@ -64,5 +64,5 @@ class Actions:
             ctx.tags = []
             gui.hide()
         else:
-            ctx.tags = ["user.help_scope"]
+            ctx.tags = ["user.help_scope_open"]
             gui.show()
