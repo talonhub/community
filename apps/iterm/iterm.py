@@ -70,6 +70,12 @@ class UserActions:
     #     """selects the file"""
     #     actions.insert(path)
 
+    def tab_jump(number: int):
+        actions.key(f"cmd-{number}")
+
+    def tab_final():
+        actions.key("cmd-9")
+
     def terminal_list_directories():
         actions.insert("ls")
         actions.key("enter")
