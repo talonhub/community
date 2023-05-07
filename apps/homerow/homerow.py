@@ -32,6 +32,7 @@ class Actions:
     def homerow_pick(label: str, mouse_action: str):
         """pick in Homerow"""
         actions.insert(label.upper())
+        
         if "left" == mouse_action:
             actions.key("enter")
         elif "right" == mouse_action:
@@ -59,7 +60,7 @@ def element_focus(element):
 
 def win_is_homerow_search_bar(win):
     return (
-        win.app.bundle == "com.dexterleng.Homerow" and win.title == "Homerow Search Bar"
+        win.app.bundle == "com.dexterleng.Homerow" and (win.title == "Homerow Search Bar" or win.title == "")
     )
 
 
