@@ -46,6 +46,7 @@ eval-expression, meta-:
 eval-print-last-sexp,, ev-p
 eval-region,, ev-r
 exchange-point-and-mark, ctrl-x ctrl-x
+execute-extended-command, meta-x
 fileloop-continue,, filel
 fill-paragraph, meta-q
 find-file, ctrl-x ctrl-f

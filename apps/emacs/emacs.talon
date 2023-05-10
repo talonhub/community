@@ -14,7 +14,7 @@ execute <user.text>$:
     user.emacs_meta_x()
     user.insert_formatted(text, "DASH_SEPARATED")
 evaluate | (evaluate | eval) (exper | expression): user.emacs("eval-expression")
-prefix: user.emacs("universal-argument")
+prefix: user.emacs_prefix()
 prefix <user.number_signed_small>: user.emacs_prefix(number_signed_small)
 
 abort recursive [edit]: user.emacs("abort-recursive-edit")
@@ -53,11 +53,11 @@ display: user.emacs("display-buffer")
 # SHELL COMMANDS #
 shell command: user.emacs("shell-command")
 shell command inserting:
-    user.emacs("universal-argument")
+    user.emacs_prefix()
     user.emacs("shell-command")
 shell command on region: user.emacs("shell-command-on-region")
 shell command on region replacing:
-    user.emacs("universal-argument")
+    user.emacs_prefix()
     user.emacs("shell-command-on-region")
 
 # CUSTOMIZE #
@@ -207,11 +207,11 @@ highlight lines matching [regex]: user.emacs("highlight-lines-matching-regexp")
 highlight regex: user.emacs("highlight-regexp")
 unhighlight regex: user.emacs("unhighlight-regexp")
 unhighlight all:
-    user.emacs("universal-argument")
+    user.emacs_prefix()
     user.emacs("unhighlight-regexp")
 
 recenter:
-    user.emacs("universal-argument")
+    user.emacs_prefix()
     user.emacs("recenter-top-bottom")
 (center | [center] <number_small> from) top:
     user.emacs("recenter-top-bottom", number_small or 0)
