@@ -124,7 +124,7 @@ class Actions:
         actions.edit.copy()
 
     def paste_word():
-        """Paste to word under cursor"""
+        """Paste replacing the word under cursor"""
         actions.edit.select_word()
         actions.edit.paste()
 
@@ -139,7 +139,7 @@ class Actions:
         actions.edit.copy()
 
     def paste_all():
-        """Paste to the current document"""
+        """Paste replacing the current document"""
         actions.edit.select_all()
         actions.edit.paste()
 
@@ -159,7 +159,7 @@ class Actions:
         actions.edit.copy()
 
     def paste_line():
-        """Paste to current line"""
+        """Paste replacing current line"""
         actions.edit.select_line()
         actions.edit.paste()
 
@@ -197,12 +197,12 @@ class Actions:
         actions.edit.copy()
 
     def paste_line_start():
-        """Paste to start of current line"""
+        """Paste replacing until start of current line"""
         actions.user.select_line_start()
         actions.edit.paste()
 
     def paste_line_end():
-        """Paste to end of current line"""
+        """Paste replacing until end of current line"""
         actions.user.select_line_end()
         actions.edit.paste()
 
