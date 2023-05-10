@@ -8,10 +8,10 @@ tag(): user.line_commands
 #suplex: key(ctrl-x)
 cancel: user.emacs("keyboard-quit")
 exchange: user.emacs("exchange-point-and-mark")
-execute: user.emacs_meta_x()
+execute: user.emacs("execute-extended-command")
 execute {user.emacs_command}$: user.emacs(emacs_command)
 execute <user.text>$:
-    user.emacs_meta_x()
+    user.emacs("execute-extended-command")
     user.insert_formatted(text, "DASH_SEPARATED")
 evaluate | (evaluate | eval) (exper | expression): user.emacs("eval-expression")
 prefix: user.emacs_prefix()
