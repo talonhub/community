@@ -1,6 +1,17 @@
+# Zoom
+zoom in: edit.zoom_in()
+zoom out: edit.zoom_out()
+zoom reset: edit.zoom_reset()
+
 # Searching
 find it: edit.find()
 next one: edit.find_next()
+
+# Navigation
+
+# The reason for these spoken forms is that "page up" and "page down" are globally defined as keys.
+scroll up: edit.page_up()
+scroll down: edit.page_down()
 
 go word left: edit.word_left()
 go word right: edit.word_right()
@@ -93,6 +104,7 @@ clear way down:
     edit.delete()
 
 # Copy
+copy that: edit.copy()
 copy all: user.copy_all()
 copy line: user.copy_line()
 copy line start: user.copy_line_start()
@@ -116,6 +128,7 @@ copy word right: user.copy_word_right()
 #     edit.copy()
 
 # Cut
+cut that: edit.cut()
 cut all: user.cut_all()
 cut line: user.cut_line()
 cut line start: user.cut_line_start()
@@ -139,6 +152,11 @@ cut word right: user.cut_word_right()
 #     edit.cut()
 
 # Paste
+(pace | paste) that: edit.paste()
+(pace | paste) enter:
+    edit.paste()
+    key(enter)
+paste match: edit.paste_match_style()
 (pace | paste) all: user.paste_all()
 (pace | paste) line: user.paste_line()
 (pace | paste) line start: user.paste_line_start()
@@ -151,4 +169,19 @@ clone line: edit.line_clone()
 
 # Insert new line
 new line above: edit.line_insert_up()
-new line below: edit.line_insert_down()
+new line below | slap: edit.line_insert_down()
+
+# Insert padding with optional symbols
+(pad | padding): user.insert_between(" ", " ")
+(pad | padding) <user.symbol_key>+:
+    insert(" ")
+    user.insert_many(symbol_key_list)
+    insert(" ")
+
+# Undo/redo
+undo that: edit.undo()
+redo that: edit.redo()
+
+# Save
+file save: edit.save()
+file save all: edit.save_all()
