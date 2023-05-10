@@ -8,11 +8,6 @@ find it: edit.find()
 next one: edit.find_next()
 
 # Navigation
-
-# The reason for these spoken forms is that "page up" and "page down" are globally defined as keys.
-scroll up: edit.page_up()
-scroll down: edit.page_down()
-
 go word left: edit.word_left()
 go word right: edit.word_right()
 
@@ -34,8 +29,11 @@ go way down: edit.file_end()
 go top: edit.file_start()
 go bottom: edit.file_end()
 
+# The reason for these spoken forms is that "page up" and "page down" are globally defined as keys.
 go page up: edit.page_up()
 go page down: edit.page_down()
+scroll up: edit.page_up()
+scroll down: edit.page_down()
 
 # Selecting
 select all: edit.select_all()
