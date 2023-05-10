@@ -68,7 +68,7 @@ class Actions:
         if n is None:
             # `M-x universal-argument` doesn't have the same effect as pressing the key.
             prefix_key = actions.user.emacs_command_keybinding("universal-argument")
-            actions.key(prefix_key or "ctrl-u") # default to ctrl-u
+            actions.key(prefix_key or "ctrl-u")  # default to ctrl-u
         else:
             # Applying meta to each key can use fewer keypresses and 'works' in ansi-term
             # mode.

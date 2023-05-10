@@ -10,11 +10,13 @@ mod.list("emacs_command", desc="Emacs commands")
 
 ctx = Context()
 
+
 class Command(NamedTuple):
     name: str
     keys: Optional[str] = None
     short: Optional[str] = None
     spoken: Optional[str] = None
+
 
 # Maps command name to Command.
 emacs_commands = {}
