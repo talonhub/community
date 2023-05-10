@@ -184,7 +184,7 @@ diff (buffer | [buffer] with file):
 
 # ----- MOTION AND EDITING ----- #
 mark: user.emacs("set-mark-command")
-go back: user.emacs("pop-mark")
+go back: user.emacs("pop-to-mark-command")
 global [go] back: user.emacs("pop-global-mark")
 
 auto indent: user.emacs("indent-region")

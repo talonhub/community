@@ -123,7 +123,7 @@ outline-up-heading, ctrl-c @ ctrl-u
 overwrite-mode,, overwr
 package-autoremove
 pop-global-mark, ctrl-x ctrl-@
-pop-mark, ctrl-u ctrl-space
+pop-to-mark-command, ctrl-u ctrl-space
 previous-error, meta-g p
 project-find-file, ctrl-x p f
 project-find-regexp, ctrl-x p g
