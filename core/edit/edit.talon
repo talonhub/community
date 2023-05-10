@@ -111,6 +111,19 @@ copy word: user.copy_word()
 copy word left: user.copy_word_left()
 copy word right: user.copy_word_right()
 
+copy way left:
+    edit.extend_line_start()
+    edit.copy()
+copy way right:
+    edit.extend_line_end()
+    edit.copy()
+copy way up:
+    edit.extend_file_start()
+    edit.copy()
+copy way down:
+    edit.extend_file_end()
+    edit.copy()
+
 #to do: do we want these variants, seem to conflict
 # copy left:
 #      edit.extend_left()
