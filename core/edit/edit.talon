@@ -9,7 +9,7 @@ next one: edit.find_next()
 
 # Navigation
 
-# The reason for these spoken forms is that scroll up and down are keys.
+# The reason for these spoken forms is that "page up" and "page down" are globally defined as keys.
 scroll up: edit.page_up()
 scroll down: edit.page_down()
 
