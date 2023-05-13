@@ -26,13 +26,13 @@ setting_x = mod.setting(
     f"{prefix}_x",
     float,
     None,
-    "Mode indicator center X-position in percentages(0-1)",
+    "Mode indicator center X-position in percentages(0-1). 0=left, 1=right",
 )
 setting_y = mod.setting(
     f"{prefix}_y",
     float,
     None,
-    "Mode indicator center Y-position in percentages(0-1)",
+    "Mode indicator center Y-position in percentages(0-1). 0=top, 1=bottom",
 )
 setting_color_sleep = mod.setting(
     f"{prefix}_color_sleep",
