@@ -9,11 +9,11 @@ settings():
     user.mode_indicator_y = 0
     # Half transparent
     user.mode_indicator_color_alpha = 0.5
-    # Grey colar for sleep mode
+    # Grey color for sleep mode
     user.mode_indicator_color_sleep = "808080"
-    # Orchid colar for dictation mode
+    # Orchid color for dictation mode
     user.mode_indicator_color_dictation = "da70d6"
-    # OliveDrab colar for mixed mode
+    # OliveDrab color for mixed mode
     user.mode_indicator_color_mixed = "6b8e23"
-    # GhostWhite colar for command/other modes
+    # GhostWhite color for command/other modes
     user.mode_indicator_color_other = "f8f8ff"
