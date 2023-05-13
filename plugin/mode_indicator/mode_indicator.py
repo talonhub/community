@@ -5,61 +5,39 @@ from talon.skia.canvas import Canvas as SkiaCanvas
 from talon.skia.imagefilter import ImageFilter
 from talon.ui import Rect
 
-prefix = "mode_indicator"
 canvas: Canvas = None
 current_mode = ""
 mod = Module()
 
 setting_show = mod.setting(
-    f"{prefix}_show",
+    "mode_indicator_show",
     bool,
-    False,
-    "If true the mode indicator is shown",
+    desc="If true the mode indicator is shown",
 )
 setting_size = mod.setting(
-    f"{prefix}_size",
+    "mode_indicator_size",
     float,
-    30,
-    "Mode indicator diameter in pixels",
+    desc="Mode indicator diameter in pixels",
 )
 setting_x = mod.setting(
-    f"{prefix}_x",
+    "mode_indicator_x",
     float,
-    None,
-    "Mode indicator center X-position in percentages(0-1). 0=left, 1=right",
+    desc="Mode indicator center X-position in percentages(0-1). 0=left, 1=right",
 )
 setting_y = mod.setting(
-    f"{prefix}_y",
+    "mode_indicator_y",
     float,
-    None,
-    "Mode indicator center Y-position in percentages(0-1). 0=top, 1=bottom",
-)
-setting_color_sleep = mod.setting(
-    f"{prefix}_color_sleep",
-    str,
-    "808080",  # Grey
-)
-setting_color_dictation = mod.setting(
-    f"{prefix}_color_dictation",
-    str,
-    "da70d6",  # Orchid
-)
-setting_color_mixed = mod.setting(
-    f"{prefix}_color_mixed",
-    str,
-    "6b8e23",  # OliveDrab
-)
-setting_color_other = mod.setting(
-    f"{prefix}_color_other",
-    str,
-    "f8f8ff",  # GhostWhite
+    desc="Mode indicator center Y-position in percentages(0-1). 0=top, 1=bottom",
 )
 setting_color_alpha = mod.setting(
-    f"{prefix}_color_alpha",
+    "mode_indicator_color_alpha",
     float,
-    0.5,
-    "Mode indicator alpha/opacity in percentages(0-1)",
+    desc="Mode indicator alpha/opacity in percentages(0-1). 0=fully transparent, 1=fully opaque",
 )
+setting_color_sleep = mod.setting("mode_indicator_color_sleep", str)
+setting_color_dictation = mod.setting("mode_indicator_color_dictation", str)
+setting_color_mixed = mod.setting("mode_indicator_color_mixed", str)
+setting_color_other = mod.setting("mode_indicator_color_other", str)
 
 setting_paths = {
     s.path
@@ -68,11 +46,11 @@ setting_paths = {
         setting_size,
         setting_x,
         setting_y,
+        setting_color_alpha,
         setting_color_sleep,
         setting_color_dictation,
         setting_color_mixed,
         setting_color_other,
-        setting_color_alpha,
     ]
 }
 
@@ -86,8 +64,7 @@ def get_color() -> str:
         color = setting_color_mixed.get()
     else:
         color = setting_color_other.get()
-    alpha = f"{int(setting_color_alpha.get() * 255):02x}"
-    return color + alpha
+    return f"{color}{int(setting_color_alpha.get() * 255):02x}"
 
 
 def on_draw(c: SkiaCanvas):
@@ -102,15 +79,15 @@ def move_indicator():
     rect = screen.rect
     radius = setting_size.get() * screen.scale / 2
 
-    if setting_x.get() is not None:
-        x = setting_x.get() * rect.width - radius
-    else:
-        x = rect.center.x - radius
+    x = rect.left + min(
+        max(setting_x.get() * rect.width - radius, 0),
+        rect.width - 2 * radius,
+    )
 
-    if setting_y.get() is not None:
-        y = setting_y.get() * rect.height - radius
-    else:
-        y = rect.top
+    y = rect.top + min(
+        max(setting_y.get() * rect.height - radius, 0),
+        rect.height - 2 * radius,
+    )
 
     side = 2 * radius
     canvas.move(x, y)
