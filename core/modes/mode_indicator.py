@@ -1,8 +1,8 @@
-from talon import app, registry, scope, ui, Module
+from talon import Module, app, registry, scope, ui
 from talon.canvas import Canvas
+from talon.screen import Screen
 from talon.skia.canvas import Canvas as SkiaCanvas
 from talon.skia.imagefilter import ImageFilter
-from talon.screen import Screen
 from talon.ui import Rect
 
 prefix = "mode_indicator"
