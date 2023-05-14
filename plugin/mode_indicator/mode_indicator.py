@@ -13,6 +13,7 @@ setting_show = mod.setting(
     "mode_indicator_show",
     bool,
     desc="If true the mode indicator is shown",
+    default=False,
 )
 setting_size = mod.setting(
     "mode_indicator_size",
