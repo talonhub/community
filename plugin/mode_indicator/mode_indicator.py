@@ -1,4 +1,4 @@
-from talon import Module, app, registry, scope, ui
+from talon import Module, app, registry, scope, ui, skia
 from talon.canvas import Canvas
 from talon.screen import Screen
 from talon.skia.canvas import Canvas as SkiaCanvas
@@ -56,23 +56,52 @@ setting_paths = {
 }
 
 
-def get_color() -> str:
+def get_mode_color() -> str:
     if current_mode == "sleep":
-        color = setting_color_sleep.get()
+        return setting_color_sleep.get()
     elif current_mode == "dictation":
-        color = setting_color_dictation.get()
+        return setting_color_dictation.get()
     elif current_mode == "mixed":
-        color = setting_color_mixed.get()
+        return setting_color_mixed.get()
     else:
-        color = setting_color_other.get()
-    return f"{color}{int(setting_color_alpha.get() * 255):02x}"
+        return setting_color_other.get()
+
+
+def get_alpha_color() -> str:
+    return f"{int(setting_color_alpha.get() * 255):02x}"
+
+
+def get_gradient_color(color: str) -> str:
+    # hex -> rgb
+    (r, g, b) = tuple(int(color[i : i + 2], 16) for i in (0, 2, 4))
+    # Darken rgb
+    factor = 0.6
+    r, g, b = int(r * factor), int(g * factor), int(b * factor)
+    # rgb -> hex
+    return f"{r:02x}{g:02x}{b:02x}"
+
+
+def get_colors():
+    color_mode = get_mode_color()
+    color_gradient = get_gradient_color(color_mode)
+    color_alpha = get_alpha_color()
+    return f"{color_mode}{color_alpha}", f"{color_gradient}"
 
 
 def on_draw(c: SkiaCanvas):
+    color_mode, color_gradient = get_colors()
+    radius = c.rect.height / 2 - 2
+    x, y = c.rect.center.x, c.rect.center.y
+
+    c.paint.shader = skia.Shader.radial_gradient(
+        (x, y), radius, [color_mode, color_gradient]
+    )
+
+    c.paint.imagefilter = ImageFilter.drop_shadow(1, 1, 1, 1, color_gradient)
+
     c.paint.style = c.paint.Style.FILL
-    c.paint.color = get_color()
-    c.paint.imagefilter = ImageFilter.drop_shadow(1, 1, 1, 1, "000000")
-    c.draw_circle(c.rect.center.x, c.rect.center.y, c.rect.height / 2 - 2)
+    c.paint.color = color_mode
+    c.draw_circle(x, y, radius)
 
 
 def move_indicator():
