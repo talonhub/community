@@ -38,7 +38,7 @@ setting_color_alpha = mod.setting(
 setting_color_gradient = mod.setting(
     "mode_indicator_color_gradient",
     float,
-    desc="Mode indicator gradient brightness in percentages(0-1). 0=black, 1=white",
+    desc="Mode indicator gradient brightness in percentages(0-1). 0=darkest, 1=brightest",
 )
 setting_color_sleep = mod.setting("mode_indicator_color_sleep", str)
 setting_color_dictation = mod.setting("mode_indicator_color_dictation", str)
