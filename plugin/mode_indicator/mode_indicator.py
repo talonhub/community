@@ -96,8 +96,8 @@ def get_colors():
 
 def on_draw(c: SkiaCanvas):
     color_mode, color_gradient = get_colors()
-    radius = c.rect.height / 2 - 2
     x, y = c.rect.center.x, c.rect.center.y
+    radius = c.rect.height / 2 - 2
 
     c.paint.shader = skia.Shader.radial_gradient(
         (x, y), radius, [color_mode, color_gradient]
