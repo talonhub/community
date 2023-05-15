@@ -9,6 +9,8 @@ settings():
     user.mode_indicator_y = 0
     # Half transparent
     user.mode_indicator_color_alpha = 0.5
+    # Grey gradient
+    user.mode_indicator_color_gradient = 0.5
     # Grey color for sleep mode
     user.mode_indicator_color_sleep = "808080"
     # Orchid color for dictation mode

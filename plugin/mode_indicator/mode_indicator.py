@@ -35,6 +35,11 @@ setting_color_alpha = mod.setting(
     float,
     desc="Mode indicator alpha/opacity in percentages(0-1). 0=fully transparent, 1=fully opaque",
 )
+setting_color_gradient = mod.setting(
+    "mode_indicator_color_gradient",
+    float,
+    desc="Mode indicator gradient brightness in percentages(0-1). 0=black, 1=white",
+)
 setting_color_sleep = mod.setting("mode_indicator_color_sleep", str)
 setting_color_dictation = mod.setting("mode_indicator_color_dictation", str)
 setting_color_mixed = mod.setting("mode_indicator_color_mixed", str)
@@ -48,6 +53,7 @@ setting_paths = {
         setting_x,
         setting_y,
         setting_color_alpha,
+        setting_color_gradient,
         setting_color_sleep,
         setting_color_dictation,
         setting_color_mixed,
@@ -72,10 +78,10 @@ def get_alpha_color() -> str:
 
 
 def get_gradient_color(color: str) -> str:
+    factor = setting_color_gradient.get()
     # hex -> rgb
     (r, g, b) = tuple(int(color[i : i + 2], 16) for i in (0, 2, 4))
     # Darken rgb
-    factor = 0.6
     r, g, b = int(r * factor), int(g * factor), int(b * factor)
     # rgb -> hex
     return f"{r:02x}{g:02x}{b:02x}"
