@@ -43,6 +43,7 @@ setting_color_gradient = mod.setting(
 setting_color_sleep = mod.setting("mode_indicator_color_sleep", str)
 setting_color_dictation = mod.setting("mode_indicator_color_dictation", str)
 setting_color_mixed = mod.setting("mode_indicator_color_mixed", str)
+setting_color_command = mod.setting("mode_indicator_color_command", str)
 setting_color_other = mod.setting("mode_indicator_color_other", str)
 
 setting_paths = {
@@ -57,6 +58,7 @@ setting_paths = {
         setting_color_sleep,
         setting_color_dictation,
         setting_color_mixed,
+        setting_color_command,
         setting_color_other,
     ]
 }
@@ -69,6 +71,8 @@ def get_mode_color() -> str:
         return setting_color_dictation.get()
     elif current_mode == "mixed":
         return setting_color_mixed.get()
+    elif current_mode == "command":
+        return setting_color_command.get()
     else:
         return setting_color_other.get()
 
@@ -163,6 +167,8 @@ def on_update_contexts():
             mode = "mixed"
         else:
             mode = "dictation"
+    elif "command" in modes:
+        mode = "command"
     else:
         mode = "other"
 
