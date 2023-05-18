@@ -78,6 +78,9 @@ def on_ready():
     if meeting_window := zoom_meeting_window():
         actions.user.meeting_started("zoom", meeting_window)
 
+    ui.register("win_open", on_win_open)
+    ui.register("win_close", on_win_close)
+
 
 @ctx.action_class("user")
 class UserActions:
@@ -117,8 +120,5 @@ class UserActions:
             meeting_window.app.focus()
             meeting_window.close()
 
-
-ui.register("win_open", on_win_open)
-ui.register("win_close", on_win_close)
 
 app.register("ready", on_ready)

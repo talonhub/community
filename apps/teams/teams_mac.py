@@ -100,6 +100,9 @@ def on_ready():
     if meeting_window := teams_meeting_window():
         actions.user.meeting_started("teams", meeting_window)
 
+    ui.register("win_open", on_win_open)
+    ui.register("win_close", on_win_close)
+
 
 @ctx.action_class("user")
 class UserActions:
@@ -143,8 +146,5 @@ class UserActions:
         if teams := teams_app():
             ctrl.key_press("h", super=True, shift=True, app=teams)
 
-
-ui.register("win_open", on_win_open)
-ui.register("win_close", on_win_close)
 
 app.register("ready", on_ready)

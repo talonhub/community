@@ -62,6 +62,9 @@ def on_ready():
     if meeting_window := webex_meetings_window():
         actions.user.meeting_started("webex", meeting_window)
 
+    ui.register("win_open", on_win_open)
+    ui.register("win_close", on_win_close)
+
 
 @ctx.action_class("user")
 class UserActions:
@@ -97,8 +100,5 @@ class UserActions:
         if webex_meetings := webex_meetings_app():
             webex_meetings.quit()
 
-
-ui.register("win_open", on_win_open)
-ui.register("win_close", on_win_close)
 
 app.register("ready", on_ready)
