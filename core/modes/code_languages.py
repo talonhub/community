@@ -45,7 +45,7 @@ code_languages = [
     Language("python", "python", ["py"]),
     Language("r", "are language", ["r"]),
     # Language("racket", "racket", ["rkt"]),
-    Language("ruby", "ruby", ["rb"]),
+    Language("ruby", "ruby", ["rb", "rake"]),
     Language("rust", "rust", ["rs"]),
     Language("scala", "scala", ["scala"]),
     Language("scss", "scss", ["scss"]),

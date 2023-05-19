@@ -7,6 +7,7 @@ tag(): user.multiple_cursors
 tag(): user.snippets
 tag(): user.splits
 tag(): user.tabs
+tag(): user.cursorless_experimental_snippets
 
 file (search|forage):
   user.vscode("workbench.action.findInFiles")
@@ -35,3 +36,12 @@ search remove: user.vscode("search.action.remove")
 #   sleep(0.05)
 #   user.mouse_helper_position_restore()
 #   key(cmd-a)
+
+(toggle bookmark|bookmark toggle):
+  key(alt-cmd-k)
+bookmark toggle label:
+  key(alt-cmd-h)
+bookmark next: key(alt-cmd-l)
+bookmark previous: key(alt-cmd-j)
+bar bookmark:
+  key(alt-cmd-g)

@@ -9,3 +9,20 @@ tag(): user.git
 tag(): user.kubectl
 tag(): user.tabs
 tag(): user.readline
+
+^last speck:
+  key(cmd-l)
+  "rspec"
+  key(ctrl-r)
+
+# ^last <phrase>:
+#   key(cmd-l)
+#   mimic(phrase)
+#   key(ctrl-r)
+
+# ^command [<phrase>]:
+#   key(cmd-l)
+#   mimic(phrase or "")
+#   # user.parse_phrase(phrase or "")
+
+# last one: key(ctrl-r)

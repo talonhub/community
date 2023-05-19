@@ -182,10 +182,10 @@ class UserActions:
         )
         actions.user.paste(result)
 
-ctx.lists["code_my_models"] = {
-    "fulfillment": "Fulfillment",
-    "line item": "LineItem",
-    "reservation": "Reservation",
-    "order": "Order",
-    "user": "User"
-}
+# ctx.lists["code_my_models"] = {
+#     "fulfillment": "Fulfillment",
+#     "line item": "LineItem",
+#     "reservation": "Reservation",
+#     "order": "Order",
+#     "user": "User"
+# }

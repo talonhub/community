@@ -8,7 +8,12 @@ and code.language: ruby
 # tag(): user.code_comment
 # tag(): user.code_generic
 tag(): user.ruby
-tag(): user.code_my_models
+
+# same as python.talon:
+state (def | deaf | deft): "def "
+
+# this is not working
+# tag(): user.code_my_models
 
 # Personal changes, not for general use.
 #
@@ -23,7 +28,18 @@ assert equals: 'assert_equals '
 
 # this isn't working :(
 # code_my_modles is defined in lang/ruby/ruby.py
-<code_my_models> find last:
-  "{code_my_models}.last"
+# <code_my_models> find last:
+#   "{code_my_models}.last"
 
 present [a]: "present?"
+
+put:
+  "puts \"\""
+  key(left)
+
+to jason: ".to_json"
+
+shazam:
+  "#{}"
+  key(left)
+
