@@ -47,7 +47,6 @@ shazam:
   "#{}"
   key(left)
 
-
 prompt <phrase>:
   "# "
   insert(phrase)
