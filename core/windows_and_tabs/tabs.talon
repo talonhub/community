@@ -1,6 +1,9 @@
 tag: user.tabs
 -
-tab (open | new): app.tab_open()
+tab (open | new) [<number_small>]: 
+    number = number_small  or 1
+    app.tab_open()
+    repeat(number - 1)
 tab (last | previous): app.tab_previous()
 tab next: app.tab_next()
 tab close: user.tab_close_wrapper()
