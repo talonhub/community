@@ -318,7 +318,11 @@ class Actions:
     def switcher_launch(path: str):
         """Launch a new application by path (all OSes), or AppUserModel_ID path on Windows"""
         if app.platform != "windows":
-            ui.launch(path=path)
+            # separate command and arguments
+            cmd=shlex.split(path)[0]
+            args=shlex.split(path)[1:]
+            ui.launch(path=cmd,args=args)
+
         else:
             is_valid_path = False
             try:
