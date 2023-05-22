@@ -173,7 +173,7 @@ if app.platform=="linux":
     import re
     import configparser
 
-    def get_linux_distro_apps():
+    def get_linux_apps():
         # app shortcuts in program menu are contained in .desktop files. This function parses those files for the app name and command
         items={}
         # find field codes in exec key with regex
@@ -322,7 +322,6 @@ class Actions:
             cmd=shlex.split(path)[0]
             args=shlex.split(path)[1:]
             ui.launch(path=cmd,args=args)
-
         else:
             is_valid_path = False
             try:
