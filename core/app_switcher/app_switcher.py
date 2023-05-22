@@ -33,6 +33,14 @@ mac_application_directories = [
     "/System/Applications/Utilities",
 ]
 
+linux_application_directories = [
+    "/usr/share/applications",
+    "/usr/local/share/applications",
+# only works for unique user-created shortcuts that do not exist in system folders
+    "~/.local/share/applications",
+# TODO: find locations where most distros store .desktop for flatpak apps
+]
+
 words_to_exclude = [
     "zero",
     "one",
