@@ -2,6 +2,7 @@ import os
 import subprocess
 import time
 from pathlib import Path
+import shlex
 
 import talon
 from talon import Context, Module, actions, app, fs, imgui, ui
