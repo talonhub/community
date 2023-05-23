@@ -1,8 +1,8 @@
 import os
+import shlex
 import subprocess
 import time
 from pathlib import Path
-import shlex
 
 import talon
 from talon import Context, Module, actions, app, fs, imgui, ui
@@ -34,12 +34,12 @@ mac_application_directories = [
     "/System/Applications/Utilities",
 ]
 
-home_app_path = os.path.expandvars('/home/$USER/.local/share/applications')
+home_app_path = os.path.expandvars("/home/$USER/.local/share/applications")
 linux_application_directories = [
     "/usr/share/applications",
     "/usr/local/share/applications",
     home_app_path
-# TODO: find locations where most distros store .desktop for flatpak apps
+    # TODO: find locations where most distros store .desktop for flatpak apps
 ]
 
 words_to_exclude = [
@@ -170,34 +170,37 @@ if app.platform == "windows":
 
         return items
 
-if app.platform=="linux":
-    import re
+
+if app.platform == "linux":
     import configparser
+    import re
 
     def get_linux_apps():
         # app shortcuts in program menu are contained in .desktop files. This function parses those files for the app name and command
-        items={}
+        items = {}
         # find field codes in exec key with regex
         # https://specifications.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html#exec-variables
-        args_pattern = re.compile(r' \%[UufFcik]')
+        args_pattern = re.compile(r" \%[UufFcik]")
         for base in linux_application_directories:
             if os.path.isdir(base):
                 for entry in os.scandir(base):
-                    if entry.name.endswith('.desktop'):
+                    if entry.name.endswith(".desktop"):
                         config = configparser.ConfigParser(interpolation=None)
                         config.read(entry.path)
                         # only parse shortcuts that are not hidden
-                        if config.has_option("Desktop Entry","NoDisplay")==False:
-                            name_key = config['Desktop Entry']['Name']
-                            exec_key = config['Desktop Entry']['Exec']
+                        if config.has_option("Desktop Entry", "NoDisplay") == False:
+                            name_key = config["Desktop Entry"]["Name"]
+                            exec_key = config["Desktop Entry"]["Exec"]
                             # remove extra quotes from exec
-                            if exec_key[0] == '"' and exec_key[-1]=='"':
-                                exec_key=re.sub('"','',exec_key)
+                            if exec_key[0] == '"' and exec_key[-1] == '"':
+                                exec_key = re.sub('"', "", exec_key)
                             # remove field codes and add full path if necessary
-                            if exec_key[0] == '/':
-                                items[name_key] = re.sub(args_pattern, '', exec_key)
+                            if exec_key[0] == "/":
+                                items[name_key] = re.sub(args_pattern, "", exec_key)
                             else:
-                                items[name_key] = '/usr/bin/' + re.sub(args_pattern, '', exec_key)
+                                items[name_key] = "/usr/bin/" + re.sub(
+                                    args_pattern, "", exec_key
+                                )
         return items
 
 
@@ -320,9 +323,9 @@ class Actions:
         """Launch a new application by path (all OSes), or AppUserModel_ID path on Windows"""
         if app.platform != "windows":
             # separate command and arguments
-            cmd=shlex.split(path)[0]
-            args=shlex.split(path)[1:]
-            ui.launch(path=cmd,args=args)
+            cmd = shlex.split(path)[0]
+            args = shlex.split(path)[1:]
+            ui.launch(path=cmd, args=args)
         else:
             is_valid_path = False
             try:
@@ -381,7 +384,12 @@ def update_launch_list():
         launch = get_windows_apps()
 
     elif app.platform == "linux":
+<<<<<<< HEAD
         launch = get_linux_apps() 
+=======
+        launch = get_linux_apps()
+
+>>>>>>> 5efe07e6bef6c90a3ab3ecef132a2a03860b2ab6
         # actions.user.talon_pretty_print(launch)
 
     ctx.lists["self.launch"] = actions.user.create_spoken_forms_from_map(
