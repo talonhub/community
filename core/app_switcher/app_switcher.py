@@ -39,7 +39,7 @@ linux_application_directories = [
     "/usr/local/share/applications",
     os.path.expandvars("/home/$USER/.local/share/applications"),
     "/var/lib/flatpak/exports/share/applications",
-    "var/lib/snapd/desktop/applications"
+    "var/lib/snapd/desktop/applications",
 ]
 
 words_to_exclude = [
