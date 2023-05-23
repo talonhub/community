@@ -34,12 +34,12 @@ mac_application_directories = [
     "/System/Applications/Utilities",
 ]
 
-home_app_path = os.path.expandvars("/home/$USER/.local/share/applications")
 linux_application_directories = [
     "/usr/share/applications",
     "/usr/local/share/applications",
-    home_app_path
-    # TODO: find locations where most distros store .desktop for flatpak apps
+    os.path.expandvars("/home/$USER/.local/share/applications"),
+    "/var/lib/flatpak/exports/share/applications",
+    "var/lib/snapd/desktop/applications"
 ]
 
 words_to_exclude = [
