@@ -385,7 +385,7 @@ def update_launch_list():
 
     elif app.platform == "linux":
 <<<<<<< HEAD
-        launch = get_linux_apps() 
+        launch = get_linux_apps()
 =======
         launch = get_linux_apps()
 
