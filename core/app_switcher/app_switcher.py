@@ -198,9 +198,7 @@ if app.platform == "linux":
                             if exec_key[0] == "/":
                                 items[name_key] = re.sub(args_pattern, "", exec_key)
                             else:
-                                items[name_key] = "/usr/bin/" + re.sub(
-                                    args_pattern, "", exec_key
-                                )
+                                items[name_key] = "/usr/bin/" + re.sub(args_pattern, "", exec_key)
         return items
 
 
