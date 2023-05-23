@@ -184,7 +184,7 @@ if app.platform=="linux":
             if os.path.isdir(base):
                 for entry in os.scandir(base):
                     if entry.name.endswith('.desktop'):
-                        config = configparser.ConfigParser(interpolation=None)                        
+                        config = configparser.ConfigParser(interpolation=None)
                         config.read(entry.path)
                         # only parse shortcuts that are not hidden
                         if config.has_option("Desktop Entry","NoDisplay")==False:
@@ -381,8 +381,7 @@ def update_launch_list():
         launch = get_windows_apps()
 
     elif app.platform == "linux":
-        launch = get_linux_apps()
-        
+        launch = get_linux_apps() 
         # actions.user.talon_pretty_print(launch)
 
     ctx.lists["self.launch"] = actions.user.create_spoken_forms_from_map(
