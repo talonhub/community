@@ -382,12 +382,8 @@ def update_launch_list():
         launch = get_windows_apps()
 
     elif app.platform == "linux":
-<<<<<<< HEAD
-        launch = get_linux_apps()
-=======
         launch = get_linux_apps()
 
->>>>>>> 5efe07e6bef6c90a3ab3ecef132a2a03860b2ab6
         # actions.user.talon_pretty_print(launch)
 
     ctx.lists["self.launch"] = actions.user.create_spoken_forms_from_map(
