@@ -5,7 +5,7 @@ from typing import Sequence, Union
 from talon import Context, Module, actions
 from talon.grammar import Phrase
 
-from ..user_settings import append_to_csv, get_list_from_csv
+from ..user_settings import append_to_csv, track_csv_list
 
 mod = Module()
 ctx = Context()
@@ -49,39 +49,20 @@ _word_map_defaults.update({word.lower(): word for word in _capitalize_defaults})
 # implementation of `dictate.replace_words` (at bottom of file) to rewrite words
 # and phrases Talon recognized. This does not change the priority with which
 # Talon recognizes particular phrases over others.
-phrases_to_replace = get_list_from_csv(
-    "words_to_replace.csv",
-    headers=("Replacement", "Original"),
-    default=_word_map_defaults,
-)
+@track_csv_list("words_to_replace.csv", headers=("Replacement", "Original"), default=_word_map_defaults)
+def on_word_map(values):
+    # "dictate.word_map" is used by Talon's built-in default implementation of
+    # `dictate.replace_words`, but supports only single-word replacements.
+    # Multi-word phrases are ignored.
+    ctx.settings["dictate.word_map"] = values
 
-# "dictate.word_map" is used by Talon's built-in default implementation of
-# `dictate.replace_words`, but supports only single-word replacements.
-# Multi-word phrases are ignored.
-ctx.settings["dictate.word_map"] = phrases_to_replace
-
-
-# Default words that should be added to Talon's vocabulary.
-# Don't edit this. Edit 'additional_vocabulary.csv' instead
-_simple_vocab_default = ["nmap", "admin", "Cisco", "Citrix", "VPN", "DNS", "Minecraft"]
-
-# Defaults for different pronounciations of words that need to be added to
-# Talon's vocabulary.
-_default_vocabulary = {
-    "N map": "nmap",
-    "under documented": "under-documented",
-}
-_default_vocabulary.update({word: word for word in _simple_vocab_default})
 
 # "user.vocabulary" is used to explicitly add words/phrases that Talon doesn't
 # recognize. Words in user.vocabulary (or other lists and captures) are
 # "command-like" and their recognition is prioritized over ordinary words.
-vocabulary = get_list_from_csv(
-    "additional_words.csv",
-    headers=("Word(s)", "Spoken Form (If Different)"),
-    default=_default_vocabulary,
-)
-ctx.lists["user.vocabulary"] = vocabulary
+@track_csv_list("additional_words.csv", headers=("Word(s)", "Spoken Form (If Different)"))
+def on_vocab(values):
+    ctx.lists["user.vocabulary"] = values
 
 
 class PhraseReplacer:

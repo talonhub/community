@@ -1,6 +1,6 @@
 from talon import Context, Module
 
-from ...core.user_settings import get_list_from_csv
+from ...core.user_settings import track_csv_list
 
 ctx = Context()
 mod = Module()
@@ -75,11 +75,8 @@ default_unix_utilities = {
     "who am I": "whoami",
 }
 
-unix_utilities = get_list_from_csv(
-    "unix_utilities.csv",
-    headers=("command", "spoken"),
-    default=default_unix_utilities,
-)
-
 mod.list("unix_utility", desc="A common utility command")
-ctx.lists["self.unix_utility"] = unix_utilities
+
+@track_csv_list("unix_utilities.csv", headers=("command", "spoken"), default=default_unix_utilities)
+def on_utilities(values):
+    ctx.lists["self.unix_utility"] = values

@@ -1,6 +1,6 @@
 from talon import Context, Module
 
-from ..user_settings import get_list_from_csv
+from ..user_settings import track_csv_list
 
 mod = Module()
 mod.list("abbreviation", desc="Common abbreviation")
@@ -446,17 +446,18 @@ abbreviations = {
 }
 
 # This variable is also considered exported for the create_spoken_forms module
-abbreviations_list = get_list_from_csv(
-    "abbreviations.csv",
-    headers=("Abbreviation", "Spoken Form"),
-    default=abbreviations,
-)
-
-# Allows the abbreviated/short form to be used as spoken phrase. eg "brief app" -> app
-abbreviations_list_with_values = {
-    **{v: v for v in abbreviations_list.values()},
-    **abbreviations_list,
-}
+abbreviations_list = {}
 
 ctx = Context()
-ctx.lists["user.abbreviation"] = abbreviations_list_with_values
+
+@track_csv_list("abbreviations.csv", headers=("Abbreviation", "Spoken Form"), default=abbreviations)
+def on_abbreviations(values):
+    global abbreviations_list
+    abbreviations_list = values
+
+    # Allows the abbreviated/short form to be used as spoken phrase. eg "brief app" -> app
+    abbreviations_list_with_values = {
+        **{v: v for v in abbreviations_list.values()},
+        **abbreviations_list,
+    }
+    ctx.lists["user.abbreviation"] = abbreviations_list_with_values

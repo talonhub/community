@@ -7,7 +7,7 @@ import os
 
 from talon import Context, Module, actions, app
 
-from .user_settings import get_list_from_csv
+from .user_settings import track_csv_list
 
 mod = Module()
 ctx = Context()
@@ -49,11 +49,9 @@ def on_ready():
 
             default_system_paths.update(onedrive_paths)
 
-    system_paths = get_list_from_csv(
-        "system_paths.csv", headers=("Path", "Spoken"), default=default_system_paths
-    )
-
-    ctx.lists["user.system_paths"] = system_paths
+    @track_csv_list("system_paths.csv", headers=("Path", "Spoken"), default=default_system_paths)
+    def on_csv(system_paths):
+        ctx.lists["user.system_paths"] = system_paths
 
 
 @mod.capture(rule="{user.system_paths}")

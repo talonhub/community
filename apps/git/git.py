@@ -1,6 +1,7 @@
+from pathlib import Path
+from typing import IO
 import csv
 import os
-from pathlib import Path
 
 from talon import Context, Module, actions, resource
 
@@ -10,14 +11,8 @@ ctx = Context()
 mod.list("git_command", desc="Git commands.")
 mod.list("git_argument", desc="Command-line git options and arguments.")
 
-dirpath = Path(__file__).parent
-arguments_csv_path = str(dirpath / "git_arguments.csv")
-commands_csv_path = str(dirpath / "git_commands.csv")
-
-
-def make_list(path):
-    with resource.open(path, "r") as f:
-        rows = list(csv.reader(f))
+def make_list(f: IO) -> dict[str, str]:
+    rows = list(csv.reader(f))
     mapping = {}
     # ignore header row
     for row in rows[1:]:
@@ -32,10 +27,13 @@ def make_list(path):
         mapping[spoken_form] = output
     return mapping
 
+@resource.watch("git_arguments.csv")
+def load_arguments(f):
+    ctx.lists["self.git_argument"] = make_list(f)
 
-ctx.lists["self.git_argument"] = make_list(arguments_csv_path)
-ctx.lists["self.git_command"] = make_list(commands_csv_path)
-
+@resource.watch("git_commands.csv")
+def load_commands(f):
+    ctx.lists["self.git_command"] = make_list(f)
 
 @mod.capture(rule="{user.git_argument}+")
 def git_arguments(m) -> str:

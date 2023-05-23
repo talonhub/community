@@ -3,7 +3,7 @@ from urllib.parse import quote_plus
 
 from talon import Context, Module
 
-from ..user_settings import get_list_from_csv
+from ..user_settings import track_csv_list
 
 mod = Module()
 mod.list("website", desc="A website.")
@@ -44,17 +44,14 @@ _search_engine_defaults = {
 }
 
 ctx = Context()
-ctx.lists["self.website"] = get_list_from_csv(
-    "websites.csv",
-    headers=("URL", "Spoken name"),
-    default=website_defaults,
-)
-ctx.lists["self.search_engine"] = get_list_from_csv(
-    "search_engines.csv",
-    headers=("URL Template", "Name"),
-    default=_search_engine_defaults,
-)
 
+@track_csv_list("websites.csv", headers=("URL", "Spoken name"), default=website_defaults)
+def on_websites(values):
+    ctx.lists["self.website"] = values
+
+@track_csv_list("search_engines.csv", headers=("URL Template", "Name"), default=_search_engine_defaults)
+def on_search_engines(values):
+    ctx.lists["self.search_engines"] = values
 
 @mod.action_class
 class Actions:

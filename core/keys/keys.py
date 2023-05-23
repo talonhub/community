@@ -1,6 +1,6 @@
 from talon import Context, Module, actions, app
 
-from ..user_settings import get_list_from_csv
+from ..user_settings import track_csv_list
 
 
 def setup_default_alphabet():
@@ -15,10 +15,6 @@ def setup_default_alphabet():
 
     return initial_default_alphabet_dict
 
-
-alphabet_list = get_list_from_csv(
-    "alphabet.csv", ("Letter", "Spoken Form"), setup_default_alphabet()
-)
 
 # used for number keys & function keys respectively
 digits = "zero one two three four five six seven eight nine".split()
@@ -132,7 +128,10 @@ if app.platform == "mac":
     modifier_keys["command"] = "cmd"
     modifier_keys["option"] = "alt"
 ctx.lists["self.modifier_key"] = modifier_keys
-ctx.lists["self.letter"] = alphabet_list
+
+@track_csv_list("alphabet.csv", ("Letter", "Spoken Form"), setup_default_alphabet())
+def on_alphabet(values):
+    ctx.lists["self.letter"] = values
 
 # `punctuation_words` is for words you want available BOTH in dictation and as key names in command mode.
 # `symbol_key_words` is for key names that should be available in command mode, but NOT during dictation.
