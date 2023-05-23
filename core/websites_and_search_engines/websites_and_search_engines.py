@@ -51,7 +51,7 @@ def on_websites(values):
 
 @track_csv_list("search_engines.csv", headers=("URL Template", "Name"), default=_search_engine_defaults)
 def on_search_engines(values):
-    ctx.lists["self.search_engines"] = values
+    ctx.lists["self.search_engine"] = values
 
 @mod.action_class
 class Actions:
