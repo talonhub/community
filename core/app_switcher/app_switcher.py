@@ -25,6 +25,7 @@ overrides = {}
 # a list of the currently running application names
 running_application_dict = {}
 
+last_focused_app = None
 
 mac_application_directories = [
     "/Applications",
@@ -254,8 +255,18 @@ class Actions:
                 return application
         raise RuntimeError(f'App not running: "{name}"')
 
+    def switch_last_focused():
+        """Focus the previously used application"""
+        global last_focused_app
+        if last_focused_app is not None:
+            current_focused_app = ui.active_app()
+            last_focused_app.focus()
+            last_focused_app = current_focused_app
+
     def switcher_focus(name: str):
         """Focus a new application by name"""
+        global last_focused_app
+        last_focused_app = ui.active_app()
         app = actions.user.get_running_app(name)
         actions.user.switcher_focus_app(app)
 

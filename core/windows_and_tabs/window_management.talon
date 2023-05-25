@@ -4,6 +4,7 @@ window last: app.window_previous()
 window close: app.window_close()
 window hide: app.window_hide()
 focus <user.running_applications>: user.switcher_focus(running_applications)
+focus (last | flip): user.switch_last_focused()
 # following only works on windows. Can't figure out how to make it work for mac. No idea what the equivalent for linux would be.
 focus$: user.switcher_menu()
 running list: user.switcher_toggle_running()
