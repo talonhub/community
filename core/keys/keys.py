@@ -244,6 +244,8 @@ simple_keys = [
     "pageup",
     "space",
     "tab",
+    "super",
+    "alt",
 ]
 
 alternate_keys = {
