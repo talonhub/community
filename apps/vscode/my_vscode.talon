@@ -37,11 +37,25 @@ search remove: user.vscode("search.action.remove")
 #   user.mouse_helper_position_restore()
 #   key(cmd-a)
 
-(toggle bookmark|bookmark toggle):
-  key(alt-cmd-k)
-bookmark toggle label:
+
+# Bookmarks. Requires Bookmarks plugin
+go marks: user.vscode("workbench.view.extension.bookmarks")
+toggle mark: user.vscode("bookmarks.toggle")
+go next mark: user.vscode("bookmarks.jumpToNext")
+go last mark: user.vscode("bookmarks.jumpToPrevious")
+
+# alternatives to Bookmarks in vscode.talon
+# go marks
+bar mark: user.vscode("workbench.view.extension.bookmarks")
+# go next mark
+mark next: user.vscode("bookmarks.jumpToNext")
+# go last mark
+mark previous: user.vscode("bookmarks.jumpToPrevious")
+# toggle mark
+mark toggle: user.vscode("bookmarks.toggle")
+(toggle mark|mark toggle) label:
   key(alt-cmd-h)
-bookmark next: key(alt-cmd-l)
-bookmark previous: key(alt-cmd-j)
-bar bookmark:
-  key(alt-cmd-g)
+
+(tab pin|pin toggle):
+  key(cmd-k)
+  key(shift-enter)

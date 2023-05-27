@@ -25,4 +25,7 @@ tag(): user.readline
 #   mimic(phrase or "")
 #   # user.parse_phrase(phrase or "")
 
-# last one: key(ctrl-r)
+last one:
+  key(cmd-l)
+  key(up)
+  key(enter)
