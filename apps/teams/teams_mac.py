@@ -27,9 +27,9 @@ def teams_window_is_meeting_window(window):
         return False
 
     for identifier in (
-        "call-status",
-        "prejoin-join-button",
-        "share_meeting_invite_dialog_subtitle",
+        "hangup-button",  # Hang up button in a meeting
+        "prejoin-join-button",  # "Join now" button
+        "share_meeting_invite_dialog_subtitle",  # "Invite people to join you"
     ):
         try:
             if window.element.children.find_one(AXDOMIdentifier=identifier):
