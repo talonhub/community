@@ -72,7 +72,11 @@ def surround(by):
 
 
 def surround2(prefix, postfix):
-    return lambda i, word, last: (prefix if i == 0 else "") + word + (postfix if last else "")
+    return (
+        lambda i, word, last: (prefix if i == 0 else "")
+        + word
+        + (postfix if last else "")
+    )
 
 
 def words_with_joiner(joiner):
