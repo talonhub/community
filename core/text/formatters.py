@@ -71,6 +71,10 @@ def surround(by):
     return lambda i, word, last: (by if i == 0 else "") + word + (by if last else "")
 
 
+def surround2(prefix, postfix):
+    return lambda i, word, last: (prefix if i == 0 else "") + word + (postfix if last else "")
+
+
 def words_with_joiner(joiner):
     """Pass through words unchanged, but add a separator between them."""
     return (NOSEP, lambda i, word, _: ("" if i == 0 else joiner) + word)
@@ -132,6 +136,7 @@ formatters_dict = {
         if i == 0 or word not in words_to_keep_lowercase
         else word,
     ),
+    "PAREN_SURROUNDED_STRING": (SEP, surround2("(", ")")),
 }
 
 # This is the mapping from spoken phrases to formatters
@@ -151,6 +156,7 @@ formatters_words = {
     "snake": formatters_dict["SNAKE_CASE"],
     "string": formatters_dict["SINGLE_QUOTED_STRING"],
     "title": formatters_dict["CAPITALIZE_ALL_WORDS"],
+    "rounded": formatters_dict["PAREN_SURROUNDED_STRING"],
 }
 
 all_formatters = {}
