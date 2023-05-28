@@ -170,11 +170,11 @@ class UserActions:
         if left:
             actions.edit.extend_word_left()
             before = actions.edit.selected_text()
-            actions.user.emacs("pop-mark")
+            actions.user.emacs("pop-to-mark-command")
         if right:
             actions.edit.extend_line_end()
             after = actions.edit.selected_text()
-            actions.user.emacs("pop-mark")
+            actions.user.emacs("pop-to-mark-command")
         return (before, after)
 
 
