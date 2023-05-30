@@ -20,8 +20,12 @@ show_help = False
 
 ctx = Context()
 mod = Module()
-mod.mode("homophones")
+
 mod.list("homophones_canonicals", desc="list of words ")
+mod.tag(
+    "homophones_open",
+    desc="Tag for enabling homophones commands when the associated gui is open",
+)
 
 main_screen = ui.main_screen()
 
@@ -57,7 +61,7 @@ is_selection = False
 
 def close_homophones():
     gui.hide()
-    actions.mode.disable("user.homophones")
+    ctx.tags = []
 
 
 PHONES_FORMATTERS = [
@@ -101,7 +105,7 @@ def raise_homophones(word_to_find_homophones_for, forced=False, selection=False)
     if word_to_find_homophones_for in all_homophones:
         valid_homophones = all_homophones[word_to_find_homophones_for]
     elif (
-        word_to_find_homophones_for[-1] == "s"
+        word_to_find_homophones_for.endswith("s")
         and word_to_find_homophones_for[:-1] in all_homophones
     ):
         valid_homophones = map(
@@ -139,7 +143,7 @@ def raise_homophones(word_to_find_homophones_for, forced=False, selection=False)
 
         return
 
-    actions.mode.enable("user.homophones")
+    ctx.tags = ["user.homophones_open"]
     show_help = False
     gui.show()
 
@@ -148,7 +152,7 @@ def raise_homophones(word_to_find_homophones_for, forced=False, selection=False)
 def gui(gui: imgui.GUI):
     global active_word_list
     if show_help:
-        gui.text("Homephone help - todo")
+        gui.text("Homophone help - todo")
     else:
         gui.text("Select a homophone")
         gui.line()
@@ -184,6 +188,15 @@ class Actions:
     def homophones_show(m: str):
         """Show the homophones display"""
         raise_homophones(m, False, False)
+
+    def homophones_show_auto():
+        """Show homophones for selection, or current word if selection is empty."""
+        text = actions.edit.selected_text()
+        if text:
+            raise_homophones(text, False, True)
+        else:
+            actions.edit.select_word()
+            actions.user.homophones_show_selection()
 
     def homophones_show_selection():
         """Show the homophones display for the selected text"""

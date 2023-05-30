@@ -2,11 +2,11 @@ import itertools
 import re
 from collections import defaultdict
 from dataclasses import dataclass
-from typing import Any, Mapping, Optional
+from typing import Any, List, Mapping, Optional
 
 from talon import Module, actions
 
-from .abbreviate.abbreviate import abbreviations
+from .abbreviate.abbreviate import abbreviations_list
 from .file_extension.file_extension import file_extensions
 from .keys.keys import symbol_key_words
 from .numbers.numbers import digits_map, scales, teens, tens
@@ -14,11 +14,8 @@ from .numbers.numbers import digits_map, scales, teens, tens
 mod = Module()
 
 
-# TODO: 'Whats application': 'WhatsApp' (Should keep "whats app" as well?)
-# TODO: 'V O X': 'VOX' (should keep "VOX" as well?)
-# Could handle by handling all alternatives for these, or by having hardcoded list of things that we want to handle specially
-# TODO: Tests
-DEFAULT_MINIMUM_TERM_LENGTH = 3
+DEFAULT_MINIMUM_TERM_LENGTH = 2
+EXPLODE_MAX_LEN = 3
 FANCY_REGULAR_EXPRESSION = r"[A-Z]?[a-z]+|[A-Z]+(?![a-z])|[0-9]+"
 FILE_EXTENSIONS_REGEX = "|".join(
     re.escape(file_extension.strip()) + "$"
@@ -39,8 +36,6 @@ REGEX_WITH_SYMBOLS = re.compile(
 )
 
 REVERSE_PRONUNCIATION_MAP = {
-    **{value: key for key, value in abbreviations.items()},
-    **{value.strip(): key for key, value in file_extensions.items()},
     **{str(value): key for key, value in digits_map.items()},
     **{value: key for key, value in symbol_key_words.items()},
 }
@@ -131,7 +126,6 @@ def create_spoken_form_years(num: str):
         if remainder == 0:
             words.append(scales[0])
     else:
-
         # 200X -> two thousand x
         if remainder < 9:
             words.append(REVERSE_PRONUNCIATION_MAP[str(centuries // 10)])
@@ -144,7 +138,6 @@ def create_spoken_form_years(num: str):
     if remainder != 0:
         # 1906 => "nineteen six"
         if remainder < 10:
-
             # todo: decide if we want nineteen oh five"
             # todo: decide if we want "and"
             # both seem like a waste
@@ -189,23 +182,131 @@ def create_single_spoken_form(source: str):
         (3) Otherwise, returns the lower case source.
     """
     normalized_source = source.lower()
-
     try:
         mapped_source = REVERSE_PRONUNCIATION_MAP[normalized_source]
     except KeyError:
-        mapped_source = source
-    if mapped_source.isupper():
-        mapped_source = " ".join(mapped_source)
+        # Leave completely uppercase words alone, as we can deal with them later.
+        # Otherwise normalized the rest to help with subsequent abbreviation lookups,
+        # etc.
+        if source.isupper():
+            mapped_source = source
+        else:
+            mapped_source = source.lower()
     return mapped_source
 
 
-def create_spoken_forms_from_regex(source: str, pattern: re.Pattern):
+def create_exploded_forms(spoken_forms: List[str]):
+    """Exploded common packed words into separate words"""
+    # TODO: This could be moved somewhere else, possibly seeded from something like
+    # words to replace...
+    packed_words = {"readme": "read me"}
+
+    new_spoken_forms = []
+    for line in spoken_forms:
+        exploded_form = []
+        # ex: "vm" or "usb" explodes into "V M" or "U S B"
+
+        if (
+            " " not in line
+            and line.islower()
+            and len(line) > 1
+            and len(line) <= EXPLODE_MAX_LEN
+        ):
+            new_spoken_forms.append(line)  # Keep a regular copy (ie: "nas")
+            new_spoken_forms.append(" ".join(line.upper()))
+        # ex: "readme" explodes into "read me"
+        else:
+            for word in line.split(" "):
+                if word in packed_words.keys():
+                    exploded_form.append(packed_words[word])
+                else:
+                    exploded_form.append(word)
+            new_spoken_forms.append(" ".join(exploded_form))
+    return new_spoken_forms
+
+
+def create_extension_forms(spoken_forms: List[str]):
+    """Add extension forms"""
+    new_spoken_forms = []
+
+    file_extensions_map = {v.strip(): k for k, v in file_extensions.items()}
+    for line in spoken_forms:
+        have_file_extension = False
+        file_extension_forms = []
+        dotted_extension_form = []
+        truncated_forms = []
+        for substring in line.split(" "):
+            # NOTE: If we ever run in to file extensions in the middle of file name, the
+            # truncated form is going to be busted. ie: foo.md.disabled
+
+            if substring in file_extensions_map.keys():
+                file_extension_forms.append(file_extensions_map[substring])
+                dotted_extension_form.append(REVERSE_PRONUNCIATION_MAP["."])
+                dotted_extension_form.append(file_extensions_map[substring])
+                have_file_extension = True
+                # purposefully down update truncated
+            else:
+                file_extension_forms.append(substring)
+                dotted_extension_form.append(substring)
+                truncated_forms.append(substring)
+        # print(file_extension_forms)
+        if have_file_extension:
+            new_spoken_forms.append(" ".join(file_extension_forms))
+            new_spoken_forms.append(" ".join(dotted_extension_form))
+        new_spoken_forms.append(" ".join(truncated_forms))
+
+    return set(dict.fromkeys(new_spoken_forms))
+
+
+def create_cased_forms(spoken_forms: List[str]):
+    """Add lower and upper case forms"""
+    new_spoken_forms = []
+
+    for line in spoken_forms:
+        lower_forms = []
+        upper_forms = []
+        # print(line)
+        for substring in line.split(" "):
+            if substring.isupper():
+                lower_forms.append(substring.lower())
+                upper_forms.append(" ".join(substring))
+            else:
+                lower_forms.append(substring)
+                upper_forms.append(substring)
+
+        new_spoken_forms.append(" ".join(lower_forms))
+        new_spoken_forms.append(" ".join(upper_forms))
+
+    return set(dict.fromkeys(new_spoken_forms))
+
+
+def create_abbreviated_forms(spoken_forms: List[str]):
+    """Add abbreviated case forms"""
+    new_spoken_forms = []
+
+    swapped_abbreviation_map = {v: k for k, v in abbreviations_list.items()}
+    for line in spoken_forms:
+        unabbreviated_forms = []
+        abbreviated_forms = []
+        for substring in line.split(" "):
+            if substring in swapped_abbreviation_map.keys():
+                abbreviated_forms.append(swapped_abbreviation_map[substring])
+            else:
+                abbreviated_forms.append(substring)
+            unabbreviated_forms.append(substring)
+
+        new_spoken_forms.append(" ".join(abbreviated_forms))
+        new_spoken_forms.append(" ".join(unabbreviated_forms))
+
+    return set(dict.fromkeys(new_spoken_forms))
+
+
+def create_spoken_number_forms(source: List[str]):
     """
-    Creates a list of spoken forms for source using the provided regex pattern.
-    For numeric pieces detected by the regex, generates both digit-wise and full
-    spoken forms for the numbers where appropriate.
+    Create a list of spoken forms by transforming numbers in source into spoken forms.
+    This creates a first pass of spoken forms with numbers translated, but will go
+    through multiple other passes.
     """
-    pieces = list(pattern.finditer(source))
 
     # list of spoken forms returned
     spoken_forms = []
@@ -224,9 +325,10 @@ def create_spoken_forms_from_regex(source: str, pattern: re.Pattern):
 
     # indicates whether or not we processed created a version with the year-like ("1900" => nineteen hundred) numbers
     has_spoken_form_years = False
-    # print(source)
-    for piece in pieces:
-        substring = piece.group(0)
+
+    for substring in source:
+        # for piece in pieces:
+        # substring = piece.group(0)
         length = len(substring)
 
         # the length is currently capped at 31 digits
@@ -250,46 +352,78 @@ def create_spoken_forms_from_regex(source: str, pattern: re.Pattern):
 
         else:
             spoken_form = create_single_spoken_form(substring)
+            full_form_digit_wise.append(spoken_form)
             full_form_fancy_numbers.append(spoken_form)
             full_form_spoken_form_years.append(spoken_form)
-            full_form_digit_wise.append(spoken_form)
 
     if has_fancy_number_version:
-        spoken_forms.append(" ".join(full_form_fancy_numbers).lower())
+        spoken_forms.append(" ".join(full_form_fancy_numbers))
 
     if has_spoken_form_years:
         result = " ".join(full_form_spoken_form_years)
         if result not in spoken_forms:
             spoken_forms.append(result)
 
-    spoken_forms.append(" ".join(full_form_digit_wise).lower())
+    spoken_forms.append(" ".join(full_form_digit_wise))
+    return set(dict.fromkeys(spoken_forms))
 
-    return spoken_forms
+
+def create_spoken_forms_from_regex(source: str, pattern: re.Pattern):
+    """
+    Creates a list of spoken forms for source using the provided regex pattern.
+    For numeric pieces detected by the regex, generates both digit-wise and full
+    spoken forms for the numbers where appropriate.
+    """
+    pieces = list(pattern.finditer(source))
+    spoken_forms = list(map(lambda x: x.group(0), pieces))
+
+    # NOTE: Order is sometimes important
+    transforms = [
+        create_spoken_number_forms,
+        create_extension_forms,
+        create_cased_forms,
+        create_exploded_forms,
+        create_abbreviated_forms,
+        create_extension_forms,
+    ]
+
+    for func in transforms:
+        spoken_forms = func(spoken_forms)
+
+    return list(dict.fromkeys(spoken_forms))
 
 
 def generate_string_subsequences(
     source: str,
     words_to_exclude: list[str],
-    minimum_term_length=DEFAULT_MINIMUM_TERM_LENGTH,
+    minimum_term_length: int,
 ):
+    # Includes (lower-cased):
+    # 1. Each word in source, eg "foo bar baz" -> "foo", "bar", "baz".
+    # 2. Each leading subsequence of words from source,
+    #    eg "foo bar baz" -> "foo", "foo bar", "foo bar baz"
+    #    (but not "bar baz" - TODO: is this intentional?)
+    #
+    # Except for:
+    # 3. strings shorter than minimum_term_length
+    # 4. strings in words_to_exclude.
     term_sequence = source.split(" ")
-    terms = list(
-        {
-            term.lower().strip()
-            for term in (
-                term_sequence
-                + list(itertools.accumulate([f"{term} " for term in term_sequence]))
-            )
-        }
-    )
-
-    terms = [
+    terms = {
+        # WARNING: This .lower() version creates unwanted duplication of broken up
+        # uppercase words, eg 'R E A D M E' -> 'r e a d m e'. Everything else should be
+        # lower case already
+        # term.lower().strip()
+        term.strip()
+        for term in (
+            term_sequence
+            + list(itertools.accumulate([f"{term} " for term in term_sequence]))
+        )
+    }
+    return [
         term
         for term in terms
         if (term not in words_to_exclude and len(term) >= minimum_term_length)
     ]
-
-    return terms
 
 
 @dataclass
@@ -308,9 +442,6 @@ class Actions:
     ) -> list[str]:
         """Create spoken forms for a given source"""
 
-        if words_to_exclude is None:
-            words_to_exclude = []
-
         spoken_forms_without_symbols = create_spoken_forms_from_regex(
             source, REGEX_NO_SYMBOLS
         )
@@ -321,28 +452,22 @@ class Actions:
         )
 
         # some may be identical, so ensure the list is reduced
-        full_spoken_forms = list(
-            set(spoken_forms_with_symbols + spoken_forms_without_symbols)
-        )
+        spoken_forms = set(spoken_forms_with_symbols + spoken_forms_without_symbols)
 
         # only generate the subsequences if requested
         if generate_subsequences:
-
             # todo: do we care about the subsequences that are excluded.
             # the only one that seems relevant are the full spoken form for
-            terms = generate_string_subsequences(
-                spoken_forms_without_symbols[-1], words_to_exclude, minimum_term_length
+            spoken_forms.update(
+                generate_string_subsequences(
+                    spoken_forms_without_symbols[-1],
+                    words_to_exclude or [],
+                    minimum_term_length,
+                )
             )
 
-            # always keep the full terms... there's probably a better way to do this
-            for form in full_spoken_forms:
-                if form not in terms:
-                    terms.append(form)
-
-        else:
-            terms = full_spoken_forms
-
-        return terms
+        # Avoid empty spoken forms.
+        return [x for x in spoken_forms if x]
 
     def create_spoken_forms_from_list(
         sources: list[str],

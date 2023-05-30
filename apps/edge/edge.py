@@ -12,6 +12,8 @@ os: windows
 and app.exe: msedge.exe
 os: mac
 and app.bundle: com.microsoft.edgemac
+os: linux
+and app.exe: msedge
 """
 
 ctx.matches = r"""
@@ -21,8 +23,6 @@ app: microsoft_edge
 
 @ctx.action_class("browser")
 class BrowserActions:
-    def go(url: str):
-        actions.browser.focus_address()
-        actions.sleep("50ms")
-        actions.insert(url)
-        actions.key("enter")
+    def show_extensions():
+        actions.app.tab_open()
+        actions.browser.go("edge://extensions")

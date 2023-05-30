@@ -1,0 +1,14 @@
+This file lists known changes to knausj_talon that are likely to have broken existing
+functionality. The file is sorted by date with the newest entries up the top.
+
+Be aware there may be some difference between the date in this file and when the change was
+applied given the delay between changes being submitted and the time they were reviewed
+and merged.
+
+---
+
+* 2023-02-04 Deprecate `murder` command for i3wm. Use 'win kill' instead.
+* 2022-12-11 Deprecate user.insert_with_history. Just use `user.add_phrase_to_history(text);
+insert(text)` instead. See #939.
+* 2022-10-01 Large refactoring of code base that moves many files into new locations. No
+other backwards-incompatible changes included.

@@ -1,37 +1,47 @@
-from talon import Context, actions, ui
+from talon import Context, actions, app, mac, ui
 from talon.mac import applescript
 
 ctx = Context()
 ctx.matches = r"""
 os: mac
-app: chrome
+tag: browser
 """
-ctx.tags = ["browser", "user.tabs"]
 
 
-def chrome_app():
-    return ui.apps(bundle="com.google.Chrome")[0]
+@ctx.action_class("user")
+class UserActions:
+    def tab_jump(number: int):
+        if number < 9:
+            actions.key(f"cmd-{number}")
+
+    def tab_final():
+        actions.key("cmd-9")
 
 
 @ctx.action_class("browser")
 class BrowserActions:
-    def address() -> str:
+    def address():
         try:
-            window = chrome_app().windows()[0]
+            mac_app = ui.apps(bundle=actions.app.bundle())[0]
+            window = mac_app.windows()[0]
         except IndexError:
             return ""
         try:
             web_area = window.element.children.find_one(AXRole="AXWebArea")
             address = web_area.AXURL
         except (ui.UIErr, AttributeError):
-            address = applescript.run(
-                """
-                tell application id "com.google.Chrome"
-                    if not (exists (window 1)) then return ""
-                    return window 1's active tab's URL
-                end tell
-            """
-            )
+            try:
+                address = applescript.run(
+                    """
+                    tell application id "{bundle}"
+                        if not (exists (window 1)) then return ""
+                        return the URL of the active tab of the front window
+                    end tell""".format(
+                        bundle=actions.app.bundle()
+                    )
+                )
+            except mac.applescript.ApplescriptErr:
+                return actions.next()
         return address
 
     def bookmark():
@@ -48,22 +58,18 @@ class BrowserActions:
 
     def focus_address():
         actions.key("cmd-l")
-        # action(browser.focus_page):
-
-    def focus_search():
-        actions.browser.focus_address()
 
     def go_blank():
         actions.key("cmd-n")
+
+    def go_home():
+        actions.key("cmd-shift-h")
 
     def go_back():
         actions.key("cmd-[")
 
     def go_forward():
         actions.key("cmd-]")
-
-    def go_home():
-        actions.key("cmd-shift-h")
 
     def open_private_window():
         actions.key("cmd-shift-n")
@@ -73,21 +79,15 @@ class BrowserActions:
 
     def reload_hard():
         actions.key("cmd-shift-r")
-        # action(browser.reload_hardest):
-
-    def show_clear_cache():
-        actions.key("cmd-shift-delete")
 
     def show_downloads():
         actions.key("cmd-shift-j")
-        # action(browser.show_extensions)
+
+    def show_clear_cache():
+        actions.key("cmd-shift-backspace")
 
     def show_history():
         actions.key("cmd-y")
-
-    def submit_form():
-        actions.key("enter")
-        # action(browser.title)
 
     def toggle_dev_tools():
         actions.key("cmd-alt-i")

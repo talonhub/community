@@ -1,4 +1,4 @@
-from talon import Context, Module, actions
+from talon import Context, Module, actions, app
 
 ctx = Context()
 mod = Module()
@@ -17,24 +17,40 @@ os: mac
 and app.bundle: org.mozilla.firefox
 """
 
+# Make the context match more specifically than anything else. This is important, eg. to
+# override the browser.go_home() implementation in tags/browser/browser_mac.py.
 ctx.matches = r"""
+os: windows
+os: linux
+os: mac
+tag: browser
 app: firefox
 """
 
 
+@mod.action_class
+class Actions:
+    def firefox_bookmarks_sidebar():
+        """Toggles the Firefox bookmark sidebar"""
+
+    def firefox_history_sidebar():
+        """Toggles the Firefox history sidebar"""
+
+
+@ctx.action_class("user")
+class UserActions:
+    def tab_close_wrapper():
+        actions.sleep("180ms")
+        actions.app.tab_close()
+
+
 @ctx.action_class("browser")
 class BrowserActions:
-    # TODO
-    # action(browser.address):
-    # action(browser.title):
-    def go(url: str):
+    def focus_page():
         actions.browser.focus_address()
-        actions.sleep("50ms")
-        actions.insert(url)
-        actions.key("enter")
+        actions.edit.find()
+        actions.sleep("180ms")
+        actions.key("escape")
 
-    def focus_search():
-        actions.browser.focus_address()
-
-    def submit_form():
-        actions.key("enter")
+    def go_home():
+        actions.key("alt-home")

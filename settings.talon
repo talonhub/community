@@ -18,7 +18,10 @@ settings():
     # Stop continuous scroll/gaze scroll with a pop
     user.mouse_enable_pop_stops_scroll = 1
 
-    # Enable pop click with 'control mouse' mode
+    # Enable pop click with 'control mouse' mode.
+    # 0 = off
+    # 1 = on with eyetracker but not zoom mouse mode
+    # 2 = on but not with zoom mouse mode
     user.mouse_enable_pop_click = 1
 
     # When enabled, the 'Scroll Mouse' GUI will not be shown.
@@ -43,12 +46,22 @@ settings():
     # "command history more" to display all of them, "command history less" to restore
     user.command_history_size = 50
 
+    # Uncomment the below to insert text longer than 10 characters (customizable) by
+    # pasting from the clipboard. This is often faster than typing.
+    #user.paste_to_insert_threshold = 10
+
     # Uncomment the below to enable context-sensitive dictation. This determines
     # how to format (capitalize, space) dictation-mode speech by selecting &
     # copying surrounding text before inserting. This can be slow and may not
     # work in some applications. You may wish to enable this on a
     # per-application basis.
     # user.context_sensitive_dictation = 1
+
+    # How to resize windows moved across physical screens (eg. via `snap next`).
+    # Default is 'proportional', which preserves window size : screen size ratio.
+    # 'size aware' keeps absolute window size the same, except full-height or
+    # -width windows are resized to stay full-height/width.
+    #user.window_snap_screen = "size aware"
 
 # Uncomment this to enable the curse yes/curse no commands (show hide mouse cursor). See issue #688.
 # tag(): user.mouse_cursor_commands_enable

@@ -3,9 +3,8 @@ mode: dictation
 ^press <user.modifiers>$: key(modifiers)
 ^press <user.keys>$: key(keys)
 
-# Everything here should call `auto_insert()` (instead of `insert()`), to preserve the state to correctly auto-capitalize/auto-space.
-# (Talonscript string literals implicitly call `auto_insert`, so there's no need to wrap those)
-<user.raw_prose>: auto_insert(raw_prose)
+# Everything here should call `user.dictation_insert()` instead of `insert()`, to correctly auto-capitalize/auto-space.
+<user.raw_prose>: user.dictation_insert(raw_prose)
 cap: user.dictation_format_cap()
 # Hyphenated variants are for Dragon.
 (no cap | no-caps): user.dictation_format_no_cap()
@@ -65,13 +64,13 @@ formatted <user.format_text>: user.dictation_insert_raw(format_text)
 ^format selection <user.formatters>$: user.formatters_reformat_selection(formatters)
 
 # Corrections
-scratch that: user.clear_last_phrase()
-scratch selection: edit.delete()
+nope that | scratch that: user.clear_last_phrase()
+(nope | scratch) selection: edit.delete()
 select that: user.select_last_phrase()
-spell that <user.letters>: auto_insert(letters)
+spell that <user.letters>: user.dictation_insert(letters)
 spell that <user.formatters> <user.letters>:
     result = user.formatted_text(letters, formatters)
     user.dictation_insert_raw(result)
 
 # Escape, type things that would otherwise be commands
-^escape <user.text>$: auto_insert(user.text)
+^escape <user.text>$: user.dictation_insert(user.text)
