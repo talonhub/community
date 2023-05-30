@@ -176,6 +176,25 @@ export: key("cmd-shift-e")
 # Resize to Fit
 resize: key("alt-shift-cmd-r")
 
+# Spacing - 156px
+spaz:
+    mouse_click()
+    "156"
+    key("enter")
+
+# Token Shortcuts
+bee:
+    "space-between"
+
+toke bee:
+    "{between."
+
+rounds:
+    "space-around"
+
+toke (round | r | are) :
+    "{around."
+
 # # Rename to Select Last Word > Copy it
 # (red it | naz):
 #     mouse_click()
