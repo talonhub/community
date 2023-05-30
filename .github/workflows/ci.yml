@@ -61,8 +61,8 @@ jobs:
 
       - name: Build docs
         run: |
-          talondoc autogen -o docs --generate-index
-          talondoc build ./ docs/_build
+          python -X utf8 -m talondoc autogen -o docs --generate-index
+          python -X utf8 -m talondoc build ./ docs/_build
 
       - name: Setup Pages
         if: github.event_name == 'push'
