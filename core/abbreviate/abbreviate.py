@@ -59,6 +59,7 @@ abbreviations = {
     "character": "char",
     "check": "chk",
     "child": "chld",
+    "china": "cn",
     "class": "cls",
     "client": "cli",
     "column": "col",
@@ -300,11 +301,13 @@ abbreviations = {
     "private": "priv",
     "process": "proc",
     "processor": "cpu",
+    "production": "prod",
     "program": "prog",
     "programs": "progs",
     "properties": "props",
     "property": "prop",
     "protocol": "proto",
+    "protocol buffers": "protobuf",
     "public": "pub",
     "python": "py",
     "quebec": "qc",
@@ -448,5 +451,12 @@ abbreviations_list = get_list_from_csv(
     headers=("Abbreviation", "Spoken Form"),
     default=abbreviations,
 )
+
+# Allows the abbreviated/short form to be used as spoken phrase. eg "brief app" -> app
+abbreviations_list_with_values = {
+    **{v: v for v in abbreviations_list.values()},
+    **abbreviations_list,
+}
+
 ctx = Context()
-ctx.lists["user.abbreviation"] = abbreviations_list
+ctx.lists["user.abbreviation"] = abbreviations_list_with_values
