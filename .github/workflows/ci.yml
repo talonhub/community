@@ -60,7 +60,9 @@ jobs:
         run: pip install -r requirements-docs.txt
 
       - name: Build docs
-        run: talondoc build ./ docs/_build
+        run: |
+          talondoc autogen -o docs --generate-index
+          talondoc build ./ docs/_build
 
       - name: Setup Pages
         if: github.event_name == 'push'

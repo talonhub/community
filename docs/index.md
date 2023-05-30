@@ -1,11 +1,9 @@
 # Documentation for knausj_talon
 
-:::{toctree}
-:maxdepth: 2
-core/index.md
-plugin/index.md
-apps/index.md
-lang/index.md
-lang/tags/index.md
-tags/index.md
-:::
+This is a placeholder.
+
+To generate the documentation, run:
+
+```sh
+talondoc autogen -o docs --generate-index
+```
