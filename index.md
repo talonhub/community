@@ -1,7 +1,6 @@
 :::{toctree}
 :maxdepth: 2
 index.md
-docs/index.md
 :::
 
 :::{include} README.md
