@@ -113,19 +113,27 @@ copy word: user.copy_word()
 copy word left: user.copy_word_left()
 copy word right: user.copy_word_right()
 
+<<<<<<< HEAD
+=======
+#copy commands
+copy all:
+    edit.select_all()
+    edit.copy()
+
+>>>>>>> master
 #to do: do we want these variants, seem to conflict
-# copy left:
-#      edit.extend_left()
-#      edit.copy()
-# copy right:
-#     edit.extend_right()
-#     edit.copy()
-# copy up:
-#     edit.extend_up()
-#     edit.copy()
-# copy down:
-#     edit.extend_down()
-#     edit.copy()
+copy left:
+    edit.extend_line_start()
+    edit.copy()
+copy right:
+    edit.extend_line_end()
+    edit.copy()
+copy up:
+    edit.extend_up()
+    edit.copy()
+copy down:
+    edit.extend_down()
+    edit.copy()
 
 # Cut
 cut that: edit.cut()

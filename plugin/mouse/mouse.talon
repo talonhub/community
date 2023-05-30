@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 hissing mode: user.toggle_hiss_click()
 
 (control | see) mouse: user.mouse_toggle_control_mouse()
@@ -11,6 +12,35 @@ run calibration: user.mouse_calibrate()
 # zoom mouse: tracking.control_zoom_toggle()
 # camera overlay: tracking.control_debug_toggle()
 # run calibration: tracking.calibrate()
+=======
+# All commands you can call for tracking
+# ---------------------------------------------
+# tracking.calibrate
+# tracking.control1_enabled
+# tracking.control1_toggle
+# tracking.control_debug_toggle
+# tracking.control_enabled
+# tracking.control_gaze_toggle
+# tracking.control_head_toggle
+# tracking.control_mouse_jump_toggle
+# tracking.control_toggle
+# tracking.control_zoom_enabled
+# tracking.control_zoom_toggle
+# tracking.zoom
+# tracking.zoom_cancel
+
+(control | see) mouse: user.mouse_toggle_control_mouse()
+(control | see) (zoom | mouse): tracking.control_zoom_toggle()
+camera overlay: tracking.control_debug_toggle()
+run calibration: tracking.calibrate()
+
+# New commands / Toggles changed to "tracking"
+# ---------------------------------------------
+#control mouse: tracking.control1_toggle()
+zoom mouse: tracking.control_zoom_toggle()
+cancel zoom mouse: tracking.zoom_cancel()
+#control mouse: tracking.control_toggle()
+>>>>>>> master
 
 touch:
     mouse_click(0)
@@ -93,7 +123,7 @@ wheel upper: user.mouse_scroll_up_continuous()
 wheel upper here:
     user.mouse_move_center_active_window()
     user.mouse_scroll_up_continuous()
-(wheel gaze | gaze): user.mouse_gaze_scroll()
+(wheel gaze | gaze | scrolls): user.mouse_gaze_scroll()
 wheel gaze here:
     user.mouse_move_center_active_window()
     user.mouse_gaze_scroll()

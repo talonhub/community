@@ -2,7 +2,7 @@
 (control | see) fusion: experimental.fusion1_toggle()
 (control | see) gazing: experimental.gaze1_toggle()
 (control | see) head: experimental.head1_toggle()
-(control | see) troll: tracking.control_toggle()
+(control | see) eyes: tracking.control_toggle()
 
 # Deep Clicks
 deep: key("ctrl-cmd-t")
@@ -176,7 +176,7 @@ clear paste:
     edit.paste()
 
 # Click on words select all delete and paste
-stacy:
+(stacy | hap):
     mouse_click(0)
     key("enter")
     edit.select_all()
@@ -290,6 +290,9 @@ zoomer: user.mouse_trigger_zoom_mouse()
 # Focus Figma
 (go fig | figz): "focus figma"
 
+# Raycast AI
+raz: key("alt-g")
+
 
 beep:
   mouse_click()
@@ -300,6 +303,7 @@ beep:
   key("cmd-c")
 
 heat:
+    mouse_click()
     mouse_click()
     mouse_click()
     sleep(200ms)

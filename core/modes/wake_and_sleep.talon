@@ -14,13 +14,19 @@ mode: all
     speech.disable()
     user.engine_sleep()
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> master
 ^talon sleep [<phrase>]$:
     speech.disable()
     mode.disable("noise")
 ^talon wake$:
     speech.enable()
     mode.enable("noise")
+<<<<<<< HEAD
 =======
 ^talon sleep [<phrase>]$: speech.disable()
 ^(talon wake)+$: speech.enable()
 >>>>>>> d61854d8bdfa61dc0e60e9570a8c4fcec889f00e
+=======
+>>>>>>> master
