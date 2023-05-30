@@ -331,6 +331,7 @@ This repository is now officially a team effort. The following contributors have
 - @rntz
 - @splondike
 - @pokey
+- @wenkokke
 
 Collaborators will reply to issues and pull requests as time and health permits. Please be patient.
 
