@@ -30,22 +30,6 @@ There are a number of automated unit tests in the repository. These are all run 
 
 To run the test suite you just need to install the `pytest` python package in to a non-Talon Python runtime you want to use for tests (i.e. don't install in the `~/.talon/.venv directory`). You can then just run the `pytest` command from the repository root to execute all the tests.
 
-## Talon documentation
-
-For official documentation on Talon's API and features, please visit https://talonvoice.com/docs/.
-
-For community-generated documentation on Talon, please visit https://talon.wiki/
-
-## Alternate installation method: Zip file
-
-It is possible to install knausj by downloading and extracting a zip file instead of using `git`. Note that this approach is discouraged, because it makes it more difficult to keep track of any changes you may make to your copy of the files.
-
-If you wish to install `knausj_talon` by downloading and extracting a zip file, proceed as follows:
-
-1. Download the [zip archive of knausj_talon](https://github.com/knausj85/knausj_talon/archive/refs/heads/main.zip)
-1. Extract the files. If you don’t know how to extract zip files, a quick google search for "extract zip files" may be helpful.
-1. Place these extracted files inside the `user` folder of the Talon Home directory. You can find this folder by right clicking the Talon icon in taskbar, clicking Scripting > Open ~/talon, and navigating to `user`.
-
 ## Coding principles
 
 This section documents some agreed upon approaches toward reviewing and including code so we can all more easily make consistent decisions.

@@ -305,6 +305,22 @@ Also, you can add additional vocabulary words, words to replace, search engines 
 
 In addition to this repo, there are [other Talon user file sets](https://talon.wiki/talon_user_file_sets/) containing additional commands that you may want to experiment with if you're feeling adventurous 😊. Many of them are meant to be used alongside knausj, but a few of them are designed as replacements. If it's not clear which, please file an issue against the given GitHub repository for that user file set!
 
+## Talon documentation
+
+For official documentation on Talon's API and features, please visit https://talonvoice.com/docs/.
+
+For community-generated documentation on Talon, please visit https://talon.wiki/
+
+## Alternate installation method: Zip file
+
+It is possible to install knausj by downloading and extracting a zip file instead of using `git`. Note that this approach is discouraged, because it makes it more difficult to keep track of any changes you may make to your copy of the files.
+
+If you wish to install `knausj_talon` by downloading and extracting a zip file, proceed as follows:
+
+1. Download the [zip archive of knausj_talon](https://github.com/knausj85/knausj_talon/archive/refs/heads/main.zip)
+1. Extract the files. If you don’t know how to extract zip files, a quick google search for "extract zip files" may be helpful.
+1. Place these extracted files inside the `user` folder of the Talon Home directory. You can find this folder by right clicking the Talon icon in taskbar, clicking Scripting > Open ~/talon, and navigating to `user`.
+
 # Collaborators
 
 This repository is now officially a team effort. The following contributors have direct access:
