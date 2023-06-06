@@ -112,8 +112,6 @@ pad,pa the
 source,sirs
 previous,pries
 change,taint
-
-
 Thursdays,thursdays
 Mondays,mondays
 Tuesday,tuesday
@@ -221,4 +219,7 @@ pad,pa the
 source,sirs
 previous,pries
 change,taint
+python,piton
+
+
 

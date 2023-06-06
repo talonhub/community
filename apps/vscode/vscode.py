@@ -43,7 +43,7 @@ vscode_projects = {
     "fish": "fish-config",
     "cube": "my-kubernetes",
     "updater": "dns-updater",
-    "andreas":"andreas"
+    "andreas": "andreas",
 }
 
 global_ctx.lists["user.vscode_projects"] = vscode_projects.keys()
@@ -163,6 +163,7 @@ class Actions:
     def command_palette():
         """Show command palette"""
         actions.key("ctrl-shift-p")
+
 
 @ctx.action_class("user")
 class user_actions:
@@ -311,10 +312,10 @@ class user_actions:
         actions.sleep("100ms")
         actions.key("esc")
 
-    def select_next_token():
-        actions.edit.find("")
-        actions.key("enter")
-        actions.key("enter")
-        actions.key("esc")
+    # def select_next_token():
+    #     actions.edit.find("")
+    #     actions.key("enter")
+    #     actions.key("enter")
+    #     actions.key("esc")
 
     # find_and_replace.py support end

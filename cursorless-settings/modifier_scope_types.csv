@@ -1,27 +1,35 @@
 Spoken form, Cursorless identifier
-param, argumentOrParameter
+arg, argumentOrParameter
 attribute, attribute
-blocko, paragraph
+block | graph, paragraph
 call, functionCall
+callee, functionCallee
+car, character
 cell, notebookCell
-char, character
-class, class
 class name, className
+class, class
 comment, comment
+condition, condition
 element, xmlElement
 end tag, xmlEndTag
 file, document
-funk, namedFunction
 funk name, functionName
+funk, namedFunction
+ident, identifier
 if state, ifStatement
 item, collectionItem
 key, collectionKey
 lambda, anonymousFunction
 line, line
 list, list
+location, url
+long paint, nonWhitespaceSequence
 map, map
 name, name
+paint, boundedNonWhitespaceSequence
 regex, regularExpression
+section, section
+selector, selector
 start tag, xmlStartTag
 state, statement
 string, string
@@ -29,4 +37,20 @@ tags, xmlBothTags
 token, token
 type, type
 value, value
-word, word
+sub, word
+branch, branch
+
+-chapter, chapter
+-environment, environment
+-five section, sectionLevelFive
+-four section, sectionLevelFour
+-one section, sectionLevelOne
+-paragraph, namedParagraph
+-part, part
+-six section, sectionLevelSix
+-subparagraph, subParagraph
+-subsection, subSection
+-subsubsection, subSubSection
+-three section, sectionLevelThree
+-two section, sectionLevelTwo
+-unit, unit

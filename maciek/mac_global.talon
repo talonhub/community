@@ -18,9 +18,6 @@ puppy [<phrase>]$:
     user.focus_puppy()
     user.rephrase(phrase or "")
 
-
-
-
 code search:
     user.open_url("https://sourcegraph.com/search")
 
@@ -32,8 +29,6 @@ code search:
 #     # user.maciek_switch_to_app("obsidian")
 #     user.switcher_focus_and_wait("obsid, 0.5ian")
 #     user.rephrase(phrase or "")
-
-
   
 
 ###############################################################################
@@ -62,13 +57,21 @@ spotlight [<user.text>]:
     key(cmd-alt-space)
     sleep(50ms)
     insert(text or "")
-(raycast|spot) [<user.text>]:
+
+###############################################################################
+### raycast
+###############################################################################
+spot [<user.text>]:
     key(alt-space)
     sleep(50ms)
     insert(text or "")
 
 spot clipboard: user.raycast_clipboard()
 spot close: key(cmd-w)
+raindrop search [<user.text>]:
+    user.raycast_raindrop_search(text or "") 
+raindrop recent:
+     key(cmd-shift-f5)
 
 talon play:user.run_in_fish_shell("talon-play-pre-last")    
 talon restart: user.run_in_fish_shell("talon-restart")
@@ -164,10 +167,6 @@ click up task$:
     user.switcher_focus_and_wait("click", 0.5)
     key(t)
     
-raindrop search [<user.text>]:
-   user.raycast_raindrop_search(text or "") 
-raindrop recent:
-    key(cmd-shift-f5)     
 
 polo help coder: user.raycast_talon_search("vscode")
 ^coder project [<user.text>]$: user.raycast_coder_project(text or "")

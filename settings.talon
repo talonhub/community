@@ -1,6 +1,6 @@
 -
 settings():
-    user.rango_direct_clicking =1
+    # user.rango_direct_clicking =1
     #adjust the scale of the imgui to my liking
     imgui.scale = 1.3
     imgui.dark_mode = 1
@@ -13,7 +13,7 @@ settings():
     # The default amount used when scrolling continuously
     user.mouse_continuous_scroll_amount = 6
     #stop continuous scroll/gaze scroll with a pop
-    user.mouse_enable_pop_stops_scroll = 1
+    user.mouse_enable_pop_stops_scroll = 1e
     #enable pop click with 'control mouse' mode
     user.mouse_enable_pop_click = 1
     #When enabled, the 'Scroll Mouse' GUI will not be shown.
@@ -39,8 +39,8 @@ settings():
     # and input volume on macOS settings is 50%
     # But when I set it to = 0.25  the sound of keyboard clicks is being picked up as activity
     # speech.threshold = 0.1
-    speech.threshold = 0.3
-    speech.timeout = 0.250
+    # speech.threshold = 0.3
+    speech.timeout = 0.4
     speech.debug = 1
     # speech.timeout = 0.180
     # Uncomment the below to enable context-sensitive dictation. This determines

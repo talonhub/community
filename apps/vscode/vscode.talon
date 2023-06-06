@@ -323,7 +323,7 @@ console switch:
     
     
     
-    #Expand/Shrink AST Selection
+#Expand/Shrink AST Selection
 select less: user.vscode("editor.action.smartSelect.shrink")
 select (more|this): user.vscode("editor.action.smartSelect.expand")
 # tina: user.vscode("editor.action.smartSelect.expand")
@@ -378,35 +378,35 @@ go line <number> end:
     # lend: edit.line_end()
     # bend: edit.line_start()
     
-    ###############################################################################
-    ### Coping, cutting, cloning, selecting stuff
-    ###############################################################################
+###############################################################################
+### Coping, cutting, cloning, selecting stuff
+###############################################################################
 copy line down: user.vscode("editor.action.copyLinesDownAction")
 copy line up: user.vscode("editor.action.copyLinesUpAction")
 
-take <number> line:
-    user.select_next_lines(number)
+# take <number> line:
+#     user.select_next_lines(number)
     
-cut <number> line:
-    user.select_next_lines(number)
-    sleep(10ms)
-    key(cmd-x)
+# cut <number> line:
+#     user.select_next_lines(number)
+#     sleep(10ms)
+#     key(cmd-x)
     
-copy <number> line:
-    user.select_next_lines(number)
-    key(cmd-c)
-    sleep(100ms)
-    key(esc)
+# copy <number> line:
+#     user.select_next_lines(number)
+#     key(cmd-c)
+#     sleep(100ms)
+#     key(esc)
     
-clone <number> line:
-    user.select_next_lines(number)
-    key(cmd-c)
-    sleep(10ms)
-    key(right cmd-v)
-    sleep(10ms)
-(clear|wipe) <number> line:
-    user.select_next_lines(number)
-    key(delete)
+# clone <number> line:
+#     user.select_next_lines(number)
+#     key(cmd-c)
+#     sleep(10ms)
+#     key(right cmd-v)
+#     sleep(10ms)
+# (clear|wipe) <number> line:
+#     user.select_next_lines(number)
+#     key(delete)
     
     
     # indentation stuff
@@ -462,6 +462,7 @@ take this$:
     key(cmd-d)
     key(cmd-shift-f)
     key(enter)
+
 (go find|find) this$:
     key(cmd-d)
     key(cmd-f)
@@ -510,6 +511,7 @@ finder show: user.vscode("revealFileInOS")
 ###############################################################################
 ### Misc
 ###############################################################################
+scratchpad new: user.vscode("scratchpads.newScratchpad")
 
 folders collapse:
     user.vscode("workbench.files.action.collapseExplorerFolders")
