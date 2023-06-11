@@ -4,6 +4,7 @@ mod = Module()
 ctx_zoom_mouse_enabled = Context()
 ctx_zoom_mouse_enabled.matches = r"""
 not user.running: Optikey Mouse
+tag: talon_plugins.eye_zoom_mouse.zoom_mouse_enabled
 and not tag: talon_plugins.eye_zoom_mouse.zoom_mouse_activated
 """
 
@@ -12,9 +13,14 @@ ctx_zoom_mouse_triggered = Context()
 ctx_zoom_mouse_triggered.matches = r"""
 tag: talon_plugins.eye_zoom_mouse.zoom_mouse_enabled
 and tag: talon_plugins.eye_zoom_mouse.zoom_mouse_activated
+and not tag: user.control_mouse_enabled
 #and not tag: talon_plugins.eye_zoom_mouse.zoom_mouse_pedal
 """
 
+ctx_control_mouse_enabled = Context()
+ctx_control_mouse_enabled.matches  = r"""
+tag: user.control_mouse_enabled
+"""
 
 def sleep_or_wake():
     if not actions.speech.enabled():
@@ -57,25 +63,35 @@ class Actions:
         """document string goes here"""
         actions.talon_plugins.eye_zoom_mouse.mouse_trigger()
 
+
     def keypad1():
         """document string goes here"""
+
         trigger_home_row()
+        
 
     def keypad2():
         """document string goes here"""
+        
         actions.user.system_switcher()
+
 
     def keypad3():
         """document string goes here"""
+        
         actions.edit.undo()
+
 
     def keypad4():
         """document string goes here"""
+        
         actions.core.repeat_command(1)
+
 
     def keypad5():
         """document"""
         actions.user.move_cursor_to_gaze_point()
+
 
     def keypad6():
         """document string goes here"""
@@ -205,7 +221,6 @@ class WindowsZoomMouseTriggerActions:
 
     def keypad3():
         """document string goes here"""
-        print("triple")
         actions.talon_plugins.eye_zoom_mouse.triple_click()
 
     def keypad4():
@@ -215,6 +230,78 @@ class WindowsZoomMouseTriggerActions:
     def keypad5():
         """document"""
         actions.talon_plugins.eye_zoom_mouse.mouse_move()
+
+    def keypad6():
+        """document string goes here"""
+
+    def keypad7():
+        """document string goes here"""
+
+    def pedal_left_left():
+        """document string goes here"""
+        actions.talon_plugins.eye_zoom_mouse.double_click()
+
+    def pedal_left_middle():
+        """document string goes here"""
+        actions.talon_plugins.eye_zoom_mouse.mouse_trigger()
+
+    def pedal_left_right():
+        """document string goes here"""
+        actions.talon_plugins.eye_zoom_mouse.triple_click()
+
+    def pedal_left_top():
+        """document string goes here"""
+        actions.talon_plugins.eye_zoom_mouse.mouse_drag()
+
+    def pedal_right_left():
+        """document string goes here"""
+        actions.talon_plugins.eye_zoom_mouse.double_click()
+
+    def pedal_right_middle():
+        """document string goes here"""
+        actions.talon_plugins.eye_zoom_mouse.right_click()
+
+    def pedal_right_right():
+        """document string goes here"""
+        actions.talon_plugins.eye_zoom_mouse.triple_click()
+
+    def pedal_right_top():
+        """document string goes here"""
+        actions.talon_plugins.eye_zoom_mouse.mouse_drag()
+
+@ctx_control_mouse_enabled.action_class("user")
+class ControlMouseEnabled:
+    def keypad0():
+        """document string goes here"""
+        actions.mouse_click(0)
+
+    def keypad1():
+        """document string goes here"""
+        actions.mouse_click(1)
+        
+
+    def keypad2():
+        """document string goes here"""
+        actions.mouse_click(0)
+        actions.mouse_click(0)
+
+    def keypad3():
+        """document string goes here"""
+        actions.mouse_click(0)
+        actions.mouse_click(0)
+        actions.mouse_click(0)
+        
+
+    def keypad4():
+        """document string goes here"""
+        actions.user.mouse_drag(0)
+        actions.user.grid_close()
+        
+
+    def keypad5():
+        """document"""
+        actions.mouse_move()
+        
 
     def keypad6():
         """document string goes here"""

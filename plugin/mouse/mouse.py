@@ -69,6 +69,9 @@ mod.list(
 mod.tag(
     "mouse_cursor_commands_enable", desc="Tag enables hide/show mouse cursor commands"
 )
+mod.tag(
+    "control_mouse_enabled", desc="tag enabled when control mouse is enabled"
+)
 setting_mouse_enable_pop_click = mod.setting(
     "mouse_enable_pop_click",
     type=int,
@@ -179,6 +182,7 @@ class Actions:
         button_down = len(list(ctrl.mouse_buttons_down())) > 0
         if button_down:
             ctrl.mouse_click(button=0, up=True)
+        ctx.tags = []
 
     def mouse_scroll_down(amount: float = 1):
         """Scrolls down"""
@@ -257,6 +261,18 @@ class Actions:
         """move the mouse cursor to the center of the currently active window"""
         rect = ui.active_window().rect
         ctrl.mouse_move(rect.left + (rect.width / 2), rect.top + (rect.height / 2))
+    def mouse_toggle_control_mouse():
+        """Toggles the control mouse"""
+        actions.tracking.control_toggle()
+        if actions.tracking.control_enabled():            
+            if actions.tracking.control_zoom_enabled():
+                actions.tracking.control_zoom_toggle()
+            ctx.tags = ["user.control_mouse_enabled"]
+
+        else:
+            ctx.tags = []
+
+
 
 
 def show_cursor_helper(show):
@@ -368,7 +384,6 @@ def gaze_scroll_cursor():
         if diff_y < 0 and amount > 0:
             amount = -amount
         actions.mouse_scroll(by_lines=False, y=amount)
-
 
 def stop_scroll():
     global scroll_amount, scroll_job, gaze_job, continuous_scoll_mode

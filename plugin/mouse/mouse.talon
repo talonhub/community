@@ -2,6 +2,9 @@ not tag: user.homerow_search
 not tag: user.fluent_search_screen_search
 -
 zoom mouse: tracking.control_zoom_toggle()
+control mouse: user.mouse_toggle_control_mouse()
+    
+
 run calibration: tracking.calibrate()
 
 touch$:
