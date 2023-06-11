@@ -174,7 +174,7 @@ class WindowsZoomMouseInactiveActions:
 
     def keypad6():
         """document string goes here"""
-        actions.tracking.control_zoom_toggle()
+        actions.user.quick_pick_show()
 
     def keypad7():
         """document string goes here"""
@@ -305,7 +305,8 @@ class ControlMouseEnabled:
 
     def keypad6():
         """document string goes here"""
-
+        actions.user.quick_pick_show()
+        
     def keypad7():
         """document string goes here"""
 

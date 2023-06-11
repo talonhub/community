@@ -1,0 +1,79 @@
+Application name, Spoken form
+-
+
+# Add spoken forms to these applications
+
+"Robo 3T, MongoDB management tool", Robomongo
+Codium, Code
+Diablo III Retail, Diablo
+Diablo IV Retail, Diablo
+foobar2000, foobar
+Gnome-control-center, Settings
+Gnome-terminal, Terminal
+Google Chrome, Chrome
+Google-chrome, Chrome
+Kodi, Codi
+Microsoft Edge, Edge
+Microsoft Visual Studio 2019, Visual Studio
+MongoDB Database Server, Mongo
+netbeans64.exe, Netbeans
+obs studio, OBS
+Org.gnome.Nautilus, Nautilus
+qbittorrent.exe, Bit Torrent
+robo3t, Robomongo
+Visual Studio Code, Code
+vscodium, Code
+Windows Command Processor, Command
+Windows Explorer, Explorer
+WindowsTerminal.exe, Terminal
+
+# Exclude these applications
+
+Application Frame Host,
+ApplicationFrameHost.exe,
+atieclxx.exe,
+ConEmuC64.exe,
+conhost.exe,
+Console Window Host,
+csrss.exe,
+CTF Loader,
+dllhost.exe,
+Git for Windows,
+Host Process for Windows Services,
+Host Process for Windows Tasks,
+LockApp.exe,
+Logi Overlay,
+LogiOptions.exe (UNICODE),
+LogiOptionsMgr.exe (UNICODE),
+LogiOverlay.exe,
+Microsoft Windows Subsystem for Linux Background Host,
+Microsoft WWA Host,
+NVDisplay.Container.exe,
+OpenConsole.exe,
+PerfWatson2.exe,
+rundll32.exe,
+Runtime Broker,
+RuntimeBroker.exe,
+Search application,
+SearchApp.exe,
+SearchHost.exe,
+ServiceHub.IdentityHost.exe,
+Shell Infrastructure Host,
+ShellExperienceHost.exe,
+smartscreen.exe,
+StartMenuExperienceHost.exe,
+Steam Client WebHelper,
+svchost.exe,
+Talon,
+talon.exe,
+TextInputHost.exe,
+VC_redist.x64.exe,
+Widgets.exe,
+Windows Defender SmartScreen,
+Windows host process (Rundll32),
+Windows Shell Experience Host,
+Windows Start Experience Host,
+wslhost.exe,
+WWAHost.exe,
+Xbox Game Bar,
+XboxGameBarSpotify.exe,
