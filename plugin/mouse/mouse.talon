@@ -1,7 +1,7 @@
 not tag: user.homerow_search
 not tag: user.fluent_search_screen_search
 -
-zoom mouse: tracking.control_zoom_toggle()
+zoom mouse: user.mouse_toggle_zoom_mouse()
 control mouse: user.mouse_toggle_control_mouse()
     
 

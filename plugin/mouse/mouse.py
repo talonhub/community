@@ -261,6 +261,13 @@ class Actions:
         """move the mouse cursor to the center of the currently active window"""
         rect = ui.active_window().rect
         ctrl.mouse_move(rect.left + (rect.width / 2), rect.top + (rect.height / 2))
+    def mouse_toggle_zoom_mouse():
+        """Toggles the zoom mouse"""
+        actions.tracking.control_zoom_toggle()
+        if actions.tracking.control_enabled():                      
+            actions.tracking.control_toggle()
+            ctx.tags = []
+
     def mouse_toggle_control_mouse():
         """Toggles the control mouse"""
         actions.tracking.control_toggle()
