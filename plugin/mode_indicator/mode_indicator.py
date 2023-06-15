@@ -117,7 +117,8 @@ def on_draw(c: SkiaCanvas):
 def move_indicator():
     screen: Screen = ui.main_screen()
     rect = screen.rect
-    radius = setting_size.get() * screen.scale / 2
+    scale = screen.scale if app.platform != "mac" else 1
+    radius = setting_size.get() * scale / 2
 
     x = rect.left + min(
         max(setting_x.get() * rect.width - radius, 0),
