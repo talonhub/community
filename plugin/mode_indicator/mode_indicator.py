@@ -131,8 +131,8 @@ def move_indicator():
     )
 
     side = 2 * radius
-    canvas.move(x, y)
     canvas.resize(side, side)
+    canvas.move(x, y)
 
 
 def show_indicator():
