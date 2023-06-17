@@ -13,7 +13,7 @@ settings():
 # Note: these have repeaters on them (+) to work around an issue where, in sleep mode,
 # you can get into a situation where these commands are difficult to trigger.
 
-# These commands are fully anchored (+ and $), which means that there must be
+# These commands are fully anchored (^ and $), which means that there must be
 # silence before and after saying them in order for them to recognize (this reduces
 # false positives during normal sleep mode, normally a good thing).
 
