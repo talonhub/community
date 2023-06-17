@@ -1,4 +1,8 @@
 mode: sleep
 not speech.engine: dragon
 -
+# We define this *only* if the speech engine isn't Dragon, because if you're using Dragon,
+# "wake up" is used to specifically control Dragon, and not affect Talon.
+#
+# If you're using any other speech engine, this controls Talon.
 ^(wake up)+$: speech.enable()
