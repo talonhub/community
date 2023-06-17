@@ -17,8 +17,7 @@ settings():
 # silence before and after saying them in order for them to recognize (this reduces
 # false positives during normal sleep mode, normally a good thing).
 
-# However, remember that ignored background speech during sleep mode also counts as an
-# utterance.
+# However, ignored background speech during sleep mode also counts as an utterance.
 
 # Thus, if you say "blah blah blah talon wake", these won't trigger, because "blah
 # blah blah" was part of the same utterance. You have to say "blah blah blah" <pause,
