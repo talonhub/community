@@ -1,5 +1,5 @@
 #defines the commands that sleep/wake Talon
-mode: all
+mode: sleep
 -
 ^(welcome back)+$:
     user.mouse_wake()
