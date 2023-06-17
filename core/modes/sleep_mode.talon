@@ -26,7 +26,7 @@ settings():
 # Sometimes people would forget the second pause, notice things weren't working, and
 # say "talon wake" over and over again before the speech timeout ever gets hit, which
 # means that these won't recognize. The (+) handles this case, so if you say
-# "<pause> talon wake talon wake talon wake <pause>", it'll still work.
+# <pause> "talon wake talon wake" <pause>, it'll still work.
 
 ^(welcome back)+$:
     user.mouse_wake()
