@@ -89,6 +89,28 @@ def first_vs_rest(first_func, rest_func=lambda w: w):
     return lambda i, word, _: first_func(word) if i == 0 else rest_func(word)
 
 
+def title_case():
+    last_word = None
+
+    def title_case_word(i, word, _):
+        nonlocal last_word
+
+        if word.islower() and (  # contains only lowercase letters
+            word not in words_to_keep_lowercase
+            or i == 0
+            or not last_word[
+                -1
+            ].isalnum()  # title case subsequent words if they follow punctuation
+        ):
+            word = word.title()
+
+        last_word = word
+
+        return word
+
+    return title_case_word
+
+
 def every_word(word_func):
     """Apply one function to every word."""
     return lambda i, word, _: word_func(word)
@@ -125,13 +147,11 @@ formatters_dict = {
     "DOT_SEPARATED": words_with_joiner("."),
     "DOT_SNAKE": (NOSEP, lambda i, word, _: "." + word if i == 0 else "_" + word),
     "SLASH_SEPARATED": (NOSEP, every_word(lambda w: "/" + w)),
-    "CAPITALIZE_FIRST_WORD": (SEP, first_vs_rest(lambda w: w[:1].upper() + w[1:])),
-    "CAPITALIZE_ALL_WORDS": (
+    "CAPITALIZE_FIRST_WORD": (
         SEP,
-        lambda i, word, _: word[:1].upper() + word[1:]
-        if i == 0 or word not in words_to_keep_lowercase
-        else word,
+        first_vs_rest(lambda w: w.title() if w.islower() else w),
     ),
+    "CAPITALIZE_ALL_WORDS": (SEP, title_case()),
 }
 
 # This is the mapping from spoken phrases to formatters
@@ -150,7 +170,6 @@ formatters_words = {
     "smash": formatters_dict["NO_SPACES"],
     "snake": formatters_dict["SNAKE_CASE"],
     "string": formatters_dict["SINGLE_QUOTED_STRING"],
-    "title": formatters_dict["CAPITALIZE_ALL_WORDS"],
 }
 
 all_formatters = {}
@@ -297,4 +316,5 @@ ctx.lists["self.prose_formatter"] = {
     "say": "NOOP",
     "speak": "NOOP",
     "sentence": "CAPITALIZE_FIRST_WORD",
+    "title": "CAPITALIZE_ALL_WORDS",
 }
