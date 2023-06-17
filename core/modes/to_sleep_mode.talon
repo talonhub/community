@@ -5,8 +5,8 @@ mode: dictation
 # The optional <phrase> afterwards allows these to match even if you say arbitrary text
 # after this command, without having to wait for the speech timeout. This is handy
 # because you often need to put Talon asleep in order to immediately talk to humans,
-# and it's easy to forget that after saying "sleep all", you must wait for the timeout
-# before talking to humans.
+# and it's annoying to have to say "sleep all", wait for the timeout, and then
+# resume your conversation.
 #
 # With this, you can say "sleep all hey bob" and Talon will immediately go to
 # sleep and ignore "hey bob". Note that subtitles will show "sleep all hey bob",
