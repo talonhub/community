@@ -7,4 +7,6 @@ not speech.engine: dragon
 #
 # It's a useful and well known command, though, so if you're using any other speech
 # engine, this controls Talon.
+#
+# For a note about the optional <phrase>, see to_sleep_mode.talon.
 ^go to sleep [<phrase>]$: speech.disable()
