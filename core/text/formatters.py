@@ -92,12 +92,13 @@ def first_vs_rest(first_func, rest_func=lambda w: w):
 def title_case():
     last_word = None
 
-    def title_case_word(i, word, _):
+    def title_case_word(i, word, is_end):
         nonlocal last_word
 
         if word.islower() and (  # contains only lowercase letters
             word not in words_to_keep_lowercase
             or i == 0
+            or is_end
             or not last_word[
                 -1
             ].isalnum()  # title case subsequent words if they follow punctuation
