@@ -10,7 +10,7 @@ key = actions.key
 edit = actions.edit
 
 words_to_keep_lowercase = (
-    "a an and as at but by en for if in nor of on or per the to up v via vs".split()
+    "a an and as at but by en for if in nor of on or per the to v via vs".split()
 )
 
 # The last phrase spoken, without & with formatting. Used for reformatting.
