@@ -64,3 +64,15 @@ if hasattr(talon, "test_mode"):
         )
 
         assert result == "Down and Up"
+
+        result = formatters.Actions.formatted_text(
+            "down-and-up", "CAPITALIZE_ALL_WORDS"
+        )
+
+        assert result == "Down-and-Up"
+
+        result = formatters.Actions.formatted_text(
+            "it's good they’re Bill’s friends", "CAPITALIZE_ALL_WORDS"
+        )
+
+        assert result == "It's Good They’re Bill’s Friends"

@@ -103,7 +103,16 @@ def title_case():
                 -1
             ].isalnum()  # title case subsequent words if they follow punctuation
         ):
-            word = word.title()
+            if "-" in word:
+                components = word.split("-")
+                title_case_component = title_case()
+                components = [
+                    title_case_component(j, component, j == len(components) - 1)
+                    for j, component in enumerate(components)
+                ]
+                word = "-".join(components)
+            else:
+                word = word.capitalize()
 
         last_word = word
 
