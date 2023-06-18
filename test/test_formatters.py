@@ -76,3 +76,9 @@ if hasattr(talon, "test_mode"):
         )
 
         assert result == "It's Good They’re Bill’s Friends"
+
+        result = formatters.Actions.formatted_text(
+            '"how\'s it going?"', "CAPITALIZE_ALL_WORDS"
+        )
+
+        assert result == '"How\'s It Going?"'

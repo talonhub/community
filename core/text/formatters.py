@@ -111,6 +111,9 @@ def title_case():
                     for j, component in enumerate(components)
                 ]
                 word = "-".join(components)
+            elif word_start := re.match(r"\W*", word).end():
+                # word begins with non-alphanumeric characters
+                word = word[:word_start] + word[word_start:].capitalize()
             else:
                 word = word.capitalize()
 
