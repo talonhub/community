@@ -159,7 +159,7 @@ formatters_dict = {
     "SLASH_SEPARATED": (NOSEP, every_word(lambda w: "/" + w)),
     "CAPITALIZE_FIRST_WORD": (
         SEP,
-        first_vs_rest(lambda w: w.title() if w.islower() else w),
+        first_vs_rest(lambda w: title_case()(0, w, True)),
     ),
     "CAPITALIZE_ALL_WORDS": (SEP, title_case()),
 }
