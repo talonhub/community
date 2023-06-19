@@ -23,9 +23,7 @@ class UserActions:
 @ctx.action_class("browser")
 class BrowserActions:
     def bookmark_tabs():
-        raise NotImplementedError(
-            "Orion doesn't have a default shortcut for this"
-        )
+        raise NotImplementedError("Orion doesn't have a default shortcut for this")
 
     def show_clear_cache():
         actions.key("cmd-alt-e")
@@ -37,7 +35,7 @@ class BrowserActions:
         actions.key("cmd-alt-l")
 
     def show_extensions():
-        user.menu_select('Tools|Extensions|Manage')
+        user.menu_select("Tools|Extensions|Manage")
 
 
 @mod.action_class
