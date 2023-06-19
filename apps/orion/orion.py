@@ -37,7 +37,7 @@ class BrowserActions:
         actions.key("cmd-alt-l")
 
     def show_extensions():
-        actions.key("cmd-y e")
+        user.menu_select('Tools|Extensions|Manage')
 
 
 @mod.action_class
