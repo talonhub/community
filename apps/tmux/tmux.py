@@ -7,16 +7,10 @@ ctx.matches = r"""
 tag: user.tmux
 """
 
-setting_tmux_mod_key = mod.setting(
-    "tmux_mod_key",
-    type=str,
-    default="ctrl",
-    desc="The modifier key used to call the tmux prefix",
-)
 setting_tmux_prefix_key = mod.setting(
     "tmux_prefix_key",
     type=str,
-    default="b",
+    default="ctrl-b",
     desc="The key used to prefix all tmux commands",
 )
 
@@ -26,7 +20,7 @@ class TmuxActions:
     def tmux_prefix():
         """press control and the configured tmux prefix key"""
         actions.key(
-            f"{setting_tmux_mod_key.get()}-{setting_tmux_prefix_key.get()}")
+            f"{setting_tmux_prefix_key.get()}")
 
     def tmux_keybind(key: str):
         """press tmux prefix followed by a key bind"""
