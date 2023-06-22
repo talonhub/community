@@ -6,7 +6,7 @@ def setup_default_alphabet():
     """set up common default alphabet.
 
     no need to modify this here, change your alphabet using alphabet.csv"""
-    initial_default_alphabet = "air brov char drum each fine gust harp ice jinks crunch lamp made near odd pit quench rank sit trap urge vest whale plex yank zip".split()
+    initial_default_alphabet = "air bat cap drum each fine gust harp sit jury crunch look made near odd pit quench red sun trap urge vest whale plex yank zip".split()
     initial_letters_string = "abcdefghijklmnopqrstuvwxyz"
     initial_default_alphabet_dict = dict(
         zip(initial_default_alphabet, initial_letters_string)

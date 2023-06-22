@@ -1,6 +1,6 @@
 window (new | open): app.window_open()
 window next: app.window_next()
-window previous: app.window_previous()
+window last: app.window_previous()
 window close: app.window_close()
 window minimize:
   key(cmd-m)
