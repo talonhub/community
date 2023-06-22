@@ -1,3 +1,0 @@
-This directory contains stubs of Talon APIs for use in tests. It is made available by a custom module loader. See conftest.py in the repo root.
-
-The implementation of the stubs will mostly be noops, but some functionality (e.g. actions) are needed by tests and so are implemented to allow for easy introspection and changing.

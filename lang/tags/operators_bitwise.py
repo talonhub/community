@@ -8,7 +8,6 @@ mod.tag("code_operators_bitwise", desc="Tag for enabling bitwise operator comman
 
 @mod.action_class
 class Actions:
-
     def code_operator_bitwise_and():
         """code_operator_bitwise_and"""
 

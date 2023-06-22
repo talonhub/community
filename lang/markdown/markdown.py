@@ -1,4 +1,4 @@
-from talon import Module, Context
+from talon import Context, Module
 
 mod = Module()
 ctx = Context()
@@ -8,4 +8,8 @@ ctx.lists["user.markdown_code_block_language"] = {
     "typescript": "typescript",
     "python": "python",
     "code": "",
+    "ruby": "ruby",
+    "shell": "shell",
+    "bash": "bash",
+    "json": "json",
 }
