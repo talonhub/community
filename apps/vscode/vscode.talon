@@ -13,6 +13,25 @@ tag(): terminal
 quokka: key(shift-cmd-k)
 comment: key(cmd-/)
 
+toggle hats:
+  user.vscode("workbench.action.showCommands")
+  insert("Cursorless: Toggle Decorations")
+  key(enter)
+
+findy:
+  key(cmd-f)
+
+find all:
+  key(cmd-shift-f)
+
+node run start:
+  "npm run start"
+  key(enter)
+
+close:
+  edit.line_end()
+  insert(";")
+
 #talon app actions
 action(app.tab_close): user.vscode("workbench.action.closeActiveEditor")
 action(app.tab_next): user.vscode("workbench.action.nextEditorInGroup")
@@ -61,7 +80,7 @@ please [<user.text>]:
     insert(user.text or "")
 
 # Sidebar
-bar explore: user.vscode("workbench.view.explorer")
+bar files: user.vscode("workbench.view.explorer")
 bar extensions: user.vscode("workbench.view.extensions")
 bar outline: user.vscode("outline.focus")
 bar run: user.vscode("workbench.view.debug")
@@ -97,11 +116,11 @@ show snippets: user.vscode("workbench.action.openSnippets")
 centered switch: user.vscode("workbench.action.toggleCenteredLayout")
 fullscreen switch: user.vscode("workbench.action.toggleFullScreen")
 theme switch: user.vscode("workbench.action.selectTheme")
-wrap switch: user.vscode("editor.action.toggleWordWrap")
+# wrap switch: user.vscode("editor.action.toggleWordWrap")
 zen switch: user.vscode("workbench.action.toggleZenMode")
 
 # File Commands
-file hunt [<user.text>]:
+search files [<user.text>]:
     user.vscode("workbench.action.quickOpen")
     sleep(50ms)
     insert(text or "")
@@ -197,40 +216,101 @@ fold five: user.vscode("editor.foldLevel5")
 fold six: user.vscode("editor.foldLevel6")
 fold seven: user.vscode("editor.foldLevel7")
 
+
+
+git status:
+  "git status"
+  key(enter)
+
+git fetch:
+  "git fetch"
+  key(enter)
+
+git pull:
+  "git pull"
+  key(enter)
+
+git checkout:
+  "git checkout "
+
+git commit all:
+  "git commit -am \""
+
+git branch:
+  "git checkout -b "
+
+git push:
+  "git push"
+
+
+git set upstream:
+  "git branch --set-upstream-to=origin/"
+
+
+git add all:
+  "git add ."
+  key(enter)
+
+git commit:
+  "git commit -m \""
+
+
+git log:
+  "git log --oneline"
+  key(enter)
+
+git push origin head:
+  "git push origin head"
+
+git stash:
+  "git stash"
+
+git stash apply:
+  "git stash apply"
+
+git clone:
+  "git clone "
+
+git change name:
+  "git config user.name "
+
+git change email:
+  "git config user.email "
+
 # Git / Github (not using verb-noun-adjective pattern, mirroring terminal commands.)
-git branch: user.vscode("git.branchFrom")
-git branch this: user.vscode("git.branch")
-git checkout [<user.text>]:
-    user.vscode("git.checkout")
-    sleep(50ms)
-    insert(text or "")
-git commit [<user.text>]:
-    user.vscode("git.commitStaged")
-    sleep(100ms)
-    user.insert_formatted(text or "", "CAPITALIZE_FIRST_WORD")
-git commit undo: user.vscode("git.undoCommit")
-git commit amend: user.vscode("git.commitStagedAmend")
-git diff: user.vscode("git.openChange")
-git fetch: user.vscode("git.fetch")
-git fetch all: user.vscode("git.fetchAll")
-git ignore: user.vscode("git.ignore")
-git merge: user.vscode("git.merge")
-git output: user.vscode("git.showOutput")
-git pull: user.vscode("git.pullRebase")
-git push: user.vscode("git.push")
-git push focus: user.vscode("git.pushForce")
-git rebase abort: user.vscode("git.rebaseAbort")
-git reveal: user.vscode("git.revealInExplorer")
-git revert: user.vscode("git.revertChange")
-git stash: user.vscode("git.stash")
-git stash pop: user.vscode("git.stashPop")
-git status: user.vscode("workbench.scm.focus")
-git stage: user.vscode("git.stage")
-git stage all: user.vscode("git.stageAll")
-git sync: user.vscode("git.sync")
-git unstage: user.vscode("git.unstage")
-git unstage all: user.vscode("git.unstageAll")
-pull request: user.vscode("pr.create")
+# git branch: user.vscode("git.branchFrom")
+# git branch this: user.vscode("git.branch")
+# git checkout [<user.text>]:
+#     user.vscode("git.checkout")
+#     sleep(50ms)
+#     insert(text or "")
+# git commit [<user.text>]:
+#     user.vscode("git.commitStaged")
+#     sleep(100ms)
+#     user.insert_formatted(text or "", "CAPITALIZE_FIRST_WORD")
+# git commit undo: user.vscode("git.undoCommit")
+# git commit amend: user.vscode("git.commitStagedAmend")
+# git diff: user.vscode("git.openChange")
+# git fetch: user.vscode("git.fetch")
+# git fetch all: user.vscode("git.fetchAll")
+# git ignore: user.vscode("git.ignore")
+# git merge: user.vscode("git.merge")
+# git output: user.vscode("git.showOutput")
+# git pull: user.vscode("git.pullRebase")
+# git push: user.vscode("git.push")
+# git push focus: user.vscode("git.pushForce")
+# git rebase abort: user.vscode("git.rebaseAbort")
+# git reveal: user.vscode("git.revealInExplorer")
+# git revert: user.vscode("git.revertChange")
+# git stash: user.vscode("git.stash")
+# git stash pop: user.vscode("git.stashPop")
+# git status: user.vscode("workbench.scm.focus")
+# git stage: user.vscode("git.stage")
+# git stage all: user.vscode("git.stageAll")
+# git sync: user.vscode("git.sync")
+# git unstage: user.vscode("git.unstage")
+# git unstage all: user.vscode("git.unstageAll")
+# pull request: user.vscode("pr.create")
 # Use keyboard shortcuts because VSCode relies on when clause contexts to choose the appropriate
 # action: https://code.visualstudio.com/api/references/when-clause-contexts
 change next: key(alt-f5)

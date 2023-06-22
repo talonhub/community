@@ -3,7 +3,7 @@ from typing import Set
 from talon import Module, Context, actions, app
 import sys
 
-default_alphabet = "air brov char drum each fine gust harp ice jinks crunch lamp made near odd pit quench red sit trap urge vest whale plex yank zip".split(
+default_alphabet = "air brov char drum each fine gust harp ice jinks crunch lamp made near odd pit quench rank sit trap urge vest whale plex yank zip".split(
    " "
 )
 letters_string = "abcdefghijklmnopqrstuvwxyz"
@@ -157,9 +157,13 @@ punctuation_words = {
 }
 symbol_key_words = {
     "pebble": ".",
+    "dot": ".",
     "ticky": "'",
+    "box": "[",
     "square": "[",
+    "open box": "[",
     "open square": "[",
+    "close box": "[",
     "close square": "]",
     "slash": "/",
     "backslash": "\\",
@@ -170,6 +174,9 @@ symbol_key_words = {
     "bang": "!",
     "dollar": "$",
     "underbar": "_",
+    "round": "(",
+    "open round": "(",
+    "close round": ")",
     "paren": "(",
     "open paren": "(",
     "close paren": ")",
@@ -178,6 +185,9 @@ symbol_key_words = {
     "close curly": "}",
     "angle": "<",
     "open angle": "<",
+    "diamond": "<",
+    "open diamond": "<",
+    "close diamond": ">",
     "less than": "<",
     "close angle": ">",
     "greater than": ">",
@@ -188,6 +198,7 @@ symbol_key_words = {
     "amper": "&",
     "pipe": "|",
     "quote": '"',
+    "quad": '"'
 }
 
 # make punctuation words also included in {user.symbol_keys}

@@ -7,9 +7,6 @@ lorem long:
 lorem very long:
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
 
-vimeo password:
-    "2,s\O\(k{L!`yKf~^9fz"
-
 my email:
   "alexrkoch@gmail.com"
 
@@ -22,11 +19,8 @@ my name:
 my user name:
   "alexrkoch"
 
-civic crumb:
-  "CiviCRM"
-
-# timer (start | stop):
-#     key(cmd-shift-r)
+findy:
+  key(cmd-f)
 
 shock:
   key(cmd-enter)
@@ -46,7 +40,7 @@ slappy:
   edit.line_end()
   key(enter)
 
-indent:
+(indent | push):
     key(tab)
 
 dedent:
@@ -56,11 +50,11 @@ zoom in: edit.zoom_in()
 
 zoom out: edit.zoom_out()
 
-snippet: edit.copy()
+(copy | snippet): edit.copy()
 
-slice: edit.cut()
+(cut | slice): edit.cut()
 
-spark: edit.paste()
+(paste | spark): edit.paste()
 
 undo: edit.undo()
 
@@ -89,16 +83,16 @@ stub comma:
 return:
     key(enter)
 
-go left:
+(go left | west):
     edit.left()
 
-go right:
+(go right | east):
     edit.right()
 
-go up:
+(go up | north):
     edit.up()
 
-go down:
+(go down | south):
     edit.down()
 
 line end:
