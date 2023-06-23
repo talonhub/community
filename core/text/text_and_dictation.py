@@ -63,25 +63,25 @@ def prose_number(m) -> str:
     return str(m)
 
 
-@mod.capture(rule="({user.vocabulary} | <word>)")
+@mod.capture(rule="({user.vocabulary} | <user.talon_word>)")
 def word(m) -> str:
     """A single word, including user-defined vocabulary."""
     try:
         return m.vocabulary
     except AttributeError:
         return " ".join(
-            actions.dictate.replace_words(actions.dictate.parse_words(m.word))
+            actions.dictate.replace_words(actions.dictate.parse_words(m.talon_word))
         )
 
 
-@mod.capture(rule="({user.vocabulary} | <phrase>)+")
+@mod.capture(rule="({user.vocabulary} | <user.talon_phrase>)+")
 def text(m) -> str:
     """A sequence of words, including user-defined vocabulary."""
     return format_phrase(m)
 
 
 @mod.capture(
-    rule="({user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <phrase> | <user.prose_number> | <user.prose_modifier>)+"
+    rule="({user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <user.talon_phrase> | <user.prose_number> | <user.prose_modifier>)+"
 )
 def prose(m) -> str:
     """Mixed words and punctuation, auto-spaced & capitalized."""
@@ -90,11 +90,21 @@ def prose(m) -> str:
 
 
 @mod.capture(
-    rule="({user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <phrase> | <user.prose_number>)+"
+    rule="({user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <user.talon_phrase> | <user.prose_number>)+"
 )
 def raw_prose(m) -> str:
     """Mixed words and punctuation, auto-spaced & capitalized, without quote straightening and commands (for use in dictation mode)."""
     return apply_formatting(m)
+
+
+@mod.capture(rule='<phrase>')
+def talon_phrase(m) -> grammar.Phrase:
+    return m.phrase
+
+
+@mod.capture(rule='<word>')
+def talon_word(m) -> grammar.Phrase:
+    return m.word
 
 
 # ---------- FORMATTING ---------- #
