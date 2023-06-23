@@ -97,12 +97,12 @@ def raw_prose(m) -> str:
     return apply_formatting(m)
 
 
-@mod.capture(rule='<phrase>')
+@mod.capture(rule="<phrase>")
 def talon_phrase(m) -> grammar.Phrase:
     return m.phrase
 
 
-@mod.capture(rule='<word>')
+@mod.capture(rule="<word>")
 def talon_word(m) -> grammar.Phrase:
     return m.word
 
