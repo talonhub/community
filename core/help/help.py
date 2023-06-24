@@ -544,12 +544,6 @@ class Actions:
         global formatters_words
         formatters_words = ab
         reset()
-        # print("help_alphabet - alphabet gui_alphabet: {}".format(gui_alphabet.showing))
-        # print(
-        #     "help_alphabet - gui_context_help showing: {}".format(
-        #         gui_context_help.showing
-        #     )
-        # )
         hide_all_help_guis()
         gui_formatters.show()
         register_events(False)
