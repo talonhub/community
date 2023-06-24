@@ -22,7 +22,7 @@ Other modes
 ## Usage
 
 The mode indicator is enabled with the following setting
-`user.mode_indicator_show = true`
+`user.mode_indicator_show = 1`
 
 ## Demo
 
