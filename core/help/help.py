@@ -75,6 +75,8 @@ def gui_formatters(gui: imgui.GUI):
         gui.text(f"{val}: {key}")
 
     gui.spacer()
+    gui.text("* prose formatter")
+    gui.spacer()
     if gui.button("Help close"):
         gui_formatters.hide()
 
