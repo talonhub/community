@@ -4,24 +4,24 @@ Graphical indicator to show you which Talon mode your currently are in. Supports
 
 ## Default colors
 
-Command mode  
+Command mode
 ![Command mode](./images/command.png)
 
-Dictation mode  
+Dictation mode
 ![Dictation mode](./images/dictation.png)
 
-Mixed mode  
+Mixed mode
 ![Mixed mode](./images/mixed.png)
 
-Sleep mode  
+Sleep mode
 ![Sleep mode](./images/sleep.png)
 
-Other modes  
+Other modes
 ![Others mode](./images/other.png)
 
 ## Usage
 
-The mode indicator is enabled with the following setting  
+The mode indicator is enabled with the following setting
 `user.mode_indicator_show = true`
 
 ## Demo
