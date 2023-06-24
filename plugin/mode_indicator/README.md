@@ -26,7 +26,7 @@ Other modes
 
 ## Usage
 
-The mode indicator is enabled with the following setting
+You can enable this by changing the following setting in `mode_indicator.talon`:
 `user.mode_indicator_show = 1`
 
 ## Demo
