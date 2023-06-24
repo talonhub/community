@@ -280,7 +280,7 @@ class Actions:
         """Reformats the current selection."""
         selected = edit.selected_text()
         if not selected:
-            print("Asked to reformat selection, but nothing selected!")
+            app.notify("Asked to reformat selection, but nothing selected!")
             return
         unformatted = unformat_text(selected)
         # Delete separately for compatibility with programs that don't overwrite
