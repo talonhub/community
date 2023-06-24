@@ -227,10 +227,26 @@ def prose_time_hours_minutes(m) -> str:
 def prose_time_hours_am_pm(m) -> str:
     return m.hours_twelve + m.time_am_pm
 
+@mod.capture(rule="point | dot")
+def prose_point(m) -> str:
+    return "." 
+
+@mod.capture(rule="dash (<user.letter>)+ <user.prose_point> <user.number_string>")
+def prose_version_suffix(m) -> str:
+    return "-" + "".join(list(m.letter_list)) + "".join([".", m.number_string])
+
+
+@mod.capture(rule="<user.number_string> ([<user.prose_point> <user.number_string>])+ [<user.prose_version_suffix>]")
+def prose_version(m) -> str:
+    return "v" + "".join(list(m))
 
 @mod.capture(rule="<user.prose_time_hours_minutes> | <user.prose_time_hours_am_pm>")
 def prose_time(m) -> str:
     return str(m)
+
+@mod.capture(rule="imp {user.employee_full_name}")
+def prose_employee_names(m) -> str:
+    return m.employee_full_name
 
 
 @mod.capture(rule="({user.vocabulary} | <word>)")
@@ -243,7 +259,6 @@ def word(m) -> str:
             actions.dictate.replace_words(actions.dictate.parse_words(m.word))
         )
 
-
 @mod.capture(rule="({user.vocabulary} | <phrase>)+")
 def text(m) -> str:
     """A sequence of words, including user-defined vocabulary."""
@@ -251,7 +266,7 @@ def text(m) -> str:
 
 
 @mod.capture(
-    rule="(<phrase> | {user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <user.prose_money> | <user.prose_time> | <user.prose_number> | <user.prose_percent> | <user.prose_modifier>)+"
+    rule="(<phrase> | {user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <user.prose_money> | <user.prose_time> | <user.prose_number> | <user.prose_percent> | <user.prose_modifier> | <user.prose_employee_names>)+"
 )
 def prose(m) -> str:
     """Mixed words and punctuation, auto-spaced & capitalized."""

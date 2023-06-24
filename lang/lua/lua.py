@@ -120,7 +120,7 @@ class UserActions:
         actions.insert("break ")
 
     # Assumes a ::continue:: label
-    def code_state_continue():
+    def code_next():
         actions.insert("goto continue")
 
     def code_try_catch():

@@ -10,8 +10,8 @@ balance-windows, ctrl-x +
 beginning-of-buffer, meta-<
 browse-kill-ring,, b-k-r
 buffer-menu, ctrl-x ctrl-b
-buffer-next, ctrl-x right
-buffer-previous, ctrl-x left
+next-buffer, ctrl-x right
+previous-buffer, ctrl-x left
 bury-buffer,, bur
 clear-rectangle, ctrl-x r c
 clone-indirect-buffer,, clo-i
@@ -46,6 +46,7 @@ eval-expression, meta-:
 eval-print-last-sexp,, ev-p
 eval-region,, ev-r
 exchange-point-and-mark, ctrl-x ctrl-x
+execute-extended-command, meta-x
 fileloop-continue,, filel
 fill-paragraph, meta-q
 find-file, ctrl-x ctrl-f
@@ -123,7 +124,7 @@ outline-up-heading, ctrl-c @ ctrl-u
 overwrite-mode,, overwr
 package-autoremove
 pop-global-mark, ctrl-x ctrl-@
-pop-mark, ctrl-u ctrl-space
+pop-to-mark-command, ctrl-u ctrl-space
 previous-error, meta-g p
 project-find-file, ctrl-x p f
 project-find-regexp, ctrl-x p g
@@ -157,8 +158,10 @@ scroll-other-window, meta-pagedown
 scroll-other-window-down, meta-pageup
 server-edit, ctrl-x #
 set-mark-command, ctrl-@
+sh-mode
 shell-command, meta-!
 shell-command-on-region, meta-|
+shell-script-mode
 shrink-window-horizontally, ctrl-x {
 shrink-window-if-larger-than-buffer, ctrl-x -
 smerge-combine-with-next
