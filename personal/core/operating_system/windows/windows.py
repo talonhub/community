@@ -94,6 +94,9 @@ class UserActionsWin:
     def system_restart():
         shutdown("r")
 
+    def system_task_manager():
+        actions.key("ctrl-shift-escape")
+        
     def system_hibernate():
         shutdown("h")
 
@@ -107,6 +110,7 @@ class UserActionsWin:
         actions.key("super-tab")
 
     def system_switcher():
+        
         actions.key("ctrl-alt-tab")
 
     def system_search():
@@ -172,11 +176,6 @@ class UserActionsWin:
         actions.sleep("500ms")
         actions.user.parse_phrase(phrase or "")
 
-    def system_show_taskmanager(phrase: str = None):
-        is_running = actions.user.switcher_focus("task manager")
-        actions.sleep("500ms")
-        if is_running:
-            actions.user.parse_phrase(phrase or "")
 
 
 def shutdown(flag: str):

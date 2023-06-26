@@ -71,7 +71,7 @@ class UserActionsMac:
         actions.key("shift-f13")
 
     def system_task_manager():
-        ui.launch(path="/System/Applications/Utilities/Activity Monitor.app")
+        actions.user.launch_or_focus_bundle("com.apple.ActivityMonitor")
 
     def system_task_view():
         actions.key("shift-f11")
@@ -137,12 +137,7 @@ class UserActionsMac:
         actions.user.launch_or_focus_bundle("com.github.GitHubClient")
         actions.sleep("250ms")
         actions.user.parse_phrase(phrase or "")
-
-    def system_show_taskmanager(phrase: str = None):
-        actions.user.launch_or_focus_bundle("com.apple.ActivityMonitor")
-        actions.sleep("250ms")
-        actions.user.parse_phrase(phrase or "")
-
+    
     def system_taskmanager_find_focused_application(phrase: str = None):
         actions.skip()
 

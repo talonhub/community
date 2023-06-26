@@ -137,8 +137,6 @@ class Actions:
     def system_show_gitter(phrase: str = None):
         """Opens the default browser for the up operating system and performs the phrase command"""
 
-    def system_show_taskmanager(phrase: str = None):
-        """Opens the default browser for the up operating system and performs the phrase command"""
 
     def system_taskmanager_find_focused_application(phrase: str = None):
         """Opens the default browser for the up operating system and performs the phrase command"""
