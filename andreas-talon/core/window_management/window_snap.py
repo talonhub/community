@@ -150,6 +150,7 @@ class Actions:
         pos_name: str,
     ):
         """Move the active window to position <pos_name> on screen <screen_desc>"""
+        print(ui.active_window())
         snap_window_to_screen_and_position(
             ui.active_window(),
             get_screen(screen_desc),
@@ -164,6 +165,16 @@ class Actions:
         snap_window_to_screen_and_position(
             actions.user.get_window_under_cursor(),
             get_screen(screen_desc),
+            pos_name,
+        )
+    def snap_specified_window_to_position(
+        window: ui.Window, 
+        pos_name: str,
+    ):
+        """Move the active window to position <pos_name> on screen <screen_desc>"""
+        snap_window_to_screen_and_position(
+            window, 
+            window.screen, 
             pos_name,
         )
 
@@ -202,6 +213,7 @@ def snap_window_to_screen(window: ui.Window, screen: ui.Screen):
         width=window.rect.width * proportional_width,
         height=window.rect.height * proportional_height,
     )
+    
 
 
 def snap_window_to_screen_and_position(

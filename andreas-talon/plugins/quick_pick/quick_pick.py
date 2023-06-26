@@ -202,7 +202,8 @@ def draw_snap_positions(
         for j, position in enumerate(group):
             pos_rect = actions.user.snap_apply_position_to_rect(rect, position)
             callback = (
-                lambda position=position: actions.user.snap_active_window_to_position(
+                lambda position=position: actions.user.snap_specified_window_to_position(
+                    active_window, 
                     position
                 )
             )
@@ -284,9 +285,10 @@ def on_mouse(e: MouseEvent):
             button.callback()
             repeater_callback = button.callback
 
-
+active_window = None
 def show():
-    global canvas, mouse_pos, size
+    global canvas, mouse_pos, size, active_window
+    active_window  = ui.active_window()
     mouse_pos = Point2d(actions.mouse_x(), actions.mouse_y())
     screen: Screen = ui.main_screen()
     size = Size(screen.scale)
