@@ -37,6 +37,7 @@ class BrowserActions:
     def show_extensions():
         actions.key("cmd-shift-x")
 
+
 @mod.action_class
 class Actions:
     def overview_tabs():
