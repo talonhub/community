@@ -98,7 +98,7 @@ class UserActionsWin:
         shutdown("h")
 
     def system_lock():
-        actions.key("super-l")
+        actions.user.exec("rundll32.exe user32.dll,LockWorkStation")
 
     def system_show_desktop():
         actions.key("super-d")
@@ -132,8 +132,8 @@ class UserActionsWin:
                 os.kill(application.pid, 0)
 
     def system_show_settings():
-        if not actions.user.switcher_focus("settings"):
-            actions.user.switcher_launch("settings")
+        actions.user.exec("start ms-settings:")
+        # actions.user.switcher_launch("settings")
 
     def system_show_email(phrase: str = None):
         """Opens the defaul6t browser for the up operating system and performs the phrase command"""
