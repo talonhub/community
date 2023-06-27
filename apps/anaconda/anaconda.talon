@@ -10,6 +10,7 @@ anaconda environment create: "conda env create -f "
 anaconda environment remove: "conda env remove -n "
 
 anaconda activate: "conda activate "
+anaconda deactivate: "conda deactivate
 anaconda clean: "conda clean "
 anaconda compare: "conda compare "
 anaconda config: "conda config "

@@ -279,3 +279,33 @@ cell run: user.vscode("notebook.cell.execute")
 
 install local: user.vscode("workbench.extensions.action.installVSIX")
 preview markdown: user.vscode("markdown.showPreview")
+
+
+# jupyter
+cell next: user.vscode("list.focusDown")
+cell last: user.vscode("list.focusUp")
+run head notebook: user.vscode("jupyter.runallcellsabove.palette")
+run cell: user.vscode("notebook.cell.executeAndSelectBelow")
+run notebook: user.vscode("jupyter.runallcells")
+cell edit: user.vscode("notebook.cell.edit")
+cell last edit: user.vscode("notebook.focusPreviousEditor")
+cell exit: user.vscode("notebook.cell.quitEdit")
+new cell: user.vscode("jupyter.notebookeditor.addcellbelow")
+new mark:
+    user.vscode("jupyter.notebookeditor.addcellbelow")
+    key("escape")
+    key("m")
+delete cell: 
+    key("escape")
+    key("d:2")
+
+
+
+
+# Splits (Maybe move to splits.py and splits.talon)
+split max: user.vscode("workbench.action.maximizeEditor")
+split reset: user.vscode("workbench.action.evenEditorWidths")
+cross: user.vscode("workbench.action.focusNextGroup")
+crossing: 
+    user.vscode("workbench.action.focusNextGroup")
+    user.vscode("workbench.action.maximizeEditor")

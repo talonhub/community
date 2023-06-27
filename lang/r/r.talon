@@ -41,3 +41,5 @@ state na: insert("NA")
 
 named arg {user.code_parameter_name}:
     user.code_insert_named_argument(code_parameter_name)
+
+run it: key(ctrl-enter)

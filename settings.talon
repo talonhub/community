@@ -7,22 +7,23 @@ settings():
     user.file_manager_auto_show_pickers = 0
 
     # Set the max number of command lines per page in help
-    user.help_max_command_lines_per_page = 50
+    user.help_max_command_lines_per_page = 40
 
     # Set the max number of contexts display per page in help
-    user.help_max_contexts_per_page = 20
+    user.help_max_contexts_per_page = 30
 
     # The default amount used when scrolling continuously
     user.mouse_continuous_scroll_amount = 80
 
     # Stop continuous scroll/gaze scroll with a pop
-    user.mouse_enable_pop_stops_scroll = 1
+    user.mouse_enable_pop_stops_scroll = 0
+
 
     # Enable pop click with 'control mouse' mode.
     # 0 = off
     # 1 = on with eyetracker but not zoom mouse mode
     # 2 = on but not with zoom mouse mode
-    user.mouse_enable_pop_click = 1
+    user.mouse_enable_pop_click = 0
 
     # When enabled, the 'Scroll Mouse' GUI will not be shown.
     user.mouse_hide_mouse_gui = 0
@@ -31,10 +32,10 @@ settings():
     user.mouse_wake_hides_cursor = 0
 
     # The amount to scroll up/down (equivalent to mouse wheel on Windows by default)
-    user.mouse_wheel_down_amount = 120
+    user.mouse_wheel_down_amount = 400
 
     # The amount to scroll left/right
-    user.mouse_wheel_horizontal_amount = 40
+    user.mouse_wheel_horizontal_amount = 80
 
     # Mouse grid and friends put the number one on the bottom left (vs on the top left)
     user.grids_put_one_bottom_left = 1
@@ -61,7 +62,9 @@ settings():
     # Default is 'proportional', which preserves window size : screen size ratio.
     # 'size aware' keeps absolute window size the same, except full-height or
     # -width windows are resized to stay full-height/width.
-    #user.window_snap_screen = "size aware"
+    #user.window_snap_screen = "size aware" 
+    
 
 # Uncomment this to enable the curse yes/curse no commands (show hide mouse cursor). See issue #688.
-# tag(): user.mouse_cursor_commands_enable
+tag(): user.mouse_cursor_commands_enable
+user.ocr_use_talon_backend = 1
