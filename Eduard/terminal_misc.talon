@@ -11,13 +11,13 @@ interactive session:
 	key(enter)
 
 
-open my data: 
+my data: 
 	"cd /hpcdata/lpd_mis/Belkaid_Lab_RNASeq_Data/Eduard_Ansaldo/"
 	key(enter)
 	"ls"
 	key(enter)
 
-open my folder: 
+my folder: 
 	"cd /hpcdata/lpd_mis/EduardAnsaldo/"
 	key(enter)
 	"ls"
@@ -44,7 +44,7 @@ katie upper:
 	"ls"
 	key(enter)
 
-open:
+open$:
 	key(tab)
 	key(enter)
 	"ls"
