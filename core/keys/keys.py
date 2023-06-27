@@ -7,9 +7,7 @@ def setup_default_alphabet():
     """set up common default alphabet.
 
     no need to modify this here, change your alphabet using alphabet.csv"""
-    initial_default_alphabet = "air bat cap drum each fine gust harp sit jury crunch look made near odd pit quench red sun trap urge vest whale plex yank zip".split(
-        " "
-    )
+    initial_default_alphabet = "air bat cap drum each fine gust harp sit jury crunch look made near odd pit quench red sun trap urge vest whale plex yank zip".split()
     initial_letters_string = "abcdefghijklmnopqrstuvwxyz"
     initial_default_alphabet_dict = dict(
         zip(initial_default_alphabet, initial_letters_string)
@@ -22,11 +20,9 @@ alphabet_list = get_list_from_csv(
     "alphabet.csv", ("Letter", "Spoken Form"), setup_default_alphabet()
 )
 
-default_digits = "zero one two three four five six seven eight nine".split(" ")
-numbers = [str(i) for i in range(10)]
-default_f_digits = (
-    "one two three four five six seven eight nine ten eleven twelve".split(" ")
-)
+# used for number keys & function keys respectively
+digits = "zero one two three four five six seven eight nine".split()
+f_digits = "one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty".split()
 
 mod = Module()
 mod.list("letter", desc="The spoken phonetic alphabet")
@@ -146,7 +142,6 @@ punctuation_words = {
     "`": "`",
     ",": ",",  # <== these things
     "back tick": "`",
-    "grave": "`",
     "comma": ",",
     # Workaround for issue with conformer b-series; see #946
     "coma": ",",
@@ -168,6 +163,11 @@ punctuation_words = {
     # Currencies
     "dollar sign": "$",
     "pound sign": "£",
+    "hyphen": "-",
+    "L paren": "(",
+    "left paren": "(",
+    "R paren": ")",
+    "right paren": ")",
 }
 symbol_key_words = {
     "dot": ".",
@@ -186,15 +186,12 @@ symbol_key_words = {
     "dash": "-",
     "equals": "=",
     "plus": "+",
+    "grave": "`",
     "tilde": "~",
     "bang": "!",
     "down score": "_",
     "underscore": "_",
     "paren": "(",
-    "L paren": "(",
-    "left paren": "(",
-    "R paren": ")",
-    "right paren": ")",
     "brace": "{",
     "left brace": "{",
     "brack": "{",
@@ -229,7 +226,7 @@ symbol_key_words = {
 symbol_key_words.update(punctuation_words)
 ctx.lists["self.punctuation"] = punctuation_words
 ctx.lists["self.symbol_key"] = symbol_key_words
-ctx.lists["self.number_key"] = dict(zip(default_digits, numbers))
+ctx.lists["self.number_key"] = {name: str(i) for i, name in enumerate(digits)}
 ctx.lists["self.arrow_key"] = {
     "down": "down",
     "left": "left",
@@ -266,7 +263,7 @@ special_keys = {k: k for k in simple_keys}
 special_keys.update(alternate_keys)
 ctx.lists["self.special_key"] = special_keys
 ctx.lists["self.function_key"] = {
-    f"F {default_f_digits[i]}": f"f{i + 1}" for i in range(12)
+    f"F {name}": f"f{i}" for i, name in enumerate(f_digits, start=1)
 }
 
 

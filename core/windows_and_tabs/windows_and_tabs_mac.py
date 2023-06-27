@@ -15,13 +15,13 @@ class AppActions:
         actions.key("cmd-w")
 
     def tab_next():
-        actions.key("cmd-shift-]")
+        actions.key("ctrl-tab")
 
     def tab_open():
         actions.key("cmd-t")
 
     def tab_previous():
-        actions.key("cmd-shift-[")
+        actions.key("ctrl-shift-tab")
 
     def tab_reopen():
         actions.key("cmd-shift-t")

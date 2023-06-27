@@ -125,10 +125,10 @@ formatters_dict = {
     "DOT_SEPARATED": words_with_joiner("."),
     "DOT_SNAKE": (NOSEP, lambda i, word, _: "." + word if i == 0 else "_" + word),
     "SLASH_SEPARATED": (NOSEP, every_word(lambda w: "/" + w)),
-    "CAPITALIZE_FIRST_WORD": (SEP, first_vs_rest(lambda w: w.capitalize())),
+    "CAPITALIZE_FIRST_WORD": (SEP, first_vs_rest(lambda w: w[:1].upper() + w[1:])),
     "CAPITALIZE_ALL_WORDS": (
         SEP,
-        lambda i, word, _: word.capitalize()
+        lambda i, word, _: word[:1].upper() + word[1:]
         if i == 0 or word not in words_to_keep_lowercase
         else word,
     ),
@@ -199,7 +199,7 @@ class ImmuneString:
 @mod.capture(
     # Add anything else into this that you want to be able to speak during a
     # formatter.
-    rule="(<user.symbol_key> | numb <number>)"
+    rule="(<user.symbol_key> | (numb | numeral) <number>)"
 )
 def formatter_immune(m) -> ImmuneString:
     """Text that can be interspersed into a formatter, e.g. characters.
