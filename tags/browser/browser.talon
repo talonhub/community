@@ -12,7 +12,7 @@ go (back | backward): browser.go_back()
 go to {user.website}: browser.go(website)
 go private: browser.open_private_window()
 
-bookmark it: browser.bookmark()
+bookmark (it | this): browser.bookmark()
 bookmark tabs: browser.bookmark_tabs()
 (refresh | reload) it: browser.reload()
 (refresh | reload) it hard: browser.reload_hard()

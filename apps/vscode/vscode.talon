@@ -10,7 +10,6 @@ tag(): user.tabs
 tag(): user.git
 tag(): terminal
 
-quokka: key(shift-cmd-k)
 comment: key(cmd-/)
 
 toggle hats:
@@ -24,8 +23,8 @@ findy:
 find all:
   key(cmd-shift-f)
 
-node run start:
-  "npm run start"
+node run (start | dev):
+  "npm run dev"
   key(enter)
 
 close:
@@ -164,7 +163,7 @@ suggest show: user.vscode("editor.action.triggerSuggest")
 hint show: user.vscode("editor.action.triggerParameterHints")
 definition show: user.vscode("editor.action.revealDefinition")
 definition peek: user.vscode("editor.action.peekDefinition")
-definition side: user.vscode("editor.action.revealDefinitionAside")
+define aside: user.vscode("editor.action.revealDefinitionAside")
 references show: user.vscode("editor.action.goToReferences")
 hierarchy peek: user.vscode("editor.showCallHierarchy")
 references find: user.vscode("references-view.find")

@@ -1,9 +1,3 @@
-dubclick:
-  user.mouse_cancel_zoom_mouse()
-	mouse_click()
-	mouse_click()
-	# close the mouse grid
-	user.grid_close()
 control mouse: tracking.control_toggle()
 zoom mouse: tracking.control_zoom_toggle()
 camera overlay: tracking.control_debug_toggle()
