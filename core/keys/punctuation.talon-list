@@ -13,8 +13,8 @@ tilde: ~
 bang: !
 score: _
 quest: ?
-single: '
-double: "
+single: "'"
+double: '"'
 leper: (
 repper: )
 lacker: [
