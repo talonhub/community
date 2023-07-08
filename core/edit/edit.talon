@@ -149,14 +149,10 @@ wipe spring:
     edit.extend_word_right()
     edit.delete()
     
-wipe head:
+wiper | wipe head: 
     edit.extend_line_start()
     edit.delete()
-    
-wipe tail:
-    edit.extend_line_end()
-    edit.delete()
-    
+
 wipe far up:
     edit.extend_file_start()
     edit.delete()
@@ -260,9 +256,4 @@ cut line:
 # duplication
 clone that: edit.selection_clone()
 clone line: edit.line_clone()
-wipe tail: 
-    edit.extend_line_end()
-    edit.delete()
-wiper | (wipe head): 
-    edit.extend_line_start()
-    edit.delete()
+
