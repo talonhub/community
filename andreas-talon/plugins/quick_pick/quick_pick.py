@@ -1,4 +1,4 @@
-from talon import Module, Context, ui, speech_system, actions
+from talon import Module, Context, ui, speech_system, actions, app
 from talon.screen import Screen
 from talon.canvas import Canvas, MouseEvent
 from talon.skia import RoundRect
@@ -9,7 +9,7 @@ from dataclasses import dataclass
 from typing import Callable, Optional
 import math
 
-FONT_FAMILY = "Segoe UI Symbol"
+FONT_FAMILY = "Segoe UI"
 BACKGROUND_COLOR = "fffafa"  # Snow
 HOVER_COLOR = "6495ed"  # CornflowerBlue
 BORDER_COLOR = "000000"  # Black
@@ -292,7 +292,11 @@ def show():
     active_window  = ui.active_window()
     mouse_pos = Point2d(actions.mouse_x(), actions.mouse_y())
     screen: Screen = ui.main_screen()
-    size = Size(screen.scale)
+    if app.platform=="windows":
+        size = Size(screen.scale)
+    elif app.platform == "mac":
+        size = Size(1)
+    print(screen.scale)
     canvas = Canvas.from_screen(screen)
     canvas.blocks_mouse = True
     canvas.register("draw", on_draw)
