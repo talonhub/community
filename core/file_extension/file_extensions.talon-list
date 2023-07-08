@@ -1,9 +1,9 @@
 list: user.file_extension
 -
-dot pie:  .py  
-dot talon:  .talon 
-mark down:  .md 
-dot shell:  .sh  
+dot pie: .py  
+dot talon: .talon 
+mark down: .md 
+dot shell: .sh  
 dot vim: .vim 
 dot see: .c
 dot see sharp: .cs 
