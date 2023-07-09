@@ -244,7 +244,7 @@ def prose_version(m) -> str:
 def prose_time(m) -> str:
     return str(m)
 
-@mod.capture(rule="imp {user.employee_full_name}")
+@mod.capture(rule="imp full {user.employee_full_name} | imp {user.employee_names}")
 def prose_employee_names(m) -> str:
     return m.employee_full_name
 
