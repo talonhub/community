@@ -1,4 +1,4 @@
-from talon import Context, actions
+from talon import Context, actions, clip
 
 ctx = Context()
 ctx.matches = r"""
@@ -90,8 +90,9 @@ class EditActions:
         actions.key("cmd-up")
 
     def find(text: str = None):
+        if text is not None:
+            clip.set_text(text, mode="find")
         actions.key("cmd-f")
-        # actions.insert(text)
 
     def find_next():
         actions.key("cmd-g")
