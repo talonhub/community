@@ -76,26 +76,38 @@ sell line:
 sell all:
     edit.select_all()
 
-sell left:
+sell left [<number_small>]:
+    numb = number_small or 1
     edit.extend_left()
+    repeat(numb - 1)
 
-sell right:
+sell right [<number_small>]:
+    numb = number_small or 1
     edit.extend_right()
+    repeat(numb - 1)
 
-sell up:
+sell up [<number_small>]:
+    numb = number_small or 1
     edit.extend_line_up()
+    repeat(numb - 1)
 
-sell down:
+sell down [<number_small>]:
+    numb = number_small or 1
     edit.extend_line_down()
+    repeat(numb - 1)
 
 sell word:
     edit.select_word()
     
-sell draw:
+sell draw [<number_small>]:
+    numb = number_small or 1
     edit.extend_word_left()
+    repeat(numb - 1)
 
-sell spring:
+sell spring [<number_small>]:
+    numb = number_small or 1
     edit.extend_word_right()
+    repeat(numb - 1)
 
 sell head:
     edit.extend_line_start()
@@ -132,23 +144,31 @@ wipe line:
 # wipe right:
 #     key(delete)
     
-wipe up:
+wipe up [<number_small>]:
+    numb = number_small or 1
     edit.extend_line_up()
+    repeat(number_small-1)
     edit.delete()
     
-wipe down:
+wipe down [<number_small>]:
+    numb = number_small or 1
     edit.extend_line_down()
+    repeat(number_small-1)
     edit.delete()
     
 wipe word:
     edit.delete_word()
     
-wipe draw:
+wipe draw [<number_small>]:
+    numb = number_small or 1
     edit.extend_word_left()
+    repeat(number_small-1)
     edit.delete()
     
-wipe spring:
+wipe spring [<number_small>]:
+    numb = number_small or 1
     edit.extend_word_right()
+    repeat(number_small-1)
     edit.delete()
     
 wiper | wipe head: 
@@ -189,12 +209,16 @@ copy word:
     edit.select_word()
     edit.copy()
     
-copy draw:
+copy draw [<number_small>]:
+    numb = number_small or 1
     edit.extend_word_left()
+    repeat(number_small-1)
     edit.copy()
     
-copy spring:
+copy spring [<number_small>]:
+    numb = number_small or 1
     edit.extend_word_right()
+    repeat(number_small-1)
     edit.copy()
     
 copy line:
@@ -240,12 +264,16 @@ cut word:
     edit.select_word()
     edit.cut()
     
-cut draw:
+cut draw [<number_small>]:
+    numb = number_small or 1
     edit.extend_word_left()
+    repeat(numb - 1)
     edit.cut()
     
-cut spring:
+cut spring [<number_small>]:
+    numb = number_small or 1
     edit.extend_word_right()
+    repeat(numb - 1)
     edit.cut()
     
 cut line:
