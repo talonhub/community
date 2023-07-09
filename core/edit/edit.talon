@@ -41,7 +41,9 @@ drill <number_small>:
 (drill | wipe) head: 
     key(shift-home)
     key(delete)
-    
+driller: 
+    key(shift-end)
+    key(delete)    
 tail:
     edit.line_end()
     
