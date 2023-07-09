@@ -70,55 +70,55 @@ far up:
 #     edit.page_up()
 
 # selecting
-sell line:
+take line:
     edit.select_line()
 
-sell all:
+take all:
     edit.select_all()
 
-sell left [<number_small>]:
+take left [<number_small>]:
     numb = number_small or 1
     edit.extend_left()
     repeat(numb - 1)
 
-sell right [<number_small>]:
+take right [<number_small>]:
     numb = number_small or 1
     edit.extend_right()
     repeat(numb - 1)
 
-sell up [<number_small>]:
+take up [<number_small>]:
     numb = number_small or 1
     edit.extend_line_up()
     repeat(numb - 1)
 
-sell down [<number_small>]:
+take down [<number_small>]:
     numb = number_small or 1
     edit.extend_line_down()
     repeat(numb - 1)
 
-sell word:
+take word:
     edit.select_word()
     
-sell draw [<number_small>]:
+take draw [<number_small>]:
     numb = number_small or 1
     edit.extend_word_left()
     repeat(numb - 1)
 
-sell spring [<number_small>]:
+take spring [<number_small>]:
     numb = number_small or 1
     edit.extend_word_right()
     repeat(numb - 1)
 
-sell head:
+take head:
     edit.extend_line_start()
 
-sell tale:
+take tale:
     edit.extend_line_end()
 
-sell far up:
+take far up:
     edit.extend_file_start()
 
-sell far down:
+take far down:
     edit.extend_file_end()
 
 # editing
