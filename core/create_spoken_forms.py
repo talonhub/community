@@ -46,10 +46,11 @@ punctuation_words = {
     "dollar": "$",
     "semi": ";",
     "stack": ":",
-    "drip": ",",
+    # "drip": ",",
     "comma": ",",
     # Workaround for issue with conformer b-series; see #946
     "coma": ",",
+    "kama": ",",
 }
 
 symbol_key_words = {}

@@ -34,7 +34,7 @@ piper: |
 dollar: $
 semi: ;
 stack: :
-drip: ,
+# drip: ,
 comma: ,
 # Workaround for issue with conformer b-series; see #946
 coma: ,
