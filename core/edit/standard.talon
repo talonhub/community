@@ -6,11 +6,11 @@ zoom out [<number>]:
 	numb  = number or 1	
 	edit.zoom_out()
 	repeat(numb - 1)
-copy take: edit.copy()
-snip take: edit.cut()
+copy [take]: edit.copy()
+snip [take]: edit.cut()
 pace: edit.paste()
 (nay | nope) [<number>]: 
-	numb  = number or 1
+	numb = number or 1
 	edit.undo()
 	repeat(numb - 1)
 again [<number>]: 

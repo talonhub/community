@@ -242,41 +242,41 @@ copy far down:
     edit.copy()
     
 #cut commands
-cut all:
+snip all:
     edit.select_all()
     edit.cut()
     
-#to do: do we want these variants
-# cut left:
+#to do: nnn variants
+# snip left:
 #      edit.select_all()
 #      edit.cut()
-# cut right:
+# snip right:
 #      edit.select_all()
 #      edit.cut()
-# cut up:
+# snip up:
 #      edit.select_all()
 #     edit.cut()
-# cut down:
+# snip down:
 #     edit.select_all()
 #     edit.cut()
     
-cut word:
+snip word:
     edit.select_word()
     edit.cut()
     
-cut draw [<number_small>]:
+snip draw [<number_small>]:
     numb = number_small or 1
     edit.extend_word_left()
     repeat(numb - 1)
     edit.cut()
     
-cut spring [<number_small>]:
+snip spring [<number_small>]:
     numb = number_small or 1
     edit.extend_word_right()
     repeat(numb - 1)
     edit.cut()
     
-cut line:
+snip line:
     edit.select_line()
     edit.cut()
 (pace | paste) all:
