@@ -65,6 +65,7 @@ class UserActionsMac:
         )
 
     def system_lock():
+        actions.user.sleep_all()
         actions.key("ctrl-cmd-q")
 
     def system_show_desktop():

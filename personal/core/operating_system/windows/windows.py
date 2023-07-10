@@ -101,6 +101,7 @@ class UserActionsWin:
         shutdown("h")
 
     def system_lock():
+        actions.user.sleep_all()
         actions.user.exec("rundll32.exe user32.dll,LockWorkStation")
 
     def system_show_desktop():

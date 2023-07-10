@@ -95,8 +95,7 @@ class Actions:
         actions.user.switcher_hide_running()
         # todo: remove when the talon_hud perf is fixed on rust branch
         if "user.talon_hud_available" in scope.get("tag"):
-            if "rust" != app.branch:
-                actions.user.hud_disable()
+            actions.user.hud_disable()
         # user.history_disable()
         actions.user.homophones_hide()
         actions.user.help_hide()
