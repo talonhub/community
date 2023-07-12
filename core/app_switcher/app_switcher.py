@@ -185,22 +185,25 @@ if app.platform == "linux":
             if os.path.isdir(base):
                 for entry in os.scandir(base):
                     if entry.name.endswith(".desktop"):
-                        config = configparser.ConfigParser(interpolation=None)
-                        config.read(entry.path)
-                        # only parse shortcuts that are not hidden
-                        if config.has_option("Desktop Entry", "NoDisplay") == False:
-                            name_key = config["Desktop Entry"]["Name"]
-                            exec_key = config["Desktop Entry"]["Exec"]
-                            # remove extra quotes from exec
-                            if exec_key[0] == '"' and exec_key[-1] == '"':
-                                exec_key = re.sub('"', "", exec_key)
-                            # remove field codes and add full path if necessary
-                            if exec_key[0] == "/":
-                                items[name_key] = re.sub(args_pattern, "", exec_key)
-                            else:
-                                items[name_key] = "/usr/bin/" + re.sub(
-                                    args_pattern, "", exec_key
-                                )
+                        try:
+                            config = configparser.ConfigParser(interpolation=None)
+                            config.read(entry.path)
+                            # only parse shortcuts that are not hidden
+                            if config.has_option("Desktop Entry", "NoDisplay") == False:
+                                name_key = config["Desktop Entry"]["Name"]
+                                exec_key = config["Desktop Entry"]["Exec"]
+                                # remove extra quotes from exec
+                                if exec_key[0] == '"' and exec_key[-1] == '"':
+                                    exec_key = re.sub('"', "", exec_key)
+                                # remove field codes and add full path if necessary
+                                if exec_key[0] == "/":
+                                    items[name_key] = re.sub(args_pattern, "", exec_key)
+                                else:
+                                    items[name_key] = "/usr/bin/" + re.sub(
+                                        args_pattern, "", exec_key
+                                    )
+                        except:
+                            print("get_linux_apps: skipped parsing application file ", entry.name)
         return items
 
 
