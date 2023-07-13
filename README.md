@@ -10,7 +10,7 @@ Voice command set for [Talon](https://talonvoice.com/), community-supported.
 >
 > However, if you'd like, you can update the remote URL in your existing local repo:
 >
-> `cd ~/.talon/knausj_talon && git remote set-url origin https://github.com/talonhub/community.git`
+> `cd ~/.talon/knausj_talon && git remote set-url origin https://github.com/talonhub/community`
 
 Can be used on its own, but shines when combined with:
 
