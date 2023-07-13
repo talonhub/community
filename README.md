@@ -39,7 +39,7 @@ It is recommended to install `community` using [`git`](https://git-scm.com/).
 
    ```bash
    cd ~/.talon/user
-   git clone https://github.com/talonhub/community.git community
+   git clone https://github.com/talonhub/community community
    ```
 
 Note that it is also possible to install knausj by [downloading and extracting a zip file](#alternate-installation-method-zip-file), but this approach is discouraged because it makes it more difficult to keep track of any changes you may make to your copy of the files.
@@ -54,7 +54,7 @@ It is recommended to install `community` using [`git`](https://git-scm.com/).
 
    ```
    cd %AppData%\Talon\user
-   git clone https://github.com/talonhub/community.git community
+   git clone https://github.com/talonhub/community community
    ```
 
 Note that it is also possible to install knausj by [downloading and extracting a zip file](#alternate-installation-method-zip-file), but this approach is discouraged because it makes it more difficult to keep track of any changes you may make to your copy of the files.
@@ -380,6 +380,6 @@ It is possible to install knausj by downloading and extracting a zip file instea
 
 If you wish to install `community` by downloading and extracting a zip file, proceed as follows:
 
-1. Download the [zip archive of community](https://github.com/talonhub/community.git/archive/refs/heads/main.zip)
+1. Download the [zip archive of community](https://github.com/talonhub/community/archive/refs/heads/main.zip)
 1. Extract the files. If you don’t know how to extract zip files, a quick google search for "extract zip files" may be helpful.
 1. Place these extracted files inside the `user` folder of the Talon Home directory. You can find this folder by right clicking the Talon icon in taskbar, clicking Scripting > Open ~/talon, and navigating to `user`.
