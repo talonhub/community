@@ -5,7 +5,12 @@ Voice command set for [Talon](https://talonvoice.com/), community-supported.
 > **Note**
 >
 > Originally called `knausj_talon`, after [its original creator :superhero:](https://github.com/knausj85).
-> You might see the reference to the original name in places.
+>
+> You might see the reference to the original name in places. If you had the old name cloned, you don't have to do anything; GitHub will redirect the old name.
+>
+> However, if you'd like, you can update the remote URL in your existing local repo:
+>
+> `cd ~/.talon/knausj_talon && git remote set-url origin https://github.com/talonhub/community.git`
 
 Can be used on its own, but shines when combined with:
 
