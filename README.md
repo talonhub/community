@@ -1,6 +1,6 @@
 # community
 
-Community-maintained [Talon](https://talonvoice.com/) command grammar.
+Voice command set for [Talon](https://talonvoice.com/), community-supported.
 
 _(Note: originally called `knausj_talon`, after [its creator](https://github.com/knausj85). You might see the reference to the original name in places.)_
 
