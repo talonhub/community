@@ -1,4 +1,4 @@
-This document attempts to list a set of principles for contributors to the knausj_talon repository to consider. The idea is to document some agreed upon approaches toward reviewing and including code so we can all more easily make consistent decisions.
+This document attempts to list a set of principles for contributors to the `community` repository to consider. The idea is to document some agreed upon approaches toward reviewing and including code so we can all more easily make consistent decisions.
 
 Each of the principles is numbered for easy referencing. The body is formatted as a short single-line summary of the principle followed by elaboration and discussion links.
 
