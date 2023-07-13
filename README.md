@@ -2,7 +2,10 @@
 
 Voice command set for [Talon](https://talonvoice.com/), community-supported.
 
-_(Note: originally called `knausj_talon`, after [its creator](https://github.com/knausj85). You might see the reference to the original name in places.)_
+> **Note**
+>
+> Originally called `knausj_talon`, after [its original creator :superhero:](https://github.com/knausj85).
+> You might see the reference to the original name in places.
 
 Can be used on its own, but shines when combined with:
 
