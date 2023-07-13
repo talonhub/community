@@ -51,4 +51,4 @@ talon dump context:
     clip.set_text(result)
 
 talon (bug report | report bug):
-    user.open_url("https://github.com/knausj85/knausj_talon/issues")
+    user.open_url("https://github.com/talonhub/community/issues")

@@ -46,7 +46,7 @@ Usages:
         actions.user.deprecate_capture("2023-09-03", "user.legacy_capture")
         # implement capture
 
-See https://github.com/knausj85/knausj_talon/issues/940 for original discussion
+See https://github.com/talonhub/community/issues/940 for original discussion
 """
 
 import datetime
