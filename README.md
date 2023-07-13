@@ -1,6 +1,6 @@
-# knausj_talon
+# community
 
-Community-maintained [Talon](https://talonvoice.com/) command grammar.
+Community-maintained [Talon](https://talonvoice.com/) command grammar. _(Note: originally called `knausj_talon`, after [its creator](https://github.com/knausj85))_
 
 Can be used on its own, but shines when combined with:
 
