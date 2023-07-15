@@ -13,4 +13,3 @@ tag(): user.code_functions_common
 #defintion blocks for the context
 action {user.talon_actions}:
     user.talon_code_insert_function(talon_actions, edit.selected_text(), 0)
-

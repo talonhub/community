@@ -1,12 +1,12 @@
 list: user.prose_snippets
 -
 spacebar: " "
-new line: 
+new line:
     """
     """
-new paragraph": 
+new paragraph":
     """
-    
+
     """
 open quote: “
 close quote: ”

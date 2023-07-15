@@ -48,10 +48,12 @@ def number_key(m) -> str:
     "One number key"
     return m.number_key
 
+
 @mod.capture(rule="{self.keypad_key}")
 def keypad_key(m) -> str:
     "One keypad key"
     return m.keypad_key
+
 
 @mod.capture(rule="{self.letter}")
 def letter(m) -> str:

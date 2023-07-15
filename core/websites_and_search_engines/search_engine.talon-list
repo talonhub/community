@@ -1,5 +1,5 @@
 list: user.search_engine
-- 
+-
 amazon: https://www.amazon.com/s/?field-keywords=%s
 google: https://www.google.com/search?q=%s
 map: https://maps.google.com/maps?q=%s

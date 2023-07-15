@@ -10,5 +10,5 @@ mod.apps.talon_debug = """
 os: windows
 and app.name: Talon
 os: windows
-and app.exe: talon.exe   
+and app.exe: talon.exe
 """

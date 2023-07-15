@@ -1,4 +1,4 @@
-list: user.punctuation 
+list: user.punctuation
 mode: dictation
 -
 dollar sign: $
@@ -6,7 +6,7 @@ ampersand: &
 back tick: `
 comma: ,
 # Workaround for issue with conformer b-series; see #946
-coma: , 
+coma: ,
 period: .
 full stop: .
 semicolon: ;

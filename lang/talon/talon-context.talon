@@ -19,5 +19,3 @@ tag require [{user.talon_tags}]:
 host require:
     hostname = user.talon_get_hostname()
     user.paste("hostname: {hostname}\n")
-
-
