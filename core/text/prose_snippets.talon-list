@@ -1,0 +1,16 @@
+list: user.prose_snippets
+-
+spacebar: " "
+new line: 
+    """
+    """
+new paragraph": 
+    """
+    
+    """
+open quote: “
+close quote: ”
+smiley": :-)
+winky": ;-)
+frowny": :-(
+this is a new test :-)
