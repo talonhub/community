@@ -2,6 +2,7 @@ user.running: fluentsearch
 -
 gpt [<user.text>]: 
     txt = text or ""
-    user.system_search()
-    sleep(100ms)
-    user.paste("chatgpt: {txt}")
+    key(ctrl-alt)
+    # key(tab)
+    user.paste("chatgpt ")
+    key(enter)
