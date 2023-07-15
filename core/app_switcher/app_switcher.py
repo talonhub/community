@@ -7,7 +7,6 @@ from pathlib import Path
 import talon
 from talon import Context, Module, actions, app, fs, imgui, ui
 
-
 # Construct at startup a list of overides for application names (similar to how homophone list is managed)
 # ie for a given talon recognition word set  `one note`, recognized this in these switcher functions as `ONENOTE`
 # the list is a comma seperated `<Recognized Words>, <Overide>`
@@ -204,7 +203,10 @@ if app.platform == "linux":
                                         args_pattern, "", exec_key
                                     )
                         except:
-                            print("get_linux_apps: skipped parsing application file ", entry.name)
+                            print(
+                                "get_linux_apps: skipped parsing application file ",
+                                entry.name,
+                            )
         return items
 
 
