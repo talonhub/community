@@ -11,6 +11,7 @@ window reload: user.vscode("workbench.action.reloadWindow")
 window close: user.vscode("workbench.action.closeWindow")
 #multiple_cursor.py support end
 
+
 please [<user.text>]:
     user.vscode("workbench.action.showCommands")
     insert(user.text or "")
@@ -145,20 +146,6 @@ close tabs way right: user.vscode("workbench.action.closeEditorsToTheRight")
 close tabs way left: user.vscode("workbench.action.closeEditorsToTheLeft")
 
 # Folding
-fold that: user.vscode("editor.fold")
-unfold that: user.vscode("editor.unfold")
-fold those: user.vscode("editor.foldAllMarkerRegions")
-unfold those: user.vscode("editor.unfoldRecursively")
-fold all: user.vscode("editor.foldAll")
-unfold all: user.vscode("editor.unfoldAll")
-fold comments: user.vscode("editor.foldAllBlockComments")
-fold one: user.vscode("editor.foldLevel1")
-fold two: user.vscode("editor.foldLevel2")
-fold three: user.vscode("editor.foldLevel3")
-fold four: user.vscode("editor.foldLevel4")
-fold five: user.vscode("editor.foldLevel5")
-fold six: user.vscode("editor.foldLevel6")
-fold seven: user.vscode("editor.foldLevel7")
 
 # Git / Github (not using verb-noun-adjective pattern, mirroring terminal commands.)
 git branch: user.vscode("git.branchFrom")

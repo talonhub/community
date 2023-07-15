@@ -21,6 +21,7 @@ ctx.lists["user.snippets"] = {
     "try except": "try/except",
     "while": "while",
     "with": "with",
+    "debugger": "import pdb; pdb.set_trace()",
 }
 
 

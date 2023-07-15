@@ -123,7 +123,7 @@ class Actions:
         self.mouse_drag_end()
 
         # Start drag
-        ctrl.mouse_click(button=button, down=True)
+        ctrl.mouse_click(button=button, down=True,up=False)
 
     def mouse_drag_end():
         """Releases any held mouse buttons"""

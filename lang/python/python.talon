@@ -26,6 +26,10 @@ settings():
     user.code_protected_variable_formatter = "SNAKE_CASE"
     user.code_public_variable_formatter = "SNAKE_CASE"
 
+authenticate: insert('awsauth --profile data --force-default')
+debugger: insert("import pdb; pdb.set_trace()")
+
+
 #python-specific grammars
 dunder in it: "__init__"
 state (def | deaf | deft): "def "

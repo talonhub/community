@@ -1,5 +1,8 @@
 -
 settings():
+    # minimum silence time (in seconds) before speech is cut off, default 0.3
+    speech.timeout = 0.4
+
     # Adjust the scale of the imgui to my liking
     imgui.scale = 1.3
 
@@ -22,7 +25,8 @@ settings():
     # 0 = off
     # 1 = on with eyetracker but not zoom mouse mode
     # 2 = on but not with zoom mouse mode
-    user.mouse_enable_pop_click = 1
+    user.mouse_enable_pop_click = 2
+
 
     # When enabled, the 'Scroll Mouse' GUI will not be shown.
     user.mouse_hide_mouse_gui = 0

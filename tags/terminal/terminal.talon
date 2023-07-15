@@ -19,3 +19,10 @@ copy paste:
     edit.copy()
     sleep(50ms)
     edit.paste()
+
+scraper run [<user.text>]: insert('scrapy crawl {text} --loglevel=INFO') 
+(ducker|do care|docker) run: 
+    insert('dexec -it ') 
+    edit.paste() 
+    insert(' bash\n')
+

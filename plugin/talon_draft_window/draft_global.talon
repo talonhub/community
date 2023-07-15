@@ -36,3 +36,7 @@ mode: command
     text = edit.selected_text()
     key(backspace)
     user.draft_show(text)
+
+^draft close:
+    # Do this toggle so we can have focus when saying 'draft show'
+    user.draft_hide()

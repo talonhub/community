@@ -1,5 +1,6 @@
 os: linux
-tag: user.tmux
+os: mac
+app: iterm2
 -
 mux: "tmux "
 
