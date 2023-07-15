@@ -1,4 +1,4 @@
-This file lists known changes to knausj_talon that are likely to have broken existing
+This file lists known changes to `community` that are likely to have broken existing
 functionality. The file is sorted by date with the newest entries up the top.
 
 Be aware there may be some difference between the date in this file and when the change was
