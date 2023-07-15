@@ -7,6 +7,7 @@ win require: user.paste("os: windows\n")
 mac require: user.paste("os: mac\n")
 linux require: user.paste("os: linux\n")
 title require: user.paste("win.title: ")
+running require: user.paste("user.running: ")
 (application|app) [require] [{user.talon_apps}]:
     app = talon_apps or ""
     user.paste("app: {app}")

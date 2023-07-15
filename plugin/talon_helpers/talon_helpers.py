@@ -242,3 +242,8 @@ class Actions:
             talon_app.quit()
         elif app.platform == "windows":
             talon_app.quit()
+
+    def talon_dump_running_applications(): 
+        """Dump active applications"""
+        for app in ui.apps():
+            print(app.name.lower())

@@ -1,12 +1,7 @@
-os: windows
-app: FluentSearch
-win.title: Fluent Search - Screen Search
+user.running: fluentsearch
 -
-tag(): user.fluent_search_screen_search
-
-<user.letters>: user.fluent_search_screen_search(letters, "left")
-duke <user.letters>: user.fluent_search_screen_search(letters, "double")
-ripple <user.letters>: user.fluent_search_screen_search(letters, "triple")
-# many <user.letters>: user.fluent_search_screen_search(letters, "command")
-rate <user.letters>: user.fluent_search_screen_search(letters, "right")
-hover <user.letters>: user.fluent_search_screen_search(letters, "hover")
+gpt [<user.text>]: 
+    txt = text or ""
+    user.system_search()
+    sleep(100ms)
+    user.paste("chatgpt: {txt}")

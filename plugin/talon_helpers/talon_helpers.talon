@@ -76,6 +76,7 @@ talent dump context:
 ^talent copy active app$:
     result = user.talon_get_active_application_info()
     clip.set_text(result)
-
+talent dump running apps:
+    user.talon_dump_running_applications()
 talent (bug report | report bug):
     user.open_url("https://github.com/knausj85/knausj_talon/issues")
