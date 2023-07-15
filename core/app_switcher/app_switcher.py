@@ -10,7 +10,7 @@ from talon import Context, Module, actions, app, fs, imgui, ui
 # Construct at startup a list of overides for application names (similar to how homophone list is managed)
 # ie for a given talon recognition word set  `one note`, recognized this in these switcher functions as `ONENOTE`
 # the list is a comma seperated `<Recognized Words>, <Overide>`
-# TODO: Consider put list csv's (homophones.csv, app_name_overrides.csv) files together in a seperate directory,`knausj_talon/lists`
+# TODO: Consider put list csv's (homophones.csv, app_name_overrides.csv) files together in a seperate directory,`community/lists`
 overrides_directory = os.path.dirname(os.path.realpath(__file__))
 override_file_name = f"app_name_overrides.{talon.app.platform}.csv"
 override_file_path = os.path.join(overrides_directory, override_file_name)

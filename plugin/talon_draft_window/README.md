@@ -11,7 +11,7 @@ An session might go like this for example:
     replace gust with error   # Replaces the word corresponding with the red anchor 'g' (gust in community) with the word 'error'
     period                    # Add a full stop
     select each through fine  # Select the words starting at the 'e' anchor and ending at 'f'
-    say without               # Insert the word 'without' (knausj_talon)
+    say without               # Insert the word 'without' (community)
     title word air            # Make the word corresponding to the 'a' anchor capitalised
     draft submit              # Type the text in your draft window back into your editor
     # End with the text "This is a sentence without error." in your editor or other textbox
