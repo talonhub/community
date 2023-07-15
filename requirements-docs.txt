@@ -1,0 +1,4 @@
+myst_parser >=1,<2
+sphinx >=5,<8
+sphinx_rtd_theme >=1.2,<2
+talondoc==1.0.0
