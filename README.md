@@ -32,7 +32,7 @@ It is recommended to install `community` using [`git`](https://git-scm.com/).
    git clone https://github.com/talonhub/community community
    ```
 
-Note that it is also possible to install knausj by [downloading and extracting a zip file](#alternate-installation-method-zip-file), but this approach is discouraged because it makes it more difficult to keep track of any changes you may make to your copy of the files.
+Note that it is also possible to install `community` by [downloading and extracting a zip file](#alternate-installation-method-zip-file), but this approach is discouraged because it makes it more difficult to keep track of any changes you may make to your copy of the files.
 
 ### Windows
 
@@ -47,7 +47,7 @@ It is recommended to install `community` using [`git`](https://git-scm.com/).
    git clone https://github.com/talonhub/community community
    ```
 
-Note that it is also possible to install knausj by [downloading and extracting a zip file](#alternate-installation-method-zip-file), but this approach is discouraged because it makes it more difficult to keep track of any changes you may make to your copy of the files.
+Note that it is also possible to install `community` by [downloading and extracting a zip file](#alternate-installation-method-zip-file), but this approach is discouraged because it makes it more difficult to keep track of any changes you may make to your copy of the files.
 
 ## Getting started with Talon
 
@@ -303,7 +303,7 @@ Also, you can add additional vocabulary words, words to replace, search engines 
 
 ## Other talon user file sets
 
-In addition to this repo, there are [other Talon user file sets](https://talon.wiki/talon_user_file_sets/) containing additional commands that you may want to experiment with if you're feeling adventurous 😊. Many of them are meant to be used alongside knausj, but a few of them are designed as replacements. If it's not clear which, please file an issue against the given GitHub repository for that user file set!
+In addition to this repo, there are [other Talon user file sets](https://talon.wiki/talon_user_file_sets/) containing additional commands that you may want to experiment with if you're feeling adventurous 😊. Many of them are meant to be used alongside `community`, but a few of them are designed as replacements. If it's not clear which, please file an issue against the given GitHub repository for that user file set!
 
 # Collaborators
 
@@ -341,7 +341,7 @@ You then have a few options as to when to run it:
 - Run yourself at any time on your locally changed files: `pre-commit run`
 - Run yourself on all files in the repository: `pre-commit run --all-files`
 - Run automatically on your PRs (fixes will be pushed automatically to your branch):
-  - Visit https://pre-commit.ci/ and authorize the app to connect to your knausj fork.
+  - Visit https://pre-commit.ci/ and authorize the app to connect to your `community` fork.
 - Set up an editor hook to run on save:
   - You could follow the instructions for [Black](https://black.readthedocs.io/en/stable/integrations/editors.html), which are well written; simply replace `black <path>` with `pre-commit run --files <file>`.
   - It's more performant to only reformat the specific file you're editing, rather than all changed files.
@@ -366,7 +366,7 @@ For community-generated documentation on Talon, please visit https://talon.wiki/
 
 ## Alternate installation method: Zip file
 
-It is possible to install knausj by downloading and extracting a zip file instead of using `git`. Note that this approach is discouraged, because it makes it more difficult to keep track of any changes you may make to your copy of the files.
+It is possible to install `community` by downloading and extracting a zip file instead of using `git`. Note that this approach is discouraged, because it makes it more difficult to keep track of any changes you may make to your copy of the files.
 
 If you wish to install `community` by downloading and extracting a zip file, proceed as follows:
 
