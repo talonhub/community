@@ -1,6 +1,8 @@
 # community
 
-Voice command set for [Talon](https://talonvoice.com/), community-supported. _(Note: Originally called `knausj_talon`, after [its original creator :superhero:](https://github.com/knausj85))_
+Voice command set for [Talon](https://talonvoice.com/), community-supported.
+
+_(Originally called `knausj_talon`, after [its original creator :superhero:](https://github.com/knausj85))_
 
 Can be used on its own, but shines when combined with:
 
