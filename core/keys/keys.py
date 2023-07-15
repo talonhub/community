@@ -2,26 +2,6 @@ from talon import Context, Module, actions, app
 
 from ..user_settings import get_list_from_csv
 
-
-def setup_default_alphabet():
-    """set up common default alphabet.
-
-    no need to modify this here, change your alphabet using alphabet.csv"""
-    initial_default_alphabet = "air bat cap drum each fine gust harp sit jury crunch look made near odd pit quench red sun trap urge vest whale plex yank zip".split(
-        " "
-    )
-    initial_letters_string = "abcdefghijklmnopqrstuvwxyz"
-    initial_default_alphabet_dict = dict(
-        zip(initial_default_alphabet, initial_letters_string)
-    )
-
-    return initial_default_alphabet_dict
-
-
-alphabet_list = get_list_from_csv(
-    "alphabet.csv", ("Letter", "Spoken Form"), setup_default_alphabet()
-)
-
 default_digits = "zero one two three four five six seven eight nine".split(" ")
 numbers = [str(i) for i in range(10)]
 default_f_digits = (
@@ -36,6 +16,7 @@ mod.list("number_key", desc="All number keys")
 mod.list("modifier_key", desc="All modifier keys")
 mod.list("function_key", desc="All function keys")
 mod.list("special_key", desc="All special keys")
+mod.list("keypad_key", desc="all keypad keys")
 mod.list("punctuation", desc="words for inserting punctuation into text")
 
 
@@ -62,6 +43,10 @@ def number_key(m) -> str:
     "One number key"
     return m.number_key
 
+@mod.capture(rule="{self.keypad_key}")
+def keypad_key(m) -> str:
+    "One keypad key"
+    return m.keypad_key
 
 @mod.capture(rule="{self.letter}")
 def letter(m) -> str:
@@ -95,7 +80,7 @@ def any_alphanumeric_key(m) -> str:
 
 @mod.capture(
     rule="( <self.letter> | <self.number_key> | <self.symbol_key> "
-    "| <self.arrow_key> | <self.function_key> | <self.special_key> )"
+    "| <self.arrow_key> | <self.function_key> | <self.special_key> | <self.keypad_key>)"
 )
 def unmodified_key(m) -> str:
     "A single key with no modifiers"
@@ -136,7 +121,6 @@ if app.platform == "mac":
     modifier_keys["command"] = "cmd"
     modifier_keys["option"] = "alt"
 ctx.lists["self.modifier_key"] = modifier_keys
-ctx.lists["self.letter"] = alphabet_list
 
 # `punctuation_words` is for words you want available BOTH in dictation and as key names in command mode.
 # `symbol_key_words` is for key names that should be available in command mode, but NOT during dictation.
