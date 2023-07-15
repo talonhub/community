@@ -239,15 +239,6 @@ class UserActions:
     def code_import():
         actions.insert("import ")
 
-    def code_private_function(text: str):
-        actions.insert("private")
-
-    def code_protected_function(text: str):
-        actions.user.code_private_function()
-
-    def code_public_function(text: str):
-        actions.insert("public ")
-
     def code_state_return():
         actions.insert("return ")
 

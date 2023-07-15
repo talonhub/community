@@ -8,6 +8,11 @@ default_f_digits = (
     "one two three four five six seven eight nine ten eleven twelve".split(" ")
 )
 
+# used for number keys & function keys respectively
+digits = "zero one two three four five six seven eight nine".split()
+f_digits = "one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty".split()
+
+
 mod = Module()
 mod.list("letter", desc="The spoken phonetic alphabet")
 mod.list("symbol_key", desc="All symbols from the keyboard")
@@ -214,7 +219,7 @@ symbol_key_words = {
 symbol_key_words.update(punctuation_words)
 ctx.lists["self.punctuation"] = punctuation_words
 ctx.lists["self.symbol_key"] = symbol_key_words
-ctx.lists["self.number_key"] = dict(zip(default_digits, numbers))
+ctx.lists["self.number_key"] = {name: str(i) for i, name in enumerate(digits)}
 ctx.lists["self.arrow_key"] = {
     "down": "down",
     "left": "left",
@@ -251,7 +256,7 @@ special_keys = {k: k for k in simple_keys}
 special_keys.update(alternate_keys)
 ctx.lists["self.special_key"] = special_keys
 ctx.lists["self.function_key"] = {
-    f"F {default_f_digits[i]}": f"f{i + 1}" for i in range(12)
+    f"F {name}": f"f{i}" for i, name in enumerate(f_digits, start=1)
 }
 
 

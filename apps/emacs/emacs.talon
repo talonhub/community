@@ -8,13 +8,13 @@ tag(): user.line_commands
 #suplex: key(ctrl-x)
 cancel: user.emacs("keyboard-quit")
 exchange: user.emacs("exchange-point-and-mark")
-execute: user.emacs_meta_x()
+execute: user.emacs("execute-extended-command")
 execute {user.emacs_command}$: user.emacs(emacs_command)
 execute <user.text>$:
-    user.emacs_meta_x()
+    user.emacs("execute-extended-command")
     user.insert_formatted(text, "DASH_SEPARATED")
 evaluate | (evaluate | eval) (exper | expression): user.emacs("eval-expression")
-prefix: user.emacs("universal-argument")
+prefix: user.emacs_prefix()
 prefix <user.number_signed_small>: user.emacs_prefix(number_signed_small)
 
 abort recursive [edit]: user.emacs("abort-recursive-edit")
@@ -53,11 +53,11 @@ display: user.emacs("display-buffer")
 # SHELL COMMANDS #
 shell command: user.emacs("shell-command")
 shell command inserting:
-    user.emacs("universal-argument")
+    user.emacs_prefix()
     user.emacs("shell-command")
 shell command on region: user.emacs("shell-command-on-region")
 shell command on region replacing:
-    user.emacs("universal-argument")
+    user.emacs_prefix()
     user.emacs("shell-command-on-region")
 
 # CUSTOMIZE #
@@ -72,10 +72,10 @@ customize variable: user.emacs("customize-variable")
 # MODE COMMANDS #
 auto fill mode: user.emacs("auto-fill-mode")
 dired omit mode: user.emacs("dired-omit-mode")
+display line numbers mode: user.emacs("display-line-numbers-mode")
 electric quote local mode: user.emacs("electric-quote-local-mode")
 emacs lisp mode: user.emacs("emacs-lisp-mode")
 fundamental mode: user.emacs("fundamental-mode")
-display line numbers mode: user.emacs("display-line-numbers-mode")
 global display line numbers mode: user.emacs("global-display-line-numbers-mode")
 global highlight line mode: user.emacs("global-hl-line-mode")
 global visual line mode: user.emacs("global-visual-line-mode")
@@ -87,6 +87,7 @@ overwrite mode: user.emacs("overwrite-mode")
 paredit mode: user.emacs("paredit-mode")
 rainbow mode: user.emacs("rainbow-mode")
 read only mode: user.emacs("read-only-mode")
+shell script mode: user.emacs("sh-mode")
 sub word mode: user.emacs("subword-mode")
 tab bar mode: user.emacs("tab-bar-mode")
 talon script mode: user.emacs("talonscript-mode")
@@ -183,7 +184,7 @@ diff (buffer | [buffer] with file):
 
 # ----- MOTION AND EDITING ----- #
 mark: user.emacs("set-mark-command")
-go back: user.emacs("pop-mark")
+go back: user.emacs("pop-to-mark-command")
 global [go] back: user.emacs("pop-global-mark")
 
 auto indent: user.emacs("indent-region")
@@ -206,11 +207,11 @@ highlight lines matching [regex]: user.emacs("highlight-lines-matching-regexp")
 highlight regex: user.emacs("highlight-regexp")
 unhighlight regex: user.emacs("unhighlight-regexp")
 unhighlight all:
-    user.emacs("universal-argument")
+    user.emacs_prefix()
     user.emacs("unhighlight-regexp")
 
 recenter:
-    user.emacs("universal-argument")
+    user.emacs_prefix()
     user.emacs("recenter-top-bottom")
 (center | [center] <number_small> from) top:
     user.emacs("recenter-top-bottom", number_small or 0)
