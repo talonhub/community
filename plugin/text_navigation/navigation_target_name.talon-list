@@ -1,5 +1,5 @@
 #todo: if we wanted to convert this
-# we'd probably want to rework the list to have hard-coded strings 
+# we'd probably want to rework the list to have hard-coded strings
 # like e.g. BRACES on the right side.
 # list: user.navigation_target_name
 # -

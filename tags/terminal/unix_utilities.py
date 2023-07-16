@@ -10,4 +10,3 @@ mod.tag(
 )
 
 mod.list("unix_utility", desc="A common utility command")
-
