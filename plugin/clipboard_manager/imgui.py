@@ -1,11 +1,12 @@
-from talon import Module, skia, ui, settings
-from talon.skia.image import Image as SkiaImage
-from talon.skia.imagefilter import ImageFilter as ImageFilter
+from dataclasses import dataclass
+from typing import Callable, Optional
+
+from talon import Module, settings, skia, ui
 from talon.canvas import Canvas, MouseEvent
 from talon.screen import Screen
+from talon.skia.image import Image as SkiaImage
+from talon.skia.imagefilter import ImageFilter as ImageFilter
 from talon.types import Rect
-from typing import Callable, Optional
-from dataclasses import dataclass
 
 FONT_FAMILY = "Segoe UI Symbol"
 FONT_SIZE = 14

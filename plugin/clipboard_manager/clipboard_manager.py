@@ -1,8 +1,10 @@
-from talon import Module, Context, actions, clip, app, cron
-from talon.skia.image import Image
-from talon.clip import MimeData
 from dataclasses import dataclass
 from typing import Optional
+
+from talon import Context, Module, actions, app, clip, cron
+from talon.clip import MimeData
+from talon.skia.image import Image
+
 from .imgui import imgui
 
 mod = Module()

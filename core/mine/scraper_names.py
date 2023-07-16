@@ -4,8 +4,8 @@ the list to easily refer to system paths in talon and python files. It also crea
 system_paths.csv in the settings folder so they user can easily add their own custom paths.
 """
 import os
-from talon import Context, Module, actions, app
 
+from talon import Context, Module, actions, app
 
 mod = Module()
 ctx = Context()

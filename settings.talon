@@ -27,7 +27,6 @@ settings():
     # 2 = on but not with zoom mouse mode
     user.mouse_enable_pop_click = 2
 
-
     # When enabled, the 'Scroll Mouse' GUI will not be shown.
     user.mouse_hide_mouse_gui = 0
 

@@ -20,10 +20,10 @@ copy paste:
     sleep(50ms)
     edit.paste()
 
-scraper run [<user.scraper_names>]: insert('scrapy crawl {scraper_names} --loglevel=INFO') 
+scraper run [<user.scraper_names>]:
+    insert("scrapy crawl {scraper_names} --loglevel=INFO")
 
-(ducker|do care|docker) run: 
-    insert('dexec -it ') 
-    edit.paste() 
-    insert(' bash\n')
-
+(ducker | do care | docker) run:
+    insert("dexec -it ")
+    edit.paste()
+    insert(" bash\n")

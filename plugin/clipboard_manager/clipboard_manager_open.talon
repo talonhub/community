@@ -1,11 +1,9 @@
 tag: user.clipboard_manager
 -
 
-clippy stay:
-    user.clipboard_manager_toggle_sticky()
+clippy stay: user.clipboard_manager_toggle_sticky()
 
-clippy clear:
-    user.clipboard_manager_remove()
+clippy clear: user.clipboard_manager_remove()
 
 clippy chuck <number_small> [and <number_small>]*:
     user.clipboard_manager_remove(number_small_list)
