@@ -327,12 +327,15 @@ class Actions:
 
     def switcher_launch(path: str):
         """Launch a new application by path (all OSes), or AppUserModel_ID path on Windows"""
-        if app.platform != "windows":
-            # separate command and arguments
+        if app.platform == "mac":
+            ui.launch(path=path)
+        elif app.platform == "linux":
+            # Could potentially be merged with OSX code. Done in this explicit
+            # way for expediency around the 0.4 release.
             cmd = shlex.split(path)[0]
             args = shlex.split(path)[1:]
             ui.launch(path=cmd, args=args)
-        else:
+        elif app.platform == "windows":
             is_valid_path = False
             try:
                 current_path = Path(path)
@@ -344,6 +347,8 @@ class Actions:
             else:
                 cmd = f"explorer.exe shell:AppsFolder\\{path}"
                 subprocess.Popen(cmd, shell=False)
+        else:
+            print("Unhandled platform in switcher_launch: " + app.platform)
 
     def switcher_menu():
         """Open a menu of running apps to switch to"""
@@ -384,7 +389,7 @@ def update_launch_list():
                 for name in os.listdir(base):
                     path = os.path.join(base, name)
                     name = name.rsplit(".", 1)[0].lower()
-                    launch[name] = f"'{path}'"
+                    launch[name] = path
 
     elif app.platform == "windows":
         launch = get_windows_apps()
