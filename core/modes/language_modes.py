@@ -59,7 +59,7 @@ language_name_overrides = {
     "go": ["go", "go lang", "go language"],
     "r": ["are language"],
     "tex": ["tech", "lay tech", "latex"],
-    "talonlist": ["talon list"],
+    "talon list": ["talon list"],
 }
 mod.list("language_mode", desc="Name of a programming language mode.")
 ctx.lists["self.language_mode"] = {
