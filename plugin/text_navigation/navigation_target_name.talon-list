@@ -1,0 +1,16 @@
+#todo: if we wanted to convert this
+# we'd probably want to rework the list to have hard-coded strings
+# like e.g. BRACES on the right side.
+# list: user.navigation_target_name
+# -
+# word: \w+
+# small: [A-Z]?[a-z0-9]+
+# big: [\S]+
+# parens: \((.*?)\)
+# squares: \[(.*?)\]
+# braces: \{(.*?)\}
+# quotes: \"(.*?)\"
+# angles: \<(.*?)\>
+# all: (.+)
+# method: \w+\((.*?)\)
+# constant: [A-Z_][A-Z_]+

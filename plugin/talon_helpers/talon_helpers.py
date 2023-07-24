@@ -19,6 +19,29 @@ def create_name(text, max_len=20):
     return "_".join(list(islice(pattern.findall(text), max_len))).lower()
 
 
+def talon_convert_list_helper(list_name, output_path):
+    import re
+
+    if list_name in registry.lists:
+        list_values = registry.lists[list_name][0]
+        result = f"list: {list_name}\n-\n"
+
+        if len(list_values) > 0:
+            for spoken_form, mapped_value in list_values.items():
+                if re.search(r"^\s+|\s+$", mapped_value):
+                    result += f'{spoken_form}: """{mapped_value}"""\n'
+                else:
+                    result += f"{spoken_form}: {mapped_value}\n"
+
+            f = open(output_path, "w")
+            f.write(result)
+            f.close()
+            return True
+        return False
+    else:
+        return False
+
+
 @mod.action_class
 class Actions:
     def talon_add_context_clipboard_python():
@@ -161,3 +184,39 @@ class Actions:
         apps = ui.apps(name=app, background=False)
         for app in apps:
             pp.pprint(app.windows())
+
+    def talon_convert_lists():
+        """Converts all active lists with at least one entry to a talon list"""
+        if app.platform == "windows":
+            base_path = os.path.expandvars(f"%AppData%\\Talon\\converted_lists")
+        else:
+            base_path = os.path.expanduser("~/.talon/converted_lists")
+
+        if not os.path.exists(base_path):
+            os.mkdir(base_path)
+
+        count = 0
+        for list_name, value in registry.lists.items():
+            output_path = os.path.join(
+                base_path, f"{list_name}.talon-list".replace("user.", "")
+            )
+            if talon_convert_list_helper(list_name, output_path):
+                count += 1
+
+        actions.app.notify(f"successfully converted {count} files to talon list")
+
+    def talon_convert_list(list_name: str):
+        """Converts active lists with at least one entry to a talon list"""
+        if app.platform == "windows":
+            base_path = os.path.expandvars(f"%AppData%\\Talon\\converted_lists")
+        else:
+            base_path = os.path.expanduser("~/.talon/converted_lists")
+
+        output_path = os.path.join(
+            base_path, f"{list_name}.talon-list".replace("user.", "")
+        )
+
+        if talon_convert_list_helper(list_name, output_path):
+            actions.app.notify(f"successfully converted {list_name} to talon list")
+        else:
+            actions.app.notify(f"failed to convert  {list_name} to talon list")

@@ -1,0 +1,6 @@
+list: user.prose_modifiers
+-
+cap: cap
+no cap: no_cap
+no caps: no_cap
+no space: no_space

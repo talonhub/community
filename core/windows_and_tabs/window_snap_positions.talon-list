@@ -1,0 +1,28 @@
+list: user.window_snap_positions
+-
+left: left
+right: right
+top: top
+bottom: bottom
+center third: center third
+left third: left third
+right third: right third
+left two thirds: left two thirds
+right two thirds: right two thirds
+top left: top left
+top right: top right
+bottom left: bottom left
+bottom right: bottom right
+top left third: top left third
+top right third: top right third
+top left two thirds: top left two thirds
+top right two thirds: top right two thirds
+top center third: top center third
+bottom left third: bottom left third
+bottom right third: bottom right third
+bottom left two thirds: bottom left two thirds
+bottom right two thirds: bottom right two thirds
+bottom center third: bottom center third
+center: center
+full: full
+fullscreen: fullscreen

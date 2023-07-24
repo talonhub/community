@@ -1,0 +1,6 @@
+list: user.arrow_key
+-
+down: down
+left: left
+right: right
+up: up
