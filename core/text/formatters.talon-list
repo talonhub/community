@@ -1,0 +1,20 @@
+list: user.formatters
+-
+all cap: all cap
+all down: all down
+camel: camel
+dotted: dotted
+dub string: dub string
+dunder: dunder
+hammer: hammer
+kebab: kebab
+packed: packed
+padded: padded
+slasher: slasher
+smash: smash
+snake: snake
+string: string
+say: say
+speak: speak
+sentence: sentence
+title: title
