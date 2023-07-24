@@ -57,6 +57,11 @@ _file_extensions_defaults = {
 
 ctx = Context()
 
-@track_csv_list("file_extensions.csv", headers=("File extension", "Name"), default=_file_extensions_defaults)
+
+@track_csv_list(
+    "file_extensions.csv",
+    headers=("File extension", "Name"),
+    default=_file_extensions_defaults,
+)
 def on_update(values):
     ctx.lists["self.file_extension"] = values

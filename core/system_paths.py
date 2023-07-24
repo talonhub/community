@@ -49,7 +49,9 @@ def on_ready():
 
             default_system_paths.update(onedrive_paths)
 
-    @track_csv_list("system_paths.csv", headers=("Path", "Spoken"), default=default_system_paths)
+    @track_csv_list(
+        "system_paths.csv", headers=("Path", "Spoken"), default=default_system_paths
+    )
     def on_csv(system_paths):
         ctx.lists["user.system_paths"] = system_paths
 

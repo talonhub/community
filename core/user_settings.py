@@ -1,7 +1,7 @@
-from pathlib import Path
-from typing import Callable, IO
 import csv
 import os
+from pathlib import Path
+from typing import IO, Callable
 
 from talon import resource
 
@@ -10,8 +10,9 @@ from talon import resource
 SETTINGS_DIR = Path(__file__).parents[1] / "settings"
 SETTINGS_DIR.mkdir(exist_ok=True)
 
-CallbackT  = Callable[[dict[str, str]], None]
+CallbackT = Callable[[dict[str, str]], None]
 DecoratorT = Callable[[CallbackT], CallbackT]
+
 
 def read_csv_list(f: IO, headers: tuple[str, str]) -> dict[str, str]:
     rows = list(csv.reader(f))
@@ -44,7 +45,10 @@ def read_csv_list(f: IO, headers: tuple[str, str]) -> dict[str, str]:
 
     return mapping
 
-def write_csv_defaults(path: Path, headers: tuple[str, str], default: dict[str, str]=None) -> None:
+
+def write_csv_defaults(
+    path: Path, headers: tuple[str, str], default: dict[str, str] = None
+) -> None:
     if not path.is_file() and default is not None:
         with open(path, "w", encoding="utf-8", newline="") as file:
             writer = csv.writer(file)
@@ -52,7 +56,10 @@ def write_csv_defaults(path: Path, headers: tuple[str, str], default: dict[str, 
             for key, value in default.items():
                 writer.writerow([key] if key == value else [value, key])
 
-def track_csv_list(filename: str, headers: tuple[str, str], default: dict[str, str]=None) -> DecoratorT:
+
+def track_csv_list(
+    filename: str, headers: tuple[str, str], default: dict[str, str] = None
+) -> DecoratorT:
     assert filename.endswith(".csv")
     path = SETTINGS_DIR / filename
     write_csv_defaults(path, headers, default)
@@ -64,6 +71,7 @@ def track_csv_list(filename: str, headers: tuple[str, str], default: dict[str, s
             fn(data)
 
     return decorator
+
 
 # NOTE: this is deprecated, use @track_csv_list instead.
 def get_list_from_csv(
@@ -78,6 +86,7 @@ def get_list_from_csv(
     # ability to reload this script for us when the resource changes
     with resource.open(str(path), "r") as f:
         return read_csv_list(f, headers)
+
 
 def append_to_csv(filename: str, rows: dict[str, str]):
     path = SETTINGS_DIR / filename
