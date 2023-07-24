@@ -54,11 +54,8 @@ def on_update_decls(decls):
         "modes",
     ]:
         l = getattr(decls, thing)
-        ctx_talon_lists.lists[
-            f"user.talon_{thing}"
-        ] = actions.user.create_spoken_forms_from_list(
-            l.keys(), generate_subsequences=False
-        )
+        values = actions.user.create_spoken_forms_from_list(l.keys(), generate_subsequences=False)
+        ctx_talon_lists.lists[f"user.talon_{thing}"] = values
         # print(
         #     "List: {} \n {}".format(thing, str(ctx_talon_lists.lists[f"user.talon_{thing}"]))
         # )
