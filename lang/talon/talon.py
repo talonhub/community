@@ -10,7 +10,7 @@ ctx_talon_lists = Context()
 # is active to prevent them from being active in contexts where they are not wanted.
 # Do not enable this tag with dragon, as it will be unusable.
 # with conformer, the latency increase may also be unacceptable depending on your cpu
-# see https://github.com/knausj85/knausj_talon/issues/600
+# see https://github.com/talonhub/community/issues/600
 ctx_talon_lists.matches = r"""
 tag: user.talon_populate_lists
 """
@@ -76,7 +76,7 @@ app.register("ready", on_ready)
 @mod.action_class
 class Actions:
     def talon_code_insert_function(text: str, selection: str, prepend_actions: bool):
-        """inserts talent specific action with either user prepended or not"""
+        """inserts talon-specific action call; prepend_actions will prepend 'actions' namespace for python (e.g. actions.insert('test'))"""
         text += f"({selection or ''})"
         if prepend_actions:
             text = "actions." + text

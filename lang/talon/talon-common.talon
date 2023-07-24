@@ -17,11 +17,5 @@ setting {user.talon_settings}: user.paste("{talon_settings} = ")
 key <user.keys> over: "{keys}"
 key <user.modifiers> over: "{modifiers}"
 
-# all actions (requires uncommenting user.talon_populate_lists tag above)
-
-funk cell <number>: user.talon_code_insert_function(number - 1, "")
-funk wrap <user.code_common_function>:
-    user.code_insert_function(code_common_function, edit.selected_text(), False)
-funk wrap <number>: user.talon_code_insert_function(number - 1, edit.selected_text(), False)
 
 
