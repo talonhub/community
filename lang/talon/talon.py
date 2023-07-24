@@ -76,7 +76,7 @@ app.register("ready", on_ready)
 @mod.action_class
 class Actions:
     def talon_code_insert_function(text: str, selection: str, prepend_actions: bool):
-        """inserts talent specific action with either user prepended or not"""
+        """inserts talon-specific action call; prepend_actions will prepend 'actions' namespace for python (e.g. actions.insert('test'))"""
         text += f"({selection or ''})"
         if prepend_actions:
             text = "actions." + text
