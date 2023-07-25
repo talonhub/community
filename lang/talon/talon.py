@@ -110,7 +110,7 @@ class TalonPythonActions:
         text = f"actions.{text}({selection or ''})"
         actions.user.paste(text)
         actions.edit.left()
-    
+
     def talon_code_assert_tag(tag: str):
         """enables tag in either python or talon files"""
         actions.user.paste(f'ctx.tags = ["{tag}"]')
