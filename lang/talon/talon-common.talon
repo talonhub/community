@@ -12,7 +12,6 @@ list {user.talon_lists}: "{{{talon_lists}}}"
 # requires user.talon_populate_lists tag. do not use with dragon
 capture {user.talon_captures}: "<{talon_captures}>"
 
-setting block: insert("settings():\n\t")
 setting {user.talon_settings}: user.talon_code_assert_setting(talon_settings)
 
 #commands for dictating key combos

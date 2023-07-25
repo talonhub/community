@@ -11,4 +11,4 @@ tag(): user.code_functions_common
 # tag(): user.talon_populate_lists
 
 #defintion blocks for the context
- 
+setting block: insert("settings():\n\t")
