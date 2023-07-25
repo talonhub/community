@@ -103,6 +103,7 @@ class TalonActions:
         """asserts setting in either python or talon files"""
         actions.user.paste(f"{setting} = ")
 
+
 @ctx_talon_python.action_class("user")
 class TalonPythonActions:
     def talon_code_insert_function(text: str, selection: str):
