@@ -43,6 +43,7 @@ ctx_talon_python.matches = r"""
 tag: user.talon_python
 """
 
+
 def on_update_decls(decls):
     # todo modes?
     for thing in [
@@ -79,12 +80,13 @@ app.register("ready", on_ready)
 class Actions:
     def talon_code_insert_function(text: str, selection: str):
         """inserts talon-specific action call"""
-    
+
     def talon_code_assert_tag(tag: str):
         """enables tag in either python or talon files"""
 
     def talon_code_assert_setting(setting: str):
         """asserts setting in either python or talon files"""
+
 
 @ctx_talon.action_class("user")
 class TalonActions:
@@ -92,7 +94,7 @@ class TalonActions:
         text += f"({selection or ''})"
         actions.user.paste(text)
         actions.edit.left()
-    
+
     def talon_code_assert_tag(tag: str):
         """enables tag in either python or talon files"""
         actions.user.paste(f"tag(): {tag}")
@@ -100,6 +102,7 @@ class TalonActions:
     def talon_code_assert_setting(setting: str):
         """asserts setting in either python or talon files"""
         actions.user.paste(f"{setting} = ")
+
 
 @ctx_talon_python.action_class("user")
 class TalonPythonActions:
@@ -115,6 +118,7 @@ class TalonPythonActions:
     def talon_code_assert_setting(setting: str):
         """asserts setting in either python or talon files"""
         actions.user.paste(f'ctx.settings["{setting}"] = ')
+
 
 @ctx_talon.action_class("user")
 class UserActions:
