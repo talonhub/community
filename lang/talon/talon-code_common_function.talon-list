@@ -1,6 +1,5 @@
 list: user.code_common_function
 tag: user.talon
-tag: user.talon_python
 -
 insert: insert
 key: key

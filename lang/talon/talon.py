@@ -1,9 +1,8 @@
 from talon import Context, Module, actions, app, registry
 
 mod = Module()
-ctx = Context()
-
-
+ctx_talon = Context()
+ctx_talon_python = Context()
 ctx_talon_lists = Context()
 
 # restrict all the talon_* lists to when the user.talon_populate_lists tag
@@ -30,16 +29,19 @@ mod.list("talon_settings")
 mod.list("talon_scopes")
 mod.list("talon_modes")
 
-ctx.matches = r"""
+ctx_talon.matches = r"""
 tag: user.talon
 """
-ctx.lists["user.code_common_function"] = {
+ctx_talon.lists["user.code_common_function"] = {
     "insert": "insert",
     "key": "key",
     "print": "print",
     "repeat": "repeat",
 }
 
+ctx_talon_python.matches = r"""
+tag: user.talon_python
+"""
 
 def on_update_decls(decls):
     # todo modes?
@@ -75,16 +77,47 @@ app.register("ready", on_ready)
 
 @mod.action_class
 class Actions:
-    def talon_code_insert_function(text: str, selection: str, prepend_actions: bool):
-        """inserts talon-specific action call; prepend_actions will prepend 'actions' namespace for python (e.g. actions.insert('test'))"""
+    def talon_code_insert_function(text: str, selection: str):
+        """inserts talon-specific action call"""
+    
+    def talon_code_assert_tag(tag: str):
+        """enables tag in either python or talon files"""
+
+    def talon_code_assert_setting(setting: str):
+        """asserts setting in either python or talon files"""
+
+@ctx_talon.action_class("user")
+class TalonActions:
+    def talon_code_insert_function(text: str, selection: str):
         text += f"({selection or ''})"
-        if prepend_actions:
-            text = "actions." + text
         actions.user.paste(text)
         actions.edit.left()
+    
+    def talon_code_assert_tag(tag: str):
+        """enables tag in either python or talon files"""
+        actions.user.paste(f"tag(): {tag}")
 
+    def talon_code_assert_setting(setting: str):
+        """asserts setting in either python or talon files"""
+        actions.user.paste("{talon_settings} = ")
 
-@ctx.action_class("user")
+@ctx_talon_python.action_class("user")
+class TalonPythonActions:
+    def talon_code_insert_function(text: str, selection: str):
+        text = f"actions.{text}({selection or ''})"
+        actions.user.paste(text)
+        actions.edit.left()
+    
+    #todo
+    # def talon_code_assert_tag(tag: str):
+    #     """enables tag in either python or talon files"""
+    #     actions.user.paste("ctx.tags : {tag}")
+
+    # def talon_code_assert_setting(setting: str):
+    #     """asserts setting in either python or talon files"""
+    #     actions.user.paste("{talon_settings} = ")
+
+@ctx_talon.action_class("user")
 class UserActions:
     def code_operator_and():
         actions.auto_insert(" and ")
