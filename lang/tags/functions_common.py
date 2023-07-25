@@ -59,6 +59,7 @@ def update_function_list_and_freeze():
     gui_functions.show()
     ctx.tags = ["user.code_functions_common_gui_active"]
 
+
 @imgui.open()
 def gui_functions(gui: imgui.GUI):
     gui.text("Functions")
