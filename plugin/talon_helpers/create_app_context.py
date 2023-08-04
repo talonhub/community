@@ -17,9 +17,8 @@ class Actions:
         active_app = ui.active_app()
         app_name = get_app_name(active_app.name)
         app_dir = APPS_DIR / app_name
-        filename = get_filename(app_name)
         talon_file = app_dir / f"{app_name}.talon"
-        python_file = app_dir / f"{filename}.py"
+        python_file = app_dir / f"{get_platform_filename(app_name)}.py"
 
         talon_context = get_talon_context(app_name)
         python_context = get_python_context(active_app, app_name)
@@ -63,7 +62,7 @@ def get_talon_context(app_name: str) -> str:
 """
 
 
-def get_filename(app_name: str) -> str:
+def get_platform_filename(app_name: str) -> str:
     platform = app.platform if app.platform != "windows" else "win"
     return f"{app_name}_{platform}"
 
