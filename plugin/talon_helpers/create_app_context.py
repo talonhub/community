@@ -17,22 +17,18 @@ class Actions:
         active_app = ui.active_app()
         app_name = create_name(active_app.name)
         app_dir = APPS_DIR / app_name
-        talon_file = app_dir / f"{app_name}.talon"
-        python_file = app_dir / f"{app_name}.py"
-
-        if app_dir.is_dir():
-            raise OSError(f"Application directory '{app_name}' already exists")
+        filename = get_filename(app_name)
+        talon_file = app_dir / f"{filename}.talon"
+        python_file = app_dir / f"{filename}.py"
 
         talon_context = get_talon_context(app_name)
         python_context = get_python_context(active_app, app_name)
 
-        os.mkdir(app_dir)
+        if not app_dir.is_dir():
+            os.mkdir(app_dir)
 
-        with open(talon_file, "w", encoding="utf-8") as file:
-            file.write(talon_context)
-
-        with open(python_file, "w", encoding="utf-8") as file:
-            file.write(python_context)
+        create_file(talon_file, talon_context)
+        create_file(python_file, python_context)
 
 
 def get_python_context(active_app: ui.App, app_name: str) -> str:
@@ -67,6 +63,11 @@ def get_talon_context(app_name: str) -> str:
 """
 
 
+def get_filename(app_name: str) -> str:
+    platform = app.platform if app.platform != "windows" else "win"
+    return f"{app_name}_{platform}"
+
+
 def get_app_context(active_app: ui.App) -> str:
     if app.platform == "mac":
         return f"app.bundle: {active_app.bundle}"
@@ -80,3 +81,12 @@ def create_name(text: str, max_len=20) -> str:
     return "_".join(
         list(islice(pattern.findall(text.replace(".exe", "")), max_len))
     ).lower()
+
+
+def create_file(path: Path, content: str):
+    if path.is_file():
+        print(f"Application context file '{path}' already exists")
+        return 
+
+    with open(path, "w", encoding="utf-8") as file:
+        file.write(content)
