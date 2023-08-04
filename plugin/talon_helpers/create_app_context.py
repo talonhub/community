@@ -86,7 +86,7 @@ def create_name(text: str, max_len=20) -> str:
 def create_file(path: Path, content: str):
     if path.is_file():
         print(f"Application context file '{path}' already exists")
-        return 
+        return
 
     with open(path, "w", encoding="utf-8") as file:
         file.write(content)
