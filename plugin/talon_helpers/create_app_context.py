@@ -15,7 +15,7 @@ class Actions:
     def talon_create_app_context():
         """Create a new python context file for the current application"""
         active_app = ui.active_app()
-        app_name = create_name(active_app.name)
+        app_name = get_app_name(active_app.name)
         app_dir = APPS_DIR / app_name
         filename = get_filename(app_name)
         talon_file = app_dir / f"{filename}.talon"
@@ -76,7 +76,7 @@ def get_app_context(active_app: ui.App) -> str:
     return f"app.name: {active_app.name}"
 
 
-def create_name(text: str, max_len=20) -> str:
+def get_app_name(text: str, max_len=20) -> str:
     pattern = re.compile(r"[A-Z][a-z]*|[a-z]+|\d")
     return "_".join(
         list(islice(pattern.findall(text.replace(".exe", "")), max_len))
