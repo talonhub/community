@@ -18,7 +18,7 @@ class Actions:
         app_name = get_app_name(active_app.name)
         app_dir = APPS_DIR / app_name
         filename = get_filename(app_name)
-        talon_file = app_dir / f"{filename}.talon"
+        talon_file = app_dir / f"{app_name}.talon"
         python_file = app_dir / f"{filename}.py"
 
         talon_context = get_talon_context(app_name)
