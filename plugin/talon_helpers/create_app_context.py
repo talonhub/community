@@ -1,7 +1,9 @@
-from talon import Module, app, actions, ui
-from pathlib import Path
+import os
+import re
 from itertools import islice
-import os, re
+from pathlib import Path
+
+from talon import Module, actions, app, ui
 
 APPS_DIR = Path(__file__).parent.parent.parent / "apps"
 
@@ -59,13 +61,10 @@ app: {app_name}
 
 
 def get_talon_context(app_name: str) -> str:
-    return """\
-app: {app_name}
+    return f"""app: {app_name}
 -
 
-""".format(
-        app_name=app_name,
-    )
+"""
 
 
 def get_app_context(active_app: ui.App) -> str:
