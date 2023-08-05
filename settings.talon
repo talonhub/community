@@ -34,7 +34,7 @@ settings():
 
     # The amount to scroll up/down (equivalent to mouse wheel on Windows by default)
     user.mouse_wheel_down_amount = 120
-
+-
     # The amount to scroll left/right
     user.mouse_wheel_horizontal_amount = 40
 
@@ -65,4 +65,5 @@ settings():
     # -width windows are resized to stay full-height/width.
     #user.window_snap_screen = "size aware"
 
-# Uncomment this to enable the curse yes/curse no commands (show hide mouse cursor). See issue #688.# tag(): user.mouse_cursor_commands_enable
+# Uncomment this to enable the curse yes/curse no commands (show hide mouse cursor). See issue #688.
+# tag(): user.mouse_cursor_commands_enable
