@@ -62,7 +62,7 @@ setting_mouse_enable_hiss_scroll = mod.setting(
     "mouse_enable_hiss_scroll",
     type=bool,
     default=False,
-    desc="Hiss noise scrolls down when enabled"
+    desc="Hiss noise scrolls down when enabled",
 )
 setting_mouse_wake_hides_cursor = mod.setting(
     "mouse_wake_hides_cursor",
@@ -258,7 +258,9 @@ def show_cursor_helper(show):
 @ctx.action_class("user")
 class UserActions:
     def noise_trigger_pop():
-        if setting_mouse_enable_pop_stops_scroll.get() >= 1 and (gaze_job or scroll_job):
+        if setting_mouse_enable_pop_stops_scroll.get() >= 1 and (
+            gaze_job or scroll_job
+        ):
             # Allow pop to stop scroll
             stop_scroll()
         else:

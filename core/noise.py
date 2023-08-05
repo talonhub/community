@@ -2,7 +2,7 @@
 Map noises (like pop) to actions so they can have contextually differing behavior
 """
 
-from talon import Module, actions, noise, cron
+from talon import Module, actions, cron, noise
 
 mod = Module()
 hiss_cron = None
