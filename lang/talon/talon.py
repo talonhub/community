@@ -32,16 +32,11 @@ mod.list("talon_modes")
 ctx_talon.matches = r"""
 tag: user.talon
 """
-ctx_talon.lists["user.code_common_function"] = {
-    "insert": "insert",
-    "key": "key",
-    "print": "print",
-    "repeat": "repeat",
-}
 
 ctx_talon_python.matches = r"""
 tag: user.talon_python
 """
+
 
 def on_update_decls(decls):
     # todo modes?
@@ -79,12 +74,13 @@ app.register("ready", on_ready)
 class Actions:
     def talon_code_insert_function(text: str, selection: str):
         """inserts talon-specific action call"""
-    
-    def talon_code_assert_tag(tag: str):
+
+    def talon_code_enable_tag(tag: str):
         """enables tag in either python or talon files"""
 
-    def talon_code_assert_setting(setting: str):
+    def talon_code_enable_setting(setting: str):
         """asserts setting in either python or talon files"""
+
 
 @ctx_talon.action_class("user")
 class TalonActions:
@@ -92,14 +88,15 @@ class TalonActions:
         text += f"({selection or ''})"
         actions.user.paste(text)
         actions.edit.left()
-    
-    def talon_code_assert_tag(tag: str):
+
+    def talon_code_enable_tag(tag: str):
         """enables tag in either python or talon files"""
         actions.user.paste(f"tag(): {tag}")
 
-    def talon_code_assert_setting(setting: str):
+    def talon_code_enable_setting(setting: str):
         """asserts setting in either python or talon files"""
         actions.user.paste(f"{setting} = ")
+
 
 @ctx_talon_python.action_class("user")
 class TalonPythonActions:
@@ -107,15 +104,15 @@ class TalonPythonActions:
         text = f"actions.{text}({selection or ''})"
         actions.user.paste(text)
         actions.edit.left()
-    
-    def talon_code_assert_tag(tag: str):
+
+    def talon_code_enable_tag(tag: str):
         """enables tag in either python or talon files"""
         actions.user.paste(f'ctx.tags = ["{tag}"]')
         if not tag:
             actions.edit.left()
             actions.edit.left()
 
-    def talon_code_assert_setting(setting: str):
+    def talon_code_enable_setting(setting: str):
         """asserts setting in either python or talon files"""
         actions.user.paste(f'ctx.settings["{setting}"] = ')
         if not setting:
