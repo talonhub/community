@@ -26,8 +26,11 @@ class Actions:
         if not app_dir.is_dir():
             os.mkdir(app_dir)
 
-        create_file(talon_file, talon_context)
-        create_file(python_file, python_context)
+        talon_file_created = create_file(talon_file, talon_context)
+        python_file_created = create_file(python_file, python_context)
+
+        if talon_file_created or python_file_created:
+            actions.user.file_manager_open_directory(str(app_dir))
 
 
 def get_python_context(active_app: ui.App, app_name: str) -> str:
@@ -43,6 +46,7 @@ and {app_context}
 """
 
 ctx.matches = r"""
+os: {os}
 app: {app_name}
 """
 
@@ -63,8 +67,9 @@ def get_talon_context(app_name: str) -> str:
 
 
 def get_platform_filename(app_name: str) -> str:
-    platform = app.platform if app.platform != "windows" else "win"
-    return f"{app_name}_{platform}"
+    if app.platform == "mac":
+        return f"{app_name}_{app.platform}"
+    return app_name
 
 
 def get_app_context(active_app: ui.App) -> str:
@@ -82,10 +87,12 @@ def get_app_name(text: str, max_len=20) -> str:
     ).lower()
 
 
-def create_file(path: Path, content: str):
+def create_file(path: Path, content: str) -> bool:
     if path.is_file():
-        print(f"Application context file '{path}' already exists")
-        return
+        actions.app.notify(f"Application context file '{path}' already exists")
+        return False
 
     with open(path, "w", encoding="utf-8") as file:
         file.write(content)
+
+    return True
