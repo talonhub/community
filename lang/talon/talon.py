@@ -81,10 +81,10 @@ class Actions:
     def talon_code_insert_function(text: str, selection: str):
         """inserts talon-specific action call"""
 
-    def talon_code_assert_tag(tag: str):
+    def talon_code_enable_tag(tag: str):
         """enables tag in either python or talon files"""
 
-    def talon_code_assert_setting(setting: str):
+    def talon_code_enable_setting(setting: str):
         """asserts setting in either python or talon files"""
 
 
@@ -95,11 +95,11 @@ class TalonActions:
         actions.user.paste(text)
         actions.edit.left()
 
-    def talon_code_assert_tag(tag: str):
+    def talon_code_enable_tag(tag: str):
         """enables tag in either python or talon files"""
         actions.user.paste(f"tag(): {tag}")
 
-    def talon_code_assert_setting(setting: str):
+    def talon_code_enable_setting(setting: str):
         """asserts setting in either python or talon files"""
         actions.user.paste(f"{setting} = ")
 
@@ -111,14 +111,14 @@ class TalonPythonActions:
         actions.user.paste(text)
         actions.edit.left()
 
-    def talon_code_assert_tag(tag: str):
+    def talon_code_enable_tag(tag: str):
         """enables tag in either python or talon files"""
         actions.user.paste(f'ctx.tags = ["{tag}"]')
         if not tag:
             actions.edit.left()
             actions.edit.left()
 
-    def talon_code_assert_setting(setting: str):
+    def talon_code_enable_setting(setting: str):
         """asserts setting in either python or talon files"""
         actions.user.paste(f'ctx.settings["{setting}"] = ')
         if not setting:
