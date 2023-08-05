@@ -1,3 +1,4 @@
+-
 settings():
     # Adjust the scale of the imgui to my liking
     imgui.scale = 1.3
