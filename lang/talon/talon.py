@@ -32,12 +32,6 @@ mod.list("talon_modes")
 ctx_talon.matches = r"""
 tag: user.talon
 """
-ctx_talon.lists["user.code_common_function"] = {
-    "insert": "insert",
-    "key": "key",
-    "print": "print",
-    "repeat": "repeat",
-}
 
 ctx_talon_python.matches = r"""
 tag: user.talon_python
