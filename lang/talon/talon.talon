@@ -7,7 +7,7 @@ tag(): user.code_functions_common
 # uncomment user.talon_populate_lists tag to activate talon-specific lists of actions, scopes, modes etcetera.
 # Do not enable this tag with dragon, as it will be unusable.
 # with conformer, the latency increase may also be unacceptable depending on your cpu
-# see https://github.com/knausj85/knausj_talon/issues/600
+# see https://github.com/talonhub/community/issues/600
 # tag(): user.talon_populate_lists
 
 dot talon: insert(".talon")
@@ -32,6 +32,9 @@ tag require [{user.talon_tags}]:
 tag set [{user.talon_tags}]:
     tag = talon_tags or ""
     user.paste("tag(): {tag}")
+host require:
+    hostname = user.talon_get_hostname()
+    user.paste("hostname: {hostname}\n")
 # requires user.talon_populate_lists tag. do not use with dragon
 list {user.talon_lists}: "{{{talon_lists}}}"
 # requires user.talon_populate_lists tag. do not use with dragon

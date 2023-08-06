@@ -26,16 +26,19 @@ class Actions:
     def screenshot(screen_number: Optional[int] = None):
         """Takes a screenshot of the entire screen and saves it to the pictures folder.
         Optional screen number can be given to use screen other than main."""
-        screen = get_screen(screen_number)
-        screenshot_rect(screen.rect)
+        selected_screen = get_screen(screen_number)
+        actions.user.screenshot_rect(selected_screen.rect)
 
     def screenshot_window():
         """Takes a screenshot of the active window and saves it to the pictures folder"""
         win = ui.active_window()
-        screenshot_rect(win.rect, win.app.name)
+        actions.user.screenshot_rect(win.rect, title=win.app.name)
 
     def screenshot_selection():
         """Triggers an application that is capable of taking a screenshot of a portion of the screen"""
+
+    def screenshot_selection_clip():
+        """Triggers an application that is capable of taking a screenshot of a portion of the screen and adding to clipboard"""
 
     def screenshot_settings():
         """Opens the settings UI for screenshots.
@@ -49,20 +52,23 @@ class Actions:
     def screenshot_clipboard(screen_number: Optional[int] = None):
         """Takes a screenshot of the entire screen and saves it to the clipboard.
         Optional screen number can be given to use screen other than main."""
-        screen = get_screen(screen_number)
-        clipboard_rect(screen.rect)
+        selected_screen = get_screen(screen_number)
+        clipboard_rect(selected_screen.rect)
 
     def screenshot_window_clipboard():
         """Takes a screenshot of the active window and saves it to the clipboard"""
         win = ui.active_window()
         clipboard_rect(win.rect)
 
-
-def screenshot_rect(rect: ui.Rect, title: str = ""):
-    flash_rect(rect)
-    img = screen.capture_rect(rect)
-    path = get_screenshot_path(title)
-    img.write_file(path)
+    def screenshot_rect(
+        rect: ui.Rect, title: str = "", screen_num: Optional[int] = None
+    ):
+        """Allow other modules this screenshot a rectangle"""
+        selected_screen = get_screen(screen_num)
+        flash_rect(rect)
+        img = screen.capture_rect(rect)
+        path = get_screenshot_path(title)
+        img.write_file(path)
 
 
 def clipboard_rect(rect: ui.Rect):
@@ -110,6 +116,9 @@ class UserActionsMac:
     def screenshot_selection():
         actions.key("cmd-shift-4")
 
+    def screenshot_selection_clip():
+        actions.key("cmd-ctrl-shift-4")
+
 
 ctx_win = Context()
 ctx_win.matches = r"""
@@ -120,6 +129,9 @@ os: windows
 @ctx_win.action_class("user")
 class UserActionsWin:
     def screenshot_selection():
+        actions.key("super-shift-s")
+
+    def screenshot_selection_clip():
         actions.key("super-shift-s")
 
 

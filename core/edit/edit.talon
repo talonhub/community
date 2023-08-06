@@ -2,7 +2,6 @@
 ## Clipboard ##
 cut that: edit.cut()
 copy that: edit.copy()
-(paste that | spark [that]): edit.paste()
 grab that:
     mouse_click()
     mouse_click()
@@ -11,6 +10,14 @@ drop that:
     mouse_click()
     mouse_click()
     edit.paste()
+(paste that | spark [that]): edit.paste()
+paste match: edit.paste_match_style()
+(spark | paste) all: user.paste_all()
+(spark | paste) line: user.paste_line()
+(spark | paste) line start: user.paste_line_start()
+(spark | paste) line end: user.paste_line_end()
+(spark | paste) word: user.paste_word()
+
 ## Search ##
 find that: edit.find()
 find next: edit.find_next()
@@ -69,6 +76,25 @@ take word: edit.select_word()
 take lord: edit.extend_word_left()
 take role: edit.extend_word_right()
 
-# duplication
+# Duplication
 clone that: edit.selection_clone()
 clone line: edit.line_clone()
+
+# Insert new line
+new line above: edit.line_insert_up()
+new line below | slap: edit.line_insert_down()
+
+# Insert padding with optional symbols
+(pad | padding): user.insert_between(" ", " ")
+(pad | padding) <user.symbol_key>+:
+    insert(" ")
+    user.insert_many(symbol_key_list)
+    insert(" ")
+
+# Undo/redo
+undo that: edit.undo()
+redo that: edit.redo()
+
+# Save
+file save: edit.save()
+file save all: edit.save_all()
