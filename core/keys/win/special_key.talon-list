@@ -16,5 +16,6 @@ home:home
 end key:end
 menu key:menu
 print screen: printscr
+minus:minus
 
 
