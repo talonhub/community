@@ -7,6 +7,9 @@ tag(): user.multiple_cursors
 tag(): user.snippets
 tag(): user.splits
 tag(): user.tabs
+shave <user.cursorless_target>:
+    user.cursorless_command("setSelectionBefore", cursorless_target)
+    key("backspace")
 cross: user.split_next()
 window reload: user.vscode("workbench.action.reloadWindow")
 window close: usedter.vscode("workbench.action.closeWindow")
@@ -287,7 +290,8 @@ select (more | this): user.vscode("editor.action.smartSelect.expand")
 minimap: user.vscode("editor.action.toggleMinimap")
 maximize: user.vscode("workbench.action.minimizeOtherEditors")
 restore: user.vscode("workbench.action.evenEditorWidths")
-
+[go] tab {self.letter} [{self.letter}]:
+    user.run_rpc_command("andreas.focusTab", "{letter_1}{letter_2 or ''}")
 #breadcrumb
 select breadcrumb: user.vscode("breadcrumbs.focusAndSelect")
 # Use `alt-left` and `alt-right` to navigate the bread crumb

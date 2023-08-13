@@ -24,5 +24,5 @@ class Actions:
         actions.skip()
 
 
-noise.register("pop", lambda _: actions.user.noise_trigger_pop())
+# noise.register("pop", lambda _: actions.user.noise_trigger_pop())
 noise.register("hiss", lambda _: actions.user.noise_trigger_hiss())
