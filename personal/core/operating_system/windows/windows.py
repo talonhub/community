@@ -83,10 +83,7 @@ class UserActionsWin:
         actions.user.system_command_nb(command)
 
     def system_setting(system_setting: str):
-        actions.key("super-r")
-        actions.sleep("500ms")
-        actions.insert(system_setting)
-        actions.key("enter")
+        actions.user.exec(f'{system_setting}')
 
     def system_shutdown():
         shutdown("s")
