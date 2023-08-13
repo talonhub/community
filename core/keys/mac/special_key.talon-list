@@ -4,7 +4,7 @@ os: mac
 pagedown: pagedown
 pageup: pageup
 tab: tab
-puff:enter
+okay:enter
 drill:delete
 wipe:backspace
 scrape:escape
