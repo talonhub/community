@@ -29,6 +29,13 @@ drink [<number_small>]:
 	numb  = number_small or 1
 	edit.line_insert_up()
 	repeat(numb - 1)
-
+wipe <number_small>: 
+	numb  = number_small or 1
+	edit.delete()
+	repeat(numb - 1)
+drill <number_small>: 
+	numb  = number_small or 1
+	key(delete)
+	repeat(numb - 1)
 
 
