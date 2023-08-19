@@ -12,13 +12,13 @@ mod = Module()
 
 @mod.action_class
 class Actions:
-    def talon_create_app_context():
+    def talon_create_app_context(platform_suffix: str = None):
         """Create a new python context file for the current application"""
         active_app = ui.active_app()
         app_name = get_app_name(active_app.name)
         app_dir = APPS_DIR / app_name
         talon_file = app_dir / f"{app_name}.talon"
-        python_file = app_dir / f"{get_platform_filename(app_name)}.py"
+        python_file = app_dir / f"{get_platform_filename(app_name, platform_suffix)}.py"
 
         talon_context = get_talon_context(app_name)
         python_context = get_python_context(active_app, app_name)
@@ -66,9 +66,9 @@ def get_talon_context(app_name: str) -> str:
 """
 
 
-def get_platform_filename(app_name: str) -> str:
-    if app.platform == "mac":
-        return f"{app_name}_{app.platform}"
+def get_platform_filename(app_name: str, platform_suffix: str = None) -> str:
+    if platform_suffix:
+        return f"{app_name}_{platform_suffix}"
     return app_name
 
 
