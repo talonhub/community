@@ -8,13 +8,13 @@ mac require: insert("os: mac\n")
 linux require: insert("os: linux\n")
 title require: insert("win.title: ")
 application [require] [{user.talon_apps}]:
-    app = talon_apps or ""
+    app = "{talon_apps}\n" or ""
     insert("app: {app}")
 mode require [{user.talon_modes}]:
-    mode = talon_modes or ""
+    mode = "{talon_modes}\n" or ""
     insert("mode: {mode}")
 tag require [{user.talon_tags}]:
-    tag = talon_tags or ""
+    tag = "{talon_tags}\n" or ""
     insert("tag: {tag}")
 host require:
     hostname = user.talon_get_hostname()
