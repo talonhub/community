@@ -62,7 +62,7 @@ Note that it is also possible to install `community` by [downloading and extract
 4. `help alphabet` will display the alphabet
 5. `command history` will toggle a display of the recent commands
 6. `help format` will display the available formatters with examples.
-7. Many useful, basic commands are defined in https://github.com/talonhub/community/blob/main/core/edit/standard.talon
+7. Many useful, basic commands are defined in https://github.com/talonhub/community/blob/main/core/edit/edit.talon
    - `undo that` and `redo that` are the default undo/redo commands.
    - `paste that`, `copy that`, and `cut that` for pasting/copy/cutting, respectively.
 8. For community-generated documentation on Talon itself, please visit https://talon.wiki/
