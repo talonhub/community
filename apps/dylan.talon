@@ -300,6 +300,13 @@ zoomer: user.mouse_trigger_zoom_mouse()
 # Raycast AI
 raz: key("alt-g")
 
+# Grab screenshot area with drag ready
+shot:
+  key("cmd-shift-4")
+  mouse_click()
+  sleep(200ms)
+  mouse_drag(0)
+  mouse_drag(0)
 
 beep:
   mouse_click()
