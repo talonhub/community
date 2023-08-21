@@ -8,7 +8,8 @@ run calibration: user.mouse_calibrate()
 # New Control Toggles
 
 # control mouse: tracking.control_toggle()
-# zoom mouse: tracking.control_zoom_toggle()
+# control off: user.mouse_sleep()
+zoom mouse: tracking.control_zoom_toggle()
 # camera overlay: tracking.control_debug_toggle()
 # run calibration: tracking.calibrate()
 # All commands you can call for tracking

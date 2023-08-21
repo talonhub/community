@@ -50,6 +50,9 @@ _file_extensions_defaults = {
     "dot g zip": ".gzip",
     "dot zip": ".zip",
     "dot toml": ".toml",
+    "dot java": ".java",
+    "dot class": ".class",
+    "dot log": ".log",
 }
 
 file_extensions = get_list_from_csv(
