@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 hissing mode: user.toggle_hiss_click()
 
 (control | see) mouse: user.mouse_toggle_control_mouse()
@@ -12,7 +11,6 @@ run calibration: user.mouse_calibrate()
 # zoom mouse: tracking.control_zoom_toggle()
 # camera overlay: tracking.control_debug_toggle()
 # run calibration: tracking.calibrate()
-=======
 # All commands you can call for tracking
 # ---------------------------------------------
 # tracking.calibrate
@@ -40,7 +38,6 @@ run calibration: tracking.calibrate()
 zoom mouse: tracking.control_zoom_toggle()
 cancel zoom mouse: tracking.zoom_cancel()
 #control mouse: tracking.control_toggle()
->>>>>>> master
 
 touch:
     mouse_click(0)

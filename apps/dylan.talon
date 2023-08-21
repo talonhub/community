@@ -101,7 +101,7 @@ outs: user.mouse_scroll_stop()
 # Vimium
 #link: key("f")
 #link new: key("shift-f")
-#link copy: key("yf")
+#link copy: key("yf") 
 
 # Vimac
 get: key("ctrl-f")
@@ -231,6 +231,13 @@ alt:
 drop [<number>]:
     key("enter")
     repeat(number - 1)
+
+
+# Paste then enter
+plot:
+  key("cmd-v")
+  sleep(200ms)
+  key("enter")
 
 # Delete key
 dellz [<number>]:

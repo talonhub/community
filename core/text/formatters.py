@@ -144,6 +144,7 @@ formatters_words = {
     "dunder": formatters_dict["DOUBLE_UNDERSCORE"],
     "hammer": formatters_dict["PUBLIC_CAMEL_CASE"],
     "kebab": formatters_dict["DASH_SEPARATED"],
+    "kobb": formatters_dict["DASH_SEPARATED"],
     "packed": formatters_dict["DOUBLE_COLON_SEPARATED"],
     "padded": formatters_dict["SPACE_SURROUNDED_STRING"],
     "slasher": formatters_dict["SLASH_SEPARATED"],
@@ -151,6 +152,7 @@ formatters_words = {
     "snake": formatters_dict["SNAKE_CASE"],
     "string": formatters_dict["SINGLE_QUOTED_STRING"],
     "title": formatters_dict["CAPITALIZE_ALL_WORDS"],
+    
 }
 
 all_formatters = {}
