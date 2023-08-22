@@ -40,7 +40,11 @@ spring:
 spring <number_small>:
     edit.word_right()
     repeat(number_small-1)
-
+draw:
+    edit.word_left()
+draw <number_small>:
+    edit.word_right()
+    repeat(number_small-1)
 go left: edit.left()
 go left <number_small>: 
     edit.left()
