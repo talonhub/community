@@ -12,7 +12,7 @@ tag(): user.readline
 
 ^last speck:
   key(cmd-l)
-  "rspec"
+  "spec"
   key(ctrl-r)
 
 # ^last <phrase>:
