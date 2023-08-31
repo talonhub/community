@@ -10,12 +10,30 @@ tag(): user.tabs
 tag(): user.git
 tag(): terminal
 
+log template:
+  "console.log(\"thing\", thing);"
+
+quick docks:
+  key(cmd-k)
+  key(cmd-i)
+
+arrow funk:
+    "() => {"
+    sleep(30ms)
+    key(enter)
+
+arrow short:
+    "() => "
+
 comment: key(cmd-/)
 
 toggle hats:
   user.vscode("workbench.action.showCommands")
   insert("Cursorless: Toggle Decorations")
   key(enter)
+
+doc string:
+  "/** "
 
 findy:
   key(cmd-f)
@@ -25,6 +43,22 @@ find all:
 
 node run (start | dev):
   "npm run dev"
+  key(enter)
+
+node run test:
+  "npm run test"
+  key(enter)
+
+node run build:
+  "npm run build"
+  key(enter)
+
+node run test watch:
+  "npm run test:watch"
+  key(enter)
+
+node install:
+  "npm i"
   key(enter)
 
 close:
@@ -345,7 +379,7 @@ test cancel: user.vscode("testing.cancelRun")
 
 # Debugging
 break point: user.vscode("editor.debug.action.toggleBreakpoint")
-step over: user.vscode("workbench.action.debug.stepOver")
+debug over: user.vscode("workbench.action.debug.stepOver")
 debug step into: user.vscode("workbench.action.debug.stepInto")
 debug step out [of]: user.vscode("workbench.action.debug.stepOut")
 debug start: user.vscode("workbench.action.debug.start")

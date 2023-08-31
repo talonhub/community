@@ -7,14 +7,20 @@ lorem long:
 lorem very long:
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
 
+note up:
+    key(cmd-ctrl-up)
+
+note down:
+    key(cmd-ctrl-down)
+
+note check:
+    key(shift-cmd-U)
+
 my email:
-  "alexrkoch@gmail.com"
+  "alex.koch@thesocialinst.com"
 
 my phone:
   "919-749-3667"
-
-my name:
-  "Alex Koch"
 
 my user name:
   "alexrkoch"
@@ -24,9 +30,6 @@ findy:
 
 shock:
   key(cmd-enter)
-
-you bun to:
-  "Ubuntu"
 
 slant:
   edit.line_end()
@@ -60,12 +63,12 @@ undo: edit.undo()
 
 redo: edit.redo()
 
-file save: edit.save() 
+file save: edit.save()
 
 tell sink:
 	edit.line_end()
 	insert(";")
-	key(enter) 
+	key(enter)
 
 stub sink:
 	edit.line_end()
@@ -74,7 +77,7 @@ stub sink:
 tell comma:
 	edit.line_end()
 	insert(",")
-	key(enter) 
+	key(enter)
 
 stub comma:
 	edit.line_end()

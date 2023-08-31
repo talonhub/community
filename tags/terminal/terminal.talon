@@ -15,6 +15,14 @@ rerun [<user.text>]: user.terminal_rerun_search(text or "")
 rerun search: user.terminal_rerun_search("")
 kill all: user.terminal_kill_all()
 
+node run (start | dev):
+  "npm run dev"
+  key(enter)
+
+node install:
+  "npm i"
+  key(enter)
+
 git status:
   "git status"
   key(enter)
@@ -75,7 +83,7 @@ git change email:
   "git config user.email "
 
 
-  
+
 
 copy paste:
 

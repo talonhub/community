@@ -2,7 +2,7 @@ control mouse: tracking.control_toggle()
 zoom mouse: tracking.control_zoom_toggle()
 camera overlay: tracking.control_debug_toggle()
 run calibration: tracking.calibrate()
-touch:
+(touch | cricket):
     mouse_click(0)
     # close the mouse grid if open
     user.grid_close()
@@ -83,11 +83,11 @@ wheel upper: user.mouse_scroll_up_continuous()
 wheel upper here:
     user.mouse_move_center_active_window()
     user.mouse_scroll_up_continuous()
-wheel gaze: user.mouse_gaze_scroll()
+(wheel gaze | scrolly): user.mouse_gaze_scroll()
 wheel gaze here:
     user.mouse_move_center_active_window()
     user.mouse_gaze_scroll()
-wheel stop: user.mouse_scroll_stop()
+(well stop | scroll stop): user.mouse_scroll_stop()
 
 drop: user.mouse_scroll_down()
 drop tiny: mouse_scroll(20)
