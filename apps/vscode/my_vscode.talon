@@ -59,3 +59,10 @@ mark toggle: user.vscode("bookmarks.toggle")
 (tab pin|pin toggle):
   key(cmd-k)
   key(shift-enter)
+
+# requires the extension: https://marketplace.visualstudio.com/items?itemName=testdouble.vscode-alternate-alternate-file
+pop sibling:
+  user.vscode("workbench.action.showCommands")
+  insert("alternate file")
+  sleep(100ms)
+  key(enter)
