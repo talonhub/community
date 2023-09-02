@@ -13,7 +13,7 @@ mod = Module()
 @mod.action_class
 class Actions:
     def talon_create_app_context(platform_suffix: str = None):
-        """Create a new python context file for the current application"""
+        """Create a new directory with talon and python context files for the current application"""
         active_app = ui.active_app()
         app_name = get_app_name(active_app.name)
         app_dir = APPS_DIR / app_name
