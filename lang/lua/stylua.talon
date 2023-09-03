@@ -1,4 +1,4 @@
-tag: user.stylua
+code.language: stylua
 -
 
 lint ignore: "-- stylua: ignore"
