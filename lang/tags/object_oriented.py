@@ -25,8 +25,5 @@ ctx.lists["self.code_operator_object_accessor"] = {
 
 @mod.action_class
 class Actions:
-    def code_operator_object_accessor():
-        """Inserts the object accessor operator (e.g., Java's "." or PHP's "->)"""
-
     def code_define_class():
         """Starts a class definition (e.g., Java's "class" keyword)"""
