@@ -272,9 +272,6 @@ class UserActions:
     def code_insert_return_type(type: str):
         actions.insert(f": {type}")
 
-    def code_operator_object_accessor():
-        actions.insert(".")
-
     def code_default_function(text: str):
         """Inserts function declaration"""
         actions.user.code_public_function(text)

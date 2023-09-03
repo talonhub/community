@@ -299,9 +299,6 @@ class UserActions:
 
     # tag: object_oriented
 
-    def code_operator_object_accessor():
-        actions.auto_insert(".")
-
     def code_define_class():
         actions.auto_insert("struct ")
 

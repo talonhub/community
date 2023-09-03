@@ -185,9 +185,6 @@ class UserActions:
     def code_operator_bitwise_right_shift_assignment():
         actions.insert(" >>= ")
 
-    def code_operator_object_accessor():
-        actions.insert(".")
-
     def code_insert_null():
         actions.insert("null")
 

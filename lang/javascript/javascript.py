@@ -95,9 +95,6 @@ class UserActions:
         actions.user.insert_between("{", "}")
         actions.key("enter")
 
-    def code_operator_object_accessor():
-        actions.auto_insert(".")
-
     def code_state_while():
         actions.user.insert_between("while (", ")")
 

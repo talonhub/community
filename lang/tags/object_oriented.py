@@ -1,5 +1,6 @@
-from talon import Module
+from talon import Context, Module
 
+ctx = Context()
 mod = Module()
 
 mod.tag(
@@ -11,6 +12,15 @@ mod.list(
     "code_self",
     desc="Reference to the current object (e.g. C++ `this` or Python `self`)",
 )
+
+mod.list(
+    "code_operator_object_accessor",
+    desc="An object accessor operator (e.g. Java `.` or PHP `->`)",
+)
+
+ctx.lists["self.code_operator_object_accessor"] = {
+    "dot": ".",
+}
 
 
 @mod.action_class
