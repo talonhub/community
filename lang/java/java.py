@@ -6,6 +6,8 @@ ctx.matches = r"""
 tag: user.java
 """
 
+ctx.lists["user.code_self"] = ["this"]
+
 # Primitive Types
 java_primitive_types = {
     "boolean": "boolean",
@@ -182,9 +184,6 @@ class UserActions:
 
     def code_operator_bitwise_right_shift_assignment():
         actions.insert(" >>= ")
-
-    def code_self():
-        actions.insert("this")
 
     def code_operator_object_accessor():
         actions.insert(".")

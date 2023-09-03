@@ -70,6 +70,8 @@ ctx.lists["user.code_keyword"] = {
     "yield": "yield ",
 }
 
+ctx.lists["user.code_self"] = ["this"]
+
 
 @ctx.action_class("user")
 class UserActions:
@@ -92,9 +94,6 @@ class UserActions:
     def code_block():
         actions.user.insert_between("{", "}")
         actions.key("enter")
-
-    def code_self():
-        actions.auto_insert("this")
 
     def code_operator_object_accessor():
         actions.auto_insert(".")

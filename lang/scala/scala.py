@@ -49,6 +49,8 @@ scala_types = scala_common_types.copy()
 scala_types.update(scala_common_generic_types)
 ctx.lists["user.code_type"] = scala_types
 
+ctx.lists["user.code_self"] = ["this"]
+
 # Scala Modifies
 scala_modifiers = {
     "public": "public",
@@ -184,9 +186,6 @@ class UserActions:
 
     def code_operator_bitwise_right_shift_assignment():
         actions.insert(" >>= ")
-
-    def code_self():
-        actions.insert("this")
 
     def code_insert_null():
         actions.insert("null")
