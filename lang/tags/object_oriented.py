@@ -1,6 +1,5 @@
-from talon import Context, Module
+from talon import Module
 
-ctx = Context()
 mod = Module()
 
 mod.tag(
