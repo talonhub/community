@@ -189,6 +189,11 @@ all_traits = {
     **iterator_traits,
 }
 
+# tag: data_null
+ctx.lists["user.code_data_null"] = {
+    "none": "None",
+    "null": "ptr::null()",
+}
 
 # tag: libraries_gui
 ctx.lists["user.code_libraries"] = {
@@ -225,7 +230,6 @@ ctx.lists["user.code_type_modifier"] = {
 
 @ctx.capture("user.code_type", rule="[{user.code_type_modifier}] {user.code_type}")
 def code_type(m) -> str:
-    """Returns a macro name"""
     return "".join(m)
 
 
@@ -314,9 +318,6 @@ class UserActions:
         actions.auto_insert("false")
 
     # tag: data_null
-
-    def code_insert_null():
-        actions.auto_insert("None")
 
     def code_insert_is_null():
         actions.auto_insert(".is_none()")

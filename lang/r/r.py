@@ -6,6 +6,10 @@ ctx.matches = r"""
 tag: user.r
 """
 
+ctx.lists["user.code_data_null"] = {
+    "null": "NULL",
+}
+
 ctx.lists["user.code_common_function"] = {
     # base R
     "as character": "as.character",
@@ -289,9 +293,6 @@ class UserActions:
 
     def code_operator_bitwise_and():
         actions.auto_insert(" & ")
-
-    def code_insert_null():
-        actions.auto_insert("NULL")
 
     def code_state_if():
         actions.insert("if () {}")

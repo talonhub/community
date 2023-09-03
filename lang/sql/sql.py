@@ -5,6 +5,10 @@ ctx.matches = r"""
 tag: user.sql
 """
 
+ctx.lists["user.code_data_null"] = {
+    "null": "NULL",
+}
+
 # these vary by dialect
 ctx.lists["user.code_common_function"] = {"count": "Count", "min": "Min", "max": "Max"}
 
@@ -52,9 +56,6 @@ class UserActions:
 
     def code_operator_or():
         actions.auto_insert("OR ")
-
-    def code_insert_null():
-        actions.auto_insert("NULL")
 
     def code_insert_is_null():
         actions.auto_insert(" IS NULL")

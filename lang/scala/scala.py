@@ -188,9 +188,6 @@ class UserActions:
     def code_self():
         actions.insert("this")
 
-    def code_insert_null():
-        actions.insert("null")
-
     def code_insert_is_null():
         actions.insert(" == null")
 

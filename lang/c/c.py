@@ -131,6 +131,10 @@ ctx.lists["user.code_common_function"] = {
     "free": "free",
 }
 
+ctx.lists["user.code_data_null"] = {
+    "null": "NULL",
+}
+
 mod.list("c_pointers", desc="Common C pointers")
 mod.list("c_signed", desc="Common C datatype signed modifiers")
 mod.list("c_keywords", desc="C keywords")
@@ -301,9 +305,6 @@ class UserActions:
 
     def code_operator_bitwise_right_shift_assignment():
         actions.auto_insert(" >>= ")
-
-    def code_insert_null():
-        actions.auto_insert("NULL")
 
     def code_insert_is_null():
         actions.auto_insert(" == NULL ")
