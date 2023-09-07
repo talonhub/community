@@ -5,7 +5,7 @@ from pathlib import Path
 from talon import resource
 
 # NOTE: This method requires this module to be one folder below the top-level
-#   knausj folder.
+#   community/knausj folder.
 SETTINGS_DIR = Path(__file__).parents[1] / "settings"
 
 if not SETTINGS_DIR.is_dir():
