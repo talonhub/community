@@ -1,8 +1,9 @@
 import appscript
-from talon import Context, Module, actions, app, ctrl, storage, clip
+from talon import Context, Module, actions, app, clip, ctrl, storage
 
 ctx = Context()
 mod = Module()
+
 
 @mod.action_class
 class Actions:
