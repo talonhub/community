@@ -14,14 +14,16 @@ cancel_phrases = ["cancel cancel"]
 #     for word2 in cancel_words
 # ]
 
+
 def pre_phrase(d):
     if "text" in d and "parsed" in d:
-        text_str = ' '.join(d["text"])
+        text_str = " ".join(d["text"])
         for phrase in cancel_phrases:
             if text_str.endswith(phrase):
                 # cancel the command
                 d["parsed"]._sequence = []
                 actions.app.notify(f"Command canceled: {text_str!r}")
                 return
+
 
 speech_system.register("pre:phrase", pre_phrase)
