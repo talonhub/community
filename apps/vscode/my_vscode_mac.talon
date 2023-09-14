@@ -9,6 +9,8 @@ tag(): user.snippets
 tag(): user.splits
 tag(): user.tabs
 
+# note: change vscode preferences window title to `[${rootName}] ${activeEditorShort}${separator}${profileName}`
+#       so that project name is first and inside [].
 switch talon:
   key('ctrl-w')
   sleep(100ms)
