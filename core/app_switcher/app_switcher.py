@@ -1,9 +1,9 @@
 import os
+import re
 import shlex
 import subprocess
 import time
 from pathlib import Path
-import re
 
 import talon
 from talon import Context, Module, actions, app, fs, imgui, ui
@@ -320,9 +320,13 @@ class Actions:
     def switcher_focus_app_title(app: str, regex: str):
         """Focus the window whose app name constains app and title matches regex"""
         for window in ui.windows():
-            if not(window.hidden) and (app in window.app.name or app == "*") and window.title != "":
+            if (
+                not (window.hidden)
+                and (app in window.app.name or app == "*")
+                and window.title != ""
+            ):
                 # logging.warn(f'Checking Window: "{window.app.name}" window:"{window.title}" hidden: "{window.hidden}"')
-                if (regex is None or re.search(regex, window.title)):
+                if regex is None or re.search(regex, window.title):
                     window.focus()
                     return
         logging.error(f'(switcher_focus_app_title) Window not found: "{app}" "{regex}"')
