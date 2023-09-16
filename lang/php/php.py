@@ -2,7 +2,7 @@ from talon import Context, actions, settings
 
 ctx = Context()
 ctx.matches = r"""
-tag: user.php
+code.language: php
 """
 
 ctx.lists["user.code_type"] = {
