@@ -35,7 +35,7 @@ class EditActions:
         actions.edit.paste()
 
     # # This simpler implementation of select_word mostly works, but in some apps it doesn't.
-    # # See https://github.com/knausj85/knausj_talon/issues/1084.
+    # # See https://github.com/talonhub/community/issues/1084.
     # def select_word():
     #     actions.edit.right()
     #     actions.edit.word_left()

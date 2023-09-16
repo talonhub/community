@@ -1,16 +1,16 @@
 from talon import Context, Module, actions
 
-ctx = Context()
 mod = Module()
 
-ctx.matches = r"""
-tag: user.tmux
+mod.apps.tmux = """
+tag: terminal
+and tag: user.tmux
 """
 
 setting_tmux_prefix_key = mod.setting(
     "tmux_prefix_key",
     type=str,
-    default="b",
+    default="ctrl-b",
     desc="The key used to prefix all tmux commands",
 )
 
@@ -19,7 +19,7 @@ setting_tmux_prefix_key = mod.setting(
 class TmuxActions:
     def tmux_prefix():
         """press control and the configured tmux prefix key"""
-        actions.key(f"ctrl-{setting_tmux_prefix_key.get()}")
+        actions.key(f"{setting_tmux_prefix_key.get()}")
 
     def tmux_keybind(key: str):
         """press tmux prefix followed by a key bind"""
@@ -45,6 +45,10 @@ class TmuxActions:
         actions.key("\n")
 
 
+ctx = Context()
+ctx.matches = "app: tmux"
+
+
 @ctx.action_class("app")
 class AppActions:
     def tab_open():
@@ -60,7 +64,10 @@ class AppActions:
 @ctx.action_class("user")
 class UserActions:
     def tab_jump(number: int):
-        actions.user.tmux_execute_command(f"select-window -t {number}")
+        if number < 10:
+            actions.user.tmux_keybind(f"{number}")
+        else:
+            actions.user.tmux_execute_command(f"select-window -t {number}")
 
     def tab_close_wrapper():
         actions.user.tmux_execute_command_with_confirmation(

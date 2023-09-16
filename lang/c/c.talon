@@ -1,4 +1,4 @@
-tag: user.c
+code.language: c
 -
 tag(): user.code_imperative
 
