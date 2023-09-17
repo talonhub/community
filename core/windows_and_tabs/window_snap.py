@@ -255,7 +255,7 @@ _snap_positions = {
     "bottom left two thirds": RelativeScreenPos(0, 0.5, 2 / 3, 1),
     "bottom right two thirds": RelativeScreenPos(1 / 3, 0.5, 1, 1),
     "bottom center third": RelativeScreenPos(1 / 3, 0.5, 2 / 3, 1),
-    # Alternate spoken forms ford sixths
+    # Alternate spoken forms for sixths
     "top left small": RelativeScreenPos(0, 0, 1 / 3, 0.5),
     "top right small": RelativeScreenPos(2 / 3, 0, 1, 0.5),
     "top left large": RelativeScreenPos(0, 0, 2 / 3, 0.5),
