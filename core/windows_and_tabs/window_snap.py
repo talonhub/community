@@ -226,12 +226,13 @@ _snap_positions = {
     "left third": RelativeScreenPos(0, 0, 1 / 3, 1),
     "right third": RelativeScreenPos(2 / 3, 0, 1, 1),
     "left two thirds": RelativeScreenPos(0, 0, 2 / 3, 1),
-    "right two thirds": RelativeScreenPos(
-        1 / 3,
-        0,
-        1,
-        1,
-    ),
+    "right two thirds": RelativeScreenPos(1 / 3, 0, 1, 1),
+    # Alternate spoken forms for thirds
+    "center small": RelativeScreenPos(1 / 3, 0, 2 / 3, 1),
+    "left small": RelativeScreenPos(0, 0, 1 / 3, 1),
+    "right small": RelativeScreenPos(2 / 3, 0, 1, 1),
+    "left large": RelativeScreenPos(0, 0, 2 / 3, 1),
+    "right large": RelativeScreenPos(1 / 3, 0, 1, 1),
     # Quarters
     # .---.---.
     # |---|---|
@@ -254,6 +255,17 @@ _snap_positions = {
     "bottom left two thirds": RelativeScreenPos(0, 0.5, 2 / 3, 1),
     "bottom right two thirds": RelativeScreenPos(1 / 3, 0.5, 1, 1),
     "bottom center third": RelativeScreenPos(1 / 3, 0.5, 2 / 3, 1),
+    # Alternate spoken forms ford sixths
+    "top left small": RelativeScreenPos(0, 0, 1 / 3, 0.5),
+    "top right small": RelativeScreenPos(2 / 3, 0, 1, 0.5),
+    "top left large": RelativeScreenPos(0, 0, 2 / 3, 0.5),
+    "top right large": RelativeScreenPos(1 / 3, 0, 1, 0.5),
+    "top center small": RelativeScreenPos(1 / 3, 0, 2 / 3, 0.5),
+    "bottom left small": RelativeScreenPos(0, 0.5, 1 / 3, 1),
+    "bottom right small": RelativeScreenPos(2 / 3, 0.5, 1, 1),
+    "bottom left large": RelativeScreenPos(0, 0.5, 2 / 3, 1),
+    "bottom right large": RelativeScreenPos(1 / 3, 0.5, 1, 1),
+    "bottom center small": RelativeScreenPos(1 / 3, 0.5, 2 / 3, 1),
     # Special
     "center": RelativeScreenPos(1 / 8, 1 / 6, 7 / 8, 5 / 6),
     "full": RelativeScreenPos(0, 0, 1, 1),
@@ -275,10 +287,12 @@ class Actions:
     def snap_window(pos: RelativeScreenPos) -> None:
         """Move the active window to a specific position on-screen.
 
-        See `RelativeScreenPos` for the structure of this position.
-
-        """
+        See `RelativeScreenPos` for the structure of this position."""
         _snap_window_helper(ui.active_window(), pos)
+
+    def snap_window_to_position(pos_name: str) -> None:
+        """Move the active window to a named position on-screen."""
+        actions.user.snap_window(_snap_positions[pos_name])
 
     def move_window_next_screen() -> None:
         """Move the active window to a specific screen."""
