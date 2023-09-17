@@ -313,7 +313,6 @@ class Actions:
     def move_app_to_screen(app_name: str, screen_number: int):
         """Move a specific application to another screen."""
         window = _get_app_window(app_name)
-        print(window)
         _bring_forward(window)
         _move_to_screen(
             window,
