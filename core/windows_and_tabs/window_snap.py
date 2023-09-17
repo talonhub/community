@@ -291,7 +291,7 @@ class Actions:
         _snap_window_helper(ui.active_window(), pos)
 
     def snap_window_to_position(pos_name: str) -> None:
-        """Move the active window to a named position on-screen."""
+        """Move the active window to a specifically named position on its current screen, using a key from `_snap_positions`."""
         actions.user.snap_window(_snap_positions[pos_name])
 
     def move_window_next_screen() -> None:
