@@ -1,4 +1,4 @@
-tag: user.go
+code.language: go
 -
 variadic: "..."
 logical and: " && "

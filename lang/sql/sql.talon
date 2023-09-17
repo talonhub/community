@@ -1,4 +1,4 @@
-tag: user.sql
+code.language: sql
 -
 tag(): user.code_operators_math
 tag(): user.code_comment_line
