@@ -34,6 +34,7 @@ def is_window_valid(window: ui.Window) -> bool:
     return (
         not window.hidden
         and window.title != ""
+        # This excludes many tiny windows that are not actual windows, and is a rough heuristic.
         and window.rect.width > window.screen.dpi
         and window.rect.height > window.screen.dpi
     )
