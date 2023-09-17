@@ -284,7 +284,7 @@ ctx.lists["user.window_snap_positions"] = _snap_positions.keys()
 
 @mod.action_class
 class Actions:
-    def snap_window(pos: RelativeScreenPos) -> None:
+    def snap_window(position: RelativeScreenPos) -> None:
         """Move the active window to a specific position on-screen.
 
         See `RelativeScreenPos` for the structure of this position."""
