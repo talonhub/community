@@ -304,11 +304,11 @@ class Actions:
         """Move the active window leftward by one."""
         _move_to_screen(ui.active_window(), screen_number=screen_number)
 
-    def snap_app(app_name: str, pos: RelativeScreenPos):
+    def snap_app(app_name: str, position: RelativeScreenPos):
         """Snap a specific application to another screen."""
         window = _get_app_window(app_name)
         _bring_forward(window)
-        _snap_window_helper(window, pos)
+        _snap_window_helper(window, position)
 
     def move_app_to_screen(app_name: str, screen_number: int):
         """Move a specific application to another screen."""
