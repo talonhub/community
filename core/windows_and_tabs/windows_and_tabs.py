@@ -33,7 +33,9 @@ def is_window_valid(window: ui.Window) -> bool:
     """Returns true if this window is valid for focusing"""
     return (
         not window.hidden
+        # On Windows, there are many fake windows with empty titles -- this excludes them.
         and window.title != ""
+        # This excludes many tiny windows that are not actual windows, and is a rough heuristic.
         and window.rect.width > window.screen.dpi
         and window.rect.height > window.screen.dpi
     )
