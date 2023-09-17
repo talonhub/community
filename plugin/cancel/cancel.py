@@ -22,7 +22,8 @@ def pre_phrase(d):
             if text_str.endswith(phrase):
                 # cancel the command
                 d["parsed"]._sequence = []
-                actions.app.notify(f"Command canceled: {text_str!r}")
+                command_without_cancel_phrase = text_str[:-len(phrase)].strip()
+                actions.app.notify(f"Command canceled: {command_without_cancel_phrase!r}")
                 return
 
 
