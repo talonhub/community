@@ -37,3 +37,9 @@ class AppActions:
 
     def window_open():
         actions.key("cmd-n")
+
+    def window_previous():
+        actions.key("cmd-shift-`")
+
+    def window_next():
+        actions.key("cmd-`")
