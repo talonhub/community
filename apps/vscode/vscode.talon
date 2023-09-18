@@ -18,8 +18,9 @@ quick docks:
   key(cmd-i)
 
 arrow funk:
-    "() => {"
+    "() => {}"
     sleep(30ms)
+    key(left)
     key(enter)
 
 arrow short:
@@ -33,7 +34,10 @@ toggle hats:
   key(enter)
 
 doc string:
-  "/** "
+  "/**  */"
+  key(left)
+  key(left)
+  key(left)
 
 findy:
   key(cmd-f)
@@ -116,7 +120,7 @@ please [<user.text>]:
 bar files: user.vscode("workbench.view.explorer")
 bar extensions: user.vscode("workbench.view.extensions")
 bar outline: user.vscode("outline.focus")
-bar run: user.vscode("workbench.view.debug")
+bar debug: user.vscode("workbench.view.debug")
 bar search: user.vscode("workbench.view.search")
 bar source: user.vscode("workbench.view.scm")
 bar test: user.vscode("workbench.view.testing.focus")
