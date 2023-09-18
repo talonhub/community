@@ -39,4 +39,3 @@ class AppActions:
 
     def window_open():
         actions.key("ctrl-n")
-        # requires easy window switcher or equivalent (built into most Linux)
