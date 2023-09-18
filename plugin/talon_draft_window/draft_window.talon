@@ -2,7 +2,7 @@
 title: Talon Draft
 -
 settings():
-    # Enable 'Smart dictation mode', see https://github.com/knausj85/knausj_talon/pull/356
+    # Enable 'Smart dictation mode', see https://github.com/talonhub/community/pull/356
     user.context_sensitive_dictation = 1
 
 # Replace a single word with a phrase

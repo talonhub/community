@@ -20,7 +20,11 @@ settings():
     # 1 = on with eyetracker but not zoom mouse mode
     # 2 = on but not with zoom mouse mode
     user.mouse_enable_pop_click = 1
-    #When enabled, the 'Scroll Mouse' GUI will not be shown.
+
+    # Uncomment the below to enable mouse scroll down using hiss noise
+    # user.mouse_enable_hiss_scroll = 1
+
+    # When enabled, the 'Scroll Mouse' GUI will not be shown.
     user.mouse_hide_mouse_gui = 0
     #hide cursor when mouse_wake is called to enable zoom mouse
     user.mouse_wake_hides_cursor = 0
