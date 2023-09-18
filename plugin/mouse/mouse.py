@@ -221,10 +221,12 @@ class Actions:
         ctrl.mouse_move(rect.left + (rect.width / 2), rect.top + (rect.height / 2))
 
     def hiss_scroll_up():
+        """Change mouse hiss scroll direction to up"""
         global hiss_scroll_up
         hiss_scroll_up = True
 
     def hiss_scroll_down():
+        """Change mouse hiss scroll direction to down"""
         global hiss_scroll_up
         hiss_scroll_up = False
 
