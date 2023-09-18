@@ -35,7 +35,6 @@ class AppActions:
 
     def window_hide_others():
         actions.key("win-d alt-tab")
-        # requires easy window switcher or equivalent (built into most Linux)
 
     def window_open():
         actions.key("ctrl-n")
