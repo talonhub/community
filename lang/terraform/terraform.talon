@@ -1,4 +1,4 @@
-tag: user.terraform
+code.language: terraform
 -
 tag(): user.code_comment_block_c_like
 tag(): user.code_comment_line

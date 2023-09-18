@@ -1,6 +1,6 @@
-tag: user.typescript
+code.language: typescript
+code.language: typescriptreact
 -
-tag(): user.javascript
 
 type union [<user.code_type>]: " | {code_type or ''}"
 type intersect [<user.code_type>]: " & {code_type or ''}"
