@@ -239,6 +239,14 @@ plot:
   sleep(200ms)
   key("enter")
 
+# Click, paste then enter
+drown:
+  mouse_click(0)
+  sleep(200ms)
+  key("cmd-v")
+  sleep(200ms)
+  key("enter")
+
 # Delete key
 dellz [<number>]:
     key("backspace")
@@ -317,8 +325,8 @@ beep:
   key("cmd-c")
 
 heat:
-    mouse_click()
-    mouse_click()
-    mouse_click()
-    sleep(200ms)
-    key("alt-shift-cmd-v")
+  mouse_click()
+  mouse_click()
+  mouse_click()
+  sleep(200ms)
+  key("alt-shift-cmd-v")

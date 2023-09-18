@@ -178,7 +178,6 @@ code_formatter_names = {
     "dunder": "DOUBLE_UNDERSCORE",
     "hammer": "PUBLIC_CAMEL_CASE",
     "kebab": "DASH_SEPARATED",
-    "kobb": formatters_dict["DASH_SEPARATED"],
     "packed": "DOUBLE_COLON_SEPARATED",
     "padded": "SPACE_SURROUNDED_STRING",
     "slasher": "SLASH_SEPARATED",
@@ -196,7 +195,6 @@ prose_formatter_names = {
 formatter_words = {
     phrase: formatters_dict[name]
     for phrase, name in (code_formatter_names | prose_formatter_names).items()
-    
 }
 
 # Allow referencing formatters by either their names or spoken forms
