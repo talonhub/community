@@ -1,4 +1,4 @@
-tag: user.python
+code.language: python
 -
 tag(): user.code_imperative
 tag(): user.code_object_oriented

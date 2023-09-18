@@ -1,10 +1,10 @@
 from talon import Context, Module, actions
 
-ctx = Context()
 mod = Module()
 
-ctx.matches = r"""
-tag: user.tmux
+mod.apps.tmux = """
+tag: terminal
+and tag: user.tmux
 """
 
 setting_tmux_prefix_key = mod.setting(
@@ -43,6 +43,10 @@ class TmuxActions:
             f'confirm-before -p "{confirmation_prompt} (y/n)" {command}'
         )
         actions.key("\n")
+
+
+ctx = Context()
+ctx.matches = "app: tmux"
 
 
 @ctx.action_class("app")
