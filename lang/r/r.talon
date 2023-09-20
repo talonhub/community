@@ -1,4 +1,4 @@
-tag: user.r
+code.language: r
 -
 tag(): user.code_imperative
 
