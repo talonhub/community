@@ -10,12 +10,9 @@ win (warp | move) {user.yabai_dir}: user.yabai("window --warp {yabai_dir}")
 
 win put {user.yabai_dir}: user.yabai("window --put {yabai_dir}")
 
-win grow <number> {user.arrow_key}:
-    user.yabai_win_resize("{arrow_key}", number * 50)
+win grow {user.arrow_key}: user.yabai_win_resize("{arrow_key}", 100)
 
-win shrink <number> {user.arrow_key}:
-    amount = number * 50
-    user.yabai_win_resize("{arrow_key}", 0 - amount)
+win shrink {user.arrow_key}: user.yabai_win_resize("{arrow_key}", -100)
 
 win screen: user.yabai("window --display recent")
 
@@ -40,4 +37,4 @@ space balance vert: user.yabai("space --balance x-axis")
 
 space rotate: user.yabai("space --rotate 90")
 
-screen switch: user.yabai("display --focus recent")
+screen (switch | swap): user.yabai("display --focus recent")
