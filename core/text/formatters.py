@@ -176,7 +176,7 @@ code_formatter_names = {
     "dotted": "DOT_SEPARATED",
     "dub string": "DOUBLE_QUOTED_STRING",
     "dunder": "DOUBLE_UNDERSCORE",
-    "hammer": "PUBLIC_CAMEL_CASE",
+    "pascal": "PUBLIC_CAMEL_CASE",
     "kebab": "DASH_SEPARATED",
     "packed": "DOUBLE_COLON_SEPARATED",
     "padded": "SPACE_SURROUNDED_STRING",

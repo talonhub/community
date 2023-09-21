@@ -1,10 +1,10 @@
 from talon import app
 from talon.track.geom import Point2d
-from talon_plugins import speech, eye_mouse, eye_zoom_mouse
+from talon_plugins import eye_mouse, eye_zoom_mouse
 
 # 16-inch mac
 if app.platform == "mac":
-    eye_zoom_mouse.config.screen_area = Point2d(350, 250)
+    eye_zoom_mouse.config.screen_area = Point2d(650, 250)
     eye_zoom_mouse.config.img_scale = 3.2
 
 # 13-inch mac

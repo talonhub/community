@@ -1,7 +1,5 @@
 -
 settings():
-    # heres a conflicting test change made in origin/master
-    # This is a change made to the knausj_origin that you want in branch ark.
     #adjust the scale of the imgui to my liking
     imgui.scale = 1.3
     # enable if you'd like the picker gui to automatically appear when explorer has focus
@@ -22,7 +20,7 @@ settings():
     user.mouse_enable_pop_click = 1
 
     # Uncomment the below to enable mouse scroll down using hiss noise
-    # user.mouse_enable_hiss_scroll = 1
+    user.mouse_enable_hiss_scroll = 0
 
     # When enabled, the 'Scroll Mouse' GUI will not be shown.
     user.mouse_hide_mouse_gui = 0
@@ -54,7 +52,7 @@ settings():
     #user.context_sensitive_dictation = 1
 
 # uncomment tag to enable mouse grid
-tag(): user.mouse_grid_enabled
+# tag(): user.mouse_grid_enabled
     # user.context_sensitive_dictation = 1
 
     # How to resize windows moved across physical screens (eg. via `snap next`).

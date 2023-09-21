@@ -13,6 +13,10 @@ tag(): terminal
 log template:
   "console.log(\"thing\", thing);"
 
+toggle vim:
+  key(cmd-i)
+  key(cmd-v)
+
 quick docks:
   key(cmd-k)
   key(cmd-i)
@@ -34,10 +38,7 @@ toggle hats:
   key(enter)
 
 doc string:
-  "/**  */"
-  key(left)
-  key(left)
-  key(left)
+  "/** "
 
 findy:
   key(cmd-f)
@@ -383,7 +384,7 @@ test cancel: user.vscode("testing.cancelRun")
 
 # Debugging
 break point: user.vscode("editor.debug.action.toggleBreakpoint")
-debug over: user.vscode("workbench.action.debug.stepOver")
+debug step over: user.vscode("workbench.action.debug.stepOver")
 debug step into: user.vscode("workbench.action.debug.stepInto")
 debug step out [of]: user.vscode("workbench.action.debug.stepOut")
 debug start: user.vscode("workbench.action.debug.start")
