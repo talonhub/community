@@ -1,9 +1,9 @@
 hissing mode: user.toggle_hiss_click()
 
-(control | see) mouse: user.mouse_toggle_control_mouse()
+(control | see) mouse: tracking.control_toggle()
 (control | see) (zoom | mouse): user.mouse_toggle_zoom_mouse()
 camera overlay: user.mouse_toggle_camera_overlay()
-run calibration: user.mouse_calibrate()
+run calibration: tracking.calibrate()
 
 # New Control Toggles
 
@@ -12,6 +12,7 @@ run calibration: user.mouse_calibrate()
 zoom mouse: tracking.control_zoom_toggle()
 # camera overlay: tracking.control_debug_toggle()
 # run calibration: tracking.calibrate()
+<<<<<<< Updated upstream
 # All commands you can call for tracking
 # ---------------------------------------------
 # tracking.calibrate
@@ -39,6 +40,12 @@ run calibration: tracking.calibrate()
 zoom mouse: tracking.control_zoom_toggle()
 cancel zoom mouse: tracking.zoom_cancel()
 #control mouse: tracking.control_toggle()
+=======
+
+# Old Toggles
+# user.mouse_calibrate()
+# user.mouse_toggle_control_mouse()
+>>>>>>> Stashed changes
 
 touch:
     mouse_click(0)

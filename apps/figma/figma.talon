@@ -195,6 +195,38 @@ rounds:
 toke (round | r | are) :
     "{around."
 
+# Opacity
+
+cee (oh | it):
+    key(shift-0)
+
+cee one:
+    key(shift-1)
+
+cee two:
+    key(shift-2)
+
+cee three:
+    key(shift-3)
+
+cee four:
+    key(shift-4)
+
+cee five:
+    key(shift-5)
+
+cee six:
+    key(shift-6)
+
+cee seven:
+    key(shift-7)
+
+cee eight:
+    key(shift-8)
+
+cee nine:
+    key(shift-9)
+
 # # Rename to Select Last Word > Copy it
 # (red it | naz):
 #     mouse_click()
