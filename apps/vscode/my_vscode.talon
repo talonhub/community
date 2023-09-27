@@ -66,3 +66,8 @@ pop sibling:
   insert("alternate file")
   sleep(100ms)
   key(enter)
+
+tab hunt <user.text>:
+  user.vscode("workbench.action.quickOpen")
+  insert("edt ")
+  insert(user.text or "")

@@ -44,3 +44,12 @@ shazam:
   "#{}"
   key(left)
 
+
+prompt <phrase>:
+  "# "
+  insert(phrase)
+  insert("\n")
+  key('alt-ctrl-i')
+
+suggest:
+  key('ctrl-alt-i')
