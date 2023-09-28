@@ -42,3 +42,6 @@ state include: "include "
 ^instance <user.text>$:
     insert("@")
     user.code_public_variable_formatter(text)
+^key <user.text>$:
+    insert(user.formatted_text(text, "snake"))
+    insert(":")
