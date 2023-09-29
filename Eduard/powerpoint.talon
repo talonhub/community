@@ -8,3 +8,8 @@ insert pic:
     key('n')
     key('p')
     key('d')
+
+new comment: 
+    key(alt)
+    key('r')
+    key('c')
