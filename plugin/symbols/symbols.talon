@@ -4,7 +4,7 @@ triple quote: "'''"
 (triple grave | triple back tick | gravy): insert("```")
 (dot dot | dotdot): ".."
 ellipses: "..."
-(comma and | spamma): ", "
+(comet): ", "
 arrow: "->"
 dub arrow: "=>"
 empty dub string: user.insert_between('"', '"')

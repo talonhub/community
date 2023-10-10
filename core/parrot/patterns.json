@@ -1,0 +1,42 @@
+{
+    "cluck": {
+        "sounds": ["roofclick"],
+        "threshold": {
+            ">power": 15,
+            ">probability": 0.95
+        }
+    },
+    "hiss": {
+        "sounds": ["hiss"],
+        "threshold": {
+            ">power": 15,
+            ">probability": 0.95
+        },
+        "graceperiod": 0.05,
+        "grace_threshold": {
+            ">power": 10
+        }
+    },
+    "shush": {
+        "sounds": ["shush"],
+        "threshold": {
+            ">power": 15,
+            ">probability": 0.95
+        },
+        "graceperiod": 0.05,
+        "grace_threshold": {
+            ">power": 10
+        }
+    },
+    "speech": {
+        "sounds": ["speech"],
+        "threshold": {
+            ">power": 15,
+            ">probability": 0.95
+        },
+        "throttle": {
+            "shush": 0.3,
+            "hiss": 0.3
+        }
+    }
+}

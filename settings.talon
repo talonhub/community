@@ -20,7 +20,7 @@ settings():
     user.mouse_enable_pop_click = 1
 
     # Uncomment the below to enable mouse scroll down using hiss noise
-    user.mouse_enable_hiss_scroll = 0
+    # user.mouse_enable_hiss_scroll = 1
 
     # When enabled, the 'Scroll Mouse' GUI will not be shown.
     user.mouse_hide_mouse_gui = 0
@@ -42,7 +42,7 @@ settings():
 
     # Uncomment the below to insert text longer than 10 characters (customizable) by
     # pasting from the clipboard. This is often faster than typing.
-    #user.paste_to_insert_threshold = 10
+    user.paste_to_insert_threshold = 10
 
     # Uncomment the below to enable context-sensitive dictation. This determines
     # how to format (capitalize, space) dictation-mode speech by selecting &
