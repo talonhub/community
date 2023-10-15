@@ -305,10 +305,11 @@ class Actions:
     def switcher_focus(name: str):
         """Focus a new application by name"""
         app = actions.user.get_running_app(name)
+
         # Focus next window on same app
         if app == ui.active_app():
             actions.app.window_next()
-        # Focus app
+        # Focus new app
         else:
             actions.user.switcher_focus_app(app)
 
