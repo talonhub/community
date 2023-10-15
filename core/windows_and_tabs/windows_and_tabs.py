@@ -18,15 +18,14 @@ def cycle_windows(app: ui.App, diff: int):
     windows = [w for w in app.windows() if w == active or is_window_valid(w)]
     windows.sort(key=lambda w: w.id)
     current = windows.index(active)
-    max = len(windows) - 1
-    i = cycle(current + diff, 0, max)
+    i = (current + diff) % len(windows)
 
     while i != current:
         try:
             actions.user.switcher_focus_window(windows[i])
             break
         except Exception:
-            i = cycle(i + diff, 0, max)
+            i = (i + diff) % len(windows)
 
 
 def is_window_valid(window: ui.Window) -> bool:
@@ -39,12 +38,3 @@ def is_window_valid(window: ui.Window) -> bool:
         and window.rect.width > window.screen.dpi
         and window.rect.height > window.screen.dpi
     )
-
-
-def cycle(value: int, min: int, max: int) -> int:
-    """Cycle value between minimum and maximum"""
-    if value < min:
-        return max
-    if value > max:
-        return min
-    return value
