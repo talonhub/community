@@ -52,6 +52,12 @@ setting_mouse_enable_pop_click = mod.setting(
     default=0,
     desc="Pop noise clicks left mouse button. 0 = off, 1 = on with eyetracker but not with zoom mouse mode, 2 = on but not with zoom mouse mode",
 )
+setting_mouse_enable_pop_wake = mod.setting(
+    "mouse_enable_pop_wake",
+    type=int,
+    default=0,
+    desc="Pop noise enables speech/wakes talon. 0 = off, 1 = on",
+)
 setting_mouse_enable_pop_stops_scroll = mod.setting(
     "mouse_enable_pop_stops_scroll",
     type=int,
@@ -258,29 +264,34 @@ def show_cursor_helper(show):
 @ctx.action_class("user")
 class UserActions:
     def noise_trigger_pop():
-        if setting_mouse_enable_pop_stops_scroll.get() >= 1 and (
-            gaze_job or scroll_job
-        ):
-            # Allow pop to stop scroll
-            stop_scroll()
-        else:
-            # Otherwise respect the mouse_enable_pop_click setting
-            setting_val = setting_mouse_enable_pop_click.get()
+        if actions.speech.enabled():
+            if setting_mouse_enable_pop_stops_scroll.get() >= 1 and (
+                gaze_job or scroll_job
+            ):
+                # Allow pop to stop scroll
+                stop_scroll()
+            else:
+                # Otherwise respect the mouse_enable_pop_click setting
+                setting_val = setting_mouse_enable_pop_click.get()
 
-            is_using_eye_tracker = (
-                actions.tracking.control_zoom_enabled()
-                or actions.tracking.control_enabled()
-                or actions.tracking.control1_enabled()
-            )
-            should_click = (
-                setting_val == 2 and not actions.tracking.control_zoom_enabled()
-            ) or (
-                setting_val == 1
-                and is_using_eye_tracker
-                and not actions.tracking.control_zoom_enabled()
-            )
-            if should_click:
-                ctrl.mouse_click(button=0, hold=16000)
+                is_using_eye_tracker = (
+                    actions.tracking.control_zoom_enabled()
+                    or actions.tracking.control_enabled()
+                    or actions.tracking.control1_enabled()
+                )
+                should_click = (
+                    setting_val == 2 and not actions.tracking.control_zoom_enabled()
+                ) or (
+                    setting_val == 1
+                    and is_using_eye_tracker
+                    and not actions.tracking.control_zoom_enabled()
+                )
+                if should_click:
+                    ctrl.mouse_click(button=0, hold=16000)
+        else:
+            # test mouse_enable_pop_wake setting
+            if setting_mouse_enable_pop_wake.get() == 1:
+                actions.speech.enable()
 
     def noise_trigger_hiss(active: bool):
         if setting_mouse_enable_hiss_scroll.get():
