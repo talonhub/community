@@ -14,7 +14,6 @@ comment <number> until <number>:
     user.select_range(number_1, number_2)
     code.toggle_comment()
 clear [line] <number>:
-    edit.jump_line(number)
     user.select_range(number, number)
     edit.delete()
 clear <number> until <number>:
@@ -65,7 +64,7 @@ drag down [line] <number>:
 drag down <number> until <number>:
     user.select_range(number_1, number_2)
     edit.line_swap_down()
-clone (line | that): edit.line_clone()
+clone [line] <number>: user.line_clone(number)
 
 select camel left: user.extend_camel_left()
 select camel right: user.extend_camel_right()

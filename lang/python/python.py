@@ -5,7 +5,7 @@ from talon import Context, Module, actions, settings
 mod = Module()
 ctx = Context()
 ctx.matches = r"""
-tag: user.python
+code.language: python
 """
 ctx.lists["user.code_common_function"] = {
     "enumerate": "enumerate",
@@ -213,6 +213,12 @@ class UserActions:
 
     def code_operator_or():
         actions.auto_insert(" or ")
+
+    def code_operator_in():
+        actions.auto_insert(" in ")
+
+    def code_operator_not_in():
+        actions.auto_insert(" not in ")
 
     def code_operator_bitwise_and():
         actions.auto_insert(" & ")

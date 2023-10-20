@@ -1,4 +1,4 @@
-from talon import Context, actions
+from talon import Context, actions, clip
 
 ctx = Context()
 ctx.matches = r"""
@@ -84,14 +84,15 @@ class EditActions:
         actions.key("shift-alt-right")
 
     def file_end():
-        actions.key("cmd-down cmd-left")
+        actions.key("cmd-down")
 
     def file_start():
-        actions.key("cmd-up cmd-left")
+        actions.key("cmd-up")
 
     def find(text: str = None):
+        if text is not None:
+            clip.set_text(text, mode="find")
         actions.key("cmd-f")
-        # actions.insert(text)
 
     def find_next():
         actions.key("cmd-g")
@@ -170,11 +171,6 @@ class EditActions:
         actions.key("right")
         # action(edit.select_paragraph):
         # action(edit.select_sentence):
-
-    def select_word():
-        actions.edit.right()
-        actions.edit.word_left()
-        actions.edit.extend_word_right()
 
     def undo():
         actions.key("cmd-z")

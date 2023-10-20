@@ -25,21 +25,15 @@ MINIMUM_SLEEP_TIME_SECONDS = 0.0005
 did_emit_pre_phrase_signal = False
 
 mod = Module()
-
 ctx = Context()
 mac_ctx = Context()
-linux_ctx = Context()
 
 ctx.matches = r"""
 tag: user.command_client
 """
 mac_ctx.matches = r"""
 os: mac
-app: vscode
-"""
-linux_ctx.matches = r"""
-os: linux
-app: vscode
+tag: user.command_client
 """
 
 
@@ -114,9 +108,9 @@ def handle_existing_request_file(path):
         raise Exception(
             "Found recent request file; another Talon process is probably running"
         )
-    else:
-        print("Removing stale request file")
-        robust_unlink(path)
+
+    print("Removing stale request file")
+    robust_unlink(path)
 
 
 def run_command(
@@ -230,7 +224,6 @@ def robust_unlink(path: Path):
         path.unlink(missing_ok=True)
     except OSError as e:
         if hasattr(e, "winerror") and e.winerror == 32:
-
             graveyard_dir = get_communication_dir_path() / "graveyard"
             graveyard_dir.mkdir(parents=True, exist_ok=True)
             graveyard_path = graveyard_dir / str(uuid4())
@@ -243,7 +236,7 @@ def robust_unlink(path: Path):
             raise e
 
 
-def read_json_with_timeout(path: str) -> Any:
+def read_json_with_timeout(path: Path) -> Any:
     """Repeatedly tries to read a json object from the given path, waiting
     until there is a trailing new line indicating that the write is complete
 
@@ -366,12 +359,6 @@ class Actions:
 class MacUserActions:
     def trigger_command_server_command_execution():
         actions.key("cmd-shift-f17")
-
-
-@linux_ctx.action_class("user")
-class LinuxUserActions:
-    def trigger_command_server_command_execution():
-        actions.key("ctrl-shift-alt-p")
 
 
 @ctx.action_class("user")

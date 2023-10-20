@@ -50,7 +50,7 @@ class Actions:
 
 ctx = Context()
 ctx.matches = r"""
-tag: user.rust
+code.language: rust
 """
 
 scalar_types = {
@@ -236,7 +236,6 @@ ctx.lists["user.code_trait"] = all_traits
 
 @ctx.action_class("user")
 class UserActions:
-
     # tag: comment_line
 
     def code_comment_line_prefix():

@@ -11,7 +11,7 @@ and app.name: Windows Explorer
 os: windows
 and app.name: Windows-Explorer
 os: windows
-and app.exe: explorer.exe
+and app.exe: /explorer.exe/i
 """
 
 # many commands should work in most save/open dialog.
@@ -49,7 +49,6 @@ if app.platform == "windows":
 
     # this is probably not the correct way to check for onedrive, quick and dirty
     if os.path.isdir(os.path.expanduser(os.path.join("~", r"OneDrive\Desktop"))):
-
         directories_to_remap = {
             "Desktop": os.path.join(one_drive_path, "Desktop"),
             "Documents": os.path.join(one_drive_path, "Documents"),

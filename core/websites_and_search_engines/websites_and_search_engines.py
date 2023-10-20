@@ -12,6 +12,8 @@ mod.list(
     desc="A search engine.  Any instance of %s will be replaced by query text",
 )
 
+# Please do not edit these defaults.  Instead, add / edit your own entries in
+# settings/websites.csv in your user directory.
 website_defaults = {
     "talon home page": "http://talonvoice.com",
     "talon slack": "http://talonvoice.slack.com/messages/help",
@@ -31,6 +33,8 @@ website_defaults = {
     "youtube": "https://www.youtube.com/",
 }
 
+# Please do not edit these defaults.  Instead, add / edit your own entries in
+# settings/search_engines.csv in your user directory.
 _search_engine_defaults = {
     "amazon": "https://www.amazon.com/s/?field-keywords=%s",
     "google": "https://www.google.com/search?q=%s",
