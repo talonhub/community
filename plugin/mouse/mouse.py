@@ -25,6 +25,8 @@ gaze_job = None
 cancel_scroll_on_pop = True
 control_mouse_forced = False
 
+hiss_scroll_up = False
+
 # Setting for how much percent of the screen you should gaze further from the reference point before scrolling starts.
 scroll_offset = 0.12
 # Setting for how fast scrolling should be depending on the distance from the reference point.
@@ -286,6 +288,16 @@ class Actions:
             ctx.tags = []
 
 
+    def hiss_scroll_up():
+        """Change mouse hiss scroll direction to up"""
+        global hiss_scroll_up
+        hiss_scroll_up = True
+
+    def hiss_scroll_down():
+        """Change mouse hiss scroll direction to down"""
+        global hiss_scroll_up
+        hiss_scroll_up = False
+
 
 
 def show_cursor_helper(show):
@@ -480,7 +492,10 @@ class UserActions:
     def noise_trigger_hiss(active: bool):
         if setting_mouse_enable_hiss_scroll.get():
             if active:
-                actions.user.mouse_scroll_down_continuous()
+                if hiss_scroll_up:
+                    actions.user.mouse_scroll_up_continuous()
+                else:
+                    actions.user.mouse_scroll_down_continuous()
             else:
                 actions.user.mouse_scroll_stop()
         else:
