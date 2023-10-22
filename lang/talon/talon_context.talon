@@ -1,6 +1,7 @@
-tag: user.talonlist
-tag: user.talon
-tag: user.talon_python
+code.language: talon
+code.language: talonlist
+code.language: python 
+and tag: user.talon_python
 -
 #context requirements
 win require: insert("os: windows\n")

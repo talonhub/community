@@ -1,5 +1,5 @@
 list: user.code_common_function
-tag: user.talon
+code.language: talon
 -
 insert
 key

@@ -29,7 +29,7 @@ mod.list("talon_settings")
 mod.list("talon_scopes")
 mod.list("talon_modes")
 
-ctx.matches = r"""
+ctx_talon.matches = r"""
 code.language: talon
 """
 
@@ -114,7 +114,6 @@ class TalonPythonActions:
             actions.user.insert_between('ctx.settings["', '"] = ')
         else:
             actions.user.paste(f'ctx.settings["{setting}"] = ')
-
 
 @ctx_talon.action_class("user")
 class UserActions:
