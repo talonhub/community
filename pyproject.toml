@@ -9,3 +9,6 @@ pythonpath = [
     ".",
     "test/stubs",
 ]
+
+[tool.pyright]
+reportSelfClsParameterName = false
