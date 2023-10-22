@@ -4,7 +4,8 @@ mod = Module()
 global_ctx = Context()
 ctx = Context()
 ctx.matches = """
-tag: user.css
+code.language: css
+code.language: scss
 """
 
 mod.list("css_at_rule", desc="List of CSS @rules")

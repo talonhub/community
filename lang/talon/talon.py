@@ -30,7 +30,7 @@ mod.list("talon_scopes")
 mod.list("talon_modes")
 
 ctx_talon.matches = r"""
-tag: user.talon
+code.language: talon
 """
 
 ctx_talon_python.matches = r"""
@@ -74,6 +74,7 @@ app.register("ready", on_ready)
 class Actions:
     def talon_code_insert_function(text: str, selection: str):
         """inserts talon-specific action call"""
+        actions.user.code_insert_function(text, selection)
 
     def talon_code_enable_tag(tag: str):
         """enables tag in either python or talon files"""
@@ -84,11 +85,6 @@ class Actions:
 
 @ctx_talon.action_class("user")
 class TalonActions:
-    def talon_code_insert_function(text: str, selection: str):
-        text += f"({selection or ''})"
-        actions.user.paste(text)
-        actions.edit.left()
-
     def talon_code_enable_tag(tag: str):
         """enables tag in either python or talon files"""
         actions.user.paste(f"tag(): {tag}")
@@ -114,11 +110,10 @@ class TalonPythonActions:
 
     def talon_code_enable_setting(setting: str):
         """asserts setting in either python or talon files"""
-        actions.user.paste(f'ctx.settings["{setting}"] = ')
         if not setting:
-            actions.edit.left()
-            actions.edit.left()
-
+            actions.user.insert_between('ctx.settings["', '"] = ')
+        else:
+            actions.user.paste(f'ctx.settings["{setting}"] = ')
 
 @ctx_talon.action_class("user")
 class UserActions:

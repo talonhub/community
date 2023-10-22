@@ -2,7 +2,7 @@ from talon import Context, actions, settings
 
 ctx = Context()
 ctx.matches = r"""
-tag: user.csharp
+code.language: csharp
 """
 ctx.lists["user.code_common_function"] = {
     "integer": "int.TryParse",

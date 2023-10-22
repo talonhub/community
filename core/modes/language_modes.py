@@ -1,8 +1,5 @@
 from talon import Context, Module, actions
 
-ctx = Context()
-mod = Module()
-
 # Maps language mode names to the extensions that activate them. Only put things
 # here which have a supported language mode; that's why there are so many
 # commented out entries. TODO: make this a csv file?
@@ -24,7 +21,7 @@ language_extensions = {
     "javascript": "js",
     "javascriptreact": "jsx",
     # 'json': 'json',
-    # 'lua': 'lua',
+    "lua": "lua",
     "markdown": "md",
     # 'perl': 'pl',
     "php": "php",
@@ -42,6 +39,7 @@ language_extensions = {
     "talon": "talon",
     "talonlist": "talon-list",
     "terraform": "tf",
+    "tex": "tex",
     "typescript": "ts",
     "typescriptreact": "tsx",
     # 'vba': 'vba',
@@ -57,9 +55,22 @@ language_name_overrides = {
     "gdb": ["g d b"],
     "go": ["go", "go lang", "go language"],
     "r": ["are language"],
-    "talonlist": ["talent list"],
+    "tex": ["tech", "lay tech", "latex"],
 }
+
+mod = Module()
+
+ctx = Context()
+
+ctx_forced = Context()
+ctx_forced.matches = r"""
+tag: user.code_language_forced
+"""
+
+
+mod.tag("code_language_forced", "This tag is active when a language mode is forced")
 mod.list("language_mode", desc="Name of a programming language mode.")
+
 ctx.lists["self.language_mode"] = {
     name: language
     for language in language_extensions
@@ -73,41 +84,36 @@ extension_lang_map = {
     for ext in extensions.split()
 }
 
-# Create a context for each defined language
-for lang in language_extensions.keys():
-    mod.tag(lang)
-    mod.tag(f"{lang}_forced")
-    c = Context()
-    # Context is active if language is forced or auto language matches
-    c.matches = f"""
-    tag: user.{lang}_forced
-    tag: user.auto_lang
-    and code.language: {lang}
-    """
-    c.tags = [f"user.{lang}"]
-
-# Create a mode for the automated language detection. This is active when no lang is forced.
-mod.tag("auto_lang")
-ctx.tags = ["user.auto_lang"]
+forced_language = ""
 
 
 @ctx.action_class("code")
-class code_actions:
+class CodeActions:
     def language():
-        result = ""
         file_extension = actions.win.file_ext()
-        if file_extension and file_extension in extension_lang_map:
-            result = extension_lang_map[file_extension]
-        return result
+        return extension_lang_map.get(file_extension, "")
+
+
+@ctx_forced.action_class("code")
+class ForcedCodeActions:
+    def language():
+        return forced_language
 
 
 @mod.action_class
 class Actions:
     def code_set_language_mode(language: str):
         """Sets the active language mode, and disables extension matching"""
+        global forced_language
         assert language in language_extensions
-        ctx.tags = [f"user.{language}_forced"]
+        forced_language = language
+        # Update tags to force a context refresh. Otherwise `code.language` will not update.
+        # Necessary to first set an empty list otherwise you can't move from one forced language to another.
+        ctx.tags = []
+        ctx.tags = ["user.code_language_forced"]
 
     def code_clear_language_mode():
         """Clears the active language mode, and re-enables code.language: extension matching"""
-        ctx.tags = ["user.auto_lang"]
+        global forced_language
+        forced_language = ""
+        ctx.tags = []

@@ -53,6 +53,9 @@ class Actions:
     def code_break():
         """Inserts break statement"""
 
+    def code_state_continue():
+        """Inserts continue statement"""
+
     def code_next():
         """Inserts next statement"""
 

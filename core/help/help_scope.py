@@ -1,4 +1,5 @@
-from talon import Module, Context, actions, imgui, scope, ui
+from talon import Context, Module, actions, imgui, scope, ui
+
 ctx = Context()
 mod = Module()
 mod.tag("help_scope_open", "tag for showing the scope help gui")

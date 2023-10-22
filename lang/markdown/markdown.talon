@@ -1,4 +1,4 @@
-tag: user.markdown
+code.language: markdown
 -
 (level | heading | header) one:
     edit.line_start()

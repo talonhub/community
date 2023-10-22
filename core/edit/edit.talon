@@ -29,12 +29,6 @@ drink [<number_small>]:
 	numb  = number_small or 1
 	edit.line_insert_up()
 	repeat(numb - 1)
-	draw:
-    edit.word_left()
-draw <number_small>:
-    edit.word_left()
-    repeat(number_small-1)
-
 spring:
     edit.word_right()
 spring <number_small>:
@@ -43,7 +37,7 @@ spring <number_small>:
 draw:
     edit.word_left()
 draw <number_small>:
-    edit.word_right()
+    edit.word_left()
     repeat(number_small-1)
 go left: edit.left()
 go left <number_small>: 

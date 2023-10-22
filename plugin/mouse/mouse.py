@@ -460,7 +460,7 @@ class UserActions:
             else:
                 actions.user.move_cursor_to_gaze_point()
 
-    def noise_trigger_hiss():
+    def noise_trigger_hiss(active):
         if actions.tracking.control_zoom_enabled():
             if "talon_plugins.eye_zoom_mouse.zoom_mouse_noise" in registry.tags:
                 eye_zoom_mouse.zoom_mouse.on_hiss(eye_zoom_mouse.zoom_mouse.state)

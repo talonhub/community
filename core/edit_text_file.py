@@ -3,7 +3,7 @@ import subprocess
 
 from talon import Context, Module, app
 
-# path to knausj root directory
+# path to community/knausj root directory
 REPO_DIR = os.path.dirname(os.path.dirname(__file__))
 SETTINGS_DIR = os.path.join(REPO_DIR, "settings")
 

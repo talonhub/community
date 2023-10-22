@@ -3,7 +3,7 @@ Helpers for deprecating voice commands, actions, and captures. Since Talon can
 be an important part of people's workflows providing a warning before removing
 functionality is encouraged.
 
-The normal deprecation process in knausj_talon is as follows:
+The normal deprecation process in `community` is as follows:
 
 1. For 6 months from deprecation a deprecated action or command should
    continue working. Put an entry in the BREAKING_CHANGES.txt file in the
@@ -46,7 +46,7 @@ Usages:
         actions.user.deprecate_capture("2023-09-03", "user.legacy_capture")
         # implement capture
 
-See https://github.com/knausj85/knausj_talon/issues/940 for original discussion
+See https://github.com/talonhub/community/issues/940 for original discussion
 """
 
 import datetime

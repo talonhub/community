@@ -1,4 +1,4 @@
-tag: user.php
+code.language: php
 -
 tag(): user.code_imperative
 tag(): user.code_object_oriented

@@ -1,4 +1,4 @@
-tag: user.scala
+code.language: scala
 -
 tag(): user.code_imperative
 tag(): user.code_object_oriented
