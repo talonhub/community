@@ -115,6 +115,7 @@ class TalonPythonActions:
         else:
             actions.user.paste(f'ctx.settings["{setting}"] = ')
 
+
 @ctx_talon.action_class("user")
 class UserActions:
     def code_operator_and():
