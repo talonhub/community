@@ -49,6 +49,7 @@ setting_text_size = mod.setting(
 
 draft_manager = DraftManager()
 
+
 # Update the styling of the draft window dynamically as user settings change
 def _update_draft_style(*args):
     draft_manager.set_styling(
@@ -71,7 +72,7 @@ settings.register("", _update_draft_style)
 class ContextSensitiveDictationActions:
     """
     Override these actions to assist 'Smart dictation mode'.
-    see https://github.com/knausj85/knausj_talon/pull/356
+    see https://github.com/talonhub/community/pull/356
     """
 
     def dictation_peek(left, right):
@@ -81,9 +82,9 @@ class ContextSensitiveDictationActions:
             area[area.sel.right : area.sel.right + 50],
         )
 
-    # def paste(text: str):
-    #     # todo: remove once user.paste works reliably with the draft window
-    #     actions.insert(text)
+    def paste(text: str):
+        # todo: remove once user.paste works reliably with the draft window
+        actions.insert(text)
 
 
 @ctx_focused.action_class("edit")

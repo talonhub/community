@@ -84,6 +84,12 @@ setting_mouse_enable_pop_stops_scroll = mod.setting(
     default=0,
     desc="When enabled, pop stops continuous scroll modes (wheel upper/downer/gaze)",
 )
+setting_mouse_enable_hiss_scroll = mod.setting(
+    "mouse_enable_hiss_scroll",
+    type=bool,
+    default=False,
+    desc="Hiss noise scrolls down when enabled",
+)
 setting_mouse_wake_hides_cursor = mod.setting(
     "mouse_wake_hides_cursor",
     type=int,
@@ -444,25 +450,43 @@ if eye_zoom_mouse.zoom_mouse.enabled:
     noise.unregister("hiss", eye_zoom_mouse.zoom_mouse.on_hiss)
 
 
-@ctx.action_class("self")
+@ctx.action_class("user")
 class UserActions:
     def noise_trigger_pop():
         if setting_mouse_enable_pop_stops_scroll.get() >= 1 and (
             gaze_job or scroll_job
         ):
+            # Allow pop to stop scroll
             stop_scroll()
-        elif not actions.tracking.control_zoom_enabled():
-            if setting_mouse_enable_pop_click.get() >= 1:
-                ctrl.mouse_click(button=0, hold=16000)
-        elif actions.tracking.control_zoom_enabled():
-            if "talon_plugins.eye_zoom_mouse.zoom_mouse_noise" in registry.tags:
-                eye_zoom_mouse.zoom_mouse.on_pop(eye_zoom_mouse.zoom_mouse.state)
-            else:
-                actions.user.move_cursor_to_gaze_point()
+        else:
+            # Otherwise respect the mouse_enable_pop_click setting
+            setting_val = setting_mouse_enable_pop_click.get()
 
-    def noise_trigger_hiss(active):
-        if actions.tracking.control_zoom_enabled():
-            if "talon_plugins.eye_zoom_mouse.zoom_mouse_noise" in registry.tags:
-                eye_zoom_mouse.zoom_mouse.on_hiss(eye_zoom_mouse.zoom_mouse.state)
+            is_using_eye_tracker = (
+                actions.tracking.control_zoom_enabled()
+                or actions.tracking.control_enabled()
+                or actions.tracking.control1_enabled()
+            )
+            should_click = (
+                setting_val == 2 and not actions.tracking.control_zoom_enabled()
+            ) or (
+                setting_val == 1
+                and is_using_eye_tracker
+                and not actions.tracking.control_zoom_enabled()
+            )
+            if should_click:
+                ctrl.mouse_click(button=0, hold=16000)
+
+    def noise_trigger_hiss(active: bool):
+        if setting_mouse_enable_hiss_scroll.get():
+            if active:
+                actions.user.mouse_scroll_down_continuous()
             else:
-                actions.skip()
+                actions.user.mouse_scroll_stop()
+        else:
+            if actions.tracking.control_zoom_enabled():
+                if "talon_plugins.eye_zoom_mouse.zoom_mouse_noise" in registry.tags:
+                    eye_zoom_mouse.zoom_mouse.on_hiss(eye_zoom_mouse.zoom_mouse.state)
+                else:
+                    actions.skip()
+     

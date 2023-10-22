@@ -78,5 +78,9 @@ talent dump context:
     clip.set_text(result)
 talent dump running apps:
     user.talon_dump_running_applications()
+^talent create app context$: user.talon_create_app_context()
+^talent create windows app context$: user.talon_create_app_context("win")
+^talent create linux app context$: user.talon_create_app_context("linux")
+^talent create mac app context$: user.talon_create_app_context("mac")
 talent (bug report | report bug):
     user.open_url("https://github.com/knausj85/knausj_talon/issues")
