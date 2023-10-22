@@ -29,8 +29,8 @@ mod.list("talon_settings")
 mod.list("talon_scopes")
 mod.list("talon_modes")
 
-ctx_talon.matches = r"""
-tag: user.talon
+ctx.matches = r"""
+code.language: talon
 """
 
 ctx_talon_python.matches = r"""

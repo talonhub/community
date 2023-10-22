@@ -1,4 +1,4 @@
-tag: user.java
+code.language: java
 -
 tag(): user.code_imperative
 tag(): user.code_object_oriented
