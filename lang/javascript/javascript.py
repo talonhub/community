@@ -2,8 +2,11 @@ from talon import Context, Module, actions, settings
 
 mod = Module()
 ctx = Context()
-ctx.matches = """
-tag: user.javascript
+ctx.matches = r"""
+code.language: javascript
+code.language: typescript
+code.language: javascriptreact
+code.language: typescriptreact
 """
 
 ctx.lists["user.code_common_function"] = {

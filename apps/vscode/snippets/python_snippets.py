@@ -5,7 +5,7 @@ from talon import Context
 ctx = Context()
 ctx.matches = r"""
 app: vscode
-tag: user.python
+code.language: python
 """
 # short name -> ide clip name
 ctx.lists["user.snippets"] = {

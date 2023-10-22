@@ -50,7 +50,7 @@ class Actions:
 
 ctx = Context()
 ctx.matches = r"""
-tag: user.rust
+code.language: rust
 """
 
 scalar_types = {
