@@ -46,7 +46,9 @@ setting_public_variable_formatter = mod.setting("code_public_variable_formatter"
 
 @mod.action_class
 class Actions:
-    def code_modified_function(modifiers: Union[list[str], int], return_type: str, text: str):
+    def code_modified_function(
+        modifiers: Union[list[str], int], return_type: str, text: str
+    ):
         """
         Inserts function declaration with the given modifiers. modifiers == 0
         implies no modifiers (.talon files don't have empty list literal
