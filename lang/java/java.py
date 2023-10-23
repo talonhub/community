@@ -250,9 +250,10 @@ class UserActions:
         actions.user.paste(text)
         actions.edit.left()
 
-    def code_private_function(text: str):
+    def code_private_function(return_type: str, text: str):
         """Inserts private function declaration"""
-        result = "private void {}".format(
+        result = "private {} {}".format(
+            return_type,
             actions.user.formatted_text(
                 text, settings.get("user.code_private_function_formatter")
             )
@@ -260,9 +261,10 @@ class UserActions:
 
         actions.user.code_insert_function(result, None)
 
-    def code_private_static_function(text: str):
+    def code_private_static_function(return_type: str, text: str):
         """Inserts private static function"""
-        result = "private static void {}".format(
+        result = "private static {} {}".format(
+            return_type,
             actions.user.formatted_text(
                 text, settings.get("user.code_private_function_formatter")
             )
@@ -270,8 +272,9 @@ class UserActions:
 
         actions.user.code_insert_function(result, None)
 
-    def code_protected_function(text: str):
-        result = "void {}".format(
+    def code_protected_function(return_type: str, text: str):
+        result = "protected {} {}".format(
+            return_type,
             actions.user.formatted_text(
                 text, settings.get("user.code_protected_function_formatter")
             )
@@ -279,8 +282,9 @@ class UserActions:
 
         actions.user.code_insert_function(result, None)
 
-    def code_protected_static_function(text: str):
-        result = "static void {}".format(
+    def code_protected_static_function(return_type: str, text: str):
+        result = "protected static {} {}".format(
+            return_type,
             actions.user.formatted_text(
                 text, settings.get("user.code_protected_function_formatter")
             )
@@ -288,8 +292,9 @@ class UserActions:
 
         actions.user.code_insert_function(result, None)
 
-    def code_public_function(text: str):
-        result = "public void {}".format(
+    def code_public_function(return_type: str, text: str):
+        result = "public {} {}".format(
+            return_type,
             actions.user.formatted_text(
                 text, settings.get("user.code_public_function_formatter")
             )
@@ -297,11 +302,13 @@ class UserActions:
 
         actions.user.code_insert_function(result, None)
 
-    def code_public_static_function(text: str):
-        result = "public static void {}".format(
+    def code_public_static_function(return_type: str, text: str):
+        result = "public static {} {}".format(
+            return_type,
             actions.user.formatted_text(
                 text, settings.get("user.code_public_function_formatter")
             )
         )
 
         actions.user.code_insert_function(result, None)
+    

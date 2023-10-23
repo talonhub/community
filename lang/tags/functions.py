@@ -46,7 +46,7 @@ setting_public_variable_formatter = mod.setting("code_public_variable_formatter"
 
 @mod.action_class
 class Actions:
-    def code_modified_function(modifiers: Union[list[str], int], text: str):
+    def code_modified_function(modifiers: Union[list[str], int], return_type: str, text: str):
         """
         Inserts function declaration with the given modifiers. modifiers == 0
         implies no modifiers (.talon files don't have empty list literal
@@ -57,19 +57,19 @@ class Actions:
         if mods == {}:
             return actions.user.code_default_function(text)
         elif mods == {"static"}:
-            return actions.user.code_private_static_function(text)
+            return actions.user.code_private_static_function(return_type, text)
         elif mods == {"private"}:
-            return actions.user.code_private_function(text)
+            return actions.user.code_private_function(return_type, text)
         elif mods == {"private", "static"}:
-            return actions.user.code_private_static_function(text)
+            return actions.user.code_private_static_function(return_type, text)
         elif mods == {"protected"}:
-            return actions.user.code_protected_function(text)
+            return actions.user.code_protected_function(return_type, text)
         elif mods == {"protected", "static"}:
-            return actions.user.code_protected_static_function(text)
+            return actions.user.code_protected_static_function(return_type, text)
         elif mods == {"public"}:
-            return actions.user.code_public_function(text)
+            return actions.user.code_public_function(return_type, text)
         elif mods == {"public", "static"}:
-            return actions.user.code_public_static_function(text)
+            return actions.user.code_public_static_function(return_type, text)
         else:
             raise RuntimeError(f"Unhandled modifier set: {mods}")
 
@@ -77,22 +77,22 @@ class Actions:
         """Inserts function declaration"""
         actions.user.code_private_function(text)
 
-    def code_private_function(text: str):
+    def code_private_function(return_type: str, text: str):
         """Inserts private function declaration"""
 
-    def code_private_static_function(text: str):
+    def code_private_static_function(return_type: str, text: str):
         """Inserts private static function"""
 
-    def code_protected_function(text: str):
+    def code_protected_function(return_type: str, text: str):
         """Inserts protected function declaration"""
 
-    def code_protected_static_function(text: str):
+    def code_protected_static_function(return_type: str, text: str):
         """Inserts public function"""
 
-    def code_public_function(text: str):
+    def code_public_function(return_type: str, text: str):
         """Inserts public function"""
 
-    def code_public_static_function(text: str):
+    def code_public_static_function(return_type: str, text: str):
         """Inserts public function"""
 
     def code_private_function_formatter(name: str):
