@@ -256,7 +256,7 @@ class UserActions:
             return_type,
             actions.user.formatted_text(
                 text, settings.get("user.code_private_function_formatter")
-            )
+            ),
         )
 
         actions.user.code_insert_function(result, None)
@@ -267,7 +267,7 @@ class UserActions:
             return_type,
             actions.user.formatted_text(
                 text, settings.get("user.code_private_function_formatter")
-            )
+            ),
         )
 
         actions.user.code_insert_function(result, None)
@@ -277,7 +277,7 @@ class UserActions:
             return_type,
             actions.user.formatted_text(
                 text, settings.get("user.code_protected_function_formatter")
-            )
+            ),
         )
 
         actions.user.code_insert_function(result, None)
@@ -287,7 +287,7 @@ class UserActions:
             return_type,
             actions.user.formatted_text(
                 text, settings.get("user.code_protected_function_formatter")
-            )
+            ),
         )
 
         actions.user.code_insert_function(result, None)
@@ -297,7 +297,7 @@ class UserActions:
             return_type,
             actions.user.formatted_text(
                 text, settings.get("user.code_public_function_formatter")
-            )
+            ),
         )
 
         actions.user.code_insert_function(result, None)
@@ -307,7 +307,7 @@ class UserActions:
             return_type,
             actions.user.formatted_text(
                 text, settings.get("user.code_public_function_formatter")
-            )
+            ),
         )
 
         actions.user.code_insert_function(result, None)

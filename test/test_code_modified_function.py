@@ -31,15 +31,16 @@ if hasattr(talon, "test_mode"):
             mock = MagicMock()
             actions.register_test_action("user", target_action, mock)
 
-            talon.actions.user.code_modified_function(modifiers, return_type, "test func")
+            talon.actions.user.code_modified_function(
+                modifiers, return_type, "test func"
+            )
 
             mock.assert_called_once()
 
-        #code_default_function remains outside the for loop since it does not take in a return_type
+        # code_default_function remains outside the for loop since it does not take in a return_type
         mock = MagicMock()
         actions.register_test_action("user", "code_default_function", mock)
 
         talon.actions.user.code_modified_function(0, return_type, "test func")
 
         mock.assert_called_once()
-        
