@@ -41,3 +41,7 @@ type {user.code_type} array:
 op array: user.code_operator_subscript()
 
 op new: insert("new ")
+
+# Functions: "[modifier] [return type] funky [function name]"
+^{user.code_function_modifier}* [<user.code_type>] funky <user.text>$:
+    user.code_modified_function(code_function_modifier_list or 0, text, code_type or "void")

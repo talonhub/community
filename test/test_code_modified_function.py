@@ -18,28 +18,19 @@ if hasattr(talon, "test_mode"):
         """
 
         examples = [
-            (["static"], "void", "code_private_static_function"),
-            (["private"], "void", "code_private_function"),
-            (["private", "static"], "void", "code_private_static_function"),
-            (["protected"], "void", "code_protected_function"),
-            (["protected", "static"], "void", "code_protected_static_function"),
-            (["public"], "void", "code_public_function"),
-            (["public", "static"], "void", "code_public_static_function"),
+            (0, "code_default_function"),
+            (["static"], "code_private_static_function"),
+            (["private"], "code_private_function"),
+            (["private", "static"], "code_private_static_function"),
+            (["protected"], "code_protected_function"),
+            (["protected", "static"], "code_protected_static_function"),
+            (["public"], "code_public_function"),
+            (["public", "static"], "code_public_static_function"),
         ]
-
-        for modifiers, return_type, target_action in examples:
+        for modifiers, target_action in examples:
             mock = MagicMock()
             actions.register_test_action("user", target_action, mock)
 
-            talon.actions.user.code_modified_function(modifiers, return_type, "test func")
+            talon.actions.user.code_modified_function(modifiers, "test func")
 
             mock.assert_called_once()
-
-        #code_default_function remains outside the for loop since it does not take in a return_type
-        mock = MagicMock()
-        actions.register_test_action("user", "code_default_function", mock)
-
-        talon.actions.user.code_modified_function(0, return_type, "test func")
-
-        mock.assert_called_once()
-        
