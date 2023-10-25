@@ -59,19 +59,29 @@ class Actions:
             if mods == {}:
                 return actions.user.code_default_function_with_return(text)
             elif mods == {"static"}:
-                return actions.user.code_private_static_function_with_return(text, return_type)
+                return actions.user.code_private_static_function_with_return(
+                    text, return_type
+                )
             elif mods == {"private"}:
                 return actions.user.code_private_function_with_return(text, return_type)
             elif mods == {"private", "static"}:
-                return actions.user.code_private_static_function_with_return(text, return_type)
+                return actions.user.code_private_static_function_with_return(
+                    text, return_type
+                )
             elif mods == {"protected"}:
-                return actions.user.code_protected_function_with_return(text, return_type)
+                return actions.user.code_protected_function_with_return(
+                    text, return_type
+                )
             elif mods == {"protected", "static"}:
-                return actions.user.code_protected_static_function_with_return(text, return_type)
+                return actions.user.code_protected_static_function_with_return(
+                    text, return_type
+                )
             elif mods == {"public"}:
                 return actions.user.code_public_function_with_return(text, return_type)
             elif mods == {"public", "static"}:
-                return actions.user.code_public_static_function_with_return(text, return_type)
+                return actions.user.code_public_static_function_with_return(
+                    text, return_type
+                )
             else:
                 raise RuntimeError(f"Unhandled modifier set: {mods}")
         else:
