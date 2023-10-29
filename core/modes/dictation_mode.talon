@@ -1,4 +1,3 @@
-experiment: anchor-file
 mode: dictation
 -
 # ^press <user.modifiers>$: key(modifiers)
