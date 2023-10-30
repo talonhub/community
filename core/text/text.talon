@@ -5,17 +5,18 @@ phrase <user.text>$:
 phrase <user.text> over:
     user.add_phrase_to_history(text)
     insert(text)
-{user.prose_formatter} <user.prose>$: user.insert_formatted(prose, prose_formatter)
-{user.prose_formatter} <user.prose> over: user.insert_formatted(prose, prose_formatter)
+# {user.prose_formatter} <user.prose>$: user.insert_formatted(prose, prose_formatter)
+# {user.prose_formatter} <user.prose> over: user.insert_formatted(prose, prose_formatter)
+
 say <user.prose>$:user.dictation_insert(prose)
 say <user.prose> over:user.dictation_insert(prose)
-<user.format_text>+$: user.insert_many(format_text_list)
-<user.format_text>+ over: user.insert_many(format_text_list)
+<user.format_code>+$: user.insert_many(format_code_list)
+<user.format_code>+ over: user.insert_many(format_code_list)
 <user.formatters> that: user.formatters_reformat_selection(user.formatters)
 word <user.word>:
     user.add_phrase_to_history(word)
     insert(word)
-title <user.word>: 
+proud | title <user.word>: 
     user.add_phrase_to_history(word)
     user.insert_formatted(word, "CAPITALIZE_FIRST_WORD")    
 recent list: user.toggle_phrase_history()

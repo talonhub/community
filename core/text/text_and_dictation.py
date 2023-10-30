@@ -53,17 +53,17 @@ def prose_modifier(m) -> Callable:
     return getattr(DictationFormat, m.prose_modifiers)
 
 
-@mod.capture(rule="numeral <user.number_string>")
+@mod.capture(rule="(telly | numeral) <user.number_string>")
 def prose_simple_number(m) -> str:
     return m.number_string
 
 
-@mod.capture(rule="numeral <user.number_string> (dot | point) <digit_string>")
+@mod.capture(rule="(telly | numeral) <user.number_string> (dot | point) <digit_string>")
 def prose_number_with_dot(m) -> str:
     return m.number_string + "." + m.digit_string
 
 
-@mod.capture(rule="numeral <user.number_string> colon <user.number_string>")
+@mod.capture(rule="(telly | numeral) <user.number_string> colon <user.number_string>")
 def prose_number_with_colon(m) -> str:
     return m.number_string_1 + ":" + m.number_string_2
 
