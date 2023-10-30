@@ -186,7 +186,7 @@ code_formatter_names = {
     "snake": "SNAKE_CASE",
     "string": "SINGLE_QUOTED_STRING",
     "title": "CAPITALIZE_ALL_WORDS",
-    "proud": "CAPITALIZE_ALL_WORDS",
+    # "proud": "CAPITALIZE_ALL_WORDS",
 }
 prose_formatter_names = {
     # "say": "NOOP",

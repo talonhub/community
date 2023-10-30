@@ -16,7 +16,7 @@ say <user.prose> over:user.dictation_insert(prose)
 word <user.word>:
     user.add_phrase_to_history(word)
     insert(word)
-proud | title <user.word>: 
+title <user.word>: 
     user.add_phrase_to_history(word)
     user.insert_formatted(word, "CAPITALIZE_FIRST_WORD")    
 recent list: user.toggle_phrase_history()
