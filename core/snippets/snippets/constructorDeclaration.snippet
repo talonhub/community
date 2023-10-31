@@ -1,4 +1,5 @@
 name: constructorDeclaration
+phrase: constructor
 insertionScope: namedFunction | statement
 ---
 
@@ -11,7 +12,7 @@ constructor($1) {
 
 language: java
 -
-$modifiers $name($1) {
+$modifiers $1($2) {
     $0
 }
 ---

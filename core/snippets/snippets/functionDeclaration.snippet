@@ -1,4 +1,5 @@
 name: functionDeclaration
+phrase: funk
 insertionScope: namedFunction | statement
 
 $0.wrapperPhrase: funk
@@ -7,20 +8,20 @@ $0.wrapperScope: statement
 
 language: javascript
 -
-function $name($1) {
+function $1($2) {
     $0
 }
 ---
 
 language: java
 -
-$modifiers void $name($1) {
+$modifiers void $1($2) {
     $0
 }
 ---
 
 language: python
 -
-def $name($1):
+def $1($2):
     $0
 ---
