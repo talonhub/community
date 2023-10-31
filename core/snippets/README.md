@@ -36,6 +36,10 @@ Tab stops(`$0`) and variables(`$try`) can be used to wrap with using the followi
 | wrapperPhrase      | No       | Yes             | `$0.wrapperPhrase: try \| trying`   |
 | wrapperScope       | No       | No              | `$0.wrapperScope: statement`        |
 
+## Formatting and syntax highlighting
+
+To get formatting and syntax highlighting for `.snippet` files install [andreas-talon](https://marketplace.visualstudio.com/items?itemName=AndreasArvidsson.andreas-talon)
+
 ## Images
 
 ### Single snippet definition
