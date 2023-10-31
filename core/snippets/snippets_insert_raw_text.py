@@ -1,5 +1,6 @@
-from talon import actions
 import re
+
+from talon import actions
 
 
 def insert_snippet_raw_text(body: str):

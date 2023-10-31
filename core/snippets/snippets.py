@@ -1,9 +1,11 @@
-from talon import Module, Context, app, fs
-from pathlib import Path
 import glob
+from pathlib import Path
+
+from talon import Context, Module, app, fs
+
 from ..modes.language_modes import language_ids
-from .snippets_parser import create_snippets_from_file
 from .snippet_types import Snippet
+from .snippets_parser import create_snippets_from_file
 
 SNIPPETS_DIR = Path(__file__).parent / "snippets"
 
