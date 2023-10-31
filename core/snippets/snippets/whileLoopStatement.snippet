@@ -1,0 +1,17 @@
+name: whileLoopStatement
+phrase: while
+insertionScope: statement
+---
+
+language: javascript | java
+-
+while($1) {
+    $0
+}
+---
+
+language: python
+-
+while $1:
+    $0
+---

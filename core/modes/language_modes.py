@@ -84,6 +84,8 @@ extension_lang_map = {
     for ext in extensions.split()
 }
 
+language_ids = set(language_extensions.keys())
+
 forced_language = ""
 
 

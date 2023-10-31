@@ -238,19 +238,19 @@ class UserActions:
         actions.user.vscode("editor.action.moveSelectionToNextFindMatch")
 
     # snippet.py support begin
-    def snippet_search(text: str):
-        actions.user.vscode("editor.action.insertSnippet")
-        actions.insert(text)
+    # def snippet_search(text: str):
+    #     actions.user.vscode("editor.action.insertSnippet")
+    #     actions.insert(text)
 
-    def snippet_insert(text: str):
-        """Inserts a snippet"""
-        actions.user.vscode("editor.action.insertSnippet")
-        actions.insert(text)
-        actions.key("enter")
+    # def snippet_insert(text: str):
+    #     """Inserts a snippet"""
+    #     actions.user.vscode("editor.action.insertSnippet")
+    #     actions.insert(text)
+    #     actions.key("enter")
 
-    def snippet_create():
-        """Triggers snippet creation"""
-        actions.user.vscode("workbench.action.openSnippets")
+    # def snippet_create():
+    #     """Triggers snippet creation"""
+    #     actions.user.vscode("workbench.action.openSnippets")
 
     # snippet.py support end
 
@@ -393,3 +393,6 @@ class UserActions:
         actions.edit.find(text)
         actions.sleep("100ms")
         actions.key("esc")
+
+    def insert_snippet(body: str):
+        actions.user.run_rpc_command("editor.action.insertSnippet", {"snippet": body})

@@ -191,7 +191,7 @@ code_formatter_names = {
 prose_formatter_names = {
     # "say": "NOOP",
     "speak": "NOOP",
-    "sentence": "CAPITALIZE_FIRST_WORD",
+    "SENTENCE": "CAPITALIZE_FIRST_WORD",
 }
 # Mapping from spoken phrases to formatters
 formatter_words = {

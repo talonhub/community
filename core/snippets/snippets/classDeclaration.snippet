@@ -1,0 +1,23 @@
+name: classDeclaration
+insertionScope: class | statement
+---
+
+language: javascript
+-
+class $name {
+    $0
+}
+---
+
+language: java
+-
+$modifiers class $name {
+    $0
+}
+---
+
+language: python
+-
+class $name:
+    $0
+---

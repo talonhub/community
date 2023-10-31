@@ -1,0 +1,23 @@
+name: constructorDeclaration
+insertionScope: namedFunction | statement
+---
+
+language: javascript
+-
+constructor($1) {
+    $0
+}
+---
+
+language: java
+-
+$modifiers $name($1) {
+    $0
+}
+---
+
+language: python
+-
+def __init__(self$1):
+    $0
+---
