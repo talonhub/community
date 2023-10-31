@@ -7,6 +7,8 @@ $0.wrapperScope: statement
 ---
 
 language: javascript
+
+$1.insertionFormatter: PRIVATE_CAMEL_CASE
 -
 function $1($2) {
     $0
@@ -14,13 +16,17 @@ function $1($2) {
 ---
 
 language: java
+
+$1.insertionFormatter: PRIVATE_CAMEL_CASE
 -
-$modifiers void $1($2) {
+void $1($2) {
     $0
 }
 ---
 
 language: python
+
+$1.insertionFormatter: SNAKE_CASE
 -
 def $1($2):
     $0
