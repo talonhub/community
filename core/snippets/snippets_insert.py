@@ -31,7 +31,7 @@ class Actions:
         for variable in snippet.variables:
             if variable.insertionFormatters is not None:
                 formatters = ",".join(variable.insertionFormatters)
-                formatted_phrase = actions.user.format_text(phrase, formatters)
+                formatted_phrase = actions.user.formatted_text(phrase, formatters)
                 substitutions[variable.name] = formatted_phrase
 
         actions.user.insert_snippet_by_name(name, substitutions)
