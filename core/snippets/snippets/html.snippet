@@ -1,0 +1,40 @@
+language: html
+---
+
+name: element
+insertionScope: xmlElement
+-
+<$name>
+    $0
+</$name>
+---
+
+name: attribute
+-
+$name=$0
+---
+
+name: table
+phrase: table
+-
+<table className="table table-striped">
+    <thead>
+        <tr>
+            <th>$1</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>$0</td>
+        </tr>
+    </tbody>
+</table>
+---
+
+name: unorderedList
+phrase: list
+-
+<ul>
+    <li>$0</li>
+</ul>
+---

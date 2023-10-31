@@ -1,0 +1,26 @@
+name: functionDeclaration
+insertionScope: namedFunction | statement
+
+$0.wrapperPhrase: funk
+$0.wrapperScope: statement
+---
+
+language: javascript
+-
+function $name($1) {
+    $0
+}
+---
+
+language: java
+-
+$modifiers void $name($1) {
+    $0
+}
+---
+
+language: python
+-
+def $name($1):
+    $0
+---
