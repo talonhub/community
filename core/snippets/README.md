@@ -1,6 +1,6 @@
 # Snippets
 
-Custom formats to represent snippets.
+Custom format to represent snippets.
 
 ## Features
 
