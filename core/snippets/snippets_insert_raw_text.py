@@ -23,6 +23,7 @@ def insert_snippet_raw_text(body: str):
                 stop_col = line.index("$0")
 
         # Replace placeholders with default text
+        # FIXME: Find variable `CLIPBOARD` and replace with clipboard content
         line = re.sub(r"\$\{\d+:(.*?)\}", r"\1", line)
         # Remove tab stops
         line = re.sub(r"\$\d+", "", line)
