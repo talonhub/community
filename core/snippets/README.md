@@ -5,8 +5,8 @@ Custom format to represent snippets.
 ## Features
 
 - Custom file ending `.snippet`.
-- VSCode syntax highlights.
-- VSCode document formatter.
+- Supports syntax highlighting in VSCode via an [extension](https://marketplace.visualstudio.com/items?itemName=AndreasArvidsson.andreas-talon)
+- Supports auto-formatting in VSCode via an [extension](https://marketplace.visualstudio.com/items?itemName=AndreasArvidsson.andreas-talon)
 - Support for insertion and wrapper snippets.
 - Support for phrase formatters.
 
