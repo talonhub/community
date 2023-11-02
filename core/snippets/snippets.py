@@ -1,5 +1,5 @@
-from collections import defaultdict
 import glob
+from collections import defaultdict
 from pathlib import Path
 
 from talon import Context, Module, app, fs
