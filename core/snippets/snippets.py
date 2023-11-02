@@ -48,9 +48,9 @@ def update_snippets():
         insertions_phrase_map = {}
         wrapper_map = {}
 
-        for fl in get_fallback_languages(lang):
+        for sl in get_super_languages(lang):
             snippets, insertions, insertions_phrase, wrappers = create_lists(
-                lang, fl, grouped.get(fl, [])
+                lang, sl, grouped.get(sl, [])
             )
             snippets_map.update(snippets)
             insertion_map.update(insertions)
@@ -72,7 +72,10 @@ def get_snippets() -> list[Snippet]:
     return result
 
 
-def get_fallback_languages(language: str) -> list[str]:
+def get_super_languages(language: str) -> list[str]:
+    """Returns a list of languages that are considered a superset of <language>, including <language> itself. Eg `javascript` will be included in the list when <language> is `typescript`.
+    Note that the order of languages returned here is very important: more general must precede more specific, so that specific langs can properly override general languages.
+    """
     match language:
         case "_":
             return ["_"]
