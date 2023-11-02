@@ -18,6 +18,7 @@ mod.list(
 mod.list("snippet_wrap", "List of wrapper snippets")
 
 context_map = {
+    # `_` represents the global context, ie snippets available regardless of language
     "_": Context(),
 }
 snippets_map = {}
