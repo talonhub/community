@@ -2,7 +2,7 @@ import glob
 from collections import defaultdict
 from pathlib import Path
 
-from talon import Context, Module, app, fs, actions
+from talon import Context, Module, actions, app, fs
 
 from ..modes.language_modes import language_ids
 from .snippet_types import Snippet
