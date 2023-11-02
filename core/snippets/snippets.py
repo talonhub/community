@@ -1,3 +1,4 @@
+from collections import defaultdict
 import glob
 from pathlib import Path
 
@@ -93,16 +94,12 @@ def get_fallback_languages(language: str) -> list[str]:
 
 
 def group_by_language(snippets: list[Snippet]) -> dict[str, list[Snippet]]:
-    result = {}
+    result = defaultdict(list)
     for snippet in snippets:
         if snippet.languages is not None:
             for lang in snippet.languages:
-                if not lang in result:
-                    result[lang] = []
                 result[lang].append(snippet)
         else:
-            if "_" not in result:
-                result["_"] = []
             result["_"].append(snippet)
     return result
 
