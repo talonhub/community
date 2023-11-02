@@ -217,7 +217,7 @@ def parse_document(
 def parse_context(
     file: str, line: int, document: SnippetDocument, text: str
 ) -> Union[SnippetDocument, None]:
-    lines = [l.strip() for l in re.split(r"\r?\n", text)]
+    lines = [l.strip() for l in text.splitlines()]
     keys: set[str] = set()
     variables: dict[str, SnippetVariable] = {}
 
