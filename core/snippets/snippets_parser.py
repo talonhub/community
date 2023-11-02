@@ -49,7 +49,7 @@ def create_snippets(documents: list[SnippetDocument]) -> list[Snippet]:
 
 def create_snippet(
     document: SnippetDocument, default_context: SnippetDocument
-) -> Snippet:
+) -> Snippet | None:
     snippet = Snippet(
         name=document.name or default_context.name,
         languages=document.languages or default_context.languages,
