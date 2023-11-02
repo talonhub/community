@@ -113,7 +113,7 @@ def create_lists(
     lang_snippets: str,
     lang_ctx: str,
     snippets: list[Snippet],
-) -> tuple[dict[str, list[Snippet]], dict[str, str], dict[str, str]]:
+) -> tuple[dict[str, list[Snippet]], dict[str, str], dict[str, str], dict[str, str]]:
     snippets_map = {}
     insertions = {}
     insertions_phrase = {}
