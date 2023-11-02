@@ -10,11 +10,11 @@ class SnippetDocument:
     line_doc: int
     line_body: int
     variables: list[SnippetVariable] = []
-    name: str = None
-    phrases: list[str] = None
-    insertionScopes: list[str] = None
-    languages: list[str] = None
-    body: str = None
+    name: str | None = None
+    phrases: list[str] | None = None
+    insertionScopes: list[str] | None = None
+    languages: list[str] | None = None
+    body: str | None = None
 
     def __init__(self, file: str, line_doc: int, line_body: int):
         self.file = file
@@ -73,7 +73,7 @@ def validate_snippet(document: SnippetDocument, snippet: Snippet) -> bool:
 
     for variable in snippet.variables:
         var_name = f"${variable.name}"
-        if not var_name in snippet.body:
+        if var_name not in snippet.body:
             error(
                 document.file,
                 document.line_body,
@@ -107,7 +107,7 @@ def combine_variables(
     variables: dict[str, SnippetVariable] = {}
 
     for variable in [*default_variables, *document_variables]:
-        if not variable.name in variables:
+        if variable.name not in variables:
             variables[variable.name] = SnippetVariable(variable.name)
 
         new_variable = variables[variable.name]
@@ -132,7 +132,7 @@ def normalize_snippet_body_tabs(body: str) -> str:
     lines = []
     smallest_indentation = None
 
-    for line in re.split(r"\r?\n", body):
+    for line in body.splitlines():
         match = re.search(r"^\s+", line)
         indentation = match.group() if match is not None else ""
 
@@ -178,7 +178,7 @@ def parse_file_content(file: str, text: str) -> list[SnippetDocument]:
     line = 0
 
     for i, doc_text in enumerate(doc_texts):
-        optional_body = i == 0 and len(doc_texts)
+        optional_body = i == 0 and len(doc_texts) > 1
         document = parse_document(file, line, optional_body, doc_text)
         if document is not None:
             documents.append(document)
@@ -203,7 +203,7 @@ def parse_document(
     if len(parts) == 2:
         body = parse_body(parts[1])
         if body is not None:
-            if org_doc is None:
+            if document is None:
                 document = org_doc
             document.body = body
 
