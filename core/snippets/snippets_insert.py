@@ -29,8 +29,8 @@ class Actions:
         substitutions = {}
 
         for variable in snippet.variables:
-            if variable.insertionFormatters is not None:
-                formatters = ",".join(variable.insertionFormatters)
+            if variable.insertion_formatters is not None:
+                formatters = ",".join(variable.insertion_formatters)
                 formatted_phrase = actions.user.formatted_text(phrase, formatters)
                 substitutions[variable.name] = formatted_phrase
 

@@ -81,7 +81,7 @@ def validate_snippet(document: SnippetDocument, snippet: Snippet) -> bool:
             )
             is_valid = False
 
-        if variable.insertionFormatters is not None and snippet.phrases is None:
+        if variable.insertion_formatters is not None and snippet.phrases is None:
             error(
                 document.file,
                 document.line_doc,
@@ -89,7 +89,7 @@ def validate_snippet(document: SnippetDocument, snippet: Snippet) -> bool:
             )
             is_valid = False
 
-        if variable.wrapperScope is not None and variable.wrapperPhrases is None:
+        if variable.wrapper_scope is not None and variable.wrapper_phrases is None:
             error(
                 document.file,
                 document.line_doc,
@@ -112,14 +112,14 @@ def combine_variables(
 
         new_variable = variables[variable.name]
 
-        if variable.insertionFormatters is not None:
-            new_variable.insertionFormatters = variable.insertionFormatters
+        if variable.insertion_formatters is not None:
+            new_variable.insertion_formatters = variable.insertion_formatters
 
-        if variable.wrapperPhrases is not None:
-            new_variable.wrapperPhrases = variable.wrapperPhrases
+        if variable.wrapper_phrases is not None:
+            new_variable.wrapper_phrases = variable.wrapper_phrases
 
-        if variable.wrapperScope is not None:
-            new_variable.wrapperScope = variable.wrapperScope
+        if variable.wrapper_scope is not None:
+            new_variable.wrapper_scope = variable.wrapper_scope
 
     return list(variables.values())
 
@@ -310,11 +310,11 @@ def parse_variable(
 
     match field:
         case "insertionFormatter":
-            get_variable(name).insertionFormatters = parse_vector_value(value)
+            get_variable(name).insertion_formatters = parse_vector_value(value)
         case "wrapperPhrase":
-            get_variable(name).wrapperPhrases = parse_vector_value(value)
+            get_variable(name).wrapper_phrases = parse_vector_value(value)
         case "wrapperScope":
-            get_variable(name).wrapperScope = value
+            get_variable(name).wrapper_scope = value
         case _:
             error(file, line_numb, f"Invalid variable key '{key}'")
             return False

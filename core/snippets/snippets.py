@@ -130,12 +130,12 @@ def create_lists(
 
         if snippet.variables is not None:
             for var in snippet.variables:
-                if var.insertionFormatters is not None and snippet.phrases is not None:
+                if var.insertion_formatters is not None and snippet.phrases is not None:
                     for phrase in snippet.phrases:
                         insertions_phrase[phrase] = id_ctx
 
-                if var.wrapperPhrases is not None:
-                    for phrase in var.wrapperPhrases:
+                if var.wrapper_phrases is not None:
+                    for phrase in var.wrapper_phrases:
                         wrappers[phrase] = f"{id_ctx}.{var.name}"
 
     return snippets_map, insertions, insertions_phrase, wrappers
