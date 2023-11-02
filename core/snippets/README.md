@@ -40,7 +40,7 @@ It's also possible to set configuration that applies to a specific tab stop (`$0
 
 To get formatting and syntax highlighting for `.snippet` files install [andreas-talon](https://marketplace.visualstudio.com/items?itemName=AndreasArvidsson.andreas-talon)
 
-## Images
+## Examples
 
 ### Single snippet definition
 
