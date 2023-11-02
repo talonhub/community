@@ -39,7 +39,7 @@ class Actions:
 
 
 def update_snippets():
-    grouped = group_by_language(get_snippets())
+    language_to_snippets  = group_by_language(get_snippets())
 
     snippets_map.clear()
 
@@ -50,7 +50,9 @@ def update_snippets():
 
         for sl in get_super_languages(lang):
             snippets, insertions, insertions_phrase, wrappers = create_lists(
-                lang, sl, grouped.get(sl, [])
+                lang, 
+                sl, 
+                language_to_snippets.get(sl, []),
             )
             snippets_map.update(snippets)
             insertion_map.update(insertions)
