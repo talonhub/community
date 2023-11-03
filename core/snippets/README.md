@@ -17,7 +17,7 @@ Custom format to represent snippets.
 - Optionally a file can have a single context at the top with no body. This is not a snippet in itself, but default values to be inherited by the other snippet documents in the same file.
 - Some context keys supports multiple values. These values are separated by `|`.
   - For most keys like `language` or `phrase` multiple values means _or_. You can use phrase _1_ or phrase _2_. The snippet is active in language _A_ or language _B_.
-  - For `insertionFormatter` multiple values means that all of the formatters will be used.
+  - For `insertionFormatter` multiple values means that the formatters will be applied in sequence.
 
 ### Context fields
 
