@@ -10,3 +10,7 @@ exit <number_small>:
     key(up)
     sleep(500ms)
     key(enter)
+
+right screen: key("super-shift-right")
+
+left screen: key("super-shift-left")
