@@ -55,12 +55,14 @@ class Actions:
         scope: str = None,
     ):
         """Wrap the target with snippet"""
-        var_name = f"${variable_name}"
+        reg = re.compile(rf"\${variable_name}|\$\{{{variable_name}\}}")
 
-        if var_name not in body:
-            raise ValueError(f"Wrapper variable '{var_name}' missing in body '{body}'")
+        if not reg.search(body):
+            raise ValueError(
+                f"Can't wrap non existing variable '{variable_name}' in snippet body '{body}'"
+            )
 
-        body = body.replace(f"{var_name}", "$TM_SELECTED_TEXT")
+        body = reg.sub("$TM_SELECTED_TEXT", body)
 
         actions.user.cursorless_wrap_with_snippet(body, target, None, scope)
 
