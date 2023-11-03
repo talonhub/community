@@ -13,9 +13,7 @@ SNIPPETS_DIR = Path(__file__).parent / "snippets"
 mod = Module()
 
 mod.list("snippet", "List of insertion snippets")
-mod.list(
-    "snippet_with_phrase", "List of insertion snippets containing a text phrase"
-)
+mod.list("snippet_with_phrase", "List of insertion snippets containing a text phrase")
 mod.list("snippet_wrap", "List of wrapper snippets")
 
 context_map = {
