@@ -14,7 +14,7 @@ mod = Module()
 
 mod.list("snippet", "List of insertion snippets")
 mod.list("snippet_with_phrase", "List of insertion snippets containing a text phrase")
-mod.list("snippet_wrap", "List of wrapper snippets")
+mod.list("snippet_wrapper", "List of wrapper snippets")
 
 context_map = {
     # `_` represents the global context, ie snippets available regardless of language
@@ -67,7 +67,7 @@ def update_snippets():
 
         ctx.lists["user.snippet"] = insertion_map
         ctx.lists["user.snippet_with_phrase"] = insertions_phrase_map
-        ctx.lists["user.snippet_wrap"] = wrapper_map
+        ctx.lists["user.snippet_wrapper"] = wrapper_map
 
 
 def get_snippets() -> list[Snippet]:
