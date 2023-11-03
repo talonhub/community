@@ -47,3 +47,31 @@ class Actions:
             )
 
         actions.user.insert_snippet_by_name(name, substitutions)
+
+    def insert_wrapper_snippet(
+        target: Any,
+        body: str,
+        variable_name: str,
+        scope: str = None,
+    ):
+        """Wrap the target with snippet"""
+        var_name = f"${variable_name}"
+
+        if var_name not in body:
+            raise ValueError(f"Wrapper variable '{var_name}' missing in body '{body}'")
+
+        body = body.replace(f"{var_name}", "$TM_SELECTED_TEXT")
+
+        actions.user.cursorless_wrap_with_snippet(body, target, None, scope)
+
+    def insert_wrapper_snippet_by_name(target: Any, id: str):
+        """Wrap the target with snippet <id>"""
+        index = id.rindex(".")
+        snippet_name = id[:index]
+        variable_name = id[index + 1]
+        snippet: Snippet = actions.user.get_snippet(snippet_name)
+        variable = snippet.get_variable_strict(variable_name)
+
+        actions.user.insert_wrapper_snippet(
+            target, snippet.body, variable_name, variable.wrapper_scope
+        )

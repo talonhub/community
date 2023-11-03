@@ -12,6 +12,7 @@ tagList = [
     "readline",
     "taskwarrior",  # commandline tag for taskwarrior commands
     "tmux",
+    "cursorless",
 ]
 for entry in tagList:
     mod.tag(entry, f"tag to load {entry} and/or related plugins ")
