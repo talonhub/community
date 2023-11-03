@@ -12,9 +12,9 @@ SNIPPETS_DIR = Path(__file__).parent / "snippets"
 
 mod = Module()
 
-mod.list("snippet_insert", "List of insertion snippets")
+mod.list("snippet", "List of insertion snippets")
 mod.list(
-    "snippet_insert_with_phrase", "List of insertion snippets containing a text phrase"
+    "snippet_with_phrase", "List of insertion snippets containing a text phrase"
 )
 mod.list("snippet_wrap", "List of wrapper snippets")
 
@@ -67,8 +67,8 @@ def update_snippets():
             insertions_phrase_map.update(insertions_phrase)
             wrapper_map.update(wrappers)
 
-        ctx.lists["user.snippet_insert"] = insertion_map
-        ctx.lists["user.snippet_insert_with_phrase"] = insertions_phrase_map
+        ctx.lists["user.snippet"] = insertion_map
+        ctx.lists["user.snippet_with_phrase"] = insertions_phrase_map
         ctx.lists["user.snippet_wrap"] = wrapper_map
 
 
