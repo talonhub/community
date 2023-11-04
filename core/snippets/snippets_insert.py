@@ -51,29 +51,24 @@ class Actions:
     def insert_wrapper_snippet(
         target: Any,
         body: str,
-        variable_name: str,
         scope: str = None,
     ):
         """Wrap the target with snippet"""
-        reg = re.compile(rf"\${variable_name}|\$\{{{variable_name}\}}")
 
-        if not reg.search(body):
-            raise ValueError(
-                f"Can't wrap non existing variable '{variable_name}' in snippet body '{body}'"
-            )
-
-        body = reg.sub("$TM_SELECTED_TEXT", body)
-
-        actions.user.cursorless_wrap_with_snippet(body, target, None, scope)
-
-    def insert_wrapper_snippet_by_name(target: Any, id: str):
-        """Wrap the target with snippet <id>"""
-        index = id.rindex(".")
-        snippet_name = id[:index]
-        variable_name = id[index + 1]
+    def insert_wrapper_snippet_by_name(target: Any, name: str):
+        """Wrap the target with snippet <name>"""
+        index = name.rindex(".")
+        snippet_name = name[:index]
+        variable_name = name[index + 1]
         snippet: Snippet = actions.user.get_snippet(snippet_name)
         variable = snippet.get_variable_strict(variable_name)
+        reg = re.compile(rf"\${variable_name}|\$\{{{variable_name}\}}")
 
-        actions.user.insert_wrapper_snippet(
-            target, snippet.body, variable_name, variable.wrapper_scope
-        )
+        if not reg.search(snippet.body):
+            raise ValueError(
+                f"Can't wrap non existing variable '{variable_name}' in snippet body '{snippet.body}'"
+            )
+
+        body = reg.sub("$TM_SELECTED_TEXT", snippet.body)
+
+        actions.user.insert_wrapper_snippet(target, body, variable.wrapper_scope)
