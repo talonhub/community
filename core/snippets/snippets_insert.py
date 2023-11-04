@@ -49,13 +49,13 @@ class Actions:
         actions.user.insert_snippet_by_name(name, substitutions)
 
     def insert_wrapper_snippet(
-        target: Any,
         body: str,
+        target: Any,
         scope: str = None,
     ):
         """Wrap the target with snippet"""
 
-    def insert_wrapper_snippet_by_name(target: Any, name: str):
+    def insert_wrapper_snippet_by_name(name: str, target: Any):
         """Wrap the target with snippet <name>"""
         index = name.rindex(".")
         snippet_name = name[:index]
@@ -71,4 +71,4 @@ class Actions:
 
         body = reg.sub("$TM_SELECTED_TEXT", snippet.body)
 
-        actions.user.insert_wrapper_snippet(target, body, variable.wrapper_scope)
+        actions.user.insert_wrapper_snippet(body, target, variable.wrapper_scope)
