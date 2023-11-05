@@ -1,13 +1,13 @@
 # Snippets
 
-Custom formats to represent snippets.
+Custom format to represent snippets.
 
 ## Features
 
 - Custom file ending `.snippet`.
-- VSCode syntax highlights.
-- VSCode document formatter.
-- Support for insertion and wrapper snippets.
+- Supports syntax highlighting in VSCode via an [extension](https://marketplace.visualstudio.com/items?itemName=AndreasArvidsson.andreas-talon)
+- Supports auto-formatting in VSCode via an [extension](https://marketplace.visualstudio.com/items?itemName=AndreasArvidsson.andreas-talon)
+- Support for insertion and wrapper snippets. Note that while the snippet file syntax here supports wrapper snippets, we still need to add the proper voice commands; stay tuned.
 - Support for phrase formatters.
 
 ## Format
@@ -16,6 +16,8 @@ Custom formats to represent snippets.
 - Each snippet document has a context and body separated by `-`.
 - Optionally a file can have a single context at the top with no body. This is not a snippet in itself, but default values to be inherited by the other snippet documents in the same file.
 - Some context keys supports multiple values. These values are separated by `|`.
+  - For most keys like `language` or `phrase` multiple values means _or_. You can use phrase _1_ or phrase _2_. The snippet is active in language _A_ or language _B_.
+  - For `insertionFormatter` multiple values means that the formatters will be applied in sequence.
 
 ### Context fields
 
@@ -28,7 +30,7 @@ Custom formats to represent snippets.
 
 ### Variables
 
-Tab stops(`$0`) and variables(`$try`) can be used to wrap with using the following fields.
+It's also possible to set configuration that applies to a specific tab stop (`$0`) or variable (`$try`):
 
 | Key                | Required | Multiple values | Example                             |
 | ------------------ | -------- | --------------- | ----------------------------------- |
@@ -40,7 +42,7 @@ Tab stops(`$0`) and variables(`$try`) can be used to wrap with using the followi
 
 To get formatting and syntax highlighting for `.snippet` files install [andreas-talon](https://marketplace.visualstudio.com/items?itemName=AndreasArvidsson.andreas-talon)
 
-## Images
+## Examples
 
 ### Single snippet definition
 

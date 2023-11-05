@@ -1,7 +1,8 @@
 import glob
+from collections import defaultdict
 from pathlib import Path
 
-from talon import Context, Module, app, fs
+from talon import Context, Module, actions, app, fs
 
 from ..modes.language_modes import language_ids
 from .snippet_types import Snippet
@@ -11,13 +12,12 @@ SNIPPETS_DIR = Path(__file__).parent / "snippets"
 
 mod = Module()
 
-mod.list("snippet_insert", "List of insertion snippets")
-mod.list(
-    "snippet_insert_with_phrase", "List of insertion snippets containing a text phrase"
-)
-mod.list("snippet_wrap", "List of wrapper snippets")
+mod.list("snippet", "List of insertion snippets")
+mod.list("snippet_with_phrase", "List of insertion snippets containing a text phrase")
+mod.list("snippet_wrapper", "List of wrapper snippets")
 
 context_map = {
+    # `_` represents the global context, ie snippets available regardless of language
     "_": Context(),
 }
 snippets_map = {}
@@ -32,12 +32,20 @@ for lang in language_ids:
 @mod.action_class
 class Actions:
     def get_snippet(name: str) -> Snippet:
-        """Get snippet by <name>"""
+        """Get snippet named <name>"""
+        # Add current code language if not specified
+        if "." not in name:
+            lang = actions.code.language() or "_"
+            name = f"{lang}.{name}"
+
+        if name not in snippets_map:
+            raise ValueError(f"Unknown snippet '{name}'")
+
         return snippets_map[name]
 
 
 def update_snippets():
-    grouped = group_by_language(get_snippets())
+    language_to_snippets = group_by_language(get_snippets())
 
     snippets_map.clear()
 
@@ -46,22 +54,24 @@ def update_snippets():
         insertions_phrase_map = {}
         wrapper_map = {}
 
-        for fl in get_fallback_languages(lang):
+        for lang_super in get_super_languages(lang):
             snippets, insertions, insertions_phrase, wrappers = create_lists(
-                lang, fl, grouped.get(fl, [])
+                lang,
+                lang_super,
+                language_to_snippets.get(lang_super, []),
             )
             snippets_map.update(snippets)
             insertion_map.update(insertions)
             insertions_phrase_map.update(insertions_phrase)
             wrapper_map.update(wrappers)
 
-        ctx.lists["user.snippet_insert"] = insertion_map
-        ctx.lists["user.snippet_insert_with_phrase"] = insertions_phrase_map
-        ctx.lists["user.snippet_wrap"] = wrapper_map
+        ctx.lists["user.snippet"] = insertion_map
+        ctx.lists["user.snippet_with_phrase"] = insertions_phrase_map
+        ctx.lists["user.snippet_wrapper"] = wrapper_map
 
 
 def get_snippets() -> list[Snippet]:
-    files = glob.glob(f"{SNIPPETS_DIR}/*.snippet")
+    files = glob.glob(f"{SNIPPETS_DIR}/**/*.snippet", recursive=True)
     result = []
 
     for file in files:
@@ -70,7 +80,10 @@ def get_snippets() -> list[Snippet]:
     return result
 
 
-def get_fallback_languages(language: str) -> list[str]:
+def get_super_languages(language: str) -> list[str]:
+    """Returns a list of languages that are considered a superset of <language>, including <language> itself. Eg `javascript` will be included in the list when <language> is `typescript`.
+    Note that the order of languages returned here is very important: more general must precede more specific, so that specific langs can properly override general languages.
+    """
     match language:
         case "_":
             return ["_"]
@@ -92,51 +105,53 @@ def get_fallback_languages(language: str) -> list[str]:
 
 
 def group_by_language(snippets: list[Snippet]) -> dict[str, list[Snippet]]:
-    result = {}
+    result = defaultdict(list)
     for snippet in snippets:
         if snippet.languages is not None:
             for lang in snippet.languages:
-                if not lang in result:
-                    result[lang] = []
                 result[lang].append(snippet)
         else:
-            if "_" not in result:
-                result["_"] = []
             result["_"].append(snippet)
     return result
 
 
 def create_lists(
-    lang_snippets: str,
     lang_ctx: str,
+    lang_snippets: str,
     snippets: list[Snippet],
-) -> tuple[dict[str, list[Snippet]], dict[str, str], dict[str, str]]:
+) -> tuple[dict[str, list[Snippet]], dict[str, str], dict[str, str], dict[str, str]]:
+    """Creates the lists for the given language, and returns them as a tuple of (snippets, insertions, insertions_phrase, wrappers)
+
+    Args:
+        lang_ctx (str): The language of the context match
+        lang_snippets (str): The language of the snippets
+        snippets (list[Snippet]): The list of snippets for the given language
+    """
     snippets_map = {}
     insertions = {}
     insertions_phrase = {}
     wrappers = {}
-    prefix_snippets = "" if lang_snippets == "_" else f"{lang_snippets}."
-    prefix_ctx = "" if lang_ctx == "_" else f"{lang_ctx}."
 
     for snippet in snippets:
-        id_snippets = f"{prefix_snippets}{snippet.name}"
-        id_ctx = f"{prefix_ctx}{snippet.name}"
+        id_ctx = f"{lang_ctx}.{snippet.name}"
+        id_lang = f"{lang_snippets}.{snippet.name}"
 
-        snippets_map[id_snippets] = snippet
+        # Make sure that the snippet is added to the map for the context language
+        snippets_map[id_ctx] = snippet
 
         if snippet.phrases is not None:
             for phrase in snippet.phrases:
-                insertions[phrase] = id_ctx
+                insertions[phrase] = id_lang
 
         if snippet.variables is not None:
             for var in snippet.variables:
-                if var.insertionFormatters is not None and snippet.phrases is not None:
+                if var.insertion_formatters is not None and snippet.phrases is not None:
                     for phrase in snippet.phrases:
-                        insertions_phrase[phrase] = id_ctx
+                        insertions_phrase[phrase] = id_lang
 
-                if var.wrapperPhrases is not None:
-                    for phrase in var.wrapperPhrases:
-                        wrappers[phrase] = f"{id_ctx}.{var.name}"
+                if var.wrapper_phrases is not None:
+                    for phrase in var.wrapper_phrases:
+                        wrappers[phrase] = f"{id_lang}.{var.name}"
 
     return snippets_map, insertions, insertions_phrase, wrappers
 

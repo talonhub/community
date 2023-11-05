@@ -10,11 +10,11 @@ class SnippetDocument:
     line_doc: int
     line_body: int
     variables: list[SnippetVariable] = []
-    name: str = None
-    phrases: list[str] = None
-    insertionScopes: list[str] = None
-    languages: list[str] = None
-    body: str = None
+    name: str | None = None
+    phrases: list[str] | None = None
+    insertionScopes: list[str] | None = None
+    languages: list[str] | None = None
+    body: str | None = None
 
     def __init__(self, file: str, line_doc: int, line_body: int):
         self.file = file
@@ -49,7 +49,7 @@ def create_snippets(documents: list[SnippetDocument]) -> list[Snippet]:
 
 def create_snippet(
     document: SnippetDocument, default_context: SnippetDocument
-) -> Snippet:
+) -> Snippet | None:
     snippet = Snippet(
         name=document.name or default_context.name,
         languages=document.languages or default_context.languages,
@@ -73,7 +73,7 @@ def validate_snippet(document: SnippetDocument, snippet: Snippet) -> bool:
 
     for variable in snippet.variables:
         var_name = f"${variable.name}"
-        if not var_name in snippet.body:
+        if var_name not in snippet.body:
             error(
                 document.file,
                 document.line_body,
@@ -81,7 +81,7 @@ def validate_snippet(document: SnippetDocument, snippet: Snippet) -> bool:
             )
             is_valid = False
 
-        if variable.insertionFormatters is not None and snippet.phrases is None:
+        if variable.insertion_formatters is not None and snippet.phrases is None:
             error(
                 document.file,
                 document.line_doc,
@@ -89,7 +89,7 @@ def validate_snippet(document: SnippetDocument, snippet: Snippet) -> bool:
             )
             is_valid = False
 
-        if variable.wrapperScope is not None and variable.wrapperPhrases is None:
+        if variable.wrapper_scope is not None and variable.wrapper_phrases is None:
             error(
                 document.file,
                 document.line_doc,
@@ -107,19 +107,19 @@ def combine_variables(
     variables: dict[str, SnippetVariable] = {}
 
     for variable in [*default_variables, *document_variables]:
-        if not variable.name in variables:
+        if variable.name not in variables:
             variables[variable.name] = SnippetVariable(variable.name)
 
         new_variable = variables[variable.name]
 
-        if variable.insertionFormatters is not None:
-            new_variable.insertionFormatters = variable.insertionFormatters
+        if variable.insertion_formatters is not None:
+            new_variable.insertion_formatters = variable.insertion_formatters
 
-        if variable.wrapperPhrases is not None:
-            new_variable.wrapperPhrases = variable.wrapperPhrases
+        if variable.wrapper_phrases is not None:
+            new_variable.wrapper_phrases = variable.wrapper_phrases
 
-        if variable.wrapperScope is not None:
-            new_variable.wrapperScope = variable.wrapperScope
+        if variable.wrapper_scope is not None:
+            new_variable.wrapper_scope = variable.wrapper_scope
 
     return list(variables.values())
 
@@ -132,7 +132,7 @@ def normalize_snippet_body_tabs(body: str) -> str:
     lines = []
     smallest_indentation = None
 
-    for line in re.split(r"\r?\n", body):
+    for line in body.splitlines():
         match = re.search(r"^\s+", line)
         indentation = match.group() if match is not None else ""
 
@@ -178,7 +178,7 @@ def parse_file_content(file: str, text: str) -> list[SnippetDocument]:
     line = 0
 
     for i, doc_text in enumerate(doc_texts):
-        optional_body = i == 0 and len(doc_texts)
+        optional_body = i == 0 and len(doc_texts) > 1
         document = parse_document(file, line, optional_body, doc_text)
         if document is not None:
             documents.append(document)
@@ -203,7 +203,7 @@ def parse_document(
     if len(parts) == 2:
         body = parse_body(parts[1])
         if body is not None:
-            if org_doc is None:
+            if document is None:
                 document = org_doc
             document.body = body
 
@@ -217,7 +217,7 @@ def parse_document(
 def parse_context(
     file: str, line: int, document: SnippetDocument, text: str
 ) -> Union[SnippetDocument, None]:
-    lines = [l.strip() for l in re.split(r"\r?\n", text)]
+    lines = [l.strip() for l in text.splitlines()]
     keys: set[str] = set()
     variables: dict[str, SnippetVariable] = {}
 
@@ -310,11 +310,11 @@ def parse_variable(
 
     match field:
         case "insertionFormatter":
-            get_variable(name).insertionFormatters = parse_vector_value(value)
+            get_variable(name).insertion_formatters = parse_vector_value(value)
         case "wrapperPhrase":
-            get_variable(name).wrapperPhrases = parse_vector_value(value)
+            get_variable(name).wrapper_phrases = parse_vector_value(value)
         case "wrapperScope":
-            get_variable(name).wrapperScope = value
+            get_variable(name).wrapper_scope = value
         case _:
             error(file, line_numb, f"Invalid variable key '{key}'")
             return False

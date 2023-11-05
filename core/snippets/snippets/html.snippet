@@ -2,22 +2,28 @@ language: html
 ---
 
 name: element
+phrase: element | tag
 insertionScope: xmlElement
+
+$1.insertionFormatter: PRIVATE_CAMEL_CASE
 -
-<$name>
+<$1>
     $0
-</$name>
+</$1>
 ---
 
 name: attribute
+phrase: attribute
+
+$1.insertionFormatter: PRIVATE_CAMEL_CASE
 -
-$name=$0
+$1=$0
 ---
 
 name: table
 phrase: table
 -
-<table className="table table-striped">
+<table>
     <thead>
         <tr>
             <th>$1</th>

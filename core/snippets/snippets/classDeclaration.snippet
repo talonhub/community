@@ -1,24 +1,33 @@
 name: classDeclaration
-insertionScope: class | statement
 phrase: class
+insertionScope: class | statement
+
+$0.wrapperPhrase: class
+$0.wrapperScope: statement
 ---
 
 language: javascript
+
+$1.insertionFormatter: PUBLIC_CAMEL_CASE
 -
-class $name {
+class $1 {
     $0
 }
 ---
 
 language: java
+
+$1.insertionFormatter: PUBLIC_CAMEL_CASE
 -
-$modifiers class $name {
+class $1 {
     $0
 }
 ---
 
 language: python
+
+$1.insertionFormatter: PUBLIC_CAMEL_CASE
 -
-class $name:
+class $1:
     $0
 ---

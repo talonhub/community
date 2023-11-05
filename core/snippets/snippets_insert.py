@@ -1,3 +1,5 @@
+import re
+
 from talon import Module, actions
 
 from .snippet_types import Snippet
@@ -19,7 +21,12 @@ class Actions:
 
         if substitutions:
             for k, v in substitutions.items():
-                body = body.replace(f"${k}", v)
+                reg = re.compile(rf"\${k}|\$\{{{k}\}}")
+                if not reg.search(body):
+                    raise ValueError(
+                        f"Can't substitute non existing variable '{k}' in snippet '{name}'"
+                    )
+                body = reg.sub(v, body)
 
         actions.user.insert_snippet(body)
 
@@ -29,14 +36,14 @@ class Actions:
         substitutions = {}
 
         for variable in snippet.variables:
-            if variable.insertionFormatters is not None:
-                formatters = ",".join(variable.insertionFormatters)
+            if variable.insertion_formatters is not None:
+                formatters = ",".join(variable.insertion_formatters)
                 formatted_phrase = actions.user.formatted_text(phrase, formatters)
                 substitutions[variable.name] = formatted_phrase
 
-        actions.user.insert_snippet_by_name(name, substitutions)
+        if not substitutions:
+            raise ValueError(
+                f"Can't use snippet phrase. No variable with insertion formatter in snippet '{name}'"
+            )
 
-    def code_insert_snippet_by_name(name: str, substitutions: dict[str, str] = None):
-        """Insert snippet <name> for the current programming language"""
-        lang = actions.code.language()
-        actions.user.insert_snippet_by_name(f"{lang}.{name}", substitutions)
+        actions.user.insert_snippet_by_name(name, substitutions)
