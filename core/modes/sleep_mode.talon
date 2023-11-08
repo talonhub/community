@@ -7,5 +7,5 @@ settings():
     user.mouse_enable_pop_click = 0
     # Stop mouse scroll down using hiss noise
     user.mouse_enable_hiss_scroll = 0
-    # Enable pop wake
-    user.mouse_enable_pop_wake = 1
+    # Enable pop wake. Note that if this is enabled, it will disable popping to click in sleep mode, if you set `mouse_enable_pop_wake = 2`.
+    user.mouse_enable_pop_wake = 0

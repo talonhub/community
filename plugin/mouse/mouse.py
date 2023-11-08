@@ -54,7 +54,7 @@ setting_mouse_enable_pop_click = mod.setting(
 )
 setting_mouse_enable_pop_wake = mod.setting(
     "mouse_enable_pop_wake",
-    type=int,
+    type=bool,
     default=0,
     desc="Pop noise enables speech/wakes talon. 0 = off, 1 = on",
 )
@@ -264,7 +264,10 @@ def show_cursor_helper(show):
 @ctx.action_class("user")
 class UserActions:
     def noise_trigger_pop():
-        if actions.speech.enabled():
+        # Pop can be configured to wake Talon, in which case we don't want to process it as a click.
+        if not actions.speech.enabled() and setting_mouse_enable_pop_wake.get() == 1:
+            actions.speech.enable()
+            return
             if setting_mouse_enable_pop_stops_scroll.get() >= 1 and (
                 gaze_job or scroll_job
             ):
