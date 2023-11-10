@@ -71,3 +71,7 @@ tab hunt <user.text>:
   user.vscode("workbench.action.quickOpen")
   insert("edt ")
   insert(user.text or "")
+
+
+suggest:
+  user.vscode("editor.action.inlineSuggest.trigger")
