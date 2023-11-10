@@ -276,7 +276,7 @@ def show_cursor_helper(show):
 class UserActions:
     def noise_trigger_pop():
         # Pop can be configured to wake Talon, in which case we don't want to process it as a click.
-        if not actions.speech.enabled() and setting_mouse_enable_pop_wake.get() == 1:
+        if not actions.speech.enabled() and setting_mouse_enable_pop_wake.get() == True:
             actions.speech.enable()
             return
         if setting_mouse_enable_pop_stops_scroll.get() >= 1 and (
