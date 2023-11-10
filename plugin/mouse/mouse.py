@@ -275,10 +275,6 @@ def show_cursor_helper(show):
 @ctx.action_class("user")
 class UserActions:
     def noise_trigger_pop():
-        # Pop can be configured to wake Talon, in which case we don't want to process it as a click.
-        if not actions.speech.enabled() and setting_mouse_enable_pop_wake.get() == True:
-            actions.speech.enable()
-            return
         if setting_mouse_enable_pop_stops_scroll.get() >= 1 and (
             gaze_job or scroll_job
         ):
@@ -395,3 +391,16 @@ def start_cursor_scrolling():
     global scroll_job, gaze_job
     stop_scroll()
     gaze_job = cron.interval("60ms", gaze_scroll)
+
+
+ctx_sleep = Context()
+ctx_sleep.matches = r"""
+mode: sleep
+"""
+
+@ctx_sleep.action_class("user")
+class UserSleepActions:
+    def noise_trigger_pop():
+        # Pop can be configured to wake Talon, in which case we don't want to process it as a click.
+        if setting_mouse_enable_pop_wake.get():
+            actions.speech.enable()
