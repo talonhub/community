@@ -16,7 +16,12 @@ mod.list("snippet", "List of insertion snippets")
 mod.list("snippet_with_phrase", "List of insertion snippets containing a text phrase")
 mod.list("snippet_wrapper", "List of wrapper snippets")
 
-setting_dir = mod.setting("snippets_dir", str, desc="Directory(relative to Talon user) containing additional snippets", default=None)
+setting_dir = mod.setting(
+    "snippets_dir",
+    str,
+    desc="Directory(relative to Talon user) containing additional snippets",
+    default=None,
+)
 
 context_map = {
     # `_` represents the global context, ie snippets available regardless of language
