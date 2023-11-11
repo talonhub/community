@@ -67,6 +67,10 @@ and mode: dictation
 """
 
 mod = Module()
+mod.tag(
+    "quick_pick_showing",
+    desc="indicates whether or not the quick pick is showing",
+)
 size: Size = None
 canvas: Canvas = None
 mouse_pos: Point2d = None
@@ -289,6 +293,7 @@ def on_mouse(e: MouseEvent):
 active_window = None
 def show():
     global canvas, mouse_pos, size, active_window
+    ctx.tags = ["user.quick_pick_showing"]
     active_window  = ui.active_window()
     mouse_pos = Point2d(actions.mouse_x(), actions.mouse_y())
     screen: Screen = ui.main_screen()
@@ -306,6 +311,7 @@ def show():
 
 def hide():
     global canvas
+    ctx.tags = []
     canvas.unregister("draw", on_draw)
     canvas.unregister("mouse", on_mouse)
     canvas.close()
