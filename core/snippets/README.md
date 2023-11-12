@@ -8,7 +8,7 @@ Custom format to represent snippets.
 - Supports syntax highlighting in VSCode via an [extension](https://marketplace.visualstudio.com/items?itemName=AndreasArvidsson.andreas-talon)
 - Supports auto-formatting in VSCode via an [extension](https://marketplace.visualstudio.com/items?itemName=AndreasArvidsson.andreas-talon)
 - Support for insertion and wrapper snippets.
-- Support for phrase formatters. Note that while the snippet file syntax here supports wrapper snippets, you will need to install [Cursorless](https://www.cursorless.org/) for wrapper snippets to work.
+- Support for phrase formatters. Note that while the snippet file syntax here supports wrapper snippets, we still need to add the proper voice commands; stay tuned.
 
 ## Format
 

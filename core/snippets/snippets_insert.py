@@ -52,6 +52,7 @@ class Actions:
     def insert_wrapper_snippet(
         body: str,
         target: Any,
+        variable_name: str,
         scope: str = None,
     ):
         """Wrap the target with snippet"""
@@ -63,13 +64,7 @@ class Actions:
         variable_name = name[index + 1]
         snippet: Snippet = actions.user.get_snippet(snippet_name)
         variable = snippet.get_variable_strict(variable_name)
-        reg = re.compile(rf"\${variable_name}|\$\{{{variable_name}\}}")
 
-        if not reg.search(snippet.body):
-            raise ValueError(
-                f"Can't wrap non existing variable '{variable_name}' in snippet body '{snippet.body}'"
-            )
-
-        body = reg.sub("$TM_SELECTED_TEXT", snippet.body)
-
-        actions.user.insert_wrapper_snippet(body, target, variable.wrapper_scope)
+        actions.user.insert_wrapper_snippet(
+            snippet.body, target, variable.name, variable.wrapper_scope
+        )
