@@ -16,7 +16,7 @@ summon <user.directory>:
 portal [<phrase>]$: user.system_show_portal(phrase or "")
 coder [<phrase>]$: user.system_show_coder(phrase or "")
 messer: user.system_show_messenger()
-slacker: user.system_show_slacker()
+messy: user.system_show_slacker()
 outer: user.system_show_email()
 gitter [<phrase>]$: user.system_show_gitter(phrase or "")
 process$: user.system_show_taskmanager(phrase or "")

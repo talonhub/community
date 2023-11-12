@@ -11,8 +11,6 @@ shave <user.cursorless_target>:
     key("backspace")
 cross: user.split_next()
 window reload: user.vscode("workbench.action.reloadWindow")
-window close: usedter.vscode("workbench.action.closeWindow")
-        #multiple_cursor.py support end
 please [<user.text>]:
     user.vscode("workbench.action.showCommands")
     insert(user.text or "")
