@@ -16,6 +16,13 @@ mod.list("snippet", "List of insertion snippets")
 mod.list("snippet_with_phrase", "List of insertion snippets containing a text phrase")
 mod.list("snippet_wrapper", "List of wrapper snippets")
 
+setting_dir = mod.setting(
+    "snippets_dir",
+    str,
+    desc="Directory(relative to Talon user) containing additional snippets",
+    default=None,
+)
+
 context_map = {
     # `_` represents the global context, ie snippets available regardless of language
     "_": Context(),
@@ -27,6 +34,19 @@ for lang in language_ids:
     ctx = Context()
     ctx.matches = f"code.language: {lang}"
     context_map[lang] = ctx
+
+
+def get_setting_dir():
+    if not setting_dir.get():
+        return None
+
+    dir = Path(setting_dir.get())
+
+    if not dir.is_absolute():
+        user_dir = Path(actions.path.talon_user())
+        dir = user_dir / dir
+
+    return dir.resolve()
 
 
 @mod.action_class
@@ -72,6 +92,10 @@ def update_snippets():
 
 def get_snippets() -> list[Snippet]:
     files = glob.glob(f"{SNIPPETS_DIR}/**/*.snippet", recursive=True)
+
+    if get_setting_dir():
+        files.extend(glob.glob(f"{get_setting_dir()}/**/*.snippet", recursive=True))
+
     result = []
 
     for file in files:
@@ -158,6 +182,10 @@ def create_lists(
 
 def on_ready():
     fs.watch(str(SNIPPETS_DIR), lambda _1, _2: update_snippets())
+
+    if get_setting_dir():
+        fs.watch(str(get_setting_dir()), lambda _1, _2: update_snippets())
+
     update_snippets()
 
 
