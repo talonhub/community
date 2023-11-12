@@ -45,7 +45,7 @@ def get_setting_dir():
     if not dir.is_absolute():
         user_dir = Path(actions.path.talon_user())
         dir = user_dir / dir
-o
+
     return dir.resolve()
 
 
