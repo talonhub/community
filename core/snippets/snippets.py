@@ -39,7 +39,14 @@ for lang in language_ids:
 def get_setting_dir():
     if not setting_dir.get():
         return None
-    return Path(actions.path.talon_user()) / setting_dir.get()
+
+    dir = Path(setting_dir.get())
+
+    if not dir.is_absolute():
+        user_dir = Path(actions.path.talon_user())
+        dir = user_dir / dir
+o
+    return dir.resolve()
 
 
 @mod.action_class
