@@ -262,7 +262,12 @@ class Actions:
         application = actions.user.get_running_app(name)
 
         if application:
-            actions.user.switcher_focus_app(application)
+            # Focus next window on same app
+            if application == ui.active_app():
+                actions.app.window_next()
+            # Focus new app
+            else:
+                actions.user.switcher_focus_app(application)
             return True
         elif name in ctx.lists["self.launch"]:
             actions.user.switcher_launch(ctx.lists["self.launch"][name])
