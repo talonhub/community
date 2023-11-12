@@ -12,11 +12,7 @@ ctx.lists["user.code_type"] = {}
 
 def base_function(text: str, visibility: str):
     """Inserts a public function definition, this assumes a lot about how your editor works"""
-    result = "func {}() {{\n\n}}".format(
-        actions.user.formatted_text(
-            text, visibility
-        )
-    )
+    result = f"func {actions.user.formatted_text(text, visibility)}() {{\n\n}}"
 
     actions.user.insert_between(f"func {text}() {{\n", "")
 
@@ -130,7 +126,7 @@ class UserActions:
     def code_operator_modulo_assignment():
         actions.auto_insert(" %= ")
 
-    def code_operator_increment():        
+    def code_operator_increment():
         actions.auto_insert(" ++ ")
 
     def code_operator_bitwise_and_assignment():
@@ -201,7 +197,7 @@ class UserActions:
 
     def code_operator_and():
         actions.auto_insert(" && ")
-    
+
     def code_operator_or():
         actions.auto_insert(" || ")
 

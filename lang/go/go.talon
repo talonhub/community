@@ -27,10 +27,10 @@ settings:
     user.code_protected_variable_formatter = "PUBLIC_CAMEL_CASE"
     user.code_public_variable_formatter = "PUBLIC_CAMEL_CASE"
 
-(main|mane) function: user.code_private_function("main")
+(main | mane) function: user.code_private_function("main")
 
 [state] context: " ctx "
-[state] context (are you|argue): " ctx context.Context "
+[state] context (are you | argue): " ctx context.Context "
 state any: " any "
 
 state (air | err): "err"
