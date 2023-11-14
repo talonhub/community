@@ -49,7 +49,7 @@ class Actions:
 
         actions.user.insert_snippet_by_name(name, substitutions)
 
-    def insert_wrapper_snippet(
+    def wrap_with_snippet(
         body: str,
         target: Any,
         variable_name: str,
@@ -57,7 +57,7 @@ class Actions:
     ):
         """Wrap the target with snippet"""
 
-    def insert_wrapper_snippet_by_name(name: str, target: Any):
+    def wrap_with_snippet_by_name(name: str, target: Any):
         """Wrap the target with snippet <name>"""
         index = name.rindex(".")
         snippet_name = name[:index]
@@ -65,6 +65,6 @@ class Actions:
         snippet: Snippet = actions.user.get_snippet(snippet_name)
         variable = snippet.get_variable_strict(variable_name)
 
-        actions.user.insert_wrapper_snippet(
+        actions.user.wrap_with_snippet(
             snippet.body, target, variable.name, variable.wrapper_scope
         )
