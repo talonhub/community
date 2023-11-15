@@ -28,3 +28,10 @@ deck(button_14):
     user.deck14()
 deck(button_15):
     user.deck15()
+
+deck(pedal_left):
+    user.pedal_left_left()
+deck(pedal_right):
+    user.pedal_left_right()
+deck(pedal_middle):
+    user.pedal_left_middle()
