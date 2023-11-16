@@ -42,4 +42,4 @@ class InsertionSnippet:
 class WrapperSnippet:
     body: str
     variableName: str
-    scope: list = None
+    scope: str = None
