@@ -75,7 +75,7 @@ class Actions:
         variable_name = name[index + 1]
         snippet: Snippet = actions.user.get_snippet(snippet_name)
         variable = snippet.get_variable_strict(variable_name)
-        return WrapperSnippet(snippet.body, variable.name, variable.wrapper_scope)        
+        return WrapperSnippet(snippet.body, variable.name, variable.wrapper_scope)
 
 
 def update_snippets():
