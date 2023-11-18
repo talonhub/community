@@ -157,36 +157,33 @@ tabby <number_small>:
     edit.indent_more()
     repeat(number_small-1)
 
-retabby:
+retabby [<number_small>]:
+    numb = number_small or 1
     edit.indent_less()
-retabby <number_small>:
-    edit.indent_less()
-    repeat(number_small-1)
+    repeat(numb-1)
 
 # deleting
-wipe line:
+wipe (line | row) [<number_small>]:
+    numb = number_small or 1
     edit.delete_line()
-
-# wipe left:
-#     key(backspace)
-
-# wipe right:
-#     key(delete)
+    repeat(numb-1)
     
 wipe up [<number_small>]:
     numb = number_small or 1
     edit.extend_line_up()
-    repeat(number_small-1)
+    repeat(numb-1)
     edit.delete()
     
 wipe down [<number_small>]:
     numb = number_small or 1
     edit.extend_line_down()
-    repeat(number_small-1)
+    repeat(numb-1)
     edit.delete()
     
-wipe word:
+wipe word [<number_small>]:
+    numb = number_small or 1
     edit.delete_word()
+    repeat(numb-1)
     
 wipe draw [<number_small>]:
     numb = number_small or 1

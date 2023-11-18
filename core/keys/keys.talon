@@ -20,4 +20,12 @@ shift down [<number_small>]:
     numb  = number_small or 1
     key(shift-down)
     repeat(numb - 1)
+shift tab [<number_small>]:
+    numb  = number_small or 1
+    key(shift-tab)
+    repeat(numb - 1)
+tab <number_small>:
+    numb  = number_small or 1
+    key(tab)
+    repeat(numb - 1)
     
