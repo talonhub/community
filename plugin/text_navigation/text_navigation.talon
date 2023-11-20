@@ -34,7 +34,7 @@ navigate [{user.arrow_key}] [{user.navigation_action}] [{user.navigation_target_
 #
 # We can specify what gets selected before or after the given input:
 #
-#    navigate select parens after equals: Select the first "(" and everything until the first ")" after the "="
+#    navigate select brackets after equals: Select the first "(" and everything until the first ")" after the "="
 #    navigate left copy all before equals: Copy everything from the start of the line until the first "=" you encounter while moving left
 #    navigate clear constant before semicolon: Delete the last word consisting of only uppercase characters or underscores before a ";"
 #
@@ -48,7 +48,7 @@ navigate [{user.arrow_key}] [{user.navigation_action}] [{user.navigation_target_
 # [{user.navigation_action}]: move, extend, select, clear, cut, copy (default: move)
 #   What action to perform.
 #
-# [{user.navigation_target_name}]: word, small, big, parens, squares, braces, quotes, angles, all, method, constant (default: word)
+# [{user.navigation_target_name}]: word, small, big, brackets, squares, braces, quotes, angles, all, method, constant (default: word)
 #    The predetermined unit to select if before_or_after was specified.
 #    Defaults to "word"
 #

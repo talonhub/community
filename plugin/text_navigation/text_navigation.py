@@ -44,7 +44,7 @@ navigation_target_names = {
     "word": r"\w+",
     "small": r"[A-Z]?[a-z0-9]+",
     "big": r"[\S]+",
-    "parens": r"\((.*?)\)",
+    "brackets": r"\((.*?)\)",
     "squares": r"\[(.*?)\]",
     "braces": r"\{(.*?)\}",
     "quotes": r"\"(.*?)\"",
