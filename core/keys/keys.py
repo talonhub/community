@@ -208,7 +208,7 @@ symbol_key_words = {
     "star": "*",
     "hash": "#",
     "percent": "%",
-    "caret": "^",
+    "exponent": "^",
     "amper": "&",
     "pipe": "|",
     "dub quote": '"',
