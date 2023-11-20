@@ -1,0 +1,437 @@
+Abbreviation,Spoken Form
+jpg,J peg
+abbr,abbreviate
+abrt,abort
+ack,acknowledge
+addr,address
+addrs,addresses
+admin,administrator
+admins,administrators
+adv,advance
+adv,advanced
+ab,alberta
+alloc,allocate
+alt,alternative
+appl,apple
+app,application
+apps,applications
+arg,argument
+args,arguments
+afaict,as far as i can tell
+afaik,as far as i know
+asm,assembly
+async,asynchronous
+atm,at the moment
+attr,attribute
+attrs,attributes
+auth,authenticate
+authn,authentication
+authz,authorization
+augroup,auto group
+avg,average
+afk,away from keyboard
+bkp,backup
+brb,be right back
+bin,binary
+blk,block
+bool,boolean
+bot,bottom
+bp,break point
+bps,break points
+bc,british columbia
+buf,buffer
+btn,button
+btw,by the way
+calc,calculate
+calc,calculator
+cam,camera
+ca,canada
+cm,centimeter
+chr,char
+char,character
+chk,check
+chld,child
+cn,china
+cls,class
+cli,client
+col,column
+cmd,command
+cmds,commands
+cmt,comment
+comm,communication
+comms,communications
+cmp,compare
+cond,condition
+conf,conference
+cfg,config
+config,configuration
+configs,configurations
+conn,connection
+const,constant
+contrib,contribute
+ctor,constructor
+ctx,context
+cfg,control flow graph
+ctrl,control
+coord,coordinate
+coords,coordinates
+cpy,copy
+cnt,count
+ctr,counter
+cred,credential
+creds,credentials
+xref,cross reference
+xrefs,cross references
+ctl,cuddle
+cur,current
+qt,cute
+db,database
+yyyy-mm-dd,date format
+deb,debian
+dbg,debug
+dec,decimal
+decl,declaration
+decl,declare
+dec,decode
+dec,decrement
+def,define
+def,definition
+deg,degree
+del,delete
+dep,depend
+deps,depends
+desc,description
+dst,dest
+dest,destination
+dev,develop
+dev,development
+dev,device
+diag,diagnostic
+dict,dictation
+dict,dictionary
+dir,direction
+dirs,directories
+dir,directory
+disp,display
+dist,distance
+dist,distribution
+doc,document
+docs,documents
+ing,doing
+deque,double ended queue
+dbl,double
+dup,dupe
+dup,duplicate
+dyn,dynamic
+elast,elastic
+elem,element
+elems,elements
+enc,encode
+eod,end of day
+eom,end of month
+eoq,end of quarter
+eow,end of week
+eoy,end of year
+ent,entry
+enum,enumerate
+env,environment
+err,error
+esc,escape
+etc,etcetera
+eth,ethernet
+eval,evaluate
+ex,example
+exc,exception
+exe,executable
+exes,executables
+exec,execute
+exp,experience
+exp,exponent
+expr,expression
+exprs,expressions
+ext,extend
+ext,extension
+extern,external
+id,eye dent
+ioctl,eye octal
+i3,eye three
+feat,feature
+fs,file system
+fp,fingerprint
+fwiw,for what
+fmt,format
+fgt,fortigate
+fw,framework
+freq,frequency
+func,function
+funcs,functions
+lol,funny
+fzy,fuzzy
+gen,generate
+gen,generic
+hw,hardware
+hdr,header
+helo,hello
+hist,history
+http,hypertext
+id,identity
+ign,ignore
+img,image
+impl,implement
+iat,import address table
+iat,import table
+irl,in real life
+inc,increment
+idx,index
+info,information
+infra,infrastructure
+init,initialize
+init,initializer
+ino,inode
+ins,insert
+inst,instance
+insn,instruction
+int,integer
+interp,interpreter
+int,interrupt
+iter,iterate
+json,jason
+json5,jason five
+jar,java archive
+js,javascript
+gif,jiff
+journalctl,journal cuttle
+jmp,jump
+jit,just in time
+kk,kay
+krnl,kernel
+keyctl,key cuttle
+kbd,keyboard
+kwargs,keyword arguments
+kw,keyword
+kg,kilogram
+km,kilometer
+lang,language
+lol,laugh out loud
+len,length
+libc,lib see
+lib,library
+lsp,lisp
+lgtm,looks good to me
+smtp,mail
+mk,make
+mgmt,management
+mgr,manager
+mb,manitoba
+md,markdown
+max,maximum
+mem,memory
+msg,message
+msf,meta sploit framework
+msf,meta sploit
+mic,microphone
+mid,middle
+mg,milligram
+ms,millisecond
+mvp,minimum viable product
+min,minimum
+misc,miscellaneous
+mod,modify
+mod,module
+mods,modules
+mon,monitor
+mnt,mount
+multi,multiple
+musl,muscle
+mut,mutate
+ns,nano second
+nvim,neo vim
+nb,new brunswick
+ns,nova scotia
+num,number
+nums,numbers
+obj,object
+objs,objects
+off,offset
+offs,offsets
+ok,okay
+on,ontario
+os,operating system
+op,operation
+ops,operations
+opt,option
+opts,options
+orig,original
+oob,out of bounds
+pkgbuild,package build
+pkg,package
+pkgs,packages
+pkt,packet
+pkts,packets
+param,parameter
+params,parameters
+passwd,password
+perf,performance
+phys,physical
+paddr,physical address
+pic,pick
+ps,pico second
+py,pie
+png,ping
+px,pixel
+pt,point
+ptr,pointer
+ptrs,pointers
+pwn,pone
+pic,position independent code
+pie,position independent executable
+pos,position
+pwndbg,pound bag
+pref,preference
+prefs,preferences
+prev,previous
+priv,private
+proc,process
+cpu,processor
+prod,production
+prog,program
+progs,programs
+props,properties
+prop,property
+proto,protocol
+protobuf,protocol buffers
+pub,public
+py,python
+qc,quebec
+qs,query string
+rad,radian
+rand,random
+rwx,read right ex
+rcpt,receipt
+recv,receive
+rec,record
+rec,recording
+rect,rectangle
+refcnt,ref count
+ref,reference
+refs,references
+reg,register
+regs,registers
+reg,registery
+regex,regular expression
+regex,regular expressions
+rm,remove
+repl,repel
+rsi,repetitive strain injury
+repo,repository
+repr,represent
+repr,representation
+req,request
+reqs,requests
+rsrcs,resources
+resp,response
+res,result
+ret,return
+rev,revision
+rnd,round
+rb,ruby
+rs,rust
+smbd,samba D
+smb,samba
+sk,saskatchewan
+sched,schedule
+sched,scheduler
+scr,screen
+scsi,scuzzy
+C,see
+seg,segment
+sel,select
+sem,semaphore
+snd,send
+sql,sequel
+seq,sequence
+sp,service pack
+sid,session id
+sh,shell
+sc,shellcode
+sig,signal
+sz,size
+[...],snipped
+sum,some
+src,source
+srcs,sources
+spec,special
+spec,specific
+spec,specification
+spec,specify
+stderr,standard error
+stdin,standard in
+stdout,standard out
+std,standard
+sod,start of day
+som,start of month
+soq,start of quarter
+sow,start of week
+soy,start of year
+stmt,statement
+stat,statistic
+stats,statistics
+str,string
+struct,structure
+structs,structures
+sym,symbol
+symlink,symbolic link
+syms,symbols
+sync,synchronize
+sync,synchronous
+sysctl,sys cuttle
+syscall,system call
+systemctl,system cuddle
+sys,system
+toc,table of contents
+tbl,table
+tw,taiwan
+toc,talk
+tech,technology
+tmp,temp
+temp,temperature
+tmp,temporary
+term,terminal
+txt,text
+hh:mm:ss,time format
+toctou,time of check time of use
+ttl,time to live
+tok,token
+txn,transaction
+ts,typescript
+ulti,ultimate
+uuid,unique id
+unk,unknown
+uid,user id
+usr,user
+utils,utilities
+util,utility
+val,value
+vals,values
+var,variable
+vars,variables
+vec,vector
+vrfy,verify
+ver,version
+vs,versus
+vid,video
+vids,videos
+vm,virtual machine
+virt,virtual
+vaddr,virtual address
+msvc,visual studio
+vis,visual
+vol,volume
+vuln,vulnerable
+wav,wave
+www,web
+wtf,what the fuck
+wnd,wind
+win,window
+ntoskrnl,windows kernel
+wip,work in progress
