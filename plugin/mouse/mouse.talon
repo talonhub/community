@@ -12,7 +12,6 @@ run calibration: tracking.calibrate()
 zoom mouse: tracking.control_zoom_toggle()
 # camera overlay: tracking.control_debug_toggle()
 # run calibration: tracking.calibrate()
-<<<<<<< Updated upstream
 # All commands you can call for tracking
 # ---------------------------------------------
 # tracking.calibrate
@@ -40,12 +39,10 @@ run calibration: tracking.calibrate()
 zoom mouse: tracking.control_zoom_toggle()
 cancel zoom mouse: tracking.zoom_cancel()
 #control mouse: tracking.control_toggle()
-=======
 
 # Old Toggles
 # user.mouse_calibrate()
 # user.mouse_toggle_control_mouse()
->>>>>>> Stashed changes
 
 touch:
     mouse_click(0)
