@@ -153,3 +153,49 @@ class WindowsZoomMouseTriggerActions:
     def deck6():
         """document"""
         actions.talon_plugins.eye_zoom_mouse.mouse_move()
+
+@ctx_control_mouse_enabled.action_class("user")
+class ControlMouseEnabled:
+    def deck1():
+        """document string goes here"""
+        actions.mouse_click(0)
+
+    def deck2():
+        """document string goes here"""
+        actions.mouse_click(1)
+        
+
+    def deck3():
+        """document string goes here"""
+        actions.mouse_click(0)
+        actions.mouse_click(0)
+
+    def deck4():
+        """document string goes here"""
+        actions.mouse_click(0)
+        actions.mouse_click(0)
+        actions.mouse_click(0)
+        
+
+    def deck5():
+        """document string goes here"""
+        actions.user.mouse_drag(0)
+        actions.user.grid_close()
+        
+
+    def deck6():
+        """document string goes here"""
+        actions.mouse_move()
+
+    def pedal_left_left():
+        actions.mouse_click(0)
+        actions.mouse_click(0)
+
+    def pedal_left_right():
+        actions.mouse_click(1)
+     
+    def pedal_left_middle():
+        actions.mouse_click(0)
+        
+        
+        

@@ -310,34 +310,34 @@ class ControlMouseEnabled:
     def keypad7():
         """document string goes here"""
 
-    def pedal_left_left():
-        """document string goes here"""
-        actions.talon_plugins.eye_zoom_mouse.double_click()
+    # def pedal_left_left():
+    #     """document string goes here"""
+    #     actions.talon_plugins.eye_zoom_mouse.double_click()
 
-    def pedal_left_middle():
-        """document string goes here"""
-        actions.talon_plugins.eye_zoom_mouse.mouse_trigger()
+    # def pedal_left_middle():
+    #     """document string goes here"""
+    #     actions.talon_plugins.eye_zoom_mouse.mouse_trigger()
 
-    def pedal_left_right():
-        """document string goes here"""
-        actions.talon_plugins.eye_zoom_mouse.triple_click()
+    # def pedal_left_right():
+    #     """document string goes here"""
+    #     actions.talon_plugins.eye_zoom_mouse.triple_click()
 
-    def pedal_left_top():
-        """document string goes here"""
-        actions.talon_plugins.eye_zoom_mouse.mouse_drag()
+    # def pedal_left_top():
+    #     """document string goes here"""
+    #     actions.talon_plugins.eye_zoom_mouse.mouse_drag()
 
-    def pedal_right_left():
-        """document string goes here"""
-        actions.talon_plugins.eye_zoom_mouse.double_click()
+    # def pedal_right_left():
+    #     """document string goes here"""
+    #     actions.talon_plugins.eye_zoom_mouse.double_click()
 
-    def pedal_right_middle():
-        """document string goes here"""
-        actions.talon_plugins.eye_zoom_mouse.right_click()
+    # def pedal_right_middle():
+    #     """document string goes here"""
+    #     actions.talon_plugins.eye_zoom_mouse.right_click()
 
-    def pedal_right_right():
-        """document string goes here"""
-        actions.talon_plugins.eye_zoom_mouse.triple_click()
+    # def pedal_right_right():
+    #     """document string goes here"""
+    #     actions.talon_plugins.eye_zoom_mouse.triple_click()
 
-    def pedal_right_top():
-        """document string goes here"""
-        actions.talon_plugins.eye_zoom_mouse.mouse_drag()
+    # def pedal_right_top():
+    #     """document string goes here"""
+    #     actions.talon_plugins.eye_zoom_mouse.mouse_drag()
