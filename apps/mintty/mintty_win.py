@@ -37,8 +37,12 @@ setting_cyg_path = mod.setting(
 def get_win_path(cyg_path):
     path = ""
     try:
+        si = subprocess.STARTUPINFO()
+        si.dwFlags |= subprocess.STARTF_USESHOWWINDOW
         path = (
-            subprocess.check_output([setting_cyg_path.get(), "-w", cyg_path])
+            subprocess.check_output(
+                [setting_cyg_path.get(), "-w", cyg_path], startupinfo=si
+            )
             .strip(b"\n")
             .decode()
         )

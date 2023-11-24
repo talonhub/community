@@ -75,23 +75,6 @@ class EditActions:
 
 @ctx.action_class("user")
 class UserActions:
-    # generic_snippet.py support beginHelp close
-    # def snippet_search(text: str):
-    #     actions.user.vscode("Insert Snippet")
-    #     actions.insert(text)
-
-    # def snippet_insert(text: str):
-    #     """Inserts a snippet"""
-    #     actions.user.vscode("Insert Snippet")
-    #     actions.insert(text)
-    #     actions.key("enter")
-
-    # def snippet_create():
-    #     """Triggers snippet creation"""
-    #     actions.user.vscode("Preferences: Configure User Snippets")
-
-    # generic_snippet.py support end
-
     # splits.py support begin
     # requires https://marketplace.eclipse.org/content/handysplit
     def split_clear_all():
