@@ -57,6 +57,18 @@ def trigger_home_row():
 
 @mod.action_class
 class Actions:
+    def deck_pedal_left():
+        """left pedal"""
+        actions.user.system_switcher()
+
+    def deck_pedal_middle():
+        """middle pedal"""
+        actions.talon_plugins.eye_zoom_mouse.mouse_trigger()
+
+    def deck_pedal_right():
+        """right pedal"""
+        trigger_home_row()
+
     def deck1():
         """document string goes here"""
         actions.talon_plugins.eye_zoom_mouse.mouse_trigger()
@@ -130,6 +142,18 @@ class Actions:
     
 @ctx_zoom_mouse_triggered.action_class("user")
 class WindowsZoomMouseTriggerActions:
+    def deck_pedal_left():
+        """left pedal"""
+        actions.talon_plugins.eye_zoom_mouse.double_click()
+
+    def deck_pedal_middle():
+        """middle pedal"""
+        actions.talon_plugins.eye_zoom_mouse.mouse_trigger()
+
+    def deck_pedal_right():
+        """right pedal"""
+        actions.talon_plugins.eye_zoom_mouse.right_click()
+
     def deck1():
         """document string goes here"""
         actions.talon_plugins.eye_zoom_mouse.mouse_trigger()
@@ -156,6 +180,18 @@ class WindowsZoomMouseTriggerActions:
 
 @ctx_control_mouse_enabled.action_class("user")
 class ControlMouseEnabled:
+    def deck_pedal_left():
+        """left pedal"""
+        actions.mouse_click(0)
+        actions.mouse_click(0)
+
+    def deck_pedal_middle():
+        """middle pedal"""
+        actions.mouse_click(0)
+
+    def deck_pedal_right():
+        """right pedal"""
+        actions.mouse_click(1)
     def deck1():
         """document string goes here"""
         actions.mouse_click(0)

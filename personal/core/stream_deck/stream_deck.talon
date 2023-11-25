@@ -30,8 +30,8 @@ deck(button_15):
     user.deck15()
 
 deck(pedal_left):
-    user.pedal_left_left()
+    user.deck_pedal_left()
 deck(pedal_right):
-    user.pedal_left_right()
+    user.deck_pedal_right()
 deck(pedal_middle):
-    user.pedal_left_middle()
+    user.deck_pedal_middle()
