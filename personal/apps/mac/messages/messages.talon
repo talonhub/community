@@ -1,4 +1,4 @@
 app: messages
 -
-# settings():
-#     user.context_sensitive_dictation = 1
+settings():
+	user.accessibility_dictation = 1
