@@ -6,11 +6,16 @@ address copy | url copy | copy address | copy url:
     sleep(50ms)
     edit.copy()
 go home: browser.go_home()
-[go] forward: browser.go_forward()
-go (back | backward): browser.go_back()
+[go] forward [<number_small>]: 
+    numb  = number_small or 1
+    browser.go_forward()
+    repeat(numb - 1)
+go (back | backward) [<number_small>]: 
+    numb  = number_small or 1
+    browser.go_back()
+    repeat(numb - 1)
 go {user.website}: browser.go(website)
 go private: browser.open_private_window()
-
 bookmark that: browser.bookmark()
 bookmark tabs: browser.bookmark_tabs()
 (refresh | reload) that: browser.reload()
