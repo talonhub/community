@@ -126,7 +126,7 @@ class Actions:
     
     def deck12():
         """document string goes here"""
-        actions.tracking.control_zoom_toggle()
+        actions.user.mouse_toggle_zoom_mouse()
     
     def deck13():
         """document string goes here"""
