@@ -20,6 +20,9 @@ class Actions:
     def code_insert_if_let_error():
         """Inserts if let error block, positioning the cursor appropriately"""
 
+    def code_insert_if_let_okay():
+        """Inserts if let okay block, positioning the cursor appropriately"""
+
     def code_insert_trait_annotation(type: str):
         """Inserts type annotation for implementor of trait"""
 
