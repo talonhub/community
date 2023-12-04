@@ -147,7 +147,7 @@ punctuation_words = {
     "coma": ",",
     "period": ".",
     "full stop": ".",
-    "semicolon": ";",
+    "semi": ";",
     "colon": ":",
     "forward slash": "/",
     "question mark": "?",
@@ -173,7 +173,7 @@ punctuation_words = {
 symbol_key_words = {
     "dot": ".",
     "point": ".",
-    "quote": "'",
+    "tock": "'",
     "question": "?",
     "apostrophe": "'",
     "L square": "[",
@@ -211,8 +211,7 @@ symbol_key_words = {
     "exponent": "^",
     "amper": "&",
     "pipe": "|",
-    "dub quote": '"',
-    "double quote": '"',
+    "quote": '"',
     # Currencies
     "dollar": "$",
     "pound": "£",
