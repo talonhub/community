@@ -36,3 +36,8 @@ settings():
     user.talon_mode()
 
 ^(talon wake)+$: speech.enable()
+
+# Catch the redundant sleep command, and notify the user that Talon is already asleep.
+# For a note about the optional <phrase>, see to_sleep_mode.talon.
+^talon sleep [<phrase>]$: app.notify("talon is already asleep")
+^go to sleep [<phrase>]$: app.notify("talon is already asleep")

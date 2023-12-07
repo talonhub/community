@@ -10,3 +10,9 @@ not mode: sleep
     mode.disable("sleep")
     mode.disable("dictation")
     mode.enable("command")
+
+# Without this command, talon will interpret "wake up" as another command ("page up", for example)
+# This happens because the _real_ "wake up" is only active in mode:sleep
+# These commands catch the redundant "wake up" command and notify the user that talon is already awake
+^(wake up)+$: app.notify("talon is already awake")
+^(talon wake)+$: app.notify("talon is already awake")
