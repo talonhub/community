@@ -19,15 +19,6 @@ note down:
 note check:
     key(shift-cmd-U)
 
-my email:
-  "alex.koch@thesocialinst.com"
-
-my phone:
-  "919-749-3667"
-
-my user name:
-  "alexrkoch"
-
 findy:
   key(cmd-f)
 
