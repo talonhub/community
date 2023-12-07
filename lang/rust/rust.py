@@ -17,6 +17,9 @@ class Actions:
     def code_insert_if_let_some():
         """Inserts if let some block, positioning the cursor appropriately"""
 
+    def code_insert_if_let_okay():
+        """Inserts if let some block, positioning the cursor appropriately"""
+
     def code_insert_if_let_error():
         """Inserts if let error block, positioning the cursor appropriately"""
 
