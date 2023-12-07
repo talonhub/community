@@ -205,7 +205,7 @@ symbol_key_words = {
     "less than": "<",
     "close angle": ">",
     "greater than": ">",
-    "star": "*",
+    "asterisk": "*",
     "hash tag": "#",
     "percent": "%",
     "caret sign": "^",

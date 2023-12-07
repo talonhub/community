@@ -10,7 +10,7 @@
 #parrot(hiss):              print("hiss")
 #parrot(cluck):              print("cluck")
 
-parrot(cluck): edit.undo()
+#parrot(cluck): edit.undo()
 
 parrot(shush):
 	user.noise_debounce("shush", true)

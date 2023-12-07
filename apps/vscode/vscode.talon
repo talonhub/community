@@ -13,6 +13,12 @@ tag(): terminal
 log template:
   "console.log(\"thing\", thing);"
 
+log object:
+  "console.log({});"
+  key(left)
+  key(left)
+  key(left)
+
 toggle vim:
   key(cmd-i)
   key(cmd-v)
@@ -62,13 +68,37 @@ node run test watch:
   "npm run test:watch"
   key(enter)
 
+node run test integration:
+  "npm run test:integration:watch"
+  key(enter)
+
+node run test unit:
+  "npm run test:unit:watch"
+  key(enter)
+
+node run storybook:
+  "npm run storybook"
+  key(enter)
+
 node install:
   "npm i"
+  key(enter)
+
+node install all:
+  "npm run install-all"
   key(enter)
 
 close:
   edit.line_end()
   insert(";")
+
+use node fourteen:
+  "nvm use 14.19.0"
+  key(enter)
+
+use node eighteen:
+  "nvm use 18.16.1"
+  key(enter)
 
 #talon app actions
 action(app.tab_close): user.vscode("workbench.action.closeActiveEditor")
@@ -260,13 +290,14 @@ unfold those: user.vscode("editor.unfoldRecursively")
 fold all: user.vscode("editor.foldAll")
 unfold all: user.vscode("editor.unfoldAll")
 fold comments: user.vscode("editor.foldAllBlockComments")
-fold one: user.vscode("editor.foldLevel1")
-fold two: user.vscode("editor.foldLevel2")
-fold three: user.vscode("editor.foldLevel3")
-fold four: user.vscode("editor.foldLevel4")
-fold five: user.vscode("editor.foldLevel5")
-fold six: user.vscode("editor.foldLevel6")
-fold seven: user.vscode("editor.foldLevel7")
+fold level one: user.vscode("editor.foldLevel1")
+fold level two: user.vscode("editor.foldLevel2")
+fold level three: user.vscode("editor.foldLevel3")
+fold level four: user.vscode("editor.foldLevel4")
+unfold level four: user.vscode("editor.unfoldLevel4")
+fold level five: user.vscode("editor.foldLevel5")
+fold level six: user.vscode("editor.foldLevel6")
+fold level seven: user.vscode("editor.foldLevel7")
 
 
 
@@ -332,10 +363,7 @@ fold seven: user.vscode("editor.foldLevel7")
 # Git / Github (not using verb-noun-adjective pattern, mirroring terminal commands.) 
 git branch: user.vscode("git.branchFrom")
 git branch this: user.vscode("git.branch")
-git checkout [<user.text>]:
-    user.vscode("git.checkout")
-    sleep(50ms)
-    insert(text or "")
+git checkout: user.vscode("git.checkout")
 git commit [<user.text>]:
     user.vscode("git.commitStaged")
     sleep(100ms)

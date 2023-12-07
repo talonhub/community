@@ -7,6 +7,9 @@ lorem long:
 lorem very long:
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
 
+(wind | win) pro: 
+    "WINPRO"
+
 note up:
     key(cmd-ctrl-up)
 
@@ -57,7 +60,7 @@ zoom out: edit.zoom_out()
 
 (cut | slice): edit.cut()
 
-(paste | spark): edit.paste()
+paste: edit.paste()
 
 undo: edit.undo()
 
@@ -195,14 +198,6 @@ deli up:
 deli down:
     edit.extend_line_down()
     edit.delete()
-
-spark word:
-    edit.select_word()
-    edit.paste()
-
-spark line:
-    edit.select_line()
-    edit.paste()
 
 deli word:
     edit.delete_word()

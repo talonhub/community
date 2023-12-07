@@ -257,14 +257,12 @@ _snap_positions = {
     # Special
     # left top right bottom
     "center": RelativeScreenPos(1 / 8, 1 / 6, 7 / 8, 5 / 6),
-    "home": RelativeScreenPos(1 / 10, 1 / 18, 9 / 10, 1),
+    "home": RelativeScreenPos(1 / 11, 0, 10 / 11, 1),
     "dev": RelativeScreenPos(1 / 12, 1 / 18, 1, 1),
     "tight": RelativeScreenPos(2 / 10, 1 / 10, 8 / 10, 9 / 10),
     "bar": RelativeScreenPos(2 / 10, 0, 1, 1),
-    "slack": RelativeScreenPos(2 / 10, 1 / 18, 9 / 10, 1),
-    "notes": RelativeScreenPos(2 / 10, 1 / 18, 8 / 10, 1),
+    "slack": RelativeScreenPos(1 / 10, 0 , 9 / 10, 1),
     "full": RelativeScreenPos(0, 0, 1, 1),
-    "fullscreen": RelativeScreenPos(0, 0, 1, 1),
 }
 
 

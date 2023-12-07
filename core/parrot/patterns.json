@@ -3,14 +3,14 @@
         "sounds": ["roofclick"],
         "threshold": {
             ">power": 15,
-            ">probability": 0.95
+            ">probability": 0.99
         }
     },
     "hiss": {
         "sounds": ["hiss"],
         "threshold": {
-            ">power": 15,
-            ">probability": 0.95
+            ">power": 10,
+            ">probability": 0.99
         },
         "graceperiod": 0.05,
         "grace_threshold": {
@@ -21,7 +21,7 @@
         "sounds": ["shush"],
         "threshold": {
             ">power": 15,
-            ">probability": 0.95
+            ">probability": 0.99
         },
         "graceperiod": 0.05,
         "grace_threshold": {
