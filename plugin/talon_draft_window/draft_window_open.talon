@@ -6,7 +6,8 @@ draft hide: user.draft_hide()
 draft submit:
     content = user.draft_get_text()
     user.draft_hide()
-    insert(content)
+    #insert(content)
     # user.paste may be somewhat faster, but seems to be unreliable on MacOSX, see
     # https://github.com/talonvoice/talon/issues/254#issuecomment-789355238
-    # user.paste(content)
+    sleep(100ms)
+    user.paste(content)
