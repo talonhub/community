@@ -16,13 +16,9 @@ app: arc
 
 @mod.action_class
 class Actions:
-    def arc_mod(key: str):
-        """Press the specified key with the correct modifier key for the OS"""
-        if app.platform == "mac":
-            actions.key(f"cmd-{key}")
-        else:
-            actions.key(f"ctrl-{key}")
-
+    def command_palette():
+        """Show command palette"""
+        actions.key("cmd-l")
 
 @ctx.action_class("user")
 class UserActions:
