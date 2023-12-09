@@ -20,6 +20,7 @@ class Actions:
         """Show command palette"""
         actions.key("cmd-l")
 
+
 @ctx.action_class("user")
 class UserActions:
     def tab_close_wrapper():
