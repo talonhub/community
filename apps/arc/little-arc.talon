@@ -1,6 +1,4 @@
 user.running: arc
 -
-little arc [<user.text>]:
+little arc:
    key("cmd-alt-n")
-    actions.user.switcher_focus_app("arc")
-    insert(user.text or "")
