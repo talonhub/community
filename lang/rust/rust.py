@@ -248,11 +248,6 @@ class UserActions:
 
     # tag: imperative
 
-    def code_block():
-        actions.auto_insert("{}")
-        actions.edit.left()
-        actions.key("enter")
-
     def code_state_if():
         actions.auto_insert("if ")
 
