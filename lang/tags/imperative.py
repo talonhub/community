@@ -53,11 +53,8 @@ class Actions:
     def code_break():
         """Inserts break statement"""
 
-    def code_state_continue():
-        """Inserts continue statement"""
-
     def code_next():
-        """Inserts next statement"""
+        """Inserts next/continue statement"""
 
     def code_try_catch():
         """Inserts try/catch. If selection is true, does so around the selection"""
