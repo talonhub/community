@@ -39,4 +39,4 @@ settings():
 
 # Catch the redundant sleep command, and notify the user that Talon is already asleep.
 # For a note about the optional <phrase>, see to_sleep_mode.talon.
-^(talon|go to) sleep [<phrase>]$: app.notify("talon is already asleep")
+^(talon | go to) sleep [<phrase>]$: app.notify("talon is already asleep")
