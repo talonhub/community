@@ -5,5 +5,5 @@ tag(): user.tabs
 
 please [<user.text>]:
     user.command_palette()
-    actions.sleep("180ms")
+    sleep(200ms)
     insert(user.text or "")
