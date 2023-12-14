@@ -13,14 +13,6 @@ ctx.matches = r"""
 app: arc
 """
 
-
-@mod.action_class
-class Actions:
-    def command_palette():
-        """Show command palette"""
-        actions.key("cmd-l")
-
-
 @ctx.action_class("user")
 class UserActions:
     def tab_close_wrapper():
