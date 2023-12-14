@@ -14,4 +14,4 @@ not mode: sleep
 # Normally, the wake commands are only bound in sleep mode.
 # However, sometimes people accidentally use them if Talon is already active, and if they're not bound, they'll likely be recognized as a different command (like "page up").
 # So we bind them here, and show a notification instead to guide the user.
-^(wake up | talon wake)+$: app.notify("talon is already awake")
+^(wake up | talon wake)+$: app.notify("Talon is already awake")
