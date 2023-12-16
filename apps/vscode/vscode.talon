@@ -55,7 +55,7 @@ show shortcuts json: user.vscode("workbench.action.openGlobalKeybindingsFile")
 show snippets: user.vscode("workbench.action.openSnippets")
 
 # VSCode Snippets
-snip (last|previous): user.vscode("jumpToPrevSnippetPlaceholder")
+snip (last | previous): user.vscode("jumpToPrevSnippetPlaceholder")
 snip next: user.vscode("jumpToNextSnippetPlaceholder")
 
 # Display
