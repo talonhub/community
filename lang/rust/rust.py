@@ -14,18 +14,6 @@ class Actions:
     def code_state_implements():
         """Inserts implements block, positioning the cursor appropriately"""
 
-    def code_insert_if_let_some():
-        """Inserts if let some block, positioning the cursor appropriately"""
-
-    def code_insert_if_let_error():
-        """Inserts if let error block, positioning the cursor appropriately"""
-
-    def code_insert_trait_annotation(type: str):
-        """Inserts type annotation for implementor of trait"""
-
-    def code_insert_return_trait(type: str):
-        """Inserts a return type for implementor of trait"""
-
     def code_insert_macro(text: str, selection: str):
         """Inserts a macro and positions the cursor appropriately"""
 
@@ -479,15 +467,6 @@ class UserActions:
     def code_operator_structure_dereference():
         actions.auto_insert("*")
 
-    def code_insert_if_let_some():
-        actions.user.insert_between("if let Some(", ")")
-
-    def code_insert_if_let_okay():
-        actions.user.insert_between("if let Ok(", ")")
-
-    def code_insert_if_let_error():
-        actions.user.insert_between("if let Err(", ")")
-
     def code_state_implements():
         actions.auto_insert("impl  {}")
         actions.edit.left()
@@ -495,12 +474,6 @@ class UserActions:
         actions.edit.up()
         actions.edit.line_end()
         repeat_call(2, actions.edit.left)
-
-    def code_insert_trait_annotation(type: str):
-        actions.auto_insert(f": impl {type}")
-
-    def code_insert_return_trait(type: str):
-        actions.auto_insert(f" -> impl {type}")
 
     def code_insert_macro(text: str, selection: str):
         if text in all_array_macro_values:
