@@ -56,6 +56,7 @@ show snippets: user.vscode("workbench.action.openSnippets")
 
 # VSCode Snippets
 snip last: user.vscode("jumpToPrevSnippetPlaceholder")
+snip previous: user.vscode("jumpToPrevSnippetPlaceholder")
 snip next: user.vscode("jumpToNextSnippetPlaceholder")
 
 # Display
