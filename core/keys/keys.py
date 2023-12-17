@@ -201,6 +201,7 @@ symbol_key_words = {
     "angle": "<",
     "left angle": "<",
     "less than": "<",
+    "langle": "<",
     "rangle": ">",
     "R angle": ">",
     "right angle": ">",

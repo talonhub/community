@@ -67,8 +67,8 @@ scalar_types = {
     "you one hundred and twenty eight": "u128",
     "eye size": "isize",
     "you size": "usize",
-    "float thirty two": "f32",
-    "float sixty four": "f64",
+    "eff thirty two": "f32",
+    "eff sixty four": "f64",
     "boolean": "bool",
     "character": "char",
 }
@@ -91,7 +91,8 @@ standard_library_types = {
     "result": "Result",
     "hashmap": "HashMap",
     "hash set": "HashSet",
-    "reference count": "Rc",
+    "ref count": "Rc",
+    "ref cell": "RefCell",
 }
 
 standard_sync_types = {
@@ -177,6 +178,7 @@ closure_traits = {
 conversion_traits = {
     "into": "Into",
     "from": "From",
+    "default": "Default",
 }
 
 iterator_traits = {

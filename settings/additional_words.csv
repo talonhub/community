@@ -11,3 +11,5 @@ Minecraft
 typst,typest
 sum
 min
+enum
+struct
