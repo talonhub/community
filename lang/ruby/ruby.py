@@ -5,6 +5,8 @@ ctx.matches = r"""
 code.language: ruby
 """
 
+ctx.lists["user.code_self"] = ["self"]
+
 
 @ctx.action_class("user")
 class UserActions:
@@ -104,12 +106,6 @@ class UserActions:
 
     def code_operator_bitwise_right_shift_assignment():
         actions.auto_insert(" >>= ")
-
-    def code_self():
-        actions.auto_insert("self")
-
-    def code_operator_object_accessor():
-        actions.auto_insert(".")
 
     def code_insert_null():
         actions.auto_insert("nil")

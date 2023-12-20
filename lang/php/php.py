@@ -15,15 +15,16 @@ ctx.lists["user.code_type"] = {
     "void": "void",
 }
 
+ctx.lists["user.code_self"] = {"this": "$this"}
+ctx.lists["user.code_operator_object_accessor"] = {
+    "arrow": "->",
+    # backwards compatibility
+    "dot": "->",
+}
+
 
 @ctx.action_class("user")
 class UserActions:
-    def code_self():
-        actions.auto_insert("$this")
-
-    def code_operator_object_accessor():
-        actions.auto_insert("->")
-
     def code_define_class():
         actions.auto_insert("class ")
 
