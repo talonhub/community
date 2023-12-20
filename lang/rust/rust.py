@@ -186,6 +186,9 @@ ctx.lists["user.code_libraries"] = {
     "collections": "std::collections",
 }
 
+# tag: object_oriented
+ctx.lists["user.code_self"] = ["self"]
+
 # tag: functions_common
 ctx.lists["user.code_common_function"] = {
     "drop": "drop",
@@ -286,9 +289,6 @@ class UserActions:
 
     def code_operator_object_accessor():
         actions.auto_insert(".")
-
-    def code_self():
-        actions.auto_insert("self")
 
     def code_define_class():
         actions.auto_insert("struct ")
