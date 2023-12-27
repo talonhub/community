@@ -107,10 +107,6 @@ ctx.lists["user.code_common_function"] = {
 
 @ctx.action_class("user")
 class UserActions:
-    def code_block():
-        actions.user.insert_between("{", "}")
-        actions.key("enter")
-
     def code_operator_addition():
         actions.insert(" + ")
 
