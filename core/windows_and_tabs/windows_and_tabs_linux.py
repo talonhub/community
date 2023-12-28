@@ -38,3 +38,6 @@ class AppActions:
 
     def window_open():
         actions.key("ctrl-n")
+
+    def focus_last():
+        actions.key("alt-tab")

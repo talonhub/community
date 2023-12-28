@@ -43,3 +43,6 @@ class AppActions:
 
     def window_next():
         actions.key("cmd-`")
+
+    def focus_last():
+        actions.key("cmd-tab")
