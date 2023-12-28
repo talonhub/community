@@ -1,5 +1,6 @@
 -
 settings():
+    speech.timeout = .400
     # Adjust the scale of the imgui to my liking
     imgui.scale = 1.3
     user.snippets_dir = "snippets"
