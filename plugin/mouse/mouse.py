@@ -63,7 +63,8 @@ hidden_cursor = os.path.join(
 )
 
 mod = Module()
-ctx = Context()
+ctx_control_mouse_enabled = Context()
+ctx_is_dragging = Context()
 
 mod.list(
     "mouse_button", desc="List of mouse button words to mouse_click index parameter"
@@ -73,6 +74,9 @@ mod.tag(
 )
 mod.tag(
     "control_mouse_enabled", desc="tag enabled when control mouse is enabled"
+)
+mod.tag(
+    "mouse_is_dragging", desc="Tag indicates whether or not the mouse is currently being dragged"
 )
 setting_mouse_enable_pop_click = mod.setting(
     "mouse_enable_pop_click",
@@ -149,9 +153,12 @@ class Actions:
         if actions.tracking.control_enabled():            
             actions.tracking.control_toggle(False)
             actions.tracking.control1_toggle(False)
-            ctx.tags = []
+            ctx_control_mouse_enabled.tags = []
+            ctx_is_dragging.tags = []
         try:
             actions.tracking.control_zoom_toggle(True)
+            ctx_is_dragging.tags = []
+
         except Exception as e:
             print(e)
             actions.app.notify(e)
@@ -164,17 +171,43 @@ class Actions:
     def mouse_drag(button: int):
         """Press and hold/release a specific mouse button for dragging"""
         # Clear any existing drags
+        global control_mouse_forced
         if actions.user.mouse_is_dragging():
+            if control_mouse_forced:
+                if actions.tracking.control_enabled():
+                    actions.user.mouse_toggle_control_mouse()
+                control_mouse_forced = False
+
             self.mouse_drag_end()
         else:
             # Start drag
+            ctx_is_dragging.tags = ["user.mouse_is_dragging"]
+
             ctrl.mouse_click(button=button, down=True)
+
+            if not actions.tracking.control_enabled():
+                control_mouse_forced = True
+                actions.user.mouse_toggle_control_mouse()
+
 
     def mouse_drag_end():
         """Releases any held mouse buttons"""
+        
+        global control_mouse_forced
         buttons_held_down = list(ctrl.mouse_buttons_down())
         for button in buttons_held_down:
             ctrl.mouse_click(button=button, up=True)
+
+        ctx_is_dragging.tags = []
+        
+        if control_mouse_forced:
+            actions.user.mouse_toggle_control_mouse()
+
+            control_mouse_forced = False
+
+            # reenable zoom mouse
+            if not actions.tracking.control_zoom_enabled():
+                actions.user.mouse_toggle_zoom_mouse()
 
     def mouse_is_dragging():
         """Returns whether or not a drag is in progress"""
@@ -183,6 +216,7 @@ class Actions:
 
     def mouse_sleep():
         """Disables control mouse, zoom mouse, and re-enables cursor"""
+        global control_mouse_forced
         actions.tracking.control_zoom_toggle(False)
         actions.tracking.control_toggle(False)
         actions.tracking.control1_toggle(False)
@@ -194,7 +228,9 @@ class Actions:
         button_down = len(list(ctrl.mouse_buttons_down())) > 0
         if button_down:
             ctrl.mouse_click(button=0, up=True)
-        ctx.tags = []
+        ctx_control_mouse_enabled.tags = []
+        ctx_is_dragging.tags = [] 
+        control_mouse_forced = False
 
     def mouse_scroll_down(amount: float = 1):
         """Scrolls down"""
@@ -280,7 +316,7 @@ class Actions:
         if actions.tracking.control_enabled():                      
             actions.tracking.control_toggle(False)
             actions.tracking.control1_toggle(False)
-            ctx.tags = []
+            ctx_control_mouse_enabled.tags = []
 
     def mouse_toggle_control_mouse():
         """Toggles the control mouse"""
@@ -288,10 +324,10 @@ class Actions:
         if actions.tracking.control_enabled():            
             if actions.tracking.control_zoom_enabled():
                 actions.tracking.control_zoom_toggle()
-            ctx.tags = ["user.control_mouse_enabled"]
+            ctx_control_mouse_enabled.tags = ["user.control_mouse_enabled"]
 
         else:
-            ctx.tags = []
+            ctx_control_mouse_enabled.tags = []
 
 
     def hiss_scroll_up():
@@ -468,7 +504,7 @@ if eye_zoom_mouse.zoom_mouse.enabled:
     noise.unregister("hiss", eye_zoom_mouse.zoom_mouse.on_hiss)
 
 
-@ctx.action_class("user")
+@ctx_control_mouse_enabled.action_class("user")
 class UserActions:
     def noise_trigger_pop():
         if setting_mouse_enable_pop_stops_scroll.get() >= 1 and (
@@ -477,23 +513,26 @@ class UserActions:
             # Allow pop to stop scroll
             stop_scroll()
         else:
-            # Otherwise respect the mouse_enable_pop_click setting
-            setting_val = setting_mouse_enable_pop_click.get()
+            if actions.user.mouse_is_dragging(): 
+                actions.user.mouse_drag_end()
+            else:
+                # Otherwise respect the mouse_enable_pop_click setting
+                setting_val = setting_mouse_enable_pop_click.get()
 
-            is_using_eye_tracker = (
-                actions.tracking.control_zoom_enabled()
-                or actions.tracking.control_enabled()
-                or actions.tracking.control1_enabled()
-            )
-            should_click = (
-                setting_val == 2 and not actions.tracking.control_zoom_enabled()
-            ) or (
-                setting_val == 1
-                and is_using_eye_tracker
-                and not actions.tracking.control_zoom_enabled()
-            )
-            if should_click:
-                ctrl.mouse_click(button=0, hold=16000)
+                is_using_eye_tracker = (
+                    actions.tracking.control_zoom_enabled()
+                    or actions.tracking.control_enabled()
+                    or actions.tracking.control1_enabled()
+                )
+                should_click = (
+                    setting_val == 2 and not actions.tracking.control_zoom_enabled()
+                ) or (
+                    setting_val == 1
+                    and is_using_eye_tracker
+                    and not actions.tracking.control_zoom_enabled()
+                )
+                if should_click:
+                    ctrl.mouse_click(button=0, hold=16000)
 
     def noise_trigger_hiss(active: bool):
         if setting_mouse_enable_hiss_scroll.get():
