@@ -7,6 +7,10 @@ mod.list("jira_fix_versions", desc="list of jira fix versions")
 mod.list("jira_components", desc="list of jira fix components")
 mod.list("jira_alias", desc="list of jira user aliases")
 mod.list("jira_labels", desc="list of jira user labels")
+mod.tag(
+    "jira",
+    desc="tag used to enable jira commands",
+)
 
 @mod.action_class
 class Actions:
