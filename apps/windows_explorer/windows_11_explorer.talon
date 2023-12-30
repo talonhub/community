@@ -1,4 +1,4 @@
-hostname: AZR-MGAM-eiD5ZW
+user.operating_system: windows 10
 app: windows_explorer
 app: windows_file_browser
 -

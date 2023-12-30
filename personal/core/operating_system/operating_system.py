@@ -1,8 +1,6 @@
 from talon import Context, Module, actions, ui, app
 import os
-
-#
-
+import platform
 
 mod = Module()
 mod.list("system_setting", desc="List of system level configuration setting to launch")
@@ -15,6 +13,13 @@ mod.list(
     desc="List of user-defined directories. Empty by default, used to expand the available paths",
 )
 
+@mod.scope
+def scope():
+    operating_system = f"{platform.system()} {platform.release()}".lower()
+    print(operating_system)
+    return {
+        "operating_system": operating_system, 
+        }
 
 portal_name = mod.setting(
     "system_portal_name",
