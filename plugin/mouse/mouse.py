@@ -173,12 +173,7 @@ class Actions:
         # Clear any existing drags
         global control_mouse_forced
         if actions.user.mouse_is_dragging():
-            if control_mouse_forced:
-                if actions.tracking.control_enabled():
-                    actions.user.mouse_toggle_control_mouse()
-                control_mouse_forced = False
-
-            self.mouse_drag_end()
+            actions.user.mouse_drag_end()
         else:
             # Start drag
             ctx_is_dragging.tags = ["user.mouse_is_dragging"]
@@ -186,6 +181,7 @@ class Actions:
             ctrl.mouse_click(button=button, down=True)
 
             if not actions.tracking.control_enabled():
+                # print("force enabling control mouse")
                 control_mouse_forced = True
                 actions.user.mouse_toggle_control_mouse()
 
@@ -207,6 +203,7 @@ class Actions:
 
             # reenable zoom mouse
             if not actions.tracking.control_zoom_enabled():
+                # print("attempting to re enable zoom mouse")
                 actions.user.mouse_toggle_zoom_mouse()
 
     def mouse_is_dragging():
@@ -313,10 +310,11 @@ class Actions:
     def mouse_toggle_zoom_mouse():
         """Toggles the zoom mouse"""
         actions.tracking.control_zoom_toggle()
+        ctx_control_mouse_enabled.tags = []
+
         if actions.tracking.control_enabled():                      
             actions.tracking.control_toggle(False)
             actions.tracking.control1_toggle(False)
-            ctx_control_mouse_enabled.tags = []
 
     def mouse_toggle_control_mouse():
         """Toggles the control mouse"""
