@@ -134,6 +134,8 @@ mod.apps.jetbrains = "app.exe: webstorm64.exe"
 mod.apps.jetbrains = """
 os: mac
 and app.bundle: com.jetbrains.pycharm
+os: mac
+and app.bundle: com.jetbrains.rider
 """
 mod.apps.jetbrains = """
 os: windows
