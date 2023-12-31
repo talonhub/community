@@ -5,6 +5,9 @@ assign {user.jira_alias}:
     key(a)
     insert(jira_alias)
 
+edit task:
+    key(e)
+    
 ping {user.jira_alias}:
     # alias = "@{jira_alias}"
     # insert("@")
