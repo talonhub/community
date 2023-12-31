@@ -175,8 +175,20 @@ class WindowsZoomMouseTriggerActions:
         actions.talon_plugins.eye_zoom_mouse.mouse_drag()
 
     def deck6():
+        """document string goes here"""
+        actions.key("shift:down")
+        actions.talon_plugins.eye_zoom_mouse.mouse_trigger()
+        actions.key("shift:up")
+
+    def deck7():
         """document"""
         actions.talon_plugins.eye_zoom_mouse.mouse_move()
+    
+    def deck11():
+        """document string goes here"""
+        actions.key("ctrl:down")
+        actions.talon_plugins.eye_zoom_mouse.mouse_trigger()
+        actions.key("ctrl:up")
 
 @ctx_control_mouse_enabled.action_class("user")
 class ControlMouseEnabled:
@@ -215,13 +227,23 @@ class ControlMouseEnabled:
 
     def deck5():
         """document string goes here"""
-        actions.user.mouse_drag(0)
-        actions.user.grid_close()
-        
+        actions.talon_plugins.eye_zoom_mouse.mouse_drag()
 
     def deck6():
         """document string goes here"""
-        actions.mouse_move()
+        actions.key("shift:down")
+        actions.mouse_click(0)
+        actions.key("shift:up")
+
+    def deck7():
+        """document"""
+        actions.talon_plugins.eye_zoom_mouse.mouse_move()
+    
+    def deck11():
+        """document string goes here"""
+        actions.key("ctrl:down")
+        actions.mouse_click(0)
+        actions.key("ctrl:up")
 
     def pedal_left_left():
         actions.mouse_click(0)
