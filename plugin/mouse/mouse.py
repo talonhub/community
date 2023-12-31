@@ -317,8 +317,8 @@ class Actions:
         if actions.tracking.control_enabled():                      
             actions.tracking.control_toggle(False)
             actions.tracking.control1_toggle(False)
-        if actions.tracking.control_zoom_enabled():
-            actions.user.clickless_mouse_enable()
+        # if actions.tracking.control_zoom_enabled():
+        #     actions.user.clickless_mouse_enable()
 
     def mouse_toggle_control_mouse():
         """Toggles the control mouse"""

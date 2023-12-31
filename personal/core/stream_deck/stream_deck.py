@@ -225,7 +225,7 @@ class ControlMouseEnabled:
 
     def deck5():
         """document string goes here"""
-        actions.talon_plugins.eye_zoom_mouse.mouse_drag()
+        actions.user.mouse_drag(0)
 
     def deck6():
         """document string goes here"""
