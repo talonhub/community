@@ -156,6 +156,7 @@ class Actions:
             ctx_control_mouse_enabled.tags = []
             ctx_is_dragging.tags = []
         try:
+            actions.user.clickless_mouse_enable()
             actions.tracking.control_zoom_toggle(True)
             ctx_is_dragging.tags = []
 
@@ -217,6 +218,7 @@ class Actions:
         actions.tracking.control_zoom_toggle(False)
         actions.tracking.control_toggle(False)
         actions.tracking.control1_toggle(False)
+        actions.user.clickless_mouse_disable()
 
         show_cursor_helper(True)
         stop_scroll()
@@ -315,6 +317,8 @@ class Actions:
         if actions.tracking.control_enabled():                      
             actions.tracking.control_toggle(False)
             actions.tracking.control1_toggle(False)
+        if actions.tracking.control_zoom_enabled():
+            actions.user.clickless_mouse_enable()
 
     def mouse_toggle_control_mouse():
         """Toggles the control mouse"""
@@ -323,6 +327,7 @@ class Actions:
             if actions.tracking.control_zoom_enabled():
                 actions.tracking.control_zoom_toggle()
             ctx_control_mouse_enabled.tags = ["user.control_mouse_enabled"]
+            actions.user.clickless_mouse_disable()
 
         else:
             ctx_control_mouse_enabled.tags = []
