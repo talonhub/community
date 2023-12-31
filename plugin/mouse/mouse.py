@@ -156,7 +156,7 @@ class Actions:
             ctx_control_mouse_enabled.tags = []
             ctx_is_dragging.tags = []
         try:
-            actions.user.clickless_mouse_enable()
+            # actions.user.clickless_mouse_enable()
             actions.tracking.control_zoom_toggle(True)
             ctx_is_dragging.tags = []
 
