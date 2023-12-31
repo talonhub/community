@@ -83,19 +83,17 @@ class Actions:
     def deck3():
         """document string goes here"""
         
-        actions.user.system_switcher()
+        actions.user.mouse_scroll_down_continuous()
 
 
     def deck4():
         """document string goes here"""
-        
-        actions.edit.undo()
+        actions.user.mouse_scroll_up_continuous()
 
 
     def deck5():
         """document string goes here"""
-        
-        actions.core.repeat_command(1)
+        actions.user.mouse_scroll_stop()
 
 
     def deck6():
@@ -110,27 +108,27 @@ class Actions:
 
     def deck8():
         """document string goes here"""
-        actions.user.mouse_scroll_down_continuous()
+        actions.user.system_switcher()
 
     def deck9():
         """document string goes here"""
-        actions.user.mouse_scroll_up_continuous()
+        actions.edit.undo()
 
     def deck10():
         """document string goes here"""
-        actions.user.mouse_scroll_stop()
+        actions.core.repeat_command(1)
 
     def deck11():
         """document string goes here"""
-        actions.user.move_cursor_to_gaze_point()
+        actions.user.mouse_toggle_zoom_mouse()
     
     def deck12():
         """document string goes here"""
-        actions.user.mouse_toggle_zoom_mouse()
+        actions.user.dictation_or_command_toggle()
     
     def deck13():
         """document string goes here"""
-        actions.user.dictation_or_command_toggle()
+        actions.speech.toggle()
     
     def deck14():
         """document string goes here"""
@@ -234,16 +232,48 @@ class ControlMouseEnabled:
         actions.key("shift:down")
         actions.mouse_click(0)
         actions.key("shift:up")
-
+    
     def deck7():
-        """document"""
-        actions.talon_plugins.eye_zoom_mouse.mouse_move()
+        """document string goes here"""
+        actions.user.quick_pick_show()
+    
+    def deck8():
+        """document string goes here"""
+        
+        actions.user.system_switcher()
+
+    def deck9():
+        """document string goes here"""
+        
+        actions.edit.undo()
+    
+    def deck10():
+        """document string goes here"""
+        
+        actions.core.repeat_command(1)
+
     
     def deck11():
         """document string goes here"""
         actions.key("ctrl:down")
         actions.mouse_click(0)
         actions.key("ctrl:up")
+        
+    def deck12():
+        """document string goes here"""
+        actions.user.dictation_or_command_toggle()
+    
+    def deck13():
+        """document string goes here"""
+        actions.speech.toggle()
+    
+    def deck14():
+        """document string goes here"""
+        actions.user.microphone_toggle()
+    
+    def deck15():
+        """document string goes here"""
+        sleep_or_wake()
 
     def pedal_left_left():
         actions.mouse_click(0)
