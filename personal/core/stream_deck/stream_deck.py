@@ -198,6 +198,7 @@ class ControlMouseEnabled:
     def deck_pedal_middle():
         """middle pedal"""
         actions.mouse_click(0)
+        actions.user.mouse_drag_end()
 
     def deck_pedal_right():
         """right pedal"""
@@ -205,6 +206,7 @@ class ControlMouseEnabled:
     def deck1():
         """document string goes here"""
         actions.mouse_click(0)
+        actions.user.mouse_drag_end()
 
     def deck2():
         """document string goes here"""
