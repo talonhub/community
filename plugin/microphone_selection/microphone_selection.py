@@ -85,7 +85,7 @@ class Actions:
 
     def microphone_toggle_video_conference():
         """mute video conference applications"""
-        pass
+        print("microphone_toggle_video_conference: not implemented")
     
     def microphone_toggle():
         """Toggles the microphone and speech"""
