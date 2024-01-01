@@ -120,7 +120,7 @@ class Actions:
 
     def deck11():
         """document string goes here"""
-        actions.user.mouse_toggle_zoom_mouse()
+        actions.user.dictation_or_command_toggle()
     
     def deck12():
         """document string goes here"""
