@@ -314,7 +314,7 @@ def clear_lists():
 
 
 def update_gui():
-    if gui_folders.showing or settings.get('user.file_manager_auto_show_pickers') >= 1:
+    if gui_folders.showing or settings.get("user.file_manager_auto_show_pickers") >= 1:
         gui_folders.show()
         gui_files.show()
 
