@@ -207,7 +207,7 @@ class MouseSnapNine:
 
     def calc_narrow(self, which, rect):
         rect = rect.copy()
-        bdr = narrow_expansion.get()
+        bdr = settings.get("user.grid_narrow_expansion")
         row = int(which - 1) // 3
         col = int(which - 1) % 3
         if settings["user.grids_put_one_bottom_left"]:

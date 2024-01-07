@@ -1,4 +1,4 @@
-from talon import Context, Module, actions
+from talon import Context, Module, actions, settings
 
 mod = Module()
 
@@ -19,7 +19,8 @@ setting_tmux_prefix_key = mod.setting(
 class TmuxActions:
     def tmux_prefix():
         """press control and the configured tmux prefix key"""
-        actions.key(f"{setting_tmux_prefix_key.get()}")
+        prefix = settings.get("user.tmux_prefix_key")
+        actions.key(f"{prefix}")
 
     def tmux_keybind(key: str):
         """press tmux prefix followed by a key bind"""

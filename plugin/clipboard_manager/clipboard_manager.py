@@ -1,4 +1,4 @@
-from talon import Module, Context, actions, clip, app, cron
+from talon import Module, Context, actions, clip, app, cron, settings
 from talon.skia.image import Image
 from talon.clip import MimeData
 from dataclasses import dataclass
@@ -78,7 +78,7 @@ def update():
 @imgui.open(numbered=True)
 def gui(gui: imgui.GUI):
     global clicked_num
-    max_rows = setting_clipboard_manager_max_rows.get()
+    max_rows = settings.get("user.clipboard_manager_max_rows")
     sticky_text = " - STICKY" if sticky else ""
     gui.header(f"Clipboard ({len(clip_history)} / {max_rows}){sticky_text}")
 
@@ -237,7 +237,7 @@ def validate_number(number: range):
 
 def shrink():
     global clip_history
-    max_rows = setting_clipboard_manager_max_rows.get()
+    max_rows = settings.get("user.clipboard_manager_max_rows")
     if len(clip_history) > max_rows:
         clip_history = clip_history[:max_rows]
 

@@ -82,7 +82,7 @@ def get_screenshot_path(title: str = ""):
         title = f" - {title.replace('.', '_')}"
     date = datetime.now().strftime("%Y-%m-%dT%H-%M-%S")
     filename = f"Screenshot {date}{title}.png"
-    folder_path = screenshot_folder.get()
+    folder_path = settings.get("user.screenshot_folder")
     path = os.path.expanduser(os.path.join(folder_path, filename))
     return os.path.normpath(path)
 

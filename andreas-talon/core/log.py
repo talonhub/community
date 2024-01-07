@@ -13,10 +13,10 @@ setting_level = mod.setting(
 class Actions:
     def debug(message: str):
         """Log debug message"""
-        if setting_level.get() == "debug":
+        if settings.get("user.log_level") == "debug":
             print(f"DEBUG: {message}")
 
     def info(message: str):
         """Log info message"""
-        if setting_level.get() in ["debug", "info"]:
+        if settings.get("user.log_level") in ["debug", "info"]:
             print(f"INFO: {message}")

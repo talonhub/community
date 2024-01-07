@@ -132,7 +132,7 @@ def get_text_right():
 def get_text_up():
     actions.edit.up()
     actions.edit.line_end()
-    for j in range(0, text_navigation_max_line_search.get()):
+    for j in range(0, settings.get("user.text_navigation_max_line_search")):
         actions.edit.extend_up()
     actions.edit.extend_line_start()
     text = actions.edit.selected_text()
@@ -143,7 +143,7 @@ def get_text_up():
 def get_text_down():
     actions.edit.down()
     actions.edit.line_start()
-    for j in range(0, text_navigation_max_line_search.get()):
+    for j in range(0, settings.get("user.text_navigation_max_line_search")):
         actions.edit.extend_down()
     actions.edit.extend_line_end()
     text = actions.edit.selected_text()

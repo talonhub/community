@@ -53,7 +53,7 @@ import datetime
 import os.path
 import warnings
 
-from talon import Module, actions, speech_system
+from talon import Module, actions, speech_system, settings
 
 REPO_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -98,7 +98,7 @@ def deprecate_notify(id: str, message: str):
 
     maybe_last_shown = notification_last_shown.get(id)
     now = datetime.datetime.now()
-    interval = setting_deprecate_warning_interval_hours.get()
+    interval = settings.get("user.deprecate_warning_interval_hours")
     threshold = now - datetime.timedelta(hours=interval)
     if maybe_last_shown is not None and maybe_last_shown > threshold:
         return

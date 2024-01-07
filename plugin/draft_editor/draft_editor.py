@@ -1,4 +1,4 @@
-from talon import Context, Module, actions, ui
+from talon import Context, Module, actions, ui, settings
 
 mod = Module()
 mod.tag("draft_editor_active", "Indicates whether the draft editor has been activated")
@@ -32,7 +32,7 @@ setting_editor_names = mod.setting(
 
 
 def get_editor_names():
-    names_csv = setting_editor_names.get()
+    names_csv = settings.get("user.draft_editor")
     return names_csv.split(", ") if names_csv else default_names
 
 

@@ -12,6 +12,7 @@ from talon import (
     ui,
     noise,
     registry,
+    settings, 
     tap,
 )
 from talon_plugins import eye_zoom_mouse
@@ -171,7 +172,7 @@ class Actions:
             actions.sleep("500ms")
             # actions.user.talon_restart()
 
-        if setting_mouse_wake_hides_cursor.get() >= 1:
+        if settings.get("user.mouse_wake_hides_cursor") >= 1:
             show_cursor_helper(False)
 
     def mouse_drag(button: int):
@@ -238,42 +239,42 @@ class Actions:
 
     def mouse_scroll_down(amount: float = 1):
         """Scrolls down"""
-        mouse_scroll(amount * setting_mouse_wheel_down_amount.get())()
+        mouse_scroll(amount * settings.get("user.mouse_wheel_down_amount"))()
 
     def mouse_scroll_down_continuous():
         """Scrolls down continuously"""
         global continuous_scoll_mode
         continuous_scoll_mode = "scroll down continuous"
-        mouse_scroll(setting_mouse_continuous_scroll_amount.get())()
+        mouse_scroll(settings.get("user.mouse_continuous_scroll_amount"))()
 
         if scroll_job is None:
             start_scroll()
 
-        if setting_mouse_hide_mouse_gui.get() == 0:
+        if settings.get("user.mouse_hide_mouse_gui") == 0:
             gui_wheel.show()
 
     def mouse_scroll_up(amount: float = 1):
         """Scrolls up"""
-        mouse_scroll(-amount * setting_mouse_wheel_down_amount.get())()
+        mouse_scroll(-amount * settings.get("user.mouse_wheel_down_amount"))()
 
     def mouse_scroll_up_continuous():
         """Scrolls up continuously"""
         global continuous_scoll_mode
         continuous_scoll_mode = "scroll up continuous"
-        mouse_scroll(-setting_mouse_continuous_scroll_amount.get())()
+        mouse_scroll(-settings.get("user.mouse_continuous_scroll_amount"))()
 
         if scroll_job is None:
             start_scroll()
-        if setting_mouse_hide_mouse_gui.get() == 0:
+        if settings.get("user.mouse_hide_mouse_gui") == 0:
             gui_wheel.show()
 
     def mouse_scroll_left(amount: float = 1):
         """Scrolls left"""
-        actions.mouse_scroll(0, -amount * setting_mouse_wheel_horizontal_amount.get())
+        actions.mouse_scroll(0, -amount * settings.get("user.mouse_wheel_horizontal_amount"))
 
     def mouse_scroll_right(amount: float = 1):
         """Scrolls right"""
-        actions.mouse_scroll(0, amount * setting_mouse_wheel_horizontal_amount.get())
+        actions.mouse_scroll(0, amount * settings.get("user.mouse_wheel_horizontal_amount"))
 
     def mouse_scroll_stop():
         """Stops scrolling"""
@@ -285,7 +286,7 @@ class Actions:
         continuous_scoll_mode = "gaze scroll"
 
         start_cursor_scrolling()
-        if setting_mouse_hide_mouse_gui.get() == 0:
+        if settings.get("user.mouse_hide_mouse_gui") == 0:
             gui_wheel.show()
 
         # enable 'control mouse' if eye tracker is present and not enabled already
@@ -301,7 +302,7 @@ class Actions:
         continuous_scoll_mode = "gaze scroll"
 
         start_cursor_scrolling()
-        if setting_mouse_hide_mouse_gui.get() == 0:
+        if settings.get("user.mouse_hide_mouse_gui") == 0:
             gui_wheel.show()
 
     def copy_mouse_position():
@@ -515,7 +516,7 @@ if eye_zoom_mouse.zoom_mouse.enabled:
 @ctx_control_mouse_enabled.action_class("user")
 class UserActions:
     def noise_trigger_pop():
-        if setting_mouse_enable_pop_stops_scroll.get() >= 1 and (
+        if settings.get("user.mouse_enable_pop_stops_scroll") >= 1 and (
             gaze_job or scroll_job
         ):
             # Allow pop to stop scroll
@@ -525,7 +526,7 @@ class UserActions:
                 actions.user.mouse_drag_end()
             else:
                 # Otherwise respect the mouse_enable_pop_click setting
-                setting_val = setting_mouse_enable_pop_click.get()
+                setting_val = settings.get("user.mouse_enable_pop_click")
 
                 is_using_eye_tracker = (
                     actions.tracking.control_zoom_enabled()
@@ -543,7 +544,7 @@ class UserActions:
                     ctrl.mouse_click(button=0, hold=16000)
 
     def noise_trigger_hiss(active: bool):
-        if setting_mouse_enable_hiss_scroll.get():
+        if settings.get("user.mouse_enable_hiss_scroll"):
             if active:
                 if hiss_scroll_up:
                     actions.user.mouse_scroll_up_continuous()

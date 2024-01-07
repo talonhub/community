@@ -1,4 +1,4 @@
-from talon import Module, app, registry, scope, skia, ui
+from talon import Module, app, registry, scope, skia, ui, settings
 from talon.canvas import Canvas
 from talon.screen import Screen
 from talon.skia.canvas import Canvas as SkiaCanvas
@@ -78,11 +78,12 @@ def get_mode_color() -> str:
 
 
 def get_alpha_color() -> str:
-    return f"{int(setting_color_alpha.get() * 255):02x}"
+    alpha = settings.get("user.mode_indicator_color_alpha")
+    return f"{int( * 255):02x}"
 
 
 def get_gradient_color(color: str) -> str:
-    factor = setting_color_gradient.get()
+    factor = settings.get("user.mode_indicator_color_gradient")
     # hex -> rgb
     (r, g, b) = tuple(int(color[i : i + 2], 16) for i in (0, 2, 4))
     # Darken rgb
@@ -118,15 +119,15 @@ def move_indicator():
     screen: Screen = ui.main_screen()
     rect = screen.rect
     scale = screen.scale if app.platform != "mac" else 1
-    radius = setting_size.get() * scale / 2
+    radius = settings.get("user.mode_indicator_size") * scale / 2
 
     x = rect.left + min(
-        max(setting_x.get() * rect.width - radius, 0),
+        max(settings.get("user.mode_indicator_x") * rect.width - radius, 0),
         rect.width - 2 * radius,
     )
 
     y = rect.top + min(
-        max(setting_y.get() * rect.height - radius, 0),
+        max(settings.get("user.mode_indicator_y") * rect.height - radius, 0),
         rect.height - 2 * radius,
     )
 
@@ -149,7 +150,7 @@ def hide_indicator():
 
 
 def update_indicator():
-    if setting_show.get():
+    if settings.get("user.mode_indicator_show"):
         if not canvas:
             show_indicator()
         move_indicator()

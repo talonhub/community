@@ -2,7 +2,7 @@ import glob
 from collections import defaultdict
 from pathlib import Path
 
-from talon import Context, Module, actions, app, fs
+from talon import Context, Module, actions, app, fs, settings
 
 from ..modes.language_modes import language_ids
 from .snippet_types import InsertionSnippet, Snippet, WrapperSnippet
@@ -37,10 +37,10 @@ for lang in language_ids:
 
 
 def get_setting_dir():
-    if not setting_dir.get():
+    if not settings.get("user.snippets_dir"):
         return None
 
-    dir = Path(setting_dir.get())
+    dir = Path(settings.get("user.snippets_dir"))
 
     if not dir.is_absolute():
         user_dir = Path(actions.path.talon_user())

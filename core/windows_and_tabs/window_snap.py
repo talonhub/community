@@ -116,7 +116,7 @@ def _move_to_screen(
 
     dest = dest_screen.visible_rect
     src = src_screen.visible_rect
-    how = setting_window_snap_screen.get()
+    how = settings.get("user.window_snap_screen")
     if how == "size aware":
         r = window.rect
         left, right = interpolate_interval(

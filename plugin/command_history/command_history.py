@@ -33,7 +33,7 @@ def gui(gui: imgui.GUI):
     gui.text("Command History")
     gui.line()
     text = (
-        history[:] if hist_more else history[-setting_command_history_display.get() :]
+        history[:] if hist_more else history[-settings.get("user.command_history_display") :]
     )
     for line in text:
         gui.text(line)
