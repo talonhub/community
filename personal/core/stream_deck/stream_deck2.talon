@@ -1,0 +1,33 @@
+# deck: FL28L1A04967
+# deck: FL28L1A04965
+-
+deck(test_1):
+    user.deck1()
+deck(test_2):
+    user.deck2()
+deck(test_3):
+    user.deck3()
+deck(test_4):
+    user.deck4()
+deck(test_5):
+    user.deck5()
+deck(test_6):
+    user.deck6()
+deck(test_7):
+    user.deck7()
+deck(test_8):
+    user.deck8()
+deck(test_9):
+    user.deck9()
+deck(test_10):
+    user.deck10()
+deck(test_11):
+    user.deck11()
+deck(test_12):
+    user.deck12()
+deck(test_13):
+    user.deck13()
+deck(test_14):
+    user.deck14()
+deck(test_15):
+    user.deck15()

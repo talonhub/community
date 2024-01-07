@@ -95,10 +95,6 @@ class Actions:
         else:
             actions.user.microphone_preferred()
 
-        # This shortcut for muting video conferencing applications only functions on windows 11
-        # It is also not supported by new teams at the moment 
-        actions.user.microphone_toggle_video_conference()
-
         actions.speech.toggle()
 
     def microphone_preferred():

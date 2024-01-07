@@ -1,4 +1,9 @@
 # deck: A00SA3232MA4OZ
+# deck: A00SA3192M9DW0
+# 2024-01-07 14:58:00.435  INFO Deck connected: Deck(pid=128, kind=Mk2, serial='A00SA3232MA4OZ', layout=None)
+# 2024-01-07 14:58:00.445  INFO Deck connected: Deck(pid=134, kind=Pedal, serial='', layout=None)
+# 2024-01-07 14:58:00.453  INFO Deck connected: Deck(pid=128, kind=Mk2, serial='A00SA3192M9DW0', layout=None)
+# 2024-01-07 14:58:00.463  INFO Deck connected: Deck(pid=134, kind=Pedal, serial='', layout=None)
 -
 deck(button_1):
     user.deck1()
@@ -30,4 +35,5 @@ deck(button_14):
     user.deck14()
 deck(button_15):
     user.deck15()
+
 
