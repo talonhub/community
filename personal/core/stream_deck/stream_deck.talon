@@ -5,35 +5,35 @@
 # 2024-01-07 14:58:00.453  INFO Deck connected: Deck(pid=128, kind=Mk2, serial='A00SA3192M9DW0', layout=None)
 # 2024-01-07 14:58:00.463  INFO Deck connected: Deck(pid=134, kind=Pedal, serial='', layout=None)
 -
-deck(button_1):
+deck(zoom):
     user.deck1()
-deck(button_2):
+deck(home):
     user.deck2()
-deck(button_3):
+deck(down):
     user.deck3()
-deck(button_4):
+deck(up):
     user.deck4()
-deck(button_5):
+deck(stop):
     user.deck5()
-deck(button_6):
+deck(move):
     user.deck6()
-deck(button_7):
+deck(qp):
     user.deck7()
-deck(button_8):
+deck(switch):
     user.deck8()
-deck(button_9):
+deck(undo):
     user.deck9()
-deck(button_10):
+deck(repeat):
     user.deck10()
-deck(button_11):
+deck(t cmd):
     user.deck11()
-deck(button_12):
+deck(t zoom):
     user.deck12()
-deck(button_13):
+deck(t mic):
     user.deck13()
-deck(button_14):
+deck(swap):
     user.deck14()
-deck(button_15):
+deck(sleep):
     user.deck15()
 
 
