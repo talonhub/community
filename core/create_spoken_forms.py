@@ -51,6 +51,7 @@ punctuation_words = {
     # Workaround for issue with conformer b-series; see #946
     "coma": ",",
     "kama": ",",
+    "void":"space"
 }
 
 symbol_key_words = {}

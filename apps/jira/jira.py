@@ -7,6 +7,8 @@ mod.list("jira_fix_versions", desc="list of jira fix versions")
 mod.list("jira_components", desc="list of jira fix components")
 mod.list("jira_alias", desc="list of jira user aliases")
 mod.list("jira_labels", desc="list of jira user labels")
+mod.list("jira_projects", desc="list of jira project keys")
+mod.list("jira_types", desc="list of jira types")
 mod.tag(
     "jira",
     desc="tag used to enable jira commands",

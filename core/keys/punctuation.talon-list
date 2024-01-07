@@ -36,6 +36,7 @@ semi: ;
 stack: :
 # drip: ,
 comma: ,
+void: " "
 # Workaround for issue with conformer b-series; see #946
 coma: ,
 kama: ,

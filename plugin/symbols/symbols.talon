@@ -22,7 +22,8 @@ empty escaped quad: '\\"\\"'
 empty escaped twin: "\\'\\'"
 empty escaped round: "\\(\\)"
 empty escaped curly: "\\{{\\}}"
-tween <user.symbol_key>: user.insert_between("{symbol_key}", "{symbol_key}")
+tween <user.symbol_key>: 
+    user.insert_between("{symbol_key}", "{symbol_key}")
 quad: user.insert_between('"', '"')
 twin: user.insert_between("'", "'")
 ski: user.insert_between("`", "`")
