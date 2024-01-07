@@ -5,7 +5,7 @@ from talon import Module, actions, imgui, settings, speech_system
 # We keep command_history_size lines of history, but by default display only
 # command_history_display of them.
 mod = Module()
-setting_command_history_size = mod.setting("command_history_size", int, default=50)
+mod.setting("command_history_size", type=int, default=50)
 mod.setting("command_history_display", type=int, default=10)
 
 hist_more = False

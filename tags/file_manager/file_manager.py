@@ -31,7 +31,7 @@ words_to_exclude = [
     "exe",
 ]
 
-setting_auto_show_pickers = mod.setting(
+mod.setting(
     "file_manager_auto_show_pickers",
     type=int,
     default=0,
