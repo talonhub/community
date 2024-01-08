@@ -66,15 +66,15 @@ setting_paths = {
 
 def get_mode_color() -> str:
     if current_mode == "sleep":
-        return setting_color_sleep.get()
+        return settings.get("user.mode_indicator_color_sleep")
     elif current_mode == "dictation":
-        return setting_color_dictation.get()
+        return settings.get("user.mode_indicator_color_dictation")
     elif current_mode == "mixed":
-        return setting_color_mixed.get()
+        return settings.get("user.mode_indicator_color_mixed")
     elif current_mode == "command":
-        return setting_color_command.get()
+        return settings.get("user.mode_indicator_color_command")
     else:
-        return setting_color_other.get()
+        return settings.get("user.mode_indicator_color_other")
 
 
 def get_alpha_color() -> str:
