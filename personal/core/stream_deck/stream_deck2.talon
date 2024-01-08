@@ -1,33 +1,35 @@
 # deck: FL28L1A04967
 # deck: FL28L1A04965
 -
-deck(test_1):
+deck(zoom 1):
     user.deck1()
-deck(test_2):
+deck(home 1):
     user.deck2()
-deck(test_3):
+deck(down 1):
     user.deck3()
-deck(test_4):
+deck(up 1):
     user.deck4()
-deck(test_5):
+deck(stop 1):
     user.deck5()
-deck(test_6):
+deck(move 1):
     user.deck6()
-deck(test_7):
+deck(qp 1):
     user.deck7()
-deck(test_8):
+deck(switch 1):
     user.deck8()
-deck(test_9):
+deck(undo 1):
     user.deck9()
-deck(test_10):
+deck(repeat1):
     user.deck10()
-deck(test_11):
+deck(t cmd1):
     user.deck11()
-deck(test_12):
+deck(t zoom1):
     user.deck12()
-deck(test_13):
+deck(t mic1):
     user.deck13()
-deck(test_14):
+deck(swap1):
     user.deck14()
-deck(test_15):
+deck(sleep1):
     user.deck15()
+
+
