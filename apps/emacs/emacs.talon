@@ -31,11 +31,13 @@ save buffers kill emacs: user.emacs("save-buffers-kill-emacs")
 save some buffers: user.emacs("save-some-buffers")
 sort lines: user.emacs("sort-lines")
 sort words: user.emacs("sort-words")
+file [loop] continue: user.emacs("fileloop-continue")
 
 go directory: user.emacs("dired-jump")
 other go directory: user.emacs("dired-jump-other-window")
 
 [toggle] debug on error: user.emacs("toggle-debug-on-error")
+[toggle] debug on quit: user.emacs("toggle-debug-on-quit")
 [toggle] input method: user.emacs("toggle-input-method")
 [toggle] truncate lines: user.emacs("toggle-truncate-lines")
 [toggle] word wrap: user.emacs("toggle-word-wrap")
@@ -204,8 +206,9 @@ search toggle case [fold | sensitive]: user.emacs_meta("c")
 search toggle regex: user.emacs_meta("r")
 
 highlight lines matching [regex]: user.emacs("highlight-lines-matching-regexp")
+highlight phrase: user.emacs("highlight-phrase")
 highlight regex: user.emacs("highlight-regexp")
-unhighlight regex: user.emacs("unhighlight-regexp")
+unhighlight (regex | phrase): user.emacs("unhighlight-regexp")
 unhighlight all:
     user.emacs_prefix()
     user.emacs("unhighlight-regexp")
@@ -286,7 +289,7 @@ rectangle number lines: user.emacs("rectangle-number-lines")
 
 # ----- PROJECT SUPPORT ----- #
 project [find] file: user.emacs("project-find-file")
-project [find] regexp: user.emacs("project-find-regexp")
+project [find] (regexp | grep): user.emacs("project-find-regexp")
 project [query] replace regexp: user.emacs("project-query-replace-regexp")
 project (dired | directory): user.emacs("projectile-dired")
 project [run] shell: user.emacs("projectile-run-shell")
@@ -298,8 +301,8 @@ project [run] shell command: user.emacs("projectile-run-shell-command-in-root")
 project [run] async shell command:
     user.emacs("projectile-run-async-shell-command-in-root")
 project (switch [to buffer] | buffer | buff): user.emacs("projectile-switch-to-buffer")
-project kill buffers: user.emacs("projectile-kill-buffers")
-project switch project: user.emacs("project-switch-project")
+project kill [buffers]: user.emacs("projectile-kill-buffers")
+project switch [project]: user.emacs("project-switch-project")
 
 # ----- VC/GIT SUPPORT ----- #
 vc (annotate | blame): user.emacs("vc-annotate")
