@@ -1,6 +1,6 @@
 import logging
 
-from talon import Context, Module, actions
+from talon import Context, Module, actions, settings
 
 mod = Module()
 ctx = Context()
@@ -18,7 +18,7 @@ Zero means always paste; -1 means never paste.
 @ctx.action_class("main")
 class MainActions:
     def insert(text):
-        threshold = paste_to_insert_threshold_setting.get()
+        threshold = settings.get("user.paste_to_insert_threshold")
         if 0 <= threshold < len(text):
             actions.user.paste(text)
             return

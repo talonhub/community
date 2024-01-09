@@ -1,0 +1,21 @@
+name: printStatement
+phrase: print
+insertionScope: statement
+
+$0.wrapperPhrase: print
+---
+
+language: javascript
+-
+console.log($0)
+---
+
+language: java
+-
+System.out.println($0);
+---
+
+language: python | talon
+-
+print($0)
+---

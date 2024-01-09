@@ -1,0 +1,11 @@
+language: talon
+---
+
+name: voiceCommandDeclaration
+phrase: command
+insertionScope: command
+
+$0.insertionFormatter: NOOP
+-
+$0: user.vscode("$CLIPBOARD")
+---

@@ -1,0 +1,46 @@
+language: html
+---
+
+name: element
+phrase: element | tag
+insertionScope: xmlElement
+
+$1.insertionFormatter: PRIVATE_CAMEL_CASE
+-
+<$1>
+    $0
+</$1>
+---
+
+name: attribute
+phrase: attribute
+
+$1.insertionFormatter: PRIVATE_CAMEL_CASE
+-
+$1=$0
+---
+
+name: table
+phrase: table
+-
+<table>
+    <thead>
+        <tr>
+            <th>$1</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>$0</td>
+        </tr>
+    </tbody>
+</table>
+---
+
+name: unorderedList
+phrase: list
+-
+<ul>
+    <li>$0</li>
+</ul>
+---
