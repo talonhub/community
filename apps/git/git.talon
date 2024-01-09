@@ -7,11 +7,11 @@ git {user.git_command} [<user.git_arguments>]:
 git commit [<user.git_arguments>] message [<user.prose>]:
     args = git_arguments or ""
     message = prose or ""
-    user.insert_between("git commit{args} --message '{message}", "'")
+    user.insert_between("git commit{args} --message \"{message}", "\"")
 git stash [push] [<user.git_arguments>] message [<user.prose>]:
     args = git_arguments or ""
     message = prose or ""
-    user.insert_between("git stash push{args} --message '{message}", "'")
+    user.insert_between("git stash push{args} --message \"{message}", "\"")
 
 # Optimistic execution for frequently used commands that are harmless (don't
 # change repository or index state).
