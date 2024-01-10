@@ -278,3 +278,8 @@ cell run: user.vscode("notebook.cell.execute")
 
 install local: user.vscode("workbench.extensions.action.installVSIX")
 preview markdown: user.vscode("markdown.showPreview")
+
+apply action:
+    key(cmd-.)
+    sleep(100ms)
+    key(enter)
