@@ -171,7 +171,7 @@ carve word right: user.cut_word_right()
 
 carve line: user.cut_line()
 
-snoop all:
+poop all:
     edit.select_all()
     edit.paste()
 
