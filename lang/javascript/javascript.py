@@ -92,10 +92,6 @@ class UserActions:
         actions.user.insert_between(" else {", "}")
         actions.key("enter")
 
-    def code_block():
-        actions.user.insert_between("{", "}")
-        actions.key("enter")
-
     def code_self():
         actions.auto_insert("this")
 
