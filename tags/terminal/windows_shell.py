@@ -11,9 +11,9 @@ tag: user.generic_windows_shell
 class Actions:
     # Implements the functions from terminal.py for unix shells
 
-    def terminal_list_directories():
+    def terminal_list_directories(path: str):
         """Lists directories"""
-        actions.insert("ls")
+        actions.insert(f"ls {path}")
         actions.key("enter")
 
     def terminal_list_all_directories():
