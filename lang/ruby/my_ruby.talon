@@ -11,6 +11,12 @@ tag(): user.ruby
 
 # same as python.talon:
 state (def | deaf | deft): "def "
+define <phrase>$:
+  #user.code_default_function(user.formatted_text(phrase,"snake"))
+  "def "
+  user.insert_formatted(phrase, "snake")
+  insert("()")
+  key(left)
 
 # this is not working
 # tag(): user.code_my_models
