@@ -37,10 +37,11 @@ for lang in language_ids:
 
 
 def get_setting_dir():
-    if not settings.get("user.snippets_dir"):
+    setting_dir = settings.get("user.snippets_dir")
+    if not setting_dir:
         return None
 
-    dir = Path(settings.get("user.snippets_dir"))
+    dir = Path(setting_dir)
 
     if not dir.is_absolute():
         user_dir = Path(actions.path.talon_user())

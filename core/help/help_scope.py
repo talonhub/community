@@ -52,11 +52,9 @@ def print_value(gui: imgui.GUI, path: str, value, ignore: set[str] = {}):
 def format_value(value):
     if isinstance(value, (list, set)):
         value = ", ".join(sorted(value))
-    if (
-        isinstance(value, str)
-        and len(value) > settings.get("user.help_scope_max_length") + 4
-    ):
-        return f"{value[:settings.get('user.help_scope_max_length')]} ..."
+    setting_max_length = settings.get("user.help_scope_max_length")
+    if isinstance(value, str) and len(value) > setting_max_length + 4:
+        return f"{value[:setting_max_length]} ..."
     return value
 
 
