@@ -226,12 +226,13 @@ _snap_positions = {
     "left third": RelativeScreenPos(0, 0, 1 / 3, 1),
     "right third": RelativeScreenPos(2 / 3, 0, 1, 1),
     "left two thirds": RelativeScreenPos(0, 0, 2 / 3, 1),
-    "right two thirds": RelativeScreenPos(
-        1 / 3,
-        0,
-        1,
-        1,
-    ),
+    "right two thirds": RelativeScreenPos(1 / 3, 0, 1, 1),
+    # Alternate (simpler) spoken forms for thirds
+    "center small": RelativeScreenPos(1 / 3, 0, 2 / 3, 1),
+    "left small": RelativeScreenPos(0, 0, 1 / 3, 1),
+    "right small": RelativeScreenPos(2 / 3, 0, 1, 1),
+    "left large": RelativeScreenPos(0, 0, 2 / 3, 1),
+    "right large": RelativeScreenPos(1 / 3, 0, 1, 1),
     # Quarters
     # .---.---.
     # |---|---|
@@ -254,6 +255,17 @@ _snap_positions = {
     "bottom left two thirds": RelativeScreenPos(0, 0.5, 2 / 3, 1),
     "bottom right two thirds": RelativeScreenPos(1 / 3, 0.5, 1, 1),
     "bottom center third": RelativeScreenPos(1 / 3, 0.5, 2 / 3, 1),
+    # Alternate (simpler) spoken forms for sixths
+    "top left small": RelativeScreenPos(0, 0, 1 / 3, 0.5),
+    "top right small": RelativeScreenPos(2 / 3, 0, 1, 0.5),
+    "top left large": RelativeScreenPos(0, 0, 2 / 3, 0.5),
+    "top right large": RelativeScreenPos(1 / 3, 0, 1, 0.5),
+    "top center small": RelativeScreenPos(1 / 3, 0, 2 / 3, 0.5),
+    "bottom left small": RelativeScreenPos(0, 0.5, 1 / 3, 1),
+    "bottom right small": RelativeScreenPos(2 / 3, 0.5, 1, 1),
+    "bottom left large": RelativeScreenPos(0, 0.5, 2 / 3, 1),
+    "bottom right large": RelativeScreenPos(1 / 3, 0.5, 1, 1),
+    "bottom center small": RelativeScreenPos(1 / 3, 0.5, 2 / 3, 1),
     # Special
     "center": RelativeScreenPos(1 / 8, 1 / 6, 7 / 8, 5 / 6),
     "full": RelativeScreenPos(0, 0, 1, 1),
@@ -272,13 +284,13 @@ ctx.lists["user.window_snap_positions"] = _snap_positions.keys()
 
 @mod.action_class
 class Actions:
-    def snap_window(pos: RelativeScreenPos) -> None:
-        """Move the active window to a specific position on-screen.
+    def snap_window(position: RelativeScreenPos) -> None:
+        """Move the active window to a specific position on its current screen, given a `RelativeScreenPos` object."""
+        _snap_window_helper(ui.active_window(), position)
 
-        See `RelativeScreenPos` for the structure of this position.
-
-        """
-        _snap_window_helper(ui.active_window(), pos)
+    def snap_window_to_position(position_name: str) -> None:
+        """Move the active window to a specifically named position on its current screen, using a key from `_snap_positions`."""
+        actions.user.snap_window(_snap_positions[position_name])
 
     def move_window_next_screen() -> None:
         """Move the active window to a specific screen."""
@@ -292,16 +304,15 @@ class Actions:
         """Move the active window leftward by one."""
         _move_to_screen(ui.active_window(), screen_number=screen_number)
 
-    def snap_app(app_name: str, pos: RelativeScreenPos):
+    def snap_app(app_name: str, position: RelativeScreenPos):
         """Snap a specific application to another screen."""
         window = _get_app_window(app_name)
         _bring_forward(window)
-        _snap_window_helper(window, pos)
+        _snap_window_helper(window, position)
 
     def move_app_to_screen(app_name: str, screen_number: int):
         """Move a specific application to another screen."""
         window = _get_app_window(app_name)
-        print(window)
         _bring_forward(window)
         _move_to_screen(
             window,
