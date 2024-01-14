@@ -12,6 +12,8 @@ os: mac
 and app.bundle: com.microsoft.VSCodeInsiders
 os: mac
 and app.bundle: com.visualstudio.code.oss
+os: mac
+and app.name: Cursor
 """
 mod.apps.vscode = """
 os: linux
@@ -24,6 +26,8 @@ os: linux
 and app.name: VSCodium
 os: linux
 and app.name: Codium
+os: linux
+and app.name: Cursor
 """
 mod.apps.vscode = """
 os: windows
@@ -40,6 +44,8 @@ os: windows
 and app.name: VSCodium
 os: windows
 and app.exe: VSCodium.exe
+os: windows
+and app.name: Cursor
 """
 
 ctx.matches = r"""

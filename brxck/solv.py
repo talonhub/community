@@ -13,12 +13,13 @@ ctx.lists["user.botler_command"] = {
 
 mod.list("solv_repository", desc="Solv repository names")
 ctx.lists["user.solv_repository"] = {
-    "dapi tasks": "dapi-tasks",
-    "dapi": "dapi",
+    "dappy tasks": "dapi-tasks",
+    "dappy": "dapi",
     "jigsaw": "jigsaw",
     "manage": "manage-dev",
     "mapp": "mapp-dev",
     "release": "release",
     "schema": "schema",
-    "turbosnails": "turbosnails",
+    "turbo provider": "turbo-provider",
+    "turbo consumer": "turbo-consumer",
 }
