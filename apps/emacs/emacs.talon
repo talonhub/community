@@ -289,8 +289,8 @@ rectangle number lines: user.emacs("rectangle-number-lines")
 
 # ----- PROJECT SUPPORT ----- #
 project [find] file: user.emacs("project-find-file")
-project [find] (regexp | grep): user.emacs("project-find-regexp")
-project [query] replace regexp: user.emacs("project-query-replace-regexp")
+project [find] (regex | grep): user.emacs("project-find-regexp")
+project [query] replace regex: user.emacs("project-query-replace-regexp")
 project (dired | directory): user.emacs("projectile-dired")
 project [run] shell: user.emacs("projectile-run-shell")
 project [run] eshell: user.emacs("projectile-run-eshell")
