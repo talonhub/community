@@ -19,7 +19,7 @@ mod.setting(
 class TmuxActions:
     def tmux_prefix():
         """press control and the configured tmux prefix key"""
-        actions.key(f"{settings.get('user.tmux_prefix_key')}")
+        actions.key(settings.get("user.tmux_prefix_key"))
 
     def tmux_keybind(key: str):
         """press tmux prefix followed by a key bind"""
