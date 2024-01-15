@@ -69,11 +69,11 @@ settings():
     # -width windows are resized to stay full-height/width.
     #user.window_snap_screen = "size aware"
 
-    # Uncomment the below to disable support for saying numbers without a prefix.
-    # By default saying "one" would write "1", however many users find this behavior
-    # prone to false positives. If you uncomment this, you will need to say
-    # "numb one" to write "1".
-    #user.disable_unprefixed_numbers = 1
-
 # Uncomment this to enable the curse yes/curse no commands (show hide mouse cursor). See issue #688.
 # tag(): user.mouse_cursor_commands_enable
+
+# Uncomment the below to disable support for saying numbers without a prefix.
+# By default saying "one" would write "1", however many users find this behavior
+# prone to false positives. If you uncomment this, you will need to say
+# "numb one" to write "1".
+# tag(): user.disable_unprefixed_numbers
