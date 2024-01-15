@@ -1,5 +1,6 @@
 tag: user.mouse_grid_showing
 -
+tag(): user.disable_unprefixed_numbers
 <user.number_key>: user.grid_narrow(number_key)
 grid off: user.grid_close()
 
