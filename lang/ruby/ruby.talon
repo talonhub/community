@@ -33,7 +33,6 @@ state begin: "begin"
 state rescue: "rescue "
 state module: "module "
 
-op or equals: auto_insert(" ||= ")
 ^instance <user.text>$:
     insert("@")
     user.code_public_variable_formatter(text)
