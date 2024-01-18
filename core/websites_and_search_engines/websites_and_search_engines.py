@@ -13,7 +13,7 @@ mod.list(
 )
 
 # Please do not edit these defaults.  Instead, add / edit your own entries in
-# settings/websites.csv in your user directory.
+# websites.csv in your user/community/settings directory.
 website_defaults = {
     "talon home page": "http://talonvoice.com",
     "talon slack": "http://talonvoice.slack.com/messages/help",
