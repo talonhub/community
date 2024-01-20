@@ -204,11 +204,8 @@ command_server_directory = None
 def get_platform_specific_communication_dir_path():
     # NB: We don't suffix on Windows, because the temp dir is user-specific
     # anyways
-    suffix = ""
-    if hasattr(os, "getuid"):
-        suffix = f"-{os.getuid()}"
     if app.platform == "linux" or app.platform == "mac":
-        return Path("/tmp") / f"{actions.user.command_server_directory()}{suffix}"
+        return Path("/tmp") / f"{actions.user.command_server_directory()}-{os.getuid()}"
     elif app.platform == "windows":
         # subprocess.run(["attrib","+H","myfile.txt"],check=True)
         return Path(TALON_HOME / f"{actions.user.command_server_directory()}")
