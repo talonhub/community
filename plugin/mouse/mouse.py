@@ -55,8 +55,8 @@ mod.setting(
 )
 mod.setting(
     "mouse_enable_pop_stops_scroll",
-    type=int,
-    default=0,
+    type=bool,
+    default=False,
     desc="When enabled, pop stops continuous scroll modes (wheel upper/downer/gaze)",
 )
 mod.setting(
@@ -67,14 +67,14 @@ mod.setting(
 )
 mod.setting(
     "mouse_wake_hides_cursor",
-    type=int,
-    default=0,
+    type=bool,
+    default=False,
     desc="When enabled, mouse wake will hide the cursor. mouse_wake enables zoom mouse.",
 )
 mod.setting(
     "mouse_hide_mouse_gui",
-    type=int,
-    default=0,
+    type=bool,
+    default=False,
     desc="When enabled, the 'Scroll Mouse' GUI will not be shown.",
 )
 mod.setting(
@@ -126,7 +126,7 @@ class Actions:
         """Enable control mouse, zoom mouse, and disables cursor"""
         actions.tracking.control_zoom_toggle(True)
 
-        if settings.get("user.mouse_wake_hides_cursor") >= 1:
+        if settings.get("user.mouse_wake_hides_cursor"):
             show_cursor_helper(False)
 
     def mouse_drag(button: int):
@@ -170,7 +170,7 @@ class Actions:
         if scroll_job is None:
             start_scroll()
 
-        if settings.get("user.mouse_hide_mouse_gui") == 0:
+        if not settings.get("user.mouse_hide_mouse_gui"):
             gui_wheel.show()
 
     def mouse_scroll_up(amount: float = 1):
@@ -185,7 +185,7 @@ class Actions:
 
         if scroll_job is None:
             start_scroll()
-        if settings.get("user.mouse_hide_mouse_gui") == 0:
+        if not settings.get("user.mouse_hide_mouse_gui"):
             gui_wheel.show()
 
     def mouse_scroll_left(amount: float = 1):
@@ -210,7 +210,7 @@ class Actions:
         continuous_scoll_mode = "gaze scroll"
 
         start_cursor_scrolling()
-        if settings.get("user.mouse_hide_mouse_gui") == 0:
+        if not settings.get("user.mouse_hide_mouse_gui"):
             gui_wheel.show()
 
         # enable 'control mouse' if eye tracker is present and not enabled already
@@ -278,7 +278,7 @@ def show_cursor_helper(show):
 @ctx.action_class("user")
 class UserActions:
     def noise_trigger_pop():
-        if settings.get("user.mouse_enable_pop_stops_scroll") >= 1 and (
+        if settings.get("user.mouse_enable_pop_stops_scroll") and (
             gaze_job or scroll_job
         ):
             # Allow pop to stop scroll
