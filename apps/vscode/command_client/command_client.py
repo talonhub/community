@@ -202,13 +202,17 @@ command_server_directory = None
 
 # NB: See https://github.com/talonhub/community/issues/966 for why we do OS-specific temp dirs
 def get_platform_specific_communication_dir_path():
-    # NB: We don't suffix on Windows, because the temp dir is user-specific
-    # anyways
+    home_dir = Path(os.path.expanduser("~"))
     if app.platform == "linux" or app.platform == "mac":
-        return Path("/tmp") / f"{actions.user.command_server_directory()}-{os.getuid()}"
+        return (
+            Path(home_dir) / f".talon/.comms/{actions.user.command_server_directory()}"
+        )
     elif app.platform == "windows":
         # subprocess.run(["attrib","+H","myfile.txt"],check=True)
-        return Path(TALON_HOME / f"{actions.user.command_server_directory()}")
+        return Path(
+            home_dir
+            / f"\\AppData\\Roaming\\talon\\{actions.user.command_server_directory()}"
+        )
 
 
 def get_communication_dir_path():
