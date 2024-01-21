@@ -7,6 +7,8 @@ apps.firefox = "app.name: Firefox"
 apps.firefox = "app.name: Firefox Developer Edition"
 apps.firefox = "app.name: firefox"
 apps.firefox = "app.name: Firefox-esr"
+apps.firefox = "app.name: LibreWolf"
+apps.firefox = "app.name: Waterfox"
 apps.firefox = """
 os: windows
 and app.name: Firefox
