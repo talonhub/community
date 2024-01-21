@@ -79,49 +79,49 @@ mod.tag(
 mod.tag(
     "mouse_is_dragging", desc="Tag indicates whether or not the mouse is currently being dragged"
 )
-setting_mouse_enable_pop_click = mod.setting(
+mod.setting(
     "mouse_enable_pop_click",
     type=int,
     default=0,
     desc="Pop noise clicks left mouse button. 0 = off, 1 = on with eyetracker but not with zoom mouse mode, 2 = on but not with zoom mouse mode",
 )
-setting_mouse_enable_pop_stops_scroll = mod.setting(
+mod.setting(
     "mouse_enable_pop_stops_scroll",
-    type=int,
-    default=0,
+    type=bool,
+    default=False,
     desc="When enabled, pop stops continuous scroll modes (wheel upper/downer/gaze)",
 )
-setting_mouse_enable_hiss_scroll = mod.setting(
+mod.setting(
     "mouse_enable_hiss_scroll",
     type=bool,
     default=False,
     desc="Hiss noise scrolls down when enabled",
 )
-setting_mouse_wake_hides_cursor = mod.setting(
+mod.setting(
     "mouse_wake_hides_cursor",
-    type=int,
-    default=0,
+    type=bool,
+    default=False,
     desc="When enabled, mouse wake will hide the cursor. mouse_wake enables zoom mouse.",
 )
-setting_mouse_hide_mouse_gui = mod.setting(
+mod.setting(
     "mouse_hide_mouse_gui",
-    type=int,
-    default=0,
+    type=bool,
+    default=False,
     desc="When enabled, the 'Scroll Mouse' GUI will not be shown.",
 )
-setting_mouse_continuous_scroll_amount = mod.setting(
+mod.setting(
     "mouse_continuous_scroll_amount",
     type=int,
     default=80,
     desc="The default amount used when scrolling continuously",
 )
-setting_mouse_wheel_down_amount = mod.setting(
+mod.setting(
     "mouse_wheel_down_amount",
     type=int,
     default=120,
     desc="The amount to scroll up/down (equivalent to mouse wheel on Windows by default)",
 )
-setting_mouse_wheel_horizontal_amount = mod.setting(
+mod.setting(
     "mouse_wheel_horizontal_amount",
     type=int,
     default=40,

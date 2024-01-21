@@ -1,4 +1,4 @@
-from talon import Module, app, registry, scope, skia, ui, settings
+from talon import Module, app, registry, scope, settings, skia, ui
 from talon.canvas import Canvas
 from talon.screen import Screen
 from talon.skia.canvas import Canvas as SkiaCanvas
@@ -9,58 +9,55 @@ canvas: Canvas = None
 current_mode = ""
 mod = Module()
 
-setting_show = mod.setting(
+mod.setting(
     "mode_indicator_show",
-    bool,
-    desc="If true the mode indicator is shown",
+    type=bool,
     default=False,
+    desc="If true the mode indicator is shown",
 )
-setting_size = mod.setting(
+mod.setting(
     "mode_indicator_size",
-    float,
+    type=float,
     desc="Mode indicator diameter in pixels",
 )
-setting_x = mod.setting(
+mod.setting(
     "mode_indicator_x",
-    float,
+    type=float,
     desc="Mode indicator center X-position in percentages(0-1). 0=left, 1=right",
 )
-setting_y = mod.setting(
+mod.setting(
     "mode_indicator_y",
-    float,
+    type=float,
     desc="Mode indicator center Y-position in percentages(0-1). 0=top, 1=bottom",
 )
-setting_color_alpha = mod.setting(
+mod.setting(
     "mode_indicator_color_alpha",
-    float,
+    type=float,
     desc="Mode indicator alpha/opacity in percentages(0-1). 0=fully transparent, 1=fully opaque",
 )
-setting_color_gradient = mod.setting(
+mod.setting(
     "mode_indicator_color_gradient",
-    float,
+    type=float,
     desc="Mode indicator gradient brightness in percentages(0-1). 0=darkest, 1=brightest",
 )
-setting_color_sleep = mod.setting("mode_indicator_color_sleep", str)
-setting_color_dictation = mod.setting("mode_indicator_color_dictation", str)
-setting_color_mixed = mod.setting("mode_indicator_color_mixed", str)
-setting_color_command = mod.setting("mode_indicator_color_command", str)
-setting_color_other = mod.setting("mode_indicator_color_other", str)
+mod.setting("mode_indicator_color_sleep", type=str)
+mod.setting("mode_indicator_color_dictation", type=str)
+mod.setting("mode_indicator_color_mixed", type=str)
+mod.setting("mode_indicator_color_command", type=str)
+mod.setting("mode_indicator_color_other", type=str)
 
 setting_paths = {
-    s.path
-    for s in [
-        setting_show,
-        setting_size,
-        setting_x,
-        setting_y,
-        setting_color_alpha,
-        setting_color_gradient,
-        setting_color_sleep,
-        setting_color_dictation,
-        setting_color_mixed,
-        setting_color_command,
-        setting_color_other,
-    ]
+    "user.mode_indicator_show",
+    "user.mode_indicator_size",
+    "user.mode_indicator_x",
+    "user.mode_indicator_y",
+    "user.mode_indicator_color_alpha",
+    "user.mode_indicator_color_gradient",
+    "user.mode_indicator_color_sleep",
+    "user.mode_indicator_color_dictation",
+    "user.mode_indicator_color_mixed",
+    "user.mode_indicator_color_command",
+    "user.mode_indicator_color_other",
 }
 
 
@@ -78,8 +75,7 @@ def get_mode_color() -> str:
 
 
 def get_alpha_color() -> str:
-    alpha = settings.get("user.mode_indicator_color_alpha")
-    return f"{int( * 255):02x}"
+    return f"{int(settings.get('user.mode_indicator_color_alpha') * 255):02x}"
 
 
 def get_gradient_color(color: str) -> str:

@@ -1,8 +1,10 @@
 mode: sleep
 -
 settings():
-    #stop continuous scroll/gaze scroll with a pop
-    user.mouse_enable_pop_stops_scroll = 0
-    #enable pop click with 'control mouse' mode
-    user.mouse_enable_pop_click = 0
+    # Stop continuous scroll/gaze scroll with a pop
+    user.mouse_enable_pop_stops_scroll = false
+    # Enable pop click with 'control mouse' mode
+    user.mouse_enable_pop_click = false
+    # Stop mouse scroll down using hiss noise
+    user.mouse_enable_hiss_scroll = false
 key(f10): user.welcome_back()
