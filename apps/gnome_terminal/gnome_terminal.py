@@ -7,6 +7,8 @@ os: linux
 and app.exe: gnome-terminal-server
 os: linux
 and app.name: Gnome-terminal
+os: linux
+and app.name: Mate-terminal
 """
 
 # Context matching
