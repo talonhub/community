@@ -52,6 +52,9 @@ if app.platform == "windows":
             "talent plugins": os.path.expandvars(
                 "%ProgramFiles%\\Talon\\talon_plugins"
             ),
+            "local app data": os.path.expandvars("%LocalAppData%"), 
+            "app data": os.path.expandvars("%AppData%"),
+            
             "root": "\\",
         }
 
@@ -73,6 +76,8 @@ if app.platform == "windows":
             )
             if app.branch == "rust"
             else os.path.expandvars("%ProgramFiles%\\Talon\\talon_plugins"),
+            "local app data": os.path.expandvars("%LocalAppData%"), 
+            "app data": os.path.expandvars("%AppData%"),
             "root": "\\",
         }
 
