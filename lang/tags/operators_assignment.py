@@ -11,6 +11,9 @@ class Actions:
     def code_operator_assignment():
         """code_operator_assignment"""
 
+    def code_or_operator_assignment():
+        """code_operator_assignment"""
+
     def code_operator_subtraction_assignment():
         """code_operator_subtraction_assignment"""
 
