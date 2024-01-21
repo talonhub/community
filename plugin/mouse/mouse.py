@@ -57,7 +57,7 @@ mod.setting(
 )
 mod.setting(
     "mouse_enable_pop_wake",
-    type=int,
+    type=bool,
     default=0,
     desc="Pop noise twice enables speech/wakes talon. 0 = off, 1 = on",
 )
