@@ -1,35 +1,20 @@
+from pathlib import Path
+from typing import Callable, IO
 import csv
 import os
-from pathlib import Path
 
 from talon import resource
 
 # NOTE: This method requires this module to be one folder below the top-level
-#   knausj folder.
+#   community/knausj folder.
 SETTINGS_DIR = Path(__file__).parents[1] / "settings"
+SETTINGS_DIR.mkdir(exist_ok=True)
 
-if not SETTINGS_DIR.is_dir():
-    os.mkdir(SETTINGS_DIR)
+CallbackT  = Callable[[dict[str, str]], None]
+DecoratorT = Callable[[CallbackT], CallbackT]
 
-
-def get_list_from_csv(
-    filename: str, headers: tuple[str, str], default: dict[str, str] = {}
-):
-    """Retrieves list from CSV"""
-    path = SETTINGS_DIR / filename
-    assert filename.endswith(".csv")
-
-    if not path.is_file():
-        with open(path, "w", encoding="utf-8", newline="") as file:
-            writer = csv.writer(file)
-            writer.writerow(headers)
-            for key, value in default.items():
-                writer.writerow([key] if key == value else [value, key])
-
-    # Now read via resource to take advantage of talon's
-    # ability to reload this script for us when the resource changes
-    with resource.open(str(path), "r") as f:
-        rows = list(csv.reader(f))
+def read_csv_list(f: IO, headers: tuple[str, str]) -> dict[str, str]:
+    rows = list(csv.reader(f))
 
     # print(str(rows))
     mapping = {}
@@ -59,6 +44,40 @@ def get_list_from_csv(
 
     return mapping
 
+def write_csv_defaults(path: Path, headers: tuple[str, str], default: dict[str, str]=None) -> None:
+    if not path.is_file() and default is not None:
+        with open(path, "w", encoding="utf-8", newline="") as file:
+            writer = csv.writer(file)
+            writer.writerow(headers)
+            for key, value in default.items():
+                writer.writerow([key] if key == value else [value, key])
+
+def track_csv_list(filename: str, headers: tuple[str, str], default: dict[str, str]=None) -> DecoratorT:
+    assert filename.endswith(".csv")
+    path = SETTINGS_DIR / filename
+    write_csv_defaults(path, headers, default)
+
+    def decorator(fn: CallbackT) -> CallbackT:
+        @resource.watch(str(path))
+        def on_update(f):
+            data = read_csv_list(f, headers)
+            fn(data)
+
+    return decorator
+
+# NOTE: this is deprecated, use @track_csv_list instead.
+def get_list_from_csv(
+    filename: str, headers: tuple[str, str], default: dict[str, str] = {}
+):
+    """Retrieves list from CSV"""
+    assert filename.endswith(".csv")
+    path = SETTINGS_DIR / filename
+    write_csv_defaults(path, headers, default)
+
+    # Now read via resource to take advantage of talon's
+    # ability to reload this script for us when the resource changes
+    with resource.open(str(path), "r") as f:
+        return read_csv_list(f, headers)
 
 def append_to_csv(filename: str, rows: dict[str, str]):
     path = SETTINGS_DIR / filename

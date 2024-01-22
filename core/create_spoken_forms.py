@@ -5,10 +5,9 @@ from dataclasses import dataclass
 from typing import Any, List, Mapping, Optional
 
 from talon import Module, actions
-
-from .abbreviate.abbreviate import abbreviations_list
+from .user_settings import track_csv_list
 from .numbers.numbers import digits_map, scales, teens, tens
-
+abbreviations_list = {}
 # `punctuation_words` is for words you want available BOTH in dictation and as key names in command mode.
 # `symbol_key_words` is for key names that should be available in command mode, but NOT during dictation.
 punctuation_words = {
@@ -153,6 +152,14 @@ thousands = [""] + [val for index, val in enumerate(scales) if index != 0]
 # print("thousands = " + thousands)
 # end: create the lists necessary for create_spoken_word_for_number
 
+@track_csv_list("abbreviations.csv", headers=("Abbreviation", "Spoken Form"))
+def on_abbreviations(values):
+    global abbreviations_list
+    abbreviations_list = values
+
+# @track_csv_list("file_extensions.csv", headers=("File extension", "Name"), default=_file_extensions_defaults)
+# def on_update(values):
+#     ctx.lists["self.file_extension"] = values
 
 def create_spoken_form_for_number(num: int):
     """Creates a spoken form for an integer"""
