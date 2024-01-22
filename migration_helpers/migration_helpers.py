@@ -1,57 +1,47 @@
-from talon import Module, app
-
 import os
 from pathlib import Path
+
+from talon import Module, app
+
 mod = Module()
 
 known_csv_files = {
-    #emacs_commands likely needs to remain a csv
+    # emacs_commands likely needs to remain a csv
     "apps/emacs/emacs_commands.csv": {},
-    "apps/git/git_arguments.csv": 
-    {
+    "apps/git/git_arguments.csv": {
         "name": "user.git_argument",
         "newpath": "apps/git/git_argument.talon-list",
         "is_spoken_form_first": False,
     },
-    "apps/git/git_commands.csv": 
-    {
+    "apps/git/git_commands.csv": {
         "name": "user.git_command",
         "newpath": "apps/git/git_command.talon-list",
         "is_spoken_form_first": False,
     },
-
-    #there's no way currently to migrate this without using
-    #registry.list
-    "core/app_switcher/app_name_overrides.linux.csv": 
-    {
-        #"is_spoken_form_first": True, 
+    # there's no way currently to migrate this without using
+    # registry.list
+    "core/app_switcher/app_name_overrides.linux.csv": {
+        # "is_spoken_form_first": True,
     },
-    #there's no way currently to migrate this without using
-    #registry.list
-    "core/app_switcher/app_name_overrides.mac.csv": 
-    {
-        #"is_spoken_form_first": True, 
+    # there's no way currently to migrate this without using
+    # registry.list
+    "core/app_switcher/app_name_overrides.mac.csv": {
+        # "is_spoken_form_first": True,
     },
-    "core/app_switcher/app_name_overrides.windows.csv": 
-    {
-        #"is_spoken_form_first": True, 
+    "core/app_switcher/app_name_overrides.windows.csv": {
+        # "is_spoken_form_first": True,
     },
-
-    #homophones needs to remain a csv, as it is a one-to-many mapping
+    # homophones needs to remain a csv, as it is a one-to-many mapping
     # "core/homophones/homophones.csv": {},
-
     # abbreviations is currently used by create_spoken_forms
-    # and requires additional work to port. 
+    # and requires additional work to port.
     # Likely needs to remain a CSV
-    "settings/abbreviations.csv": 
-    {
-        #"name": "user.abbreviation",
-        #"newpath": "core/abbreviate/abbreviation.talon-list",
-        #"is_spoken_form_first": False,
+    "settings/abbreviations.csv": {
+        # "name": "user.abbreviation",
+        # "newpath": "core/abbreviate/abbreviation.talon-list",
+        # "is_spoken_form_first": False,
     },
-
-    "settings/additional_words.csv": 
-    {
+    "settings/additional_words.csv": {
         "name": "user.vocabulary",
         "newpath": "core/vocabulary/vocabulary.talon-list",
         "is_spoken_form_first": False,
@@ -61,73 +51,52 @@ known_csv_files = {
         "newpath": "core/keys/letter.talon-list",
         "is_spoken_form_first": False,
     },
-
     # file_extensions is currently used by create_spoken_forms
     # and requires additional care to port
     # Likely needs to remain a CSV
-    "settings/file_extensions.csv": 
-    {
-        #"name": "user.file_extension"
-        #"newpath": "core/file_extension/file_extension.talon-list",
+    "settings/file_extensions.csv": {
+        # "name": "user.file_extension"
+        # "newpath": "core/file_extension/file_extension.talon-list",
     },
-    "settings/search_engines.csv": 
-    {
+    "settings/search_engines.csv": {
         "name": "user.search_engine",
         "newpath": "core/websites_and_search_engines/search_engine.talon-list",
         "is_spoken_form_first": False,
     },
-
-    #system paths is likely host-specific
-    #and should be treated as such
-    "settings/system_paths.csv": 
-    {},
-
-    "settings/unix_utilities.csv": 
-    {
+    # system paths is likely host-specific
+    # and should be treated as such
+    "settings/system_paths.csv": {},
+    "settings/unix_utilities.csv": {
         "name": "user.unix_utility",
-        "newpath": "tags/terminal/unix_utility.talon-list",  
+        "newpath": "tags/terminal/unix_utility.talon-list",
         "is_spoken_form_first": False,
     },
-    "settings/websites.csv": 
-    {
+    "settings/websites.csv": {
         "name": "user.website",
         "newpath": "core/websites_and_search_engines/website.talon-list",
         "is_spoken_form_first": False,
     },
-
-    #words to replace is a setting in talon
-    #not sure how to handle this.
-    "settings/words_to_replace.csv": 
-    {
-
-    },
-
-
-    "tags/emoji/emoji.csv": 
-    {
+    # words to replace is a setting in talon
+    # not sure how to handle this.
+    "settings/words_to_replace.csv": {},
+    "tags/emoji/emoji.csv": {
         "name": "user.emoji",
-        "newpath": "tags/emoji/emoji.talon-list",     
+        "newpath": "tags/emoji/emoji.talon-list",
         "is_spoken_form_first": True,
-   
     },
-
     # due to the characters in emoticons
-    # this needs special handling 
-    "tags/emoji/emoticon.csv": 
-    {
-        #"name": "user.emoticon",
-        #"newpath": "tags/emoji/emoticon.talon-list", 
-        #"is_spoken_form_first": True,
+    # this needs special handling
+    "tags/emoji/emoticon.csv": {
+        # "name": "user.emoticon",
+        # "newpath": "tags/emoji/emoticon.talon-list",
+        # "is_spoken_form_first": True,
     },
-
-
     # due to the characters in kaomoji
-    # this needs special handling 
-    "tags/emoji/kaomoji.csv": 
-    {
-        #"name": "user.kaomoji",
-        #"newpath": "tags/emoji/kaomoji.talon-list",  
-        #"is_spoken_form_first": True,
+    # this needs special handling
+    "tags/emoji/kaomoji.csv": {
+        # "name": "user.kaomoji",
+        # "newpath": "tags/emoji/kaomoji.talon-list",
+        # "is_spoken_form_first": True,
     },
 }
 
@@ -342,6 +311,7 @@ def strip_base_directory(base_dir, path):
     else:
         return path
 
+
 def convert_files():
     global known_csv_files
     known_csv_files = {
@@ -368,9 +338,7 @@ def convert_files():
             print(f"Skipping existing talon-file {talonlist_relative_file}")
             continue
         if disabled_csv_file and os.path.isfile(disabled_csv_file):
-            print(
-                f"Skipping existing renamed csv file {disabled_csv_file}"
-            )
+            print(f"Skipping existing renamed csv file {disabled_csv_file}")
             continue
         print(
             f"Converting csv file: {csv_relative_file} -> talon-list file: {talonlist_relative_file}"
@@ -382,17 +350,21 @@ def convert_files():
         write_to_file(talonlist_file, talonlist_content)
         os.rename(csv_file, disabled_csv_file)
 
+
 @mod.action_class
 class MigrationActions:
     def migrate_known_csv_files():
         """migrates known CSV files to .talon-list"""
         convert_files()
 
-    def migrate_custom_csv(path: str, new_path: str, list_name: str, spoken_form_first: bool):
+    def migrate_custom_csv(
+        path: str, new_path: str, list_name: str, spoken_form_first: bool
+    ):
         """Migrates custom CSV files"""
+
 
 def on_ready():
     convert_files()
 
-app.register("ready", on_ready)
 
+app.register("ready", on_ready)
