@@ -3,9 +3,9 @@ import os
 import time
 from dataclasses import dataclass
 from pathlib import Path
+from tempfile import gettempdir
 from typing import Any
 from uuid import uuid4
-from tempfile import gettempdir
 
 from talon import Context, Module, actions, app, speech_system
 from talon_init import TALON_HOME
