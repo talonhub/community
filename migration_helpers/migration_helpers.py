@@ -1,9 +1,14 @@
-import os
+import os, re
 from pathlib import Path
 
 from talon import Module, app
 
+
 mod = Module()
+
+# custom function to format emoticon.csv values. quick and dirty.  
+def emoticon_value_converter(value):
+    return '"""{}"""'.format(value)
 
 known_csv_files = {
     # emacs_commands likely needs to remain a csv
@@ -83,20 +88,23 @@ known_csv_files = {
         "name": "user.emoji",
         "newpath": "tags/emoji/emoji.talon-list",
         "is_spoken_form_first": True,
+
     },
     # due to the characters in emoticons
     # this needs special handling
     "tags/emoji/emoticon.csv": {
-        # "name": "user.emoticon",
-        # "newpath": "tags/emoji/emoticon.talon-list",
-        # "is_spoken_form_first": True,
+        "name": "user.emoticon",
+        "newpath": "tags/emoji/emoticon.talon-list",
+        "is_spoken_form_first": True,
+        "custom_value_converter": emoticon_value_converter, 
     },
+
     # due to the characters in kaomoji
     # this needs special handling
     "tags/emoji/kaomoji.csv": {
-        # "name": "user.kaomoji",
-        # "newpath": "tags/emoji/kaomoji.talon-list",
-        # "is_spoken_form_first": True,
+        "name": "user.kaomoji",
+        "newpath": "tags/emoji/kaomoji.talon-list",
+        "is_spoken_form_first": True,
     },
 }
 
@@ -241,11 +249,15 @@ def convert_format_csv_to_talonlist(input_string, config):
                 spoken_form, value = line.split(",")
             else:
                 value, spoken_form = line.split(",")
+
+            value = value.strip()
+            if config.get("custom_value_converter"):
+                value = config["custom_value_converter"](value)
+
         else:
             spoken_form = value = line.strip()
 
         spoken_form = spoken_form.strip()
-        value = value.strip()
         output.append(f"{spoken_form}: {value}")
 
     return "\n".join(output)
