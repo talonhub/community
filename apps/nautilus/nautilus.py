@@ -7,6 +7,8 @@ os: linux
 and app.exe: nautilus
 os: linux
 and app.name: Org.gnome.Nautilus
+os: linux
+and app.name: Caja
 """
 
 # Context matching
