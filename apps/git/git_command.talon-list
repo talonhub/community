@@ -1,0 +1,71 @@
+list: user.git_command
+-
+add: add
+archive: archive
+bisect: bisect
+blame: blame
+branch: branch
+checkout: checkout
+cherry-pick, cherry pick: cherry-pick, cherry pick
+clean: clean
+clone: clone
+commit: commit
+config: config
+diff: diff
+difftool, diff tool: difftool, diff tool
+fetch: fetch
+gc: gc
+grep: grep
+help: help
+init, in it: init, in it
+log: log
+ls-files, ls files: ls-files, ls files
+merge: merge
+mergetool, merge tool: mergetool, merge tool
+mv, move: mv, move
+pull: pull
+push: push
+range-diff, range diff: range-diff, range diff
+rebase: rebase
+reflog,ref log: reflog,ref log
+remote: remote
+remote add: remote add
+remote remove: remote remove
+remote rename: remote rename
+remote set-url, remote set url: remote set-url, remote set url
+remote set-url, remote set you are el: remote set-url, remote set you are el
+remote show: remote show
+rerere: rerere
+rerere diff: rerere diff
+rerere status: rerere status
+reset: reset
+restore: restore
+revert: revert
+rm, remove: rm, remove
+shortlog,short log: shortlog,short log
+show: show
+sparse-checkout,sparse checkout: sparse-checkout,sparse checkout
+stash: stash
+stash apply: stash apply
+stash list: stash list
+stash pop: stash pop
+stash push: stash push
+stash show: stash show
+stash save: stash save
+status: status
+submodule: submodule
+submodule add: submodule add
+submodule init, submodule in it: submodule init, submodule in it
+submodule status: submodule status
+submodule update: submodule update
+switch: switch
+tag: tag
+worktree: worktree
+worktree add: worktree add
+worktree list: worktree list
+worktree lock: worktree lock
+worktree move: worktree move
+worktree prune: worktree prune
+worktree remove: worktree remove
+worktree repair: worktree repair
+worktree unlock: worktree unlock
