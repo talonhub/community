@@ -1,14 +1,16 @@
-import os, re
+import os
+import re
 from pathlib import Path
 
 from talon import Module, app
 
-
 mod = Module()
 
-# custom function to format emoticon.csv values. quick and dirty.  
+
+# custom function to format emoticon.csv values. quick and dirty.
 def emoticon_value_converter(value):
-    return '"""{}"""'.format(value)
+    return f'"""{value}"""'
+
 
 known_csv_files = {
     # emacs_commands likely needs to remain a csv
@@ -88,7 +90,6 @@ known_csv_files = {
         "name": "user.emoji",
         "newpath": "tags/emoji/emoji.talon-list",
         "is_spoken_form_first": True,
-
     },
     # due to the characters in emoticons
     # this needs special handling
@@ -96,9 +97,8 @@ known_csv_files = {
         "name": "user.emoticon",
         "newpath": "tags/emoji/emoticon.talon-list",
         "is_spoken_form_first": True,
-        "custom_value_converter": emoticon_value_converter, 
+        "custom_value_converter": emoticon_value_converter,
     },
-
     # due to the characters in kaomoji
     # this needs special handling
     "tags/emoji/kaomoji.csv": {
