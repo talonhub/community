@@ -39,6 +39,7 @@ class AppActions:
     def window_open():
         actions.key("ctrl-n")
 
+
 @ctx.action_class("user")
 class UserActions:
     def switcher_focus_last():
