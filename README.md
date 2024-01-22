@@ -284,7 +284,7 @@ user.mouse_continuous_scroll_amount = 80
 #stop continuous scroll/gaze scroll with a pop
 user.mouse_enable_pop_stops_scroll = true
 #enable pop click with 'control mouse' mode
-user.mouse_enable_pop_click = true
+user.mouse_enable_pop_click = 1
 #When enabled, the 'Scroll Mouse' GUI will not be shown.
 user.mouse_hide_mouse_gui = false
 #hide cursor when mouse_wake is called to enable zoom mouse
