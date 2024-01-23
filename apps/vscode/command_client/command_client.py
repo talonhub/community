@@ -220,16 +220,12 @@ def get_communication_dir_path_old():
 # NB: See https://github.com/talonhub/community/issues/966 for why we do OS-specific temp dirs
 def get_platform_specific_communication_dir_path():
     home_dir = Path(os.path.expanduser("~"))
+    directory_name = actions.user.command_server_directory()
     if app.platform == "linux" or app.platform == "mac":
-        return (
-            Path(home_dir) / f".talon/.comms/{actions.user.command_server_directory()}"
-        )
+        return home_dir / ".talon" / " .comms" / directory_name
     elif app.platform == "windows":
         # subprocess.run(["attrib","+H","myfile.txt"],check=True)
-        return Path(
-            home_dir
-            / f"\\AppData\\Roaming\\talon\\.comms\\{actions.user.command_server_directory()}"
-        )
+        return home_dir / "AppData" / "Roaming" / "talon" / ".comms" / directory_name
 
 
 def get_communication_dir_path():
