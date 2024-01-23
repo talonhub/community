@@ -201,22 +201,6 @@ def run_command(
 command_server_directory = None
 
 
-def get_communication_dir_path_old():
-    """Returns directory that is used by command-server for communication
-
-    Returns:
-        Path: The path to the communication dir
-    """
-    suffix = ""
-
-    # NB: We don't suffix on Windows, because the temp dir is user-specific
-    # anyways
-    if hasattr(os, "getuid"):
-        suffix = f"-{os.getuid()}"
-
-    return Path(gettempdir()) / f"{actions.user.command_server_directory()}{suffix}"
-
-
 # NB: See https://github.com/talonhub/community/issues/966 for why we do OS-specific temp dirs
 def get_platform_specific_communication_dir_path():
     home_dir = Path(os.path.expanduser("~"))
