@@ -9,4 +9,4 @@ not speech.engine: dragon
 # engine, this controls Talon.
 #
 # For a note about the optional <phrase>, see to_sleep_mode.talon.
-^go to sleep [<phrase>]$: speech.disable()
+^drowse [<phrase>]$: speech.disable()
