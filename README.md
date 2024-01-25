@@ -266,7 +266,7 @@ into each editor.
 
 ## Settings
 
-Several options are configurable via a [single settings file](https://github.com/talonhub/community/blob/main/settings.talon) out of the box. Any setting can be made context specific as needed (e.g., per-OS, per-app, etc).
+Several options are configurable via a [single settings file](settings.talon) out of the box. Any setting can be made context specific as needed (e.g., per-OS, per-app, etc).
 
 The most commonly adjusted settings are probably
 
