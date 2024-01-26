@@ -40,6 +40,10 @@ os: windows
 and app.name: VSCodium
 os: windows
 and app.exe: VSCodium.exe
+os: windows
+and app.name: Azure Data Studio
+os: windows
+and app.exe: azuredatastudio.exe
 """
 
 ctx.matches = r"""
