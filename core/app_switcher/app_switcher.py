@@ -1,4 +1,5 @@
 import os
+import re
 import shlex
 import subprocess
 import time
@@ -321,6 +322,20 @@ class Actions:
             if time.perf_counter() - t1 > 1:
                 raise RuntimeError(f"Can't focus app: {app.name}")
             actions.sleep(0.1)
+
+    def switcher_focus_app_title(app: str, regex: str):
+        """Focus the window whose app name constains app and title matches regex"""
+        for window in ui.windows():
+            if (
+                not (window.hidden)
+                and (app in window.app.name or app == "*")
+                and window.title != ""
+            ):
+                # logging.warn(f'Checking Window: "{window.app.name}" window:"{window.title}" hidden: "{window.hidden}"')
+                if regex is None or re.search(regex, window.title):
+                    window.focus()
+                    return
+        logging.error(f'(switcher_focus_app_title) Window not found: "{app}" "{regex}"')
 
     def switcher_focus_window(window: ui.Window):
         """Focus window and wait until switch is made"""

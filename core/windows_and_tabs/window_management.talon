@@ -4,6 +4,7 @@ window last: app.window_previous()
 window close: app.window_close()
 window hide: app.window_hide()
 focus <user.running_applications>: user.switcher_focus(running_applications)
+focus title <phrase>: user.switcher_focus_app_title("*", "{phrase}")
 # following only works on windows. Can't figure out how to make it work for mac. No idea what the equivalent for linux would be.
 focus$: user.switcher_menu()
 running list: user.switcher_toggle_running()
