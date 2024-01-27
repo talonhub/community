@@ -59,9 +59,9 @@ state default: "default:\nbreak;"
 
 #control flow
 #best used with a push like command
-#the below example may not work in editors that automatically add the closing bracket
+#the below example may not work in editors that automatically add the closing brace
 #if so uncomment the two lines and comment out the rest accordingly
-push brackets:
+push braces:
     edit.line_end()
     #insert("{")
     #key(enter)
