@@ -6,7 +6,11 @@ applied given the delay between changes being submitted and the time they were r
 and merged.
 
 ---
-* 2023-06-06 Deprecate `go marks` command for VSCode. Use 'bar marks' instead.
+* 2024-01-27 Deprecate '<user.number_string>' command without a spoken prefix like `numb`.
+See `numbers.talon` and `numbers_unprefixed.talon.` If in the future you want to still use
+unprefixed numbers, you will need to comment out the
+`tag(): user.disable_unprefixed_numbers` line in your `settings.talon` file.
+* 2023-06-06 Deprecate `go ` command for VSCode. Use 'bar marks' instead.
 * 2023-02-04 Deprecate `murder` command for i3wm. Use 'win kill' instead.
 * 2022-12-11 Deprecate user.insert_with_history. Just use `user.add_phrase_to_history(text);
 insert(text)` instead. See #939.
