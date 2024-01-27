@@ -1,4 +1,5 @@
 import os
+import shlex
 import subprocess
 import time
 from pathlib import Path
@@ -32,6 +33,14 @@ mac_application_directories = [
     "/Users/knausj/Applications/Chrome Apps.localized",
     "/System/Applications",
     "/System/Applications/Utilities",
+]
+
+linux_application_directories = [
+    "/usr/share/applications",
+    "/usr/local/share/applications",
+    os.path.expandvars("/home/$USER/.local/share/applications"),
+    "/var/lib/flatpak/exports/share/applications",
+    "/var/lib/snapd/desktop/applications",
 ]
 
 words_to_exclude = [
@@ -163,6 +172,45 @@ if app.platform == "windows":
         return items
 
 
+if app.platform == "linux":
+    import configparser
+    import re
+
+    def get_linux_apps():
+        # app shortcuts in program menu are contained in .desktop files. This function parses those files for the app name and command
+        items = {}
+        # find field codes in exec key with regex
+        # https://specifications.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html#exec-variables
+        args_pattern = re.compile(r" \%[UufFcik]")
+        for base in linux_application_directories:
+            if os.path.isdir(base):
+                for entry in os.scandir(base):
+                    if entry.name.endswith(".desktop"):
+                        try:
+                            config = configparser.ConfigParser(interpolation=None)
+                            config.read(entry.path)
+                            # only parse shortcuts that are not hidden
+                            if config.has_option("Desktop Entry", "NoDisplay") == False:
+                                name_key = config["Desktop Entry"]["Name"]
+                                exec_key = config["Desktop Entry"]["Exec"]
+                                # remove extra quotes from exec
+                                if exec_key[0] == '"' and exec_key[-1] == '"':
+                                    exec_key = re.sub('"', "", exec_key)
+                                # remove field codes and add full path if necessary
+                                if exec_key[0] == "/":
+                                    items[name_key] = re.sub(args_pattern, "", exec_key)
+                                else:
+                                    items[name_key] = "/usr/bin/" + re.sub(
+                                        args_pattern, "", exec_key
+                                    )
+                        except:
+                            print(
+                                "get_linux_apps: skipped parsing application file ",
+                                entry.name,
+                            )
+        return items
+
+
 @mod.capture(rule="{self.running}")  # | <user.text>)")
 def running_applications(m) -> str:
     "Returns a single application name"
@@ -288,6 +336,9 @@ class Actions:
                 raise RuntimeError(f"Can't focus app: {app.name}")
             actions.sleep(0.1)
 
+    def switcher_focus_last():
+        """Focus last window/application"""
+
     def switcher_focus_window(window: ui.Window):
         """Focus window and wait until switch is made"""
         window.focus()
@@ -314,9 +365,15 @@ class Actions:
 
     def switcher_launch(path: str):
         """Launch a new application by path (all OSes), or AppUserModel_ID path on Windows"""
-        if app.platform != "windows":
+        if app.platform == "mac":
             ui.launch(path=path)
-        else:
+        elif app.platform == "linux":
+            # Could potentially be merged with OSX code. Done in this explicit
+            # way for expediency around the 0.4 release.
+            cmd = shlex.split(path)[0]
+            args = shlex.split(path)[1:]
+            ui.launch(path=cmd, args=args)
+        elif app.platform == "windows":
             is_valid_path = False
             try:
                 current_path = Path(path)
@@ -328,6 +385,8 @@ class Actions:
             else:
                 cmd = f"explorer.exe shell:AppsFolder\\{path}"
                 subprocess.Popen(cmd, shell=False)
+        else:
+            print("Unhandled platform in switcher_launch: " + app.platform)
 
     def switcher_menu():
         """Open a menu of running apps to switch to"""
@@ -381,6 +440,10 @@ def update_launch_list():
 
     elif app.platform == "windows":
         launch = get_windows_apps()
+
+    elif app.platform == "linux":
+        launch = get_linux_apps()
+
         # actions.user.talon_pretty_print(launch)
 
     ctx.lists["self.launch"] = actions.user.create_spoken_forms_from_map(
