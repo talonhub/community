@@ -1,5 +1,6 @@
 list: user.emoticon
 -
+broken heart: """</3"""
 cheeky: """:p"""
 cheering: """\o/"""
 crying: """:'("""
