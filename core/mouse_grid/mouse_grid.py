@@ -307,3 +307,7 @@ class GridActions:
         """Close the active grid"""
         ctx.tags = []
         mg.close()
+
+    def grid_is_active():
+        """check if grid is already active"""
+        return mg.active

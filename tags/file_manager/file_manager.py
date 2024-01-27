@@ -33,8 +33,8 @@ words_to_exclude = [
 
 mod.setting(
     "file_manager_auto_show_pickers",
-    type=int,
-    default=0,
+    type=bool,
+    default=False,
     desc="Enable to show the file/directories pickers automatically",
 )
 mod.setting(
@@ -338,7 +338,7 @@ def clear_lists():
 
 
 def update_gui():
-    if gui_folders.showing or settings.get("user.file_manager_auto_show_pickers") >= 1:
+    if gui_folders.showing or settings.get("user.file_manager_auto_show_pickers"):
         gui_folders.show()
         gui_files.show()
 

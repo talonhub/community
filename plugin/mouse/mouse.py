@@ -63,8 +63,8 @@ mod.setting(
 )
 mod.setting(
     "mouse_enable_pop_stops_scroll",
-    type=int,
-    default=0,
+    type=bool,
+    default=False,
     desc="When enabled, pop stops continuous scroll modes (wheel upper/downer/gaze)",
 )
 mod.setting(
@@ -75,14 +75,14 @@ mod.setting(
 )
 mod.setting(
     "mouse_wake_hides_cursor",
-    type=int,
-    default=0,
+    type=bool,
+    default=False,
     desc="When enabled, mouse wake will hide the cursor. mouse_wake enables zoom mouse.",
 )
 mod.setting(
     "mouse_hide_mouse_gui",
-    type=int,
-    default=0,
+    type=bool,
+    default=False,
     desc="When enabled, the 'Scroll Mouse' GUI will not be shown.",
 )
 mod.setting(
@@ -104,12 +104,12 @@ mod.setting(
     desc="The amount to scroll left/right",
 )
 
-continuous_scoll_mode = ""
+continuous_scroll_mode = ""
 
 
 @imgui.open(x=700, y=0)
 def gui_wheel(gui: imgui.GUI):
-    gui.text(f"Scroll mode: {continuous_scoll_mode}")
+    gui.text(f"Scroll mode: {continuous_scroll_mode}")
     gui.line()
     if gui.button("Wheel Stop [stop scrolling]"):
         actions.user.mouse_scroll_stop()
@@ -134,7 +134,7 @@ class Actions:
         """Enable control mouse, zoom mouse, and disables cursor"""
         actions.tracking.control_zoom_toggle(True)
 
-        if settings.get("user.mouse_wake_hides_cursor") >= 1:
+        if settings.get("user.mouse_wake_hides_cursor"):
             show_cursor_helper(False)
 
     def mouse_drag(button: int):
@@ -171,14 +171,14 @@ class Actions:
 
     def mouse_scroll_down_continuous():
         """Scrolls down continuously"""
-        global continuous_scoll_mode
-        continuous_scoll_mode = "scroll down continuous"
+        global continuous_scroll_mode
+        continuous_scroll_mode = "scroll down continuous"
         mouse_scroll(settings.get("user.mouse_continuous_scroll_amount"))()
 
         if scroll_job is None:
             start_scroll()
 
-        if settings.get("user.mouse_hide_mouse_gui") == 0:
+        if not settings.get("user.mouse_hide_mouse_gui"):
             gui_wheel.show()
 
     def mouse_scroll_up(amount: float = 1):
@@ -187,13 +187,13 @@ class Actions:
 
     def mouse_scroll_up_continuous():
         """Scrolls up continuously"""
-        global continuous_scoll_mode
-        continuous_scoll_mode = "scroll up continuous"
+        global continuous_scroll_mode
+        continuous_scroll_mode = "scroll up continuous"
         mouse_scroll(-settings.get("user.mouse_continuous_scroll_amount"))()
 
         if scroll_job is None:
             start_scroll()
-        if settings.get("user.mouse_hide_mouse_gui") == 0:
+        if not settings.get("user.mouse_hide_mouse_gui"):
             gui_wheel.show()
 
     def mouse_scroll_left(amount: float = 1):
@@ -214,11 +214,11 @@ class Actions:
 
     def mouse_gaze_scroll():
         """Starts gaze scroll"""
-        global continuous_scoll_mode
-        continuous_scoll_mode = "gaze scroll"
+        global continuous_scroll_mode
+        continuous_scroll_mode = "gaze scroll"
 
         start_cursor_scrolling()
-        if settings.get("user.mouse_hide_mouse_gui") == 0:
+        if not settings.get("user.mouse_hide_mouse_gui"):
             gui_wheel.show()
 
         # enable 'control mouse' if eye tracker is present and not enabled already
@@ -295,7 +295,7 @@ def show_cursor_helper(show):
 class UserActions:
     def noise_trigger_pop():
         if actions.speech.enabled():
-            if settings.get("user.mouse_enable_pop_stops_scroll") >= 1 and (
+            if settings.get("user.mouse_enable_pop_stops_scroll") and (
                 gaze_job or scroll_job
             ):
                 # Allow pop to stop scroll
@@ -336,7 +336,7 @@ class UserActions:
 def mouse_scroll(amount):
     def scroll():
         global scroll_amount
-        if continuous_scoll_mode:
+        if continuous_scroll_mode:
             if (scroll_amount >= 0) == (amount >= 0):
                 scroll_amount += amount
             else:
@@ -390,7 +390,7 @@ def gaze_scroll():
 
 
 def stop_scroll():
-    global scroll_amount, scroll_job, gaze_job, continuous_scoll_mode
+    global scroll_amount, scroll_job, gaze_job, continuous_scroll_mode
     scroll_amount = 0
     if scroll_job:
         cron.cancel(scroll_job)
@@ -407,7 +407,7 @@ def stop_scroll():
     gaze_job = None
     gui_wheel.hide()
 
-    continuous_scoll_mode = ""
+    continuous_scroll_mode = ""
 
 
 def start_cursor_scrolling():
