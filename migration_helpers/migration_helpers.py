@@ -2,7 +2,7 @@ import os
 import re
 from pathlib import Path
 
-from talon import Module, app, actions
+from talon import Module, actions, app
 
 mod = Module()
 
@@ -72,12 +72,13 @@ known_csv_files = {
     },
     # system paths is likely host-specific
     # and should be treated as such
-    "settings/system_paths.csv": 
-    {
+    "settings/system_paths.csv": {
         "name": "user.system_paths",
-        "newpath": (lambda: "core/system_paths-{}.talon-list".format(actions.user.talon_get_hostname())),
+        "newpath": (
+            lambda: f"core/system_paths-{actions.user.talon_get_hostname()}.talon-list"
+        ),
         "is_spoken_form_first": True,
-        "custom_header": (lambda: "host: {}".format(actions.user.talon_get_hostname())),  
+        "custom_header": (lambda: f"host: {actions.user.talon_get_hostname()}"),
     },
     "settings/unix_utilities.csv": {
         "name": "user.unix_utility",
@@ -354,12 +355,11 @@ def convert_files():
             print(f"Skipping unsuppported convertion yet: {csv_relative_file}")
             continue
 
-        
         if callable(config["newpath"]):
             newpath = config["newpath"]()
         else:
             newpath = config["newpath"]
-        
+
         talonlist_relative_file = normalize_path(newpath)
         talonlist_file = os.path.join(directory_to_search, talonlist_relative_file)
         if os.path.isfile(talonlist_file) and not os.path.isfile(csv_file):
