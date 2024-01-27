@@ -13,7 +13,7 @@ empty string: user.insert_between("'", "'")
 empty escaped string: user.insert_between("\\'", "\\'")
 (inside parens | args): user.insert_between("(", ")")
 inside (squares | brackets | square brackets | list): user.insert_between("[", "]")
-inside braces: user.insert_between("{", "}")
+inside (braces | curly brackets): user.insert_between("{", "}")
 inside percent: user.insert_between("%", "%")
 inside (quotes | string): user.insert_between("'", "'")
 inside (double quotes | dub quotes): user.insert_between('"', '"')
@@ -24,7 +24,7 @@ angle that:
 (square | bracket | square bracket) that:
     text = edit.selected_text()
     user.paste("[{text}]")
-brace that:
+(brace | curly bracket) that:
     text = edit.selected_text()
     user.paste("{{{text}}}")
 (parens | args) that:
