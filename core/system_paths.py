@@ -49,11 +49,7 @@ def on_ready():
 
             default_system_paths.update(onedrive_paths)
 
-    system_paths = get_list_from_csv(
-        "system_paths.csv", headers=("Path", "Spoken"), default=default_system_paths
-    )
-
-    ctx.lists["user.system_paths"] = system_paths
+    ctx.lists["user.system_paths"] = default_system_paths
 
 
 @mod.capture(rule="{user.system_paths}")

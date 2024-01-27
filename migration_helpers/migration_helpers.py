@@ -2,7 +2,7 @@ import os
 import re
 from pathlib import Path
 
-from talon import Module, app
+from talon import Module, app, actions
 
 mod = Module()
 
@@ -72,7 +72,13 @@ known_csv_files = {
     },
     # system paths is likely host-specific
     # and should be treated as such
-    "settings/system_paths.csv": {},
+    "settings/system_paths.csv": 
+    {
+        "name": "user.system_paths",
+        "newpath": (lambda: "core/system_paths-{}.talon-list".format(actions.user.talon_get_hostname())),
+        "is_spoken_form_first": True,
+        "custom_header": (lambda: "host: {}".format(actions.user.talon_get_hostname())),  
+    },
     "settings/unix_utilities.csv": {
         "name": "user.unix_utility",
         "newpath": "tags/terminal/unix_utility.talon-list",
@@ -235,6 +241,9 @@ def convert_format_csv_to_talonlist(input_string, config):
     output = []
 
     output.append(f"list: {config['name']}")
+    if config.get("custom_header"):
+        output.append(config.get("custom_header")())
+
     output.append("-")
 
     for line in lines:
@@ -344,7 +353,14 @@ def convert_files():
         if not config:
             print(f"Skipping unsuppported convertion yet: {csv_relative_file}")
             continue
-        talonlist_relative_file = normalize_path(config["newpath"])
+
+        
+        if callable(config["newpath"]):
+            newpath = config["newpath"]()
+        else:
+            newpath = config["newpath"]
+        
+        talonlist_relative_file = normalize_path(newpath)
         talonlist_file = os.path.join(directory_to_search, talonlist_relative_file)
         if os.path.isfile(talonlist_file) and not os.path.isfile(csv_file):
             print(f"Skipping existing talon-file {talonlist_relative_file}")
