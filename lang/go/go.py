@@ -7,7 +7,6 @@ code.language: go
 """
 
 
-ctx.lists["user.code_type"] = {}
 
 
 def base_function(text: str, visibility: str):
