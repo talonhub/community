@@ -23,10 +23,12 @@ mode: command
 mode: dictation
 """
 
+
 @ctx_sleep.action_class("speech")
 class ActionsSleepMode:
     def disable():
         actions.app.notify("Talon is already asleep")
+
 
 @ctx_awake.action_class("speech")
 class ActionsAwakeMode:
