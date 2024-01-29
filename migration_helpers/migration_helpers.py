@@ -364,7 +364,7 @@ def convert_files():
             continue
         config = known_csv_files[csv_relative_file]
         if not config:
-            print(f"Skipping unsuppported convertion yet: {csv_relative_file}")
+            print(f"Skipping currently unsupported conversion {csv_relative_file}")
             continue
 
         if callable(config["newpath"]):
