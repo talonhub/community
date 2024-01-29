@@ -43,3 +43,9 @@ class AppActions:
 
     def window_next():
         actions.key("cmd-`")
+
+
+@ctx.action_class("user")
+class UserActions:
+    def switcher_focus_last():
+        actions.key("cmd-tab")
