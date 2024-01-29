@@ -1,6 +1,10 @@
+mode: sleep
 mode: command
 mode: dictation
+speech.engine: dragon
 -
+^talon sleep [<phrase>]$: speech.disable()
+^talon wake [<phrase>]$: speech.enable()
 
 # The optional <phrase> afterwards allows these to match even if you say arbitrary text
 # after this command, without having to wait for the speech timeout.
@@ -22,5 +26,3 @@ mode: dictation
     user.mouse_sleep()
     speech.disable()
     user.engine_sleep()
-
-^talon sleep [<phrase>]$: speech.disable()

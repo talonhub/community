@@ -1,6 +1,8 @@
 from talon import Context, Module, app, actions, speech_system, scope
 
 mod = Module()
+ctx_sleep = Context()
+ctx_awake = Context()
 
 tags = {
     # "admin": "enable extra administration commands terminal (docker, etc)",
@@ -12,6 +14,25 @@ tags = {
 
 for key, value in tags.items():
     mod.tags(key, value)
+
+ctx_sleep.matches = r"""
+mode: sleep
+"""
+
+ctx_awake.matches = r"""
+mode: command
+mode: dictation
+"""
+
+@ctx_sleep.action_class("speech")
+class ActionsSleepMode:
+    def disable():
+        actions.app.notify("Talon is already asleep")
+
+@ctx_awake.action_class("speech")
+class ActionsAwakeMode:
+    def enable():
+        actions.app.notify("Talon is already awake")
 
 
 @mod.action_class
