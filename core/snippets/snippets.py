@@ -86,9 +86,13 @@ def update_snippets():
             insertions_phrase_map.update(insertions_phrase)
             wrapper_map.update(wrappers)
 
-        ctx.lists["user.snippet"] = insertion_map
-        ctx.lists["user.snippet_with_phrase"] = insertions_phrase_map
-        ctx.lists["user.snippet_wrapper"] = wrapper_map
+        ctx.lists.update(
+            {
+                "user.snippet": insertion_map,
+                "user.snippet_with_phrase": insertions_phrase_map,
+                "user.snippet_wrapper": wrapper_map,
+            }
+        )
 
 
 def get_snippets() -> list[Snippet]:

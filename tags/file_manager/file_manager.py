@@ -331,8 +331,12 @@ def clear_lists():
         or len(ctx.lists["self.file_manager_files"]) > 0
     ):
         current_folder_page = current_file_page = 1
-        ctx.lists["self.file_manager_directories"] = []
-        ctx.lists["self.file_manager_files"] = []
+        ctx.lists.update(
+            {
+                "self.file_manager_directories": [],
+                "self.file_manager_files": [],
+            }
+        )
         folder_selections = []
         file_selections = []
 
@@ -371,8 +375,12 @@ def update_lists(path=None):
             files = {}
 
     current_folder_page = current_file_page = 1
-    ctx.lists["self.file_manager_directories"] = directories
-    ctx.lists["self.file_manager_files"] = files
+    ctx.lists.update(
+        {
+            "self.file_manager_directories": directories,
+            "self.file_manager_files": files,
+        }
+    )
 
     folder_selections = list(set(directories.values()))
     folder_selections.sort(key=str.casefold)
