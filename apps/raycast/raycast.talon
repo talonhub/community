@@ -6,21 +6,18 @@ os: mac
 ^cast [<user.text>]$: user.raycast(text or "")
 
 ^cast {user.raycast_command}$:
-    user.raycast(user.raycast_command)
+    user.raycast(raycast_command)
     key(enter)
 
 ^cast {user.raycast_input_command} [<user.text>]$:
-    user.raycast(user.raycast_input_command, user.text or "")
+    user.raycast(raycast_input_command, text or "")
 
 ^menu [<user.text>]$:
     key(ctrl-alt-space)
     sleep(150ms)
     insert(text or "")
 
-^switch [<user.running_applications>] [<user.text>]$:
-    key(alt-space)
-    sleep(150ms)
-    insert(user.running_applications or user.text)
+^switch <user.running_applications>$: user.raycast_switcher(running_applications, true)
 
 ^switch$: key(alt-space)
 

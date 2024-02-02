@@ -1,4 +1,4 @@
-from talon import Context, Module, actions
+from talon import Context, Module, actions, ui
 
 mod = Module()
 ctx = Context()
@@ -23,10 +23,11 @@ ctx.lists["user.raycast_input_command"] = {
 
 @mod.action_class
 class Actions:
-    def raycast(command: str = "", input: str or None = None):
+    def raycast(command: str = "", input: str | None = None, wait: bool = True):
         """Launch Raycast command with optional input"""
         actions.key("cmd-space")
         actions.sleep("150ms")
+
         if command:
             actions.insert(command)
         if input is not None:
@@ -34,8 +35,15 @@ class Actions:
         if input:
             actions.sleep("150ms")
             actions.insert(input)
+        if not wait:
+            actions.key("enter")
 
+    def raycast_switcher(name: str = "", wait: bool = False):
+        """Switch to window using Raycast"""
+        actions.key("alt-space")
+        actions.sleep("150ms")
 
-@ctx.action("user.switcher_menu")
-def open_raycast_switcher():
-    actions.key("alt-space")
+        if name:
+            actions.insert(name)
+        if not wait:
+            actions.key("enter")

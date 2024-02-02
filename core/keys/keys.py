@@ -206,7 +206,7 @@ symbol_key_words = {
     "insta": "@",
     "amper": "&",
     "pipe": "|",
-    "squote": '"',
+    "quad": '"',
 }
 
 # make punctuation words also included in {user.symbol_keys}
