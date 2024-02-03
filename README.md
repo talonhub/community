@@ -284,45 +284,45 @@ Also, you can add additional vocabulary words, words to replace, search engines 
 
 The core folder contains [edit_settings.talon](core/edit_settings.talon), which contains a command to open various settings files. Additionally, it contains several other subfolders having various commands, some of which are described in more detail elsewhere in the readme:
 
-* `abbreviate` has a command for the use of abbreviations
-* `app_switcher` does not have commands, but has the implementation of functions that allow for switching between applications
-* `edit` has commands for navigating and editing text, as well as commands for zooming in and out
-* `file_extension` has a command for simpler spoken forms of file and website name extensions
-* `help` has commands to open various help menus
-* `homophones` has commands to replace words with their homophones
-* `keys` has commands for pressing [keys](#keys)
-* `modes` has commands for switching between dictation, command, and sleep mode, as well as for forcing a certain [programming language](#programming-languages) mode
-* `mouse_grid` has commands to use a grid on the screen to click at a specific location
-* `numbers` has the command for writing a number
-* `screens` has a command for talon to show the index associated with each of your computer screens
-* `snippets` has commands for inserting snippets of code for various languages
-* `text` has commands for inserting and reformatting text
-* `vocabulary` has commands for adding new words to be recognized and for having certain words automatically by replaced by others
-* `websites_and_search_engines` has commands for opening websites, following links, and making browser searches
-* `windows_and_tabs` has commands for tab and [window management](#window-management), launching and switching between different applications, and snapping application windows to different locations on the screen
-* `edit_settings.talon` has a command to modify the various CSV files containing [settings information](#settings)
+- `abbreviate` has a command for the use of abbreviations
+- `app_switcher` does not have commands, but has the implementation of functions that allow for switching between applications
+- `edit` has commands for navigating and editing text, as well as commands for zooming in and out
+- `file_extension` has a command for simpler spoken forms of file and website name extensions
+- `help` has commands to open various help menus
+- `homophones` has commands to replace words with their homophones
+- `keys` has commands for pressing [keys](#keys)
+- `modes` has commands for switching between dictation, command, and sleep mode, as well as for forcing a certain [programming language](#programming-languages) mode
+- `mouse_grid` has commands to use a grid on the screen to click at a specific location
+- `numbers` has the command for writing a number
+- `screens` has a command for talon to show the index associated with each of your computer screens
+- `snippets` has commands for inserting snippets of code for various languages
+- `text` has commands for inserting and reformatting text
+- `vocabulary` has commands for adding new words to be recognized and for having certain words automatically by replaced by others
+- `websites_and_search_engines` has commands for opening websites, following links, and making browser searches
+- `windows_and_tabs` has commands for tab and [window management](#window-management), launching and switching between different applications, and snapping application windows to different locations on the screen
+- `edit_settings.talon` has a command to modify the various CSV files containing [settings information](#settings)
 
 ## Other commands within 'plugin'
 
 The plugin folder contains several other subfolders containing various commands, some of which are described in more detail elsewhere in the readme:
 
-* `cancel` contains commands to make talon ignore a command
-* `command_history` has commands to see previous commands
-* `datetimeinsert` has commands to automatically write the current date and time
-* `desktops` has some of the commands to navigate between the different desktops on a computer
-* `draft_editor` has commands to open and use a built-in pop-up text editor
-* `dropdown` has commands to select something from a dropdown menu
-* `macro` has commands to use macros
-* `media` has commands for video and volume control
-* `microphone_selection` has commands for selecting a microphone to use
-* `mode_indicator` does not have commands, but has settings for enabling a graphical mode indicator
-* `mouse` has [mouse commands](#mouse-commands)
-* `repeater` has [repeating commands](#repeating-commands)
-* `screenshot` has [screenshot commands](#screenshot-commands)
-* `symbols` have part of the [symbol commands](#symbols)
-* `talon_draft_window` has the rest of the commands for using the draft editor window
-* `talon_helpers` has commands helpful for debugging, opening the talon directory, and getting updates
-* `text_navigation` has commands for navigating the cursor in text
+- `cancel` contains commands to make talon ignore a command
+- `command_history` has commands to see previous commands
+- `datetimeinsert` has commands to automatically write the current date and time
+- `desktops` has some of the commands to navigate between the different desktops on a computer
+- `draft_editor` has commands to open and use a built-in pop-up text editor
+- `dropdown` has commands to select something from a dropdown menu
+- `macro` has commands to use macros
+- `media` has commands for video and volume control
+- `microphone_selection` has commands for selecting a microphone to use
+- `mode_indicator` does not have commands, but has settings for enabling a graphical mode indicator
+- `mouse` has [mouse commands](#mouse-commands)
+- `repeater` has [repeating commands](#repeating-commands)
+- `screenshot` has [screenshot commands](#screenshot-commands)
+- `symbols` have part of the [symbol commands](#symbols)
+- `talon_draft_window` has the rest of the commands for using the draft editor window
+- `talon_helpers` has commands helpful for debugging, opening the talon directory, and getting updates
+- `text_navigation` has commands for navigating the cursor in text
 
 ## Other talon user file sets
 
