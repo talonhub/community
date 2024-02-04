@@ -1,6 +1,5 @@
 mode: sleep
-mode: command
-mode: dictation
+not mode: sleep
 not speech.engine: dragon
 -
 ^talon wake [<phrase>]$: speech.enable()

@@ -1,6 +1,5 @@
 mode: sleep
-mode: command
-mode: dictation
+not mode: sleep
 speech.engine: dragon
 -
 ^talon sleep [<phrase>]$: speech.disable()

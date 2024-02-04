@@ -1,6 +1,7 @@
 from talon import Context, Module, app, actions, speech_system, scope
 
 mod = Module()
+
 ctx_sleep = Context()
 ctx_awake = Context()
 
@@ -20,8 +21,7 @@ mode: sleep
 """
 
 ctx_awake.matches = r"""
-mode: command
-mode: dictation
+not mode: sleep
 """
 
 @ctx_sleep.action_class("speech")
