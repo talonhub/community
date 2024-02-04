@@ -1,5 +1,6 @@
-from talon import Context, settings, actions
 import time
+
+from talon import Context, actions, settings
 
 ctx = Context()
 
