@@ -245,15 +245,6 @@ class Actions:
         global hiss_scroll_up
         hiss_scroll_up = False
 
-    def pop_twice_to_wake():
-        """Use pop sound to wake from sleep"""
-        global time_last_pop
-        delta = time.time() - time_last_pop
-        if delta >= 0.1 and delta <= 0.3:
-            actions.speech.enable()
-        time_last_pop = time.time()
-
-
 def show_cursor_helper(show):
     """Show/hide the cursor"""
     if app.platform == "windows":
