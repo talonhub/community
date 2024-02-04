@@ -1,5 +1,4 @@
 import os
-import time
 
 from talon import Context, Module, actions, app, clip, cron, ctrl, imgui, settings, ui
 from talon_plugins import eye_zoom_mouse
@@ -13,7 +12,6 @@ gaze_job = None
 cancel_scroll_on_pop = True
 control_mouse_forced = False
 hiss_scroll_up = False
-time_last_pop = 0
 
 default_cursor = {
     "AppStarting": r"%SystemRoot%\Cursors\aero_working.ani",
