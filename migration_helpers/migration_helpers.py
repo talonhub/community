@@ -251,15 +251,17 @@ def convert_format_csv_to_talonlist(input_string: str, config: CSVData):
 
     Args:
     - input_string (str): A multi-line string where each line is expected to be in "value,key" format.
-    Returns:
     - config: CSVData instance
 
+    Returns:
+    - str: A reformatted multi-line string in "key: value" format.
+    
     Raises:
     - ValueError: If any line in the input string does not contain exactly one comma separator.
 
     Example:
     >>> convert_format_csv_to_talonlist("a,air\n\nb,bat")
-    'air:\ta\nbat:\tb'
+    'air: a\nbat: b'
 
     Note:
     The function assumes that each non-empty line in the input string has exactly one comma
