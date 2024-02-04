@@ -255,7 +255,7 @@ def convert_format_csv_to_talonlist(input_string: str, config: CSVData):
 
     Returns:
     - str: A reformatted multi-line string in "key: value" format.
-    
+
     Raises:
     - ValueError: If any line in the input string does not contain exactly one comma separator.
 
