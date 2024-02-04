@@ -35,15 +35,18 @@ def number_key(m) -> str:
     "One number key"
     return m.number_key
 
+
 @mod.capture(rule="{self.keypad_key}")
 def keypad_key(m) -> str:
     "One keypad key"
     return m.keypad_key
 
+
 @mod.capture(rule="{self.letter}")
 def letter(m) -> str:
     "One letter key"
     return m.letter
+
 
 @mod.capture(rule="{self.special_key}")
 def special_key(m) -> str:
@@ -194,6 +197,7 @@ symbol_key_words = {
 symbol_key_words.update(punctuation_words)
 ctx.lists["self.punctuation"] = punctuation_words
 ctx.lists["self.symbol_key"] = symbol_key_words
+
 
 @mod.action_class
 class Actions:
