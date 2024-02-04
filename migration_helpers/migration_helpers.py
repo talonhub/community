@@ -1,8 +1,9 @@
 import os
 import re
 from pathlib import Path
-
-from talon import Module, actions, app
+from dataclasses import dataclass
+from typing import Union
+from talon import Module, app, actions
 
 mod = Module()
 
@@ -11,121 +12,45 @@ mod = Module()
 def emoticon_value_converter(value):
     return f'"""{value}"""'
 
+@dataclass
+class CSVData:
+    """Class for keeping track of an item in inventory."""
+    # name of the list 
+    name: str
+    # Path to the CSV file 
+    path: str
+    # path to the generated .talon-list 
+    newpath: Union[str, callable] = None
+    # Indicates whether the first line of the CSV file is a header
+    # that should be ignored 
+    is_first_line_header: bool = True
+    # Indicates whether the spoken form or value is first in the CSV file 
+    is_spoken_form_first: bool = False
+    # Indicates whether the first line is a header specifying the 
+    # CSV format that should be ignored during the conversion 
+    is_first_line_header: bool = True
+    # An optional callable for generating a custom header for 
+    # generated .talon-list 
+    custom_header: callable = None
+    # An optional callable for custom processing of the value for 
+    # generated .talon-list
+    custom_value_converter: callable = None
 
-known_csv_files = {
-    # emacs_commands likely needs to remain a csv
-    # "apps/emacs/emacs_commands.csv": {},
-    "apps/git/git_arguments.csv": {
-        "name": "user.git_argument",
-        "newpath": "apps/git/git_argument.talon-list",
-        "is_spoken_form_first": False,
-        "is_first_line_header": True,
-    },
-    "apps/git/git_commands.csv": {
-        "name": "user.git_command",
-        "newpath": "apps/git/git_command.talon-list",
-        "is_spoken_form_first": False,
-        "is_first_line_header": True,
-    },
-    # there's no way currently to migrate this without using
-    # registry.list
-    # "core/app_switcher/app_name_overrides.linux.csv": {
-    # "is_spoken_form_first": True,
-    # },
-    # there's no way currently to migrate this without using
-    # registry.list
-    # "core/app_switcher/app_name_overrides.mac.csv": {
-    # "is_spoken_form_first": True,
-    # },
-    # "core/app_switcher/app_name_overrides.windows.csv": {
-    # "is_spoken_form_first": True,
-    # },
-    # homophones needs to remain a csv, as it is a one-to-many mapping
-    # "core/homophones/homophones.csv": {},
-    # abbreviations is currently used by create_spoken_forms
-    # and requires additional work to port.
-    # Likely needs to remain a CSV
-    # "settings/abbreviations.csv": {
-    # "name": "user.abbreviation",
-    # "newpath": "core/abbreviate/abbreviation.talon-list",
-    # "is_spoken_form_first": False,
-    # },
-    "settings/additional_words.csv": {
-        "name": "user.vocabulary",
-        "newpath": "core/vocabulary/vocabulary.talon-list",
-        "is_spoken_form_first": False,
-        "is_first_line_header": True,
-    },
-    "settings/alphabet.csv": {
-        "name": "user.letter",
-        "newpath": "core/keys/letter.talon-list",
-        "is_spoken_form_first": False,
-        "is_first_line_header": True,
-    },
-    # file_extensions is currently used by create_spoken_forms
-    # and requires additional care to port
-    # Likely needs to remain a CSV
-    # "settings/file_extensions.csv": {
-    # "name": "user.file_extension"
-    # "newpath": "core/file_extension/file_extension.talon-list",
-    # },
-    "settings/search_engines.csv": {
-        "name": "user.search_engine",
-        "newpath": "core/websites_and_search_engines/search_engine.talon-list",
-        "is_spoken_form_first": False,
-        "is_first_line_header": True,
-    },
-    # system paths is likely host-specific
-    # and should be treated as such
-    "settings/system_paths.csv": {
-        "name": "user.system_paths",
-        "newpath": (
-            lambda: f"core/system_paths-{actions.user.talon_get_hostname()}.talon-list"
-        ),
-        "is_spoken_form_first": False,
-        "is_first_line_header": True,
-        "custom_header": (lambda: f"host: {actions.user.talon_get_hostname()}"),
-    },
-    "settings/unix_utilities.csv": {
-        "name": "user.unix_utility",
-        "newpath": "tags/terminal/unix_utility.talon-list",
-        "is_spoken_form_first": False,
-        "is_first_line_header": True,
-    },
-    "settings/websites.csv": {
-        "name": "user.website",
-        "newpath": "core/websites_and_search_engines/website.talon-list",
-        "is_spoken_form_first": False,
-        "is_first_line_header": True,
-    },
-    # words to replace is a setting in talon
-    # not sure how to handle this.
-    # "settings/words_to_replace.csv": {},
-    "tags/emoji/emoji.csv": {
-        "name": "user.emoji",
-        "newpath": "tags/emoji/emoji.talon-list",
-        "is_spoken_form_first": True,
-        "is_first_line_header": False,
-    },
-    # due to the characters in emoticons
-    # this needs special handling
-    "tags/emoji/emoticon.csv": {
-        "name": "user.emoticon",
-        "newpath": "tags/emoji/emoticon.talon-list",
-        "is_spoken_form_first": True,
-        "is_first_line_header": False,
-        "custom_value_converter": emoticon_value_converter,
-    },
-    # due to the characters in kaomoji
-    # this needs special handling
-    "tags/emoji/kaomoji.csv": {
-        "name": "user.kaomoji",
-        "newpath": "tags/emoji/kaomoji.talon-list",
-        "is_spoken_form_first": True,
-        "is_first_line_header": False,
-    },
-}
-
+# Note: homophones, emacs_commands, file_extensions, and app name overrides
+# are intentionally omitted, as their use cases are not compatible with .talon-list conversions
+supported_csv_files = [
+    CSVData("user.git_argument", "apps/git/git_arguments.csv", "apps/git/git_argument.talon-list", True, False, None, None), 
+    CSVData("user.git_command", "apps/git/git_commands.csv", "apps/git/git_command.talon-list", True, False, None, None),
+    CSVData("user.vocabulary", "settings/additional_words.csv", "core/vocabulary/vocabulary.talon-list", True, False, None, None),
+    CSVData("user.letter", "settings/alphabet.csv", "core/keys/letter.talon-list", True, False, None, None),
+    CSVData("user.system_paths","settings/system_paths.csv", lambda: f"core/system_paths-{actions.user.talon_get_hostname()}.talon-list", True, False, (lambda: "host: {}".format(actions.user.talon_get_hostname())), None),
+    CSVData("user.search_engine", "settings/search_engines.csv", "core/websites_and_search_engines/search_engine.talon-list", True, False, None, None),
+    CSVData("user.unix_utility", "settings/unix_utilities.csv", "tags/terminal/unix_utility.talon-list", True, False, None, None),
+    CSVData("user.website", "settings/websites.csv", "core/websites_and_search_engines/website.talon-list", True, False, None, None),
+    CSVData("user.emoji", "tags/emoji/emoji.csv", "tags/emoji/emoji.talon-list", False, True, None, None),
+    CSVData("user.emoticon", "tags/emoji/emoticon.csv", "tags/emoji/emoticon.talon-list", False, True, None, emoticon_value_converter),
+    CSVData("user.kaomoji", "tags/emoji/kaomoji.csv", "tags/emoji/kaomoji.talon-list", False, True, None, None),
+]
 
 def normalize_path(path_string):
     """
@@ -226,7 +151,7 @@ def find_csv_files(directory):
     return csv_files
 
 
-def convert_format_csv_to_talonlist(input_string, config):
+def convert_format_csv_to_talonlist(input_string: str, config: CSVData):
     """
     Convert a string with lines of "value,key" pairs into a format of "key:\tvalue" pairs.
     Empty lines or lines containing only whitespace are skipped.
@@ -234,7 +159,7 @@ def convert_format_csv_to_talonlist(input_string, config):
     Args:
     - input_string (str): A multi-line string where each line is expected to be in "value,key" format.
     Returns:
-    - str: A reformatted multi-line string in "key:\tvalue" format.
+    - config: CSVData instance 
 
     Raises:
     - ValueError: If any line in the input string does not contain exactly one comma separator.
@@ -248,21 +173,21 @@ def convert_format_csv_to_talonlist(input_string, config):
     separating a value and a key. Lines that don't meet this criterion will raise an error.
     """
     lines = input_string.split("\n")
-    is_spoken_form_first = config["is_spoken_form_first"]
-    is_first_line_header = config["is_first_line_header"]
+    is_spoken_form_first = config.is_spoken_form_first
+    is_first_line_header = config.is_first_line_header
     start_index = 1 if is_first_line_header else 0
     output = []
 
-    output.append(f"list: {config['name']}")
-    if config.get("custom_header"):
-        output.append(config.get("custom_header")())
+    output.append(f"list: {config.name}")
+    if config.custom_header and callable(config.custom_header):
+        output.append(config.custom_header())
 
     output.append("-")
-
+        
     for line in lines[start_index:]:
         if len(line) == 0 or line[0] == "#":
             continue
-
+        
         if not line.strip():
             continue
 
@@ -273,8 +198,8 @@ def convert_format_csv_to_talonlist(input_string, config):
                 value, spoken_form = line.split(",")
 
             value = value.strip()
-            if config.get("custom_value_converter"):
-                value = config["custom_value_converter"](value)
+            if config.custom_value_converter:
+                value = config.custom_value_converter(value)
 
         else:
             spoken_form = value = line.strip()
@@ -346,10 +271,10 @@ def strip_base_directory(base_dir, path):
         return path
 
 
-def convert_files():
-    global known_csv_files
+def convert_files(csv_files_list):
+    global known_csv_files    
     known_csv_files = {
-        normalize_path(key): value for key, value in known_csv_files.items()
+        normalize_path(item.path): item for item in csv_files_list
     }
 
     directory_to_search = parent_directory_of_script()
@@ -364,14 +289,15 @@ def convert_files():
             continue
         config = known_csv_files[csv_relative_file]
         if not config:
-            print(f"Skipping currently unsupported conversion {csv_relative_file}")
+            print(f"Skipping currently unsupported conversion: {csv_relative_file}")
             continue
 
-        if callable(config["newpath"]):
-            newpath = config["newpath"]()
+        
+        if callable(config.newpath):
+            newpath = config.newpath()
         else:
-            newpath = config["newpath"]
-
+            newpath = config.newpath
+        
         talonlist_relative_file = normalize_path(newpath)
         talonlist_file = os.path.join(directory_to_search, talonlist_relative_file)
         if os.path.isfile(talonlist_file) and not os.path.isfile(csv_file):
@@ -395,16 +321,18 @@ def convert_files():
 class MigrationActions:
     def migrate_known_csv_files():
         """migrates known CSV files to .talon-list"""
-        convert_files()
+        convert_files(supported_csv_files)
 
     def migrate_custom_csv(
-        path: str, new_path: str, list_name: str, spoken_form_first: bool
+        path: str, new_path: str, list_name: str, is_first_line_header: bool, spoken_form_first: bool
     ):
         """Migrates custom CSV files"""
+        csv_file = CSVData(list_name, path, new_path, is_first_line_header, spoken_form_first, None, None)
+        convert_files([csv_file])
 
 
 def on_ready():
-    convert_files()
+    actions.user.migrate_known_csv_files()
 
 
 app.register("ready", on_ready)
