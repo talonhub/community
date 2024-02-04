@@ -245,6 +245,7 @@ class Actions:
         global hiss_scroll_up
         hiss_scroll_up = False
 
+
 def show_cursor_helper(show):
     """Show/hide the cursor"""
     if app.platform == "windows":
