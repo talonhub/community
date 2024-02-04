@@ -266,6 +266,15 @@ with community enabled.
 For Jetbrains commands to work you must install https://plugins.jetbrains.com/plugin/10504-voice-code-idea
 into each editor.
 
+## Additional commands
+
+There are other commands not described fully within this file. As an overview:
+* The apps folder has command sets for use within different applications
+* The core folder has various commands described [here](https://github.com/talonhub/community/blob/main/core/README.md)
+* The lang folder has commands for writing [programming languages](https://github.com/talonhub/community?tab=readme-ov-file#programming-languages)
+* The plugin folder has various commands described [here](https://github.com/talonhub/community/blob/main/plugin/README.md)
+* The tags folder has various other commands, such as using a browser, navigating a filesystem in terminal, and managing multiple cursors
+
 ## Settings
 
 Several options are configurable via a [single settings file](settings.talon) out of the box. Any setting can be made context specific as needed (e.g., per-OS, per-app, etc).
