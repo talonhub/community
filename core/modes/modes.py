@@ -19,8 +19,7 @@ mode: sleep
 """
 
 ctx_awake.matches = r"""
-mode: command
-mode: dictation
+not mode: sleep
 """
 
 
