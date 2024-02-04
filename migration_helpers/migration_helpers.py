@@ -40,7 +40,7 @@ class CSVData:
     custom_value_converter: callable = None
 
 
-# Note: homophones, emacs_commands, file_extensions, and app name overrides
+# Note: homophones, emacs_commands, file_extensions, words_to_replace, abbreviations, and app name overrides
 # are intentionally omitted, as their use cases are not compatible with .talon-list conversions
 supported_csv_files = [
     CSVData(
@@ -378,7 +378,7 @@ def convert_files(csv_files_list):
         csv_file = os.path.join(directory_to_search, csv_relative_file)
         disabled_csv_file = get_new_absolute_path_by_prefixing_dot(csv_file)
         if csv_relative_file not in known_csv_files.keys():
-            print(f"Skipping non default csv file {csv_relative_file}")
+            print(f"Skipping csv file {csv_relative_file}")
             continue
         config = known_csv_files[csv_relative_file]
         if not config:
