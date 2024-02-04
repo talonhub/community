@@ -12,7 +12,7 @@ This folder contains `edit_settings.talon`, which has a command to open various 
 - `modes` has commands for switching between dictation, command, and sleep mode, as well as for forcing a certain [programming language](https://github.com/talonhub/community?tab=readme-ov-file#programming-languages) mode
 - `mouse_grid` has commands to use a grid on the screen to click at a specific location
 - `numbers` has the command for writing a number
-- `screens` has a command for talon to show the index associated with each of your computer screens
+- `screens` has a command for talon to show the index associated with each of your computer screens for the sake of moving windows to different screens
 - `snippets` has commands for inserting snippets of code for various languages
 - `text` has commands for inserting and reformatting text
 - `vocabulary` has commands for adding new words to be recognized and for having certain words automatically by replaced by others
