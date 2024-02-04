@@ -16,7 +16,7 @@ def emoticon_value_converter(value):
 
 @dataclass
 class CSVData:
-    """Class for keeping track of an item in inventory."""
+    """Class to track CSV-related data necessary for conversion to .talon-list"""
 
     # name of the list
     name: str
