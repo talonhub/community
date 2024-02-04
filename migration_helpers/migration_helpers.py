@@ -246,7 +246,7 @@ def find_csv_files(directory):
 
 def convert_format_csv_to_talonlist(input_string: str, config: CSVData):
     """
-    Convert a string with lines of "value,key" pairs into a format of "key:\tvalue" pairs.
+    Convert a string with lines of "value,key" pairs into a format of "key: value" pairs.
     Empty lines or lines containing only whitespace are skipped.
 
     Args:
