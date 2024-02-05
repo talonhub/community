@@ -1,5 +1,8 @@
 app: microsoft_teams
 -
+settings():
+    user.paste_to_insert_threshold = -1
+
 #tag(): user.messaging
 tag(): user.emoji
 
