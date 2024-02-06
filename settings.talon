@@ -76,4 +76,4 @@ settings():
 # By default saying "one" would write "1", however many users find this behavior
 # prone to false positives. If you uncomment this, you will need to say
 # "numb one" to write "1".
-# tag(): user.disable_unprefixed_numbers
+# tag(): user.prefixed_numbers
