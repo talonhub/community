@@ -6,7 +6,7 @@ mod.apps.sumatrapdf = """
 os: windows
 and app.name: SumatraPDF
 os: windows
-and app.exe: SumatraPDF.exe
+and app.exe: /^sumatrapdf\.exe$/i
 """
 
 # Context matching
