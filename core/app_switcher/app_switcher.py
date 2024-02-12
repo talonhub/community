@@ -13,7 +13,7 @@ from talon import Context, Module, actions, app, fs, imgui, ui
 # TODO: Consider put list csv's (homophones.csv, app_name_overrides.csv) files together in a seperate directory,`community/lists`
 overrides_directory = os.path.dirname(os.path.realpath(__file__))
 override_file_name = f"app_name_overrides.{talon.app.platform}.csv"
-override_file_path = os.path.join(overrides_directory, override_file_name)
+override_file_path = os.path.normcase(os.path.join(overrides_directory, override_file_name))
 
 mod = Module()
 mod.list("running", desc="all running applications")
@@ -22,6 +22,9 @@ ctx = Context()
 
 # a list of the current overrides
 overrides = {}
+
+# apps to exclude from running list
+excludes = set()
 
 # a list of the currently running application names
 running_application_dict = {}
@@ -238,7 +241,7 @@ def update_running_list():
             exe = os.path.split(cur_app.exe)[1]
             running_application_dict[exe.lower()] = exe
 
-    override_apps = frozenset(overrides.values())
+    override_apps = excludes.union(overrides.values())
 
     running = actions.user.create_spoken_forms_from_list(
         [
@@ -260,11 +263,13 @@ def update_running_list():
 
 
 def update_overrides(name, flags):
-    """Updates the overrides list"""
-    global overrides
-    overrides = {}
+    """Updates the overrides and excludes lists"""
+    global overrides, excludes
 
-    if name is None or name == override_file_path:
+    if name is None or os.path.normcase(name) == override_file_path:
+        overrides = {}
+        excludes = set()
+
         # print("update_overrides")
         with open(override_file_path) as f:
             for line in f:
@@ -272,6 +277,8 @@ def update_overrides(name, flags):
                 line = line.split(",")
                 if len(line) == 2:
                     overrides[line[0]] = line[1].strip()
+                if len(line) == 1:
+                    excludes.add(line[0].strip())
 
         update_running_list()
 
