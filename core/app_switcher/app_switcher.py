@@ -391,8 +391,8 @@ class Actions:
 def gui_running(gui: imgui.GUI):
     gui.text("Running applications (with spoken forms)")
     gui.line()
-    running_apps = sorted((v, k) for k, v in ctx.lists["self.running"].items())
-    for full_application_name, running_name in running_apps:
+    running_apps = sorted((v.lower(), k, v) for k, v in ctx.lists["self.running"].items())
+    for _, running_name, full_application_name in running_apps:
         gui.text(f"{full_application_name}: {running_name}")
 
     gui.spacer()
