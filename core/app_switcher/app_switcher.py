@@ -240,7 +240,7 @@ def update_running_list():
         running_application_dict[cur_app.name.lower()] = cur_app.name
 
         if app.platform == "windows":
-            exe = os.path.split(cur_app.exe)[1]
+            exe = os.path.basename(cur_app.exe)
             running_application_dict[exe.lower()] = exe
 
     override_apps = excludes.union(overrides.values())
@@ -308,7 +308,7 @@ class Actions:
         for application in ui.apps(background=False):
             if application.name == name or (
                 app.platform == "windows"
-                and os.path.split(application.exe)[1].lower() == name.lower()
+                and os.path.basename(application.exe).lower() == name
             ):
                 return application
         raise RuntimeError(f'App not running: "{name}"')
