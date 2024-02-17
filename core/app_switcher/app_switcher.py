@@ -13,7 +13,9 @@ from talon import Context, Module, actions, app, fs, imgui, ui
 # TODO: Consider put list csv's (homophones.csv, app_name_overrides.csv) files together in a seperate directory,`community/lists`
 overrides_directory = os.path.dirname(os.path.realpath(__file__))
 override_file_name = f"app_name_overrides.{talon.app.platform}.csv"
-override_file_path = os.path.normcase(os.path.join(overrides_directory, override_file_name))
+override_file_path = os.path.normcase(
+    os.path.join(overrides_directory, override_file_name)
+)
 
 mod = Module()
 mod.list("running", desc="all running applications")
@@ -391,7 +393,9 @@ class Actions:
 def gui_running(gui: imgui.GUI):
     gui.text("Running applications (with spoken forms)")
     gui.line()
-    running_apps = sorted((v.lower(), k, v) for k, v in ctx.lists["self.running"].items())
+    running_apps = sorted(
+        (v.lower(), k, v) for k, v in ctx.lists["self.running"].items()
+    )
     for _, running_name, full_application_name in running_apps:
         gui.text(f"{full_application_name}: {running_name}")
 
