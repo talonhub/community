@@ -127,7 +127,7 @@ https://github.com/talonhub/community/blob/main/core/text/text.talon#L8
 
 ### Mouse commands
 
-See https://github.com/talonhub/community/blob/main/plugin/mouse/mouse.talon
+See https://github.com/talonhub/community/blob/main/plugin/mouse/mouse.talon for commands to click, drag, scroll, and use an eye tracker. To use a grid to click at a certain location on the screen, see [mouse_grid](https://github.com/talonhub/community/tree/main/core/mouse_grid).
 
 ### Generic editing commands
 
@@ -245,6 +245,8 @@ tag(): user.tabs
 
 For instance, kubectl commands (kubernetes) aren't relevant to everyone.
 
+Note also that while some of the command sets associated with these tags are defined in talon files within [tags](https://github.com/talonhub/community/tree/main/tags), others, like git, are defined within [apps](https://github.com/talonhub/community/tree/main/apps). Additionally, the commands for tabs are defined in [tabs.talon](https://github.com/talonhub/community/blob/main/core/windows_and_tabs/tabs.talon).
+
 ### Unix utilities
 
 If you have a Unix (e.g. OSX) or Linux computer, you can enable support for a number of
@@ -263,6 +265,16 @@ with community enabled.
 
 For Jetbrains commands to work you must install https://plugins.jetbrains.com/plugin/10504-voice-code-idea
 into each editor.
+
+## Additional commands
+
+There are other commands not described fully within this file. As an overview:
+
+- The apps folder has command sets for use within different applications
+- The core folder has various commands described [here](https://github.com/talonhub/community/blob/main/core/README.md)
+- The lang folder has commands for writing [programming languages](https://github.com/talonhub/community?tab=readme-ov-file#programming-languages)
+- The plugin folder has various commands described [here](https://github.com/talonhub/community/blob/main/plugin/README.md)
+- The tags folder has various other commands, such as using a browser, navigating a filesystem in terminal, and managing multiple cursors
 
 ## Settings
 
