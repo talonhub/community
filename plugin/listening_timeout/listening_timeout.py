@@ -54,7 +54,7 @@ def check_timeout():
     if time.perf_counter() - last_phrase_time > timeout:
         actions.user.listening_timeout_expired()
         stop_timeout_job()
-    elif timeout_job is None and timeout > 0:
+    elif timeout > 0:
         start_timeout_job(timeout)
 
 def post_phrase(e):
