@@ -6,7 +6,7 @@ mod.apps.kindle = """
 os: windows
 and app.name: Kindle
 os: windows
-and app.exe: Kindle.exe
+and app.exe: /^kindle\.exe$/i
 """
 mod.apps.kindle = """
 os: mac

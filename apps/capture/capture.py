@@ -7,11 +7,11 @@ user.running: TechSmith Capture
 """
 mod = Module()
 
-mod.apps.tech_smith_capture = """
+mod.apps.tech_smith_capture = r"""
 os: windows
 and app.name: TechSmith Capture
 os: windows
-and app.exe: RelayRecorder.exe
+and app.exe: /^relayrecorder\.exe$/i
 """
 
 

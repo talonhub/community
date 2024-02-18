@@ -76,14 +76,15 @@ def get_app_context(active_app: ui.App) -> str:
     if app.platform == "mac":
         return f"app.bundle: {active_app.bundle}"
     if app.platform == "windows":
-        return f"app.exe: {active_app.exe.split(os.path.sep)[-1]}"
+        executable = os.path.basename(active_app.exe)
+        return f"app.exe: /^{re.escape(executable.lower())}$/i"
     return f"app.name: {active_app.name}"
 
 
 def get_app_name(text: str, max_len=20) -> str:
     pattern = re.compile(r"[A-Z][a-z]*|[a-z]+|\d")
     return "_".join(
-        list(islice(pattern.findall(text.replace(".exe", "")), max_len))
+        list(islice(pattern.findall(text.removesuffix(".exe")), max_len))
     ).lower()
 
 
