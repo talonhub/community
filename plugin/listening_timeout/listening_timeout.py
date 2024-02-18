@@ -1,13 +1,11 @@
 import time
 
 from talon import Module, Context,  actions, cron, speech_system, ui, settings, app
-from talon.canvas import Canvas
 
-canvas: Canvas = None
 mod = Module()
 ctx = Context()
 mod.setting("listening_timeout_minutes", int, default=-1, desc="After X mintues, disable speech recognition")
-mod.setting("listening_timeout_show_notification", bool, default=True, desc="After the timeout expires, display a fullscreen notification")
+mod.setting("listening_timeout_show_notification", bool, default=True, desc="After the timeout expires, display a notification")
 
 @mod.action_class
 class UserActions:
