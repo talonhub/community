@@ -1,5 +1,6 @@
 -
 settings():
+    speech.record_all = 1
     speech.timeout = .400
     # Adjust the scale of the imgui to my liking
     imgui.scale = 1.6
