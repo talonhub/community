@@ -32,31 +32,33 @@ app: windows_file_browser
 
 # There are a few different ways the address bar needs to be found depending on the state of the window.
 address_bar_criterion: list[list[dict[str]]] = [
-
-        # File Explorer windows most of the time
-        [
-            {},  # Match any element for the root element
-            {'automation_id': '40965'},  # 'class_name': 'ReBarWindow32'
-            {'automation_id': '41477'},  # 'class_name': 'Address Band Root'
-            {'class_name': 'msctls_progress32'},  # Progress bar
-            {'class_name': 'Breadcrumb Parent'},  # Breadcrumb bar
-            {'automation_id': '1001'}  # 'ToolbarWindow32'
-        ],
-
-        # File Explorer window when the address bar dropdown is open
-        [
-            {},  # Match any element for the root element
-            {'automation_id': '40965'},  # ReBarWindow32
-            {'automation_id': '41477'},  # Address Band Root
-            {'class_name': 'msctls_progress32'},  # Progress bar
-            {'name': 'Address band toolbar', 'class_name': 'ToolbarWindow32'},  # Address band toolbar
-            {'control_type': 'Button', 'name': re.compile(r"Refresh .+ \(F5\)")}  # Refresh button
-        ],
-        # Title change events have the 'Address toolbar' as the root element
-        [
-            {'automation_id': '1001'}  # 'class_name': 'ToolbarWindow32'
-        ],
-    ]
+    # File Explorer windows most of the time
+    [
+        {},  # Match any element for the root element
+        {"automation_id": "40965"},  # 'class_name': 'ReBarWindow32'
+        {"automation_id": "41477"},  # 'class_name': 'Address Band Root'
+        {"class_name": "msctls_progress32"},  # Progress bar
+        {"class_name": "Breadcrumb Parent"},  # Breadcrumb bar
+        {"automation_id": "1001"},  # 'ToolbarWindow32'
+    ],
+    # File Explorer window when the address bar dropdown is open
+    [
+        {},  # Match any element for the root element
+        {"automation_id": "40965"},  # ReBarWindow32
+        {"automation_id": "41477"},  # Address Band Root
+        {"class_name": "msctls_progress32"},  # Progress bar
+        {
+            "name": "Address band toolbar",
+            "class_name": "ToolbarWindow32",
+        },  # Address band toolbar
+        {
+            "control_type": "Button",
+            "name": re.compile(r"Refresh .+ \(F5\)"),
+        },  # Refresh button
+    ],
+    # Title change events have the 'Address toolbar' as the root element
+    [{"automation_id": "1001"}],  # 'class_name': 'ToolbarWindow32'
+]
 
 user_path = os.path.expanduser("~")
 directories_to_remap = {}
@@ -179,6 +181,7 @@ class UserActions:
         """file_manager_open_volume"""
         actions.user.file_manager_open_directory(volume)
 
+
 def get_explorer_directory(window: ui.Window) -> str | None:
     """
     Returns the current directory in the given Windows Explorer window from the Address toolbar.
@@ -244,7 +247,10 @@ def check_if_element_strictly_matches(element: windows.ax.Element, **kw) -> bool
             return False
     return True
 
-def first_matching_child(element: windows.ax.Element, **kw) -> windows.ax.Element | None:
+
+def first_matching_child(
+    element: windows.ax.Element, **kw
+) -> windows.ax.Element | None:
     """
     Returns the first child element of `element` that matches all the given attribute-value pairs.
     The value may be a string or a regex pattern.
@@ -253,12 +259,11 @@ def first_matching_child(element: windows.ax.Element, **kw) -> windows.ax.Elemen
         ```python
         child = first_matching_child(element, name="Channels", control_type="Group")
         ```
-        This will return the first child of `element` that has an attribute `name` 
+        This will return the first child of `element` that has an attribute `name`
            with the value "Channels" and `control_type` with the value "Group".
     """
 
     return next(
-        (
-            e for e in element.children if check_if_element_strictly_matches(e, **kw)
-        ), None
+        (e for e in element.children if check_if_element_strictly_matches(e, **kw)),
+        None,
     )
