@@ -69,28 +69,7 @@ def post_phrase(e):
         stop_timeout_job()
 
 def show_notification():
-    def on_draw(c):
-        c.paint.typeface = "Arial"
-        c.paint.textsize = round(min(c.width, c.height) / 5)
-        text = "sleep mode"
-        rect = c.paint.measure_text(text)[1]
-        x = c.x + c.width / 2 - rect.x - rect.width / 2
-        y = c.y + c.height / 2 + rect.height / 2
-
-        c.paint.style = c.paint.Style.FILL
-        c.paint.color = "eeeeee"
-        c.draw_text(text, x, y)
-
-        c.paint.style = c.paint.Style.STROKE
-        c.paint.color = "000000"
-        c.draw_text(text, x, y)
-
-        cron.after("1s", canvas.close)
-
-    screen = ui.main_screen()
-    canvas = Canvas.from_rect(screen.rect)
-    canvas.register("draw", on_draw)
-    canvas.freeze()
+    actions.app.notify(f"Speech recognition disabled - no speech detected for {calculate_timeout()}s")
 
 def on_ready():
     global last_phrase_time
