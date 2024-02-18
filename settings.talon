@@ -2,6 +2,7 @@
 settings():
     speech.record_all = 1
     speech.timeout = .400
+    user.listening_timeout_minutes = 3
     # Adjust the scale of the imgui to my liking
     imgui.scale = 1.6
     user.snippets_dir = "snippets"
