@@ -5,60 +5,9 @@ from typing import Sequence, Union
 from talon import Context, Module, actions
 from talon.grammar import Phrase
 
-from ..user_settings import append_to_csv, get_list_from_csv
+from ..user_settings import append_to_csv, track_csv_list
 
-mod = Module()
-ctx = Context()
-
-mod.list("vocabulary", desc="additional vocabulary words")
-
-
-# Default words that will need to be capitalized.
-# DON'T EDIT THIS. Edit settings/words_to_replace.csv instead.
-# These defaults and those later in this file are ONLY used when
-# auto-creating the corresponding settings/*.csv files. Those csv files
-# determine the contents of user.vocabulary and dictate.word_map. Once they
-# exist, the contents of the lists/dictionaries below are irrelevant.
-_capitalize_defaults = [
-    # NB. the lexicon now capitalizes January/February by default, but not the
-    # others below. Not sure why.
-    "January",
-    "February",
-    # March omitted because it's a regular word too
-    "April",
-    # May omitted because it's a regular word too
-    "June",
-    "July",
-    "August",  # technically also an adjective but the month is far more common
-    "September",
-    "October",
-    "November",
-    "December",
-]
-
-# Default words that need to be remapped.
-_word_map_defaults = {
-    # E.g:
-    # "cash": "cache",
-    # This is the opposite ordering to words_to_replace.csv (the latter has the target word first)
-}
-_word_map_defaults.update({word.lower(): word for word in _capitalize_defaults})
-
-
-# phrases_to_replace is a spoken form -> written form map, used by our
-# implementation of `dictate.replace_words` (at bottom of file) to rewrite words
-# and phrases Talon recognized. This does not change the priority with which
-# Talon recognizes particular phrases over others.
-phrases_to_replace = get_list_from_csv(
-    "words_to_replace.csv",
-    headers=("Replacement", "Original"),
-    default=_word_map_defaults,
-)
-
-# "dictate.word_map" is used by Talon's built-in default implementation of
-# `dictate.replace_words`, but supports only single-word replacements.
-# Multi-word phrases are ignored.
-ctx.settings["dictate.word_map"] = phrases_to_replace
+phrases_to_replace = {}
 
 class PhraseReplacer:
     """Utility for replacing phrases by other phrases inside text or word lists.
@@ -118,6 +67,57 @@ class PhraseReplacer:
         return " ".join(self.replace(text.split()))
 
 
+mod = Module()
+ctx = Context()
+
+mod.list("vocabulary", desc="additional vocabulary words")
+
+
+# Default words that will need to be capitalized.
+# DON'T EDIT THIS. Edit settings/words_to_replace.csv instead.
+# These defaults and those later in this file are ONLY used when
+# auto-creating the corresponding settings/*.csv files. Those csv files
+# determine the contents of user.vocabulary and dictate.word_map. Once they
+# exist, the contents of the lists/dictionaries below are irrelevant.
+_capitalize_defaults = [
+    # NB. the lexicon now capitalizes January/February by default, but not the
+    # others below. Not sure why.
+    "January",
+    "February",
+    # March omitted because it's a regular word too
+    "April",
+    # May omitted because it's a regular word too
+    "June",
+    "July",
+    "August",  # technically also an adjective but the month is far more common
+    "September",
+    "October",
+    "November",
+    "December",
+]
+
+# Default words that need to be remapped.
+_word_map_defaults = {
+    # E.g:
+    # "cash": "cache",
+    # This is the opposite ordering to words_to_replace.csv (the latter has the target word first)
+}
+_word_map_defaults.update({word.lower(): word for word in _capitalize_defaults})
+
+
+# phrases_to_replace is a spoken form -> written form map, used by our
+# implementation of `dictate.replace_words` (at bottom of file) to rewrite words
+# and phrases Talon recognized. This does not change the priority with which
+# Talon recognizes particular phrases over others.
+@track_csv_list("words_to_replace.csv", headers=("Replacement", "Original"),default=_word_map_defaults)
+def on_words_to_replace(values):
+    global phrases_to_replace
+    global phrase_replacer
+
+    phrases_to_replace = values
+    ctx.settings["dictate.word_map"] = phrases_to_replace
+    phrase_replacer = PhraseReplacer(phrases_to_replace)
+
 # Unit tests for PhraseReplacer
 rep = PhraseReplacer(
     {
@@ -134,8 +134,6 @@ assert rep.replace_string("this is a test") == "it worked!"
 assert rep.replace_string("well this is a test really") == "well it worked! really"
 assert rep.replace_string("try this is too") == "try stopping early too"
 assert rep.replace_string("this is a tricky one") == "stopping early a tricky one"
-
-phrase_replacer = PhraseReplacer(phrases_to_replace)
 
 
 @ctx.action_class("dictate")

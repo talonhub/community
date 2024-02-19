@@ -13,7 +13,7 @@ SETTINGS_DIR.mkdir(exist_ok=True)
 CallbackT  = Callable[[dict[str, str]], None]
 DecoratorT = Callable[[CallbackT], CallbackT]
 
-def read_csv_list(f: IO, headers: tuple[str, str]) -> dict[str, str]:
+def read_csv_list(f: IO, headers: tuple[str, str], is_spoken_form_first: bool = False) -> dict[str, str]:
     rows = list(csv.reader(f))
 
     # print(str(rows))
@@ -22,7 +22,7 @@ def read_csv_list(f: IO, headers: tuple[str, str]) -> dict[str, str]:
         actual_headers = rows[0]
         if not actual_headers == list(headers):
             print(
-                f'"{filename}": Malformed headers - {actual_headers}.'
+                f'"{f}": Malformed headers - {actual_headers}.'
                 + f" Should be {list(headers)}. Ignoring row."
             )
         for row in rows[1:]:
@@ -32,10 +32,14 @@ def read_csv_list(f: IO, headers: tuple[str, str]) -> dict[str, str]:
             if len(row) == 1:
                 output = spoken_form = row[0]
             else:
-                output, spoken_form = row[:2]
+                if is_spoken_form_first:
+                    spoken_form, output = row[:2]
+                else:
+                    output, spoken_form = row[:2]
+
                 if len(row) > 2:
                     print(
-                        f'"{filename}": More than two values in row: {row}.'
+                        f'"{f}": More than two values in row: {row}.'
                         + " Ignoring the extras."
                     )
             # Leading/trailing whitespace in spoken form can prevent recognition.
@@ -44,23 +48,28 @@ def read_csv_list(f: IO, headers: tuple[str, str]) -> dict[str, str]:
 
     return mapping
 
-def write_csv_defaults(path: Path, headers: tuple[str, str], default: dict[str, str]=None) -> None:
+def write_csv_defaults(path: Path, headers: tuple[str, str], default: dict[str, str]=None, is_spoken_form_first: bool = False) -> None:
     if not path.is_file() and default is not None:
         with open(path, "w", encoding="utf-8", newline="") as file:
             writer = csv.writer(file)
             writer.writerow(headers)
             for key, value in default.items():
-                writer.writerow([key] if key == value else [value, key])
+                if key == value:
+                    writer.writerow([key])
+                elif is_spoken_form_first:
+                    writer.writerow([key, value])
+                else:
+                    writer.writerow([value, key])
 
-def track_csv_list(filename: str, headers: tuple[str, str], default: dict[str, str]=None) -> DecoratorT:
+def track_csv_list(filename: str, headers: tuple[str, str], default: dict[str, str]=None, is_spoken_form_first: bool = False) -> DecoratorT:
     assert filename.endswith(".csv")
     path = SETTINGS_DIR / filename
-    write_csv_defaults(path, headers, default)
+    write_csv_defaults(path, headers, default, is_spoken_form_first)
 
     def decorator(fn: CallbackT) -> CallbackT:
         @resource.watch(str(path))
         def on_update(f):
-            data = read_csv_list(f, headers)
+            data = read_csv_list(f, headers, is_spoken_form_first)
             fn(data)
 
     return decorator
