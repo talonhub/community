@@ -7,7 +7,6 @@ settings():
     imgui.scale = 1.6
     user.snippets_dir = "snippets"
     # Enable if you'd like the picker gui to automatically appear when explorer has focus
-    user.file_manager_auto_show_pickers = false
 
     # Set the max number of command lines per page in help
     user.help_max_command_lines_per_page = 50

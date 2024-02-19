@@ -1,9 +1,6 @@
 tag: user.file_manager
 -
 title force: user.file_manager_refresh_title()
-manager show: user.file_manager_toggle_pickers()
-manager close: user.file_manager_hide_pickers()
-manager refresh: user.file_manager_update_lists()
 go <user.directory>: user.file_manager_open_directory(directory)
 go back: user.file_manager_go_back()
 go forward: user.file_manager_go_forward()
@@ -19,15 +16,6 @@ go forward: user.file_manager_go_forward()
     user.file_manager_open_directory(file_manager_directories)
 ^take folder {user.file_manager_directories}$:
     user.file_manager_select_directory(file_manager_directories)
-^open <number_small>$:
-    file = user.file_manager_get_file_by_index(number_small - 1)
-    user.file_manager_open_file(file)
-^take folder numb <number_small>$:
-    directory = user.file_manager_get_directory_by_index(number_small - 1)
-    user.file_manager_select_directory(directory)
-^take file numb <number_small>$:
-    file = user.file_manager_get_file_by_index(number_small - 1)
-    user.file_manager_select_file(file)
 ^take file {user.file_manager_files}$: user.file_manager_select_file(file_manager_files)
 
 #new folder
