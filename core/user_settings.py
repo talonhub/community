@@ -74,20 +74,6 @@ def track_csv_list(filename: str, headers: tuple[str, str], default: dict[str, s
 
     return decorator
 
-# NOTE: this is deprecated, use @track_csv_list instead.
-def get_list_from_csv(
-    filename: str, headers: tuple[str, str], default: dict[str, str] = {}
-):
-    """Retrieves list from CSV"""
-    assert filename.endswith(".csv")
-    path = SETTINGS_DIR / filename
-    write_csv_defaults(path, headers, default)
-
-    # Now read via resource to take advantage of talon's
-    # ability to reload this script for us when the resource changes
-    with resource.open(str(path), "r") as f:
-        return read_csv_list(f, headers)
-
 def append_to_csv(filename: str, rows: dict[str, str]):
     path = SETTINGS_DIR / filename
     assert filename.endswith(".csv")
