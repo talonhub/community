@@ -1,5 +1,5 @@
 os: windows
-app.exe: ConEmu64.exe
+app.exe: /^conemu64\.exe$/i
 -
 
 tag(): terminal
