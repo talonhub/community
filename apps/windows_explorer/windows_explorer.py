@@ -136,8 +136,10 @@ class UserActions:
 
     def file_manager_open_file(path: str):
         """opens the file"""
-        actions.key("home")
+        actions.key("ctrl-l")
+        actions.sleep("50ms")
         actions.insert(path)
+        actions.sleep("50ms")
         actions.key("enter")
 
     def file_manager_select_file(path: str):
