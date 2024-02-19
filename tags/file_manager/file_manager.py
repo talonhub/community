@@ -44,10 +44,6 @@ mod.setting(
     desc="Maximum number of files to iterate",
 )
 
-cached_path = None
-file_selections = folder_selections = []
-current_file_page = current_folder_page = 1
-
 @mod.action_class
 class Actions:
     def file_manager_current_path() -> str:
@@ -137,13 +133,11 @@ def get_file_map(current_path):
 
 @ctx.dynamic_list("user.file_manager_directories")
 def file_manager_directories(phrase) -> dict[str, str]:
-    global directories, folder_selections, current_folder_page
     is_valid_path = False
     
     path = actions.user.file_manager_current_path()
 
     directories = {}
-    folder_selections = []
     try:
         current_path = Path(path)
         is_valid_path = current_path.is_dir()
@@ -156,21 +150,15 @@ def file_manager_directories(phrase) -> dict[str, str]:
         except:
             directories = {}
 
-    current_folder_page = 1
-
-    folder_selections = list(set(directories.values()))
-    folder_selections.sort(key=str.casefold)
-
     return directories
 
 @ctx.dynamic_list("user.file_manager_files")
 def file_manager_files(phrase) -> dict[str, str]:
-    global files, file_selections, current_file_page
+    global files
     is_valid_path = False
     path = actions.user.file_manager_current_path()
 
     files = {}
-    file_selections = []
     try:
         current_path = Path(path)
         is_valid_path = current_path.is_dir()
@@ -182,10 +170,5 @@ def file_manager_files(phrase) -> dict[str, str]:
             files = get_file_map(current_path)
         except:
             files = {}
-
-    current_file_page = 1
-
-    file_selections = list(set(files.values()))
-    file_selections.sort(key=str.casefold)
 
     return files
