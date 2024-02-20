@@ -482,8 +482,8 @@ class UserActions:
     def file_manager_open_volume(volume: str):
         actions.user.file_manager_open_directory(volume)
 
-    def terminal_list_directories():
-        actions.insert("ls")
+    def terminal_list_directories(path: str):
+        actions.insert(f"ls {path}")
         actions.key("enter")
 
     def terminal_list_all_directories():
