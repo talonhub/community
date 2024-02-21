@@ -3,6 +3,8 @@ tag: user.messaging
 # Navigation
 previous (workspace | server): user.messaging_workspace_previous()
 next (workspace | server): user.messaging_workspace_next()
+(workspace | server) up: user.messaging_workspace_previous()
+(workspace | server) down: user.messaging_workspace_next()
 channel: user.messaging_open_channel_picker()
 channel <user.text>:
     user.messaging_open_channel_picker()
