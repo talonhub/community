@@ -1,5 +1,5 @@
 app: RemNote
-
+-
 make blank:
     key(cmd-alt-q)
 
@@ -31,7 +31,7 @@ definition:
 
 equation:
     "$$"
-    sleep(100ms)
+    sleep(200ms)
 
 text:
     key(\)
@@ -56,6 +56,21 @@ frac:
     key(left)
     key(left)
     key(left)
+
+modulo:
+    key(\)
+    key(t)
+    key(e)
+    key(x)
+    key(t)
+    key({)
+    key(space)
+    key(m)
+    key(o)
+    key(d)
+    key(space)
+    key(})
+    
 
 enter:
     key(enter)
@@ -108,3 +123,7 @@ lecture (forward | next) <number_small>:
 
 screenshot:
     key(cmd-shift-4)
+
+paste image:
+    key(cmd-v)
+    sleep(100ms)
