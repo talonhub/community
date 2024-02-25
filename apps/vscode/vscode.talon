@@ -14,6 +14,10 @@ please [<user.text>]:
     user.vscode("workbench.action.showCommands")
     insert(user.text or "")
 
+view [<user.text>]:
+    user.vscode("workbench.action.openView")
+    insert(user.text or "")
+
 # Sidebar
 bar explore: user.vscode("workbench.view.explorer")
 bar extensions: user.vscode("workbench.view.extensions")
