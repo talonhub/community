@@ -30,3 +30,16 @@ class Snippet:
         if variable is None:
             raise ValueError(f"Snippet '{self.name}' has no variable '{name}'")
         return variable
+
+
+@dataclass
+class InsertionSnippet:
+    body: str
+    scopes: list[str] = None
+
+
+@dataclass
+class WrapperSnippet:
+    body: str
+    variable_name: str
+    scope: str = None
