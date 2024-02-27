@@ -1,12 +1,18 @@
 os: windows
-and app: microsoft outlook
+and app.name: Microsoft Outlook
+os: windows
+and app.exe: OUTLOOK.EXE
 -
 
 send email: key('ctrl+enter')
 
-attach file: key('alt')
+insert: 
+    key('alt')
+    sleep(300ms)
     key('n')
-    key('af')
+    sleep(1500ms)
+    key('a')
+    key('f')
 
 settings():
     user.context_sensitive_dictation = 0

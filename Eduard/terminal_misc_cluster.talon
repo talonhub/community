@@ -1,8 +1,7 @@
-
 os: windows
-and app.name: Windows Command Processor
+and app.name: WindowsTerminal.exe
 os: windows
-and app.exe: cmd.exe
+and app.exe: WindowsTerminal.exe
 -
 lisa:
 	"ls"

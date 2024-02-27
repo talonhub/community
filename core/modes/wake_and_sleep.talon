@@ -3,8 +3,8 @@ mode: all
 -
 
 ^(welcome back)+$:
-    user.mouse_wake()
-    user.history_enable()
+    # user.mouse_wake()
+    # user.history_enable()
     user.talon_mode()
     user.connect_ocr_eye_tracker()
 
