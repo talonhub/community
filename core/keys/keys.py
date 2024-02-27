@@ -211,10 +211,10 @@ symbol_key_words = {
     "caret": "^",
     "amper": "&",
     "pipe": "|",
-    "quad": '"',
+    "quad": '"', 
     # Currencies
     "dollar": "$",
-    "pound": "£",
+    # "pound": "£",
 }
 
 # make punctuation words also included in {user.symbol_keys}
