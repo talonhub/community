@@ -1,0 +1,33 @@
+name: functionDeclaration
+phrase: funk
+insertionScope: namedFunction | statement
+
+$0.wrapperPhrase: funk
+$0.wrapperScope: statement
+---
+
+language: javascript
+
+$1.insertionFormatter: PRIVATE_CAMEL_CASE
+-
+function $1($2) {
+    $0
+}
+---
+
+language: java
+
+$1.insertionFormatter: PRIVATE_CAMEL_CASE
+-
+void $1($2) {
+    $0
+}
+---
+
+language: python
+
+$1.insertionFormatter: SNAKE_CASE
+-
+def $1($2):
+    $0
+---

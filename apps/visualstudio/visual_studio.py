@@ -113,19 +113,6 @@ class WinActions:
 
 @ctx.action_class("user")
 class UserActions:
-    # snippet.py support beginHelp close
-    def snippet_search(text: str):
-        """TEST"""
-        actions.key("ctrl-k ctrl-x")
-
-    # def snippet_insert(text: str):
-    #     """Inserts a snippet"""
-
-    # def snippet_create():
-    #     """Triggers snippet creation"""
-
-    # snippet.py support end
-
     # def select_word(verb: str):
     #     actions.key("ctrl-w")
     #     actions.user.perform_selection_action(verb)

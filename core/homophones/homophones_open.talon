@@ -1,4 +1,4 @@
-mode: user.homophones
+tag: user.homophones_open
 -
 choose <number_small>:
     result = user.homophones_select(number_small)

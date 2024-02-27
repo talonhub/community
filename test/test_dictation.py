@@ -5,7 +5,7 @@ PHRASE_EXAMPLES = ["", "foo", "foo bar", "lorem ipsum dolor sit amet"]
 if hasattr(talon, "test_mode"):
     # Only include this when we're running tests
 
-    from knausj_talon_pkg.core.text import text_and_dictation
+    from core.text import text_and_dictation
 
     def test_format_phrase():
         for x in PHRASE_EXAMPLES:

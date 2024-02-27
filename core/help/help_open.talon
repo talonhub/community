@@ -1,4 +1,4 @@
-mode: user.help
+tag: user.help_open
 -
 help next$: user.help_next()
 help previous$: user.help_previous()

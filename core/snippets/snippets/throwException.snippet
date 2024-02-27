@@ -1,0 +1,18 @@
+name: throwException
+phrase: exception
+---
+
+language: javascript
+-
+throw Error(`$0`)
+---
+
+language: python
+-
+raise ValueError(f"$0")
+---
+
+language: java
+-
+throw new Exception(String.format("$0"))
+---

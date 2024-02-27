@@ -2,7 +2,7 @@ from talon import Context, actions, settings
 
 ctx = Context()
 ctx.matches = r"""
-tag: user.php
+code.language: php
 """
 
 ctx.lists["user.code_type"] = {
@@ -26,11 +26,6 @@ class UserActions:
 
     def code_define_class():
         actions.auto_insert("class ")
-
-    def code_block():
-        actions.insert("{}")
-        actions.edit.left()
-        actions.key("enter")
 
     def code_import():
         actions.auto_insert("use ;")
@@ -205,8 +200,25 @@ class UserActions:
         actions.user.paste(result)
         actions.edit.left()
 
+    def code_private_function(text: str):
+        """Inserts private function declaration"""
+        result = "private function {}()".format(
+            actions.user.formatted_text(
+                text, settings.get("user.code_public_function_formatter")
+            )
+        )
+        actions.user.paste(result)
+        actions.edit.left()
+
     def code_private_static_function(text: str):
-        actions.user.code_public_static_function(text)
+        """Inserts private static function declaration"""
+        result = "private static function {}()".format(
+            actions.user.formatted_text(
+                text, settings.get("user.code_protected_function_formatter")
+            )
+        )
+        actions.user.paste(result)
+        actions.edit.left()
 
     def code_protected_static_function(text: str):
         """Inserts protected static function declaration"""

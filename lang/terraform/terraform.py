@@ -3,7 +3,7 @@ from talon import Context, Module, actions
 ctx = Context()
 mod = Module()
 ctx.matches = r"""
-tag: user.terraform
+code.language: terraform
 """
 
 types = {
