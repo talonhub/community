@@ -30,7 +30,7 @@ library <user.code_libraries>:
     key(end enter)
 
 # R specific commands
-(chain | pipe that):
+(chain | pipe that) down:
     key(end)
     " %>%"
     key(enter)
