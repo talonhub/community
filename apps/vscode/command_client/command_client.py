@@ -7,7 +7,8 @@ from tempfile import gettempdir
 from typing import Any
 from uuid import uuid4
 
-from talon import Context, Module, actions, speech_system
+from talon import Context, Module, actions, app, speech_system
+from talon_init import TALON_HOME
 
 # How old a request file needs to be before we declare it stale and are willing
 # to remove it
@@ -197,20 +198,30 @@ def run_command(
     return decoded_contents["returnValue"]
 
 
+command_server_directory = None
+
+
+# NB: See https://github.com/talonhub/community/issues/966 for why we do OS-specific temp dirs
+def get_platform_specific_communication_dir_path():
+    home_dir = Path(os.path.expanduser("~"))
+    directory_name = actions.user.command_server_directory()
+    if app.platform == "linux" or app.platform == "mac":
+        return home_dir / ".talon" / " .comms" / directory_name
+    elif app.platform == "windows":
+        # subprocess.run(["attrib","+H","myfile.txt"],check=True)
+        return home_dir / "AppData" / "Roaming" / "talon" / ".comms" / directory_name
+
+
 def get_communication_dir_path():
     """Returns directory that is used by command-server for communication
 
     Returns:
         Path: The path to the communication dir
     """
-    suffix = ""
-
-    # NB: We don't suffix on Windows, because the temp dir is user-specific
-    # anyways
-    if hasattr(os, "getuid"):
-        suffix = f"-{os.getuid()}"
-
-    return Path(gettempdir()) / f"{actions.user.command_server_directory()}{suffix}"
+    global command_server_directory
+    if command_server_directory is None:
+        command_server_directory = get_platform_specific_communication_dir_path()
+    return command_server_directory
 
 
 def robust_unlink(path: Path):
