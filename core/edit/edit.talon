@@ -83,7 +83,7 @@ deli:
     edit.extend_word_left()
     edit.delete()
 
-clear word right:
+swallow:
     edit.extend_word_right()
     edit.delete()
 

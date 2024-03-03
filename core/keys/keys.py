@@ -124,8 +124,9 @@ ctx = Context()
 modifier_keys = {
     # If you find 'alt' is often misrecognized, try using 'alter'.
     "alt": "alt",  #'alter': 'alt',
-    "control": "ctrl",  #'troll':   'ctrl',
-    "shift": "shift",  #'sky':     'shift',
+    "alter": "alt",
+    "troll": "ctrl",  #'troll':   'ctrl',
+    "ship": "shift",  #'sky':     'shift',
     "super": "super",
 }
 if app.platform == "mac":
@@ -172,12 +173,16 @@ punctuation_words = {
 symbol_key_words = {
     "dot": ".",
     "point": ".",
-    "quote": "'",
-    "question": "?",
+    "drip": ",",
+    "semi": ";",
+    "stack": ":",
+    "twin": "'",
+    "quest": "?",
     "apostrophe": "'",
     "box": "[",
     "R box": "]",
     "right box": "]",
+    "boxer": "]",
     "slash": "/",
     "backslash": "\\",
     "minus": "-",
@@ -187,7 +192,7 @@ symbol_key_words = {
     "grave": "`",
     "tilde": "~",
     "bang": "!",
-    "down score": "_",
+    "score": "_",
     "underscore": "_",
     "paren": "(",
     "brace": "{",
@@ -237,7 +242,7 @@ simple_keys = [
     "insert",
     "pagedown",
     "pageup",
-    "space",
+    "void",
     "tab",
 ]
 
