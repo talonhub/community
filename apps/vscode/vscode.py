@@ -12,6 +12,14 @@ os: mac
 and app.bundle: com.microsoft.VSCodeInsiders
 os: mac
 and app.bundle: com.visualstudio.code.oss
+os: mac
+and tag: browser
+and browser.host: cider-v-staging.corp.google.com
+os: mac
+and tag: browser
+and browser.host: cider-v.corp.google.com
+os: mac
+and app.name: Cider V
 """
 mod.apps.vscode = """
 os: linux
