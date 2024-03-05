@@ -72,7 +72,7 @@ settings.register("", _update_draft_style)
 class ContextSensitiveDictationActions:
     """
     Override these actions to assist 'Smart dictation mode'.
-    see https://github.com/knausj85/knausj_talon/pull/356
+    see https://github.com/talonhub/community/pull/356
     """
 
     def dictation_peek(left, right):

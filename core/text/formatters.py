@@ -2,7 +2,7 @@ import logging
 import re
 from typing import Union
 
-from talon import Context, Module, actions
+from talon import Context, Module, actions, app
 from talon.grammar import Phrase
 
 ctx = Context()
@@ -10,7 +10,7 @@ key = actions.key
 edit = actions.edit
 
 words_to_keep_lowercase = (
-    "a an the at by for in is of on to up and as but or nor".split()
+    "a an and as at but by en for if in nor of on or per the to v via vs".split()
 )
 
 # The last phrase spoken, without & with formatting. Used for reformatting.
@@ -89,11 +89,47 @@ def first_vs_rest(first_func, rest_func=lambda w: w):
     return lambda i, word, _: first_func(word) if i == 0 else rest_func(word)
 
 
+def title_case():
+    last_word = None
+
+    def title_case_word(i, word, is_end):
+        nonlocal last_word
+
+        if word.islower() and (  # contains only lowercase letters
+            word not in words_to_keep_lowercase
+            or i == 0
+            or is_end
+            or not last_word[
+                -1
+            ].isalnum()  # title case subsequent words if they follow punctuation
+        ):
+            if "-" in word:
+                components = word.split("-")
+                title_case_component = title_case()
+                components = [
+                    title_case_component(j, component, j == len(components) - 1)
+                    for j, component in enumerate(components)
+                ]
+                word = "-".join(components)
+            elif word_start := re.match(r"\W*", word).end():
+                # word begins with non-alphanumeric characters
+                word = word[:word_start] + word[word_start:].capitalize()
+            else:
+                word = word.capitalize()
+
+        last_word = word
+
+        return word
+
+    return title_case_word
+
+
 def every_word(word_func):
     """Apply one function to every word."""
     return lambda i, word, _: word_func(word)
 
 
+# All formatters (code and prose)
 formatters_dict = {
     "NOOP": (SEP, lambda i, word, _: word),
     "DOUBLE_UNDERSCORE": (NOSEP, first_vs_rest(lambda w: f"__{w}__")),
@@ -125,43 +161,53 @@ formatters_dict = {
     "DOT_SEPARATED": words_with_joiner("."),
     "DOT_SNAKE": (NOSEP, lambda i, word, _: "." + word if i == 0 else "_" + word),
     "SLASH_SEPARATED": (NOSEP, every_word(lambda w: "/" + w)),
-    "CAPITALIZE_FIRST_WORD": (SEP, first_vs_rest(lambda w: w.capitalize())),
-    "CAPITALIZE_ALL_WORDS": (
+    "CAPITALIZE_FIRST_WORD": (
         SEP,
-        lambda i, word, _: word.capitalize()
-        if i == 0 or word not in words_to_keep_lowercase
-        else word,
+        first_vs_rest(lambda w: title_case()(0, w, True)),
     ),
+    "CAPITALIZE_ALL_WORDS": (SEP, title_case()),
 }
 
-# This is the mapping from spoken phrases to formatters
-formatters_words = {
-    "all cap": formatters_dict["ALL_CAPS"],
-    "all down": formatters_dict["ALL_LOWERCASE"],
-    "camel": formatters_dict["PRIVATE_CAMEL_CASE"],
-    "dotted": formatters_dict["DOT_SEPARATED"],
-    "dub string": formatters_dict["DOUBLE_QUOTED_STRING"],
-    "dunder": formatters_dict["DOUBLE_UNDERSCORE"],
-    "hammer": formatters_dict["PUBLIC_CAMEL_CASE"],
-    "kebab": formatters_dict["DASH_SEPARATED"],
-    "packed": formatters_dict["DOUBLE_COLON_SEPARATED"],
-    "padded": formatters_dict["SPACE_SURROUNDED_STRING"],
-    "slasher": formatters_dict["SLASH_SEPARATED"],
-    "smash": formatters_dict["NO_SPACES"],
-    "snake": formatters_dict["SNAKE_CASE"],
-    "string": formatters_dict["SINGLE_QUOTED_STRING"],
-    "title": formatters_dict["CAPITALIZE_ALL_WORDS"],
+# Mapping from spoken phrases to formatter names
+code_formatter_names = {
+    "all cap": "ALL_CAPS",
+    "all down": "ALL_LOWERCASE",
+    "camel": "PRIVATE_CAMEL_CASE",
+    "dotted": "DOT_SEPARATED",
+    "dub string": "DOUBLE_QUOTED_STRING",
+    "dunder": "DOUBLE_UNDERSCORE",
+    "hammer": "PUBLIC_CAMEL_CASE",
+    "kebab": "DASH_SEPARATED",
+    "packed": "DOUBLE_COLON_SEPARATED",
+    "padded": "SPACE_SURROUNDED_STRING",
+    "slasher": "SLASH_SEPARATED",
+    "smash": "NO_SPACES",
+    "snake": "SNAKE_CASE",
+    "string": "SINGLE_QUOTED_STRING",
+}
+prose_formatter_names = {
+    "say": "NOOP",
+    "speak": "NOOP",
+    "sentence": "CAPITALIZE_FIRST_WORD",
+    "title": "CAPITALIZE_ALL_WORDS",
+}
+# Mapping from spoken phrases to formatters
+formatter_words = {
+    phrase: formatters_dict[name]
+    for phrase, name in (code_formatter_names | prose_formatter_names).items()
 }
 
-all_formatters = {}
-all_formatters.update(formatters_dict)
-all_formatters.update(formatters_words)
+# Allow referencing formatters by either their names or spoken forms
+all_prose_formatters = [
+    item for sublist in prose_formatter_names.items() for item in sublist
+]
+all_formatters = formatters_dict | formatter_words
 
 mod = Module()
-mod.list("formatters", desc="list of formatters")
+mod.list("formatters", desc="list of all formatters (code and prose)")
+mod.list("code_formatter", desc="list of formatters typically applied to code")
 mod.list(
-    "prose_formatter",
-    desc="words to start dictating prose, and the formatter they apply",
+    "prose_formatter", desc="list of prose formatters (words to start dictating prose)"
 )
 
 
@@ -171,6 +217,12 @@ def formatters(m) -> str:
     return ",".join(m.formatters_list)
 
 
+@mod.capture(rule="{self.code_formatter}+")
+def code_formatters(m) -> str:
+    "Returns a comma-separated string of code formatters e.g. 'SNAKE,DUBSTRING'"
+    return ",".join(m.code_formatter_list)
+
+
 @mod.capture(
     # Note that if the user speaks something like "snake dot", it will
     # insert "dot" - otherwise, they wouldn't be able to insert punctuation
@@ -178,7 +230,7 @@ def formatters(m) -> str:
     rule="<self.formatters> <user.text> (<user.text> | <user.formatter_immune>)*"
 )
 def format_text(m) -> str:
-    "Formats the text and returns a string"
+    """Formats text and returns a string"""
     out = ""
     formatters = m[0]
     for chunk in m[1:]:
@@ -187,6 +239,14 @@ def format_text(m) -> str:
         else:
             out += format_phrase(chunk, formatters)
     return out
+
+
+@mod.capture(
+    rule="<self.code_formatters> <user.text> (<user.text> | <user.formatter_immune>)*"
+)
+def format_code(m) -> str:
+    """Formats code and returns a string"""
+    return format_text(m)
 
 
 class ImmuneString:
@@ -248,29 +308,34 @@ class Actions:
         """Reformats the current selection."""
         selected = edit.selected_text()
         if not selected:
-            print("Asked to reformat selection, but nothing selected!")
+            app.notify("Asked to reformat selection, but nothing selected!")
             return
-        unformatted = unformat_text(selected)
+        if formatters not in all_prose_formatters:
+            selected = unformat_text(selected)
         # Delete separately for compatibility with programs that don't overwrite
         # selected text (e.g. Emacs)
         edit.delete()
-        text = actions.self.formatted_text(unformatted, formatters)
+        text = actions.self.formatted_text(selected, formatters)
         actions.insert(text)
         return text
 
     def get_formatters_words() -> dict:
         """returns a list of words currently used as formatters, and a demonstration string using those formatters"""
         formatters_help_demo = {}
-        for name in sorted(set(formatters_words.keys())):
-            formatters_help_demo[name] = format_phrase_without_adding_to_history(
+        for name in sorted(set(formatter_words)):
+            demo = format_phrase_without_adding_to_history(
                 ["one", "two", "three"], name
             )
+            if name in prose_formatter_names:
+                name += " *"
+            formatters_help_demo[name] = demo
         return formatters_help_demo
 
     def reformat_text(text: str, formatters: str) -> str:
         """Reformat the text."""
-        unformatted = unformat_text(text)
-        return actions.user.formatted_text(unformatted, formatters)
+        if formatters not in all_prose_formatters:
+            text = unformat_text(text)
+        return actions.user.formatted_text(text, formatters)
 
     def insert_many(strings: list[str]) -> None:
         """Insert a list of strings, sequentially."""
@@ -292,9 +357,6 @@ def unformat_text(text: str) -> str:
     return unformatted.lower()
 
 
-ctx.lists["self.formatters"] = formatters_words.keys()
-ctx.lists["self.prose_formatter"] = {
-    "say": "NOOP",
-    "speak": "NOOP",
-    "sentence": "CAPITALIZE_FIRST_WORD",
-}
+ctx.lists["self.formatters"] = formatter_words.keys()
+ctx.lists["self.code_formatter"] = code_formatter_names.keys()
+ctx.lists["self.prose_formatter"] = prose_formatter_names.keys()

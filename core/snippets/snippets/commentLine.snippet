@@ -1,0 +1,25 @@
+name: commentLine
+phrase: comment
+
+$0.insertionFormatter: CAPITALIZE_FIRST_WORD
+---
+
+language: c | javascript | java | json
+-
+// $0
+---
+
+language: python | talon | csv
+-
+# $0
+---
+
+language: html
+-
+<!-- $0 -->
+---
+
+language: scm
+-
+;; $0
+---
