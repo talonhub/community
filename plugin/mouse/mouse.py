@@ -54,12 +54,6 @@ mod.setting(
     desc="Pop noise clicks left mouse button. 0 = off, 1 = on with eyetracker but not with zoom mouse mode, 2 = on but not with zoom mouse mode",
 )
 mod.setting(
-    "mouse_enable_pop_wake",
-    type=bool,
-    default=False,
-    desc="Pop noise twice enables speech/wakes talon.",
-)
-mod.setting(
     "mouse_enable_pop_stops_scroll",
     type=bool,
     default=False,

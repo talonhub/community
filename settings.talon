@@ -70,3 +70,6 @@ settings():
 # Uncomment to enable the curse yes/curse no commands (show/hide mouse cursor).
 # See issue #688 for more detail: https://github.com/talonhub/community/issues/688
 # tag(): user.mouse_cursor_commands_enable
+
+# Uncomment to enable pop-twice to wake 
+# tag(): user.pop_twice_to_wake

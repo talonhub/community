@@ -7,8 +7,6 @@ settings():
     user.mouse_enable_pop_click = 0
     # Stop mouse scroll down using hiss noise
     user.mouse_enable_hiss_scroll = false
-    # Enable pop twice to wake. Note that if this is enabled, it will disable popping to click in sleep mode, if you set `mouse_enable_pop_click = 2`.
-    user.mouse_enable_pop_wake = false
 
 #================================================================================
 # Commands to wake Talon
