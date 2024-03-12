@@ -1,14 +1,11 @@
 import time
 
-from talon import Context, actions, Module
+from talon import Context, Module, actions
 
 ctx = Context()
 mod = Module()
 
-mod.tag(
-    "pop_twice_to_repeat",
-    desc="tag for enabling pop twice to repeat"
-)
+mod.tag("pop_twice_to_repeat", desc="tag for enabling pop twice to repeat")
 
 ctx.matches = r"""
 mode: command
