@@ -1,5 +1,3 @@
-os: windows
-app.exe: meld.exe
-win.title: Meld
+app: meld
 -
 tag(): user.tabs
