@@ -27,12 +27,8 @@ and tag: user.pop_twice_to_wake
 """
 
 time_last_pop = 0
-double_pop_speed_minimum = settings.get(
-    "user.double_pop_speed_minimum"
-)  # default 0.1
-double_pop_speed_maximum = settings.get(
-    "user.double_pop_speed_maximum"
-)  # default 0.3
+double_pop_speed_minimum = settings.get("user.double_pop_speed_minimum")  # default 0.1
+double_pop_speed_maximum = settings.get("user.double_pop_speed_maximum")  # default 0.3
 
 
 @ctx.action_class("user")
