@@ -1,14 +1,11 @@
 import time
 
-from talon import Context, actions, Module, settings
+from talon import Context, Module, actions, settings
 
 ctx = Context()
 mod = Module()
 
-mod.tag(
-    "pop_twice_to_wake",
-    desc="tag for enabling pop twice to wake in sleep mode"
-)
+mod.tag("pop_twice_to_wake", desc="tag for enabling pop twice to wake in sleep mode")
 
 mod.setting(
     "last_pop_time_maximum",
@@ -30,8 +27,12 @@ and tag: user.pop_twice_to_wake
 """
 
 time_last_pop = 0
-last_pop_time_minimum = settings.get("user.mouse_enable_pop_stops_scroll") # default 0.1
-last_pop_time_maximum = settings.get("user.mouse_enable_pop_stops_scroll") # default 0.3
+last_pop_time_minimum = settings.get(
+    "user.mouse_enable_pop_stops_scroll"
+)  # default 0.1
+last_pop_time_maximum = settings.get(
+    "user.mouse_enable_pop_stops_scroll"
+)  # default 0.3
 
 
 @ctx.action_class("user")
