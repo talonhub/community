@@ -77,10 +77,13 @@ settings():
 # "numb one" to write "1". Note that this tag will eventually be activated by default
 # tag(): user.prefixed_numbers
 
-# Enabling this change will disable mouse related noise pop actions in command mode
-# Uncomment to enable pop-twice to wake 
+# Uncomment below enable pop_twice_to_wake
+# Without this tag noise_trigger_pop is usually associated with pop to click actions
+# Enabling this tag disables other pop to click actions in sleep mmode, including pop to click
 # tag(): user.pop_twice_to_wake
 
-# Enabling this change will disable mouse related noise_trigger_pop in sleep mode
-# Uncomment to enable "pop_twice_to_repeat", which lets you repeat the last command on two pops
+# Uncomment below enable pop_twice_to_repeat
+# Enabling this tag will repeat the last command when two pops are heard within the alloted time window
+# Without this tag noise_trigger_pop is usually associated with pop to click actions
+# Enabling this tag disables other pop to click actions in command mode, including pop to click
 # tag(): user.pop_twice_to_repeat
