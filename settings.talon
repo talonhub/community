@@ -47,6 +47,10 @@ settings():
     # Set the total number of command history lines to display
     user.command_history_size = 50
 
+    # Set the time window size for to for pop_twice_to_sleep and pop_twice_to_repeat
+    user.last_pop_time_manimum = 0.1
+    user.last_pop_time_maximum = 0.3
+
     # Uncomment to add a directory (relative to the Talon user dir) with additional
     # .snippet files. Changing this setting requires a restart of Talon.
     # user.snippets_dir = "snippets"
