@@ -13,11 +13,11 @@ and tag: user.pop_twice_to_repeat
 """
 
 time_last_pop = 0
-last_pop_time_minimum = settings.get(
-    "user.mouse_enable_pop_stops_scroll"
+double_pop_speed_minimum = settings.get(
+    "user.double_pop_speed_minimum"
 )  # default 0.1
-last_pop_time_maximum = settings.get(
-    "user.mouse_enable_pop_stops_scroll"
+double_pop_speed_maximum = settings.get(
+    "user.double_pop_speed_maximum"
 )  # defualt 0.3
 
 
