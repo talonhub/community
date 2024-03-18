@@ -22,6 +22,6 @@ class UserActions:
     def noise_trigger_pop():
         global time_last_pop
         delta = time.time() - time_last_pop
-        if delta >= last_pop_time_minimum and delta <= last_pop_time_maximum:
+        if delta >= double_pop_speed_minimum and delta <= double_pop_speed_maximum:
             actions.core.repeat_command()
         time_last_pop = time.time()
