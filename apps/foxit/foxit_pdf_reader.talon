@@ -1,6 +1,5 @@
 app: foxit_pdf_reader
 -
-# Set tags
 tag(): user.tabs
 tag(): user.pages
 
