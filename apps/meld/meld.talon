@@ -1,4 +1,3 @@
-os: windows
 app: meld
 -
 tag(): user.tabs

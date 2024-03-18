@@ -15,8 +15,6 @@ ctx.matches = r"""
 app: meld
 """
 
-ctx.tags = ["user.tabs"]
-
 @ctx.action_class("app")
 class AppActions:
     def tab_open():
