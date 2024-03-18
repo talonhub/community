@@ -15,6 +15,7 @@ ctx.matches = r"""
 app: meld
 """
 
+
 @ctx.action_class("app")
 class AppActions:
     def tab_open():
