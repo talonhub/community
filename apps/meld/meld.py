@@ -17,6 +17,7 @@ app: meld
 
 ctx.tags = ["user.tabs"]
 
+
 @ctx.action_class("app")
 class AppActions:
     def tab_open():
@@ -43,5 +44,3 @@ class UserActions:
 
     def tab_duplicate():
         print("Meld does not support this action.")
-
-    
