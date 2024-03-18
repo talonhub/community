@@ -41,5 +41,3 @@ class UserActions:
 
     def tab_duplicate():
         print("Meld does not support this action.")
-
-    
