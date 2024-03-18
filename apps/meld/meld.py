@@ -23,7 +23,7 @@ class AppActions:
     def tab_previous():
         actions.key("ctrl-alt-pageup")
 
-    def tab_previous():
+    def tab_next():
         actions.key("ctrl-alt-pagedown")
 
     def tab_reopen():
