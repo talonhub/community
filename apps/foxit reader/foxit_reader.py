@@ -1,4 +1,4 @@
-from talon import Module, Context, actions
+from talon import Context, Module, actions
 
 mod = Module()
 ctx = Context()
@@ -16,6 +16,7 @@ ctx.matches = """
 app: foxit_reader
 """
 
+
 @ctx.action_class("app")
 class AppActions:
     # app.tabs
@@ -24,6 +25,7 @@ class AppActions:
 
     def tab_reopen():
         actions.app.notify("Foxit does not support this action.")
+
 
 @ctx.action_class("user")
 class UserActions:
@@ -42,7 +44,7 @@ class UserActions:
         actions.key("ctrl-g")
         page = actions.edit.selected_text()
         return int(page)
-    
+
     def page_next():
         actions.key("right")
 
