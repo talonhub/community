@@ -4,7 +4,7 @@ mod = Module()
 ctx = Context()
 
 # --- App definition ---
-mod.apps.foxit_pdf_reader = r"""
+mod.apps.foxit_reader = r"""
 os: windows
 and app.name: /^Foxit Reader/
 os: windows
@@ -13,11 +13,8 @@ and app.exe: /^foxitreader\.exe$/i
 
 # Context matching
 ctx.matches = """
-os: windows
-app: foxit_pdf_reader
+app: foxit_reader
 """
-
-ctx.tags = ["user.tabs", "user.pages"]
 
 @ctx.action_class("app")
 class AppActions:

@@ -1,4 +1,4 @@
-app: foxit_pdf_reader
+app: foxit_reader
 -
 tag(): user.tabs
 tag(): user.pages
