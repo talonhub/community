@@ -6,3 +6,5 @@ hunt this (pace | paste):
     sleep(25ms)
     edit.paste()
 hunt this <user.text>: user.find(text)
+hunt next: user.find_next()
+hunt previous: user.find_previous()
