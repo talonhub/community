@@ -110,7 +110,7 @@ class UserActions:
 
     # splits.py support end
 
-    # find_and_replace.py support begin
+    # find.py support begin
 
     def find(text: str):
         """Triggers find in current editor"""
@@ -124,6 +124,10 @@ class UserActions:
 
     def find_previous():
         actions.key("shift-enter")
+
+    # find.py support end
+
+    # find_and_replace.py support begin
 
     def find_everywhere(text: str):
         """Triggers find across project"""
