@@ -17,6 +17,13 @@ class UserActions:
     def tab_final():
         actions.key("cmd-9")
 
+    # find
+    def find_next():    
+        actions.edit.find_next()        
+
+    def find_previous():    
+        actions.edit.find_previous()
+
 
 @ctx.action_class("browser")
 class BrowserActions:
