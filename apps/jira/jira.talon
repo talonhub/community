@@ -3,6 +3,7 @@ tag: user.jira
 -
 assign {user.jira_alias}:
     key(a)
+    sleep(100ms)
     insert(jira_alias)
 
 edit task:
