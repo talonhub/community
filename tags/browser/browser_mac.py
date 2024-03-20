@@ -18,10 +18,10 @@ class UserActions:
         actions.key("cmd-9")
 
     # find
-    def find_next():    
-        actions.edit.find_next()        
+    def find_next():
+        actions.edit.find_next()
 
-    def find_previous():    
+    def find_previous():
         actions.edit.find_previous()
 
 

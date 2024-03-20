@@ -64,8 +64,8 @@ class UserActions:
         #     actions.insert(text)
         actions.edit.find(text)
 
-    def find_next():    
-        actions.key("ctrl-g")   
+    def find_next():
+        actions.key("ctrl-g")
 
     def find_previous():
         actions.key("ctrl-shift-g")
