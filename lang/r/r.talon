@@ -32,7 +32,7 @@ library <user.code_libraries>:
 # R specific commands
 (chain | pipe that) down:
     key(end)
-    " %>%"
+    " |>"
     key(enter)
 state na: insert("NA")
 
