@@ -1,4 +1,4 @@
-from talon import Context, Module, actions, ui
+from talon import Context, Module, actions, settings, ui
 
 mod = Module()
 mod.tag("draft_editor_active", "Indicates whether the draft editor has been activated")
@@ -23,7 +23,7 @@ def remove_tag(tag: str):
 
 default_names = ["Visual Studio Code", "Code", "VSCodium", "Codium", "code-oss"]
 
-setting_editor_names = mod.setting(
+mod.setting(
     "draft_editor",
     type=str,
     default=None,
@@ -32,7 +32,7 @@ setting_editor_names = mod.setting(
 
 
 def get_editor_names():
-    names_csv = setting_editor_names.get()
+    names_csv = settings.get("user.draft_editor")
     return names_csv.split(", ") if names_csv else default_names
 
 

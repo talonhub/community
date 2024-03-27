@@ -1,6 +1,8 @@
-# knausj_talon
+# community
 
-Community-maintained [Talon](https://talonvoice.com/) command grammar.
+Voice command set for [Talon](https://talonvoice.com/), community-supported.
+
+_(Originally called `knausj_talon`, after [its original creator :superhero:](https://github.com/knausj85))_
 
 Can be used on its own, but shines when combined with:
 
@@ -21,7 +23,7 @@ Can be used on its own, but shines when combined with:
 
 ### Linux & Mac
 
-It is recommended to install `knausj_talon` using [`git`](https://git-scm.com/).
+It is recommended to install `community` using [`git`](https://git-scm.com/).
 
 1. Install [`git`](https://git-scm.com/)
 2. Open a terminal ([Mac](https://support.apple.com/en-gb/guide/terminal/apd5265185d-f365-44cb-8b09-71a064a42125/mac) / [Ubuntu](https://ubuntu.com/tutorials/command-line-for-beginners#3-opening-a-terminal))
@@ -29,14 +31,14 @@ It is recommended to install `knausj_talon` using [`git`](https://git-scm.com/).
 
    ```bash
    cd ~/.talon/user
-   git clone https://github.com/knausj85/knausj_talon knausj_talon
+   git clone https://github.com/talonhub/community community
    ```
 
-Note that it is also possible to install knausj by [downloading and extracting a zip file](#alternate-installation-method-zip-file), but this approach is discouraged because it makes it more difficult to keep track of any changes you may make to your copy of the files.
+Note that it is also possible to install `community` by [downloading and extracting a zip file](#alternate-installation-method-zip-file), but this approach is discouraged because it makes it more difficult to keep track of any changes you may make to your copy of the files.
 
 ### Windows
 
-It is recommended to install `knausj_talon` using [`git`](https://git-scm.com/).
+It is recommended to install `community` using [`git`](https://git-scm.com/).
 
 1. Install [`git`](https://git-scm.com/)
 2. Open a [terminal](https://www.wikihow.com/Open-the-Command-Prompt-in-Windows)
@@ -44,23 +46,23 @@ It is recommended to install `knausj_talon` using [`git`](https://git-scm.com/).
 
    ```
    cd %AppData%\Talon\user
-   git clone https://github.com/knausj85/knausj_talon knausj_talon
+   git clone https://github.com/talonhub/community community
    ```
 
-Note that it is also possible to install knausj by [downloading and extracting a zip file](#alternate-installation-method-zip-file), but this approach is discouraged because it makes it more difficult to keep track of any changes you may make to your copy of the files.
+Note that it is also possible to install `community` by [downloading and extracting a zip file](#alternate-installation-method-zip-file), but this approach is discouraged because it makes it more difficult to keep track of any changes you may make to your copy of the files.
 
 ## Getting started with Talon
 
 1. `help active` will display the available commands for the active application.
    - Available commands can change with the application, or even window title that has focus.
    - You may navigate help using the displayed numbers. e.g., `help one one` or `help eleven` to open the 11th item in the help list.
-   - Note that all help-related commands are defined in [`core/help/help.talon`](https://github.com/knausj85/knausj_talon/blob/main/core/help/help.talon) and [`core/help/help_open.talon`](https://github.com/knausj85/knausj_talon/blob/main/core/help/help_open.talon)
+   - Note that all help-related commands are defined in [`core/help/help.talon`](https://github.com/talonhub/community/blob/main/core/help/help.talon) and [`core/help/help_open.talon`](https://github.com/talonhub/community/blob/main/core/help/help_open.talon)
 2. You can also search for commands by saying `help search <phrase>`. For example, `help search tab` displays all tab-related commands, and `help search help` displays all help-related commands.
 3. You can also jump immediately into a particular help context display by recalling the name displayed in help window (based on the name of the .talon file) e.g. `help symbols` or `help visual studio`
 4. `help alphabet` will display the alphabet
 5. `command history` will toggle a display of the recent commands
 6. `help format` will display the available formatters with examples.
-7. Many useful, basic commands are defined in https://github.com/knausj85/knausj_talon/blob/main/core/edit/standard.talon
+7. Many useful, basic commands are defined in https://github.com/talonhub/community/blob/main/core/edit/edit.talon
    - `undo that` and `redo that` are the default undo/redo commands.
    - `paste that`, `copy that`, and `cut that` for pasting/copy/cutting, respectively.
 8. For community-generated documentation on Talon itself, please visit https://talon.wiki/
@@ -76,7 +78,7 @@ If you use vim, just start with the numbers and alphabet, otherwise look at gene
 ### Alphabet
 
 The alphabet is defined here
-https://github.com/knausj85/knausj_talon/blob/main/core/keys/keys.py#L3
+https://github.com/talonhub/community/blob/main/core/keys/keys.py#L3
 
 `help alphabet` will open a window that displays the alphabet. `help close` to hide the window.
 
@@ -84,9 +86,9 @@ Try saying e.g. `air bat cap` to insert abc.
 
 ### Keys
 
-Keys are defined in keys.py. The alphabet is used for A-Z. For the rest, search for `modifier_keys` and then keep scrolling through the file, eg. roughly https://github.com/knausj85/knausj_talon/blob/main/core/keys/keys.py#L111
+Keys are defined in keys.py. The alphabet is used for A-Z. For the rest, search for `modifier_keys` and then keep scrolling through the file, eg. roughly https://github.com/talonhub/community/blob/main/core/keys/keys.py#L111
 
-All key commands are defined in [keys.talon](https://github.com/knausj85/knausj_talon/blob/main/core/keys/keys.talon). For example, say `shift air` to press `shift-a`, which types a capital `A`.
+All key commands are defined in [keys.talon](https://github.com/talonhub/community/blob/main/core/keys/keys.talon). For example, say `shift air` to press `shift-a`, which types a capital `A`.
 
 On Windows, try commands such as
 
@@ -105,9 +107,9 @@ Any combination of the modifiers, symbols, alphabet, numbers and function keys c
 ### Symbols
 
 Some symbols are defined in keys.py, so you can say e.g. `control colon` to press those keys.
-https://github.com/knausj85/knausj_talon/blob/main/core/keys/keys.py#L140
+https://github.com/talonhub/community/blob/main/core/keys/keys.py#L140
 
-Some other symbols are defined here: https://github.com/knausj85/knausj_talon/blob/main/plugin/symbols/symbols.talon
+Some other symbols are defined here: https://github.com/talonhub/community/blob/main/plugin/symbols/symbols.talon
 
 ### Formatters
 
@@ -118,24 +120,24 @@ Try using formatters by saying e.g. `snake hello world`, which will insert hello
 Multiple formatters can be used together, e.g. `dubstring snake hello world`. This will insert "hello_world"
 
 Formatters (snake, dubstring) are defined here
-https://github.com/knausj85/knausj_talon/blob/main/core/text/formatters.py#L137
+https://github.com/talonhub/community/blob/main/core/text/formatters.py#L137
 
 All formatter-related commands are defined here
-https://github.com/knausj85/knausj_talon/blob/main/core/text/text.talon#L8
+https://github.com/talonhub/community/blob/main/core/text/text.talon#L8
 
 ### Mouse commands
 
-See https://github.com/knausj85/knausj_talon/blob/main/plugin/mouse/mouse.talon
+See https://github.com/talonhub/community/blob/main/plugin/mouse/mouse.talon for commands to click, drag, scroll, and use an eye tracker. To use a grid to click at a certain location on the screen, see [mouse_grid](https://github.com/talonhub/community/tree/main/core/mouse_grid).
 
 ### Generic editing commands
 
-https://github.com/knausj85/knausj_talon/blob/main/core/edit/edit.talon
+https://github.com/talonhub/community/blob/main/core/edit/edit.talon
 
 These generic commands are global. Commands such as `go word left` will work in any text box.
 
 ### Repeating commands
 
-For repeating commands, useful voice commands are defined here: https://github.com/knausj85/knausj_talon/blob/main/plugin/repeater/repeater.talon
+For repeating commands, useful voice commands are defined here: https://github.com/talonhub/community/blob/main/plugin/repeater/repeater.talon
 
 Try saying e.g. `go up fifth` will go up five lines.
 Try saying e.g. `select up third` to hit `shift-up` three times to select some lines in a text field.
@@ -143,7 +145,7 @@ Try saying e.g. `select up third` to hit `shift-up` three times to select some l
 ### Window management
 
 Global window managment commands are defined here:
-https://github.com/knausj85/knausj_talon/blob/main/core/windows_and_tabs/window_management.talon
+https://github.com/talonhub/community/blob/main/core/windows_and_tabs/window_management.talon
 
 - `running list` will toggle a GUI list of words you can say to switch to running applications.
 - `focus chrome` will focus the chrome application.
@@ -151,7 +153,7 @@ https://github.com/knausj85/knausj_talon/blob/main/core/windows_and_tabs/window_
 
 ### Screenshot commands
 
-https://github.com/knausj85/knausj_talon/blob/main/plugin/screenshot/screenshot.talon
+https://github.com/talonhub/community/blob/main/plugin/screenshot/screenshot.talon
 
 ### Programming Languages
 
@@ -159,14 +161,14 @@ Specific programming languages may be activated by voice commands, or via title 
 
 Activating languages via commands will enable the commands globally, e.g. they'll work in any application. This will also disable the title tracking method (code.language in .talon files) until the "clear language modes" voice command is used.
 
-The commands for enabling languages are defined here: https://github.com/knausj85/knausj_talon/blob/main/core/modes/language_modes.talon
+The commands for enabling languages are defined here: https://github.com/talonhub/community/blob/main/core/modes/language_modes.talon
 
 By default, title tracking activates coding languages in supported applications such as VSCode, Visual Studio (requires plugin), and Notepad++.
 
 To enable title tracking for your application:
 
 1. The active filename (including extension) must be included in the editor's title
-2. Implement the required Talon-defined `filename` action to correctly extract the filename from the programs's title. See https://github.com/knausj85/knausj_talon/blob/main/apps/vscode/vscode.py#L122-L138 for an example.
+2. Implement the required Talon-defined `filename` action to correctly extract the filename from the programs's title. See https://github.com/talonhub/community/blob/main/apps/vscode/vscode.py#L122-L138 for an example.
 
 Python, C#, Talon and javascript language support is currently broken up into several tags in an attempt to define a common grammar where possible between languages. Each tag is defined by a .talon file, which defines the voice commands, and a Python file which declares the actions that should be implemented by each concrete language implementation to support those voice commands. Currently, the tags which are available are:
 
@@ -192,7 +194,7 @@ The support for the language-specific implementations of actions are then locate
 
 - `lang/{your-language}/{your-language}.py`
 
-To start support for a new language, ensure the appropriate extension is added to the [`language_extensions` in language_modes.py](https://github.com/knausj85/knausj_talon/blob/main/core/modes/language_modes.py#L9).
+To start support for a new language, ensure the appropriate extension is added to the [`language_extensions` in language_modes.py](https://github.com/talonhub/community/blob/main/core/modes/language_modes.py#L9).
 Then create the following files:
 
 - `lang/{your-language}/{your-language}.py`
@@ -204,7 +206,7 @@ You may also want to add a force command to `language_modes.talon`.
 
 ## File Manager commands
 
-For the following file manager commands to work, your file manager must display the full folder path in the title bar. https://github.com/knausj85/knausj_talon/blob/main/tags/file_manager/file_manager.talon
+For the following file manager commands to work, your file manager must display the full folder path in the title bar. https://github.com/talonhub/community/blob/main/tags/file_manager/file_manager.talon
 
 For Mac OS X's Finder, run this command in terminal to display the full path in the title.
 
@@ -226,7 +228,7 @@ Notes:
 To implement support for a new program, you need to implement the relevant file manager actions for your application and assert the user.file_manager tag.
 
 - There are a number of example implementations in the repository. Finder is a good example to copy and customize to your application as needed.
-  https://github.com/knausj85/knausj_talon/blob/main/apps/finder/finder.py
+  https://github.com/talonhub/community/blob/main/apps/finder/finder.py
 
 ## Terminal commands
 
@@ -243,6 +245,8 @@ tag(): user.tabs
 
 For instance, kubectl commands (kubernetes) aren't relevant to everyone.
 
+Note also that while some of the command sets associated with these tags are defined in talon files within [tags](https://github.com/talonhub/community/tree/main/tags), others, like git, are defined within [apps](https://github.com/talonhub/community/tree/main/apps). Additionally, the commands for tabs are defined in [tabs.talon](https://github.com/talonhub/community/blob/main/core/windows_and_tabs/tabs.talon).
+
 ### Unix utilities
 
 If you have a Unix (e.g. OSX) or Linux computer, you can enable support for a number of
@@ -255,41 +259,26 @@ line in [unix_shell.py](tags/terminal/unix_shell.py):
 
 Once you have uncommented the line, you can customize your utility commands by editing
 `settings/unix_utilities.csv`. Note: this directory is created when first running Talon
-with knausj_talon enabled.
+with community enabled.
 
 ## Jetbrains commands
 
 For Jetbrains commands to work you must install https://plugins.jetbrains.com/plugin/10504-voice-code-idea
 into each editor.
 
+## Additional commands
+
+There are other commands not described fully within this file. As an overview:
+
+- The apps folder has command sets for use within different applications
+- The core folder has various commands described [here](https://github.com/talonhub/community/blob/main/core/README.md)
+- The lang folder has commands for writing [programming languages](https://github.com/talonhub/community?tab=readme-ov-file#programming-languages)
+- The plugin folder has various commands described [here](https://github.com/talonhub/community/blob/main/plugin/README.md)
+- The tags folder has various other commands, such as using a browser, navigating a filesystem in terminal, and managing multiple cursors
+
 ## Settings
 
-Several options are configurable via a single settings file out of the box. Any setting can be made context specific as needed (e.g., per-OS, per-app, etc).
-
-https://github.com/knausj85/knausj_talon/blob/main/settings.talon
-
-```
-#adjust the scale of the imgui to my liking
-imgui.scale = 1.3
-# enable if you'd like the picker gui to automatically appear when explorer has focus
-user.file_manager_auto_show_pickers = 0
-#set the max number of command lines per page in help
-user.help_max_command_lines_per_page = 50
-# set the max number of contexts display per page in help
-user.help_max_contexts_per_page = 20
-# The default amount used when scrolling continuously
-user.mouse_continuous_scroll_amount = 80
-#stop continuous scroll/gaze scroll with a pop
-user.mouse_enable_pop_stops_scroll = 1
-#enable pop click with 'control mouse' mode
-user.mouse_enable_pop_click = 1
-#When enabled, the 'Scroll Mouse' GUI will not be shown.
-user.mouse_hide_mouse_gui = 0
-#hide cursor when mouse_wake is called to enable zoom mouse
-user.mouse_wake_hides_cursor = 0
-#the amount to scroll up/down (equivalent to mouse wheel on Windows by default)
-user.mouse_wheel_down_amount = 120
-```
+Several options are configurable via a [single settings file](settings.talon) out of the box. Any setting can be made context specific as needed (e.g., per-OS, per-app, etc).
 
 The most commonly adjusted settings are probably
 
@@ -299,11 +288,11 @@ The most commonly adjusted settings are probably
 
 • `user.mouse_wheel_down_amount` and `user.mouse_continuous_scroll_amount` for adjusting the scroll amounts for the various scroll commands.
 
-Also, you can add additional vocabulary words, words to replace, search engines and more. Complete the knausj_talon setup instructions above, then open the `settings` folder to see the provided CSV files and customize them as needed.
+Also, you can add additional vocabulary words, words to replace, search engines and more. Complete the community setup instructions above, then open the `settings` folder to see the provided CSV files and customize them as needed.
 
 ## Other talon user file sets
 
-In addition to this repo, there are [other Talon user file sets](https://talon.wiki/talon_user_file_sets/) containing additional commands that you may want to experiment with if you're feeling adventurous 😊. Many of them are meant to be used alongside knausj, but a few of them are designed as replacements. If it's not clear which, please file an issue against the given GitHub repository for that user file set!
+In addition to this repo, there are [other Talon user file sets](https://talon.wiki/talon_user_file_sets/) containing additional commands that you may want to experiment with if you're feeling adventurous 😊. Many of them are meant to be used alongside `community`, but a few of them are designed as replacements. If it's not clear which, please file an issue against the given GitHub repository for that user file set!
 
 # Collaborators
 
@@ -341,7 +330,7 @@ You then have a few options as to when to run it:
 - Run yourself at any time on your locally changed files: `pre-commit run`
 - Run yourself on all files in the repository: `pre-commit run --all-files`
 - Run automatically on your PRs (fixes will be pushed automatically to your branch):
-  - Visit https://pre-commit.ci/ and authorize the app to connect to your knausj fork.
+  - Visit https://pre-commit.ci/ and authorize the app to connect to your `community` fork.
 - Set up an editor hook to run on save:
   - You could follow the instructions for [Black](https://black.readthedocs.io/en/stable/integrations/editors.html), which are well written; simply replace `black <path>` with `pre-commit run --files <file>`.
   - It's more performant to only reformat the specific file you're editing, rather than all changed files.
@@ -366,10 +355,10 @@ For community-generated documentation on Talon, please visit https://talon.wiki/
 
 ## Alternate installation method: Zip file
 
-It is possible to install knausj by downloading and extracting a zip file instead of using `git`. Note that this approach is discouraged, because it makes it more difficult to keep track of any changes you may make to your copy of the files.
+It is possible to install `community` by downloading and extracting a zip file instead of using `git`. Note that this approach is discouraged, because it makes it more difficult to keep track of any changes you may make to your copy of the files.
 
-If you wish to install `knausj_talon` by downloading and extracting a zip file, proceed as follows:
+If you wish to install `community` by downloading and extracting a zip file, proceed as follows:
 
-1. Download the [zip archive of knausj_talon](https://github.com/knausj85/knausj_talon/archive/refs/heads/main.zip)
+1. Download the [zip archive of community](https://github.com/talonhub/community/archive/refs/heads/main.zip)
 1. Extract the files. If you don’t know how to extract zip files, a quick google search for "extract zip files" may be helpful.
 1. Place these extracted files inside the `user` folder of the Talon Home directory. You can find this folder by right clicking the Talon icon in taskbar, clicking Scripting > Open ~/talon, and navigating to `user`.

@@ -5,18 +5,18 @@ from collections import defaultdict
 from itertools import islice
 from typing import Iterable
 
-from talon import Context, Module, actions, imgui, registry
+from talon import Context, Module, actions, imgui, registry, settings
 
 mod = Module()
 mod.list("help_contexts", desc="list of available contexts")
 mod.tag("help_open", "tag for commands that are available only when help is visible")
-setting_help_max_contexts_per_page = mod.setting(
+mod.setting(
     "help_max_contexts_per_page",
     type=int,
     default=20,
     desc="Max contexts to display per page in help",
 )
-setting_help_max_command_lines_per_page = mod.setting(
+mod.setting(
     "help_max_command_lines_per_page",
     type=int,
     default=50,
@@ -75,6 +75,8 @@ def gui_formatters(gui: imgui.GUI):
         gui.text(f"{val}: {key}")
 
     gui.spacer()
+    gui.text("* prose formatter")
+    gui.spacer()
     if gui.button("Help close"):
         gui_formatters.hide()
 
@@ -83,9 +85,11 @@ def format_context_title(context_name: str) -> str:
     global cached_active_contexts_list
     return "{} [{}]".format(
         context_name,
-        "ACTIVE"
-        if context_map.get(context_name, None) in cached_active_contexts_list
-        else "INACTIVE",
+        (
+            "ACTIVE"
+            if context_map.get(context_name, None) in cached_active_contexts_list
+            else "INACTIVE"
+        ),
     )
 
 
@@ -97,9 +101,11 @@ def format_context_button(index: int, context_label: str, context_name: str) -> 
         return "{}. {}{}".format(
             index,
             context_label,
-            "*"
-            if context_map.get(context_name, None) in cached_active_contexts_list
-            else "",
+            (
+                "*"
+                if context_map.get(context_name, None) in cached_active_contexts_list
+                else ""
+            ),
         )
     else:
         return f"{index}. {context_label} "
@@ -107,20 +113,22 @@ def format_context_button(index: int, context_label: str, context_name: str) -> 
 
 # translates 1-based index -> actual index in sorted_context_map_keys
 def get_context_page(index: int) -> int:
-    return math.ceil(index / setting_help_max_contexts_per_page.get())
+    return math.ceil(index / settings.get("user.help_max_contexts_per_page"))
 
 
 def get_total_context_pages() -> int:
     return math.ceil(
-        len(sorted_display_list) / setting_help_max_contexts_per_page.get()
+        len(sorted_display_list) / settings.get("user.help_max_contexts_per_page")
     )
 
 
 def get_current_context_page_length() -> int:
-    start_index = (current_context_page - 1) * setting_help_max_contexts_per_page.get()
+    start_index = (current_context_page - 1) * settings.get(
+        "user.help_max_contexts_per_page"
+    )
     return len(
         sorted_display_list[
-            start_index : start_index + setting_help_max_contexts_per_page.get()
+            start_index : start_index + settings.get("user.help_max_contexts_per_page")
         ]
     )
 
@@ -148,9 +156,8 @@ def get_pages(item_line_counts: list[int]) -> list[int]:
     current_page = 1
     pages = []
     for line_count in item_line_counts:
-        if (
-            line_count + current_page_line_count
-            > setting_help_max_command_lines_per_page.get()
+        if line_count + current_page_line_count > settings.get(
+            "user.help_max_command_lines_per_page"
         ):
             if current_page_line_count == 0:
                 # Special case, render a larger page.
@@ -466,7 +473,7 @@ def hide_all_help_guis():
 
 
 def paginate_list(data, SIZE=None):
-    chunk_size = SIZE or setting_help_max_command_lines_per_page.get()
+    chunk_size = SIZE or settings.get("user.help_max_command_lines_per_page")
     it = iter(data)
     for i in range(0, len(data), chunk_size):
         yield {k: data[k] for k in islice(it, chunk_size)}
@@ -544,12 +551,6 @@ class Actions:
         global formatters_words
         formatters_words = ab
         reset()
-        # print("help_alphabet - alphabet gui_alphabet: {}".format(gui_alphabet.showing))
-        # print(
-        #     "help_alphabet - gui_context_help showing: {}".format(
-        #         gui_context_help.showing
-        #     )
-        # )
         hide_all_help_guis()
         gui_formatters.show()
         register_events(False)
@@ -634,8 +635,9 @@ class Actions:
         """Select the context by a number"""
         global sorted_display_list, selected_context
         if gui_context_help.showing:
-            if index < setting_help_max_contexts_per_page.get() and (
-                (current_context_page - 1) * setting_help_max_contexts_per_page.get()
+            if index < settings.get("user.help_max_contexts_per_page") and (
+                (current_context_page - 1)
+                * settings.get("user.help_max_contexts_per_page")
                 + index
                 < len(sorted_display_list)
             ):
@@ -643,7 +645,7 @@ class Actions:
                     selected_context = display_name_to_context_name_map[
                         sorted_display_list[
                             (current_context_page - 1)
-                            * setting_help_max_contexts_per_page.get()
+                            * settings.get("user.help_max_contexts_per_page")
                             + index
                         ]
                     ]

@@ -1,7 +1,8 @@
-tag: user.r
+code.language: r
 -
 tag(): user.code_imperative
 
+tag(): user.code_block_c_like
 tag(): user.code_comment_line
 tag(): user.code_data_bool
 tag(): user.code_data_null

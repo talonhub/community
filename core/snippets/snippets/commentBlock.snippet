@@ -1,0 +1,21 @@
+name: commentBlock
+phrase: block comment
+insertionScope: statement
+
+$0.insertionFormatter: CAPITALIZE_FIRST_WORD
+---
+
+language: c | javascript | java
+-
+/* $0 */
+---
+
+language: python
+-
+"""$0"""
+---
+
+language: html
+-
+<!-- $0 -->
+---
