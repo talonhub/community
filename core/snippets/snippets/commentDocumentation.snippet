@@ -1,0 +1,16 @@
+name: commentDocumentation
+phrase: doc comment | doc string
+insertionScope: statement
+
+$0.insertionFormatter: CAPITALIZE_FIRST_WORD
+---
+
+language: javascript | java
+-
+/** $0 */
+---
+
+language: python
+-
+"""$0"""
+---

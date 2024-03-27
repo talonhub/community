@@ -1,14 +1,12 @@
 from typing import Optional
 
-from talon import Module, actions, imgui, speech_system
+from talon import Module, actions, imgui, settings, speech_system
 
 # We keep command_history_size lines of history, but by default display only
 # command_history_display of them.
 mod = Module()
-setting_command_history_size = mod.setting("command_history_size", int, default=50)
-setting_command_history_display = mod.setting(
-    "command_history_display", int, default=10
-)
+mod.setting("command_history_size", type=int, default=50)
+mod.setting("command_history_display", type=int, default=10)
 
 hist_more = False
 history = []
@@ -23,7 +21,7 @@ def on_phrase(j):
 
     if text is not None:
         history.append(text)
-        history = history[-setting_command_history_size.get() :]
+        history = history[-settings.get("user.command_history_size") :]
 
 
 # todo: dynamic rect?
@@ -33,7 +31,9 @@ def gui(gui: imgui.GUI):
     gui.text("Command History")
     gui.line()
     text = (
-        history[:] if hist_more else history[-setting_command_history_display.get() :]
+        history[:]
+        if hist_more
+        else history[-settings.get("user.command_history_display") :]
     )
     for line in text:
         gui.text(line)

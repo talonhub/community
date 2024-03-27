@@ -1,9 +1,10 @@
-tag: user.php
+code.language: php
 -
 tag(): user.code_imperative
 tag(): user.code_object_oriented
 tag(): user.code_libraries
 
+tag(): user.code_block_c_like
 tag(): user.code_comment_line
 tag(): user.code_comment_block
 tag(): user.code_comment_documentation

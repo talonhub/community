@@ -1,0 +1,37 @@
+name: tryCatchStatement
+phrase: try catch
+insertionScope: statement
+
+$1.wrapperPhrase: try
+$1.wrapperScope: statement
+$0.wrapperPhrase: catch
+$0.wrapperScope: statement
+---
+
+language: javascript
+-
+try {
+    $1
+}
+catch(error) {
+    $0
+}
+---
+
+language: java
+-
+try {
+    $1
+}
+catch(Exception ex) {
+    $0
+}
+---
+
+language: python
+-
+try:
+    $1
+except Exception as ex:
+    $0
+---

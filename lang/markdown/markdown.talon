@@ -1,4 +1,4 @@
-tag: user.markdown
+code.language: markdown
 -
 (level | heading | header) one:
     edit.line_start()
@@ -39,10 +39,7 @@ list six:
     "                    - "
 
 {user.markdown_code_block_language} block:
-    "```{markdown_code_block_language}"
-    key(enter:2)
-    "```"
-    key(up)
+    user.insert_snippet("```{markdown_code_block_language}\n$0\n```")
 
 link:
     "[]()"

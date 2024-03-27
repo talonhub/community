@@ -3,7 +3,7 @@ from talon import Context, Module, actions, settings
 ctx = Context()
 mod = Module()
 ctx.matches = r"""
-tag: user.scala
+code.language: scala
 """
 
 # Scala Common Types
@@ -86,11 +86,6 @@ ctx.lists["user.scala_keyword"] = scala_keywords
 
 @ctx.action_class("user")
 class UserActions:
-    def code_block():
-        actions.insert("{}")
-        actions.edit.left()
-        actions.key("enter")
-
     def code_operator_lambda():
         actions.insert(" => ")
 

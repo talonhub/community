@@ -3,7 +3,7 @@ from talon import Context, Module, actions, settings
 ctx = Context()
 mod = Module()
 ctx.matches = r"""
-tag: user.java
+code.language: java
 """
 
 # Primitive Types
@@ -238,15 +238,6 @@ class UserActions:
 
     def code_import():
         actions.insert("import ")
-
-    def code_private_function(text: str):
-        actions.insert("private")
-
-    def code_protected_function(text: str):
-        actions.user.code_private_function()
-
-    def code_public_function(text: str):
-        actions.insert("public ")
 
     def code_state_return():
         actions.insert("return ")

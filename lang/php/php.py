@@ -2,7 +2,7 @@ from talon import Context, actions, settings
 
 ctx = Context()
 ctx.matches = r"""
-tag: user.php
+code.language: php
 """
 
 ctx.lists["user.code_type"] = {
@@ -26,11 +26,6 @@ class UserActions:
 
     def code_define_class():
         actions.auto_insert("class ")
-
-    def code_block():
-        actions.insert("{}")
-        actions.edit.left()
-        actions.key("enter")
 
     def code_import():
         actions.auto_insert("use ;")
