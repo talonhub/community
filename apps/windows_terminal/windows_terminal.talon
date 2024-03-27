@@ -1,4 +1,7 @@
-app: windows_terminal
+os: windows
+and app.name: WindowsTerminal.exe
+os: windows
+and app.exe: windowsterminal.exe
 -
 # makes the commands in terminal.talon available
 tag(): terminal

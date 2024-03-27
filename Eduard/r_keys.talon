@@ -58,8 +58,10 @@ column names:
 
 chain:
     key(end)
-    " %>%"
-    
+    " |>"
+
+chain here:
+    " |> "
 
 ########## Single cell RNA sequencing ##########
 
