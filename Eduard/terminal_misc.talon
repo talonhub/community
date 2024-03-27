@@ -1,4 +1,8 @@
-tag: terminal
+os: windows
+and app.name: WindowsTerminal.exe
+os: windows
+and app.exe: windowsterminal.exe
+#tag: terminal
 -
 jupiter: "jupyter notebook "	
  
