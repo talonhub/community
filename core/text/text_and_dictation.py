@@ -20,7 +20,6 @@ ctx = Context()
 ctx.lists["user.prose_modifiers"] = {
     "cap": "cap",
     "no cap": "no_cap",
-    "no caps": "no_cap",  # "no caps" variant for Dragon
     "no space": "no_space",
 }
 ctx.lists["user.prose_snippets"] = {
