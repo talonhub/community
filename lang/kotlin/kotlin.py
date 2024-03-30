@@ -2,7 +2,7 @@ from talon import Context, Module, actions, settings
 
 ctx = Context()
 ctx.matches = r"""
-tag: user.kotlin
+code.language: kotlin
 """
 
 
@@ -10,12 +10,6 @@ tag: user.kotlin
 class UserActions:
     def code_comment_line_prefix():
         actions.insert("// ")
-
-    def code_operator_indirection():
-        actions.skip()
-
-    def code_operator_address_of():
-        actions.skip()
 
     def code_operator_lambda():
         actions.auto_insert(" -> ")
@@ -118,37 +112,27 @@ class UserActions:
         actions.insert(" != null")
 
     def code_state_if():
-        actions.insert("if () ")
-        actions.key("left")
-        actions.key("left")
+        actions.user.insert_between("if (", ") ")
 
     def code_state_else_if():
-        actions.insert("else if () ")
-        actions.key("left")
-        actions.key("left")
+        actions.user.insert_between("else if (", ") ")
 
     def code_state_else():
         actions.insert("else ")
         actions.key("enter")
 
     def code_state_switch():
-        actions.insert("switch () ")
-        actions.key("left")
-        actions.edit.left()
+        actions.user.insert_between("switch (", ") ")
 
     def code_state_case():
         actions.insert("case \nbreak;")
         actions.edit.up()
 
     def code_state_for():
-        actions.insert("for () ")
-        actions.key("left")
-        actions.key("left")
+        actions.user.insert_between("for (", ") ")
 
     def code_state_while():
-        actions.insert("while () ")
-        actions.edit.left()
-        actions.edit.left()
+        actions.user.insert_between("while (", ") ")
 
     def code_define_class():
         actions.auto_insert("class ")

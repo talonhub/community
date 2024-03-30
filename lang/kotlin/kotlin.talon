@@ -1,4 +1,4 @@
-tag: user.kotlin
+code.language: kotlin
 -
 tag(): user.code_imperative
 tag(): user.code_object_oriented
@@ -23,5 +23,5 @@ settings():
     user.code_protected_variable_formatter = "PRIVATE_CAMEL_CASE"
     user.code_public_variable_formatter = "PRIVATE_CAMEL_CASE"
 
-state var: "var "
-state val: "val "
+state var:                  "var "
+state val:                  "val "
