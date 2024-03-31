@@ -20,5 +20,11 @@ and app.name: Microsoft Teams (work or school)
 os: windows
 and app.exe: ms-teams.exe
 """
+mod.apps.microsoft_teams_work_or_school = r"""
+os: windows
+and app.name: Microsoft Teams (work or school)
+os: windows
+and app.exe: /^ms\-teams\.exe$/i
+"""
 
 mod.list("teams_alias", desc="list of teams user aliases")
