@@ -2,8 +2,6 @@ list: user.vocabulary
 -
 under documented: under-documented
 admin: admin
-Cisco: Cisco
-Citrix: Citrix
 VPN: VPN
 DNS: DNS
 Minecraft: Minecraft

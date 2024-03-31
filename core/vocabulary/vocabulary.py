@@ -132,9 +132,9 @@ _default_vocabulary.update({word: word for word in _simple_vocab_default})
 # implementation of `dictate.replace_words` (at bottom of file) to rewrite words
 # and phrases Talon recognized. This does not change the priority with which
 # Talon recognizes particular phrases over others.
-@track_csv_list("additional_words.csv", headers=("Word(s)", "Spoken Form (If Different)"),default=_default_vocabulary)
-def on_additional_words(values):
-    ctx.lists["user.vocabulary"] = values
+# @track_csv_list("additional_words.csv", headers=("Word(s)", "Spoken Form (If Different)"),default=_default_vocabulary)
+# def on_additional_words(values):
+#     ctx.lists["user.vocabulary"] = values
 
 # Unit tests for PhraseReplacer
 rep = PhraseReplacer(
