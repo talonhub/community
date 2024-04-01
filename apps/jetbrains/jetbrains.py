@@ -59,33 +59,42 @@ port_mapping = {
 }
 
 
-def _get_nonce(port, file_prefix):
-    file_name = file_prefix + str(port)
-    try:
-        with open(os.path.join(tempfile.gettempdir(), file_name)) as fh:
-            return fh.read()
-    except FileNotFoundError as e:
-        try:
-            home = str(Path.home())
-            with open(os.path.join(home, file_name)) as fh:
-                return fh.read()
-        except FileNotFoundError as eb:
-            print(f"Could not find {file_name} in tmp or home")
-            return None
-    except OSError as e:
-        print(e)
-        return None
+def _get_nonce(port):
+    locations = [Path(tempfile.gettempdir()), Path.home()]
+    file_names = [p + str(port) for p in (".vcidea_", "vcidea_")]
+    any_file_existed = False
+    nonce = None
+    errors_encountered = []
+    for l in locations:
+        for fn in file_names:
+            to_try = l / fn
+            if to_try.exists():
+                any_file_existed = True
+                try:
+                    nonce = to_try.read_text()
+                except Exception as e:
+                    errors_encountered.append(e)
+    if nonce is None:
+        if any_file_existed:
+            print("could not read voicecode-idea nonce file! jetbrains commands will not work!")
+            for e in errors_encountered:
+                print("  ", e)
+        else:
+            print(f"Could not find any voicecode-idea nonce files, .vcidea_{port} or vcidea_{port} in {' or '.join(locations)}! jetbrains commands will not work!")
+    return nonce
 
 
 def send_idea_command(cmd):
-    print(f"Sending {cmd}")
     active_app = ui.active_app()
     bundle = active_app.bundle or active_app.name
     port = port_mapping.get(bundle, None)
-    nonce = _get_nonce(port, ".vcidea_") or _get_nonce(port, "vcidea_")
+    if port is None:
+        print(f"could not figure out port to use for jetbrains application '{bundle}'; vscode-idea commands will not work!")
+        return
+    nonce = _get_nonce(port)
     proxies = {"http": None, "https": None}
-    print(f"sending {bundle} {port} {nonce}")
     if port and nonce:
+        print(f"sending voicecode-idea command {cmd} to {bundle} {port} {nonce}")
         response = requests.get(
             f"http://localhost:{port}/{nonce}/{cmd}",
             proxies=proxies,
@@ -101,7 +110,6 @@ def get_idea_location():
 
 def idea_commands(commands):
     command_list = commands.split(",")
-    print("executing jetbrains", commands)
     global extendCommands
     extendCommands = command_list
     for cmd in command_list:
