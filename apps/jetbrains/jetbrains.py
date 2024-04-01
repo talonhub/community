@@ -76,11 +76,15 @@ def _get_nonce(port):
                     errors_encountered.append(e)
     if nonce is None:
         if any_file_existed:
-            print("could not read voicecode-idea nonce file! jetbrains commands will not work!")
+            print(
+                "could not read voicecode-idea nonce file! jetbrains commands will not work!"
+            )
             for e in errors_encountered:
                 print("  ", e)
         else:
-            print(f"Could not find any voicecode-idea nonce files, .vcidea_{port} or vcidea_{port} in {' or '.join(locations)}! jetbrains commands will not work!")
+            print(
+                f"Could not find any voicecode-idea nonce files, .vcidea_{port} or vcidea_{port} in {' or '.join(locations)}! jetbrains commands will not work!"
+            )
     return nonce
 
 
@@ -89,7 +93,9 @@ def send_idea_command(cmd):
     bundle = active_app.bundle or active_app.name
     port = port_mapping.get(bundle, None)
     if port is None:
-        print(f"could not figure out port to use for jetbrains application '{bundle}'; vscode-idea commands will not work!")
+        print(
+            f"could not figure out port to use for jetbrains application '{bundle}'; vscode-idea commands will not work!"
+        )
         return
     nonce = _get_nonce(port)
     proxies = {"http": None, "https": None}
