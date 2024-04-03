@@ -118,7 +118,7 @@ class UserActions:
         actions.user.insert_between("else if (", ") ")
 
     def code_state_else():
-        actions.insert("else ")
+        actions.user.insert_between(" else {", "}")
         actions.key("enter")
 
     def code_state_switch():
