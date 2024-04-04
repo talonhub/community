@@ -1,9 +1,30 @@
 from talon import Context, Module, actions, settings
 
 ctx = Context()
+mod = Module()
 ctx.matches = r"""
 code.language: kotlin
 """
+
+# Java Modifies
+kotlin_modifiers = {
+    "var": "var",
+    "val": "val",
+    "lateinit": "lateinit",
+    "public": "public",
+    "private": "private",
+    "protected": "protected",
+    "static": "static",
+    "synchronized": "synchronized",
+    "volatile": "volatile",
+    "transient": "transient",
+    "abstract": "abstract",
+    "interface": "interface",
+    "final": "final",
+}
+
+mod.list("kotlin_modifier", desc="Kotlin Modifiers")
+ctx.lists["self.kotlin_modifier"] = kotlin_modifiers
 
 
 @ctx.action_class("user")
@@ -15,8 +36,7 @@ class UserActions:
         actions.auto_insert(" -> ")
 
     def code_operator_subscript():
-        actions.insert("[]")
-        actions.key("left")
+        actions.user.insert_between("[", "]")
 
     def code_operator_assignment():
         actions.auto_insert(" = ")
