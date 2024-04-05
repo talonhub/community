@@ -8,7 +8,7 @@ If you'd like to use Cursorless, follow the instructions in the [cursorless-talo
 
 ## Terminal
 
-By default the VSCode terminal is not going to recognize terminal commands from talon. In order for talon to configure terminal commands in VSCode the window has to include a word that it can use to match. This is possible using the VSCode setting to include word terminal in the title. You can do this with this setting in VSCode:
+In order to use terminal commands when the VSCode terminal is focused, you must add the following line to your [VSCode `settings.json`](https://code.visualstudio.com/docs/getstarted/settings#_settingsjson):
 
 ```
 "window.title": "${dirty}${activeEditorShort}${separator}${rootName}${separator}${profileName}${separator}${appName}${separator}focus:[${focusedView}]",
