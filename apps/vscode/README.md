@@ -13,3 +13,7 @@ In order to use terminal commands when the VSCode terminal is focused, you must 
 ```
 "window.title": "${dirty}${activeEditorShort}${separator}${rootName}${separator}${profileName}${separator}${appName}${separator}focus:[${focusedView}]",
 ```
+
+This setting will cause VSCode to include a special string in the window title whenever the terminal is focused. Talon will look for this string in the window title and activate the terminal commands in response.
+
+Note that if you have customizations in your window title that you'd like to keep, the important part is just to ensure that `focus:[${focusedView}]` appears somewhere within your custom window title.
