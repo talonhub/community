@@ -75,6 +75,11 @@ class Actions:
     def talon_code_insert_function(text: str, selection: str):
         """inserts talon-specific action call"""
         actions.user.code_insert_function(text, selection)
+    
+    def talon_action_insert_definition(text: str):
+        """inserts talon-specific action definition"""
+        text = f"def {text}($1)\n\t$2".replace("user.", "")
+        actions.user.insert_snippet(text)
 
     def talon_code_enable_tag(tag: str):
         """enables tag in either python or talon files"""

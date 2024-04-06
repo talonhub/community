@@ -315,7 +315,10 @@ cell run above: user.vscode("notebook.cell.executeCellsAbove")
 cell run: user.vscode("notebook.cell.execute")
 
 add dock string: user.vscode("autoDocstring.generateDocstring")
-next: user.vscode_and_wait("jumpToNextSnippetPlaceholder")
+next [<number_small>]: 
+    number = number_small or 1
+    user.vscode_and_wait("jumpToNextSnippetPlaceholder")
+    repeat(number - 1)
 snip last: user.vscode("jumpToPrevSnippetPlaceholder")
 skip:
     key("backspace")
