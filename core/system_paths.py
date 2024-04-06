@@ -3,6 +3,7 @@ This module gives us the list {user.system_paths} and the capture <user.system_p
 the list to easily refer to system paths in talon and python files. It also creates a file
 system_paths.csv in the settings folder so they user can easily add their own custom paths.
 """
+
 import os
 
 from talon import Context, Module, actions, app

@@ -116,10 +116,6 @@ class UserActions:
     def code_operator_bitwise_right_shift_assignment():
         actions.auto_insert(" >>= ")
 
-    def code_block():
-        actions.insert("{}")
-        actions.key("left enter enter up tab")
-
     def code_self():
         actions.auto_insert("this")
 
