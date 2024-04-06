@@ -68,7 +68,6 @@ settings():
     # user.window_snap_screen = "size aware"
 
     # Puts Talon into sleep mode if no commands are spoken for a defined period of time.
-    # Changing this setting requires a restart of Talon
     # user.listening_timeout_minutes = 3
 
 # Uncomment to enable the curse yes/curse no commands (show/hide mouse cursor).
