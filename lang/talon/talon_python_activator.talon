@@ -1,6 +1,6 @@
 # This file activates talon-specific python commands
 # by default, it simply looks for the python tag to be active
-# lines 7-13 provide examples to make the activation more specific
+# lines 7-11 provide examples to make the activation more specific
 # which may be preferred by people who code in other python projects
 # app: vscode
 # Mac VSCode uses an em-dash
