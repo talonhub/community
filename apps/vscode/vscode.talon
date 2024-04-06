@@ -6,6 +6,8 @@ tag(): user.line_commands
 tag(): user.multiple_cursors
 tag(): user.splits
 tag(): user.tabs
+tag(): user.history
+
 shave <user.cursorless_target>:
     user.cursorless_command("setSelectionBefore", cursorless_target)
     key("backspace")
@@ -156,8 +158,6 @@ ref last:
 
 #code navigation
 (go declaration | follow): user.vscode("editor.action.revealDefinition")
-go back: user.vscode("workbench.action.navigateBack")
-go forward: user.vscode("workbench.action.navigateForward")
 go implementation: user.vscode("editor.action.goToImplementation")
 go type: user.vscode("editor.action.goToTypeDefinition")
 go usage: user.vscode("references-view.find")

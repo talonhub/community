@@ -3,6 +3,8 @@ app: finder
 -
 tag(): user.file_manager
 tag(): user.tabs
+tag(): user.history
+
 preferences: key(cmd-,)
 options: key(cmd-j)
 search: key(cmd-alt-f)

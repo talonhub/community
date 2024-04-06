@@ -2,8 +2,6 @@ tag: user.file_manager
 -
 title force: user.file_manager_refresh_title()
 go <user.directory>: user.file_manager_open_directory(directory)
-go back: user.file_manager_go_back()
-go forward: user.file_manager_go_forward()
 (go parent | daddy) [<number_small>]: 
     number = number_small or 0
     user.file_manager_open_parent()
