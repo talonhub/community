@@ -11,7 +11,7 @@ If you'd like to use Cursorless, follow the instructions in the [cursorless-talo
 In order to use terminal commands when the VSCode terminal is focused, you must add the following line to your [VSCode `settings.json`](https://code.visualstudio.com/docs/getstarted/settings#_settingsjson):
 
 ```
-"window.title": "${dirty}${activeEditorShort}${separator}${rootName}${separator}${profileName}${separator}${appName}${separator}focus:[${focusedView}]",
+"window.title": "${activeEditorShort}${separator}${rootName}${separator}${profileName}${separator}focus:[${focusedView}]",
 ```
 
 This setting will cause VSCode to include a special string in the window title whenever the terminal is focused. Talon will look for this string in the window title and activate the terminal commands in response.
