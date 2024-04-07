@@ -8,6 +8,10 @@ tag(): user.splits
 tag(): user.tabs
 tag(): user.history
 
+view [<user.text>]:
+    user.vscode("workbench.action.openView")
+    insert(user.text or "")
+
 shave <user.cursorless_target>:
     user.cursorless_command("setSelectionBefore", cursorless_target)
     key("backspace")
