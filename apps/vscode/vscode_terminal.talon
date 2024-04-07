@@ -1,4 +1,4 @@
-# app: vscode_terminal
+app: vscode_terminal
 -
 tag(): terminal
 tag(): user.generic_unix_shell

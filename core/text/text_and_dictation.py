@@ -571,6 +571,7 @@ class Actions:
             )
             need_right = not omit_space_after(text)
             before, after = actions.user.dictation_peek(need_left, need_right)
+            print(f"{before} {after}")
             dictation_formatter.update_context(before)
             add_space_after = after is not None and needs_space_between(text, after)
         text = dictation_formatter.format(text, auto_cap)
