@@ -46,7 +46,7 @@ touch$:
     key("{modifiers}:up")
     # close the mouse grid
     user.grid_close()
-<user.modifiers> rate:
+<user.modifiers> connie:
     # close zoom if open
     user.zoom_close()
     key("{modifiers}:down")
