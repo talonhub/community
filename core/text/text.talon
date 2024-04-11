@@ -9,9 +9,10 @@ phrase <user.text> over:
 # {user.prose_formatter} <user.prose> over: user.insert_formatted(prose, prose_formatter)
 
 #say <user.prose>$:user.dictation_insert(prose)
-say <user.prose>: user.dictation_insert(prose)
-<user.format_code>+: user.insert_many(format_code_list)
-<user.format_code>+: user.insert_many(format_code_list)
+say <user.prose>$: user.dictation_insert(prose)
+say <user.prose> over: user.dictation_insert(prose)
+<user.format_code>+$: user.insert_many(format_code_list)
+<user.format_code>+ over: user.insert_many(format_code_list)
 <user.formatters> that: user.formatters_reformat_selection(user.formatters)
 word <user.word>:
     user.add_phrase_to_history(word)
