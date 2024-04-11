@@ -7,7 +7,7 @@ zoom out [<number_small>]:
 	edit.zoom_out()
 	repeat(numb - 1)
 copy [take]: edit.copy()
-snip [take]: edit.cut()
+slice [take]: edit.cut()
 pace: edit.paste()
 (nay | nope) [<number_small>]: 
 	numb = number or 1
@@ -268,41 +268,41 @@ copy far down:
     edit.copy()
     
 #cut commands
-snip all:
+slice all:
     edit.select_all()
     edit.cut()
     
 #to do: nnn variants
-# snip left:
+# slice left:
 #      edit.select_all()
 #      edit.cut()
-# snip right:
+# slice right:
 #      edit.select_all()
 #      edit.cut()
-# snip up:
+# slice up:
 #      edit.select_all()
 #     edit.cut()
-# snip down:
+# slice down:
 #     edit.select_all()
 #     edit.cut()
     
-snip word:
+slice word:
     edit.select_word()
     edit.cut()
     
-snip draw [<number_small>]:
+slice draw [<number_small>]:
     numb = number_small or 1
     edit.extend_word_left()
     repeat(numb - 1)
     edit.cut()
     
-snip spring [<number_small>]:
+slice spring [<number_small>]:
     numb = number_small or 1
     edit.extend_word_right()
     repeat(numb - 1)
     edit.cut()
     
-snip line:
+slice line:
     edit.select_line()
     edit.cut()
 (pace | paste) all:

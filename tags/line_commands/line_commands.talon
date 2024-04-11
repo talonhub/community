@@ -26,10 +26,10 @@ copy [row] <number>:
 copy <number> by <number>: 
     user.select_range(number_1, number_2)
     edit.copy()
-snip [row] <number>: 
+slice [row] <number>: 
     user.select_range(number, number)
     edit.cut()
-snip [row] <number> by <number>: 
+slice [row] <number> by <number>: 
     user.select_range(number_1, number_2)
     edit.cut()
 paste <number> by <number>:

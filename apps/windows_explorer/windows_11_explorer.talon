@@ -6,7 +6,7 @@ tag(): user.file_manager
 tag(): user.tabs
 
 
-snip take:
+slice take:
     user.mouse_helper_position_save()
     user.mouse_helper_move_image_relative("2024-01-15_18.53.04.935105.png", 0)
     sleep(0.05)
