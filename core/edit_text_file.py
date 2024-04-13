@@ -9,14 +9,21 @@ SETTINGS_DIR = os.path.join(REPO_DIR, "settings")
 
 mod = Module()
 ctx = Context()
-mod.list("edit_file", desc="Absolute paths to frequently edited files (.talon-list, csv, etc)")
+mod.list(
+    "edit_file",
+    desc="Absolute paths to frequently edited files (.talon-list, csv, etc)",
+)
 
 _edit_files = {
-    "alphabet": os.path.join(REPO_DIR, "core\\keys\\letter.talon-list"), 
-    "search engines": os.path.join(REPO_DIR, "core\\websites_and_search_engines\\search_engine.talon-list"), 
-    "unix utilities": os.path.join(REPO_DIR, "tags\\terminal\\unix_utility.talon-list"), 
-    "websites": os.path.join(REPO_DIR, "core\\websites_and_search_engines\\website.talon-list"), 
-    "homophones": os.path.join(REPO_DIR, "core", "homophones", "homophones.csv")
+    "alphabet": os.path.join(REPO_DIR, "core\\keys\\letter.talon-list"),
+    "search engines": os.path.join(
+        REPO_DIR, "core\\websites_and_search_engines\\search_engine.talon-list"
+    ),
+    "unix utilities": os.path.join(REPO_DIR, "tags\\terminal\\unix_utility.talon-list"),
+    "websites": os.path.join(
+        REPO_DIR, "core\\websites_and_search_engines\\website.talon-list"
+    ),
+    "homophones": os.path.join(REPO_DIR, "core", "homophones", "homophones.csv"),
 }
 
 _settings_csvs = {
@@ -31,6 +38,7 @@ _settings_csvs = {
 
 _edit_files.update(_settings_csvs)
 ctx.lists["self.edit_file"] = _edit_files
+
 
 @mod.action_class
 class ModuleActions:
