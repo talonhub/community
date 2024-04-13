@@ -29,9 +29,6 @@ class CSVData:
     is_first_line_header: bool = True
     # Indicates whether the spoken form or value is first in the CSV file
     is_spoken_form_first: bool = False
-    # Indicates whether the first line is a header specifying the
-    # CSV format that should be ignored during the conversion
-    is_first_line_header: bool = True
     # An optional callable for generating a custom header for
     # generated .talon-list
     custom_header: callable = None
@@ -300,7 +297,10 @@ def convert_format_csv_to_talonlist(input_string: str, config: CSVData):
             spoken_form = value = line.strip()
 
         spoken_form = spoken_form.strip()
-        output.append(f"{spoken_form}: {value}")
+        if spoken_form != value:
+            output.append(f"{spoken_form}: {value}")
+        else:
+            output.append(f"{spoken_form}")
 
     return "\n".join(output)
 
@@ -320,24 +320,21 @@ def write_to_file(filename, text):
         file.write(text)
 
 
-def get_new_absolute_path_by_prefixing_dot(absolute_path):
+def get_new_absolute_path(absolute_path):
     """
-    Return the new absolute path for a file by prefixing its base name with a "."
+    Return the new absolute path for a file by changing to .csv-converted
 
     Args:
     - absolute_path (str): The absolute path to the file.
 
     Returns:
-    - str: The new absolute path after prefixing the base name with ".".
+    - str: The new absolute path after changing to .csv-converted
     """
     dir_name = os.path.dirname(absolute_path)
     base_filename = os.path.basename(absolute_path)
 
-    # Prefix the base filename with "."
-    new_filename = "." + base_filename
-
     # Construct the new absolute path
-    new_absolute_path = os.path.join(dir_name, new_filename)
+    new_absolute_path = os.path.join(dir_name, base_filename.replace(".csv", ".csv-converted"))
 
     return new_absolute_path
 
@@ -369,16 +366,17 @@ def strip_base_directory(base_dir, path):
 def convert_files(csv_files_list):
     global known_csv_files
     known_csv_files = {normalize_path(item.path): item for item in csv_files_list}
-
+    conversion_count = 0    
     directory_to_search = parent_directory_of_script()
-    print(f"Base directory: {directory_to_search}")
+    
+    print(f"migration_helpers.py convert_files - Base directory: {directory_to_search}")
     csv_relative_files_list = find_csv_files(directory_to_search)
 
     for csv_relative_file in csv_relative_files_list:
         csv_file = os.path.join(directory_to_search, csv_relative_file)
-        disabled_csv_file = get_new_absolute_path_by_prefixing_dot(csv_file)
+        disabled_csv_file = get_new_absolute_path(csv_file)
         if csv_relative_file not in known_csv_files.keys():
-            print(f"Skipping csv file {csv_relative_file}")
+            print(f"Skipping unsupported csv file {csv_relative_file}")
             continue
         config = known_csv_files[csv_relative_file]
         if not config:
@@ -392,28 +390,37 @@ def convert_files(csv_files_list):
 
         talonlist_relative_file = normalize_path(newpath)
         talonlist_file = os.path.join(directory_to_search, talonlist_relative_file)
+
         if os.path.isfile(talonlist_file) and not os.path.isfile(csv_file):
             print(f"Skipping existing talon-file {talonlist_relative_file}")
             continue
+
         if disabled_csv_file and os.path.isfile(disabled_csv_file):
             print(f"Skipping existing renamed csv file {disabled_csv_file}")
             continue
+        
         print(
             f"Converting csv file: {csv_relative_file} -> talon-list file: {talonlist_relative_file}"
         )
+
+        conversion_count += 1
         csv_content = read_csv_file(csv_file)
         talonlist_content = convert_format_csv_to_talonlist(csv_content, config)
-        # print(talonlist_content)
 
         write_to_file(talonlist_file, talonlist_content)
         os.rename(csv_file, disabled_csv_file)
-
+    
+    return conversion_count
 
 @mod.action_class
 class MigrationActions:
     def migrate_known_csv_files():
         """migrates known CSV files to .talon-list"""
-        convert_files(supported_csv_files)
+        conversion_count = convert_files(supported_csv_files)
+        if conversion_count > 0:
+            notification_text = f"migrations_helpers.py converted {conversion_count} CSVs. See Talon log for more details. \n"
+            print(notification_text)
+            actions.app.notify(notification_text)
 
     def migrate_custom_csv(
         path: str,
