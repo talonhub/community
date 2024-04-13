@@ -16,7 +16,7 @@ def emoticon_value_converter(value):
 
 @dataclass
 class CSVData:
-    """Class for keeping track of an item in inventory."""
+    """Class to track CSV-related data necessary for conversion to .talon-list"""
 
     # name of the list
     name: str
@@ -37,7 +37,7 @@ class CSVData:
     custom_value_converter: callable = None
 
 
-# Note: homophones, emacs_commands, file_extensions, and app name overrides
+# Note: homophones, emacs_commands, file_extensions, words_to_replace, abbreviations, and app name overrides
 # are intentionally omitted, as their use cases are not compatible with .talon-list conversions
 supported_csv_files = [
     CSVData(
@@ -248,15 +248,17 @@ def convert_format_csv_to_talonlist(input_string: str, config: CSVData):
 
     Args:
     - input_string (str): A multi-line string where each line is expected to be in "value,key" format.
-    Returns:
     - config: CSVData instance
+
+    Returns:
+    - str: A reformatted multi-line string in "key: value" format.
 
     Raises:
     - ValueError: If any line in the input string does not contain exactly one comma separator.
 
     Example:
     >>> convert_format_csv_to_talonlist("a,air\n\nb,bat")
-    'air:\ta\nbat:\tb'
+    'air: a\nbat: b'
 
     Note:
     The function assumes that each non-empty line in the input string has exactly one comma
