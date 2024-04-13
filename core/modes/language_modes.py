@@ -37,6 +37,7 @@ language_extensions = {
     # 'snippets': 'snippets',
     "sql": "sql",
     "talon": "talon",
+    "talonlist": "talon-list",
     "terraform": "tf",
     "tex": "tex",
     "typescript": "ts",
