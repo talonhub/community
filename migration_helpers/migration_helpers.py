@@ -334,7 +334,9 @@ def get_new_absolute_path(absolute_path):
     base_filename = os.path.basename(absolute_path)
 
     # Construct the new absolute path
-    new_absolute_path = os.path.join(dir_name, base_filename.replace(".csv", ".csv-converted"))
+    new_absolute_path = os.path.join(
+        dir_name, base_filename.replace(".csv", ".csv-converted")
+    )
 
     return new_absolute_path
 
@@ -366,9 +368,9 @@ def strip_base_directory(base_dir, path):
 def convert_files(csv_files_list):
     global known_csv_files
     known_csv_files = {normalize_path(item.path): item for item in csv_files_list}
-    conversion_count = 0    
+    conversion_count = 0
     directory_to_search = parent_directory_of_script()
-    
+
     print(f"migration_helpers.py convert_files - Base directory: {directory_to_search}")
     csv_relative_files_list = find_csv_files(directory_to_search)
 
@@ -398,7 +400,7 @@ def convert_files(csv_files_list):
         if disabled_csv_file and os.path.isfile(disabled_csv_file):
             print(f"Skipping existing renamed csv file {disabled_csv_file}")
             continue
-        
+
         print(
             f"Converting csv file: {csv_relative_file} -> talon-list file: {talonlist_relative_file}"
         )
@@ -409,8 +411,9 @@ def convert_files(csv_files_list):
 
         write_to_file(talonlist_file, talonlist_content)
         os.rename(csv_file, disabled_csv_file)
-    
+
     return conversion_count
+
 
 @mod.action_class
 class MigrationActions:
