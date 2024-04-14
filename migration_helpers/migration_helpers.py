@@ -8,12 +8,6 @@ from talon import Module, actions, app
 
 mod = Module()
 
-
-# custom function to format emoticon.csv values. quick and dirty.
-def emoticon_value_converter(value):
-    return f'"""{value}"""'
-
-
 @dataclass
 class CSVData:
     """Class to track CSV-related data necessary for conversion to .talon-list"""
@@ -42,8 +36,8 @@ class CSVData:
 supported_csv_files = [
     CSVData(
         "user.git_argument",
-        "apps/git/git_arguments.csv",
-        "apps/git/git_argument.talon-list",
+        os.path.normpath("apps/git/git_arguments.csv"),
+        os.path.normpath("apps/git/git_argument.talon-list"),
         True,
         False,
         None,
@@ -51,8 +45,8 @@ supported_csv_files = [
     ),
     CSVData(
         "user.git_command",
-        "apps/git/git_commands.csv",
-        "apps/git/git_command.talon-list",
+        os.path.normpath("apps/git/git_commands.csv"),
+        os.path.normpath("apps/git/git_command.talon-list"),
         True,
         False,
         None,
@@ -60,8 +54,8 @@ supported_csv_files = [
     ),
     CSVData(
         "user.vocabulary",
-        "settings/additional_words.csv",
-        "core/vocabulary/vocabulary.talon-list",
+        os.path.normpath("settings/additional_words.csv"),
+        os.path.normpath("core/vocabulary/vocabulary.talon-list"),
         True,
         False,
         None,
@@ -69,8 +63,8 @@ supported_csv_files = [
     ),
     CSVData(
         "user.letter",
-        "settings/alphabet.csv",
-        "core/keys/letter.talon-list",
+        os.path.normpath("settings/alphabet.csv"),
+        os.path.normpath("core/keys/letter.talon-list"),
         True,
         False,
         None,
@@ -78,8 +72,8 @@ supported_csv_files = [
     ),
     CSVData(
         "user.system_paths",
-        "settings/system_paths.csv",
-        lambda: f"core/system_paths-{actions.user.talon_get_hostname()}.talon-list",
+        os.path.normpath("settings/system_paths.csv"),
+        lambda: os.path.normpath(f"core/system_paths-{actions.user.talon_get_hostname()}.talon-list"),
         True,
         False,
         (lambda: f"host: {actions.user.talon_get_hostname()}"),
@@ -87,8 +81,8 @@ supported_csv_files = [
     ),
     CSVData(
         "user.search_engine",
-        "settings/search_engines.csv",
-        "core/websites_and_search_engines/search_engine.talon-list",
+        os.path.normpath("settings/search_engines.csv"),
+        os.path.normpath("core/websites_and_search_engines/search_engine.talon-list"),
         True,
         False,
         None,
@@ -96,8 +90,8 @@ supported_csv_files = [
     ),
     CSVData(
         "user.unix_utility",
-        "settings/unix_utilities.csv",
-        "tags/terminal/unix_utility.talon-list",
+        os.path.normpath("settings/unix_utilities.csv"),
+        os.path.normpath("tags/terminal/unix_utility.talon-list"),
         True,
         False,
         None,
@@ -105,8 +99,8 @@ supported_csv_files = [
     ),
     CSVData(
         "user.website",
-        "settings/websites.csv",
-        "core/websites_and_search_engines/website.talon-list",
+        os.path.normpath("settings/websites.csv"),
+        os.path.normpath("core/websites_and_search_engines/website.talon-list"),
         True,
         False,
         None,
@@ -114,8 +108,8 @@ supported_csv_files = [
     ),
     CSVData(
         "user.emoji",
-        "tags/emoji/emoji.csv",
-        "tags/emoji/emoji.talon-list",
+        os.path.normpath("tags/emoji/emoji.csv"),
+        os.path.normpath("tags/emoji/emoji.talon-list"),
         False,
         True,
         None,
@@ -123,37 +117,23 @@ supported_csv_files = [
     ),
     CSVData(
         "user.emoticon",
-        "tags/emoji/emoticon.csv",
-        "tags/emoji/emoticon.talon-list",
+        os.path.normpath("tags/emoji/emoticon.csv"),
+        os.path.normpath("tags/emoji/emoticon.talon-list"),
         False,
         True,
         None,
-        emoticon_value_converter,
+        None,
     ),
     CSVData(
         "user.kaomoji",
-        "tags/emoji/kaomoji.csv",
-        "tags/emoji/kaomoji.talon-list",
+        os.path.normpath("tags/emoji/kaomoji.csv"),
+        os.path.normpath("tags/emoji/kaomoji.talon-list"),
         False,
         True,
         None,
         None,
     ),
 ]
-
-
-def normalize_path(path_string):
-    """
-    Normalize a path based on the current operating system.
-
-    Args:
-    - path_string (str): The path string to be normalized.
-
-    Returns:
-    - str: A normalized path string appropriate for the current OS.
-    """
-    return str(Path(path_string))
-
 
 def read_csv_file(file_name):
     """
@@ -181,65 +161,6 @@ def read_csv_file(file_name):
     with open(file_name, "r") as file:
         # Skip the first line
         return file.read()
-
-
-def parent_directory_of_script():
-    """
-    Get the parent directory of the currently executing Python script.
-
-    Returns:
-    - Path: A `Path` object representing the parent directory of the current script.
-
-    Note:
-    This function is intended to be called from within a script and may not
-    work as expected if called interactively (e.g., from a Python REPL).
-
-    Example:
-    Assuming the script is located at "/home/user/scripts/myscript.py":
-    >>> parent_directory_of_script()
-    Path("/home/user/scripts")
-    """
-    # Get the directory of the current Python script
-    script_dir = Path(os.path.dirname(os.path.abspath(__file__)))
-    parent_dir = script_dir.parent
-    return parent_dir
-
-
-def find_csv_files(directory):
-    """
-    Finds all files with a .csv extension within the specified directory and its subdirectories.
-
-    This function follows symbolic links but skips directories and their contents if any directory
-    in the path starts with a period (".").
-
-    Args:
-        directory (str): The starting directory for the search.
-
-    Returns:
-        list: List of file paths with a .csv extension, relative to the given directory.
-
-    Example:
-        >>> find_csv_files('./data')
-        ['sample1.csv', 'subfolder/sample2.csv']
-    """
-    csv_files = []
-
-    for dirpath, dirnames, filenames in os.walk(directory, followlinks=True):
-        # Skip directories that start with a '.'
-        if any(
-            dir_component.startswith(".") for dir_component in dirpath.split(os.sep)
-        ):
-            continue
-
-        for filename in filenames:
-            # ignore if the .csv file starts with a "." since it indicates an already converted .csv into .talon-list
-            if filename.endswith(".csv") and not filename.startswith("."):
-                full_path = os.path.join(dirpath, filename)
-                relative_path = os.path.relpath(full_path, directory)
-                csv_files.append(relative_path)
-
-    return csv_files
-
 
 def convert_format_csv_to_talonlist(input_string: str, config: CSVData):
     """
@@ -292,6 +213,10 @@ def convert_format_csv_to_talonlist(input_string: str, config: CSVData):
             value = value.strip()
             if config.custom_value_converter:
                 value = config.custom_value_converter(value)
+            
+            # escape various characters... very rudimentary
+            elif ":" in value or "'" in value:
+                value = f'"""{value}"""'
 
         else:
             spoken_form = value = line.strip()
@@ -319,26 +244,6 @@ def write_to_file(filename, text):
     with open(filename, "w") as file:
         file.write(text)
 
-
-def get_new_absolute_path(absolute_path):
-    """
-    Return the new absolute path for a file by changing to .csv-converted
-
-    Args:
-    - absolute_path (str): The absolute path to the file.
-
-    Returns:
-    - str: The new absolute path after changing to .csv-converted
-    """
-    dir_name = os.path.dirname(absolute_path)
-    base_filename = os.path.basename(absolute_path)
-
-    # Construct the new absolute path
-    new_absolute_path = os.path.join(dir_name, base_filename.replace(".csv", ".csv-converted"))
-
-    return new_absolute_path
-
-
 def strip_base_directory(base_dir, path):
     """
     Strip the base directory from the path if it exists.
@@ -365,22 +270,24 @@ def strip_base_directory(base_dir, path):
 
 def convert_files(csv_files_list):
     global known_csv_files
-    known_csv_files = {normalize_path(item.path): item for item in csv_files_list}
-    conversion_count = 0    
-    directory_to_search = parent_directory_of_script()
-    
-    print(f"migration_helpers.py convert_files - Base directory: {directory_to_search}")
-    csv_relative_files_list = find_csv_files(directory_to_search)
+    known_csv_files = {os.path.normpath(item.path): item for item in csv_files_list}
 
-    for csv_relative_file in csv_relative_files_list:
-        csv_file = os.path.join(directory_to_search, csv_relative_file)
-        disabled_csv_file = get_new_absolute_path(csv_file)
-        if csv_relative_file not in known_csv_files.keys():
-            print(f"Skipping unsupported csv file {csv_relative_file}")
+    conversion_count = 0    
+    base_directory = os.path.dirname(os.path.dirname(__file__))
+
+    print(f"migration_helpers.py convert_files - Base directory: {base_directory}")
+    for csv_file in Path(base_directory).rglob("*.csv"):
+        csv_file_path = os.path.normpath(csv_file.resolve())
+        csv_relative_file_path = os.path.normpath(csv_file.relative_to(base_directory))
+        migrated_csv_file_path = csv_file_path.replace(".csv", ".csv-converted")
+
+        if csv_relative_file_path not in known_csv_files.keys():
+            print(f"Skipping unsupported csv file {csv_relative_file_path}")
             continue
-        config = known_csv_files[csv_relative_file]
+
+        config = known_csv_files[csv_relative_file_path]
         if not config:
-            print(f"Skipping currently unsupported conversion: {csv_relative_file}")
+            print(f"Skipping currently unsupported conversion: {csv_relative_file_path}")
             continue
 
         if callable(config.newpath):
@@ -388,30 +295,33 @@ def convert_files(csv_files_list):
         else:
             newpath = config.newpath
 
-        talonlist_relative_file = normalize_path(newpath)
-        talonlist_file = os.path.join(directory_to_search, talonlist_relative_file)
+        talonlist_relative_file = os.path.normpath(newpath)
+        talonlist_file = os.path.join(base_directory, talonlist_relative_file)
 
         if os.path.isfile(talonlist_file) and not os.path.isfile(csv_file):
             print(f"Skipping existing talon-file {talonlist_relative_file}")
             continue
 
-        if disabled_csv_file and os.path.isfile(disabled_csv_file):
-            print(f"Skipping existing renamed csv file {disabled_csv_file}")
+        if migrated_csv_file_path and os.path.isfile(migrated_csv_file_path):
+            print(f"Skipping existing renamed csv file {migrated_csv_file_path}")
             continue
-        
-        print(
-            f"Converting csv file: {csv_relative_file} -> talon-list file: {talonlist_relative_file}"
-        )
 
+        print(
+            f"Converting csv file: {csv_relative_file_path} -> talon-list file: {talonlist_relative_file}"
+        )
+ 
         conversion_count += 1
         csv_content = read_csv_file(csv_file)
         talonlist_content = convert_format_csv_to_talonlist(csv_content, config)
 
+        print(
+            f"Renaming converted csv file: {csv_file_path} -> {migrated_csv_file_path}. This file may be deleted if no longer needed; provided for reference in case there's an issue"
+        )
         write_to_file(talonlist_file, talonlist_content)
-        os.rename(csv_file, disabled_csv_file)
-    
-    return conversion_count
+        os.rename(csv_file_path, migrated_csv_file_path)
 
+    return conversion_count
+    
 @mod.action_class
 class MigrationActions:
     def migrate_known_csv_files():
@@ -421,26 +331,6 @@ class MigrationActions:
             notification_text = f"migrations_helpers.py converted {conversion_count} CSVs. See Talon log for more details. \n"
             print(notification_text)
             actions.app.notify(notification_text)
-
-    def migrate_custom_csv(
-        path: str,
-        new_path: str,
-        list_name: str,
-        is_first_line_header: bool,
-        spoken_form_first: bool,
-    ):
-        """Migrates custom CSV files"""
-        csv_file = CSVData(
-            list_name,
-            path,
-            new_path,
-            is_first_line_header,
-            spoken_form_first,
-            None,
-            None,
-        )
-        convert_files([csv_file])
-
 
 def on_ready():
     actions.user.migrate_known_csv_files()
