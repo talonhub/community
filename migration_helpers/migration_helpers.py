@@ -8,6 +8,7 @@ from talon import Module, actions, app
 
 mod = Module()
 
+
 @dataclass
 class CSVData:
     """Class to track CSV-related data necessary for conversion to .talon-list"""
@@ -73,7 +74,9 @@ supported_csv_files = [
     CSVData(
         "user.system_paths",
         os.path.normpath("settings/system_paths.csv"),
-        lambda: os.path.normpath(f"core/system_paths-{actions.user.talon_get_hostname()}.talon-list"),
+        lambda: os.path.normpath(
+            f"core/system_paths-{actions.user.talon_get_hostname()}.talon-list"
+        ),
         True,
         False,
         (lambda: f"host: {actions.user.talon_get_hostname()}"),
@@ -135,6 +138,7 @@ supported_csv_files = [
     ),
 ]
 
+
 def read_csv_file(file_name):
     """
     Read the content of a text file while skipping its first line.
@@ -161,6 +165,7 @@ def read_csv_file(file_name):
     with open(file_name, "r") as file:
         # Skip the first line
         return file.read()
+
 
 def convert_format_csv_to_talonlist(input_string: str, config: CSVData):
     """
@@ -213,7 +218,7 @@ def convert_format_csv_to_talonlist(input_string: str, config: CSVData):
             value = value.strip()
             if config.custom_value_converter:
                 value = config.custom_value_converter(value)
-            
+
             # escape various characters... very rudimentary
             elif ":" in value or "'" in value:
                 value = f'"""{value}"""'
@@ -244,6 +249,7 @@ def write_to_file(filename, text):
     with open(filename, "w") as file:
         file.write(text)
 
+
 def strip_base_directory(base_dir, path):
     """
     Strip the base directory from the path if it exists.
@@ -272,7 +278,7 @@ def convert_files(csv_files_list):
     global known_csv_files
     known_csv_files = {os.path.normpath(item.path): item for item in csv_files_list}
 
-    conversion_count = 0    
+    conversion_count = 0
     base_directory = os.path.dirname(os.path.dirname(__file__))
 
     print(f"migration_helpers.py convert_files - Base directory: {base_directory}")
@@ -287,7 +293,9 @@ def convert_files(csv_files_list):
 
         config = known_csv_files[csv_relative_file_path]
         if not config:
-            print(f"Skipping currently unsupported conversion: {csv_relative_file_path}")
+            print(
+                f"Skipping currently unsupported conversion: {csv_relative_file_path}"
+            )
             continue
 
         if callable(config.newpath):
@@ -309,7 +317,7 @@ def convert_files(csv_files_list):
         print(
             f"Converting csv file: {csv_relative_file_path} -> talon-list file: {talonlist_relative_file}"
         )
- 
+
         conversion_count += 1
         csv_content = read_csv_file(csv_file)
         talonlist_content = convert_format_csv_to_talonlist(csv_content, config)
@@ -321,7 +329,8 @@ def convert_files(csv_files_list):
         os.rename(csv_file_path, migrated_csv_file_path)
 
     return conversion_count
-    
+
+
 @mod.action_class
 class MigrationActions:
     def migrate_known_csv_files():
@@ -350,6 +359,7 @@ class MigrationActions:
             None,
         )
         convert_files([csv_file])
+
 
 def on_ready():
     actions.user.migrate_known_csv_files()
