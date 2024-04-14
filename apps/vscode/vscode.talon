@@ -14,7 +14,7 @@ please [<user.text>]:
     user.vscode("workbench.action.showCommands")
     insert(user.text or "")
 
-view [<user.text>]:
+go view [<user.text>]:
     user.vscode("workbench.action.openView")
     insert(user.text or "")
 
