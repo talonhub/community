@@ -332,6 +332,25 @@ class MigrationActions:
             print(notification_text)
             actions.app.notify(notification_text)
 
+    def migrate_custom_csv(
+        path: str,
+        new_path: str,
+        list_name: str,
+        is_first_line_header: bool,
+        spoken_form_first: bool,
+    ):
+        """Migrates custom CSV files"""
+        csv_file = CSVData(
+            list_name,
+            path,
+            new_path,
+            is_first_line_header,
+            spoken_form_first,
+            None,
+            None,
+        )
+        convert_files([csv_file])
+ 
 def on_ready():
     actions.user.migrate_known_csv_files()
 
