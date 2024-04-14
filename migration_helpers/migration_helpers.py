@@ -350,7 +350,7 @@ class MigrationActions:
             None,
         )
         convert_files([csv_file])
- 
+
 def on_ready():
     actions.user.migrate_known_csv_files()
 
