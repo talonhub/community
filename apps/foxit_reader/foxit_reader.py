@@ -9,8 +9,11 @@ os: windows
 and app.name: /^Foxit Reader/
 os: windows
 and app.exe: /^foxitreader\.exe$/i
+os: windows
+and app.name: Foxit PDF Reader
+os: windows
+and app.exe: /^foxitpdfreader\.exe$/i
 """
-
 # Context matching
 ctx.matches = """
 app: foxit_reader
