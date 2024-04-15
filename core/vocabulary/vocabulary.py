@@ -1,5 +1,5 @@
-import os 
 import logging
+import os
 import re
 from typing import Sequence, Union
 
@@ -187,7 +187,7 @@ def _add_selection_to_file(
     entries = _create_vocabulary_entries(spoken_form, written_form, type)
     added_some_phrases = False
 
-    # until we add support for parsing or otherwise getting the active 
+    # until we add support for parsing or otherwise getting the active
     # vocabulary.talon-list, skip the logic for checking for duplicates etc
     if file_contents:
         # clear the new entries dictionary
@@ -196,7 +196,9 @@ def _add_selection_to_file(
             if skip_identical_replacement and spoken_form == written_form:
                 actions.app.notify(f'Skipping identical replacement: "{spoken_form}"')
             elif spoken_form in file_contents:
-                actions.app.notify(f'Spoken form "{spoken_form}" is already in {file_name}')
+                actions.app.notify(
+                    f'Spoken form "{spoken_form}" is already in {file_name}'
+                )
             else:
                 new_entries[spoken_form] = written_form
                 added_some_phrases = True
@@ -211,6 +213,7 @@ def _add_selection_to_file(
 
     if added_some_phrases:
         actions.app.notify(f"Added to {file_name}: {new_entries}")
+
 
 def append_to_vocabulary(rows: dict[str, str]):
     vocabulary_file_path = actions.user.get_vocabulary_file_path()
@@ -231,14 +234,15 @@ def append_to_vocabulary(rows: dict[str, str]):
                 file.write(f"{key}: {value}")
 
 
-
 @mod.action_class
 class Actions:
     # this is implemented as an action so it may be overridden in other contexts
     def get_vocabulary_file_path():
         """Returns the path for the active vocabulary file"""
         vocabulary_directory = os.path.dirname(os.path.realpath(__file__))
-        vocabulary_file_path = os.path.join(vocabulary_directory, "vocabulary.talon-list")
+        vocabulary_file_path = os.path.join(
+            vocabulary_directory, "vocabulary.talon-list"
+        )
         return vocabulary_file_path
 
     def add_selection_to_vocabulary(phrase: Union[Phrase, str] = "", type: str = ""):
