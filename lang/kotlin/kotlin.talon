@@ -14,6 +14,7 @@ tag(): user.code_operators_assignment
 tag(): user.code_operators_bitwise
 tag(): user.code_operators_lambda
 tag(): user.code_operators_math
+tag(): user.code_keywords
 
 settings():
     user.code_private_function_formatter = "PRIVATE_CAMEL_CASE"
@@ -22,5 +23,3 @@ settings():
     user.code_private_variable_formatter = "PRIVATE_CAMEL_CASE"
     user.code_protected_variable_formatter = "PRIVATE_CAMEL_CASE"
     user.code_public_variable_formatter = "PRIVATE_CAMEL_CASE"
-
-[state] {user.kotlin_modifier}: insert(user.kotlin_modifier + " ")

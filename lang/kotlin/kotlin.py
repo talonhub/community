@@ -7,7 +7,7 @@ code.language: kotlin
 """
 
 # Java Modifies
-kotlin_modifiers = {
+ctx.lists["user.code_keyword"] = {
     "var": "var",
     "val": "val",
     "lateinit": "lateinit",
@@ -22,9 +22,6 @@ kotlin_modifiers = {
     "interface": "interface",
     "final": "final",
 }
-
-mod.list("kotlin_modifier", desc="Kotlin Modifiers")
-ctx.lists["self.kotlin_modifier"] = kotlin_modifiers
 
 
 @ctx.action_class("user")
