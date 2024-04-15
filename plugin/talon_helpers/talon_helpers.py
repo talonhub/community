@@ -25,15 +25,15 @@ class Actions:
         """Adds os-specific context info to the clipboard for the focused app for .py files. Assumes you've a Module named mod declared."""
         friendly_name = actions.app.name()
         # print(actions.app.executable())
-        executable = actions.app.executable().split(os.path.sep)[-1]
-        app_name = create_name(friendly_name.replace(".exe", ""))
+        executable = os.path.basename(actions.app.executable())
+        app_name = create_name(friendly_name.removesuffix(".exe"))
         if app.platform == "mac":
-            result = 'mod.apps.{} = """\nos: {}\nand app.bundle: {}\n"""'.format(
-                app_name, app.platform, actions.app.bundle()
+            result = 'mod.apps.{} = """\nos: mac\nand app.bundle: {}\n"""'.format(
+                app_name, actions.app.bundle()
             )
         elif app.platform == "windows":
-            result = 'mod.apps.{} = """\nos: windows\nand app.name: {}\nos: windows\nand app.exe: {}\n"""'.format(
-                app_name, friendly_name, executable
+            result = 'mod.apps.{} = r"""\nos: windows\nand app.name: {}\nos: windows\nand app.exe: /^{}$/i\n"""'.format(
+                app_name, friendly_name, re.escape(executable.lower())
             )
         else:
             result = 'mod.apps.{} = """\nos: {}\nand app.name: {}\n"""'.format(
@@ -46,14 +46,12 @@ class Actions:
         """Adds os-specific context info to the clipboard for the focused app for .talon files"""
         friendly_name = actions.app.name()
         # print(actions.app.executable())
-        executable = actions.app.executable().split(os.path.sep)[-1]
+        executable = os.path.basename(actions.app.executable())
         if app.platform == "mac":
-            result = f"os: {app.platform}\nand app.bundle: {actions.app.bundle()}\n"
+            result = f"os: mac\nand app.bundle: {actions.app.bundle()}\n"
         elif app.platform == "windows":
-            result = (
-                "os: windows\nand app.name: {}\nos: windows\nand app.exe: {}\n".format(
-                    friendly_name, executable
-                )
+            result = "os: windows\nand app.name: {}\nos: windows\nand app.exe: /^{}$/i\n".format(
+                friendly_name, re.escape(executable.lower())
             )
         else:
             result = f"os: {app.platform}\nand app.name: {friendly_name}\n"
