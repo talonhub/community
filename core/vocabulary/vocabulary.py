@@ -60,6 +60,7 @@ phrases_to_replace = get_list_from_csv(
 # Multi-word phrases are ignored.
 ctx.settings["dictate.word_map"] = phrases_to_replace
 
+
 class PhraseReplacer:
     """Utility for replacing phrases by other phrases inside text or word lists.
 
