@@ -60,30 +60,6 @@ phrases_to_replace = get_list_from_csv(
 # Multi-word phrases are ignored.
 ctx.settings["dictate.word_map"] = phrases_to_replace
 
-
-# Default words that should be added to Talon's vocabulary.
-# Don't edit this. Edit 'additional_vocabulary.csv' instead
-_simple_vocab_default = ["nmap", "admin", "Cisco", "Citrix", "VPN", "DNS", "Minecraft"]
-
-# Defaults for different pronounciations of words that need to be added to
-# Talon's vocabulary.
-_default_vocabulary = {
-    "N map": "nmap",
-    "under documented": "under-documented",
-}
-_default_vocabulary.update({word: word for word in _simple_vocab_default})
-
-# "user.vocabulary" is used to explicitly add words/phrases that Talon doesn't
-# recognize. Words in user.vocabulary (or other lists and captures) are
-# "command-like" and their recognition is prioritized over ordinary words.
-vocabulary = get_list_from_csv(
-    "additional_words.csv",
-    headers=("Word(s)", "Spoken Form (If Different)"),
-    default=_default_vocabulary,
-)
-ctx.lists["user.vocabulary"] = vocabulary
-
-
 class PhraseReplacer:
     """Utility for replacing phrases by other phrases inside text or word lists.
 
