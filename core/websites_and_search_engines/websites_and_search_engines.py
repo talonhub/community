@@ -10,6 +10,7 @@ mod.list(
     desc="A search engine.  Any instance of %s will be replaced by query text",
 )
 
+
 @mod.action_class
 class Actions:
     def open_url(url: str):
