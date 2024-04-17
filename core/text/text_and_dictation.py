@@ -434,6 +434,8 @@ class Actions:
             # key(shift-up) doesn't work consistently in the Slack webapp (sometimes
             # escapes the text box).
             if dummy and not dummy.isspace():
+                # If the dummy is all spaces, extend_word_left should select it.
+                # Otherwise, select it manually.
                 for _ in dummy:
                     actions.edit.extend_left()
             actions.edit.extend_word_left()
