@@ -317,6 +317,11 @@ def convert_files(csv_files_list):
         print(
             f"Renaming converted csv file: {csv_file_path} -> {migrated_csv_file_path}. This file may be deleted if no longer needed; provided for reference in case there's an issue"
         )
+        if os.path.isfile(talonlist_file):
+            backup_file_name = talonlist_file.replace(".talon-list", ".bak")
+            print(f"Migration target {talonlist_relative_file} already exists, backing up to {backup_file_name}")
+            os.rename(talonlist_file, backup_file_name)
+            
         write_to_file(talonlist_file, talonlist_content)
         os.rename(csv_file_path, migrated_csv_file_path)
 
