@@ -442,13 +442,13 @@ class Actions:
             if before:
                 # Unfortunately, in web Slack, if our selection ends at newline, this
                 # will go right over the newline. Argh.
-                actions.edit.right() # cancel selection
+                actions.edit.right()  # cancel selection
 
         if not right:
-            actions.key(f"backspace:{len(dummy)}") # remove the dummy
+            actions.key(f"backspace:{len(dummy)}")  # remove the dummy
         else:
             for _ in dummy:
-                actions.edit.left()         # go left before dummy
+                actions.edit.left()  # go left before dummy
             # We want to select at least two characters to the right, plus the dummy we
             # inserted, because no_space_before needs two characters in the worst case
             # -- for example, inserting before "' hello" we don't want to add space,
@@ -470,7 +470,7 @@ class Actions:
             actions.edit.extend_word_right()
             after = actions.edit.selected_text()
             if after:
-                actions.edit.left()             # cancel selection
-            actions.key(f"delete:{len(dummy)}") # remove the dummy
+                actions.edit.left()  # cancel selection
+            actions.key(f"delete:{len(dummy)}")  # remove the dummy
 
         return before, after
