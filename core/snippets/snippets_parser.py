@@ -54,6 +54,7 @@ def create_snippet(
         name=document.name or default_context.name,
         languages=document.languages or default_context.languages,
         phrases=document.phrases or default_context.phrases,
+        insertion_scopes=document.insertionScopes or default_context.insertionScopes,
         variables=combine_variables(default_context.variables, document.variables),
         body=normalize_snippet_body_tabs(document.body),
     )
