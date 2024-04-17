@@ -61,6 +61,12 @@ settings():
     # wish to enable this on a per-application basis.
     # user.context_sensitive_dictation = true
 
+    # Uncomment this to have context-sensitive dictation insert a dummy string before it
+    # selects surrounding text. This avoids copying with an empty selection, which
+    # misbehaves in some applications; however, it also slows down context-sensitive
+    # dictation and can clutter the undo history.
+    # user.context_sensitive_dictation_dummy_string = " "
+
     # Choose how to resize windows moved across physical screens (eg. via `snap next`).
     # Default is 'proportional', which preserves window size : screen size ratio.
     # 'size aware' keeps absolute window size the same, except full-height or

@@ -13,6 +13,13 @@ mod.setting(
     desc="Look at surrounding text to improve auto-capitalization/spacing in dictation mode. By default, this works by selecting that text & copying it to the clipboard, so it may be slow or fail in some applications.",
 )
 
+mod.setting(
+    "context_sensitive_dictation_dummy_string",
+    type=str,
+    default="",
+    desc="""Dummy string inserted when looking at surrounding text for context-sensitive dictation. Defaults to empty string "", i.e. disabled. Using a dummy character such as a space (user.context_sensitive_dictation_dummy_string = " ") prevents an empty selection, which in some applications causes copying to misbehave (eg: to copy the entire line). However, it also slows down context-sensitive dictation and can clutter the undo history. In some contexts a non-space character like "x" may be necessary (eg: the google.com search bar prevents inserting spaces when there is already a space present).""",
+)
+
 mod.list("prose_modifiers", desc="Modifiers that can be used within prose")
 mod.list("prose_snippets", desc="Snippets that can be used within prose")
 ctx = Context()
@@ -412,42 +419,58 @@ class Actions:
         if not (left or right):
             return None, None
         before, after = None, None
-        # Inserting a space ensures we select something even if we're at
-        # document start; some editors 'helpfully' copy the current line if we
-        # edit.copy() while nothing is selected.
-        actions.insert(" ")
+
+        # Inserting a character ensures we select something even if we're at document
+        # start; some editors 'helpfully' copy the current line if we edit.copy() while
+        # nothing is selected.
+        dummy = settings.get("user.context_sensitive_dictation_dummy_string")
+        actions.insert(dummy)
+
         if left:
-            # In principle the previous word should suffice, but some applications
-            # have a funny concept of what the previous word is (for example, they
-            # may only take the "`" at the end of "`foo`"). To be double sure we
-            # take two words left. I also tried taking a line up + a word left, but
-            # edit.extend_up() = key(shift-up) doesn't work consistently in the
-            # Slack webapp (sometimes escapes the text box).
+            # In principle the previous word should suffice, but some applications have
+            # a funny concept of what the previous word is (for example, they may only
+            # take the "`" at the end of "`foo`"). To be double sure we take two words
+            # left. I also tried taking a line up + a word left, but edit.extend_up() =
+            # key(shift-up) doesn't work consistently in the Slack webapp (sometimes
+            # escapes the text box).
+            if dummy and not dummy.isspace():
+                for _ in dummy:
+                    actions.edit.extend_left()
             actions.edit.extend_word_left()
             actions.edit.extend_word_left()
-            before = actions.edit.selected_text()[:-1]
-            # Unfortunately, in web Slack, if our selection ends at newline,
-            # this will go right over the newline. Argh.
-            actions.edit.right()
+            before = actions.edit.selected_text()
+            if before:
+                # Unfortunately, in web Slack, if our selection ends at newline, this
+                # will go right over the newline. Argh.
+                actions.edit.right() # cancel selection
+
         if not right:
-            actions.key("backspace")  # remove the space
+            actions.key(f"backspace:{len(dummy)}") # remove the dummy
         else:
-            actions.edit.left()  # go left before space
-            # We want to select at least two characters to the right, plus the space
-            # we inserted, because no_space_before needs two characters in the worst
-            # case -- for example, inserting before "' hello" we don't want to add
-            # space, while inserted before "'hello" we do.
+            for _ in dummy:
+                actions.edit.left()         # go left before dummy
+            # We want to select at least two characters to the right, plus the dummy we
+            # inserted, because no_space_before needs two characters in the worst case
+            # -- for example, inserting before "' hello" we don't want to add space,
+            # while inserted before "'hello" we do.
             #
             # We use 2x extend_word_right() because it's fewer keypresses (lower
-            # latency) than 3x extend_right(). Other options all seem to have
-            # problems. For instance, extend_line_end() might not select all the way
-            # to the next newline if text has been wrapped across multiple lines;
-            # extend_line_down() sometimes escapes the current text box (eg. in a
-            # browser address bar). 1x extend_word_right() _usually_ works, but on
-            # Windows in Firefox it doesn't always select enough characters.
+            # latency) than 3x extend_right(). Other options all seem to have problems.
+            # For instance, extend_line_end() might not select all the way to the next
+            # newline if text has been wrapped across multiple lines; extend_line_down()
+            # sometimes escapes the current text box (eg. in a browser address bar). 1x
+            # extend_word_right() _usually_ works, but on Windows in Firefox it doesn't
+            # always select enough characters.
+            if dummy and not dummy.isspace():
+                # If the dummy is all spaces, extend_word_right should select it.
+                # Otherwise, select it manually.
+                for _ in dummy:
+                    actions.edit.extend_right()
             actions.edit.extend_word_right()
             actions.edit.extend_word_right()
-            after = actions.edit.selected_text()[1:]
-            actions.edit.left()
-            actions.key("delete")  # remove space
+            after = actions.edit.selected_text()
+            if after:
+                actions.edit.left()             # cancel selection
+            actions.key(f"delete:{len(dummy)}") # remove the dummy
+
         return before, after
