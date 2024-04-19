@@ -27,7 +27,7 @@ def remove_tag(tag: str):
         ctx.tags = list(tags)
 
 
-default_names = ["Visual Studio Code", "Code", "VSCodium", "Codium", "code-oss"]
+default_names = ["Visual Studio Code - Insiders", "Code - Insiders", "Visual Studio Code", "Code", "VSCodium", "Codium", "code-oss"]
 
 mod.setting(
     "draft_editor",

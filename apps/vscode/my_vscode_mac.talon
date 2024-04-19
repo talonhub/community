@@ -29,29 +29,29 @@ switch user:
   "user"
   key('enter')
 
-chat switch:
-  user.vscode("workbench.panel.chat.view.copilot.focus")
+# bar (copilot | chat):
+#   user.vscode("workbench.panel.chat.view.copilot.focus")
 
-copilot switch:
-  user.vscode("workbench.panel.chat.view.copilot.focus")
-  sleep(100ms)
-  insert("@workspace ")
-  #user.vscode("type", { text: "@workspace " })
+# copilot switch:
+#   user.vscode("workbench.panel.chat.view.copilot.focus")
+#   sleep(100ms)
+#   insert("@workspace ")
+#   #user.vscode("type", { text: "@workspace " })
 
-copilot code switch:
-  user.vscode("workbench.panel.chat.view.copilot.focus")
-  sleep(100ms)
-  insert("@vscode ")
+# copilot code switch:
+#   user.vscode("workbench.panel.chat.view.copilot.focus")
+#   sleep(100ms)
+#   insert("@vscode ")
 
-copilot explain:
-  user.vscode("github.copilot.interactiveEditor.explain")
+# copilot explain:
+#   user.vscode("github.copilot.interactiveEditor.explain")
 
-copilot fix this:
-  user.vscode("github.copilot.interactiveEditor.fix")
+# copilot fix this:
+#   user.vscode("github.copilot.interactiveEditor.fix")
 
-copilot inline:
-  user.vscode("inlineChat.start")
-  # user.vscode("editor.action.inlineSuggest.trigger")
+# copilot inline:
+#   user.vscode("inlineChat.start")
+#   # user.vscode("editor.action.inlineSuggest.trigger")
 
-copilot search:
-  user.vscode("github.copilot.executeSearch")
+# copilot search:
+#   user.vscode("github.copilot.executeSearch")
