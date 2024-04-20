@@ -41,5 +41,5 @@ class InsertionSnippet:
 @dataclass
 class WrapperSnippet:
     body: str
-    variableName: str
+    variable_name: str
     scope: str = None

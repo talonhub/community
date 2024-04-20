@@ -16,11 +16,11 @@ mod.list("snippet", "List of insertion snippets")
 mod.list("snippet_with_phrase", "List of insertion snippets containing a text phrase")
 mod.list("snippet_wrapper", "List of wrapper snippets")
 
-setting_dir = mod.setting(
+mod.setting(
     "snippets_dir",
-    str,
-    desc="Directory(relative to Talon user) containing additional snippets",
+    type=str,
     default=None,
+    desc="Directory (relative to Talon user) containing additional snippets",
 )
 
 context_map = {
@@ -37,10 +37,11 @@ for lang in language_ids:
 
 
 def get_setting_dir():
-    if not settings.get("user.snippets_dir"):
+    setting_dir = settings.get("user.snippets_dir")
+    if not setting_dir:
         return None
 
-    dir = Path(settings.get("user.snippets_dir"))
+    dir = Path(setting_dir)
 
     if not dir.is_absolute():
         user_dir = Path(actions.path.talon_user())
@@ -98,16 +99,14 @@ def update_snippets():
             insertion_map.update(insertions)
             insertions_phrase_map.update(insertions_phrase)
             wrapper_map.update(wrappers)
-        
+
         ctx.lists.update(
-        {
-            "user.snippet": insertion_map,
-            "user.snippet_with_phrase": insertions_phrase_map,
-            "user.snippet_wrapper": wrapper_map,
-        }
-    )
-
-
+            {
+                "user.snippet": insertion_map,
+                "user.snippet_with_phrase": insertions_phrase_map,
+                "user.snippet_wrapper": wrapper_map,
+            }
+        )
 
 
 def get_snippets() -> list[Snippet]:
