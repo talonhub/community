@@ -27,7 +27,7 @@ Other modes
 ## Usage
 
 You can enable this by changing the following setting in `mode_indicator.talon`:
-`user.mode_indicator_show = 1`
+`user.mode_indicator_show = true`
 
 ## Demo
 

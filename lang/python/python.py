@@ -330,7 +330,7 @@ class UserActions:
         actions.user.paste(result)
         actions.edit.left()
         actions.edit.left()
-    
+
     def code_public_function(text: str):
         result = "def {}():".format(
             actions.user.formatted_text(

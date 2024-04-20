@@ -19,4 +19,4 @@ key <user.keys> over: "{keys}"
 key <user.modifiers> over: "{modifiers}"
 
 action {user.talon_actions}:
-    user.talon_code_insert_function(talon_actions, edit.selected_text())
+    user.talon_code_insert_action_call(talon_actions, edit.selected_text())

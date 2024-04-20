@@ -51,10 +51,10 @@ def on_update_decls(decls):
         "modes",
     ]:
         l = getattr(decls, thing)
-        ctx_talon_lists.lists[
-            f"user.talon_{thing}"
-        ] = actions.user.create_spoken_forms_from_list(
-            l.keys(), generate_subsequences=False
+        ctx_talon_lists.lists[f"user.talon_{thing}"] = (
+            actions.user.create_spoken_forms_from_list(
+                l.keys(), generate_subsequences=False
+            )
         )
         # print(
         #     "List: {} \n {}".format(thing, str(ctx_talon_lists.lists[f"user.talon_{thing}"]))
@@ -72,7 +72,7 @@ app.register("ready", on_ready)
 
 @mod.action_class
 class Actions:
-    def talon_code_insert_function(text: str, selection: str):
+    def talon_code_insert_action_call(text: str, selection: str):
         """inserts talon-specific action call"""
         actions.user.code_insert_function(text, selection)
     
@@ -101,7 +101,7 @@ class TalonActions:
 
 @ctx_talon_python.action_class("user")
 class TalonPythonActions:
-    def talon_code_insert_function(text: str, selection: str):
+    def talon_code_insert_action_call(text: str, selection: str):
         text = f"actions.{text}({selection or ''})"
         actions.user.paste(text)
         actions.edit.left()
@@ -119,6 +119,7 @@ class TalonPythonActions:
             actions.user.insert_between('ctx.settings["', '"] = ')
         else:
             actions.user.paste(f'ctx.settings["{setting}"] = ')
+
 
 @ctx_talon.action_class("user")
 class UserActions:

@@ -1,3 +1,4 @@
+# this functionality is only available in the talon beta
 from talon import Module
 
 mod = Module()

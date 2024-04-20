@@ -1,6 +1,6 @@
 code.language: talon
 code.language: talonlist
-code.language: python 
+code.language: python
 and tag: user.talon_python
 -
 #context requirements
