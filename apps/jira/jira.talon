@@ -29,12 +29,12 @@ fix {user.jira_fix_versions}:
     # user.jira_fix_versions(jira_fix_versions)
     insert(jira_fix_versions)
     sleep(100ms)
-    key(enter)
+    # key(enter)
 
 epic {user.jira_epics}:
     insert(jira_epics)
     sleep(100ms)
-    key(enter)
+    # key(enter)
     
 create issue:
     key(c)
