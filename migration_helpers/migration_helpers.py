@@ -215,8 +215,8 @@ def convert_format_csv_to_talonlist(input_string: str, config: CSVData):
                 value = config.custom_value_converter(value)
             
             # escape various characters... very rudimentary
-            elif "'" in value:
-                value = f'"""{value}"""'
+            else:
+                value = repr(value)
 
         else:
             spoken_form = value = line.strip()
