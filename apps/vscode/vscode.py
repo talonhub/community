@@ -127,6 +127,9 @@ class EditActions:
         actions.insert(str(n))
         actions.key("enter")
         actions.edit.line_start()
+        
+    def zoom_reset():
+        actions.user.vscode("workbench.action.zoomReset")
 
 
 @ctx.action_class("win")

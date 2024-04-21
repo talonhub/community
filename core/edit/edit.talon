@@ -6,6 +6,8 @@ zoom out [<number_small>]:
 	numb  = number_small or 1	
 	edit.zoom_out()
 	repeat(numb - 1)
+zoom reset:
+    edit.zoom_reset()
 copy [take]: edit.copy()
 slice [take]: edit.cut()
 pace: edit.paste()
