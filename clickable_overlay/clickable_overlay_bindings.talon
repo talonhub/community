@@ -13,6 +13,12 @@ key(;): user.clickable_handle_key(";")
 key('): user.clickable_handle_key("'")
 key(#): user.clickable_handle_key("#")
 
+connie: user.clickable_handle_key(",")
+metal: user.clickable_handle_key(".")
+focus: user.clickable_handle_key("/")
+duke: user.clickable_handle_key(";")
+touch: user.clickable_handle_key("'")
+hover: user.clickable_handle_key("#")
 
 # Label Keys
 key(a): user.clickable_handle_key("a")

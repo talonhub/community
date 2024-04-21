@@ -38,7 +38,7 @@ class Actions:
         window = ui.active_window()
         window_rect = window.rect
         clickables = []
-        print(ui.platform)
+        
         if ui.platform == "windows":
             CLICKABLE_PATTERNS = {
                 "Invoke",

@@ -1,5 +1,7 @@
 not tag: user.homerow_search
 not tag: user.fluent_search_screen_search
+not tag: user.homerow_search
+not tag: user.clickable_overlay_active
 -
 zoom mouse: user.mouse_toggle_zoom_mouse()
 control mouse: user.mouse_toggle_control_mouse()
