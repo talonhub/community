@@ -1,3 +1,4 @@
-not tag: user.mouse_grid_showing
+mode: command
+mode: dictation
 -
 (telly | number) <user.number_string>: "{number_string}"
