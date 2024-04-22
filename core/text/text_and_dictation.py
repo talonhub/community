@@ -255,9 +255,9 @@ def auto_capitalize(text, state=None):
         newline = c == "\n"
         sentence_end = c in ".!?" and not no_cap_after.search(output)
     return output, (
-        "sentence start"
-        if charge or sentence_end
-        else "after newline" if newline else None
+        "sentence start" if charge or sentence_end else
+        "after newline" if newline else
+        None
     )
 
 
@@ -424,7 +424,13 @@ class Actions:
         # start; some editors 'helpfully' copy the current line if we edit.copy() while
         # nothing is selected.
         dummy = settings.get("user.context_sensitive_dictation_dummy_string")
-        actions.insert(dummy)
+        if dummy:
+            actions.insert(dummy)
+        elif actions.edit.selected_text():
+            # If there's no dummy, we assume we're ok to trust edit.selected_text(); and
+            # if there is a current selection, we clobber it, otherwise our selections
+            # below will do the wrong thing.
+            actions.edit.delete()
 
         if left:
             # In principle the previous word should suffice, but some applications have
@@ -445,6 +451,8 @@ class Actions:
                 # Unfortunately, in web Slack, if our selection ends at newline, this
                 # will go right over the newline. Argh.
                 actions.edit.right()  # cancel selection
+            if dummy:
+                before = before[:-len(dummy)]
 
         if not right:
             actions.key(f"backspace:{len(dummy)}")  # remove the dummy
@@ -472,7 +480,9 @@ class Actions:
             actions.edit.extend_word_right()
             after = actions.edit.selected_text()
             if after:
-                actions.edit.left()  # cancel selection
-            actions.key(f"delete:{len(dummy)}")  # remove the dummy
+                actions.edit.left()             # cancel selection
+            if dummy:
+                after = after[len(dummy):]
+                actions.key(f"delete:{len(dummy)}") # remove the dummy
 
         return before, after
