@@ -255,9 +255,9 @@ def auto_capitalize(text, state=None):
         newline = c == "\n"
         sentence_end = c in ".!?" and not no_cap_after.search(output)
     return output, (
-        "sentence start" if charge or sentence_end else
-        "after newline" if newline else
-        None
+        "sentence start"
+        if charge or sentence_end
+        else "after newline" if newline else None
     )
 
 
@@ -452,7 +452,7 @@ class Actions:
                 # will go right over the newline. Argh.
                 actions.edit.right()  # cancel selection
             if dummy:
-                before = before[:-len(dummy)]
+                before = before[: -len(dummy)]
 
         if not right:
             actions.key(f"backspace:{len(dummy)}")  # remove the dummy
@@ -480,9 +480,9 @@ class Actions:
             actions.edit.extend_word_right()
             after = actions.edit.selected_text()
             if after:
-                actions.edit.left()             # cancel selection
+                actions.edit.left()  # cancel selection
             if dummy:
-                after = after[len(dummy):]
-                actions.key(f"delete:{len(dummy)}") # remove the dummy
+                after = after[len(dummy) :]
+                actions.key(f"delete:{len(dummy)}")  # remove the dummy
 
         return before, after
