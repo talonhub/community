@@ -1,4 +1,3 @@
-tag: browser
 tag: user.jira
 -
 assign {user.jira_alias}:
