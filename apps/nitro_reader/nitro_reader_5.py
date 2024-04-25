@@ -6,7 +6,7 @@ mod.apps.nitro_reader_five = """
 os: windows
 and app.name: Nitro Reader 5
 os: windows
-and app.exe: NitroPDFReader.exe
+and app.exe: /^nitropdfreader\.exe$/i
 """
 
 # Context matching

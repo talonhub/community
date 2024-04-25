@@ -250,9 +250,7 @@ def auto_capitalize(text, state=None):
     return output, (
         "sentence start"
         if charge or sentence_end
-        else "after newline"
-        if newline
-        else None
+        else "after newline" if newline else None
     )
 
 
@@ -380,9 +378,8 @@ class Actions:
             # peek right if we might need trailing space. NB. We peek right
             # BEFORE insertion to avoid breaking the undo-chain between the
             # inserted text and the trailing space.
-            need_left = (
-                not omit_space_before(text)
-                or text != auto_capitalize(text, "sentence start")[0]
+            need_left = not omit_space_before(text) or (
+                auto_cap and text != auto_capitalize(text, "sentence start")[0]
             )
             need_right = not omit_space_after(text)
             before, after = actions.user.dictation_peek(need_left, need_right)

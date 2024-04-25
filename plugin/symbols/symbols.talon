@@ -21,7 +21,7 @@ inside (graves | back ticks): user.insert_between("`", "`")
 angle that:
     text = edit.selected_text()
     user.paste("<{text}>")
-(square | square bracket) that:
+(square | bracket | square bracket) that:
     text = edit.selected_text()
     user.paste("[{text}]")
 (brace) that:
