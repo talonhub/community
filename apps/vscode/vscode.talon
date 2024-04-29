@@ -247,7 +247,7 @@ terminal scroll up: user.vscode("workbench.action.terminal.scrollUp")
 terminal scroll down: user.vscode("workbench.action.terminal.scrollDown")
 terminal <number_small>: user.vscode_terminal(number_small)
 
-task [<user.text>]:
+task run [<user.text>]:
     user.vscode("workbench.action.quickOpen")
     insert("task ")
     insert(user.text or "")
