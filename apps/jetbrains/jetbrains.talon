@@ -245,6 +245,12 @@ refactor last <user.text> [over]:
     user.idea("find prev {text}, action Refactorings.QuickListPopupAction")
 refactor next <user.text> [over]:
     user.idea("find next {text}, action Refactorings.QuickListPopupAction")
+rename next <user.text> [over]: user.idea("find next {text}, action RenameElement")
+rename last <user.text> [over]: user.idea("find prev {text}, action RenameElement")
+complete next <user.text> [over]: user.idea("find next {text},action CodeCompletion")
+complete last <user.text> [over]: user.idea("find prev {text},action CodeCompletion")
+intention next <user.text> [over]: user.idea("find next {text},action ShowIntentionActions")
+intention last <user.text> [over]: user.idea("find prev {text},action ShowIntentionActions")
 replace last <user.text> [over]: user.idea("find prev {text}, action EditorPaste")
 replace next <user.text> [over]: user.idea("find next {text}, action EditorPaste")
 select last <user.text> [over]: user.idea("find prev {text}")
