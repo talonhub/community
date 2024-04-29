@@ -186,4 +186,4 @@ redo that: edit.redo()
 file save:                  edit.save()
 file save all:              edit.save_all()
 
-go middle:                  user.go_middle()
+go mid:                     user.go_mid()
