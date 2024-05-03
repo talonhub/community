@@ -116,6 +116,7 @@ def _move_to_screen(
 
     dest = dest_screen.visible_rect
     src = src_screen.visible_rect
+    maximized = window.maximized
     how = settings.get("user.window_snap_screen")
     if how == "size aware":
         r = window.rect
@@ -129,6 +130,8 @@ def _move_to_screen(
         r.width = right - left
         r.height = bot - top
         window.rect = r
+        if(maximized):
+            window.maximized = True
         return
 
     # TODO: Test vertical screen with different aspect ratios
