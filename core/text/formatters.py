@@ -218,7 +218,7 @@ formatter_list = [
     CustomFormatter("SINGLE_QUOTED_STRING", lambda text: f"'{text}'"),
     CustomFormatter("ALL_CAPS", lambda text: text.upper()),
     CustomFormatter("ALL_LOWERCASE", lambda text: text.lower()),
-    TitleFormatter("TITLE_CASE"),
+    TitleFormatter("CAPITALIZE_ALL_WORDS"),
     SentenceFormatter("SENTENCE"),
     CodeFormatter("NO_SPACES", "", lower, lower),
     CodeFormatter("PRIVATE_CAMEL_CASE", "", lower, capitalize),
@@ -317,7 +317,7 @@ code_formatter_names = {
 prose_formatter_names = {
     "say": "NOOP",
     "speak": "NOOP",
-    "sentence": "CAPITALIZE_FIRST_WORD",
+    "sentence": "SENTENCE",
     "title": "CAPITALIZE_ALL_WORDS",
 }
 

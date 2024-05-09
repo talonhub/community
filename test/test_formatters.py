@@ -32,6 +32,15 @@ if hasattr(talon, "test_mode"):
             "hEllo wOrld", "CAPITALIZE_FIRST_WORD"
         )
 
+        assert result == "HEllo wOrld"
+
+    def test_sentence():
+        result = formatters.Actions.formatted_text("hello world", "SENTENCE")
+
+        assert result == "Hello world"
+
+        result = formatters.Actions.formatted_text("hEllo wOrld", "SENTENCE")
+
         assert result == "hEllo wOrld"
 
     def test_capitalize_all_words():
