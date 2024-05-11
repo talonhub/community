@@ -122,7 +122,7 @@ def _move_to_screen(
         r.width = right - left
         r.height = bot - top
         window.rect = r
-        if(maximized):
+        if maximized:
             window.maximized = True
         return
 
@@ -180,7 +180,7 @@ def _move_to_screen(
         width = window.rect.width * proportional_width
         height = window.rect.height * proportional_height
     _set_window_pos(window, x=x, y=y, width=width, height=height)
-    if(maximized):
+    if maximized:
         window.maximized = True
 
 
