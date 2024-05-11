@@ -183,7 +183,7 @@ undo that: edit.undo()
 redo that: edit.redo()
 
 # Save
-file save:                  edit.save()
-file save all:              edit.save_all()
+file save: edit.save()
+file save all: edit.save_all()
 
-go mid:                     user.go_mid()
+go mid: user.go_mid()
