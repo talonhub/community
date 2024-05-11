@@ -1,7 +1,7 @@
 import logging
 import re
-from typing import Optional, Union, Callable
 from abc import ABC, abstractmethod
+from typing import Callable, Optional, Union
 
 from talon import Context, Module, actions, app
 from talon.grammar import Phrase
