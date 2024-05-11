@@ -9,7 +9,6 @@ from uuid import uuid4
 
 from talon import actions
 
-
 # The amount of time to wait for application to perform a command, in seconds
 RPC_COMMAND_TIMEOUT_SECONDS = 3.0
 

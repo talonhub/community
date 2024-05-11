@@ -1,8 +1,9 @@
 from pathlib import Path
 from typing import Any
 
-from .rpc_client import run_rpc_command, get_communication_dir_path
 from talon import Context, Module, actions, speech_system
+
+from .rpc_client import get_communication_dir_path, run_rpc_command
 
 # Indicates whether a pre-phrase signal was emitted during the course of the
 # current phrase
