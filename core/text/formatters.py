@@ -219,7 +219,10 @@ formatter_list = [
     CustomFormatter("ALL_CAPS", lambda text: text.upper()),
     CustomFormatter("ALL_LOWERCASE", lambda text: text.lower()),
     TitleFormatter("CAPITALIZE_ALL_WORDS"),
-    SentenceFormatter("SENTENCE"),
+    # The sentence formatter being called `CAPITALIZE_FIRST_WORD` is a bit of a misnomer, but kept for backward compatibility.
+    SentenceFormatter("CAPITALIZE_FIRST_WORD"),
+    # This is the formatter that actually just capitalizes the first word
+    CapitalizeFormatter("CAPITALIZE"),
     CodeFormatter("NO_SPACES", "", lower, lower),
     CodeFormatter("PRIVATE_CAMEL_CASE", "", lower, capitalize),
     CodeFormatter("PUBLIC_CAMEL_CASE", "", capitalize, capitalize),
@@ -229,7 +232,6 @@ formatter_list = [
     CodeFormatter("SLASH_SEPARATED", "/", lower, lower),
     CodeFormatter("DOUBLE_UNDERSCORE", "__", lower, lower),
     CodeFormatter("DOUBLE_COLON_SEPARATED", "::", lower, lower),
-    CapitalizeFormatter("CAPITALIZE_FIRST_WORD"),
     CustomFormatter("COMMA_SEPARATED", lambda text: re.sub(r"\s+", ", ", text)),
     CustomFormatter("REMOVE_FORMATTING", remove_code_formatting),
 ]
@@ -317,7 +319,7 @@ code_formatter_names = {
 prose_formatter_names = {
     "say": "NOOP",
     "speak": "NOOP",
-    "sentence": "SENTENCE",
+    "sentence": "CAPITALIZE_FIRST_WORD",
     "title": "CAPITALIZE_ALL_WORDS",
 }
 
