@@ -258,7 +258,7 @@ code_formatter_names = {
     "smash": "NO_SPACES",
     "snake": "SNAKE_CASE",
     "string": "SINGLE_QUOTED_STRING",
-    "constant": "ALL_UPPERCASE,SNAKE_CASE",
+    "constant": "ALL_CAPS,SNAKE_CASE",
 }
 prose_formatter_names = {
     "say": "NOOP",
