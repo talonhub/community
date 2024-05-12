@@ -203,7 +203,7 @@ command_server_directory = None
 
 # NB: See https://github.com/talonhub/community/issues/966 for why we do OS-specific temp dirs
 def get_platform_specific_communication_dir_path():
-    home_dir = Path(os.path.expanduser("~"))
+    home_dir = Path.home()
     directory_name = actions.user.command_server_directory()
     if app.platform == "linux" or app.platform == "mac":
         return home_dir / ".talon" / " .comms" / directory_name
