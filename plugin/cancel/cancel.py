@@ -19,8 +19,9 @@ ts_threshold: float = 0
 class SpeechActions:
     # When Talon wakes we set the timestamp threshold. On the next command we
     # will compare the phrase timestamp to the threshold and cancel any phrase
-    # started before wakeup. This is to prevent commands from being executed if
-    # the user wakes Talon using a noise or keypress
+    # started before wakeup. This is to prevent speech said before wake-up to
+    # be interpreted as a command if the user wakes Talon using a noise or
+    # keypress.
     def enable():
         actions.user.cancel_current_phrase()
         actions.next()
