@@ -7,11 +7,11 @@ mod = Module()
 @ctx.action_class("edit")
 class EditActions:
     def paragraph_start():
-        if extend_paragraph_start():
+        if extend_paragraph_start_with_success():
             actions.edit.left()
 
     def paragraph_end():
-        if extend_paragraph_end():
+        if extend_paragraph_end_with_success():
             actions.edit.right()
 
     def select_paragraph():
@@ -24,15 +24,20 @@ class EditActions:
         actions.edit.extend_paragraph_end()
 
     def extend_paragraph_start():
-        extend_paragraph_start()
+        # The reason for the wrapper function is a difference in function signature.
+        # The Talon action has no return value and the below function returns a boolean with success state.
+        extend_paragraph_start_with_success()
 
     def extend_paragraph_end():
-        extend_paragraph_end()
+        extend_paragraph_end_with_success()
 
     def delete_paragraph():
         actions.edit.select_paragraph()
+        # Remove selection
         actions.edit.delete()
+        # Remove the empty line containing the cursor
         actions.edit.delete()
+        # Remove leading or trailing empty line
         actions.edit.delete_line()
 
 
@@ -55,7 +60,8 @@ class Actions:
         actions.edit.paste()
 
 
-def is_line_empty():
+def is_line_empty() -> bool:
+    """Check if the current line is empty. Return True if empty."""
     actions.edit.extend_line_start()
     text = actions.edit.selected_text().strip()
     if text:
@@ -69,7 +75,8 @@ def is_line_empty():
     return True
 
 
-def extend_paragraph_start() -> bool:
+def extend_paragraph_start_with_success() -> bool:
+    """Extend selection to the start of the paragraph. Return True if successful."""
     actions.edit.extend_line_start()
     text = actions.edit.selected_text()
     length = len(text)
@@ -88,7 +95,8 @@ def extend_paragraph_start() -> bool:
     return text.strip() != ""
 
 
-def extend_paragraph_end() -> bool:
+def extend_paragraph_end_with_success() -> bool:
+    """Extend selection to the end of the paragraph. Return True if successful."""
     actions.edit.extend_line_end()
     text = actions.edit.selected_text()
     length = len(text)
