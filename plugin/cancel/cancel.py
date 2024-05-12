@@ -51,7 +51,7 @@ def pre_phrase(phrase: Phrase):
         # Start of phrase is before threshold timestamp
         if phrase_starts_before_threshold:
             print(f"Canceled phrase: {' '.join(words)}")
-            abort_entire_phrase(phrase)
+            cancel_entire_phrase(phrase)
             return
 
     # Check if the phrase is a cancel command
@@ -59,11 +59,11 @@ def pre_phrase(phrase: Phrase):
     before, after = words[:-n], words[-n:]
     if after == cancel_phrase:
         actions.app.notify(f"Command canceled: {' '.join(before)!r}")
-        abort_entire_phrase(phrase)
+        cancel_entire_phrase(phrase)
         return
 
 
-def abort_entire_phrase(phrase: Phrase):
+def cancel_entire_phrase(phrase: Phrase):
     phrase["phrase"] = []
     if "parsed" in phrase:
         phrase["parsed"]._sequence = []
