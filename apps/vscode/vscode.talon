@@ -11,6 +11,8 @@ tag(): user.splits
 tag(): user.tabs
 tag(): user.history
 
+go tab {self.letter} [{self.letter}]:
+    user.run_rpc_command("andreas.focusTab", "{letter_1}{letter_2 or ''}")
 view [<user.text>]:
     user.vscode("workbench.action.openView")
     insert(user.text or "")
