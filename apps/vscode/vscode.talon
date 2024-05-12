@@ -1,6 +1,9 @@
 #custom vscode commands go here
 app: vscode
 -
+settings():
+    user.context_sensitive_dictation = true
+   
 tag(): user.find_and_replace
 tag(): user.line_commands
 tag(): user.multiple_cursors

@@ -170,6 +170,16 @@ class MacUserActions:
 
 @ctx.action_class("user")
 class UserActions:
+    # def dictation_peek(left, right):
+    #     try:
+    #         context = actions.user.vscode_get("andreas.getDictationContext")
+    #     except Exception:
+    #         context = None
+
+    #     if context is not None:
+    #         return (context["before"], context["after"])
+    #     return (None, None)
+
     def history_go_back():
         actions.user.vscode("workbench.action.navigateBack")
         
@@ -409,3 +419,4 @@ class UserActions:
 
     def insert_snippet(body: str):
         actions.user.run_rpc_command("editor.action.insertSnippet", {"snippet": body})
+ 
