@@ -1,6 +1,3 @@
-
-
-
 from talon import Module, settings, actions
 
 mod = Module()

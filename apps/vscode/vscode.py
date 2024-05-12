@@ -170,15 +170,15 @@ class MacUserActions:
 
 @ctx.action_class("user")
 class UserActions:
-    # def dictation_peek(left, right):
-    #     try:
-    #         context = actions.user.vscode_get("andreas.getDictationContext")
-    #     except Exception:
-    #         context = None
+    def dictation_peek(left, right):
+        try:
+            context = actions.user.vscode_get("andreas.getDictationContext")
+        except Exception:
+            context = None
 
-    #     if context is not None:
-    #         return (context["before"], context["after"])
-    #     return (None, None)
+        if context is not None:
+            return (context["before"], context["after"])
+        return (None, None)
 
     def history_go_back():
         actions.user.vscode("workbench.action.navigateBack")
