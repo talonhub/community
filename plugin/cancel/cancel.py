@@ -50,7 +50,7 @@ def pre_phrase(phrase: Phrase):
         ts_threshold = 0
         # Start of phrase is before threshold timestamp
         if phrase_starts_before_threshold:
-            print(f"Aborted phrase: {''.join(words)}")
+            print(f"Aborted phrase: {' '.join(words)}")
             abort_entire_phrase(phrase)
             return
 
