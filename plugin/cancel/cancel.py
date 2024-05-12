@@ -50,6 +50,8 @@ def pre_phrase(phrase: Phrase):
                 print(f"Aborted phrase: {''.join(words)}")
                 abort_entire_phrase(phrase)
                 return
+        else:
+            ts_threshold = 0
 
     # Check if the phrase is a cancel command
     if "text" in phrase:
