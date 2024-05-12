@@ -38,29 +38,29 @@ class Actions:
 def pre_phrase(phrase: Phrase):
     global ts_threshold
 
+    words = phrase["phrase"]
+
+    if not words:
+        return
+
     # Check if the phrase is before the threshold
     if ts_threshold != 0:
-        words = phrase["phrase"]
-        if words:
-            start = getattr(words[0], "start", phrase["_ts"])
-            phrase_starts_before_threshold = start < ts_threshold
-            ts_threshold = 0
-            # Start of phrase is before threshold timestamp
-            if phrase_starts_before_threshold:
-                print(f"Aborted phrase: {''.join(words)}")
-                abort_entire_phrase(phrase)
-                return
-        else:
-            ts_threshold = 0
-
-    # Check if the phrase is a cancel command
-    if "text" in phrase:
-        n = len(cancel_phrase)
-        before, after = phrase["text"][:-n], phrase["text"][-n:]
-        if after == cancel_phrase:
-            actions.app.notify(f"Command canceled: {' '.join(before)!r}")
+        start = getattr(words[0], "start", phrase["_ts"])
+        phrase_starts_before_threshold = start < ts_threshold
+        ts_threshold = 0
+        # Start of phrase is before threshold timestamp
+        if phrase_starts_before_threshold:
+            print(f"Aborted phrase: {''.join(words)}")
             abort_entire_phrase(phrase)
             return
+
+    # Check if the phrase is a cancel command
+    n = len(cancel_phrase)
+    before, after = words[:-n], words[-n:]
+    if after == cancel_phrase:
+        actions.app.notify(f"Command canceled: {' '.join(before)!r}")
+        abort_entire_phrase(phrase)
+        return
 
 
 def abort_entire_phrase(phrase: Phrase):
