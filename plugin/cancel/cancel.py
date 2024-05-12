@@ -30,7 +30,7 @@ def pre_phrase(phrase: Phrase):
     global ts_threshold
 
     # Nothing to cancel
-    if not "parsed" in phrase:
+    if "parsed" not in phrase:
         return
 
     # Check if the phrase is before the threshold
