@@ -210,7 +210,7 @@ class Actions:
         """Show the homophones display for the selected text forcibly"""
         raise_homophones(actions.edit.selected_text(), True, True)
 
-    def homophones_select(number: int) -> str:
+    def choose(number: int) -> str:
         """selects the homophone by number"""
         if number <= len(active_word_list) and number > 0:
             return active_word_list[number - 1]
