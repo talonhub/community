@@ -19,6 +19,7 @@ show_help = False
 ########################################################################
 
 ctx = Context()
+ctx_homophones_open = Context()
 mod = Module()
 
 mod.list("homophones_canonicals", desc="list of words ")
@@ -28,6 +29,10 @@ mod.tag(
 )
 
 main_screen = ui.main_screen()
+
+ctx_homophones_open.matches = """
+tag: user.homophones_open
+"""
 
 
 def update_homophones(name, flags):
@@ -210,20 +215,23 @@ class Actions:
         """Show the homophones display for the selected text forcibly"""
         raise_homophones(actions.edit.selected_text(), True, True)
 
-    def choose(number: int) -> str:
-        """selects the homophone by number"""
-        if number <= len(active_word_list) and number > 0:
-            return active_word_list[number - 1]
-
-        error = "homophones.py index {} is out of range (1-{})".format(
-            number, len(active_word_list)
-        )
-        app.notify(error)
-        raise error
-
     def homophones_get(word: str) -> [str] or None:
         """Get homophones for the given word"""
         word = word.lower()
         if word in all_homophones:
             return all_homophones[word]
         return None
+
+
+@ctx_homophones_open.action_class("user")
+class UserActions:
+    def choose(number_small: int) -> str:
+        """selects the homophone by number"""
+        if number_small <= len(active_word_list) and number_small > 0:
+            return active_word_list[number_small - 1]
+
+        error = "homophones.py index {} is out of range (1-{})".format(
+            number_small, len(active_word_list)
+        )
+        app.notify(error)
+        raise error
