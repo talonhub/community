@@ -4,6 +4,6 @@ choose up <number_small>: user.choose_up(number_small)
 
 # DEPRECATED
 drop down <number_small>:
-    app.notify("DEPRECATED: please use the voice command 'choose' instead of 'drop down'")
+    user.deprecate_command("2024-05-13", "drop down", "choose")
 drop down up <number_small>:
-    app.notify("DEPRECATED: please use the voice command 'choose up' instead of 'drop down up'")
+    user.deprecate_command("2024-05-13", "drop down up", "choose up")
