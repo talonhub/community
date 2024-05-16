@@ -247,13 +247,16 @@ refactor last <user.text> [over]:
     user.idea("find prev {text}, action Refactorings.QuickListPopupAction")
 refactor next <user.text> [over]:
     user.idea("find next {text}, action Refactorings.QuickListPopupAction")
-rename <number> <user.text> [over]: user.idea("goto {number} 0,find next {text}, action RenameElement")
+rename <number> <user.text> [over]:
+    user.idea("goto {number} 0,find next {text}, action RenameElement")
 rename next <user.text> [over]: user.idea("find next {text}, action RenameElement")
 rename last <user.text> [over]: user.idea("find prev {text}, action RenameElement")
-complete <number> <user.text> [over]: user.idea("goto {number} 0,find next {text},action CodeCompletion")
+complete <number> <user.text> [over]:
+    user.idea("goto {number} 0,find next {text},action CodeCompletion")
 complete next <user.text> [over]: user.idea("find next {text},action CodeCompletion")
 complete last <user.text> [over]: user.idea("find prev {text},action CodeCompletion")
-quick fix <number> <user.text> [over]: user.idea("goto {number} 0,find next {text},action ShowIntentionActions")
+quick fix <number> <user.text> [over]:
+    user.idea("goto {number} 0,find next {text},action ShowIntentionActions")
 quick fix next <user.text> [over]:
     user.idea("find next {text},action ShowIntentionActions")
 quick fix last <user.text> [over]:
@@ -261,11 +264,13 @@ quick fix last <user.text> [over]:
 replace last <user.text> [over]: user.idea("find prev {text}, action EditorPaste")
 replace next <user.text> [over]: user.idea("find next {text}, action EditorPaste")
 
-follow <number> <user.text> [over]: user.idea("goto {number} 0,find next {text},action GotoDeclaration")
+follow <number> <user.text> [over]:
+    user.idea("goto {number} 0,find next {text},action GotoDeclaration")
 follow next <user.text> [over]: user.idea("find next {text},action GotoDeclaration")
 follow last <user.text> [over]: user.idea("find prev {text},action GotoDeclaration")
 
-reference <number> <user.text> [over]: user.idea("goto {number} 0,find next {text},action FindUsages")
+reference <number> <user.text> [over]:
+    user.idea("goto {number} 0,find next {text},action FindUsages")
 reference next <user.text> [over]: user.idea("find next {text},action FindUsages")
 reference last <user.text> [over]: user.idea("find prev {text},action FindUsages")
 
