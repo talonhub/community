@@ -237,6 +237,7 @@ comment next <user.text> [over]:
     user.idea("find next {text}, action CommentByLineComment")
 go last <user.text> [over]: user.idea("find prev {text}, action EditorRight")
 go next <user.text> [over]: user.idea("find next {text}, action EditorRight")
+go <number> <user.text> [over]: user.idea("goto {number} 0,find next {text}, action EditorRight")
 paste last <user.text> [over]:
     user.idea("find prev {text}, action EditorRight, action EditorPaste")
 paste next <user.text> [over]:
@@ -276,6 +277,7 @@ reference last <user.text> [over]: user.idea("find prev {text},action FindUsages
 
 select last <user.text> [over]: user.idea("find prev {text}")
 select next <user.text> [over]: user.idea("find next {text}")
+select <number> <user.text> [over]: user.idea("goto {number} 0,find next {text}")
 
 select camel left: user.extend_camel_left()
 select camel right: user.extend_camel_right()
