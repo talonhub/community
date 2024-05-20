@@ -1,8 +1,10 @@
 parrot(click):
 	key(ctrl-s)
+	key(esc)
 
 parrot(tsk):
 	key(enter)
 
 parrot(psst):
-	key(esc)
+	user.vscode("workbench.action.quickOpen")
+

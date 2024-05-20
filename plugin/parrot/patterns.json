@@ -23,8 +23,8 @@
     "psst": {
         "sounds": ["psst"],
         "threshold": {
-            ">power": 20,
-            ">probability": 0.999
+            ">power": 25,
+            ">probability": 0.99999
         },
         "throttle": {
             "psst": 0.12
