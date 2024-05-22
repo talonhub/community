@@ -25,11 +25,12 @@
         "sounds": ["psst"],
         "threshold": {
             ">power": 20,
-            ">probability": 0.9999
+            ">probability": 0.999
         },
 
         "throttle": {
-            "psst": 0.12
+            "psst": 0.12,
+            "tsk": 0.12
         }
     },
     "whistle": {

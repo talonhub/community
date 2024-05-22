@@ -14,4 +14,3 @@ parrot(psst):
 
 parrot(whistle):
   key(esc)
-
