@@ -13,12 +13,12 @@
     "tsk": {
         "sounds": ["tsk"],
         "threshold": {
-            ">power": 20,
-            ">probability": 0.9999
+            ">power": 15,
+            ">probability": 0.999
         },
 
         "throttle": {
-            "tsk": 0.12
+            "tsk": 0.6
         }
     },
     "psst": {
@@ -36,11 +36,10 @@
         "sounds": ["whistle"],
         "threshold": {
             ">power": 20,
-            ">probability": 0.9999
+            ">probability": 0.999
         },
-
         "throttle": {
-            "whistle": 0.12
+            "whistle": 0.5
         }
     }
 }

@@ -1,7 +1,17 @@
-parrot (click): print("click")
+os: linux
+-
 
-parrot (tsk): print("tsk")
+parrot(click): 
+  key(esc ctrl-s)
 
-parrot (psst): print("psst")
+parrot(tsk): 
+  key(enter)
+  print("tsk")
 
-parrot (whistle): print("whistle")
+parrot(psst): 
+  key(ctrl-p)
+  print("psst")
+
+parrot(whistle):
+  key(esc)
+
