@@ -1,16 +1,14 @@
 os: linux
 -
 
-parrot(click): 
-  key(esc ctrl-s)
+parrot (click): key(esc ctrl-s)
 
-parrot(tsk): 
-  key(enter)
-  print("tsk")
+parrot (tsk):
+    key(enter)
+    print("tsk")
 
-parrot(psst): 
-  key(ctrl-p)
-  print("psst")
+parrot (psst):
+    key(ctrl-p)
+    print("psst")
 
-parrot(whistle):
-  key(esc)
+parrot (whistle): key(esc)
