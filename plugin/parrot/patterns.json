@@ -16,29 +16,13 @@
         "threshold": {
             ">power": 15,
             ">probability": 0.999
-        },
-
-        "throttle": {
-            "tsk": 0.6
-        }
-    },
-
-    "psst": {
-        "sounds": ["psst"],
-        "threshold": {
-            ">power": 30,
-            ">probability": 0.9999
-        },
-        "throttle": {
-            "psst": 0.12,
-            "tsk": 0.12
         }
     },
 
     "whistle": {
         "sounds": ["whistle"],
         "threshold": {
-            ">power": 100,
+            ">power": 500,
             ">probability": 0.9999
         },
         "throttle": {
