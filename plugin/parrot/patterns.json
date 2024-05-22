@@ -5,6 +5,7 @@
             ">power": 20,
             ">probability": 0.9999
         },
+
         "throttle": {
             "click": 0.12
         }
@@ -13,7 +14,7 @@
         "sounds": ["tsk"],
         "threshold": {
             ">power": 20,
-            ">probability": 0.999
+            ">probability": 0.9999
         },
 
         "throttle": {
@@ -23,11 +24,23 @@
     "psst": {
         "sounds": ["psst"],
         "threshold": {
-            ">power": 25,
-            ">probability": 0.99999
+            ">power": 20,
+            ">probability": 0.9999
         },
+
         "throttle": {
             "psst": 0.12
+        }
+    },
+    "whistle": {
+        "sounds": ["whistle"],
+        "threshold": {
+            ">power": 20,
+            ">probability": 0.9999
+        },
+
+        "throttle": {
+            "whistle": 0.12
         }
     }
 }

@@ -1,7 +1,11 @@
-parrot (click):
-    key(ctrl-s)
-    key(esc)
+parrot(click):
+	print("click")
 
-parrot (tsk): key(enter)
+parrot(tsk):
+	print("tsk")
 
-parrot (psst): user.vscode("workbench.action.quickOpen")
+parrot(psst):
+	print("psst")
+
+parrot(whistle):
+	print("whistle")
