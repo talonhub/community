@@ -1,11 +1,7 @@
-parrot(click):
-	print("click")
+parrot (click): print("click")
 
-parrot(tsk):
-	print("tsk")
+parrot (tsk): print("tsk")
 
-parrot(psst):
-	print("psst")
+parrot (psst): print("psst")
 
-parrot(whistle):
-	print("whistle")
+parrot (whistle): print("whistle")
