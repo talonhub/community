@@ -287,8 +287,24 @@ rectangle (yank | paste): user.emacs("yank-rectangle")
 rectangle copy: user.emacs("copy-rectangle-as-kill")
 rectangle number lines: user.emacs("rectangle-number-lines")
 
+# ----- XREF SUPPORT ----- #
+[xref] find definition: user.emacs("xref-find-definitions")
+[xref] find definition other window: user.emacs("xref-find-definitions-other-window")
+[xref] find definition other frame: user.emacs("xref-find-definitions-other-frame")
+[xref] find references: user.emacs("xref-find-references")
+[xref] find references [and] replace: user.emacs("xref-find-references-and-replace")
+xref find apropos: user.emacs("xref-find-apropos")
+xref go back: user.emacs("xref-go-back")
+visit tags table: user.emacs("visit-tags-table")
+
 # ----- PROJECT SUPPORT ----- #
 project [find] file: user.emacs("project-find-file")
+project [find] file <user.text>$:
+    user.emacs("project-find-file")
+    user.insert_formatted(text, "DASH_SEPARATED")
+project [find] file <user.text> over:
+    user.emacs("project-find-file")
+    user.insert_formatted(text, "DASH_SEPARATED")
 project [find] (regex | grep): user.emacs("project-find-regexp")
 project [query] replace regex: user.emacs("project-query-replace-regexp")
 project (dired | directory): user.emacs("projectile-dired")
@@ -324,7 +340,8 @@ merge next: user.emacs("smerge-next")
 merge last: user.emacs("smerge-prev")
 merge keep upper: user.emacs("smerge-keep-upper")
 merge keep lower: user.emacs("smerge-keep-lower")
-merge keep this: user.emacs("smerge-keep-current")
+merge keep base: user.emacs("smerge-keep-base")
+merge keep (this | current): user.emacs("smerge-keep-current")
 merge refine: user.emacs("smerge-refine")
 merge split: user.emacs("smerge-resolve")
 
