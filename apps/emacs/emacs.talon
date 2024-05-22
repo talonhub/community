@@ -299,12 +299,6 @@ visit tags table: user.emacs("visit-tags-table")
 
 # ----- PROJECT SUPPORT ----- #
 project [find] file: user.emacs("project-find-file")
-project [find] file <user.text>$:
-    user.emacs("project-find-file")
-    user.insert_formatted(text, "DASH_SEPARATED")
-project [find] file <user.text> over:
-    user.emacs("project-find-file")
-    user.insert_formatted(text, "DASH_SEPARATED")
 project [find] (regex | grep): user.emacs("project-find-regexp")
 project [query] replace regex: user.emacs("project-query-replace-regexp")
 project (dired | directory): user.emacs("projectile-dired")
