@@ -170,53 +170,193 @@ class MacUserActions:
         actions.key("cmd-shift-p")
 
 
+def _replace_tab_with_untitled_file():
+    """Simulates the creation of an empty split by replacing a single tab in a split group with an untitled file"""
+    actions.user.vscode("workbench.action.files.newUntitledFile")
+    actions.app.tab_previous()
+    actions.user.tab_close_wrapper()
+
+
 @ctx.action_class("user")
-class UserActions:
-    # splits.py support begin
-    def split_clear_all():
-        actions.user.vscode("workbench.action.editorLayoutSingle")
+class SplitActions:
+    # Creation
 
-    def split_clear():
-        actions.user.vscode("workbench.action.joinTwoGroups")
+    ## Empty splits
+    def split_create():
+        actions.user.split_clone()
+        _replace_tab_with_untitled_file()
 
-    def split_flip():
-        actions.user.vscode("workbench.action.toggleEditorGroupLayout")
+    def split_create_right():
+        actions.user.split_clone_right()
+        _replace_tab_with_untitled_file()
 
-    def split_maximize():
-        actions.user.vscode("workbench.action.maximizeEditor")
+    def split_create_left():
+        actions.user.split_clone_left()
+        _replace_tab_with_untitled_file()
 
-    def split_reset():
-        actions.user.vscode("workbench.action.evenEditorWidths")
+    def split_create_down():
+        actions.user.split_clone_down()
+        _replace_tab_with_untitled_file()
 
-    def split_last():
-        actions.user.vscode("workbench.action.focusLeftGroup")
+    def split_create_up():
+        actions.user.split_clone_up()
+        _replace_tab_with_untitled_file()
 
-    def split_next():
-        actions.user.vscode_and_wait("workbench.action.focusRightGroup")
+    ## Duplicated splits
+    def split_clone():
+        actions.user.vscode("workbench.action.splitEditor")
 
-    def split_window_down():
-        actions.user.vscode("workbench.action.moveEditorToBelowGroup")
+    def split_clone_right():
+        actions.user.vscode("workbench.action.splitEditorRight")
 
-    def split_window_horizontally():
+    def split_clone_left():
+        actions.user.vscode("workbench.action.splitEditorLeft")
+
+    def split_clone_down():
+        actions.user.vscode("workbench.action.splitEditorDown")
+
+    def split_clone_up():
+        actions.user.vscode("workbench.action.splitEditorUp")
+
+    def split_clone_vertically():
+        actions.user.vscode("workbench.action.splitEditor")
+
+    def split_clone_horizontally():
         actions.user.vscode("workbench.action.splitEditorOrthogonal")
 
-    def split_window_left():
+    # Destruction
+    def split_close():
+        actions.user.vscode("workbench.action.joinTwoGroups")
+
+    def split_close_all():
+        actions.user.vscode("workbench.action.editorLayoutSingle")
+
+    # Navigation
+    def split_focus_up():
+        actions.user.vscode("workbench.action.focusAboveGroup")
+
+    def split_focus_down():
+        actions.user.vscode("workbench.action.focusBelowGroup")
+
+    def split_focus_left():
+        actions.user.vscode("workbench.action.focusLeftGroup")
+
+    def split_focus_right():
+        actions.user.vscode("workbench.action.focusRightGroup")
+
+    def split_focus_previous():
+        actions.user.vscode("workbench.action.focusPreviousGroup")
+
+    def split_focus_next():
+        actions.user.vscode("workbench.action.focusNextGroup")
+
+    def split_focus_first():
+        actions.user.vscode("workbench.action.focusFirstEditorGroup")
+
+    def split_focus_final():
+        actions.user.vscode("workbench.action.focusLastEditorGroup")
+
+    # Arrangement
+    def split_move_down():
+        actions.user.vscode("workbench.action.moveEditorToBelowGroup")
+
+    def split_move_left():
         actions.user.vscode("workbench.action.moveEditorToLeftGroup")
 
-    def split_window_right():
+    def split_move_right():
         actions.user.vscode("workbench.action.moveEditorToRightGroup")
 
-    def split_window_up():
+    def split_move_up():
         actions.user.vscode("workbench.action.moveEditorToAboveGroup")
 
-    def split_window_vertically():
-        actions.user.vscode("workbench.action.splitEditor")
+    # Resizing
+    def split_toggle_orientation():
+        actions.user.vscode("workbench.action.toggleEditorGroupLayout")
 
-    def split_window():
-        actions.user.vscode("workbench.action.splitEditor")
+    def split_toggle_maximize():
+        actions.user.vscode("workbench.action.toggleMaximizeEditorGroup")
 
-    # splits.py support end
+    def split_layout_reset():
+        actions.user.vscode("workbench.action.evenEditorWidths")
 
+    def split_expand_width():
+        actions.user.vscode("workbench.action.increaseViewWidth")
+
+    def split_shrink_width():
+        actions.user.vscode("workbench.action.decreaseViewWidth")
+
+    def split_expand_height():
+        actions.user.vscode("workbench.action.increaseViewHeight")
+
+    def split_shrink_height():
+        actions.user.vscode("workbench.action.decreaseViewHeight")
+
+
+@ctx.action_class("user")
+class TabActions:
+    # Destruction
+
+    def tab_close_others():
+        actions.user.vscode("workbench.action.closeOtherEditors")
+
+    def tab_close_all():
+        actions.user.vscode("workbench.action.closeAllEditors")
+
+    # Navigation
+    def tab_focus_index(index: int):
+        if index < 10:
+            if is_mac:
+                actions.user.vscode_with_plugin(
+                    f"workbench.action.openEditorAtIndex{index}"
+                )
+            else:
+                actions.key(f"alt-{index}")
+        else:
+            actions.user.vscode_with_plugin("workbench.action.openEditorAtIndex", index)
+
+    def tab_focus_negative_index(index: int):
+        actions.user.vscode_with_plugin("workbench.action.openEditorAtIndex", -index)
+
+    def tab_focus_first():
+        if is_mac:
+            actions.key("cmd-1")
+        else:
+            actions.key("alt-1")
+
+    def tab_focus_final():
+        if is_mac:
+            actions.user.vscode("workbench.action.lastEditorInGroup")
+        else:
+            actions.key("alt-0")
+
+    # Arrangement
+    def tab_pin():
+        actions.user.vscode("workbench.action.pinEditor")
+
+    def tab_unpin():
+        actions.user.vscode("workbench.action.unpinEditor")
+
+    def tab_move_right():
+        actions.user.vscode("workbench.action.moveEditorRightInGroup")
+
+    def tab_move_left():
+        actions.user.vscode("workbench.action.moveEditorLeftInGroup")
+
+    def tab_move_to_split_left():
+        actions.user.vscode("workbench.action.moveEditorToLeftGroup")
+
+    def tab_move_to_split_right():
+        actions.user.vscode("workbench.action.moveEditorToRightGroup")
+
+    def tab_move_to_split_up():
+        actions.user.vscode("workbench.action.moveEditorToAboveGroup")
+
+    def tab_move_to_split_down():
+        actions.user.vscode("workbench.action.moveEditorToBelowGroup")
+
+
+@ctx.action_class("user")
+class UserActions:
     # multiple_cursor.py support begin
     # note: vscode has no explicit mode for multiple cursors
     def multi_cursor_add_above():
@@ -245,25 +385,6 @@ class UserActions:
 
     def multi_cursor_skip_occurrence():
         actions.user.vscode("editor.action.moveSelectionToNextFindMatch")
-
-    def tab_jump(number: int):
-        if number < 10:
-            if is_mac:
-                actions.user.vscode_with_plugin(
-                    f"workbench.action.openEditorAtIndex{number}"
-                )
-            else:
-                actions.key(f"alt-{number}")
-        else:
-            actions.user.vscode_with_plugin(
-                "workbench.action.openEditorAtIndex", number
-            )
-
-    def tab_final():
-        if is_mac:
-            actions.user.vscode("workbench.action.lastEditorInGroup")
-        else:
-            actions.key("alt-0")
 
     # splits.py support begin
     def split_number(index: int):
