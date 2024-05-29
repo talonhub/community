@@ -227,3 +227,12 @@ class Actions:
         if word in all_homophones:
             return all_homophones[word]
         return None
+
+
+@ctx.action_class("user")
+class UserActions:
+    def choose(number_small: int):
+        """Choose the nth homophone"""
+        result = actions.user.homophones_select(number_small)
+        actions.insert(result)
+        actions.user.homophones_hide()

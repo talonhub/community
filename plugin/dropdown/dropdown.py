@@ -3,6 +3,8 @@ from talon import Context, Module, actions
 default_dropdown_select = Context()
 mod = Module()
 
+mod.tag("choose_selector", desc="Tag for selecting with 'choose'")
+
 
 @mod.action_class
 class Actions:
