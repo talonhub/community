@@ -12,6 +12,8 @@ os: mac
 and app.bundle: com.microsoft.VSCodeInsiders
 os: mac
 and app.bundle: com.visualstudio.code.oss
+os: mac
+and app.bundle: com.todesktop.230313mzl4w4u92
 """
 mod.apps.vscode = """
 os: linux
@@ -127,6 +129,9 @@ class EditActions:
         actions.insert(str(n))
         actions.key("enter")
         actions.edit.line_start()
+
+    def zoom_reset():
+        actions.user.vscode("workbench.action.zoomReset")
 
 
 @ctx.action_class("win")
