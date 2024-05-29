@@ -229,7 +229,13 @@ class Actions:
         return None
 
 
-@ctx.action_class("user")
+ctx_homophones_open = Context()
+ctx_homophones_open.matches = """
+tag: user.homophones_open
+"""
+
+
+@ctx_homophones_open.action_class("user")
 class UserActions:
     def choose(number_small: int):
         """Choose the nth homophone"""
