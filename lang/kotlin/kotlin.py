@@ -8,19 +8,19 @@ code.language: kotlin
 
 # Java Modifies
 ctx.lists["user.code_keyword"] = {
-    "var": "var",
-    "val": "val",
-    "lateinit": "lateinit",
-    "public": "public",
-    "private": "private",
-    "protected": "protected",
-    "static": "static",
-    "synchronized": "synchronized",
-    "volatile": "volatile",
-    "transient": "transient",
-    "abstract": "abstract",
-    "interface": "interface",
-    "final": "final",
+    "var": "var ",
+    "val": "val ",
+    "lateinit": "lateinit ",
+    "public": "public ",
+    "private": "private ",
+    "protected": "protected ",
+    "static": "static ",
+    "synchronized": "synchronized ",
+    "volatile": "volatile ",
+    "transient": "transient ",
+    "abstract": "abstract ",
+    "interface": "interface ",
+    "final": "final ",
 }
 
 
