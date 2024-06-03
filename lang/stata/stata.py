@@ -9,8 +9,8 @@ code.language: stata
 # functions.py
 ctx.lists["user.code_parameter_name"] = {
     # regressions
-    "v c e cluster": "vce(cluster)",
-    "v c e robust": "vce(robust)",
+    "V C E cluster": "vce(cluster)",
+    "V C E robust": "vce(robust)",
 }
 
 # functions_common.py
