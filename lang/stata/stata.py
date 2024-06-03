@@ -39,7 +39,6 @@ class UserActions:
     # comment_line.py
     def code_comment_line_prefix():
         actions.auto_insert("* ")
-        # actions.auto_insert("// ")
 
     # functions.py
     def code_private_function(text: str):
