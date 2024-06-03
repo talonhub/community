@@ -67,40 +67,28 @@ class UserActions:
         actions.auto_insert("\n")
 
     def code_state_if():
-        actions.insert("if  {")
-        actions.key("enter tab enter left")
-        actions.insert("}")
-        actions.key("up:2 right:2")
-
+        actions.insert("if  {\n\n}\n")
+        actions.key("up:2 tab up left")
+ 
     def code_state_else_if():
-        actions.insert("else if  {")
-        actions.key("enter tab enter left")
-        actions.insert("}")
-        actions.key("up:2 right:7")
+        actions.insert("else if  {\n\n}\n")
+        actions.key("up:2 tab up right:4")
 
     def code_state_else():
-        actions.insert("else  {")
-        actions.key("enter tab enter left")
-        actions.insert("}")
-        actions.key("up:2 right:4")
-
-    def code_state_do():
-        actions.insert("do {")
-        actions.key("enter tab enter left")
-        actions.insert("} while ()")
-        actions.key("up tab")
+        actions.insert("else {\n\n}\n")
+        actions.key("up:2 tab")
 
     def code_state_for():
-        actions.insert("for () {")
-        actions.key("enter tab enter left")
-        actions.insert("}")
-        actions.key("up:2 right:4")
+        actions.insert("forval  {\n\n}\n")
+        actions.key("up:2 tab up right:3")
 
     def code_state_for_each():
-        actions.insert("foreach  in {")
-        actions.key("enter tab enter left")
-        actions.insert("}")
-        actions.key("up:2 right:7")
+        actions.insert("foreach  in  {\n\n}\n")
+        actions.key("up:2 tab up right:4")
+
+    def code_state_while():
+        actions.insert("while  {\n\n}\n")
+        actions.key("up:2 tab up right:2")
 
     def code_break():
         actions.insert("break")

@@ -17,6 +17,8 @@ settings():
 
 arg {user.code_parameter_name}: user.code_insert_named_argument(code_parameter_name)
 
+state for val: user.code_state_for()
+
 # alternative to saying ""state import""
 s s c install: user.code_import()
 
