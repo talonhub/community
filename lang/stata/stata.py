@@ -69,7 +69,7 @@ class UserActions:
     def code_state_if():
         actions.insert("if  {\n\n}\n")
         actions.key("up:2 tab up left")
- 
+
     def code_state_else_if():
         actions.insert("else if  {\n\n}\n")
         actions.key("up:2 tab up right:4")
