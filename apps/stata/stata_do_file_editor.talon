@@ -1,7 +1,7 @@
 # Commands for the Stata Do-File Editor
 os: windows
 app: stata
-win.title: Do-file Editor
+win.title: /^Do-file Editor/
 -
 do this: key(ctrl-d)
 
