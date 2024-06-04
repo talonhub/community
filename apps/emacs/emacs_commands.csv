@@ -63,8 +63,8 @@ global-hl-line-mode,, g-hl-l-m
 global-visual-line-mode,, gl-v-l-m
 goto-line, meta-g meta-g
 highlight-lines-matching-regexp, meta-s h l
-highlight-regexp, meta-s h r
 highlight-phrase, meta-s h p
+highlight-regexp, meta-s h r
 hl-line-mode,, hl-l-m
 indent-region, meta-ctrl-\
 indent-rigidly, ctrl-x tab
@@ -102,6 +102,7 @@ next-buffer, ctrl-x right
 next-error, meta-g n
 occur, meta-s o
 open-rectangle, ctrl-x r o
+other-frame, ctrl-x 5 o
 other-window, ctrl-x o
 outline-backward-same-level, ctrl-c @ ctrl-b
 outline-demote, ctrl-c @ ctrl->
@@ -214,9 +215,17 @@ unhighlight-regexp, meta-s h u
 universal-argument, ctrl-u
 vc-annotate, ctrl-x v g
 view-lossage, ctrl-h l
+visit-tags-table,, v-t-t
 visual-line-mode,, visu-l-m
 whitespace-cleanup,, wh-cl
 whitespace-mode,, white-m
 widen, ctrl-x n w
+xref-find-apropos, meta-ctrl-.
+xref-find-definitions, meta-.
+xref-find-definitions-other-frame, ctrl-x 5 .
+xref-find-definitions-other-window, ctrl-x 4 .
+xref-find-references, meta-?
+xref-find-references-and-replace
+xref-go-back,"meta-,"
 yank, ctrl-y
 yank-rectangle, ctrl-x r y
