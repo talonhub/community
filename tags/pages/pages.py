@@ -24,3 +24,15 @@ class Actions:
 
     def page_final():
         """Go to final page"""
+
+    def page_rotate_right():
+        """Rotates the document 90 degrees to the right"""
+        
+    def page_rotate_left():
+        """Rotates the document 90 degrees to the left"""
+
+    def page_go_back():
+        """Goes back"""
+
+    def page_go_forward():
+        """Goes forward"""
