@@ -67,28 +67,38 @@ class UserActions:
         actions.auto_insert("\n")
 
     def code_state_if():
-        actions.insert("if  {\n\n}\n")
-        actions.key("up:2 tab up left")
+        actions.insert("if  {\n\n}")
+        actions.key("up tab up")
+        actions.edit.line_end()
+        actions.key("left:2")
 
     def code_state_else_if():
-        actions.insert("else if  {\n\n}\n")
-        actions.key("up:2 tab up right:4")
+        actions.insert("else if  {\n\n}")
+        actions.key("up tab up")
+        actions.edit.line_end()
+        actions.key("left:2")
 
     def code_state_else():
-        actions.insert("else {\n\n}\n")
-        actions.key("up:2 tab")
+        actions.insert("else {\n\n}")
+        actions.key("up tab")
 
     def code_state_for():
-        actions.insert("forval  {\n\n}\n")
-        actions.key("up:2 tab up right:3")
+        actions.insert("forval  {\n\n}")
+        actions.key("up tab up")
+        actions.edit.line_end()
+        actions.key("left:2")
 
     def code_state_for_each():
-        actions.insert("foreach  in  {\n\n}\n")
-        actions.key("up:2 tab up right:4")
+        actions.insert("foreach  in  {\n\n}")
+        actions.key("up tab up")
+        actions.edit.line_end()
+        actions.key("left:2")
 
     def code_state_while():
-        actions.insert("while  {\n\n}\n")
-        actions.key("up:2 tab up right:2")
+        actions.insert("while  {\n\n}")
+        actions.key("up tab up")
+        actions.edit.line_end()
+        actions.key("left:2")
 
     def code_break():
         actions.insert("break")
