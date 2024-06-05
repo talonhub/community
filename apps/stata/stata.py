@@ -1,4 +1,4 @@
-from talon import Module, Context
+from talon import Context, Module
 
 mod = Module()
 ctx = Context()
@@ -13,6 +13,7 @@ and app.exe: /^statase\-64\.exe$/i
 ctx.matches = r"""
 app: stata
 """
+
 
 @ctx.action_class("code")
 class CodeActions:
