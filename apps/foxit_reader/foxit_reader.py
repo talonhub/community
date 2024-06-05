@@ -64,7 +64,7 @@ class UserActions:
         actions.key("end")
 
     def page_rotate_right():
-        actions.key("shift-ctrl-keypad_equals")
+        actions.key("shift-ctrl-keypad_plus")
 
     def page_rotate_left():
         actions.key("shift-ctrl-keypad_minus")
