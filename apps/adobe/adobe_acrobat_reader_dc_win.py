@@ -53,3 +53,15 @@ class UserActions:
 
     def page_final():
         actions.key("end")
+
+    def page_rotate_right():
+        actions.key("shift-ctrl-0")
+        
+    def page_rotate_left():
+        actions.key("shift-ctrl-1")
+
+    def page_go_back():
+        actions.key("alt-left")
+
+    def page_go_forward():
+        actions.key("alt-right")
