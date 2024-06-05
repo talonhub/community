@@ -152,18 +152,17 @@ cut word right: user.cut_word_right()
 #     edit.cut()
 
 # Paste
-(pace | paste) that:        edit.paste()
+(pace | paste) that: edit.paste()
 (pace | paste) enter:
     edit.paste()
     key(enter)
-paste match:                edit.paste_match_style()
-(pace | paste) all:         user.paste_all()
-(pace | paste) line:        user.paste_line()
-(pace | paste) line start:  user.paste_line_start()
-(pace | paste) line end:    user.paste_line_end()
-(pace | paste) word:        user.paste_word()
-<user.formatters> (pace | paste):
-    user.insert_formatted(clip.text(), formatters)
+paste match: edit.paste_match_style()
+(pace | paste) all: user.paste_all()
+(pace | paste) line: user.paste_line()
+(pace | paste) line start: user.paste_line_start()
+(pace | paste) line end: user.paste_line_end()
+(pace | paste) word: user.paste_word()
+<user.formatters> (pace | paste): user.insert_formatted(clip.text(), formatters)
 
 # Duplication
 clone that: edit.selection_clone()
