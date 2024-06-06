@@ -2,8 +2,8 @@ settings():
     # Adjust the scale of the imgui
     imgui.scale = 1.3
 
-    # If `true`, enable dark mode for talon help menus
-    imgui.dark_mode = false
+    # Uncomment to enable dark mode for talon help menus
+    # imgui.dark_mode = true
 
     # If `true`, automatically show the picker GUI when the file manager has focus
     user.file_manager_auto_show_pickers = false
