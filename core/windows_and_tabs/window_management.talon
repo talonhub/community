@@ -11,11 +11,11 @@ running list: user.switcher_toggle_running()
 running close: user.switcher_hide_running()
 launch <user.launch_applications>: user.switcher_launch(launch_applications)
 
-focus snap <user.running_applications> <user.running_applications>:
+focus snap <user.running_applications> <user.window_snap_position> [and] <user.running_applications> <user.window_snap_position>:
     user.switcher_focus(running_applications_1)
     user.switcher_focus(running_applications_2)
-    user.snap_app(running_applications_1, "right")
-    user.snap_app(running_applications_2, "left")
+    user.snap_app(running_applications_1, window_snap_position_1)
+    user.snap_app(running_applications_2, window_snap_position_2)
 
 snap <user.window_snap_position>: user.snap_window(window_snap_position)
 snap next [screen]: user.move_window_next_screen()
