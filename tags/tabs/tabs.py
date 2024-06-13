@@ -14,7 +14,7 @@ mod.setting(
 @mod.action_class
 class TabActions:
     # Creation
-    def tab_open_with_name(name: str):
+    def tab_open_with_name(name: str = ""):
         """Opens a tab renamed to the specified"""
 
     def tab_clone():
@@ -59,10 +59,10 @@ class TabActions:
     def tab_focus_most_recent():
         """Focuses on the most recently viewed tab"""
 
-    def tab_focus_named(name: str):
+    def tab_focus_named(name: str = ""):
         """Focuses on a tab that matches a specified name"""
 
-    def tab_search(name: str):
+    def tab_search(name: str = ""):
         """Searches through the tabs for the specified name"""
 
     # Arrangement
@@ -103,10 +103,10 @@ class TabActions:
         as vscode, jetbrains, etc."""
 
     # Renaming
-    def tab_rename(name: str):
+    def tab_rename(name: str = ""):
         """Renames the current tab"""
 
-    def tab_rename_formatted(name: str):
+    def tab_rename_formatted(name: str = ""):
         """Applies formatting to tab name prior to passing to tab_rename()"""
         if len(name):
             name = actions.user.formatted_text(name, actions.user.tab_name_format())
