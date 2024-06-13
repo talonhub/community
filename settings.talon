@@ -2,7 +2,8 @@ settings():
     # Adjust the scale of the imgui
     imgui.scale = 1.3
 
-    # Set the speech timeout. Default is 0.3s.
+    # Uncomment to set the speech timeout. This is the amount of time after you stop 
+    # speaking until Talon starts parsing the spoken audio. Default is 0.3s.
     # speech.timeout = 0.3
 
     # Uncomment to enable dark mode for talon help menus
