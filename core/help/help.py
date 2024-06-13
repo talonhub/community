@@ -482,15 +482,12 @@ def get_sorted_keys_by_context_specificity(
     def sort_key(short_name_a, short_name_b) -> int:
         score_a = get_specificity_score(short_name_a)
         score_b = get_specificity_score(short_name_b)
-
         if score_a != score_b:
             return score_b - score_a
-
         if short_name_a < short_name_b:
             return -1
         if short_name_a > short_name_b:
             return 1
-
         return 0
 
     return sorted(
