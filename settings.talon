@@ -18,7 +18,7 @@ settings():
     # Set the number of contexts to display per help page
     user.help_max_contexts_per_page = 20
 
-    # Uncomment to always sort help con text alphabetically.
+    # Uncomment to always sort help contexts alphabetically.
     # user.help_sort_contexts_by_specificity = false
 
     # Set the scroll amount for continuous scroll/gaze scroll
