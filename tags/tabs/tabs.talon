@@ -5,12 +5,12 @@ tag: user.tabs
 tab (open | new): app.tab_open()
 tab (open | new) named [<user.text>]: user.tab_open_with_name(text or "")
 tab (reopen | restore): app.tab_reopen()
-tab (clone|duplicate): user.tab_clone()
+tab (clone | duplicate): user.tab_clone()
 
 # Destruction
 tab close: user.tab_close_wrapper()
 tab close all: user.tab_close_all()
-tab (close others|solo): user.tab_close_others()
+tab (close others | solo): user.tab_close_others()
 
 # Navigation
 [go] tab (last | previous): app.tab_previous()

@@ -146,7 +146,6 @@ toggle mark: user.vscode("bookmarks.toggle")
 go next mark: user.vscode("bookmarks.jumpToNext")
 go last mark: user.vscode("bookmarks.jumpToPrevious")
 
-
 close tabs way right: user.vscode("workbench.action.closeEditorsToTheRight")
 close tabs way left: user.vscode("workbench.action.closeEditorsToTheLeft")
 
@@ -287,7 +286,7 @@ cell run: user.vscode("notebook.cell.execute")
 install local: user.vscode("workbench.extensions.action.installVSIX")
 preview markdown: user.vscode("markdown.showPreview")
 
-
 # Deprecated commands
-close other tabs: user.deprecate_command("2024-05-29", "close other tabs", "(tab close others|tab solo)")
+close other tabs:
+    user.deprecate_command("2024-05-29", "close other tabs", "(tab close others|tab solo)")
 close all tabs: user.deprecate_command("2024-05-29", "close all tabs", "tab close all")
