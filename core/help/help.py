@@ -1,8 +1,8 @@
-from functools import cmp_to_key
 import itertools
 import math
 import re
 from collections import defaultdict
+from functools import cmp_to_key
 from itertools import islice
 from typing import Any, Iterable
 
