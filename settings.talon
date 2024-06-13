@@ -2,6 +2,9 @@ settings():
     # Adjust the scale of the imgui
     imgui.scale = 1.3
 
+    # Set the speech timeout. Default is 0.3s.
+    # speech.timeout = 0.3
+
     # Uncomment to enable dark mode for talon help menus
     # imgui.dark_mode = true
 
