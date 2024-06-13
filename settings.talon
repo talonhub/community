@@ -19,7 +19,7 @@ settings():
     user.help_max_contexts_per_page = 20
 
     # Uncomment to always sort help con text alphabetically.
-    user.help_sort_contexts_by_specificity = false
+    # user.help_sort_contexts_by_specificity = false
 
     # Set the scroll amount for continuous scroll/gaze scroll
     user.mouse_continuous_scroll_amount = 80
