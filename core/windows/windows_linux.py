@@ -1,31 +1,16 @@
-# defines the default app actions for windows
+# defines the default app actions for linux
 
 from talon import Context, actions
 
 ctx = Context()
 ctx.matches = r"""
-os: windows
+os: linux
 """
 
 
 @ctx.action_class("app")
 class AppActions:
     # app.preferences()
-
-    def tab_close():
-        actions.key("ctrl-w")
-
-    def tab_next():
-        actions.key("ctrl-tab")
-
-    def tab_open():
-        actions.key("ctrl-t")
-
-    def tab_previous():
-        actions.key("ctrl-shift-tab")
-
-    def tab_reopen():
-        actions.key("ctrl-shift-t")
 
     def window_close():
         actions.key("alt-f4")
