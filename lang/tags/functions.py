@@ -46,32 +46,63 @@ setting_public_variable_formatter = mod.setting("code_public_variable_formatter"
 
 @mod.action_class
 class Actions:
-    def code_modified_function(modifiers: Union[list[str], int], text: str):
+    def code_modified_function(
+        modifiers: Union[list[str], int], text: str, return_type: str = "void"
+    ):
         """
         Inserts function declaration with the given modifiers. modifiers == 0
         implies no modifiers (.talon files don't have empty list literal
         syntax)
         """
         mods = {} if modifiers == 0 else set(modifiers)
-
-        if mods == {}:
-            return actions.user.code_default_function(text)
-        elif mods == {"static"}:
-            return actions.user.code_private_static_function(text)
-        elif mods == {"private"}:
-            return actions.user.code_private_function(text)
-        elif mods == {"private", "static"}:
-            return actions.user.code_private_static_function(text)
-        elif mods == {"protected"}:
-            return actions.user.code_protected_function(text)
-        elif mods == {"protected", "static"}:
-            return actions.user.code_protected_static_function(text)
-        elif mods == {"public"}:
-            return actions.user.code_public_function(text)
-        elif mods == {"public", "static"}:
-            return actions.user.code_public_static_function(text)
+        if return_type != "void":
+            if mods == {}:
+                return actions.user.code_default_function_with_return(text)
+            elif mods == {"static"}:
+                return actions.user.code_private_static_function_with_return(
+                    text, return_type
+                )
+            elif mods == {"private"}:
+                return actions.user.code_private_function_with_return(text, return_type)
+            elif mods == {"private", "static"}:
+                return actions.user.code_private_static_function_with_return(
+                    text, return_type
+                )
+            elif mods == {"protected"}:
+                return actions.user.code_protected_function_with_return(
+                    text, return_type
+                )
+            elif mods == {"protected", "static"}:
+                return actions.user.code_protected_static_function_with_return(
+                    text, return_type
+                )
+            elif mods == {"public"}:
+                return actions.user.code_public_function_with_return(text, return_type)
+            elif mods == {"public", "static"}:
+                return actions.user.code_public_static_function_with_return(
+                    text, return_type
+                )
+            else:
+                raise RuntimeError(f"Unhandled modifier set: {mods}")
         else:
-            raise RuntimeError(f"Unhandled modifier set: {mods}")
+            if mods == {}:
+                return actions.user.code_default_function(text)
+            elif mods == {"static"}:
+                return actions.user.code_private_static_function(text)
+            elif mods == {"private"}:
+                return actions.user.code_private_function(text)
+            elif mods == {"private", "static"}:
+                return actions.user.code_private_static_function(text)
+            elif mods == {"protected"}:
+                return actions.user.code_protected_function(text)
+            elif mods == {"protected", "static"}:
+                return actions.user.code_protected_static_function(text)
+            elif mods == {"public"}:
+                return actions.user.code_public_function(text)
+            elif mods == {"public", "static"}:
+                return actions.user.code_public_static_function(text)
+            else:
+                raise RuntimeError(f"Unhandled modifier set: {mods}")
 
     def code_default_function(text: str):
         """Inserts function declaration"""
@@ -87,13 +118,31 @@ class Actions:
         """Inserts protected function declaration"""
 
     def code_protected_static_function(text: str):
-        """Inserts public function"""
+        """Inserts protected static function"""
 
     def code_public_function(text: str):
         """Inserts public function"""
 
     def code_public_static_function(text: str):
-        """Inserts public function"""
+        """Inserts public static function"""
+
+    def code_private_function_with_return(text: str, return_type: str):
+        """Inserts private function declaration with a return type"""
+
+    def code_private_static_function_with_return(text: str, return_type: str):
+        """Inserts private static function with a return type"""
+
+    def code_protected_function_with_return(text: str, return_type: str):
+        """Inserts protected function declaration with a return type"""
+
+    def code_protected_static_function_with_return(text: str, return_type: str):
+        """Inserts protected static function with a return type"""
+
+    def code_public_function_with_return(text: str, return_type: str):
+        """Inserts public function with a return type"""
+
+    def code_public_static_function_with_return(text: str, return_type: str):
+        """Inserts public static function with a return type"""
 
     def code_private_function_formatter(name: str):
         """Inserts private function name with formatter"""
