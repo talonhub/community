@@ -492,7 +492,7 @@ def get_sorted_keys_by_context_specificity(
 
     return sorted(
         display_name_to_context_name_map.keys(),
-        key=cmp_to_key(sort_key),
+        key=lambda name: (-get_specificity_score(name), name),
     )
 
 
