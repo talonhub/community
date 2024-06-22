@@ -2,6 +2,13 @@ settings():
     # Adjust the scale of the imgui
     imgui.scale = 1.3
 
+    # Uncomment to set the speech timeout. This is the amount of time after you stop
+    # speaking until Talon starts processing the spoken audio. Default is 0.3s.
+    # speech.timeout = 0.3
+
+    # Uncomment to enable dark mode for talon help menus
+    # imgui.dark_mode = true
+
     # If `true`, automatically show the picker GUI when the file manager has focus
     user.file_manager_auto_show_pickers = false
 
