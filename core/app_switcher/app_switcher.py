@@ -84,19 +84,9 @@ words_to_exclude = [
 if app.platform == "windows":
     import ctypes
     import os
-
-    import pywintypes
-
-    try:
-        pass
-    except ImportError:
-        # Python 2
-        pass
-
-        bytes = lambda x: str(buffer(x))
-
     from ctypes import wintypes
 
+    import pywintypes
     from win32com.propsys import propsys, pscon
     from win32com.shell import shell, shellcon
 
