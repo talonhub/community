@@ -465,11 +465,22 @@ class Actions:
         actions.insert(text)
 
     def get_formatters_words() -> dict:
-        """returns a list of words currently used as formatters, and a demonstration string using those formatters"""
+        """Returns words currently used as formatters, and a demonstration string using those formatters"""
         formatters_help_demo = {}
         for phrase in sorted(all_phrase_formatters):
             name = all_phrase_formatters[phrase]
             demo = format_text_without_adding_to_history("one two three", name)
+            if phrase in prose_formatter_names:
+                phrase += " *"
+            formatters_help_demo[phrase] = demo
+        return formatters_help_demo
+
+    def get_reformatters_words() -> dict:
+        """Returns words currently used as re-formatters, and a demonstration string using those re-formatters"""
+        formatters_help_demo = {}
+        for phrase in sorted(all_phrase_formatters):
+            name = all_phrase_formatters[phrase]
+            demo = format_text_without_adding_to_history("one_two_three", name, True)
             if phrase in prose_formatter_names:
                 phrase += " *"
             formatters_help_demo[phrase] = demo

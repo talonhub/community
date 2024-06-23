@@ -68,7 +68,10 @@ def update_title():
 @imgui.open(y=0)
 def gui_formatters(gui: imgui.GUI):
     global formatters_words
-    gui.text("formatters help")
+    if formatters_reformat:
+        gui.text("re-formatters help")
+    else
+        gui.text("formatters help")
     gui.line()
 
     for key, val in formatters_words.items():
@@ -545,11 +548,12 @@ class Actions:
         register_events(True)
         ctx.tags = ["user.help_open"]
 
-    def help_formatters(ab: dict):
+    def help_formatters(ab: dict, reformat: bool):
         """Provides the list of formatter keywords"""
         # what you say is stored as a trigger
-        global formatters_words
+        global formatters_words, formatters_reformat
         formatters_words = ab
+        formatters_reformat = reformat
         reset()
         hide_all_help_guis()
         gui_formatters.show()
