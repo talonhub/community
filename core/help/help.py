@@ -70,7 +70,7 @@ def gui_formatters(gui: imgui.GUI):
     global formatters_words
     if formatters_reformat:
         gui.text("re-formatters help")
-    else
+    else:
         gui.text("formatters help")
     gui.line()
 
