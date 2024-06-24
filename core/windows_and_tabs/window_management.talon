@@ -29,6 +29,18 @@ snap left <user.running_applications> <user.running_applications> <user.running_
     user.snap_window_to_position("center third")
     user.switcher_focus(running_applications_3)
     user.snap_window_to_position("right third")
+snap right <user.running_applications> <user.running_applications>:
+    user.switcher_focus(running_applications_2)
+    user.snap_window_to_position("left")
+    user.switcher_focus(running_applications_1)
+    user.snap_window_to_position("right")
+snap right <user.running_applications> <user.running_applications> <user.running_applications>:
+    user.switcher_focus(running_applications_3)
+    user.snap_window_to_position("left third")
+    user.switcher_focus(running_applications_2)
+    user.snap_window_to_position("center third")
+    user.switcher_focus(running_applications_1)
+    user.snap_window_to_position("right third")
 snap clock <user.running_applications> <user.running_applications> <user.running_applications>:
     user.switcher_focus(running_applications_1)
     user.snap_window_to_position("left")
