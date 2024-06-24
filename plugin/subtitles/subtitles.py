@@ -1,9 +1,10 @@
-from talon import Module, app, ui, cron, settings
+from typing import Any, Callable, Optional, Type
+
+from talon import Module, app, cron, settings, ui
 from talon.canvas import Canvas
 from talon.skia.canvas import Canvas as SkiaCanvas
 from talon.skia.imagefilter import ImageFilter
 from talon.types import Rect
-from typing import Type, Callable, Optional, Any
 
 mod = Module()
 

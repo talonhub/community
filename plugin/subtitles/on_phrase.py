@@ -1,5 +1,6 @@
-from talon import speech_system, actions
+from talon import actions, speech_system
 from talon.grammar import Phrase
+
 from .subtitles import show_subtitle
 
 
