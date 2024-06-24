@@ -1,4 +1,4 @@
-from talon import Module, app, registry, scope, settings, skia, ui
+from talon import Module, app, registry, scope, settings, skia, ui, cron, actions
 from talon.canvas import Canvas
 from talon.screen import Screen
 from talon.skia.canvas import Canvas as SkiaCanvas
@@ -7,6 +7,7 @@ from talon.ui import Rect
 
 canvas: Canvas = None
 current_mode = ""
+current_microphone = ""
 mod = Module()
 
 mod.setting(
@@ -40,6 +41,7 @@ mod.setting(
     type=float,
     desc="Mode indicator gradient brightness in percentages(0-1). 0=darkest, 1=brightest",
 )
+mod.setting("mode_indicator_color_mute", type=str)
 mod.setting("mode_indicator_color_sleep", type=str)
 mod.setting("mode_indicator_color_dictation", type=str)
 mod.setting("mode_indicator_color_mixed", type=str)
@@ -53,6 +55,7 @@ setting_paths = {
     "user.mode_indicator_y",
     "user.mode_indicator_color_alpha",
     "user.mode_indicator_color_gradient",
+    "user.mode_indicator_color_mute",
     "user.mode_indicator_color_sleep",
     "user.mode_indicator_color_dictation",
     "user.mode_indicator_color_mixed",
@@ -62,6 +65,8 @@ setting_paths = {
 
 
 def get_mode_color() -> str:
+    if current_microphone == "None":
+        return settings.get("user.mode_indicator_color_mute")
     if current_mode == "sleep":
         return settings.get("user.mode_indicator_color_sleep")
     elif current_mode == "dictation":
@@ -180,10 +185,19 @@ def on_update_settings(updated_settings: set[str]):
         update_indicator()
 
 
+def poll_microphone():
+    global current_microphone
+    microphone = actions.sound.active_microphone()
+    if current_microphone != microphone:
+        current_microphone = microphone
+        update_indicator()
+
+
 def on_ready():
     registry.register("update_contexts", on_update_contexts)
     registry.register("update_settings", on_update_settings)
     ui.register("screen_change", lambda _: update_indicator)
+    cron.interval("500ms", poll_microphone)
 
 
 app.register("ready", on_ready)
