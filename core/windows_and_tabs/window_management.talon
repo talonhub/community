@@ -42,11 +42,18 @@ snap right <user.running_applications> <user.running_applications> <user.running
     user.switcher_focus(running_applications_1)
     user.snap_window_to_position("right third")
 snap clock <user.running_applications> <user.running_applications> <user.running_applications>:
-    user.switcher_focus(running_applications_1)
-    user.snap_window_to_position("left")
     user.switcher_focus(running_applications_2)
     user.snap_window_to_position("top right")
     user.switcher_focus(running_applications_3)
     user.snap_window_to_position("bottom right")
+    user.switcher_focus(running_applications_1)
+    user.snap_window_to_position("left")
+snap counterclock <user.running_applications> <user.running_applications> <user.running_applications>:
+    user.switcher_focus(running_applications_2)
+    user.snap_window_to_position("top left")
+    user.switcher_focus(running_applications_3)
+    user.snap_window_to_position("bottom left")
+    user.switcher_focus(running_applications_1)
+    user.snap_window_to_position("right")
 snap <user.running_applications> [screen] <number>:
     user.move_app_to_screen(running_applications, number)
