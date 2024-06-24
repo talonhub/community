@@ -186,6 +186,7 @@ def on_update_settings(updated_settings: set[str]):
 
 
 def poll_microphone():
+    # Ideally, we would have a callback instead of needing to poll. https://github.com/talonvoice/talon/issues/624
     global current_microphone
     microphone = actions.sound.active_microphone()
     if current_microphone != microphone:
