@@ -1,4 +1,4 @@
-from talon import Module, app, registry, scope, settings, skia, ui, cron, actions
+from talon import Module, actions, app, cron, registry, scope, settings, skia, ui
 from talon.canvas import Canvas
 from talon.screen import Screen
 from talon.skia.canvas import Canvas as SkiaCanvas
