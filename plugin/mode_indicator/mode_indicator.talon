@@ -11,7 +11,7 @@ settings():
     user.mode_indicator_color_alpha = 0.75
     # Grey gradient
     user.mode_indicator_color_gradient = 0.5
-    # Black color for mute mode (Microphone is disabled/None)
+    # Black color for mute (Microphone is disabled/None)
     user.mode_indicator_color_mute = "000000"
     # Grey color for sleep mode
     user.mode_indicator_color_sleep = "808080"
