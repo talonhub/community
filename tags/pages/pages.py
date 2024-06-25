@@ -31,8 +31,8 @@ class Actions:
     def page_rotate_left():
         """Rotates the document 90 degrees to the left"""
 
-    def page_go_back():
+    def go_back():
         """Goes back"""
 
-    def page_go_forward():
+    def go_forward():
         """Goes forward"""
