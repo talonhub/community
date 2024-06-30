@@ -1,5 +1,5 @@
 mode: command
-and not tag: user.screen_shots_disabled
+and not tag: user.disable_screenshots
 -
 
 ^grab screen$: user.screenshot()
