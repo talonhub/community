@@ -1,6 +1,7 @@
 mode: command
-and not tag: user.disable_screenshots
+and not tag: user.screen_shots_disabled
 -
+
 ^grab screen$: user.screenshot()
 ^grab screen <number_small>$: user.screenshot(number_small)
 ^grab window$: user.screenshot_window()
