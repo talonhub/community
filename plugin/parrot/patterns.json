@@ -1,0 +1,32 @@
+{
+    "click": {
+        "sounds": ["click"],
+        "threshold": {
+            ">power": 20,
+            ">probability": 0.9999
+        },
+
+        "throttle": {
+            "click": 0.12
+        }
+    },
+
+    "tsk": {
+        "sounds": ["tsk"],
+        "threshold": {
+            ">power": 15,
+            ">probability": 0.999
+        }
+    },
+
+    "whistle": {
+        "sounds": ["whistle"],
+        "threshold": {
+            ">power": 500,
+            ">probability": 0.9999
+        },
+        "throttle": {
+            "whistle": 0.5
+        }
+    }
+}
