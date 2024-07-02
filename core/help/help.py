@@ -2,8 +2,9 @@ import itertools
 import math
 import re
 from collections import defaultdict
+from functools import cmp_to_key
 from itertools import islice
-from typing import Iterable
+from typing import Any, Iterable, Tuple
 
 from talon import Context, Module, actions, imgui, registry, settings
 
@@ -21,6 +22,12 @@ mod.setting(
     type=int,
     default=50,
     desc="Max lines of command to display per page in help",
+)
+mod.setting(
+    "help_sort_contexts_by_specificity",
+    type=bool,
+    default=True,
+    desc="If true contexts are sorted by specificity before alphabetically. If false, contexts are just sorted alphabetically.",
 )
 
 ctx = Context()
@@ -205,10 +212,17 @@ def gui_context_help(gui: imgui.GUI):
 
         current_item_index = 1
         current_selection_index = 1
-        for display_name in sorted_display_list:
+        current_group = ""
+        for display_name, group, _ in sorted_display_list:
             target_page = get_context_page(current_item_index)
             context_name = display_name_to_context_name_map[display_name]
             if current_context_page == target_page:
+                if current_group != group:
+                    if current_group:
+                        gui.line()
+                    gui.text(f"{group}:")
+                    current_group = group
+
                 button_name = format_context_button(
                     current_selection_index,
                     display_name,
@@ -429,13 +443,58 @@ def refresh_context_command_map(enabled_only=False):
 
     context_map = local_context_map
     context_command_map = local_context_command_map
-    sorted_display_list = sorted(local_display_name_to_context_name_map.keys())
+    sorted_display_list = get_sorted_display_keys(
+        local_context_map,
+        local_display_name_to_context_name_map,
+    )
     show_enabled_contexts_only = enabled_only
     display_name_to_context_name_map = local_display_name_to_context_name_map
     rule_word_map = refresh_rule_word_map(local_context_command_map)
 
     ctx.lists["self.help_contexts"] = cached_short_context_names
     update_active_contexts_cache(active_contexts)
+
+
+def get_sorted_display_keys(
+    context_map: dict[str, Any],
+    display_name_to_context_name_map: dict[str, str],
+):
+    if settings.get("user.help_sort_contexts_by_specificity"):
+        return get_sorted_keys_by_context_specificity(
+            context_map,
+            display_name_to_context_name_map,
+        )
+    return [
+        (display_name, "", 0)
+        for display_name in sorted(display_name_to_context_name_map.keys())
+    ]
+
+
+def get_sorted_keys_by_context_specificity(
+    context_map: dict[str, Any],
+    display_name_to_context_name_map: dict[str, str],
+) -> list[Tuple[str, str, int]]:
+    def get_group(display_name) -> Tuple[str, str, int]:
+        try:
+            context_name = display_name_to_context_name_map[display_name]
+            context = context_map[context_name]
+            keys = context._match.keys()
+            if "app.app" in keys:
+                return (display_name, "Application-specific", 2)
+            if keys:
+                return (display_name, "Context-dependent", 1)
+            return (display_name, "Global", 0)
+        except Exception as ex:
+            return (display_name, "", 0)
+
+    grouped_list = [
+        get_group(display_name)
+        for display_name in display_name_to_context_name_map.keys()
+    ]
+    return sorted(
+        grouped_list,
+        key=lambda item: (-item[2], item[0]),
+    )
 
 
 def refresh_rule_word_map(context_command_map):
@@ -484,7 +543,7 @@ def draw_list_commands(gui: imgui.GUI):
     global total_page_count
     global selected_context_page
 
-    talon_list = registry.lists[selected_list][0]
+    talon_list = registry.lists[selected_list][-1]
     # numpages = math.ceil(len(talon_list) / SIZE)
 
     pages_list = []
