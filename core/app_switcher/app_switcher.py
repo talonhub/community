@@ -40,15 +40,22 @@ mac_application_directories = [
     "/Applications/Utilities",
     "/System/Applications",
     "/System/Applications/Utilities",
+    f"{Path.home()}/Applications",
+    f"{Path.home()}/.nix-profile/Applications",
 ]
 
 linux_application_directories = [
     "/usr/share/applications",
     "/usr/local/share/applications",
-    os.path.expandvars("/home/$USER/.local/share/applications"),
+    f"{Path.home()}/.local/share/applications",
     "/var/lib/flatpak/exports/share/applications",
     "/var/lib/snapd/desktop/applications",
 ]
+xdg_data_dirs = os.environ.get("XDG_DATA_DIRS")
+if xdg_data_dirs is not None:
+    for directory in xdg_data_dirs.split(":"):
+        linux_application_directories.append(f"{directory}/applications")
+linux_application_directories = list(set(linux_application_directories))
 
 words_to_exclude = [
     "zero",
@@ -178,7 +185,7 @@ if app.platform == "linux":
         items = {}
         # find field codes in exec key with regex
         # https://specifications.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html#exec-variables
-        args_pattern = re.compile(r" \%[UufFcik]")
+        args_pattern = re.compile(r"\%[UufFcik]")
         for base in linux_application_directories:
             if os.path.isdir(base):
                 for entry in os.scandir(base):
@@ -187,7 +194,7 @@ if app.platform == "linux":
                             config = configparser.ConfigParser(interpolation=None)
                             config.read(entry.path)
                             # only parse shortcuts that are not hidden
-                            if config.has_option("Desktop Entry", "NoDisplay") == False:
+                            if not config.has_option("Desktop Entry", "NoDisplay"):
                                 name_key = config["Desktop Entry"]["Name"]
                                 exec_key = config["Desktop Entry"]["Exec"]
                                 # remove extra quotes from exec
@@ -197,10 +204,24 @@ if app.platform == "linux":
                                 if exec_key[0] == "/":
                                     items[name_key] = re.sub(args_pattern, "", exec_key)
                                 else:
-                                    items[name_key] = "/usr/bin/" + re.sub(
-                                        args_pattern, "", exec_key
+                                    exec_path = (
+                                        subprocess.check_output(
+                                            ["which", exec_key.split()[0]],
+                                            stderr=subprocess.DEVNULL,
+                                        )
+                                        .decode("utf-8")
+                                        .strip()
                                     )
-                        except:
+                                    items[name_key] = (
+                                        exec_path
+                                        + " "
+                                        + re.sub(
+                                            args_pattern,
+                                            "",
+                                            " ".join(exec_key.split()[1:]),
+                                        )
+                                    )
+                        except Exception:
                             print(
                                 "get_linux_apps: skipped parsing application file ",
                                 entry.name,
