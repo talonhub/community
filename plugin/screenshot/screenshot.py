@@ -7,7 +7,7 @@ from talon.canvas import Canvas
 
 mod = Module()
 
-mod.tag('screenshot_disabled', desc='Activating this tag disables screenshot commands')
+mod.tag("screenshot_disabled", desc="Activating this tag disables screenshot commands")
 
 default_folder = ""
 if app.platform == "windows":
