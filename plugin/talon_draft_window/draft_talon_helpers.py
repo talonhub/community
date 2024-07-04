@@ -54,12 +54,12 @@ draft_manager = DraftManager()
 def _update_draft_style(*args):
     draft_manager.set_styling(
         **{
-            arg: setting.get()
+            arg: settings.get(setting)
             for setting, arg in (
-                (setting_theme, "theme"),
-                (setting_label_size, "label_size"),
-                (setting_label_color, "label_color"),
-                (setting_text_size, "text_size"),
+                ("user.draft_window_theme", "theme"),
+                ("user.draft_window_label_size", "label_size"),
+                ("user.draft_window_label_color", "label_color"),
+                ("user.draft_window_text_size", "text_size"),
             )
         }
     )
