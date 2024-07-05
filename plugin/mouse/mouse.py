@@ -147,7 +147,7 @@ class Actions:
         """Disables control mouse, zoom mouse, and re-enables cursor"""
         actions.tracking.control_zoom_toggle(False)
         actions.tracking.control_toggle(False)
-        actions.tracking.control1_toggle(False)
+        actions.tracking.control_toggle(False)
 
         show_cursor_helper(True)
         stop_scroll()
