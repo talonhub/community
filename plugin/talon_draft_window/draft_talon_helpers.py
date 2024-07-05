@@ -18,19 +18,19 @@ title: Talon Draft
 """
 
 mod.tag("draft_window_showing", desc="Tag set when draft window showing")
-setting_theme = mod.setting(
+mod.setting(
     "draft_window_theme",
     type=str,
     default="dark",
     desc="Sets the main colors of the window, one of 'dark' or 'light'",
 )
-setting_label_size = mod.setting(
+mod.setting(
     "draft_window_label_size",
     type=int,
     default=20,
     desc="Sets the size of the word labels used in the draft window",
 )
-setting_label_color = mod.setting(
+mod.setting(
     "draft_window_label_color",
     type=str,
     default=None,
@@ -39,7 +39,7 @@ setting_label_color = mod.setting(
         "E.g. 00ff00 would be green"
     ),
 )
-setting_text_size = mod.setting(
+mod.setting(
     "draft_window_text_size",
     type=int,
     default=20,
