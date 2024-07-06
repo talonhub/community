@@ -706,7 +706,7 @@ class Actions:
                             (current_context_page - 1)
                             * settings.get("user.help_max_contexts_per_page")
                             + index
-                        ]
+                        ][0]
                     ]
 
     def help_previous():
