@@ -342,7 +342,7 @@ This repository uses [`pre-commit`](https://pre-commit.com/) to run and manage i
 
 ```bash
 $ pip install pre-commit
-````
+```
 
 You then have a few options as to when to run it:
 
