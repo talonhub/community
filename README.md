@@ -296,7 +296,7 @@ To override configuration without forking the community repository, create talon
 
 For example, to override `user.modifier_key`, you could create `modifier_keys_MYNAME.talon`:
 
-```talon
+````talon
 list:  user.modifier_key
 language: en
 -
@@ -339,7 +339,7 @@ This repository uses [`pre-commit`](https://pre-commit.com/) to run and manage i
 
 ```bash
 $ pip install pre-commit
-```
+````
 
 You then have a few options as to when to run it:
 
