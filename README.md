@@ -290,6 +290,23 @@ The most commonly adjusted settings are probably
 
 Also, you can add additional vocabulary words, words to replace, search engines and more. Complete the community setup instructions above, then open the `settings` folder to see the provided CSV files and customize them as needed.
 
+## Overriding settings without forking
+
+If you want to override a setting without forking the community repository, you can do so by creating talon files that have more specific tags than the default. Any tag will work at all. You can for example simply set the language on a talon file or a talon list and it will override whatever is coming from community itself. If you want to override the modifier keys, for example, you could create a talon file that looks like this:
+
+````
+list:  user.modifier_key
+language: en
+-
+
+# Example
+
+rose: cmd
+troll: control
+shift: shift
+alt: alt
+```
+
 ## Other talon user file sets
 
 In addition to this repo, there are [other Talon user file sets](https://talon.wiki/talon_user_file_sets/) containing additional commands that you may want to experiment with if you're feeling adventurous 😊. Many of them are meant to be used alongside `community`, but a few of them are designed as replacements. If it's not clear which, please file an issue against the given GitHub repository for that user file set!
@@ -323,7 +340,7 @@ This repository uses [`pre-commit`](https://pre-commit.com/) to run and manage i
 
 ```bash
 $ pip install pre-commit
-```
+````
 
 You then have a few options as to when to run it:
 
