@@ -1,4 +1,3 @@
-os: mac
 app: warp
 -
 tag(): terminal
