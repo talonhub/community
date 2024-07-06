@@ -479,7 +479,7 @@ def get_sorted_keys_by_context_specificity(
             context_name = display_name_to_context_name_map[display_name]
             context = context_map[context_name]
             keys = context._match.keys()
-            if "app.app" in keys:
+            if any(key for key in keys if key.startswith("app.")):
                 return (display_name, "Application-specific", 2)
             if keys:
                 return (display_name, "Context-dependent", 1)
@@ -706,7 +706,7 @@ class Actions:
                             (current_context_page - 1)
                             * settings.get("user.help_max_contexts_per_page")
                             + index
-                        ]
+                        ][0]
                     ]
 
     def help_previous():
