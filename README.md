@@ -299,7 +299,7 @@ To do so, simply create a `.talon` file with a more specific [context header](ht
 
 For example, to override `user.modifier_key`, you could create `modifier_keys_MYNAME.talon`:
 
-````talon
+```talon
 list:  user.modifier_key
 language: en
 -
@@ -309,6 +309,8 @@ rose: cmd
 troll: control
 shift: shift
 alt: alt
+```
+
 ## Other talon user file sets
 
 In addition to this repo, there are [other Talon user file sets](https://talon.wiki/talon_user_file_sets/) containing additional commands that you may want to experiment with if you're feeling adventurous 😊. Many of them are meant to be used alongside `community`, but a few of them are designed as replacements. If it's not clear which, please file an issue against the given GitHub repository for that user file set!
@@ -342,7 +344,7 @@ This repository uses [`pre-commit`](https://pre-commit.com/) to run and manage i
 
 ```bash
 $ pip install pre-commit
-````
+```
 
 You then have a few options as to when to run it:
 
