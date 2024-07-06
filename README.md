@@ -294,21 +294,18 @@ Also, you can add additional vocabulary words, words to replace, search engines 
 
 To override configuration without forking the community repository, create talon files with more specific tags than the default. This customizes your setup without affecting the base repository. Any tag will work. For example, setting the language on a talon file or list will override the community settings. This is useful for personal customizations or workflow-specific tweaks.
 
-If you want to override the modifier keys, for example, you could create a talon file that looks like this:
+For example, to override `user.modifier_key`, you could create `modifier_keys_MYNAME.talon`:
 
-```
+```talon
 list:  user.modifier_key
 language: en
 -
 
-# Example
-
+# My preferred modifier keys
 rose: cmd
 troll: control
 shift: shift
 alt: alt
-```
-
 ## Other talon user file sets
 
 In addition to this repo, there are [other Talon user file sets](https://talon.wiki/talon_user_file_sets/) containing additional commands that you may want to experiment with if you're feeling adventurous 😊. Many of them are meant to be used alongside `community`, but a few of them are designed as replacements. If it's not clear which, please file an issue against the given GitHub repository for that user file set!
