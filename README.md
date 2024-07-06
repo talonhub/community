@@ -292,9 +292,11 @@ Also, you can add additional vocabulary words, words to replace, search engines 
 
 ## Overriding settings without forking
 
-If you want to override a setting without forking the community repository, you can do so by creating talon files that have more specific tags than the default. Any tag will work at all. You can for example simply set the language on a talon file or a talon list and it will override whatever is coming from community itself. If you want to override the modifier keys, for example, you could create a talon file that looks like this:
+To override a setting without forking the community repository, create talon files with more specific tags than the default. This customizes your setup without affecting the base repository. Any tag will work. For example, setting the language on a talon file or list will override the community settings. This is useful for personal customizations or workflow-specific tweaks.
 
-````
+If you want to override the modifier keys, for example, you could create a talon file that looks like this:
+
+```
 list:  user.modifier_key
 language: en
 -
