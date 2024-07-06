@@ -1,6 +1,6 @@
-from typing import Any, Callable, Optional, Type
+from typing import Any, Callable, Optional, Sequence, Type
 
-from talon import Module, app, cron, settings, ui
+from talon import Module, app, ctrl, cron, settings, ui
 from talon.canvas import Canvas
 from talon.skia.canvas import Canvas as SkiaCanvas
 from talon.skia.imagefilter import ImageFilter
@@ -22,10 +22,10 @@ setting_show = setting(
     "If true show (custom) subtitles",
     default=False,
 )
-setting_all_screens = setting(
-    "all_screens",
-    bool,
-    "If true show subtitles on all screens. If false show only on main screen.",
+setting_screens = setting(
+    "screens",
+    str,
+    "Show on which screens: 'all', 'main', 'cursor', 'focus'",
 )
 setting_size = setting(
     "size",
@@ -72,13 +72,32 @@ def show_subtitle(text: str):
     if not setting_show():
         return
     clear_canvases()
-    if setting_all_screens():
-        screens = ui.screens()
-    else:
-        screens = [ui.main_screen()]
+    screens = get_screens()
     for screen in screens:
         canvas = show_text_on_screen(screen, text)
         canvases.append(canvas)
+
+
+def get_screens() -> Sequence[ui.Screen]:
+    screen = setting_screens()
+    match screen:
+        case "main":
+            return [ui.main_screen()]
+        case "all":
+            return ui.screens()
+        case "cursor":
+            x, y = ctrl.mouse_pos()
+            containing_screen = ui.screen_containing(x, y)
+            if containing_screen is not None:
+                return [containing_screen]
+            return []
+        case "focus":
+            active_window = ui.active_window()
+            if active_window is not None:
+                return [active_window.screen]
+            return []
+        case _:
+            raise ValueError(f"Unknown screen setting: {screen}")
 
 
 def show_text_on_screen(screen: ui.Screen, text: str):

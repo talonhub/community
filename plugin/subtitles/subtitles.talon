@@ -1,8 +1,8 @@
 settings():
     # Show subtitles
     user.subtitles_show = false
-    # Show subtitles on all screens
-    user.subtitles_all_screens = true
+    # Show subtitles on main screen. Available values: "all", "main", "cursor", "focus"
+    user.subtitles_screens = "main"
     # 100px subtitles font size
     user.subtitles_size = 100
     # White subtitles color
