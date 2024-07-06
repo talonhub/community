@@ -290,9 +290,12 @@ The most commonly adjusted settings are probably
 
 Also, you can add additional vocabulary words, words to replace, search engines and more. Complete the community setup instructions above, then open the `settings` folder to see the provided CSV files and customize them as needed.
 
-## Overriding settings (such as talon lists) without forking
+## 💡 Tip: Overriding cleanly
 
-To override configuration without forking the community repository, create talon files with more specific tags than the default. This customizes your setup without affecting the base repository. Any tag will work. For example, setting the language on a talon file or list will override the community settings. This is useful for personal customizations or workflow-specific tweaks.
+You can override Talon lists by creating a new `.talon` file of your own, rather than changing the existing list in the repository.
+This reduces how much manual `git merge`-ing you'll have to do in the future, when you go to merge new versions of this repository (colloquially called "upstream") with your local changes. This is because _new_ files you create will almost never conflict with upstream changes, whereas changing an existing files (especially hot spots, like commonly-customized lists) frequently do.
+Your override files can even live outside of the `community` repository (anywhere in the Talon user directory), if you prefer, further simplifying merging.
+To do so, simply create a `.talon` file with a more specific [context header](https://talon.wiki/Customization/talon-files#context-header) than the default. (For example, `lang: en` or `os: mac` main). Talon ensures that the most precise header (your override file) wins.
 
 For example, to override `user.modifier_key`, you could create `modifier_keys_MYNAME.talon`:
 
