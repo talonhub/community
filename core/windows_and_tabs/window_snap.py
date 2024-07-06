@@ -310,6 +310,51 @@ class Actions:
         _bring_forward(window)
         _snap_window_helper(window, position)
 
+    def snap_split_two(app_one: str, app_two: str):
+        """Split the screen between two applications."""
+        window_two = _get_app_window(app_two)
+        _bring_forward(window_two)
+        _snap_window_helper(window_two, RelativeScreenPos(0.5, 0, 1, 1))
+        window = _get_app_window(app_one)
+        _bring_forward(window)
+        _snap_window_helper(window, RelativeScreenPos(0, 0, 0.5, 1))
+
+    def snap_clock_three(app_one: str, app_two: str, app_three: str):
+        """Split the screen clockwise between three applications."""
+        window_three = _get_app_window(app_three)
+        _bring_forward(window_three)
+        _snap_window_helper(window_three, RelativeScreenPos(0.5, 0.5, 1, 1))
+        window_two = _get_app_window(app_two)
+        _bring_forward(window_two)
+        _snap_window_helper(window_two, RelativeScreenPos(0.5, 0, 1, 0.5))
+        window = _get_app_window(app_one)
+        _bring_forward(window)
+        _snap_window_helper(window, RelativeScreenPos(0, 0, 0.5, 1))
+
+    def snap_counterclock_three(app_one: str, app_two: str, app_three: str):
+        """Split the screen between two applications."""
+        window_three = _get_app_window(app_three)
+        _bring_forward(window_three)
+        _snap_window_helper(window_three, RelativeScreenPos(0, 0.5, 0.5, 1))
+        window_two = _get_app_window(app_two)
+        _bring_forward(window_two)
+        _snap_window_helper(window_two, RelativeScreenPos(0, 0, 0.5, 0.5))
+        window = _get_app_window(app_one)
+        _bring_forward(window)
+        _snap_window_helper(window, RelativeScreenPos(0.5, 0, 1, 1))
+
+    def snap_split_three(app_one: str, app_two: str, app_three: str):
+        """Split the screen counterclockwise between three applications."""
+        window_three = _get_app_window(app_three)
+        _bring_forward(window_three)
+        _snap_window_helper(window_three, RelativeScreenPos(2 / 3, 0, 1, 1))
+        window_two = _get_app_window(app_two)
+        _bring_forward(window_two)
+        _snap_window_helper(window_two, RelativeScreenPos(1 / 3, 0, 2 / 3, 1))
+        window = _get_app_window(app_one)
+        _bring_forward(window)
+        _snap_window_helper(window, RelativeScreenPos(0, 0, 1 / 3, 1))
+
     def move_app_to_screen(app_name: str, screen_number: int):
         """Move a specific application to another screen."""
         window = _get_app_window(app_name)
