@@ -290,9 +290,9 @@ The most commonly adjusted settings are probably
 
 Also, you can add additional vocabulary words, words to replace, search engines and more. Complete the community setup instructions above, then open the `settings` folder to see the provided CSV files and customize them as needed.
 
-## Overriding settings without forking
+## Overriding settings (such as talon lists) without forking
 
-To override a setting without forking the community repository, create talon files with more specific tags than the default. This customizes your setup without affecting the base repository. Any tag will work. For example, setting the language on a talon file or list will override the community settings. This is useful for personal customizations or workflow-specific tweaks.
+To override configuration without forking the community repository, create talon files with more specific tags than the default. This customizes your setup without affecting the base repository. Any tag will work. For example, setting the language on a talon file or list will override the community settings. This is useful for personal customizations or workflow-specific tweaks.
 
 If you want to override the modifier keys, for example, you could create a talon file that looks like this:
 
