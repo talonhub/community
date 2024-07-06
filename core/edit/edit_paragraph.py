@@ -52,7 +52,6 @@ class Actions:
         """Copy paragraph under the cursor"""
         actions.edit.select_paragraph()
         actions.edit.copy()
-        actions.edit.select_none()
 
     def paste_paragraph():
         """Paste to paragraph under the cursor"""
