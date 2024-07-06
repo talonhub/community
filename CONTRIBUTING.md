@@ -11,3 +11,9 @@ Each of the principles is numbered for easy referencing. The body is formatted a
 
 - P03 - Use the `app.bundle` matcher for apps on OSX. This is the least ambiguous way of referring to a particular program.
 - P04 - Use both `app.name` and `app.exe` matchers for apps on Windows. That is the context should OR together one matcher of each type. Apparently the [MUICache](https://www.magnetforensics.com/blog/forensic-analysis-of-muicache-files-in-windows/) can break, perhaps making one of these matchers stop working.
+
+# Configuration
+
+Sometimes it is useful to allow for users to specify the configuration settings that they would like. We often use the `settings.talon` file to do this.
+
+Since some users prefer to set settings using a file outside of this repository, it is easier for those users if we do not hard code the settings values into the `settings.talon` file. Instead, it is helpful to provide an example setting that is commented out in that file and set a default value in Python code in case the setting is not present in the `settings.talon` file.
