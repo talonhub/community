@@ -11,7 +11,6 @@ mod.tag("gamepad", desc="Activate tag to enable gamepad bindings")
 
 @mod.action_class
 class Actions:
-
     # DPAD buttons
 
     def gamepad_press_dpad_left():
