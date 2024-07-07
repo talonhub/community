@@ -87,15 +87,9 @@ def get_screens() -> Sequence[ui.Screen]:
             return ui.screens()
         case "cursor":
             x, y = ctrl.mouse_pos()
-            containing_screen = ui.screen_containing(x, y)
-            if containing_screen is not None:
-                return [containing_screen]
-            return []
+            return [ui.screen_containing(x, y)]
         case "focus":
-            active_window = ui.active_window()
-            if active_window is not None:
-                return [active_window.screen]
-            return []
+            return [ui.active_window().screen]
         case _:
             raise ValueError(f"Unknown screen setting: {screen}")
 
