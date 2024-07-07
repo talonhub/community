@@ -1,4 +1,4 @@
-from talon import Module, actions, ui, ctrl
+from talon import Module, actions, ctrl, ui
 from talon.screen import Screen
 
 screen: Screen = ui.main_screen()

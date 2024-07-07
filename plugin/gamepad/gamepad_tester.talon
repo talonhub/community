@@ -1,1 +1,1 @@
-gamepad tester:             user.gamepad_tester_toggle()
+gamepad tester: user.gamepad_tester_toggle()
