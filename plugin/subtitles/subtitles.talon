@@ -1,19 +1,23 @@
 settings():
-    # Show subtitles
+    # Show subtitles?
     user.subtitles_show = false
-    # Show subtitles on main screen. Available values: "all", "main", "cursor", "focus"
+    # Screens on which to show subtitles:
+    # "all" - all screens
+    # "main" - main screen as configured in OS
+    # "cursor" - screen containing mouse pointer
+    # "focus" - screen containing active/focused window/app
     user.subtitles_screens = "main"
-    # 100px subtitles font size
+    # 100 px maximum subtitle font size
     user.subtitles_size = 100
-    # White subtitles color
+    # White subtitle color
     user.subtitles_color = "ffffff"
     # Slightly dark subtitle outline
     user.subtitles_color_outline = "aaaaaa"
-    # For each character in the subtitle extend the timeout 50ms
+    # For each character in the subtitle, extend the timeout 50 ms
     user.subtitles_timeout_per_char = 50
-    # 750ms is the minimum timeout for a subtitle
+    # 750 ms is the minimum time to display a subtitle
     user.subtitles_timeout_min = 750
-    # 3 seconds is the maximum timeout for a subtitle
+    # 3 seconds is the maximum time to display a subtitle
     user.subtitles_timeout_max = 3000
-    # Subtitles are positioned at the bottom of the screen
+    # Position subtitles at the bottom of the screen (93% from top)
     user.subtitles_y = 0.93
