@@ -115,6 +115,9 @@ copy block: user.copy_paragraph()
 copy word: user.copy_word()
 copy word left: user.copy_word_left()
 copy word right: user.copy_word_right()
+copy phrase <phrase>: clip.set_text(phrase)
+copy append phrase <phrase>:
+    clip.set_text("{clip.text()}\n{phrase}")
 
 #to do: do we want these variants, seem to conflict
 # copy left:
