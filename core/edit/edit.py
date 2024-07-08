@@ -93,6 +93,11 @@ class Actions:
         for _ in range(n):
             actions.edit.word_right()
 
+    def cut_append():
+        """Cut and append the selected text to the clipboard"""
+        clip.set_text(clip.get() + "\n" + actions.edit.selected_text())
+        actions.key("delete")
+
     def cut_word():
         """Cut word under cursor"""
         actions.edit.select_word()
@@ -112,6 +117,10 @@ class Actions:
         """Copy word under cursor"""
         actions.edit.select_word()
         actions.edit.copy()
+
+    def copy_append():
+        """Append the selected text to the clipboard"""
+        clip.set_text(clip.get() + "\n" + actions.edit.selected_text())
 
     def copy_word_left():
         """Copies the word to the left."""

@@ -107,6 +107,7 @@ clear way down:
 
 # Copy
 copy that: edit.copy()
+copy append that: user.copy_append()
 copy all: user.copy_all()
 copy line: user.copy_line()
 copy line start: user.copy_line_start()
@@ -132,6 +133,7 @@ copy word right: user.copy_word_right()
 
 # Cut
 cut that: edit.cut()
+cut append that: user.cut_append()
 cut all: user.cut_all()
 cut line: user.cut_line()
 cut line start: user.cut_line_start()
