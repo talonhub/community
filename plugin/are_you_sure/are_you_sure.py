@@ -45,13 +45,13 @@ def gui(gui: imgui.GUI):
 @mod.action_class
 class Actions:
     def are_you_sure_confirm():
-        ''''''
+        '''Performs the registered are you sure action'''
         confirmation.confirm()
     
     def are_you_sure_cancel():
-        ''''''
+        '''Cancels the registered are you sure action'''
         confirmation.disconfirm()
 
     def are_you_sure_register(message: str, on_confirmation: Callable, on_disconfirmation: Callable = None):
-        ''''''
+        '''Registers an action to be performed if the user confirms it'''
         confirmation.request_confirmation(message, on_confirmation, on_disconfirmation)
