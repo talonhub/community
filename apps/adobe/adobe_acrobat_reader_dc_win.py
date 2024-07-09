@@ -59,9 +59,3 @@ class UserActions:
 
     def page_rotate_left():
         actions.key("shift-ctrl-1")
-
-    def go_back():
-        actions.key("alt-left")
-
-    def page_go_forward():
-        actions.key("alt-right")
