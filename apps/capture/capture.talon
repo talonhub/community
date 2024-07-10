@@ -3,4 +3,5 @@ app: tech_smith_capture
 -
 settings():
 	speech._subtitles = 0
+	user.subtitles_show = false
 
