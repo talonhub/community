@@ -1,30 +1,30 @@
 import itertools
 import re
 
-from talon import Context, Module, actions
+from talon import Context, Module, actions, settings
 
 ctx = Context()
 mod = Module()
 
 
-text_navigation_max_line_search = mod.setting(
+mod.setting(
     "text_navigation_max_line_search",
     type=int,
     default=10,
-    desc="the maximum number of rows that will be included in the search for the keywords above and below in <user direction>",
+    desc="The maximum number of rows that will be included in the search for the keywords above and below in <user direction>",
 )
 
 mod.list(
     "navigation_action",
-    desc="actions to perform, for instance move, select, cut, etc",
+    desc="Actions to perform, for instance move, select, cut, etc",
 )
 mod.list(
     "before_or_after",
-    desc="words to indicate if the cursor should be moved before or after a given reference point",
+    desc="Words to indicate if the cursor should be moved before or after a given reference point",
 )
 mod.list(
     "navigation_target_name",
-    desc="names for regular expressions for common things to navigate to, for instance a word with or without underscores",
+    desc="Names for regular expressions for common things to navigate to, for instance a word with or without underscores",
 )
 
 ctx.lists["self.navigation_action"] = {

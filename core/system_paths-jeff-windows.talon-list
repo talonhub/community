@@ -1,0 +1,17 @@
+list: user.system_paths
+host: jeff-windows
+-
+user: 'C:\\Users\\knaus'
+profile: 'C:\\Users\\knaus'
+desktop: 'C:\\Users\\knaus\\OneDrive\\Desktop'
+desk: 'C:\\Users\\knaus\\Desktop'
+documents: 'C:\\Users\\knaus\\OneDrive\\Documents'
+docks: 'C:\\Users\\knaus\\Documents'
+downloads: 'C:\\Users\\knaus\\Downloads'
+music: 'C:\\Users\\knaus\\Music'
+pictures: 'C:\\Users\\knaus\\OneDrive\\Pictures'
+videos: 'C:\\Users\\knaus\\Videos'
+talon home: 'C:\\Users\\knaus\\AppData\\Roaming\\talon'
+talon user: 'C:\\Users\\knaus\\AppData\\Roaming\\talon\\user'
+one drive: 'C:\\Users\\knaus\\OneDrive'
+applications: 'shell:applications'

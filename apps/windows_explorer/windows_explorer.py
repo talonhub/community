@@ -86,17 +86,6 @@ if app.platform == "windows":
 
 @ctx.action_class("user")
 class UserActions:
-    def history_go_back():
-        actions.key("alt-left")
-        
-    def history_go_forward():
-        actions.key("alt-right")
-        
-    def file_manager_go_back():
-        actions.key("alt-left")
-
-    def file_manager_go_forward():
-        actions.key("alt-right")
 
     def file_manager_open_parent():
         actions.key("alt-up")

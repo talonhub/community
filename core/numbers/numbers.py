@@ -11,7 +11,7 @@ tens = "twenty thirty forty fifty sixty seventy eighty ninety".split()
 scales = "hundred thousand million billion trillion quadrillion quintillion sextillion septillion octillion nonillion decillion".split()
 
 digits_map = {n: i for i, n in enumerate(digit_list)}
-digits_map["not"] = 0
+digits_map["oh"] = 0
 teens_map = {n: i + 10 for i, n in enumerate(teens)}
 tens_map = {n: 10 * (i + 2) for i, n in enumerate(tens)}
 scales_map = {n: 10 ** (3 * (i + 1)) for i, n in enumerate(scales[1:])}
@@ -177,6 +177,7 @@ for ten in tens:
 number_small_map = {n: i for i, n in enumerate(number_small_list)}
 
 mod.list("number_small", desc="List of small numbers")
+mod.tag("prefixed_numbers", desc="Require prefix when saying a number")
 ctx.lists["self.number_small"] = number_small_map.keys()
 
 
@@ -213,3 +214,10 @@ def number_signed(m):
 @ctx.capture("number_small", rule="{user.number_small}")
 def number_small(m) -> int:
     return number_small_map[m.number_small]
+
+
+@mod.capture(rule=f"[negative|minus] <number_small>")
+def number_signed_small(m) -> int:
+    """Parses an integer between -99 and 99."""
+    number = m[-1]
+    return -number if (m[0] in ["negative", "minus"]) else number

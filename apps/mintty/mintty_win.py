@@ -1,6 +1,6 @@
 import subprocess
 
-from talon import Context, Module, actions, ui, settings
+from talon import Context, Module, actions, settings, ui
 
 mod = Module()
 mod.apps.mintty = """
@@ -26,7 +26,7 @@ ctx.tags = [
 directories_to_remap = {}
 directories_to_exclude = {}
 
-setting_cyg_path = mod.setting(
+mod.setting(
     "cygpath",
     type=str,
     default="C:\\cygwin64\\bin\\cygpath.exe",

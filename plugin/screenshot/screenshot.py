@@ -2,10 +2,12 @@ import os
 from datetime import datetime
 from typing import Optional
 
-from talon import Context, Module, actions, app, clip, cron, screen, ui
+from talon import Context, Module, actions, app, clip, cron, screen, settings, ui
 from talon.canvas import Canvas
 
 mod = Module()
+
+mod.tag("screenshot_disabled", desc="Activating this tag disables screenshot commands")
 
 default_folder = ""
 if app.platform == "windows":
@@ -13,7 +15,7 @@ if app.platform == "windows":
 if not os.path.isdir(default_folder):
     default_folder = os.path.join("~", "Pictures")
 
-screenshot_folder = mod.setting(
+mod.setting(
     "screenshot_folder",
     type=str,
     default=default_folder,

@@ -4,7 +4,7 @@ from typing import Optional
 from talon import Context, Module, actions, settings
 
 mod = Module()
-setting_meta = mod.setting(
+mod.setting(
     "emacs_meta",
     type=str,
     default="esc",

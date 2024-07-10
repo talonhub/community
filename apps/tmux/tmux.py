@@ -7,7 +7,7 @@ tag: terminal
 and tag: user.tmux
 """
 
-setting_tmux_prefix_key = mod.setting(
+mod.setting(
     "tmux_prefix_key",
     type=str,
     default="ctrl-b",
@@ -19,8 +19,7 @@ setting_tmux_prefix_key = mod.setting(
 class TmuxActions:
     def tmux_prefix():
         """press control and the configured tmux prefix key"""
-        prefix = settings.get("user.tmux_prefix_key")
-        actions.key(f"{prefix}")
+        actions.key(settings.get("user.tmux_prefix_key"))
 
     def tmux_keybind(key: str):
         """press tmux prefix followed by a key bind"""

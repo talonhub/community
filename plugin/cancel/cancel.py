@@ -38,33 +38,35 @@ class Actions:
 def pre_phrase(phrase: Phrase):
     global ts_threshold
 
-    # Nothing to cancel
-    if "parsed" not in phrase:
+    words = phrase["phrase"]
+
+    if not words:
         return
 
     # Check if the phrase is before the threshold
     if ts_threshold != 0:
-        words = phrase["phrase"]
         start = getattr(words[0], "start", phrase["_ts"])
         phrase_starts_before_threshold = start < ts_threshold
         ts_threshold = 0
         # Start of phrase is before threshold timestamp
         if phrase_starts_before_threshold:
-            abort_phrase(phrase)
-            actions.app.notify(f"Command canceled, started before talon was awake")
-
+            print(f"Canceled phrase: {' '.join(words)}")
+            cancel_entire_phrase(phrase)
             return
 
     # Check if the phrase is a cancel command
-    if "text" in phrase:
-        n = len(cancel_phrase)
-        before, after = phrase["text"][:-n], phrase["text"][-n:]
-        if after == cancel_phrase:
-            abort_phrase(phrase)
-            return
+    n = len(cancel_phrase)
+    before, after = words[:-n], words[-n:]
+    if after == cancel_phrase:
+        actions.app.notify(f"Command canceled: {' '.join(before)!r}")
+        cancel_entire_phrase(phrase)
+        return
 
 
-def abort_phrase(phrase: Phrase):
-    phrase["parsed"]._sequence = []
+def cancel_entire_phrase(phrase: Phrase):
+    phrase["phrase"] = []
+    if "parsed" in phrase:
+        phrase["parsed"]._sequence = []
+
 
 speech_system.register("pre:phrase", pre_phrase)
