@@ -10,6 +10,7 @@ phrase <user.text> over:
 <user.format_code>+$: user.insert_many(format_code_list)
 <user.format_code>+ over: user.insert_many(format_code_list)
 <user.formatters> that: user.formatters_reformat_selection(user.formatters)
+<user.formatters> (pace | paste): user.insert_formatted(clip.text(), formatters)
 word <user.word>:
     user.add_phrase_to_history(word)
     insert(word)
@@ -25,3 +26,6 @@ select that: user.select_last_phrase()
 before that: user.before_last_phrase()
 nope that | scratch that: user.clear_last_phrase()
 nope that was <user.formatters>: user.formatters_reformat_last(formatters)
+(abbreviate | abreviate | brief) {user.abbreviation}: "{abbreviation}"
+<user.formatters> (abbreviate | abreviate | brief) {user.abbreviation}:
+    user.insert_formatted(abbreviation, formatters)
