@@ -9,8 +9,6 @@ mod = Module()
 mod.list("emacs_command", desc="Emacs commands")
 
 ctx = Context()
-emacs_ctx = Context()
-emacs_ctx.matches = "app: emacs"
 
 
 class Command(NamedTuple):
@@ -20,21 +18,22 @@ class Command(NamedTuple):
     spoken: Optional[str] = None
 
 
-@dataclass
-class CommandInfo:
-    by_name: dict  # maps name to Commands.
-    by_spoken: dict  # maps spoken forms to Commands.
-
-    def __init__(self):
-        self.by_name = {}
-        self.by_spoken = {}
+# Maps command name to Command.
+emacs_commands = {}
 
 
-emacs_commands = CommandInfo()
+@mod.action_class
+class Actions:
+    def emacs_command_keybinding(command_name: str) -> Optional[str]:
+        "Looks up the keybinding for command_name in emacs_commands.csv."
+        return emacs_commands.get(command_name, Command(command_name)).keys
+
+    def emacs_command_short_form(command_name: str) -> Optional[str]:
+        "Looks up the short form for command_name in emacs_commands.csv."
+        return emacs_commands.get(command_name, Command(command_name)).short
 
 
 def load_csv():
-    global emacs_commands
     filepath = Path(__file__).parents[0] / "emacs_commands.csv"
     with resource.open(filepath) as f:
         rows = list(csv.reader(f))
@@ -55,8 +54,9 @@ def load_csv():
         )[:4]
         commands.append(Command(name=name, keys=keys, short=short, spoken=spoken))
 
-    info = CommandInfo()
-    info.by_name = {c.name: c for c in commands}
+    # Update global command info.
+    global emacs_commands
+    emacs_commands = {c.name: c for c in commands}
 
     # Generate spoken forms and apply overrides.
     try:
@@ -69,36 +69,8 @@ def load_csv():
         for c in commands:
             if c.spoken:
                 command_list[c.spoken] = c.name
-        info.by_spoken = command_list
-
-    global emacs_commands
-    emacs_commands = info
-    ctx.lists["self.emacs_command"] = info.by_spoken
+    ctx.lists["self.emacs_command"] = command_list
 
 
 # TODO: register on change to file!
 app.register("ready", load_csv)
-
-
-@mod.action_class
-class Actions:
-    def emacs(command_name: str, prefix: Optional[int] = None):
-        """
-        Runs the emacs command `command_name`. Defaults to using M-x, but may use
-        a key binding if known or rpc if available. Provides numeric prefix argument
-        `prefix` if specified.
-        """
-
-
-@emacs_ctx.action_class("user")
-class UserActions:
-    def emacs(command_name, prefix=None):
-        if prefix is not None:
-            actions.user.emacs_prefix(prefix)
-        command = emacs_commands.by_name.get(command_name, Command(command_name))
-        if command.keys is not None:
-            actions.user.emacs_key(command.keys)
-        else:
-            actions.user.emacs_meta_x()
-            actions.insert(command.short or command.name)
-            actions.key("enter")

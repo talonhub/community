@@ -3,7 +3,7 @@ from talon import Context, actions, settings
 ctx = Context()
 
 ctx.matches = r"""
-tag: user.r
+code.language: r
 """
 
 ctx.lists["user.code_common_function"] = {

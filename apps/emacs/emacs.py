@@ -1,9 +1,10 @@
 import logging
+from typing import Optional
 
-from talon import Context, Module, actions
+from talon import Context, Module, actions, settings
 
 mod = Module()
-setting_meta = mod.setting(
+mod.setting(
     "emacs_meta",
     type=str,
     default="esc",
@@ -12,9 +13,14 @@ setting_meta = mod.setting(
 
 mod.apps.emacs = "app.name: Emacs"
 mod.apps.emacs = "app.name: emacs"
+mod.apps.emacs = "app.name: /^GNU Emacs/"
 mod.apps.emacs = """
 os: mac
 app.bundle: org.gnu.Emacs
+"""
+mod.apps.emacs = """
+os: windows
+app.exe: emacs.exe
 """
 
 ctx = Context()
@@ -22,7 +28,7 @@ ctx.matches = "app: emacs"
 
 
 def meta(keys):
-    m = setting_meta.get()
+    m = settings.get("user.emacs_meta")
     if m == "alt":
         return " ".join("alt-" + k for k in keys.split())
     elif m == "cmd":
@@ -57,18 +63,34 @@ class Actions:
         # TODO: handle corner-cases like key(" ") and key("ctrl- "), etc.
         actions.key(" ".join(meta_fixup(k) for k in keys.split()))
 
-    def emacs_meta_x():
-        "Prompts user to enter a command name via execute-extended-command (M-x)."
-        actions.user.emacs_meta("x")
+    def emacs_prefix(n: Optional[int] = None):
+        "Inputs a prefix argument."
+        if n is None:
+            # `M-x universal-argument` doesn't have the same effect as pressing the key.
+            prefix_key = actions.user.emacs_command_keybinding("universal-argument")
+            actions.key(prefix_key or "ctrl-u")  # default to ctrl-u
+        else:
+            # Applying meta to each key can use fewer keypresses and 'works' in ansi-term
+            # mode.
+            actions.user.emacs_meta(" ".join(str(n)))
 
-    def emacs_prefix(n: int):
-        "Inputs a numeric prefix argument."
-        # Applying meta to each key can use fewer keypresses and 'works' in ansi-term
-        # mode.
-        actions.user.emacs_meta(" ".join(str(n)))
-        # # Alternative implementation using universal-argument (ctrl-u):
-        # actions.user.emacs("universal-argument")
-        # actions.key(" ".join(str(n)))
+    def emacs(command_name: str, prefix: Optional[int] = None):
+        """
+        Runs the emacs command `command_name`. Defaults to using M-x, but may use
+        a key binding if known or rpc if available. Provides numeric prefix argument
+        `prefix` if specified.
+        """
+        meta_x = actions.user.emacs_command_keybinding("execute-extended-command")
+        keys = actions.user.emacs_command_keybinding(command_name)
+        short_form = actions.user.emacs_command_short_form(command_name)
+        if prefix is not None:
+            actions.user.emacs_prefix(prefix)
+        if keys is not None:
+            actions.user.emacs_key(keys)
+        else:
+            actions.user.emacs_key(meta_x or "meta-x")
+            actions.insert(short_form or command_name)
+            actions.key("enter")
 
     def emacs_help(key: str = None):
         "Runs the emacs help command prefix, optionally followed by some keys."
@@ -148,11 +170,11 @@ class UserActions:
         if left:
             actions.edit.extend_word_left()
             before = actions.edit.selected_text()
-            actions.user.emacs("pop-mark")
+            actions.user.emacs("pop-to-mark-command")
         if right:
             actions.edit.extend_line_end()
             after = actions.edit.selected_text()
-            actions.user.emacs("pop-mark")
+            actions.user.emacs("pop-to-mark-command")
         return (before, after)
 
 

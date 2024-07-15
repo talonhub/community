@@ -10,6 +10,13 @@ app: discord
 
 @ctx.action_class("user")
 class UserActions:
+    # Navigation: QuickSwitcher
+    def discord_quick_switcher(dest_type: str, dest_search: str):
+        actions.key("ctrl-k")
+        actions.insert(dest_type)
+        if dest_search:
+            actions.insert(dest_search)
+
     # Navigation: Servers
     def messaging_workspace_previous():
         actions.key("ctrl-alt-up")
@@ -18,9 +25,6 @@ class UserActions:
         actions.key("ctrl-alt-down")
 
     # Navigation: Channels
-    def messaging_open_channel_picker():
-        actions.key("ctrl-k")
-
     def messaging_channel_previous():
         actions.key("alt-up")
 
@@ -58,6 +62,9 @@ class UserActions:
     def discord_gif_picker():
         actions.key("ctrl-g")
 
+    def discord_sticker_picker():
+        actions.key("ctrl-s")
+
     # Misc
     def messaging_mark_workspace_read():
         actions.key("shift-esc")
@@ -88,9 +95,3 @@ class UserActions:
 
     def discord_toggle_dms():
         actions.key("ctrl-alt-right")
-
-    def discord_quick_switcher(dest_type: str, dest_search: str):
-        actions.key("ctrl-k")
-        actions.insert(dest_type)
-        if dest_search:
-            actions.insert(dest_search)

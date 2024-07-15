@@ -2,11 +2,11 @@
 import re
 from typing import Callable, Optional
 
-from talon import Context, Module, actions, grammar, ui
+from talon import Context, Module, actions, grammar, settings, ui
 
 mod = Module()
 
-setting_context_sensitive_dictation = mod.setting(
+mod.setting(
     "context_sensitive_dictation",
     type=bool,
     default=False,
@@ -53,17 +53,17 @@ def prose_modifier(m) -> Callable:
     return getattr(DictationFormat, m.prose_modifiers)
 
 
-@mod.capture(rule="numeral <user.number_string>")
+@mod.capture(rule="(numb | numeral) <user.number_string>")
 def prose_simple_number(m) -> str:
     return m.number_string
 
 
-@mod.capture(rule="numeral <user.number_string> (dot | point) <digit_string>")
+@mod.capture(rule="(numb | numeral) <user.number_string> (dot | point) <digit_string>")
 def prose_number_with_dot(m) -> str:
     return m.number_string + "." + m.digit_string
 
 
-@mod.capture(rule="numeral <user.number_string> colon <user.number_string>")
+@mod.capture(rule="(numb | numeral) <user.number_string> colon <user.number_string>")
 def prose_number_with_colon(m) -> str:
     return m.number_string_1 + ":" + m.number_string_2
 
@@ -420,9 +420,7 @@ def auto_capitalize(text, state=None):
     return output, (
         "sentence start"
         if charge or sentence_end
-        else "after newline"
-        if newline
-        else None
+        else "after newline" if newline else None
     )
 
 
@@ -545,14 +543,13 @@ class Actions:
     def dictation_insert(text: str, auto_cap: bool = True) -> str:
         """Inserts dictated text, formatted appropriately."""
         add_space_after = False
-        if setting_context_sensitive_dictation.get():
+        if settings.get("user.context_sensitive_dictation"):
             # Peek left if we might need leading space or auto-capitalization;
             # peek right if we might need trailing space. NB. We peek right
             # BEFORE insertion to avoid breaking the undo-chain between the
             # inserted text and the trailing space.
-            need_left = (
-                not omit_space_before(text)
-                or text != auto_capitalize(text, "sentence start")[0]
+            need_left = not omit_space_before(text) or (
+                auto_cap and text != auto_capitalize(text, "sentence start")[0]
             )
             need_right = not omit_space_after(text)
             before, after = actions.user.dictation_peek(need_left, need_right)

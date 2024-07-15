@@ -1,0 +1,20 @@
+name: elseStatement
+phrase: else
+insertionScope: statement
+
+$0.wrapperPhrase: else
+$0.wrapperScope: statement
+---
+
+language: javascript | java
+-
+else {
+    $0
+}
+---
+
+language: python
+-
+else:
+    $0
+---

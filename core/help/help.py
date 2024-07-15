@@ -2,25 +2,32 @@ import itertools
 import math
 import re
 from collections import defaultdict
+from functools import cmp_to_key
 from itertools import islice
-from typing import Iterable
+from typing import Any, Iterable, Tuple
 
-from talon import Context, Module, actions, imgui, registry
+from talon import Context, Module, actions, imgui, registry, settings
 
 mod = Module()
 mod.list("help_contexts", desc="list of available contexts")
-mod.mode("help", "mode for commands that are available only when help is visible")
-setting_help_max_contexts_per_page = mod.setting(
+mod.tag("help_open", "tag for commands that are available only when help is visible")
+mod.setting(
     "help_max_contexts_per_page",
     type=int,
     default=20,
     desc="Max contexts to display per page in help",
 )
-setting_help_max_command_lines_per_page = mod.setting(
+mod.setting(
     "help_max_command_lines_per_page",
     type=int,
     default=50,
     desc="Max lines of command to display per page in help",
+)
+mod.setting(
+    "help_sort_contexts_by_specificity",
+    type=bool,
+    default=True,
+    desc="If true contexts are sorted by specificity before alphabetically. If false, contexts are just sorted alphabetically.",
 )
 
 ctx = Context()
@@ -75,6 +82,8 @@ def gui_formatters(gui: imgui.GUI):
         gui.text(f"{val}: {key}")
 
     gui.spacer()
+    gui.text("* prose formatter")
+    gui.spacer()
     if gui.button("Help close"):
         gui_formatters.hide()
 
@@ -83,9 +92,11 @@ def format_context_title(context_name: str) -> str:
     global cached_active_contexts_list
     return "{} [{}]".format(
         context_name,
-        "ACTIVE"
-        if context_map.get(context_name, None) in cached_active_contexts_list
-        else "INACTIVE",
+        (
+            "ACTIVE"
+            if context_map.get(context_name, None) in cached_active_contexts_list
+            else "INACTIVE"
+        ),
     )
 
 
@@ -97,9 +108,11 @@ def format_context_button(index: int, context_label: str, context_name: str) -> 
         return "{}. {}{}".format(
             index,
             context_label,
-            "*"
-            if context_map.get(context_name, None) in cached_active_contexts_list
-            else "",
+            (
+                "*"
+                if context_map.get(context_name, None) in cached_active_contexts_list
+                else ""
+            ),
         )
     else:
         return f"{index}. {context_label} "
@@ -107,20 +120,22 @@ def format_context_button(index: int, context_label: str, context_name: str) -> 
 
 # translates 1-based index -> actual index in sorted_context_map_keys
 def get_context_page(index: int) -> int:
-    return math.ceil(index / setting_help_max_contexts_per_page.get())
+    return math.ceil(index / settings.get("user.help_max_contexts_per_page"))
 
 
 def get_total_context_pages() -> int:
     return math.ceil(
-        len(sorted_display_list) / setting_help_max_contexts_per_page.get()
+        len(sorted_display_list) / settings.get("user.help_max_contexts_per_page")
     )
 
 
 def get_current_context_page_length() -> int:
-    start_index = (current_context_page - 1) * setting_help_max_contexts_per_page.get()
+    start_index = (current_context_page - 1) * settings.get(
+        "user.help_max_contexts_per_page"
+    )
     return len(
         sorted_display_list[
-            start_index : start_index + setting_help_max_contexts_per_page.get()
+            start_index : start_index + settings.get("user.help_max_contexts_per_page")
         ]
     )
 
@@ -148,9 +163,8 @@ def get_pages(item_line_counts: list[int]) -> list[int]:
     current_page = 1
     pages = []
     for line_count in item_line_counts:
-        if (
-            line_count + current_page_line_count
-            > setting_help_max_command_lines_per_page.get()
+        if line_count + current_page_line_count > settings.get(
+            "user.help_max_command_lines_per_page"
         ):
             if current_page_line_count == 0:
                 # Special case, render a larger page.
@@ -198,10 +212,17 @@ def gui_context_help(gui: imgui.GUI):
 
         current_item_index = 1
         current_selection_index = 1
-        for display_name in sorted_display_list:
+        current_group = ""
+        for display_name, group, _ in sorted_display_list:
             target_page = get_context_page(current_item_index)
             context_name = display_name_to_context_name_map[display_name]
             if current_context_page == target_page:
+                if current_group != group:
+                    if current_group:
+                        gui.line()
+                    gui.text(f"{group}:")
+                    current_group = group
+
                 button_name = format_context_button(
                     current_selection_index,
                     display_name,
@@ -422,13 +443,58 @@ def refresh_context_command_map(enabled_only=False):
 
     context_map = local_context_map
     context_command_map = local_context_command_map
-    sorted_display_list = sorted(local_display_name_to_context_name_map.keys())
+    sorted_display_list = get_sorted_display_keys(
+        local_context_map,
+        local_display_name_to_context_name_map,
+    )
     show_enabled_contexts_only = enabled_only
     display_name_to_context_name_map = local_display_name_to_context_name_map
     rule_word_map = refresh_rule_word_map(local_context_command_map)
 
     ctx.lists["self.help_contexts"] = cached_short_context_names
     update_active_contexts_cache(active_contexts)
+
+
+def get_sorted_display_keys(
+    context_map: dict[str, Any],
+    display_name_to_context_name_map: dict[str, str],
+):
+    if settings.get("user.help_sort_contexts_by_specificity"):
+        return get_sorted_keys_by_context_specificity(
+            context_map,
+            display_name_to_context_name_map,
+        )
+    return [
+        (display_name, "", 0)
+        for display_name in sorted(display_name_to_context_name_map.keys())
+    ]
+
+
+def get_sorted_keys_by_context_specificity(
+    context_map: dict[str, Any],
+    display_name_to_context_name_map: dict[str, str],
+) -> list[Tuple[str, str, int]]:
+    def get_group(display_name) -> Tuple[str, str, int]:
+        try:
+            context_name = display_name_to_context_name_map[display_name]
+            context = context_map[context_name]
+            keys = context._match.keys()
+            if any(key for key in keys if key.startswith("app.")):
+                return (display_name, "Application-specific", 2)
+            if keys:
+                return (display_name, "Context-dependent", 1)
+            return (display_name, "Global", 0)
+        except Exception as ex:
+            return (display_name, "", 0)
+
+    grouped_list = [
+        get_group(display_name)
+        for display_name in display_name_to_context_name_map.keys()
+    ]
+    return sorted(
+        grouped_list,
+        key=lambda item: (-item[2], item[0]),
+    )
 
 
 def refresh_rule_word_map(context_command_map):
@@ -466,7 +532,7 @@ def hide_all_help_guis():
 
 
 def paginate_list(data, SIZE=None):
-    chunk_size = SIZE or setting_help_max_command_lines_per_page.get()
+    chunk_size = SIZE or settings.get("user.help_max_command_lines_per_page")
     it = iter(data)
     for i in range(0, len(data), chunk_size):
         yield {k: data[k] for k in islice(it, chunk_size)}
@@ -477,7 +543,7 @@ def draw_list_commands(gui: imgui.GUI):
     global total_page_count
     global selected_context_page
 
-    talon_list = registry.lists[selected_list][0]
+    talon_list = registry.lists[selected_list][-1]
     # numpages = math.ceil(len(talon_list) / SIZE)
 
     pages_list = []
@@ -536,7 +602,7 @@ class Actions:
         selected_list = ab
         gui_list_help.show()
         register_events(True)
-        actions.mode.enable("user.help")
+        ctx.tags = ["user.help_open"]
 
     def help_formatters(ab: dict):
         """Provides the list of formatter keywords"""
@@ -544,16 +610,10 @@ class Actions:
         global formatters_words
         formatters_words = ab
         reset()
-        # print("help_alphabet - alphabet gui_alphabet: {}".format(gui_alphabet.showing))
-        # print(
-        #     "help_alphabet - gui_context_help showing: {}".format(
-        #         gui_context_help.showing
-        #     )
-        # )
         hide_all_help_guis()
         gui_formatters.show()
         register_events(False)
-        actions.mode.enable("user.help")
+        ctx.tags = ["user.help_open"]
 
     def help_context_enabled():
         """Display contextual command info"""
@@ -562,7 +622,7 @@ class Actions:
         hide_all_help_guis()
         gui_context_help.show()
         register_events(True)
-        actions.mode.enable("user.help")
+        ctx.tags = ["user.help_open"]
 
     def help_context():
         """Display contextual command info"""
@@ -571,7 +631,7 @@ class Actions:
         hide_all_help_guis()
         gui_context_help.show()
         register_events(True)
-        actions.mode.enable("user.help")
+        ctx.tags = ["user.help_open"]
 
     def help_search(phrase: str):
         """Display command info for search phrase"""
@@ -583,7 +643,7 @@ class Actions:
         hide_all_help_guis()
         gui_context_help.show()
         register_events(True)
-        actions.mode.enable("user.help")
+        ctx.tags = ["user.help_open"]
 
     def help_selected_context(m: str):
         """Display command info for selected context"""
@@ -601,7 +661,7 @@ class Actions:
         hide_all_help_guis()
         gui_context_help.show()
         register_events(True)
-        actions.mode.enable("user.help")
+        ctx.tags = ["user.help_open"]
 
     def help_next():
         """Navigates to next page"""
@@ -634,8 +694,9 @@ class Actions:
         """Select the context by a number"""
         global sorted_display_list, selected_context
         if gui_context_help.showing:
-            if index < setting_help_max_contexts_per_page.get() and (
-                (current_context_page - 1) * setting_help_max_contexts_per_page.get()
+            if index < settings.get("user.help_max_contexts_per_page") and (
+                (current_context_page - 1)
+                * settings.get("user.help_max_contexts_per_page")
                 + index
                 < len(sorted_display_list)
             ):
@@ -643,9 +704,9 @@ class Actions:
                     selected_context = display_name_to_context_name_map[
                         sorted_display_list[
                             (current_context_page - 1)
-                            * setting_help_max_contexts_per_page.get()
+                            * settings.get("user.help_max_contexts_per_page")
                             + index
-                        ]
+                        ][0]
                     ]
 
     def help_previous():
@@ -710,7 +771,7 @@ class Actions:
         hide_all_help_guis()
         refresh_context_command_map()
         register_events(False)
-        actions.mode.disable("user.help")
+        ctx.tags = []
 
 
 def commands_updated(_):

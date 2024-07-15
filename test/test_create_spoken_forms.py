@@ -5,8 +5,9 @@ if hasattr(talon, "test_mode"):
 
     import itertools
 
-    import knausj_talon_pkg.core.create_spoken_forms
     from talon import actions
+
+    import core.create_spoken_forms
 
     def test_excludes_words():
         result = actions.user.create_spoken_forms("hi world", ["world"], 0, True)
@@ -40,6 +41,32 @@ if hasattr(talon, "test_mode"):
         result = actions.user.create_spoken_forms("hi .cs", None, 0, True)
 
         assert "hi dot see sharp" in result
+
+    def test_expands_abbreviations():
+        result = actions.user.create_spoken_forms("src", None, 0, True)
+
+        assert "source" in result
+        assert "src" in result
+
+        result = actions.user.create_spoken_forms("WhatsApp", None, 0, True)
+
+        assert "whats app" in result
+
+    def test_expand_upper_case():
+        result = actions.user.create_spoken_forms("LICENSE", None, 0, True)
+
+        assert "license" in result
+        assert "L I C E N S E" in result
+
+    def test_small_word_to_upper_case():
+        result = actions.user.create_spoken_forms("vm", None, 0, True)
+
+        assert "V M" in result
+
+    def test_explode_packed_words():
+        result = actions.user.create_spoken_forms("README", None, 0, True)
+
+        assert "read me" in result
 
     def test_properties():
         """

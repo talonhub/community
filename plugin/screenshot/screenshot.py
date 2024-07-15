@@ -2,10 +2,12 @@ import os
 from datetime import datetime
 from typing import Optional
 
-from talon import Context, Module, actions, app, clip, cron, screen, ui
+from talon import Context, Module, actions, app, clip, cron, screen, settings, ui
 from talon.canvas import Canvas
 
 mod = Module()
+
+mod.tag("screenshot_disabled", desc="Activating this tag disables screenshot commands")
 
 default_folder = ""
 if app.platform == "windows":
@@ -13,7 +15,7 @@ if app.platform == "windows":
 if not os.path.isdir(default_folder):
     default_folder = os.path.join("~", "Pictures")
 
-screenshot_folder = mod.setting(
+mod.setting(
     "screenshot_folder",
     type=str,
     default=default_folder,
@@ -26,13 +28,13 @@ class Actions:
     def screenshot(screen_number: Optional[int] = None):
         """Takes a screenshot of the entire screen and saves it to the pictures folder.
         Optional screen number can be given to use screen other than main."""
-        screen = get_screen(screen_number)
-        screenshot_rect(screen.rect)
+        selected_screen = get_screen(screen_number)
+        actions.user.screenshot_rect(selected_screen.rect)
 
     def screenshot_window():
         """Takes a screenshot of the active window and saves it to the pictures folder"""
         win = ui.active_window()
-        screenshot_rect(win.rect, win.app.name)
+        actions.user.screenshot_rect(win.rect, title=win.app.name)
 
     def screenshot_selection():
         """Triggers an application that is capable of taking a screenshot of a portion of the screen"""
@@ -52,20 +54,23 @@ class Actions:
     def screenshot_clipboard(screen_number: Optional[int] = None):
         """Takes a screenshot of the entire screen and saves it to the clipboard.
         Optional screen number can be given to use screen other than main."""
-        screen = get_screen(screen_number)
-        clipboard_rect(screen.rect)
+        selected_screen = get_screen(screen_number)
+        clipboard_rect(selected_screen.rect)
 
     def screenshot_window_clipboard():
         """Takes a screenshot of the active window and saves it to the clipboard"""
         win = ui.active_window()
         clipboard_rect(win.rect)
 
-
-def screenshot_rect(rect: ui.Rect, title: str = ""):
-    flash_rect(rect)
-    img = screen.capture_rect(rect)
-    path = get_screenshot_path(title)
-    img.write_file(path)
+    def screenshot_rect(
+        rect: ui.Rect, title: str = "", screen_num: Optional[int] = None
+    ):
+        """Allow other modules this screenshot a rectangle"""
+        selected_screen = get_screen(screen_num)
+        flash_rect(rect)
+        img = screen.capture_rect(rect)
+        path = get_screenshot_path(title)
+        img.write_file(path)
 
 
 def clipboard_rect(rect: ui.Rect):
@@ -79,7 +84,7 @@ def get_screenshot_path(title: str = ""):
         title = f" - {title.replace('.', '_')}"
     date = datetime.now().strftime("%Y-%m-%dT%H-%M-%S")
     filename = f"Screenshot {date}{title}.png"
-    folder_path = screenshot_folder.get()
+    folder_path = settings.get("user.screenshot_folder")
     path = os.path.expanduser(os.path.join(folder_path, filename))
     return os.path.normpath(path)
 

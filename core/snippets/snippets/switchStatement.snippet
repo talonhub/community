@@ -1,0 +1,17 @@
+name: switchStatement
+phrase: switch
+insertionScope: statement
+---
+
+language: javascript | java
+-
+switch ($1) {
+    $0
+}
+---
+
+language: python
+-
+match $1:
+    $0
+---
