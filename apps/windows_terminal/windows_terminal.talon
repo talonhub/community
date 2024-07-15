@@ -16,6 +16,9 @@ tag(): user.tabs
 # TODO: file_manager
 tag(): user.splits
 
+# Uncomment the following line to enable common unix utilities from unix_utilities.py
+# tag(): user.unix_utilities
+
 settings open: key(ctrl-,)
 focus left: key(ctrl-alt-shift-left)
 focus right: key(ctrl-alt-shift-right)

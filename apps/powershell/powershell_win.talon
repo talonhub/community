@@ -14,3 +14,6 @@ tag(): user.generic_windows_shell
 tag(): user.git
 tag(): user.anaconda
 # tag(): user.kubectl
+
+# Uncomment the following line to enable common unix utilities from unix_utilities.py
+# tag(): user.unix_utilities
