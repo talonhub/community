@@ -207,9 +207,11 @@ class Actions:
     def mouse_gaze_scroll():
         """Starts gaze scroll"""
         global continuous_scroll_mode
+        # this calls stop_scroll, which resets continuous_scroll_mode
+        start_cursor_scrolling()
+
         continuous_scroll_mode = "gaze scroll"
 
-        start_cursor_scrolling()
         if not settings.get("user.mouse_hide_mouse_gui"):
             gui_wheel.show()
 
