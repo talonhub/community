@@ -32,16 +32,12 @@ def code_type(m) -> str:
     return m.code_type
 
 
-setting_private_function_formatter = mod.setting("code_private_function_formatter", str)
-setting_protected_function_formatter = mod.setting(
-    "code_protected_function_formatter", str
-)
-setting_public_function_formatter = mod.setting("code_public_function_formatter", str)
-setting_private_variable_formatter = mod.setting("code_private_variable_formatter", str)
-setting_protected_variable_formatter = mod.setting(
-    "code_protected_variable_formatter", str
-)
-setting_public_variable_formatter = mod.setting("code_public_variable_formatter", str)
+mod.setting("code_private_function_formatter", str)
+mod.setting("code_protected_function_formatter", str)
+mod.setting("code_public_function_formatter", str)
+mod.setting("code_private_variable_formatter", str)
+mod.setting("code_protected_variable_formatter", str)
+mod.setting("code_public_variable_formatter", str)
 
 
 @mod.action_class

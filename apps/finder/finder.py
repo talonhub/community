@@ -16,12 +16,6 @@ class UserActions:
     def file_manager_open_parent():
         actions.key("cmd-up")
 
-    def file_manager_go_forward():
-        actions.key("cmd-]")
-
-    def file_manager_go_back():
-        actions.key("cmd-[")
-
     def file_manager_current_path():
         title = ui.active_window().title
 
