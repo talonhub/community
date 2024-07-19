@@ -16,15 +16,14 @@ go <user.system_path>: user.file_manager_open_directory(system_path)
 ^[select | cell] folder {user.file_manager_directories}$:
     user.file_manager_select_directory(file_manager_directories)
 ^[select | cell] folder numb <number_small>$:
-  directory = user.file_manager_get_directory_by_index(number_small - 1)
-  user.file_manager_select_directory(directory)
-^[select | cell] file {user.file_manager_files}$: 
+    directory = user.file_manager_get_directory_by_index(number_small - 1)
+    user.file_manager_select_directory(directory)
+^[select | cell] file {user.file_manager_files}$:
     user.file_manager_select_file(file_manager_files)
 ^[select | cell] file numb <number_small>$:
     file = user.file_manager_get_file_by_index(number_small - 1)
     user.file_manager_select_file(file)
-^open {user.file_manager_files}$:
-    user.file_manager_open_file(file_manager_files)
+^open {user.file_manager_files}$: user.file_manager_open_file(file_manager_files)
 ^open numb <number_small>$:
     file = user.file_manager_get_file_by_index(number_small - 1)
     user.file_manager_open_file(file)
