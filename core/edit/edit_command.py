@@ -47,4 +47,4 @@ class Actions:
             modifier_callback()
             action_callback()
         except ValueError as ex:
-            actions.user.notify(str(ex))
+            actions.app.notify(str(ex))
