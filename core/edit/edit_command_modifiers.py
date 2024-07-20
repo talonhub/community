@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Callable
-from talon import Module, actions
 
+from talon import Module, actions
 
 mod = Module()
 mod.list("edit_modifier", desc="Modifiers for the edit command")
