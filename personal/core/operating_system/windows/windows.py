@@ -1,3 +1,4 @@
+from typing import Tuple
 from talon import Context, actions, app, ui
 import os
 
@@ -81,9 +82,71 @@ if app.platform == "windows":
             "root": "\\",
         }
 
+def get_selection_hell_mode(document_range, selection_range) -> Tuple[int, int]:
+    """Get the selection from the hellish Windows API (lol)."""
+    range_before_selection = document_range.clone()
+    range_before_selection.move_endpoint_by_range(
+        "End",
+        "Start",
+        target=selection_range,
+    )
+    start = len(range_before_selection.text)
+
+    range_after_selection = document_range.clone()
+    range_after_selection.move_endpoint_by_range(
+        "Start",
+        "End",
+        target=selection_range,
+    )
+    end = len(document_range.text) - len(range_after_selection.text)
+
+    return start, end
 
 @ctx.action_class("user")
 class UserActionsWin:
+    def dictation_peek(left, right):
+        # Latency for this approach when I tested it with Slack in Firefox was <16ms.
+        try:
+            focused_element = ui.focused_element()
+            print("focused_element")
+
+            textedit_pattern = focused_element.textedit_pattern
+            print("textedit_pattern")
+            text_pattern = focused_element.text_pattern
+            print("text_pattern")
+            if not (textedit_pattern and text_pattern):
+                print("No text edit pattern")
+                return None
+
+            document_range = text_pattern.document_range
+            document_text = document_range.text
+            print(document_text)
+            selection_ranges = text_pattern.selection
+            print(selection_ranges)
+            if len(selection_ranges) > 1:
+                # Just act like there is no selection if there are multiple selections.
+                print(
+                    "WARNING: Multiple selections detected. This is not supported. Ignoring surrounding text."
+                )
+                return None
+            print("reached selection...")
+            selection_range = selection_ranges[0]
+            selection_start, selection_end = get_selection_hell_mode(
+                document_range, selection_range
+            )
+
+            N_CHARS_BEFORE = 30000
+            N_CHARS_AFTER = 30000
+            chars_before_start = max(0, selection_start - N_CHARS_BEFORE)
+            chars_after_end = min(len(document_text) - 1, selection_end + N_CHARS_AFTER)
+            print(document_text[chars_before_start:selection_start])
+            return (
+                document_text[chars_before_start:selection_start],
+                document_text[selection_end:chars_after_end])
+        except Exception as e: 
+            return actions.next(left, right)
+                        
+    
     def exec(command: str):
         actions.user.system_command_nb(command)
 
