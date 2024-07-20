@@ -8,5 +8,6 @@ go after: goAfter
 copy: copyToClipboard
 cut: cutToClipboard
 paste: pasteFromClipboard
+paste to: pasteFromClipboard
 
 clear: delete
