@@ -39,7 +39,6 @@ class Actions:
 
         try:
             if key in compound_actions:
-                print(f"Performing compound action: {key}")
                 compound_actions[key]()
                 return
 
