@@ -10,7 +10,7 @@ class ConfirmationState:
     
     def request_confirmation(self, message: str, on_confirmation, on_disconfirmation):
         self.on_confirmation = on_confirmation
-        self.on_disconfirmation = on_disconfirmation
+        self.on_cancel = on_disconfirmation
         self.message = message
         self.context.tags = ['user.are_you_sure']
         gui.show()
@@ -19,14 +19,14 @@ class ConfirmationState:
         self.on_confirmation()
         self.cleanup()
     
-    def disconfirm(self):
-        if self.on_disconfirmation: self.on_disconfirmation()
+    def cancel(self):
+        if self.on_cancel: self.on_cancel()
         self.cleanup()
 
     def cleanup(self):
         self.context.tags = []
         self.on_confirmation = None
-        self.on_disconfirmation = None
+        self.on_cancel = None
         self.message = None
         gui.hide()
 
@@ -50,8 +50,13 @@ class Actions:
     
     def are_you_sure_cancel():
         '''Cancels the registered are you sure action'''
-        confirmation.disconfirm()
+        confirmation.cancel()
 
-    def are_you_sure_register(message: str, on_confirmation: Callable, on_disconfirmation: Callable = None):
-        '''Registers an action to be performed if the user confirms it'''
-        confirmation.request_confirmation(message, on_confirmation, on_disconfirmation)
+    def are_you_sure_set_on_confirmation_action(message: str, on_confirmation: Callable, on_cancel: Callable = None):
+        '''Sets the action to be performed on user confirmation. 
+        message: the message to display to the user
+        on_confirmation: the action to perform if the user confirms
+        on_cancel: (optional) the action to perform if the user cancels
+        This only supports working with a single action at a time and
+        does not work with chaining as it is intended to be used with particularly destructive actions.'''
+        confirmation.request_confirmation(message, on_confirmation, on_cancel)
