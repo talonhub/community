@@ -126,7 +126,7 @@ class Actions:
             actions.edit.right()
         actions.edit.extend_line_end()
 
-        #    def line_middle():
+    def line_middle():
         """Go to the middle of the line"""
         actions.edit.select_line()
         half_line_length = int(len(actions.edit.selected_text()) / 2)
