@@ -49,3 +49,4 @@ class Actions:
             action_callback()
         except ValueError as ex:
             actions.app.notify(str(ex))
+            raise ex
