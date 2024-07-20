@@ -1,3 +1,6 @@
+# Compound of action(select, clear, copy, cut, paste, etc.)
+# and modifier(left, right, up, down, word, line, etc.) commands for editing text.
+# eg: "select line", "clear all"
 <user.edit_action> <user.edit_modifier>: user.edit_command(edit_action, edit_modifier)
 
 # Zoom
