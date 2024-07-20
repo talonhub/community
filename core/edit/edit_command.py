@@ -37,16 +37,12 @@ class Actions:
         # string joined of action and modifier
         key = f"{action}.{modifier}"
 
-        try:
-            if key in compound_actions:
-                compound_actions[key]()
-                return
+        if key in compound_actions:
+            compound_actions[key]()
+            return
 
-            action_callback = get_action_callback(action)
-            modifier_callback = get_modifier_callback(modifier)
+        action_callback = get_action_callback(action)
+        modifier_callback = get_modifier_callback(modifier)
 
-            modifier_callback()
-            action_callback()
-        except ValueError as ex:
-            actions.app.notify(str(ex))
-            raise ex
+        modifier_callback()
+        action_callback()
