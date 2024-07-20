@@ -3,6 +3,7 @@ from talon import Module, actions
 from .edit_command_actions import EditAction, get_action_callback
 from .edit_command_modifiers import EditModifier, get_modifier_callback
 
+# In some cases there already is a "compound" talon action for a given action and modifier
 compound_actions = {
     # Select
     "select.word": actions.edit.select_word,
