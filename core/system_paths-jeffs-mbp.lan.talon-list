@@ -1,0 +1,15 @@
+list: user.system_paths
+host: jeffs-mbp.lan
+-
+user: '/Users/knausj'
+profile: '/Users/knausj'
+desktop: '/Users/knausj/Desktop'
+desk: '/Users/knausj/Desktop'
+documents: '/Users/knausj/Documents'
+docks: '/Users/knausj/Documents'
+downloads: '/Users/knausj/Downloads'
+music: '/Users/knausj/Music'
+pictures: '/Users/knausj/Pictures'
+videos: '/Users/knausj/Videos'
+talon home: '/Users/knausj/.talon'
+talon user: '/Users/knausj/.talon/user'
