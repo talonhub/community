@@ -1,5 +1,4 @@
-<user.edit_action> <user.edit_modifier>:
-    user.edit_command(edit_action, edit_modifier)
+<user.edit_action> <user.edit_modifier>: user.edit_command(edit_action, edit_modifier)
 
 # Zoom
 zoom in: edit.zoom_in()
