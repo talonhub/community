@@ -82,8 +82,8 @@ if app.platform == "windows":
             "root": "\\",
         }
 
-def get_selection_hell_mode(document_range, selection_range) -> Tuple[int, int]:
-    """Get the selection from the hellish Windows API (lol)."""
+def get_selection(document_range, selection_range) -> Tuple[int, int]:
+    """Get the selection from the Windows API"""
     range_before_selection = document_range.clone()
     range_before_selection.move_endpoint_by_range(
         "End",
@@ -129,7 +129,7 @@ class UserActionsWin:
                 return None
             # print("Selection found")
             selection_range = selection_ranges[0]
-            selection_start, selection_end = get_selection_hell_mode(
+            selection_start, selection_end = get_selection(
                 document_range, selection_range
             )
 
