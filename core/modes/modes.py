@@ -49,7 +49,7 @@ class Actions:
             elif app.platform == "windows":
                 actions.user.dragon_engine_wake()
                 # note: this may not do anything for all versions of Dragon. Requires Pro.
-                actions.user.dragon_command_mode()
+                actions.user.dragon_engine_command_mode()
 
     def dragon_mode():
         """For windows and Mac with Dragon, disables Talon commands and exits Dragon's command mode"""
@@ -64,4 +64,4 @@ class Actions:
             elif app.platform == "windows":
                 actions.user.dragon_engine_wake()
                 # note: this may not do anything for all versions of Dragon. Requires Pro.
-                actions.user.dragon_normal_mode()
+                actions.user.dragon_engine_normal_mode()

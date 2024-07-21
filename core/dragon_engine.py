@@ -13,10 +13,10 @@ class Actions:
         """Wake the dragon engine"""
         speech_system.engine_mimic("wake up"),
 
-    def dragon_command_mode():
+    def dragon_engine_command_mode():
         """Switch dragon to command mode. Requires Pro."""
         speech_system.engine_mimic("switch to command mode")
 
-    def dragon_normal_mode():
+    def dragon_engine_normal_mode():
         """Switch dragon to normal mode. Requires Pro."""
         speech_system.engine_mimic("start normal mode")
