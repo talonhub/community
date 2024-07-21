@@ -38,4 +38,3 @@ not speech.engine: dragon
     user.help_hide()
     user.mouse_sleep()
     speech.disable()
-    user.engine_sleep()
