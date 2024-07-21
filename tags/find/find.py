@@ -4,10 +4,6 @@ mod = Module()
 mod.tag("find", desc="Tag for enabling generic find commands")
 
 ctx = Context()
-ctx.matches = r"""
-os: windows
-os: linux
-"""
 
 ctx_mac = Context()
 ctx_mac.matches = r"""
