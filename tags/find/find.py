@@ -12,7 +12,7 @@ os: windows
 
 
 @ctx.action_class("edit")
-class WinActions:
+class EditActions:
     def find(text: str = None):
         actions.key("ctrl-f")
         if text:
@@ -20,7 +20,7 @@ class WinActions:
 
 
 @ctx_mac.action_class("edit")
-class MacActions:
+class MacEditActions:
     def find(text: str = None):
         actions.key("cmd-f")
         if text:
