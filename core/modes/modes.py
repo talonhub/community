@@ -45,11 +45,11 @@ class Actions:
         # app.notify(engine)
         if "dragon" in engine:
             if app.platform == "mac":
-                actions.user.engine_sleep()
+                actions.user.dragon_engine_sleep()
             elif app.platform == "windows":
-                actions.user.engine_wake()
+                actions.user.dragon_engine_wake()
                 # note: this may not do anything for all versions of Dragon. Requires Pro.
-                actions.user.engine_mimic("switch to command mode")
+                actions.user.dragon_engine_command_mode()
         else:
             actions.mode.disable("sleep")
             actions.mode.disable("dictation")
@@ -65,11 +65,11 @@ class Actions:
             # app.notify("dragon mode")
             actions.speech.disable()
             if app.platform == "mac":
-                actions.user.engine_wake()
+                actions.user.dragon_engine_wake()
             elif app.platform == "windows":
-                actions.user.engine_wake()
+                actions.user.dragon_engine_wake()
                 # note: this may not do anything for all versions of Dragon. Requires Pro.
-                actions.user.engine_mimic("start normal mode")
+                actions.user.dragon_engine_normal_mode()
         else:
             actions.mode.disable("sleep")
             actions.mode.enable("dictation")
@@ -122,7 +122,6 @@ class Actions:
         actions.user.help_hide()
         actions.user.mouse_sleep()
         actions.speech.disable()
-        actions.user.engine_sleep()
         actions.mode.disable("noise")
         actions.sound.set_microphone("None")
         actions.user.disconnect_ocr_eye_tracker()
