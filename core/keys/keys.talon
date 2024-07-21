@@ -12,14 +12,22 @@ not tag: user.fluent_search_screen_search
 press <user.modifiers>: key(modifiers)
 # for consistency with dictation mode and explicit arrow keys if you need them.
 press <user.keys>: key(keys)
-shift up [<number_small>]:
+shift <user.arrow_key> [<number_small>]:
     numb  = number_small or 1
-    key(shift-up)
+    key("shift-{arrow_key}")
     repeat(numb - 1)
-shift down [<number_small>]:
-    numb  = number_small or 1
-    key(shift-down)
-    repeat(numb - 1)
+# shift right [<number_small>]:
+#     numb  = number_small or 1
+#     key(shift-right)
+#     repeat(numb - 1)
+# shift up [<number_small>]:
+#     numb  = number_small or 1
+#     key(shift-up)
+#     repeat(numb - 1)
+# shift down [<number_small>]:
+#     numb  = number_small or 1
+#     key(shift-down)
+#     repeat(numb - 1)
 shift tab [<number_small>]:
     numb  = number_small or 1
     key(shift-tab)
