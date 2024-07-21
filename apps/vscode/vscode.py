@@ -167,6 +167,11 @@ class MacUserActions:
     def command_palette():
         actions.key("cmd-shift-p")
 
+    def find(text: str = None):
+        actions.key("cmd-f")
+        if text:
+            actions.insert(text)
+
 
 @ctx.action_class("user")
 class UserActions:
