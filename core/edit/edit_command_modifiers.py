@@ -17,7 +17,7 @@ def edit_modifier(m) -> EditModifier:
     return EditModifier(m.edit_modifier)
 
 
-modifier_callbacks = {
+modifier_callbacks: dict[str, Callable] = {
     "document": actions.edit.select_all,
     "paragraph": actions.edit.select_paragraph,
     "word": actions.edit.select_word,
@@ -27,10 +27,11 @@ modifier_callbacks = {
 }
 
 
-def get_modifier_callback(modifier: EditModifier) -> Callable:
-    key = str(modifier)
+def run_modifier_callback(modifier: EditModifier):
+    modifier_type = modifier.type
 
-    if key in modifier_callbacks:
-        return modifier_callbacks[key]
+    if modifier_type not in modifier_callbacks:
+        raise ValueError(f"Unknown edit modifier: {modifier_type}")
 
-    raise ValueError(f"Unknown edit modifier: {modifier}")
+    callback = modifier_callbacks[modifier_type]
+    callback()

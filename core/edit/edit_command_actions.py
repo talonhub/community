@@ -49,19 +49,22 @@ simple_action_callbacks: dict[str, Callable] = {
 }
 
 
-def get_action_callback(action: EditAction) -> Callable:
+def run_action_callback(action: EditAction):
     action_type = action.type
 
     if action_type in simple_action_callbacks:
-        return simple_action_callbacks[action_type]
+        callback = simple_action_callbacks[action_type]
+        callback()
+        return
 
     match action_type:
         case "insert":
             assert isinstance(action, EditInsertAction)
-            return lambda: actions.insert(action.text)
+            actions.insert(action.text)
 
         case "applyFormatter":
             assert isinstance(action, EditFormatAction)
-            return lambda: actions.user.formatters_reformat_selection(action.formatters)
+            actions.user.formatters_reformat_selection(action.formatters)
 
-    raise ValueError(f"Unknown edit action: {action}")
+        case _:
+            raise ValueError(f"Unknown edit action: {action_type}")

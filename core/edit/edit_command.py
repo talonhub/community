@@ -1,7 +1,7 @@
 from talon import Module, actions
 
-from .edit_command_actions import EditAction, get_action_callback
-from .edit_command_modifiers import EditModifier, get_modifier_callback
+from .edit_command_actions import EditAction, run_action_callback
+from .edit_command_modifiers import EditModifier, run_modifier_callback
 
 # In some cases there already is a "compound" talon action for a given action and modifier
 compound_actions = {
@@ -34,8 +34,5 @@ class Actions:
             compound_actions[key]()
             return
 
-        action_callback = get_action_callback(action)
-        modifier_callback = get_modifier_callback(modifier)
-
-        modifier_callback()
-        action_callback()
+        run_modifier_callback(modifier)
+        run_action_callback(action)
