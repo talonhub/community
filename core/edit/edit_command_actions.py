@@ -5,7 +5,7 @@ from talon import Module, actions
 
 
 @dataclass
-class EditSimpleAction:
+class EditAction:
     type: str
 
     def __str__(self):
@@ -13,28 +13,15 @@ class EditSimpleAction:
 
 
 @dataclass
-class EditInsertAction:
+class EditInsertAction(EditAction):
     type = "insert"
     text: str
 
-    def __str__(self):
-        return self.type
-
 
 @dataclass
-class EditFormatAction:
+class EditFormatAction(EditAction):
     type = "applyFormatter"
     formatters: str
-
-    def __str__(self):
-        return self.type
-
-
-EditAction = Union[
-    EditSimpleAction,
-    EditInsertAction,
-    EditFormatAction,
-]
 
 
 mod = Module()
