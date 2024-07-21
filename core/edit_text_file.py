@@ -16,13 +16,7 @@ _csvs = {
     for name, file_name in {
         "abbreviations": "abbreviations.csv",
         "additional words": "additional_words.csv",
-        "alphabet": "alphabet.csv",
-        "directories": "directories.csv",
         "file extensions": "file_extensions.csv",
-        "search engines": "search_engines.csv",
-        "system paths": "system_paths.csv",
-        "unix utilities": "unix_utilities.csv",
-        "websites": "websites.csv",
         "words to replace": "words_to_replace.csv",
     }.items()
 }
