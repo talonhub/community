@@ -20,9 +20,10 @@ class ConfirmationState:
     def confirm(self):
         self.on_confirmation()
         self.cleanup()
-    
+
     def cancel(self):
-        if self.on_cancel: self.on_cancel()
+        if self.on_cancel:
+            self.on_cancel()
         self.cleanup()
 
     def cleanup(self):
@@ -43,8 +44,9 @@ confirmation = ConfirmationState()
 def gui(gui: imgui.GUI):
     gui.text(confirmation.get_message())
     gui.line()
-    gui.text('Yes I am sure')
-    gui.text('Cancel')
+    gui.text("Yes I am sure")
+    gui.text("Cancel")
+
 
 @mod.action_class
 class Actions:
@@ -53,14 +55,17 @@ class Actions:
         confirmation.confirm()
 
     def are_you_sure_cancel():
-        '''Cancels the registered are you sure action'''
+        """Cancels the registered are you sure action"""
         confirmation.cancel()
 
-    def are_you_sure_set_on_confirmation_action(message: str, on_confirmation: Callable, on_cancel: Callable = None):
-        '''Sets the action to be performed on user confirmation. 
+    def are_you_sure_set_on_confirmation_action(
+        message: str, on_confirmation: Callable, on_cancel: Callable = None
+    ):
+        """Sets the action to be performed on user confirmation.
         message: the message to display to the user
         on_confirmation: the action to perform if the user confirms
         on_cancel: (optional) the action to perform if the user cancels
         This only supports working with a single action at a time and
-        does not work with chaining as it is intended to be used with particularly destructive actions.'''
+        does not work with chaining as it is intended to be used with particularly destructive actions.
+        """
         confirmation.request_confirmation(message, on_confirmation, on_cancel)

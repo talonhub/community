@@ -1,4 +1,5 @@
 # Are You Sure Dialog
+
 This lets you require confirmation before executing an action, which can be useful for potentially destructive commands like shutting down your computer or exiting talon.
 
 To require confirmation for an action, you use the user.are_you_sure_set_on_confirmation_action function that receives a message to display for the dialogue and the action to perform on confirmation. An optional action to perform on cancelling the action can be provided as the third argument. As this is intended to work with particularly destructive actions, this only supports executing a single action at a time and does not work with chaining.
@@ -6,6 +7,7 @@ To require confirmation for an action, you use the user.are_you_sure_set_on_conf
 You confirm an action by saying "yes I am sure" and cancel it by saying "cancel".
 
 ## Example
+
 ```python
 from talon import actions, Module, app
 
