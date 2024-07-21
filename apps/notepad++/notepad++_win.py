@@ -57,9 +57,16 @@ class EditActions:
         actions.insert(str(n))
         actions.key("enter")
 
-    def find(text: str):
+    def find(text: str = None):
         actions.key("ctrl-f")
-        actions.insert(text)
+        if text:
+            actions.insert(text)
+
+    def find_next():
+        actions.key("enter")
+
+    def find_previous():
+        actions.key("shift-enter")
 
 
 @ctx.action_class("win")
@@ -95,23 +102,6 @@ class UserActions:
         """Jumps to the final tab"""
         print("Notepad doesn't support this...")
         # actions.key("ctrl-numpad_0")
-
-    # find.py support begin
-
-    def find(text: str):
-        """Triggers find in current editor"""
-        actions.key("ctrl-f")
-
-        if text:
-            actions.insert(text)
-
-    def find_next():
-        actions.key("enter")
-
-    def find_previous():
-        actions.key("shift-enter")
-
-    # find.py support end
 
     # find_and_replace.py support begin
 

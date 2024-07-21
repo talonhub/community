@@ -42,9 +42,16 @@ class CodeActions:
 
 @ctx.action_class("edit")
 class EditActions:
-    def find(text: str):
+    def find(text: str = None):
         actions.key("ctrl-f")
-        actions.insert(text)
+        if text:
+            actions.insert(text)
+
+    def find_next():
+        actions.key("enter")
+
+    def find_previous():
+        actions.key("shift-enter")
 
     def line_swap_up():
         actions.key("alt-up")
@@ -109,23 +116,6 @@ class UserActions:
         actions.key("alt-ctrl-s s")
 
     # splits.py support end
-
-    # find.py support begin
-
-    def find(text: str):
-        """Triggers find in current editor"""
-
-        actions.key("ctrl-f")
-        if text:
-            actions.insert(text)
-
-    def find_next():
-        actions.key("enter")
-
-    def find_previous():
-        actions.key("shift-enter")
-
-    # find.py support end
 
     # find_and_replace.py support begin
 

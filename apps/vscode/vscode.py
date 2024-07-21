@@ -101,13 +101,16 @@ class EditActions:
     def save_all():
         actions.user.vscode("workbench.action.files.saveAll")
 
-    def find(text=None):
-        if is_mac:
-            actions.key("cmd-f")
-        else:
-            actions.key("ctrl-f")
-        if text is not None:
+    def find(text: str = None):
+        actions.key("ctrl-f")
+        if text:
             actions.insert(text)
+
+    def find_next():
+        actions.user.vscode("editor.action.nextMatchFindAction")
+
+    def find_previous():
+        actions.user.vscode("editor.action.previousMatchFindAction")
 
     def line_swap_up():
         actions.key("alt-up")
@@ -162,6 +165,14 @@ class Actions:
     def command_palette():
         """Show command palette"""
         actions.key("ctrl-shift-p")
+
+
+@mac_ctx.action_class("edit")
+class MacEditActions:
+    def find(text: str = None):
+        actions.key("cmd-f")
+        if text:
+            actions.insert(text)
 
 
 @mac_ctx.action_class("user")
@@ -275,26 +286,6 @@ class UserActions:
                 actions.key(f"ctrl-{index}")
 
     # splits.py support end
-
-    # find.py support begin
-
-    def find(text: str):
-        """Triggers find in current editor"""
-        if is_mac:
-            actions.key("cmd-f")
-        else:
-            actions.key("ctrl-f")
-
-        if text:
-            actions.insert(text)
-
-    def find_next():
-        actions.user.vscode("editor.action.nextMatchFindAction")
-
-    def find_previous():
-        actions.user.vscode("editor.action.previousMatchFindAction")
-
-    # find.py support end
 
     # find_and_replace.py support begin
 
