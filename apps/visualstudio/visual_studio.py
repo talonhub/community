@@ -74,11 +74,6 @@ class EditActions:
     def save_all():
         actions.key("ctrl-shift-s")
 
-    def find(text: str = None):
-        actions.key("ctrl-f")
-        if text:
-            actions.insert(text)
-
     def find_next():
         actions.key("enter")
 

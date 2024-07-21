@@ -42,11 +42,6 @@ class CodeActions:
 
 @ctx.action_class("edit")
 class EditActions:
-    def find(text: str = None):
-        actions.key("ctrl-f")
-        if text:
-            actions.insert(text)
-
     def find_next():
         actions.key("enter")
 

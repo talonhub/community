@@ -91,11 +91,6 @@ class EditActions:
     def file_start():
         actions.key("ctrl-home")
 
-    def find(text: str = None):
-        actions.key("ctrl-f")
-        if text:
-            actions.insert(text)
-
     def find_next():
         actions.key("f3")
         # action(edit.find_previous):

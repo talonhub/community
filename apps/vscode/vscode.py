@@ -101,11 +101,6 @@ class EditActions:
     def save_all():
         actions.user.vscode("workbench.action.files.saveAll")
 
-    def find(text: str = None):
-        actions.key("ctrl-f")
-        if text:
-            actions.insert(text)
-
     def find_next():
         actions.user.vscode("editor.action.nextMatchFindAction")
 
@@ -165,14 +160,6 @@ class Actions:
     def command_palette():
         """Show command palette"""
         actions.key("ctrl-shift-p")
-
-
-@mac_ctx.action_class("edit")
-class MacEditActions:
-    def find(text: str = None):
-        actions.key("cmd-f")
-        if text:
-            actions.insert(text)
 
 
 @mac_ctx.action_class("user")
