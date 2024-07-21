@@ -11,9 +11,6 @@ mod.list("edit_modifier", desc="Modifiers for the edit command")
 class EditModifier:
     type: str
 
-    def __str__(self):
-        return self.type
-
 
 @mod.capture(rule="{user.edit_modifier}")
 def edit_modifier(m) -> EditModifier:

@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Callable, Union
+from typing import Callable
 
 from talon import Module, actions
 
@@ -7,9 +7,6 @@ from talon import Module, actions
 @dataclass
 class EditAction:
     type: str
-
-    def __str__(self):
-        return self.type
 
 
 @dataclass
@@ -29,8 +26,8 @@ mod.list("edit_action", desc="Actions for the edit command")
 
 
 @mod.capture(rule="{user.edit_action}")
-def edit_simple_action(m) -> EditSimpleAction:
-    return EditSimpleAction(m.edit_action)
+def edit_simple_action(m) -> EditAction:
+    return EditAction(m.edit_action)
 
 
 @mod.capture(rule="<user.edit_simple_action>")
