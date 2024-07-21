@@ -111,7 +111,7 @@ class UserActionsWin:
             textedit_pattern = focused_element.textedit_pattern
             text_pattern = focused_element.text_pattern
             if not (textedit_pattern and text_pattern):
-                return None
+                return actions.next(left, right)
 
             document_range = text_pattern.document_range
             document_text = document_range.text
@@ -133,10 +133,10 @@ class UserActionsWin:
                 document_text[chars_before_start:selection_start],
                 document_text[selection_end:chars_after_end])
         except OSError as e:
-            print(e)
+            print(str(e))
             return actions.next(left, right)
         except Exception as e: 
-            actions.app.notify(e)
+            print(str(e))
             return actions.next(left, right)
                         
     
