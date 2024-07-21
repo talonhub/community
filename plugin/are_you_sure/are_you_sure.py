@@ -40,7 +40,7 @@ def gui(gui: imgui.GUI):
     gui.text(confirmation.get_message())
     gui.line()
     gui.text('Yes I am sure')
-    gui.text('No')
+    gui.text('Cancel')
 
 @mod.action_class
 class Actions:
