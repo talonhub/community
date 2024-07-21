@@ -192,17 +192,13 @@ def parse_document(
     file: str, line: int, optional_body: bool, text: str
 ) -> Union[SnippetDocument, None]:
     parts = re.split(r"^-\r?\n?$", text, flags=re.MULTILINE)
-
-    if len(parts) > 2:
-        error(file, line, f"Found multiple '-' in snippet document '{text}'")
-        return None
-
     line_body = line + parts[0].count("\n") + 1
     org_doc = SnippetDocument(file, line, line_body)
     document = parse_context(file, line, org_doc, parts[0])
 
-    if len(parts) == 2:
-        body = parse_body(parts[1])
+    if len(parts) > 1:
+        body_text = "-".join(parts[1:])
+        body = parse_body(body_text)
         if body is not None:
             if document is None:
                 document = org_doc
