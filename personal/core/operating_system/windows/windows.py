@@ -108,20 +108,26 @@ class UserActionsWin:
         # Latency for this approach when I tested it with Slack in Firefox was <16ms.
         try:
             focused_element = ui.focused_element()
-            textedit_pattern = focused_element.textedit_pattern
+            # print("focused_element")
             text_pattern = focused_element.text_pattern
-            if not (textedit_pattern and text_pattern):
+            # print("text_pattern")
+            if not (text_pattern):
+                # print("No text")
                 return actions.next(left, right)
-
+            
             document_range = text_pattern.document_range
+            # print("document_range")
             document_text = document_range.text
+            # print("document_text")
             selection_ranges = text_pattern.selection
+            # print("Selection range")
             if len(selection_ranges) > 1:
                 # Just act like there is no selection if there are multiple selections.
                 print(
                     "WARNING: Multiple selections detected. This is not supported. Ignoring surrounding text."
                 )
                 return None
+            # print("Selection found")
             selection_range = selection_ranges[0]
             selection_start, selection_end = get_selection_hell_mode(
                 document_range, selection_range
