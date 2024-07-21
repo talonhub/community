@@ -7,7 +7,7 @@ ctx = Context()
 
 ctx_mac = Context()
 ctx_mac.matches = r"""
-os: windows
+os: mac
 """
 
 
