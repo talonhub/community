@@ -113,19 +113,6 @@ class WinActions:
 
 @ctx.action_class("user")
 class UserActions:
-    # snippet.py support beginHelp close
-    def snippet_search(text: str):
-        """TEST"""
-        actions.key("ctrl-k ctrl-x")
-
-    # def snippet_insert(text: str):
-    #     """Inserts a snippet"""
-
-    # def snippet_create():
-    #     """Triggers snippet creation"""
-
-    # snippet.py support end
-
     # def select_word(verb: str):
     #     actions.key("ctrl-w")
     #     actions.user.perform_selection_action(verb)
@@ -178,7 +165,7 @@ class UserActions:
 
     # splits.py support end
 
-    # find_and_replace.py support begin
+    # find.py support begin
 
     def find(text: str):
         """Triggers find in current editor"""
@@ -192,6 +179,10 @@ class UserActions:
 
     def find_previous():
         actions.key("shift-enter")
+
+    # find.py support end
+
+    # find_and_replace.py support begin
 
     def find_everywhere(text: str):
         """Triggers find across project"""

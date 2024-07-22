@@ -1,6 +1,6 @@
 settings():
     # Don't show mode indicator by default
-    user.mode_indicator_show = 0
+    user.mode_indicator_show = false
     # 30pixels diameter
     user.mode_indicator_size = 30
     # Center horizontally
@@ -11,6 +11,8 @@ settings():
     user.mode_indicator_color_alpha = 0.75
     # Grey gradient
     user.mode_indicator_color_gradient = 0.5
+    # Black color for when the microphone is muted (set to "None")
+    user.mode_indicator_color_mute = "000000"
     # Grey color for sleep mode
     user.mode_indicator_color_sleep = "808080"
     # Gold color for dictation mode

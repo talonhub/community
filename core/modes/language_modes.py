@@ -21,6 +21,7 @@ language_extensions = {
     "javascript": "js",
     "javascriptreact": "jsx",
     # 'json': 'json',
+    "kotlin": "kt",
     "lua": "lua",
     "markdown": "md",
     # 'perl': 'pl',
@@ -36,7 +37,9 @@ language_extensions = {
     "scss": "scss",
     # 'snippets': 'snippets',
     "sql": "sql",
+    "stata": "do ado",
     "talon": "talon",
+    "talonlist": "talon-list",
     "terraform": "tf",
     "tex": "tex",
     "typescript": "ts",
@@ -82,6 +85,8 @@ extension_lang_map = {
     for language, extensions in language_extensions.items()
     for ext in extensions.split()
 }
+
+language_ids = set(language_extensions.keys())
 
 forced_language = ""
 

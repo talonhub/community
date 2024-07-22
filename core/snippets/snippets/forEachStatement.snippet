@@ -1,0 +1,24 @@
+name: forEachStatement
+phrase: for each
+insertionScope: statement
+---
+
+language: javascript
+-
+for (const $1 of $2) {
+    $0
+}
+---
+
+language: java
+-
+for (final $1 : $2) {
+    $0
+}
+---
+
+language: python
+-
+for $1 in $2:
+    $0
+---
