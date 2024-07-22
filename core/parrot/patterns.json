@@ -20,12 +20,12 @@
     "shush": {
         "sounds": ["shush"],
         "threshold": {
-            ">power": 15,
+            ">power": 20,
             ">probability": 0.99
         },
-        "graceperiod": 0.05,
+        "graceperiod": 0.1,
         "grace_threshold": {
-            ">power": 10
+            ">power": 15
         }
     },
     "speech": {

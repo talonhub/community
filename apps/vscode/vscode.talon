@@ -10,6 +10,19 @@ tag(): user.tabs
 tag(): user.git
 tag(): terminal
 
+console log:
+  "console.log(\"\");"
+  key(left)
+  key(left)
+  key(left)
+
+use effect log:
+  "useEffect(()=> {"
+  key(return)
+  "console.log(thing);"
+  key(return)
+  "},[thing])"
+
 log template:
   "console.log(\"thing\", thing);"
 
@@ -52,7 +65,7 @@ findy:
 find all:
   key(cmd-shift-f)
 
-node run (start | dev):
+node run (start | dev | development):
   "npm run dev"
   key(enter)
 
@@ -89,6 +102,8 @@ node install all:
   key(enter)
 
 close:
+  key(escape)
+  sleep(20ms)
   edit.line_end()
   insert(";")
 
@@ -146,6 +161,13 @@ action(user.multi_cursor_select_more_occurrences): user.vscode("Add Selection To
 please [<user.text>]:
     user.vscode("workbench.action.showCommands")
     insert(user.text or "")
+
+# Copilot
+bar chat: user.vscode("workbench.panel.chat.view.copilot.focus")
+chat new: user.vscode("workbench.action.chat.clear")
+chat inline: user.vscode("inlineChat.start")
+toggle copilot: user.vscode("github.copilot.toggleCopilot")
+chat quick: user.vscode("workbench.action.openQuickChat.copilot")
 
 # Sidebar
 bar files: user.vscode("workbench.view.explorer")
@@ -275,6 +297,7 @@ go marks:
 toggle mark: user.vscode("bookmarks.toggle")
 go next mark: user.vscode("bookmarks.jumpToNext")
 go last mark: user.vscode("bookmarks.jumpToPrevious")
+mark label: user.vscode("bookmarks.toggleLabeled")
 
 close other tabs: user.vscode("workbench.action.closeOtherEditors")
 close all tabs: user.vscode("workbench.action.closeAllEditors")

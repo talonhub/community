@@ -19,6 +19,10 @@ node run (start | dev):
   "npm run dev"
   key(enter)
 
+node run storybook:
+  "npm run storybook"
+  key(enter)
+
 node install:
   "npm i"
   key(enter)
