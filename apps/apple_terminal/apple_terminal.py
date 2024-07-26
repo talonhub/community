@@ -82,6 +82,7 @@ class UserActions:
         if number <= 9:
             actions.key(f"cmd-{number}")
 
+
 @ctx.action_class("app")
 class app_actions:
     # other tab functions should already be implemented in
