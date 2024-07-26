@@ -1,6 +1,7 @@
 from contextlib import suppress
 from dataclasses import dataclass
 from typing import Callable, Literal
+
 from talon import Module, actions
 
 

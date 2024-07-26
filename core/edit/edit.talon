@@ -15,8 +15,7 @@ scroll down: edit.page_down()
 
 # go left, go left left down, go 5 left 2 down
 # go word left, go 2 words right
-go <user.navigation_step>+:
-    user.perform_navigation_steps(navigation_step_list)
+go <user.navigation_step>+: user.perform_navigation_steps(navigation_step_list)
 
 go line start | head: edit.line_start()
 go line end | tail: edit.line_end()
