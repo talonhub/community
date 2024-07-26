@@ -4,7 +4,7 @@ settings():
 
     # Uncomment to set the speech timeout. This is the amount of time after you stop
     # speaking until Talon starts processing the spoken audio. Default is 0.3s.
-    speech.timeout = 0.25
+    speech.timeout = 0.20
 
     # Uncomment to enable dark mode for talon help menus
     # imgui.dark_mode = true
@@ -40,7 +40,7 @@ settings():
     user.mouse_hide_mouse_gui = true
 
     # If `true`, hide the cursor when enabling zoom mouse
-    user.mouse_wake_hides_cursor = true
+    user.mouse_wake_hides_cursor = false
 
     # Set the amount to scroll up/down
     user.mouse_wheel_down_amount = 200
@@ -88,4 +88,4 @@ settings():
 # By default saying "one" would write "1", however many users find this behavior
 # prone to false positives. If you uncomment this, you will need to say
 # "numb one" to write "1". Note that this tag will eventually be activated by default
-# tag(): user.prefixed_numbers
+tag(): user.prefixed_numbers
