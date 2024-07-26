@@ -77,6 +77,10 @@ class UserActions:
     def file_manager_refresh_title():
         return
 
+    def tab_jump(number: int):
+        """Jumps to the specified tab. Cmd+1 switching be enabled in terminal settings to work properly."""
+        if number <= 9:
+            actions.key(f"cmd-{number}")
 
 @ctx.action_class("app")
 class app_actions:
