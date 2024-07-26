@@ -143,6 +143,13 @@ class Actions:
         for button in buttons_held_down:
             ctrl.mouse_click(button=button, up=True)
 
+    def toggle_mouse_drag(button: int):
+        """If the button is held down, release all held buttons, else start dragging"""
+        if button in list(ctrl.mouse_buttons_down()):
+            self.mouse_drag_end()
+        else:
+            self.mouse_drag(button)
+
     def mouse_sleep():
         """Disables control mouse, zoom mouse, and re-enables cursor"""
         actions.tracking.control_zoom_toggle(False)
@@ -220,6 +227,13 @@ class Actions:
         if not actions.tracking.control_enabled():
             actions.tracking.control_toggle(True)
             control_mouse_forced = True
+
+    def toggle_mouse_gaze_scroll():
+        """If not scrolling, start gaze scroll, else stop scrolling."""
+        if continuous_scroll_mode == "":
+            self.mouse_gaze_scroll()
+        else:
+            self.mouse_scroll_stop()
 
     def copy_mouse_position():
         """Copy the current mouse position coordinates"""
