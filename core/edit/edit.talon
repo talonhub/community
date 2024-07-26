@@ -13,13 +13,10 @@ next one: edit.find_next()
 scroll up: edit.page_up()
 scroll down: edit.page_down()
 
-go word left: edit.word_left()
-go word right: edit.word_right()
-
-go left: edit.left()
-go right: edit.right()
-go up: edit.up()
-go down: edit.down()
+# go left, go left left down, go 5 left 2 down
+# go word left, go 2 words right
+go <user.navigation_step>+:
+    user.perform_navigation_steps(navigation_step_list)
 
 go line start | head: edit.line_start()
 go line end | tail: edit.line_end()
