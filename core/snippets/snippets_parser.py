@@ -195,7 +195,7 @@ def parse_document(
 
     if match is not None:
         context_text = text[: match.start(0)]
-        body_text = text[match.end(0) :].strip()
+        body_text = text[match.end(0) :]
     else:
         context_text = text
         body_text = ""
@@ -327,6 +327,7 @@ def parse_variable(
 
 
 def parse_body(text: str) -> Union[str, None]:
+    # Find first line that is not empty. Preserve indentation.
     match_leading = re.search(r"^[ \t]*\S", text, flags=re.MULTILINE)
 
     if match_leading is None:
