@@ -45,11 +45,11 @@ class Actions:
         # app.notify(engine)
         if "dragon" in engine:
             if app.platform == "mac":
-                actions.user.engine_sleep()
+                actions.user.dragon_engine_sleep()
             elif app.platform == "windows":
-                actions.user.engine_wake()
+                actions.user.dragon_engine_wake()
                 # note: this may not do anything for all versions of Dragon. Requires Pro.
-                actions.user.engine_mimic("switch to command mode")
+                actions.user.dragon_engine_command_mode()
 
     def dragon_mode():
         """For windows and Mac with Dragon, disables Talon commands and exits Dragon's command mode"""
@@ -60,8 +60,8 @@ class Actions:
             # app.notify("dragon mode")
             actions.speech.disable()
             if app.platform == "mac":
-                actions.user.engine_wake()
+                actions.user.dragon_engine_wake()
             elif app.platform == "windows":
-                actions.user.engine_wake()
+                actions.user.dragon_engine_wake()
                 # note: this may not do anything for all versions of Dragon. Requires Pro.
-                actions.user.engine_mimic("start normal mode")
+                actions.user.dragon_engine_normal_mode()
