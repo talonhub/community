@@ -191,13 +191,20 @@ def parse_file_content(file: str, text: str) -> list[SnippetDocument]:
 def parse_document(
     file: str, line: int, optional_body: bool, text: str
 ) -> Union[SnippetDocument, None]:
-    parts = re.split(r"^-\r?\n?$", text, flags=re.MULTILINE)
-    line_body = line + parts[0].count("\n") + 1
-    org_doc = SnippetDocument(file, line, line_body)
-    document = parse_context(file, line, org_doc, parts[0])
+    match = re.search(r"^-\r?\n?$", text, flags=re.MULTILINE)
 
-    if len(parts) > 1:
-        body_text = "-".join(parts[1:])
+    if match is not None:
+        context_text = text[: match.start(0)]
+        body_text = text[match.end(0) :].strip()
+    else:
+        context_text = text
+        body_text = ""
+
+    line_body = line + body_text.count("\n") + 1
+    org_doc = SnippetDocument(file, line, line_body)
+    document = parse_context(file, line, org_doc, context_text)
+
+    if body_text:
         body = parse_body(body_text)
         if body is not None:
             if document is None:
