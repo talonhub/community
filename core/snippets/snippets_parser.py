@@ -174,7 +174,7 @@ def parse_file(file_path: str) -> list[SnippetDocument]:
 
 
 def parse_file_content(file: str, text: str) -> list[SnippetDocument]:
-    doc_texts = re.split(r"^---\r?\n?$", text, flags=re.MULTILINE)
+    doc_texts = re.split(r"^---$", text, flags=re.MULTILINE)
     documents: list[SnippetDocument] = []
     line = 0
 
