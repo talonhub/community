@@ -9,7 +9,7 @@ tag(): user.line_commands
 tag(): user.multiple_cursors
 tag(): user.splits
 tag(): user.tabs
-tag(): user.history
+tag(): user.navigation
 
 go tab {self.letter} [{self.letter}]:
     user.run_rpc_command("andreas.focusTab", "{letter_1}{letter_2 or ''}")
@@ -313,6 +313,7 @@ join lines: user.vscode("editor.action.joinLines")
 full screen: user.vscode("workbench.action.toggleFullScreen")
 
 curse undo: user.vscode("cursorUndo")
+curse redo: user.vscode("cursorRedo")
 
 select word: user.vscode("editor.action.addSelectionToNextFindMatch")
 skip word: user.vscode("editor.action.moveSelectionToNextFindMatch")

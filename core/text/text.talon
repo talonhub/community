@@ -14,6 +14,7 @@ say <user.prose> over: user.say(prose)
 <user.format_code>+$: user.insert_many(format_code_list)
 <user.format_code>+ over: user.insert_many(format_code_list)
 <user.formatters> that: user.formatters_reformat_selection(user.formatters)
+{user.word_formatter} <user.word>: user.insert_formatted(word, word_formatter)
 word <user.word>:
     user.add_phrase_to_history(word)
     insert(word)

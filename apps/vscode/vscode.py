@@ -101,13 +101,11 @@ class EditActions:
     def save_all():
         actions.user.vscode("workbench.action.files.saveAll")
 
-    def find(text=None):
-        if is_mac:
-            actions.key("cmd-f")
-        else:
-            actions.key("ctrl-f")
-        if text is not None:
-            actions.insert(text)
+    def find_next():
+        actions.user.vscode("editor.action.nextMatchFindAction")
+
+    def find_previous():
+        actions.user.vscode("editor.action.previousMatchFindAction")
 
     def line_swap_up():
         actions.key("alt-up")
@@ -129,7 +127,7 @@ class EditActions:
         actions.insert(str(n))
         actions.key("enter")
         actions.edit.line_start()
-        
+
     def zoom_reset():
         actions.user.vscode("workbench.action.zoomReset")
 
@@ -164,6 +162,14 @@ class Actions:
         actions.key("ctrl-shift-p")
 
 
+@mac_ctx.action_class("edit")
+class MacEditActions:
+    def find(text: str = None):
+        actions.key("cmd-f")
+        if text:
+            actions.insert(text)
+
+
 @mac_ctx.action_class("user")
 class MacUserActions:
     def command_palette():
@@ -182,10 +188,10 @@ class UserActions:
             return (context["before"], context["after"])
         return (None, None)
 
-    def history_go_back():
+    def go_back():
         actions.user.vscode("workbench.action.navigateBack")
         
-    def history_go_forward():
+    def go_forward():
         actions.user.vscode("workbench.action.navigateForward")
 
     # splits.py support begin
@@ -308,26 +314,6 @@ class UserActions:
                 actions.key(f"ctrl-{index}")
 
     # splits.py support end
-
-    # find.py support begin
-
-    def find(text: str):
-        """Triggers find in current editor"""
-        if is_mac:
-            actions.key("cmd-f")
-        else:
-            actions.key("ctrl-f")
-
-        if text:
-            actions.insert(text)
-
-    def find_next():
-        actions.user.vscode("editor.action.nextMatchFindAction")
-
-    def find_previous():
-        actions.user.vscode("editor.action.previousMatchFindAction")
-
-    # find.py support end
 
     # find_and_replace.py support begin
 

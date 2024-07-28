@@ -91,13 +91,16 @@ class EditActions:
     def file_start():
         actions.key("ctrl-home")
 
-    def find(text: str = ""):
+    def find(text: str = None):
         actions.key("ctrl-f")
-        actions.insert(text)
+        if text:
+            actions.insert(text)
+
+    def find_previous():
+        actions.key("shift-f3")
 
     def find_next():
         actions.key("f3")
-        # action(edit.find_previous):
 
     def indent_less():
         actions.key("home delete")

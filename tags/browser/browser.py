@@ -55,12 +55,6 @@ class UserActions:
             actions.app.tab_open()
             actions.user.paste(url_address)
             actions.key("enter")
-    
-    def history_go_back():
-        actions.browser.go_back()
-        
-    def history_go_forward():
-        actions.browser.go_forward()
         
 
 @ctx.action_class("browser")

@@ -1,6 +1,6 @@
 tag: browser
 -
-tag(): user.history
+tag(): user.navigation
 
 address bar | go address | go url: browser.focus_address()
 address copy | url copy | copy address | copy url:

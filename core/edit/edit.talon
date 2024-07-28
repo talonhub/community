@@ -41,25 +41,7 @@ draw:
 draw <number_small>:
     edit.word_left()
     repeat(number_small-1)
-go left: edit.left()
-go left <number_small>: 
-    edit.left()
-    repeat(number_small-1)
 
-go right: edit.right()
-go right <number_small>: 
-    edit.right()
-    repeat(number_small-1)
-
-go up: edit.up()
-go up <number_small>: 
-    edit.up()
-    repeat(number_small-1)
-
-go down: edit.down()
-go down <number_small>: 
-    edit.down()
-    repeat(number_small-1)
 wipe <number_small>: 
     key(backspace)
     repeat(number_small-1)
@@ -77,6 +59,11 @@ driller:
     key(delete)    
 tail:
     edit.line_end()
+
+    
+# go left, go left left down, go 5 left 2 down
+# go word left, go 2 words right
+go <user.navigation_step>+: user.perform_navigation_steps(navigation_step_list)
     
 head:
     edit.line_start()
