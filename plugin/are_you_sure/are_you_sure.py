@@ -1,6 +1,6 @@
 from typing import Callable
 
-from talon import Context, Module, imgui
+from talon import Context, Module, imgui, actions
 
 mod = Module()
 mod.tag("are_you_sure", desc="Activates are you sure commands")
@@ -44,8 +44,10 @@ confirmation = ConfirmationState()
 def gui(gui: imgui.GUI):
     gui.text(confirmation.get_message())
     gui.line()
-    gui.text("Yes I am sure")
-    gui.text("Cancel")
+    if gui.button("Yes I am sure"):
+        actions.user.are_you_sure_confirm()
+    if gui.button("Cancel"):
+        actions.user.are_you_sure_cancel()
 
 
 @mod.action_class
