@@ -1,6 +1,6 @@
 from typing import Callable
 
-from talon import Context, Module, imgui, actions
+from talon import Context, Module, actions, imgui
 
 mod = Module()
 mod.tag("are_you_sure", desc="Activates are you sure commands")
