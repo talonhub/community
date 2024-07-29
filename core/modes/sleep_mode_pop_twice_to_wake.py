@@ -28,6 +28,7 @@ and tag: user.pop_twice_to_wake
 
 time_last_pop = 0
 
+
 @ctx.action_class("user")
 class UserActions:
     def noise_trigger_pop():
