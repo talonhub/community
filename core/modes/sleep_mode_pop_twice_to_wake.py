@@ -27,15 +27,17 @@ and tag: user.pop_twice_to_wake
 """
 
 time_last_pop = 0
-double_pop_speed_minimum = settings.get("user.double_pop_speed_minimum")  # default 0.1
-double_pop_speed_maximum = settings.get("user.double_pop_speed_maximum")  # default 0.3
-
 
 @ctx.action_class("user")
 class UserActions:
     def noise_trigger_pop():
+        # Since zoom mouse is registering against noise.register("pop", on_pop), let that take priority
+        if actions.tracking.control_zoom_enabled():
+            return
         global time_last_pop
-        delta = time.time() - time_last_pop
+        double_pop_speed_minimum = settings.get("user.double_pop_speed_minimum")
+        double_pop_speed_maximum = settings.get("user.double_pop_speed_maximum")
+        delta = time.perf_counter() - time_last_pop
         if delta >= double_pop_speed_minimum and delta <= double_pop_speed_maximum:
             actions.speech.enable()
-        time_last_pop = time.time()
+        time_last_pop = time.perf_counter()
