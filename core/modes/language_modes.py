@@ -9,7 +9,7 @@ language_extensions = {
     "batch": "bat",
     "c": "c h",
     # 'cmake': 'cmake',
-    # "cpp": "cpp hpp",
+    # "cplusplus": "cpp hpp",
     "csharp": "cs",
     "css": "css",
     # 'elisp': 'el',
@@ -52,7 +52,7 @@ language_extensions = {
 # Override speakable forms for language modes. If not present, a language mode's
 # name is used directly.
 language_name_overrides = {
-    "cpp": ["see plus plus"],
+    "cplusplus": ["see plus plus"],
     "csharp": ["see sharp"],
     "css": ["c s s"],
     "gdb": ["g d b"],
