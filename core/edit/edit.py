@@ -7,7 +7,7 @@ mod.setting(
     "selected_text_timeout",
     type=float,
     default=0.25,
-    desc="Time in seconds to wait for the clipboard to change when trying to get select the text",
+    desc="Time in seconds to wait for the clipboard to change when trying to get selected text",
 )
 
 END_OF_WORD_SYMBOLS = ".!?;:—_/\\|@#$%^&*()[]{}<>=+-~`"
