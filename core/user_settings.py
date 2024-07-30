@@ -75,3 +75,35 @@ def append_to_csv(filename: str, rows: dict[str, str]):
             writer.writerow([])
         for key, value in rows.items():
             writer.writerow([key] if key == value else [value, key])
+
+
+def get_list_from_three_column_csv(
+        filename: str, headers: tuple[str, str, str], default: dict[str, str] = {}
+):
+    """Retrieves a list from a CSV of the form name,values,spoken_forms"""
+    path = _compute_csv_path(filename)    
+    if not path.is_file():
+        _create_three_columns_csv_from_default(path, headers, default)
+    
+    rows = _obtain_rows_from_csv(path)
+    
+    talon_list = _convert_rows_to_key_value_pairs(rows)
+    return talon_list
+
+def _create_three_columns_csv_from_default(path, headers, default):
+    pass
+
+def _obtain_rows_from_csv(path):
+    with resource.open(str(path), "r") as f:
+        rows = list(csv.reader(f))
+    return rows
+
+def _convert_rows_to_key_value_pairs(rows):
+    key_value_pairs = {}
+    spoken_forms = {}
+
+
+def _compute_csv_path(filename: str):
+    path = SETTINGS_DIR / filename
+    assert filename.endswith(".csv")
+    return path

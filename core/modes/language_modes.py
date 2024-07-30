@@ -1,5 +1,7 @@
 from talon import Context, Module, actions
 
+from ..user_settings import get_list_from_three_column_csv
+
 # Maps language mode names to the extensions that activate them. Only put things
 # here which have a supported language mode; that's why there are so many
 # commented out entries. TODO: make this a csv file?
