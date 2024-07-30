@@ -77,7 +77,7 @@ def append_to_csv(filename: str, rows: dict[str, str]):
             writer.writerow([key] if key == value else [value, key])
 
 
-def get_list_from_three_column_csv(
+def get_key_value_pairs_and_spoken_forms_from_three_column_csv(
         filename: str, headers: tuple[str, str, str], default: dict[str, str] = {}
 ):
     """Retrieves a list from a CSV of the form name,values,spoken_forms"""
@@ -87,7 +87,7 @@ def get_list_from_three_column_csv(
     
     rows = _obtain_rows_from_csv(path)
     
-    talon_list = _convert_rows_to_key_value_pairs(rows)
+    talon_list = _convert_rows_from_file_with_headers_to_key_value_pairs_and_spoken_forms(rows, filename, headers)
     return talon_list
 
 def _create_three_columns_csv_from_default(path, headers, default):
@@ -98,10 +98,48 @@ def _obtain_rows_from_csv(path):
         rows = list(csv.reader(f))
     return rows
 
-def _convert_rows_to_key_value_pairs(rows):
+def _convert_rows_from_file_with_headers_to_key_value_pairs_and_spoken_forms(rows, filename, headers):
     key_value_pairs = {}
     spoken_forms = {}
+    if len(rows) >= 2:
+        _complain_if_invalid_headers_found_in_file(rows, filename, headers)
+        for row in rows[1:]:
+            if len(row) == 0:
+                # Windows newlines are sometimes read as empty rows. :champagne:
+                continue
+            elif len(row) == 1:
+                print(f"{filename}: Ignoring row with only one value: {row}.")
+                continue
+            elif len(row) == 2:
+                name, values_text = row
+                new_spoken_forms_text = ""
+            else:
+                if len(row) > 3:
+                    print(
+                            f'"{filename}": More than three values in row: {row}.'
+                            + " Ignoring the extras."
+                        )
+                name, values_text, new_spoken_forms_text = row[:3]
+            name = name.strip()
+            values = _get_intermediate_values_from_column(values_text)
+            key_value_pairs[name] = values
+            if new_spoken_forms_text:
+                spoken_forms[name] = _get_spoken_forms_from_column(new_spoken_forms_text)
+    return key_value_pairs, spoken_forms
+            
+def _get_intermediate_values_from_column(values_text):
+    pass
 
+def _get_spoken_forms_from_column(spoken_forms_text):
+    pass
+
+def _complain_if_invalid_headers_found_in_file(rows, expected_headers, filename):
+    actual_headers = rows[0]
+    if not actual_headers == list(expected_headers):
+        print(
+            f'"{filename}": Malformed headers - {actual_headers}.'
+            + f" Should be {list(expected_headers)}. Ignoring row."
+        )
 
 def _compute_csv_path(filename: str):
     path = SETTINGS_DIR / filename

@@ -1,6 +1,6 @@
 from talon import Context, Module, actions
 
-from ..user_settings import get_list_from_three_column_csv
+from ..user_settings import get_key_value_pairs_and_spoken_forms_from_three_column_csv
 
 # Maps language mode names to the extensions that activate them. Only put things
 # here which have a supported language mode; that's why there are so many
