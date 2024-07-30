@@ -1,7 +1,14 @@
-from talon import Context, Module, actions, clip
+from talon import Context, Module, actions, clip, settings
 
 ctx = Context()
 mod = Module()
+
+mod.setting(
+    "selected_text_timeout",
+    type=float,
+    default=0.25,
+    desc="Time in seconds to wait for the clipboard to change when trying to get select the text",
+)
 
 END_OF_WORD_SYMBOLS = ".!?;:—_/\\|@#$%^&*()[]{}<>=+-~`"
 
@@ -9,7 +16,8 @@ END_OF_WORD_SYMBOLS = ".!?;:—_/\\|@#$%^&*()[]{}<>=+-~`"
 @ctx.action_class("edit")
 class EditActions:
     def selected_text() -> str:
-        with clip.capture() as s:
+        timeout = settings.get("user.selected_text_timeout")
+        with clip.capture(timeout) as s:
             actions.edit.copy()
         try:
             return s.text()
