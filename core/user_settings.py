@@ -82,7 +82,7 @@ def get_key_value_pairs_and_spoken_forms_from_three_column_csv(
         filename: str, headers: tuple[str, str, str], default: list[str, tuple[str], tuple[str]]
 ):
     """Retrieves a list from a CSV of the form name,values,spoken_forms"""
-    path = _compute_csv_path(filename)    
+    path = compute_csv_path(filename)    
     if not path.is_file():
         _create_three_columns_csv_from_default(path, headers, default)
     
@@ -172,7 +172,7 @@ def _complain_if_invalid_headers_found_in_file(rows, expected_headers, filename)
             + f" Should be {list(expected_headers)}. Ignoring row."
         )
 
-def _compute_csv_path(filename: str):
+def compute_csv_path(filename: str):
     path = SETTINGS_DIR / filename
     assert filename.endswith(".csv")
     return path

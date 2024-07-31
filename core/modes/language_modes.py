@@ -1,6 +1,12 @@
-from talon import Context, Module, actions
+from talon import Context, Module, actions, resource
 
-from ..user_settings import get_key_value_pairs_and_spoken_forms_from_three_column_csv
+from ..user_settings import get_key_value_pairs_and_spoken_forms_from_three_column_csv, compute_csv_path
+
+settings_filepath = compute_csv_path("language_modes.csv")
+@resource.watch(settings_filepath)
+def load_language_modes(path: str):
+    pass    
+
 
 # Maps language mode names to the extensions that activate them. Only put things
 # here which have a supported language mode; that's why there are so many
