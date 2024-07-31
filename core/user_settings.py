@@ -151,7 +151,7 @@ def _compute_csv_path(filename: str):
     assert filename.endswith(".csv")
     return path
 
-def compute_unified_dictionary_from_key_value_pairs_and_spoken_forms(
+def compute_spoken_form_to_key_dictionary(
     key_value_pairs,
     spoken_forms
     ):
