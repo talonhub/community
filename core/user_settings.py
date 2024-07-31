@@ -88,8 +88,8 @@ def get_key_value_pairs_and_spoken_forms_from_three_column_csv(
     
     rows = _obtain_rows_from_csv(path)
     
-    talon_list = _convert_rows_from_file_with_headers_to_key_value_pairs_and_spoken_forms(rows, filename, headers)
-    return talon_list
+    result = _convert_rows_from_file_with_headers_to_key_value_pairs_and_spoken_forms(rows, filename, headers)
+    return result
 
 def _create_three_columns_csv_from_default(path, headers, default):
     with open(path, "w", encoding="utf-8", newline="") as file:
