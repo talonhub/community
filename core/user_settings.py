@@ -122,7 +122,7 @@ def _convert_rows_from_file_with_headers_to_key_value_pairs_and_spoken_forms(row
     key_value_pairs = {}
     spoken_forms = {}
     if len(rows) >= 2:
-        _complain_if_invalid_headers_found_in_file(rows, filename, headers)
+        _complain_if_invalid_headers_found_in_file(rows, headers, filename)
         for row in rows[1:]:
             if len(row) == 0:
                 # Windows newlines are sometimes read as empty rows. :champagne:
@@ -175,9 +175,15 @@ def compute_spoken_form_to_key_dictionary(
     key_value_pairs,
     spoken_forms
     ):
-    result = {
-        name: key
-        for key in key_value_pairs
-        for name in spoken_forms.get(key, [key])
-    }
+    if spoken_forms:
+        result = {
+            name: key
+            for key in key_value_pairs
+            for name in spoken_forms.get(key, [key])
+        }
+    else:
+        result = {
+            key: key
+            for key in key_value_pairs
+        }
     return result
