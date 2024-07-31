@@ -1,4 +1,4 @@
-from talon import Context, Module, actions, settings, ui, app
+from talon import Context, Module, actions, app, settings, ui
 
 mod = Module()
 mod.tag("draft_editor_active", "Indicates whether the draft editor has been activated")
@@ -87,11 +87,12 @@ class Actions:
         try:
             actions.user.switcher_focus_window(original_window)
         except Exception:
-            app.notify("Failed to focus on window to submit draft, manually focus on intended destination and use draft submit again")
+            app.notify(
+                "Failed to focus on window to submit draft, manually focus on intended destination and use draft submit again"
+            )
         else:
             actions.sleep("300ms")
             actions.user.paste(last_draft)
-
 
     def draft_editor_discard():
         """Discard draft editor"""
@@ -115,6 +116,7 @@ def get_editor_app() -> ui.App:
             return app
 
     raise RuntimeError("Draft editor is not running")
+
 
 def close_editor() -> str:
     global last_draft
