@@ -1,5 +1,6 @@
 import csv
 import os
+import io
 from pathlib import Path
 
 from talon import resource
@@ -91,7 +92,26 @@ def get_key_value_pairs_and_spoken_forms_from_three_column_csv(
     return talon_list
 
 def _create_three_columns_csv_from_default(path, headers, default):
-    pass
+    with open(path, "w", encoding="utf-8", newline="") as file:
+        writer = csv.writer(file)
+        writer.writerow(headers)
+        for row_tuple in default.:
+            row = _compute_row_for_three_column_csv(row_tuple)
+            writer.writerow(row)
+
+def _compute_row_for_three_column_csv(input_tuple):
+    name, values, spoken_forms = input_tuple
+    values_text = _compute_values_packed_into_column(values)
+    spoken_forms_text = _compute_values_packed_into_column(spoken_forms)
+    row = [name, values_text, spoken_forms_text]
+    return row
+
+def _compute_values_packed_into_column(values):
+    output = io.StringIO()
+    writer = csv.writer(output, delimiter=";")
+    writer.writerow(values)
+    result = output.getvalue().strip()
+    return result
 
 def _obtain_rows_from_csv(path):
     with resource.open(str(path), "r") as f:
