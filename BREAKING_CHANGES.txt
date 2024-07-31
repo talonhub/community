@@ -6,6 +6,7 @@ applied given the delay between changes being submitted and the time they were r
 and merged.
 
 ---
+* 2024-07-30 Deprecate `lend` and `bend` commands in favor of `go line end | tail` and `go line start | head`.
 * 2024-05-30 Deprecate 'drop down <user.number_small>' in favor of overridable 'choose' helper
 * 2024-01-27 Deprecate '<user.number_string>' command without a spoken prefix like `numb`.
 See `numbers.talon` and `numbers_unprefixed.talon.` If in the future you want to still use
