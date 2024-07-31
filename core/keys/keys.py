@@ -47,6 +47,12 @@ def arrow_key(m) -> str:
     return m.arrow_key
 
 
+@mod.capture(rule="<self.arrow_key>+")
+def arrow_keys(m) -> str:
+    "One or more arrow keys separated by a space"
+    return str(m)
+
+
 @mod.capture(rule="{self.number_key}")
 def number_key(m) -> str:
     "One number key"
