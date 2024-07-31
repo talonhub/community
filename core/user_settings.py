@@ -1,4 +1,4 @@
-import csv
+Uimport csv
 import os
 import io
 from pathlib import Path
@@ -114,7 +114,7 @@ def _compute_values_packed_into_column(values):
     return result
 
 def _obtain_rows_from_csv(path):
-    with resource.open(str(path), "r") as f:
+    with open(str(path), "r") as f:
         rows = list(csv.reader(f))
     return rows
 
