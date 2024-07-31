@@ -100,10 +100,16 @@ def _create_three_columns_csv_from_default(path, headers, default):
             writer.writerow(row)
 
 def _compute_row_for_three_column_csv(input_tuple):
-    name, values, spoken_forms = input_tuple
+    if len(input_tuple) == 3:
+        name, values, spoken_forms = input_tuple
+    else:
+        name, values = input_tuple
+        spoken_forms = None
     values_text = _compute_values_packed_into_column(values)
-    spoken_forms_text = _compute_values_packed_into_column(spoken_forms)
-    row = [name, values_text, spoken_forms_text]
+    row = [name, values_text]
+    if spoken_forms:
+        spoken_forms_text = _compute_values_packed_into_column(spoken_forms)
+        row.append(spoken_forms_text)
     return row
 
 def _compute_values_packed_into_column(values):
