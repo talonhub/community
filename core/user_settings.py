@@ -150,3 +150,14 @@ def _compute_csv_path(filename: str):
     path = SETTINGS_DIR / filename
     assert filename.endswith(".csv")
     return path
+
+def compute_unified_dictionary_from_key_value_pairs_and_spoken_forms(
+    key_value_pairs,
+    spoken_forms
+    ):
+    result = {
+        name: key
+        for key in key_value_pairs
+        for name in spoken_forms.get(key, [key])
+    }
+    return result
