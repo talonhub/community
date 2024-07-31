@@ -448,7 +448,7 @@ class Actions:
         actions.user.clear_last_phrase()
         actions.user.insert_formatted(last_phrase, formatters)
 
-    def reformat_text(text: str, formatters: str):
+    def reformat_text(text: str, formatters: str) -> str:
         """Re-formats <text> as <formatters>"""
         return format_phrase(text, formatters, True)
 
