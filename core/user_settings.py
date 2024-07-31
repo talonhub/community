@@ -79,7 +79,7 @@ def append_to_csv(filename: str, rows: dict[str, str]):
 
 
 def get_key_value_pairs_and_spoken_forms_from_three_column_csv(
-        filename: str, headers: tuple[str, str, str], default: dict[str, str] = {}
+        filename: str, headers: tuple[str, str, str], default: list[str, tuple[str], tuple[str]]
 ):
     """Retrieves a list from a CSV of the form name,values,spoken_forms"""
     path = _compute_csv_path(filename)    
@@ -95,7 +95,7 @@ def _create_three_columns_csv_from_default(path, headers, default):
     with open(path, "w", encoding="utf-8", newline="") as file:
         writer = csv.writer(file)
         writer.writerow(headers)
-        for row_tuple in default.:
+        for row_tuple in default:
             row = _compute_row_for_three_column_csv(row_tuple)
             writer.writerow(row)
 
