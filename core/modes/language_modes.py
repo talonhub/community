@@ -1,73 +1,6 @@
 from talon import Context, Module, actions, resource
 
-from ..user_settings import get_key_value_pairs_and_spoken_forms_from_three_column_csv, compute_csv_path
-
-settings_filepath = compute_csv_path("language_modes.csv")
-@resource.watch(settings_filepath)
-def load_language_modes(path: str):
-    pass    
-
-
-# Maps language mode names to the extensions that activate them. Only put things
-# here which have a supported language mode; that's why there are so many
-# commented out entries. TODO: make this a csv file?
-language_extensions = {
-    # 'assembly': 'asm s',
-    # 'bash': 'bashbook sh',
-    "batch": "bat",
-    "c": "c h",
-    # 'cmake': 'cmake',
-    # "cplusplus": "cpp hpp",
-    "csharp": "cs",
-    "css": "css",
-    # 'elisp': 'el',
-    # 'elm': 'elm',
-    "gdb": "gdb",
-    "go": "go",
-    "java": "java",
-    "javascript": "js",
-    "javascriptreact": "jsx",
-    # "json": "json",
-    "kotlin": "kt",
-    "lua": "lua",
-    "markdown": "md",
-    # 'perl': 'pl',
-    "php": "php",
-    # 'powershell': 'ps1',
-    "python": "py",
-    "protobuf": "proto",
-    "r": "r",
-    # 'racket': 'rkt',
-    "ruby": "rb",
-    "rust": "rs",
-    "scala": "scala",
-    "scss": "scss",
-    # 'snippets': 'snippets',
-    "sql": "sql",
-    "stata": "do ado",
-    "talon": "talon",
-    "talonlist": "talon-list",
-    "terraform": "tf",
-    "tex": "tex",
-    "typescript": "ts",
-    "typescriptreact": "tsx",
-    # 'vba': 'vba',
-    "vimscript": "vim vimrc",
-    # html doesn't actually have a language mode, but we do have snippets.
-    "html": "html",
-}
-
-# Override speakable forms for language modes. If not present, a language mode's
-# name is used directly.
-language_name_overrides = {
-    "cplusplus": ["see plus plus"],
-    "csharp": ["see sharp"],
-    "css": ["c s s"],
-    "gdb": ["g d b"],
-    "go": ["go", "go lang", "go language"],
-    "r": ["are language"],
-    "tex": ["tech", "lay tech", "latex"],
-}
+from ..user_settings import get_key_value_pairs_and_spoken_forms_from_three_column_csv, compute_csv_path, compute_spoken_form_to_key_dictionary
 
 mod = Module()
 
@@ -82,20 +15,80 @@ tag: user.code_language_forced
 mod.tag("code_language_forced", "This tag is active when a language mode is forced")
 mod.list("language_mode", desc="Name of a programming language mode.")
 
-ctx.lists["self.language_mode"] = {
-    name: language
-    for language in language_extensions
-    for name in language_name_overrides.get(language, [language])
-}
-
 # Maps extension to languages.
-extension_lang_map = {
-    "." + ext: language
-    for language, extensions in language_extensions.items()
-    for ext in extensions.split()
-}
+extension_lang_map = None
 
-language_ids = set(language_extensions.keys())
+language_ids = None
+language_extensions = None
+
+settings_filepath = compute_csv_path("language_modes.csv")
+@resource.watch(settings_filepath)
+def load_language_modes(path: str):
+    # Maps language mode names to the extensions that activate them. Only put things
+    # here which have a supported language mode; that's why there are so many
+    # commented out entries. TODO: make this a csv file?
+    default_csv_contents = [
+        #['assembly', ('asm', 's'),],
+        #['bash', ('bashbook', 'sh'),],
+        ["batch", ("bat"),],
+        ["c", ("c", "h"),],
+        #['cmake', ('cmake'),],
+        #["cplusplus", ("cpp hpp"), ("see plus plus")],
+        ["csharp", ("cs"), ("see sharp")],
+        ["css", ("css"), ("c s s")],
+        #['elisp', ('el'),],
+        #['elm', ('elm'),],
+        ["gdb", ("gdb"), ("g d b")],
+        ["go", ("go"), ("go", "go lang", "go language")],
+        ["java", ("java"),],
+        ["javascript", ("js"),],
+        ["javascriptreact", ("jsx"),],
+        #["json", ("json"),],
+        ["kotlin", ("kt"),],
+        ["lua", ("lua"),],
+        ["markdown", ("md"),],
+        #['perl', ('pl'),],
+        ["php", ("php"),],
+        #['powershell', ('ps1'),],
+        ["python", ("py"),],
+        ["protobuf", ("proto"),],
+        ["r", ("r"), ("are language")],
+        #['racket', ('rkt'),],
+        ["ruby", ("rb"),],
+        ["rust", ("rs"),],
+        ["scala", ("scala"),],
+        ["scss", ("scss"),],
+        #['snippets', ('snippets'),],
+        ["sql", ("sql"),],
+        ["stata", ("do", "ado"),],
+        ["talon", ("talon"),],
+        ["talonlist", ("talon-list"),],
+        ["terraform", ("tf"),],
+        ["tex", ("tex"), ("tech", "lay tech", "latex")],
+        ["typescript", ("ts"),],
+        ["typescriptreact", ("tsx"),],
+        #['vba', ('vba'),],
+        ["vimscript", ("vim", "vimrc"),],
+        #htm doesn't actually have a language moded, but we do have snippets.
+        ["html", ("html"),],
+    ]
+    
+    global language_extensions
+    language_extensions, language_spoken_forms = get_key_value_pairs_and_spoken_forms_from_three_column_csv(
+        path,
+        ["language", "extensions", "spoken_forms"],
+        default_csv_contents,
+    )
+    ctx.lists["self.language_mode"] = compute_spoken_form_to_key_dictionary(language_extensions, language_spoken_forms)
+    global extension_lang_map
+    extension_lang_map = {
+        "." + ext: language
+        for language, extensions in language_extensions.items()
+        for ext in extensions
+    }
+    global language_ids
+    language_ids = set(language_extensions.keys())
+load_language_modes(settings_filepath)
 
 forced_language = ""
 
