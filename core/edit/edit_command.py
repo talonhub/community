@@ -18,8 +18,8 @@ compound_actions = {
     ("delete", "line"): actions.edit.delete_line,
     ("delete", "paragraph"): actions.edit.delete_paragraph,
     ("delete", "document"): actions.edit.delete_all,
-    # Cut
-    ("cut", "line"): actions.user.cut_line,
+    # Cut to clipboard
+    ("cutToClipboard", "line"): actions.user.cut_line,
 }
 
 
