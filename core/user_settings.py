@@ -79,17 +79,24 @@ def append_to_csv(filename: str, rows: dict[str, str]):
 
 
 def get_key_value_pairs_and_spoken_forms_from_three_column_csv(
-        filename: str, headers: tuple[str, str, str], default: list[list[str, tuple[str], tuple[str]]]
+        filename: str, headers: tuple[str, str, str]
 ):
     """Retrieves a list from a CSV of the form name,values,spoken_forms"""
     path = compute_csv_path(filename)    
-    if not path.is_file():
-        _create_three_columns_csv_from_default(path, headers, default)
     
     rows = _obtain_rows_from_csv(path)
     
     result = _convert_rows_from_file_with_headers_to_key_value_pairs_and_spoken_forms(rows, filename, headers)
     return result
+
+def create_three_columns_csv_from_default_if_nonexistent(
+    filename: str,
+    headers: tuple[str, str, str],
+    default: list[list[str, tuple[str], tuple[str]]]
+):
+    path = compute_csv_path(filename)
+    if not path.is_file():
+        _create_three_columns_csv_from_default(path, headers, default)
 
 def _create_three_columns_csv_from_default(path, headers, default):
     with open(path, "w", encoding="utf-8", newline="") as file:

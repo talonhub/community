@@ -1,6 +1,7 @@
 from talon import Context, Module, actions, resource
 
-from ..user_settings import get_key_value_pairs_and_spoken_forms_from_three_column_csv, compute_csv_path, compute_spoken_form_to_key_dictionary
+from ..user_settings import get_key_value_pairs_and_spoken_forms_from_three_column_csv, compute_csv_path, compute_spoken_form_to_key_dictionary, \
+    create_three_columns_csv_from_default_if_nonexistent
 
 mod = Module()
 
@@ -23,9 +24,11 @@ language_extensions = None
 
 SETTINGS_FILENAME = "language_modes.csv"
 settings_filepath = compute_csv_path(SETTINGS_FILENAME)
-@resource.watch(settings_filepath)
-def load_language_modes(path: str):
-    # Maps language mode names to the extensions that activate them. Only put things
+
+LANGUAGE_HEADERS = ["language", "extensions", "spoken_forms"]
+
+def make_sure_settings_file_exists():
+    # Maps language mode names to the extensions that activate them and language spoken forms. Only put things
     # here which have a supported language mode; that's why there are so many
     # commented out entries. TODO: make this a csv file?
     default_csv_contents = [
@@ -39,9 +42,6 @@ def load_language_modes(path: str):
         ["css", ("css",), ("c s s",)],
         #['elisp', ('el'),],
         #['elm', ('elm'),],
-        ["gdb", ("gdb",), ("g d b",)],
-        ["go", ("go",), ("go", "go lang", "go language")],
-        ["java", ("java",),],
         ["javascript", ("js",),],
         ["javascriptreact", ("jsx",),],
         #["json", ("json",),],
@@ -73,12 +73,16 @@ def load_language_modes(path: str):
         #htm doesn't actually have a language moded, but we do have snippets.
         ["html", ("html",),],
     ]
-    
+    create_three_columns_csv_from_default_if_nonexistent(SETTINGS_FILENAME, LANGUAGE_HEADERS, default_csv_contents)
+make_sure_settings_file_exists()
+
+@resource.watch(settings_filepath)
+def load_language_modes(path: str):
+    make_sure_settings_file_exists()   
     global language_extensions
     language_extensions, language_spoken_forms = get_key_value_pairs_and_spoken_forms_from_three_column_csv(
         SETTINGS_FILENAME,
-        ["language", "extensions", "spoken_forms"],
-        default_csv_contents,
+        LANGUAGE_HEADERS,
     )
     ctx.lists["self.language_mode"] = compute_spoken_form_to_key_dictionary(language_extensions, language_spoken_forms)
     global extension_lang_map
