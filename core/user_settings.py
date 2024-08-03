@@ -1,6 +1,6 @@
 import csv
-import os
 import io
+import os
 from pathlib import Path
 
 from talon import resource
@@ -79,24 +79,28 @@ def append_to_csv(filename: str, rows: dict[str, str]):
 
 
 def get_key_value_pairs_and_spoken_forms_from_three_column_csv(
-        filename: str, headers: tuple[str, str, str]
+    filename: str, headers: tuple[str, str, str]
 ):
     """Retrieves a list from a CSV of the form name,values,spoken_forms"""
-    path = compute_csv_path(filename)    
-    
+    path = compute_csv_path(filename)
+
     rows = _obtain_rows_from_csv(path)
-    
-    result = _convert_rows_from_file_with_headers_to_key_value_pairs_and_spoken_forms(rows, filename, headers)
+
+    result = _convert_rows_from_file_with_headers_to_key_value_pairs_and_spoken_forms(
+        rows, filename, headers
+    )
     return result
+
 
 def create_three_columns_csv_from_default_if_nonexistent(
     filename: str,
     headers: tuple[str, str, str],
-    default: list[list[str, tuple[str], tuple[str]]]
+    default: list[list[str, tuple[str], tuple[str]]],
 ):
     path = compute_csv_path(filename)
     if not path.is_file():
         _create_three_columns_csv_from_default(path, headers, default)
+
 
 def _create_three_columns_csv_from_default(path, headers, default):
     with open(path, "w", encoding="utf-8", newline="") as file:
@@ -105,6 +109,7 @@ def _create_three_columns_csv_from_default(path, headers, default):
         for row_tuple in default:
             row = _compute_row_for_three_column_csv(row_tuple)
             writer.writerow(row)
+
 
 def _compute_row_for_three_column_csv(input_tuple):
     if len(input_tuple) == 3:
@@ -119,6 +124,7 @@ def _compute_row_for_three_column_csv(input_tuple):
         row.append(spoken_forms_text)
     return row
 
+
 def _compute_values_packed_into_column(values):
     output = io.StringIO()
     writer = csv.writer(output, delimiter=";")
@@ -126,12 +132,16 @@ def _compute_values_packed_into_column(values):
     result = output.getvalue().strip()
     return result
 
+
 def _obtain_rows_from_csv(path):
     with open(str(path), "r") as f:
         rows = list(csv.reader(f))
     return rows
 
-def _convert_rows_from_file_with_headers_to_key_value_pairs_and_spoken_forms(rows, filename, headers):
+
+def _convert_rows_from_file_with_headers_to_key_value_pairs_and_spoken_forms(
+    rows, filename, headers
+):
     key_value_pairs = {}
     spoken_forms = {}
     if len(rows) >= 2:
@@ -149,27 +159,32 @@ def _convert_rows_from_file_with_headers_to_key_value_pairs_and_spoken_forms(row
             else:
                 if len(row) > 3:
                     print(
-                            f'"{filename}": More than three values in row: {row}.'
-                            + " Ignoring the extras."
-                        )
+                        f'"{filename}": More than three values in row: {row}.'
+                        + " Ignoring the extras."
+                    )
                 name, values_text, new_spoken_forms_text = row[:3]
             name = name.strip()
             values = _get_intermediate_values_from_column(values_text)
             key_value_pairs[name] = values
             if new_spoken_forms_text:
-                spoken_forms[name] = _get_spoken_forms_from_column(new_spoken_forms_text)
+                spoken_forms[name] = _get_spoken_forms_from_column(
+                    new_spoken_forms_text
+                )
     return key_value_pairs, spoken_forms
-            
+
+
 def _get_intermediate_values_from_column(values_text):
     reader = csv.reader([values_text], delimiter=";")
     values = next(reader)
     return values
+
 
 def _get_spoken_forms_from_column(spoken_forms_text):
     reader = csv.reader([spoken_forms_text], delimiter=";")
     spoken_forms = next(reader)
     spoken_forms = [spoken_form.strip() for spoken_form in spoken_forms]
     return spoken_forms
+
 
 def _complain_if_invalid_headers_found_in_file(rows, expected_headers, filename):
     actual_headers = rows[0]
@@ -179,15 +194,14 @@ def _complain_if_invalid_headers_found_in_file(rows, expected_headers, filename)
             + f" Should be {list(expected_headers)}. Ignoring row."
         )
 
+
 def compute_csv_path(filename: str):
     path = SETTINGS_DIR / filename
     assert filename.endswith(".csv")
     return path
 
-def compute_spoken_form_to_key_dictionary(
-    key_value_pairs,
-    spoken_forms
-    ):
+
+def compute_spoken_form_to_key_dictionary(key_value_pairs, spoken_forms):
     if spoken_forms:
         result = {
             name: key
@@ -195,8 +209,5 @@ def compute_spoken_form_to_key_dictionary(
             for name in spoken_forms.get(key, [key])
         }
     else:
-        result = {
-            key: key
-            for key in key_value_pairs
-        }
+        result = {key: key for key in key_value_pairs}
     return result

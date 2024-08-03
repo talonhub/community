@@ -1,7 +1,11 @@
 from talon import Context, Module, actions, resource
 
-from ..user_settings import get_key_value_pairs_and_spoken_forms_from_three_column_csv, compute_csv_path, compute_spoken_form_to_key_dictionary, \
-    create_three_columns_csv_from_default_if_nonexistent
+from ..user_settings import (
+    compute_csv_path,
+    compute_spoken_form_to_key_dictionary,
+    create_three_columns_csv_from_default_if_nonexistent,
+    get_key_value_pairs_and_spoken_forms_from_three_column_csv,
+)
 
 mod = Module()
 
@@ -27,64 +31,143 @@ settings_filepath = compute_csv_path(SETTINGS_FILENAME)
 
 LANGUAGE_HEADERS = ["language", "extensions", "spoken_forms"]
 
+
 def make_sure_settings_file_exists():
     # Maps language mode names to the extensions that activate them and language spoken forms. Only put things
     # here which have a supported language mode; that's why there are so many
     # commented out entries. TODO: make this a csv file?
     default_csv_contents = [
-        #['assembly', ('asm', 's'),],
-        #['bash', ('bashbook', 'sh'),],
-        ["batch", ("bat",),],
-        ["c", ("c", "h"),],
-        #['cmake', ('cmake',),],
-        #["cplusplus", ("cpp hpp",), ("see plus plus",)],
+        # ['assembly', ('asm', 's'),],
+        # ['bash', ('bashbook', 'sh'),],
+        [
+            "batch",
+            ("bat",),
+        ],
+        [
+            "c",
+            ("c", "h"),
+        ],
+        # ['cmake', ('cmake',),],
+        # ["cplusplus", ("cpp hpp",), ("see plus plus",)],
         ["csharp", ("cs",), ("see sharp",)],
         ["css", ("css",), ("c s s",)],
-        #['elisp', ('el'),],
-        #['elm', ('elm'),],
-        ["javascript", ("js",),],
-        ["javascriptreact", ("jsx",),],
-        #["json", ("json",),],
-        ["kotlin", ("kt",),],
-        ["lua", ("lua",),],
-        ["markdown", ("md",),],
-        #['perl', ('pl',),],
-        ["php", ("php",),],
-        #['powershell', ('ps1',),],
-        ["python", ("py",),],
-        ["protobuf", ("proto",),],
+        # ['elisp', ('el'),],
+        # ['elm', ('elm'),],
+        [
+            "javascript",
+            ("js",),
+        ],
+        [
+            "javascriptreact",
+            ("jsx",),
+        ],
+        # ["json", ("json",),],
+        [
+            "kotlin",
+            ("kt",),
+        ],
+        [
+            "lua",
+            ("lua",),
+        ],
+        [
+            "markdown",
+            ("md",),
+        ],
+        # ['perl', ('pl',),],
+        [
+            "php",
+            ("php",),
+        ],
+        # ['powershell', ('ps1',),],
+        [
+            "python",
+            ("py",),
+        ],
+        [
+            "protobuf",
+            ("proto",),
+        ],
         ["r", ("r"), ("are language",)],
-        #['racket', ('rkt,'),],
-        ["ruby", ("rb",),],
-        ["rust", ("rs",),],
-        ["scala", ("scala",),],
-        ["scss", ("scss",),],
-        #['snippets', ('snippets',),],
-        ["sql", ("sql",),],
-        ["stata", ("do", "ado"),],
-        ["talon", ("talon",),],
-        ["talonlist", ("talon-list",),],
-        ["terraform", ("tf",),],
+        # ['racket', ('rkt,'),],
+        [
+            "ruby",
+            ("rb",),
+        ],
+        [
+            "rust",
+            ("rs",),
+        ],
+        [
+            "scala",
+            ("scala",),
+        ],
+        [
+            "scss",
+            ("scss",),
+        ],
+        # ['snippets', ('snippets',),],
+        [
+            "sql",
+            ("sql",),
+        ],
+        [
+            "stata",
+            ("do", "ado"),
+        ],
+        [
+            "talon",
+            ("talon",),
+        ],
+        [
+            "talonlist",
+            ("talon-list",),
+        ],
+        [
+            "terraform",
+            ("tf",),
+        ],
         ["tex", ("tex",), ("tech", "lay tech", "latex")],
-        ["typescript", ("ts",),],
-        ["typescriptreact", ("tsx",),],
-        #['vba', ('vba',),],
-        ["vimscript", ("vim", "vimrc"),],
-        #htm doesn't actually have a language moded, but we do have snippets.
-        ["html", ("html",),],
+        [
+            "typescript",
+            ("ts",),
+        ],
+        [
+            "typescriptreact",
+            ("tsx",),
+        ],
+        # ['vba', ('vba',),],
+        [
+            "vimscript",
+            ("vim", "vimrc"),
+        ],
+        # htm doesn't actually have a language moded, but we do have snippets.
+        [
+            "html",
+            ("html",),
+        ],
     ]
-    create_three_columns_csv_from_default_if_nonexistent(SETTINGS_FILENAME, LANGUAGE_HEADERS, default_csv_contents)
+    create_three_columns_csv_from_default_if_nonexistent(
+        SETTINGS_FILENAME, LANGUAGE_HEADERS, default_csv_contents
+    )
+
+
 make_sure_settings_file_exists()
+
 
 @resource.watch(settings_filepath)
 def load_language_modes(path: str):
-    make_sure_settings_file_exists()   
+    make_sure_settings_file_exists()
     global language_extensions
-    language_extensions, language_spoken_forms = get_key_value_pairs_and_spoken_forms_from_three_column_csv(
-        SETTINGS_FILENAME,
-        LANGUAGE_HEADERS,
+    language_extensions, language_spoken_forms = (
+        get_key_value_pairs_and_spoken_forms_from_three_column_csv(
+            SETTINGS_FILENAME,
+            LANGUAGE_HEADERS,
+        )
     )
-    ctx.lists["self.language_mode"] = compute_spoken_form_to_key_dictionary(language_extensions, language_spoken_forms)
+    ctx.lists["self.language_mode"] = compute_spoken_form_to_key_dictionary(
+        language_extensions, language_spoken_forms
+    )
     global extension_lang_map
     extension_lang_map = {
         "." + ext: language
@@ -93,6 +176,8 @@ def load_language_modes(path: str):
     }
     global language_ids
     language_ids = set(language_extensions.keys())
+
+
 load_language_modes(settings_filepath)
 
 forced_language = ""
