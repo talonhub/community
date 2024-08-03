@@ -1,5 +1,4 @@
-mode: sleep
-not mode: sleep
+mode: all
 speech.engine: dragon
 -
 # The optional <phrase> afterwards allows these to match even if you say arbitrary text
