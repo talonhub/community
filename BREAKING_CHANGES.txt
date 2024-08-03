@@ -6,6 +6,7 @@ applied given the delay between changes being submitted and the time they were r
 and merged.
 
 ---
+* 2024-07-30 Deprecate `lend` and `bend` commands in favor of `go line end | tail` and `go line start | head`.
 * 2024-07-28 Removed the following actions in favor of the new action/modifier grammar.
     https://github.com/talonhub/community/blob/37a8ebde90c8120a0b52555030988d4f54e65159/core/edit/edit.talon#L3
     cut_word, copy_word, paste_word
