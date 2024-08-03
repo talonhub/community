@@ -448,7 +448,7 @@ class Actions:
         actions.user.clear_last_phrase()
         actions.user.insert_formatted(last_phrase, formatters)
 
-    def formatters_reformat_text(text: str, formatters: str):
+    def reformat_text(text: str, formatters: str) -> str:
         """Re-formats <text> as <formatters>"""
         return format_phrase(text, formatters, True)
 
@@ -461,7 +461,7 @@ class Actions:
         # Delete separately for compatibility with programs that don't overwrite
         # selected text (e.g. Emacs)
         actions.edit.delete()
-        text = actions.user.formatters_reformat_text(selected, formatters)
+        text = actions.user.reformat_text(selected, formatters)
         actions.insert(text)
 
     def get_formatters_words() -> dict:
