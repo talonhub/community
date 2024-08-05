@@ -134,7 +134,7 @@ def _compute_values_packed_into_column(values):
 
 
 def _obtain_rows_from_csv(path):
-    with open(str(path), "r") as f:
+    with open(str(path), "r", newline='') as f:
         rows = list(csv.reader(f))
     return rows
 
