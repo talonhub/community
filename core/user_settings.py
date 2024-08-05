@@ -167,7 +167,7 @@ def _convert_rows_from_file_with_headers_to_key_value_pairs_and_spoken_forms(
             values = _get_intermediate_values_from_column(values_text)
             key_value_pairs[name] = values
             if new_spoken_forms_text:
-                spoken_forms[name] = _get_spoken_forms_from_column(
+                spoken_forms[name] = _get_intermediate_values_from_column(
                     new_spoken_forms_text
                 )
     return key_value_pairs, spoken_forms
@@ -176,14 +176,8 @@ def _convert_rows_from_file_with_headers_to_key_value_pairs_and_spoken_forms(
 def _get_intermediate_values_from_column(values_text):
     reader = csv.reader([values_text], delimiter=";")
     values = next(reader)
+    values = [value.strip() for value in values]
     return values
-
-
-def _get_spoken_forms_from_column(spoken_forms_text):
-    reader = csv.reader([spoken_forms_text], delimiter=";")
-    spoken_forms = next(reader)
-    spoken_forms = [spoken_form.strip() for spoken_form in spoken_forms]
-    return spoken_forms
 
 
 def _complain_if_invalid_headers_found_in_file(rows, expected_headers, filename):
