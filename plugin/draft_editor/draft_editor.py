@@ -105,7 +105,6 @@ def get_editor_app() -> ui.App:
 
 
 def close_editor(submit_draft: bool) -> None:
-    global last_draft
     remove_tag("user.draft_editor_active")
     actions.edit.select_all()
     selected_text = actions.edit.selected_text()
