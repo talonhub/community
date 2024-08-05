@@ -1,4 +1,4 @@
-from talon import Context, Module, actions, app, settings, ui
+from talon import Context, Module, actions, settings, ui, app
 
 mod = Module()
 mod.tag("draft_editor_active", "Indicates whether the draft editor has been activated")
@@ -82,25 +82,11 @@ class Actions:
 
     def draft_editor_submit():
         """Submit/save draft editor"""
-        global last_draft
-        last_draft = close_editor()
-        try:
-            actions.user.switcher_focus_window(original_window)
-        except Exception:
-            app.notify(
-                "Failed to focus on window to submit draft, manually focus on intended destination and use draft submit again"
-            )
-        else:
-            actions.sleep("300ms")
-            actions.user.paste(last_draft)
+        close_editor(submit_draft = True)
 
     def draft_editor_discard():
         """Discard draft editor"""
-        close_editor()
-        try:
-            actions.user.switcher_focus_window(original_window)
-        except Exception:
-            app.notify("Failed to focus on previous window, leaving editor open")
+        close_editor(submit_draft = False)
 
     def draft_editor_paste_last():
         """Paste last submitted draft"""
@@ -117,12 +103,25 @@ def get_editor_app() -> ui.App:
 
     raise RuntimeError("Draft editor is not running")
 
-
-def close_editor() -> str:
+def close_editor(submit_draft: bool) -> None:
     global last_draft
     remove_tag("user.draft_editor_active")
     actions.edit.select_all()
     selected_text = actions.edit.selected_text()
     actions.edit.delete()
     actions.app.tab_close()
-    return selected_text
+    if submit_draft:
+        global last_draft
+        last_draft = selected_text
+        try:
+            actions.user.switcher_focus_window(original_window)
+        except Exception:
+            app.notify("Failed to focus on window to submit draft, manually focus on intended destination and use draft submit again")
+        else:
+            actions.sleep("300ms")
+            actions.user.paste(last_draft)
+    else:
+        try:
+            actions.user.switcher_focus_window(original_window)
+        except Exception:
+            app.notify("Failed to focus on previous window, leaving editor open")
