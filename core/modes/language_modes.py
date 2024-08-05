@@ -37,115 +37,49 @@ def make_sure_settings_file_exists():
     # here which have a supported language mode; that's why there are so many
     # commented out entries. TODO: make this a csv file?
     default_csv_contents = [
-        # ['assembly', ('asm', 's'),],
-        # ['bash', ('bashbook', 'sh'),],
-        [
-            "batch",
-            ("bat",),
-        ],
-        [
-            "c",
-            ("c", "h"),
-        ],
-        # ['cmake', ('cmake',),],
-        # ["cplusplus", ("cpp hpp",), ("see plus plus",)],
+        #['assembly', ('asm', 's'),],
+        #['bash', ('bashbook', 'sh'),],
+        ["batch", ("bat",),],
+        ["c", ("c", "h"),],
+        #['cmake', ('cmake',),],
+        #["cplusplus", ("cpp hpp",), ("see plus plus",)],
         ["csharp", ("cs",), ("see sharp",)],
         ["css", ("css",), ("c s s",)],
-        # ['elisp', ('el'),],
-        # ['elm', ('elm'),],
-        [
-            "javascript",
-            ("js",),
-        ],
-        [
-            "javascriptreact",
-            ("jsx",),
-        ],
-        # ["json", ("json",),],
-        [
-            "kotlin",
-            ("kt",),
-        ],
-        [
-            "lua",
-            ("lua",),
-        ],
-        [
-            "markdown",
-            ("md",),
-        ],
-        # ['perl', ('pl',),],
-        [
-            "php",
-            ("php",),
-        ],
-        # ['powershell', ('ps1',),],
-        [
-            "python",
-            ("py",),
-        ],
-        [
-            "protobuf",
-            ("proto",),
-        ],
+        #['elisp', ('el'),],
+        #['elm', ('elm'),],
+        ["gdb", ("gdb",), ("g d b",)],
+        ["go", ("go",), ("go", "go lang", "go language")],
+        ["java", ("java",)],
+        ["javascript", ("js",)],
+        ["javascriptreact", ("jsx",)],
+        #["json", ("json",),],
+        ["kotlin", ("kt",),],
+        ["lua", ("lua",),],
+        ["markdown", ("md",),],
+        #['perl', ('pl',),],
+        ["php", ("php",),],
+        #['powershell', ('ps1',),],
+        ["python", ("py",),],
+        ["protobuf", ("proto",),],
         ["r", ("r"), ("are language",)],
-        # ['racket', ('rkt,'),],
-        [
-            "ruby",
-            ("rb",),
-        ],
-        [
-            "rust",
-            ("rs",),
-        ],
-        [
-            "scala",
-            ("scala",),
-        ],
-        [
-            "scss",
-            ("scss",),
-        ],
-        # ['snippets', ('snippets',),],
-        [
-            "sql",
-            ("sql",),
-        ],
-        [
-            "stata",
-            ("do", "ado"),
-        ],
-        [
-            "talon",
-            ("talon",),
-        ],
-        [
-            "talonlist",
-            ("talon-list",),
-        ],
-        [
-            "terraform",
-            ("tf",),
-        ],
+        #['racket', ('rkt,'),],
+        ["ruby", ("rb",),],
+        ["rust", ("rs",),],
+        ["scala", ("scala",),],
+        ["scss", ("scss",),],
+        #['snippets', ('snippets',),],
+        ["sql", ("sql",),],
+        ["stata", ("do", "ado"),],
+        ["talon", ("talon",),],
+        ["talonlist", ("talon-list",),],
+        ["terraform", ("tf",),],
         ["tex", ("tex",), ("tech", "lay tech", "latex")],
-        [
-            "typescript",
-            ("ts",),
-        ],
-        [
-            "typescriptreact",
-            ("tsx",),
-        ],
-        # ['vba', ('vba',),],
-        [
-            "vimscript",
-            ("vim", "vimrc"),
-        ],
-        # htm doesn't actually have a language moded, but we do have snippets.
-        [
-            "html",
-            ("html",),
-        ],
+        ["typescript", ("ts",),],
+        ["typescriptreact", ("tsx",),],
+        #['vba', ('vba',),],
+        ["vimscript", ("vim", "vimrc"),],
+        #htm doesn't actually have a language moded, but we do have snippets.
+        ["html", ("html",),],
     ]
     create_three_columns_csv_from_default_if_nonexistent(
         SETTINGS_FILENAME, LANGUAGE_HEADERS, default_csv_contents
