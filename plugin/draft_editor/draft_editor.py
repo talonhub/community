@@ -105,14 +105,14 @@ def get_editor_app() -> ui.App:
 
 
 def close_editor(submit_draft: bool) -> None:
+    global last_draft
     remove_tag("user.draft_editor_active")
     actions.edit.select_all()
-    selected_text = actions.edit.selected_text()
+    if submit_draft:
+        last_draft = actions.edit.selected_text()
     actions.edit.delete()
     actions.app.tab_close()
     if submit_draft:
-        global last_draft
-        last_draft = selected_text
         try:
             actions.user.switcher_focus_window(original_window)
         except Exception:
