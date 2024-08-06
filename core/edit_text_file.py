@@ -1,6 +1,6 @@
 import os
-import subprocess
 import shutil
+import subprocess
 from pathlib import Path
 
 from talon import Context, Module, app
@@ -60,7 +60,7 @@ class WinActions:
 class MacActions:
     def edit_text_file(path):
         # -t means try to open in a text editor.
-                open_with_subprocess(
+        open_with_subprocess(
             path, ["/usr/bin/open", "-t", Path(path).expanduser().resolve()]
         )
 
