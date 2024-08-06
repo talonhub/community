@@ -80,6 +80,9 @@ settings():
     # Puts Talon into sleep mode if no commands are spoken for a defined period of time.
     # user.listening_timeout_minutes = 3
 
+    # Time in seconds to wait for the clipboard to change when trying to get selected text
+    # user.selected_text_timeout = 0.25
+
 # Uncomment to enable the curse yes/curse no commands (show/hide mouse cursor).
 # See issue #688 for more detail: https://github.com/talonhub/community/issues/688
 # tag(): user.mouse_cursor_commands_enable

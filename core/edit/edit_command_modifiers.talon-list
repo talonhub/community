@@ -1,0 +1,10 @@
+list: user.edit_modifier
+-
+
+all: document
+paragraph: paragraph
+word: word
+
+line: line
+line start: lineStart
+line end: lineEnd

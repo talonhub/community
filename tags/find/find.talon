@@ -1,10 +1,10 @@
 tag: user.find
 -
-hunt this: user.find("")
+hunt this: edit.find()
 hunt this (pace | paste):
-    user.find("")
+    edit.find()
     sleep(25ms)
     edit.paste()
-hunt this <user.text>: user.find(text)
-hunt next: user.find_next()
-hunt previous: user.find_previous()
+hunt this <user.text>: edit.find(text)
+hunt next: edit.find_next()
+hunt previous: edit.find_previous()

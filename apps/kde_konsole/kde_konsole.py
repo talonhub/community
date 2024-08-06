@@ -55,7 +55,7 @@ class EditActions:
     def copy():
         actions.key("ctrl-shift-c")
 
-    def find(text: str):
+    def find(text: str = None):
         actions.key("ctrl-shift-f")
         if str:
             actions.insert(text)
