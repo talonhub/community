@@ -10,6 +10,7 @@ phrase <user.text> over:
 <user.format_code>+$: user.insert_many(format_code_list)
 <user.format_code>+ over: user.insert_many(format_code_list)
 <user.formatters> that: user.formatters_reformat_selection(user.formatters)
+{user.word_formatter} <user.word>: user.insert_formatted(word, word_formatter)
 <user.formatters> (pace | paste): user.insert_formatted(clip.text(), formatters)
 word <user.word>:
     user.add_phrase_to_history(word)
