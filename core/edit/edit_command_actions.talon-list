@@ -1,0 +1,12 @@
+list: user.edit_action
+-
+take: select
+go before: goBefore
+go after: goAfter
+
+copy: copyToClipboard
+slice: cutToClipboard
+paste: pasteFromClipboard
+paste to: pasteFromClipboard
+
+wipe: delete
