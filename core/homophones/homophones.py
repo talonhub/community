@@ -39,6 +39,7 @@ def update_homophones(name, flags):
     with open(homophones_file) as f:
         for line in f:
             words = line.rstrip().split(",")
+            words = [x for x in words if x.strip() != ""]
             canonical_list.append(words[0])
             merged_words = set(words)
             for word in words:
@@ -93,7 +94,6 @@ def raise_homophones(word_to_find_homophones_for, forced=False, selection=False)
 
     if is_selection:
         word_to_find_homophones_for = word_to_find_homophones_for.strip()
-
     formatter = find_matching_format_function(
         word_to_find_homophones_for, PHONES_FORMATTERS
     )
@@ -102,6 +102,7 @@ def raise_homophones(word_to_find_homophones_for, forced=False, selection=False)
 
     # We support plurals, but very naively. If we can't find your word but your word ends in an s, presume its plural
     # and attempt to find the singular, then present the presumed plurals back. This could be improved!
+
     if word_to_find_homophones_for in all_homophones:
         valid_homophones = all_homophones[word_to_find_homophones_for]
     elif (
@@ -118,6 +119,7 @@ def raise_homophones(word_to_find_homophones_for, forced=False, selection=False)
         return
 
     # Move current word to end of list to reduce searcher's cognitive load
+
     valid_homophones_reordered = list(
         filter(
             lambda word_from_list: word_from_list.lower()
@@ -133,6 +135,7 @@ def raise_homophones(word_to_find_homophones_for, forced=False, selection=False)
         and quick_replace
         and not force_raise
     ):
+
         if word_to_find_homophones_for == active_word_list[0].lower():
             new = active_word_list[1]
         else:
@@ -140,7 +143,6 @@ def raise_homophones(word_to_find_homophones_for, forced=False, selection=False)
 
         clip.set(new)
         actions.edit.paste()
-
         return
 
     ctx.tags = ["user.homophones_open"]
