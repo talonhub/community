@@ -216,6 +216,8 @@ class EditActions:
 
     def find(text: str = None):
         actions.user.idea("action Find")
+        if text:
+            actions.insert(text)
 
     def line_clone():
         actions.user.idea("action EditorDuplicate")
