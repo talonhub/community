@@ -1,5 +1,7 @@
 import os
 import subprocess
+import shutil
+from pathlib import Path
 
 from talon import Context, Module, app
 
@@ -58,7 +60,9 @@ class WinActions:
 class MacActions:
     def edit_text_file(path):
         # -t means try to open in a text editor.
-        open_with_subprocess(path, ["/usr/bin/open", "-t", path])
+                open_with_subprocess(
+            path, ["/usr/bin/open", "-t", Path(path).expanduser().resolve()]
+        )
 
 
 @linuxctx.action_class("self")
@@ -67,7 +71,11 @@ class LinuxActions:
         # we use xdg-open for this even though it might not open a text
         # editor. we could use $EDITOR, but that might be something that
         # requires a terminal (eg nano, vi).
-        open_with_subprocess(path, ["/usr/bin/xdg-open", path])
+        open_cmd = shutil.which("xdg-open")
+        if not open_cmd:
+            app.notify("xdg-open is not available, cannot open file for editing.")
+            return
+        open_with_subprocess(path, [open_cmd, Path(path).expanduser().resolve()])
 
 
 # Helper for linux and mac.
