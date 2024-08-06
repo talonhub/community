@@ -1,12 +1,14 @@
-from talon import Module, ui, actions
+from talon import Module, actions, ui
 
 mod = Module()
 
 mod.tag("plugins", "Enable commands and contexts for apps that use optional plugins")
 
+
 @mod.scope
 def scope():
     return {"plugin_installed": actions.user.plugins_list()}
+
 
 @mod.action_class
 class Actions:
@@ -27,6 +29,7 @@ class Actions:
 
     def plugins_list_print() -> str:
         """Print the list of plugins currently associated with the active app"""
+
 
 ui.register("win_focus", scope.update)
 ui.register("win_title", scope.update)

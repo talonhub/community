@@ -6,6 +6,7 @@ ctx.matches = r"""
     user.plugin_installed: arturodent.jump-and-select
 """
 
+
 @ctx.action_class("user")
 class UserActions:
     def jump_cursor_to_next_char(char: str):

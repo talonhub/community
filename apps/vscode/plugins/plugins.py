@@ -1,5 +1,6 @@
-import pathlib
 import json
+import pathlib
+
 from talon import Context, Module, actions
 
 mod = Module()
