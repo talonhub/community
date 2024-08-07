@@ -17,6 +17,7 @@ tens_map = {n: 10 * (i + 2) for i, n in enumerate(tens)}
 scales_map = {n: 10 ** (3 * (i + 1)) for i, n in enumerate(scales[1:])}
 scales_map["hundred"] = 100
 
+# Maps number words to integers values that are used to compute numeric values.
 numbers_map = digits_map.copy()
 numbers_map.update(teens_map)
 numbers_map.update(tens_map)
