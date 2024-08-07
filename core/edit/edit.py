@@ -75,6 +75,10 @@ class EditActions:
         actions.edit.word_left()
         actions.edit.extend_word_right()
 
+    def delete_all():
+        actions.edit.select_all()
+        actions.edit.delete()
+
 
 @mod.action_class
 class Actions:
