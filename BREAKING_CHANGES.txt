@@ -8,7 +8,7 @@ and merged.
 ---
 * 2024-07-31 Remove commands `"command mode"`, `"dictation mode"` from custom user modes. Note that if you have any custom modes where you want these commands you could add that mode to the context of `command_and_dictation_mode.talon` or copying the command to one of your custom files.
 * 2024-07-30 Deprecate `lend` and `bend` commands in favor of `go line end | tail` and `go line start | head`.
-* 2024-07-28 Removed the following actions in favor of the new action/modifier grammar.
+* 2024-07-28 Removed the following user namespace actions in favor of the new action/modifier grammar.
     https://github.com/talonhub/community/blob/37a8ebde90c8120a0b52555030988d4f54e65159/core/edit/edit.talon#L3
     cut_word, copy_word, paste_word
     cut_all, copy_all, paste_all, delete_all
