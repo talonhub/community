@@ -154,8 +154,8 @@ make_sure_settings_file_exists()
 
 @resource.watch(settings_filepath)
 def load_language_modes(path: str):
-    make_sure_settings_file_exists()
     global language_extensions, extension_lang_map, language_ids
+    make_sure_settings_file_exists()
     language_extensions, language_spoken_forms = (
         get_key_value_pairs_and_spoken_forms_from_three_column_csv(
             SETTINGS_FILENAME,
