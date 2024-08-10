@@ -134,7 +134,6 @@ def raise_homophones(word_to_find_homophones_for, forced=False, selection=False)
         and quick_replace
         and not force_raise
     ):
-
         if word_to_find_homophones_for == active_word_list[0].lower():
             new = active_word_list[1]
         else:
