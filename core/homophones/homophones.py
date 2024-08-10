@@ -119,7 +119,6 @@ def raise_homophones(word_to_find_homophones_for, forced=False, selection=False)
         return
 
     # Move current word to end of list to reduce searcher's cognitive load
-
     valid_homophones_reordered = list(
         filter(
             lambda word_from_list: word_from_list.lower()
