@@ -34,8 +34,8 @@ LANGUAGE_HEADERS = ["language", "extensions", "spoken_forms"]
 
 def make_sure_settings_file_exists():
     # Maps language mode names to the extensions that activate them and language spoken forms. Only put things
-    # here which have a supported language mode; that's why there are so many
-    # commented out entries. TODO: make this a csv file?
+    # here which have a supported language mode or snippets; that's why there are so many
+    # commented out entries.
     default_csv_contents = [
         # ['assembly', ('asm', 's'),],
         # ['bash', ('bashbook', 'sh'),],
@@ -138,7 +138,7 @@ def make_sure_settings_file_exists():
             "vimscript",
             ("vim", "vimrc"),
         ],
-        # htm doesn't actually have a language moded, but we do have snippets.
+        # html doesn't actually have a language mode, but we do have snippets.
         [
             "html",
             ("html",),
@@ -155,7 +155,7 @@ make_sure_settings_file_exists()
 @resource.watch(settings_filepath)
 def load_language_modes(path: str):
     make_sure_settings_file_exists()
-    global language_extensions
+    global language_extensions, extension_lang_map, language_ids
     language_extensions, language_spoken_forms = (
         get_key_value_pairs_and_spoken_forms_from_three_column_csv(
             SETTINGS_FILENAME,
@@ -165,13 +165,11 @@ def load_language_modes(path: str):
     ctx.lists["self.language_mode"] = compute_spoken_form_to_key_dictionary(
         language_extensions, language_spoken_forms
     )
-    global extension_lang_map
     extension_lang_map = {
         "." + ext: language
         for language, extensions in language_extensions.items()
         for ext in extensions
     }
-    global language_ids
     language_ids = set(language_extensions.keys())
 
 

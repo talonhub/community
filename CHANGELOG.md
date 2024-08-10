@@ -1,0 +1,1 @@
+August 10 2024: The language modes (that keep track of programming language names, corresponding extensions, and spoken forms) have been migrated to a CSV file. If you have made changes directly to the language_modes.py file to customize that information, you can migrate your changes by letting the new community code run to generate the CSV file and then editing it.
