@@ -23,18 +23,23 @@ mod.setting(
     desc="Directory (relative to Talon user) containing additional snippets",
 )
 
-context_map = {
-    # `_` represents the global context, ie snippets available regardless of language
-    "_": Context(),
-}
+context_map = None
+
+def create_context_map():
+    global context_map
+    context_map = {
+        # `_` represents the global context, ie snippets available regardless of language
+        "_": Context(),
+    }
+
+    # Create a context for each defined language
+    for lang in language_ids:
+        ctx = Context()
+        ctx.matches = f"code.language: {lang}"
+        context_map[lang] = ctx
+create_context_map()
+
 snippets_map = {}
-
-# Create a context for each defined language
-for lang in language_ids:
-    ctx = Context()
-    ctx.matches = f"code.language: {lang}"
-    context_map[lang] = ctx
-
 
 def get_setting_dir():
     setting_dir = settings.get("user.snippets_dir")
@@ -198,6 +203,9 @@ def create_lists(
 
     return snippets_map, insertions, insertions_phrase, wrappers
 
+def on_language_modes_update():
+    create_context_map()
+    update_snippets()
 
 def on_ready():
     fs.watch(str(SNIPPETS_DIR), lambda _1, _2: update_snippets())
@@ -206,6 +214,7 @@ def on_ready():
         fs.watch(str(get_setting_dir()), lambda _1, _2: update_snippets())
 
     update_snippets()
+    actions.user.register_language_mode_on_update_callback("snippets", on_language_modes_update)
 
 
 app.register("ready", on_ready)
