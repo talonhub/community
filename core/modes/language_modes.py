@@ -1,5 +1,6 @@
-from talon import Context, Module, actions, resource
 from typing import Callable
+
+from talon import Context, Module, actions, resource
 
 from ..user_settings import (
     compute_csv_path,
@@ -33,6 +34,7 @@ settings_filepath = compute_csv_path(SETTINGS_FILENAME)
 LANGUAGE_HEADERS = ["language", "extensions", "spoken_forms"]
 
 language_mode_update_callbacks = {}
+
 
 def make_sure_settings_file_exists():
     # Maps language mode names to the extensions that activate them and language spoken forms. Only put things
@@ -214,6 +216,8 @@ class Actions:
         forced_language = ""
         ctx.tags = []
 
-    def register_language_mode_on_update_callback(name: str, callback: Callable[[], None]):
+    def register_language_mode_on_update_callback(
+        name: str, callback: Callable[[], None]
+    ):
         """Registers a callback to be called when the language mode csv is updated"""
         language_mode_update_callbacks[name] = callback
