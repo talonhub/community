@@ -15,22 +15,26 @@ mod.list(
 )
 
 _edit_files = {
-    "alphabet": os.path.join(REPO_DIR, "core\\keys\\letter.talon-list"),
-    "search engines": os.path.join(
-        REPO_DIR, "core\\websites_and_search_engines\\search_engine.talon-list"
+    "additional words": os.path.join(
+        REPO_DIR, "core", "vocabulary", "vocabulary.talon-list"
     ),
-    "unix utilities": os.path.join(REPO_DIR, "tags\\terminal\\unix_utility.talon-list"),
-    "websites": os.path.join(
-        REPO_DIR, "core\\websites_and_search_engines\\website.talon-list"
-    ),
+    "alphabet": os.path.join(REPO_DIR, "core", "keys", "letter.talon-list"),
     "homophones": os.path.join(REPO_DIR, "core", "homophones", "homophones.csv"),
+    "search engines": os.path.join(
+        REPO_DIR, "core", "websites_and_search_engines", "search_engine.talon-list"
+    ),
+    "unix utilities": os.path.join(
+        REPO_DIR, "tags", "terminal", "unix_utility.talon-list"
+    ),
+    "websites": os.path.join(
+        REPO_DIR, "core", "websites_and_search_engines", "website.talon-list"
+    ),
 }
 
 _settings_csvs = {
     name: os.path.join(SETTINGS_DIR, file_name)
     for name, file_name in {
         "abbreviations": "abbreviations.csv",
-        "additional words": "additional_words.csv",
         "file extensions": "file_extensions.csv",
         "words to replace": "words_to_replace.csv",
     }.items()
