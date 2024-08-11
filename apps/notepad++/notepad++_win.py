@@ -57,9 +57,11 @@ class EditActions:
         actions.insert(str(n))
         actions.key("enter")
 
-    def find(text: str):
-        actions.key("ctrl-f")
-        actions.insert(text)
+    def find_next():
+        actions.key("enter")
+
+    def find_previous():
+        actions.key("shift-enter")
 
 
 @ctx.action_class("win")
@@ -97,19 +99,6 @@ class UserActions:
         # actions.key("ctrl-numpad_0")
 
     # find_and_replace.py support begin
-
-    def find(text: str):
-        """Triggers find in current editor"""
-        actions.key("ctrl-f")
-
-        if text:
-            actions.insert(text)
-
-    def find_next():
-        actions.key("enter")
-
-    def find_previous():
-        actions.key("shift-enter")
 
     def find_everywhere(text: str):
         """Triggers find across project"""
