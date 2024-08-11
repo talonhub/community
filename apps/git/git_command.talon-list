@@ -6,34 +6,34 @@ bisect
 blame
 branch
 checkout
-cherry pick: 'cherry-pick'
+cherry pick: cherry-pick
 clean
 clone
 commit
 config
 diff
-diff tool: 'difftool'
+diff tool: difftool
 fetch
 gc
 grep
 help
-in it: 'init'
+in it: init
 log
-ls files: 'ls-files'
+ls files: ls-files
 merge
-merge tool: 'mergetool'
-move: 'mv'
+merge tool: mergetool
+move: mv
 pull
 push
-range diff: 'range-diff'
+range diff: range-diff
 rebase
-ref log: 'reflog'
+ref log: reflog
 remote
 remote add
 remote remove
 remote rename
-remote set url: 'remote set-url'
-remote set you are el: 'remote set-url'
+remote set url: remote set-url
+remote set you are el: remote set-url
 remote show
 rerere
 rerere diff
@@ -41,10 +41,10 @@ rerere status
 reset
 restore
 revert
-remove: 'rm'
-short log: 'shortlog'
+remove: rm
+short log: shortlog
 show
-sparse checkout: 'sparse-checkout'
+sparse checkout: sparse-checkout
 stash
 stash apply
 stash list
@@ -55,7 +55,7 @@ stash save
 status
 submodule
 submodule add
-submodule in it: 'submodule init'
+submodule in it: submodule init
 submodule status
 submodule update
 switch
