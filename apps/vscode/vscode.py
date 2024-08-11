@@ -254,6 +254,10 @@ class UserActions:
     def multi_cursor_skip_occurrence():
         actions.user.vscode("editor.action.moveSelectionToNextFindMatch")
 
+    def please_command(command: str):
+        actions.user.vscode("workbench.action.showCommands")
+        actions.insert(command)
+
     def tab_jump(number: int):
         if number < 10:
             if is_mac:

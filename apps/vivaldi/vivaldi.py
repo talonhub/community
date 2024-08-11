@@ -53,6 +53,11 @@ class UserActions:
     def tab_jump(number: int):
         actions.key(f"ctrl-{number}")
 
+    def please_command(command: str):
+        actions.user.vivaldi_toggle_quick_commands()
+        actions.sleep("180ms")
+        actions.insert(command)
+
 
 @ctx.action_class("browser")
 class BrowserActions:

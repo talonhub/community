@@ -20,6 +20,11 @@ class UserActions:
         actions.sleep("180ms")
         actions.app.tab_close()
 
+    def please_command(command: str):
+        actions.key("cmd-l")
+        actions.sleep("200ms")
+        actions.insert(command)
+
 
 @ctx.action_class("browser")
 class BrowserActions:
