@@ -16,7 +16,7 @@ smart: user.idea("action SmartTypeCompletion")
 grab <number>: user.idea_grab(number)
 # Actions
 (action | please): user.idea("action GotoAction")
-(action | please) <user.text>:
+^(action | please) <user.text>$:
     user.idea("action GotoAction")
     insert(text)
 # Refactoring

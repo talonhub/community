@@ -8,7 +8,7 @@ tag(): user.splits
 tag(): user.tabs
 # splits.py support end
 
-please [<user.text>]:
+^please [<user.text>]$:
     key(ctrl-3)
     insert(user.text or "")
 
