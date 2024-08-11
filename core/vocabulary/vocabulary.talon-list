@@ -1,7 +1,7 @@
 list: user.vocabulary
 -
-N map: 'nmap'
-under documented: 'under-documented'
+N map: nmap
+under documented: under-documented
 nmap
 admin
 Cisco

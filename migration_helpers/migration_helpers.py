@@ -1,3 +1,4 @@
+import csv
 import os
 import re
 from dataclasses import dataclass
@@ -37,160 +38,88 @@ class CSVData:
 supported_csv_files = [
     CSVData(
         "user.git_argument",
-        os.path.normpath("apps/git/git_arguments.csv"),
-        os.path.normpath("apps/git/git_argument.talon-list"),
-        True,
-        False,
-        None,
-        None,
+        os.path.join("apps", "git", "git_arguments.csv"),
+        os.path.join("apps", "git", "git_argument.talon-list"),
     ),
     CSVData(
         "user.git_command",
-        os.path.normpath("apps/git/git_commands.csv"),
-        os.path.normpath("apps/git/git_command.talon-list"),
-        True,
-        False,
-        None,
-        None,
+        os.path.join("apps", "git", "git_commands.csv"),
+        os.path.join("apps", "git", "git_command.talon-list"),
     ),
     CSVData(
         "user.vocabulary",
-        os.path.normpath("settings/additional_words.csv"),
-        os.path.normpath("core/vocabulary/vocabulary.talon-list"),
-        True,
-        False,
-        None,
-        None,
+        os.path.join("settings", "additional_words.csv"),
+        os.path.join("core", "vocabulary", "vocabulary.talon-list"),
     ),
     CSVData(
         "user.letter",
-        os.path.normpath("settings/alphabet.csv"),
-        os.path.normpath("core/keys/letter.talon-list"),
-        True,
-        False,
-        None,
-        None,
+        os.path.join("settings", "alphabet.csv"),
+        os.path.join("core", "keys", "letter.talon-list"),
     ),
     CSVData(
         "user.system_paths",
-        os.path.normpath("settings/system_paths.csv"),
-        lambda: os.path.normpath(
-            f"core/system_paths-{actions.user.talon_get_hostname()}.talon-list"
+        os.path.join("settings", "system_paths.csv"),
+        lambda: os.path.join(
+            "core", f"system_paths-{actions.user.talon_get_hostname()}.talon-list"
         ),
-        True,
-        False,
-        (lambda: f"host: {actions.user.talon_get_hostname()}"),
-        None,
+        custom_header=(lambda: f"host: {actions.user.talon_get_hostname()}"),
     ),
     CSVData(
         "user.search_engine",
-        os.path.normpath("settings/search_engines.csv"),
-        os.path.normpath("core/websites_and_search_engines/search_engine.talon-list"),
-        True,
-        False,
-        None,
-        None,
+        os.path.join("settings", "search_engines.csv"),
+        os.path.join("core", "websites_and_search_engines", "search_engine.talon-list"),
     ),
     CSVData(
         "user.unix_utility",
-        os.path.normpath("settings/unix_utilities.csv"),
-        os.path.normpath("tags/terminal/unix_utility.talon-list"),
-        True,
-        False,
-        None,
-        None,
+        os.path.join("settings", "unix_utilities.csv"),
+        os.path.join("tags", "terminal", "unix_utility.talon-list"),
     ),
     CSVData(
         "user.website",
-        os.path.normpath("settings/websites.csv"),
-        os.path.normpath("core/websites_and_search_engines/website.talon-list"),
-        True,
-        False,
-        None,
-        None,
+        os.path.join("settings", "websites.csv"),
+        os.path.join("core", "websites_and_search_engines", "website.talon-list"),
     ),
     CSVData(
         "user.emoji",
-        os.path.normpath("tags/emoji/emoji.csv"),
-        os.path.normpath("tags/emoji/emoji.talon-list"),
-        False,
-        True,
-        None,
-        None,
+        os.path.join("tags", "emoji", "emoji.csv"),
+        os.path.join("tags", "emoji", "emoji.talon-list"),
+        is_first_line_header=False,
+        is_spoken_form_first=True,
     ),
     CSVData(
         "user.emoticon",
-        os.path.normpath("tags/emoji/emoticon.csv"),
-        os.path.normpath("tags/emoji/emoticon.talon-list"),
-        False,
-        True,
-        None,
-        None,
+        os.path.join("tags", "emoji", "emoticon.csv"),
+        os.path.join("tags", "emoji", "emoticon.talon-list"),
+        is_first_line_header=False,
+        is_spoken_form_first=True,
     ),
     CSVData(
         "user.kaomoji",
-        os.path.normpath("tags/emoji/kaomoji.csv"),
-        os.path.normpath("tags/emoji/kaomoji.talon-list"),
-        False,
-        True,
-        None,
-        None,
+        os.path.join("tags", "emoji", "kaomoji.csv"),
+        os.path.join("tags", "emoji", "kaomoji.talon-list"),
+        is_first_line_header=False,
+        is_spoken_form_first=True,
     ),
 ]
 
 
-def read_csv_file(file_name):
+def convert_csv_to_talonlist(input_csv: csv.reader, config: CSVData):
     """
-    Read the content of a text file while skipping its first line.
+    Convert a 1 or 2 column CSV into a talon list.
+    Empty lines, lines containing only whitespace or starting with a # are skipped.
 
     Args:
-    - file_name (str): Path to the text file to be read.
+    - input_csv: A csv.reader instance
+    - config: A CSVData instance
 
     Returns:
-    - str: The content of the file after skipping the first line.
+    - str: The contents of a talon list file
 
     Raises:
-    - FileNotFoundError: If the specified file does not exist.
-    - IOError: For other I/O related errors, such as issues with file permissions.
-
-    Example:
-    Assuming the content of 'sample.txt' is:
-    Line 1
-    Line 2
-    Line 3
-
-    >>> read_csv_file('sample.txt')
-    'Line 2\nLine 3\n'
+    - ValueError: If any line in the input CSV contains more than 2 columns.
     """
-    with open(file_name, "r") as file:
-        # Skip the first line
-        return file.read()
+    rows = list(input_csv)
 
-
-def convert_format_csv_to_talonlist(input_string: str, config: CSVData):
-    """
-    Convert a string with lines of "value,key" pairs into a format of "key: value" pairs.
-    Empty lines or lines containing only whitespace are skipped.
-
-    Args:
-    - input_string (str): A multi-line string where each line is expected to be in "value,key" format.
-    - config: CSVData instance
-
-    Returns:
-    - str: A reformatted multi-line string in "key: value" format.
-
-    Raises:
-    - ValueError: If any line in the input string does not contain exactly one comma separator.
-
-    Example:
-    >>> convert_format_csv_to_talonlist("a,air\n\nb,bat")
-    'air: a\nbat: b'
-
-    Note:
-    The function assumes that each non-empty line in the input string has exactly one comma
-    separating a value and a key. Lines that don't meet this criterion will raise an error.
-    """
-    lines = input_string.split("\n")
     is_spoken_form_first = config.is_spoken_form_first
     is_first_line_header = config.is_first_line_header
     start_index = 1 if is_first_line_header else 0
@@ -202,32 +131,35 @@ def convert_format_csv_to_talonlist(input_string: str, config: CSVData):
 
     output.append("-")
 
-    for line in lines[start_index:]:
-        if len(line) == 0 or line[0] == "#":
+    for row in rows[start_index:]:
+        # Remove trailing whitespace for each cell
+        row = [col.rstrip() for col in row]
+        cols = len(row)
+
+        # Check columns
+        if cols > 2:
+            raise ValueError("Expected only 1 or 2 columns, got {cols}:", row)
+
+        # Exclude empty or comment rows
+        if cols == 0 or (cols == 1 and row[0] == "") or row[0].startswith("#"):
             continue
 
-        if not line.strip():
-            continue
-
-        if "," in line:
+        if cols == 2:
             if is_spoken_form_first:
-                spoken_form, value = line.split(",")
+                spoken_form, value = row
             else:
-                value, spoken_form = line.split(",")
+                value, spoken_form = row
 
-            value = value.strip()
             if config.custom_value_converter:
                 value = config.custom_value_converter(value)
 
-            # escape various characters... very rudimentary
-            else:
+        else:
+            spoken_form = value = row[0]
+
+        if spoken_form != value:
+            if not str.isprintable(value) or "'" in value or '"' in value:
                 value = repr(value)
 
-        else:
-            spoken_form = value = line.strip()
-
-        spoken_form = spoken_form.strip()
-        if spoken_form != value:
             output.append(f"{spoken_form}: {value}")
         else:
             output.append(f"{spoken_form}")
@@ -235,116 +167,70 @@ def convert_format_csv_to_talonlist(input_string: str, config: CSVData):
     return "\n".join(output)
 
 
-def write_to_file(filename, text):
-    """
-    Write a text string into a specified file.
-
-    Args:
-    - filename (str): The path of the file where the text should be written.
-    - text (str): The text to be written to the file.
-
-    Returns:
-    - None
-    """
-    with open(filename, "w") as file:
-        file.write(text)
-
-
-def strip_base_directory(base_dir, path):
-    """
-    Strip the base directory from the path if it exists.
-
-    Parameters:
-    - base_dir (str): The base directory to be stripped.
-    - path (str): The path from which the base directory should be stripped.
-
-    Returns:
-    - str: Path after stripping the base directory.
-    """
-
-    # Ensure both the base directory and path are normalized
-    base_dir = os.path.normpath(base_dir)
-    path = os.path.normpath(path)
-
-    # Check if the path starts with the base directory
-    if path.startswith(base_dir):
-        # Subtract base_dir length from path
-        return path[len(base_dir) :].lstrip(os.sep)  # Remove any leading separators
-    else:
-        return path
-
-
 def convert_files(csv_files_list):
-    global known_csv_files
-    known_csv_files = {os.path.normpath(item.path): item for item in csv_files_list}
+    known_csv_files = {str(item.path): item for item in csv_files_list}
 
     conversion_count = 0
-    base_directory = os.path.dirname(os.path.dirname(__file__))
+    base_path = Path(__file__).resolve().parent.parent
 
-    print(f"migration_helpers.py convert_files - Base directory: {base_directory}")
-    for csv_file in Path(base_directory).rglob("*.csv"):
-        csv_file_path = os.path.normpath(csv_file.resolve())
-        csv_relative_file_path = os.path.normpath(csv_file.relative_to(base_directory))
-        migrated_csv_file_path = csv_file_path.replace(".csv", ".csv-converted")
+    print(f"migration_helpers.py: converting CSV files in directory {base_path}")
+    for csv_path in base_path.rglob("*.csv"):
+        csv_relative_path = csv_path.relative_to(base_path)
+        migrated_csv_path = csv_path.with_suffix(".csv-converted-to-talon-list")
 
-        if csv_relative_file_path not in known_csv_files.keys():
-            print(f"Skipping unsupported csv file {csv_relative_file_path}")
-            continue
-
-        config = known_csv_files[csv_relative_file_path]
+        config = known_csv_files.get(str(csv_relative_path))
         if not config:
-            print(
-                f"Skipping currently unsupported conversion: {csv_relative_file_path}"
-            )
+            print(f"Talon list conversion not supported for CSV: {csv_relative_path}")
             continue
 
         if callable(config.newpath):
-            newpath = config.newpath()
+            talonlist_relative_path = config.newpath()
         else:
-            newpath = config.newpath
+            talonlist_relative_path = config.newpath
 
-        talonlist_relative_file = os.path.normpath(newpath)
-        talonlist_file = os.path.join(base_directory, talonlist_relative_file)
+        talonlist_path = base_path / talonlist_relative_path
 
-        if os.path.isfile(talonlist_file) and not os.path.isfile(csv_file):
-            print(f"Skipping existing talon-file {talonlist_relative_file}")
+        if talonlist_path.is_file() and not csv_path.is_file():
+            print(f"Skipping existing Talon list file {talonlist_relative_path}")
             continue
 
-        if migrated_csv_file_path and os.path.isfile(migrated_csv_file_path):
-            print(f"Skipping existing renamed csv file {migrated_csv_file_path}")
+        if migrated_csv_path.is_file():
+            print(f"Skipping existing renamed CSV {migrated_csv_path}")
             continue
 
         print(
-            f"Converting csv file: {csv_relative_file_path} -> talon-list file: {talonlist_relative_file}"
+            f"Converting CSV {csv_relative_path} to Talon list {talonlist_relative_path}"
         )
 
         conversion_count += 1
-        csv_content = read_csv_file(csv_file)
-        talonlist_content = convert_format_csv_to_talonlist(csv_content, config)
+        with open(csv_path, newline="") as csv_file:
+            csv_reader = csv.reader(csv_file, skipinitialspace=True)
+            talonlist_content = convert_csv_to_talonlist(csv_reader, config)
 
         print(
-            f"Renaming converted csv file: {csv_file_path} -> {migrated_csv_file_path}. This file may be deleted if no longer needed; provided for reference in case there's an issue"
+            f"Renaming converted CSV to {migrated_csv_path.name}. This file may be deleted if no longer needed; it's preserved in case there's an issue with conversion."
         )
-        if os.path.isfile(talonlist_file):
-            backup_file_name = talonlist_file.replace(".talon-list", ".bak")
+        if talonlist_path.is_file():
+            backup_path = talonlist_path.with_suffix(".bak")
             print(
-                f"Migration target {talonlist_relative_file} already exists, backing up to {backup_file_name}"
+                f"Migration target {talonlist_relative_path} already exists; backing up to {backup_path}"
             )
-            os.rename(talonlist_file, backup_file_name)
+            talonlist_path.rename(backup_path)
 
-        write_to_file(talonlist_file, talonlist_content)
-        os.rename(csv_file_path, migrated_csv_file_path)
+        with open(talonlist_path, "w") as talonlist_file:
+            talonlist_file.write(talonlist_content)
+        csv_path.rename(migrated_csv_path)
 
     return conversion_count
 
 
 @mod.action_class
-class MigrationActions:
+class Actions:
     def migrate_known_csv_files():
-        """migrates known CSV files to .talon-list"""
+        """Migrate known CSV files to .talon-list"""
         conversion_count = convert_files(supported_csv_files)
         if conversion_count > 0:
-            notification_text = f"migrations_helpers.py converted {conversion_count} CSVs. See Talon log for more details. \n"
+            notification_text = f"migration_helpers.py converted {conversion_count} CSVs. See Talon log for more details.\n"
             print(notification_text)
             actions.app.notify(notification_text)
 
@@ -355,7 +241,7 @@ class MigrationActions:
         is_first_line_header: bool,
         spoken_form_first: bool,
     ):
-        """Migrates custom CSV files"""
+        """Migrate a custom CSV file"""
         csv_file = CSVData(
             list_name,
             path,
