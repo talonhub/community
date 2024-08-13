@@ -1,4 +1,4 @@
-from talon import Context, Module, actions
+from talon import Context, Module, actions, app
 
 # Maps language mode names to the extensions that activate them. Only put things
 # here which have a supported language mode; that's why there are so many
@@ -49,6 +49,19 @@ language_extensions = {
     "html": "html",
 }
 
+# Files without specific extensions but are associated with languages
+special_file_map = {
+    "CMakeLists.txt": "cmake",
+    "Makefile": "make",
+    "Dockerfile": "docker",
+    "meson.build": "meson",
+    ".bashrc": "bash",
+    ".zshrc": "zsh",
+    "PKGBUILD": "pkgbuild",
+    ".vimrc": "vimscript",
+    "vimrc": "vimscript",
+}
+
 # Override speakable forms for language modes. If not present, a language mode's
 # name is used directly.
 language_name_overrides = {
@@ -57,12 +70,12 @@ language_name_overrides = {
     "css": ["c s s"],
     "gdb": ["g d b"],
     "go": ["go", "go lang", "go language"],
-    "r": ["are language"],
+    "r": ["are lang", "are language"],
+    "scm": ["scheme", "s c m", "tree sitter"],
     "tex": ["tech", "lay tech", "latex"],
 }
 
 mod = Module()
-
 ctx = Context()
 
 ctx_forced = Context()
@@ -95,6 +108,10 @@ forced_language = ""
 @ctx.action_class("code")
 class CodeActions:
     def language():
+        file_name = actions.win.filename()
+        if file_name in special_file_map:
+            return special_file_map[file_name]
+
         file_extension = actions.win.file_ext()
         return extension_lang_map.get(file_extension, "")
 
@@ -122,3 +139,8 @@ class Actions:
         global forced_language
         forced_language = ""
         ctx.tags = []
+
+    def code_show_forced_language_mode():
+        """Show the active language for this context"""
+        if forced_language
+            app.notify(f"Forced language: {forced_language}")
