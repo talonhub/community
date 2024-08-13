@@ -5,23 +5,25 @@ phrase <user.text>$:
 phrase <user.text> over:
     user.add_phrase_to_history(text)
     insert(text)
-# {user.prose_formatter} <user.prose>$: user.insert_formatted(prose, prose_formatter)
-# {user.prose_formatter} <user.prose> over: user.insert_formatted(prose, prose_formatter)
-
+    
+#{user.prose_formatter} <user.prose>$: user.insert_formatted(prose, prose_formatter)
+#{user.prose_formatter} <user.prose> over: user.insert_formatted(prose, prose_formatter)
+#this is a
 #say <user.prose>$:user.dictation_insert(prose)
 say <user.prose>$: user.say(prose)
 say <user.prose> over: user.say(prose)
-<user.format_code>+$: user.insert_many(format_code_list)
-<user.format_code>+ over: user.insert_many(format_code_list)
-<user.formatters> that$: user.formatters_reformat_selection(user.formatters)
-<user.formatters> that over: user.formatters_reformat_selection(user.formatters)
+<user.format_text>$: insert(format_text)
+<user.format_text> over: insert(format_text)
+
+# <user.formatters> that$: user.formatters_reformat_selection(user.formatters)
+# <user.formatters> that over: user.formatters_reformat_selection(user.formatters)
 {user.word_formatter} <user.word>: user.insert_formatted(word, word_formatter)
 word <user.word>:
     user.add_phrase_to_history(word)
     insert(word)
-title <user.word>: 
-    user.add_phrase_to_history(word)
-    user.insert_formatted(word, "CAPITALIZE_FIRST_WORD")    
+# title <user.word>: 
+#     user.add_phrase_to_history(word)
+#     user.insert_formatted(word, "CAPITALIZE_FIRST_WORD")    
 recent list: user.toggle_phrase_history()
 recent close: user.phrase_history_hide()
 recent repeat <number_small>:
