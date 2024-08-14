@@ -1,4 +1,3 @@
-import itertools
 import math
 import re
 from collections import defaultdict
@@ -32,7 +31,7 @@ mod.setting(
 
 ctx = Context()
 # context name -> commands
-context_command_map = {}
+context_command_map: dict[str, dict[str, str]] = {}
 
 # rule word -> Set[(context name, rule)]
 rule_word_map: dict[str, set[tuple[str, str]]] = defaultdict(set)
@@ -71,6 +70,11 @@ def update_title():
                 refresh_context_command_map(show_enabled_contexts_only)
             else:
                 update_active_contexts_cache(registry.active_contexts())
+
+
+def commands_updated(_):
+    """React to a change in available commands"""
+    update_title()
 
 
 @imgui.open(y=0)
@@ -329,25 +333,25 @@ def draw_search_commands(gui: imgui.GUI):
     global selected_context_page
 
     title = f"Search: {search_phrase}"
-    commands_grouped = get_search_commands(search_phrase)
-    commands_flat = list(itertools.chain.from_iterable(commands_grouped.values()))
+    commands_grouped = get_search_commands()
 
+    # Bring active contexts to the top of the results
     sorted_commands_grouped = sorted(
         commands_grouped.items(),
         key=lambda item: context_map[item[0]] not in cached_active_contexts_list,
     )
 
-    pages = get_pages(
-        [
-            sum(get_command_line_count(command) for command in commands) + 3
-            for _, commands in sorted_commands_grouped
-        ]
-    )
+    # Count all lines from one context plus space for title and spacer
+    line_counts_of_contexts = [
+        sum(get_command_line_count(command) for command in commands) + 3
+        for _, commands in sorted_commands_grouped
+    ]
+
+    pages = get_pages(line_counts_of_contexts)
     total_page_count = max(pages, default=1)
 
     draw_commands_title(gui, title)
 
-    current_item_index = 1
     for (context, commands), page in zip(sorted_commands_grouped, pages):
         if page == selected_context_page:
             gui.text(format_context_title(context))
@@ -356,7 +360,7 @@ def draw_search_commands(gui: imgui.GUI):
             gui.spacer()
 
 
-def get_search_commands():
+def get_search_commands() -> dict[str, list[tuple[str, str]]]:
     """Using the search_phrase, search for commands."""
     global rule_word_map
     tokens = search_phrase.split(" ")
@@ -540,7 +544,9 @@ def get_sorted_keys_by_context_specificity(
     )
 
 
-def refresh_rule_word_map(context_command_map):
+def refresh_rule_word_map(
+    context_command_map: dict[str, dict[tuple[str, str]]]
+) -> dict[str, set[tuple[str, str]]]:
     """Create a map of word to context/rule that contain it.
 
     >>> refresh_rule_word_map({
@@ -585,26 +591,22 @@ def hide_all_help_guis():
     gui_list_help.hide()
 
 
-def paginate_list(data, SIZE=None):
-    chunk_size = SIZE or settings.get("user.help_max_command_lines_per_page")
+def paginate_list(data: dict[str, str], SIZE=None):
+    chunk_size: int = SIZE or settings.get("user.help_max_command_lines_per_page")
     it = iter(data)
-    for i in range(0, len(data), chunk_size):
+    for _ in range(0, len(data), chunk_size):
         yield {k: data[k] for k in islice(it, chunk_size)}
 
 
+def make_talonlist_pages():
     """Turn the currently selected list into pages."""
     global selected_list
     global total_page_count
-    global selected_context_page
 
+    # FIXME: ListTypeFull can be multiple things, we only support dict[str,str] here
     talon_list = registry.lists[selected_list][-1]
-    # numpages = math.ceil(len(talon_list) / SIZE)
 
-    pages_list = []
-
-    for item in paginate_list(talon_list):
-        pages_list.append(item)
-    # print(pages_list)
+    pages_list = list(paginate_list(talon_list))
 
     total_page_count = len(pages_list)
     return pages_list
@@ -616,12 +618,9 @@ def gui_list_help(gui: imgui.GUI):
     global current_list_page
     global selected_list
 
-    pages_list = draw_list_commands(gui)
-    total_page_count = len(pages_list)
-    # print(pages_list[current_page])
+    pages_list = make_talonlist_pages()
 
     gui.text(f"{selected_list} {current_list_page}/{total_page_count}")
-
     gui.line()
 
     for key, value in pages_list[current_list_page - 1].items():
@@ -827,7 +826,3 @@ class Actions:
         refresh_context_command_map()
         register_events(False)
         ctx.tags = []
-
-
-def commands_updated(_):
-    update_title()
