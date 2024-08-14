@@ -2,8 +2,7 @@ list: user.phrase_ender
 -
 
 over:          ""
-void:          " "
-step:          " "
+space:         " "
 question:      "?"
 bang:          "!"
 slap:          "\n"
