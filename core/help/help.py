@@ -194,20 +194,26 @@ def get_pages(item_line_counts: list[int]) -> list[int]:
     current_page = 1
     pages = []
     for line_count in item_line_counts:
+        # Will the next entry take us over the limit?
         if line_count + current_page_line_count > settings.get(
             "user.help_max_command_lines_per_page"
         ):
             if current_page_line_count == 0:
-                # Special case, render a larger page.
+                # This is the only item for the page, so it gets
+                # a page completely for itself, no matter how big.
                 page = current_page
                 current_page_line_count = 0
             else:
+                # Put the item as the first item on the next page
                 page = current_page + 1
                 current_page_line_count = line_count
+            # In any case, we up the current page by one
             current_page += 1
         else:
+            # Count the added lines for the current page
             current_page_line_count += line_count
             page = current_page
+        # Store the page the item will appear on into the list
         pages.append(page)
     return pages
 
@@ -225,7 +231,7 @@ def gui_context_help(gui: imgui.GUI):
     global total_page_count
     global search_phrase
 
-    # if no selected context, draw the contexts
+    # if no selected context, and not showing search results, draw the context list
     if selected_context is None and search_phrase is None:
         total_page_count = get_total_context_pages()
 
@@ -242,13 +248,17 @@ def gui_context_help(gui: imgui.GUI):
 
         gui.line()
 
-        current_item_index = 1
-        current_selection_index = 1
+        # index counting only visible items
+        current_entry_index = 1
         current_group = ""
-        for display_name, group, _ in sorted_display_list:
+        for current_item_index, (display_name, group, _) in enumerate(
+            sorted_display_list, start=1
+        ):
             target_page = get_context_page(current_item_index)
             context_name = display_name_to_context_name_map[display_name]
             if current_context_page == target_page:
+                # If the group has changed (or is the group of
+                # the very first element) show a line and the group title
                 if current_group != group:
                     if current_group:
                         gui.line()
@@ -256,16 +266,14 @@ def gui_context_help(gui: imgui.GUI):
                     current_group = group
 
                 button_name = format_context_button(
-                    current_selection_index,
+                    current_entry_index,
                     display_name,
                     context_name,
                 )
 
                 if gui.button(button_name):
                     selected_context = context_name
-                current_selection_index = current_selection_index + 1
-
-            current_item_index += 1
+                current_entry_index = current_entry_index + 1
 
         if total_page_count > 1:
             gui.spacer()
@@ -275,7 +283,7 @@ def gui_context_help(gui: imgui.GUI):
             if gui.button("Help previous"):
                 actions.user.help_previous()
 
-    # if there's a selected context, draw the commands for it
+    # if there's a selected context, or search results, draw the commands for it
     else:
         if selected_context is not None:
             draw_context_commands(gui)
