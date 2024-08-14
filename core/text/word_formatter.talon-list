@@ -1,0 +1,5 @@
+list: user.word_formatter
+-
+word: ALL_LOWERCASE
+trot: TRAILING_SPACE
+leap: CAPITALIZE_FIRST_WORD
