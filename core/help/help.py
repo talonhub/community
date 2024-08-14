@@ -61,6 +61,7 @@ current_list_page = 1
 
 
 def update_title():
+    """After commands changed, update the GUI"""
     global live_update
     global show_enabled_contexts_only
 
@@ -74,6 +75,7 @@ def update_title():
 
 @imgui.open(y=0)
 def gui_formatters(gui: imgui.GUI):
+    """GUI for formatters with formatter names and example outputs"""
     global formatters_words
     if formatters_reformat:
         gui.text("re-formatters help")
@@ -92,6 +94,10 @@ def gui_formatters(gui: imgui.GUI):
 
 
 def format_context_title(context_name: str) -> str:
+    """Turn a context name into text to show in the interface.
+
+    Will put "ACTIVE" or "INACTIVE" in brackets after the name depending
+    on the current state."""
     global cached_active_contexts_list
     return "{} [{}]".format(
         context_name,
@@ -104,6 +110,12 @@ def format_context_title(context_name: str) -> str:
 
 
 def format_context_button(index: int, context_label: str, context_name: str) -> str:
+    """Given an index, label for the context, and its actual name, give text for a button.
+
+    If active and inactive contexts are showing, active contexts get a little * in front.
+
+    The index is put at the front so the user can address it with spoken commands.
+    """
     global cached_active_contexts_list
     global show_enabled_contexts_only
 
@@ -121,18 +133,20 @@ def format_context_button(index: int, context_label: str, context_name: str) -> 
         return f"{index}. {context_label} "
 
 
-# translates 1-based index -> actual index in sorted_context_map_keys
 def get_context_page(index: int) -> int:
+    """translates 1-based index -> actual index in sorted_context_map_keys"""
     return math.ceil(index / settings.get("user.help_max_contexts_per_page"))
 
 
 def get_total_context_pages() -> int:
+    """Get the total number of pages of contexts"""
     return math.ceil(
         len(sorted_display_list) / settings.get("user.help_max_contexts_per_page")
     )
 
 
 def get_current_context_page_length() -> int:
+    """Get the number of entries for the currently shown page"""
     start_index = (current_context_page - 1) * settings.get(
         "user.help_max_contexts_per_page"
     )
@@ -144,7 +158,17 @@ def get_current_context_page_length() -> int:
 
 
 def get_command_line_count(command: tuple[str, str]) -> int:
-    """This should be kept in sync with draw_commands"""
+    r"""Output how many lines a command will be printed as.
+
+    Single-line commands are printed on one line, anything longer
+    will have an empty line after it.
+
+    >>> get_command_line_count(("florble", "user.florble_thing()"))
+    1
+    >>> get_command_line_count(("turgle", "\"turgle turgle\"\nkey(enter)\n\"who turgled?\""))
+    3
+    """
+    # This should be kept in sync with draw_commands
     _, body = command
     lines = len(body.split("\n"))
     if lines == 1:
@@ -155,7 +179,7 @@ def get_command_line_count(command: tuple[str, str]) -> int:
 
 def get_pages(item_line_counts: list[int]) -> list[int]:
     """Given some set of indivisible items with given line counts,
-    return the page number each item should appear on.
+    return the page number (1-based) each item should appear on.
 
     If an item will cross a page boundary, it is moved to the next page,
     so that pages may be shorter than the maximum lenth, but not longer. The only
@@ -186,6 +210,7 @@ def get_pages(item_line_counts: list[int]) -> list[int]:
 
 @imgui.open(y=0)
 def gui_context_help(gui: imgui.GUI):
+    """GUI Window for help. Handles context list as well as context content"""
     global context_command_map
     global current_context_page
     global selected_context
@@ -272,6 +297,9 @@ def gui_context_help(gui: imgui.GUI):
 
 
 def draw_context_commands(gui: imgui.GUI):
+    """Draw a pageful of commands for the currently selected context.
+
+    Includes a title with page numbers at the top."""
     global selected_context
     global total_page_count
     global selected_context_page
@@ -294,6 +322,7 @@ def draw_context_commands(gui: imgui.GUI):
 
 
 def draw_search_commands(gui: imgui.GUI):
+    """Draw a pageful of search results with title and grouped by context."""
     global search_phrase
     global total_page_count
     global cached_active_contexts_list
@@ -327,7 +356,8 @@ def draw_search_commands(gui: imgui.GUI):
             gui.spacer()
 
 
-def get_search_commands(phrase: str) -> dict[str, tuple[str, str]]:
+def get_search_commands():
+    """Using the search_phrase, search for commands."""
     global rule_word_map
     tokens = search_phrase.split(" ")
 
@@ -344,6 +374,7 @@ def get_search_commands(phrase: str) -> dict[str, tuple[str, str]]:
 
 
 def draw_commands_title(gui: imgui.GUI, title: str):
+    """Draw a page's title, page number / total pages, and a horizontal line."""
     global selected_context_page
     global total_page_count
 
@@ -352,6 +383,11 @@ def draw_commands_title(gui: imgui.GUI, title: str):
 
 
 def draw_commands(gui: imgui.GUI, commands: Iterable[tuple[str, str]]):
+    """Draw a list of command / body pairs.
+
+    When the body of the command is just a single line, the command is put in
+    front of the body. If the body is more than one line, the command goes on
+    its own line up top, and the body is shown below with an indent."""
     for key, val in commands:
         val = val.split("\n")
         if len(val) > 1:
@@ -396,6 +432,9 @@ overrides = {}
 
 
 def refresh_context_command_map(enabled_only=False):
+    """Go through all contexts and collect commands.
+
+    When enabled_only is True, inactive contexts are left out."""
     active_contexts = registry.active_contexts()
 
     local_context_map = {}
@@ -462,6 +501,7 @@ def get_sorted_display_keys(
     context_map: dict[str, Any],
     display_name_to_context_name_map: dict[str, str],
 ):
+    """Return context names sorted by name, optionally grouped by specificity."""
     if settings.get("user.help_sort_contexts_by_specificity"):
         return get_sorted_keys_by_context_specificity(
             context_map,
@@ -501,6 +541,17 @@ def get_sorted_keys_by_context_specificity(
 
 
 def refresh_rule_word_map(context_command_map):
+    """Create a map of word to context/rule that contain it.
+
+    >>> refresh_rule_word_map({
+    ...     "one": {"search example": "...", "result": "..."},
+    ...     "two": {"search tea": "..."}
+    ... })
+    {"search": {("one", "search example"), ("two", "search tea")},
+     "example": {("one", "search example")},
+     "result": {("one", "result")},
+     "tea": {("two", "search tea")}}
+    """
     rule_word_map = defaultdict(set)
 
     for context_name, commands in context_command_map.items():
@@ -541,7 +592,7 @@ def paginate_list(data, SIZE=None):
         yield {k: data[k] for k in islice(it, chunk_size)}
 
 
-def draw_list_commands(gui: imgui.GUI):
+    """Turn the currently selected list into pages."""
     global selected_list
     global total_page_count
     global selected_context_page
