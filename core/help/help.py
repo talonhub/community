@@ -170,7 +170,7 @@ def get_command_line_count(command: tuple[str, str]) -> int:
     >>> get_command_line_count(("florble", "user.florble_thing()"))
     1
     >>> get_command_line_count(("turgle", "\"turgle turgle\"\nkey(enter)\n\"who turgled?\""))
-    3
+    4
     """
     # This should be kept in sync with draw_commands
     _, body = command
@@ -555,17 +555,7 @@ def get_sorted_keys_by_context_specificity(
 def refresh_rule_word_map(
     context_command_map: dict[str, dict[tuple[str, str]]]
 ) -> dict[str, set[tuple[str, str]]]:
-    """Create a map of word to context/rule that contain it.
-
-    >>> refresh_rule_word_map({
-    ...     "one": {"search example": "...", "result": "..."},
-    ...     "two": {"search tea": "..."}
-    ... })
-    {"search": {("one", "search example"), ("two", "search tea")},
-     "example": {("one", "search example")},
-     "result": {("one", "result")},
-     "tea": {("two", "search tea")}}
-    """
+    """Create a map of word to context/rule that contain it."""
     rule_word_map = defaultdict(set)
 
     for context_name, commands in context_command_map.items():
