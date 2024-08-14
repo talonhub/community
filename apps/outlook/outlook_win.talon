@@ -1,6 +1,10 @@
 os: windows
 app: microsoft_outlook
 -
+settings():
+    user.context_sensitive_dictation = true
+    user.paste_to_insert_threshold = 0
+    
 archive: key(alt h o 1)
 email new: key(ctrl-n)
 calendar: key(ctrl-2)

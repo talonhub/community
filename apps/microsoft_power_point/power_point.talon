@@ -1,4 +1,4 @@
-app: microsoft_word
+app: microsoft_power_point
 -
 settings():
     user.context_sensitive_dictation = true
