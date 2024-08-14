@@ -449,20 +449,25 @@ def refresh_context_command_map(enabled_only=False):
     When enabled_only is True, inactive contexts are left out."""
     active_contexts = registry.active_contexts()
 
-    local_context_map = {}
-    local_display_name_to_context_name_map = {}
-    local_context_command_map = {}
-    cached_short_context_names = {}
+    local_context_map: dict[str, Context] = {}
+    local_display_name_to_context_name_map: dict[str, str] = {}
+    local_context_command_map: dict[str, dict[str, str]] = {}
+    cached_short_context_names: dict[str, str] = {}
 
     for context_name, context in registry.contexts.items():
         splits = context_name.split(".")
 
+        # Skip over contexts not coming from .talon files
         if "talon" != splits[-1]:
             continue
 
+        # Only use the basename as display name
+        # This also makes files like "foo.bar.talon" only show up as
+        # just "bar", so don't put extra dots in your talon file names!
         display_name = splits[-2].replace("_", " ")
 
-        short_names = actions.user.create_spoken_forms(
+        # Make some extra speakable alternatives for the context's name
+        short_names: list[str] = actions.user.create_spoken_forms(
             display_name,
             generate_subsequences=False,
         )
@@ -479,6 +484,8 @@ def refresh_context_command_map(enabled_only=False):
                     local_context_command_map[context_name][
                         str(val.rule.rule)
                     ] = val.target.code
+            # If we didn't actually get any commands, toss the context out of
+            # the local context command map again.
             if len(local_context_command_map[context_name]) == 0:
                 local_context_command_map.pop(context_name)
             else:
