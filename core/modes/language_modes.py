@@ -70,8 +70,7 @@ language_name_overrides = {
     "css": ["c s s"],
     "gdb": ["g d b"],
     "go": ["go", "go lang", "go language"],
-    "r": ["are lang", "are language"],
-    "scm": ["scheme", "s c m", "tree sitter"],
+    "r": ["are language"],
     "tex": ["tech", "lay tech", "latex"],
 }
 
@@ -144,3 +143,5 @@ class Actions:
         """Show the active language for this context"""
         if forced_language
             app.notify(f"Forced language: {forced_language}")
+        else:
+            app.notify("No language forced")

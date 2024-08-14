@@ -1,13 +1,7 @@
 from talon import Context, Module
 
 mod = Module()
-apps = mod.apps
-apps.obsidian = "app.name: Obsidian"
-
-ctx = Context()
-ctx.matches = r"""
-app: obsidian
-"""
+mod.apps.obsidian = "app.name: Obsidian"
 
 lang_ctx = Context()
 lang_ctx.matches = r"""
