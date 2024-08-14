@@ -643,11 +643,13 @@ def gui_list_help(gui: imgui.GUI):
         if gui.button("Help previous"):
             actions.user.help_previous()
 
-        if gui.button("Help return"):
-            actions.user.help_return()
+    # TODO: until there is a "list of lists", nothing to return to
+    # if gui.button("Help return"):
+    #    actions.user.help_return()
 
-    if gui.button("Help refresh"):
-        actions.user.help_refresh()
+    # TODO: "help refresh" does nothing when the lists help window is showing
+    # if gui.button("Help refresh"):
+    #    actions.user.help_refresh()
 
     if gui.button("Help close"):
         actions.user.help_hide()
