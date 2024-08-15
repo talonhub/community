@@ -10,7 +10,7 @@ phrase <user.text> {user.phrase_ender}:
     user.insert_formatted(prose, prose_formatter)
     insert(phrase_ender)
 <user.format_code>+$: user.insert_many(format_code_list)
-<user.format_code>+ {user.phrase_ender}: 
+<user.format_code>+ {user.phrase_ender}:
     user.insert_many(format_code_list)
     insert(phrase_ender)
 <user.formatters> that: user.formatters_reformat_selection(user.formatters)
