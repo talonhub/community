@@ -141,7 +141,7 @@ class Actions:
 
     def code_show_forced_language_mode():
         """Show the active language for this context"""
-        if forced_language
+        if forced_language:
             app.notify(f"Forced language: {forced_language}")
         else:
             app.notify("No language forced")
