@@ -1,8 +1,4 @@
 list: user.phrase_ender
 -
 
-over:          ""
-space:         " "
-question:      "?"
-bang:          "!"
-slap:          "\n"
+over: ""
