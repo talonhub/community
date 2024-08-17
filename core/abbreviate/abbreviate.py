@@ -454,7 +454,7 @@ abbreviations_list = get_list_from_csv(
     default=abbreviations,
 )
 
-# Matches letters and space. Talon accepts nothing else as a spoken form.
+# Matches letters and spaces, as currently, Talon doesn't accept other characters in spoken forms.
 PATTERN = re.compile(r"^[a-zA-Z ]+$")
 abbreviation_values = {
     v: v for v in abbreviations_list.values() if PATTERN.match(v) is not None
