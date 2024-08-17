@@ -60,6 +60,12 @@ mod.setting(
     desc="When enabled, pop stops continuous scroll modes (wheel upper/downer/gaze)",
 )
 mod.setting(
+    "mouse_enable_pop_stops_drag",
+    type=bool,
+    default=False,
+    desc="When enabled, pop stops mouse drag",
+)
+mod.setting(
     "mouse_enable_hiss_scroll",
     type=bool,
     default=False,
@@ -275,7 +281,12 @@ def show_cursor_helper(show):
 @ctx.action_class("user")
 class UserActions:
     def noise_trigger_pop():
-        if settings.get("user.mouse_enable_pop_stops_scroll") and (
+        if (
+            settings.get("user.mouse_enable_pop_stops_drag")
+            and ctrl.mouse_buttons_down()
+        ):
+            actions.user.mouse_drag_end()
+        elif settings.get("user.mouse_enable_pop_stops_scroll") and (
             gaze_job or scroll_job
         ):
             # Allow pop to stop scroll
