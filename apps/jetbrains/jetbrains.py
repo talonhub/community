@@ -298,7 +298,7 @@ class UserActions:
         # if it's a single line, select the entire thing including the ending new-line5
         if line_start == line_end:
             actions.user.idea(f"goto {line_start} 0")
-            (actions.user.idea("action EditorSelectLine"))
+            actions.user.idea("action EditorSelectLine")
         else:
             actions.user.idea(f"range {line_start} {line_end}")
 
