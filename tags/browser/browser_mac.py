@@ -27,7 +27,7 @@ class BrowserActions:
         except IndexError:
             return ""
         try:
-            web_area = window.element.children.find_one(AXRole="AXWebArea")
+            web_area = window.element.children.find(AXRole="AXWebArea")[-1]
             address = web_area.AXURL
         except (ui.UIErr, AttributeError):
             try:
