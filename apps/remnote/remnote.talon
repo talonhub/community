@@ -95,28 +95,28 @@ done:
     key(right)
 
 lecture toggle:
-    user.switcher_focus("firefox")
+    user.switcher_focus("Firefox")
     key(space)
     user.switcher_focus("RemNote")
 
 lecture (back | previous):
-    user.switcher_focus("firefox")
+    user.switcher_focus("Firefox")
     key(left)
     user.switcher_focus("RemNote")
 
 lecture (back | previous) <number_small>:
-    user.switcher_focus("firefox")
+    user.switcher_focus("Firefox")
     key(left)
     repeat(number_small)
     user.switcher_focus("RemNote")
 
 lecture (forward | next):
-    user.switcher_focus("firefox")
+    user.switcher_focus("Firefox")
     key(right)
     user.switcher_focus("RemNote")
 
 lecture (forward | next) <number_small>:
-    user.switcher_focus("firefox")
+    user.switcher_focus("Firefox")
     key(right)
     repeat(number_small)
     user.switcher_focus("RemNote")
