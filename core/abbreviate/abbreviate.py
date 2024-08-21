@@ -1,3 +1,5 @@
+import re
+
 from talon import Context, Module
 
 from ..user_settings import get_list_from_csv
@@ -452,9 +454,15 @@ abbreviations_list = get_list_from_csv(
     default=abbreviations,
 )
 
+# Matches letters and spaces, as currently, Talon doesn't accept other characters in spoken forms.
+PATTERN = re.compile(r"^[a-zA-Z ]+$")
+abbreviation_values = {
+    v: v for v in abbreviations_list.values() if PATTERN.match(v) is not None
+}
+
 # Allows the abbreviated/short form to be used as spoken phrase. eg "brief app" -> app
 abbreviations_list_with_values = {
-    **{v: v for v in abbreviations_list.values()},
+    **abbreviation_values,
     **abbreviations_list,
 }
 
