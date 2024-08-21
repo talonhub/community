@@ -60,6 +60,12 @@ mod.setting(
     desc="When enabled, pop stops continuous scroll modes (wheel upper/downer/gaze)",
 )
 mod.setting(
+    "mouse_enable_pop_stops_drag",
+    type=bool,
+    default=False,
+    desc="When enabled, pop stops mouse drag",
+)
+mod.setting(
     "mouse_enable_hiss_scroll",
     type=bool,
     default=False,
@@ -132,15 +138,14 @@ class Actions:
     def mouse_drag(button: int):
         """Press and hold/release a specific mouse button for dragging"""
         # Clear any existing drags
-        self.mouse_drag_end()
+        actions.user.mouse_drag_end()
 
         # Start drag
         ctrl.mouse_click(button=button, down=True)
 
     def mouse_drag_end():
         """Releases any held mouse buttons"""
-        buttons_held_down = list(ctrl.mouse_buttons_down())
-        for button in buttons_held_down:
+        for button in ctrl.mouse_buttons_down():
             ctrl.mouse_click(button=button, up=True)
 
     def mouse_sleep():
@@ -151,11 +156,7 @@ class Actions:
 
         show_cursor_helper(True)
         stop_scroll()
-
-        # todo: fixme temporary fix for drag command
-        button_down = len(list(ctrl.mouse_buttons_down())) > 0
-        if button_down:
-            ctrl.mouse_click(button=0, up=True)
+        actions.user.mouse_drag_end()
 
     def mouse_scroll_down(amount: float = 1):
         """Scrolls down"""
@@ -280,7 +281,12 @@ def show_cursor_helper(show):
 @ctx.action_class("user")
 class UserActions:
     def noise_trigger_pop():
-        if settings.get("user.mouse_enable_pop_stops_scroll") and (
+        if (
+            settings.get("user.mouse_enable_pop_stops_drag")
+            and ctrl.mouse_buttons_down()
+        ):
+            actions.user.mouse_drag_end()
+        elif settings.get("user.mouse_enable_pop_stops_scroll") and (
             gaze_job or scroll_job
         ):
             # Allow pop to stop scroll
