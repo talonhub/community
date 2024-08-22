@@ -17,13 +17,9 @@ snap last [screen]: user.move_window_previous_screen()
 snap screen <number>: user.move_window_to_screen(number)
 snap <user.running_applications> <user.window_snap_position>:
     user.snap_app(running_applications, window_snap_position)
-snap split <user.running_applications> <user.running_applications>:
+snap <user.window_split_position> <user.running_applications> <user.running_applications>:
     user.snap_split_two(running_applications_1, running_applications_2)
-snap split <user.running_applications> <user.running_applications> <user.running_applications>:
-    user.snap_split_three(running_applications_1, running_applications_2, running_applications_3)
-snap clock <user.running_applications> <user.running_applications> <user.running_applications>:
-    user.snap_clock_three(running_applications_1, running_applications_2, running_applications_3)
-snap counterclock <user.running_applications> <user.running_applications> <user.running_applications>:
-    user.snap_counterclock_three(running_applications_1, running_applications_2, running_applications_3)
+snap <user.window_split_position> <user.running_applications> <user.running_applications> <user.running_applications>:
+    user.snap_split_three(window_split_position, running_applications_1, running_applications_2, running_applications_3)
 snap <user.running_applications> [screen] <number>:
     user.move_app_to_screen(running_applications, number)
