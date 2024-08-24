@@ -1,12 +1,18 @@
 URL,Spoken name
 https://www.amazon.com/,amazon
-https://dropbox.com/,dropbox
 https://www.google.com/,google
 https://calendar.google.com,google calendar
 https://maps.google.com/,google maps
-https://scholar.google.com/,google scholar
 https://mail.google.com/,gmail
 https://github.com/,github
 https://gist.github.com/,gist
 https://en.wikipedia.org/,wikipedia
 https://www.youtube.com/,youtube
+https://chatgpt.com/,chat GPT
+https://linear.app/solv/,linear
+https://news.ycombinator.com/,hacker news
+https://www.icloud.com/,icloud
+https://homeassistant.neatflix.xyz/,home assistant
+https://sonarr.neatflix.xyz/,sonarr
+https://radarr.neatflix.xyz/,radarr
+https://prowlarr.neatflix.xyz/,prowlarr
