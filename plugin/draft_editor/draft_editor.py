@@ -1,4 +1,4 @@
-from talon import Context, Module, actions, ui
+from talon import Context, Module, actions, app, settings, ui
 
 mod = Module()
 mod.tag("draft_editor_active", "Indicates whether the draft editor has been activated")
@@ -23,7 +23,7 @@ def remove_tag(tag: str):
 
 default_names = ["Visual Studio Code", "Code", "VSCodium", "Codium", "code-oss"]
 
-setting_editor_names = mod.setting(
+mod.setting(
     "draft_editor",
     type=str,
     default=None,
@@ -32,7 +32,7 @@ setting_editor_names = mod.setting(
 
 
 def get_editor_names():
-    names_csv = setting_editor_names.get()
+    names_csv = settings.get("user.draft_editor")
     return names_csv.split(", ") if names_csv else default_names
 
 
@@ -107,15 +107,26 @@ def get_editor_app() -> ui.App:
     raise RuntimeError("Draft editor is not running")
 
 
-def close_editor(submit_draft: bool):
+def close_editor(submit_draft: bool) -> None:
     global last_draft
     remove_tag("user.draft_editor_active")
     actions.edit.select_all()
-    selected_text = actions.edit.selected_text()
+    if submit_draft:
+        last_draft = actions.edit.selected_text()
     actions.edit.delete()
     actions.app.tab_close()
-    actions.user.switcher_focus_window(original_window)
-    actions.sleep("300ms")
     if submit_draft:
-        last_draft = selected_text
-        actions.user.paste(selected_text)
+        try:
+            actions.user.switcher_focus_window(original_window)
+        except Exception:
+            app.notify(
+                "Failed to focus on window to submit draft, manually focus on intended destination and use draft submit again"
+            )
+        else:
+            actions.sleep("300ms")
+            actions.user.paste(last_draft)
+    else:
+        try:
+            actions.user.switcher_focus_window(original_window)
+        except Exception:
+            app.notify("Failed to focus on previous window, leaving editor open")

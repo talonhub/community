@@ -5,7 +5,7 @@ from talon import Context, Module, actions, settings
 mod = Module()
 ctx = Context()
 
-paste_to_insert_threshold_setting = mod.setting(
+mod.setting(
     "paste_to_insert_threshold",
     type=int,
     default=-1,

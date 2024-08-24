@@ -128,8 +128,7 @@ and app.bundle: com.google.android.studio
 """
 # windows
 mod.apps.jetbrains = "app.exe: idea64.exe"
-mod.apps.jetbrains = "app.exe: PyCharm64.exe"
-mod.apps.jetbrains = "app.exe: pycharm64.exe"
+mod.apps.jetbrains = "app.exe: /^PyCharm64\.exe$/i"
 mod.apps.jetbrains = "app.exe: webstorm64.exe"
 mod.apps.jetbrains = """
 os: mac
@@ -217,6 +216,8 @@ class EditActions:
 
     def find(text: str = None):
         actions.user.idea("action Find")
+        if text:
+            actions.insert(text)
 
     def line_clone():
         actions.user.idea("action EditorDuplicate")

@@ -13,7 +13,7 @@ and app.bundle: com.microsoft.VSCodeInsiders
 os: mac
 and app.bundle: com.visualstudio.code.oss
 os: mac
-and app.name: Cursor
+and app.bundle: com.todesktop.230313mzl4w4u92
 """
 mod.apps.vscode = """
 os: linux
@@ -29,7 +29,7 @@ and app.name: Codium
 os: linux
 and app.name: Cursor
 """
-mod.apps.vscode = """
+mod.apps.vscode = r"""
 os: windows
 and app.name: Visual Studio Code
 os: windows
@@ -37,13 +37,13 @@ and app.name: Visual Studio Code Insiders
 os: windows
 and app.name: Visual Studio Code - Insiders
 os: windows
-and app.exe: Code.exe
+and app.exe: /^code\.exe$/i
 os: windows
-and app.exe: Code-Insiders.exe
+and app.exe: /^code-insiders\.exe$/i
 os: windows
 and app.name: VSCodium
 os: windows
-and app.exe: VSCodium.exe
+and app.exe: /^vscodium\.exe$/i
 os: windows
 and app.name: Cursor
 os: windows
@@ -105,13 +105,11 @@ class EditActions:
     def save_all():
         actions.user.vscode("workbench.action.files.saveAll")
 
-    def find(text=None):
-        if is_mac:
-            actions.key("cmd-f")
-        else:
-            actions.key("ctrl-f")
-        if text is not None:
-            actions.insert(text)
+    def find_next():
+        actions.user.vscode("editor.action.nextMatchFindAction")
+
+    def find_previous():
+        actions.user.vscode("editor.action.previousMatchFindAction")
 
     def line_swap_up():
         actions.key("alt-up")
@@ -149,6 +147,9 @@ class EditActions:
     def select_word():
         actions.user.vscode("editor.action.addSelectionToNextFindMatch")
 
+    def zoom_reset():
+        actions.user.vscode("workbench.action.zoomReset")
+
 
 @ctx.action_class("win")
 class WinActions:
@@ -178,6 +179,14 @@ class Actions:
     def command_palette():
         """Show command palette"""
         actions.key("ctrl-shift-p")
+
+
+@mac_ctx.action_class("edit")
+class MacEditActions:
+    def find(text: str = None):
+        actions.key("cmd-f")
+        if text:
+            actions.insert(text)
 
 
 @mac_ctx.action_class("user")
@@ -293,22 +302,6 @@ class UserActions:
     # splits.py support end
 
     # find_and_replace.py support begin
-
-    def find(text: str):
-        """Triggers find in current editor"""
-        if is_mac:
-            actions.key("cmd-f")
-        else:
-            actions.key("ctrl-f")
-
-        if text:
-            actions.insert(text)
-
-    def find_next():
-        actions.user.vscode("editor.action.nextMatchFindAction")
-
-    def find_previous():
-        actions.user.vscode("editor.action.previousMatchFindAction")
 
     def find_everywhere(text: str):
         """Triggers find across project"""

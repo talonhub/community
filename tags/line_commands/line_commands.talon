@@ -1,8 +1,6 @@
 tag: user.line_commands
 -
 #this defines some common line commands. More may be defined that are ide-specific.
-# lend: edit.line_end()
-# bend: edit.line_start()
 go line <number>: edit.jump_line(number)
 go line <number> end:
     edit.jump_line(number)

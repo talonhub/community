@@ -1,3 +1,7 @@
+# Compound of action(select, clear, copy, cut, paste, etc.) and modifier(word, line, etc.) commands for editing text.
+# eg: "select line", "clear all"
+<user.edit_action> <user.edit_modifier>: user.edit_command(edit_action, edit_modifier)
+
 ### Actions ###
 ## Clipboard ##
 cut that: edit.cut()
@@ -29,6 +33,8 @@ replay: edit.redo()
 disk: edit.save()
 disk as: edit.save_all()
 file print: edit.print()
+
+# Zoom
 zoom in: edit.zoom_in()
 zoom out: edit.zoom_out()
 zoom reset: edit.zoom_reset()
@@ -100,3 +106,5 @@ redo that: edit.redo()
 # Save
 file save: edit.save()
 file save all: edit.save_all()
+
+[go] line mid: user.line_middle()
