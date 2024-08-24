@@ -106,7 +106,7 @@ class UserActionsMac:
         actions.user.launch_or_focus_bundle("com.apple.systempreferences")
 
     def system_show_portal(phrase: str = None):
-        actions.user.launch_or_focus_bundle("com.google.Chrome")
+        actions.user.launch_or_focus_bundle("com.apple.Safari")
         actions.sleep("250ms")
         actions.user.parse_phrase(phrase or "")
 
