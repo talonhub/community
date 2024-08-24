@@ -23,3 +23,30 @@ ctx.lists["user.solv_repository"] = {
     "turbo provider": "turbo-provider",
     "turbo consumer": "turbo-consumer",
 }
+
+# Linear magic words
+mod.list("linear_keyword", desc="Linear magic words")
+ctx.lists["user.linear_keyword"] = {
+    "close": "close",
+    "closes": "closes",
+    "closed": "closed",
+    "closing": "closing",
+    "fix": "fix",
+    "fixes": "fixes",
+    "fixed": "fixed",
+    "fixing": "fixing",
+    "resolve": "resolve",
+    "resolves": "resolves",
+    "resolved": "resolved",
+    "resolving": "resolving",
+    "complete": "complete",
+    "completes": "completes",
+    "completed": "completed",
+    "completing": "completing",
+    "ref": "ref",
+    "references": "references",
+    "part of": "part of",
+    "related to": "related to",
+    "contributes to": "contributes to",
+    "towards": "towards",
+}
