@@ -228,4 +228,4 @@ def get_screen(screen_desc: Union[int, str]) -> ui.Screen:
         return actions.user.screen_get_by_offset(-1)
     if screen_desc == "next":
         return actions.user.screen_get_by_offset(1)
-    return actions.user.screen_get_by_number(screen_desc)
+    return actions.user.screens_get_by_number(screen_desc)
