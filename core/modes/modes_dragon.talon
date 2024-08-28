@@ -22,7 +22,4 @@ speech.engine: dragon
     user.help_hide()
     user.mouse_sleep()
     speech.disable()
-    user.engine_sleep()
-
-^talon sleep [<phrase>]$: speech.disable()
-^drowse$: speech.disable()
+    user.dragon_engine_sleep()
