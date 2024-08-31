@@ -164,6 +164,8 @@ def convert_csv_to_talonlist(input_csv: csv.reader, config: CSVData):
         else:
             output.append(f"{spoken_form}")
 
+    # Terminate file in newline
+    output.append("")
     return "\n".join(output)
 
 
