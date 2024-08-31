@@ -223,15 +223,15 @@ def append_to_vocabulary(rows: dict[str, str]):
             pass
         needs_newline = line is not None and not line.endswith("\n")
 
-    with open(vocabulary_file_path, "a", encoding="utf-8", newline="") as file:
+    with open(vocabulary_file_path, "a", encoding="utf-8") as file:
         if needs_newline:
             file.write("\n")
         for key, value in rows.items():
             if key == value:
-                file.write(f"{key}")
+                file.write(f"{key}\n")
             else:
                 value = repr(value)
-                file.write(f"{key}: {value}")
+                file.write(f"{key}: {value}\n")
 
 
 @mod.action_class
