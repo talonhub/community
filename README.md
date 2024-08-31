@@ -78,7 +78,7 @@ If you use vim, just start with the numbers and alphabet, otherwise look at gene
 
 ### Alphabet
 
-The alphabet is defined in 
+The alphabet is defined in
 [this Talon list file](core/keys/letter.talon-list).
 
 `help alphabet` will open a window that displays the alphabet. `help close` to hide the window.
@@ -87,11 +87,11 @@ Try saying e.g. `air bat cap` to insert abc.
 
 ### Keys
 
-All key commands are defined in [keys.talon](core/keys/keys.talon). Say letters of the [Talon alphabet](#alphabet) for A–Z. 
+All key commands are defined in [keys.talon](core/keys/keys.talon). Say letters of the [Talon alphabet](#alphabet) for A–Z.
 
-For modifier keys, say `help modifiers`.  For example, say `shift air` to press `shift-a`, which types a capital `A`.
+For modifier keys, say `help modifiers`. For example, say `shift air` to press `shift-a`, which types a capital `A`.
 
-For symbols, say `help symbols`.  These are defined in keys.py;
+For symbols, say `help symbols`. These are defined in keys.py;
 search for `modifier_keys` and then keep scrolling — roughly starting [here](core/keys/keys.py#L124).
 
 On Windows, try commands such as:
@@ -104,7 +104,7 @@ On Mac, try commands such as:
 
 - `command air` to press ⌘A and select all.
 
-- `control shift command 4` to press  ⌃⇧⌘4, copying a screenshot of the selected area to the clipboard. Then try `escape` to exit. Please note the order of the modifiers doesn't matter.
+- `control shift command 4` to press ⌃⇧⌘4, copying a screenshot of the selected area to the clipboard. Then try `escape` to exit. Please note the order of the modifiers doesn't matter.
 
 Say any combination of modifiers, symbols, alphabet, numbers and function keys to execute keyboard shortcuts. Modifier keys can be tapped using `press`, for example `press control` taps the Control (⌃) key by itself.
 
@@ -116,17 +116,17 @@ Multi-character punctuation (e.g., ellipses) is defined in [symbols.talon](plugi
 
 ### Formatters
 
-Formatters allow you to insert words with consistent capitalization and punctuation.  `help format` displays available formatters with examples of their output when followed by `one two three`.
+Formatters allow you to insert words with consistent capitalization and punctuation. `help format` displays available formatters with examples of their output when followed by `one two three`.
 
 Try using a formatter by saying `snake hello world`. This inserts "hello_world".
 
 Multiple formatters can be chained together — for example, `dubstring snake hello world` inserts "hello_world".
 
-Prose formatters (marked with * in the help window) preserve hyphens and apostrophes. Non-prose (code) formatters strip punctuation instead, for example to generate a valid variable name. `title how's it going` inserts "How's It Going"; `hammer how's it going` inserts "HowsItGoing".
+Prose formatters (marked with \* in the help window) preserve hyphens and apostrophes. Non-prose (code) formatters strip punctuation instead, for example to generate a valid variable name. `title how's it going` inserts "How's It Going"; `hammer how's it going` inserts "HowsItGoing".
 
-Reformat existing text with one or more formatters by selecting it, then saying the formatter name(s) followed by `that`.  Say `help reformat` to display how each formatter reformats `one_two_three`.
+Reformat existing text with one or more formatters by selecting it, then saying the formatter name(s) followed by `that`. Say `help reformat` to display how each formatter reformats `one_two_three`.
 
-Formatter names (snake, dubstring) are defined [here](core/text/formatters.py#L245).  Formatter-related commands are defined in [text.talon](core/text/text.talon#L8).
+Formatter names (snake, dubstring) are defined [here](core/text/formatters.py#L245). Formatter-related commands are defined in [text.talon](core/text/text.talon#L8).
 
 ### Mouse commands
 
@@ -196,7 +196,7 @@ To add support for a new language, ensure appropriate extension is added/uncomme
 - `lang/{your-language}/{your-language}.py`
 - `lang/{your-language}/{your-language}.talon`
 
-Activate the appropriate tags in `{your-language}.talon` and implement the corresponding actions in `{your-language}.py`, following existing language implementations.  Put additional voice commands for your language (not shared with other languages) in `{your-language}.talon`.
+Activate the appropriate tags in `{your-language}.talon` and implement the corresponding actions in `{your-language}.py`, following existing language implementations. Put additional voice commands for your language (not shared with other languages) in `{your-language}.talon`.
 
 ## File manager commands
 
@@ -218,7 +218,7 @@ Notes:
 
 - If there no hidden files or folders, and the items are displayed in alphabetical order, you can typically issue the `follow <number>`, `file <number>` and `open <number>` commands based on the displayed order.
 
-To implement support for a new program, implement the relevant file manager actions for your application and assert the `user.file_manager` tag.  There are a number of example implementations in the repository. [Finder](apps/finder/finder.py) is a good example to copy and mdoify.
+To implement support for a new program, implement the relevant file manager actions for your application and assert the `user.file_manager` tag. There are a number of example implementations in the repository. [Finder](apps/finder/finder.py) is a good example to copy and mdoify.
 
 ## Terminal commands
 
@@ -279,11 +279,11 @@ The most commonly adjusted settings are probably
 
 ## Customizing words and lists
 
-Most lists of words are provided as Talon list files, with an extension of `.talon-list`.  Read about the syntax of these files [on the Talon wiki](https://talon.wiki/Customization/talon_lists).
+Most lists of words are provided as Talon list files, with an extension of `.talon-list`. Read about the syntax of these files [on the Talon wiki](https://talon.wiki/Customization/talon_lists).
 
-Some lists with multiple spoken forms/alternatives are instead provided as CSV files.  Some are in the `settings` folder and are not created until you launch Talon with `community`.
+Some lists with multiple spoken forms/alternatives are instead provided as CSV files. Some are in the `settings` folder and are not created until you launch Talon with `community`.
 
-You can customize common Talon list and CSV files with voice commands: say the word "customize" followed by "additional words", "alphabet", "homophones", "search engines", "Unix utilities" or "websites".  This will open the file in a text editor and move to the bottom of the file so you can add something to it.
+You can customize common Talon list and CSV files with voice commands: say the word "customize" followed by "additional words", "alphabet", "homophones", "search engines", "Unix utilities" or "websites". This will open the file in a text editor and move to the bottom of the file so you can add something to it.
 
 You can also add words to the vocabulary by using the commands in edit_vocabulary.talon.
 
