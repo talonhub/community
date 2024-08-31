@@ -11,7 +11,7 @@ mod = Module()
 ctx = Context()
 mod.list(
     "edit_file",
-    desc="Absolute paths to frequently edited files (.talon-list, csv, etc)",
+    desc="Absolute paths to frequently edited files (Talon list, CSV, etc.)",
 )
 
 _edit_files = {
