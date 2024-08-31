@@ -208,7 +208,7 @@ def draw_snap_positions(
             pos_rect = actions.user.snap_apply_position_to_rect(rect, position)
             callback = (
                 lambda position=position: actions.user.snap_specified_window_to_position(
-                    active_window, 
+                    ui.active_window(), 
                     position
                 )
             )
@@ -290,11 +290,9 @@ def on_mouse(e: MouseEvent):
             button.callback()
             repeater_callback = button.callback
 
-active_window = None
 def show():
-    global canvas, mouse_pos, size, active_window
+    global canvas, mouse_pos, size
     ctx.tags = ["user.quick_pick_showing"]
-    active_window  = ui.active_window()
     mouse_pos = Point2d(actions.mouse_x(), actions.mouse_y())
     screen: Screen = ui.main_screen()
     if app.platform=="windows":
