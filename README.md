@@ -81,7 +81,7 @@ If you use vim, just start with the numbers and alphabet, otherwise look at gene
 The alphabet is defined in
 [this Talon list file](core/keys/letter.talon-list).
 
-`help alphabet` will open a window that displays the alphabet. `help close` to hide the window.
+Say `help alphabet` to open a window displaying the alphabet. `help close` closes the window.
 
 Try saying e.g. `air bat cap` to insert abc.
 
