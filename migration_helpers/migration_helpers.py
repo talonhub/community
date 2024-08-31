@@ -173,14 +173,12 @@ def convert_files(csv_files_list):
     conversion_count = 0
     base_path = Path(__file__).resolve().parent.parent
 
-    print(f"migration_helpers.py: converting CSV files in directory {base_path}")
     for csv_path in base_path.rglob("*.csv"):
         csv_relative_path = csv_path.relative_to(base_path)
         migrated_csv_path = csv_path.with_suffix(".csv-converted-to-talon-list")
 
         config = known_csv_files.get(str(csv_relative_path))
         if not config:
-            print(f"Talon list conversion not supported for CSV: {csv_relative_path}")
             continue
 
         if callable(config.newpath):
