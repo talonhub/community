@@ -281,11 +281,11 @@ The most commonly adjusted settings are probably
 
 Most lists of words are provided as Talon list files, with an extension of `.talon-list`. Read about the syntax of these files [on the Talon wiki](https://talon.wiki/Customization/talon_lists).
 
-Some lists with multiple spoken forms/alternatives are instead provided as CSV files. Some are in the `settings` folder and are not created until you launch Talon with `community`.
+Some lists with multiple spoken forms/alternatives are instead provided as CSV files. Some are in the `settings` folder and are not created until you launch Talon with `community` installed.
 
-You can customize common Talon list and CSV files with voice commands: say the word "customize" followed by "additional words", "alphabet", "homophones", "search engines", "Unix utilities" or "websites". This will open the file in a text editor and move to the bottom of the file so you can add something to it.
+You can customize common Talon list and CSV files with voice commands: say the word `customize` followed by `abbreviations`, `additional words`, `alphabet`, `homophones`, `search engines`, `Unix utilities`, `websites` or `words to replace`. These open the file in a text editor and move the insertion point to the bottom of the file so you can add to it.
 
-You can also add words to the vocabulary by using the commands in edit_vocabulary.talon.
+You can also add words to the vocabulary or replacements (words_to_replace) by using the commands in [edit_vocabulary.talon](core/vocabulary/edit_vocabulary.talon).
 
 ## Other Talon user file sets
 
