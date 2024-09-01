@@ -186,7 +186,8 @@ class Resource:
 
     def watch(self, path: str):
         return lambda f: f
-    
+
+
 class App:
     """
     Implements something like the talon app variable
