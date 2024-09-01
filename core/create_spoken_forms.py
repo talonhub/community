@@ -50,6 +50,7 @@ def on_extensions(values):
     )
     update_regex()
 
+
 REVERSE_PRONUNCIATION_MAP = {
     **{str(value): key for key, value in digits_map.items()},
     **{value: key for key, value in symbol_key_words.items()},

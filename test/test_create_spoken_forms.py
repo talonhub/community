@@ -8,8 +8,8 @@ if hasattr(talon, "test_mode"):
 
     from talon import actions
 
-    import core.user_settings
     import core.abbreviate
+    import core.user_settings
 
     core.abbreviate.abbreviations_list = {"source": "src", "whats app": "WhatsApp"}
 
