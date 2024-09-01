@@ -49,11 +49,15 @@ def on_extensions(values):
     )
     update_regex()
 
+
 abbreviations_list = {}
+
+
 @track_csv_list("abbreviations.csv", headers=("Abbreviation", "Spoken Form"))
 def on_abbreviations(values):
     global abbreviations_list
     abbreviations_list = values
+
 
 REVERSE_PRONUNCIATION_MAP = {
     **{str(value): key for key, value in digits_map.items()},
