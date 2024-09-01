@@ -184,7 +184,9 @@ class Resource:
     def open(self, path: str, mode: str = "r"):
         return open(path, mode, encoding="utf-8")
 
-
+    def watch(self, path: str):
+        return lambda f: f
+    
 class App:
     """
     Implements something like the talon app variable
