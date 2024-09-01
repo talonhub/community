@@ -9,6 +9,9 @@ if hasattr(talon, "test_mode"):
     from talon import actions
 
     import core.user_settings
+    import core.abbreviate
+
+    core.abbreviate.abbreviations_list = {"source": "src", "whats app": "WhatsApp"}
 
     # we need to replace the track_csv_list decorator for unit tests.
     CallbackT = Callable[[dict[str, str]], None]

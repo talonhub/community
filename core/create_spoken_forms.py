@@ -6,6 +6,7 @@ from typing import Any, List, Mapping, Optional
 
 from talon import Module, actions
 
+from .abbreviate.abbreviate import abbreviations_list
 from .keys.keys import symbol_key_words
 from .numbers.numbers import digits_map, scales, teens, tens
 from .user_settings import track_csv_list
@@ -48,13 +49,6 @@ def on_extensions(values):
         re.escape(file_extension.strip()) + "$" for file_extension in values.values()
     )
     update_regex()
-
-
-@track_csv_list("abbreviations.csv", headers=("Abbreviation", "Spoken Form"))
-def on_abbreviations(values):
-    global abbreviations_list
-    abbreviations_list = values
-
 
 REVERSE_PRONUNCIATION_MAP = {
     **{str(value): key for key, value in digits_map.items()},
