@@ -1,3 +1,5 @@
+import re
+
 from talon import Context, Module
 
 from ..user_settings import track_csv_list
@@ -454,11 +456,21 @@ def abbreviated(m) -> str:
 @track_csv_list("abbreviations.csv", headers=("Abbreviation", "Spoken Form"), default=abbreviations)
 def on_abbreviations(values):
     global abbreviations_list
-    abbreviations_list = values
+	
+    # Matches letters and spaces, as currently, Talon doesn't accept other characters in spoken forms.
+    PATTERN = re.compile(r"^[a-zA-Z ]+$")
+    abbreviation_values = {
+        v: v for v in values.values() if PATTERN.match(v) is not None
+    }
 
     # Allows the abbreviated/short form to be used as spoken phrase. eg "brief app" -> app
     abbreviations_list_with_values = {
-        **{v: v for v in abbreviations_list.values()},
+        **{v: v for v in abbreviation_values.values()},
         **abbreviations_list,
     }
+
+    ctx.lists["user.abbreviation"] = abbreviations_list_with_values
+	
+	# abbreviations_list is also imported by the create_spoken_forms module
+    abbreviations_list = abbreviations_list_with_values
     ctx.lists["user.abbreviation"] = abbreviations_list_with_values
