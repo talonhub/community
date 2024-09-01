@@ -32,6 +32,7 @@ class Actions:
         "Looks up the short form for command_name in emacs_commands.csv."
         return emacs_commands.get(command_name, Command(command_name)).short
 
+
 @resource.watch("emacs_commands.csv")
 def load_commands(f):
     rows = list(csv.reader(f))
@@ -44,7 +45,7 @@ def load_commands(f):
             continue
         if len(row) > 4:
             print(
-                f'emacs_commands.csv: More than four values in row: {row}. '
+                f"emacs_commands.csv: More than four values in row: {row}. "
                 + " Ignoring the extras"
             )
         name, keys, short, spoken = (
@@ -68,4 +69,3 @@ def load_commands(f):
             if c.spoken:
                 command_list[c.spoken] = c.name
     ctx.lists["self.emacs_command"] = command_list
-

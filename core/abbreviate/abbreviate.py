@@ -448,12 +448,15 @@ abbreviations = {
     "work in progress": "wip",
 }
 
-@track_csv_list("abbreviations.csv", headers=("Abbreviation", "Spoken Form"), default=abbreviations)
+
+@track_csv_list(
+    "abbreviations.csv", headers=("Abbreviation", "Spoken Form"), default=abbreviations
+)
 def on_abbreviations(values):
     global abbreviations_list
 
     # note: abbreviations_list is  imported by the create_spoken_forms module
-    abbreviations_list = values 
+    abbreviations_list = values
 
     # Matches letters and spaces, as currently, Talon doesn't accept other characters in spoken forms.
     PATTERN = re.compile(r"^[a-zA-Z ]+$")
@@ -466,5 +469,5 @@ def on_abbreviations(values):
         **{v: v for v in abbreviation_values.values()},
         **abbreviations_list,
     }
-	
+
     ctx.lists["user.abbreviation"] = abbreviations_list_with_values

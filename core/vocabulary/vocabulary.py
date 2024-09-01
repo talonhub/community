@@ -45,6 +45,7 @@ _word_map_defaults = {
 _word_map_defaults.update({word.lower(): word for word in _capitalize_defaults})
 phrases_to_replace = {}
 
+
 class PhraseReplacer:
     """Utility for replacing phrases by other phrases inside text or word lists.
 
@@ -126,11 +127,16 @@ assert rep.replace_string("this is a tricky one") == "stopping early a tricky on
 
 phrase_replacer = PhraseReplacer()
 
+
 # phrases_to_replace is a spoken form -> written form map, used by our
 # implementation of `dictate.replace_words` (at bottom of file) to rewrite words
 # and phrases Talon recognized. This does not change the priority with which
 # Talon recognizes particular phrases over others.
-@track_csv_list("words_to_replace.csv", headers=("Replacement", "Original"), default=_word_map_defaults)
+@track_csv_list(
+    "words_to_replace.csv",
+    headers=("Replacement", "Original"),
+    default=_word_map_defaults,
+)
 def on_word_map(values):
     global phrases_to_replace
     phrases_to_replace = values
@@ -140,7 +146,6 @@ def on_word_map(values):
     # `dictate.replace_words`, but supports only single-word replacements.
     # Multi-word phrases are ignored.
     ctx.settings["dictate.word_map"] = values
-
 
 
 @ctx.action_class("dictate")

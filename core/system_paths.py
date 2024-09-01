@@ -1,6 +1,6 @@
 """
 This module gives us the list {user.system_paths} and the capture <user.system_path> that wraps
-the list to easily refer to system paths in talon and python files. 
+the list to easily refer to system paths in talon and python files.
 """
 
 import os

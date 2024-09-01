@@ -17,8 +17,9 @@ DEFAULT_MINIMUM_TERM_LENGTH = 2
 EXPLODE_MAX_LEN = 3
 FANCY_REGULAR_EXPRESSION = r"[A-Z]?[a-z]+|[A-Z]+(?![a-z])|[0-9]+"
 SYMBOLS_REGEX = "|".join(re.escape(symbol) for symbol in set(symbol_key_words.values()))
-FILE_EXTENSIONS_REGEX = r'^\b$'
+FILE_EXTENSIONS_REGEX = r"^\b$"
 file_extensions = {}
+
 
 def update_regex():
     global REGEX_NO_SYMBOLS
@@ -35,7 +36,9 @@ def update_regex():
         "|".join([FANCY_REGULAR_EXPRESSION, FILE_EXTENSIONS_REGEX, SYMBOLS_REGEX])
     )
 
+
 update_regex()
+
 
 @track_csv_list("file_extensions.csv", headers=("File extension", "Name"))
 def on_extensions(values):
@@ -43,10 +46,10 @@ def on_extensions(values):
     global file_extensions
     file_extensions = values
     FILE_EXTENSIONS_REGEX = "|".join(
-        re.escape(file_extension.strip()) + "$"
-        for file_extension in values.values()
+        re.escape(file_extension.strip()) + "$" for file_extension in values.values()
     )
     update_regex()
+
 
 REVERSE_PRONUNCIATION_MAP = {
     **{str(value): key for key, value in digits_map.items()},
