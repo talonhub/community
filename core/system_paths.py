@@ -1,14 +1,11 @@
 """
 This module gives us the list {user.system_paths} and the capture <user.system_path> that wraps
-the list to easily refer to system paths in talon and python files. It also creates a file
-system_paths.csv in the settings folder so they user can easily add their own custom paths.
+the list to easily refer to system paths in talon and python files. 
 """
 
 import os
 
 from talon import Context, Module, actions, app
-
-from .user_settings import get_list_from_csv
 
 mod = Module()
 ctx = Context()
