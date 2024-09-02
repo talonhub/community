@@ -1,7 +1,7 @@
 import logging
 from typing import Optional
 
-from talon import Context, Module, actions, settings
+from talon import Context, Module, actions, settings, clip
 
 mod = Module()
 mod.setting(
@@ -320,6 +320,16 @@ class EditActions:
     def find_previous():
         actions.key("ctrl-r")
 
+    def selected_text() -> str:
+        timeout = settings.get("user.selected_text_timeout")
+        with clip.capture(timeout) as s:
+            actions.edit.copy()
+            # this restores the selection after the copy
+            actions.user.emacs("exchange-point-and-mark")
+        try:
+            return s.text()
+        except clip.NoChange:
+            return ""
 
 @ctx.action_class("app")
 class AppActions:
