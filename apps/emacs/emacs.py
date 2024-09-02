@@ -1,7 +1,7 @@
 import logging
 from typing import Optional
 
-from talon import Context, Module, actions, settings, clip
+from talon import Context, Module, actions, clip, settings
 
 mod = Module()
 mod.setting(
@@ -330,6 +330,7 @@ class EditActions:
             return s.text()
         except clip.NoChange:
             return ""
+
 
 @ctx.action_class("app")
 class AppActions:
