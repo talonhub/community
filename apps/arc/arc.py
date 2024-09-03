@@ -22,8 +22,9 @@ class UserActions:
 
     def command_search(command: str = ""):
         actions.key("cmd-l")
-        actions.sleep("200ms")
-        actions.insert(command)
+        if command != "":
+            actions.sleep("200ms")
+            actions.insert(command)
 
 
 @ctx.action_class("browser")

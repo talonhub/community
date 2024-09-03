@@ -316,7 +316,8 @@ class UserActions:
 
     def command_search(command: str = ""):
         actions.user.idea("action GotoAction")
-        actions.insert(command)
+        if command != "":
+            actions.insert(command)
 
     def line_clone(line: int):
         actions.user.idea(f"clone {line}")

@@ -55,8 +55,9 @@ class UserActions:
 
     def command_search(command: str = ""):
         actions.user.vivaldi_toggle_quick_commands()
-        actions.sleep("180ms")
-        actions.insert(command)
+        if command != "":
+            actions.sleep("180ms")
+            actions.insert(command)
 
 
 @ctx.action_class("browser")

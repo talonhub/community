@@ -256,7 +256,8 @@ class UserActions:
 
     def command_search(command: str = ""):
         actions.user.vscode("workbench.action.showCommands")
-        actions.insert(command)
+        if command != "":
+            actions.insert(command)
 
     def tab_jump(number: int):
         if number < 10:

@@ -112,7 +112,8 @@ class UserActions:
 
     def command_search(command: str = ""):
         actions.key("ctrl-3")
-        actions.insert(command)
+        if command != "":
+            actions.insert(command)
 
     # splits.py support end
 
