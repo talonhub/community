@@ -1,0 +1,15 @@
+list: user.system_paths
+host: Macbook-Air
+-
+user: /Users/arnauroca
+profile: /Users/arnauroca
+desktop: /Users/arnauroca/Desktop
+desk: /Users/arnauroca/Desktop
+documents: /Users/arnauroca/Documents
+docks: /Users/arnauroca/Documents
+downloads: /Users/arnauroca/Downloads
+music: /Users/arnauroca/Music
+pictures: /Users/arnauroca/Pictures
+videos: /Users/arnauroca/Videos
+talon home: /Users/arnauroca/.talon
+talon user: /Users/arnauroca/.talon/user
