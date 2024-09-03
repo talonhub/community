@@ -146,11 +146,11 @@ new line above: edit.line_insert_up()
 new line below | slap: edit.line_insert_down()
 
 # Insert padding with optional symbols
-(pad | padding): user.insert_between(" ", " ")
-(pad | padding) <user.symbol_key>+:
-    insert(" ")
-    user.insert_many(symbol_key_list)
-    insert(" ")
+# (pad | padding): user.insert_between(" ", " ")
+# (pad | padding) <user.symbol_key>+:
+#     insert(" ")
+#     user.insert_many(symbol_key_list)
+#     insert(" ")
 
 # Undo/redo
 undo that: edit.undo()
