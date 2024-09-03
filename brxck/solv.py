@@ -15,8 +15,6 @@ mod.list("solv_repository", desc="Solv repository names")
 ctx.lists["user.solv_repository"] = {
     "dappy tasks": "dapi-tasks",
     "dappy": "dapi",
-    "jigsaw": "jigsaw",
-    "manage": "manage-dev",
     "mapp": "mapp-dev",
     "release": "release",
     "schema": "schema",
