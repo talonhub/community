@@ -254,7 +254,7 @@ class UserActions:
     def multi_cursor_skip_occurrence():
         actions.user.vscode("editor.action.moveSelectionToNextFindMatch")
 
-    def please_command(command: str):
+    def command_search(command: str = ""):
         actions.user.vscode("workbench.action.showCommands")
         actions.insert(command)
 

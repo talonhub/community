@@ -2,7 +2,7 @@ app: vivaldi
 -
 tag(): browser
 tag(): user.tabs
-tag(): user.please_command
+tag(): user.command_search
 
 (sidebar | panel) history: user.vivaldi_history_panel()
 (sidebar | panel) downloads: user.vivaldi_downloads_panel()

@@ -2,12 +2,12 @@ from talon import Module
 
 mod = Module()
 mod.tag(
-    "please_command",
+    "command_search",
     desc="A command for running an arbitrary command based on a search",
 )
 
 
 @mod.action_class
-class please_command_actions:
-    def please_command(command: str):
+class command_search_actions:
+    def command_search(command: str = ""):
         """Searches for command based on text"""

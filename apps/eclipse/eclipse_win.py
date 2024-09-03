@@ -110,7 +110,7 @@ class UserActions:
     def split_window():
         actions.key("alt-ctrl-s s")
 
-    def please_command(command: str):
+    def command_search(command: str = ""):
         actions.key("ctrl-3")
         actions.insert(command)
 

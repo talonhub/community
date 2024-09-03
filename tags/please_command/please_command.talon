@@ -1,3 +1,3 @@
-tag: user.please_command
+tag: user.command_search
 -
-^please [<user.text>]$: user.please_command(user.text or "")
+^please [<user.text>]$: user.command_search(user.text or "")
