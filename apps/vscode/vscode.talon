@@ -290,3 +290,8 @@ cell run: user.vscode("notebook.cell.execute")
 
 install local: user.vscode("workbench.extensions.action.installVSIX")
 preview markdown: user.vscode("markdown.showPreview")
+
+# PlatformIO
+Arduino flash: user.vscode("platformio-ide.uploadAndMonitor")
+Arduino monitor: user.vscode("platformio-ide.serialMonitor")
+Arduino compile: user.vscode("platformio-ide.build")
