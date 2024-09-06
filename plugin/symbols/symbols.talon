@@ -18,9 +18,9 @@ inside percent: user.insert_between("%", "%")
 inside (quotes | string): user.insert_between("'", "'")
 inside (double quotes | dub quotes): user.insert_between('"', '"')
 inside (graves | back ticks): user.insert_between("`", "`")
-angle that:
-    text = edit.selected_text()
-    user.paste("<{text}>")
+# angle that:
+#     text = edit.selected_text()
+#     user.paste("<{text}>")
 (square | bracket | square bracket) that:
     text = edit.selected_text()
     user.paste("[{text}]")
