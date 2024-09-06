@@ -247,7 +247,7 @@ code_formatter_names = {
     "all down": "ALL_LOWERCASE",
     "camel": "PRIVATE_CAMEL_CASE",
     "dotted": "DOT_SEPARATED",
-    "dub string": "DOUBLE_QUOTED_STRING",
+    # "dub string": "DOUBLE_QUOTED_STRING",
     "dunder": "DOUBLE_UNDERSCORE",
     "hammer": "PUBLIC_CAMEL_CASE",
     "kebab": "DASH_SEPARATED",
@@ -257,12 +257,13 @@ code_formatter_names = {
     "conga": "SLASH_SEPARATED",
     "smash": "NO_SPACES",
     "snake": "SNAKE_CASE",
-    "string": "SINGLE_QUOTED_STRING",
+    # "string": "SINGLE_QUOTED_STRING",
+    "string": "DOUBLE_QUOTED_STRING",
     "constant": "ALL_CAPS,SNAKE_CASE",
 }
 prose_formatter_names = {
     "say": "NOOP",
-    "speak": "NOOP",
+    # "speak": "NOOP",
     "sentence": "CAPITALIZE_FIRST_WORD",
     "title": "CAPITALIZE_ALL_WORDS",
 }
