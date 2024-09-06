@@ -50,21 +50,21 @@ mid click:
     key("{modifiers}:up")
     # close the mouse grid
     user.grid_close()
-(dub click | duke):
-    # close zoom if open
-    user.zoom_close()
-    mouse_click()
-    mouse_click()
-    # close the mouse grid
-    user.grid_close()
-(trip click | trip lick):
-    # close zoom if open
-    user.zoom_close()
-    mouse_click()
-    mouse_click()
-    mouse_click()
-    # close the mouse grid
-    user.grid_close()
+# (dub click | duke):
+#     # close zoom if open
+#     user.zoom_close()
+#     mouse_click()
+#     mouse_click()
+#     # close the mouse grid
+#     user.grid_close()
+# (trip click | trip lick):
+#     # close zoom if open
+#     user.zoom_close()
+#     mouse_click()
+#     mouse_click()
+#     mouse_click()
+#     # close the mouse grid
+#     user.grid_close()
 left drag | drag | drag start:
     # close zoom if open
     user.zoom_close()
