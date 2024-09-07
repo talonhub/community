@@ -287,6 +287,27 @@ You can customize common Talon list and CSV files with voice commands: say the w
 
 You can also add words to the vocabulary or replacements (words_to_replace) by using the commands in [edit_vocabulary.talon](core/vocabulary/edit_vocabulary.talon).
 
+## 💡 Tip: Overriding cleanly
+
+You can override Talon lists by creating a new `.talon-list` file of your own, rather than changing the existing list in the repository.
+This reduces how much manual `git merge`-ing you'll have to do in the future, when you go to merge new versions of this repository (colloquially called "upstream") with your local changes. This is because _new_ files you create will almost never conflict with upstream changes, whereas changing an existing file (especially hot spots, like commonly-customized lists) frequently do.
+Your override files can even live outside of the `community` repository (anywhere in the Talon user directory), if you prefer, further simplifying merging.
+To do so, simply create a `.talon-list` file with a more specific [context header](https://talon.wiki/Customization/talon-files#context-header) than the default. (For example, `lang: en` or `os: mac` main). Talon ensures that the most specific header (your override file) wins.
+
+For example, to override `user.modifier_key`, you could create `modifier_keys_MYNAME.talon`:
+
+```talon
+list:  user.modifier_key
+language: en
+-
+
+# My preferred modifier keys
+rose: cmd
+troll: control
+shift: shift
+alt: alt
+```
+
 ## Other Talon user file sets
 
 In addition to this repo, there are [other Talon user file sets](https://talon.wiki/talon_user_file_sets/) containing additional commands that you may want to experiment with if you're feeling adventurous 😊. Many of them are meant to be used alongside `community`, but a few of them are designed as replacements. If it's not clear which, please file an issue against the given GitHub repository for that user file set!
