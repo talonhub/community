@@ -255,7 +255,17 @@ class Actions:
 
 
 def on_ready():
-    actions.user.migrate_known_csv_files()
+    try:
+        actions.user.migrate_known_csv_files()
+    except KeyError:
+        # Due to a core Talon bug, the above action may not be available when a ready callback is invoked.
+        # (see https://github.com/talonhub/community/pull/1268#issuecomment-2325721706)
+        notification = (
+            "Unable to migrate CSVs to Talon lists.",
+            "Please quit and restart Talon.",
+        )
+        app.notify(*notification)
+        print(*notification)
 
 
 app.register("ready", on_ready)
