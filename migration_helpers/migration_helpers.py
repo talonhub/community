@@ -62,7 +62,7 @@ supported_csv_files = [
         lambda: os.path.join(
             "core", f"system_paths-{actions.user.talon_get_hostname()}.talon-list"
         ),
-        custom_header=(lambda: f"host: {actions.user.talon_get_hostname()}"),
+        custom_header=(lambda: f"hostname: {actions.user.talon_get_hostname()}"),
     ),
     CSVData(
         "user.search_engine",
