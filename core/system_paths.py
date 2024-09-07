@@ -6,6 +6,7 @@ custom paths.
 """
 
 from pathlib import Path
+
 from talon import Context, Module, actions, app, registry
 
 mod = Module()
