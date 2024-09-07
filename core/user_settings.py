@@ -59,7 +59,7 @@ def write_csv_defaults(
     is_spoken_form_first: bool = False,
 ) -> None:
     if not path.is_file() and default is not None:
-        with open(path, "w", encoding="utf-8", newline="") as file:
+        with open(path, "w", encoding="utf-8") as file:
             writer = csv.writer(file)
             writer.writerow(headers)
             for key, value in default.items():
