@@ -25,7 +25,7 @@ def read_csv_list(
         actual_headers = rows[0]
         if not actual_headers == list(headers):
             print(
-                f'"{f}": Malformed headers - {actual_headers}.'
+                f'"{f.name}": Malformed headers - {actual_headers}.'
                 + f" Should be {list(headers)}. Ignoring row."
             )
         for row in rows[1:]:
@@ -42,7 +42,7 @@ def read_csv_list(
 
                 if len(row) > 2:
                     print(
-                        f'"{f}": More than two values in row: {row}.'
+                        f'"{f.name}": More than two values in row: {row}.'
                         + " Ignoring the extras."
                     )
             # Leading/trailing whitespace in spoken form can prevent recognition.
