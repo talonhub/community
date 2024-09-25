@@ -223,6 +223,14 @@ class UserActions:
     def split_window():
         actions.user.vscode("workbench.action.splitEditor")
 
+    def split_number(index: int):
+        """Navigates to a the specified split"""
+        if index < 9:
+            if is_mac:
+                actions.key(f"cmd-{index}")
+            else:
+                actions.key(f"ctrl-{index}")
+
     # splits.py support end
 
     # multiple_cursor.py support begin
@@ -254,6 +262,9 @@ class UserActions:
     def multi_cursor_skip_occurrence():
         actions.user.vscode("editor.action.moveSelectionToNextFindMatch")
 
+    # multiple_cursor.py support end
+
+    # tabs.py support begin
     def tab_jump(number: int):
         if number < 10:
             if is_mac:
@@ -273,16 +284,12 @@ class UserActions:
         else:
             actions.key("alt-0")
 
-    # splits.py support begin
-    def split_number(index: int):
-        """Navigates to a the specified split"""
-        if index < 9:
-            if is_mac:
-                actions.key(f"cmd-{index}")
-            else:
-                actions.key(f"ctrl-{index}")
-
-    # splits.py support end
+    def tab_duplicate():
+        # Duplicates the current tab into a new tab group
+        # vscode does not allow duplicate tabs in the same tab group, and so is implemented through splits
+        actions.user.split_window_vertically()
+    
+    # tabs.py support end
 
     # find_and_replace.py support begin
 
