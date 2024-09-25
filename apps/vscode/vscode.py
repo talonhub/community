@@ -288,7 +288,7 @@ class UserActions:
         # Duplicates the current tab into a new tab group
         # vscode does not allow duplicate tabs in the same tab group, and so is implemented through splits
         actions.user.split_window_vertically()
-    
+
     # tabs.py support end
 
     # find_and_replace.py support begin
