@@ -325,6 +325,15 @@ class Actions:
             if time.perf_counter() - t1 > 1:
                 raise RuntimeError(f"Can't focus app: {app.name}")
             actions.sleep(0.1)
+            
+    def switcher_focus_or_launch(name: str):
+        """Focus a new application by name"""
+        try:
+            actions.user.get_running_app(name)
+        except RuntimeError:
+            actions.user.switcher_launch(name)
+        else:
+            actions.user.switcher_focus(name)
 
     def switcher_focus_last():
         """Focus last window/application"""
