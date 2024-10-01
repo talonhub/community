@@ -2,8 +2,14 @@ import os
 
 from talon import actions
 
-os.system("git fetch origin")
-code = os.system("cd ./user/brxck_talon && git diff --exit-code origin/main")
+code = os.system(
+    (
+        "cd ./user/brxck_talon &&"
+        "git fetch origin main &&"
+        "[ $(git rev-list HEAD..origin/main --count) -ne 0 ] &&"
+        "exit 1 || exit 0"
+    )
+)
 
 if code != 0:
     actions.app.notify(
