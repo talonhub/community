@@ -94,6 +94,3 @@ new scratch (shell | window):
     user.i3wm_move("scratchpad")
     user.i3wm_show_scratchpad()
 
-murder:
-    user.deprecate_command("2023-02-04", "murder", "win kill")
-    app.window_close()
