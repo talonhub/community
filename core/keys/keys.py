@@ -232,7 +232,7 @@ simple_keys = [
     "tab",
 ]
 
-alternate_keys = {
+default_alternate_keys = {
     "wipe": "backspace",
     "delete": "backspace",
     #'junk': 'backspace',
@@ -240,6 +240,9 @@ alternate_keys = {
     "page up": "pageup",
     "page down": "pagedown",
 }
+alternate_keys = get_list_from_csv(
+    "alternate_keys.csv", ("Key", "Spoken Form"), default_alternate_keys
+)
 # mac apparently doesn't have the menu key.
 if app.platform in ("windows", "linux"):
     alternate_keys["menu key"] = "menu"
