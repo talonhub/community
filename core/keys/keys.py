@@ -1,7 +1,5 @@
 from talon import Context, Module, app
 
-from ..user_settings import get_list_from_csv
-
 # used for number keys & function keys respectively
 digits = "zero one two three four five six seven eight nine".split()
 f_digits = "one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty".split()
