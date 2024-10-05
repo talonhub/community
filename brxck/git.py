@@ -1,6 +1,6 @@
 import os
 
-from talon import actions
+from talon import actions, app
 
 code = os.system(
     (
@@ -11,8 +11,11 @@ code = os.system(
     )
 )
 
-if code != 0:
-    actions.app.notify(
-        "New changes available in brxck_talon",
-        "Talon config update",
-    )
+def notify_changes():
+    if code != 0:
+        actions.app.notify(
+            "New changes in brxck_talon",
+            "Update config",
+        )
+
+app.register("ready", notify_changes)
