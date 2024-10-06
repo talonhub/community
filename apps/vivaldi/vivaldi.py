@@ -26,7 +26,7 @@ class Actions:
 
     def vivaldi_bookmarks_panel():
         """Toggles the Vivaldi bookmarks panel"""
-        actions.user.vivaldi_toggle_quick_commands()
+        actions.user.command_search()
         actions.sleep("180ms")
         actions.insert("Bookmarks Panel")
         actions.key("enter")
@@ -39,10 +39,6 @@ class Actions:
         """Toggles the Vivaldi notes panel"""
         actions.key("ctrl-shift-o")
 
-    def vivaldi_toggle_quick_commands():
-        """Toggles the Vivaldi Quick Commands tool"""
-        actions.key("ctrl-e")
-
 
 @ctx.action_class("user")
 class UserActions:
@@ -54,7 +50,7 @@ class UserActions:
         actions.key(f"ctrl-{number}")
 
     def command_search(command: str = ""):
-        actions.user.vivaldi_toggle_quick_commands()
+        actions.key("ctrl-e")
         if command != "":
             actions.sleep("180ms")
             actions.insert(command)
