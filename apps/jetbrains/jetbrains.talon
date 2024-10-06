@@ -5,6 +5,7 @@ tag(): user.line_commands
 tag(): user.multiple_cursors
 tag(): user.splits
 tag(): user.tabs
+tag(): user.command_search
 # multiple_cursors.py support end
 
 # Auto complete
@@ -14,11 +15,7 @@ smart: user.idea("action SmartTypeCompletion")
 (done | finish): user.idea("action EditorCompleteStatement")
 # Copying
 grab <number>: user.idea_grab(number)
-# Actions
-(action | please): user.idea("action GotoAction")
-(action | please) <user.text>:
-    user.idea("action GotoAction")
-    insert(text)
+action [<user.text>]: user.deprecate_command("2024-09-02", "action", "please")
 # Refactoring
 refactor: user.idea("action Refactorings.QuickListPopupAction")
 refactor <user.text>:

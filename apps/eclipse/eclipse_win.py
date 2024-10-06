@@ -110,6 +110,11 @@ class UserActions:
     def split_window():
         actions.key("alt-ctrl-s s")
 
+    def command_search(command: str = ""):
+        actions.key("ctrl-3")
+        if command != "":
+            actions.insert(command)
+
     # splits.py support end
 
     # find_and_replace.py support begin
