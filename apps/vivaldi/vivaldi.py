@@ -26,9 +26,7 @@ class Actions:
 
     def vivaldi_bookmarks_panel():
         """Toggles the Vivaldi bookmarks panel"""
-        actions.user.command_search()
-        actions.sleep("180ms")
-        actions.insert("Bookmarks Panel")
+        actions.user.command_search("Bookmarks Panel")
         actions.key("enter")
 
     def vivaldi_downloads_panel():
