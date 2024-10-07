@@ -224,12 +224,12 @@ class UserActions:
         actions.user.vscode("workbench.action.splitEditor")
 
     def split_number(index: int):
-        """Navigates to a the specified split"""
-        if index < 9:
-            if is_mac:
-                actions.key(f"cmd-{index}")
-            else:
-                actions.key(f"ctrl-{index}")
+        ordinal = [
+            'First', 'Second', 'Third', 'Fourth', 'Fifth','Sixth','Seventh','Eighth','Last',
+        ]
+
+        if 0 <= index < len(ordinal):
+            actions.user.vscode(f"workbench.action.focus{ordinal}EditorGroup")
 
     # splits.py support end
 
