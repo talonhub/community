@@ -12,6 +12,10 @@ def do_disable(e):
 
 @delay_mod.action_class
 class DelayedSpeechOffActions:
+    def is_delayed_enabled():
+        """Return if delayed speech is enabled"""
+        return delayed_enabled
+    
     def delayed_speech_on():
         """Activates a "temporary speech" mode that can be disabled lazily,
         so that the actual disable command happens after whatever phrase
