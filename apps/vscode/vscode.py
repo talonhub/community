@@ -237,7 +237,7 @@ class UserActions:
         ]
 
         if 0 <= index < len(ordinal):
-            actions.user.vscode(f"workbench.action.focus{ordinal}EditorGroup")
+            actions.user.vscode(f"workbench.action.focus{ordinal[index]}EditorGroup")
 
     # splits.py support end
 
