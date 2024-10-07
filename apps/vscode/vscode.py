@@ -225,7 +225,15 @@ class UserActions:
 
     def split_number(index: int):
         ordinal = [
-            'First', 'Second', 'Third', 'Fourth', 'Fifth','Sixth','Seventh','Eighth','Last',
+            "First",
+            "Second",
+            "Third",
+            "Fourth",
+            "Fifth",
+            "Sixth",
+            "Seventh",
+            "Eighth",
+            "Last",
         ]
 
         if 0 <= index < len(ordinal):
