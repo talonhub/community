@@ -5,6 +5,10 @@ ctx.matches = r"""
 code.language: ruby
 """
 
+ctx.lists["user.code_data_null"] = {
+    "nil": "nil",
+}
+
 
 @ctx.action_class("user")
 class UserActions:
@@ -113,9 +117,6 @@ class UserActions:
 
     def code_operator_object_accessor():
         actions.auto_insert(".")
-
-    def code_insert_null():
-        actions.auto_insert("nil")
 
     def code_insert_is_null():
         actions.auto_insert(".nil?")
