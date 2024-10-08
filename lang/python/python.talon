@@ -12,6 +12,7 @@ tag(): user.code_functions_common
 tag(): user.code_keywords
 tag(): user.code_libraries
 tag(): user.code_libraries_gui
+tag(): user.code_libraries_gui_showing
 tag(): user.code_operators_array
 tag(): user.code_operators_assignment
 tag(): user.code_operators_bitwise
