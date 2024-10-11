@@ -37,8 +37,7 @@ true: "true"
 false: "false"
 nil: "nil"
 
-[state] raise {user.elixir_exception}:
-    user.insert_between("raise ", "")
+[state] raise {user.elixir_exception}: user.insert_between("raise ", "")
 
 [state] rescue {user.elixir_exception}: "rescue {elixir_exception}"
 
