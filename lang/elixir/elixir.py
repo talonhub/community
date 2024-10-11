@@ -10,6 +10,7 @@ code.language: elixir
 ctx.lists["user.code_keyword"] = {
     "def": "def ",
     "def p": "defp ",
+    "def module": "defmodule ",
     "do": "do ",
     "end": "end",
     "if": "if ",
