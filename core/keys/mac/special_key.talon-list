@@ -1,0 +1,16 @@
+list: user.special_key
+os: mac
+-
+
+end: end
+home: home
+minus: minus
+enter: enter
+page down: pagedown
+page up: pageup
+escape: escape
+space: space
+tab: tab
+wipe: backspace
+delete: backspace
+forward delete: delete
