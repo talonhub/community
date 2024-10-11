@@ -32,6 +32,8 @@ state rescue: "rescue"
 state after: "after"
 state end: "end"
 
+op pipe: " |> "
+
 # Elixir-specific keywords and symbols
 true: "true"
 false: "false"
