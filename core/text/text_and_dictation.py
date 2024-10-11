@@ -15,6 +15,7 @@ mod.setting(
 
 mod.list("prose_modifiers", desc="Modifiers that can be used within prose")
 mod.list("prose_snippets", desc="Snippets that can be used within prose")
+mod.list("phrase_ender", "List of commands that can be used to end a phrase")
 ctx = Context()
 # Maps spoken forms to DictationFormat method names (see DictationFormat below).
 ctx.lists["user.prose_modifiers"] = {
