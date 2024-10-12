@@ -5,9 +5,9 @@ mod = Module()
 
 mod.apps.vivaldi = "app.name: Vivaldi"
 mod.apps.vivaldi = "app.name: Vivaldi-stable"
-mod.apps.vivaldi = """
+mod.apps.vivaldi = r"""
 os: windows
-and app.exe: vivaldi.exe
+and app.exe: /^vivaldi\.exe$/i
 os: linux
 and app.exe: vivaldi-bin
 os: mac
