@@ -12,6 +12,7 @@ page up: pageup
 escape: escape
 space: space
 tab: tab
+insert: insert
 wipe: backspace
 delete: backspace
 forward delete: delete
