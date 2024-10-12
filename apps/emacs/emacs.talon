@@ -8,13 +8,13 @@ tag(): user.line_commands
 #suplex: key(ctrl-x)
 cancel: user.emacs("keyboard-quit")
 exchange: user.emacs("exchange-point-and-mark")
-execute: user.emacs_meta_x()
+execute: user.emacs("execute-extended-command")
 execute {user.emacs_command}$: user.emacs(emacs_command)
 execute <user.text>$:
-    user.emacs_meta_x()
+    user.emacs("execute-extended-command")
     user.insert_formatted(text, "DASH_SEPARATED")
 evaluate | (evaluate | eval) (exper | expression): user.emacs("eval-expression")
-prefix: user.emacs("universal-argument")
+prefix: user.emacs_prefix()
 prefix <user.number_signed_small>: user.emacs_prefix(number_signed_small)
 
 abort recursive [edit]: user.emacs("abort-recursive-edit")
@@ -31,11 +31,13 @@ save buffers kill emacs: user.emacs("save-buffers-kill-emacs")
 save some buffers: user.emacs("save-some-buffers")
 sort lines: user.emacs("sort-lines")
 sort words: user.emacs("sort-words")
+file [loop] continue: user.emacs("fileloop-continue")
 
 go directory: user.emacs("dired-jump")
 other go directory: user.emacs("dired-jump-other-window")
 
 [toggle] debug on error: user.emacs("toggle-debug-on-error")
+[toggle] debug on quit: user.emacs("toggle-debug-on-quit")
 [toggle] input method: user.emacs("toggle-input-method")
 [toggle] truncate lines: user.emacs("toggle-truncate-lines")
 [toggle] word wrap: user.emacs("toggle-word-wrap")
@@ -53,11 +55,11 @@ display: user.emacs("display-buffer")
 # SHELL COMMANDS #
 shell command: user.emacs("shell-command")
 shell command inserting:
-    user.emacs("universal-argument")
+    user.emacs_prefix()
     user.emacs("shell-command")
 shell command on region: user.emacs("shell-command-on-region")
 shell command on region replacing:
-    user.emacs("universal-argument")
+    user.emacs_prefix()
     user.emacs("shell-command-on-region")
 
 # CUSTOMIZE #
@@ -204,14 +206,15 @@ search toggle case [fold | sensitive]: user.emacs_meta("c")
 search toggle regex: user.emacs_meta("r")
 
 highlight lines matching [regex]: user.emacs("highlight-lines-matching-regexp")
+highlight phrase: user.emacs("highlight-phrase")
 highlight regex: user.emacs("highlight-regexp")
-unhighlight regex: user.emacs("unhighlight-regexp")
+unhighlight (regex | phrase): user.emacs("unhighlight-regexp")
 unhighlight all:
-    user.emacs("universal-argument")
+    user.emacs_prefix()
     user.emacs("unhighlight-regexp")
 
 recenter:
-    user.emacs("universal-argument")
+    user.emacs_prefix()
     user.emacs("recenter-top-bottom")
 (center | [center] <number_small> from) top:
     user.emacs("recenter-top-bottom", number_small or 0)
@@ -284,10 +287,20 @@ rectangle (yank | paste): user.emacs("yank-rectangle")
 rectangle copy: user.emacs("copy-rectangle-as-kill")
 rectangle number lines: user.emacs("rectangle-number-lines")
 
+# ----- XREF SUPPORT ----- #
+[xref] find definition: user.emacs("xref-find-definitions")
+[xref] find definition other window: user.emacs("xref-find-definitions-other-window")
+[xref] find definition other frame: user.emacs("xref-find-definitions-other-frame")
+[xref] find references: user.emacs("xref-find-references")
+[xref] find references [and] replace: user.emacs("xref-find-references-and-replace")
+xref find apropos: user.emacs("xref-find-apropos")
+xref go back: user.emacs("xref-go-back")
+visit tags table: user.emacs("visit-tags-table")
+
 # ----- PROJECT SUPPORT ----- #
 project [find] file: user.emacs("project-find-file")
-project [find] regexp: user.emacs("project-find-regexp")
-project [query] replace regexp: user.emacs("project-query-replace-regexp")
+project [find] (regex | grep): user.emacs("project-find-regexp")
+project [query] replace regex: user.emacs("project-query-replace-regexp")
 project (dired | directory): user.emacs("projectile-dired")
 project [run] shell: user.emacs("projectile-run-shell")
 project [run] eshell: user.emacs("projectile-run-eshell")
@@ -298,8 +311,8 @@ project [run] shell command: user.emacs("projectile-run-shell-command-in-root")
 project [run] async shell command:
     user.emacs("projectile-run-async-shell-command-in-root")
 project (switch [to buffer] | buffer | buff): user.emacs("projectile-switch-to-buffer")
-project kill buffers: user.emacs("projectile-kill-buffers")
-project switch project: user.emacs("project-switch-project")
+project kill [buffers]: user.emacs("projectile-kill-buffers")
+project switch [project]: user.emacs("project-switch-project")
 
 # ----- VC/GIT SUPPORT ----- #
 vc (annotate | blame): user.emacs("vc-annotate")
@@ -321,7 +334,8 @@ merge next: user.emacs("smerge-next")
 merge last: user.emacs("smerge-prev")
 merge keep upper: user.emacs("smerge-keep-upper")
 merge keep lower: user.emacs("smerge-keep-lower")
-merge keep this: user.emacs("smerge-keep-current")
+merge keep base: user.emacs("smerge-keep-base")
+merge keep (this | current): user.emacs("smerge-keep-current")
 merge refine: user.emacs("smerge-refine")
 merge split: user.emacs("smerge-resolve")
 

@@ -2,8 +2,8 @@
 title: Talon Draft
 -
 settings():
-    # Enable 'Smart dictation mode', see https://github.com/knausj85/knausj_talon/pull/356
-    user.context_sensitive_dictation = 1
+    # Enable 'Smart dictation mode', see https://github.com/talonhub/community/pull/356
+    user.context_sensitive_dictation = true
 
 # Replace a single word with a phrase
 replace <user.draft_anchor> with <user.text>:

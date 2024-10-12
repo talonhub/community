@@ -1,7 +1,10 @@
-tag: user.protobuf
+code.language: protobuf
 -
+tag(): user.code_block_c_like
 
 # this is pretty bare-bones, further contributions welcome
+block: user.code_block()
+
 state message: "message "
 state package: "package "
 state reserved: "reserved "

@@ -1,0 +1,56 @@
+language: javascript
+---
+
+name: forInLoopStatement
+phrase: for in
+insertionScope: statement
+-
+for (const $1 in $2) {
+    $0
+}
+---
+
+name: anonymousFunctionDeclarationAndCall
+phrase: self calling
+-
+(() => {
+    $0
+})();
+---
+
+name: importStarStatement
+phrase: import star
+-
+import * as $0 from "$0";
+---
+
+name: importFromStatement
+phrase: import from
+-
+import $0 from "$0";
+---
+
+name: namedLambdaExpression
+phrase: arrow funk
+insertionScope: statement
+-
+const $1 = ($2) => {
+    $0
+}
+---
+
+name: reactUseState
+phrase: use state
+insertionScope: statement
+-
+const [$1, set${1/(.)/${1:/capitalize}/}] = useState($0);
+---
+
+name: reactUseEffect
+phrase: use effect
+insertionScope: statement
+-
+useEffect(() => {
+    $0
+}, []);
+---

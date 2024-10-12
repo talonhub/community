@@ -2,7 +2,7 @@ os: linux
 # XXX - this matches .gdb files atm
 #win.title: /gdb/
 tag: terminal
-tag: user.gdb
+and tag: user.gdb
 -
 tag(): user.debugger
 until <number>: "until {number}"

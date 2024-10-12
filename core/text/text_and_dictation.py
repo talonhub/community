@@ -2,11 +2,11 @@
 import re
 from typing import Callable, Optional
 
-from talon import Context, Module, actions, grammar, ui
+from talon import Context, Module, actions, grammar, settings, ui
 
 mod = Module()
 
-setting_context_sensitive_dictation = mod.setting(
+mod.setting(
     "context_sensitive_dictation",
     type=bool,
     default=False,
@@ -15,6 +15,7 @@ setting_context_sensitive_dictation = mod.setting(
 
 mod.list("prose_modifiers", desc="Modifiers that can be used within prose")
 mod.list("prose_snippets", desc="Snippets that can be used within prose")
+mod.list("phrase_ender", "List of commands that can be used to end a phrase")
 ctx = Context()
 # Maps spoken forms to DictationFormat method names (see DictationFormat below).
 ctx.lists["user.prose_modifiers"] = {
@@ -250,9 +251,7 @@ def auto_capitalize(text, state=None):
     return output, (
         "sentence start"
         if charge or sentence_end
-        else "after newline"
-        if newline
-        else None
+        else "after newline" if newline else None
     )
 
 
@@ -375,14 +374,13 @@ class Actions:
     def dictation_insert(text: str, auto_cap: bool = True) -> str:
         """Inserts dictated text, formatted appropriately."""
         add_space_after = False
-        if setting_context_sensitive_dictation.get():
+        if settings.get("user.context_sensitive_dictation"):
             # Peek left if we might need leading space or auto-capitalization;
             # peek right if we might need trailing space. NB. We peek right
             # BEFORE insertion to avoid breaking the undo-chain between the
             # inserted text and the trailing space.
-            need_left = (
-                not omit_space_before(text)
-                or text != auto_capitalize(text, "sentence start")[0]
+            need_left = not omit_space_before(text) or (
+                auto_cap and text != auto_capitalize(text, "sentence start")[0]
             )
             need_right = not omit_space_after(text)
             before, after = actions.user.dictation_peek(need_left, need_right)
