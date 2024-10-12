@@ -26,6 +26,8 @@ os: linux
 and app.name: VSCodium
 os: linux
 and app.name: Codium
+os: linux
+and app.name: Cursor
 """
 mod.apps.vscode = r"""
 os: windows
@@ -162,15 +164,18 @@ class Actions:
         actions.key("ctrl-shift-p")
 
 
-@mac_ctx.action_class("user")
-class MacUserActions:
-    def command_palette():
-        actions.key("cmd-shift-p")
-
+@mac_ctx.action_class("edit")
+class MacEditActions:
     def find(text: str = None):
         actions.key("cmd-f")
         if text:
             actions.insert(text)
+
+
+@mac_ctx.action_class("user")
+class MacUserActions:
+    def command_palette():
+        actions.key("cmd-shift-p")
 
 
 @ctx.action_class("user")
