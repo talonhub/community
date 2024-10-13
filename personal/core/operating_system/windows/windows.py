@@ -50,7 +50,11 @@ if app.platform == "windows":
             "talent home": os.path.expandvars("%AppData%\\Talon"),
             "talent user": os.path.expandvars("%AppData%\\Talon\\user"),
             "talent recordings": os.path.expandvars("%AppData%\\talon\\recordings"),
+            "talent recording": os.path.expandvars("%AppData%\\talon\\recordings"),
             "talent plugins": os.path.expandvars(
+                "%ProgramFiles%\\Talon\\talon_plugins"
+            ),
+            "talent plugin": os.path.expandvars(
                 "%ProgramFiles%\\Talon\\talon_plugins"
             ),
             "local app data": os.path.expandvars("%LocalAppData%"), 
@@ -72,11 +76,13 @@ if app.platform == "windows":
             "talent home": os.path.expandvars("%AppData%\\Talon"),
             "talent user": os.path.expandvars("%AppData%\\Talon\\user"),
             "talent recordings": os.path.expandvars("%AppData%\\talon\\recordings"),
+            "talent recording": os.path.expandvars("%AppData%\\talon\\recordings"),
             "talent plugins": os.path.expandvars(
-                "%ProgramFiles%\\Talon Rust\\talon_plugins"
-            )
-            if app.branch == "rust"
-            else os.path.expandvars("%ProgramFiles%\\Talon\\talon_plugins"),
+                "%ProgramFiles%\\Talon\\talon_plugins"
+            ),
+            "talent plugin": os.path.expandvars(
+                "%ProgramFiles%\\Talon\\talon_plugins"
+            ),
             "local app data": os.path.expandvars("%LocalAppData%"), 
             "app data": os.path.expandvars("%AppData%"),
             "root": "\\",
