@@ -18,9 +18,9 @@ mod.apps.emacs = """
 os: mac
 app.bundle: org.gnu.Emacs
 """
-mod.apps.emacs = """
+mod.apps.emacs = r"""
 os: windows
-app.exe: emacs.exe
+app.exe: /^emacs\.exe$/i
 """
 
 ctx = Context()
