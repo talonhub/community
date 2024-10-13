@@ -9,18 +9,17 @@ language_extensions = {
     "batch": "bat",
     "c": "c h",
     # 'cmake': 'cmake',
-    # 'cplusplus': 'cpp hpp',
+    # "cplusplus": "cpp hpp",
     "csharp": "cs",
     "css": "css",
     # 'elisp': 'el',
     # 'elm': 'elm',
     "gdb": "gdb",
     "go": "go",
-    # 'html': 'html',
     "java": "java",
     "javascript": "js",
     "javascriptreact": "jsx",
-    # 'json': 'json',
+    # "json": "json",
     "kotlin": "kt",
     "lua": "lua",
     "markdown": "md",
@@ -37,6 +36,7 @@ language_extensions = {
     "scss": "scss",
     # 'snippets': 'snippets',
     "sql": "sql",
+    # "stata": "do ado",
     "talon": "talon",
     "talonlist": "talon-list",
     "terraform": "tf",
@@ -45,6 +45,8 @@ language_extensions = {
     "typescriptreact": "tsx",
     # 'vba': 'vba',
     "vimscript": "vim vimrc",
+    # html doesn't actually have a language mode, but we do have snippets.
+    # "html": "html",
 }
 
 # Override speakable forms for language modes. If not present, a language mode's

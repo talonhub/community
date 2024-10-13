@@ -1,7 +1,7 @@
-from pathlib import Path
-from typing import Callable, IO
 import csv
 import os
+from pathlib import Path
+from typing import IO, Callable
 
 from talon import resource
 
@@ -10,10 +10,13 @@ from talon import resource
 SETTINGS_DIR = Path(__file__).parents[1] / "settings"
 SETTINGS_DIR.mkdir(exist_ok=True)
 
-CallbackT  = Callable[[dict[str, str]], None]
+CallbackT = Callable[[dict[str, str]], None]
 DecoratorT = Callable[[CallbackT], CallbackT]
 
-def read_csv_list(f: IO, headers: tuple[str, str], is_spoken_form_first: bool = False) -> dict[str, str]:
+
+def read_csv_list(
+    f: IO, headers: tuple[str, str], is_spoken_form_first: bool = False
+) -> dict[str, str]:
     rows = list(csv.reader(f))
 
     # print(str(rows))
@@ -22,7 +25,7 @@ def read_csv_list(f: IO, headers: tuple[str, str], is_spoken_form_first: bool = 
         actual_headers = rows[0]
         if not actual_headers == list(headers):
             print(
-                f'"{f}": Malformed headers - {actual_headers}.'
+                f'"{f.name}": Malformed headers - {actual_headers}.'
                 + f" Should be {list(headers)}. Ignoring row."
             )
         for row in rows[1:]:
@@ -39,7 +42,7 @@ def read_csv_list(f: IO, headers: tuple[str, str], is_spoken_form_first: bool = 
 
                 if len(row) > 2:
                     print(
-                        f'"{f}": More than two values in row: {row}.'
+                        f'"{f.name}": More than two values in row: {row}.'
                         + " Ignoring the extras."
                     )
             # Leading/trailing whitespace in spoken form can prevent recognition.
@@ -48,9 +51,15 @@ def read_csv_list(f: IO, headers: tuple[str, str], is_spoken_form_first: bool = 
 
     return mapping
 
-def write_csv_defaults(path: Path, headers: tuple[str, str], default: dict[str, str]=None, is_spoken_form_first: bool = False) -> None:
+
+def write_csv_defaults(
+    path: Path,
+    headers: tuple[str, str],
+    default: dict[str, str] = None,
+    is_spoken_form_first: bool = False,
+) -> None:
     if not path.is_file() and default is not None:
-        with open(path, "w", encoding="utf-8", newline="") as file:
+        with open(path, "w", encoding="utf-8") as file:
             writer = csv.writer(file)
             writer.writerow(headers)
             for key, value in default.items():
@@ -61,7 +70,13 @@ def write_csv_defaults(path: Path, headers: tuple[str, str], default: dict[str, 
                 else:
                     writer.writerow([value, key])
 
-def track_csv_list(filename: str, headers: tuple[str, str], default: dict[str, str]=None, is_spoken_form_first: bool = False) -> DecoratorT:
+
+def track_csv_list(
+    filename: str,
+    headers: tuple[str, str],
+    default: dict[str, str] = None,
+    is_spoken_form_first: bool = False,
+) -> DecoratorT:
     assert filename.endswith(".csv")
     path = SETTINGS_DIR / filename
     write_csv_defaults(path, headers, default, is_spoken_form_first)
@@ -73,6 +88,7 @@ def track_csv_list(filename: str, headers: tuple[str, str], default: dict[str, s
             fn(data)
 
     return decorator
+
 
 def append_to_csv(filename: str, rows: dict[str, str]):
     path = SETTINGS_DIR / filename

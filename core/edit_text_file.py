@@ -9,21 +9,32 @@ SETTINGS_DIR = os.path.join(REPO_DIR, "settings")
 
 mod = Module()
 ctx = Context()
-mod.list("edit_file", desc="Absolute paths to frequently edited files (.talon-list, csv, etc)")
+mod.list(
+    "edit_file",
+    desc="Absolute paths to frequently edited files (Talon list, CSV, etc.)",
+)
 
 _edit_files = {
-    "alphabet": os.path.join(REPO_DIR, "core\\keys\\letter.talon-list"), 
-    "search engines": os.path.join(REPO_DIR, "core\\websites_and_search_engines\\search_engine.talon-list"), 
-    "unix utilities": os.path.join(REPO_DIR, "tags\\terminal\\unix_utility.talon-list"), 
-    "websites": os.path.join(REPO_DIR, "core\\websites_and_search_engines\\website.talon-list"), 
-    "homophones": os.path.join(REPO_DIR, "core", "homophones", "homophones.csv")
+    "additional words": os.path.join(
+        REPO_DIR, "core", "vocabulary", "vocabulary.talon-list"
+    ),
+    "alphabet": os.path.join(REPO_DIR, "core", "keys", "letter.talon-list"),
+    "homophones": os.path.join(REPO_DIR, "core", "homophones", "homophones.csv"),
+    "search engines": os.path.join(
+        REPO_DIR, "core", "websites_and_search_engines", "search_engine.talon-list"
+    ),
+    "unix utilities": os.path.join(
+        REPO_DIR, "tags", "terminal", "unix_utility.talon-list"
+    ),
+    "websites": os.path.join(
+        REPO_DIR, "core", "websites_and_search_engines", "website.talon-list"
+    ),
 }
 
 _settings_csvs = {
     name: os.path.join(SETTINGS_DIR, file_name)
     for name, file_name in {
         "abbreviations": "abbreviations.csv",
-        "additional words": "additional_words.csv",
         "file extensions": "file_extensions.csv",
         "words to replace": "words_to_replace.csv",
     }.items()
@@ -31,6 +42,7 @@ _settings_csvs = {
 
 _edit_files.update(_settings_csvs)
 ctx.lists["self.edit_file"] = _edit_files
+
 
 @mod.action_class
 class ModuleActions:

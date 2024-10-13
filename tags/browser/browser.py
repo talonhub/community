@@ -8,6 +8,7 @@ ctx.matches = r"""
 tag: browser
 """
 
+
 def is_url(url: str) -> bool:
     try:
         # Valid if url successfully parsed
@@ -55,7 +56,7 @@ class UserActions:
             actions.app.tab_open()
             actions.user.paste(url_address)
             actions.key("enter")
-        
+
 
 @ctx.action_class("browser")
 class BrowserActions:

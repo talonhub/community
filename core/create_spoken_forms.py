@@ -5,8 +5,10 @@ from dataclasses import dataclass
 from typing import Any, List, Mapping, Optional
 
 from talon import Module, actions
-from .user_settings import track_csv_list
+
+#from .keys.keys import symbol_key_words
 from .numbers.numbers import digits_map, scales, teens, tens
+from .user_settings import track_csv_list
 abbreviations_list = {}
 # `punctuation_words` is for words you want available BOTH in dictation and as key names in command mode.
 # `symbol_key_words` is for key names that should be available in command mode, but NOT during dictation.
@@ -58,76 +60,54 @@ symbol_key_words = {}
 # make punctuation words also included in {user.symbol_keys}
 symbol_key_words.update(punctuation_words)
 
-file_extensions = {
-    "dot pie": ".py",
-    "dot talon": ".talon",
-    "dot mark down": ".md",
-    "dot shell": ".sh",
-    "dot vim": ".vim",
-    "dot see": ".c",
-    "dot see sharp": ".cs",
-    "dot com": ".com",
-    "dot net": ".net",
-    "dot org": ".org",
-    "dot us": ".us",
-    "dot U S": ".us",
-    "dot co dot UK": ".co.uk",
-    "dot exe": ".exe",
-    "dot bin": ".bin",
-    "dot bend": ".bin",
-    "dot jason": ".json",
-    "dot jay son": ".json",
-    "dot J S": ".js",
-    "dot java script": ".js",
-    "dot TS": ".ts",
-    "dot type script": ".ts",
-    "dot csv": ".csv",
-    "totssv": ".csv",
-    "tot csv": ".csv",
-    "dot cassie": ".csv",
-    "dot text": ".txt",
-    "dot julia": ".jl",
-    "dot J L": ".jl",
-    "dot html": ".html",
-    "dot css": ".css",
-    "dot sass": ".sass",
-    "dot svg": ".svg",
-    "dot png": ".png",
-    "dot wave": ".wav",
-    "dot flack": ".flac",
-    "dot doc": ".doc",
-    "dot doc x": ".docx",
-    "dot pdf": ".pdf",
-    "dot tar": ".tar",
-    "dot g z": ".gz",
-    "dot g zip": ".gzip",
-    "dot zip": ".zip",
-    "dot toml": ".toml",
-}
-
 mod = Module()
-
 
 DEFAULT_MINIMUM_TERM_LENGTH = 2
 EXPLODE_MAX_LEN = 3
 FANCY_REGULAR_EXPRESSION = r"[A-Z]?[a-z]+|[A-Z]+(?![a-z])|[0-9]+"
-FILE_EXTENSIONS_REGEX = "|".join(
-    re.escape(file_extension.strip()) + "$"
-    for file_extension in file_extensions.values()
-)
 SYMBOLS_REGEX = "|".join(re.escape(symbol) for symbol in set(symbol_key_words.values()))
-REGEX_NO_SYMBOLS = re.compile(
-    "|".join(
-        [
-            FANCY_REGULAR_EXPRESSION,
-            FILE_EXTENSIONS_REGEX,
-        ]
-    )
-)
+FILE_EXTENSIONS_REGEX = r"^\b$"
+file_extensions = {}
 
-REGEX_WITH_SYMBOLS = re.compile(
-    "|".join([FANCY_REGULAR_EXPRESSION, FILE_EXTENSIONS_REGEX, SYMBOLS_REGEX])
-)
+
+def update_regex():
+    global REGEX_NO_SYMBOLS
+    global REGEX_WITH_SYMBOLS
+    REGEX_NO_SYMBOLS = re.compile(
+        "|".join(
+            [
+                FANCY_REGULAR_EXPRESSION,
+                FILE_EXTENSIONS_REGEX,
+            ]
+        )
+    )
+    REGEX_WITH_SYMBOLS = re.compile(
+        "|".join([FANCY_REGULAR_EXPRESSION, FILE_EXTENSIONS_REGEX, SYMBOLS_REGEX])
+    )
+
+
+update_regex()
+
+
+@track_csv_list("file_extensions.csv", headers=("File extension", "Name"))
+def on_extensions(values):
+    global FILE_EXTENSIONS_REGEX
+    global file_extensions
+    file_extensions = values
+    FILE_EXTENSIONS_REGEX = "|".join(
+        re.escape(file_extension.strip()) + "$" for file_extension in values.values()
+    )
+    update_regex()
+
+
+abbreviations_list = {}
+
+
+@track_csv_list("abbreviations.csv", headers=("Abbreviation", "Spoken Form"))
+def on_abbreviations(values):
+    global abbreviations_list
+    abbreviations_list = values
+
 
 REVERSE_PRONUNCIATION_MAP = {
     **{str(value): key for key, value in digits_map.items()},
@@ -152,14 +132,6 @@ thousands = [""] + [val for index, val in enumerate(scales) if index != 0]
 # print("thousands = " + thousands)
 # end: create the lists necessary for create_spoken_word_for_number
 
-@track_csv_list("abbreviations.csv", headers=("Abbreviation", "Spoken Form"))
-def on_abbreviations(values):
-    global abbreviations_list
-    abbreviations_list = values
-
-# @track_csv_list("file_extensions.csv", headers=("File extension", "Name"), default=_file_extensions_defaults)
-# def on_update(values):
-#     ctx.lists["self.file_extension"] = values
 
 def create_spoken_form_for_number(num: int):
     """Creates a spoken form for an integer"""
@@ -228,7 +200,6 @@ def create_spoken_form_years(num: str):
         if remainder == 0:
             words.append(scales[0])
     else:
-
         # 200X -> two thousand x
         if remainder < 9:
             words.append(REVERSE_PRONUNCIATION_MAP[str(centuries // 10)])
@@ -241,7 +212,6 @@ def create_spoken_form_years(num: str):
     if remainder != 0:
         # 1906 => "nineteen six"
         if remainder < 10:
-
             # todo: decide if we want nineteen oh five"
             # todo: decide if we want "and"
             # both seem like a waste
@@ -286,7 +256,6 @@ def create_single_spoken_form(source: str):
         (3) Otherwise, returns the lower case source.
     """
     normalized_source = source.lower()
-
     try:
         mapped_source = REVERSE_PRONUNCIATION_MAP[normalized_source]
     except KeyError:

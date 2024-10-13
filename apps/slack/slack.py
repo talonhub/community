@@ -4,11 +4,11 @@ ctx = Context()
 mod = Module()
 apps = mod.apps
 apps.slack = "app.name: Slack"
-mod.apps.slack = """
+mod.apps.slack = r"""
 os: windows
 and app.name: Slack
 os: windows
-and app.exe: slack.exe
+and app.exe: /^slack\.exe$/i
 """
 apps.slack = """
 os: mac

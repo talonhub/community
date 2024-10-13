@@ -53,12 +53,12 @@ import datetime
 import os.path
 import warnings
 
-from talon import Module, actions, speech_system, settings
+from talon import Module, actions, settings, speech_system
 
 REPO_DIR = os.path.dirname(os.path.dirname(__file__))
 
 mod = Module()
-setting_deprecate_warning_interval_hours = mod.setting(
+mod.setting(
     "deprecate_warning_interval_hours",
     type=float,
     desc="""How long, in hours, to wait before notifying the user again of a

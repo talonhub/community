@@ -8,28 +8,28 @@ change mode recurse: chmod -R
 change mode: chmod
 change owner recurse: chown -R
 change owner: chown
-curl: curl
-cut: cut
+curl
+cut
 disk free human: df -h
 disk free: df
-dig: dig
+dig
 disk usage human: du -h
 disk usage: du
-echo: echo
-false: false
-find: find
+echo
+false
+find
 grab here: grep -Hirn
 grab: grep
-head: head
+head
 harp top: htop
 I D user: id -u
 I D: id
-less: less
+less
 link soft: ln -s
 link: ln
 M D five sum: md5sum
 make dear: mkdir
-paste: paste
+paste
 print format: printf
 work dear: pwd
 reverse: rev
@@ -37,27 +37,27 @@ are sync: rsync
 said: sed
 sequence: seq
 shah two fifty six sum: sha256sum
-sleep: sleep
+sleep
 sort human: sort -h
 sort numeric: sort -n
 sort reverse: sort -r
 sort unique: sort -u
-sort: sort
+sort
 S S H: ssh
-stat: stat
+stat
 pseudo: sudo
 tail follow: tail -f
-tail: tail
+tail
 tea append: tee -a
 tea: tee
-touch: touch
+touch
 translate delete: tr -d
 translate: tr
-true: true
+true
 unique count: uniq -c
 unique: uniq
 word count characters: wc -c
 word count lines: wc -l
 word count: wc
-who: who
+who
 who am I: whoami
