@@ -127,20 +127,20 @@ os: mac
 and app.bundle: com.google.android.studio
 """
 # windows
-mod.apps.jetbrains = "app.exe: idea64.exe"
-mod.apps.jetbrains = "app.exe: /^PyCharm64\.exe$/i"
-mod.apps.jetbrains = "app.exe: webstorm64.exe"
+mod.apps.jetbrains = r"app.exe: /^idea64\.exe$/i"
+mod.apps.jetbrains = r"app.exe: /^PyCharm64\.exe$/i"
+mod.apps.jetbrains = r"app.exe: /^webstorm64\.exe$/i"
 mod.apps.jetbrains = """
 os: mac
 and app.bundle: com.jetbrains.pycharm
 os: mac
 and app.bundle: com.jetbrains.rider
 """
-mod.apps.jetbrains = """
+mod.apps.jetbrains = r"""
 os: windows
 and app.name: JetBrains Rider
 os: windows
-and app.exe: rider64.exe
+and app.exe: /^rider64\.exe$/i
 """
 
 
@@ -298,7 +298,7 @@ class UserActions:
         # if it's a single line, select the entire thing including the ending new-line5
         if line_start == line_end:
             actions.user.idea(f"goto {line_start} 0")
-            actions.user.idea("action EditorSelectLine"),
+            actions.user.idea("action EditorSelectLine")
         else:
             actions.user.idea(f"range {line_start} {line_end}")
 
@@ -313,6 +313,11 @@ class UserActions:
 
     def camel_right():
         actions.user.idea("action EditorNextWordInDifferentHumpsMode")
+
+    def command_search(command: str = ""):
+        actions.user.idea("action GotoAction")
+        if command != "":
+            actions.insert(command)
 
     def line_clone(line: int):
         actions.user.idea(f"clone {line}")

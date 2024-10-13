@@ -47,7 +47,7 @@ and app.exe: /^vscodium\.exe$/i
 os: windows
 and app.name: Azure Data Studio
 os: windows
-and app.exe: azuredatastudio.exe
+and app.exe: /^azuredatastudio\.exe$/i
 """
 
 ctx.matches = r"""
@@ -253,6 +253,11 @@ class UserActions:
 
     def multi_cursor_skip_occurrence():
         actions.user.vscode("editor.action.moveSelectionToNextFindMatch")
+
+    def command_search(command: str = ""):
+        actions.user.vscode("workbench.action.showCommands")
+        if command != "":
+            actions.insert(command)
 
     def tab_jump(number: int):
         if number < 10:
