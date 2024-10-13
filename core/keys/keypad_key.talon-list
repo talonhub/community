@@ -1,5 +1,6 @@
 list: user.keypad_key
 -
+
 key pad zero: keypad_0
 key pad one: keypad_1
 key pad two: keypad_2
@@ -17,3 +18,4 @@ key pad star: keypad_multiply
 key pad slash: keypad_divide
 key pad equals: keypad_equals
 key pad clear: keypad_clear
+key pad enter: keypad_enter
