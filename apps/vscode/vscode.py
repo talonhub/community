@@ -47,7 +47,7 @@ and app.exe: /^vscodium\.exe$/i
 os: windows
 and app.name: Azure Data Studio
 os: windows
-and app.exe: azuredatastudio.exe
+and app.exe: /^azuredatastudio\.exe$/i
 """
 
 ctx.matches = r"""
@@ -272,6 +272,11 @@ class UserActions:
         actions.user.vscode("editor.action.moveSelectionToNextFindMatch")
 
     # multiple_cursor.py support end
+
+    def command_search(command: str = ""):
+        actions.user.vscode("workbench.action.showCommands")
+        if command != "":
+            actions.insert(command)
 
     # tabs.py support begin
     def tab_jump(number: int):

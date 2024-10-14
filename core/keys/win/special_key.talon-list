@@ -2,6 +2,7 @@ list: user.special_key
 os: windows
 os: linux
 -
+
 end: end
 home: home
 minus: minus
@@ -9,6 +10,7 @@ enter: enter
 page down: pagedown
 page up: pageup
 escape: escape
+space: space
 tab: tab
 wipe: backspace
 delete: backspace
