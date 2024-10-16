@@ -1,39 +1,40 @@
-# deck: A00SA3232MA4OZ
-# deck: A00SA3192M9DW0
+# deck.serial: A00SA3232MA4OZ
+deck.serial: A00SA3192M9DW0
 # 2024-01-07 14:58:00.435  INFO Deck connected: Deck(pid=128, kind=Mk2, serial='A00SA3232MA4OZ', layout=None)
 # 2024-01-07 14:58:00.445  INFO Deck connected: Deck(pid=134, kind=Pedal, serial='', layout=None)
 # 2024-01-07 14:58:00.453  INFO Deck connected: Deck(pid=128, kind=Mk2, serial='A00SA3192M9DW0', layout=None)
 # 2024-01-07 14:58:00.463  INFO Deck connected: Deck(pid=134, kind=Pedal, serial='', layout=None)
 -
-deck(zoom):
+#images from https://joypixels.com/emoji
+deck(magnifying-glass-tilted-right):
     user.deck1()
-deck(home):
+deck(house-with-garden):
     user.deck2()
-deck(down):
+deck(down-arrow):
     user.deck3()
-deck(up):
+deck(up-arrow):
     user.deck4()
-deck(stop):
+deck(stop-sign):
     user.deck5()
-deck(move):
+deck(delivery-truck):
     user.deck6()
-deck(qp):
+deck(fast-up-button):
     user.deck7()
-deck(switch):
+deck(mobile-phone):
     user.deck8()
-deck(undo):
+deck(man-gesturing-no):
     user.deck9()
-deck(repeat):
+deck(repeat-button):
     user.deck10()
-deck(t cmd):
+deck(speaking-head):
     user.deck11()
-deck(t zoom):
+deck(eye):
     user.deck12()
-deck(t mic):
+deck(studio-microphone):
     user.deck13()
-deck(swap):
+deck(currency-exchange):
     user.deck14()
-deck(sleep):
+deck(zzz):
     user.deck15()
 
 

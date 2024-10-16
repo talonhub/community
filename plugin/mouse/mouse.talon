@@ -92,7 +92,11 @@ left drag | drag:
 # wheel tiny [down] here:
 #     user.mouse_move_center_active_window()
 #     user.mouse_scroll_down(0.2)
-# wheel downer: user.mouse_scroll_down_continuous()
+[wheel] down [<number_small>]: 
+    numb = number_small or 1
+    user.mouse_scroll_down_continuous()
+    repeat(numb - 1)
+
 # wheel downer here:
 #     user.mouse_move_center_active_window()
 #     user.mouse_scroll_down_continuous()
@@ -104,7 +108,11 @@ left drag | drag:
 # wheel tiny up here:
 #     user.mouse_move_center_active_window()
 #     user.mouse_scroll_up(0.2)
-# wheel upper: user.mouse_scroll_up_continuous()
+[wheel] (upper) [<number_small>]: 
+    numb = number_small or 1
+    user.mouse_scroll_up_continuous()
+    repeat(numb - 1)
+    
 # wheel upper here:
 #     user.mouse_move_center_active_window()
 #     user.mouse_scroll_up_continuous()
