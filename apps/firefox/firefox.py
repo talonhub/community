@@ -10,11 +10,11 @@ apps.firefox = "app.name: Firefox-esr"
 apps.firefox = "app.name: firefox-esr"
 apps.firefox = "app.name: LibreWolf"
 apps.firefox = "app.name: waterfox"
-apps.firefox = """
+apps.firefox = r"""
 os: windows
 and app.name: Firefox
 os: windows
-and app.exe: firefox.exe
+and app.exe: /^firefox\.exe$/i
 """
 apps.firefox = """
 os: mac
