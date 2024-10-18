@@ -353,9 +353,10 @@ class Actions:
         try:
             positions = positions_by_count[len(apps)]
         except KeyError:
-            raise NotImplementedError(
-                f"There is no such layout yet defined for {len(apps)} items"
-            )
+            supported_layouts = ", ".join(positions_by_count.keys())
+            message = f"{len(apps)} applications given but chosen layout only supports {supported_layouts}"
+            actions.app.notify(message, "Cannot arrange")
+            raise NotImplementedError(message)
         for index, app in enumerate(apps):
             window = _get_app_window(app)
             _snap_window_helper(window, positions[index])
