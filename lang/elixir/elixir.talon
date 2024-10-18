@@ -35,7 +35,6 @@ state end: "end"
 op pipe: " |> "
 
 # Elixir-specific keywords and symbols
-
 [state] raise {user.elixir_exception}: user.insert_between("raise ", "")
 
 [state] rescue {user.elixir_exception}: "rescue {elixir_exception}"
