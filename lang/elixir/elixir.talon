@@ -15,10 +15,10 @@ tag(): user.code_operators_math
 tag(): user.code_operators_lambda
 
 settings():
-    user.code_private_function_formatter = "snake_case"
-    user.code_public_function_formatter = "snake_case"
-    user.code_private_variable_formatter = "snake_case"
-    user.code_public_variable_formatter = "snake_case"
+    user.code_private_function_formatter = "SNAKE_CASE"
+    user.code_public_function_formatter = "SNAKE_CASE"
+    user.code_private_variable_formatter = "SNAKE_CASE"
+    user.code_public_variable_formatter = "SNAKE_CASE"
 
 # Elixir-specific grammars
 state def: "def "
