@@ -352,7 +352,12 @@ class Actions:
         apps: list[str],
     ):
         """Split the screen between multiple applications."""
-        positions = positions_by_count[len(apps)]
+        try:
+            positions = positions_by_count[len(apps)]
+        except KeyError:
+            raise NotImplementedError(
+                f"There is no such layout yet defined for {len(apps)} items"
+            )
         for index, app in enumerate(apps):
             window = _get_app_window(app)
             _snap_window_helper(window, positions[index])
