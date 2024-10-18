@@ -84,6 +84,12 @@ class UserActions:
     def code_self():
         actions.auto_insert("self")
 
+    def code_insert_true():
+        actions.auto_insert("true")
+
+    def code_insert_false():
+        actions.auto_insert("false")
+
     def code_insert_null():
         actions.insert("nil")
 

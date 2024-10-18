@@ -35,13 +35,7 @@ state end: "end"
 op pipe: " |> "
 
 # Elixir-specific keywords and symbols
-true: "true"
-false: "false"
-nil: "nil"
 
 [state] raise {user.elixir_exception}: user.insert_between("raise ", "")
 
 [state] rescue {user.elixir_exception}: "rescue {elixir_exception}"
-
-comment line: user.code_comment_line_prefix()
-comment block: user.code_comment_block_prefix()
