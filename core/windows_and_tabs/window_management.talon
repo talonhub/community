@@ -18,8 +18,8 @@ snap screen <number>: user.move_window_to_screen(number)
 snap <user.running_applications> <user.window_snap_position>:
     user.snap_app(running_applications, window_snap_position)
 snap <user.window_split_position> <user.running_applications> <user.running_applications>:
-    user.snap_split_two(running_applications_1, running_applications_2)
+    user.snap_layout(window_split_position, running_applications_1, running_applications_2)
 snap <user.window_split_position> <user.running_applications> <user.running_applications> <user.running_applications>:
-    user.snap_split_three(window_split_position, running_applications_1, running_applications_2, running_applications_3)
+    user.snap_layout(window_split_position, running_applications_1, running_applications_2, running_applications_3)
 snap <user.running_applications> [screen] <number>:
     user.move_app_to_screen(running_applications, number)

@@ -8,7 +8,7 @@ Originally from dweil/talon_community - modified for newapi by jcaw.
 #   platforms
 
 import logging
-from typing import Optional
+from typing import Dict, Optional
 
 from talon import Context, Module, actions, settings, ui
 
@@ -277,21 +277,30 @@ _snap_positions = {
 }
 
 _split_positions = {
-    "split": [
-        _snap_positions["left third"],
-        _snap_positions["center third"],
-        _snap_positions["right third"],
-    ],
-    "clock": [
-        _snap_positions["left"],
-        _snap_positions["top right"],
-        _snap_positions["bottom right"],
-    ],
-    "counterclock": [
-        _snap_positions["right"],
-        _snap_positions["top left"],
-        _snap_positions["bottom left"],
-    ],
+    "split": {
+        2: [_snap_positions["left"], _snap_positions["right"]],
+        3: [
+            _snap_positions["left third"],
+            _snap_positions["center third"],
+            _snap_positions["right third"],
+        ],
+    },
+    "clock": {
+        2: [_snap_positions["left"], _snap_positions["right"]],
+        3: [
+            _snap_positions["left"],
+            _snap_positions["top right"],
+            _snap_positions["bottom right"],
+        ],
+    },
+    "counterclock": {
+        2: [_snap_positions["left"], _snap_positions["right"]],
+        3: [
+            _snap_positions["right"],
+            _snap_positions["top left"],
+            _snap_positions["bottom left"],
+        ],
+    },
 }
 
 
@@ -301,7 +310,7 @@ def window_snap_position(m) -> RelativeScreenPos:
 
 
 @mod.capture(rule="{user.window_split_positions}")
-def window_split_position(m) -> list[RelativeScreenPos]:
+def window_split_position(m) -> Dict[int, list[RelativeScreenPos]]:
     return _split_positions[m.window_split_positions]
 
 
@@ -338,29 +347,19 @@ class Actions:
         _bring_forward(window)
         _snap_window_helper(window, position)
 
-    def snap_split_two(app_one: str, app_two: str):
-        """Split the screen between two applications."""
-        window = _get_app_window(app_one)
-        window_two = _get_app_window(app_two)
-        _snap_window_helper(window_two, _snap_positions["right"])
-        _snap_window_helper(window, _snap_positions["left"])
-        window_two.focus()
-        window.focus()
-
-    def snap_split_three(
-        positions: list[RelativeScreenPos], app_one: str, app_two: str, app_three: str
+    def snap_layout(
+        positions_by_count: Dict[int, list[RelativeScreenPos]],
+        app_one: str,
+        app_two: str,
+        app_three: Optional[str] = None,
     ):
-        """Split the screen between three applications."""
-        window = _get_app_window(app_one)
-        window_two = _get_app_window(app_two)
-        window_three = _get_app_window(app_three)
-        _snap_window_helper(window, positions[0])
-        _snap_window_helper(window_two, positions[1])
-        _snap_window_helper(window_three, positions[2])
-
-        window_three.focus()
-        window_two.focus()
-        window.focus()
+        """Split the screen between multiple applications."""
+        apps = [app for app in [app_one, app_two, app_three] if app is not None]
+        positions = positions_by_count[len(apps)]
+        for index, app in enumerate(apps):
+            window = _get_app_window(app)
+            _snap_window_helper(window, positions[index])
+            window.focus()
 
     def move_app_to_screen(app_name: str, screen_number: int):
         """Move a specific application to another screen."""
