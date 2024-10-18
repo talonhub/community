@@ -353,7 +353,7 @@ class Actions:
         try:
             positions = positions_by_count[len(apps)]
         except KeyError:
-            supported_layouts = ", ".join(positions_by_count.keys())
+            supported_layouts = ", ".join(map(str, positions_by_count.keys()))
             message = f"{len(apps)} applications given but chosen layout only supports {supported_layouts}"
             actions.app.notify(message, "Cannot arrange")
             raise NotImplementedError(message)
