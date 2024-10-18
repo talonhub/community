@@ -349,12 +349,9 @@ class Actions:
 
     def snap_layout(
         positions_by_count: Dict[int, list[RelativeScreenPos]],
-        app_one: str,
-        app_two: str,
-        app_three: Optional[str] = None,
+        apps: list[str],
     ):
         """Split the screen between multiple applications."""
-        apps = [app for app in [app_one, app_two, app_three] if app is not None]
         positions = positions_by_count[len(apps)]
         for index, app in enumerate(apps):
             window = _get_app_window(app)
