@@ -286,7 +286,6 @@ _split_positions = {
         ],
     },
     "clock": {
-        2: [_snap_positions["left"], _snap_positions["right"]],
         3: [
             _snap_positions["left"],
             _snap_positions["top right"],
