@@ -20,6 +20,7 @@ language_extensions = {
     "javascript": "js",
     "javascriptreact": "jsx",
     # "json": "json",
+    "elixir": "ex",
     "kotlin": "kt",
     "lua": "lua",
     "markdown": "md",
