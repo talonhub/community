@@ -1,4 +1,3 @@
-import itertools
 import math
 import re
 from collections import defaultdict
@@ -32,7 +31,7 @@ mod.setting(
 
 ctx = Context()
 # context name -> commands
-context_command_map = {}
+context_command_map: dict[str, dict[str, str]] = {}
 
 # rule word -> Set[(context name, rule)]
 rule_word_map: dict[str, set[tuple[str, str]]] = defaultdict(set)
@@ -61,6 +60,7 @@ current_list_page = 1
 
 
 def update_title():
+    """After commands changed, update the GUI"""
     global live_update
     global show_enabled_contexts_only
 
@@ -72,8 +72,14 @@ def update_title():
                 update_active_contexts_cache(registry.active_contexts())
 
 
+def commands_updated(_):
+    """React to a change in available commands"""
+    update_title()
+
+
 @imgui.open(y=0)
 def gui_formatters(gui: imgui.GUI):
+    """GUI for formatters with formatter names and example outputs"""
     global formatters_words
     if formatters_reformat:
         gui.text("re-formatters help")
@@ -92,6 +98,10 @@ def gui_formatters(gui: imgui.GUI):
 
 
 def format_context_title(context_name: str) -> str:
+    """Turn a context name into text to show in the interface.
+
+    Will put "ACTIVE" or "INACTIVE" in brackets after the name depending
+    on the current state."""
     global cached_active_contexts_list
     return "{} [{}]".format(
         context_name,
@@ -104,6 +114,12 @@ def format_context_title(context_name: str) -> str:
 
 
 def format_context_button(index: int, context_label: str, context_name: str) -> str:
+    """Given an index, label for the context, and its actual name, give text for a button.
+
+    If active and inactive contexts are showing, active contexts get a little * in front.
+
+    The index is put at the front so the user can address it with spoken commands.
+    """
     global cached_active_contexts_list
     global show_enabled_contexts_only
 
@@ -121,18 +137,20 @@ def format_context_button(index: int, context_label: str, context_name: str) -> 
         return f"{index}. {context_label} "
 
 
-# translates 1-based index -> actual index in sorted_context_map_keys
 def get_context_page(index: int) -> int:
+    """translates 1-based index -> actual index in sorted_context_map_keys"""
     return math.ceil(index / settings.get("user.help_max_contexts_per_page"))
 
 
 def get_total_context_pages() -> int:
+    """Get the total number of pages of contexts"""
     return math.ceil(
         len(sorted_display_list) / settings.get("user.help_max_contexts_per_page")
     )
 
 
 def get_current_context_page_length() -> int:
+    """Get the number of entries for the currently shown page"""
     start_index = (current_context_page - 1) * settings.get(
         "user.help_max_contexts_per_page"
     )
@@ -144,7 +162,17 @@ def get_current_context_page_length() -> int:
 
 
 def get_command_line_count(command: tuple[str, str]) -> int:
-    """This should be kept in sync with draw_commands"""
+    r"""Output how many lines a command will be printed as.
+
+    Single-line commands are printed on one line, anything longer
+    will have an empty line after it.
+
+    >>> get_command_line_count(("florble", "user.florble_thing()"))
+    1
+    >>> get_command_line_count(("turgle", "\"turgle turgle\"\nkey(enter)\n\"who turgled?\""))
+    4
+    """
+    # This should be kept in sync with draw_commands
     _, body = command
     lines = len(body.split("\n"))
     if lines == 1:
@@ -155,7 +183,7 @@ def get_command_line_count(command: tuple[str, str]) -> int:
 
 def get_pages(item_line_counts: list[int]) -> list[int]:
     """Given some set of indivisible items with given line counts,
-    return the page number each item should appear on.
+    return the page number (1-based) each item should appear on.
 
     If an item will cross a page boundary, it is moved to the next page,
     so that pages may be shorter than the maximum lenth, but not longer. The only
@@ -166,26 +194,33 @@ def get_pages(item_line_counts: list[int]) -> list[int]:
     current_page = 1
     pages = []
     for line_count in item_line_counts:
+        # Will the next entry take us over the limit?
         if line_count + current_page_line_count > settings.get(
             "user.help_max_command_lines_per_page"
         ):
             if current_page_line_count == 0:
-                # Special case, render a larger page.
+                # This is the only item for the page, so it gets
+                # a page completely for itself, no matter how big.
                 page = current_page
                 current_page_line_count = 0
             else:
+                # Put the item as the first item on the next page
                 page = current_page + 1
                 current_page_line_count = line_count
+            # In any case, we up the current page by one
             current_page += 1
         else:
+            # Count the added lines for the current page
             current_page_line_count += line_count
             page = current_page
+        # Store the page the item will appear on into the list
         pages.append(page)
     return pages
 
 
 @imgui.open(y=0)
 def gui_context_help(gui: imgui.GUI):
+    """GUI Window for help. Handles context list as well as context content"""
     global context_command_map
     global current_context_page
     global selected_context
@@ -196,7 +231,7 @@ def gui_context_help(gui: imgui.GUI):
     global total_page_count
     global search_phrase
 
-    # if no selected context, draw the contexts
+    # if no selected context, and not showing search results, draw the context list
     if selected_context is None and search_phrase is None:
         total_page_count = get_total_context_pages()
 
@@ -213,13 +248,17 @@ def gui_context_help(gui: imgui.GUI):
 
         gui.line()
 
-        current_item_index = 1
-        current_selection_index = 1
+        # index counting only visible items
+        current_entry_index = 1
         current_group = ""
-        for display_name, group, _ in sorted_display_list:
+        for current_item_index, (display_name, group, _) in enumerate(
+            sorted_display_list, start=1
+        ):
             target_page = get_context_page(current_item_index)
             context_name = display_name_to_context_name_map[display_name]
             if current_context_page == target_page:
+                # If the group has changed (or is the group of
+                # the very first element) show a line and the group title
                 if current_group != group:
                     if current_group:
                         gui.line()
@@ -227,16 +266,14 @@ def gui_context_help(gui: imgui.GUI):
                     current_group = group
 
                 button_name = format_context_button(
-                    current_selection_index,
+                    current_entry_index,
                     display_name,
                     context_name,
                 )
 
                 if gui.button(button_name):
                     selected_context = context_name
-                current_selection_index = current_selection_index + 1
-
-            current_item_index += 1
+                current_entry_index = current_entry_index + 1
 
         if total_page_count > 1:
             gui.spacer()
@@ -246,7 +283,7 @@ def gui_context_help(gui: imgui.GUI):
             if gui.button("Help previous"):
                 actions.user.help_previous()
 
-    # if there's a selected context, draw the commands for it
+    # if there's a selected context, or search results, draw the commands for it
     else:
         if selected_context is not None:
             draw_context_commands(gui)
@@ -272,6 +309,9 @@ def gui_context_help(gui: imgui.GUI):
 
 
 def draw_context_commands(gui: imgui.GUI):
+    """Draw a pageful of commands for the currently selected context.
+
+    Includes a title with page numbers at the top."""
     global selected_context
     global total_page_count
     global selected_context_page
@@ -294,31 +334,32 @@ def draw_context_commands(gui: imgui.GUI):
 
 
 def draw_search_commands(gui: imgui.GUI):
+    """Draw a pageful of search results with title and grouped by context."""
     global search_phrase
     global total_page_count
     global cached_active_contexts_list
     global selected_context_page
 
     title = f"Search: {search_phrase}"
-    commands_grouped = get_search_commands(search_phrase)
-    commands_flat = list(itertools.chain.from_iterable(commands_grouped.values()))
+    commands_grouped = get_search_commands()
 
+    # Bring active contexts to the top of the results
     sorted_commands_grouped = sorted(
         commands_grouped.items(),
         key=lambda item: context_map[item[0]] not in cached_active_contexts_list,
     )
 
-    pages = get_pages(
-        [
-            sum(get_command_line_count(command) for command in commands) + 3
-            for _, commands in sorted_commands_grouped
-        ]
-    )
+    # Count all lines from one context plus space for title and spacer
+    line_counts_of_contexts = [
+        sum(get_command_line_count(command) for command in commands) + 3
+        for _, commands in sorted_commands_grouped
+    ]
+
+    pages = get_pages(line_counts_of_contexts)
     total_page_count = max(pages, default=1)
 
     draw_commands_title(gui, title)
 
-    current_item_index = 1
     for (context, commands), page in zip(sorted_commands_grouped, pages):
         if page == selected_context_page:
             gui.text(format_context_title(context))
@@ -327,7 +368,8 @@ def draw_search_commands(gui: imgui.GUI):
             gui.spacer()
 
 
-def get_search_commands(phrase: str) -> dict[str, tuple[str, str]]:
+def get_search_commands() -> dict[str, list[tuple[str, str]]]:
+    """Using the search_phrase, search for commands."""
     global rule_word_map
     tokens = search_phrase.split(" ")
 
@@ -344,6 +386,7 @@ def get_search_commands(phrase: str) -> dict[str, tuple[str, str]]:
 
 
 def draw_commands_title(gui: imgui.GUI, title: str):
+    """Draw a page's title, page number / total pages, and a horizontal line."""
     global selected_context_page
     global total_page_count
 
@@ -352,6 +395,11 @@ def draw_commands_title(gui: imgui.GUI, title: str):
 
 
 def draw_commands(gui: imgui.GUI, commands: Iterable[tuple[str, str]]):
+    """Draw a list of command / body pairs.
+
+    When the body of the command is just a single line, the command is put in
+    front of the body. If the body is more than one line, the command goes on
+    its own line up top, and the body is shown below with an indent."""
     for key, val in commands:
         val = val.split("\n")
         if len(val) > 1:
@@ -396,45 +444,57 @@ overrides = {}
 
 
 def refresh_context_command_map(enabled_only=False):
+    """Go through all contexts and collect commands.
+
+    When enabled_only is True, inactive contexts are left out."""
     active_contexts = registry.active_contexts()
 
-    local_context_map = {}
-    local_display_name_to_context_name_map = {}
-    local_context_command_map = {}
-    cached_short_context_names = {}
+    local_context_map: dict[str, Context] = {}
+    local_display_name_to_context_name_map: dict[str, str] = {}
+    local_context_command_map: dict[str, dict[str, str]] = {}
+    cached_short_context_names: dict[str, str] = {}
 
     for context_name, context in registry.contexts.items():
         splits = context_name.split(".")
 
-        if "talon" == splits[-1]:
-            display_name = splits[-2].replace("_", " ")
+        # Skip over contexts not coming from .talon files
+        if "talon" != splits[-1]:
+            continue
 
-            short_names = actions.user.create_spoken_forms(
-                display_name,
-                generate_subsequences=False,
-            )
+        # Only use the basename as display name
+        # This also makes files like "foo.bar.talon" only show up as
+        # just "bar", so don't put extra dots in your talon file names!
+        display_name = splits[-2].replace("_", " ")
 
-            if short_names[0] in overrides:
-                short_names = [overrides[short_names[0]]]
-            elif len(short_names) == 2 and short_names[1] in overrides:
-                short_names = [overrides[short_names[1]]]
+        # Make some extra speakable alternatives for the context's name
+        short_names: list[str] = actions.user.create_spoken_forms(
+            display_name,
+            generate_subsequences=False,
+        )
 
-            if enabled_only and context in active_contexts or not enabled_only:
-                local_context_command_map[context_name] = {}
-                for command_alias, val in context.commands.items():
-                    if command_alias in registry.commands or not enabled_only:
-                        local_context_command_map[context_name][
-                            str(val.rule.rule)
-                        ] = val.target.code
-                if len(local_context_command_map[context_name]) == 0:
-                    local_context_command_map.pop(context_name)
-                else:
-                    for short_name in short_names:
-                        cached_short_context_names[short_name] = context_name
+        if short_names[0] in overrides:
+            short_names = [overrides[short_names[0]]]
+        elif len(short_names) == 2 and short_names[1] in overrides:
+            short_names = [overrides[short_names[1]]]
 
-                    # the last entry will contain no symbols
-                    local_display_name_to_context_name_map[display_name] = context_name
-                    local_context_map[context_name] = context
+        if enabled_only and context in active_contexts or not enabled_only:
+            local_context_command_map[context_name] = {}
+            for command_alias, val in context.commands.items():
+                if command_alias in registry.commands or not enabled_only:
+                    local_context_command_map[context_name][
+                        str(val.rule.rule)
+                    ] = val.target.code
+            # If we didn't actually get any commands, toss the context out of
+            # the local context command map again.
+            if len(local_context_command_map[context_name]) == 0:
+                local_context_command_map.pop(context_name)
+            else:
+                for short_name in short_names:
+                    cached_short_context_names[short_name] = context_name
+
+                # the last entry will contain no symbols
+                local_display_name_to_context_name_map[display_name] = context_name
+                local_context_map[context_name] = context
 
     # Update all the global state after we've performed our calculations
     global context_map
@@ -462,6 +522,7 @@ def get_sorted_display_keys(
     context_map: dict[str, Any],
     display_name_to_context_name_map: dict[str, str],
 ):
+    """Return context names sorted by name, optionally grouped by specificity."""
     if settings.get("user.help_sort_contexts_by_specificity"):
         return get_sorted_keys_by_context_specificity(
             context_map,
@@ -500,7 +561,10 @@ def get_sorted_keys_by_context_specificity(
     )
 
 
-def refresh_rule_word_map(context_command_map):
+def refresh_rule_word_map(
+    context_command_map: dict[str, dict[tuple[str, str]]]
+) -> dict[str, set[tuple[str, str]]]:
+    """Create a map of word to context/rule that contain it."""
     rule_word_map = defaultdict(set)
 
     for context_name, commands in context_command_map.items():
@@ -534,26 +598,22 @@ def hide_all_help_guis():
     gui_list_help.hide()
 
 
-def paginate_list(data, SIZE=None):
-    chunk_size = SIZE or settings.get("user.help_max_command_lines_per_page")
+def paginate_list(data: dict[str, str], SIZE=None):
+    chunk_size: int = SIZE or settings.get("user.help_max_command_lines_per_page")
     it = iter(data)
-    for i in range(0, len(data), chunk_size):
+    for _ in range(0, len(data), chunk_size):
         yield {k: data[k] for k in islice(it, chunk_size)}
 
 
-def draw_list_commands(gui: imgui.GUI):
+def make_talonlist_pages():
+    """Turn the currently selected list into pages."""
     global selected_list
     global total_page_count
-    global selected_context_page
 
+    # FIXME: ListTypeFull can be multiple things, we only support dict[str,str] here
     talon_list = registry.lists[selected_list][-1]
-    # numpages = math.ceil(len(talon_list) / SIZE)
 
-    pages_list = []
-
-    for item in paginate_list(talon_list):
-        pages_list.append(item)
-    # print(pages_list)
+    pages_list = list(paginate_list(talon_list))
 
     total_page_count = len(pages_list)
     return pages_list
@@ -565,12 +625,9 @@ def gui_list_help(gui: imgui.GUI):
     global current_list_page
     global selected_list
 
-    pages_list = draw_list_commands(gui)
-    total_page_count = len(pages_list)
-    # print(pages_list[current_page])
+    pages_list = make_talonlist_pages()
 
     gui.text(f"{selected_list} {current_list_page}/{total_page_count}")
-
     gui.line()
 
     for key, value in pages_list[current_list_page - 1].items():
@@ -585,11 +642,13 @@ def gui_list_help(gui: imgui.GUI):
         if gui.button("Help previous"):
             actions.user.help_previous()
 
-        if gui.button("Help return"):
-            actions.user.help_return()
+    # TODO: until there is a "list of lists", nothing to return to
+    # if gui.button("Help return"):
+    #    actions.user.help_return()
 
-    if gui.button("Help refresh"):
-        actions.user.help_refresh()
+    # TODO: "help refresh" does nothing when the lists help window is showing
+    # if gui.button("Help refresh"):
+    #    actions.user.help_refresh()
 
     if gui.button("Help close"):
         actions.user.help_hide()
@@ -776,7 +835,3 @@ class Actions:
         refresh_context_command_map()
         register_events(False)
         ctx.tags = []
-
-
-def commands_updated(_):
-    update_title()
