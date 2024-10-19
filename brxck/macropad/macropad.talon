@@ -11,9 +11,11 @@
 
 # key(cmd-shift-alt-ctrl-c):
 
-# key(cmd-shift-alt-ctrl-d):
+key(cmd-shift-alt-ctrl-d):
+  user.desktop_last()
 
-# key(cmd-shift-alt-ctrl-e):
+key(cmd-shift-alt-ctrl-e):
+  user.desktop_next()
 
 key(cmd-shift-alt-ctrl-w):
   user.mode_toggle()
@@ -31,9 +33,22 @@ key(cmd-shift-alt-ctrl-z:up):
 
 # Layer 1
 
-# @0  @   3   4
-# 5   6   7   8
-# 9   10  11  12
+# @0   @    F13  F14
+# F15  F16  F17  F18
+# F19  F20  F21  F22
+
+# key(cmd-shift-alt-ctrl-f13):
+# key(cmd-shift-alt-ctrl-f14):
+# key(cmd-shift-alt-ctrl-f16):
+# key(cmd-shift-alt-ctrl-f17):
+# key(cmd-shift-alt-ctrl-f18):
+# key(cmd-shift-alt-ctrl-f19):
+# key(cmd-shift-alt-ctrl-f20):
+key(cmd-shift-alt-ctrl-f21):
+  key(cmd-space)
+  paste('Toggle System Appearance')
+  key(enter)
+# key(cmd-shift-alt-ctrl-f22):
 
 # ...
 
