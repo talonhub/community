@@ -370,6 +370,8 @@ class Actions:
         elif app.platform == "mac":
             # MacOS equivalent is "Mission Control"
             actions.user.dock_send_notification("com.apple.expose.awake")
+        else:
+            print("Persistent Switcher Menu not supported on " + app.platform)
 
     def switcher_toggle_running():
         """Shows/hides all running applications"""
