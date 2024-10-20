@@ -282,7 +282,6 @@ def gamepad_mouse_jump(direction: str):
     """Move the mouse cursor to the specified quadrant of the active screen"""
     x, y = ctrl.mouse_pos()
     rect = ui.screen_containing(x, y).rect
-    print(ui.active_window())
 
     # Half distance between cursor and screen edge
     match direction:

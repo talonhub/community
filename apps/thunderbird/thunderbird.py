@@ -3,11 +3,11 @@ from talon import Context, Module
 # --- App definitions ---
 # Main app TODO: mac context
 mod = Module()
-mod.apps.thunderbird = """
+mod.apps.thunderbird = r"""
 os: windows
 and app.name: Thunderbird
 os: windows
-and app.exe: thunderbird.exe
+and app.exe: /^thunderbird\.exe$/i
 """
 mod.apps.thunderbird = """
 os: linux
