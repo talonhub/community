@@ -369,9 +369,7 @@ class Actions:
             actions.key("alt-ctrl-tab")
         elif app.platform == "mac":
             # MacOS equivalent is "Mission Control"
-            actions.key("ctrl-up")
-        else:
-            print("Persistent Switcher Menu not supported on " + app.platform)
+            actions.user.dock_send_notification("com.apple.expose.awake")
 
     def switcher_toggle_running():
         """Shows/hides all running applications"""
