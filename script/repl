@@ -1,5 +1,0 @@
-#! /usr/bin/env bash
-
-# https://talon.wiki/Customization/misc-tips#repl-and-logging
-
-$HOME/.talon/bin/repl
