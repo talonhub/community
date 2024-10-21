@@ -44,13 +44,13 @@ key(cmd-shift-alt-ctrl-z:up):
 # key(cmd-shift-alt-ctrl-f18):
 # key(cmd-shift-alt-ctrl-f19):
 # key(cmd-shift-alt-ctrl-f20):
-key(cmd-shift-alt-ctrl-f21):
-  key(cmd-space)
-  paste('Toggle System Appearance')
-  key(enter)
-# key(cmd-shift-alt-ctrl-f22):
 
-# ...
+# f21+ don't seem to work
+key(cmd-shift-alt-ctrl-+):
+  user.raycast("Toggle System Appearance")
+
+key(cmd-shift-alt-ctrl-_):
+  speech.enable()
 
 # Layer 2
 
