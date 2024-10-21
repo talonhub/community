@@ -8,7 +8,7 @@ Originally from dweil/talon_community - modified for newapi by jcaw.
 #   platforms
 
 import logging
-from typing import Dict, Optional
+from typing import Any, Dict, Optional
 
 from talon import Context, Module, actions, settings, ui
 
@@ -18,7 +18,11 @@ mod.list(
     "Predefined window positions for the current window. See `RelativeScreenPos`.",
 )
 mod.list(
-    "window_split_positions",
+    "window_pair_positions",
+    "Predefined window positions when splitting the screen between three applications.",
+)
+mod.list(
+    "window_trio_positions",
     "Predefined window positions when splitting the screen between three applications.",
 )
 mod.setting(
@@ -276,30 +280,44 @@ _snap_positions = {
     "fullscreen": RelativeScreenPos(0, 0, 1, 1),
 }
 
-_split_positions = {
-    "split": {
-        2: [_snap_positions["left"], _snap_positions["right"]],
-        3: [
-            _snap_positions["left third"],
-            _snap_positions["center third"],
-            _snap_positions["right third"],
-        ],
-    },
-    "clock": {
-        3: [
-            _snap_positions["left"],
-            _snap_positions["top right"],
-            _snap_positions["bottom right"],
-        ],
-    },
-    "counterclock": {
-        3: [
-            _snap_positions["right"],
-            _snap_positions["top left"],
-            _snap_positions["bottom left"],
-        ],
-    },
+_pair_positions = {
+    "split": [_snap_positions["left"], _snap_positions["right"]],
 }
+
+_trio_positions = {
+    "thirds": [
+        _snap_positions["left third"],
+        _snap_positions["center third"],
+        _snap_positions["right third"],
+    ],
+    "clock": [
+        _snap_positions["left"],
+        _snap_positions["top right"],
+        _snap_positions["bottom right"],
+    ],
+    "counterclock": [
+        _snap_positions["right"],
+        _snap_positions["top left"],
+        _snap_positions["bottom left"],
+    ],
+}
+
+
+def _snap_layout(
+    positions: list[RelativeScreenPos],
+    windows: list[Any],
+):
+    """Split the screen between multiple windows."""
+    for index, window in enumerate(reversed(windows)):
+        _snap_window_helper(window, positions[len(windows) - index - 1])
+        window.focus()
+
+
+def _top_n_windows(num_windows: int):
+    active_window = ui.active_window()
+    ui_windows = ui.windows()
+    active_index = ui_windows.index(active_window)
+    return ui_windows[active_index : active_index + num_windows]
 
 
 @mod.capture(rule="{user.window_snap_positions}")
@@ -307,14 +325,20 @@ def window_snap_position(m) -> RelativeScreenPos:
     return _snap_positions[m.window_snap_positions]
 
 
-@mod.capture(rule="{user.window_split_positions}")
-def window_split_position(m) -> Dict[int, list[RelativeScreenPos]]:
-    return _split_positions[m.window_split_positions]
+@mod.capture(rule="{user.window_pair_positions}")
+def window_pair_position(m) -> list[RelativeScreenPos]:
+    return _pair_positions[m.window_pair_positions]
+
+
+@mod.capture(rule="{user.window_trio_positions}")
+def window_trio_position(m) -> list[RelativeScreenPos]:
+    return _trio_positions[m.window_trio_positions]
 
 
 ctx = Context()
 ctx.lists["user.window_snap_positions"] = _snap_positions.keys()
-ctx.lists["user.window_split_positions"] = _split_positions.keys()
+ctx.lists["user.window_pair_positions"] = _pair_positions.keys()
+ctx.lists["user.window_trio_positions"] = _trio_positions.keys()
 
 
 @mod.action_class
@@ -322,6 +346,13 @@ class Actions:
     def snap_window(position: RelativeScreenPos) -> None:
         """Move the active window to a specific position on its current screen, given a `RelativeScreenPos` object."""
         _snap_window_helper(ui.active_window(), position)
+
+    def snap_nth_window(window_number: int, position: RelativeScreenPos) -> None:
+        """Move the nth window to a specific position on its current screen, given a `RelativeScreenPos` object."""
+        top_n_windows = _top_n_windows(window_number)
+        target_window = top_n_windows[window_number - 1]
+        _snap_window_helper(target_window, position)
+        target_window.focus()
 
     def snap_window_to_position(position_name: str) -> None:
         """Move the active window to a specifically named position on its current screen, using a key from `_snap_positions`."""
@@ -345,22 +376,43 @@ class Actions:
         _bring_forward(window)
         _snap_window_helper(window, position)
 
-    def snap_layout(
-        positions_by_count: Dict[int, list[RelativeScreenPos]],
+    def snap_app_layout(
+        positions: list[RelativeScreenPos],
         apps: list[str],
     ):
         """Split the screen between multiple applications."""
-        try:
-            positions = positions_by_count[len(apps)]
-        except KeyError:
-            supported_layouts = ", ".join(map(str, positions_by_count.keys()))
-            message = f"{len(apps)} applications given but chosen layout only supports {supported_layouts}"
+        windows = [_get_app_window(app) for app in apps]
+        _snap_layout(positions, windows)
+
+    def snap_window_layout(
+        positions: list[RelativeScreenPos],
+        num_windows: int,
+    ):
+        """Snap next layout using the top three application windows"""
+        top_n_windows = _top_n_windows(num_windows)
+        top_n_windows.append(top_n_windows.pop(0))
+        _snap_layout(positions, top_n_windows)
+
+    def snap_window_layout_with_focus(
+        positions: list[RelativeScreenPos],
+        num_windows: int,
+        focus_window: int,
+    ):
+        """Snap layout with a specific window in focus."""
+        top_n_windows = _top_n_windows(num_windows)
+        focus_window -= 1
+
+        if 0 <= focus_window < len(top_n_windows):
+            top_n_windows[0], top_n_windows[focus_window] = (
+                top_n_windows[focus_window],
+                top_n_windows[0],
+            )
+        else:
+            message = f"Tried to focus the {focus_window} window but chosen layout only supports {num_windows}"
             actions.app.notify(message, "Cannot arrange")
-            raise NotImplementedError(message)
-        for index, app in enumerate(apps):
-            window = _get_app_window(app)
-            _snap_window_helper(window, positions[index])
-            window.focus()
+            raise ValueError(message)
+
+        _snap_layout(positions, top_n_windows)
 
     def move_app_to_screen(app_name: str, screen_number: int):
         """Move a specific application to another screen."""
