@@ -2,6 +2,7 @@
 (prose) <user.text>$:
     user.add_phrase_to_history(text)
     insert(text)
+    " "
 (prose) <user.text> over:
     user.add_phrase_to_history(text)
     insert(text)
