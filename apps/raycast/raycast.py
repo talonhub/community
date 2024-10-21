@@ -21,13 +21,14 @@ ctx.lists["user.raycast_input_command"] = {
 }
 
 
-@mod.action_class
-class Actions:
-    def raycast(command: str = "", input: str | None = None, wait: bool = True):
-        """Launch Raycast command with optional input"""
-        actions.key("cmd-space")
-        actions.sleep("150ms")
+def rc(command: str = "", input: str | None = None, wait: bool = True, key: str = "cmd-space"):
+    """Launch Raycast command with optional input"""
+    def on_focus(win):
+        if win.app.name != "Raycast":
+            return
 
+        ui.unregister("win_open", on_focus)
+        
         if command:
             actions.insert(command)
         if input is not None:
@@ -37,13 +38,20 @@ class Actions:
             actions.insert(input)
         if not wait:
             actions.key("enter")
+    
+    ui.register("win_open", on_focus)
+    actions.key(key)
+        
+@mod.action_class
+class Actions:
+    def raycast(command: str = "", input: str | None = None):
+        """Execute command immediately with raycast"""
+        rc(command, input, False) 
+        
+    def raycast_wait(command: str = "", input: str | None = None):
+        """Input command into raycast and wait"""
+        rc(command, input, True)
 
     def raycast_switcher(name: str = "", wait: bool = False):
         """Switch to window using Raycast"""
-        actions.key("alt-space")
-        actions.sleep("150ms")
-
-        if name:
-            actions.insert(name)
-        if not wait:
-            actions.key("enter")
+        rc(command=name, wait=wait, key="alt-space")

@@ -3,14 +3,16 @@ os: mac
 
 # todo: talon doesn't seem able to detect when raycast is focused
 
-^cast [<user.text>]$: user.raycast(text or "")
+^cast [<user.text>]$: user.raycast_wait(text or "")
 
 ^cast {user.raycast_command}$:
     user.raycast(raycast_command)
-    key(enter)
 
-^cast {user.raycast_input_command} [<user.text>]$:
-    user.raycast(raycast_input_command, text or "")
+^cast {user.raycast_input_command} <user.text>$:
+    user.raycast(raycast_input_command, text)
+
+^cast {user.raycast_input_command}$:
+    user.raycast_wait(raycast_input_command)
 
 ^menu [<user.text>]$:
     key(ctrl-alt-space)
