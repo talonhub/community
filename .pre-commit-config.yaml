@@ -1,7 +1,7 @@
 minimum_pre_commit_version: "3.2.0"
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v5.0.0
     hooks:
       - id: check-added-large-files
       - id: check-case-conflict
@@ -35,18 +35,18 @@ repos:
     hooks:
       - id: isort
   - repo: https://github.com/psf/black-pre-commit-mirror
-    rev: 24.1.1
+    rev: 24.10.0
     hooks:
       - id: black
   - repo: https://github.com/Lucas-C/pre-commit-hooks
-    rev: v1.5.4
+    rev: v1.5.5
     hooks:
       - id: remove-tabs
         types: [file]
         files: \.talon$
         args: ["--whitespaces-count=4"]
   - repo: https://github.com/wenkokke/talonfmt
-    rev: 1.10.1
+    rev: 1.10.2
     hooks:
       - id: talonfmt
         args: ["--in-place"]

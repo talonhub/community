@@ -6,34 +6,58 @@ from typing import Any, List, Mapping, Optional
 
 from talon import Module, actions
 
-from .abbreviate.abbreviate import abbreviations_list
-from .file_extension.file_extension import file_extensions
 from .keys.keys import symbol_key_words
 from .numbers.numbers import digits_map, scales, teens, tens
+from .user_settings import track_csv_list
 
 mod = Module()
-
 
 DEFAULT_MINIMUM_TERM_LENGTH = 2
 EXPLODE_MAX_LEN = 3
 FANCY_REGULAR_EXPRESSION = r"[A-Z]?[a-z]+|[A-Z]+(?![a-z])|[0-9]+"
-FILE_EXTENSIONS_REGEX = "|".join(
-    re.escape(file_extension.strip()) + "$"
-    for file_extension in file_extensions.values()
-)
 SYMBOLS_REGEX = "|".join(re.escape(symbol) for symbol in set(symbol_key_words.values()))
-REGEX_NO_SYMBOLS = re.compile(
-    "|".join(
-        [
-            FANCY_REGULAR_EXPRESSION,
-            FILE_EXTENSIONS_REGEX,
-        ]
-    )
-)
+FILE_EXTENSIONS_REGEX = r"^\b$"
+file_extensions = {}
 
-REGEX_WITH_SYMBOLS = re.compile(
-    "|".join([FANCY_REGULAR_EXPRESSION, FILE_EXTENSIONS_REGEX, SYMBOLS_REGEX])
-)
+
+def update_regex():
+    global REGEX_NO_SYMBOLS
+    global REGEX_WITH_SYMBOLS
+    REGEX_NO_SYMBOLS = re.compile(
+        "|".join(
+            [
+                FANCY_REGULAR_EXPRESSION,
+                FILE_EXTENSIONS_REGEX,
+            ]
+        )
+    )
+    REGEX_WITH_SYMBOLS = re.compile(
+        "|".join([FANCY_REGULAR_EXPRESSION, FILE_EXTENSIONS_REGEX, SYMBOLS_REGEX])
+    )
+
+
+update_regex()
+
+
+@track_csv_list("file_extensions.csv", headers=("File extension", "Name"))
+def on_extensions(values):
+    global FILE_EXTENSIONS_REGEX
+    global file_extensions
+    file_extensions = values
+    FILE_EXTENSIONS_REGEX = "|".join(
+        re.escape(file_extension.strip()) + "$" for file_extension in values.values()
+    )
+    update_regex()
+
+
+abbreviations_list = {}
+
+
+@track_csv_list("abbreviations.csv", headers=("Abbreviation", "Spoken Form"))
+def on_abbreviations(values):
+    global abbreviations_list
+    abbreviations_list = values
+
 
 REVERSE_PRONUNCIATION_MAP = {
     **{str(value): key for key, value in digits_map.items()},

@@ -35,13 +35,14 @@ class UserActions:
     def tab_jump(number: int):
         actions.key(f"alt-{number}")
 
-    # user.file_manager
-    def file_manager_go_back():
+    # user.navigation
+    def go_back():
         actions.key("alt-left")
 
-    def file_manager_go_forward():
+    def go_forward():
         actions.key("alt-right")
 
+    # user.file_manager
     def file_manager_open_parent():
         actions.key("alt-up")
 
