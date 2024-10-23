@@ -315,15 +315,27 @@ class UserActions:
         actions.user.vscode("workbench.action.quickOpen")
         actions.sleep("50ms")
         actions.insert(f"edt {string}")
+    
+    def tab_duplicate():
+        # Duplicates the current tab into a new tab group
+        # vscode does not allow duplicate tabs in the same tab group, and so is implemented through splits
+        actions.user.split_window_vertically()
 
     # splits.py support begin
     def split_number(index: int):
-        """Navigates to a the specified split"""
-        if index < 9:
-            if is_mac:
-                actions.key(f"cmd-{index}")
-            else:
-                actions.key(f"ctrl-{index}")
+        supported_ordinals = [
+            "First",
+            "Second",
+            "Third",
+            "Fourth",
+            "Fifth",
+            "Sixth",
+            "Seventh",
+            "Eighth",
+        ]
+        if 0 <= index - 1 < len(supported_ordinals):
+            actions.user.vscode(
+                f"workbench.action.focus{supported_ordinals[index - 1]}EditorGroup")
 
     # splits.py support end
 

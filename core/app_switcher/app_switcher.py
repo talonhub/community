@@ -35,22 +35,6 @@ excludes = set()
 running_application_dict = {}
 
 
-mac_application_directories = [
-    "/Applications",
-    "/Applications/Utilities",
-    "/Users/knausj/Applications/Chrome Apps.localized",
-    "/System/Applications",
-    "/System/Applications/Utilities",
-]
-
-linux_application_directories = [
-    "/usr/share/applications",
-    "/usr/local/share/applications",
-    os.path.expandvars("/home/$USER/.local/share/applications"),
-    "/var/lib/flatpak/exports/share/applications",
-    "/var/lib/snapd/desktop/applications",
-]
-
 words_to_exclude = [
     "zero",
     "one",
@@ -85,19 +69,9 @@ words_to_exclude = [
 if app.platform == "windows":
     import ctypes
     import os
-
-    import pywintypes
-
-    try:
-        pass
-    except ImportError:
-        # Python 2
-        pass
-
-        bytes = lambda x: str(buffer(x))
-
     from ctypes import wintypes
 
+    import pywintypes
     from win32com.propsys import propsys, pscon
     from win32com.shell import shell, shellcon
 
@@ -156,7 +130,7 @@ if app.platform == "windows":
         result.sort(key=lambda x: x.upper())
         return result
 
-    def get_windows_apps():
+    def get_apps():
         items = {}
         for item in enum_known_folder(FOLDERID_AppsFolder):
             try:
@@ -179,17 +153,29 @@ if app.platform == "windows":
 
         return items
 
-
-if app.platform == "linux":
+elif app.platform == "linux":
     import configparser
     import re
 
-    def get_linux_apps():
+    linux_application_directories = [
+        "/usr/share/applications",
+        "/usr/local/share/applications",
+        f"{Path.home()}/.local/share/applications",
+        "/var/lib/flatpak/exports/share/applications",
+        "/var/lib/snapd/desktop/applications",
+    ]
+    xdg_data_dirs = os.environ.get("XDG_DATA_DIRS")
+    if xdg_data_dirs is not None:
+        for directory in xdg_data_dirs.split(":"):
+            linux_application_directories.append(f"{directory}/applications")
+    linux_application_directories = list(set(linux_application_directories))
+
+    def get_apps():
         # app shortcuts in program menu are contained in .desktop files. This function parses those files for the app name and command
         items = {}
         # find field codes in exec key with regex
         # https://specifications.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html#exec-variables
-        args_pattern = re.compile(r" \%[UufFcik]")
+        args_pattern = re.compile(r"\%[UufFcik]")
         for base in linux_application_directories:
             if os.path.isdir(base):
                 for entry in os.scandir(base):
@@ -198,7 +184,7 @@ if app.platform == "linux":
                             config = configparser.ConfigParser(interpolation=None)
                             config.read(entry.path)
                             # only parse shortcuts that are not hidden
-                            if config.has_option("Desktop Entry", "NoDisplay") == False:
+                            if not config.has_option("Desktop Entry", "NoDisplay"):
                                 name_key = config["Desktop Entry"]["Name"]
                                 exec_key = config["Desktop Entry"]["Exec"]
                                 # remove extra quotes from exec
@@ -208,14 +194,49 @@ if app.platform == "linux":
                                 if exec_key[0] == "/":
                                     items[name_key] = re.sub(args_pattern, "", exec_key)
                                 else:
-                                    items[name_key] = "/usr/bin/" + re.sub(
-                                        args_pattern, "", exec_key
+                                    exec_path = (
+                                        subprocess.check_output(
+                                            ["which", exec_key.split()[0]],
+                                            stderr=subprocess.DEVNULL,
+                                        )
+                                        .decode("utf-8")
+                                        .strip()
                                     )
-                        except:
+                                    items[name_key] = (
+                                        exec_path
+                                        + " "
+                                        + re.sub(
+                                            args_pattern,
+                                            "",
+                                            " ".join(exec_key.split()[1:]),
+                                        )
+                                    )
+                        except Exception:
                             print(
-                                "get_linux_apps: skipped parsing application file ",
+                                "linux get_apps(): skipped parsing application file ",
                                 entry.name,
                             )
+        return items
+
+elif app.platform == "mac":
+    mac_application_directories = [
+        "/Applications",
+        "/Applications/Utilities",
+        "/System/Applications",
+        "/System/Applications/Utilities",
+        f"{Path.home()}/Applications",
+        f"{Path.home()}/.nix-profile/Applications",
+    ]
+
+    def get_apps():
+        items = {}
+        for base in mac_application_directories:
+            base = os.path.expanduser(base)
+            if os.path.isdir(base):
+                for name in os.listdir(base):
+                    path = os.path.join(base, name)
+                    name = name.rsplit(".", 1)[0].lower()
+                    items[name] = path
         return items
 
 
@@ -268,7 +289,6 @@ def update_running_list():
     ctx.lists["self.running"] = running
 
 
-
 def update_overrides(name, flags):
     """Updates the overrides and excludes lists"""
     global overrides, excludes
@@ -316,31 +336,18 @@ class Actions:
                 and os.path.basename(application.exe).lower() == name
             ):
                 return application
-        return None
-        # raise RuntimeError(f'App not running: "{name}"')
+        raise RuntimeError(f'App not running: "{name}"')
 
     def switcher_focus(name: str):
         """Focus a new application by name"""
-        # print(name)
-        application = actions.user.get_running_app(name)
+        app = actions.user.get_running_app(name)
 
-        if application:
-            # Focus next window on same app
-            if application == ui.active_app():
-                actions.app.window_next()
-            # Focus new app
-            else:
-                actions.user.switcher_focus_app(application)
-            return True
-        elif name in ctx.lists["self.launch"]:
-            actions.user.switcher_launch(ctx.lists["self.launch"][name])
-            t1 = time.perf_counter()
-            # while name != ctx.lists["self.launch"][name]:
-            #     print(ui.active_app().name)
-            #     print(ctx.lists["self.launch"][name])
-            #     if time.perf_counter() - t1 > 3:
-            #         raise RuntimeError(f"Can't focus app: {name}")
-            #     actions.sleep(0.1)
+        # Focus next window on same app
+        if app == ui.active_app():
+            actions.app.window_next()
+        # Focus new app
+        else:
+            actions.user.switcher_focus_app(app)
 
     def switcher_focus_app(app: ui.App):
         """Focus application and wait until switch is made"""
@@ -362,21 +369,6 @@ class Actions:
             if time.perf_counter() - t1 > 1:
                 raise RuntimeError(f"Can't focus window: {window.title}")
             actions.sleep(0.1)
-
-    def switcher_focus_window_by_name(application_name: str, window_name: str):
-        """Something here"""
-        # print(application_name)
-        # print(window_name)
-        application = actions.user.get_running_app(application_name)
-        if application:
-            # print("application found")
-            for window in application.windows():
-                # print("title:"  + window.title)
-                if window_name in window.title:
-
-                    window.focus()
-                    return True
-        return False
 
     def switcher_launch(path: str):
         """Launch a new application by path (all OSes), or AppUserModel_ID path on Windows"""
@@ -407,15 +399,6 @@ class Actions:
         """Open a menu of running apps to switch to"""
         if app.platform == "windows":
             actions.key("alt-ctrl-tab")
-        elif app.platform == "mac":
-            actions.key("ctrl-up")
-
-    def switcher_show_desktop():
-        """toggles the desktop view"""
-        if app.platform == "windows":
-            actions.key("super-d")
-        elif app.platform == "mac":
-            actions.key("f11")
         else:
             print("Persistent Switcher Menu not supported on " + app.platform)
 
@@ -447,22 +430,9 @@ def gui_running(gui: imgui.GUI):
 
 
 def update_launch_list():
-    launch = {}
-    if app.platform == "mac":
-        for base in mac_application_directories:
-            if os.path.isdir(base):
-                for name in os.listdir(base):
-                    path = os.path.join(base, name)
-                    name = name.rsplit(".", 1)[0].lower()
-                    launch[name] = path
+    launch = get_apps()
 
-    elif app.platform == "windows":
-        launch = get_windows_apps()
-
-    elif app.platform == "linux":
-        launch = get_linux_apps()
-
-        # actions.user.talon_pretty_print(launch)
+    # actions.user.talon_pretty_print(launch)
 
     ctx.lists["self.launch"] = actions.user.create_spoken_forms_from_map(
         launch, words_to_exclude
