@@ -267,7 +267,7 @@ prose_formatter_names = {
     "title": "CAPITALIZE_ALL_WORDS",
 }
 reformatter_names = {
-    "cap": "CAPITALIZE",
+    "recap": "CAPITALIZE",
     "list": "COMMA_SEPARATED",
     "unformat": "REMOVE_FORMATTING",
 }
