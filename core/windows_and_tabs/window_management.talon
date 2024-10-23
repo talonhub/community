@@ -17,5 +17,8 @@ snap last [screen]: user.move_window_previous_screen()
 snap screen <number>: user.move_window_to_screen(number)
 snap <user.running_applications> <user.window_snap_position>:
     user.snap_app(running_applications, window_snap_position)
+# <user.running_applications> is here twice to require at least two applications.
+snap <user.window_split_position> <user.running_applications> <user.running_applications>+:
+    user.snap_layout(window_split_position, running_applications_list)
 snap <user.running_applications> [screen] <number>:
     user.move_app_to_screen(running_applications, number)
