@@ -1,5 +1,5 @@
 from talon import Context, Module, actions, app
-
+import os
 is_mac = app.platform == "mac"
 
 ctx = Context()
@@ -167,6 +167,16 @@ class Actions:
     def command_palette():
         """Show command palette"""
         actions.key("ctrl-shift-p")
+    
+    def vscode_launch(path: str):
+        """vscode_launch"""
+        if is_mac:    
+            result = os.system(f'/usr/local/bin/code {path}')
+        else:
+            result = os.system(f"code {path}")
+        print(result)
+
+        
 
 
 @mac_ctx.action_class("edit")
