@@ -1,0 +1,4 @@
+list: user.vscode_projects
+os: windows
+-
+talent user: %appdata%\talon\user

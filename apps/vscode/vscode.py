@@ -5,6 +5,11 @@ is_mac = app.platform == "mac"
 ctx = Context()
 mac_ctx = Context()
 mod = Module()
+mod.list(
+    "vscode_projects",
+    desc="List of vscode projects",
+)
+
 mod.apps.vscode = """
 os: mac
 and app.bundle: com.microsoft.VSCode

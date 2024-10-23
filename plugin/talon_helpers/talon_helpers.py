@@ -245,3 +245,8 @@ class Actions:
         """Dump active applications"""
         for app in ui.apps():
             print(app.name.lower())
+    
+    def talon_edit_log():
+        """Edit talon log"""
+        actions.user.exec("code C:\\Users\\knaus\\AppData\\Roaming\\talon\\talon.log")
+        
