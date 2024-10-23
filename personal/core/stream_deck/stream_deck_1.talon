@@ -69,17 +69,22 @@ deck(zoom/ctrl-left):
 # deck(zoom):
 #     skip(user.deck15)
 deck(control/left):
-    user.deck1()
+    mouse_click(0)
 deck(control/right):
-    user.deck2()
+    mouse_click(1)
 deck(control/double):
-    user.deck3()
+    mouse_click(0)
+    mouse_click(0)
 deck(control/triple):
-    user.deck4()
+    mouse_click(0)
+    mouse_click(0)
+    mouse_click(0)
 deck(control/drag):
-    user.deck5()
+    user.mouse_drag(0)
 deck(control/shift-left):
-    user.deck6()
+    key("shift:down")
+    mouse_click(0)
+    key("shift:up")
 deck(control/fast-up-button):
     user.deck7()
 deck(control/mobile-phone):
@@ -89,7 +94,9 @@ deck(control/man-gesturing-no):
 deck(control/repeat-button):
     user.deck10()
 deck(control/ctrl-left):
-    user.deck11()
+    key("ctrl:down")
+    mouse_click(0)
+    key("ctrl:up")
 deck(control/eye):
     user.deck12()
 deck(control/studio-microphone):
