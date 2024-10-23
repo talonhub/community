@@ -1,9 +1,9 @@
 # #zoom mouse trigger paged
-# deck.serial: A00SA3192M9DW0
-# -
+deck.serial: A00SA3232MA4OZ
+-
 # #images from https://joypixels.com/emoji
-# deck(left-arrow):
-#     user.deck1()
+deck(left-arrow):
+    user.deck1()
 # deck(right-arrow):
 #     user.deck2()
 # deck(keycap-2):

@@ -74,7 +74,6 @@ settings():
 # Uncomment this to enable the curse yes/curse no commands (show hide mouse cursor). See issue #688.
 # tag(): user.mouse_cursor_commands_enable
 # tag():user.mouse_grid_enabled
-tag(): user.cursorless_experimental_snippets
 tag(): user.talon_populate_lists
 tag(): user.prefixed_numbers
 # tag(): talon_plugins.eye_zoom_mouse.zoom_mouse_noise
