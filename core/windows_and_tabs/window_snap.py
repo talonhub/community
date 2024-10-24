@@ -113,7 +113,13 @@ def _move_to_screen(
     dest = dest_screen.visible_rect
     src = src_screen.visible_rect
     maximized = window.maximized
+    fullscreen = window.fullscreen
     how = settings.get("user.window_snap_screen")
+	
+    # At present, we are unable to set the position of a fullscreen window on macOS 
+    if app.platform == "mac" and fullscreen:
+        return
+        
     if how == "size aware":
         r = window.rect
         left, right = interpolate_interval(
@@ -128,6 +134,8 @@ def _move_to_screen(
         window.rect = r
         if maximized:
             window.maximized = True
+        if fullscreen:
+            window.fullscreen = True
         return
 
     # TODO: Test vertical screen with different aspect ratios
@@ -186,6 +194,8 @@ def _move_to_screen(
     _set_window_pos(window, x=x, y=y, width=width, height=height)
     if maximized:
         window.maximized = True
+    if fullscreen:
+        window.fullscreen = True
 
 
 def _snap_window_helper(window, pos):
