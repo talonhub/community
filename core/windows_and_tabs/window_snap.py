@@ -10,7 +10,7 @@ Originally from dweil/talon_community - modified for newapi by jcaw.
 import logging
 from typing import Dict, Optional
 
-from talon import Context, Module, actions, settings, ui
+from talon import Context, Module, actions, settings, ui, app
 
 mod = Module()
 mod.list(
