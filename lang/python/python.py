@@ -240,7 +240,7 @@ class UserActions:
 
     def code_operator_bitwise_exclusive_or_assignment():
         actions.auto_insert(" ^= ")
-    
+
     def code_operator_bitwise_not():
         actions.auto_insert("~")
 
