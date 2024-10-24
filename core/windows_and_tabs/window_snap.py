@@ -10,7 +10,7 @@ Originally from dweil/talon_community - modified for newapi by jcaw.
 import logging
 from typing import Optional
 
-from talon import Context, Module, actions, settings, ui
+from talon import Context, Module, actions, settings, ui, app
 
 mod = Module()
 mod.list(
@@ -109,7 +109,11 @@ def _move_to_screen(
     dest = dest_screen.visible_rect
     src = src_screen.visible_rect
     maximized = window.maximized
+    fullscreen = window.fullscreen
     how = settings.get("user.window_snap_screen")
+    if app.platform == "mac" and fullscreen:
+        return
+        
     if how == "size aware":
         r = window.rect
         left, right = interpolate_interval(
@@ -118,12 +122,15 @@ def _move_to_screen(
         top, bot = interpolate_interval(
             r.top, r.bot, src.top, src.bot, dest.top, dest.bot
         )
+
         r.x, r.y = left, top
         r.width = right - left
         r.height = bot - top
         window.rect = r
         if maximized:
             window.maximized = True
+        if fullscreen:
+            window.fullscreen = True
         return
 
     # TODO: Test vertical screen with different aspect ratios
@@ -182,6 +189,8 @@ def _move_to_screen(
     _set_window_pos(window, x=x, y=y, width=width, height=height)
     if maximized:
         window.maximized = True
+    if fullscreen:
+        window.fullscreen = True
 
 
 def _snap_window_helper(window, pos):
