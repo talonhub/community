@@ -2,6 +2,10 @@ settings():
     # Adjust the scale of the imgui
     imgui.scale = 1.3
 
+    # Uncomment to set the speech timeout. This is the amount of time after you stop
+    # speaking until Talon starts processing the spoken audio. Default is 0.3s.
+    # speech.timeout = 0.3
+
     # Uncomment to enable dark mode for talon help menus
     # imgui.dark_mode = true
 
@@ -14,11 +18,17 @@ settings():
     # Set the number of contexts to display per help page
     user.help_max_contexts_per_page = 20
 
+    # Uncomment to always sort help contexts alphabetically.
+    # user.help_sort_contexts_by_specificity = false
+
     # Set the scroll amount for continuous scroll/gaze scroll
     user.mouse_continuous_scroll_amount = 80
 
     # If `true`, stop continuous scroll/gaze scroll with a pop
     user.mouse_enable_pop_stops_scroll = true
+
+    # If `true`, stop mouse drag with a pop
+    user.mouse_enable_pop_stops_drag = true
 
     # Choose how pop click should work in 'control mouse' mode
     # 0 = off
@@ -72,6 +82,9 @@ settings():
 
     # Puts Talon into sleep mode if no commands are spoken for a defined period of time.
     # user.listening_timeout_minutes = 3
+
+    # Time in seconds to wait for the clipboard to change when trying to get selected text
+    # user.selected_text_timeout = 0.25
 
 # Uncomment to enable the curse yes/curse no commands (show/hide mouse cursor).
 # See issue #688 for more detail: https://github.com/talonhub/community/issues/688
