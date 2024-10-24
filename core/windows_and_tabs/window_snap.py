@@ -8,7 +8,7 @@ Originally from dweil/talon_community - modified for newapi by jcaw.
 #   platforms
 
 import logging
-from typing import Dict, Optional
+from typing import Any, Dict, Optional
 
 from talon import Context, Module, actions, settings, ui
 
@@ -19,7 +19,7 @@ mod.list(
 )
 mod.list(
     "window_split_positions",
-    "Predefined window positions when splitting the screen between three applications.",
+    "Predefined window positions when splitting the screen between multiple windows.",
 )
 mod.setting(
     "window_snap_screen",
@@ -210,6 +210,17 @@ class RelativeScreenPos:
         self.right = right
 
 
+class WindowLayout:
+    """Represents a layout of windows on a screen"""
+
+    def __init__(
+        self, layout: list[RelativeScreenPos], windows: list[Any], should_rotate: bool
+    ):
+        self.layout = layout
+        self.windows = windows
+        self.should_rotate = should_rotate
+
+
 _snap_positions = {
     # Halves
     # .---.---.     .-------.
@@ -299,14 +310,154 @@ _split_positions = {
 }
 
 
+def _snap_next(windows: list[Any], target_layout: RelativeScreenPos) -> int:
+    print(windows)
+    for index, window in enumerate(windows):
+        if window is None:
+            return index
+        try:
+            _snap_window_helper(
+                window,
+                target_layout,
+            )
+            return index
+        except Exception as e:
+            print(f"Failed to snap window: {e}")
+    return -1
+
+
+def _snap_layout(window_layout: WindowLayout):
+    """Split the screen between multiple windows."""
+    import copy
+
+    target_layout = copy.deepcopy(window_layout.layout)
+    remaining_windows = window_layout.windows
+    snapped_windows = []
+    snapped_window_index = 0
+    if window_layout.should_rotate:
+        target_layout.insert(0, target_layout.pop())
+
+    while len(target_layout) > 0:
+        snapped_window_index = _snap_next(remaining_windows, target_layout.pop(0))
+        if snapped_window_index >= 0:
+            snapped_windows.insert(0, remaining_windows[snapped_window_index])
+            remaining_windows = remaining_windows[snapped_window_index + 1 :]
+
+    if window_layout.should_rotate:
+        snapped_windows.insert(0, snapped_windows.pop())
+    for window in snapped_windows:
+        window.focus()
+
+
+def _top_n_windows() -> list[Any]:
+    active_window = ui.active_window()
+    ui_windows = ui.windows()
+    active_index = ui_windows.index(active_window)
+    return ui_windows[active_index:]
+
+
 @mod.capture(rule="{user.window_snap_positions}")
 def window_snap_position(m) -> RelativeScreenPos:
     return _snap_positions[m.window_snap_positions]
 
 
-@mod.capture(rule="{user.window_split_positions}")
-def window_split_position(m) -> Dict[int, list[RelativeScreenPos]]:
-    return _split_positions[m.window_split_positions]
+@mod.capture(rule="{user.window_split_positions} [<number_small>]")
+def window_split_position(m) -> list[RelativeScreenPos]:
+    if hasattr(m, "number_small"):
+        return _split_positions[m.window_split_positions][m.number_small]
+    else:
+        min_key = min(_split_positions[m.window_split_positions].keys())
+        return _split_positions[m.window_split_positions][min_key]
+
+
+@mod.capture(rule="all")
+def all_windows(m) -> list[Any]:
+    return _top_n_windows()
+
+
+@mod.capture(rule="gap")
+def skip_window(m) -> list[Any]:
+    return [None]
+
+
+@mod.capture(rule="<user.running_applications>")
+def application_windows(m) -> list[Any]:
+    return [
+        window
+        for app in m.running_applications_list
+        for window in actions.self.get_running_app(app).windows()
+    ]
+
+
+@mod.capture(
+    rule="<user.application_windows>|<user.numbered_windows>|<user.skip_window>"
+)
+def layout_item(m) -> list[Any]:
+    # Check for multiple attributes and raise an error if found
+    attributes = [
+        hasattr(m, "application_windows"),
+        hasattr(m, "numbered_windows"),
+        hasattr(m, "skip_window"),
+    ]
+
+    if sum(attributes) > 1:
+        raise ValueError(
+            "Multiple attributes found on 'm'. Only one of 'application_windows', 'numbered_windows', or 'skip_window' should be present."
+        )
+
+    # Return the appropriate list based on which attribute is available
+    if hasattr(m, "application_windows"):
+        return m.application_windows
+    elif hasattr(m, "numbered_windows"):
+        return m.numbered_windows
+    elif hasattr(m, "skip_window"):
+        return m.skip_window
+    else:
+        return []
+
+
+@mod.capture(rule="<user.ordinals_small>+")
+def numbered_windows(m) -> list[Any]:
+    all_windows = _top_n_windows()
+    selected_windows = [
+        all_windows[i - 1] for i in m.ordinals_small_list if i - 1 < len(all_windows)
+    ]
+    return selected_windows
+
+
+@mod.capture(rule="<user.layout_item>+ [<user.all_windows>]")
+def target_windows(m) -> list[Any]:
+    windows = []
+    if hasattr(m, "layout_item_list"):
+        windows += [window for sublist in m.layout_item_list for window in sublist]
+
+    if hasattr(m, "all_windows"):
+        windows += [w for w in m.all_windows if w not in windows]
+    return windows
+
+
+@mod.capture(
+    rule="{user.window_split_positions} [<number_small>] [<user.target_windows>]"
+)
+def window_layout(m) -> WindowLayout:
+    if hasattr(m, "target_windows"):
+        target_length = len(m.target_windows)
+    else:
+        target_length = len(_top_n_windows())
+    if hasattr(m, "number_small"):
+        layout = _split_positions[m.window_split_positions][m.number_small]
+    else:
+        closest_key = min(
+            _split_positions[m.window_split_positions].keys(),
+            key=lambda k: abs(k - target_length),
+        )
+        layout = _split_positions[m.window_split_positions][closest_key]
+    if hasattr(m, "target_windows"):
+        target_windows = m.target_windows
+    else:
+        target_windows = _top_n_windows()
+
+    return WindowLayout(layout, target_windows, not hasattr(m, "target_windows"))
 
 
 ctx = Context()
@@ -343,21 +494,10 @@ class Actions:
         _snap_window_helper(window, position)
 
     def snap_layout(
-        positions_by_count: Dict[int, list[RelativeScreenPos]],
-        apps: list[str],
+        window_layout: WindowLayout,
     ):
         """Split the screen between multiple applications."""
-        try:
-            positions = positions_by_count[len(apps)]
-        except KeyError:
-            supported_layouts = ", ".join(map(str, positions_by_count.keys()))
-            message = f"{len(apps)} applications given but chosen layout only supports {supported_layouts}"
-            actions.app.notify(message, "Cannot arrange")
-            raise NotImplementedError(message)
-        for index, app in enumerate(apps):
-            window = _get_app_window(app)
-            _snap_window_helper(window, positions[index])
-            window.focus()
+        _snap_layout(window_layout)
 
     def move_app_to_screen(app_name: str, screen_number: int):
         """Move a specific application to another screen."""
