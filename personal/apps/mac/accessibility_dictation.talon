@@ -21,4 +21,5 @@ app: calendar
 app: git_hub_desktop
 -
 settings():
-	user.accessibility_dictation = 1
+	user.accessibility_dictation = true
+	user.context_sensitive_dictation = true
