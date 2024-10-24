@@ -14,7 +14,7 @@ configure {user.system_setting}:
 summon <user.directory>:
      user.system_open_directory(directory)
 portal [<phrase>]$: user.system_show_portal(phrase or "")
-coder [<phrase>]$: user.system_show_coder(phrase or "")
+coder$: user.system_show_coder()
 messer: user.system_show_messenger()
 messy: user.system_show_slacker()
 outer: user.system_show_email()
