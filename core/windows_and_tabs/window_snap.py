@@ -123,7 +123,6 @@ def _move_to_screen(
         r.height = bot - top
         window.rect = r
         if maximized:
-            print("Preserving maximize status")
             window.maximized = True
         return
 
@@ -182,7 +181,6 @@ def _move_to_screen(
         height = window.rect.height * proportional_height
     _set_window_pos(window, x=x, y=y, width=width, height=height)
     if maximized:
-        print("Preserving maximize status")
         window.maximized = True
 
 
