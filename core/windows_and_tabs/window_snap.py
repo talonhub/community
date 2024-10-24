@@ -115,11 +115,11 @@ def _move_to_screen(
     maximized = window.maximized
     fullscreen = window.fullscreen
     how = settings.get("user.window_snap_screen")
-	
-    # At present, we are unable to set the position of a fullscreen window on macOS 
+
+    # At present, we are unable to set the position of a fullscreen window on macOS
     if app.platform == "mac" and fullscreen:
         return
-        
+
     if how == "size aware":
         r = window.rect
         left, right = interpolate_interval(
