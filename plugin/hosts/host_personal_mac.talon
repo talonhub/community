@@ -1,5 +1,5 @@
 os: mac
-hostname: jeffs-mbp.lan
+hostname: macbookpro.lan
 -
 settings():
     user.system_portal_name = "safari"

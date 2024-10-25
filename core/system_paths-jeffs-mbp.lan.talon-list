@@ -1,5 +1,5 @@
 list: user.system_paths
-host: jeffs-mbp.lan
+host: macbookpro.lan
 -
 user: '/Users/knausj'
 profile: '/Users/knausj'
