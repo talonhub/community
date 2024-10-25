@@ -122,14 +122,14 @@ class UserActionsMac:
 
     def system_show_slacker(phrase: str = None):
         actions.user.launch_or_focus_bundle(
-            "com.google.Chrome.app.nabnijjbhmmgnnohmlablhajenhllcda"
+            "com.apple.Safari.WebApp.A240B276-0EFC-4A6C-B441-34814CCA8028"
         )
         actions.sleep("250ms")
         actions.user.parse_phrase(phrase or "")
 
     def system_show_email(phrase: str = None):
         actions.user.launch_or_focus_bundle(
-            "com.google.Chrome.app.fmgjjmmmlfnkbppncabfkddbjimcfncm"
+            "com.apple.Safari.WebApp.85038FE5-E720-4773-8851-EC5FA8FF4971"
         )
         actions.sleep("250ms")
         actions.user.parse_phrase(phrase or "")

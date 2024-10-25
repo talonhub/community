@@ -64,10 +64,12 @@ class Actions:
     def deck_pedal_middle():
         """middle pedal"""
         actions.talon_plugins.eye_zoom_mouse.mouse_trigger()
+        actions.deck.goto("A00SA3192M9DW0", "zoom")
 
     def deck_pedal_right():
         """right pedal"""
-        trigger_home_row()
+        # trigger_home_row()
+        actions.user.quick_pick_show()
 
     def deck1():
         """document string goes here"""
