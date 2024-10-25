@@ -346,7 +346,7 @@ def _snap_layout(window_layout: WindowLayout):
             snapped_windows.insert(0, remaining_windows[snapped_window_index])
             remaining_windows = remaining_windows[snapped_window_index + 1 :]
 
-    if window_layout.should_rotate:
+    if window_layout.should_rotate and len(snapped_windows) > 0:
         snapped_windows.insert(0, snapped_windows.pop())
     for window in snapped_windows:
         window.focus()
