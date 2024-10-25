@@ -20,3 +20,10 @@ tag require [{user.talon_tags}]:
 host require:
     hostname = user.talon_get_hostname()
     insert("hostname: {hostname}\n")
+bundle require:
+    insert("app.bundle: ")
+language require {user.language_mode}:
+    insert("code.language: {language_mode}\n")
+language require:
+    insert("code.language: ")
+

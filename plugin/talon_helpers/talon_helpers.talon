@@ -25,10 +25,10 @@ talent copy executable:
     clip.set_text(executable)
 talent copy bundle:
     bundle = app.bundle()
-    clip.set_text(bundle)
+    clip.set_text("app.bundle: {bundle}")
 talent copy title: 
     title = win.title()
-    clip.set_text(title)
+    clip.set_text("win.title: {title}")
 talent dump version: 
     result = user.talon_version_info()
     print(result)
