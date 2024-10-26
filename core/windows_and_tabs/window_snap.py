@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+
 """Tools for voice-driven window management.
 
 Originally from dweil/talon_community - modified for newapi by jcaw.
@@ -228,15 +230,13 @@ class RelativeScreenPos:
         return f"RelativeScreenPos(left={self.left}, top={self.top}, right={self.right}, bottom={self.bottom})"
 
 
+@dataclass
 class WindowLayout:
     """Represents a layout of windows on a screen"""
 
-    def __init__(
-        self, layout: list[RelativeScreenPos], windows: list[Any], should_rotate: bool
-    ):
-        self.layout = layout
-        self.windows = windows
-        self.should_rotate = should_rotate
+    layout: list["RelativeScreenPos"]
+    windows: list[Any]
+    should_rotate: bool
 
 
 _snap_positions = {
