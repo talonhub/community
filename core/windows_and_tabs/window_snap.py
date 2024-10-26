@@ -329,7 +329,6 @@ _split_positions = {
 
 
 def _snap_next(windows: list[Any], target_layout: RelativeScreenPos) -> Optional[int]:
-    print(windows)
     for index, window in enumerate(windows):
         if window is None:
             return index
@@ -375,7 +374,7 @@ def _snap_layout(window_layout: WindowLayout):
     currently_snapping_layout = False
 
 
-def _top_n_windows() -> list[Any]:
+def _windows_under_active_window() -> list[Any]:
     active_window = ui.active_window()
     ui_windows = ui.windows()
     try:
@@ -400,8 +399,8 @@ def window_split_position(m) -> list[RelativeScreenPos]:
 
 
 @mod.capture(rule="all")
-def all_windows(m) -> list[Any]:
-    return _top_n_windows()
+def all_candidate_windows(m) -> list[Any]:
+    return _windows_under_active_window()
 
 
 @mod.capture(rule="gap")
@@ -447,21 +446,21 @@ def layout_item(m) -> list[Any]:
 
 @mod.capture(rule="<user.ordinals_small>+")
 def numbered_windows(m) -> list[Any]:
-    all_windows = _top_n_windows()
+    all_windows = _windows_under_active_window()
     selected_windows = [
         all_windows[i - 1] for i in m.ordinals_small_list if i - 1 < len(all_windows)
     ]
     return selected_windows
 
 
-@mod.capture(rule="<user.layout_item>+ [<user.all_windows>]")
+@mod.capture(rule="<user.layout_item>+ [<user.all_candidate_windows>]")
 def target_windows(m) -> list[Any]:
     windows = []
     if hasattr(m, "layout_item_list"):
         windows += [window for sublist in m.layout_item_list for window in sublist]
 
-    if hasattr(m, "all_windows"):
-        windows += [w for w in m.all_windows if w not in windows]
+    if hasattr(m, "all_candidate_windows"):
+        windows += [w for w in m.all_candidate_windows if w not in windows]
     return windows
 
 
@@ -473,7 +472,7 @@ def window_layout(m) -> WindowLayout:
     if hasattr(m, "target_windows"):
         target_length = len(m.target_windows)
     else:
-        target_length = len(_top_n_windows())
+        target_length = len(_windows_under_active_window())
     if hasattr(m, "number_small"):
         layout = _split_positions[m.window_split_positions][m.number_small]
     else:
@@ -485,7 +484,7 @@ def window_layout(m) -> WindowLayout:
     if hasattr(m, "target_windows"):
         target_windows = m.target_windows
     else:
-        target_windows = _top_n_windows()
+        target_windows = _windows_under_active_window()
 
     return WindowLayout(
         layout,
