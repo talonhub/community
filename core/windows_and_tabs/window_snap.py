@@ -212,6 +212,10 @@ class RelativeScreenPos:
         self.bottom = bottom
         self.right = right
 
+    def __str__(self):
+        # Return a string representation of the RelativeScreenPos instance
+        return f"RelativeScreenPos(left={self.left}, top={self.top}, right={self.right}, bottom={self.bottom})"
+
 
 class WindowLayout:
     """Represents a layout of windows on a screen"""
@@ -313,7 +317,7 @@ _split_positions = {
 }
 
 
-def _snap_next(windows: list[Any], target_layout: RelativeScreenPos) -> int:
+def _snap_next(windows: list[Any], target_layout: RelativeScreenPos) -> Optional[int]:
     print(windows)
     for index, window in enumerate(windows):
         if window is None:
@@ -326,7 +330,7 @@ def _snap_next(windows: list[Any], target_layout: RelativeScreenPos) -> int:
             return index
         except Exception as e:
             print(f"Failed to snap window: {e}")
-    return -1
+    return None
 
 
 def _snap_layout(window_layout: WindowLayout):
@@ -338,16 +342,16 @@ def _snap_layout(window_layout: WindowLayout):
     snapped_windows = []
     snapped_window_index = 0
     if window_layout.should_rotate:
-        target_layout.insert(0, target_layout.pop())
+        target_layout.append(target_layout.pop(0))
 
     while len(target_layout) > 0:
         snapped_window_index = _snap_next(remaining_windows, target_layout.pop(0))
-        if snapped_window_index >= 0:
+        if snapped_window_index is not None:
             snapped_windows.insert(0, remaining_windows[snapped_window_index])
             remaining_windows = remaining_windows[snapped_window_index + 1 :]
 
     if window_layout.should_rotate and len(snapped_windows) > 0:
-        snapped_windows.insert(0, snapped_windows.pop())
+        snapped_windows.append(snapped_windows.pop(0))
     for window in snapped_windows:
         window.focus()
 
