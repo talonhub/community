@@ -32,6 +32,7 @@ mod.setting(
   "size aware": Preserve position relative to the screen, but keep absolute size the same, except if window is full-height or -width, keep it so.
 """,
 )
+last_focus_was_done_by_snap_layout = False
 
 
 def _set_window_pos(window, x, y, width, height):
@@ -335,6 +336,8 @@ def _snap_next(windows: list[Any], target_layout: RelativeScreenPos) -> Optional
 
 def _snap_layout(window_layout: WindowLayout):
     """Split the screen between multiple windows."""
+    global last_focus_was_done_by_snap_layout
+    last_focus_was_done_by_snap_layout = True
     import copy
 
     target_layout = copy.deepcopy(window_layout.layout)
@@ -447,6 +450,7 @@ def target_windows(m) -> list[Any]:
     rule="{user.window_split_positions} [<number_small>] [<user.target_windows>]"
 )
 def window_layout(m) -> WindowLayout:
+    global last_focus_was_done_by_snap_layout
     if hasattr(m, "target_windows"):
         target_length = len(m.target_windows)
     else:
@@ -464,7 +468,11 @@ def window_layout(m) -> WindowLayout:
     else:
         target_windows = _top_n_windows()
 
-    return WindowLayout(layout, target_windows, not hasattr(m, "target_windows"))
+    return WindowLayout(
+        layout,
+        target_windows,
+        not hasattr(m, "target_windows") and last_focus_was_done_by_snap_layout,
+    )
 
 
 ctx = Context()
