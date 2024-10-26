@@ -35,6 +35,11 @@ mod.setting(
 last_focus_was_done_by_snap_layout = False
 
 
+def _focus_was_done_by_other_method(_):
+    global last_focus_was_done_by_snap_layout
+    last_focus_was_done_by_snap_layout = False
+
+
 def _set_window_pos(window, x, y, width, height):
     """Helper to set the window position."""
     # TODO: Special case for full screen move - use os-native maximize, rather
@@ -337,7 +342,6 @@ def _snap_next(windows: list[Any], target_layout: RelativeScreenPos) -> Optional
 def _snap_layout(window_layout: WindowLayout):
     """Split the screen between multiple windows."""
     global last_focus_was_done_by_snap_layout
-    last_focus_was_done_by_snap_layout = True
     import copy
 
     target_layout = copy.deepcopy(window_layout.layout)
@@ -345,6 +349,7 @@ def _snap_layout(window_layout: WindowLayout):
     snapped_windows = []
     snapped_window_index = 0
     if window_layout.should_rotate:
+        print("Trying to rotate")
         target_layout.append(target_layout.pop(0))
 
     while len(target_layout) > 0:
@@ -357,13 +362,18 @@ def _snap_layout(window_layout: WindowLayout):
         snapped_windows.append(snapped_windows.pop(0))
     for window in snapped_windows:
         window.focus()
+        actions.sleep("180ms")
+    last_focus_was_done_by_snap_layout = True
 
 
 def _top_n_windows() -> list[Any]:
     active_window = ui.active_window()
     ui_windows = ui.windows()
-    active_index = ui_windows.index(active_window)
-    return ui_windows[active_index:]
+    try:
+        active_index = ui_windows.index(active_window)
+        return ui_windows[active_index:]
+    except Exception:
+        return ui_windows
 
 
 @mod.capture(rule="{user.window_snap_positions}")
@@ -522,3 +532,7 @@ class Actions:
             window,
             screen_number=screen_number,
         )
+
+
+ui.register("app_activate", _focus_was_done_by_other_method)
+ui.register("win_focus", _focus_was_done_by_other_method)
