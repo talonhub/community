@@ -49,14 +49,6 @@ def _focus_was_done_by_other_method(_):
 
 def _set_window_pos(window, x, y, width, height):
     """Helper to set the window position."""
-    # TODO: Special case for full screen move - use os-native maximize, rather
-    #   than setting the position?
-
-    # 2020/10/01: While the upstream Talon implementation for MS Windows is
-    #   settling, this may be buggy on full screen windows. Aegis doesn't want a
-    #   hacky solution merged, so for now just repeat the command.
-    #
-    # TODO: Audit once upstream Talon is bug-free on MS Windows
     window.rect = ui.Rect(round(x), round(y), round(width), round(height))
 
 
@@ -133,6 +125,7 @@ def _move_to_screen(
 
     dest = dest_screen.visible_rect
     src = src_screen.visible_rect
+    maximized = window.maximized
     how = settings.get("user.window_snap_screen")
     if how == "size aware":
         r = window.rect
@@ -146,6 +139,8 @@ def _move_to_screen(
         r.width = right - left
         r.height = bot - top
         window.rect = r
+        if maximized:
+            window.maximized = True
         return
 
     # TODO: Test vertical screen with different aspect ratios
@@ -202,6 +197,8 @@ def _move_to_screen(
         width = window.rect.width * proportional_width
         height = window.rect.height * proportional_height
     _set_window_pos(window, x=x, y=y, width=width, height=height)
+    if maximized:
+        window.maximized = True
 
 
 def _snap_window_helper(window, pos):
