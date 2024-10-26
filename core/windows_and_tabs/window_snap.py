@@ -33,11 +33,16 @@ mod.setting(
 """,
 )
 last_focus_was_done_by_snap_layout = False
+currently_snapping_layout = False
 
 
 def _focus_was_done_by_other_method(_):
     global last_focus_was_done_by_snap_layout
-    last_focus_was_done_by_snap_layout = False
+    global currently_snapping_layout
+
+    if not currently_snapping_layout:
+        print("Resetting last focus")
+        last_focus_was_done_by_snap_layout = False
 
 
 def _set_window_pos(window, x, y, width, height):
@@ -342,6 +347,8 @@ def _snap_next(windows: list[Any], target_layout: RelativeScreenPos) -> Optional
 def _snap_layout(window_layout: WindowLayout):
     """Split the screen between multiple windows."""
     global last_focus_was_done_by_snap_layout
+    global currently_snapping_layout
+    currently_snapping_layout = True
     import copy
 
     target_layout = copy.deepcopy(window_layout.layout)
@@ -363,7 +370,9 @@ def _snap_layout(window_layout: WindowLayout):
     for window in snapped_windows:
         window.focus()
         actions.sleep("180ms")
+    actions.sleep("500ms")
     last_focus_was_done_by_snap_layout = True
+    currently_snapping_layout = False
 
 
 def _top_n_windows() -> list[Any]:
