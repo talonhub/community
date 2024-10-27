@@ -127,8 +127,14 @@ mod.setting(
     default=40,
     desc="The amount to scroll left/right",
 )
+mod.setting(
+    "mouse_drag_use_control_mouse",
+    type=bool,
+    default=False,
+    desc="Boolean that specifies whether or not to use control mouse for dragging",
+)
 
-continuous_scoll_mode = ""
+continuous_scoll_mode = None
 
 
 @imgui.open(x=700, y=0)
@@ -187,10 +193,11 @@ class Actions:
 
             ctrl.mouse_click(button=button, down=True)
 
-            if not actions.tracking.control_enabled():
-                # print("force enabling control mouse")
-                control_mouse_forced = True
-                actions.user.mouse_toggle_control_mouse()
+            if settings.get("user.mouse_drag_use_control_mouse"):
+                if not actions.tracking.control_enabled():
+                    # print("force enabling control mouse")
+                    control_mouse_forced = True
+                    actions.user.mouse_toggle_control_mouse()
 
 
     def mouse_drag_end():
@@ -203,15 +210,16 @@ class Actions:
 
         ctx_is_dragging.tags = []
         
-        if control_mouse_forced:
-            actions.user.mouse_toggle_control_mouse()
+        if settings.get("user.mouse_drag_use_control_mouse"):
+            if control_mouse_forced:
+                actions.user.mouse_toggle_control_mouse()
 
-            control_mouse_forced = False
+                control_mouse_forced = False
 
-            # reenable zoom mouse
-            if not actions.tracking.control_zoom_enabled():
-                # print("attempting to re enable zoom mouse")
-                actions.user.mouse_toggle_zoom_mouse()
+                # reenable zoom mouse
+                if not actions.tracking.control_zoom_enabled():
+                    # print("attempting to re enable zoom mouse")
+                    actions.user.mouse_toggle_zoom_mouse()
 
     def mouse_is_dragging():
         """Returns whether or not a drag is in progress"""
@@ -279,6 +287,12 @@ class Actions:
     def mouse_scroll_stop():
         """Stops scrolling"""
         stop_scroll()
+    
+    def mouse_is_continuous_scrolling():
+        """Returns whether a continuous_scoll_mode is enabled"""
+        if continuous_scoll_mode:
+            return True
+        
 
     def mouse_gaze_scroll():
         """Starts gaze scroll"""
@@ -479,7 +493,7 @@ def stop_scroll():
     gaze_job = None
     gui_wheel.hide()
 
-    continuous_scoll_mode = ""
+    continuous_scoll_mode = None
 
 
 def start_cursor_scrolling():

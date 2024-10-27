@@ -85,10 +85,10 @@ deck(control/shift-left):
     key("shift:down")
     mouse_click(0)
     key("shift:up")
-deck(control/fast-up-button):
-    user.deck7()
-deck(control/mobile-phone):
-    user.deck8()
+deck(control/down-arrow):
+    user.deck3()
+deck(control/up-arrow):
+    user.deck4()
 deck(control/man-gesturing-no):
     user.deck9()
 deck(control/repeat-button):
@@ -97,10 +97,14 @@ deck(control/ctrl-left):
     key("ctrl:down")
     mouse_click(0)
     key("ctrl:up")
-deck(control/eye):
-    user.deck12()
-deck(control/studio-microphone):
-    user.deck13()
+deck(control/fast-up-button):
+    user.deck7()
+deck(control/mobile-phone):
+    user.deck8()
+# deck(control/eye):
+#     user.deck12()
+# deck(control/studio-microphone):
+#     user.deck13()
 # deck(control/currency-exchange):
 #     user.deck14()
 deck(control/zzz):

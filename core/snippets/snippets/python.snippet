@@ -19,6 +19,15 @@ class Actions:
     $0
 ---
 
+name: talonActionDeclaration
+phrase: action
+insertionScope: class | statement
+-
+def $1($2):
+    """$3"""
+    $0
+---
+
 name: talonContextMatch
 phrase: context match
 insertionScope: statement
