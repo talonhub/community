@@ -39,6 +39,7 @@ def update_homophones(name, flags):
     with open(homophones_file) as f:
         for line in f:
             words = line.rstrip().split(",")
+            words = [x for x in words if x.strip() != ""]
             canonical_list.append(words[0])
             merged_words = set(words)
             for word in words:
@@ -93,7 +94,6 @@ def raise_homophones(word_to_find_homophones_for, forced=False, selection=False)
 
     if is_selection:
         word_to_find_homophones_for = word_to_find_homophones_for.strip()
-
     formatter = find_matching_format_function(
         word_to_find_homophones_for, PHONES_FORMATTERS
     )
@@ -140,7 +140,6 @@ def raise_homophones(word_to_find_homophones_for, forced=False, selection=False)
 
         clip.set(new)
         actions.edit.paste()
-
         return
 
     ctx.tags = ["user.homophones_open"]
