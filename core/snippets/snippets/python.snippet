@@ -29,6 +29,15 @@ def $1($2):
     $0
 ---
 
+name: talonActionDefinition
+phrase: action deaf
+insertionScope: class | statement
+$1.insertionFormatter: PUBLIC_CAMEL_CASE
+-
+def $1($2):
+    $0
+---
+
 name: talonContextMatch
 phrase: context match
 insertionScope: statement
