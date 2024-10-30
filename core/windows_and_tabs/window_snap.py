@@ -1,3 +1,4 @@
+from datetime import datetime
 import copy
 from dataclasses import dataclass
 
@@ -36,14 +37,14 @@ mod.setting(
 """,
 )
 last_focus_was_done_by_snap_layout = False
-currently_snapping_layout = False
+lay_out_start_time = datetime.now()
 
 
 def _focus_was_done_by_other_method(_):
     global last_focus_was_done_by_snap_layout
-    global currently_snapping_layout
+    global lay_out_start_time
 
-    if not currently_snapping_layout:
+    if (datetime.now() - lay_out_start_time).total_seconds() >= 1:
         print("Resetting last focus")
         last_focus_was_done_by_snap_layout = False
 
@@ -338,7 +339,7 @@ def _snap_next(windows: list[Any], target_layout: str) -> Optional[int]:
             return index
         except Exception as e:
             print(
-                f"Failed to snap window for application {window.app.name} {window.title}: {e}"
+                f"Failed to snap window for application (this is normal) {window.app.name} {window.title}: {e}"
             )
     return None
 
@@ -346,8 +347,9 @@ def _snap_next(windows: list[Any], target_layout: str) -> Optional[int]:
 def _snap_layout(window_layout: WindowLayout):
     """Split the screen between multiple windows."""
     global last_focus_was_done_by_snap_layout
-    global currently_snapping_layout
-    currently_snapping_layout = True
+    global lay_out_start_time
+
+    lay_out_start_time = datetime.now()
 
     target_layout = copy.deepcopy(window_layout.layout)
     remaining_windows = window_layout.windows
@@ -366,10 +368,9 @@ def _snap_layout(window_layout: WindowLayout):
     if window_layout.should_rotate and len(snapped_windows) > 0:
         snapped_windows.append(snapped_windows.pop(0))
     for window in snapped_windows:
-        window.focus()
-    actions.sleep("500ms")
+        actions.user.switcher_focus_window(window)
+
     last_focus_was_done_by_snap_layout = True
-    currently_snapping_layout = False
 
 
 def _windows_under_active_window() -> list[Any]:
