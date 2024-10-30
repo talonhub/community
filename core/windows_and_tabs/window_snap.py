@@ -1,3 +1,4 @@
+import copy
 from dataclasses import dataclass
 
 """Tools for voice-driven window management.
@@ -336,7 +337,9 @@ def _snap_next(windows: list[Any], target_layout: str) -> Optional[int]:
             )
             return index
         except Exception as e:
-            print(f"Failed to snap window: {e}")
+            print(
+                f"Failed to snap window for application {window.app.name} {window.title}: {e}"
+            )
     return None
 
 
@@ -345,7 +348,6 @@ def _snap_layout(window_layout: WindowLayout):
     global last_focus_was_done_by_snap_layout
     global currently_snapping_layout
     currently_snapping_layout = True
-    import copy
 
     target_layout = copy.deepcopy(window_layout.layout)
     remaining_windows = window_layout.windows
@@ -365,7 +367,6 @@ def _snap_layout(window_layout: WindowLayout):
         snapped_windows.append(snapped_windows.pop(0))
     for window in snapped_windows:
         window.focus()
-        actions.sleep("180ms")
     actions.sleep("500ms")
     last_focus_was_done_by_snap_layout = True
     currently_snapping_layout = False
