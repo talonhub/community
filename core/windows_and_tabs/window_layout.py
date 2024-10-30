@@ -186,32 +186,42 @@ def target_windows(m) -> list[Any]:
     return windows
 
 
+def _pick_split_arrangement(
+    target_windows, window_split_positions, number_small
+) -> list[str]:
+    if target_windows is not None:
+        target_length = len(target_windows)
+    else:
+        target_length = len(_windows_under_active_window())
+    if number_small is not None:
+        return _split_positions[window_split_positions][number_small]
+    else:
+        closest_key = min(
+            _split_positions[window_split_positions].keys(),
+            key=lambda k: abs(k - target_length),
+        )
+        return _split_positions[window_split_positions][closest_key]
+
+
 @mod.capture(
     rule="{user.window_split_positions} [<number_small>] [<user.target_windows>]"
 )
 def window_layout(m) -> WindowLayout:
     global last_focus_was_done_by_snap_layout
-    if hasattr(m, "target_windows"):
-        target_length = len(m.target_windows)
-    else:
-        target_length = len(_windows_under_active_window())
-    if hasattr(m, "number_small"):
-        layout = _split_positions[m.window_split_positions][m.number_small]
-    else:
-        closest_key = min(
-            _split_positions[m.window_split_positions].keys(),
-            key=lambda k: abs(k - target_length),
-        )
-        layout = _split_positions[m.window_split_positions][closest_key]
-    if hasattr(m, "target_windows"):
-        target_windows = m.target_windows
-    else:
-        target_windows = _windows_under_active_window()
+    window_was_specified = hasattr(m, "target_windows")
+    specified_layout_count = m.number_small if hasattr(m, "number_small") else None
+    target_windows = (
+        m.target_windows if window_was_specified else _windows_under_active_window()
+    )
+
+    layout = _pick_split_arrangement(
+        target_windows, m.window_split_positions, specified_layout_count
+    )
 
     return WindowLayout(
         layout,
         target_windows,
-        not hasattr(m, "target_windows") and last_focus_was_done_by_snap_layout,
+        not window_was_specified and last_focus_was_done_by_snap_layout,
     )
 
 
