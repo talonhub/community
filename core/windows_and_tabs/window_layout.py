@@ -1,6 +1,6 @@
-from datetime import datetime
 import copy
 from dataclasses import dataclass
+from datetime import datetime
 
 """Tools for laying out windows in an arrangement """
 
