@@ -224,14 +224,14 @@ class RelativeScreenPos:
 
     def __str__(self):
         # Return a string representation of the RelativeScreenPos instance
-        return f"RelativeScreenPos(left={self.left}, top={self.top}, right={self.right}, bottom={self.bottom})"
+        return f"RelativewScreenPos(left={self.left}, top={self.top}, right={self.right}, bottom={self.bottom})"
 
 
 @dataclass
 class WindowLayout:
     """Represents a layout of windows on a screen"""
 
-    layout: list["RelativeScreenPos"]
+    layout: list[str]
     windows: list[Any]
     should_rotate: bool
 
@@ -301,36 +301,36 @@ _snap_positions = {
 
 _split_positions = {
     "split": {
-        2: [_snap_positions["left"], _snap_positions["right"]],
+        2: ["left", "right"],
         3: [
-            _snap_positions["left third"],
-            _snap_positions["center third"],
-            _snap_positions["right third"],
+            "left third",
+            "center third",
+            "right third",
         ],
     },
     "clock": {
         3: [
-            _snap_positions["left"],
-            _snap_positions["top right"],
-            _snap_positions["bottom right"],
+            "left",
+            "top right",
+            "bottom right",
         ],
     },
     "counterclock": {
         3: [
-            _snap_positions["right"],
-            _snap_positions["top left"],
-            _snap_positions["bottom left"],
+            "right",
+            "top left",
+            "bottom left",
         ],
     },
 }
 
 
-def _snap_next(windows: list[Any], target_layout: RelativeScreenPos) -> Optional[int]:
+def _snap_next(windows: list[Any], target_layout: str) -> Optional[int]:
     for index, window in enumerate(windows):
         if window is None:
             return index
         try:
-            _snap_window_helper(
+            actions.user.snap_target_window_to_position(
                 window,
                 target_layout,
             )
@@ -528,6 +528,11 @@ class Actions:
     ):
         """Split the screen between multiple applications."""
         _snap_layout(window_layout)
+
+    def snap_target_window_to_position(window: Any, position: str):
+        """Snap a window to a position by name"""
+        window_position = _snap_positions[position]
+        _snap_window_helper(window, window_position)
 
     def move_app_to_screen(app_name: str, screen_number: int):
         """Move a specific application to another screen."""
