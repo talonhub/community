@@ -105,7 +105,12 @@ def _snap_layout(window_layout: WindowLayout):
     if window_layout.should_rotate and len(snapped_windows) > 0:
         snapped_windows.append(snapped_windows.pop(0))
     for window in snapped_windows:
-        actions.user.switcher_focus_window(window)
+        try:
+            actions.user.switcher_focus_window(window)
+        except Exception as ex:
+            print(
+                f"Failed to focus window for application {window.app.name} {window.title}: {ex}"
+            )
 
     last_focus_was_done_by_snap_layout = True
 
