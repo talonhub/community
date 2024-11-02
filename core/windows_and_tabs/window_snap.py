@@ -1,7 +1,3 @@
-import copy
-from dataclasses import dataclass
-from datetime import datetime
-
 """Tools for voice-driven window management.
 
 Originally from dweil/talon_community - modified for newapi by jcaw.
@@ -12,7 +8,7 @@ Originally from dweil/talon_community - modified for newapi by jcaw.
 #   platforms
 
 import logging
-from typing import Any, Dict, Optional
+from typing import Optional
 
 from talon import Context, Module, actions, settings, ui
 from talon.ui import Window
