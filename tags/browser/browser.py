@@ -57,6 +57,7 @@ class UserActions:
             actions.user.paste(url_address)
             actions.key("enter")
 
+
 @ctx.action_class("browser")
 class BrowserActions:
     def address() -> str:
