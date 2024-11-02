@@ -29,7 +29,6 @@ def focus_callback(_):
         delta = perf_counter() - last_layout.finish_time
     print(f"delta ispr{delta}")
     if delta >= 1:
-        print("Resetting last focus")
         last_layout = None
 
 
@@ -102,7 +101,6 @@ def snap_layout(window_layout: WindowLayout):
     snapped_windows = []
     snapped_window_idx = 0
     if window_layout.should_rotate:
-        print("Trying to rotate")
         target_layout.append(target_layout.pop(0))
 
     while len(target_layout) > 0:
@@ -115,12 +113,7 @@ def snap_layout(window_layout: WindowLayout):
         snapped_windows.append(snapped_windows.pop(0))
 
     for window in snapped_windows:
-        try:
-            actions.user.switcher_focus_window(window)
-        except Exception as ex:
-            print(
-                f"Failed to focus window for application {window.app.name} {window.title}: {ex}"
-            )
+        actions.user.switcher_focus_window(window)
 
     layout_in_progress.finish_time = perf_counter()
     last_layout = layout_in_progress
@@ -232,7 +225,6 @@ def window_layout(m) -> WindowLayout:
         if window_was_specified
         else filter_nonviable_windows(ui.windows())
     )
-    print(f"target windows is {target_windows}")
 
     layout = pick_split_arrangement(
         target_windows, m.window_split_positions, specified_layout_count
