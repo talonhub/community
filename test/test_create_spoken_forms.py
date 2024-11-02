@@ -4,8 +4,37 @@ if hasattr(talon, "test_mode"):
     # Only include this when we're running tests
 
     import itertools
+    from typing import IO, Callable
 
     from talon import actions
+
+    import core.abbreviate
+    import core.user_settings
+
+    # we need to replace the track_csv_list decorator for unit tests.
+    CallbackT = Callable[[dict[str, str]], None]
+    DecoratorT = Callable[[CallbackT], CallbackT]
+
+    def track_csv_list_test(
+        filename: str,
+        headers: tuple[str, str],
+        default: dict[str, str] = None,
+        is_spoken_form_first: bool = False,
+    ) -> DecoratorT:
+        def decorator(fn: CallbackT) -> CallbackT:
+            extensions = {
+                "dot see sharp": ".cs",
+            }
+            abbreviations = {"source": "src", "whats app": "WhatsApp"}
+            if filename == "abbreviations.csv":
+                fn(abbreviations)
+            elif filename == "file_extensions.csv":
+                fn(extensions)
+
+        return decorator
+
+    # replace track_csv_list before importing create_spoken_forms
+    core.user_settings.track_csv_list = track_csv_list_test
 
     import core.create_spoken_forms
 
@@ -43,6 +72,7 @@ if hasattr(talon, "test_mode"):
         assert "hi dot see sharp" in result
 
     def test_expands_abbreviations():
+
         result = actions.user.create_spoken_forms("src", None, 0, True)
 
         assert "source" in result

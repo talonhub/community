@@ -6,13 +6,11 @@ tag(): user.line_commands
 tag(): user.multiple_cursors
 tag(): user.splits
 tag(): user.tabs
+tag(): user.command_search
+
 window reload: user.vscode("workbench.action.reloadWindow")
 window close: user.vscode("workbench.action.closeWindow")
 #multiple_cursor.py support end
-
-please [<user.text>]:
-    user.vscode("workbench.action.showCommands")
-    insert(user.text or "")
 
 go view [<user.text>]:
     user.vscode("workbench.action.openView")
@@ -247,6 +245,9 @@ terminal scroll up: user.vscode("workbench.action.terminal.scrollUp")
 terminal scroll down: user.vscode("workbench.action.terminal.scrollDown")
 terminal <number_small>: user.vscode_terminal(number_small)
 
+task run [<user.text>]:
+    user.vscode("workbench.action.tasks.runTask")
+    insert(user.text or "")
 #TODO: should this be added to linecommands?
 copy line down: user.vscode("editor.action.copyLinesDownAction")
 copy line up: user.vscode("editor.action.copyLinesUpAction")
