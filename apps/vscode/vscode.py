@@ -191,7 +191,7 @@ class UserActions:
         actions.user.vscode("workbench.action.toggleEditorGroupLayout")
 
     def split_maximize():
-        actions.user.vscode("workbench.action.maximizeEditor")
+        actions.user.vscode("workbench.action.toggleMaximizeEditorGroup")
 
     def split_reset():
         actions.user.vscode("workbench.action.evenEditorWidths")
