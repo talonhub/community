@@ -124,8 +124,13 @@ def filter_nonviable_windows(windows: List[Window]) -> list[Window]:
 
     # Many invisible non-resizable windows are identifiable because they exist above the current window
     # in the z-index
-    active_window_idx = windows.index(active_window)  # type: ignore
-    return list(filter(lambda w: windows.index(w) >= active_window_idx, windows))
+    active_window_idx = windows.index(active_window) if active_window in windows else 0  # type: ignore
+    return list(
+        filter(
+            lambda w: windows.index(w) >= active_window_idx,
+            windows,
+        )
+    )
 
 
 @mod.capture(rule="all")
@@ -140,11 +145,13 @@ def skip_window(m) -> list[Window]:
 
 @mod.capture(rule="<user.running_applications>")
 def application_windows(m) -> list[Window]:
-    return [
-        window
-        for app in m.running_applications_list
-        for window in actions.self.get_running_app(app).windows()
-    ]
+    return filter_nonviable_windows(
+        [
+            window
+            for app in m.running_applications_list
+            for window in actions.self.get_running_app(app).windows()
+        ]
+    )
 
 
 @mod.capture(
