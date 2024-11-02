@@ -27,7 +27,6 @@ def focus_callback(_):
     delta = 1
     if last_layout is not None:
         delta = perf_counter() - last_layout.finish_time
-    print(f"delta ispr{delta}")
     if delta >= 1:
         last_layout = None
 
@@ -77,9 +76,9 @@ def snap_next(windows: list[Window], target_layout: str) -> Optional[int]:
         if window is None:
             return idx
         try:
-            actions.user.snap_target_window_to_position(
-                window,
+            actions.user.snap_window_to_position(
                 target_layout,
+                window,
             )
 
             return idx
@@ -217,7 +216,7 @@ def pick_split_arrangement(
     rule="{user.window_split_positions} [<number_small>] [<user.target_windows>]"
 )
 def window_layout(m) -> WindowLayout:
-    global last_focus_was_done_by_snap_layout
+    global last_layout
     window_was_specified = hasattr(m, "target_windows")
     specified_layout_count = m.number_small if hasattr(m, "number_small") else None
     target_windows = (

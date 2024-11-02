@@ -15,6 +15,7 @@ import logging
 from typing import Any, Dict, Optional
 
 from talon import Context, Module, actions, settings, ui
+from talon.ui import Window
 
 mod = Module()
 mod.list(
@@ -289,11 +290,17 @@ ctx.lists["user.window_snap_positions"] = _snap_positions.keys()
 
 @mod.action_class
 class Actions:
-    def snap_window(position: RelativeScreenPos) -> None:
+    def snap_window(
+        position: RelativeScreenPos, window: Optional[Window] = None
+    ) -> None:
         """Move the active window to a specific position on its current screen, given a `RelativeScreenPos` object."""
-        _snap_window_helper(ui.active_window(), position)
+        if window is None:
+            window = ui.active_window()
+        _snap_window_helper(window, position)
 
-    def snap_window_to_position(position_name: str) -> None:
+    def snap_window_to_position(
+        position_name: str, window: Optional[Window] = None
+    ) -> None:
         """Move the active window to a specifically named position on its current screen, using a key from `_snap_positions`."""
         actions.user.snap_window(_snap_positions[position_name])
 
@@ -314,11 +321,6 @@ class Actions:
         window = _get_app_window(app_name)
         _bring_forward(window)
         _snap_window_helper(window, position)
-
-    def snap_target_window_to_position(window: ui.Window, position: str):
-        """Snap a window to a position by name"""
-        window_position = _snap_positions[position]
-        _snap_window_helper(window, window_position)
 
     def move_app_to_screen(app_name: str, screen_number: int):
         """Move a specific application to another screen."""
