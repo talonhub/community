@@ -26,10 +26,10 @@ class BrowserActions:
 @ctx_mac.action_class("user")
 class MacActions:
     def go_back():
-        actions.key("cmd-]")
+        actions.key("cmd-[")
 
     def go_forward():
-        actions.key("cmd-[")
+        actions.key("cmd-]")
 
 
 @mod.action_class
