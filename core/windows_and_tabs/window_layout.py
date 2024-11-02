@@ -1,14 +1,14 @@
 import copy
 from dataclasses import dataclass
-from typing import List, Optional, Union
 from time import perf_counter
+from typing import List, Optional, Union
 
 from talon import Context, Module, actions, settings, ui
 
 """Tools for laying out windows in an arrangement """
 
 from talon import Context, Module, actions, settings
-from talon.ui import Window, UIErr
+from talon.ui import UIErr, Window
 
 mod = Module()
 
