@@ -124,10 +124,11 @@ def filter_nonviable_windows(windows: List[Window]) -> list[Window]:
 
     # Many invisible non-resizable windows are identifiable because they exist above the current window
     # in the z-index
-    active_window_idx = windows.index(active_window) if active_window in windows else 0  # type: ignore
+    all_windows = ui.windows()
+    active_window_idx = all_windows.index(active_window)  # type: ignore
     return list(
         filter(
-            lambda w: windows.index(w) >= active_window_idx,
+            lambda w: all_windows.index(w) >= active_window_idx,
             windows,
         )
     )
