@@ -211,7 +211,7 @@ class RelativeScreenPos:
         self.right = right
 
     def __str__(self):
-        return f"RelativewScreenPos(left={self.left}, top={self.top}, right={self.right}, bottom={self.bottom})"
+        return f"RelativeScreenPos(left={self.left}, top={self.top}, right={self.right}, bottom={self.bottom})"
 
 
 _snap_positions = {
