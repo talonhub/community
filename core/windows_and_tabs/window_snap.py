@@ -302,7 +302,7 @@ class Actions:
         position_name: str, window: Optional[Window] = None
     ) -> None:
         """Move the active window to a specifically named position on its current screen, using a key from `_snap_positions`."""
-        actions.user.snap_window(_snap_positions[position_name])
+        actions.user.snap_window(_snap_positions[position_name], window)
 
     def move_window_next_screen() -> None:
         """Move the active window to a specific screen."""
