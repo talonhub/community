@@ -1,1 +1,1 @@
-stupid test: user.paste(" stupid test")
+stupid test: insert(" stupid test really long to see ")
