@@ -23,6 +23,32 @@ numbers_map.update(teens_map)
 numbers_map.update(tens_map)
 numbers_map.update(scales_map)
 
+def get_spoken_form_under_one_hundred (start, end, include_oh_variant_for_single_digits, include_default_single_digit_variant):
+    """Helper function to get spoken forms of numbers in the range [start, end] under 100"""
+
+    import math
+    result = {}
+
+    for value in range(start, end + 1): 
+        digit_index = value % 10
+        if value < 10:
+            if include_oh_variant_for_single_digits:
+                result[f"oh {digit_list[digit_index]}"] = f"{value}" 
+            if include_default_single_digit_variant:
+                result[f"{digit_list[digit_index]}"] = f"{value}"
+        elif value < 20:
+            teens_index = value - 10
+            result[f"{teens[teens_index]}"] = f"{value}" 
+        elif value < 100:
+            tens_index = math.floor(value / 10) - 2
+            if digit_index > 0:
+                spoken_form = f"{tens[tens_index]} {digit_list[digit_index]}"
+            else:
+                spoken_form = f"{tens[tens_index]}"
+
+            result[spoken_form] = f"{value}" 
+
+    return result
 
 def parse_number(l: list[str]) -> str:
     """Parses a list of words into a number/digit string."""
