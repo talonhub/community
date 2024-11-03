@@ -1,6 +1,11 @@
 os: mac
 app: finder
 -
+settings():
+	user.accessibility_dictation = true
+	user.context_sensitive_dictation = true
+	user.paste_to_insert_threshold =  0
+
 tag(): user.file_manager
 tag(): user.tabs
 preferences: key(cmd-,)

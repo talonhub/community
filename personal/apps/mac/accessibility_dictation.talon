@@ -3,7 +3,7 @@ app: text_edit
 app: messages
 app: text_edit
 app: photos
-app: finder
+# app: finder
 app: system_settings
 app: vscode
 app: apple_terminal

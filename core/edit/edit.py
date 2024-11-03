@@ -87,6 +87,7 @@ class Actions:
 
         with clip.revert():
             clip.set_text(text)
+            actions.sleep("150ms")
             actions.edit.paste()
             # sleep here so that clip.revert doesn't revert the clipboard too soon
             actions.sleep("150ms")

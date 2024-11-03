@@ -52,8 +52,9 @@ class UserActions:
     def file_manager_open_directory(path: str):
         """opens the directory that's already visible in the view"""
         actions.key("cmd-shift-g")
-        actions.sleep("50ms")
+        actions.sleep("150ms")
         actions.insert(path)
+        actions.sleep("150ms")
         actions.key("enter")
 
     def file_manager_select_directory(path: str):
