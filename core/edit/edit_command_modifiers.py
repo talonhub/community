@@ -24,9 +24,10 @@ modifier_callbacks: dict[str, Callable] = {
     "line": actions.edit.select_line,
     "lineEnd": actions.user.select_line_end,
     "lineStart": actions.user.select_line_start,
-    "fileStart": actions.edit.extend_file_start, 
-    "fileEnd": actions.edit.extend_file_end, 
+    "fileStart": actions.edit.extend_file_start,
+    "fileEnd": actions.edit.extend_file_end,
 }
+
 
 def run_modifier_callback(modifier: EditModifier):
     modifier_type = modifier.type

@@ -47,7 +47,6 @@ select down: edit.extend_line_down()
 select word left: edit.extend_word_left()
 select word right: edit.extend_word_right()
 
-
 # Indentation
 indent [more]: edit.indent_more()
 (indent less | out dent): edit.indent_less()
