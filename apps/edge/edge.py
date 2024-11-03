@@ -2,6 +2,7 @@ from talon import Context, Module, actions
 
 mod = Module()
 ctx = Context()
+ctx_windows = Context()
 
 mod.apps.microsoft_edge = r"""
 os: windows
@@ -20,9 +21,19 @@ ctx.matches = r"""
 app: microsoft_edge
 """
 
+ctx_windows.matches = r"""
+app: microsoft_edge
+os: windows
+"""
 
 @ctx.action_class("browser")
 class BrowserActions:
     def show_extensions():
         actions.app.tab_open()
         actions.browser.go("edge://extensions")
+
+# @ctx_windows.action_class("edit")
+# class EditActions:
+#     def paste():
+#         actions.key("ctrl-shift-v")
+                    

@@ -1,0 +1,1 @@
+stupid test: user.paste(" stupid test")

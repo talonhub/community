@@ -79,7 +79,6 @@ class EditActions:
         actions.edit.select_all()
         actions.edit.delete()
 
-
 @mod.action_class
 class Actions:
     def paste(text: str):
