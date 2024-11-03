@@ -23,8 +23,8 @@ numbers_map.update(teens_map)
 numbers_map.update(tens_map)
 numbers_map.update(scales_map)
 
-def get_spoken_form_under_one_hundred (start, end, include_oh_variant_for_single_digits, include_default_single_digit_variant):
-    """Helper function to get spoken forms of numbers in the range [start, end] under 100"""
+def get_spoken_form_under_one_hundred (start, end, include_oh_variant_for_single_digits, include_default_variant_for_single_digits):
+    """Helper function to get dictionary of spoken forms for non-negative numbers in the range [start, end] under 100"""
 
     import math
     result = {}
@@ -33,8 +33,8 @@ def get_spoken_form_under_one_hundred (start, end, include_oh_variant_for_single
         digit_index = value % 10
         if value < 10:
             if include_oh_variant_for_single_digits:
-                result[f"oh {digit_list[digit_index]}"] = f"{value}" 
-            if include_default_single_digit_variant:
+                result[f"oh {digit_list[digit_index]}"] = f"0{value}" 
+            if include_default_variant_for_single_digits:
                 result[f"{digit_list[digit_index]}"] = f"{value}"
         elif value < 20:
             teens_index = value - 10
