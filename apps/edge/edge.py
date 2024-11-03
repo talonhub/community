@@ -1,4 +1,4 @@
-from talon import Context, Module, actions
+from talon import Context, Module, actions, ui, settings, app
 
 mod = Module()
 ctx = Context()
@@ -32,8 +32,11 @@ class BrowserActions:
         actions.app.tab_open()
         actions.browser.go("edge://extensions")
 
-# @ctx_windows.action_class("edit")
-# class EditActions:
-#     def paste():
-#         actions.key("ctrl-shift-v")
+@ctx.action_class("main")
+class MainActions:
+    def insert(text):
+        if app.platform == "windows" and ui.focused_element().name in ["Address and search bar", "Find on page"]:
+            actions.next(text)
+        else:
+            actions.user.paste(text)
                     
