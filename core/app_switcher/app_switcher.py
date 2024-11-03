@@ -7,13 +7,18 @@ from pathlib import Path
 import talon
 from talon import Context, Module, actions, app, fs, imgui, ui
 
-# Construct at startup a list of overides for application names (similar to how homophone list is managed)
-# ie for a given talon recognition word set  `one note`, recognized this in these switcher functions as `ONENOTE`
-# the list is a comma seperated `<Recognized Words>, <Overide>`
-# TODO: Consider put list csv's (homophones.csv, app_name_overrides.csv) files together in a seperate directory,`community/lists`
+# Construct a list of spoken form overrides for application names (similar to how homophone list is managed)
+# These overrides are used *instead* of the generated spoken forms for the given app name or .exe (on Windows)
+# CSV files contain lines of the form:
+# <spoken form>,<app name or .exe> - to add a spoken form override for the app, or
+# <app name or .exe> - to exclude the app from appearing in "running list" or "focus <app>"
+
+# TODO: Consider moving overrides to settings directory
 overrides_directory = os.path.dirname(os.path.realpath(__file__))
 override_file_name = f"app_name_overrides.{talon.app.platform}.csv"
-override_file_path = os.path.join(overrides_directory, override_file_name)
+override_file_path = os.path.normcase(
+    os.path.join(overrides_directory, override_file_name)
+)
 
 mod = Module()
 mod.list("running", desc="all running applications")
@@ -23,24 +28,12 @@ ctx = Context()
 # a list of the current overrides
 overrides = {}
 
+# apps to exclude from running list
+excludes = set()
+
 # a list of the currently running application names
 running_application_dict = {}
 
-
-mac_application_directories = [
-    "/Applications",
-    "/Applications/Utilities",
-    "/System/Applications",
-    "/System/Applications/Utilities",
-]
-
-linux_application_directories = [
-    "/usr/share/applications",
-    "/usr/local/share/applications",
-    os.path.expandvars("/home/$USER/.local/share/applications"),
-    "/var/lib/flatpak/exports/share/applications",
-    "/var/lib/snapd/desktop/applications",
-]
 
 words_to_exclude = [
     "zero",
@@ -76,19 +69,9 @@ words_to_exclude = [
 if app.platform == "windows":
     import ctypes
     import os
-
-    import pywintypes
-
-    try:
-        pass
-    except ImportError:
-        # Python 2
-        pass
-
-        bytes = lambda x: str(buffer(x))
-
     from ctypes import wintypes
 
+    import pywintypes
     from win32com.propsys import propsys, pscon
     from win32com.shell import shell, shellcon
 
@@ -147,7 +130,7 @@ if app.platform == "windows":
         result.sort(key=lambda x: x.upper())
         return result
 
-    def get_windows_apps():
+    def get_apps():
         items = {}
         for item in enum_known_folder(FOLDERID_AppsFolder):
             try:
@@ -170,17 +153,29 @@ if app.platform == "windows":
 
         return items
 
-
-if app.platform == "linux":
+elif app.platform == "linux":
     import configparser
     import re
 
-    def get_linux_apps():
+    linux_application_directories = [
+        "/usr/share/applications",
+        "/usr/local/share/applications",
+        f"{Path.home()}/.local/share/applications",
+        "/var/lib/flatpak/exports/share/applications",
+        "/var/lib/snapd/desktop/applications",
+    ]
+    xdg_data_dirs = os.environ.get("XDG_DATA_DIRS")
+    if xdg_data_dirs is not None:
+        for directory in xdg_data_dirs.split(":"):
+            linux_application_directories.append(f"{directory}/applications")
+    linux_application_directories = list(set(linux_application_directories))
+
+    def get_apps():
         # app shortcuts in program menu are contained in .desktop files. This function parses those files for the app name and command
         items = {}
         # find field codes in exec key with regex
         # https://specifications.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html#exec-variables
-        args_pattern = re.compile(r" \%[UufFcik]")
+        args_pattern = re.compile(r"\%[UufFcik]")
         for base in linux_application_directories:
             if os.path.isdir(base):
                 for entry in os.scandir(base):
@@ -189,7 +184,7 @@ if app.platform == "linux":
                             config = configparser.ConfigParser(interpolation=None)
                             config.read(entry.path)
                             # only parse shortcuts that are not hidden
-                            if config.has_option("Desktop Entry", "NoDisplay") == False:
+                            if not config.has_option("Desktop Entry", "NoDisplay"):
                                 name_key = config["Desktop Entry"]["Name"]
                                 exec_key = config["Desktop Entry"]["Exec"]
                                 # remove extra quotes from exec
@@ -199,14 +194,49 @@ if app.platform == "linux":
                                 if exec_key[0] == "/":
                                     items[name_key] = re.sub(args_pattern, "", exec_key)
                                 else:
-                                    items[name_key] = "/usr/bin/" + re.sub(
-                                        args_pattern, "", exec_key
+                                    exec_path = (
+                                        subprocess.check_output(
+                                            ["which", exec_key.split()[0]],
+                                            stderr=subprocess.DEVNULL,
+                                        )
+                                        .decode("utf-8")
+                                        .strip()
                                     )
-                        except:
+                                    items[name_key] = (
+                                        exec_path
+                                        + " "
+                                        + re.sub(
+                                            args_pattern,
+                                            "",
+                                            " ".join(exec_key.split()[1:]),
+                                        )
+                                    )
+                        except Exception:
                             print(
-                                "get_linux_apps: skipped parsing application file ",
+                                "linux get_apps(): skipped parsing application file ",
                                 entry.name,
                             )
+        return items
+
+elif app.platform == "mac":
+    mac_application_directories = [
+        "/Applications",
+        "/Applications/Utilities",
+        "/System/Applications",
+        "/System/Applications/Utilities",
+        f"{Path.home()}/Applications",
+        f"{Path.home()}/.nix-profile/Applications",
+    ]
+
+    def get_apps():
+        items = {}
+        for base in mac_application_directories:
+            base = os.path.expanduser(base)
+            if os.path.isdir(base):
+                for name in os.listdir(base):
+                    path = os.path.join(base, name)
+                    name = name.rsplit(".", 1)[0].lower()
+                    items[name] = path
         return items
 
 
@@ -229,47 +259,53 @@ def update_running_list():
     global running_application_dict
     running_application_dict = {}
     running = {}
-    for cur_app in ui.apps(background=False):
-        running_application_dict[cur_app.name] = True
+    foreground_apps = ui.apps(background=False)
+
+    for cur_app in foreground_apps:
+        running_application_dict[cur_app.name.lower()] = cur_app.name
 
         if app.platform == "windows":
-            # print("hit....")
-            # print(cur_app.exe)
-            running_application_dict[cur_app.exe.split(os.path.sep)[-1]] = True
+            exe = os.path.basename(cur_app.exe)
+            running_application_dict[exe.lower()] = exe
+
+    override_apps = excludes.union(overrides.values())
 
     running = actions.user.create_spoken_forms_from_list(
-        [curr_app.name for curr_app in ui.apps(background=False)],
+        [
+            curr_app.name
+            for curr_app in ui.apps(background=False)
+            if curr_app.name.lower() not in override_apps
+            and curr_app.exe.lower() not in override_apps
+            and os.path.basename(curr_app.exe).lower() not in override_apps
+        ],
         words_to_exclude=words_to_exclude,
         generate_subsequences=True,
     )
 
-    # print(str(running_application_dict))
-    # todo: should the overrides remove the other spoken forms for an application?
-    for override in overrides:
-        if overrides[override] in running_application_dict:
-            running[override] = overrides[override]
+    for running_name, full_application_name in overrides.items():
+        if running_app_name := running_application_dict.get(full_application_name):
+            running[running_name] = running_app_name
 
-    lists = {
-        "self.running": running,
-    }
-
-    # batch update lists
-    ctx.lists.update(lists)
+    ctx.lists["self.running"] = running
 
 
 def update_overrides(name, flags):
-    """Updates the overrides list"""
-    global overrides
-    overrides = {}
+    """Updates the overrides and excludes lists"""
+    global overrides, excludes
 
-    if name is None or name == override_file_path:
+    if name is None or os.path.normcase(name) == override_file_path:
+        overrides = {}
+        excludes = set()
+
         # print("update_overrides")
         with open(override_file_path) as f:
             for line in f:
-                line = line.rstrip()
+                line = line.rstrip().lower()
                 line = line.split(",")
-                if len(line) == 2:
-                    overrides[line[0].lower()] = line[1].strip()
+                if len(line) == 2 and line[0] != "Spoken form":
+                    overrides[line[0]] = line[1].strip()
+                if len(line) == 1:
+                    excludes.add(line[0].strip())
 
         update_running_list()
 
@@ -281,7 +317,7 @@ class Actions:
         # We should use the capture result directly if it's already in the list
         # of running applications. Otherwise, name is from <user.text> and we
         # can be a bit fuzzier
-        if name not in running_application_dict:
+        if name.lower() not in running_application_dict:
             if len(name) < 3:
                 raise RuntimeError(
                     f'Skipped getting app: "{name}" has less than 3 chars.'
@@ -297,7 +333,7 @@ class Actions:
         for application in ui.apps(background=False):
             if application.name == name or (
                 app.platform == "windows"
-                and application.exe.split(os.path.sep)[-1] == name
+                and os.path.basename(application.exe).lower() == name
             ):
                 return application
         raise RuntimeError(f'App not running: "{name}"')
@@ -321,6 +357,9 @@ class Actions:
             if time.perf_counter() - t1 > 1:
                 raise RuntimeError(f"Can't focus app: {app.name}")
             actions.sleep(0.1)
+
+    def switcher_focus_last():
+        """Focus last window/application"""
 
     def switcher_focus_window(window: ui.Window):
         """Focus window and wait until switch is made"""
@@ -360,6 +399,9 @@ class Actions:
         """Open a menu of running apps to switch to"""
         if app.platform == "windows":
             actions.key("alt-ctrl-tab")
+        elif app.platform == "mac":
+            # MacOS equivalent is "Mission Control"
+            actions.user.dock_send_notification("com.apple.expose.awake")
         else:
             print("Persistent Switcher Menu not supported on " + app.platform)
 
@@ -377,10 +419,13 @@ class Actions:
 
 @imgui.open()
 def gui_running(gui: imgui.GUI):
-    gui.text("Names of running applications")
+    gui.text("Running applications (with spoken forms)")
     gui.line()
-    for line in ctx.lists["self.running"]:
-        gui.text(line)
+    running_apps = sorted(
+        (v.lower(), k, v) for k, v in ctx.lists["self.running"].items()
+    )
+    for _, running_name, full_application_name in running_apps:
+        gui.text(f"{full_application_name}: {running_name}")
 
     gui.spacer()
     if gui.button("Running close"):
@@ -388,22 +433,9 @@ def gui_running(gui: imgui.GUI):
 
 
 def update_launch_list():
-    launch = {}
-    if app.platform == "mac":
-        for base in mac_application_directories:
-            if os.path.isdir(base):
-                for name in os.listdir(base):
-                    path = os.path.join(base, name)
-                    name = name.rsplit(".", 1)[0].lower()
-                    launch[name] = path
+    launch = get_apps()
 
-    elif app.platform == "windows":
-        launch = get_windows_apps()
-
-    elif app.platform == "linux":
-        launch = get_linux_apps()
-
-        # actions.user.talon_pretty_print(launch)
+    # actions.user.talon_pretty_print(launch)
 
     ctx.lists["self.launch"] = actions.user.create_spoken_forms_from_map(
         launch, words_to_exclude

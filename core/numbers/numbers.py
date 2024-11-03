@@ -177,6 +177,7 @@ for ten in tens:
 number_small_map = {n: i for i, n in enumerate(number_small_list)}
 
 mod.list("number_small", desc="List of small numbers")
+mod.tag("unprefixed_numbers", desc="Dont require prefix when saying a number")
 ctx.lists["self.number_small"] = number_small_map.keys()
 
 

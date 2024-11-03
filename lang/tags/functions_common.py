@@ -30,7 +30,7 @@ class Actions:
         if gui_functions.showing:
             function_list = []
             gui_functions.hide()
-            ctx.tags.discard("user.code_functions_common_gui_active")
+            ctx.tags = []
         else:
             update_function_list_and_freeze()
 
@@ -57,7 +57,7 @@ def update_function_list_and_freeze():
         function_list = []
 
     gui_functions.show()
-    ctx.tags.add("user.code_functions_common_gui_active")
+    ctx.tags = ["user.code_functions_common_gui_active"]
 
 
 @imgui.open()
@@ -74,7 +74,7 @@ def gui_functions(gui: imgui.GUI):
 
     gui.spacer()
     if gui.button("Toggle funk (close window)"):
-        actions.user.code_toggle_functions_hide()
+        actions.user.code_toggle_functions()
 
 
 def commands_updated(_):

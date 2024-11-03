@@ -18,6 +18,9 @@ class UserActions:
     def code_operator_assignment():
         actions.auto_insert(" = ")
 
+    def code_or_operator_assignment():
+        actions.auto_insert(" ||= ")
+
     def code_operator_subtraction():
         actions.auto_insert(" - ")
 

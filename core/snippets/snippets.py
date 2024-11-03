@@ -5,7 +5,7 @@ from pathlib import Path
 from talon import Context, Module, actions, app, fs, settings
 
 from ..modes.language_modes import language_ids
-from .snippet_types import Snippet
+from .snippet_types import InsertionSnippet, Snippet, WrapperSnippet
 from .snippets_parser import create_snippets_from_file
 
 SNIPPETS_DIR = Path(__file__).parent / "snippets"
@@ -64,6 +64,20 @@ class Actions:
 
         return snippets_map[name]
 
+    def get_insertion_snippet(name: str) -> InsertionSnippet:
+        """Get insertion snippet named <name>"""
+        snippet: Snippet = actions.user.get_snippet(name)
+        return InsertionSnippet(snippet.body, snippet.insertion_scopes)
+
+    def get_wrapper_snippet(name: str) -> WrapperSnippet:
+        """Get wrapper snippet named <name>"""
+        index = name.rindex(".")
+        snippet_name = name[:index]
+        variable_name = name[index + 1]
+        snippet: Snippet = actions.user.get_snippet(snippet_name)
+        variable = snippet.get_variable_strict(variable_name)
+        return WrapperSnippet(snippet.body, variable.name, variable.wrapper_scope)
+
 
 def update_snippets():
     language_to_snippets = group_by_language(get_snippets())
@@ -86,9 +100,13 @@ def update_snippets():
             insertions_phrase_map.update(insertions_phrase)
             wrapper_map.update(wrappers)
 
-        ctx.lists["user.snippet"] = insertion_map
-        ctx.lists["user.snippet_with_phrase"] = insertions_phrase_map
-        ctx.lists["user.snippet_wrapper"] = wrapper_map
+        ctx.lists.update(
+            {
+                "user.snippet": insertion_map,
+                "user.snippet_with_phrase": insertions_phrase_map,
+                "user.snippet_wrapper": wrapper_map,
+            }
+        )
 
 
 def get_snippets() -> list[Snippet]:
