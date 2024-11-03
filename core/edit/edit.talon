@@ -53,20 +53,23 @@ draw <number_small>:
     repeat(number_small-1)
 
 wipe <number_small>: 
-    key(backspace)
+    edit.delete()
     repeat(number_small-1)
+wiper:
+    edit.extend_line_start()
+    edit.delete()
 drill <number_small>: 
-    key(delete)
+    edit.delete()
     repeat(number_small-1)
 (drill) tail:
-    key(shift-end)
-    key(delete)
+    edit.extend_line_end()
+    edit.delete()
 (drill) head: 
-    key(shift-home)
-    key(delete)
+    edit.extend_line_start()
+    edit.delete()
 driller: 
-    key(shift-end)
-    key(delete)    
+    edit.extend_line_end()
+    edit.delete()  
 tail:
     edit.line_end()
 head:
