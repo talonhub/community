@@ -1,10 +1,14 @@
 list: user.edit_modifier
 -
-
 all: document
 paragraph: paragraph
 word: word
-
 line: line
 line start: lineStart
+way left: lineStart
 line end: lineEnd
+way right: lineEnd
+file start: fileStart
+way up: fileStart
+file end: fileEnd
+way down: fileEnd
