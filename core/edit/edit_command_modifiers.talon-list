@@ -6,8 +6,10 @@ word: word
 line: line
 line start: lineStart
 way left: lineStart
+head: lineStart
 line end: lineEnd
 way right: lineEnd
+tail: lineEnd
 file start: fileStart
 way up: fileStart
 file end: fileEnd

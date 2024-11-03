@@ -1,6 +1,11 @@
+# go left, go left left down, go 5 left 2 down
+# go word left, go 2 words right
+go <user.navigation_step>+: user.perform_navigation_steps(navigation_step_list)
+    
 # Compound of action(select, clear, copy, cut, paste, etc.) and modifier(word, line, etc.) commands for editing text.
 # eg: "select line", "clear all"
 <user.edit_action> <user.edit_modifier>: user.edit_command(edit_action, edit_modifier)
+
 zoom in [<number_small>]: 
 	numb  = number_small or 1	
 	edit.zoom_in()
@@ -11,8 +16,10 @@ zoom out [<number_small>]:
 	repeat(numb - 1)
 zoom reset:
     edit.zoom_reset()
+
 copy [take]: edit.copy()
 slice [take]: edit.cut()
+
 pace: edit.paste()
 (nay | nope) [<number_small>]: 
 	numb = number or 1
@@ -51,10 +58,10 @@ wipe <number_small>:
 drill <number_small>: 
     key(delete)
     repeat(number_small-1)
-(drill | wipe) tail: 
+(drill) tail:
     key(shift-end)
     key(delete)
-(drill | wipe) head: 
+(drill) head: 
     key(shift-home)
     key(delete)
 driller: 
@@ -62,12 +69,6 @@ driller:
     key(delete)    
 tail:
     edit.line_end()
-
-    
-# go left, go left left down, go 5 left 2 down
-# go word left, go 2 words right
-go <user.navigation_step>+: user.perform_navigation_steps(navigation_step_list)
-    
 head:
     edit.line_start()
 
@@ -89,14 +90,6 @@ far up:
 
 # go page up:
 #     edit.page_up()
-
-# selecting
-take line:
-    edit.select_line()
-
-take all:
-    edit.select_all()
-
 take left [<number_small>]:
     numb = number_small or 1
     edit.extend_left()
@@ -116,9 +109,6 @@ take down [<number_small>]:
     numb = number_small or 1
     edit.extend_line_down()
     repeat(numb - 1)
-
-take word:
-    edit.select_word()
     
 take draw [<number_small>]:
     numb = number_small or 1
@@ -129,12 +119,6 @@ take spring [<number_small>]:
     numb = number_small or 1
     edit.extend_word_right()
     repeat(numb - 1)
-
-take head:
-    edit.extend_line_start()
-
-take tale:
-    edit.extend_line_end()
 
 take far up:
     edit.extend_file_start()
@@ -187,11 +171,6 @@ wipe spring [<number_small>]:
     numb = number_small or 1
     edit.extend_word_right()
     repeat(number_small-1)
-    edit.delete()
-    
-wiper | wipe head: 
-    edit.extend_line_start()
-    edit.delete()
 
 wipe far up:
     edit.extend_file_start()
@@ -200,32 +179,6 @@ wipe far up:
 wipe far down:
     edit.extend_file_end()
     edit.delete()
-    
-clear all:
-    edit.select_all()
-    edit.delete()
-    
-#copy commands
-copy all:
-    edit.select_all()
-    edit.copy()
-#to do: do we want these variants, seem to conflict
-# copy left:
-#      edit.extend_left()
-#      edit.copy()
-# copy right:
-#     edit.extend_right()
-#     edit.copy()
-# copy up:
-#     edit.extend_up()
-#     edit.copy()
-# copy down:
-#     edit.extend_down()
-#     edit.copy()
-    
-copy word:
-    edit.select_word()
-    edit.copy()
     
 copy draw [<number_small>]:
     numb = number_small or 1
@@ -259,29 +212,6 @@ copy far down:
     edit.extend_file_end()
     edit.copy()
     
-#cut commands
-slice all:
-    edit.select_all()
-    edit.cut()
-    
-#to do: nnn variants
-# slice left:
-#      edit.select_all()
-#      edit.cut()
-# slice right:
-#      edit.select_all()
-#      edit.cut()
-# slice up:
-#      edit.select_all()
-#     edit.cut()
-# slice down:
-#     edit.select_all()
-#     edit.cut()
-    
-slice word:
-    edit.select_word()
-    edit.cut()
-    
 slice draw [<number_small>]:
     numb = number_small or 1
     edit.extend_word_left()
@@ -293,13 +223,6 @@ slice spring [<number_small>]:
     edit.extend_word_right()
     repeat(numb - 1)
     edit.cut()
-    
-slice line:
-    edit.select_line()
-    edit.cut()
-(pace | paste) all:
-    edit.select_all()
-    edit.paste()
 
 # duplication
 clone that: edit.selection_clone()

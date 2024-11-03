@@ -6,5 +6,6 @@ go after: goAfter
 copy: copyToClipboard
 slice: cutToClipboard
 paste: pasteFromClipboard
+pace: pasteFromClipboard
 paste to: pasteFromClipboard
 wipe: delete
