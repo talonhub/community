@@ -20,6 +20,12 @@ class UserActions:
         actions.sleep("180ms")
         actions.app.tab_close()
 
+    def command_search(command: str = ""):
+        actions.key("cmd-l")
+        if command != "":
+            actions.sleep("200ms")
+            actions.insert(command)
+
 
 @ctx.action_class("browser")
 class BrowserActions:

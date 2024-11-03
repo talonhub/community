@@ -1,0 +1,21 @@
+list: user.keypad_key
+-
+
+key pad zero: keypad_0
+key pad one: keypad_1
+key pad two: keypad_2
+key pad three: keypad_3
+key pad four: keypad_4
+key pad five: keypad_5
+key pad six: keypad_6
+key pad seven: keypad_7
+key pad eight: keypad_8
+key pad nine: keypad_9
+key pad point: keypad_decimal
+key pad plus: keypad_plus
+key pad minus: keypad_minus
+key pad star: keypad_multiply
+key pad slash: keypad_divide
+key pad equals: keypad_equals
+key pad clear: keypad_clear
+key pad enter: keypad_enter

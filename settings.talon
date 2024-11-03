@@ -27,6 +27,9 @@ settings():
     # If `true`, stop continuous scroll/gaze scroll with a pop
     user.mouse_enable_pop_stops_scroll = true
 
+    # If `true`, stop mouse drag with a pop
+    user.mouse_enable_pop_stops_drag = true
+
     # Choose how pop click should work in 'control mouse' mode
     # 0 = off
     # 1 = on with eyetracker but not zoom mouse mode
@@ -57,6 +60,10 @@ settings():
     # Set the total number of command history lines to display
     user.command_history_size = 50
 
+    # Set the time window size for to for pop_twice_to_sleep and pop_twice_to_repeat. By default, the pops must be more than 0.1 seconds apart and less then 0.3 seconds, to reduce false positives
+    user.double_pop_speed_minimum = 0.1
+    user.double_pop_speed_maximum = 0.3
+
     # Uncomment to add a directory (relative to the Talon user dir) with additional
     # .snippet files. Changing this setting requires a restart of Talon.
     # user.snippets_dir = "snippets"
@@ -80,12 +87,25 @@ settings():
     # Puts Talon into sleep mode if no commands are spoken for a defined period of time.
     # user.listening_timeout_minutes = 3
 
+    # Time in seconds to wait for the clipboard to change when trying to get selected text
+    # user.selected_text_timeout = 0.25
+
 # Uncomment to enable the curse yes/curse no commands (show/hide mouse cursor).
 # See issue #688 for more detail: https://github.com/talonhub/community/issues/688
 # tag(): user.mouse_cursor_commands_enable
 
-# Uncomment the below to disable support for saying numbers without a prefix.
-# By default saying "one" would write "1", however many users find this behavior
-# prone to false positives. If you uncomment this, you will need to say
-# "numb one" to write "1". Note that this tag will eventually be activated by default
-# tag(): user.prefixed_numbers
+# Uncomment below enable pop_twice_to_wake
+# Without this tag noise_trigger_pop is usually associated with pop to click actions
+# Enabling this tag disables other pop to click actions in sleep mode, including pop to click
+# tag(): user.pop_twice_to_wake
+
+# Uncomment below enable pop_twice_to_repeat
+# Enabling this tag will repeat the last command when two pops are heard within the allotted time window
+# Without this tag noise_trigger_pop is usually associated with pop to click actions
+# Enabling this tag disables other pop to click actions in command mode, including pop to click
+# tag(): user.pop_twice_to_repeat
+
+# Uncomment the below to enable support for saying numbers without a prefix.
+# By default you need to say "numb one" to write "1". If you uncomment this,
+# you can say "one" to write "1".
+# tag(): user.unprefixed_numbers
