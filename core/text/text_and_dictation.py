@@ -3,6 +3,7 @@ import re
 from typing import Callable, Optional
 
 from talon import Context, Module, actions, grammar, settings, ui
+
 from ..numbers.numbers import get_spoken_form_under_one_hundred
 
 mod = Module()
@@ -20,7 +21,9 @@ mod.list("phrase_ender", "List of commands that can be used to end a phrase")
 mod.list("hours_twelve", desc="Names for hours up to 12")
 mod.list("hours", desc="Names for hours up to 24")
 mod.list("minutes", desc="Names for minutes, 01 up to 59")
-mod.list("currency_denomination", desc="Currency denominations that can be used within prose")
+mod.list(
+    "currency_denomination", desc="Currency denominations that can be used within prose"
+)
 
 ctx = Context()
 # Maps spoken forms to DictationFormat method names (see DictationFormat below).
@@ -42,9 +45,10 @@ ctx.lists["user.prose_snippets"] = {
     "frowny": ":-(",
 }
 
-ctx.lists["user.hours_twelve"] = get_spoken_form_under_one_hundred(1, 12, True, True)  
+ctx.lists["user.hours_twelve"] = get_spoken_form_under_one_hundred(1, 12, True, True)
 ctx.lists["user.hours"] = get_spoken_form_under_one_hundred(1, 23, True, True)
 ctx.lists["user.minutes"] = get_spoken_form_under_one_hundred(1, 59, True, False)
+
 
 @mod.capture(rule="{user.prose_modifiers}")
 def prose_modifier(m) -> Callable:
@@ -91,6 +95,7 @@ def prose_money(m) -> str:
     if hasattr(m, "number_string_2"):
         s += "." + m.number_string_2
     return s
+
 
 @mod.capture(rule="am|pm")
 def time_am_pm(m) -> str:
