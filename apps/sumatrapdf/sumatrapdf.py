@@ -56,6 +56,12 @@ class UserActions:
     def page_final():
         actions.key("end")
 
+    def page_rotate_right():
+        actions.key("shift-ctrl-keypad_plus")
+
+    def page_rotate_left():
+        actions.key("shift-ctrl-keypad_minus")
+
     # user.tabs
     def tab_jump(number: int):
         if number < 9:
