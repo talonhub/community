@@ -82,7 +82,7 @@ def snap_next(windows: list[Window], target_layout: str) -> Optional[int]:
             )
 
             return idx
-        except UIErr as e:
+        except (UIErr, AttributeError) as e:
             print(
                 f'Failed to snap {window.app.name}\'s "{window.title}" window ({type(e).__name__} {e});  this is normal; continuing to the next'
             )
