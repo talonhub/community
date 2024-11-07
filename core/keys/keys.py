@@ -139,8 +139,8 @@ ctx.lists["self.letter"] = alphabet_list
 punctuation_words = {
     # TODO: I'm not sure why we need these, I think it has something to do with
     # Dragon. Possibly it has been fixed by later improvements to talon? -rntz
-    "`": "`",
-    ",": ",",  # <== these things
+    # "`": "`",
+    # ",": ",",  # <== these things
     "back tick": "`",
     "comma": ",",
     # Workaround for issue with conformer b-series; see #946
@@ -181,7 +181,6 @@ symbol_key_words = {
     "square": "[",
     "squad": "]",
     "slash": "/",
-    "slash": "/",
     "backslash": "\\",
     "dash": "-",
     "equit": "=",
@@ -190,7 +189,7 @@ symbol_key_words = {
     "tilde": "~",
     "bang": "!",
     "cash": "$",
-    "flat": "_",
+    "floor": "_",
     "cot": ":",
     "caught": ":",
     "bend": "(",
@@ -199,7 +198,7 @@ symbol_key_words = {
     "curl": "}",
     "angle": "<",
     "rangle": ">",
-    "splat": "*",
+    "star": "*",
     "pound": "#",
     "perco": "%",
     "caret": "^",
