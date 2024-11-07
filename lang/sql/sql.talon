@@ -6,37 +6,38 @@ tag(): user.code_comment_block_c_like
 tag(): user.code_data_null
 tag(): user.code_functions_common
 
-select: "SELECT "
-distinct: "DISTINCT "
-from: "FROM "
-select star from: "SELECT *\nFROM "
-where: "WHERE "
-order by: "ORDER BY "
-group by: "GROUP BY "
-having: "HAVING "
-descending: " DESC"
-ascending: " ASC"
-dot i d: ".id"
-inner join: user.insert_between("INNER JOIN ", " ON ")
-inner join using: user.insert_between("INNER JOIN ", " USING ")
-left outer join: user.insert_between("LEFT OUTER JOIN ", " ON ")
-right outer join: user.insert_between("RIGHT OUTER JOIN ", " ON ")
+{user.sql_select}:
+    insert(sql_select)
 
-with:
-    key(enter up)
-    "WITH  AS ("
-    key(enter tab)
-    "SELECT "
-    key(enter shift-tab)
-    edit.extend_line_end()
-    edit.delete()
-    ") "
-    key(delete up:2 right:3)
+from <user.sql_table_with_alias>:
+    user.sql_insert(" from ")
+    insert(sql_table_with_alias)
 
-column:
-    key(return)
-    ", "
+{user.sql_join} [<user.sql_table_with_alias>]:
+    user.sql_insert(sql_join)
+    insert(" ")
+    insert(sql_table_with_alias)
 
-count: user.code_insert_function("Count", "")
+on <user.sql_field>:
+    user.sql_insert("on ")
+    insert(sql_field)
 
-date: user.insert_between("DATE '", "'")
+on <user.sql_field_equals>:
+    user.sql_insert("on ")
+    insert(sql_field_equals)
+
+equals <user.sql_field>:
+    user.sql_insert("= ")
+    insert(sql_field)
+
+where <user.sql_field>:
+    user.sql_insert("where ")
+    insert(sql_field)
+
+and <user.sql_field>:
+    user.sql_insert("and ")
+    insert(sql_field)
+
+or <user.sql_field>:
+    user.sql_insert("or ")
+    insert(sql_field)

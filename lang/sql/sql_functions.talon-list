@@ -1,0 +1,16 @@
+list: user.code_common_function
+code.language: sql
+-
+now
+count
+min
+max
+avg
+sum
+coalesce
+any
+all
+
+array agg: array_agg
+json agg: jsonb_agg
+to json: to_jsonb

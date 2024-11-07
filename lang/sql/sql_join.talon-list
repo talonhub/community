@@ -1,0 +1,11 @@
+list: user.sql_join
+code.language: sql
+-
+
+inner join
+left join
+right join
+full join
+cross join
+cross join lateral
+left join lateral

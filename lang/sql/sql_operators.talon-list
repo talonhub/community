@@ -1,0 +1,17 @@
+list: user.sql_operators
+code.language: sql
+-
+equals: =
+not equals: !=
+is null
+is not null
+like
+I like: ilike
+is distinct from
+is not distinct from
+is true
+is false
+less than: <
+less equal: <=
+greater than: >
+greater equal: >=
