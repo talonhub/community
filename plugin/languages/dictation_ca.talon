@@ -19,4 +19,4 @@ eliminar línia:
 (intro | enter):
     key("enter")
 
-<phrase>: user.dictation_insert("{phrase} ")
+<phrase>: insert("{phrase} ")

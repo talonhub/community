@@ -1,22 +1,22 @@
 {
 	"cluck": {
-		"sounds": ["Alveolar Click"],
+		"sounds": ["Alveolar Click 2"],
 		"threshold": {
 			">power": 20,
 			">probability": 0.87
 		},
 		"throttle": {
-			"Alveolar Click": 0.2
+			"cluck": 0.2
 		}
 	},
 	"rree": {
-		"sounds": ["rree"],
+		"sounds": ["rree2"],
 		"threshold": {
 			">power": 20,
 			">probability": 0.87
 		},
 		"throttle": {
-			"Alveolar Click": 0.2,
+			"cluck": 0.2,
 			"rree": 0.2
 		}
 	},
@@ -40,8 +40,11 @@
         },
         "throttle": {
             "cluck": 0.3,
+            "Alveolar Click 2": 0.3,
             "rree": 0.3,
-            "hiss": 0.3
+            "rree2": 0.3,
+            "hiss": 0.3,
+            "hiss2": 0.3
         }
     }
 }

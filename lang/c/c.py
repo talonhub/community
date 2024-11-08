@@ -30,7 +30,7 @@ ctx.lists["self.c_keywords"] = {
 
 ctx.lists["self.stdint_types"] = {
     "character": "int8_t",
-    "char": "int8_t",
+    # "char": "int8_t",
     "short": "int16_t",
     "long": "int32_t",
     "long long": "int64_t",
@@ -40,14 +40,14 @@ ctx.lists["self.stdint_types"] = {
     "double": "double",
     "struct": "struct",
     "struck": "struct",
-    "num": "enum",
+    "enum": "enum",
     "union": "union",
     "float": "float",
 }
 
 ctx.lists["self.c_types"] = {
     "character": "char",
-    "char": "char",
+    # "char": "char",
     "short": "short",
     "long": "long",
     "int": "int",
@@ -56,7 +56,7 @@ ctx.lists["self.c_types"] = {
     "double": "double",
     "struct": "struct",
     "struck": "struct",
-    "num": "enum",
+    "enum": "enum",
     "union": "union",
     "float": "float",
 }
