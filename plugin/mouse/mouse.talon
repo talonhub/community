@@ -77,6 +77,12 @@ right drag | righty drag:
     user.mouse_drag(1)
     # close the mouse grid
     user.grid_close()
+mid drag | wheel drag:
+    # close zoom if open
+    user.zoom_close()
+    user.mouse_drag(2)
+    # close the mouse grid
+    user.grid_close()
 end drag | drag end: user.mouse_drag_end()
 wheel down: user.mouse_scroll_down()
 wheel down here:
