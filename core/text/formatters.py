@@ -385,12 +385,10 @@ def format_text(m) -> str:
     return out
 
 
-@mod.capture(
-    rule="<self.code_formatters> <user.text> (<user.text> | <user.formatter_immune>)*"
-)
+@mod.capture(rule="<user.code_formatters> <user.text>")
 def format_code(m) -> str:
     """Formats code and returns a string"""
-    return format_text(m)
+    return format_phrase(m.text, m.code_formatters)
 
 
 class ImmuneString:
