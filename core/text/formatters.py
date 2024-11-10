@@ -402,6 +402,7 @@ class ImmuneString:
 )
 def formatter_immune(m) -> ImmuneString:
     """Symbols and numbers that can be interspersed into a prose formatter
+    (i.e., not dictated immediately after the name of the formatter)
 
     It will be inserted directly, without being formatted.
 
