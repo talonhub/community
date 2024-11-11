@@ -214,7 +214,7 @@ def number_signed_string(m) -> str:
 
 @ctx.capture("number_signed", rule="<user.number_signed_string>")
 def number_signed(m) -> int:
-    """Parses a (possibly negative) number phrase, returning that number as a int."""
+    """Parses a (possibly negative) number phrase, returning that number as a integer."""
     return int(m.number_signed_string)
 
 
