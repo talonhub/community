@@ -47,25 +47,25 @@ last_layout: Optional[WindowLayout] = None
 
 SPLIT_POSITIONS = {
     "split": {
-        2: ["left", "right"],
+        2: ["Left", "Right"],
         3: [
-            "left third",
-            "center third",
-            "right third",
+            "LeftThird",
+            "CenterThird",
+            "RightThird",
         ],
     },
     "clock": {
         3: [
-            "left",
-            "top right",
-            "bottom right",
+            "Left",
+            "TopRight",
+            "BottomRight",
         ],
     },
     "counterclock": {
         3: [
-            "right",
-            "top left",
-            "bottom left",
+            "Right",
+            "TopLeft",
+            "BottomLeft",
         ],
     },
 }

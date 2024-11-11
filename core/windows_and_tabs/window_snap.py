@@ -19,6 +19,7 @@ mod.list(
     "Predefined window positions for the current window. See `RelativeScreenPos`.",
 )
 
+
 mod.setting(
     "window_snap_screen",
     type=str,
@@ -216,72 +217,115 @@ _snap_positions = {
     # .---.---.     .-------.
     # |   |   |  &  |-------|
     # '---'---'     '-------'
-    "left": RelativeScreenPos(0, 0, 0.5, 1),
-    "right": RelativeScreenPos(0.5, 0, 1, 1),
-    "top": RelativeScreenPos(0, 0, 1, 0.5),
-    "bottom": RelativeScreenPos(0, 0.5, 1, 1),
+    "Left": RelativeScreenPos(0, 0, 0.5, 1),
+    "Right": RelativeScreenPos(0.5, 0, 1, 1),
+    "Top": RelativeScreenPos(0, 0, 1, 0.5),
+    "Bottom": RelativeScreenPos(0, 0.5, 1, 1),
     # Thirds
     # .--.--.--.
     # |  |  |  |
     # '--'--'--'
-    "center third": RelativeScreenPos(1 / 3, 0, 2 / 3, 1),
-    "left third": RelativeScreenPos(0, 0, 1 / 3, 1),
-    "right third": RelativeScreenPos(2 / 3, 0, 1, 1),
-    "left two thirds": RelativeScreenPos(0, 0, 2 / 3, 1),
-    "right two thirds": RelativeScreenPos(1 / 3, 0, 1, 1),
+    "CenterThird": RelativeScreenPos(1 / 3, 0, 2 / 3, 1),
+    "LeftThird": RelativeScreenPos(0, 0, 1 / 3, 1),
+    "RightThird": RelativeScreenPos(2 / 3, 0, 1, 1),
+    "LeftTwoThirds": RelativeScreenPos(0, 0, 2 / 3, 1),
+    "RightTwoThirds": RelativeScreenPos(1 / 3, 0, 1, 1),
     # Alternate (simpler) spoken forms for thirds
-    "center small": RelativeScreenPos(1 / 3, 0, 2 / 3, 1),
-    "left small": RelativeScreenPos(0, 0, 1 / 3, 1),
-    "right small": RelativeScreenPos(2 / 3, 0, 1, 1),
-    "left large": RelativeScreenPos(0, 0, 2 / 3, 1),
-    "right large": RelativeScreenPos(1 / 3, 0, 1, 1),
+    "CenterSmall": RelativeScreenPos(1 / 3, 0, 2 / 3, 1),
+    "LeftSmall": RelativeScreenPos(0, 0, 1 / 3, 1),
+    "RightSmall": RelativeScreenPos(2 / 3, 0, 1, 1),
+    "LeftLarge": RelativeScreenPos(0, 0, 2 / 3, 1),
+    "RightLarge": RelativeScreenPos(1 / 3, 0, 1, 1),
     # Quarters
     # .---.---.
     # |---|---|
     # '---'---'
-    "top left": RelativeScreenPos(0, 0, 0.5, 0.5),
-    "top right": RelativeScreenPos(0.5, 0, 1, 0.5),
-    "bottom left": RelativeScreenPos(0, 0.5, 0.5, 1),
-    "bottom right": RelativeScreenPos(0.5, 0.5, 1, 1),
+    "TopLeft": RelativeScreenPos(0, 0, 0.5, 0.5),
+    "TopRight": RelativeScreenPos(0.5, 0, 1, 0.5),
+    "BottomLeft": RelativeScreenPos(0, 0.5, 0.5, 1),
+    "BottomRight": RelativeScreenPos(0.5, 0.5, 1, 1),
     # Sixths
     # .--.--.--.
     # |--|--|--|
     # '--'--'--'
-    "top left third": RelativeScreenPos(0, 0, 1 / 3, 0.5),
-    "top right third": RelativeScreenPos(2 / 3, 0, 1, 0.5),
-    "top left two thirds": RelativeScreenPos(0, 0, 2 / 3, 0.5),
-    "top right two thirds": RelativeScreenPos(1 / 3, 0, 1, 0.5),
-    "top center third": RelativeScreenPos(1 / 3, 0, 2 / 3, 0.5),
-    "bottom left third": RelativeScreenPos(0, 0.5, 1 / 3, 1),
-    "bottom right third": RelativeScreenPos(2 / 3, 0.5, 1, 1),
-    "bottom left two thirds": RelativeScreenPos(0, 0.5, 2 / 3, 1),
-    "bottom right two thirds": RelativeScreenPos(1 / 3, 0.5, 1, 1),
-    "bottom center third": RelativeScreenPos(1 / 3, 0.5, 2 / 3, 1),
+    "TopLeftThird": RelativeScreenPos(0, 0, 1 / 3, 0.5),
+    "TopRightThird": RelativeScreenPos(2 / 3, 0, 1, 0.5),
+    "TopLeftTwoThirds": RelativeScreenPos(0, 0, 2 / 3, 0.5),
+    "TopRightTwoThirds": RelativeScreenPos(1 / 3, 0, 1, 0.5),
+    "TopCenterThird": RelativeScreenPos(1 / 3, 0, 2 / 3, 0.5),
+    "BottomLeftThird": RelativeScreenPos(0, 0.5, 1 / 3, 1),
+    "BottomRightThird": RelativeScreenPos(2 / 3, 0.5, 1, 1),
+    "BottomLeftTwoThirds": RelativeScreenPos(0, 0.5, 2 / 3, 1),
+    "BottomRightTwoThirds": RelativeScreenPos(1 / 3, 0.5, 1, 1),
+    "BottomCenterThird": RelativeScreenPos(1 / 3, 0.5, 2 / 3, 1),
     # Alternate (simpler) spoken forms for sixths
-    "top left small": RelativeScreenPos(0, 0, 1 / 3, 0.5),
-    "top right small": RelativeScreenPos(2 / 3, 0, 1, 0.5),
-    "top left large": RelativeScreenPos(0, 0, 2 / 3, 0.5),
-    "top right large": RelativeScreenPos(1 / 3, 0, 1, 0.5),
-    "top center small": RelativeScreenPos(1 / 3, 0, 2 / 3, 0.5),
-    "bottom left small": RelativeScreenPos(0, 0.5, 1 / 3, 1),
-    "bottom right small": RelativeScreenPos(2 / 3, 0.5, 1, 1),
-    "bottom left large": RelativeScreenPos(0, 0.5, 2 / 3, 1),
-    "bottom right large": RelativeScreenPos(1 / 3, 0.5, 1, 1),
-    "bottom center small": RelativeScreenPos(1 / 3, 0.5, 2 / 3, 1),
+    "TopLeftSmall": RelativeScreenPos(0, 0, 1 / 3, 0.5),
+    "TopRightSmall": RelativeScreenPos(2 / 3, 0, 1, 0.5),
+    "TopLeftLarge": RelativeScreenPos(0, 0, 2 / 3, 0.5),
+    "TopRightLarge": RelativeScreenPos(1 / 3, 0, 1, 0.5),
+    "TopCenterSmall": RelativeScreenPos(1 / 3, 0, 2 / 3, 0.5),
+    "BottomLeftSmall": RelativeScreenPos(0, 0.5, 1 / 3, 1),
+    "BottomRightSmall": RelativeScreenPos(2 / 3, 0.5, 1, 1),
+    "BottomLeftLarge": RelativeScreenPos(0, 0.5, 2 / 3, 1),
+    "BottomRightLarge": RelativeScreenPos(1 / 3, 0.5, 1, 1),
+    "BottomCenterSmall": RelativeScreenPos(1 / 3, 0.5, 2 / 3, 1),
     # Special
-    "center": RelativeScreenPos(1 / 8, 1 / 6, 7 / 8, 5 / 6),
-    "full": RelativeScreenPos(0, 0, 1, 1),
-    "fullscreen": RelativeScreenPos(0, 0, 1, 1),
+    "Center": RelativeScreenPos(1 / 8, 1 / 6, 7 / 8, 5 / 6),
+    "Full": RelativeScreenPos(0, 0, 1, 1),
+    "Fullscreen": RelativeScreenPos(0, 0, 1, 1),
+}
+_snap_position_spoken_forms = {
+    "left": "Left",
+    "right": "Right",
+    "top": "Top",
+    "bottom": "Bottom",
+    "center third": "CenterThird",
+    "left third": "LeftThird",
+    "right third": "RightThird",
+    "left two thirds": "LeftTwoThirds",
+    "right two thirds": "RightTwoThirds",
+    "center small": "CenterSmall",
+    "left small": "LeftSmall",
+    "right small": "RightSmall",
+    "left large": "LeftLarge",
+    "right large": "RightLarge",
+    "top left": "TopLeft",
+    "top right": "TopRight",
+    "bottom left": "BottomLeft",
+    "bottom right": "BottomRight",
+    "top left third": "TopLeftThird",
+    "top right third": "TopRightThird",
+    "top left two thirds": "TopLeftTwoThirds",
+    "top right two thirds": "TopRightTwoThirds",
+    "top center third": "TopCenterThird",
+    "bottom left third": "BottomLeftThird",
+    "bottom right third": "BottomRightThird",
+    "bottom left two thirds": "BottomLeftTwoThirds",
+    "bottom right two thirds": "BottomRightTwoThirds",
+    "bottom center third": "BottomCenterThird",
+    "top left small": "TopLeftSmall",
+    "top right small": "TopRightSmall",
+    "top left large": "TopLeftLarge",
+    "top right large": "TopRightLarge",
+    "top center small": "TopCenterSmall",
+    "bottom left small": "BottomLeftSmall",
+    "bottom right small": "BottomRightSmall",
+    "bottom left large": "BottomLeftLarge",
+    "bottom right large": "BottomRightLarge",
+    "bottom center small": "BottomCenterSmall",
+    "center": "Center",
+    "full": "Full",
+    "fullscreen": "Fullscreen",
 }
 
 
 @mod.capture(rule="{user.window_snap_positions}")
 def window_snap_position(m) -> RelativeScreenPos:
-    return _snap_positions[m.window_snap_positions]
+    return _snap_positions[_snap_position_spoken_forms[m.window_snap_positions]]
 
 
 ctx = Context()
-ctx.lists["user.window_snap_positions"] = _snap_positions.keys()
+ctx.lists["user.window_snap_positions"] = _snap_position_spoken_forms.keys()
 
 
 @mod.action_class
