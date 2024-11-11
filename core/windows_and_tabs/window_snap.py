@@ -274,58 +274,14 @@ _snap_positions = {
     "Full": RelativeScreenPos(0, 0, 1, 1),
     "Fullscreen": RelativeScreenPos(0, 0, 1, 1),
 }
-_snap_position_spoken_forms = {
-    "left": "Left",
-    "right": "Right",
-    "top": "Top",
-    "bottom": "Bottom",
-    "center third": "CenterThird",
-    "left third": "LeftThird",
-    "right third": "RightThird",
-    "left two thirds": "LeftTwoThirds",
-    "right two thirds": "RightTwoThirds",
-    "center small": "CenterSmall",
-    "left small": "LeftSmall",
-    "right small": "RightSmall",
-    "left large": "LeftLarge",
-    "right large": "RightLarge",
-    "top left": "TopLeft",
-    "top right": "TopRight",
-    "bottom left": "BottomLeft",
-    "bottom right": "BottomRight",
-    "top left third": "TopLeftThird",
-    "top right third": "TopRightThird",
-    "top left two thirds": "TopLeftTwoThirds",
-    "top right two thirds": "TopRightTwoThirds",
-    "top center third": "TopCenterThird",
-    "bottom left third": "BottomLeftThird",
-    "bottom right third": "BottomRightThird",
-    "bottom left two thirds": "BottomLeftTwoThirds",
-    "bottom right two thirds": "BottomRightTwoThirds",
-    "bottom center third": "BottomCenterThird",
-    "top left small": "TopLeftSmall",
-    "top right small": "TopRightSmall",
-    "top left large": "TopLeftLarge",
-    "top right large": "TopRightLarge",
-    "top center small": "TopCenterSmall",
-    "bottom left small": "BottomLeftSmall",
-    "bottom right small": "BottomRightSmall",
-    "bottom left large": "BottomLeftLarge",
-    "bottom right large": "BottomRightLarge",
-    "bottom center small": "BottomCenterSmall",
-    "center": "Center",
-    "full": "Full",
-    "fullscreen": "Fullscreen",
-}
 
 
 @mod.capture(rule="{user.window_snap_positions}")
 def window_snap_position(m) -> RelativeScreenPos:
-    return _snap_positions[_snap_position_spoken_forms[m.window_snap_positions]]
+    return _snap_positions[m.window_snap_positions]
 
 
 ctx = Context()
-ctx.lists["user.window_snap_positions"] = _snap_position_spoken_forms.keys()
 
 
 @mod.action_class
