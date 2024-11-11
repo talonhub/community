@@ -368,9 +368,6 @@ def code_formatters(m) -> str:
 
 
 @mod.capture(
-    # Note that if the user speaks something like "snake dot", it will
-    # insert "dot" - otherwise, they wouldn't be able to insert punctuation
-    # words directly.
     rule="<self.formatters> <user.text> (<user.text> | <user.formatter_immune>)*"
 )
 def format_text(m) -> str:
@@ -385,12 +382,10 @@ def format_text(m) -> str:
     return out
 
 
-@mod.capture(
-    rule="<self.code_formatters> <user.text> (<user.text> | <user.formatter_immune>)*"
-)
+@mod.capture(rule="<user.code_formatters> <user.text>")
 def format_code(m) -> str:
     """Formats code and returns a string"""
-    return format_text(m)
+    return format_phrase(m.text, m.code_formatters)
 
 
 class ImmuneString:
@@ -401,14 +396,15 @@ class ImmuneString:
 
 
 @mod.capture(
-    # Add anything else into this that you want to be able to speak during a
-    # formatter.
+    # Add anything else into this that you want to have inserted when
+    # using a prose formatter.
     rule="(<user.symbol_key> | (numb | numeral) <number>)"
 )
 def formatter_immune(m) -> ImmuneString:
-    """Text that can be interspersed into a formatter, e.g. characters.
+    """Symbols and numbers that can be interspersed into a prose formatter
+    (i.e., not dictated immediately after the name of the formatter)
 
-    It will be inserted directly, without being formatted.
+    They will be inserted directly, without being formatted.
 
     """
     if hasattr(m, "number"):

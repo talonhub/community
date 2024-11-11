@@ -1,5 +1,6 @@
 tag: browser
 -
+tag(): user.find
 tag(): user.navigation
 
 address bar | go address | go url: browser.focus_address()

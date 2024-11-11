@@ -9,10 +9,12 @@ compound_actions = {
     ("goBefore", "line"): actions.edit.line_start,
     ("goBefore", "paragraph"): actions.edit.paragraph_start,
     ("goBefore", "document"): actions.edit.file_start,
+    ("goBefore", "fileStart"): actions.edit.file_start,
     # Go after
     ("goAfter", "line"): actions.edit.line_end,
     ("goAfter", "paragraph"): actions.edit.paragraph_end,
     ("goAfter", "document"): actions.edit.file_end,
+    ("goAfter", "fileEnd"): actions.edit.file_end,
     # Delete
     ("delete", "word"): actions.edit.delete_word,
     ("delete", "line"): actions.edit.delete_line,
