@@ -234,7 +234,7 @@ def number_prose_with_colon(m) -> str:
 
 
 @mod.capture(
-    rule="<user.number_string> | <user.number_signed_string> | <user.number_prose_with_dot> | <user.number_prose_with_comma> | <user.number_prose_with_colon>"
+    rule="<user.number_signed_string> | <user.number_prose_with_dot> | <user.number_prose_with_comma> | <user.number_prose_with_colon>"
 )
 def number_prose_unprefixed(m) -> str:
     return m[0]
