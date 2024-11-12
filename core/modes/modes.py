@@ -26,13 +26,15 @@ not mode: sleep
 @ctx_sleep.action_class("speech")
 class ActionsSleepMode:
     def disable():
-        actions.app.notify("Talon is already asleep")
+        # actions.app.notify("Talon is already asleep")
+        pass
 
 
 @ctx_awake.action_class("speech")
 class ActionsAwakeMode:
     def enable():
-        actions.app.notify("Talon is already awake")
+        # actions.app.notify("Talon is already awake")
+        pass
 
 
 @mod.action_class
