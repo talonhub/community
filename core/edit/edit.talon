@@ -1,7 +1,6 @@
 # go left, go left left down, go 5 left 2 down
 # go word left, go 2 words right
 go <user.navigation_step>+: user.perform_navigation_steps(navigation_step_list)
-    
 # Compound of action(select, clear, copy, cut, paste, etc.) and modifier(word, line, etc.) commands for editing text.
 # eg: "select line", "clear all"
 <user.edit_action> <user.edit_modifier>: user.edit_command(edit_action, edit_modifier)
@@ -33,7 +32,7 @@ paste match: edit.paste_match_style()
 disk: edit.save()
 disk oliver: edit.save_all()
 padding: user.insert_between(" ", " ")
-pour [<number_small>]: 
+(pour|poor) [<number_small>]: 
 	numb  = number_small or 1
 	edit.line_insert_down()
 	repeat(numb - 1)

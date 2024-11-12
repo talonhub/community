@@ -25,6 +25,9 @@ compound_actions = {
     ("delete", "selection"): actions.edit.delete,
     # Cut to clipboard
     ("cutToClipboard", "line"): actions.user.cut_line,
+    ("cutToClipboard", "selection"): actions.edit.cut,
+    # copy
+    ("copyToClipboard", "selection"): actions.edit.copy,
 }
 
 

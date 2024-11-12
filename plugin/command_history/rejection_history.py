@@ -1,5 +1,5 @@
 from typing import Optional
-
+from datetime import datetime
 from talon import Module, actions, imgui, settings, speech_system
 
 # We keep rejection_history_size lines of history, but by default display only
@@ -16,10 +16,11 @@ def on_phrase(j):
     global history
     meta = j['_metadata']
     if meta['reject']:
-        print(f"Rejected: {meta['emit']}")
-        hypothesis = meta['emit']
+        print(repr(j))
+        print(f"Rejected: {meta['emit']} {datetime.now()}")
+        hypothesis = f"{meta['emit']}"
 
-        history.append(hypothesis if len (hypothesis) > 0 else "Noise rejected")
+        history.append(f"{hypothesis} {datetime.now()}" if len (hypothesis) > 0 else f"Noise rejected {datetime.now()}")
         history = history[-settings.get("user.rejection_history_size") :]
 
 
