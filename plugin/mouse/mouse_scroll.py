@@ -1,4 +1,5 @@
 from typing import Literal
+
 from talon import Context, Module, actions, app, cron, ctrl, imgui, settings, ui
 from talon_plugins import eye_zoom_mouse
 

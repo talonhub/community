@@ -3,7 +3,6 @@ import os
 from talon import Context, Module, actions, app, clip, ctrl, settings, ui
 from talon_plugins import eye_zoom_mouse
 
-
 default_cursor = {
     "AppStarting": r"%SystemRoot%\Cursors\aero_working.ani",
     "Arrow": r"%SystemRoot%\Cursors\aero_arrow.cur",
