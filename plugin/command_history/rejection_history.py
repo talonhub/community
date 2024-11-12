@@ -16,7 +16,6 @@ def on_phrase(j):
     global history, history_no_timestamp
     meta = j['_metadata']
     if meta['reject']:
-        print(repr(j))
         print(f"Rejected: {meta['emit']} {datetime.now()}")
         hypothesis = f"{meta['emit']}"
 
