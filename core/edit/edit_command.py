@@ -10,16 +10,19 @@ compound_actions = {
     ("goBefore", "paragraph"): actions.edit.paragraph_start,
     ("goBefore", "document"): actions.edit.file_start,
     ("goBefore", "fileStart"): actions.edit.file_start,
+    ("goBefore", "selection"): actions.edit.left,
     # Go after
     ("goAfter", "line"): actions.edit.line_end,
     ("goAfter", "paragraph"): actions.edit.paragraph_end,
     ("goAfter", "document"): actions.edit.file_end,
     ("goAfter", "fileEnd"): actions.edit.file_end,
+    ("goAfter", "selection"): actions.edit.right,
     # Delete
     ("delete", "word"): actions.edit.delete_word,
     ("delete", "line"): actions.edit.delete_line,
     ("delete", "paragraph"): actions.edit.delete_paragraph,
     ("delete", "document"): actions.edit.delete_all,
+    ("delete", "selection"): actions.edit.delete,
     # Cut to clipboard
     ("cutToClipboard", "line"): actions.user.cut_line,
 }

@@ -17,8 +17,8 @@ zoom out [<number_small>]:
 zoom reset:
     edit.zoom_reset()
 
-copy [take]: edit.copy()
-slice [take]: edit.cut()
+copy: edit.copy()
+slice: edit.cut()
 
 pace: edit.paste()
 (nay | nope) [<number_small>]: 
