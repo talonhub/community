@@ -104,7 +104,7 @@ class Actions:
 
     def mouse_drag_toggle(button: int):
         """If the button is held down, release the button, else start dragging"""
-        if button in list(ctrl.mouse_buttons_down()):
+        if button in ctrl.mouse_buttons_down():
             actions.mouse_release(button)
         else:
             actions.mouse_drag(button)
