@@ -2,4 +2,5 @@ list: user.vscode_projects
 os: mac
 -
 talent user: ~/.talon/user
+talent community: /Users/knausj/git/community 
 
