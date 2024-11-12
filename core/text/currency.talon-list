@@ -1,4 +1,4 @@
-list: user.currency_denomination
+list: user.currency
 -
 dollar: $
 dollars: $
