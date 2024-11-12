@@ -1,4 +1,4 @@
-from talon import Module, Context, actions
+from talon import Module, Context, actions, scope
 
 mod = Module()
 
@@ -19,26 +19,17 @@ class MacroPadActions:
             actions.speech.enable()
             
     def mode_toggle():
-        """Toggle between command and dictation mode"""
-        pass
-
-ctx = Context()
-ctx.matches = "mode: command"
-
-@ctx.action_class("user")
-class MacroPadActionsCommand:
-    def mode_toggle():
-        actions.app.notify("Dictation mode")
-        actions.mode.enable("dictation")
-        actions.mode.disable("command")
-        
-ctx = Context()
-ctx.matches = "mode: dictation"
-
-@ctx.action_class("user")
-class MacroPadActionsDictation:
-    def mode_toggle():
-        actions.app.notify("Command mode")
-        actions.mode.enable("command")
-        actions.mode.disable("dictation")
-        
+        """Toggle between command, dictation, and mixed mode"""
+        mode = scope.get("mode")
+        if {'command', 'dictation'}.issubset(mode):
+            actions.app.notify("Command mode")
+            actions.mode.enable("command")
+            actions.mode.disable("dictation")
+        elif 'command' in mode:
+            actions.app.notify("Dictation mode")
+            actions.mode.enable("dictation")
+            actions.mode.disable("command")
+        elif 'dictation' in mode:
+            actions.app.notify("Mixed mode")
+            actions.mode.enable("command")
+            actions.mode.enable("dictation")
