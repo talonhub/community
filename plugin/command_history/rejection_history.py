@@ -1,6 +1,6 @@
 from typing import Optional
 from datetime import datetime
-from talon import Module, actions, imgui, settings, speech_system
+from talon import Module, actions, imgui, settings, speech_system, clip
 
 # We keep rejection_history_size lines of history, but by default display only
 # rejection_history_display of them.
@@ -10,10 +10,10 @@ mod.setting("rejection_history_display", type=int, default=10)
 
 hist_more = False
 history = []
-
+history_no_timestamp = []
 
 def on_phrase(j):
-    global history
+    global history, history_no_timestamp
     meta = j['_metadata']
     if meta['reject']:
         print(repr(j))
@@ -21,6 +21,8 @@ def on_phrase(j):
         hypothesis = f"{meta['emit']}"
 
         history.append(f"{hypothesis} {datetime.now()}" if len (hypothesis) > 0 else f"Noise rejected {datetime.now()}")
+        history_no_timestamp.append(f"{hypothesis}")
+        history_no_timestamp = history_no_timestamp[-settings.get("user.rejection_history_size") :]
         history = history[-settings.get("user.rejection_history_size") :]
 
 
@@ -90,3 +92,8 @@ class Actions:
             return None
 
         return " ".join(words) if words else None
+    
+    def rejection_copy_last():
+        """placeholder"""
+        clip.set_text(history_no_timestamp[-1])
+        
