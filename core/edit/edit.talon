@@ -60,15 +60,11 @@ wiper:
 drill <number_small>: 
     edit.delete()
     repeat(number_small-1)
-(drill) tail:
-    edit.extend_line_end()
-    edit.delete()
-(drill) head: 
-    edit.extend_line_start()
-    edit.delete()
+
 driller: 
     edit.extend_line_end()
     edit.delete()  
+
 tail:
     edit.line_end()
 head:

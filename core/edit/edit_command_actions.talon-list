@@ -9,3 +9,4 @@ paste: pasteFromClipboard
 pace: pasteFromClipboard
 paste to: pasteFromClipboard
 wipe: delete
+drill: delete
