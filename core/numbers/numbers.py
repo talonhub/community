@@ -233,6 +233,12 @@ def number_string(m) -> str:
     return parse_number(list(m))
 
 
+@mod.capture(rule="<user.number_string> ((point | dot) <user.number_string>)+")
+def number_decimal_string(m) -> str:
+    """Parses a decimal number phrase, returning that number as a string."""
+    return ".".join(m.number_string_list)
+
+
 @ctx.capture("number", rule="<user.number_string>")
 def number(m) -> int:
     """Parses a number phrase, returning it as an integer."""
