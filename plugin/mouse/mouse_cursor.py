@@ -1,6 +1,6 @@
-from talon import Module, app, ctrl
 import os
 
+from talon import Module, app, ctrl
 
 default_cursor = {
     "AppStarting": r"%SystemRoot%\Cursors\aero_working.ani",
@@ -51,6 +51,7 @@ def show_cursor_helper(show: bool):
     if app.platform == "windows":
         import ctypes
         import winreg
+
         import win32con
 
         try:
