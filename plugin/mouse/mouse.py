@@ -175,7 +175,7 @@ class UserActions:
             if actions.user.mouse_drag_end():
                 dont_click = True
 
-            # Allow pop to stop scroll
+        # Allow pop to stop scroll
         if settings.get("user.mouse_enable_pop_stops_scroll"):
             if actions.user.mouse_scroll_stop():
                 dont_click = True
