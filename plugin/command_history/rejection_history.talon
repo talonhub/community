@@ -2,3 +2,5 @@
 copy (lest|last) (reject|rejection): user.rejection_copy_last()
 reject category one: user.rejection_move_last(1)
 reject category two: user.rejection_move_last(2)
+move reject <number_small> category one: user.rejection_move(1, number_small)
+move reject <number_small> category one: user.rejection_move(2, number_small)

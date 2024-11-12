@@ -1,6 +1,6 @@
 from typing import Optional
 from datetime import datetime
-from talon import Module, actions, imgui, settings, speech_system, clip
+from talon import Module, actions, imgui, settings, speech_system, clip, app
 
 # We keep rejection_history_size lines of history, but by default display only
 # rejection_history_display of them.
@@ -11,6 +11,8 @@ mod.setting("rejection_history_display", type=int, default=10)
 hist_more = False
 history = []
 history_no_timestamp = []
+good_category_one = '/Users/knausj/Desktop/rejections/good category one' if app.platform=="mac" else ""
+good_category_two = '/Users/knausj/Desktop/rejections/good category two' if app.platform=="mac" else ""
 
 def on_phrase(j):
     global history, history_no_timestamp
@@ -36,8 +38,8 @@ def gui(gui: imgui.GUI):
         if hist_more
         else history[-settings.get("user.rejection_history_display") :]
     )
-    for line in text:
-        gui.text(line)
+    for index, line in enumerate (text, 1):
+        gui.text(f"{index}. {line}")
 
     gui.spacer()
     if gui.button("Rejection history close"):
@@ -45,7 +47,15 @@ def gui(gui: imgui.GUI):
 
 
 speech_system.register("phrase", on_phrase)
+def get_latest_reject():
+    import glob
+    import os
+    import shutil
 
+    list_of_files = glob.glob('/Users/knausj/.talon/recordings/2024-11/reject/*') # * means all if need specific format then *.csv
+    latest_file = max(list_of_files, key=os.path.getmtime)
+    print(latest_file)
+    return latest_file
 
 @mod.action_class
 class Actions:
@@ -98,17 +108,31 @@ class Actions:
     
     def rejection_move_last(category: int):
         """placeholder"""
-        import glob
-        import os
         import shutil
-
-        list_of_files = glob.glob('/Users/knausj/.talon/recordings/2024-11/reject/*') # * means all if need specific format then *.csv
-        latest_file = max(list_of_files, key=os.path.getmtime)
-        print(latest_file)
+        latest_reject = get_latest_reject()
         # I spoke and it was correctly rejected 
         if category==1:
-            shutil.move(latest_file, '/Users/knausj/Desktop/rejections/good category one')
+
+            shutil.move(latest_reject, good_category_one)
+            actions.app.notify(f"moved reject {latest_reject} to category one")
+        # background speech that was correctly rejected
         else:
-            shutil.move(latest_file, '/Users/knausj/Desktop/rejections/good category two')
+            shutil.move(latest_reject, good_category_two)
+            actions.app.notify(f"moved reject {latest_reject} to category two")
+    
+    # def rejection_move(category: int):
+    #     import glob
+    #     import os
+    #     import shutil
+
+    #     list_of_files = glob.glob('/Users/knausj/.talon/recordings/2024-11/reject/*') # * means all if need specific format then *.csv
+    #     latest_file = max(list_of_files, key=os.path.getmtime)
+    #     print(latest_file)
+    #     # I spoke and it was correctly rejected 
+    #     if category==1:
+    #         shutil.move(latest_file, '/Users/knausj/Desktop/rejections/good category one')
+    #     else:
+    #         shutil.move(latest_file, '/Users/knausj/Desktop/rejections/good category two')
+        
             
         
