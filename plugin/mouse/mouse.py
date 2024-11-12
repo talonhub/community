@@ -170,12 +170,15 @@ class UserActions:
     def noise_trigger_pop():
         dont_click = False
 
+        # Allow pop to stop drag
         if settings.get("user.mouse_enable_pop_stops_drag"):
-            dont_click = dont_click or actions.user.mouse_drag_end()
+            if actions.user.mouse_drag_end():
+                dont_click = True
 
-        if settings.get("user.mouse_enable_pop_stops_scroll"):
             # Allow pop to stop scroll
-            dont_click = dont_click or actions.user.mouse_scroll_stop()
+        if settings.get("user.mouse_enable_pop_stops_scroll"):
+            if actions.user.mouse_scroll_stop():
+                dont_click = True
 
         if dont_click:
             return
