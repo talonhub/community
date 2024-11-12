@@ -2,7 +2,8 @@
 import re
 from typing import Callable, Optional
 
-from talon import Context, Module, actions, grammar, ui, settings
+from talon import Context, Module, actions, grammar, settings, ui
+
 from ..numbers.numbers import get_spoken_form_under_one_hundred
 
 mod = Module()
@@ -20,7 +21,10 @@ mod.list("phrase_ender", "List of commands that can be used to end a phrase")
 mod.list("hours_twelve", desc="Names for hours up to 12")
 mod.list("hours", desc="Names for hours up to 24")
 mod.list("minutes", desc="Names for minutes, 01 up to 59")
-mod.list("currency", desc="Currency types (e.g., dollars, euros) that can be used within prose")
+mod.list(
+    "currency",
+    desc="Currency types (e.g., dollars, euros) that can be used within prose",
+)
 
 ctx = Context()
 ctx.lists["user.prose_snippets"] = {
@@ -35,9 +39,25 @@ ctx.lists["user.prose_snippets"] = {
     "frowny": ":-(",
 }
 
-ctx.lists["user.hours_twelve"] = get_spoken_form_under_one_hundred(1, 12, include_oh_variant_for_single_digits = True, include_default_variant_for_single_digits = True)  
-ctx.lists["user.hours"] = get_spoken_form_under_one_hundred(1, 23, include_oh_variant_for_single_digits = True, include_default_variant_for_single_digits = True)
-ctx.lists["user.minutes"] = get_spoken_form_under_one_hundred(1, 59, include_oh_variant_for_single_digits = True, include_default_variant_for_single_digits = False)
+ctx.lists["user.hours_twelve"] = get_spoken_form_under_one_hundred(
+    1,
+    12,
+    include_oh_variant_for_single_digits=True,
+    include_default_variant_for_single_digits=True,
+)
+ctx.lists["user.hours"] = get_spoken_form_under_one_hundred(
+    1,
+    23,
+    include_oh_variant_for_single_digits=True,
+    include_default_variant_for_single_digits=True,
+)
+ctx.lists["user.minutes"] = get_spoken_form_under_one_hundred(
+    1,
+    59,
+    include_oh_variant_for_single_digits=True,
+    include_default_variant_for_single_digits=False,
+)
+
 
 @mod.capture(rule="{user.prose_modifiers}")
 def prose_modifier(m) -> Callable:
@@ -85,9 +105,11 @@ def prose_currency(m) -> str:
         s += "." + m.number_string_2
     return s
 
+
 @mod.capture(rule="am|pm")
 def time_am_pm(m) -> str:
     return str(m)
+
 
 # this matches eg "twelve thirty-four" -> 12:34 and "twelve hundred" -> 12:00. hmmmmm.
 @mod.capture(
@@ -102,6 +124,7 @@ def prose_time_hours_minutes(m) -> str:
     if hasattr(m, "time_am_pm"):
         t += m.time_am_pm
     return t
+
 
 @mod.capture(rule="{user.hours_twelve} <user.time_am_pm>")
 def prose_time_hours_am_pm(m) -> str:
@@ -139,7 +162,8 @@ def word(m) -> str:
             actions.dictate.replace_words(actions.dictate.parse_words(m.word))
         )
 
-@mod.capture(rule="({user.vocabulary} | <phrase> | <user.abbreviated>)+")
+
+@mod.capture(rule="({user.vocabulary} | <phrase>)+")
 def text(m) -> str:
     """A sequence of words, including user-defined vocabulary."""
     return format_phrase(m)
