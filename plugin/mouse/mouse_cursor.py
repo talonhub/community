@@ -29,6 +29,11 @@ hidden_cursor = os.path.join(
 
 mod = Module()
 
+mod.tag(
+    "mouse_cursor_commands_enable",
+    desc="Tag enables hide/show mouse cursor commands",
+)
+
 
 @mod.action_class
 class Actions:

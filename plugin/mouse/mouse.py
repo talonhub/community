@@ -15,10 +15,8 @@ mod = Module()
 ctx = Context()
 
 mod.list(
-    "mouse_button", desc="List of mouse button words to mouse_click index parameter"
-)
-mod.tag(
-    "mouse_cursor_commands_enable", desc="Tag enables hide/show mouse cursor commands"
+    "mouse_button",
+    desc="List of mouse button words to mouse_click index parameter",
 )
 mod.setting(
     "mouse_enable_pop_click",
