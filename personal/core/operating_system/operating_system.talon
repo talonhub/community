@@ -11,7 +11,7 @@ setter:             user.system_show_settings()
 ^kill focused$: user.system_kill_focused_application()
 configure {user.system_setting}:
      user.system_setting(system_setting)
-summon <user.directory>:
+(summon | some in) <user.directory>:
      user.system_open_directory(directory)
 portal [<phrase>]$: user.system_show_portal(phrase or "")
 coder$: user.system_show_coder()
