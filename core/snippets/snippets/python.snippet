@@ -64,3 +64,15 @@ insertionScope: class | statement
 class $2Actions:
     $0
 ---
+
+name: talonSettingsDeclaration
+phrase: module setting
+insertionScope: class | statement
+-
+mod.setting("$1", 
+    type=$2, 
+    default=$3, 
+    desc="""$4"""
+)
+$0
+---

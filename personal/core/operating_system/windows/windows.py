@@ -59,7 +59,7 @@ if app.platform == "windows":
             ),
             "local app data": os.path.expandvars("%LocalAppData%"), 
             "app data": os.path.expandvars("%AppData%"),
-            
+            "rejects": os.path.expandvars("%AppData%\\talon\\recordings\\2024-11\\reject"), 
             "root": "\\",
         }
 
@@ -85,6 +85,7 @@ if app.platform == "windows":
             ),
             "local app data": os.path.expandvars("%LocalAppData%"), 
             "app data": os.path.expandvars("%AppData%"),
+            "rejects": os.path.expandvars("%AppData%\\talon\\recordings\\2024-11\\reject"),
             "root": "\\",
         }
 

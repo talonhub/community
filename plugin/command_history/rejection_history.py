@@ -1,18 +1,24 @@
 from typing import Optional
 from datetime import datetime
 from talon import Module, actions, imgui, settings, speech_system, clip, app
+import os
 
 # We keep rejection_history_size lines of history, but by default display only
 # rejection_history_display of them.
 mod = Module()
 mod.setting("rejection_history_size", type=int, default=50)
 mod.setting("rejection_history_display", type=int, default=10)
+mod.setting("rejection_path", 
+    type=str, 
+    default=os.path.expandvars("%AppData%\\talon\\recordings\\2024-11\\reject") if app.platform=="windows" else os.path.expanduser("~/.talon/recordings/2024-11/reject"), 
+    desc="""rejection path"""
+)
 
 hist_more = False
 history = []
 history_no_timestamp = []
-good_category_one = '/Users/knausj/Desktop/rejections/good category one' if app.platform=="mac" else ""
-good_category_two = '/Users/knausj/Desktop/rejections/good category two' if app.platform=="mac" else ""
+good_category_one = os.path.expanduser("~/Desktop/rejections/good category one")
+good_category_two = os.path.expanduser("~/Desktop/rejections/good category two")
 
 def on_phrase(j):
     global history, history_no_timestamp
@@ -51,8 +57,9 @@ def get_latest_reject():
     import glob
     import os
     import shutil
-
-    list_of_files = glob.glob('/Users/knausj/.talon/recordings/2024-11/reject/*') # * means all if need specific format then *.csv
+    path =os.path.join(settings.get("user.rejection_path"), "*") 
+    print(path)
+    list_of_files = glob.glob(path) # * means all if need specific format then *.csv
     latest_file = max(list_of_files, key=os.path.getmtime)
     print(latest_file)
     return latest_file
