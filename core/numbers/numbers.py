@@ -1,6 +1,7 @@
-from typing import Iterator, Union, math
+from typing import Iterator, Union
 
 from talon import Context, Module
+import math
 
 mod = Module()
 ctx = Context()
