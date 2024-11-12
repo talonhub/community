@@ -20,7 +20,7 @@ mod.list("phrase_ender", "List of commands that can be used to end a phrase")
 mod.list("hours_twelve", desc="Names for hours up to 12")
 mod.list("hours", desc="Names for hours up to 24")
 mod.list("minutes", desc="Names for minutes, 01 up to 59")
-mod.list("currency_denomination", desc="Currency denominations that can be used within prose")
+mod.list("currency", desc="Currency types (e.g., dollars, euros) that can be used within prose")
 
 ctx = Context()
 ctx.lists["user.prose_snippets"] = {
@@ -35,9 +35,9 @@ ctx.lists["user.prose_snippets"] = {
     "frowny": ":-(",
 }
 
-ctx.lists["user.hours_twelve"] = get_spoken_form_under_one_hundred(1, 12, True, True)  
-ctx.lists["user.hours"] = get_spoken_form_under_one_hundred(1, 23, True, True)
-ctx.lists["user.minutes"] = get_spoken_form_under_one_hundred(1, 59, True, False)
+ctx.lists["user.hours_twelve"] = get_spoken_form_under_one_hundred(1, 12, include_oh_variant_for_single_digits = True, include_default_variant_for_single_digits = True)  
+ctx.lists["user.hours"] = get_spoken_form_under_one_hundred(1, 23, include_oh_variant_for_single_digits = True, include_default_variant_for_single_digits = True)
+ctx.lists["user.minutes"] = get_spoken_form_under_one_hundred(1, 59, include_oh_variant_for_single_digits = True, include_default_variant_for_single_digits = False)
 
 @mod.capture(rule="{user.prose_modifiers}")
 def prose_modifier(m) -> Callable:
@@ -77,10 +77,10 @@ def prose_percent(m) -> str:
 
 
 @mod.capture(
-    rule="<user.number_string> {user.currency_denomination} [[and] <user.number_string> [cents|pence]]"
+    rule="<user.number_string> {user.currency} [[and] <user.number_string> [cents|pence]]"
 )
-def prose_money(m) -> str:
-    s = m.currency_denomination + m.number_string_1
+def prose_currency(m) -> str:
+    s = m.currency + m.number_string_1
     if hasattr(m, "number_string_2"):
         s += "." + m.number_string_2
     return s
@@ -146,7 +146,7 @@ def text(m) -> str:
 
 
 @mod.capture(
-    rule="(<phrase> | {user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <user.prose_money> | <user.prose_time> | <user.prose_number> | <user.prose_percent> | <user.prose_modifier> | <user.prose_employee_names> | <user.abbreviated>)+"
+    rule="(<phrase> | {user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <user.prose_currency> | <user.prose_time> | <user.prose_number> | <user.prose_percent> | <user.prose_modifier> | <user.prose_employee_names> | <user.abbreviated>)+"
 )
 def prose(m) -> str:
     """Mixed words and punctuation, auto-spaced & capitalized."""
@@ -155,7 +155,7 @@ def prose(m) -> str:
 
 
 @mod.capture(
-    rule="(<phrase> | {user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <user.prose_money> | <user.prose_time> | <user.prose_number> | <user.prose_percent> | <user.abbreviated>)+"
+    rule="(<phrase> | {user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <user.prose_currency> | <user.prose_time> | <user.prose_number> | <user.prose_percent> | <user.abbreviated>)+"
 )
 def raw_prose(m) -> str:
     """Mixed words and punctuation, auto-spaced & capitalized, without quote straightening and commands (for use in dictation mode)."""

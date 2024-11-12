@@ -1,4 +1,4 @@
-from typing import Iterator, Union
+from typing import Iterator, Union, math
 
 from talon import Context, Module
 
@@ -26,7 +26,6 @@ numbers_map.update(scales_map)
 def get_spoken_form_under_one_hundred (start, end, include_oh_variant_for_single_digits, include_default_variant_for_single_digits):
     """Helper function to get dictionary of spoken forms for non-negative numbers in the range [start, end] under 100"""
 
-    import math
     result = {}
 
     for value in range(start, end + 1): 
