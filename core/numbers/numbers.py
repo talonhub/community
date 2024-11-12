@@ -214,7 +214,7 @@ for d1 in range(1, 10):
     for d2 in range(10):
         number_small_map[f"{digit_list[d1]} {digit_list[d2]}"] = f"{d1}{d2}"
 
-mod.list("number_small", desc="List of small numbers")
+mod.list("number_small", "List of small (0-99) numbers")
 mod.tag("unprefixed_numbers", desc="Dont require prefix when saying a number")
 ctx.lists["user.number_small"] = number_small_map
 
