@@ -17,8 +17,9 @@ def on_phrase(j):
     meta = j['_metadata']
     if meta['reject']:
         print(f"Rejected: {meta['emit']}")
+        hypothesis = meta['emit']
 
-        history.append(meta['emit'])
+        history.append(hypothesis if len (hypothesis) > 0 else "Noise rejected")
         history = history[-settings.get("user.rejection_history_size") :]
 
 
