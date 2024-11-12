@@ -20,7 +20,7 @@ copy: edit.copy()
 slice: edit.cut()
 
 pace: edit.paste()
-(nay | nope) [<number_small>]: 
+(nay | nope | nak | neigh) [<number_small>]: 
 	numb = number or 1
 	edit.undo()
 	repeat(numb - 1)
