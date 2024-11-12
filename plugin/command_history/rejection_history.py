@@ -95,4 +95,20 @@ class Actions:
     def rejection_copy_last():
         """placeholder"""
         clip.set_text(history_no_timestamp[-1])
+    
+    def rejection_move_last(category: int):
+        """placeholder"""
+        import glob
+        import os
+        import shutil
+
+        list_of_files = glob.glob('/Users/knausj/.talon/recordings/2024-11/reject/*') # * means all if need specific format then *.csv
+        latest_file = max(list_of_files, key=os.path.getmtime)
+        print(latest_file)
+        # I spoke and it was correctly rejected 
+        if category==1:
+            shutil.move(latest_file, '/Users/knausj/Desktop/rejections/good category one')
+        else:
+            shutil.move(latest_file, '/Users/knausj/Desktop/rejections/good category two')
+            
         
