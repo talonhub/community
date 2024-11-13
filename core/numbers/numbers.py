@@ -284,7 +284,7 @@ def number_small(m) -> int:
     return number_small_map[m.number_small]
 
 
-@mod.capture(rule="[negative|minus] <number_small>")
+@mod.capture(rule="[negative | minus] <number_small>")
 def number_signed_small(m) -> int:
     """Parses an integer between -99 and 99."""
     number = m[-1]
