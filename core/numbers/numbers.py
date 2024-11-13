@@ -12,8 +12,7 @@ tens = "twenty thirty forty fifty sixty seventy eighty ninety".split()
 scales = "hundred thousand million billion trillion quadrillion quintillion sextillion septillion octillion nonillion decillion".split()
 
 digits_map = {n: i for i, n in enumerate(digit_list)}
-digits_map["not"] = 0
-digits_map["oh"] = "0"
+digits_map["oh"] = 0
 teens_map = {n: i + 10 for i, n in enumerate(teens)}
 tens_map = {n: 10 * (i + 2) for i, n in enumerate(tens)}
 scales_map = {n: 10 ** (3 * (i + 1)) for i, n in enumerate(scales[1:])}
@@ -209,11 +208,15 @@ number_small_list = [*digit_list, *teens]
 for ten in tens:
     number_small_list.append(ten)
     number_small_list.extend(f"{ten} {digit}" for digit in digit_list[1:])
-number_small_map = {n: i for i, n in enumerate(number_small_list)}
+number_small_map = {n: str(i) for i, n in enumerate(number_small_list)}
+# Add support for double single digits. eg. "five one" -> 51
+for d1 in range(1, 10):
+    for d2 in range(10):
+        number_small_map[f"{digit_list[d1]} {digit_list[d2]}"] = f"{d1}{d2}"
 
-mod.list("number_small", desc="List of small numbers")
+mod.list("number_small", "List of small (0-99) numbers")
 mod.tag("unprefixed_numbers", desc="Dont require prefix when saying a number")
-ctx.lists["self.number_small"] = number_small_map.keys()
+ctx.lists["user.number_small"] = number_small_map
 
 
 # TODO: allow things like "double eight" for 88
@@ -234,6 +237,12 @@ def number_string(m) -> str:
     return parse_number(list(m))
 
 
+@mod.capture(rule="<user.number_string> ((point | dot) <user.number_string>)+")
+def number_decimal_string(m) -> str:
+    """Parses a decimal number phrase, returning that number as a string."""
+    return ".".join(m.number_string_list)
+
+
 @ctx.capture("number", rule="<user.number_string>")
 def number(m) -> int:
     """Parses a number phrase, returning it as an integer."""
@@ -248,7 +257,7 @@ def number_signed(m):
 
 @ctx.capture("number_small", rule="{user.number_small}")
 def number_small(m) -> int:
-    return number_small_map[m.number_small]
+    return int(m.number_small)
 
 
 @mod.capture(rule=f"[negative|minus] <number_small>")
