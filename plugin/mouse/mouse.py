@@ -78,8 +78,8 @@ class Actions:
         actions.tracking.control_toggle(False)
         actions.tracking.control1_toggle(False)
 
-        actions.user.mouse_scroll_stop()
         actions.user.mouse_cursor_show()
+        actions.user.mouse_scroll_stop()
         actions.user.mouse_drag_end()
 
     def copy_mouse_position():
