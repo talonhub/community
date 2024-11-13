@@ -1,3 +1,4 @@
+import math
 from typing import Iterator, Union
 
 from talon import Context, Module
@@ -17,10 +18,43 @@ tens_map = {n: 10 * (i + 2) for i, n in enumerate(tens)}
 scales_map = {n: 10 ** (3 * (i + 1)) for i, n in enumerate(scales[1:])}
 scales_map["hundred"] = 100
 
+# Maps number words to integers values that are used to compute numeric values.
 numbers_map = digits_map.copy()
 numbers_map.update(teens_map)
 numbers_map.update(tens_map)
 numbers_map.update(scales_map)
+
+
+def get_spoken_form_under_one_hundred(
+    start,
+    end,
+    include_oh_variant_for_single_digits,
+    include_default_variant_for_single_digits,
+):
+    """Helper function to get dictionary of spoken forms for non-negative numbers in the range [start, end] under 100"""
+
+    result = {}
+
+    for value in range(start, end + 1):
+        digit_index = value % 10
+        if value < 10:
+            if include_oh_variant_for_single_digits:
+                result[f"oh {digit_list[digit_index]}"] = f"0{value}"
+            if include_default_variant_for_single_digits:
+                result[f"{digit_list[digit_index]}"] = f"{value}"
+        elif value < 20:
+            teens_index = value - 10
+            result[f"{teens[teens_index]}"] = f"{value}"
+        elif value < 100:
+            tens_index = math.floor(value / 10) - 2
+            if digit_index > 0:
+                spoken_form = f"{tens[tens_index]} {digit_list[digit_index]}"
+            else:
+                spoken_form = f"{tens[tens_index]}"
+
+            result[spoken_form] = f"{value}"
+
+    return result
 
 
 def parse_number(l: list[str]) -> str:
