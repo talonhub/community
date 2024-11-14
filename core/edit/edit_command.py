@@ -5,6 +5,9 @@ from .edit_command_modifiers import EditModifier, run_modifier_callback
 
 # In some cases there already is a "compound" talon action for a given action and modifier
 compound_actions = {
+    # selection
+    ("selection", "wordLeft"): actions.edit.extend_word_left,
+    ("selection", "wordRight"): actions.edit.extend_word_right,
     # Go before
     ("goBefore", "line"): actions.edit.line_start,
     ("goBefore", "paragraph"): actions.edit.paragraph_start,
@@ -19,6 +22,7 @@ compound_actions = {
     ("goAfter", "selection"): actions.edit.right,
     # Delete
     ("delete", "word"): actions.edit.delete_word,
+    ("deleteLeft", "word"): actions.edit.delete_word,
     ("delete", "line"): actions.edit.delete_line,
     ("delete", "paragraph"): actions.edit.delete_paragraph,
     ("delete", "document"): actions.edit.delete_all,
@@ -38,10 +42,10 @@ mod = Module()
 class Actions:
     def edit_command(action: EditAction, modifier: EditModifier):
         """Perform edit command"""
-        key = (action.type, modifier.type)
-
+        key = (action.type, modifier.type)    
         if key in compound_actions:
-            compound_actions[key]()
+            for i in range(1, modifier.count + 1):
+                compound_actions[key]()
             return
 
         run_modifier_callback(modifier)

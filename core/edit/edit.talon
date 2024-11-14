@@ -54,11 +54,12 @@ draw <number_small>:
 wipe <number_small>: 
     edit.delete()
     repeat(number_small-1)
+    
 wiper:
     edit.extend_line_start()
     edit.delete()
 drill <number_small>: 
-    edit.delete()
+    edit.delete_right()
     repeat(number_small-1)
 
 driller: 
@@ -69,60 +70,6 @@ tail:
     edit.line_end()
 head:
     edit.line_start()
-
-far left:
-    edit.line_start()
-    edit.line_start()
-
-far right:
-    edit.line_end()
-
-far down:
-    edit.file_end()
-
-far up:
-    edit.file_start()
-
-# go page down:
-#     edit.page_down()
-
-# go page up:
-#     edit.page_up()
-take left [<number_small>]:
-    numb = number_small or 1
-    edit.extend_left()
-    repeat(numb - 1)
-
-take right [<number_small>]:
-    numb = number_small or 1
-    edit.extend_right()
-    repeat(numb - 1)
-
-take up [<number_small>]:
-    numb = number_small or 1
-    edit.extend_line_up()
-    repeat(numb - 1)
-
-take down [<number_small>]:
-    numb = number_small or 1
-    edit.extend_line_down()
-    repeat(numb - 1)
-    
-take draw [<number_small>]:
-    numb = number_small or 1
-    edit.extend_word_left()
-    repeat(numb - 1)
-
-take spring [<number_small>]:
-    numb = number_small or 1
-    edit.extend_word_right()
-    repeat(numb - 1)
-
-take far up:
-    edit.extend_file_start()
-
-take far down:
-    edit.extend_file_end()
 
 # editing
 tabby:
@@ -141,86 +88,6 @@ wipe (line | row) [<number_small>]:
     numb = number_small or 1
     edit.delete_line()
     repeat(numb-1)
-    
-wipe up [<number_small>]:
-    numb = number_small or 1
-    edit.extend_line_up()
-    repeat(numb-1)
-    edit.delete()
-    
-wipe down [<number_small>]:
-    numb = number_small or 1
-    edit.extend_line_down()
-    repeat(numb-1)
-    edit.delete()
-    
-wipe word [<number_small>]:
-    numb = number_small or 1
-    edit.delete_word()
-    repeat(numb-1)
-    
-wipe draw [<number_small>]:
-    numb = number_small or 1
-    edit.extend_word_left()
-    repeat(number_small-1)
-    edit.delete()
-    
-wipe spring [<number_small>]:
-    numb = number_small or 1
-    edit.extend_word_right()
-    repeat(number_small-1)
-
-wipe far up:
-    edit.extend_file_start()
-    edit.delete()
-    
-wipe far down:
-    edit.extend_file_end()
-    edit.delete()
-    
-copy draw [<number_small>]:
-    numb = number_small or 1
-    edit.extend_word_left()
-    repeat(number_small-1)
-    edit.copy()
-    
-copy spring [<number_small>]:
-    numb = number_small or 1
-    edit.extend_word_right()
-    repeat(number_small-1)
-    edit.copy()
-    
-copy line:
-    edit.select_line()
-    edit.copy()
-    
-copy far left:
-    edit.extend_line_start()
-    edit.delete()
-    
-copy far right:
-    edit.extend_line_end()
-    edit.copy()
-    
-copy far up:
-    edit.extend_file_start()
-    edit.copy()
-    
-copy far down:
-    edit.extend_file_end()
-    edit.copy()
-    
-slice draw [<number_small>]:
-    numb = number_small or 1
-    edit.extend_word_left()
-    repeat(numb - 1)
-    edit.cut()
-    
-slice spring [<number_small>]:
-    numb = number_small or 1
-    edit.extend_word_right()
-    repeat(numb - 1)
-    edit.cut()
 
 # duplication
 clone that: edit.selection_clone()

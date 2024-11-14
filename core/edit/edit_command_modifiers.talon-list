@@ -6,12 +6,22 @@ word: word
 line: line
 line start: lineStart
 way left: lineStart
+far left: lineStart
 head: lineStart
 line end: lineEnd
 way right: lineEnd
+far right: lineEnd
 tail: lineEnd
 file start: fileStart
 way up: fileStart
+far up: fileStart
 file end: fileEnd
 way down: fileEnd
+far down: fileEnd
 take: selection
+draw: wordLeft
+spring: wordRight
+up: lineUp
+down: lineDown
+left: left
+right: right
