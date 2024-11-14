@@ -106,7 +106,7 @@ def get_editor_app() -> ui.App:
 
 def close_editor(submit_draft: bool) -> None:
     global last_draft
-    remove_tag("user.draft_editor_active")
+
     actions.edit.select_all()
 
     if submit_draft:
@@ -116,6 +116,8 @@ def close_editor(submit_draft: bool) -> None:
         if not last_draft:
             actions.app.notify("Failed to get draft document text")
             return
+
+    remove_tag("user.draft_editor_active")
 
     actions.edit.delete()
     actions.app.tab_close()
