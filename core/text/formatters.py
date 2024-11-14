@@ -149,7 +149,7 @@ class TitleFormatter(Formatter):
 
 class CapitalizeFormatter(Formatter):
     def format(self, text: str) -> str:
-        return re.sub(r"^\S+", lambda m: capitalize_first(m.group()), text)
+        return re.sub(r"^\s*(\S+)", lambda m: capitalize_first(m.group()), text)
 
     def unformat(self, text: str) -> str:
         return unformat_upper(text)
@@ -159,8 +159,13 @@ class SentenceFormatter(Formatter):
     def format(self, text: str) -> str:
         """Capitalize first word if it's already all lower case"""
         words = [x for x in re.split(r"(\s+)", text) if x]
-        if words and words[0].islower():
-            words[0] = words[0].capitalize()
+        for i in range(len(words)):
+            word = words[i]
+            if word.isspace():
+                continue
+            if word.islower():
+                words[i] = word.capitalize()
+            break
         return "".join(words)
 
     def unformat(self, text: str) -> str:
@@ -168,7 +173,9 @@ class SentenceFormatter(Formatter):
 
 
 def capitalize_first(text: str) -> str:
-    return text[:1].upper() + text[1:]
+    stripped = text.lstrip()
+    prefix = text[: len(text) - len(stripped)]
+    return prefix + stripped[:1].upper() + stripped[1:]
 
 
 def capitalize(text: str) -> str:
