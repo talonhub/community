@@ -28,8 +28,10 @@ numbers_map.update(scales_map)
 def get_spoken_form_under_one_hundred(
     start,
     end,
-    include_oh_variant_for_single_digits,
-    include_default_variant_for_single_digits,
+    *,
+    include_oh_variant_for_single_digits=False,
+    include_default_variant_for_single_digits=False,
+    include_double_digits=False,
 ):
     """Helper function to get dictionary of spoken forms for non-negative numbers in the range [start, end] under 100"""
 
@@ -38,8 +40,10 @@ def get_spoken_form_under_one_hundred(
     for value in range(start, end + 1):
         digit_index = value % 10
         if value < 10:
+            # oh prefix digit: "oh five"-> `05`
             if include_oh_variant_for_single_digits:
                 result[f"oh {digit_list[digit_index]}"] = f"0{value}"
+            # default digit: "five" -> `5`
             if include_default_variant_for_single_digits:
                 result[f"{digit_list[digit_index]}"] = f"{value}"
         elif value < 20:
@@ -52,6 +56,14 @@ def get_spoken_form_under_one_hundred(
             else:
                 spoken_form = f"{tens[tens_index]}"
 
+            result[spoken_form] = f"{value}"
+        else:
+            raise ValueError(f"Value {value} is not in the range [0, 100)")
+
+        # double digits: "five one" -> `51`
+        if include_double_digits and value > 9:
+            tens_index = math.floor(value / 10)
+            spoken_form = f"{digit_list[tens_index]} {digit_list[digit_index]}"
             result[spoken_form] = f"{value}"
 
     return result
@@ -203,16 +215,14 @@ leading_words -= {"oh", "o"}  # comment out to enable bare/initial "oh"
 number_word_leading = f"({'|'.join(leading_words)})"
 
 
-# Numbers used in `number_small` capture
-number_small_list = [*digit_list, *teens]
-for ten in tens:
-    number_small_list.append(ten)
-    number_small_list.extend(f"{ten} {digit}" for digit in digit_list[1:])
-number_small_map = {n: i for i, n in enumerate(number_small_list)}
-
-mod.list("number_small", desc="List of small numbers")
+mod.list("number_small", "List of small (0-99) numbers")
 mod.tag("unprefixed_numbers", desc="Dont require prefix when saying a number")
-ctx.lists["self.number_small"] = number_small_map.keys()
+ctx.lists["user.number_small"] = get_spoken_form_under_one_hundred(
+    0,
+    99,
+    include_default_variant_for_single_digits=True,
+    include_double_digits=True,
+)
 
 
 # TODO: allow things like "double eight" for 88
@@ -253,7 +263,7 @@ def number_signed(m):
 
 @ctx.capture("number_small", rule="{user.number_small}")
 def number_small(m) -> int:
-    return number_small_map[m.number_small]
+    return int(m.number_small)
 
 
 @mod.capture(rule=f"[negative|minus] <number_small>")
