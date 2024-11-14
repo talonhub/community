@@ -1,4 +1,5 @@
 from talon import Module, actions
+from typing import Union
 
 from .edit_command_actions import EditAction, run_action_callback
 from .edit_command_modifiers import EditModifier, run_modifier_callback
@@ -8,6 +9,8 @@ compound_actions = {
     # selection
     ("selection", "wordLeft"): actions.edit.extend_word_left,
     ("selection", "wordRight"): actions.edit.extend_word_right,
+    ("selection", "left"): actions.edit.extend_left,
+    ("selection", "right"): actions.edit.extend_right,
     # Go before
     ("goBefore", "line"): actions.edit.line_start,
     ("goBefore", "paragraph"): actions.edit.paragraph_start,
@@ -40,13 +43,20 @@ mod = Module()
 
 @mod.action_class
 class Actions:
-    def edit_command(action: EditAction, modifier: EditModifier):
+    def edit_command(action: EditAction, modifier: Union[EditModifier, str], count: int):
         """Perform edit command"""
-        key = (action.type, modifier.type)    
-        if key in compound_actions:
-            for i in range(1, modifier.count + 1):
-                compound_actions[key]()
-            return
+        if type(modifier) is not str:
+            
+            key = (action.type, modifier.type)    
+            if key in compound_actions:
+                for i in range(1, count + 1):
+                    compound_actions[key]()
+                return
 
-        run_modifier_callback(modifier)
-        run_action_callback(action)
+            for i in range(1, count + 1):
+                run_modifier_callback(modifier)
+                run_action_callback(action)
+        else:
+            for i in range(1, count + 1):
+                run_action_callback(action)
+    

@@ -11,15 +11,11 @@ mod.list("edit_modifier", desc="Modifiers for the edit command")
 @dataclass
 class EditModifier:
     type: str
-    count: int
 
 
-@mod.capture(rule="{user.edit_modifier} [<number_small>]")
+@mod.capture(rule="{user.edit_modifier}")
 def edit_modifier(m) -> EditModifier:
-    count = 1
-    with suppress(AttributeError):
-        count = m.number_small
-    return EditModifier(m.edit_modifier, count)
+    return EditModifier(m.edit_modifier)
 
 
 modifier_callbacks: dict[str, Callable] = {
@@ -41,11 +37,8 @@ modifier_callbacks: dict[str, Callable] = {
 
 def run_modifier_callback(modifier: EditModifier):
     modifier_type = modifier.type
-    count = modifier.count
     if modifier_type not in modifier_callbacks:
         raise ValueError(f"Unknown edit modifier: {modifier_type}")
 
     callback = modifier_callbacks[modifier_type]
-
-    for i in range(1, count + 1):
-        callback()
+    callback()

@@ -3,7 +3,10 @@
 go <user.navigation_step>+: user.perform_navigation_steps(navigation_step_list)
 # Compound of action(select, clear, copy, cut, paste, etc.) and modifier(word, line, etc.) commands for editing text.
 # eg: "select line", "clear all"
-<user.edit_action> <user.edit_modifier>: user.edit_command(edit_action, edit_modifier)
+<user.edit_action> <user.edit_modifier> [<number_small>]: 
+    user.edit_command(edit_action, edit_modifier, number_small or 1)
+<user.edit_action> [<number_small>]: 
+    user.edit_command(edit_action, "", number_small or 1)
 
 zoom in [<number_small>]: 
 	numb  = number_small or 1	
@@ -16,10 +19,9 @@ zoom out [<number_small>]:
 zoom reset:
     edit.zoom_reset()
 
-copy: edit.copy()
-slice: edit.cut()
-
-pace: edit.paste()
+# copy: edit.copy()
+# slice: edit.cut()
+# pace: edit.paste()
 (nay | nope | nak | neigh) [<number_small>]: 
 	numb = number or 1
 	edit.undo()
@@ -51,16 +53,16 @@ draw <number_small>:
     edit.word_left()
     repeat(number_small-1)
 
-wipe <number_small>: 
-    edit.delete()
-    repeat(number_small-1)
+# wipe <number_small>: 
+#     edit.delete()
+#     repeat(number_small-1)
     
 wiper:
     edit.extend_line_start()
     edit.delete()
-drill <number_small>: 
-    edit.delete_right()
-    repeat(number_small-1)
+# drill <number_small>: 
+#     edit.delete_right()
+#     repeat(number_small-1)
 
 driller: 
     edit.extend_line_end()
