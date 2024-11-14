@@ -108,16 +108,24 @@ def close_editor(submit_draft: bool) -> None:
     global last_draft
     remove_tag("user.draft_editor_active")
     actions.edit.select_all()
+
     if submit_draft:
+        actions.sleep("50ms")
         last_draft = actions.edit.selected_text()
+
+        if not last_draft:
+            actions.app.notify("Failed to get draft document text")
+            return
+
     actions.edit.delete()
     actions.app.tab_close()
+
     if submit_draft:
         try:
             actions.user.switcher_focus_window(original_window)
         except Exception:
             app.notify(
-                "Failed to focus on window to submit draft, manually focus on intended destination and use draft submit again"
+                "Failed to focus on window to submit draft, manually focus intended destination and use 'draft submit' again"
             )
         else:
             actions.sleep("300ms")
@@ -126,4 +134,4 @@ def close_editor(submit_draft: bool) -> None:
         try:
             actions.user.switcher_focus_window(original_window)
         except Exception:
-            app.notify("Failed to focus on previous window, leaving editor open")
+            app.notify("Failed to focus previous window, leaving editor open")
