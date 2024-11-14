@@ -1,5 +1,6 @@
-from .code_languages import code_languages, code_special_file_map
 from talon import Context, Module, actions, app
+
+from .code_languages import code_languages, code_special_file_map
 
 mod = Module()
 ctx = Context()
