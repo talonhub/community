@@ -55,7 +55,7 @@ class Actions:
 
             for i in range(1, count + 1):
                 run_modifier_callback(modifier)
-                run_action_callback(action)
+            run_action_callback(action)
         else:
             for i in range(1, count + 1):
                 run_action_callback(action)
