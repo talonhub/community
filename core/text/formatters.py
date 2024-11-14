@@ -149,7 +149,7 @@ class TitleFormatter(Formatter):
 
 class CapitalizeFormatter(Formatter):
     def format(self, text: str) -> str:
-        return re.sub(r"^\s*(\S+)", lambda m: capitalize_first(m.group()), text)
+        return re.sub(r"^\s*\S+", lambda m: capitalize_first(m.group()), text)
 
     def unformat(self, text: str) -> str:
         return unformat_upper(text)
