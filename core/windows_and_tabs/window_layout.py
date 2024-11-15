@@ -103,12 +103,10 @@ def snap_layout(layout_config: WindowLayout):
         global layout_in_progress, last_layout
 
         layout_in_progress = layout_config
-        print(f"let configuration is {layout_config}")
         remaining_windows = layout_config.windows
 
         snapped_windows = []
         if layout_config.should_rotate:
-            print("trying to rotate")
             layout_config.split_positions.append(layout_config.split_positions.pop(0))
 
         while len(layout_config.split_positions) > 0:
