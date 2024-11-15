@@ -41,6 +41,9 @@ mod.list(
     "window_split_positions",
     "Predefined window positions when splitting the screen between multiple windows.",
 )
+ctx = Context()
+
+ctx.lists["user.window_split_positions"] = SPLIT_POSITIONS.keys()
 
 
 def focus_callback(_):
@@ -76,7 +79,8 @@ last_layout: Optional[WindowLayout] = None
 
 def snap_next(windows: list[Window], target_layout: str) -> Optional[Window]:
     """This function snaps a window and returns the window if successful"""
-    for window in windows:
+    while windows:
+        window = windows.pop(0)
         if isinstance(window, GapWindow):
             return window
         try:
@@ -100,23 +104,16 @@ def snap_layout(layout_config: WindowLayout):
 
         layout_in_progress = layout_config
         remaining_windows = layout_config.windows
+
         snapped_windows = []
-        snapped_window = 0
         if layout_config.should_rotate:
             layout_config.split_positions.append(layout_config.split_positions.pop(0))
 
         while len(layout_config.split_positions) > 0:
-            snapped_window = snap_next(
+            snapped_window: Window = snap_next(
                 remaining_windows, layout_config.split_positions.pop(0)
             )
             snapped_windows.insert(0, snapped_window)
-            # safely get index, return 0 if not found
-            snapped_window_index = (
-                remaining_windows.index(snapped_window)
-                if snapped_window in remaining_windows
-                else 0
-            )
-            remaining_windows = remaining_windows[snapped_window_index + 1 :]
 
         if layout_config.should_rotate and len(snapped_windows) > 0:
             snapped_windows.append(snapped_windows.pop(0))
@@ -217,7 +214,9 @@ def target_windows(m) -> list[Window]:
 
 
 def pick_split_arrangement(
-    target_windows, window_split_positions, number_small
+    target_windows: Union[list[Window], None],
+    window_split_positions: str,
+    number_small: Union[int, None],
 ) -> list[str]:
     if target_windows is not None:
         target_length = len(target_windows)
@@ -258,11 +257,6 @@ def window_layout(m) -> WindowLayout:
         and perf_counter() - last_layout.finish_time > 1,
         0,
     )
-
-
-ctx = Context()
-
-ctx.lists["user.window_split_positions"] = SPLIT_POSITIONS.keys()
 
 
 @mod.action_class
