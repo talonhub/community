@@ -60,7 +60,7 @@ def focus_callback(_):
 class WindowLayout:
     """Represents a layout of windows on a screen"""
 
-    layout: list[str]
+    split_positions: list[str]
     windows: list[Window]
     should_rotate: bool
     finish_time: float
@@ -99,15 +99,16 @@ def snap_layout(window_layout: WindowLayout):
     global last_layout
 
     layout_in_progress = window_layout
-    target_layout = copy.deepcopy(window_layout.layout)
     remaining_windows = window_layout.windows
     snapped_windows = []
     snapped_window = 0
     if window_layout.should_rotate:
-        target_layout.append(target_layout.pop(0))
+        window_layout.split_positions.append(window_layout.split_positions.pop(0))
 
-    while len(target_layout) > 0:
-        snapped_window = snap_next(remaining_windows, target_layout.pop(0))
+    while len(window_layout.split_positions) > 0:
+        snapped_window = snap_next(
+            remaining_windows, window_layout.split_positions.pop(0)
+        )
         if snapped_window is not None:
             snapped_windows.insert(0, snapped_window)
             snapped_window_index = remaining_windows.index(snapped_window)
@@ -216,13 +217,13 @@ def pick_split_arrangement(
     else:
         target_length = len(filter_nonviable_windows(ui.windows()))
     if number_small is not None:
-        return SPLIT_POSITIONS[window_split_positions][number_small]
+        return copy.deepcopy(SPLIT_POSITIONS[window_split_positions][number_small])
     else:
         closest_key = min(
             SPLIT_POSITIONS[window_split_positions].keys(),
             key=lambda k: abs(k - target_length),
         )
-        return SPLIT_POSITIONS[window_split_positions][closest_key]
+        return copy.deepcopy(SPLIT_POSITIONS[window_split_positions][closest_key])
 
 
 @mod.capture(
