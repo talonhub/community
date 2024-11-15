@@ -76,7 +76,7 @@ last_layout: Optional[WindowLayout] = None
 
 def snap_next(windows: list[Window], target_layout: str) -> Optional[Window]:
     """This function snaps a window and returns the window if successful"""
-    for idx, window in enumerate(windows):
+    for window in windows:
         if isinstance(window, GapWindow):
             return window
         try:
@@ -90,39 +90,46 @@ def snap_next(windows: list[Window], target_layout: str) -> Optional[Window]:
             print(
                 f'Failed to snap {window.app.name}\'s "{window.title}" window ({type(e).__name__} {e});  this is normal; continuing to the next'
             )
-    return None
+    return GapWindow()
 
 
-def snap_layout(window_layout: WindowLayout):
-    """Split the screen between multiple windows."""
-    global layout_in_progress
-    global last_layout
+def snap_layout(layout_config: WindowLayout):
+    try:
+        """Split the screen between multiple windows."""
+        global layout_in_progress, last_layout
 
-    layout_in_progress = window_layout
-    remaining_windows = window_layout.windows
-    snapped_windows = []
-    snapped_window = 0
-    if window_layout.should_rotate:
-        window_layout.split_positions.append(window_layout.split_positions.pop(0))
+        layout_in_progress = layout_config
+        remaining_windows = layout_config.windows
+        snapped_windows = []
+        snapped_window = 0
+        if layout_config.should_rotate:
+            layout_config.split_positions.append(layout_config.split_positions.pop(0))
 
-    while len(window_layout.split_positions) > 0:
-        snapped_window = snap_next(
-            remaining_windows, window_layout.split_positions.pop(0)
-        )
-        if snapped_window is not None:
+        while len(layout_config.split_positions) > 0:
+            snapped_window = snap_next(
+                remaining_windows, layout_config.split_positions.pop(0)
+            )
             snapped_windows.insert(0, snapped_window)
-            snapped_window_index = remaining_windows.index(snapped_window)
+            # safely get index, return 0 if not found
+            snapped_window_index = (
+                remaining_windows.index(snapped_window)
+                if snapped_window in remaining_windows
+                else 0
+            )
             remaining_windows = remaining_windows[snapped_window_index + 1 :]
 
-    if window_layout.should_rotate and len(snapped_windows) > 0:
-        snapped_windows.append(snapped_windows.pop(0))
+        if layout_config.should_rotate and len(snapped_windows) > 0:
+            snapped_windows.append(snapped_windows.pop(0))
 
-    for window in snapped_windows:
-        actions.user.switcher_focus_window(window)
+        for window in snapped_windows:
+            if isinstance(window, GapWindow):
+                continue
+            actions.user.switcher_focus_window(window)
 
-    layout_in_progress.finish_time = perf_counter()
-    last_layout = layout_in_progress
-    layout_in_progress = None
+        layout_in_progress.finish_time = perf_counter()
+        last_layout = layout_in_progress
+    finally:
+        layout_in_progress = None
 
 
 def filter_nonviable_windows(windows: List[Window]) -> list[Window]:
