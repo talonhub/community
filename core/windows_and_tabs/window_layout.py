@@ -98,16 +98,17 @@ def snap_next(windows: list[Window], target_layout: str) -> Optional[Window]:
 
 
 def snap_layout(layout_config: WindowLayout):
+    """Split the screen between multiple windows."""
     try:
-        """Split the screen between multiple windows."""
         global layout_in_progress, last_layout
 
         layout_in_progress = layout_config
+        print(f"let configuration is {layout_config}")
         remaining_windows = layout_config.windows
-        print(f"Trying to snap these windows:{remaining_windows}")
 
         snapped_windows = []
         if layout_config.should_rotate:
+            print("trying to rotate")
             layout_config.split_positions.append(layout_config.split_positions.pop(0))
 
         while len(layout_config.split_positions) > 0:
@@ -130,24 +131,9 @@ def snap_layout(layout_config: WindowLayout):
         layout_in_progress = None
 
 
-def filter_nonviable_windows(windows: List[Window]) -> list[Window]:
-    active_window = ui.active_window()
-
-    # Many invisible non-resizable windows are identifiable because they exist above the current window
-    # in the z-index
-    all_windows = ui.windows()
-    active_window_idx = all_windows.index(active_window)  # type: ignore
-    return list(
-        filter(
-            lambda w: all_windows.index(w) >= active_window_idx,
-            windows,
-        )
-    )
-
-
 @mod.capture(rule="all")
 def all_candidate_windows(m) -> list[Window]:
-    return filter_nonviable_windows(ui.windows())
+    return ui.windows()
 
 
 @mod.capture(rule="gap")
@@ -194,7 +180,7 @@ def layout_item(m) -> list[Union[Window, None]]:
 
 @mod.capture(rule="<user.ordinals_small>+")
 def numbered_windows(m) -> list[Window]:
-    all_windows = filter_nonviable_windows(ui.windows())
+    all_windows = ui.windows()
     selected_windows = [
         all_windows[i - 1] for i in m.ordinals_small_list if i - 1 < len(all_windows)
     ]
@@ -220,7 +206,7 @@ def pick_split_arrangement(
     if target_windows is not None:
         target_length = len(target_windows)
     else:
-        target_length = len(filter_nonviable_windows(ui.windows()))
+        target_length = len(ui.windows())
     if number_small is not None:
         return copy.deepcopy(SPLIT_POSITIONS[window_split_positions][number_small])
     else:
@@ -238,11 +224,7 @@ def window_layout(m) -> WindowLayout:
     global last_layout
     window_was_specified = hasattr(m, "target_windows")
     specified_layout_count = m.number_small if hasattr(m, "number_small") else None
-    target_windows = (
-        m.target_windows
-        if window_was_specified
-        else filter_nonviable_windows(ui.windows())
-    )
+    target_windows = m.target_windows if window_was_specified else ui.windows()
 
     layout = pick_split_arrangement(
         target_windows, m.window_split_positions, specified_layout_count
