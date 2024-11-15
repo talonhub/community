@@ -10,6 +10,31 @@ from talon import Context, Module, actions, settings, ui
 from talon import Context, Module, actions, settings
 from talon.ui import UIErr, Window
 
+SPLIT_POSITIONS = {
+    "split": {
+        2: ["Left", "Right"],
+        3: [
+            "LeftThird",
+            "CenterThird",
+            "RightThird",
+        ],
+    },
+    "clock": {
+        3: [
+            "Left",
+            "TopRight",
+            "BottomRight",
+        ],
+    },
+    "counterclock": {
+        3: [
+            "Right",
+            "TopLeft",
+            "BottomLeft",
+        ],
+    },
+}
+
 mod = Module()
 
 mod.list(
@@ -41,47 +66,26 @@ class WindowLayout:
     finish_time: float
 
 
+class GapWindow:
+    pass
+
+
 layout_in_progress: Optional[WindowLayout] = None
 last_layout: Optional[WindowLayout] = None
 
 
-SPLIT_POSITIONS = {
-    "split": {
-        2: ["Left", "Right"],
-        3: [
-            "LeftThird",
-            "CenterThird",
-            "RightThird",
-        ],
-    },
-    "clock": {
-        3: [
-            "Left",
-            "TopRight",
-            "BottomRight",
-        ],
-    },
-    "counterclock": {
-        3: [
-            "Right",
-            "TopLeft",
-            "BottomLeft",
-        ],
-    },
-}
-
-
-def snap_next(windows: list[Window], target_layout: str) -> Optional[int]:
+def snap_next(windows: list[Window], target_layout: str) -> Optional[Window]:
+    """This function snaps a window and returns the window if successful"""
     for idx, window in enumerate(windows):
-        if window is None:
-            return idx
+        if isinstance(window, GapWindow):
+            return window
         try:
             actions.user.snap_window_to_position(
                 target_layout,
                 window,
             )
 
-            return idx
+            return window
         except (UIErr, AttributeError) as e:
             print(
                 f'Failed to snap {window.app.name}\'s "{window.title}" window ({type(e).__name__} {e});  this is normal; continuing to the next'
@@ -98,15 +102,16 @@ def snap_layout(window_layout: WindowLayout):
     target_layout = copy.deepcopy(window_layout.layout)
     remaining_windows = window_layout.windows
     snapped_windows = []
-    snapped_window_idx = 0
+    snapped_window = 0
     if window_layout.should_rotate:
         target_layout.append(target_layout.pop(0))
 
     while len(target_layout) > 0:
-        snapped_window_idx = snap_next(remaining_windows, target_layout.pop(0))
-        if snapped_window_idx is not None:
-            snapped_windows.insert(0, remaining_windows[snapped_window_idx])
-            remaining_windows = remaining_windows[snapped_window_idx + 1 :]
+        snapped_window = snap_next(remaining_windows, target_layout.pop(0))
+        if snapped_window is not None:
+            snapped_windows.insert(0, snapped_window)
+            snapped_window_index = remaining_windows.index(snapped_window)
+            remaining_windows = remaining_windows[snapped_window_index + 1 :]
 
     if window_layout.should_rotate and len(snapped_windows) > 0:
         snapped_windows.append(snapped_windows.pop(0))
@@ -141,7 +146,7 @@ def all_candidate_windows(m) -> list[Window]:
 
 @mod.capture(rule="gap")
 def skip_window(m) -> list[Window]:
-    return [None]
+    return [GapWindow()]
 
 
 @mod.capture(rule="<user.running_applications>")
