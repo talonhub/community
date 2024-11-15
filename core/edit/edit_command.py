@@ -11,18 +11,23 @@ compound_actions = {
     ("selection", "wordRight"): actions.edit.extend_word_right,
     ("selection", "left"): actions.edit.extend_left,
     ("selection", "right"): actions.edit.extend_right,
+    ("selection", "word"): actions.edit.extend_word_right,
     # Go before
     ("goBefore", "line"): actions.edit.line_start,
     ("goBefore", "paragraph"): actions.edit.paragraph_start,
     ("goBefore", "document"): actions.edit.file_start,
     ("goBefore", "fileStart"): actions.edit.file_start,
     ("goBefore", "selection"): actions.edit.left,
+    ("goBefore", "wordLeft"): actions.edit.word_left,
+    ("goBefore", "word"): actions.edit.word_left,
     # Go after
     ("goAfter", "line"): actions.edit.line_end,
     ("goAfter", "paragraph"): actions.edit.paragraph_end,
     ("goAfter", "document"): actions.edit.file_end,
     ("goAfter", "fileEnd"): actions.edit.file_end,
     ("goAfter", "selection"): actions.edit.right,
+    ("goAfter", "wordRight"): actions.edit.word_right,
+    ("goAfter", "word"): actions.edit.word_right,
     # Delete
     ("delete", "word"): actions.edit.delete_word,
     ("deleteLeft", "word"): actions.edit.delete_word,
@@ -48,13 +53,14 @@ class Actions:
         if type(modifier) is not str:
             
             key = (action.type, modifier.type)    
+            print(f"{action.type} {modifier.type}")
             if key in compound_actions:
+                print("Found compound action")
                 for i in range(1, count + 1):
                     compound_actions[key]()
                 return
-
-            for i in range(1, count + 1):
-                run_modifier_callback(modifier)
+          
+            run_modifier_callback(modifier, count)
             run_action_callback(action)
         else:
             for i in range(1, count + 1):

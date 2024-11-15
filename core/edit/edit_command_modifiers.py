@@ -12,33 +12,44 @@ mod.list("edit_modifier", desc="Modifiers for the edit command")
 class EditModifier:
     type: str
 
+@dataclass
+class EditModifierCallback:
+    modifier: str
+    callback: Callable
+    repeatable: False
+
 
 @mod.capture(rule="{user.edit_modifier}")
 def edit_modifier(m) -> EditModifier:
     return EditModifier(m.edit_modifier)
 
 
-modifier_callbacks: dict[str, Callable] = {
-    "document": actions.edit.select_all,
-    "paragraph": actions.edit.select_paragraph,
-    "word": actions.edit.select_word,
-    "wordLeft": actions.edit.extend_word_left,
-    "wordRight": actions.edit.extend_word_right,
-    "left": actions.edit.extend_left,
-    "right": actions.edit.extend_right,
-    "lineUp": actions.edit.extend_line_up,
-    "lineDown": actions.edit.extend_line_down,
-    "line": actions.edit.select_line,
-    "lineEnd": actions.user.select_line_end,
-    "lineStart": actions.user.select_line_start,
-    "fileStart": actions.edit.extend_file_start, 
-    "fileEnd": actions.edit.extend_file_end, 
-}
+modifiers =  [
+    EditModifierCallback("document", actions.edit.select_all, False), 
+    EditModifierCallback("paragraph", actions.edit.select_paragraph, False),
+    EditModifierCallback("word", actions.edit.extend_word_right,  True),
+    EditModifierCallback("wordLeft",  actions.edit.extend_word_left,  True),
+    EditModifierCallback("wordRight",  actions.edit.extend_word_right,  True),
+    EditModifierCallback("left", actions.edit.extend_left,  True),
+    EditModifierCallback("right",  actions.edit.extend_right,  True),
+    EditModifierCallback("lineUp",  actions.edit.extend_line_up, True),
+    EditModifierCallback("lineDown",  actions.edit.extend_line_down, True),
+    EditModifierCallback("line",  actions.edit.select_line, False),
+    EditModifierCallback("lineEnd",  actions.user.select_line_end, False),
+    EditModifierCallback("lineStart",  actions.user.select_line_start, False),
+    EditModifierCallback("fileStart",  actions.edit.extend_file_start,  False),
+    EditModifierCallback("fileEnd",  actions.edit.extend_file_end,   False),
+    EditModifierCallback("selection",  actions.skip,   False),
+]
 
-def run_modifier_callback(modifier: EditModifier):
+modifier_dictionary : dict[str, EditModifierCallback] = { item.modifier : item for item in modifiers}
+
+def run_modifier_callback(modifier: EditModifier, count: int):
     modifier_type = modifier.type
-    if modifier_type not in modifier_callbacks:
+    if modifier_type not in modifier_dictionary:
         raise ValueError(f"Unknown edit modifier: {modifier_type}")
 
-    callback = modifier_callbacks[modifier_type]
-    callback()
+    modifier = modifier_dictionary[modifier_type]
+    count = 1 if not modifier.repeatable else count 
+    for i in range(1, count + 1):
+        modifier.callback()

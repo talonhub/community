@@ -1,8 +1,8 @@
 list: user.edit_action
 -
 take: selection
-go before: goBefore
-go after: goAfter
+before: goBefore
+after: goAfter
 copy: copyToClipboard
 slice: cutToClipboard
 paste: pasteFromClipboard

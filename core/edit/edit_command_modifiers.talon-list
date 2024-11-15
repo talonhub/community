@@ -1,8 +1,11 @@
 list: user.edit_modifier
 -
+take: selection
 all: document
 paragraph: paragraph
 word: word
+word left: wordLeft
+word right: wordRight
 line: line
 line start: lineStart
 way left: lineStart
@@ -18,7 +21,6 @@ far up: fileStart
 file end: fileEnd
 way down: fileEnd
 far down: fileEnd
-take: selection
 draw: wordLeft
 spring: wordRight
 up: lineUp
