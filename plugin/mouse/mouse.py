@@ -1,4 +1,4 @@
-from talon import Context, Module, actions, clip, ctrl, settings, ui
+from talon import Context, Module, actions, ctrl, settings, ui
 from talon_plugins import eye_zoom_mouse
 
 mod = Module()
@@ -32,6 +32,12 @@ mod.setting(
     default=False,
     desc="When enabled, mouse wake will hide the cursor. mouse_wake enables zoom mouse.",
 )
+
+
+@ctx.action_class("main")
+class MainActions:
+    def mouse_click(button: int = 0):
+        ctrl.mouse_click(button=button, hold=16000)
 
 
 @mod.action_class
@@ -84,13 +90,14 @@ class Actions:
 
     def copy_mouse_position():
         """Copy the current mouse position coordinates"""
-        position = ctrl.mouse_pos()
-        clip.set_text(repr(position))
+        x = actions.mouse_x()
+        y = actions.mouse_y()
+        actions.clip.set_text(f"{x}, {y}")
 
     def mouse_move_center_active_window():
-        """move the mouse cursor to the center of the currently active window"""
+        """Move the mouse cursor to the center of the currently active window"""
         rect = ui.active_window().rect
-        ctrl.mouse_move(rect.left + (rect.width / 2), rect.top + (rect.height / 2))
+        actions.mouse_move(rect.center.x, rect.center.y)
 
 
 @ctx.action_class("user")
@@ -129,4 +136,4 @@ class UserActions:
         )
 
         if should_click:
-            ctrl.mouse_click(button=0, hold=16000)
+            actions.mouse_click()
