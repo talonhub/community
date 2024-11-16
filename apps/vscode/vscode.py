@@ -26,6 +26,8 @@ os: linux
 and app.name: VSCodium
 os: linux
 and app.name: Codium
+os: linux
+and app.name: Cursor
 """
 mod.apps.vscode = r"""
 os: windows
@@ -45,7 +47,7 @@ and app.exe: /^vscodium\.exe$/i
 os: windows
 and app.name: Azure Data Studio
 os: windows
-and app.exe: azuredatastudio.exe
+and app.exe: /^azuredatastudio\.exe$/i
 """
 
 ctx.matches = r"""
@@ -189,7 +191,7 @@ class UserActions:
         actions.user.vscode("workbench.action.toggleEditorGroupLayout")
 
     def split_maximize():
-        actions.user.vscode("workbench.action.maximizeEditor")
+        actions.user.vscode("workbench.action.toggleMaximizeEditorGroup")
 
     def split_reset():
         actions.user.vscode("workbench.action.evenEditorWidths")
@@ -220,6 +222,23 @@ class UserActions:
 
     def split_window():
         actions.user.vscode("workbench.action.splitEditor")
+
+    def split_number(index: int):
+        supported_ordinals = [
+            "First",
+            "Second",
+            "Third",
+            "Fourth",
+            "Fifth",
+            "Sixth",
+            "Seventh",
+            "Eighth",
+        ]
+
+        if 0 <= index - 1 < len(supported_ordinals):
+            actions.user.vscode(
+                f"workbench.action.focus{supported_ordinals[index - 1]}EditorGroup"
+            )
 
     # splits.py support end
 
@@ -252,6 +271,14 @@ class UserActions:
     def multi_cursor_skip_occurrence():
         actions.user.vscode("editor.action.moveSelectionToNextFindMatch")
 
+    # multiple_cursor.py support end
+
+    def command_search(command: str = ""):
+        actions.user.vscode("workbench.action.showCommands")
+        if command != "":
+            actions.insert(command)
+
+    # tabs.py support begin
     def tab_jump(number: int):
         if number < 10:
             if is_mac:
@@ -271,16 +298,12 @@ class UserActions:
         else:
             actions.key("alt-0")
 
-    # splits.py support begin
-    def split_number(index: int):
-        """Navigates to a the specified split"""
-        if index < 9:
-            if is_mac:
-                actions.key(f"cmd-{index}")
-            else:
-                actions.key(f"ctrl-{index}")
+    def tab_duplicate():
+        # Duplicates the current tab into a new tab group
+        # vscode does not allow duplicate tabs in the same tab group, and so is implemented through splits
+        actions.user.split_window_vertically()
 
-    # splits.py support end
+    # tabs.py support end
 
     # find_and_replace.py support begin
 

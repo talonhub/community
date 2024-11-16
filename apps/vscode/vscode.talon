@@ -6,13 +6,11 @@ tag(): user.line_commands
 tag(): user.multiple_cursors
 tag(): user.splits
 tag(): user.tabs
+tag(): user.command_search
+
 window reload: user.vscode("workbench.action.reloadWindow")
 window close: user.vscode("workbench.action.closeWindow")
 #multiple_cursor.py support end
-
-please [<user.text>]:
-    user.vscode("workbench.action.showCommands")
-    insert(user.text or "")
 
 go view [<user.text>]:
     user.vscode("workbench.action.openView")

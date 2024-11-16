@@ -1,28 +1,4 @@
-from talon import Context, Module, app
-
-from ..user_settings import get_list_from_csv
-
-
-def setup_default_alphabet():
-    """set up common default alphabet.
-
-    no need to modify this here, change your alphabet using alphabet.csv"""
-    initial_default_alphabet = "air bat cap drum each fine gust harp sit jury crunch look made near odd pit quench red sun trap urge vest whale plex yank zip".split()
-    initial_letters_string = "abcdefghijklmnopqrstuvwxyz"
-    initial_default_alphabet_dict = dict(
-        zip(initial_default_alphabet, initial_letters_string)
-    )
-
-    return initial_default_alphabet_dict
-
-
-alphabet_list = get_list_from_csv(
-    "alphabet.csv", ("Letter", "Spoken Form"), setup_default_alphabet()
-)
-
-# used for number keys & function keys respectively
-digits = "zero one two three four five six seven eight nine".split()
-f_digits = "one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty".split()
+from talon import Context, Module, actions, app
 
 mod = Module()
 mod.list("letter", desc="The spoken phonetic alphabet")
@@ -32,6 +8,7 @@ mod.list("number_key", desc="All number keys")
 mod.list("modifier_key", desc="All modifier keys")
 mod.list("function_key", desc="All function keys")
 mod.list("special_key", desc="All special keys")
+mod.list("keypad_key", desc="All keypad keys")
 mod.list("punctuation", desc="words for inserting punctuation into text")
 
 
@@ -57,6 +34,12 @@ def arrow_keys(m) -> str:
 def number_key(m) -> str:
     "One number key"
     return m.number_key
+
+
+@mod.capture(rule="{self.keypad_key}")
+def keypad_key(m) -> str:
+    "One keypad key"
+    return m.keypad_key
 
 
 @mod.capture(rule="{self.letter}")
@@ -91,7 +74,7 @@ def any_alphanumeric_key(m) -> str:
 
 @mod.capture(
     rule="( <self.letter> | <self.number_key> | <self.symbol_key> "
-    "| <self.arrow_key> | <self.function_key> | <self.special_key> )"
+    "| <self.arrow_key> | <self.function_key> | <self.special_key> | <self.keypad_key>)"
 )
 def unmodified_key(m) -> str:
     "A single key with no modifiers"
@@ -121,18 +104,6 @@ def letters(m) -> str:
 
 
 ctx = Context()
-modifier_keys = {
-    # If you find 'alt' is often misrecognized, try using 'alter'.
-    "alt": "alt",  #'alter': 'alt',
-    "control": "ctrl",  #'troll':   'ctrl',
-    "shift": "shift",  #'sky':     'shift',
-    "super": "super",
-}
-if app.platform == "mac":
-    modifier_keys["command"] = "cmd"
-    modifier_keys["option"] = "alt"
-ctx.lists["self.modifier_key"] = modifier_keys
-ctx.lists["self.letter"] = alphabet_list
 
 # `punctuation_words` is for words you want available BOTH in dictation and as key names in command mode.
 # `symbol_key_words` is for key names that should be available in command mode, but NOT during dictation.
@@ -230,42 +201,3 @@ symbol_key_words = {
 symbol_key_words.update(punctuation_words)
 ctx.lists["self.punctuation"] = punctuation_words
 ctx.lists["self.symbol_key"] = symbol_key_words
-ctx.lists["self.number_key"] = {name: str(i) for i, name in enumerate(digits)}
-ctx.lists["self.arrow_key"] = {
-    "down": "down",
-    "left": "left",
-    "right": "right",
-    "up": "up",
-}
-
-simple_keys = [
-    "end",
-    "enter",
-    "escape",
-    "home",
-    "insert",
-    "pagedown",
-    "pageup",
-    "space",
-    "tab",
-]
-
-alternate_keys = {
-    "wipe": "backspace",
-    "delete": "backspace",
-    #'junk': 'backspace',
-    "forward delete": "delete",
-    "page up": "pageup",
-    "page down": "pagedown",
-}
-# mac apparently doesn't have the menu key.
-if app.platform in ("windows", "linux"):
-    alternate_keys["menu key"] = "menu"
-    alternate_keys["print screen"] = "printscr"
-
-special_keys = {k: k for k in simple_keys}
-special_keys.update(alternate_keys)
-ctx.lists["self.special_key"] = special_keys
-ctx.lists["self.function_key"] = {
-    f"F {name}": f"f{i}" for i, name in enumerate(f_digits, start=1)
-}
