@@ -90,8 +90,7 @@ class Actions:
 
     def copy_mouse_position():
         """Copy the current mouse position coordinates"""
-        x = actions.mouse_x()
-        y = actions.mouse_y()
+        x, y = actions.mouse_x(), actions.mouse_y()
         actions.clip.set_text(f"{x}, {y}")
 
     def mouse_move_center_active_window():
