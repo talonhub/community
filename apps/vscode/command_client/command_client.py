@@ -64,7 +64,8 @@ def run_command(
             raise Exception("Must use command-server extension for advanced commands")
         raise NoFileServerException("Communication directory not found")
 
-    trigger_execution = lambda: actions.user.trigger_command_server_command_execution()
+    def trigger_execution():
+        return actions.user.trigger_command_server_command_execution()
 
     payload = {
         "command_id": command_id,
