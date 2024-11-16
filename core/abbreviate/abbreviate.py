@@ -6,6 +6,11 @@ from ..user_settings import track_csv_list
 
 mod = Module()
 ctx = Context()
+
+ctx_dragon = Context()
+ctx_dragon.matches = r"""
+speech.engine: dragon
+"""
 mod.list("abbreviation", desc="Common abbreviation")
 
 abbreviations_list = {}
@@ -449,8 +454,7 @@ abbreviations = {
 }
 
 @mod.capture(rule="brief {user.abbreviation}")
-def abbreviated(m) -> str:
-    """A reverse abbreviation inside another command"""
+def abbreviation(m) -> str:
     return m.abbreviation
 
 @track_csv_list(

@@ -7,6 +7,10 @@ from talon import Context, Module, actions, grammar, settings, ui
 from ..numbers.numbers import get_spoken_form_under_one_hundred
 
 mod = Module()
+ctx_dragon = Context()
+ctx_dragon.matches = r"""
+speech.engine: dragon
+"""
 
 mod.setting(
     "context_sensitive_dictation",
@@ -151,26 +155,26 @@ def prose_time(m) -> str:
 def prose_employee_names(m) -> str:
     return m.employee_full_name
 
-
-@mod.capture(rule="({user.vocabulary} | <word>)")
+@mod.capture(rule="({user.vocabulary} | <user.abbreviation> | <word>)")
 def word(m) -> str:
     """A single word, including user-defined vocabulary."""
-    try:
+    if hasattr(m, "vocabulary"):
         return m.vocabulary
-    except AttributeError:
+    elif hasattr(m, "abbreviation"):
+        return m.abbreviation
+    else:
         return " ".join(
             actions.dictate.replace_words(actions.dictate.parse_words(m.word))
         )
 
-
-@mod.capture(rule="({user.vocabulary} | <phrase>)+")
+@mod.capture(rule="({user.vocabulary} | <user.abbreviation> | <phrase>)+")
 def text(m) -> str:
     """A sequence of words, including user-defined vocabulary."""
     return format_phrase(m)
 
 
 @mod.capture(
-    rule="(<phrase> | {user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <user.prose_currency> | <user.prose_time> | <user.prose_number> | <user.prose_percent> | <user.prose_modifier> | <user.prose_employee_names> | <user.abbreviated>)+"
+    rule="(<phrase> | {user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <user.prose_currency> | <user.prose_time> | <user.prose_number> | <user.prose_percent> | <user.prose_modifier> | <user.prose_employee_names> | <user.abbreviation>)+"
 )
 def prose(m) -> str:
     """Mixed words and punctuation, auto-spaced & capitalized."""
@@ -179,12 +183,32 @@ def prose(m) -> str:
 
 
 @mod.capture(
-    rule="(<phrase> | {user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <user.prose_currency> | <user.prose_time> | <user.prose_number> | <user.prose_percent> | <user.abbreviated>)+"
+    rule="(<phrase> | {user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <user.prose_currency> | <user.prose_time> | <user.prose_number> | <user.prose_percent> | <user.abbreviation>)+"
 )
 def raw_prose(m) -> str:
     """Mixed words and punctuation, auto-spaced & capitalized, without quote straightening and commands (for use in dictation mode)."""
     return apply_formatting(m)
 
+#For dragon, omit support for abbreviations
+@ctx_dragon.capture("user.text", rule="({user.vocabulary} | <phrase>)+")
+def text_dragon(m) -> str:
+    """A sequence of words, including user-defined vocabulary."""
+    return format_phrase(m)
+
+@ctx_dragon.capture("user.prose", 
+    rule="(<phrase> | {user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <user.prose_currency> | <user.prose_time> | <user.prose_number> | <user.prose_percent> | <user.prose_modifier> | <user.prose_employee_names>)+"
+)
+def prose_dragon(m) -> str:
+    """Mixed words and punctuation, auto-spaced & capitalized."""
+    # Straighten curly quotes that were introduced to obtain proper spacing.
+    return apply_formatting(m).replace("“", '"').replace("”", '"')
+
+@ctx_dragon.capture("user.raw_prose", 
+    rule="(<phrase> | {user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <user.prose_currency> | <user.prose_time> | <user.prose_number> | <user.prose_percent>)+"
+)
+def raw_prose_dragon(m) -> str:
+    """Mixed words and punctuation, auto-spaced & capitalized, without quote straightening and commands (for use in dictation mode)."""
+    return apply_formatting(m)
 
 # ---------- FORMATTING ---------- #
 def format_phrase(m):
