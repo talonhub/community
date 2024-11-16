@@ -1,7 +1,7 @@
 import os
 import subprocess
-
-from talon import Context, Module, app
+from pathlib import Path
+from talon import Context, Module, app, actions
 
 # path to community/knausj root directory
 REPO_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -48,32 +48,14 @@ ctx.lists["self.edit_file"] = _edit_files
 class ModuleActions:
     def edit_text_file(path: str):
         """Tries to open a file in the user's preferred text editor."""
+        actions.user.vscode_launch(f"{Path(path).expanduser().resolve()}")
+
 
 
 winctx, linuxctx, macctx = Context(), Context(), Context()
 winctx.matches = "os: windows"
 linuxctx.matches = "os: linux"
 macctx.matches = "os: mac"
-
-
-@winctx.action_class("self")
-class WinActions:
-    def edit_text_file(path):
-        # If there's no applications registered that can open the given type
-        # of file, 'edit' will fail, but 'open' always gives the user a
-        # choice between applications.
-        try:
-            os.startfile(path, "edit")
-        except OSError:
-            os.startfile(path, "open")
-
-
-@macctx.action_class("self")
-class MacActions:
-    def edit_text_file(path):
-        # -t means try to open in a text editor.
-        open_with_subprocess(path, ["/usr/bin/open", "-t", path])
-
 
 @linuxctx.action_class("self")
 class LinuxActions:
