@@ -34,12 +34,6 @@ mod.setting(
 )
 
 
-@ctx.action_class("main")
-class MainActions:
-    def mouse_click(button: int = 0):
-        ctrl.mouse_click(button=button, hold=16000)
-
-
 @mod.action_class
 class Actions:
     def zoom_close():
@@ -135,4 +129,4 @@ class UserActions:
         )
 
         if should_click:
-            actions.mouse_click()
+            ctrl.mouse_click(button=0, hold=16000)
