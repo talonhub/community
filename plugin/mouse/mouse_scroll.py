@@ -8,7 +8,7 @@ continuous_scroll_mode = ""
 scroll_job = None
 gaze_job = None
 scroll_dir: Literal[-1, 1] = 1
-scroll_ts: float = 0
+scroll_start_ts: float = 0
 hiss_scroll_up = False
 control_mouse_forced = False
 
@@ -38,7 +38,7 @@ mod.setting(
     "mouse_continuous_scroll_acceleration",
     type=float,
     default=1,
-    desc="The maximum acceleration factor when scrolling continuously. 1=constant speed/no acceleration",
+    desc="The maximum (linear) acceleration factor when scrolling continuously. 1=constant speed/no acceleration",
 )
 mod.setting(
     "mouse_enable_hiss_scroll",
@@ -167,7 +167,7 @@ class UserActions:
 
 
 def mouse_scroll_continuous(new_scroll_dir: Literal[-1, 1]):
-    global scroll_job, scroll_dir, scroll_ts, continuous_scroll_mode
+    global scroll_job, scroll_dir, scroll_start_ts, continuous_scroll_mode
 
     if eye_zoom_mouse.zoom_mouse.state != eye_zoom_mouse.STATE_IDLE:
         return
@@ -181,10 +181,10 @@ def mouse_scroll_continuous(new_scroll_dir: Literal[-1, 1]):
         # Issuing a scroll in the reverse direction resets acceleration
         else:
             scroll_dir = new_scroll_dir
-            scroll_ts = time.perf_counter()
+            scroll_start_ts = time.perf_counter()
     else:
         scroll_dir = new_scroll_dir
-        scroll_ts = time.perf_counter()
+        scroll_start_ts = time.perf_counter()
         continuous_scroll_mode = "scroll down continuous"
         scroll_continuous_helper()
         scroll_job = cron.interval("16ms", scroll_continuous_helper)
@@ -197,7 +197,7 @@ def scroll_continuous_helper():
     scroll_amount = settings.get("user.mouse_continuous_scroll_amount")
     acceleration_setting = settings.get("user.mouse_continuous_scroll_acceleration")
     acceleration_speed = (
-        1 + min((time.perf_counter() - scroll_ts) / 0.5, acceleration_setting - 1)
+        1 + min((time.perf_counter() - scroll_start_ts) / 0.5, acceleration_setting - 1)
         if acceleration_setting > 1
         else 1
     )
