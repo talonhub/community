@@ -1,3 +1,4 @@
+import math
 from typing import Iterator, Union
 
 from talon import Context, Module
@@ -17,10 +18,55 @@ tens_map = {n: 10 * (i + 2) for i, n in enumerate(tens)}
 scales_map = {n: 10 ** (3 * (i + 1)) for i, n in enumerate(scales[1:])}
 scales_map["hundred"] = 100
 
+# Maps number words to integers values that are used to compute numeric values.
 numbers_map = digits_map.copy()
 numbers_map.update(teens_map)
 numbers_map.update(tens_map)
 numbers_map.update(scales_map)
+
+
+def get_spoken_form_under_one_hundred(
+    start,
+    end,
+    *,
+    include_oh_variant_for_single_digits=False,
+    include_default_variant_for_single_digits=False,
+    include_double_digits=False,
+):
+    """Helper function to get dictionary of spoken forms for non-negative numbers in the range [start, end] under 100"""
+
+    result = {}
+
+    for value in range(start, end + 1):
+        digit_index = value % 10
+        if value < 10:
+            # oh prefix digit: "oh five"-> `05`
+            if include_oh_variant_for_single_digits:
+                result[f"oh {digit_list[digit_index]}"] = f"0{value}"
+            # default digit: "five" -> `5`
+            if include_default_variant_for_single_digits:
+                result[f"{digit_list[digit_index]}"] = f"{value}"
+        elif value < 20:
+            teens_index = value - 10
+            result[f"{teens[teens_index]}"] = f"{value}"
+        elif value < 100:
+            tens_index = math.floor(value / 10) - 2
+            if digit_index > 0:
+                spoken_form = f"{tens[tens_index]} {digit_list[digit_index]}"
+            else:
+                spoken_form = f"{tens[tens_index]}"
+
+            result[spoken_form] = f"{value}"
+        else:
+            raise ValueError(f"Value {value} is not in the range [0, 100)")
+
+        # double digits: "five one" -> `51`
+        if include_double_digits and value > 9:
+            tens_index = math.floor(value / 10)
+            spoken_form = f"{digit_list[tens_index]} {digit_list[digit_index]}"
+            result[spoken_form] = f"{value}"
+
+    return result
 
 
 def parse_number(l: list[str]) -> str:
@@ -169,16 +215,14 @@ leading_words -= {"oh", "o"}  # comment out to enable bare/initial "oh"
 number_word_leading = f"({'|'.join(leading_words)})"
 
 
-# Numbers used in `number_small` capture
-number_small_list = [*digit_list, *teens]
-for ten in tens:
-    number_small_list.append(ten)
-    number_small_list.extend(f"{ten} {digit}" for digit in digit_list[1:])
-number_small_map = {n: i for i, n in enumerate(number_small_list)}
-
-mod.list("number_small", desc="List of small numbers")
-mod.tag("prefixed_numbers", desc="Require prefix when saying a number")
-ctx.lists["self.number_small"] = number_small_map.keys()
+mod.list("number_small", "List of small (0-99) numbers")
+mod.tag("unprefixed_numbers", desc="Dont require prefix when saying a number")
+ctx.lists["user.number_small"] = get_spoken_form_under_one_hundred(
+    0,
+    99,
+    include_default_variant_for_single_digits=True,
+    include_double_digits=True,
+)
 
 
 # TODO: allow things like "double eight" for 88
@@ -199,6 +243,12 @@ def number_string(m) -> str:
     return parse_number(list(m))
 
 
+@mod.capture(rule="<user.number_string> ((point | dot) <user.number_string>)+")
+def number_decimal_string(m) -> str:
+    """Parses a decimal number phrase, returning that number as a string."""
+    return ".".join(m.number_string_list)
+
+
 @ctx.capture("number", rule="<user.number_string>")
 def number(m) -> int:
     """Parses a number phrase, returning it as an integer."""
@@ -213,7 +263,7 @@ def number_signed(m):
 
 @ctx.capture("number_small", rule="{user.number_small}")
 def number_small(m) -> int:
-    return number_small_map[m.number_small]
+    return int(m.number_small)
 
 
 @mod.capture(rule=f"[negative|minus] <number_small>")

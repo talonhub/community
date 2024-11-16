@@ -1,5 +1,6 @@
+mode: command
+mode: dictation
 mode: sleep
-not mode: sleep
 not speech.engine: dragon
 -
 # The optional <phrase> afterwards allows these to match even if you say arbitrary text
@@ -38,4 +39,3 @@ not speech.engine: dragon
     user.help_hide()
     user.mouse_sleep()
     speech.disable()
-    user.engine_sleep()

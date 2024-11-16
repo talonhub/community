@@ -79,12 +79,6 @@ class Actions:
         """file_manager_open_parent"""
         return
 
-    def file_manager_go_forward():
-        """file_manager_go_forward_directory"""
-
-    def file_manager_go_back():
-        """file_manager_go_forward_directory"""
-
     def file_manager_open_volume(volume: str):
         """file_manager_open_volume"""
 
@@ -325,7 +319,7 @@ def gui_files(gui: imgui.GUI):
 
 
 def clear_lists():
-    global folder_selections, file_selections
+    global folder_selections, file_selections, current_folder_page, current_file_page
     if (
         len(ctx.lists["self.file_manager_directories"]) > 0
         or len(ctx.lists["self.file_manager_files"]) > 0
@@ -398,12 +392,15 @@ def win_event_handler(window):
     if not window.app.exe or window != ui.active_window():
         return
 
-    path = actions.user.file_manager_current_path()
-
     if "user.file_manager" not in registry.tags:
         actions.user.file_manager_hide_pickers()
         clear_lists()
-    elif path:
+        cached_path = None
+        return
+
+    path = actions.user.file_manager_current_path()
+
+    if path:
         if cached_path != path:
             update_lists(path)
     elif cached_path:

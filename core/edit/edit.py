@@ -1,7 +1,14 @@
-from talon import Context, Module, actions, clip
+from talon import Context, Module, actions, clip, settings
 
 ctx = Context()
 mod = Module()
+
+mod.setting(
+    "selected_text_timeout",
+    type=float,
+    default=0.25,
+    desc="Time in seconds to wait for the clipboard to change when trying to get selected text",
+)
 
 END_OF_WORD_SYMBOLS = ".!?;:—_/\\|@#$%^&*()[]{}<>=+-~`"
 
@@ -9,7 +16,8 @@ END_OF_WORD_SYMBOLS = ".!?;:—_/\\|@#$%^&*()[]{}<>=+-~`"
 @ctx.action_class("edit")
 class EditActions:
     def selected_text() -> str:
-        with clip.capture() as s:
+        timeout = settings.get("user.selected_text_timeout")
+        with clip.capture(timeout) as s:
             actions.edit.copy()
         try:
             return s.text()
@@ -93,11 +101,6 @@ class Actions:
         for _ in range(n):
             actions.edit.word_right()
 
-    def cut_word():
-        """Cut word under cursor"""
-        actions.edit.select_word()
-        actions.edit.cut()
-
     def cut_word_left():
         """Cuts the word to the left."""
         actions.edit.extend_word_left()
@@ -108,11 +111,6 @@ class Actions:
         actions.edit.extend_word_right()
         actions.edit.cut()
 
-    def copy_word():
-        """Copy word under cursor"""
-        actions.edit.select_word()
-        actions.edit.copy()
-
     def copy_word_left():
         """Copies the word to the left."""
         actions.edit.extend_word_left()
@@ -122,46 +120,6 @@ class Actions:
         """Copies the word to the right."""
         actions.edit.extend_word_right()
         actions.edit.copy()
-
-    def paste_word():
-        """Paste to word under cursor"""
-        actions.edit.select_word()
-        actions.edit.paste()
-
-    def cut_all():
-        """Cut all text in the current document"""
-        actions.edit.select_all()
-        actions.edit.cut()
-
-    def copy_all():
-        """Copy all text in the current document"""
-        actions.edit.select_all()
-        actions.edit.copy()
-
-    def paste_all():
-        """Paste to the current document"""
-        actions.edit.select_all()
-        actions.edit.paste()
-
-    def delete_all():
-        """Delete all text in the current document"""
-        actions.edit.select_all()
-        actions.edit.delete()
-
-    def cut_line():
-        """Cut current line"""
-        actions.edit.select_line()
-        actions.edit.cut()
-
-    def copy_line():
-        """Copy current line"""
-        actions.edit.select_line()
-        actions.edit.copy()
-
-    def paste_line():
-        """Paste to current line"""
-        actions.edit.select_line()
-        actions.edit.paste()
 
     # ----- Start / End of line -----
     def select_line_start():
@@ -176,42 +134,15 @@ class Actions:
             actions.edit.right()
         actions.edit.extend_line_end()
 
-    def cut_line_start():
-        """Cut to start of current line"""
-        actions.user.select_line_start()
+    def line_middle():
+        """Go to the middle of the line"""
+        actions.edit.select_line()
+        half_line_length = int(len(actions.edit.selected_text()) / 2)
+        actions.edit.left()
+        for i in range(0, half_line_length):
+            actions.edit.right()
+
+    def cut_line():
+        """Cut current line"""
+        actions.edit.select_line()
         actions.edit.cut()
-
-    def cut_line_end():
-        """Cut to end of current line"""
-        actions.user.select_line_end()
-        actions.edit.cut()
-
-    def copy_line_start():
-        """Copy to start of current line"""
-        actions.user.select_line_start()
-        actions.edit.copy()
-
-    def copy_line_end():
-        """Copy to end of current line"""
-        actions.user.select_line_end()
-        actions.edit.copy()
-
-    def paste_line_start():
-        """Paste to start of current line"""
-        actions.user.select_line_start()
-        actions.edit.paste()
-
-    def paste_line_end():
-        """Paste to end of current line"""
-        actions.user.select_line_end()
-        actions.edit.paste()
-
-    def delete_line_start():
-        """Delete to start of current line"""
-        actions.user.select_line_start()
-        actions.edit.delete()
-
-    def delete_line_end():
-        """Delete to end of current line"""
-        actions.user.select_line_end()
-        actions.edit.delete()
