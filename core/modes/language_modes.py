@@ -25,6 +25,7 @@ extension_lang_map = {
     f".{ext}": lang.id for lang in code_languages for ext in lang.extensions
 }
 
+language_ids = {lang.id for lang in code_languages}
 forced_language = ""
 
 
@@ -50,7 +51,7 @@ class Actions:
     def code_set_language_mode(language: str):
         """Sets the active language mode, and disables extension matching"""
         global forced_language
-        assert language in code_languages
+        assert language in language_ids
         forced_language = language
         # Update tags to force a context refresh. Otherwise `code.language` will not update.
         # Necessary to first set an empty list otherwise you can't move from one forced language to another.
