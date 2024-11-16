@@ -6,11 +6,6 @@ from ..user_settings import track_csv_list
 
 mod = Module()
 ctx = Context()
-
-ctx_dragon = Context()
-ctx_dragon.matches = r"""
-speech.engine: dragon
-"""
 mod.list("abbreviation", desc="Common abbreviation")
 
 abbreviations_list = {}
