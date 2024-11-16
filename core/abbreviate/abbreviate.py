@@ -448,9 +448,11 @@ abbreviations = {
     "work in progress": "wip",
 }
 
+
 @mod.capture(rule="brief {user.abbreviation}")
 def abbreviation(m) -> str:
     return m.abbreviation
+
 
 @track_csv_list(
     "abbreviations.csv", headers=("Abbreviation", "Spoken Form"), default=abbreviations
