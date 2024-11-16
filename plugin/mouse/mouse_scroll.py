@@ -36,7 +36,7 @@ mod.setting(
 )
 mod.setting(
     "mouse_continuous_scroll_acceleration",
-    type=int,
+    type=float,
     default=1,
     desc="The maximum acceleration factor when scrolling continuously. 1=constant speed/no acceleration",
 )
