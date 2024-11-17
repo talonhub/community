@@ -315,7 +315,7 @@ def shrink_to_string_inside(text: str) -> tuple[str, str, str]:
 
 
 @mod.capture(
-    rule="({user.code_formatter} | {user.prose_formatter} | {user.reformatters})+ "
+    rule="({user.code_formatter} | {user.prose_formatter} | {user.reformatter})+ "
 )
 def formatters(m) -> str:
     "Returns a comma-separated string of formatters e.g. 'SNAKE,DUBSTRING'"
