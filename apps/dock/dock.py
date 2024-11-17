@@ -13,9 +13,33 @@ class Actions:
     def dock_send_notification(notification: str):
         """Send a CoreDock notification to the macOS Dock using SPI"""
 
+    def dock_app_expose():
+        """Activate app Exposé using the macOS Dock item for the frontmost app"""
+
 
 @ctx.action_class("user")
 class UserActions:
+    def dock_app_expose():
+        from pathlib import Path
+
+        app_name = Path(ui.active_app().path).stem
+        dock_items = ui.apps(bundle="com.apple.dock")[0].children.find(
+            AXSubrole="AXApplicationDockItem", AXTitle=app_name, max_depth=1
+        )
+        match len(dock_items):
+            case 1:
+                dock_items[0].perform("AXShowExpose")
+            case 0:
+                actions.app.notify(
+                    body=f"No dock icon for “{app_name}”",
+                    title="Unable to activate App Exposé",
+                )
+            case _:
+                actions.app.notify(
+                    body=f"Multiple dock icons for “{app_name}”",
+                    title="Unable to activate App Exposé",
+                )
+
     def dock_send_notification(notification: str):
         from talon.mac.dock import dock_notify
 
