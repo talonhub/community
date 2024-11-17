@@ -4,7 +4,7 @@ from pathlib import Path
 
 from talon import Context, Module, actions, app, fs, settings
 
-from ..modes.language_modes import language_ids
+from ..modes.code_languages import code_languages
 from .snippet_types import InsertionSnippet, Snippet, WrapperSnippet
 from .snippets_parser import create_snippets_from_file
 
@@ -30,10 +30,10 @@ context_map = {
 snippets_map = {}
 
 # Create a context for each defined language
-for lang in language_ids:
+for lang in code_languages:
     ctx = Context()
-    ctx.matches = f"code.language: {lang}"
-    context_map[lang] = ctx
+    ctx.matches = f"code.language: {lang.id}"
+    context_map[lang.id] = ctx
 
 
 def get_setting_dir():

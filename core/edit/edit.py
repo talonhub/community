@@ -78,6 +78,14 @@ class EditActions:
     def delete_all():
         actions.edit.select_all()
         actions.edit.delete()
+    
+    def delete_right():
+        """Delete character to the right"""
+        actions.key("delete")
+    
+    def delete_left():
+        """Delete character to the right"""
+        actions.key("backspace")
 
 @mod.action_class
 class Actions:
@@ -90,10 +98,6 @@ class Actions:
             actions.edit.paste()
             # sleep here so that clip.revert doesn't revert the clipboard too soon
             actions.sleep("150ms")
-
-    def delete_right():
-        """Delete character to the right"""
-        actions.key("delete")
 
     def words_left(n: int):
         """Moves left by n words."""

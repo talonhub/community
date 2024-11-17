@@ -35,8 +35,9 @@ class BrowserActions:
 @ctx.action_class("main")
 class MainActions:
     def insert(text):
-        if app.platform == "windows" and ui.focused_element().name in ["Address and search bar", "Find on page"]:
-            actions.next(text)
-        else:
-            actions.user.paste(text)
+        actions.next(text)
+        # if app.platform == "windows" and ui.focused_element().name in ["Address and search bar", "Find on page"]:
+        #     actions.next(text)
+        # else:
+        #     actions.user.paste(text)
                     

@@ -448,10 +448,11 @@ abbreviations = {
     "work in progress": "wip",
 }
 
+
 @mod.capture(rule="brief {user.abbreviation}")
-def abbreviated(m) -> str:
-    """A reverse abbreviation inside another command"""
+def abbreviation(m) -> str:
     return m.abbreviation
+
 
 @track_csv_list(
     "abbreviations.csv", headers=("Abbreviation", "Spoken Form"), default=abbreviations

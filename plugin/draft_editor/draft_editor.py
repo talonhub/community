@@ -106,24 +106,33 @@ def get_editor_app() -> ui.App:
 
 def close_editor(submit_draft: bool) -> None:
     global last_draft
-    remove_tag("user.draft_editor_active")
-    actions.edit.select_all()
+
     if submit_draft:
-        last_draft = actions.edit.selected_text()
-    actions.edit.delete()
+        actions.sleep("50ms")
+        last_draft = actions.user.vscode_get("andreas.getDocumentText")
+        # print(last_draft)
+
+        if not last_draft:
+            actions.app.notify("Failed to get draft document text")
+            return
+
+    remove_tag("user.draft_editor_active")
+
+    actions.user.vscode("workbench.action.revertAndCloseActiveEditor")
+
     actions.app.tab_close()
+
     if submit_draft:
         try:
             actions.user.switcher_focus_window(original_window)
         except Exception:
             app.notify(
-                "Failed to focus on window to submit draft, manually focus on intended destination and use draft submit again"
+                "Failed to focus on window to submit draft, manually focus intended destination and use 'draft submit' again"
             )
         else:
-            actions.sleep("300ms")
-            actions.user.paste(last_draft)
+            actions.insert(last_draft)
     else:
         try:
             actions.user.switcher_focus_window(original_window)
         except Exception:
-            app.notify("Failed to focus on previous window, leaving editor open")
+            app.notify("Failed to focus previous window, leaving editor open")

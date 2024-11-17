@@ -1,1 +1,4 @@
-stupid test: insert(" stupid test really long to see ")
+Stupid test [<number_small>]:
+    numb = number_small or 1
+    edit.delete_word()
+    repeat(numb-1)
