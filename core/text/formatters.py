@@ -248,7 +248,7 @@ formatter_list = [
 formatters_dict = {f.id: f for f in formatter_list}
 
 mod = Module()
-mod.list("reformatters", desc="list of all reformatters")
+mod.list("reformatter", desc="list of all reformatters")
 mod.list("code_formatter", desc="list of formatters typically applied to code")
 mod.list(
     "prose_formatter", desc="list of prose formatters (words to start dictating prose)"
