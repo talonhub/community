@@ -135,10 +135,15 @@ class Actions:
             shutil.move(latest_reject, good_category_two)
             print(f"moved reject {latest_reject} to category two")
             actions.app.notify(f"moved reject {latest_reject} to category two")
-        elif category == 3:
+        elif category==3:
+            shutil.move(latest_reject, bad_category)
+            print(f"moved reject {latest_reject} to bad category")
+            actions.app.notify(f"moved reject {latest_reject} to bad category ")
+        elif category == 4:
             shutil.move(latest_reject, review_category)
             print(f"moved reject {latest_reject} to category review category")
             actions.app.notify(f"moved reject {latest_reject} to category review category")
+        
     
     # def rejection_move(category: int):
     #     import glob
