@@ -208,6 +208,9 @@ class WindowsZoomMouseTriggerActions:
         actions.talon_plugins.eye_zoom_mouse.mouse_trigger()
         actions.key("ctrl:up")
         actions.deck.goto("A00SA3192M9DW0", "default")
+    def deck12():
+        actions.tracking.zoom_cancel()
+        actions.deck.goto("A00SA3192M9DW0", "default")
 
 @ctx_control_mouse_enabled.action_class("user")
 class ControlMouseEnabled:

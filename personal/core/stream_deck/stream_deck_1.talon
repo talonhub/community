@@ -60,6 +60,8 @@ deck(zoom/shift-left):
 #     skip()
 deck(zoom/ctrl-left):
     user.deck11()
+deck(zoom/move):
+    user.deck12()
 # deck(zoom):
 #     skip()
 # deck(zoom):
@@ -108,4 +110,21 @@ deck(control/mobile-phone):
 # deck(control/currency-exchange):
 #     user.deck14()
 deck(control/zzz):
+    user.deck15()
+
+deck(reject/gud 1):
+    user.rejection_move_last(1)
+deck(reject/gud 2):
+    user.rejection_move_last(2)
+# deck(reject/eye):
+#     user.deck12()
+# deck(reject/studio-microphone):
+#     user.deck13()
+# deck(reject/currency-exchange):
+#     user.deck14()
+deck(reject/bad):
+    user.rejection_move_last(3)
+deck(reject/rev):
+    user.rejection_move_last(4)
+deck(reject/zzz):
     user.deck15()

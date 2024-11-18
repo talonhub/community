@@ -30,6 +30,7 @@ def edit_simple_action(m) -> EditAction:
     return EditAction(m.edit_action)
 
 
+
 @mod.capture(rule="<user.edit_simple_action>")
 def edit_action(m) -> EditAction:
     return m[0]

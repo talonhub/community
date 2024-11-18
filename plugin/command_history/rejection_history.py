@@ -21,9 +21,11 @@ history_no_timestamp = []
 good_category_one = os.path.expanduser("~/Desktop/rejections/good category one")
 good_category_two = os.path.expanduser("~/Desktop/rejections/good category two")
 bad_category = os.path.expanduser("~/Desktop/rejections/bad")
+review_category = os.path.expanduser("~/Desktop/rejections/to review")
 Path(good_category_one).mkdir(parents=True, exist_ok=True)
 Path(good_category_two).mkdir(parents=True, exist_ok=True)
 Path(bad_category).mkdir(parents=True, exist_ok=True)
+Path(review_category).mkdir(parents=True, exist_ok=True)
 
 def on_phrase(j):
     global history, history_no_timestamp
@@ -126,14 +128,17 @@ class Actions:
         if category==1:
 
             shutil.move(latest_reject, good_category_one)
+            print(f"moved reject {latest_reject} to category one")
             actions.app.notify(f"moved reject {latest_reject} to category one")
         # background speech that was correctly rejected
         elif category==2:
             shutil.move(latest_reject, good_category_two)
+            print(f"moved reject {latest_reject} to category two")
             actions.app.notify(f"moved reject {latest_reject} to category two")
-        else:
-            shutil.move(latest_reject, bad_category)
-            actions.app.notify(f"moved reject {latest_reject} to category three")
+        elif category == 3:
+            shutil.move(latest_reject, review_category)
+            print(f"moved reject {latest_reject} to category review category")
+            actions.app.notify(f"moved reject {latest_reject} to category review category")
     
     # def rejection_move(category: int):
     #     import glob
