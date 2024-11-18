@@ -2,60 +2,10 @@ import math
 from typing import Iterator, Union
 
 from talon import Context, Module
+from .numbers_definitions import digits_map, teens_map, tens_map, scales, scales_map, numbers_map, get_spoken_form_under_one_hundred
 
 mod = Module()
 ctx = Context()
-
-digit_list = "zero one two three four five six seven eight nine".split()
-teens = "ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen".split()
-tens = "twenty thirty forty fifty sixty seventy eighty ninety".split()
-scales = "hundred thousand million billion trillion quadrillion quintillion sextillion septillion octillion nonillion decillion".split()
-
-digits_map = {n: i for i, n in enumerate(digit_list)}
-digits_map["oh"] = 0
-teens_map = {n: i + 10 for i, n in enumerate(teens)}
-tens_map = {n: 10 * (i + 2) for i, n in enumerate(tens)}
-scales_map = {n: 10 ** (3 * (i + 1)) for i, n in enumerate(scales[1:])}
-scales_map["hundred"] = 100
-
-# Maps number words to integers values that are used to compute numeric values.
-numbers_map = digits_map.copy()
-numbers_map.update(teens_map)
-numbers_map.update(tens_map)
-numbers_map.update(scales_map)
-
-
-def get_spoken_form_under_one_hundred(
-    start,
-    end,
-    include_oh_variant_for_single_digits,
-    include_default_variant_for_single_digits,
-):
-    """Helper function to get dictionary of spoken forms for non-negative numbers in the range [start, end] under 100"""
-
-    result = {}
-
-    for value in range(start, end + 1):
-        digit_index = value % 10
-        if value < 10:
-            if include_oh_variant_for_single_digits:
-                result[f"oh {digit_list[digit_index]}"] = f"0{value}"
-            if include_default_variant_for_single_digits:
-                result[f"{digit_list[digit_index]}"] = f"{value}"
-        elif value < 20:
-            teens_index = value - 10
-            result[f"{teens[teens_index]}"] = f"{value}"
-        elif value < 100:
-            tens_index = math.floor(value / 10) - 2
-            if digit_index > 0:
-                spoken_form = f"{tens[tens_index]} {digit_list[digit_index]}"
-            else:
-                spoken_form = f"{tens[tens_index]}"
-
-            result[spoken_form] = f"{value}"
-
-    return result
-
 
 def parse_number(l: list[str]) -> str:
     """Parses a list of words into a number/digit string."""
@@ -202,21 +152,9 @@ leading_words = numbers_map.keys() - scales_map.keys()
 leading_words -= {"oh", "o"}  # comment out to enable bare/initial "oh"
 number_word_leading = f"({'|'.join(leading_words)})"
 
-
-# Numbers used in `number_small` capture
-number_small_list = [*digit_list, *teens]
-for ten in tens:
-    number_small_list.append(ten)
-    number_small_list.extend(f"{ten} {digit}" for digit in digit_list[1:])
-number_small_map = {n: str(i) for i, n in enumerate(number_small_list)}
-# Add support for double single digits. eg. "five one" -> 51
-for d1 in range(1, 10):
-    for d2 in range(10):
-        number_small_map[f"{digit_list[d1]} {digit_list[d2]}"] = f"{d1}{d2}"
-
 mod.list("number_small", "List of small (0-99) numbers")
 mod.tag("unprefixed_numbers", desc="Dont require prefix when saying a number")
-ctx.lists["user.number_small"] = number_small_map
+ctx.lists["user.number_small"] = get_spoken_form_under_one_hundred(0, 99, include_oh_variant_for_single_digits=False, include_default_variant_for_single_digits=True, include_serial_digits=True)
 
 
 # TODO: allow things like "double eight" for 88

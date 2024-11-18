@@ -55,21 +55,23 @@ ctx.lists["user.hours_twelve"] = get_spoken_form_under_one_hundred(
     1,
     12,
     include_oh_variant_for_single_digits=True,
-    include_default_variant_for_single_digits=True,
+    include_default_variant_for_single_digits=True, 
+    include_serial_digits=False
 )
 ctx.lists["user.hours"] = get_spoken_form_under_one_hundred(
     1,
     23,
     include_oh_variant_for_single_digits=True,
     include_default_variant_for_single_digits=True,
+    include_serial_digits=False
 )
 ctx.lists["user.minutes"] = get_spoken_form_under_one_hundred(
     1,
     59,
     include_oh_variant_for_single_digits=True,
     include_default_variant_for_single_digits=False,
+    include_serial_digits=False
 )
-
 
 @mod.capture(rule="{user.prose_modifiers}")
 def prose_modifier(m) -> Callable:
