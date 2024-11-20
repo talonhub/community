@@ -4,6 +4,8 @@ from typing import Callable, Optional
 
 from talon import Context, Module, actions, grammar, settings, ui
 
+from ..numbers.numbers import get_spoken_form_under_one_hundred
+
 mod = Module()
 
 mod.setting(
@@ -16,6 +18,14 @@ mod.setting(
 mod.list("prose_modifiers", desc="Modifiers that can be used within prose")
 mod.list("prose_snippets", desc="Snippets that can be used within prose")
 mod.list("phrase_ender", "List of commands that can be used to end a phrase")
+mod.list("hours_twelve", desc="Names for hours up to 12")
+mod.list("hours", desc="Names for hours up to 24")
+mod.list("minutes", desc="Names for minutes, 01 up to 59")
+mod.list(
+    "currency",
+    desc="Currency types (e.g., dollars, euros) that can be used within prose",
+)
+
 ctx = Context()
 # Maps spoken forms to DictationFormat method names (see DictationFormat below).
 ctx.lists["user.prose_modifiers"] = {
@@ -35,6 +45,25 @@ ctx.lists["user.prose_snippets"] = {
     "winky": ";-)",
     "frowny": ":-(",
 }
+
+ctx.lists["user.hours_twelve"] = get_spoken_form_under_one_hundred(
+    1,
+    12,
+    include_oh_variant_for_single_digits=True,
+    include_default_variant_for_single_digits=True,
+)
+ctx.lists["user.hours"] = get_spoken_form_under_one_hundred(
+    1,
+    23,
+    include_oh_variant_for_single_digits=True,
+    include_default_variant_for_single_digits=True,
+)
+ctx.lists["user.minutes"] = get_spoken_form_under_one_hundred(
+    1,
+    59,
+    include_oh_variant_for_single_digits=True,
+    include_default_variant_for_single_digits=False,
+)
 
 
 @mod.capture(rule="{user.prose_modifiers}")
@@ -64,6 +93,56 @@ def prose_number(m) -> str:
     return str(m)
 
 
+@mod.capture(
+    rule="<user.number_string> [(dot | point) <digit_string>] percent [sign|sine]"
+)
+def prose_percent(m) -> str:
+    s = m.number_string
+    if hasattr(m, "digit_string"):
+        s += "." + m.digit_string
+    return s + "%"
+
+
+@mod.capture(
+    rule="<user.number_string> {user.currency} [[and] <user.number_string> [cents|pence]]"
+)
+def prose_currency(m) -> str:
+    s = m.currency + m.number_string_1
+    if hasattr(m, "number_string_2"):
+        s += "." + m.number_string_2
+    return s
+
+
+@mod.capture(rule="am|pm")
+def time_am_pm(m) -> str:
+    return str(m)
+
+
+# this matches eg "twelve thirty-four" -> 12:34 and "twelve hundred" -> 12:00. hmmmmm.
+@mod.capture(
+    rule="{user.hours} ({user.minutes} | o'clock | hundred hours) [<user.time_am_pm>]"
+)
+def prose_time_hours_minutes(m) -> str:
+    t = m.hours + ":"
+    if hasattr(m, "minutes"):
+        t += m.minutes
+    else:
+        t += "00"
+    if hasattr(m, "time_am_pm"):
+        t += m.time_am_pm
+    return t
+
+
+@mod.capture(rule="{user.hours_twelve} <user.time_am_pm>")
+def prose_time_hours_am_pm(m) -> str:
+    return m.hours_twelve + m.time_am_pm
+
+
+@mod.capture(rule="<user.prose_time_hours_minutes> | <user.prose_time_hours_am_pm>")
+def prose_time(m) -> str:
+    return str(m)
+
+
 @mod.capture(rule="({user.vocabulary} | <word>)")
 def word(m) -> str:
     """A single word, including user-defined vocabulary."""
@@ -82,7 +161,7 @@ def text(m) -> str:
 
 
 @mod.capture(
-    rule="({user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <phrase> | <user.prose_number> | <user.prose_modifier>)+"
+    rule="(<phrase> | {user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <user.prose_currency> | <user.prose_time> | <user.prose_number> | <user.prose_percent> | <user.prose_modifier>)+"
 )
 def prose(m) -> str:
     """Mixed words and punctuation, auto-spaced & capitalized."""
@@ -91,7 +170,7 @@ def prose(m) -> str:
 
 
 @mod.capture(
-    rule="({user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <phrase> | <user.prose_number>)+"
+    rule="(<phrase> | {user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <user.prose_currency> | <user.prose_time> | <user.prose_number> | <user.prose_percent>)+"
 )
 def raw_prose(m) -> str:
     """Mixed words and punctuation, auto-spaced & capitalized, without quote straightening and commands (for use in dictation mode)."""
