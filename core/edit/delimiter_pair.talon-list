@@ -1,0 +1,11 @@
+list: user.delimiter_pair
+-
+
+round: ( )
+index: [ ]
+diamond: < >
+curly: { }
+twin: "' '"
+quad: '" "'
+skis: ` `
+padding: space space
