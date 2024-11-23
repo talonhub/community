@@ -249,7 +249,7 @@ def number(m) -> int:
     return int(m.number_string)
 
 
-@mod.capture(rule="[negative | minus] <user_number_string>")
+@mod.capture(rule="[negative | minus] <user.number_string>")
 def number_signed_string(m) -> str:
     """Parses a (possibly negative) number phrase, returning that number as a string."""
     number = m.user_number_string
@@ -262,12 +262,12 @@ def number_signed(m) -> int:
     return int(m.number_signed_string)
 
 
-@mod.capture(rule="<user.number_string> ((dot | point) <number_string>)+")
+@mod.capture(rule="<user.number_string> ((dot | point) <user.number_string>)+")
 def number_prose_with_dot(m) -> str:
     return ".".join(m.number_string_list)
 
 
-@mod.capture(rule="<user.number_string> (comma <number_string>)+")
+@mod.capture(rule="<user.number_string> (comma <user.number_string>)+")
 def number_prose_with_comma(m) -> str:
     return ",".join(m.number_string_list)
 
@@ -284,7 +284,7 @@ def number_prose_unprefixed(m) -> str:
     return m[0]
 
 
-@mod.capture(rule="(numb | numeral) <user.number_prose_unprefixed>")
+@mod.capture(rule="(telly) <user.number_prose_unprefixed>")
 def number_prose_prefixed(m) -> str:
     return m.number_prose_unprefixed
 
