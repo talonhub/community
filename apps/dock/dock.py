@@ -19,8 +19,9 @@ class Actions:
 
 @ctx.action_class("user")
 class UserActions:
-    def dock_app_expose():
-        from pathlib import Path
+    def dock_app_expose(app: Optional[App]):
+        if app is None:
+            app = ui.active_app()
 
         app_name = Path(ui.active_app().path).stem
         dock_items = ui.apps(bundle="com.apple.dock")[0].children.find(
