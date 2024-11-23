@@ -76,28 +76,6 @@ def prose_modifier(m) -> Callable:
     return getattr(DictationFormat, m.prose_modifiers)
 
 
-@mod.capture(rule="(telly | numeral) <user.number_string>")
-def prose_simple_number(m) -> str:
-    return m.number_string
-
-
-@mod.capture(rule="(telly | numeral) <user.number_string> (dot | point) <digit_string>")
-def prose_number_with_dot(m) -> str:
-    return m.number_string + "." + m.digit_string
-
-
-@mod.capture(rule="(telly | numeral) <user.number_string> colon <user.number_string>")
-def prose_number_with_colon(m) -> str:
-    return m.number_string_1 + ":" + m.number_string_2
-
-
-@mod.capture(
-    rule="<user.prose_simple_number> | <user.prose_number_with_dot> | <user.prose_number_with_colon>"
-)
-def prose_number(m) -> str:
-    return str(m)
-
-
 @mod.capture(
     rule="<user.number_string> [(dot | point) <digit_string>] percent [sign|sine]"
 )
@@ -142,18 +120,6 @@ def prose_time_hours_minutes(m) -> str:
 def prose_time_hours_am_pm(m) -> str:
     return m.hours_twelve + m.time_am_pm
 
-@mod.capture(rule="point | dot")
-def prose_point(m) -> str:
-    return "." 
-
-@mod.capture(rule="dash (<user.letter>)+ <user.prose_point> <user.number_string>")
-def prose_version_suffix(m) -> str:
-    return "-" + "".join(list(m.letter_list)) + "".join([".", m.number_string])
-
-
-@mod.capture(rule="<user.number_string> ([<user.prose_point> <user.number_string>])+ [<user.prose_version_suffix>]")
-def prose_version(m) -> str:
-    return "v" + "".join(list(m))
 
 @mod.capture(rule="<user.prose_time_hours_minutes> | <user.prose_time_hours_am_pm>")
 def prose_time(m) -> str:
@@ -182,7 +148,7 @@ def text(m) -> str:
 
 
 @mod.capture(
-    rule="(<phrase> | {user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <user.prose_currency> | <user.prose_time> | <user.prose_number> | <user.prose_percent> | <user.prose_modifier> | <user.prose_employee_names> | <user.abbreviation>)+"
+    rule="(<phrase> | {user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <user.prose_currency> | <user.prose_time> | <user.number_prose_prefixed> | <user.prose_percent> | <user.prose_modifier> | <user.prose_employee_names> | <user.abbreviation>)+"
 )
 def prose(m) -> str:
     """Mixed words and punctuation, auto-spaced & capitalized."""
@@ -191,7 +157,7 @@ def prose(m) -> str:
 
 
 @mod.capture(
-    rule="(<phrase> | {user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <user.prose_currency> | <user.prose_time> | <user.prose_number> | <user.prose_percent> | <user.abbreviation>)+"
+    rule="(<phrase> | {user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <user.prose_currency> | <user.prose_time> | <user.number_prose_prefixed> | <user.prose_percent> | <user.abbreviation>)+"
 )
 def raw_prose(m) -> str:
     """Mixed words and punctuation, auto-spaced & capitalized, without quote straightening and commands (for use in dictation mode)."""
