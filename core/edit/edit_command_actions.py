@@ -60,16 +60,7 @@ def edit_wrap_action(m) -> EditWrapAction:
     return EditWrapAction(m.delimiter_pair)
 
 
-@mod.capture(rule="<user.formatters> (format | form)")
-def edit_format_action(m) -> EditFormatAction:
-    return EditFormatAction(m.formatters)
-
-
-@mod.capture(
-    rule="<user.edit_simple_action>"
-    " | <user.edit_wrap_action>"
-    " | <user.edit_format_action>"
-)
+@mod.capture(rule="<user.edit_simple_action> | <user.edit_wrap_action>")
 def edit_action(m) -> EditAction:
     return m[0]
 
