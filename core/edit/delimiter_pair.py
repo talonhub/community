@@ -18,15 +18,9 @@ def delimiter_pair(m) -> list[str]:
 class Actions:
     def delimiter_pair_insert(pair: list[str]):
         """Insert a delimiter pair <pair> leaving the cursor in the middle"""
-        left, right = pair
-        actions.insert(f"{left}{right}")
-        for _ in right:
-            actions.edit.left()
+        actions.user.insert_between(pair[0], pair[1])
 
     def delimiter_pair_wrap_selection(pair: list[str]):
         """Wrap selection with delimiter pair <pair>"""
-        left, right = pair
         selected = actions.edit.selected_text()
-        actions.insert(f"{left}{selected}{right}")
-        for _ in right:
-            actions.edit.left()
+        actions.user.insert_between(pair[0], pair[1], selected)
