@@ -1,4 +1,4 @@
-from talon import Context, Module, actions, clip, ctrl, settings, ui
+from talon import Context, Module, actions, ctrl, settings, ui
 from talon_plugins import eye_zoom_mouse
 
 mod = Module()
@@ -84,13 +84,13 @@ class Actions:
 
     def copy_mouse_position():
         """Copy the current mouse position coordinates"""
-        position = ctrl.mouse_pos()
-        clip.set_text(repr(position))
+        x, y = actions.mouse_x(), actions.mouse_y()
+        actions.clip.set_text(f"{x}, {y}")
 
     def mouse_move_center_active_window():
-        """move the mouse cursor to the center of the currently active window"""
+        """Move the mouse cursor to the center of the currently active window"""
         rect = ui.active_window().rect
-        ctrl.mouse_move(rect.left + (rect.width / 2), rect.top + (rect.height / 2))
+        actions.mouse_move(rect.center.x, rect.center.y)
 
 
 @ctx.action_class("user")
