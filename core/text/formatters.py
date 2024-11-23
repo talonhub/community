@@ -1,7 +1,7 @@
 import logging
 import re
 from abc import ABC, abstractmethod
-from typing import Callable, Dict, Optional, Tuple, Union
+from typing import Callable, Optional, Tuple, Union
 
 from talon import Context, Module, actions, app, registry
 from talon.grammar import Phrase
@@ -375,15 +375,15 @@ def formatter_immune(m) -> ImmuneString:
     return ImmuneString(str(value))
 
 
-def get_all_phrase_and_prose_formatters() -> Tuple[Dict[str, str], Dict[str, str]]:
+def get_all_phrase_and_prose_formatters() -> Tuple[dict[str, str], dict[str, str]]:
     """Returns dictionary of all phrase formatters and a dictionary of all prose formatters"""
     all_phrase_formatters = {}
     prose_formatters = {}
 
-    all_phrase_formatters.update(registry.lists["user.code_formatter"][0])
-    all_phrase_formatters.update(registry.lists["user.prose_formatter"][0])
-    all_phrase_formatters.update(registry.lists["user.reformatter"][0])
-    prose_formatters.update(registry.lists["user.prose_formatter"][0])
+    all_phrase_formatters.update(registry.lists["user.code_formatter"][-1])
+    all_phrase_formatters.update(registry.lists["user.prose_formatter"][-1])
+    all_phrase_formatters.update(registry.lists["user.reformatter"][-1])
+    prose_formatters.update(registry.lists["user.prose_formatter"][-1])
     return all_phrase_formatters, prose_formatters
 
 
