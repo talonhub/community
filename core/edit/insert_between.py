@@ -1,4 +1,4 @@
-from talon import Module, actions, app
+from talon import Module, actions
 
 mod = Module()
 
@@ -10,14 +10,3 @@ class module_actions:
         actions.insert(f"{before}{middle}{after}")
         for _ in after:
             actions.edit.left()
-
-    # This is deprecated, please use insert_between instead.
-    def insert_cursor(text: str):
-        """Insert a string. Leave the cursor wherever [|] is in the text"""
-        if "[|]" in text:
-            actions.user.insert_between(*text.split("[|]", 1))
-        else:
-            actions.insert(text)
-        app.notify(
-            "insert_cursor is deprecated, please update your code to use insert_between"
-        )
