@@ -178,7 +178,7 @@ class Settings:
 
 class Registry:
     """
-    Implements something like talon's registry
+    Implements something like Talon's registry
     """
 
 
