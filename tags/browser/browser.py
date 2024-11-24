@@ -62,7 +62,9 @@ class UserActions:
 
     def address_bar_copy_address():
         """Copies the current address"""
-        actions.clip.set_text(actions.browser.address())
+        actions.browser.focus_address()
+        actions.sleep("100ms")
+        actions.edit.copy()
 
     def address_bar_navigate(address: str):
         actions.browser.go(address)
