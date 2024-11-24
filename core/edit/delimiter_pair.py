@@ -9,6 +9,7 @@ mod.list("delimiter_pair", "List of matching pair delimiters")
 def delimiter_pair(m) -> list[str]:
     pair = m.delimiter_pair.split()
     assert len(pair) == 2
+    # "space" requires a special written form because Talon lists are whitespace insensitive
     open = pair[0] if pair[0] != "space" else " "
     close = pair[1] if pair[1] != "space" else " "
     return [open, close]
