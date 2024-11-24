@@ -11,4 +11,10 @@ curly: { }
 twin: "' '"
 quad: '" "'
 skis: ` `
+percentages: % %
 pad: space space
+
+escaped quad: '\\" \\"'
+escaped twin:  "\\' \\'"
+escaped round: \( \)
+escaped box: \[ \]
