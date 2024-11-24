@@ -469,9 +469,10 @@ class Actions:
 
     def get_formatters_words() -> dict:
         """Returns words currently used as formatters, and a demonstration string using those formatters"""
+        formatter_names = code_formatter_names | prose_formatter_names
         formatters_help_demo = {}
-        for phrase in sorted(all_phrase_formatters):
-            name = all_phrase_formatters[phrase]
+        for phrase in sorted(formatter_names):
+            name = formatter_names[phrase]
             demo = format_text_without_adding_to_history("one two three", name)
             if phrase in prose_formatter_names:
                 phrase += " *"
