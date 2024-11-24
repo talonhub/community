@@ -16,6 +16,8 @@ mode require [{user.talon_modes}]:
     insert("mode: {mode}")
 mode require all:
     insert("mode: all")
+scope require {user.talon_scopes}:
+    insert("{talon_scopes}")
 tag require [{user.talon_tags}]:
     tag = "{talon_tags}\n" or ""
     insert("tag: {tag}")
