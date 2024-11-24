@@ -55,11 +55,10 @@ class Actions:
 def update_function_list_and_freeze():
     global function_list
     if "user.code_common_function" in registry.lists:
-        function_list = sorted(
-            actions.user.talon_get_active_registry_list(
-                "user.code_common_function"
-            ).keys()
+        talon_list = actions.user.talon_get_active_registry_list(
+            "user.code_common_function"
         )
+        function_list = sorted(talon_list.keys())
     else:
         function_list = []
 
