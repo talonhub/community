@@ -4,40 +4,71 @@ from typing import Callable, Union
 from talon import Module, actions
 
 
+# "simple" actions are actions that don't require any arguments. Only a type.
+# select, copy, delete, etc.
 @dataclass
-class EditAction:
+class EditSimpleAction:
     type: str
 
+    def __str__(self):
+        return self.type
+
 
 @dataclass
-class EditInsertAction(EditAction):
+class EditInsertAction:
     type = "insert"
     text: str
 
+    def __str__(self):
+        return self.type
+
 
 @dataclass
-class EditFormatAction(EditAction):
+class EditWrapAction:
+    type = "wrapWithDelimiterPair"
+    pair: list[str]
+
+    def __str__(self):
+        return self.type
+
+
+@dataclass
+class EditFormatAction:
     type = "applyFormatter"
     formatters: str
 
+    def __str__(self):
+        return self.type
+
+
+EditAction = Union[
+    EditSimpleAction,
+    EditInsertAction,
+    EditWrapAction,
+    EditFormatAction,
+]
 
 mod = Module()
 mod.list("edit_action", desc="Actions for the edit command")
 
 
 @mod.capture(rule="{user.edit_action}")
-def edit_simple_action(m) -> EditAction:
-    return EditAction(m.edit_action)
+def edit_simple_action(m) -> EditSimpleAction:
+    return EditSimpleAction(m.edit_action)
 
 
+@mod.capture(rule="<user.delimiter_pair> wrap")
+def edit_wrap_action(m) -> EditWrapAction:
+    return EditWrapAction(m.delimiter_pair)
 
-@mod.capture(rule="<user.edit_simple_action>")
+
+@mod.capture(rule="<user.edit_simple_action> | <user.edit_wrap_action>")
 def edit_action(m) -> EditAction:
     return m[0]
 
 
 simple_action_callbacks: dict[str, Callable] = {
-    "selection": actions.skip,
+    "select": actions.skip,
     "goBefore": actions.edit.left,
     "goAfter": actions.edit.right,
     "copyToClipboard": actions.edit.copy,
@@ -64,6 +95,10 @@ def run_action_callback(action: EditAction):
         case "insert":
             assert isinstance(action, EditInsertAction)
             actions.insert(action.text)
+
+        case "wrapWithDelimiterPair":
+            assert isinstance(action, EditWrapAction)
+            return lambda: actions.user.delimiter_pair_wrap_selection(action.pair)
 
         case "applyFormatter":
             assert isinstance(action, EditFormatAction)

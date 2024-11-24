@@ -7,6 +7,19 @@ go <user.navigation_step>+: user.perform_navigation_steps(navigation_step_list)
     user.edit_command(edit_action, edit_modifier, number_small or 1)
 <user.edit_action> [<number_small>]: 
     user.edit_command(edit_action, "", number_small or 1)
+    
+# Insert padding with optional symbols
+(padding): user.insert_between(" ", " ")
+(pad | padding) <user.symbol_key>+:
+    insert(" ")
+    user.insert_many(symbol_key_list)
+    insert(" ")
+
+# Insert delimiter pairs
+<user.delimiter_pair>: user.delimiter_pair_insert(delimiter_pair)
+
+# Wrap selection with delimiter pairs
+<user.delimiter_pair> that: user.delimiter_pair_wrap_selection(delimiter_pair)
 
 zoom in [<number_small>]: 
 	numb  = number_small or 1	
