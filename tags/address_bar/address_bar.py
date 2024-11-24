@@ -1,4 +1,4 @@
-from talon import Module, actions
+from talon import Module
 
 mod = Module()
 mod.tag("address_bar", desc="Application with address bar")
