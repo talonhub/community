@@ -1,6 +1,7 @@
-from talon import Context, Module, actions, clip, ui
 from pathlib import Path
 from typing import Optional
+
+from talon import Context, Module, actions, clip, ui
 
 ctx = Context()
 mod = Module()
