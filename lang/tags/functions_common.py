@@ -37,10 +37,11 @@ class Actions:
     def code_select_function(number: int, selection: str):
         """Inserts the selected function when the imgui is open"""
         if gui_functions.showing and number < len(function_list):
+            talon_list = actions.user.talon_get_active_registry_list(
+                "user.code_common_function"
+            )
             actions.user.code_insert_function(
-                actions.user.talon_get_active_registry_list(
-                    "user.code_common_function"
-                )[function_list[number]],
+                talon_list[function_list[number]],
                 selection,
             )
 
