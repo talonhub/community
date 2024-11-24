@@ -4,6 +4,8 @@ from typing import Callable, Union
 from talon import Module, actions
 
 
+# "simple" actions are actions that don't require any arguments. Only a type.
+# select, copy, delete, etc.
 @dataclass
 class EditSimpleAction:
     type: str
