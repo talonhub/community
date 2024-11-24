@@ -125,6 +125,7 @@ new line above: edit.line_insert_up()
 new line below | slap: edit.line_insert_down()
 
 # Insert padding with optional symbols
+(padding): user.insert_between(" ", " ")
 (pad | padding) <user.symbol_key>+:
     insert(" ")
     user.insert_many(symbol_key_list)
@@ -132,6 +133,9 @@ new line below | slap: edit.line_insert_down()
 
 # Insert delimiter pairs
 <user.delimiter_pair>: user.delimiter_pair_insert(delimiter_pair)
+
+# Wrap selection with delimiter pairs
+<user.delimiter_pair> that: user.delimiter_pair_wrap_selection(delimiter_pair)
 
 # Undo/redo
 undo that: edit.undo()
