@@ -60,16 +60,62 @@ def on_update_decls(decls):
         #     "List: {} \n {}".format(thing, str(ctx_talon_lists.lists[f"user.talon_{thing}"]))
         # )
 
+@ctx_talon_lists.dynamic_list("user.talon_actions")
+def talon_actions(phrase) -> dict[str, str]:
+    l = getattr(registry.decls, "actions")
+    
+    return actions.user.create_spoken_forms_from_list(
+            l.keys(), generate_subsequences=False
+        )
+    
+@ctx_talon_lists.dynamic_list("user.talon_lists")
+def talon_lists(phrase) -> dict[str, str]:
+    l = getattr(registry.decls, "lists")
+    return actions.user.create_spoken_forms_from_list(
+            l.keys(), generate_subsequences=False
+        )
 
-def on_ready():
-    # print("on_ready")
-    on_update_decls(registry.decls)
-    registry.register("update_decls", on_update_decls)
+@ctx_talon_lists.dynamic_list("user.talon_captures")
+def talon_captures(phrase) -> dict[str, str]:
+    l = getattr(registry.decls, "captures")
+    return actions.user.create_spoken_forms_from_list(
+            l.keys(), generate_subsequences=False
+        )
 
+@ctx_talon_lists.dynamic_list("user.talon_tags")
+def tags(phrase) -> dict[str, str]:
+    l = getattr(registry.decls, "tags")
+    return actions.user.create_spoken_forms_from_list(
+            l.keys(), generate_subsequences=False
+        )
 
-app.register("ready", on_ready)
+@ctx_talon_lists.dynamic_list("user.talon_apps")
+def apps(phrase) -> dict[str, str]:
+    l = getattr(registry.decls, "apps")
+    return actions.user.create_spoken_forms_from_list(
+            l.keys(), generate_subsequences=False
+        )
 
+@ctx_talon_lists.dynamic_list("user.talon_settings")
+def settings(phrase) -> dict[str, str]:
+    l = getattr(registry.decls, "settings")
+    return actions.user.create_spoken_forms_from_list(
+            l.keys(), generate_subsequences=False
+        )
 
+@ctx_talon_lists.dynamic_list("user.talon_scopes")
+def scopes(phrase) -> dict[str, str]:
+    l = getattr(registry.decls, "scopes")
+    return actions.user.create_spoken_forms_from_list(
+            l.keys(), generate_subsequences=False
+        )
+        
+@ctx_talon_lists.dynamic_list("user.talon_modes")
+def modes(phrase) -> dict[str, str]:
+    l = getattr(registry.decls, "modes")
+    return actions.user.create_spoken_forms_from_list(
+            l.keys(), generate_subsequences=False
+        )
 @mod.action_class
 class Actions:
     def talon_code_insert_action_call(text: str, selection: str):

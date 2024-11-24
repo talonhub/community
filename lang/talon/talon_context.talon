@@ -14,6 +14,8 @@ application [require] [{user.talon_apps}]:
 mode require [{user.talon_modes}]:
     mode = "{talon_modes}\n" or ""
     insert("mode: {mode}")
+mode require all:
+    insert("mode: all")
 tag require [{user.talon_tags}]:
     tag = "{talon_tags}\n" or ""
     insert("tag: {tag}")
