@@ -1,11 +1,14 @@
 list: user.delimiter_pair
 -
 
+# SPOKEN_FORM: LEFT_DELIMITER RIGHT_DELIMITER. Example: "round: ( )"
+# Special case for whitespace "space". Example: "pad: space space"
+
 round: ( )
-index: [ ]
+box: [ ]
 diamond: < >
 curly: { }
 twin: "' '"
 quad: '" "'
 skis: ` `
-padding: space space
+pad: space space
