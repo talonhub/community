@@ -6,6 +6,10 @@ from talon import Context, Module, actions, app, imgui, settings, ui, scope
 
 mod = Module()
 ctx = Context()
+ctx_file_manager = Context()
+ctx_file_manager.matches = r"""
+tag: user.file_manager
+"""
 
 mod.tag("file_manager", desc="Tag for enabling generic file management commands")
 mod.list("file_manager_directories", desc="List of subdirectories for the current path")
@@ -43,6 +47,10 @@ mod.setting(
     default=1000,
     desc="Maximum number of files to iterate",
 )
+
+@ctx_file_manager.capture("user.address", rule="<user.user_directory> | <user.system_diretory>")
+def address(m) -> str:
+    return str(m)
 
 @mod.action_class
 class Actions:

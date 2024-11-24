@@ -2,14 +2,9 @@ tag: browser
 -
 tag(): user.navigation
 tag(): user.find
+tag(): user.address_bar
 
-address bar | go address | go url: browser.focus_address()
-address copy | url copy | copy address | copy url:
-    browser.focus_address()
-    sleep(50ms)
-    edit.copy()
 go home: browser.go_home()
-go {user.website}: browser.go(website)
 go private: browser.open_private_window()
 bookmark that: browser.bookmark()
 bookmark tabs: browser.bookmark_tabs()

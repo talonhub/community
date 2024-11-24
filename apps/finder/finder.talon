@@ -5,9 +5,12 @@ settings():
 	user.accessibility_dictation = true
 	user.context_sensitive_dictation = true
 	user.paste_to_insert_threshold =  0
-
+	
+tag(): user.address_bar
 tag(): user.file_manager
+tag(): user.navigation
 tag(): user.tabs
+
 preferences: key(cmd-,)
 options: key(cmd-j)
 search: key(cmd-alt-f)
@@ -26,11 +29,7 @@ column view: key(cmd-3)
 list view: key(cmd-2)
 gallery view: key(cmd-4)
 
-copy path: key(alt-cmd-c)
 trash it: key(cmd-backspace)
 
 hide [finder]: key(cmd-h)
 hide others: app.window_hide_others()
-address copy: 
-	path = user.file_manager_current_path()
-    clip.set_text(path)

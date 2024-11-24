@@ -56,6 +56,16 @@ class UserActions:
             actions.app.tab_open()
             actions.user.paste(url_address)
             actions.key("enter")
+    
+    def address_bar_focus():
+        actions.browser.focus_address()
+
+    def address_bar_copy_address():
+        """Copies the current address"""
+        actions.clip.set_text(actions.browser.address())
+
+    def address_bar_navigate(address: str):
+        actions.browser.go(address)
 
 
 @ctx.action_class("browser")
