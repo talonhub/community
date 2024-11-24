@@ -2,7 +2,7 @@ import math
 from itertools import islice
 from pathlib import Path
 
-from talon import Context, Module, actions, app, imgui, settings, ui, scope
+from talon import Context, Module, actions, app, imgui, scope, settings, ui
 
 mod = Module()
 ctx = Context()
@@ -43,6 +43,7 @@ mod.setting(
     default=1000,
     desc="Maximum number of files to iterate",
 )
+
 
 @mod.action_class
 class Actions:
@@ -128,7 +129,7 @@ def get_file_map(current_path):
 @ctx.dynamic_list("user.file_manager_directories")
 def file_manager_directories(phrase) -> dict[str, str]:
     is_valid_path = False
-    
+
     path = actions.user.file_manager_current_path()
 
     directories = {}
@@ -145,6 +146,7 @@ def file_manager_directories(phrase) -> dict[str, str]:
             directories = {}
 
     return directories
+
 
 @ctx.dynamic_list("user.file_manager_files")
 def file_manager_files(phrase) -> dict[str, str]:
