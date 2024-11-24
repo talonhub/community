@@ -267,7 +267,7 @@ def number_prose_with_dot(m) -> str:
     return ".".join(m.number_string_list)
 
 
-@mod.capture(rule="<user.number_string> (comma <number_string>)+")
+@mod.capture(rule="<user.number_string> (comma <user.number_string>)+")
 def number_prose_with_comma(m) -> str:
     return ",".join(m.number_string_list)
 
