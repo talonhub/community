@@ -252,7 +252,7 @@ def number(m) -> int:
 @mod.capture(rule="[negative | minus] <user_number_string>")
 def number_signed_string(m) -> str:
     """Parses a (possibly negative) number phrase, returning that number as a string."""
-    number = m.user_number_string
+    number = m.number_string
     return f"-{number}" if (m[0] in ["negative", "minus"]) else number
 
 
