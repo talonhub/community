@@ -57,8 +57,8 @@ def run_command(
         actions.user.trigger_command_server_command_execution,
         command_id,
         args,
-        wait_for_finish=wait_for_finish,
-        return_command_output=return_command_output,
+        wait_for_finish,
+        return_command_output,
     )
 
 
