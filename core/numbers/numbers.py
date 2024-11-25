@@ -243,22 +243,50 @@ def number_string(m) -> str:
     return parse_number(list(m))
 
 
-@mod.capture(rule="<user.number_string> ((point | dot) <user.number_string>)+")
-def number_decimal_string(m) -> str:
-    """Parses a decimal number phrase, returning that number as a string."""
-    return ".".join(m.number_string_list)
-
-
 @ctx.capture("number", rule="<user.number_string>")
 def number(m) -> int:
     """Parses a number phrase, returning it as an integer."""
     return int(m.number_string)
 
 
-@ctx.capture("number_signed", rule=f"[negative|minus] <number>")
-def number_signed(m):
-    number = m[-1]
-    return -number if (m[0] in ["negative", "minus"]) else number
+@mod.capture(rule="[negative | minus] <user.number_string>")
+def number_signed_string(m) -> str:
+    """Parses a (possibly negative) number phrase, returning that number as a string."""
+    number = m.number_string
+    return f"-{number}" if (m[0] in ["negative", "minus"]) else number
+
+
+@ctx.capture("number_signed", rule="<user.number_signed_string>")
+def number_signed(m) -> int:
+    """Parses a (possibly negative) number phrase, returning that number as a integer."""
+    return int(m.number_signed_string)
+
+
+@mod.capture(rule="<user.number_string> ((dot | point) <user.number_string>)+")
+def number_prose_with_dot(m) -> str:
+    return ".".join(m.number_string_list)
+
+
+@mod.capture(rule="<user.number_string> (comma <user.number_string>)+")
+def number_prose_with_comma(m) -> str:
+    return ",".join(m.number_string_list)
+
+
+@mod.capture(rule="<user.number_string> (colon <user.number_string>)+")
+def number_prose_with_colon(m) -> str:
+    return ":".join(m.number_string_list)
+
+
+@mod.capture(
+    rule="<user.number_signed_string> | <user.number_prose_with_dot> | <user.number_prose_with_comma> | <user.number_prose_with_colon>"
+)
+def number_prose_unprefixed(m) -> str:
+    return m[0]
+
+
+@mod.capture(rule="(numb | numeral) <user.number_prose_unprefixed>")
+def number_prose_prefixed(m) -> str:
+    return m.number_prose_unprefixed
 
 
 @ctx.capture("number_small", rule="{user.number_small}")
@@ -266,7 +294,7 @@ def number_small(m) -> int:
     return int(m.number_small)
 
 
-@mod.capture(rule=f"[negative|minus] <number_small>")
+@mod.capture(rule="[negative | minus] <number_small>")
 def number_signed_small(m) -> int:
     """Parses an integer between -99 and 99."""
     number = m[-1]
