@@ -11,3 +11,5 @@ function prompt {
   "$pwd" + '> '
 }
 ```
+
+Then you can set the setting `user.powershell_always_refresh_title` to false.
