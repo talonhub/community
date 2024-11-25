@@ -2,8 +2,8 @@ from typing import Any
 
 from talon import Context, Module, actions
 
-from .command_client import run_command
-from .rpc_client.types import NoFileServerException, NotSet
+from .command_client import run_command, NotSet
+from .rpc_client.types import NoFileServerException
 
 mod = Module()
 

@@ -20,10 +20,5 @@ class Request:
         }
 
 
-class NotSet:
-    def __repr__(self):
-        return "<argument not set>"
-
-
 class NoFileServerException(Exception):
     pass

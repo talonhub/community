@@ -4,7 +4,6 @@ from typing import Any
 from talon import Context, Module, actions, speech_system
 
 from .rpc_client.get_communication_dir_path import get_communication_dir_path
-from .rpc_client.types import NotSet
 
 # Indicates whether a pre-phrase signal was emitted during the course of the
 # current phrase
@@ -21,6 +20,11 @@ mac_ctx.matches = r"""
 os: mac
 tag: user.command_client
 """
+
+
+class NotSet:
+    def __repr__(self):
+        return "<argument not set>"
 
 
 def run_command(
@@ -44,9 +48,12 @@ def run_command(
     Returns:
         Object: The response from the command, if requested.
     """
-    dir_name = actions.user.command_server_directory()
+    # NB: This is a hack to work around the fact that talon doesn't support
+    # variable argument lists
+    args = [x for x in args if x is not NotSet]
+
     return actions.user.rpc_client_run_command(
-        dir_name,
+        actions.user.command_server_directory(),
         actions.user.trigger_command_server_command_execution,
         command_id,
         args,
