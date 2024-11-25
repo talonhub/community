@@ -36,7 +36,7 @@ class UserActions:
     def file_manager_open_parent():
         actions.insert("cd ..")
         actions.key("enter")
-        if settings.get("user.powershell_auto_refresh_title"):
+        if settings.get("user.powershell_always_refresh_title"):
             actions.user.file_manager_refresh_title()
 
     def file_manager_current_path():
@@ -54,7 +54,7 @@ class UserActions:
         """opens the directory that's already visible in the view"""
         actions.insert(f'cd "{path}"')
         actions.key("enter")
-        if settings.get("user.powershell_auto_refresh_title"):
+        if settings.get("user.powershell_always_refresh_title"):
             actions.user.file_manager_refresh_title()
 
     def file_manager_select_directory(path: str):
