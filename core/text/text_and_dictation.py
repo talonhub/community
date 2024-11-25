@@ -27,6 +27,11 @@ mod.list(
 )
 
 ctx = Context()
+ctx_dragon = Context()
+ctx_dragon.matches = r"""
+speech.engine: dragon
+"""
+
 # Maps spoken forms to DictationFormat method names (see DictationFormat below).
 ctx.lists["user.prose_modifiers"] = {
     "cap": "cap",
@@ -69,28 +74,6 @@ ctx.lists["user.minutes"] = get_spoken_form_under_one_hundred(
 @mod.capture(rule="{user.prose_modifiers}")
 def prose_modifier(m) -> Callable:
     return getattr(DictationFormat, m.prose_modifiers)
-
-
-@mod.capture(rule="(numb | numeral) <user.number_string>")
-def prose_simple_number(m) -> str:
-    return m.number_string
-
-
-@mod.capture(rule="(numb | numeral) <user.number_string> (dot | point) <digit_string>")
-def prose_number_with_dot(m) -> str:
-    return m.number_string + "." + m.digit_string
-
-
-@mod.capture(rule="(numb | numeral) <user.number_string> colon <user.number_string>")
-def prose_number_with_colon(m) -> str:
-    return m.number_string_1 + ":" + m.number_string_2
-
-
-@mod.capture(
-    rule="<user.prose_simple_number> | <user.prose_number_with_dot> | <user.prose_number_with_colon>"
-)
-def prose_number(m) -> str:
-    return str(m)
 
 
 @mod.capture(
@@ -143,12 +126,14 @@ def prose_time(m) -> str:
     return str(m)
 
 
-@mod.capture(rule="({user.vocabulary} | <word>)")
+@mod.capture(rule="({user.vocabulary} | <user.abbreviation> | <word>)")
 def word(m) -> str:
     """A single word, including user-defined vocabulary."""
-    try:
+    if hasattr(m, "vocabulary"):
         return m.vocabulary
-    except AttributeError:
+    elif hasattr(m, "abbreviation"):
+        return m.abbreviation
+    else:
         return " ".join(
             actions.dictate.replace_words(actions.dictate.parse_words(m.word))
         )
@@ -161,7 +146,7 @@ def text(m) -> str:
 
 
 @mod.capture(
-    rule="(<phrase> | {user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <user.prose_currency> | <user.prose_time> | <user.prose_number> | <user.prose_percent> | <user.prose_modifier>)+"
+    rule="({user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <user.prose_currency> | <user.prose_time> | <user.number_prose_prefixed> | <user.prose_percent> | <user.prose_modifier> | <user.abbreviation> | <phrase>)+"
 )
 def prose(m) -> str:
     """Mixed words and punctuation, auto-spaced & capitalized."""
@@ -170,9 +155,35 @@ def prose(m) -> str:
 
 
 @mod.capture(
-    rule="(<phrase> | {user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <user.prose_currency> | <user.prose_time> | <user.prose_number> | <user.prose_percent>)+"
+    rule="({user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <user.prose_currency> | <user.prose_time> | <user.number_prose_prefixed> | <user.prose_percent> | <user.abbreviation> | <phrase>)+"
 )
 def raw_prose(m) -> str:
+    """Mixed words and punctuation, auto-spaced & capitalized, without quote straightening and commands (for use in dictation mode)."""
+    return apply_formatting(m)
+
+
+# For dragon, omit support for abbreviations
+@ctx_dragon.capture("user.text", rule="({user.vocabulary} | <phrase>)+")
+def text_dragon(m) -> str:
+    """A sequence of words, including user-defined vocabulary."""
+    return format_phrase(m)
+
+
+@ctx_dragon.capture(
+    "user.prose",
+    rule="(<phrase> | {user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <user.prose_currency> | <user.prose_time> | <user.prose_number> | <user.prose_percent> | <user.prose_modifier>)+",
+)
+def prose_dragon(m) -> str:
+    """Mixed words and punctuation, auto-spaced & capitalized."""
+    # Straighten curly quotes that were introduced to obtain proper spacing.
+    return apply_formatting(m).replace("“", '"').replace("”", '"')
+
+
+@ctx_dragon.capture(
+    "user.raw_prose",
+    rule="(<phrase> | {user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <user.prose_currency> | <user.prose_time> | <user.prose_number> | <user.prose_percent>)+",
+)
+def raw_prose_dragon(m) -> str:
     """Mixed words and punctuation, auto-spaced & capitalized, without quote straightening and commands (for use in dictation mode)."""
     return apply_formatting(m)
 
