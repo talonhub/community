@@ -5,8 +5,8 @@ from talon import Module, actions
 
 from .get_communication_dir_path import get_communication_dir_path
 from .read_json_with_timeout import read_json_with_timeout
-from .types import NoFileServerException, NotSet, Request
 from .robust_unlink import robust_unlink
+from .types import NoFileServerException, NotSet, Request
 from .write_request import write_request
 
 mod = Module()

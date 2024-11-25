@@ -3,9 +3,8 @@ import time
 from pathlib import Path
 from typing import Any
 
-from .types import Request
 from .robust_unlink import robust_unlink
-
+from .types import Request
 
 # How old a request file needs to be before we declare it stale and are willing
 # to remove it
