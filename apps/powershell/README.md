@@ -5,6 +5,7 @@ By default the windows powershell does not display the current address in the ti
 To find the profile file run `$profile` in windows powershell.
 
 The prompt function to add:
+
 ```
 function prompt {
   $Host.UI.RawUI.WindowTitle = 'Windows PowerShell: ' +  $(get-location)
