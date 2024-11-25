@@ -2,7 +2,8 @@ from typing import Any
 
 from talon import Context, Module, actions
 
-from .command_client import NoFileServerException, NotSet, run_command
+from .command_client import run_command
+from .rpc_client.types import NoFileServerException, NotSet
 
 mod = Module()
 
@@ -41,10 +42,28 @@ class VsCodeAction:
 
 @mod.action_class
 class Actions:
-    def vscode(command_id: str):
-        """Execute command via vscode command server, if available, or fallback
-        to command palette."""
-        command_server_or_client_fallback(command_id, False)
+    # def vscode(command_id: str):
+    #     """Execute command via vscode command server, if available, or fallback
+    #     to command palette."""
+    #     command_server_or_client_fallback(command_id, False)
+
+    def vscode(
+        command_id: str,
+        arg1: Any = NotSet,
+        arg2: Any = NotSet,
+        arg3: Any = NotSet,
+        arg4: Any = NotSet,
+        arg5: Any = NotSet,
+    ):
+        """Execute vscode command <command_id>"""
+        actions.user.run_rpc_command(
+            command_id,
+            arg1,
+            arg2,
+            arg3,
+            arg4,
+            arg5,
+        )
 
     def vscode_and_wait(command_id: str):
         """Execute command via vscode command server, if available, and wait
@@ -92,7 +111,7 @@ class Actions:
         arg4: Any = NotSet,
         arg5: Any = NotSet,
     ) -> Any:
-        """Execute command via vscode command server and return command output."""
+        """Execute vscode command <command_id> with return value"""
         return actions.user.run_rpc_command_get(
             command_id, arg1, arg2, arg3, arg4, arg5
         )

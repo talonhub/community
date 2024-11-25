@@ -3,7 +3,8 @@ from typing import Any
 
 from talon import Context, Module, actions, speech_system
 
-from .rpc_client import get_communication_dir_path, run_rpc_command
+from .rpc_client.get_communication_dir_path import get_communication_dir_path
+from .rpc_client.types import NotSet
 
 # Indicates whether a pre-phrase signal was emitted during the course of the
 # current phrase
@@ -20,15 +21,6 @@ mac_ctx.matches = r"""
 os: mac
 tag: user.command_client
 """
-
-
-class NotSet:
-    def __repr__(self):
-        return "<argument not set>"
-
-
-class NoFileServerException(Exception):
-    pass
 
 
 def run_command(
@@ -52,32 +44,14 @@ def run_command(
     Returns:
         Object: The response from the command, if requested.
     """
-    # NB: This is a hack to work around the fact that talon doesn't support
-    # variable argument lists
-    args = [x for x in args if x is not NotSet]
-
     dir_name = actions.user.command_server_directory()
-    communication_dir_path = get_communication_dir_path(dir_name)
-
-    if not communication_dir_path.exists():
-        if args or return_command_output:
-            raise Exception("Must use command-server extension for advanced commands")
-        raise NoFileServerException("Communication directory not found")
-
-    def trigger_execution():
-        return actions.user.trigger_command_server_command_execution()
-
-    payload = {
-        "command_id": command_id,
-        "args": args,
-    }
-
-    return run_rpc_command(
-        communication_dir_path,
-        trigger_execution,
-        wait_for_finish,
-        return_command_output,
-        payload,
+    return actions.user.rpc_client_run_command(
+        dir_name,
+        actions.user.trigger_command_server_command_execution,
+        command_id,
+        args,
+        wait_for_finish=wait_for_finish,
+        return_command_output=return_command_output,
     )
 
 
