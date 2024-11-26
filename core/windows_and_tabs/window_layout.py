@@ -1,9 +1,9 @@
 import copy
 import time
 from dataclasses import dataclass
-from typing import List, Optional, Union
+from typing import List, Optional
 
-from talon import Context, Module, actions, settings, ui
+from talon import Context, Module, actions, ui
 from talon.ui import UIErr, Window
 
 """Tools for laying out windows in an arrangement """
@@ -203,7 +203,7 @@ def application_windows(m) -> list[Window]:
 @mod.capture(
     rule="<user.application_windows>|<user.numbered_windows>|<user.skip_window>"
 )
-def layout_item(m) -> list[Union[Window, None]]:
+def layout_item(m) -> list[Optional[Window]]:
     attributes = [
         "application_windows",
         "numbered_windows",
@@ -247,9 +247,9 @@ def target_windows(m) -> list[Window]:
 
 
 def pick_split_arrangement(
-    target_windows: Union[list[Window], None],
+    target_windows: Optional[list[Window]],
     layout_name: str,
-    number_small: Union[int, None],
+    number_small: Optional[int],
 ) -> list[str]:
     if number_small is not None:
         return SPLIT_POSITIONS[layout_name][number_small]
