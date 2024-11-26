@@ -294,12 +294,15 @@ class Actions:
 def focus_callback(_):
     global layout_in_progress
     global last_layout
-    if layout_in_progress is not None:
+
+    # Running a layout will generate focus events, which we don't consider to be manual
+    # / user initiated, so skip in that case.
+    if last_layout is None or layout_in_progress is not None:
         return
 
-    delta = 1
-    if last_layout is not None:
-        delta = time.perf_counter() - last_layout.finish_time
+    # Track if the user has manually focused since layout and clear the state if so;
+    # this way we won't rotate if that same layout request is made again.
+    delta = time.perf_counter() - last_layout.finish_time
     if delta >= 1:
         last_layout = None
 
