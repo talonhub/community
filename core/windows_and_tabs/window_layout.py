@@ -1,14 +1,12 @@
 import copy
+import time
 from dataclasses import dataclass
-from time import perf_counter
 from typing import List, Optional, Union
 
 from talon import Context, Module, actions, settings, ui
+from talon.ui import UIErr, Window
 
 """Tools for laying out windows in an arrangement """
-
-from talon import Context, Module, actions, settings
-from talon.ui import UIErr, Window
 
 SPLIT_POSITIONS = {
     "split": {
@@ -19,6 +17,10 @@ SPLIT_POSITIONS = {
             "RightThird",
         ],
     },
+    # Explicit layout names with only one configuration can be easier to force
+    # the desired result:
+    "halves": {2: ["Left", "Right"]},
+    "thirds": {3: ["LeftThird", "CenterThird", "RightThird"]},
     "clock": {
         3: [
             "Left",
@@ -31,6 +33,24 @@ SPLIT_POSITIONS = {
             "Right",
             "TopLeft",
             "BottomLeft",
+        ],
+    },
+    "grid": {
+        4: [
+            "TopLeft",
+            "TopRight",
+            "BottomLeft",
+            "BottomRight",
+        ],
+    },
+    "big grid": {
+        6: [
+            "TopLeftThird",
+            "TopCenterThird",
+            "TopRightThird",
+            "BottomLeftThird",
+            "BottomCenterThird",
+            "BottomRightThird",
         ],
     },
 }
@@ -54,7 +74,7 @@ def focus_callback(_):
 
     delta = 1
     if last_layout is not None:
-        delta = perf_counter() - last_layout.finish_time
+        delta = time.perf_counter() - last_layout.finish_time
     if delta >= 1:
         last_layout = None
 
@@ -63,9 +83,11 @@ def focus_callback(_):
 class WindowLayout:
     """Represents a layout of windows on a screen"""
 
+    name: str
     split_positions: list[str]
     windows: list[Window]
-    should_rotate: bool
+    can_rotate: bool
+    rotation_count: int
     finish_time: float
 
 
@@ -97,33 +119,48 @@ def snap_next(windows: list[Window], target_layout: str) -> Optional[Window]:
     return GapWindow()
 
 
-def snap_layout(layout_config: WindowLayout):
+def snap_layout(layout: WindowLayout):
+    """Split the screen between multiple windows."""
     try:
-        """Split the screen between multiple windows."""
         global layout_in_progress, last_layout
+        layout_in_progress = layout
 
-        layout_in_progress = layout_config
-        remaining_windows = layout_config.windows
+        # If called multiple times (and the user hasn't focused a window manually since
+        # last time), rotate the offset of the existing windows in the arrangement,
+        # allowing the user to use a repeater to cycle through the windows to get the
+        # desired result.
+        if (
+            layout.can_rotate
+            and last_layout is not None
+            and last_layout.name == layout.name
+            and time.perf_counter() - last_layout.finish_time > 0.25
+        ):
+            layout.rotation_count += 1
+
+        # Copy these data structures so we can mutate them:
+        remaining_windows = [ui.windows(id=w.id)[0] for w in layout.windows]
+        split_positions = layout.split_positions.copy()
 
         snapped_windows = []
-        if layout_config.should_rotate:
-            layout_config.split_positions.append(layout_config.split_positions.pop(0))
+        for _ in range(layout.rotation_count):
+            split_positions.append(split_positions.pop(0))
 
-        while len(layout_config.split_positions) > 0:
+        while len(split_positions) > 0:
             snapped_window: Window = snap_next(
-                remaining_windows, layout_config.split_positions.pop(0)
+                remaining_windows, split_positions.pop(0)
             )
             snapped_windows.insert(0, snapped_window)
 
-        if layout_config.should_rotate and len(snapped_windows) > 0:
-            snapped_windows.append(snapped_windows.pop(0))
+        if len(snapped_windows) > 0:
+            for _ in range(layout.rotation_count):
+                snapped_windows.append(snapped_windows.pop(0))
 
         for window in snapped_windows:
             if isinstance(window, GapWindow):
                 continue
             actions.user.switcher_focus_window(window)
 
-        layout_in_progress.finish_time = perf_counter()
+        layout_in_progress.finish_time = time.perf_counter()
         last_layout = layout_in_progress
     finally:
         layout_in_progress = None
@@ -167,8 +204,6 @@ def application_windows(m) -> list[Window]:
     rule="<user.application_windows>|<user.numbered_windows>|<user.skip_window>"
 )
 def layout_item(m) -> list[Union[Window, None]]:
-    # Check for multiple attributes and raise an error if found
-
     attributes = [
         "application_windows",
         "numbered_windows",
@@ -213,21 +248,19 @@ def target_windows(m) -> list[Window]:
 
 def pick_split_arrangement(
     target_windows: Union[list[Window], None],
-    window_split_positions: str,
+    layout_name: str,
     number_small: Union[int, None],
 ) -> list[str]:
-    if target_windows is not None:
-        target_length = len(target_windows)
-    else:
-        target_length = len(filter_nonviable_windows(ui.windows()))
     if number_small is not None:
-        return copy.deepcopy(SPLIT_POSITIONS[window_split_positions][number_small])
+        return SPLIT_POSITIONS[layout_name][number_small]
     else:
+        windows = target_windows if target_windows is not None else ui.windows()
+        target_length = len(filter_nonviable_windows(windows))
         closest_key = min(
-            SPLIT_POSITIONS[window_split_positions].keys(),
+            SPLIT_POSITIONS[layout_name].keys(),
             key=lambda k: abs(k - target_length),
         )
-        return copy.deepcopy(SPLIT_POSITIONS[window_split_positions][closest_key])
+        return SPLIT_POSITIONS[layout_name][closest_key]
 
 
 @mod.capture(
@@ -235,6 +268,7 @@ def pick_split_arrangement(
 )
 def window_layout(m) -> WindowLayout:
     global last_layout
+    layout_name = m.window_split_positions
     window_was_specified = hasattr(m, "target_windows")
     specified_layout_count = m.number_small if hasattr(m, "number_small") else None
     target_windows = (
@@ -243,27 +277,22 @@ def window_layout(m) -> WindowLayout:
         else filter_nonviable_windows(ui.windows())
     )
 
-    layout = pick_split_arrangement(
-        target_windows, m.window_split_positions, specified_layout_count
-    )
-
+    layout = pick_split_arrangement(target_windows, layout_name, specified_layout_count)
     return WindowLayout(
-        layout,
-        target_windows,
-        not window_was_specified
-        and last_layout is not None
-        and perf_counter() - last_layout.finish_time > 1,
-        0,
+        name=layout_name,
+        split_positions=layout,
+        windows=target_windows,
+        can_rotate=True,
+        rotation_count=0,
+        finish_time=0,
     )
 
 
 @mod.action_class
 class Actions:
-    def snap_layout(
-        window_layout: WindowLayout,
-    ):
+    def snap_layout(layout: WindowLayout):
         """Split the screen between multiple applications."""
-        snap_layout(window_layout)
+        snap_layout(layout)
 
 
 ui.register("app_activate", focus_callback)
