@@ -131,6 +131,8 @@ def snap_layout(layout: WindowLayout):
             and last_layout.name == layout.name
         ):
             layout.rotation_count = last_layout.rotation_count + 1
+            if layout.windows != last_layout.windows:
+                layout.rotation_count = 1
 
         # Copy these data structures so we can mutate them:
         remaining_windows = [copy_window(w) for w in layout.windows]
