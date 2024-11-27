@@ -70,6 +70,13 @@ mod.apps.windows_power_shell = r"""
 os: windows
 and app.exe: /^powershell\.exe$/i
 """
+mod.apps.windows_power_shell = r"""
+os: windows
+and app.name: WindowsTerminal.exe
+os: windows
+and app.exe: /^windowsterminal\.exe$/i
+win.title: /Windows PowerShell:/
+"""
 
 apps.vim = """
 win.title:/VIM/

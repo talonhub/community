@@ -1,8 +1,8 @@
-os: windows
-and app.name: Windows PowerShell
-os: windows
-and app.exe: powershell.exe
+app: windows_power_shell
 -
+settings():
+	user.powershell_always_refresh_title = false
+
 # makes the commands in terminal.talon available
 tag(): terminal
 
@@ -14,3 +14,5 @@ tag(): user.generic_windows_shell
 tag(): user.git
 tag(): user.anaconda
 # tag(): user.kubectl
+
+tag(): user.file_manager
