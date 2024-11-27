@@ -86,6 +86,15 @@ layout_in_progress: Optional[WindowLayout] = None
 last_layout: Optional[WindowLayout] = None
 
 
+def copy_window(window: Window) -> Window:
+    if isinstance(window, Gap):
+        return Gap()
+    windows = ui.windows(id=window.id)
+    if windows:
+        return windows[0]
+    return Gap()
+
+
 def snap_next(windows: list[Window], target_layout: SnapPosition) -> Optional[Window]:
     """This function snaps a window and returns the window if successful"""
     while windows:
@@ -120,12 +129,11 @@ def snap_layout(layout: WindowLayout):
             layout.can_rotate
             and last_layout is not None
             and last_layout.name == layout.name
-            and time.perf_counter() - last_layout.finish_time > 0.25
         ):
-            layout.rotation_count += 1
+            layout.rotation_count = last_layout.rotation_count + 1
 
         # Copy these data structures so we can mutate them:
-        remaining_windows = [ui.windows(id=w.id)[0] for w in layout.windows]
+        remaining_windows = [copy_window(w) for w in layout.windows]
         split_positions = layout.split_positions.copy()
 
         snapped_windows = []
@@ -162,7 +170,7 @@ def filter_nonviable_windows(windows: List[Window]) -> list[Window]:
     active_window_idx = all_windows.index(active_window)  # type: ignore
     return list(
         filter(
-            lambda w: all_windows.index(w) >= active_window_idx,
+            lambda w: (isinstance(w, Gap) or all_windows.index(w) >= active_window_idx),
             windows,
         )
     )
@@ -199,7 +207,7 @@ def application_windows(m) -> list[Window]:
 @mod.capture(
     rule="<user.application_windows>|<user.numbered_windows>|<user.skip_window>"
 )
-def layout_item(m) -> list[Union[Window, None]]:
+def layout_item(m) -> list[Optional[Window]]:
     attributes = [
         "application_windows",
         "numbered_windows",
@@ -243,9 +251,9 @@ def target_windows(m) -> list[Window]:
 
 
 def pick_split_arrangement(
-    target_windows: Union[list[Window], None],
+    target_windows: Optional[list[Window]],
     layout_name: str,
-    number_small: Union[int, None],
+    number_small: Optional[int],
 ) -> list[SnapPosition]:
     if number_small is not None:
         return SPLIT_POSITIONS[layout_name][number_small]
