@@ -1,9 +1,9 @@
 import copy
 import time
 from dataclasses import dataclass
-from typing import List, Optional
+from typing import List, Optional, Union
 
-from talon import Context, Module, actions, ui
+from talon import Context, Module, actions, settings, ui
 from talon.ui import UIErr, Window
 
 """Tools for laying out windows in an arrangement """
@@ -55,28 +55,8 @@ SPLIT_POSITIONS = {
     },
 }
 
-mod = Module()
-
-mod.list(
-    "window_split_positions",
-    "Predefined window positions when splitting the screen between multiple windows.",
-)
-ctx = Context()
-
-ctx.lists["user.window_split_positions"] = SPLIT_POSITIONS.keys()
-
-
-def focus_callback(_):
-    global layout_in_progress
-    global last_layout
-    if layout_in_progress is not None:
-        return
-
-    delta = 1
-    if last_layout is not None:
-        delta = time.perf_counter() - last_layout.finish_time
-    if delta >= 1:
-        last_layout = None
+# Keys in `windows_snap.py` `_snap_positions`, ie "TopLeft", "BottomCenterThird", etc.
+SnapPosition = str
 
 
 @dataclass
@@ -84,26 +64,33 @@ class WindowLayout:
     """Represents a layout of windows on a screen"""
 
     name: str
-    split_positions: list[str]
+    split_positions: list[SnapPosition]
     windows: list[Window]
     can_rotate: bool
     rotation_count: int
     finish_time: float
 
 
-class GapWindow:
+class Gap:
+    """Users can leave gaps or holes (as in a code snippet) when dictating a layout;
+    this represents such a gap."""
+
     pass
 
 
+# Create a union type for Talon windows and Gaps:
+Window = Union[Window, Gap]
+
+# The current layout being arranged and the last one arranged, if any.
 layout_in_progress: Optional[WindowLayout] = None
 last_layout: Optional[WindowLayout] = None
 
 
-def snap_next(windows: list[Window], target_layout: str) -> Optional[Window]:
+def snap_next(windows: list[Window], target_layout: SnapPosition) -> Optional[Window]:
     """This function snaps a window and returns the window if successful"""
     while windows:
         window = windows.pop(0)
-        if isinstance(window, GapWindow):
+        if isinstance(window, Gap):
             return window
         try:
             actions.user.snap_window_to_position(
@@ -114,9 +101,9 @@ def snap_next(windows: list[Window], target_layout: str) -> Optional[Window]:
             return window
         except (UIErr, AttributeError) as e:
             print(
-                f'Failed to snap {window.app.name}\'s "{window.title}" window ({type(e).__name__} {e});  this is normal; continuing to the next'
+                f'Failed to snap {window.app.name}\'s "{window.title}" window ({type(e).__name__} {e}); this is normal; continuing to the next'
             )
-    return GapWindow()
+    return Gap()
 
 
 def snap_layout(layout: WindowLayout):
@@ -156,7 +143,7 @@ def snap_layout(layout: WindowLayout):
                 snapped_windows.append(snapped_windows.pop(0))
 
         for window in snapped_windows:
-            if isinstance(window, GapWindow):
+            if isinstance(window, Gap):
                 continue
             actions.user.switcher_focus_window(window)
 
@@ -181,6 +168,15 @@ def filter_nonviable_windows(windows: List[Window]) -> list[Window]:
     )
 
 
+mod = Module()
+mod.list(
+    "window_split_positions",
+    "Predefined window positions when splitting the screen between multiple windows.",
+)
+ctx = Context()
+ctx.lists["user.window_split_positions"] = SPLIT_POSITIONS.keys()
+
+
 @mod.capture(rule="all")
 def all_candidate_windows(m) -> list[Window]:
     return filter_nonviable_windows(ui.windows())
@@ -188,7 +184,7 @@ def all_candidate_windows(m) -> list[Window]:
 
 @mod.capture(rule="gap")
 def skip_window(m) -> list[Window]:
-    return [GapWindow()]
+    return [Gap()]
 
 
 @mod.capture(rule="<user.running_applications>")
@@ -203,7 +199,7 @@ def application_windows(m) -> list[Window]:
 @mod.capture(
     rule="<user.application_windows>|<user.numbered_windows>|<user.skip_window>"
 )
-def layout_item(m) -> list[Optional[Window]]:
+def layout_item(m) -> list[Union[Window, None]]:
     attributes = [
         "application_windows",
         "numbered_windows",
@@ -247,10 +243,10 @@ def target_windows(m) -> list[Window]:
 
 
 def pick_split_arrangement(
-    target_windows: Optional[list[Window]],
+    target_windows: Union[list[Window], None],
     layout_name: str,
-    number_small: Optional[int],
-) -> list[str]:
+    number_small: Union[int, None],
+) -> list[SnapPosition]:
     if number_small is not None:
         return SPLIT_POSITIONS[layout_name][number_small]
     else:
@@ -293,6 +289,19 @@ class Actions:
     def snap_layout(layout: WindowLayout):
         """Split the screen between multiple applications."""
         snap_layout(layout)
+
+
+def focus_callback(_):
+    global layout_in_progress
+    global last_layout
+    if layout_in_progress is not None:
+        return
+
+    delta = 1
+    if last_layout is not None:
+        delta = time.perf_counter() - last_layout.finish_time
+    if delta >= 1:
+        last_layout = None
 
 
 ui.register("app_activate", focus_callback)
