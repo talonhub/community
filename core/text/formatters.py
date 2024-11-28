@@ -379,10 +379,18 @@ def get_all_phrase_and_prose_formatters() -> tuple[dict[str, str], dict[str, str
     """Returns dictionary of all phrase formatters and a dictionary of all prose formatters"""
     all_phrase_formatters = {}
     prose_formatters = {}
-    all_phrase_formatters.update(actions.user.talon_get_active_registry_list("user.code_formatter"))
-    all_phrase_formatters.update(actions.user.talon_get_active_registry_list("user.prose_formatter"))
-    all_phrase_formatters.update(actions.user.talon_get_active_registry_list("user.reformatter"))
-    prose_formatters.update(actions.user.talon_get_active_registry_list("user.prose_formatter"))
+    all_phrase_formatters.update(
+        actions.user.talon_get_active_registry_list("user.code_formatter")
+    )
+    all_phrase_formatters.update(
+        actions.user.talon_get_active_registry_list("user.prose_formatter")
+    )
+    all_phrase_formatters.update(
+        actions.user.talon_get_active_registry_list("user.reformatter")
+    )
+    prose_formatters.update(
+        actions.user.talon_get_active_registry_list("user.prose_formatter")
+    )
     return all_phrase_formatters, prose_formatters
 
 
