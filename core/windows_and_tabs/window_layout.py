@@ -9,50 +9,35 @@ from talon.ui import UIErr, Window
 """Tools for laying out windows in an arrangement """
 
 SPLIT_POSITIONS = {
-    "split": {
-        2: ["Left", "Right"],
-        3: [
-            "LeftThird",
-            "CenterThird",
-            "RightThird",
-        ],
-    },
+    "split": ["Left", "Right"],
     # Explicit layout names with only one configuration can be easier to force
     # the desired result:
-    "halves": {2: ["Left", "Right"]},
-    "thirds": {3: ["LeftThird", "CenterThird", "RightThird"]},
-    "clock": {
-        3: [
-            "Left",
-            "TopRight",
-            "BottomRight",
-        ],
-    },
-    "counterclock": {
-        3: [
-            "Right",
-            "TopLeft",
-            "BottomLeft",
-        ],
-    },
-    "grid": {
-        4: [
-            "TopLeft",
-            "TopRight",
-            "BottomLeft",
-            "BottomRight",
-        ],
-    },
-    "big grid": {
-        6: [
-            "TopLeftThird",
-            "TopCenterThird",
-            "TopRightThird",
-            "BottomLeftThird",
-            "BottomCenterThird",
-            "BottomRightThird",
-        ],
-    },
+    "halves": ["Left", "Right"],
+    "thirds": ["LeftThird", "CenterThird", "RightThird"],
+    "clock": [
+        "Left",
+        "TopRight",
+        "BottomRight",
+    ],
+    "counterclock": [
+        "Right",
+        "TopLeft",
+        "BottomLeft",
+    ],
+    "grid": [
+        "TopLeft",
+        "TopRight",
+        "BottomLeft",
+        "BottomRight",
+    ],
+    "big grid": [
+        "TopLeftThird",
+        "TopCenterThird",
+        "TopRightThird",
+        "BottomLeftThird",
+        "BottomCenterThird",
+        "BottomRightThird",
+    ],
 }
 
 # Keys in `windows_snap.py` `_snap_positions`, ie "TopLeft", "BottomCenterThird", etc.
@@ -245,35 +230,23 @@ def target_windows(m) -> list[Window]:
 def pick_split_arrangement(
     target_windows: Optional[list[Window]],
     layout_name: str,
-    number_small: Optional[int],
 ) -> list[SnapPosition]:
-    if number_small is not None:
-        return SPLIT_POSITIONS[layout_name][number_small]
-    else:
-        windows = target_windows if target_windows is not None else ui.windows()
-        target_length = len(filter_nonviable_windows(windows))
-        closest_key = min(
-            SPLIT_POSITIONS[layout_name].keys(),
-            key=lambda k: abs(k - target_length),
-        )
-        return SPLIT_POSITIONS[layout_name][closest_key]
+    return SPLIT_POSITIONS[layout_name]
 
 
-@mod.capture(
-    rule="{user.window_split_positions} [<number_small>] [<user.target_windows>]"
-)
+@mod.capture(rule="{user.window_split_positions} [<user.target_windows>]")
 def window_layout(m) -> WindowLayout:
     global last_layout
     layout_name = m.window_split_positions
     window_was_specified = hasattr(m, "target_windows")
-    specified_layout_count = m.number_small if hasattr(m, "number_small") else None
+
     target_windows = (
         m.target_windows
         if window_was_specified
         else filter_nonviable_windows(ui.windows())
     )
 
-    layout = pick_split_arrangement(target_windows, layout_name, specified_layout_count)
+    layout = pick_split_arrangement(target_windows, layout_name)
     return WindowLayout(
         name=layout_name,
         split_positions=layout,
