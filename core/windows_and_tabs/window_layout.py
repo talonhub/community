@@ -86,15 +86,6 @@ layout_in_progress: Optional[WindowLayout] = None
 last_layout: Optional[WindowLayout] = None
 
 
-def copy_window(window: Window) -> Window:
-    if isinstance(window, Gap):
-        return Gap()
-    windows = ui.windows(id=window.id)
-    if windows:
-        return windows[0]
-    return Gap()
-
-
 def snap_next(windows: list[Window], target_layout: SnapPosition) -> Optional[Window]:
     """This function snaps a window and returns the window if successful"""
     while windows:
@@ -134,7 +125,7 @@ def snap_layout(layout: WindowLayout):
             layout.rotation_count = last_layout.rotation_count + 1
 
         # Copy these data structures so we can mutate them:
-        remaining_windows = [copy_window(w) for w in layout.windows]
+        remaining_windows = [w for w in layout.windows]
         split_positions = layout.split_positions.copy()
 
         snapped_windows = []
