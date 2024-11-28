@@ -1,7 +1,7 @@
 import math
 
 class Number:
-    number: str
+    number: int
     spoken_forms: list[str]
 
     def __init__(self, number: int, spoken_form: str | list[str]):
@@ -50,7 +50,22 @@ tens = [
     Number(90, "ninety"), 
 ]
 
-scales = "hundred thousand million billion trillion quadrillion quintillion sextillion septillion octillion nonillion decillion".split()
+scales = [
+    Number(100, "hundred"), 
+    Number(1000, "thousand"), 
+    Number(1000000, "million"), 
+    Number(1000000000, "billion"), 
+    Number(1000000000000, "trillion"), 
+    Number(1000000000000000, "quadrillion"), 
+    Number(1000000000000000000, "quintillion"),
+    Number(1000000000000000000000, "sextillion"),
+    Number(1000000000000000000000000, "septillion"),
+    Number(1000000000000000000000000000, "octillion"),
+    Number(1000000000000000000000000000000, "nonillion"),
+    Number(1000000000000000000000000000000000, "decillion"),
+]
+
+# scales = "hundred thousand million billion trillion quadrillion quintillion sextillion septillion octillion nonillion decillion".split()
 
 digit_list = [number.spoken_forms for i, number in enumerate(digits)]
 teens_list = [number.spoken_forms for i, number in enumerate(teens)]
@@ -75,8 +90,11 @@ tens_map = {
     for spoken_form in number.spoken_forms
 }
 
-scales_map = {n: 10 ** (3 * (i + 1)) for i, n in enumerate(scales[1:])}
-scales_map["hundred"] = 100
+scales_map = {
+    spoken_form: number.number
+    for number in scales
+    for spoken_form in number.spoken_forms
+}
 
 # Maps number words to integers values that are used to compute numeric values.
 numbers_map = digits_map.copy()
@@ -89,7 +107,7 @@ def get_spoken_form_under_one_hundred(
     end,
     include_oh_variant_for_single_digits,
     include_default_variant_for_single_digits,
-    include_serial_digits
+    include_double_digits,
 ):
     """Helper function to get dictionary of spoken forms for non-negative numbers in the range [start, end] under 100"""
 
@@ -125,7 +143,7 @@ def get_spoken_form_under_one_hundred(
                 for tens_spoken_form in tens_spoken_forms:
                     result[f"{tens_spoken_form}"] = f"{value}"
 
-        if include_serial_digits and leading_digit_index > 1:
+        if include_double_digits and leading_digit_index > 1:
             for leading_index_spoken_form in leading_index_spoken_forms:
                 for digit_spoken_form in digit_spoken_forms:
                     spoken_form = f"{leading_index_spoken_form} {digit_spoken_form}"

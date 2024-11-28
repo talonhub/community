@@ -2,7 +2,7 @@ import math
 from typing import Iterator, Union
 
 from talon import Context, Module
-from .numbers_definitions import digits_map, teens_map, tens_map, scales, scales_map, numbers_map, get_spoken_form_under_one_hundred
+from .numbers_definitions import Number, digits_map, teens_map, tens_map, scales, scales_map, numbers_map, get_spoken_form_under_one_hundred
 
 mod = Module()
 ctx = Context()
@@ -41,7 +41,7 @@ def scan_small_numbers(l: list[str]) -> Iterator[Union[str, int]]:
             yield n
 
 
-def parse_scale(scale: str, l: list[Union[str, int]]) -> list[Union[str, int]]:
+def parse_scale(scale: Number, l: list[Union[str, int]]) -> list[Union[str, int]]:
     """Parses a list of mixed numbers & strings for occurrences of the following
     pattern:
 
@@ -57,39 +57,40 @@ def parse_scale(scale: str, l: list[Union[str, int]]) -> list[Union[str, int]]:
     We assume that all scales of lower magnitude have already been parsed; don't
     call parse_scale("thousand") until you've called parse_scale("hundred").
     """
-    scale_value = scales_map[scale]
+    scale_value =  scale.number
     scale_digits = len(str(scale_value))
 
     # Split the list on the desired scale word, then parse from left to right.
-    left, *splits = split_list(scale, l)
-    for right in splits:
-        # (1) Figure out the multiplier by looking to the left of the scale
-        # word. We ignore non-integers because they are scale words that we
-        # haven't processed yet; this strategy means that "thousand hundred"
-        # gets parsed as 1,100 instead of 100,000, but "hundred thousand" is
-        # parsed correctly as 100,000.
-        before = 1  # default multiplier
-        if left and isinstance(left[-1], int) and left[-1] != 0:
-            before = left.pop()
+    for spoken_form in scale.spoken_forms:
+        left, *splits = split_list(spoken_form, l)
+        for right in splits:
+            # (1) Figure out the multiplier by looking to the left of the scale
+            # word. We ignore non-integers because they are scale words that we
+            # haven't processed yet; this strategy means that "thousand hundred"
+            # gets parsed as 1,100 instead of 100,000, but "hundred thousand" is
+            # parsed correctly as 100,000.
+            before = 1  # default multiplier
+            if left and isinstance(left[-1], int) and left[-1] != 0:
+                before = left.pop()
 
-        # (2) Absorb numbers to the right, eg. in [1, "thousand", 1, 26], "1
-        # thousand" absorbs ["1", "26"] to make 1,126. We pull numbers off
-        # `right` until we fill up the desired number of digits.
-        after = ""
-        while right and isinstance(right[0], int):
-            next = after + str(right[0])
-            if len(next) >= scale_digits:
-                break
-            after = next
-            right.pop(0)
-        after = int(after) if after else 0
+            # (2) Absorb numbers to the right, eg. in [1, "thousand", 1, 26], "1
+            # thousand" absorbs ["1", "26"] to make 1,126. We pull numbers off
+            # `right` until we fill up the desired number of digits.
+            after = ""
+            while right and isinstance(right[0], int):
+                next = after + str(right[0])
+                if len(next) >= scale_digits:
+                    break
+                after = next
+                right.pop(0)
+            after = int(after) if after else 0
 
-        # (3) Push the parsed number into place, append whatever was left
-        # unparsed, and continue.
-        left.append(before * scale_value + after)
-        left.extend(right)
+            # (3) Push the parsed number into place, append whatever was left
+            # unparsed, and continue.
+            left.append(before * scale_value + after)
+            left.extend(right)
 
-    return left
+        return left
 
 
 def split_list(value, l: list) -> Iterator:
@@ -113,8 +114,16 @@ def split_list(value, l: list) -> Iterator:
 #     for scale in scales:
 #         old = l
 #         l = parse_scale(scale, l)
-#         if scale in old: print("  parse -->", l)
-#         else: assert old == l, "parse_scale should do nothing if the scale does not occur in the list"
+
+#         scale_found = False
+#         for spoken_form in scale.spoken_forms:
+#             if spoken_form in old: 
+#                 print("  parse -->", l)
+#                 scale_found = True
+#                 break
+    
+#         if not scale_found:
+#             assert old == l, "parse_scale should do nothing if the scale does not occur in the list"
 #     result = "".join(str(n) for n in l)
 #     assert result == parse_number(string.split())
 #     assert str(expected) == result, f"parsing {string!r}, expected {expected}, got {result}"
@@ -152,9 +161,16 @@ leading_words = numbers_map.keys() - scales_map.keys()
 leading_words -= {"oh", "o"}  # comment out to enable bare/initial "oh"
 number_word_leading = f"({'|'.join(leading_words)})"
 
+
 mod.list("number_small", "List of small (0-99) numbers")
 mod.tag("unprefixed_numbers", desc="Dont require prefix when saying a number")
-ctx.lists["user.number_small"] = get_spoken_form_under_one_hundred(0, 99, include_oh_variant_for_single_digits=False, include_default_variant_for_single_digits=True, include_serial_digits=True)
+ctx.lists["user.number_small"] = get_spoken_form_under_one_hundred(
+    0,
+    99,
+    include_oh_variant_for_single_digits=False,
+    include_default_variant_for_single_digits=True,
+    include_double_digits=True,
+)
 
 
 # TODO: allow things like "double eight" for 88
@@ -175,22 +191,50 @@ def number_string(m) -> str:
     return parse_number(list(m))
 
 
-@mod.capture(rule="<user.number_string> ((point | dot) <user.number_string>)+")
-def number_decimal_string(m) -> str:
-    """Parses a decimal number phrase, returning that number as a string."""
-    return ".".join(m.number_string_list)
-
-
 @ctx.capture("number", rule="<user.number_string>")
 def number(m) -> int:
     """Parses a number phrase, returning it as an integer."""
     return int(m.number_string)
 
 
-@ctx.capture("number_signed", rule=f"[negative|minus] <number>")
-def number_signed(m):
-    number = m[-1]
-    return -number if (m[0] in ["negative", "minus"]) else number
+@mod.capture(rule="[negative | minus] <user.number_string>")
+def number_signed_string(m) -> str:
+    """Parses a (possibly negative) number phrase, returning that number as a string."""
+    number = m.number_string
+    return f"-{number}" if (m[0] in ["negative", "minus"]) else number
+
+
+@ctx.capture("number_signed", rule="<user.number_signed_string>")
+def number_signed(m) -> int:
+    """Parses a (possibly negative) number phrase, returning that number as a integer."""
+    return int(m.number_signed_string)
+
+
+@mod.capture(rule="<user.number_string> ((dot | point) <user.number_string>)+")
+def number_prose_with_dot(m) -> str:
+    return ".".join(m.number_string_list)
+
+
+@mod.capture(rule="<user.number_string> (comma <user.number_string>)+")
+def number_prose_with_comma(m) -> str:
+    return ",".join(m.number_string_list)
+
+
+@mod.capture(rule="<user.number_string> (colon <user.number_string>)+")
+def number_prose_with_colon(m) -> str:
+    return ":".join(m.number_string_list)
+
+
+@mod.capture(
+    rule="<user.number_signed_string> | <user.number_prose_with_dot> | <user.number_prose_with_comma> | <user.number_prose_with_colon>"
+)
+def number_prose_unprefixed(m) -> str:
+    return m[0]
+
+
+@mod.capture(rule="(telly) <user.number_prose_unprefixed>")
+def number_prose_prefixed(m) -> str:
+    return m.number_prose_unprefixed
 
 
 @ctx.capture("number_small", rule="{user.number_small}")
@@ -198,7 +242,7 @@ def number_small(m) -> int:
     return int(m.number_small)
 
 
-@mod.capture(rule=f"[negative|minus] <number_small>")
+@mod.capture(rule="[negative | minus] <number_small>")
 def number_signed_small(m) -> int:
     """Parses an integer between -99 and 99."""
     number = m[-1]
