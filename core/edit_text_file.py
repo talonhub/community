@@ -4,11 +4,10 @@ from pathlib import Path
 
 from talon import Context, Module, app
 
-# path to community/knausj root directory
+# path to community root directory
 REPO_DIR = os.path.dirname(os.path.dirname(__file__))
 
 mod = Module()
-ctx = Context()
 mod.list(
     "edit_file",
     desc="Absolute paths to frequently edited files (Talon list, CSV, etc.)",
@@ -21,13 +20,13 @@ class ModuleActions:
         """Tries to open a file in the user's preferred text editor."""
 
 
-winctx, linuxctx, macctx = Context(), Context(), Context()
-winctx.matches = "os: windows"
-linuxctx.matches = "os: linux"
-macctx.matches = "os: mac"
+ctx_win, ctx_linux, ctx_mac = Context(), Context(), Context()
+ctx_win.matches = "os: windows"
+ctx_linux.matches = "os: linux"
+ctx_mac.matches = "os: mac"
 
 
-@winctx.action_class("self")
+@ctx_win.action_class("user")
 class WinActions:
     def edit_text_file(file: str):
         path = get_full_path(file)
@@ -40,7 +39,7 @@ class WinActions:
             os.startfile(path, "open")
 
 
-@macctx.action_class("self")
+@ctx_mac.action_class("user")
 class MacActions:
     def edit_text_file(file: str):
         path = get_full_path(file)
@@ -48,7 +47,7 @@ class MacActions:
         open_with_subprocess(path, ["/usr/bin/open", "-t", path.expanduser().resolve()])
 
 
-@linuxctx.action_class("self")
+@ctx_linux.action_class("user")
 class LinuxActions:
     def edit_text_file(file: str):
         path = get_full_path(file)
