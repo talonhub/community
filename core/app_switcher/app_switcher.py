@@ -93,8 +93,22 @@ words_to_exclude = [
 # launchable. To easily retrieve the apps this makes available, navigate to shell:AppsFolder in Explorer
 
 if app.platform == "windows":
-    from .windows_known_paths import resolve_known_path, PathNotFoundException
+    from .windows_known_paths import resolve_known_windows_path, PathNotFoundException
     from uuid import UUID
+
+    def resolve_path_with_guid(path) -> Path:
+        splits = path.split(os.path.sep)
+        guid = splits[0]
+        if is_valid_uuid(guid):
+            try:
+                known_folder_path = resolve_known_windows_path(UUID(guid))
+            except (PathNotFoundException):
+                print("Failed to resolve known path: " + guid)
+                return None
+            full_path = os.path.join(known_folder_path, *splits[1:])
+            p = Path(full_path)
+            return p
+        return None
 
     def is_valid_uuid(value):
         try:
@@ -105,9 +119,7 @@ if app.platform == "windows":
         
     def get_apps()-> dict[str, Application]:
         import win32com.client
-        import pathlib
-
-
+        
         shell = win32com.client.Dispatch("Shell.Application")
         folder = shell.NameSpace('shell:::{4234d49b-0245-4df3-b780-3893943456e1}')
         items = folder.Items()
@@ -115,27 +127,18 @@ if app.platform == "windows":
         for item in items:
             display_name = item.Name
             app_user_model_id = item.path
-            splits = app_user_model_id.split(os.path.sep)
             path = None
             executable_name = None
-            guid = splits[0]
 
             should_create_entry = "install" not in display_name.lower()
 
-            # check if we 
             if should_create_entry:
-                try:
-                    if is_valid_uuid(guid):
-                        executable_name = splits[-1]
-                        known_folder_path = resolve_known_path(UUID(f'{guid}'))
-                        path = os.path.join(known_folder_path, *splits[1:])
-                        p = pathlib.Path(path)
-
-                        # we want to exclude anything that is NOT an actual executable
-                        should_create_entry = p.suffix in [".exe"]
-                except (PathNotFoundException):
-                    print("Failed to resolve known path: " + guid)
-
+                p = resolve_path_with_guid(app_user_model_id)
+                if p:
+                    path = p.resolve()
+                    executable_name = p.name  
+                    # exclude anything that is NOT an actual executable
+                    should_create_entry = p.suffix in [".exe"]
 
             spoken_forms = []
             if should_create_entry:
@@ -383,14 +386,10 @@ def update_overrides(name, flags):
                     value = line[1].strip().lower()
 
                     if app.platform == "windows":
-                        splits = key.split(os.path.sep)
-                        guid = splits[0]
-                        try:
-                            if is_valid_uuid(guid):
-                                known_folder_path = resolve_known_path(UUID(f'{guid}'))
-                                key = os.path.join(known_folder_path, *splits[1:])
-                        except PathNotFoundException:
-                            break
+                        p = resolve_path_with_guid(line[0])
+                        if p:
+                            key = p.resolve()
+                            print(key)
                 overrides[key] = value
                 if len(line) == 1:
                     excludes.add(line[0].strip().lower())

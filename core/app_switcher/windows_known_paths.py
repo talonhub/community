@@ -134,7 +134,7 @@ if app.platform == "windows":
 
     class PathNotFoundException(Exception): pass
 
-    def resolve_known_path(folderid, user_handle=UserHandle.common):
+    def resolve_known_windows_path(folderid, user_handle=UserHandle.common):
         if str(folderid) in cached_paths:
             return cached_paths[str(folderid)]
         
