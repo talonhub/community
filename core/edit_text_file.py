@@ -14,26 +14,6 @@ mod.list(
     desc="Absolute paths to frequently edited files (Talon list, CSV, etc.)",
 )
 
-_edit_files = {
-    "additional words": "core/vocabulary/vocabulary.talon-list",
-    "alphabet": "core/keys/letter.talon-list",
-    "homophones": "core/homophones/homophones.csv",
-    "search engines": "core/websites_and_search_engines/search_engine.talon-list",
-    "unix utilities": "tags/terminal/unix_utility.talon-list",
-    "websites": "core/websites_and_search_engines/website.talon-list",
-}
-
-_settings_csvs = {
-    "abbreviations": "abbreviations.csv",
-    "file extensions": "file_extensions.csv",
-    "words to replace": "words_to_replace.csv",
-}
-
-ctx.lists["self.edit_file"] = {
-    **_edit_files,
-    **{name: f"settings/{file_name}" for name, file_name in _settings_csvs.items()},
-}
-
 
 @mod.action_class
 class ModuleActions:
