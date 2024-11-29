@@ -1,3 +1,5 @@
+#modified from https://gist.github.com/mkropat/7550097
+
 from talon import app
 
 if app.platform == "windows":
