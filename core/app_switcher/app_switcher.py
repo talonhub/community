@@ -1,3 +1,8 @@
+#todo
+#(1) Consolidate logic for getting absolute paths of executables
+#(2) Break out get_apps into action and move to operating system-specific area
+#(3) Move CSVs to new style...
+#(4) Simplify and consolidate logic for excludes
 import os
 import shlex
 import subprocess
