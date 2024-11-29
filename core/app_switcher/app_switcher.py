@@ -87,92 +87,26 @@ words_to_exclude = [
 # rather than via e.g. the start menu. This way, all apps, including "modern" apps are
 # launchable. To easily retrieve the apps this makes available, navigate to shell:AppsFolder in Explorer
 if app.platform == "windows":
-    import ctypes
-    import os
-    from ctypes import wintypes
-
-    import pywintypes
-    from win32com.propsys import propsys, pscon
-    from win32com.shell import shell, shellcon
-
-    # KNOWNFOLDERID
-    # https://msdn.microsoft.com/en-us/library/dd378457
-    # win32com defines most of these, except the ones added in Windows 8.
-    FOLDERID_AppsFolder = pywintypes.IID("{1e87508d-89c2-42f0-8a7e-645a0f50ca58}")
-
-    # win32com is missing SHGetKnownFolderIDList, so use ctypes.
-
-    _ole32 = ctypes.OleDLL("ole32")
-    _shell32 = ctypes.OleDLL("shell32")
-
-    _REFKNOWNFOLDERID = ctypes.c_char_p
-    _PPITEMIDLIST = ctypes.POINTER(ctypes.c_void_p)
-
-    _ole32.CoTaskMemFree.restype = None
-    _ole32.CoTaskMemFree.argtypes = (wintypes.LPVOID,)
-
-    _shell32.SHGetKnownFolderIDList.argtypes = (
-        _REFKNOWNFOLDERID,  # rfid
-        wintypes.DWORD,  # dwFlags
-        wintypes.HANDLE,  # hToken
-        _PPITEMIDLIST,
-    )  # ppidl
-
-    def get_known_folder_id_list(folder_id, htoken=None):
-        if isinstance(folder_id, pywintypes.IIDType):
-            folder_id = bytes(folder_id)
-        pidl = ctypes.c_void_p()
-        try:
-            _shell32.SHGetKnownFolderIDList(folder_id, 0, htoken, ctypes.byref(pidl))
-            return shell.AddressAsPIDL(pidl.value)
-        except OSError as e:
-            if e.winerror & 0x80070000 == 0x80070000:
-                # It's a WinAPI error, so re-raise it, letting Python
-                # raise a specific exception such as FileNotFoundError.
-                raise ctypes.WinError(e.winerror & 0x0000FFFF)
-            raise
-        finally:
-            if pidl:
-                _ole32.CoTaskMemFree(pidl)
-
-    def enum_known_folder(folder_id, htoken=None):
-        id_list = get_known_folder_id_list(folder_id, htoken)
-        folder_shell_item = shell.SHCreateShellItem(None, None, id_list)
-        items_enum = folder_shell_item.BindToHandler(
-            None, shell.BHID_EnumItems, shell.IID_IEnumShellItems
-        )
-        yield from items_enum
-
-    def list_known_folder(folder_id, htoken=None):
-        result = []
-        for item in enum_known_folder(folder_id, htoken):
-            result.append(item.GetDisplayName(shellcon.SIGDN_NORMALDISPLAY))
-        result.sort(key=lambda x: x.upper())
-        return result
-
     def get_apps()-> dict[str, Application]:
-        global applications
-        for item in enum_known_folder(FOLDERID_AppsFolder):
-            try:
-                property_store = item.BindToHandler(
-                    None, shell.BHID_PropertyStore, propsys.IID_IPropertyStore
-                )
-                app_user_model_id = property_store.GetValue(
-                    pscon.PKEY_AppUserModel_ID
-                ).ToString()
+        import win32com.client
 
-            except pywintypes.error:
-                continue
+        shell = win32com.client.Dispatch("Shell.Application")
+        folder = shell.NameSpace('shell:::{4234d49b-0245-4df3-b780-3893943456e1}')
+        items = folder.Items()
+        
+        for item in items:
+            display_name = item.Name
+            app_user_model_id = item.path
 
-            display_name = item.GetDisplayName(shellcon.SIGDN_NORMALDISPLAY)
-
+            # print(f"{display_name} {app_user_model_id}")
             # apply overrides
             for key, value in overrides.items():
                 override = key.lower()
                 if display_name == override or app_user_model_id.lower() == override:
+                    print(f"override: {value} {key}")
                     display_name = value
                     break
-
+            
             if app_user_model_id not in applications and "install" not in display_name.lower():
                 applications[app_user_model_id] = Application(None, display_name, app_user_model_id, None)
 
@@ -523,12 +457,14 @@ def update_launch_list():
     if app.platform == "windows":
         launch = {app.display_name : app.unique_identifier for app in applications.values()}    
     else:
-        launch = {app.display_name : app.path for app in applications.values()}    
+        launch = {app.display_name : app.path for app in applications.values()}  
+
+    for key, value in overrides.items():
+        launch[value.lower()] = key
 
     ctx.lists["self.launch"] = actions.user.create_spoken_forms_from_map(
         launch, words_to_exclude
     )
-
 
 def ui_event(event, arg):
     if event in ("app_launch", "app_close"):
