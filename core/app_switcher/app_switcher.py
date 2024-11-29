@@ -86,9 +86,22 @@ words_to_exclude = [
 # we use the shell:AppsFolder to populate the list of applications
 # rather than via e.g. the start menu. This way, all apps, including "modern" apps are
 # launchable. To easily retrieve the apps this makes available, navigate to shell:AppsFolder in Explorer
+
 if app.platform == "windows":
+    from .windows_known_paths import resolve_known_path, PathNotFoundException
+    from uuid import UUID
+
+    def is_valid_uuid(value):
+        try:
+            uuid_obj = UUID(value, version=4)
+            return True
+        except ValueError:
+            return False
+        
     def get_apps()-> dict[str, Application]:
         import win32com.client
+        import pathlib
+
 
         shell = win32com.client.Dispatch("Shell.Application")
         folder = shell.NameSpace('shell:::{4234d49b-0245-4df3-b780-3893943456e1}')
@@ -97,18 +110,38 @@ if app.platform == "windows":
         for item in items:
             display_name = item.Name
             app_user_model_id = item.path
+            splits = app_user_model_id.split(os.path.sep)
+            path = None
+            executable_name = None
+            guid = splits[0]
 
-            # print(f"{display_name} {app_user_model_id}")
-            # apply overrides
-            for key, value in overrides.items():
-                override = key.lower()
-                if display_name == override or app_user_model_id.lower() == override:
-                    print(f"override: {value} {key}")
-                    display_name = value
-                    break
-            
-            if app_user_model_id not in applications and "install" not in display_name.lower():
-                applications[app_user_model_id] = Application(None, display_name, app_user_model_id, None)
+            should_create_entry = "install" not in display_name.lower()
+
+            # check if we 
+            if should_create_entry:
+                try:
+                    if is_valid_uuid(guid):
+                        executable_name = splits[-1]
+                        known_folder_path = resolve_known_path(UUID(f'{guid}'))
+                        path = os.path.join(known_folder_path, *splits[1:])
+                        p = pathlib.Path(path)
+
+                        # we want to exclude anything that is NOT an actual executable
+                        should_create_entry = p.suffix in [".exe"]
+                except (PathNotFoundException):
+                    print("Failed to resolve known path: " + guid)
+
+            if should_create_entry:
+                # apply overrides
+                for key, value in overrides.items():
+                    override = key.lower()
+                    if display_name == override or app_user_model_id.lower() == override:
+                        display_name = value
+                        break
+                
+                if app_user_model_id not in applications:
+                    #print(f"{app_user_model_id}: path = {path}, display_name = {display_name}, executable_name = {executable_name}")
+                    applications[app_user_model_id] = Application(path, display_name, app_user_model_id, executable_name)
 
         return applications
 
@@ -330,7 +363,6 @@ def update_overrides(name, flags):
                 if len(line) == 1:
                     excludes.add(line[0].strip().lower())
 
-        print(overrides)
         update_running_list()
 
 
