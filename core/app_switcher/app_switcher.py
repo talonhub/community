@@ -150,8 +150,8 @@ if app.platform == "windows":
         result.sort(key=lambda x: x.upper())
         return result
 
-    def get_apps():
-        items = {}
+    def get_apps()-> dict[str, Application]:
+        global applications
         for item in enum_known_folder(FOLDERID_AppsFolder):
             try:
                 property_store = item.BindToHandler(
@@ -164,14 +164,19 @@ if app.platform == "windows":
             except pywintypes.error:
                 continue
 
-            name = item.GetDisplayName(shellcon.SIGDN_NORMALDISPLAY)
+            display_name = item.GetDisplayName(shellcon.SIGDN_NORMALDISPLAY)
 
-            # exclude anything with install/uninstall...
-            # 'cause I don't think we don't want 'em
-            if "install" not in name.lower():
-                items[name] = app_user_model_id
+            # apply overrides
+            for key, value in overrides.items():
+                override = key.lower()
+                if display_name == override or app_user_model_id.lower() == override:
+                    display_name = value
+                    break
 
-        return items
+            if app_user_model_id not in applications and "install" not in display_name.lower():
+                applications[app_user_model_id] = Application(None, display_name, app_user_model_id, None)
+
+        return applications
 
 elif app.platform == "linux":
     import configparser
@@ -276,10 +281,10 @@ elif app.platform == "mac":
                             elif executable_name.lower() in overrides:
                                 display_name = overrides[executable_name].lower()
                                 
-                            applications[bundle_identifier] = Application(path, display_name, bundle_identifier, executable_name)
-                            #if bundle_identifier in applications:
-                            #    print(f"duplicate: {bundle_identifier} path: {path}")
-                    
+                            if bundle_identifier not in applications:
+                                applications[bundle_identifier] = Application(path, display_name, bundle_identifier, executable_name)
+
+                            applications[path] = Application(path, display_name, bundle_identifier, executable_name)
                     else:
                         files = glob.glob(os.path.join(path, '**/Info.plist'), recursive=True)  
 
@@ -297,9 +302,10 @@ elif app.platform == "mac":
                                     elif executable_name in overrides:
                                         display_name = overrides[bundle_identifier].lower()
                                     
-                                    #if bundle_identifier in applications:
-                                    #    print(f"duplicate: {bundle_identifier} path: {path} vs {applications[bundle_identifier].path}")
-                                    applications[bundle_identifier] = Application(path, display_name, bundle_identifier, executable_name)
+                                    if bundle_identifier not in applications:
+                                        applications[bundle_identifier] = Application(path, display_name, bundle_identifier, executable_name)
+
+                                    applications[path] = Application(path, display_name, bundle_identifier, executable_name)
 
         return applications
 
@@ -514,7 +520,10 @@ def gui_running(gui: imgui.GUI):
 
 
 def update_launch_list():
-    launch = {app.display_name : app.path for app in applications.values()}    
+    if app.platform == "windows":
+        launch = {app.display_name : app.unique_identifier for app in applications.values()}    
+    else:
+        launch = {app.display_name : app.path for app in applications.values()}    
 
     ctx.lists["self.launch"] = actions.user.create_spoken_forms_from_map(
         launch, words_to_exclude
@@ -524,7 +533,6 @@ def update_launch_list():
 def ui_event(event, arg):
     if event in ("app_launch", "app_close"):
         update_running_list()
-
 
 # Talon starts faster if you don't use the `talon.ui` module during launch
 

@@ -249,4 +249,17 @@ class Actions:
     def talon_edit_log():
         """Edit talon log"""
         actions.user.exec("code C:\\Users\\knaus\\AppData\\Roaming\\talon\\talon.log")
+
+    def talon_get_windows_app_id():
+        """do it"""
+        import win32com.client
+
+        shell = win32com.client.Dispatch("Shell.Application")
+        folder = shell.NameSpace('shell:::{4234d49b-0245-4df3-b780-3893943456e1}')
+        items = folder.Items()
+        
+        for item in items:
+            if ui.active_app().name.lower() in item.Name.lower():
+                clip.set_text(item.path)
+    
         

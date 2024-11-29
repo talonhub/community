@@ -14,6 +14,7 @@ talent home: menu.open_talon_home()
 talent debug: menu.open_debug_window()
 talent copy context pie: user.talon_add_context_clipboard_python()
 talent copy context: user.talon_add_context_clipboard()
+talent copy i d: user.talon_get_windows_app_id()
 talent host:
     host = user.talon_get_hostname()
     insert(host)
