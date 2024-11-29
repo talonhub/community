@@ -140,29 +140,21 @@ if app.platform == "windows":
                     # exclude anything that is NOT an actual executable
                     should_create_entry = p.suffix in [".exe"]
 
-            spoken_forms = []
             if should_create_entry:
                 should_exclude = display_name in excludes or app_user_model_id in excludes or path in excludes or executable_name in excludes
 
-                # apply overrides
-                for key, value in overrides.items():
-                    override = key.lower()
-                    if executable_name == override or str(path) == override or display_name.lower() == override or app_user_model_id.lower() == override:
-                        # print("override found: " + value)
-                        spoken_forms.append(value)
-                
                 if app_user_model_id not in applications:
-                    #print(f"{app_user_model_id}: path = {path}, display_name = {display_name}, executable_name = {executable_name}")
-                    if len(spoken_forms) > 0:
-                        new_app = Application(path, display_name, app_user_model_id, executable_name, should_exclude, spoken_forms)
-                    else:
-                        new_app = Application(path, display_name, app_user_model_id, executable_name, should_exclude)
+                    new_app = Application(path, display_name, app_user_model_id, executable_name, should_exclude)
 
-                    applications[app_user_model_id] = new_app
+                    applications[app_user_model_id.lower()] = new_app
+
                     if new_app.path:
-                        applications[path] = new_app
+                        applications[str(new_app.path).lower()] = new_app
+                    if executable_name:
+                        applications[executable_name.lower()] = new_app
+                    if display_name:
+                        applications[display_name.lower()] = new_app
 
-                
         return applications
 
 elif app.platform == "linux":
@@ -282,17 +274,12 @@ elif app.platform == "mac":
                                     #print(f"found at: {file}")
                                     bundle_identifier = pl["CFBundleIdentifier"].lower()
                                     executable_name = pl["CFBundleExecutable"].lower() if "CFBundleExecutable" in pl else ""
-
-                                    # apply overrides
-                                    if bundle_identifier in overrides:
-                                        display_name = overrides[bundle_identifier].lower()
-                                    elif executable_name in overrides:
-                                        display_name = overrides[bundle_identifier].lower()
-                                    
+                                    new_app = Application(path, display_name, bundle_identifier, executable_name)
                                     if bundle_identifier not in applications:
-                                        applications[bundle_identifier] = Application(path, display_name, bundle_identifier, executable_name)
-
-                                    applications[path] = Application(path, display_name, bundle_identifier, executable_name)
+                                        applications[bundle_identifier.lower()] = new_app
+                                        applications[path.lower()] = new_app
+                                        applications[display_name.lower()] = new_app
+                                        applications[executable_name.lower()] = new_app
 
         return applications
 
@@ -311,6 +298,21 @@ def launch_applications(m) -> str:
     "Returns a single application name"
     return m.launch
 
+def should_add_running_app(curr_app):
+    name = curr_app.name.lower()
+    bundle_name = curr_app.bundle.lower()
+    exe_path = str(Path(curr_app.exe).resolve()).lower() 
+    executable_name = os.path.basename(curr_app.exe).lower()
+    #print(name)
+    if bundle_name and bundle_name in applications:
+        return not applications[bundle_name].exclude and applications[bundle_name].spoken_forms is None
+    elif exe_path and exe_path in applications:
+        return not applications[exe_path].exclude and applications[exe_path].spoken_forms is None
+    elif name and name in applications:
+        return not applications[name].exclude and applications[name].spoken_forms is None
+    elif executable_name and executable_name in applications:
+        return not applications[executable_name].exclude and applications[executable_name].spoken_forms is None
+    return True
 
 def update_running_list():
     global running_application_dict
@@ -320,63 +322,48 @@ def update_running_list():
 
     for cur_app in foreground_apps:
         name = cur_app.name.lower()
-        bundle_name = cur_app.bundle.lower()
         running_application_dict[name.lower()] = cur_app.name
         
         if app.platform == "mac":
-            running_application_dict[bundle_name.lower()] = cur_app.name
+            bundle_name = cur_app.bundle.lower()
+            running_application_dict[bundle_name.lower()] = cur_app
 
         if app.platform == "windows":
-            exe = os.path.basename(cur_app.exe)
-            running_application_dict[cur_app.exe.lower()] = exe
+            exe = os.path.basename(cur_app.exe).lower()
+            running_application_dict[cur_app.exe.lower()] = cur_app
+            running_application_dict[exe] = cur_app
 
-    override_apps = excludes.union(overrides.values())
-
-    if app.platform == "windows" or app.platform == "linux":
         running = actions.user.create_spoken_forms_from_list(
             [
-                curr_app.name
-                for curr_app in ui.apps(background=False)
-                if curr_app.name.lower() not in override_apps
-                and curr_app.exe.lower() not in override_apps
-                and os.path.basename(curr_app.exe).lower() not in override_apps
+                cur_app.name
+                for cur_app in ui.apps(background=False)
+                if should_add_running_app(cur_app)
             ],
             words_to_exclude=words_to_exclude,
             generate_subsequences=False,
         )
-    else:
-        running = actions.user.create_spoken_forms_from_list(
-            [
-                curr_app.name
-                for curr_app in ui.apps(background=False)
-                if curr_app.bundle.lower() not in override_apps
-                and curr_app.exe.lower() not in override_apps
-                and os.path.basename(curr_app.exe).lower() not in override_apps
-                and bundle_name not in override_apps
-            ],
-            words_to_exclude=words_to_exclude,
-            generate_subsequences=False,
-        )       
 
     #print(overrides)
     for full_application_name, running_name in overrides.items():
         #print(f"{running_name} {full_application_name}")
-        if full_application_name in running_application_dict:
-            #print("overridden!!")
+        if full_application_name.lower() in running_application_dict:
             running[running_name] = full_application_name
 
     ctx.lists["self.running"] = running
 
 
-def update_overrides(name, flags):
+def update_and_apply_overrides(name, flags):
     """Updates the overrides and excludes lists"""
     global overrides, excludes
+
+    for key, cur_app in applications.items():
+        cur_app.spoken_forms = None
 
     if name is None or os.path.normcase(name) == override_file_path:
         overrides = {}
         excludes = set()
 
-        # print("update_overrides")
+        # print("update_and_apply_overrides")
         with open(override_file_path) as f:
             for line in f:
                 line = line.rstrip().lower()
@@ -388,13 +375,21 @@ def update_overrides(name, flags):
                     if app.platform == "windows":
                         p = resolve_path_with_guid(line[0])
                         if p:
-                            key = p.resolve()
-                            print(key)
-                overrides[key] = value
+                            key = str(p.resolve()).lower()
+                    overrides[key] = value
+
+                    if key in applications:
+                        current_app = applications[key]
+                        if not current_app.spoken_forms:
+                            current_app.spoken_forms = [value]
+                        else:
+                            current_app.spoken_forms.append(value)
+
                 if len(line) == 1:
                     excludes.add(line[0].strip().lower())
 
         update_running_list()
+        update_launch_list()
 
 
 @mod.action_class
@@ -404,6 +399,9 @@ class Actions:
         # We should use the capture result directly if it's already in the list
         # of running applications. Otherwise, name is from <user.text> and we
         # can be a bit fuzzier
+        if name.lower() in running_application_dict:
+            return running_application_dict[name]
+        
         if name.lower() not in running_application_dict:
             if len(name) < 3:
                 raise RuntimeError(
@@ -527,11 +525,12 @@ def update_launch_list():
     )
 
     customized = {
-        spoken_form:  app.unique_identifier
-        for app in applications.values()
-        if app.spoken_forms is not None
-        for spoken_form in app.spoken_forms
+        spoken_form:  current_app.unique_identifier
+        for current_app in applications.values()
+        if current_app.spoken_forms is not None
+        for spoken_form in current_app.spoken_forms
     }
+
     result.update(customized)
     ctx.lists["self.launch"] = result
 
@@ -543,15 +542,13 @@ def ui_event(event, arg):
 
 
 def on_ready():
-    # get overrides first...
-    update_overrides(None, None)
-
     # build application dictionary
     get_apps()
 
-    fs.watch(overrides_directory, update_overrides)
-    update_launch_list()
-    update_running_list()
+    # get overrides first...
+    update_and_apply_overrides(None, None)
+
+    fs.watch(overrides_directory, update_and_apply_overrides)
     ui.register("", ui_event)
 
 
