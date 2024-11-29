@@ -303,6 +303,7 @@ def should_add_running_app(curr_app):
     bundle_name = curr_app.bundle.lower()
     exe_path = str(Path(curr_app.exe).resolve()).lower() 
     executable_name = os.path.basename(curr_app.exe).lower()
+
     #print(name)
     if bundle_name and bundle_name in applications:
         return not applications[bundle_name].exclude and applications[bundle_name].spoken_forms is None
@@ -377,13 +378,16 @@ def update_and_apply_overrides(name, flags):
                         if p:
                             key = str(p.resolve()).lower()
                     overrides[key] = value
-
+                    print(f"{key} {value}")
                     if key in applications:
                         current_app = applications[key]
                         if not current_app.spoken_forms:
                             current_app.spoken_forms = [value]
+                            print(current_app.spoken_forms)
                         else:
                             current_app.spoken_forms.append(value)
+                            print(current_app.spoken_forms)
+
 
                 if len(line) == 1:
                     excludes.add(line[0].strip().lower())
