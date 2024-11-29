@@ -34,6 +34,26 @@ excludes = set()
 # a list of the currently running application names
 running_application_dict = {}
 
+class Application:
+    path: str
+    display_name: str
+    unique_identifier: str
+    executable_name: str
+    spoken_forms: list[str]
+    exclude: bool 
+
+    def __init__(self, path, display_name: str, unique_identifier: str, executable_name: str, exclude=False, spoken_forms: list[str] = None):
+        self.path = path
+        self.display_name = display_name
+        self.executable_name = executable_name 
+        self.unique_identifier = unique_identifier
+        self.exclude = exclude
+
+        self.spoken_forms = (
+            [spoken_forms] if isinstance(spoken_forms, str) else spoken_forms
+        )
+
+applications = {}
 
 words_to_exclude = [
     "zero",
@@ -228,16 +248,60 @@ elif app.platform == "mac":
         f"{Path.home()}/.nix-profile/Applications",
     ]
 
-    def get_apps():
-        items = {}
+    def get_apps() -> dict[str, Application]:
+        global applications
+        from plistlib import load
+        import glob
+
         for base in mac_application_directories:
             base = os.path.expanduser(base)
             if os.path.isdir(base):
                 for name in os.listdir(base):
                     path = os.path.join(base, name)
-                    name = name.rsplit(".", 1)[0].lower()
-                    items[name] = path
-        return items
+                    display_name = name.rsplit(".", 1)[0].lower() 
+                    
+                    # most, but not all, apps store this here
+                    plist_path = os.path.join(path, "Contents/Info.plist")
+                    
+                    if os.path.exists(plist_path):
+                        with open(plist_path, 'rb') as fp:
+                            #print(f"found at default: {plist_path}")
+                            pl = load(fp)
+                            bundle_identifier = pl["CFBundleIdentifier"].lower()
+                            executable_name = pl["CFBundleExecutable"] if "CFBundleExecutable" in pl else ""
+
+                            # apply overrides
+                            if bundle_identifier.lower() in overrides:
+                                display_name = overrides[bundle_identifier].lower()
+                            elif executable_name.lower() in overrides:
+                                display_name = overrides[executable_name].lower()
+                                
+                            applications[bundle_identifier] = Application(path, display_name, bundle_identifier, executable_name)
+                            #if bundle_identifier in applications:
+                            #    print(f"duplicate: {bundle_identifier} path: {path}")
+                    
+                    else:
+                        files = glob.glob(os.path.join(path, '**/Info.plist'), recursive=True)  
+
+                        for file in files:
+                            with open(file, 'rb') as fp:
+                                pl = load(fp)
+                                if "CFBundleIdentifier" in pl:
+                                    #print(f"found at: {file}")
+                                    bundle_identifier = pl["CFBundleIdentifier"].lower()
+                                    executable_name = pl["CFBundleExecutable"].lower() if "CFBundleExecutable" in pl else ""
+
+                                    # apply overrides
+                                    if bundle_identifier in overrides:
+                                        display_name = overrides[bundle_identifier].lower()
+                                    elif executable_name in overrides:
+                                        display_name = overrides[bundle_identifier].lower()
+                                    
+                                    #if bundle_identifier in applications:
+                                    #    print(f"duplicate: {bundle_identifier} path: {path} vs {applications[bundle_identifier].path}")
+                                    applications[bundle_identifier] = Application(path, display_name, bundle_identifier, executable_name)
+
+        return applications
 
 
 @mod.capture(rule="{self.running}")  # | <user.text>)")
@@ -262,7 +326,12 @@ def update_running_list():
     foreground_apps = ui.apps(background=False)
 
     for cur_app in foreground_apps:
-        running_application_dict[cur_app.name.lower()] = cur_app.name
+        name = cur_app.name.lower()
+        bundle_name = cur_app.bundle.lower()
+        running_application_dict[name] = cur_app.name
+
+        if app.platform == "mac":
+            running_application_dict[bundle_name] = cur_app.name
 
         if app.platform == "windows":
             exe = os.path.basename(cur_app.exe)
@@ -270,21 +339,35 @@ def update_running_list():
 
     override_apps = excludes.union(overrides.values())
 
-    running = actions.user.create_spoken_forms_from_list(
-        [
-            curr_app.name
-            for curr_app in ui.apps(background=False)
-            if curr_app.name.lower() not in override_apps
-            and curr_app.exe.lower() not in override_apps
-            and os.path.basename(curr_app.exe).lower() not in override_apps
-        ],
-        words_to_exclude=words_to_exclude,
-        generate_subsequences=True,
-    )
+    if app.platform == "windows" or app.platform == "linux":
+        running = actions.user.create_spoken_forms_from_list(
+            [
+                curr_app.name
+                for curr_app in ui.apps(background=False)
+                if curr_app.name.lower() not in override_apps
+                and curr_app.exe.lower() not in override_apps
+                and os.path.basename(curr_app.exe).lower() not in override_apps
+            ],
+            words_to_exclude=words_to_exclude,
+            generate_subsequences=False,
+        )
+    else:
+        running = actions.user.create_spoken_forms_from_list(
+            [
+                curr_app.name
+                for curr_app in ui.apps(background=False)
+                if curr_app.bundle.lower() not in override_apps
+                and curr_app.exe.lower() not in override_apps
+                and os.path.basename(curr_app.exe).lower() not in override_apps
+                and bundle_name not in override_apps
+            ],
+            words_to_exclude=words_to_exclude,
+            generate_subsequences=False,
+        )       
 
-    for running_name, full_application_name in overrides.items():
-        if running_app_name := running_application_dict.get(full_application_name):
-            running[running_name] = running_app_name
+    for full_application_name, running_name in overrides.items():
+        if full_application_name in running_application_dict:
+            running[running_name] = full_application_name
 
     ctx.lists["self.running"] = running
 
@@ -303,10 +386,11 @@ def update_overrides(name, flags):
                 line = line.rstrip().lower()
                 line = line.split(",")
                 if len(line) == 2 and line[0] != "Spoken form":
-                    overrides[line[0]] = line[1].strip()
+                    overrides[line[0].lower()] = line[1].strip().lower()
                 if len(line) == 1:
-                    excludes.add(line[0].strip())
+                    excludes.add(line[0].strip().lower())
 
+        print(overrides)
         update_running_list()
 
 
@@ -331,7 +415,7 @@ class Actions:
                     name = full_application_name
                     break
         for application in ui.apps(background=False):
-            if application.name == name or (
+            if application.name == name or application.bundle.lower() == name or (
                 app.platform == "windows"
                 and os.path.basename(application.exe).lower() == name
             ):
@@ -430,9 +514,7 @@ def gui_running(gui: imgui.GUI):
 
 
 def update_launch_list():
-    launch = get_apps()
-
-    # actions.user.talon_pretty_print(launch)
+    launch = {app.display_name : app.path for app in applications.values()}    
 
     ctx.lists["self.launch"] = actions.user.create_spoken_forms_from_map(
         launch, words_to_exclude
@@ -448,7 +530,12 @@ def ui_event(event, arg):
 
 
 def on_ready():
+    # get overrides first...
     update_overrides(None, None)
+
+    # build application dictionary
+    get_apps()
+
     fs.watch(overrides_directory, update_overrides)
     update_launch_list()
     update_running_list()
