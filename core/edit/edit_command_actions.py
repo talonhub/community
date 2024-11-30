@@ -8,7 +8,8 @@ from talon import Module, actions
 # select, copy, delete, etc.
 @dataclass
 class EditSimpleAction:
-    """"Simple" actions are actions that don't require any arguments, only a type (select, copy, delete, etc.)"""
+    """ "Simple" actions are actions that don't require any arguments, only a type (select, copy, delete, etc.)"""
+
     type: str
 
     def __str__(self):
