@@ -5,7 +5,7 @@ from pathlib import Path
 from talon import Context, Module, app
 
 # Path to community root directory
-REPO_DIR = os.path.dirname(os.path.dirname(__file__))
+REPO_DIR = Path(__file__).parent.parent.parent
 
 mod = Module()
 mod.list(
