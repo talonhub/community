@@ -2,7 +2,6 @@ import itertools
 import math
 import re
 from collections import defaultdict
-from functools import cmp_to_key
 from itertools import islice
 from typing import Any, Iterable, Tuple
 
@@ -546,7 +545,7 @@ def draw_list_commands(gui: imgui.GUI):
     global total_page_count
     global selected_context_page
 
-    talon_list = registry.lists[selected_list][-1]
+    talon_list = actions.user.talon_get_active_registry_list(selected_list)
     # numpages = math.ceil(len(talon_list) / SIZE)
 
     pages_list = []

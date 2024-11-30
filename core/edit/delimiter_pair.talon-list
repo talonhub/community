@@ -1,0 +1,25 @@
+list: user.delimiter_pair
+-
+
+# Format:
+# SPOKEN_FORM: LEFT_DELIMITER RIGHT_DELIMITER
+# Use the literal symbols for delimiters (except for whitespace, which is "space")
+#
+# Examples:
+# round: ( )
+# pad: space space
+
+round: ( )
+box: [ ]
+diamond: < >
+curly: { }
+twin: "' '"
+quad: '" "'
+skis: ` `
+percentages: % %
+pad: space space
+
+escaped quad: '\\" \\"'
+escaped twin:  "\\' \\'"
+escaped round: \( \)
+escaped box: \[ \]
