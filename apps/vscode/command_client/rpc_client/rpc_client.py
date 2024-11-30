@@ -25,6 +25,8 @@ class Actions:
         """Runs a command, using command server if available
 
         Args:
+            dir_name (str): The name of the directory to use for communication.
+            trigger_command_execution (Callable): The function to call to trigger command execution.
             command_id (str): The ID of the command to run.
             args: The arguments to the command.
             wait_for_finish (bool, optional): Whether to wait for the command to finish before returning. Defaults to False.
