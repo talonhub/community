@@ -1,4 +1,4 @@
-list: user.edit_file
+list: user.edit_text_file
 -
 
 additional words: core/vocabulary/vocabulary.talon-list

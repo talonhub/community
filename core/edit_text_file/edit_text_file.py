@@ -4,12 +4,12 @@ from pathlib import Path
 
 from talon import Context, Module, app
 
-# path to community root directory
+# Path to community root directory
 REPO_DIR = os.path.dirname(os.path.dirname(__file__))
 
 mod = Module()
 mod.list(
-    "edit_file",
+    "edit_text_file",
     desc="Absolute paths to frequently edited files (Talon list, CSV, etc.)",
 )
 
