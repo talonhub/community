@@ -42,7 +42,7 @@ def get_editor_names():
     return names_csv.split(", ") if names_csv else default_names
 
 
-def handle_app_running():
+def handle_app_running(_app):
     editor_names = get_editor_names()
     for app in ui.apps(background=False):
         if app.name in editor_names:
