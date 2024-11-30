@@ -375,18 +375,29 @@ def formatter_immune(m) -> ImmuneString:
     return ImmuneString(str(value))
 
 
-def get_formatters_and_prose_formatters(include_reformatters: bool) -> tuple[dict[str, str], dict[str, str]]:
+def get_formatters_and_prose_formatters(
+    include_reformatters: bool,
+) -> tuple[dict[str, str], dict[str, str]]:
     """Returns dictionary of non-word formatters and a dictionary of all prose formatters"""
     formatters = {}
     prose_formatters = {}
-    formatters.update(actions.user.talon_get_active_registry_list("user.code_formatter"))
-    formatters.update(actions.user.talon_get_active_registry_list("user.prose_formatter"))
+    formatters.update(
+        actions.user.talon_get_active_registry_list("user.code_formatter")
+    )
+    formatters.update(
+        actions.user.talon_get_active_registry_list("user.prose_formatter")
+    )
 
-    if include_reformatters:    
-        formatters.update(actions.user.talon_get_active_registry_list("user.reformatter"))
+    if include_reformatters:
+        formatters.update(
+            actions.user.talon_get_active_registry_list("user.reformatter")
+        )
 
-    prose_formatters.update(actions.user.talon_get_active_registry_list("user.prose_formatter"))
+    prose_formatters.update(
+        actions.user.talon_get_active_registry_list("user.prose_formatter")
+    )
     return formatters, prose_formatters
+
 
 @mod.action_class
 class Actions:
