@@ -375,24 +375,18 @@ def formatter_immune(m) -> ImmuneString:
     return ImmuneString(str(value))
 
 
-def get_all_phrase_and_prose_formatters() -> tuple[dict[str, str], dict[str, str]]:
-    """Returns dictionary of all phrase formatters and a dictionary of all prose formatters"""
-    all_phrase_formatters = {}
+def get_formatters_and_prose_formatters(include_reformatters: bool) -> tuple[dict[str, str], dict[str, str]]:
+    """Returns dictionary of formatters and a dictionary of all prose formatters"""
+    formatters = {}
     prose_formatters = {}
-    all_phrase_formatters.update(
-        actions.user.talon_get_active_registry_list("user.code_formatter")
-    )
-    all_phrase_formatters.update(
-        actions.user.talon_get_active_registry_list("user.prose_formatter")
-    )
-    all_phrase_formatters.update(
-        actions.user.talon_get_active_registry_list("user.reformatter")
-    )
-    prose_formatters.update(
-        actions.user.talon_get_active_registry_list("user.prose_formatter")
-    )
-    return all_phrase_formatters, prose_formatters
+    formatters.update(actions.user.talon_get_active_registry_list("user.code_formatter"))
+    formatters.update(actions.user.talon_get_active_registry_list("user.prose_formatter"))
 
+    if include_reformatters:    
+        formatters.update(actions.user.talon_get_active_registry_list("user.reformatter"))
+
+    prose_formatters.update(actions.user.talon_get_active_registry_list("user.prose_formatter"))
+    return formatters, prose_formatters
 
 @mod.action_class
 class Actions:
@@ -443,11 +437,11 @@ class Actions:
     def get_formatters_words() -> dict:
         """Returns words currently used as formatters, and a demonstration string using those formatters"""
         formatters_help_demo = {}
-        all_phrase_formatters, prose_formatters = get_all_phrase_and_prose_formatters()
+        formatters, prose_formatters = get_formatters_and_prose_formatters(False)
         prose_formatter_names = prose_formatters.keys()
 
-        for phrase in sorted(all_phrase_formatters):
-            name = all_phrase_formatters[phrase]
+        for phrase in sorted(formatters):
+            name = formatters[phrase]
             demo = format_text_without_adding_to_history("one two three", name)
             if phrase in prose_formatter_names:
                 phrase += " *"
@@ -457,10 +451,10 @@ class Actions:
     def get_reformatters_words() -> dict:
         """Returns words currently used as re-formatters, and a demonstration string using those re-formatters"""
         formatters_help_demo = {}
-        all_phrase_formatters, prose_formatters = get_all_phrase_and_prose_formatters()
+        formatters, prose_formatters = get_formatters_and_prose_formatters(True)
         prose_formatter_names = prose_formatters.keys()
-        for phrase in sorted(all_phrase_formatters):
-            name = all_phrase_formatters[phrase]
+        for phrase in sorted(formatters):
+            name = formatters[phrase]
             demo = format_text_without_adding_to_history("one_two_three", name, True)
             if phrase in prose_formatter_names:
                 phrase += " *"
