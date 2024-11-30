@@ -64,7 +64,7 @@ class LinuxActions:
 def open_with_subprocess(path: Path, args: list[str | Path]):
     """Tries to open a file using the given subprocess arguments."""
     try:
-        return subprocess.run(args, timeout=0.5, check=True)
+        subprocess.run(args, timeout=0.5, check=True)
     except subprocess.TimeoutExpired:
         app.notify(f"Timeout trying to open file for editing: {path}")
         raise
