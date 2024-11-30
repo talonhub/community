@@ -56,7 +56,7 @@ class UserActions:
             actions.app.tab_open()
             actions.user.paste(url_address)
             actions.key("enter")
-    
+
     def address_bar_focus():
         actions.browser.focus_address()
 

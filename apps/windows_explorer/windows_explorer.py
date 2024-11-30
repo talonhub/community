@@ -141,7 +141,7 @@ class UserActions:
     def file_manager_open_volume(volume: str):
         """file_manager_open_volume"""
         actions.user.file_manager_open_directory(volume)
-    
+
     def address_bar_focus():
         actions.key("ctrl-l")
 
