@@ -1,4 +1,4 @@
-bimport math
+import math
 from itertools import islice
 from pathlib import Path
 
