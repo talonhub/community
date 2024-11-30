@@ -77,6 +77,7 @@ ctx.lists["self.file_manager_files"] = []
 def address(m) -> str:
     return str(m)
 
+
 @mod.action_class
 class Actions:
     def file_manager_current_path() -> str:
