@@ -76,28 +76,6 @@ def prose_modifier(m) -> Callable:
     return getattr(DictationFormat, m.prose_modifiers)
 
 
-@mod.capture(rule="(numb | numeral) <user.number_string>")
-def prose_simple_number(m) -> str:
-    return m.number_string
-
-
-@mod.capture(rule="(numb | numeral) <user.number_string> (dot | point) <digit_string>")
-def prose_number_with_dot(m) -> str:
-    return m.number_string + "." + m.digit_string
-
-
-@mod.capture(rule="(numb | numeral) <user.number_string> colon <user.number_string>")
-def prose_number_with_colon(m) -> str:
-    return m.number_string_1 + ":" + m.number_string_2
-
-
-@mod.capture(
-    rule="<user.prose_simple_number> | <user.prose_number_with_dot> | <user.prose_number_with_colon>"
-)
-def prose_number(m) -> str:
-    return str(m)
-
-
 @mod.capture(
     rule="<user.number_string> [(dot | point) <digit_string>] percent [sign|sine]"
 )
@@ -168,7 +146,7 @@ def text(m) -> str:
 
 
 @mod.capture(
-    rule="(<phrase> | {user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <user.prose_currency> | <user.prose_time> | <user.prose_number> | <user.prose_percent> | <user.prose_modifier> | <user.abbreviation>)+"
+    rule="({user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <user.prose_currency> | <user.prose_time> | <user.number_prose_prefixed> | <user.prose_percent> | <user.prose_modifier> | <user.abbreviation> | <phrase>)+"
 )
 def prose(m) -> str:
     """Mixed words and punctuation, auto-spaced & capitalized."""
@@ -177,7 +155,7 @@ def prose(m) -> str:
 
 
 @mod.capture(
-    rule="(<phrase> | {user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <user.prose_currency> | <user.prose_time> | <user.prose_number> | <user.prose_percent> | <user.abbreviation>)+"
+    rule="({user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <user.prose_currency> | <user.prose_time> | <user.number_prose_prefixed> | <user.prose_percent> | <user.abbreviation> | <phrase>)+"
 )
 def raw_prose(m) -> str:
     """Mixed words and punctuation, auto-spaced & capitalized, without quote straightening and commands (for use in dictation mode)."""
