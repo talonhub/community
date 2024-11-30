@@ -10,7 +10,7 @@ REPO_DIR = os.path.dirname(os.path.dirname(__file__))
 mod = Module()
 mod.list(
     "edit_text_file",
-    desc="Absolute paths to frequently edited files (Talon list, CSV, etc.)",
+    desc="Paths to frequently edited files (Talon list, CSV, etc.)",
 )
 
 ctx_win, ctx_linux, ctx_mac = Context(), Context(), Context()
@@ -20,7 +20,7 @@ ctx_mac.matches = "os: mac"
 
 
 @mod.action_class
-class ModuleActions:
+class Actions:
     def edit_text_file(file: str):
         """Tries to open a file in the user's preferred text editor."""
 
