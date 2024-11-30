@@ -376,7 +376,7 @@ def formatter_immune(m) -> ImmuneString:
 
 
 def get_formatters_and_prose_formatters(include_reformatters: bool) -> tuple[dict[str, str], dict[str, str]]:
-    """Returns dictionary of formatters and a dictionary of all prose formatters"""
+    """Returns dictionary of non-word formatters and a dictionary of all prose formatters"""
     formatters = {}
     prose_formatters = {}
     formatters.update(actions.user.talon_get_active_registry_list("user.code_formatter"))
