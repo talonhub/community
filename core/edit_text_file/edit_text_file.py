@@ -61,7 +61,7 @@ class LinuxActions:
 
 
 # Helper for linux and mac.
-def open_with_subprocess(path: Path, args):
+def open_with_subprocess(path: Path, args: list[str | Path]):
     """Tries to open a file using the given subprocess arguments."""
     try:
         return subprocess.run(args, timeout=0.5, check=True)
