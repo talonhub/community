@@ -9,28 +9,27 @@ from talon.ui import UIErr, Window
 """Tools for laying out windows in an arrangement """
 
 SPLIT_POSITIONS = {
-    "split": ["Left", "Right"],
     # Explicit layout names with only one configuration can be easier to force
     # the desired result:
-    "halves": ["Left", "Right"],
-    "thirds": ["LeftThird", "CenterThird", "RightThird"],
-    "clock": [
+    "Halves": ["Left", "Right"],
+    "Thirds": ["LeftThird", "CenterThird", "RightThird"],
+    "Clock": [
         "Left",
         "TopRight",
         "BottomRight",
     ],
-    "counterclock": [
+    "Counterclock": [
         "Right",
         "TopLeft",
         "BottomLeft",
     ],
-    "grid": [
+    "Grid": [
         "TopLeft",
         "TopRight",
         "BottomLeft",
         "BottomRight",
     ],
-    "big grid": [
+    "BigGrid": [
         "TopLeftThird",
         "TopCenterThird",
         "TopRightThird",
@@ -159,7 +158,6 @@ mod.list(
     "Predefined window positions when splitting the screen between multiple windows.",
 )
 ctx = Context()
-ctx.lists["user.window_split_positions"] = SPLIT_POSITIONS.keys()
 
 
 @mod.capture(rule="all")
