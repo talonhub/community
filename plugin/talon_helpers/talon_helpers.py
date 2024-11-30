@@ -247,9 +247,14 @@ class Actions:
         for app in ui.apps():
             print(app.name.lower())
     
-    def talon_edit_log():
+    def talon_open_log():
         """Edit talon log"""
-        actions.user.exec("code C:\\Users\\knaus\\AppData\\Roaming\\talon\\talon.log")
+        if app.platform == "windows":
+            path = os.path.expandvars("%AppData%\\Talon\\talon.log")
+        else:
+            path = os.path.expanduser("~/.talon/talon.log")
+            
+        actions.user.edit_text_file(path)
 		
     def talon_get_active_registry_list(name: str) -> ListTypeFull:
         """Returns the active list from the Talon registry"""
