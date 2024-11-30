@@ -13,17 +13,16 @@ mod.list(
     desc="Absolute paths to frequently edited files (Talon list, CSV, etc.)",
 )
 
+ctx_win, ctx_linux, ctx_mac = Context(), Context(), Context()
+ctx_win.matches = "os: windows"
+ctx_linux.matches = "os: linux"
+ctx_mac.matches = "os: mac"
+
 
 @mod.action_class
 class ModuleActions:
     def edit_text_file(file: str):
         """Tries to open a file in the user's preferred text editor."""
-
-
-ctx_win, ctx_linux, ctx_mac = Context(), Context(), Context()
-ctx_win.matches = "os: windows"
-ctx_linux.matches = "os: linux"
-ctx_mac.matches = "os: mac"
 
 
 @ctx_win.action_class("user")
