@@ -3,9 +3,10 @@ from talon import Module
 mod = Module()
 mod.tag("address_bar", desc="Application with address bar")
 
+
 @mod.capture
 def address(m) -> str:
-    """Captures an address"""
+    """Captures an address; this capture must be implemented the context which desires to support the grammar"""
 
 @mod.action_class
 class Actions:
