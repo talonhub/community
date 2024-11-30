@@ -10,7 +10,7 @@ tag(): user.line_commands
 tag(): user.multiple_cursors
 tag(): user.splits
 tag(): user.tabs
-tag(): user.navigation
+tag(): user.command_search
 
 go tab {self.letter} [{self.letter}]:
     user.run_rpc_command("andreas.focusTab", "{letter_1}{letter_2 or ''}")
@@ -23,9 +23,6 @@ shave <user.cursorless_target>:
     key("backspace")
 cross: user.split_next()
 window reload: user.vscode("workbench.action.reloadWindow")
-please [<user.text>]:
-    user.vscode("workbench.action.showCommands")
-    insert(user.text or "")
 
 # Sidebar
 bar explore: user.vscode("workbench.view.explorer")
