@@ -115,6 +115,6 @@ Xcode,None,False,com.apple.dt.Xcode,/Applications/Xcode.app,Xcode
 bootcampassistantinstalld,None,True,com.apple.bootcampassistant.installd,/System/Applications/Utilities,bootcampassistantinstalld
 com.apple.activitymonitor.helper,None,True,com.apple.activitymonitor.helper,/System/Applications/Utilities,com.apple.activitymonitor.helper
 iMovie,None,True,com.apple.iMovieApp,/Applications/iMovie.app,iMovie
-iPhone Mirroring,None,True,com.apple.ScreenContinuity,/System/Applications/iPhone Mirroring.app,iPhone Mirroring
+iPhone Mirroring,iphone;iPhone Mirroring;phone,False,com.apple.ScreenContinuity,/System/Applications/iPhone Mirroring.app,iPhone Mirroring
 iTerm,None,False,com.googlecode.iterm2,/Applications/iTerm.app,iTerm2
 zoom.us,zoom,False,us.zoom.xos,/Applications/zoom.us.app,zoom.us
