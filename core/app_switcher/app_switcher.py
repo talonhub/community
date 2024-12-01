@@ -7,7 +7,7 @@ import csv
 import talon
 from talon import Context, Module, actions, app, imgui, ui, resource
 from typing import Union
-from ..user_settings import track_csv_list
+import glob
 
 # Construct a list of spoken form overrides for application names (similar to how homophone list is managed)
 # These overrides are used *instead* of the generated spoken forms for the given app name or .exe (on Windows)
@@ -93,7 +93,7 @@ got_apps = False
 if app.platform == "windows":
     from .windows_known_paths import resolve_known_windows_path, PathNotFoundException
     from uuid import UUID
-
+    import win32com
     def resolve_path_with_guid(path) -> Path:
         splits = path.split(os.path.sep)
         guid = splits[0]
@@ -115,20 +115,123 @@ if app.platform == "windows":
         except ValueError:
             return False
         
-    def get_apps()-> list[Application]:
-        global got_apps
-        import win32com.client
-        
-        shell = win32com.client.Dispatch("Shell.Application")
-        folder = shell.NameSpace('shell:::{4234d49b-0245-4df3-b780-3893943456e1}')
-        items = folder.Items()
-        
+    import ctypes
+    import os
+    from ctypes import wintypes
+
+    import pywintypes
+    from win32com.propsys import propsys, pscon
+    from win32com.shell import shell, shellcon
+
+    # KNOWNFOLDERID
+    # https://msdn.microsoft.com/en-us/library/dd378457
+    # win32com defines most of these, except the ones added in Windows 8.
+    FOLDERID_AppsFolder = pywintypes.IID("{1e87508d-89c2-42f0-8a7e-645a0f50ca58}")
+
+    # win32com is missing SHGetKnownFolderIDList, so use ctypes.
+
+    _ole32 = ctypes.OleDLL("ole32")
+    _shell32 = ctypes.OleDLL("shell32")
+
+    _REFKNOWNFOLDERID = ctypes.c_char_p
+    _PPITEMIDLIST = ctypes.POINTER(ctypes.c_void_p)
+
+    _ole32.CoTaskMemFree.restype = None
+    _ole32.CoTaskMemFree.argtypes = (wintypes.LPVOID,)
+
+    _shell32.SHGetKnownFolderIDList.argtypes = (
+        _REFKNOWNFOLDERID,  # rfid
+        wintypes.DWORD,  # dwFlags
+        wintypes.HANDLE,  # hToken
+        _PPITEMIDLIST,
+    )  # ppidl
+
+    def get_known_folder_id_list(folder_id, htoken=None):
+        if isinstance(folder_id, pywintypes.IIDType):
+            folder_id = bytes(folder_id)
+        pidl = ctypes.c_void_p()
+        try:
+            _shell32.SHGetKnownFolderIDList(folder_id, 0, htoken, ctypes.byref(pidl))
+            return shell.AddressAsPIDL(pidl.value)
+        except OSError as e:
+            if e.winerror & 0x80070000 == 0x80070000:
+                # It's a WinAPI error, so re-raise it, letting Python
+                # raise a specific exception such as FileNotFoundError.
+                raise ctypes.WinError(e.winerror & 0x0000FFFF)
+            raise
+        finally:
+            if pidl:
+                _ole32.CoTaskMemFree(pidl)
+
+    def enum_known_folder(folder_id, htoken=None):
+        id_list = get_known_folder_id_list(folder_id, htoken)
+        folder_shell_item = shell.SHCreateShellItem(None, None, id_list)
+        items_enum = folder_shell_item.BindToHandler(
+            None, shell.BHID_EnumItems, shell.IID_IEnumShellItems
+        )
+        yield from items_enum
+
+    def list_known_folder(folder_id, htoken=None):
+        result = []
+        for item in enum_known_folder(folder_id, htoken):
+            result.append(item.GetDisplayName(shellcon.SIGDN_NORMALDISPLAY))
+        result.sort(key=lambda x: x.upper())
+        return result
+
+    def get_target_path(lnk_file):
+        print(lnk_file)
+        try:
+            shell = win32com.client.Dispatch("WScript.Shell")
+            shortcut = shell.CreateShortCut(lnk_file)
+            return shortcut.Targetpath
+        except:
+            return None
+
+    def get_apps() -> list[known_application_list]:
+        global got_apps        
+        got_apps = True
+
+        windows_application_directories = [
+            "%AppData%/Microsoft/Windows/Start Menu/Programs",
+            "%ProgramData%/Microsoft/Windows/Start Menu/Programs",
+            "%AppData%/Microsoft/Internet Explorer/Quick Launch/User Pinned/TaskBar",
+        ]
+
+        files = []
+        for path in windows_application_directories:
+            full_path = os.path.expandvars(path)
+            files.extend(glob.glob(os.path.join(full_path, '**/*.lnk'), recursive=True))
+
+        files ={Path(path).stem : Path(get_target_path(str(Path(path).resolve()))).resolve() for path in files}
+
         applications_dupe_prevention = {}
-        for item in items:
-            display_name = item.Name
-            app_user_model_id = item.path
+        for item in enum_known_folder(FOLDERID_AppsFolder):
             path = None
             executable_name = None
+
+            try:
+                property_store = item.BindToHandler(
+                    None, shell.BHID_PropertyStore, propsys.IID_IPropertyStore
+                )
+                app_user_model_id = property_store.GetValue(
+                    pscon.PKEY_AppUserModel_ID
+                ).ToString()
+
+            except pywintypes.error:
+                continue
+
+            display_name = item.GetDisplayName(shellcon.SIGDN_NORMALDISPLAY)
+
+            # if item.GetAttributes(shellcon.SFGAO_LINK):
+            #     print("link found...")
+
+                
+            # try:
+            #     link_item = item.BindToHandler(None, shell.BHID_SFUIObject, shell.IID_IShellItem)
+            #     #target_path = link_item.GetDisplayName(shellcon.SIGDN_FILESYSPATH)
+            #     print("did it??")
+            # except:
+            #     print("failed")
 
             should_create_entry = "install" not in display_name
 
@@ -140,6 +243,11 @@ if app.platform == "windows":
                     # exclude anything that is NOT an actual executable
                     should_create_entry = p.suffix in [".exe"]
 
+            if not executable_name:
+                if display_name in files:
+                    path = str(files[display_name].resolve())
+                    executable_name = str(files[display_name].name)
+                    
             new_app = Application(
                 path=str(path) if path else None,
                 display_name=display_name, 
@@ -154,7 +262,6 @@ if app.platform == "windows":
                     applications_dupe_prevention[app_user_model_id] = True
                 else:
                     print(f"Potential duplicate app {new_app}")
-        got_apps = True
         return known_application_list
 
 elif app.platform == "linux":
@@ -235,7 +342,6 @@ elif app.platform == "mac":
     def get_apps() -> list[Application]:
         global applications
         from plistlib import load
-        import glob
         applications_dupe_prevention = {}
         for base in mac_application_directories:
             base = os.path.expanduser(base)
