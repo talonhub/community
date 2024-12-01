@@ -388,7 +388,13 @@ def update(f):
     if not got_apps:
         get_apps()
 
+    application_map = {
+        app.unique_identifier : app for app in known_application_list
+    }
+
     applications_overrides = {}
+    must_update_file = False
+
     rows = list(csv.reader(f))
     assert rows[0] == ["Application name", " Spoken forms", " Exclude"," Unique Id", " Path", " Executable Name"]
 
@@ -419,10 +425,11 @@ def update(f):
                                     spoken_form=spoken_forms,
                                     )
         
-        # if display_name == "visual studio code":
-        #     print("FOUND VISUAL STUDIO CODE!?!?")
-        #     print(override_app)
-            
+        # app has been removed?
+        #if uid not in application_map:
+        #    print("update required?")
+        #    must_update_file = True        
+        
         applications_overrides[override_app.display_name] = override_app
 
         if override_app.executable_name:
@@ -434,13 +441,19 @@ def update(f):
         if override_app.unique_identifier:
             applications_overrides[override_app.unique_identifier] = override_app
 
+
+
     # build the applications dictionary with the overrides applied
     applications = {}
-    for application in known_application_list:
+    for index,application in enumerate(known_application_list):
         curr_app = application
 
         if application.unique_identifier in applications_overrides:
             curr_app = applications_overrides[application.unique_identifier]
+            known_application_list[index] = curr_app
+        # else:
+        #     print("Update Required?")
+        #     must_update_file = True
 
         if application.path in applications_overrides:
             curr_app = applications_overrides[application.path]
@@ -466,6 +479,11 @@ def update(f):
         if curr_app.executable_name:
             applications[curr_app.executable_name] = curr_app
 
+    
+
+    # if must_update_file:
+    #     write_updated_csv()
+    # else:
     update_running_list()
     update_launch_list()
 
