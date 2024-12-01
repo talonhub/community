@@ -76,7 +76,7 @@ Movies & TV,None,True,Microsoft.ZuneVideo_8wekyb3d8bbwe!Microsoft.ZuneVideo,None
 Narrator,None,True,{1AC14E77-02E7-4E5D-B744-2EB1AE5198B7}\narrator.exe,C:\Windows\System32\Narrator.exe,narrator.exe
 News,None,True,Microsoft.BingNews_8wekyb3d8bbwe!AppexNews,None,None
 Notepad,None,True,{1AC14E77-02E7-4E5D-B744-2EB1AE5198B7}\notepad.exe,C:\Windows\System32\notepad.exe,notepad.exe
-Notepad++,Notepad; note pad,False,{6D809377-6AF0-444B-8957-A3773F02200E}\Notepad++\notepad++.exe,C:\Program Files\Notepad++\notepad++.exe,notepad++.exe
+Notepad++,notepad; note pad,False,{6D809377-6AF0-444B-8957-A3773F02200E}\Notepad++\notepad++.exe,C:\Program Files\Notepad++\notepad++.exe,notepad++.exe
 ODBC Data Sources (32-bit),None,True,{D65231B0-B2F1-4857-A4CE-A8E7C6EA7D27}\odbcad32.exe,C:\Windows\SysWOW64\odbcad32.exe,odbcad32.exe
 ODBC Data Sources (64-bit),None,True,{1AC14E77-02E7-4E5D-B744-2EB1AE5198B7}\odbcad32.exe,C:\Windows\System32\odbcad32.exe,odbcad32.exe
 Office Language Preferences,None,True,Microsoft.Office.SETLANG.EXE.15,None,None

@@ -1,18 +1,13 @@
-#todo
-#(1) Consolidate logic for getting absolute paths of executables
-#(2) Break out get_apps into action and move to operating system-specific area
-#(3) Move CSVs to new style...
-#(4) Simplify and consolidate logic for excludes
 import os
 import shlex
 import subprocess
 import time
 from pathlib import Path
 import csv
-
 import talon
-from talon import Context, Module, actions, app, fs, imgui, ui, resource
+from talon import Context, Module, actions, app, imgui, ui, resource
 from typing import Union
+from ..user_settings import track_csv_list
 
 # Construct a list of spoken form overrides for application names (similar to how homophone list is managed)
 # These overrides are used *instead* of the generated spoken forms for the given app name or .exe (on Windows)
@@ -359,9 +354,24 @@ def update_running_list():
 
     ctx.lists["self.running"] = running
 
+def write_default_csv():
+    path = Path(app_names_file_path)
+    if not path.exists():
+        if not got_apps:
+            get_apps()
+        
+        sorted_apps = sorted(known_application_list, key=lambda application: application.display_name)
 
-@resource.watch(app_names_file_name)
-def update_and_apply_overrides(f):
+        with open(path, 'w') as file:
+            file.write("Application name, Spoken forms, Exclude, Unique Id, Path, Executable Name\n")
+            
+            for application in sorted_apps:
+                file.write(str(application) + "\n")
+
+write_default_csv()
+
+@resource.watch(app_names_file_path)
+def update(f):
     global applications, applications_overrides
     
     if not got_apps:
