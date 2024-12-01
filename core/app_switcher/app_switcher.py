@@ -94,6 +94,15 @@ if app.platform == "windows":
     from .windows_known_paths import resolve_known_windows_path, PathNotFoundException
     from uuid import UUID
     import win32com
+
+    # since I can't figure out how to get the target paths from the shell folders,
+    # we'll parse the known shortcuts and do it live!?
+    windows_application_directories = [
+        "%AppData%/Microsoft/Windows/Start Menu/Programs",
+        "%ProgramData%/Microsoft/Windows/Start Menu/Programs",
+        "%AppData%/Microsoft/Internet Explorer/Quick Launch/User Pinned/TaskBar",
+    ]
+
     def resolve_path_with_guid(path) -> Path:
         splits = path.split(os.path.sep)
         guid = splits[0]
@@ -179,7 +188,6 @@ if app.platform == "windows":
         return result
 
     def get_target_path(lnk_file):
-        print(lnk_file)
         try:
             shell = win32com.client.Dispatch("WScript.Shell")
             shortcut = shell.CreateShortCut(lnk_file)
@@ -187,27 +195,23 @@ if app.platform == "windows":
         except:
             return None
 
-    def get_apps() -> list[known_application_list]:
+    shortcut_paths = []
+    for path in windows_application_directories:
+        full_path = os.path.expandvars(path)
+        shortcut_paths.extend(glob.glob(os.path.join(full_path, '**/*.lnk'), recursive=True))
+
+    shortcut_map = {Path(path).stem : Path(get_target_path(str(Path(path).resolve()))).resolve() for path in shortcut_paths}
+
+    def get_apps() -> list[Application]:
         global got_apps        
         got_apps = True
-
-        windows_application_directories = [
-            "%AppData%/Microsoft/Windows/Start Menu/Programs",
-            "%ProgramData%/Microsoft/Windows/Start Menu/Programs",
-            "%AppData%/Microsoft/Internet Explorer/Quick Launch/User Pinned/TaskBar",
-        ]
-
-        files = []
-        for path in windows_application_directories:
-            full_path = os.path.expandvars(path)
-            files.extend(glob.glob(os.path.join(full_path, '**/*.lnk'), recursive=True))
-
-        files ={Path(path).stem : Path(get_target_path(str(Path(path).resolve()))).resolve() for path in files}
 
         applications_dupe_prevention = {}
         for item in enum_known_folder(FOLDERID_AppsFolder):
             path = None
             executable_name = None
+            display_name = None
+            app_user_model_id = None
 
             try:
                 property_store = item.BindToHandler(
@@ -221,32 +225,24 @@ if app.platform == "windows":
                 continue
 
             display_name = item.GetDisplayName(shellcon.SIGDN_NORMALDISPLAY)
-
-            # if item.GetAttributes(shellcon.SFGAO_LINK):
-            #     print("link found...")
-
-                
-            # try:
-            #     link_item = item.BindToHandler(None, shell.BHID_SFUIObject, shell.IID_IShellItem)
-            #     #target_path = link_item.GetDisplayName(shellcon.SIGDN_FILESYSPATH)
-            #     print("did it??")
-            # except:
-            #     print("failed")
-
             should_create_entry = "install" not in display_name
 
             if should_create_entry:
-                p = resolve_path_with_guid(app_user_model_id)
-                if p:
-                    path = p.resolve()
-                    executable_name = p.name  
-                    # exclude anything that is NOT an actual executable
-                    should_create_entry = p.suffix in [".exe"]
+                try:
+                    p = resolve_path_with_guid(app_user_model_id)
+                    if p:
+                        path = p.resolve()
+                        executable_name = p.name  
+                        # exclude anything that is NOT an actual executable
+                        should_create_entry = p.suffix in [".exe"]
+                except:
+                    pass
 
-            if not executable_name:
-                if display_name in files:
-                    path = str(files[display_name].resolve())
-                    executable_name = str(files[display_name].name)
+                if not executable_name:
+                    if display_name in shortcut_map:
+                        path = str(shortcut_map[display_name].resolve())
+                        executable_name = str(shortcut_map[display_name].name)
+                        should_create_entry = shortcut_map[display_name].suffix in [".exe"]
                     
             new_app = Application(
                 path=str(path) if path else None,
@@ -466,7 +462,7 @@ def update_running_list():
         running.update(actions.user.create_spoken_forms_from_list(
             generate_spoken_form_list,
             words_to_exclude=words_to_exclude,
-            generate_subsequences=True,
+            generate_subsequences=False,
         ))
 
     ctx.lists["self.running"] = running
@@ -561,14 +557,14 @@ def update(f):
         #     print("Update Required?")
         #     must_update_file = True
 
-        if application.path in applications_overrides:
-            curr_app = applications_overrides[application.path]
+        # if application.path in applications_overrides:
+        #     curr_app = applications_overrides[application.path]
 
-        if application.display_name in applications_overrides:
-            curr_app = applications_overrides[application.display_name]
+        # if application.display_name in applications_overrides:
+        #     curr_app = applications_overrides[application.display_name]
     
-        if application.executable_name in applications_overrides:
-            curr_app = applications_overrides[application.executable_name]
+#        if application.executable_name in applications_overrides:
+#            curr_app = applications_overrides[application.executable_name]
         
         #if curr_app.display_name == "visual studio code":
         #    print("found it agian?!?!")
@@ -736,7 +732,7 @@ def update_launch_list():
     result = actions.user.create_spoken_forms_from_map(
         sources=launch, 
         words_to_exclude=words_to_exclude,
-        generate_subsequences=True,
+        generate_subsequences=False,
     )
 
     customized = {
