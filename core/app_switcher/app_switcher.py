@@ -116,8 +116,8 @@ def update_running_list():
     running = {}
     foreground_apps = ui.apps(background=False)
     generate_spoken_form_list = []
-
     for cur_app in foreground_apps:
+        #print(f"{cur_app.name} {cur_app.exe}")
         name = cur_app.name.lower()
         running_application_dict[name.lower()] = cur_app
         
@@ -142,7 +142,7 @@ def update_running_list():
             words_to_exclude=words_to_exclude,
             generate_subsequences=False,
         ))
-
+    #print(running)
     ctx.lists["self.running"] = running
 
 def get_installed_apps():
@@ -163,7 +163,7 @@ def update_csv(forced: bool = False):
 
         sorted_apps = sorted(all_apps, key=lambda application: application.display_name)
 
-        output = ["Application name, Spoken forms, Exclude, Unique Id, Path, Executable Name\n"]
+        output = ["Application name, Spoken forms, Exclude, Unique Id, Path, Executable Name, Host\n"]
         for application in sorted_apps:
             output.extend(f"{str(application)}\n") 
 
@@ -190,16 +190,21 @@ def update(f):
     must_update_file = False
 
     rows = list(csv.reader(f))
-    assert rows[0] == ["Application name", " Spoken forms", " Exclude"," Unique Id", " Path", " Executable Name"]
+    #assert rows[0] == ["Application name", " Spoken forms", " Exclude"," Unique Id", " Path", " Executable Name", " Host"]
     if len(rows[1:]) < len(INSTALLED_APPLICATIONS_LIST):
         must_update_file = True
     
     for row in rows[1:]:
-        if len(row) != 6:
-            print(f"Row {row} malformed; expecting 6 entires")
+        if len(row) < 6 or len(row) > 7:
+            print(f"Row {row} malformed; expecting 6 or 7 entires")
 
-        display_name, spoken_forms, exclude, uid, path, executable_name = (
-            [x.strip() or None for x in row])[:6]
+        if len(row) == 6:
+            display_name, spoken_forms, exclude, uid, path, executable_name = (
+                [x.strip() or None for x in row])[:6]
+            host = None
+        elif len(row) == 7:
+            display_name, spoken_forms, exclude, uid, path, executable_name, host = (
+                [x.strip() or None for x in row])[:7]
         
         if spoken_forms.lower() == "none":
             spoken_forms = None
@@ -216,6 +221,7 @@ def update(f):
                                     executable_name=executable_name,
                                     exclude = exclude,
                                     spoken_form=spoken_forms,
+                                    host=host
                                     )
         
         # app has been removed from the OS or is not installed yet.
@@ -413,3 +419,13 @@ def update_launch_list():
     }
     result.update(customized)
     ctx.lists["self.launch"] = result
+
+def ui_event(event, arg):
+    if event in ("app_launch", "app_close"):
+        update_running_list()
+
+def on_ready():
+    update_running_list()
+
+
+app.register("ready", on_ready)
