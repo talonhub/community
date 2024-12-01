@@ -38,7 +38,7 @@ PRESERVED_APPLICATION_LIST: list[Application] = []
 # we use the shell:AppsFolder to populate the list of applications
 # rather than via e.g. the start menu. This way, all apps, including "modern" apps are
 # launchable. To easily retrieve the apps this makes available, navigate to shell:AppsFolder in Explorer
-KNOWN_APPLICATIONS_INITIALIZED = False
+INSTALLED_APPLICATIONS_INITIALIZED = False
 
 # Define the regex pattern for a bundle ID
 bundle_id_pattern = r'^[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)+$'
@@ -90,21 +90,24 @@ def launch_applications(m) -> str:
     "Returns a single application name"
     return m.launch
 
-def should_generate_spoken_forms(curr_app) -> tuple[bool, Union[Application, None]]:
+def should_generate_spoken_forms_for_running_app(curr_app) -> tuple[bool, Union[Application, None]]:
     name = curr_app.name
     bundle_name = curr_app.bundle
     exe_path = str(Path(curr_app.exe).resolve())
     executable_name = os.path.basename(curr_app.exe)
 
     if bundle_name and bundle_name in APPLICATIONS_OVERRIDES:
-        return not APPLICATIONS_OVERRIDES[bundle_name].exclude and APPLICATIONS_OVERRIDES[bundle_name].spoken_forms is None, APPLICATIONS_OVERRIDES[bundle_name]
+        #return not APPLICATIONS_OVERRIDES[bundle_name].exclude and APPLICATIONS_OVERRIDES[bundle_name].spoken_forms is None, APPLICATIONS_OVERRIDES[bundle_name]
+        return APPLICATIONS_OVERRIDES[bundle_name].spoken_forms is None, APPLICATIONS_OVERRIDES[bundle_name]
     elif exe_path and exe_path in APPLICATIONS_OVERRIDES:
-        return not APPLICATIONS_OVERRIDES[exe_path].exclude and APPLICATIONS_OVERRIDES[exe_path].spoken_forms is None, APPLICATIONS_OVERRIDES[exe_path]
+        #return not APPLICATIONS_OVERRIDES[exe_path].exclude and APPLICATIONS_OVERRIDES[exe_path].spoken_forms is None, APPLICATIONS_OVERRIDES[exe_path]
+        return APPLICATIONS_OVERRIDES[exe_path].spoken_forms is None, APPLICATIONS_OVERRIDES[exe_path]
     elif executable_name and executable_name in APPLICATIONS_OVERRIDES:
-        value = not APPLICATIONS_OVERRIDES[executable_name].exclude and APPLICATIONS_OVERRIDES[executable_name].spoken_forms is None
-        return value, APPLICATIONS_OVERRIDES[executable_name]    
+        #return not APPLICATIONS_OVERRIDES[executable_name].exclude and APPLICATIONS_OVERRIDES[executable_name].spoken_forms is None, APPLICATIONS_OVERRIDES[executable_name]  
+        return APPLICATIONS_OVERRIDES[executable_name].spoken_forms is None, APPLICATIONS_OVERRIDES[executable_name]      
     elif name and name in APPLICATIONS_OVERRIDES:
-        return not APPLICATIONS_OVERRIDES[name].exclude and APPLICATIONS_OVERRIDES[name].spoken_forms is None, APPLICATIONS_OVERRIDES[name]
+        return APPLICATIONS_OVERRIDES[name].spoken_forms is None, APPLICATIONS_OVERRIDES[name]
+        #return not APPLICATIONS_OVERRIDES[name].exclude and APPLICATIONS_OVERRIDES[name].spoken_forms is None, APPLICATIONS_OVERRIDES[name]
     return True, None
 
 def update_running_list():
@@ -127,7 +130,7 @@ def update_running_list():
             running_application_dict[cur_app.exe.lower()] = cur_app
             running_application_dict[exe] = cur_app
 
-        should_generate_forms, override = should_generate_spoken_forms(cur_app)
+        should_generate_forms, override = should_generate_spoken_forms_for_running_app(cur_app)
         if should_generate_forms:
             generate_spoken_form_list.append(cur_app.name.lower())
         elif override and override.spoken_forms is not None:
@@ -143,13 +146,13 @@ def update_running_list():
     ctx.lists["self.running"] = running
 
 def get_installed_apps():
-    global INSTALLED_APPLICATIONS_LIST, KNOWN_APPLICATIONS_INITIALIZED
-    if not KNOWN_APPLICATIONS_INITIALIZED:
+    global INSTALLED_APPLICATIONS_LIST, INSTALLED_APPLICATIONS_INITIALIZED
+    if not INSTALLED_APPLICATIONS_INITIALIZED:
         if app.platform == "windows":
             INSTALLED_APPLICATIONS_LIST = get_installed_windows_apps()
         elif app.platform == "mac":
             INSTALLED_APPLICATIONS_LIST = get_installed_mac_apps()
-        KNOWN_APPLICATIONS_INITIALIZED = True
+        INSTALLED_APPLICATIONS_INITIALIZED = True
 
 def update_csv(forced: bool = False):
     path = Path(app_names_file_path)
@@ -171,7 +174,7 @@ update_csv()
 
 @resource.watch(app_names_file_path)
 def update(f):
-    global applications, INSTALLED_APPLICATIONS_LIST, APPLICATIONS_OVERRIDES, KNOWN_APPLICATIONS_INITIALIZED
+    global applications, INSTALLED_APPLICATIONS_LIST, APPLICATIONS_OVERRIDES, INSTALLED_APPLICATIONS_INITIALIZED
     global PRESERVED_APPLICATION_LIST
     
     get_installed_apps()
