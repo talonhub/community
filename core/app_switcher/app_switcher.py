@@ -41,26 +41,23 @@ class Application:
     display_name: str
     unique_identifier: str
     executable_name: str
-    spoken_forms: list[str]
     exclude: bool 
+    spoken_forms: list[str]
 
-    def __init__(self, path:str, display_name: str, unique_identifier: str, executable_name: str, exclude=False, spoken_forms: list[str] = None):
+    def __init__(self, path:str, display_name: str, unique_identifier: str, executable_name: str, exclude: bool, spoken_form: list[str]):
         self.path = path
         self.display_name = display_name
         self.executable_name = executable_name 
         self.unique_identifier = unique_identifier
         self.exclude = exclude
-
-        self.spoken_forms = (
-            [spoken_forms] if isinstance(spoken_forms, str) else spoken_forms
-        )
+        self.spoken_forms = spoken_form  
 
     def __str__(self):
-        spoken_forms = None
+        spoken_form = None
         if self.spoken_forms:
-            spoken_forms = ";".join(self.spoken_forms)
+            spoken_form = ";".join(self.spoken_forms)
 
-        return f"{self.display_name},{spoken_forms},{self.exclude},{self.unique_identifier},{self.path},{self.executable_name}"
+        return f"{self.display_name},{spoken_form},{self.exclude},{self.unique_identifier},{self.path},{self.executable_name}"
 
 # a dictionary of applications with overrides pre-applied
 # key by app name, exe path, exe, and bundle id/AppUserModelId
@@ -131,13 +128,14 @@ if app.platform == "windows":
         folder = shell.NameSpace('shell:::{4234d49b-0245-4df3-b780-3893943456e1}')
         items = folder.Items()
         
+        applications_dupe_prevention = {}
         for item in items:
-            display_name = item.Name
+            display_name = item.Name.lower()
             app_user_model_id = item.path
             path = None
             executable_name = None
 
-            should_create_entry = "install" not in display_name.lower()
+            should_create_entry = "install" not in display_name
 
             if should_create_entry:
                 p = resolve_path_with_guid(app_user_model_id)
@@ -147,16 +145,20 @@ if app.platform == "windows":
                     # exclude anything that is NOT an actual executable
                     should_create_entry = p.suffix in [".exe"]
 
+            new_app = Application(
+                path=str(path).lower() if path else None,
+                display_name=display_name.lower(), 
+                unique_identifier= app_user_model_id.lower(), 
+                executable_name=executable_name.lower() if executable_name else None,
+                exclude=False,
+                spoken_form=None)
+            
             if should_create_entry:
-                if app_user_model_id not in applications:
-                    new_app = Application(
-                        path=path,
-                        display_name=display_name, 
-                        unique_identifier=app_user_model_id, 
-                        executable_name=executable_name, 
-                        exclude=False)
-
+                if app_user_model_id not in applications_dupe_prevention:
                     known_application_list.append(new_app)
+                    applications_dupe_prevention[app_user_model_id] = True
+                else:
+                    print(f"Potential duplicate app {new_app}")
         got_apps = True
         return known_application_list
 
@@ -263,7 +265,8 @@ elif app.platform == "mac":
                                 display_name=display_name, 
                                 unique_identifier=bundle_identifier, 
                                 executable_name=executable_name, 
-                                exclude=False)
+                                exclude=False,
+                                spoken_form=None)
                                                         
                             known_application_list.append(new_app)
 
@@ -282,7 +285,8 @@ elif app.platform == "mac":
                                         display_name=display_name, 
                                         unique_identifier=bundle_identifier, 
                                         executable_name=executable_name, 
-                                        exclude=False)
+                                        exclude=False,
+                                        spoken_form=None)
                                     
                                     known_application_list.append(new_app)
 
@@ -329,11 +333,11 @@ def update_running_list():
 
     for cur_app in foreground_apps:
         name = cur_app.name.lower()
-        running_application_dict[name.lower()] = cur_app.name
+        running_application_dict[name.lower()] = cur_app
         
         if app.platform == "mac":
             bundle_name = cur_app.bundle.lower()
-            running_application_dict[bundle_name.lower()] = cur_app
+            running_application_dict[bundle_name] = cur_app
 
         if app.platform == "windows":
             exe = os.path.basename(cur_app.exe).lower()
@@ -343,9 +347,9 @@ def update_running_list():
         should_generate_forms, override = should_generate_spoken_forms(cur_app)
         if should_generate_forms:
             generate_spoken_form_list.append(cur_app.name)
-        else:
+        elif override and override.spoken_forms is not None:
             for spoken_form in override.spoken_forms:
-                running[spoken_form] = cur_app.name
+                running[spoken_form] = name
 
         running.update(actions.user.create_spoken_forms_from_list(
             generate_spoken_form_list,
@@ -371,7 +375,7 @@ def update_and_apply_overrides(f):
         if 0 == len(row):
             continue
 
-        if len(row) < 6:
+        if len(row) != 6:
             print(f"Row {row} malformed; expecting 6 entires")
 
         display_name, spoken_forms, exclude, uid, path, executable_name = (
@@ -386,15 +390,18 @@ def update_and_apply_overrides(f):
         uid = None if uid.lower() == "none" else uid
         path = None if path.lower() == "none" else path
         executable_name = None if executable_name.lower() == "none" else executable_name
-    
         override_app = Application (path=path,
                                     display_name=display_name, 
-                                    spoken_forms=spoken_forms,
-                                    exclude = exclude,
                                     unique_identifier=uid,
-                                    executable_name=executable_name)
+                                    executable_name=executable_name,
+                                    exclude = exclude,
+                                    spoken_form=spoken_forms,
+                                    )
         
-        
+        # if display_name == "visual studio code":
+        #     print("FOUND VISUAL STUDIO CODE!?!?")
+        #     print(override_app)
+            
         applications_overrides[override_app.display_name] = override_app
 
         if override_app.executable_name:
@@ -423,6 +430,9 @@ def update_and_apply_overrides(f):
         if application.executable_name in applications_overrides:
             curr_app = applications_overrides[application.executable_name]
         
+        #if curr_app.display_name == "visual studio code":
+        #    print("found it agian?!?!")
+
         if curr_app.unique_identifier:
             applications[curr_app.unique_identifier] = curr_app
 
@@ -482,7 +492,7 @@ class Actions:
 
     def switcher_focus(name: str):
         """Focus a new application by name"""
-        app = actions.user.get_running_app(name)
+        app = actions.user.get_running_app(name.lower())
 
         # Focus next window on same app
         if app == ui.active_app():
@@ -573,9 +583,17 @@ def gui_running(gui: imgui.GUI):
 
 def update_launch_list():
     if app.platform == "windows":
-        launch = {app.display_name : app.unique_identifier for app in applications.values() if not app.exclude and not app.spoken_forms}    
+        launch = {
+            application.display_name : application.unique_identifier 
+            for application in applications.values() 
+            if not application.exclude and not application.spoken_forms
+        }    
     else:
-        launch = {app.display_name : app.path  for app in applications.values() if not app.exclude and not app.spoken_forms}  
+        launch = {
+            application.display_name : application.path  
+            for application in applications.values() 
+            if not application.exclude and not application.spoken_forms
+        }  
 
     result = actions.user.create_spoken_forms_from_map(
         sources=launch, 
@@ -589,17 +607,5 @@ def update_launch_list():
         if current_app.spoken_forms is not None
         for spoken_form in current_app.spoken_forms
     }
-
     result.update(customized)
     ctx.lists["self.launch"] = result
-
-
-# Talon starts faster if you don't use the `talon.ui` module during launch
-
-
-def on_ready():
-    # build application dictionary
-    if not got_apps:
-        get_apps()
-
-app.register("ready", on_ready)
