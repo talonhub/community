@@ -232,7 +232,7 @@ elif app.platform == "mac":
         f"{Path.home()}/.nix-profile/Applications",
     ]
 
-    def get_apps() -> dict[str, Application]:
+    def get_apps() -> list[Application]:
         global applications
         from plistlib import load
         import glob
@@ -253,7 +253,7 @@ elif app.platform == "mac":
                             #print(f"found at default: {plist_path}")
                             pl = load(fp)
                             bundle_identifier = pl["CFBundleIdentifier"].lower()
-                            executable_name = pl["CFBundleExecutable"] if "CFBundleExecutable" in pl else ""
+                            executable_name = pl["CFBundleExecutable"] if "CFBundleExecutable" in pl else None
                                 
                             new_app = Application(
                                 path=path,
@@ -274,7 +274,7 @@ elif app.platform == "mac":
                                 if "CFBundleIdentifier" in pl:
                                     #print(f"found at: {file}")
                                     bundle_identifier = pl["CFBundleIdentifier"].lower()
-                                    executable_name = pl["CFBundleExecutable"].lower() if "CFBundleExecutable" in pl else ""
+                                    executable_name = pl["CFBundleExecutable"].lower() if "CFBundleExecutable" in pl else None
                                     new_app = Application(
                                         path=path,
                                         display_name=display_name, 
