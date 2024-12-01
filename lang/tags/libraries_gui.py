@@ -36,8 +36,11 @@ class Actions:
     def code_select_library(number: int, selection: str):
         """Inserts the selected library when the imgui is open"""
         if gui_libraries.showing and number < len(library_list):
+            talon_list = actions.user.talon_get_active_registry_list(
+                "user.code_libraries"
+            )
             actions.user.code_insert_library(
-                registry.lists["user.code_libraries"][0][library_list[number]],
+                talon_list[library_list[number]],
                 selection,
             )
 
@@ -54,7 +57,8 @@ def gui_libraries(gui: imgui.GUI):
     gui.line()
 
     for i, entry in enumerate(library_list, 1):
-        gui.text(f"{i}. {entry}: {registry.lists['user.code_libraries'][0][entry]}")
+        talon_list = actions.user.talon_get_active_registry_list("user.code_libraries")
+        gui.text(f"{i}. {entry}: {talon_list[entry]}")
 
     gui.spacer()
     if gui.button("Toggle libraries close"):
@@ -64,7 +68,8 @@ def gui_libraries(gui: imgui.GUI):
 def update_library_list_and_freeze():
     global library_list
     if "user.code_libraries" in registry.lists:
-        library_list = sorted(registry.lists["user.code_libraries"][0].keys())
+        talon_list = actions.user.talon_get_active_registry_list("user.code_libraries")
+        library_list = sorted(talon_list.keys())
     else:
         library_list = []
 

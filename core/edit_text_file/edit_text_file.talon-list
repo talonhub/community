@@ -1,0 +1,15 @@
+list: user.edit_text_file
+-
+
+additional words: core/vocabulary/vocabulary.talon-list
+vocabulary: core/vocabulary/vocabulary.talon-list
+alphabet: core/keys/letter.talon-list
+homophones: core/homophones/homophones.csv
+search engines: core/websites_and_search_engines/search_engine.talon-list
+websites: core/websites_and_search_engines/website.talon-list
+
+unix utilities: tags/terminal/unix_utility.talon-list
+
+abbreviations: settings/abbreviations.csv
+file extensions: settings/file_extensions.csv
+words to replace: settings/words_to_replace.csv

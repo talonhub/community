@@ -37,8 +37,11 @@ class Actions:
     def code_select_function(number: int, selection: str):
         """Inserts the selected function when the imgui is open"""
         if gui_functions.showing and number < len(function_list):
+            talon_list = actions.user.talon_get_active_registry_list(
+                "user.code_common_function"
+            )
             actions.user.code_insert_function(
-                registry.lists["user.code_common_function"][0][function_list[number]],
+                talon_list[function_list[number]],
                 selection,
             )
 
@@ -52,7 +55,10 @@ class Actions:
 def update_function_list_and_freeze():
     global function_list
     if "user.code_common_function" in registry.lists:
-        function_list = sorted(registry.lists["user.code_common_function"][0].keys())
+        talon_list = actions.user.talon_get_active_registry_list(
+            "user.code_common_function"
+        )
+        function_list = sorted(talon_list.keys())
     else:
         function_list = []
 
@@ -65,12 +71,12 @@ def gui_functions(gui: imgui.GUI):
     gui.text("Functions")
     gui.line()
 
-    # print(str(registry.lists["user.code_functions"]))
     for i, entry in enumerate(function_list, 1):
-        if entry in registry.lists["user.code_common_function"][0]:
-            gui.text(
-                f"{i}. {entry}: {registry.lists['user.code_common_function'][0][entry]}"
-            )
+        talon_list = actions.user.talon_get_active_registry_list(
+            "user.code_common_function"
+        )
+        if entry in talon_list:
+            gui.text(f"{i}. {entry}: {talon_list[entry]}")
 
     gui.spacer()
     if gui.button("Toggle funk (close window)"):

@@ -14,3 +14,5 @@ tag(): user.generic_windows_shell
 tag(): user.git
 tag(): user.anaconda
 # tag(): user.kubectl
+
+tag(): user.file_manager
