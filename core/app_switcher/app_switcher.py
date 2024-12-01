@@ -6,16 +6,12 @@ from pathlib import Path
 import csv
 import talon
 from talon import Context, Module, actions, app, imgui, ui, resource
+from .windows import get_installed_windows_apps
+from .mac import get_installed_mac_apps
 from typing import Union
-import glob
+from .application import Application
+import re
 
-# Construct a list of spoken form overrides for application names (similar to how homophone list is managed)
-# These overrides are used *instead* of the generated spoken forms for the given app name or .exe (on Windows)
-# CSV files contain lines of the form:
-# <spoken form>,<app name or .exe> - to add a spoken form override for the app, or
-# <app name or .exe> - to exclude the app from appearing in "running list" or "focus <app>"
-
-# TODO: Consider moving overrides to settings directory
 directory = os.path.dirname(os.path.realpath(__file__))
 app_names_file_name = f"app_names_{talon.app.platform}.csv"
 app_names_file_path = os.path.normcase(
@@ -31,33 +27,26 @@ ctx = Context()
 # a list of the currently running application names
 running_application_dict = {}
 
-class Application:
-    path: str
-    display_name: str
-    unique_identifier: str
-    executable_name: str
-    exclude: bool 
-    spoken_forms: list[str]
-
-    def __init__(self, path:str, display_name: str, unique_identifier: str, executable_name: str, exclude: bool, spoken_form: list[str]):
-        self.path = path
-        self.display_name = display_name
-        self.executable_name = executable_name 
-        self.unique_identifier = unique_identifier
-        self.exclude = exclude
-        self.spoken_forms = spoken_form  
-
-    def __str__(self):
-        spoken_form = None
-        if self.spoken_forms:
-            spoken_form = ";".join(self.spoken_forms)
-
-        return f"{self.display_name},{spoken_form},{self.exclude},{self.unique_identifier},{self.path},{self.executable_name}"
-
 # a dictionary of applications with overrides pre-applied
 # key by app name, exe path, exe, and bundle id/AppUserModelId
 applications = {}
 known_application_list = []
+# on Windows, WindowsApps are not like normal applications, so
+# we use the shell:AppsFolder to populate the list of applications
+# rather than via e.g. the start menu. This way, all apps, including "modern" apps are
+# launchable. To easily retrieve the apps this makes available, navigate to shell:AppsFolder in Explorer
+KNOWN_APPLICATIONS_INITIALIZED = False
+
+# Define the regex pattern for a bundle ID
+bundle_id_pattern = r'^[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)+$'
+
+# Compile the regex pattern
+compiled_pattern = re.compile(bundle_id_pattern)
+
+# Function to check if a string is a bundle ID
+def is_bundle_id(string):
+    return bool(compiled_pattern.match(string))
+
 words_to_exclude = [
     "zero",
     "one",
@@ -85,322 +74,6 @@ words_to_exclude = [
     "windows",
 ]
 
-# on Windows, WindowsApps are not like normal applications, so
-# we use the shell:AppsFolder to populate the list of applications
-# rather than via e.g. the start menu. This way, all apps, including "modern" apps are
-# launchable. To easily retrieve the apps this makes available, navigate to shell:AppsFolder in Explorer
-got_apps = False
-if app.platform == "windows":
-    from .windows_known_paths import resolve_known_windows_path, PathNotFoundException
-    from uuid import UUID
-    import win32com
-
-    # since I can't figure out how to get the target paths from the shell folders,
-    # we'll parse the known shortcuts and do it live!?
-    windows_application_directories = [
-        "%AppData%/Microsoft/Windows/Start Menu/Programs",
-        "%ProgramData%/Microsoft/Windows/Start Menu/Programs",
-        "%AppData%/Microsoft/Internet Explorer/Quick Launch/User Pinned/TaskBar",
-    ]
-
-    def resolve_path_with_guid(path) -> Path:
-        splits = path.split(os.path.sep)
-        guid = splits[0]
-        if is_valid_uuid(guid):
-            try:
-                known_folder_path = resolve_known_windows_path(UUID(guid))
-            except (PathNotFoundException):
-                print("Failed to resolve known path: " + guid)
-                return None
-            full_path = os.path.join(known_folder_path, *splits[1:])
-            p = Path(full_path)
-            return p
-        return None
-
-    def is_valid_uuid(value):
-        try:
-            uuid_obj = UUID(value, version=4)
-            return True
-        except ValueError:
-            return False
-        
-    import ctypes
-    import os
-    from ctypes import wintypes
-
-    import pywintypes
-    from win32com.propsys import propsys, pscon
-    from win32com.shell import shell, shellcon
-
-    # KNOWNFOLDERID
-    # https://msdn.microsoft.com/en-us/library/dd378457
-    # win32com defines most of these, except the ones added in Windows 8.
-    FOLDERID_AppsFolder = pywintypes.IID("{1e87508d-89c2-42f0-8a7e-645a0f50ca58}")
-
-    # win32com is missing SHGetKnownFolderIDList, so use ctypes.
-
-    _ole32 = ctypes.OleDLL("ole32")
-    _shell32 = ctypes.OleDLL("shell32")
-
-    _REFKNOWNFOLDERID = ctypes.c_char_p
-    _PPITEMIDLIST = ctypes.POINTER(ctypes.c_void_p)
-
-    _ole32.CoTaskMemFree.restype = None
-    _ole32.CoTaskMemFree.argtypes = (wintypes.LPVOID,)
-
-    _shell32.SHGetKnownFolderIDList.argtypes = (
-        _REFKNOWNFOLDERID,  # rfid
-        wintypes.DWORD,  # dwFlags
-        wintypes.HANDLE,  # hToken
-        _PPITEMIDLIST,
-    )  # ppidl
-
-    def get_known_folder_id_list(folder_id, htoken=None):
-        if isinstance(folder_id, pywintypes.IIDType):
-            folder_id = bytes(folder_id)
-        pidl = ctypes.c_void_p()
-        try:
-            _shell32.SHGetKnownFolderIDList(folder_id, 0, htoken, ctypes.byref(pidl))
-            return shell.AddressAsPIDL(pidl.value)
-        except OSError as e:
-            if e.winerror & 0x80070000 == 0x80070000:
-                # It's a WinAPI error, so re-raise it, letting Python
-                # raise a specific exception such as FileNotFoundError.
-                raise ctypes.WinError(e.winerror & 0x0000FFFF)
-            raise
-        finally:
-            if pidl:
-                _ole32.CoTaskMemFree(pidl)
-
-    def enum_known_folder(folder_id, htoken=None):
-        id_list = get_known_folder_id_list(folder_id, htoken)
-        folder_shell_item = shell.SHCreateShellItem(None, None, id_list)
-        items_enum = folder_shell_item.BindToHandler(
-            None, shell.BHID_EnumItems, shell.IID_IEnumShellItems
-        )
-        yield from items_enum
-
-    def list_known_folder(folder_id, htoken=None):
-        result = []
-        for item in enum_known_folder(folder_id, htoken):
-            result.append(item.GetDisplayName(shellcon.SIGDN_NORMALDISPLAY))
-        result.sort(key=lambda x: x.upper())
-        return result
-
-    def get_target_path(lnk_file):
-        try:
-            shell = win32com.client.Dispatch("WScript.Shell")
-            shortcut = shell.CreateShortCut(lnk_file)
-            return shortcut.Targetpath
-        except:
-            return None
-
-    shortcut_paths = []
-    for path in windows_application_directories:
-        full_path = os.path.expandvars(path)
-        shortcut_paths.extend(glob.glob(os.path.join(full_path, '**/*.lnk'), recursive=True))
-
-    shortcut_map = {Path(path).stem : Path(get_target_path(str(Path(path).resolve()))).resolve() for path in shortcut_paths}
-
-    def get_apps() -> list[Application]:
-        global got_apps        
-        got_apps = True
-
-        applications_dupe_prevention = {}
-        for item in enum_known_folder(FOLDERID_AppsFolder):
-            path = None
-            executable_name = None
-            display_name = None
-            app_user_model_id = None
-
-            try:
-                property_store = item.BindToHandler(
-                    None, shell.BHID_PropertyStore, propsys.IID_IPropertyStore
-                )
-                app_user_model_id = property_store.GetValue(
-                    pscon.PKEY_AppUserModel_ID
-                ).ToString()
-
-            except pywintypes.error:
-                continue
-
-            display_name = item.GetDisplayName(shellcon.SIGDN_NORMALDISPLAY)
-            should_create_entry = "install" not in display_name
-
-            if should_create_entry:
-                try:
-                    p = resolve_path_with_guid(app_user_model_id)
-                    if p:
-                        path = p.resolve()
-                        executable_name = p.name  
-                        # exclude anything that is NOT an actual executable
-                        should_create_entry = p.suffix in [".exe"]
-                except:
-                    pass
-
-                if not executable_name:
-                    if display_name in shortcut_map:
-                        path = str(shortcut_map[display_name].resolve())
-                        executable_name = str(shortcut_map[display_name].name)
-                        should_create_entry = shortcut_map[display_name].suffix in [".exe"]
-                    
-            new_app = Application(
-                path=str(path) if path else None,
-                display_name=display_name, 
-                unique_identifier= app_user_model_id, 
-                executable_name=executable_name if executable_name else None,
-                exclude=False,
-                spoken_form=None)
-            
-            if should_create_entry:
-                if app_user_model_id not in applications_dupe_prevention:
-                    known_application_list.append(new_app)
-                    applications_dupe_prevention[app_user_model_id] = True
-                else:
-                    print(f"Potential duplicate app {new_app}")
-        return known_application_list
-
-elif app.platform == "linux":
-    import configparser
-    import re
-
-    linux_application_directories = [
-        "/usr/share/applications",
-        "/usr/local/share/applications",
-        f"{Path.home()}/.local/share/applications",
-        "/var/lib/flatpak/exports/share/applications",
-        "/var/lib/snapd/desktop/applications",
-    ]
-    xdg_data_dirs = os.environ.get("XDG_DATA_DIRS")
-    if xdg_data_dirs is not None:
-        for directory in xdg_data_dirs.split(":"):
-            linux_application_directories.append(f"{directory}/applications")
-    linux_application_directories = list(set(linux_application_directories))
-
-    def get_apps():
-        # app shortcuts in program menu are contained in .desktop files. This function parses those files for the app name and command
-        items = {}
-        # find field codes in exec key with regex
-        # https://specifications.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html#exec-variables
-        args_pattern = re.compile(r"\%[UufFcik]")
-        for base in linux_application_directories:
-            if os.path.isdir(base):
-                for entry in os.scandir(base):
-                    if entry.name.endswith(".desktop"):
-                        try:
-                            config = configparser.ConfigParser(interpolation=None)
-                            config.read(entry.path)
-                            # only parse shortcuts that are not hidden
-                            if not config.has_option("Desktop Entry", "NoDisplay"):
-                                name_key = config["Desktop Entry"]["Name"]
-                                exec_key = config["Desktop Entry"]["Exec"]
-                                # remove extra quotes from exec
-                                if exec_key[0] == '"' and exec_key[-1] == '"':
-                                    exec_key = re.sub('"', "", exec_key)
-                                # remove field codes and add full path if necessary
-                                if exec_key[0] == "/":
-                                    items[name_key] = re.sub(args_pattern, "", exec_key)
-                                else:
-                                    exec_path = (
-                                        subprocess.check_output(
-                                            ["which", exec_key.split()[0]],
-                                            stderr=subprocess.DEVNULL,
-                                        )
-                                        .decode("utf-8")
-                                        .strip()
-                                    )
-                                    items[name_key] = (
-                                        exec_path
-                                        + " "
-                                        + re.sub(
-                                            args_pattern,
-                                            "",
-                                            " ".join(exec_key.split()[1:]),
-                                        )
-                                    )
-                        except Exception:
-                            print(
-                                "linux get_apps(): skipped parsing application file ",
-                                entry.name,
-                            )
-        return items
-
-elif app.platform == "mac":
-    mac_application_directories = [
-        "/Applications",
-        "/Applications/Utilities",
-        "/System/Applications",
-        "/System/Applications/Utilities",
-        f"{Path.home()}/Applications",
-        f"{Path.home()}/.nix-profile/Applications",
-    ]
-
-    def get_apps() -> list[Application]:
-        global applications
-        from plistlib import load
-        applications_dupe_prevention = {}
-        for base in mac_application_directories:
-            base = os.path.expanduser(base)
-            if os.path.isdir(base):
-                for name in os.listdir(base):
-                    new_app = None
-                    path = os.path.join(base, name)
-                    display_name = name.rsplit(".", 1)[0]
-                    
-                    # most, but not all, apps store this here
-                    plist_path = os.path.join(path, "Contents/Info.plist")
-                    
-                    if os.path.exists(plist_path):
-                        with open(plist_path, 'rb') as fp:
-                            #print(f"found at default: {plist_path}")
-                            pl = load(fp)
-                            bundle_identifier = pl["CFBundleIdentifier"]
-                            executable_name = pl["CFBundleExecutable"] if "CFBundleExecutable" in pl else None
-                            use_alternate_name =  display_name.lower() == "utilities" and base in "/System/Applications/Utilities"
-                            if use_alternate_name and not executable_name or bundle_identifier in applications_dupe_prevention:
-                                continue                         
-
-                            new_app = Application(
-                                path=path,
-                                display_name=display_name if not use_alternate_name else executable_name,
-                                unique_identifier=bundle_identifier, 
-                                executable_name=executable_name, 
-                                exclude=False,
-                                spoken_form=None)
-                                                        
-                            known_application_list.append(new_app)
-                            applications_dupe_prevention[bundle_identifier] = True
-
-                    else:
-                        files = glob.glob(os.path.join(path, '**/Info.plist'), recursive=True)  
-
-                        for file in files:
-                            with open(file, 'rb') as fp:
-                                pl = load(fp)
-                                if "CFBundleIdentifier" in pl:
-                                    #print(f"found at: {file}")
-                                    bundle_identifier = pl["CFBundleIdentifier"]
-                                    executable_name = pl["CFBundleExecutable"] if "CFBundleExecutable" in pl else None
-                                    use_alternate_name =  display_name.lower() == "utilities" and base in "/System/Applications/Utilities"
-                                    
-                                    if use_alternate_name and not executable_name or bundle_identifier in applications_dupe_prevention:
-                                        continue
-                                       
-                                    new_app = Application(
-                                        path=path,
-                                        display_name=display_name if not use_alternate_name else executable_name,   
-                                        unique_identifier=bundle_identifier, 
-                                        executable_name=executable_name, 
-                                        exclude=False,
-                                        spoken_form=None)
-                                    
-                                    known_application_list.append(new_app)
-                                    applications_dupe_prevention[bundle_identifier] = True
-
-
-        return known_application_list
-
-
 @mod.capture(rule="{self.running}")  # | <user.text>)")
 def running_applications(m) -> str:
     "Returns a single application name"
@@ -408,7 +81,6 @@ def running_applications(m) -> str:
         return m.running
     except AttributeError:
         return m.text
-
 
 @mod.capture(rule="{self.launch}")
 def launch_applications(m) -> str:
@@ -467,12 +139,20 @@ def update_running_list():
 
     ctx.lists["self.running"] = running
 
+def get_installed_apps():
+    global known_application_list, KNOWN_APPLICATIONS_INITIALIZED
+    if not KNOWN_APPLICATIONS_INITIALIZED:
+        if app.platform == "windows":
+            known_application_list = get_installed_windows_apps()
+        elif app.platform == "mac":
+            known_application_list = get_installed_mac_apps()
+        KNOWN_APPLICATIONS_INITIALIZED = True
+
 def update_csv(forced: bool = False):
     path = Path(app_names_file_path)
-    if not path.exists() or forced:
-        if not got_apps:
-            get_apps()
-        
+    get_installed_apps()
+
+    if not path.exists() or forced:        
         sorted_apps = sorted(known_application_list, key=lambda application: application.display_name)
 
         output = ["Application name, Spoken forms, Exclude, Unique Id, Path, Executable Name\n"]
@@ -486,10 +166,9 @@ update_csv()
 
 @resource.watch(app_names_file_path)
 def update(f):
-    global applications, applications_overrides
+    global applications, known_application_list, applications_overrides, KNOWN_APPLICATIONS_INITIALIZED
     
-    if not got_apps:
-        get_apps()
+    get_installed_apps()
 
     application_map = {
         app.unique_identifier : app for app in known_application_list
@@ -500,48 +179,49 @@ def update(f):
 
     rows = list(csv.reader(f))
     assert rows[0] == ["Application name", " Spoken forms", " Exclude"," Unique Id", " Path", " Executable Name"]
+    if len(rows[1:]) < len(known_application_list):
+        must_update_file = True
+    
+    if not must_update_file:
+        for row in rows[1:]:
+            if len(row) != 6:
+                print(f"Row {row} malformed; expecting 6 entires")
 
-    for row in rows[1:]:
-        if 0 == len(row):
-            continue
-
-        if len(row) != 6:
-            print(f"Row {row} malformed; expecting 6 entires")
-
-        display_name, spoken_forms, exclude, uid, path, executable_name = (
-            [x.strip() or None for x in row])[:6]
-        
-        if spoken_forms.lower() == "none":
-            spoken_forms = None
-        else:
-            spoken_forms = spoken_forms.split(";")
+            display_name, spoken_forms, exclude, uid, path, executable_name = (
+                [x.strip() or None for x in row])[:6]
             
-        exclude = False if exclude.lower() == "false" else True
-        uid = None if uid.lower() == "none" else uid
-        path = None if path.lower() == "none" else path
-        executable_name = None if executable_name.lower() == "none" else executable_name
-        override_app = Application (path=path,
-                                    display_name=display_name, 
-                                    unique_identifier=uid,
-                                    executable_name=executable_name,
-                                    exclude = exclude,
-                                    spoken_form=spoken_forms,
-                                    )
-        
-        # app has been removed?
-        if uid not in application_map:
-            must_update_file = True        
-        
-        applications_overrides[override_app.display_name] = override_app
+            if spoken_forms.lower() == "none":
+                spoken_forms = None
+            else:
+                spoken_forms = [spoken_form.strip() for spoken_form in spoken_forms.split(";")]
+                
+            exclude = False if exclude.lower() == "false" else True
+            uid = None if uid.lower() == "none" else uid
+            path = None if path.lower() == "none" else path
+            executable_name = None if executable_name.lower() == "none" else executable_name
+            override_app = Application (path=path,
+                                        display_name=display_name, 
+                                        unique_identifier=uid,
+                                        executable_name=executable_name,
+                                        exclude = exclude,
+                                        spoken_form=spoken_forms,
+                                        )
+            
+            # app has been removed from the OS
+            # should we preserve this entry?
+            # if uid not in application_map:
+            #     must_update_file = True        
+            
+            applications_overrides[override_app.display_name] = override_app
 
-        if override_app.executable_name:
-            applications_overrides[override_app.executable_name] = override_app
+            if override_app.executable_name:
+                applications_overrides[override_app.executable_name] = override_app
 
-        if override_app.path:
-            applications_overrides[override_app.path] = override_app                   
+            if override_app.path:
+                applications_overrides[override_app.path] = override_app                   
 
-        if override_app.unique_identifier:
-            applications_overrides[override_app.unique_identifier] = override_app
+            if override_app.unique_identifier:
+                applications_overrides[override_app.unique_identifier] = override_app
 
     # build the applications dictionary with the overrides applied
     applications = {}
@@ -572,7 +252,6 @@ def update(f):
     else:
         update_running_list()
         update_launch_list()
-
 
 @mod.action_class
 class Actions:
@@ -640,7 +319,11 @@ class Actions:
     def switcher_launch(path: str):
         """Launch a new application by path (all OSes), or AppUserModel_ID path on Windows"""
         if app.platform == "mac":
-            ui.launch(bundle=path)
+            if is_bundle_id(path):
+                ui.launch(bundle=path)
+            else: 
+                ui.launch(path=path)
+                
         elif app.platform == "linux":
             # Could potentially be merged with OSX code. Done in this explicit
             # way for expediency around the 0.4 release.
@@ -654,6 +337,7 @@ class Actions:
                 is_valid_path = current_path.is_file()
             except:
                 is_valid_path = False
+
             if is_valid_path:
                 ui.launch(path=path)
             else:
