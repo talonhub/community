@@ -11,7 +11,7 @@ from pathlib import Path
 import csv
 
 import talon
-from talon import Context, Module, actions, app, fs, imgui, ui
+from talon import Context, Module, actions, app, fs, imgui, ui, resource
 from typing import Union
 
 # Construct a list of spoken form overrides for application names (similar to how homophone list is managed)
@@ -360,55 +360,53 @@ def update_running_list():
     ctx.lists["self.running"] = running
 
 
-def update_and_apply_overrides(name, flags):
+@resource.watch(app_names_file_name)
+def update_and_apply_overrides(f):
     global applications, applications_overrides
     """Updates the overrides and excludes lists"""
 
     applications_overrides = {}
-    print(name)
+    rows = list(csv.reader(f))
+    assert rows[0] == ["Application name", " Spoken forms", " Exclude"," Unique Id", " Path", " Executable Name"]
 
-    if name is None or os.path.normcase(name) == app_names_file_path:
-        with open(app_names_file_path) as f:
-            rows = list(csv.reader(f))
-            print(rows[0])
-            assert rows[0] == ["Application name", " Spoken forms", " Exclude"," Unique Id", " Path", " Executable Name"]
+    for row in rows[1:]:
+        if 0 == len(row):
+            continue
 
-            for row in rows[1:]:
-                if 0 == len(row):
-                    continue
-                if len(row) < 6:
-                    print(f"Row {row} malformed; expecting 6 entires")
+        if len(row) < 6:
+            print(f"Row {row} malformed; expecting 6 entires")
 
-                display_name, spoken_forms, exclude, uid, path, executable_name = (
-                    [x.strip().lower() or None for x in row])[:6]
-                
-                if spoken_forms.lower() == "none":
-                    spoken_forms = None
-                else:
-                    spoken_forms = spoken_forms.split(";")
-                exclude = False if exclude.lower() == "false" else True
-                uid = None if uid.lower() == "none" else uid
-                path = None if path.lower() == "none" else path
-                executable_name = None if executable_name.lower() == "none" else executable_name
+        display_name, spoken_forms, exclude, uid, path, executable_name = (
+            [x.strip().lower() or None for x in row])[:6]
+        
+        if spoken_forms.lower() == "none":
+            spoken_forms = None
+        else:
+            spoken_forms = spoken_forms.split(";")
             
-                override_app = Application (path=path,
-                                            display_name=display_name, 
-                                            spoken_forms=spoken_forms,
-                                            exclude = exclude,
-                                            unique_identifier=uid,
-                                            executable_name=executable_name)
-                
-                
-                applications_overrides[override_app.display_name] = override_app
+        exclude = False if exclude.lower() == "false" else True
+        uid = None if uid.lower() == "none" else uid
+        path = None if path.lower() == "none" else path
+        executable_name = None if executable_name.lower() == "none" else executable_name
+    
+        override_app = Application (path=path,
+                                    display_name=display_name, 
+                                    spoken_forms=spoken_forms,
+                                    exclude = exclude,
+                                    unique_identifier=uid,
+                                    executable_name=executable_name)
+        
+        
+        applications_overrides[override_app.display_name] = override_app
 
-                if override_app.executable_name:
-                    applications_overrides[override_app.executable_name] = override_app
+        if override_app.executable_name:
+            applications_overrides[override_app.executable_name] = override_app
 
-                if override_app.path:
-                    applications_overrides[override_app.path] = override_app                   
+        if override_app.path:
+            applications_overrides[override_app.path] = override_app                   
 
-                if override_app.unique_identifier:
-                    applications_overrides[override_app.unique_identifier] = override_app
+        if override_app.unique_identifier:
+            applications_overrides[override_app.unique_identifier] = override_app
 
     # build the applications dictionary with the overrides applied
     applications = {}
@@ -594,9 +592,6 @@ def update_launch_list():
     result.update(customized)
     ctx.lists["self.launch"] = result
 
-def ui_event(event, arg):
-    if event in ("app_launch", "app_close"):
-        update_running_list()
 
 # Talon starts faster if you don't use the `talon.ui` module during launch
 
@@ -604,12 +599,5 @@ def ui_event(event, arg):
 def on_ready():
     # build application dictionary
     get_apps()
-
-    # get overrides first...
-    update_and_apply_overrides(None, None)
-
-    fs.watch(overrides_directory, update_and_apply_overrides)
-    ui.register("", ui_event)
-
 
 app.register("ready", on_ready)
