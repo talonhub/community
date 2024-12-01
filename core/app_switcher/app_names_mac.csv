@@ -1,139 +1,120 @@
 Application name, Spoken forms, Exclude, Unique Id, Path, Executable Name
-.karabiner-virtualhiddevice-manager,None,True,org.pqrs.karabiner-virtualhiddevice-manager,/Applications/.Karabiner-VirtualHIDDevice-Manager.app,Karabiner-VirtualHIDDevice-Manager
-activity monitor,activity monitor;task manager,False,com.apple.activitymonitor,/System/Applications/Utilities/Activity Monitor.app,Activity Monitor
-airport utility,None,True,com.apple.airport.airportutility,/System/Applications/Utilities/AirPort Utility.app,AirPort Utility
-amazon kindle,None,False,com.amazon.lassen,/Applications/Amazon Kindle.app,Kindle
-app store,app store;store,False,com.apple.appstore,/System/Applications/App Store.app,App Store
-audacity,None,False,org.audacityteam.audacity,/Applications/Audacity.app,Wrapper
-audio midi setup,None,True,com.apple.audio.audiomidisetup,/System/Applications/Utilities/Audio MIDI Setup.app,Audio MIDI Setup
-automator,None,False,com.apple.automator,/System/Applications/Automator.app,Automator
-beyond compare,None,False,com.scootersoftware.beyondcompare,/Applications/Beyond Compare.app,BCompare
-bluetooth file exchange,None,True,com.apple.bluetoothfileexchange,/System/Applications/Utilities/Bluetooth File Exchange.app,Bluetooth File Exchange
-books,None,False,com.apple.ibooksx,/System/Applications/Books.app,Books
-boot camp assistant,None,True,com.apple.bootcampassistant,/System/Applications/Utilities/Boot Camp Assistant.app,Boot Camp Assistant
-calculator,None,False,com.apple.calculator,/System/Applications/Calculator.app,Calculator
-calendar,None,False,com.apple.ical,/System/Applications/Calendar.app,Calendar
-chess,None,True,com.apple.chess,/System/Applications/Chess.app,Chess
-chrome apps,None,True,com.google.chrome.app.fmgjjmmmlfnkbppncabfkddbjimcfncm,/Users/knausj/Applications/Chrome Apps.localized,app_mode_loader
-chrome apps,None,True,com.google.chrome.app.profile-2-knipolnnllmklapflnccelgolnpehhpl,/Users/knausj/Applications/Chrome Apps.localized,app_mode_loader
-chrome apps,None,True,com.google.chrome.app.nabnijjbhmmgnnohmlablhajenhllcda,/Users/knausj/Applications/Chrome Apps.localized,app_mode_loader
-clock,None,False,com.apple.clock,/System/Applications/Clock.app,Clock
-colorsync utility,None,False,com.apple.colorsyncutility,/System/Applications/Utilities/ColorSync Utility.app,ColorSync Utility
-console,None,False,com.apple.console,/System/Applications/Utilities/Console.app,Console
-contacts,None,False,com.apple.addressbook,/System/Applications/Contacts.app,Contacts
-contexts,None,True,com.contextsformac.contexts,/Applications/Contexts.app,Contexts
-copilot,None,True,com.copilot.production,/Applications/Copilot.app,Copilot
-dictionary,None,False,com.apple.dictionary,/System/Applications/Dictionary.app,Dictionary
-digital color meter,None,True,com.apple.digitalcolormeter,/System/Applications/Utilities/Digital Color Meter.app,Digital Color Meter
-discord,None,False,com.apple.safari.webapp.75652608-4a3f-4b48-9317-3c2516aa5ce1,/Users/knausj/Applications/Discord.app,None
-disk utility,None,False,com.apple.diskutility,/System/Applications/Utilities/Disk Utility.app,Disk Utility
-everyday habit tracker,everyday habit tracker;habit,False,app.everyday,/Applications/Everyday Habit Tracker.app,Everyday Habit Tracker
-facetime,None,False,com.apple.facetime,/System/Applications/FaceTime.app,FaceTime
-findmy,find my,False,com.apple.findmy,/System/Applications/FindMy.app,FindMy
-font book,None,True,com.apple.fontbook,/System/Applications/Font Book.app,Font Book
-freeform,None,False,com.apple.freeform,/System/Applications/Freeform.app,Freeform
-garageband,None,False,com.apple.garageband10,/Applications/GarageBand.app,GarageBand
-github desktop,github,False,com.github.githubclient,/Applications/GitHub Desktop.app,GitHub Desktop
-gmail,None,False,com.apple.safari.webapp.85038fe5-e720-4773-8851-ec5fa8ff4971,/Users/knausj/Applications/Gmail.app,None
-google chrome,None,False,com.google.chrome,/Applications/Google Chrome.app,Google Chrome
-grapher,None,False,com.apple.grapher,/System/Applications/Utilities/Grapher.app,Grapher
-home,None,False,com.apple.home,/System/Applications/Home.app,Home
-homerow,None,False,com.superultra.homerow,/Applications/Homerow.app,Homerow
-image capture,capture,False,com.apple.image_capture,/System/Applications/Image Capture.app,Image Capture
-imovie,None,True,com.apple.imovieapp,/Applications/iMovie.app,iMovie
-iphone mirroring,iphone;iPhone mirroring,False,com.apple.screencontinuity,/System/Applications/iPhone Mirroring.app,iPhone Mirroring
-iterm,None,True,com.googlecode.iterm2,/Applications/iTerm.app,iTerm2
-karabiner-elements,None,True,org.pqrs.karabiner-elements.preferences,/Applications/Karabiner-Elements.app,Karabiner-Elements
-karabiner-eventviewer,None,True,org.pqrs.karabiner-eventviewer,/Applications/Karabiner-EventViewer.app,Karabiner-EventViewer
-keynote,None,False,com.apple.iwork.keynote,/Applications/Keynote.app,Keynote
-launchpad,None,False,com.apple.launchpad.launcher,/System/Applications/Launchpad.app,Launchpad
-maccy,None,True,org.p0deje.maccy,/Applications/Maccy.app,Maccy
-mail,None,False,com.apple.mail,/System/Applications/Mail.app,Mail
-maps,None,False,com.apple.maps,/System/Applications/Maps.app,Maps
-messages,None,False,com.apple.mobilesms,/System/Applications/Messages.app,Messages
-microsoft excel,None,False,com.microsoft.excel,/Applications/Microsoft Excel.app,Microsoft Excel
-microsoft onenote,None,False,com.microsoft.onenote.mac,/Applications/Microsoft OneNote.app,Microsoft OneNote
-microsoft outlook,None,False,com.microsoft.outlook,/Applications/Microsoft Outlook.app,Microsoft Outlook
-microsoft powerpoint,None,False,com.microsoft.powerpoint,/Applications/Microsoft PowerPoint.app,Microsoft PowerPoint
-microsoft teams classic,teams,False,com.microsoft.teams,/Applications/Microsoft Teams classic.app,Teams
-microsoft word,word,False,com.microsoft.word,/Applications/Microsoft Word.app,Microsoft Word
-migration assistant,None,True,com.apple.migrateassistant,/System/Applications/Utilities/Migration Assistant.app,Migration Assistant
-mission control,None,False,com.apple.exposelauncher,/System/Applications/Mission Control.app,Mission Control
-music,None,False,com.apple.music,/System/Applications/Music.app,Music
-news,None,False,com.apple.news,/System/Applications/News.app,News
-notes,None,False,com.apple.notes,/System/Applications/Notes.app,Notes
-numbers,None,False,com.apple.iwork.numbers,/Applications/Numbers.app,Numbers
-omnifocus,None,False,com.omnigroup.omnifocus4,/Applications/OmniFocus.app,OmniFocus
-onedrive,None,False,com.microsoft.onedrive,/Applications/OneDrive.app,OneDrive
-pages,None,False,com.apple.iwork.pages,/Applications/Pages.app,Pages
-passwords,None,False,com.apple.passwords,/System/Applications/Passwords.app,Passwords
-photo booth,None,False,com.apple.photobooth,/System/Applications/Photo Booth.app,Photo Booth
-photos,None,False,com.apple.photos,/System/Applications/Photos.app,Photos
-podcasts,None,False,com.apple.podcasts,/System/Applications/Podcasts.app,Podcasts
-preview,None,False,com.apple.preview,/System/Applications/Preview.app,Preview
-print center,None,False,com.apple.printcenter,/System/Applications/Utilities/Print Center.app,Print Center
-python 3,None,True,org.python.idle,/Applications/Python 3.12,idle
-python 3,None,True,org.python.pythonlauncher,/Applications/Python 3.12,python launcher
-quicktime player,None,False,com.apple.quicktimeplayerx,/System/Applications/QuickTime Player.app,QuickTime Player
-rango for safari,None,False,app.rango.rango,/Applications/Rango for Safari.app,Rango for Safari
-reminders,None,False,com.apple.reminders,/System/Applications/Reminders.app,Reminders
-rsiguard,None,False,com.enviance.rsiguard,/Applications/RSIGuard.app,RSIGuard
-safari,None,False,com.apple.safari,/Applications/Safari.app,Safari
-screen sharing,None,False,com.apple.screensharing,/System/Applications/Utilities/Screen Sharing.app,Screen Sharing
-screenshot,None,False,com.apple.screenshot.launcher,/System/Applications/Utilities/Screenshot.app,Screenshot
-script editor,None,False,com.apple.scripteditor2,/System/Applications/Utilities/Script Editor.app,Script Editor
-shortcuts,None,False,com.apple.shortcuts,/System/Applications/Shortcuts.app,Shortcuts
-siri,None,True,com.apple.siri.launcher,/System/Applications/Siri.app,Siri
-skype,None,False,com.skype.skype,/Applications/Skype.app,Skype
-slack,None,False,com.apple.safari.webapp.a240b276-0efc-4a6c-b441-34814cca8028,/Users/knausj/Applications/Slack.app,None
-spotify,None,False,com.spotify.client,/Applications/Spotify.app,Spotify
-steam,None,False,com.valvesoftware.steam,/Applications/Steam.app,steam_osx
-stickies,None,False,com.apple.stickies,/System/Applications/Stickies.app,Stickies
-stocks,None,False,com.apple.stocks,/System/Applications/Stocks.app,Stocks
-system information,information,False,com.apple.systemprofiler,/System/Applications/Utilities/System Information.app,System Information
-system settings,settings,False,com.apple.systempreferences,/System/Applications/System Settings.app,System Settings
-talon,None,True,com.talonvoice.talon,/Applications/Talon.app,Talon
-teleparty for safari,None,True,com.teleparty.teleparty-for-safari,/Applications/Teleparty For Safari.app,Teleparty For Safari
-terminal,terminal;command prompt,False,com.apple.terminal,/System/Applications/Utilities/Terminal.app,Terminal
-textedit,text edit,False,com.apple.textedit,/System/Applications/TextEdit.app,TextEdit
-time machine,None,False,com.apple.backup.launcher,/System/Applications/Time Machine.app,Time Machine
-tips,None,True,com.apple.helpviewer,/System/Applications/Tips.app,Tips
-turbotax 2022,None,True,com.intuit.turbotax.2022,/Applications/TurboTax 2022.app,TurboTax 2022
-turbotax 2023,None,True,com.intuit.turbotax.2023,/Applications/TurboTax 2023.app,TurboTax 2023
-tv,None,False,com.apple.tv,/System/Applications/TV.app,TV
-twitter,None,True,maccatalyst.com.atebits.tweetie2,/Applications/Twitter.app,Twitter
-ukelele,None,True,org.sil.ukelele,/Applications/Ukelele.app,Ukelele
-utilities,None,True,com.apple.airport.airportutility,/System/Applications/Utilities,airport utility
-utilities,None,True,com.apple.voiceoverutility,/System/Applications/Utilities,voiceover utility
-utilities,None,True,com.apple.voiceoverutilitycachebuilder,/System/Applications/Utilities,voiceover utility
-utilities,None,True,com.apple.terminal,/System/Applications/Utilities,terminal
-utilities,None,True,com.apple.activitymonitor,/System/Applications/Utilities,activity monitor
-utilities,None,True,com.apple.activitymonitor.helper,/System/Applications/Utilities,com.apple.activitymonitor.helper
-utilities,None,True,com.apple.screenshot.launcher,/System/Applications/Utilities,screenshot
-utilities,None,True,com.apple.grapher,/System/Applications/Utilities,grapher
-utilities,None,True,com.apple.audio.audiomidisetup,/System/Applications/Utilities,audio midi setup
-utilities,None,True,com.apple.screensharing,/System/Applications/Utilities,screen sharing
-utilities,None,True,com.apple.systemprofiler,/System/Applications/Utilities,system information
-utilities,None,True,com.apple.printcenter,/System/Applications/Utilities,print center
-utilities,None,True,com.apple.migrateassistant,/System/Applications/Utilities,migration assistant
-utilities,None,True,com.apple.scripteditor2,/System/Applications/Utilities,script editor
-utilities,None,True,com.apple.script-editor-dummy.scptd,/System/Applications/Utilities,None
-utilities,None,True,com.apple.colorsyncutility,/System/Applications/Utilities,colorsync utility
-utilities,None,True,com.apple.colorsyncutility.devices,/System/Applications/Utilities,devices
-utilities,None,True,com.apple.colorsyncutility.firstaid,/System/Applications/Utilities,firstaid
-utilities,None,True,com.apple.colorsyncutility.filters,/System/Applications/Utilities,filters
-utilities,None,True,com.apple.colorsyncutility.profiles,/System/Applications/Utilities,profiles
-utilities,None,True,com.apple.colorsyncutility.calculator,/System/Applications/Utilities,calculator
-utilities,None,True,com.apple.console,/System/Applications/Utilities,console
-utilities,None,True,com.apple.diskutility,/System/Applications/Utilities,disk utility
-utilities,None,True,com.apple.bluetoothfileexchange,/System/Applications/Utilities,bluetooth file exchange
-utilities,None,True,com.apple.bootcampassistant,/System/Applications/Utilities,boot camp assistant
-utilities,None,True,com.apple.bootcampassistant.installd,/System/Applications/Utilities,bootcampassistantinstalld
-utilities,None,True,com.apple.digitalcolormeter,/System/Applications/Utilities,digital color meter
-vimac,None,False,dexterleng.vimac,/Applications/Vimac.app,Vimac
-visual studio code,None,False,com.microsoft.vscode,/Applications/Visual Studio Code.app,Electron
-voicememos,None,False,com.apple.voicememos,/System/Applications/VoiceMemos.app,VoiceMemos
-voiceover utility,None,True,com.apple.voiceoverutility,/System/Applications/Utilities/VoiceOver Utility.app,VoiceOver Utility
-weather,None,False,com.apple.weather,/System/Applications/Weather.app,Weather
-xcode,None,False,com.apple.dt.xcode,/Applications/Xcode.app,Xcode
+.Karabiner-VirtualHIDDevice-Manager,None,True,org.pqrs.Karabiner-VirtualHIDDevice-Manager,/Applications/.Karabiner-VirtualHIDDevice-Manager.app,Karabiner-VirtualHIDDevice-Manager
+Activity Monitor,None,False,com.apple.ActivityMonitor,/System/Applications/Utilities,Activity Monitor
+AirPort Utility,None,True,com.apple.airport.airportutility,/System/Applications/Utilities,AirPort Utility
+Amazon Kindle,None,False,com.amazon.Lassen,/Applications/Amazon Kindle.app,Kindle
+App Store,store;app store,False,com.apple.AppStore,/System/Applications/App Store.app,App Store
+Audacity,None,False,org.audacityteam.audacity,/Applications/Audacity.app,Wrapper
+Audio MIDI Setup,None,True,com.apple.audio.AudioMIDISetup,/System/Applications/Utilities,Audio MIDI Setup
+Automator,None,False,com.apple.Automator,/System/Applications/Automator.app,Automator
+Beyond Compare,None,False,com.ScooterSoftware.BeyondCompare,/Applications/Beyond Compare.app,BCompare
+Bluetooth File Exchange,None,True,com.apple.BluetoothFileExchange,/System/Applications/Utilities,Bluetooth File Exchange
+Books,None,False,com.apple.iBooksX,/System/Applications/Books.app,Books
+Boot Camp Assistant,None,True,com.apple.bootcampassistant,/System/Applications/Utilities,Boot Camp Assistant
+Calculator,color sink utility,True,com.apple.ColorSyncUtility.Calculator,/System/Applications/Utilities,Calculator
+Calculator,None,False,com.apple.calculator,/System/Applications/Calculator.app,Calculator
+Calendar,None,False,com.apple.iCal,/System/Applications/Calendar.app,Calendar
+Chess,None,True,com.apple.Chess,/System/Applications/Chess.app,Chess
+Chrome Apps,None,True,com.google.Chrome.app.fmgjjmmmlfnkbppncabfkddbjimcfncm,/Users/knausj/Applications/Chrome Apps.localized,app_mode_loader
+Chrome Apps,None,True,com.google.Chrome.app.Profile-2-knipolnnllmklapflnccelgolnpehhpl,/Users/knausj/Applications/Chrome Apps.localized,app_mode_loader
+Chrome Apps,None,True,com.google.Chrome.app.nabnijjbhmmgnnohmlablhajenhllcda,/Users/knausj/Applications/Chrome Apps.localized,app_mode_loader
+Clock,None,False,com.apple.clock,/System/Applications/Clock.app,Clock
+ColorSync Utility,None,False,com.apple.ColorSyncUtility,/System/Applications/Utilities,ColorSync Utility
+Console,None,False,com.apple.Console,/System/Applications/Utilities,Console
+Contacts,None,False,com.apple.AddressBook,/System/Applications/Contacts.app,Contacts
+Contexts,None,False,com.contextsformac.Contexts,/Applications/Contexts.app,Contexts
+Copilot,None,False,com.copilot.production,/Applications/Copilot.app,Copilot
+Devices,None,False,com.apple.ColorSyncUtility.Devices,/System/Applications/Utilities,Devices
+Dictionary,None,False,com.apple.Dictionary,/System/Applications/Dictionary.app,Dictionary
+Digital Color Meter,None,False,com.apple.DigitalColorMeter,/System/Applications/Utilities,Digital Color Meter
+Discord,None,False,com.apple.Safari.WebApp.75652608-4A3F-4B48-9317-3C2516AA5CE1,/Users/knausj/Applications/Discord.app,None
+Disk Utility,None,False,com.apple.DiskUtility,/System/Applications/Utilities,Disk Utility
+Everyday Habit Tracker,everyday habit tracker;habit,False,app.everyday,/Applications/Everyday Habit Tracker.app,Everyday Habit Tracker
+FaceTime,None,True,com.apple.FaceTime,/System/Applications/FaceTime.app,FaceTime
+Filters,None,False,com.apple.ColorSyncUtility.Filters,/System/Applications/Utilities,Filters
+FindMy,None,False,com.apple.findmy,/System/Applications/FindMy.app,FindMy
+FirstAid,None,False,com.apple.ColorSyncUtility.FirstAid,/System/Applications/Utilities,FirstAid
+Font Book,None,False,com.apple.FontBook,/System/Applications/Font Book.app,Font Book
+Freeform,None,False,com.apple.freeform,/System/Applications/Freeform.app,Freeform
+GarageBand,None,False,com.apple.garageband10,/Applications/GarageBand.app,GarageBand
+GitHub Desktop,None,False,com.github.GitHubClient,/Applications/GitHub Desktop.app,GitHub Desktop
+Gmail,None,False,com.apple.Safari.WebApp.85038FE5-E720-4773-8851-EC5FA8FF4971,/Users/knausj/Applications/Gmail.app,None
+Google Chrome,chrome,False,com.google.Chrome,/Applications/Google Chrome.app,Google Chrome
+Grapher,None,True,com.apple.grapher,/System/Applications/Utilities,Grapher
+Home,None,True,com.apple.Home,/System/Applications/Home.app,Home
+Homerow,None,False,com.superultra.Homerow,/Applications/Homerow.app,Homerow
+Image Capture,None,False,com.apple.Image_Capture,/System/Applications/Image Capture.app,Image Capture
+Karabiner-Elements,None,True,org.pqrs.Karabiner-Elements.Preferences,/Applications/Karabiner-Elements.app,Karabiner-Elements
+Karabiner-EventViewer,None,True,org.pqrs.Karabiner-EventViewer,/Applications/Karabiner-EventViewer.app,Karabiner-EventViewer
+Keynote,None,False,com.apple.iWork.Keynote,/Applications/Keynote.app,Keynote
+Launchpad,None,True,com.apple.launchpad.launcher,/System/Applications/Launchpad.app,Launchpad
+Maccy,None,False,org.p0deje.Maccy,/Applications/Maccy.app,Maccy
+Mail,None,False,com.apple.mail,/System/Applications/Mail.app,Mail
+Maps,None,False,com.apple.Maps,/System/Applications/Maps.app,Maps
+Messages,None,False,com.apple.MobileSMS,/System/Applications/Messages.app,Messages
+Microsoft Excel,None,False,com.microsoft.Excel,/Applications/Microsoft Excel.app,Microsoft Excel
+Microsoft OneNote,None,False,com.microsoft.onenote.mac,/Applications/Microsoft OneNote.app,Microsoft OneNote
+Microsoft Outlook,None,False,com.microsoft.Outlook,/Applications/Microsoft Outlook.app,Microsoft Outlook
+Microsoft PowerPoint,None,False,com.microsoft.Powerpoint,/Applications/Microsoft PowerPoint.app,Microsoft PowerPoint
+Microsoft Teams classic,None,False,com.microsoft.teams,/Applications/Microsoft Teams classic.app,Teams
+Microsoft Word,None,False,com.microsoft.Word,/Applications/Microsoft Word.app,Microsoft Word
+Migration Assistant,None,False,com.apple.MigrateAssistant,/System/Applications/Utilities,Migration Assistant
+Mission Control,None,False,com.apple.exposelauncher,/System/Applications/Mission Control.app,Mission Control
+Music,None,False,com.apple.Music,/System/Applications/Music.app,Music
+News,None,False,com.apple.news,/System/Applications/News.app,News
+Notes,None,False,com.apple.Notes,/System/Applications/Notes.app,Notes
+Numbers,None,False,com.apple.iWork.Numbers,/Applications/Numbers.app,Numbers
+OmniFocus,None,True,com.omnigroup.OmniFocus4,/Applications/OmniFocus.app,OmniFocus
+OneDrive,None,True,com.microsoft.OneDrive,/Applications/OneDrive.app,OneDrive
+Pages,None,False,com.apple.iWork.Pages,/Applications/Pages.app,Pages
+Passwords,None,False,com.apple.Passwords,/System/Applications/Passwords.app,Passwords
+Photo Booth,None,False,com.apple.PhotoBooth,/System/Applications/Photo Booth.app,Photo Booth
+Photos,None,False,com.apple.Photos,/System/Applications/Photos.app,Photos
+Podcasts,None,False,com.apple.podcasts,/System/Applications/Podcasts.app,Podcasts
+Preview,None,False,com.apple.Preview,/System/Applications/Preview.app,Preview
+Print Center,None,True,com.apple.printcenter,/System/Applications/Utilities,Print Center
+Profiles,None,True,com.apple.ColorSyncUtility.Profiles,/System/Applications/Utilities,Profiles
+Python 3,None,True,org.python.IDLE,/Applications/Python 3.12,IDLE
+Python 3,None,True,org.python.PythonLauncher,/Applications/Python 3.12,Python Launcher
+QuickTime Player,quick time,False,com.apple.QuickTimePlayerX,/System/Applications/QuickTime Player.app,QuickTime Player
+RSIGuard,None,True,com.enviance.rsiguard,/Applications/RSIGuard.app,RSIGuard
+Rango for Safari,None,True,app.rango.Rango,/Applications/Rango for Safari.app,Rango for Safari
+Reminders,None,False,com.apple.reminders,/System/Applications/Reminders.app,Reminders
+Safari,safari;portal,False,com.apple.Safari,/Applications/Safari.app,Safari
+Screen Sharing,None,True,com.apple.ScreenSharing,/System/Applications/Utilities,Screen Sharing
+Screenshot,None,False,com.apple.screenshot.launcher,/System/Applications/Utilities,Screenshot
+Script Editor,None,True,com.apple.ScriptEditor2,/System/Applications/Utilities,Script Editor
+Shortcuts,None,False,com.apple.shortcuts,/System/Applications/Shortcuts.app,Shortcuts
+Siri,None,False,com.apple.siri.launcher,/System/Applications/Siri.app,Siri
+Skype,None,False,com.skype.skype,/Applications/Skype.app,Skype
+Slack,None,False,com.apple.Safari.WebApp.A240B276-0EFC-4A6C-B441-34814CCA8028,/Users/knausj/Applications/Slack.app,None
+Spotify,None,False,com.spotify.client,/Applications/Spotify.app,Spotify
+Steam,None,False,com.valvesoftware.steam,/Applications/Steam.app,steam_osx
+Stickies,None,False,com.apple.Stickies,/System/Applications/Stickies.app,Stickies
+Stocks,None,False,com.apple.stocks,/System/Applications/Stocks.app,Stocks
+System Information,None,False,com.apple.SystemProfiler,/System/Applications/Utilities,System Information
+System Settings,None,False,com.apple.systempreferences,/System/Applications/System Settings.app,System Settings
+TV,None,False,com.apple.TV,/System/Applications/TV.app,TV
+Talon,None,False,com.talonvoice.Talon,/Applications/Talon.app,Talon
+Teleparty For Safari,None,False,com.teleparty.Teleparty-For-Safari,/Applications/Teleparty For Safari.app,Teleparty For Safari
+Terminal,None,False,com.apple.Terminal,/System/Applications/Utilities,Terminal
+TextEdit,None,False,com.apple.TextEdit,/System/Applications/TextEdit.app,TextEdit
+Time Machine,None,False,com.apple.backup.launcher,/System/Applications/Time Machine.app,Time Machine
+Tips,None,True,com.apple.helpviewer,/System/Applications/Tips.app,Tips
+TurboTax 2022,None,True,com.intuit.turbotax.2022,/Applications/TurboTax 2022.app,TurboTax 2022
+TurboTax 2023,None,True,com.intuit.turbotax.2023,/Applications/TurboTax 2023.app,TurboTax 2023
+Twitter,None,True,maccatalyst.com.atebits.Tweetie2,/Applications/Twitter.app,Twitter
+Ukelele,None,True,org.sil.ukelele,/Applications/Ukelele.app,Ukelele
+Vimac,None,True,dexterleng.vimac,/Applications/Vimac.app,Vimac
+Visual Studio Code,coder,False,com.microsoft.VSCode,/Applications/Visual Studio Code.app,Electron
+VoiceMemos,None,False,com.apple.VoiceMemos,/System/Applications/VoiceMemos.app,VoiceMemos
+VoiceOver Utility,None,True,com.apple.VoiceOverUtility,/System/Applications/Utilities,VoiceOver Utility
+VoiceOver Utility,None,True,com.apple.VoiceOverUtilityCacheBuilder,/System/Applications/Utilities,VoiceOver Utility
+Weather,None,False,com.apple.weather,/System/Applications/Weather.app,Weather
+Xcode,None,False,com.apple.dt.Xcode,/Applications/Xcode.app,Xcode
+bootcampassistantinstalld,None,True,com.apple.bootcampassistant.installd,/System/Applications/Utilities,bootcampassistantinstalld
+com.apple.activitymonitor.helper,None,True,com.apple.activitymonitor.helper,/System/Applications/Utilities,com.apple.activitymonitor.helper
+iMovie,None,True,com.apple.iMovieApp,/Applications/iMovie.app,iMovie
+iPhone Mirroring,None,True,com.apple.ScreenContinuity,/System/Applications/iPhone Mirroring.app,iPhone Mirroring
+iTerm,None,False,com.googlecode.iterm2,/Applications/iTerm.app,iTerm2
 zoom.us,zoom,False,us.zoom.xos,/Applications/zoom.us.app,zoom.us

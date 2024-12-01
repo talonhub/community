@@ -125,7 +125,7 @@ if app.platform == "windows":
         
         applications_dupe_prevention = {}
         for item in items:
-            display_name = item.Name.lower()
+            display_name = item.Name
             app_user_model_id = item.path
             path = None
             executable_name = None
@@ -141,10 +141,10 @@ if app.platform == "windows":
                     should_create_entry = p.suffix in [".exe"]
 
             new_app = Application(
-                path=str(path).lower() if path else None,
-                display_name=display_name.lower(), 
-                unique_identifier= app_user_model_id.lower(), 
-                executable_name=executable_name.lower() if executable_name else None,
+                path=str(path) if path else None,
+                display_name=display_name, 
+                unique_identifier= app_user_model_id, 
+                executable_name=executable_name if executable_name else None,
                 exclude=False,
                 spoken_form=None)
             
@@ -236,14 +236,14 @@ elif app.platform == "mac":
         global applications
         from plistlib import load
         import glob
-
+        applications_dupe_prevention = {}
         for base in mac_application_directories:
             base = os.path.expanduser(base)
             if os.path.isdir(base):
                 for name in os.listdir(base):
                     new_app = None
                     path = os.path.join(base, name)
-                    display_name = name.rsplit(".", 1)[0].lower() 
+                    display_name = name.rsplit(".", 1)[0]
                     
                     # most, but not all, apps store this here
                     plist_path = os.path.join(path, "Contents/Info.plist")
@@ -252,18 +252,22 @@ elif app.platform == "mac":
                         with open(plist_path, 'rb') as fp:
                             #print(f"found at default: {plist_path}")
                             pl = load(fp)
-                            bundle_identifier = pl["CFBundleIdentifier"].lower()
+                            bundle_identifier = pl["CFBundleIdentifier"]
                             executable_name = pl["CFBundleExecutable"] if "CFBundleExecutable" in pl else None
-                                
+                            use_alternate_name =  display_name.lower() == "utilities" and base in "/System/Applications/Utilities"
+                            if use_alternate_name and not executable_name or bundle_identifier in applications_dupe_prevention:
+                                continue                         
+
                             new_app = Application(
                                 path=path,
-                                display_name=display_name, 
+                                display_name=display_name if not use_alternate_name else executable_name,
                                 unique_identifier=bundle_identifier, 
                                 executable_name=executable_name, 
                                 exclude=False,
                                 spoken_form=None)
                                                         
                             known_application_list.append(new_app)
+                            applications_dupe_prevention[bundle_identifier] = True
 
                     else:
                         files = glob.glob(os.path.join(path, '**/Info.plist'), recursive=True)  
@@ -273,17 +277,24 @@ elif app.platform == "mac":
                                 pl = load(fp)
                                 if "CFBundleIdentifier" in pl:
                                     #print(f"found at: {file}")
-                                    bundle_identifier = pl["CFBundleIdentifier"].lower()
-                                    executable_name = pl["CFBundleExecutable"].lower() if "CFBundleExecutable" in pl else None
+                                    bundle_identifier = pl["CFBundleIdentifier"]
+                                    executable_name = pl["CFBundleExecutable"] if "CFBundleExecutable" in pl else None
+                                    use_alternate_name =  display_name.lower() == "utilities" and base in "/System/Applications/Utilities"
+                                    
+                                    if use_alternate_name and not executable_name or bundle_identifier in applications_dupe_prevention:
+                                        continue
+                                       
                                     new_app = Application(
                                         path=path,
-                                        display_name=display_name, 
+                                        display_name=display_name if not use_alternate_name else executable_name,   
                                         unique_identifier=bundle_identifier, 
                                         executable_name=executable_name, 
                                         exclude=False,
                                         spoken_form=None)
                                     
                                     known_application_list.append(new_app)
+                                    applications_dupe_prevention[bundle_identifier] = True
+
 
         return known_application_list
 
@@ -303,10 +314,10 @@ def launch_applications(m) -> str:
     return m.launch
 
 def should_generate_spoken_forms(curr_app) -> tuple[bool, Union[Application, None]]:
-    name = curr_app.name.lower()
-    bundle_name = curr_app.bundle.lower()
-    exe_path = str(Path(curr_app.exe).resolve()).lower() 
-    executable_name = os.path.basename(curr_app.exe).lower()
+    name = curr_app.name
+    bundle_name = curr_app.bundle
+    exe_path = str(Path(curr_app.exe).resolve())
+    executable_name = os.path.basename(curr_app.exe)
 
     if bundle_name and bundle_name in applications_overrides:
         return not applications_overrides[bundle_name].exclude and applications_overrides[bundle_name].spoken_forms is None, applications_overrides[bundle_name]
@@ -341,7 +352,7 @@ def update_running_list():
 
         should_generate_forms, override = should_generate_spoken_forms(cur_app)
         if should_generate_forms:
-            generate_spoken_form_list.append(cur_app.name)
+            generate_spoken_form_list.append(cur_app.name.lower())
         elif override and override.spoken_forms is not None:
             for spoken_form in override.spoken_forms:
                 running[spoken_form] = name
@@ -389,7 +400,7 @@ def update(f):
             print(f"Row {row} malformed; expecting 6 entires")
 
         display_name, spoken_forms, exclude, uid, path, executable_name = (
-            [x.strip().lower() or None for x in row])[:6]
+            [x.strip() or None for x in row])[:6]
         
         if spoken_forms.lower() == "none":
             spoken_forms = None
@@ -535,7 +546,7 @@ class Actions:
     def switcher_launch(path: str):
         """Launch a new application by path (all OSes), or AppUserModel_ID path on Windows"""
         if app.platform == "mac":
-            ui.launch(path=path)
+            ui.launch(bundle=path)
         elif app.platform == "linux":
             # Could potentially be merged with OSX code. Done in this explicit
             # way for expediency around the 0.4 release.
@@ -592,18 +603,11 @@ def gui_running(gui: imgui.GUI):
 
 
 def update_launch_list():
-    if app.platform == "windows":
-        launch = {
-            application.display_name : application.unique_identifier 
-            for application in applications.values() 
-            if not application.exclude and not application.spoken_forms
-        }    
-    else:
-        launch = {
-            application.display_name : application.path  
-            for application in applications.values() 
-            if not application.exclude and not application.spoken_forms
-        }  
+    launch = {
+        application.display_name : application.unique_identifier 
+        for application in applications.values() 
+        if not application.exclude and not application.spoken_forms
+    }    
 
     result = actions.user.create_spoken_forms_from_map(
         sources=launch, 
