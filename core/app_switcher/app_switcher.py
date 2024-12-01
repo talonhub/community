@@ -30,7 +30,10 @@ running_application_dict = {}
 # a dictionary of applications with overrides pre-applied
 # key by app name, exe path, exe, and bundle id/AppUserModelId
 applications = {}
-known_application_list = []
+
+INSTALLED_APPLICATIONS_LIST: list[Application] = []
+PRESERVED_APPLICATION_LIST: list[Application] = []
+
 # on Windows, WindowsApps are not like normal applications, so
 # we use the shell:AppsFolder to populate the list of applications
 # rather than via e.g. the start menu. This way, all apps, including "modern" apps are
@@ -93,15 +96,15 @@ def should_generate_spoken_forms(curr_app) -> tuple[bool, Union[Application, Non
     exe_path = str(Path(curr_app.exe).resolve())
     executable_name = os.path.basename(curr_app.exe)
 
-    if bundle_name and bundle_name in applications_overrides:
-        return not applications_overrides[bundle_name].exclude and applications_overrides[bundle_name].spoken_forms is None, applications_overrides[bundle_name]
-    elif exe_path and exe_path in applications_overrides:
-        return not applications_overrides[exe_path].exclude and applications_overrides[exe_path].spoken_forms is None, applications_overrides[exe_path]
-    elif executable_name and executable_name in applications_overrides:
-        value = not applications_overrides[executable_name].exclude and applications_overrides[executable_name].spoken_forms is None
-        return value, applications_overrides[executable_name]    
-    elif name and name in applications_overrides:
-        return not applications_overrides[name].exclude and applications_overrides[name].spoken_forms is None, applications_overrides[name]
+    if bundle_name and bundle_name in APPLICATIONS_OVERRIDES:
+        return not APPLICATIONS_OVERRIDES[bundle_name].exclude and APPLICATIONS_OVERRIDES[bundle_name].spoken_forms is None, APPLICATIONS_OVERRIDES[bundle_name]
+    elif exe_path and exe_path in APPLICATIONS_OVERRIDES:
+        return not APPLICATIONS_OVERRIDES[exe_path].exclude and APPLICATIONS_OVERRIDES[exe_path].spoken_forms is None, APPLICATIONS_OVERRIDES[exe_path]
+    elif executable_name and executable_name in APPLICATIONS_OVERRIDES:
+        value = not APPLICATIONS_OVERRIDES[executable_name].exclude and APPLICATIONS_OVERRIDES[executable_name].spoken_forms is None
+        return value, APPLICATIONS_OVERRIDES[executable_name]    
+    elif name and name in APPLICATIONS_OVERRIDES:
+        return not APPLICATIONS_OVERRIDES[name].exclude and APPLICATIONS_OVERRIDES[name].spoken_forms is None, APPLICATIONS_OVERRIDES[name]
     return True, None
 
 def update_running_list():
@@ -140,20 +143,22 @@ def update_running_list():
     ctx.lists["self.running"] = running
 
 def get_installed_apps():
-    global known_application_list, KNOWN_APPLICATIONS_INITIALIZED
+    global INSTALLED_APPLICATIONS_LIST, KNOWN_APPLICATIONS_INITIALIZED
     if not KNOWN_APPLICATIONS_INITIALIZED:
         if app.platform == "windows":
-            known_application_list = get_installed_windows_apps()
+            INSTALLED_APPLICATIONS_LIST = get_installed_windows_apps()
         elif app.platform == "mac":
-            known_application_list = get_installed_mac_apps()
+            INSTALLED_APPLICATIONS_LIST = get_installed_mac_apps()
         KNOWN_APPLICATIONS_INITIALIZED = True
 
 def update_csv(forced: bool = False):
     path = Path(app_names_file_path)
     get_installed_apps()
 
-    if not path.exists() or forced:        
-        sorted_apps = sorted(known_application_list, key=lambda application: application.display_name)
+    if not path.exists() or forced:
+        all_apps = [*INSTALLED_APPLICATIONS_LIST, *PRESERVED_APPLICATION_LIST]
+
+        sorted_apps = sorted(all_apps, key=lambda application: application.display_name)
 
         output = ["Application name, Spoken forms, Exclude, Unique Id, Path, Executable Name\n"]
         for application in sorted_apps:
@@ -166,71 +171,76 @@ update_csv()
 
 @resource.watch(app_names_file_path)
 def update(f):
-    global applications, known_application_list, applications_overrides, KNOWN_APPLICATIONS_INITIALIZED
+    global applications, INSTALLED_APPLICATIONS_LIST, APPLICATIONS_OVERRIDES, KNOWN_APPLICATIONS_INITIALIZED
+    global PRESERVED_APPLICATION_LIST
     
     get_installed_apps()
 
     application_map = {
-        app.unique_identifier : app for app in known_application_list
+        app.unique_identifier : app for app in INSTALLED_APPLICATIONS_LIST
     }
 
-    applications_overrides = {}
+    APPLICATIONS_OVERRIDES = {}
+    removed_apps_dict = {}
+    PRESERVED_APPLICATION_LIST = []
+
     must_update_file = False
 
     rows = list(csv.reader(f))
     assert rows[0] == ["Application name", " Spoken forms", " Exclude"," Unique Id", " Path", " Executable Name"]
-    if len(rows[1:]) < len(known_application_list):
+    if len(rows[1:]) < len(INSTALLED_APPLICATIONS_LIST):
         must_update_file = True
     
-    if not must_update_file:
-        for row in rows[1:]:
-            if len(row) != 6:
-                print(f"Row {row} malformed; expecting 6 entires")
+    for row in rows[1:]:
+        if len(row) != 6:
+            print(f"Row {row} malformed; expecting 6 entires")
 
-            display_name, spoken_forms, exclude, uid, path, executable_name = (
-                [x.strip() or None for x in row])[:6]
+        display_name, spoken_forms, exclude, uid, path, executable_name = (
+            [x.strip() or None for x in row])[:6]
+        
+        if spoken_forms.lower() == "none":
+            spoken_forms = None
+        else:
+            spoken_forms = [spoken_form.strip() for spoken_form in spoken_forms.split(";")]
             
-            if spoken_forms.lower() == "none":
-                spoken_forms = None
-            else:
-                spoken_forms = [spoken_form.strip() for spoken_form in spoken_forms.split(";")]
-                
-            exclude = False if exclude.lower() == "false" else True
-            uid = None if uid.lower() == "none" else uid
-            path = None if path.lower() == "none" else path
-            executable_name = None if executable_name.lower() == "none" else executable_name
-            override_app = Application (path=path,
-                                        display_name=display_name, 
-                                        unique_identifier=uid,
-                                        executable_name=executable_name,
-                                        exclude = exclude,
-                                        spoken_form=spoken_forms,
-                                        )
-            
-            # app has been removed from the OS
-            # should we preserve this entry?
-            # if uid not in application_map:
-            #     must_update_file = True        
-            
-            applications_overrides[override_app.display_name] = override_app
+        exclude = False if exclude.lower() == "false" else True
+        uid = None if uid.lower() == "none" else uid
+        path = None if path.lower() == "none" else path
+        executable_name = None if executable_name.lower() == "none" else executable_name
+        override_app = Application (path=path,
+                                    display_name=display_name, 
+                                    unique_identifier=uid,
+                                    executable_name=executable_name,
+                                    exclude = exclude,
+                                    spoken_form=spoken_forms,
+                                    )
+        
+        # app has been removed from the OS or is not installed yet.
+        # lets preserve this entry for the convenience
+        if uid not in application_map and uid not in removed_apps_dict:
+            print(f"removed_apps_dict: added {uid}")
+            removed_apps_dict[uid] = True
+            PRESERVED_APPLICATION_LIST.append(override_app)
+    
+        APPLICATIONS_OVERRIDES[override_app.display_name] = override_app
 
-            if override_app.executable_name:
-                applications_overrides[override_app.executable_name] = override_app
+        if override_app.executable_name:
+            APPLICATIONS_OVERRIDES[override_app.executable_name] = override_app
 
-            if override_app.path:
-                applications_overrides[override_app.path] = override_app                   
+        if override_app.path:
+            APPLICATIONS_OVERRIDES[override_app.path] = override_app                   
 
-            if override_app.unique_identifier:
-                applications_overrides[override_app.unique_identifier] = override_app
+        if override_app.unique_identifier:
+            APPLICATIONS_OVERRIDES[override_app.unique_identifier] = override_app
 
     # build the applications dictionary with the overrides applied
     applications = {}
-    for index,application in enumerate(known_application_list):
+    for index,application in enumerate(INSTALLED_APPLICATIONS_LIST):
         curr_app = application
 
-        if application.unique_identifier in applications_overrides:
-            curr_app = applications_overrides[application.unique_identifier]
-            known_application_list[index] = curr_app
+        if application.unique_identifier in APPLICATIONS_OVERRIDES:
+            curr_app = APPLICATIONS_OVERRIDES[application.unique_identifier]
+            INSTALLED_APPLICATIONS_LIST[index] = curr_app
         else:
              must_update_file = True
 
