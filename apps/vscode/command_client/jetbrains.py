@@ -8,6 +8,7 @@ app: jetbrains
 
 ctx.tags = ["user.command_client"]
 
+
 @ctx.action_class("user")
 class JetbrainsActions:
     def command_server_directory() -> str:
