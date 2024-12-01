@@ -1,0 +1,3 @@
+Application name, Spoken forms, Exclude, Unique Id, Path, Executable Name
+Visual Studio Code,coder,False,Microsoft.VisualStudioCode,None,code.exe
+Notepad++,notepad;note pad,False,{6D809377-6AF0-444B-8957-A3773F02200E}\Notepad++\notepad++.exe,C:\Program Files\Notepad++\notepad++.exe,notepad++.exe
