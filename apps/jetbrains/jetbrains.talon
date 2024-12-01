@@ -6,6 +6,8 @@ tag(): user.multiple_cursors
 tag(): user.splits
 tag(): user.tabs
 tag(): user.command_search
+tag(): user.cursorless
+
 # multiple_cursors.py support end
 
 # Auto complete
