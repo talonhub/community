@@ -7,7 +7,7 @@ Apple Software Update,apple update,False,{7C5A40EF-A0FB-4BFC-874A-C0F2E0B9FA8E}\
 Application Verifier (WOW),None,True,{D65231B0-B2F1-4857-A4CE-A8E7C6EA7D27}\appverif.exe,C:\Windows\SysWOW64\appverif.exe,appverif.exe
 Application Verifier (X64),None,True,{1AC14E77-02E7-4E5D-B744-2EB1AE5198B7}\appverif.exe,C:\Windows\System32\appverif.exe,appverif.exe
 Audacity,None,False,{6D809377-6AF0-444B-8957-A3773F02200E}\Audacity\Audacity.exe,C:\Program Files\Audacity\Audacity.exe,Audacity.exe
-Beyond Compare 4,None,False,{6D809377-6AF0-444B-8957-A3773F02200E}\Beyond Compare 4\BCompare.exe,C:\Program Files\Beyond Compare 4\BCompare.exe,BCompare.exe
+Beyond Compare 4,beyond compare;compare,False,{6D809377-6AF0-444B-8957-A3773F02200E}\Beyond Compare 4\BCompare.exe,C:\Program Files\Beyond Compare 4\BCompare.exe,BCompare.exe
 Building Architect,None,False,{7C5A40EF-A0FB-4BFC-874A-C0F2E0B9FA8E}\GOG Galaxy\Games\SimCity 3000 Unlimited\Apps\Baapp.exe,C:\Program Files (x86)\GOG Galaxy\Games\SimCity 3000 Unlimited\Apps\Baapp.exe,Baapp.exe
 Calculator,None,False,Microsoft.WindowsCalculator_8wekyb3d8bbwe!App,None,None
 Calendar,None,False,microsoft.windowscommunicationsapps_8wekyb3d8bbwe!microsoft.windowslive.calendar,None,None
