@@ -21,21 +21,17 @@ from typing import Union
 # <app name or .exe> - to exclude the app from appearing in "running list" or "focus <app>"
 
 # TODO: Consider moving overrides to settings directory
-overrides_directory = os.path.dirname(os.path.realpath(__file__))
+directory = os.path.dirname(os.path.realpath(__file__))
 app_names_file_name = f"app_names_{talon.app.platform}.csv"
 app_names_file_path = os.path.normcase(
-    os.path.join(overrides_directory, app_names_file_name)
+    os.path.join(directory, app_names_file_name)
 )
+
 mod = Module()
 mod.list("running", desc="all running applications")
 mod.list("launch", desc="all launchable applications")
+
 ctx = Context()
-
-# a list of the current overrides
-overrides = {}
-
-# apps to exclude from running list
-excludes = set()
 
 # a list of the currently running application names
 running_application_dict = {}
@@ -66,10 +62,9 @@ class Application:
 
         return f"{self.display_name},{spoken_forms},{self.exclude},{self.unique_identifier},{self.path},{self.executable_name}"
 
+# a dictionary of applications with overrides pre-applied
+# key by app name, exe path, exe, and bundle id/AppUserModelId
 applications = {}
-applications_overrides = {}
-applications_excluded = {}
-applications_with_spoken_forms = {}
 known_application_list = []
 words_to_exclude = [
     "zero",
@@ -102,7 +97,7 @@ words_to_exclude = [
 # we use the shell:AppsFolder to populate the list of applications
 # rather than via e.g. the start menu. This way, all apps, including "modern" apps are
 # launchable. To easily retrieve the apps this makes available, navigate to shell:AppsFolder in Explorer
-
+got_apps = False
 if app.platform == "windows":
     from .windows_known_paths import resolve_known_windows_path, PathNotFoundException
     from uuid import UUID
@@ -129,6 +124,7 @@ if app.platform == "windows":
             return False
         
     def get_apps()-> list[Application]:
+        global got_apps
         import win32com.client
         
         shell = win32com.client.Dispatch("Shell.Application")
@@ -161,7 +157,7 @@ if app.platform == "windows":
                         exclude=False)
 
                     known_application_list.append(new_app)
-
+        got_apps = True
         return known_application_list
 
 elif app.platform == "linux":
@@ -354,7 +350,7 @@ def update_running_list():
         running.update(actions.user.create_spoken_forms_from_list(
             generate_spoken_form_list,
             words_to_exclude=words_to_exclude,
-            generate_subsequences=False,
+            generate_subsequences=True,
         ))
 
     ctx.lists["self.running"] = running
@@ -363,7 +359,9 @@ def update_running_list():
 @resource.watch(app_names_file_name)
 def update_and_apply_overrides(f):
     global applications, applications_overrides
-    """Updates the overrides and excludes lists"""
+    
+    if not got_apps:
+        get_apps()
 
     applications_overrides = {}
     rows = list(csv.reader(f))
@@ -445,9 +443,12 @@ def update_and_apply_overrides(f):
 class Actions:
     def dump_apps_to_file():
         """what??"""
+        sorted_apps = sorted(known_application_list, key=lambda application: application.display_name)
+
         with open("C:\\Users\\knaus\\app_names_windows.csv", 'w') as file:
             file.write("Application name, Spoken forms, Exclude, Unique Id, Path, Executable Name\n")
-            for application in known_application_list:
+            
+            for application in sorted_apps:
                 file.write(str(application) + "\n")
 
     def get_running_app(name: str) -> ui.App:
@@ -579,7 +580,7 @@ def update_launch_list():
     result = actions.user.create_spoken_forms_from_map(
         sources=launch, 
         words_to_exclude=words_to_exclude,
-        generate_subsequences=False,
+        generate_subsequences=True,
     )
 
     customized = {
@@ -598,6 +599,7 @@ def update_launch_list():
 
 def on_ready():
     # build application dictionary
-    get_apps()
+    if not got_apps:
+        get_apps()
 
 app.register("ready", on_ready)
