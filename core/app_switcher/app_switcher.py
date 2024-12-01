@@ -467,21 +467,22 @@ def update_running_list():
 
     ctx.lists["self.running"] = running
 
-def write_default_csv():
+def update_csv(forced: bool = False):
     path = Path(app_names_file_path)
-    if not path.exists():
+    if not path.exists() or forced:
         if not got_apps:
             get_apps()
         
         sorted_apps = sorted(known_application_list, key=lambda application: application.display_name)
 
-        with open(path, 'w') as file:
-            file.write("Application name, Spoken forms, Exclude, Unique Id, Path, Executable Name\n")
-            
-            for application in sorted_apps:
-                file.write(str(application) + "\n")
+        output = ["Application name, Spoken forms, Exclude, Unique Id, Path, Executable Name\n"]
+        for application in sorted_apps:
+            output.extend(f"{str(application)}\n") 
 
-write_default_csv()
+        with open(path, 'w') as file:
+            file.write("".join(output))
+
+update_csv()
 
 @resource.watch(app_names_file_path)
 def update(f):
@@ -528,9 +529,8 @@ def update(f):
                                     )
         
         # app has been removed?
-        #if uid not in application_map:
-        #    print("update required?")
-        #    must_update_file = True        
+        if uid not in application_map:
+            must_update_file = True        
         
         applications_overrides[override_app.display_name] = override_app
 
@@ -543,8 +543,6 @@ def update(f):
         if override_app.unique_identifier:
             applications_overrides[override_app.unique_identifier] = override_app
 
-
-
     # build the applications dictionary with the overrides applied
     applications = {}
     for index,application in enumerate(known_application_list):
@@ -553,21 +551,8 @@ def update(f):
         if application.unique_identifier in applications_overrides:
             curr_app = applications_overrides[application.unique_identifier]
             known_application_list[index] = curr_app
-        # else:
-        #     print("Update Required?")
-        #     must_update_file = True
-
-        # if application.path in applications_overrides:
-        #     curr_app = applications_overrides[application.path]
-
-        # if application.display_name in applications_overrides:
-        #     curr_app = applications_overrides[application.display_name]
-    
-#        if application.executable_name in applications_overrides:
-#            curr_app = applications_overrides[application.executable_name]
-        
-        #if curr_app.display_name == "visual studio code":
-        #    print("found it agian?!?!")
+        else:
+             must_update_file = True
 
         if curr_app.unique_identifier:
             applications[curr_app.unique_identifier] = curr_app
@@ -581,27 +566,16 @@ def update(f):
         if curr_app.executable_name:
             applications[curr_app.executable_name] = curr_app
 
-    
-
-    # if must_update_file:
-    #     write_updated_csv()
-    # else:
-    update_running_list()
-    update_launch_list()
+    if must_update_file:
+        print(f"Missing or new application detected, updating {app_names_file_name}")
+        update_csv(True)
+    else:
+        update_running_list()
+        update_launch_list()
 
 
 @mod.action_class
 class Actions:
-    def dump_apps_to_file():
-        """what??"""
-        sorted_apps = sorted(known_application_list, key=lambda application: application.display_name)
-
-        with open("C:\\Users\\knaus\\app_names_windows.csv", 'w') as file:
-            file.write("Application name, Spoken forms, Exclude, Unique Id, Path, Executable Name\n")
-            
-            for application in sorted_apps:
-                file.write(str(application) + "\n")
-
     def get_running_app(name: str) -> ui.App:
         """Get the first available running app with `name`."""
         # We should use the capture result directly if it's already in the list
