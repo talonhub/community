@@ -32,12 +32,10 @@ running_application_dict = {}
 applications = {}
 
 INSTALLED_APPLICATIONS_LIST: list[Application] = []
-PRESERVED_APPLICATION_LIST: list[Application] = []
 
-# on Windows, WindowsApps are not like normal applications, so
-# we use the shell:AppsFolder to populate the list of applications
-# rather than via e.g. the start menu. This way, all apps, including "modern" apps are
-# launchable. To easily retrieve the apps this makes available, navigate to shell:AppsFolder in Explorer
+# list of applications that appear in the CSV, but do not appear to be installed
+# these are preserved when the csv is re-written
+PRESERVED_APPLICATION_LIST: list[Application] = []
 INSTALLED_APPLICATIONS_INITIALIZED = False
 
 # Define the regex pattern for a bundle ID
@@ -95,6 +93,8 @@ def should_generate_spoken_forms_for_running_app(curr_app) -> tuple[bool, Union[
     bundle_name = curr_app.bundle
     exe_path = str(Path(curr_app.exe).resolve())
     executable_name = os.path.basename(curr_app.exe)
+
+    # we do not exclude these apps from the running list in case they're started thru other means
 
     if bundle_name and bundle_name in APPLICATIONS_OVERRIDES:
         #return not APPLICATIONS_OVERRIDES[bundle_name].exclude and APPLICATIONS_OVERRIDES[bundle_name].spoken_forms is None, APPLICATIONS_OVERRIDES[bundle_name]
@@ -184,8 +184,8 @@ def update(f):
     }
 
     APPLICATIONS_OVERRIDES = {}
-    removed_apps_dict = {}
     PRESERVED_APPLICATION_LIST = []
+    removed_apps_dict = {}
 
     must_update_file = False
 
@@ -221,7 +221,6 @@ def update(f):
         # app has been removed from the OS or is not installed yet.
         # lets preserve this entry for the convenience
         if uid not in application_map and uid not in removed_apps_dict:
-            print(f"removed_apps_dict: added {uid}")
             removed_apps_dict[uid] = True
             PRESERVED_APPLICATION_LIST.append(override_app)
     
