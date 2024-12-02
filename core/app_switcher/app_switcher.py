@@ -9,7 +9,7 @@ from talon import Context, Module, actions, app, imgui, ui, resource
 from .windows import get_installed_windows_apps
 from .mac import get_installed_mac_apps
 from typing import Union
-from .application import Application
+from .application import Application, ApplicationGroup
 import re
 
 directory = os.path.dirname(os.path.realpath(__file__))
@@ -25,13 +25,17 @@ mod.list("launch", desc="all launchable applications")
 ctx = Context()
 
 # a list of the currently running application names
-running_application_dict = {}
+RUNNING_APPLICATION_DICT = {}
 
 # a dictionary of applications with overrides pre-applied
 # key by app name, exe path, exe, and bundle id/AppUserModelId
-applications = {}
+APPLICATIONS_DICT = {}
 
+# list of known, installed applications
 INSTALLED_APPLICATIONS_LIST: list[Application] = []
+
+# list of application groups. mapped by executable path or name
+APPLICATION_GROUPS_DICT = {}
 
 # list of applications that appear in the CSV, but do not appear to be installed
 # these are preserved when the csv is re-written
@@ -88,54 +92,70 @@ def launch_applications(m) -> str:
     "Returns a single application name"
     return m.launch
 
-def should_generate_spoken_forms_for_running_app(curr_app) -> tuple[bool, Union[Application, None]]:
+def get_override_for_running_app(curr_app) -> tuple[Union[Application | ApplicationGroup, None]]:
     name = curr_app.name
     bundle_name = curr_app.bundle
     exe_path = str(Path(curr_app.exe).resolve())
     executable_name = os.path.basename(curr_app.exe)
 
-    # we do not exclude these apps from the running list in case they're started thru other means
-
+    # application groups take precedence
+    if exe_path in APPLICATION_GROUPS_DICT:
+        return APPLICATION_GROUPS_DICT[exe_path]
+    elif executable_name in APPLICATION_GROUPS_DICT:
+        return APPLICATION_GROUPS_DICT[executable_name]
+        
+    # otherwise, check for application overrides
     if bundle_name and bundle_name in APPLICATIONS_OVERRIDES:
-        #return not APPLICATIONS_OVERRIDES[bundle_name].exclude and APPLICATIONS_OVERRIDES[bundle_name].spoken_forms is None, APPLICATIONS_OVERRIDES[bundle_name]
-        return APPLICATIONS_OVERRIDES[bundle_name].spoken_forms is None, APPLICATIONS_OVERRIDES[bundle_name]
+        override = APPLICATIONS_OVERRIDES[bundle_name]
+        return override if override.spoken_forms else None
     elif exe_path and exe_path in APPLICATIONS_OVERRIDES:
-        #return not APPLICATIONS_OVERRIDES[exe_path].exclude and APPLICATIONS_OVERRIDES[exe_path].spoken_forms is None, APPLICATIONS_OVERRIDES[exe_path]
-        return APPLICATIONS_OVERRIDES[exe_path].spoken_forms is None, APPLICATIONS_OVERRIDES[exe_path]
+        override = APPLICATIONS_OVERRIDES[exe_path]
+        return override if override.spoken_forms is not None else None
     elif executable_name and executable_name in APPLICATIONS_OVERRIDES:
-        #return not APPLICATIONS_OVERRIDES[executable_name].exclude and APPLICATIONS_OVERRIDES[executable_name].spoken_forms is None, APPLICATIONS_OVERRIDES[executable_name]  
-        return APPLICATIONS_OVERRIDES[executable_name].spoken_forms is None, APPLICATIONS_OVERRIDES[executable_name]      
+        override = APPLICATIONS_OVERRIDES[executable_name]
+        return override if override.spoken_forms is not None else None   
     elif name and name in APPLICATIONS_OVERRIDES:
-        return APPLICATIONS_OVERRIDES[name].spoken_forms is None, APPLICATIONS_OVERRIDES[name]
-        #return not APPLICATIONS_OVERRIDES[name].exclude and APPLICATIONS_OVERRIDES[name].spoken_forms is None, APPLICATIONS_OVERRIDES[name]
-    return True, None
+        override = APPLICATIONS_OVERRIDES[name]
+        return override if override.spoken_forms is not None else None 
+    
+    # if we made it here, no overrides found
+    return None
 
 def update_running_list():
-    global running_application_dict
-    running_application_dict = {}
+    global RUNNING_APPLICATION_DICT
+    RUNNING_APPLICATION_DICT = {}
     running = {}
     foreground_apps = ui.apps(background=False)
     generate_spoken_form_list = []
     for cur_app in foreground_apps:
         #print(f"{cur_app.name} {cur_app.exe}")
         name = cur_app.name.lower()
-        running_application_dict[name.lower()] = cur_app
+        RUNNING_APPLICATION_DICT[name.lower()] = cur_app
         
         if app.platform == "mac":
             bundle_name = cur_app.bundle.lower()
-            running_application_dict[bundle_name] = cur_app
+            RUNNING_APPLICATION_DICT[bundle_name] = cur_app
 
         if app.platform == "windows":
             exe = os.path.basename(cur_app.exe).lower()
-            running_application_dict[cur_app.exe.lower()] = cur_app
-            running_application_dict[exe] = cur_app
+            RUNNING_APPLICATION_DICT[cur_app.exe.lower()] = cur_app
+            RUNNING_APPLICATION_DICT[exe] = cur_app
 
-        should_generate_forms, override = should_generate_spoken_forms_for_running_app(cur_app)
-        if should_generate_forms:
+        override = get_override_for_running_app(cur_app)
+        if not override:
             generate_spoken_form_list.append(cur_app.name.lower())
-        elif override and override.spoken_forms is not None:
-            for spoken_form in override.spoken_forms:
-                running[spoken_form] = name
+        elif override:
+            if isinstance(override,ApplicationGroup):
+                running[override.group_name] = cur_app.name
+                for window in cur_app.windows():
+                    for spoken_form, __ in override.spoken_forms.items():
+                        if window.title.startswith(spoken_form):
+                            running[spoken_form] = f"{cur_app.name}-::*::-{window.title}"
+                            break
+
+            else:
+                for spoken_form in override.spoken_forms:
+                    running[spoken_form] = cur_app.name
 
         running.update(actions.user.create_spoken_forms_from_list(
             generate_spoken_form_list,
@@ -163,7 +183,7 @@ def update_csv(forced: bool = False):
 
         sorted_apps = sorted(all_apps, key=lambda application: application.display_name)
 
-        output = ["Application name, Spoken forms, Exclude, Unique Id, Path, Executable Name, Host\n"]
+        output = ["Application name, Spoken forms, Exclude, Unique Id, Path, Executable Name, Application Group, Default for Applcation Group\n"]
         for application in sorted_apps:
             output.extend(f"{str(application)}\n") 
 
@@ -174,8 +194,9 @@ update_csv()
 
 @resource.watch(app_names_file_path)
 def update(f):
-    global applications, INSTALLED_APPLICATIONS_LIST, APPLICATIONS_OVERRIDES, INSTALLED_APPLICATIONS_INITIALIZED
+    global APPLICATIONS_DICT, INSTALLED_APPLICATIONS_LIST, APPLICATIONS_OVERRIDES, INSTALLED_APPLICATIONS_INITIALIZED
     global PRESERVED_APPLICATION_LIST
+    global APPLICATION_GROUPS_DICT
     
     get_installed_apps()
 
@@ -183,6 +204,7 @@ def update(f):
         app.unique_identifier : app for app in INSTALLED_APPLICATIONS_LIST
     }
 
+    APPLICATION_GROUPS_DICT = {}
     APPLICATIONS_OVERRIDES = {}
     PRESERVED_APPLICATION_LIST = []
     removed_apps_dict = {}
@@ -195,16 +217,16 @@ def update(f):
         must_update_file = True
     
     for row in rows[1:]:
-        if len(row) < 6 or len(row) > 7:
-            print(f"Row {row} malformed; expecting 6 or 7 entires")
+        if len(row) != 6 and len(row) != 8:
+            print(f"Row {row} malformed; expecting 6 or 8 entiresl found {len(row)}")
 
+        group_name = None
         if len(row) == 6:
             display_name, spoken_forms, exclude, uid, path, executable_name = (
                 [x.strip() or None for x in row])[:6]
-            host = None
-        elif len(row) == 7:
-            display_name, spoken_forms, exclude, uid, path, executable_name, host = (
-                [x.strip() or None for x in row])[:7]
+        elif len(row) == 8:
+            display_name, spoken_forms, exclude, uid, path, executable_name, group_name, is_default_for_application_group = (
+                [x.strip() or None for x in row])[:8]
         
         if spoken_forms.lower() == "none":
             spoken_forms = None
@@ -215,15 +237,43 @@ def update(f):
         uid = None if uid.lower() == "none" else uid
         path = None if path.lower() == "none" else path
         executable_name = None if executable_name.lower() == "none" else executable_name
-        override_app = Application (path=path,
-                                    display_name=display_name, 
-                                    unique_identifier=uid,
-                                    executable_name=executable_name,
-                                    exclude = exclude,
-                                    spoken_form=spoken_forms,
-                                    host=host
-                                    )
+
+        if not group_name:
+            override_app = Application (path=path,
+                                        display_name=display_name, 
+                                        unique_identifier=uid,
+                                        executable_name=executable_name,
+                                        exclude = exclude,
+                                        spoken_form=spoken_forms)
+        else:
+            is_default_for_application_group=is_default_for_application_group.lower()=="true"
+
+            override_app = Application (path=path,
+                                        display_name=display_name, 
+                                        unique_identifier=uid,
+                                        executable_name=executable_name,
+                                        exclude = exclude,
+                                        spoken_form=spoken_forms,
+                                        application_group=group_name,
+                                        is_default_for_application_group=is_default_for_application_group)            
         
+            if group_name not in APPLICATION_GROUPS_DICT:
+                group = ApplicationGroup()
+                APPLICATION_GROUPS_DICT[group_name] = group
+            else:
+                group = APPLICATION_GROUPS_DICT[group_name]
+
+            if is_default_for_application_group:
+                group.group_name=group_name
+                group.path=path,
+                group.executable_name=executable_name,
+                group.unique_id=uid
+
+                APPLICATION_GROUPS_DICT[executable_name] = group
+                APPLICATION_GROUPS_DICT[path] = group
+            else:
+                group.spoken_forms[display_name] = display_name
+
         # app has been removed from the OS or is not installed yet.
         # lets preserve this entry for the convenience
         if uid not in application_map and uid not in removed_apps_dict:
@@ -242,7 +292,7 @@ def update(f):
             APPLICATIONS_OVERRIDES[override_app.unique_identifier] = override_app
 
     # build the applications dictionary with the overrides applied
-    applications = {}
+    APPLICATIONS_DICT = {}
     for index,application in enumerate(INSTALLED_APPLICATIONS_LIST):
         curr_app = application
 
@@ -253,17 +303,18 @@ def update(f):
              must_update_file = True
 
         if curr_app.unique_identifier:
-            applications[curr_app.unique_identifier] = curr_app
+            APPLICATIONS_DICT[curr_app.unique_identifier] = curr_app
 
         if curr_app.path:
-            applications[curr_app.path] = curr_app
+            APPLICATIONS_DICT[curr_app.path] = curr_app
 
         if curr_app.display_name:
-            applications[curr_app.display_name] = curr_app
+            APPLICATIONS_DICT[curr_app.display_name] = curr_app
     
         if curr_app.executable_name:
-            applications[curr_app.executable_name] = curr_app
+            APPLICATIONS_DICT[curr_app.executable_name] = curr_app
 
+    print("\n".join([str(group) for group in APPLICATION_GROUPS_DICT.values()]))
     if must_update_file:
         print(f"Missing or new application detected, updating {app_names_file_name}")
         update_csv(True)
@@ -278,10 +329,10 @@ class Actions:
         # We should use the capture result directly if it's already in the list
         # of running applications. Otherwise, name is from <user.text> and we
         # can be a bit fuzzier
-        if name.lower() in running_application_dict:
-            return running_application_dict[name]
+        if name.lower() in RUNNING_APPLICATION_DICT:
+            return RUNNING_APPLICATION_DICT[name]
         
-        if name.lower() not in running_application_dict:
+        if name.lower() not in RUNNING_APPLICATION_DICT:
             if len(name) < 3:
                 raise RuntimeError(
                     f'Skipped getting app: "{name}" has less than 3 chars.'
@@ -304,14 +355,22 @@ class Actions:
 
     def switcher_focus(name: str):
         """Focus a new application by name"""
-        app = actions.user.get_running_app(name.lower())
+        splits = name.split("-::*::-")
+        app_name = splits[0].lower()
+        app = actions.user.get_running_app(app_name)
 
-        # Focus next window on same app
-        if app == ui.active_app():
-            actions.app.window_next()
-        # Focus new app
+        if len(splits) == 2:
+            window_name = splits[1]
+            for window in app.windows():
+                if window.title == window_name:
+                    window.focus()
         else:
-            actions.user.switcher_focus_app(app)
+            # Focus next window on same app
+            if app == ui.active_app():
+                actions.app.window_next()
+            # Focus new app
+            else:
+                actions.user.switcher_focus_app(app)
 
     def switcher_focus_app(app: ui.App):
         """Focus application and wait until switch is made"""
@@ -401,7 +460,7 @@ def gui_running(gui: imgui.GUI):
 def update_launch_list():
     launch = {
         application.display_name : application.unique_identifier 
-        for application in applications.values() 
+        for application in APPLICATIONS_DICT.values() 
         if not application.exclude and not application.spoken_forms
     }    
 
@@ -413,7 +472,7 @@ def update_launch_list():
 
     customized = {
         spoken_form:  current_app.unique_identifier
-        for current_app in applications.values()
+        for current_app in APPLICATIONS_DICT.values()
         if current_app.spoken_forms is not None
         for spoken_form in current_app.spoken_forms
     }
@@ -426,6 +485,7 @@ def ui_event(event, arg):
 
 def on_ready():
     update_running_list()
+    ui.register("", ui_event)
 
 
 app.register("ready", on_ready)
