@@ -301,50 +301,6 @@ _split_positions = {
     },
 }
 
-_name_mapping = {
-    "left": "LEFT",
-    "right": "RIGHT",
-    "top": "TOP",
-    "bottom": "BOTTOM",
-    "center third": "CENTER_THIRD",
-    "left third": "LEFT_THIRD",
-    "right third": "RIGHT_THIRD",
-    "left two thirds": "LEFT_TWO_THIRDS",
-    "right two thirds": "RIGHT_TWO_THIRDS",
-    "center small": "CENTER_SMALL",
-    "left small": "LEFT_SMALL",
-    "right small": "RIGHT_SMALL",
-    "left large": "LEFT_LARGE",
-    "right large": "RIGHT_LARGE",
-    "top left": "TOP_LEFT",
-    "top right": "TOP_RIGHT",
-    "bottom left": "BOTTOM_LEFT",
-    "bottom right": "BOTTOM_RIGHT",
-    "top left third": "TOP_LEFT_THIRD",
-    "top right third": "TOP_RIGHT_THIRD",
-    "top left two thirds": "TOP_LEFT_TWO_THIRDS",
-    "top right two thirds": "TOP_RIGHT_TWO_THIRDS",
-    "top center third": "TOP_CENTER_THIRD",
-    "bottom left third": "BOTTOM_LEFT_THIRD",
-    "bottom right third": "BOTTOM_RIGHT_THIRD",
-    "bottom left two thirds": "BOTTOM_LEFT_TWO_THIRDS",
-    "bottom right two thirds": "BOTTOM_RIGHT_TWO_THIRDS",
-    "bottom center third": "BOTTOM_CENTER_THIRD",
-    "top left small": "TOP_LEFT_SMALL",
-    "top right small": "TOP_RIGHT_SMALL",
-    "top left large": "TOP_LEFT_LARGE",
-    "top right large": "TOP_RIGHT_LARGE",
-    "top center small": "TOP_CENTER_SMALL",
-    "bottom left small": "BOTTOM_LEFT_SMALL",
-    "bottom right small": "BOTTOM_RIGHT_SMALL",
-    "bottom left large": "BOTTOM_LEFT_LARGE",
-    "bottom right large": "BOTTOM_RIGHT_LARGE",
-    "bottom center small": "BOTTOM_CENTER_SMALL",
-    "center": "CENTER",
-    "full": "FULL",
-    "fullscreen": "FULLSCREEN",
-}
-
 
 @mod.capture(rule="{user.window_snap_positions}")
 def window_snap_position(m) -> RelativeScreenPos:
@@ -379,7 +335,15 @@ class Actions:
         if position_name in _snap_positions:
             position = _snap_positions[position_name]
         else:
-            position = _snap_positions[_name_mapping[position_name]]
+            screaming_snake_position = actions.user.formatted_text(
+                position_name, "ALL_CAPS,SNAKE_CASE"
+            )
+            actions.user.deprecate_command(
+                "2024-12-02",
+                f"snap_window_to_position('{position_name}')",
+                f"snap_window_to_position('{screaming_snake_position}')",
+            )
+            position = _snap_positions[screaming_snake_position]
         actions.user.snap_window(position, window)
 
     def move_window_next_screen() -> None:
