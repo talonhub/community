@@ -1,44 +1,44 @@
 list: user.window_snap_positions
 -
 
-left: Left
-right: Right
-top: Top
-bottom: Bottom
-center third: CenterThird
-left third: LeftThird
-right third: RightThird
-left two thirds: LeftTwoThirds
-right two thirds: RightTwoThirds
-center small: CenterSmall
-left small: LeftSmall
-right small: RightSmall
-left large: LeftLarge
-right large: RightLarge
-top left: TopLeft
-top right: TopRight
-bottom left: BottomLeft
-bottom right: BottomRight
-top left third: TopLeftThird
-top right third: TopRightThird
-top left two thirds: TopLeftTwoThirds
-top right two thirds: TopRightTwoThirds
-top center third: TopCenterThird
-bottom left third: BottomLeftThird
-bottom right third: BottomRightThird
-bottom left two thirds: BottomLeftTwoThirds
-bottom right two thirds: BottomRightTwoThirds
-bottom center third: BottomCenterThird
-top left small: TopLeftSmall
-top right small: TopRightSmall
-top left large: TopLeftLarge
-top right large: TopRightLarge
-top center small: TopCenterSmall
-bottom left small: BottomLeftSmall
-bottom right small: BottomRightSmall
-bottom left large: BottomLeftLarge
-bottom right large: BottomRightLarge
-bottom center small: BottomCenterSmall
-center: Center
-full: Full
-fullscreen: Fullscreen
+left: LEFT
+right: RIGHT
+top: TOP
+bottom: BOTTOM
+center third: CENTER_THIRD
+left third: LEFT_THIRD
+right third: RIGHT_THIRD
+left two thirds: LEFT_TWO_THIRDS
+right two thirds: RIGHT_TWO_THIRDS
+center small: CENTER_SMALL
+left small: LEFT_SMALL
+right small: RIGHT_SMALL
+left large: LEFT_LARGE
+right large: RIGHT_LARGE
+top left: TOP_LEFT
+top right: TOP_RIGHT
+bottom left: BOTTOM_LEFT
+bottom right: BOTTOM_RIGHT
+top left third: TOP_LEFT_THIRD
+top right third: TOP_RIGHT_THIRD
+top left two thirds: TOP_LEFT_TWO_THIRDS
+top right two thirds: TOP_RIGHT_TWO_THIRDS
+top center third: TOP_CENTER_THIRD
+bottom left third: BOTTOM_LEFT_THIRD
+bottom right third: BOTTOM_RIGHT_THIRD
+bottom left two thirds: BOTTOM_LEFT_TWO_THIRDS
+bottom right two thirds: BOTTOM_RIGHT_TWO_THIRDS
+bottom center third: BOTTOM_CENTER_THIRD
+top left small: TOP_LEFT_SMALL
+top right small: TOP_RIGHT_SMALL
+top left large: TOP_LEFT_LARGE
+top right large: TOP_RIGHT_LARGE
+top center small: TOP_CENTER_SMALL
+bottom left small: BOTTOM_LEFT_SMALL
+bottom right small: BOTTOM_RIGHT_SMALL
+bottom left large: BOTTOM_LEFT_LARGE
+bottom right large: BOTTOM_RIGHT_LARGE
+bottom center small: BOTTOM_CENTER_SMALL
+center: CENTER
+full: FULL
+fullscreen: FULLSCREEN
