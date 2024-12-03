@@ -338,7 +338,7 @@ class Actions:
             # Previously this function took a spoken form, but we now have constant identifiers in `_snap_positions`.
             # If the user passed a previous spoken form instead, see if we can convert it to the new identifier.
             new_key = actions.user.formatted_text(position_name, "ALL_CAPS,SNAKE_CASE")
-            if position_name in _snap_positions:
+            if new_key in _snap_positions:
                 actions.user.deprecate_command(
                     "2024-12-02",
                     f"snap_window_to_position('{position_name}')",
