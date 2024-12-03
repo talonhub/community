@@ -322,7 +322,7 @@ class Actions:
     def snap_window(
         position: RelativeScreenPos, window: Optional[Window] = None
     ) -> None:
-        """Move the active window to a specific position on its current screen, given a `RelativeScreenPos` object."""
+        """Move a window (defaults to the active window) to a specific position on its current screen, given a `RelativeScreenPos` object."""
         if window is None:
             window = ui.active_window()
         _snap_window_helper(window, position)
@@ -330,21 +330,24 @@ class Actions:
     def snap_window_to_position(
         position_name: str, window: Optional[Window] = None
     ) -> None:
-        """Move the active window to a specifically named position on its current screen, using a key from `_snap_positions`."""
+        """Move a window (defaults to the active window) to a specifically named position on its current screen, using a key from `_snap_positions`."""
         position: Optional[RelativeScreenPos] = None
         if position_name in _snap_positions:
             position = _snap_positions[position_name]
         else:
-            screaming_snake_position = actions.user.formatted_text(
-                position_name, "ALL_CAPS,SNAKE_CASE"
-            )
-            actions.user.deprecate_command(
-                "2024-12-02",
-                f"snap_window_to_position('{position_name}')",
-                f"snap_window_to_position('{screaming_snake_position}')",
-            )
-            position = _snap_positions[screaming_snake_position]
-        actions.user.snap_window(position, window)
+            # Previously this function took a spoken form, but we now have constant identifiers in `_snap_positions`.
+            # If the user passed a previous spoken form instead, see if we can convert it to the new identifier.
+            new_key = actions.user.formatted_text(position_name, "ALL_CAPS,SNAKE_CASE")
+            if position_name in _snap_positions:
+                actions.user.deprecate_command(
+                    "2024-12-02",
+                    f"snap_window_to_position('{position_name}')",
+                    f"snap_window_to_position('{new_key}')",
+                )
+                position = _snap_positions[new_key]
+                actions.user.snap_window(position, window)
+            else:
+                raise KeyError()
 
     def move_window_next_screen() -> None:
         """Move the active window to a specific screen."""
