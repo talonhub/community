@@ -339,7 +339,7 @@ class Actions:
             # If the user passed a previous spoken form instead, see if we can convert it to the new identifier.
             new_key = actions.user.formatted_text(position_name, "ALL_CAPS,SNAKE_CASE")
             if new_key in _snap_positions:
-                actions.user.deprecate_command(
+                actions.user.deprecate_action(
                     "2024-12-02",
                     f"snap_window_to_position('{position_name}')",
                     f"snap_window_to_position('{new_key}')",
@@ -351,7 +351,7 @@ class Actions:
 
     def move_window_next_screen() -> None:
         """Move the active window to a specific screen."""
-        _move_to_screen(ui.active_window(), offset=1)
+        actions.user.snap_window_to_position("top right", ui.active_window())
 
     def move_window_previous_screen() -> None:
         """Move the active window to the previous screen."""

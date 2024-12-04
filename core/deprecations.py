@@ -51,6 +51,7 @@ See https://github.com/talonhub/community/issues/940 for original discussion
 
 import datetime
 import os.path
+from typing import Optional
 import warnings
 
 from talon import Module, actions, settings, speech_system
@@ -161,15 +162,25 @@ class Actions:
         )
         warnings.warn(msg, DeprecationWarning, stacklevel=3)
 
-    def deprecate_action(time_deprecated: str, name: str):
+    def deprecate_action(
+        time_deprecated: str, name: str, replacement: Optional[str] = None
+    ):
         """
         Notify the user that the given action is deprecated and should
         not be used into the future.
         """
 
         id = f"action.{name}.{time_deprecated}"
+        suggested_replacement = ""
+        if replacement is not None:
+            suggested_replacement = (
+                f"The suggested replacement action is {replacement}. "
+            )
 
-        deprecate_notify(id, f"The `{name}` action is deprecated. See log for more.")
+        deprecate_notify(
+            id,
+            f"The `{name}` action is deprecated. {suggested_replacement}See log for more.",
+        )
 
         msg = (
             f"The `{name}` action is deprecated since {time_deprecated}."
