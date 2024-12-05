@@ -31,31 +31,31 @@ words_to_exclude = [
     "exe",
 ]
 
-setting_auto_show_pickers = mod.setting(
+mod.setting(
     "file_manager_auto_show_pickers",
-    type=int,
-    default=0,
+    type=bool,
+    default=False,
     desc="Enable to show the file/directories pickers automatically",
 )
-setting_folder_limit = mod.setting(
+mod.setting(
     "file_manager_folder_limit",
     type=int,
     default=1000,
     desc="Maximum number of files/folders to iterate",
 )
-setting_file_limit = mod.setting(
+mod.setting(
     "file_manager_file_limit",
     type=int,
     default=1000,
     desc="Maximum number of files to iterate",
 )
-setting_imgui_limit = mod.setting(
+mod.setting(
     "file_manager_imgui_limit",
     type=int,
     default=20,
     desc="Maximum number of files/folders to display in the imgui",
 )
-setting_imgui_string_limit = mod.setting(
+mod.setting(
     "file_manager_string_limit",
     type=int,
     default=20,
@@ -78,12 +78,6 @@ class Actions:
     def file_manager_open_parent():
         """file_manager_open_parent"""
         return
-
-    def file_manager_go_forward():
-        """file_manager_go_forward_directory"""
-
-    def file_manager_go_back():
-        """file_manager_go_forward_directory"""
 
     def file_manager_open_volume(volume: str):
         """file_manager_open_volume"""
@@ -134,13 +128,17 @@ class Actions:
 
     def file_manager_get_directory_by_index(index: int) -> str:
         """Returns the requested directory for the imgui display by index"""
-        index = (current_folder_page - 1) * setting_imgui_limit.get() + index
+        index = (current_folder_page - 1) * settings.get(
+            "user.file_manager_imgui_limit"
+        ) + index
         assert index < len(folder_selections)
         return folder_selections[index]
 
     def file_manager_get_file_by_index(index: int) -> str:
         """Returns the requested directory for the imgui display by index"""
-        index = (current_file_page - 1) * setting_imgui_limit.get() + index
+        index = (current_file_page - 1) * settings.get(
+            "user.file_manager_imgui_limit"
+        ) + index
         assert index < len(file_selections)
         return file_selections[index]
 
@@ -234,21 +232,29 @@ def get_file_map(current_path):
 def gui_folders(gui: imgui.GUI):
     global current_folder_page, total_folder_pages
     total_folder_pages = math.ceil(
-        len(ctx.lists["self.file_manager_directories"]) / setting_imgui_limit.get()
+        len(ctx.lists["self.file_manager_directories"])
+        / settings.get("user.file_manager_imgui_limit")
     )
     gui.text(f"Select a directory ({current_folder_page}/{total_folder_pages})")
     gui.line()
 
     index = 1
-    current_index = (current_folder_page - 1) * setting_imgui_limit.get()
+    current_index = (current_folder_page - 1) * settings.get(
+        "user.file_manager_imgui_limit"
+    )
 
-    while index <= setting_imgui_limit.get() and current_index < len(folder_selections):
+    while index <= settings.get(
+        "user.file_manager_imgui_limit"
+    ) and current_index < len(folder_selections):
         name = (
             (
-                folder_selections[current_index][: setting_imgui_string_limit.get()]
+                folder_selections[current_index][
+                    : settings.get("user.file_manager_string_limit")
+                ]
                 + ".."
             )
-            if len(folder_selections[current_index]) > setting_imgui_string_limit.get()
+            if len(folder_selections[current_index])
+            > settings.get("user.file_manager_string_limit")
             else folder_selections[current_index]
         )
         gui.text(f"{index}: {name} ")
@@ -272,17 +278,29 @@ def gui_folders(gui: imgui.GUI):
 @imgui.open(y=10, x=1300)
 def gui_files(gui: imgui.GUI):
     global file_selections, current_file_page, total_file_pages
-    total_file_pages = math.ceil(len(file_selections) / setting_imgui_limit.get())
+    total_file_pages = math.ceil(
+        len(file_selections) / settings.get("user.file_manager_imgui_limit")
+    )
 
     gui.text(f"Select a file ({current_file_page}/{total_file_pages})")
     gui.line()
     index = 1
-    current_index = (current_file_page - 1) * setting_imgui_limit.get()
+    current_index = (current_file_page - 1) * settings.get(
+        "user.file_manager_imgui_limit"
+    )
 
-    while index <= setting_imgui_limit.get() and current_index < len(file_selections):
+    while index <= settings.get(
+        "user.file_manager_imgui_limit"
+    ) and current_index < len(file_selections):
         name = (
-            (file_selections[current_index][: setting_imgui_string_limit.get()] + "..")
-            if len(file_selections[current_index]) > setting_imgui_string_limit.get()
+            (
+                file_selections[current_index][
+                    : settings.get("user.file_manager_string_limit")
+                ]
+                + ".."
+            )
+            if len(file_selections[current_index])
+            > settings.get("user.file_manager_string_limit")
             else file_selections[current_index]
         )
 
@@ -301,20 +319,24 @@ def gui_files(gui: imgui.GUI):
 
 
 def clear_lists():
-    global folder_selections, file_selections
+    global folder_selections, file_selections, current_folder_page, current_file_page
     if (
         len(ctx.lists["self.file_manager_directories"]) > 0
         or len(ctx.lists["self.file_manager_files"]) > 0
     ):
         current_folder_page = current_file_page = 1
-        ctx.lists["self.file_manager_directories"] = []
-        ctx.lists["self.file_manager_files"] = []
+        ctx.lists.update(
+            {
+                "self.file_manager_directories": [],
+                "self.file_manager_files": [],
+            }
+        )
         folder_selections = []
         file_selections = []
 
 
 def update_gui():
-    if gui_folders.showing or settings.get("user.file_manager_auto_show_pickers") >= 1:
+    if gui_folders.showing or settings.get("user.file_manager_auto_show_pickers"):
         gui_folders.show()
         gui_files.show()
 
@@ -347,8 +369,12 @@ def update_lists(path=None):
             files = {}
 
     current_folder_page = current_file_page = 1
-    ctx.lists["self.file_manager_directories"] = directories
-    ctx.lists["self.file_manager_files"] = files
+    ctx.lists.update(
+        {
+            "self.file_manager_directories": directories,
+            "self.file_manager_files": files,
+        }
+    )
 
     folder_selections = list(set(directories.values()))
     folder_selections.sort(key=str.casefold)
@@ -366,12 +392,15 @@ def win_event_handler(window):
     if not window.app.exe or window != ui.active_window():
         return
 
-    path = actions.user.file_manager_current_path()
-
     if "user.file_manager" not in registry.tags:
         actions.user.file_manager_hide_pickers()
         clear_lists()
-    elif path:
+        cached_path = None
+        return
+
+    path = actions.user.file_manager_current_path()
+
+    if path:
         if cached_path != path:
             update_lists(path)
     elif cached_path:
