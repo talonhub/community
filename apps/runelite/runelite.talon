@@ -14,9 +14,12 @@ music: key(f12)
 world hop: key(f14)
 
 skip dialogue:
-    user.toggle_key_hold('space')
+    user.toggle_key_repeater('space')
 
-# Initiate or release space hold on touch
-camera up:
-    user.toggle_key_hold('up')
-
+under:
+    #user.zoom_close()
+    key("shift:down")
+    sleep(200ms)
+    mouse_click(0)
+    sleep(200ms)
+    key("shift:up")
