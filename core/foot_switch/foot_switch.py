@@ -109,8 +109,8 @@ class Actions:
 
     def foot_switch_right_down():
         """Foot switch button right:down"""
-        actions.skip()
+        actions.speech.enable()
 
     def foot_switch_right_up(held: bool):
         """Foot switch button right:up"""
-        actions.skip()
+        actions.speech.disable()
