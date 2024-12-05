@@ -11,6 +11,7 @@ import logging
 from typing import Dict, Optional
 
 from talon import Context, Module, actions, settings, ui
+from talon.types import Rect
 
 mod = Module()
 mod.list(
@@ -246,6 +247,7 @@ _snap_positions = {
     # .--.--.--.
     # |--|--|--|
     # '--'--'--'
+    "top center small": RelativeScreenPos(1 / 3, 0, 2 / 3, 0.5),
     "top left third": RelativeScreenPos(0, 0, 1 / 3, 0.5),
     "top right third": RelativeScreenPos(2 / 3, 0, 1, 0.5),
     "top left two thirds": RelativeScreenPos(0, 0, 2 / 3, 0.5),
@@ -270,6 +272,9 @@ _snap_positions = {
     # Special
     "center": RelativeScreenPos(1 / 8, 1 / 6, 7 / 8, 5 / 6),
     "full": RelativeScreenPos(0, 0, 1, 1),
+    "top center": RelativeScreenPos(1 / 6, 0, 5 / 6, 0.5),
+    "bottom center": RelativeScreenPos(1 / 6, 0.5, 5 / 6, 1),
+    "middle": RelativeScreenPos(1 / 6, 1 / 8, 5 / 6, 1),
     "fullscreen": RelativeScreenPos(0, 0, 1, 1),
 }
 
@@ -309,6 +314,8 @@ def window_split_position(m) -> Dict[int, list[RelativeScreenPos]]:
     return _split_positions[m.window_split_positions]
 
 
+window_states = {}
+
 ctx = Context()
 ctx.lists["user.window_snap_positions"] = _snap_positions.keys()
 ctx.lists["user.window_split_positions"] = _split_positions.keys()
@@ -319,6 +326,29 @@ class Actions:
     def snap_window(position: RelativeScreenPos) -> None:
         """Move the active window to a specific position on its current screen, given a `RelativeScreenPos` object."""
         _snap_window_helper(ui.active_window(), position)
+
+    def window_set_rect(window: ui.Window, rect: ui.Rect):
+        """Update window position. Keeps track of old position to enable revert/undo"""
+        window_states[window] = window.rect
+        window.rect = rect
+
+    def snap_active_window_to_position(pos_name: str):
+        """Move the active window to position <pos_name> on the current screen"""
+        window = ui.active_window()
+        snap_window_to_screen_and_position(
+            window,
+            window.screen,
+            pos_name,
+        )
+
+    def window_set_pos(
+        window: ui.Window, x: float, y: float, width: float, height: float
+    ):
+        """Update window position. Keeps track of old position to enable revert/undo"""
+        actions.user.window_set_rect(
+            window,
+            ui.Rect(round(x), round(y), round(width), round(height)),
+        )
 
     def snap_window_to_position(position_name: str) -> None:
         """Move the active window to a specifically named position on its current screen, using a key from `_snap_positions`."""
@@ -341,6 +371,29 @@ class Actions:
         window = _get_app_window(app_name)
         _bring_forward(window)
         _snap_window_helper(window, position)
+
+    def snap_apply_position_to_rect(rect: Rect, pos_name: str) -> Rect:
+        """Applies snap position <pos_name> to given rectangle"""
+        pos = _snap_positions[pos_name]
+        return Rect(
+            rect.x + (rect.width * pos.left),
+            rect.y + (rect.height * pos.top),
+            rect.width * (pos.right - pos.left),
+            rect.height * (pos.bottom - pos.top),
+        )
+
+def snap_window_to_screen_and_position(window: ui.Window, screen: ui.Screen, pos_name: str):
+    """
+    Snaps the given window to the specified screen and positions it according to the provided position name.
+
+    Args:
+        window (ui.Window): The window to snap.
+        screen (ui.Screen): The screen to snap the window to.
+        pos_name (str): The name of the position to apply (e.g., "top-left").
+    """
+    rect = actions.user.snap_apply_position_to_rect(screen.visible_rect, pos_name)
+    actions.user.window_set_pos(window, rect.x, rect.y, rect.width, rect.height)
+
 
     def snap_layout(
         positions_by_count: Dict[int, list[RelativeScreenPos]],
