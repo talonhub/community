@@ -331,7 +331,7 @@ class Actions:
                     name = full_application_name
                     break
         for application in ui.apps(background=False):
-            if application.name == name or (
+            if application.name.lower() == name.lower() or (
                 app.platform == "windows"
                 and os.path.basename(application.exe).lower() == name
             ):
