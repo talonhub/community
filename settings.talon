@@ -21,7 +21,7 @@ settings():
     # 0 = off
     # 1 = on with eyetracker but not zoom mouse mode
     # 2 = on but not with zoom mouse mode
-    user.mouse_enable_pop_click = 0
+    user.mouse_enable_pop_click = 2
 
     # Enable if you like to use the hissing noise to do mouse scroll
     user.mouse_enable_hiss_scroll = 0
