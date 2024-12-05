@@ -180,6 +180,7 @@ new line below | slap: edit.line_insert_down()
 
 # Undo/redo
 undo that: edit.undo()
+junk: edit.undo()
 redo that: edit.redo()
 
 # Save
