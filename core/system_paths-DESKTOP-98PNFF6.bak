@@ -1,0 +1,16 @@
+list: user.system_paths
+hostname: DESKTOP-98PNFF6
+-
+user: C:\Users\slate
+desktop: C:\Users\slate\Desktop
+desk: C:\Users\slate\Desktop
+documents: C:\Users\slate\Documents
+docks: C:\Users\slate\Documents
+downloads: C:\Users\slate\Downloads
+music: C:\Users\slate\Music
+pictures: C:\Users\slate\Pictures
+videos: C:\Users\slate\Videos
+talon home: C:\Users\slate\AppData\Roaming\talon
+talon recordings: C:\Users\slate\AppData\Roaming\talon\recordings
+talon user: C:\Users\slate\AppData\Roaming\talon\user
+profile: C:\Users\slate

@@ -1,7 +1,12 @@
 list: user.search_engine
 -
-amazon: https://www.amazon.com/s/?field-keywords=%s
+amazon: https://smile.amazon.co.uk/s/?field-keywords=%s
 google: https://www.google.com/search?q=%s
 map: https://maps.google.com/maps?q=%s
 scholar: https://scholar.google.com/scholar?q=%s
 wiki: https://en.wikipedia.org/w/index.php?search=%s
+dock: https://docs.google.com/document/u/0/?q=%s
+paper: https://paper.dropbox.com/#q=%s
+order: https://www.amazon.co.uk/gp/your-account/order-history/ref=ppx_yo_dt_b_search?opt=ab&search=%s
+issue: https://github.com/cursorless-dev/cursorless/issues?q=is%3Aissue+is%3Aopen+%s
+pull: https://github.com/cursorless-dev/cursorless/pulls?q=is%3Apr+is%3Aopen+%s
