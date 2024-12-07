@@ -148,15 +148,18 @@ if app.platform == "windows":
                         should_create_entry = p.suffix in [".exe"]
                 except:
                     pass
+                
+                # this isn't very robust, but let's try it..?
+                is_windows_store_app = app_user_model_id.endswith("!App")
 
                 if not executable_name:
-                    if display_name in shortcut_map:
+                    if not is_windows_store_app and display_name in shortcut_map:
                         path = str(shortcut_map[display_name].resolve())
                         executable_name = str(shortcut_map[display_name].name)
                         should_create_entry = shortcut_map[display_name].suffix in [".exe"]
 
                 #exclude entries that start with http
-                if not executable_name and not path:
+                if not is_windows_store_app and not executable_name and not path:
                     should_create_entry = should_create_entry and not app_user_model_id.startswith("https://") and not app_user_model_id.startswith("http://") 
                     
                 new_app = Application(
