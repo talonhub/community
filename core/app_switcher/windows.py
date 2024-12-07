@@ -107,9 +107,13 @@ if app.platform == "windows":
             shell = win32com.client.Dispatch("WScript.Shell")
             shortcut = shell.CreateShortCut(lnk_file)
             return shortcut.Targetpath
-        except:
+        except Exception:
             print(f"Failed to parse {lnk_file}")
             return None
+        
+    def check_should_create_entry(display_name):
+        #in windows, many dumb things are added to the apps folder
+        return "install" not in display_name.lower()
 
     shortcut_paths = []
     for path in windows_application_directories:
@@ -120,6 +124,7 @@ if app.platform == "windows":
     for short_cut_path in shortcut_paths:
         stem = Path(short_cut_path).stem
         target_path = get_shortcut_target_path(short_cut_path)
+
 
         if target_path:
             shortcut_map[stem] = Path(target_path)
@@ -148,10 +153,7 @@ if app.platform == "windows":
                 continue
 
             display_name = item.GetDisplayName(shellcon.SIGDN_NORMALDISPLAY)
-            should_create_entry = "install" not in display_name
-
-            if display_name == "File Explorer":
-                print("EXPLORER FOUND")
+            should_create_entry = check_should_create_entry(display_name) 
 
             if should_create_entry:
                 try:
@@ -169,15 +171,14 @@ if app.platform == "windows":
                 # this isn't very robust, but let's try it..?
                 is_windows_store_app = app_user_model_id.endswith("!App")
 
-                if not executable_name:
+                if should_create_entry and not executable_name:
                     if not is_windows_store_app and display_name in shortcut_map:
-                        path = shortcut_map[display_name]
+                        shortcut_path = shortcut_map[display_name]
 
-                        if path:
-                            path = str(Path(shortcut_map[display_name].resolve()))
-
-                            executable_name = str(shortcut_map[display_name].name)
-                            should_create_entry = shortcut_map[display_name].suffix in [".exe"]
+                        if shortcut_path:
+                            path = shortcut_map[display_name].resolve()
+                            executable_name = shortcut_path.name
+                            should_create_entry = shortcut_path.suffix.lower() in [".exe", ".msc"]
 
                 #exclude entries that start with http
                 if not is_windows_store_app and not executable_name and not path:
