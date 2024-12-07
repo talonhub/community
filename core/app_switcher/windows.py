@@ -111,6 +111,9 @@ if app.platform == "windows":
             print(f"Failed to parse {lnk_file}")
             return None
         
+    def is_extension_allowed(extension):
+        return extension.lower() in [".exe", ".msc"]
+    
     def check_should_create_entry(display_name):
         #in windows, many dumb things are added to the apps folder
         return "install" not in display_name.lower()
@@ -162,9 +165,10 @@ if app.platform == "windows":
                         path = p.resolve()
                         executable_name = p.name  
                         # exclude anything that is NOT an actual executable
-                        should_create_entry = p.suffix in [".exe"]
+                        should_create_entry = is_extension_allowed(p.suffix) 
+                        #if not should_create_entry:
+                        #    print(f"{executable_name} {path}")
 
-                        
                 except:
                     pass
                 
@@ -178,7 +182,10 @@ if app.platform == "windows":
                         if shortcut_path:
                             path = shortcut_map[display_name].resolve()
                             executable_name = shortcut_path.name
-                            should_create_entry = shortcut_path.suffix.lower() in [".exe", ".msc"]
+                            should_create_entry = is_extension_allowed (path.suffix)
+
+                        #if not should_create_entry:
+                        #    print(f"{executable_name} {path}")
 
                 #exclude entries that start with http
                 if not is_windows_store_app and not executable_name and not path:
