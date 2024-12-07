@@ -113,7 +113,9 @@ if app.platform == "windows":
         full_path = os.path.expandvars(path)
         shortcut_paths.extend(glob.glob(os.path.join(full_path, '**/*.lnk'), recursive=True))
 
-    shortcut_map = {Path(path).stem : Path(get_shortcut_target_path(str(Path(path).resolve()))).resolve() for path in shortcut_paths}
+    print(shortcut_paths)
+    shortcut_map = {}
+    #shortcut_map = {Path(path).stem : Path(get_shortcut_target_path(str(Path(path).resolve()))).resolve() for path in shortcut_paths}
 
     def get_installed_windows_apps() -> list[Application]:
         application_list = []
@@ -138,6 +140,9 @@ if app.platform == "windows":
             display_name = item.GetDisplayName(shellcon.SIGDN_NORMALDISPLAY)
             should_create_entry = "install" not in display_name
 
+            if display_name == "File Explorer":
+                print("EXPLORER FOUND")
+
             if should_create_entry:
                 try:
                     p = resolve_path_with_guid(app_user_model_id)
@@ -146,22 +151,36 @@ if app.platform == "windows":
                         executable_name = p.name  
                         # exclude anything that is NOT an actual executable
                         should_create_entry = p.suffix in [".exe"]
+
+                        
                 except:
                     pass
                 
                 # this isn't very robust, but let's try it..?
                 is_windows_store_app = app_user_model_id.endswith("!App")
 
+                if display_name == "File Explorer" and not should_create_entry:
+                    print("161 -- EXCLUDED")
                 if not executable_name:
                     if not is_windows_store_app and display_name in shortcut_map:
                         path = str(shortcut_map[display_name].resolve())
+
                         executable_name = str(shortcut_map[display_name].name)
+
+                        if executable_name.lower().startswith("talon"):
+                            print(f"{path} {executable_name} {display_name}")
+
                         should_create_entry = shortcut_map[display_name].suffix in [".exe"]
+
+                if display_name == "File Explorer" and not should_create_entry:
+                    print("169 -- EXCLUDED")
 
                 #exclude entries that start with http
                 if not is_windows_store_app and not executable_name and not path:
                     should_create_entry = should_create_entry and not app_user_model_id.startswith("https://") and not app_user_model_id.startswith("http://") 
                     
+
+
                 new_app = Application(
                     path=str(path) if path else None,
                     display_name=display_name, 
