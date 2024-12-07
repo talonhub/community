@@ -106,6 +106,7 @@ if app.platform == "windows":
             shortcut = shell.CreateShortCut(lnk_file)
             return shortcut.Targetpath
         except:
+            print(f"adsfasdf failed {lnk_file}")
             return None
 
     shortcut_paths = []
@@ -113,9 +114,15 @@ if app.platform == "windows":
         full_path = os.path.expandvars(path)
         shortcut_paths.extend(glob.glob(os.path.join(full_path, '**/*.lnk'), recursive=True))
 
-    print(shortcut_paths)
     shortcut_map = {}
-    #shortcut_map = {Path(path).stem : Path(get_shortcut_target_path(str(Path(path).resolve()))).resolve() for path in shortcut_paths}
+    for short_cut_path in shortcut_paths:
+        stem = Path(short_cut_path).stem
+        target_path = get_shortcut_target_path(short_cut_path)
+
+        if target_path:
+            shortcut_map[stem] = Path(target_path)
+        else:
+            shortcut_map[stem] = None
 
     def get_installed_windows_apps() -> list[Application]:
         application_list = []
@@ -161,16 +168,16 @@ if app.platform == "windows":
 
                 if display_name == "File Explorer" and not should_create_entry:
                     print("161 -- EXCLUDED")
+
                 if not executable_name:
                     if not is_windows_store_app and display_name in shortcut_map:
-                        path = str(shortcut_map[display_name].resolve())
+                        path = shortcut_map[display_name]
+                        
+                        if path:
+                            path = str(Path(shortcut_map[display_name].resolve()))
 
-                        executable_name = str(shortcut_map[display_name].name)
-
-                        if executable_name.lower().startswith("talon"):
-                            print(f"{path} {executable_name} {display_name}")
-
-                        should_create_entry = shortcut_map[display_name].suffix in [".exe"]
+                            executable_name = str(shortcut_map[display_name].name)
+                            should_create_entry = shortcut_map[display_name].suffix in [".exe"]
 
                 if display_name == "File Explorer" and not should_create_entry:
                     print("169 -- EXCLUDED")
