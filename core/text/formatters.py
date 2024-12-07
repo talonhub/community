@@ -315,11 +315,11 @@ def shrink_to_string_inside(text: str) -> tuple[str, str, str]:
 
 
 @mod.capture(
-    rule="({user.code_formatter} | {user.prose_formatter} | {user.reformatter})+"
+    rule="({user.code_formatter} | {user.prose_formatter} | {user.reformatter})+ "
 )
 def formatters(m) -> str:
     "Returns a comma-separated string of formatters e.g. 'SNAKE,DUBSTRING'"
-    return ",".join(str(m).split(" "))
+    return ",".join(list(m))
 
 
 @mod.capture(rule="{self.code_formatter}+")
@@ -448,7 +448,7 @@ class Actions:
     def get_formatters_words() -> dict:
         """Returns words currently used as formatters, and a demonstration string using those formatters"""
         formatters_help_demo = {}
-        formatters, prose_formatters = get_formatters_and_prose_formatters(False)
+        formatters, prose_formatters = get_formatters_and_prose_formatters(include_reformatters=False)
         prose_formatter_names = prose_formatters.keys()
 
         for phrase in sorted(formatters):
@@ -462,7 +462,7 @@ class Actions:
     def get_reformatters_words() -> dict:
         """Returns words currently used as re-formatters, and a demonstration string using those re-formatters"""
         formatters_help_demo = {}
-        formatters, prose_formatters = get_formatters_and_prose_formatters(True)
+        formatters, prose_formatters = get_formatters_and_prose_formatters(include_reformatters=True)
         prose_formatter_names = prose_formatters.keys()
         for phrase in sorted(formatters):
             name = formatters[phrase]
