@@ -147,11 +147,19 @@ def update_running_list():
         elif override:
             if isinstance(override,ApplicationGroup):
                 running[override.group_name] = cur_app.name
+
+                # cycle thru windows and check for subprograms.
                 for window in cur_app.windows():
-                    for spoken_form, __ in override.spoken_forms.items():
-                        if window.title.startswith(spoken_form):
-                            running[spoken_form] = f"{cur_app.name}-::*::-{window.title}"
+                    for display_name, spoken_forms in override.spoken_forms.items():
+                        if window.title.startswith(display_name):
+                            mapping = f"{cur_app.name}-::*::-{window.title}"
+                            for spoken_form in spoken_forms:
+                                running[spoken_form] = mapping
                             break
+                
+                # ensure the default spoken forms for the group are added.
+                for spoken_form in override.group_spoken_forms:
+                    running[spoken_form] = cur_app.name
 
             else:
                 for spoken_form in override.spoken_forms:
@@ -259,6 +267,7 @@ def update(f):
         
             if group_name not in APPLICATION_GROUPS_DICT:
                 group = ApplicationGroup()
+                group.group_spoken_forms = spoken_forms if spoken_forms else display_name
                 APPLICATION_GROUPS_DICT[group_name] = group
             else:
                 group = APPLICATION_GROUPS_DICT[group_name]
@@ -272,7 +281,8 @@ def update(f):
                 APPLICATION_GROUPS_DICT[executable_name] = group
                 APPLICATION_GROUPS_DICT[path] = group
             else:
-                group.spoken_forms[display_name] = display_name
+                group.spoken_forms[display_name] = spoken_forms if spoken_forms != None else display_name
+                # print(f"{display_name} {spoken_forms}")
 
         # app has been removed from the OS or is not installed yet.
         # lets preserve this entry for the convenience
@@ -314,7 +324,7 @@ def update(f):
         if curr_app.executable_name:
             APPLICATIONS_DICT[curr_app.executable_name] = curr_app
 
-    print("\n".join([str(group) for group in APPLICATION_GROUPS_DICT.values()]))
+    # print("\n".join([str(group) for group in APPLICATION_GROUPS_DICT.values()]))
     if must_update_file:
         print(f"Missing or new application detected, updating {app_names_file_name}")
         update_csv(True)
