@@ -1,0 +1,6 @@
+exe=TextInputHost.exe
+exe=StartMenuExperienceHost.exe
+exe=ApplicationFrameHost.exe
+exe=ShellExperienceHost.exe
+name=Windows Shell Experience Host
+name=Application Frame Host

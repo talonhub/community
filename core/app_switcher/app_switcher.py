@@ -8,6 +8,7 @@ import talon
 from talon import Context, Module, actions, app, imgui, ui, resource
 from .windows import get_installed_windows_apps
 from .mac import get_installed_mac_apps
+from .exclusion import ExclusionType, RunningApplicationExclusion
 from typing import Union
 from .application import Application, ApplicationGroup
 import re
@@ -15,6 +16,11 @@ import platform
 hostname = platform.node()
 base_script_directory = os.path.dirname(os.path.realpath(__file__))
 csv_directory = os.path.join(base_script_directory, talon.app.platform, hostname)
+running_applications_exclusions_filename = "running_applications_exclusions.csv"
+running_applications_file_path = os.path.normcase(
+    os.path.join(csv_directory, running_applications_exclusions_filename)
+)
+
 launch_applications_filename = "launch_applications.csv"
 launch_applications_file_path = os.path.normcase(
     os.path.join(csv_directory, launch_applications_filename)
@@ -33,6 +39,13 @@ ctx = Context()
 # a list of the currently running application names
 RUNNING_APPLICATION_DICT = {}
 
+# exclusions applied to the running applications list (user.running)
+# key is exe, path, bundle, etc
+RUNNING_APPLICATION_EXCLUSIONS_DICT = {}
+
+# list of all application exclusions
+RUNNING_APPLICATION_EXCLUSIONS = []
+
 # a dictionary of applications with overrides pre-applied
 # key by app name, exe path, exe, and bundle id/AppUserModelId
 APPLICATIONS_DICT = {}
@@ -42,6 +55,9 @@ INSTALLED_APPLICATIONS_LIST: list[Application] = []
 
 # list of application groups. mapped by executable path or name
 APPLICATION_GROUPS_DICT = {}
+
+# dictionary of application overrides from launch file
+APPLICATIONS_OVERRIDES = {}
 
 # list of applications that appear in the CSV, but do not appear to be installed
 # these are preserved when the csv is re-written
@@ -98,11 +114,20 @@ def launch_applications(m) -> str:
     "Returns a single application name"
     return m.launch
 
-def get_override_for_running_app(curr_app) -> tuple[Union[Application | ApplicationGroup, None]]:
+def get_override_for_running_app(curr_app) -> Union[Application | ApplicationGroup | RunningApplicationExclusion | None]:
     name = curr_app.name
     bundle_name = curr_app.bundle
     exe_path = str(Path(curr_app.exe).resolve())
     executable_name = os.path.basename(curr_app.exe)
+
+    if exe_path in RUNNING_APPLICATION_EXCLUSIONS_DICT:
+        return RUNNING_APPLICATION_EXCLUSIONS_DICT[exe_path]
+    elif executable_name in RUNNING_APPLICATION_EXCLUSIONS_DICT:
+        return RUNNING_APPLICATION_EXCLUSIONS_DICT[executable_name]
+    elif bundle_name in RUNNING_APPLICATION_EXCLUSIONS_DICT:
+        return RUNNING_APPLICATION_EXCLUSIONS_DICT[bundle_name]
+    elif name in RUNNING_APPLICATION_EXCLUSIONS_DICT:
+        return RUNNING_APPLICATION_EXCLUSIONS_DICT[name]
 
     # application groups take precedence
     if exe_path in APPLICATION_GROUPS_DICT:
@@ -166,7 +191,10 @@ def update_running_list():
                 # ensure the default spoken forms for the group are added.
                 for spoken_form in override.group_spoken_forms:
                     running[spoken_form] = cur_app.name
-
+            # check for exclusion
+            elif isinstance(override, RunningApplicationExclusion):
+                continue
+            #otherewise add the things
             else:
                 for spoken_form in override.spoken_forms:
                     running[spoken_form] = cur_app.name
@@ -188,7 +216,7 @@ def get_installed_apps():
             INSTALLED_APPLICATIONS_LIST = get_installed_mac_apps()
         INSTALLED_APPLICATIONS_INITIALIZED = True
 
-def update_csv(forced: bool = False):
+def process_launch_applications_file(forced: bool = False):
     path = Path(launch_applications_file_path)
     get_installed_apps()
 
@@ -204,10 +232,55 @@ def update_csv(forced: bool = False):
         with open(path, 'w') as file:
             file.write("".join(output))
 
-update_csv()
+process_launch_applications_file()
 
+@resource.watch(running_applications_file_path)
+def update_running_exclusions(f):
+    global RUNNING_APPLICATION_EXCLUSIONS_DICT
+    global RUNNING_APPLICATION_EXCLUSIONS
+
+    RUNNING_APPLICATION_EXCLUSIONS_DICT = {}
+    RUNNING_APPLICATION_EXCLUSIONS = []
+    rows = list(csv.reader(f))
+    for row in rows:
+        if (len(row) != 1):
+            continue
+
+        splits = row[0].split("=")
+        exlcusion_type = None
+        if len(splits) == 2:
+            parsed_type = splits[0].strip().upper()
+            match parsed_type:
+                case "EXE":
+                    exlcusion_type = ExclusionType.EXECUTABLE
+
+                case "EXECUTABLE":
+                    exlcusion_type = ExclusionType.EXECUTABLE
+
+                case "BUNDLE":
+                    exlcusion_type = ExclusionType.BUNDLE
+
+                case "PATH":
+                    exlcusion_type = ExclusionType.PATH
+                
+                case "NAME":
+                    exlcusion_type = ExclusionType.NAME
+                
+                case _:
+                    print(f"Unknown exclusion type {parsed_type} detected in {running_applications_exclusions_filename}")
+
+        if exlcusion_type:
+            data_string = splits[1].strip()
+            exclusion = RunningApplicationExclusion(exclusion_type=exlcusion_type, data_string=data_string)
+            RUNNING_APPLICATION_EXCLUSIONS.append(exclusion)
+            RUNNING_APPLICATION_EXCLUSIONS_DICT[data_string] = exclusion
+        else:
+            print(f"Malformed application exlucions {row}")
+
+    update_running_list()
+    
 @resource.watch(launch_applications_file_path)
-def update(f):
+def update_launch_applications(f):
     global APPLICATIONS_DICT, INSTALLED_APPLICATIONS_LIST, APPLICATIONS_OVERRIDES, INSTALLED_APPLICATIONS_INITIALIZED
     global PRESERVED_APPLICATION_LIST
     global APPLICATION_GROUPS_DICT
@@ -273,7 +346,6 @@ def update(f):
         
             if group_name not in APPLICATION_GROUPS_DICT:
                 group = ApplicationGroup()
-                group.group_spoken_forms = spoken_forms if spoken_forms else display_name
                 APPLICATION_GROUPS_DICT[group_name] = group
             else:
                 group = APPLICATION_GROUPS_DICT[group_name]
@@ -283,6 +355,7 @@ def update(f):
                 group.path=path,
                 group.executable_name=executable_name,
                 group.unique_id=uid
+                group.group_spoken_forms = spoken_forms if spoken_forms else display_name
 
                 APPLICATION_GROUPS_DICT[executable_name] = group
                 APPLICATION_GROUPS_DICT[path] = group
@@ -333,7 +406,7 @@ def update(f):
     # print("\n".join([str(group) for group in APPLICATION_GROUPS_DICT.values()]))
     if must_update_file:
         print(f"Missing or new application detected, updating {launch_applications_filename}")
-        update_csv(True)
+        process_launch_applications_file(True)
     else:
         update_running_list()
         update_launch_list()
@@ -500,7 +573,6 @@ def ui_event(event, arg):
         update_running_list()
 
 def on_ready():
-    update_running_list()
     ui.register("", ui_event)
 
 
