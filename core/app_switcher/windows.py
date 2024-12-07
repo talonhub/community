@@ -101,12 +101,14 @@ if app.platform == "windows":
         return result
 
     def get_shortcut_target_path(lnk_file):
+        # todo: ideally we'd parse the target type here... that would make things more robust
+        # windows shortcuts can include applications, Control Panel, and other weird targets.
         try:
             shell = win32com.client.Dispatch("WScript.Shell")
             shortcut = shell.CreateShortCut(lnk_file)
             return shortcut.Targetpath
         except:
-            print(f"adsfasdf failed {lnk_file}")
+            print(f"Failed to parse {lnk_file}")
             return None
 
     shortcut_paths = []
@@ -121,6 +123,7 @@ if app.platform == "windows":
 
         if target_path:
             shortcut_map[stem] = Path(target_path)
+        # some windows shortcuts don't have a path to make things weird (target: Control Panel)
         else:
             shortcut_map[stem] = None
 
@@ -166,28 +169,20 @@ if app.platform == "windows":
                 # this isn't very robust, but let's try it..?
                 is_windows_store_app = app_user_model_id.endswith("!App")
 
-                if display_name == "File Explorer" and not should_create_entry:
-                    print("161 -- EXCLUDED")
-
                 if not executable_name:
                     if not is_windows_store_app and display_name in shortcut_map:
                         path = shortcut_map[display_name]
-                        
+
                         if path:
                             path = str(Path(shortcut_map[display_name].resolve()))
 
                             executable_name = str(shortcut_map[display_name].name)
                             should_create_entry = shortcut_map[display_name].suffix in [".exe"]
 
-                if display_name == "File Explorer" and not should_create_entry:
-                    print("169 -- EXCLUDED")
-
                 #exclude entries that start with http
                 if not is_windows_store_app and not executable_name and not path:
                     should_create_entry = should_create_entry and not app_user_model_id.startswith("https://") and not app_user_model_id.startswith("http://") 
-                    
-
-
+                
                 new_app = Application(
                     path=str(path) if path else None,
                     display_name=display_name, 
