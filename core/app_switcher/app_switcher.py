@@ -11,12 +11,18 @@ from .mac import get_installed_mac_apps
 from typing import Union
 from .application import Application, ApplicationGroup
 import re
-
-directory = os.path.dirname(os.path.realpath(__file__))
-app_names_file_name = f"app_names_{talon.app.platform}.csv"
-app_names_file_path = os.path.normcase(
-    os.path.join(directory, app_names_file_name)
+import platform
+hostname = platform.node()
+base_script_directory = os.path.dirname(os.path.realpath(__file__))
+csv_directory = os.path.join(base_script_directory, talon.app.platform, hostname)
+launch_applications_filename = "launch_applications.csv"
+launch_applications_file_path = os.path.normcase(
+    os.path.join(csv_directory, launch_applications_filename)
 )
+
+if not os.path.exists(csv_directory):
+    # Create the directory
+    os.makedirs(csv_directory)
 
 mod = Module()
 mod.list("running", desc="all running applications")
@@ -183,7 +189,7 @@ def get_installed_apps():
         INSTALLED_APPLICATIONS_INITIALIZED = True
 
 def update_csv(forced: bool = False):
-    path = Path(app_names_file_path)
+    path = Path(launch_applications_file_path)
     get_installed_apps()
 
     if not path.exists() or forced:
@@ -200,7 +206,7 @@ def update_csv(forced: bool = False):
 
 update_csv()
 
-@resource.watch(app_names_file_path)
+@resource.watch(launch_applications_file_path)
 def update(f):
     global APPLICATIONS_DICT, INSTALLED_APPLICATIONS_LIST, APPLICATIONS_OVERRIDES, INSTALLED_APPLICATIONS_INITIALIZED
     global PRESERVED_APPLICATION_LIST
@@ -326,7 +332,7 @@ def update(f):
 
     # print("\n".join([str(group) for group in APPLICATION_GROUPS_DICT.values()]))
     if must_update_file:
-        print(f"Missing or new application detected, updating {app_names_file_name}")
+        print(f"Missing or new application detected, updating {launch_applications_filename}")
         update_csv(True)
     else:
         update_running_list()
