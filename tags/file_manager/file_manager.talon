@@ -1,5 +1,6 @@
 tag: user.file_manager
 -
+tag(): user.address
 tag(): user.navigation
 
 title force: user.file_manager_refresh_title()
