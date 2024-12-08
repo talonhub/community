@@ -223,7 +223,13 @@ def process_launch_applications_file(forced: bool = False):
     if not path.exists() or forced:
         all_apps = [*INSTALLED_APPLICATIONS_LIST, *PRESERVED_APPLICATION_LIST]
 
-        sorted_apps = sorted(all_apps, key=lambda application: application.display_name)
+        grouped = [app for app in all_apps if app.application_group is not None]
+        ungrouped = [app for app in all_apps if app.application_group is None]
+
+        grouped = sorted(grouped, key=lambda application: application.application_group)
+        ungrouped = sorted(ungrouped, key=lambda application: application.display_name)
+
+        sorted_apps =[*grouped, *ungrouped]
 
         output = ["Application name, Spoken forms, Exclude, Unique Id, Path, Executable Name, Application Group, Default for Applcation Group\n"]
         for application in sorted_apps:
@@ -320,6 +326,9 @@ def update_launch_applications(f):
         else:
             spoken_forms = [spoken_form.strip() for spoken_form in spoken_forms.split(";")]
             
+        if group_name and group_name.lower() == "none":
+            group_name = None
+
         exclude = False if exclude.lower() == "false" else True
         uid = None if uid.lower() == "none" else uid
         path = None if path.lower() == "none" else path
@@ -331,7 +340,8 @@ def update_launch_applications(f):
                                         unique_identifier=uid,
                                         executable_name=executable_name,
                                         exclude = exclude,
-                                        spoken_form=spoken_forms)
+                                        spoken_form=spoken_forms,
+                                        application_group=None)
         else:
             is_default_for_application_group=is_default_for_application_group.lower()=="true"
 
