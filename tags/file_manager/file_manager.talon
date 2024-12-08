@@ -1,5 +1,8 @@
 tag: user.file_manager
 -
+tag(): user.address
+tag(): user.navigation
+
 title force: user.file_manager_refresh_title()
 (go parent | daddy) [<number_small>]: 
     number = number_small or 0
@@ -21,6 +24,3 @@ properties show: user.file_manager_show_properties()
 
 # open terminal at location
 terminal here: user.file_manager_terminal_here()
-address copy: 
-    clip.set_text(user.file_manager_current_path())
-
