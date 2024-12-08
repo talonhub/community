@@ -1,7 +1,7 @@
 os: mac
 app: finder
 -
-tag(): user.address_bar
+tag(): user.address
 tag(): user.file_manager
 tag(): user.navigation
 tag(): user.tabs

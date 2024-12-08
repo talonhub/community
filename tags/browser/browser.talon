@@ -1,6 +1,6 @@
 tag: browser
 -
-tag(): user.address_bar
+tag(): user.address
 tag(): user.find
 tag(): user.navigation
 
