@@ -14,6 +14,10 @@ mod.setting(
 )
 mod.tag("stylua", desc="Tag for stylua linting commands")
 
+ctx.lists["user.code_data_null"] = {
+    "nil": "nil",
+}
+
 ctx.lists["user.code_common_function"] = {
     "to number": "tonumber",
     "I pairs": "ipairs",
@@ -157,9 +161,6 @@ class UserActions:
     ##
     # code_data_null
     ##
-    def code_insert_null():
-        actions.insert("nil")
-
     def code_insert_is_null():
         actions.insert(" == nil")
 
