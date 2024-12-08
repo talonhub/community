@@ -80,7 +80,7 @@ class UserActions:
         actions.key("cmd-shift-g")
 
     def address_bar_copy_address():
-        actions.user.key("alt-cmd-c")
+        actions.key("alt-cmd-c")
 
     def address_bar_navigate(address: str):
         actions.user.file_manager_open_directory(address)
