@@ -231,7 +231,7 @@ def process_launch_applications_file(forced: bool = False):
 
         sorted_apps =[*grouped, *ungrouped]
 
-        output = ["Application name, Spoken forms, Exclude, Unique Id, Path, Executable Name, Application Group, Default for Applcation Group\n"]
+        output = ["Application name, Spoken forms, Exclude from Launch List, Unique Id, Path, Executable Name, Application Group, Default for Applcation Group\n"]
         for application in sorted_apps:
             output.extend(f"{str(application)}\n") 
 
@@ -305,7 +305,7 @@ def update_launch_applications(f):
     must_update_file = False
 
     rows = list(csv.reader(f))
-    #assert rows[0] == ["Application name", " Spoken forms", " Exclude"," Unique Id", " Path", " Executable Name", " Host"]
+
     if len(rows[1:]) < len(INSTALLED_APPLICATIONS_LIST):
         must_update_file = True
     

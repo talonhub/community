@@ -16,7 +16,7 @@ class Application:
                  executable_name: str, 
                  exclude: bool, 
                  spoken_form: list[str],
-                 application_group: str = "",
+                 application_group: str = None,
                  is_default_for_application_group = False):
         self.path = path
         self.display_name = display_name
