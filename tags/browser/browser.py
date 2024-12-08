@@ -56,17 +56,17 @@ class UserActions:
             actions.app.tab_open()
             actions.user.paste(url_address)
             actions.key("enter")
-    
-    def address_bar_focus():
+
+    def address_focus():
         actions.browser.focus_address()
 
-    def address_bar_copy_address():
+    def address_copy_address():
         """Copies the current address"""
         actions.browser.focus_address()
         actions.sleep("100ms")
         actions.edit.copy()
 
-    def address_bar_navigate(address: str):
+    def address_navigate(address: str):
         actions.browser.go(address)
 
 

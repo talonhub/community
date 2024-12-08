@@ -1,7 +1,6 @@
 tag: user.file_manager
 -
 title force: user.file_manager_refresh_title()
-go <user.directory>: user.file_manager_open_directory(directory)
 (go parent | daddy) [<number_small>]: 
     number = number_small or 0
     user.file_manager_open_parent()

@@ -76,13 +76,12 @@ class UserActions:
         """selects the file"""
         actions.key("home")
         actions.insert(path)
-    
-    def address_bar_focus():
+
+    def address_focus():
         actions.key("cmd-shift-g")
 
-    def address_bar_copy_address():
-        actions.user.key("alt-cmd-c")
+    def address_copy_address():
+        actions.key("alt-cmd-c")
 
-    def address_bar_navigate(address: str):
+    def address_navigate(address: str):
         actions.user.file_manager_open_directory(address)
-

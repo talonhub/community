@@ -2,7 +2,7 @@ tag: browser
 -
 tag(): user.navigation
 tag(): user.find
-tag(): user.address_bar
+tag(): user.address
 
 go home: browser.go_home()
 go private: browser.open_private_window()
