@@ -30,7 +30,10 @@ not speech.engine: dragon
 #
 # It's a useful and well known command, though, so if you're using any other speech
 # engine, this controls Talon.
-^go to sleep [<phrase>]$: speech.disable()
+^go to sleep [<phrase>]$: 
+    speech.disable()
+    user.system_command_nb("curl -X 'GET' \"http://10.0.0.151/show?letter=S\"")
+
 ^talon sleep [<phrase>]$: speech.disable()
 
 ^sleep all [<phrase>]$:
