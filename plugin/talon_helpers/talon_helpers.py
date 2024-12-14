@@ -24,13 +24,18 @@ def talon_convert_list_helper(list_name, output_path):
     if list_name in registry.lists:
         list_values =  registry.lists[list_name][0]
         result = f"list: {list_name}\n-\n"
-
-        if len(list_values) > 0:
+        list_values =  registry.lists[list_name][0]
+        try:
+            length = len(list_values)
+        except:
+            print(f"{list_name} skipped")
+            return False
+        if length > 0:
             for spoken_form, mapped_value in list_values.items():
-                if re.search(r'^\s+|\s+$',mapped_value):
-                    result += f'{spoken_form}: """{mapped_value}"""\n'
-                else:
-                    result += f"{spoken_form}: {mapped_value}\n"
+                    if re.search(r'^\s+|\s+$',mapped_value):
+                        result += f'{spoken_form}: """{mapped_value}"""\n'
+                    else:
+                        result += f"{spoken_form}: {mapped_value}\n"
 
             f = open(output_path, "w")
             f.write(result)
