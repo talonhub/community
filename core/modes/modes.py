@@ -5,9 +5,6 @@ ctx_sleep = Context()
 ctx_awake = Context()
 
 modes = {
-    "admin": "enable extra administration commands terminal (docker, etc)",
-    "debug": "a way to force debugger commands to be loaded",
-    "ida": "a way to force ida commands to be loaded",
     "presentation": "a more strict form of sleep where only a more strict wake up command works",
 }
 
@@ -45,11 +42,11 @@ class Actions:
         # app.notify(engine)
         if "dragon" in engine:
             if app.platform == "mac":
-                actions.user.engine_sleep()
+                actions.user.dragon_engine_sleep()
             elif app.platform == "windows":
-                actions.user.engine_wake()
+                actions.user.dragon_engine_wake()
                 # note: this may not do anything for all versions of Dragon. Requires Pro.
-                actions.user.engine_mimic("switch to command mode")
+                actions.user.dragon_engine_command_mode()
 
     def dragon_mode():
         """For windows and Mac with Dragon, disables Talon commands and exits Dragon's command mode"""
@@ -60,8 +57,8 @@ class Actions:
             # app.notify("dragon mode")
             actions.speech.disable()
             if app.platform == "mac":
-                actions.user.engine_wake()
+                actions.user.dragon_engine_wake()
             elif app.platform == "windows":
-                actions.user.engine_wake()
+                actions.user.dragon_engine_wake()
                 # note: this may not do anything for all versions of Dragon. Requires Pro.
-                actions.user.engine_mimic("start normal mode")
+                actions.user.dragon_engine_normal_mode()
