@@ -1,0 +1,28 @@
+# `punctuation` is for words you want available BOTH in dictation and as key names in command mode.
+list: user.punctuation
+-
+back tick: `
+comma: ,
+coma: ,
+period: .
+full stop: .
+semicolon: ;
+colon: :
+forward slash: /
+question mark: ?
+exclamation mark: !
+exclamation point: !
+asterisk: *
+hash sign: #
+number sign: #
+percent sign: %
+at sign: @
+and sign: &
+ampersand: &
+dollar sign: $
+pound sign: £
+hyphen: -
+L paren: (
+left paren: (
+R paren: )
+right paren: )

@@ -6,7 +6,6 @@ from typing import Any, List, Mapping, Optional
 
 from talon import Module, actions
 
-from .keys.keys import symbol_key_words
 from .numbers.numbers import digits_map, scales, teens, tens
 from .user_settings import track_csv_list
 
@@ -15,14 +14,12 @@ mod = Module()
 DEFAULT_MINIMUM_TERM_LENGTH = 2
 EXPLODE_MAX_LEN = 3
 FANCY_REGULAR_EXPRESSION = r"[A-Z]?[a-z]+|[A-Z]+(?![a-z])|[0-9]+"
-SYMBOLS_REGEX = "|".join(re.escape(symbol) for symbol in set(symbol_key_words.values()))
 FILE_EXTENSIONS_REGEX = r"^\b$"
 file_extensions = {}
 
 
 def update_regex():
     global REGEX_NO_SYMBOLS
-    global REGEX_WITH_SYMBOLS
     REGEX_NO_SYMBOLS = re.compile(
         "|".join(
             [
@@ -30,9 +27,6 @@ def update_regex():
                 FILE_EXTENSIONS_REGEX,
             ]
         )
-    )
-    REGEX_WITH_SYMBOLS = re.compile(
-        "|".join([FANCY_REGULAR_EXPRESSION, FILE_EXTENSIONS_REGEX, SYMBOLS_REGEX])
     )
 
 
@@ -61,7 +55,6 @@ def on_abbreviations(values):
 
 REVERSE_PRONUNCIATION_MAP = {
     **{str(value): key for key, value in digits_map.items()},
-    **{value: key for key, value in symbol_key_words.items()},
 }
 
 # begin: create the lists etc necessary for create_spoken_word_for_number
@@ -265,8 +258,7 @@ def create_extension_forms(spoken_forms: List[str]):
 
             if substring in file_extensions_map.keys():
                 file_extension_forms.append(file_extensions_map[substring])
-                dotted_extension_form.append(REVERSE_PRONUNCIATION_MAP["."])
-                dotted_extension_form.append(file_extensions_map[substring])
+
                 have_file_extension = True
                 # purposefully down update truncated
             else:
@@ -466,17 +458,9 @@ class Actions:
     ) -> list[str]:
         """Create spoken forms for a given source"""
 
-        spoken_forms_without_symbols = create_spoken_forms_from_regex(
+        spoken_forms = create_spoken_forms_from_regex(
             source, REGEX_NO_SYMBOLS
         )
-
-        # todo: this could probably be optimized out if there's no symbols
-        spoken_forms_with_symbols = create_spoken_forms_from_regex(
-            source, REGEX_WITH_SYMBOLS
-        )
-
-        # some may be identical, so ensure the list is reduced
-        spoken_forms = set(spoken_forms_with_symbols + spoken_forms_without_symbols)
 
         # only generate the subsequences if requested
         if generate_subsequences:
