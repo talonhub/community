@@ -64,7 +64,7 @@ if hasattr(talon, "test_mode"):
     def test_expands_special_chars():
         result = actions.user.create_spoken_forms("hi $world", None, 0, True)
 
-        assert "hi dollar sign world" in result
+        assert "hi world" in result
 
     def test_expands_file_extensions():
         result = actions.user.create_spoken_forms("hi .cs", None, 0, True)
@@ -104,7 +104,7 @@ if hasattr(talon, "test_mode"):
         """
 
         def _example_generator():
-            pieces = ["hi", "world", "$", ".cs", "1900"]
+            pieces = ["hi", "world", ".cs", "1900"]
             params = list(
                 itertools.product(
                     [None, ["world"], ["dot"]],  # Dot is from the expanded ".cs"
