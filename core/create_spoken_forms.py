@@ -466,23 +466,22 @@ class Actions:
 
         spoken_forms = create_spoken_forms_from_regex(source, REGEX_NO_SYMBOLS)
 
+        spoken_forms_set = set(spoken_forms)
+
         # only generate the subsequences if requested
         if generate_subsequences:
             # todo: do we care about the subsequences that are excluded.
             # the only one that seems relevant are the full spoken form for
-            spoken_forms.extend(
+            spoken_forms_set.update(
                 generate_string_subsequences(
                     spoken_forms[-1],
                     words_to_exclude or [],
                     minimum_term_length,
                 )
             )
-
-        # remove any duplicates
-        spoken_forms = set(spoken_forms)
-
+        
         # Avoid empty spoken forms.
-        return [x for x in spoken_forms if x]
+        return [x for x in spoken_forms_set if x]
 
     def create_spoken_forms_from_list(
         sources: list[str],

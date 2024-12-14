@@ -104,7 +104,7 @@ if hasattr(talon, "test_mode"):
         """
 
         def _example_generator():
-            pieces = ["hi", "world", ".cs", "1900"]
+            pieces = ["hi", "world", "dollar", ".cs", "1900"]
             params = list(
                 itertools.product(
                     [None, ["world"], ["dot"]],  # Dot is from the expanded ".cs"
