@@ -466,9 +466,9 @@ class Actions:
         if generate_subsequences:
             # todo: do we care about the subsequences that are excluded.
             # the only one that seems relevant are the full spoken form for
-            spoken_forms.update(
+            spoken_forms.extend(
                 generate_string_subsequences(
-                    spoken_forms_without_symbols[-1],
+                    spoken_forms[-1],
                     words_to_exclude or [],
                     minimum_term_length,
                 )
