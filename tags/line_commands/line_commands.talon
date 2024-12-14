@@ -68,3 +68,6 @@ drag down <number> by <number>:
     user.select_range(number_1, number_2)
     edit.line_swap_down()
 clone row: edit.line_clone()
+
+go char <user.unmodified_key>: user.jump_cursor_to_next_char(unmodified_key)
+go last char <user.unmodified_key>: user.jump_cursor_to_prev_char(unmodified_key)

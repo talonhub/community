@@ -10,6 +10,7 @@ tag(): user.line_commands
 tag(): user.multiple_cursors
 tag(): user.splits
 tag(): user.tabs
+tag(): user.plugins
 tag(): user.command_search
 
 go tab {self.letter} [{self.letter}]:
