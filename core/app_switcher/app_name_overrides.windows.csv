@@ -1,5 +1,6 @@
+Spoken form, App name/.exe (or list an app name/.exe by itself on a line to exclude it)
 grip, DataGrip
-term, iTerm2
+term, WindowsTerminal.exe
 one note, ONENOTE
 lock, slack.exe
 app, slack.exe

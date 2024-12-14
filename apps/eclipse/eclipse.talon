@@ -6,11 +6,8 @@ tag(): user.line_commands
 # tag(): user.multiple_cursors
 tag(): user.splits
 tag(): user.tabs
+tag(): user.command_search
 # splits.py support end
-
-please [<user.text>]:
-    key(ctrl-3)
-    insert(user.text or "")
 
 # Sidebar
 bar explore: key(alt-shift-w p)

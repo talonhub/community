@@ -54,6 +54,7 @@ def create_snippet(
         name=document.name or default_context.name,
         languages=document.languages or default_context.languages,
         phrases=document.phrases or default_context.phrases,
+        insertion_scopes=document.insertionScopes or default_context.insertionScopes,
         variables=combine_variables(default_context.variables, document.variables),
         body=normalize_snippet_body_tabs(document.body),
     )
@@ -173,7 +174,7 @@ def parse_file(file_path: str) -> list[SnippetDocument]:
 
 
 def parse_file_content(file: str, text: str) -> list[SnippetDocument]:
-    doc_texts = re.split(r"^---\r?\n?$", text, flags=re.MULTILINE)
+    doc_texts = re.split(r"^---$", text, flags=re.MULTILINE)
     documents: list[SnippetDocument] = []
     line = 0
 
@@ -190,12 +191,7 @@ def parse_file_content(file: str, text: str) -> list[SnippetDocument]:
 def parse_document(
     file: str, line: int, optional_body: bool, text: str
 ) -> Union[SnippetDocument, None]:
-    parts = re.split(r"^-\r?\n?$", text, flags=re.MULTILINE)
-
-    if len(parts) > 2:
-        error(file, line, f"Found multiple '-' in snippet document '{text}'")
-        return None
-
+    parts = re.split(r"^-$", text, maxsplit=1, flags=re.MULTILINE)
     line_body = line + parts[0].count("\n") + 1
     org_doc = SnippetDocument(file, line, line_body)
     document = parse_context(file, line, org_doc, parts[0])
@@ -323,6 +319,7 @@ def parse_variable(
 
 
 def parse_body(text: str) -> Union[str, None]:
+    # Find first line that is not empty. Preserve indentation.
     match_leading = re.search(r"^[ \t]*\S", text, flags=re.MULTILINE)
 
     if match_leading is None:

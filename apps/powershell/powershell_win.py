@@ -1,4 +1,4 @@
-from talon import Context, Module, actions, ui
+from talon import Context, Module, actions, settings, ui
 
 ctx = Context()
 mod = Module()
@@ -10,6 +10,13 @@ and win.title: /PowerShell/
 
 directories_to_remap = {}
 directories_to_exclude = {}
+
+mod.setting(
+    "powershell_always_refresh_title",
+    type=bool,
+    default=True,
+    desc="If the title is refreshed after every directory move",
+)
 
 
 @ctx.action_class("edit")
@@ -25,15 +32,12 @@ class UserActions:
             "$Host.UI.RawUI.WindowTitle = 'Windows PowerShell: ' +  $(get-location)"
         )
         actions.key("enter")
-        # action(user.file_manager_go_back):
-        #    key("alt-left")
-        # action(user.file_manager_go_forward):
-        #    key("alt-right")
 
     def file_manager_open_parent():
         actions.insert("cd ..")
         actions.key("enter")
-        actions.user.file_manager_refresh_title()
+        if settings.get("user.powershell_always_refresh_title"):
+            actions.user.file_manager_refresh_title()
 
     def file_manager_current_path():
         path = ui.active_window().title
@@ -50,7 +54,8 @@ class UserActions:
         """opens the directory that's already visible in the view"""
         actions.insert(f'cd "{path}"')
         actions.key("enter")
-        actions.user.file_manager_refresh_title()
+        if settings.get("user.powershell_always_refresh_title"):
+            actions.user.file_manager_refresh_title()
 
     def file_manager_select_directory(path: str):
         """selects the directory"""
@@ -62,8 +67,8 @@ class UserActions:
 
     def file_manager_open_file(path: str):
         """opens the file"""
-        actions.insert(path)
-        # actions.key("enter")
+        actions.insert(f'./"{path}"')
+        actions.key("enter")
 
     def file_manager_select_file(path: str):
         """selects the file"""

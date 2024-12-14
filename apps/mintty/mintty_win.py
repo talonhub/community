@@ -1,6 +1,6 @@
 import subprocess
 
-from talon import Context, Module, actions, ui
+from talon import Context, Module, actions, settings, ui
 
 mod = Module()
 mod.apps.mintty = """
@@ -26,7 +26,7 @@ ctx.tags = [
 directories_to_remap = {}
 directories_to_exclude = {}
 
-setting_cyg_path = mod.setting(
+mod.setting(
     "cygpath",
     type=str,
     default="C:\\cygwin64\\bin\\cygpath.exe",
@@ -41,7 +41,7 @@ def get_win_path(cyg_path):
         si.dwFlags |= subprocess.STARTF_USESHOWWINDOW
         path = (
             subprocess.check_output(
-                [setting_cyg_path.get(), "-w", cyg_path], startupinfo=si
+                [settings.get("user.cygpath"), "-w", cyg_path], startupinfo=si
             )
             .strip(b"\n")
             .decode()

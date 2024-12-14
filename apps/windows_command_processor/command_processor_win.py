@@ -27,10 +27,6 @@ class UserActions:
     def file_manager_refresh_title():
         actions.insert("title Command Prompt: %CD%")
         actions.key("enter")
-        # action(user.file_manager_go_back):
-        #    key("alt-left")
-        # action(user.file_manager_go_forward):
-        #    key("alt-right")
 
     def file_manager_open_parent():
         actions.insert("cd ..")
