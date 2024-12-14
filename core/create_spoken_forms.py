@@ -57,6 +57,9 @@ REVERSE_PRONUNCIATION_MAP = {
     **{str(value): key for key, value in digits_map.items()},
 }
 
+# for the moment, keep the dot spoken form
+REVERSE_PRONUNCIATION_MAP["."] = "dot"
+
 # begin: create the lists etc necessary for create_spoken_word_for_number
 # by convention, each entry in the list has an append space... until I clean up the function
 # the algorithm's expectation is slightly different from numbers.py
@@ -259,7 +262,10 @@ def create_extension_forms(spoken_forms: List[str]):
             if substring in file_extensions_map.keys():
                 file_extension_forms.append(file_extensions_map[substring])
 
+                dotted_extension_form.append(REVERSE_PRONUNCIATION_MAP["."])
+                dotted_extension_form.append(file_extensions_map[substring])
                 have_file_extension = True
+
                 # purposefully down update truncated
             else:
                 file_extension_forms.append(substring)
