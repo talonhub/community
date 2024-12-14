@@ -458,9 +458,7 @@ class Actions:
     ) -> list[str]:
         """Create spoken forms for a given source"""
 
-        spoken_forms = create_spoken_forms_from_regex(
-            source, REGEX_NO_SYMBOLS
-        )
+        spoken_forms = create_spoken_forms_from_regex(source, REGEX_NO_SYMBOLS)
 
         # only generate the subsequences if requested
         if generate_subsequences:
