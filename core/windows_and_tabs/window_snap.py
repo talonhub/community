@@ -347,11 +347,11 @@ class Actions:
                 position = _snap_positions[new_key]
                 actions.user.snap_window(position, window)
             else:
-                raise KeyError()
+                raise KeyError(position_name)
 
     def move_window_next_screen() -> None:
         """Move the active window to a specific screen."""
-        actions.user.snap_window_to_position("top right", ui.active_window())
+        _move_to_screen(ui.active_window(), offset=1)
 
     def move_window_previous_screen() -> None:
         """Move the active window to the previous screen."""
