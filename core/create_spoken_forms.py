@@ -471,7 +471,10 @@ class Actions:
                     minimum_term_length,
                 )
             )
-
+        
+        # remove any duplicates
+        spoken_forms = set(spoken_forms)
+        
         # Avoid empty spoken forms.
         return [x for x in spoken_forms if x]
 
