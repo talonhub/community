@@ -1,7 +1,10 @@
 from talon import Module
 
 mod = Module()
-mod.tag("address", desc="Application with a mechanism to browse or navigate by address; eg an address bar or Finder's go-to-folder functionality")
+mod.tag(
+    "address",
+    desc="Application with a mechanism to browse or navigate by address; eg an address bar or Finder's go-to-folder functionality",
+)
 
 
 @mod.capture

@@ -448,7 +448,9 @@ class Actions:
     def get_formatters_words() -> dict:
         """Returns words currently used as formatters, and a demonstration string using those formatters"""
         formatters_help_demo = {}
-        formatters, prose_formatters = get_formatters_and_prose_formatters(include_reformatters=False)
+        formatters, prose_formatters = get_formatters_and_prose_formatters(
+            include_reformatters=False
+        )
         prose_formatter_names = prose_formatters.keys()
 
         for phrase in sorted(formatters):
@@ -462,7 +464,9 @@ class Actions:
     def get_reformatters_words() -> dict:
         """Returns words currently used as re-formatters, and a demonstration string using those re-formatters"""
         formatters_help_demo = {}
-        formatters, prose_formatters = get_formatters_and_prose_formatters(include_reformatters=True)
+        formatters, prose_formatters = get_formatters_and_prose_formatters(
+            include_reformatters=True
+        )
         prose_formatter_names = prose_formatters.keys()
         for phrase in sorted(formatters):
             name = formatters[phrase]
