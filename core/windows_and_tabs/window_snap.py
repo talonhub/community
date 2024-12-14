@@ -8,16 +8,20 @@ Originally from dweil/talon_community - modified for newapi by jcaw.
 #   platforms
 
 import logging
-from typing import Optional
+from typing import Dict, Optional
 
-from talon import Context, Module, actions, ui
+from talon import Context, Module, actions, settings, ui
 
 mod = Module()
 mod.list(
     "window_snap_positions",
     "Predefined window positions for the current window. See `RelativeScreenPos`.",
 )
-setting_window_snap_screen = mod.setting(
+mod.list(
+    "window_split_positions",
+    "Predefined window positions when splitting the screen between three applications.",
+)
+mod.setting(
     "window_snap_screen",
     type=str,
     default="proportional",
@@ -32,14 +36,6 @@ setting_window_snap_screen = mod.setting(
 
 def _set_window_pos(window, x, y, width, height):
     """Helper to set the window position."""
-    # TODO: Special case for full screen move - use os-native maximize, rather
-    #   than setting the position?
-
-    # 2020/10/01: While the upstream Talon implementation for MS Windows is
-    #   settling, this may be buggy on full screen windows. Aegis doesn't want a
-    #   hacky solution merged, so for now just repeat the command.
-    #
-    # TODO: Audit once upstream Talon is bug-free on MS Windows
     window.rect = ui.Rect(round(x), round(y), round(width), round(height))
 
 
@@ -116,7 +112,8 @@ def _move_to_screen(
 
     dest = dest_screen.visible_rect
     src = src_screen.visible_rect
-    how = setting_window_snap_screen.get()
+    maximized = window.maximized
+    how = settings.get("user.window_snap_screen")
     if how == "size aware":
         r = window.rect
         left, right = interpolate_interval(
@@ -129,6 +126,8 @@ def _move_to_screen(
         r.width = right - left
         r.height = bot - top
         window.rect = r
+        if maximized:
+            window.maximized = True
         return
 
     # TODO: Test vertical screen with different aspect ratios
@@ -185,6 +184,8 @@ def _move_to_screen(
         width = window.rect.width * proportional_width
         height = window.rect.height * proportional_height
     _set_window_pos(window, x=x, y=y, width=width, height=height)
+    if maximized:
+        window.maximized = True
 
 
 def _snap_window_helper(window, pos):
@@ -272,14 +273,45 @@ _snap_positions = {
     "fullscreen": RelativeScreenPos(0, 0, 1, 1),
 }
 
+_split_positions = {
+    "split": {
+        2: [_snap_positions["left"], _snap_positions["right"]],
+        3: [
+            _snap_positions["left third"],
+            _snap_positions["center third"],
+            _snap_positions["right third"],
+        ],
+    },
+    "clock": {
+        3: [
+            _snap_positions["left"],
+            _snap_positions["top right"],
+            _snap_positions["bottom right"],
+        ],
+    },
+    "counterclock": {
+        3: [
+            _snap_positions["right"],
+            _snap_positions["top left"],
+            _snap_positions["bottom left"],
+        ],
+    },
+}
+
 
 @mod.capture(rule="{user.window_snap_positions}")
 def window_snap_position(m) -> RelativeScreenPos:
     return _snap_positions[m.window_snap_positions]
 
 
+@mod.capture(rule="{user.window_split_positions}")
+def window_split_position(m) -> Dict[int, list[RelativeScreenPos]]:
+    return _split_positions[m.window_split_positions]
+
+
 ctx = Context()
 ctx.lists["user.window_snap_positions"] = _snap_positions.keys()
+ctx.lists["user.window_split_positions"] = _split_positions.keys()
 
 
 @mod.action_class
@@ -309,6 +341,23 @@ class Actions:
         window = _get_app_window(app_name)
         _bring_forward(window)
         _snap_window_helper(window, position)
+
+    def snap_layout(
+        positions_by_count: Dict[int, list[RelativeScreenPos]],
+        apps: list[str],
+    ):
+        """Split the screen between multiple applications."""
+        try:
+            positions = positions_by_count[len(apps)]
+        except KeyError:
+            supported_layouts = ", ".join(map(str, positions_by_count.keys()))
+            message = f"{len(apps)} applications given but chosen layout only supports {supported_layouts}"
+            actions.app.notify(message, "Cannot arrange")
+            raise NotImplementedError(message)
+        for index, app in enumerate(apps):
+            window = _get_app_window(app)
+            _snap_window_helper(window, positions[index])
+            window.focus()
 
     def move_app_to_screen(app_name: str, screen_number: int):
         """Move a specific application to another screen."""

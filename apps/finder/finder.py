@@ -16,12 +16,6 @@ class UserActions:
     def file_manager_open_parent():
         actions.key("cmd-up")
 
-    def file_manager_go_forward():
-        actions.key("cmd-]")
-
-    def file_manager_go_back():
-        actions.key("cmd-[")
-
     def file_manager_current_path():
         title = ui.active_window().title
 
@@ -81,3 +75,12 @@ class UserActions:
         """selects the file"""
         actions.key("home")
         actions.insert(path)
+
+    def address_focus():
+        actions.key("cmd-shift-g")
+
+    def address_copy_address():
+        actions.key("alt-cmd-c")
+
+    def address_navigate(address: str):
+        actions.user.file_manager_open_directory(address)

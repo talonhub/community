@@ -1,0 +1,25 @@
+name: lambdaExpression
+phrase: lambda
+
+$0.wrapperPhrase: lambda
+$0.wrapperScope: statement
+---
+
+language: javascript
+-
+($1) => {
+    $0
+}
+---
+
+language: java
+-
+($1) -> {
+    $0
+}
+---
+
+language: python
+-
+lambda $1: $0
+---

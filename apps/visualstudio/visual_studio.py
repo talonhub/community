@@ -74,9 +74,11 @@ class EditActions:
     def save_all():
         actions.key("ctrl-shift-s")
 
-    def find(text: str):
-        actions.key("ctrl-f")
-        actions.insert(text)
+    def find_next():
+        actions.key("enter")
+
+    def find_previous():
+        actions.key("shift-enter")
 
     def line_swap_up():
         actions.key("alt-up")
@@ -113,19 +115,6 @@ class WinActions:
 
 @ctx.action_class("user")
 class UserActions:
-    # snippet.py support beginHelp close
-    def snippet_search(text: str):
-        """TEST"""
-        actions.key("ctrl-k ctrl-x")
-
-    # def snippet_insert(text: str):
-    #     """Inserts a snippet"""
-
-    # def snippet_create():
-    #     """Triggers snippet creation"""
-
-    # snippet.py support end
-
     # def select_word(verb: str):
     #     actions.key("ctrl-w")
     #     actions.user.perform_selection_action(verb)
@@ -179,19 +168,6 @@ class UserActions:
     # splits.py support end
 
     # find_and_replace.py support begin
-
-    def find(text: str):
-        """Triggers find in current editor"""
-        actions.key("ctrl-f")
-
-        if text:
-            actions.insert(text)
-
-    def find_next():
-        actions.key("enter")
-
-    def find_previous():
-        actions.key("shift-enter")
 
     def find_everywhere(text: str):
         """Triggers find across project"""
