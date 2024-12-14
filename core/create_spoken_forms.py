@@ -479,7 +479,7 @@ class Actions:
                     minimum_term_length,
                 )
             )
-        
+
         # Avoid empty spoken forms.
         return [x for x in spoken_forms_set if x]
 
