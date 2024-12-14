@@ -6,11 +6,8 @@ from typing import Any, List, Mapping, Optional
 
 from talon import Module, actions
 
-#from .keys.keys import symbol_key_words
 from .numbers.numbers import digits_map, scales, teens, tens
 from .user_settings import track_csv_list
-abbreviations_list = {}
-
 
 mod = Module()
 
@@ -225,6 +222,7 @@ def create_exploded_forms(spoken_forms: List[str]):
     for line in spoken_forms:
         exploded_form = []
         # ex: "vm" or "usb" explodes into "V M" or "U S B"
+
         if (
             " " not in line
             and line.islower()
@@ -460,23 +458,17 @@ class Actions:
     ) -> list[str]:
         """Create spoken forms for a given source"""
 
-        if words_to_exclude is None:
-            words_to_exclude = []
-
-        spoken_forms_without_symbols = create_spoken_forms_from_regex(
+        spoken_forms = create_spoken_forms_from_regex(
             source, REGEX_NO_SYMBOLS
         )
-
-        # some may be identical, so ensure the list is reduced
-        spoken_forms = set(spoken_forms_without_symbols)
 
         # only generate the subsequences if requested
         if generate_subsequences:
             # todo: do we care about the subsequences that are excluded.
             # the only one that seems relevant are the full spoken form for
-            spoken_forms.update(
+            spoken_forms.extend(
                 generate_string_subsequences(
-                    spoken_forms_without_symbols[-1],
+                    spoken_forms[-1],
                     words_to_exclude or [],
                     minimum_term_length,
                 )

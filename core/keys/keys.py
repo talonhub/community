@@ -8,7 +8,7 @@ mod.list("number_key", desc="All number keys")
 mod.list("modifier_key", desc="All modifier keys")
 mod.list("function_key", desc="All function keys")
 mod.list("special_key", desc="All special keys")
-mod.list("keypad_key", desc="all keypad keys ")
+mod.list("keypad_key", desc="All keypad keys")
 mod.list("punctuation", desc="words for inserting punctuation into text")
 
 
@@ -35,15 +35,18 @@ def number_key(m) -> str:
     "One number key"
     return m.number_key
 
+
 @mod.capture(rule="{self.keypad_key}")
 def keypad_key(m) -> str:
     "One keypad key"
     return m.keypad_key
 
+
 @mod.capture(rule="{self.letter}")
 def letter(m) -> str:
     "One letter key"
     return m.letter
+
 
 @mod.capture(rule="{self.special_key}")
 def special_key(m) -> str:
@@ -62,7 +65,8 @@ def function_key(m) -> str:
     "One function key"
     return m.function_key
 
-@mod.capture(rule="( <self.letter> | <self.number_key> | <self.symbol_key>)")
+
+@mod.capture(rule="( <self.letter> | <self.number_key> | <self.symbol_key> )")
 def any_alphanumeric_key(m) -> str:
     "any alphanumeric key"
     return str(m)
