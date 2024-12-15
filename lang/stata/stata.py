@@ -28,7 +28,7 @@ ctx.lists["user.code_common_function"] = {
     "esttab": "esttab",
 }
 
-# libraries_gui.py
+# libraries.py
 ctx.lists["user.code_libraries"] = {
     "estout": "estout",
 }
@@ -110,7 +110,7 @@ class UserActions:
     def code_import():
         actions.auto_insert("ssc install ")
 
-    # libraries_gui.py
+    # libraries.py
     def code_insert_library(text: str, selection: str):
         actions.auto_insert("ssc install ")
         actions.user.paste(text + selection)

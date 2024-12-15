@@ -180,7 +180,6 @@ Python, C#, Talon and JavaScript language support is broken up into multiple tag
 - `lang/tags/functions_common.{talon,py}` - common functions (also includes a GUI for picking functions)
 - `lang/tags/imperative.{talon,py}` - statements (e.g., `if`, `while`, `switch`)
 - `lang/tags/libraries.{talon,py}` - libraries and imports
-- `lang/tags/libraries_gui.{talon,py}` - graphical helper for common libraries
 - `lang/tags/object_oriented.{talon,py}` - objects and classes (e.g., `this`)
 - `lang/tags/operators_array.{talon,py}` - array operators (e.g., Ruby's `x[0]`)
 - `lang/tags/operators_assignment.{talon,py}` - assignment operators (e.g., C++'s `x += 5`)
