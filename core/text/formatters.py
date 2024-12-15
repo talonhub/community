@@ -3,7 +3,7 @@ import re
 from abc import ABC, abstractmethod
 from typing import Callable, Optional, Union
 
-from talon import Context, Module, actions, app
+from talon import Context, Module, actions, app, registry
 from talon.grammar import Phrase
 
 
@@ -247,61 +247,13 @@ formatter_list = [
 
 formatters_dict = {f.id: f for f in formatter_list}
 
-
-# Mapping from spoken phrases to formatter names
-code_formatter_names = {
-    "all cap": "ALL_CAPS",
-    "all down": "ALL_LOWERCASE",
-    "camel": "PRIVATE_CAMEL_CASE",
-    "dotted": "DOT_SEPARATED",
-    "dub string": "DOUBLE_QUOTED_STRING",
-    "dunder": "DOUBLE_UNDERSCORE",
-    "hammer": "PUBLIC_CAMEL_CASE",
-    "kebab": "DASH_SEPARATED",
-    "packed": "DOUBLE_COLON_SEPARATED",
-    "padded": "SPACE_SURROUNDED_STRING",
-    "slasher": "ALL_SLASHES",
-    "conga": "SLASH_SEPARATED",
-    "smash": "NO_SPACES",
-    "snake": "SNAKE_CASE",
-    "string": "SINGLE_QUOTED_STRING",
-    "constant": "ALL_CAPS,SNAKE_CASE",
-}
-prose_formatter_names = {
-    "say": "NOOP",
-    "speak": "NOOP",
-    "sentence": "CAPITALIZE_FIRST_WORD",
-    "title": "CAPITALIZE_ALL_WORDS",
-}
-reformatter_names = {
-    "cap": "CAPITALIZE",
-    "list": "COMMA_SEPARATED",
-    "unformat": "REMOVE_FORMATTING",
-}
-word_formatter_names = {
-    "word": "ALL_LOWERCASE",
-    "trot": "TRAILING_SPACE,ALL_LOWERCASE",
-    "proud": "CAPITALIZE_FIRST_WORD",
-    "leap": "TRAILING_SPACE,CAPITALIZE_FIRST_WORD",
-}
-
-
-all_phrase_formatters = code_formatter_names | prose_formatter_names | reformatter_names
-
 mod = Module()
-mod.list("formatters", desc="list of all formatters (code and prose)")
+mod.list("reformatter", desc="list of all reformatters")
 mod.list("code_formatter", desc="list of formatters typically applied to code")
 mod.list(
     "prose_formatter", desc="list of prose formatters (words to start dictating prose)"
 )
 mod.list("word_formatter", "List of word formatters")
-
-ctx = Context()
-ctx.lists["self.formatters"] = all_phrase_formatters
-ctx.lists["self.code_formatter"] = code_formatter_names
-ctx.lists["self.prose_formatter"] = prose_formatter_names
-ctx.lists["user.word_formatter"] = word_formatter_names
-
 
 # The last phrase spoken, without & with formatting. Used for reformatting.
 last_phrase = ""
@@ -362,10 +314,12 @@ def shrink_to_string_inside(text: str) -> tuple[str, str, str]:
     return text, "", ""
 
 
-@mod.capture(rule="{self.formatters}+")
+@mod.capture(
+    rule="({user.code_formatter} | {user.prose_formatter} | {user.reformatter})+"
+)
 def formatters(m) -> str:
     "Returns a comma-separated string of formatters e.g. 'SNAKE,DUBSTRING'"
-    return ",".join(m.formatters_list)
+    return ",".join(list(m))
 
 
 @mod.capture(rule="{self.code_formatter}+")
@@ -421,6 +375,30 @@ def formatter_immune(m) -> ImmuneString:
     return ImmuneString(str(value))
 
 
+def get_formatters_and_prose_formatters(
+    include_reformatters: bool,
+) -> tuple[dict[str, str], dict[str, str]]:
+    """Returns dictionary of non-word formatters and a dictionary of all prose formatters"""
+    formatters = {}
+    prose_formatters = {}
+    formatters.update(
+        actions.user.talon_get_active_registry_list("user.code_formatter")
+    )
+    formatters.update(
+        actions.user.talon_get_active_registry_list("user.prose_formatter")
+    )
+
+    if include_reformatters:
+        formatters.update(
+            actions.user.talon_get_active_registry_list("user.reformatter")
+        )
+
+    prose_formatters.update(
+        actions.user.talon_get_active_registry_list("user.prose_formatter")
+    )
+    return formatters, prose_formatters
+
+
 @mod.action_class
 class Actions:
     def formatted_text(phrase: Union[str, Phrase], formatters: str) -> str:
@@ -470,8 +448,13 @@ class Actions:
     def get_formatters_words() -> dict:
         """Returns words currently used as formatters, and a demonstration string using those formatters"""
         formatters_help_demo = {}
-        for phrase in sorted(all_phrase_formatters):
-            name = all_phrase_formatters[phrase]
+        formatters, prose_formatters = get_formatters_and_prose_formatters(
+            include_reformatters=False
+        )
+        prose_formatter_names = prose_formatters.keys()
+
+        for phrase in sorted(formatters):
+            name = formatters[phrase]
             demo = format_text_without_adding_to_history("one two three", name)
             if phrase in prose_formatter_names:
                 phrase += " *"
@@ -481,8 +464,12 @@ class Actions:
     def get_reformatters_words() -> dict:
         """Returns words currently used as re-formatters, and a demonstration string using those re-formatters"""
         formatters_help_demo = {}
-        for phrase in sorted(all_phrase_formatters):
-            name = all_phrase_formatters[phrase]
+        formatters, prose_formatters = get_formatters_and_prose_formatters(
+            include_reformatters=True
+        )
+        prose_formatter_names = prose_formatters.keys()
+        for phrase in sorted(formatters):
+            name = formatters[phrase]
             demo = format_text_without_adding_to_history("one_two_three", name, True)
             if phrase in prose_formatter_names:
                 phrase += " *"

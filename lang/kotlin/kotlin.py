@@ -20,6 +20,7 @@ ctx.lists["user.code_keyword"] = {
     "abstract": "abstract ",
     "interface": "interface ",
     "final": "final ",
+    "return": "return ",
 }
 
 

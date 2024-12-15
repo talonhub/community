@@ -1,7 +1,9 @@
 os: mac
 app: finder
 -
+tag(): user.address
 tag(): user.file_manager
+tag(): user.navigation
 tag(): user.tabs
 preferences: key(cmd-,)
 options: key(cmd-j)
@@ -21,7 +23,6 @@ column view: key(cmd-3)
 list view: key(cmd-2)
 gallery view: key(cmd-4)
 
-copy path: key(alt-cmd-c)
 trash it: key(cmd-backspace)
 
 hide [finder]: key(cmd-h)
