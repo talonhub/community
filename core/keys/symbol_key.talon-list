@@ -54,28 +54,3 @@ dub quote: '"'
 double quote: '"'
 dollar: $
 pound: £
-back tick: `
-comma: ,
-coma: ,
-period: .
-full stop: .
-semicolon: ;
-colon: :
-forward slash: /
-question mark: ?
-exclamation mark: !
-exclamation point: !
-asterisk: *
-hash sign: #
-number sign: #
-percent sign: %
-at sign: @
-and sign: &
-ampersand: &
-dollar sign: $
-pound sign: £
-hyphen: -
-L paren: (
-left paren: (
-R paren: )
-right paren: )
