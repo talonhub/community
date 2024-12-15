@@ -16,6 +16,8 @@ compound_actions = {
     ("goAfter", "document"): actions.edit.file_end,
     ("goAfter", "fileEnd"): actions.edit.file_end,
     # Delete
+    ("delete", "left"): actions.edit.delete,
+    ("delete", "right"): actions.user.delete_right,
     ("delete", "word"): actions.edit.delete_word,
     ("delete", "line"): actions.edit.delete_line,
     ("delete", "paragraph"): actions.edit.delete_paragraph,
