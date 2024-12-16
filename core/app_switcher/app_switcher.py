@@ -6,7 +6,8 @@ from pathlib import Path
 import csv
 import talon
 from talon import Context, Module, actions, app, imgui, ui, resource
-from .windows import get_installed_windows_apps
+from .windows import get_installed_windows_apps, application_frame_host_path, application_frame_host, application_frame_host_group
+from .windows_applications import get_windows_application_override
 from .mac import get_installed_mac_apps
 from .exclusion import ExclusionType, RunningApplicationExclusion
 from typing import Union
@@ -117,9 +118,15 @@ def launch_applications(m) -> str:
 def get_override_for_running_app(curr_app) -> Union[Application | ApplicationGroup | RunningApplicationExclusion | None]:
     name = curr_app.name
     bundle_name = curr_app.bundle
-    exe_path = str(Path(curr_app.exe).resolve())
-    executable_name = os.path.basename(curr_app.exe)
+    exe_path = str(Path(curr_app.exe).resolve()).lower()
+    executable_name = os.path.basename(curr_app.exe).lower()
 
+    # if app.platform == "windows":
+    #     override = get_windows_application_override(executable_name)
+    #     if override:
+    #         print(f"windows application override found {executable_name}")
+    #         return override
+        
     if exe_path in RUNNING_APPLICATION_EXCLUSIONS_DICT:
         return RUNNING_APPLICATION_EXCLUSIONS_DICT[exe_path]
     elif executable_name in RUNNING_APPLICATION_EXCLUSIONS_DICT:
@@ -134,21 +141,21 @@ def get_override_for_running_app(curr_app) -> Union[Application | ApplicationGro
         return APPLICATION_GROUPS_DICT[exe_path]
     elif executable_name in APPLICATION_GROUPS_DICT:
         return APPLICATION_GROUPS_DICT[executable_name]
-        
+    
     # otherwise, check for application overrides
     if bundle_name and bundle_name in APPLICATIONS_OVERRIDES:
         override = APPLICATIONS_OVERRIDES[bundle_name]
-        return override if override.spoken_forms else None
+        return override
     elif exe_path and exe_path in APPLICATIONS_OVERRIDES:
         override = APPLICATIONS_OVERRIDES[exe_path]
-        return override if override.spoken_forms is not None else None
+        return override
     elif executable_name and executable_name in APPLICATIONS_OVERRIDES:
         override = APPLICATIONS_OVERRIDES[executable_name]
-        return override if override.spoken_forms is not None else None   
+        return override 
     elif name and name in APPLICATIONS_OVERRIDES:
         override = APPLICATIONS_OVERRIDES[name]
-        return override if override.spoken_forms is not None else None 
-    
+        return override 
+
     # if we made it here, no overrides found
     return None
 
@@ -162,17 +169,52 @@ def update_running_list():
         #print(f"{cur_app.name} {cur_app.exe}")
         name = cur_app.name.lower()
         RUNNING_APPLICATION_DICT[name.lower()] = cur_app
-        
+        exe = os.path.basename(cur_app.exe).lower()
+
         if app.platform == "mac":
             bundle_name = cur_app.bundle.lower()
             RUNNING_APPLICATION_DICT[bundle_name] = cur_app
 
         if app.platform == "windows":
+            # skip anything in the windows app or system app, as they are part of 
+            # application frame host... I think
+            if "windowsapp" in cur_app.exe.lower() or "systemapp" in cur_app.exe.lower():
+                #print(f"skipping windows app {cur_app.exe}")
+                continue 
+            
             exe = os.path.basename(cur_app.exe).lower()
             RUNNING_APPLICATION_DICT[cur_app.exe.lower()] = cur_app
             RUNNING_APPLICATION_DICT[exe] = cur_app
 
+        if exe == "applicationframehost.exe":
+            for window in cur_app.windows():
+                if window.title and window.title not in ["CicMarshalWnd", "Default IME", "OLEChannelWnd", "MSCTFIME UI"]:
+                    spoken_forms = None
+                    mapping = f"{cur_app.name}-::*::-{window.title}"
+                    
+                    if application_frame_host_group in APPLICATION_GROUPS_DICT:
+                        group = APPLICATION_GROUPS_DICT[application_frame_host_group]
+                        if window.title in group.spoken_forms:
+                            spoken_forms = group.spoken_forms[window.title]
+                            for spoken_form in spoken_forms:
+                                running[spoken_form.lower()] = mapping
+                    
+                    if not spoken_forms:
+                        spoken_forms = actions.user.create_spoken_forms(source=window.title.lower(), words_to_exclude=words_to_exclude,generate_subsequences=False,)
+
+                    for spoken_form in spoken_forms:
+                        running[spoken_form] = mapping
+
+            # we're done here for windows apps
+            continue
+        # elif exe == "explorer.exe":
+            # for window in cur_app.windows():
+            #     if window.title:
+            #         print(window.title)
+
+            
         override = get_override_for_running_app(cur_app)
+
         if not override:
             generate_spoken_form_list.append(cur_app.name.lower())
         elif override:
@@ -189,15 +231,20 @@ def update_running_list():
                             break
                 
                 # ensure the default spoken forms for the group are added.
-                for spoken_form in override.group_spoken_forms:
-                    running[spoken_form] = cur_app.name
+                if override.spoken_forms:
+                    for spoken_form in override.group_spoken_forms:
+                        running[spoken_form] = cur_app.name
+
             # check for exclusion
             elif isinstance(override, RunningApplicationExclusion):
                 continue
             #otherewise add the things
             else:
-                for spoken_form in override.spoken_forms:
-                    running[spoken_form] = cur_app.name
+                if override.spoken_forms:
+                    for spoken_form in override.spoken_forms:
+                        running[spoken_form] = cur_app.name
+                else:
+                    generate_spoken_form_list.append(override.display_name)
 
         running.update(actions.user.create_spoken_forms_from_list(
             generate_spoken_form_list,
@@ -298,6 +345,19 @@ def update_launch_applications(f):
     }
 
     APPLICATION_GROUPS_DICT = {}
+    if app.platform == "windows":
+        modern_windows_app_group = ApplicationGroup()
+        modern_windows_app_group.executable_name = application_frame_host
+        modern_windows_app_group.group_spoken_forms = None
+        modern_windows_app_group.group_name = application_frame_host_group
+        modern_windows_app_group.path = application_frame_host_path
+        modern_windows_app_group.unique_id = None
+        APPLICATION_GROUPS_DICT[application_frame_host] = modern_windows_app_group
+        APPLICATION_GROUPS_DICT[application_frame_host_path] = modern_windows_app_group
+        APPLICATION_GROUPS_DICT[application_frame_host_group] = modern_windows_app_group
+
+
+   
     APPLICATIONS_OVERRIDES = {}
     PRESERVED_APPLICATION_LIST = []
     removed_apps_dict = {}
@@ -324,7 +384,7 @@ def update_launch_applications(f):
         if spoken_forms.lower() == "none":
             spoken_forms = None
         else:
-            spoken_forms = [spoken_form.strip() for spoken_form in spoken_forms.split(";")]
+            spoken_forms = [spoken_form.strip().lower() for spoken_form in spoken_forms.split(";")]
             
         if group_name and group_name.lower() == "none":
             group_name = None
@@ -333,6 +393,8 @@ def update_launch_applications(f):
         uid = None if uid.lower() == "none" else uid
         path = None if path.lower() == "none" else path
         executable_name = None if executable_name.lower() == "none" else executable_name
+
+
 
         if not group_name:
             override_app = Application (path=path,
@@ -367,10 +429,19 @@ def update_launch_applications(f):
                 group.unique_id=uid
                 group.group_spoken_forms = spoken_forms if spoken_forms else display_name
 
-                APPLICATION_GROUPS_DICT[executable_name] = group
-                APPLICATION_GROUPS_DICT[path] = group
+                APPLICATION_GROUPS_DICT[executable_name.lower()] = group
+                APPLICATION_GROUPS_DICT[path.lower()] = group
             else:
-                group.spoken_forms[display_name] = spoken_forms if spoken_forms != None else display_name
+                group.path=path
+                group.executable_name=executable_name
+
+                # to do, it is okay perf-wise to generate things here?
+                group.spoken_forms[display_name] = spoken_forms if spoken_forms != None else actions.user.create_spoken_forms(display_name.lower(), words_to_exclude=words_to_exclude,generate_subsequences=False,)
+
+
+                # hack for ApplicationFrameHost???
+                #APPLICATION_GROUPS_DICT[executable_name.lower()] = group
+                #APPLICATION_GROUPS_DICT[path.lower()] = group
                 # print(f"{display_name} {spoken_forms}")
 
         # app has been removed from the OS or is not installed yet.
@@ -382,10 +453,13 @@ def update_launch_applications(f):
         APPLICATIONS_OVERRIDES[override_app.display_name] = override_app
 
         if override_app.executable_name:
-            APPLICATIONS_OVERRIDES[override_app.executable_name] = override_app
+            APPLICATIONS_OVERRIDES[override_app.executable_name.lower()] = override_app
+
+            if "Microsoft.Msn.News.exe" == executable_name:
+                print("Application override added...")
 
         if override_app.path:
-            APPLICATIONS_OVERRIDES[override_app.path] = override_app                   
+            APPLICATIONS_OVERRIDES[override_app.path.lower()] = override_app                   
 
         if override_app.unique_identifier:
             APPLICATIONS_OVERRIDES[override_app.unique_identifier] = override_app
@@ -466,9 +540,11 @@ class Actions:
         else:
             # Focus next window on same app
             if app == ui.active_app():
+                print("Attempting to focus next window")
                 actions.app.window_next()
             # Focus new app
             else:
+                print("Focus a new app")
                 actions.user.switcher_focus_app(app)
 
     def switcher_focus_app(app: ui.App):
@@ -489,8 +565,10 @@ class Actions:
         t1 = time.perf_counter()
         while ui.active_window() != window:
             if time.perf_counter() - t1 > 1:
+                print("Failed")
                 raise RuntimeError(f"Can't focus window: {window.title}")
             actions.sleep(0.1)
+        print("succeeded")
 
     def switcher_launch(path: str):
         """Launch a new application by path (all OSes), or AppUserModel_ID path on Windows"""

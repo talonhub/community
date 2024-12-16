@@ -2,13 +2,22 @@ from talon import app
 from pathlib import Path
 from uuid import UUID
 from .application import Application
+from.windows_applications import is_known_windows_application
 import glob
 import os
+
+application_frame_host_path = None
+application_frame_host = None
+application_frame_host_group = None
 
 if app.platform == "windows":
     from .windows_known_paths import resolve_known_windows_path, PathNotFoundException
     import win32com
 
+    application_frame_host = "applicationframehost.exe"
+    application_frame_host_path = os.path.expandvars(os.path.join("%WINDIR%", "System32", application_frame_host))
+    application_frame_host_group = "Windows Applications"
+    
     # since I can't figure out how to get the target paths from the shell folders,
     # we'll parse the known shortcuts and do it live!?
     windows_application_directories = [
@@ -158,6 +167,7 @@ if app.platform == "windows":
             display_name = item.GetDisplayName(shellcon.SIGDN_NORMALDISPLAY)
             should_create_entry = check_should_create_entry(display_name) 
 
+            
             if should_create_entry:
                 try:
                     p = resolve_path_with_guid(app_user_model_id)
@@ -173,7 +183,12 @@ if app.platform == "windows":
                     pass
                 
                 # this isn't very robust, but let's try it..?
-                is_windows_store_app = app_user_model_id.endswith("!App")
+                is_known_windows_app = is_known_windows_application(app_user_model_id)
+                is_windows_store_app = is_known_windows_app or app_user_model_id.endswith("!App") 
+
+                if is_windows_store_app:
+                    executable_name = application_frame_host
+                    path = application_frame_host_path
 
                 if should_create_entry and not executable_name:
                     if not is_windows_store_app and display_name in shortcut_map:
@@ -198,8 +213,11 @@ if app.platform == "windows":
                     executable_name=executable_name if executable_name else None,
                     exclude=False,
                     spoken_form=None,
-                    application_group=None)
+                    application_group=None if not is_windows_store_app else application_frame_host_group)
             
+                #if is_windows_store_app:
+                #    print(str(new_app))
+                    
                 if should_create_entry:
                     if app_user_model_id not in applications_dict:
                         application_list.append(new_app)

@@ -1,0 +1,44 @@
+3D Viewer,Microsoft.Microsoft3DViewer_8wekyb3d8bbwe!Microsoft.Microsoft3DViewer
+Calculator,Microsoft.WindowsCalculator_8wekyb3d8bbwe!App
+Calendar,microsoft.windowscommunicationsapps_8wekyb3d8bbwe!microsoft.windowslive.calendar
+Camera,Microsoft.WindowsCamera_8wekyb3d8bbwe!App
+Clock,Microsoft.WindowsAlarms_8wekyb3d8bbwe!App
+
+
+
+
+Cursorly,7922Cursorly.Cursorly_ntmkm5b03xqbp!Cursorly.Cursorly
+Ditto,60145ScottBrogden.ditto-cp_n6b029mg40na2!Ditto
+Dolby Atmos,DolbyLaboratories.DolbyAtmos_rz1tebttyb220!App
+Feedback Hub,Microsoft.WindowsFeedbackHub_8wekyb3d8bbwe!App
+Game Bar,Microsoft.XboxGamingOverlay_8wekyb3d8bbwe!App
+Get Help,Microsoft.GetHelp_8wekyb3d8bbwe!App
+
+Git FAQs (Frequently Asked Questions),https://github.com/git-for-windows/git/wiki/FAQ
+
+
+Mail,microsoft.windowscommunicationsapps_8wekyb3d8bbwe!microsoft.windowslive.mail
+Maps,Microsoft.WindowsMaps_8wekyb3d8bbwe!App
+Media Player,Microsoft.ZuneMusic_8wekyb3d8bbwe!Microsoft.ZuneMusic
+Microsoft Accessory Center,Microsoft.MicrosoftAccessoryCenter_8wekyb3d8bbwe!App
+Microsoft Defender,Microsoft.6365217CE6EB4_8wekyb3d8bbwe!App
+Microsoft Store,Microsoft.WindowsStore_8wekyb3d8bbwe!App
+Mixed Reality Portal,Microsoft.MixedReality.Portal_8wekyb3d8bbwe!App
+Movies & TV,Microsoft.ZuneVideo_8wekyb3d8bbwe!Microsoft.ZuneVideo
+News,Microsoft.BingNews_8wekyb3d8bbwe!AppexNews
+Paint 3D,Microsoft.MSPaint_8wekyb3d8bbwe!Microsoft.MSPaint
+Phone Link,Microsoft.YourPhone_8wekyb3d8bbwe!App
+Photos,Microsoft.Windows.Photos_8wekyb3d8bbwe!App
+Skype,Microsoft.SkypeApp_kzf8qxf38zg5c!App
+Snip & Sketch,Microsoft.ScreenSketch_8wekyb3d8bbwe!App
+Solitaire & Casual Games,Microsoft.MicrosoftSolitaireCollection_8wekyb3d8bbwe!App
+Spotify,SpotifyAB.SpotifyMusic_zpdnekdrzrea0!Spotify
+Sticky Notes,Microsoft.MicrosoftStickyNotes_8wekyb3d8bbwe!App
+Terminal,Microsoft.WindowsTerminal_8wekyb3d8bbwe!App
+Tips,Microsoft.Getstarted_8wekyb3d8bbwe!App
+Ubuntu on Windows,CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc!ubuntuonwindows,ubuntu.exe
+Voice Recorder,Microsoft.WindowsSoundRecorder_8wekyb3d8bbwe!App
+Weather,Microsoft.BingWeather_8wekyb3d8bbwe!App,Microsoft.Msn.Weather.exe
+Windows Backup,MicrosoftWindows.Client.CBS_cw5n1h2txyewy!WindowsBackup,WindowsBackupClient.exe
+Windows Security,Microsoft.Windows.SecHealthUI_cw5n1h2txyewy!SecHealthUI,SecHealthUI.exe
+Xbox Console Companion,Microsoft.XboxApp_8wekyb3d8bbwe!Microsoft.XboxApp,
