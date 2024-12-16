@@ -14,7 +14,7 @@ class RunningApplicationExclusion:
                  exclusion_type:ExclusionType, 
                  data_string: str):
         self.exclusion_type = exclusion_type
-        self.data_string = data_string
+        self.data_string = data_string.lower()
 
     def __str__(self) -> str:
         return f"{self.exclusion_type} = {self.data_string}"

@@ -115,6 +115,12 @@ def launch_applications(m) -> str:
     "Returns a single application name"
     return m.launch
 
+def get_override_by_app_user_model_id(uuid, curr_app):
+    if uuid.lower() in APPLICATIONS_OVERRIDES:
+        return APPLICATIONS_OVERRIDES[uuid.lower()]
+    
+    return get_override_for_running_app(curr_app)
+
 def get_override_for_running_app(curr_app) -> Union[Application | ApplicationGroup | RunningApplicationExclusion | None]:
     name = curr_app.name
     bundle_name = curr_app.bundle
@@ -126,10 +132,10 @@ def get_override_for_running_app(curr_app) -> Union[Application | ApplicationGro
     #     if override:
     #         print(f"windows application override found {executable_name}")
     #         return override
-        
     if exe_path in RUNNING_APPLICATION_EXCLUSIONS_DICT:
         return RUNNING_APPLICATION_EXCLUSIONS_DICT[exe_path]
     elif executable_name in RUNNING_APPLICATION_EXCLUSIONS_DICT:
+        print(f"override found {executable_name}")
         return RUNNING_APPLICATION_EXCLUSIONS_DICT[executable_name]
     elif bundle_name in RUNNING_APPLICATION_EXCLUSIONS_DICT:
         return RUNNING_APPLICATION_EXCLUSIONS_DICT[bundle_name]
@@ -174,7 +180,7 @@ def update_running_list():
         frame_host_apps = ui.apps(name="Application Frame Host")
         for cur_app in frame_host_apps:
             for window in cur_app.windows():
-                if window.title and window.title not in ["CicMarshalWnd", "Default IME", "OLEChannelWnd", "MSCTFIME UI"]:
+                if window.title and window.title not in ["CicMarshalWnd", "Default IME", "OLEChannelWnd", "MSCTFIME UI", "OleMainThreadWndName"]:
                     app_frame_host_cache[window.title] = True
                     spoken_forms = None
                     mapping = f"{cur_app.name}-::*::-{window.title}"
@@ -204,9 +210,7 @@ def update_running_list():
             
         RUNNING_APPLICATION_DICT[exe_path] = cur_app
         RUNNING_APPLICATION_DICT[exe] = cur_app
-
-
-        #todo: figure out how to do win32con.PROCESS_QUERY_LIMITED_INFORMATION in windows.
+        is_windows_app = False
 
         if app.platform == "windows":
             if exe == "applicationframehost.exe":
@@ -218,24 +222,25 @@ def update_running_list():
             if (is_windows_app):
                 app_user_model_id = get_application_user_model_id(cur_app.pid)
                 
-                #print(f"{cur_app.pid} {exe}")
                 is_known_app, uses_frame_host = is_known_windows_application(app_user_model_id)
 
-                #else:
-                #    print(f"{exe} is a known windows app, trying name")
                 if is_known_app:
                     if uses_frame_host:
-                        #print(f"{exe}  known windows app, uses frame host. skipped")
+                        #print(f"{app_user_model_id} uses frame host")
                         continue
+                    #else:
+                        #print(f"{app_user_model_id} known app, doesn't use frame host")
                 else: 
                     if cur_app.name in app_frame_host_cache:
-                        #print(f"{cur_app.name}  known windows app present in app_frame_host_cache")
+                        #print(f"{cur_app.name} is app frame host cached, skipping")
                         continue
                     #else:
                         #print(f"{cur_app.name} {exe} unknown windows app, assuming this executable is real")
 
-
-        override = get_override_for_running_app(cur_app)
+        if is_windows_app:
+            override = get_override_by_app_user_model_id(app_user_model_id, cur_app)
+        else:
+            override = get_override_for_running_app(cur_app)
 
         if not override:          
             generate_spoken_form_map[cur_app.name.lower()] = cur_app.name   
@@ -259,6 +264,7 @@ def update_running_list():
 
             # check for exclusion
             elif isinstance(override, RunningApplicationExclusion):
+                print(str(override))
                 continue
             #otherewise add the things
             else:

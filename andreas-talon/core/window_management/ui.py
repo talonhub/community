@@ -6,13 +6,13 @@ mod = Module()
 ctx = Context()
 
 
-@ctx.action_class("app")
-class AppActionsWin:
-    def window_previous():
-        cycle_windows(ui.active_app(), -1)
+# @ctx.action_class("app")
+# class AppActionsWin:
+#     def window_previous():
+#         cycle_windows(ui.active_app(), -1)
 
-    def window_next():
-        cycle_windows(ui.active_app(), 1)
+#     def window_next():
+#         cycle_windows(ui.active_app(), 1)
 
 
 @mod.action_class
