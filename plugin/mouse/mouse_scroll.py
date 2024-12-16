@@ -31,7 +31,7 @@ mod.setting(
 mod.setting(
     "mouse_continuous_scroll_amount",
     type=int,
-    default=80,
+    default=8,
     desc="The default amount used when scrolling continuously",
 )
 mod.setting(
@@ -201,7 +201,7 @@ def scroll_continuous_helper():
         if acceleration_setting > 1
         else 1
     )
-    y = scroll_amount * acceleration_speed * scroll_dir / 10
+    y = scroll_amount * acceleration_speed * scroll_dir
     actions.mouse_scroll(y)
 
 
