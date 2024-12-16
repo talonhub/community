@@ -135,7 +135,6 @@ def get_override_for_running_app(curr_app) -> Union[Application | ApplicationGro
     if exe_path in RUNNING_APPLICATION_EXCLUSIONS_DICT:
         return RUNNING_APPLICATION_EXCLUSIONS_DICT[exe_path]
     elif executable_name in RUNNING_APPLICATION_EXCLUSIONS_DICT:
-        print(f"override found {executable_name}")
         return RUNNING_APPLICATION_EXCLUSIONS_DICT[executable_name]
     elif bundle_name in RUNNING_APPLICATION_EXCLUSIONS_DICT:
         return RUNNING_APPLICATION_EXCLUSIONS_DICT[bundle_name]
