@@ -166,6 +166,18 @@ def get_override_for_running_app(curr_app) -> Union[Application | ApplicationGro
 
 app_frame_host_cache = {}
 
+
+def is_window_valid(window: ui.Window) -> bool:
+    """Returns true if this window is valid for focusing"""
+    return (
+        not window.hidden
+        # On Windows, there are many fake windows with empty titles -- this excludes them.
+        and window.title != ""
+        # This excludes many tiny windows that are not actual windows, and is a rough heuristic.
+        and window.rect.width > window.screen.dpi
+        and window.rect.height > window.screen.dpi
+    )
+
 def update_running_list():
     global RUNNING_APPLICATION_DICT, app_frame_host_cache
     RUNNING_APPLICATION_DICT = {}
@@ -215,26 +227,18 @@ def update_running_list():
             if exe == "applicationframehost.exe":
                 continue
             
+            valid_windows = [window  for window in cur_app.windows() if is_window_valid(window)]
+            
             is_windows_app = "windowsapps" in exe_path or "systemapps" in exe_path
+
+            # if there are no valid windows for the app, let's ignore it.
+            if len(valid_windows) <= 0:
+                #print(f"{app_user_model_id}; windows = {len(valid_windows)}, should appear in ApplicationFrameHost if it's real...")
+                continue
 
             # this is an ugly heurestic to attempt to always focus the proper application
             if (is_windows_app):
                 app_user_model_id = get_application_user_model_id(cur_app.pid)
-                
-                is_known_app, uses_frame_host = is_known_windows_application(app_user_model_id)
-
-                if is_known_app:
-                    if uses_frame_host:
-                        #print(f"{app_user_model_id} uses frame host")
-                        continue
-                    #else:
-                        #print(f"{app_user_model_id} known app, doesn't use frame host")
-                else: 
-                    if cur_app.name in app_frame_host_cache:
-                        #print(f"{cur_app.name} is app frame host cached, skipping")
-                        continue
-                    #else:
-                        #print(f"{cur_app.name} {exe} unknown windows app, assuming this executable is real")
 
         if is_windows_app:
             override = get_override_by_app_user_model_id(app_user_model_id, cur_app)
