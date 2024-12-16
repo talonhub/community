@@ -172,11 +172,22 @@ def is_window_valid(window: ui.Window) -> bool:
     return (
         not window.hidden
         # On Windows, there are many fake windows with empty titles -- this excludes them.
-        and window.title != ""
+        and len(window.title) > 0
         # This excludes many tiny windows that are not actual windows, and is a rough heuristic.
         and window.rect.width > window.screen.dpi
         and window.rect.height > window.screen.dpi
     )
+
+def get_valid_windows(app: ui.App):
+    valid_windows = []
+    for window in app.windows():
+        if is_window_valid(window):
+            valid_windows.append(window)
+
+    if "explorer.exe" in app.exe.lower():
+        print(valid_windows)
+
+    return valid_windows
 
 def update_running_list():
     global RUNNING_APPLICATION_DICT, app_frame_host_cache
@@ -223,12 +234,12 @@ def update_running_list():
         RUNNING_APPLICATION_DICT[exe] = cur_app
         is_windows_app = False
 
+        valid_windows = get_valid_windows(cur_app)
+
         if app.platform == "windows":
             if exe == "applicationframehost.exe":
                 continue
-            
-            valid_windows = [window  for window in cur_app.windows() if is_window_valid(window)]
-            
+        
             is_windows_app = "windowsapps" in exe_path or "systemapps" in exe_path
 
             # if there are no valid windows for the app, let's ignore it.
@@ -250,11 +261,10 @@ def update_running_list():
         elif override:
             if isinstance(override,ApplicationGroup):
                 running[override.group_name] = cur_app.name
-
                 # cycle thru windows and check for subprograms.
-                for window in cur_app.windows():
+                for window in valid_windows:
                     for display_name, spoken_forms in override.spoken_forms.items():
-                        if window.title.startswith(display_name):
+                        if display_name.lower() in window.title.lower():
                             mapping = f"{cur_app.name}-::*::-{window.title}"
                             for spoken_form in spoken_forms:
                                 running[spoken_form] = mapping
@@ -557,9 +567,12 @@ class Actions:
 
         if len(splits) == 2:
             window_name = splits[1]
-            for window in app.windows():
-                if window.title == window_name:
+            valid_windows = get_valid_windows(app)
+            print(valid_windows)
+            for window in valid_windows:
+                if window_name.lower() == window.title.lower() or window_name.lower() in window.title.lower():
                     window.focus()
+                    break
         else:
             # Focus next window on same app
             if app == ui.active_app():
