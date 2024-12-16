@@ -6,7 +6,7 @@ from pathlib import Path
 import csv
 import talon
 from talon import Context, Module, actions, app, imgui, ui, resource
-from .windows import get_installed_windows_apps, application_frame_host_path, application_frame_host, application_frame_host_group
+from .windows import get_installed_windows_apps, application_frame_host_path, application_frame_host, application_frame_host_group, get_application_user_model_id
 from .windows_applications import is_known_windows_application
 from .mac import get_installed_mac_apps
 from .exclusion import ExclusionType, RunningApplicationExclusion
@@ -205,8 +205,10 @@ def update_running_list():
         RUNNING_APPLICATION_DICT[exe_path] = cur_app
         RUNNING_APPLICATION_DICT[exe] = cur_app
 
+
+        #todo: figure out how to do win32con.PROCESS_QUERY_LIMITED_INFORMATION in windows.
+
         if app.platform == "windows":
-            # already processed these
             if exe == "applicationframehost.exe":
                 continue
             
@@ -214,14 +216,13 @@ def update_running_list():
 
             # this is an ugly heurestic to attempt to always focus the proper application
             if (is_windows_app):
-                #print(exe_path)
-                is_known_app, uses_frame_host = is_known_windows_application(exe) 
-                if not is_known_app:
-                    #print(f"{exe} not a known windows app, trying name")
-                    is_known_app, uses_frame_host = is_known_windows_application(cur_app.name)
+                app_user_model_id = get_application_user_model_id(cur_app.pid)
+                
+                #print(f"{cur_app.pid} {exe}")
+                is_known_app, uses_frame_host = is_known_windows_application(app_user_model_id)
+
                 #else:
                 #    print(f"{exe} is a known windows app, trying name")
-
                 if is_known_app:
                     if uses_frame_host:
                         #print(f"{exe}  known windows app, uses frame host. skipped")
@@ -232,6 +233,7 @@ def update_running_list():
                         continue
                     #else:
                         #print(f"{cur_app.name} {exe} unknown windows app, assuming this executable is real")
+
 
         override = get_override_for_running_app(cur_app)
 

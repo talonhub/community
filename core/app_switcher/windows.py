@@ -230,6 +230,44 @@ if app.platform == "windows":
                     else:
                         print(f"Potential duplicate app {new_app}")
         return application_list
+    
+    import ctypes
+    from ctypes import wintypes
+    import win32con
+    # Define constants
+
+    # Load the necessary DLL
+    kernel32 = ctypes.WinDLL('kernel32', use_last_error=True)
+
+    # Define the GetApplicationUserModelId function
+    GetApplicationUserModelId = kernel32.GetApplicationUserModelId
+    GetApplicationUserModelId.argtypes = [wintypes.HANDLE, ctypes.POINTER(wintypes.UINT), wintypes.LPWSTR]
+    GetApplicationUserModelId.restype = wintypes.LONG
+
+    def get_application_user_model_id(pid):
+        # Open the process
+        process_handle = kernel32.OpenProcess(win32con.PROCESS_QUERY_LIMITED_INFORMATION, False, pid)
+        if not process_handle:
+            raise ctypes.WinError(ctypes.get_last_error())
+
+        try:
+            # Get the length of the ApplicationUserModelId
+            length = wintypes.UINT(0)
+            result = GetApplicationUserModelId(process_handle, ctypes.byref(length), None)
+
+            # we expect error 122 in this algorithm
+            if result != 122:
+                raise ctypes.WinError(result)
+
+            # Allocate buffer for the ApplicationUserModelId
+            buffer = ctypes.create_unicode_buffer(length.value)
+            result = GetApplicationUserModelId(process_handle, ctypes.byref(length), buffer)
+            if result != 0:
+                raise ctypes.WinError(result)
+
+            return buffer.value
+        finally:
+            kernel32.CloseHandle(process_handle)
 else:
     def get_installed_windows_apps() -> list[Application]:
         return []
