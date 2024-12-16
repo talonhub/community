@@ -11,11 +11,18 @@ class AppActions:
     def window_next():
         cycle_windows(ui.active_app(), 1)
 
+def get_valid_windows(app: ui.App):
+    valid_windows = []
+    for window in app.windows():
+        if is_window_valid(window):
+            valid_windows.append(window)
+
+    return valid_windows
 
 def cycle_windows(app: ui.App, diff: int):
     """Cycle windows backwards or forwards for the given application"""
     active = app.active_window
-    windows = [w for w in app.windows() if w == active or is_window_valid(w)]
+    windows = get_valid_windows(app)
     windows.sort(key=lambda w: w.id)
     current = windows.index(active)
     i = (current + diff) % len(windows)
@@ -33,7 +40,7 @@ def is_window_valid(window: ui.Window) -> bool:
     return (
         not window.hidden
         # On Windows, there are many fake windows with empty titles -- this excludes them.
-        and window.title != ""
+        and len(window.title) > 0
         # This excludes many tiny windows that are not actual windows, and is a rough heuristic.
         and window.rect.width > window.screen.dpi
         and window.rect.height > window.screen.dpi

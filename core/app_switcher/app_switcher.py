@@ -184,9 +184,6 @@ def get_valid_windows(app: ui.App):
         if is_window_valid(window):
             valid_windows.append(window)
 
-    if "explorer.exe" in app.exe.lower():
-        print(valid_windows)
-
     return valid_windows
 
 def update_running_list():
@@ -568,7 +565,6 @@ class Actions:
         if len(splits) == 2:
             window_name = splits[1]
             valid_windows = get_valid_windows(app)
-            print(valid_windows)
             for window in valid_windows:
                 if window_name.lower() == window.title.lower() or window_name.lower() in window.title.lower():
                     window.focus()
