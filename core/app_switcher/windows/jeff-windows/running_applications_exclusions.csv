@@ -6,4 +6,4 @@ exe=msedgewebview2.exe
 exe=LockApp.exe
 exe=Cortana.exe
 exe=SearchApp.exe
-name=Search Application
+name=Search application
