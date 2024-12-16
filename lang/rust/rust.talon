@@ -14,7 +14,6 @@ tag(): user.code_data_null
 tag(): user.code_functions
 tag(): user.code_functions_common
 tag(): user.code_libraries
-tag(): user.code_libraries_gui
 
 tag(): user.code_operators_array
 tag(): user.code_operators_assignment
