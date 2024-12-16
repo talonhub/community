@@ -183,10 +183,10 @@ if app.platform == "windows":
                     pass
                 
                 # this isn't very robust, but let's try it..?
-                is_known_windows_app = is_known_windows_application(app_user_model_id)
+                is_known_windows_app, use_application_frame_host = is_known_windows_application(app_user_model_id)
                 is_windows_store_app = is_known_windows_app or app_user_model_id.endswith("!App") 
 
-                if is_windows_store_app:
+                if is_windows_store_app and use_application_frame_host:
                     executable_name = application_frame_host
                     path = application_frame_host_path
 
@@ -213,7 +213,7 @@ if app.platform == "windows":
                     executable_name=executable_name if executable_name else None,
                     exclude=False,
                     spoken_form=None,
-                    application_group=None if not is_windows_store_app else application_frame_host_group)
+                    application_group=application_frame_host_group if is_windows_store_app and use_application_frame_host else None)
             
                 #if is_windows_store_app:
                 #    print(str(new_app))

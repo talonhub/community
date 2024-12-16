@@ -8,6 +8,7 @@ class WindowsApplication:
     display_name: str
     unique_identifier: str
     executable_name: str
+    uses_application_frame_host: bool = True
 
 windows_applications = [
     WindowsApplication(display_name="3D Viewer", 
@@ -46,10 +47,12 @@ windows_applications = [
                        executable_name="GetHelp.exe"), 
     WindowsApplication(display_name="iTunes", 
                        unique_identifier="AppleInc.iTunes_nzyj5cx40ttqa!iTunes", 
-                       executable_name="iTunes.exe"), 
+                       executable_name="iTunes.exe",
+                       uses_application_frame_host=False), 
     WindowsApplication(display_name="Mail", 
                        unique_identifier="microsoft.windowscommunicationsapps_8wekyb3d8bbwe!microsoft.windowslive.mail", 
-                       executable_name="olk.exe"), 
+                       executable_name="olk.exe",
+                       uses_application_frame_host=False), 
     WindowsApplication(display_name="Maps", 
                        unique_identifier="Microsoft.WindowsMaps_8wekyb3d8bbwe!App", 
                        executable_name=None), 
@@ -77,11 +80,9 @@ windows_applications = [
     WindowsApplication(display_name="News", 
                        unique_identifier="Microsoft.BingNews_8wekyb3d8bbwe!AppexNews", 
                        executable_name="Microsoft.Msn.News.exe"), 
-
     WindowsApplication(display_name="Paint 3D", 
                        unique_identifier="Microsoft.MSPaint_8wekyb3d8bbwe!Microsoft.MSPaint", 
                        executable_name="PaintStudio.View.exe"), 
-
     WindowsApplication(display_name="Phone Link", 
                        unique_identifier="Microsoft.YourPhone_8wekyb3d8bbwe!App", 
                        executable_name="PhoneExperienceHost.exe"), 
@@ -133,27 +134,26 @@ windows_applications = [
 
 ]
 
-window_application_overrides = {}
 windows_application_dict = {}
 for application in windows_applications:
     unique_identifier = application.unique_identifier
 
     if application.executable_name:
         executable_name = application.executable_name.lower()
-        application_exclusion = RunningApplicationExclusion(exclusion_type=ExclusionType.EXE, data_string=executable_name)
-        window_application_overrides[executable_name] = application_exclusion
-        window_application_overrides[unique_identifier] = application_exclusion
-    
+        windows_application_dict[executable_name] = application
+
     windows_application_dict[unique_identifier.lower()] = application
 
     
-
-def get_windows_application_override(key):
+def app_uses_frame_host(key):
     key = key.lower()
-    if key in window_application_overrides:
-        return window_application_overrides[key]
-    return None
+    if key in windows_application_dict:
+        return windows_application_dict[key].uses_application_frame_host
+    return False
         
 def is_known_windows_application(uuid):
-    return uuid.lower() in windows_application_dict
-    
+    known_app = uuid.lower() in windows_application_dict
+    if known_app:
+        return True, windows_application_dict[uuid.lower()].uses_application_frame_host
+    else:
+        return False, False
