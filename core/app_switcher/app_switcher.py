@@ -263,7 +263,7 @@ def update_running_list():
 
             # check for exclusion
             elif isinstance(override, RunningApplicationExclusion):
-                print(str(override))
+                #print(str(override))
                 continue
             #otherewise add the things
             else:
