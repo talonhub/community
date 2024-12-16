@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from .exclusion import ExclusionType, RunningApplicationExclusion
 
 # This is a list of known "modern" windows applications where we can't access the executable
 @dataclass
@@ -140,7 +139,7 @@ for application in windows_applications:
 
     if application.executable_name:
         executable_name = application.executable_name.lower()
-        windows_application_dict[executable_name] = application
+        windows_application_dict[executable_name.lower()] = application
 
     windows_application_dict[unique_identifier.lower()] = application
 

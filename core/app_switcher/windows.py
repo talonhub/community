@@ -18,6 +18,11 @@ if app.platform == "windows":
     application_frame_host_path = os.path.expandvars(os.path.join("%WINDIR%", "System32", application_frame_host))
     application_frame_host_group = "Windows Applications"
     
+    windows_app_dir = os.path.expandvars(os.path.join("%ProgramFiles%", "WindowsApps"))
+    windows_system_app_dir = os.path.expandvars(os.path.join("%WINDIR%", "SystemApps"))
+
+    #print(f"{windows_app_dir} {windows_system_app_dir}")
+
     # since I can't figure out how to get the target paths from the shell folders,
     # we'll parse the known shortcuts and do it live!?
     windows_application_directories = [

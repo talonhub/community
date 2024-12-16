@@ -7,7 +7,7 @@ import csv
 import talon
 from talon import Context, Module, actions, app, imgui, ui, resource
 from .windows import get_installed_windows_apps, application_frame_host_path, application_frame_host, application_frame_host_group
-from .windows_applications import app_uses_frame_host
+from .windows_applications import is_known_windows_application
 from .mac import get_installed_mac_apps
 from .exclusion import ExclusionType, RunningApplicationExclusion
 from typing import Union
@@ -159,28 +159,23 @@ def get_override_for_running_app(curr_app) -> Union[Application | ApplicationGro
     # if we made it here, no overrides found
     return None
 
+app_frame_host_cache = {}
+
 def update_running_list():
-    global RUNNING_APPLICATION_DICT
+    global RUNNING_APPLICATION_DICT, app_frame_host_cache
     RUNNING_APPLICATION_DICT = {}
+    app_frame_host_cache = {}
     running = {}
     foreground_apps = ui.apps(background=False)
-    generate_spoken_form_map = {}
-    for cur_app in foreground_apps:
-        #print(f"{cur_app.name} {cur_app.exe}")
-        name = cur_app.name.lower()
-        RUNNING_APPLICATION_DICT[name.lower()] = cur_app
-        exe = os.path.basename(cur_app.exe).lower()
-        exe_path = cur_app.exe.lower()
-        if app.platform == "mac":
-            bundle_name = cur_app.bundle.lower()
-            RUNNING_APPLICATION_DICT[bundle_name] = cur_app
-            
-        RUNNING_APPLICATION_DICT[exe_path] = cur_app
-        RUNNING_APPLICATION_DICT[exe] = cur_app
 
-        if exe == "applicationframehost.exe":
+    generate_spoken_form_map = {}
+
+    if app.platform == "windows":
+        frame_host_apps = ui.apps(name="Application Frame Host")
+        for cur_app in frame_host_apps:
             for window in cur_app.windows():
                 if window.title and window.title not in ["CicMarshalWnd", "Default IME", "OLEChannelWnd", "MSCTFIME UI"]:
+                    app_frame_host_cache[window.title] = True
                     spoken_forms = None
                     mapping = f"{cur_app.name}-::*::-{window.title}"
                     
@@ -196,14 +191,50 @@ def update_running_list():
 
                     for spoken_form in spoken_forms:
                         running[spoken_form] = mapping
-                        
-            continue
 
-        if (app.platform == "windows" and "windowsapps" in exe_path or "systemapps" in exe_path) and app_uses_frame_host(exe):
-            continue 
+    for cur_app in foreground_apps:
+        #print(f"{cur_app.name} {cur_app.exe}")
+        name = cur_app.name.lower()
+        RUNNING_APPLICATION_DICT[name.lower()] = cur_app
+        exe = os.path.basename(cur_app.exe).lower()
+        exe_path = cur_app.exe.lower()
+        if app.platform == "mac":
+            bundle_name = cur_app.bundle.lower()
+            RUNNING_APPLICATION_DICT[bundle_name] = cur_app
+            
+        RUNNING_APPLICATION_DICT[exe_path] = cur_app
+        RUNNING_APPLICATION_DICT[exe] = cur_app
+
+        if app.platform == "windows":
+            # already processed these
+            if exe == "applicationframehost.exe":
+                continue
+            
+            is_windows_app = "windowsapps" in exe_path or "systemapps" in exe_path
+
+            # this is an ugly heurestic to attempt to always focus the proper application
+            if (is_windows_app):
+                #print(exe_path)
+                is_known_app, uses_frame_host = is_known_windows_application(exe) 
+                if not is_known_app:
+                    #print(f"{exe} not a known windows app, trying name")
+                    is_known_app, uses_frame_host = is_known_windows_application(cur_app.name)
+                #else:
+                #    print(f"{exe} is a known windows app, trying name")
+
+                if is_known_app:
+                    if uses_frame_host:
+                        #print(f"{exe}  known windows app, uses frame host. skipped")
+                        continue
+                else: 
+                    if cur_app.name in app_frame_host_cache:
+                        #print(f"{cur_app.name}  known windows app present in app_frame_host_cache")
+                        continue
+                    #else:
+                        #print(f"{cur_app.name} {exe} unknown windows app, assuming this executable is real")
 
         override = get_override_for_running_app(cur_app)
-        
+
         if not override:          
             generate_spoken_form_map[cur_app.name.lower()] = cur_app.name   
         elif override:
