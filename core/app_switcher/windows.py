@@ -6,9 +6,7 @@ from.windows_applications import is_known_windows_application
 import glob
 import os
 
-application_frame_host_path = None
-application_frame_host = None
-application_frame_host_group = None
+
 
 if app.platform == "windows":
     from .windows_known_paths import resolve_known_windows_path, PathNotFoundException
@@ -269,5 +267,13 @@ if app.platform == "windows":
         finally:
             kernel32.CloseHandle(process_handle)
 else:
+    application_frame_host_path = None
+    application_frame_host = None
+    application_frame_host_group = None
+    
     def get_installed_windows_apps() -> list[Application]:
         return []
+    
+    def get_application_user_model_id(pid):
+        # Open the process
+        return None

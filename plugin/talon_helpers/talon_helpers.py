@@ -259,7 +259,7 @@ class Actions:
         else:
             path = os.path.expanduser("~/.talon/talon.log")
             
-        actions.user.edit_text_file(path)
+        actions.user.vscode_launch(path)
 		
     def talon_get_active_registry_list(name: str) -> ListTypeFull:
         """Returns the active list from the Talon registry"""
