@@ -32,6 +32,7 @@ if not os.path.exists(csv_directory):
     os.makedirs(csv_directory)
 
 mod = Module()
+mod.tag("app_switcher_selector_showing", desc="Indicates the app_switcher_selector_showing")
 mod.list("running", desc="all running applications")
 mod.list("launch", desc="all launchable applications")
 
@@ -166,6 +167,20 @@ def get_override_for_running_app(curr_app) -> Union[Application | ApplicationGro
 
 app_frame_host_cache = {}
 
+pending_app = None
+valid_windows_for_pending_app = None
+
+@imgui.open()
+def gui_switcher_chooser(gui: imgui.GUI):
+    # if no selected context, draw the contexts
+    for index, window in enumerate(valid_windows_for_pending_app, 1):
+        button_name = f"{index}. {window.title}"
+
+        if gui.button(button_name):
+            window.focus()
+            gui_switcher_chooser.hide()
+            ctx.tags = []
+
 
 def is_window_valid(window: ui.Window) -> bool:
     """Returns true if this window is valid for focusing"""
@@ -257,7 +272,13 @@ def update_running_list():
                     for window in valid_windows:
                         if not any(exclusion in window.title.lower() for exclusion in explorer_exclusions):
                             mapping = f"{cur_app.name}-::*::-{window.title}"
-                            generate_spoken_form_map[window.title] = mapping
+                            control_panel_found = False
+                            if "Control Panel" in window.title:
+                                generate_spoken_form_map[window.title] = mapping
+
+                                if not control_panel_found:
+                                    running["control panel"] = mapping
+
                     continue
                 # 
                 elif exe == "mmc.exe":
@@ -267,7 +288,9 @@ def update_running_list():
                     for window in valid_windows:
                         if not any(exclusion in window.title.lower() for exclusion in mmc_exclusions):
                             mapping = f"{cur_app.name}-::*::-{window.title}"
-                            generate_spoken_form_map[window.title] = mapping                   
+                            generate_spoken_form_map[window.title] = mapping 
+
+                    continue                  
 
 
         if is_windows_app:
@@ -550,6 +573,16 @@ def update_launch_applications(f):
 
 @mod.action_class
 class Actions:
+    def app_switcher_select_index(index: int):
+        """"""
+        for number, window in enumerate(valid_windows_for_pending_app, 1):
+            if index == number:
+                window.focus()
+                gui_switcher_chooser.hide()
+                ctx.tags = []
+                break
+
+        
     def get_running_app(name: str) -> ui.App:
         """Get the first available running app with `name`."""
         # We should use the capture result directly if it's already in the list
@@ -579,6 +612,12 @@ class Actions:
         raise RuntimeError(f'App not running: "{name}"')
 
     def switcher_focus(name: str):
+        """"""
+        global pending_app 
+        global valid_windows_for_pending_app
+        pending_app = None
+        valid_windows_for_pending_app = None
+
         """Focus a new application by name"""
         splits = name.split("-::*::-")
         app_name = splits[0].lower()
@@ -593,11 +632,18 @@ class Actions:
                     break
         else:
             # Focus next window on same app
-            if app == ui.active_app():
-                actions.app.window_next()
-            # Focus new app
+            valid_windows = get_valid_windows(app)
+            if len(valid_windows) > 1:
+                pending_app = app
+                valid_windows_for_pending_app = valid_windows
+                gui_switcher_chooser.show()
+                ctx.tags = ["user.app_switcher_selector_showing"]
             else:
-                actions.user.switcher_focus_app(app)
+                if app == ui.active_app():
+                    actions.app.window_next()
+                # Focus new app
+                else:
+                    actions.user.switcher_focus_app(app)
 
     def switcher_focus_app(app: ui.App):
         """Focus application and wait until switch is made"""
