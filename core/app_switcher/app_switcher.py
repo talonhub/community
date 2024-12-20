@@ -248,6 +248,27 @@ def update_running_list():
             # this is an ugly heurestic to attempt to always focus the proper application
             if (is_windows_app):
                 app_user_model_id = get_application_user_model_id(cur_app.pid)
+            else:
+                # known application groups...
+                if exe == "explorer.exe":
+                    running["explorer"] = f"{cur_app.name}"
+
+                    explorer_exclusions = ["file explorer", "snap assist", "program manager", "folder view"]
+                    for window in valid_windows:
+                        if not any(exclusion in window.title.lower() for exclusion in explorer_exclusions):
+                            mapping = f"{cur_app.name}-::*::-{window.title}"
+                            generate_spoken_form_map[window.title] = mapping
+                    continue
+                # 
+                elif exe == "mmc.exe":
+                    running["microsoft management console"] = cur_app.name
+                    mmc_exclusions = ["pane"]
+
+                    for window in valid_windows:
+                        if not any(exclusion in window.title.lower() for exclusion in mmc_exclusions):
+                            mapping = f"{cur_app.name}-::*::-{window.title}"
+                            generate_spoken_form_map[window.title] = mapping                   
+
 
         if is_windows_app:
             override = get_override_by_app_user_model_id(app_user_model_id, cur_app)
@@ -385,7 +406,7 @@ def update_launch_applications(f):
     get_installed_apps()
 
     application_map = {
-        app.unique_identifier : app for app in INSTALLED_APPLICATIONS_LIST
+        app.unique_identifier.lower() : app for app in INSTALLED_APPLICATIONS_LIST
     }
 
     APPLICATION_GROUPS_DICT = {}
@@ -481,8 +502,8 @@ def update_launch_applications(f):
 
         # app has been removed from the OS or is not installed yet.
         # lets preserve this entry for the convenience
-        if uid not in application_map and uid not in removed_apps_dict:
-            removed_apps_dict[uid] = True
+        if uid.lower() not in application_map and uid.lower() not in removed_apps_dict:
+            removed_apps_dict[uid.lower()] = True
             PRESERVED_APPLICATION_LIST.append(override_app)
     
         APPLICATIONS_OVERRIDES[override_app.display_name] = override_app
@@ -490,22 +511,19 @@ def update_launch_applications(f):
         if override_app.executable_name:
             APPLICATIONS_OVERRIDES[override_app.executable_name.lower()] = override_app
 
-            if "Microsoft.Msn.News.exe" == executable_name:
-                print("Application override added...")
-
         if override_app.path:
             APPLICATIONS_OVERRIDES[override_app.path.lower()] = override_app                   
 
         if override_app.unique_identifier:
-            APPLICATIONS_OVERRIDES[override_app.unique_identifier] = override_app
+            APPLICATIONS_OVERRIDES[override_app.unique_identifier.lower()] = override_app
 
     # build the applications dictionary with the overrides applied
     APPLICATIONS_DICT = {}
     for index,application in enumerate(INSTALLED_APPLICATIONS_LIST):
         curr_app = application
 
-        if application.unique_identifier in APPLICATIONS_OVERRIDES:
-            curr_app = APPLICATIONS_OVERRIDES[application.unique_identifier]
+        if application.unique_identifier.lower() in APPLICATIONS_OVERRIDES:
+            curr_app = APPLICATIONS_OVERRIDES[application.unique_identifier.lower()]
             INSTALLED_APPLICATIONS_LIST[index] = curr_app
         else:
              must_update_file = True
@@ -538,9 +556,8 @@ class Actions:
         # of running applications. Otherwise, name is from <user.text> and we
         # can be a bit fuzzier
         if name.lower() in RUNNING_APPLICATION_DICT:
-            return RUNNING_APPLICATION_DICT[name]
-        
-        if name.lower() not in RUNNING_APPLICATION_DICT:
+            return RUNNING_APPLICATION_DICT[name.lower()]
+        else:
             if len(name) < 3:
                 raise RuntimeError(
                     f'Skipped getting app: "{name}" has less than 3 chars.'
@@ -577,11 +594,9 @@ class Actions:
         else:
             # Focus next window on same app
             if app == ui.active_app():
-                print("Attempting to focus next window")
                 actions.app.window_next()
             # Focus new app
             else:
-                print("Focus a new app")
                 actions.user.switcher_focus_app(app)
 
     def switcher_focus_app(app: ui.App):
