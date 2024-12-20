@@ -226,10 +226,16 @@ def create_exploded_forms(spoken_forms: List[str]):
         exploded_form = []
         # ex: "vm" or "usb" explodes into "V M" or "U S B"
 
-        if (
-            " " not in line
-            and line.islower()
-            and len(line) > 1
+        splits = line.split(" ")
+        title_case = True
+
+        for split in splits:
+            title_case = title_case and (split.islower() or split[1:].islower())
+            if not title_case:
+                break
+
+        if (len(splits) == 1
+            and not title_case
             and len(line) <= EXPLODE_MAX_LEN
         ):
             new_spoken_forms.append(line)  # Keep a regular copy (ie: "nas")
