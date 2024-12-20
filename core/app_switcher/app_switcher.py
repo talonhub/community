@@ -223,14 +223,15 @@ def update_running_list():
         RUNNING_APPLICATION_DICT[name.lower()] = cur_app
         exe = os.path.basename(cur_app.exe).lower()
         exe_path = cur_app.exe.lower()
+
         if app.platform == "mac":
             bundle_name = cur_app.bundle.lower()
             RUNNING_APPLICATION_DICT[bundle_name] = cur_app
-            
+
         RUNNING_APPLICATION_DICT[exe_path] = cur_app
         RUNNING_APPLICATION_DICT[exe] = cur_app
+        
         is_windows_app = False
-
         valid_windows = get_valid_windows(cur_app)
 
         if app.platform == "windows":
@@ -262,16 +263,19 @@ def update_running_list():
                 for window in valid_windows:
                     for display_name, spoken_forms in override.spoken_forms.items():
                         if display_name.lower() in window.title.lower():
+                            
                             mapping = f"{cur_app.name}-::*::-{window.title}"
                             for spoken_form in spoken_forms:
                                 running[spoken_form] = mapping
                             break
-                
+
                 # ensure the default spoken forms for the group are added.
-                if override.spoken_forms:
+                if override.group_spoken_forms and len(override.group_spoken_forms) > 0:
                     for spoken_form in override.group_spoken_forms:
                         running[spoken_form] = cur_app.name
-
+                else:
+                    generate_spoken_form_map[override.group_name] = cur_app.name
+                    
             # check for exclusion
             elif isinstance(override, RunningApplicationExclusion):
                 #print(str(override))
@@ -284,6 +288,7 @@ def update_running_list():
                 else:
                     generate_spoken_form_map[override.display_name] = cur_app.name   
 
+    if generate_spoken_form_map and len(generate_spoken_form_map) > 0:
         running.update(actions.user.create_spoken_forms_from_map(
             generate_spoken_form_map,
             words_to_exclude=words_to_exclude,
