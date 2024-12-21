@@ -11,10 +11,11 @@ scroll_dir: Literal[-1, 1] = 1
 scroll_start_ts: float = 0
 hiss_scroll_up = False
 control_mouse_forced = False
+scrolling_speed_factor = 1
 
 mod = Module()
 ctx = Context()
-
+continuous_scrolling_context = Context()
 
 mod.setting(
     "mouse_wheel_down_amount",
@@ -52,6 +53,8 @@ mod.setting(
     default=False,
     desc="When enabled, the 'Scroll Mouse' GUI will not be shown.",
 )
+
+mod.tag("continuous_scrolling", desc="Allows commands for adjusting continuous scrolling behavior")
 
 
 @imgui.open(x=700, y=0)
@@ -119,10 +122,12 @@ class Actions:
 
     def mouse_scroll_stop() -> bool:
         """Stops scrolling"""
-        global scroll_job, gaze_job, continuous_scroll_mode, control_mouse_forced
+        global scroll_job, gaze_job, continuous_scroll_mode, control_mouse_forced, scrolling_speed_factor, continuous_scrolling_context
 
         continuous_scroll_mode = ""
+        scrolling_speed_factor = 1
         return_value = False
+        continuous_scrolling_context.tags = []
 
         if scroll_job:
             cron.cancel(scroll_job)
@@ -141,6 +146,12 @@ class Actions:
         gui_wheel.hide()
 
         return return_value
+
+    def mouse_scroll_set_speed(speed: int):
+        """Sets the continuous scrolling speed for the current scrolling"""
+        global scrolling_speed_factor, scroll_start_ts
+        scroll_start_ts = time.perf_counter()
+        scrolling_speed_factor = speed/10
 
     def hiss_scroll_up():
         """Change mouse hiss scroll direction to up"""
@@ -167,7 +178,7 @@ class UserActions:
 
 
 def mouse_scroll_continuous(new_scroll_dir: Literal[-1, 1]):
-    global scroll_job, scroll_dir, scroll_start_ts, continuous_scroll_mode
+    global scroll_job, scroll_dir, scroll_start_ts, continuous_scroll_mode, continuous_scrolling_context
 
     if eye_zoom_mouse.zoom_mouse.state != eye_zoom_mouse.STATE_IDLE:
         return
@@ -188,13 +199,14 @@ def mouse_scroll_continuous(new_scroll_dir: Literal[-1, 1]):
         continuous_scroll_mode = "scroll down continuous"
         scroll_continuous_helper()
         scroll_job = cron.interval("16ms", scroll_continuous_helper)
+        continuous_scrolling_context.tags = ["user.continuous_scrolling"]
 
         if not settings.get("user.mouse_hide_mouse_gui"):
             gui_wheel.show()
 
 
 def scroll_continuous_helper():
-    scroll_amount = settings.get("user.mouse_continuous_scroll_amount")
+    scroll_amount = settings.get("user.mouse_continuous_scroll_amount")*scrolling_speed_factor
     acceleration_setting = settings.get("user.mouse_continuous_scroll_acceleration")
     acceleration_speed = (
         1 + min((time.perf_counter() - scroll_start_ts) / 0.5, acceleration_setting - 1)
