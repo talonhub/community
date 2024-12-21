@@ -8,3 +8,5 @@ __pycache__
 .DS_Store
 .bak
 system_paths-*.talon-list
+core/vocabulary/vocabulary.talon-list
+core/websites_and_search_engines/website.talon-list
