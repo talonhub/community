@@ -10,3 +10,4 @@ command: cmd
 option: alt
 function: fn
 globe: fn
+king: cmd

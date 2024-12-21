@@ -9,3 +9,4 @@ shift: shift
 super: super
 command: ctrl
 option: alt
+king: ctrl
