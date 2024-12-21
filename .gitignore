@@ -7,3 +7,4 @@ __pycache__
 .vscode/settings.json
 .DS_Store
 .bak
+system_paths-*.talon-list
