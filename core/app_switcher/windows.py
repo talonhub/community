@@ -11,6 +11,12 @@ import os
 if app.platform == "windows":
     from .windows_known_paths import resolve_known_windows_path, PathNotFoundException
     import win32com
+    import ctypes
+    from ctypes import wintypes
+    import win32con
+    from win32com.propsys import propsys, pscon
+    import pywintypes
+    from win32com.shell import shell, shellcon
 
     application_frame_host = "applicationframehost.exe"
     application_frame_host_path = os.path.expandvars(os.path.join("%WINDIR%", "System32", application_frame_host))
@@ -50,14 +56,6 @@ if app.platform == "windows":
         except ValueError:
             return False
         
-    import ctypes
-    import os
-    from ctypes import wintypes
-
-    import pywintypes
-    from win32com.propsys import propsys, pscon
-    from win32com.shell import shell, shellcon
-
     # KNOWNFOLDERID
     # https://msdn.microsoft.com/en-us/library/dd378457
     # win32com defines most of these, except the ones added in Windows 8.
@@ -229,9 +227,7 @@ if app.platform == "windows":
                         print(f"Potential duplicate app {new_app}")
         return application_list
     
-    import ctypes
-    from ctypes import wintypes
-    import win32con
+
     # Define constants
 
     # Load the necessary DLL
@@ -266,6 +262,15 @@ if app.platform == "windows":
             return buffer.value
         finally:
             kernel32.CloseHandle(process_handle)
+
+    def get_application_user_model_for_window(hwnd: int):    
+        try:
+            property_store = propsys.SHGetPropertyStoreForWindow(hwnd, propsys.IID_IPropertyStore)
+            window_app_user_model_id = property_store.GetValue(pscon.PKEY_AppUserModel_ID)
+            return window_app_user_model_id.GetValue()
+        except:
+            return None
+
 else:
     application_frame_host_path = None
     application_frame_host = None
@@ -276,4 +281,7 @@ else:
     
     def get_application_user_model_id(pid):
         # Open the process
+        return None
+    
+    def get_application_user_model_for_window(hwnd: int):
         return None

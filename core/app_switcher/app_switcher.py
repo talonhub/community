@@ -6,7 +6,7 @@ from pathlib import Path
 import csv
 import talon
 from talon import Context, Module, actions, app, imgui, ui, resource
-from .windows import get_installed_windows_apps, application_frame_host_path, application_frame_host, application_frame_host_group, get_application_user_model_id
+from .windows import get_installed_windows_apps, application_frame_host_path, application_frame_host, application_frame_host_group, get_application_user_model_id, get_application_user_model_for_window
 from .windows_applications import is_known_windows_application
 from .mac import get_installed_mac_apps
 from .exclusion import ExclusionType, RunningApplicationExclusion
@@ -202,6 +202,7 @@ def get_valid_windows(app: ui.App):
 
     return valid_windows
 
+
 def update_running_list():
     global RUNNING_APPLICATION_DICT, app_frame_host_cache
     RUNNING_APPLICATION_DICT = {}
@@ -211,22 +212,22 @@ def update_running_list():
 
     generate_spoken_form_map = {}
 
-    if app.platform == "windows":
+    if app.platform == "windows":        
         frame_host_apps = ui.apps(name="Application Frame Host")
         for cur_app in frame_host_apps:
-            for window in cur_app.windows():
-                if window.title and window.title not in ["CicMarshalWnd", "Default IME", "OLEChannelWnd", "MSCTFIME UI", "OleMainThreadWndName"]:
-                    app_frame_host_cache[window.title] = True
-                    spoken_forms = None
+            valid_windows = get_valid_windows(cur_app)
+            for window in valid_windows:
+                window_app_user_model_id = get_application_user_model_for_window(window.id)
+
+                if window_app_user_model_id:
                     mapping = f"{cur_app.name}-::*::-{window.title}"
-                    
-                    if application_frame_host_group in APPLICATION_GROUPS_DICT:
-                        group = APPLICATION_GROUPS_DICT[application_frame_host_group]
-                        if window.title in group.spoken_forms:
-                            spoken_forms = group.spoken_forms[window.title]
-                            for spoken_form in spoken_forms:
-                                running[spoken_form.lower()] = mapping
-                    
+
+                    override = get_override_by_app_user_model_id(window_app_user_model_id, cur_app)
+
+                    app_frame_host_cache[window_app_user_model_id.lower()] = True
+
+                    spoken_forms = override.spoken_forms if override and override.spoken_forms else None
+
                     if not spoken_forms:
                         spoken_forms = actions.user.create_spoken_forms(source=window.title.lower(), words_to_exclude=words_to_exclude,generate_subsequences=False,)
 
@@ -249,7 +250,7 @@ def update_running_list():
         
         is_windows_app = False
         valid_windows = get_valid_windows(cur_app)
-
+                            
         if app.platform == "windows":
             if exe == "applicationframehost.exe":
                 continue
@@ -264,21 +265,31 @@ def update_running_list():
             # this is an ugly heurestic to attempt to always focus the proper application
             if (is_windows_app):
                 app_user_model_id = get_application_user_model_id(cur_app.pid)
+            
+                #skip things we know are hosted by the applicationframehost...
+                if app_user_model_id.lower() in app_frame_host_cache:
+                    continue
             else:
                 # known application groups...
                 if exe == "explorer.exe":
                     running["explorer"] = f"{cur_app.name}"
 
-                    explorer_exclusions = ["file explorer", "snap assist", "program manager", "folder view"]
                     for window in valid_windows:
-                        if not any(exclusion in window.title.lower() for exclusion in explorer_exclusions):
-                            mapping = f"{cur_app.name}-::*::-{window.title}"
-                            control_panel_found = False
-                            if "Control Panel" in window.title:
-                                generate_spoken_form_map[window.title] = mapping
+                        window_app_user_model_id = get_application_user_model_for_window(window.id)
+                        override = None
+                        
+                        if window_app_user_model_id:
+                            override = get_override_by_app_user_model_id(window_app_user_model_id, cur_app)
 
-                                if not control_panel_found:
-                                    running["control panel"] = mapping
+                            spoken_forms = override.spoken_forms if override and override.spoken_forms else None
+                            mapping = f"{cur_app.name}-::*::-{window.title}"
+
+                            if spoken_forms:
+                                for spoken_form in spoken_forms:
+                                    running[spoken_form] = mapping
+                            else:
+                                generate_spoken_form_map[override.display_name if override else window.title] = mapping 
+                        
 
                     continue
                 # 
@@ -626,8 +637,10 @@ class Actions:
 
         if len(splits) == 2:
             window_name = splits[1]
+            print(window_name)
             valid_windows = get_valid_windows(app)
-            for window in valid_windows:
+            for window in app.windows():
+                print(window.title)
                 if window_name.lower() == window.title.lower() or window_name.lower() in window.title.lower():
                     window.focus()
                     break
