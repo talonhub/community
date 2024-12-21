@@ -283,7 +283,6 @@ def update_running_list():
 
                             spoken_forms = override.spoken_forms if override and override.spoken_forms else None
                             mapping = f"{cur_app.name}-::*::-{window.title}"
-
                             if spoken_forms:
                                 for spoken_form in spoken_forms:
                                     running[spoken_form] = mapping
@@ -292,7 +291,6 @@ def update_running_list():
                         
 
                     continue
-                # 
                 elif exe == "mmc.exe":
                     running["microsoft management console"] = cur_app.name
                     mmc_exclusions = ["pane"]
@@ -637,7 +635,7 @@ class Actions:
 
         if len(splits) == 2:
             window_name = splits[1]
-            print(window_name)
+            #print(window_name)
             valid_windows = get_valid_windows(app)
             for window in app.windows():
                 print(window.title)
