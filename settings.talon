@@ -28,7 +28,7 @@ settings():
     user.mouse_continuous_scroll_acceleration = 1
 
     # If `true`, stop continuous scroll/gaze scroll with a pop
-    user.mouse_enable_pop_stops_scroll = true
+    user.mouse_enable_pop_stops_scroll = false
 
     # If `true`, stop mouse drag with a pop
     user.mouse_enable_pop_stops_drag = true
@@ -55,7 +55,7 @@ settings():
     user.mouse_wheel_horizontal_amount = 40
 
     # If `true`, start mouse grid numbering on the bottom left (vs. top left)
-    user.grids_put_one_bottom_left = true
+    user.grids_put_one_bottom_left = false
 
     # Set the default number of command history lines to display
     user.command_history_display = 10

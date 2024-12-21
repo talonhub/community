@@ -14,7 +14,7 @@ empty escaped string:
     user.deprecate_command("2024-11-24", "empty escaped string", "escaped twin")
     user.insert_between("\\'", "\\'")
 
-inside (parens | args):
+inside parens:
     user.deprecate_command("2024-11-24", "inside (parens | args)", "round")
     user.insert_between("(", ")")
 

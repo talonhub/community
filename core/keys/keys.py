@@ -66,7 +66,7 @@ def function_key(m) -> str:
     return m.function_key
 
 
-@mod.capture(rule="( <self.letter> | <self.number_key> | <self.symbol_key> )")
+@mod.capture(rule="( <self.letter> | <self.number_key> | <self.symbol_key> | {user.mouse_control_chicken_uppercase_letter})")
 def any_alphanumeric_key(m) -> str:
     "any alphanumeric key"
     return str(m)
