@@ -66,9 +66,9 @@ class Operators(TypedDict):
     MATH_EQUAL: NotRequired[Operator]
     MATH_NOT_EQUAL: NotRequired[Operator]
     MATH_GREATER_THAN: NotRequired[Operator]
-    MATH_GREATER_THAN_OR_EQUAL_TO: NotRequired[Operator]
+    MATH_GREATER_THAN_OR_EQUAL: NotRequired[Operator]
     MATH_LESS_THAN: NotRequired[Operator]
-    MATH_LESS_THAN_OR_EQUAL_TO: NotRequired[Operator]
+    MATH_LESS_THAN_OR_EQUAL: NotRequired[Operator]
     MATH_AND: NotRequired[Operator]
     MATH_OR: NotRequired[Operator]
     MATH_NOT: NotRequired[Operator]
@@ -177,11 +177,11 @@ def operators_fallback(id: str) -> None:
             actions.user.code_operator_not_equal()
         case "MATH_GREATER_THAN":
             actions.user.code_operator_greater_than()
-        case "MATH_GREATER_THAN_OR_EQUAL_TO":
+        case "MATH_GREATER_THAN_OR_EQUAL":
             actions.user.code_operator_greater_than_or_equal_to()
         case "MATH_LESS_THAN":
             actions.user.code_operator_less_than()
-        case "MATH_LESS_THAN_OR_EQUAL_TO":
+        case "MATH_LESS_THAN_OR_EQUAL":
             actions.user.code_operator_less_than_or_equal_to()
         case "MATH_AND":
             actions.user.code_operator_and()

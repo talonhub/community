@@ -2,6 +2,6 @@ list: user.code_operators_pointer
 tag: user.code_operators_pointer
 -
 
-dereference:   POINTER_INDIRECTION
-address of:    POINTER_ADDRESS_OF
-arrow:         POINTER_STRUCTURE_DEREFERENCE
+dereference: POINTER_INDIRECTION
+address of: POINTER_ADDRESS_OF
+arrow: POINTER_STRUCTURE_DEREFERENCE
