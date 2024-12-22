@@ -1,4 +1,5 @@
 from typing import Callable, NotRequired, Optional, TypedDict
+
 from talon import Module, actions
 
 mod = Module()
