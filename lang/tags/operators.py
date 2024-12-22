@@ -87,7 +87,7 @@ class Actions:
         """Insert a code operator"""
         operators: Operators = actions.user.code_get_operators()
 
-        # This language has not implement the get operators and we therefore use the fallback
+        # This language has not implement the operators dict and we therefore use the fallback
         if operators is None:
             operators_fallback(id)
             return
