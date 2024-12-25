@@ -27,14 +27,6 @@ mod.list(
     desc="Names for regular expressions for common things to navigate to, for instance a word with or without underscores",
 )
 
-ctx.lists["self.navigation_action"] = {
-    "move": "GO",
-    "extend": "EXTEND",
-    "select": "SELECT",
-    "clear": "DELETE",
-    "cut": "CUT",
-    "copy": "COPY",
-}
 ctx.lists["self.before_or_after"] = {
     "before": "BEFORE",
     "after": "AFTER",
