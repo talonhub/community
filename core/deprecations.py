@@ -161,7 +161,7 @@ class Actions:
         )
         warnings.warn(msg, DeprecationWarning, stacklevel=3)
 
-    def deprecate_action(time_deprecated: str, name: str):
+    def deprecate_action(time_deprecated: str, name: str, replacement: str = ""):
         """
         Notify the user that the given action is deprecated and should
         not be used into the future.
@@ -170,9 +170,11 @@ class Actions:
         id = f"action.{name}.{time_deprecated}"
 
         deprecate_notify(id, f"The `{name}` action is deprecated. See log for more.")
+        replacement_msg = f' Instead, use: "{replacement}".' if replacement else ""
 
         msg = (
             f"The `{name}` action is deprecated since {time_deprecated}."
+            f"{replacement_msg}"
             f' See {os.path.join(REPO_DIR, "BREAKING_CHANGES.txt")}'
             f"{calculate_rule_info()}"
         )
