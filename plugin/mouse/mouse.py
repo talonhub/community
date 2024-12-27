@@ -42,6 +42,7 @@ class Actions:
             "user.zoom_close",
             "tracking.zoom_cancel",
         )
+        actions.tracking.zoom_cancel()
 
     def mouse_wake():
         """Enable control mouse, zoom mouse, and disables cursor"""
