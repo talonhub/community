@@ -164,7 +164,8 @@ class Actions:
     def deprecate_action(time_deprecated: str, name: str, replacement: str = ""):
         """
         Notify the user that the given action is deprecated and should
-        not be used into the future.
+        not be used into the future; the action `replacement` should be used
+        instead.
         """
 
         id = f"action.{name}.{time_deprecated}"
