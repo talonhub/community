@@ -55,7 +55,10 @@ mod.setting(
     desc="When enabled, the 'Scroll Mouse' GUI will not be shown.",
 )
 
-mod.tag("continuous_scrolling", desc="Allows commands for adjusting continuous scrolling behavior")
+mod.tag(
+    "continuous_scrolling",
+    desc="Allows commands for adjusting continuous scrolling behavior",
+)
 
 
 @imgui.open(x=700, y=0)
@@ -153,7 +156,9 @@ class Actions:
         global continuous_scrolling_speed_factor, scroll_start_ts
         if scroll_start_ts:
             scroll_start_ts = time.perf_counter()
-        continuous_scrolling_speed_factor = speed/DEFAULT_CONTINUOUS_SCROLLING_SPEED_FACTOR
+        continuous_scrolling_speed_factor = (
+            speed / DEFAULT_CONTINUOUS_SCROLLING_SPEED_FACTOR
+        )
 
     def hiss_scroll_up():
         """Change mouse hiss scroll direction to up"""
@@ -179,7 +184,10 @@ class UserActions:
                 actions.user.mouse_scroll_stop()
 
 
-def mouse_scroll_continuous(new_scroll_dir: Literal[-1, 1], speed_factor: Optional[int] = DEFAULT_CONTINUOUS_SCROLLING_SPEED_FACTOR):
+def mouse_scroll_continuous(
+    new_scroll_dir: Literal[-1, 1],
+    speed_factor: Optional[int] = DEFAULT_CONTINUOUS_SCROLLING_SPEED_FACTOR,
+):
     global scroll_job, scroll_dir, scroll_start_ts, continuous_scroll_mode, ctx
     actions.user.mouse_scroll_set_speed(speed_factor)
 
@@ -209,7 +217,10 @@ def mouse_scroll_continuous(new_scroll_dir: Literal[-1, 1], speed_factor: Option
 
 
 def scroll_continuous_helper():
-    scroll_amount = settings.get("user.mouse_continuous_scroll_amount")*continuous_scrolling_speed_factor
+    scroll_amount = (
+        settings.get("user.mouse_continuous_scroll_amount")
+        * continuous_scrolling_speed_factor
+    )
     acceleration_setting = settings.get("user.mouse_continuous_scroll_acceleration")
     acceleration_speed = (
         1 + min((time.perf_counter() - scroll_start_ts) / 0.5, acceleration_setting - 1)
