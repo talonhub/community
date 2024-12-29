@@ -1,3 +1,4 @@
+import logging
 import os
 import os.path
 import tempfile
@@ -143,7 +144,8 @@ class Actions:
                     send_idea_command(cmd.strip())
                     actions.sleep(0.1)
         except Exception as e:
-            app.notify(e)
+            app.notify(repr(e))
+            logging.warning("send_idea_command error at %s", "idea", exc_info=e)
             raise
 
     def idea_grab(times: int):
