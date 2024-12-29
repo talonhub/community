@@ -4,6 +4,8 @@ from typing import Literal
 from talon import Context, Module, actions, app, cron, ctrl, imgui, settings, ui
 from talon_plugins import eye_zoom_mouse
 
+DEFAULT_CONTINUOUS_SCROLLING_SPEED_FACTOR: int = 10
+
 continuous_scroll_mode = ""
 scroll_job = None
 gaze_job = None
@@ -86,11 +88,11 @@ class Actions:
         x = amount * settings.get("user.mouse_wheel_horizontal_amount")
         actions.mouse_scroll(0, x)
 
-    def mouse_scroll_up_continuous(speed_factor: float = 10):
+    def mouse_scroll_up_continuous(speed_factor: int = DEFAULT_CONTINUOUS_SCROLLING_SPEED_FACTOR):
         """Scrolls up continuously"""
         mouse_scroll_continuous(-1, speed_factor)
 
-    def mouse_scroll_down_continuous(speed_factor: float = 10):
+    def mouse_scroll_down_continuous(speed_factor: int = DEFAULT_CONTINUOUS_SCROLLING_SPEED_FACTOR):
         """Scrolls down continuously"""
         mouse_scroll_continuous(1, speed_factor)
 
@@ -151,7 +153,7 @@ class Actions:
         global continuous_scrolling_speed_factor, scroll_start_ts
         if scroll_start_ts:
             scroll_start_ts = time.perf_counter()
-        continuous_scrolling_speed_factor = speed/10
+        continuous_scrolling_speed_factor = speed/DEFAULT_CONTINUOUS_SCROLLING_SPEED_FACTOR
 
     def hiss_scroll_up():
         """Change mouse hiss scroll direction to up"""
@@ -177,7 +179,7 @@ class UserActions:
                 actions.user.mouse_scroll_stop()
 
 
-def mouse_scroll_continuous(new_scroll_dir: Literal[-1, 1], speed_factor: float = 10):
+def mouse_scroll_continuous(new_scroll_dir: Literal[-1, 1], speed_factor: int = DEFAULT_CONTINUOUS_SCROLLING_SPEED_FACTOR):
     global scroll_job, scroll_dir, scroll_start_ts, continuous_scroll_mode, ctx
     actions.user.mouse_scroll_set_speed(speed_factor)
 
