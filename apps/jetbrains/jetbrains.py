@@ -32,6 +32,7 @@ port_mapping = {
     "google-android-studio": 8652,
     "idea64.exe": 8653,
     "IntelliJ IDEA": 8653,
+    "IntelliJ IDEA Community Edition": 8654,
     "jetbrains-appcode": 8655,
     "jetbrains-clion": 8657,
     "jetbrains-datagrip": 8664,
