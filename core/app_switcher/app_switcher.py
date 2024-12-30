@@ -311,10 +311,8 @@ def update_running_list():
                         window_override = None
                         window = window_list[-1]
 
-                        #print(f"{cur_app.name} {window_app_user_model_id}")
                         window_override = get_override_by_app_user_model_id(window_app_user_model_id, cur_app)
 
-                            
                         spoken_forms = window_override.spoken_forms if window_override and window_override.spoken_forms else None
                         mapping = f"{cur_app.name}-::*::-{window.title}"
 
@@ -813,7 +811,7 @@ def update_launch_list():
     ctx.lists["self.launch"] = result
 
 def ui_event(event, arg):
-    if event in ("app_launch", "app_close"):
+    if event in ("app_launch", "app_close", "app_activate", "app_deactivate"):
         update_running_list()
 
 def on_ready():
