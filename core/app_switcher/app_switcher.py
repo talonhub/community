@@ -286,10 +286,6 @@ def update_running_list():
                 #print(f"{app_user_model_id}; windows = {len(valid_windows)}, should appear in ApplicationFrameHost if it's real...")
                 continue
 
-            #run dll is one of those super fun host applications
-
-
-            # this is an ugly heurestic to attempt to always focus the proper application
             if (is_windows_app):
                 app_user_model_id = get_application_user_model_id(cur_app.pid)
             
@@ -329,13 +325,15 @@ def update_running_list():
         else:
             override = get_override_for_running_app(cur_app)
             
-        if not override:        
-            if exe == "rundll32.exe":
+        if not override:     
+            #rundll32 exe & mmc.exe are host application   
+            if exe in ["rundll32.exe", "mmc.exe"]:
                 for user_model_id, window_list in valid_windows.items():
                     for window in window_list: 
                         mapping = f"{cur_app.name}-::*::-{window.title}"
                         generate_spoken_form_map[window.title] = mapping
-            else:
+            
+            if exe != "rundll32.exe":
                 generate_spoken_form_map[cur_app.name.lower()] = cur_app.name
 
         elif override:
