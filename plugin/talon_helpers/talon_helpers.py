@@ -9,6 +9,8 @@ from talon import Module, actions, app, clip, registry, scope, speech_system, ui
 from talon.grammar import Phrase
 from talon.scripting.types import ListTypeFull
 
+from ...core.app_switcher.windows import get_application_user_model_id, get_application_user_model_for_window
+
 pp = pprint.PrettyPrinter()
 
 
@@ -146,7 +148,17 @@ class Actions:
         bundle = actions.app.bundle()
         title = actions.win.title()
         hostname = scope.get("hostname")
-        result = f"Name: {name}\nExecutable: {executable}\nBundle: {bundle}\nTitle: {title}\nhostname: {hostname}"
+
+        try:
+            app_user_model_id = get_application_user_model_id(ui.active_app().pid)
+        except:
+            app_user_model_id = "None"
+
+        if app.platform == "windows":
+            result = f"Name: {name}\nExecutable: {executable}\nAppUserModelId: {app_user_model_id}\nWindow AppUserModelId: {get_application_user_model_for_window(ui.active_window().id)}\nTitle: {title}\nhostname: {hostname}"
+        else:
+            result = f"Name: {name}\nExecutable: {executable}\nBundle: {bundle}\nTitle: {title}\nhostname: {hostname}"
+
         return result
 
     def talon_get_hostname() -> str:
@@ -163,6 +175,10 @@ class Actions:
         result += "\nExecutable: " + actions.app.executable()
         result += "\nBundle: " + actions.app.bundle()
         result += "\nTitle: " + actions.win.title()
+
+        if app.platform == "windows":
+            result +="\nAppUserModelId: " + get_application_user_model_id(ui.active_app().pid)
+
         return result
 
     def talon_version_info() -> str:
