@@ -4,7 +4,7 @@ settings():
     speech.timeout = .400
     user.listening_timeout_minutes = 3
     # Adjust the scale of the imgui to my liking
-    imgui.scale = 1.6
+    imgui.scale = 2.5
     user.snippets_dir = "snippets"
     # Enable if you'd like the picker gui to automatically appear when explorer has focus
 
