@@ -272,7 +272,8 @@ def update_running_list():
             else:
                 # known application groups...
                 if exe == "explorer.exe":
-                    running["explorer"] = f"{cur_app.name}"
+                    if len(valid_windows) > 0:
+                        running["explorer"] = f"{cur_app.name}"
 
                     for window in valid_windows:
                         window_app_user_model_id = get_application_user_model_for_window(window.id)
@@ -296,12 +297,40 @@ def update_running_list():
                     mmc_exclusions = ["pane"]
 
                     for window in valid_windows:
+
+                        window_app_user_model_id = get_application_user_model_for_window(window.id)
+                        print(f"{exe_path} {window_app_user_model_id}")
+
+                        override = None
+
+                        if window_app_user_model_id:
+
+                            override = get_override_by_app_user_model_id(window_app_user_model_id, cur_app)
+
                         if not any(exclusion in window.title.lower() for exclusion in mmc_exclusions):
                             mapping = f"{cur_app.name}-::*::-{window.title}"
                             generate_spoken_form_map[window.title] = mapping 
+                    continue 
+                elif exe == "msedge.exe":
+                    running["edge"] = cur_app.name
 
-                    continue                  
+                    for window in valid_windows:
+                        window_app_user_model_id = get_application_user_model_for_window(window.id)
 
+                        override = None
+
+                        if window_app_user_model_id:
+
+                            override = get_override_by_app_user_model_id(window_app_user_model_id, cur_app)
+
+                            spoken_forms = override.spoken_forms if override and override.spoken_forms else None
+                            mapping = f"{cur_app.name}-::*::-{window.title}"
+                            if spoken_forms:
+                                for spoken_form in spoken_forms:
+                                    running[spoken_form] = mapping
+                            else:
+                                mapping = f"{cur_app.name}-::*::-{window.title}"
+                                generate_spoken_form_map[override.display_name] = mapping 
 
         if is_windows_app:
             override = get_override_by_app_user_model_id(app_user_model_id, cur_app)
@@ -638,7 +667,6 @@ class Actions:
             #print(window_name)
             valid_windows = get_valid_windows(app)
             for window in app.windows():
-                print(window.title)
                 if window_name.lower() == window.title.lower() or window_name.lower() in window.title.lower():
                     window.focus()
                     break
