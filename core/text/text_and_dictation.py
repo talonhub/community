@@ -32,14 +32,6 @@ ctx_dragon.matches = r"""
 speech.engine: dragon
 """
 
-# Maps spoken forms to DictationFormat method names (see DictationFormat below).
-ctx.lists["user.prose_modifiers"] = {
-    "cap": "cap",
-    "no cap": "no_cap",
-    "no caps": "no_cap",  # "no caps" variant for Dragon
-    "no space": "no_space",
-}
-
 ctx.lists["user.hours_twelve"] = get_spoken_form_under_one_hundred(
     1,
     12,
