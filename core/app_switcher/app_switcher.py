@@ -194,11 +194,33 @@ def is_window_valid(window: ui.Window) -> bool:
         and window.rect.height > window.screen.dpi
     )
 
+
 def get_valid_windows(app: ui.App):
     valid_windows = []
     for window in app.windows():
         if is_window_valid(window):
             valid_windows.append(window)
+
+    return valid_windows
+
+def get_valid_windows_by_app_user_model_id(app: ui.App) -> dict[str, list]:
+    exe_path = app.exe.lower()
+
+    is_windows_app = "windowsapps" in exe_path or "systemapps" in exe_path
+    app_user_model_id = str(get_application_user_model_id(app.pid)) if is_windows_app else "None"
+
+    valid_windows = {}
+    
+    for window in app.windows():
+        if is_window_valid(window):
+            window_app_user_model_id = get_application_user_model_for_window(window.id)
+            
+            key = window_app_user_model_id if window_app_user_model_id else app_user_model_id      
+           
+            if key not in valid_windows:
+                valid_windows[key] = [window]
+            else:
+                valid_windows[key].append(window)
 
     return valid_windows
 
@@ -213,54 +235,64 @@ def update_running_list():
     generate_spoken_form_map = {}
 
     if app.platform == "windows":        
-        frame_host_apps = ui.apps(name="Application Frame Host")
+        frame_host_apps = ui.apps(name="Application Frame Host", background=False)
         for cur_app in frame_host_apps:
-            valid_windows = get_valid_windows(cur_app)
-            for window in valid_windows:
-                window_app_user_model_id = get_application_user_model_for_window(window.id)
+            valid_windows = get_valid_windows_by_app_user_model_id(cur_app)
+            for window_app_user_model_id, window_list in valid_windows.items():
 
-                if window_app_user_model_id:
-                    mapping = f"{cur_app.name}-::*::-{window.title}"
+                if window_app_user_model_id != "None":
+                    mapping = f"{cur_app.name}-::*::-{window_list[-1].title}"
 
                     override = get_override_by_app_user_model_id(window_app_user_model_id, cur_app)
-
-                    app_frame_host_cache[window_app_user_model_id.lower()] = True
-
                     spoken_forms = override.spoken_forms if override and override.spoken_forms else None
 
                     if not spoken_forms:
-                        spoken_forms = actions.user.create_spoken_forms(source=window.title.lower(), words_to_exclude=words_to_exclude,generate_subsequences=False,)
+                        spoken_forms = actions.user.create_spoken_forms(source=window_list[-1].title.lower(), words_to_exclude=words_to_exclude,generate_subsequences=False,)
 
                     for spoken_form in spoken_forms:
                         running[spoken_form] = mapping
 
+                    app_frame_host_cache[window_app_user_model_id.lower()] = True
+
+
+
     for cur_app in foreground_apps:
         #print(f"{cur_app.name} {cur_app.exe}")
         name = cur_app.name.lower()
-        RUNNING_APPLICATION_DICT[name.lower()] = cur_app
         exe = os.path.basename(cur_app.exe).lower()
         exe_path = cur_app.exe.lower()
+        override = None
 
         if app.platform == "mac":
             bundle_name = cur_app.bundle.lower()
             RUNNING_APPLICATION_DICT[bundle_name] = cur_app
 
-        RUNNING_APPLICATION_DICT[exe_path] = cur_app
-        RUNNING_APPLICATION_DICT[exe] = cur_app
-        
-        is_windows_app = False
-        valid_windows = get_valid_windows(cur_app)
-                            
+        if exe_path not in RUNNING_APPLICATION_DICT:
+            RUNNING_APPLICATION_DICT[exe_path] = [cur_app]
+            RUNNING_APPLICATION_DICT[exe] = [cur_app]
+            RUNNING_APPLICATION_DICT[name.lower()] = [cur_app]
+
+        else:
+            RUNNING_APPLICATION_DICT[exe_path].append(cur_app)
+            RUNNING_APPLICATION_DICT[exe].append(cur_app)
+            RUNNING_APPLICATION_DICT[name.lower()].append(cur_app)
+
+
         if app.platform == "windows":
             if exe == "applicationframehost.exe":
                 continue
-        
+            
             is_windows_app = "windowsapps" in exe_path or "systemapps" in exe_path
+
+            valid_windows = get_valid_windows_by_app_user_model_id(cur_app)
 
             # if there are no valid windows for the app, let's ignore it.
             if len(valid_windows) <= 0:
                 #print(f"{app_user_model_id}; windows = {len(valid_windows)}, should appear in ApplicationFrameHost if it's real...")
                 continue
+
+            #run dll is one of those super fun host applications
+
 
             # this is an ugly heurestic to attempt to always focus the proper application
             if (is_windows_app):
@@ -269,88 +301,61 @@ def update_running_list():
                 #skip things we know are hosted by the applicationframehost...
                 if app_user_model_id.lower() in app_frame_host_cache:
                     continue
+                else:
+                    override = get_override_by_app_user_model_id(app_user_model_id, cur_app)
             else:
-                # known application groups...
-                if exe == "explorer.exe":
-                    if len(valid_windows) > 0:
-                        running["explorer"] = f"{cur_app.name}"
 
-                    for window in valid_windows:
-                        window_app_user_model_id = get_application_user_model_for_window(window.id)
-                        override = None
-                        
-                        if window_app_user_model_id:
-                            override = get_override_by_app_user_model_id(window_app_user_model_id, cur_app)
+                #print(f"{cur_app.name} {cur_app.exe} {valid_windows}")                       
+                for window_app_user_model_id, window_list in valid_windows.items():
+                    if window_app_user_model_id != "None":
+                        window_override = None
+                        window = window_list[-1]
 
-                            spoken_forms = override.spoken_forms if override and override.spoken_forms else None
-                            mapping = f"{cur_app.name}-::*::-{window.title}"
-                            if spoken_forms:
-                                for spoken_form in spoken_forms:
+                        #print(f"{cur_app.name} {window_app_user_model_id}")
+                        window_override = get_override_by_app_user_model_id(window_app_user_model_id, cur_app)
+
+                            
+                        spoken_forms = window_override.spoken_forms if window_override and window_override.spoken_forms else None
+                        mapping = f"{cur_app.name}-::*::-{window.title}"
+
+                        if spoken_forms:
+                            for spoken_form in spoken_forms:
+                                if spoken_form not in running:
                                     running[spoken_form] = mapping
-                            else:
-                                generate_spoken_form_map[override.display_name if override else window.title] = mapping 
-                        
-
-                    continue
-                elif exe == "mmc.exe":
-                    running["microsoft management console"] = cur_app.name
-                    mmc_exclusions = ["pane"]
-
-                    for window in valid_windows:
-
-                        window_app_user_model_id = get_application_user_model_for_window(window.id)
-                        print(f"{exe_path} {window_app_user_model_id}")
-
-                        override = None
-
-                        if window_app_user_model_id:
-
-                            override = get_override_by_app_user_model_id(window_app_user_model_id, cur_app)
-
-                        if not any(exclusion in window.title.lower() for exclusion in mmc_exclusions):
-                            mapping = f"{cur_app.name}-::*::-{window.title}"
-                            generate_spoken_form_map[window.title] = mapping 
-                    continue 
-                elif exe == "msedge.exe":
-                    running["edge"] = cur_app.name
-
-                    for window in valid_windows:
-                        window_app_user_model_id = get_application_user_model_for_window(window.id)
-
-                        override = None
-
-                        if window_app_user_model_id:
-
-                            override = get_override_by_app_user_model_id(window_app_user_model_id, cur_app)
-
-                            spoken_forms = override.spoken_forms if override and override.spoken_forms else None
-                            mapping = f"{cur_app.name}-::*::-{window.title}"
-                            if spoken_forms:
-                                for spoken_form in spoken_forms:
-                                    running[spoken_form] = mapping
-                            else:
-                                mapping = f"{cur_app.name}-::*::-{window.title}"
-                                generate_spoken_form_map[override.display_name] = mapping 
-
-        if is_windows_app:
-            override = get_override_by_app_user_model_id(app_user_model_id, cur_app)
+                        else:
+                            generate_spoken_form_map[window.title if not window_override else window_override.display_name] = mapping 
+                    
+                    elif not override:
+                        override = get_override_for_running_app(cur_app)
         else:
             override = get_override_for_running_app(cur_app)
+            
+        if not override:        
+            if exe == "rundll32.exe":
+                for user_model_id, window_list in valid_windows.items():
+                    for window in window_list: 
+                        mapping = f"{cur_app.name}-::*::-{window.title}"
+                        generate_spoken_form_map[window.title] = mapping
+            else:
+                generate_spoken_form_map[cur_app.name.lower()] = cur_app.name
 
-        if not override:          
-            generate_spoken_form_map[cur_app.name.lower()] = cur_app.name   
         elif override:
             if isinstance(override,ApplicationGroup):
                 running[override.group_name] = cur_app.name
                 # cycle thru windows and check for subprograms.
-                for window in valid_windows:
+                for user_model_id, window_list in valid_windows.items():
+                    if user_model_id != "None":
+                        continue
+
                     for display_name, spoken_forms in override.spoken_forms.items():
-                        if display_name.lower() in window.title.lower():
-                            
-                            mapping = f"{cur_app.name}-::*::-{window.title}"
-                            for spoken_form in spoken_forms:
-                                running[spoken_form] = mapping
-                            break
+                        for window in window_list: 
+                            if display_name.lower() in window.title.lower():
+                                
+                                mapping = f"{cur_app.name}-::*::-{window.title}"
+
+                                for spoken_form in spoken_forms:
+                                    running[spoken_form] = mapping
+                                break
 
                 # ensure the default spoken forms for the group are added.
                 if override.group_spoken_forms and len(override.group_spoken_forms) > 0:
@@ -660,30 +665,43 @@ class Actions:
         """Focus a new application by name"""
         splits = name.split("-::*::-")
         app_name = splits[0].lower()
-        app = actions.user.get_running_app(app_name)
+        apps = actions.user.get_running_app(app_name)
 
         if len(splits) == 2:
             window_name = splits[1]
             #print(window_name)
-            valid_windows = get_valid_windows(app)
-            for window in app.windows():
-                if window_name.lower() == window.title.lower() or window_name.lower() in window.title.lower():
-                    window.focus()
-                    break
+            for app in apps:
+                valid_windows = get_valid_windows(app)
+                for window in app.windows():
+                    if window_name.lower() == window.title.lower() or window_name.lower() in window.title.lower():
+                        window.focus()
+                        break
         else:
             # Focus next window on same app
-            valid_windows = get_valid_windows(app)
-            if len(valid_windows) > 1:
-                pending_app = app
-                valid_windows_for_pending_app = valid_windows
-                gui_switcher_chooser.show()
-                ctx.tags = ["user.app_switcher_selector_showing"]
+            show_switcher = False
+            if not any(app for app in apps if app == ui.active_app()):
+                actions.user.switcher_focus_app(apps[0])
             else:
-                if app == ui.active_app():
-                    actions.app.window_next()
-                # Focus new app
-                else:
-                    actions.user.switcher_focus_app(app)
+                for app in apps:
+                    valid_windows = get_valid_windows(app)
+                    if not valid_windows_for_pending_app:
+                        valid_windows_for_pending_app = valid_windows
+                    else:
+                        valid_windows_for_pending_app.extend(valid_windows)
+                        
+                unique_windows = {}
+                result = []
+                for window in valid_windows_for_pending_app:
+                    if window.id not in unique_windows:
+                        unique_windows[window.id] = True
+                        result.append(window)
+                    
+                valid_windows_for_pending_app = result    
+
+                if len(valid_windows_for_pending_app) > 1:
+                    gui_switcher_chooser.show()
+                    ctx.tags = ["user.app_switcher_selector_showing"]                    
+        
 
     def switcher_focus_app(app: ui.App):
         """Focus application and wait until switch is made"""
