@@ -42,11 +42,11 @@ class ApplicationGroup:
     group_name: str
     path: str
     executable_name: str
-    unique_id: str
+    unique_identifier: str
     group_spoken_forms: list[str]
 
     #window title to spoken form
     spoken_forms: dict[str, str] = {}
 
     def __str__(self) -> str:
-        return f"{self.group_name}\n\t{self.group_spoken_forms}\n\t{self.path}\n\t{self.unique_id},\n\t{self.path},\n\t{self.executable_name},\n\t{self.spoken_forms}"
+        return f"{self.group_name}\n\t{self.group_spoken_forms}\n\t{self.path}\n\t{self.unique_identifier},\n\t{self.path},\n\t{self.executable_name},\n\t{self.spoken_forms}"

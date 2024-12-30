@@ -204,18 +204,13 @@ def get_valid_windows(app: ui.App):
     return valid_windows
 
 def get_valid_windows_by_app_user_model_id(app: ui.App) -> dict[str, list]:
-    exe_path = app.exe.lower()
-
-    is_windows_app = "windowsapps" in exe_path or "systemapps" in exe_path
-    app_user_model_id = str(get_application_user_model_id(app.pid)) if is_windows_app else "None"
-
     valid_windows = {}
     
     for window in app.windows():
         if is_window_valid(window):
             window_app_user_model_id = get_application_user_model_for_window(window.id)
             
-            key = window_app_user_model_id if window_app_user_model_id else app_user_model_id      
+            key = window_app_user_model_id if window_app_user_model_id else "None"      
            
             if key not in valid_windows:
                 valid_windows[key] = [window]
@@ -304,27 +299,33 @@ def update_running_list():
                 else:
                     override = get_override_by_app_user_model_id(app_user_model_id, cur_app)
             else:
+                override = get_override_for_running_app(cur_app)
+                uuid = None
+                if isinstance(override, Application) or isinstance(override, ApplicationGroup):
+                    uuid = override.unique_identifier
 
-                #print(f"{cur_app.name} {cur_app.exe} {valid_windows}")                       
-                for window_app_user_model_id, window_list in valid_windows.items():
-                    if window_app_user_model_id != "None":
-                        window_override = None
-                        window = window_list[-1]
+                # in many cases, apps will only have one active id, so skip the window-specific logic in that case.     
+                if len(valid_windows) > 1:        
+                    #print(f"{cur_app.name} has more than one AppUserModelId") 
+                    for window_app_user_model_id, window_list in valid_windows.items():
 
-                        window_override = get_override_by_app_user_model_id(window_app_user_model_id, cur_app)
+                        # most applications won't set this
+                        if (window_app_user_model_id != "None" 
+                            and uuid != window_app_user_model_id):
+                            window_override = None
+                            window = window_list[-1]
 
-                        spoken_forms = window_override.spoken_forms if window_override and window_override.spoken_forms else None
-                        mapping = f"{cur_app.name}-::*::-{window.title}"
+                            window_override = get_override_by_app_user_model_id(window_app_user_model_id, cur_app)
 
-                        if spoken_forms:
-                            for spoken_form in spoken_forms:
-                                if spoken_form not in running:
-                                    running[spoken_form] = mapping
-                        else:
-                            generate_spoken_form_map[window.title if not window_override else window_override.display_name] = mapping 
-                    
-                    elif not override:
-                        override = get_override_for_running_app(cur_app)
+                            spoken_forms = window_override.spoken_forms if window_override and window_override.spoken_forms else None
+                            mapping = f"{cur_app.name}-::*::-{window.title}"
+
+                            if spoken_forms:
+                                for spoken_form in spoken_forms:
+                                    if spoken_form not in running:
+                                        running[spoken_form] = mapping
+                            else:
+                                generate_spoken_form_map[window.title if not window_override else window_override.display_name] = mapping                 
         else:
             override = get_override_for_running_app(cur_app)
             
@@ -481,7 +482,7 @@ def update_launch_applications(f):
         modern_windows_app_group.group_spoken_forms = None
         modern_windows_app_group.group_name = application_frame_host_group
         modern_windows_app_group.path = application_frame_host_path
-        modern_windows_app_group.unique_id = None
+        modern_windows_app_group.unique_identifier = None
         APPLICATION_GROUPS_DICT[application_frame_host] = modern_windows_app_group
         APPLICATION_GROUPS_DICT[application_frame_host_path] = modern_windows_app_group
         APPLICATION_GROUPS_DICT[application_frame_host_group] = modern_windows_app_group
@@ -553,7 +554,7 @@ def update_launch_applications(f):
                 group.group_name=group_name
                 group.path=path,
                 group.executable_name=executable_name,
-                group.unique_id=uid
+                group.unique_identifier=uid
                 group.group_spoken_forms = spoken_forms if spoken_forms else display_name
 
                 APPLICATION_GROUPS_DICT[executable_name.lower()] = group
@@ -667,9 +668,8 @@ class Actions:
 
         if len(splits) == 2:
             window_name = splits[1]
-            #print(window_name)
+            print(window_name)
             for app in apps:
-                valid_windows = get_valid_windows(app)
                 for window in app.windows():
                     if window_name.lower() == window.title.lower() or window_name.lower() in window.title.lower():
                         window.focus()
@@ -678,27 +678,31 @@ class Actions:
             # Focus next window on same app
             show_switcher = False
             if not any(app for app in apps if app == ui.active_app()):
+                print("focusing new app....")
                 actions.user.switcher_focus_app(apps[0])
             else:
-                for app in apps:
-                    valid_windows = get_valid_windows(app)
-                    if not valid_windows_for_pending_app:
-                        valid_windows_for_pending_app = valid_windows
-                    else:
-                        valid_windows_for_pending_app.extend(valid_windows)
-                        
-                unique_windows = {}
-                result = []
-                for window in valid_windows_for_pending_app:
-                    if window.id not in unique_windows:
-                        unique_windows[window.id] = True
-                        result.append(window)
-                    
-                valid_windows_for_pending_app = result    
+                print("focusing next window....")
+                actions.app.window_next()
 
-                if len(valid_windows_for_pending_app) > 1:
-                    gui_switcher_chooser.show()
-                    ctx.tags = ["user.app_switcher_selector_showing"]                    
+                # for app in apps:
+                #     valid_windows = get_valid_windows(app)
+                #     if not valid_windows_for_pending_app:
+                #         valid_windows_for_pending_app = valid_windows
+                #     else:
+                #         valid_windows_for_pending_app.extend(valid_windows)
+                        
+                # unique_windows = {}
+                # result = []
+                # for window in valid_windows_for_pending_app:
+                #     if window.id not in unique_windows:
+                #         unique_windows[window.id] = True
+                #         result.append(window)
+                    
+                # valid_windows_for_pending_app = result    
+
+                # if len(valid_windows_for_pending_app) > 1:
+                #     gui_switcher_chooser.show()
+                #     ctx.tags = ["user.app_switcher_selector_showing"]                    
         
 
     def switcher_focus_app(app: ui.App):
