@@ -653,13 +653,12 @@ class Actions:
         raise RuntimeError(f'App not running: "{name}"')
 
     def switcher_focus(name: str):
-        """"""
+        """Focus a new application by name"""
         global pending_app 
         global valid_windows_for_pending_app
         pending_app = None
         valid_windows_for_pending_app = None
 
-        """Focus a new application by name"""
         splits = name.split("-::*::-")
         app_name = splits[0].lower()
         apps = actions.user.get_running_app(app_name)
@@ -673,36 +672,19 @@ class Actions:
                         window.focus()
                         break
         else:
-            # Focus next window on same app
-            show_switcher = False
-            if not any(app for app in apps if app == ui.active_app()):
-                print("focusing new app....")
-                actions.user.switcher_focus_app(apps[0])
+            for app in apps:
+                valid_windows = get_valid_windows(app)
+                if not valid_windows_for_pending_app:
+                    valid_windows_for_pending_app = valid_windows
+                else:
+                    valid_windows_for_pending_app.extend(valid_windows) 
+
+            if len(valid_windows_for_pending_app) > 1:
+                gui_switcher_chooser.show()
+                ctx.tags = ["user.app_switcher_selector_showing"] 
             else:
-                print("focusing next window....")
-                actions.app.window_next()
-
-                # for app in apps:
-                #     valid_windows = get_valid_windows(app)
-                #     if not valid_windows_for_pending_app:
-                #         valid_windows_for_pending_app = valid_windows
-                #     else:
-                #         valid_windows_for_pending_app.extend(valid_windows)
-                        
-                # unique_windows = {}
-                # result = []
-                # for window in valid_windows_for_pending_app:
-                #     if window.id not in unique_windows:
-                #         unique_windows[window.id] = True
-                #         result.append(window)
-                    
-                # valid_windows_for_pending_app = result    
-
-                # if len(valid_windows_for_pending_app) > 1:
-                #     gui_switcher_chooser.show()
-                #     ctx.tags = ["user.app_switcher_selector_showing"]                    
+                actions.user.switcher_focus_window(valid_windows_for_pending_app[-1])                
         
-
     def switcher_focus_app(app: ui.App):
         """Focus application and wait until switch is made"""
         app.focus()
