@@ -13,7 +13,7 @@ scroll_dir: Literal[-1, 1] = 1
 scroll_start_ts: float = 0
 hiss_scroll_up = False
 control_mouse_forced = False
-continuous_scrolling_speed_factor = 1
+continuous_scrolling_speed_factor: int = 1
 
 mod = Module()
 ctx = Context()
@@ -91,11 +91,11 @@ class Actions:
         x = amount * settings.get("user.mouse_wheel_horizontal_amount")
         actions.mouse_scroll(0, x)
 
-    def mouse_scroll_up_continuous(speed_factor: Optional[int]):
+    def mouse_scroll_up_continuous(speed_factor: Optional[int] = None):
         """Scrolls up continuously"""
         mouse_scroll_continuous(-1, speed_factor)
 
-    def mouse_scroll_down_continuous(speed_factor: Optional[int]):
+    def mouse_scroll_down_continuous(speed_factor: Optional[int] = None):
         """Scrolls down continuously"""
         mouse_scroll_continuous(1, speed_factor)
 
@@ -151,14 +151,15 @@ class Actions:
 
         return return_value
 
-    def mouse_scroll_set_speed(speed: int):
+    def mouse_scroll_set_speed(speed: Optional[int]):
         """Sets the continuous scrolling speed for the current scrolling"""
         global continuous_scrolling_speed_factor, scroll_start_ts
         if scroll_start_ts:
             scroll_start_ts = time.perf_counter()
-        continuous_scrolling_speed_factor = (
-            speed / DEFAULT_CONTINUOUS_SCROLLING_SPEED_FACTOR
-        )
+        if speed is None:
+            continuous_scrolling_speed_factor = 1
+        else:
+            continuous_scrolling_speed_factor = speed / DEFAULT_CONTINUOUS_SCROLLING_SPEED_FACTOR
 
     def hiss_scroll_up():
         """Change mouse hiss scroll direction to up"""
@@ -186,7 +187,7 @@ class UserActions:
 
 def mouse_scroll_continuous(
     new_scroll_dir: Literal[-1, 1],
-    speed_factor: Optional[int] = DEFAULT_CONTINUOUS_SCROLLING_SPEED_FACTOR,
+    speed_factor: Optional[int] = None,
 ):
     global scroll_job, scroll_dir, scroll_start_ts, continuous_scroll_mode, ctx
     actions.user.mouse_scroll_set_speed(speed_factor)
