@@ -229,7 +229,6 @@ class Actions:
                     control_mouse_forced = True
                     actions.user.mouse_toggle_control_mouse()
 
-
     def mouse_drag_end():
         """Releases any held mouse buttons"""
         
