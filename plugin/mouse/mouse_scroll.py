@@ -159,7 +159,9 @@ class Actions:
         if speed is None:
             continuous_scrolling_speed_factor = 1
         else:
-            continuous_scrolling_speed_factor = speed / DEFAULT_CONTINUOUS_SCROLLING_SPEED_FACTOR
+            continuous_scrolling_speed_factor = (
+                speed / DEFAULT_CONTINUOUS_SCROLLING_SPEED_FACTOR
+            )
 
     def hiss_scroll_up():
         """Change mouse hiss scroll direction to up"""
