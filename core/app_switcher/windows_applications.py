@@ -7,7 +7,6 @@ class WindowsApplication:
     display_name: str
     unique_identifier: str
     executable_name: str
-    uses_application_frame_host: bool = True
 
 windows_applications = [
     WindowsApplication(display_name="3D Viewer", 
@@ -46,12 +45,10 @@ windows_applications = [
                        executable_name="GetHelp.exe"), 
     WindowsApplication(display_name="iTunes", 
                        unique_identifier="AppleInc.iTunes_nzyj5cx40ttqa!iTunes", 
-                       executable_name="iTunes.exe",
-                       uses_application_frame_host=False), 
+                       executable_name="iTunes.exe"), 
     WindowsApplication(display_name="Mail", 
                        unique_identifier="microsoft.windowscommunicationsapps_8wekyb3d8bbwe!microsoft.windowslive.mail", 
-                       executable_name="olk.exe",
-                       uses_application_frame_host=False), 
+                       executable_name="olk.exe"), 
     WindowsApplication(display_name="Maps", 
                        unique_identifier="Microsoft.WindowsMaps_8wekyb3d8bbwe!App", 
                        executable_name=None), 
@@ -108,8 +105,7 @@ windows_applications = [
                        executable_name=""), 
     WindowsApplication(display_name="Terminal", 
                        unique_identifier="Microsoft.WindowsTerminal_8wekyb3d8bbwe!App", 
-                       executable_name="WindowsTerminal.exe",
-                       uses_application_frame_host=False), 
+                       executable_name="WindowsTerminal.exe"), 
     WindowsApplication(display_name="Tips", 
                        unique_identifier="Microsoft.Getstarted_8wekyb3d8bbwe!App", 
                        executable_name="WhatsNew.Store.exe"), 
@@ -152,8 +148,4 @@ def app_uses_frame_host(key):
     return False
         
 def is_known_windows_application(uuid):
-    known_app = uuid.lower() in windows_application_dict
-    if known_app:
-        return True, windows_application_dict[uuid.lower()].uses_application_frame_host
-    else:
-        return False, False
+    return uuid.lower() in windows_application_dict
