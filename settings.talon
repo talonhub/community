@@ -1,5 +1,6 @@
 -
 settings():
+    tracking.zoom_live = false
     speech.record_all = 1
     speech.timeout = .400
     user.listening_timeout_minutes = 3

@@ -3,15 +3,15 @@ mod = Module()
 ctx_zoom_mouse_enabled = Context()
 ctx_zoom_mouse_enabled.matches = r"""
 not user.running: Optikey Mouse
-tag: talon_plugins.eye_zoom_mouse.zoom_mouse_enabled
-and not tag: talon_plugins.eye_zoom_mouse.zoom_mouse_activated
+tag: user.zoom_mouse_enabled
+and not tag: user.zoom_mouse_activated
 """
 
 
 ctx_zoom_mouse_triggered = Context()
 ctx_zoom_mouse_triggered.matches = r"""
-tag: talon_plugins.eye_zoom_mouse.zoom_mouse_enabled
-and tag: talon_plugins.eye_zoom_mouse.zoom_mouse_activated
+tag: user.zoom_mouse_enabled
+and tag: user.zoom_mouse_activated
 and not tag: user.control_mouse_enabled
 #and not tag: talon_plugins.eye_zoom_mouse.zoom_mouse_pedal
 """
@@ -63,7 +63,7 @@ class Actions:
 
     def deck_pedal_middle():
         """middle pedal"""
-        actions.talon_plugins.eye_zoom_mouse.mouse_trigger()
+        actions.tracking.zoom()
         actions.deck.goto("A00SA3192M9DW0", "zoom")
 
     def deck_pedal_right():
@@ -73,7 +73,7 @@ class Actions:
 
     def deck1():
         """document string goes here"""
-        actions.talon_plugins.eye_zoom_mouse.mouse_trigger()
+        actions.tracking.zoom()
         actions.deck.goto("A00SA3192M9DW0", "zoom")
 
     def deck2():
@@ -151,66 +151,101 @@ class Actions:
 class WindowsZoomMouseTriggerActions:
     def deck_pedal_left():
         """left pedal"""
-        actions.talon_plugins.eye_zoom_mouse.double_click()
+        actions.tracking.zoom_cancel()
+        actions.mouse_click(0)
         actions.deck.goto("A00SA3192M9DW0", "default")
+        actions.user.zoom_clear_activated()
 
 
     def deck_pedal_middle():
         """middle pedal"""
-        actions.talon_plugins.eye_zoom_mouse.mouse_trigger()
+        actions.tracking.zoom_cancel()
+        actions.mouse_click(0)
         actions.deck.goto("A00SA3192M9DW0", "default")
+        actions.user.zoom_clear_activated()
 
     def deck_pedal_right():
         """right pedal"""
-        actions.talon_plugins.eye_zoom_mouse.right_click()
+        actions.tracking.zoom_cancel()
+        actions.mouse_click(1)
         actions.deck.goto("A00SA3192M9DW0", "default")
+        actions.user.zoom_clear_activated()
 
     def deck1():
         """document string goes here"""
-        actions.talon_plugins.eye_zoom_mouse.mouse_trigger()
+        print("triggered - 1")
+
+        actions.tracking.zoom_cancel()
+        actions.mouse_click(0)
         actions.deck.goto("A00SA3192M9DW0", "default")
+        actions.user.zoom_clear_activated()
 
     def deck2():
         """document string goes here"""
-        actions.talon_plugins.eye_zoom_mouse.right_click()
+        print("triggered - 2")
+        actions.tracking.zoom_cancel()
+        actions.mouse_click(1)
         actions.deck.goto("A00SA3192M9DW0", "default")
+        actions.user.zoom_clear_activated()
+
 
     def deck3():
         """document string goes here"""
-        actions.talon_plugins.eye_zoom_mouse.double_click()
+        actions.tracking.zoom_cancel()
+        actions.mouse_click(0)
+        actions.mouse_click(0)
         actions.deck.goto("A00SA3192M9DW0", "default")
+        actions.user.zoom_clear_activated()
+
 
     def deck4():
         """document string goes here"""
-        actions.talon_plugins.eye_zoom_mouse.triple_click()
+        actions.tracking.zoom_cancel()
+        actions.mouse_click(0)
+        actions.mouse_click(0)
+        actions.mouse_click(0)
         actions.deck.goto("A00SA3192M9DW0", "default")
+        actions.user.zoom_clear_activated()
+
 
     def deck5():
         """document string goes here"""
-        actions.talon_plugins.eye_zoom_mouse.mouse_drag()
+        actions.tracking.zoom_cancel()
+        actions.user.mouse_drag(0)
         actions.deck.goto("A00SA3192M9DW0", "default")
+        actions.user.zoom_clear_activated()
+
 
     def deck6():
         """document string goes here"""
         actions.key("shift:down")
-        actions.talon_plugins.eye_zoom_mouse.mouse_trigger()
+        actions.tracking.zoom_cancel()
+        actions.mouse_click(0)        
         actions.key("shift:up")
         actions.deck.goto("A00SA3192M9DW0", "default")
+        actions.user.zoom_clear_activated()
+
 
     def deck7():
         """document"""
-        actions.talon_plugins.eye_zoom_mouse.mouse_move()
+        actions.tracking.zoom_cancel()
         actions.deck.goto("A00SA3192M9DW0", "default")
+        actions.user.zoom_clear_activated()
+
     
     def deck11():
         """document string goes here"""
         actions.key("ctrl:down")
-        actions.talon_plugins.eye_zoom_mouse.mouse_trigger()
+        actions.tracking.zoom_cancel()
+        actions.mouse_click(0)
         actions.key("ctrl:up")
         actions.deck.goto("A00SA3192M9DW0", "default")
+        actions.user.zoom_clear_activated()
+
     def deck12():
         actions.tracking.zoom_cancel()
         actions.deck.goto("A00SA3192M9DW0", "default")
+        actions.user.zoom_clear_activated()
 
 @ctx_control_mouse_enabled.action_class("user")
 class ControlMouseEnabled:

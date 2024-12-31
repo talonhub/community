@@ -15,7 +15,6 @@ from talon import (
     settings, 
     tap,
 )
-from talon_plugins import eye_zoom_mouse
 
 key = actions.key
 self = actions.self
@@ -64,6 +63,8 @@ hidden_cursor = os.path.join(
 )
 
 mod = Module()
+ctx_global = Context()
+ctx_zoom_triggered = Context()
 ctx_control_mouse_enabled = Context()
 ctx_is_dragging = Context()
 
@@ -75,6 +76,12 @@ mod.tag(
 )
 mod.tag(
     "control_mouse_enabled", desc="tag enabled when control mouse is enabled"
+)
+mod.tag(
+    "zoom_mouse_enabled", desc="tag enabled when zoom mouse is enabled"
+)
+mod.tag(
+    "zoom_mouse_activated", desc="tag enabled when zoom mouse is activated"
 )
 mod.tag(
     "mouse_is_dragging", desc="Tag indicates whether or not the mouse is currently being dragged"
@@ -145,12 +152,35 @@ def gui_wheel(gui: imgui.GUI):
         actions.user.mouse_scroll_stop()
 
 
+@ctx_global.action_class("tracking")
+class TrackingActions:
+    # other tab functions should already be implemented in
+    # code/platforms/mac/app.py
+    def zoom():
+        ctx_zoom_triggered.tags = ["user.zoom_mouse_activated"]
+        actions.next()
+
+    def zoom_cancel():
+        actions.next()
+
+    def control_zoom_toggle(state: bool = None) -> None:    
+        actions.next()
+
+        if state:
+            ctx_control_mouse_enabled.tags = ["user.zoom_mouse_enabled"]
+        else:
+            ctx_control_mouse_enabled.tags = []
+
+
 @mod.action_class
 class Actions:
+    def zoom_clear_activated():
+        """"""
+        ctx_zoom_triggered.tags = []
+
     def zoom_close():
         """Closes an in-progress zoom. Talon will move the cursor position but not click."""
-        if eye_zoom_mouse.zoom_mouse.state == eye_zoom_mouse.STATE_OVERLAY:
-            actions.tracking.zoom_cancel()
+        actions.tracking.zoom_cancel()
 
     def mouse_show_cursor():
         """Shows the cursor"""
@@ -332,11 +362,11 @@ class Actions:
     def mouse_toggle_zoom_mouse():
         """Toggles the zoom mouse"""
         actions.tracking.control_zoom_toggle()
-        ctx_control_mouse_enabled.tags = []
-
+        
         if actions.tracking.control_enabled():                      
             actions.tracking.control_toggle(False)
             actions.tracking.control1_toggle(False)
+
         # if actions.tracking.control_zoom_enabled():
         #     actions.user.clickless_mouse_enable()
 
@@ -346,11 +376,7 @@ class Actions:
         if actions.tracking.control_enabled():            
             if actions.tracking.control_zoom_enabled():
                 actions.tracking.control_zoom_toggle()
-            ctx_control_mouse_enabled.tags = ["user.control_mouse_enabled"]
             actions.user.clickless_mouse_disable()
-
-        else:
-            ctx_control_mouse_enabled.tags = []
 
 
     def hiss_scroll_up():
@@ -416,7 +442,7 @@ def mouse_scroll(amount):
 def scroll_continuous_helper():
     global scroll_amount
     # print("scroll_continuous_helper")
-    if scroll_amount and (eye_zoom_mouse.zoom_mouse.state == eye_zoom_mouse.STATE_IDLE):
+    if scroll_amount:
         actions.mouse_scroll(by_lines=False, y=int(scroll_amount / 10))
 
 
@@ -427,31 +453,28 @@ def start_scroll():
 
 def gaze_scroll():
     # print("gaze_scroll")
-    if (
-        eye_zoom_mouse.zoom_mouse.state == eye_zoom_mouse.STATE_IDLE
-    ):  # or eye_zoom_mouse.zoom_mouse.state == eye_zoom_mouse.STATE_SLEEP:
-        x, y = ctrl.mouse_pos()
+    x, y = ctrl.mouse_pos()
 
-        # the rect for the window containing the mouse
-        rect = None
+    # the rect for the window containing the mouse
+    rect = None
 
-        # on windows, check the active_window first since ui.windows() is not z-ordered
-        if app.platform == "windows" and ui.active_window().rect.contains(x, y):
-            rect = ui.active_window().rect
-        else:
-            windows = ui.windows()
-            for w in windows:
-                if w.rect.contains(x, y):
-                    rect = w.rect
-                    break
+    # on windows, check the active_window first since ui.windows() is not z-ordered
+    if app.platform == "windows" and ui.active_window().rect.contains(x, y):
+        rect = ui.active_window().rect
+    else:
+        windows = ui.windows()
+        for w in windows:
+            if w.rect.contains(x, y):
+                rect = w.rect
+                break
 
-        if rect is None:
-            # print("no window found!")
-            return
+    if rect is None:
+        # print("no window found!")
+        return
 
-        midpoint = rect.y + rect.height / 2
-        amount = int(((y - midpoint) / (rect.height / 10)) ** 3)
-        actions.mouse_scroll(by_lines=False, y=amount)
+    midpoint = rect.y + rect.height / 2
+    amount = int(((y - midpoint) / (rect.height / 10)) ** 3)
+    actions.mouse_scroll(by_lines=False, y=amount)
 
     # print(f"gaze_scroll: {midpoint} {rect.height} {amount}")
 
@@ -502,31 +525,6 @@ def start_cursor_scrolling():
     gaze_job = cron.interval("60ms", gaze_scroll)
 
 
-def custom_zoom_enable(self):
-    # print("custom zoom enable hit")
-    if self.enabled:
-        return
-    eye_zoom_mouse.ctx.tags = ["talon_plugins.eye_zoom_mouse.zoom_mouse_enabled"]
-
-    # intentionally don't register pop, handled in on_pop.
-    # noise.register("pop", self.on_pop)
-    # noise.register("hiss", self.on_hiss)
-
-    tap.register(tap.MCLICK | tap.HOOK, self.on_key)
-
-    # app.register('overlay', self.draw_gaze)
-    self.enabled = True
-
-
-# monkey patch for allowing continuous scrolling to be stopped via a pop
-# and coexist well with the zoom mouse.
-eye_zoom_mouse.ZoomMouse.enable = custom_zoom_enable
-
-if eye_zoom_mouse.zoom_mouse.enabled:
-    noise.unregister("pop", eye_zoom_mouse.zoom_mouse.on_pop)
-    noise.unregister("hiss", eye_zoom_mouse.zoom_mouse.on_hiss)
-
-
 @ctx_control_mouse_enabled.action_class("user")
 class UserActions:
     def noise_trigger_pop():
@@ -565,11 +563,5 @@ class UserActions:
                 else:
                     actions.user.mouse_scroll_down_continuous()
             else:
-                actions.user.mouse_scroll_stop()
-        else:
-            if actions.tracking.control_zoom_enabled():
-                if "talon_plugins.eye_zoom_mouse.zoom_mouse_noise" in registry.tags:
-                    eye_zoom_mouse.zoom_mouse.on_hiss(eye_zoom_mouse.zoom_mouse.state)
-                else:
-                    actions.skip()
+                actions.user.mouse_scroll_stop()            
      
