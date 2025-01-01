@@ -157,9 +157,11 @@ class TrackingActions:
     # other tab functions should already be implemented in
     # code/platforms/mac/app.py
     def zoom():
-        ctx_zoom_triggered.tags = ["user.zoom_mouse_activated"]
         if actions.tracking.control_zoom_enabled():
+            ctx_zoom_triggered.tags = ["user.zoom_mouse_activated"]
             actions.next()
+        else:
+            ctx_zoom_triggered.tags = []
 
     def zoom_cancel():
         if actions.tracking.control_zoom_enabled() or "user.zoom_mouse_activated" in ctx_zoom_triggered.tags:
