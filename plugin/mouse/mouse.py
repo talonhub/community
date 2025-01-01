@@ -158,13 +158,15 @@ class TrackingActions:
     # code/platforms/mac/app.py
     def zoom():
         ctx_zoom_triggered.tags = ["user.zoom_mouse_activated"]
-        actions.next()
+        if actions.tracking.control_zoom_enabled():
+            actions.next()
 
     def zoom_cancel():
-        actions.next()
-
+        if actions.tracking.control_zoom_enabled() or "user.zoom_mouse_activated" in ctx_zoom_triggered.tags:
+            actions.next()
+            
     def control_zoom_toggle(state: bool = None) -> None:    
-        actions.next()
+        actions.next(state)
 
         if state:
             ctx_control_mouse_enabled.tags = ["user.zoom_mouse_enabled"]
