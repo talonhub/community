@@ -1,5 +1,7 @@
 list: user.edit_modifier_repeatable
 -
+#to do:
+# before two down, after 2 wordleft/right don't work as expected
 word: word
 word left: wordLeft
 word right: wordRight

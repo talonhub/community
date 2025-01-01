@@ -19,6 +19,7 @@ compound_actions = {
     ("goBefore", "fileStart"): actions.edit.file_start,
     ("goBefore", "selection"): actions.edit.left,
     ("goBefore", "wordLeft"): actions.edit.word_left,
+    ("goAfter", "wordLeft"): actions.edit.word_left,
     ("goBefore", "word"): actions.edit.word_left,
     # Go after
     ("goAfter", "line"): actions.edit.line_end,
