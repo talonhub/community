@@ -4,6 +4,22 @@ from typing import Union
 from .edit_command_actions import EditAction, run_action_callback
 from .edit_command_modifiers import EditModifier, run_modifier_callback
 
+def before_line_up():
+    actions.edit.up()
+    actions.edit.line_start()
+
+def after_line_up():
+    actions.edit.up()
+    actions.edit.line_end()
+
+def before_line_down():
+    actions.edit.down()
+    actions.edit.line_start()
+
+def after_line_down():
+    actions.edit.down()
+    actions.edit.line_end()
+
 # In some cases there already is a "compound" talon action for a given action and modifier
 compound_actions = {
     # selection
@@ -14,20 +30,24 @@ compound_actions = {
     ("selection", "word"): actions.edit.extend_word_right,
     # Go before
     ("goBefore", "line"): actions.edit.line_start,
+    ("goBefore", "lineUp"): before_line_up,
+    ("goBefore", "lineDown"): before_line_down,
     ("goBefore", "paragraph"): actions.edit.paragraph_start,
     ("goBefore", "document"): actions.edit.file_start,
     ("goBefore", "fileStart"): actions.edit.file_start,
     ("goBefore", "selection"): actions.edit.left,
     ("goBefore", "wordLeft"): actions.edit.word_left,
-    ("goAfter", "wordLeft"): actions.edit.word_left,
     ("goBefore", "word"): actions.edit.word_left,
     # Go after
     ("goAfter", "line"): actions.edit.line_end,
+    ("goAfter", "lineUp"): after_line_up,
+    ("goBefore", "lineDown"): before_line_up,
     ("goAfter", "paragraph"): actions.edit.paragraph_end,
     ("goAfter", "document"): actions.edit.file_end,
     ("goAfter", "fileEnd"): actions.edit.file_end,
     ("goAfter", "selection"): actions.edit.right,
     ("goAfter", "wordRight"): actions.edit.word_right,
+    ("goAfter", "wordLeft"): actions.edit.word_left,
     ("goAfter", "word"): actions.edit.word_right,
     # Delete
     ("delete", "word"): actions.edit.delete_word,
@@ -42,7 +62,6 @@ compound_actions = {
     # copy
     ("copyToClipboard", "selection"): actions.edit.copy,
 }
-
 
 mod = Module()
 @mod.action_class
