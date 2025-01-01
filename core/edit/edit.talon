@@ -3,11 +3,18 @@
 go <user.navigation_step>+: user.perform_navigation_steps(navigation_step_list)
 # Compound of action(select, clear, copy, cut, paste, etc.) and modifier(word, line, etc.) commands for editing text.
 # eg: "select line", "clear all"
-<user.edit_action> <user.edit_modifier> [<number_small>]: 
-    user.edit_command(edit_action, edit_modifier, number_small or 1)
-<user.edit_action> [<number_small>]: 
-    user.edit_command(edit_action, "", number_small or 1)
-    
+<user.edit_action> (<user.edit_modifier>): user.edit_command(edit_action, edit_modifier)
+
+wipe [<number_small>]:
+	numb  = number_small or 1	
+	edit.delete_left()
+	repeat(numb - 1)
+
+drill [<number_small>]:
+	numb  = number_small or 1	
+	edit.delete_right()
+	repeat(numb - 1)
+
 # Insert padding with optional symbols
 (padding): user.insert_between(" ", " ")
 (pad | padding) <user.symbol_key>+:

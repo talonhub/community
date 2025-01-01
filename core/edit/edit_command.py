@@ -48,21 +48,19 @@ mod = Module()
 
 @mod.action_class
 class Actions:
-    def edit_command(action: EditAction, modifier: Union[EditModifier, str], count: int):
+    def edit_command(action: EditAction, modifier: Union[EditModifier, str]):
         """Perform edit command"""
         if type(modifier) is not str:
             
             key = (action.type, modifier.type)    
-            print(f"{action.type} {modifier.type}")
             if key in compound_actions:
-                print("Found compound action")
+                count = modifier.count 
                 for i in range(1, count + 1):
                     compound_actions[key]()
                 return
           
-            run_modifier_callback(modifier, count)
+            run_modifier_callback(modifier)
             run_action_callback(action)
         else:
-            for i in range(1, count + 1):
-                run_action_callback(action)
+            run_action_callback(action)
     

@@ -260,16 +260,21 @@ def update_running_list():
 
         if app.platform == "mac":
             bundle_name = cur_app.bundle.lower()
-            RUNNING_APPLICATION_DICT[bundle_name] = cur_app
+            RUNNING_APPLICATION_DICT[bundle_name] = [cur_app]
 
         if exe_path not in RUNNING_APPLICATION_DICT:
             RUNNING_APPLICATION_DICT[exe_path] = [cur_app]
-            RUNNING_APPLICATION_DICT[exe] = [cur_app]
-            RUNNING_APPLICATION_DICT[name.lower()] = [cur_app]
-
         else:
             RUNNING_APPLICATION_DICT[exe_path].append(cur_app)
+        
+        if exe not in RUNNING_APPLICATION_DICT:
+            RUNNING_APPLICATION_DICT[exe] = [cur_app]
+        else:
             RUNNING_APPLICATION_DICT[exe].append(cur_app)
+
+        if name.lower() not in RUNNING_APPLICATION_DICT:
+            RUNNING_APPLICATION_DICT[name.lower()] = [cur_app]
+        else:
             RUNNING_APPLICATION_DICT[name.lower()].append(cur_app)
 
 
