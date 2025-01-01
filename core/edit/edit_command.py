@@ -44,8 +44,6 @@ compound_actions = {
 
 
 mod = Module()
-
-
 @mod.action_class
 class Actions:
     def edit_command(action: EditAction, modifier: Union[EditModifier, str]):
