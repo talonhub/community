@@ -132,7 +132,7 @@ operators = Operators(
 
 @ctx.action_class("user")
 class UserActions:
-    def code_get_operators() -> Operators:
+    def code_get_operators():
         return operators
 
     def code_self():
