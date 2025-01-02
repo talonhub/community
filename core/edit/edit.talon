@@ -39,9 +39,9 @@ zoom out [<number_small>]:
 zoom reset:
     edit.zoom_reset()
 
-# copy: edit.copy()
-# slice: edit.cut()
-# pace: edit.paste()
+copy: edit.copy()
+slice: edit.cut()
+pace: edit.paste()
 (nay | nope | nak | neigh) [<number_small>]: 
 	numb = number or 1
 	edit.undo()
