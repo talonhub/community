@@ -2,7 +2,7 @@ from talon import app
 from pathlib import Path
 from uuid import UUID
 from .application import Application
-from.windows_applications import is_known_windows_application
+from.windows_applications import is_known_windows_application, WindowsShortcut
 import glob
 import os
 
@@ -14,6 +14,7 @@ if app.platform == "windows":
     import ctypes
     from ctypes import wintypes
     import win32con
+    import winreg
     from win32com.propsys import propsys, pscon
     import pywintypes
     from win32com.shell import shell, shellcon
@@ -26,10 +27,17 @@ if app.platform == "windows":
     windows_system_app_dir = os.path.expandvars(os.path.join("%WINDIR%", "SystemApps"))
 
     #print(f"{windows_app_dir} {windows_system_app_dir}")
+    def get_desktop_path():
+        with winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders") as key:
+
+            desktop = winreg.QueryValueEx(key, "Desktop")[0]
+
+        return os.path.expandvars(desktop)
 
     # since I can't figure out how to get the target paths from the shell folders,
     # we'll parse the known shortcuts and do it live!?
     windows_application_directories = [
+        get_desktop_path(), 
         "%AppData%/Microsoft/Windows/Start Menu/Programs",
         "%ProgramData%/Microsoft/Windows/Start Menu/Programs",
         "%AppData%/Microsoft/Internet Explorer/Quick Launch/User Pinned/TaskBar",
@@ -110,15 +118,21 @@ if app.platform == "windows":
         result.sort(key=lambda x: x.upper())
         return result
 
-    def get_shortcut_target_path(lnk_file):
+    def get_shortcut_info(lnk_file)-> WindowsShortcut:
         # todo: ideally we'd parse the target type here... that would make things more robust
         # windows shortcuts can include applications, Control Panel, and other weird targets.
+        shell = win32com.client.Dispatch("WScript.Shell")
+        shortcut = shell.CreateShortCut(lnk_file)
+        name = Path(lnk_file).stem
         try:
-            shell = win32com.client.Dispatch("WScript.Shell")
-            shortcut = shell.CreateShortCut(lnk_file)
-            return shortcut.Targetpath
+            arguments = shortcut.Arguments
+        except:
+            arguments = None
+
+        try:
+            return WindowsShortcut(str(name), lnk_file, shortcut.TargetPath, arguments )
         except Exception:
-            print(f"Failed to parse {lnk_file}")
+            print(f"stupid Failed to parse {lnk_file}")
             return None
         
     def is_extension_allowed(extension):
@@ -135,15 +149,15 @@ if app.platform == "windows":
 
     shortcut_map = {}
     for short_cut_path in shortcut_paths:
-        stem = Path(short_cut_path).stem
-        target_path = get_shortcut_target_path(short_cut_path)
+        shortcut =  get_shortcut_info(short_cut_path)
 
-
-        if target_path:
-            shortcut_map[stem] = Path(target_path)
-        # some windows shortcuts don't have a path to make things weird (target: Control Panel)
-        else:
-            shortcut_map[stem] = None
+        if shortcut:
+            target_path = shortcut.target_path
+            if target_path:
+                shortcut_map[shortcut.display_name] = Path(target_path)
+            # some windows shortcuts don't have a path to make things weird (target: Control Panel)
+            else:
+                shortcut_map[shortcut.display_name] = None
 
     def get_installed_windows_apps() -> list[Application]:
         application_list = []

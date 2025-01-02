@@ -8,6 +8,13 @@ class WindowsApplication:
     unique_identifier: str
     executable_name: str
 
+@dataclass
+class WindowsShortcut:
+    display_name: str
+    full_path: str
+    target_path: str
+    arguments: str
+
 windows_applications = [
     WindowsApplication(display_name="3D Viewer", 
                        unique_identifier="Microsoft.Microsoft3DViewer_8wekyb3d8bbwe!Microsoft.Microsoft3DViewer", 
