@@ -47,3 +47,8 @@ list six:
 link:
     "[]()"
     key(left:3)
+
+caption: 
+    '![Caption]()'
+    key(left:1)
+

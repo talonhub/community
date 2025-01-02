@@ -65,5 +65,5 @@ chain here:
 
 ########## Single cell RNA sequencing ##########
 
-object: 'scRNAseq'
-metadata: 'scRNAseq@meta.data'
+object: 'seurat'
+metadata: 'seurat@meta.data'

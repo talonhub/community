@@ -10,6 +10,10 @@ connect to locus:
 	"ssh -X ansaldoginee2@ai-submit2.niaid.nih.gov"
 	key(enter)
 
+connect to skyline: 
+	"ssh -X ansaldoginee2@ai-hpcsubmit2.niaid.nih.gov"
+	key(enter)
+
 interactive session: 
 	"qrsh -l h_vmem=16G"
 	key(enter)

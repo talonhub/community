@@ -48,3 +48,7 @@ folder scratch:
 	key(enter)
 	"ls"
 	key(enter)
+
+create sample sheet:
+	"python /nethome/ansaldoginee2/scripts/make_bcl_convert.py"
+	key(enter)	
