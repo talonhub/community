@@ -1,0 +1,13 @@
+name: methodDeclaration
+phrase: method
+insertionScope: namedFunction | statement
+---
+
+language: javascript
+
+$1.insertionFormatter: PRIVATE_CAMEL_CASE
+-
+$1($2) {
+    $0
+}
+---

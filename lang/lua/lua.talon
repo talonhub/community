@@ -1,4 +1,4 @@
-tag: user.lua
+code.language: lua
 -
 
 tag(): user.code_imperative
