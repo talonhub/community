@@ -1,4 +1,4 @@
-from typing import Callable, NotRequired, Optional, TypedDict
+from typing import Callable, NotRequired, TypedDict
 
 from talon import Module, actions
 
@@ -87,8 +87,10 @@ class Actions:
         """Insert a code operator"""
         operators: Operators = actions.user.code_get_operators()
 
-        # This language has not implement the operators dict and we therefore use the fallback
-        if operators is None:
+        try:
+            operators = actions.user.code_get_operators()
+        except NotImplementedError:
+            # This language has not implement the operators dict and we therefore use the fallback
             operators_fallback(id)
             return
 
@@ -102,9 +104,8 @@ class Actions:
         else:
             operator()
 
-    def code_get_operators() -> Optional[Operators]:
+    def code_get_operators() -> Operators:
         """Get code operators dictionary"""
-        return None
 
 
 # Fallback is to rely on the legacy actions
