@@ -236,7 +236,7 @@ def update_running_list():
             for window_app_user_model_id, window_list in valid_windows.items():
 
                 if window_app_user_model_id != "None":
-                    mapping = f"{cur_app.name}-::*::-{window_list[-1].title}"
+                    mapping = f"{cur_app.name}-::*::-{window_app_user_model_id}"
 
                     override = get_override_by_app_user_model_id(window_app_user_model_id, cur_app)
                     spoken_forms = override.spoken_forms if override and override.spoken_forms else None
@@ -319,7 +319,7 @@ def update_running_list():
                             window_override = get_override_by_app_user_model_id(window_app_user_model_id, cur_app)
 
                             spoken_forms = window_override.spoken_forms if window_override and window_override.spoken_forms else None
-                            mapping = f"{cur_app.name}-::*::-{window.title}"
+                            mapping = f"{cur_app.name}-::*::-{window_app_user_model_id}"
 
                             if spoken_forms:
                                 for spoken_form in spoken_forms:
@@ -335,7 +335,7 @@ def update_running_list():
             if exe in ["rundll32.exe", "mmc.exe"]:
                 for user_model_id, window_list in valid_windows.items():
                     for window in window_list: 
-                        mapping = f"{cur_app.name}-::*::-{window.title}"
+                        mapping = f"{cur_app.name}-::*::-None-::*::-{window.title}"
                         generate_spoken_form_map[window.title] = mapping
             
             if exe != "rundll32.exe":
@@ -353,7 +353,7 @@ def update_running_list():
                         for window in window_list: 
                             if display_name.lower() in window.title.lower():
                                 
-                                mapping = f"{cur_app.name}-::*::-{window.title}"
+                                mapping = f"{cur_app.name}-::*::-None-::*::-{window.title}"
 
                                 for spoken_form in spoken_forms:
                                     running[spoken_form] = mapping
@@ -479,18 +479,6 @@ def update_launch_applications(f):
     }
 
     APPLICATION_GROUPS_DICT = {}
-    if app.platform == "windows":
-        modern_windows_app_group = ApplicationGroup()
-        modern_windows_app_group.executable_name = application_frame_host
-        modern_windows_app_group.group_spoken_forms = None
-        modern_windows_app_group.group_name = application_frame_host_group
-        modern_windows_app_group.path = application_frame_host_path
-        modern_windows_app_group.unique_identifier = None
-        APPLICATION_GROUPS_DICT[application_frame_host] = modern_windows_app_group
-        APPLICATION_GROUPS_DICT[application_frame_host_path] = modern_windows_app_group
-        APPLICATION_GROUPS_DICT[application_frame_host_group] = modern_windows_app_group
-
-
     APPLICATIONS_OVERRIDES = {}
     PRESERVED_APPLICATION_LIST = []
     removed_apps_dict = {}
@@ -668,12 +656,17 @@ class Actions:
         app_name = splits[0].lower()
         apps = actions.user.get_running_app(app_name)
 
-        if len(splits) == 2:
-            window_name = splits[1]
-            print(window_name)
+        if len(splits) == 3:
+            title = splits[2].lower()
+            for window in app.windows():
+                if title == window.title.lower():
+                    window.focus()
+                    break
+        elif len(splits) == 2:
+            application_user_model_id = splits[1]
             for app in apps:
                 for window in app.windows():
-                    if window_name.lower() == window.title.lower() or window_name.lower() in window.title.lower():
+                    if application_user_model_id == get_application_user_model_for_window(window.id):
                         window.focus()
                         break
         else:

@@ -325,6 +325,7 @@ def scope_gui(gui: imgui.GUI):
     gui.text(f"title: {title}")
     gui.text(f"AppUserModelId: {app_user_model_id}")
     gui.text(f"Window AppUserModelId: {window_id}")
+    gui.text(f"Window cls: {ui.active_window().cls}")
 
     if gui.button("Close"):
         gui.hide()

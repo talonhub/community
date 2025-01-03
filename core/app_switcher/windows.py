@@ -175,8 +175,6 @@ if app.platform == "windows":
             display_name = item.GetDisplayName(shellcon.SIGDN_NORMALDISPLAY)
             should_create_entry = check_should_create_entry(display_name) 
 
-            is_url_maybe = path.startswith("http") if path else False
-            is_mmc = False
             if should_create_entry:
                 try:
                     p = resolve_path_with_guid(app_user_model_id)
@@ -202,7 +200,6 @@ if app.platform == "windows":
 
                     elif display_name in shortcut_map:
                         shortcut_info = shortcut_map[display_name]
-
                         if shortcut_info:
                             if shortcut_info.target_path:
                                 path = Path(shortcut_info.target_path).resolve()
@@ -214,8 +211,8 @@ if app.platform == "windows":
                                     path = mmc
                                     executable_name = "mmc.exe"
                         
-                    elif is_url_maybe:
-                        should_create_entry = False
+
+                is_url_maybe = str(path).startswith("http") if path else False
 
                 new_app = Application(
                     path=str(path) if path else None,
@@ -226,12 +223,17 @@ if app.platform == "windows":
                     spoken_form=None,
                     application_group=None)
                     
-                if should_create_entry:
+                if "Python" in display_name:
+                    print(f"{should_create_entry} {new_app}")
+                
+                if should_create_entry and not is_url_maybe:
                     if app_user_model_id not in applications_dict:
                         application_list.append(new_app)
                         applications_dict[app_user_model_id] = True
                     else:
                         print(f"Potential duplicate app {new_app}")
+                #else:
+                    #print(new_app)
         return application_list
     
 
