@@ -1,0 +1,28 @@
+list: user.code_operators_math
+tag: user.code_operators_math
+-
+
+# Math operators
+minus: MATH_SUBTRACT
+plus: MATH_ADD
+times: MATH_MULTIPLY
+divide: MATH_DIVIDE
+mod: MATH_MODULO
+power: MATH_EXPONENT
+
+# Comparison operators
+equal: MATH_EQUAL
+not equal: MATH_NOT_EQUAL
+greater: MATH_GREATER_THAN
+less: MATH_LESS_THAN
+greater or equal: MATH_GREATER_THAN_OR_EQUAL
+less or equal: MATH_LESS_THAN_OR_EQUAL
+
+# logical operators
+and: MATH_AND
+or: MATH_OR
+not: MATH_NOT
+
+# set operators
+in: MATH_IN
+not in: MATH_NOT_IN
