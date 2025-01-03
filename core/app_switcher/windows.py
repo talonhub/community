@@ -2,7 +2,7 @@ from talon import app
 from pathlib import Path
 from uuid import UUID
 from .application import Application
-from.windows_applications import get_known_windows_application, WindowsShortcut
+from.windows_applications import get_known_windows_application, WindowsShortcut, mmc
 import glob
 import os
 
@@ -176,7 +176,7 @@ if app.platform == "windows":
             should_create_entry = check_should_create_entry(display_name) 
 
             is_url_maybe = path.startswith("http") if path else False
-
+            is_mmc = False
             if should_create_entry:
                 try:
                     p = resolve_path_with_guid(app_user_model_id)
@@ -185,6 +185,11 @@ if app.platform == "windows":
                         executable_name = p.name  
                         # exclude anything that is NOT an actual executable
                         should_create_entry = is_extension_allowed(p.suffix) 
+
+                        # fix anything with a mmc snap in...
+                        if p.suffix and ".msc" == p.suffix.lower():
+                           path = mmc
+                           executable_name = "mmc.exe"
                 except:
                     pass
                 
@@ -203,6 +208,11 @@ if app.platform == "windows":
                                 path = Path(shortcut_info.target_path).resolve()
                                 executable_name = path.name
                                 should_create_entry = is_extension_allowed (path.suffix)
+
+                                # fix anything with a mmc snap in...
+                                if path.suffix and ".msc" == path.suffix.lower():
+                                    path = mmc
+                                    executable_name = "mmc.exe"
                         
                     elif is_url_maybe:
                         should_create_entry = False
