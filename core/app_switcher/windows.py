@@ -6,7 +6,6 @@ from.windows_applications import get_known_windows_application, WindowsShortcut
 import glob
 import os
 
-
 if app.platform == "windows":
     from .windows_known_paths import resolve_known_windows_path, PathNotFoundException
     import win32com
@@ -129,10 +128,11 @@ if app.platform == "windows":
             arguments = None
 
         try:
-            return WindowsShortcut(str(name), lnk_file, shortcut.TargetPath, arguments )
-        except Exception:
-            print(f"Failed to parse {lnk_file}")
-            return None
+            target_path = shortcut.TargetPath
+        except:
+            target_path = None
+
+        return WindowsShortcut(str(name), lnk_file, target_path, arguments )
         
     def is_extension_allowed(extension):
         return extension.lower() in [".exe", ".msc"]
@@ -175,6 +175,7 @@ if app.platform == "windows":
             display_name = item.GetDisplayName(shellcon.SIGDN_NORMALDISPLAY)
             should_create_entry = check_should_create_entry(display_name) 
             path = app_user_model_id
+            is_url_maybe = path.startswith("http")
 
             if should_create_entry:
                 try:
@@ -197,10 +198,14 @@ if app.platform == "windows":
                     elif display_name in shortcut_map:
                         shortcut_info = shortcut_map[display_name]
 
-                        if shortcut_info and shortcut_info.target_path:
-                            path = Path(shortcut_info.target_path).resolve()
-                            executable_name = shortcut_info.display_name
-                            should_create_entry = is_extension_allowed (path.suffix)
+                        if shortcut_info:
+                            if shortcut_info.target_path:
+                                path = Path(shortcut_info.target_path).resolve()
+                                executable_name = shortcut_info.display_name
+                                should_create_entry = is_extension_allowed (path.suffix)
+                        
+                    elif is_url_maybe:
+                        should_create_entry = False
 
                 new_app = Application(
                     path=str(path) if path else None,

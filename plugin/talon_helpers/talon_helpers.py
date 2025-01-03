@@ -5,7 +5,7 @@ import re
 from itertools import islice
 from typing import Union
 
-from talon import Module, actions, app, clip, registry, scope, speech_system, ui
+from talon import Module, actions, app, clip, registry, scope, speech_system, ui, imgui
 from talon.grammar import Phrase
 from talon.scripting.types import ListTypeFull
 
@@ -292,5 +292,41 @@ class Actions:
         for item in items:
             if ui.active_app().name.lower() in item.Name.lower():
                 clip.set_text(item.path)
+
+    def talon_toggle_scope_gui():
+        """dsfadf"""
+        if scope_gui.showing:
+            scope_gui.hide()
+        else:
+            scope_gui.show()
     
+@imgui.open()
+def scope_gui(gui: imgui.GUI):
+    name = actions.app.name()
+    executable = actions.app.executable()
+    bundle = actions.app.bundle()
+    title = actions.win.title()
+    hostname = scope.get("hostname")
+
+    try:
+        app_user_model_id = get_application_user_model_id(ui.active_app().pid)
+    except:
+        app_user_model_id = "None"
+
+    try:
+        window_id = get_application_user_model_for_window(ui.active_window().id)
+    except:
+        window_id = "None"
+
+    gui.text(f"Name: {name}")
+    gui.text(f"executable: {executable}")
+    gui.text(f"bundle: {bundle}")
+    gui.text(f"hostname: {hostname}")
+    gui.text(f"title: {title}")
+    gui.text(f"AppUserModelId: {app_user_model_id}")
+    gui.text(f"Window AppUserModelId: {window_id}")
+
+    if gui.button("Close"):
+        gui.hide()
+
         

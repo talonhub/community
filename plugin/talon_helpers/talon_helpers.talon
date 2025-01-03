@@ -39,6 +39,8 @@ talent insert version:
 talent dump context: 
     result = user.talon_get_active_context()
     print(result)
+talent context:
+    user.talon_toggle_scope_gui()
 ^talent test last$:
     phrase = user.history_get(1)
     user.talon_sim_phrase(phrase)
