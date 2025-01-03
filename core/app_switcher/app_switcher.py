@@ -7,7 +7,7 @@ import csv
 import talon
 from talon import Context, Module, actions, app, imgui, ui, resource
 from .windows import get_installed_windows_apps, application_frame_host_path, application_frame_host, application_frame_host_group, get_application_user_model_id, get_application_user_model_for_window
-from .windows_applications import is_known_windows_application
+from .windows_applications import get_known_windows_application
 from .mac import get_installed_mac_apps
 from .exclusion import ExclusionType, RunningApplicationExclusion
 from typing import Union

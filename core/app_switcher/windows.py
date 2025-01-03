@@ -2,10 +2,9 @@ from talon import app
 from pathlib import Path
 from uuid import UUID
 from .application import Application
-from.windows_applications import is_known_windows_application, WindowsShortcut
+from.windows_applications import get_known_windows_application, WindowsShortcut
 import glob
 import os
-
 
 
 if app.platform == "windows":
@@ -132,7 +131,7 @@ if app.platform == "windows":
         try:
             return WindowsShortcut(str(name), lnk_file, shortcut.TargetPath, arguments )
         except Exception:
-            print(f"stupid Failed to parse {lnk_file}")
+            print(f"Failed to parse {lnk_file}")
             return None
         
     def is_extension_allowed(extension):
@@ -150,15 +149,9 @@ if app.platform == "windows":
     shortcut_map = {}
     for short_cut_path in shortcut_paths:
         shortcut =  get_shortcut_info(short_cut_path)
-
         if shortcut:
-            target_path = shortcut.target_path
-            if target_path:
-                shortcut_map[shortcut.display_name] = Path(target_path)
-            # some windows shortcuts don't have a path to make things weird (target: Control Panel)
-            else:
-                shortcut_map[shortcut.display_name] = None
-
+            shortcut_map[shortcut.display_name] = shortcut
+            
     def get_installed_windows_apps() -> list[Application]:
         application_list = []
         applications_dict = {}
@@ -181,42 +174,34 @@ if app.platform == "windows":
 
             display_name = item.GetDisplayName(shellcon.SIGDN_NORMALDISPLAY)
             should_create_entry = check_should_create_entry(display_name) 
+            path = app_user_model_id
 
-            
             if should_create_entry:
                 try:
                     p = resolve_path_with_guid(app_user_model_id)
                     if p:
-                        path = p.resolve()
+                        path = str(p.resolve())
                         executable_name = p.name  
                         # exclude anything that is NOT an actual executable
                         should_create_entry = is_extension_allowed(p.suffix) 
-                        #if not should_create_entry:
-                        #    print(f"{executable_name} {path}")
-
                 except:
                     pass
                 
-                # this isn't very robust, but let's try it..?
-                is_known_windows_app = is_known_windows_application(app_user_model_id)
-                is_windows_store_app = is_known_windows_app or app_user_model_id.endswith("!App") 
-
                 if should_create_entry and not executable_name:
-                    if not is_windows_store_app and display_name in shortcut_map:
-                        shortcut_path = shortcut_map[display_name]
+                    windows_application_info = get_known_windows_application(app_user_model_id)
 
-                        if shortcut_path:
-                            path = shortcut_map[display_name].resolve()
-                            executable_name = shortcut_path.name
+                    if windows_application_info:
+                        path = windows_application_info.executable_path
+                        executable_name = windows_application_info.executable_name
+
+                    elif display_name in shortcut_map:
+                        shortcut_info = shortcut_map[display_name]
+
+                        if shortcut_info and shortcut_info.target_path:
+                            path = Path(shortcut_info.target_path).resolve()
+                            executable_name = shortcut_info.display_name
                             should_create_entry = is_extension_allowed (path.suffix)
 
-                        #if not should_create_entry:
-                        #    print(f"{executable_name} {path}")
-
-                #exclude entries that start with http
-                if not is_windows_store_app and not executable_name and not path:
-                    should_create_entry = should_create_entry and not app_user_model_id.startswith("https://") and not app_user_model_id.startswith("http://") 
-                
                 new_app = Application(
                     path=str(path) if path else None,
                     display_name=display_name, 
@@ -225,9 +210,6 @@ if app.platform == "windows":
                     exclude=False,
                     spoken_form=None,
                     application_group=None)
-            
-                #if is_windows_store_app:
-                #    print(str(new_app))
                     
                 if should_create_entry:
                     if app_user_model_id not in applications_dict:
