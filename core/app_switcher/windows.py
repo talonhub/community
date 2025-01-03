@@ -174,8 +174,8 @@ if app.platform == "windows":
 
             display_name = item.GetDisplayName(shellcon.SIGDN_NORMALDISPLAY)
             should_create_entry = check_should_create_entry(display_name) 
-            path = app_user_model_id
-            is_url_maybe = path.startswith("http")
+
+            is_url_maybe = path.startswith("http") if path else False
 
             if should_create_entry:
                 try:
@@ -201,7 +201,7 @@ if app.platform == "windows":
                         if shortcut_info:
                             if shortcut_info.target_path:
                                 path = Path(shortcut_info.target_path).resolve()
-                                executable_name = shortcut_info.display_name
+                                executable_name = path.name
                                 should_create_entry = is_extension_allowed (path.suffix)
                         
                     elif is_url_maybe:
