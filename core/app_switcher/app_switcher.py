@@ -478,7 +478,7 @@ def update_launch_applications(f):
         app.unique_identifier.lower() : app for app in INSTALLED_APPLICATIONS_LIST
     }
 
-    APPLICATION_GROUPS_DICT = {}
+    APPLICATION_GROUPS_DICT = {}  
     APPLICATIONS_OVERRIDES = {}
     PRESERVED_APPLICATION_LIST = []
     removed_apps_dict = {}

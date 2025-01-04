@@ -37,29 +37,6 @@ ctx_talon_python.matches = r"""
 tag: user.talon_python
 """
 
-
-def on_update_decls(decls):
-    # todo modes?
-    for thing in [
-        "actions",
-        "lists",
-        "captures",
-        "tags",
-        "apps",
-        "settings",
-        "scopes",
-        "modes",
-    ]:
-        l = getattr(decls, thing)
-        ctx_talon_lists.lists[f"user.talon_{thing}"] = (
-            actions.user.create_spoken_forms_from_list(
-                l.keys(), generate_subsequences=False
-            )
-        )
-        # print(
-        #     "List: {} \n {}".format(thing, str(ctx_talon_lists.lists[f"user.talon_{thing}"]))
-        # )
-
 @ctx_talon_lists.dynamic_list("user.talon_actions")
 def talon_actions(phrase) -> dict[str, str]:
     l = getattr(registry.decls, "actions")
