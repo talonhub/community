@@ -13,12 +13,12 @@ configure {user.system_setting}:
      user.system_setting(system_setting)
 (summon | some in) <user.directory>:
      user.system_open_directory(directory)
-portal [<phrase>]$: user.system_show_portal(phrase or "")
-coder$: user.system_show_coder()
-messer: user.system_show_messenger()
-messy: user.system_show_slacker()
-outer: user.system_show_email()
-gitter [<phrase>]$: user.system_show_gitter(phrase or "")
+# portal [<phrase>]$: user.system_show_portal(phrase or "")
+# coder$: user.system_show_coder()
+# messer: user.system_show_messenger()
+# messy: user.system_show_slacker()
+# outer: user.system_show_email()
+# gitter [<phrase>]$: user.system_show_gitter(phrase or "")
 process$: user.system_show_taskmanager(phrase or "")
 process current$: user.system_taskmanager_find_focused_application()
 

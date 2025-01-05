@@ -617,6 +617,13 @@ def update_launch_applications(f):
 
 @mod.action_class
 class Actions:
+    def switcher_accessibility_focus(title: str):
+        """experimental"""
+        rebuild_taskbar_app_list()
+        for item in cache:
+            if item.title == title:
+                item.element.invoke_pattern.invoke()
+                break
     def app_switcher_select_index(index: int):
         """"""
         for number, window in enumerate(valid_windows_for_pending_app, 1):
@@ -626,7 +633,6 @@ class Actions:
                 ctx.tags = []
                 break
 
-        
     def get_running_app(name: str) -> ui.App:
         """Get the first available running app with `name`."""
         # We should use the capture result directly if it's already in the list
@@ -811,20 +817,6 @@ class TaskBarItem:
     title: str
     type: str
     element: Element
-
-@mod.action_class
-class Actions:
-    def switcher_accessibility_focus(title: str):
-        """experimental"""
-        rebuild_taskbar_app_list()
-        for item in cache:
-            if item.title == title:
-                item.element.invoke_pattern.invoke()
-                break
-
-    # def switcher_accessibility_show():
-    #     """what"""
-    #     create_canvases()
 
 def first_matching_child(element, **kw):
     if len(kw) > 1:
