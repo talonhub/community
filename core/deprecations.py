@@ -162,7 +162,6 @@ class Actions:
         )
         warnings.warn(msg, DeprecationWarning, stacklevel=3)
 
-
     def deprecate_action(time_deprecated: str, name: str, replacement: str = ""):
         """
         Notify the user that the given action is deprecated and should
@@ -171,7 +170,6 @@ class Actions:
         """
 
         id = f"action.{name}.{time_deprecated}"
-
 
         deprecate_notify(id, f"The `{name}` action is deprecated. See log for more.")
         replacement_msg = f' Instead, use: "{replacement}".' if replacement else ""
