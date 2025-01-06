@@ -31,6 +31,7 @@ port_mapping = {
     "google-android-studio": 8652,
     "idea64.exe": 8653,
     "IntelliJ IDEA": 8653,
+    "IntelliJ IDEA Community Edition": 8654,
     "jetbrains-appcode": 8655,
     "jetbrains-clion": 8657,
     "jetbrains-datagrip": 8664,
@@ -142,7 +143,7 @@ class Actions:
                     send_idea_command(cmd.strip())
                     actions.sleep(0.1)
         except Exception as e:
-            app.notify(e)
+            app.notify(str(e))
             raise
 
     def idea_grab(times: int):
