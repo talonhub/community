@@ -1,0 +1,17 @@
+list: user.system_paths
+hostname: DESKTOP-GV4VE26
+-
+user: C:\Users\Mike
+desktop: C:\Users\Mike\OneDrive\Desktop
+desk: C:\Users\Mike\Desktop
+documents: C:\Users\Mike\OneDrive\Documents
+docks: C:\Users\Mike\Documents
+downloads: C:\Users\Mike\Downloads
+music: C:\Users\Mike\Music
+pictures: C:\Users\Mike\OneDrive\Pictures
+videos: C:\Users\Mike\Videos
+talon home: C:\Users\Mike\AppData\Roaming\talon
+talon recordings: C:\Users\Mike\AppData\Roaming\talon\recordings
+talon user: C:\Users\Mike\AppData\Roaming\talon\user
+profile: C:\Users\Mike
+one drive: C:\Users\Mike\OneDrive
