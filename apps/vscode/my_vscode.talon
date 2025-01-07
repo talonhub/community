@@ -80,3 +80,5 @@ suggest:
   key(alt-cmd-k)
 bookmark toggle label:
   key(alt-cmd-h)
+(go to | follow) link:
+  user.vscode('editor.action.openLink')
