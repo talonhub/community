@@ -1,4 +1,13 @@
 #custom vscode commands go here
+# app: vscode
+# -
+# tag(): user.find_and_replace
+# tag(): user.line_commands
+# tag(): user.multiple_cursors
+# tag(): user.snippets
+# tag(): user.splits
+# tag(): user.tabs
+# tag(): user.cursorless_experimental_snippets
 app: vscode
 -
 tag(): user.find_and_replace
@@ -7,7 +16,6 @@ tag(): user.multiple_cursors
 tag(): user.snippets
 tag(): user.splits
 tag(): user.tabs
-tag(): user.cursorless_experimental_snippets
 
 file (search|forage):
   user.vscode("workbench.action.findInFiles")
@@ -82,3 +90,15 @@ bookmark toggle label:
   key(alt-cmd-h)
 (go to | follow) link:
   user.vscode('editor.action.openLink')
+
+key(ctrl+d):
+  user.disable_talon_mic()
+
+# this adds the spoken forms `scout all`, `scout all say <phrase>`, `scout all poke` (e.g. paste)
+# the cursorless form `scout all <target>` still works!
+scout all:
+  app.notify("scout all")
+  user.vscode("workbench.action.findInFiles")
+
+scout:
+  user.vscode("actions.find")

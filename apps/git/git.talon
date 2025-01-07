@@ -15,11 +15,21 @@ git stash [push] [<user.git_arguments>] message [<user.prose>]:
 
 # Optimistic execution for frequently used commands that are harmless (don't
 # change repository or index state).
-git status$: "git status\n"
-git add patch$: "git add --patch\n"
-git show head$: "git show HEAD\n"
-git diff$: "git diff\n"
-git diff (cached | cashed)$: "git diff --cached\n"
+git status$:
+    "git status"
+	key(enter)
+git add patch$:
+"git add --patch"
+	key(enter)
+git show head$:
+	"git show HEAD"
+	key(enter)
+git diff$:
+	"git diff"
+	key(enter)
+git diff (cached | cashed)$:
+	"git diff --cached"
+	key(enter)
 
 # Convenience
 git clone clipboard:
