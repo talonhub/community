@@ -53,5 +53,5 @@ prompt <phrase>:
   insert("\n")
   key('alt-ctrl-i')
 
-suggest:
-  key('ctrl-alt-i')
+
+
