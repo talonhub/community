@@ -22,10 +22,22 @@ switch dendron:
   "dendron"
   key('enter')
 
+switch foam:
+  key('ctrl-w')
+  sleep(100ms)
+  "foam"
+  key('enter')
+
 switch user:
   key('ctrl-w')
   sleep(100ms)
   "user"
+  key('enter')
+
+switch view:
+  key('ctrl-w')
+  sleep(100ms)
+  "doximity-client-vue"
   key('enter')
 
 # bar (copilot | chat):
