@@ -5,11 +5,10 @@ os: mac
 tag(): user.find_and_replace
 tag(): user.line_commands
 tag(): user.multiple_cursors
-tag(): user.snippets
 tag(): user.splits
 tag(): user.tabs
 
-# note: change vscode preferences window title to `[${rootName}] ${activeEditorShort}${separator}${profileName}`
+# note: change vscode preferences window title to `[${rootName}] ${activeEditorShort}${separator}${activeFolderMedium}${separator}${activeRepositoryBranchName}${separator}focus:[${focusedView}]`
 #       so that project name is first and inside [].
 switch talon:
   key('ctrl-w')

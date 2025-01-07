@@ -112,3 +112,7 @@ tag(): user.pop_twice_to_repeat
 # By default you need to say "numb one" to write "1". If you uncomment this,
 # you can say "one" to write "1".
 # tag(): user.unprefixed_numbers
+
+# use community snippets with cursorless
+# https://www.cursorless.org/docs/user/experimental/snippets/#using-community-snippets
+tag(): user.cursorless_use_community_snippets

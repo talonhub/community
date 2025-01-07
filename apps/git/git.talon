@@ -19,7 +19,7 @@ git status$:
     "git status"
 	key(enter)
 git add patch$:
-"git add --patch"
+    "git add --patch"
 	key(enter)
 git show head$:
 	"git show HEAD"

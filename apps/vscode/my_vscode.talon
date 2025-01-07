@@ -4,7 +4,6 @@
 # tag(): user.find_and_replace
 # tag(): user.line_commands
 # tag(): user.multiple_cursors
-# tag(): user.snippets
 # tag(): user.splits
 # tag(): user.tabs
 # tag(): user.cursorless_experimental_snippets
@@ -13,7 +12,6 @@ app: vscode
 tag(): user.find_and_replace
 tag(): user.line_commands
 tag(): user.multiple_cursors
-tag(): user.snippets
 tag(): user.splits
 tag(): user.tabs
 
