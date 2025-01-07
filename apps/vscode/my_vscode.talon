@@ -37,7 +37,6 @@ search remove: user.vscode("search.action.remove")
 #   user.mouse_helper_position_restore()
 #   key(cmd-a)
 
-<<<<<<< HEAD
 
 # Bookmarks. Requires Bookmarks plugin
 go marks: user.vscode("workbench.view.extension.bookmarks")
@@ -81,7 +80,3 @@ suggest:
   key(alt-cmd-k)
 bookmark toggle label:
   key(alt-cmd-h)
-bookmark next: key(alt-cmd-l)
-bookmark previous: key(alt-cmd-j)
-bar bookmark:
-  key(alt-cmd-g)
