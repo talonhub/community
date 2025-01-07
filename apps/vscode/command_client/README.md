@@ -4,7 +4,7 @@ This directory contains the client code for communicating with the [VSCode comma
 
 ## Contributing
 
-The source of truth is in https://github.com/talonhub/community/tree/main/apps/vscode/command_client, but the code is also maintained as a subtree at https://github.com/pokey/talon-vscode-command-client.
+The source of truth is in https://github.com/talonhub/community/tree/main/apps/vscode/command_client, but the code is also maintained as a subtree at https://github.com/cursorless-dev/talon-vscode-command-client.
 
 To contribute, first open a PR on `community`.
 
@@ -12,11 +12,11 @@ Once the PR is merged, you can push the changes to the subtree by running the fo
 
 ```sh
 git subtree split --prefix=apps/vscode/command_client --annotate="[split] " -b split
-git push talon-vscode-command-client split:master
+git push talon-vscode-command-client split:main
 ```
 
 Note that you'll need to have set the upstream up the first time:
 
 ```sh
-git remote add talon-vscode-command-client git@github.com:pokey/talon-vscode-command-client.git
+git remote add talon-vscode-command-client git@github.com:cursorless-dev/talon-vscode-command-client.git
 ```
