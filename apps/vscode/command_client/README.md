@@ -12,11 +12,5 @@ Once the PR is merged, you can push the changes to the subtree by running the fo
 
 ```sh
 git subtree split --prefix=apps/vscode/command_client --annotate="[split] " -b split
-git push talon-command-client split:main
-```
-
-Note that you'll need to have set the upstream up the first time:
-
-```sh
-git remote add talon-command-client git@github.com:cursorless-dev/talon-command-client.git
+git push git@github.com:cursorless-dev/talon-command-client.git split:main
 ```
