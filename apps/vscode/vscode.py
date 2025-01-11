@@ -101,7 +101,7 @@ class EditActions:
 
     def redo():
         actions.user.vscode("redo")
-    
+
     # talon edit actions
     def indent_more():
         actions.user.vscode("editor.action.indentLines")
