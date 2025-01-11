@@ -44,7 +44,7 @@ class Actions:
         if not communication_dir_path.exists():
             if args or return_command_output:
                 raise Exception(
-                    "Must use command-server extension for advanced commands"
+                    "Communication directory not found. Must use command-server extension for advanced commands"
                 )
             raise NoFileServerException("Communication directory not found")
 
