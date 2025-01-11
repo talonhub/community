@@ -108,7 +108,7 @@ class EditActions:
 
     def save():
         actions.user.vscode("workbench.action.files.save")
-        
+
     def find_next():
         actions.user.vscode("editor.action.nextMatchFindAction")
 
