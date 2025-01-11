@@ -1,9 +1,9 @@
 list: user.window_split_positions
 -
 
-halves: Halves
-thirds: Thirds
-clock: Clock
-counterclock: Counterclock
-grid: Grid
-big grid: BigGrid
+halves: HALVES
+thirds: THIRDS
+clock: CLOCK
+counterclock: COUNTERCLOCK
+grid: GRID
+big grid: BIG_GRID

@@ -11,31 +11,31 @@ from talon.ui import UIErr, Window
 SPLIT_POSITIONS = {
     # Explicit layout names with only one configuration can be easier to force
     # the desired result:
-    "Halves": ["Left", "Right"],
-    "Thirds": ["LeftThird", "CenterThird", "RightThird"],
-    "Clock": [
-        "Left",
-        "TopRight",
-        "BottomRight",
+    "HALVES": ["LEFT", "RIGHT"],
+    "THIRDS": ["LEFT_THIRD", "CENTER_THIRD", "RIGHT_THIRD"],
+    "CLOCK": [
+        "LEFT",
+        "TOP_RIGHT",
+        "BOTTOM_RIGHT",
     ],
-    "Counterclock": [
-        "Right",
-        "TopLeft",
-        "BottomLeft",
+    "COUNTERCLOCK": [
+        "RIGHT",
+        "TOP_LEFT",
+        "BOTTOM_LEFT",
     ],
-    "Grid": [
-        "TopLeft",
-        "TopRight",
-        "BottomLeft",
-        "BottomRight",
+    "GRID": [
+        "TOP_LEFT",
+        "TOP_RIGHT",
+        "BOTTOM_LEFT",
+        "BOTTOM_RIGHT",
     ],
-    "BigGrid": [
-        "TopLeftThird",
-        "TopCenterThird",
-        "TopRightThird",
-        "BottomLeftThird",
-        "BottomCenterThird",
-        "BottomRightThird",
+    "BIG_GRID": [
+        "TOP_LEFT_THIRD",
+        "TOP_CENTER_THIRD",
+        "TOP_RIGHT_THIRD",
+        "BOTTOM_LEFT_THIRD",
+        "BOTTOM_CENTER_THIRD",
+        "BOTTOM_RIGHT_THIRD",
     ],
 }
 
