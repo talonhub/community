@@ -826,11 +826,17 @@ def first_matching_child(element, **kw):
 
 def rebuild_taskbar_app_list(forced: bool = False):
     global cache
-
-    explorer = ui.apps(name="Windows Explorer")[0]
-    taskbar = next(
-        window for window in explorer.windows() if window.cls == "Shell_TrayWnd"
-    )
+    taskbar = None
+    apps = ui.apps(name="Windows Explorer")
+    for app in apps:
+        for window in app.windows():
+            if window.cls == "Shell_TrayWnd":
+                taskbar = window
+                break
+                
+    if not taskbar:
+        print("task are not found")
+        return
     running_applications = first_matching_child(taskbar.element, class_name=["MSTaskListWClass"])
     #update_canvas = forced or len(running_applications.children) != len(cache)
     cache = []
