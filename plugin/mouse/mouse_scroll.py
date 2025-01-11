@@ -2,7 +2,6 @@ import time
 from typing import Literal, Optional
 
 from talon import Context, Module, actions, app, cron, ctrl, imgui, settings, ui
-from talon_plugins import eye_zoom_mouse
 
 DEFAULT_CONTINUOUS_SCROLLING_SPEED_FACTOR: int = 10
 
@@ -103,9 +102,6 @@ class Actions:
         """Starts gaze scroll"""
         global gaze_job, continuous_scroll_mode, control_mouse_forced
 
-        if eye_zoom_mouse.zoom_mouse.state != eye_zoom_mouse.STATE_IDLE:
-            return
-
         continuous_scroll_mode = "gaze scroll"
         gaze_job = cron.interval("16ms", scroll_gaze_helper)
 
@@ -193,9 +189,6 @@ def mouse_scroll_continuous(
 ):
     global scroll_job, scroll_dir, scroll_start_ts, continuous_scroll_mode, ctx
     actions.user.mouse_scroll_set_speed(speed_factor)
-
-    if eye_zoom_mouse.zoom_mouse.state != eye_zoom_mouse.STATE_IDLE:
-        return
 
     if scroll_job:
         # Issuing a scroll in the same direction aborts scrolling

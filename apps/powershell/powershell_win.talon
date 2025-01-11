@@ -1,6 +1,9 @@
 os: windows
 and app.name: Windows PowerShell
 os: windows
+app: windows_terminal
+and win.title: /PowerShell/
+os: windows
 and app.exe: powershell.exe
 -
 # makes the commands in terminal.talon available
