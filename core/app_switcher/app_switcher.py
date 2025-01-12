@@ -833,9 +833,11 @@ def rebuild_taskbar_app_list(forced: bool = False):
             if window.cls == "Shell_TrayWnd":
                 taskbar = window
                 break
+        if taskbar:
+            break
                 
     if not taskbar:
-        print("task are not found")
+        actions.app.notify("taskbar window not found")
         return
     running_applications = first_matching_child(taskbar.element, class_name=["MSTaskListWClass"])
     #update_canvas = forced or len(running_applications.children) != len(cache)

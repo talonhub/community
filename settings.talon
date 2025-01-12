@@ -80,6 +80,7 @@ settings():
 # tag(): user.mouse_cursor_commands_enable
 # tag():user.mouse_grid_enabled
 tag(): user.talon_populate_lists
+tag(): user.cursorless_use_community_snippets
 # tag(): talon_plugins.eye_zoom_mouse.zoom_mouse_noise
 
 # tag(): user.mouse_grid_enabled
