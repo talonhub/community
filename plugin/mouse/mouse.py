@@ -33,6 +33,7 @@ mod.setting(
 )
 
 
+
 @mod.action_class
 class Actions:
     def zoom_close():
