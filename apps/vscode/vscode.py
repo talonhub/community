@@ -106,6 +106,9 @@ class EditActions:
     def save_all():
         actions.user.vscode("workbench.action.files.saveAll")
 
+    def save():
+        actions.user.vscode("workbench.action.files.save")
+
     def find_next():
         actions.user.vscode("editor.action.nextMatchFindAction")
 

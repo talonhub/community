@@ -11,6 +11,7 @@ import logging
 from typing import Dict, Optional
 
 from talon import Context, Module, actions, settings, ui
+from talon.ui import Window
 
 mod = Module()
 mod.list(
@@ -209,91 +210,93 @@ class RelativeScreenPos:
         self.bottom = bottom
         self.right = right
 
+    def __str__(self):
+        return f"RelativeScreenPos(left={self.left}, top={self.top}, right={self.right}, bottom={self.bottom})"
+
 
 _snap_positions = {
     # Halves
     # .---.---.     .-------.
     # |   |   |  &  |-------|
     # '---'---'     '-------'
-    "left": RelativeScreenPos(0, 0, 0.5, 1),
-    "right": RelativeScreenPos(0.5, 0, 1, 1),
-    "top": RelativeScreenPos(0, 0, 1, 0.5),
-    "bottom": RelativeScreenPos(0, 0.5, 1, 1),
+    "LEFT": RelativeScreenPos(0, 0, 0.5, 1),
+    "RIGHT": RelativeScreenPos(0.5, 0, 1, 1),
+    "TOP": RelativeScreenPos(0, 0, 1, 0.5),
+    "BOTTOM": RelativeScreenPos(0, 0.5, 1, 1),
     # Thirds
     # .--.--.--.
     # |  |  |  |
     # '--'--'--'
-    "center third": RelativeScreenPos(1 / 3, 0, 2 / 3, 1),
-    "left third": RelativeScreenPos(0, 0, 1 / 3, 1),
-    "right third": RelativeScreenPos(2 / 3, 0, 1, 1),
-    "left two thirds": RelativeScreenPos(0, 0, 2 / 3, 1),
-    "right two thirds": RelativeScreenPos(1 / 3, 0, 1, 1),
+    "CENTER_THIRD": RelativeScreenPos(1 / 3, 0, 2 / 3, 1),
+    "LEFT_THIRD": RelativeScreenPos(0, 0, 1 / 3, 1),
+    "RIGHT_THIRD": RelativeScreenPos(2 / 3, 0, 1, 1),
+    "LEFT_TWO_THIRDS": RelativeScreenPos(0, 0, 2 / 3, 1),
+    "RIGHT_TWO_THIRDS": RelativeScreenPos(1 / 3, 0, 1, 1),
     # Alternate (simpler) spoken forms for thirds
-    "center small": RelativeScreenPos(1 / 3, 0, 2 / 3, 1),
-    "left small": RelativeScreenPos(0, 0, 1 / 3, 1),
-    "right small": RelativeScreenPos(2 / 3, 0, 1, 1),
-    "left large": RelativeScreenPos(0, 0, 2 / 3, 1),
-    "right large": RelativeScreenPos(1 / 3, 0, 1, 1),
+    "CENTER_SMALL": RelativeScreenPos(1 / 3, 0, 2 / 3, 1),
+    "LEFT_SMALL": RelativeScreenPos(0, 0, 1 / 3, 1),
+    "RIGHT_SMALL": RelativeScreenPos(2 / 3, 0, 1, 1),
+    "LEFT_LARGE": RelativeScreenPos(0, 0, 2 / 3, 1),
+    "RIGHT_LARGE": RelativeScreenPos(1 / 3, 0, 1, 1),
     # Quarters
     # .---.---.
     # |---|---|
     # '---'---'
-    "top left": RelativeScreenPos(0, 0, 0.5, 0.5),
-    "top right": RelativeScreenPos(0.5, 0, 1, 0.5),
-    "bottom left": RelativeScreenPos(0, 0.5, 0.5, 1),
-    "bottom right": RelativeScreenPos(0.5, 0.5, 1, 1),
+    "TOP_LEFT": RelativeScreenPos(0, 0, 0.5, 0.5),
+    "TOP_RIGHT": RelativeScreenPos(0.5, 0, 1, 0.5),
+    "BOTTOM_LEFT": RelativeScreenPos(0, 0.5, 0.5, 1),
+    "BOTTOM_RIGHT": RelativeScreenPos(0.5, 0.5, 1, 1),
     # Sixths
     # .--.--.--.
     # |--|--|--|
     # '--'--'--'
-    "top left third": RelativeScreenPos(0, 0, 1 / 3, 0.5),
-    "top right third": RelativeScreenPos(2 / 3, 0, 1, 0.5),
-    "top left two thirds": RelativeScreenPos(0, 0, 2 / 3, 0.5),
-    "top right two thirds": RelativeScreenPos(1 / 3, 0, 1, 0.5),
-    "top center third": RelativeScreenPos(1 / 3, 0, 2 / 3, 0.5),
-    "bottom left third": RelativeScreenPos(0, 0.5, 1 / 3, 1),
-    "bottom right third": RelativeScreenPos(2 / 3, 0.5, 1, 1),
-    "bottom left two thirds": RelativeScreenPos(0, 0.5, 2 / 3, 1),
-    "bottom right two thirds": RelativeScreenPos(1 / 3, 0.5, 1, 1),
-    "bottom center third": RelativeScreenPos(1 / 3, 0.5, 2 / 3, 1),
+    "TOP_LEFT_THIRD": RelativeScreenPos(0, 0, 1 / 3, 0.5),
+    "TOP_RIGHT_THIRD": RelativeScreenPos(2 / 3, 0, 1, 0.5),
+    "TOP_LEFT_TWO_THIRDS": RelativeScreenPos(0, 0, 2 / 3, 0.5),
+    "TOP_RIGHT_TWO_THIRDS": RelativeScreenPos(1 / 3, 0, 1, 0.5),
+    "TOP_CENTER_THIRD": RelativeScreenPos(1 / 3, 0, 2 / 3, 0.5),
+    "BOTTOM_LEFT_THIRD": RelativeScreenPos(0, 0.5, 1 / 3, 1),
+    "BOTTOM_RIGHT_THIRD": RelativeScreenPos(2 / 3, 0.5, 1, 1),
+    "BOTTOM_LEFT_TWO_THIRDS": RelativeScreenPos(0, 0.5, 2 / 3, 1),
+    "BOTTOM_RIGHT_TWO_THIRDS": RelativeScreenPos(1 / 3, 0.5, 1, 1),
+    "BOTTOM_CENTER_THIRD": RelativeScreenPos(1 / 3, 0.5, 2 / 3, 1),
     # Alternate (simpler) spoken forms for sixths
-    "top left small": RelativeScreenPos(0, 0, 1 / 3, 0.5),
-    "top right small": RelativeScreenPos(2 / 3, 0, 1, 0.5),
-    "top left large": RelativeScreenPos(0, 0, 2 / 3, 0.5),
-    "top right large": RelativeScreenPos(1 / 3, 0, 1, 0.5),
-    "top center small": RelativeScreenPos(1 / 3, 0, 2 / 3, 0.5),
-    "bottom left small": RelativeScreenPos(0, 0.5, 1 / 3, 1),
-    "bottom right small": RelativeScreenPos(2 / 3, 0.5, 1, 1),
-    "bottom left large": RelativeScreenPos(0, 0.5, 2 / 3, 1),
-    "bottom right large": RelativeScreenPos(1 / 3, 0.5, 1, 1),
-    "bottom center small": RelativeScreenPos(1 / 3, 0.5, 2 / 3, 1),
+    "TOP_LEFT_SMALL": RelativeScreenPos(0, 0, 1 / 3, 0.5),
+    "TOP_RIGHT_SMALL": RelativeScreenPos(2 / 3, 0, 1, 0.5),
+    "TOP_LEFT_LARGE": RelativeScreenPos(0, 0, 2 / 3, 0.5),
+    "TOP_RIGHT_LARGE": RelativeScreenPos(1 / 3, 0, 1, 0.5),
+    "TOP_CENTER_SMALL": RelativeScreenPos(1 / 3, 0, 2 / 3, 0.5),
+    "BOTTOM_LEFT_SMALL": RelativeScreenPos(0, 0.5, 1 / 3, 1),
+    "BOTTOM_RIGHT_SMALL": RelativeScreenPos(2 / 3, 0.5, 1, 1),
+    "BOTTOM_LEFT_LARGE": RelativeScreenPos(0, 0.5, 2 / 3, 1),
+    "BOTTOM_RIGHT_LARGE": RelativeScreenPos(1 / 3, 0.5, 1, 1),
+    "BOTTOM_CENTER_SMALL": RelativeScreenPos(1 / 3, 0.5, 2 / 3, 1),
     # Special
-    "center": RelativeScreenPos(1 / 8, 1 / 6, 7 / 8, 5 / 6),
-    "full": RelativeScreenPos(0, 0, 1, 1),
-    "fullscreen": RelativeScreenPos(0, 0, 1, 1),
+    "CENTER": RelativeScreenPos(1 / 8, 1 / 6, 7 / 8, 5 / 6),
+    "FULL": RelativeScreenPos(0, 0, 1, 1),
+    "FULLSCREEN": RelativeScreenPos(0, 0, 1, 1),
 }
-
 _split_positions = {
     "split": {
-        2: [_snap_positions["left"], _snap_positions["right"]],
+        2: [_snap_positions["LEFT"], _snap_positions["RIGHT"]],
         3: [
-            _snap_positions["left third"],
-            _snap_positions["center third"],
-            _snap_positions["right third"],
+            _snap_positions["LEFT_THIRD"],
+            _snap_positions["CENTER_THIRD"],
+            _snap_positions["RIGHT_THIRD"],
         ],
     },
     "clock": {
         3: [
-            _snap_positions["left"],
-            _snap_positions["top right"],
-            _snap_positions["bottom right"],
+            _snap_positions["LEFT"],
+            _snap_positions["TOP_RIGHT"],
+            _snap_positions["BOTTOM_RIGHT"],
         ],
     },
     "counterclock": {
         3: [
-            _snap_positions["right"],
-            _snap_positions["top left"],
-            _snap_positions["bottom left"],
+            _snap_positions["RIGHT"],
+            _snap_positions["TOP_LEFT"],
+            _snap_positions["BOTTOM_LEFT"],
         ],
     },
 }
@@ -316,13 +319,35 @@ ctx.lists["user.window_split_positions"] = _split_positions.keys()
 
 @mod.action_class
 class Actions:
-    def snap_window(position: RelativeScreenPos) -> None:
-        """Move the active window to a specific position on its current screen, given a `RelativeScreenPos` object."""
-        _snap_window_helper(ui.active_window(), position)
+    def snap_window(
+        position: RelativeScreenPos, window: Optional[Window] = None
+    ) -> None:
+        """Move a window (defaults to the active window) to a specific position on its current screen, given a `RelativeScreenPos` object."""
+        if window is None:
+            window = ui.active_window()
+        _snap_window_helper(window, position)
 
-    def snap_window_to_position(position_name: str) -> None:
-        """Move the active window to a specifically named position on its current screen, using a key from `_snap_positions`."""
-        actions.user.snap_window(_snap_positions[position_name])
+    def snap_window_to_position(
+        position_name: str, window: Optional[Window] = None
+    ) -> None:
+        """Move a window (defaults to the active window) to a specifically named position on its current screen, using a key from `_snap_positions`."""
+        position: Optional[RelativeScreenPos] = None
+        if position_name in _snap_positions:
+            position = _snap_positions[position_name]
+        else:
+            # Previously this function took a spoken form, but we now have constant identifiers in `_snap_positions`.
+            # If the user passed a previous spoken form instead, see if we can convert it to the new identifier.
+            new_key = actions.user.formatted_text(position_name, "ALL_CAPS,SNAKE_CASE")
+            if new_key in _snap_positions:
+                actions.user.deprecate_action(
+                    "2024-12-02",
+                    f"snap_window_to_position('{position_name}')",
+                    f"snap_window_to_position('{new_key}')",
+                )
+                position = _snap_positions[new_key]
+                actions.user.snap_window(position, window)
+            else:
+                raise KeyError(position_name)
 
     def move_window_next_screen() -> None:
         """Move the active window to a specific screen."""
