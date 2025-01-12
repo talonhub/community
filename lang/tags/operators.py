@@ -85,24 +85,21 @@ class Operators(TypedDict):
 class Actions:
     def code_operator(id: str):
         """Insert a code operator"""
-        operators: Operators = actions.user.code_get_operators()
-
         try:
-            operators = actions.user.code_get_operators()
+            operators: Operators = actions.user.code_get_operators()
+            operator = operators.get(id)
+
+            if operator is None:
+                raise ValueError(f"Operator {id} not found")
+
+            if type(operator) is str:
+                actions.insert(operator)
+            else:
+                operator()
         except NotImplementedError:
             # This language has not implement the operators dict and we therefore use the fallback
             operators_fallback(id)
             return
-
-        operator = operators.get(id)
-
-        if operator is None:
-            raise ValueError(f"Operator {id} not found")
-
-        if type(operator) is str:
-            actions.insert(operator)
-        else:
-            operator()
 
     def code_get_operators() -> Operators:
         """Get code operators dictionary"""
