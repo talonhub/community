@@ -1,7 +1,6 @@
-user.draft_editor_running: True
-not tag: user.draft_editor_app_focused
+tag: user.draft_editor_app_running
+and not tag: user.draft_editor_app_focused
 -
-
 draft this: user.draft_editor_open()
 
 draft all:
