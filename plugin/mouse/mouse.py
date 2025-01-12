@@ -218,3 +218,25 @@ class UserActions:
 
         if should_click:
             ctrl.mouse_click(button=0, hold=16000)
+            
+ctx_global = Context()
+@ctx_global.action_class("tracking")
+class TrackingActions:
+    def zoom():
+        if actions.tracking.control_zoom_enabled():
+            ctx_zoom_triggered.tags = ["user.zoom_mouse_activated"]
+            actions.next()
+        else:
+            ctx_zoom_triggered.tags = []
+
+    def zoom_cancel():
+        if actions.tracking.control_zoom_enabled() or "user.zoom_mouse_activated" in ctx_zoom_triggered.tags:
+            actions.next()
+            
+    def control_zoom_toggle(state: bool = None) -> None:    
+        actions.next(state)
+
+        if state:
+            ctx_control_mouse_enabled.tags = ["user.zoom_mouse_enabled"]
+        else:
+            ctx_control_mouse_enabled.tags = []
