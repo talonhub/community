@@ -109,7 +109,7 @@ class Actions:
 def operators_fallback(id: str) -> None:
     match id:
         # code_operators_array
-        case "subscript":
+        case "SUBSCRIPT":
             actions.user.code_operator_subscript()
 
         # code_operators_assignment
