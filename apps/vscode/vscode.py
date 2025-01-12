@@ -100,6 +100,12 @@ class CodeActions:
 
 @ctx.action_class("edit")
 class EditActions:
+    def undo():
+        actions.user.vscode("undo")
+
+    def redo():
+        actions.user.vscode("redo")
+
     # talon edit actions
     def indent_more():
         actions.user.vscode("editor.action.indentLines")
@@ -109,6 +115,9 @@ class EditActions:
 
     def save_all():
         actions.user.vscode("workbench.action.files.saveAll")
+
+    def save():
+        actions.user.vscode("workbench.action.files.save")
 
     def find_next():
         actions.user.vscode("editor.action.nextMatchFindAction")
