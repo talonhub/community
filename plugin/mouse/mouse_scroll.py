@@ -159,6 +159,13 @@ class Actions:
                 speed / DEFAULT_CONTINUOUS_SCROLLING_SPEED_FACTOR
             )
 
+    def mouse_is_continuous_scrolling():
+        """Returns whether continuous scroll is in progress"""
+        if continuous_scroll_mode:
+            return True
+        return False
+        
+
     def hiss_scroll_up():
         """Change mouse hiss scroll direction to up"""
         global hiss_scroll_up
@@ -193,9 +200,7 @@ def mouse_scroll_continuous(
     if scroll_job:
         # Issuing a scroll in the same direction aborts scrolling
         if scroll_dir == new_scroll_dir:
-            cron.cancel(scroll_job)
-            scroll_job = None
-            continuous_scroll_mode = ""
+            actions.user.mouse_scroll_stop()
         # Issuing a scroll in the reverse direction resets acceleration
         else:
             scroll_dir = new_scroll_dir
