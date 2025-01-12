@@ -115,6 +115,9 @@ class WinActions:
 
 @ctx.action_class("user")
 class UserActions:
+    def command_server_directory() -> str:
+        return "visual-studio-command-server"
+
     # def select_word(verb: str):
     #     actions.key("ctrl-w")
     #     actions.user.perform_selection_action(verb)
