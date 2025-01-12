@@ -31,7 +31,12 @@ mod.setting(
     default=False,
     desc="When enabled, mouse wake will hide the cursor. mouse_wake enables zoom mouse.",
 )
-
+mod.setting(
+    "mouse_drag_use_control_mouse",
+    type=bool,
+    default=False,
+    desc="When enabled, drag will enable control mouse",
+)
 
 @mod.action_class
 class Actions:
