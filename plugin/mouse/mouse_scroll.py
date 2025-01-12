@@ -164,7 +164,6 @@ class Actions:
         if continuous_scroll_mode:
             return True
         return False
-        
 
     def hiss_scroll_up():
         """Change mouse hiss scroll direction to up"""
