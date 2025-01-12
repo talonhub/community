@@ -38,6 +38,7 @@ mod.setting(
     desc="When enabled, drag will enable control mouse",
 )
 
+
 @mod.action_class
 class Actions:
     def zoom_close():
