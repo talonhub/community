@@ -165,6 +165,7 @@ class Actions:
             return True
         return False
         
+
     def hiss_scroll_up():
         """Change mouse hiss scroll direction to up"""
         global hiss_scroll_up
