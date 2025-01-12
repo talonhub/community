@@ -1,4 +1,3 @@
-os: windows
 app: visual_studio
 -
 tag(): user.tabs
