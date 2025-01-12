@@ -14,7 +14,7 @@ from talon import Context, Module, actions
 mod = Module()
 ctx = Context()
 
-mod.apps.visual_studio = """
+mod.apps.visual_studio = r"""
 os: windows
 and app.name: Microsoft Visual Studio 2022
 os: windows
