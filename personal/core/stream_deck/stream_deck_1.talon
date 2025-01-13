@@ -128,3 +128,49 @@ deck(reject/rev):
     user.rejection_move_last(4)
 deck(reject/zzz):
     user.deck15()
+
+deck(scrolling/x):
+    skip()
+deck(scrolling/y):
+    skip()
+deck(scrolling/down-arrow):
+    user.mouse_scroll_down_continuous()
+    deck.goto("A00SA3192M9DW0", "default")
+deck(scrolling/up-arrow):
+    user.mouse_scroll_up_continuous()
+    deck.goto("A00SA3192M9DW0", "default")
+
+deck(scrolling/5):
+    user.mouse_scroll_set_speed(5)
+deck(scrolling/10):
+    user.mouse_scroll_set_speed(10)
+deck(scrolling/25):
+    user.mouse_scroll_set_speed(25)
+deck(scrolling/35):
+    user.mouse_scroll_set_speed(35)
+deck(scrolling/55):
+    user.mouse_scroll_set_speed(55)
+deck(scrolling/100):
+    user.mouse_scroll_set_speed(100)
+# deck(scrolling/repeat-button):
+#     user.deck10()
+# deck(scrolling/speaking-head):
+#     user.deck11()
+# deck(scrolling/eye):
+#     user.deck12()
+# deck(scrolling/studio-microphone):
+#     user.deck13()
+# deck(scrolling/currency-exchange):
+#     user.deck14()
+deck(scrolling/stop):
+    user.mouse_scroll_stop()
+    deck.goto("A00SA3192M9DW0", "default")
+deck(scrolling/stop 2):
+    user.mouse_scroll_stop()
+    deck.goto("A00SA3192M9DW0", "default")
+deck(scrolling/stop 3):
+    user.mouse_scroll_stop()
+    deck.goto("A00SA3192M9DW0", "default")
+deck(scrolling/zzz):
+    user.mouse_scroll_stop()
+    deck.goto("A00SA3192M9DW0", "default")

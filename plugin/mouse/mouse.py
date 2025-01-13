@@ -223,11 +223,12 @@ ctx_global = Context()
 @ctx_global.action_class("tracking")
 class TrackingActions:
     def zoom():
-        if actions.tracking.control_zoom_enabled():
-            ctx_zoom_triggered.tags = ["user.zoom_mouse_activated"]
-            actions.next()
-        else:
-            ctx_zoom_triggered.tags = []
+        if not actions.user.mouse_is_continuous_scrolling():
+            if actions.tracking.control_zoom_enabled():
+                ctx_zoom_triggered.tags = ["user.zoom_mouse_activated"]
+                actions.next()
+            else:
+                ctx_zoom_triggered.tags = []
 
     def zoom_cancel():
         if actions.tracking.control_zoom_enabled() or "user.zoom_mouse_activated" in ctx_zoom_triggered.tags:
