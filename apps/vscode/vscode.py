@@ -102,6 +102,12 @@ class EditActions:
     def redo():
         actions.user.vscode("redo")
 
+    def copy():
+        actions.user.vscode("editor.action.clipboardCopyAction")
+
+    def paste():
+        actions.user.vscode("editor.action.clipboardPasteAction")
+
     # talon edit actions
     def indent_more():
         actions.user.vscode("editor.action.indentLines")
