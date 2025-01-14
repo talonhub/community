@@ -52,6 +52,7 @@ See https://github.com/talonhub/community/issues/940 for original discussion
 import datetime
 import os.path
 import warnings
+from typing import Optional
 
 from talon import Module, actions, settings, speech_system
 
