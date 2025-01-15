@@ -334,6 +334,7 @@ class Actions:
         position: Optional[RelativeScreenPos] = None
         if position_name in _snap_positions:
             position = _snap_positions[position_name]
+            actions.user.snap_window(position, window)
         else:
             # Previously this function took a spoken form, but we now have constant identifiers in `_snap_positions`.
             # If the user passed a previous spoken form instead, see if we can convert it to the new identifier.
