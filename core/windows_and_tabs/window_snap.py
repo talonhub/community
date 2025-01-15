@@ -94,9 +94,9 @@ def _move_to_screen(
     moved.
 
     """
-    assert screen_number or offset and not (screen_number and offset), (
-        "Provide exactly one of `screen_number` or `offset`."
-    )
+    assert (
+        screen_number or offset and not (screen_number and offset)
+    ), "Provide exactly one of `screen_number` or `offset`."
 
     src_screen = window.screen
 
