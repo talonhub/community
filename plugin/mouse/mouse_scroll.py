@@ -198,8 +198,10 @@ def mouse_scroll_continuous(
     new_scroll_dir: Literal[-1, 1],
     speed_factor: Optional[int] = None,
 ):
-    global scroll_job, scroll_dir, scroll_start_ts, continuous_scroll_mode, ctx
+    global scroll_job, scroll_dir, scroll_start_ts, ctx
     actions.user.mouse_scroll_set_speed(speed_factor)
+
+    update_continuous_scrolling_mode(new_scroll_dir)
 
     if scroll_job:
         # Issuing a scroll in the same direction aborts scrolling
@@ -212,7 +214,6 @@ def mouse_scroll_continuous(
     else:
         scroll_dir = new_scroll_dir
         scroll_start_ts = time.perf_counter()
-        continuous_scroll_mode = "scroll down continuous"
         scroll_continuous_helper()
         scroll_job = cron.interval("16ms", scroll_continuous_helper)
         ctx.tags = ["user.continuous_scrolling"]
@@ -220,6 +221,12 @@ def mouse_scroll_continuous(
         if not settings.get("user.mouse_hide_mouse_gui"):
             gui_wheel.show()
 
+def update_continuous_scrolling_mode(new_scroll_dir: Literal[-1, 1]):
+    global continuous_scroll_mode
+    if new_scroll_dir == -1:
+        continuous_scroll_mode = "scroll up continuous"
+    else:
+        continuous_scroll_mode = "scroll down continuous"
 
 def scroll_continuous_helper():
     scroll_amount = (
