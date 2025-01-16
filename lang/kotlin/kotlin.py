@@ -23,6 +23,25 @@ ctx.lists["user.code_keyword"] = {
     "return": "return ",
 }
 
+ctx.lists["user.code_type"] = {
+    "boolean": "Boolean",
+    "integer": "Int",
+    "string": "Sting",
+    "none": "None",
+    "dick": "Dict",
+    "float": "float",
+    "any": "Any",
+    "tuple": "Tuple",
+    "union": "UnionAny",
+    "iterable": "Iterable",
+    "vector": "Vector",
+    "bytes": "bytes",
+    "sequence": "Sequence",
+    "callable": "Callable",
+    "list": "List",
+    "no return": "NoReturn",
+}
+
 
 @ctx.action_class("user")
 class UserActions:
