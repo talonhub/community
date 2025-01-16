@@ -53,10 +53,10 @@ mod.setting(
 )
 
 mod.setting(
-    'mouse_continuous_scroll_speed_quotient',
-    type = float,
-    default = 10.0,
-    desc = "When adjusting the continuous scrolling speed through voice commands, the result is that the speed is multiplied by the dictated number divided by this number."
+    "mouse_continuous_scroll_speed_quotient",
+    type=float,
+    default=10.0,
+    desc="When adjusting the continuous scrolling speed through voice commands, the result is that the speed is multiplied by the dictated number divided by this number.",
 )
 
 mod.tag(
@@ -160,8 +160,8 @@ class Actions:
         if speed is None:
             continuous_scrolling_speed_factor = 1.0
         else:
-            continuous_scrolling_speed_factor = (
-                speed / settings.get("user.mouse_continuous_scroll_speed_quotient")
+            continuous_scrolling_speed_factor = speed / settings.get(
+                "user.mouse_continuous_scroll_speed_quotient"
             )
 
     def mouse_is_continuous_scrolling():
@@ -221,12 +221,14 @@ def mouse_scroll_continuous(
         if not settings.get("user.mouse_hide_mouse_gui"):
             gui_wheel.show()
 
+
 def update_continuous_scrolling_mode(new_scroll_dir: Literal[-1, 1]):
     global continuous_scroll_mode
     if new_scroll_dir == -1:
         continuous_scroll_mode = "scroll up continuous"
     else:
         continuous_scroll_mode = "scroll down continuous"
+
 
 def scroll_continuous_helper():
     scroll_amount = (
@@ -239,7 +241,7 @@ def scroll_continuous_helper():
         if acceleration_setting > 1
         else 1
     )
-    
+
     y = scroll_amount * acceleration_speed * scroll_dir
     actions.mouse_scroll(y)
 
