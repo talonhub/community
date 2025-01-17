@@ -149,6 +149,7 @@ os: mac
 and app.bundle: com.jetbrains.jbr.java
 """
 
+
 @mod.action_class
 class Actions:
     def idea(commands: str):
