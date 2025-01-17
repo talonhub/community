@@ -49,6 +49,8 @@ os: windows
 and app.name: Azure Data Studio
 os: windows
 and app.exe: /^azuredatastudio\.exe$/i
+os: windows
+and app.exe: positron.exe
 """
 
 ctx.matches = r"""
@@ -103,6 +105,9 @@ class EditActions:
 
     def save_all():
         actions.user.vscode("workbench.action.files.saveAll")
+
+    def save():
+        actions.user.vscode("workbench.action.files.save")
 
     def find_next():
         actions.user.vscode("editor.action.nextMatchFindAction")
