@@ -24,16 +24,14 @@ settings():
     user.code_protected_variable_formatter = "PRIVATE_CAMEL_CASE"
     user.code_public_variable_formatter = "PRIVATE_CAMEL_CASE"
 
-
 (variadic | spread): "..."
 assign: " := "
-channel (receive|send): " <- "
+channel (receive | send): " <- "
 
-[state] if (err|error):
+[state] if (err | error):
     insert("if err != nil {")
     key("enter")
 
-[state] if not (err|error):
+[state] if not (err | error):
     insert("if err == nil {")
     key("enter")
-
