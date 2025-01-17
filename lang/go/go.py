@@ -19,39 +19,52 @@ ctx.lists["self.code_type"] = {
     "string": "string",
     "rune": "rune",
     "void": "void",
+    "channel": "channel",
 }
 
 ctx.lists["user.code_keyword"] = {
     "break": "break",
     "continue": "continue",
-    "class": "class ",
-    "return": "return ",
+    "struct": "struct",
+    "type": "type",
+    "return": "return",
     "package": "package",
-    "import": "import ",
+    "import": "import",
     "null": "nil",
     "nil": "nil",
     "true": "true",
     "false": "false",
+    "defer": "defer",
+    "go": "go",
+    "if": "if",
+    "else": "else",
+    "switch": "switch",
+    "select": "select",
+    "const": "const",
 }
 
-ctx.lists["self.go_pointers"] = {
-    "pointer": "*",
-}
-
-mod.list("go_pointers", desc="Common go pointers")
-mod.list("go_types", desc="Common go types")
-
-
-@mod.capture(rule="{self._types}")
-def go_types(m) -> str:
-    "Returns a string"
-    return m.go_types
-
-
-@mod.capture(rule="{self.go_pointers}")
-def go_pointers(m) -> str:
-    "Returns a string"
-    return m.go_pointers
+ctx.lists["user.code_common_function"] = {
+    # golang buildin functions
+    "append": "append",
+    "length": "len",
+    "make": "make",
+    # formatting
+    "format print": "fmt.Printf",
+    "format sprint": "fmt.Sprintf",
+    "format print L": "fmt.Println",
+    # time
+    "time hour": "time.Hour"
+    "time minute": "time.Minute"
+    "time second": "time.Second"
+    "time millisecond": "time.Millisecond"
+    "time microsecond": "time.Microsecond"
+    "time nanosecond": "time.Nanosecond"
+    # IO
+    "buf I O": "bufio."
+    # strings
+    "string convert": "strconv."
+    "string convert to int": "strconv.AtoI"
+    }
 
 
 @ctx.action_class("user")
@@ -181,7 +194,7 @@ class UserActions:
         actions.key("enter")
 
     def code_state_switch():
-        actions.user.insert_between("switch (", ") ")
+        actions.user.insert_between("switch ", " ")
 
     def code_state_case():
         actions.user.insert_between("case ", ":")
