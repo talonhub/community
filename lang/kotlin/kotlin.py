@@ -25,21 +25,19 @@ ctx.lists["user.code_keyword"] = {
 
 ctx.lists["user.code_type"] = {
     "boolean": "Boolean",
-    "integer": "Int",
-    "string": "Sting",
-    "none": "None",
-    "dick": "Dict",
-    "float": "float",
+    "byte": "Byte",
+    "short": "Short",
+    "int": "Int",
+    "long": "Long",
+    "float": "Float",
+    "double": "Double",
+    "char": "Char",
+    "string": "String",
+    "array": "Array",
+    "map": "Map",
     "any": "Any",
-    "tuple": "Tuple",
-    "union": "UnionAny",
-    "iterable": "Iterable",
-    "vector": "Vector",
-    "bytes": "bytes",
-    "sequence": "Sequence",
-    "callable": "Callable",
-    "list": "List",
-    "no return": "NoReturn",
+    "nothing": "Nothing",
+    "unit": "Unit",
 }
 
 
