@@ -55,6 +55,8 @@ port_mapping = {
     "pycharm64.exe": 8658,
     "WebStorm": 8663,
     "webstorm64.exe": 8663,
+    # Local plugin development:
+    "com.jetbrains.jbr.java": 8666,
 }
 
 
@@ -121,8 +123,18 @@ mod.apps.jetbrains = r"app.exe: /^webstorm64\.exe$/i"
 mod.apps.jetbrains = """
 os: mac
 and app.bundle: com.jetbrains.pycharm
+"""
+mod.apps.jetbrains = """
 os: mac
 and app.bundle: com.jetbrains.rider
+"""
+mod.apps.jetbrains = """
+os: mac
+and app.bundle: com.jetbrains.goland
+"""
+mod.apps.jetbrains = """
+os: mac
+and app.bundle: com.jetbrains.intellij.ce
 """
 mod.apps.jetbrains = r"""
 os: windows
@@ -131,6 +143,11 @@ os: windows
 and app.exe: /^rider64\.exe$/i
 """
 
+# Local plugin development:
+mod.apps.jetbrains = """
+os: mac
+and app.bundle: com.jetbrains.jbr.java
+"""
 
 @mod.action_class
 class Actions:
