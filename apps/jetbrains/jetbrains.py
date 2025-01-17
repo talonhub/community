@@ -134,8 +134,6 @@ and app.exe: /^rider64\.exe$/i
 
 @mod.action_class
 class Actions:
-    def command_server_directory() -> str:
-        return "jetbrains-command-server"
 
     def idea(commands: str):
         """Send a command to Jetbrains product"""
