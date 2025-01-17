@@ -135,6 +135,9 @@ and app.exe: /^rider64\.exe$/i
 
 @mod.action_class
 class Actions:
+    def command_server_directory() -> str:
+        return "jetbrains-command-server"
+
     def idea(commands: str):
         """Send a command to Jetbrains product"""
         command_list = commands.split(",")
@@ -282,6 +285,10 @@ class WinActions:
 
 @ctx.action_class("user")
 class UserActions:
+
+    def command_server_directory() -> str:
+        return "jetbrains-command-server"
+
     def tab_jump(number: int):
         # depends on plugin GoToTabs
         if number < 10:
