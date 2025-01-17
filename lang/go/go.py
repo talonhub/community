@@ -53,18 +53,18 @@ ctx.lists["user.code_common_function"] = {
     "format sprint": "fmt.Sprintf",
     "format print L": "fmt.Println",
     # time
-    "time hour": "time.Hour"
-    "time minute": "time.Minute"
-    "time second": "time.Second"
-    "time millisecond": "time.Millisecond"
-    "time microsecond": "time.Microsecond"
-    "time nanosecond": "time.Nanosecond"
+    "time hour": "time.Hour",
+    "time minute": "time.Minute",
+    "time second": "time.Second",
+    "time millisecond": "time.Millisecond",
+    "time microsecond": "time.Microsecond",
+    "time nanosecond": "time.Nanosecond",
     # IO
-    "buf I O": "bufio."
+    "buf I O": "bufio.",
     # strings
-    "string convert": "strconv."
-    "string convert to int": "strconv.AtoI"
-    }
+    "string convert": "strconv.",
+    "string convert to int": "strconv.AtoI",
+}
 
 
 @ctx.action_class("user")
