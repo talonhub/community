@@ -10,7 +10,7 @@ tag: user.generic_windows_shell
 
 @ctx.action_class("user")
 class Actions:
-    # Implements the functions from terminal.py for unix shells
+    # Implements the functions from terminal.py for PowerShell
 
     def terminal_list_directories(path: Optional[str] = None):
         actions.insert(f"ls {path or ''}")
