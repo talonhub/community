@@ -1,6 +1,7 @@
 import os
 
 from talon import Context, actions, ui
+from typing import Optional
 
 ctx = Context()
 ctx.matches = r"""
@@ -79,9 +80,9 @@ class UserActions:
         """file_manager_open_volume"""
         actions.user.file_manager_open_directory(volume)
 
-    def terminal_list_directories(path: str):
+    def terminal_list_directories(path: Optional[str] = None):
         """Lists directories"""
-        actions.insert(f"dir {path}")
+        actions.insert(f"dir {path or ''}")
         actions.key("enter")
 
     def terminal_list_all_directories():

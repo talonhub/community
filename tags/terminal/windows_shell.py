@@ -1,4 +1,5 @@
 from talon import Context, Module, actions
+from typing import Optional
 
 ctx = Context()
 mod = Module()
@@ -11,9 +12,8 @@ tag: user.generic_windows_shell
 class Actions:
     # Implements the functions from terminal.py for unix shells
 
-    def terminal_list_directories(path: str):
-        """Lists directories"""
-        actions.insert(f"ls {path}")
+    def terminal_list_directories(path: Optional[str] = None):
+        actions.insert(f"ls {path or ''}")
         actions.key("enter")
 
     def terminal_list_all_directories():

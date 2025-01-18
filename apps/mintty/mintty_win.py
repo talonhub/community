@@ -1,6 +1,7 @@
 import subprocess
 
 from talon import Context, Module, actions, settings, ui
+from typing import Optional
 
 mod = Module()
 mod.apps.mintty = """
@@ -113,8 +114,8 @@ class UserActions:
         """file_manager_open_volume"""
         actions.user.file_manager_open_directory(volume)
 
-    def terminal_list_directories(path: str):
-        actions.insert(f"ls {path}")
+    def terminal_list_directories(path: Optional[str] = None):
+        actions.insert(f"ls {path or ''}")
         actions.key("enter")
 
     def terminal_list_all_directories():

@@ -1,11 +1,12 @@
 from talon import Module
+from typing import Optional
 
 mod = Module()
 
 
 @mod.action_class
 class Actions:
-    def terminal_list_directories(path: str):
+    def terminal_list_directories(path: Optional[str] = None):
         """Lists directories"""
 
     def terminal_list_all_directories():
