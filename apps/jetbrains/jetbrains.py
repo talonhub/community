@@ -31,6 +31,7 @@ port_mapping = {
     "google-android-studio": 8652,
     "idea64.exe": 8653,
     "IntelliJ IDEA": 8653,
+    "IntelliJ IDEA Community Edition": 8654,
     "jetbrains-appcode": 8655,
     "jetbrains-clion": 8657,
     "jetbrains-datagrip": 8664,
@@ -54,6 +55,8 @@ port_mapping = {
     "pycharm64.exe": 8658,
     "WebStorm": 8663,
     "webstorm64.exe": 8663,
+    # Local plugin development:
+    "com.jetbrains.jbr.java": 8666,
 }
 
 
@@ -120,8 +123,18 @@ mod.apps.jetbrains = r"app.exe: /^webstorm64\.exe$/i"
 mod.apps.jetbrains = """
 os: mac
 and app.bundle: com.jetbrains.pycharm
+"""
+mod.apps.jetbrains = """
 os: mac
 and app.bundle: com.jetbrains.rider
+"""
+mod.apps.jetbrains = """
+os: mac
+and app.bundle: com.jetbrains.goland
+"""
+mod.apps.jetbrains = """
+os: mac
+and app.bundle: com.jetbrains.intellij.ce
 """
 mod.apps.jetbrains = r"""
 os: windows
@@ -130,9 +143,16 @@ os: windows
 and app.exe: /^rider64\.exe$/i
 """
 
+# Local plugin development:
+mod.apps.jetbrains = """
+os: mac
+and app.bundle: com.jetbrains.jbr.java
+"""
+
 
 @mod.action_class
 class Actions:
+
     def idea(commands: str):
         """Send a command to Jetbrains product"""
         command_list = commands.split(",")
@@ -142,7 +162,7 @@ class Actions:
                     send_idea_command(cmd.strip())
                     actions.sleep(0.1)
         except Exception as e:
-            app.notify(e)
+            app.notify(str(e))
             raise
 
     def idea_grab(times: int):
@@ -279,6 +299,10 @@ class WinActions:
 
 @ctx.action_class("user")
 class UserActions:
+
+    def command_server_directory() -> str:
+        return "jetbrains-command-server"
+
     def tab_jump(number: int):
         # depends on plugin GoToTabs
         if number < 10:

@@ -1,5 +1,4 @@
 from talon import Context, Module, actions, ctrl, settings, ui
-from talon_plugins import eye_zoom_mouse
 
 mod = Module()
 ctx = Context()
@@ -38,8 +37,12 @@ mod.setting(
 class Actions:
     def zoom_close():
         """Closes an in-progress zoom. Talon will move the cursor position but not click."""
-        if eye_zoom_mouse.zoom_mouse.state == eye_zoom_mouse.STATE_OVERLAY:
-            actions.tracking.zoom_cancel()
+        actions.user.deprecate_action(
+            "2024-12-26",
+            "user.zoom_close",
+            "tracking.zoom_cancel",
+        )
+        actions.tracking.zoom_cancel()
 
     def mouse_wake():
         """Enable control mouse, zoom mouse, and disables cursor"""

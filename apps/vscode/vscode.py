@@ -5,6 +5,7 @@ is_mac = app.platform == "mac"
 ctx = Context()
 mac_ctx = Context()
 mod = Module()
+# com.todesktop.230313mzl4w4u92 is for Cursor - https://www.cursor.com/
 mod.apps.vscode = """
 os: mac
 and app.bundle: com.microsoft.VSCode
@@ -48,6 +49,8 @@ os: windows
 and app.name: Azure Data Studio
 os: windows
 and app.exe: /^azuredatastudio\.exe$/i
+os: windows
+and app.exe: positron.exe
 """
 
 ctx.matches = r"""
@@ -93,6 +96,18 @@ class CodeActions:
 
 @ctx.action_class("edit")
 class EditActions:
+    def undo():
+        actions.user.vscode("undo")
+
+    def redo():
+        actions.user.vscode("redo")
+
+    def copy():
+        actions.user.vscode("editor.action.clipboardCopyAction")
+
+    def paste():
+        actions.user.vscode("editor.action.clipboardPasteAction")
+
     # talon edit actions
     def indent_more():
         actions.user.vscode("editor.action.indentLines")
@@ -102,6 +117,9 @@ class EditActions:
 
     def save_all():
         actions.user.vscode("workbench.action.files.saveAll")
+
+    def save():
+        actions.user.vscode("workbench.action.files.save")
 
     def find_next():
         actions.user.vscode("editor.action.nextMatchFindAction")

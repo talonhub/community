@@ -391,4 +391,4 @@ class UserActions:
         actions.user.code_insert_function(result, None)
 
     def code_insert_library(text: str, selection: str):
-        actions.user.paste(f"include <{text}>")
+        actions.user.paste(f"#include <{text}>")

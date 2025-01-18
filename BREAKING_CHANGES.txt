@@ -7,6 +7,8 @@ and when the change was applied given the delay between changes being
 submitted and the time they were reviewed and merged.
 
 ---
+* 2024-12-3 Introduced an intermediate layer for naming snap window positions instead of using the raw spoken forms. Instead of calling snap_window_to_position("top right") you should now call snap_window_to_position("TOP_RIGHT")
+* 2024-12-26 Deprecated action `user.zoom_close` in favor of `tracking.zoom_cancel`.
 * 2024-11-24 Deprecated a bunch of symbol commands to insert delimited pairs
   ("", '', []) in favor of the new `delimiter_pair` Talon list file.
 * 2024-09-07 Removed `get_list_from_csv` from `user_settings.py`. Please
