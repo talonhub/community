@@ -1,7 +1,7 @@
 import subprocess
+from typing import Optional
 
 from talon import Context, Module, actions, settings, ui
-from typing import Optional
 
 mod = Module()
 mod.apps.mintty = """

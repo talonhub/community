@@ -3,10 +3,10 @@ import os
 import re
 import subprocess
 import sys
+from typing import Optional
 
 from talon import Context, Module, actions, app, ui
 from talon.debug import log_exception
-from typing import Optional
 
 mod = Module()
 
