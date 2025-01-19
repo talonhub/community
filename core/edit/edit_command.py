@@ -36,12 +36,12 @@ def after_line_down():
 
 def action_handler(action):
     if action == "selection":
-        pass
+        return
     elif action == "cutToClipboard":
         actions.edit.cut()
     elif action == "copyToClipboard":
         actions.edit.copy()
-    elif action in ["delete", "deleteLeft", "deleteRight"]:
+    elif action == "delete":
         actions.edit.delete()
 
 def select_lines(action, direction, count):
@@ -95,16 +95,9 @@ custom_callbacks = {
     # delete
     ("delete", "word"): select_words,
     ("delete", "wordLeft"): select_words,
-    ("deleteLeft", "wordLeft"): select_words,
-    ("deleteRight", "wordRight"): select_words,
-    ("deleteLeft", "wordRight"): select_words,
     ("delete", "wordRight"): select_words,
     ("delete", "lineUp"): select_lines,
-    ("deleteLeft", "lineUp"): select_lines,
-    ("deleteRight", "lineUp"): select_lines,
     ("delete", "lineDown"): select_lines,
-    ("deleteLeft", "lineDown"): select_lines,
-    ("deleteRight", "lineDown"): select_lines,
 
     #cut
     ("cutToClipboard", "word"): select_words,
@@ -150,7 +143,7 @@ compound_actions = {
     ("goAfter", "word"): actions.edit.word_right,
     # Delete
     ("delete", "left"): actions.edit.delete,
-    ("delete", "right"): actions.user.delete_right,
+    ("delete", "right"): actions.edit.delete_right,
     ("delete", "line"): actions.edit.delete_line,
     ("delete", "paragraph"): actions.edit.delete_paragraph,
     ("delete", "document"): actions.edit.delete_all,

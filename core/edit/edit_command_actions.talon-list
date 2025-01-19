@@ -8,5 +8,4 @@ slice: cutToClipboard
 paste: pasteFromClipboard
 pace: pasteFromClipboard
 paste to: pasteFromClipboard
-wipe: deleteLeft
-drill: deleteRight
+wipe: delete
