@@ -84,7 +84,9 @@ simple_action_callbacks: dict[str, Callable] = {
     "insertLineAbove": actions.edit.line_insert_up,
     "insertLineBelow": actions.edit.line_insert_down,
     "insertCopyAfter": actions.edit.selection_clone,
-    "delete": actions.edit.delete,
+    "delete": actions.edit.delete_right,
+    "deleteRight": actions.edit.delete_right,
+    "deleteLeft": actions.edit.delete_left,
 }
 
 
