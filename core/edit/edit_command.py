@@ -112,14 +112,12 @@ custom_callbacks = {
     ("cutToClipboard", "wordRight"): select_words,
     ("copyToClipboard", "lineDown"): select_lines,
     ("cutToClipboard", "lineUp"): select_lines,
-
-    #copy
+    # copy
     ("copyToClipboard", "word"): select_words,
     ("copyToClipboard", "wordLeft"): select_words,
     ("copyToClipboard", "wordRight"): select_words,
     ("copyToClipboard", "lineDown"): select_lines,
     ("copyToClipboard", "lineUp"): select_lines,
-
 }
 
 # In other cases there already is a "compound" talon action for a given action and modifier
