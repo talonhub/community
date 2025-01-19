@@ -18,21 +18,26 @@ mod.setting(
     desc="Sleep required between line selections",
 )
 
+
 def before_line_up():
     actions.edit.up()
     actions.edit.line_start()
+
 
 def after_line_up():
     actions.edit.up()
     actions.edit.line_end()
 
+
 def before_line_down():
     actions.edit.down()
     actions.edit.line_start()
 
+
 def after_line_down():
     actions.edit.down()
     actions.edit.line_end()
+
 
 def action_handler(action):
     if action == "selection":
@@ -43,6 +48,7 @@ def action_handler(action):
         actions.edit.copy()
     elif action == "delete":
         actions.edit.delete()
+
 
 def select_lines(action, direction, count):
     if direction == "lineUp":
@@ -55,11 +61,12 @@ def select_lines(action, direction, count):
     for i in range(1, count + 1):
         selection_callback()
         actions.sleep(selection_delay)
-    
+
     # ensure we take the start of the line too!
     actions.edit.extend_line_start()
     actions.sleep(selection_delay)
     action_handler(action)
+
 
 def select_words(action, direction, count):
     if direction == "wordLeft":
@@ -74,6 +81,7 @@ def select_words(action, direction, count):
 
     action_handler(action)
 
+
 def word_movement_handler(action, direction, count):
     if direction == "wordLeft":
         movement_callback = actions.edit.word_left
@@ -85,28 +93,26 @@ def word_movement_handler(action, direction, count):
         movement_callback()
         actions.sleep(selection_delay)
 
+
 # in some cases, it is necessary to have some custom handling for timing reasons
 custom_callbacks = {
     ("goAfter", "wordLeft"): word_movement_handler,
     ("goAfter", "wordRight"): word_movement_handler,
     ("goBefore", "wordLeft"): word_movement_handler,
     ("goBefore", "wordRight"): word_movement_handler,
-
     # delete
     ("delete", "word"): select_words,
     ("delete", "wordLeft"): select_words,
     ("delete", "wordRight"): select_words,
     ("delete", "lineUp"): select_lines,
     ("delete", "lineDown"): select_lines,
-
-    #cut
+    # cut
     ("cutToClipboard", "word"): select_words,
     ("cutToClipboard", "wordLeft"): select_words,
     ("cutToClipboard", "wordRight"): select_words,
     ("cutToClipboard", "lineUp"): select_lines,
     ("copyToClipboard", "lineDown"): select_lines,
-
-    #copy
+    # copy
     ("copyToClipboard", "word"): select_words,
     ("copyToClipboard", "wordLeft"): select_words,
     ("copyToClipboard", "wordRight"): select_words,
@@ -160,19 +166,17 @@ compound_actions = {
 class Actions:
     def edit_command(action: EditAction, modifier: EditModifier):
         """Perform edit command"""
-        key = (action.type, modifier.type)   
-        count = modifier.count 
+        key = (action.type, modifier.type)
+        count = modifier.count
 
         if key in custom_callbacks:
             custom_callbacks[key](action.type, modifier.type, count)
-            return 
-        
+            return
+
         elif key in compound_actions:
             for i in range(1, count + 1):
                 compound_actions[key]()
             return
-        
+
         run_modifier_callback(modifier)
         run_action_callback(action)
-
-    
