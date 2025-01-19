@@ -5,7 +5,7 @@ if hasattr(talon, "test_mode"):
 
     from talon import actions
 
-    from core.text import formatters
+    from core.formatters import formatters
 
     def setup_function():
         actions.reset_test_actions()
