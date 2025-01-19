@@ -405,7 +405,7 @@ def create_spoken_forms_from_regex(source: str, pattern: re.Pattern):
     spoken forms for the numbers where appropriate.
     """
     source_without_apostrophes = source.replace("'", "")
-    pieces = list(pattern.finditer(source_without_apostrophes.replace("'", "")))
+    pieces = list(pattern.finditer(source_without_apostrophes))
     spoken_forms = list(map(lambda x: x.group(0), pieces))
 
     # NOTE: Order is sometimes important
