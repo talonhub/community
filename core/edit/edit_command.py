@@ -3,21 +3,27 @@ from talon import Module, actions
 from .edit_command_actions import EditAction, run_action_callback
 from .edit_command_modifiers import EditModifier, run_modifier_callback
 
+
 def before_line_up():
     actions.edit.up()
     actions.edit.line_start()
+
 
 def after_line_up():
     actions.edit.up()
     actions.edit.line_end()
 
+
 def before_line_down():
     actions.edit.down()
     actions.edit.line_start()
 
+
 def after_line_down():
     actions.edit.down()
     actions.edit.line_end()
+
+
 # In some cases there already is a "compound" talon action for a given action and modifier
 compound_actions = {
     # selection
@@ -64,18 +70,18 @@ compound_actions = {
 }
 
 mod = Module()
+
+
 @mod.action_class
 class Actions:
     def edit_command(action: EditAction, modifier: EditModifier):
         """Perform edit command"""
-        key = (action.type, modifier.type)    
+        key = (action.type, modifier.type)
         if key in compound_actions:
-            count = modifier.count 
+            count = modifier.count
             for i in range(1, count + 1):
                 compound_actions[key]()
             return
-        
+
         run_modifier_callback(modifier)
         run_action_callback(action)
-
-    
