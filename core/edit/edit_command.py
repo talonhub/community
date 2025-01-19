@@ -36,12 +36,12 @@ def after_line_down():
 
 def action_handler(action):
     if action == "selection":
-        pass
+        return
     elif action == "cutToClipboard":
         actions.edit.cut()
     elif action == "copyToClipboard":
         actions.edit.copy()
-    elif action in ["delete", "deleteLeft", "deleteRight"]:
+    elif action == "delete":
         actions.edit.delete()
 
 def select_lines(action, direction, count):
@@ -74,21 +74,30 @@ def select_words(action, direction, count):
 
     action_handler(action)
 
+def word_movement_handler(action, direction, count):
+    if direction == "wordLeft":
+        movement_callback = actions.edit.word_left
+    else:
+        movement_callback = actions.edit.word_right
+
+    selection_delay = f"{settings.get('user.edit_command_word_selection_delay')}ms"
+    for i in range(1, count + 1):
+        movement_callback()
+        actions.sleep(selection_delay)
+
 # in some cases, it is necessary to have some custom handling for timing reasons
 custom_callbacks = {
+    ("goAfter", "wordLeft"): word_movement_handler,
+    ("goAfter", "wordRight"): word_movement_handler,
+    ("goBefore", "wordLeft"): word_movement_handler,
+    ("goBefore", "wordRight"): word_movement_handler,
+
     # delete
     ("delete", "word"): select_words,
     ("delete", "wordLeft"): select_words,
-    ("deleteLeft", "wordLeft"): select_words,
-    ("deleteRight", "wordRight"): select_words,
-    ("deleteLeft", "wordRight"): select_words,
     ("delete", "wordRight"): select_words,
     ("delete", "lineUp"): select_lines,
-    ("deleteLeft", "lineUp"): select_lines,
-    ("deleteRight", "lineUp"): select_lines,
     ("delete", "lineDown"): select_lines,
-    ("deleteLeft", "lineDown"): select_lines,
-    ("deleteRight", "lineDown"): select_lines,
 
     #cut
     ("cutToClipboard", "word"): select_words,
