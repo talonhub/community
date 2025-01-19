@@ -43,5 +43,5 @@ increment:
     user.code_operator("ASSIGNMENT_BITWISE_LEFT_SHIFT")
 
 [(op | logical | bitwise)] (right shift | shift right) equals:
-    user.deprecate_command("2025-01-19", "[(op | logical | bitwise)] (right shift | shift right) equals", "4p right shift equals")
+    user.deprecate_command("2025-01-19", "[(op | logical | bitwise)] (right shift | shift right) equals", "op right shift equals")
     user.code_operator("ASSIGNMENT_BITWISE_RIGHT_SHIFT")
