@@ -6,17 +6,16 @@ from typing import Any, List, Mapping, Optional
 
 from talon import Module, actions
 
-
 from .numbers.numbers import digits_map, scales, teens, tens
 from .user_settings import track_csv_list
 
 mod = Module()
 
-# Keep support for a handful of symbols. 
+# Keep support for a handful of symbols.
 symbol_key_words = {
-    "dot": ".", 
-    "and": "&", 
-    "at": "@", 
+    "dot": ".",
+    "and": "&",
+    "at": "@",
 }
 
 DEFAULT_MINIMUM_TERM_LENGTH = 2
@@ -405,7 +404,7 @@ def create_spoken_forms_from_regex(source: str, pattern: re.Pattern):
     For numeric pieces detected by the regex, generates both digit-wise and full
     spoken forms for the numbers where appropriate.
     """
-    source_without_apostrophes = source.replace("'", "") 
+    source_without_apostrophes = source.replace("'", "")
     pieces = list(pattern.finditer(source_without_apostrophes.replace("'", "")))
     spoken_forms = list(map(lambda x: x.group(0), pieces))
 
@@ -473,7 +472,7 @@ class Actions:
         generate_subsequences: bool = True,
     ) -> list[str]:
         """Create spoken forms for a given source"""
-        
+
         spoken_forms_without_symbols = create_spoken_forms_from_regex(
             source, REGEX_NO_SYMBOLS
         )
