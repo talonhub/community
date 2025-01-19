@@ -98,11 +98,9 @@ if hasattr(talon, "test_mode"):
 
         assert "read me" in result
 
-    def test_case():
-        result = actions.user.create_spoken_forms("Microsoft Word", None, 0, True)
-
-        assert "microsoft word" in result
-    
+    def test_email():
+        result = actions.user.create_spoken_forms("stupid@test.com", None, 0, True)
+        assert "stupid at test dot com" in result
     
     def test_symbol_removal():
         result = actions.user.create_spoken_forms("this_is_a-test", None, 0, True)
