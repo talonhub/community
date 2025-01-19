@@ -14,9 +14,9 @@ mod = Module()
 
 # Keep support for a handful of symbols. 
 symbol_key_words = {
-    ".": "dot", 
-    "&": "and", 
-    "@": "at", 
+    "dot": ".", 
+    "and": "&", 
+    "at": "@", 
 }
 
 DEFAULT_MINIMUM_TERM_LENGTH = 2
