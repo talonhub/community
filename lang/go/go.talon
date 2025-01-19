@@ -25,7 +25,7 @@ settings():
     user.code_public_variable_formatter = "PRIVATE_CAMEL_CASE"
 
 (variadic | spread): "..."
-assign: " := "
+declare: " := "
 channel (receive | send): " <- "
 
 [state] if (err | error):

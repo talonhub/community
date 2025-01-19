@@ -51,7 +51,7 @@ ctx.lists["user.code_common_function"] = {
     # formatting
     "format print": "fmt.Printf",
     "format sprint": "fmt.Sprintf",
-    "format print L": "fmt.Println",
+    "format print line": "fmt.Println",
     # time
     "time hour": "time.Hour",
     "time minute": "time.Minute",
