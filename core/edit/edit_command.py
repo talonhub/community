@@ -74,8 +74,24 @@ def select_words(action, direction, count):
 
     action_handler(action)
 
+def word_movement_handler(action, direction, count):
+    if direction == "wordLeft":
+        movement_callback = actions.edit.word_left
+    else:
+        movement_callback = actions.edit.word_right
+
+    selection_delay = f"{settings.get('user.edit_command_word_selection_delay')}ms"
+    for i in range(1, count + 1):
+        movement_callback()
+        actions.sleep(selection_delay)
+
 # in some cases, it is necessary to have some custom handling for timing reasons
 custom_callbacks = {
+    ("goAfter", "wordLeft"): word_movement_handler,
+    ("goAfter", "wordRight"): word_movement_handler,
+    ("goBefore", "wordLeft"): word_movement_handler,
+    ("goBefore", "wordRight"): word_movement_handler,
+
     # delete
     ("delete", "word"): select_words,
     ("delete", "wordLeft"): select_words,
