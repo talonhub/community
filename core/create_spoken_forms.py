@@ -6,20 +6,30 @@ from typing import Any, List, Mapping, Optional
 
 from talon import Module, actions
 
+
 from .numbers.numbers import digits_map, scales, teens, tens
 from .user_settings import track_csv_list
 
 mod = Module()
 
+# Keep support for a handful of symbols. 
+symbol_key_words = {
+    "dot": ".", 
+    "and": "&", 
+    "at": "@", 
+}
+
 DEFAULT_MINIMUM_TERM_LENGTH = 2
 EXPLODE_MAX_LEN = 3
 FANCY_REGULAR_EXPRESSION = r"[A-Z]?[a-z]+|[A-Z]+(?![a-z])|[0-9]+"
+SYMBOLS_REGEX = "|".join(re.escape(symbol) for symbol in set(symbol_key_words.values()))
 FILE_EXTENSIONS_REGEX = r"^\b$"
 file_extensions = {}
 
 
 def update_regex():
     global REGEX_NO_SYMBOLS
+    global REGEX_WITH_SYMBOLS
     REGEX_NO_SYMBOLS = re.compile(
         "|".join(
             [
@@ -27,6 +37,9 @@ def update_regex():
                 FILE_EXTENSIONS_REGEX,
             ]
         )
+    )
+    REGEX_WITH_SYMBOLS = re.compile(
+        "|".join([FANCY_REGULAR_EXPRESSION, FILE_EXTENSIONS_REGEX, SYMBOLS_REGEX])
     )
 
 
@@ -55,10 +68,8 @@ def on_abbreviations(values):
 
 REVERSE_PRONUNCIATION_MAP = {
     **{str(value): key for key, value in digits_map.items()},
+    **{value: key for key, value in symbol_key_words.items()},
 }
-
-# for the moment, keep the dot spoken form
-REVERSE_PRONUNCIATION_MAP["."] = "dot"
 
 # begin: create the lists etc necessary for create_spoken_word_for_number
 # by convention, each entry in the list has an append space... until I clean up the function
@@ -261,11 +272,9 @@ def create_extension_forms(spoken_forms: List[str]):
 
             if substring in file_extensions_map.keys():
                 file_extension_forms.append(file_extensions_map[substring])
-
                 dotted_extension_form.append(REVERSE_PRONUNCIATION_MAP["."])
                 dotted_extension_form.append(file_extensions_map[substring])
                 have_file_extension = True
-
                 # purposefully down update truncated
             else:
                 file_extension_forms.append(substring)
@@ -396,7 +405,8 @@ def create_spoken_forms_from_regex(source: str, pattern: re.Pattern):
     For numeric pieces detected by the regex, generates both digit-wise and full
     spoken forms for the numbers where appropriate.
     """
-    pieces = list(pattern.finditer(source))
+    source_without_apostrophes = source.replace("'", "") 
+    pieces = list(pattern.finditer(source_without_apostrophes.replace("'", "")))
     spoken_forms = list(map(lambda x: x.group(0), pieces))
 
     # NOTE: Order is sometimes important
@@ -463,25 +473,33 @@ class Actions:
         generate_subsequences: bool = True,
     ) -> list[str]:
         """Create spoken forms for a given source"""
+        
+        spoken_forms_without_symbols = create_spoken_forms_from_regex(
+            source, REGEX_NO_SYMBOLS
+        )
 
-        spoken_forms = create_spoken_forms_from_regex(source, REGEX_NO_SYMBOLS)
+        # todo: this could probably be optimized out if there's no symbols
+        spoken_forms_with_symbols = create_spoken_forms_from_regex(
+            source, REGEX_WITH_SYMBOLS
+        )
 
-        spoken_forms_set = set(spoken_forms)
+        # some may be identical, so ensure the list is reduced
+        spoken_forms = set(spoken_forms_with_symbols + spoken_forms_without_symbols)
 
         # only generate the subsequences if requested
         if generate_subsequences:
             # todo: do we care about the subsequences that are excluded.
             # the only one that seems relevant are the full spoken form for
-            spoken_forms_set.update(
+            spoken_forms.update(
                 generate_string_subsequences(
-                    spoken_forms[-1],
+                    spoken_forms_without_symbols[-1],
                     words_to_exclude or [],
                     minimum_term_length,
                 )
             )
 
         # Avoid empty spoken forms.
-        return [x for x in spoken_forms_set if x]
+        return [x for x in spoken_forms if x]
 
     def create_spoken_forms_from_list(
         sources: list[str],
