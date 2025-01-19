@@ -1,0 +1,8 @@
+list: user.prose_modifiers
+-
+# Maps spoken forms to DictationFormat method names (see DictationFormat in text_and_dictation.py).
+cap: cap
+no cap: no_cap
+# no caps variant for Dragon
+no caps: no_cap
+no space: no_space

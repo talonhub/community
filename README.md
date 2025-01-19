@@ -126,7 +126,7 @@ Prose formatters (marked with \* in the help window) preserve hyphens and apostr
 
 Reformat existing text with one or more formatters by selecting it, then saying the formatter name(s) followed by `that`. Say `help reformat` to display how each formatter reformats `one_two_three`.
 
-Formatter names (snake, dubstring) are defined [here](core/text/formatters.py#L245). Formatter-related commands are defined in [text.talon](core/text/text.talon#L8).
+Formatter names (snake, dubstring) are defined [here](core/formatters/formatters.py#L245). Formatter-related commands are defined in [text.talon](core/text/text.talon#L8).
 
 ### Mouse commands
 
@@ -144,7 +144,7 @@ Say `go up fifth` or `go up five times` to go up five lines. `select up third` w
 
 ### Window management
 
-Global window managment commands are defined in [window_management.talon](core/windows_and_tabs/window_management.talon).
+Global window management commands are defined in [window_management.talon](core/windows_and_tabs/window_management.talon).
 
 - `running list` toggles a window displaying words you can say to switch to running applications. To customize the spoken forms for an app (or hide an app entirely from the list), edit the `app_name_overrides_<platform>.csv` files in the [core/app_switcher](core/app_switcher) directory.
 - `focus chrome` will focus the Chrome application.
