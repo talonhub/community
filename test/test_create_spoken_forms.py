@@ -103,7 +103,7 @@ if hasattr(talon, "test_mode"):
         assert "stupid at test dot com" in result
     
     def test_symbol_removal():
-        result = actions.user.create_spoken_forms("this_is_a-test", None, 0, True)
+        result = actions.user.create_spoken_forms("$ this_is_a-'test'", None, 0, True)
 
         assert "this is a test" in result
     
