@@ -96,18 +96,6 @@ class CodeActions:
 
 @ctx.action_class("edit")
 class EditActions:
-    def undo():
-        actions.user.vscode("undo")
-
-    def redo():
-        actions.user.vscode("redo")
-
-    def copy():
-        actions.user.vscode("editor.action.clipboardCopyAction")
-
-    def paste():
-        actions.user.vscode("editor.action.clipboardPasteAction")
-
     # talon edit actions
     def indent_more():
         actions.user.vscode("editor.action.indentLines")
