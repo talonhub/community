@@ -74,6 +74,7 @@ def select_words(action, direction, count):
 
     action_handler(action)
 
+# in some cases, it is necessary to have some custom handling for timing reasons
 custom_callbacks = {
     # delete
     ("delete", "word"): select_words,
@@ -102,7 +103,7 @@ custom_callbacks = {
     ("copyToClipboard", "wordRight"): select_words,
 }
 
-# In some cases there already is a "compound" talon action for a given action and modifier
+# In other cases there already is a "compound" talon action for a given action and modifier
 compound_actions = {
     # selection
     ("selection", "wordLeft"): actions.edit.extend_word_left,
@@ -134,8 +135,6 @@ compound_actions = {
     # Delete
     ("delete", "left"): actions.edit.delete,
     ("delete", "right"): actions.user.delete_right,
-    ("delete", "word"): actions.edit.delete_word,
-    ("deleteLeft", "wordLeft"): actions.edit.delete_word,
     ("delete", "line"): actions.edit.delete_line,
     ("delete", "paragraph"): actions.edit.delete_paragraph,
     ("delete", "document"): actions.edit.delete_all,
