@@ -1,4 +1,5 @@
 import os
+from typing import Optional
 
 from talon import Context, actions, ui
 
@@ -79,9 +80,9 @@ class UserActions:
         """file_manager_open_volume"""
         actions.user.file_manager_open_directory(volume)
 
-    def terminal_list_directories():
+    def terminal_list_directories(path: Optional[str] = None):
         """Lists directories"""
-        actions.insert("dir")
+        actions.insert(f"dir {path or ''}")
         actions.key("enter")
 
     def terminal_list_all_directories():
