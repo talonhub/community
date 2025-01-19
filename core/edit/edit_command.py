@@ -56,7 +56,7 @@ def select_lines(action, direction, count):
     else:
         selection_callback = actions.edit.extend_line_down
 
-    selection_delay = f"{settings.get('user.edit_command_word_selection_delay')}ms"
+    selection_delay = f"{settings.get('user.edit_command_line_selection_delay')}ms"
 
     for i in range(1, count + 1):
         selection_callback()
