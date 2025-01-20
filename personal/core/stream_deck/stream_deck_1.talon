@@ -139,17 +139,17 @@ deck(scrolling/up-arrow):
     user.deck4()
 
 deck(scrolling/5):
-    user.mouse_scroll_set_speed(5)
+    user.deck5()
 deck(scrolling/10):
-    user.mouse_scroll_set_speed(10)
+    user.deck6()
 deck(scrolling/25):
-    user.mouse_scroll_set_speed(25)
+    user.deck7()
 deck(scrolling/35):
-    user.mouse_scroll_set_speed(35)
+    user.deck8()
 deck(scrolling/55):
-    user.mouse_scroll_set_speed(55)
+    user.deck9()
 deck(scrolling/100):
-    user.mouse_scroll_set_speed(100)
+    user.deck10()
 # deck(scrolling/repeat-button):
 #     user.deck10()
 # deck(scrolling/speaking-head):
