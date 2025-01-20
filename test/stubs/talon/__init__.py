@@ -175,10 +175,12 @@ class Settings:
     Implements something like talon.settings
     """
 
+
 class Registry:
     """
-    Implements something like talon's registry
+    Implements something like Talon's registry
     """
+
 
 class Resource:
     """

@@ -1,7 +1,14 @@
 list: user.delimiter_pair
 -
-# SPOKEN_FORM: LEFT_DELIMITER RIGHT_DELIMITER. Example: "round: ( )"
-# Special case for whitespace "space". Example: "pad: space space"
+
+# Format:
+# SPOKEN_FORM: LEFT_DELIMITER RIGHT_DELIMITER
+# Use the literal symbols for delimiters (except for whitespace, which is "space")
+#
+# Examples:
+# round: ( )
+# pad: space space
+
 round: ( )
 box: [ ]
 diamond: < >
@@ -11,6 +18,7 @@ quad: '" "'
 skis: ` `
 percentages: % %
 pad: space space
+
 escaped quad: '\\" \\"'
 escaped twin:  "\\' \\'"
 escaped round: \( \)
