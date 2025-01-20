@@ -5,6 +5,7 @@ ctx_zoom_mouse_enabled.matches = r"""
 not user.running: Optikey Mouse
 tag: user.zoom_mouse_enabled
 and not tag: user.zoom_mouse_activated
+and not tag: user.continuous_scrolling
 """
 
 
@@ -13,12 +14,14 @@ ctx_zoom_mouse_triggered.matches = r"""
 tag: user.zoom_mouse_enabled
 and tag: user.zoom_mouse_activated
 and not tag: user.control_mouse_enabled
+and not tag: user.continuous_scrolling
 #and not tag: talon_plugins.eye_zoom_mouse.zoom_mouse_pedal
 """
 
 ctx_control_mouse_enabled = Context()
 ctx_control_mouse_enabled.matches  = r"""
 tag: user.control_mouse_enabled
+and not tag: user.continuous_scrolling
 """
 def sleep_or_wake():
     if not actions.speech.enabled():

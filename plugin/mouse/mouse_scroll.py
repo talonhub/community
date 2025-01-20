@@ -3,8 +3,6 @@ from typing import Literal, Optional
 
 from talon import Context, Module, actions, app, cron, ctrl, imgui, settings, ui
 
-DEFAULT_CONTINUOUS_SCROLLING_SPEED_FACTOR: int = 10
-
 continuous_scroll_mode = ""
 scroll_job = None
 gaze_job = None
@@ -12,7 +10,7 @@ scroll_dir: Literal[-1, 1] = 1
 scroll_start_ts: float = 0
 hiss_scroll_up = False
 control_mouse_forced = False
-continuous_scrolling_speed_factor: int = 1
+continuous_scrolling_speed_factor: float = 1.0
 
 mod = Module()
 ctx = Context()
@@ -52,6 +50,13 @@ mod.setting(
     type=bool,
     default=False,
     desc="When enabled, the 'Scroll Mouse' GUI will not be shown.",
+)
+
+mod.setting(
+    "mouse_continuous_scroll_speed_quotient",
+    type=float,
+    default=10.0,
+    desc="When adjusting the continuous scrolling speed through voice commands, the result is that the speed is multiplied by the dictated number divided by this number.",
 )
 
 mod.tag(
@@ -125,7 +130,7 @@ class Actions:
         global scroll_job, gaze_job, continuous_scroll_mode, control_mouse_forced, continuous_scrolling_speed_factor, ctx
 
         continuous_scroll_mode = ""
-        continuous_scrolling_speed_factor = 1
+        continuous_scrolling_speed_factor = 1.0
         return_value = False
         ctx.tags = []
 
@@ -153,10 +158,10 @@ class Actions:
         if scroll_start_ts:
             scroll_start_ts = time.perf_counter()
         if speed is None:
-            continuous_scrolling_speed_factor = 1
+            continuous_scrolling_speed_factor = 1.0
         else:
-            continuous_scrolling_speed_factor = (
-                speed / DEFAULT_CONTINUOUS_SCROLLING_SPEED_FACTOR
+            continuous_scrolling_speed_factor = speed / settings.get(
+                "user.mouse_continuous_scroll_speed_quotient"
             )
 
     def mouse_is_continuous_scrolling():
@@ -164,7 +169,6 @@ class Actions:
         if continuous_scroll_mode:
             return True
         return False
-        
 
     def hiss_scroll_up():
         """Change mouse hiss scroll direction to up"""
@@ -194,8 +198,10 @@ def mouse_scroll_continuous(
     new_scroll_dir: Literal[-1, 1],
     speed_factor: Optional[int] = None,
 ):
-    global scroll_job, scroll_dir, scroll_start_ts, continuous_scroll_mode, ctx
+    global scroll_job, scroll_dir, scroll_start_ts, ctx
     actions.user.mouse_scroll_set_speed(speed_factor)
+
+    update_continuous_scrolling_mode(new_scroll_dir)
 
     if scroll_job:
         # Issuing a scroll in the same direction aborts scrolling
@@ -208,13 +214,20 @@ def mouse_scroll_continuous(
     else:
         scroll_dir = new_scroll_dir
         scroll_start_ts = time.perf_counter()
-        continuous_scroll_mode = "scroll down continuous"
         scroll_continuous_helper()
         scroll_job = cron.interval("16ms", scroll_continuous_helper)
         ctx.tags = ["user.continuous_scrolling"]
 
         if not settings.get("user.mouse_hide_mouse_gui"):
             gui_wheel.show()
+
+
+def update_continuous_scrolling_mode(new_scroll_dir: Literal[-1, 1]):
+    global continuous_scroll_mode
+    if new_scroll_dir == -1:
+        continuous_scroll_mode = "scroll up continuous"
+    else:
+        continuous_scroll_mode = "scroll down continuous"
 
 
 def scroll_continuous_helper():
@@ -228,6 +241,7 @@ def scroll_continuous_helper():
         if acceleration_setting > 1
         else 1
     )
+
     y = scroll_amount * acceleration_speed * scroll_dir
     actions.mouse_scroll(y)
 

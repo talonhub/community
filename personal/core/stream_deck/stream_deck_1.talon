@@ -134,11 +134,9 @@ deck(scrolling/x):
 deck(scrolling/y):
     skip()
 deck(scrolling/down-arrow):
-    user.mouse_scroll_down_continuous()
-    deck.goto("A00SA3192M9DW0", "default")
+    user.deck3()
 deck(scrolling/up-arrow):
-    user.mouse_scroll_up_continuous()
-    deck.goto("A00SA3192M9DW0", "default")
+    user.deck4()
 
 deck(scrolling/5):
     user.mouse_scroll_set_speed(5)
