@@ -68,6 +68,7 @@ mod.tag(
 @imgui.open(x=700, y=0)
 def gui_wheel(gui: imgui.GUI):
     gui.text(f"Scroll mode: {continuous_scroll_mode}")
+    gui.text(f"say a number between 0 and 99 to set scrolling speed")
     gui.line()
     if gui.button("Wheel Stop [stop scrolling]"):
         actions.user.mouse_scroll_stop()
