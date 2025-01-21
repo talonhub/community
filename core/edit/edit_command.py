@@ -38,7 +38,7 @@ def after_line_down():
     actions.edit.down()
     actions.edit.line_end()
 
-        
+
 def select_lines(action, direction, count):
     if direction == "lineUp":
         selection_callback = actions.edit.extend_line_up
@@ -52,7 +52,7 @@ def select_lines(action, direction, count):
     for i in range(1, count + 1):
         selection_callback()
         actions.sleep(selection_delay)
-    
+
     # ensure we take the start/end of the line too!
     extend_line_callback()
     actions.sleep(selection_delay)
@@ -82,28 +82,26 @@ def word_movement_handler(action, direction, count):
         movement_callback()
         actions.sleep(selection_delay)
 
+
 # in some cases, it is necessary to have some custom handling for timing reasons
 custom_callbacks = {
     ("goAfter", "wordLeft"): word_movement_handler,
     ("goAfter", "wordRight"): word_movement_handler,
     ("goBefore", "wordLeft"): word_movement_handler,
     ("goBefore", "wordRight"): word_movement_handler,
-
     # delete
     ("delete", "word"): select_words,
     ("delete", "wordLeft"): select_words,
     ("delete", "wordRight"): select_words,
     ("delete", "lineUp"): select_lines,
     ("delete", "lineDown"): select_lines,
-
-    #cut
+    # cut
     ("cutToClipboard", "word"): select_words,
     ("cutToClipboard", "wordLeft"): select_words,
     ("cutToClipboard", "wordRight"): select_words,
     ("cutToClipboard", "lineUp"): select_lines,
     ("cutToClipboard", "lineDown"): select_lines,
-
-    #copy
+    # copy
     ("copyToClipboard", "word"): select_words,
     ("copyToClipboard", "wordLeft"): select_words,
     ("copyToClipboard", "wordRight"): select_words,
