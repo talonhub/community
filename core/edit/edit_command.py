@@ -58,6 +58,7 @@ def select_lines(action, direction, count):
     actions.sleep(selection_delay)
     run_action_callback(action)
 
+
 def select_words(action, direction, count):
     if direction == "wordLeft":
         selection_callback = actions.edit.extend_word_left
@@ -70,6 +71,7 @@ def select_words(action, direction, count):
         actions.sleep(selection_delay)
 
     run_action_callback(action)
+
 
 def word_movement_handler(action, direction, count):
     if direction == "wordLeft":
@@ -106,9 +108,8 @@ custom_callbacks = {
     ("copyToClipboard", "wordLeft"): select_words,
     ("copyToClipboard", "wordRight"): select_words,
     ("copyToClipboard", "lineUp"): select_lines,
-    ("copyToClipboard", "lineDown"): select_lines,    
-
-    #select
+    ("copyToClipboard", "lineDown"): select_lines,
+    # select
     ("select", "lineUp"): select_lines,
     ("select", "lineDown"): select_lines,
 }
