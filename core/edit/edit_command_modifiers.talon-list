@@ -1,5 +1,6 @@
 list: user.edit_modifier
 -
+take: selection
 all: document
 paragraph: paragraph
 line: line
