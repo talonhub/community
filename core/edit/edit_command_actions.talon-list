@@ -1,6 +1,6 @@
 list: user.edit_action
 -
-take: selection
+take: select
 before: goBefore
 after: goAfter
 copy: copyToClipboard

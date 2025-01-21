@@ -34,21 +34,8 @@ def after_line_down():
     actions.edit.down()
     actions.edit.line_end()
 
-def action_handler(action):
-    match action:
-        case "selection":
-            action-1
-        case "cutToClipboard":
-            actions.edit.cut()
-        case "copyToClipboard":
-            actions.edit.copy()
-        case "delete":
-            actions.edit.delete()
-        case _:
-            print("action_handler: Unknown action")
         
 def select_lines(action, direction, count):
-    print(f"{action} {direction} {count}")
     if direction == "lineUp":
         selection_callback = actions.edit.extend_line_up
         extend_line_callback = actions.edit.extend_line_start
@@ -65,7 +52,7 @@ def select_lines(action, direction, count):
     # ensure we take the start/end of the line too!
     extend_line_callback()
     actions.sleep(selection_delay)
-    action_handler(action)
+    run_action_callback(action)
 
 def select_words(action, direction, count):
     if direction == "wordLeft":
@@ -78,7 +65,7 @@ def select_words(action, direction, count):
         selection_callback()
         actions.sleep(selection_delay)
 
-    action_handler(action)
+    run_action_callback(action)
 
 def word_movement_handler(action, direction, count):
     if direction == "wordLeft":
@@ -110,26 +97,28 @@ custom_callbacks = {
     ("cutToClipboard", "wordLeft"): select_words,
     ("cutToClipboard", "wordRight"): select_words,
     ("cutToClipboard", "lineUp"): select_lines,
-    ("copyToClipboard", "lineDown"): select_lines,
+    ("cutToClipboard", "lineDown"): select_lines,
 
     #copy
     ("copyToClipboard", "word"): select_words,
     ("copyToClipboard", "wordLeft"): select_words,
     ("copyToClipboard", "wordRight"): select_words,
+    ("copyToClipboard", "lineUp"): select_lines,
+    ("copyToClipboard", "lineDown"): select_lines,    
 
-    #selection
-    ("selection", "lineUp"): select_lines,
-    ("selection", "lineDown"): select_lines,
+    #select
+    ("select", "lineUp"): select_lines,
+    ("select", "lineDown"): select_lines,
 }
 
 # In other cases there already is a "compound" talon action for a given action and modifier
 compound_actions = {
-    # selection
-    ("selection", "wordLeft"): actions.edit.extend_word_left,
-    ("selection", "wordRight"): actions.edit.extend_word_right,
-    ("selection", "left"): actions.edit.extend_left,
-    ("selection", "right"): actions.edit.extend_right,
-    ("selection", "word"): actions.edit.extend_word_right,
+    # select
+    ("select", "wordLeft"): actions.edit.extend_word_left,
+    ("select", "wordRight"): actions.edit.extend_word_right,
+    ("select", "left"): actions.edit.extend_left,
+    ("select", "right"): actions.edit.extend_right,
+    ("select", "word"): actions.edit.extend_word_right,
     # Go before
     ("goBefore", "line"): actions.edit.line_start,
     ("goBefore", "lineUp"): before_line_up,
@@ -173,7 +162,7 @@ class Actions:
         key = (action.type, modifier.type)   
         count = modifier.count 
         if key in custom_callbacks:
-            custom_callbacks[key](action.type, modifier.type, count)
+            custom_callbacks[key](action, modifier.type, count)
             return 
         
         elif key in compound_actions:
