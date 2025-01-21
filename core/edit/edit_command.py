@@ -38,32 +38,35 @@ def after_line_down():
     actions.edit.down()
     actions.edit.line_end()
 
-
 def action_handler(action):
-    if action == "selection":
-        return
-    elif action == "cutToClipboard":
-        actions.edit.cut()
-    elif action == "copyToClipboard":
-        actions.edit.copy()
-    elif action == "delete":
-        actions.edit.delete()
-
-
+    match action:
+        case "selection":
+            pass
+        case "cutToClipboard":
+            actions.edit.cut()
+        case "copyToClipboard":
+            actions.edit.copy()
+        case "delete":
+            actions.edit.delete()
+        case _:
+            print("action_handler: Unknown action")
+        
 def select_lines(action, direction, count):
     if direction == "lineUp":
         selection_callback = actions.edit.extend_line_up
+        extend_line_callback = actions.edit.extend_line_start
     else:
         selection_callback = actions.edit.extend_line_down
+        extend_line_callback = actions.edit.extend_line_end
 
     selection_delay = f"{settings.get('user.edit_command_line_selection_delay')}ms"
 
     for i in range(1, count + 1):
         selection_callback()
         actions.sleep(selection_delay)
-
-    # ensure we take the start of the line too!
-    actions.edit.extend_line_start()
+    
+    # ensure we take the start/end of the line too!
+    extend_line_callback()
     actions.sleep(selection_delay)
     action_handler(action)
 
@@ -93,31 +96,37 @@ def word_movement_handler(action, direction, count):
         movement_callback()
         actions.sleep(selection_delay)
 
-
 # in some cases, it is necessary to have some custom handling for timing reasons
 custom_callbacks = {
     ("goAfter", "wordLeft"): word_movement_handler,
     ("goAfter", "wordRight"): word_movement_handler,
     ("goBefore", "wordLeft"): word_movement_handler,
     ("goBefore", "wordRight"): word_movement_handler,
+
     # delete
     ("delete", "word"): select_words,
     ("delete", "wordLeft"): select_words,
     ("delete", "wordRight"): select_words,
     ("delete", "lineUp"): select_lines,
     ("delete", "lineDown"): select_lines,
-    # cut
+
+    #cut
     ("cutToClipboard", "word"): select_words,
     ("cutToClipboard", "wordLeft"): select_words,
     ("cutToClipboard", "wordRight"): select_words,
-    ("copyToClipboard", "lineDown"): select_lines,
     ("cutToClipboard", "lineUp"): select_lines,
-    # copy
+    ("cutToClipboard", "lineDown"): select_lines,
+
+    #copy
     ("copyToClipboard", "word"): select_words,
     ("copyToClipboard", "wordLeft"): select_words,
     ("copyToClipboard", "wordRight"): select_words,
-    ("copyToClipboard", "lineDown"): select_lines,
     ("copyToClipboard", "lineUp"): select_lines,
+    ("copyToClipboard", "lineDown"): select_lines,    
+
+    #selection
+    ("selection", "lineUp"): select_lines,
+    ("selection", "lineDown"): select_lines,
 }
 
 # In other cases there already is a "compound" talon action for a given action and modifier
