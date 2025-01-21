@@ -127,7 +127,7 @@ class Actions:
 
     def mouse_scroll_stop() -> bool:
         """Stops scrolling"""
-        global scroll_job, gaze_job, continuous_scroll_mode, control_mouse_forced, continuous_scrolling_speed_factor, ctx
+        global scroll_job, gaze_job, continuous_scroll_mode, control_mouse_forced, continuous_scrolling_speed_factor
 
         continuous_scroll_mode = ""
         continuous_scrolling_speed_factor = 1.0
