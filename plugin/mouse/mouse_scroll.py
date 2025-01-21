@@ -167,9 +167,7 @@ class Actions:
 
     def mouse_is_continuous_scrolling():
         """Returns whether continuous scroll is in progress"""
-        if continuous_scroll_mode:
-            return True
-        return False
+        return len(continuous_scroll_mode) > 0
 
     def hiss_scroll_up():
         """Change mouse hiss scroll direction to up"""
@@ -199,7 +197,7 @@ def mouse_scroll_continuous(
     new_scroll_dir: Literal[-1, 1],
     speed_factor: Optional[int] = None,
 ):
-    global scroll_job, scroll_dir, scroll_start_ts, ctx
+    global scroll_job, scroll_dir, scroll_start_ts
     actions.user.mouse_scroll_set_speed(speed_factor)
 
     update_continuous_scrolling_mode(new_scroll_dir)
