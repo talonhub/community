@@ -12,6 +12,8 @@ and app.bundle: com.microsoft.VSCode
 os: mac
 and app.bundle: com.microsoft.VSCodeInsiders
 os: mac
+and app.bundle: com.vscodium
+os: mac
 and app.bundle: com.visualstudio.code.oss
 os: mac
 and app.bundle: com.todesktop.230313mzl4w4u92
