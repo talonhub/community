@@ -14,6 +14,7 @@ mod.setting(
     desc="How much time a hiss must last for to be considered a hiss rather than part of speech, in ms",
 )
 
+
 @mod.action_class
 class Actions:
     def noise_trigger_pop():
@@ -39,7 +40,7 @@ def noise_trigger_hiss_debounce(active: bool):
     if active:
         hiss_cron = cron.after(
             str(settings.get("user.hiss_scroll_debounce_time")) + "ms",
-            lambda: actions.user.noise_trigger_hiss(active)
+            lambda: actions.user.noise_trigger_hiss(active),
         )
     else:
         cron.cancel(hiss_cron)
