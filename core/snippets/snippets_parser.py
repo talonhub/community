@@ -174,7 +174,7 @@ def parse_file(file_path: str) -> list[SnippetDocument]:
 
 
 def parse_file_content(file: str, text: str) -> list[SnippetDocument]:
-    doc_texts = re.split(r"^---$", text, flags=re.MULTILINE)
+    doc_texts = re.split(r"^---\n?$", text, flags=re.MULTILINE)
     documents: list[SnippetDocument] = []
     line = 0
 
@@ -189,7 +189,10 @@ def parse_file_content(file: str, text: str) -> list[SnippetDocument]:
 
 
 def parse_document(
-    file: str, line: int, optional_body: bool, text: str
+    file: str,
+    line: int,
+    optional_body: bool,
+    text: str,
 ) -> Union[SnippetDocument, None]:
     parts = re.split(r"^-$", text, maxsplit=1, flags=re.MULTILINE)
     line_body = line + parts[0].count("\n") + 1
@@ -211,7 +214,10 @@ def parse_document(
 
 
 def parse_context(
-    file: str, line: int, document: SnippetDocument, text: str
+    file: str,
+    line: int,
+    document: SnippetDocument,
+    text: str,
 ) -> Union[SnippetDocument, None]:
     lines = [l.strip() for l in text.splitlines()]
     keys: set[str] = set()
