@@ -16,6 +16,13 @@ go view [<user.text>]:
     user.vscode("workbench.action.openView")
     insert(user.text or "")
 
+# Palette Command Search
+palette: user.vscode("workbench.action.showCommands")
+palette search [<user.text>]:
+    user.vscode("workbench.action.showCommands")
+    sleep(50ms)
+    insert(user.text or "")
+
 # Sidebar
 bar explore: user.vscode("workbench.view.explorer")
 bar extensions: user.vscode("workbench.view.extensions")
