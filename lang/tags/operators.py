@@ -26,7 +26,7 @@ mod.list("code_operators_pointer", desc="List of code operators for pointers")
 Operator = str | Callable[[], None]
 
 
-class Operators(TypedDict):
+class Operators(TypedDict, total=False):
     # code_operators_array
     SUBSCRIPT: NotRequired[Operator]
 
