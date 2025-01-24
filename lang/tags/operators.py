@@ -92,10 +92,10 @@ class Actions:
             if operator is None:
                 raise ValueError(f"Operator {id} not found")
 
-            if type(operator) is str:
-                actions.insert(operator)
-            else:
+            if callable(operator):
                 operator()
+            else:
+                actions.insert(operator)
         except NotImplementedError:
             # This language has not implement the operators dict and we therefore use the fallback
             operators_fallback(id)
