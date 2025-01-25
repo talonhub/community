@@ -1,0 +1,22 @@
+list: user.code_operators_assignment
+tag: user.code_operators_assignment
+-
+
+# Assignment
+equals: ASSIGNMENT
+or equals: ASSIGNMENT_OR
+
+# Combined computation and assignment
+minus equals: ASSIGNMENT_SUBTRACTION
+plus equals: ASSIGNMENT_ADDITION
+times equals: ASSIGNMENT_MULTIPLICATION
+divide equals: ASSIGNMENT_DIVISION
+mod equals: ASSIGNMENT_MODULO
+increment: ASSIGNMENT_INCREMENT
+
+# Bitwise operators
+bitwise and equals: ASSIGNMENT_BITWISE_AND
+bitwise or equals: ASSIGNMENT_BITWISE_OR
+bitwise exclusive or equals: ASSIGNMENT_BITWISE_EXCLUSIVE_OR
+left shift equals: ASSIGNMENT_BITWISE_LEFT_SHIFT
+right shift equals: ASSIGNMENT_BITWISE_RIGHT_SHIFT
