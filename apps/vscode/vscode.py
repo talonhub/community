@@ -12,6 +12,8 @@ and app.bundle: com.microsoft.VSCode
 os: mac
 and app.bundle: com.microsoft.VSCodeInsiders
 os: mac
+and app.bundle: com.vscodium
+os: mac
 and app.bundle: com.visualstudio.code.oss
 os: mac
 and app.bundle: com.todesktop.230313mzl4w4u92
@@ -105,6 +107,9 @@ class EditActions:
 
     def save_all():
         actions.user.vscode("workbench.action.files.saveAll")
+
+    def save():
+        actions.user.vscode("workbench.action.files.save")
 
     def find_next():
         actions.user.vscode("editor.action.nextMatchFindAction")
