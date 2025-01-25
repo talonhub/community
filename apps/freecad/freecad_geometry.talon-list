@@ -1,0 +1,8 @@
+list: user.freecad_geometry
+-
+line: gl
+polyline: gm
+point: gy
+arc: ga
+circle: gc
+rectangle: gr

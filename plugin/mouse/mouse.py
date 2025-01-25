@@ -117,8 +117,8 @@ def gui_wheel(gui: imgui.GUI):
 class Actions:
     def zoom_close():
         """Closes an in-progress zoom. Talon will move the cursor position but not click."""
-        if eye_zoom_mouse.zoom_mouse.state == eye_zoom_mouse.STATE_OVERLAY:
-            actions.tracking.zoom_cancel()
+        # if eye_zoom_mouse.zoom_mouse.state == eye_zoom_mouse.STATE_OVERLAY:
+        actions.tracking.zoom_cancel()
 
     def mouse_show_cursor():
         """Shows the cursor"""
@@ -337,8 +337,8 @@ def mouse_scroll(amount):
 def scroll_continuous_helper():
     global scroll_amount
     # print("scroll_continuous_helper")
-    if scroll_amount and (eye_zoom_mouse.zoom_mouse.state == eye_zoom_mouse.STATE_IDLE):
-        actions.mouse_scroll(by_lines=False, y=int(scroll_amount / 10))
+    # if scroll_amount and (eye_zoom_mouse.zoom_mouse.state == eye_zoom_mouse.STATE_IDLE):
+    actions.mouse_scroll(by_lines=False, y=int(scroll_amount / 10))
 
 
 def start_scroll():
@@ -348,31 +348,28 @@ def start_scroll():
 
 def gaze_scroll():
     # print("gaze_scroll")
-    if (
-        eye_zoom_mouse.zoom_mouse.state == eye_zoom_mouse.STATE_IDLE
-    ):  # or eye_zoom_mouse.zoom_mouse.state == eye_zoom_mouse.STATE_SLEEP:
-        x, y = ctrl.mouse_pos()
+    x, y = ctrl.mouse_pos()
 
-        # the rect for the window containing the mouse
-        rect = None
+    # the rect for the window containing the mouse
+    rect = None
 
-        # on windows, check the active_window first since ui.windows() is not z-ordered
-        if app.platform == "windows" and ui.active_window().rect.contains(x, y):
-            rect = ui.active_window().rect
-        else:
-            windows = ui.windows()
-            for w in windows:
-                if w.rect.contains(x, y):
-                    rect = w.rect
-                    break
+    # on windows, check the active_window first since ui.windows() is not z-ordered
+    if app.platform == "windows" and ui.active_window().rect.contains(x, y):
+        rect = ui.active_window().rect
+    else:
+        windows = ui.windows()
+        for w in windows:
+            if w.rect.contains(x, y):
+                rect = w.rect
+                break
 
-        if rect is None:
-            # print("no window found!")
-            return
+    if rect is None:
+        # print("no window found!")
+        return
 
-        midpoint = rect.y + rect.height / 2
-        amount = int(((y - midpoint) / (rect.height / 10)) ** 3)
-        actions.mouse_scroll(by_lines=False, y=amount)
+    midpoint = rect.y + rect.height / 2
+    amount = int(((y - midpoint) / (rect.height / 10)) ** 3)
+    actions.mouse_scroll(by_lines=False, y=amount)
 
     # print(f"gaze_scroll: {midpoint} {rect.height} {amount}")
 

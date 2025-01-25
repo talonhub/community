@@ -1,0 +1,11 @@
+list: user.freecad_constraints
+-
+dimension: d
+point: c
+horizontal: a
+vertical: a
+parallel: p
+tangent: t
+equal: e
+symmetric: s
+block: kb
