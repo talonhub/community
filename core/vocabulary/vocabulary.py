@@ -1,4 +1,5 @@
 import logging
+import os
 import re
 from typing import Sequence, Union
 
@@ -7,7 +8,43 @@ from talon.grammar import Phrase
 
 from ..user_settings import append_to_csv, track_csv_list
 
+mod = Module()
+ctx = Context()
+
+mod.list("vocabulary", desc="additional vocabulary words")
+
+# Default words that will need to be capitalized.
+# DON'T EDIT THIS. Edit settings/words_to_replace.csv instead.
+# These defaults and those later in this file are ONLY used when
+# auto-creating the corresponding settings/*.csv files. Those csv files
+# determine the contents of user.vocabulary and dictate.word_map. Once they
+# exist, the contents of the lists/dictionaries below are irrelevant.
+_capitalize_defaults = [
+    # NB. the lexicon now capitalizes January/February by default, but not the
+    # others below. Not sure why.
+    "January",
+    "February",
+    # March omitted because it's a regular word too
+    "April",
+    # May omitted because it's a regular word too
+    "June",
+    "July",
+    "August",  # technically also an adjective but the month is far more common
+    "September",
+    "October",
+    "November",
+    "December",
+]
+
+# Default words that need to be remapped.
+_word_map_defaults = {
+    # E.g:
+    # "cash": "cache",
+    # This is the opposite ordering to words_to_replace.csv (the latter has the target word first)
+}
+_word_map_defaults.update({word.lower(): word for word in _capitalize_defaults})
 phrases_to_replace = {}
+
 
 class PhraseReplacer:
     """Utility for replacing phrases by other phrases inside text or word lists.
@@ -18,7 +55,10 @@ class PhraseReplacer:
       - phrase_dict: dictionary mapping recognized/spoken forms to written forms
     """
 
-    def __init__(self, phrase_dict: dict[str, str]):
+    def __init__(self):
+        self.phrase_index = {}
+
+    def update(self, phrase_dict: dict[str, str]):
         # Index phrases by first word, then number of subsequent words n_next
         phrase_index = dict()
         for spoken_form, written_form in phrase_dict.items():
@@ -67,77 +107,9 @@ class PhraseReplacer:
         return " ".join(self.replace(text.split()))
 
 
-mod = Module()
-ctx = Context()
-
-mod.list("vocabulary", desc="additional vocabulary words")
-
-# Default words that will need to be capitalized.
-# DON'T EDIT THIS. Edit settings/words_to_replace.csv instead.
-# These defaults and those later in this file are ONLY used when
-# auto-creating the corresponding settings/*.csv files. Those csv files
-# determine the contents of user.vocabulary and dictate.word_map. Once they
-# exist, the contents of the lists/dictionaries below are irrelevant.
-_capitalize_defaults = [
-    # NB. the lexicon now capitalizes January/February by default, but not the
-    # others below. Not sure why.
-    "January",
-    "February",
-    # March omitted because it's a regular word too
-    "April",
-    # May omitted because it's a regular word too
-    "June",
-    "July",
-    "August",  # technically also an adjective but the month is far more common
-    "September",
-    "October",
-    "November",
-    "December",
-]
-
-# Default words that need to be remapped.
-_word_map_defaults = {
-    # E.g:
-    # "cash": "cache",
-    # This is the opposite ordering to words_to_replace.csv (the latter has the target word first)
-}
-_word_map_defaults.update({word.lower(): word for word in _capitalize_defaults})
-
-# phrases_to_replace is a spoken form -> written form map, used by our
-# implementation of `dictate.replace_words` (at bottom of file) to rewrite words
-# and phrases Talon recognized. This does not change the priority with which
-# Talon recognizes particular phrases over others.
-@track_csv_list("words_to_replace.csv", headers=("Replacement", "Original"),default=_word_map_defaults)
-def on_words_to_replace(values):
-    global phrases_to_replace
-    global phrase_replacer
-
-    phrases_to_replace = values
-    ctx.settings["dictate.word_map"] = phrases_to_replace
-    phrase_replacer = PhraseReplacer(phrases_to_replace)
-
-# Default words that should be added to Talon's vocabulary.
-# Don't edit this. Edit 'additional_vocabulary.csv' instead
-_simple_vocab_default = ["nmap", "admin", "Cisco", "Citrix", "VPN", "DNS", "Minecraft"]
-
-# Defaults for different pronounciations of words that need to be added to
-# Talon's vocabulary.
-_default_vocabulary = {
-    "N map": "nmap",
-    "under documented": "under-documented",
-}
-_default_vocabulary.update({word: word for word in _simple_vocab_default})
-
-# phrases_to_replace is a spoken form -> written form map, used by our
-# implementation of `dictate.replace_words` (at bottom of file) to rewrite words
-# and phrases Talon recognized. This does not change the priority with which
-# Talon recognizes particular phrases over others.
-# @track_csv_list("additional_words.csv", headers=("Word(s)", "Spoken Form (If Different)"),default=_default_vocabulary)
-# def on_additional_words(values):
-#     ctx.lists["user.vocabulary"] = values
-
 # Unit tests for PhraseReplacer
-rep = PhraseReplacer(
+rep = PhraseReplacer()
+rep.update(
     {
         "this": "foo",
         "that": "bar",
@@ -152,6 +124,28 @@ assert rep.replace_string("this is a test") == "it worked!"
 assert rep.replace_string("well this is a test really") == "well it worked! really"
 assert rep.replace_string("try this is too") == "try stopping early too"
 assert rep.replace_string("this is a tricky one") == "stopping early a tricky one"
+
+phrase_replacer = PhraseReplacer()
+
+
+# phrases_to_replace is a spoken form -> written form map, used by our
+# implementation of `dictate.replace_words` (at bottom of file) to rewrite words
+# and phrases Talon recognized. This does not change the priority with which
+# Talon recognizes particular phrases over others.
+@track_csv_list(
+    "words_to_replace.csv",
+    headers=("Replacement", "Original"),
+    default=_word_map_defaults,
+)
+def on_word_map(values):
+    global phrases_to_replace
+    phrases_to_replace = values
+    phrase_replacer.update(values)
+
+    # "dictate.word_map" is used by Talon's built-in default implementation of
+    # `dictate.replace_words`, but supports only single-word replacements.
+    # Multi-word phrases are ignored.
+    ctx.settings["dictate.word_map"] = values
 
 
 @ctx.action_class("dictate")
@@ -186,11 +180,11 @@ def _create_vocabulary_entries(spoken_form, written_form, type):
 
 # See https://github.com/wolfmanstout/talon-vocabulary-editor for an experimental version
 # of this which tests if the default spoken form can be used instead of the provided phrase.
-def _add_selection_to_csv(
+def _add_selection_to_file(
     phrase: Union[Phrase, str],
     type: str,
-    csv: str,
-    csv_contents: dict[str, str],
+    file_name: str,
+    file_contents: dict[str, str],
     skip_identical_replacement: bool,
 ):
     written_form = actions.edit.selected_text().strip()
@@ -200,32 +194,67 @@ def _add_selection_to_csv(
         is_acronym = re.fullmatch(r"[A-Z]+", written_form)
         spoken_form = " ".join(written_form) if is_acronym else written_form
     entries = _create_vocabulary_entries(spoken_form, written_form, type)
-    new_entries = {}
     added_some_phrases = False
+
+    new_entries = {}
     for spoken_form, written_form in entries.items():
         if skip_identical_replacement and spoken_form == written_form:
             actions.app.notify(f'Skipping identical replacement: "{spoken_form}"')
-        elif spoken_form in csv_contents:
-            actions.app.notify(f'Spoken form "{spoken_form}" is already in {csv}')
+        elif spoken_form in file_contents:
+            actions.app.notify(f'Spoken form "{spoken_form}" is already in {file_name}')
         else:
             new_entries[spoken_form] = written_form
             added_some_phrases = True
-    append_to_csv(csv, new_entries)
+
+    if file_name.endswith(".csv"):
+        append_to_csv(file_name, new_entries)
+    elif file_name == "vocabulary.talon-list":
+        append_to_vocabulary(new_entries)
+
     if added_some_phrases:
-        actions.app.notify(f"Added to {csv}: {new_entries}")
+        actions.app.notify(f"Added to {file_name}: {new_entries}")
+
+
+def append_to_vocabulary(rows: dict[str, str]):
+    vocabulary_file_path = actions.user.get_vocabulary_file_path()
+    with open(str(vocabulary_file_path)) as file:
+        line = None
+        for line in file:
+            pass
+        needs_newline = line is not None and not line.endswith("\n")
+
+    with open(vocabulary_file_path, "a", encoding="utf-8") as file:
+        if needs_newline:
+            file.write("\n")
+        for key, value in rows.items():
+            if key == value:
+                file.write(f"{key}\n")
+            else:
+                if not str.isprintable(value) or "'" in value or '"' in value:
+                    value = repr(value)
+                file.write(f"{key}: {value}\n")
 
 
 @mod.action_class
 class Actions:
+    # this is implemented as an action so it may be overridden in other contexts
+    def get_vocabulary_file_path():
+        """Returns the path for the active vocabulary file"""
+        vocabulary_directory = os.path.dirname(os.path.realpath(__file__))
+        vocabulary_file_path = os.path.join(
+            vocabulary_directory, "vocabulary.talon-list"
+        )
+        return vocabulary_file_path
+
     def add_selection_to_vocabulary(phrase: Union[Phrase, str] = "", type: str = ""):
         """Permanently adds the currently selected text to the vocabulary with the provided
         spoken form and adds variants based on the type ("noun" or "name").
         """
-        _add_selection_to_csv(
+        _add_selection_to_file(
             phrase,
             type,
-            "additional_words.csv",
-            vocabulary,
+            "vocabulary.talon-list",
+            actions.user.talon_get_active_registry_list("user.vocabulary"),
             False,
         )
 
@@ -233,10 +262,28 @@ class Actions:
         """Permanently adds the currently selected text as replacement for the provided
         original form and adds variants based on the type ("noun" or "name").
         """
-        _add_selection_to_csv(
+        _add_selection_to_file(
             phrase,
             type,
             "words_to_replace.csv",
             phrases_to_replace,
             True,
         )
+
+    def check_vocabulary_for_selection():
+        """Checks if the currently selected text is in the vocabulary."""
+        text = actions.edit.selected_text().strip()
+        spoken_forms = [
+            spoken
+            for spoken, written in actions.user.talon_get_active_registry_list(
+                "user.vocabulary"
+            ).items()
+            if text == written
+        ]
+        if spoken_forms:
+            if len(spoken_forms) == 1:
+                actions.app.notify(f'"{text}" is spoken as "{spoken_forms[0]}"')
+            else:
+                actions.app.notify(f'"{text}" is spoken as any of {spoken_forms}')
+        else:
+            actions.app.notify(f'"{text}" is not in the vocabulary')
