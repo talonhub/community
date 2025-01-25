@@ -83,14 +83,14 @@ class Operators(TypedDict, total=False):
 
 @mod.action_class
 class Actions:
-    def code_operator(id: str):
+    def code_operator(identifier: str):
         """Insert a code operator"""
         try:
             operators: Operators = actions.user.code_get_operators()
-            operator = operators.get(id)
+            operator = operators.get(identifier)
 
             if operator is None:
-                raise ValueError(f"Operator {id} not found")
+                raise ValueError(f"Operator {identifier} not found")
 
             if callable(operator):
                 operator()
@@ -98,7 +98,7 @@ class Actions:
                 actions.insert(operator)
         except NotImplementedError:
             # This language has not implement the operators dict and we therefore use the fallback
-            operators_fallback(id)
+            operators_fallback(identifier)
             return
 
     def code_get_operators() -> Operators:
@@ -106,8 +106,8 @@ class Actions:
 
 
 # Fallback is to rely on the legacy actions
-def operators_fallback(id: str) -> None:
-    match id:
+def operators_fallback(identifier: str) -> None:
+    match identifier:
         # code_operators_array
         case "SUBSCRIPT":
             actions.user.code_operator_subscript()
@@ -201,4 +201,4 @@ def operators_fallback(id: str) -> None:
             actions.user.code_operator_structure_dereference()
 
         case _:
-            raise ValueError(f"Operator {id} not found")
+            raise ValueError(f"Operator {identifier} not found")
