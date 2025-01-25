@@ -1,9 +1,6 @@
-from talon import Context, Module
+from talon import Module
 
-ctx = Context()
 mod = Module()
-
-mod.tag("code_operators_bitwise", desc="Tag for enabling bitwise operator commands")
 
 
 @mod.action_class
