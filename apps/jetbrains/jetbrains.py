@@ -55,6 +55,7 @@ port_mapping = {
     "pycharm64.exe": 8658,
     "WebStorm": 8663,
     "webstorm64.exe": 8663,
+    "PhpStorm": 8662,
     # Local plugin development:
     "com.jetbrains.jbr.java": 8666,
 }
