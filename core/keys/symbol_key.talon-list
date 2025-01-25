@@ -14,8 +14,8 @@ left bracket: [
 square: [
 R square: ]
 right square: ]
-r brack: ]
-r bracket: ]
+R brack: ]
+R bracket: ]
 right bracket: ]
 slash: /
 backslash: \
@@ -30,12 +30,13 @@ down score: _
 underscore: _
 paren: (
 brace: {
+L brace: {
 left brace: {
 curly bracket: {
 left curly bracket: {
-r brace: }
+R brace: }
 right brace: }
-r curly bracket: }
+R curly bracket: }
 right curly bracket: }
 angle: <
 left angle: <
