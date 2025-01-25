@@ -14,11 +14,6 @@ start <user.launch_applications>: user.switcher_launch(launch_applications)
 snapfur: user.snap_window_to_position("full")
 aprate: user.snap_window_to_position("right")
 snap rat: user.snap_window_to_position("right")
-# (snap) next [screen]: user.move_window_next_screen()
-# (snap) last [screen]: user.move_window_previous_screen()
-# (snap) screen <number>: user.move_window_to_screen(number)
-# (snap) <user.running_applications> <user.window_snap_position>:
-#     user.snap_app(running_applications, window_snap_position)
-# (snap) <user.running_applications> [screen] <number>:
-#     user.move_app_to_screen(running_applications, number)
+layout <user.window_layout>: user.snap_layout(window_layout)
+
 desk show: user.switcher_show_desktop()
