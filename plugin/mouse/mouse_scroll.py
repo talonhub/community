@@ -68,6 +68,7 @@ mod.tag(
 @imgui.open(x=700, y=0)
 def gui_wheel(gui: imgui.GUI):
     gui.text(f"Scroll mode: {continuous_scroll_mode}")
+    gui.text(f"say a number between 0 and 99 to set scrolling speed")
     gui.line()
     if gui.button("Wheel Stop [stop scrolling]"):
         actions.user.mouse_scroll_stop()
@@ -127,7 +128,7 @@ class Actions:
 
     def mouse_scroll_stop() -> bool:
         """Stops scrolling"""
-        global scroll_job, gaze_job, continuous_scroll_mode, control_mouse_forced, continuous_scrolling_speed_factor, ctx
+        global scroll_job, gaze_job, continuous_scroll_mode, control_mouse_forced, continuous_scrolling_speed_factor
 
         continuous_scroll_mode = ""
         continuous_scrolling_speed_factor = 1.0
@@ -166,9 +167,7 @@ class Actions:
 
     def mouse_is_continuous_scrolling():
         """Returns whether continuous scroll is in progress"""
-        if continuous_scroll_mode:
-            return True
-        return False
+        return len(continuous_scroll_mode) > 0
 
     def hiss_scroll_up():
         """Change mouse hiss scroll direction to up"""
@@ -198,7 +197,7 @@ def mouse_scroll_continuous(
     new_scroll_dir: Literal[-1, 1],
     speed_factor: Optional[int] = None,
 ):
-    global scroll_job, scroll_dir, scroll_start_ts, ctx
+    global scroll_job, scroll_dir, scroll_start_ts
     actions.user.mouse_scroll_set_speed(speed_factor)
 
     update_continuous_scrolling_mode(new_scroll_dir)
@@ -242,7 +241,9 @@ def scroll_continuous_helper():
         else 1
     )
 
-    y = scroll_amount * acceleration_speed * scroll_dir
+    y = round(scroll_amount * acceleration_speed * scroll_dir)
+    if abs(y) < 1:
+        y = scroll_dir
     actions.mouse_scroll(y)
 
 
