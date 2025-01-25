@@ -6,6 +6,5 @@ parrot(rree):
     user.grid_close()
 
 parrot(hiss):
-	#user.mouse_normal_scroll()
-	user.mouse_gaze_scroll()
+	user.mouse_gaze_scroll_toggle()
 	

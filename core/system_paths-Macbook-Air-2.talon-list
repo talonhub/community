@@ -1,0 +1,16 @@
+list: user.system_paths
+hostname: Macbook-Air-2
+-
+user: /Users/arnauroca
+desktop: /Users/arnauroca/Desktop
+desk: /Users/arnauroca/Desktop
+documents: /Users/arnauroca/Documents
+docks: /Users/arnauroca/Documents
+downloads: /Users/arnauroca/Downloads
+music: /Users/arnauroca/Music
+pictures: /Users/arnauroca/Pictures
+videos: /Users/arnauroca/Videos
+talon home: /Users/arnauroca/.talon
+talon recordings: /Users/arnauroca/.talon/recordings
+talon user: /Users/arnauroca/.talon/user
+home: /Users/arnauroca
