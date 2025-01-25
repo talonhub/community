@@ -174,7 +174,7 @@ def parse_file(file_path: str) -> list[SnippetDocument]:
 
 
 def parse_file_content(file: str, text: str) -> list[SnippetDocument]:
-    doc_texts = re.split(r"^---$", text, flags=re.MULTILINE)
+    doc_texts = re.split(r"^---\n?$", text, flags=re.MULTILINE)
     documents: list[SnippetDocument] = []
     line = 0
 
@@ -189,7 +189,10 @@ def parse_file_content(file: str, text: str) -> list[SnippetDocument]:
 
 
 def parse_document(
-    file: str, line: int, optional_body: bool, text: str
+    file: str,
+    line: int,
+    optional_body: bool,
+    text: str,
 ) -> Union[SnippetDocument, None]:
     parts = re.split(r"^-$", text, maxsplit=1, flags=re.MULTILINE)
     line_body = line + parts[0].count("\n") + 1
@@ -211,7 +214,10 @@ def parse_document(
 
 
 def parse_context(
-    file: str, line: int, document: SnippetDocument, text: str
+    file: str,
+    line: int,
+    document: SnippetDocument,
+    text: str,
 ) -> Union[SnippetDocument, None]:
     lines = [l.strip() for l in text.splitlines()]
     keys: set[str] = set()
@@ -265,7 +271,7 @@ def parse_context_line(
     if key in keys:
         error(file, line, f"Duplicate key '{key}'")
 
-    valid_key = True
+    keys.add(key)
 
     match key:
         case "name":
@@ -278,14 +284,9 @@ def parse_context_line(
             document.languages = parse_vector_value(value)
         case _:
             if key.startswith("$"):
-                if not parse_variable(file, line, get_variable, key, value):
-                    valid_key = False
+                parse_variable(file, line, get_variable, key, value)
             else:
                 error(file, line, f"Invalid key '{key}'")
-                valid_key = False
-
-    if valid_key:
-        keys.add(key)
 
 
 def parse_variable(
@@ -294,12 +295,12 @@ def parse_variable(
     get_variable: Callable[[str], SnippetVariable],
     key: str,
     value: str,
-) -> bool:
+):
     parts = key.split(".")
 
     if len(parts) != 2:
         error(file, line_numb, f"Invalid variable key '{key}'")
-        return False
+        return
 
     name = parts[0][1:]
     field = parts[1]
@@ -313,9 +314,6 @@ def parse_variable(
             get_variable(name).wrapper_scope = value
         case _:
             error(file, line_numb, f"Invalid variable key '{key}'")
-            return False
-
-    return True
 
 
 def parse_body(text: str) -> Union[str, None]:
