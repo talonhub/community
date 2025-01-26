@@ -1,4 +1,4 @@
-from typing import Callable, NotRequired, TypedDict
+from typing import Callable, TypedDict
 
 from talon import Module, actions
 
@@ -26,91 +26,88 @@ mod.list("code_operators_pointer", desc="List of code operators for pointers")
 Operator = str | Callable[[], None]
 
 
-class Operators(TypedDict):
+class Operators(TypedDict, total=False):
     # code_operators_array
-    SUBSCRIPT: NotRequired[Operator]
+    SUBSCRIPT: Operator
 
     # code_operators_assignment
-    ASSIGNMENT: NotRequired[Operator]
-    ASSIGNMENT_OR: NotRequired[Operator]
-    ASSIGNMENT_SUBTRACTION: NotRequired[Operator]
-    ASSIGNMENT_ADDITION: NotRequired[Operator]
-    ASSIGNMENT_MULTIPLICATION: NotRequired[Operator]
-    ASSIGNMENT_DIVISION: NotRequired[Operator]
-    ASSIGNMENT_MODULO: NotRequired[Operator]
-    ASSIGNMENT_INCREMENT: NotRequired[Operator]
-    ASSIGNMENT_BITWISE_AND: NotRequired[Operator]
-    ASSIGNMENT_BITWISE_OR: NotRequired[Operator]
-    ASSIGNMENT_BITWISE_EXCLUSIVE_OR: NotRequired[Operator]
-    ASSIGNMENT_BITWISE_LEFT_SHIFT: NotRequired[Operator]
-    ASSIGNMENT_BITWISE_RIGHT_SHIFT: NotRequired[Operator]
+    ASSIGNMENT: Operator
+    ASSIGNMENT_OR: Operator
+    ASSIGNMENT_SUBTRACTION: Operator
+    ASSIGNMENT_ADDITION: Operator
+    ASSIGNMENT_MULTIPLICATION: Operator
+    ASSIGNMENT_DIVISION: Operator
+    ASSIGNMENT_MODULO: Operator
+    ASSIGNMENT_INCREMENT: Operator
+    ASSIGNMENT_BITWISE_AND: Operator
+    ASSIGNMENT_BITWISE_OR: Operator
+    ASSIGNMENT_BITWISE_EXCLUSIVE_OR: Operator
+    ASSIGNMENT_BITWISE_LEFT_SHIFT: Operator
+    ASSIGNMENT_BITWISE_RIGHT_SHIFT: Operator
 
     # code_operators_bitwise
-    BITWISE_AND: NotRequired[Operator]
-    BITWISE_OR: NotRequired[Operator]
-    BITWISE_NOT: NotRequired[Operator]
-    BITWISE_EXCLUSIVE_OR: NotRequired[Operator]
-    BITWISE_LEFT_SHIFT: NotRequired[Operator]
-    BITWISE_RIGHT_SHIFT: NotRequired[Operator]
+    BITWISE_AND: Operator
+    BITWISE_OR: Operator
+    BITWISE_NOT: Operator
+    BITWISE_EXCLUSIVE_OR: Operator
+    BITWISE_LEFT_SHIFT: Operator
+    BITWISE_RIGHT_SHIFT: Operator
 
     # code_operators_lambda
-    LAMBDA: NotRequired[Operator]
+    LAMBDA: Operator
 
     # code_operators_math
-    MATH_SUBTRACT: NotRequired[Operator]
-    MATH_ADD: NotRequired[Operator]
-    MATH_MULTIPLY: NotRequired[Operator]
-    MATH_DIVIDE: NotRequired[Operator]
-    MATH_MODULO: NotRequired[Operator]
-    MATH_EXPONENT: NotRequired[Operator]
-    MATH_EQUAL: NotRequired[Operator]
-    MATH_NOT_EQUAL: NotRequired[Operator]
-    MATH_GREATER_THAN: NotRequired[Operator]
-    MATH_GREATER_THAN_OR_EQUAL: NotRequired[Operator]
-    MATH_LESS_THAN: NotRequired[Operator]
-    MATH_LESS_THAN_OR_EQUAL: NotRequired[Operator]
-    MATH_AND: NotRequired[Operator]
-    MATH_OR: NotRequired[Operator]
-    MATH_NOT: NotRequired[Operator]
-    MATH_IN: NotRequired[Operator]
-    MATH_NOT_IN: NotRequired[Operator]
+    MATH_SUBTRACT: Operator
+    MATH_ADD: Operator
+    MATH_MULTIPLY: Operator
+    MATH_DIVIDE: Operator
+    MATH_MODULO: Operator
+    MATH_EXPONENT: Operator
+    MATH_EQUAL: Operator
+    MATH_NOT_EQUAL: Operator
+    MATH_GREATER_THAN: Operator
+    MATH_GREATER_THAN_OR_EQUAL: Operator
+    MATH_LESS_THAN: Operator
+    MATH_LESS_THAN_OR_EQUAL: Operator
+    MATH_AND: Operator
+    MATH_OR: Operator
+    MATH_NOT: Operator
+    MATH_IN: Operator
+    MATH_NOT_IN: Operator
 
     # code_operators_pointer
-    POINTER_INDIRECTION: NotRequired[Operator]
-    POINTER_ADDRESS_OF: NotRequired[Operator]
-    POINTER_STRUCTURE_DEREFERENCE: NotRequired[Operator]
+    POINTER_INDIRECTION: Operator
+    POINTER_ADDRESS_OF: Operator
+    POINTER_STRUCTURE_DEREFERENCE: Operator
 
 
 @mod.action_class
 class Actions:
-    def code_operator(id: str):
+    def code_operator(identifier: str):
         """Insert a code operator"""
-
         try:
-            operators = actions.user.code_get_operators()
+            operators: Operators = actions.user.code_get_operators()
+            operator = operators.get(identifier)
+
+            if operator is None:
+                raise ValueError(f"Operator {identifier} not found")
+
+            if callable(operator):
+                operator()
+            else:
+                actions.insert(operator)
         except NotImplementedError:
-            print("attempting fallback {id}")
             # This language has not implement the operators dict and we therefore use the fallback
-            operators_fallback(id)
+            operators_fallback(identifier)
             return
-
-        operator = operators.get(id)
-
-        if operator is None:
-            raise ValueError(f"Operator {id} not found")
-
-        if type(operator) is str:
-            actions.insert(operator)
-        else:
-            operator()
 
     def code_get_operators() -> Operators:
         """Get code operators dictionary"""
 
 
 # Fallback is to rely on the legacy actions
-def operators_fallback(id: str) -> None:
-    match id:
+def operators_fallback(identifier: str) -> None:
+    match identifier:
         # code_operators_array
         case "SUBSCRIPT":
             actions.user.code_operator_subscript()
@@ -204,4 +201,4 @@ def operators_fallback(id: str) -> None:
             actions.user.code_operator_structure_dereference()
 
         case _:
-            raise ValueError(f"Operator {id} not found")
+            raise ValueError(f"Operator {identifier} not found")
