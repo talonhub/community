@@ -11,6 +11,7 @@ class SnippetDocument:
     line_body: int
     variables: list[SnippetVariable] = []
     name: str | None = None
+    description: str | None = None
     phrases: list[str] | None = None
     insertionScopes: list[str] | None = None
     languages: list[str] | None = None
@@ -48,10 +49,12 @@ def create_snippets(documents: list[SnippetDocument]) -> list[Snippet]:
 
 
 def create_snippet(
-    document: SnippetDocument, default_context: SnippetDocument
+    document: SnippetDocument,
+    default_context: SnippetDocument,
 ) -> Snippet | None:
     snippet = Snippet(
-        name=document.name or default_context.name,
+        name=document.name or default_context.name or "",
+        description=document.description or default_context.description,
         languages=document.languages or default_context.languages,
         phrases=document.phrases or default_context.phrases,
         insertion_scopes=document.insertionScopes or default_context.insertionScopes,
@@ -71,6 +74,10 @@ def validate_snippet(document: SnippetDocument, snippet: Snippet) -> bool:
     if not snippet.name:
         error(document.file, document.line_doc, "Missing snippet name")
         is_valid = False
+
+    if snippet.variables is None:
+        error(document.file, document.line_doc, "Missing snippet variables")
+        return False
 
     for variable in snippet.variables:
         var_name = f"${variable.name}"
@@ -125,9 +132,12 @@ def combine_variables(
     return list(variables.values())
 
 
-def normalize_snippet_body_tabs(body: str) -> str:
+def normalize_snippet_body_tabs(body: str | None) -> str:
+    if not body:
+        return ""
+
     # If snippet body already contains tabs. No change.
-    if not body or "\t" in body:
+    if "\t" in body:
         return body
 
     lines = []
@@ -276,6 +286,8 @@ def parse_context_line(
     match key:
         case "name":
             document.name = value
+        case "description":
+            document.description = value
         case "phrase":
             document.phrases = parse_vector_value(value)
         case "insertionScope":
