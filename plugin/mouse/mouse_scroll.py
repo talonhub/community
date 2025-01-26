@@ -242,7 +242,7 @@ def scroll_continuous_helper():
     )
 
     y = round(scroll_amount * acceleration_speed * scroll_dir)
-    if abs(y) < 1:
+    if y == 0:
         y = scroll_dir
     actions.mouse_scroll(y)
 
