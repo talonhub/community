@@ -22,8 +22,10 @@ modifier_callbacks: dict[str, Callable] = {
     "paragraph": actions.edit.select_paragraph,
     "word": actions.edit.select_word,
     "line": actions.edit.select_line,
-    "lineEnd": actions.user.select_line_end,
-    "lineStart": actions.user.select_line_start,
+    "lineEnd": actions.edit.extend_line_end,
+    "lineStart": actions.edit.extend_line_start,
+    "fileStart": actions.edit.extend_file_start,
+    "fileEnd": actions.edit.extend_file_end,
 }
 
 

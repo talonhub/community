@@ -1,5 +1,5 @@
-not tag: user.prefixed_numbers
+tag: user.unprefixed_numbers
+and not tag: user.continuous_scrolling
 -
-<user.number_string>:
-    insert("{number_string}")
-    user.deprecate_command("2024-01-27", "<number>", "numb <number>")
+
+<user.number_prose_unprefixed>: "{number_prose_unprefixed}"

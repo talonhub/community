@@ -1,28 +1,49 @@
-This file lists known changes to `community` that are likely to have broken existing
-functionality. The file is sorted by date with the newest entries up the top.
+This file lists known changes to `community` that are likely to have
+broken existing functionality. The file is sorted by date with the
+newest entries up the top.
 
-Be aware there may be some difference between the date in this file and when the change was
-applied given the delay between changes being submitted and the time they were reviewed
-and merged.
+Be aware there may be some difference between the date in this file
+and when the change was applied given the delay between changes being
+submitted and the time they were reviewed and merged.
 
 ---
-* 2024-07-31 Remove commands `"command mode"`, `"dictation mode"` from custom user modes. Note that if you have any custom modes where you want these commands you could add that mode to the context of `command_and_dictation_mode.talon` or copying the command to one of your custom files.
-* 2024-07-30 Deprecate `lend` and `bend` commands in favor of `go line end | tail` and `go line start | head`.
-* 2024-07-28 Removed the following user namespace actions in favor of the new action/modifier grammar.
+* 2025-01-19 Deprecated a bunch of programming language operator commands in favor of using Talon lists
+* 2024-12-3 Introduced an intermediate layer for naming snap window positions instead of using the raw spoken forms. Instead of calling snap_window_to_position("top right") you should now call snap_window_to_position("TOP_RIGHT")
+* 2024-12-26 Deprecated action `user.zoom_close` in favor of `tracking.zoom_cancel`.
+* 2024-11-24 Deprecated a bunch of symbol commands to insert delimited pairs
+  ("", '', []) in favor of the new `delimiter_pair` Talon list file.
+* 2024-09-07 Removed `get_list_from_csv` from `user_settings.py`. Please
+  use the new `track_csv_list` decorator, which leverages Talon's
+  `talon.watch` API for robustness on Talon launch.
+* 2024-09-07 If you've updated `community` since 2024-08-31, you may
+  need to replace `host:` with `hostname:` in the header of
+  `core/system_paths-<hostname>.talon-list` due to an issue with
+  automatic conversion from CSV (#1268).
+* 2024-07-31 Remove commands `"command mode"`, `"dictation mode"` from
+  custom user modes. Note that if you have any custom modes where you
+  want these commands you could add that mode to the context of
+  `command_and_dictation_mode.talon` or copying the command to one of
+  your custom files.
+* 2024-07-30 Deprecate `lend` and `bend` commands in favor of `go line
+  end | tail` and `go line start | head`.
+* 2024-07-28 Removed the following user namespace actions in favor of
+  the new action/modifier grammar.
     https://github.com/talonhub/community/blob/37a8ebde90c8120a0b52555030988d4f54e65159/core/edit/edit.talon#L3
     cut_word, copy_word, paste_word
     cut_all, copy_all, paste_all, delete_all
     copy_line, paste_line
     cut_line_start, copy_line_start, paste_line_start, delete_line_start
     cut_line_end, copy_line_end, paste_line_end, delete_line_end
-* 2024-05-30 Deprecate 'drop down <user.number_small>' in favor of overridable 'choose' helper
-* 2024-01-27 Deprecate '<user.number_string>' command without a spoken prefix like `numb`.
-See `numbers.talon` and `numbers_unprefixed.talon.` If in the future you want to still use
-unprefixed numbers, you will need to comment out the
-`tag(): user.prefixed_numbers` line in your `settings.talon` file.
-* 2023-06-06 Deprecate `go ` command for VSCode. Use 'bar marks' instead.
+* 2024-05-30 Deprecate 'drop down <user.number_small>' in favor of
+  overridable 'choose' helper
+* 2024-01-27 Deprecate '<user.number_string>' command without a spoken
+  prefix like `numb`. See `numbers.talon` and
+  `numbers_unprefixed.talon.` If in the future you want to still use
+  unprefixed numbers, you will need to comment out the
+  `tag(): user.prefixed_numbers` line in your `settings.talon` file.
+* 2023-06-06 Deprecate `go` command for VSCode. Use 'bar marks' instead.
 * 2023-02-04 Deprecate `murder` command for i3wm. Use 'win kill' instead.
-* 2022-12-11 Deprecate user.insert_with_history. Just use `user.add_phrase_to_history(text);
-insert(text)` instead. See #939.
-* 2022-10-01 Large refactoring of code base that moves many files into new locations. No
-other backwards-incompatible changes included.
+* 2022-12-11 Deprecate user.insert_with_history. Just use
+  `user.add_phrase_to_history(text); insert(text)` instead. See #939.
+* 2022-10-01 Large refactoring of code base that moves many files into
+  new locations. No other backwards-incompatible changes included.

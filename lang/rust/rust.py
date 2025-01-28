@@ -180,7 +180,7 @@ all_traits = {
 }
 
 
-# tag: libraries_gui
+# tag: libraries
 ctx.lists["user.code_libraries"] = {
     "eye oh": "std::io",
     "file system": "std::fs",
@@ -347,8 +347,6 @@ class UserActions:
 
     def code_import():
         actions.auto_insert("use ")
-
-    # tag: libraries_gui
 
     def code_insert_library(text: str, selection: str):
         actions.user.paste(f"use {text}")

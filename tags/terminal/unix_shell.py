@@ -7,7 +7,7 @@ tag: user.generic_unix_shell
 """
 
 # Uncomment the following line to enable common unix utilities from unix_utilities.py
-# ctx.tags = ["user.unix_utilities"]
+ctx.tags = ["user.unix_utilities"]
 
 
 @ctx.action_class("user")

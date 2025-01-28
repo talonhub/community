@@ -5,3 +5,5 @@ __pycache__
 # Locally generated
 .vscode/settings.json
 .DS_Store
+.bak
+core/system_paths-*.talon-list

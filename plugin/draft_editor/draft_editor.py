@@ -3,6 +3,10 @@ from talon import Context, Module, actions, app, settings, ui
 mod = Module()
 mod.tag("draft_editor_active", "Indicates whether the draft editor has been activated")
 mod.tag(
+    "draft_editor_app_running",
+    "Indicates that the draft editor app currently is running",
+)
+mod.tag(
     "draft_editor_app_focused",
     "Indicates that the draft editor app currently has focus",
 )
@@ -12,13 +16,15 @@ tags: set[str] = set()
 
 
 def add_tag(tag: str):
-    tags.add(tag)
-    ctx.tags = list(tags)
+    if tag not in tags:
+        tags.add(tag)
+        ctx.tags = list(tags)
 
 
 def remove_tag(tag: str):
-    tags.discard(tag)
-    ctx.tags = list(tags)
+    if tag in tags:
+        tags.discard(tag)
+        ctx.tags = list(tags)
 
 
 default_names = ["Visual Studio Code", "Code", "VSCodium", "Codium", "code-oss"]
@@ -36,15 +42,13 @@ def get_editor_names():
     return names_csv.split(", ") if names_csv else default_names
 
 
-@mod.scope
-def scope():
+def handle_app_running(_app):
     editor_names = get_editor_names()
-
     for app in ui.apps(background=False):
         if app.name in editor_names:
-            return {"draft_editor_running": True}
-
-    return {"draft_editor_running": False}
+            add_tag("user.draft_editor_app_running")
+            return
+    remove_tag("user.draft_editor_app_running")
 
 
 def handle_app_activate(app):
@@ -54,10 +58,16 @@ def handle_app_activate(app):
         remove_tag("user.draft_editor_app_focused")
 
 
-ui.register("app_launch", scope.update)
-ui.register("app_close", scope.update)
-ui.register("app_activate", handle_app_activate)
+def on_ready():
+    ui.register("app_launch", handle_app_running)
+    ui.register("app_close", handle_app_running)
+    ui.register("app_activate", handle_app_activate)
 
+    handle_app_running(None)
+    handle_app_activate(ui.active_app())
+
+
+app.register("ready", on_ready)
 
 original_window = None
 
@@ -106,18 +116,28 @@ def get_editor_app() -> ui.App:
 
 def close_editor(submit_draft: bool) -> None:
     global last_draft
-    remove_tag("user.draft_editor_active")
+
     actions.edit.select_all()
+
     if submit_draft:
+        actions.sleep("50ms")
         last_draft = actions.edit.selected_text()
+
+        if not last_draft:
+            actions.app.notify("Failed to get draft document text")
+            return
+
+    remove_tag("user.draft_editor_active")
+
     actions.edit.delete()
     actions.app.tab_close()
+
     if submit_draft:
         try:
             actions.user.switcher_focus_window(original_window)
         except Exception:
             app.notify(
-                "Failed to focus on window to submit draft, manually focus on intended destination and use draft submit again"
+                "Failed to focus on window to submit draft, manually focus intended destination and use 'draft submit' again"
             )
         else:
             actions.sleep("300ms")
@@ -126,4 +146,4 @@ def close_editor(submit_draft: bool) -> None:
         try:
             actions.user.switcher_focus_window(original_window)
         except Exception:
-            app.notify("Failed to focus on previous window, leaving editor open")
+            app.notify("Failed to focus previous window, leaving editor open")

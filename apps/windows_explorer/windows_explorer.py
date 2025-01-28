@@ -5,13 +5,13 @@ from talon import Context, Module, actions, app, ui
 mod = Module()
 apps = mod.apps
 
-apps.windows_explorer = """
+apps.windows_explorer = r"""
 os: windows
 and app.name: Windows Explorer
 os: windows
 and app.name: Windows-Explorer
 os: windows
-and app.exe: /explorer.exe/i
+and app.exe: /^explorer\.exe$/i
 """
 
 # many commands should work in most save/open dialog.
@@ -141,3 +141,13 @@ class UserActions:
     def file_manager_open_volume(volume: str):
         """file_manager_open_volume"""
         actions.user.file_manager_open_directory(volume)
+
+    def address_focus():
+        actions.key("ctrl-l")
+
+    def address_copy_address():
+        actions.key("ctrl-l")
+        actions.edit.copy()
+
+    def address_navigate(address: str):
+        actions.user.file_manager_open_directory(address)

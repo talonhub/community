@@ -47,11 +47,6 @@ select down: edit.extend_line_down()
 select word left: edit.extend_word_left()
 select word right: edit.extend_word_right()
 
-select way left: edit.extend_line_start()
-select way right: edit.extend_line_end()
-select way up: edit.extend_file_start()
-select way down: edit.extend_file_end()
-
 # Indentation
 indent [more]: edit.indent_more()
 (indent less | out dent): edit.indent_less()
@@ -74,22 +69,6 @@ clear word left:
 
 clear word right:
     edit.extend_word_right()
-    edit.delete()
-
-clear way left:
-    edit.extend_line_start()
-    edit.delete()
-
-clear way right:
-    edit.extend_line_end()
-    edit.delete()
-
-clear way up:
-    edit.extend_file_start()
-    edit.delete()
-
-clear way down:
-    edit.extend_file_end()
     edit.delete()
 
 # Copy
@@ -146,7 +125,7 @@ new line above: edit.line_insert_up()
 new line below | slap: edit.line_insert_down()
 
 # Insert padding with optional symbols
-(pad | padding): user.insert_between(" ", " ")
+padding: user.insert_between(" ", " ")
 (pad | padding) <user.symbol_key>+:
     insert(" ")
     user.insert_many(symbol_key_list)

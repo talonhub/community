@@ -2,7 +2,6 @@ import itertools
 import math
 import re
 from collections import defaultdict
-from functools import cmp_to_key
 from itertools import islice
 from typing import Any, Iterable, Tuple
 
@@ -69,7 +68,7 @@ def update_title():
             if selected_context is None:
                 refresh_context_command_map(show_enabled_contexts_only)
             else:
-                update_active_contexts_cache(registry.active_contexts())
+                update_active_contexts_cache(registry.last_active_contexts)
 
 
 @imgui.open(y=0)
@@ -396,7 +395,7 @@ overrides = {}
 
 
 def refresh_context_command_map(enabled_only=False):
-    active_contexts = registry.active_contexts()
+    active_contexts = registry.last_active_contexts
 
     local_context_map = {}
     local_display_name_to_context_name_map = {}
@@ -546,7 +545,7 @@ def draw_list_commands(gui: imgui.GUI):
     global total_page_count
     global selected_context_page
 
-    talon_list = registry.lists[selected_list][-1]
+    talon_list = actions.user.talon_get_active_registry_list(selected_list)
     # numpages = math.ceil(len(talon_list) / SIZE)
 
     pages_list = []
@@ -659,7 +658,7 @@ class Actions:
             refresh_context_command_map()
         else:
             selected_context_page = 1
-            update_active_contexts_cache(registry.active_contexts())
+            update_active_contexts_cache(registry.last_active_contexts)
 
         selected_context = m
         hide_all_help_guis()
@@ -761,7 +760,7 @@ class Actions:
             if selected_context is None:
                 refresh_context_command_map(show_enabled_contexts_only)
             else:
-                update_active_contexts_cache(registry.active_contexts())
+                update_active_contexts_cache(registry.last_active_contexts)
 
     def help_hide():
         """Hides the help"""

@@ -45,7 +45,8 @@ def pre_phrase(phrase: Phrase):
 
     # Check if the phrase is before the threshold
     if ts_threshold != 0:
-        start = getattr(words[0], "start", phrase["_ts"])
+        # NB: mimic() and Dragon don't have this key.
+        start = getattr(words[0], "start", None) or phrase.get("_ts", ts_threshold)
         phrase_starts_before_threshold = start < ts_threshold
         ts_threshold = 0
         # Start of phrase is before threshold timestamp

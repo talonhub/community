@@ -10,13 +10,10 @@
 
 from talon import Context, Module, actions
 
-# is_mac = app.platform == "mac"
-
-ctx = Context()
 mod = Module()
+ctx = Context()
 
-apps = mod.apps
-apps.visual_studio = """
+mod.apps.visual_studio = r"""
 os: windows
 and app.name: Microsoft Visual Studio 2022
 os: windows
@@ -25,23 +22,13 @@ os: windows
 and app.name: devenv.exe
 """
 
-
 ctx.matches = r"""
-app: visual_studio
-"""
-
-from talon import Context, actions
-
-ctx = Context()
-ctx.matches = r"""
-os: windows
 app: visual_studio
 """
 
 
 @ctx.action_class("app")
 class AppActions:
-    # talon app actions
     def tab_close():
         actions.key("ctrl-f4")
 
@@ -57,14 +44,12 @@ class AppActions:
 
 @ctx.action_class("code")
 class CodeActions:
-    # talon code actions
     def toggle_comment():
         actions.key("ctrl-k ctrl-/")
 
 
 @ctx.action_class("edit")
 class EditActions:
-    # talon edit actions
     def indent_more():
         actions.key("tab")
 
@@ -100,21 +85,17 @@ class EditActions:
 class WinActions:
     def filename():
         title = actions.win.title()
-        # this doesn't seem to be necessary on VSCode for Mac
-        # if title == "":
-        #    title = ui.active_window().doc
-
         result = title.split("-")[0].rstrip()
-
         if "." in result:
-            # print(result)
             return result
-
         return ""
 
 
 @ctx.action_class("user")
 class UserActions:
+    def command_server_directory() -> str:
+        return "visual-studio-command-server"
+
     # def select_word(verb: str):
     #     actions.key("ctrl-w")
     #     actions.user.perform_selection_action(verb)
