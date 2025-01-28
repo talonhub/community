@@ -218,8 +218,13 @@ def get_window_containing(x: float, y: float):
     if app.platform == "windows" and ui.active_window().rect.contains(x, y):
         return ui.active_window()
 
+    active = ui.active_window()
+
+    found_active_window = False
     for window in ui.windows():
-        if window.rect.contains(x, y):
+        if window == active:
+            found_active_window = True
+        if found_active_window and window.rect.contains(x, y):
             return window
 
     return None
