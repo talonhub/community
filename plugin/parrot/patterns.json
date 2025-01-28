@@ -30,6 +30,9 @@
 		"grace_threshold": {
 			">power": 5,
 			">probability": 0.6
+		},
+		"throttle": {
+			"hiss": 0.2
 		}
 	},
 	"speech": {
