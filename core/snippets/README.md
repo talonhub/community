@@ -32,6 +32,7 @@ Custom format to represent snippets.
 | Key            | Required | Multiple values | Example                        |
 | -------------- | -------- | --------------- | ------------------------------ |
 | name           | Yes      | No              | `name: ifStatement`            |
+| description    | No       | No              | `description: My snippet`      |
 | language       | No       | Yes             | `language: javascript \| java` |
 | phrase         | No       | Yes             | `phrase: if \| if state`       |
 | insertionScope | No       | Yes             | `insertionScope: statement`    |

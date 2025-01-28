@@ -10,7 +10,7 @@ mod.tag(
 mod.tag("code_block_c_like", desc="Language uses C style code blocks, i.e. braces")
 
 c_like_ctx.matches = """
-tag: self.code_block_c_like
+tag: user.code_block_c_like
 """
 
 
@@ -65,7 +65,7 @@ class Actions:
         """Inserts try/catch. If selection is true, does so around the selection"""
 
 
-@c_like_ctx.action_class("self")
+@c_like_ctx.action_class("user")
 class CActions:
     def code_block():
         actions.user.insert_between("{", "}")
