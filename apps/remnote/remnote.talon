@@ -1,7 +1,6 @@
 app: RemNote
 -
-make blank:
-    key(cmd-alt-q)
+make blank: key(cmd-alt-q)
 
 make concept:
     key(cmd-alt-c)
@@ -70,7 +69,6 @@ modulo:
     key(d)
     key(space)
     key(})
-    
 
 enter:
     key(enter)
@@ -121,8 +119,7 @@ lecture (forward | next) <number_small>:
     repeat(number_small)
     user.switcher_focus("RemNote")
 
-screenshot:
-    key(cmd-shift-4)
+screenshot: key(cmd-shift-4)
 
 paste image:
     key(cmd-v)
