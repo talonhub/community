@@ -1,7 +1,7 @@
 mode: user.flow
---
+-
 
-parrot(cluck):
+parrot (cluck):
     key('fn-space')
     mode.disable("user.flow")
     mode.enable("command")

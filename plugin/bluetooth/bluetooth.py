@@ -1,8 +1,10 @@
-from talon import Module, Context
 import subprocess
+
+from talon import Context, Module
 
 mod = Module()
 ctx = Context()
+
 
 @mod.action_class
 class Actions:

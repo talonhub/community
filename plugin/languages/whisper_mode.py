@@ -1,4 +1,5 @@
 import json
+
 import requests
 from talon import Module
 
@@ -11,7 +12,7 @@ class Actions:
     def whisper_start_dictation():
         """Start dictation mode"""
         # Sending a POST request
-        response = requests.post('http://pc.local:5006/start')
+        response = requests.post("http://pc.local:5006/start")
 
         # Checking the response
         if response.status_code == 200:
@@ -19,22 +20,22 @@ class Actions:
             print(response.text)
         else:
             print(f"Failed with status code: {response.status_code}")
-    
+
     def whisper_stop_dictation() -> str:
         """Stop dictation mode"""
         # Sending a POST request
-        response = requests.post('http://pc.local:5006/stop')
+        response = requests.post("http://pc.local:5006/stop")
         # Checking the response
         if response.status_code == 200:
             print("Request was successful")
             # decode json
             data = json.loads(response.text)
-            if 'transcription' in data:
+            if "transcription" in data:
                 print(f"transcript: {data['transcription']}")
-                transcription = data['transcription']
-                transcription = transcription.rstrip('\n')
+                transcription = data["transcription"]
+                transcription = transcription.rstrip("\n")
                 return transcription
-                
+
             # print(response.text)
         else:
             print(f"Failed with status code: {response.status_code}")

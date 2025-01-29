@@ -1,41 +1,41 @@
 {
-	"cluck": {
-		"sounds": ["Alveolar Click 2"],
-		"threshold": {
-			">power": 20,
-			">probability": 0.87
-		},
-		"throttle": {
-			"cluck": 0.2
-		}
-	},
-	"rree": {
-		"sounds": ["rree2"],
-		"threshold": {
-			">power": 20,
-			">probability": 0.87
-		},
-		"throttle": {
-			"cluck": 0.2,
-			"rree": 0.2
-		}
-	},
-	"hiss": {
-		"sounds": ["hiss2"],
-		"threshold": {
-			">power": 13,
-			">probability": 0.9
-		},
-		"graceperiod": 0.1,
-		"grace_threshold": {
-			">power": 5,
-			">probability": 0.6
-		},
-		"throttle": {
-			"hiss": 0.2
-		}
-	},
-	"speech": {
+    "cluck": {
+        "sounds": ["Alveolar Click 2"],
+        "threshold": {
+            ">power": 20,
+            ">probability": 0.87
+        },
+        "throttle": {
+            "cluck": 0.2
+        }
+    },
+    "rree": {
+        "sounds": ["rree2"],
+        "threshold": {
+            ">power": 20,
+            ">probability": 0.87
+        },
+        "throttle": {
+            "cluck": 0.2,
+            "rree": 0.2
+        }
+    },
+    "hiss": {
+        "sounds": ["hiss2"],
+        "threshold": {
+            ">power": 13,
+            ">probability": 0.9
+        },
+        "graceperiod": 0.1,
+        "grace_threshold": {
+            ">power": 5,
+            ">probability": 0.6
+        },
+        "throttle": {
+            "hiss": 0.2
+        }
+    },
+    "speech": {
         "sounds": ["Speech"],
         "threshold": {
             ">power": 15,

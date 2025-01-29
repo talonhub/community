@@ -2,9 +2,9 @@ tag: browser
 browser.host: /matferline/
 -
 
-select any: 
+select any:
     mouse_move(600, 300)
-        mouse_click()
+    mouse_click()
 
 select bill:
     mouse_move(600, 450)

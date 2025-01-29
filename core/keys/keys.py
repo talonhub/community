@@ -178,7 +178,7 @@ symbol_key_words = {
     "right brace": "}",
     # "r curly bracket": "}",
     # "right curly bracket": "}",
-#     "angle": "<",
+    #     "angle": "<",
     # "left angle": "<",
     "less than": "<",
     # "rangle": ">",

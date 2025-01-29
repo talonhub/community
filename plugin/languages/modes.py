@@ -1,6 +1,7 @@
+from typing import Union
+
 from talon import Module, actions, cron
 from talon.grammar import Phrase
-from typing import Union
 
 mod = Module()
 

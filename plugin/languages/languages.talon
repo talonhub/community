@@ -3,6 +3,6 @@ catalan mode:
     mode.enable("dictation")
     mode.enable("user.catalan")
 
-^whisper$:  
+^whisper$:
     user.whisper_mode()
     user.whisper_start_dictation()

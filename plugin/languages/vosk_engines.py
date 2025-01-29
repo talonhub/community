@@ -1,5 +1,5 @@
 # ideally you integrate this into your engines.py file
-# 
+#
 # from talon import speech_system, Context
 # from talon.engines.vosk import VoskEngine
 

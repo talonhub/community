@@ -1,7 +1,7 @@
 mode: user.chatgpt_voice
---
+-
 
-parrot(cluck):
+parrot (cluck):
     user.switcher_focus("ChatGPT")
     app.window_close()
     mode.disable("user.chatgpt_voice")
