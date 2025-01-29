@@ -8,3 +8,5 @@ self dot:
 state self: user.code_self()
 
 state class: user.code_define_class()
+
+state new: insert("new ")

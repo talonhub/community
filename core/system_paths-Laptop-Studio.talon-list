@@ -1,0 +1,16 @@
+list: user.system_paths
+hostname: Laptop-Studio
+-
+user: C:\Users\arnau
+desktop: C:\Users\arnau\Desktop
+desk: C:\Users\arnau\Desktop
+documents: C:\Users\arnau\Documents
+docks: C:\Users\arnau\Documents
+downloads: C:\Users\arnau\Downloads
+music: C:\Users\arnau\Music
+pictures: C:\Users\arnau\Pictures
+videos: C:\Users\arnau\Videos
+talon home: C:\Users\arnau\AppData\Roaming\talon
+talon recordings: C:\Users\arnau\AppData\Roaming\talon\recordings
+talon user: C:\Users\arnau\AppData\Roaming\talon\user
+profile: C:\Users\arnau
