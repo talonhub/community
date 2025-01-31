@@ -89,7 +89,8 @@ def update_snippets():
         insertions_phrase_map = {}
         wrapper_map = {}
 
-        for lang_super in get_super_languages(lang):
+        # Assign global snippets to all languages
+        for lang_super in ["_", lang]:
             snippets, insertions, insertions_phrase, wrappers = create_lists(
                 lang,
                 lang_super,
@@ -121,30 +122,6 @@ def get_snippets() -> list[Snippet]:
         result.extend(create_snippets_from_file(file))
 
     return result
-
-
-def get_super_languages(language: str) -> list[str]:
-    """Returns a list of languages that are considered a superset of <language>, including <language> itself. Eg `javascript` will be included in the list when <language> is `typescript`.
-    Note that the order of languages returned here is very important: more general must precede more specific, so that specific langs can properly override general languages.
-    """
-    match language:
-        case "_":
-            return ["_"]
-        case "typescript":
-            return ["_", "javascript", "typescript"]
-        case "javascriptreact":
-            return ["_", "html", "javascript", "javascriptreact"]
-        case "typescriptreact":
-            return [
-                "_",
-                "html",
-                "javascript",
-                "typescript",
-                "javascriptreact",
-                "typescriptreact",
-            ]
-        case _:
-            return ["_", language]
 
 
 def group_by_language(snippets: list[Snippet]) -> dict[str, list[Snippet]]:
@@ -200,7 +177,7 @@ def create_lists(
 
 
 def on_ready():
-    fs.watch(str(SNIPPETS_DIR), lambda _1, _2: update_snippets())
+    fs.watch(SNIPPETS_DIR, lambda _1, _2: update_snippets())
 
     if get_setting_dir():
         fs.watch(str(get_setting_dir()), lambda _1, _2: update_snippets())
