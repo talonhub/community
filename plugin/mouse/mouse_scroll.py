@@ -108,6 +108,8 @@ class Actions:
         """Starts gaze scroll"""
         global gaze_job, continuous_scroll_mode, control_mouse_forced
 
+        ctx.tags = ["user.continuous_scrolling"]
+
         continuous_scroll_mode = "gaze scroll"
         gaze_job = cron.interval("16ms", scroll_gaze_helper)
 
