@@ -29,20 +29,22 @@ mod.setting(
     desc="Directory (relative to Talon user) containing additional snippets",
 )
 
+# `_` represents the global context, ie snippets available regardless of language
+GLOBAL_ID = "_"
+
 # { SNIPPET_NAME: Snippet[] }
 snippets_map: dict[str, list[Snippet]] = {}
 
 # { LANGUAGE_ID: SnippetLanguageState }
 languages_state_map: dict[str, SnippetLanguageState] = {
-    # `_` represents the global context, ie snippets available regardless of language
-    "_": SnippetLanguageState(Context(), SnippetLists({}, {}, {}))
+    GLOBAL_ID: SnippetLanguageState(Context(), SnippetLists())
 }
 
 # Create a context for each defined language
 for lang in code_languages:
     ctx = Context()
     ctx.matches = f"code.language: {lang.id}"
-    languages_state_map[lang.id] = SnippetLanguageState(ctx, SnippetLists({}, {}, {}))
+    languages_state_map[lang.id] = SnippetLanguageState(ctx, SnippetLists())
 
 
 def get_setting_dir():
@@ -150,9 +152,9 @@ def update_snippets():
         name_to_snippets[snippet.name].append(snippet)
 
         # Map languages to phrase / name dicts
-        for language in snippet.languages or ["_"]:
+        for language in snippet.languages or [GLOBAL_ID]:
             if language not in language_to_lists:
-                language_to_lists[language] = SnippetLists({}, {}, {})
+                language_to_lists[language] = SnippetLists()
 
             lists = language_to_lists[language]
 
@@ -171,7 +173,7 @@ def update_snippets():
 
 
 def update_contexts(language_to_lists: dict[str, SnippetLists]):
-    global_lists = language_to_lists["_"] or SnippetLists({}, {}, {})
+    global_lists = language_to_lists[GLOBAL_ID] or SnippetLists()
 
     for lang, lists in language_to_lists.items():
         if lang not in languages_state_map:

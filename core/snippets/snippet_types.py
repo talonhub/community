@@ -3,11 +3,15 @@ from dataclasses import dataclass
 from talon import Context
 
 
-@dataclass
 class SnippetLists:
     insertion: dict[str, str]
     with_phrase: dict[str, str]
     wrapper: dict[str, str]
+
+    def __init__(self):
+        self.insertion = {}
+        self.with_phrase = {}
+        self.wrapper = {}
 
 
 @dataclass
