@@ -63,3 +63,12 @@ $1.insertionFormatter: PRIVATE_CAMEL_CASE
 -
 const $1 = $0;
 ---
+
+name: letAssignment
+phrase: let
+insertionScope: statement
+
+$1.insertionFormatter: PRIVATE_CAMEL_CASE
+-
+let $1 = $0;
+---
