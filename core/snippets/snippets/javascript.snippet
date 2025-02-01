@@ -54,3 +54,12 @@ useEffect(() => {
     $0
 }, []);
 ---
+
+name: constDeclaration
+phrase: const
+insertionScope: statement
+
+$1.insertionFormatter: PRIVATE_CAMEL_CASE
+-
+const $1 = $0;
+---
