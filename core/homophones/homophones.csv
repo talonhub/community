@@ -40,6 +40,7 @@ apprize,apprise
 arc,ark
 ascent,assent
 assistance,assistants
+attendance,attendants
 augur,auger
 aunt,ant
 oral,aural
@@ -75,6 +76,7 @@ be,bee
 beach,beech
 been,bin
 beer,bier
+beetle,beatle
 bell,belle
 better,bettor
 bib,bibb
@@ -125,6 +127,8 @@ carol,carrel
 carrot,carat,caret,karat
 cash,cache
 cached,cashed
+caches,cashes
+caching,cashing
 cast,caste
 caster,castor
 cause,caws
@@ -177,6 +181,7 @@ crepe,crape
 cruel,crewel
 cruise,crews
 queue,cue
+queues,cues
 current,currant
 cursor,curser
 signet,cygnet
@@ -209,12 +214,14 @@ eight,ate
 illicit,elicit
 elude,allude
 elusive,illusive,allusive
+ensure,insure
 emend,amend
 innumerable,enumerable
 errant,arrant
 eve,eave
 exceed,accede
 except,accept
+excepting,accepting
 exercise,exorcise
 end,and
 I'd,eyed
@@ -232,6 +239,9 @@ few,phew
 Phil,fill
 find,fined
 fisher,fissure
+fish,phish
+fished,phished
+fishing,phishing
 flare,flair
 flee,flea
 flow,floe
@@ -252,10 +262,12 @@ friar,fryer
 fur,fir
 gaffe,gaff
 gate,gait
+gator,gaiter
 gamble,gambol
 gel,jell
 gene,Jean
 jibe,gibe
+gui,gooey
 guild,gild
 gilder,guilder
 guilt,gilt
@@ -374,10 +386,8 @@ mast,massed
 mat,matte
 meet,meat,mete
 meteor,meatier
-metal,medal,mettle
-medal,meddle,mettle
+metal,medal,meddle,mettle
 Mary,marry,merry
-metal,meddle,mettle
 mule,mewl
 mean,mien
 mill,mil
@@ -488,6 +498,8 @@ review,revue
 rigor,rigger
 ring,wring
 right,write,rite
+rights,writes,rites
+rot,wrought
 roads,rhodes
 Rome,roam
 row,roe
@@ -529,6 +541,7 @@ side,sighed
 size,sighs
 site,sight,cite
 sink,sync
+sinking,syncing
 slay,sleigh
 slight,sleight
 slow,sloe
@@ -565,6 +578,7 @@ tale,tail
 taper,tapir
 terry,tarry
 taupe,tope
+talk,tock
 taught,taut
 tea,tee
 team,teem
@@ -608,6 +622,7 @@ use,ewes,yews
 veil,vale
 valence,valance
 vain,vein,vane
+variants,variance
 vein,vane
 Venus,venous
 versus,verses
@@ -624,10 +639,12 @@ wax,whacks
 way,weigh,whey
 we,wee
 where,wear,ware
+whether,weather
 were,whir,we're
 whether,weather,wether
 we'd,weed
 week,weak
+weekly,weakly
 wade,weighed
 ways,weighs
 wet,whet
