@@ -3,9 +3,16 @@ phrase: for each
 insertionScope: statement
 ---
 
-language: javascript
+language: cpp
 -
-for (const $1 of $2) {
+for ($1 : $2) {
+    $0
+}
+---
+
+language: csharp
+-
+foreach ($1 in $2) {
     $0
 }
 ---
@@ -13,6 +20,13 @@ for (const $1 of $2) {
 language: java
 -
 for (final $1 : $2) {
+    $0
+}
+---
+
+language: javascript | typescript | javascriptreact | typescriptreact
+-
+for (const $1 of $2) {
     $0
 }
 ---

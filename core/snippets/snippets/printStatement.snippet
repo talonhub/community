@@ -5,9 +5,9 @@ insertionScope: statement
 $0.wrapperPhrase: print
 ---
 
-language: javascript
+language: cpp
 -
-console.log($0)
+std::printf($0);
 ---
 
 language: java
@@ -15,7 +15,17 @@ language: java
 System.out.println($0);
 ---
 
+language: javascript | typescript | javascriptreact | typescriptreact
+-
+console.log($0);
+---
+
 language: python | talon
 -
 print($0)
+---
+
+language: csharp
+-
+Console.WriteLine($0);
 ---
