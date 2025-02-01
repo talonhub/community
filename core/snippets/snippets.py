@@ -147,15 +147,12 @@ def update_snippets():
 
     for snippet in snippets:
         # Map snippet names to actual snippets
-        if snippet.name not in name_to_snippets:
-            name_to_snippets[snippet.name] = []
+        name_to_snippets.setdefault(snippet.name, [])
         name_to_snippets[snippet.name].append(snippet)
 
         # Map languages to phrase / name dicts
         for language in snippet.languages or [GLOBAL_ID]:
-            if language not in language_to_lists:
-                language_to_lists[language] = SnippetLists()
-
+            language_to_lists.setdefault(language, SnippetLists())
             lists = language_to_lists[language]
 
             for phrase in snippet.phrases or []:
