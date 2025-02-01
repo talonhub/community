@@ -6,20 +6,20 @@ $0.wrapperPhrase: funk
 $0.wrapperScope: statement
 ---
 
-language: javascript
-
-$1.insertionFormatter: PRIVATE_CAMEL_CASE
--
-function $1($2) {
-    $0
-}
----
-
-language: java
+language: c | cpp | csharp | java
 
 $1.insertionFormatter: PRIVATE_CAMEL_CASE
 -
 void $1($2) {
+    $0
+}
+---
+
+language: javascript | typescript | javascriptreact | typescriptreact
+
+$1.insertionFormatter: PRIVATE_CAMEL_CASE
+-
+function $1($2) {
     $0
 }
 ---
