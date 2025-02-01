@@ -217,10 +217,10 @@ def get_snippets_from_files() -> list[Snippet]:
 
 
 def on_ready():
-    fs.watch(SNIPPETS_DIR, lambda _1, _2: update_snippets())
+    fs.watch(SNIPPETS_DIR, lambda _path, _flags: update_snippets())
 
     if get_setting_dir():
-        fs.watch(str(get_setting_dir()), lambda _1, _2: update_snippets())
+        fs.watch(get_setting_dir(), lambda _path, _flags: update_snippets())
 
     update_snippets()
 
