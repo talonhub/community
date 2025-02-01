@@ -59,6 +59,13 @@ mod.setting(
     desc="When adjusting the continuous scrolling speed through voice commands, the result is that the speed is multiplied by the dictated number divided by this number.",
 )
 
+mod.setting(
+    'mouse_gaze_scroll_speed_multiplier',
+    type = float,
+    default = 0.1,
+    desc = "This multiplies the gaze scroll speed"
+)
+
 mod.tag(
     "continuous_scrolling",
     desc="Allows commands for adjusting continuous scrolling behavior",
@@ -258,7 +265,8 @@ def scroll_gaze_helper():
 
     rect = window.rect
     midpoint = rect.center.y
-    amount = ((y - midpoint) / (rect.height / 10)) ** 3
+    factor = continuous_scrolling_speed_factor*settings.get("user.mouse_gaze_scroll_speed_multiplier")
+    amount = factor*(((y - midpoint) / (rect.height / 10)) ** 3)
     actions.mouse_scroll(amount)
 
 
