@@ -1,6 +1,20 @@
 language: python
 ---
 
+name: talonModuleDeclaration
+phrase: module
+insertionScope: statement
+-
+mod = Module()
+---
+
+name: talonContextDeclaration
+phrase: context
+insertionScope: statement
+-
+ctx = Context()
+---
+
 name: talonAppDeclaration
 phrase: module app
 insertionScope: statement
@@ -43,5 +57,12 @@ insertionScope: class | statement
 -
 @ctx.action_class("$1")
 class $2Actions:
+    $0
+---
+
+name: suppressError
+phrase: suppress error
+-
+with suppress(AttributeError):
     $0
 ---

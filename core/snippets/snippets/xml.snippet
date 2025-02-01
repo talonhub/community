@@ -1,0 +1,21 @@
+language: xml | html | javascriptreact | typescriptreact
+---
+
+name: element
+phrase: element | tag
+insertionScope: xmlElement
+
+$1.insertionFormatter: PRIVATE_CAMEL_CASE
+-
+<$1>
+    $0
+</$1>
+---
+
+name: attribute
+phrase: attribute
+
+$1.insertionFormatter: PRIVATE_CAMEL_CASE
+-
+$1=$0
+---
