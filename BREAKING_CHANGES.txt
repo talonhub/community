@@ -7,6 +7,7 @@ and when the change was applied given the delay between changes being
 submitted and the time they were reviewed and merged.
 
 ---
+* 2025-02-01 Removed snippet language inheritance. From now on typescript will not automatically use javascript snippets. Each snippet need to define every language it should be active in.
 * 2025-01-19 Deprecated a bunch of programming language operator commands in favor of using Talon lists
 * 2024-12-3 Introduced an intermediate layer for naming snap window positions instead of using the raw spoken forms. Instead of calling snap_window_to_position("top right") you should now call snap_window_to_position("TOP_RIGHT")
 * 2024-12-26 Deprecated action `user.zoom_close` in favor of `tracking.zoom_cancel`.
