@@ -178,6 +178,7 @@ def update_contexts(language_to_lists: dict[str, SnippetLists]):
     for lang, lists in language_to_lists.items():
         if lang not in languages_state_map:
             print(f"Found snippets for unknown language: {lang}")
+            actions.app.notify(f"Found snippets for unknown language: {lang}")
             continue
 
         state = languages_state_map[lang]
