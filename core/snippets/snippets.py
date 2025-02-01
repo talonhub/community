@@ -150,8 +150,7 @@ def update_snippets():
 
         # Map languages to phrase / name dicts
         for language in snippet.languages or [GLOBAL_ID]:
-            language_to_lists.setdefault(language, SnippetLists())
-            lists = language_to_lists[language]
+            lists = language_to_lists.setdefault(language, SnippetLists())
 
             for phrase in snippet.phrases or []:
                 lists.insertion[phrase] = snippet.name
