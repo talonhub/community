@@ -62,7 +62,7 @@ mod.setting(
 mod.setting(
     'mouse_gaze_scroll_speed_multiplier',
     type = float,
-    default = 0.1,
+    default = 1.0,
     desc = "This multiplies the gaze scroll speed"
 )
 
@@ -114,6 +114,8 @@ class Actions:
     def mouse_gaze_scroll():
         """Starts gaze scroll"""
         global gaze_job, continuous_scroll_mode, control_mouse_forced
+
+        ctx.tags = ["user.continuous_scrolling"]
 
         continuous_scroll_mode = "gaze scroll"
         gaze_job = cron.interval("16ms", scroll_gaze_helper)
