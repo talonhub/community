@@ -60,10 +60,10 @@ mod.setting(
 )
 
 mod.setting(
-    'mouse_gaze_scroll_speed_multiplier',
-    type = float,
-    default = 1.0,
-    desc = "This multiplies the gaze scroll speed"
+    "mouse_gaze_scroll_speed_multiplier",
+    type=float,
+    default=1.0,
+    desc="This multiplies the gaze scroll speed",
 )
 
 mod.tag(
@@ -267,8 +267,10 @@ def scroll_gaze_helper():
 
     rect = window.rect
     midpoint = rect.center.y
-    factor = continuous_scrolling_speed_factor*settings.get("user.mouse_gaze_scroll_speed_multiplier")
-    amount = factor*(((y - midpoint) / (rect.height / 10)) ** 3)
+    factor = continuous_scrolling_speed_factor * settings.get(
+        "user.mouse_gaze_scroll_speed_multiplier"
+    )
+    amount = factor * (((y - midpoint) / (rect.height / 10)) ** 3)
     actions.mouse_scroll(amount)
 
 
