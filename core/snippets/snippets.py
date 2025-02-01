@@ -105,7 +105,7 @@ class Actions:
 
 def get_preferred_snippet(snippets: list[Snippet]) -> Snippet:
     lang: Union[str, set[str]] = actions.code.language()
-    languages = list([lang]) if isinstance(lang, str) else lang
+    languages = [lang] if isinstance(lang, str) else lang
 
     # First try to find a snippet matching the active language
     for snippet in snippets:
