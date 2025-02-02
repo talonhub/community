@@ -5,6 +5,7 @@ from typing import List, Optional, Union
 
 from talon import Context, Module, actions, settings, ui
 from talon.ui import UIErr, Window
+from .windows_and_tabs import is_window_valid
 
 """Tools for laying out windows in an arrangement """
 
@@ -146,7 +147,7 @@ def filter_nonviable_windows(windows: List[Window]) -> list[Window]:
     active_window_idx = all_windows.index(active_window)  # type: ignore
     return list(
         filter(
-            lambda w: (isinstance(w, Gap) or all_windows.index(w) >= active_window_idx),
+            lambda w: (isinstance(w, Gap) or is_window_valid(w)),
             windows,
         )
     )
@@ -172,11 +173,13 @@ def skip_window(m) -> list[Window]:
 
 @mod.capture(rule="<user.running_applications>")
 def application_windows(m) -> list[Window]:
-    return [
-        window
-        for app in m.running_applications_list
-        for window in actions.self.get_running_app(app).windows()
-    ]
+    return filter_nonviable_windows(
+        [
+            window
+            for app in m.running_applications_list
+            for window in actions.self.get_running_app(app).windows()
+        ]
+    )
 
 
 @mod.capture(
