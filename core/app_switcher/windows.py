@@ -220,7 +220,7 @@ if app.platform == "windows":
                     unique_identifier= app_user_model_id, 
                     executable_name=executable_name if executable_name else None,
                     exclude=False,
-                    spoken_form=None,
+                    spoken_forms=None,
                     application_group=None)
                     
                 if "Python" in display_name:
