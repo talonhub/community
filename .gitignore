@@ -7,3 +7,13 @@ __pycache__
 .vscode/settings.json
 .DS_Store
 *.bak
+# Emacs (from https://github.com/github/gitignore/blob/main/Global/Emacs.gitignore)
+*~
+\#*\#
+.\#*
+# Vim (from https://github.com/github/gitignore/blob/main/Global/Vim.gitignore)
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-rt-v][a-z]
+[._]ss[a-gi-z]
+[._]sw[a-p]
