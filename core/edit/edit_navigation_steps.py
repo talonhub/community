@@ -38,7 +38,7 @@ class Actions:
         for step in steps:
             match step.type:
                 case "wordLeft":
-                     repeat_action(actions.edit.word_left, step.count)
+                    repeat_action(actions.edit.word_left, step.count)
                 case "wordRight":
                     repeat_action(actions.edit.word_right, step.count)
                 case "word":
