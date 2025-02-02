@@ -234,7 +234,8 @@ def update_running_list():
 
     generate_spoken_form_map = {}
 
-    if app.platform == "windows":        
+    if app.platform == "windows":  
+        return      
         frame_host_apps = ui.apps(name="Application Frame Host", background=False)
         for cur_app in frame_host_apps:
             valid_windows = get_valid_windows_by_app_user_model_id(cur_app)

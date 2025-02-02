@@ -4,6 +4,10 @@ from .edit_command_actions import EditAction, run_action_callback
 from .edit_command_modifiers import EditModifier, run_modifier_callback
 
 mod = Module()
+
+# providing some settings for customizing the word and line selection delay 
+# talon can execute selections must faster than a human 
+# resulting in unexpected or inconsistent results in applications such as visual studio code 
 mod.setting(
     "edit_command_word_selection_delay",
     type=int,
