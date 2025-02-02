@@ -1,11 +1,16 @@
-import glob
-from collections import defaultdict
 from pathlib import Path
+from typing import Union
 
 from talon import Context, Module, actions, app, fs, settings
 
 from ..modes.code_languages import code_languages
-from .snippet_types import InsertionSnippet, Snippet, WrapperSnippet
+from .snippet_types import (
+    InsertionSnippet,
+    Snippet,
+    SnippetLanguageState,
+    SnippetLists,
+    WrapperSnippet,
+)
 from .snippets_parser import create_snippets_from_file
 
 SNIPPETS_DIR = Path(__file__).parent / "snippets"
@@ -23,17 +28,22 @@ mod.setting(
     desc="Directory (relative to Talon user) containing additional snippets",
 )
 
-context_map = {
-    # `_` represents the global context, ie snippets available regardless of language
-    "_": Context(),
+# `_` represents the global context, ie snippets available regardless of language
+GLOBAL_ID = "_"
+
+# { SNIPPET_NAME: Snippet[] }
+snippets_map: dict[str, list[Snippet]] = {}
+
+# { LANGUAGE_ID: SnippetLanguageState }
+languages_state_map: dict[str, SnippetLanguageState] = {
+    GLOBAL_ID: SnippetLanguageState(Context(), SnippetLists())
 }
-snippets_map = {}
 
 # Create a context for each defined language
 for lang in code_languages:
     ctx = Context()
     ctx.matches = f"code.language: {lang.id}"
-    context_map[lang.id] = ctx
+    languages_state_map[lang.id] = SnippetLanguageState(ctx, SnippetLists())
 
 
 def get_setting_dir():
@@ -52,128 +62,153 @@ def get_setting_dir():
 
 @mod.action_class
 class Actions:
-    def get_snippet(name: str) -> Snippet:
-        """Get snippet named <name>"""
-        # Add current code language if not specified
-        if "." not in name:
-            lang = actions.code.language() or "_"
-            name = f"{lang}.{name}"
-
+    def get_snippets(name: str) -> list[Snippet]:
+        """Get snippets named <name>"""
         if name not in snippets_map:
             raise ValueError(f"Unknown snippet '{name}'")
-
         return snippets_map[name]
 
+    def get_snippet(name: str) -> Snippet:
+        """Get snippet named <name> for the active language"""
+        snippets: list[Snippet] = actions.user.get_snippets(name)
+        return get_preferred_snippet(snippets)
+
+    def get_insertion_snippets(name: str) -> list[InsertionSnippet]:
+        """Get insertion snippets named <name>"""
+        snippets: list[Snippet] = actions.user.get_snippets(name)
+        return [
+            InsertionSnippet(s.body, s.insertion_scopes, s.languages) for s in snippets
+        ]
+
     def get_insertion_snippet(name: str) -> InsertionSnippet:
-        """Get insertion snippet named <name>"""
+        """Get insertion snippet named <name> for the active language"""
         snippet: Snippet = actions.user.get_snippet(name)
-        return InsertionSnippet(snippet.body, snippet.insertion_scopes)
+        return InsertionSnippet(
+            snippet.body,
+            snippet.insertion_scopes,
+            snippet.languages,
+        )
+
+    def get_wrapper_snippets(name: str) -> list[WrapperSnippet]:
+        """Get wrapper snippets named <name>"""
+        snippet_name, variable_name = split_wrapper_snippet_name(name)
+        snippets: list[Snippet] = actions.user.get_snippets(snippet_name)
+        return [to_wrapper_snippet(s, variable_name) for s in snippets]
 
     def get_wrapper_snippet(name: str) -> WrapperSnippet:
-        """Get wrapper snippet named <name>"""
-        index = name.rindex(".")
-        snippet_name = name[:index]
-        variable_name = name[index + 1]
+        """Get wrapper snippet named <name> for the active language"""
+        snippet_name, variable_name = split_wrapper_snippet_name(name)
         snippet: Snippet = actions.user.get_snippet(snippet_name)
-        variable = snippet.get_variable_strict(variable_name)
-        return WrapperSnippet(snippet.body, variable.name, variable.wrapper_scope)
+        return to_wrapper_snippet(snippet, variable_name)
+
+
+def get_preferred_snippet(snippets: list[Snippet]) -> Snippet:
+    lang: Union[str, set[str]] = actions.code.language()
+    languages = [lang] if isinstance(lang, str) else lang
+
+    # First try to find a snippet matching the active language
+    for snippet in snippets:
+        if snippet.languages:
+            for snippet_lang in snippet.languages:
+                if snippet_lang in languages:
+                    return snippet
+
+    # Then look for a global snippet
+    for snippet in snippets:
+        if not snippet.languages:
+            return snippet
+
+    raise ValueError(f"Snippet not available for language '{lang}'")
+
+
+def split_wrapper_snippet_name(name: str) -> tuple[str, str]:
+    index = name.rindex(".")
+    return name[:index], name[index + 1]
+
+
+def to_wrapper_snippet(snippet: Snippet, variable_name) -> WrapperSnippet:
+    """Get wrapper snippet named <name>"""
+    var = snippet.get_variable_strict(variable_name)
+    return WrapperSnippet(
+        snippet.body,
+        var.name,
+        var.wrapper_scope,
+        snippet.languages,
+    )
 
 
 def update_snippets():
-    language_to_snippets = group_by_language(get_snippets())
+    global snippets_map
 
-    snippets_map.clear()
+    snippets = get_snippets_from_files()
+    name_to_snippets: dict[str, list[Snippet]] = {}
+    language_to_lists: dict[str, SnippetLists] = {}
 
-    for lang, ctx in context_map.items():
-        insertion_map = {}
-        insertions_phrase_map = {}
-        wrapper_map = {}
+    for snippet in snippets:
+        # Map snippet names to actual snippets
+        name_to_snippets.setdefault(snippet.name, []).append(snippet)
 
-        # Assign global snippets to all languages
-        for lang_super in ["_", lang]:
-            snippets, insertions, insertions_phrase, wrappers = create_lists(
-                lang,
-                lang_super,
-                language_to_snippets.get(lang_super, []),
-            )
-            snippets_map.update(snippets)
-            insertion_map.update(insertions)
-            insertions_phrase_map.update(insertions_phrase)
-            wrapper_map.update(wrappers)
+        # Map languages to phrase / name dicts
+        for language in snippet.languages or [GLOBAL_ID]:
+            lists = language_to_lists.setdefault(language, SnippetLists())
 
-        ctx.lists.update(
-            {
-                "user.snippet": insertion_map,
-                "user.snippet_with_phrase": insertions_phrase_map,
-                "user.snippet_wrapper": wrapper_map,
-            }
-        )
+            for phrase in snippet.phrases or []:
+                lists.insertion[phrase] = snippet.name
+
+                for var in snippet.variables:
+                    if var.insertion_formatters:
+                        lists.with_phrase[phrase] = snippet.name
+
+                    if var.wrapper_phrases:
+                        lists.wrapper[phrase] = f"{snippet.name}.{var.name}"
+
+    snippets_map = name_to_snippets
+    update_contexts(language_to_lists)
 
 
-def get_snippets() -> list[Snippet]:
-    files = glob.glob(f"{SNIPPETS_DIR}/**/*.snippet", recursive=True)
+def update_contexts(language_to_lists: dict[str, SnippetLists]):
+    global_lists = language_to_lists[GLOBAL_ID] or SnippetLists()
 
-    if get_setting_dir():
-        files.extend(glob.glob(f"{get_setting_dir()}/**/*.snippet", recursive=True))
+    for lang, lists in language_to_lists.items():
+        if lang not in languages_state_map:
+            print(f"Found snippets for unknown language: {lang}")
+            actions.app.notify(f"Found snippets for unknown language: {lang}")
+            continue
 
+        state = languages_state_map[lang]
+        insertion = {**global_lists.insertion, **lists.insertion}
+        with_phrase = {**global_lists.with_phrase, **lists.with_phrase}
+        wrapper = {**global_lists.wrapper, **lists.wrapper}
+        updated_lists: dict[str, dict[str, str]] = {}
+
+        if state.lists.insertion != insertion:
+            state.lists.insertion = insertion
+            updated_lists["user.snippet"] = insertion
+
+        if state.lists.with_phrase != with_phrase:
+            state.lists.with_phrase = with_phrase
+            updated_lists["user.snippet_with_phrase"] = with_phrase
+
+        if state.lists.wrapper != wrapper:
+            state.lists.wrapper = wrapper
+            updated_lists["user.snippet_wrapper"] = wrapper
+
+        if updated_lists:
+            state.ctx.lists.update(updated_lists)
+
+
+def get_snippets_from_files() -> list[Snippet]:
+    setting_dir = get_setting_dir()
     result = []
 
-    for file in files:
+    for file in SNIPPETS_DIR.glob("**/*.snippet"):
         result.extend(create_snippets_from_file(file))
 
+    if setting_dir:
+        for file in setting_dir.glob("**/*.snippet"):
+            result.extend(create_snippets_from_file(file))
+
     return result
-
-
-def group_by_language(snippets: list[Snippet]) -> dict[str, list[Snippet]]:
-    result = defaultdict(list)
-    for snippet in snippets:
-        if snippet.languages is not None:
-            for lang in snippet.languages:
-                result[lang].append(snippet)
-        else:
-            result["_"].append(snippet)
-    return result
-
-
-def create_lists(
-    lang_ctx: str,
-    lang_snippets: str,
-    snippets: list[Snippet],
-) -> tuple[dict[str, list[Snippet]], dict[str, str], dict[str, str], dict[str, str]]:
-    """Creates the lists for the given language, and returns them as a tuple of (snippets, insertions, insertions_phrase, wrappers)
-
-    Args:
-        lang_ctx (str): The language of the context match
-        lang_snippets (str): The language of the snippets
-        snippets (list[Snippet]): The list of snippets for the given language
-    """
-    snippets_map = {}
-    insertions = {}
-    insertions_phrase = {}
-    wrappers = {}
-
-    for snippet in snippets:
-        id_ctx = f"{lang_ctx}.{snippet.name}"
-        id_lang = f"{lang_snippets}.{snippet.name}"
-
-        # Make sure that the snippet is added to the map for the context language
-        snippets_map[id_ctx] = snippet
-
-        if snippet.phrases is not None:
-            for phrase in snippet.phrases:
-                insertions[phrase] = id_lang
-
-        if snippet.variables is not None:
-            for var in snippet.variables:
-                if var.insertion_formatters is not None and snippet.phrases is not None:
-                    for phrase in snippet.phrases:
-                        insertions_phrase[phrase] = id_lang
-
-                if var.wrapper_phrases is not None:
-                    for phrase in var.wrapper_phrases:
-                        wrappers[phrase] = f"{id_lang}.{var.name}"
-
-    return snippets_map, insertions, insertions_phrase, wrappers
 
 
 def on_ready():

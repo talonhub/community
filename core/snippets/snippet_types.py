@@ -1,5 +1,24 @@
 from dataclasses import dataclass
 
+from talon import Context
+
+
+class SnippetLists:
+    insertion: dict[str, str]
+    with_phrase: dict[str, str]
+    wrapper: dict[str, str]
+
+    def __init__(self):
+        self.insertion = {}
+        self.with_phrase = {}
+        self.wrapper = {}
+
+
+@dataclass
+class SnippetLanguageState:
+    ctx: Context
+    lists: SnippetLists
+
 
 @dataclass
 class SnippetVariable:
@@ -14,16 +33,15 @@ class Snippet:
     name: str
     body: str
     description: str | None
-    phrases: list[str] | None = None
-    insertion_scopes: list[str] | None = None
-    languages: list[str] | None = None
-    variables: list[SnippetVariable] | None = None
+    phrases: list[str] | None
+    insertion_scopes: list[str] | None
+    languages: list[str] | None
+    variables: list[SnippetVariable]
 
     def get_variable(self, name: str):
-        if self.variables:
-            for var in self.variables:
-                if var.name == name:
-                    return var
+        for var in self.variables:
+            if var.name == name:
+                return var
         return None
 
     def get_variable_strict(self, name: str):
@@ -36,11 +54,13 @@ class Snippet:
 @dataclass
 class InsertionSnippet:
     body: str
-    scopes: list[str] | None = None
+    scopes: list[str] | None
+    languages: list[str] | None
 
 
 @dataclass
 class WrapperSnippet:
     body: str
     variable_name: str
-    scope: str | None = None
+    scope: str | None
+    languages: list[str] | None
