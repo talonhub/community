@@ -119,11 +119,10 @@ def word(m) -> str:
             actions.dictate.replace_words(actions.dictate.parse_words(m.word))
         )
 
-@mod.capture(rule="({user.vocabulary} | <user.prose_contact> | <user.abbreviation> | <phrase>)+")
+@mod.capture(rule="({user.vocabulary} | <user.prose_contact> | <user.abbreviation> | <phrase> | <user.date>)+")
 def text(m) -> str:
     """A sequence of words, including user-defined vocabulary."""
     return format_phrase(m)
-
 
 @mod.capture(
     rule=(
@@ -138,6 +137,7 @@ def text(m) -> str:
         "| <user.prose_modifier>"
         "| <user.abbreviation>"
         "| <user.prose_contact>"
+        "| <user.date>"
         "| <phrase>"
         ")+"
     )
