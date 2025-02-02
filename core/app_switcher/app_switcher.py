@@ -66,6 +66,8 @@ APPLICATION_GROUPS_DICT = {}
 # dictionary of application overrides from launch file
 APPLICATIONS_OVERRIDES = {}
 
+WINDOWS_NAME_TO_TALON_NAME = {}
+
 # list of applications that appear in the CSV, but do not appear to be installed
 # these are preserved when the csv is re-written
 PRESERVED_APPLICATION_LIST: list[Application] = []
@@ -226,6 +228,9 @@ def get_valid_windows_by_app_user_model_id(app: ui.App) -> dict[str, list]:
 
 
 def update_running_list():
+    #if app.platform == "windows":
+    #    return
+    
     global RUNNING_APPLICATION_DICT, app_frame_host_cache
     RUNNING_APPLICATION_DICT = {}
     app_frame_host_cache = {}
@@ -285,6 +290,8 @@ def update_running_list():
 
 
         if app.platform == "windows":
+            #return
+
             if exe == "applicationframehost.exe":
                 continue
             
@@ -477,7 +484,7 @@ def update_running_exclusions(f):
     
 @resource.watch(launch_applications_file_path)
 def update_launch_applications(f):
-    global APPLICATIONS_DICT, INSTALLED_APPLICATIONS_LIST, APPLICATIONS_OVERRIDES, INSTALLED_APPLICATIONS_INITIALIZED
+    global APPLICATIONS_DICT, INSTALLED_APPLICATIONS_LIST, APPLICATIONS_OVERRIDES, INSTALLED_APPLICATIONS_INITIALIZED, WINDOWS_NAME_TO_TALON_NAME
     global PRESERVED_APPLICATION_LIST
     global APPLICATION_GROUPS_DICT
     
@@ -489,6 +496,7 @@ def update_launch_applications(f):
 
     APPLICATION_GROUPS_DICT = {}  
     APPLICATIONS_OVERRIDES = {}
+    WINDOWS_NAME_TO_TALON_NAME = {}
     PRESERVED_APPLICATION_LIST = []
     removed_apps_dict = {}
 
@@ -500,16 +508,20 @@ def update_launch_applications(f):
         must_update_file = True
     
     for row in rows[1:]:
-        if len(row) != 6 and len(row) != 8:
-            print(f"Row {row} malformed; expecting 6 or 8 entiresl found {len(row)}")
+        if len(row) == 6 and len(row) == 7 and len(row) == 9:
+            print(f"Row {row} malformed; expecting 6-9 entires found {len(row)}")
 
         group_name = None
+        talon_name = None
         if len(row) == 6:
             display_name, spoken_forms, exclude, uid, path, executable_name = (
                 [x.strip() or None for x in row])[:6]
-        elif len(row) == 8:
-            display_name, spoken_forms, exclude, uid, path, executable_name, group_name, is_default_for_application_group = (
-                [x.strip() or None for x in row])[:8]
+        elif len(row) == 7:
+            display_name, spoken_forms, exclude, uid, path, executable_name, talon_name = (
+                [x.strip() or None for x in row])[:7]        
+        # elif len(row) == 8:
+        #     display_name, spoken_forms, exclude, uid, path, executable_name, group_name, is_default_for_application_group = (
+        #         [x.strip() or None for x in row])[:8]
         
         if spoken_forms.lower() == "none":
             spoken_forms = None
@@ -518,6 +530,12 @@ def update_launch_applications(f):
             
         if group_name and group_name.lower() == "none":
             group_name = None
+
+        if talon_name and talon_name.lower() == "none":
+            talon_name = None
+
+        if talon_name and talon_name != display_name:
+            WINDOWS_NAME_TO_TALON_NAME[display_name] = talon_name
 
         exclude = False if exclude.lower() == "false" else True
         uid = None if uid.lower() == "none" else uid
@@ -641,24 +659,29 @@ class Actions:
         if name.lower() in RUNNING_APPLICATION_DICT:
             return RUNNING_APPLICATION_DICT[name.lower()]
         else:
-            if len(name) < 3:
-                raise RuntimeError(
-                    f'Skipped getting app: "{name}" has less than 3 chars.'
-                )
-            for running_name, full_application_name in ctx.lists[
-                "self.running"
-            ].items():
-                if running_name == name or running_name.lower().startswith(
-                    name.lower()
+            # if len(name) < 3:
+            #     raise RuntimeError(
+            #         f'Skipped getting app: "{name}" has less than 3 chars.'
+            #     )
+            # for running_name, full_application_name in ctx.lists[
+            #     "self.running"
+            # ].items():
+            #     if running_name == name or running_name.lower().startswith(
+            #         name.lower()
+            #     ):
+            #         name = full_application_name
+            #         break
+            result = []
+            for application in ui.apps(background=False):
+                if application.name == name or application.bundle.lower() == name or (
+                    app.platform == "windows"
+                    and os.path.basename(application.exe).lower() == name
                 ):
-                    name = full_application_name
-                    break
-        for application in ui.apps(background=False):
-            if application.name == name or application.bundle.lower() == name or (
-                app.platform == "windows"
-                and os.path.basename(application.exe).lower() == name
-            ):
-                return application
+                    result.append(application)
+            
+            if len(result) > 0:
+                return result
+    
         raise RuntimeError(f'App not running: "{name}"')
 
     def switcher_focus(name: str):
@@ -824,27 +847,31 @@ def first_matching_child(element, **kw):
     attr, values = list(kw.items())[0]
     return next(e for e in element.children if getattr(e, attr) in values)
 
+taskbar = None
+ms_tasklist = None
 def rebuild_taskbar_app_list(forced: bool = False):
-    global cache
-    taskbar = None
-    apps = ui.apps(name="Windows Explorer")
-    for app in apps:
-        for window in app.windows():
-            if window.cls == "Shell_TrayWnd":
-                taskbar = window
+    global cache, taskbar, ms_tasklist
+
+    if not taskbar:
+        apps = ui.apps(name="Windows Explorer")
+        for app in apps:
+            for window in app.windows():
+                if window.cls == "Shell_TrayWnd":
+                    taskbar = window
+                    break
+            if taskbar:
+                ms_tasklist = first_matching_child(taskbar.element, class_name=["MSTaskListWClass"])
                 break
-        if taskbar:
-            break
                 
     if not taskbar:
         actions.app.notify("taskbar window not found")
         return
-    running_applications = first_matching_child(taskbar.element, class_name=["MSTaskListWClass"])
+    
     #update_canvas = forced or len(running_applications.children) != len(cache)
     cache = []
     running_applications_result = {}
-    running = {}
-    for e in running_applications.children:
+    #running = {}
+    for e in ms_tasklist.children:
 
         title = e.name
         splits = title.split(" - ")
@@ -857,14 +884,14 @@ def rebuild_taskbar_app_list(forced: bool = False):
         if override and override.spoken_forms:
             for form in override.spoken_forms:
                 running_applications_result[form] = title
-                running[form] = name
+                #running[form] = name if name not in WINDOWS_NAME_TO_TALON_NAME else WINDOWS_NAME_TO_TALON_NAME[name]
         else:
             running_applications_result[name] = title
-            running[name] = name
+            #running[name] = name if name not in WINDOWS_NAME_TO_TALON_NAME else WINDOWS_NAME_TO_TALON_NAME[name]
 
     update_dict = {
         "user.running_applications": running_applications_result, 
-        # "user.running": running
+        #"user.running": running
     }
 
     ctx.lists.update(update_dict)
