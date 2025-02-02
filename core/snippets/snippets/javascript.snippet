@@ -1,4 +1,4 @@
-language: javascript
+language: javascript | typescript | javascriptreact | typescriptreact
 ---
 
 name: forInLoopStatement
@@ -39,18 +39,27 @@ const $1 = ($2) => {
 }
 ---
 
-name: reactUseState
-phrase: use state
+name: printTimeStatement
+phrase: print time
 insertionScope: statement
 -
-const [$1, set${1/(.)/${1:/capitalize}/}] = useState($0);
+console.time("$0");
 ---
 
-name: reactUseEffect
-phrase: use effect
+name: constAssignment
+phrase: const
 insertionScope: statement
+
+$1.insertionFormatter: PRIVATE_CAMEL_CASE
 -
-useEffect(() => {
-    $0
-}, []);
+const $1 = $0;
+---
+
+name: letAssignment
+phrase: let
+insertionScope: statement
+
+$1.insertionFormatter: PRIVATE_CAMEL_CASE
+-
+let $1 = $0;
 ---

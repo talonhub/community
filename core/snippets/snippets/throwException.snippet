@@ -2,17 +2,27 @@ name: throwException
 phrase: exception
 ---
 
-language: javascript
+language: cpp
 -
-throw Error(`$0`)
+throw std::runtime_error("$0");
+---
+
+language: java
+-
+throw new Exception(String.format("$0"));
+---
+
+language: csharp
+-
+throw new Exception(String.Format("$0"));
+---
+
+language: javascript | typescript | javascriptreact | typescriptreact
+-
+throw Error(`$0`);
 ---
 
 language: python
 -
 raise ValueError(f"$0")
----
-
-language: java
--
-throw new Exception(String.format("$0"))
 ---
