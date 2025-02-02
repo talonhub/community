@@ -6,6 +6,8 @@ from typing import List, Optional, Union
 from talon import Context, Module, actions, settings, ui
 from talon.ui import UIErr, Window
 from .windows_and_tabs import is_window_valid
+from ...core.app_switcher.windows import get_application_user_model_for_window
+
 """Tools for laying out windows in an arrangement """
 
 SPLIT_POSITIONS = {
@@ -172,12 +174,29 @@ def skip_window(m) -> list[Window]:
 
 @mod.capture(rule="<user.running_applications>")
 def application_windows(m) -> list[Window]:
-    return [
-        window
-        for app in m.running_applications_list
-        for window in actions.self.get_running_app(app).windows()
-        if  is_window_valid(window) 
-    ]
+    windows = None
+    for app in m.running_applications_list:
+        splits = app.split("-::*::-")
+
+        if len(splits) == 1:
+            windows = actions.self.get_running_app(app)[0].windows()
+
+        elif len(splits) == 2:
+            app_name = splits[0].lower()
+            apps = actions.user.get_running_app(app_name)
+
+            application_user_model_id = splits[1]
+            for app in apps:
+                for window in app.windows():
+                    if application_user_model_id == get_application_user_model_for_window(window.id):
+                        windows = [window]
+    result = []
+    if windows:
+        for window in windows:
+            if is_window_valid(window):
+                result.append(window)
+    
+    return result
 
 
 @mod.capture(

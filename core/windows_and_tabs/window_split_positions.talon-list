@@ -1,7 +1,7 @@
 list: user.window_split_positions
 -
 
-halves: HALVES
+half: HALVES
 thirds: THIRDS
 clock: CLOCK
 counterclock: COUNTERCLOCK

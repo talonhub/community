@@ -235,7 +235,7 @@ def update_running_list():
     generate_spoken_form_map = {}
 
     if app.platform == "windows":  
-        return      
+              
         frame_host_apps = ui.apps(name="Application Frame Host", background=False)
         for cur_app in frame_host_apps:
             valid_windows = get_valid_windows_by_app_user_model_id(cur_app)
@@ -307,6 +307,8 @@ def update_running_list():
                     override = get_override_by_app_user_model_id(app_user_model_id, cur_app)
             else:
                 override = get_override_for_running_app(cur_app)
+                # print(f"{cur_app.name}: {override}" )
+
                 uuid = None
                 if isinstance(override, Application) or isinstance(override, ApplicationGroup):
                     uuid = override.unique_identifier
@@ -608,12 +610,8 @@ def update_launch_applications(f):
         print(f"Missing or new application detected, updating {launch_applications_filename}")
         process_launch_applications_file(True)
     else:
-
-        if app.platform != "windows":
-            update_running_list()
-        else:
-            rebuild_taskbar_app_list()
-
+        update_running_list()
+        rebuild_taskbar_app_list()
         update_launch_list()
 
 @mod.action_class
@@ -843,7 +841,8 @@ def rebuild_taskbar_app_list(forced: bool = False):
     running_applications = first_matching_child(taskbar.element, class_name=["MSTaskListWClass"])
     #update_canvas = forced or len(running_applications.children) != len(cache)
     cache = []
-    result = {}
+    running_applications_result = {}
+    running = {}
     for e in running_applications.children:
 
         title = e.name
@@ -856,18 +855,23 @@ def rebuild_taskbar_app_list(forced: bool = False):
             
         if override and override.spoken_forms:
             for form in override.spoken_forms:
-                result[form] = title
+                running_applications_result[form] = title
+                running[form] = name
         else:
-            result[name] = title
+            running_applications_result[name] = title
+            running[name] = name
 
-    ctx.lists["user.running_applications"] = result
+    update_dict = {
+        "user.running_applications": running_applications_result, 
+        # "user.running": running
+    }
+
+    ctx.lists.update(update_dict)
 
 def ui_event(event, arg):
     if event in ("app_launch", "app_close", "app_activate", "app_deactivate"):
-        if app.platform != "windows":
-            update_running_list()
-        else:
-            rebuild_taskbar_app_list()
+        update_running_list()
+        rebuild_taskbar_app_list()
 
 def on_ready():
     ui.register("", ui_event)

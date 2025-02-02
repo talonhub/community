@@ -14,6 +14,6 @@ start <user.launch_applications>: user.switcher_launch(launch_applications)
 snapfur: user.snap_window_to_position("full")
 aprate: user.snap_window_to_position("right")
 snap rat: user.snap_window_to_position("right")
-# layout <user.window_layout>: user.snap_layout(window_layout)
+<user.window_layout>: user.snap_layout(window_layout)
 
 desk show: user.switcher_show_desktop()
