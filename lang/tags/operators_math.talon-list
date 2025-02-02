@@ -11,7 +11,7 @@ mod: MATH_MODULO
 power: MATH_EXPONENT
 
 # Comparison operators
-equal: MATH_EQUAL
+is equal: MATH_EQUAL
 not equal: MATH_NOT_EQUAL
 greater: MATH_GREATER_THAN
 less: MATH_LESS_THAN

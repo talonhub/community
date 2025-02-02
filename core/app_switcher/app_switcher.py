@@ -630,7 +630,8 @@ def update_launch_applications(f):
         process_launch_applications_file(True)
     else:
         update_running_list()
-        rebuild_taskbar_app_list()
+        if app.platform == "windows":
+            rebuild_taskbar_app_list()
         update_launch_list()
 
 @mod.action_class
@@ -852,6 +853,7 @@ ms_tasklist = None
 def rebuild_taskbar_app_list(forced: bool = False):
     global cache, taskbar, ms_tasklist
 
+        
     if not taskbar:
         apps = ui.apps(name="Windows Explorer")
         for app in apps:
@@ -899,7 +901,8 @@ def rebuild_taskbar_app_list(forced: bool = False):
 def ui_event(event, arg):
     if event in ("app_launch", "app_close", "app_activate", "app_deactivate"):
         update_running_list()
-        rebuild_taskbar_app_list()
+        if app.platform == "windows":
+            rebuild_taskbar_app_list()
 
 def on_ready():
     ui.register("", ui_event)
