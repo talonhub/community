@@ -1,0 +1,1182 @@
+[
+    {
+        "path": "/Applications/.Karabiner-VirtualHIDDevice-Manager.app",
+        "display_name": ".Karabiner-VirtualHIDDevice-Manager",
+        "unique_identifier": "org.pqrs.Karabiner-VirtualHIDDevice-Manager",
+        "executable_name": "Karabiner-VirtualHIDDevice-Manager",
+        "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Utilities",
+        "display_name": "Activity Monitor",
+        "unique_identifier": "com.apple.ActivityMonitor",
+        "executable_name": "Activity Monitor",
+        "exclude": false,
+        "spoken_forms": ["task manager", "activity monitor"],
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Utilities",
+        "display_name": "AirPort Utility",
+        "unique_identifier": "com.apple.airport.airportutility",
+        "executable_name": "AirPort Utility",
+        "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/Applications/Amazon Kindle.app",
+        "display_name": "Amazon Kindle",
+        "unique_identifier": "com.amazon.Lassen",
+        "executable_name": "Kindle",
+        "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/App Store.app",
+        "display_name": "App Store",
+        "unique_identifier": "com.apple.AppStore",
+        "executable_name": "App Store",
+        "exclude": false,
+        "spoken_forms": ["store", "app store"],
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/Applications/Audacity.app",
+        "display_name": "Audacity",
+        "unique_identifier": "org.audacityteam.audacity",
+        "executable_name": "Wrapper",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Utilities",
+        "display_name": "Audio MIDI Setup",
+        "unique_identifier": "com.apple.audio.AudioMIDISetup",
+        "executable_name": "Audio MIDI Setup",
+        "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Automator.app",
+        "display_name": "Automator",
+        "unique_identifier": "com.apple.Automator",
+        "executable_name": "Automator",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/Applications/Beyond Compare.app",
+        "display_name": "Beyond Compare",
+        "unique_identifier": "com.ScooterSoftware.BeyondCompare",
+        "executable_name": "BCompare",
+        "exclude": false,
+        "spoken_forms": ["compare", "beyond compare"],
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Utilities",
+        "display_name": "Bluetooth File Exchange",
+        "unique_identifier": "com.apple.BluetoothFileExchange",
+        "executable_name": "Bluetooth File Exchange",
+        "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Books.app",
+        "display_name": "Books",
+        "unique_identifier": "com.apple.iBooksX",
+        "executable_name": "Books",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Utilities",
+        "display_name": "Boot Camp Assistant",
+        "unique_identifier": "com.apple.bootcampassistant",
+        "executable_name": "Boot Camp Assistant",
+        "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Utilities",
+        "display_name": "Calculator",
+        "unique_identifier": "com.apple.ColorSyncUtility.Calculator",
+        "executable_name": "Calculator",
+        "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Calculator.app",
+        "display_name": "Calculator",
+        "unique_identifier": "com.apple.calculator",
+        "executable_name": "Calculator",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Calendar.app",
+        "display_name": "Calendar",
+        "unique_identifier": "com.apple.iCal",
+        "executable_name": "Calendar",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Chess.app",
+        "display_name": "Chess",
+        "unique_identifier": "com.apple.Chess",
+        "executable_name": "Chess",
+        "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/Users/knausj/Applications/Chrome Apps.localized",
+        "display_name": "Chrome Apps",
+        "unique_identifier": "com.google.Chrome.app.fmgjjmmmlfnkbppncabfkddbjimcfncm",
+        "executable_name": "app_mode_loader",
+        "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/Users/knausj/Applications/Chrome Apps.localized",
+        "display_name": "Chrome Apps",
+        "unique_identifier": "com.google.Chrome.app.Profile-2-knipolnnllmklapflnccelgolnpehhpl",
+        "executable_name": "app_mode_loader",
+        "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Clock.app",
+        "display_name": "Clock",
+        "unique_identifier": "com.apple.clock",
+        "executable_name": "Clock",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Utilities",
+        "display_name": "ColorSync Utility",
+        "unique_identifier": "com.apple.ColorSyncUtility",
+        "executable_name": "ColorSync Utility",
+        "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Utilities",
+        "display_name": "Console",
+        "unique_identifier": "com.apple.Console",
+        "executable_name": "Console",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Contacts.app",
+        "display_name": "Contacts",
+        "unique_identifier": "com.apple.AddressBook",
+        "executable_name": "Contacts",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/Applications/Contexts.app",
+        "display_name": "Contexts",
+        "unique_identifier": "com.contextsformac.Contexts",
+        "executable_name": "Contexts",
+        "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/Applications/Copilot.app",
+        "display_name": "Copilot",
+        "unique_identifier": "com.copilot.production",
+        "executable_name": "Copilot",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Utilities",
+        "display_name": "Devices",
+        "unique_identifier": "com.apple.ColorSyncUtility.Devices",
+        "executable_name": "Devices",
+        "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Dictionary.app",
+        "display_name": "Dictionary",
+        "unique_identifier": "com.apple.Dictionary",
+        "executable_name": "Dictionary",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Utilities",
+        "display_name": "Digital Color Meter",
+        "unique_identifier": "com.apple.DigitalColorMeter",
+        "executable_name": "Digital Color Meter",
+        "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/Users/knausj/Applications/Discord.app",
+        "display_name": "Discord",
+        "unique_identifier": "com.apple.Safari.WebApp.75652608-4A3F-4B48-9317-3C2516AA5CE1",
+        "executable_name": null,
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Utilities",
+        "display_name": "Disk Utility",
+        "unique_identifier": "com.apple.DiskUtility",
+        "executable_name": "Disk Utility",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/Applications/Everyday Habit Tracker.app",
+        "display_name": "Everyday Habit Tracker",
+        "unique_identifier": "app.everyday",
+        "executable_name": "Everyday Habit Tracker",
+        "exclude": false,
+        "spoken_forms": ["habit tracker", "habit"],
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/FaceTime.app",
+        "display_name": "FaceTime",
+        "unique_identifier": "com.apple.FaceTime",
+        "executable_name": "FaceTime",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Utilities",
+        "display_name": "Filters",
+        "unique_identifier": "com.apple.ColorSyncUtility.Filters",
+        "executable_name": "Filters",
+        "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/FindMy.app",
+        "display_name": "FindMy",
+        "unique_identifier": "com.apple.findmy",
+        "executable_name": "FindMy",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Utilities",
+        "display_name": "FirstAid",
+        "unique_identifier": "com.apple.ColorSyncUtility.FirstAid",
+        "executable_name": "FirstAid",
+        "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Font Book.app",
+        "display_name": "Font Book",
+        "unique_identifier": "com.apple.FontBook",
+        "executable_name": "Font Book",
+        "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Freeform.app",
+        "display_name": "Freeform",
+        "unique_identifier": "com.apple.freeform",
+        "executable_name": "Freeform",
+        "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/Applications/GarageBand.app",
+        "display_name": "GarageBand",
+        "unique_identifier": "com.apple.garageband10",
+        "executable_name": "GarageBand",
+        "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/Applications/GitHub Desktop.app",
+        "display_name": "GitHub Desktop",
+        "unique_identifier": "com.github.GitHubClient",
+        "executable_name": "GitHub Desktop",
+        "exclude": false,
+        "spoken_forms": ["gitter", "git hub"],
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/Users/knausj/Applications/Gmail.app",
+        "display_name": "Gmail",
+        "unique_identifier": "com.apple.Safari.WebApp.85038FE5-E720-4773-8851-EC5FA8FF4971",
+        "executable_name": null,
+        "exclude": false,
+        "spoken_forms": ["gmail", "outer", "mail"],
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/Applications/Google Chrome.app",
+        "display_name": "Google Chrome",
+        "unique_identifier": "com.google.Chrome",
+        "executable_name": "Google Chrome",
+        "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Utilities",
+        "display_name": "Grapher",
+        "unique_identifier": "com.apple.grapher",
+        "executable_name": "Grapher",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Home.app",
+        "display_name": "Home",
+        "unique_identifier": "com.apple.Home",
+        "executable_name": "Home",
+        "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/Applications/Homerow.app",
+        "display_name": "Homerow",
+        "unique_identifier": "com.superultra.Homerow",
+        "executable_name": "Homerow",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Image Capture.app",
+        "display_name": "Image Capture",
+        "unique_identifier": "com.apple.Image_Capture",
+        "executable_name": "Image Capture",
+        "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/Applications/Karabiner-Elements.app",
+        "display_name": "Karabiner-Elements",
+        "unique_identifier": "org.pqrs.Karabiner-Elements.Preferences",
+        "executable_name": "Karabiner-Elements",
+        "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/Applications/Karabiner-EventViewer.app",
+        "display_name": "Karabiner-EventViewer",
+        "unique_identifier": "org.pqrs.Karabiner-EventViewer",
+        "executable_name": "Karabiner-EventViewer",
+        "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/Applications/Keynote.app",
+        "display_name": "Keynote",
+        "unique_identifier": "com.apple.iWork.Keynote",
+        "executable_name": "Keynote",
+        "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Launchpad.app",
+        "display_name": "Launchpad",
+        "unique_identifier": "com.apple.launchpad.launcher",
+        "executable_name": "Launchpad",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/Applications/Maccy.app",
+        "display_name": "Maccy",
+        "unique_identifier": "org.p0deje.Maccy",
+        "executable_name": "Maccy",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Mail.app",
+        "display_name": "Mail",
+        "unique_identifier": "com.apple.mail",
+        "executable_name": "Mail",
+        "exclude": true,
+        "spoken_forms": ["apple mail"],
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Maps.app",
+        "display_name": "Maps",
+        "unique_identifier": "com.apple.Maps",
+        "executable_name": "Maps",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Messages.app",
+        "display_name": "Messages",
+        "unique_identifier": "com.apple.MobileSMS",
+        "executable_name": "Messages",
+        "exclude": false,
+        "spoken_forms": ["messer", "messages"],
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/Applications/Microsoft Excel.app",
+        "display_name": "Microsoft Excel",
+        "unique_identifier": "com.microsoft.Excel",
+        "executable_name": "Microsoft Excel",
+        "exclude": false,
+        "spoken_forms": ["excel"],
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/Applications/Microsoft OneNote.app",
+        "display_name": "Microsoft OneNote",
+        "unique_identifier": "com.microsoft.onenote.mac",
+        "executable_name": "Microsoft OneNote",
+        "exclude": false,
+        "spoken_forms": ["one note"],
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/Applications/Microsoft Outlook.app",
+        "display_name": "Microsoft Outlook",
+        "unique_identifier": "com.microsoft.Outlook",
+        "executable_name": "Microsoft Outlook",
+        "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/Applications/Microsoft PowerPoint.app",
+        "display_name": "Microsoft PowerPoint",
+        "unique_identifier": "com.microsoft.Powerpoint",
+        "executable_name": "Microsoft PowerPoint",
+        "exclude": false,
+        "spoken_forms": ["powerpoint"],
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/Applications/Microsoft Teams classic.app",
+        "display_name": "Microsoft Teams classic",
+        "unique_identifier": "com.microsoft.teams",
+        "executable_name": "Teams",
+        "exclude": false,
+        "spoken_forms": ["teams"],
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/Applications/Microsoft Word.app",
+        "display_name": "Microsoft Word",
+        "unique_identifier": "com.microsoft.Word",
+        "executable_name": "Microsoft Word",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Utilities",
+        "display_name": "Migration Assistant",
+        "unique_identifier": "com.apple.MigrateAssistant",
+        "executable_name": "Migration Assistant",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Mission Control.app",
+        "display_name": "Mission Control",
+        "unique_identifier": "com.apple.exposelauncher",
+        "executable_name": "Mission Control",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Music.app",
+        "display_name": "Music",
+        "unique_identifier": "com.apple.Music",
+        "executable_name": "Music",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/News.app",
+        "display_name": "News",
+        "unique_identifier": "com.apple.news",
+        "executable_name": "News",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Notes.app",
+        "display_name": "Notes",
+        "unique_identifier": "com.apple.Notes",
+        "executable_name": "Notes",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/Applications/Numbers.app",
+        "display_name": "Numbers",
+        "unique_identifier": "com.apple.iWork.Numbers",
+        "executable_name": "Numbers",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/Applications/OmniFocus.app",
+        "display_name": "OmniFocus",
+        "unique_identifier": "com.omnigroup.OmniFocus4",
+        "executable_name": "OmniFocus",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/Applications/OneDrive.app",
+        "display_name": "OneDrive",
+        "unique_identifier": "com.microsoft.OneDrive",
+        "executable_name": "OneDrive",
+        "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/Applications/Pages.app",
+        "display_name": "Pages",
+        "unique_identifier": "com.apple.iWork.Pages",
+        "executable_name": "Pages",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Passwords.app",
+        "display_name": "Passwords",
+        "unique_identifier": "com.apple.Passwords",
+        "executable_name": "Passwords",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Photo Booth.app",
+        "display_name": "Photo Booth",
+        "unique_identifier": "com.apple.PhotoBooth",
+        "executable_name": "Photo Booth",
+        "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Photos.app",
+        "display_name": "Photos",
+        "unique_identifier": "com.apple.Photos",
+        "executable_name": "Photos",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Podcasts.app",
+        "display_name": "Podcasts",
+        "unique_identifier": "com.apple.podcasts",
+        "executable_name": "Podcasts",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Preview.app",
+        "display_name": "Preview",
+        "unique_identifier": "com.apple.Preview",
+        "executable_name": "Preview",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Utilities",
+        "display_name": "Print Center",
+        "unique_identifier": "com.apple.printcenter",
+        "executable_name": "Print Center",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Utilities",
+        "display_name": "Profiles",
+        "unique_identifier": "com.apple.ColorSyncUtility.Profiles",
+        "executable_name": "Profiles",
+        "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/Applications/Python 3.12",
+        "display_name": "Python 3",
+        "unique_identifier": "org.python.IDLE",
+        "executable_name": "IDLE",
+        "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/Applications/Python 3.12",
+        "display_name": "Python 3",
+        "unique_identifier": "org.python.PythonLauncher",
+        "executable_name": "Python Launcher",
+        "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/QuickTime Player.app",
+        "display_name": "QuickTime Player",
+        "unique_identifier": "com.apple.QuickTimePlayerX",
+        "executable_name": "QuickTime Player",
+        "exclude": false,
+        "spoken_forms": ["quick time"],
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/Applications/RSIGuard.app",
+        "display_name": "RSIGuard",
+        "unique_identifier": "com.enviance.rsiguard",
+        "executable_name": "RSIGuard",
+        "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/Applications/Rango for Safari.app",
+        "display_name": "Rango for Safari",
+        "unique_identifier": "app.rango.Rango",
+        "executable_name": "Rango for Safari",
+        "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Reminders.app",
+        "display_name": "Reminders",
+        "unique_identifier": "com.apple.reminders",
+        "executable_name": "Reminders",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/Applications/Safari.app",
+        "display_name": "Safari",
+        "unique_identifier": "com.apple.Safari",
+        "executable_name": "Safari",
+        "exclude": false,
+        "spoken_forms": ["portal", "edge", "safari"],
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Utilities",
+        "display_name": "Screen Sharing",
+        "unique_identifier": "com.apple.ScreenSharing",
+        "executable_name": "Screen Sharing",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Utilities",
+        "display_name": "Screenshot",
+        "unique_identifier": "com.apple.screenshot.launcher",
+        "executable_name": "Screenshot",
+        "exclude": false,
+        "spoken_forms": ["screenshot", "capture"],
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Utilities",
+        "display_name": "Script Editor",
+        "unique_identifier": "com.apple.ScriptEditor2",
+        "executable_name": "Script Editor",
+        "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Shortcuts.app",
+        "display_name": "Shortcuts",
+        "unique_identifier": "com.apple.shortcuts",
+        "executable_name": "Shortcuts",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Siri.app",
+        "display_name": "Siri",
+        "unique_identifier": "com.apple.siri.launcher",
+        "executable_name": "Siri",
+        "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/Applications/Skype.app",
+        "display_name": "Skype",
+        "unique_identifier": "com.skype.skype",
+        "executable_name": "Skype",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/Users/knausj/Applications/Slack.app",
+        "display_name": "Slack",
+        "unique_identifier": "com.apple.Safari.WebApp.A240B276-0EFC-4A6C-B441-34814CCA8028",
+        "executable_name": null,
+        "exclude": false,
+        "spoken_forms": ["slacker", "messy", "slack"],
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/Applications/Spotify.app",
+        "display_name": "Spotify",
+        "unique_identifier": "com.spotify.client",
+        "executable_name": "Spotify",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/Applications/Steam.app",
+        "display_name": "Steam",
+        "unique_identifier": "com.valvesoftware.steam",
+        "executable_name": "steam_osx",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Stickies.app",
+        "display_name": "Stickies",
+        "unique_identifier": "com.apple.Stickies",
+        "executable_name": "Stickies",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Stocks.app",
+        "display_name": "Stocks",
+        "unique_identifier": "com.apple.stocks",
+        "executable_name": "Stocks",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Utilities",
+        "display_name": "System Information",
+        "unique_identifier": "com.apple.SystemProfiler",
+        "executable_name": "System Information",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/System Settings.app",
+        "display_name": "System Settings",
+        "unique_identifier": "com.apple.systempreferences",
+        "executable_name": "System Settings",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/TV.app",
+        "display_name": "TV",
+        "unique_identifier": "com.apple.TV",
+        "executable_name": "TV",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/Applications/Talon.app",
+        "display_name": "Talon",
+        "unique_identifier": "com.talonvoice.Talon",
+        "executable_name": "Talon",
+        "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/Applications/Teleparty For Safari.app",
+        "display_name": "Teleparty For Safari",
+        "unique_identifier": "com.teleparty.Teleparty-For-Safari",
+        "executable_name": "Teleparty For Safari",
+        "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Utilities",
+        "display_name": "Terminal",
+        "unique_identifier": "com.apple.Terminal",
+        "executable_name": "Terminal",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/TextEdit.app",
+        "display_name": "TextEdit",
+        "unique_identifier": "com.apple.TextEdit",
+        "executable_name": "TextEdit",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Time Machine.app",
+        "display_name": "Time Machine",
+        "unique_identifier": "com.apple.backup.launcher",
+        "executable_name": "Time Machine",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Tips.app",
+        "display_name": "Tips",
+        "unique_identifier": "com.apple.helpviewer",
+        "executable_name": "Tips",
+        "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/Applications/TurboTax 2022.app",
+        "display_name": "TurboTax 2022",
+        "unique_identifier": "com.intuit.turbotax.2022",
+        "executable_name": "TurboTax 2022",
+        "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/Applications/TurboTax 2023.app",
+        "display_name": "TurboTax 2023",
+        "unique_identifier": "com.intuit.turbotax.2023",
+        "executable_name": "TurboTax 2023",
+        "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/Applications/Twitter.app",
+        "display_name": "Twitter",
+        "unique_identifier": "maccatalyst.com.atebits.Tweetie2",
+        "executable_name": "Twitter",
+        "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/Applications/Ukelele.app",
+        "display_name": "Ukelele",
+        "unique_identifier": "org.sil.ukelele",
+        "executable_name": "Ukelele",
+        "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/Applications/Vimac.app",
+        "display_name": "Vimac",
+        "unique_identifier": "dexterleng.vimac",
+        "executable_name": "Vimac",
+        "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/Applications/Visual Studio Code.app",
+        "display_name": "Visual Studio Code",
+        "unique_identifier": "com.microsoft.VSCode",
+        "executable_name": "Electron",
+        "exclude": false,
+        "spoken_forms": ["coder", "stupid test"],
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/VoiceMemos.app",
+        "display_name": "VoiceMemos",
+        "unique_identifier": "com.apple.VoiceMemos",
+        "executable_name": "VoiceMemos",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Utilities",
+        "display_name": "VoiceOver Utility",
+        "unique_identifier": "com.apple.VoiceOverUtility",
+        "executable_name": "VoiceOver Utility",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Utilities",
+        "display_name": "VoiceOver Utility",
+        "unique_identifier": "com.apple.VoiceOverUtilityCacheBuilder",
+        "executable_name": "VoiceOver Utility",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Weather.app",
+        "display_name": "Weather",
+        "unique_identifier": "com.apple.weather",
+        "executable_name": "Weather",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/Applications/Xcode.app",
+        "display_name": "Xcode",
+        "unique_identifier": "com.apple.dt.Xcode",
+        "executable_name": "Xcode",
+        "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Utilities",
+        "display_name": "bootcampassistantinstalld",
+        "unique_identifier": "com.apple.bootcampassistant.installd",
+        "executable_name": "bootcampassistantinstalld",
+        "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/Utilities",
+        "display_name": "com.apple.activitymonitor.helper",
+        "unique_identifier": "com.apple.activitymonitor.helper",
+        "executable_name": "com.apple.activitymonitor.helper",
+        "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/Applications/iMovie.app",
+        "display_name": "iMovie",
+        "unique_identifier": "com.apple.iMovieApp",
+        "executable_name": "iMovie",
+        "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/System/Applications/iPhone Mirroring.app",
+        "display_name": "iPhone Mirroring",
+        "unique_identifier": "com.apple.ScreenContinuity",
+        "executable_name": "iPhone Mirroring",
+        "exclude": false,
+        "spoken_forms": ["iPhone", "phone", "mirror"],
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/Applications/iTerm.app",
+        "display_name": "iTerm",
+        "unique_identifier": "com.googlecode.iterm2",
+        "executable_name": "iTerm2",
+        "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/Applications/zoom.us.app",
+        "display_name": "zoom.us",
+        "unique_identifier": "us.zoom.xos",
+        "executable_name": "zoom.us",
+        "exclude": false,
+        "spoken_forms": ["zoom"],
+        "application_group": null,
+        "is_default_for_application_group": false
+    }
+]

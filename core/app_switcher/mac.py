@@ -46,7 +46,7 @@ if app.platform == "mac":
                                 unique_identifier=bundle_identifier, 
                                 executable_name=executable_name, 
                                 exclude=False,
-                                spoken_form=None,
+                                spoken_forms=None,
                                 application_group=None)
                                                         
                             application_list.append(new_app)
@@ -73,7 +73,7 @@ if app.platform == "mac":
                                         unique_identifier=bundle_identifier, 
                                         executable_name=executable_name, 
                                         exclude=False,
-                                        spoken_form=None)
+                                        spoken_forms=None)
                                     
                                     application_list.append(new_app)
                                     application_dict[bundle_identifier] = True

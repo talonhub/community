@@ -15,7 +15,8 @@ from .application import Application, ApplicationGroup
 import re
 from talon.ui import Rect
 from talon.windows.ax import Element
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
+import json
 
 import platform
 hostname = platform.node()
@@ -26,9 +27,9 @@ running_applications_file_path = os.path.normcase(
     os.path.join(csv_directory, running_applications_exclusions_filename)
 )
 
-launch_applications_filename = "launch_applications.csv"
-launch_applications_file_path = os.path.normcase(
-    os.path.join(csv_directory, launch_applications_filename)
+launch_applications_json = "launch_applications.json"
+launch_applications_json = os.path.normcase(
+    os.path.join(csv_directory, launch_applications_json)
 )
 
 if not os.path.exists(csv_directory):
@@ -414,10 +415,10 @@ def get_installed_apps():
         INSTALLED_APPLICATIONS_INITIALIZED = True
 
 def process_launch_applications_file(forced: bool = False):
-    path = Path(launch_applications_file_path)
+    json_path = Path(launch_applications_json)
     get_installed_apps()
 
-    if not path.exists() or forced:
+    if not json_path.exists() or forced:
         all_apps = [*INSTALLED_APPLICATIONS_LIST, *PRESERVED_APPLICATION_LIST]
 
         grouped = [app for app in all_apps if app.application_group is not None]
@@ -428,12 +429,8 @@ def process_launch_applications_file(forced: bool = False):
 
         sorted_apps =[*grouped, *ungrouped]
 
-        output = ["Application name, Spoken forms, Exclude from Launch List, Unique Id, Path, Executable Name, Application Group, Default for Applcation Group\n"]
-        for application in sorted_apps:
-            output.extend(f"{str(application)}\n") 
-
-        with open(path, 'w') as file:
-            file.write("".join(output))
+        with open(json_path, "w") as json_file:
+            json.dump([asdict(application) for application in sorted_apps], json_file, indent = 4)
 
 process_launch_applications_file()
 
@@ -482,7 +479,7 @@ def update_running_exclusions(f):
 
     update_running_list()
     
-@resource.watch(launch_applications_file_path)
+@resource.watch(launch_applications_json)
 def update_launch_applications(f):
     global APPLICATIONS_DICT, INSTALLED_APPLICATIONS_LIST, APPLICATIONS_OVERRIDES, INSTALLED_APPLICATIONS_INITIALIZED, WINDOWS_NAME_TO_TALON_NAME
     global PRESERVED_APPLICATION_LIST
@@ -502,104 +499,59 @@ def update_launch_applications(f):
 
     must_update_file = False
 
-    rows = list(csv.reader(f))
+    # Read JSON file
+    with open(launch_applications_json, "r") as json_file:
+        applications = json.load(json_file)
 
-    if len(rows[1:]) < len(INSTALLED_APPLICATIONS_LIST):
+    if len(applications) < len(INSTALLED_APPLICATIONS_LIST):
         must_update_file = True
+
+    # Convert JSON dictionaries to Person objects
+    applications = [Application(**application) for application in applications]
     
-    for row in rows[1:]:
-        if len(row) == 6 and len(row) == 7 and len(row) == 9:
-            print(f"Row {row} malformed; expecting 6-9 entires found {len(row)}")
+    for application in applications:
+        application_group = application.application_group
+        if application_group:
+            is_default_for_application_group=application.is_default_for_application_group
 
-        group_name = None
-        talon_name = None
-        if len(row) == 6:
-            display_name, spoken_forms, exclude, uid, path, executable_name = (
-                [x.strip() or None for x in row])[:6]
-        elif len(row) == 7:
-            display_name, spoken_forms, exclude, uid, path, executable_name, talon_name = (
-                [x.strip() or None for x in row])[:7]        
-        # elif len(row) == 8:
-        #     display_name, spoken_forms, exclude, uid, path, executable_name, group_name, is_default_for_application_group = (
-        #         [x.strip() or None for x in row])[:8]
-        
-        if spoken_forms.lower() == "none":
-            spoken_forms = None
-        else:
-            spoken_forms = [spoken_form.strip().lower() for spoken_form in spoken_forms.split(";")]
-            
-        if group_name and group_name.lower() == "none":
-            group_name = None
-
-        if talon_name and talon_name.lower() == "none":
-            talon_name = None
-
-        if talon_name and talon_name != display_name:
-            WINDOWS_NAME_TO_TALON_NAME[display_name] = talon_name
-
-        exclude = False if exclude.lower() == "false" else True
-        uid = None if uid.lower() == "none" else uid
-        path = None if path.lower() == "none" else path
-        executable_name = None if executable_name.lower() == "none" else executable_name
-
-        if not group_name:
-            override_app = Application (path=path,
-                                        display_name=display_name, 
-                                        unique_identifier=uid,
-                                        executable_name=executable_name,
-                                        exclude = exclude,
-                                        spoken_form=spoken_forms,
-                                        application_group=None)
-        else:
-            is_default_for_application_group=is_default_for_application_group.lower()=="true"
-
-            override_app = Application (path=path,
-                                        display_name=display_name, 
-                                        unique_identifier=uid,
-                                        executable_name=executable_name,
-                                        exclude = exclude,
-                                        spoken_form=spoken_forms,
-                                        application_group=group_name,
-                                        is_default_for_application_group=is_default_for_application_group)            
-        
-            if group_name not in APPLICATION_GROUPS_DICT:
+            if application_group not in APPLICATION_GROUPS_DICT:
                 group = ApplicationGroup()
-                APPLICATION_GROUPS_DICT[group_name] = group
+                APPLICATION_GROUPS_DICT[application_group] = group
             else:
-                group = APPLICATION_GROUPS_DICT[group_name]
+                group = APPLICATION_GROUPS_DICT[application_group]
 
             if is_default_for_application_group:
-                group.group_name=group_name
-                group.path=path,
-                group.executable_name=executable_name,
-                group.unique_identifier=uid
-                group.group_spoken_forms = spoken_forms if spoken_forms else display_name
+                group.group_name=application_group
+                group.path=application.path,
+                group.executable_name=application.executable_name,
+                group.unique_identifier=application.unique_identifier
+                group.group_spoken_forms = application.spoken_forms if application.spoken_forms else application.display_name
 
-                APPLICATION_GROUPS_DICT[executable_name.lower()] = group
-                APPLICATION_GROUPS_DICT[path.lower()] = group
+                APPLICATION_GROUPS_DICT[application.executable_name.lower()] = group
+                APPLICATION_GROUPS_DICT[application.path.lower()] = group
             else:
-                group.path=path
-                group.executable_name=executable_name
+                group.path=application.path
+                group.executable_name=application.executable_name
 
                 # to do, it is okay perf-wise to generate things here?
-                group.spoken_forms[display_name] = spoken_forms if spoken_forms != None else actions.user.create_spoken_forms(display_name.lower(), words_to_exclude=words_to_exclude,generate_subsequences=False,)
+                group.spoken_forms[application.display_name] = application.poken_forms if application.spoken_forms != None else actions.user.create_spoken_forms(application.display_name.lower(), words_to_exclude=words_to_exclude,generate_subsequences=False,)
 
         # app has been removed from the OS or is not installed yet.
         # lets preserve this entry for the convenience
-        if uid.lower() not in application_map and uid.lower() not in removed_apps_dict:
-            removed_apps_dict[uid.lower()] = True
-            PRESERVED_APPLICATION_LIST.append(override_app)
+        if application.unique_identifier.lower() not in application_map and application.unique_identifier.lower() not in removed_apps_dict:
+            removed_apps_dict[application.unique_identifier.lower()] = True
+            PRESERVED_APPLICATION_LIST.append(application)
     
-        APPLICATIONS_OVERRIDES[override_app.display_name] = override_app
+        APPLICATIONS_OVERRIDES[application.display_name] = application
 
-        if override_app.executable_name:
-            APPLICATIONS_OVERRIDES[override_app.executable_name.lower()] = override_app
+        if application.executable_name:
+            APPLICATIONS_OVERRIDES[application.executable_name.lower()] = application
 
-        if override_app.path:
-            APPLICATIONS_OVERRIDES[override_app.path.lower()] = override_app                   
+        if application.path:
+            APPLICATIONS_OVERRIDES[application.path.lower()] = application                   
 
-        if override_app.unique_identifier:
-            APPLICATIONS_OVERRIDES[override_app.unique_identifier.lower()] = override_app
+        if application.unique_identifier:
+            APPLICATIONS_OVERRIDES[application.unique_identifier.lower()] = application
 
     # build the applications dictionary with the overrides applied
     APPLICATIONS_DICT = {}
@@ -626,7 +578,7 @@ def update_launch_applications(f):
 
     # print("\n".join([str(group) for group in APPLICATION_GROUPS_DICT.values()]))
     if must_update_file:
-        print(f"Missing or new application detected, updating {launch_applications_filename}")
+        print(f"Missing or new application detected, updating {launch_applications_json}")
         process_launch_applications_file(True)
     else:
         update_running_list()

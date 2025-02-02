@@ -1,3 +1,6 @@
+from dataclasses import dataclass
+from typing import List
+@dataclass
 class Application:
     """Class for tracking application information for launching, switching etc"""
     path: str
@@ -5,7 +8,7 @@ class Application:
     unique_identifier: str
     executable_name: str
     exclude: bool 
-    spoken_forms: list[str]
+    spoken_forms: List[str]
     application_group: str
     is_default_for_application_group: False
 
@@ -15,7 +18,7 @@ class Application:
                  unique_identifier: str, 
                  executable_name: str, 
                  exclude: bool, 
-                 spoken_form: list[str],
+                 spoken_forms: List[str],
                  application_group: str = None,
                  is_default_for_application_group = False):
         self.path = path
@@ -23,7 +26,7 @@ class Application:
         self.executable_name = executable_name 
         self.unique_identifier = unique_identifier
         self.exclude = exclude
-        self.spoken_forms = spoken_form
+        self.spoken_forms = spoken_forms
         self.application_group = application_group
         self.is_default_for_application_group = is_default_for_application_group
 
