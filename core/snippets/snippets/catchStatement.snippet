@@ -2,16 +2,23 @@ name: catchStatement
 phrase: catch
 ---
 
-language: javascript
+language: cpp
 -
-catch(error) {
+catch (const std::exception& ex) {
     $0
 }
 ---
 
-language: java
+language: java | csharp
 -
-catch(Exception ex) {
+catch(final Exception ex) {
+    $0
+}
+---
+
+language: javascript | typescript | javascriptreact | typescriptreact
+-
+catch(error) {
     $0
 }
 ---
