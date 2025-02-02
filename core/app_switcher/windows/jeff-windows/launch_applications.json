@@ -375,7 +375,7 @@
         "unique_identifier": "Microsoft.Windows.Explorer",
         "executable_name": "explorer.exe",
         "exclude": false,
-        "spoken_forms": null,
+        "spoken_forms": ["explorer"],
         "application_group": null,
         "is_default_for_application_group": false
     },
