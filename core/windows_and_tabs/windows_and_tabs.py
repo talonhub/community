@@ -41,6 +41,7 @@ def is_window_valid(window: ui.Window) -> bool:
         not window.hidden
         # On Windows, there are many fake windows with empty titles -- this excludes them.
         and len(window.title) > 0
+        and (window.title not in ("Chrome Legacy Window"))
         # This excludes many tiny windows that are not actual windows, and is a rough heuristic.
         and window.rect.width > window.screen.dpi
         and window.rect.height > window.screen.dpi
