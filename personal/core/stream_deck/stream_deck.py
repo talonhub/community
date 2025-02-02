@@ -66,8 +66,9 @@ class Actions:
 
     def deck_pedal_middle():
         """middle pedal"""
-        actions.tracking.zoom()
-        actions.deck.goto("A00SA3192M9DW0", "zoom")
+        if actions.tracking.control_zoom_enabled():
+            actions.tracking.zoom()
+            actions.deck.goto("A00SA3192M9DW0", "zoom")
 
     def deck_pedal_right():
         """right pedal"""
@@ -76,6 +77,8 @@ class Actions:
 
     def deck1():
         """document string goes here"""
+        if not actions.tracking.control_zoom_enabled():
+            actions.tracking.control_zoom_toggle(True)
         actions.tracking.zoom()
         actions.deck.goto("A00SA3192M9DW0", "zoom")
 

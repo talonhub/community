@@ -62,6 +62,7 @@ class Actions:
     def zoom_clear_activated():
         """"""
         ctx_zoom_triggered.tags = []
+        actions.tracking.control_zoom_toggle(False)
 
     def zoom_close():
         """Closes an in-progress zoom. Talon will move the cursor position but not click."""
@@ -81,7 +82,7 @@ class Actions:
             ctx_is_dragging.tags = []
         try:
             # actions.user.clickless_mouse_enable()
-            actions.tracking.control_zoom_toggle(True)
+            # actions.tracking.control_zoom_toggle(True)
             ctx_is_dragging.tags = []
 
         except Exception as e:
