@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Union
 
-from talon import Context, Module, actions, app, fs
+from talon import Context, Module, actions, app, fs, settings
 
 from ..modes.code_languages import code_languages
 from .snippet_types import (
