@@ -5,6 +5,7 @@ from typing import List, Optional, Union
 
 from talon import Context, Module, actions, settings, ui
 from talon.ui import UIErr, Window
+
 from .windows_and_tabs import is_window_valid
 
 """Tools for laying out windows in an arrangement """
