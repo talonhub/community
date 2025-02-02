@@ -32,6 +32,7 @@ Custom format to represent snippets.
 | Key            | Required | Multiple values | Example                        |
 | -------------- | -------- | --------------- | ------------------------------ |
 | name           | Yes      | No              | `name: ifStatement`            |
+| description    | No       | No              | `description: My snippet`      |
 | language       | No       | Yes             | `language: javascript \| java` |
 | phrase         | No       | Yes             | `phrase: if \| if state`       |
 | insertionScope | No       | Yes             | `insertionScope: statement`    |
@@ -48,7 +49,7 @@ It's also possible to set configuration that applies to a specific tab stop (`$0
 
 ## Formatting and syntax highlighting
 
-To get formatting and syntax highlighting for `.snippet` files install [andreas-talon](https://marketplace.visualstudio.com/items?itemName=AndreasArvidsson.andreas-talon)
+To get formatting, code completion and syntax highlighting for `.snippet` files: install [andreas-talon](https://marketplace.visualstudio.com/items?itemName=AndreasArvidsson.andreas-talon)
 
 ## Examples
 
