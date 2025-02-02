@@ -315,9 +315,7 @@ def update_running_list():
 
                 # in many cases, apps will only have one active id, so skip the window-specific logic in that case.     
                 if len(valid_windows) > 1:        
-                    #print(f"{cur_app.name} has more than one AppUserModelId") 
                     for window_app_user_model_id, window_list in valid_windows.items():
-
                         # most applications won't set this
                         if (window_app_user_model_id != "None" 
                             and uuid != window_app_user_model_id):
@@ -382,7 +380,10 @@ def update_running_list():
             else:
                 if override.spoken_forms:
                     for spoken_form in override.spoken_forms:
-                        running[spoken_form] = cur_app.name
+                        mapping = cur_app.name
+                        if cur_app.name == "Microsoft Edge":
+                            mapping = f"{cur_app.name}-::*::-MSEdge"
+                        running[spoken_form] = mapping
                 else:
                     generate_spoken_form_map[override.display_name] = cur_app.name   
 
@@ -719,7 +720,7 @@ class Actions:
                 print("Failed")
                 raise RuntimeError(f"Can't focus window: {window.title}")
             actions.sleep(0.1)
-        print("succeeded")
+        #print("succeeded")
 
     def switcher_launch(path: str):
         """Launch a new application by path (all OSes), or AppUserModel_ID path on Windows"""
