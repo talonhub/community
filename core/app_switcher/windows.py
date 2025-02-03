@@ -23,7 +23,8 @@ if app.platform == "windows":
     
     windows_app_dir = os.path.expandvars(os.path.join("%ProgramFiles%", "WindowsApps"))
     windows_system_app_dir = os.path.expandvars(os.path.join("%WINDIR%", "SystemApps"))
-
+    windows_explorer = Path(os.path.expandvars(os.path.join("%WINDIR%", "explorer.exe"))).resolve()
+ 
     #print(f"{windows_app_dir} {windows_system_app_dir}")
     def get_desktop_path():
         with winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders") as key:
@@ -139,7 +140,7 @@ if app.platform == "windows":
     
     def check_should_create_entry(display_name):
         #in windows, many dumb things are added to the apps folder
-        return "install" not in display_name.lower()
+        return "install" not in display_name.lower() and display_name not in ("This PC")
 
     shortcut_paths = []
     for path in windows_application_directories:
@@ -165,6 +166,7 @@ if app.platform == "windows":
                 property_store = item.BindToHandler(
                     None, shell.BHID_PropertyStore, propsys.IID_IPropertyStore
                 )
+                
                 app_user_model_id = property_store.GetValue(
                     pscon.PKEY_AppUserModel_ID
                 ).ToString()
@@ -200,19 +202,28 @@ if app.platform == "windows":
 
                     elif display_name in shortcut_map:
                         shortcut_info = shortcut_map[display_name]
+
                         if shortcut_info:
                             if shortcut_info.target_path:
                                 path = Path(shortcut_info.target_path).resolve()
+                                target_path = Path(shortcut_info.arguments)
+
+                                # Attempt to exclude shortcuts that simply open a folder 
+                                if path == windows_explorer:
+                                    should_create_entry = not os.path.exists(target_path) and os.path.isdir(target_path)
+                                else:
+                                    should_create_entry = is_extension_allowed (path.suffix)
+                                # 
+                                #print(f"{display_name} {path} {target_path}")
                                 executable_name = path.name
-                                should_create_entry = is_extension_allowed (path.suffix)
 
                                 # fix anything with a mmc snap in...
                                 if path.suffix and ".msc" == path.suffix.lower():
                                     path = mmc
                                     executable_name = "mmc.exe"
                         
-
-                is_url_maybe = str(path).startswith("http") if path else False
+                if path:
+                    should_create_entry = should_create_entry and not str(path).startswith("http") 
 
                 new_app = Application(
                     path=str(path) if path else None,
@@ -223,10 +234,10 @@ if app.platform == "windows":
                     spoken_forms=None,
                     application_group=None)
                     
-                if "Python" in display_name:
-                    print(f"{should_create_entry} {new_app}")
+                # if "Python" in display_name:
+                #     print(f"{should_create_entry} {new_app}")
                 
-                if should_create_entry and not is_url_maybe:
+                if should_create_entry:
                     if app_user_model_id not in applications_dict:
                         application_list.append(new_app)
                         applications_dict[app_user_model_id] = True

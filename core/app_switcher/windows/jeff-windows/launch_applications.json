@@ -35,7 +35,9 @@
         "unique_identifier": "{7C5A40EF-A0FB-4BFC-874A-C0F2E0B9FA8E}\\AccessibilityInsights\\1.1\\AccessibilityInsights.exe",
         "executable_name": "AccessibilityInsights.exe",
         "exclude": false,
-        "spoken_forms": ["accessibility insights"],
+        "spoken_forms": [
+            "accessibility insights"
+        ],
         "application_group": null,
         "is_default_for_application_group": false
     },
@@ -45,7 +47,9 @@
         "unique_identifier": "{6D809377-6AF0-444B-8957-A3773F02200E}\\Adobe\\Acrobat DC\\Acrobat\\Acrobat.exe",
         "executable_name": "Acrobat.exe",
         "exclude": false,
-        "spoken_forms": ["acrobat"],
+        "spoken_forms": [
+            "acrobat"
+        ],
         "application_group": null,
         "is_default_for_application_group": false
     },
@@ -95,7 +99,10 @@
         "unique_identifier": "{6D809377-6AF0-444B-8957-A3773F02200E}\\Beyond Compare 4\\BCompare.exe",
         "executable_name": "BCompare.exe",
         "exclude": false,
-        "spoken_forms": ["compare", "beyond compare"],
+        "spoken_forms": [
+            "compare",
+            "beyond compare"
+        ],
         "application_group": null,
         "is_default_for_application_group": false
     },
@@ -175,7 +182,10 @@
         "unique_identifier": "{1AC14E77-02E7-4E5D-B744-2EB1AE5198B7}\\cmd.exe",
         "executable_name": "cmd.exe",
         "exclude": false,
-        "spoken_forms": ["command prompt", "command"],
+        "spoken_forms": [
+            "command prompt",
+            "command"
+        ],
         "application_group": null,
         "is_default_for_application_group": false
     },
@@ -305,7 +315,9 @@
         "unique_identifier": "discord.com-EA2E0C84_gfnmj1zmvxvrt!App",
         "executable_name": null,
         "exclude": false,
-        "spoken_forms": ["discord"],
+        "spoken_forms": [
+            "discord"
+        ],
         "application_group": null,
         "is_default_for_application_group": false
     },
@@ -375,7 +387,9 @@
         "unique_identifier": "Microsoft.Windows.Explorer",
         "executable_name": "explorer.exe",
         "exclude": false,
-        "spoken_forms": ["explorer"],
+        "spoken_forms": [
+            "explorer"
+        ],
         "application_group": null,
         "is_default_for_application_group": false
     },
@@ -515,7 +529,10 @@
         "unique_identifier": "com.squirrel.GitHubDesktop.GitHubDesktop",
         "executable_name": "GitHubDesktop.exe",
         "exclude": false,
-        "spoken_forms": ["gitter", "Get Hub"],
+        "spoken_forms": [
+            "gitter",
+            "Get Hub"
+        ],
         "application_group": null,
         "is_default_for_application_group": false
     },
@@ -525,7 +542,11 @@
         "unique_identifier": "mail.google.com-FCFEA3FA_vq8mrer2vmnwe!App",
         "executable_name": null,
         "exclude": false,
-        "spoken_forms": ["mail", "outer", "gmail"],
+        "spoken_forms": [
+            "mail",
+            "outer",
+            "gmail"
+        ],
         "application_group": null,
         "is_default_for_application_group": false
     },
@@ -615,7 +636,9 @@
         "unique_identifier": "microsoft.windowscommunicationsapps_8wekyb3d8bbwe!microsoft.windowslive.mail",
         "executable_name": null,
         "exclude": true,
-        "spoken_forms": ["windows mail"],
+        "spoken_forms": [
+            "windows mail"
+        ],
         "application_group": null,
         "is_default_for_application_group": false
     },
@@ -665,7 +688,9 @@
         "unique_identifier": "Microsoft.MicrosoftAccessoryCenter_8wekyb3d8bbwe!App",
         "executable_name": null,
         "exclude": false,
-        "spoken_forms": ["accessory center"],
+        "spoken_forms": [
+            "accessory center"
+        ],
         "application_group": null,
         "is_default_for_application_group": false
     },
@@ -685,7 +710,11 @@
         "unique_identifier": "MSEdge",
         "executable_name": "msedge.exe",
         "exclude": false,
-        "spoken_forms": ["portal", "edge", "safari"],
+        "spoken_forms": [
+            "portal",
+            "edge",
+            "safari"
+        ],
         "application_group": null,
         "is_default_for_application_group": false
     },
@@ -765,7 +794,9 @@
         "unique_identifier": "{1AC14E77-02E7-4E5D-B744-2EB1AE5198B7}\\notepad.exe",
         "executable_name": "notepad.exe",
         "exclude": false,
-        "spoken_forms": ["microsoft notepad"],
+        "spoken_forms": [
+            "microsoft notepad"
+        ],
         "application_group": null,
         "is_default_for_application_group": false
     },
@@ -775,7 +806,10 @@
         "unique_identifier": "{6D809377-6AF0-444B-8957-A3773F02200E}\\Notepad++\\notepad++.exe",
         "executable_name": "notepad++.exe",
         "exclude": false,
-        "spoken_forms": ["note pad", "note pad plus plus"],
+        "spoken_forms": [
+            "note pad",
+            "note pad plus plus"
+        ],
         "application_group": null,
         "is_default_for_application_group": false
     },
@@ -835,7 +869,9 @@
         "unique_identifier": "Microsoft.Office.ONENOTE.EXE.15",
         "executable_name": "ONENOTE.EXE",
         "exclude": false,
-        "spoken_forms": ["one note"],
+        "spoken_forms": [
+            "one note"
+        ],
         "application_group": null,
         "is_default_for_application_group": false
     },
@@ -955,7 +991,9 @@
         "unique_identifier": "Microsoft.PowerToysWin32",
         "executable_name": "PowerToys.exe",
         "exclude": false,
-        "spoken_forms": ["power toys"],
+        "spoken_forms": [
+            "power toys"
+        ],
         "application_group": null,
         "is_default_for_application_group": false
     },
@@ -1010,6 +1048,16 @@
         "is_default_for_application_group": false
     },
     {
+        "path": "C:\\Python\\Python39\\python.exe",
+        "display_name": "Python 3.9 Module Docs (64-bit)",
+        "unique_identifier": "Microsoft.AutoGenerated.{D1BBEC48-75A7-A7B9-F4AF-414C86CBC495}",
+        "executable_name": "python.exe",
+        "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
         "path": "C:\\Windows\\System32\\quickassist.exe",
         "display_name": "Quick Assist",
         "unique_identifier": "{1AC14E77-02E7-4E5D-B744-2EB1AE5198B7}\\quickassist.exe",
@@ -1045,7 +1093,10 @@
         "unique_identifier": "{F38BF404-1D43-42F2-9305-67DE0B28FC23}\\regedit.exe",
         "executable_name": "regedit.exe",
         "exclude": false,
-        "spoken_forms": ["reg edit", "registry editor"],
+        "spoken_forms": [
+            "reg edit",
+            "registry editor"
+        ],
         "application_group": null,
         "is_default_for_application_group": false
     },
@@ -1055,7 +1106,9 @@
         "unique_identifier": "Microsoft.Windows.RemoteDesktop",
         "executable_name": "mstsc.exe",
         "exclude": false,
-        "spoken_forms": ["remote desktop"],
+        "spoken_forms": [
+            "remote desktop"
+        ],
         "application_group": null,
         "is_default_for_application_group": false
     },
@@ -1135,7 +1188,11 @@
         "unique_identifier": "app.slack.com-38BE4B2_366e83yqjt2rw!App",
         "executable_name": null,
         "exclude": false,
-        "spoken_forms": ["slacker", "messy", "slack"],
+        "spoken_forms": [
+            "slacker",
+            "messy",
+            "slack"
+        ],
         "application_group": null,
         "is_default_for_application_group": false
     },
@@ -1305,7 +1362,10 @@
         "unique_identifier": "Microsoft.AutoGenerated.{923DD477-5846-686B-A659-0FCCD73851A8}",
         "executable_name": "Taskmgr.exe",
         "exclude": false,
-        "spoken_forms": ["task manager", "activity monitor"],
+        "spoken_forms": [
+            "task manager",
+            "activity monitor"
+        ],
         "application_group": null,
         "is_default_for_application_group": false
     },
@@ -1325,7 +1385,9 @@
         "unique_identifier": "C:\\Users\\knaus\\AppData\\Local\\RelayRecorder\\RelayRecorder.exe",
         "executable_name": "RelayRecorder.exe",
         "exclude": false,
-        "spoken_forms": ["capture"],
+        "spoken_forms": [
+            "capture"
+        ],
         "application_group": null,
         "is_default_for_application_group": false
     },
@@ -1345,16 +1407,6 @@
         "unique_identifier": "Microsoft.WindowsTerminal_8wekyb3d8bbwe!App",
         "executable_name": null,
         "exclude": false,
-        "spoken_forms": null,
-        "application_group": null,
-        "is_default_for_application_group": false
-    },
-    {
-        "path": "C:\\Windows\\explorer.exe",
-        "display_name": "This PC",
-        "unique_identifier": "Microsoft.Windows.Computer",
-        "executable_name": "explorer.exe",
-        "exclude": true,
         "spoken_forms": null,
         "application_group": null,
         "is_default_for_application_group": false
@@ -1385,7 +1437,9 @@
         "unique_identifier": "CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc!ubuntuonwindows",
         "executable_name": null,
         "exclude": false,
-        "spoken_forms": ["ubuntu"],
+        "spoken_forms": [
+            "ubuntu"
+        ],
         "application_group": null,
         "is_default_for_application_group": false
     },
@@ -1415,7 +1469,9 @@
         "unique_identifier": "VisualStudio.924b20f2",
         "executable_name": "devenv.exe",
         "exclude": false,
-        "spoken_forms": ["visual studio"],
+        "spoken_forms": [
+            "visual studio"
+        ],
         "application_group": null,
         "is_default_for_application_group": false
     },
@@ -1425,7 +1481,10 @@
         "unique_identifier": "Microsoft.VisualStudioCode",
         "executable_name": "Code.exe",
         "exclude": false,
-        "spoken_forms": ["coder", "visual studio code"],
+        "spoken_forms": [
+            "coder",
+            "visual studio code"
+        ],
         "application_group": null,
         "is_default_for_application_group": false
     },
@@ -1564,16 +1623,6 @@
         "display_name": "Windows Security",
         "unique_identifier": "Microsoft.Windows.SecHealthUI_cw5n1h2txyewy!SecHealthUI",
         "executable_name": null,
-        "exclude": true,
-        "spoken_forms": null,
-        "application_group": null,
-        "is_default_for_application_group": false
-    },
-    {
-        "path": "C:\\Windows\\explorer.exe",
-        "display_name": "Windows Software Development Kit",
-        "unique_identifier": "Microsoft.AutoGenerated.{3B6E7DF3-19A3-70DB-96F6-86E65A17E61C}",
-        "executable_name": "explorer.exe",
         "exclude": true,
         "spoken_forms": null,
         "application_group": null,
