@@ -136,6 +136,10 @@ def get_override_for_running_app(curr_app) -> Union[Application | ApplicationGro
     exe_path = str(Path(curr_app.exe).resolve()).lower()
     executable_name = os.path.basename(curr_app.exe).lower()
 
+    if exe_path in APPLICATION_GROUPS_DICT:
+        return APPLICATION_GROUPS_DICT[exe_path]
+    elif executable_name in APPLICATION_GROUPS_DICT:
+        return APPLICATION_GROUPS_DICT[executable_name]
     # if app.platform == "windows":
     #     override = get_windows_application_override(executable_name)
     #     if override:
@@ -151,10 +155,6 @@ def get_override_for_running_app(curr_app) -> Union[Application | ApplicationGro
         return RUNNING_APPLICATION_EXCLUSIONS_DICT[name]
 
     # application groups take precedence
-    if exe_path in APPLICATION_GROUPS_DICT:
-        return APPLICATION_GROUPS_DICT[exe_path]
-    elif executable_name in APPLICATION_GROUPS_DICT:
-        return APPLICATION_GROUPS_DICT[executable_name]
     
     # otherwise, check for application overrides
     if bundle_name and bundle_name in APPLICATIONS_OVERRIDES:
@@ -534,7 +534,7 @@ def update_launch_applications(f):
                 group.executable_name=application.executable_name
 
                 # to do, it is okay perf-wise to generate things here?
-                group.spoken_forms[application.display_name] = application.poken_forms if application.spoken_forms != None else actions.user.create_spoken_forms(application.display_name.lower(), words_to_exclude=words_to_exclude,generate_subsequences=False,)
+                group.spoken_forms[application.display_name] = application.spoken_forms if application.spoken_forms != None else actions.user.create_spoken_forms(application.display_name.lower(), words_to_exclude=words_to_exclude,generate_subsequences=False,)
 
         # app has been removed from the OS or is not installed yet.
         # lets preserve this entry for the convenience
