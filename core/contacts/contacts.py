@@ -12,11 +12,14 @@ ctx = Context()
 mod.list("contact_names", desc="Contact first names, full names, and nicknames.")
 mod.list("contact_emails", desc="Maps names to email addresses.")
 mod.list("contact_full_names", desc="Maps names to full names.")
-
+mod.list("contact_jira_alias", desc="Maps names to jira alias")
+mod.list("contact_perforce_alias", desc="Maps names to perforce alias")
 
 @dataclass
 class Contact:
     email: str
+    jira_alias: str
+    perforce_alias: str
     full_name: str
     nicknames: list[str]
     pronunciations: dict[str, str]
@@ -79,9 +82,14 @@ class Contact:
                 nicknames.append(nickname)
             else:
                 nicknames.append(nickname_raw)
+        
+        jira_alias = contact.get("jira_alias")
+        perforce_alias = contact.get("perforce_alias")
 
         return Contact(
             email=email,
+            jira_alias=jira_alias, 
+            perforce_alias=perforce_alias, 
             full_name=full_name,
             nicknames=nicknames,
             pronunciations=pronunciations,
@@ -167,18 +175,28 @@ def reload_contacts():
     contact_names = {}
     contact_emails = {}
     contact_full_names = {}
+    contact_perforce_aliases = {}
+    contact_jira_aliases = {}
     # Iterate in reverse so that the first contact with a name is used.
     for contact in reversed(merged_contacts):
         pronunciation_map = create_pronunciation_to_name_map(contact)
         for pronunciation, name in pronunciation_map.items():
             contact_names[pronunciation] = name
             contact_emails[pronunciation] = contact.email
+            if contact.perforce_alias:
+                contact_perforce_aliases[pronunciation] = contact.perforce_alias
+            
+            if contact.jira_alias:
+                contact_jira_aliases[pronunciation] = contact.jira_alias
+                
             if contact.full_name:
                 contact_full_names[pronunciation] = contact.full_name
 
     ctx.lists["user.contact_names"] = contact_names
     ctx.lists["user.contact_emails"] = contact_emails
     ctx.lists["user.contact_full_names"] = contact_full_names
+    ctx.lists["user.contact_jira_alias"] = contact_jira_aliases
+    ctx.lists["user.contact_perforce_alias"] = contact_perforce_aliases
 
 
 def first_name_from_full_name(full_name: str):

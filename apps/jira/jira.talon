@@ -8,14 +8,13 @@ assign {user.jira_alias}:
 edit task:
     key(e)
     
-ping {user.jira_alias}:
+ping {user.contact_jira_alias}:
     # alias = "@{jira_alias}"
-    # insert("@")
-    # sleep(250ms)
-    # insert("{jira_alias}")
-    user.paste("{jira_alias}")
+    insert("@")
     sleep(250ms)
-    key(space)
+    # insert("{jira_alias}")
+    "{contact_jira_alias}"
+
     # sleep(500ms)
     # key(enter)
     # sleep(500ms)
