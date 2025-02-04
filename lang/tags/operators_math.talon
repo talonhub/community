@@ -19,23 +19,17 @@ op (exponent | to the power [of]):
     user.code_operator("MATH_EXPONENT")
 
 # comparison operators
-is equal:
-    user.code_operator("MATH_EQUAL")
+is equal: user.code_operator("MATH_EQUAL")
 
-is not equal:
-    user.code_operator("MATH_NOT_EQUAL")
+is not equal: user.code_operator("MATH_NOT_EQUAL")
 
-is (greater | more):
-    user.code_operator("MATH_GREATER_THAN")
+is (greater | more): user.code_operator("MATH_GREATER_THAN")
 
-is (less | below) [than]:
-    user.code_operator("MATH_LESS_THAN")
+is (less | below) [than]: user.code_operator("MATH_LESS_THAN")
 
-is greater [than] or equal:
-    user.code_operator("MATH_GREATER_THAN_OR_EQUAL")
+is greater [than] or equal: user.code_operator("MATH_GREATER_THAN_OR_EQUAL")
 
-is less [than] or equal:
-    user.code_operator("MATH_LESS_THAN_OR_EQUAL")
+is less [than] or equal: user.code_operator("MATH_LESS_THAN_OR_EQUAL")
 
 # logical operators
 logical and:
@@ -51,11 +45,9 @@ logical not:
     user.code_operator("MATH_NOT")
 
 # set operators
-is in:
-    user.code_operator("MATH_IN")
+is in: user.code_operator("MATH_IN")
 
-is not in:
-    user.code_operator("MATH_NOT_IN")
+is not in: user.code_operator("MATH_NOT_IN")
 
 op colon:
     user.deprecate_command("2025-01-19", "op colon", "pad colon")
