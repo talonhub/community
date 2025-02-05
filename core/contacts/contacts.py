@@ -108,8 +108,9 @@ def on_contacts_csv(values):
         if not email:
             logging.error(f"Skipping contact missing email: {full_name}")
             continue
+
         csv_contacts.append(
-            Contact(email=email, full_name=full_name, nicknames=[], pronunciations={})
+            Contact(email=email,jira_alias=None,perforce_alias=None, full_name=full_name, nicknames=[], pronunciations={})
         )
     reload_contacts()
 
