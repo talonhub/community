@@ -99,6 +99,15 @@ class Actions:
             # sleep here so that clip.revert doesn't revert the clipboard too soon
             actions.sleep("150ms")
 
+    def delete_right():
+        """Delete character to the right"""
+        actions.key("delete")
+
+    def delete_all():
+        """Delete all text in the current document"""
+        actions.edit.select_all()
+        actions.edit.delete()
+
     def words_left(n: int):
         """Moves left by n words."""
         for _ in range(n):
