@@ -1,4 +1,5 @@
 os: mac
 -
-# settings():
-# 	user.accessibility_dictation = 1
+settings():
+	#user.accessibility_dictation = 1
+    tracking.zoom_live = true
