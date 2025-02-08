@@ -80,7 +80,7 @@ def track_csv_list(
     private: bool = False,
 ) -> DecoratorT:
     assert filename.endswith(".csv")
-    path = PRIVATE_DIR / filename if private else SETTINGS_DIR / filename
+    path = (PRIVATE_DIR / filename) if private else (SETTINGS_DIR / filename)
     write_csv_defaults(path, headers, default, is_spoken_form_first)
 
     def decorator(fn: CallbackT) -> CallbackT:
@@ -93,7 +93,7 @@ def track_csv_list(
 
 
 def append_to_csv(filename: str, rows: dict[str, str], private: bool = False):
-    path = PRIVATE_DIR / filename if private else SETTINGS_DIR / filename
+    path = (PRIVATE_DIR / filename) if private else (SETTINGS_DIR / filename)
     assert filename.endswith(".csv")
 
     with open(str(path)) as file:
@@ -118,7 +118,7 @@ def track_file(
     default: str = "",
     private: bool = False,
 ) -> WatchDecoratorType:
-    path = PRIVATE_DIR / filename if private else SETTINGS_DIR / filename
+    path = (PRIVATE_DIR / filename) if private else (SETTINGS_DIR / filename)
     if not path.is_file():
         path.write_text(default)
 
