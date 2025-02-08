@@ -1,0 +1,15 @@
+list: user.code_operators_math_comparison
+tag: user.code_operators_math
+-
+
+# Comparison operators
+equal: MATH_EQUAL
+not equal: MATH_NOT_EQUAL
+greater: MATH_GREATER_THAN
+less: MATH_LESS_THAN
+greater or equal: MATH_GREATER_THAN_OR_EQUAL
+less or equal: MATH_LESS_THAN_OR_EQUAL
+
+# Set operators
+in: MATH_IN
+not in: MATH_NOT_IN

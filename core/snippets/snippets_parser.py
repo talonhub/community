@@ -23,8 +23,8 @@ class SnippetDocument:
         self.line_body = line_body
 
 
-def create_snippets_from_file(file_path: str) -> list[Snippet]:
-    documents = parse_file(file_path)
+def create_snippets_from_file(file: Path) -> list[Snippet]:
+    documents = parse_file(file)
     return create_snippets(documents)
 
 
@@ -176,11 +176,10 @@ def reconstruct_line(smallest_indentation: str, indentation: str, rest: str) -> 
 # ---------- Snippet file parser ----------
 
 
-def parse_file(file_path: str) -> list[SnippetDocument]:
-    with open(file_path, encoding="utf-8") as f:
+def parse_file(file: Path) -> list[SnippetDocument]:
+    with open(file, encoding="utf-8") as f:
         content = f.read()
-    file_name = Path(file_path).name
-    return parse_file_content(file_name, content)
+    return parse_file_content(file.name, content)
 
 
 def parse_file_content(file: str, text: str) -> list[SnippetDocument]:
@@ -279,7 +278,7 @@ def parse_context_line(
         return
 
     if key in keys:
-        error(file, line, f"Duplicate key '{key}'")
+        warn(file, line, f"Duplicate key '{key}'")
 
     keys.add(key)
 
@@ -298,7 +297,7 @@ def parse_context_line(
             if key.startswith("$"):
                 parse_variable(file, line, get_variable, key, value)
             else:
-                error(file, line, f"Invalid key '{key}'")
+                warn(file, line, f"Unknown key '{key}'")
 
 
 def parse_variable(
@@ -325,7 +324,7 @@ def parse_variable(
         case "wrapperScope":
             get_variable(name).wrapper_scope = value
         case _:
-            error(file, line_numb, f"Invalid variable key '{key}'")
+            warn(file, line_numb, f"Unknown variable key '{key}'")
 
 
 def parse_body(text: str) -> Union[str, None]:
@@ -344,3 +343,7 @@ def parse_vector_value(value: str) -> list[str]:
 
 def error(file: str, line: int, message: str):
     print(f"ERROR | {file}:{line+1} | {message}")
+
+
+def warn(file: str, line: int, message: str):
+    print(f"WARN | {file}:{line+1} | {message}")

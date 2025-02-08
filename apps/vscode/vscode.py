@@ -53,6 +53,8 @@ os: windows
 and app.exe: /^azuredatastudio\.exe$/i
 os: windows
 and app.exe: positron.exe
+os: windows
+and app.exe: Cursor.exe
 """
 
 ctx.matches = r"""
