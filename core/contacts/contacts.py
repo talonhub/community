@@ -92,7 +92,7 @@ csv_contacts: list[Contact] = []
 json_contacts: list[Contact] = []
 
 
-@track_csv_list("contacts.csv", headers=("Name", "Email"), default={})
+@track_csv_list("contacts.csv", headers=("Name", "Email"), default={}, private=True)
 def on_contacts_csv(values):
     global csv_contacts
     csv_contacts = []
@@ -106,7 +106,7 @@ def on_contacts_csv(values):
     reload_contacts()
 
 
-@track_file("contacts.json", default="[]")
+@track_file("contacts.json", default="[]", private=True)
 def on_contacts_json(f):
     global json_contacts
     try:

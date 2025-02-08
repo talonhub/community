@@ -4,6 +4,7 @@ __pycache__
 .idea/
 # Locally generated
 /settings
+/private
 .vscode/settings.json
 .DS_Store
 *.bak
