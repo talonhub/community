@@ -2,7 +2,7 @@ from contextlib import suppress
 from dataclasses import dataclass
 from typing import Callable, Literal
 
-from talon import Module, actions
+from talon import Module, actions, settings
 
 
 @dataclass
@@ -37,11 +37,14 @@ class Actions:
         for step in steps:
             match step.type:
                 case "wordLeft":
-                    repeat_action(actions.edit.word_left, step.count)
+                    delay = f"{settings.get('user.edit_command_word_selection_delay')}ms"
+                    repeat_action(actions.edit.word_left, step.count, delay)
                 case "wordRight":
-                    repeat_action(actions.edit.word_right, step.count)
+                    delay = f"{settings.get('user.edit_command_word_selection_delay')}ms"
+                    repeat_action(actions.edit.word_right, step.count, delay)
                 case "word":
-                    repeat_action(actions.edit.word_right, step.count)
+                    delay = f"{settings.get('user.edit_command_word_selection_delay')}ms"
+                    repeat_action(actions.edit.word_right, step.count, delay)
                 case "left":
                     repeat_action(actions.edit.left, step.count)
                 case "right":
@@ -52,6 +55,9 @@ class Actions:
                     repeat_action(actions.edit.down, step.count)
 
 
-def repeat_action(action: Callable, count: int):
+def repeat_action(action: Callable, count: int, delay: str = None):
     for _ in range(count):
         action()
+        
+        if delay:
+            actions.sleep(delay)
