@@ -56,10 +56,10 @@ def repeat_action(action: Callable, count: int, delay: bool = False):
     delay_string = None
 
     if delay:
-        delay_string = f"{settings.get('user.edit_command_word_selection_delay')}ms" 
+        delay_string = f"{settings.get('user.edit_command_word_selection_delay')}ms"
 
     for _ in range(count):
         action()
-        
+
         if delay_string:
             actions.sleep(delay_string)
