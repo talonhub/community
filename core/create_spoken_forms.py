@@ -12,6 +12,9 @@ from .user_settings import track_csv_list
 mod = Module()
 
 # Keep support for a handful of symbols.
+# We do this since the registry is intended for debug purposes only
+# - & appears in application names in windows
+# - dot and at are kept for intuitively converting emails into spoken forms
 symbol_key_words = {
     "dot": ".",
     "and": "&",
