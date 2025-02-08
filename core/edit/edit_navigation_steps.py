@@ -37,20 +37,11 @@ class Actions:
         for step in steps:
             match step.type:
                 case "wordLeft":
-                    delay = (
-                        f"{settings.get('user.edit_command_word_selection_delay')}ms"
-                    )
-                    repeat_action(actions.edit.word_left, step.count, delay)
+                    repeat_action(actions.edit.word_left, step.count, True)
                 case "wordRight":
-                    delay = (
-                        f"{settings.get('user.edit_command_word_selection_delay')}ms"
-                    )
-                    repeat_action(actions.edit.word_right, step.count, delay)
+                    repeat_action(actions.edit.word_right, step.count, True)
                 case "word":
-                    delay = (
-                        f"{settings.get('user.edit_command_word_selection_delay')}ms"
-                    )
-                    repeat_action(actions.edit.word_right, step.count, delay)
+                    repeat_action(actions.edit.word_right, step.count, True)
                 case "left":
                     repeat_action(actions.edit.left, step.count)
                 case "right":
@@ -61,9 +52,14 @@ class Actions:
                     repeat_action(actions.edit.down, step.count)
 
 
-def repeat_action(action: Callable, count: int, delay: str = None):
+def repeat_action(action: Callable, count: int, delay: bool = False):
+    delay_string = None
+
+    if delay:
+        delay_string = f"{settings.get('user.edit_command_word_selection_delay')}ms" 
+
     for _ in range(count):
         action()
-
-        if delay:
-            actions.sleep(delay)
+        
+        if delay_string:
+            actions.sleep(delay_string)
