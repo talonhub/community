@@ -3,6 +3,8 @@ __pycache__
 *.sw?
 .idea/
 # Locally generated
-/settings/system_paths.csv
+/settings
+/private
 .vscode/settings.json
 .DS_Store
+*.bak

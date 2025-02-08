@@ -8,6 +8,8 @@ from talon import resource
 #   community folder.
 SETTINGS_DIR = Path(__file__).parents[1] / "settings"
 SETTINGS_DIR.mkdir(exist_ok=True)
+PRIVATE_DIR = Path(__file__).parents[1] / "private"
+PRIVATE_DIR.mkdir(exist_ok=True)
 
 CallbackT = Callable[[dict[str, str]], None]
 DecoratorT = Callable[[CallbackT], CallbackT]
@@ -75,9 +77,10 @@ def track_csv_list(
     headers: tuple[str, str],
     default: dict[str, str] = None,
     is_spoken_form_first: bool = False,
+    private: bool = False,
 ) -> DecoratorT:
     assert filename.endswith(".csv")
-    path = SETTINGS_DIR / filename
+    path = (PRIVATE_DIR / filename) if private else (SETTINGS_DIR / filename)
     write_csv_defaults(path, headers, default, is_spoken_form_first)
 
     def decorator(fn: CallbackT) -> CallbackT:
@@ -89,8 +92,8 @@ def track_csv_list(
     return decorator
 
 
-def append_to_csv(filename: str, rows: dict[str, str]):
-    path = SETTINGS_DIR / filename
+def append_to_csv(filename: str, rows: dict[str, str], private: bool = False):
+    path = (PRIVATE_DIR / filename) if private else (SETTINGS_DIR / filename)
     assert filename.endswith(".csv")
 
     with open(str(path)) as file:
@@ -113,8 +116,9 @@ WatchDecoratorType = Callable[[WatchCallbackType], WatchCallbackType]
 def track_file(
     filename: str,
     default: str = "",
+    private: bool = False,
 ) -> WatchDecoratorType:
-    path = SETTINGS_DIR / filename
+    path = (PRIVATE_DIR / filename) if private else (SETTINGS_DIR / filename)
     if not path.is_file():
         path.write_text(default)
 
