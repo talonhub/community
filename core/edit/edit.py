@@ -90,14 +90,19 @@ class EditActions:
 @mod.action_class
 class Actions:
     def paste(text: str):
-        """Pastes text and preserves clipboard"""
-
+        """Pastes <text> and preserves clipboard"""
         with clip.revert():
-            clip.set_text(text)
-            actions.sleep("150ms")
+            actions.user.clip_set_transient_text(text)
             actions.edit.paste()
             # sleep here so that clip.revert doesn't revert the clipboard too soon
             actions.sleep("150ms")
+
+    def clip_set_transient_text(text: str):
+        """Set clipboard text without monitoring"""
+        mime = clip.MimeData()
+        mime.text = text
+        mime["ExcludeClipboardContentFromMonitorProcessing"] = b"true"
+        clip.set_mime(mime)
 
     def delete_right():
         """Delete character to the right"""
