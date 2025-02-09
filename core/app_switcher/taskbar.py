@@ -113,9 +113,9 @@ if app.platform == "windows":
         else:
             global tasklist_width, height, width, x_start, y_start
             tasklist_width = 2400
-            width = 96
-            height = 88
-            x_start = 650
+            width = 88
+            height = 96
+            x_start = 646
             y_start = 2090
         mcanvas.register("draw", draw_options)
 
