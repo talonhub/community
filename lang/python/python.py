@@ -163,7 +163,7 @@ operators = Operators(
     ASSIGNMENT_BITWISE_LEFT_SHIFT=" <<= ",
     ASSIGNMENT_BITWISE_RIGHT_SHIFT=" >>= ",
     # code_operators_bitwise
-    MATH_NOT="~"
+    BITWISE_NOT="~",
     BITWISE_AND=" & ",
     BITWISE_OR=" | ",
     BITWISE_EXCLUSIVE_OR=" ^ ",
