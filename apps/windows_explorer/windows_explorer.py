@@ -114,9 +114,9 @@ class UserActions:
     def file_manager_open_directory(path: str):
         """opens the directory that's already visible in the view"""
         actions.key("ctrl-l")
-        actions.sleep("50ms")
+        actions.sleep("100ms")
         actions.insert(path)
-        actions.sleep("50ms")
+        actions.sleep("100ms")
         actions.key("enter")
 
     def file_manager_select_directory(path: str):
@@ -151,6 +151,7 @@ class UserActions:
 
     def address_copy_address():
         actions.key("ctrl-l")
+        actions.sleep("100ms")
         actions.edit.copy()
 
     def address_navigate(address: str):
