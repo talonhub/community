@@ -1,4 +1,4 @@
-from ..tags.operators import Operatorslambda : 
+from ..tags.operators import Operators
 import re
 
 from talon import Context, Module, actions, settings
@@ -192,6 +192,9 @@ operators = Operators(
 
 @ctx.action_class("user")
 class UserActions:
+    def code_get_operators() -> Operators:
+        return operators
+
     def code_operator_lambda():
         actions.user.insert_between("lambda ", ": ")
 
