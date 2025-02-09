@@ -14,12 +14,18 @@ mod.list("contact_emails", desc="Maps names to email addresses.")
 mod.list("contact_full_names", desc="Maps names to full names.")
 mod.list("contact_jira_alias", desc="Maps names to jira alias")
 mod.list("contact_perforce_alias", desc="Maps names to perforce alias")
+mod.list("contact_discord_alias", desc="Maps names to discord alias")
+mod.list("contact_teams_alias", desc="Maps names to teams alias")
+mod.list("contact_slack_alias", desc="Maps names to slack alias")
 
 @dataclass
 class Contact:
     email: str
     jira_alias: str
     perforce_alias: str
+    discord_alias: str
+    teams_alias: str
+    slack_alias: str
     full_name: str
     nicknames: list[str]
     pronunciations: dict[str, str]
@@ -85,11 +91,17 @@ class Contact:
         
         jira_alias = contact.get("jira_alias")
         perforce_alias = contact.get("perforce_alias")
+        discord_alias = contact.get("discord_alias")
+        teams_alias = contact.get("teams_alias")
+        slack_alias = contact.get("slack_alias")
 
         return Contact(
             email=email,
             jira_alias=jira_alias, 
             perforce_alias=perforce_alias, 
+            discord_alias=discord_alias, 
+            teams_alias=teams_alias,
+            slack_alias=slack_alias,
             full_name=full_name,
             nicknames=nicknames,
             pronunciations=pronunciations,
@@ -164,9 +176,15 @@ def reload_contacts():
             merged_contacts.append(
                 Contact(
                     email=email,
+                    jira_alias=None, 
+                    perforce_alias=None, 
+                    discord_alias=None, 
+                    teams_alias=None,
+                    slack_alias=None,
                     full_name=full_name,
                     nicknames=json_contact.nicknames,
                     pronunciations=json_contact.pronunciations,
+                    
                 )
             )
         else:
@@ -178,6 +196,9 @@ def reload_contacts():
     contact_full_names = {}
     contact_perforce_aliases = {}
     contact_jira_aliases = {}
+    contact_teams_alias = {}
+    contact_slack_alias = {}
+    contact_discord_alias = {}
     # Iterate in reverse so that the first contact with a name is used.
     for contact in reversed(merged_contacts):
         pronunciation_map = create_pronunciation_to_name_map(contact)
@@ -189,6 +210,15 @@ def reload_contacts():
             
             if contact.jira_alias:
                 contact_jira_aliases[pronunciation] = contact.jira_alias
+            
+            if contact.discord_alias:
+                contact_discord_alias[pronunciation] = contact.discord_alias
+
+            if contact.slack_alias:
+                contact_slack_alias[pronunciation] = contact.slack_alias
+            
+            if contact.teams_alias:
+                contact_teams_alias[pronunciation] = contact.teams_alias
                 
             if contact.full_name:
                 contact_full_names[pronunciation] = contact.full_name
@@ -198,6 +228,10 @@ def reload_contacts():
     ctx.lists["user.contact_full_names"] = contact_full_names
     ctx.lists["user.contact_jira_alias"] = contact_jira_aliases
     ctx.lists["user.contact_perforce_alias"] = contact_perforce_aliases
+    ctx.lists["user.contact_discord_alias"] = contact_discord_alias
+    ctx.lists["user.contact_slack_alias"] = contact_slack_alias
+    ctx.lists["user.contact_teams_alias"] = contact_teams_alias
+
 
 
 def first_name_from_full_name(full_name: str):
