@@ -2,7 +2,7 @@ win (new | open): app.window_open()
 win next: app.window_next()
 win last: app.window_previous()
 win close: app.window_close()
-#focus <user.running_applications>: user.switcher_focus(running_applications)
+focus <user.running_applications>: user.switcher_focus(running_applications)
 # following only works on windows. Can't figure out how to make it work for mac. No idea what the equivalent for linux would be.
 focus$: user.switcher_menu()
 focus last: user.switcher_focus_last()

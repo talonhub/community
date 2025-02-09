@@ -803,6 +803,7 @@ def first_matching_child(element, **kw):
 taskbar = None
 ms_tasklist = None
 def rebuild_taskbar_app_list(forced: bool = False):
+    return
     global cache, taskbar, ms_tasklist
 
         
