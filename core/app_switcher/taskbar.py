@@ -3,6 +3,7 @@ from talon import Context, Module, actions, app, imgui, ui, resource, canvas, ct
 from dataclasses import dataclass, asdict
 from talon.ui import Rect
 import math
+import platform
 
 def first_matching_child(element, **kw):
     if len(kw) > 1:
@@ -107,7 +108,15 @@ def rebuild_taskbar_app_list(forced: bool = False):
 if app.platform == "windows":
     # uncomment the following for quick testing
     def on_ready():
-        rebuild_taskbar_app_list()
+        if "Windows-11" not in platform.platform():
+            rebuild_taskbar_app_list()
+        else:
+            global tasklist_width, height, width, x_start, y_start
+            tasklist_width = 2400
+            width = 96
+            height = 88
+            x_start = 650
+            y_start = 2090
         mcanvas.register("draw", draw_options)
 
     app.register("ready", on_ready)
