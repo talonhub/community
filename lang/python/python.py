@@ -1,7 +1,8 @@
-from ..tags.operators import Operators
 import re
 
 from talon import Context, Module, actions, settings
+
+from ..tags.operators import Operators
 
 mod = Module()
 ctx = Context()
@@ -189,6 +190,7 @@ operators = Operators(
     MATH_NOT="not ",
     MATH_NOT_IN="not in",
 )
+
 
 @ctx.action_class("user")
 class UserActions:
