@@ -34,8 +34,8 @@ class Actions:
 
 mcanvas = canvas.Canvas.from_screen(ui.main_screen())
 def draw_options(canvas):
-    # if cache is None or len(cache) <= 0:
-    #     return
+    if not width:
+        return
     paint = canvas.paint
     #for b in cache:
     canvas.paint.text_align = canvas.paint.TextAlign.CENTER
