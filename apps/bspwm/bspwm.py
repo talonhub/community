@@ -179,14 +179,33 @@ create_terminals("monitor", {
 create_terminals("wm", {"wm": "wm"})
 
 # Command terminals
-create_terminals("to_desktop", {"to desktop": "--to-desktop"})
-create_terminals("to_monitor", {"to monitor": "--to-monitor"})
-create_terminals("to_node", {"to node": "--to-node"})
+create_terminals("to_desktop", {
+    "to desktop": "--to-desktop",
+    "to desk": "--to-desktop",
+    "to workspace": "--to-desktop",
+    "send": "--to-desktop",
+})
+create_terminals("to_monitor", {
+    "to monitor": "--to-monitor",
+    "to screen": "--to-monitor",
+    "courier": "--to-monitor",
+    "jump": "--to-monitor",
+})
+create_terminals("to_node", {
+    "to node": "--to-node",
+    "to window": "--to-node",
+    "move": "--to-node",
+    "warp": "--to-node",
+})
+create_terminals("focus", {
+    "focus": "--focus",
+    "go": "--focus",
+})
 create_terminals("follow", {"follow": "--follow"})
 create_terminals("presel_dir", {"presel dir": "--presel-dir"})
 create_terminals("cancel", {"cancel": "cancel"})
 create_terminals("presel_ratio", {"presel ratio": "--presel-ratio"})
-create_terminals("move", {"move": "--move"})
+create_terminals("move", {"adjust": "--move"})
 create_terminals("insert_receptacle", {"insert receptacle": "--insert-receptacle"})
 create_terminals("close", {"close": "--close"})
 create_terminals("kill", {"kill": "--kill"})
@@ -200,10 +219,6 @@ create_terminals("record_history", {"record history": "--record-history"})
 create_terminals("on", {"on": "on"})
 create_terminals("off", {"off": "off"})
 create_terminals("restart", {"restart": "--restart"})
-create_terminals("focus", {
-    "focus": "--focus",
-    "go": "--focus",
-})
 create_terminals("activate", {"activate": "--activate"})
 create_terminals("swap", {"swap": "--swap"})
 create_terminals("state", {"state": "--state"})
@@ -303,15 +318,15 @@ for name, rule in BSPWM_CAPTURE_RULES.items():
     create_capture(name, rule)
 
 # Have to define this separately because it isn't referencing an internal capture
-@mod.capture(rule="<number_small>")
+@mod.capture(rule="<digits>")
 def bspwm_number(m) -> str:
-    "number_small"
+    "digits"
     return m
 
 # Have to define this separately because it isn't referencing an internal capture
-@mod.capture(rule="<phrase>")
+@mod.capture(rule="<user.text>")
 def bspwm_text(m) -> str:
-    "number_small"
+    "user text"
     return m
 
 

@@ -1,7 +1,7 @@
 tag: user.bspwm
 -
 
-# e.g. "node focus right", "desktop swap next" "node move to desktop three"
+# e.g. "node focus right", "desktop swap next" "node move to desktop next follow"
 <user.bspwm_action>: user.bspwm_command(bspwm_action)
 # Swap verb and subject, more natural. e.g. "focus node right", "swap desktop next"
 <user.bspwm_node_actions> {user.bspwm_node} [<user.bspwm_node_sel>]: user.bspwm_object_command(bspwm_node, bspwm_node_actions, bspwm_node_sel or "")
