@@ -120,14 +120,28 @@ def word(m) -> str:
         )
 
 
-@mod.capture(rule="({user.vocabulary} | <phrase>)+")
+@mod.capture(rule="({user.vocabulary} | <user.prose_contact> | <phrase>)+")
 def text(m) -> str:
     """A sequence of words, including user-defined vocabulary."""
     return format_phrase(m)
 
 
 @mod.capture(
-    rule="({user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <user.prose_currency> | <user.prose_time> | <user.number_prose_prefixed> | <user.prose_percent> | <user.prose_modifier> | <user.abbreviation> | <phrase>)+"
+    rule=(
+        "("
+        "{user.vocabulary}"
+        "| {user.punctuation}"
+        "| {user.prose_snippets}"
+        "| <user.prose_currency>"
+        "| <user.prose_time>"
+        "| <user.number_prose_prefixed>"
+        "| <user.prose_percent>"
+        "| <user.prose_modifier>"
+        "| <user.abbreviation>"
+        "| <user.prose_contact>"
+        "| <phrase>"
+        ")+"
+    )
 )
 def prose(m) -> str:
     """Mixed words and punctuation, auto-spaced & capitalized."""
@@ -136,14 +150,27 @@ def prose(m) -> str:
 
 
 @mod.capture(
-    rule="({user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <user.prose_currency> | <user.prose_time> | <user.number_prose_prefixed> | <user.prose_percent> | <user.abbreviation> | <phrase>)+"
+    rule=(
+        "("
+        "{user.vocabulary}"
+        "| {user.punctuation}"
+        "| {user.prose_snippets}"
+        "| <user.prose_currency>"
+        "| <user.prose_time>"
+        "| <user.number_prose_prefixed>"
+        "| <user.prose_percent>"
+        "| <user.abbreviation>"
+        "| <user.prose_contact>"
+        "| <phrase>"
+        ")+"
+    )
 )
 def raw_prose(m) -> str:
     """Mixed words and punctuation, auto-spaced & capitalized, without quote straightening and commands (for use in dictation mode)."""
     return apply_formatting(m)
 
 
-# For dragon, omit support for abbreviations
+# For dragon, omit support for abbreviations and contacts
 @ctx_dragon.capture("user.text", rule="({user.vocabulary} | <phrase>)+")
 def text_dragon(m) -> str:
     """A sequence of words, including user-defined vocabulary."""

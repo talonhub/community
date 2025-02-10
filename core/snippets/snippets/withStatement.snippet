@@ -1,0 +1,13 @@
+name: withStatement
+phrase: with
+insertionScope: statement
+
+$0.wrapperPhrase: with
+$0.wrapperScope: statement
+---
+
+language: python
+-
+with $1:
+    $0
+---
