@@ -93,6 +93,7 @@ class Actions:
         """Pastes <text> and preserves clipboard"""
         with clip.revert():
             actions.user.clip_set_transient_text(text)
+            actions.sleep("150ms")
             actions.edit.paste()
             # sleep here so that clip.revert doesn't revert the clipboard too soon
             actions.sleep("150ms")
