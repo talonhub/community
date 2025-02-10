@@ -3,10 +3,17 @@
 This integrates the bspc control grammar for the [bspwm window
 manager](https://github.come/baskerville/bspwm) with talon.
 
+Enable it by adding the `tag(): user.bspwm` to one of your .talon files, e.g.
+```talon
+os: linux
+-
+tag(): user.bspwm
+```
+
 It is designed to match the bspc command line interface as closely as possible, so
 you can directly convert most bspc commands to spoken commands.
 For example, `bspc node --focus east` becomes "node focus east".
-Other speech examples include "node focus right", "desktop swap next" "node move to desktop next follow".
+Other speech examples include "node focus right", "desktop swap next" "node to desktop next follow".
 
 For convenience, some shortcuts and alternative utternances are included.
 Mappings to replace works, e.g. to say "window" in place of "node", can be seen in `create_terminal` calls in [./bspwm.py](./bspwm.py). Some examples are below.
