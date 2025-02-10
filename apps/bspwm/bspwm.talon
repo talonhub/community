@@ -1,22 +1,15 @@
 tag: user.bspwm
 -
 
-# e.g. "node focus right", "desktop swap next"
-<user.bspwm_domain> <user.bspwm_command> <user.bspwm_selector>:
-    user.bspwm_command(bspwm_domain, bspwm_selector, bspwm_command)
-# Swap verb and subject, more natural. e.g. "node focus right", "desktop swap next"
-<user.bspwm_command> <user.bspwm_domain> <user.bspwm_selector>:
-    user.bspwm_command(bspwm_domain, bspwm_selector, bspwm_command)
+# e.g. "node focus right", "desktop swap next" "node move to desktop three"
+<user.bspwm_action>: user.bspwm_command(bspwm_action)
+# Swap verb and subject, more natural. e.g. "focus node right", "swap desktop next"
+<user.bspwm_node_actions> {user.bspwm_node} [<user.bspwm_node_sel>]: user.bspwm_object_command(bspwm_node, bspwm_node_actions, bspwm_node_sel or "")
+<user.bspwm_desktop_actions> {user.bspwm_desktop} [<user.bspwm_desktop_sel>]: user.bspwm_object_command(bspwm_desktopst, bspwm_desktop_actions, bspwm_desktop_sel or "")
+<user.bspwm_monitor_actions> {user.bspwm_monitor} [<user.bspwm_monitor_sel>]: user.bspwm_object_command(bspwm_monitorst, bspwm_monitor_actions, bspwm_monitor_sel or "")
 
-# Shorthand for faster focus switching
-<user.bspwm_domain> <user.bspwm_selector>:
-    user.bspwm_command(bspwm_domain, bspwm_selector, "--focus")
+# Shorthand for quick focusing: "node right", "desktop next"
+<user.bspwm_object> <user.bspwm_selector>: user.bspwm_object_command(bspwm_object, "--focus", bspwm_selector)
+# Desktop is special/annoying because left=prev rather than west.
+{user.bspwm_desktop} <user.bspwm_desktop_sel>: user.bspwm_object_command(bspwm_desktop, "--focus", bspwm_desktop_sel)
 
-<user.bspwm_domain> <user.bspwm_desktop_selector> state <user.bspwm_state>:
-    user.bspwm_state_command(bspwm_domain, bspwm_desktop_selector, bspwm_state)
-
-<user.bspwm_domain> <user.bspwm_node_selector> flag <user.bspwm_flag>:
-    user.bspwm_flag_command(bspwm_domain, bspwm_node_selector, bspwm_flag)
-
-<user.bspwm_domain> <user.bspwm_desktop_selector> flag <user.bspwm_flag>:
-    user.bspwm_flag_command(bspwm_domain, bspwm_desktop_selector, bspwm_flag)

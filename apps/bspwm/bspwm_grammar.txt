@@ -1,0 +1,114 @@
+# Reference of grammar for talon voice commands.
+bspwm_syntax      ::= T_BSPC (node_command | desktop_command | monitor_command | wm_command )
+
+node_command      ::= T_NODE [NODE_SEL] node_actions
+desktop_command   ::= T_DESKTOP [DESKTOP_SEL] desktop_actions
+monitor_command   ::= T_MONITOR [MONITOR_SEL] monitor_actions
+
+node_actions      ::= focus_command | activate_command | T_TO_DESKTOP DESKTOP_SEL [T_FOLLOW]
+                    | T_TO_MONITOR MONITOR_SEL [T_FOLLOW] | T_TO_NODE NODE_SEL [T_FOLLOW]
+                    | T_SWAP NODE_SEL [T_FOLLOW] | T_PRESEL_DIR DIR | T_CANCEL
+                    | T_PRESEL_RATIO RATIO | state_command | resize_command
+                    | T_MOVE dx dy | T_INSERT_RECEPTACLE | T_CLOSE | T_KILL
+
+desktop_actions   ::= focus_command | activate_command
+                    | T_TO_MONITOR MONITOR_SEL [T_FOLLOW] | T_SWAP DESKTOP_SEL [T_FOLLOW] MONITOR_SEL
+                    | T_LAYOUT layout_type | T_REMOVE
+
+monitor_actions   ::= focus_command | T_SWAP DESKTOP_SEL [T_FOLLOW]
+                    | T_ADD_DESKTOPS T_SPACE | T_REMOVE
+
+wm_command        ::= T_WM wm_actions
+wm_actions        ::= T_DUMP_STATE | T_LOAD_STATE file_path
+                    | T_ADOPT_ORPHANS | T_RECORD_HISTORY (T_ON | T_OFF)
+                    | T_RESTART
+
+focus_command     ::= T_FOCUS [selector]
+activate_command  ::= T_ACTIVATE [selector]
+state_command     ::= T_STATE STATE
+resize_command    ::= T_RESIZE resize_direction dx dy
+
+NODE_SEL          ::= [NODE_SEL] node_descriptor [node_modifier]
+DESKTOP_SEL       ::= [DESKTOP_SEL] desktop_descriptor [desktop_modifier]
+MONITOR_SEL       ::= [MONITOR_SEL] monitor_descriptor [monitor_modifier]
+
+node_descriptor   ::= BASIC_DESCRIPTOR | T_BIGGEST | T_SMALLEST
+desktop_descriptor::= CYCLE_DESCRIPTOR | number_small
+monitor_descriptor::= BASIC_DESCRIPTOR | T_PRIMARY | number_small
+
+BASIC_DESCRIPTOR  ::= DIR | CYCLE_DIR | T_ANY | T_FIRST_ANCESTOR | T_LAST
+                    | T_NEWEST | T_OLDER | T_NEWER | T_FOCUSED | T_POINTED
+
+CYCLE_DESCRIPTOR  ::= CYCLE_DIR | T_ANY | T_LAST | T_NEWEST | T_OLDER | T_NEWER
+
+node_modifier     ::= [T_NOT] common_modifier
+desktop_modifier  ::= [T_NOT] (common_modifier | T_OCCUPIED | T_LOCAL)
+monitor_modifier  ::= [T_NOT] T_FOCUSED | T_OCCUPIED
+
+common_modifier   ::= "focused" | "active" | "automatic" | "leaf"
+                    | "window" | "same_class" | "descendant_of" | "ancestor_of"
+                    | "hidden" | "sticky" | "private" | "locked" | "marked"
+                    | "urgent" | "below" | "normal" | "above"
+                    | "horizontal" | "vertical" | "local"
+
+STATE             ::= "tiled" | "pseudo_tiled" | "floating" | "fullscreen"
+resize_direction  ::= "top" | "left" | "bottom" | "right"
+                    | "top_left" | "top_right" | "bottom_right" | "bottom_left"
+
+DIR               ::= "north" | "west" | "south" | "east"
+CYCLE_DIR         ::= "next" | "prev"
+layout_type       ::= "tiled" | "monocle"
+
+# Terminal definitions
+T_BSPC              ::= "bspc"
+T_NODE              ::= "node"
+T_DESKTOP           ::= "desktop"
+T_MONITOR           ::= "monitor"
+T_WM                ::= "wm"
+
+T_TO_DESKTOP        ::= "--to-desktop"
+T_TO_MONITOR        ::= "--to-monitor"
+T_TO_NODE           ::= "--to-node"
+T_FOLLOW            ::= "--follow"
+T_PRESEL_DIR        ::= "--presel-dir"
+T_CANCEL            ::= "cancel"
+T_PRESEL_RATIO      ::= "--presel-ratio"
+T_MOVE              ::= "--move"
+T_INSERT_RECEPTACLE ::= "--insert-receptacle"
+T_CLOSE             ::= "--close"
+T_KILL              ::= "--kill"
+T_LAYOUT            ::= "--layout"
+T_RENAME            ::= "--rename"
+T_REMOVE            ::= "--remove"
+T_ADD_DESKTOPS      ::= "--add-desktops"
+T_RECTANGLE         ::= "--rectangle"
+T_DUMP_STATE        ::= "--dump-state"
+T_LOAD_STATE        ::= "--load-state"
+T_ADOPT_ORPHANS     ::= "--adopt-orphans"
+T_RECORD_HISTORY    ::= "--record-history"
+T_ON                ::= "on"
+T_OFF               ::= "off"
+T_RESTART           ::= "--restart"
+T_FOCUS             ::= "--focus"
+T_ACTIVATE          ::= "--activate"
+T_SWAP              ::= "--swap"
+T_STATE             ::= "--state"
+T_RESIZE            ::= "--resize"
+
+# Modifier terminals
+T_BIGGEST           ::= "biggest"
+T_SMALLEST          ::= "smallest"
+T_PRIMARY           ::= "primary"
+T_ANY               ::= "any"
+T_FIRST_ANCESTOR    ::= "first_ancestor"
+T_LAST              ::= "last"
+T_NEWEST            ::= "newest"
+T_OLDER             ::= "older"
+T_NEWER             ::= "newer"
+T_FOCUSED           ::= "focused"
+T_POINTED           ::= "pointed"
+T_NOT               ::= "!"
+T_OCCUPIED          ::= "occupied"
+T_LOCAL             ::= "local"
+T_SPACE             ::= " "
+
