@@ -188,7 +188,8 @@ operators = Operators(
     MATH_AND=" and ",
     MATH_OR=" or ",
     MATH_NOT="not ",
-    MATH_NOT_IN="not in",
+    MATH_IN=" in ",
+    MATH_NOT_IN=" not in ",
 )
 
 
