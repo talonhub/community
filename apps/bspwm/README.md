@@ -49,11 +49,14 @@ direction, for example "node left" or "screen right". This is enabled as a speci
 case in the talon file. You can also swap the verb and subject for simple actions,
 for example "focus workspace previous" or "go window south".
 
+To quickly change state you may omit the word "state", e.g. "node fullscreen".
+
+
 If you wish to customise these, you will have to redeclare the whole lists or rules
 in a python file. For example:
 ```python
 from talon import Context
-ctx = Context()
+ctx = Context(")"
 # Ensure your file takes prescedence over the default one
 ctx.matches = """
 os: linux
@@ -62,6 +65,6 @@ language: en
 
 # Name is the name in bspwm.py, prefixed with "user.bspwm_"
 ctx.lists["user.bspwm_to_desktop"] = {
-  "meander in the direction of space": "--to-desktop",
+  ""meander" in the direction of space": "--to-desktop",
 }
 ```

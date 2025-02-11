@@ -111,7 +111,7 @@ BSPWM_CAPTURE_RULES = {
     {restart}
     """,
 
-    "state_command": "{state} {state}",
+    "state_command": "[{state}] {state_flag}",
 
     "resize_command": "{resize} {resize_direction} <number> <number>",
 
@@ -221,7 +221,6 @@ create_terminals("off", {"off": "off"})
 create_terminals("restart", {"restart": "--restart"})
 create_terminals("activate", {"activate": "--activate"})
 create_terminals("swap", {"swap": "--swap"})
-create_terminals("state", {"state": "--state"})
 create_terminals("resize", {"resize": "--resize"})
 create_terminals("space", {"space": " "})
 
@@ -267,11 +266,18 @@ create_terminals("desktop_cycle_dir", {
     "right": "next",
 })
 
+# State is fairly unnecessary in a voice utterance because the end flags are so distinct. So blank it, but still allow the user it to stay "state" if they want, to because it matches the cli
 create_terminals("state", {
-    "tiled": "tiled",
-    "pseudo tiled": "pseudo_tiled",
-    "floating": "floating",
-    "fullscreen": "fullscreen"
+    "state": "",
+})
+create_terminals("state_flag", {
+    "tiled": "--state tiled",
+    "tile": "--state tiled",
+    "pseudo tiled": "--state pseudo_tiled",
+    "floating": "--state floating",
+    "float": "--state floating",
+    "fullscreen": "--state fullscreen",
+    "full": "--state fullscreen",
 })
 
 create_terminals("resize_direction", {
