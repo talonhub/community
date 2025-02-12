@@ -194,9 +194,9 @@ def c_variable(m) -> str:
     "Returns a string"
     return " ".join(list(m))
 
+
 operators = Operators(
     SUBSCRIPT=lambda: actions.user.insert_between("[", "]"),
-
     ASSIGNMENT=" = ",
     ASSIGNMENT_ADDITION=" += ",
     ASSIGNMENT_SUBTRACTION=" -= ",
@@ -209,14 +209,12 @@ operators = Operators(
     ASSIGNMENT_BITWISE_EXCLUSIVE_OR=" ^= ",
     ASSIGNMENT_BITWISE_LEFT_SHIFT=" <<= ",
     ASSIGNMENT_BITWISE_RIGHT_SHIFT=" >>= ",
-    
     BITWISE_AND=" & ",
     BITWISE_OR=" | ",
     BITWISE_NOT="~",
     BITWISE_EXCLUSIVE_OR=" ^ ",
     BITWISE_LEFT_SHIFT=" << ",
     BITWISE_RIGHT_SHIFT=" >> ",
-
     MATH_SUBTRACT=" - ",
     MATH_ADD=" + ",
     MATH_MULTIPLY=" * ",
@@ -228,15 +226,15 @@ operators = Operators(
     MATH_GREATER_THAN_OR_EQUAL=" >= ",
     MATH_LESS_THAN=" < ",
     MATH_LESS_THAN_OR_EQUAL=" <= ",
-    MATH_AND=" && " ,
+    MATH_AND=" && ",
     MATH_OR=" || ",
     MATH_NOT="!",
-    
     POINTER_INDIRECTION="*",
     POINTER_ADDRESS_OF="&",
     POINTER_STRUCTURE_DEREFERENCE="->",
 )
- 
+
+
 @ctx.action_class("user")
 class UserActions:
     def code_get_operators() -> Operators:
