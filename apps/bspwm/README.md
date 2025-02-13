@@ -4,6 +4,7 @@ This integrates the bspc control grammar for the [bspwm window
 manager](https://github.come/baskerville/bspwm) with talon.
 
 Enable it by adding the `tag(): user.bspwm` to one of your .talon files, e.g.
+
 ```talon
 os: linux
 -
@@ -41,6 +42,7 @@ Mappings to replace works, e.g. to say "window" in place of "node", can be seen 
     "focus": "--focus",
     "go": "--focus",
 ```
+
 This also includes left and right etc as alternatives to east, west etc, as well as
 for next and previous.
 
@@ -51,9 +53,9 @@ for example "focus workspace previous" or "go window south".
 
 To quickly change state you may omit the word "state", e.g. "node fullscreen".
 
-
 If you wish to customise these, you will have to redeclare the whole lists or rules
 in a python file. For example:
+
 ```python
 from talon import Context
 ctx = Context(")"

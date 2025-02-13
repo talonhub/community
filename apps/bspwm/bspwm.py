@@ -1,15 +1,18 @@
-from talon import Module, Context, actions
 import subprocess
+
+from talon import Context, Module, actions
 
 mod = Module()
 ctx = Context()
 
 mod.tag("bspwm", desc="Enable commands to control the bspwm window manager")
 
+
 def create_terminals(name, items):
     name = f"bspwm_{name}"
     mod.list(name, desc=f"BSPWM {name} terminals")
     ctx.lists[f"user.{name}"] = items
+
 
 def create_capture(name: str, rule: str):
     """
@@ -20,11 +23,7 @@ def create_capture(name: str, rule: str):
         rule: The rule for the capture
     """
     # Prepend scope to all list and capture references.
-    rule = (
-        rule
-        .replace("<", "<user.bspwm_")
-        .replace("{", "{user.bspwm_")
-    )
+    rule = rule.replace("<", "<user.bspwm_").replace("{", "{user.bspwm_")
     name = f"bspwm_{name}"
     exec(
         f"""
@@ -33,13 +32,15 @@ def {name}(m) -> str:
     # For descriptors and some other captures, we don't want to join words
     join_words = not "{name}".endswith("_descriptor")
     return " ".join(m) if join_words else str(m)
-""")
+"""
+    )
 
     # @mod.capture(rule=rule)
     # def capture_function(m) -> str:
     #     return " ".join(m) if join_words else str(m)
     # # Rename the function to the desired name
     # capture_function.__name__ = f"bspwm_{name}"
+
 
 BSPWM_CAPTURE_RULES = {
     "action": """
@@ -48,27 +49,21 @@ BSPWM_CAPTURE_RULES = {
     <monitor_command> |
     <wm_command>
     """,
-
     # Second option for commands is an alternative option to use verb first
     "node_command": """
     {node} [<node_sel>] <node_actions>
     """,
-
     "desktop_command": """
     {desktop} [<desktop_sel>] <desktop_actions>
     """,
-
     "monitor_command": """
     {monitor} [<monitor_sel>] <monitor_actions>
     """,
-
     "wm_command": "{wm} <wm_actions>",
-
     # "object": "{node} | {desktop} | {monitor}",
     # "selector": "<node_sel> | <desktop_sel> | <monitor_sel>",
     "object": "{node} | {monitor}",
     "selector": "<node_sel> | <monitor_sel>",
-
     "node_actions": """
     {focus} [<node_sel>] |
     {activate} [<node_sel>] |
@@ -86,7 +81,6 @@ BSPWM_CAPTURE_RULES = {
     {close} |
     {kill}
     """,
-
     "desktop_actions": """
     {focus} [<desktop_sel>] |
     {activate} [<desktop_sel>] |
@@ -95,14 +89,12 @@ BSPWM_CAPTURE_RULES = {
     {layout} {layout_type} |
     {remove}
     """,
-
     "monitor_actions": """
     {focus} [<monitor_sel>] |
     {swap} <desktop_sel> [{follow}] |
     {add_desktops} {space} |
     {remove}
     """,
-
     "wm_actions": """
     {dump_state} |
     {load_state} <text> |
@@ -110,29 +102,17 @@ BSPWM_CAPTURE_RULES = {
     {record_history} ({on} | {off}) |
     {restart}
     """,
-
     "state_command": "[{state}] {state_flag}",
-
     "resize_command": "{resize} {resize_direction} <number> <number>",
-
     "node_sel": "[<node_sel>] <node_descriptor> [<node_modifier>]",
-
     "desktop_sel": "[<desktop_sel>] <desktop_descriptor> [<desktop_modifier>]",
-
     "monitor_sel": "[<monitor_sel>] <monitor_descriptor> [<monitor_modifier>]",
-
     "node_descriptor": "<basic_descriptor> | {biggest} | {smallest}",
-
     "desktop_descriptor": "<desktop_cycle_descriptor> | <number>",
-
     "monitor_descriptor": "<basic_descriptor> | {primary} | <number>",
-
     "node_modifier": "[{not}] {common_modifier}",
-
     "desktop_modifier": "[{not}] ({common_modifier} | {occupied} | {local})",
-
     "monitor_modifier": "[{not}] ({focused} | {occupied})",
-
     "basic_descriptor": """
         {dir} |
         {cycle_dir} |
@@ -145,7 +125,6 @@ BSPWM_CAPTURE_RULES = {
         {focused} |
         {pointed}
         """,
-
     "cycle_descriptor": """
         {cycle_dir} |
         {any} |
@@ -154,53 +133,72 @@ BSPWM_CAPTURE_RULES = {
         {older} |
         {newer}
         """,
-
     "desktop_cycle_descriptor": """
         <cycle_descriptor> | {desktop_cycle_dir}
         """,
-
 }
 
 
 # Terminal definitions
-create_terminals("node", {
-    "node": "node",
-    "window": "node",
-})
-create_terminals("desktop", {
-    "desktop": "desktop",
-    "desk": "desktop",
-    "workspace": "desktop",
-})
-create_terminals("monitor", {
-    "monitor": "monitor",
-    "screen": "monitor",
-})
+create_terminals(
+    "node",
+    {
+        "node": "node",
+        "window": "node",
+    },
+)
+create_terminals(
+    "desktop",
+    {
+        "desktop": "desktop",
+        "desk": "desktop",
+        "workspace": "desktop",
+    },
+)
+create_terminals(
+    "monitor",
+    {
+        "monitor": "monitor",
+        "screen": "monitor",
+    },
+)
 create_terminals("wm", {"wm": "wm"})
 
 # Command terminals
-create_terminals("to_desktop", {
-    "to desktop": "--to-desktop",
-    "to desk": "--to-desktop",
-    "to workspace": "--to-desktop",
-    "send": "--to-desktop",
-})
-create_terminals("to_monitor", {
-    "to monitor": "--to-monitor",
-    "to screen": "--to-monitor",
-    "courier": "--to-monitor",
-    "jump": "--to-monitor",
-})
-create_terminals("to_node", {
-    "to node": "--to-node",
-    "to window": "--to-node",
-    "move": "--to-node",
-    "warp": "--to-node",
-})
-create_terminals("focus", {
-    "focus": "--focus",
-    "go": "--focus",
-})
+create_terminals(
+    "to_desktop",
+    {
+        "to desktop": "--to-desktop",
+        "to desk": "--to-desktop",
+        "to workspace": "--to-desktop",
+        "send": "--to-desktop",
+    },
+)
+create_terminals(
+    "to_monitor",
+    {
+        "to monitor": "--to-monitor",
+        "to screen": "--to-monitor",
+        "courier": "--to-monitor",
+        "jump": "--to-monitor",
+    },
+)
+create_terminals(
+    "to_node",
+    {
+        "to node": "--to-node",
+        "to window": "--to-node",
+        "move": "--to-node",
+        "warp": "--to-node",
+    },
+)
+create_terminals(
+    "focus",
+    {
+        "focus": "--focus",
+        "go": "--focus",
+    },
+)
 create_terminals("follow", {"follow": "--follow"})
 create_terminals("presel_dir", {"presel dir": "--presel-dir"})
 create_terminals("cancel", {"cancel": "cancel"})
@@ -241,93 +239,113 @@ create_terminals("occupied", {"occupied": "occupied"})
 create_terminals("local", {"local": "local"})
 
 # Base types
-create_terminals("dir", {
-    "north": "north",
-    "west": "west",
-    "south": "south",
-    "east": "east",
-    "up": "north",
-    "left": "west",
-    "down": "south",
-    "right": "east",
-})
+create_terminals(
+    "dir",
+    {
+        "north": "north",
+        "west": "west",
+        "south": "south",
+        "east": "east",
+        "up": "north",
+        "left": "west",
+        "down": "south",
+        "right": "east",
+    },
+)
 
-create_terminals("cycle_dir", {
-    "next": "next",
-    "prev": "prev",
-    "previous": "prev",
-})
+create_terminals(
+    "cycle_dir",
+    {
+        "next": "next",
+        "prev": "prev",
+        "previous": "prev",
+    },
+)
 
-create_terminals("desktop_cycle_dir", {
-    "next": "next",
-    "prev": "prev",
-    "previous": "prev",
-    "left": "prev",
-    "right": "next",
-})
+create_terminals(
+    "desktop_cycle_dir",
+    {
+        "next": "next",
+        "prev": "prev",
+        "previous": "prev",
+        "left": "prev",
+        "right": "next",
+    },
+)
 
 # State is fairly unnecessary in a voice utterance because the end flags are so distinct. So blank it, but still allow the user it to stay "state" if they want, to because it matches the cli
-create_terminals("state", {
-    "state": "",
-})
-create_terminals("state_flag", {
-    "tiled": "--state tiled",
-    "tile": "--state tiled",
-    "pseudo tiled": "--state pseudo_tiled",
-    "floating": "--state floating",
-    "float": "--state floating",
-    "fullscreen": "--state fullscreen",
-    "full": "--state fullscreen",
-})
+create_terminals(
+    "state",
+    {
+        "state": "",
+    },
+)
+create_terminals(
+    "state_flag",
+    {
+        "tiled": "--state tiled",
+        "tile": "--state tiled",
+        "pseudo tiled": "--state pseudo_tiled",
+        "floating": "--state floating",
+        "float": "--state floating",
+        "fullscreen": "--state fullscreen",
+        "full": "--state fullscreen",
+    },
+)
 
-create_terminals("resize_direction", {
-    "top": "top",
-    "left": "left",
-    "bottom": "bottom",
-    "right": "right",
-    "top left": "top_left",
-    "top right": "top_right",
-    "bottom right": "bottom_right",
-    "bottom left": "bottom_left"
-})
+create_terminals(
+    "resize_direction",
+    {
+        "top": "top",
+        "left": "left",
+        "bottom": "bottom",
+        "right": "right",
+        "top left": "top_left",
+        "top right": "top_right",
+        "bottom right": "bottom_right",
+        "bottom left": "bottom_left",
+    },
+)
 
-create_terminals("layout_type", {
-    "tiled": "tiled",
-    "monocle": "monocle"
-})
+create_terminals("layout_type", {"tiled": "tiled", "monocle": "monocle"})
 
-create_terminals("common_modifier", {
-    "focused": "focused",
-    "active": "active",
-    "automatic": "automatic",
-    "leaf": "leaf",
-    "window": "window",
-    "same class": "same_class",
-    "descendant of": "descendant_of",
-    "ancestor of": "ancestor_of",
-    "hidden": "hidden",
-    "sticky": "sticky",
-    "private": "private",
-    "locked": "locked",
-    "marked": "marked",
-    "urgent": "urgent",
-    "below": "below",
-    "normal": "normal",
-    "above": "above",
-    "horizontal": "horizontal",
-    "vertical": "vertical",
-    "local": "local"
-})
+create_terminals(
+    "common_modifier",
+    {
+        "focused": "focused",
+        "active": "active",
+        "automatic": "automatic",
+        "leaf": "leaf",
+        "window": "window",
+        "same class": "same_class",
+        "descendant of": "descendant_of",
+        "ancestor of": "ancestor_of",
+        "hidden": "hidden",
+        "sticky": "sticky",
+        "private": "private",
+        "locked": "locked",
+        "marked": "marked",
+        "urgent": "urgent",
+        "below": "below",
+        "normal": "normal",
+        "above": "above",
+        "horizontal": "horizontal",
+        "vertical": "vertical",
+        "local": "local",
+    },
+)
 
 # Create all captures from the dictionary
 for name, rule in BSPWM_CAPTURE_RULES.items():
     create_capture(name, rule)
+
 
 # Have to define this separately because it isn't referencing an internal capture
 @mod.capture(rule="<digits>")
 def bspwm_number(m) -> str:
     "digits"
     return m
+
 
 # Have to define this separately because it isn't referencing an internal capture
 @mod.capture(rule="<user.text>")
@@ -336,15 +354,15 @@ def bspwm_text(m) -> str:
     return m
 
 
-
 def bspc_command(*args: tuple[str]):
     args = [arg for part in args for arg in part.split() if arg]
     result = subprocess.run(["bspc", *args], capture_output=True, text=True)
     if result.stderr:
-        argstr =" ".join(args)
+        argstr = " ".join(args)
         print(f"BSPC error running `bspc {argstr}`: {result.stderr}")
     # else:
     #     print(f"Output: {result.stdout}")
+
 
 @mod.action_class
 class Actions:

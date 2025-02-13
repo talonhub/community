@@ -111,4 +111,3 @@ T_NOT               ::= "!"
 T_OCCUPIED          ::= "occupied"
 T_LOCAL             ::= "local"
 T_SPACE             ::= " "
-
