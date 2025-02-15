@@ -4,6 +4,7 @@ This folder contains `edit_settings.talon`, which has a command to open various 
 
 - `abbreviate` has a command for the use of abbreviations
 - `app_switcher` does not have commands but has the implementation of functions that allow for switching between applications
+- `contacts` has captures for inserting contact information including name and email.
 - `edit` has commands for navigating and editing text with copy, paste, etc., as well as commands for zooming in and out
 - `file_extension` has a command for simpler spoken forms of file and website name extensions
 - `help` has commands to open various help menus, as described in the top level [README](https://github.com/talonhub/community?tab=readme-ov-file#getting-started-with-talon)
