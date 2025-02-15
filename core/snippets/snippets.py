@@ -159,8 +159,9 @@ def update_snippets():
                     if var.insertion_formatters:
                         lists.with_phrase[phrase] = snippet.name
 
-                    if var.wrapper_phrases:
-                        lists.wrapper[phrase] = f"{snippet.name}.{var.name}"
+            for var in snippet.variables:
+                for phrase in var.wrapper_phrases or []:
+                    lists.wrapper[phrase] = f"{snippet.name}.{var.name}"
 
     snippets_map = name_to_snippets
     update_contexts(language_to_lists)

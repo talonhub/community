@@ -152,7 +152,8 @@ compound_actions = {
     ("delete", "right"): actions.user.delete_right,
     ("delete", "line"): actions.edit.delete_line,
     ("delete", "paragraph"): actions.edit.delete_paragraph,
-    ("delete", "document"): actions.edit.delete_all,
+    # ("delete", "document"): actions.edit.delete_all, # Beta only
+    ("delete", "document"): actions.user.delete_all,
     ("delete", "selection"): actions.edit.delete,
     # Cut to clipboard
     ("cutToClipboard", "line"): actions.user.cut_line,
