@@ -50,6 +50,7 @@ operators = Operators(
     MATH_NOT_EQUAL=" != ",
     MATH_OR=" || ",
     MATH_AND=" && ",
+    MATH_NOT="!",
     MATH_GREATER_THAN_OR_EQUAL=" >= ",
     MATH_GREATER_THAN=" > ",
     MATH_LESS_THAN_OR_EQUAL=" <= ",
