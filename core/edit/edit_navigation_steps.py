@@ -7,7 +7,7 @@ from talon import Module, actions, settings
 
 @dataclass
 class NavigationStep:
-    type: Literal[
+    modifier: Literal[
         "wordLeft", "wordRight", "word", "left", "right", "lineUp", "lineDown"
     ]
     count: int
