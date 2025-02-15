@@ -25,7 +25,7 @@ def navigation_step(m) -> NavigationStep:
         count = m.number_small
 
     return NavigationStep(
-        type=type,
+        modifier=modifier,
         count=count,
     )
 
