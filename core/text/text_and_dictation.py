@@ -118,6 +118,11 @@ def word(m) -> str:
         return " ".join(
             actions.dictate.replace_words(actions.dictate.parse_words(m.word))
         )
+    
+@mod.capture(rule="{user.file_extension}")
+def prose_file_extension(m) -> str:
+    """A sequence of words, including user-defined vocabulary."""
+    return f" {m.file_extension}"
 
 @mod.capture(rule="({user.vocabulary} | <user.prose_contact> | <user.abbreviation> | <phrase> | <user.date>)+")
 def text(m) -> str:
@@ -130,6 +135,7 @@ def text(m) -> str:
         "{user.vocabulary}"
         "| {user.punctuation}"
         "| {user.prose_snippets}"
+        "| <user.prose_file_extension>"
         "| <user.prose_currency>"
         "| <user.prose_time>"
         "| <user.number_prose_prefixed>"
@@ -154,12 +160,14 @@ def prose(m) -> str:
         "{user.vocabulary}"
         "| {user.punctuation}"
         "| {user.prose_snippets}"
+        "| <user.prose_location>"
         "| <user.prose_currency>"
         "| <user.prose_time>"
         "| <user.number_prose_prefixed>"
         "| <user.prose_percent>"
         "| <user.abbreviation>"
         "| <user.prose_contact>"
+        "| <user.date>"
         "| <phrase>"
         ")+"
     )
