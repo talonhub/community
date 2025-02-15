@@ -19,7 +19,7 @@ mod = Module()
 @mod.capture(rule="[<number_small>] {user.edit_modifier_repeatable}")
 def navigation_step(m) -> NavigationStep:
     count = 1
-    type = m.edit_modifier_repeatable
+    modifier = m.edit_modifier_repeatable
 
     with suppress(AttributeError):
         count = m.number_small
