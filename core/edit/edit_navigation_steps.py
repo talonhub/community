@@ -35,7 +35,7 @@ class Actions:
     def perform_navigation_steps(steps: list[NavigationStep]):
         """Navigate by a series of steps"""
         for step in steps:
-            match step.type:
+            match step.modifier:
                 case "wordLeft":
                     repeat_action(actions.edit.word_left, step.count, True)
                 case "wordRight":
