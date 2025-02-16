@@ -1,4 +1,5 @@
-from talon import Context, Module, actions, imgui, scope, settings, ui
+from talon import Context, Module, actions, imgui, scope, settings, ui, app
+from ...core.app_switcher.windows import get_application_user_model_id, get_application_user_model_for_window
 
 ctx = Context()
 mod = Module()
@@ -35,6 +36,22 @@ def gui(gui: imgui.GUI):
             value = scope.get(key)
             print_value(gui, key, value, ignore)
     gui.spacer()
+    # if app.platform=="windows":
+    #     gui.text("Windows-specific")
+    #     application_user_model_id = None
+    #     window_application_user_model_id = None
+    #     try:
+    #         application_user_model_id = get_application_user_model_id(ui.active_app().pid)
+    #     except:
+    #         pass
+    #     try:
+    #         window_application_user_model_id = get_application_user_model_id(ui.active_app().pid)
+    #     except:
+    #         pass
+
+    #     gui.text(f"AppUserModelId: {application_user_model_id}")
+    #     gui.text(f"Window AppUserModelId: {window_application_user_model_id}")
+    #     gui.text(f"Window cls: {ui.active_window().cls}")
     if gui.button("Hide"):
         actions.user.help_scope_toggle()
 
