@@ -141,9 +141,6 @@ class UserActions:
     def code_operator_object_accessor():
         actions.insert(".")
 
-    def code_insert_null():
-        actions.insert("null")
-
     def code_insert_is_null():
         actions.insert(" == null")
 
