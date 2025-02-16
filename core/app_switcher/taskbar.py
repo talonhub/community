@@ -24,7 +24,7 @@ mod = Module()
 class Actions:
     def switcher_click(mouse_button: int, index: int):
         """"""
-        if index == 1:
+        if index == 0:
             return
         x, y = ctrl.mouse_pos()
         actions.mouse_move(position_cache[index].x, position_cache[index].y)
