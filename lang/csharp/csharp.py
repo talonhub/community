@@ -15,7 +15,6 @@ ctx.lists["user.code_common_function"] = {
 operators = Operators(
     # code_operators_array
     SUBSCRIPT=lambda: actions.user.insert_between("[", "]"),
-
     # code_operators_assignment
     ASSIGNMENT=" = ",
     ASSIGNMENT_ADDITION=" += ",
@@ -29,17 +28,14 @@ operators = Operators(
     ASSIGNMENT_BITWISE_OR=" |= ",
     ASSIGNMENT_BITWISE_RIGHT_SHIFT=" >>= ",
     ASSIGNMENT_INCREMENT="++",
-
     # code_operators_bitwise
     BITWISE_AND=" & ",
     BITWISE_EXCLUSIVE_OR=" ^ ",
     BITWISE_LEFT_SHIFT=" << ",
     BITWISE_OR=" | ",
     BITWISE_RIGHT_SHIFT=" >> ",
-
     # code_operators_lambda
     LAMBDA="=>",
-
     # code_operators_pointer
     MATH_ADD=" + ",
     MATH_SUBTRACT=" - ",
@@ -55,12 +51,12 @@ operators = Operators(
     MATH_GREATER_THAN=" > ",
     MATH_LESS_THAN_OR_EQUAL=" <= ",
     MATH_LESS_THAN=" < ",
-
-    #code_operators_pointer
+    # code_operators_pointer
     POINTER_ADDRESS_OF="&",
     POINTER_INDIRECTION="*",
     POINTER_STRUCTURE_DEREFERENCE="->",
 )
+
 
 @ctx.action_class("user")
 class UserActions:
