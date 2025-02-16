@@ -20,7 +20,7 @@ Note that the full window title may not be displayed at the top of VS Code windo
 
 Change the [`window.title`](vscode://settings/window.title) setting to:
 
-```json
+```
 ${activeEditorShort}${separator}${rootName}${separator}${profileName}${separator}focus:[${focusedView}]
 ```
 
@@ -60,7 +60,7 @@ tag(): user.git
 tag(): user.readline
 ```
 
-```
+```talon
 app: vscode
 win.title: /^powershell /
 -
