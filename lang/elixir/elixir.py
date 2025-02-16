@@ -1,6 +1,7 @@
 from talon import Context, Module, actions, settings
 
 from ..tags.operators import Operators
+
 ctx = Context()
 mod = Module()
 ctx.matches = r"""
@@ -36,9 +37,7 @@ ctx.lists["user.code_keyword"] = {
 
 operators = Operators(
     LAMBDA="->",
-
     ASSIGNMENT=" = ",
-
     MATH_ADD=" + ",
     MATH_SUBTRACT=" - ",
     MATH_MULTIPLY=" * ",
@@ -53,8 +52,9 @@ operators = Operators(
     MATH_OR=" or ",
     MATH_NOT="not ",
     MATH_IN=" in ",
-    MATH_NOT_IN=" not in "
+    MATH_NOT_IN=" not in ",
 )
+
 
 @ctx.action_class("user")
 class UserActions:
