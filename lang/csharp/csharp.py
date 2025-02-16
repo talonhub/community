@@ -29,6 +29,7 @@ operators = Operators(
     ASSIGNMENT_BITWISE_RIGHT_SHIFT=" >>= ",
     ASSIGNMENT_INCREMENT="++",
     # code_operators_bitwise
+    BITWISE_NOT="~",
     BITWISE_AND=" & ",
     BITWISE_EXCLUSIVE_OR=" ^ ",
     BITWISE_LEFT_SHIFT=" << ",
