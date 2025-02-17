@@ -6,16 +6,18 @@ from typing import Any, List, Mapping, Optional
 
 from talon import Module, actions
 
+from .keys.symbols import symbols_for_create_spoken_forms
 from .numbers.numbers import digits_map, scales, teens, tens
 from .user_settings import track_csv_list
-from .keys.symbols import symbols_for_create_spoken_forms
 
 mod = Module()
 
 DEFAULT_MINIMUM_TERM_LENGTH = 2
 EXPLODE_MAX_LEN = 3
 FANCY_REGULAR_EXPRESSION = r"[A-Z]?[a-z]+|[A-Z]+(?![a-z])|[0-9]+"
-SYMBOLS_REGEX = "|".join(re.escape(symbol) for symbol in set(symbols_for_create_spoken_forms.values()))
+SYMBOLS_REGEX = "|".join(
+    re.escape(symbol) for symbol in set(symbols_for_create_spoken_forms.values())
+)
 FILE_EXTENSIONS_REGEX = r"^\b$"
 file_extensions = {}
 

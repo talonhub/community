@@ -20,26 +20,35 @@ symbols_for_create_spoken_forms = {
     "at": "@",
     "dot": ".",
     # for application names like "notepad++"
-    "plus": "+"
+    "plus": "+",
 }
+
 
 class Symbol:
     character: str
     command_forms: list[str] = None
     command_and_dictation_forms: list[str] = None
 
-    def __init__(self, character: str, command_and_dictation_forms: str | list[str] = None, command_forms: str | list[str] = None): 
+    def __init__(
+        self,
+        character: str,
+        command_and_dictation_forms: str | list[str] = None,
+        command_forms: str | list[str] = None,
+    ):
         self.character = character
-        
+
         if command_and_dictation_forms:
             self.command_and_dictation_forms = (
-                [command_and_dictation_forms] if isinstance(command_and_dictation_forms, str) else command_and_dictation_forms
+                [command_and_dictation_forms]
+                if isinstance(command_and_dictation_forms, str)
+                else command_and_dictation_forms
             )
 
         if command_forms:
             self.command_forms = (
                 [command_forms] if isinstance(command_forms, str) else command_forms
             )
+
 
 currency_symbols = [
     Symbol("$", ["dollar sign"], ["dollar"]),
@@ -66,12 +75,33 @@ symbols = [
     Symbol("_", None, ["down score", "underscore"]),
     Symbol("(", ["paren", "L paren", "left paren"], None),
     Symbol(")", ["R paren", "right paren"], None),
-    Symbol("[", None, ["brack", "L brack", "bracket", "L bracket", "left bracket", "square", "L square", "left square"]),
-    Symbol("]", None, ["R brack", "R bracket", "right bracket", "R square", "right square"]),
+    Symbol(
+        "[",
+        None,
+        [
+            "brack",
+            "L brack",
+            "bracket",
+            "L bracket",
+            "left bracket",
+            "square",
+            "L square",
+            "left square",
+        ],
+    ),
+    Symbol(
+        "]", None, ["R brack", "R bracket", "right bracket", "R square", "right square"]
+    ),
     Symbol("/", ["forward slash"], ["slash"]),
     Symbol("\\", None, ["backslash"]),
-    Symbol("{", None, ["brace", "L brace", "left brace", "curly bracket", "left curly bracket"]),
-    Symbol("}", None, ["R brace", "right brace" "R curly bracket", "right curly bracket"]),
+    Symbol(
+        "{",
+        None,
+        ["brace", "L brace", "left brace", "curly bracket", "left curly bracket"],
+    ),
+    Symbol(
+        "}", None, ["R brace", "right brace" "R curly bracket", "right curly bracket"]
+    ),
     Symbol("<", None, ["angle", "L Angle", "left angle", "less than"]),
     Symbol(">", None, ["rangle", "R angle", "right angle", "greater than"]),
     Symbol("^", None, ["caret"]),
@@ -82,7 +112,7 @@ symbols = [
 
 # by convention, symbols should include currency symbols
 symbols.extend(currency_symbols)
- 
+
 for symbol in symbols:
     if symbol.command_and_dictation_forms:
         for spoken_form in symbol.command_and_dictation_forms:
