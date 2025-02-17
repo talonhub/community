@@ -111,6 +111,12 @@ def letters(m) -> str:
     "Multiple letter keys"
     return "".join(m.letter_list)
 
+@mod.action_class
+class Actions:
+    def get_punctuation_words():
+        """Gets the user.punctuation list"""
+        return symbols_command_and_dictation
+
 ctx.lists["self.punctuation"] = symbols_command_and_dictation
 ctx.lists["self.symbol_key"] = symbols_command
 ctx_dragon.lists["self.symbol_key"] = dragon_symbols_command_and_dictation
