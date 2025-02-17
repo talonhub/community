@@ -3,7 +3,6 @@ __pycache__
 *.sw?
 .idea/
 # Locally generated
-/settings
 # we highly recommended against removing the private folder from the gitignore file
 # the directory is used to store sensitive information such as contacts
 /private
