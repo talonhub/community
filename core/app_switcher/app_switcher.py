@@ -242,26 +242,24 @@ def update_running_list():
 
     if app.platform == "windows":  
               
-        # frame_host_apps = ui.apps(name="Application Frame Host", background=False)
-        # for cur_app in frame_host_apps:
-        #     valid_windows = get_valid_windows_by_app_user_model_id(cur_app)
-        #     for window_app_user_model_id, window_list in valid_windows.items():
+        frame_host_apps = ui.apps(name="Application Frame Host", background=False)
+        for cur_app in frame_host_apps:
+            valid_windows = get_valid_windows_by_app_user_model_id(cur_app)
+            for window_app_user_model_id, window_list in valid_windows.items():
 
-        #         if window_app_user_model_id != "None":
-        #             mapping = f"{cur_app.name}-::*::-{window_app_user_model_id}"
+                if window_app_user_model_id != "None":
+                    mapping = f"{cur_app.name}-::*::-{window_app_user_model_id}"
 
-        #             override = get_override_by_app_user_model_id(window_app_user_model_id, cur_app)
-        #             spoken_forms = override.spoken_forms if override and override.spoken_forms else None
+                    override = get_override_by_app_user_model_id(window_app_user_model_id, cur_app)
+                    spoken_forms = override.spoken_forms if override and override.spoken_forms else None
 
-        #             if not spoken_forms:
-        #                 spoken_forms = actions.user.create_spoken_forms(source=window_list[-1].title.lower(), words_to_exclude=words_to_exclude,generate_subsequences=False,)
+                    if not spoken_forms:
+                        spoken_forms = actions.user.create_spoken_forms(source=window_list[-1].title.lower(), words_to_exclude=words_to_exclude,generate_subsequences=False,)
 
-        #             for spoken_form in spoken_forms:
-        #                 running[spoken_form] = mapping
+                    for spoken_form in spoken_forms:
+                        running[spoken_form] = mapping
 
-        #             app_frame_host_cache[window_app_user_model_id.lower()] = True
-
-
+                    app_frame_host_cache[window_app_user_model_id.lower()] = True
 
     for cur_app in foreground_apps:
         #print(f"{cur_app.name} {cur_app.exe}")
@@ -291,7 +289,10 @@ def update_running_list():
 
 
         if app.platform == "windows":
-            is_windows_app =  exe == "applicationframehost.exe" or  "windowsapps" in exe_path or "systemapps" in exe_path
+            if exe == "applicationframehost.exe":
+                continue
+            
+            is_windows_app = "windowsapps" in exe_path or "systemapps" in exe_path
 
             valid_windows = get_valid_windows_by_app_user_model_id(cur_app)
 
