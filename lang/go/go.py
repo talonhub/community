@@ -81,6 +81,7 @@ operators = Operators(
     ASSIGNMENT_INCREMENT="++",
     ASSIGNMENT_BITWISE_AND=" &= ",
     ASSIGNMENT_BITWISE_OR=" |= ",
+    ASSIGNMENT_BITWISE_EXCLUSIVE_OR=" ^= ",
     ASSIGNMENT_BITWISE_LEFT_SHIFT=" <<= ",
     ASSIGNMENT_BITWISE_RIGHT_SHIFT=" >>= ",
     # code_operators_bitwise
