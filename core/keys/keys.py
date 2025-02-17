@@ -1,6 +1,15 @@
 from talon import Context, Module, actions, app
+from .symbols import symbols_command_and_dictation, symbols_dictation, dragon_symbols_command_and_dictation
 
 mod = Module()
+ctx = Context()
+
+ctx_dragon = Context()
+ctx_dragon = Context()
+ctx_dragon.matches = r"""
+speech.engine: dragon
+"""
+
 mod.list("letter", desc="The spoken phonetic alphabet")
 mod.list("symbol_key", desc="All symbols from the keyboard")
 mod.list("arrow_key", desc="All arrow keys")
@@ -112,3 +121,7 @@ class Actions:
                 getattr(actions.edit, d)()
             else:
                 raise RuntimeError(f"invalid arrow key: {d}")
+
+ctx.lists["self.punctuation"] = symbols_dictation
+ctx.lists["self.symbol_key"] = symbols_command_and_dictation
+ctx_dragon.lists["self.symbol_key"] = dragon_symbols_command_and_dictation
