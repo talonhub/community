@@ -8,8 +8,9 @@ dragon_symbols_command_and_dictation = {
     ",": ",",
 }
 
-# define the spoken forms for symbols that are intended for dictation mode only
-symbols_dictation = {}
+# define the spoken forms for symbols that are intended for command mode only
+# e.g. for keys
+symbols_command = {}
 
 # define spoken form for symbols for use in create_spoken_forms.py functionality
 # we define a handful of symbol only. at present, this is restricted to one entry per symbol.
@@ -25,10 +26,10 @@ symbols_for_create_spoken_forms = {
 
 class Symbol:
     character: str
-    dictation_forms: list[str] = None
+    command_forms: list[str] = None
     command_and_dictation_forms: list[str] = None
 
-    def __init__(self, character: str, command_and_dictation_forms: str | list[str] = None, dictation_forms: str | list[str] = None):
+    def __init__(self, character: str, command_and_dictation_forms: str | list[str] = None, command_forms: str | list[str] = None):
         if len(character) != 1:
             raise ValueError(f"character must be a single character, got: '{character}'")
         
@@ -39,9 +40,9 @@ class Symbol:
                 [command_and_dictation_forms] if isinstance(command_and_dictation_forms, str) else command_and_dictation_forms
             )
 
-        if dictation_forms:
-            self.dictation_forms = (
-                [dictation_forms] if isinstance(dictation_forms, str) else dictation_forms
+        if command_forms:
+            self.command_forms = (
+                [command_forms] if isinstance(command_forms, str) else command_forms
             )
 
 currency_symbols = [
@@ -91,10 +92,9 @@ for symbol in symbols:
     if symbol.command_and_dictation_forms:
         for spoken_form in symbol.command_and_dictation_forms:
             symbols_command_and_dictation[spoken_form] = symbol.character
-            symbols_dictation[spoken_form] = symbol.character
+            symbols_command[spoken_form] = symbol.character
             dragon_symbols_command_and_dictation[spoken_form] = symbol.character
 
-    if symbol.dictation_forms:
-        for spoken_form in symbol.dictation_forms:
-            symbols_dictation[spoken_form] = symbol.character
-            dragon_symbols_command_and_dictation[spoken_form] = symbol.character
+    if symbol.command_forms:
+        for spoken_form in symbol.command_forms:
+            symbols_command[spoken_form] = symbol.character

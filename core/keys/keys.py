@@ -1,5 +1,5 @@
 from talon import Context, Module, actions, app
-from .symbols import symbols_command_and_dictation, symbols_dictation, dragon_symbols_command_and_dictation
+from .symbols import symbols_command_and_dictation, symbols_command, dragon_symbols_command_and_dictation
 
 mod = Module()
 ctx = Context()
@@ -111,17 +111,6 @@ def letters(m) -> str:
     "Multiple letter keys"
     return "".join(m.letter_list)
 
-
-@mod.action_class
-class Actions:
-    def move_cursor(s: str):
-        """Given a sequence of directions, eg. 'left left up', moves the cursor accordingly using edit.{left,right,up,down}."""
-        for d in s.split():
-            if d in ("left", "right", "up", "down"):
-                getattr(actions.edit, d)()
-            else:
-                raise RuntimeError(f"invalid arrow key: {d}")
-
-ctx.lists["self.punctuation"] = symbols_dictation
-ctx.lists["self.symbol_key"] = symbols_command_and_dictation
+ctx.lists["self.punctuation"] = symbols_command_and_dictation
+ctx.lists["self.symbol_key"] = symbols_command
 ctx_dragon.lists["self.symbol_key"] = dragon_symbols_command_and_dictation
