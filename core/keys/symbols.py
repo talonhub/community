@@ -9,7 +9,6 @@ dragon_symbols_command_and_dictation = {
 }
 
 # define the spoken forms for symbols that are intended for command mode only
-# e.g. for keys
 symbols_command = {}
 
 # define spoken form for symbols for use in create_spoken_forms.py functionality
@@ -21,7 +20,7 @@ symbols_for_create_spoken_forms = {
     "at": "@",
     "dot": ".",
     # for application names like "notepad++"
-    "plus": "+"
+    "plus": "+",
 }
 
 class Symbol:
@@ -29,12 +28,9 @@ class Symbol:
     command_forms: list[str] = None
     command_and_dictation_forms: list[str] = None
 
-    def __init__(self, character: str, command_and_dictation_forms: str | list[str] = None, command_forms: str | list[str] = None):
-        if len(character) != 1:
-            raise ValueError(f"character must be a single character, got: '{character}'")
-        
+    def __init__(self, character: str, command_and_dictation_forms = None, command_forms = None):
         self.character = character
-        
+
         if command_and_dictation_forms:
             self.command_and_dictation_forms = (
                 [command_and_dictation_forms] if isinstance(command_and_dictation_forms, str) else command_and_dictation_forms
