@@ -321,26 +321,24 @@ def update_running_list():
                 if isinstance(override, Application) or isinstance(override, ApplicationGroup):
                     uuid = override.unique_identifier
 
-                # in many cases, apps will only have one active id, so skip the window-specific logic in that case.     
-                if len(valid_windows) > 1:        
-                    for window_app_user_model_id, window_list in valid_windows.items():
-                        # most applications won't set this
-                        if (window_app_user_model_id != "None" 
-                            and uuid != window_app_user_model_id):
-                            window_override = None
-                            window = window_list[-1]
+                for window_app_user_model_id, window_list in valid_windows.items():
+                    # most applications won't set this
+                    if (window_app_user_model_id != "None"): 
+                        #and uuid != window_app_user_model_id):
+                        window_override = None
+                        window = window_list[-1]
 
-                            window_override = get_override_by_app_user_model_id(window_app_user_model_id, cur_app)
+                        window_override = get_override_by_app_user_model_id(window_app_user_model_id, cur_app)
 
-                            spoken_forms = window_override.spoken_forms if window_override and window_override.spoken_forms else None
-                            mapping = f"{cur_app.name}-::*::-{window_app_user_model_id}"
+                        spoken_forms = window_override.spoken_forms if window_override and window_override.spoken_forms else None
+                        mapping = f"{cur_app.name}-::*::-{window_app_user_model_id}"
 
-                            if spoken_forms:
-                                for spoken_form in spoken_forms:
-                                    if spoken_form not in running:
-                                        running[spoken_form] = mapping
-                            else:
-                                generate_spoken_form_map[window.title if not window_override else window_override.display_name] = mapping                 
+                        if spoken_forms:
+                            for spoken_form in spoken_forms:
+                                if spoken_form not in running:
+                                    running[spoken_form] = mapping
+                        else:
+                            generate_spoken_form_map[window.title if not window_override else window_override.display_name] = mapping                 
         else:
             override = get_override_for_running_app(cur_app)
             
@@ -390,7 +388,7 @@ def update_running_list():
                     for spoken_form in override.spoken_forms:
                         mapping = cur_app.name
                         if cur_app.name == "Microsoft Edge":
-                            mapping = f"{cur_app.name}-::*::-MSEdge"
+                            continue
                         running[spoken_form] = mapping
                 else:
                     generate_spoken_form_map[override.display_name] = cur_app.name   
