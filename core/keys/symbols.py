@@ -29,12 +29,16 @@ class Symbol:
     command_forms: list[str] = None
     command_and_dictation_forms: list[str] = None
 
-    def __init__(self, character: str, command_and_dictation_forms = None, command_forms = None):
+    def __init__(
+        self, character: str, command_and_dictation_forms=None, command_forms=None
+    ):
         self.character = character
 
         if command_and_dictation_forms:
             self.command_and_dictation_forms = (
-                [command_and_dictation_forms] if isinstance(command_and_dictation_forms, str) else command_and_dictation_forms
+                [command_and_dictation_forms]
+                if isinstance(command_and_dictation_forms, str)
+                else command_and_dictation_forms
             )
 
         if command_forms:
