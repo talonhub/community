@@ -42,7 +42,6 @@ def after_line_down():
     actions.edit.down()
     actions.edit.line_end()
 
-
 def select_lines(action, direction, count):
     if direction == "lineUp":
         selection_callback = actions.edit.extend_line_up
