@@ -81,11 +81,12 @@ operators = Operators(
     MATH_NOT="!",
 )
 
+
 @ctx.action_class("user")
 class UserActions:
     def code_get_operators() -> Operators:
         return operators
-        
+
     def code_comment_line_prefix():
         actions.insert("// ")
 
