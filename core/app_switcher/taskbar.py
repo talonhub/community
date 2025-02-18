@@ -1,9 +1,18 @@
 from talon.windows.ax import Element
-from talon import Context, Module, actions, app, imgui, ui, resource, canvas, ctrl
+from talon import Context, Module, actions, app, imgui, ui, resource, canvas, ctrl, settings
 from dataclasses import dataclass, asdict
 from talon.ui import Rect
 import math
 import platform
+
+mod = Module()
+
+mod.setting(
+    "talon_icon_index",
+    type=int,
+    default=0,
+    desc="index of the talent icon in the taskbar",
+)
 
 def first_matching_child(element, **kw):
     if len(kw) > 1:
@@ -24,15 +33,16 @@ mod = Module()
 class Actions:
     def switcher_click(mouse_button: int, index: int):
         """"""
-        if index == 0:
+        if index == settings.get("user.talon_icon_index"):
             return
+        
         x, y = ctrl.mouse_pos()
         actions.mouse_move(position_cache[index].x, position_cache[index].y)
         actions.mouse_click(mouse_button)
 
-        # if mouse_button == 0:
-        #     actions.sleep("150ms")
-        #     actions.mouse_move(x, y)
+
+        actions.sleep("150ms")
+        actions.mouse_move(x, y)
 
 
 mcanvas = canvas.Canvas.from_screen(ui.main_screen())
@@ -70,7 +80,7 @@ x_start = None
 y_start = None
 
 tasklist_width = None
-def rebuild_taskbar_app_list(forced: bool = False):
+def get_windows_ten_taskbar(forced: bool = False):
     global cache, taskbar, ms_tasklist, tasklist_width
 
 
@@ -107,20 +117,64 @@ def rebuild_taskbar_app_list(forced: bool = False):
             y_start = e.rect.y
             break
 
+def get_windows_eleven_taskbar(forced: bool = False):
+    global cache, taskbar, ms_tasklist, tasklist_width
+
+    if not taskbar:
+        apps = ui.apps(name="Windows Explorer")
+        for app in apps:
+            for window in app.windows():
+                if window.cls == "Shell_TrayWnd":
+                    print("Input found")
+
+                    taskbar = window.element
+                elif window.cls == "Taskbar.TaskbarFrameAutomationPeer":
+                    print("Taskbar.TaskbarFrameAutomationPeer")
+                    for e in window.element.children:
+                        print(e.name)
+                    
+
+        if taskbar:
+            # ms_tasklist = first_matching_child(taskbar.element, class_name=["Taskbar.TaskbarFrameAutomationPeer"])            
+            show_hidden_x = None
+            for element in taskbar.children:
+                for child in element.children:
+                    for child2 in child.children:
+                        if child2.name == "Search":
+                            global width, height, x_start, y_start, tasklist_width
+
+                            tasklist_width = child.rect.width
+                            
+                            if not x_start:
+                                width = child2.rect.width
+                                height = child2.rect.height
+                                x_start = child2.rect.x
+                                y_start = child2.rect.y
+
+                    if child.name == "Show Hidden Icons":
+                        show_hidden_x = child.rect.x
+                        #print("found Hidden!")
+            
+            tasklist_width = show_hidden_x - x_start
+
+def update_canvas(register):
+    if "Windows-11" not in platform.platform():
+        get_windows_ten_taskbar(True)
+    else:
+        get_windows_eleven_taskbar(True)
+    
+    if register:
+        mcanvas.register("draw", draw_options)
+        mcanvas.freeze()
+
+        #todo: figure out screen changes
+        #ui.register("screen_change", lambda _: on_ready())
+
 if app.platform == "windows":
     # uncomment the following for quick testing
     def on_ready():
-        if "Windows-11" not in platform.platform():
-            rebuild_taskbar_app_list()
-        else:
-            global tasklist_width, height, width, x_start, y_start
-            tasklist_width = 2400
-            width = 88
-            height = 96
-            x_start = 646
-            y_start = 2090
-        mcanvas.register("draw", draw_options)
-
+        update_canvas(True)     
+        
     app.register("ready", on_ready)
 
 
