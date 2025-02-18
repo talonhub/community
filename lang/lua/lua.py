@@ -84,9 +84,11 @@ def lua_functions(m) -> str:
     "Returns a string"
     return m.lua_functions
 
- ###
- # code_operators_bitwise
- ###
+
+###
+# code_operators_bitwise
+###
+
 
 # NOTE: < 5.3 assumes Lua BitOp usage
 #       > 5.2 assumes native bitwise operators
@@ -98,11 +100,13 @@ def code_operator_bitwise_and():
     else:
         actions.insert(" bit.band() ")
 
+
 def code_operator_bitwise_or():
     if settings.get("user.lua_version") > 5.2:
         actions.insert(" | ")
     else:
         actions.insert(" bit.bor() ")
+
 
 def code_operator_bitwise_exclusive_or():
     if settings.get("user.lua_version") > 5.2:
@@ -110,11 +114,13 @@ def code_operator_bitwise_exclusive_or():
     else:
         actions.insert(" bit.xor() ")
 
+
 def code_operator_bitwise_left_shift():
     if settings.get("user.lua_version") > 5.2:
         actions.insert(" << ")
     else:
         actions.insert(" bit.lshift() ")
+
 
 def code_operator_bitwise_right_shift():
     if settings.get("user.lua_version") > 5.2:
@@ -151,6 +157,7 @@ operators = Operators(
     MATH_AND=" and ",
     MATH_OR=" or ",
 )
+
 
 @ctx.action_class("user")
 class UserActions:
