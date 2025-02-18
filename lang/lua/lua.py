@@ -125,7 +125,7 @@ def code_operator_bitwise_right_shift():
 
 operators = Operators(
     # code_operators_array
-    SUBSCRIPT=lambda: actions.user.insert_between("[", "]")
+    SUBSCRIPT=lambda: actions.user.insert_between("[", "]"),
     # code_operators_assignment
     ASSIGNMENT=" = ",
     # code_operators_bitwise
@@ -139,7 +139,9 @@ operators = Operators(
     MATH_ADD=" + ",
     MATH_MULTIPLY=" * ",
     MATH_DIVIDE=" / ",
+    MATH_FLOOR_DIVIDE=" // ",
     MATH_MODULO=" % ",
+    MATH_EXPONENT=" ^ ",
     MATH_EQUAL=" == ",
     MATH_NOT_EQUAL=" ~= ",
     MATH_GREATER_THAN=" > ",
