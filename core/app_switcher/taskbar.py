@@ -56,7 +56,7 @@ def draw_options(canvas):
     paint.textsize = 20
 
     x = x_start
-    y = y_start + math.floor(height / 2)
+    y = y_start + 70
     for index in range(1, count + 1):
         paint.style = paint.Style.FILL
         paint.color = "000000"
@@ -64,8 +64,8 @@ def draw_options(canvas):
 
         paint.color = "ffffff"
 
-        position = Position(x + width / 2 + 17, y + 20)
-        canvas.draw_text(f"{index}", position.x, position.y)
+        position = Position(x + width / 2 + width / 5.5, y+ height / 5.5)
+        canvas.draw_text(f"{index}", position.x, position.y )
 
         position_cache.append(position)
         x = x + width
@@ -125,14 +125,8 @@ def get_windows_eleven_taskbar(forced: bool = False):
         for app in apps:
             for window in app.windows():
                 if window.cls == "Shell_TrayWnd":
-                    print("Input found")
-
                     taskbar = window.element
-                elif window.cls == "Taskbar.TaskbarFrameAutomationPeer":
-                    print("Taskbar.TaskbarFrameAutomationPeer")
-                    for e in window.element.children:
-                        print(e.name)
-                    
+                    break
 
         if taskbar:
             # ms_tasklist = first_matching_child(taskbar.element, class_name=["Taskbar.TaskbarFrameAutomationPeer"])            
