@@ -53,14 +53,14 @@ operators = Operators(
     ASSIGNMENT_DIVISION=" /= ",
     ASSIGNMENT_MODULO=" %= ",
     ASSIGNMENT_INCREMENT="++",
+    ASSIGNMENT_BITWISE_LEFT_SHIFT=" <<= ",
+    ASSIGNMENT_BITWISE_RIGHT_SHIFT=" >>= ",
     # code_operators_bitwise
     BITWISE_AND=" & ",
     BITWISE_OR=" | ",
     BITWISE_EXCLUSIVE_OR=" ^ ",
     BITWISE_LEFT_SHIFT=" << ",
-    ASSIGNMENT_BITWISE_LEFT_SHIFT=" <<= ",
     BITWISE_RIGHT_SHIFT=" >> ",
-    ASSIGNMENT_BITWISE_RIGHT_SHIFT=" >>= ",
     # code_operators_lambda
     LAMBDA=" -> ",
     # code_operators_bitwise
