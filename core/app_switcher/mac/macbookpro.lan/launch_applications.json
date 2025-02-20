@@ -15,7 +15,10 @@
         "unique_identifier": "com.apple.ActivityMonitor",
         "executable_name": "Activity Monitor",
         "exclude": false,
-        "spoken_forms": ["task manager", "activity monitor"],
+        "spoken_forms": [
+            "task manager",
+            "activity monitor"
+        ],
         "application_group": null,
         "is_default_for_application_group": false
     },
@@ -45,7 +48,10 @@
         "unique_identifier": "com.apple.AppStore",
         "executable_name": "App Store",
         "exclude": false,
-        "spoken_forms": ["store", "app store"],
+        "spoken_forms": [
+            "store",
+            "app store"
+        ],
         "application_group": null,
         "is_default_for_application_group": false
     },
@@ -85,7 +91,10 @@
         "unique_identifier": "com.ScooterSoftware.BeyondCompare",
         "executable_name": "BCompare",
         "exclude": false,
-        "spoken_forms": ["compare", "beyond compare"],
+        "spoken_forms": [
+            "compare",
+            "beyond compare"
+        ],
         "application_group": null,
         "is_default_for_application_group": false
     },
@@ -270,6 +279,16 @@
         "is_default_for_application_group": false
     },
     {
+        "path": "/Applications/Discord.app",
+        "display_name": "Discord",
+        "unique_identifier": "com.hnc.Discord",
+        "executable_name": "Discord",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
         "path": "/Users/knausj/Applications/Discord.app",
         "display_name": "Discord",
         "unique_identifier": "com.apple.Safari.WebApp.75652608-4A3F-4B48-9317-3C2516AA5CE1",
@@ -295,7 +314,10 @@
         "unique_identifier": "app.everyday",
         "executable_name": "Everyday Habit Tracker",
         "exclude": false,
-        "spoken_forms": ["habit tracker", "habit"],
+        "spoken_forms": [
+            "habit tracker",
+            "habit"
+        ],
         "application_group": null,
         "is_default_for_application_group": false
     },
@@ -375,7 +397,10 @@
         "unique_identifier": "com.github.GitHubClient",
         "executable_name": "GitHub Desktop",
         "exclude": false,
-        "spoken_forms": ["gitter", "git hub"],
+        "spoken_forms": [
+            "gitter",
+            "git hub"
+        ],
         "application_group": null,
         "is_default_for_application_group": false
     },
@@ -385,7 +410,11 @@
         "unique_identifier": "com.apple.Safari.WebApp.85038FE5-E720-4773-8851-EC5FA8FF4971",
         "executable_name": null,
         "exclude": false,
-        "spoken_forms": ["gmail", "outer", "mail"],
+        "spoken_forms": [
+            "gmail",
+            "outer",
+            "mail"
+        ],
         "application_group": null,
         "is_default_for_application_group": false
     },
@@ -495,7 +524,9 @@
         "unique_identifier": "com.apple.mail",
         "executable_name": "Mail",
         "exclude": true,
-        "spoken_forms": ["apple mail"],
+        "spoken_forms": [
+            "apple mail"
+        ],
         "application_group": null,
         "is_default_for_application_group": false
     },
@@ -515,7 +546,10 @@
         "unique_identifier": "com.apple.MobileSMS",
         "executable_name": "Messages",
         "exclude": false,
-        "spoken_forms": ["messer", "messages"],
+        "spoken_forms": [
+            "messer",
+            "messages"
+        ],
         "application_group": null,
         "is_default_for_application_group": false
     },
@@ -525,7 +559,9 @@
         "unique_identifier": "com.microsoft.Excel",
         "executable_name": "Microsoft Excel",
         "exclude": false,
-        "spoken_forms": ["excel"],
+        "spoken_forms": [
+            "excel"
+        ],
         "application_group": null,
         "is_default_for_application_group": false
     },
@@ -535,7 +571,9 @@
         "unique_identifier": "com.microsoft.onenote.mac",
         "executable_name": "Microsoft OneNote",
         "exclude": false,
-        "spoken_forms": ["one note"],
+        "spoken_forms": [
+            "one note"
+        ],
         "application_group": null,
         "is_default_for_application_group": false
     },
@@ -555,7 +593,9 @@
         "unique_identifier": "com.microsoft.Powerpoint",
         "executable_name": "Microsoft PowerPoint",
         "exclude": false,
-        "spoken_forms": ["powerpoint"],
+        "spoken_forms": [
+            "powerpoint"
+        ],
         "application_group": null,
         "is_default_for_application_group": false
     },
@@ -565,7 +605,9 @@
         "unique_identifier": "com.microsoft.teams",
         "executable_name": "Teams",
         "exclude": false,
-        "spoken_forms": ["teams"],
+        "spoken_forms": [
+            "teams"
+        ],
         "application_group": null,
         "is_default_for_application_group": false
     },
@@ -765,7 +807,9 @@
         "unique_identifier": "com.apple.QuickTimePlayerX",
         "executable_name": "QuickTime Player",
         "exclude": false,
-        "spoken_forms": ["quick time"],
+        "spoken_forms": [
+            "quick time"
+        ],
         "application_group": null,
         "is_default_for_application_group": false
     },
@@ -805,7 +849,11 @@
         "unique_identifier": "com.apple.Safari",
         "executable_name": "Safari",
         "exclude": false,
-        "spoken_forms": ["portal", "edge", "safari"],
+        "spoken_forms": [
+            "portal",
+            "edge",
+            "safari"
+        ],
         "application_group": null,
         "is_default_for_application_group": false
     },
@@ -825,7 +873,10 @@
         "unique_identifier": "com.apple.screenshot.launcher",
         "executable_name": "Screenshot",
         "exclude": false,
-        "spoken_forms": ["screenshot", "capture"],
+        "spoken_forms": [
+            "screenshot",
+            "capture"
+        ],
         "application_group": null,
         "is_default_for_application_group": false
     },
@@ -875,7 +926,11 @@
         "unique_identifier": "com.apple.Safari.WebApp.A240B276-0EFC-4A6C-B441-34814CCA8028",
         "executable_name": null,
         "exclude": false,
-        "spoken_forms": ["slacker", "messy", "slack"],
+        "spoken_forms": [
+            "slacker",
+            "messy",
+            "slack"
+        ],
         "application_group": null,
         "is_default_for_application_group": false
     },
@@ -1065,7 +1120,10 @@
         "unique_identifier": "com.microsoft.VSCode",
         "executable_name": "Electron",
         "exclude": false,
-        "spoken_forms": ["coder", "stupid test"],
+        "spoken_forms": [
+            "coder",
+            "stupid test"
+        ],
         "application_group": null,
         "is_default_for_application_group": false
     },
@@ -1155,7 +1213,11 @@
         "unique_identifier": "com.apple.ScreenContinuity",
         "executable_name": "iPhone Mirroring",
         "exclude": false,
-        "spoken_forms": ["iPhone", "phone", "mirror"],
+        "spoken_forms": [
+            "iPhone",
+            "phone",
+            "mirror"
+        ],
         "application_group": null,
         "is_default_for_application_group": false
     },
@@ -1175,7 +1237,9 @@
         "unique_identifier": "us.zoom.xos",
         "executable_name": "zoom.us",
         "exclude": false,
-        "spoken_forms": ["zoom"],
+        "spoken_forms": [
+            "zoom"
+        ],
         "application_group": null,
         "is_default_for_application_group": false
     }
