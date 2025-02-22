@@ -117,6 +117,7 @@ class TalonPythonActions:
         else:
             actions.user.paste(f'ctx.settings["{setting}"] = ')
 
+
 operators = Operators(
     MATH_AND=" and ",
     MATH_OR=" or ",
@@ -126,6 +127,7 @@ operators = Operators(
     MATH_DIVIDE=" / ",
     ASSIGNMENT=" = ",
 )
+
 
 @ctx_talon.action_class("user")
 class UserActions:
