@@ -70,7 +70,7 @@ class Operators(TypedDict, total=False):
     MATH_EXPONENT: Operator
     MATH_EQUAL: Operator
     MATH_NOT_EQUAL: Operator
-    #For weak comparison operators. Strict comparison should use standard operators.
+    # For weak comparison operators. Strict comparison should use standard operators.
     MATH_WEAK_EQUAL: Operator
     MATH_WEAK_NOT_EQUAL: Operator
     MATH_GREATER_THAN: Operator
