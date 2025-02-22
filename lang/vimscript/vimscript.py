@@ -44,6 +44,7 @@ def vimscript_scope(m) -> str:
     "Returns a string"
     return m.vimscript_scope
 
+
 operators = Operators(
     # code_operators_assignment
     ASSIGNMENT=" = ",
@@ -57,6 +58,7 @@ operators = Operators(
     MATH_MULTIPLY=" * ",
     MATH_DIVIDE=" / ",
 )
+
 
 @ctx.action_class("user")
 class UserActions:
