@@ -15,3 +15,6 @@ power: MATH_EXPONENT
 and: MATH_AND
 or: MATH_OR
 not: MATH_NOT
+weak and: MATH_WEAK_AND
+weak or: MATH_WEAK_OR
+weak not: MATH_WEAK_NOT
