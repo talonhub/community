@@ -1,5 +1,13 @@
 language: python
 ---
+
+name: talonModuleDeclaration
+phrase: module
+insertionScope: statement
+-
+mod = Module()
+---
+
 name: talonListDeclaration
 phrase: list
 insertionScope: class | statement
@@ -12,6 +20,12 @@ mod.list(
 $0
 ---
 
+name: talonContextDeclaration
+phrase: context
+insertionScope: statement
+-
+ctx = Context()
+---
 
 name: talonAppDeclaration
 phrase: module app
@@ -77,6 +91,13 @@ class $2Actions:
     $0
 ---
 
+name: suppressError
+phrase: suppress error
+-
+with suppress(AttributeError):
+    $0
+---
+
 name: talonSettingsDeclaration
 phrase: module setting
 insertionScope: class | statement
@@ -87,4 +108,32 @@ mod.setting("$1",
     desc="""$4"""
 )
 $0
+---
+
+name: listComprehension
+phrase: list comp
+insertionScope: statement
+-
+[$2 for $2 in $1 if $0]
+---
+
+name: setComprehension
+phrase: set comp
+insertionScope: statement
+-
+{$0 for $0 in $1}
+---
+
+name: dictComprehension
+phrase: dict comp
+insertionScope: statement
+-
+{$0: $2 for $2 in $1}
+---
+
+name: generatorExpression
+phrase: gen comp
+insertionScope: statement
+-
+($2 for $2 in $1 if $0)
 ---
