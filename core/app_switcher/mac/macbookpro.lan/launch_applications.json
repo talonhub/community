@@ -469,6 +469,16 @@
         "is_default_for_application_group": false
     },
     {
+        "path": "/System/Applications/Image Playground.app",
+        "display_name": "Image Playground",
+        "unique_identifier": "com.apple.GenerativePlaygroundApp",
+        "executable_name": "Image Playground",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
         "path": "/Applications/Karabiner-Elements.app",
         "display_name": "Karabiner-Elements",
         "unique_identifier": "org.pqrs.Karabiner-Elements.Preferences",
