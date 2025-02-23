@@ -1,0 +1,29 @@
+name: importStatement
+phrase: import
+
+---
+
+language: javascript | typescript | javascriptreact | typescriptreact
+-
+import $0 from "$0";
+---
+
+language: python
+-
+import $0
+---
+
+name: importStarStatement
+phrase: import star
+
+---
+
+language: javascript | typescript | javascriptreact | typescriptreact
+-
+import * as $0 from "$0";
+---
+
+language: python
+-
+from $0 import *
+---
