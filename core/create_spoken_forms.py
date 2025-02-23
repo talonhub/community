@@ -228,22 +228,25 @@ def create_exploded_forms(spoken_forms: List[str]):
     new_spoken_forms = []
     for line in spoken_forms:
         exploded_form = []
-        # ex: "vm" or "usb" explodes into "V M" or "U S B"
-
+        # ex: "vm" or "usb" explodes into "V M" or "U S B"    
         if (
             " " not in line
             and line.islower()
             and len(line) > 1
             and len(line) <= EXPLODE_MAX_LEN
+            #todo: detect actual words?
+            and line not in ("run")
         ):
             new_spoken_forms.append(line)  # Keep a regular copy (ie: "nas")
             new_spoken_forms.append(" ".join(line.upper()))
         # ex: "readme" explodes into "read me"
         else:
+
             for word in line.split(" "):
                 if word in packed_words.keys():
                     exploded_form.append(packed_words[word])
                 else:
+
                     exploded_form.append(word)
             new_spoken_forms.append(" ".join(exploded_form))
     return new_spoken_forms
