@@ -56,15 +56,15 @@ def draw_options(canvas):
     paint.textsize = 20
 
     x = x_start
-    y = y_start + 70
+    y = y_start + .8 * height
     for index in range(1, count + 1):
         paint.style = paint.Style.FILL
         paint.color = "000000"
-        canvas.draw_rect(Rect(math.floor(x + width / 2), y, width / 3, height / 3))
+        canvas.draw_rect(Rect(math.floor(x + width / 2), y, width / 3, height * .8 ))
 
         paint.color = "ffffff"
 
-        position = Position(x + width / 2 + width / 5.5, y+ height / 5.5)
+        position = Position(x + width / 2 + width * .18 , y+ height * .18)
         canvas.draw_text(f"{index}", position.x, position.y )
 
         position_cache.append(position)
@@ -115,6 +115,7 @@ def get_windows_ten_taskbar(forced: bool = False):
             height = e.rect.height
             x_start = e.rect.x
             y_start = e.rect.y
+            print(f"{width}x{height}")
             break
 
 def get_windows_eleven_taskbar(forced: bool = False):
@@ -142,6 +143,7 @@ def get_windows_eleven_taskbar(forced: bool = False):
                             if not x_start:
                                 width = child2.rect.width
                                 height = child2.rect.height
+                                print(f"{width}x{height}")
                                 x_start = child2.rect.x
                                 y_start = child2.rect.y
 
