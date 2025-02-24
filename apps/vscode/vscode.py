@@ -190,7 +190,7 @@ class Actions:
         if is_mac:    
             result = os.system(f'/usr/local/bin/code {path}')
         else:
-            result = os.system(f"code {path}")
+            result = actions.user.system_command_nb(f"code {path}")
         print(result)
 
         
