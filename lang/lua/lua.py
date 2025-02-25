@@ -1,5 +1,7 @@
 from talon import Context, Module, actions, settings
 
+from ..tags.operators import Operators
+
 mod = Module()
 ctx = Context()
 ctx.matches = r"""
@@ -83,8 +85,85 @@ def lua_functions(m) -> str:
     return m.lua_functions
 
 
+###
+# code_operators_bitwise
+###
+
+
+# NOTE: < 5.3 assumes Lua BitOp usage
+#       > 5.2 assumes native bitwise operators
+# TODO: Possibly add settings to define which library to use, as 5.2
+# includes bit32. Neovim uses luajit, which uses Lua BitOp
+def code_operator_bitwise_and():
+    if settings.get("user.lua_version") > 5.2:
+        actions.insert(" & ")
+    else:
+        actions.insert(" bit.band() ")
+
+
+def code_operator_bitwise_or():
+    if settings.get("user.lua_version") > 5.2:
+        actions.insert(" | ")
+    else:
+        actions.insert(" bit.bor() ")
+
+
+def code_operator_bitwise_exclusive_or():
+    if settings.get("user.lua_version") > 5.2:
+        actions.insert(" ~ ")
+    else:
+        actions.insert(" bit.xor() ")
+
+
+def code_operator_bitwise_left_shift():
+    if settings.get("user.lua_version") > 5.2:
+        actions.insert(" << ")
+    else:
+        actions.insert(" bit.lshift() ")
+
+
+def code_operator_bitwise_right_shift():
+    if settings.get("user.lua_version") > 5.2:
+        actions.insert(" >> ")
+    else:
+        actions.insert(" bit.rshift() ")
+
+
+operators = Operators(
+    # code_operators_array
+    SUBSCRIPT=lambda: actions.user.insert_between("[", "]"),
+    # code_operators_assignment
+    ASSIGNMENT=" = ",
+    # code_operators_bitwise
+    BITWISE_AND=code_operator_bitwise_and,
+    BITWISE_OR=code_operator_bitwise_or,
+    BITWISE_EXCLUSIVE_OR=code_operator_bitwise_exclusive_or,
+    BITWISE_LEFT_SHIFT=code_operator_bitwise_left_shift,
+    BITWISE_RIGHT_SHIFT=code_operator_bitwise_right_shift,
+    # code_operators_assignment
+    MATH_SUBTRACT=" - ",
+    MATH_ADD=" + ",
+    MATH_MULTIPLY=" * ",
+    MATH_DIVIDE=" / ",
+    MATH_INTEGER_DIVIDE=" // ",
+    MATH_MODULO=" % ",
+    MATH_EXPONENT=" ^ ",
+    MATH_EQUAL=" == ",
+    MATH_NOT_EQUAL=" ~= ",
+    MATH_GREATER_THAN=" > ",
+    MATH_GREATER_THAN_OR_EQUAL=" >= ",
+    MATH_LESS_THAN=" < ",
+    MATH_LESS_THAN_OR_EQUAL=" <= ",
+    MATH_AND=" and ",
+    MATH_OR=" or ",
+)
+
+
 @ctx.action_class("user")
 class UserActions:
+    def code_get_operators() -> Operators:
+        return operators
+
     # tag-related actions listed first, indicated by comment. corresponds to
     # the tag(): user.code_imperative style declaration in the language .talon
     # file
@@ -209,97 +288,5 @@ class UserActions:
 
     def code_insert_library(text: str, selection: str):
         actions.insert(f"local {selection} = require('{selection}')")
-
-    ##
-    # code_operators_array
-    ##
-    def code_operator_subscript():
-        actions.user.insert_between("[", "]")
-
-    ##
-    # code_operators_assignment
-    ##
-    def code_operator_assignment():
-        actions.insert(" = ")
-
-    ##
-    # code_operators_math
-    ##
-    def code_operator_subtraction():
-        actions.insert(" - ")
-
-    def code_operator_addition():
-        actions.insert(" + ")
-
-    def code_operator_multiplication():
-        actions.insert(" * ")
-
-    def code_operator_division():
-        actions.insert(" / ")
-
-    def code_operator_modulo():
-        actions.insert(" % ")
-
-    def code_operator_equal():
-        actions.insert(" == ")
-
-    def code_operator_not_equal():
-        actions.insert(" ~= ")
-
-    def code_operator_greater_than():
-        actions.insert(" > ")
-
-    def code_operator_greater_than_or_equal_to():
-        actions.insert(" >= ")
-
-    def code_operator_less_than():
-        actions.insert(" < ")
-
-    def code_operator_less_than_or_equal_to():
-        actions.insert(" <= ")
-
-    def code_operator_and():
-        actions.insert(" and ")
-
-    def code_operator_or():
-        actions.insert(" or ")
-
-    ###
-    # code_operators_bitwise
-    ###
-
-    # NOTE: < 5.3 assumes Lua BitOp usage
-    #       > 5.2 assumes native bitwise operators
-    # TODO: Possibly add settings to define which library to use, as 5.2
-    # includes bit32. Neovim uses luajit, which uses Lua BitOp
-    def code_operator_bitwise_and():
-        if settings.get("user.lua_version") > 5.2:
-            actions.insert(" & ")
-        else:
-            actions.insert(" bit.band() ")
-
-    def code_operator_bitwise_or():
-        if settings.get("user.lua_version") > 5.2:
-            actions.insert(" | ")
-        else:
-            actions.insert(" bit.bor() ")
-
-    def code_operator_bitwise_exclusive_or():
-        if settings.get("user.lua_version") > 5.2:
-            actions.insert(" ~ ")
-        else:
-            actions.insert(" bit.xor() ")
-
-    def code_operator_bitwise_left_shift():
-        if settings.get("user.lua_version") > 5.2:
-            actions.insert(" << ")
-        else:
-            actions.insert(" bit.lshift() ")
-
-    def code_operator_bitwise_right_shift():
-        if settings.get("user.lua_version") > 5.2:
-            actions.insert(" >> ")
-        else:
-            actions.insert(" bit.rshift() ")
 
     # non-tag related actions
