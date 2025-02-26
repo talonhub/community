@@ -62,6 +62,7 @@ ctx.lists["user.code_type"] = {
 }
 
 ctx.lists["user.code_keyword"] = {
+    "assert": "assert ",
     "break": "break",
     "continue": "continue",
     "class": "class ",
@@ -69,6 +70,7 @@ ctx.lists["user.code_keyword"] = {
     "import": "import ",
     "null": "None",
     "none": "None",
+    "pass": "pass",
     "true": "True",
     "false": "False",
     "yield": "yield ",
