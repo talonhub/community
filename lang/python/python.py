@@ -177,6 +177,7 @@ operators = Operators(
     MATH_ADD=" + ",
     MATH_MULTIPLY=" * ",
     MATH_DIVIDE=" / ",
+    MATH_INTEGER_DIVIDE=" // ",
     MATH_MODULO=" % ",
     MATH_EXPONENT=" ** ",
     MATH_EQUAL=" == ",
