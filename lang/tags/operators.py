@@ -66,6 +66,7 @@ class Operators(TypedDict, total=False):
     MATH_ADD: Operator
     MATH_MULTIPLY: Operator
     MATH_DIVIDE: Operator
+    MATH_INTEGER_DIVIDE: Operator
     MATH_MODULO: Operator
     MATH_EXPONENT: Operator
     MATH_EQUAL: Operator
