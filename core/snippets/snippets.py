@@ -123,7 +123,7 @@ def get_preferred_snippet(snippets: list[Snippet]) -> Snippet:
 
 def split_wrapper_snippet_name(name: str) -> tuple[str, str]:
     index = name.rindex(".")
-    return name[:index], name[index + 1]
+    return name[:index], name[index + 1 :]
 
 
 def to_wrapper_snippet(snippet: Snippet, variable_name) -> WrapperSnippet:
