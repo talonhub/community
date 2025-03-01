@@ -1,5 +1,7 @@
 from talon import Context, actions, settings
 
+from ..tags.operators import Operators
+
 ctx = Context()
 
 ctx.matches = r"""
@@ -239,56 +241,31 @@ ctx.lists["user.code_parameter_name"] = {
     "why min": "ymin",
 }
 
+operators = Operators(
+    # code_operators_assignment
+    ASSIGNMENT=" <- ",
+    # code_operators_math
+    MATH_SUBTRACT=" - ",
+    MATH_ADD=" + ",
+    MATH_MULTIPLY=" * ",
+    MATH_EXPONENT=" ** ",
+    MATH_DIVIDE=" / ",
+    MATH_MODULO=" %% ",
+    MATH_EQUAL=" == ",
+    MATH_NOT_EQUAL=" != ",
+    MATH_GREATER_THAN=" > ",
+    MATH_GREATER_THAN_OR_EQUAL=" >= ",
+    MATH_LESS_THAN=" < ",
+    MATH_LESS_THAN_OR_EQUAL=" <= ",
+    MATH_AND=" & ",
+    MATH_OR=" | ",
+    BITWISE_AND=" & ",
+)
 
 @ctx.action_class("user")
 class UserActions:
-    def code_operator_assignment():
-        actions.auto_insert(" <- ")
-
-    def code_operator_subtraction():
-        actions.auto_insert(" - ")
-
-    def code_operator_addition():
-        actions.auto_insert(" + ")
-
-    def code_operator_multiplication():
-        actions.auto_insert(" * ")
-
-    def code_operator_exponent():
-        actions.auto_insert(" ** ")
-
-    def code_operator_division():
-        actions.auto_insert(" / ")
-
-    def code_operator_modulo():
-        actions.auto_insert(" %% ")
-
-    def code_operator_equal():
-        actions.auto_insert(" == ")
-
-    def code_operator_not_equal():
-        actions.auto_insert(" != ")
-
-    def code_operator_greater_than():
-        actions.auto_insert(" > ")
-
-    def code_operator_greater_than_or_equal_to():
-        actions.auto_insert(" >= ")
-
-    def code_operator_less_than():
-        actions.auto_insert(" < ")
-
-    def code_operator_less_than_or_equal_to():
-        actions.auto_insert(" <= ")
-
-    def code_operator_and():
-        actions.auto_insert(" & ")
-
-    def code_operator_or():
-        actions.auto_insert(" | ")
-
-    def code_operator_bitwise_and():
-        actions.auto_insert(" & ")
+    def code_get_operators() -> Operators:
+        return operators
 
     def code_insert_null():
         actions.auto_insert("NULL")
