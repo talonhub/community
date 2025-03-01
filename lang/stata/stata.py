@@ -1,5 +1,7 @@
 from talon import Context, actions, settings
 
+from ..tags.operators import Operators
+
 ctx = Context()
 
 ctx.matches = r"""
@@ -33,9 +35,33 @@ ctx.lists["user.code_libraries"] = {
     "estout": "estout",
 }
 
+operators = Operators(
+    # code_operators_array
+    SUBSCRIPT=lambda: actions.user.insert_between("[", "]"),
+    # code_operators_assignment
+    ASSIGNMENT=" = ",
+    # code_operators_math
+    MATH_ADD=" + ",
+    MATH_SUBTRACT=" - ",
+    MATH_MULTIPLY=" * ",
+    MATH_DIVIDE=" / ",
+    MATH_MODULO=lambda: actions.user.insert_between("mod(", ")"),
+    MATH_EXPONENT=" ^ ",
+    MATH_EQUAL=" == ",
+    MATH_NOT_EQUAL=" != ",
+    MATH_GREATER_THAN=" > ",
+    MATH_GREATER_THAN_OR_EQUAL=" >= ",
+    MATH_LESS_THAN=" < ",
+    MATH_LESS_THAN_OR_EQUAL=" <= ",
+    MATH_AND=" & ",
+    MATH_OR=" | ",
+)
 
 @ctx.action_class("user")
 class UserActions:
+    def code_get_operators() -> Operators:
+        return operators
+
     # comment_line.py
     def code_comment_line_prefix():
         actions.auto_insert("* ")
@@ -114,54 +140,3 @@ class UserActions:
     def code_insert_library(text: str, selection: str):
         actions.auto_insert("ssc install ")
         actions.user.paste(text + selection)
-
-    # operators_array.py
-    def code_operator_subscript():
-        actions.user.insert_between("[", "]")
-
-    # operators_assignment.py
-    def code_operator_assignment():
-        actions.auto_insert(" = ")
-
-    # operators_math.py
-    def code_operator_subtraction():
-        actions.auto_insert(" - ")
-
-    def code_operator_addition():
-        actions.auto_insert(" + ")
-
-    def code_operator_multiplication():
-        actions.auto_insert(" * ")
-
-    def code_operator_division():
-        actions.auto_insert(" / ")
-
-    def code_operator_modulo():
-        actions.user.insert_between("mod(", ")")
-
-    def code_operator_exponent():
-        actions.auto_insert(" ^ ")
-
-    def code_operator_equal():
-        actions.auto_insert(" == ")
-
-    def code_operator_not_equal():
-        actions.auto_insert(" != ")
-
-    def code_operator_greater_than():
-        actions.auto_insert(" > ")
-
-    def code_operator_less_than():
-        actions.auto_insert(" < ")
-
-    def code_operator_greater_than_or_equal_to():
-        actions.auto_insert(" >= ")
-
-    def code_operator_less_than_or_equal_to():
-        actions.auto_insert(" <= ")
-
-    def code_operator_and():
-        actions.auto_insert(" & ")
-
-    def code_operator_or():
-        actions.auto_insert(" | ")
