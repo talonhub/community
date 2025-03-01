@@ -244,7 +244,9 @@ ctx.lists["user.code_parameter_name"] = {
 operators = Operators(
     # code_operators_assignment
     ASSIGNMENT=" <- ",
-    # code_operators_math
+    # code_operators_bitwise
+    BITWISE_AND=" & ",
+    # code_operators_math:
     MATH_SUBTRACT=" - ",
     MATH_ADD=" + ",
     MATH_MULTIPLY=" * ",
@@ -259,7 +261,7 @@ operators = Operators(
     MATH_LESS_THAN_OR_EQUAL=" <= ",
     MATH_AND=" & ",
     MATH_OR=" | ",
-    BITWISE_AND=" & ",
+    MATH_IN=" %in% ",
 )
 
 @ctx.action_class("user")
