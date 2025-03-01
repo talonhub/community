@@ -260,6 +260,8 @@ operators = Operators(
     MATH_AND=" && ",
     MATH_OR=" || ",
     ASSIGNMENT_INCREMENT=" += 1",
+    # code_operators_pointer
+    POINTER_STRUCTURE_DEREFERENCE=actions.auto_insert("*")
 )
 
 @ctx.action_class("user")
@@ -393,9 +395,6 @@ class UserActions:
         actions.user.paste(f"use {text}")
 
     # rust specific grammar
-
-    def code_operator_structure_dereference():
-        actions.auto_insert("*")
 
     def code_state_implements():
         actions.auto_insert("impl  {}")
