@@ -1,5 +1,7 @@
 from talon import Context, Module, actions
 
+from ..tags.operators import Operators
+
 ctx = Context()
 mod = Module()
 ctx.matches = r"""
@@ -45,6 +47,26 @@ module_blocks = {
 mod.list("terraform_module_block", desc="Simple Terraform Block")
 ctx.lists["self.terraform_module_block"] = module_blocks
 
+operators = Operators(
+    # code_operators_assignment
+    ASSIGNMENT=" = ",
+    # code_operators_lambda
+    LAMBDA=" => ",
+    # code_operators_math
+    MATH_ADD=" + ",
+    MATH_SUBTRACT=" - ",
+    MATH_MULTIPLY=" * ",
+    MATH_DIVIDE=" / ",
+    MATH_MODULO=" % ",
+    MATH_EQUAL=" == ",
+    MATH_NOT_EQUAL=" != ",
+    MATH_GREATER_THAN=" > ",
+    MATH_GREATER_THAN_OR_EQUAL=" >= ",
+    MATH_LESS_THAN=" < ",
+    MATH_LESS_THAN_OR_EQUAL=" <= ",
+    MATH_AND=" && ",
+    MATH_OR=" || ",
+)
 
 @mod.action_class
 class Actions:
@@ -60,6 +82,9 @@ class Actions:
 
 @ctx.action_class("user")
 class UserActions:
+    def code_get_operators() -> Operators:
+        return operators
+
     def code_terraform_module_block(text: str):
         actions.user.insert_between(text + ' "', '"')
 
@@ -75,56 +100,11 @@ class UserActions:
         actions.insert(result)
         actions.key("left")
 
-    def code_operator_assignment():
-        actions.insert(" = ")
-
-    def code_operator_subtraction():
-        actions.insert(" - ")
-
-    def code_operator_addition():
-        actions.insert(" + ")
-
-    def code_operator_multiplication():
-        actions.insert(" * ")
-
-    def code_operator_division():
-        actions.insert(" / ")
-
-    def code_operator_modulo():
-        actions.insert(" % ")
-
-    def code_operator_equal():
-        actions.insert(" == ")
-
-    def code_operator_not_equal():
-        actions.insert(" != ")
-
-    def code_operator_greater_than():
-        actions.insert(" > ")
-
-    def code_operator_greater_than_or_equal_to():
-        actions.insert(" >= ")
-
-    def code_operator_less_than():
-        actions.insert(" < ")
-
-    def code_operator_less_than_or_equal_to():
-        actions.insert(" <= ")
-
-    def code_operator_and():
-        actions.insert(" && ")
-
-    def code_operator_or():
-        actions.insert(" || ")
-
     def code_insert_true():
         actions.insert("true")
 
     def code_insert_false():
         actions.insert("false")
-
-    def code_operator_lambda():
-        actions.insert(" => ")
 
     def code_insert_null():
         actions.insert("null")
