@@ -261,7 +261,9 @@ operators = Operators(
     MATH_OR=" || ",
     ASSIGNMENT_INCREMENT=" += 1",
     # code_operators_pointer
-    POINTER_STRUCTURE_DEREFERENCE=actions.auto_insert("*")
+    POINTER_INDIRECTION="*",
+    POINTER_ADDRESS_OF="&",
+    POINTER_STRUCTURE_DEREFERENCE="*",
 )
 
 @ctx.action_class("user")
