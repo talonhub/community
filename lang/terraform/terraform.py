@@ -68,6 +68,7 @@ operators = Operators(
     MATH_OR=" || ",
 )
 
+
 @mod.action_class
 class Actions:
     def code_terraform_module_block(text: str):
