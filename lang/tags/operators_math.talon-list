@@ -7,7 +7,7 @@ minus: MATH_SUBTRACT
 plus: MATH_ADD
 times: MATH_MULTIPLY
 divide: MATH_DIVIDE
-floor divide: MATH_FLOOR_DIVIDE
+int divide: MATH_INTEGER_DIVIDE
 mod: MATH_MODULO
 power: MATH_EXPONENT
 
