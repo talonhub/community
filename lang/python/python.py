@@ -179,6 +179,7 @@ operators = Operators(
     MATH_ADD=" + ",
     MATH_MULTIPLY=" * ",
     MATH_DIVIDE=" / ",
+    MATH_INTEGER_DIVIDE=" // ",
     MATH_MODULO=" % ",
     MATH_EXPONENT=" ** ",
     MATH_EQUAL=" == ",
@@ -189,7 +190,7 @@ operators = Operators(
     MATH_LESS_THAN_OR_EQUAL=" <= ",
     MATH_AND=" and ",
     MATH_OR=" or ",
-    MATH_NOT="not ",
+    MATH_NOT=" not ",
     MATH_IN=" in ",
     MATH_NOT_IN=" not in ",
 )
