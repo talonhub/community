@@ -23,8 +23,8 @@ operators = Operators(
     MATH_LESS_THAN_OR_EQUAL=" <= ",
     MATH_IN=lambda: actions.user.insert_between(" IN (", ")"),
     MATH_NOT_IN=lambda: actions.user.insert_between(" NOT IN (", ")"),
-    MATH_AND="AND ",
-    MATH_OR="OR ",
+    MATH_AND=" AND ",
+    MATH_OR=" OR ",
 )
 
 
