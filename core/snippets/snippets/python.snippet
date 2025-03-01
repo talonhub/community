@@ -66,3 +66,31 @@ phrase: suppress error
 with suppress(AttributeError):
     $0
 ---
+
+name: listComprehension
+phrase: list comp
+insertionScope: statement
+-
+[$2 for $2 in $1 if $0]
+---
+
+name: setComprehension
+phrase: set comp
+insertionScope: statement
+-
+{$0 for $0 in $1}
+---
+
+name: dictComprehension
+phrase: dict comp
+insertionScope: statement
+-
+{$0: $2 for $2 in $1}
+---
+
+name: generatorExpression
+phrase: gen comp
+insertionScope: statement
+-
+($2 for $2 in $1 if $0)
+---
