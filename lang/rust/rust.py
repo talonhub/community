@@ -263,7 +263,6 @@ operators = Operators(
     # code_operators_pointer
     POINTER_INDIRECTION="*",
     POINTER_ADDRESS_OF="&",
-    POINTER_STRUCTURE_DEREFERENCE="*",
 )
 
 
