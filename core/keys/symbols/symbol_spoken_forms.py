@@ -1,15 +1,14 @@
-# define the spoken forms for symbols in command and dictation mode
-symbols_command_and_dictation = {}
+from .symbol import Symbol
 
 # for dragon, we add a couple of mappings that don't work for conformer
 # i.e. dragon supports some actual symbols as the spoken form
-dragon_symbols_command_and_dictation = {
+dragon_symbols = {
     "`": "`",
     ",": ",",
 }
 
 # define the spoken forms for symbols that are intended for command mode only
-symbols_command = {}
+symbols = {}
 
 # define spoken form for symbols for use in create_spoken_forms.py functionality
 # we define a handful of symbol only. at present, this is restricted to one entry per symbol.
@@ -23,30 +22,12 @@ symbols_for_create_spoken_forms = {
     "plus": "+",
 }
 
-class Symbol:
-    character: str
-    command_forms: list[str] = None
-    command_and_dictation_forms: list[str] = None
-
-    def __init__(self, character: str, command_and_dictation_forms = None, command_forms = None):
-        self.character = character
-
-        if command_and_dictation_forms:
-            self.command_and_dictation_forms = (
-                [command_and_dictation_forms] if isinstance(command_and_dictation_forms, str) else command_and_dictation_forms
-            )
-
-        if command_forms:
-            self.command_forms = (
-                [command_forms] if isinstance(command_forms, str) else command_forms
-            )
-
 currency_symbols = [
     Symbol("$", ["dollar"]),
     Symbol("£", ["pound sign"]),
 ]
 
-symbols = [
+symbols_definitions = [
     Symbol("`", ["brick"]),
     Symbol(",", ["comma", "coma", "kama", "spama"]),
     Symbol(".", ["period", "point"]),
@@ -82,15 +63,11 @@ symbols = [
 ]
 
 # by convention, symbols should include currency symbols
-symbols.extend(currency_symbols)
- 
-for symbol in symbols:
-    if symbol.command_and_dictation_forms:
-        for spoken_form in symbol.command_and_dictation_forms:
-            symbols_command_and_dictation[spoken_form] = symbol.character
-            symbols_command[spoken_form] = symbol.character
-            dragon_symbols_command_and_dictation[spoken_form] = symbol.character
+symbols_definitions.extend(currency_symbols)
 
-    if symbol.command_forms:
-        for spoken_form in symbol.command_forms:
-            symbols_command[spoken_form] = symbol.character
+# build the spoken form maps
+for symbol in symbols_definitions:
+    if symbol.spoken_forms:
+        for spoken_form in symbol.spoken_forms:
+            symbols[spoken_form] = symbol.character
+            dragon_symbols[spoken_form] = symbol.character

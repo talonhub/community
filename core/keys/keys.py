@@ -1,5 +1,5 @@
 from talon import Context, Module, actions, app
-from .symbols import symbols_command_and_dictation, symbols_command, dragon_symbols_command_and_dictation
+from .symbols.symbol_spoken_forms import symbols, dragon_symbols
 
 mod = Module()
 ctx = Context()
@@ -115,8 +115,8 @@ def letters(m) -> str:
 class Actions:
     def get_punctuation_words():
         """Gets the user.punctuation list"""
-        return symbols_command_and_dictation
+        return symbols
 
-ctx.lists["self.punctuation"] = symbols_command_and_dictation
-ctx.lists["self.symbol_key"] = symbols_command
-ctx_dragon.lists["self.symbol_key"] = dragon_symbols_command_and_dictation
+ctx.lists["self.punctuation"] = symbols
+ctx.lists["self.symbol_key"] = symbols
+ctx_dragon.lists["self.symbol_key"] = dragon_symbols
