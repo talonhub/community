@@ -1,0 +1,26 @@
+name: elseStatement
+phrase: else
+insertionScope: statement
+
+$0.wrapperPhrase: else
+$0.wrapperScope: statement
+---
+
+language: c | cpp | csharp | java | javascript | typescript | javascriptreact | typescriptreact
+-
+else {
+    $0
+}
+---
+
+language: python
+-
+else:
+    $0
+---
+
+language: lua
+-
+else
+    $0
+---

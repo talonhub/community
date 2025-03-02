@@ -1,0 +1,65 @@
+language: javascript | typescript | javascriptreact | typescriptreact
+---
+
+name: forInLoopStatement
+phrase: for in
+insertionScope: statement
+-
+for (const $1 in $2) {
+    $0
+}
+---
+
+name: anonymousFunctionDeclarationAndCall
+phrase: self calling
+-
+(() => {
+    $0
+})();
+---
+
+name: importStarStatement
+phrase: import star
+-
+import * as $0 from "$0";
+---
+
+name: importFromStatement
+phrase: import from
+-
+import $0 from "$0";
+---
+
+name: namedLambdaExpression
+phrase: arrow funk
+insertionScope: statement
+-
+const $1 = ($2) => {
+    $0
+}
+---
+
+name: printTimeStatement
+phrase: print time
+insertionScope: statement
+-
+console.time("$0");
+---
+
+name: constAssignment
+phrase: const
+insertionScope: statement
+
+$1.insertionFormatter: PRIVATE_CAMEL_CASE
+-
+const $1 = $0;
+---
+
+name: letAssignment
+phrase: let
+insertionScope: statement
+
+$1.insertionFormatter: PRIVATE_CAMEL_CASE
+-
+let $1 = $0;
+---

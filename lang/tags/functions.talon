@@ -16,7 +16,7 @@ tag: user.code_functions
 #   * pub static funky -> code_public_static_function
 #
 ^{user.code_function_modifier}* funky <user.text>$:
-  user.code_modified_function(code_function_modifier_list or 0, text)
+    user.code_modified_function(code_function_modifier_list or 0, text)
 
 # for annotating function parameters
 is type <user.code_type>: user.code_insert_type_annotation(code_type)

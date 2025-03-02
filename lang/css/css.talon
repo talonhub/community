@@ -1,5 +1,7 @@
-tag: user.css
+code.language: css
+code.language: scss
 -
+tag(): user.code_block_c_like
 tag(): user.code_comment_block_c_like
 tag(): user.code_functions_common
 tag(): user.code_libraries
@@ -23,12 +25,11 @@ rule <user.text>:
     name = user.formatted_text(text, "DASH_SEPARATED")
     insert("{name}: ")
 
-value <user.number_string> [{user.css_unit}]:
-    "{number_string}{css_unit or ''}"
+value <user.number_string> [{user.css_unit}]: "{number_string}{css_unit or ''}"
 value <user.number_string> point <digit_string> [{user.css_unit}]:
     "{number_string}.{digit_string}{css_unit or ''}"
 
-(value|state) {user.css_global_value}: "{css_global_value}"
+(value | state) {user.css_global_value}: "{css_global_value}"
 value <user.text>: user.insert_formatted(text, "DASH_SEPARATED")
 
 variable <user.text>:

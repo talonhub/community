@@ -1,0 +1,24 @@
+name: constructorDeclaration
+phrase: constructor
+insertionScope: namedFunction | statement
+---
+
+language: cpp | csharp | java
+-
+$1($2) {
+    $0
+}
+---
+
+language: javascript | typescript | javascriptreact | typescriptreact
+-
+constructor($1) {
+    $0
+}
+---
+
+language: python
+-
+def __init__(self$1):
+    $0
+---

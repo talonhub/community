@@ -1,0 +1,30 @@
+name: catchStatement
+phrase: catch
+---
+
+language: cpp
+-
+catch (const std::exception& ex) {
+    $0
+}
+---
+
+language: java | csharp
+-
+catch(final Exception ex) {
+    $0
+}
+---
+
+language: javascript | typescript | javascriptreact | typescriptreact
+-
+catch(error) {
+    $0
+}
+---
+
+language: python
+-
+except Exception as ex:
+    $0
+---

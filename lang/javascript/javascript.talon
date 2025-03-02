@@ -1,8 +1,12 @@
-tag: user.javascript
+code.language: javascript
+code.language: typescript
+code.language: javascriptreact
+code.language: typescriptreact
 -
 tag(): user.code_imperative
 tag(): user.code_object_oriented
 
+tag(): user.code_block_c_like
 tag(): user.code_comment_line
 tag(): user.code_comment_block_c_like
 tag(): user.code_data_bool
@@ -50,5 +54,4 @@ state reduce: app.notify('ERROR: Command deprecated; please use "dot reduce"')
 
 state spread: "..."
 
-from import:
-    user.insert_between(' from  "', '"')
+from import: user.insert_between(' from  "', '"')

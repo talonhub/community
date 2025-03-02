@@ -1,11 +1,10 @@
 # XXX - trigger alt-1 to hit command window for necessary commands?
 # ex: user.windbg_insert_in_cmd()
 #    edit.left()
-
-mode: user.windbg
+tag: user.windbg
 -
 tag(): user.debugger
-tag(): user.windbg
+
 register <user.registers>:
     key(@)
     insert("{registers}")
@@ -16,19 +15,14 @@ open help: insert(".hh\n")
 
 add microsoft symbols:
     insert("srv*C:\\symbols*http://msdl.microsoft.com/download/symbols;\n")
-force reload symbols:
-    insert(".reload /f\n")
-reload symbols:
-    insert(".reload\n")
-loaded modules:
-    insert("lm l\n")
+force reload symbols: insert(".reload /f\n")
+reload symbols: insert(".reload\n")
+loaded modules: insert("lm l\n")
 
-display pointers:
-    insert("dps ")
+display pointers: insert("dps ")
 
 # XXX - should be generic
-dereference pointer:
-    user.insert_between("poi(", ")")
+dereference pointer: user.insert_between("poi(", ")")
 
 show version: key(ctrl-alt-w)
 
@@ -44,9 +38,9 @@ view memory: key(alt-5)
 view call stack: key(alt-6)
 view disassembly: key(alt-7)
 view scratch pad: key(alt-8)
-view (processes|threads): key(alt-9)
+view (processes | threads): key(alt-9)
 
 # XXX - temp
 dump function params: "r @rcx,@rdx,@r8,@r9\n"
 
-(lib|library) <user.windows_dlls>: "{windows_dlls}"
+(lib | library) <user.windows_dlls>: "{windows_dlls}"

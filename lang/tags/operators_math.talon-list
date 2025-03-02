@@ -1,0 +1,17 @@
+list: user.code_operators_math
+tag: user.code_operators_math
+-
+
+# Math operators
+minus: MATH_SUBTRACT
+plus: MATH_ADD
+times: MATH_MULTIPLY
+divide: MATH_DIVIDE
+int divide: MATH_INTEGER_DIVIDE
+mod: MATH_MODULO
+power: MATH_EXPONENT
+
+# logical operators
+and: MATH_AND
+or: MATH_OR
+not: MATH_NOT

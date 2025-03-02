@@ -1,0 +1,96 @@
+language: python
+---
+
+name: talonModuleDeclaration
+phrase: module
+insertionScope: statement
+-
+mod = Module()
+---
+
+name: talonContextDeclaration
+phrase: context
+insertionScope: statement
+-
+ctx = Context()
+---
+
+name: talonAppDeclaration
+phrase: module app
+insertionScope: statement
+-
+mod.apps.$1 = r"""
+$0
+"""
+---
+
+name: talonModuleClass
+phrase: module class
+insertionScope: class | statement
+-
+@mod.action_class
+class Actions:
+    $0
+---
+
+name: talonContextMatch
+phrase: context match
+insertionScope: statement
+-
+ctx.matches = r"""
+$0
+"""
+---
+
+name: talonContextList
+phrase: context list
+insertionScope: statement
+-
+ctx.lists["user.$1"] = {
+    $0
+}
+---
+
+name: talonContextClass
+phrase: context class
+insertionScope: class | statement
+-
+@ctx.action_class("$1")
+class $2Actions:
+    $0
+---
+
+name: suppressError
+phrase: suppress error
+-
+with suppress(AttributeError):
+    $0
+---
+
+name: listComprehension
+phrase: list comp
+insertionScope: statement
+-
+[$2 for $2 in $1 if $0]
+---
+
+name: setComprehension
+phrase: set comp
+insertionScope: statement
+-
+{$0 for $0 in $1}
+---
+
+name: dictComprehension
+phrase: dict comp
+insertionScope: statement
+-
+{$0: $2 for $2 in $1}
+---
+
+name: generatorExpression
+phrase: gen comp
+insertionScope: statement
+-
+($2 for $2 in $1 if $0)
+---

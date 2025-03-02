@@ -1,20 +1,20 @@
-tag: user.python
+code.language: python
 -
 tag(): user.code_imperative
 tag(): user.code_object_oriented
 
-tag(): user.code_comment_line
 tag(): user.code_comment_documentation
+tag(): user.code_comment_line
 tag(): user.code_data_bool
 tag(): user.code_data_null
 tag(): user.code_functions
 tag(): user.code_functions_common
 tag(): user.code_keywords
 tag(): user.code_libraries
-tag(): user.code_libraries_gui
 tag(): user.code_operators_array
 tag(): user.code_operators_assignment
 tag(): user.code_operators_bitwise
+tag(): user.code_operators_lambda
 tag(): user.code_operators_math
 
 settings():
@@ -35,18 +35,16 @@ self taught: "self."
 pie test: "pytest"
 state past: "pass"
 
-raise {user.python_exception}: user.insert_between("raise {python_exception}(", ")")
-except {user.python_exception}: "except {python_exception}:"
+[state] raise {user.python_exception}:
+    user.insert_between("raise {python_exception}(", ")")
+[state] except {user.python_exception}: "except {python_exception}:"
 
-dock string:
-    user.code_comment_documentation()
+dock string: user.code_comment_documentation()
 dock {user.python_docstring_fields}:
     insert("{python_docstring_fields}")
     edit.left()
-dock type {user.code_type}:
-    user.insert_between(":type ", ": {code_type}")
-dock returns type {user.code_type}:
-    user.insert_between(":rtype ", ": {code_type}")
+dock type {user.code_type}: user.insert_between(":type ", ": {code_type}")
+dock returns type {user.code_type}: user.insert_between(":rtype ", ": {code_type}")
 
 toggle imports: user.code_toggle_libraries()
 import <user.code_libraries>:

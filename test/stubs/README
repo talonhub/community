@@ -1,0 +1,3 @@
+This directory contains stubs of Talon APIs for use in tests. It is made available by pytest's pythonpath configuration, see pyproject.toml.
+
+The implementation of the stubs will mostly be noops, but some functionality (e.g. actions) are needed by tests and so are implemented to allow for easy introspection and changing.

@@ -1,0 +1,14 @@
+[tool.black]
+target-version = ['py310']
+
+[tool.isort]
+profile = 'black'
+
+[tool.pytest.ini_options]
+pythonpath = [
+    ".",
+    "test/stubs",
+]
+
+[tool.pyright]
+reportSelfClsParameterName = false

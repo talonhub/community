@@ -1,0 +1,9 @@
+Spoken form, App name/.exe (or list an app name/.exe by itself on a line to exclude it)
+grip, DataGrip
+term, WindowsTerminal.exe
+one note, ONENOTE
+lock, slack.exe
+app, slack.exe
+lockapp, slack.exe
+pycharm, pycharm64.exe
+webstorm, webstorm64.exe

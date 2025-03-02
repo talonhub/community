@@ -1,0 +1,231 @@
+Command, Key binding, Short form, Spoken form
+abort-recursive-edit, ctrl-]
+auto-fill-mode,, auto-f
+backward-paragraph, meta-{
+backward-sentence, meta-a
+backward-sexp, meta-ctrl-b
+backward-up-list, meta-ctrl-up
+backward-word, meta-b
+balance-windows, ctrl-x +
+beginning-of-buffer, meta-<
+browse-kill-ring,, b-k-r
+buffer-menu, ctrl-x ctrl-b
+bury-buffer,, bur
+byte-compile-file,, by-c
+byte-recompile-directory
+byte-recompile-file
+clear-rectangle, ctrl-x r c
+clone-indirect-buffer,, clo-i
+comment-dwim, meta-;
+comment-line,, comment-l
+comment-region, ctrl-c ;
+compile
+compile-defun,, co-def
+copy-rectangle-as-kill, ctrl-x r meta-w
+copy-rectangle-to-register, ctrl-x r r
+copy-to-register, ctrl-x r s
+custom-theme-visit-theme
+customize-face
+customize-group
+customize-variable
+delete-other-windows, ctrl-x 1
+delete-rectangle, ctrl-x r d
+delete-window, ctrl-x 0
+describe-character,, desc-char
+diff-buffer-with-file,, d-b-w-f
+display-buffer, ctrl-x 4 ctrl-o
+dired-jump, ctrl-x ctrl-j
+dired-jump-other-window, ctrl-x 4 ctrl-j
+display-buffer, ctrl-x 4 ctrl-o
+display-line-numbers-mode,, dis-num
+down-list, meta-ctrl-down
+electric-quote-local-mode
+electric-quote-mode
+end-of-buffer, meta->
+enlarge-window, ctrl-x ^
+enlarge-window-horizontally, ctrl-x }
+eval-expression, meta-:
+eval-print-last-sexp,, ev-p
+eval-region,, ev-r
+exchange-point-and-mark, ctrl-x ctrl-x
+execute-extended-command, meta-x
+fileloop-continue,, filel
+fill-paragraph, meta-q
+find-file, ctrl-x ctrl-f
+font-lock-update, ctrl-x x f
+forward-paragraph, meta-}
+forward-sentence, meta-e
+forward-sexp, meta-ctrl-f
+forward-word, meta-f
+fundamental-mode,, fun-m
+global-display-line-numbers-mode,, g-d-l-n-m
+global-hl-line-mode,, g-hl-l-m
+global-visual-line-mode,, gl-v-l-m
+goto-line, meta-g meta-g
+highlight-lines-matching-regexp, meta-s h l
+highlight-phrase, meta-s h p
+highlight-regexp, meta-s h r
+hl-line-mode,, hl-l-m
+indent-region, meta-ctrl-\
+indent-rigidly, ctrl-x tab
+insert-char, ctrl-x 8 enter
+insert-register, ctrl-x r i
+isearch-backward, ctrl-r
+isearch-backward-regexp, meta-ctrl-r
+isearch-forward, ctrl-s
+isearch-forward-regexp, meta-ctrl-s
+isearch-forward-symbol, meta-s _
+isearch-forward-word, meta-s w
+jump-to-register, ctrl-x r j
+keyboard-quit, ctrl-g
+kill-buffer, ctrl-x k
+kill-line, ctrl-k
+kill-paragraph,, kill-par
+kill-rectangle, ctrl-x r k
+kill-region, ctrl-w
+kill-ring-save, meta-w
+kill-sentence, meta-k
+kill-sexp, meta-ctrl-k
+kill-word, meta-d
+kmacro-end-and-call-macro, ctrl-x e
+kmacro-end-macro, ctrl-x )
+kmacro-start-macro, ctrl-x (
+list-packages
+make-frame-command, ctrl-x 5 2
+mark-paragraph, meta-h
+mark-sexp, meta-ctrl-@
+mark-whole-buffer, ctrl-x h
+move-beginning-of-line, ctrl-a
+move-end-of-line, ctrl-e
+narrow-to-region, ctrl-x n n
+next-buffer, ctrl-x right
+next-error, meta-g n
+occur, meta-s o
+open-rectangle, ctrl-x r o
+other-frame, ctrl-x 5 o
+other-window, ctrl-x o
+outline-backward-same-level, ctrl-c @ ctrl-b
+outline-demote, ctrl-c @ ctrl->
+outline-forward-same-level, ctrl-c @ ctrl-f
+outline-hide-body, ctrl-c @ ctrl-t
+outline-hide-entry, ctrl-c @ ctrl-c
+outline-hide-leaves, ctrl-c @ ctrl-l
+outline-hide-other, ctrl-c @ ctrl-o
+outline-hide-sublevels, ctrl-c @ ctrl-q
+outline-hide-subtree, ctrl-c @ ctrl-d
+outline-insert-heading, ctrl-c @ RET
+outline-mark-subtree, ctrl-c @ @
+outline-move-subtree-down, ctrl-c @ ctrl-v
+outline-move-subtree-up, ctrl-c @ ctrl-^
+outline-next-visible-heading, ctrl-c @ ctrl-n
+outline-previous-visible-heading, ctrl-c @ ctrl-p
+outline-promote, ctrl-c @ ctrl-<
+outline-show-all, ctrl-c @ ctrl-a
+outline-show-branches, ctrl-c @ ctrl-k
+outline-show-children, ctrl-c @ tab
+outline-show-entry, ctrl-c @ ctrl-e
+outline-show-subtree, ctrl-c @ ctrl-s
+outline-up-heading, ctrl-c @ ctrl-u
+overwrite-mode,, overwr
+package-autoremove
+pop-global-mark, ctrl-x ctrl-@
+pop-to-mark-command, ctrl-u ctrl-space
+previous-buffer, ctrl-x left
+previous-error, meta-g p
+project-find-file, ctrl-x p f
+project-find-regexp, ctrl-x p g
+project-query-replace-regexp, ctrl-x p r
+project-search, ctrl-x p ctrl-s
+project-switch-project
+project-vc-dir, ctrl-x p v
+projectile-compile-project, ctrl-x p c
+projectile-dired, ctrl-x p d
+projectile-kill-buffers, ctrl-x p k
+projectile-run-async-shell-command-in-root, ctrl-x p &
+projectile-run-eshell, ctrl-x p e
+projectile-run-shell, ctrl-x p s
+projectile-run-shell-command-in-root, ctrl-x p !
+projectile-switch-to-buffer, ctrl-x p b
+query-replace, meta-%
+query-replace-regexp, meta-ctrl-%
+read-only-mode, ctrl-x ctrl-q
+recenter-top-bottom, ctrl-l
+recenter-top-bottom, ctrl-l
+rectangle-number-lines, ctrl-x r N
+rename-buffer, ctrl-x x r, ren-b
+rename-uniquely, ctrl-x x u
+reverse-region
+revert-buffer,, rev-buf
+revert-buffer-quick, ctrl-x x g
+save-buffer, ctrl-x ctrl-s
+save-buffers-kill-emacs,, s-b-k-e
+save-some-buffers, ctrl-x s
+scroll-other-window, meta-pagedown
+scroll-other-window-down, meta-pageup
+server-edit, ctrl-x #
+set-mark-command, ctrl-@
+sh-mode
+shell-command, meta-!
+shell-command-on-region, meta-|
+shell-script-mode
+shrink-window-horizontally, ctrl-x {
+shrink-window-if-larger-than-buffer, ctrl-x -
+smerge-combine-with-next
+smerge-diff-base-lower
+smerge-diff-base-upper
+smerge-diff-upper-lower
+smerge-ediff
+smerge-keep-all
+smerge-keep-base
+smerge-keep-current, ctrl-c ^ enter
+smerge-keep-lower, ctrl-c ^ l
+smerge-keep-upper, ctrl-c ^ u
+smerge-next, ctrl-c ^ n
+smerge-prev, ctrl-c ^ p
+smerge-refine, ctrl-c ^ R
+smerge-resolve, ctrl-c ^ r
+sort-lines
+sort-words
+split-window-below, ctrl-x 2
+split-window-right, ctrl-x 3
+switch-to-buffer, ctrl-x b
+switch-to-buffer-other-window, ctrl-x 4 b
+tab-bar-mode
+tab-close, ctrl-x t 0
+tab-close-other, ctrl-x t 1
+tab-new, ctrl-x t 2
+tab-next, ctrl-x t o
+tab-previous, ctrl-x t O
+tab-undo, ctrl-x t u
+text-mode,, text-m
+toggle-debug-on-error,, t-d-on-e
+toggle-debug-on-quit,, t-d-on-q
+toggle-input-method, ctrl-\
+toggle-truncate-lines, ctrl-x x t
+toggle-word-wrap
+transient-mark-mode,, tr-m-m
+transpose-chars, ctrl-t
+transpose-lines, ctrl-x ctrl-t
+transpose-paragraphs,, tr-par
+transpose-sentences,, tr-sen
+transpose-sexps, meta-ctrl-t
+transpose-words, meta-t
+undo, ctrl-_
+unhighlight-regexp, meta-s h u
+universal-argument, ctrl-u
+vc-annotate, ctrl-x v g
+view-lossage, ctrl-h l
+visit-tags-table,, v-t-t
+visual-line-mode,, visu-l-m
+whitespace-cleanup,, wh-cl
+whitespace-mode,, white-m
+widen, ctrl-x n w
+xref-find-apropos, meta-ctrl-.
+xref-find-definitions, meta-.
+xref-find-definitions-other-frame, ctrl-x 5 .
+xref-find-definitions-other-window, ctrl-x 4 .
+xref-find-references, meta-?
+xref-find-references-and-replace
+xref-go-back,"meta-,"
+yank, ctrl-y
+yank-rectangle, ctrl-x r y

@@ -1,0 +1,8 @@
+macro record: user.macro_record()
+macro stop: user.macro_stop()
+macro play [{user.saved_macros}]: user.macro_play(saved_macros or "")
+macro copy [{user.saved_macros}]: user.macro_copy(saved_macros or "")
+macro copy as <user.text>: user.macro_copy(text)
+macro save as <user.text>: user.macro_save(text)
+macro list: user.macro_list()
+macro list close: user.macro_list_close()

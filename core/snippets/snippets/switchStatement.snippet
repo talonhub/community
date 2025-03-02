@@ -1,0 +1,17 @@
+name: switchStatement
+phrase: switch
+insertionScope: statement
+---
+
+language: c | cpp | csharp | java | javascript | typescript | javascriptreact | typescriptreact
+-
+switch ($1) {
+    $0
+}
+---
+
+language: python
+-
+match $1:
+    $0
+---

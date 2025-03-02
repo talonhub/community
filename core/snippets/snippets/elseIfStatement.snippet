@@ -1,0 +1,28 @@
+name: elseIfStatement
+phrase: elif
+insertionScope: statement
+
+$1.wrapperPhrase: elif cond
+$1.wrapperScope: statement
+$0.wrapperPhrase: elif
+$0.wrapperScope: statement
+---
+
+language: c | cpp | csharp | java | javascript | typescript | javascriptreact | typescriptreact
+-
+else if ($1) {
+    $0
+}
+---
+
+language: python
+-
+elif $1:
+    $0
+---
+
+language: lua
+-
+elseif $1 then
+    $0
+---
