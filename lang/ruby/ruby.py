@@ -1,112 +1,60 @@
 from talon import Context, actions, settings
 
+from ..tags.operators import Operators
+
 ctx = Context()
 ctx.matches = r"""
 code.language: ruby
 """
+operators = Operators(
+    # code_operators_array
+    SUBSCRIPT=lambda: actions.user.insert_between("[", "]"),
+    # code_operators_assignment
+    ASSIGNMENT=" = ",
+    ASSIGNMENT_OR=" ||= ",
+    ASSIGNMENT_SUBTRACTION=" -= ",
+    ASSIGNMENT_ADDITION=" += ",
+    ASSIGNMENT_MULTIPLICATION=" *= ",
+    ASSIGNMENT_DIVISION=" /= ",
+    ASSIGNMENT_MODULO=" %= ",
+    ASSIGNMENT_INCREMENT=" += 1",
+    ASSIGNMENT_BITWISE_AND=" &= ",
+    ASSIGNMENT_BITWISE_OR=" |= ",
+    ASSIGNMENT_BITWISE_EXCLUSIVE_OR=" ^= ",
+    ASSIGNMENT_BITWISE_LEFT_SHIFT=" <<= ",
+    ASSIGNMENT_BITWISE_RIGHT_SHIFT=" >>= ",
+    # code_operators_bitwise
+    BITWISE_AND=" & ",
+    BITWISE_OR=" | ",
+    BITWISE_NOT="~",
+    BITWISE_EXCLUSIVE_OR=" ^ ",
+    BITWISE_LEFT_SHIFT=" << ",
+    BITWISE_RIGHT_SHIFT=" >> ",
+    # code_operators_lambda
+    LAMBDA="->",
+    # code_operators_math
+    MATH_SUBTRACT=" - ",
+    MATH_ADD=" + ",
+    MATH_MULTIPLY=" * ",
+    MATH_EXPONENT=" ** ",
+    MATH_DIVIDE=" / ",
+    MATH_MODULO=" % ",
+    MATH_EQUAL=" == ",
+    MATH_NOT_EQUAL=" != ",
+    MATH_GREATER_THAN=" > ",
+    MATH_GREATER_THAN_OR_EQUAL=" >= ",
+    MATH_LESS_THAN=" < ",
+    MATH_LESS_THAN_OR_EQUAL=" <= ",
+    MATH_NOT="!",
+    MATH_AND=" && ",
+    MATH_OR=" || ",
+)
 
 
 @ctx.action_class("user")
 class UserActions:
-    def code_operator_lambda():
-        actions.auto_insert("->")
-
-    def code_operator_subscript():
-        actions.insert("[]")
-        actions.key("left")
-
-    def code_operator_assignment():
-        actions.auto_insert(" = ")
-
-    def code_or_operator_assignment():
-        actions.auto_insert(" ||= ")
-
-    def code_operator_subtraction():
-        actions.auto_insert(" - ")
-
-    def code_operator_subtraction_assignment():
-        actions.auto_insert(" -= ")
-
-    def code_operator_addition():
-        actions.auto_insert(" + ")
-
-    def code_operator_addition_assignment():
-        actions.auto_insert(" += ")
-
-    def code_operator_multiplication():
-        actions.auto_insert(" * ")
-
-    def code_operator_multiplication_assignment():
-        actions.auto_insert(" *= ")
-
-    def code_operator_exponent():
-        actions.auto_insert(" ** ")
-
-    def code_operator_division():
-        actions.auto_insert(" / ")
-
-    def code_operator_division_assignment():
-        actions.auto_insert(" /= ")
-
-    def code_operator_modulo():
-        actions.auto_insert(" % ")
-
-    def code_operator_modulo_assignment():
-        actions.auto_insert(" %= ")
-
-    def code_operator_equal():
-        actions.auto_insert(" == ")
-
-    def code_operator_not_equal():
-        actions.auto_insert(" != ")
-
-    def code_operator_greater_than():
-        actions.auto_insert(" > ")
-
-    def code_operator_greater_than_or_equal_to():
-        actions.auto_insert(" >= ")
-
-    def code_operator_less_than():
-        actions.auto_insert(" < ")
-
-    def code_operator_less_than_or_equal_to():
-        actions.auto_insert(" <= ")
-
-    def code_operator_and():
-        actions.auto_insert(" && ")
-
-    def code_operator_or():
-        actions.auto_insert(" || ")
-
-    def code_operator_bitwise_and():
-        actions.auto_insert(" & ")
-
-    def code_operator_bitwise_and_assignment():
-        actions.auto_insert(" &= ")
-
-    def code_operator_bitwise_or():
-        actions.auto_insert(" | ")
-
-    def code_operator_bitwise_or_assignment():
-        actions.auto_insert(" |= ")
-
-    def code_operator_bitwise_exclusive_or():
-        actions.auto_insert(" ^ ")
-
-    def code_operator_bitwise_exclusive_or_assignment():
-        actions.auto_insert(" ^= ")
-
-    def code_operator_bitwise_left_shift():
-        actions.auto_insert(" << ")
-
-    def code_operator_bitwise_left_shift_assignment():
-        actions.auto_insert(" <<= ")
-
-    def code_operator_bitwise_right_shift():
-        actions.auto_insert(" >> ")
-
-    def code_operator_bitwise_right_shift_assignment():
-        actions.auto_insert(" >>= ")
+    def code_get_operators() -> Operators:
+        return operators
 
     def code_self():
         actions.auto_insert("self")
