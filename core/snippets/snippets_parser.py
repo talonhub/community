@@ -1,3 +1,4 @@
+import logging
 import re
 from pathlib import Path
 from typing import Callable, Union
@@ -342,8 +343,8 @@ def parse_vector_value(value: str) -> list[str]:
 
 
 def error(file: str, line: int, message: str):
-    print(f"ERROR | {file}:{line+1} | {message}")
+    logging.error(f"{file}:{line+1} | {message}")
 
 
 def warn(file: str, line: int, message: str):
-    print(f"WARN | {file}:{line+1} | {message}")
+    logging.warning(f"{file}:{line+1} | {message}")
