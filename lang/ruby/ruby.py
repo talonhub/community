@@ -23,7 +23,6 @@ operators = Operators(
     ASSIGNMENT_BITWISE_EXCLUSIVE_OR=" ^= ",
     ASSIGNMENT_BITWISE_LEFT_SHIFT=" <<= ",
     ASSIGNMENT_BITWISE_RIGHT_SHIFT=" >>= ",
-
     # code_operators_bitwise
     BITWISE_AND=" & ",
     BITWISE_OR=" | ",
@@ -31,10 +30,8 @@ operators = Operators(
     BITWISE_EXCLUSIVE_OR=" ^ ",
     BITWISE_LEFT_SHIFT=" << ",
     BITWISE_RIGHT_SHIFT=" >> ",
-
     # code_operators_lambda
     LAMBDA="->",
-
     # code_operators_math
     MATH_SUBTRACT=" - ",
     MATH_ADD=" + ",
@@ -52,6 +49,7 @@ operators = Operators(
     MATH_AND=" && ",
     MATH_OR=" || ",
 )
+
 
 @ctx.action_class("user")
 class UserActions:
