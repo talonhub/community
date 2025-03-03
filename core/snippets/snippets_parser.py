@@ -1,7 +1,7 @@
+import logging
 import re
 from pathlib import Path
 from typing import Callable, Union
-import logging
 
 from .snippet_types import Snippet, SnippetVariable
 
