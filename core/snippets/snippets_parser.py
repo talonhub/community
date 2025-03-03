@@ -81,7 +81,7 @@ def validate_snippet(document: SnippetDocument, snippet: Snippet) -> bool:
 
     for variable in snippet.variables:
         var_name = f"${variable.name}"
-        if var_name not in snippet.body:
+        if not is_variable_in_body(variable.name, snippet.body):
             error(
                 document.file,
                 document.line_body,
@@ -106,6 +106,10 @@ def validate_snippet(document: SnippetDocument, snippet: Snippet) -> bool:
             is_valid = False
 
     return is_valid
+
+
+def is_variable_in_body(variable_name: str, body: str) -> bool:
+    return re.search(rf"\${variable_name}|\${{{variable_name}.*}}", body) is not None
 
 
 def combine_variables(
