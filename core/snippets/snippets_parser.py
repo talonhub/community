@@ -109,6 +109,7 @@ def validate_snippet(document: SnippetDocument, snippet: Snippet) -> bool:
 
 
 def is_variable_in_body(variable_name: str, body: str) -> bool:
+    # $value or ${value} or ${value:default}
     return re.search(rf"\${variable_name}|\${{{variable_name}.*}}", body) is not None
 
 
