@@ -105,7 +105,15 @@ ctx = Context()
 mod = Module()
 
 mod.apps.jetbrains = "app.name: /jetbrains/"
-appNames = ["CLion", "IntelliJ IDEA", "PhpStorm", "PyCharm", "Webstorm", "RubyMine", "DataGrip"]
+appNames = [
+    "CLion",
+    "IntelliJ IDEA",
+    "PhpStorm",
+    "PyCharm",
+    "Webstorm",
+    "RubyMine",
+    "DataGrip",
+]
 for appName in appNames:
     mod.apps.jetbrains = f"app.name: {appName}"
     mod.apps.jetbrains = f"app.name: {appName}-EAP"
