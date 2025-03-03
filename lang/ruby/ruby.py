@@ -48,6 +48,7 @@ operators = Operators(
     MATH_GREATER_THAN_OR_EQUAL=" >= ",
     MATH_LESS_THAN=" < ",
     MATH_LESS_THAN_OR_EQUAL=" <= ",
+    MATH_NOT="!",
     MATH_AND=" && ",
     MATH_OR=" || ",
 )
