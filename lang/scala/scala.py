@@ -102,6 +102,7 @@ operators = Operators(
     ASSIGNMENT_BITWISE_LEFT_SHIFT=" <<= ",
     ASSIGNMENT_BITWISE_RIGHT_SHIFT=" >>= ",
     # code_operators_bitwise
+    BITWISE_NOT="~",
     BITWISE_AND=" & ",
     BITWISE_OR=" | ",
     BITWISE_EXCLUSIVE_OR=" ^ ",
@@ -117,6 +118,7 @@ operators = Operators(
     MATH_MODULO=" % ",
     MATH_EQUAL=" == ",
     MATH_NOT_EQUAL=" != ",
+    MATH_NOT="!",
     MATH_OR=" || ",
     MATH_AND=" && ",
     MATH_EXPONENT=" ^ ",
