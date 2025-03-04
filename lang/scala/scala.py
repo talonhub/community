@@ -128,11 +128,12 @@ operators = Operators(
     MATH_LESS_THAN_OR_EQUAL=" <= ",
 )
 
+
 @ctx.action_class("user")
 class UserActions:
     def code_get_operators() -> Operators:
         return operators
-    
+
     def code_self():
         actions.insert("this")
 
