@@ -1,5 +1,7 @@
 from talon import Context, Module, actions, settings
 
+from ..tags.operators import Operators
+
 ctx = Context()
 mod = Module()
 ctx.matches = r"""
@@ -83,103 +85,52 @@ scala_keywords = {
 mod.list("scala_keyword", desc="Scala Keywords")
 ctx.lists["user.scala_keyword"] = scala_keywords
 
+operators = Operators(
+    # code_operators_array
+    SUBSCRIPT=lambda: actions.user.insert_between("(", ")"),
+    # code_operators_assignment
+    ASSIGNMENT=" = ",
+    ASSIGNMENT_ADDITION=" += ",
+    ASSIGNMENT_SUBTRACTION=" -= ",
+    ASSIGNMENT_MULTIPLICATION=" *= ",
+    ASSIGNMENT_DIVISION=" /= ",
+    ASSIGNMENT_MODULO=" %= ",
+    ASSIGNMENT_INCREMENT="++",
+    ASSIGNMENT_BITWISE_AND=" &= ",
+    ASSIGNMENT_BITWISE_OR=" |= ",
+    ASSIGNMENT_BITWISE_EXCLUSIVE_OR=" ^= ",
+    ASSIGNMENT_BITWISE_LEFT_SHIFT=" <<= ",
+    ASSIGNMENT_BITWISE_RIGHT_SHIFT=" >>= ",
+    # code_operators_bitwise
+    BITWISE_AND=" & ",
+    BITWISE_OR=" | ",
+    BITWISE_EXCLUSIVE_OR=" ^ ",
+    BITWISE_LEFT_SHIFT=" << ",
+    BITWISE_RIGHT_SHIFT=" >> ",
+    # code_operators_lambda
+    LAMBDA=" => ",
+    # code_operators_math
+    MATH_ADD=" + ",
+    MATH_SUBTRACT=" - ",
+    MATH_MULTIPLY=" * ",
+    MATH_DIVIDE=" / ",
+    MATH_MODULO=" % ",
+    MATH_EQUAL=" == ",
+    MATH_NOT_EQUAL=" != ",
+    MATH_OR=" || ",
+    MATH_AND=" && ",
+    MATH_EXPONENT=" ^ ",
+    MATH_GREATER_THAN=" > ",
+    MATH_LESS_THAN=" < ",
+    MATH_GREATER_THAN_OR_EQUAL=" >= ",
+    MATH_LESS_THAN_OR_EQUAL=" <= ",
+)
 
 @ctx.action_class("user")
 class UserActions:
-    def code_operator_lambda():
-        actions.insert(" => ")
-
-    def code_operator_subscript():
-        actions.insert("()")
-        actions.edit.left()
-
-    def code_operator_assignment():
-        actions.insert(" = ")
-
-    def code_operator_subtraction():
-        actions.insert(" - ")
-
-    def code_operator_subtraction_assignment():
-        actions.insert(" -= ")
-
-    def code_operator_addition():
-        actions.insert(" + ")
-
-    def code_operator_addition_assignment():
-        actions.insert(" += ")
-
-    def code_operator_multiplication():
-        actions.insert(" * ")
-
-    def code_operator_multiplication_assignment():
-        actions.insert(" *= ")
-
-    def code_operator_exponent():
-        actions.insert(" ^ ")
-
-    def code_operator_division():
-        actions.insert(" / ")
-
-    def code_operator_division_assignment():
-        actions.insert(" /= ")
-
-    def code_operator_modulo():
-        actions.insert(" % ")
-
-    def code_operator_modulo_assignment():
-        actions.insert(" %= ")
-
-    def code_operator_equal():
-        actions.insert(" == ")
-
-    def code_operator_not_equal():
-        actions.insert(" != ")
-
-    def code_operator_greater_than():
-        actions.insert(" > ")
-
-    def code_operator_greater_than_or_equal_to():
-        actions.insert(" >= ")
-
-    def code_operator_less_than():
-        actions.insert(" < ")
-
-    def code_operator_less_than_or_equal_to():
-        actions.insert(" <= ")
-
-    def code_operator_and():
-        actions.insert(" && ")
-
-    def code_operator_or():
-        actions.insert(" || ")
-
-    def code_operator_bitwise_and():
-        actions.insert(" & ")
-
-    def code_operator_bitwise_and_assignment():
-        actions.insert(" &= ")
-
-    def code_operator_increment():
-        actions.insert("++")
-
-    def code_operator_bitwise_or():
-        actions.insert(" | ")
-
-    def code_operator_bitwise_exclusive_or():
-        actions.insert(" ^ ")
-
-    def code_operator_bitwise_left_shift():
-        actions.insert(" << ")
-
-    def code_operator_bitwise_left_shift_assignment():
-        actions.insert(" <<= ")
-
-    def code_operator_bitwise_right_shift():
-        actions.insert(" >> ")
-
-    def code_operator_bitwise_right_shift_assignment():
-        actions.insert(" >>= ")
-
+    def code_get_operators() -> Operators:
+        return operators
+    
     def code_self():
         actions.insert("this")
 
