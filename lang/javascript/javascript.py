@@ -121,6 +121,9 @@ operators = Operators(
 
 @ctx.action_class("user")
 class UserActions:
+    def code_get_operators() -> Operators:
+        return operators
+
     def code_insert_is_not_null():
         actions.auto_insert(" !== null")
 
