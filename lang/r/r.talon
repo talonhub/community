@@ -21,9 +21,6 @@ settings():
     user.code_protected_variable_formatter = "SNAKE_CASE"
     user.code_public_variable_formatter = "SNAKE_CASE"
 
-# NOTE: migrated from generic as it is only use here
-(op | is) in: " %in% "
-
 toggle library: user.code_toggle_libraries()
 library <user.code_libraries>:
     user.code_insert_library(code_libraries, "")

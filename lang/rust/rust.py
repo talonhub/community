@@ -2,6 +2,8 @@ from typing import Any, Callable, TypeVar
 
 from talon import Context, Module, actions, settings
 
+from ..tags.operators import Operators
+
 mod = Module()
 # rust specific grammar
 mod.list("code_type_modifier", desc="List of type modifiers for active language")
@@ -221,9 +223,54 @@ ctx.lists["user.code_macros"] = all_macros
 
 ctx.lists["user.code_trait"] = all_traits
 
+operators = Operators(
+    # code_operators_array
+    SUBSCRIPT=lambda: actions.user.insert_between("[", "]"),
+    # code_operators_assignment
+    ASSIGNMENT=" = ",
+    ASSIGNMENT_ADDITION=" += ",
+    ASSIGNMENT_SUBTRACTION=" -= ",
+    ASSIGNMENT_MULTIPLICATION=" *= ",
+    ASSIGNMENT_DIVISION=" /= ",
+    ASSIGNMENT_MODULO=" %= ",
+    ASSIGNMENT_BITWISE_AND=" &= ",
+    ASSIGNMENT_BITWISE_OR=" |= ",
+    ASSIGNMENT_BITWISE_EXCLUSIVE_OR=" ^= ",
+    ASSIGNMENT_BITWISE_LEFT_SHIFT=" <<= ",
+    ASSIGNMENT_BITWISE_RIGHT_SHIFT=" >>= ",
+    # code_operators_bitwise
+    BITWISE_AND=" & ",
+    BITWISE_OR=" | ",
+    BITWISE_EXCLUSIVE_OR=" ^ ",
+    BITWISE_LEFT_SHIFT=" << ",
+    BITWISE_RIGHT_SHIFT=" >> ",
+    # code_operators_math
+    MATH_ADD=" + ",
+    MATH_SUBTRACT=" - ",
+    MATH_MULTIPLY=" * ",
+    MATH_DIVIDE=" / ",
+    MATH_MODULO=" % ",
+    MATH_EXPONENT=lambda: actions.user.insert_between(".pow(", ")"),
+    MATH_EQUAL=" == ",
+    MATH_NOT_EQUAL=" != ",
+    MATH_GREATER_THAN=" > ",
+    MATH_GREATER_THAN_OR_EQUAL=" >= ",
+    MATH_LESS_THAN=" < ",
+    MATH_LESS_THAN_OR_EQUAL=" <= ",
+    MATH_AND=" && ",
+    MATH_OR=" || ",
+    ASSIGNMENT_INCREMENT=" += 1",
+    # code_operators_pointer
+    POINTER_INDIRECTION="*",
+    POINTER_ADDRESS_OF="&",
+)
+
 
 @ctx.action_class("user")
 class UserActions:
+    def code_get_operators() -> Operators:
+        return operators
+
     # tag: comment_line
 
     def code_comment_line_prefix():
@@ -349,116 +396,7 @@ class UserActions:
     def code_insert_library(text: str, selection: str):
         actions.user.paste(f"use {text}")
 
-    # tag: operators_array
-
-    def code_operator_subscript():
-        actions.auto_insert("[]")
-        actions.edit.left()
-
-    # tag: code_operators_assignment
-
-    def code_operator_assignment():
-        actions.auto_insert(" = ")
-
-    def code_operator_subtraction_assignment():
-        actions.auto_insert(" -= ")
-
-    def code_operator_addition_assignment():
-        actions.auto_insert(" += ")
-
-    def code_operator_multiplication_assignment():
-        actions.auto_insert(" *= ")
-
-    def code_operator_division_assignment():
-        actions.auto_insert(" /= ")
-
-    def code_operator_modulo_assignment():
-        actions.auto_insert(" %= ")
-
-    def code_operator_bitwise_and_assignment():
-        actions.auto_insert(" &= ")
-
-    def code_operator_bitwise_or_assignment():
-        actions.auto_insert(" |= ")
-
-    def code_operator_bitwise_exclusive_or_assignment():
-        actions.auto_insert(" ^= ")
-
-    def code_operator_bitwise_left_shift_assignment():
-        actions.auto_insert(" <<= ")
-
-    def code_operator_bitwise_right_shift_assignment():
-        actions.auto_insert(" >>= ")
-
-    # tag: operators_bitwise
-
-    def code_operator_bitwise_and():
-        actions.auto_insert(" & ")
-
-    def code_operator_bitwise_or():
-        actions.auto_insert(" | ")
-
-    def code_operator_bitwise_exclusive_or():
-        actions.auto_insert(" ^ ")
-
-    def code_operator_bitwise_left_shift():
-        actions.auto_insert(" << ")
-
-    def code_operator_bitwise_right_shift():
-        actions.auto_insert(" >> ")
-
-    # tag: operators_math
-
-    def code_operator_subtraction():
-        actions.auto_insert(" - ")
-
-    def code_operator_addition():
-        actions.auto_insert(" + ")
-
-    def code_operator_multiplication():
-        actions.auto_insert(" * ")
-
-    def code_operator_exponent():
-        actions.auto_insert(".pow()")
-        actions.edit.left()
-
-    def code_operator_division():
-        actions.auto_insert(" / ")
-
-    def code_operator_modulo():
-        actions.auto_insert(" % ")
-
-    def code_operator_equal():
-        actions.auto_insert(" == ")
-
-    def code_operator_not_equal():
-        actions.auto_insert(" != ")
-
-    def code_operator_greater_than():
-        actions.auto_insert(" > ")
-
-    def code_operator_greater_than_or_equal_to():
-        actions.auto_insert(" >= ")
-
-    def code_operator_less_than():
-        actions.auto_insert(" < ")
-
-    def code_operator_less_than_or_equal_to():
-        actions.auto_insert(" <= ")
-
-    def code_operator_and():
-        actions.auto_insert(" && ")
-
-    def code_operator_or():
-        actions.auto_insert(" || ")
-
-    def code_operator_increment():
-        actions.auto_insert(" += 1")
-
     # rust specific grammar
-
-    def code_operator_structure_dereference():
-        actions.auto_insert("*")
 
     def code_state_implements():
         actions.auto_insert("impl  {}")
