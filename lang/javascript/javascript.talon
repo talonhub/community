@@ -36,7 +36,7 @@ settings():
 (op | is) strict not equal:
     user.deprecate_command("2025-03-4", "(op | is) strict not equal", "is not equal")
     user.code_operator("MATH_NOT_EQUAL")
-    
+
 op null else: " ?? "
 
 state const: "const "

@@ -119,6 +119,7 @@ operators = Operators(
     MATH_WEAK_NOT_EQUAL=" != ",
 )
 
+
 @ctx.action_class("user")
 class UserActions:
     def code_get_operators() -> Operators:
