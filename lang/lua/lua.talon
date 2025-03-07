@@ -14,8 +14,10 @@ tag(): user.code_operators_array
 tag(): user.code_operators_assignment
 tag(): user.code_operators_bitwise
 tag(): user.code_operators_math
-tag(): user.code_operators_pointer
+
 # Use this tag if you use the stylua linter
+#tag(): user.stylua
+
 settings():
     user.code_private_function_formatter = "SNAKE_CASE"
     user.code_public_function_formatter = "SNAKE_CASE"

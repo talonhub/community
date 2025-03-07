@@ -66,10 +66,17 @@ class Operators(TypedDict, total=False):
     MATH_ADD: Operator
     MATH_MULTIPLY: Operator
     MATH_DIVIDE: Operator
+    MATH_INTEGER_DIVIDE: Operator
     MATH_MODULO: Operator
     MATH_EXPONENT: Operator
     MATH_EQUAL: Operator
     MATH_NOT_EQUAL: Operator
+    # For weak comparison operators. Strict comparison should use standard operators.
+    MATH_WEAK_EQUAL: Operator
+    MATH_WEAK_NOT_EQUAL: Operator
+    MATH_WEAK_AND: Operator
+    MATH_WEAK_OR: Operator
+    MATH_WEAK_NOT: Operator
     MATH_GREATER_THAN: Operator
     MATH_GREATER_THAN_OR_EQUAL: Operator
     MATH_LESS_THAN: Operator
