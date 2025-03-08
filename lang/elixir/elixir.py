@@ -1,5 +1,7 @@
 from talon import Context, Module, actions, settings
 
+from ..tags.operators import Operators
+
 ctx = Context()
 mod = Module()
 ctx.matches = r"""
@@ -33,53 +35,39 @@ ctx.lists["user.code_keyword"] = {
     "use": "use ",
 }
 
+operators = Operators(
+    LAMBDA="->",
+    ASSIGNMENT=" = ",
+    MATH_ADD=" + ",
+    MATH_SUBTRACT=" - ",
+    MATH_MULTIPLY=" * ",
+    MATH_DIVIDE=" / ",
+    MATH_EQUAL=" === ",
+    MATH_NOT_EQUAL=" !== ",
+    MATH_WEAK_EQUAL=" == ",
+    MATH_WEAK_NOT_EQUAL=" != ",
+    MATH_WEAK_AND=" && ",
+    MATH_WEAK_OR=" || ",
+    MATH_WEAK_NOT="!",
+    MATH_GREATER_THAN=" > ",
+    MATH_GREATER_THAN_OR_EQUAL=" >= ",
+    MATH_LESS_THAN=" < ",
+    MATH_LESS_THAN_OR_EQUAL=" <= ",
+    MATH_AND=" and ",
+    MATH_OR=" or ",
+    MATH_NOT="not ",
+    MATH_IN=" in ",
+    MATH_NOT_IN=" not in ",
+)
+
 
 @ctx.action_class("user")
 class UserActions:
+    def code_get_operators() -> Operators:
+        return operators
+
     def code_comment_line_prefix():
         actions.insert("# ")
-
-    def code_operator_lambda():
-        actions.auto_insert("->")
-
-    def code_operator_assignment():
-        actions.auto_insert(" = ")
-
-    def code_operator_addition():
-        actions.auto_insert(" + ")
-
-    def code_operator_subtraction():
-        actions.auto_insert(" - ")
-
-    def code_operator_multiplication():
-        actions.auto_insert(" * ")
-
-    def code_operator_division():
-        actions.auto_insert(" / ")
-
-    def code_operator_equal():
-        actions.auto_insert(" == ")
-
-    def code_operator_not_equal():
-        actions.auto_insert(" != ")
-
-    def code_operator_greater_than():
-        actions.auto_insert(" > ")
-
-    def code_operator_greater_than_or_equal_to():
-        actions.auto_insert(" >= ")
-
-    def code_operator_less_than():
-        actions.auto_insert(" < ")
-
-    def code_operator_less_than_or_equal_to():
-        actions.auto_insert(" <= ")
-
-    def code_operator_and():
-        actions.auto_insert(" and ")
-
-    def code_operator_or():
-        actions.auto_insert(" or ")
 
     def code_self():
         actions.auto_insert("self")
