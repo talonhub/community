@@ -1,14 +1,14 @@
-name: importFromStatement
-phrase: import from
+name: importStarStatement
+phrase: import star
 
 ---
 
 language: javascript | typescript | javascriptreact | typescriptreact
 -
-import $1 from "$0";
+import * as $0 from "$0";
 ---
 
 language: python
 -
-from $1 import $0
+from $0 import *
 ---
