@@ -15,10 +15,10 @@ touch:
 
 righty:
     # close zoom if open
-    user.zoom_close()
+    # user.zoom_close()
     mouse_click(1)
     # close the mouse grid if open
-    user.grid_close()
+    # user.grid_close()
 
 mid click:
     # close zoom if open
@@ -36,20 +36,20 @@ mid click:
 #super = windows key
 <user.modifiers> touch:
     # close zoom if open
-    user.zoom_close()
+    # user.zoom_close()
     key("{modifiers}:down")
     mouse_click(0)
     key("{modifiers}:up")
     # close the mouse grid
-    user.grid_close()
+    # user.grid_close()?
 <user.modifiers> righty:
     # close zoom if open
-    user.zoom_close()
+    # user.zoom_close()
     key("{modifiers}:down")
     mouse_click(1)
     key("{modifiers}:up")
     # close the mouse grid
-    user.grid_close()
+    # user.grid_close()
 (dub click | duke):
     # close zoom if open
     user.zoom_close()
@@ -67,7 +67,6 @@ mid click:
     user.grid_close()
 left drag | drag | drag start:
     # close zoom if open
-    user.zoom_close()
     user.mouse_drag(0)
     # close the mouse grid
     user.grid_close()

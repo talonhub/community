@@ -5,7 +5,11 @@ source code: /Users/morgan/SourceCode
 platform: /Users/morgan/SourceCode/go/src/gitlab.com/learnd/platform
 database: /Users/morgan/SourceCode/go/src/gitlab.com/learnd/platform/database
 agent: /Users/morgan/SourceCode/go/src/gitlab.com/learnd/platform/agent
-windows agent: C:\Users\slate\Documents\go\learnd\platform\agent
+local infer: \Users\slate\Documents\go\learnd\platform\local-infra\
+frontend: \Users\slate\Documents\go\learnd\frontend\
+portal: \Users\slate\Documents\go\learnd\frontend\portal\
+platform: \Users\slate\Documents\go\learnd\platform\
+agent: C:\Users\slate\Documents\go\learnd\platform\agent
 service: /Users/morgan/SourceCode/go/src/gitlab.com/learnd/platform/service
 local infer: /Users/morgan/SourceCode/go/src/gitlab.com/learnd/platform/local-infra
 mobile app expo: /Users/morgan/SourceCode/go/src/gitlab.com/learnd/frontend/mobile-app-expo
