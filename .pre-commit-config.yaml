@@ -38,6 +38,7 @@ repos:
     rev: 25.1.0
     hooks:
       - id: black
+        exclude: core/keys/symbols.py$
   - repo: https://github.com/Lucas-C/pre-commit-hooks
     rev: v1.5.5
     hooks:
