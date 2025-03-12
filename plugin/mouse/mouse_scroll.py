@@ -214,7 +214,7 @@ class UserActions:
 def mouse_scroll_continuous(
     new_scroll_dir: Literal[-1, 1],
     speed_factor: Optional[int] = None,
-    is_vertical: bool = True
+    is_vertical: bool = True,
 ):
     global scroll_job, scroll_dir, scroll_start_ts, is_continuous_scrolling_vertical
     actions.user.mouse_scroll_set_speed(speed_factor)
