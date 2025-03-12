@@ -218,13 +218,14 @@ def mouse_scroll_continuous(
 ):
     global scroll_job, scroll_dir, scroll_start_ts, is_continuous_scrolling_vertical
     actions.user.mouse_scroll_set_speed(speed_factor)
+    was_vertical = is_continuous_scrolling_vertical
     is_continuous_scrolling_vertical = is_vertical
 
     update_continuous_scrolling_mode(new_scroll_dir, is_vertical)
 
     if scroll_job:
         # Issuing a scroll in the same direction aborts scrolling
-        if scroll_dir == new_scroll_dir:
+        if scroll_dir == new_scroll_dir and was_vertical == is_vertical:
             actions.user.mouse_scroll_stop()
         # Issuing a scroll in the reverse direction resets acceleration
         else:
