@@ -220,7 +220,7 @@ def mouse_scroll_continuous(
     actions.user.mouse_scroll_set_speed(speed_factor)
     is_continuous_scrolling_vertical = is_vertical
 
-    update_continuous_scrolling_mode(new_scroll_dir)
+    update_continuous_scrolling_mode(new_scroll_dir, is_vertical)
 
     if scroll_job:
         # Issuing a scroll in the same direction aborts scrolling
@@ -241,12 +241,18 @@ def mouse_scroll_continuous(
             gui_wheel.show()
 
 
-def update_continuous_scrolling_mode(new_scroll_dir: Literal[-1, 1]):
+def update_continuous_scrolling_mode(new_scroll_dir: Literal[-1, 1], is_vertical: bool):
     global continuous_scroll_mode
     if new_scroll_dir == -1:
-        continuous_scroll_mode = "scroll up continuous"
+        if is_vertical:
+            continuous_scroll_mode = "scroll up continuous"
+        else:
+            continuous_scroll_mode = "scroll left continuous"
     else:
-        continuous_scroll_mode = "scroll down continuous"
+        if is_vertical:
+            continuous_scroll_mode = "scroll down continuous"
+        else:
+            continuous_scroll_mode = "scroll right continuous"
 
 
 def scroll_continuous_helper():
