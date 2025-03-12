@@ -11,6 +11,7 @@ scroll_start_ts: float = 0
 hiss_scroll_up = False
 control_mouse_forced = False
 continuous_scrolling_speed_factor: float = 1.0
+is_continuous_scrolling_vertical: bool = True
 
 mod = Module()
 ctx = Context()
@@ -111,6 +112,14 @@ class Actions:
         """Scrolls down continuously"""
         mouse_scroll_continuous(1, speed_factor)
 
+    def mouse_scroll_right_continuous(speed_factor: Optional[int] = None):
+        """Scrolls right continuously"""
+        mouse_scroll_continuous(1, speed_factor, is_vertical=False)
+
+    def mouse_scroll_left_continuous(speed_factor: Optional[int] = None):
+        """Scrolls left continuously"""
+        mouse_scroll_continuous(-1, speed_factor, is_vertical=False)
+
     def mouse_gaze_scroll():
         """Starts gaze scroll"""
         global gaze_job, continuous_scroll_mode, control_mouse_forced
@@ -205,9 +214,11 @@ class UserActions:
 def mouse_scroll_continuous(
     new_scroll_dir: Literal[-1, 1],
     speed_factor: Optional[int] = None,
+    is_vertical: bool = True
 ):
-    global scroll_job, scroll_dir, scroll_start_ts
+    global scroll_job, scroll_dir, scroll_start_ts, is_continuous_scrolling_vertical
     actions.user.mouse_scroll_set_speed(speed_factor)
+    is_continuous_scrolling_vertical = is_vertical
 
     update_continuous_scrolling_mode(new_scroll_dir)
 
@@ -253,7 +264,11 @@ def scroll_continuous_helper():
     y = round(scroll_amount * acceleration_speed * scroll_dir)
     if y == 0:
         y = scroll_dir
-    actions.mouse_scroll(y)
+    if is_continuous_scrolling_vertical:
+        actions.mouse_scroll(y)
+    else:
+        print('horizontal')
+        actions.mouse_scroll(0, y)
 
 
 def scroll_gaze_helper():

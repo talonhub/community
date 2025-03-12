@@ -110,6 +110,22 @@ wheel upper here <number_small>:
 wheel upper here:
     user.mouse_move_center_active_window()
     user.mouse_scroll_up_continuous()
+wheel righter <number_small>: user.mouse_scroll_right_continuous(number_small)
+wheel righter: user.mouse_scroll_right_continuous()
+wheel righter here <number_small>:
+    user.mouse_move_center_active_window()
+    user.mouse_scroll_right_continuous(number_small)
+wheel righter here:
+    user.mouse_move_center_active_window()
+    user.mouse_scroll_right_continuous()
+wheel lefter <number_small>: user.mouse_scroll_left_continuous(number_small)
+wheel lefter: user.mouse_scroll_left_continuous()
+wheel lefter here <number_small>:
+    user.mouse_move_center_active_window()
+    user.mouse_scroll_left_continuous(number_small)
+wheel lefter here:
+    user.mouse_move_center_active_window()
+    user.mouse_scroll_left_continuous()
 wheel gaze: user.mouse_gaze_scroll()
 wheel gaze here:
     user.mouse_move_center_active_window()
