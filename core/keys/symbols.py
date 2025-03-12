@@ -1,3 +1,5 @@
+# fmt: off
+
 # define the spoken forms for symbols in command and dictation mode
 punctuation_dict = {}
 
