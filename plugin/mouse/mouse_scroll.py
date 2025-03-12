@@ -274,7 +274,6 @@ def scroll_continuous_helper():
     if is_continuous_scrolling_vertical:
         actions.mouse_scroll(y)
     else:
-        print('horizontal')
         actions.mouse_scroll(0, y)
 
 
