@@ -6,6 +6,8 @@ tag(): user.multiple_cursors
 tag(): user.splits
 tag(): user.tabs
 tag(): user.command_search
+tag(): user.command_client
+
 # multiple_cursors.py support end
 
 # Auto complete
@@ -58,7 +60,7 @@ find (everywhere | all) <user.text> [over]:
 recent: user.idea("action RecentFiles")
 
 surround [this] with <user.text> [over]:
-    idea("action SurroundWith")
+    user.idea("action SurroundWith")
     sleep(500ms)
     insert(text)
 # Making these longer to reduce collisions with real code dictation.
@@ -67,7 +69,7 @@ insert generated <user.text> [over]:
     sleep(500ms)
     insert(text)
 insert template <user.text> [over]:
-    idea("action InsertLiveTemplate")
+    user.idea("action InsertLiveTemplate")
     sleep(500ms)
     insert(text)
 create (template | snippet): user.idea("action SaveAsTemplate")
@@ -76,7 +78,7 @@ toggle recording: user.idea("action StartStopMacroRecording")
 change (recording | recordings): user.idea("action EditMacros")
 play recording: user.idea("action PlaybackLastMacro")
 play recording <user.text> [over]:
-    idea("action PlaySavedMacrosAction")
+    user.idea("action PlaySavedMacrosAction")
     insert(text)
     sleep(500ms)
     Key("enter")
@@ -234,18 +236,48 @@ comment next <user.text> [over]:
     user.idea("find next {text}, action CommentByLineComment")
 go last <user.text> [over]: user.idea("find prev {text}, action EditorRight")
 go next <user.text> [over]: user.idea("find next {text}, action EditorRight")
+go <number> <user.text> [over]:
+    user.idea("goto {number} 0,find next {text}, action EditorRight")
 paste last <user.text> [over]:
     user.idea("find prev {text}, action EditorRight, action EditorPaste")
 paste next <user.text> [over]:
     user.idea("find next {text}, action EditorRight, action EditorPaste")
+refactor <number> <user.text> [over]:
+    user.idea("goto {number} 0,find next {text}, action Refactorings.QuickListPopupAction")
 refactor last <user.text> [over]:
     user.idea("find prev {text}, action Refactorings.QuickListPopupAction")
 refactor next <user.text> [over]:
     user.idea("find next {text}, action Refactorings.QuickListPopupAction")
+rename <number> <user.text> [over]:
+    user.idea("goto {number} 0,find next {text}, action RenameElement")
+rename next <user.text> [over]: user.idea("find next {text}, action RenameElement")
+rename last <user.text> [over]: user.idea("find prev {text}, action RenameElement")
+complete <number> <user.text> [over]:
+    user.idea("goto {number} 0,find next {text},action CodeCompletion")
+complete next <user.text> [over]: user.idea("find next {text},action CodeCompletion")
+complete last <user.text> [over]: user.idea("find prev {text},action CodeCompletion")
+quick fix <number> <user.text> [over]:
+    user.idea("goto {number} 0,find next {text},action ShowIntentionActions")
+quick fix next <user.text> [over]:
+    user.idea("find next {text},action ShowIntentionActions")
+quick fix last <user.text> [over]:
+    user.idea("find prev {text},action ShowIntentionActions")
 replace last <user.text> [over]: user.idea("find prev {text}, action EditorPaste")
 replace next <user.text> [over]: user.idea("find next {text}, action EditorPaste")
+
+follow <number> <user.text> [over]:
+    user.idea("goto {number} 0,find next {text},action GotoDeclaration")
+follow next <user.text> [over]: user.idea("find next {text},action GotoDeclaration")
+follow last <user.text> [over]: user.idea("find prev {text},action GotoDeclaration")
+
+reference <number> <user.text> [over]:
+    user.idea("goto {number} 0,find next {text},action FindUsages")
+reference next <user.text> [over]: user.idea("find next {text},action FindUsages")
+reference last <user.text> [over]: user.idea("find prev {text},action FindUsages")
+
 select last <user.text> [over]: user.idea("find prev {text}")
 select next <user.text> [over]: user.idea("find next {text}")
+select <number> <user.text> [over]: user.idea("goto {number} 0,find next {text}")
 
 select camel left: user.extend_camel_left()
 select camel right: user.extend_camel_right()
