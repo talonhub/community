@@ -124,10 +124,10 @@ class EditActions:
         actions.user.vscode("workbench.action.files.save")
 
     def find(text: str = None):
-        actions.user.vscode("actions.find")
         if text:
-            actions.sleep("100ms")
-            actions.insert(text)
+            actions.user.run_rpc_command("editor.actions.findWithArgs", {"searchString": text})
+        else:
+            actions.user.vscode("actions.find")
 
 
 @ctx.action_class("edit")
