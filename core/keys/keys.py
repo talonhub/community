@@ -1,10 +1,14 @@
 from talon import Context, Module, actions, app
-from .symbols.symbol_spoken_forms import symbols, dragon_symbols
+
+from .symbols import (
+    dragon_punctuation_dict,
+    punctuation_dict,
+    symbol_key_dict,
+)
 
 mod = Module()
 ctx = Context()
 
-ctx_dragon = Context()
 ctx_dragon = Context()
 ctx_dragon.matches = r"""
 speech.engine: dragon
@@ -111,12 +115,14 @@ def letters(m) -> str:
     "Multiple letter keys"
     return "".join(m.letter_list)
 
+
 @mod.action_class
 class Actions:
     def get_punctuation_words():
         """Gets the user.punctuation list"""
-        return symbols
+        return punctuation_dict
 
-ctx.lists["self.punctuation"] = symbols
-ctx.lists["self.symbol_key"] = symbols
-ctx_dragon.lists["self.symbol_key"] = dragon_symbols
+
+ctx.lists["user.punctuation"] = punctuation_dict
+ctx.lists["user.symbol_key"] = symbol_key_dict
+ctx_dragon.lists["user.punctuation"] = dragon_punctuation_dict

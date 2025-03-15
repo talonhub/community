@@ -8,7 +8,7 @@ from talon import Module, actions
 
 from .numbers.numbers import digits_map, scales, teens, tens
 from .user_settings import track_csv_list
-from .keys.symbols.symbol_spoken_forms import symbols_for_create_spoken_forms
+from .keys.symbols import symbols_for_create_spoken_forms
 
 mod = Module()
 
