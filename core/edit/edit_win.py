@@ -1,12 +1,24 @@
 # defines the default edit actions for windows
 
-from talon import Context, actions
+from talon import Context, actions, clip
 
 ctx = Context()
 ctx.matches = r"""
 os: windows
 """
 
+
+@ctx.action_class("user")
+class UserActions:
+    def paste(text: str):
+        """Pastes <text> and preserves clipboard"""
+        
+        with clip.revert():
+            actions.user.clip_set_transient_text(text)
+            actions.sleep("250ms")
+            actions.edit.paste()
+            # sleep here so that clip.revert doesn't revert the clipboard too soon
+            actions.sleep("250ms")
 
 @ctx.action_class("edit")
 class EditActions:
