@@ -125,7 +125,9 @@ class EditActions:
 
     def find(text: str = None):
         if text:
-            actions.user.run_rpc_command("editor.actions.findWithArgs", {"searchString": text})
+            actions.user.run_rpc_command(
+                "editor.actions.findWithArgs", {"searchString": text}
+            )
         else:
             actions.user.vscode("actions.find")
 
