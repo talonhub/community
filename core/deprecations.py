@@ -83,8 +83,8 @@ def calculate_rule_info():
     """
     try:
         current_command = actions.core.current_command__unstable()
-        start_line = current_command[0].target.start_line
-        filename = current_command[0].target.filename
+        start_line = current_command[0].script.start_line
+        filename = current_command[0].script.filename
         rule = " ".join(current_command[1]._unmapped)
         return f'\nTriggered from "{rule}" ({filename}:{start_line})'
     except Exception as e:
