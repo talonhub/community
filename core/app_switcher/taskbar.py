@@ -93,7 +93,12 @@ def get_windows_ten_taskbar(forced: bool = False):
                     break
             if taskbar:
                 ms_tasklist = first_matching_child(taskbar.element, class_name=["MSTaskListWClass"])
-                break
+                # tray = first_matching_child(taskbar.element, class_name=["TrayNotifyWnd"])
+                # pager = first_matching_child(tray, class_name=["SysPager"])
+                # toolbar = first_matching_child(pager, class_name=["ToolbarWindow32"])
+                # for child in toolbar.children:
+                #     print(f"{child.name} {child.rect.width} {child.rect.height}")
+                # break
                 
     if not taskbar:
         actions.app.notify("taskbar window not found")
