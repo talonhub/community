@@ -64,15 +64,6 @@ class Actions:
         ctx_zoom_triggered.tags = []
         actions.tracking.control_zoom_toggle(False)
 
-    def zoom_close():
-        """Closes an in-progress zoom. Talon will move the cursor position but not click."""
-        actions.user.deprecate_action(
-            "2024-12-26",
-            "user.zoom_close",
-            "tracking.zoom_cancel",
-        )
-        actions.tracking.zoom_cancel()
-
     def mouse_wake():
         """Enable control mouse, zoom mouse, and disables cursor"""
         if actions.tracking.control_enabled():            
