@@ -39,3 +39,8 @@ not speech.engine: dragon
     user.help_hide()
     user.mouse_sleep()
     speech.disable()
+
+^mixed mode$:
+  mode.disable("sleep")
+  mode.enable("dictation")
+  mode.enable("command")
