@@ -47,6 +47,8 @@ ctx.lists["user.code_common_member_function"] = {
     "then": "then",
 }
 
+ctx.lists["user.code_data_null"] = ["null", "undefined"]
+
 ctx.lists["user.code_keyword"] = {
     "a sink": "async ",
     "await": "await ",
@@ -139,9 +141,6 @@ class UserActions:
 
     def code_insert_false():
         actions.auto_insert("false")
-
-    def code_insert_null():
-        actions.auto_insert("null")
 
     def code_operator_lambda():
         actions.auto_insert(" => ")

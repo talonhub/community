@@ -42,6 +42,8 @@ docstring_fields = {
 mod.list("python_docstring_fields", desc="python docstring fields")
 ctx.lists["user.python_docstring_fields"] = docstring_fields
 
+ctx.lists["user.code_data_null"] = ["None"]
+
 ctx.lists["user.code_type"] = {
     "boolean": "bool",
     "integer": "int",
@@ -206,9 +208,6 @@ class UserActions:
 
     def code_operator_object_accessor():
         actions.auto_insert(".")
-
-    def code_insert_null():
-        actions.auto_insert("None")
 
     def code_insert_is_null():
         actions.auto_insert(" is None")

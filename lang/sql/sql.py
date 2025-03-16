@@ -7,6 +7,10 @@ ctx.matches = r"""
 code.language: sql
 """
 
+ctx.lists["user.code_data_null"] = {
+    "null": "NULL",
+}
+
 # these vary by dialect
 ctx.lists["user.code_common_function"] = {"count": "Count", "min": "Min", "max": "Max"}
 
@@ -32,9 +36,6 @@ operators = Operators(
 class UserActions:
     def code_get_operators() -> Operators:
         return operators
-
-    def code_insert_null():
-        actions.auto_insert("NULL")
 
     def code_insert_is_null():
         actions.auto_insert(" IS NULL")

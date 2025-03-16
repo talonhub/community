@@ -56,9 +56,6 @@ class UserActions:
     def code_insert_false():
         actions.auto_insert("false")
 
-    def code_insert_null():
-        actions.auto_insert("null")
-
     def code_insert_is_null():
         actions.auto_insert("is_null()")
         actions.edit.left()
