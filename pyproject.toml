@@ -12,3 +12,4 @@ pythonpath = [
 
 [tool.pyright]
 reportSelfClsParameterName = false
+reportGeneralTypeIssues = false
