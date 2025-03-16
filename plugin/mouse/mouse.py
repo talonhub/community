@@ -83,6 +83,7 @@ class Actions:
             # actions.user.talon_restart()
 
         if settings.get("user.mouse_wake_hides_cursor"):
+
             actions.user.mouse_cursor_hide()
 
     def mouse_drag(button: int):
