@@ -1,4 +1,4 @@
-from talon import Context, Module, actions, app, speech_system, settings, imgui
+from talon import Context, Module, actions, app, speech_system, settings, imgui, scope
 
 mod = Module()
 ctx_sleep = Context()
@@ -95,11 +95,15 @@ class Actions:
         """Wakes up Talon from sleep mode bypassing the deep sleep wake up counter"""
         actions.user.sleep_reset_deep_sleep_counter()
         actions.speech.enable()
+        if deep_sleep_gui.showing:
+            deep_sleep_gui.hide()
 
     def sleep_enable():
         """Puts Talon to sleep mode"""
         actions.speech.disable()
         actions.user.sleep_reset_deep_sleep_counter()
+        if "user.deep_sleep" in scope.get("tag"):
+            deep_sleep_gui.show()
 
 
 @ctx_deep_sleep.action_class("user")
