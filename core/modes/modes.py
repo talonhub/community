@@ -1,8 +1,9 @@
-from talon import Context, Module, actions, app, speech_system
+from talon import Context, Module, actions, app, speech_system, settings, imgui
 
 mod = Module()
 ctx_sleep = Context()
 ctx_awake = Context()
+ctx_deep_sleep = Context()
 
 modes = {
     "presentation": "a more strict form of sleep where only a more strict wake up command works",
@@ -10,6 +11,24 @@ modes = {
 
 for key, value in modes.items():
     mod.mode(key, value)
+
+mod.tag(
+    "deep_sleep",
+    desc="This requires using the standard wakeup action multiple times to exit sleep mode",
+)
+
+mod.setting(
+    'deep_sleep_wake_ups_required',
+    type = int,
+    default = 3,
+    desc = "The number of consecutive wake ups required to exit deep sleep mode"
+)
+
+wake_ups_remaining_to_exit_deep_sleep: int = 0
+
+ctx_deep_sleep.matches = r"""
+tag: user.deep_sleep
+"""
 
 ctx_sleep.matches = r"""
 mode: sleep
@@ -62,3 +81,37 @@ class Actions:
                 actions.user.dragon_engine_wake()
                 # note: this may not do anything for all versions of Dragon. Requires Pro.
                 actions.user.dragon_engine_normal_mode()
+    
+    def sleep_wake_up():
+        """Wakes up Talon from sleep mode"""
+        actions.speech.enable()
+
+    def sleep_reset_deep_sleep_counter():
+        """Resets the deep sleep wake up counter"""
+        global wake_ups_remaining_to_exit_deep_sleep
+        wake_ups_remaining_to_exit_deep_sleep = settings.get("user.deep_sleep_wake_ups_required")
+
+    def sleep_wake_up_immediately():
+        """Wakes up Talon from sleep mode bypassing the deep sleep wake up counter"""
+        actions.user.sleep_reset_deep_sleep_counter()
+        actions.speech.enable()
+
+    def sleep_enable():
+        """Puts Talon to sleep mode"""
+        actions.speech.disable()
+        actions.user.sleep_reset_deep_sleep_counter()
+
+
+@ctx_deep_sleep.action_class("user")
+class ActionsDeepSleep:
+    def sleep_wake_up():
+        global wake_ups_remaining_to_exit_deep_sleep
+        wake_ups_remaining_to_exit_deep_sleep -= 1
+        if wake_ups_remaining_to_exit_deep_sleep <= 0:
+            actions.user.sleep_wake_up_immediately()
+
+@imgui.open(y=0)
+def deep_sleep_gui(gui: imgui.GUI):
+    global wake_ups_remaining_to_exit_deep_sleep
+    gui.text("Deep sleep")
+    gui.text(f"Consecutive Wake Ups Needed to Exit Deep Sleep: {wake_ups_remaining_to_exit_deep_sleep}")
