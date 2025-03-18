@@ -1,4 +1,4 @@
-from talon import Context, Module, actions, app, speech_system, settings, imgui, scope
+from talon import Context, Module, actions, app, imgui, scope, settings, speech_system
 
 mod = Module()
 ctx = Context()
@@ -19,10 +19,10 @@ mod.tag(
 )
 
 mod.setting(
-    'deep_sleep_wake_ups_required',
-    type = int,
-    default = 3,
-    desc = "The number of consecutive wake ups required to exit deep sleep mode"
+    "deep_sleep_wake_ups_required",
+    type=int,
+    default=3,
+    desc="The number of consecutive wake ups required to exit deep sleep mode",
 )
 
 wake_ups_remaining_to_exit_deep_sleep: int = 0
@@ -82,7 +82,7 @@ class Actions:
                 actions.user.dragon_engine_wake()
                 # note: this may not do anything for all versions of Dragon. Requires Pro.
                 actions.user.dragon_engine_normal_mode()
-    
+
     def sleep_wake_up():
         """Wakes up Talon from sleep mode"""
         actions.speech.enable()
@@ -90,7 +90,9 @@ class Actions:
     def sleep_reset_deep_sleep_counter():
         """Resets the deep sleep wake up counter"""
         global wake_ups_remaining_to_exit_deep_sleep
-        wake_ups_remaining_to_exit_deep_sleep = settings.get("user.deep_sleep_wake_ups_required")
+        wake_ups_remaining_to_exit_deep_sleep = settings.get(
+            "user.deep_sleep_wake_ups_required"
+        )
 
     def sleep_wake_up_immediately():
         """Wakes up Talon from sleep mode bypassing the deep sleep wake up counter"""
@@ -121,8 +123,11 @@ class ActionsDeepSleep:
         if wake_ups_remaining_to_exit_deep_sleep <= 0:
             actions.user.sleep_wake_up_immediately()
 
+
 @imgui.open(y=0)
 def deep_sleep_gui(gui: imgui.GUI):
     global wake_ups_remaining_to_exit_deep_sleep
     gui.text("Deep sleep")
-    gui.text(f"Consecutive Wake Ups Needed to Exit Deep Sleep: {wake_ups_remaining_to_exit_deep_sleep}")
+    gui.text(
+        f"Consecutive Wake Ups Needed to Exit Deep Sleep: {wake_ups_remaining_to_exit_deep_sleep}"
+    )
