@@ -40,5 +40,5 @@ class UserActions:
         double_pop_speed_maximum = settings.get("user.double_pop_speed_maximum")
         delta = time.perf_counter() - time_last_pop
         if delta >= double_pop_speed_minimum and delta <= double_pop_speed_maximum:
-            actions.speech.enable()
+            actions.user.sleep_wake_up_immediately()
         time_last_pop = time.perf_counter()

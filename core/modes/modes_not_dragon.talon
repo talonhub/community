@@ -15,22 +15,22 @@ not speech.engine: dragon
 # because it's part of the rule definition, but "hey bob" will be ignored, because
 # we don't do anything with the <phrase> in the body of the command.
 
-^talon wake [<phrase>]$: speech.enable()
+^talon wake [<phrase>]$: user.sleep_wake_up()
 
 # We define this *only* if the speech engine isn't Dragon, because if you're using Dragon,
 # "wake up" is used to specifically control Dragon, and not affect Talon.
 #
 # It's a useful and well known command, though, so if you're using any other speech
 # engine, this controls Talon.
-^(wake up)+$: speech.enable()
+^(wake up)+$: user.sleep_wake_up()
 
 # We define this *only* if the speech engine isn't Dragon, because if you're using Dragon,
 # "go to sleep" is used to specifically control Dragon, and not affect Talon.
 #
 # It's a useful and well known command, though, so if you're using any other speech
 # engine, this controls Talon.
-^go to sleep [<phrase>]$: speech.disable()
-^talon sleep [<phrase>]$: speech.disable()
+^go to sleep [<phrase>]$: user.sleep_enable()
+^talon sleep [<phrase>]$: user.sleep_enable()
 
 ^sleep all [<phrase>]$:
     user.switcher_hide_running()
@@ -38,4 +38,4 @@ not speech.engine: dragon
     user.homophones_hide()
     user.help_hide()
     user.mouse_sleep()
-    speech.disable()
+    user.sleep_enable()

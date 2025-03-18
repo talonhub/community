@@ -22,7 +22,7 @@ mod.setting(
 class UserActions:
     def listening_timeout_expired():
         """Action called when the listening timeout expires"""
-        actions.speech.disable()
+        actions.user.sleep_enable()
 
         if settings.get("user.listening_timeout_show_notification"):
             show_notification()

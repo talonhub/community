@@ -7,7 +7,7 @@ delayed_enabled = False
 
 def do_disable(e):
     speech_system.unregister("post:phrase", do_disable)
-    actions.speech.disable()
+    actions.user.sleep_enable()
 
 
 @delay_mod.action_class
@@ -19,7 +19,7 @@ class DelayedSpeechOffActions:
         global delayed_enabled
         if not actions.speech.enabled():
             delayed_enabled = True
-            actions.speech.enable()
+            actions.user.sleep_wake_up_immediately()
 
     def delayed_speech_off():
         """Disables "temporary speech" mode lazily, meaning that the next
