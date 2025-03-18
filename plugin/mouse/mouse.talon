@@ -114,11 +114,13 @@ wheel tiny right: user.mouse_scroll_right(0.5)
 wheel tiny right here:
     user.mouse_move_center_active_window()
     user.mouse_scroll_right(0.5)
-wheel {user.continuous_scrolling_direction}: user.mouse_scroll_continuous(continuous_scrolling_direction)
-wheel {user.continuous_scrolling_direction} here: 
+wheel {user.continuous_scrolling_direction}:
+    user.mouse_scroll_continuous(continuous_scrolling_direction)
+wheel {user.continuous_scrolling_direction} here:
     user.mouse_move_center_active_window()
     user.mouse_scroll_continuous(continuous_scrolling_direction)
-wheel {user.continuous_scrolling_direction} <number_small>: user.mouse_scroll_continuous(continuous_scrolling_direction, number_small)
+wheel {user.continuous_scrolling_direction} <number_small>:
+    user.mouse_scroll_continuous(continuous_scrolling_direction, number_small)
 wheel {user.continuous_scrolling_direction} here <number_small>:
     user.mouse_move_center_active_window()
     user.mouse_scroll_continuous(continuous_scrolling_direction, number_small)

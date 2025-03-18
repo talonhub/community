@@ -16,7 +16,10 @@ is_continuous_scrolling_vertical: bool = True
 mod = Module()
 ctx = Context()
 
-mod.list("continuous_scrolling_direction", desc="Defines names for directions used with continuous scrolling")
+mod.list(
+    "continuous_scrolling_direction",
+    desc="Defines names for directions used with continuous scrolling",
+)
 
 mod.setting(
     "mouse_wheel_down_amount",
