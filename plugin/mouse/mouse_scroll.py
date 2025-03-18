@@ -16,6 +16,8 @@ is_continuous_scrolling_vertical: bool = True
 mod = Module()
 ctx = Context()
 
+mod.list("continuous_scrolling_direction", desc="Defines names for directions used with continuous scrolling")
+
 mod.setting(
     "mouse_wheel_down_amount",
     type=int,
@@ -103,6 +105,20 @@ class Actions:
         """Scrolls right"""
         x = amount * settings.get("user.mouse_wheel_horizontal_amount")
         actions.mouse_scroll(0, x)
+
+    def mouse_scroll_continuous(direction: str, speed_factor: Optional[int] = None):
+        """Scrolls continuously in the given direction"""
+        match direction:
+            case "UP":
+                actions.user.mouse_scroll_up_continuous(speed_factor)
+            case "DOWN":
+                actions.user.mouse_scroll_down_continuous(speed_factor)
+            case "LEFT":
+                actions.user.mouse_scroll_left_continuous(speed_factor)
+            case "RIGHT":
+                actions.user.mouse_scroll_right_continuous(speed_factor)
+            case _:
+                raise ValueError(f"Invalid continuous scrolling direction: {direction}")
 
     def mouse_scroll_up_continuous(speed_factor: Optional[int] = None):
         """Scrolls up continuously"""
@@ -268,13 +284,13 @@ def scroll_continuous_helper():
         else 1
     )
 
-    y = round(scroll_amount * acceleration_speed * scroll_dir)
-    if y == 0:
-        y = scroll_dir
+    scroll_delta = round(scroll_amount * acceleration_speed * scroll_dir)
+    if scroll_delta == 0:
+        scroll_delta = scroll_dir
     if is_continuous_scrolling_vertical:
-        actions.mouse_scroll(y)
+        actions.mouse_scroll(scroll_delta)
     else:
-        actions.mouse_scroll(0, y)
+        actions.mouse_scroll(0, scroll_delta)
 
 
 def scroll_gaze_helper():

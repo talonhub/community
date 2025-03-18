@@ -86,14 +86,6 @@ wheel tiny [down]: user.mouse_scroll_down(0.2)
 wheel tiny [down] here:
     user.mouse_move_center_active_window()
     user.mouse_scroll_down(0.2)
-wheel downer <number_small>: user.mouse_scroll_down_continuous(number_small)
-wheel downer: user.mouse_scroll_down_continuous()
-wheel downer here <number_small>:
-    user.mouse_move_center_active_window()
-    user.mouse_scroll_down_continuous(number_small)
-wheel downer here:
-    user.mouse_move_center_active_window()
-    user.mouse_scroll_down_continuous()
 wheel up: user.mouse_scroll_up()
 wheel up here:
     user.mouse_move_center_active_window()
@@ -102,30 +94,6 @@ wheel tiny up: user.mouse_scroll_up(0.2)
 wheel tiny up here:
     user.mouse_move_center_active_window()
     user.mouse_scroll_up(0.2)
-wheel upper <number_small>: user.mouse_scroll_up_continuous(number_small)
-wheel upper: user.mouse_scroll_up_continuous()
-wheel upper here <number_small>:
-    user.mouse_move_center_active_window()
-    user.mouse_scroll_up_continuous(number_small)
-wheel upper here:
-    user.mouse_move_center_active_window()
-    user.mouse_scroll_up_continuous()
-wheel righter <number_small>: user.mouse_scroll_right_continuous(number_small)
-wheel righter: user.mouse_scroll_right_continuous()
-wheel righter here <number_small>:
-    user.mouse_move_center_active_window()
-    user.mouse_scroll_right_continuous(number_small)
-wheel righter here:
-    user.mouse_move_center_active_window()
-    user.mouse_scroll_right_continuous()
-wheel lefter <number_small>: user.mouse_scroll_left_continuous(number_small)
-wheel lefter: user.mouse_scroll_left_continuous()
-wheel lefter here <number_small>:
-    user.mouse_move_center_active_window()
-    user.mouse_scroll_left_continuous(number_small)
-wheel lefter here:
-    user.mouse_move_center_active_window()
-    user.mouse_scroll_left_continuous()
 wheel gaze: user.mouse_gaze_scroll()
 wheel gaze here:
     user.mouse_move_center_active_window()
@@ -146,6 +114,14 @@ wheel tiny right: user.mouse_scroll_right(0.5)
 wheel tiny right here:
     user.mouse_move_center_active_window()
     user.mouse_scroll_right(0.5)
+wheel {user.continuous_scrolling_direction}: user.mouse_scroll_continuous(continuous_scrolling_direction)
+wheel {user.continuous_scrolling_direction} here: 
+    user.mouse_move_center_active_window()
+    user.mouse_scroll_continuous(continuous_scrolling_direction)
+wheel {user.continuous_scrolling_direction} <number_small>: user.mouse_scroll_continuous(continuous_scrolling_direction, number_small)
+wheel {user.continuous_scrolling_direction} here <number_small>:
+    user.mouse_move_center_active_window()
+    user.mouse_scroll_continuous(continuous_scrolling_direction, number_small)
 copy mouse position: user.copy_mouse_position()
 curse no:
     # Command added 2021-12-13, can remove after 2022-06-01
