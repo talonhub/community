@@ -1,6 +1,7 @@
 from talon import Context, Module, actions, app, speech_system, settings, imgui, scope
 
 mod = Module()
+ctx = Context()
 ctx_sleep = Context()
 ctx_awake = Context()
 ctx_deep_sleep = Context()
@@ -97,6 +98,7 @@ class Actions:
         actions.speech.enable()
         if deep_sleep_gui.showing:
             deep_sleep_gui.hide()
+        ctx.tags = []
 
     def sleep_enable():
         """Puts Talon to sleep mode"""
@@ -104,6 +106,11 @@ class Actions:
         actions.user.sleep_reset_deep_sleep_counter()
         if "user.deep_sleep" in scope.get("tag"):
             deep_sleep_gui.show()
+
+    def sleep_enable_deep_sleep():
+        """Puts Talon to sleep mode with deep sleep enabled"""
+        ctx.tags = ["user.deep_sleep"]
+        actions.user.sleep_enable()
 
 
 @ctx_deep_sleep.action_class("user")
