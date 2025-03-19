@@ -52,6 +52,13 @@ class ActionsAwakeMode:
         actions.app.notify("Talon is already awake")
 
 
+def cleanup_deep_sleep_state():
+    """Resets deep sleep related state. Intended to be used after waking up from deep sleep."""
+    actions.user.sleep_reset_deep_sleep_counter()
+    if deep_sleep_gui.showing:
+        deep_sleep_gui.hide()
+    ctx.tags = []
+
 @mod.action_class
 class Actions:
     def talon_mode():
@@ -96,11 +103,8 @@ class Actions:
 
     def sleep_wake_up_immediately():
         """Wakes up Talon from sleep mode bypassing the deep sleep wake up counter"""
-        actions.user.sleep_reset_deep_sleep_counter()
+        cleanup_deep_sleep_state()
         actions.speech.enable()
-        if deep_sleep_gui.showing:
-            deep_sleep_gui.hide()
-        ctx.tags = []
 
     def sleep_enable():
         """Puts Talon to sleep mode"""
@@ -131,3 +135,8 @@ def deep_sleep_gui(gui: imgui.GUI):
     gui.text(
         f"Consecutive Wake Ups Needed to Exit Deep Sleep: {wake_ups_remaining_to_exit_deep_sleep}"
     )
+    #This allows cleaning deep sleep state if the user wakes up talon through some other means than the actions defined here:
+    if actions.speech.enabled():
+        cleanup_deep_sleep_state()
+    elif gui.button("Wake Up Now"):
+        actions.user.sleep_wake_up_immediately()
