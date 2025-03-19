@@ -66,11 +66,13 @@ def cleanup_deep_sleep_state():
         deep_sleep_gui.hide()
     ctx.tags = []
 
+
 def setup_deep_sleep_state():
     """Sets up deep sleep related state. Intended to be used when entering deep sleep. This must be called after sleep mode is enabled because the graphics will try to clean up the deep sleep state if talon is awake while it is showing."""
     ctx.tags = ["user.deep_sleep"]
     actions.user.sleep_reset_deep_sleep_counter()
     deep_sleep_gui.show()
+
 
 @mod.action_class
 class Actions:
@@ -128,6 +130,7 @@ class Actions:
         actions.user.sleep_enable()
         setup_deep_sleep_state()
 
+
 @ctx_deep_sleep_asleep.action_class("user")
 class ActionsDeepSleep:
     def sleep_wake_up():
@@ -136,11 +139,13 @@ class ActionsDeepSleep:
         if wake_ups_remaining_to_exit_deep_sleep <= 0:
             actions.user.sleep_wake_up_immediately()
 
+
 @ctx_deep_sleep_awake.action_class("user")
 class ActionsDeepAwake:
     def sleep_enable():
         actions.next()
         setup_deep_sleep_state()
+
 
 # Going to sleep with the deep sleep tag active will require the user to wake up multiple times to exit sleep mode, but if they use speech.disable() without this, the graphical interface will not display and the counter may be in a bad state
 @ctx_deep_sleep_awake.action_class("speech")
@@ -149,6 +154,7 @@ class ActionsDeepAwakeSpeech:
         actions.next()
         setup_deep_sleep_state()
 
+
 @imgui.open(y=0)
 def deep_sleep_gui(gui: imgui.GUI):
     global wake_ups_remaining_to_exit_deep_sleep
@@ -156,7 +162,7 @@ def deep_sleep_gui(gui: imgui.GUI):
     gui.text(
         f"Consecutive Wake Ups Needed to Exit Deep Sleep: {wake_ups_remaining_to_exit_deep_sleep}"
     )
-    #This allows cleaning deep sleep state if the user wakes up talon through some other means than the actions defined here:
+    # This allows cleaning deep sleep state if the user wakes up talon through some other means than the actions defined here:
     if actions.speech.enabled():
         cleanup_deep_sleep_state()
     elif gui.button("Wake Up Now"):
