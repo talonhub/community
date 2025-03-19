@@ -1,18 +1,15 @@
 list: user.system_paths
 hostname: DESKTOP-98PNFF6
 -
-source code: /Users/morgan/SourceCode
-platform: /Users/morgan/SourceCode/go/src/gitlab.com/learnd/platform
-database: /Users/morgan/SourceCode/go/src/gitlab.com/learnd/platform/database
-agent: /Users/morgan/SourceCode/go/src/gitlab.com/learnd/platform/agent
-local infer: \Users\slate\Documents\go\learnd\platform\local-infra\
-frontend: \Users\slate\Documents\go\learnd\frontend\
-portal: \Users\slate\Documents\go\learnd\frontend\portal\
-platform: \Users\slate\Documents\go\learnd\platform\
+source code: C:\Users\slate\Documents\go
+platform: C:\Users\slate\Documents\go\learnd\platform
+database: C:\Users\slate\Documents\go\learnd\platform\database
 agent: C:\Users\slate\Documents\go\learnd\platform\agent
-service: /Users/morgan/SourceCode/go/src/gitlab.com/learnd/platform/service
-local infer: /Users/morgan/SourceCode/go/src/gitlab.com/learnd/platform/local-infra
-mobile app expo: /Users/morgan/SourceCode/go/src/gitlab.com/learnd/frontend/mobile-app-expo
-portal: /Users/morgan/SourceCode/go/src/gitlab.com/learnd/frontend/portal
-machine dreams: /Users/morgan/SourceCode/go/src/github.com/slatermorgan/machinesdream
-host file: /private/etc/
+local infer: \Users\slate\Documents\go\learnd\platform\local-infra\
+frontend: C:\Users\slate\Documents\go\learnd\frontend\
+platform: C:\Users\slate\Documents\go\learnd\platform\
+agent: C:\Users\slate\Documents\go\learnd\platform\agent
+service: C:\Users\slate\Documents\go\learnd\platform\service
+local infer: C:\Users\slate\Documents\go\learnd\platform\local-infra
+mobile app expo: C:\Users\slate\Documents\go\learnd\frontend\mobile-app-expo
+portal: C:\Users\slate\Documents\go\learnd\frontend\portal
