@@ -28,7 +28,7 @@ mark inbox channel read: user.discord_mark_inbox_read()
 [toggle] (mute | unmute): user.discord_mute()
 (mute | unmute) and sleep:
     user.discord_mute()
-    speech.disable()
+    user.sleep_enable()
 [toggle] (deafen | undeafen): user.discord_deafen()
 answer call: user.discord_answer_call()
 decline call: user.discord_decline_call()
