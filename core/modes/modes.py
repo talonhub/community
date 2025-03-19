@@ -4,7 +4,8 @@ mod = Module()
 ctx = Context()
 ctx_sleep = Context()
 ctx_awake = Context()
-ctx_deep_sleep = Context()
+ctx_deep_sleep_asleep = Context()
+ctx_deep_sleep_awake = Context()
 
 modes = {
     "presentation": "a more strict form of sleep where only a more strict wake up command works",
@@ -27,8 +28,14 @@ mod.setting(
 
 wake_ups_remaining_to_exit_deep_sleep: int = 0
 
-ctx_deep_sleep.matches = r"""
+ctx_deep_sleep_asleep.matches = r"""
 tag: user.deep_sleep
+mode: sleep
+"""
+
+ctx_deep_sleep_awake.matches = r"""
+tag: user.deep_sleep
+not mode: sleep
 """
 
 ctx_sleep.matches = r"""
@@ -58,6 +65,12 @@ def cleanup_deep_sleep_state():
     if deep_sleep_gui.showing:
         deep_sleep_gui.hide()
     ctx.tags = []
+
+def setup_deep_sleep_state():
+    """Sets up deep sleep related state. Intended to be used when entering deep sleep. This must be called after sleep mode is enabled because the graphics will try to clean up the deep sleep state if talon is awake while it is showing."""
+    ctx.tags = ["user.deep_sleep"]
+    actions.user.sleep_reset_deep_sleep_counter()
+    deep_sleep_gui.show()
 
 @mod.action_class
 class Actions:
@@ -109,17 +122,13 @@ class Actions:
     def sleep_enable():
         """Puts Talon to sleep mode"""
         actions.speech.disable()
-        actions.user.sleep_reset_deep_sleep_counter()
-        if "user.deep_sleep" in scope.get("tag"):
-            deep_sleep_gui.show()
 
     def sleep_enable_deep_sleep():
         """Puts Talon to sleep mode with deep sleep enabled"""
-        ctx.tags = ["user.deep_sleep"]
         actions.user.sleep_enable()
+        setup_deep_sleep_state()
 
-
-@ctx_deep_sleep.action_class("user")
+@ctx_deep_sleep_asleep.action_class("user")
 class ActionsDeepSleep:
     def sleep_wake_up():
         global wake_ups_remaining_to_exit_deep_sleep
@@ -127,6 +136,18 @@ class ActionsDeepSleep:
         if wake_ups_remaining_to_exit_deep_sleep <= 0:
             actions.user.sleep_wake_up_immediately()
 
+@ctx_deep_sleep_awake.action_class("user")
+class ActionsDeepAwake:
+    def sleep_enable():
+        actions.next()
+        setup_deep_sleep_state()
+
+# Going to sleep with the deep sleep tag active will require the user to wake up multiple times to exit sleep mode, but if they use speech.disable() without this, the graphical interface will not display and the counter may be in a bad state
+@ctx_deep_sleep_awake.action_class("speech")
+class ActionsDeepAwakeSpeech:
+    def disable():
+        actions.next()
+        setup_deep_sleep_state()
 
 @imgui.open(y=0)
 def deep_sleep_gui(gui: imgui.GUI):
