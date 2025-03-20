@@ -1,0 +1,27 @@
+list: user.system_paths
+hostname: morgans-MacBook-Pro
+-
+user: /Users/morgan
+desktop: /Users/morgan/Desktop
+desk: /Users/morgan/Desktop
+documents: /Users/morgan/Documents
+docks: /Users/morgan/Documents
+downloads: /Users/morgan/Downloads
+music: /Users/morgan/Music
+pictures: /Users/morgan/Pictures
+videos: /Users/morgan/Videos
+talon home: /Users/morgan/.talon
+talon recordings: /Users/morgan/.talon/recordings
+talon user: /Users/morgan/.talon/user
+home: /Users/morgan
+source code: /Users/morgan/SourceCode
+platform: /Users/morgan/SourceCode/go/src/gitlab.com/learnd/platform
+database: /Users/morgan/SourceCode/go/src/gitlab.com/learnd/platform/database
+agent: /Users/morgan/SourceCode/go/src/gitlab.com/learnd/platform/agent
+service: /Users/morgan/SourceCode/go/src/gitlab.com/learnd/platform/service
+local infer: /Users/morgan/SourceCode/go/src/gitlab.com/learnd/platform/local-infra
+mobile app expo: /Users/morgan/SourceCode/go/src/gitlab.com/learnd/frontend/mobile-app-expo
+portal: /Users/morgan/SourceCode/go/src/gitlab.com/learnd/frontend/portal
+machine dreams: /Users/morgan/SourceCode/go/src/github.com/slatermorgan/machinesdream
+neural dream: /Users/morgan/SourceCode/go/src/github.com/neuraldream
+host file: /private/etc/
