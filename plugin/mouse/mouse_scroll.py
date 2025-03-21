@@ -285,9 +285,14 @@ def get_window_containing(x: float, y: float):
 
     return None
 
-def compute_scroll_gaze_amount(midpoint: float, relevant_position_coordinate: float, relevant_dimension: float):
+
+def compute_scroll_gaze_amount(
+    midpoint: float, relevant_position_coordinate: float, relevant_dimension: float
+):
     factor = continuous_scrolling_speed_factor * settings.get(
         "user.mouse_gaze_scroll_speed_multiplier"
     )
-    amount = factor * (((relevant_position_coordinate - midpoint) / (relevant_dimension / 10)) ** 3)
+    amount = factor * (
+        ((relevant_position_coordinate - midpoint) / (relevant_dimension / 10)) ** 3
+    )
     return amount
