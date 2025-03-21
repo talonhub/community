@@ -26,6 +26,18 @@ operators = Operators(
     ASSIGNMENT_DIVISION=" /= ",
     ASSIGNMENT_MODULO=" %= ",
     ASSIGNMENT_INCREMENT="++",
+    ASSIGNMENT_BITWISE_AND=" &= ",
+    ASSIGNMENT_BITWISE_OR=" |= ",
+    ASSIGNMENT_BITWISE_EXCLUSIVE_OR=" ^= ",
+    ASSIGNMENT_BITWISE_LEFT_SHIFT=" <<= ",
+    ASSIGNMENT_BITWISE_RIGHT_SHIFT=" >>= ",
+    # code_operators_bitwise
+    BITWISE_AND=" & ",
+    BITWISE_OR=" | ",
+    BITWISE_EXCLUSIVE_OR=" ^ ",
+    BITWISE_LEFT_SHIFT=" << ",
+    BITWISE_RIGHT_SHIFT=" >> ",
+    BITWISE_NOT="~",
     # code_operators_math
     MATH_ADD=" + ",
     MATH_SUBTRACT=" - ",
