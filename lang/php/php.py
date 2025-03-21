@@ -58,6 +58,7 @@ operators = Operators(
     MATH_OR=" || ",
 )
 
+
 @ctx.action_class("user")
 class UserActions:
     def code_get_operators() -> Operators:
