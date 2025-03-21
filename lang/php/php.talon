@@ -22,8 +22,12 @@ settings():
     user.code_protected_variable_formatter = "PRIVATE_CAMEL_CASE"
     user.code_public_variable_formatter = "PRIVATE_CAMEL_CASE"
 
-(op | is) loosely equal: " == "
-(op | is) loosely not equal: " != "
+(op | is) loosely equal: 
+    user.deprecate_command("2025-03-20", "(op | is) loosely equal", "is weak equal")
+    insert(" == ")
+(op | is) loosely not equal: 
+    user.deprecate_command("2025-03-20", "(op | is) loosely not equal", "is weak not equal")
+    insert(" != ")
 
 state try: "try {\n"
 state catch: "catch (\\Throwable $exception) {\n"
