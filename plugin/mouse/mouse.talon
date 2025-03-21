@@ -114,6 +114,10 @@ wheel gaze: user.mouse_gaze_scroll()
 wheel gaze here:
     user.mouse_move_center_active_window()
     user.mouse_gaze_scroll()
+wheel gaze horizontal: user.mouse_gaze_scroll(false)
+wheel gaze horizontal here:
+    user.mouse_move_center_active_window()
+    user.mouse_gaze_scroll(false)
 wheel left: user.mouse_scroll_left()
 wheel left here:
     user.mouse_move_center_active_window()
