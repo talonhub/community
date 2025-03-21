@@ -111,14 +111,14 @@ class Actions:
         """Scrolls down continuously"""
         mouse_scroll_continuous(1, speed_factor)
 
-    def mouse_gaze_scroll():
+    def mouse_gaze_scroll(is_vertical: bool = True):
         """Starts gaze scroll"""
         global gaze_job, continuous_scroll_mode, control_mouse_forced
 
         ctx.tags = ["user.continuous_scrolling"]
 
         continuous_scroll_mode = "gaze scroll"
-        gaze_job = cron.interval("16ms", scroll_gaze_helper)
+        gaze_job = cron.interval("16ms", lambda: scroll_gaze_helper(is_vertical))
 
         if not settings.get("user.mouse_hide_mouse_gui"):
             gui_wheel.show()
@@ -256,7 +256,7 @@ def scroll_continuous_helper():
     actions.mouse_scroll(y)
 
 
-def scroll_gaze_helper():
+def scroll_gaze_helper(is_vertical: bool):
     x, y = ctrl.mouse_pos()
 
     # The window containing the mouse
@@ -266,12 +266,12 @@ def scroll_gaze_helper():
         return
 
     rect = window.rect
-    midpoint = rect.center.y
-    factor = continuous_scrolling_speed_factor * settings.get(
-        "user.mouse_gaze_scroll_speed_multiplier"
-    )
-    amount = factor * (((y - midpoint) / (rect.height / 10)) ** 3)
-    actions.mouse_scroll(amount)
+    if is_vertical:
+        amount = compute_scroll_gaze_amount(rect.center.y, y, rect.height)
+        actions.mouse_scroll(amount)
+    else:
+        amount = compute_scroll_gaze_amount(rect.center.x, x, rect.width)
+        actions.mouse_scroll(0, amount)
 
 
 def get_window_containing(x: float, y: float):
@@ -284,3 +284,10 @@ def get_window_containing(x: float, y: float):
             return window
 
     return None
+
+def compute_scroll_gaze_amount(midpoint: float, relevant_position_coordinate: float, relevant_dimension: float):
+    factor = continuous_scrolling_speed_factor * settings.get(
+        "user.mouse_gaze_scroll_speed_multiplier"
+    )
+    amount = factor * (((relevant_position_coordinate - midpoint) / (relevant_dimension / 10)) ** 3)
+    return amount
