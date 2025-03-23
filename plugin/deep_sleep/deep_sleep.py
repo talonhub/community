@@ -1,9 +1,13 @@
-from talon import Module, Context, actions
+from talon import Context, Module, actions
 
 mod = Module()
-mod.tag("deep_sleep", desc="Tag for enabling deep sleep, which requires a longer wake up command")
+mod.tag(
+    "deep_sleep",
+    desc="Tag for enabling deep sleep, which requires a longer wake up command",
+)
 
 ctx = Context()
+
 
 @mod.action_class
 class Actions:
