@@ -64,7 +64,7 @@ if hasattr(talon, "test_mode"):
     def test_expands_special_chars():
         result = actions.user.create_spoken_forms("hi $world", None, 0, True)
 
-        assert "hi dollar sign world" in result
+        assert "hi world" in result
 
     def test_expands_file_extensions():
         result = actions.user.create_spoken_forms("hi .cs", None, 0, True)
@@ -98,13 +98,33 @@ if hasattr(talon, "test_mode"):
 
         assert "read me" in result
 
+    def test_email():
+        result = actions.user.create_spoken_forms("stupid@test.com", None, 0, True)
+        assert "stupid at test dot com" in result
+
+    def test_symbol_removal():
+        result = actions.user.create_spoken_forms("$ this_is_a-'test'", None, 0, True)
+
+        assert "this is a test" in result
+
+    def test_and_symbol():
+        result = actions.user.create_spoken_forms("movies & tv", None, 0, True)
+
+        assert "movies tv" in result
+        assert "movies and tv" in result
+
+    def test_apostrophe_stripping():
+        result = actions.user.create_spoken_forms("Sam's club", None, 0, True)
+
+        assert "sams club" in result
+
     def test_properties():
         """
         Throw some random inputs at the function to make sure it behaves itself
         """
 
         def _example_generator():
-            pieces = ["hi", "world", "$", ".cs", "1900"]
+            pieces = ["hi", "world", "dollar", ".cs", "1900"]
             params = list(
                 itertools.product(
                     [None, ["world"], ["dot"]],  # Dot is from the expanded ".cs"
