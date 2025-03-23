@@ -41,13 +41,13 @@ def draw_options(canvas):
     #for b in cache:
     canvas.paint.text_align = canvas.paint.TextAlign.CENTER
     paint.textsize = 12
-    index = 1
+    index = 0
     
     dock_items = ui.apps(bundle="com.apple.dock")[0].children
     for child in dock_items[0].children:
-        
-        if child.AXSubrole == "AXSeparatorDockItem":
-            continue 
+        index += 1
+
+
 
         paint.style = paint.Style.FILL
         #paint.color = "ffffff"
@@ -55,10 +55,11 @@ def draw_options(canvas):
         frame_rect = Rect(math.floor(rect.x), rect.y + rect.height / 4, rect.width / 3, rect.height )
         #canvas.draw_rect(frame_rect)
         paint.color = "ffffff"
+        if child.AXSubrole == "AXSeparatorDockItem":
+            continue 
         canvas.draw_text(f"{index}", rect.x, frame_rect.y + rect.height / 2 )
         #if index == 38:
         #    print(child)
-        index += 1
 
 
     count = len(dock_items[0].children)
