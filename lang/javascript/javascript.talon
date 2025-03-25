@@ -29,8 +29,14 @@ settings():
     user.code_protected_variable_formatter = "PRIVATE_CAMEL_CASE"
     user.code_public_variable_formatter = "PRIVATE_CAMEL_CASE"
 
-(op | is) strict equal: " === "
-(op | is) strict not equal: " !== "
+(op | is) strict equal:
+    user.deprecate_command("2025-03-4", "(op | is) strict equal", "is equal")
+    user.code_operator("MATH_EQUAL")
+
+(op | is) strict not equal:
+    user.deprecate_command("2025-03-4", "(op | is) strict not equal", "is not equal")
+    user.code_operator("MATH_NOT_EQUAL")
+
 op null else: " ?? "
 
 state const: "const "
