@@ -12,4 +12,3 @@ not tag: user.deep_sleep
 # engine, this controls Talon.
 
 ^(wake up)+$: speech.enable()
-^talon wake [<phrase>]$: speech.enable()
