@@ -650,11 +650,18 @@ class Actions:
                     break
         elif len(splits) == 2:
             application_user_model_id = splits[1]
-            for app in apps:
+            valid_windows_for_pending_app = []
+            for app in set(apps):
                 for window in app.windows():
-                    if application_user_model_id == get_application_user_model_for_window(window.id):
-                        window.focus()
-                        break
+                    if is_window_valid(window) and application_user_model_id == get_application_user_model_for_window(window.id):
+                        valid_windows_for_pending_app.append(window)
+            
+            if len(valid_windows_for_pending_app) > 1:
+                gui_switcher_chooser.show()
+                ctx.tags = ["user.app_switcher_selector_showing"] 
+            else:
+                actions.user.switcher_focus_window(valid_windows_for_pending_app[-1]) 
+                
         else:
             for app in set(apps):
                 valid_windows = get_valid_windows(app)
