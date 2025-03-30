@@ -656,7 +656,7 @@ class Actions:
                         window.focus()
                         break
         else:
-            for app in apps:
+            for app in set(apps):
                 valid_windows = get_valid_windows(app)
                 if not valid_windows_for_pending_app:
                     valid_windows_for_pending_app = valid_windows
