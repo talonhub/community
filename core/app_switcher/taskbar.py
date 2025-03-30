@@ -45,7 +45,6 @@ class Actions:
         actions.mouse_move(x, y)
 
 
-mcanvas = canvas.Canvas.from_screen(ui.main_screen())
 def draw_options(canvas):
     if not width:
         return
@@ -157,8 +156,24 @@ def get_windows_eleven_taskbar(forced: bool = False):
                         #print("found Hidden!")
             
             tasklist_width = show_hidden_x - x_start
-
+mcanvas = None
 def update_canvas(register):
+    global mcanvas
+    global cache, taskbar, ms_tasklist, tasklist_width
+    global width, height, x_start, y_start
+    if mcanvas:
+        taskbar = None
+        ms_tasklist = None
+        tasklist_width = None
+        width = None
+        height = None
+        x_start = None
+        y_start = None
+        mcanvas.close()
+
+    
+    mcanvas = canvas.Canvas.from_screen(ui.main_screen())
+
     if "Windows-11" not in platform.platform():
         get_windows_ten_taskbar(True)
     else:
@@ -174,7 +189,8 @@ def update_canvas(register):
 if app.platform == "windows":
     # uncomment the following for quick testing
     def on_ready():
-        update_canvas(True)     
+        update_canvas(True)
+        ui.register("screen_change", lambda _: update_canvas(True))     
         
     app.register("ready", on_ready)
 
