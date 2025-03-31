@@ -1,5 +1,5 @@
 from talon.windows.ax import Element
-from talon import Context, Module, actions, app, imgui, ui, resource, canvas, ctrl, settings
+from talon import Context, Module, actions, app, imgui, ui, resource, canvas, ctrl, settings, cron
 from dataclasses import dataclass, asdict
 from talon.ui import Rect
 import math
@@ -33,10 +33,10 @@ class Actions:
         # actions.sleep("150ms")
         # actions.mouse_move(x, y)
 
-count = None
 mcanvas = canvas.Canvas.from_screen(ui.main_screen())
+cached_count = 0
 def draw_options(canvas):
-    global count
+    global cached_count
     paint = canvas.paint
     #for b in cache:
     canvas.paint.text_align = canvas.paint.TextAlign.CENTER
@@ -47,7 +47,8 @@ def draw_options(canvas):
     for child in dock_items[0].children:
         index += 1
 
-
+        if child.AXSubrole == "AXSeparatorDockItem":
+            continue
 
         paint.style = paint.Style.FILL
         #paint.color = "ffffff"
@@ -55,19 +56,25 @@ def draw_options(canvas):
         frame_rect = Rect(math.floor(rect.x), rect.y + rect.height / 4, rect.width / 3, rect.height )
         #canvas.draw_rect(frame_rect)
         paint.color = "ffffff"
-        if child.AXSubrole == "AXSeparatorDockItem":
-            continue 
         canvas.draw_text(f"{index}", rect.x, frame_rect.y + rect.height / 2 )
         #if index == 38:
         #    print(child)
 
 
-    count = len(dock_items[0].children)
+    cached_count = len(dock_items[0].children)
 
+def update():
+    if len(ui.apps(bundle="com.apple.dock")[0].children) != cached_count:
+        mcanvas.freeze()
+        
+        
 if app.platform == "mac":
     # uncomment the following for quick testing
     def on_ready():
         mcanvas.register("draw", draw_options)
+        mcanvas.freeze()
+        ui.register("app_launch", lambda _: update())
+        ui.register("app_close", lambda _: update())
 
         # for child in dock_items[0].children:
         #     rect = child.AXFrame
