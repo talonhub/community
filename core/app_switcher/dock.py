@@ -75,7 +75,7 @@ if app.platform == "mac":
         mcanvas.freeze()
         ui.register("app_launch", lambda _: update())
         ui.register("app_close", lambda _: update())
-
+        ui.register("screen_change", lambda _: update())
         # for child in dock_items[0].children:
         #     rect = child.AXFrame
         #     print(rect.width)
