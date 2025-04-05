@@ -159,6 +159,11 @@ mod.list(
     "window_split_positions",
     "Predefined window positions when splitting the screen between multiple windows.",
 )
+mod.tag(
+    "experimental_window_layout",
+    desc="Tag to enable experimental window layout commands",
+)
+
 ctx = Context()
 
 
