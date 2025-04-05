@@ -65,7 +65,7 @@ if app.platform == "windows":
 
     else:
         ctx.lists["self.system_directories"] = {
-            "applications": "shell:Applications",
+            "applications": "shell:AppsFolder",
             "desk": os.path.expanduser("~/Desktop"),
             "docks": os.path.expanduser("~/Documents"),
             "downloads": os.path.expanduser("~/Downloads"),
@@ -193,9 +193,12 @@ class UserActionsWin:
 
     def system_open_directory(path):
         path = os.path.expanduser(path)
-        if os.path.exists(path):
+        
+        if os.path.exists(path) or "shell:" in path:
+
             actions.user.exec(f'explorer.exe "{path}"')
         else:
+            print("requested path {path} does not exist")
             actions.app.notify(f"requested path {path} does not exist")
 
     def system_show_clipboard():
