@@ -120,6 +120,6 @@ settings():
 # you can say "one" to write "1".
 # tag(): user.unprefixed_numbers
 
-# Uncomment a blow to enable the experimental window layout commands
+# Uncomment the below to enable the experimental window layout commands
 # defined in window_layout.talon
 # tag(): user.experimental_window_layout
