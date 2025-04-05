@@ -148,7 +148,7 @@ def filter_nonviable_windows(windows: List[Window]) -> list[Window]:
     active_window_idx = all_windows.index(active_window)  # type: ignore
     return list(
         filter(
-            lambda w: (isinstance(w, Gap) or all_windows.index(w) >= active_window_idx),
+            lambda w: (isinstance(w, Gap) or is_window_valid(w)),
             windows,
         )
     )
