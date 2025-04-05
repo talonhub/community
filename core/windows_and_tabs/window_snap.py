@@ -10,7 +10,7 @@ Originally from dweil/talon_community - modified for newapi by jcaw.
 import logging
 from typing import Dict, Optional
 
-from talon import Context, Module, actions, settings, ui, app
+from talon import Context, Module, actions, settings, ui, app, registry
 from talon.ui import Window
 
 mod = Module()
@@ -41,7 +41,7 @@ def _set_window_pos(window, x, y, width, height):
 
     # on occassion, for whatever reason, it fails to
     # position correctly on windows the first time
-    if app.platform == "windows":
+    if app.platform == "windows" and "user.experimental_window_layout" in registry.tags:
         actions.sleep("100ms")
         window.rect = ui.Rect(round(x), round(y), round(width), round(height))
 
