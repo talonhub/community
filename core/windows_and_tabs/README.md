@@ -1,5 +1,11 @@
 # Laying Out Windows
 
+The experimental laying out windows command requires that you first enable a tag. You can find an example in the provided settings.talon file, or you can set it yourself like this:
+
+```
+tag(): user.experimental_window_layout
+```
+
 The `layout` command allows you to lay out multiple windows around the screen in prearranged configurations. With a single command you can arrange multiple windows and if you repeat the same command it will rotate them. Here are some example arrangements:
 
 Halves: Split the screen into two halves. The first window goes to the left half and the second goes to the right.
