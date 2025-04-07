@@ -119,3 +119,7 @@ settings():
 # By default you need to say "numb one" to write "1". If you uncomment this,
 # you can say "one" to write "1".
 # tag(): user.unprefixed_numbers
+
+# Uncomment the below to enable the experimental window layout commands
+# defined in window_layout.talon
+# tag(): user.experimental_window_layout
