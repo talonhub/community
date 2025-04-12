@@ -120,9 +120,6 @@ class EditActions:
     def paste():
         actions.user.vscode("editor.action.clipboardPasteAction")
 
-    def save():
-        actions.user.vscode("workbench.action.files.save")
-
     def find(text: str = None):
         if text:
             actions.user.run_rpc_command(
@@ -143,6 +140,9 @@ class EditActions:
 
     def save_all():
         actions.user.vscode("workbench.action.files.saveAll")
+
+    def save():
+        actions.user.vscode("workbench.action.files.save")
 
     def find_next():
         actions.user.vscode("editor.action.nextMatchFindAction")
