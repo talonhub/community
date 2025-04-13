@@ -1,4 +1,5 @@
 from contextlib import suppress
+
 from talon import Context, Module, actions, settings
 
 from ..tags.operators import Operators
@@ -52,7 +53,7 @@ ctx.lists["user.c_qualifiers"] = {
     "extern": "extern",
     "const expert": "constexpr",
     "const expression": "constexpr",
-    "constant expression": "constexpr"
+    "constant expression": "constexpr",
 }
 
 ctx.lists["user.code_common_function"] = {
@@ -65,6 +66,7 @@ ctx.lists["user.code_common_function"] = {
     "size of": "sizeof",
     "exit": "exit",
 }
+
 
 @ctx.action_class("user")
 class UserActions:

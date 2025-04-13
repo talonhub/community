@@ -100,11 +100,9 @@ type <user.c_type>: "{c_type}"
 (var|variable) [<user.c_qualifier_list>] <user.c_type> <user.c_variable>:
     qualifiers = c_qualifier_list or ""
     insert("{qualifiers}{c_type} {c_variable}")
- 
+
 [<user.c_qualifier_list>] <user.c_type> funky <user.text>:
     qualifiers = c_qualifier_list or ""
     insert("{qualifiers} {text}")
 
 int main: user.insert_between("int main(", ")")
-
-

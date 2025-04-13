@@ -1,4 +1,5 @@
 from contextlib import suppress
+
 from talon import Context, Module, actions, settings
 
 from ..tags.operators import Operators
@@ -34,20 +35,20 @@ ctx.lists["self.c_type_bit_width"] = {
 # arithmetic types
 
 ctx.lists["user.c_arithmetic_specifiers"] = {
-    "short": 'short',
-    "long": 'long',
-    "signed": 'signed',
-    "unsigned": 'unsigned',
-    "char": 'char',
+    "short": "short",
+    "long": "long",
+    "signed": "signed",
+    "unsigned": "unsigned",
+    "char": "char",
     "car": "char",
-    "character": 'char',
+    "character": "char",
     "int": "int",
     "integer": "int",
-    "double": 'double',
-    "float": 'float',
-    "boolean": "bool", #todo base types
+    "double": "double",
+    "float": "float",
+    "boolean": "bool",  # todo base types
     "bool": "bool",
-    "void": "void", 
+    "void": "void",
 }
 
 ctx.lists["user.c_qualifiers"] = {
@@ -95,7 +96,6 @@ ctx.lists["user.code_libraries"] = {
     "string": "string.h",
     "time": "time.h",
     "standard int": "stdint.h",
- 
 }
 
 ctx.lists["user.code_common_function"] = {
@@ -171,20 +171,24 @@ def c_keywords(m) -> str:
     "Returns a string"
     return m.c_keywords
 
+
 @mod.capture(rule="{self.stdint_signed}")
 def stdint_signed(m) -> str:
     "Returns a string"
     return m.stdint_signed
+
 
 @mod.capture(rule="{self.c_type_bit_width}")
 def c_type_bit_width(m) -> str:
     "Returns a string"
     return m.c_type_bit_width
 
+
 @mod.capture(rule="{self.c_arithmetic_specifiers}")
 def c_arithmetic_specifier(m) -> str:
     "Returns a string"
     return m.c_arithmetic_specifiers
+
 
 # fixed-width integer types
 @mod.capture(rule="[<self.stdint_signed>] int <self.c_type_bit_width>")
@@ -195,16 +199,19 @@ def c_fixed_integer(m) -> str:
         prefix = m.stdint_signed
     return prefix + "int" + m.c_type_bit_width + "_t"
 
+
 # arithmetic types
 @mod.capture(rule="<self.c_arithmetic_specifier>+")
 def c_arithmetic_type(m) -> str:
     "Returns a string"
     return " ".join(m.c_arithmetic_specifier_list)
 
+
 @mod.capture(rule="<self.c_fixed_integer>|<self.c_arithmetic_type>")
 def c_raw_type(m) -> str:
     "Returns a string"
     return str(m)
+
 
 @mod.capture(rule="<self.c_raw_type> [<self.c_pointers>+]")
 def c_type(m) -> str:
@@ -212,31 +219,33 @@ def c_type(m) -> str:
     suffix = ""
     with suppress(AttributeError):
         suffix = "".join(m.c_pointers_list)
-    return m.c_raw_type+suffix
+    return m.c_raw_type + suffix
+
 
 @mod.capture(rule="{self.c_declarators}* <user.text>")
 def c_variable(m) -> str:
     "Returns a string"
     name = actions.user.formatted_text(
-                m.text,
-                settings.get("user.code_private_variable_formatter")
-            )
+        m.text, settings.get("user.code_private_variable_formatter")
+    )
     with suppress(AttributeError):
-        if 'array' in m.c_declarators_list:
-            name = name+"[]"
-        if 'pointer' in m.c_declarators_list:
-            name = "*"+name
+        if "array" in m.c_declarators_list:
+            name = name + "[]"
+        if "pointer" in m.c_declarators_list:
+            name = "*" + name
     return name
+
 
 @mod.capture(rule="{self.c_qualifiers}")
 def c_qualifier(m) -> str:
     "Returns a string"
     return m.c_qualifiers
 
+
 @mod.capture(rule="<self.c_qualifier>+")
 def c_qualifier_list(m) -> str:
     "Returns a string"
-    return " ".join(m.c_qualifier_list)+" "
+    return " ".join(m.c_qualifier_list) + " "
 
 
 operators = Operators(
@@ -295,16 +304,15 @@ class UserActions:
 
     def code_state_if():
         actions.insert("if (")
-        #actions.key("left")
-        #actions.insert("if () {\n}\n")
-        #actions.key("up:2 left:3")
+        # actions.key("left")
+        # actions.insert("if () {\n}\n")
+        # actions.key("up:2 left:3")
 
     def code_state_else_if():
         actions.insert("else if (")
-        #actions.key("left")
-        #actions.insert("else if () {\n}\n")
-        #actions.key("up:2 left:3")
-        
+        # actions.key("left")
+        # actions.insert("else if () {\n}\n")
+        # actions.key("up:2 left:3")
 
     def code_state_else():
         actions.insert("else {")
