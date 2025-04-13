@@ -11,9 +11,15 @@ scroll_start_ts: float = 0
 hiss_scroll_up = False
 control_mouse_forced = False
 continuous_scrolling_speed_factor: float = 1.0
+is_continuous_scrolling_vertical: bool = True
 
 mod = Module()
 ctx = Context()
+
+mod.list(
+    "continuous_scrolling_direction",
+    desc="Defines names for directions used with continuous scrolling",
+)
 
 mod.setting(
     "mouse_wheel_down_amount",
@@ -103,6 +109,20 @@ class Actions:
         x = amount * settings.get("user.mouse_wheel_horizontal_amount")
         actions.mouse_scroll(0, x)
 
+    def mouse_scroll_continuous(direction: str, speed_factor: Optional[int] = None):
+        """Scrolls continuously in the given direction"""
+        match direction:
+            case "UP":
+                actions.user.mouse_scroll_up_continuous(speed_factor)
+            case "DOWN":
+                actions.user.mouse_scroll_down_continuous(speed_factor)
+            case "LEFT":
+                actions.user.mouse_scroll_left_continuous(speed_factor)
+            case "RIGHT":
+                actions.user.mouse_scroll_right_continuous(speed_factor)
+            case _:
+                raise ValueError(f"Invalid continuous scrolling direction: {direction}")
+
     def mouse_scroll_up_continuous(speed_factor: Optional[int] = None):
         """Scrolls up continuously"""
         mouse_scroll_continuous(-1, speed_factor)
@@ -110,6 +130,14 @@ class Actions:
     def mouse_scroll_down_continuous(speed_factor: Optional[int] = None):
         """Scrolls down continuously"""
         mouse_scroll_continuous(1, speed_factor)
+
+    def mouse_scroll_right_continuous(speed_factor: Optional[int] = None):
+        """Scrolls right continuously"""
+        mouse_scroll_continuous(1, speed_factor, is_vertical=False)
+
+    def mouse_scroll_left_continuous(speed_factor: Optional[int] = None):
+        """Scrolls left continuously"""
+        mouse_scroll_continuous(-1, speed_factor, is_vertical=False)
 
     def mouse_gaze_scroll():
         """Starts gaze scroll"""
@@ -205,15 +233,18 @@ class UserActions:
 def mouse_scroll_continuous(
     new_scroll_dir: Literal[-1, 1],
     speed_factor: Optional[int] = None,
+    is_vertical: bool = True,
 ):
-    global scroll_job, scroll_dir, scroll_start_ts
+    global scroll_job, scroll_dir, scroll_start_ts, is_continuous_scrolling_vertical
     actions.user.mouse_scroll_set_speed(speed_factor)
+    was_vertical = is_continuous_scrolling_vertical
+    is_continuous_scrolling_vertical = is_vertical
 
-    update_continuous_scrolling_mode(new_scroll_dir)
+    update_continuous_scrolling_mode(new_scroll_dir, is_vertical)
 
     if scroll_job:
         # Issuing a scroll in the same direction aborts scrolling
-        if scroll_dir == new_scroll_dir:
+        if scroll_dir == new_scroll_dir and was_vertical == is_vertical:
             actions.user.mouse_scroll_stop()
         # Issuing a scroll in the reverse direction resets acceleration
         else:
@@ -230,12 +261,18 @@ def mouse_scroll_continuous(
             gui_wheel.show()
 
 
-def update_continuous_scrolling_mode(new_scroll_dir: Literal[-1, 1]):
+def update_continuous_scrolling_mode(new_scroll_dir: Literal[-1, 1], is_vertical: bool):
     global continuous_scroll_mode
     if new_scroll_dir == -1:
-        continuous_scroll_mode = "scroll up continuous"
+        if is_vertical:
+            continuous_scroll_mode = "scroll up continuous"
+        else:
+            continuous_scroll_mode = "scroll left continuous"
     else:
-        continuous_scroll_mode = "scroll down continuous"
+        if is_vertical:
+            continuous_scroll_mode = "scroll down continuous"
+        else:
+            continuous_scroll_mode = "scroll right continuous"
 
 
 def scroll_continuous_helper():
@@ -250,10 +287,13 @@ def scroll_continuous_helper():
         else 1
     )
 
-    y = round(scroll_amount * acceleration_speed * scroll_dir)
-    if y == 0:
-        y = scroll_dir
-    actions.mouse_scroll(y)
+    scroll_delta = round(scroll_amount * acceleration_speed * scroll_dir)
+    if scroll_delta == 0:
+        scroll_delta = scroll_dir
+    if is_continuous_scrolling_vertical:
+        actions.mouse_scroll(scroll_delta)
+    else:
+        actions.mouse_scroll(0, scroll_delta)
 
 
 def scroll_gaze_helper():
