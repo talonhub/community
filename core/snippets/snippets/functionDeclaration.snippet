@@ -6,7 +6,7 @@ $0.wrapperPhrase: funk
 $0.wrapperScope: statement
 ---
 
-language: c | cpp | csharp | java
+language: c | csharp | java
 
 $1.insertionFormatter: PRIVATE_CAMEL_CASE
 -
@@ -30,4 +30,12 @@ $1.insertionFormatter: SNAKE_CASE
 -
 def $1($2):
     $0
+---
+language: cpp
+
+$1.insertionFormatter: SNAKE_CASE
+-
+auto $1($2) {
+    $0
+}
 ---

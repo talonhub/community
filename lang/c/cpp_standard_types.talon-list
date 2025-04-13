@@ -1,0 +1,55 @@
+list: user.cpp_standard_types
+code.language: cpp
+language: en
+-
+vector
+string
+tuple
+map
+hash
+array
+function
+pair
+unordered map: unordered_map
+deck: deque
+out stream: ostream
+in stream: istream
+bit set: bitset
+queue
+priority queue: priority_queue
+stack
+set
+unordered set: unordered_set
+multiset
+unordered multiset: unordered_multiset
+multimap
+unordered multimap: unordered_multimap
+shared pointer: shared_ptr
+unique pointer: unique_ptr
+weak pointer: weak_ptr
+optional
+variant
+any
+span
+filesystem path: filesystem::path
+regex
+match results: match_results
+sub match: sub_match
+chrono duration: chrono::duration
+chrono time point: chrono::time_point
+mutex
+recursive mutex: recursive_mutex
+shared mutex: shared_mutex
+condition variable: condition_variable
+atomic
+thread
+future
+promise
+packaged task: packaged_task
+lock guard: lock_guard
+unique lock: unique_lock
+scoped lock: scoped_lock
+barrier
+latch
+semaphore
+stop token: stop_token

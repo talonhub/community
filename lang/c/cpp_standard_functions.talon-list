@@ -1,0 +1,118 @@
+list: user.cpp_standard_functions
+code.language: cpp
+language: en
+-
+all of: all_of
+any of: any_of
+apply
+as const: as_const
+async
+at
+atomic compare exchange: atomic_compare_exchange
+atomic fetch add: atomic_fetch_add
+atomic fetch sub: atomic_fetch_sub
+atomic load: atomic_load
+atomic store: atomic_store
+binary search: binary_search
+const begin: cbegin
+const end: cend
+clamp
+copy
+copy backward: copy_backward
+count
+count if: count_if
+const reverse begin: crbegin
+const reverse end: crend
+current exception: current_exception
+distance
+emplace
+emplace back: emplace_back
+emplace front: emplace_front
+end
+equal
+erase
+erase if: erase_if
+exit
+fill
+fill n: fill_n
+find
+find end: find_end
+find first of: find_first_of
+find if: find_if
+find if not: find_if_not
+for each: for_each
+format
+forward
+forward as tuple: forward_as_tuple
+generate
+generate n: generate_n
+get
+includes
+inplace merge: inplace_merge
+invoke
+is heap: is_heap
+is heap until: is_heap_until
+is partitioned: is_partitioned
+is sorted: is_sorted
+is sorted until: is_sorted_until
+iter swap: iter_swap
+lexicographical compare: lexicographical_compare
+lower bound: lower_bound
+make heap: make_heap
+make pair: make_pair
+make shared: make_shared
+make tuple: make_tuple
+make unique: make_unique
+max
+max element: max_element
+merge
+min
+min element: min_element
+minmax
+minmax element: minmax_element
+move
+next permutation: next_permutation
+none of: none_of
+nth element: nth_element
+partial sort: partial_sort
+partial sort copy: partial_sort_copy
+partition
+partition copy: partition_copy
+pop heap: pop_heap
+previous permutation: prev_permutation
+push heap: push_heap
+ranges all of: ranges::all_of
+ranges begin: ranges::begin
+ranges binary search: ranges::binary_search
+ranges end: ranges::end
+ranges reverse: ranges::reverse
+ranges sort: ranges::sort
+reduce
+remove
+remove copy: remove_copy
+remove copy if: remove_copy_if
+remove if: remove_if
+replace
+replace copy: replace_copy
+replace copy if: replace_copy_if
+replace if: replace_if
+reverse
+reverse copy: reverse_copy
+rotate
+rotate copy: rotate_copy
+search
+search n: search_n
+set difference: set_difference
+set intersection: set_intersection
+set symmetric difference: set_symmetric_difference
+set union: set_union
+set width: setw
+sort
+stable partition: stable_partition
+stable sort: stable_sort
+swap
+swap ranges: swap_ranges
+transform
+unique
+unique copy: unique_copy
+upper bound: upper_bound
