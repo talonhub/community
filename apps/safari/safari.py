@@ -27,6 +27,8 @@ class UserActions:
 @ctx.action_class("browser")
 class BrowserActions:
     def address() -> str:
+        if "WebApp" in actions.app.bundle():
+            return ""
         try:
             window = ui.active_app().windows()[0]
         except IndexError:
