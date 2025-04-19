@@ -13,7 +13,7 @@ from .windows_and_tabs import is_window_valid
 SPLIT_POSITIONS = {
     # Explicit layout names with only one configuration can be easier to force
     # the desired result:
-    "HALVES": ["LEFT", "RIGHT"],
+    "HALF": ["LEFT", "RIGHT"],
     "THIRDS": ["LEFT_THIRD", "CENTER_THIRD", "RIGHT_THIRD"],
     "CLOCK": [
         "LEFT",

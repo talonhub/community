@@ -8,7 +8,7 @@ tag(): user.experimental_window_layout
 
 The `layout` command allows you to lay out multiple windows around the screen in prearranged configurations. With a single command you can arrange multiple windows and if you repeat the same command it will rotate them. Here are some example arrangements:
 
-Halves: Split the screen into two halves. The first window goes to the left half and the second goes to the right.
+Half: Split the screen into two halves. The first window goes to the left half and the second goes to the right.
 Thirds: Split the screen into thirds, arranging from left to right.
 Clock: Arrange one window on the left half, and split the right from top to bottom.
 
