@@ -1,0 +1,51 @@
+language: cpp
+---
+
+name: Template
+phrase: template
+insertionScope: statement
+-
+template <$0>
+---
+
+name: Public
+phrase: public
+insertionScope: statement
+-
+public:
+    $0
+---
+
+name: Protected
+phrase: protected
+insertionScope: statement
+-
+protected:
+    $0
+---
+
+name: Private
+phrase: private
+insertionScope: statement
+-
+private:
+    $0
+---
+
+name: Structure
+phrase: structure | struct
+insertionScope: statement
+-
+struct $1 {
+    $0
+};
+---
+
+name: Subclass
+phrase: subclass
+$1.insertionFormatter: PUBLIC_CAMEL_CASE
+-
+class $1 : $2 {
+    $0
+};
+---

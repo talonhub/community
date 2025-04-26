@@ -6,7 +6,7 @@ $0.wrapperPhrase: class
 $0.wrapperScope: statement
 ---
 
-language: cpp | csharp | java | javascript | typescript | javascriptreact | typescriptreact
+language: csharp | java | javascript | typescript | javascriptreact | typescriptreact
 
 $1.insertionFormatter: PUBLIC_CAMEL_CASE
 -
@@ -21,4 +21,13 @@ $1.insertionFormatter: PUBLIC_CAMEL_CASE
 -
 class $1:
     $0
+---
+
+language: cpp
+
+$1.insertionFormatter: PUBLIC_CAMEL_CASE
+-
+class $1 {
+    $0
+};
 ---
