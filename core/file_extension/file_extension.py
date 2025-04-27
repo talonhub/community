@@ -7,6 +7,7 @@ mod.list("file_extension", desc="A file extension, such as .py")
 
 _file_extensions_defaults = {
     "dot pie": ".py",
+    "dot pe es one": ".ps1",
     "dot elixir": ".ex",
     "dot talon": ".talon",
     "dot mark down": ".md",
@@ -45,6 +46,8 @@ _file_extensions_defaults = {
     "dot flack": ".flac",
     "dot doc": ".doc",
     "dot doc x": ".docx",
+    "dot oh de tee": ".odt",
+    "dot oh de es": ".ods",
     "dot pdf": ".pdf",
     "dot tar": ".tar",
     "dot g z": ".gz",
