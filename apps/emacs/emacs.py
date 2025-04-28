@@ -109,7 +109,7 @@ class UserActions:
     def split_window():
         actions.user.emacs("split-window-below")
 
-    def split_window_vertically():
+    def split_window_vertical_line():
         actions.user.emacs("split-window-below")
 
     def split_window_up():
@@ -119,7 +119,7 @@ class UserActions:
         actions.user.emacs("split-window-below")
         actions.user.emacs("other-window")
 
-    def split_window_horizontally():
+    def split_window_horizontal_line():
         actions.user.emacs("split-window-right")
 
     def split_window_left():

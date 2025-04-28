@@ -40,10 +40,10 @@ class user_actions:
     def split_window_up():
         actions.key("alt-up")
 
-    def split_window_vertically():
+    def split_window_vertical_line():
         actions.key("shift-ctrl-e")
 
-    def split_window_horizontally():
+    def split_window_horizontal_line():
         actions.key("shift-ctrl-o")
 
     def split_flip():

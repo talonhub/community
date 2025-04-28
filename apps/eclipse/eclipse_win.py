@@ -95,7 +95,7 @@ class UserActions:
     def split_window_down():
         actions.key("alt-shift-s m")
 
-    def split_window_horizontally():
+    def split_window_horizontal_line():
         actions.key("alt-ctrl-s s")
 
     def split_window_right():
@@ -104,7 +104,7 @@ class UserActions:
     def split_window_up():
         actions.key("alt-shift-s m")
 
-    def split_window_vertically():
+    def split_window_vertical_line():
         actions.key("alt-shift-s s")
 
     def split_window():

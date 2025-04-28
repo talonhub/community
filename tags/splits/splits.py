@@ -18,11 +18,11 @@ class Actions:
     def split_window_up():
         """Move active tab to upper split"""
 
-    def split_window_vertically():
-        """Splits window vertically"""
+    def split_window_vertical_line():
+        """Splits the window using a vertical split line"""
 
-    def split_window_horizontally():
-        """Splits window horizontally"""
+    def split_window_horizontal_line():
+        """Splits the window using a horizontal split line"""
 
     def split_flip():
         """Flips the orietation of the active split"""
