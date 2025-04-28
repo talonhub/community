@@ -12,10 +12,10 @@ class tab_actions:
         actions.app.tab_close()
 
     def tab_duplicate():
-        """Duplicates the current tab."""
+        """Duplicates the current tab"""
 
     def tab_final():
         """Jumps to the final tab"""
 
     def tab_jump(number: int):
-        """Jumps to the specified tab"""
+        """Jumps to a tab by its one-based index"""
