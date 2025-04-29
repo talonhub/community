@@ -19,3 +19,9 @@ class tab_actions:
 
     def tab_jump(number: int):
         """Jumps to a tab by its one-based index"""
+
+    def tab_move_left():
+        """Move the current tab one tab to the left"""
+
+    def tab_move_right():
+        """Move the current tab one tab to the right"""
