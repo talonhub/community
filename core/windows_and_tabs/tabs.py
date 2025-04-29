@@ -25,3 +25,12 @@ class tab_actions:
 
     def tab_move_right():
         """Move the current tab one tab to the right"""
+
+    def tab_switcher_focus(text: str):
+        """Focus a tab using tab search"""
+
+    def tab_switcher_focus_last():
+        """Focus last tab"""
+
+    def tab_switcher_menu():
+        """Shows the app's tab switcher"""
