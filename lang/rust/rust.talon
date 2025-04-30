@@ -44,7 +44,6 @@ state enum <user.text>:
     insert("enum ")
     insert(user.formatted_text(text, "PUBLIC_CAMEL_CASE"))
 
-toggle use: user.code_toggle_libraries()
 
 ## Simple aliases
 borrow: "&"

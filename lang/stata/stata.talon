@@ -24,5 +24,3 @@ s s c install: user.code_import()
 
 s s c install <user.code_libraries>: user.code_insert_library(code_libraries, "")
 
-toggle imports: user.code_toggle_libraries()
-toggle packages: user.code_toggle_libraries()
