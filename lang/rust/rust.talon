@@ -44,7 +44,6 @@ state enum <user.text>:
     insert("enum ")
     insert(user.formatted_text(text, "PUBLIC_CAMEL_CASE"))
 
-
 ## Simple aliases
 borrow: "&"
 borrow mutable: "&mut "
