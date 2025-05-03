@@ -124,6 +124,11 @@ def launch_applications(m) -> str:
     "Returns a single application name"
     return m.launch
 
+def get_application_by_app_user_model_id(uuid) -> Application:
+    if uuid.lower() in APPLICATIONS_DICT:
+        return APPLICATIONS_DICT[uuid.lower()]
+    return None
+    
 def get_override_by_app_user_model_id(uuid, curr_app):
     if uuid.lower() in APPLICATIONS_OVERRIDES:
         return APPLICATIONS_OVERRIDES[uuid.lower()]
@@ -259,6 +264,9 @@ def update_running_list():
                     for spoken_form in spoken_forms:
                         running[spoken_form] = mapping
 
+                    if app_user_model_id.lower() not in RUNNING_APPLICATION_DICT:
+                        RUNNING_APPLICATION_DICT[window_app_user_model_id.lower()] = [window_list[-1]]
+
                     app_frame_host_cache[window_app_user_model_id.lower()] = True
 
     for cur_app in foreground_apps:
@@ -270,17 +278,17 @@ def update_running_list():
 
         if app.platform == "mac":
             bundle_name = cur_app.bundle.lower()
-            RUNNING_APPLICATION_DICT[bundle_name] = [cur_app]
+            RUNNING_APPLICATION_DICT[bundle_name.lower()] = [cur_app]
 
         if exe_path not in RUNNING_APPLICATION_DICT:
-            RUNNING_APPLICATION_DICT[exe_path] = [cur_app]
+            RUNNING_APPLICATION_DICT[exe_path.lower()] = [cur_app]
         else:
-            RUNNING_APPLICATION_DICT[exe_path].append(cur_app)
+            RUNNING_APPLICATION_DICT[exe_path.lower()].append(cur_app)
         
         if exe not in RUNNING_APPLICATION_DICT:
-            RUNNING_APPLICATION_DICT[exe] = [cur_app]
+            RUNNING_APPLICATION_DICT[exe.lower()] = [cur_app]
         else:
-            RUNNING_APPLICATION_DICT[exe].append(cur_app)
+            RUNNING_APPLICATION_DICT[exe.lower()].append(cur_app)
 
         if name.lower() not in RUNNING_APPLICATION_DICT:
             RUNNING_APPLICATION_DICT[name.lower()] = [cur_app]
@@ -309,6 +317,8 @@ def update_running_list():
                     continue
                 else:
                     override = get_override_by_app_user_model_id(app_user_model_id, cur_app)
+
+                RUNNING_APPLICATION_DICT[app_user_model_id.lower()] = [cur_app]
             else:
                 override = get_override_for_running_app(cur_app)
                 # print(f"{cur_app.name}: {override}" )
@@ -328,6 +338,11 @@ def update_running_list():
 
                         spoken_forms = window_override.spoken_forms if window_override and window_override.spoken_forms else None
                         mapping = f"{cur_app.name}-::*::-{window_app_user_model_id}"
+
+                        if window_app_user_model_id.lower() not in RUNNING_APPLICATION_DICT:
+                            RUNNING_APPLICATION_DICT[window_app_user_model_id.lower()] = [window]
+                        else:
+                            RUNNING_APPLICATION_DICT[window_app_user_model_id.lower()].append(window)
 
                         if spoken_forms:
                             for spoken_form in spoken_forms:
@@ -500,7 +515,7 @@ def update_launch_applications(f):
     if len(applications) < len(INSTALLED_APPLICATIONS_LIST):
         must_update_file = True
 
-    # Convert JSON dictionaries to Person objects
+    # Convert JSON dictionaries to application objects
     applications = [Application(**application) for application in applications]
     
     for application in applications:
@@ -559,16 +574,16 @@ def update_launch_applications(f):
              must_update_file = True
 
         if curr_app.unique_identifier:
-            APPLICATIONS_DICT[curr_app.unique_identifier] = curr_app
+            APPLICATIONS_DICT[curr_app.unique_identifier.lower()] = curr_app
 
         if curr_app.path:
-            APPLICATIONS_DICT[curr_app.path] = curr_app
+            APPLICATIONS_DICT[curr_app.path.lower()] = curr_app
 
         if curr_app.display_name:
-            APPLICATIONS_DICT[curr_app.display_name] = curr_app
+            APPLICATIONS_DICT[curr_app.display_name.lower()] = curr_app
     
         if curr_app.executable_name:
-            APPLICATIONS_DICT[curr_app.executable_name] = curr_app
+            APPLICATIONS_DICT[curr_app.executable_name.lower()] = curr_app
 
     # print("\n".join([str(group) for group in APPLICATION_GROUPS_DICT.values()]))
     if must_update_file:
@@ -714,6 +729,27 @@ class Actions:
             args = shlex.split(path)[1:]
             ui.launch(path=cmd, args=args)
         elif app.platform == "windows":
+            print(path)
+            application_info = get_application_by_app_user_model_id(path)
+            if application_info:
+                print(application_info)
+                if path.lower() in RUNNING_APPLICATION_DICT:
+                    RUNNING_APPLICATION_DICT[path.lower()][-1].focus()
+                    return
+                
+                elif application_info.path and application_info.path.lower() in RUNNING_APPLICATION_DICT:
+                    RUNNING_APPLICATION_DICT[application_info.path.lower()][-1].focus()
+                    return
+                
+                elif application_info.executable_name and application_info.executable_name.lower() in RUNNING_APPLICATION_DICT:
+                    RUNNING_APPLICATION_DICT[application_info.executable_name.lower()][-1].focus()
+
+                    return
+                
+                elif application_info.executable_name and application_info.display_name.lower() in RUNNING_APPLICATION_DICT:
+                    RUNNING_APPLICATION_DICT[application_info.display_name.lower()][-1].focus()
+                    return
+
             is_valid_path = False
             try:
                 current_path = Path(path)
