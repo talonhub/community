@@ -1,4 +1,5 @@
 window (new | open): app.window_open()
+window reopen: user.window_reopen()
 window next: app.window_next()
 window last: app.window_previous()
 window close: app.window_close()

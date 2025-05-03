@@ -1,5 +1,6 @@
-from talon import Context, actions, ui
+from talon import Context, Module, actions, ui
 
+mod = Module()
 ctx = Context()
 
 
@@ -10,6 +11,12 @@ class AppActions:
 
     def window_next():
         cycle_windows(ui.active_app(), 1)
+
+
+@mod.action_class
+class Actions:
+    def window_reopen():
+        """Reopen the last-closed window"""
 
 
 def cycle_windows(app: ui.App, diff: int):

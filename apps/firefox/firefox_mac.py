@@ -17,6 +17,10 @@ class UserActions:
     def firefox_history_sidebar():
         actions.key("cmd-shift-h")
 
+    def window_reopen():
+        # Note that as of Firefox 138.0.1, this command does not appear in any Firefox’s menus and only works if there is already an existing Firefox window open.
+        actions.key("cmd-shift-n")
+
 
 @ctx.action_class("browser")
 class BrowserActions:
