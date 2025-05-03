@@ -264,7 +264,7 @@ def update_running_list():
                     for spoken_form in spoken_forms:
                         running[spoken_form] = mapping
 
-                    if app_user_model_id.lower() not in RUNNING_APPLICATION_DICT:
+                    if window_app_user_model_id.lower() not in RUNNING_APPLICATION_DICT:
                         RUNNING_APPLICATION_DICT[window_app_user_model_id.lower()] = [window_list[-1]]
 
                     app_frame_host_cache[window_app_user_model_id.lower()] = True
