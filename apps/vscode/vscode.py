@@ -246,7 +246,7 @@ class UserActions:
     def split_window_down():
         actions.user.vscode("workbench.action.moveEditorToBelowGroup")
 
-    def split_window_horizontally():
+    def split_window_horizontal_line():
         actions.user.vscode("workbench.action.splitEditorOrthogonal")
 
     def split_window_left():
@@ -258,7 +258,7 @@ class UserActions:
     def split_window_up():
         actions.user.vscode("workbench.action.moveEditorToAboveGroup")
 
-    def split_window_vertically():
+    def split_window_vertical_line():
         actions.user.vscode("workbench.action.splitEditor")
 
     def split_window():
@@ -342,7 +342,7 @@ class UserActions:
     def tab_duplicate():
         # Duplicates the current tab into a new tab group
         # vscode does not allow duplicate tabs in the same tab group, and so is implemented through splits
-        actions.user.split_window_vertically()
+        actions.user.split_window_vertical_line()
 
     # tabs.py support end
 
