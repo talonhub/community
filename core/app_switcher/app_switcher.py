@@ -729,24 +729,27 @@ class Actions:
             args = shlex.split(path)[1:]
             ui.launch(path=cmd, args=args)
         elif app.platform == "windows":
-            print(path)
             application_info = get_application_by_app_user_model_id(path)
+
+            check_executable = True
+
             if application_info:
-                print(application_info)
+                if application_info.executable_name == "explorer.exe":
+                    if application_info.display_name != "File Explorer":
+                        check_executable = False
+
                 if path.lower() in RUNNING_APPLICATION_DICT:
                     RUNNING_APPLICATION_DICT[path.lower()][-1].focus()
                     return
-                
-                elif application_info.path and application_info.path.lower() in RUNNING_APPLICATION_DICT:
+                elif application_info.display_name.lower() in RUNNING_APPLICATION_DICT:
+                    print(f"{application_info.display_name} found")
+                    RUNNING_APPLICATION_DICT[application_info.display_name.lower()][-1].focus()
+                    return
+                elif check_executable and application_info.path and application_info.path.lower() in RUNNING_APPLICATION_DICT:
                     RUNNING_APPLICATION_DICT[application_info.path.lower()][-1].focus()
                     return
                 
-                elif application_info.executable_name and application_info.executable_name.lower() in RUNNING_APPLICATION_DICT:
-                    RUNNING_APPLICATION_DICT[application_info.executable_name.lower()][-1].focus()
-
-                    return
-                
-                elif application_info.executable_name and application_info.display_name.lower() in RUNNING_APPLICATION_DICT:
+                elif check_executable and application_info.executable_name and application_info.display_name.lower() in RUNNING_APPLICATION_DICT:
                     RUNNING_APPLICATION_DICT[application_info.display_name.lower()][-1].focus()
                     return
 
