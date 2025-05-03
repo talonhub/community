@@ -17,7 +17,7 @@ title force: user.file_manager_refresh_title()
 ^file {user.file_manager_files}$: user.file_manager_open_file(file_manager_files)
 
 #new folder
-folder new <user.text>: user.file_manager_new_folder(text)
+folder new [<user.text>]: user.file_manager_new_folder(text or "")
 
 #show properties
 properties show: user.file_manager_show_properties()
