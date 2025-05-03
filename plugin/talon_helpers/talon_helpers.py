@@ -181,6 +181,10 @@ class Actions:
 
         return result
 
+    def talon_get_active_window_class_name() -> str:
+        """Returns the class name of the active window"""
+        return ui.active_window().cls
+        
     def talon_version_info() -> str:
         """Returns talon & operation system verison information"""
         result = (

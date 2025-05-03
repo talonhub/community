@@ -33,6 +33,9 @@ talent copy title:
 talent dump version: 
     result = user.talon_version_info()
     print(result)
+talent copy class:
+    class_name = user.talon_get_active_window_class_name()
+    clip.set_text(class_name)
 talent insert version: 
     result = user.talon_version_info()
     user.paste(result)
