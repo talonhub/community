@@ -15,8 +15,14 @@ class AppActions:
 
 @mod.action_class
 class Actions:
+    def window_maximize():
+        """Maximize the current window"""
+
     def window_reopen():
         """Reopen the last-closed window"""
+
+    def window_restore():
+        """Restore (unmaximize) the current window"""
 
 
 def cycle_windows(app: ui.App, diff: int):
