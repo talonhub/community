@@ -1,8 +1,11 @@
 window (new | open): app.window_open()
+window reopen: user.window_reopen()
 window next: app.window_next()
 window last: app.window_previous()
 window close: app.window_close()
-window hide: app.window_hide()
+window (min | minimize | hide):
+    # TODO: In January 2026: Deprecate "window hide" to recommend "window minimize/app hide".
+    app.window_hide()
 focus <user.running_applications>: user.switcher_focus(running_applications)
 # following only works on windows. Can't figure out how to make it work for mac. No idea what the equivalent for linux would be.
 focus$: user.switcher_menu()
