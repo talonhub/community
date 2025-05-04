@@ -3,7 +3,7 @@ window reopen: user.window_reopen()
 window next: app.window_next()
 window last: app.window_previous()
 window close: app.window_close()
-window hide: app.window_hide()
+window (min | minimize): app.window_hide()
 app (preferences | prefs | settings): app.preferences()
 focus <user.running_applications>: user.switcher_focus(running_applications)
 # following only works on windows. Can't figure out how to make it work for mac. No idea what the equivalent for linux would be.
@@ -22,3 +22,6 @@ snap <user.running_applications> <user.window_snap_position>:
 
 snap <user.running_applications> [screen] <number>:
     user.move_app_to_screen(running_applications, number)
+
+# DEPRECATED
+window hide: user.deprecate_command("2025-05-11", "window hide", "window minimize/app hide")

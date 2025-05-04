@@ -44,9 +44,6 @@ class AppActions:
 
             # Note that 2x Win+Down not only minimizes the window, but also restores it before that. It would be contrary to user expectations if a window that was previously maximized is in restored state after unminimizing it again. The shortcut also unexpectedly arranges the window differently, if it's in an arranged state like covering an upper quarter or half of the work area.
 
-    def window_hide_others():
-        actions.key("win-d alt-tab")
-
     def window_open():
         actions.key("ctrl-n")
 
