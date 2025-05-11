@@ -695,10 +695,12 @@ class Actions:
         valid_windows_for_pending_app = None
 
         splits = name.split("-::*::-")
-        app_name = splits[0].lower()
+        app_name = splits[0]
+
         apps = actions.user.get_running_app(app_name)
         valid_window_checker = is_window_valid
         
+        app_name = app_name.lower()
         if app_name == "windows explorer":
             valid_window_checker = is_valid_explorer_window
 
