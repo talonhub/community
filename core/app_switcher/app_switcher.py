@@ -307,11 +307,15 @@ def update_running_list():
         running.update(explorer_spoken_forms)
 
     for cur_app in foreground_apps:
-        #print(f"{cur_app.name} {cur_app.exe}")
         name = cur_app.name.lower()
         exe = os.path.basename(cur_app.exe).lower()
         exe_path = cur_app.exe.lower()
         override = None
+
+        if app.platform == "windows" and exe in ["applicationframehost.exe",  "explorer.exe"]:
+            continue
+        # 
+        # print(f"{cur_app.name} {cur_app.exe}")
 
         if app.platform == "mac":
             bundle_name = cur_app.bundle.lower()
@@ -334,16 +338,15 @@ def update_running_list():
 
 
         if app.platform == "windows":
-            if exe == "applicationframehost.exe" or "explorer.exe":
-                continue
+            # print("test")
             
             is_windows_app = "windowsapps" in exe_path or "systemapps" in exe_path
 
-            valid_windows = get_valid_windows_by_app_user_model_id(cur_app)
+            valid_windows = get_valid_windows_by_app_user_model_id(cur_app, is_window_valid)
 
             # if there are no valid windows for the app, let's ignore it.
             if len(valid_windows) <= 0:
-                #print(f"{app_user_model_id}; windows = {len(valid_windows)}, should appear in ApplicationFrameHost if it's real...")
+                # print(f"{app_user_model_id}; windows = {len(valid_windows)}, should appear in ApplicationFrameHost if it's real...")
                 continue
 
             if (is_windows_app):
@@ -365,6 +368,7 @@ def update_running_list():
                     uuid = override.unique_identifier
 
                 for window_app_user_model_id, window_list in valid_windows.items():
+                    # print(f"hit it {window_app_user_model_id}")
                     # most applications won't set this
                     if (window_app_user_model_id != "None"): 
                         #and uuid != window_app_user_model_id):
@@ -380,7 +384,7 @@ def update_running_list():
                             RUNNING_APPLICATION_DICT[window_app_user_model_id.lower()] = [window]
                         else:
                             RUNNING_APPLICATION_DICT[window_app_user_model_id.lower()].append(window)
-
+                            
                         if spoken_forms:
                             for spoken_form in spoken_forms:
                                 if spoken_form not in running:
