@@ -24,4 +24,5 @@ snap <user.running_applications> [screen] <number>:
     user.move_app_to_screen(running_applications, number)
 
 # DEPRECATED
-window hide: user.deprecate_command("2025-05-11", "window hide", "window minimize/app hide")
+window hide:
+    user.deprecate_command("2025-05-11", "window hide", "window minimize/app hide")
