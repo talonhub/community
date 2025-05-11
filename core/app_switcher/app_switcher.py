@@ -194,6 +194,9 @@ def gui_switcher_chooser(gui: imgui.GUI):
             gui_switcher_chooser.hide()
             ctx.tags = []
 
+def is_valid_explorer_window(window: ui.Window) -> bool:
+    invalid_exlorer_titles = ["windows hello", "program manager", "folderview"]
+    return not any(s == window.title.lower() for s in invalid_exlorer_titles) and is_window_valid(window)
 
 def is_window_valid(window: ui.Window) -> bool:
     """Returns true if this window is valid for focusing"""
@@ -216,11 +219,11 @@ def get_valid_windows(app: ui.App):
 
     return valid_windows
 
-def get_valid_windows_by_app_user_model_id(app: ui.App) -> dict[str, list]:
+def get_valid_windows_by_app_user_model_id(app: ui.App, valid_window_checker=is_window_valid) -> dict[str, list]:
     valid_windows = {}
     
     for window in app.windows():
-        if is_window_valid(window):
+        if valid_window_checker(window):
             window_app_user_model_id = get_application_user_model_for_window(window.id)
             
             key = window_app_user_model_id if window_app_user_model_id else "None"      
@@ -232,6 +235,50 @@ def get_valid_windows_by_app_user_model_id(app: ui.App) -> dict[str, list]:
 
     return valid_windows
 
+def get_spoken_form_mapping_for_host_app(host_app, valid_window_checker=is_window_valid, host_cache=None, empty_window_model_id_mapping=None):
+    spoken_form_map = {}
+    for cur_app in host_app:
+        valid_windows = get_valid_windows_by_app_user_model_id(cur_app, valid_window_checker)
+        for window_app_user_model_id, window_list in valid_windows.items():
+
+            if window_app_user_model_id != "None":
+                mapping = f"{cur_app.name}-::*::-{window_app_user_model_id}"
+
+                override = get_override_by_app_user_model_id(window_app_user_model_id, cur_app)
+                spoken_forms = override.spoken_forms if override and override.spoken_forms else None
+                
+                if not spoken_forms:
+                    if override and override.display_name:
+                        spoken_forms = actions.user.create_spoken_forms(source=override.display_name, words_to_exclude=words_to_exclude,generate_subsequences=False,)
+                    else:
+                        spoken_forms = actions.user.create_spoken_forms(source=window_list[-1].title.lower(), words_to_exclude=words_to_exclude,generate_subsequences=False,)
+                
+                for spoken_form in spoken_forms:
+                    spoken_form_map[spoken_form] = mapping
+
+                if window_app_user_model_id.lower() not in RUNNING_APPLICATION_DICT:
+                    RUNNING_APPLICATION_DICT[window_app_user_model_id.lower()] = [window_list[-1]]
+
+                if host_cache:
+                    host_cache[window_app_user_model_id.lower()] = True
+
+            else:
+                RUNNING_APPLICATION_DICT[empty_window_model_id_mapping.lower()] = [window_list[-1]]
+                mapping = f"{cur_app.name}-::*::-None"
+
+                override = get_override_by_app_user_model_id(empty_window_model_id_mapping, cur_app)
+                spoken_forms = override.spoken_forms if override and override.spoken_forms else None
+
+                if not spoken_forms:
+                    if override and override.display_name:
+                        spoken_forms = actions.user.create_spoken_forms(source=override.display_name, words_to_exclude=words_to_exclude,generate_subsequences=False,)
+                    else:
+                        spoken_forms = actions.user.create_spoken_forms(source=window_list[-1].title.lower(), words_to_exclude=words_to_exclude,generate_subsequences=False,)                
+                
+                for spoken_form in spoken_forms:
+                    spoken_form_map[spoken_form] = mapping
+
+    return spoken_form_map
 
 def update_running_list():
     #if app.platform == "windows":
@@ -246,28 +293,18 @@ def update_running_list():
     generate_spoken_form_map = {}
 
     if app.platform == "windows":  
-              
         frame_host_apps = ui.apps(name="Application Frame Host", background=False)
-        for cur_app in frame_host_apps:
-            valid_windows = get_valid_windows_by_app_user_model_id(cur_app)
-            for window_app_user_model_id, window_list in valid_windows.items():
-
-                if window_app_user_model_id != "None":
-                    mapping = f"{cur_app.name}-::*::-{window_app_user_model_id}"
-
-                    override = get_override_by_app_user_model_id(window_app_user_model_id, cur_app)
-                    spoken_forms = override.spoken_forms if override and override.spoken_forms else None
-
-                    if not spoken_forms:
-                        spoken_forms = actions.user.create_spoken_forms(source=window_list[-1].title.lower(), words_to_exclude=words_to_exclude,generate_subsequences=False,)
-
-                    for spoken_form in spoken_forms:
-                        running[spoken_form] = mapping
-
-                    if window_app_user_model_id.lower() not in RUNNING_APPLICATION_DICT:
-                        RUNNING_APPLICATION_DICT[window_app_user_model_id.lower()] = [window_list[-1]]
-
-                    app_frame_host_cache[window_app_user_model_id.lower()] = True
+        frame_spoken_forms = get_spoken_form_mapping_for_host_app(frame_host_apps, 
+                                                                  host_cache=app_frame_host_cache, 
+                                                                  empty_window_model_id_mapping=None)
+        
+        explorer_apps = ui.apps(name="Windows Explorer", background=False)
+        explorer_spoken_forms = get_spoken_form_mapping_for_host_app(explorer_apps, 
+                                                                     valid_window_checker=is_valid_explorer_window, 
+                                                                     host_cache=None, 
+                                                                     empty_window_model_id_mapping="Microsoft.Windows.Explorer")
+        running.update(frame_spoken_forms)
+        running.update(explorer_spoken_forms)
 
     for cur_app in foreground_apps:
         #print(f"{cur_app.name} {cur_app.exe}")
@@ -297,7 +334,7 @@ def update_running_list():
 
 
         if app.platform == "windows":
-            if exe == "applicationframehost.exe":
+            if exe == "applicationframehost.exe" or "explorer.exe":
                 continue
             
             is_windows_app = "windowsapps" in exe_path or "systemapps" in exe_path
@@ -656,6 +693,10 @@ class Actions:
         splits = name.split("-::*::-")
         app_name = splits[0].lower()
         apps = actions.user.get_running_app(app_name)
+        valid_window_checker = is_window_valid
+        
+        if app_name == "windows explorer":
+            valid_window_checker = is_valid_explorer_window
 
         if len(splits) == 3:
             title = splits[2].lower()
@@ -665,10 +706,11 @@ class Actions:
                     break
         elif len(splits) == 2:
             application_user_model_id = splits[1]
+            print(application_user_model_id)
             valid_windows_for_pending_app = []
             for app in set(apps):
                 for window in app.windows():
-                    if is_window_valid(window) and application_user_model_id == get_application_user_model_for_window(window.id):
+                    if valid_window_checker(window) and str(application_user_model_id) == str(get_application_user_model_for_window(window.id)):
                         valid_windows_for_pending_app.append(window)
             
             if len(valid_windows_for_pending_app) > 1:
@@ -731,25 +773,12 @@ class Actions:
         elif app.platform == "windows":
             application_info = get_application_by_app_user_model_id(path)
 
-            check_executable = True
-
             if application_info:
-                if application_info.executable_name == "explorer.exe":
-                    if application_info.display_name != "File Explorer":
-                        check_executable = False
-
                 if path.lower() in RUNNING_APPLICATION_DICT:
                     RUNNING_APPLICATION_DICT[path.lower()][-1].focus()
                     return
                 elif application_info.display_name.lower() in RUNNING_APPLICATION_DICT:
                     print(f"{application_info.display_name} found")
-                    RUNNING_APPLICATION_DICT[application_info.display_name.lower()][-1].focus()
-                    return
-                elif check_executable and application_info.path and application_info.path.lower() in RUNNING_APPLICATION_DICT:
-                    RUNNING_APPLICATION_DICT[application_info.path.lower()][-1].focus()
-                    return
-                
-                elif check_executable and application_info.executable_name and application_info.display_name.lower() in RUNNING_APPLICATION_DICT:
                     RUNNING_APPLICATION_DICT[application_info.display_name.lower()][-1].focus()
                     return
 
