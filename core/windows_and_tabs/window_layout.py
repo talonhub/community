@@ -6,7 +6,7 @@ from typing import List, Optional, Union
 from talon import Context, Module, actions, settings, ui
 from talon.ui import UIErr, Window
 from .windows_and_tabs import is_window_valid
-from ...core.app_switcher.windows import get_application_user_model_for_window
+from ..app_switcher.windows.installed_applications import get_application_user_model_for_window
 
 """Tools for laying out windows in an arrangement """
 

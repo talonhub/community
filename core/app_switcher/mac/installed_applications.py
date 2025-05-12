@@ -1,6 +1,6 @@
 from talon import app
 from pathlib import Path
-from .application import Application
+from ..common_classes.application import Application
 import glob
 import os
 

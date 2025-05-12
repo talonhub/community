@@ -1,8 +1,9 @@
+from .data_classes.windows_shortcut import windows_shortcut
 from talon import app
 from pathlib import Path
 from uuid import UUID
-from .application import Application
-from.windows_applications import get_known_windows_application, WindowsShortcut, mmc
+from ..common_classes.application import Application
+from .windows_known_applications import get_known_windows_application, mmc
 import glob
 import os
 
@@ -117,7 +118,7 @@ if app.platform == "windows":
         result.sort(key=lambda x: x.upper())
         return result
 
-    def get_shortcut_info(lnk_file)-> WindowsShortcut:
+    def get_shortcut_info(lnk_file)-> windows_shortcut:
         # todo: ideally we'd parse the target type here... that would make things more robust
         # windows shortcuts can include applications, Control Panel, and other weird targets.
         shell = win32com.client.Dispatch("WScript.Shell")
@@ -133,7 +134,7 @@ if app.platform == "windows":
         except:
             target_path = None
 
-        return WindowsShortcut(str(name), lnk_file, target_path, arguments )
+        return windows_shortcut(str(name), lnk_file, target_path, arguments )
         
     def is_extension_allowed(extension):
         return extension.lower() in [".exe", ".msc"]

@@ -6,14 +6,13 @@ from pathlib import Path
 import csv
 import talon
 from talon import Context, Module, actions, app, imgui, ui, resource
-from .windows import get_installed_windows_apps, application_frame_host_path, application_frame_host, application_frame_host_group, get_application_user_model_id, get_application_user_model_for_window
-from .windows_applications import get_known_windows_application
-from .mac import get_installed_mac_apps
-from .exclusion import ExclusionType, RunningApplicationExclusion
+from .windows.installed_applications import get_installed_windows_apps, application_frame_host_path, application_frame_host, application_frame_host_group, get_application_user_model_id, get_application_user_model_for_window
+from .windows.windows_known_applications import get_known_windows_application
+from .mac.installed_applications import get_installed_mac_apps
+from .common_classes.exclusion import ExclusionType, RunningApplicationExclusion
 from typing import Union
-from .application import Application, ApplicationGroup
+from .common_classes.application import Application, ApplicationGroup
 import re
-from talon.ui import Rect
 from talon.windows.ax import Element
 from dataclasses import dataclass, asdict
 import json
@@ -638,22 +637,6 @@ def update_launch_applications(f):
 
 @mod.action_class
 class Actions:
-    def switcher_accessibility_focus(title: str):
-        """experimental"""
-        rebuild_taskbar_app_list()
-        for item in cache:
-            if item.title == title:
-                item.element.invoke_pattern.invoke()
-                break
-    def app_switcher_select_index(index: int):
-        """"""
-        for number, window in enumerate(valid_windows_for_pending_app, 1):
-            if index == number:
-                window.focus()
-                gui_switcher_chooser.hide()
-                ctx.tags = []
-                break
-
     def get_running_app(name: str) -> ui.App:
         """Get the first available running app with `name`."""
         # We should use the capture result directly if it's already in the list
@@ -686,6 +669,15 @@ class Actions:
                 return result
     
         raise RuntimeError(f'App not running: "{name}"')
+    
+    def switcher_select_index(index: int):
+        """Focuses the selected window index when requested"""
+        for number, window in enumerate(valid_windows_for_pending_app, 1):
+            if index == number:
+                window.focus()
+                gui_switcher_chooser.hide()
+                ctx.tags = []
+                break
 
     def switcher_focus(name: str):
         """Focus a new application by name"""
