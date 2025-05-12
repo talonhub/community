@@ -1,5 +1,6 @@
 from .data_classes.windows_shortcut import windows_shortcut
-from talon import app
+from talon import app, ui
+
 from pathlib import Path
 from uuid import UUID
 from ..common_classes.application import Application
@@ -291,6 +292,31 @@ if app.platform == "windows":
             return window_app_user_model_id.GetValue()
         except:
             return None
+        
+    def get_valid_windows_by_app_user_model_id(application,
+                                            valid_window_checker: callable, 
+                                            empty_window_model_id_mapping=None) -> dict[str, list]:
+        valid_windows = {}
+        app_list = application
+        if not isinstance(app_list, list):
+            app_list = [application]
+
+        for cur_app in app_list:
+            for window in cur_app.windows():
+                if valid_window_checker(window):
+                    window_app_user_model_id = get_application_user_model_for_window(window.id)
+                    
+                    key = window_app_user_model_id if window_app_user_model_id else "None"
+                        
+                    if key == "None" and empty_window_model_id_mapping:
+                        key = empty_window_model_id_mapping
+
+                    if key not in valid_windows:
+                        valid_windows[key] = [window]
+                    elif window not in valid_windows[key]:
+                        valid_windows[key].append(window)
+
+        return valid_windows
 
 else:
     application_frame_host_path = None
@@ -306,3 +332,8 @@ else:
     
     def get_application_user_model_for_window(hwnd: int):
         return None
+    
+    def get_valid_windows_by_app_user_model_id(application: ui.App, 
+                                            valid_window_checker: callable, 
+                                            empty_window_model_id_mapping=None) -> dict[str, list]:
+        return {}
