@@ -20,7 +20,6 @@ resume [<user.number_string>]:
     insert("fg " + number_string)
     key(enter)
 
-
 # Overrides for basic editing, tab, and window management.
 # Note that if your `kitty_mod` is set to something other than the default of
 # ctrl-shift, you will need to make the same change here.
@@ -44,11 +43,11 @@ split last: key(ctrl-shift-[)
 # it to match the binding set in your kitty.conf. N.B. that ctrl-alt tends to
 # get eaten by GNOME3.
 # go split <user.arrow_key>:
-# 	key("ctrl:down")
-# 	key("alt:down")
-# 	key(arrow_key)
-# 	key("ctrl:up")
-# 	key("alt:up")
+#   key("ctrl:down")
+#   key("alt:down")
+#   key(arrow_key)
+#   key("ctrl:up")
+#   key("alt:up")
 
 scroll up: key(ctrl-shift-up)
 scroll down: key(ctrl-shift-down)
