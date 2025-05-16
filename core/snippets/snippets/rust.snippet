@@ -1,0 +1,12 @@
+language: rust
+---
+
+name: implementsStruct
+phrase: imply | implement | implement struct | implement structure
+
+$1.insertionFormatter: PUBLIC_CAMEL_CASE
+-
+impl $1 {
+    $0
+}
+---
