@@ -296,12 +296,7 @@ class UserActions:
         actions.auto_insert("match ")
 
     def code_state_for():
-        actions.auto_insert("for  in  {}")
-        actions.edit.left()
-        actions.key("enter")
-        actions.edit.up()
-        actions.edit.line_end()
-        repeat_call(6, actions.edit.left)
+        actions.user.insert_snippet_by_name("forEachStatement")
 
     def code_state_while():
         actions.user.insert_snippet_by_name("whileLoopStatement")
