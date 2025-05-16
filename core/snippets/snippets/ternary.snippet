@@ -16,3 +16,9 @@ language: lua
 -
 $1 and $2 or $0
 ---
+
+// r if else implicitly returns its result, like a ternary
+language: r
+-
+if ($2) { $1 } else { $0 }
+---

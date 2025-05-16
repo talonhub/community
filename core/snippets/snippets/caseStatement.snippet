@@ -15,3 +15,10 @@ insertionScope: branch
 case $1:
     $0
 ---
+
+language: r
+insertionScope: branch
+-
+    ${1:condition} ~ ${2:return_value},
+)
+---
