@@ -40,6 +40,12 @@ for i := 0; i < $1; i++ {
 language: stata
 -
 forval $1 {
+
+---
+
+language: r
+-
+for (${1:x} in 1:${2:10}) {
     $0
 }
 ---
