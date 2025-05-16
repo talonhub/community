@@ -304,12 +304,7 @@ class UserActions:
         repeat_call(6, actions.edit.left)
 
     def code_state_while():
-        actions.auto_insert("while  {}")
-        actions.edit.left()
-        actions.key("enter")
-        actions.edit.up()
-        actions.edit.line_end()
-        repeat_call(2, actions.edit.left)
+        actions.user.insert_snippet_by_name("whileLoopStatement")
 
     def code_state_infinite_loop():
         actions.user.insert_between("loop {", "}")
