@@ -2,7 +2,7 @@ name: caseStatement
 phrase: case
 ---
 
-language: c | cpp | csharp | java | javascript | typescript | javascriptreact | typescriptreact
+language: cpp | csharp | java | javascript | typescript | javascriptreact | typescriptreact
 insertionScope: branch
 -
 case $1:
@@ -14,4 +14,12 @@ insertionScope: branch
 -
 case $1:
     $0
+---
+
+language: c
+insertionScope: branch
+-
+case $1:
+    $0
+    break;
 ---
