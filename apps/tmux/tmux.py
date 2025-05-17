@@ -75,26 +75,26 @@ class UserActions:
         )
 
     def split_window_right():
-        actions.user.split_window_horizontally()
+        actions.user.split_window_horizontal_line()
         actions.user.tmux_execute_command("swap-pane -U -s #P")
 
     def split_window_left():
-        actions.user.split_window_horizontally()
+        actions.user.split_window_horizontal_line()
 
     def split_window_down():
-        actions.user.split_window_vertically()
+        actions.user.split_window_vertical_line()
         actions.user.tmux_execute_command("swap-pane -U -s #P")
 
     def split_window_up():
-        actions.user.split_window_vertically()
+        actions.user.split_window_vertical_line()
 
     def split_flip():
         actions.user.tmux_execute_command("next-layout")
 
-    def split_window_vertically():
+    def split_window_vertical_line():
         actions.user.tmux_execute_command("split-pane")
 
-    def split_window_horizontally():
+    def split_window_horizontal_line():
         actions.user.tmux_execute_command("split-pane -h")
 
     def split_maximize():
@@ -105,7 +105,7 @@ class UserActions:
         actions.user.tmux_execute_command("resize-pane -Z")
 
     def split_window():
-        actions.user.split_window_horizontally()
+        actions.user.split_window_horizontal_line()
 
     def split_clear():
         actions.user.tmux_execute_command_with_confirmation(
