@@ -296,20 +296,10 @@ class UserActions:
         actions.auto_insert("match ")
 
     def code_state_for():
-        actions.auto_insert("for  in  {}")
-        actions.edit.left()
-        actions.key("enter")
-        actions.edit.up()
-        actions.edit.line_end()
-        repeat_call(6, actions.edit.left)
+        actions.user.insert_snippet_by_name("forEachStatement")
 
     def code_state_while():
-        actions.auto_insert("while  {}")
-        actions.edit.left()
-        actions.key("enter")
-        actions.edit.up()
-        actions.edit.line_end()
-        repeat_call(2, actions.edit.left)
+        actions.user.insert_snippet_by_name("whileLoopStatement")
 
     def code_state_infinite_loop():
         actions.user.insert_between("loop {", "}")
@@ -399,12 +389,7 @@ class UserActions:
     # rust specific grammar
 
     def code_state_implements():
-        actions.auto_insert("impl  {}")
-        actions.edit.left()
-        actions.key("enter")
-        actions.edit.up()
-        actions.edit.line_end()
-        repeat_call(2, actions.edit.left)
+        actions.user.insert_snippet_by_name("implementsStruct")
 
     def code_insert_macro(text: str, selection: str):
         if text in all_array_macro_values:

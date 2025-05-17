@@ -1,0 +1,22 @@
+language: rust
+---
+
+name: implementsStruct
+phrase: impel | implement
+insertionScope: statement
+
+$1.insertionFormatter: PUBLIC_CAMEL_CASE
+-
+impl $1 {
+    $0
+}
+---
+
+name: structDeclaration
+phrase: struct
+$1.insertionFormatter: PUBLIC_CAMEL_CASE
+-
+struct $1 {
+    $0
+}
+---
