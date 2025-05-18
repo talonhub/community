@@ -12,3 +12,12 @@ language: python
 -
 from $1 import $0
 ---
+
+language: r
+-
+library(
+    ${1:tidyverse},
+    include.only = c(${0:"tibble"})${2:,
+    warn.conflicts = FALSE}
+)
+---
