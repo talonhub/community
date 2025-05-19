@@ -26,10 +26,11 @@ KITTY_MOD = "ctrl-shift"
 # set here if you've made extensive changes to kitty's default keybinds.
 
 
-@ctx.action("user")
+@ctx.action_class("user")
 class UserActions:
     # Override user.splits
     def split_window():
+        # actions.key("ctrl-shift-enter")
         actions.key(f"{KITTY_MOD}-enter")
 
     def split_next():
@@ -39,7 +40,7 @@ class UserActions:
         actions.key(f"{KITTY_MOD}-[")
 
 
-@ctx.action("app")
+@ctx.action_class("app")
 class AppActions:
     # Override app.tabs
     def tab_open():
