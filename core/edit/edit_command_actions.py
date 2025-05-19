@@ -88,26 +88,32 @@ simple_action_callbacks: dict[str, Callable] = {
 }
 
 
-def run_action_callback(action: EditAction):
-    action_type = action.type
+@mod.action_class
+class Actions:
+    def run_action_callback(action: EditAction):
+        """
+        Run a callback that applies an edit action to the selected
+        Intended for internal use and overwriting
+        """
+        action_type = action.type
 
-    if action_type in simple_action_callbacks:
-        callback = simple_action_callbacks[action_type]
-        callback()
-        return
+        if action_type in simple_action_callbacks:
+            callback = simple_action_callbacks[action_type]
+            callback()
+            return
 
-    match action_type:
-        case "insert":
-            assert isinstance(action, EditInsertAction)
-            actions.insert(action.text)
+        match action_type:
+            case "insert":
+                assert isinstance(action, EditInsertAction)
+                actions.insert(action.text)
 
-        case "wrapWithDelimiterPair":
-            assert isinstance(action, EditWrapAction)
-            return lambda: actions.user.delimiter_pair_wrap_selection(action.pair)
+            case "wrapWithDelimiterPair":
+                assert isinstance(action, EditWrapAction)
+                return lambda: actions.user.delimiter_pair_wrap_selection(action.pair)
 
-        case "applyFormatter":
-            assert isinstance(action, EditFormatAction)
-            actions.user.formatters_reformat_selection(action.formatters)
+            case "applyFormatter":
+                assert isinstance(action, EditFormatAction)
+                actions.user.formatters_reformat_selection(action.formatters)
 
-        case _:
-            raise ValueError(f"Unknown edit action: {action_type}")
+            case _:
+                raise ValueError(f"Unknown edit action: {action_type}")
