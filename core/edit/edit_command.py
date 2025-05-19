@@ -1,7 +1,7 @@
 from talon import Module, actions, settings
 
-from .edit_command_actions import EditAction, EditSimpleAction, run_action_callback
-from .edit_command_modifiers import EditModifier, run_modifier_callback
+from .edit_command_actions import EditAction, EditSimpleAction
+from .edit_command_modifiers import EditModifier
 
 mod = Module()
 
@@ -60,7 +60,7 @@ def select_lines(action, direction, count):
     # ensure we take the start/end of the line too!
     extend_line_callback()
     actions.sleep(selection_delay)
-    run_action_callback(action)
+    actions.user.run_action_callback(action)
 
 
 def select_words(action, direction, count):
@@ -74,7 +74,7 @@ def select_words(action, direction, count):
         selection_callback()
         actions.sleep(selection_delay)
 
-    run_action_callback(action)
+    actions.user.run_action_callback(action)
 
 
 def word_movement_handler(action, direction, count):
@@ -187,5 +187,5 @@ class Actions:
                 compound_actions[key]()
             return
 
-        run_modifier_callback(modifier)
-        run_action_callback(action)
+        actions.user.run_modifier_callback(modifier)
+        actions.user.run_action_callback(action)
