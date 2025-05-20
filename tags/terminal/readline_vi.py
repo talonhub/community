@@ -1,6 +1,7 @@
 from talon import Context, actions
 from typing import Callable
 from dataclasses import dataclass
+from time import sleep
 
 
 ctx = Context()
@@ -50,8 +51,14 @@ edit_action_vi_keys: dict[str, str] = {
         "copyToClipboard": "y",
         "cutToClipboard": "c",
         "pasteFromClipboard": "y",
-
 }
+
+def normal_cmd(keys):
+    actions.key("escape")
+    # sleep to avoid interpreting as an escape sequence
+    sleep(0.2)
+    actions.insert(keys)
+
 
 # This operates on a paradigm of staying in insert mode, but at least allows standard community text editing commands if the user has set their shell to vi mode in read line.
 # Vi bindings may occasionally have an issue at the start or end of a line, because the cursor may get stuck and the subsequent reentering of insert mode will leave the cursor one before the end of the line.
@@ -66,15 +73,14 @@ class EditActions:
     #     actions.insert(modifier.callback)
 
     def delete_line():
-        actions.key("escape")
-        actions.insert("cc")
+        normal_cmd("cc")
 
     def word_left():
-        actions.key("escape")
-        actions.insert("bi")
+        normal_cmd("bi")
 
     def word_right():
         actions.key("escape")
+        sleep(0.1)
         # the escape key shifts the position one to the left
         actions.key("right")
         actions.insert("w")
@@ -82,17 +88,14 @@ class EditActions:
         actions.insert("i")
 
     def line_end():
-        actions.key("escape")
-        actions.insert("A")
+        normal_cmd("A")
 
     def line_start():
-        actions.key("escape")
-        actions.insert("I")
+        normal_cmd("I")
 
     def undo():
         # Technically control underscore works in vi readline mode as well, but this also works in zsh
-        actions.key("escape")
-        actions.insert("ua")
+        normal_cmd("ua")
 
     # TODO: we don't want to overwrite the system's paste action, should this be a separate command?
     # def paste():
@@ -127,8 +130,7 @@ class Actions:
         action_type = action.type
 
         if action_type in edit_action_vi_keys:
-            actions.key("escape")
-            actions.key(edit_action_vi_keys[action_type])
+            normal_cmd(edit_action_vi_keys[action_type])
         else:
             try:
                 callback = actions.user.get_simple_action_callback(action_type)
