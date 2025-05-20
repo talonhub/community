@@ -11,3 +11,12 @@ impl $1 {
     $0
 }
 ---
+
+name: enumTypeDeclaration
+phrase: enum
+$1.insertionFormatter: PUBLIC_CAMEL_CASE
+-
+enum $1 {
+    $0
+}
+---
