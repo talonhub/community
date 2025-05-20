@@ -124,9 +124,9 @@ class UserActions:
 
     # libraries.py
     def code_import():
-        actions.auto_insert("ssc install ")
+        actions.user.insert_snippet_by_name("importStatement")
 
     # libraries.py
     def code_insert_library(text: str, selection: str):
-        actions.auto_insert("ssc install ")
-        actions.user.paste(text + selection)
+        library_text = text + selection
+        actions.user.insert_snippet_by_name("importStatement", {"0": library_text})
