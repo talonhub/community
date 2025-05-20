@@ -4,7 +4,7 @@ app: kitty
 # Kitty is a terminal emulator for Unix systems (including WSL, unofficially).
 # Learn more at https://sw.kovidgoyal.net.
 
-# Cribbed from the .talon file for iTerm
+# Cribbed from an older .talon file for iTerm
 suspend: key(ctrl-z)
 resume:
     insert("fg")
@@ -19,7 +19,9 @@ split window here: key(alt-shift-enter)
 # Move to the split in the given direction.
 # Kitty doesn't define `neighboring_window` by default. Uncomment this and set
 # it to match the binding set in your kitty.conf. N.B. that ctrl-alt tends to
-# get eaten by GNOME3.
+# get eaten by GNOME3 (see dconf:org.gnome.desktop.wm.keybindings if you want
+# to change GNOME3 rather than kitty--recommended, as GNOME3 provides *3*
+# different shortcuts for switching workspaces).
 # go split <user.arrow_key>:
 #   key("ctrl:down")
 #   key("alt:down")
