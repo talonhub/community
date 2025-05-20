@@ -72,7 +72,7 @@ class Actions:
         Intended for internal use and overwriting
         """
         count = modifier.count
-        modifier = actions.user.get_modifier_callback(EditModifier)
+        modifier = actions.user.get_modifier_callback(modifier)
         for i in range(1, count + 1):
             modifier.callback()
 
