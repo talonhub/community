@@ -236,7 +236,6 @@ class UserActions:
 
     def code_state_for_each():
         actions.user.insert_snippet_by_name("forEachStatement")
-    
 
     def code_state_while():
         actions.user.insert_snippet_by_name("whileLoopStatement")
