@@ -111,10 +111,7 @@ class UserActions:
         actions.key("left:2")
 
     def code_state_for_each():
-        actions.insert("foreach  in  {\n\n}")
-        actions.key("up tab up")
-        actions.edit.line_end()
-        actions.key("left:2")
+        actions.user.insert_snippet_by_name("forEachStatement")
 
     def code_state_while():
         actions.user.insert_snippet_by_name("whileLoopStatement")
