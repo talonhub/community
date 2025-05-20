@@ -71,11 +71,14 @@ class Actions:
         Run a callback that selects or prepares text ready to apply and edit action.
         Intended for internal use and overwriting
         """
+        count = modifier.count
+        modifier = actions.user.get_modifier_callback(EditModifier)
+        for i in range(1, count + 1):
+            modifier.callback()
+
+    def get_modifier_callback(modifier: EditModifier):
+        """Convert an edit modifier created from a string into its associated EditModifierCallback"""
         modifier_type = modifier.type
         if modifier_type not in modifier_dictionary:
             raise ValueError(f"Unknown edit modifier: {modifier_type}")
-
-        count = modifier.count
-        modifier = modifier_dictionary[modifier_type]
-        for i in range(1, count + 1):
-            modifier.callback()
+        return modifier_dictionary[modifier_type]
