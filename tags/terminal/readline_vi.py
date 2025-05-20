@@ -9,8 +9,9 @@ ctx.matches = """
 tag: user.readline_vi
 """
 
+
 @dataclass
-class PendingSelection():
+class PendingSelection:
     motion: str
     endAction: str
     count: int = 1
@@ -20,15 +21,16 @@ pendingSelection: PendingSelection | None = None
 
 
 edit_action_vi_keys: dict[str, str] = {
-        "cut": "c",
-        "delete": "c",
-        "goBefore": "",
-        "goAfter": "",
-        # We can't actually use the clipboard for these operations
-        "copyToClipboard": "y",
-        "cutToClipboard": "c",
-        "pasteFromClipboard": "y",
+    "cut": "c",
+    "delete": "c",
+    "goBefore": "",
+    "goAfter": "",
+    # We can't actually use the clipboard for these operations
+    "copyToClipboard": "y",
+    "cutToClipboard": "c",
+    "pasteFromClipboard": "y",
 }
+
 
 def normal_cmd(keys):
     actions.key("escape")
@@ -87,10 +89,8 @@ class EditActions:
         pendingSelection = PendingSelection("w", "i")
 
 
-
 @ctx.action_class("user")
 class Actions:
-
     def run_action_callback(action):
         """
         Run a callback that applies an edit action to the selected
