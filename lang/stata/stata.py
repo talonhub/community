@@ -105,10 +105,7 @@ class UserActions:
         actions.user.insert_snippet_by_name("elseStatement")
 
     def code_state_for():
-        actions.insert("forval  {\n\n}")
-        actions.key("up tab up")
-        actions.edit.line_end()
-        actions.key("left:2")
+        actions.user.insert_snippet_by_name("genericForLoopStatement")
 
     def code_state_for_each():
         actions.user.insert_snippet_by_name("forEachStatement")
