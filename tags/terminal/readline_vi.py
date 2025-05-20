@@ -16,31 +16,8 @@ class PendingSelection():
     count: int = 1
 
 
-# @dataclass
-# class EditModifier:
-#     type: str
-#     count: int = 1
+pendingSelection: PendingSelection | None = None
 
-@dataclass
-class EditModifierCallback:
-    modifier: str
-    callback: str
-
-
-pendingSelection: PendingSelection = None
-
-
-modifiers: dict[str, EditModifierCallback] = {
-    item.modifier: item for item in
-    [
-        EditModifierCallback("word", "iwi"),
-        EditModifierCallback("wordLeft", "bi"),
-        EditModifierCallback("wordRight", "wa"),
-        EditModifierCallback("line", "_i"),
-        EditModifierCallback("lineEnd", "$a"),
-        EditModifierCallback("lineStart", "0i"),
-    ]
-}
 
 edit_action_vi_keys: dict[str, str] = {
         "cut": "c",
@@ -64,14 +41,6 @@ def normal_cmd(keys):
 # Vi bindings may occasionally have an issue at the start or end of a line, because the cursor may get stuck and the subsequent reentering of insert mode will leave the cursor one before the end of the line.
 @ctx.action_class("edit")
 class EditActions:
-    # Map possible edit actions to letters, run the edit action first, then modifier letter/callback
-    # def edit_command(action, modifier):
-    #     """Perform edit command"""
-    #     # count = modifier.count
-    #     actions.key("escape")
-    #     actions.insert(action.type)
-    #     actions.insert(modifier.callback)
-
     def delete_line():
         normal_cmd("cc")
 
@@ -127,6 +96,7 @@ class Actions:
         Run a callback that applies an edit action to the selected
         Intended for internal use and overwriting
         """
+        global pendingSelection
         action_type = action.type
 
         if action_type in edit_action_vi_keys:
@@ -139,78 +109,29 @@ class Actions:
                 print("readline_vi only supports simple action callbacks")
                 return
 
+        if not pendingSelection:
+            print("readline_vi: No pending selection")
+            return
         actions.insert(str(pendingSelection.count))
         actions.insert(pendingSelection.motion)
         actions.insert(pendingSelection.endAction)
-
-    # def run_modifier_callback(modifier: EditModifier):
-    #     """
-    #     Store pending text movement callbacks for the next action to apply to
-    #     """
-    #     count = modifier.count
-    #     modifier = actions.user.get_modifier_callback(EditModifier)
-    #     pendingSelection = PendingSelection(
-    #         modifier.callback, "", range(1, count + 1)
-    #     )
-
-    # def edit_command(action: EditAction, modifier: EditModifier):
-    #     """Perform edit command with associated modifier. Same as function in
-    #     edit command actions except calling action before modifier."""
-    #     key = (action.type, modifier.type)
-    #     count = modifier.count
-
-    #     if key in custom_callbacks:
-    #         custom_callbacks[key](action, modifier.type, count)
-    #         return
-
-    #     elif key in compound_actions:
-    #         for i in range(1, count + 1):
-    #             compound_actions[key]()
-    #         return
-
-    #     run_action_callback(action)
-    #     run_modifier_callback(modifier)
+        pendingSelection = None
 
     def cut_line():
-        actions.key("escape")
-        actions.insert("cc")
-
-    # def delete_word():
-    #     actions.key("escape")
-    #     actions.insert("ciw")
-
-    # def delete_word_left():
-    #     actions.key("ctrl-w")
-
-    # def delete_word_right():
-    #     actions.user.cut_word_right()
+        normal_cmd("cc")
 
     def cut_word_right():
-        actions.key("escape")
-        actions.insert("cw")
+        normal_cmd("cw")
 
     def cut_word_left():
-        actions.key("escape")
-        actions.insert("cb")
+        normal_cmd("cb")
 
     def copy_word_left():
         actions.key("escape")
+        sleep(0.2)
         actions.key("right")
         # Yanking backwards doesn't consider the current character the cursor is on, so we need to move the cursor one to the right
         actions.insert("ybi")
 
     def copy_word_right():
-        actions.key("escape")
-        actions.insert("ywa")
-
-    # def cut_word():
-    #     actions.key("escape")]
-    #     actions.insert("ciw")
-
-    # def copy_word():
-    #     actions.key("escape")
-    #     actions.insert("yiwa")
-
-    # def delete_word():
-    #     actions.key("escape")
-    #     actions.insert("ciw")
+        normal_cmd("ywa")
