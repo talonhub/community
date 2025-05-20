@@ -217,38 +217,38 @@ class UserActions:
         actions.auto_insert(" is not None")
 
     def code_state_if():
-        actions.user.insert_between("if ", ":")
+        actions.user.insert_snippet_by_name("ifStatement")
 
     def code_state_else_if():
-        actions.user.insert_between("elif ", ":")
+        actions.user.insert_snippet_by_name("elseIfStatement")
 
     def code_state_else():
-        actions.insert("else:")
-        actions.key("enter")
+        actions.user.insert_snippet_by_name("elseStatement")
 
     def code_state_switch():
-        actions.user.insert_between("match ", ":")
+        actions.user.insert_snippet_by_name("switchStatement")
 
     def code_state_case():
-        actions.user.insert_between("case ", ":")
+        actions.user.insert_snippet_by_name("caseStatement")
 
     def code_state_for():
         actions.auto_insert("for ")
 
     def code_state_for_each():
-        actions.user.insert_between("for ", " in ")
+        actions.user.insert_snippet_by_name("forEachStatement")
+    
 
     def code_state_while():
-        actions.user.insert_between("while ", ":")
+        actions.user.insert_snippet_by_name("whileLoopStatement")
 
     def code_define_class():
-        actions.auto_insert("class ")
+        actions.user.insert_snippet_by_name("classDeclaration")
 
     def code_import():
-        actions.auto_insert("import ")
+        actions.user.insert_snippet_by_name("importStatement")
 
     def code_comment_line_prefix():
-        actions.auto_insert("# ")
+        actions.user.insert_snippet_by_name("commentLine")
 
     def code_state_return():
         actions.insert("return ")
@@ -260,7 +260,7 @@ class UserActions:
         actions.auto_insert("False")
 
     def code_comment_documentation():
-        actions.user.insert_between('"""', '"""')
+        actions.user.insert_snippet_by_name("commentBlock")
 
     def code_insert_function(text: str, selection: str):
         text += f"({selection or ''})"
