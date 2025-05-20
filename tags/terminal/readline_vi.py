@@ -20,14 +20,15 @@ class PendingSelection:
 pendingSelection: PendingSelection | None = None
 
 
+# using d instead of c for removal so that we remain in normal mode and the character sent to exit normal mode doesn't get inserted
 edit_action_vi_keys: dict[str, str] = {
-    "cut": "c",
-    "delete": "c",
+    "cut": "d",
+    "delete": "d",
     "goBefore": "",
     "goAfter": "",
     # We can't actually use the clipboard for these operations
     "copyToClipboard": "y",
-    "cutToClipboard": "c",
+    "cutToClipboard": "d",
     "pasteFromClipboard": "y",
 }
 
@@ -37,6 +38,14 @@ def normal_cmd(keys):
     # sleep to avoid interpreting as an escape sequence
     sleep(0.2)
     actions.insert(keys)
+
+
+def add_pending(motion, end):
+    global pendingSelection
+    if pendingSelection and pendingSelection.motion == motion:
+        pendingSelection.count += 1
+    else:
+        pendingSelection = PendingSelection(motion, end)
 
 
 # This operates on a paradigm of staying in insert mode, but at least allows standard community text editing commands if the user has set their shell to vi mode in read line.
@@ -68,25 +77,27 @@ class EditActions:
         # Technically control underscore works in vi readline mode as well, but this also works in zsh
         normal_cmd("ua")
 
+    def redo():
+        actions.key("escape")
+        sleep(0.1)
+        actions.key("ctrl-r")
+        actions.insert("a")
+
     # TODO: we don't want to overwrite the system's paste action, should this be a separate command?
     # def paste():
 
     # Read line doesn't have any selection mechanism, so instead we add any "selections" to a pending selection object, which get applied when the edit next action is called
     def extend_line_end():
-        global pendingSelection
-        pendingSelection = PendingSelection("$", "a")
+        add_pending("$", "a")
 
     def extend_line_start():
-        global pendingSelection
-        pendingSelection = PendingSelection("0", "i")
+        pendingSelection = add_pending("0", "i")
 
     def extend_word_left():
-        global pendingSelection
-        pendingSelection = PendingSelection("b", "i")
+        add_pending("b", "i")
 
     def extend_word_right():
-        global pendingSelection
-        pendingSelection = PendingSelection("w", "i")
+        add_pending("w", "i")
 
 
 @ctx.action_class("user")
