@@ -59,11 +59,11 @@ operators = Operators(
     MATH_DIVIDE=" / ",
 )
 
+
 def code_function_declaration(text: str, formatter: str):
-    formatted_text = actions.user.formatted_text(
-                text, settings.get(formatter)
-            )
+    formatted_text = actions.user.formatted_text(text, settings.get(formatter))
     actions.user.insert_snippet_by_name("functionDeclaration", {"1": formatted_text})
+
 
 @ctx.action_class("user")
 class UserActions:
