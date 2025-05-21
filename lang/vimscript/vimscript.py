@@ -1,4 +1,4 @@
-from talon import Context, Module, actions
+from talon import Context, Module, actions, settings
 
 from ..tags.operators import Operators
 
@@ -59,6 +59,11 @@ operators = Operators(
     MATH_DIVIDE=" / ",
 )
 
+def code_function_declaration(text: str, formatter: str):
+    formatted_text = actions.user.formatted_text(
+                text, settings.get(formatter)
+            )
+    actions.user.insert_snippet_by_name("functionDeclaration", {"1": formatted_text})
 
 @ctx.action_class("user")
 class UserActions:
@@ -78,10 +83,10 @@ class UserActions:
         actions.user.insert_snippet_by_name("elseStatement")
 
     def code_private_function(text: str):
-        actions.user.insert_snippet_by_name("functionDeclaration")
+        code_function_declaration(text, "user.code_private_function_formatter")
 
     def code_protected_function(text: str):
-        actions.user.insert_snippet_by_name("functionDeclaration")
+        code_function_declaration(text, "user.code_protected_function_formatter")
 
     def code_public_function(text: str):
-        actions.user.insert_snippet_by_name("functionDeclaration")
+        code_function_declaration(text, "user.code_public_function_formatter")
