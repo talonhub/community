@@ -66,22 +66,22 @@ class UserActions:
         return operators
 
     def code_comment_line_prefix():
-        actions.auto_insert('"')
+        actions.user.insert_snippet_by_name("commentLine")
 
     def code_state_if():
-        actions.insert("if ")
+        actions.user.insert_snippet_by_name("ifStatement")
 
     def code_state_else_if():
-        actions.insert("elseif ")
+        actions.user.insert_snippet_by_name("elseIfStatement")
 
     def code_state_else():
-        actions.insert("else")
+        actions.user.insert_snippet_by_name("elseStatement")
 
     def code_private_function(text: str):
-        actions.auto_insert("function ")
+        actions.user.insert_snippet_by_name("functionDeclaration")
 
     def code_protected_function(text: str):
-        actions.auto_insert("function ")
+        actions.user.insert_snippet_by_name("functionDeclaration")
 
     def code_public_function(text: str):
-        actions.auto_insert("function ")
+        actions.user.insert_snippet_by_name("functionDeclaration")
