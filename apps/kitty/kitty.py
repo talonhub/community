@@ -271,7 +271,7 @@ class UserActions:
         KittyCmdMap.previous_window.send_command()
 
     def split_number(index: int):
-        KittyCmdMap.nth_window.send_command(index)
+        KittyCmdMap.nth_window.send_command(str(index))
 
     def split_clear():
         """Close the current window/split."""
@@ -288,11 +288,10 @@ class UserActions:
 
     def split_flip():
         layout = _get_active_tab_layout()
-        act = KittyCmdMap.layout_action
         if layout == "splits":
-            act.send_command("rotate")
+            KittyCmdMap.layout_action.send_command("rotate")
         elif layout in ("tall", "fat"):
-            act.send_command("mirror")
+            KittyCmdMap.layout_action.send_command("mirror")
 
     def split_reset():
         """This only goes to the previously used layout and is most useful for
@@ -303,7 +302,7 @@ class UserActions:
 
     # Implement a couple tab commands
     def tab_jump(number: int):
-        KittyCmdMap.goto_tab.send_command(number)
+        KittyCmdMap.goto_tab.send_command(str(number))
 
     def tab_duplicate():
         """Opens a new tab in $PWD.
@@ -340,7 +339,7 @@ class KittyActions:
         "split switch" covers the meaning of "go to the split I was in
         previously."
         """
-        KittyCmdMap.nth_window.send_command(-1)
+        KittyCmdMap.nth_window.send_command("-1")
 
     def split_choose():
         """Start kitty's interactive window chooser.
