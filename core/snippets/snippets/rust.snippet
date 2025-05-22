@@ -20,3 +20,21 @@ enum $1 {
     $0
 }
 ---
+
+name: ifLetStatement
+phrase: if let
+insertionScope: statement
+-
+if let $1 = $2 {
+    $0
+}
+---
+
+name: letElseStatement
+phrase: let else
+insertionScope: statement
+-
+let $1 = $2 else {
+    return $0;
+}
+---
