@@ -1,21 +1,36 @@
 app: kitty
 -
-
+#
 # Kitty is a terminal emulator for Unix systems (including WSL, unofficially).
 # Learn more at https://sw.kovidgoyal.net.
+#
+# Some commands rely on your 1) kitty.conf enabling remote control, and 2) your
+# Talon and kitty configs agreeing on where the unix socket is. Most commands,
+# if these conditions are not met, will fall back to using the default key
+# combinations; some commands do not have default key bindings. In the event
+# such a command is called but RPC is not set up, you will get a desktop
+# notification saying what the kitty command was and advising you to enable RPC.
+#
 
-# The `new_window_with_cwd` action isn't bound in a default kitty.conf
-# (but it's highly recommended!)
-split window here: key(alt-shift-enter)
+### Novel split commands: ###
+
+# Create a new split in the current split's working directory.
+# (Requires RPC)
+split window here: user.split_window_here()
+
+# Go to the most recently-used split
+# (Requires RPC)
+split switch: user.split_switch()
+
 # Move to the split in the given direction.
-# Kitty doesn't define `neighboring_window` by default. Uncomment this and set
-# it to match the binding set in your kitty.conf. N.B. that ctrl-alt tends to
-# get eaten by GNOME3 (see dconf:org.gnome.desktop.wm.keybindings if you want
-# to change GNOME3 rather than kitty--recommended, as GNOME3 provides *3*
-# different shortcuts for switching workspaces).
-# go split <user.arrow_key>:
-#   key("ctrl:down")
-#   key("alt:down")
-#   key(arrow_key)
-#   key("ctrl:up")
-#   key("alt:up")
+# (Requires RPC)
+go split <user.arrow_key>: user.split_relative(arrow_key)
+
+# Start kitty's interactive window chooser.
+# Choose the split by "pressing" the number overlaid on the split you want.
+split choose: user.split_choose()
+
+### Miscellaneous commands: ###
+
+# Start a command line to run a kitten.
+kitten <user.text>: user.kitten_insert(text)
