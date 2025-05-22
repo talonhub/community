@@ -274,16 +274,13 @@ class UserActions:
         actions.auto_insert("NULL")
 
     def code_state_if():
-        actions.insert("if () {}")
-        actions.key("left enter up end left:3")
+        actions.user.insert_snippet_by_name("ifStatement")
 
     def code_state_else_if():
-        actions.insert(" else if () {}")
-        actions.key("left enter up end left:3")
+        actions.user.insert_snippet_by_name("elseIfStatement")
 
     def code_state_else():
-        actions.insert(" else {}")
-        actions.key("left enter")
+        actions.user.insert_snippet_by_name("elseStatement")
 
     def code_state_for():
         actions.insert("for ( in ) {}")
