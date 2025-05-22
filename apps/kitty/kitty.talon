@@ -14,23 +14,48 @@ app: kitty
 
 ### Novel split commands: ###
 
-# Create a new split in the current split's working directory.
+# Start kitty's interactive window chooser.
+# Choose the split by "pressing" the number overlaid on the split you want.
+split choose: user.split_choose()
+
+# Move to the split in the given relative/arrow direction.
 # (Requires RPC)
-split window here: user.split_window_here()
+go split <user.arrow_key>: user.split_relative(arrow_key)
 
 # Go to the most recently-used split
 # (Requires RPC)
 split switch: user.split_switch()
 
-# Move to the split in the given direction.
+# Create a new split in the current split's working directory.
 # (Requires RPC)
-go split <user.arrow_key>: user.split_relative(arrow_key)
+split window here: user.split_window_here()
 
-# Start kitty's interactive window chooser.
-# Choose the split by "pressing" the number overlaid on the split you want.
-split choose: user.split_choose()
+### Novel tab commands: ###
+
+# Start kitty's interactive tab chooser.
+# Choose the tab by "pressing" the number of the tab you want.
+tab choose: user.tab_choose()
+#
+# Go to the most recently-used split
+# (Requires RPC)
+tab switch: user.tab_switch()
 
 ### Miscellaneous commands: ###
 
 # Start a command line to run a kitten.
 kitten <user.text>: user.kitten_insert(text)
+
+# Hints kitten
+# https://sw.kovidgoyal.net/kitty/kittens/hints/
+# In short, similar idea to Cursorless, the draft plugin, Tridactyl, Vimium, etc.
+# (These should all work without RPC unless you have rebound kitty_mod+p.)
+hint U R L: user.hint_url()
+hint hash: user.hint_hash()
+hint line: user.hint_line()
+hint line in file: user.hint_line_in_file()
+hint path: user.hint_path_insert()
+# Like 'hint path', but open the file with the default program instead of paste it
+# to the command line.
+hint path open: user.hint_path_open()
+hint word: user.hint_word()
+hint terminal link: user.hint_terminal_link()

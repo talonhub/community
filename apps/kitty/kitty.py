@@ -1,8 +1,8 @@
 import enum
 import json
 import subprocess
-from functools import cache
-from typing import Iterable
+from functools import cache, partial
+from typing import Iterable, Sequence
 
 from talon import Context, Module, actions, app, settings, ui
 
@@ -116,7 +116,62 @@ def _sock_memo(active_win_pid: int):
 app.register("ready", _sock_memo.cache_clear)
 
 
-class KittyCmdMap(enum.Enum):
+class CmdMap(enum.Enum):
+    def __new__(cls, key_combo, *args):
+        member = object.__new__(cls)
+        # Allows us to use `""` as the value for multiple members without them
+        # being considered duplicates/aliases.
+        member._value_ = key_combo or object()
+        return member
+
+    @enum.property
+    def key_combo(self):
+        if isinstance(self._value_, str):
+            return self._value_
+        return ""
+
+    def _send_command(self, *args):
+        """Execute the kitty command, using the RPC kitten if possible or the
+        default keybinding otherwise.
+        """
+        # TODO: Versions of kitty newer than what Ubuntu packages as of May 2025
+        # have a third option where a new OS window can be launched but hidden
+        # and attached to the active kitty process, meaning the `kitten` command
+        # can be used without having to pass `--to <socket>` but remain invisible
+        # to the user.
+        active_win_pid = ui.active_window().app.pid
+        sock = _sock_memo(active_win_pid)
+        if sock:
+            run_kitten_client(sock, args)
+        else:
+            if not self.key_combo:
+                warn_msg = (
+                    f"No known binding for command {self._name_!r}.\n"
+                    "Commands without default key binds will only work when"
+                    " kitty has a remote control socket open and Talon knows"
+                    " about it. Please set `user.kitty_rpc_socket` in your"
+                    " Talon config, make sure it matches the value of the"
+                    " `listen_on` directive in your kitty.conf, and that"
+                    " `allow_remote_control` is enabled."
+                )
+                app.notify(
+                    title="Talon: kitty",
+                    subtitle="Warning: unbound action key",
+                    body=warn_msg,
+                    sound=True,
+                )
+            else:
+                actions.key(
+                    self.key_combo.format(
+                        kitty_mod=settings.get("user.kitty_terminal_mod")
+                    )
+                )
+
+    def send_command(self, *args):
+        raise NotImplementedError()
+
+
+class KittyCmdMap(CmdMap):
     """Mapping of kitty's mappable actions to their default key combinations.
 
     The `send_command` method will first check to see if `user.kitty_rpc_socket`
@@ -167,6 +222,7 @@ class KittyCmdMap(enum.Enum):
     new_tab_with_cwd = ""
     next_tab = "{kitty_mod}-right"
     previous_tab = "{kitty_mod}-left"
+    select_tab = ""
 
     # Commands for copy/paste
     copy_to_clipboard = "{kitty_mod}-c"
@@ -180,57 +236,32 @@ class KittyCmdMap(enum.Enum):
     scroll_page_up = "{kitty_mod}-pageup"
 
     # Misc
+    open_url_with_hints = "{kitty_mod}-e"
     show_scrollback = "{kitty_mod}-h"
 
-    def __new__(cls, key_combo):
-        member = object.__new__(cls)
-        # Allows us to use `""` as the value for multiple members without them
-        # being considered duplicates/aliases.
-        member._value_ = key_combo or object()
-        return member
+    def send_command(self, *args):
+        self._send_command("action", self._name_, *args)
 
-    @enum.property
-    def key_combo(self):
-        if isinstance(self._value_, str):
-            return self._value_
-        return ""
+
+class HintsKittenCmdMap(CmdMap):
+    """Mappings specific to the Hints kitten
+
+    See https://sw.kovidgoyal.net/kitty/kittens/hints/ for details.
+    """
+
+    def __init__(self, key_combo: str, hint_opts: Sequence[str]):
+        self.hint_opts = hint_opts
+
+    hint_hash = ("{kitty_mod}+p h", ["--type", "hash", "--program", "-"])
+    hint_line = ("{kitty_mod}+p l", ["--type", "line", "--program", "-"])
+    hint_line_in_file = ("{kitty_mod}+p n", ["--type", "linenum"])
+    hint_path_insert = ("{kitty_mod}+p f", ["--type", "path", "--program", "-"])
+    hint_path_open = ("{kitty_mod}+p shift+f", ["--type", "path"])
+    hint_word = ("{kitty_mod}+p w", ["--type", "word", "--program", "-"])
+    hint_terminal_link = ("{kitty_mod}+p y", ["--type", "hyperlink"])
 
     def send_command(self, *args):
-        """Execute the kitty command, using the RPC kitten if possible or the
-        default keybinding otherwise.
-        """
-        # TODO: Versions of kitty newer than what Ubuntu packages as of May 2025
-        # have a third option where a new OS window can be launched but hidden
-        # and attached to the active kitty process, meaning the `kitten` command
-        # can be used without having to pass `--to <socket>` but remain invisible
-        # to the user.
-        active_win_pid = ui.active_window().app.pid
-        sock = _sock_memo(active_win_pid)
-        if sock:
-            run_kitten_client(sock, ["action", self._name_, *args])
-        else:
-            if not self.key_combo:
-                warn_msg = (
-                    f"No known binding for command {self._name_!r}.\n"
-                    "Commands without default key binds will only work when"
-                    " kitty has a remote control socket open and Talon knows"
-                    " about it. Please set `user.kitty_rpc_socket` in your"
-                    " Talon config, make sure it matches the value of the"
-                    " `listen_on` directive in your kitty.conf, and that"
-                    " `allow_remote_control` is enabled."
-                )
-                app.notify(
-                    title="Talon: kitty",
-                    subtitle="Warning: unbound action key",
-                    body=warn_msg,
-                    sound=True,
-                )
-            else:
-                actions.key(
-                    self.key_combo.format(
-                        kitty_mod=settings.get("user.kitty_terminal_mod")
-                    )
-                )
+        self._send_command("action", "kitten", "hints", *self.hint_opts)
 
 
 def _get_active_tab_layout() -> str:
@@ -319,7 +350,9 @@ class UserActions:
 
 @mod.action_class
 class KittyActions:
-    # Novel commands just for kitty
+    """Novel commands just for kitty"""
+
+    # Extra split commands
     def split_window_here():
         """Opens a new kitty window/Talon split in $PWD.
 
@@ -349,6 +382,23 @@ class KittyActions:
         """
         KittyCmdMap.focus_visible_window.send_command()
 
+    # Extra tab commands
+    def tab_choose():
+        """Start kitty's interactive tab chooser.
+
+        An enumerated list of tabs will be overlayed on the active window. Say
+        the number of the tab you want.
+        """
+        KittyCmdMap.select_tab.send_command()
+
+    def tab_switch():
+        """Let "tab last" mean "go to the previous tab in the list", and
+        "tab switch" covers the meaning of "go to the tab I was in
+        previously."
+        """
+        KittyCmdMap.goto_tab.send_command("-1")
+
+    # Misc
     def kitten_insert(kitten: str):
         """Insert `kitten <kitten_name>` into the command line to run kittens
         other than the RPC kitten.
@@ -360,6 +410,16 @@ class KittyActions:
         Stops short of inserting "enter" so you can make sure the kitten you
         intended to run is the one on the command line.
         """
+        # As of May 2025, all built-in kitten names are kebab-cased. But, it
+        # turns out calling `insert_formatted` on text preformatted with the
+        # the given format actually removes the formatting. There are, at time
+        # of writing, two cases where we replace the Talon-interpreted text
+        # with such strings; rebinding the name of a callable is an easy way to
+        # accommodate those and future cases.
+        inserter = partial(
+            actions.user.insert_formatted,
+            formatters="DASH_SEPARATED",
+        )
         match kitten:
             case "I cat" | "eye cat":
                 kitten = "icat"
@@ -367,16 +427,54 @@ class KittyActions:
                 kitten = "ssh"
             case "hyperlinked grip":
                 kitten = "hyperlinked-grep"
+                inserter = actions.insert
             case "at":
                 kitten = "@"
             case "help":
                 kitten = "--help"
-            # TODO: "diff" is not consistently recognized (at least on my gear),
-            # sometimes registering as "iff" or "di."
+                inserter = actions.insert
+            case "di" | "death" | "iff" | "duff" | "tiff":
+                kitten = "diff"
         actions.insert("kitten ")
-        # As of May 2025, all built-in kitten names are kebab-cased.
-        actions.user.insert_formatted(kitten, "DASH_SEPARATED")
+        inserter(kitten)
         actions.key("space")
+
+    def hint_url():
+        """Start a hints overlay for opening visible URLs in a browser."""
+        KittyCmdMap.open_url_with_hints.send_command()
+
+    def hint_hash():
+        """Start a hints overlay for copying visible hashes to the command-line."""
+        HintsKittenCmdMap.hint_hash.send_command()
+
+    def hint_line():
+        """Start a hints overlay for copying visible lines to the command-line."""
+        HintsKittenCmdMap.hint_line.send_command()
+
+    def hint_line_in_file():
+        """Start a hints overlay for opening a file to a line with `editor`.
+
+        Eg., `/path/to/file:50` will open the file to line 50.
+        """
+        HintsKittenCmdMap.hint_line_in_file.send_command()
+
+    def hint_path_insert():
+        """Start a hints overlay for copying visible paths to the command-line."""
+        HintsKittenCmdMap.hint_path_insert.send_command()
+
+    def hint_path_open():
+        """Start a hints overlay for opening visible paths with the program associated
+        with the file type."""
+        HintsKittenCmdMap.hint_path_open.send_command()
+
+    def hint_word():
+        """Start a hints overlay for copying visible words to the command-line."""
+        HintsKittenCmdMap.hint_word.send_command()
+
+    def hint_terminal_link():
+        """Start a hints overlay for opening terminal hyperlinks with a program
+        appropriate to the URL scheme, if possible."""
+        HintsKittenCmdMap.hint_terminal_link.send_command()
 
 
 @ctx.action_class("app")
@@ -389,7 +487,7 @@ class AppActions:
         KittyCmdMap.previous_tab.send_command()
 
     def tab_next():
-        KittyCmdMap.close_tab.send_command()
+        KittyCmdMap.next_tab.send_command()
 
     def tab_close():
         KittyCmdMap.close_tab.send_command()
