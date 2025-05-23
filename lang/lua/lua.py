@@ -190,7 +190,7 @@ class UserActions:
         actions.insert("goto ")
 
     def code_state_while():
-        actions.user.insert_between("while ", " do")
+        actions.user.insert_snippet_by_name("whileLoopStatement")
 
     def code_state_return():
         actions.insert("return ")
@@ -209,14 +209,13 @@ class UserActions:
     # code_comment_line
     ##
     def code_comment_line_prefix():
-        actions.insert("-- ")
+        actions.user.insert_snippet_by_name("commentLine")
 
     ##
     # code_comment_block
     ##
     def code_comment_block():
-        actions.insert("--[[\n\n--]]")
-        actions.edit.up()
+        actions.user.insert_snippet_by_name("commentBlock")
 
     def code_comment_block_prefix():
         actions.insert("--[[")
@@ -284,9 +283,10 @@ class UserActions:
     # code_libraries
     ##
     def code_import():
-        actions.user.insert_between("local ", " = require('')")
+        actions.user.insert_snippet_by_name("importStatement")
 
     def code_insert_library(text: str, selection: str):
-        actions.insert(f"local {selection} = require('{selection}')")
+        substitutions = {"1": selection, "0": selection}
+        actions.user.insert_snippet_by_name("importStatement", substitutions)
 
     # non-tag related actions
