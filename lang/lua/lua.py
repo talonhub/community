@@ -172,19 +172,19 @@ class UserActions:
     # code_imperative
     ##
     def code_state_if():
-        actions.user.insert_between("if ", " then")
+        actions.user.insert_snippet_by_name("ifStatement")
 
     def code_state_else_if():
-        actions.user.insert_between("elseif ", " then")
+        actions.user.insert_snippet_by_name("elseIfStatement")
 
     def code_state_else():
-        actions.insert("else\n")
+        actions.user.insert_snippet_by_name("elseStatement")
 
     def code_state_do():
-        actions.insert("repeat\n")
+        actions.user.insert_snippet_by_name("doWhileLoopStatement")
 
     def code_state_for():
-        actions.user.insert_between("for ", " do")
+       actions.user.insert_snippet_by_name("genericForLoopStatement")
 
     def code_state_go_to():
         actions.insert("goto ")
