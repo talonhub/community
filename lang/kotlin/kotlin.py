@@ -89,10 +89,10 @@ class UserActions:
 
     def code_comment_line_prefix():
         actions.user.insert_snippet_by_name("commentLine")
-        
+
     def code_comment_block():
         actions.user.insert_snippet_by_name("commentBlock")
-        
+
     def code_self():
         actions.auto_insert("this")
 
