@@ -88,7 +88,10 @@ class UserActions:
         return operators
 
     def code_comment_line_prefix():
-        actions.insert("// ")
+        actions.user.insert_snippet_by_name("commentLine")
+
+    def code_comment_block():
+        actions.user.insert_snippet_by_name("commentBlock")
 
     def code_self():
         actions.auto_insert("this")
@@ -103,30 +106,29 @@ class UserActions:
         actions.insert(" != null")
 
     def code_state_if():
-        actions.user.insert_between("if (", ") ")
+        actions.user.insert_snippet_by_name("ifStatement")
 
     def code_state_else_if():
-        actions.user.insert_between("else if (", ") ")
+        actions.user.insert_snippet_by_name("elseIfStatement")
 
     def code_state_else():
-        actions.user.insert_between("else {", "}")
-        actions.key("enter")
+        actions.user.insert_snippet_by_name("elseStatement")
 
     def code_state_switch():
-        actions.user.insert_between("when (", ") ")  # Kotlin uses 'when' for switch
+        actions.user.insert_snippet_by_name("switchStatement")
 
     def code_state_case():
         actions.insert("case \nbreak;")
         actions.edit.up()
 
     def code_state_for():
-        actions.user.insert_between("for (", ") ")
+        actions.user.insert_snippet_by_name("forEachStatement")
 
     def code_state_while():
-        actions.user.insert_between("while (", ") ")
+        actions.user.insert_snippet_by_name("whileLoopStatement")
 
     def code_define_class():
-        actions.auto_insert("class ")
+        actions.user.insert_snippet_by_name("classDeclaration")
 
     def code_state_return():
         actions.insert("return ")
