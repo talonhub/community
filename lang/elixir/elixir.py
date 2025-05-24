@@ -67,7 +67,7 @@ class UserActions:
         return operators
 
     def code_comment_line_prefix():
-        actions.insert("# ")
+        actions.user.insert_snippet_by_name("commentLine")
 
     def code_self():
         actions.auto_insert("self")
@@ -88,23 +88,22 @@ class UserActions:
         actions.insert(" != nil")
 
     def code_state_if():
-        actions.user.insert_between("if ", " do\nend")
+        actions.user.insert_snippet_by_name("ifStatement")
 
     def code_state_else_if():
         actions.user.insert_between("else if ", " do\nend")
 
     def code_state_else():
-        actions.insert("else\nend")
-        actions.key("enter")
+        actions.user.insert_snippet_by_name("elseStatement")
 
     def code_state_case():
         actions.user.insert_between("case ", " do\nend")
 
     def code_state_for():
-        actions.user.insert_between("for ", " do\nend")
+        actions.user.insert_snippet_by_name("genericForLoopStatement")
 
     def code_state_while():
-        actions.user.insert_between("while ", " do\nend")
+        actions.user.insert_snippet_by_name("whileLoopStatement")
 
     def code_define_class():
         # Elixir doesn't have classes, so this is not applicable
