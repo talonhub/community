@@ -31,8 +31,6 @@ state try: "try do"
 state rescue: "rescue"
 state after: "after"
 state end: "end"
-state while: user.insert_snippet_by_name("whileLoopStatement")
-state for: user.insert_snippet_by_name("genericForLoopStatement")
 
 op pipe: " |> "
 
