@@ -259,7 +259,7 @@ class UserActions:
         actions.auto_insert("False")
 
     def code_comment_documentation():
-        actions.user.insert_snippet_by_name("commentBlock")
+        actions.user.insert_snippet_by_name("commentDocumentation")
 
     def code_insert_function(text: str, selection: str):
         text += f"({selection or ''})"
