@@ -1,0 +1,20 @@
+language: sql
+---
+
+name: createTable
+phrase: create table
+insertionScope: statement
+-
+CREATE TABLE $1(
+    $0
+);
+---
+
+name: withStatement
+phrase: with
+insertionScope: statement
+-
+WITH $1 AS (
+        SELECT $0
+)
+---
