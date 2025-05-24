@@ -172,25 +172,25 @@ class UserActions:
     # code_imperative
     ##
     def code_state_if():
-        actions.user.insert_between("if ", " then")
+        actions.user.insert_snippet_by_name("ifStatement")
 
     def code_state_else_if():
-        actions.user.insert_between("elseif ", " then")
+        actions.user.insert_snippet_by_name("elseIfStatement")
 
     def code_state_else():
-        actions.insert("else\n")
+        actions.user.insert_snippet_by_name("elseStatement")
 
     def code_state_do():
-        actions.insert("repeat\n")
+        actions.user.insert_snippet_by_name("doWhileLoopStatement")
 
     def code_state_for():
-        actions.user.insert_between("for ", " do")
+        actions.user.insert_snippet_by_name("genericForLoopStatement")
 
     def code_state_go_to():
         actions.insert("goto ")
 
     def code_state_while():
-        actions.user.insert_between("while ", " do")
+        actions.user.insert_snippet_by_name("whileLoopStatement")
 
     def code_state_return():
         actions.insert("return ")
@@ -209,14 +209,13 @@ class UserActions:
     # code_comment_line
     ##
     def code_comment_line_prefix():
-        actions.insert("-- ")
+        actions.user.insert_snippet_by_name("commentLine")
 
     ##
     # code_comment_block
     ##
     def code_comment_block():
-        actions.insert("--[[\n\n--]]")
-        actions.edit.up()
+        actions.user.insert_snippet_by_name("commentBlock")
 
     def code_comment_block_prefix():
         actions.insert("--[[")
@@ -284,9 +283,10 @@ class UserActions:
     # code_libraries
     ##
     def code_import():
-        actions.user.insert_between("local ", " = require('')")
+        actions.user.insert_snippet_by_name("importStatement")
 
     def code_insert_library(text: str, selection: str):
-        actions.insert(f"local {selection} = require('{selection}')")
+        substitutions = {"1": selection, "0": selection}
+        actions.user.insert_snippet_by_name("importStatement", substitutions)
 
     # non-tag related actions
