@@ -68,6 +68,9 @@ class discord_actions:
     def discord_decline_call():
         """Decline incoming call"""
 
+    def discord_start_call():
+        """Start a call in a private DM or group"""
+
     def discord_quick_switcher(dest_type: str, dest_search: str):
         """Open up the quick switcher, optionally specifying a type of destination"""
 
@@ -77,9 +80,39 @@ class discord_actions:
     def discord_toggle_dms():
         """Toggle between dms and your most recent server"""
 
+    def discord_create_join_server():
+        """Create or join a new server"""
+
+    def discord_toggle_soundboard():
+        """Toggle the soundboard while in a call"""
+
+    def discord_create_private_group():
+        """Create private group"""
+
+    def discord_channel_oldest_unread():
+        """Go to oldest unread message in channel"""
+
+    def discord_open_support():
+        """Open the Discord support page in browser"""
+
+    def discord_start_lofi():
+        """Listen to Lofi beats with Wumpus"""
+
 
 @ctx.action_class("user")
 class UserActions:
     # Navigation: Channels
     def messaging_open_channel_picker():
         actions.user.discord_quick_switcher("#", "")
+
+
+@ctx.action_class("edit")
+class EditActions:
+    # Suppress the find next and find previous actions when in discord as they do nothing in discord
+    # and may cause undefined behavior for the user. If I could specify that this only allows find
+    # and not find_next or find_previous, I would do that instead.
+    def find_next():
+        pass
+
+    def find_previous():
+        pass
