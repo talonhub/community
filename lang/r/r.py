@@ -274,30 +274,25 @@ class UserActions:
         actions.auto_insert("NULL")
 
     def code_state_if():
-        actions.insert("if () {}")
-        actions.key("left enter up end left:3")
+        actions.user.insert_snippet_by_name("ifStatement")
 
     def code_state_else_if():
-        actions.insert(" else if () {}")
-        actions.key("left enter up end left:3")
+        actions.user.insert_snippet_by_name("elseIfStatement")
 
     def code_state_else():
-        actions.insert(" else {}")
-        actions.key("left enter")
+        actions.user.insert_snippet_by_name("elseStatement")
 
     def code_state_for():
-        actions.insert("for ( in ) {}")
-        actions.key("left enter up end left:7")
+        actions.user.insert_snippet_by_name("forEachStatement")
 
     def code_state_while():
-        actions.insert("while () {}")
-        actions.key("left enter up end left:3")
+        actions.user.insert_snippet_by_name("whileLoopStatement")
 
     def code_import():
-        actions.user.insert_between("library(", ")")
+        actions.user.insert_snippet_by_name("importStatement")
 
     def code_comment_line_prefix():
-        actions.auto_insert("#")
+        actions.user.insert_snippet_by_name("commentLine")
 
     def code_state_return():
         actions.user.insert_between("return(", ")")
@@ -335,8 +330,7 @@ class UserActions:
         actions.edit.left()
 
     def code_insert_library(text: str, selection: str):
-        actions.user.insert_between("library(", ")")
-        actions.user.paste(text + selection)
+        actions.user.insert_snippet_by_name("importStatement", {"0": text + selection})
 
     def code_insert_named_argument(parameter_name: str):
         actions.insert(f"{parameter_name} = ")
