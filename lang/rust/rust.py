@@ -274,26 +274,26 @@ class UserActions:
     # tag: comment_line
 
     def code_comment_line_prefix():
-        actions.auto_insert("// ")
+        actions.user.insert_snippet_by_name("commentLine")
 
     # tag: comment_documentation
 
     def code_comment_documentation():
-        actions.auto_insert("/// ")
+        actions.user.insert_snippet_by_name("commentDocumentation")
 
     # tag: imperative
 
     def code_state_if():
-        actions.auto_insert("if ")
+        actions.user.insert_snippet_by_name("ifStatement")
 
     def code_state_else_if():
-        actions.auto_insert(" else if ")
+        actions.user.insert_snippet_by_name("elseIfStatement")
 
     def code_state_else():
-        actions.user.insert_between(" else { ", " }")
+        actions.user.insert_snippet_by_name("elseStatement")
 
     def code_state_switch():
-        actions.auto_insert("match ")
+        actions.user.insert_snippet_by_name("switchStatement")
 
     def code_state_for():
         actions.user.insert_snippet_by_name("forEachStatement")
@@ -302,8 +302,7 @@ class UserActions:
         actions.user.insert_snippet_by_name("whileLoopStatement")
 
     def code_state_infinite_loop():
-        actions.user.insert_between("loop {", "}")
-        actions.key("enter")
+        actions.user.insert_snippet_by_name("infiniteLoopStatement")
 
     def code_state_return():
         actions.auto_insert("return ")
@@ -323,7 +322,7 @@ class UserActions:
         actions.auto_insert("self")
 
     def code_define_class():
-        actions.auto_insert("struct ")
+        actions.user.insert_snippet_by_name("structDeclaration")
 
     # tag: data_bool
 
@@ -400,8 +399,7 @@ class UserActions:
             code_insert_function_or_macro(text, selection, "(", ")")
 
     def code_state_unsafe():
-        actions.user.insert_between("unsafe {", "}")
-        actions.key("enter")
+        actions.user.insert_snippet_by_name("unsafeBlock")
 
     def code_comment_documentation_block():
         actions.user.insert_between("/**", "*/")
