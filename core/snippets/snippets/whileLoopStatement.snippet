@@ -3,9 +3,9 @@ phrase: while
 insertionScope: statement
 ---
 
-language: c | cpp | csharp | java | javascript | typescript | javascriptreact | typescriptreact
+language: c | cpp | csharp | java | javascript | typescript | javascriptreact | typescriptreact | r | php | scala | kotlin
 -
-while($1) {
+while ($1) {
     $0
 }
 ---
@@ -16,7 +16,28 @@ while $1:
     $0
 ---
 
-language: lua
+language: ruby
+-
+while $1
+    $0
+end
+---
+
+language: go
+-
+for $1 {
+    $0
+}
+---
+
+language: rust | stata
+-
+while $1 {
+    $0
+}
+---
+
+language: elixir | lua
 -
 while $1 do
     $0

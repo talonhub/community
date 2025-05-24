@@ -8,7 +8,7 @@ $0.wrapperPhrase: elif
 $0.wrapperScope: statement
 ---
 
-language: c | cpp | csharp | java | javascript | typescript | javascriptreact | typescriptreact
+language: c | cpp | csharp | java | javascript | typescript | javascriptreact | typescriptreact | r | scala | kotlin
 -
 else if ($1) {
     $0
@@ -25,4 +25,30 @@ language: lua
 -
 elseif $1 then
     $0
+---
+
+language: ruby
+-
+elsif $1
+    $0
+---
+
+language: vimscript
+-
+elseif $1
+    $0
+---
+
+language: php
+-
+elseif ($1) {
+    $0
+}
+---
+
+language: stata | go
+-
+else if $1 {
+    $0
+}
 ---
