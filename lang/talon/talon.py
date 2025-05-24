@@ -135,7 +135,7 @@ class UserActions:
         return operators
 
     def code_comment_line_prefix():
-        actions.auto_insert("#")
+        actions.user.insert_snippet_by_name("commentLine")
 
     def code_insert_function(text: str, selection: str):
         text += f"({selection or ''})"
