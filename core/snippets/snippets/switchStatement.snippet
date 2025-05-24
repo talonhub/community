@@ -3,7 +3,7 @@ phrase: switch
 insertionScope: statement
 ---
 
-language: c | cpp | csharp | java | javascript | typescript | javascriptreact | typescriptreact
+language: c | cpp | csharp | java | javascript | typescript | javascriptreact | typescriptreact | php
 -
 switch ($1) {
     $0
@@ -14,11 +14,4 @@ language: python
 -
 match $1:
     $0
----
-
-language: php
--
-switch ($1) {
-    $0
-}
 ---
