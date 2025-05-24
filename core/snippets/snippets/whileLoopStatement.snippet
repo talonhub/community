@@ -3,7 +3,7 @@ phrase: while
 insertionScope: statement
 ---
 
-language: c | cpp | csharp | java | javascript | typescript | javascriptreact | typescriptreact | php
+language: c | cpp | csharp | java | javascript | typescript | javascriptreact | typescriptreact | r | php
 -
 while ($1) {
     $0
@@ -14,4 +14,18 @@ language: python
 -
 while $1:
     $0
+---
+
+language: rust | stata
+-
+while $1 {
+    $0
+}
+---
+
+language: elixir
+-
+while $1 do
+    $0
+end
 ---
