@@ -23,6 +23,13 @@ for i in range($1):
     $0
 ---
 
+language: scala
+-
+for (i <- 0 until $1) {
+    $0
+}
+---
+
 language: go
 -
 for i := 0; i < $1; i++ {
