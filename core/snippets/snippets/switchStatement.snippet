@@ -3,7 +3,7 @@ phrase: switch
 insertionScope: statement
 ---
 
-language: c | cpp | csharp | java | javascript | typescript | javascriptreact | typescriptreact
+language: c | cpp | csharp | java | javascript | typescript | javascriptreact | typescriptreact | php
 -
 switch ($1) {
     $0
@@ -21,4 +21,32 @@ language: kotlin
 when ($1) {
     $0
 }
+---
+
+language: ruby
+-
+case $1
+    $0
+end
+---
+
+language: scala
+-
+$1 match {
+    $0
+}
+---
+
+language: go
+-
+switch $1 {
+    $0
+}
+---
+
+language: elixir
+-
+case $1 do
+    $0
+end
 ---

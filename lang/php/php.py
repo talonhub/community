@@ -71,21 +71,16 @@ class UserActions:
         actions.auto_insert("->")
 
     def code_define_class():
-        actions.auto_insert("class ")
+        actions.user.insert_snippet_by_name("classDeclaration")
 
     def code_import():
-        actions.auto_insert("use ;")
-        actions.edit.left()
+        actions.user.insert_snippet_by_name("importStatement")
 
     def code_comment_line_prefix():
-        actions.auto_insert("// ")
+        actions.user.insert_snippet_by_name("commentLine")
 
     def code_comment_block():
-        actions.user.code_comment_block_prefix()
-        actions.key("enter")
-        actions.key("enter")
-        actions.user.code_comment_block_suffix()
-        actions.edit.up()
+        actions.user.insert_snippet_by_name("commentBlock")
 
     def code_comment_block_prefix():
         actions.auto_insert("/*")
@@ -94,7 +89,7 @@ class UserActions:
         actions.auto_insert("*/")
 
     def code_comment_documentation():
-        actions.insert("/**")
+        actions.user.insert_snippet_by_name("commentDocumentation")
 
     def code_insert_true():
         actions.auto_insert("true")
@@ -114,40 +109,31 @@ class UserActions:
         actions.edit.left()
 
     def code_state_if():
-        actions.insert("if ()")
-        actions.edit.left()
+        actions.user.insert_snippet_by_name("ifStatement")
 
     def code_state_else_if():
-        actions.insert("elseif ()")
-        actions.edit.left()
+        actions.user.insert_snippet_by_name("elseIfStatement")
 
     def code_state_else():
-        actions.insert("else {")
-        actions.key("enter")
+        actions.user.insert_snippet_by_name("elseStatement")
 
     def code_state_while():
-        actions.insert("while ()")
-        actions.edit.left()
+        actions.user.insert_snippet_by_name("whileLoopStatement")
 
     def code_state_for():
-        actions.insert("for ()")
-        actions.edit.left()
+        actions.user.insert_snippet_by_name("genericForLoopStatement")
 
     def code_state_for_each():
-        actions.insert("foreach ()")
-        actions.edit.left()
+        actions.user.insert_snippet_by_name("forEachStatement")
 
     def code_state_switch():
-        actions.insert("switch ()")
-        actions.edit.left()
+        actions.user.insert_snippet_by_name("switchStatement")
 
     def code_state_case():
-        actions.insert("case :")
-        actions.edit.left()
+        actions.user.insert_snippet_by_name("caseStatement")
 
     def code_state_do():
-        actions.insert("do {")
-        actions.key("enter")
+        actions.user.insert_snippet_by_name("doWhileLoopStatement")
 
     def code_state_go_to():
         actions.insert("goto ;")
