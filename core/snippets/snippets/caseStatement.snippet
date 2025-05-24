@@ -9,9 +9,15 @@ case $1:
     $0
 ---
 
-language: python
+language: python | php | go
 insertionScope: branch
 -
 case $1:
+    $0
+---
+
+language: elixir
+-
+$1 ->
     $0
 ---
