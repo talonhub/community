@@ -31,3 +31,19 @@ $1.insertionFormatter: SNAKE_CASE
 def $1($2):
     $0
 ---
+
+language: vimscript
+-
+function $1($2)
+    $0
+endfunction
+---
+
+language: php
+
+$1.insertionFormatter: SNAKE_CASE
+-
+function $1($2) {
+    $0
+}
+---
