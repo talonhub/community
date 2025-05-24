@@ -37,6 +37,13 @@ for $1 in $2:
     $0
 ---
 
+language: go
+-
+for $1 := range $2 {
+    $0
+}
+---
+
 language: php
 -
 foreach ($1 as $2) {
