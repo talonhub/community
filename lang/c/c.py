@@ -250,24 +250,19 @@ class UserActions:
         actions.auto_insert(" != NULL")
 
     def code_state_if():
-        actions.insert("if () {\n}\n")
-        actions.key("up:2 left:3")
+        actions.user.insert_snippet_by_name("ifStatement")
 
     def code_state_else_if():
-        actions.insert("else if () {\n}\n")
-        actions.key("up:2 left:3")
+        actions.user.insert_snippet_by_name("elseIfStatement")
 
     def code_state_else():
-        actions.insert("else\n{\n}\n")
-        actions.key("up:2")
+        actions.user.insert_snippet_by_name("elseStatement")
 
     def code_state_switch():
-        actions.insert("switch ()")
-        actions.edit.left()
+        actions.user.insert_snippet_by_name("switchStatement")
 
     def code_state_case():
-        actions.insert("case \nbreak;")
-        actions.edit.up()
+        actions.user.insert_snippet_by_name("caseStatement")
 
     def code_state_for():
         actions.auto_insert("for ")
@@ -276,8 +271,7 @@ class UserActions:
         actions.auto_insert("goto ")
 
     def code_state_while():
-        actions.insert("while ()")
-        actions.edit.left()
+        actions.user.insert_snippet_by_name("whileLoopStatement")
 
     def code_state_return():
         actions.auto_insert("return ")
@@ -295,7 +289,7 @@ class UserActions:
         actions.auto_insert("false")
 
     def code_comment_line_prefix():
-        actions.auto_insert("//")
+        actions.user.insert_snippet_by_name("commentLine")
 
     def code_insert_function(text: str, selection: str):
         if selection:
