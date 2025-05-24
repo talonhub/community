@@ -2,7 +2,7 @@ name: defaultStatement
 phrase: default
 ---
 
-language: c | cpp | csharp | java | javascript | typescript | javascriptreact | typescriptreact
+language: c | cpp | csharp | java | javascript | typescript | javascriptreact | typescriptreact | go
 -
 default:
     $0
@@ -17,5 +17,16 @@ case _:
 language: ruby
 -
 else
+    $0
+---
+
+language: scala
+-
+case _ => $0
+---
+
+language: elixir
+-
+_ ->
     $0
 ---

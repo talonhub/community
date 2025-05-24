@@ -147,37 +147,25 @@ class UserActions:
         actions.insert(" != null")
 
     def code_state_if():
-        actions.insert("if () ")
-        actions.edit.left()
-        actions.edit.left()
+        actions.user.insert_snippet_by_name("ifStatement")
 
     def code_state_else_if():
-        actions.insert("else if () ")
-        actions.edit.left()
-        actions.edit.left()
+        actions.user.insert_snippet_by_name("elseIfStatement")
 
     def code_state_else():
-        actions.insert("else ")
+        actions.user.insert_snippet_by_name("elseStatement")
 
     def code_state_switch():
-        actions.insert("match {\n")
+        actions.user.insert_snippet_by_name("switchStatement")
 
     def code_state_case():
-        actions.insert("case  => ")
-        actions.edit.left()
-        actions.edit.left()
-        actions.edit.left()
-        actions.edit.left()
+        actions.user.insert_snippet_by_name("caseStatement")
 
     def code_state_for():
-        actions.insert("for () ")
-        actions.edit.left()
-        actions.edit.left()
+        actions.user.insert_snippet_by_name("genericForLoopStatement")
 
     def code_state_while():
-        actions.insert("while () ")
-        actions.edit.left()
-        actions.edit.left()
+        actions.user.insert_snippet_by_name("whileLoopStatement")
 
     def code_break():
         actions.insert("break")
@@ -192,23 +180,19 @@ class UserActions:
         actions.insert("false")
 
     def code_define_class():
-        actions.insert("class ")
+        actions.user.insert_snippet_by_name("classDeclaration")
 
     def code_import():
-        actions.insert("import ")
+        actions.user.insert_snippet_by_name("importStatement")
 
     def code_state_return():
         actions.insert("return ")
 
     def code_comment_line_prefix():
-        actions.insert("// ")
+        actions.user.insert_snippet_by_name("commentLine")
 
     def code_comment_block():
-        actions.insert("/*")
-        actions.key("enter")
-        actions.key("enter")
-        actions.insert("*/")
-        actions.edit.up()
+        actions.user.insert_snippet_by_name("commentBlock")
 
     def code_comment_block_prefix():
         actions.insert("/*")

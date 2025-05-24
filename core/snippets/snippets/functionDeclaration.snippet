@@ -40,3 +40,19 @@ def $1($2)
     $0
 end
 ---
+
+language: vimscript
+-
+function $1($2)
+    $0
+endfunction
+---
+
+language: php
+
+$1.insertionFormatter: SNAKE_CASE
+-
+function $1($2) {
+    $0
+}
+---
