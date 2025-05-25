@@ -89,7 +89,7 @@ Try saying e.g. `air bat cap` to insert abc.
 
 All key commands are defined in [keys.talon](core/keys/keys.talon). Say letters of the [Talon alphabet](#alphabet) for A–Z.
 
-For modifier keys, say `help modifiers`. For example, say `shift air` to press <kbd><kbd>shift</kbd>-<kbd>a</kbd></kbd>, which types a capital `A`.
+For modifier keys, say `help modifiers`. For example, say `shift air` to press <kbd><kbd>shift</kbd>+<kbd>a</kbd></kbd>, which types a capital `A`.
 
 For symbols, say `help symbols`. These are defined in keys.py;
 search for `modifier_keys` and then keep scrolling — roughly starting [here](core/keys/keys.py#L124).
