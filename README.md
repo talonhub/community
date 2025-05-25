@@ -28,7 +28,7 @@ It is recommended to install `community` using [`git`](https://git-scm.com/).
 
 1. Install [`git`](https://git-scm.com/)
 2. Open a terminal ([Mac](https://support.apple.com/en-gb/guide/terminal/apd5265185d-f365-44cb-8b09-71a064a42125/mac) / [Ubuntu](https://ubuntu.com/tutorials/command-line-for-beginners#3-opening-a-terminal))
-3. Paste the following into the terminal window then press <kdb>Enter</kdb>/<kdb>Return</kdb>:
+3. Paste the following into the terminal window then press <kbd>Enter</kbd>/<kbd>Return</kbd>:
 
    ```bash
    cd ~/.talon/user
