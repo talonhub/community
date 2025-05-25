@@ -43,7 +43,7 @@ It is recommended to install `community` using [`git`](https://git-scm.com/).
 
 1. Install [`git`](https://git-scm.com/)
 2. Open a [command prompt](https://www.wikihow.com/Open-the-Command-Prompt-in-Windows)
-3. Paste the following into the command prompt window then press Enter:
+3. Paste the following into the command prompt window then press <kbd>Enter</kbd>:
 
    ```
    cd %AppData%\Talon\user
@@ -72,7 +72,7 @@ It's recommended to learn the alphabet first, then get familiar with the keys, s
 
 Once you have the basics of text input down, try copying some code from one window to another.
 
-After that, explore using ordinal repetition for easily repeating a command without pausing (e.g., saying `go up fifth` will go up five lines), window switching (`focus chrome`), and moving around in your text editor of choice.
+After that, explore using ordinal repetition for easily repeating a command without pausing (e.g., saying `go up fifth` will go up five lines), window switchings (`focus chrome`), and moving around in your text editor of choice.
 
 If you use vim, just start with the numbers and alphabet, otherwise look at generic_editor.talon as well at jetbrains, vscode, and any other integrations.
 
@@ -89,7 +89,7 @@ Try saying e.g. `air bat cap` to insert abc.
 
 All key commands are defined in [keys.talon](core/keys/keys.talon). Say letters of the [Talon alphabet](#alphabet) for A–Z.
 
-For modifier keys, say `help modifiers`. For example, say `shift air` to press `shift-a`, which types a capital `A`.
+For modifier keys, say `help modifiers`. For example, say `shift air` to press <kbd><kbd>shift</kbd>-<kbd>a</kbd></kbd>`, which types a capital `A`.
 
 For symbols, say `help symbols`. These are defined in keys.py;
 search for `modifier_keys` and then keep scrolling — roughly starting [here](core/keys/keys.py#L124).
