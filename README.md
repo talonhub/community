@@ -89,22 +89,22 @@ Try saying e.g. `air bat cap` to insert abc.
 
 All key commands are defined in [keys.talon](core/keys/keys.talon). Say letters of the [Talon alphabet](#alphabet) for A–Z.
 
-For modifier keys, say `help modifiers`. For example, say `shift air` to press <kbd><kbd>shift</kbd>+<kbd>a</kbd></kbd>, which types a capital `A`.
+For modifier keys, say `help modifiers`. For example, say `shift air` to press <kbd>Shift</kbd> + <kbd>A</kbd>, which types a capital `A`.
 
 For symbols, say `help symbols`. These are defined in keys.py;
 search for `modifier_keys` and then keep scrolling — roughly starting [here](core/keys/keys.py#L124).
 
 On Windows, try commands such as:
 
-- `control air` to press <kbd><kbd>Control</kbd>+<kbd>A</kbd></kbd> and select all.
+- `control air` to press <kbd>Control</kbd> + <kbd>A</kbd> and select all.
 
-- `super-shift-sun` to press <kbd><kbd>Win</kbd>+<kbd>Shift</kbd>+<kbd>S</kbd></kbd>, triggering the screenshot application (Windows 10). Then try `escape` to exit.
+- `super-shift-sun` to press <kbd>Win</kbd> + <kbd>Shift</kbd> + <kbd>S</kbd>, triggering the screenshot application (Windows 10/11). Then try `escape` to exit.
 
 On Mac, try commands such as:
 
-- `command air` to press <kbd><kbd>⌘</kbd>+<kbd>A</kbd></kbd> and select all.
+- `command air` to press <kbd>⌘</kbd><kbd>A</kbd> and select all.
 
-- `control shift command 4` to press <kbd><kbd>⌃</kbd>+<kbd>⇧</kbd>+<kbd>⌘</kbd>+<kbd>4</kbd></kbd>, copying a screenshot of the selected area to the clipboard. Then try `escape` to exit. Please note the order of the modifiers doesn't matter.
+- `control shift command 4` to press <kbd>⌃</kbd><kbd>⇧</kbd><kbd>⌘</kbd><kbd>4</kbd>, copying a screenshot of the selected area to the clipboard. Then try `escape` to exit. Please note the order of the modifiers doesn't matter.
 
 Say any combination of modifiers, symbols, alphabet, numbers and function keys to execute keyboard shortcuts. Modifier keys can be tapped using `press`, for example `press control` taps the <kbd>Control</kbd> (<kbd>⌃</kbd>) key by itself.
 
@@ -140,7 +140,7 @@ Editing commands in [edit.talon](core/edit/edit.talon) are global. Commands such
 
 Voice commands for repeating commands are defined in [repeater.talon](plugin/repeater/repeater.talon).
 
-Say `go up fifth` or `go up five times` to go up five lines. `select up third` will press <kbd><kbd>Shift</kbd>+<kbd>Up</kbd></kbd> three times to select several lines of text.
+Say `go up fifth` or `go up five times` to go up five lines. `select up third` will press <kbd>Shift</kbd>+<kbd>↑</kbd> three times to select several lines of text.
 
 ### Window management
 
