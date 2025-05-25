@@ -1,5 +1,6 @@
 from typing import Any, Callable
 from uuid import uuid4
+import logging
 
 from talon import Module, actions
 
@@ -8,6 +9,8 @@ from .read_json_with_timeout import read_json_with_timeout
 from .robust_unlink import robust_unlink
 from .types import NoFileServerException, Request
 from .write_request import write_request
+
+logger = logging.getLogger(__name__)
 
 mod = Module()
 
@@ -42,6 +45,9 @@ class Actions:
         communication_dir_path = get_communication_dir_path(dir_name)
 
         if not communication_dir_path.exists():
+            logger.warning(
+                f"Communication directory not found at: {communication_dir_path}"
+            )
             if args or return_command_output:
                 raise Exception(
                     "Communication directory not found. Must use command-server extension for advanced commands"
