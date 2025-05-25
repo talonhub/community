@@ -1,6 +1,6 @@
+import logging
 from typing import Any, Callable
 from uuid import uuid4
-import logging
 
 from talon import Module, actions
 
