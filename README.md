@@ -96,17 +96,17 @@ search for `modifier_keys` and then keep scrolling — roughly starting [here](
 
 On Windows, try commands such as:
 
-- `control air` to press Control+A and select all.
+- `control air` to press <kbd><kbd>Control</kbd>+<kbd>A</kbd></kbd> and select all.
 
-- `super-shift-sun` to press Win+Shift+S, triggering the screenshot application (Windows 10). Then try `escape` to exit.
+- `super-shift-sun` to press <kbd><kbd>Win</kbd>+<kbd>Shift</kbd>+<kbd>S</kbd></kbd>, triggering the screenshot application (Windows 10). Then try `escape` to exit.
 
 On Mac, try commands such as:
 
-- `command air` to press ⌘A and select all.
+- `command air` to press <kbd><kbd>⌘</kbd>+<kbd>A</kbd></kbd> and select all.
 
-- `control shift command 4` to press ⌃⇧⌘4, copying a screenshot of the selected area to the clipboard. Then try `escape` to exit. Please note the order of the modifiers doesn't matter.
+- `control shift command 4` to press <kbd><kbd>⌃</kbd>+<kbd>⇧</kbd>+<kbd>⌘</kbd>+<kbd>4</kbd></kbd>, copying a screenshot of the selected area to the clipboard. Then try `escape` to exit. Please note the order of the modifiers doesn't matter.
 
-Say any combination of modifiers, symbols, alphabet, numbers and function keys to execute keyboard shortcuts. Modifier keys can be tapped using `press`, for example `press control` taps the Control (⌃) key by itself.
+Say any combination of modifiers, symbols, alphabet, numbers and function keys to execute keyboard shortcuts. Modifier keys can be tapped using `press`, for example `press control` taps the <kbd>Control</kbd> (⌃) key by itself.
 
 ### Symbols
 
@@ -140,7 +140,7 @@ Editing commands in [edit.talon](core/edit/edit.talon) are global. Commands such
 
 Voice commands for repeating commands are defined in [repeater.talon](plugin/repeater/repeater.talon).
 
-Say `go up fifth` or `go up five times` to go up five lines. `select up third` will press Shift+Up three times to select several lines of text.
+Say `go up fifth` or `go up five times` to go up five lines. `select up third` will press <kbd><kbd>Shift</kbd>+<kbd>Up</kbd></kbd> three times to select several lines of text.
 
 ### Window management
 
