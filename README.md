@@ -72,7 +72,7 @@ It's recommended to learn the alphabet first, then get familiar with the keys, s
 
 Once you have the basics of text input down, try copying some code from one window to another.
 
-After that, explore using ordinal repetition for easily repeating a command without pausing (e.g., saying `go up fifth` will go up five lines), window switchings (`focus chrome`), and moving around in your text editor of choice.
+After that, explore using ordinal repetition for easily repeating a command without pausing (e.g., saying `go up fifth` will go up five lines), window switching (`focus chrome`), and moving around in your text editor of choice.
 
 If you use vim, just start with the numbers and alphabet, otherwise look at generic_editor.talon as well at jetbrains, vscode, and any other integrations.
 
