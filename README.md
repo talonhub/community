@@ -106,7 +106,7 @@ On Mac, try commands such as:
 
 - `control shift command 4` to press <kbd><kbd>⌃</kbd>+<kbd>⇧</kbd>+<kbd>⌘</kbd>+<kbd>4</kbd></kbd>, copying a screenshot of the selected area to the clipboard. Then try `escape` to exit. Please note the order of the modifiers doesn't matter.
 
-Say any combination of modifiers, symbols, alphabet, numbers and function keys to execute keyboard shortcuts. Modifier keys can be tapped using `press`, for example `press control` taps the <kbd>Control</kbd> (⌃) key by itself.
+Say any combination of modifiers, symbols, alphabet, numbers and function keys to execute keyboard shortcuts. Modifier keys can be tapped using `press`, for example `press control` taps the <kbd>Control</kbd> (<kbd>⌃</kbd>) key by itself.
 
 ### Symbols
 
