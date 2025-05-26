@@ -380,10 +380,10 @@ class UserActions:
     # tag: libraries
 
     def code_import():
-        actions.auto_insert("use ")
+        actions.user.insert_snippet_by_name("importStatement")
 
     def code_insert_library(text: str, selection: str):
-        actions.user.paste(f"use {text}")
+        actions.user.insert_snippet_by_name("importStatement", {"0": text})
 
     # rust specific grammar
 
