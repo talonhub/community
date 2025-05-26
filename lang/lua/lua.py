@@ -184,7 +184,7 @@ class UserActions:
         actions.user.insert_snippet_by_name("doWhileLoopStatement")
 
     def code_state_for():
-        actions.user.insert_snippet_by_name("genericForLoopStatement")
+        actions.user.insert_snippet_by_name("forLoopStatement")
 
     def code_state_go_to():
         actions.insert("goto ")
