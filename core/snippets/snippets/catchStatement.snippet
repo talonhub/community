@@ -35,3 +35,12 @@ catch (\Throwable \$exception) {
     $0
 }
 ---
+
+language: r
+-
+warning = function(w) {
+    $1
+}, error = function(e) {
+    $0
+},
+---
