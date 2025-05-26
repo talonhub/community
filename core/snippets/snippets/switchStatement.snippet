@@ -50,3 +50,11 @@ case $1 do
     $0
 end
 ---
+
+language: r
+-
+case_when(
+    $0
+    .default = ${1}
+)
+---
