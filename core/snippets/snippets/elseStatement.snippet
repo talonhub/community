@@ -6,7 +6,7 @@ $0.wrapperPhrase: else
 $0.wrapperScope: statement
 ---
 
-language: c | cpp | csharp | java | javascript | typescript | javascriptreact | typescriptreact
+language: c | cpp | csharp | java | javascript | typescript | javascriptreact | typescriptreact | r | php | stata | go | scala | kotlin
 -
 else {
     $0
@@ -19,7 +19,19 @@ else:
     $0
 ---
 
-language: lua
+language: lua | elixir
+-
+else
+    $0
+---
+
+language: vimscript
+-
+else
+    $0
+---
+
+language: ruby
 -
 else
     $0

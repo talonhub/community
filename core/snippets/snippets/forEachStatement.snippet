@@ -43,3 +43,55 @@ for $1 in $2 {
     $0
 }
 ---
+
+language: lua
+-
+for $1 in $2 do
+    $0
+end
+---
+
+language: ruby
+-
+.each do |$1|
+    $0
+end
+---
+
+language: scala
+-
+for ($1 <- $0)
+---
+
+language: terraform
+-
+for $1 in $2 : $0
+---
+
+language: go
+-
+for $1 := range $2 {
+    $0
+}
+---
+
+language: php
+-
+foreach ($1 as $2) {
+    $0
+}
+---
+
+language: r | kotlin
+-
+for ($1 in $2) {
+    $0
+}
+---
+
+language: stata
+-
+foreach $1 in $2 {
+    $0
+}
+---

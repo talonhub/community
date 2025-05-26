@@ -1,0 +1,37 @@
+name: genericForLoopStatement
+phrase: for
+insertionScope: statement
+---
+
+language: scala
+-
+for ($1) $0
+---
+
+language: c | cpp | csharp | java | javascript | typescript | javascriptreact | typescriptreact
+-
+for ($1) {
+	$0
+}
+---
+
+language: php
+-
+for ($1; $2; $3) {
+	$0
+}
+---
+
+language: stata
+-
+forval $1 {
+	$0
+}
+---
+
+language: elixir | lua
+-
+for $1 do
+	$0
+end
+---
