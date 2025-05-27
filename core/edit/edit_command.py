@@ -1,7 +1,7 @@
 from talon import Module, actions, settings
 
-from .edit_command_actions import EditAction, run_action_callback
-from .edit_command_modifiers import EditModifier, run_modifier_callback
+from .edit_command_actions import EditAction, EditSimpleAction
+from .edit_command_modifiers import EditModifier
 
 mod = Module()
 
@@ -60,7 +60,7 @@ def select_lines(action, direction, count):
     # ensure we take the start/end of the line too!
     extend_line_callback()
     actions.sleep(selection_delay)
-    run_action_callback(action)
+    actions.user.run_action_callback(action)
 
 
 def select_words(action, direction, count):
@@ -74,7 +74,7 @@ def select_words(action, direction, count):
         selection_callback()
         actions.sleep(selection_delay)
 
-    run_action_callback(action)
+    actions.user.run_action_callback(action)
 
 
 def word_movement_handler(action, direction, count):
@@ -165,8 +165,16 @@ compound_actions = {
 
 @mod.action_class
 class Actions:
-    def edit_command(action: EditAction, modifier: EditModifier):
-        """Perform edit command"""
+    def edit_command(action: EditAction | str, modifier: EditModifier | str):
+        """Perform edit command with associated modifier.
+        Action and modifier can be dataclasses (formed from utterances via
+        capture) or str, for use in scripts. Strings should match the action or
+        modifier types declared here or in edit_command_modifiers.py or
+        edit_command_actions.py"""
+        if isinstance(modifier, str):
+            modifier = EditModifier(modifier)
+        if isinstance(action, str):
+            action = EditSimpleAction(action)
         key = (action.type, modifier.type)
         count = modifier.count
 
@@ -179,5 +187,5 @@ class Actions:
                 compound_actions[key]()
             return
 
-        run_modifier_callback(modifier)
-        run_action_callback(action)
+        actions.user.run_modifier_callback(modifier)
+        actions.user.run_action_callback(action)
