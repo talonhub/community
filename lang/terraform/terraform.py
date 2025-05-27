@@ -117,7 +117,7 @@ class UserActions:
         actions.insert(" != null")
 
     def code_comment_line_prefix():
-        actions.insert("# ")
+        actions.user.insert_snippet_by_name("commentLine")
 
     def code_state_for():
-        actions.user.insert_between("for ", " in")
+        actions.user.insert_snippet_by_name("forEachStatement")
