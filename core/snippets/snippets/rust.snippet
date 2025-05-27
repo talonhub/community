@@ -12,11 +12,40 @@ impl $1 {
 }
 ---
 
+name: implementsGenericStruct
+phrase: generic impel | generic implement | gen impel | gen implement
+insertionScope: statement
+
+$2.insertionFormatter: PUBLIC_CAMEL_CASE
+-
+impl<$1> $2<$3> {
+    $0
+}
+---
+
 name: enumTypeDeclaration
 phrase: enum
 $1.insertionFormatter: PUBLIC_CAMEL_CASE
 -
 enum $1 {
+    $0
+}
+---
+
+name: traitDeclaration
+phrase: trait
+$1.insertionFormatter: PUBLIC_CAMEL_CASE
+-
+trait $1 {
+    $0
+}
+---
+
+name: traitImplementation
+phrase: implement trait | impel trait
+$1.insertionFormatter: PUBLIC_CAMEL_CASE
+-
+impl $1 for $2 {
     $0
 }
 ---
