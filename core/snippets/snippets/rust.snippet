@@ -2,7 +2,7 @@ language: rust
 ---
 
 name: implementsStruct
-phrase: impel | implement
+phrase: imp | implement
 insertionScope: statement
 
 $1.insertionFormatter: PUBLIC_CAMEL_CASE
@@ -13,7 +13,7 @@ impl $1 {
 ---
 
 name: implementsGenericStruct
-phrase: generic impel | generic implement | gen impel | gen implement
+phrase: generic imp | generic implement | gen imp | gen implement
 insertionScope: statement
 
 $2.insertionFormatter: PUBLIC_CAMEL_CASE
@@ -42,7 +42,7 @@ trait $1 {
 ---
 
 name: traitImplementation
-phrase: implement trait | impel trait
+phrase: implement trait | imp trait
 $1.insertionFormatter: PUBLIC_CAMEL_CASE
 -
 impl $1 for $2 {
