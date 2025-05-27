@@ -65,7 +65,7 @@ class UserActions:
 
     # comment_line.py
     def code_comment_line_prefix():
-        actions.auto_insert("* ")
+        actions.user.insert_snippet_by_name("commentLine")
 
     # functions.py
     def code_private_function(text: str):
@@ -86,46 +86,32 @@ class UserActions:
 
     # functions_common.py
     def code_insert_function(text: str, selection: str):
-        text += f" {selection or ''}"
-        actions.user.paste(text)
+        substitutions = {"1": text}
+        if selection:
+            substitutions["0"] = selection
+        actions.user.insert_snippet_by_name("functionCall", substitutions)
 
     # imperative.py
     def code_block():
         actions.auto_insert("\n")
 
     def code_state_if():
-        actions.insert("if  {\n\n}")
-        actions.key("up tab up")
-        actions.edit.line_end()
-        actions.key("left:2")
+        actions.user.insert_snippet_by_name("ifStatement")
 
     def code_state_else_if():
-        actions.insert("else if  {\n\n}")
-        actions.key("up tab up")
-        actions.edit.line_end()
-        actions.key("left:2")
+        actions.user.insert_snippet_by_name("elseIfStatement")
 
     def code_state_else():
-        actions.insert("else {\n\n}")
-        actions.key("up tab")
+        actions.user.insert_snippet_by_name("elseStatement")
 
     def code_state_for():
-        actions.insert("forval  {\n\n}")
-        actions.key("up tab up")
-        actions.edit.line_end()
-        actions.key("left:2")
+        actions.user.insert_snippet_by_name("forLoopStatement")
 
     def code_state_for_each():
-        actions.insert("foreach  in  {\n\n}")
-        actions.key("up tab up")
-        actions.edit.line_end()
-        actions.key("left:2")
+        actions.user.insert_snippet_by_name("forEachStatement")
 
     def code_state_while():
-        actions.insert("while  {\n\n}")
-        actions.key("up tab up")
-        actions.edit.line_end()
-        actions.key("left:2")
+        actions.user.insert_snippet_by_name("whileLoopStatement")
 
     def code_break():
         actions.insert("break")
@@ -135,9 +121,9 @@ class UserActions:
 
     # libraries.py
     def code_import():
-        actions.auto_insert("ssc install ")
+        actions.user.insert_snippet_by_name("importStatement")
 
     # libraries.py
     def code_insert_library(text: str, selection: str):
-        actions.auto_insert("ssc install ")
-        actions.user.paste(text + selection)
+        library_text = text + selection
+        actions.user.insert_snippet_by_name("importStatement", {"0": library_text})

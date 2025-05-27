@@ -126,8 +126,10 @@ class UserActions:
         return operators
 
     def code_import():
-        actions.insert("@import ")
+        actions.user.insert_snippet_by_name("importStatement")
 
     def code_insert_function(text: str, selection: str):
-        actions.user.paste(f"{text}({selection})")
-        actions.edit.left()
+        substitutions = {"1": text}
+        if selection:
+            substitutions["0"] = selection
+        actions.user.insert_snippet_by_name("functionCall", substitutions)
