@@ -41,6 +41,7 @@ mod.setting(
     type=float,
     desc="Mode indicator gradient brightness in percentages(0-1). 0=darkest, 1=brightest",
 )
+mod.setting("mode_indicator_color_text", type=str)
 mod.setting("mode_indicator_color_mute", type=str)
 mod.setting("mode_indicator_color_sleep", type=str)
 mod.setting("mode_indicator_color_dictation", type=str)
@@ -115,6 +116,37 @@ def on_draw(c: SkiaCanvas):
     c.paint.color = color_mode
     c.draw_circle(x, y, radius)
 
+def on_draw_text(c: SkiaCanvas):
+    x, y = c.rect.center.x, c.rect.center.y
+    radius = c.rect.height / 2 - 2
+    text = actions.sound.active_microphone()[:2]
+    color = settings.get("user.mode_indicator_color_text")
+    stroke = True
+    draw_text(
+        c,
+        x,
+        y,
+        text,
+        color,
+        stroke)
+    
+
+def draw_text(
+    c: SkiaCanvas,
+    x: float,
+    y: float,
+    text: str,
+    color: str = settings.get("user.mode_indicator_color_other"),
+    stroke: bool = True,
+):
+    c.paint.style = c.paint.Style.FILL
+    c.paint.color = color
+    text_rect = c.paint.measure_text(text)[1]
+    c.draw_text(
+        text,
+        x - text_rect.x - text_rect.width / 2,
+        y - text_rect.y - text_rect.height / 2,
+    )
 
 def move_indicator():
     screen: Screen = ui.main_screen()
@@ -140,7 +172,9 @@ def move_indicator():
 def show_indicator():
     global canvas
     canvas = Canvas.from_rect(Rect(0, 0, 0, 0))
+    canvas = Canvas.from_rect(Rect(0, 0, 0, 0))
     canvas.register("draw", on_draw)
+    canvas.register("draw", on_draw_text)
 
 
 def hide_indicator():
