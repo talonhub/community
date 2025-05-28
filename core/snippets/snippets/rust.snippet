@@ -82,3 +82,23 @@ $0.insertionFormatter: SNAKE_CASE
 -
 #[$0]
 ---
+
+name: moduleDeclaration
+phrase: mod | module
+$1.insertionFormatter: SNAKE_CASE
+-
+mod $1 {
+    $0
+}
+---
+
+name: testModuleDeclaration
+phrase: test mod | test module
+-
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    $0
+}
+---
