@@ -120,4 +120,4 @@ class UserActions:
         actions.user.insert_snippet_by_name("commentLine")
 
     def code_state_for():
-        actions.user.insert_snippet_by_name("forEachStatement")
+        actions.user.insert_snippet_by_name("forLoopStatement")

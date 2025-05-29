@@ -149,7 +149,7 @@ class UserActions:
         actions.user.insert_snippet_by_name("caseStatement")
 
     def code_state_for():
-        actions.user.insert_snippet_by_name("whileLoopStatement")
+        actions.user.insert_snippet_by_name("forLoopStatement")
 
     # There is no while keyword in go. Closest approximation is a for loop.
     def code_state_while():
