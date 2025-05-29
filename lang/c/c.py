@@ -274,7 +274,7 @@ class UserActions:
         actions.user.insert_snippet_by_name("whileLoopStatement")
 
     def code_state_return():
-        actions.auto_insert("return ")
+        actions.user.insert_snippet_by_name("returnStatement")
 
     def code_break():
         actions.auto_insert("break;")

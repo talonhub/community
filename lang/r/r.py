@@ -295,7 +295,7 @@ class UserActions:
         actions.user.insert_snippet_by_name("commentLine")
 
     def code_state_return():
-        actions.user.insert_between("return(", ")")
+        actions.user.insert_snippet_by_name("returnStatement")
 
     def code_break():
         actions.auto_insert("break")
