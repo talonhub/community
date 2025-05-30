@@ -12,6 +12,14 @@ app: kitty
 # notification saying what the kitty command was and advising you to enable RPC.
 #
 
+tag(): user.splits
+tag(): user.tabs
+tag(): terminal
+tag(): user.generic_unix_shell
+tag(): user.unix_utilities
+tag(): user.readline
+tag(): user.git
+
 ### Novel split commands: ###
 
 # Start kitty's interactive window chooser.
