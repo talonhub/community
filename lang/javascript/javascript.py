@@ -174,7 +174,7 @@ class UserActions:
         actions.user.insert_snippet_by_name("classDeclaration")
 
     def code_state_for_each():
-        actions.user.insert_between(".forEach(", ")")
+        actions.user.insert_snippet_by_name("forEachStatement")
 
     def code_break():
         actions.auto_insert("break;")
