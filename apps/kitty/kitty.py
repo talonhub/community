@@ -6,9 +6,14 @@ from functools import partial
 from typing import Iterable, Sequence
 
 from talon import Context, Module, actions, app, settings, ui
-from ._utils import (
-    CmdMap, UserCmdMap, parse_map_cmds, run_kitten_client, _sock_memo, KITTY_CONF
 
+from ._utils import (
+    KITTY_CONF,
+    CmdMap,
+    UserCmdMap,
+    _sock_memo,
+    parse_map_cmds,
+    run_kitten_client,
 )
 
 """
@@ -122,7 +127,10 @@ class KittyCmdMap(CmdMap):
     new_window_with_cwd = "new_window_with_cwd", ""
     next_window = "next_window", "{kitty_mod}-]"
     nth_window = "nth_window", ""
-    previous_window = "previous_window", "{kitty_mod}-["  # ] to make "smart" indent behave
+    previous_window = (
+        "previous_window",
+        "{kitty_mod}-[",
+    )  # ] to make "smart" indent behave
     toggle_layout = "toggle_layout", ""
 
     # Commands for OS Windows ("windows" in Talon)
@@ -154,18 +162,36 @@ class KittyCmdMap(CmdMap):
 
     # Mappings specific to the Hints kitten
     # See https://sw.kovidgoyal.net/kitty/kittens/hints/ for details.
-    hint_hash = "kitten", "{kitty_mod}+p h", ("hints", "--type", "hash", "--program", "-")
-    hint_line = "kitten", "{kitty_mod}+p l", ("hints", "--type", "line", "--program", "-")
+    hint_hash = (
+        "kitten",
+        "{kitty_mod}+p h",
+        ("hints", "--type", "hash", "--program", "-"),
+    )
+    hint_line = (
+        "kitten",
+        "{kitty_mod}+p l",
+        ("hints", "--type", "line", "--program", "-"),
+    )
     hint_line_in_file = "kitten", "{kitty_mod}+p n", ("hints", "--type", "linenum")
-    hint_path_insert = "kitten", "{kitty_mod}+p f", ("hints", "--type", "path", "--program", "-")
+    hint_path_insert = (
+        "kitten",
+        "{kitty_mod}+p f",
+        ("hints", "--type", "path", "--program", "-"),
+    )
     hint_path_open = "kitten", "{kitty_mod}+p shift+f", ("hints", "--type", "path")
-    hint_word = "kitten", "{kitty_mod}+p w", ("hints", "--type", "word", "--program", "-")
+    hint_word = (
+        "kitten",
+        "{kitty_mod}+p w",
+        ("hints", "--type", "word", "--program", "-"),
+    )
     hint_terminal_link = "kitten", "{kitty_mod}+p y", ("hints", "--type", "hyperlink")
 
 
 if UserCmdMap is not None:
-    cm = ChainMap({m: v for m, v in UserCmdMap.__members__.items()},
-                  {m: v for m, v in KittyCmdMap.__members__.items()})
+    cm = ChainMap(
+        {m: v for m, v in UserCmdMap.__members__.items()},
+        {m: v for m, v in KittyCmdMap.__members__.items()},
+    )
     OverrideCmdMap = CmdMap(
         "OverrideCmdMap",
         {m: astuple(v) for m, v in cm.items()},

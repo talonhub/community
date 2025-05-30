@@ -2,10 +2,10 @@ import enum
 import os
 import re
 import subprocess
+from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
 from functools import cache
 from pathlib import Path
-from collections.abc import Iterable, Sequence
 from typing import cast
 
 from talon import actions, app, settings, ui
@@ -42,8 +42,8 @@ def parse_kitty_conf(conf: Sequence[str]) -> dict[str, str | list[tuple[str, ...
         # that a quoted argument that deliberately has consecutive whitespace
         # will also be mangled, but for now I'm not concerned with that corner-
         # case.
-        deduplicated = '\t'.join(
-            s for s in re.split(r'\s+', line, maxsplit=3) if s
+        deduplicated = "\t".join(
+            s for s in re.split(r"\s+", line, maxsplit=3) if s
         ).rstrip("\n\r")
         # Skip if that created an empty line
         if not deduplicated:
@@ -76,11 +76,12 @@ def _reload_conf():
     if conf := read_kitty_conf():
         KITTY_CONF = parse_kitty_conf(conf)
 
+
 app.register("ready", _reload_conf)
 
 
 def parse_map_cmds(
-    maps: Sequence[tuple[str, ...]]
+    maps: Sequence[tuple[str, ...]],
 ) -> list[tuple[str, str, tuple[str, ...]]]:
     """kitty.conf maps look like `map <keys> <command>`. If we're to construct
     a CmdMap, we want `<command> <keys>`, s/>/ /g and s/+/-/g, and wrap
@@ -132,9 +133,8 @@ def kitty_mod() -> str:
     This has to be a function to defer fetching the value until it's definitely
     been read by Talon.
     """
-    return (
-        cast(str, KITTY_CONF.get("kitty_mod", ""))
-        or settings.get("user.kitty_terminal_mod")
+    return cast(str, KITTY_CONF.get("kitty_mod", "")) or settings.get(
+        "user.kitty_terminal_mod"
     )
 
 
@@ -146,9 +146,8 @@ def _sock_memo(active_win_pid: int) -> str:
     # every time. Sounds pretty cool... but 4.5 * 35.3ns is still only 160ns.
     if not settings.get("user.kitty_use_rpc"):
         return ""
-    sock = (
-        cast(str, KITTY_CONF.get("listen_on", ""))
-        or settings.get("user.kitty_rpc_socket")
+    sock = cast(str, KITTY_CONF.get("listen_on", "")) or settings.get(
+        "user.kitty_rpc_socket"
     )
     if sock and not settings.get("user.kitty_rpc_socket_verbatim"):
         if "{kitty_pid}" in sock:
@@ -223,14 +222,11 @@ class CmdMap(MapDirective, enum.Enum):
                     sound=True,
                 )
             else:
-                actions.key(
-                    self.key_combo.format(
-                        kitty_mod=kitty_mod()
-                    )
-                )
+                actions.key(self.key_combo.format(kitty_mod=kitty_mod()))
 
     def send_command(self, *args):
         self._send_command("action", self.action, *self.arguments, *args)
+
 
 if maps := KITTY_CONF.get("map", None):
     UserCmdMap = CmdMap(
