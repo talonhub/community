@@ -135,11 +135,10 @@ class UserActions:
         actions.user.insert_snippet_by_name("ifStatement")
 
     def code_state_else_if():
-        actions.user.insert_between(" else if (", ")")
+        actions.user.insert_snippet_by_name("elseIfStatement")
 
     def code_state_else():
-        actions.user.insert_between(" else {", "}")
-        actions.key("enter")
+        actions.user.insert_snippet_by_name("elseStatement")
 
     def code_self():
         actions.auto_insert("this")
@@ -175,7 +174,7 @@ class UserActions:
         actions.user.insert_snippet_by_name("classDeclaration")
 
     def code_state_for_each():
-        actions.user.insert_between(".forEach(", ")")
+        actions.user.insert_snippet_by_name("forEachStatement")
 
     def code_break():
         actions.auto_insert("break;")
