@@ -203,7 +203,7 @@ class UserActions:
         actions.insert("goto continue")
 
     def code_try_catch():
-        actions.user.insert_between("pcall(", ")")
+        actions.user.insert_snippet_by_name("tryCatchStatement")
 
     ##
     # code_comment_line
