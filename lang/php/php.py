@@ -139,8 +139,7 @@ class UserActions:
         actions.user.insert_snippet_by_name("goToStatement")
 
     def code_state_return():
-        actions.insert("return ;")
-        actions.edit.left()
+        actions.user.insert_snippet_by_name("returnStatement")
 
     def code_break():
         actions.insert("break;")

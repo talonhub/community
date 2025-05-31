@@ -250,7 +250,7 @@ class UserActions:
         actions.user.insert_snippet_by_name("commentLine")
 
     def code_state_return():
-        actions.insert("return ")
+        actions.user.insert_snippet_by_name("returnStatement")
 
     def code_insert_true():
         actions.auto_insert("True")
