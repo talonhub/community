@@ -30,6 +30,7 @@ case $1 => $0
 ---
 
 language: elixir
+insertionScope: branch
 -
 $1 ->
     $0
@@ -40,4 +41,10 @@ insertionScope: branch
 -
     $1 ~ $2,
 )
+---
+
+language: kotlin
+insertionScope: branch
+-
+$1 -> $0
 ---

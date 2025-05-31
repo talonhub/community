@@ -118,8 +118,7 @@ class UserActions:
         actions.user.insert_snippet_by_name("switchStatement")
 
     def code_state_case():
-        actions.insert("case \nbreak;")
-        actions.edit.up()
+        actions.user.insert_snippet_by_name("caseStatement")
 
     def code_state_for():
         actions.user.insert_snippet_by_name("forEachStatement")
