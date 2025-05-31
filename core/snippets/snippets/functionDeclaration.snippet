@@ -32,6 +32,14 @@ def $1($2):
     $0
 ---
 
+language: rust
+$1.insertionFormatter: SNAKE_CASE
+-
+fn $1($2) {
+    $0
+}
+---
+
 language: ruby
 
 $1.insertionFormatter: SNAKE_CASE

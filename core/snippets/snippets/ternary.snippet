@@ -17,6 +17,11 @@ language: lua
 $1 and $2 or $0
 ---
 
+language: rust
+-
+if $1 { $2 } else { $0 }
+---
+
 language: scala | kotlin
 -
 if ($1) $2 else $0
