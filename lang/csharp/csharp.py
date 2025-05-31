@@ -101,7 +101,7 @@ class UserActions:
         actions.user.insert_snippet_by_name("forEachStatement")
 
     def code_state_go_to():
-        actions.auto_insert("go to ")
+        actions.user.insert_snippet_by_name("goToStatement")
 
     def code_state_while():
         actions.user.insert_snippet_by_name("whileLoopStatement")
