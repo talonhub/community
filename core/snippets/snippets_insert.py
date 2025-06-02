@@ -15,7 +15,7 @@ class Actions:
         insert_snippet_raw_text(body)
 
     def move_cursor_to_next_snippet_stop():
-        """Moves the cursor to the next cursor stop"""
+        """Moves the cursor to the next snippet stop"""
         go_to_next_stop()
 
     def insert_snippet_by_name(
