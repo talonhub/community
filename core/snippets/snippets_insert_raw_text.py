@@ -55,7 +55,6 @@ def go_to_next_stop():
             actions.edit.line_end()
             for _ in range(len(next_line) - next_stop.col):
                 actions.edit.right()
-        stop_stack.pop()
         if len(stop_stack) <= 1:
             stop_stack = None
             snippet_lines = None
