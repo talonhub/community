@@ -1,15 +1,15 @@
 import re
 from dataclasses import dataclass
 
-from talon import actions, Module, settings
+from talon import Module, actions, settings
 
 mod = Module()
 
 mod.setting(
     "snippets_raw_text_always_paste",
-    type = bool,
-    default = False,
-    desc = """If true, inserting snippets as raw text will always be done through pasting"""
+    type=bool,
+    default=False,
+    desc="""If true, inserting snippets as raw text will always be done through pasting""",
 )
 
 INDENTATION = "    "
