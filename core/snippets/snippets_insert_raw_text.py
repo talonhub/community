@@ -14,10 +14,58 @@ class Stop:
     row: int
     col: int
 
+stop_stack: list[Stop] | None = None
+snippet_lines: list[str] | None = None
+
+def update_stop_information(stops: list[Stop], lines: list[str]):
+    global stop_stack, snippet_lines
+    if len(stops) > 1:
+        stop_stack = stops
+        snippet_lines = lines
+        stop_stack.reverse()
+
+def move_to_correct_column(start: int, end: int):
+    if start < end:
+        for _ in range(end - start):
+            actions.edit.right()
+    else:
+        for _ in range(start - end):
+            actions.edit.left()
+
+def move_to_correct_row(start: int, end: int):
+    if start < end:
+        for _ in range(end - start):
+            actions.edit.down()
+    else:
+        for _ in range(start - end):
+            actions.edit.up()
+
+def go_to_next_stop():
+    """Goes to the next snippet stop if it exists"""
+    global stop_stack, snippet_lines
+
+    if stop_stack and snippet_lines:
+        current_stop = stop_stack.pop()
+        next_stop = stop_stack[-1] 
+        next_line = snippet_lines[next_stop.row]
+        if current_stop.row == next_stop.row:
+            move_to_correct_column(current_stop.col, next_stop.col)
+        else:
+            move_to_correct_row(current_stop.row, next_stop.row)
+            actions.edit.line_end()
+            for _ in range(len(next_line) - next_stop.col):
+                actions.edit.right()
+        stop_stack.pop()
+        if len(stop_stack) <= 1:
+            stop_stack = None
+            snippet_lines = None
 
 def insert_snippet_raw_text(body: str):
     """Insert snippet as raw text without editor support"""
-    updated_snippet, stop = parse_snippet(body)
+    updated_snippet, stops, lines = parse_snippet(body)
+    stop = get_first_stop(stops)
+
+    update_stop_information(stops, lines)
 
     actions.insert(updated_snippet)
 
@@ -64,7 +112,7 @@ def parse_snippet(body: str):
 
     updated_snippet = "\n".join(lines)
 
-    return updated_snippet, get_first_stop(stops)
+    return updated_snippet, stops, lines
 
 
 def up(n: int):
