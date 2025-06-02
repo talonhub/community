@@ -17,14 +17,15 @@ class Stop:
 
 def insert_snippet_raw_text(body: str):
     """Insert snippet as raw text without editor support"""
-    updated_snippet, stop = parse_snippet(body)
+    updated_snippet, stop, lines = parse_snippet(body)
 
     actions.insert(updated_snippet)
 
     if stop:
         up(stop.rows_up)
-        actions.edit.line_start()
-        right(stop.col)
+        actions.edit.line_end()
+        line_with_final_stop = lines[stop.row]
+        left(len(line_with_final_stop) - stop.col)
 
 
 def parse_snippet(body: str):
@@ -64,7 +65,7 @@ def parse_snippet(body: str):
 
     updated_snippet = "\n".join(lines)
 
-    return updated_snippet, get_first_stop(stops)
+    return updated_snippet, get_first_stop(stops), lines
 
 
 def up(n: int):
@@ -73,10 +74,10 @@ def up(n: int):
         actions.edit.up()
 
 
-def right(n: int):
-    """Move cursor right <n> columns"""
+def left(n: int):
+    """Move cursor left <n> columns"""
     for _ in range(n):
-        actions.edit.right()
+        actions.edit.left()
 
 
 def key(stop: Stop):
