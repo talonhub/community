@@ -23,6 +23,9 @@ def update_stop_information(stops: list[Stop], lines: list[str]):
         stop_stack = stops
         snippet_lines = lines
         stop_stack.reverse()
+    else:
+        stop_stack = None
+        snippet_lines = None
 
 def move_to_correct_column(start: int, end: int):
     if start < end:
