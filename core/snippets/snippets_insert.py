@@ -3,7 +3,7 @@ import re
 from talon import Module, actions
 
 from .snippet_types import Snippet
-from .snippets_insert_raw_text import insert_snippet_raw_text, go_to_next_stop
+from .snippets_insert_raw_text import go_to_next_stop, insert_snippet_raw_text
 
 mod = Module()
 

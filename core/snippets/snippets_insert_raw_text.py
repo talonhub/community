@@ -14,8 +14,10 @@ class Stop:
     row: int
     col: int
 
+
 stop_stack: list[Stop] | None = None
 snippet_lines: list[str] | None = None
+
 
 def update_stop_information(stops: list[Stop], lines: list[str]):
     global stop_stack, snippet_lines
@@ -27,6 +29,7 @@ def update_stop_information(stops: list[Stop], lines: list[str]):
         stop_stack = None
         snippet_lines = None
 
+
 def move_to_correct_column(start: int, end: int):
     if start < end:
         for _ in range(end - start):
@@ -34,6 +37,7 @@ def move_to_correct_column(start: int, end: int):
     else:
         for _ in range(start - end):
             actions.edit.left()
+
 
 def move_to_correct_row(start: int, end: int):
     if start < end:
@@ -43,13 +47,14 @@ def move_to_correct_row(start: int, end: int):
         for _ in range(start - end):
             actions.edit.up()
 
+
 def go_to_next_stop():
     """Goes to the next snippet stop if it exists"""
     global stop_stack, snippet_lines
 
     if stop_stack and snippet_lines:
         current_stop = stop_stack.pop()
-        next_stop = stop_stack[-1] 
+        next_stop = stop_stack[-1]
         next_line = snippet_lines[next_stop.row]
         if current_stop.row == next_stop.row:
             move_to_correct_column(current_stop.col, next_stop.col)
@@ -60,6 +65,7 @@ def go_to_next_stop():
         if len(stop_stack) <= 1:
             stop_stack = None
             snippet_lines = None
+
 
 def insert_snippet_raw_text(body: str):
     """Insert snippet as raw text without editor support"""
