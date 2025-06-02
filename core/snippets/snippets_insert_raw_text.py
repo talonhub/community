@@ -56,8 +56,7 @@ def go_to_next_stop():
         else:
             move_to_correct_row(current_stop.row, next_stop.row)
             actions.edit.line_end()
-            for _ in range(len(next_line) - next_stop.col):
-                actions.edit.left()
+            move_to_correct_column(len(next_line), next_stop.col)
         if len(stop_stack) <= 1:
             stop_stack = None
             snippet_lines = None
