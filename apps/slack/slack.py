@@ -102,4 +102,14 @@ class Actions:
     def slack_create_snippet():
         """Opens the menu for creating a snippet in Slack"""
 
+    def slack_huddle():
+        """Starts a huddle in Slack"""
     
+    def slack_open_keyboard_shortcuts():
+        """Opens the keyboard shortcuts menu in Slack"""
+
+    def slack_toggle_left_sidebar():
+        """Toggles the visibility of the left sidebar in Slack"""
+
+    def slack_toggle_right_sidebar():
+        """Toggles the visibility of the right sidebar in Slack"""

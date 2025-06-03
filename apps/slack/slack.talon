@@ -40,3 +40,31 @@ bold: user.slack_toggle_bold()
 (italic | italicize): user.slack_toggle_italic()
 (strike | strikethrough): user.slack_toggle_strikethrough()
 (slack | lack) snippet: user.slack_create_snippet()
+# Calls
+(slack | lack) huddle: user.slack_huddle()
+([toggle] mute | unmute): key(m)
+(slack | lack) ([toggle] video): key(v)
+(slack | lack) invite: key(a)
+
+# Miscellaneous
+emote <user.text>: "{text}"
+(slack | lack) shortcuts: user.slack_open_keyboard_shortcuts()
+toggle left sidebar: user.slack_toggle_left_sidebar()
+toggle right sidebar: user.slack_toggle_right_sidebar()
+
+# DEPRECATED
+(move | next) focus:
+    app.notify("please use the voice command 'focus next' instead of 'next focus'")
+    key(ctrl-`)
+[next] (section | zone):
+    app.notify("please use the voice command 'section next' instead of 'next section'")
+    key(f6)
+(previous | last) (section | zone):
+    app.notify("please use the voice command 'section last' instead of 'last section'")
+    key(shift-f6)
+[next] (element | bit):
+    app.notify("please use the voice command 'element next' instead of 'next element'")
+    key(tab)
+(previous | last) (element | bit):
+    app.notify("please use the voice command 'element last' instead of 'last element'")
+    key(shift-tab)

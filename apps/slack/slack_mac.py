@@ -105,3 +105,18 @@ class UserActions:
 
     def slack_create_snippet():
         actions.key('cmd-shift-enter')
+
+    def slack_huddle():
+        actions.key('cmd-shift-h')
+
+    def slack_open_keyboard_shortcuts():
+        """Opens the keyboard shortcuts menu in Slack"""
+        actions.key('cmd-/')
+
+    def slack_toggle_left_sidebar():
+        """Toggles the visibility of the left sidebar in Slack"""
+        actions.key('cmd-shift-d')
+
+    def slack_toggle_right_sidebar():
+        """Toggles the visibility of the right sidebar in Slack"""
+        actions.key('cmd-.')
