@@ -8,20 +8,28 @@ mod = Module()
 mod.setting("command_history_size", type=int, default=50)
 mod.setting("command_history_display", type=int, default=10)
 
-hist_more = False
-history = []
+hist_more: bool = False
+history: list[str] = []
+was_asleep: bool = False
 
-
-def on_phrase(j):
+def handle_phrase(j):
     global history
-
     words = j.get("text")
-
     text = actions.user.history_transform_phrase_text(words)
-
     if text is not None:
         history.append(text)
         history = history[-settings.get("user.command_history_size") :]
+
+def on_phrase(j):
+    global was_asleep
+    was_asleep = not actions.speech.enabled()
+    if actions.speech.enabled():
+        handle_phrase(j)
+
+def after_phrase(j):
+    """This handles a situation where the user used a command that woke up talon"""
+    if was_asleep and actions.speech.enabled():
+        handle_phrase(j)
 
 
 # todo: dynamic rect?
@@ -44,6 +52,7 @@ def gui(gui: imgui.GUI):
 
 
 speech_system.register("phrase", on_phrase)
+speech_system.register("post:phrase", after_phrase)
 
 
 @mod.action_class
@@ -85,8 +94,4 @@ class Actions:
 
     def history_transform_phrase_text(words: list[str]) -> Optional[str]:
         """Transforms phrase text for presentation in history. Return `None` to omit from history"""
-
-        if not actions.speech.enabled():
-            return None
-
         return " ".join(words) if words else None
