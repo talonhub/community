@@ -60,3 +60,48 @@ class UserActions:
 
     def slack_go_forward():
         actions.key("cmd-]")
+
+    def slack_open_activity():
+        actions.key("cmd-shift-m")
+
+    def slack_open_directory():
+        actions.key("cmd-shift-e")
+
+    def slack_open_unread_messages():
+        actions.key("cmd-shift-a")
+
+    def slack_toggle_full_screen():
+        actions.key('ctrl-cmd-f')
+    
+    def slack_add_reaction():
+        actions.key('cmd-shift-\\')
+        
+    def slack_insert_command():
+        actions.key('cmd-shift-c')
+
+    def slack_insert_link():
+        actions.key('cmd-shift-u')
+
+    def slack_insert_code():
+        actions.key('cmd-shift-alt-c')
+       
+    def slack_start_bulleted_list():
+        actions.key('cmd-shift-8')
+
+    def slack_start_numbered_list():
+        actions.key('cmd-shift-7')
+
+    def slack_insert_quotation():
+        actions.key('cmd-shift->')
+
+    def slack_toggle_bold():
+        actions.key('cmd-b')
+
+    def slack_toggle_italic():
+        actions.key('cmd-i')
+
+    def slack_toggle_strikethrough():
+        actions.key('cmd-shift-x')
+
+    def slack_create_snippet():
+        actions.key('cmd-shift-enter')

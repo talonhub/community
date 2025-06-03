@@ -57,14 +57,6 @@ class Actions:
     def slack_go_forward():
         """Navigates forward in Slack"""
 
-    def slack_element_next():
-        """Selects the next Slack element"""
-        actions.key('tab')
-
-    def slack_element_previous():
-        """Selects the previous Slack element"""
-        actions.key('shift-tab')
-
     def slack_open_activity():
         """Opens the Activity section in Slack"""
         
