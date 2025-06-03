@@ -130,9 +130,6 @@ class UserActions:
     def code_define_class():
         actions.user.insert_snippet_by_name("classDeclaration")
 
-    def code_state_return():
-        actions.user.insert_snippet_by_name("returnStatement")
-
     def code_insert_function(text: str, selection: str):
         text += f"({selection or ''})"
         actions.user.paste(text)

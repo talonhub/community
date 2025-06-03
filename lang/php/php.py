@@ -139,9 +139,6 @@ class UserActions:
         actions.insert("goto ;")
         actions.edit.left()
 
-    def code_state_return():
-        actions.user.insert_snippet_by_name("returnStatement")
-
     def code_break():
         actions.insert("break;")
 

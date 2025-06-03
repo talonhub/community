@@ -189,9 +189,6 @@ class UserActions:
     def code_import():
         actions.user.insert_snippet_by_name("importStatement")
 
-    def code_state_return():
-        actions.user.insert_snippet_by_name("returnStatement")
-
     def code_comment_line_prefix():
         actions.user.insert_snippet_by_name("commentLine")
 

@@ -153,9 +153,6 @@ class UserActions:
     def code_state_do():
         actions.user.insert_snippet_by_name("doWhileLoopStatement")
 
-    def code_state_return():
-        actions.user.insert_snippet_by_name("returnStatement")
-
     def code_state_for():
         actions.user.insert_snippet_by_name("forLoopStatement")
 
