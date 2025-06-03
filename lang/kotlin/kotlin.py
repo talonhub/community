@@ -99,6 +99,10 @@ class UserActions:
     def code_insert_is_not_null():
         actions.insert(" != null")
 
+    def code_state_case():
+        actions.insert("case \nbreak;")
+        actions.edit.up()
+
     def code_state_for():
         actions.user.insert_snippet_by_name("forEachStatement")
 
