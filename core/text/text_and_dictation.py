@@ -15,6 +15,13 @@ mod.setting(
     desc="Look at surrounding text to improve auto-capitalization/spacing in dictation mode. By default, this works by selecting that text & copying it to the clipboard, so it may be slow or fail in some applications.",
 )
 
+mod.setting(
+    "context_sensitive_dictation_peek_character",
+    type=str,
+    default=" ",
+    desc="This is the character inserted during dictation_peek to ensure that some text is selected even if the cursor is at the start or end of the document.",
+)
+
 mod.list("prose_modifiers", desc="Modifiers that can be used within prose")
 mod.list("prose_snippets", desc="Snippets that can be used within prose")
 mod.list("phrase_ender", "List of commands that can be used to end a phrase")
@@ -510,10 +517,10 @@ class Actions:
         if not (left or right):
             return None, None
         before, after = None, None
-        # Inserting a space ensures we select something even if we're at
+        # Inserting a character ensures we select something even if we're at
         # document start; some editors 'helpfully' copy the current line if we
         # edit.copy() while nothing is selected.
-        actions.insert(" ")
+        actions.insert(settings.get("user.context_sensitive_dictation_peek_character"))
         if left:
             # In principle the previous word should suffice, but some applications
             # have a funny concept of what the previous word is (for example, they
@@ -528,10 +535,10 @@ class Actions:
             # this will go right over the newline. Argh.
             actions.edit.right()
         if not right:
-            actions.key("backspace")  # remove the space
+            actions.key("backspace")  # remove the peek character
         else:
-            actions.edit.left()  # go left before space
-            # We want to select at least two characters to the right, plus the space
+            actions.edit.left()  # go left before the peek character
+            # We want to select at least two characters to the right, plus the character
             # we inserted, because no_space_before needs two characters in the worst
             # case -- for example, inserting before "' hello" we don't want to add
             # space, while inserted before "'hello" we do.
@@ -547,5 +554,5 @@ class Actions:
             actions.edit.extend_word_right()
             after = actions.edit.selected_text()[1:]
             actions.edit.left()
-            actions.key("delete")  # remove space
+            actions.key("delete")  # remove peek character
         return before, after
