@@ -42,3 +42,21 @@ class UserActions:
     # Files and Snippets
     def messaging_upload_file():
         actions.key("cmd-u")
+
+    def slack_open_workspace(number: int):
+        actions.key(f"cmd-{number}")
+
+    def slack_show_channel_info():
+        actions.key("cmd-shift-i")
+
+    def slack_open_direct_messages():
+        actions.key("cmd-shift-k")
+
+    def slack_open_threads():
+        actions.key("cmd-shift-t")
+
+    def slack_go_back():
+        actions.key("cmd-[")
+
+    def slack_go_forward():
+        actions.key("cmd-]")

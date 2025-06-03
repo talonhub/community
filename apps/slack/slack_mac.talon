@@ -1,20 +1,9 @@
 os: mac
 app: slack
 -
-tag(): user.messaging
-tag(): user.emoji
-# Workspace
-workspace <number>: key("cmd-{number}")
-# Channel
-(slack | lack) [channel] info: key(cmd-shift-i)
 # Navigation
 focus (move | next): key(ctrl-`)
-(section | zone) [next]: key(f6)
-(section | zone) (previous | last): key(shift-f6)
-(slack | lack) [direct] messages: key(cmd-shift-k)
-(slack | lack) threads: key(cmd-shift-t)
-(slack | lack) (history [next] | back | backward): key(cmd-[)
-(slack | lack) forward: key(cmd-])
+
 (element | bit) [next]: key(tab)
 (element | bit) (previous | last): key(shift-tab)
 (slack | lack) (my stuff | activity): key(cmd-shift-m)
@@ -22,11 +11,6 @@ focus (move | next): key(ctrl-`)
 (slack | lack) (starred [items] | stars): key(cmd-shift-s)
 (slack | lack) unread [messages]: key(cmd-shift-a)
 (go | undo | toggle) full: key(ctrl-cmd-f)
-# Messaging
-grab left: key(shift-up)
-grab right: key(shift-down)
-add line: key(shift-enter)
-(slack | lack) (slap | slaw | slapper): key(cmd-right shift-enter)
 (slack | lack) (react | reaction): key(cmd-shift-\)
 (insert command | commandify): key(cmd-shift-c)
 insert link: key(cmd-shift-u)
