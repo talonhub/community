@@ -102,9 +102,6 @@ class UserActions:
     def code_comment_line_prefix():
         actions.user.insert_snippet_by_name("commentLine")
 
-    def code_state_return():
-        actions.insert("return ")
-
     def code_insert_true():
         actions.auto_insert("true")
 

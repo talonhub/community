@@ -315,9 +315,6 @@ class UserActions:
         actions.user.insert_between("loop {", "}")
         actions.key("enter")
 
-    def code_state_return():
-        actions.auto_insert("return ")
-
     def code_break():
         actions.auto_insert("break;")
 
