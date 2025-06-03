@@ -12,6 +12,7 @@ hist_more: bool = False
 history: list[str] = []
 was_asleep: bool = False
 
+
 def handle_phrase(j):
     global history
     words = j.get("text")
@@ -20,11 +21,13 @@ def handle_phrase(j):
         history.append(text)
         history = history[-settings.get("user.command_history_size") :]
 
+
 def on_phrase(j):
     global was_asleep
     was_asleep = not actions.speech.enabled()
     if actions.speech.enabled():
         handle_phrase(j)
+
 
 def after_phrase(j):
     """This handles a situation where the user used a command that woke up talon"""
