@@ -47,7 +47,7 @@ bold: user.slack_toggle_bold()
 (slack | lack) invite: key(a)
 
 # Miscellaneous
-emote <user.text>: "{text}"
+emote <user.text>: ":{text}:"
 (slack | lack) shortcuts: user.slack_open_keyboard_shortcuts()
 toggle left sidebar: user.slack_toggle_left_sidebar()
 toggle right sidebar: user.slack_toggle_right_sidebar()
