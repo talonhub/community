@@ -152,6 +152,7 @@ def c_keywords(m) -> str:
     "Returns a string"
     return m.c_keywords
 
+
 @mod.capture(rule="{self.c_types}")
 def c_types(m) -> str:
     "Returns a string"
