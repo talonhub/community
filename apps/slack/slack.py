@@ -29,6 +29,7 @@ class EditActions:
         actions.edit.line_end()
         actions.key("shift-enter")
 
+
 @mod.action_class
 class Actions:
     def slack_open_workspace(number: int):
@@ -39,11 +40,11 @@ class Actions:
 
     def slack_section_next():
         """Selects the next Slack section"""
-        actions.key('f6')
+        actions.key("f6")
 
     def slack_section_previous():
         """Selects the previous Slack section"""
-        actions.key('shift-f6')
+        actions.key("shift-f6")
 
     def slack_open_direct_messages():
         """Opens direct messages in Slack"""
@@ -59,22 +60,22 @@ class Actions:
 
     def slack_open_activity():
         """Opens Activity in Slack"""
-        
+
     def slack_open_directory():
         """Opens Directory in Slack"""
-    
+
     def slack_open_unread_messages():
         """Opens Unread Messages in Slack"""
 
     def slack_open_starred_items():
         """Opens Starred Items in Slack"""
-    
+
     def slack_toggle_full_screen():
         """Toggles full screen mode in Slack"""
-        
+
     def slack_add_reaction():
         """Adds a reaction to the current message in Slack"""
-        
+
     def slack_insert_command():
         """Inserts a command in Slack"""
 
@@ -83,7 +84,7 @@ class Actions:
 
     def slack_insert_code():
         """Inserts a code block in Slack"""
-       
+
     def slack_start_bulleted_list():
         """Starts a bulleted list in Slack"""
 
@@ -107,7 +108,7 @@ class Actions:
 
     def slack_huddle():
         """Starts a huddle in Slack"""
-    
+
     def slack_open_keyboard_shortcuts():
         """Opens the keyboard shortcuts menu in Slack"""
 
