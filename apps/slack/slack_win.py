@@ -72,6 +72,9 @@ class UserActions:
     def slack_open_unread_messages():
         actions.key("ctrl-shift-a")
 
+    def slack_open_starred_items():
+        actions.key("ctrl-shift-s")
+
     def slack_toggle_full_screen():
         actions.key('ctrl-ctrl-f')
     

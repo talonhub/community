@@ -27,6 +27,9 @@ class UserActions:
     def messaging_unread_previous():
         actions.key("alt-shift-up")
 
+    def slack_open_starred_items():
+        actions.key("cmd-shift-s")
+
     def messaging_unread_next():
         actions.key("alt-shift-down")
 

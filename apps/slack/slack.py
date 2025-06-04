@@ -58,13 +58,16 @@ class Actions:
         """Navigates forward in Slack"""
 
     def slack_open_activity():
-        """Opens the Activity section in Slack"""
+        """Opens Activity in Slack"""
         
     def slack_open_directory():
-        """Opens the Directory section in Slack"""
+        """Opens Directory in Slack"""
     
     def slack_open_unread_messages():
-        """Opens the Unread Messages section in Slack"""
+        """Opens Unread Messages in Slack"""
+
+    def slack_open_starred_items():
+        """Opens Starred Items in Slack"""
     
     def slack_toggle_full_screen():
         """Toggles full screen mode in Slack"""
