@@ -172,7 +172,17 @@ class KittyCmdMap(CmdMap):
         "{kitty_mod}+p l",
         ("hints", "--type", "line", "--program", "-"),
     )
+    hint_line_clip = (
+        "kitten",
+        "{kitty_mod}+p l",
+        ("hints", "--type", "line", "--program", "@"),
+    )
     hint_line_in_file = "kitten", "{kitty_mod}+p n", ("hints", "--type", "linenum")
+    hint_path_clip = (
+        "kitten",
+        "{kitty_mod}+p f",
+        ("hints", "--type", "path", "--program", "@"),
+    )
     hint_path_insert = (
         "kitten",
         "{kitty_mod}+p f",
@@ -184,12 +194,17 @@ class KittyCmdMap(CmdMap):
         "{kitty_mod}+p w",
         ("hints", "--type", "word", "--program", "-"),
     )
+    hint_word_clip = (
+        "kitten",
+        "{kitty_mod}+p w",
+        ("hints", "--type", "word", "--program", "@"),
+    )
     hint_terminal_link = "kitten", "{kitty_mod}+p y", ("hints", "--type", "hyperlink")
 
 
 if UserCmdMap is not None:
     cm = ChainMap(
-        {m: v for m, v in UserCmdMap.__members__.items()},
+        {m: v for m, v in UserCmdMap.__members__.items()},  # type: ignore
         {m: v for m, v in KittyCmdMap.__members__.items()},
     )
     OverrideCmdMap = CmdMap(
@@ -197,7 +212,7 @@ if UserCmdMap is not None:
         {m: astuple(v) for m, v in cm.items()},
     )
     _KittyCmdMap = KittyCmdMap
-    KittyCmdMap = OverrideCmdMap
+    KittyCmdMap = OverrideCmdMap  # type: ignore
 
 
 def _get_active_tab_layout() -> str:
@@ -387,12 +402,20 @@ class KittyActions:
         """Start a hints overlay for copying visible lines to the command-line."""
         KittyCmdMap.hint_line.send_command()
 
+    def hint_line_clip():
+        """Start a hints overlay for copying visible lines to the clipboard."""
+        KittyCmdMap.hint_line_clip.send_command()
+
     def hint_line_in_file():
         """Start a hints overlay for opening a file to a line with `editor`.
 
         Eg., `/path/to/file:50` will open the file to line 50.
         """
         KittyCmdMap.hint_line_in_file.send_command()
+
+    def hint_path_clip():
+        """Start a hints overlay for copying visible paths to the clipboard."""
+        KittyCmdMap.hint_path_clip.send_command()
 
     def hint_path_insert():
         """Start a hints overlay for copying visible paths to the command-line."""
@@ -406,6 +429,10 @@ class KittyActions:
     def hint_word():
         """Start a hints overlay for copying visible words to the command-line."""
         KittyCmdMap.hint_word.send_command()
+
+    def hint_word_clip():
+        """Start a hints overlay for copying visible words to the clipboard."""
+        KittyCmdMap.hint_word_clip.send_command()
 
     def hint_terminal_link():
         """Start a hints overlay for opening terminal hyperlinks with a program

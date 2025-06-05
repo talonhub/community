@@ -1,12 +1,13 @@
 import enum
+import json
 import os
 import re
 import subprocess
 from collections.abc import Iterable, Sequence
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass, field
 from functools import cache
 from pathlib import Path
-from typing import cast
+from typing import Any, cast
 
 from talon import actions, app, settings, ui
 
@@ -163,6 +164,25 @@ app.register("ready", _sock_memo.cache_clear)
 
 
 @dataclass
+class KittyRpc:
+    cmd: str
+    version: list[int] = field(default_factory=lambda: [0, 32, 2])
+    no_response: bool = True
+    kitty_window_id: int | None = None
+    payload: dict[str, Any] = field(default_factory=dict)
+
+    def __bytes__(self):
+        return (
+            b"\x1bP@kitty-cmd"
+            + bytes(
+                json.dumps(asdict(self), indent=None, separators=(",", ":")),
+                "utf-8",
+            )
+            + b"\x1b\\"
+        )
+
+
+@dataclass
 class MapDirective:
     """Represents the pieces of a `map` directive in kitty.conf"""
 
@@ -178,6 +198,22 @@ class MapDirective:
             self.action,
             " ".join(self.arguments),
         )
+
+    @property
+    def rpc(self) -> KittyRpc:
+        return self._rpc
+
+    @property
+    def rpc_bytes(self) -> bytes:
+        return self._rpc_bytes
+
+    def __post_init__(self):
+        self._rpc = KittyRpc(
+            "action", payload={"action": " ".join((self.action, *self.arguments))}
+        )
+        # Pre-compute this on load so we're not running `json.dumps` every time
+        # the user speaks.
+        self._rpc_bytes = bytes(self._rpc)
 
 
 class CmdMap(MapDirective, enum.Enum):

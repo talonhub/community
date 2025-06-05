@@ -60,10 +60,14 @@ kitten <user.text>: user.kitten_insert(text)
 hint U R L: user.hint_url()
 hint hash: user.hint_hash()
 hint line: user.hint_line()
+hint line clip: user.hint_line_clip()
+# Like 'hint line', but copy it to the clipboard instead of the command line.
 hint line in file: user.hint_line_in_file()
 hint path: user.hint_path_insert()
+hint path clip: user.hint_path_clip()
 # Like 'hint path', but open the file with the default program instead of paste it
 # to the command line.
 hint path open: user.hint_path_open()
 hint word: user.hint_word()
+hint word clip: user.hint_word_clip()
 hint terminal link: user.hint_terminal_link()
