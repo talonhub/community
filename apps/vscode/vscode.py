@@ -241,7 +241,7 @@ class UserActions:
         actions.user.vscode("workbench.action.focusLeftGroup")
 
     def split_next():
-        actions.user.vscode_and_wait("workbench.action.focusRightGroup")
+        actions.user.vscode("workbench.action.focusRightGroup")
 
     def split_window_down():
         actions.user.vscode("workbench.action.moveEditorToBelowGroup")

@@ -28,7 +28,7 @@ It is recommended to install `community` using [`git`](https://git-scm.com/).
 
 1. Install [`git`](https://git-scm.com/)
 2. Open a terminal ([Mac](https://support.apple.com/en-gb/guide/terminal/apd5265185d-f365-44cb-8b09-71a064a42125/mac) / [Ubuntu](https://ubuntu.com/tutorials/command-line-for-beginners#3-opening-a-terminal))
-3. Paste the following into the terminal window then press Enter/Return:
+3. Paste the following into the terminal window then press <kbd>Enter</kbd>/<kbd>Return</kbd>:
 
    ```bash
    cd ~/.talon/user
@@ -43,7 +43,7 @@ It is recommended to install `community` using [`git`](https://git-scm.com/).
 
 1. Install [`git`](https://git-scm.com/)
 2. Open a [command prompt](https://www.wikihow.com/Open-the-Command-Prompt-in-Windows)
-3. Paste the following into the command prompt window then press Enter:
+3. Paste the following into the command prompt window then press <kbd>Enter</kbd>:
 
    ```
    cd %AppData%\Talon\user
@@ -89,24 +89,24 @@ Try saying e.g. `air bat cap` to insert abc.
 
 All key commands are defined in [keys.talon](core/keys/keys.talon). Say letters of the [Talon alphabet](#alphabet) for A–Z.
 
-For modifier keys, say `help modifiers`. For example, say `shift air` to press `shift-a`, which types a capital `A`.
+For modifier keys, say `help modifiers`. For example, say `shift air` to press <kbd>Shift</kbd> + <kbd>A</kbd>, which types a capital `A`.
 
 For symbols, say `help symbols`. These are defined in keys.py;
 search for `modifier_keys` and then keep scrolling — roughly starting [here](core/keys/keys.py#L124).
 
 On Windows, try commands such as:
 
-- `control air` to press Control+A and select all.
+- `control air` to press <kbd>Control</kbd> + <kbd>A</kbd> and select all.
 
-- `super-shift-sun` to press Win+Shift+S, triggering the screenshot application (Windows 10). Then try `escape` to exit.
+- `super-shift-sun` to press <kbd>Win</kbd> + <kbd>Shift</kbd> + <kbd>S</kbd>, triggering the screenshot application (Windows 10/11). Then try `escape` to exit.
 
 On Mac, try commands such as:
 
-- `command air` to press ⌘A and select all.
+- `command air` to press <kbd>⌘</kbd><kbd>A</kbd> and select all.
 
-- `control shift command 4` to press ⌃⇧⌘4, copying a screenshot of the selected area to the clipboard. Then try `escape` to exit. Please note the order of the modifiers doesn't matter.
+- `control shift command 4` to press <kbd>⌃</kbd><kbd>⇧</kbd><kbd>⌘</kbd><kbd>4</kbd>, copying a screenshot of the selected area to the clipboard. Then try `escape` to exit. Please note the order of the modifiers doesn't matter.
 
-Say any combination of modifiers, symbols, alphabet, numbers and function keys to execute keyboard shortcuts. Modifier keys can be tapped using `press`, for example `press control` taps the Control (⌃) key by itself.
+Say any combination of modifiers, symbols, alphabet, numbers and function keys to execute keyboard shortcuts. Modifier keys can be tapped using `press`, for example `press control` taps the <kbd>Control</kbd> (<kbd>⌃</kbd>) key by itself.
 
 ### Symbols
 
@@ -140,7 +140,7 @@ Editing commands in [edit.talon](core/edit/edit.talon) are global. Commands such
 
 Voice commands for repeating commands are defined in [repeater.talon](plugin/repeater/repeater.talon).
 
-Say `go up fifth` or `go up five times` to go up five lines. `select up third` will press Shift+Up three times to select several lines of text.
+Say `go up fifth` or `go up five times` to go up five lines. `select up third` will press <kbd>Shift</kbd>+<kbd>↑</kbd> three times to select several lines of text.
 
 ### Window management
 
@@ -217,7 +217,7 @@ Notes:
 
 - If there no hidden files or folders, and the items are displayed in alphabetical order, you can typically issue the `follow <number>`, `file <number>` and `open <number>` commands based on the displayed order.
 
-To implement support for a new program, implement the relevant file manager actions for your application and assert the `user.file_manager` tag. There are a number of example implementations in the repository. [Finder](apps/finder/finder.py) is a good example to copy and mdoify.
+To implement support for a new program, implement the relevant file manager actions for your application and assert the `user.file_manager` tag. There are a number of example implementations in the repository. [Finder](apps/finder/finder.py) is a good example to copy and modify.
 
 ## Terminal commands
 
