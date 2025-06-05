@@ -116,9 +116,6 @@ class UserActions:
     def code_break():
         actions.insert("break")
 
-    def code_next():
-        actions.insert("continue")
-
     # libraries.py
     def code_import():
         actions.user.insert_snippet_by_name("importStatement")

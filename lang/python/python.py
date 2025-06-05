@@ -299,6 +299,3 @@ class UserActions:
 
     def code_break():
         actions.insert("break")
-
-    def code_next():
-        actions.insert("continue")

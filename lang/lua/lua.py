@@ -198,10 +198,6 @@ class UserActions:
     def code_break():
         actions.insert("break ")
 
-    # Assumes a ::continue:: label
-    def code_next():
-        actions.insert("goto continue")
-
     def code_try_catch():
         actions.user.insert_snippet_by_name("tryCatchStatement")
 
