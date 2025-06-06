@@ -12,7 +12,6 @@ mod.setting("command_history_display", type=int, default=10)
 
 hist_more: bool = False
 history: list[str] = []
-was_asleep: bool = False
 
 
 def on_phrase(j):
