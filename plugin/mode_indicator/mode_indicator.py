@@ -122,20 +122,15 @@ def on_draw(c: SkiaCanvas):
     c.paint.color = color_mode
     c.draw_circle(x, y, radius)
 
+
 def on_draw_text(c: SkiaCanvas):
     x, y = c.rect.center.x, c.rect.center.y
     radius = c.rect.height / 2 - 2
     text = actions.sound.active_microphone()[:2]
     color = settings.get("user.mode_indicator_color_text")
     stroke = True
-    draw_text(
-        c,
-        x,
-        y,
-        text,
-        color,
-        stroke)
-    
+    draw_text(c, x, y, text, color, stroke)
+
 
 def draw_text(
     c: SkiaCanvas,
@@ -153,6 +148,7 @@ def draw_text(
         x - text_rect.x - text_rect.width / 2,
         y - text_rect.y - text_rect.height / 2,
     )
+
 
 def move_indicator():
     screen: Screen = ui.main_screen()
