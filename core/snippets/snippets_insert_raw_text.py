@@ -11,21 +11,21 @@ RE_STOP = re.compile(r"\$(\d+|\w+)|\$\{(\d+|\w+)\}|\$\{(\d+|\w+):(.+)\}")
 class Stop:
     name: str
     rows_up: int
+    columns_left: int
     row: int
     col: int
 
 
 def insert_snippet_raw_text(body: str):
     """Insert snippet as raw text without editor support"""
-    updated_snippet, stop, lines = parse_snippet(body)
+    updated_snippet, stop = parse_snippet(body)
 
     actions.insert(updated_snippet)
 
     if stop:
         up(stop.rows_up)
         actions.edit.line_end()
-        line_with_final_stop = lines[stop.row]
-        left(len(line_with_final_stop) - stop.col)
+        left(stop.columns_left)
 
 
 def parse_snippet(body: str):
@@ -43,19 +43,20 @@ def parse_snippet(body: str):
         match = RE_STOP.search(line)
 
         while match:
-            stops.append(
-                Stop(
-                    name=match.group(1) or match.group(2) or match.group(3),
-                    rows_up=len(lines) - i - 1,
-                    row=i,
-                    col=match.start(),
-                )
-            )
-
             # Remove tab stops and variables.
             stop_text = match.group(0)
             default_value = match.group(4) or ""
             line = line.replace(stop_text, default_value, 1)
+
+            stops.append(
+                Stop(
+                    name=match.group(1) or match.group(2) or match.group(3),
+                    rows_up=len(lines) - i - 1,
+                    columns_left=len(line) - match.start(),
+                    row=i,
+                    col=match.start(),
+                )
+            )
 
             # Might have multiple stops on the same line
             match = RE_STOP.search(line)
@@ -65,7 +66,7 @@ def parse_snippet(body: str):
 
     updated_snippet = "\n".join(lines)
 
-    return updated_snippet, get_first_stop(stops), lines
+    return updated_snippet, get_first_stop(stops)
 
 
 def up(n: int):
