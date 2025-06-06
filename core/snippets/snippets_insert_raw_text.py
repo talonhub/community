@@ -58,7 +58,6 @@ def parse_snippet(body: str):
                 )
             )
 
-
             # Might have multiple stops on the same line
             match = RE_STOP.search(line)
 
