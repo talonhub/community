@@ -19,3 +19,10 @@ for ${1:k}, ${2:v} in pairs($3) do
     $0
 end
 ---
+
+name: tryCatchStatement
+phrase: try catch
+insertionScope: statement
+-
+pcall($0)
+---

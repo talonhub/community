@@ -12,3 +12,12 @@ language: python
 -
 from $1 import $0
 ---
+
+language: r
+-
+library(
+    ${1},
+    include.only = c(${0})${2:,
+    warn.conflicts = FALSE}
+)
+---

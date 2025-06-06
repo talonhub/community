@@ -9,4 +9,4 @@ code.language: batch
 @ctx.action_class("user")
 class UserActions:
     def code_comment_line_prefix():
-        actions.auto_insert("REM ")
+        actions.user.insert_snippet_by_name("commentLine")

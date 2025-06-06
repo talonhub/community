@@ -43,7 +43,10 @@ class UserActions:
         actions.auto_insert(" IS NOT NULL")
 
     def code_comment_line_prefix():
-        actions.auto_insert("-- ")
+        actions.user.insert_snippet_by_name("commentLine")
 
     def code_insert_function(text: str, selection: str):
-        actions.user.insert_between(f"{text}({selection or ''}", ")")
+        substitutions = {"1": text}
+        if selection:
+            substitutions["0"] = selection
+        actions.user.insert_snippet_by_name("functionCall", substitutions)

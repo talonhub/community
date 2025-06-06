@@ -29,11 +29,7 @@ state include: insert("#include ")
 state include system: user.insert_between("#include <", ">")
 state include local: user.insert_between('#include "', '"')
 state type deaf: insert("typedef ")
-state type deaf struct:
-    insert("typedef struct")
-    insert("{\n\n}")
-    edit.up()
-    key('tab')
+state type deaf struct: user.insert_snippet_by_name("typedefStructDeclaration")
 
 # XXX - create a preprocessor tag for these, as they will match cpp, etc
 state define: "#define "
