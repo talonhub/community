@@ -11,19 +11,18 @@ RE_STOP = re.compile(r"\$(\d+|\w+)|\$\{(\d+|\w+)\}|\$\{(\d+|\w+):(.+)\}")
 class Stop:
     name: str
     rows_up: int
+    columns_left: int
     row: int
     col: int
 
 
 def insert_snippet_raw_text(body: str):
     """Insert snippet as raw text without editor support"""
-    updated_snippet, stop, lines = parse_snippet(body)
+    updated_snippet, stop = parse_snippet(body)
 
     actions.insert(updated_snippet)
 
-    last_line_length = len(lines[-1])
-    # If the first stop is at the end of the last line, we do not need to move the cursor
-    if stop and (stop.rows_up > 0 or stop.col < last_line_length):
+    if stop:
         up(stop.rows_up)
         actions.edit.line_start()
         right(stop.col)
@@ -44,19 +43,21 @@ def parse_snippet(body: str):
         match = RE_STOP.search(line)
 
         while match:
+            # Remove tab stops and variables.
+            stop_text = match.group(0)
+            default_value = match.group(4) or ""
+            line = line.replace(stop_text, default_value, 1)
+
             stops.append(
                 Stop(
                     name=match.group(1) or match.group(2) or match.group(3),
                     rows_up=len(lines) - i - 1,
+                    columns_left=len(line) - match.start(),
                     row=i,
                     col=match.start(),
                 )
             )
 
-            # Remove tab stops and variables.
-            stop_text = match.group(0)
-            default_value = match.group(4) or ""
-            line = line.replace(stop_text, default_value, 1)
 
             # Might have multiple stops on the same line
             match = RE_STOP.search(line)
@@ -66,7 +67,7 @@ def parse_snippet(body: str):
 
     updated_snippet = "\n".join(lines)
 
-    return updated_snippet, get_first_stop(stops), lines
+    return updated_snippet, get_first_stop(stops)
 
 
 def up(n: int):
@@ -93,4 +94,7 @@ def get_first_stop(stops: list[Stop]):
     if not stops:
         return None
     stops.sort(key=key)
-    return stops[0]
+    stop = stops[0]
+    if stop.rows_up == 0 and stop.columns_left == 0:
+        return None
+    return stop
