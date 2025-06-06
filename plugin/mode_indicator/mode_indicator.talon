@@ -2,7 +2,7 @@ settings():
     # Don't show mode indicator by default
     user.mode_indicator_show = false
     # Set to true to show the first 2 letters of the mic name inside the mode indicator
-    user.show_microphone_name_in_mode_indicator = false
+    user.mode_indicator_show_mic_name = false
     # 30pixels diameter
     user.mode_indicator_size = 30
     # Center horizontally. (0=left, 0.5=center, 1=right)

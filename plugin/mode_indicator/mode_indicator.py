@@ -17,6 +17,12 @@ mod.setting(
     desc="If true the mode indicator is shown",
 )
 mod.setting(
+    "mode_indicator_show_mic_name",
+    type=bool,
+    default=False,
+    desc="Show first two letters of mic name if true",
+)
+mod.setting(
     "mode_indicator_size",
     type=float,
     desc="Mode indicator diameter in pixels",
