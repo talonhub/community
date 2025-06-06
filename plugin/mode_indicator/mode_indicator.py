@@ -125,21 +125,14 @@ def on_draw(c: SkiaCanvas):
     if settings.get("user.mode_indicator_show_mic_name"):
         color = settings.get("user.mode_indicator_color_text")
         # Remove c.paint.shader gradient before drawing again
-        c.paint.shader = skia.Shader.radial_gradient(
-        (x, y), radius, [color, color]
-        )
+        c.paint.shader = skia.Shader.radial_gradient((x, y), radius, [color, color])
 
         x, y = c.rect.center.x, c.rect.center.y
         radius = c.rect.height / 2 - 2
         text = actions.sound.active_microphone()[:2]
         stroke = True
-        draw_text(
-            c,
-            x,
-            y,
-            text,
-            color,
-            stroke)
+        draw_text(c, x, y, text, color, stroke)
+
 
 def draw_text(
     c: SkiaCanvas,
@@ -184,6 +177,7 @@ def show_indicator():
     global canvas
     canvas = Canvas.from_rect(Rect(0, 0, 0, 0))
     canvas.register("draw", on_draw)
+
 
 def hide_indicator():
     global canvas
