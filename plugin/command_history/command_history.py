@@ -2,7 +2,7 @@ from typing import Optional
 
 from talon import Module, actions, imgui, settings, speech_system
 
-from ..subtitles.on_phrase import skip_phrase
+from ..subtitles.on_phrase import skip_phrase, parse_phrase
 
 # We keep command_history_size lines of history, but by default display only
 # command_history_display of them.
@@ -20,8 +20,7 @@ def on_phrase(j):
     if skip_phrase(j):
         return
 
-    words = j.get("text")
-    text = actions.user.history_transform_phrase_text(words)
+    text = parse_phrase(j)
     history.append(text)
     history = history[-settings.get("user.command_history_size") :]
 
