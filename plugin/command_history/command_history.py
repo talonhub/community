@@ -14,6 +14,7 @@ hist_more: bool = False
 history: list[str] = []
 was_asleep: bool = False
 
+
 def on_phrase(j):
     global history
     if skip_phrase(j):
@@ -23,6 +24,7 @@ def on_phrase(j):
     text = actions.user.history_transform_phrase_text(words)
     history.append(text)
     history = history[-settings.get("user.command_history_size") :]
+
 
 # todo: dynamic rect?
 @imgui.open(y=0)
