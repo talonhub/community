@@ -147,8 +147,8 @@ def draw_text(
     text_rect = c.paint.measure_text(text)[1]
     c.draw_text(
         text,
-        x - text_rect.x - text_rect.width / 2,
-        y - text_rect.y - text_rect.height / 2,
+        x - text_rect.center.x,
+        y - text_rect.center.y,
     )
 
 
