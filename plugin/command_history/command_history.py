@@ -82,7 +82,3 @@ class Actions:
         """returns the history entry at the specified index"""
         num = (0 - number) - 1
         return history[num]
-
-    def history_transform_phrase_text(words: list[str]) -> Optional[str]:
-        """Transforms phrase text for presentation in history. Return `None` to omit from history"""
-        return " ".join(words) if words else None
