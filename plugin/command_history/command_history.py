@@ -2,6 +2,8 @@ from typing import Optional
 
 from talon import Module, actions, imgui, settings, speech_system
 
+from ..subtitles.on_phrase import skip_phrase
+
 # We keep command_history_size lines of history, but by default display only
 # command_history_display of them.
 mod = Module()
@@ -12,28 +14,15 @@ hist_more: bool = False
 history: list[str] = []
 was_asleep: bool = False
 
-
-def handle_phrase(j):
+def on_phrase(j):
     global history
+    if skip_phrase(j):
+        return
+
     words = j.get("text")
     text = actions.user.history_transform_phrase_text(words)
-    if text is not None:
-        history.append(text)
-        history = history[-settings.get("user.command_history_size") :]
-
-
-def on_phrase(j):
-    global was_asleep
-    was_asleep = not actions.speech.enabled()
-    if actions.speech.enabled():
-        handle_phrase(j)
-
-
-def after_phrase(j):
-    """This handles a situation where the user used a command that woke up talon"""
-    if was_asleep and actions.speech.enabled():
-        handle_phrase(j)
-
+    history.append(text)
+    history = history[-settings.get("user.command_history_size") :]
 
 # todo: dynamic rect?
 @imgui.open(y=0)
@@ -55,7 +44,6 @@ def gui(gui: imgui.GUI):
 
 
 speech_system.register("phrase", on_phrase)
-speech_system.register("post:phrase", after_phrase)
 
 
 @mod.action_class
