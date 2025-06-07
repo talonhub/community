@@ -159,12 +159,6 @@ def c_types(m) -> str:
     return m.c_types
 
 
-@mod.capture(rule="{self.c_types}")
-def c_types(m) -> str:
-    "Returns a string"
-    return m.c_types
-
-
 @mod.capture(rule="{self.stdint_types}")
 def stdint_types(m) -> str:
     "Returns a string"
