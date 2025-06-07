@@ -43,11 +43,6 @@ def parse_snippet(body: str):
         match = RE_STOP.search(line)
 
         while match:
-            # Remove tab stops and variables.
-            stop_text = match.group(0)
-            default_value = match.group(4) or ""
-            line = line.replace(stop_text, default_value, 1)
-
             stops.append(
                 Stop(
                     name=match.group(1) or match.group(2) or match.group(3),
@@ -58,15 +53,20 @@ def parse_snippet(body: str):
                 )
             )
 
+            # Remove tab stops and variables.
+            stop_text = match.group(0)
+            default_value = match.group(4) or ""
+            line = line.replace(stop_text, default_value, 1)
+
             # Might have multiple stops on the same line
             match = RE_STOP.search(line)
 
         # Update existing line
         lines[i] = line
 
-    for stop in stops:
-        line = lines[stop.row]
-        stop.columns_left = len(line) - stop.col
+    # Can't calculate column left until line text is fully updated
+    for stop in stops:       
+        stop.columns_left = len(lines[stop.row]) - stop.col
 
     updated_snippet = "\n".join(lines)
 
