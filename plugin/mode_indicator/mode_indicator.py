@@ -137,6 +137,7 @@ def on_draw(c: SkiaCanvas):
             y - text_rect.center.y,
         )
 
+
 def move_indicator():
     screen: Screen = ui.main_screen()
     rect = screen.rect
