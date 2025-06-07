@@ -2,26 +2,26 @@ from typing import Optional
 
 from talon import Module, actions, imgui, settings, speech_system
 
+from ..subtitles.on_phrase import parse_phrase, skip_phrase
+
 # We keep command_history_size lines of history, but by default display only
 # command_history_display of them.
 mod = Module()
 mod.setting("command_history_size", type=int, default=50)
 mod.setting("command_history_display", type=int, default=10)
 
-hist_more = False
-history = []
+hist_more: bool = False
+history: list[str] = []
 
 
 def on_phrase(j):
     global history
+    if skip_phrase(j):
+        return
 
-    words = j.get("text")
-
-    text = actions.user.history_transform_phrase_text(words)
-
-    if text is not None:
-        history.append(text)
-        history = history[-settings.get("user.command_history_size") :]
+    text = parse_phrase(j)
+    history.append(text)
+    history = history[-settings.get("user.command_history_size") :]
 
 
 # todo: dynamic rect?
@@ -82,11 +82,3 @@ class Actions:
         """returns the history entry at the specified index"""
         num = (0 - number) - 1
         return history[num]
-
-    def history_transform_phrase_text(words: list[str]) -> Optional[str]:
-        """Transforms phrase text for presentation in history. Return `None` to omit from history"""
-
-        if not actions.speech.enabled():
-            return None
-
-        return " ".join(words) if words else None
