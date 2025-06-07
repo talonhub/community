@@ -16,9 +16,59 @@ class Stop:
     col: int
 
 
+stop_stack: list[Stop] | None = None
+
+
+def update_stop_information(stops: list[Stop]):
+    global stop_stack
+    if len(stops) > 1:
+        stop_stack = stops
+        stop_stack.reverse()
+    else:
+        stop_stack = None
+
+
+def move_to_correct_column(start: int, end: int):
+    if start < end:
+        for _ in range(end - start):
+            actions.edit.right()
+    else:
+        for _ in range(start - end):
+            actions.edit.left()
+
+
+def move_to_correct_row(start: int, end: int):
+    if start < end:
+        for _ in range(end - start):
+            actions.edit.down()
+    else:
+        for _ in range(start - end):
+            actions.edit.up()
+
+
+def go_to_next_stop():
+    """Goes to the next snippet stop if it exists"""
+    global stop_stack
+
+    if stop_stack:
+        current_stop = stop_stack.pop()
+        next_stop = stop_stack[-1]
+        if current_stop.row == next_stop.row:
+            move_to_correct_column(current_stop.col, next_stop.col)
+        else:
+            move_to_correct_row(current_stop.row, next_stop.row)
+            actions.edit.line_end()
+            left(next_stop.columns_left)
+        if len(stop_stack) <= 1:
+            stop_stack = None
+
+
 def insert_snippet_raw_text(body: str):
     """Insert snippet as raw text without editor support"""
-    updated_snippet, stop = parse_snippet(body)
+    updated_snippet, stops = parse_snippet(body)
+    stop = get_first_stop(stops)
+
+    update_stop_information(stops)
 
     actions.insert(updated_snippet)
 
@@ -70,7 +120,7 @@ def parse_snippet(body: str):
 
     updated_snippet = "\n".join(lines)
 
-    return updated_snippet, get_first_stop(stops)
+    return updated_snippet, stops
 
 
 def up(n: int):
