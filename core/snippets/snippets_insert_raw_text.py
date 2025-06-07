@@ -65,7 +65,7 @@ def parse_snippet(body: str):
         lines[i] = line
 
     # Can't calculate column left until line text is fully updated
-    for stop in stops:       
+    for stop in stops:
         stop.columns_left = len(lines[stop.row]) - stop.col
 
     updated_snippet = "\n".join(lines)
