@@ -24,8 +24,8 @@ def insert_snippet_raw_text(body: str):
 
     if stop:
         up(stop.rows_up)
-        actions.edit.line_start()
-        right(stop.col)
+        actions.edit.line_end()
+        left(stop.columns_left)
 
 
 def parse_snippet(body: str):
@@ -75,10 +75,10 @@ def up(n: int):
         actions.edit.up()
 
 
-def right(n: int):
-    """Move cursor right <n> columns"""
+def left(n: int):
+    """Move cursor left <n> columns"""
     for _ in range(n):
-        actions.edit.right()
+        actions.edit.left()
 
 
 def key(stop: Stop):
