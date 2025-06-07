@@ -27,8 +27,7 @@ def skip_phrase_in_sleep(phrase: Phrase) -> bool:
 
 def parse_phrase(phrase: Phrase) -> str:
     words = phrase["phrase"]
-    current_phrase = " ".join(words)
-    return current_phrase
+    return " ".join(words)
 
 
 speech_system.register("phrase", on_pre_phrase)
