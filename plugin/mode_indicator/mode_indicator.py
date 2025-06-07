@@ -137,25 +137,6 @@ def on_draw(c: SkiaCanvas):
             y - text_rect.center.y,
         )
 
-
-def draw_text(
-    c: SkiaCanvas,
-    x: float,
-    y: float,
-    text: str,
-    color: str = settings.get("user.mode_indicator_color_other"),
-    stroke: bool = True,
-):
-    c.paint.style = c.paint.Style.FILL
-    c.paint.color = color
-    text_rect = c.paint.measure_text(text)[1]
-    c.draw_text(
-        text,
-        x - text_rect.center.x,
-        y - text_rect.center.y,
-    )
-
-
 def move_indicator():
     screen: Screen = ui.main_screen()
     rect = screen.rect
