@@ -52,7 +52,7 @@ def parse_snippet(body: str):
                 Stop(
                     name=match.group(1) or match.group(2) or match.group(3),
                     rows_up=len(lines) - i - 1,
-                    columns_left=len(line) - match.start(),
+                    columns_left=0,
                     row=i,
                     col=match.start(),
                 )
@@ -63,6 +63,10 @@ def parse_snippet(body: str):
 
         # Update existing line
         lines[i] = line
+
+    for stop in stops:
+        line = lines[stop.row]
+        stop.columns_left = len(line) - stop.col
 
     updated_snippet = "\n".join(lines)
 
