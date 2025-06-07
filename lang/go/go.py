@@ -134,7 +134,7 @@ class UserActions:
         actions.insert(" != nil")
 
     def code_state_for():
-        actions.user.insert_snippet_by_name("whileLoopStatement")
+        actions.user.insert_snippet_by_name("forLoopStatement")
 
     def code_break():
         actions.insert("break")

@@ -217,7 +217,7 @@ class UserActions:
         actions.auto_insert(" is not None")
 
     def code_state_for():
-        actions.auto_insert("for ")
+        actions.user.insert_snippet_by_name("forLoopStatement")
 
     def code_state_return():
         actions.insert("return ")

@@ -103,7 +103,7 @@ class UserActions:
         actions.user.insert_snippet_by_name("caseStatement")
 
     def code_state_for():
-        actions.user.insert_snippet_by_name("forEachStatement")
+        actions.user.insert_snippet_by_name("forLoopStatement")
 
     def code_state_return():
         actions.insert("return ")
