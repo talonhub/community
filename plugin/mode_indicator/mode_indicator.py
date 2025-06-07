@@ -17,7 +17,7 @@ mod.setting(
     desc="If true the mode indicator is shown",
 )
 mod.setting(
-    "mode_indicator_show_mic_name",
+    "mode_indicator_show_microphone_name",
     type=bool,
     default=False,
     desc="Show first two letters of microphone name if true",
@@ -123,7 +123,7 @@ def on_draw(c: SkiaCanvas):
     c.paint.color = color_mode
     c.draw_circle(x, y, radius)
 
-    if settings.get("user.mode_indicator_show_mic_name"):
+    if settings.get("user.mode_indicator_show_microphone_name"):
         # Remove c.paint.shader gradient before drawing again
         c.paint.shader = skia.Shader.radial_gradient(
             Point2d(x, y), radius, [color_text, color_text]
