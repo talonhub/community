@@ -129,7 +129,7 @@ def on_draw(c: SkiaCanvas):
             Point2d(x, y), radius, [color_text, color_text]
         )
 
-        text = actions.sound.active_microphone()[:2]
+        text = current_microphone[:2]
         c.paint.style = c.paint.Style.FILL
         c.paint.color = color_text
         text_rect = c.paint.measure_text(text)[1]
