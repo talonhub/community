@@ -1,0 +1,12 @@
+name: structDeclaration
+phrase: struct
+$1.insertionFormatter: PUBLIC_CAMEL_CASE
+---
+
+language: rust
+insertionScope: class
+-
+struct $1 {
+    $0
+}
+---
