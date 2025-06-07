@@ -93,4 +93,7 @@ def get_first_stop(stops: list[Stop]):
     if not stops:
         return None
     stops.sort(key=key)
-    return stops[0]
+    stop = stops[0]
+    if stop.rows_up == 0 and stop.columns_left == 0:
+        return None
+    return stop
