@@ -127,11 +127,15 @@ def on_draw(c: SkiaCanvas):
         # Remove c.paint.shader gradient before drawing again
         c.paint.shader = skia.Shader.radial_gradient((x, y), radius, [color, color])
 
-        x, y = c.rect.center.x, c.rect.center.y
-        radius = c.rect.height / 2 - 2
         text = actions.sound.active_microphone()[:2]
-        stroke = True
-        draw_text(c, x, y, text, color, stroke)
+        c.paint.style = c.paint.Style.FILL
+        c.paint.color = color
+        text_rect = c.paint.measure_text(text)[1]
+        c.draw_text(
+            text,
+            x - text_rect.center.x,
+            y - text_rect.center.y,
+        )
 
 
 def draw_text(
