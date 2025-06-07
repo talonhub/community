@@ -20,8 +20,8 @@ ctx.lists["self.stdint_signed"] = {
 }
 
 ctx.lists["self.c_signed"] = {
-    "signed": "signed ",
-    "unsigned": "unsigned ",
+    "signed": "signed",
+    "unsigned": "unsigned",
 }
 
 ctx.lists["self.c_keywords"] = {
