@@ -105,7 +105,7 @@ def get_colors():
     color_gradient = get_gradient_color(color_mode)
     color_alpha = get_alpha_color()
     color_text = settings.get("user.mode_indicator_color_text")
-    return f"{color_mode}{color_alpha}", f"{color_gradient}", f"{color_text}"
+    return f"{color_mode}{color_alpha}", color_gradient, color_text
 
 
 def on_draw(c: SkiaCanvas):
