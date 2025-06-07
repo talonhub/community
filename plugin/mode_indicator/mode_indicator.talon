@@ -14,7 +14,7 @@ settings():
     # Grey gradient
     user.mode_indicator_color_gradient = 0.5
     # White color for optional text overlay on mode indicator
-    user.mode_indicator_color_text = "EEE"
+    user.mode_indicator_color_text = "eeeeee"
     # Black color for when the microphone is muted (set to "None")
     user.mode_indicator_color_mute = "000000"
     # Grey color for sleep mode
