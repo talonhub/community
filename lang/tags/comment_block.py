@@ -16,6 +16,7 @@ c_like_ctx.tags = ["user.code_comment_block"]
 class Actions:
     def code_comment_block():
         """Block comment"""
+        actions.user.insert_snippet_by_name("commentBlock")
 
     def code_comment_block_prefix():
         """Block comment start syntax"""

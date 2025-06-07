@@ -1,4 +1,4 @@
-from talon import Context, Module
+from talon import Context, Module, actions
 
 ctx = Context()
 mod = Module()
@@ -19,3 +19,4 @@ class Actions:
 
     def code_define_class():
         """Starts a class definition (e.g., Java's "class" keyword)"""
+        actions.user.insert_snippet_by_name("classDeclaration")

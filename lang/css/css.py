@@ -125,9 +125,6 @@ class UserActions:
     def code_get_operators() -> Operators:
         return operators
 
-    def code_import():
-        actions.user.insert_snippet_by_name("importStatement")
-
     def code_insert_function(text: str, selection: str):
         substitutions = {"1": text}
         if selection:
