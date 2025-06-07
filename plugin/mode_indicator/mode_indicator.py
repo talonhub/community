@@ -104,11 +104,12 @@ def get_colors():
     color_mode = get_mode_color()
     color_gradient = get_gradient_color(color_mode)
     color_alpha = get_alpha_color()
-    return f"{color_mode}{color_alpha}", f"{color_gradient}"
+    color_text = settings.get("user.mode_indicator_color_text")
+    return f"{color_mode}{color_alpha}", f"{color_gradient}", f"{color_text}"
 
 
 def on_draw(c: SkiaCanvas):
-    color_mode, color_gradient = get_colors()
+    color_mode, color_gradient, color_text = get_colors()
     x, y = c.rect.center.x, c.rect.center.y
     radius = c.rect.height / 2 - 2
 
@@ -123,15 +124,12 @@ def on_draw(c: SkiaCanvas):
     c.draw_circle(x, y, radius)
 
     if settings.get("user.mode_indicator_show_mic_name"):
-        color = settings.get("user.mode_indicator_color_text")
         # Remove c.paint.shader gradient before drawing again
-        c.paint.shader = skia.Shader.radial_gradient(
-            Point2d(x, y), radius, [color, color]
-        )
+        c.paint.shader = skia.Shader.radial_gradient(Point2d(x, y), radius, [color_text, color_text])
 
         text = actions.sound.active_microphone()[:2]
         c.paint.style = c.paint.Style.FILL
-        c.paint.color = color
+        c.paint.color = color_text
         text_rect = c.paint.measure_text(text)[1]
         c.draw_text(
             text,
