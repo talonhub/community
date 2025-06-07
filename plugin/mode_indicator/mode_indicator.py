@@ -125,7 +125,9 @@ def on_draw(c: SkiaCanvas):
     if settings.get("user.mode_indicator_show_mic_name"):
         color = settings.get("user.mode_indicator_color_text")
         # Remove c.paint.shader gradient before drawing again
-        c.paint.shader = skia.Shader.radial_gradient(Point2d(x, y), radius, [color, color])
+        c.paint.shader = skia.Shader.radial_gradient(
+            Point2d(x, y), radius, [color, color]
+        )
 
         text = actions.sound.active_microphone()[:2]
         c.paint.style = c.paint.Style.FILL
