@@ -554,5 +554,5 @@ class Actions:
             actions.edit.extend_word_right()
             after = actions.edit.selected_text()[1:]
             actions.edit.left()
-            actions.user.delete_right() # remove peek character
+            actions.user.delete_right()  # remove peek character
         return before, after
