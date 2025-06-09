@@ -572,8 +572,9 @@ def gui_list_help(gui: imgui.GUI):
 
     gui.line()
 
-    for key, value in pages_list[current_list_page - 1].items():
-        gui.text(f"{value}: {key}")
+    if len(pages_list) > 0:
+        for key, value in pages_list[current_list_page - 1].items():
+            gui.text(f"{value}: {key}")
 
     gui.spacer()
 

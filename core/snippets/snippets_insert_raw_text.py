@@ -11,6 +11,7 @@ RE_STOP = re.compile(r"\$(\d+|\w+)|\$\{(\d+|\w+)\}|\$\{(\d+|\w+):(.+)\}")
 class Stop:
     name: str
     rows_up: int
+    columns_left: int
     row: int
     col: int
 
@@ -23,8 +24,8 @@ def insert_snippet_raw_text(body: str):
 
     if stop:
         up(stop.rows_up)
-        actions.edit.line_start()
-        right(stop.col)
+        actions.edit.line_end()
+        left(stop.columns_left)
 
 
 def parse_snippet(body: str):
@@ -46,6 +47,7 @@ def parse_snippet(body: str):
                 Stop(
                     name=match.group(1) or match.group(2) or match.group(3),
                     rows_up=len(lines) - i - 1,
+                    columns_left=0,
                     row=i,
                     col=match.start(),
                 )
@@ -62,6 +64,10 @@ def parse_snippet(body: str):
         # Update existing line
         lines[i] = line
 
+    # Can't calculate column left until line text is fully updated
+    for stop in stops:
+        stop.columns_left = len(lines[stop.row]) - stop.col
+
     updated_snippet = "\n".join(lines)
 
     return updated_snippet, get_first_stop(stops)
@@ -73,10 +79,10 @@ def up(n: int):
         actions.edit.up()
 
 
-def right(n: int):
-    """Move cursor right <n> columns"""
+def left(n: int):
+    """Move cursor left <n> columns"""
     for _ in range(n):
-        actions.edit.right()
+        actions.edit.left()
 
 
 def key(stop: Stop):
@@ -91,4 +97,7 @@ def get_first_stop(stops: list[Stop]):
     if not stops:
         return None
     stops.sort(key=key)
-    return stops[0]
+    stop = stops[0]
+    if stop.rows_up == 0 and stop.columns_left == 0:
+        return None
+    return stop
