@@ -21,33 +21,43 @@ class Actions:
 
     def code_state_if():
         """Inserts if statement"""
+        actions.user.insert_snippet_by_name("ifStatement")
 
     def code_state_else_if():
         """Inserts else if statement"""
+        actions.user.insert_snippet_by_name("elseIfStatement")
 
     def code_state_else():
         """Inserts else statement"""
+        actions.user.insert_snippet_by_name("elseStatement")
 
     def code_state_do():
         """Inserts do statement"""
+        actions.user.insert_snippet_by_name("doWhileLoopStatement")
 
     def code_state_switch():
         """Inserts switch statement"""
+        actions.user.insert_snippet_by_name("switchStatement")
 
     def code_state_case():
         """Inserts case statement"""
+        actions.user.insert_snippet_by_name("caseStatement")
 
     def code_state_for():
         """Inserts for statement"""
+        actions.user.insert_snippet_by_name("forLoopStatement")
 
     def code_state_for_each():
         """Inserts for each equivalent statement"""
+        actions.user.insert_snippet_by_name("forEachStatement")
 
     def code_state_go_to():
         """inserts go-to statement"""
+        actions.user.insert_snippet_by_name("goToStatement")
 
     def code_state_while():
         """Inserts while statement"""
+        actions.user.insert_snippet_by_name("whileLoopStatement")
 
     def code_state_infinite_loop():
         """Inserts infinite loop statement"""
@@ -63,6 +73,7 @@ class Actions:
 
     def code_try_catch():
         """Inserts try/catch. If selection is true, does so around the selection"""
+        actions.user.insert_snippet_by_name("tryCatchStatement")
 
 
 @c_like_ctx.action_class("user")

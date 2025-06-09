@@ -42,9 +42,6 @@ class UserActions:
     def code_insert_is_not_null():
         actions.auto_insert(" IS NOT NULL")
 
-    def code_comment_line_prefix():
-        actions.user.insert_snippet_by_name("commentLine")
-
     def code_insert_function(text: str, selection: str):
         substitutions = {"1": text}
         if selection:
