@@ -5,18 +5,12 @@ from talon import Module, actions, settings
 
 mod = Module()
 
-mod.setting(
-    "snippets_raw_text_convert_indentation",
-    type=bool,
-    default=True,
-    desc="""If true, snippets inserted as raw text have tabs converted to spaces""",
-)
 
 mod.setting(
     "snippets_raw_text_spaces_per_tab",
     type=int,
-    default=4,
-    desc="""The number of spaces to use for each tab in snippets inserted as raw text when converting tabs to spaces""",
+    default=-1,
+    desc="""The number of spaces to use for each tab in snippets inserted as raw text when converting tabs to spaces. A negative value prevents tabs from getting converted spaces.""",
 )
 
 RE_STOP = re.compile(r"\$(\d+|\w+)|\$\{(\d+|\w+)\}|\$\{(\d+|\w+):(.+)\}")
@@ -49,7 +43,7 @@ def compute_indentation_as_spaces():
 
 def parse_snippet(body: str):
     # Some IM services will send the message on a tab
-    if settings.get("user.snippets_raw_text_convert_indentation"):
+    if settings.get("user.snippets_raw_text_spaces_per_tab") >= 0:
         body = re.sub(r"\t", compute_indentation_as_spaces(), body)
 
     # Replace variable with appropriate value/text
