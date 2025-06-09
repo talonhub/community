@@ -19,7 +19,7 @@ mod.setting(
     "context_sensitive_dictation_peek_character",
     type=str,
     default=" ",
-    desc="This is the character inserted during dictation_peek to ensure that some text is selected even if the cursor is at the start or end of the document.",
+    desc="This is the character inserted during dictation_peek to ensure that some text is selected even if the cursor is at the start or end of the document. This should be a single character only.",
 )
 
 mod.list("prose_modifiers", desc="Modifiers that can be used within prose")
