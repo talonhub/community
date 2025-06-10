@@ -295,9 +295,6 @@ class UserActions:
     def code_state_switch():
         actions.user.insert_snippet_by_name("switchStatement")
 
-    def code_state_for():
-        actions.user.insert_snippet_by_name("forLoopStatement")
-
     def code_state_while():
         actions.user.insert_snippet_by_name("whileLoopStatement")
 
