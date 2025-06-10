@@ -219,9 +219,6 @@ class UserActions:
     def code_state_for():
         actions.user.insert_snippet_by_name("forLoopStatement")
 
-    def code_state_return():
-        actions.insert("return ")
-
     def code_insert_true():
         actions.auto_insert("True")
 
