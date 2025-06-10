@@ -37,8 +37,12 @@ def insert_snippet_raw_text(body: str):
         left(stop.columns_left)
 
 
-def compute_indentation_as_spaces():
-    return " " * settings.get("user.snippets_raw_text_spaces_per_tab")
+def format_tabs(text: str) -> str:
+    """Possibly replaces tabs with spaces in the given text."""
+    spaces_per_tab: int = settings.get("user.snippet_raw_text_spaces_per_tab")
+    if spaces_per_tab < 0:
+        return text
+    return re.sub(r"\t", " " * spaces_per_tab, text)
 
 
 def parse_snippet(body: str):
