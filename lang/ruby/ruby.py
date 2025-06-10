@@ -75,9 +75,6 @@ class UserActions:
     def code_state_do():
         actions.insert("do ")
 
-    def code_state_return():
-        actions.insert("return ")
-
     def code_insert_true():
         actions.auto_insert("true")
 

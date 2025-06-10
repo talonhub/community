@@ -304,9 +304,6 @@ class UserActions:
     def code_state_infinite_loop():
         actions.user.insert_snippet_by_name("infiniteLoopStatement")
 
-    def code_state_return():
-        actions.auto_insert("return ")
-
     def code_break():
         actions.auto_insert("break;")
 

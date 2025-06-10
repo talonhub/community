@@ -64,6 +64,7 @@ class Actions:
 
     def code_state_return():
         """Inserts return statement"""
+        actions.user.insert_snippet_by_name("returnStatement")
 
     def code_break():
         """Inserts break statement"""

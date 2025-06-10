@@ -93,10 +93,6 @@ class UserActions:
         actions.auto_insert("isset()")
         actions.edit.left()
 
-    def code_state_return():
-        actions.insert("return ;")
-        actions.edit.left()
-
     def code_break():
         actions.insert("break;")
 

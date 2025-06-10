@@ -146,9 +146,6 @@ class UserActions:
     def code_operator_object_accessor():
         actions.auto_insert(".")
 
-    def code_state_return():
-        actions.insert("return ")
-
     def code_break():
         actions.auto_insert("break;")
 

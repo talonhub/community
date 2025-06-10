@@ -148,9 +148,6 @@ class UserActions:
     def code_insert_false():
         actions.insert("false")
 
-    def code_state_return():
-        actions.insert("return ")
-
     def code_insert_function(text: str, selection: str):
         text += f"({selection or ''})"
         actions.user.paste(text)

@@ -158,9 +158,6 @@ class UserActions:
     def code_insert_false():
         actions.insert("false")
 
-    def code_state_return():
-        actions.insert("return ")
-
     def code_comment_block_prefix():
         actions.insert("/*")
 

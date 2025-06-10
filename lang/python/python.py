@@ -219,9 +219,6 @@ class UserActions:
     def code_state_for():
         actions.auto_insert("for ")
 
-    def code_state_return():
-        actions.insert("return ")
-
     def code_insert_true():
         actions.auto_insert("True")
 
