@@ -123,12 +123,12 @@ class UserActions:
             '"Split up" is not possible in windows terminal without special configuration. Use "split horizontally" instead.'
         )
 
-    def split_window_vertically():
-        """Splits window vertically"""
+    def split_window_vertical_line():
+        """Splits the window using a vertical split line"""
         actions.key("shift-alt-plus")
 
-    def split_window_horizontally():
-        """Splits window horizontally"""
+    def split_window_horizontal_line():
+        """Splits the window using a horizontal split line"""
         actions.key("shift-alt-minus")
 
     def split_flip():

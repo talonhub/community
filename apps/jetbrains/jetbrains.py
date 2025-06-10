@@ -376,10 +376,10 @@ class UserActions:
     # def split_window_left():
     # def split_window_down():
     # def split_window_up():
-    def split_window_vertically():
+    def split_window_vertical_line():
         actions.user.idea("action SplitVertically")
 
-    def split_window_horizontally():
+    def split_window_horizontal_line():
         actions.user.idea("action SplitHorizontally")
 
     def split_flip():
