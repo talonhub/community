@@ -7,7 +7,7 @@ mod = Module()
 
 
 mod.setting(
-    "snippets_raw_text_spaces_per_tab",
+    "snippet_raw_text_spaces_per_tab",
     type=int,
     default=4,
     desc="""The number of spaces to use for each tab in snippets inserted as raw text when converting tabs to spaces. A negative value prevents tabs from getting converted spaces.""",
