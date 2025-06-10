@@ -47,8 +47,7 @@ def format_tabs(text: str) -> str:
 
 def parse_snippet(body: str):
     # Some IM services will send the message on a tab
-    if settings.get("user.snippets_raw_text_spaces_per_tab") >= 0:
-        body = re.sub(r"\t", compute_indentation_as_spaces(), body)
+    body = format_tabs(body)
 
     # Replace variable with appropriate value/text
     body = re.sub(r"\$TM_SELECTED_TEXT", lambda _: actions.edit.selected_text(), body)
