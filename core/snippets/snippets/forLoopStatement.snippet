@@ -42,3 +42,28 @@ for $1 in $2 {
     $0
 }
 ---
+
+language: go
+-
+for $1 {
+    $0
+}
+---
+
+language: r | kotlin
+-
+for ($1 in $2) {
+    $0
+}
+---
+
+language: python
+-
+for $1 in $2:
+    $0
+---
+
+language: terraform
+-
+for $1 in $2 : $0
+---

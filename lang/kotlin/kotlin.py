@@ -102,9 +102,6 @@ class UserActions:
     def code_state_case():
         actions.user.insert_snippet_by_name("caseStatement")
 
-    def code_state_for():
-        actions.user.insert_snippet_by_name("forEachStatement")
-
     def code_insert_function(text: str, selection: str):
         text += f"({selection or ''})"
         actions.user.paste(text)
