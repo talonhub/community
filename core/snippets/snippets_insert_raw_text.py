@@ -1,7 +1,16 @@
 import re
 from dataclasses import dataclass
 
-from talon import actions
+from talon import Module, actions, settings
+
+mod = Module()
+
+mod.setting(
+    "snippet_raw_text_paste",
+    type=bool,
+    default=False,
+    desc="""If true, inserting snippets as raw text will always be done through pasting""",
+)
 
 INDENTATION = "    "
 RE_STOP = re.compile(r"\$(\d+|\w+)|\$\{(\d+|\w+)\}|\$\{(\d+|\w+):(.+)\}")
@@ -20,7 +29,10 @@ def insert_snippet_raw_text(body: str):
     """Insert snippet as raw text without editor support"""
     updated_snippet, stop = parse_snippet(body)
 
-    actions.insert(updated_snippet)
+    if settings.get("user.snippet_raw_text_paste"):
+        actions.user.paste(updated_snippet)
+    else:
+        actions.insert(updated_snippet)
 
     if stop:
         up(stop.rows_up)
@@ -43,26 +55,30 @@ def parse_snippet(body: str):
         match = RE_STOP.search(line)
 
         while match:
-            # Remove tab stops and variables.
-            stop_text = match.group(0)
-            default_value = match.group(4) or ""
-            line = line.replace(stop_text, default_value, 1)
-
             stops.append(
                 Stop(
                     name=match.group(1) or match.group(2) or match.group(3),
                     rows_up=len(lines) - i - 1,
-                    columns_left=len(line) - match.start(),
+                    columns_left=0,
                     row=i,
                     col=match.start(),
                 )
             )
+
+            # Remove tab stops and variables.
+            stop_text = match.group(0)
+            default_value = match.group(4) or ""
+            line = line.replace(stop_text, default_value, 1)
 
             # Might have multiple stops on the same line
             match = RE_STOP.search(line)
 
         # Update existing line
         lines[i] = line
+
+    # Can't calculate column left until line text is fully updated
+    for stop in stops:
+        stop.columns_left = len(lines[stop.row]) - stop.col
 
     updated_snippet = "\n".join(lines)
 

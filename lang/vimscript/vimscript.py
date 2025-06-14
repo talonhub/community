@@ -70,18 +70,6 @@ class UserActions:
     def code_get_operators() -> Operators:
         return operators
 
-    def code_comment_line_prefix():
-        actions.user.insert_snippet_by_name("commentLine")
-
-    def code_state_if():
-        actions.user.insert_snippet_by_name("ifStatement")
-
-    def code_state_else_if():
-        actions.user.insert_snippet_by_name("elseIfStatement")
-
-    def code_state_else():
-        actions.user.insert_snippet_by_name("elseStatement")
-
     def code_private_function(text: str):
         code_function_declaration(text, "user.code_private_function_formatter")
 
