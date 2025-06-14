@@ -86,6 +86,4 @@ class Actions:
 
     def history_transform_phrase_text(words: list[str]) -> Optional[str]:
         """Transforms phrase text for presentation in history. Return `None` to omit from history"""
-        if words:
-            return " ".join(words)
-        return None
+        return " ".join(words) if words else None
