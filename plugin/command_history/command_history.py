@@ -21,8 +21,9 @@ def on_phrase(j):
 
     words = j.get("phrase")
     text = actions.user.history_transform_phrase_text(words)
-    history.append(text)
-    history = history[-settings.get("user.command_history_size") :]
+    if text:
+        history.append(text)
+        history = history[-settings.get("user.command_history_size") :]
 
 
 # todo: dynamic rect?
