@@ -1,9 +1,18 @@
 import re
 from dataclasses import dataclass
 
-from talon import actions
+from talon import Module, actions, settings
 
-INDENTATION = "    "
+mod = Module()
+
+
+mod.setting(
+    "snippet_raw_text_spaces_per_tab",
+    type=int,
+    default=4,
+    desc="""The number of spaces to use for each tab in snippets inserted as raw text when converting tabs to spaces. A negative value prevents tabs from getting converted spaces.""",
+)
+
 RE_STOP = re.compile(r"\$(\d+|\w+)|\$\{(\d+|\w+)\}|\$\{(\d+|\w+):(.+)\}")
 
 
@@ -28,9 +37,17 @@ def insert_snippet_raw_text(body: str):
         left(stop.columns_left)
 
 
+def format_tabs(text: str) -> str:
+    """Possibly replaces tabs with spaces in the given text."""
+    spaces_per_tab: int = settings.get("user.snippet_raw_text_spaces_per_tab")
+    if spaces_per_tab < 0:
+        return text
+    return re.sub(r"\t", " " * spaces_per_tab, text)
+
+
 def parse_snippet(body: str):
     # Some IM services will send the message on a tab
-    body = re.sub(r"\t", INDENTATION, body)
+    body = format_tabs(body)
 
     # Replace variable with appropriate value/text
     body = re.sub(r"\$TM_SELECTED_TEXT", lambda _: actions.edit.selected_text(), body)
