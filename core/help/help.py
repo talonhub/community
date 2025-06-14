@@ -334,6 +334,10 @@ def get_search_commands(phrase: str) -> dict[str, tuple[str, str]]:
     for token in tokens[1:]:
         viable_commands &= rule_word_map[token]
 
+    # sets have no stable sort order, unlike dicts
+    viable_commands = list(viable_commands)
+    viable_commands.sort()
+
     commands_grouped = defaultdict(list)
     for context, rule in viable_commands:
         command = context_command_map[context][rule]
