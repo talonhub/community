@@ -61,6 +61,7 @@ class Actions:
 
     def code_state_infinite_loop():
         """Inserts infinite loop statement"""
+        actions.user.insert_snippet_by_name("infiniteLoopStatement")
 
     def code_state_return():
         """Inserts return statement"""
