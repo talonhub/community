@@ -6,7 +6,7 @@ from talon import Module, actions, settings
 mod = Module()
 
 mod.setting(
-    "snippets_raw_text_always_paste",
+    "snippet_raw_text_paste",
     type=bool,
     default=False,
     desc="""If true, inserting snippets as raw text will always be done through pasting""",
@@ -28,7 +28,7 @@ def insert_snippet_raw_text(body: str):
     """Insert snippet as raw text without editor support"""
     updated_snippet, stop = parse_snippet(body)
 
-    if settings.get("user.snippets_raw_text_always_paste"):
+    if settings.get("user.snippet_raw_text_paste"):
         actions.user.paste(updated_snippet)
     else:
         actions.insert(updated_snippet)
