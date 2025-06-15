@@ -273,12 +273,6 @@ class UserActions:
     def code_insert_null():
         actions.auto_insert("NULL")
 
-    def code_state_for():
-        actions.user.insert_snippet_by_name("forEachStatement")
-
-    def code_state_return():
-        actions.user.insert_between("return(", ")")
-
     def code_break():
         actions.auto_insert("break")
 

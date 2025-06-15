@@ -243,9 +243,6 @@ class UserActions:
     def code_insert_is_not_null():
         actions.auto_insert(" != NULL")
 
-    def code_state_return():
-        actions.auto_insert("return ")
-
     def code_break():
         actions.auto_insert("break;")
 
