@@ -63,10 +63,6 @@ class UserActions:
     def code_get_operators() -> Operators:
         return operators
 
-    # comment_line.py
-    def code_comment_line_prefix():
-        actions.user.insert_snippet_by_name("commentLine")
-
     # functions.py
     def code_private_function(text: str):
         result = "program {} \n\nend".format(
@@ -95,33 +91,11 @@ class UserActions:
     def code_block():
         actions.auto_insert("\n")
 
-    def code_state_if():
-        actions.user.insert_snippet_by_name("ifStatement")
-
-    def code_state_else_if():
-        actions.user.insert_snippet_by_name("elseIfStatement")
-
-    def code_state_else():
-        actions.user.insert_snippet_by_name("elseStatement")
-
-    def code_state_for():
-        actions.user.insert_snippet_by_name("forLoopStatement")
-
-    def code_state_for_each():
-        actions.user.insert_snippet_by_name("forEachStatement")
-
-    def code_state_while():
-        actions.user.insert_snippet_by_name("whileLoopStatement")
-
     def code_break():
         actions.insert("break")
 
     def code_next():
         actions.insert("continue")
-
-    # libraries.py
-    def code_import():
-        actions.user.insert_snippet_by_name("importStatement")
 
     # libraries.py
     def code_insert_library(text: str, selection: str):

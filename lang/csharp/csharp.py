@@ -79,36 +79,6 @@ class UserActions:
     def code_insert_is_not_null():
         actions.auto_insert(" != null")
 
-    def code_state_if():
-        actions.user.insert_snippet_by_name("ifStatement")
-
-    def code_state_else_if():
-        actions.user.insert_snippet_by_name("elseIfStatement")
-
-    def code_state_else():
-        actions.user.insert_snippet_by_name("elseStatement")
-
-    def code_state_switch():
-        actions.user.insert_snippet_by_name("switchStatement")
-
-    def code_state_case():
-        actions.user.insert_snippet_by_name("caseStatement")
-
-    def code_state_for():
-        actions.auto_insert("for ")
-
-    def code_state_for_each():
-        actions.user.insert_snippet_by_name("forEachStatement")
-
-    def code_state_go_to():
-        actions.user.insert_snippet_by_name("goToStatement")
-
-    def code_state_while():
-        actions.user.insert_snippet_by_name("whileLoopStatement")
-
-    def code_state_return():
-        actions.auto_insert("return ")
-
     def code_break():
         actions.auto_insert("break;")
 
@@ -120,15 +90,6 @@ class UserActions:
 
     def code_insert_false():
         actions.auto_insert("false")
-
-    def code_define_class():
-        actions.user.insert_snippet_by_name("classDeclaration")
-
-    def code_import():
-        actions.user.insert_snippet_by_name("importStatement")
-
-    def code_comment_line_prefix():
-        actions.user.insert_snippet_by_name("commentLine")
 
     def code_insert_function(text: str, selection: str):
         text += f"({selection or ''})"
