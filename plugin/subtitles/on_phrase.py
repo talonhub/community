@@ -8,7 +8,8 @@ def on_pre_phrase(phrase: Phrase):
     if skip_phrase(phrase):
         return
 
-    current_phrase = parse_phrase(phrase)
+    words = phrase["phrase"]
+    current_phrase = " ".join(words)
     show_subtitle(current_phrase)
 
 
@@ -23,11 +24,6 @@ def skip_phrase_in_sleep(phrase: Phrase) -> bool:
         and len(phrase["parsed"]) == 1
         and phrase["parsed"][0]._name == "___ltphrase_gt__"
     )
-
-
-def parse_phrase(phrase: Phrase) -> str:
-    words = phrase["phrase"]
-    return " ".join(words)
 
 
 speech_system.register("phrase", on_pre_phrase)
