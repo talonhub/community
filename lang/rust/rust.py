@@ -271,52 +271,7 @@ class UserActions:
     def code_get_operators() -> Operators:
         return operators
 
-    # tag: comment_line
-
-    def code_comment_line_prefix():
-        actions.auto_insert("// ")
-
-    # tag: comment_documentation
-
-    def code_comment_documentation():
-        actions.auto_insert("/// ")
-
     # tag: imperative
-
-    def code_state_if():
-        actions.auto_insert("if ")
-
-    def code_state_else_if():
-        actions.auto_insert(" else if ")
-
-    def code_state_else():
-        actions.user.insert_between(" else { ", " }")
-
-    def code_state_switch():
-        actions.auto_insert("match ")
-
-    def code_state_for():
-        actions.auto_insert("for  in  {}")
-        actions.edit.left()
-        actions.key("enter")
-        actions.edit.up()
-        actions.edit.line_end()
-        repeat_call(6, actions.edit.left)
-
-    def code_state_while():
-        actions.auto_insert("while  {}")
-        actions.edit.left()
-        actions.key("enter")
-        actions.edit.up()
-        actions.edit.line_end()
-        repeat_call(2, actions.edit.left)
-
-    def code_state_infinite_loop():
-        actions.user.insert_between("loop {", "}")
-        actions.key("enter")
-
-    def code_state_return():
-        actions.auto_insert("return ")
 
     def code_break():
         actions.auto_insert("break;")
@@ -330,7 +285,7 @@ class UserActions:
         actions.auto_insert("self")
 
     def code_define_class():
-        actions.auto_insert("struct ")
+        actions.user.insert_snippet_by_name("structDeclaration")
 
     # tag: data_bool
 
@@ -387,21 +342,13 @@ class UserActions:
 
     # tag: libraries
 
-    def code_import():
-        actions.auto_insert("use ")
-
     def code_insert_library(text: str, selection: str):
-        actions.user.paste(f"use {text}")
+        actions.user.insert_snippet_by_name("importStatement", {"0": text})
 
     # rust specific grammar
 
     def code_state_implements():
-        actions.auto_insert("impl  {}")
-        actions.edit.left()
-        actions.key("enter")
-        actions.edit.up()
-        actions.edit.line_end()
-        repeat_call(2, actions.edit.left)
+        actions.user.insert_snippet_by_name("implementsStruct")
 
     def code_insert_macro(text: str, selection: str):
         if text in all_array_macro_values:
@@ -412,8 +359,7 @@ class UserActions:
             code_insert_function_or_macro(text, selection, "(", ")")
 
     def code_state_unsafe():
-        actions.user.insert_between("unsafe {", "}")
-        actions.key("enter")
+        actions.user.insert_snippet_by_name("unsafeBlock")
 
     def code_comment_documentation_block():
         actions.user.insert_between("/**", "*/")

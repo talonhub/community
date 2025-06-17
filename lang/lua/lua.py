@@ -168,51 +168,12 @@ class UserActions:
     # the tag(): user.code_imperative style declaration in the language .talon
     # file
 
-    ##
-    # code_imperative
-    ##
-    def code_state_if():
-        actions.user.insert_snippet_by_name("ifStatement")
-
-    def code_state_else_if():
-        actions.user.insert_snippet_by_name("elseIfStatement")
-
-    def code_state_else():
-        actions.user.insert_snippet_by_name("elseStatement")
-
-    def code_state_do():
-        actions.user.insert_snippet_by_name("doWhileLoopStatement")
-
-    def code_state_for():
-        actions.user.insert_snippet_by_name("forLoopStatement")
-
-    def code_state_go_to():
-        actions.user.insert_snippet_by_name("goToStatement")
-
-    def code_state_while():
-        actions.user.insert_snippet_by_name("whileLoopStatement")
-
-    def code_state_return():
-        actions.insert("return ")
-
     def code_break():
         actions.insert("break ")
-
-    def code_try_catch():
-        actions.user.insert_snippet_by_name("tryCatchStatement")
-
-    ##
-    # code_comment_line
-    ##
-    def code_comment_line_prefix():
-        actions.user.insert_snippet_by_name("commentLine")
 
     ##
     # code_comment_block
     ##
-    def code_comment_block():
-        actions.user.insert_snippet_by_name("commentBlock")
-
     def code_comment_block_prefix():
         actions.insert("--[[")
 
@@ -278,9 +239,6 @@ class UserActions:
     ##
     # code_libraries
     ##
-    def code_import():
-        actions.user.insert_snippet_by_name("importStatement")
-
     def code_insert_library(text: str, selection: str):
         substitutions = {"1": selection, "0": selection}
         actions.user.insert_snippet_by_name("importStatement", substitutions)
