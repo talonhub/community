@@ -276,9 +276,6 @@ class UserActions:
     def code_break():
         actions.auto_insert("break;")
 
-    def code_next():
-        actions.auto_insert("continue;")
-
     # tag: object_oriented
 
     def code_operator_object_accessor():

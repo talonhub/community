@@ -276,9 +276,6 @@ class UserActions:
     def code_break():
         actions.auto_insert("break")
 
-    def code_next():
-        actions.auto_insert("next")
-
     def code_insert_true():
         actions.auto_insert("TRUE")
 
