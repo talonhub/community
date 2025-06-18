@@ -216,9 +216,6 @@ class UserActions:
     def code_insert_is_not_null():
         actions.auto_insert(" is not None")
 
-    def code_state_for():
-        actions.auto_insert("for ")
-
     def code_insert_true():
         actions.auto_insert("True")
 
@@ -263,6 +260,3 @@ class UserActions:
 
     def code_break():
         actions.insert("break")
-
-    def code_next():
-        actions.insert("continue")

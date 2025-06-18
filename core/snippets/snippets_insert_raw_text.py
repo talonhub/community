@@ -13,6 +13,13 @@ mod.setting(
     desc="""The number of spaces to use for each tab in snippets inserted as raw text when converting tabs to spaces. A negative value prevents tabs from getting converted spaces.""",
 )
 
+mod.setting(
+    "snippet_raw_text_paste",
+    type=bool,
+    default=False,
+    desc="""If true, inserting snippets as raw text will always be done through pasting""",
+)
+
 RE_STOP = re.compile(r"\$(\d+|\w+)|\$\{(\d+|\w+)\}|\$\{(\d+|\w+):(.+)\}")
 
 
@@ -29,7 +36,10 @@ def insert_snippet_raw_text(body: str):
     """Insert snippet as raw text without editor support"""
     updated_snippet, stop = parse_snippet(body)
 
-    actions.insert(updated_snippet)
+    if settings.get("user.snippet_raw_text_paste"):
+        actions.user.paste(updated_snippet)
+    else:
+        actions.insert(updated_snippet)
 
     if stop:
         up(stop.rows_up)
