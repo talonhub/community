@@ -37,13 +37,9 @@ def update_stop_information(stops: list[Stop]):
         stop_stack = None
 
 
-def move_to_correct_column(start: int, end: int):
-    if start < end:
-        for _ in range(end - start):
-            actions.edit.right()
-    else:
-        for _ in range(start - end):
-            actions.edit.left()
+def move_to_correct_column(stop: Stop):
+    actions.edit.line_end()
+    left(stop.columns_left)
 
 
 def move_to_correct_row(start: int, end: int):
@@ -58,16 +54,12 @@ def move_to_correct_row(start: int, end: int):
 def go_to_next_stop():
     """Goes to the next snippet stop if it exists"""
     global stop_stack
-
     if stop_stack:
         current_stop = stop_stack.pop()
         next_stop = stop_stack[-1]
-        if current_stop.row == next_stop.row:
-            move_to_correct_column(current_stop.col, next_stop.col)
-        else:
+        if current_stop.row != next_stop.row:
             move_to_correct_row(current_stop.row, next_stop.row)
-            actions.edit.line_end()
-            left(next_stop.columns_left)
+        move_to_correct_column(next_stop)
         if len(stop_stack) <= 1:
             stop_stack = None
 
