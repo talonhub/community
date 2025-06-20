@@ -78,8 +78,7 @@ def insert_snippet_raw_text(body: str):
 
     if stop:
         up(stop.rows_up)
-        actions.edit.line_end()
-        left(stop.columns_left)
+        move_to_correct_column(stop)
 
 
 def parse_snippet(body: str):
