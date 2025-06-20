@@ -1,6 +1,6 @@
 import re
-from dataclasses import dataclass
 from collections import defaultdict
+from dataclasses import dataclass
 
 from talon import Module, actions, settings
 
@@ -16,6 +16,7 @@ mod.setting(
 INDENTATION = "    "
 RE_STOP = re.compile(r"\$(\d+|\w+)|\$\{(\d+|\w+)\}|\$\{(\d+|\w+):(.+)\}")
 LAST_SNIPPET_HOLE_KEY_VALUE = 1000
+
 
 @dataclass
 class Stop:
@@ -68,24 +69,26 @@ def update_stop_information(stops: list[Stop]):
     else:
         stop_stack = []
 
+
 def compute_stops_sorted_always_moving_left_to_right(stops: list[Stop]) -> list[Stop]:
     """Without editor support, moving from right to left is problematic. Each line of stops is sorted by the smallest snippet hole key in the line. Each line gets sorted from left to right."""
-    #Separate the stops by line keeping track of the smallest key in each line
+    # Separate the stops by line keeping track of the smallest key in each line
     lines = defaultdict(list)
     smallest_keys = defaultdict(lambda: LAST_SNIPPET_HOLE_KEY_VALUE)
     for stop in stops:
         lines[stop.row].append(stop)
         line_key = smallest_keys[stop.row]
         smallest_keys[stop.row] = min(line_key, key(stop))
-                
+
     sorted_stops: list[Stop] = []
-    #Sort lines by key
+    # Sort lines by key
     sorted_lines = sorted(lines.values(), key=lambda line: smallest_keys[line[0].row])
-    #Add every line sorted from left to right
+    # Add every line sorted from left to right
     for line in sorted_lines:
         sorted_line = sorted(line, key=lambda stop: stop.col)
         sorted_stops.extend(sorted_line)
     return sorted_stops
+
 
 def move_to_correct_column(stop: Stop):
     actions.edit.line_end()
