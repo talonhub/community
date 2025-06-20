@@ -79,9 +79,6 @@ class UserActions:
     def code_insert_is_not_null():
         actions.auto_insert(" != null")
 
-    def code_break():
-        actions.auto_insert("break;")
-
     def code_insert_true():
         actions.auto_insert("true")
 

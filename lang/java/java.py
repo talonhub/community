@@ -150,9 +150,6 @@ class UserActions:
     def code_insert_is_not_null():
         actions.insert(" != null")
 
-    def code_break():
-        actions.insert("break;")
-
     def code_insert_true():
         actions.insert("true")
 
