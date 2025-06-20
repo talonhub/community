@@ -3,7 +3,7 @@ import re
 from talon import Module, actions
 
 from .snippet_types import Snippet
-from .snippets_insert_raw_text import go_to_next_stop, insert_snippet_raw_text
+from .snippets_insert_raw_text import go_to_next_stop_raw, insert_snippet_raw_text
 
 mod = Module()
 
@@ -16,7 +16,7 @@ class Actions:
 
     def move_cursor_to_next_snippet_stop():
         """Moves the cursor to the next snippet stop"""
-        go_to_next_stop()
+        go_to_next_stop_raw()
 
     def insert_snippet_by_name(
         name: str,

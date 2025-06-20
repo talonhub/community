@@ -27,7 +27,7 @@ class Stop:
 
 stop_stack: list[Stop] = []
 
-def go_to_next_stop():
+def go_to_next_stop_raw():
     """Goes to the next snippet stop if it exists"""
     global stop_stack
     if len(stop_stack) > 1:
