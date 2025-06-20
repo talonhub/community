@@ -2,7 +2,7 @@ import re
 from collections import defaultdict
 from dataclasses import dataclass
 
-from talon import Module, actions, settings, app
+from talon import Module, actions, app, settings
 
 mod = Module()
 
@@ -82,10 +82,14 @@ def compute_stops_sorted_always_moving_left_to_right(stops: list[Stop]) -> list[
 
     # If a line was from right to left, notify user and sort
     if is_any_line_from_right_to_left(lines.values()):
-        app.notify("The snippet you inserted got adjusted to move from left to right because editor support is unavailable.")
+        app.notify(
+            "The snippet you inserted got adjusted to move from left to right because editor support is unavailable."
+        )
         sorted_stops: list[Stop] = []
         # Sort lines by key
-        sorted_lines = sorted(lines.values(), key=lambda line: smallest_keys[line[0].row])
+        sorted_lines = sorted(
+            lines.values(), key=lambda line: smallest_keys[line[0].row]
+        )
         # Add every line sorted from left to right
         for line in sorted_lines:
             sorted_line = sorted(line, key=lambda stop: stop.col)
@@ -102,14 +106,14 @@ def is_any_line_from_right_to_left(lines) -> bool:
             stop_key = key(stop)
             for next_stop in line[1:]:
                 next_key = key(next_stop)
-                # If the ordering between the keys and columns are inconsistent, 
+                # If the ordering between the keys and columns are inconsistent,
                 # the stops on this line go from right to left
                 if next_key < stop_key != stop.col < next_stop.col:
                     return True
                 stop_key = next_key
                 stop = next_stop
     return False
-    
+
 
 def move_to_correct_column(stop: Stop):
     actions.edit.line_end()
