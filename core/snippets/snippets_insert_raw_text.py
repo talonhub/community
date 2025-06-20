@@ -80,18 +80,18 @@ def compute_stops_sorted_always_moving_left_to_right(stops: list[Stop]) -> list[
         line_key = smallest_keys[stop.row]
         smallest_keys[stop.row] = min(line_key, key(stop))
 
-    sorted_stops: list[Stop] = []
-    # Sort lines by key
-    sorted_lines = sorted(lines.values(), key=lambda line: smallest_keys[line[0].row])
-    # Add every line sorted from left to right
-    for line in sorted_lines:
-        sorted_line = sorted(line, key=lambda stop: stop.col)
-        sorted_stops.extend(sorted_line)
-    
-    # If a line was from right to left, notify user
+    # If a line was from right to left, notify user and sort
     if is_any_line_from_right_to_left(lines.values()):
         app.notify("The snippet you inserted got adjusted to move from left to right because editor support is unavailable.")
-    return sorted_stops
+        sorted_stops: list[Stop] = []
+        # Sort lines by key
+        sorted_lines = sorted(lines.values(), key=lambda line: smallest_keys[line[0].row])
+        # Add every line sorted from left to right
+        for line in sorted_lines:
+            sorted_line = sorted(line, key=lambda stop: stop.col)
+            sorted_stops.extend(sorted_line)
+        return sorted_stops
+    return sorted(stops, key=key)
 
 
 def is_any_line_from_right_to_left(lines) -> bool:
