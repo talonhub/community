@@ -1,5 +1,6 @@
 import re
 from dataclasses import dataclass
+from collections import defaultdict
 
 from talon import Module, actions, settings
 
@@ -14,7 +15,7 @@ mod.setting(
 
 INDENTATION = "    "
 RE_STOP = re.compile(r"\$(\d+|\w+)|\$\{(\d+|\w+)\}|\$\{(\d+|\w+):(.+)\}")
-
+LAST_SNIPPET_HOLE_KEY_VALUE = 1000
 
 @dataclass
 class Stop:
@@ -44,9 +45,10 @@ def go_to_next_stop_raw():
 def insert_snippet_raw_text(body: str):
     """Insert snippet as raw text without editor support"""
     updated_snippet, stops = parse_snippet(body)
-    stop = get_first_stop(stops)
+    sorted_stops = compute_stops_sorted_always_moving_left_to_right(stops)
+    stop = get_first_stop(sorted_stops)
 
-    update_stop_information(stops)
+    update_stop_information(sorted_stops)
 
     if settings.get("user.snippet_raw_text_paste"):
         actions.user.paste(updated_snippet)
@@ -66,6 +68,24 @@ def update_stop_information(stops: list[Stop]):
     else:
         stop_stack = []
 
+def compute_stops_sorted_always_moving_left_to_right(stops: list[Stop]) -> list[Stop]:
+    """Without editor support, moving from right to left is problematic. Each line of stops is sorted by the smallest snippet hole key in the line. Each line gets sorted from left to right."""
+    #Separate the stops by line keeping track of the smallest key in each line
+    lines = defaultdict(list)
+    smallest_keys = defaultdict(lambda: LAST_SNIPPET_HOLE_KEY_VALUE)
+    for stop in stops:
+        lines[stop.row].append(stop)
+        line_key = smallest_keys[stop.row]
+        smallest_keys[stop.row] = min(line_key, key(stop))
+                
+    sorted_stops: list[Stop] = []
+    #Sort lines by key
+    sorted_lines = sorted(lines.values(), key=lambda line: smallest_keys[line[0].row])
+    #Add every line sorted from left to right
+    for line in sorted_lines:
+        sorted_line = sorted(line, key=lambda stop: stop.col)
+        sorted_stops.extend(sorted_line)
+    return sorted_stops
 
 def move_to_correct_column(stop: Stop):
     actions.edit.line_end()
@@ -140,7 +160,7 @@ def left(n: int):
 
 def key(stop: Stop):
     if stop.name == "0":
-        return 1000
+        return LAST_SNIPPET_HOLE_KEY_VALUE
     if stop.name.isdigit():
         return int(stop.name)
     return 999
@@ -149,7 +169,6 @@ def key(stop: Stop):
 def get_first_stop(stops: list[Stop]):
     if not stops:
         return None
-    stops.sort(key=key)
     stop = stops[0]
     if stop.rows_up == 0 and stop.columns_left == 0:
         return None
