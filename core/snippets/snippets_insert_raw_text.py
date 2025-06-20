@@ -25,16 +25,13 @@ class Stop:
     col: int
 
 
-stop_stack: list[Stop] | None = None
+stop_stack: list[Stop] = []
 
 
 def update_stop_information(stops: list[Stop]):
     global stop_stack
-    if len(stops) > 1:
-        stop_stack = stops
-        stop_stack.reverse()
-    else:
-        stop_stack = None
+    stop_stack = stops
+    stop_stack.reverse()
 
 
 def move_to_correct_column(stop: Stop):
@@ -54,14 +51,12 @@ def move_to_correct_row(start: int, end: int):
 def go_to_next_stop():
     """Goes to the next snippet stop if it exists"""
     global stop_stack
-    if stop_stack:
+    if len(stop_stack) > 1:
         current_stop = stop_stack.pop()
         next_stop = stop_stack[-1]
         if current_stop.row != next_stop.row:
             move_to_correct_row(current_stop.row, next_stop.row)
         move_to_correct_column(next_stop)
-        if len(stop_stack) <= 1:
-            stop_stack = None
 
 
 def insert_snippet_raw_text(body: str):
