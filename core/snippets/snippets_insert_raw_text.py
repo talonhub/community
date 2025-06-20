@@ -66,6 +66,7 @@ def update_stop_information(stops: list[Stop]):
     else:
         stop_stack = []
 
+
 def move_to_correct_column(stop: Stop):
     actions.edit.line_end()
     left(stop.columns_left)
