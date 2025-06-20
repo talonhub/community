@@ -37,6 +37,8 @@ def go_to_next_stop_raw():
         if current_stop.row != next_stop.row:
             move_to_correct_row(current_stop.row, next_stop.row)
         move_to_correct_column(next_stop)
+    else:
+        stop_stack = []
 
 
 def insert_snippet_raw_text(body: str):
@@ -58,9 +60,11 @@ def insert_snippet_raw_text(body: str):
 
 def update_stop_information(stops: list[Stop]):
     global stop_stack
-    stop_stack = stops
-    stop_stack.reverse()
-
+    if len(stops) > 1:
+        stop_stack = stops[:]
+        stop_stack.reverse()
+    else:
+        stop_stack = []
 
 def move_to_correct_column(stop: Stop):
     actions.edit.line_end()
