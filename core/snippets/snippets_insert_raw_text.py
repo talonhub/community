@@ -27,27 +27,6 @@ class Stop:
 
 stop_stack: list[Stop] = []
 
-
-def update_stop_information(stops: list[Stop]):
-    global stop_stack
-    stop_stack = stops
-    stop_stack.reverse()
-
-
-def move_to_correct_column(stop: Stop):
-    actions.edit.line_end()
-    left(stop.columns_left)
-
-
-def move_to_correct_row(start: int, end: int):
-    if start < end:
-        for _ in range(end - start):
-            actions.edit.down()
-    else:
-        for _ in range(start - end):
-            actions.edit.up()
-
-
 def go_to_next_stop():
     """Goes to the next snippet stop if it exists"""
     global stop_stack
@@ -74,6 +53,25 @@ def insert_snippet_raw_text(body: str):
     if stop:
         up(stop.rows_up)
         move_to_correct_column(stop)
+
+def update_stop_information(stops: list[Stop]):
+    global stop_stack
+    stop_stack = stops
+    stop_stack.reverse()
+
+
+def move_to_correct_column(stop: Stop):
+    actions.edit.line_end()
+    left(stop.columns_left)
+
+
+def move_to_correct_row(start: int, end: int):
+    if start < end:
+        for _ in range(end - start):
+            actions.edit.down()
+    else:
+        for _ in range(start - end):
+            actions.edit.up()
 
 
 def parse_snippet(body: str):
