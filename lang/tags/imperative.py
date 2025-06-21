@@ -69,6 +69,7 @@ class Actions:
 
     def code_break():
         """Inserts break statement"""
+        actions.user.insert_snippet_by_name("breakStatement")
 
     def code_next():
         """Inserts next/continue statement"""

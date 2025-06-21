@@ -93,9 +93,6 @@ class UserActions:
         actions.auto_insert("isset()")
         actions.edit.left()
 
-    def code_break():
-        actions.insert("break;")
-
     def code_default_function(text: str):
         actions.user.code_public_function(text)
 
