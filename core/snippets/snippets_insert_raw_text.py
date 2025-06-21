@@ -1,9 +1,25 @@
 import re
 from dataclasses import dataclass
 
-from talon import actions
+from talon import Module, actions, settings
 
-INDENTATION = "    "
+mod = Module()
+
+
+mod.setting(
+    "snippet_raw_text_spaces_per_tab",
+    type=int,
+    default=4,
+    desc="""The number of spaces per tab when inserting snippets as raw text. Set to -1 to insert tabs as tabs, such as in code editors that can expand tabs in pasted or typed text. This setting is provided for applications like web browsers and chat apps.""",
+)
+
+mod.setting(
+    "snippet_raw_text_paste",
+    type=bool,
+    default=False,
+    desc="""If true, inserting snippets as raw text will always be done through pasting""",
+)
+
 RE_STOP = re.compile(r"\$(\d+|\w+)|\$\{(\d+|\w+)\}|\$\{(\d+|\w+):(.+)\}")
 
 
@@ -20,7 +36,10 @@ def insert_snippet_raw_text(body: str):
     """Insert snippet as raw text without editor support"""
     updated_snippet, stop = parse_snippet(body)
 
-    actions.insert(updated_snippet)
+    if settings.get("user.snippet_raw_text_paste"):
+        actions.user.paste(updated_snippet)
+    else:
+        actions.insert(updated_snippet)
 
     if stop:
         up(stop.rows_up)
@@ -28,9 +47,17 @@ def insert_snippet_raw_text(body: str):
         left(stop.columns_left)
 
 
+def format_tabs(text: str) -> str:
+    """Possibly replaces tabs with spaces in the given text."""
+    spaces_per_tab: int = settings.get("user.snippet_raw_text_spaces_per_tab")
+    if spaces_per_tab < 0:
+        return text
+    return re.sub(r"\t", " " * spaces_per_tab, text)
+
+
 def parse_snippet(body: str):
     # Some IM services will send the message on a tab
-    body = re.sub(r"\t", INDENTATION, body)
+    body = format_tabs(body)
 
     # Replace variable with appropriate value/text
     body = re.sub(r"\$TM_SELECTED_TEXT", lambda _: actions.edit.selected_text(), body)

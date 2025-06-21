@@ -61,6 +61,7 @@ class Actions:
 
     def code_state_infinite_loop():
         """Inserts infinite loop statement"""
+        actions.user.insert_snippet_by_name("infiniteLoopStatement")
 
     def code_state_return():
         """Inserts return statement"""
@@ -68,9 +69,11 @@ class Actions:
 
     def code_break():
         """Inserts break statement"""
+        actions.user.insert_snippet_by_name("breakStatement")
 
     def code_next():
         """Inserts next/continue statement"""
+        actions.user.insert_snippet_by_name("continueStatement")
 
     def code_try_catch():
         """Inserts try/catch. If selection is true, does so around the selection"""
