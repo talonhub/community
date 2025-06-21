@@ -10,7 +10,7 @@ mod.setting(
     "snippet_raw_text_spaces_per_tab",
     type=int,
     default=4,
-    desc="""The number of spaces to use for each tab in snippets inserted as raw text when converting tabs to spaces. A negative value prevents tabs from getting converted to spaces. This should usually be negative for actual code editors because they can usually handle tabs correctly. This setting is provided applications like web browsers and chat apps.""",
+    desc="""The number of spaces per tab when inserting snippets as raw text. Set to -1 to insert tabs as tabs, such as in code editors that can expand tabs in pasted or typed text. This setting is provided for applications like web browsers and chat apps.""",
 )
 
 mod.setting(
