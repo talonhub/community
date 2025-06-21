@@ -78,7 +78,7 @@ settings():
     # .snippet files. Changing this setting requires a restart of Talon.
     # user.snippets_dir = "snippets"
 
-    # Set the number of spaces to convert each tab to for inserting snippets without editor support. A negative number means that tabs will not be converted to spaces. This setting should usually be set to a negative number for actual code editors because they can usually format tabs correctly. This setting is available for contexts like web browsers and chat applications that do not understand code formatting.
+     # Set to the number of spaces to use for each tab when inserting snippets as raw text (without editor support). Set to -1 to insert tabs as tabs, such as in code editors that can expand tabs in pasted or typed text. This setting is provided for applications like web browsers and chat apps that do not understand code formatting.
     user.snippet_raw_text_spaces_per_tab = 4
 
     # Uncomment to insert text longer than 10 characters (customizable) by pasting from
