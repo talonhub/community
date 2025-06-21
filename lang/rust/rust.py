@@ -273,9 +273,6 @@ class UserActions:
 
     # tag: imperative
 
-    def code_break():
-        actions.auto_insert("break;")
-
     # tag: object_oriented
 
     def code_operator_object_accessor():
