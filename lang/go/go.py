@@ -133,12 +133,6 @@ class UserActions:
     def code_insert_is_not_null():
         actions.insert(" != nil")
 
-    def code_break():
-        actions.insert("break")
-
-    def code_next():
-        actions.insert("continue")
-
     def code_insert_true():
         actions.insert("true")
 

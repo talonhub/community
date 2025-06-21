@@ -91,12 +91,6 @@ class UserActions:
     def code_block():
         actions.auto_insert("\n")
 
-    def code_break():
-        actions.insert("break")
-
-    def code_next():
-        actions.insert("continue")
-
     # libraries.py
     def code_insert_library(text: str, selection: str):
         library_text = text + selection
