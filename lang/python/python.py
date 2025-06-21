@@ -257,6 +257,3 @@ class UserActions:
 
     def code_insert_return_type(type: str):
         actions.insert(f" -> {type}")
-
-    def code_break():
-        actions.insert("break")
