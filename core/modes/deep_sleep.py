@@ -24,10 +24,6 @@ class Actions:
         apps. With this tag active, any sleep command triggers deep
         sleep.
 
-        When activating the tag on a per application basis, you must
-        remember to explicitly match sleep mode, as command mode is
-        implicitly matched by default.
-
         You can also manually activate deep sleep by defining a custom
         voice command using this action.
 
