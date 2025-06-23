@@ -131,7 +131,7 @@ def is_any_line_from_right_to_left(lines) -> bool:
 
 def move_to_correct_column(stop: Stop):
     actions.edit.line_end()
-    left(stop.columns_left)
+    move_cursor_left(stop.columns_left)
 
 
 def move_to_correct_row(current_stop: Stop, next_stop: Stop):
@@ -204,7 +204,7 @@ def up(n: int):
         actions.edit.up()
 
 
-def left(n: int):
+def move_cursor_left(n: int):
     """Move cursor left <n> columns"""
     for _ in range(n):
         actions.edit.left()
