@@ -32,6 +32,14 @@ class Stop:
     columns_left: int
     row: int
     col: int
+    
+    def compute_sorting_key(self) -> int:
+        """Returns a key value used to sort stops"""
+        if self.name == "0":
+            return LAST_SNIPPET_HOLE_KEY_VALUE
+        if self.name.isdigit():
+            return int(self.name)
+        return 999
 
 
 stop_stack: list[Stop] = []
@@ -84,7 +92,7 @@ def compute_stops_sorted_always_moving_left_to_right(stops: list[Stop]) -> list[
     for stop in stops:
         lines[stop.row].append(stop)
         line_key = smallest_keys[stop.row]
-        smallest_keys[stop.row] = min(line_key, key(stop))
+        smallest_keys[stop.row] = min(line_key, stop.compute_sorting_key())
 
     # If a line was from right to left, notify user and sort
     if is_any_line_from_right_to_left(lines.values()):
@@ -101,7 +109,7 @@ def compute_stops_sorted_always_moving_left_to_right(stops: list[Stop]) -> list[
             sorted_line = sorted(line, key=lambda stop: stop.col)
             sorted_stops.extend(sorted_line)
         return sorted_stops
-    return sorted(stops, key=key)
+    return sorted(stops, key=lambda stop: stop.compute_sorting_key())
 
 
 def is_any_line_from_right_to_left(lines) -> bool:
@@ -109,9 +117,9 @@ def is_any_line_from_right_to_left(lines) -> bool:
         # Lines with only one stop are always in order
         if len(line) > 1:
             stop = line[0]
-            stop_key = key(stop)
+            stop_key = stop.compute_sorting_key()
             for next_stop in line[1:]:
-                next_key = key(next_stop)
+                next_key = next_stop.compute_sorting_key()
                 # If the ordering between the keys and columns are inconsistent,
                 # the stops on this line go from right to left
                 if next_key < stop_key != stop.col < next_stop.col:
@@ -199,14 +207,6 @@ def left(n: int):
     """Move cursor left <n> columns"""
     for _ in range(n):
         actions.edit.left()
-
-
-def key(stop: Stop):
-    if stop.name == "0":
-        return LAST_SNIPPET_HOLE_KEY_VALUE
-    if stop.name.isdigit():
-        return int(stop.name)
-    return 999
 
 
 def get_first_stop(stops: list[Stop]):
