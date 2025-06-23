@@ -43,8 +43,7 @@ def go_to_next_stop_raw():
     if len(stop_stack) > 1:
         current_stop = stop_stack.pop()
         next_stop = stop_stack[-1]
-        if current_stop.row != next_stop.row:
-            move_to_correct_row(current_stop.row, next_stop.row)
+        move_to_correct_row(current_stop, next_stop)
         move_to_correct_column(next_stop)
     else:
         stop_stack = []
@@ -127,14 +126,15 @@ def move_to_correct_column(stop: Stop):
     left(stop.columns_left)
 
 
-def move_to_correct_row(start: int, end: int):
+def move_to_correct_row(current_stop: Stop, next_stop: Stop):
+    start = current_stop.row
+    end = next_stop.row
     if start < end:
         for _ in range(end - start):
             actions.edit.down()
-    else:
+    elif start > end:
         for _ in range(start - end):
             actions.edit.up()
-
 
 def format_tabs(text: str) -> str:
     """Possibly replaces tabs with spaces in the given text."""
