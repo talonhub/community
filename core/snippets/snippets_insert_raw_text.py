@@ -32,7 +32,7 @@ class Stop:
     columns_left: int
     row: int
     col: int
-    
+
     def compute_sorting_key(self) -> int:
         """Returns a key value used to sort stops"""
         if self.name == "0":
@@ -143,6 +143,7 @@ def move_to_correct_row(current_stop: Stop, next_stop: Stop):
     elif start > end:
         for _ in range(start - end):
             actions.edit.up()
+
 
 def format_tabs(text: str) -> str:
     """Possibly replaces tabs with spaces in the given text."""
