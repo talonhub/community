@@ -1,6 +1,5 @@
 from talon import Context, Module, actions
 
-c_like_ctx = Context()
 mod = Module()
 
 mod.tag(
@@ -8,11 +7,6 @@ mod.tag(
     desc="Tag for enabling basic imperative programming commands (loops, functions, etc)",
 )
 mod.tag("code_block_c_like", desc="Language uses C style code blocks, i.e. braces")
-
-c_like_ctx.matches = """
-tag: user.code_block_c_like
-"""
-
 
 @mod.action_class
 class Actions:
