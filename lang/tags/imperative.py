@@ -8,6 +8,7 @@ mod.tag(
 )
 mod.tag("code_block_c_like", desc="Language uses C style code blocks, i.e. braces")
 
+
 @mod.action_class
 class Actions:
     def code_block():
@@ -73,4 +74,3 @@ class Actions:
     def code_try_catch():
         """Inserts try/catch. If selection is true, does so around the selection"""
         actions.user.insert_snippet_by_name("tryCatchStatement")
-
