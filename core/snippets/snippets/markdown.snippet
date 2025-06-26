@@ -6,7 +6,50 @@ phrase: link
 
 $1.wrapperPhrase: link
 -
-[$1]($0)
+[$0]($1)
+---
+
+name: image
+phrase: image
+-
+![$0]($1)
+---
+
+
+name: checkbox
+phrase: to do | check box | tick box
+-
+* [ ] $0
+---
+
+name: bold
+phrase: bold
+-
+**$0**
+---
+
+name: italic
+phrase: italic
+-
+*$0*
+---
+
+name: italic bold
+phrase: italic bold | bold italic
+-
+***$0***
+---
+
+name: quote
+phrase: quote
+-
+> $0
+---
+
+name: comment
+phrase: comment
+-
+<!-- $0 -->
 ---
 
 name: image
