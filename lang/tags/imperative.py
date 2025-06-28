@@ -6,8 +6,6 @@ mod.tag(
     "code_imperative",
     desc="Tag for enabling basic imperative programming commands (loops, functions, etc)",
 )
-mod.tag("code_block_c_like", desc="Language uses C style code blocks, i.e. braces")
-
 
 @mod.action_class
 class Actions:
