@@ -122,9 +122,7 @@ def is_any_line_from_right_to_left(lines) -> bool:
                 next_key = next_stop.compute_sorting_key()
                 # If the ordering between the keys and columns are inconsistent,
                 # the stops on this line go from right to left
-                is_next_key_smaller = next_key < stop_key
-                is_next_col_smaller = next_stop.col < stop.col
-                if is_next_key_smaller != is_next_col_smaller:
+                if (next_key < stop_key) != (next_stop.col < stop.col):
                     return True
                 stop_key = next_key
                 stop = next_stop
