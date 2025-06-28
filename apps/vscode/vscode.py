@@ -431,3 +431,6 @@ class UserActions:
 
     def insert_snippet(body: str):
         actions.user.run_rpc_command("editor.action.insertSnippet", {"snippet": body})
+
+    def move_cursor_to_next_snippet_stop():
+        actions.user.vscode("jumpToNextSnippetPlaceholder")
