@@ -17,7 +17,7 @@ settings():
 
 arg {user.code_parameter_name}: user.code_insert_named_argument(code_parameter_name)
 
-state for val: user.code_state_for()
+state for val: user.insert_snippet_by_name("forLoopStatement")
 
 # alternative to saying ""state import""
 s s c install: user.code_import()
