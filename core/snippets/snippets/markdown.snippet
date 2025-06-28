@@ -4,5 +4,42 @@ language: markdown
 name: link
 phrase: link
 -
-[$1]($0)
+[$1]($2) $0
+---
+
+name: image
+phrase: image
+-
+![$1]($2) $0
+---
+
+
+name: checkbox
+phrase: to do | check box | tick box
+-
+* [ ] $0
+---
+
+name: bold
+phrase: bold
+-
+**$0**
+---
+
+name: italic
+phrase: italic
+-
+*$0*
+---
+
+name: italic bold
+phrase: italic bold | bold italic
+-
+***$0***
+---
+
+name: quote
+phrase: quote
+-
+> $0
 ---
