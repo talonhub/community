@@ -146,69 +146,11 @@ class UserActions:
     def code_insert_is_not_null():
         actions.insert(" != null")
 
-    def code_state_if():
-        actions.insert("if () ")
-        actions.edit.left()
-        actions.edit.left()
-
-    def code_state_else_if():
-        actions.insert("else if () ")
-        actions.edit.left()
-        actions.edit.left()
-
-    def code_state_else():
-        actions.insert("else ")
-
-    def code_state_switch():
-        actions.insert("match {\n")
-
-    def code_state_case():
-        actions.insert("case  => ")
-        actions.edit.left()
-        actions.edit.left()
-        actions.edit.left()
-        actions.edit.left()
-
-    def code_state_for():
-        actions.insert("for () ")
-        actions.edit.left()
-        actions.edit.left()
-
-    def code_state_while():
-        actions.insert("while () ")
-        actions.edit.left()
-        actions.edit.left()
-
-    def code_break():
-        actions.insert("break")
-
-    def code_next():
-        actions.insert("continue")
-
     def code_insert_true():
         actions.insert("true")
 
     def code_insert_false():
         actions.insert("false")
-
-    def code_define_class():
-        actions.insert("class ")
-
-    def code_import():
-        actions.insert("import ")
-
-    def code_state_return():
-        actions.insert("return ")
-
-    def code_comment_line_prefix():
-        actions.insert("// ")
-
-    def code_comment_block():
-        actions.insert("/*")
-        actions.key("enter")
-        actions.key("enter")
-        actions.insert("*/")
-        actions.edit.up()
 
     def code_comment_block_prefix():
         actions.insert("/*")

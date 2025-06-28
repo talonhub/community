@@ -79,62 +79,11 @@ class UserActions:
     def code_insert_is_not_null():
         actions.auto_insert(" != null")
 
-    def code_state_if():
-        actions.user.insert_between("if(", ")")
-
-    def code_state_else_if():
-        actions.user.insert_between("else if(", ")")
-
-    def code_state_else():
-        actions.insert("else\n{\n}\n")
-        actions.key("up")
-
-    def code_state_switch():
-        actions.user.insert_between("switch(", ")")
-
-    def code_state_case():
-        actions.insert("case \nbreak;")
-        actions.edit.up()
-
-    def code_state_for():
-        actions.auto_insert("for ")
-
-    def code_state_for_each():
-        actions.insert("foreach() ")
-        actions.key("left")
-        actions.edit.word_left()
-        actions.key("space")
-        actions.edit.left()
-
-    def code_state_go_to():
-        actions.auto_insert("go to ")
-
-    def code_state_while():
-        actions.user.insert_between("while(", ")")
-
-    def code_state_return():
-        actions.auto_insert("return ")
-
-    def code_break():
-        actions.auto_insert("break;")
-
-    def code_next():
-        actions.auto_insert("continue;")
-
     def code_insert_true():
         actions.auto_insert("true")
 
     def code_insert_false():
         actions.auto_insert("false")
-
-    def code_define_class():
-        actions.auto_insert("class ")
-
-    def code_import():
-        actions.auto_insert("using  ")
-
-    def code_comment_line_prefix():
-        actions.auto_insert("//")
 
     def code_insert_function(text: str, selection: str):
         text += f"({selection or ''})"

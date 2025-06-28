@@ -334,6 +334,10 @@ def get_search_commands(phrase: str) -> dict[str, tuple[str, str]]:
     for token in tokens[1:]:
         viable_commands &= rule_word_map[token]
 
+    # sets have no stable sort order, unlike dicts
+    viable_commands = list(viable_commands)
+    viable_commands.sort()
+
     commands_grouped = defaultdict(list)
     for context, rule in viable_commands:
         command = context_command_map[context][rule]
@@ -572,8 +576,9 @@ def gui_list_help(gui: imgui.GUI):
 
     gui.line()
 
-    for key, value in pages_list[current_list_page - 1].items():
-        gui.text(f"{value}: {key}")
+    if len(pages_list) > 0:
+        for key, value in pages_list[current_list_page - 1].items():
+            gui.text(f"{value}: {key}")
 
     gui.spacer()
 

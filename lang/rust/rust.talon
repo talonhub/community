@@ -44,8 +44,6 @@ state enum <user.text>:
     insert("enum ")
     insert(user.formatted_text(text, "PUBLIC_CAMEL_CASE"))
 
-toggle use: user.code_toggle_libraries()
-
 ## Simple aliases
 borrow: "&"
 borrow mutable: "&mut "
@@ -71,7 +69,7 @@ state use: user.code_import()
 
 use <user.code_libraries>:
     user.code_insert_library(code_libraries, "")
-    key(; enter)
+    key(enter)
 
 ## specialist flow control
 state if let some: user.insert_between("if let Some(", ")")
