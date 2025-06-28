@@ -32,6 +32,7 @@ state end: "end"
 state begin: "begin"
 state rescue: "rescue "
 state module: "module "
+state do: user.code_state_do()
 
 ^instance <user.text>$:
     insert("@")
