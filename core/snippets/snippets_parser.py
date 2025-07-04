@@ -134,7 +134,7 @@ def is_variable_in_body(variable_name: str, body: str) -> bool:
 
 def create_variable_regular_expression(variable_name: str) -> str:
     # $value or ${value} or ${value:default}
-    return rf"\${variable_name}|\${{{variable_name}.*}}"
+    return rf"\${variable_name}|\${{{variable_name}.*?}}"
 
 
 def combine_variables(
