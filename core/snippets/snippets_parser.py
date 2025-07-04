@@ -5,6 +5,9 @@ from typing import Callable, Union
 
 from .snippet_types import Snippet, SnippetVariable
 
+# The final stop gets this name if replaced with a final stop after it
+FINAL_STOP_REPLACEMENT_NAME = "999"
+
 
 class SnippetDocument:
     file: str
@@ -53,20 +56,43 @@ def create_snippet(
     document: SnippetDocument,
     default_context: SnippetDocument,
 ) -> Snippet | None:
+    body, variables = format_snippet_body_and_variables(document, default_context)
+
     snippet = Snippet(
         name=document.name or default_context.name or "",
         description=document.description or default_context.description,
         languages=document.languages or default_context.languages,
         phrases=document.phrases or default_context.phrases,
         insertion_scopes=document.insertionScopes or default_context.insertionScopes,
-        variables=combine_variables(default_context.variables, document.variables),
-        body=normalize_snippet_body_tabs(document.body),
+        variables=variables,
+        body=body,
     )
 
     if not validate_snippet(document, snippet):
         return None
 
     return snippet
+
+
+def format_snippet_body_and_variables(
+    document: SnippetDocument, default_context: SnippetDocument
+) -> tuple[str, list[SnippetVariable]]:
+    body = normalize_snippet_body_tabs(document.body)
+    variables = combine_variables(default_context.variables, document.variables)
+    # If a final stop should be added to the end, update the body and variables accordingly
+    if body:
+        body_with_final_stop_at_the_end = add_final_snippet_stop(body)
+        # This is an efficient way to check if the body was changed because adding a stop changes the length
+        if len(body_with_final_stop_at_the_end) != len(body):
+            body = body_with_final_stop_at_the_end
+            replace_variables_for_final_stop(variables)
+    return body, variables
+
+
+def replace_variables_for_final_stop(variables):
+    for variable in variables:
+        if variable.name == "0":
+            variable.name = FINAL_STOP_REPLACEMENT_NAME
 
 
 def validate_snippet(document: SnippetDocument, snippet: Snippet) -> bool:
@@ -110,8 +136,14 @@ def validate_snippet(document: SnippetDocument, snippet: Snippet) -> bool:
 
 
 def is_variable_in_body(variable_name: str, body: str) -> bool:
+    return (
+        re.search(create_variable_regular_expression(variable_name), body) is not None
+    )
+
+
+def create_variable_regular_expression(variable_name: str) -> str:
     # $value or ${value} or ${value:default}
-    return re.search(rf"\${variable_name}|\${{{variable_name}.*}}", body) is not None
+    return rf"\${variable_name}|\${{{variable_name}.*?}}"
 
 
 def combine_variables(
@@ -136,6 +168,33 @@ def combine_variables(
             new_variable.wrapper_scope = variable.wrapper_scope
 
     return list(variables.values())
+
+
+def add_final_snippet_stop(body: str | None) -> str:
+    """This makes the snippet end with a final snippet hole so the user can get to the end of the snippet using the snippet next action."""
+    if not body:
+        return ""
+
+    final_stop_matches = find_variable_matches("0", body)
+
+    # If the snippet body already ends with a final snippet stop, make no change.
+    if len(final_stop_matches) > 0 and final_stop_matches[-1].end() == len(body):
+        return body
+
+    # Dealing with matches in reverse means replacing a match
+    # does not change the location of the remaining matches.
+    for match in reversed(final_stop_matches):
+        replacement = match.group().replace("0", FINAL_STOP_REPLACEMENT_NAME, 1)
+        body = body[: match.start()] + replacement + body[match.end() :]
+
+    return body + "${0}"
+
+
+def find_variable_matches(variable_name: str, body: str) -> list[re.Match[str]]:
+    """Find every match of a variable in the body"""
+    expression = create_variable_regular_expression(variable_name)
+    matches = [m for m in re.finditer(expression, body)]
+    return matches
 
 
 def normalize_snippet_body_tabs(body: str | None) -> str:
