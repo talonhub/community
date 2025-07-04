@@ -110,12 +110,12 @@ def validate_snippet(document: SnippetDocument, snippet: Snippet) -> bool:
 
 
 def is_variable_in_body(variable_name: str, body: str) -> bool:
-    return find_variable_in_body(variable_name, body) is not None
+    return re.search(create_variable_regular_expression(variable_name), body) is not None
 
 
-def find_variable_in_body(variable_name: str, body: str) -> re.Match | None:
-    # $value or ${value} or ${value:default}
-    return re.search(rf"\${variable_name}|\${{{variable_name}.*}}", body)
+def create_variable_regular_expression(variable_name: str) -> str:
+    """Create a regular expression to match a variable in the snippet body."""
+    return rf"\${variable_name}|\${{{variable_name}.*}}"
 
 
 def combine_variables(
@@ -146,15 +146,16 @@ def add_final_snippet_stop(body: str | None) -> str:
     if not body:
         return ""
 
-    final_stop = find_variable_in_body("0", body)
+    final_stop_expression = create_variable_regular_expression("0")
+    final_stop_matches = [m for m in re.finditer(final_stop_expression, body)]
 
     # If the snippet body already ends with a final snippet stop, make no change.
-    if final_stop is not None and final_stop.end() == len(body):
+    if len(final_stop_matches) > 0 and final_stop_matches[-1].end() == len(body):
         return body
     
-    if final_stop is not None:
-        # This must change the original final stop
-        body = body[: final_stop.start()] + "${999}" + body[final_stop.end():]
+    for match in reversed(final_stop_matches):
+        body = body[: match.start()] + "${999}" + body[match.end() :]
+        
     return body + "${0}"
 
 
