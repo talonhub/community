@@ -60,7 +60,7 @@ def create_snippet(
         phrases=document.phrases or default_context.phrases,
         insertion_scopes=document.insertionScopes or default_context.insertionScopes,
         variables=combine_variables(default_context.variables, document.variables),
-        body=normalize_snippet_body_tabs(document.body),
+        body=add_final_snippet_stop(normalize_snippet_body_tabs(document.body)),
     )
 
     if not validate_snippet(document, snippet):
@@ -110,8 +110,12 @@ def validate_snippet(document: SnippetDocument, snippet: Snippet) -> bool:
 
 
 def is_variable_in_body(variable_name: str, body: str) -> bool:
+    return find_variable_in_body(variable_name, body) is not None
+
+
+def find_variable_in_body(variable_name: str, body: str) -> re.Match | None:
     # $value or ${value} or ${value:default}
-    return re.search(rf"\${variable_name}|\${{{variable_name}.*}}", body) is not None
+    return re.search(rf"\${variable_name}|\${{{variable_name}.*}}", body)
 
 
 def combine_variables(
@@ -136,6 +140,22 @@ def combine_variables(
             new_variable.wrapper_scope = variable.wrapper_scope
 
     return list(variables.values())
+
+def add_final_snippet_stop(body: str | None) -> str:
+    """This makes the snippet end with a final snippet hole so the user can get to the end of the snippet using the snippet next action."""
+    if not body:
+        return ""
+
+    final_stop = find_variable_in_body("0", body)
+
+    # If the snippet body already ends with a final snippet stop, make no change.
+    if final_stop is not None and final_stop.end() == len(body):
+        return body
+    
+    if final_stop is not None:
+        # This must change the original final stop
+        body = body[: final_stop.start()] + "${999}" + body[final_stop.end():]
+    return body + "${0}"
 
 
 def normalize_snippet_body_tabs(body: str | None) -> str:
