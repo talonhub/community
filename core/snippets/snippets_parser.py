@@ -75,8 +75,10 @@ def create_snippet(
 def format_snippet_body_and_variables(document: SnippetDocument, default_context: SnippetDocument) -> tuple[str, list[SnippetVariable]]:
     body = normalize_snippet_body_tabs(document.body)
     variables = combine_variables(default_context.variables, document.variables)
+    # If a final stop should be added to the end, update the body and variables accordingly
     if body:
         body_with_final_stop_at_the_end = add_final_snippet_stop(body)
+        # This is an efficient way to check if the body was changed because adding a stop changes the length
         if len(body_with_final_stop_at_the_end) != len(body):
             body = body_with_final_stop_at_the_end
             replace_variables_for_final_stop(variables)
@@ -171,8 +173,10 @@ def add_final_snippet_stop(body: str | None) -> str:
     if len(final_stop_matches) > 0 and final_stop_matches[-1].end() == len(body):
         return body
     
+    # Dealing with matches in reverse means replacing a match
+    # does not change the location of the remaining matches.
     for match in reversed(final_stop_matches):
-        replacement = match.group().replace("0", "999", 1)
+        replacement = match.group().replace("0", FINAL_STOP_REPLACEMENT_NAME, 1)
         body = body[:match.start()] + replacement + body[match.end():]
         
     return body + "${0}"
