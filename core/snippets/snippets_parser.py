@@ -114,7 +114,7 @@ def is_variable_in_body(variable_name: str, body: str) -> bool:
 
 
 def create_variable_regular_expression(variable_name: str) -> str:
-    """Create a regular expression to match a variable in the snippet body."""
+    # $value or ${value} or ${value:default}
     return rf"\${variable_name}|\${{{variable_name}.*}}"
 
 
@@ -154,6 +154,7 @@ def add_final_snippet_stop(body: str | None) -> str:
         return body
     
     for match in reversed(final_stop_matches):
+        
         body = body[: match.start()] + "${999}" + body[match.end() :]
         
     return body + "${0}"
