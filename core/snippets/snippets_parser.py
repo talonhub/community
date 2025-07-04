@@ -55,16 +55,7 @@ def create_snippet(
     document: SnippetDocument,
     default_context: SnippetDocument,
 ) -> Snippet | None:
-    body = normalize_snippet_body_tabs(document.body)
-    variables = combine_variables(default_context.variables, document.variables)
-    if body:
-        body_with_final_stop_at_the_end = add_final_snippet_stop(body)
-        if len(body_with_final_stop_at_the_end) != len(body):
-            body = body_with_final_stop_at_the_end
-            # Update variables corresponding to the original final stop
-            for variable in variables:
-                if variable.name == "0":
-                    variable.name = FINAL_STOP_REPLACEMENT_NAME
+    body, variables = properly_format_body_and_variables(document, default_context)
         
     snippet = Snippet(
         name=document.name or default_context.name or "",
@@ -81,6 +72,21 @@ def create_snippet(
 
     return snippet
 
+def properly_format_body_and_variables(document: SnippetDocument, default_context: SnippetDocument) -> tuple[str, list[SnippetVariable]]:
+    body = normalize_snippet_body_tabs(document.body)
+    variables = combine_variables(default_context.variables, document.variables)
+    if body:
+        body_with_final_stop_at_the_end = add_final_snippet_stop(body)
+        if len(body_with_final_stop_at_the_end) != len(body):
+            body = body_with_final_stop_at_the_end
+            replace_variables_for_final_stop(variables)
+    return body, variables
+    
+
+def replace_variables_for_final_stop(variables):
+    for variable in variables:
+        if variable.name == "0":
+            variable.name = FINAL_STOP_REPLACEMENT_NAME
 
 def validate_snippet(document: SnippetDocument, snippet: Snippet) -> bool:
     is_valid = True
