@@ -5,6 +5,8 @@ from typing import Callable, Union
 
 from .snippet_types import Snippet, SnippetVariable
 
+# The final stop gets this name if replaced with a final stop after it
+FINAL_STOP_REPLACEMENT_NAME = "999"
 
 class SnippetDocument:
     file: str
@@ -53,14 +55,25 @@ def create_snippet(
     document: SnippetDocument,
     default_context: SnippetDocument,
 ) -> Snippet | None:
+    body = normalize_snippet_body_tabs(document.body)
+    variables = combine_variables(default_context.variables, document.variables)
+    if body:
+        body_with_final_stop_at_the_end = add_final_snippet_stop(body)
+        if len(body_with_final_stop_at_the_end) != len(body):
+            body = body_with_final_stop_at_the_end
+            # Update variables corresponding to the original final stop
+            for variable in variables:
+                if variable.name == "0":
+                    variable.name = FINAL_STOP_REPLACEMENT_NAME
+        
     snippet = Snippet(
         name=document.name or default_context.name or "",
         description=document.description or default_context.description,
         languages=document.languages or default_context.languages,
         phrases=document.phrases or default_context.phrases,
         insertion_scopes=document.insertionScopes or default_context.insertionScopes,
-        variables=combine_variables(default_context.variables, document.variables),
-        body=add_final_snippet_stop(normalize_snippet_body_tabs(document.body)),
+        variables=variables,
+        body=body,
     )
 
     if not validate_snippet(document, snippet):
@@ -146,8 +159,7 @@ def add_final_snippet_stop(body: str | None) -> str:
     if not body:
         return ""
 
-    final_stop_expression = create_variable_regular_expression("0")
-    final_stop_matches = [m for m in re.finditer(final_stop_expression, body)]
+    final_stop_matches = find_variable_matches("0", body)
 
     # If the snippet body already ends with a final snippet stop, make no change.
     if len(final_stop_matches) > 0 and final_stop_matches[-1].end() == len(body):
@@ -158,6 +170,13 @@ def add_final_snippet_stop(body: str | None) -> str:
         body = body[:match.start()] + replacement + body[match.end():]
         
     return body + "${0}"
+
+
+def find_variable_matches(variable_name: str, body: str) -> list[re.Match[str]]:
+    """Find every match of a variable in the body"""
+    expression = create_variable_regular_expression(variable_name)
+    matches = [m for m in re.finditer(expression, body)]
+    return matches
 
 
 def normalize_snippet_body_tabs(body: str | None) -> str:
