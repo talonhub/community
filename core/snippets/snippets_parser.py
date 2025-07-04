@@ -154,7 +154,7 @@ def add_final_snippet_stop(body: str | None) -> str:
         return body
     
     for match in reversed(final_stop_matches):
-        replacement = body[match.start():match.end()].replace("0", "999", 1)
+        replacement = match.group().replace("0", "999", 1)
         body = body[:match.start()] + replacement + body[match.end():]
         
     return body + "${0}"
