@@ -55,7 +55,7 @@ def create_snippet(
     document: SnippetDocument,
     default_context: SnippetDocument,
 ) -> Snippet | None:
-    body, variables = properly_format_body_and_variables(document, default_context)
+    body, variables = format_snippet_body_and_variables(document, default_context)
         
     snippet = Snippet(
         name=document.name or default_context.name or "",
@@ -72,7 +72,7 @@ def create_snippet(
 
     return snippet
 
-def properly_format_body_and_variables(document: SnippetDocument, default_context: SnippetDocument) -> tuple[str, list[SnippetVariable]]:
+def format_snippet_body_and_variables(document: SnippetDocument, default_context: SnippetDocument) -> tuple[str, list[SnippetVariable]]:
     body = normalize_snippet_body_tabs(document.body)
     variables = combine_variables(default_context.variables, document.variables)
     if body:
