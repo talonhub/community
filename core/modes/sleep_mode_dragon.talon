@@ -13,6 +13,7 @@ speech.engine: dragon
 # because it's part of the rule definition, but "hey bob" will be ignored, because
 # we don't do anything with the <phrase> in the body of the command.
 ^talon sleep [<phrase>]$: speech.disable()
+^talon wake [<phrase>]$: speech.enable()
 
 ^sleep all [<phrase>]$:
     user.switcher_hide_running()
