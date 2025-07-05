@@ -1,23 +1,18 @@
 from talon import Context, Module, actions
 
-c_like_ctx = Context()
 mod = Module()
 
 mod.tag(
     "code_imperative",
     desc="Tag for enabling basic imperative programming commands (loops, functions, etc)",
 )
-mod.tag("code_block_c_like", desc="Language uses C style code blocks, i.e. braces")
-
-c_like_ctx.matches = """
-tag: user.code_block_c_like
-"""
 
 
 @mod.action_class
 class Actions:
     def code_block():
         """Inserts equivalent of {\n} for the active language, and places the cursor appropriately"""
+        actions.user.insert_snippet_by_name("codeBlock")
 
     def code_state_if():
         """Inserts if statement"""
@@ -153,10 +148,3 @@ class Actions:
             "user.code_try_catch",
             'user.insert_snippet_by_name("tryCatchStatement")',
         )
-
-
-@c_like_ctx.action_class("user")
-class CActions:
-    def code_block():
-        actions.user.insert_between("{", "}")
-        actions.key("enter")

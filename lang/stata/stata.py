@@ -87,10 +87,6 @@ class UserActions:
             substitutions["0"] = selection
         actions.user.insert_snippet_by_name("functionCall", substitutions)
 
-    # imperative.py
-    def code_block():
-        actions.auto_insert("\n")
-
     # libraries.py
     def code_insert_library(text: str, selection: str):
         library_text = text + selection
