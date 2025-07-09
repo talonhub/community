@@ -5,7 +5,10 @@ mod = Module()
 mod.tag("code_keywords", desc="Tag for enabling commands for keywords")
 
 mod.list("code_keyword", desc="List of keywords for active language")
-mod.list("code_keyword_long", desc="List of long keywords (at least 3 syllables) for active language")
+mod.list(
+    "code_keyword_long",
+    desc="List of long keywords (at least 3 syllables) for active language",
+)
 
 
 @mod.capture(rule=("{user.code_keyword}|{user.code_keyword_long}"))
