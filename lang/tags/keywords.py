@@ -13,11 +13,6 @@ def code_keyword(m) -> str:
     return str(m)
 
 
-@mod.capture(rule=("{user.code_keyword_long}"))
-def code_keyword_long(m) -> str:
-    return str(m)
-
-
 @mod.action_class
 class Actions:
     def code_keyword(keywords: list[str]):
