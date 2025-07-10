@@ -5,10 +5,6 @@ from typing import Callable, Union
 
 from .snippet_types import Snippet, SnippetVariable
 
-# The final stop gets this name if replaced with a final stop after it
-FINAL_STOP_REPLACEMENT_NAME = "999"
-
-
 class SnippetDocument:
     file: str
     line_doc: int
@@ -56,7 +52,9 @@ def create_snippet(
     document: SnippetDocument,
     default_context: SnippetDocument,
 ) -> Snippet | None:
-    body, variables = format_snippet_body_and_variables(document, default_context)
+    body = normalize_snippet_body_tabs(document.body)
+    variables = combine_variables(default_context.variables, document.variables)
+    body, variables = format_snippet_body_and_variables(body, variables)
 
     snippet = Snippet(
         name=document.name or default_context.name or "",
@@ -75,24 +73,15 @@ def create_snippet(
 
 
 def format_snippet_body_and_variables(
-    document: SnippetDocument, default_context: SnippetDocument
+    body: str, variables: list[SnippetVariable]
 ) -> tuple[str, list[SnippetVariable]]:
-    body = normalize_snippet_body_tabs(document.body)
-    variables = combine_variables(default_context.variables, document.variables)
     # If a final stop should be added to the end, update the body and variables accordingly
     if body:
-        body_with_final_stop_at_the_end = add_final_snippet_stop(body)
+        body_with_final_stop_at_the_end = add_final_snippet_stop(body, variables)
         # This is an efficient way to check if the body was changed because adding a stop changes the length
         if len(body_with_final_stop_at_the_end) != len(body):
             body = body_with_final_stop_at_the_end
-            replace_variables_for_final_stop(variables)
     return body, variables
-
-
-def replace_variables_for_final_stop(variables):
-    for variable in variables:
-        if variable.name == "0":
-            variable.name = FINAL_STOP_REPLACEMENT_NAME
 
 
 def validate_snippet(document: SnippetDocument, snippet: Snippet) -> bool:
@@ -170,7 +159,7 @@ def combine_variables(
     return list(variables.values())
 
 
-def add_final_snippet_stop(body: str | None) -> str:
+def add_final_snippet_stop(body: str | None, variables: list[SnippetVariable]) -> str:
     """This makes the snippet end with a final snippet hole so the user can get to the end of the snippet using the snippet next action."""
     if not body:
         return ""
@@ -181,13 +170,23 @@ def add_final_snippet_stop(body: str | None) -> str:
     if len(final_stop_matches) > 0 and final_stop_matches[-1].end() == len(body):
         return body
 
-    # Dealing with matches in reverse means replacing a match
-    # does not change the location of the remaining matches.
-    for match in reversed(final_stop_matches):
-        replacement = match.group().replace("0", FINAL_STOP_REPLACEMENT_NAME, 1)
-        body = body[: match.start()] + replacement + body[match.end() :]
-
+    biggest_variable_number: int | None = find_largest_variable_number(body)
+    if biggest_variable_number is not None:
+        final_stop_replacement_name = str(biggest_variable_number + 1)
+        # Dealing with matches in reverse means replacing a match
+        # does not change the location of the remaining matches.
+        for match in reversed(final_stop_matches):
+            replacement = match.group().replace("0", final_stop_replacement_name, 1)
+            body = body[: match.start()] + replacement + body[match.end() :]
+        replace_variables_for_final_stop(variables, final_stop_replacement_name)
+        
     return body + "${0}"
+
+
+def replace_variables_for_final_stop(variables, replacement_name: str):
+    for variable in variables:
+        if variable.name == "0":
+            variable.name = replacement_name
 
 
 def find_variable_matches(variable_name: str, body: str) -> list[re.Match[str]]:
@@ -195,6 +194,32 @@ def find_variable_matches(variable_name: str, body: str) -> list[re.Match[str]]:
     expression = create_variable_regular_expression(variable_name)
     matches = [m for m in re.finditer(expression, body)]
     return matches
+
+
+def find_largest_variable_number(body: str) -> int | None:
+    regular_expression = rf"\$\d+?|\${{\d+?:.*?}}"
+    matches = re.findall(regular_expression, body)
+    if matches:
+        numbers = [compute_first_integer_in_string(match) for match in matches if match is not None]
+        if numbers:
+            return max(numbers)
+    return None
+
+
+def compute_first_integer_in_string(text: str) -> int | None:
+    start_index: int | None = None
+    ending_index: int | None = None
+    for i, char in enumerate(text):
+        if char.isdigit():
+            if start_index is None:
+                start_index = i
+            ending_index = i + 1
+        elif start_index is not None:
+            break
+    if start_index is not None:
+        integer_text = text[start_index:ending_index]
+        return int(integer_text)
+    return None
 
 
 def normalize_snippet_body_tabs(body: str | None) -> str:
