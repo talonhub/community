@@ -12,3 +12,7 @@ not tag: user.deep_sleep
 # engine, this controls Talon.
 
 ^(wake up)+$: speech.enable()
+
+^talon wake [<phrase>]$:
+    speech.enable()
+    user.deprecate_command("2025-06-25", "talon wake (without dragon)", "wake up")
