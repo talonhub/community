@@ -163,7 +163,7 @@ def add_final_stop_to_snippet_body(
                 replacement_name = str(biggest_variable_number + 1)
                 body = replace_final_stop(body, replacement_name, final_stop_matches)
                 replace_variables_for_final_stop(variables, replacement_name)
-            body += "${0}"
+            body += "$0"
 
     return body, variables
 
