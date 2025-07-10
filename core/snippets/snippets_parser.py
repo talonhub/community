@@ -5,6 +5,7 @@ from typing import Callable, Union
 
 from .snippet_types import Snippet, SnippetVariable
 
+
 class SnippetDocument:
     file: str
     line_doc: int
@@ -154,7 +155,9 @@ def add_final_stop_to_snippet_body(
         final_stop_matches = find_variable_matches("0", body)
 
         # Only make a change if the snippet body does not end with a final stop.
-        if not (len(final_stop_matches) > 0 and final_stop_matches[-1].end() == len(body)):
+        if not (
+            len(final_stop_matches) > 0 and final_stop_matches[-1].end() == len(body)
+        ):
             biggest_variable_number: int | None = find_largest_variable_number(body)
             if biggest_variable_number is not None:
                 replacement_name = str(biggest_variable_number + 1)
@@ -172,7 +175,7 @@ def replace_final_stop(body: str, replacement_name: str, final_stop_matches) -> 
         replacement = match.group().replace("0", replacement_name, 1)
         body = body[: match.start()] + replacement + body[match.end() :]
     return body
-    
+
 
 def replace_variables_for_final_stop(variables, replacement_name: str):
     for variable in variables:
@@ -191,7 +194,11 @@ def find_largest_variable_number(body: str) -> int | None:
     regular_expression = rf"\$\d+?|\${{\d+?:.*?}}"
     matches = re.findall(regular_expression, body)
     if matches:
-        numbers = [compute_first_integer_in_string(match) for match in matches if match is not None]
+        numbers = [
+            compute_first_integer_in_string(match)
+            for match in matches
+            if match is not None
+        ]
         if numbers:
             return max(numbers)
     return None
