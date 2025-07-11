@@ -53,5 +53,3 @@ if hasattr(talon, "test_mode"):
         body = "[$0 for $0 in $1 if $2]"
         expected = "[$3 for $3 in $1 if $2]$0"
         assert_body_with_final_stop_added_as_expected(body, expected)
-
-        
