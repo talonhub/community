@@ -81,7 +81,7 @@ if hasattr(talon, "test_mode"):
     def test_formatting_gets_moved():
         body = "def $0:\n\treturn $1"
         variables = [SnippetVariable("0", insertion_formatters=["snake"])]
-        expected_variables = [SnippetVariable("1", insertion_formatters=["snake"])]
+        expected_variables = [SnippetVariable("2", insertion_formatters=["snake"])]
         assert_variables_match_expected(body, variables, expected_variables)
 
     def test_variables_unchanged_for_smaller_variable():
