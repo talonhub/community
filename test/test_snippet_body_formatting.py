@@ -53,3 +53,19 @@ if hasattr(talon, "test_mode"):
         body = "[$0 for $0 in $1 if $2]"
         expected = "[$3 for $3 in $1 if $2]$0"
         assert_body_with_final_stop_added_as_expected(body, expected)
+
+    def test_multiple_final_stops_with_default():
+        body = "[${0:nums} for ${0:nums} in $1 if $2]"
+        expected = "[${3:nums} for ${3:nums} in $1 if $2]$0"
+        assert_body_with_final_stop_added_as_expected(body, expected)
+
+    def test_multiple_final_stops_with_number_in_braces():
+        body = "[${0} for ${0} in $1 if $2]"
+        expected = "[${3} for ${3} in $1 if $2]$0"
+        assert_body_with_final_stop_added_as_expected(body, expected)
+
+    def test_duplicate_proceeding_stops(self):
+        body = "[$1 for $1 in $0]"
+        expected = "[$2 for $2 in $0]$0"
+        assert_body_with_final_stop_added_as_expected(body, expected)
+
