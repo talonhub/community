@@ -191,7 +191,7 @@ def find_variable_matches(variable_name: str, body: str) -> list[re.Match[str]]:
 
 
 def find_largest_variable_number(body: str) -> int | None:
-    regular_expression = rf"\$\d+?|\${{\d+?:.*?}}"
+    regular_expression = rf"\$\d+?|\${{\d+?:.*?}}|\${{\d+?}}"
     matches = re.findall(regular_expression, body)
     if matches:
         numbers = [
