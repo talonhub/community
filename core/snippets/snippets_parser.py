@@ -121,6 +121,8 @@ def is_variable_in_body(variable_name: str, body: str) -> bool:
 
 def create_variable_regular_expression(variable_name: str) -> str:
     # $value or ${value} or ${value:default}
+    # *? is used to find the smallest possible match.
+    # We need this here to avoid treating multiple stops as a single one
     return rf"\${variable_name}|\${{{variable_name}.*?}}"
 
 
@@ -191,6 +193,9 @@ def find_variable_matches(variable_name: str, body: str) -> list[re.Match[str]]:
 
 
 def find_largest_variable_number(body: str) -> int | None:
+    # Find all snippet stops with a numeric variable name
+    # +? is used to find the smallest possible match.
+    # We need this here to avoid treating multiple stops as a single one
     regular_expression = rf"\$\d+?|\${{\d+?:.*?}}|\${{\d+?}}"
     matches = re.findall(regular_expression, body)
     if matches:
