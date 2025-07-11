@@ -2,6 +2,7 @@ import logging
 import re
 from pathlib import Path
 from typing import Callable, Union
+from copy import deepcopy
 
 from .snippet_types import Snippet, SnippetVariable
 
@@ -184,9 +185,11 @@ def replace_final_stop(body: str, replacement_name: str, final_stop_matches) -> 
 
 
 def replace_variables_for_final_stop(variables, replacement_name: str):
-    for variable in variables:
+    variables_clone = deepcopy(variables)
+    for variable in variables_clone:
         if variable.name == "0":
             variable.name = replacement_name
+    return variables_clone
 
 
 def find_variable_matches(variable_name: str, body: str) -> list[re.Match[str]]:
