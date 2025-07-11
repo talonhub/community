@@ -40,8 +40,8 @@ if hasattr(talon, "test_mode"):
         assert_body_with_final_stop_added_as_expected(body, body)
 
     def test_biggest_value_having_default():
-        body = "from ${1:module} import $0"
-        expected = "from ${1:module} import ${2}$0"
+        body = "from ${1:module} import $0;"
+        expected = "from ${1:module} import ${2};$0"
         assert_body_with_final_stop_added_as_expected(body, expected)
 
     def test_three_stops():
