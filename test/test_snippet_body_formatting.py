@@ -78,20 +78,23 @@ if hasattr(talon, "test_mode"):
         _, actual = snippets_parser.add_final_stop_to_snippet_body(body, variables)
         assert actual == expected_variables
 
+    def create_snake_case_variable(name: str) -> SnippetVariable:
+        return SnippetVariable(name, insertion_formatters=["snake"])
+
     def test_formatting_gets_moved():
         body = "def $0:\n\treturn $1"
-        variables = [SnippetVariable("0", insertion_formatters=["snake"])]
-        expected_variables = [SnippetVariable("2", insertion_formatters=["snake"])]
+        variables = [create_snake_case_variable("0")]
+        expected_variables = [create_snake_case_variable("2")]
         assert_variables_match_expected(body, variables, expected_variables)
 
     def test_variables_unchanged_for_smaller_variable():
         body = "def $1:\n\treturn $0;"
-        variables = [SnippetVariable("1", insertion_formatters=["snake"])]
-        expected_variables = [SnippetVariable("1", insertion_formatters=["snake"])]
+        variables = [create_snake_case_variable("1")]
+        expected_variables = [create_snake_case_variable("1")]
         assert_variables_match_expected(body, variables, expected_variables)
 
     def test_variables_unchanged_with_stop_at_end():
         body = "def $1:\n\treturn $0"
-        variables = [SnippetVariable("1", insertion_formatters=["snake"])]
-        expected_variables = [SnippetVariable("1", insertion_formatters=["snake"])]
+        variables = [create_snake_case_variable("1")]
+        expected_variables = [create_snake_case_variable("1")]
         assert_variables_match_expected(body, variables, expected_variables)
