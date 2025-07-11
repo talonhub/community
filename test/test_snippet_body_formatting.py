@@ -71,11 +71,13 @@ if hasattr(talon, "test_mode"):
         assert_body_with_final_stop_added_as_expected(body, expected)
 
     def assert_variables_match_expected(
-        body: str, variables: list[SnippetVariable], expected_variables: list[SnippetVariable]
+        body: str,
+        variables: list[SnippetVariable],
+        expected_variables: list[SnippetVariable],
     ):
         _, actual = snippets_parser.add_final_stop_to_snippet_body(body, variables)
         assert actual == expected_variables
-    
+
     def test_formatting_gets_moved():
         body = "def $0:\n\treturn $1"
         variables = [SnippetVariable("0", insertion_formatters=["snake"])]
