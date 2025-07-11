@@ -66,5 +66,5 @@ if hasattr(talon, "test_mode"):
 
     def test_duplicate_proceeding_stops():
         body = "[$1 for $1 in $0]"
-        expected = "[$2 for $2 in $0]$0"
+        expected = "[$1 for $1 in $2]$0"
         assert_body_with_final_stop_added_as_expected(body, expected)
