@@ -1,5 +1,7 @@
 from talon import Context, actions, settings
 
+from ..tags.operators import Operators
+
 ctx = Context()
 
 ctx.matches = r"""
@@ -239,94 +241,37 @@ ctx.lists["user.code_parameter_name"] = {
     "why min": "ymin",
 }
 
+operators = Operators(
+    # code_operators_assignment
+    ASSIGNMENT=" <- ",
+    # code_operators_bitwise
+    BITWISE_AND=" & ",
+    # code_operators_math:
+    MATH_SUBTRACT=" - ",
+    MATH_ADD=" + ",
+    MATH_MULTIPLY=" * ",
+    MATH_EXPONENT=" ** ",
+    MATH_DIVIDE=" / ",
+    MATH_MODULO=" %% ",
+    MATH_EQUAL=" == ",
+    MATH_NOT_EQUAL=" != ",
+    MATH_GREATER_THAN=" > ",
+    MATH_GREATER_THAN_OR_EQUAL=" >= ",
+    MATH_LESS_THAN=" < ",
+    MATH_LESS_THAN_OR_EQUAL=" <= ",
+    MATH_AND=" & ",
+    MATH_OR=" | ",
+    MATH_IN=" %in% ",
+)
+
 
 @ctx.action_class("user")
 class UserActions:
-    def code_operator_assignment():
-        actions.auto_insert(" <- ")
-
-    def code_operator_subtraction():
-        actions.auto_insert(" - ")
-
-    def code_operator_addition():
-        actions.auto_insert(" + ")
-
-    def code_operator_multiplication():
-        actions.auto_insert(" * ")
-
-    def code_operator_exponent():
-        actions.auto_insert(" ** ")
-
-    def code_operator_division():
-        actions.auto_insert(" / ")
-
-    def code_operator_modulo():
-        actions.auto_insert(" %% ")
-
-    def code_operator_equal():
-        actions.auto_insert(" == ")
-
-    def code_operator_not_equal():
-        actions.auto_insert(" != ")
-
-    def code_operator_greater_than():
-        actions.auto_insert(" > ")
-
-    def code_operator_greater_than_or_equal_to():
-        actions.auto_insert(" >= ")
-
-    def code_operator_less_than():
-        actions.auto_insert(" < ")
-
-    def code_operator_less_than_or_equal_to():
-        actions.auto_insert(" <= ")
-
-    def code_operator_and():
-        actions.auto_insert(" & ")
-
-    def code_operator_or():
-        actions.auto_insert(" | ")
-
-    def code_operator_bitwise_and():
-        actions.auto_insert(" & ")
+    def code_get_operators() -> Operators:
+        return operators
 
     def code_insert_null():
         actions.auto_insert("NULL")
-
-    def code_state_if():
-        actions.insert("if () {}")
-        actions.key("left enter up end left:3")
-
-    def code_state_else_if():
-        actions.insert(" else if () {}")
-        actions.key("left enter up end left:3")
-
-    def code_state_else():
-        actions.insert(" else {}")
-        actions.key("left enter")
-
-    def code_state_for():
-        actions.insert("for ( in ) {}")
-        actions.key("left enter up end left:7")
-
-    def code_state_while():
-        actions.insert("while () {}")
-        actions.key("left enter up end left:3")
-
-    def code_import():
-        actions.user.insert_between("library(", ")")
-
-    def code_comment_line_prefix():
-        actions.auto_insert("#")
-
-    def code_state_return():
-        actions.user.insert_between("return(", ")")
-
-    def code_break():
-        actions.auto_insert("break")
-
-    def code_next():
-        actions.auto_insert("next")
 
     def code_insert_true():
         actions.auto_insert("TRUE")
@@ -355,8 +300,7 @@ class UserActions:
         actions.edit.left()
 
     def code_insert_library(text: str, selection: str):
-        actions.user.insert_between("library(", ")")
-        actions.user.paste(text + selection)
+        actions.user.insert_snippet_by_name("importStatement", {"0": text + selection})
 
     def code_insert_named_argument(parameter_name: str):
         actions.insert(f"{parameter_name} = ")

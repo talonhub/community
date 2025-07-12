@@ -3,7 +3,6 @@ code.language: scala
 tag(): user.code_imperative
 tag(): user.code_object_oriented
 
-tag(): user.code_block_c_like
 tag(): user.code_comment_line
 tag(): user.code_comment_block_c_like
 tag(): user.code_data_bool
@@ -32,8 +31,6 @@ op right arrow: " -> "
 op left arrow: " <- "
 op plus plus: " ++ "
 op subtype: " <: "
-
-state match: user.code_state_switch()
 
 block string:
     insert('""""""')

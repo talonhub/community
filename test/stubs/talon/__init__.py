@@ -176,6 +176,12 @@ class Settings:
     """
 
 
+class Registry:
+    """
+    Implements something like Talon's registry
+    """
+
+
 class Resource:
     """
     Implements something like the talon resource system
@@ -183,6 +189,9 @@ class Resource:
 
     def open(self, path: str, mode: str = "r"):
         return open(path, mode, encoding="utf-8")
+
+    def watch(self, path: str):
+        return lambda f: f
 
 
 class App:
@@ -200,6 +209,7 @@ imgui = ImgUI()
 ui = UI()
 settings = Settings()
 resource = Resource()
+registry = Registry()
 
 # Indicate to test files that they should load since we're running in test mode
 test_mode = True

@@ -4,13 +4,13 @@ mod = Module()
 ctx = Context()
 
 apps = mod.apps
-apps.notepad_plus_plus = """
+apps.notepad_plus_plus = r"""
 os: windows
 and app.name: Notepad++ : a free (GNU) source code editor
 os: windows
 and app.name: Notepad++ : a free (GPL) source code editor
 os: windows
-and app.exe: notepad++.exe
+and app.exe: /^notepad\+\+\.exe$/i
 """
 
 ctx.matches = r"""
@@ -22,6 +22,9 @@ ctx.tags = ["user.find_and_replace", "user.line_commands", "user.tabs"]
 
 @ctx.action_class("app")
 class AppActions:
+    def tab_open():
+        actions.key("ctrl-n")
+
     def tab_previous():
         actions.key("ctrl-pageup")
 

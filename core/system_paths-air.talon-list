@@ -1,0 +1,15 @@
+list: user.system_paths
+hostname: air
+-
+user: /Users/brock
+profile: /Users/brock
+desktop: /Users/brock/Desktop
+desk: /Users/brock/Desktop
+documents: /Users/brock/Documents
+docks: /Users/brock/Documents
+downloads: /Users/brock/Downloads
+music: /Users/brock/Music
+pictures: /Users/brock/Pictures
+videos: /Users/brock/Videos
+talon home: /Users/brock/.talon
+talon user: /Users/brock/.talon/user

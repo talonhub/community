@@ -1,17 +1,44 @@
 name: caseStatement
 phrase: case
+insertionScope: branch
 ---
 
-language: javascript | java
-insertionScope: branch
+language: c | cpp | csharp | java | javascript | typescript | javascriptreact | typescriptreact
 -
 case $1:
     $0
 ---
 
-language: python
-insertionScope: branch
+language: python | php | go
 -
 case $1:
     $0
+---
+
+language: ruby
+-
+when $1
+    $0
+---
+
+language: scala
+-
+case $1 => $0
+---
+
+language: elixir
+-
+$1 ->
+    $0
+---
+
+language: r
+-
+    $1 ~ $2,
+)
+---
+
+language: kotlin
+-
+$1 -> $0
 ---

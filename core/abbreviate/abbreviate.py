@@ -2,12 +2,13 @@ import re
 
 from talon import Context, Module
 
-from ..user_settings import get_list_from_csv
+from ..user_settings import track_csv_list
 
 mod = Module()
+ctx = Context()
 mod.list("abbreviation", desc="Common abbreviation")
 
-
+abbreviations_list = {}
 abbreviations = {
     "J peg": "jpg",
     "abbreviate": "abbr",
@@ -447,24 +448,31 @@ abbreviations = {
     "work in progress": "wip",
 }
 
-# This variable is also considered exported for the create_spoken_forms module
-abbreviations_list = get_list_from_csv(
-    "abbreviations.csv",
-    headers=("Abbreviation", "Spoken Form"),
-    default=abbreviations,
+
+@mod.capture(rule="brief {user.abbreviation}")
+def abbreviation(m) -> str:
+    return m.abbreviation
+
+
+@track_csv_list(
+    "abbreviations.csv", headers=("Abbreviation", "Spoken Form"), default=abbreviations
 )
+def on_abbreviations(values):
+    global abbreviations_list
 
-# Matches letters and spaces, as currently, Talon doesn't accept other characters in spoken forms.
-PATTERN = re.compile(r"^[a-zA-Z ]+$")
-abbreviation_values = {
-    v: v for v in abbreviations_list.values() if PATTERN.match(v) is not None
-}
+    # note: abbreviations_list is  imported by the create_spoken_forms module
+    abbreviations_list = values
 
-# Allows the abbreviated/short form to be used as spoken phrase. eg "brief app" -> app
-abbreviations_list_with_values = {
-    **abbreviation_values,
-    **abbreviations_list,
-}
+    # Matches letters and spaces, as currently, Talon doesn't accept other characters in spoken forms.
+    PATTERN = re.compile(r"^[a-zA-Z ]+$")
+    abbreviation_values = {
+        v: v for v in abbreviations_list.values() if PATTERN.match(v) is not None
+    }
 
-ctx = Context()
-ctx.lists["user.abbreviation"] = abbreviations_list_with_values
+    # Allows the abbreviated/short form to be used as spoken phrase. eg "brief app" -> app
+    abbreviations_list_with_values = {
+        **{v: v for v in abbreviation_values.values()},
+        **abbreviations_list,
+    }
+
+    ctx.lists["user.abbreviation"] = abbreviations_list_with_values

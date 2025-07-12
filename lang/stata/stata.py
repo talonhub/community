@@ -1,5 +1,7 @@
 from talon import Context, actions, settings
 
+from ..tags.operators import Operators
+
 ctx = Context()
 
 ctx.matches = r"""
@@ -28,17 +30,38 @@ ctx.lists["user.code_common_function"] = {
     "esttab": "esttab",
 }
 
-# libraries_gui.py
+# libraries.py
 ctx.lists["user.code_libraries"] = {
     "estout": "estout",
 }
 
+operators = Operators(
+    # code_operators_array
+    SUBSCRIPT=lambda: actions.user.insert_between("[", "]"),
+    # code_operators_assignment
+    ASSIGNMENT=" = ",
+    # code_operators_math
+    MATH_ADD=" + ",
+    MATH_SUBTRACT=" - ",
+    MATH_MULTIPLY=" * ",
+    MATH_DIVIDE=" / ",
+    MATH_MODULO=lambda: actions.user.insert_between("mod(", ")"),
+    MATH_EXPONENT=" ^ ",
+    MATH_EQUAL=" == ",
+    MATH_NOT_EQUAL=" != ",
+    MATH_GREATER_THAN=" > ",
+    MATH_GREATER_THAN_OR_EQUAL=" >= ",
+    MATH_LESS_THAN=" < ",
+    MATH_LESS_THAN_OR_EQUAL=" <= ",
+    MATH_AND=" & ",
+    MATH_OR=" | ",
+)
+
 
 @ctx.action_class("user")
 class UserActions:
-    # comment_line.py
-    def code_comment_line_prefix():
-        actions.auto_insert("* ")
+    def code_get_operators() -> Operators:
+        return operators
 
     # functions.py
     def code_private_function(text: str):
@@ -59,109 +82,12 @@ class UserActions:
 
     # functions_common.py
     def code_insert_function(text: str, selection: str):
-        text += f" {selection or ''}"
-        actions.user.paste(text)
-
-    # imperative.py
-    def code_block():
-        actions.auto_insert("\n")
-
-    def code_state_if():
-        actions.insert("if  {\n\n}")
-        actions.key("up tab up")
-        actions.edit.line_end()
-        actions.key("left:2")
-
-    def code_state_else_if():
-        actions.insert("else if  {\n\n}")
-        actions.key("up tab up")
-        actions.edit.line_end()
-        actions.key("left:2")
-
-    def code_state_else():
-        actions.insert("else {\n\n}")
-        actions.key("up tab")
-
-    def code_state_for():
-        actions.insert("forval  {\n\n}")
-        actions.key("up tab up")
-        actions.edit.line_end()
-        actions.key("left:2")
-
-    def code_state_for_each():
-        actions.insert("foreach  in  {\n\n}")
-        actions.key("up tab up")
-        actions.edit.line_end()
-        actions.key("left:2")
-
-    def code_state_while():
-        actions.insert("while  {\n\n}")
-        actions.key("up tab up")
-        actions.edit.line_end()
-        actions.key("left:2")
-
-    def code_break():
-        actions.insert("break")
-
-    def code_next():
-        actions.insert("continue")
+        substitutions = {"1": text}
+        if selection:
+            substitutions["0"] = selection
+        actions.user.insert_snippet_by_name("functionCall", substitutions)
 
     # libraries.py
-    def code_import():
-        actions.auto_insert("ssc install ")
-
-    # libraries_gui.py
     def code_insert_library(text: str, selection: str):
-        actions.auto_insert("ssc install ")
-        actions.user.paste(text + selection)
-
-    # operators_array.py
-    def code_operator_subscript():
-        actions.user.insert_between("[", "]")
-
-    # operators_assignment.py
-    def code_operator_assignment():
-        actions.auto_insert(" = ")
-
-    # operators_math.py
-    def code_operator_subtraction():
-        actions.auto_insert(" - ")
-
-    def code_operator_addition():
-        actions.auto_insert(" + ")
-
-    def code_operator_multiplication():
-        actions.auto_insert(" * ")
-
-    def code_operator_division():
-        actions.auto_insert(" / ")
-
-    def code_operator_modulo():
-        actions.user.insert_between("mod(", ")")
-
-    def code_operator_exponent():
-        actions.auto_insert(" ^ ")
-
-    def code_operator_equal():
-        actions.auto_insert(" == ")
-
-    def code_operator_not_equal():
-        actions.auto_insert(" != ")
-
-    def code_operator_greater_than():
-        actions.auto_insert(" > ")
-
-    def code_operator_less_than():
-        actions.auto_insert(" < ")
-
-    def code_operator_greater_than_or_equal_to():
-        actions.auto_insert(" >= ")
-
-    def code_operator_less_than_or_equal_to():
-        actions.auto_insert(" <= ")
-
-    def code_operator_and():
-        actions.auto_insert(" & ")
-
-    def code_operator_or():
-        actions.auto_insert(" | ")
+        library_text = text + selection
+        actions.user.insert_snippet_by_name("importStatement", {"0": library_text})

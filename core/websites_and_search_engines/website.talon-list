@@ -1,0 +1,19 @@
+list: user.website
+-
+amazon: https://www.amazon.com/
+google: https://www.google.com/
+google calendar: https://calendar.google.com
+google maps: https://maps.google.com/
+gmail: https://mail.google.com/
+github: https://github.com/
+gist: https://gist.github.com/
+wikipedia: https://en.wikipedia.org/
+youtube: https://www.youtube.com/
+chat GPT: https://chatgpt.com/
+linear: https://linear.app/solv/
+hacker news: https://news.ycombinator.com/
+icloud: https://www.icloud.com/
+home assistant: https://homeassistant.neatflix.xyz/
+sonarr: https://sonarr.neatflix.xyz/
+radarr: https://radarr.neatflix.xyz/
+prowlarr: https://prowlarr.neatflix.xyz/

@@ -4,6 +4,8 @@ from typing import Callable, Optional
 
 from talon import Context, Module, actions, grammar, settings, ui
 
+from ..numbers.numbers import get_spoken_form_under_one_hundred
+
 mod = Module()
 
 mod.setting(
@@ -13,28 +15,48 @@ mod.setting(
     desc="Look at surrounding text to improve auto-capitalization/spacing in dictation mode. By default, this works by selecting that text & copying it to the clipboard, so it may be slow or fail in some applications.",
 )
 
+mod.setting(
+    "context_sensitive_dictation_peek_character",
+    type=str,
+    default=" ",
+    desc="This is the character inserted during dictation_peek to ensure that some text is selected even if the cursor is at the start or end of the document. This should be a single character only.",
+)
+
 mod.list("prose_modifiers", desc="Modifiers that can be used within prose")
 mod.list("prose_snippets", desc="Snippets that can be used within prose")
 mod.list("phrase_ender", "List of commands that can be used to end a phrase")
+mod.list("hours_twelve", desc="Names for hours up to 12")
+mod.list("hours", desc="Names for hours up to 24")
+mod.list("minutes", desc="Names for minutes, 01 up to 59")
+mod.list(
+    "currency",
+    desc="Currency types (e.g., dollars, euros) that can be used within prose",
+)
+
 ctx = Context()
-# Maps spoken forms to DictationFormat method names (see DictationFormat below).
-ctx.lists["user.prose_modifiers"] = {
-    "cap": "cap",
-    "no cap": "no_cap",
-    "no caps": "no_cap",  # "no caps" variant for Dragon
-    "no space": "no_space",
-}
-ctx.lists["user.prose_snippets"] = {
-    "spacebar": " ",
-    "new line": "\n",
-    "new paragraph": "\n\n",
-    # Curly quotes are used to obtain proper spacing for left and right quotes, but will later be straightened.
-    "open quote": "“",
-    "close quote": "”",
-    "smiley": ":-)",
-    "winky": ";-)",
-    "frowny": ":-(",
-}
+ctx_dragon = Context()
+ctx_dragon.matches = r"""
+speech.engine: dragon
+"""
+
+ctx.lists["user.hours_twelve"] = get_spoken_form_under_one_hundred(
+    1,
+    12,
+    include_oh_variant_for_single_digits=True,
+    include_default_variant_for_single_digits=True,
+)
+ctx.lists["user.hours"] = get_spoken_form_under_one_hundred(
+    1,
+    23,
+    include_oh_variant_for_single_digits=True,
+    include_default_variant_for_single_digits=True,
+)
+ctx.lists["user.minutes"] = get_spoken_form_under_one_hundred(
+    1,
+    59,
+    include_oh_variant_for_single_digits=True,
+    include_default_variant_for_single_digits=False,
+)
 
 
 @mod.capture(rule="{user.prose_modifiers}")
@@ -42,47 +64,91 @@ def prose_modifier(m) -> Callable:
     return getattr(DictationFormat, m.prose_modifiers)
 
 
-@mod.capture(rule="(numb | numeral) <user.number_string>")
-def prose_simple_number(m) -> str:
-    return m.number_string
-
-
-@mod.capture(rule="(numb | numeral) <user.number_string> (dot | point) <digit_string>")
-def prose_number_with_dot(m) -> str:
-    return m.number_string + "." + m.digit_string
-
-
-@mod.capture(rule="(numb | numeral) <user.number_string> colon <user.number_string>")
-def prose_number_with_colon(m) -> str:
-    return m.number_string_1 + ":" + m.number_string_2
+@mod.capture(
+    rule="<user.number_string> [(dot | point) <digit_string>] percent [sign|sine]"
+)
+def prose_percent(m) -> str:
+    s = m.number_string
+    if hasattr(m, "digit_string"):
+        s += "." + m.digit_string
+    return s + "%"
 
 
 @mod.capture(
-    rule="<user.prose_simple_number> | <user.prose_number_with_dot> | <user.prose_number_with_colon>"
+    rule="<user.number_string> {user.currency} [[and] <user.number_string> [cents|pence]]"
 )
-def prose_number(m) -> str:
+def prose_currency(m) -> str:
+    s = m.currency + m.number_string_1
+    if hasattr(m, "number_string_2"):
+        s += "." + m.number_string_2
+    return s
+
+
+@mod.capture(rule="am|pm")
+def time_am_pm(m) -> str:
     return str(m)
 
 
-@mod.capture(rule="({user.vocabulary} | <word>)")
+# this matches eg "twelve thirty-four" -> 12:34 and "twelve hundred" -> 12:00. hmmmmm.
+@mod.capture(
+    rule="{user.hours} ({user.minutes} | o'clock | hundred hours) [<user.time_am_pm>]"
+)
+def prose_time_hours_minutes(m) -> str:
+    t = m.hours + ":"
+    if hasattr(m, "minutes"):
+        t += m.minutes
+    else:
+        t += "00"
+    if hasattr(m, "time_am_pm"):
+        t += m.time_am_pm
+    return t
+
+
+@mod.capture(rule="{user.hours_twelve} <user.time_am_pm>")
+def prose_time_hours_am_pm(m) -> str:
+    return m.hours_twelve + m.time_am_pm
+
+
+@mod.capture(rule="<user.prose_time_hours_minutes> | <user.prose_time_hours_am_pm>")
+def prose_time(m) -> str:
+    return str(m)
+
+
+@mod.capture(rule="({user.vocabulary} | <user.abbreviation> | <word>)")
 def word(m) -> str:
     """A single word, including user-defined vocabulary."""
-    try:
+    if hasattr(m, "vocabulary"):
         return m.vocabulary
-    except AttributeError:
+    elif hasattr(m, "abbreviation"):
+        return m.abbreviation
+    else:
         return " ".join(
             actions.dictate.replace_words(actions.dictate.parse_words(m.word))
         )
 
 
-@mod.capture(rule="({user.vocabulary} | <phrase>)+")
+@mod.capture(rule="({user.vocabulary} | <user.prose_contact> | <phrase>)+")
 def text(m) -> str:
     """A sequence of words, including user-defined vocabulary."""
     return format_phrase(m)
 
 
 @mod.capture(
-    rule="({user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <phrase> | <user.prose_number> | <user.prose_modifier>)+"
+    rule=(
+        "("
+        "{user.vocabulary}"
+        "| {user.punctuation}"
+        "| {user.prose_snippets}"
+        "| <user.prose_currency>"
+        "| <user.prose_time>"
+        "| <user.number_prose_prefixed>"
+        "| <user.prose_percent>"
+        "| <user.prose_modifier>"
+        "| <user.abbreviation>"
+        "| <user.prose_contact>"
+        "| <phrase>"
+        ")+"
+    )
 )
 def prose(m) -> str:
     """Mixed words and punctuation, auto-spaced & capitalized."""
@@ -91,9 +157,48 @@ def prose(m) -> str:
 
 
 @mod.capture(
-    rule="({user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <phrase> | <user.prose_number>)+"
+    rule=(
+        "("
+        "{user.vocabulary}"
+        "| {user.punctuation}"
+        "| {user.prose_snippets}"
+        "| <user.prose_currency>"
+        "| <user.prose_time>"
+        "| <user.number_prose_prefixed>"
+        "| <user.prose_percent>"
+        "| <user.abbreviation>"
+        "| <user.prose_contact>"
+        "| <phrase>"
+        ")+"
+    )
 )
 def raw_prose(m) -> str:
+    """Mixed words and punctuation, auto-spaced & capitalized, without quote straightening and commands (for use in dictation mode)."""
+    return apply_formatting(m)
+
+
+# For dragon, omit support for abbreviations and contacts
+@ctx_dragon.capture("user.text", rule="({user.vocabulary} | <phrase>)+")
+def text_dragon(m) -> str:
+    """A sequence of words, including user-defined vocabulary."""
+    return format_phrase(m)
+
+
+@ctx_dragon.capture(
+    "user.prose",
+    rule="(<phrase> | {user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <user.prose_currency> | <user.prose_time> | <user.prose_number> | <user.prose_percent> | <user.prose_modifier>)+",
+)
+def prose_dragon(m) -> str:
+    """Mixed words and punctuation, auto-spaced & capitalized."""
+    # Straighten curly quotes that were introduced to obtain proper spacing.
+    return apply_formatting(m).replace("“", '"').replace("”", '"')
+
+
+@ctx_dragon.capture(
+    "user.raw_prose",
+    rule="(<phrase> | {user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <user.prose_currency> | <user.prose_time> | <user.prose_number> | <user.prose_percent>)+",
+)
+def raw_prose_dragon(m) -> str:
     """Mixed words and punctuation, auto-spaced & capitalized, without quote straightening and commands (for use in dictation mode)."""
     return apply_formatting(m)
 
@@ -412,10 +517,10 @@ class Actions:
         if not (left or right):
             return None, None
         before, after = None, None
-        # Inserting a space ensures we select something even if we're at
+        # Inserting a character ensures we select something even if we're at
         # document start; some editors 'helpfully' copy the current line if we
         # edit.copy() while nothing is selected.
-        actions.insert(" ")
+        actions.insert(settings.get("user.context_sensitive_dictation_peek_character"))
         if left:
             # In principle the previous word should suffice, but some applications
             # have a funny concept of what the previous word is (for example, they
@@ -430,10 +535,10 @@ class Actions:
             # this will go right over the newline. Argh.
             actions.edit.right()
         if not right:
-            actions.key("backspace")  # remove the space
+            actions.key("backspace")  # remove the peek character
         else:
-            actions.edit.left()  # go left before space
-            # We want to select at least two characters to the right, plus the space
+            actions.edit.left()  # go left before the peek character
+            # We want to select at least two characters to the right, plus the character
             # we inserted, because no_space_before needs two characters in the worst
             # case -- for example, inserting before "' hello" we don't want to add
             # space, while inserted before "'hello" we do.
@@ -449,5 +554,5 @@ class Actions:
             actions.edit.extend_word_right()
             after = actions.edit.selected_text()[1:]
             actions.edit.left()
-            actions.key("delete")  # remove space
+            actions.user.delete_right()  # remove peek character
         return before, after

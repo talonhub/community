@@ -7,6 +7,7 @@ from typing import Union
 
 from talon import Module, actions, app, clip, registry, scope, speech_system, ui
 from talon.grammar import Phrase
+from talon.scripting.types import ListTypeFull
 
 pp = pprint.PrettyPrinter()
 
@@ -60,7 +61,7 @@ class Actions:
 
     def talon_sim_phrase(phrase: Union[str, Phrase]):
         """Sims the phrase in the active app and dumps to the log"""
-        print("**** Simulated Phrse **** ")
+        print("**** Simulated Phrase **** ")
         print(speech_system._sim(str(phrase)))
         print("*************************")
 
@@ -139,6 +140,10 @@ class Actions:
         result += "\nTitle: " + actions.win.title()
         return result
 
+    def talon_get_active_window_class_name() -> str:
+        """Returns the class name of the active window"""
+        return ui.active_window().cls
+
     def talon_version_info() -> str:
         """Returns talon & operation system verison information"""
         result = (
@@ -159,3 +164,7 @@ class Actions:
         apps = ui.apps(name=app, background=False)
         for app in apps:
             pp.pprint(app.windows())
+
+    def talon_get_active_registry_list(name: str) -> ListTypeFull:
+        """Returns the active list from the Talon registry"""
+        return registry.lists[name][-1]

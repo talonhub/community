@@ -2,7 +2,7 @@ name: ternary
 phrase: ternary
 ---
 
-language: javascript
+language: c | cpp | java | csharp | javascript | typescript | javascriptreact | typescriptreact | terraform | ruby
 -
 $1 ? $2 : $0
 ---
@@ -10,4 +10,24 @@ $1 ? $2 : $0
 language: python
 -
 $1 if $2 else $0
+---
+
+language: lua
+-
+$1 and $2 or $0
+---
+
+language: rust
+-
+if $1 { $2 } else { $0 }
+---
+
+language: scala | kotlin
+-
+if ($1) $2 else $0
+---
+
+language: r
+-
+if ($2) { $1 } else { $0 }
 ---

@@ -1,0 +1,6 @@
+list: user.continuous_scrolling_direction
+-
+upper: UP
+downer: DOWN
+righter: RIGHT
+lefter: LEFT

@@ -13,6 +13,8 @@ from <user.sql_table_with_alias>:
     user.sql_insert(" from ")
     insert(sql_table_with_alias)
 
+with: user.insert_snippet_by_name("withStatement")
+
 {user.sql_join} [<user.sql_table_with_alias>]:
     user.sql_insert(sql_join)
     insert(" ")

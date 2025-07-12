@@ -2,10 +2,14 @@ import math
 from itertools import islice
 from pathlib import Path
 
-from talon import Context, Module, actions, app, imgui, registry, settings, ui
+from talon import Context, Module, actions, app, imgui, scope, settings, ui
 
 mod = Module()
 ctx = Context()
+ctx_file_manager = Context()
+ctx_file_manager.matches = r"""
+tag: user.file_manager
+"""
 
 mod.tag("file_manager", desc="Tag for enabling generic file management commands")
 mod.list("file_manager_directories", desc="List of subdirectories for the current path")
@@ -67,6 +71,11 @@ current_file_page = current_folder_page = 1
 
 ctx.lists["self.file_manager_directories"] = []
 ctx.lists["self.file_manager_files"] = []
+
+
+@ctx_file_manager.capture("user.address", rule="{user.system_paths}")
+def address(m) -> str:
+    return str(m)
 
 
 @mod.action_class
@@ -392,7 +401,7 @@ def win_event_handler(window):
     if not window.app.exe or window != ui.active_window():
         return
 
-    if "user.file_manager" not in registry.tags:
+    if "user.file_manager" not in scope.get("tag"):
         actions.user.file_manager_hide_pickers()
         clear_lists()
         cached_path = None

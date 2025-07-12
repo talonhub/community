@@ -1,5 +1,7 @@
 from talon import Context, Module, actions
 
+from ..tags.operators import Operators
+
 mod = Module()
 global_ctx = Context()
 ctx = Context()
@@ -104,42 +106,27 @@ ctx.lists["user.code_common_function"] = {
     "translate": "translate",
 }
 
+operators = Operators(
+    MATH_ADD=" + ",
+    MATH_SUBTRACT=" - ",
+    MATH_MULTIPLY=" * ",
+    MATH_DIVIDE=" / ",
+    MATH_AND=" and ",
+    MATH_OR=" or ",
+    MATH_GREATER_THAN=" > ",
+    MATH_GREATER_THAN_OR_EQUAL=" >= ",
+    MATH_LESS_THAN=" < ",
+    MATH_LESS_THAN_OR_EQUAL=" <= ",
+)
+
 
 @ctx.action_class("user")
 class UserActions:
-    def code_operator_addition():
-        actions.insert(" + ")
-
-    def code_operator_subtraction():
-        actions.insert(" - ")
-
-    def code_operator_multiplication():
-        actions.insert(" * ")
-
-    def code_operator_division():
-        actions.insert(" / ")
-
-    def code_operator_and():
-        actions.insert(" and ")
-
-    def code_operator_or():
-        actions.insert(" or ")
-
-    def code_operator_greater_than():
-        actions.insert(" > ")
-
-    def code_operator_greater_than_or_equal_to():
-        actions.insert(" >= ")
-
-    def code_operator_less_than():
-        actions.insert(" < ")
-
-    def code_operator_less_than_or_equal_to():
-        actions.insert(" <= ")
-
-    def code_import():
-        actions.insert("@import ")
+    def code_get_operators() -> Operators:
+        return operators
 
     def code_insert_function(text: str, selection: str):
-        actions.user.paste(f"{text}({selection})")
-        actions.edit.left()
+        substitutions = {"1": text}
+        if selection:
+            substitutions["0"] = selection
+        actions.user.insert_snippet_by_name("functionCall", substitutions)

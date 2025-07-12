@@ -1,0 +1,27 @@
+list: user.function_key
+-
+f one: f1
+f two: f2
+f three: f3
+f four: f4
+f five: f5
+f six: f6
+f seven: f7
+f eight: f8
+f nine: f9
+f ten: f10
+f eleven: f11
+f twelve: f12
+f thirteen: f13
+f fourteen: f14
+f fifteen: f15
+f sixteen: f16
+f seventeen: f17
+f eighteen: f18
+f nineteen: f19
+f twenty: f20
+# these f keys are not supported by all platforms (eg Mac) and are disabled by default
+#f twenty one: f21
+#f twenty two: f22
+#f twenty three: f23
+#f twenty four: f24
