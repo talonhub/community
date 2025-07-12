@@ -1,6 +1,6 @@
 from talon import Module, actions, settings
 
-from .edit_command_actions import EditAction, run_action_callback
+from .edit_command_actions import EditAction, EditSimpleAction, run_action_callback
 from .edit_command_modifiers import EditModifier, run_modifier_callback
 
 mod = Module()

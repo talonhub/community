@@ -131,15 +131,6 @@ class UserActions:
     def code_insert_is_null():
         actions.auto_insert(" === null")
 
-    def code_state_if():
-        actions.user.insert_snippet_by_name("ifStatement")
-
-    def code_state_else_if():
-        actions.user.insert_snippet_by_name("elseIfStatement")
-
-    def code_state_else():
-        actions.user.insert_snippet_by_name("elseStatement")
-
     def code_self():
         actions.auto_insert("this")
 

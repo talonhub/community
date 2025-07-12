@@ -99,9 +99,6 @@ class UserActions:
     def code_insert_is_not_null():
         actions.insert(" != null")
 
-    def code_state_case():
-        actions.user.insert_snippet_by_name("caseStatement")
-
     def code_insert_function(text: str, selection: str):
         text += f"({selection or ''})"
         actions.user.paste(text)

@@ -87,14 +87,6 @@ class UserActions:
     def code_state_else_if():
         actions.user.insert_between("else if ", " do\nend")
 
-    def code_define_class():
-        # Elixir doesn't have classes, so this is not applicable
-        pass
-
-    def code_state_return():
-        # Elixir functions automatically return the last evaluated expression
-        pass
-
     def code_insert_function(text: str, selection: str):
         text += f"({selection or ''})"
         actions.user.paste(text)
