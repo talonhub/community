@@ -3,6 +3,10 @@ app: vscode
 
 # Layer 3
 
+# @0  F2  F3  @3
+# F5  F6  F7  F8
+# F9  F10 F11 F12
+
 key(cmd-shift-alt-ctrl-f2): user.vscode("workbench.view.explorer")
 
 # slot occupied
