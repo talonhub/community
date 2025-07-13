@@ -97,8 +97,8 @@ class Actions:
         """
         action_type = action.type
 
-        if action_type in simple_action_callbacks:
-            callback = actions.user.get_simple_action_callback(action_type)
+        callback = actions.user.get_simple_action_callback(action_type)
+        if callback:
             callback()
             return
 
@@ -120,5 +120,7 @@ class Actions:
 
     def get_simple_action_callback(action_type: str) -> Callable | None:
         """Convert a edit action type created from a string into its associated Callback"""
-        assert action_type in simple_action_callbacks
-        return simple_action_callbacks[action_type]
+        if action_type in simple_action_callbacks:
+            return simple_action_callbacks[action_type]
+        else:
+            return None
