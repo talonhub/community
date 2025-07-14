@@ -1,3 +1,6 @@
+os: mac
+-
+
 ^(shot | sot) [<user.text>]: user.shortcat_hover(text or "")
 
 ^(shot | sot) click [<user.text>]:
