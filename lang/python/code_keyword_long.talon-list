@@ -2,6 +2,6 @@ list: user.code_keyword_long
 code.language: python
 -
 
-finally: "finally"
 continue: "continue"
+finally: "finally"
 nonlocal: "nonlocal "
