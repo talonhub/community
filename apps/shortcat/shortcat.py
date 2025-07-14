@@ -3,7 +3,7 @@ from talon import Module, actions
 mod = Module()
 
 # Hotkey that is configured to activate Shortcat
-SHORTCAT_HOTKEY = "cmd-shift-alt-]"
+SHORTCAT_HOTKEY = "cmd-shift-space"
 # Delay to wait for Shortcat to show the shortcuts
 SHORTCUTS_DELAY = "500ms"
 
