@@ -14,6 +14,7 @@ app: iterm2
 directories_to_remap = {}
 directories_to_exclude = {}
 
+
 @ctx.action_class("user")
 class UserActions:
     def tab_jump(number: int):
