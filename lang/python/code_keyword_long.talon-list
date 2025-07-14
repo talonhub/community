@@ -1,4 +1,4 @@
-list: user.code_keyword_long
+list: user.code_keyword_bare
 code.language: python
 -
 
