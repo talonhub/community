@@ -5,9 +5,13 @@ mod = Module()
 mod.tag("code_keywords", desc="Tag for enabling commands for keywords")
 
 mod.list("code_keyword", desc="List of keywords for active language")
+mod.list(
+    "code_keyword_bare",
+    desc="List of keywords for active language that can be dictated by name alone or the put (name) command",
+)
 
 
-@mod.capture(rule=("{user.code_keyword}"))
+@mod.capture(rule=("{user.code_keyword}|{user.code_keyword_bare}"))
 def code_keyword(m) -> str:
     return str(m)
 
