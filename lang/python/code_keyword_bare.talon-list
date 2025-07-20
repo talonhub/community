@@ -1,7 +1,0 @@
-list: user.code_keyword_bare
-code.language: python
--
-
-continue: "continue"
-finally: "finally"
-nonlocal: "nonlocal "
