@@ -169,55 +169,8 @@ class UserActions:
     # file
 
     ##
-    # code_imperative
-    ##
-    def code_state_if():
-        actions.user.insert_between("if ", " then")
-
-    def code_state_else_if():
-        actions.user.insert_between("elseif ", " then")
-
-    def code_state_else():
-        actions.insert("else\n")
-
-    def code_state_do():
-        actions.insert("repeat\n")
-
-    def code_state_for():
-        actions.user.insert_between("for ", " do")
-
-    def code_state_go_to():
-        actions.insert("goto ")
-
-    def code_state_while():
-        actions.user.insert_between("while ", " do")
-
-    def code_state_return():
-        actions.insert("return ")
-
-    def code_break():
-        actions.insert("break ")
-
-    # Assumes a ::continue:: label
-    def code_next():
-        actions.insert("goto continue")
-
-    def code_try_catch():
-        actions.user.insert_between("pcall(", ")")
-
-    ##
-    # code_comment_line
-    ##
-    def code_comment_line_prefix():
-        actions.insert("-- ")
-
-    ##
     # code_comment_block
     ##
-    def code_comment_block():
-        actions.insert("--[[\n\n--]]")
-        actions.edit.up()
-
     def code_comment_block_prefix():
         actions.insert("--[[")
 
@@ -283,10 +236,8 @@ class UserActions:
     ##
     # code_libraries
     ##
-    def code_import():
-        actions.user.insert_between("local ", " = require('')")
-
     def code_insert_library(text: str, selection: str):
-        actions.insert(f"local {selection} = require('{selection}')")
+        substitutions = {"1": selection, "0": selection}
+        actions.user.insert_snippet_by_name("importStatement", substitutions)
 
     # non-tag related actions

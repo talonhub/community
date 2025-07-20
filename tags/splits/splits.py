@@ -25,7 +25,7 @@ class Actions:
         """Splits window horizontally"""
 
     def split_flip():
-        """Flips the orietation of the active split"""
+        """Flips the orientation of the active split"""
 
     def split_maximize():
         """Maximizes the active split"""

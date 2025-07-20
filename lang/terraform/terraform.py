@@ -115,9 +115,3 @@ class UserActions:
 
     def code_insert_is_not_null():
         actions.insert(" != null")
-
-    def code_comment_line_prefix():
-        actions.insert("# ")
-
-    def code_state_for():
-        actions.user.insert_between("for ", " in")

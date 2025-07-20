@@ -7,6 +7,7 @@ mod.list("file_extension", desc="A file extension, such as .py")
 
 _file_extensions_defaults = {
     "dot pie": ".py",
+    "dot elixir": ".ex",
     "dot talon": ".talon",
     "dot mark down": ".md",
     "dot shell": ".sh",
