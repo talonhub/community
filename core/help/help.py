@@ -93,24 +93,38 @@ def gui_formatters(gui: imgui.GUI):
 
 
 def update_operators_text():
+    """For operators implemented for the active language, 
+        Map spoken forms including operator prefix to
+            the operator text for operators implemented as text insertion
+            or the operator name from the list for operators implemented differently
+    """
     global operators_text
     try:
         operators = actions.user.code_get_operators()
+        
+        # Associate the names of the operator lists with the corresponding prefix
         op_list_names = ["pointer", "math", "lambda", "bitwise", "assignment", "array"]
         names_with_prefix = [(name, "op") for name in op_list_names]
         names_with_prefix.append(("math_comparison", "is"))
+
+        # Fill in the dictionary by iterating over the operator lists
         operators_text = {}
         for name, prefix in names_with_prefix:
             operators_list = actions.user.talon_get_active_registry_list(
                 "user.code_operators_" + name
             )
             for operator_name, operator_text in operators_list.items():
-                text = operator_text
-                if operators:
+                # Only display operators implemented for the active language
+                if operator_text in operators:
+                    # If the operator is implemented as text insertion,
+                    # display the operator text
                     operator = operators.get(operator_text)
                     if type(operator) == str:
                         text = operator
-                if operator_text in operators:
+                    # Otherwise display the operator name from list
+                    else:
+                        text = operator_text
+
                     operators_text[f"{prefix} {operator_name}"] = text
     except NotImplementedError:
         operators_text = None
