@@ -69,6 +69,8 @@ def update_title():
                 refresh_context_command_map(show_enabled_contexts_only)
             else:
                 update_active_contexts_cache(registry.last_active_contexts)
+        if gui_operators.showing:
+            update_operators_text()
 
 
 @imgui.open(y=0)
@@ -671,7 +673,7 @@ class Actions:
         hide_all_help_guis()
         update_operators_text()
         gui_operators.show()
-        register_events(False)
+        register_events(True)
         ctx.tags = ["user.help_open"]
 
     def help_context_enabled():
