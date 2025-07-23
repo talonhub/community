@@ -89,6 +89,7 @@ def gui_formatters(gui: imgui.GUI):
     if gui.button("Help close"):
         gui_formatters.hide()
 
+
 def update_operators_text():
     global operators_text
     try:
@@ -98,7 +99,9 @@ def update_operators_text():
         names_with_prefix.append(("math_comparison", "is"))
         operators_text = {}
         for name, prefix in names_with_prefix:
-            operators_list = actions.user.talon_get_active_registry_list("user.code_operators_" + name)
+            operators_list = actions.user.talon_get_active_registry_list(
+                "user.code_operators_" + name
+            )
             for operator_name, operator_text in operators_list.items():
                 text = operator_text
                 if operators:
