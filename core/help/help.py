@@ -98,7 +98,7 @@ def update_operators_text():
         the operator text for operators implemented as text insertion
         or the operator name from the list for operators implemented differently
     """
-    global operators_text
+    global operators_text, total_page_count
     try:
         operators = actions.user.code_get_operators()
 
@@ -107,8 +107,8 @@ def update_operators_text():
         names_with_prefix = [(name, "op") for name in op_list_names]
         names_with_prefix.append(("math_comparison", "is"))
 
-        # Fill in the dictionary by iterating over the operator lists
-        operators_text = {}
+        # Fill in the list by iterating over the operator lists
+        operators_text = []
         for name, prefix in names_with_prefix:
             operators_list = actions.user.talon_get_active_registry_list(
                 "user.code_operators_" + name
@@ -125,7 +125,9 @@ def update_operators_text():
                     else:
                         text = operator_text
 
-                    operators_text[f"{prefix} {operator_name}"] = text
+                    operators_text.append(f"{prefix} {operator_name}: {text}")
+        page_size = settings.get("user.help_max_command_lines_per_page")
+        total_page_count = math.ceil(len(operators_text) / page_size)
     except NotImplementedError:
         operators_text = None
 
@@ -133,15 +135,27 @@ def update_operators_text():
 @imgui.open(y=0)
 def gui_operators(gui: imgui.GUI):
     global operators_text
-    gui.text("Operators")
-    gui.line()
 
     if operators_text is None:
+        gui.text("Operators")
+        gui.line()
         gui.text("There was no active programming language when you opened this menu")
         gui.text("or the language does not have operator support.")
     else:
-        for key, val in operators_text.items():
-            gui.text(f"{key}: {val}")
+        page_size = settings.get("user.help_max_command_lines_per_page")
+        page_start = page_size * (current_list_page - 1)
+        page_end = page_start + page_size
+        gui.text(f"Operators {current_list_page}/{total_page_count}")
+        for text in operators_text[page_start:page_end]:
+            gui.text(text)
+        
+        if total_page_count > 1:
+            gui.spacer()
+            if gui.button("Help next"):
+                actions.user.help_next()
+
+            if gui.button("Help previous"):
+                actions.user.help_previous()
     gui.spacer()
     if gui.button("Help close"):
         gui_operators.hide()
@@ -759,7 +773,7 @@ class Actions:
                 else:
                     selected_context_page = 1
 
-        if gui_list_help.showing:
+        if gui_list_help.showing or gui_operators.showing:
             if current_list_page != total_page_count:
                 current_list_page += 1
             else:
@@ -806,7 +820,7 @@ class Actions:
                 else:
                     selected_context_page = total_page_count
 
-        if gui_list_help.showing:
+        if gui_list_help.showing or gui_operators.showing:
             if current_list_page != total_page_count:
                 current_list_page -= 1
             else:
