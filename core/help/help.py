@@ -93,15 +93,15 @@ def gui_formatters(gui: imgui.GUI):
 
 
 def update_operators_text():
-    """For operators implemented for the active language, 
-        Map spoken forms including operator prefix to
-            the operator text for operators implemented as text insertion
-            or the operator name from the list for operators implemented differently
+    """For operators implemented for the active language,
+    Map spoken forms including operator prefix to
+        the operator text for operators implemented as text insertion
+        or the operator name from the list for operators implemented differently
     """
     global operators_text
     try:
         operators = actions.user.code_get_operators()
-        
+
         # Associate the names of the operator lists with the corresponding prefix
         op_list_names = ["pointer", "math", "lambda", "bitwise", "assignment", "array"]
         names_with_prefix = [(name, "op") for name in op_list_names]
