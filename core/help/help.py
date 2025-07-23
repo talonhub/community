@@ -148,7 +148,7 @@ def gui_operators(gui: imgui.GUI):
         gui.text(f"Operators {current_list_page}/{total_page_count}")
         for text in operators_text[page_start:page_end]:
             gui.text(text)
-        
+
         if total_page_count > 1:
             gui.spacer()
             if gui.button("Help next"):
