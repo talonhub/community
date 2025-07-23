@@ -89,6 +89,44 @@ def gui_formatters(gui: imgui.GUI):
     if gui.button("Help close"):
         gui_formatters.hide()
 
+def update_operators_text():
+    global operators_text
+    try:
+        operators = actions.user.code_get_operators()
+        op_list_names = ["pointer", "math", "lambda", "bitwise", "assignment", "array"]
+        names_with_prefix = [(name, "op") for name in op_list_names]
+        names_with_prefix.append(("math_comparison", "is"))
+        operators_text = {}
+        for name, prefix in names_with_prefix:
+            operators_list = actions.user.talon_get_active_registry_list("user.code_operators_" + name)
+            for operator_name, operator_text in operators_list.items():
+                text = operator_text
+                if operators:
+                    operator = operators.get(operator_text)
+                    if type(operator) == str:
+                        text = operator
+                if operator_text in operators:
+                    operators_text[f"{prefix} {operator_name}"] = text
+    except NotImplementedError:
+        operators_text = None
+
+
+@imgui.open(y=0)
+def gui_operators(gui: imgui.GUI):
+    global operators_text
+    gui.text("Operators")
+    gui.line()
+
+    if operators_text is None:
+        gui.text("There was no active programming language when you opened this menu")
+        gui.text("or the language does not have operator support.")
+    else:
+        for key, val in operators_text.items():
+            gui.text(f"{key}: {val}")
+    gui.spacer()
+    if gui.button("Help close"):
+        gui_operators.hide()
+
 
 def format_context_title(context_name: str) -> str:
     global cached_active_contexts_list
@@ -535,6 +573,7 @@ def hide_all_help_guis():
     gui_context_help.hide()
     gui_formatters.hide()
     gui_list_help.hide()
+    gui_operators.hide()
 
 
 def paginate_list(data, SIZE=None):
@@ -620,6 +659,15 @@ class Actions:
         reset()
         hide_all_help_guis()
         gui_formatters.show()
+        register_events(False)
+        ctx.tags = ["user.help_open"]
+
+    def help_operators():
+        """Displays the list of operator names"""
+        reset()
+        hide_all_help_guis()
+        update_operators_text()
+        gui_operators.show()
         register_events(False)
         ctx.tags = ["user.help_open"]
 
