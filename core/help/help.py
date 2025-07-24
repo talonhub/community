@@ -120,12 +120,12 @@ def update_operators_text():
                     # display the operator text
                     operator = operators.get(operator_text)
                     if type(operator) == str:
-                        text = operator
+                        text = ": " + operator
                     # Otherwise display the operator name from list
                     else:
-                        text = operator_text
+                        text = ""
 
-                    operators_text.append(f"{prefix} {operator_name}: {text}")
+                    operators_text.append(f"{prefix} {operator_name}{text}")
         page_size = settings.get("user.help_max_command_lines_per_page")
         total_page_count = math.ceil(len(operators_text) / page_size)
     except NotImplementedError:
