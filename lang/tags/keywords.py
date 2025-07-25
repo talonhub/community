@@ -20,5 +20,13 @@ def code_keyword(m) -> str:
 class Actions:
     def code_keyword(keywords: list[str]):
         """Adds keywords"""
-        for keyword in keywords:
-            actions.insert(keyword)
+        if len(keywords) == 1:
+            actions.insert(keywords[0])
+        else:
+            # every keyword is separated by a space
+            # the spacing before the first keyword and after the last keyword is kept
+            combined_text: str = keywords[0].rstrip() + " "
+            for i in range(1, len(keywords) - 1):
+                combined_text += keywords[i].strip() + " "
+            combined_text += keywords[-1].lstrip()
+            actions.insert(combined_text)
