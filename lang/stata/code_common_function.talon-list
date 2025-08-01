@@ -1,0 +1,15 @@
+list: user.code_common_function
+code.language: stata
+-
+
+# base stata
+global: global
+local: local
+reg: reg
+regress: reg
+# packages
+estadd: estadd
+estout: estout
+estpost: estpost
+eststo: eststo
+esttab: esttab
