@@ -45,7 +45,6 @@ ctx.lists["user.code_keyword"] = {
     "const": "const",
 }
 
-
 operators = Operators(
     # code_operators_array
     SUBSCRIPT=lambda: actions.user.insert_between("[", "]"),

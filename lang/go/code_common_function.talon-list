@@ -3,9 +3,9 @@ code.language: go
 -
 
 # golang buildin functions
-append: append
+append
 length: len
-make: make
+make
 # formatting
 format print: fmt.Printf
 format sprint: fmt.Sprintf
