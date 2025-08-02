@@ -6,11 +6,6 @@ ctx = Context()
 ctx.matches = r"""
 code.language: csharp
 """
-ctx.lists["user.code_common_function"] = {
-    "integer": "int.TryParse",
-    "print": "Console.WriteLine",
-    "string": ".ToString",
-}
 
 operators = Operators(
     # code_operators_array
