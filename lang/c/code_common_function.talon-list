@@ -2,44 +2,46 @@ list: user.code_common_function
 code.language: c
 -
 
+alloc ah: alloca
+ay to eye: atoi
+ef close: fclose
+ef open: fopen
+ef read: fread
+ef write: fwrite
+em map: mmap
+em un map: munmap
+es en print eff: sprintf
+es print eff: sprintf
+exit
+free
+get char: getchar
+get op: getopt
+is digit: isdigit
+ma map: mmap
+malloc
 mem copy: memcpy
 mem set: memset
-string cat: strcat
-stir cat: strcat
-stir en cat: strncat
-stir elle cat: strlcat
-stir copy: strcpy
-stir en copy: strncpy
-stir elle copy: strlcpy
-string char: strchr
-string dupe: strdup
-stir dupe: strdup
-stir comp: strcmp
-stir en comp: strncmp
-string len: strlen
-stir len: strlen
-is digit: isdigit
-get char: getchar
 print eff: printf
-es print eff: sprintf
-es en print eff: sprintf
+re alloc: realloc
+see alloc: calloc
+set jump: setjmp
+signal
+size of: sizeof
+stir cat: strcat
+string cat: strcat
+stir comp: strcmp
+stir copy: strcpy
+stir dupe: strdup
+string dupe: strdup
+stir elle cat: strlcat
+stir l cat: strlcat
+stir elle copy: strlcpy
+stir l copy: strlcpy
+stir en cat: strncat
+stir en copy: strncpy
+stir en comp: strncmp
+stir len: strlen
+string len: strlen
 stir to int: strtoint
 stir to unsigned int: strtouint
-ay to eye: atoi
-em map: mmap
-ma map: mmap
-em un map: munmap
-size of: sizeof
-ef open: fopen
-ef write: fwrite
-ef read: fread
-ef close: fclose
-exit
-signal
-set jump: setjmp
-get op: getopt
-malloc
-see alloc: calloc
-alloc ah: alloca
-re alloc: realloc
-free
+string char: strchr
