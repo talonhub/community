@@ -6,3 +6,40 @@ phrase: link
 -
 [$1]($0)
 ---
+
+name: image
+phrase: image
+-
+![$1]($0)
+---
+
+
+name: checkbox
+phrase: to do | check box | tick box
+-
+* [ ] $0
+---
+
+name: bold
+phrase: bold | strong
+-
+**$0**
+---
+
+name: italic
+phrase: italic | emph | emphasis
+-
+*$0*
+---
+
+name: italic bold
+phrase: italic bold | bold italic | strong emphasis | strong emph
+-
+***$0***
+---
+
+name: quote
+phrase: quote
+-
+> $0
+---
