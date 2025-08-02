@@ -27,5 +27,9 @@ class Actions:
             # the spacing before the first keyword and after the last keyword is kept
             leading_word = keywords[0].rstrip()
             trailing_word = keywords[-1].lstrip()
-            stripped_words = [leading_word] + [keyword.strip() for keyword in keywords[1:-1]] + [trailing_word]
+            stripped_words = (
+                [leading_word]
+                + [keyword.strip() for keyword in keywords[1:-1]]
+                + [trailing_word]
+            )
             actions.insert(" ".join(stripped_words))
