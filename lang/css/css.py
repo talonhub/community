@@ -54,57 +54,6 @@ global_ctx.lists["self.css_at_rule"] = {
 
 global_ctx.lists["self.css_global_value"] = ["initial", "inherit", "unset", "revert"]
 
-ctx.lists["user.code_common_function"] = {
-    # reference
-    "attribute": "attr",
-    "env": "env",
-    "url": "url",
-    "var": "var",
-    "variable": "var",
-    # mathematical
-    "calc": "calc",
-    "calculate": "calc",
-    "clamp": "clamp",
-    "max": "max",
-    "min": "min",
-    # color
-    "HSL": "hsl",
-    "hue sat light": "hsl",
-    "HSLA": "hsla",
-    "lab": "lab",
-    "LCH": "lch",
-    "RGB": "rgb",
-    "red green blue": "rgb",
-    "RGBA": "rgba",
-    "color": "color",
-    # image functions
-    "linear gradient": "linear-gradient",
-    # counter functions
-    "counter": "counter",
-    "counters": "counters",
-    "symbols": "symbols",
-    # filter
-    "blur": "blur",
-    "brightness": "brightness",
-    "contrast": "contrast",
-    "drop shadow": "drop-shadow",
-    "grayscale": "grayscale",
-    "hue rotate": "hue-rotate",
-    "invert": "invert",
-    "opacity": "opacity",
-    "saturate": "saturate",
-    "sepia": "sepia",
-    # grid
-    "fit content": "fit-content",
-    "min max": "minmax",
-    "repeat": "repeat",
-    # transform
-    "matrix": "matrix",
-    "rotate": "rotate",
-    "scale": "scale",
-    "skew": "skew",
-    "translate": "translate",
-}
 
 operators = Operators(
     MATH_ADD=" + ",
