@@ -25,7 +25,8 @@ for: "for "
 go to: "goto "
 if: "if "
 in line: "inline "
-int | integer: "int"
+int
+integer: int
 long: "long "
 null pointer: "nullptr"
 register: "register "
