@@ -16,52 +16,6 @@ mod.setting(
 )
 mod.tag("stylua", desc="Tag for stylua linting commands")
 
-ctx.lists["user.code_common_function"] = {
-    "to number": "tonumber",
-    "I pairs": "ipairs",
-    "print": "print",
-    "print F": "printf",
-    "type": "type",
-    "assert": "assert",
-    "get meta table": "getmetatable",
-    "set meta table": "setmetatable",
-    # io
-    "I O write": "io.write",
-    "I O read": "io.read",
-    "I O open": "io.open",
-    # string
-    "format": "string.format",
-    "string G find": "string.gfind",
-    "string find": "string.strfind",
-    "string len": "string.strlen",
-    "string upper": "string.strupper",
-    "string lower": "string.strlower",
-    "string sub": "string.strsub",
-    "string G sub": "string.gsub",
-    "string match": "string.match",
-    "string G match": "string.gmatch",
-    # table
-    "table unpack": "table.unpack",
-    "table insert": "table.insert",
-    "tabel get N": "table.getn",
-    "tabel sort": "table.sort",
-    # math
-    "math max": "math.max",
-    # json
-    "jason parse": "json.parse",
-    # http
-    "H T T P get": "http.get",
-    "web get": "http.get",
-    # os
-    "O S date": "os.date",
-    "O S time": "os.time",
-    "O S clock": "os.clock",
-    "O S rename": "os.rename",
-    "O S remove": "os.remove",
-    "O S getenv": "os.getenv",
-    "O S execute": "os.execute",
-}
-
 ctx.lists["user.code_libraries"] = {
     "bit": "bit",
     "I O": "io",
