@@ -3,7 +3,7 @@ from talon.canvas import Canvas
 from talon.screen import Screen
 from talon.skia.canvas import Canvas as SkiaCanvas
 from talon.skia.imagefilter import ImageFilter
-from talon.ui import Rect
+from talon.ui import Point2d, Rect
 
 canvas: Canvas = None
 current_mode = ""
@@ -15,6 +15,12 @@ mod.setting(
     type=bool,
     default=False,
     desc="If true the mode indicator is shown",
+)
+mod.setting(
+    "mode_indicator_show_microphone_name",
+    type=bool,
+    default=False,
+    desc="Show first two letters of microphone name if true",
 )
 mod.setting(
     "mode_indicator_size",
@@ -41,6 +47,7 @@ mod.setting(
     type=float,
     desc="Mode indicator gradient brightness in percentages(0-1). 0=darkest, 1=brightest",
 )
+mod.setting("mode_indicator_color_text", type=str)
 mod.setting("mode_indicator_color_mute", type=str)
 mod.setting("mode_indicator_color_sleep", type=str)
 mod.setting("mode_indicator_color_dictation", type=str)
@@ -97,16 +104,17 @@ def get_colors():
     color_mode = get_mode_color()
     color_gradient = get_gradient_color(color_mode)
     color_alpha = get_alpha_color()
-    return f"{color_mode}{color_alpha}", f"{color_gradient}"
+    color_text = settings.get("user.mode_indicator_color_text")
+    return f"{color_mode}{color_alpha}", color_gradient, color_text
 
 
 def on_draw(c: SkiaCanvas):
-    color_mode, color_gradient = get_colors()
+    color_mode, color_gradient, color_text = get_colors()
     x, y = c.rect.center.x, c.rect.center.y
     radius = c.rect.height / 2 - 2
 
     c.paint.shader = skia.Shader.radial_gradient(
-        (x, y), radius, [color_mode, color_gradient]
+        Point2d(x, y), radius, [color_mode, color_gradient]
     )
 
     c.paint.imagefilter = ImageFilter.drop_shadow(1, 1, 1, 1, color_gradient)
@@ -114,6 +122,22 @@ def on_draw(c: SkiaCanvas):
     c.paint.style = c.paint.Style.FILL
     c.paint.color = color_mode
     c.draw_circle(x, y, radius)
+
+    if settings.get("user.mode_indicator_show_microphone_name"):
+        # Remove c.paint.shader gradient before drawing again
+        c.paint.shader = skia.Shader.radial_gradient(
+            Point2d(x, y), radius, [color_text, color_text]
+        )
+
+        text = current_microphone[:2]
+        c.paint.style = c.paint.Style.FILL
+        c.paint.color = color_text
+        text_rect = c.paint.measure_text(text)[1]
+        c.draw_text(
+            text,
+            x - text_rect.center.x,
+            y - text_rect.center.y,
+        )
 
 
 def move_indicator():
