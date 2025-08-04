@@ -1,4 +1,5 @@
 from time import sleep
+
 from talon import Module, actions, settings
 
 mod = Module()
@@ -9,6 +10,7 @@ mod.setting(
     default=0,
     desc="Time in milliseconds to sleep after inserting text with `insert_between` (e.g. when using paired delimiters like 'box' or 'round'), before moving the cursor back. Useful to set on a per-application basis, to prevent moving the moving the cursor before text is inserted",
 )
+
 
 @mod.action_class
 class module_actions:
