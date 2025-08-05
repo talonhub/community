@@ -94,8 +94,8 @@ def gui_formatters(gui: imgui.GUI):
 
 def update_operators_text():
     """For operators implemented for the active language, map spoken forms including operator prefix to
-        the operator text for operators implemented as text insertion
-        or an asterix for operators implemented as a function call.
+    the operator text for operators implemented as text insertion
+    or an asterix for operators implemented as a function call.
     """
     global operators_text, total_page_count
     try:
