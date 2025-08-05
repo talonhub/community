@@ -112,6 +112,8 @@ def update_operators_text():
             operators_list = actions.user.talon_get_active_registry_list(
                 "user.code_operators_" + name
             )
+            if operators_list:
+                operators_text.append(f"{name} operators:")
             for operator_name, operator_text in operators_list.items():
                 # Only display operators implemented for the active language
                 if operator_text in operators:
@@ -124,7 +126,7 @@ def update_operators_text():
                     else:
                         text = ""
 
-                    operators_text.append(f"{prefix} {operator_name}{text}")
+                    operators_text.append(f" {prefix} {operator_name}{text}")
         page_size = settings.get("user.help_max_command_lines_per_page")
         total_page_count = math.ceil(len(operators_text) / page_size)
     # This exception will get raised if there is no operators object defined in the active context
