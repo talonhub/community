@@ -137,7 +137,7 @@ def gui_operators(gui: imgui.GUI):
     global operators_text
 
     if operators_text is None:
-        gui.text("Operators")
+        gui.text("Help: Operators (1/1)")
         gui.line()
         gui.text("There is no active programming language when you opened this menu")
         gui.text("or the language does not have operator support.")
@@ -145,7 +145,7 @@ def gui_operators(gui: imgui.GUI):
         page_size = settings.get("user.help_max_command_lines_per_page")
         page_start = page_size * (current_list_page - 1)
         page_end = page_start + page_size
-        gui.text(f"Operators {current_list_page}/{total_page_count}")
+        gui.text(f"Help: Operators ({current_list_page}/{total_page_count})")
         for text in operators_text[page_start:page_end]:
             gui.text(text)
 
