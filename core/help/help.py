@@ -102,7 +102,7 @@ def update_operators_text():
         operators = actions.user.code_get_operators()
 
         # Associate the names of the operator lists with the corresponding prefix
-        op_list_names = ["pointer", "math", "lambda", "bitwise", "assignment", "array"]
+        op_list_names = ["array", "assignment", "bitwise", "lambda", "math", "pointer"]
         names_with_prefix = [(name, "op") for name in op_list_names]
         names_with_prefix.append(("math_comparison", "is"))
 
@@ -114,7 +114,7 @@ def update_operators_text():
             )
             if operators_list:
                 operators_text.append(f"{name} operators:")
-            for operator_name, operator_text in operators_list.items():
+            for operator_name, operator_text in sorted(operators_list.items()):
                 # Only display operators implemented for the active language
                 if operator_text in operators:
                     # If the operator is implemented as text insertion,
