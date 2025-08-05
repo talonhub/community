@@ -127,6 +127,7 @@ def update_operators_text():
                     operators_text.append(f"{prefix} {operator_name}{text}")
         page_size = settings.get("user.help_max_command_lines_per_page")
         total_page_count = math.ceil(len(operators_text) / page_size)
+    # This exception will get raised if there is no operators object defined in the active context
     except NotImplementedError:
         operators_text = None
 
