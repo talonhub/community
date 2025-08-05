@@ -108,12 +108,12 @@ def update_operators_text():
 
         # Fill in the list by iterating over the operator lists
         operators_text = []
+        has_operator_without_text_implementation = False
         for name, prefix in names_with_prefix:
             operators_list = actions.user.talon_get_active_registry_list(
                 "user.code_operators_" + name
             )
-            if operators_list:
-                operators_text.append(f"{name} operators:")
+            has_added_first_list_item = False
             for operator_name, operator_text in sorted(operators_list.items()):
                 # Only display operators implemented for the active language
                 if operator_text in operators:
@@ -124,9 +124,18 @@ def update_operators_text():
                         text = ": " + operator
                     # Otherwise display the operator name from list
                     else:
-                        text = ""
+                        has_operator_without_text_implementation = True
+                        text = "*"
+                    # Only add the header if an item in the list is defined in operators
+                    if not has_added_first_list_item:
+                        has_added_first_list_item = True
+                        operators_text.append(f"{name} operators:")
 
                     operators_text.append(f" {prefix} {operator_name}{text}")
+        if has_operator_without_text_implementation:
+            operators_text.append(
+                "* operator is implemented as a function call and cannot be displayed"
+            )
         page_size = settings.get("user.help_max_command_lines_per_page")
         total_page_count = math.ceil(len(operators_text) / page_size)
     # This exception will get raised if there is no operators object defined in the active context
