@@ -1,6 +1,6 @@
 from typing import Any, Callable, TypeVar
 
-from talon import Context, Module, actions, settings, app
+from talon import Context, Module, actions, app, settings
 
 from ..tags.operators import Operators
 
@@ -224,6 +224,8 @@ ctx.lists["user.code_macros"] = all_macros
 ctx.lists["user.code_trait"] = all_traits
 
 operators: Operators
+
+
 def on_ready():
     global operators
     operators = Operators(
@@ -253,7 +255,9 @@ def on_ready():
         MATH_MULTIPLY=" * ",
         MATH_DIVIDE=" / ",
         MATH_MODULO=" % ",
-        MATH_EXPONENT=actions.user.described_function_create_insert_between(".pow(", ")"),
+        MATH_EXPONENT=actions.user.described_function_create_insert_between(
+            ".pow(", ")"
+        ),
         MATH_EQUAL=" == ",
         MATH_NOT_EQUAL=" != ",
         MATH_GREATER_THAN=" > ",
@@ -268,7 +272,9 @@ def on_ready():
         POINTER_ADDRESS_OF="&",
     )
 
+
 app.register("ready", on_ready)
+
 
 @ctx.action_class("user")
 class UserActions:

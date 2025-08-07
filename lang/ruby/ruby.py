@@ -1,4 +1,4 @@
-from talon import Context, actions, settings, app
+from talon import Context, actions, app, settings
 
 from ..tags.operators import Operators
 
@@ -8,6 +8,8 @@ code.language: ruby
 """
 
 operators: Operators
+
+
 def on_ready():
     global operators
     operators = Operators(
@@ -54,7 +56,9 @@ def on_ready():
         MATH_OR=" || ",
     )
 
+
 app.register("ready", on_ready)
+
 
 @ctx.action_class("user")
 class UserActions:

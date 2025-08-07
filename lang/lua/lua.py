@@ -1,4 +1,4 @@
-from talon import Context, Module, actions, settings, app
+from talon import Context, Module, actions, app, settings
 
 from ..tags.operators import Operators
 
@@ -82,7 +82,10 @@ def code_operator_bitwise_right_shift():
     else:
         actions.insert(" bit.rshift() ")
 
+
 operators: Operators
+
+
 def on_ready():
     global operators
     operators = Operators(
@@ -91,11 +94,21 @@ def on_ready():
         # code_operators_assignment
         ASSIGNMENT=" = ",
         # code_operators_bitwise
-        BITWISE_AND=actions.user.described_function_create(code_operator_bitwise_and, 'code_operator_bitwise_and'),
-        BITWISE_OR=actions.user.described_function_create(code_operator_bitwise_or, 'code_operator_bitwise_or'),
-        BITWISE_EXCLUSIVE_OR=actions.user.described_function_create(code_operator_bitwise_exclusive_or, 'code_operator_bitwise_exclusive_or'),
-        BITWISE_LEFT_SHIFT=actions.user.described_function_create(code_operator_bitwise_left_shift, 'code_operator_bitwise_left_shift'),
-        BITWISE_RIGHT_SHIFT=actions.user.described_function_create(code_operator_bitwise_right_shift, 'code_operator_bitwise_right_shift'),
+        BITWISE_AND=actions.user.described_function_create(
+            code_operator_bitwise_and, "code_operator_bitwise_and"
+        ),
+        BITWISE_OR=actions.user.described_function_create(
+            code_operator_bitwise_or, "code_operator_bitwise_or"
+        ),
+        BITWISE_EXCLUSIVE_OR=actions.user.described_function_create(
+            code_operator_bitwise_exclusive_or, "code_operator_bitwise_exclusive_or"
+        ),
+        BITWISE_LEFT_SHIFT=actions.user.described_function_create(
+            code_operator_bitwise_left_shift, "code_operator_bitwise_left_shift"
+        ),
+        BITWISE_RIGHT_SHIFT=actions.user.described_function_create(
+            code_operator_bitwise_right_shift, "code_operator_bitwise_right_shift"
+        ),
         # code_operators_assignment
         MATH_SUBTRACT=" - ",
         MATH_ADD=" + ",
@@ -114,7 +127,9 @@ def on_ready():
         MATH_OR=" or ",
     )
 
+
 app.register("ready", on_ready)
+
 
 @ctx.action_class("user")
 class UserActions:

@@ -1,4 +1,4 @@
-from talon import Context, Module, actions, settings, app
+from talon import Context, Module, actions, app, settings
 
 from ..tags.operators import Operators
 
@@ -69,6 +69,8 @@ ctx.lists["user.code_common_function"] = {
 }
 
 operators: Operators
+
+
 def on_ready():
     global operators
     operators = Operators(
@@ -115,7 +117,9 @@ def on_ready():
         POINTER_INDIRECTION="*",
     )
 
+
 app.register("ready", on_ready)
+
 
 @ctx.action_class("user")
 class UserActions:

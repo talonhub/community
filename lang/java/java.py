@@ -1,4 +1,4 @@
-from talon import Context, Module, actions, settings, app
+from talon import Context, Module, actions, app, settings
 
 from ..tags.operators import Operators
 
@@ -90,6 +90,8 @@ mod.list("java_modifier", desc="Java Modifiers")
 ctx.lists["self.java_modifier"] = java_modifiers
 
 operators: Operators
+
+
 def on_ready():
     global operators
     operators = Operators(
@@ -132,7 +134,9 @@ def on_ready():
         MATH_NOT="!",
     )
 
+
 app.register("ready", on_ready)
+
 
 @ctx.action_class("user")
 class UserActions:

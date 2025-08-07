@@ -1,6 +1,6 @@
 import re
 
-from talon import Context, Module, actions, settings, app
+from talon import Context, Module, actions, app, settings
 
 from ..tags.operators import Operators
 
@@ -9,7 +9,7 @@ ctx = Context()
 ctx.matches = r"""
 code.language: python
 """
- 
+
 """a set of fields used in python docstrings that will follow the
 reStructuredText format"""
 docstring_fields = {
@@ -123,6 +123,7 @@ ctx.lists["user.python_exception"] = {
 
 operators: Operators
 
+
 def on_ready():
     global operators
     operators = Operators(
@@ -170,7 +171,10 @@ def on_ready():
         MATH_IN=" in ",
         MATH_NOT_IN=" not in ",
     )
+
+
 app.register("ready", on_ready)
+
 
 @ctx.action_class("user")
 class UserActions:

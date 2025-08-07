@@ -1,4 +1,4 @@
-from talon import Context, Module, actions, settings, app
+from talon import Context, Module, actions, app, settings
 
 from ..tags.operators import Operators
 
@@ -144,7 +144,10 @@ def c_variable(m) -> str:
     "Returns a string"
     return " ".join(list(m))
 
+
 operators: Operators
+
+
 def on_ready():
     global operators
     operators = Operators(
@@ -185,6 +188,7 @@ def on_ready():
         POINTER_ADDRESS_OF="&",
         POINTER_STRUCTURE_DEREFERENCE="->",
     )
+
 
 app.register("ready", on_ready)
 

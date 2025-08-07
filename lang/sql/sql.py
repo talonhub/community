@@ -8,6 +8,8 @@ code.language: sql
 """
 
 operators: Operators
+
+
 def on_ready():
     global operators
     operators = Operators(
@@ -22,12 +24,16 @@ def on_ready():
         MATH_LESS_THAN=" < ",
         MATH_LESS_THAN_OR_EQUAL=" <= ",
         MATH_IN=actions.user.described_function_create_insert_between(" IN (", ")"),
-        MATH_NOT_IN=actions.user.described_function_create_insert_between(" NOT IN (", ")"),
+        MATH_NOT_IN=actions.user.described_function_create_insert_between(
+            " NOT IN (", ")"
+        ),
         MATH_AND=" AND ",
         MATH_OR=" OR ",
     )
 
+
 app.register("ready", on_ready)
+
 
 @ctx.action_class("user")
 class UserActions:

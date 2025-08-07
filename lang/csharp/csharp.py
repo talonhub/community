@@ -1,4 +1,4 @@
-from talon import Context, actions, settings, app
+from talon import Context, actions, app, settings
 
 from ..tags.operators import Operators
 
@@ -8,6 +8,8 @@ code.language: csharp
 """
 
 operators: Operators
+
+
 def on_ready():
     global operators
     operators = Operators(
@@ -55,6 +57,7 @@ def on_ready():
         POINTER_INDIRECTION="*",
         POINTER_STRUCTURE_DEREFERENCE="->",
     )
+
 
 app.register("ready", on_ready)
 
