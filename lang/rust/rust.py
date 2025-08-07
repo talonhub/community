@@ -1,6 +1,6 @@
 from typing import Any, Callable, TypeVar
 
-from talon import Context, Module, actions, settings
+from talon import Context, Module, actions, settings, app
 
 from ..tags.operators import Operators
 
@@ -223,48 +223,52 @@ ctx.lists["user.code_macros"] = all_macros
 
 ctx.lists["user.code_trait"] = all_traits
 
-operators = Operators(
-    # code_operators_array
-    SUBSCRIPT=lambda: actions.user.insert_between("[", "]"),
-    # code_operators_assignment
-    ASSIGNMENT=" = ",
-    ASSIGNMENT_ADDITION=" += ",
-    ASSIGNMENT_SUBTRACTION=" -= ",
-    ASSIGNMENT_MULTIPLICATION=" *= ",
-    ASSIGNMENT_DIVISION=" /= ",
-    ASSIGNMENT_MODULO=" %= ",
-    ASSIGNMENT_BITWISE_AND=" &= ",
-    ASSIGNMENT_BITWISE_OR=" |= ",
-    ASSIGNMENT_BITWISE_EXCLUSIVE_OR=" ^= ",
-    ASSIGNMENT_BITWISE_LEFT_SHIFT=" <<= ",
-    ASSIGNMENT_BITWISE_RIGHT_SHIFT=" >>= ",
-    # code_operators_bitwise
-    BITWISE_AND=" & ",
-    BITWISE_OR=" | ",
-    BITWISE_EXCLUSIVE_OR=" ^ ",
-    BITWISE_LEFT_SHIFT=" << ",
-    BITWISE_RIGHT_SHIFT=" >> ",
-    # code_operators_math
-    MATH_ADD=" + ",
-    MATH_SUBTRACT=" - ",
-    MATH_MULTIPLY=" * ",
-    MATH_DIVIDE=" / ",
-    MATH_MODULO=" % ",
-    MATH_EXPONENT=lambda: actions.user.insert_between(".pow(", ")"),
-    MATH_EQUAL=" == ",
-    MATH_NOT_EQUAL=" != ",
-    MATH_GREATER_THAN=" > ",
-    MATH_GREATER_THAN_OR_EQUAL=" >= ",
-    MATH_LESS_THAN=" < ",
-    MATH_LESS_THAN_OR_EQUAL=" <= ",
-    MATH_AND=" && ",
-    MATH_OR=" || ",
-    ASSIGNMENT_INCREMENT=" += 1",
-    # code_operators_pointer
-    POINTER_INDIRECTION="*",
-    POINTER_ADDRESS_OF="&",
-)
+operators: Operators
+def on_ready():
+    global operators
+    operators = Operators(
+        # code_operators_array
+        SUBSCRIPT=actions.user.described_function_create_insert_between("[", "]"),
+        # code_operators_assignment
+        ASSIGNMENT=" = ",
+        ASSIGNMENT_ADDITION=" += ",
+        ASSIGNMENT_SUBTRACTION=" -= ",
+        ASSIGNMENT_MULTIPLICATION=" *= ",
+        ASSIGNMENT_DIVISION=" /= ",
+        ASSIGNMENT_MODULO=" %= ",
+        ASSIGNMENT_BITWISE_AND=" &= ",
+        ASSIGNMENT_BITWISE_OR=" |= ",
+        ASSIGNMENT_BITWISE_EXCLUSIVE_OR=" ^= ",
+        ASSIGNMENT_BITWISE_LEFT_SHIFT=" <<= ",
+        ASSIGNMENT_BITWISE_RIGHT_SHIFT=" >>= ",
+        # code_operators_bitwise
+        BITWISE_AND=" & ",
+        BITWISE_OR=" | ",
+        BITWISE_EXCLUSIVE_OR=" ^ ",
+        BITWISE_LEFT_SHIFT=" << ",
+        BITWISE_RIGHT_SHIFT=" >> ",
+        # code_operators_math
+        MATH_ADD=" + ",
+        MATH_SUBTRACT=" - ",
+        MATH_MULTIPLY=" * ",
+        MATH_DIVIDE=" / ",
+        MATH_MODULO=" % ",
+        MATH_EXPONENT=actions.user.described_function_create_insert_between(".pow(", ")"),
+        MATH_EQUAL=" == ",
+        MATH_NOT_EQUAL=" != ",
+        MATH_GREATER_THAN=" > ",
+        MATH_GREATER_THAN_OR_EQUAL=" >= ",
+        MATH_LESS_THAN=" < ",
+        MATH_LESS_THAN_OR_EQUAL=" <= ",
+        MATH_AND=" && ",
+        MATH_OR=" || ",
+        ASSIGNMENT_INCREMENT=" += 1",
+        # code_operators_pointer
+        POINTER_INDIRECTION="*",
+        POINTER_ADDRESS_OF="&",
+    )
 
+app.register("ready", on_ready)
 
 @ctx.action_class("user")
 class UserActions:

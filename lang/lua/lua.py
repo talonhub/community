@@ -1,4 +1,4 @@
-from talon import Context, Module, actions, settings
+from talon import Context, Module, actions, settings, app
 
 from ..tags.operators import Operators
 
@@ -82,36 +82,39 @@ def code_operator_bitwise_right_shift():
     else:
         actions.insert(" bit.rshift() ")
 
+operators: Operators
+def on_ready():
+    global operators
+    operators = Operators(
+        # code_operators_array
+        SUBSCRIPT=actions.user.described_function_create_insert_between("[", "]"),
+        # code_operators_assignment
+        ASSIGNMENT=" = ",
+        # code_operators_bitwise
+        BITWISE_AND=code_operator_bitwise_and,
+        BITWISE_OR=code_operator_bitwise_or,
+        BITWISE_EXCLUSIVE_OR=code_operator_bitwise_exclusive_or,
+        BITWISE_LEFT_SHIFT=code_operator_bitwise_left_shift,
+        BITWISE_RIGHT_SHIFT=code_operator_bitwise_right_shift,
+        # code_operators_assignment
+        MATH_SUBTRACT=" - ",
+        MATH_ADD=" + ",
+        MATH_MULTIPLY=" * ",
+        MATH_DIVIDE=" / ",
+        MATH_INTEGER_DIVIDE=" // ",
+        MATH_MODULO=" % ",
+        MATH_EXPONENT=" ^ ",
+        MATH_EQUAL=" == ",
+        MATH_NOT_EQUAL=" ~= ",
+        MATH_GREATER_THAN=" > ",
+        MATH_GREATER_THAN_OR_EQUAL=" >= ",
+        MATH_LESS_THAN=" < ",
+        MATH_LESS_THAN_OR_EQUAL=" <= ",
+        MATH_AND=" and ",
+        MATH_OR=" or ",
+    )
 
-operators = Operators(
-    # code_operators_array
-    SUBSCRIPT=lambda: actions.user.insert_between("[", "]"),
-    # code_operators_assignment
-    ASSIGNMENT=" = ",
-    # code_operators_bitwise
-    BITWISE_AND=code_operator_bitwise_and,
-    BITWISE_OR=code_operator_bitwise_or,
-    BITWISE_EXCLUSIVE_OR=code_operator_bitwise_exclusive_or,
-    BITWISE_LEFT_SHIFT=code_operator_bitwise_left_shift,
-    BITWISE_RIGHT_SHIFT=code_operator_bitwise_right_shift,
-    # code_operators_assignment
-    MATH_SUBTRACT=" - ",
-    MATH_ADD=" + ",
-    MATH_MULTIPLY=" * ",
-    MATH_DIVIDE=" / ",
-    MATH_INTEGER_DIVIDE=" // ",
-    MATH_MODULO=" % ",
-    MATH_EXPONENT=" ^ ",
-    MATH_EQUAL=" == ",
-    MATH_NOT_EQUAL=" ~= ",
-    MATH_GREATER_THAN=" > ",
-    MATH_GREATER_THAN_OR_EQUAL=" >= ",
-    MATH_LESS_THAN=" < ",
-    MATH_LESS_THAN_OR_EQUAL=" <= ",
-    MATH_AND=" and ",
-    MATH_OR=" or ",
-)
-
+app.register("ready", on_ready)
 
 @ctx.action_class("user")
 class UserActions:

@@ -1,4 +1,4 @@
-from talon import Context, actions, settings
+from talon import Context, actions, settings, app
 
 from ..tags.operators import Operators
 
@@ -35,28 +35,32 @@ ctx.lists["user.code_libraries"] = {
     "estout": "estout",
 }
 
-operators = Operators(
-    # code_operators_array
-    SUBSCRIPT=lambda: actions.user.insert_between("[", "]"),
-    # code_operators_assignment
-    ASSIGNMENT=" = ",
-    # code_operators_math
-    MATH_ADD=" + ",
-    MATH_SUBTRACT=" - ",
-    MATH_MULTIPLY=" * ",
-    MATH_DIVIDE=" / ",
-    MATH_MODULO=lambda: actions.user.insert_between("mod(", ")"),
-    MATH_EXPONENT=" ^ ",
-    MATH_EQUAL=" == ",
-    MATH_NOT_EQUAL=" != ",
-    MATH_GREATER_THAN=" > ",
-    MATH_GREATER_THAN_OR_EQUAL=" >= ",
-    MATH_LESS_THAN=" < ",
-    MATH_LESS_THAN_OR_EQUAL=" <= ",
-    MATH_AND=" & ",
-    MATH_OR=" | ",
-)
+operators: Operators
+def on_ready():
+    global operators
+    operators = Operators(
+        # code_operators_array
+        SUBSCRIPT=actions.user.described_function_create_insert_between("[", "]"),
+        # code_operators_assignment
+        ASSIGNMENT=" = ",
+        # code_operators_math
+        MATH_ADD=" + ",
+        MATH_SUBTRACT=" - ",
+        MATH_MULTIPLY=" * ",
+        MATH_DIVIDE=" / ",
+        MATH_MODULO=actions.user.described_function_create_insert_between("mod(", ")"),
+        MATH_EXPONENT=" ^ ",
+        MATH_EQUAL=" == ",
+        MATH_NOT_EQUAL=" != ",
+        MATH_GREATER_THAN=" > ",
+        MATH_GREATER_THAN_OR_EQUAL=" >= ",
+        MATH_LESS_THAN=" < ",
+        MATH_LESS_THAN_OR_EQUAL=" <= ",
+        MATH_AND=" & ",
+        MATH_OR=" | ",
+    )
 
+app.register("ready", on_ready)
 
 @ctx.action_class("user")
 class UserActions:

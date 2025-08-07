@@ -1,4 +1,4 @@
-from talon import Context, Module, actions, settings
+from talon import Context, Module, actions, settings, app
 
 from ..tags.operators import Operators
 
@@ -85,49 +85,53 @@ scala_keywords = {
 mod.list("scala_keyword", desc="Scala Keywords")
 ctx.lists["user.scala_keyword"] = scala_keywords
 
-operators = Operators(
-    # code_operators_array
-    SUBSCRIPT=lambda: actions.user.insert_between("(", ")"),
-    # code_operators_assignment
-    ASSIGNMENT=" = ",
-    ASSIGNMENT_ADDITION=" += ",
-    ASSIGNMENT_SUBTRACTION=" -= ",
-    ASSIGNMENT_MULTIPLICATION=" *= ",
-    ASSIGNMENT_DIVISION=" /= ",
-    ASSIGNMENT_MODULO=" %= ",
-    ASSIGNMENT_INCREMENT="++",
-    ASSIGNMENT_BITWISE_AND=" &= ",
-    ASSIGNMENT_BITWISE_OR=" |= ",
-    ASSIGNMENT_BITWISE_EXCLUSIVE_OR=" ^= ",
-    ASSIGNMENT_BITWISE_LEFT_SHIFT=" <<= ",
-    ASSIGNMENT_BITWISE_RIGHT_SHIFT=" >>= ",
-    # code_operators_bitwise
-    BITWISE_NOT="~",
-    BITWISE_AND=" & ",
-    BITWISE_OR=" | ",
-    BITWISE_EXCLUSIVE_OR=" ^ ",
-    BITWISE_LEFT_SHIFT=" << ",
-    BITWISE_RIGHT_SHIFT=" >> ",
-    # code_operators_lambda
-    LAMBDA=" => ",
-    # code_operators_math
-    MATH_ADD=" + ",
-    MATH_SUBTRACT=" - ",
-    MATH_MULTIPLY=" * ",
-    MATH_DIVIDE=" / ",
-    MATH_MODULO=" % ",
-    MATH_EQUAL=" == ",
-    MATH_NOT_EQUAL=" != ",
-    MATH_NOT="!",
-    MATH_OR=" || ",
-    MATH_AND=" && ",
-    MATH_EXPONENT=" ^ ",
-    MATH_GREATER_THAN=" > ",
-    MATH_LESS_THAN=" < ",
-    MATH_GREATER_THAN_OR_EQUAL=" >= ",
-    MATH_LESS_THAN_OR_EQUAL=" <= ",
-)
+operators: Operators
+def on_ready():
+    global operators
+    operators = Operators(
+        # code_operators_array
+        SUBSCRIPT=actions.user.described_function_create_insert_between("(", ")"),
+        # code_operators_assignment
+        ASSIGNMENT=" = ",
+        ASSIGNMENT_ADDITION=" += ",
+        ASSIGNMENT_SUBTRACTION=" -= ",
+        ASSIGNMENT_MULTIPLICATION=" *= ",
+        ASSIGNMENT_DIVISION=" /= ",
+        ASSIGNMENT_MODULO=" %= ",
+        ASSIGNMENT_INCREMENT="++",
+        ASSIGNMENT_BITWISE_AND=" &= ",
+        ASSIGNMENT_BITWISE_OR=" |= ",
+        ASSIGNMENT_BITWISE_EXCLUSIVE_OR=" ^= ",
+        ASSIGNMENT_BITWISE_LEFT_SHIFT=" <<= ",
+        ASSIGNMENT_BITWISE_RIGHT_SHIFT=" >>= ",
+        # code_operators_bitwise
+        BITWISE_NOT="~",
+        BITWISE_AND=" & ",
+        BITWISE_OR=" | ",
+        BITWISE_EXCLUSIVE_OR=" ^ ",
+        BITWISE_LEFT_SHIFT=" << ",
+        BITWISE_RIGHT_SHIFT=" >> ",
+        # code_operators_lambda
+        LAMBDA=" => ",
+        # code_operators_math
+        MATH_ADD=" + ",
+        MATH_SUBTRACT=" - ",
+        MATH_MULTIPLY=" * ",
+        MATH_DIVIDE=" / ",
+        MATH_MODULO=" % ",
+        MATH_EQUAL=" == ",
+        MATH_NOT_EQUAL=" != ",
+        MATH_NOT="!",
+        MATH_OR=" || ",
+        MATH_AND=" && ",
+        MATH_EXPONENT=" ^ ",
+        MATH_GREATER_THAN=" > ",
+        MATH_LESS_THAN=" < ",
+        MATH_GREATER_THAN_OR_EQUAL=" >= ",
+        MATH_LESS_THAN_OR_EQUAL=" <= ",
+    )
 
+app.register("ready", on_ready)
 
 @ctx.action_class("user")
 class UserActions:

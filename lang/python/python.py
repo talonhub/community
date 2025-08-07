@@ -1,6 +1,6 @@
 import re
 
-from talon import Context, Module, actions, settings
+from talon import Context, Module, actions, settings, app
 
 from ..tags.operators import Operators
 
@@ -9,7 +9,7 @@ ctx = Context()
 ctx.matches = r"""
 code.language: python
 """
-
+ 
 """a set of fields used in python docstrings that will follow the
 reStructuredText format"""
 docstring_fields = {
@@ -121,52 +121,56 @@ ctx.lists["user.python_exception"] = {
     for exception in exception_list
 }
 
-operators = Operators(
-    # code_operators_array
-    SUBSCRIPT=lambda: actions.user.insert_between("[", "]"),
-    # code_operators_assignment
-    ASSIGNMENT=" = ",
-    ASSIGNMENT_SUBTRACTION=" -= ",
-    ASSIGNMENT_ADDITION=" += ",
-    ASSIGNMENT_MULTIPLICATION=" *= ",
-    ASSIGNMENT_DIVISION=" /= ",
-    ASSIGNMENT_MODULO=" %= ",
-    ASSIGNMENT_INCREMENT=" += 1",
-    ASSIGNMENT_BITWISE_AND=" &= ",
-    ASSIGNMENT_BITWISE_OR=" |= ",
-    ASSIGNMENT_BITWISE_EXCLUSIVE_OR=" ^= ",
-    ASSIGNMENT_BITWISE_LEFT_SHIFT=" <<= ",
-    ASSIGNMENT_BITWISE_RIGHT_SHIFT=" >>= ",
-    # code_operators_bitwise
-    BITWISE_NOT="~",
-    BITWISE_AND=" & ",
-    BITWISE_OR=" | ",
-    BITWISE_EXCLUSIVE_OR=" ^ ",
-    BITWISE_LEFT_SHIFT=" << ",
-    BITWISE_RIGHT_SHIFT=" >> ",
-    # code_operators_lambda
-    LAMBDA=lambda: actions.user.insert_between("lambda ", ": "),
-    # code_operators_math
-    MATH_SUBTRACT=" - ",
-    MATH_ADD=" + ",
-    MATH_MULTIPLY=" * ",
-    MATH_DIVIDE=" / ",
-    MATH_INTEGER_DIVIDE=" // ",
-    MATH_MODULO=" % ",
-    MATH_EXPONENT=" ** ",
-    MATH_EQUAL=" == ",
-    MATH_NOT_EQUAL=" != ",
-    MATH_GREATER_THAN=" > ",
-    MATH_GREATER_THAN_OR_EQUAL=" >= ",
-    MATH_LESS_THAN=" < ",
-    MATH_LESS_THAN_OR_EQUAL=" <= ",
-    MATH_AND=" and ",
-    MATH_OR=" or ",
-    MATH_NOT=" not ",
-    MATH_IN=" in ",
-    MATH_NOT_IN=" not in ",
-)
+operators: Operators
 
+def on_ready():
+    global operators
+    operators = Operators(
+        # code_operators_array
+        SUBSCRIPT=actions.user.described_function_create_insert_between("[", "]"),
+        # code_operators_assignment
+        ASSIGNMENT=" = ",
+        ASSIGNMENT_SUBTRACTION=" -= ",
+        ASSIGNMENT_ADDITION=" += ",
+        ASSIGNMENT_MULTIPLICATION=" *= ",
+        ASSIGNMENT_DIVISION=" /= ",
+        ASSIGNMENT_MODULO=" %= ",
+        ASSIGNMENT_INCREMENT=" += 1",
+        ASSIGNMENT_BITWISE_AND=" &= ",
+        ASSIGNMENT_BITWISE_OR=" |= ",
+        ASSIGNMENT_BITWISE_EXCLUSIVE_OR=" ^= ",
+        ASSIGNMENT_BITWISE_LEFT_SHIFT=" <<= ",
+        ASSIGNMENT_BITWISE_RIGHT_SHIFT=" >>= ",
+        # code_operators_bitwise
+        BITWISE_NOT="~",
+        BITWISE_AND=" & ",
+        BITWISE_OR=" | ",
+        BITWISE_EXCLUSIVE_OR=" ^ ",
+        BITWISE_LEFT_SHIFT=" << ",
+        BITWISE_RIGHT_SHIFT=" >> ",
+        # code_operators_lambda
+        LAMBDA=actions.user.described_function_create_insert_between("lambda ", ": "),
+        # code_operators_math
+        MATH_SUBTRACT=" - ",
+        MATH_ADD=" + ",
+        MATH_MULTIPLY=" * ",
+        MATH_DIVIDE=" / ",
+        MATH_INTEGER_DIVIDE=" // ",
+        MATH_MODULO=" % ",
+        MATH_EXPONENT=" ** ",
+        MATH_EQUAL=" == ",
+        MATH_NOT_EQUAL=" != ",
+        MATH_GREATER_THAN=" > ",
+        MATH_GREATER_THAN_OR_EQUAL=" >= ",
+        MATH_LESS_THAN=" < ",
+        MATH_LESS_THAN_OR_EQUAL=" <= ",
+        MATH_AND=" and ",
+        MATH_OR=" or ",
+        MATH_NOT=" not ",
+        MATH_IN=" in ",
+        MATH_NOT_IN=" not in ",
+    )
+app.register("ready", on_ready)
 
 @ctx.action_class("user")
 class UserActions:
