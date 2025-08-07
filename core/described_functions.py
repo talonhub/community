@@ -12,8 +12,11 @@ class DescribedFunction:
 	def __call__(self, *args, **kwargs):
 		return self.function(*args, **kwargs)
 
-	def __repr__(self):
+	def __str__(self):
 		return self.description
+
+	def __repr__(self):
+		return f"DescribedFunction({self.function}, {self.description})"
 
 mod = Module()
 @mod.action_class
