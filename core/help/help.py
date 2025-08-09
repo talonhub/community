@@ -663,6 +663,7 @@ def gui_list_help(gui: imgui.GUI):
 
     gui.text(f"List: {selected_list} ({page_info})")
 
+    # Extract description from list declaration, i.e. mod.list(..., desc=...))
     if (desc := registry.decls.lists[selected_list].desc) is not None:
         for line in wrap(desc):
             gui.text(line)
