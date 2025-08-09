@@ -1,3 +1,5 @@
+# Note: the "help operators" command will currently display "op" and "is" regardless of what the commands are
+# so changing those commands will make the "help operators" command display the wrong prefixes
 op {user.code_operators_array}: user.code_operator(code_operators_array)
 op {user.code_operators_assignment}: user.code_operator(code_operators_assignment)
 op {user.code_operators_bitwise}: user.code_operator(code_operators_bitwise)
