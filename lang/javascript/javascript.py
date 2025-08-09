@@ -11,8 +11,6 @@ code.language: javascriptreact
 code.language: typescriptreact
 """
 
-mod.tag("javascript", desc="Used to match a variant of javascript")
-
 mod.list("code_common_member_function", "Function to use in a dotted chain, eg .foo()")
 
 ctx.lists["user.code_common_member_function"] = {

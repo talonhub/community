@@ -1,5 +1,8 @@
 list: user.code_common_function
-tag: user.javascript
+code.language: javascript
+code.language: typescript
+code.language: javascriptreact
+code.language: typescriptreact
 -
 
 abs: Math.abs
