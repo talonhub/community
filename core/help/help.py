@@ -157,6 +157,7 @@ def gui_operators(gui: imgui.GUI):
         page_start = page_size * (current_list_page - 1)
         page_end = page_start + page_size
         gui.text(f"Help: Operators ({current_list_page}/{total_page_count})")
+        gui.line()
         for text in operators_text[page_start:page_end]:
             gui.text(text)
 
