@@ -1,0 +1,26 @@
+list: user.code_common_function
+code.language: go
+-
+
+# golang builtin functions
+append
+length: len
+make
+# formatting
+format print: fmt.Printf
+format print eff: fmt.Printf
+format sprint: fmt.Sprintf
+format es print eff: fmt.Sprintf
+format print line: fmt.Println
+# time
+time hour: time.Hour
+time minute: time.Minute
+time second: time.Second
+time millisecond: time.Millisecond
+time microsecond: time.Microsecond
+time nanosecond: time.Nanosecond
+# IO
+buf I O: bufio.
+# strings
+string convert: strconv.
+string convert to int: strconv.AtoI
