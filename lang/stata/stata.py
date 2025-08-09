@@ -15,21 +15,6 @@ ctx.lists["user.code_parameter_name"] = {
     "V C E robust": "vce(robust)",
 }
 
-# functions_common.py
-ctx.lists["user.code_common_function"] = {
-    # base stata
-    "global": "global",
-    "local": "local",
-    "reg": "reg",
-    "regress": "reg",
-    # packages
-    "estadd": "estadd",
-    "estout": "estout",
-    "estpost": "estpost",
-    "eststo": "eststo",
-    "esttab": "esttab",
-}
-
 # libraries.py
 ctx.lists["user.code_libraries"] = {
     "estout": "estout",
