@@ -2,7 +2,7 @@ list: user.code_common_function
 code.language: go
 -
 
-# golang buildin functions
+# golang builtin functions
 append
 length: len
 make
