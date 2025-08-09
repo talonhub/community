@@ -44,7 +44,7 @@ requires: "requires "
 return: "return "
 short: "short "
 static: "static "
-strictfp: "strictfp "
+strict eff pee: "strictfp "
 super
 switch: "switch "
 synchronized: "synchronized "
