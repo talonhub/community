@@ -7,6 +7,7 @@ and when the change was applied given the delay between changes being
 submitted and the time they were reviewed and merged.
 
 ---
+* 2025-08-09 Rename `user.code_keyword_bare` to `user.code_keyword_unprefixed`.
 * 2025-07-10 Make `state do` for ruby insert a do while loop instead of the `do` keyword to make the behavior consistent with other languages.
 * 2025-06-28 Remove user.code_block_c_like tag in favor of using `codeBlock.snippet` to handle code blocks.
 * 2025-06-24 Deprecate imperative.py code state actions in favor of their corresponding snippets.
