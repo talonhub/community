@@ -8,6 +8,7 @@ length: len
 make
 # formatting
 format print: fmt.Printf
+format print eff: fmt.Printf
 format sprint: fmt.Sprintf
 format print line: fmt.Println
 # time
