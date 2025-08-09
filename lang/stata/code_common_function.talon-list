@@ -3,13 +3,13 @@ code.language: stata
 -
 
 # base stata
-global: global
-local: local
-reg: reg
+global
+local
+reg
 regress: reg
 # packages
-estadd: estadd
-estout: estout
-estpost: estpost
-eststo: eststo
-esttab: esttab
+estadd
+estout
+estpost
+eststo
+esttab
