@@ -1,4 +1,4 @@
-tsettings():
+settings():
     # Don't show mode indicator by default
     user.mode_indicator_show = true
     # Set to true to show the first 2 letters of the microphone name inside the mode indicator
