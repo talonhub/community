@@ -47,10 +47,10 @@ settings():
 
     # How much time a hiss must last for to be considered a hiss rather than
     # part of speech, in ms
-    user.hiss_scroll_debounce_time = 100
+    user.hiss_scroll_debounce_time = 200
 
     # If `true`, hide the continuous scroll/gaze scroll GUI
-    user.mouse_hide_mouse_gui = false
+    user.mouse_hide_mouse_gui = true
 
     # If `true`, hide the cursor when enabling zoom mouse
     user.mouse_wake_hides_cursor = false
@@ -121,7 +121,7 @@ settings():
 # Uncomment the below to enable support for saying numbers without a prefix.
 # By default you need to say "numb one" to write "1". If you uncomment this,
 # you can say "one" to write "1".
-# tag(): user.unprefixed_numbers
+tag(): user.unprefixed_numbers
 
 # Uncomment the below to enable the experimental window layout commands
 # defined in window_layout.talon
