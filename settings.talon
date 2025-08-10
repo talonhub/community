@@ -27,7 +27,7 @@ settings():
     # Set the scroll multiplier for gaze scroll
     user.mouse_gaze_scroll_speed_multiplier = 1.0
 
-c    # Set the maximum acceleration factor when scrolling continuously. 1=constant speed/no acceleration.
+    # Set the maximum acceleration factor when scrolling continuously. 1=constant speed/no acceleration.
     user.mouse_continuous_scroll_acceleration = 1
 
     # If `true`, stop continuous scroll/gaze scroll with a pop
