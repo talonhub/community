@@ -34,7 +34,7 @@ mid click:
 #option = alt
 #shift
 #super = windows key
-<user.modifiers> touch:
+<user.modifiers> click:
     # close zoom if open
     tracking.zoom_cancel()
     key("{modifiers}:down")
@@ -130,5 +130,5 @@ curse no:
     app.notify("Please activate the user.mouse_cursor_commands_enable tag to enable this command")
 
 # To scroll with a hiss sound, set mouse_enable_hiss_scroll to true in settings.talon
-mouse hiss up: user.hiss_scroll_up()
-mouse hiss down: user.hiss_scroll_down()
+hiss up: user.hiss_scroll_up()
+hiss down: user.hiss_scroll_down()
