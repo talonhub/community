@@ -33,13 +33,13 @@ state type deaf struct: user.insert_snippet_by_name("typedefStructDeclaration")
 # XXX - create a preprocessor tag for these, as they will match cpp, etc
 state define: user.insert_snippet_by_name("preprocessorDefineStatement")
 state (undefine | undeaf): "#undef "
-state if (define | deaf): "#ifdef "
+state if (define | deaf): user.insert_snippet_by_name("preprocessorIfDefineStatement")
 [state] define <user.text>$:
     user.insert_snippet_by_name_with_phrase("preprocessorDefineStatement", text)
 [state] (undefine | undeaf) <user.text>$:
     user.insert_snippet_by_name_with_phrase("preprocessorUndefineStatement", text)
 [state] if (define | deaf) <user.text>$:
-    "#ifdef {user.formatted_text(text, 'ALL_CAPS,SNAKE_CASE')}"
+    user.insert_snippet_by_name_with_phrase("preprocessorIfDefineStatement", text)
 
 # XXX - preprocessor instead of pre?
 state pre if: user.insert_snippet_by_name("preprocessorIfStatement")

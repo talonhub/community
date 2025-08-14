@@ -1,10 +1,10 @@
-name: preprocessorUndefineStatement
-phrase: pre undeaf | undeaf
+name: preprocessorIfDefineStatement
+phrase: pre if deaf | if deaf
 insertionScope: statement
 ---
 
 language: c | cpp
 $0.insertionFormatter: ALL_CAPS,SNAKE_CASE
 -
-#undef $0
+#ifdef $0
 ---
