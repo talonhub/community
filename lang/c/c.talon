@@ -32,7 +32,7 @@ state type deaf struct: user.insert_snippet_by_name("typedefStructDeclaration")
 
 # XXX - create a preprocessor tag for these, as they will match cpp, etc
 state define: user.insert_snippet_by_name("preprocessorDefineStatement")
-state (undefine | undeaf): "#undef "
+state (undefine | undeaf): user.insert_snippet_by_name("preprocessorUndefineStatement")
 state if (define | deaf): user.insert_snippet_by_name("preprocessorIfDefineStatement")
 [state] define <user.text>$:
     user.insert_snippet_by_name_with_phrase("preprocessorDefineStatement", text)
