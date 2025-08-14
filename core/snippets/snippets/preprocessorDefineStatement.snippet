@@ -1,0 +1,10 @@
+name: preprocessorDefineStatement
+phrase: pre define
+insertionScope: statement
+---
+
+language: c | cpp
+$0.insertionFormatter: ALL_CAPS,SNAKE_CASE
+-
+#define $0
+---

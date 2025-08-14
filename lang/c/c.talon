@@ -31,22 +31,22 @@ state type deaf: insert("typedef ")
 state type deaf struct: user.insert_snippet_by_name("typedefStructDeclaration")
 
 # XXX - create a preprocessor tag for these, as they will match cpp, etc
-state define: "#define "
+state define: user.insert_snippet_by_name("preprocessorDefineStatement")
 state (undefine | undeaf): "#undef "
 state if (define | deaf): "#ifdef "
 [state] define <user.text>$:
-    "#define {user.formatted_text(text, 'ALL_CAPS,SNAKE_CASE')}"
+    user.insert_snippet_by_name_with_phrase("preprocessorDefineStatement", text)
 [state] (undefine | undeaf) <user.text>$:
     "#undef {user.formatted_text(text, 'ALL_CAPS,SNAKE_CASE')}"
 [state] if (define | deaf) <user.text>$:
     "#ifdef {user.formatted_text(text, 'ALL_CAPS,SNAKE_CASE')}"
 
 # XXX - preprocessor instead of pre?
-state pre if: "#if "
-state error: "#error "
-state pre else if: "#elif "
-state pre end: "#endif "
-state pragma: "#pragma "
+state pre if: user.insert_snippet_by_name("preprocessorIfStatement")
+state error: user.insert_snippet_by_name("preprocessorErrorStatement")
+state pre else if: user.insert_snippet_by_name("preprocessorElseIfStatement")
+state pre end: user.insert_snippet_by_name("preprocessorEndIfStatement")
+state pragma: user.insert_snippet_by_name("preprocessorPragmaStatement")
 state default: "default:\nbreak;"
 
 #control flow
