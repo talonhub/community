@@ -1,0 +1,10 @@
+name: preprocessorUndefineStatement
+phrase: pre undefine | pre undeaf | undefine | undeaf
+insertionScope: statement
+---
+
+language: c | cpp
+$0.insertionFormatter: ALL_CAPS,SNAKE_CASE
+-
+#undef $0
+---

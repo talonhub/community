@@ -37,7 +37,7 @@ state if (define | deaf): "#ifdef "
 [state] define <user.text>$:
     user.insert_snippet_by_name_with_phrase("preprocessorDefineStatement", text)
 [state] (undefine | undeaf) <user.text>$:
-    "#undef {user.formatted_text(text, 'ALL_CAPS,SNAKE_CASE')}"
+    user.insert_snippet_by_name_with_phrase("preprocessorUndefineStatement", text)
 [state] if (define | deaf) <user.text>$:
     "#ifdef {user.formatted_text(text, 'ALL_CAPS,SNAKE_CASE')}"
 
