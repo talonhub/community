@@ -194,6 +194,8 @@ def parse_file_content(file: str, text: str) -> list[SnippetDocument]:
     line = 0
 
     for i, doc_text in enumerate(doc_texts):
+        if "\\---" in doc_text:
+            doc_text = doc_text.replace("\\---", "---")
         optional_body = i == 0 and len(doc_texts) > 1
         document = parse_document(file, line, optional_body, doc_text)
         if document is not None:
