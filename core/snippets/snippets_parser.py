@@ -5,6 +5,8 @@ from typing import Callable, Union
 
 from .snippet_types import Snippet, SnippetVariable
 
+ESCAPED_SNIPPET_DELIMITER_EXPRESSION = r"^\\---$"
+SNIPPET_DELIMITER = "---"
 
 class SnippetDocument:
     file: str
@@ -341,8 +343,10 @@ def parse_body(text: str) -> Union[str, None]:
         return None
 
     body = text[match_leading.start() :].rstrip()
-    if "\\---" in body:
-        body = body.replace("\\---", "---")
+
+    if re.search(ESCAPED_SNIPPET_DELIMITER_EXPRESSION, body, flags=re.MULTILINE):
+        body = re.sub(ESCAPED_SNIPPET_DELIMITER_EXPRESSION, SNIPPET_DELIMITER, body, flags=re.MULTILINE)
+
     return body
 
 
