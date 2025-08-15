@@ -8,6 +8,7 @@ from .snippet_types import Snippet, SnippetVariable
 ESCAPED_SNIPPET_DELIMITER_EXPRESSION = re.compile(r"^\\---$", flags=re.MULTILINE)
 SNIPPET_DELIMITER = "---"
 
+
 class SnippetDocument:
     file: str
     line_doc: int
@@ -345,9 +346,7 @@ def parse_body(text: str) -> Union[str, None]:
     body = text[match_leading.start() :].rstrip()
 
     if ESCAPED_SNIPPET_DELIMITER_EXPRESSION.search(body):
-        body = ESCAPED_SNIPPET_DELIMITER_EXPRESSION.sub(
-            SNIPPET_DELIMITER, body
-        )
+        body = ESCAPED_SNIPPET_DELIMITER_EXPRESSION.sub(SNIPPET_DELIMITER, body)
 
     return body
 
