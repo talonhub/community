@@ -19,7 +19,7 @@ code_languages = [
     # Language("bash", "bash", ["sh", "bashbook"]),
     Language("batch", "batch", ["bat"]),
     Language("c", "see", ["c", "h"]),
-    Language("community_snippets", "community snippets", ["snippet"]),
+    Language("snippets", "snippets", ["snippet"]),
     # Language("cmake", "see make", ["cmake"]),
     Language("csharp", "see sharp", ["cs"]),
     Language("css", "c s s", ["css"]),
