@@ -13,7 +13,6 @@ sec plots: user.vscode("workbench.panel.positronPlots.focus")
 
 help that: user.vscode("positron.help.showHelpAtCursor")
 
-
 #Plot Commands
 
 plot copy: user.vscode("workbench.action.positronPlots.copy")

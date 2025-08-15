@@ -4,7 +4,6 @@ app.bundle: positron
 win.file_ext: .qmd
 -
 
-
 # Quarto Markdown
 cell next: user.vscode("quarto.goToNextCell")
 cell last: user.vscode("quarto.goToPreviousCell")
