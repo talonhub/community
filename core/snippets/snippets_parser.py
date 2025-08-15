@@ -345,7 +345,7 @@ def parse_body(text: str) -> Union[str, None]:
         return None
 
     body = text[match_leading.start() :].rstrip()
-    
+
     body = ESCAPED_SNIPPET_DELIMITER_EXPRESSION.sub(SNIPPET_DELIMITER, body)
 
     return body
