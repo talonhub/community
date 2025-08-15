@@ -1,6 +1,6 @@
 # Adding Quarto Markdown Support For Positron and VSCode
-app.bundle: vscode
-app.bundle: positron
+app: vscode
+app: positron
 win.file_ext: .qmd
 -
 
