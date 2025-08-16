@@ -1,4 +1,4 @@
-language: c
+language: c | cpp
 ---
 name: typedefStructDeclaration
 phrase: typedef struct
@@ -8,4 +8,11 @@ insertionScope: statement
 typedef struct {
     $1
 } $0
+---
+
+name: preprocessorPragmaStatement
+phrase: pre pragma | pragma
+insertionScope: statement
+-
+#pragma $0
 ---
