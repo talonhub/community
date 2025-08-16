@@ -24,9 +24,9 @@ settings():
     user.code_public_variable_formatter = "SNAKE_CASE"
 
 # NOTE: migrated from generic, as they were only used here, though once cpp support is added, perhaps these should be migrated to a tag together with the commands below
-state include: insert("#include ")
-state include system: user.insert_between("#include <", ">")
-state include local: user.insert_between('#include "', '"')
+state include: user.insert_snippet_by_name("importStatement")
+state include system: user.insert_snippet_by_name("includeSystemStatement")
+state include local: user.insert_snippet_by_name("includeLocalStatement")
 state type deaf: insert("typedef ")
 state type deaf struct: user.insert_snippet_by_name("typedefStructDeclaration")
 
