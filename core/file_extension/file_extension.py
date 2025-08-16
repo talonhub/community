@@ -17,6 +17,8 @@ _file_extensions_defaults = {
     "dot com": ".com",
     "dot net": ".net",
     "dot org": ".org",
+    "dot education": ".edu",
+    "dot e d u": ".edu",
     "dot us": ".us",
     "dot U S": ".us",
     "dot co dot UK": ".co.uk",
