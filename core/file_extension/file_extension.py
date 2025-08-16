@@ -9,6 +9,7 @@ _file_extensions_defaults = {
     "dot pie": ".py",
     "dot elixir": ".ex",
     "dot talon": ".talon",
+    "dot talon list": ".talon-list",
     "dot mark down": ".md",
     "dot shell": ".sh",
     "dot vim": ".vim",
