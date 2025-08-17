@@ -123,7 +123,7 @@ def is_variable_in_body(variable_name: str, body: str) -> bool:
 def create_variable_regular_expression(variable_name: str) -> str:
     # $value or ${value} or ${value:default}
     # *? is used to find the smallest possible match.
-    # We need this here to avoid treating multiple stops as a single one
+    # This stops multiple stops from being treated as a single stop.
     return rf"\${variable_name}|\${{{variable_name}.*?}}"
 
 
