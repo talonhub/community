@@ -72,9 +72,6 @@ class UserActions:
     def code_insert_is_not_null():
         actions.auto_insert(".present?")
 
-    def code_state_do():
-        actions.insert("do ")
-
     def code_insert_true():
         actions.auto_insert("true")
 

@@ -7,9 +7,6 @@ ctx.matches = r"""
 code.language: sql
 """
 
-# these vary by dialect
-ctx.lists["user.code_common_function"] = {"count": "Count", "min": "Min", "max": "Max"}
-
 operators = Operators(
     MATH_ADD=" + ",
     MATH_SUBTRACT=" - ",

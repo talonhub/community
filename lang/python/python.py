@@ -9,18 +9,6 @@ ctx = Context()
 ctx.matches = r"""
 code.language: python
 """
-ctx.lists["user.code_common_function"] = {
-    "enumerate": "enumerate",
-    "integer": "int",
-    "length": "len",
-    "list": "list",
-    "print": "print",
-    "range": "range",
-    "set": "set",
-    "split": "split",
-    "string": "str",
-    "update": "update",
-}
 
 """a set of fields used in python docstrings that will follow the
 reStructuredText format"""
@@ -59,22 +47,6 @@ ctx.lists["user.code_type"] = {
     "callable": "Callable",
     "list": "List",
     "no return": "NoReturn",
-}
-
-ctx.lists["user.code_keyword"] = {
-    "assert": "assert ",
-    "break": "break",
-    "continue": "continue",
-    "class": "class ",
-    "return": "return ",
-    "import": "import ",
-    "null": "None",
-    "none": "None",
-    "pass": "pass",
-    "true": "True",
-    "false": "False",
-    "yield": "yield ",
-    "from": "from ",
 }
 
 exception_list = [
