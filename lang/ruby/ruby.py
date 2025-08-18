@@ -1,63 +1,56 @@
 from talon import Context, actions, app, settings
 
 from ..tags.operators import Operators
+from ...core.described_functions import described_function_create_insert_between
 
 ctx = Context()
 ctx.matches = r"""
 code.language: ruby
 """
 
-operators: Operators
-
-
-def on_ready():
-    global operators
-    operators = Operators(
-        # code_operators_array
-        SUBSCRIPT=actions.user.described_function_create_insert_between("[", "]"),
-        # code_operators_assignment
-        ASSIGNMENT=" = ",
-        ASSIGNMENT_OR=" ||= ",
-        ASSIGNMENT_SUBTRACTION=" -= ",
-        ASSIGNMENT_ADDITION=" += ",
-        ASSIGNMENT_MULTIPLICATION=" *= ",
-        ASSIGNMENT_DIVISION=" /= ",
-        ASSIGNMENT_MODULO=" %= ",
-        ASSIGNMENT_INCREMENT=" += 1",
-        ASSIGNMENT_BITWISE_AND=" &= ",
-        ASSIGNMENT_BITWISE_OR=" |= ",
-        ASSIGNMENT_BITWISE_EXCLUSIVE_OR=" ^= ",
-        ASSIGNMENT_BITWISE_LEFT_SHIFT=" <<= ",
-        ASSIGNMENT_BITWISE_RIGHT_SHIFT=" >>= ",
-        # code_operators_bitwise
-        BITWISE_AND=" & ",
-        BITWISE_OR=" | ",
-        BITWISE_NOT="~",
-        BITWISE_EXCLUSIVE_OR=" ^ ",
-        BITWISE_LEFT_SHIFT=" << ",
-        BITWISE_RIGHT_SHIFT=" >> ",
-        # code_operators_lambda
-        LAMBDA="->",
-        # code_operators_math
-        MATH_SUBTRACT=" - ",
-        MATH_ADD=" + ",
-        MATH_MULTIPLY=" * ",
-        MATH_EXPONENT=" ** ",
-        MATH_DIVIDE=" / ",
-        MATH_MODULO=" % ",
-        MATH_EQUAL=" == ",
-        MATH_NOT_EQUAL=" != ",
-        MATH_GREATER_THAN=" > ",
-        MATH_GREATER_THAN_OR_EQUAL=" >= ",
-        MATH_LESS_THAN=" < ",
-        MATH_LESS_THAN_OR_EQUAL=" <= ",
-        MATH_NOT="!",
-        MATH_AND=" && ",
-        MATH_OR=" || ",
-    )
-
-
-app.register("ready", on_ready)
+operators = Operators(
+    # code_operators_array
+    SUBSCRIPT=described_function_create_insert_between("[", "]"),
+    # code_operators_assignment
+    ASSIGNMENT=" = ",
+    ASSIGNMENT_OR=" ||= ",
+    ASSIGNMENT_SUBTRACTION=" -= ",
+    ASSIGNMENT_ADDITION=" += ",
+    ASSIGNMENT_MULTIPLICATION=" *= ",
+    ASSIGNMENT_DIVISION=" /= ",
+    ASSIGNMENT_MODULO=" %= ",
+    ASSIGNMENT_INCREMENT=" += 1",
+    ASSIGNMENT_BITWISE_AND=" &= ",
+    ASSIGNMENT_BITWISE_OR=" |= ",
+    ASSIGNMENT_BITWISE_EXCLUSIVE_OR=" ^= ",
+    ASSIGNMENT_BITWISE_LEFT_SHIFT=" <<= ",
+    ASSIGNMENT_BITWISE_RIGHT_SHIFT=" >>= ",
+    # code_operators_bitwise
+    BITWISE_AND=" & ",
+    BITWISE_OR=" | ",
+    BITWISE_NOT="~",
+    BITWISE_EXCLUSIVE_OR=" ^ ",
+    BITWISE_LEFT_SHIFT=" << ",
+    BITWISE_RIGHT_SHIFT=" >> ",
+    # code_operators_lambda
+    LAMBDA="->",
+    # code_operators_math
+    MATH_SUBTRACT=" - ",
+    MATH_ADD=" + ",
+    MATH_MULTIPLY=" * ",
+    MATH_EXPONENT=" ** ",
+    MATH_DIVIDE=" / ",
+    MATH_MODULO=" % ",
+    MATH_EQUAL=" == ",
+    MATH_NOT_EQUAL=" != ",
+    MATH_GREATER_THAN=" > ",
+    MATH_GREATER_THAN_OR_EQUAL=" >= ",
+    MATH_LESS_THAN=" < ",
+    MATH_LESS_THAN_OR_EQUAL=" <= ",
+    MATH_NOT="!",
+    MATH_AND=" && ",
+    MATH_OR=" || ",
+)
 
 
 @ctx.action_class("user")

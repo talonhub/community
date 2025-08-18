@@ -1,6 +1,7 @@
 from talon import Context, Module, actions, app, settings
 
 from ..tags.operators import Operators
+from ...core.described_functions import described_function_create_insert_between
 
 ctx = Context()
 mod = Module()
@@ -89,53 +90,45 @@ java_modifiers = {
 mod.list("java_modifier", desc="Java Modifiers")
 ctx.lists["self.java_modifier"] = java_modifiers
 
-operators: Operators
-
-
-def on_ready():
-    global operators
-    operators = Operators(
-        # code_operators_array
-        SUBSCRIPT=actions.user.described_function_create_insert_between("[", "]"),
-        # code_operators_assignment
-        ASSIGNMENT=" = ",
-        ASSIGNMENT_SUBTRACTION=" -= ",
-        ASSIGNMENT_ADDITION=" += ",
-        ASSIGNMENT_MULTIPLICATION=" *= ",
-        ASSIGNMENT_DIVISION=" /= ",
-        ASSIGNMENT_MODULO=" %= ",
-        ASSIGNMENT_INCREMENT="++",
-        ASSIGNMENT_BITWISE_AND=" &= ",
-        ASSIGNMENT_BITWISE_LEFT_SHIFT=" <<= ",
-        ASSIGNMENT_BITWISE_RIGHT_SHIFT=" >>= ",
-        # code_operators_bitwise
-        BITWISE_AND=" & ",
-        BITWISE_OR=" | ",
-        BITWISE_EXCLUSIVE_OR=" ^ ",
-        BITWISE_LEFT_SHIFT=" << ",
-        BITWISE_RIGHT_SHIFT=" >> ",
-        # code_operators_lambda
-        LAMBDA=" -> ",
-        # code_operators_math
-        MATH_SUBTRACT=" - ",
-        MATH_ADD=" + ",
-        MATH_MULTIPLY=" * ",
-        MATH_DIVIDE=" / ",
-        MATH_MODULO=" % ",
-        MATH_EXPONENT=" ^ ",
-        MATH_EQUAL=" == ",
-        MATH_NOT_EQUAL=" != ",
-        MATH_GREATER_THAN=" > ",
-        MATH_GREATER_THAN_OR_EQUAL=" >= ",
-        MATH_LESS_THAN=" < ",
-        MATH_LESS_THAN_OR_EQUAL=" <= ",
-        MATH_AND=" && ",
-        MATH_OR=" || ",
-        MATH_NOT="!",
-    )
-
-
-app.register("ready", on_ready)
+operators = Operators(
+    # code_operators_array
+    SUBSCRIPT=described_function_create_insert_between("[", "]"),
+    # code_operators_assignment
+    ASSIGNMENT=" = ",
+    ASSIGNMENT_SUBTRACTION=" -= ",
+    ASSIGNMENT_ADDITION=" += ",
+    ASSIGNMENT_MULTIPLICATION=" *= ",
+    ASSIGNMENT_DIVISION=" /= ",
+    ASSIGNMENT_MODULO=" %= ",
+    ASSIGNMENT_INCREMENT="++",
+    ASSIGNMENT_BITWISE_AND=" &= ",
+    ASSIGNMENT_BITWISE_LEFT_SHIFT=" <<= ",
+    ASSIGNMENT_BITWISE_RIGHT_SHIFT=" >>= ",
+    # code_operators_bitwise
+    BITWISE_AND=" & ",
+    BITWISE_OR=" | ",
+    BITWISE_EXCLUSIVE_OR=" ^ ",
+    BITWISE_LEFT_SHIFT=" << ",
+    BITWISE_RIGHT_SHIFT=" >> ",
+    # code_operators_lambda
+    LAMBDA=" -> ",
+    # code_operators_math
+    MATH_SUBTRACT=" - ",
+    MATH_ADD=" + ",
+    MATH_MULTIPLY=" * ",
+    MATH_DIVIDE=" / ",
+    MATH_MODULO=" % ",
+    MATH_EXPONENT=" ^ ",
+    MATH_EQUAL=" == ",
+    MATH_NOT_EQUAL=" != ",
+    MATH_GREATER_THAN=" > ",
+    MATH_GREATER_THAN_OR_EQUAL=" >= ",
+    MATH_LESS_THAN=" < ",
+    MATH_LESS_THAN_OR_EQUAL=" <= ",
+    MATH_AND=" && ",
+    MATH_OR=" || ",
+    MATH_NOT="!",
+)
 
 
 @ctx.action_class("user")

@@ -1,38 +1,31 @@
 from talon import Context, actions, app
 
 from ..tags.operators import Operators
+from ...core.described_functions import described_function_create_insert_between
 
 ctx = Context()
 ctx.matches = r"""
 code.language: sql
 """
 
-operators: Operators
-
-
-def on_ready():
-    global operators
-    operators = Operators(
-        MATH_ADD=" + ",
-        MATH_SUBTRACT=" - ",
-        MATH_MULTIPLY=" * ",
-        MATH_DIVIDE=" / ",
-        MATH_EQUAL=" = ",
-        MATH_NOT_EQUAL=" <> ",
-        MATH_GREATER_THAN=" > ",
-        MATH_GREATER_THAN_OR_EQUAL=" >= ",
-        MATH_LESS_THAN=" < ",
-        MATH_LESS_THAN_OR_EQUAL=" <= ",
-        MATH_IN=actions.user.described_function_create_insert_between(" IN (", ")"),
-        MATH_NOT_IN=actions.user.described_function_create_insert_between(
-            " NOT IN (", ")"
-        ),
-        MATH_AND=" AND ",
-        MATH_OR=" OR ",
-    )
-
-
-app.register("ready", on_ready)
+operators = Operators(
+    MATH_ADD=" + ",
+    MATH_SUBTRACT=" - ",
+    MATH_MULTIPLY=" * ",
+    MATH_DIVIDE=" / ",
+    MATH_EQUAL=" = ",
+    MATH_NOT_EQUAL=" <> ",
+    MATH_GREATER_THAN=" > ",
+    MATH_GREATER_THAN_OR_EQUAL=" >= ",
+    MATH_LESS_THAN=" < ",
+    MATH_LESS_THAN_OR_EQUAL=" <= ",
+    MATH_IN=described_function_create_insert_between(" IN (", ")"),
+    MATH_NOT_IN=described_function_create_insert_between(
+        " NOT IN (", ")"
+    ),
+    MATH_AND=" AND ",
+    MATH_OR=" OR ",
+)
 
 
 @ctx.action_class("user")

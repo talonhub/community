@@ -1,6 +1,7 @@
 from talon import Context, Module, actions, app, settings
 
 from ..tags.operators import Operators
+from ...core.described_functions import create_described_function, described_function_create_insert_between
 
 mod = Module()
 ctx = Context()
@@ -83,55 +84,47 @@ def code_operator_bitwise_right_shift():
         actions.insert(" bit.rshift() ")
 
 
-operators: Operators
-
-
-def on_ready():
-    global operators
-    operators = Operators(
-        # code_operators_array
-        SUBSCRIPT=actions.user.described_function_create_insert_between("[", "]"),
-        # code_operators_assignment
-        ASSIGNMENT=" = ",
-        # code_operators_bitwise
-        BITWISE_AND=actions.user.described_function_create(
-            code_operator_bitwise_and, "insert bitwise and based on lua version"
-        ),
-        BITWISE_OR=actions.user.described_function_create(
-            code_operator_bitwise_or, "insert bitwise or based on lua version"
-        ),
-        BITWISE_EXCLUSIVE_OR=actions.user.described_function_create(
-            code_operator_bitwise_exclusive_or,
-            "insert bitwise exclusive or based on lua version",
-        ),
-        BITWISE_LEFT_SHIFT=actions.user.described_function_create(
-            code_operator_bitwise_left_shift,
-            "insert bitwise left shift based on lua version",
-        ),
-        BITWISE_RIGHT_SHIFT=actions.user.described_function_create(
-            code_operator_bitwise_right_shift,
-            "insert bitwise right shift based on lua version",
-        ),
-        # code_operators_assignment
-        MATH_SUBTRACT=" - ",
-        MATH_ADD=" + ",
-        MATH_MULTIPLY=" * ",
-        MATH_DIVIDE=" / ",
-        MATH_INTEGER_DIVIDE=" // ",
-        MATH_MODULO=" % ",
-        MATH_EXPONENT=" ^ ",
-        MATH_EQUAL=" == ",
-        MATH_NOT_EQUAL=" ~= ",
-        MATH_GREATER_THAN=" > ",
-        MATH_GREATER_THAN_OR_EQUAL=" >= ",
-        MATH_LESS_THAN=" < ",
-        MATH_LESS_THAN_OR_EQUAL=" <= ",
-        MATH_AND=" and ",
-        MATH_OR=" or ",
-    )
-
-
-app.register("ready", on_ready)
+operators = Operators(
+    # code_operators_array
+    SUBSCRIPT=described_function_create_insert_between("[", "]"),
+    # code_operators_assignment
+    ASSIGNMENT=" = ",
+    # code_operators_bitwise
+    BITWISE_AND=create_described_function(
+        code_operator_bitwise_and, "insert bitwise and based on lua version"
+    ),
+    BITWISE_OR=create_described_function(
+        code_operator_bitwise_or, "insert bitwise or based on lua version"
+    ),
+    BITWISE_EXCLUSIVE_OR=create_described_function(
+        code_operator_bitwise_exclusive_or,
+        "insert bitwise exclusive or based on lua version",
+    ),
+    BITWISE_LEFT_SHIFT=create_described_function(
+        code_operator_bitwise_left_shift,
+        "insert bitwise left shift based on lua version",
+    ),
+    BITWISE_RIGHT_SHIFT=create_described_function(
+        code_operator_bitwise_right_shift,
+        "insert bitwise right shift based on lua version",
+    ),
+    # code_operators_assignment
+    MATH_SUBTRACT=" - ",
+    MATH_ADD=" + ",
+    MATH_MULTIPLY=" * ",
+    MATH_DIVIDE=" / ",
+    MATH_INTEGER_DIVIDE=" // ",
+    MATH_MODULO=" % ",
+    MATH_EXPONENT=" ^ ",
+    MATH_EQUAL=" == ",
+    MATH_NOT_EQUAL=" ~= ",
+    MATH_GREATER_THAN=" > ",
+    MATH_GREATER_THAN_OR_EQUAL=" >= ",
+    MATH_LESS_THAN=" < ",
+    MATH_LESS_THAN_OR_EQUAL=" <= ",
+    MATH_AND=" and ",
+    MATH_OR=" or ",
+)
 
 
 @ctx.action_class("user")
