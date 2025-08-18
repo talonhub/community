@@ -1,40 +1,23 @@
 # This file provides support for defining functions that have an associated description
-# The talon version of python does not have adequate inspection support to get the doc string of a function, so this serves as an alternative
+# Talon's version of python does not allow getting the code of a function through reflection, so we are instead allowing associating doc strings with lambdas and functions as a way to apply descriptions to the community help system
+
 
 from typing import Callable
 
-from talon import Module, actions
+from talon import actions
 
 
-class DescribedFunction:
-    def __init__(self, function, description: str):
-        self.function = function
-        self.description = description
-
-    def __call__(self, *args, **kwargs):
-        return self.function(*args, **kwargs)
-
-    def __str__(self):
-        return self.description
-
-    def __repr__(self):
-        return f"DescribedFunction({self.function}, {self.description})"
+def create_described_function(function: Callable, description: str) -> Callable:
+    """Creates a function with an associated doc string. Primarily intended to be used with lambdas"""
+    function.__doc__ = description
+    return function
 
 
-mod = Module()
-
-
-@mod.action_class
-class Actions:
-    def described_function_create(function: Callable, description: str):
-        """Create a function with an associated description"""
-        return DescribedFunction(function, description)
-
-    def described_function_create_insert_between(
-        before: str, after: str
-    ) -> DescribedFunction:
-        """Creates a described function for calling actions.user.insert_between"""
-        return DescribedFunction(
-            lambda: actions.user.insert_between(before, after),
-            f"actions.user.insert_between('{before}', '{after}')",
-        )
+def described_function_create_insert_between(
+    before: str, after: str
+) -> Callable:
+    """Creates a described function for calling actions.user.insert_between"""
+    return create_described_function(
+        lambda: actions.user.insert_between(before, after),
+        f"actions.user.insert_between('{before}', '{after}')",
+    )
