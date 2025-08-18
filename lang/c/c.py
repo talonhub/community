@@ -18,6 +18,7 @@ ctx.lists["self.c_pointers"] = {
 ctx.lists["self.stdint_signed"] = {
     "signed": "",
     "unsigned": "u",
+    "you": "u",
 }
 
 ctx.lists["self.c_signed"] = {

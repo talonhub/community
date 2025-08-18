@@ -12,21 +12,6 @@ code.language: javascriptreact
 code.language: typescriptreact
 """
 
-ctx.lists["user.code_common_function"] = {
-    "abs": "Math.abs",
-    "entries": "Object.entries",
-    "fetch": "fetch",
-    "floor": "Math.floor",
-    "from entries": "Object.fromEntries",
-    "keys": "Object.keys",
-    "log": "console.log",
-    "max": "Math.max",
-    "min": "Math.min",
-    "print": "console.log",
-    "round": "Math.round",
-    "values": "Object.values",
-}
-
 mod.list("code_common_member_function", "Function to use in a dotted chain, eg .foo()")
 
 ctx.lists["user.code_common_member_function"] = {
