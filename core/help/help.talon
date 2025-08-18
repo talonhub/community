@@ -23,3 +23,7 @@ help keywords unprefixed: user.help_list("user.code_keyword_unprefixed")
     user.help_formatters(user.get_formatters_words(), false)
 (help re formatters | help re format | re format help):
     user.help_formatters(user.get_reformatters_words(), true)
+(help prose | prose help):
+    user.help_formatters(user.get_prose_formatter_words(), false)
+(help word | word help):
+    user.help_formatters(user.get_word_formatter_words(), false)
