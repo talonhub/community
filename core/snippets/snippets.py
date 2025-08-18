@@ -103,6 +103,9 @@ class Actions:
 
     def escape_snippet_stops(body: str) -> str:
         """Escapes snippet stops in the body"""
+        # $ needs to be escaped because it is used to mark snippet stops.
+        # \ needs to be escaped to prevent it from escaping the backslashes used to escape the stops
+        # which would undo the escaping
         body = body.replace("\\", "\\\\").replace("$", "\\$")
         return body
 
