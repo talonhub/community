@@ -1,5 +1,6 @@
 import logging
 import re
+from copy import deepcopy
 from pathlib import Path
 from typing import Callable, Union
 
@@ -57,14 +58,18 @@ def create_snippet(
     document: SnippetDocument,
     default_context: SnippetDocument,
 ) -> Snippet | None:
+    body = normalize_snippet_body_tabs(document.body)
+    variables = combine_variables(default_context.variables, document.variables)
+    body, variables = add_final_stop_to_snippet_body(body, variables)
+
     snippet = Snippet(
         name=document.name or default_context.name or "",
         description=document.description or default_context.description,
         languages=document.languages or default_context.languages,
         phrases=document.phrases or default_context.phrases,
         insertion_scopes=document.insertionScopes or default_context.insertionScopes,
-        variables=combine_variables(default_context.variables, document.variables),
-        body=normalize_snippet_body_tabs(document.body),
+        variables=variables,
+        body=body,
     )
 
     if not validate_snippet(document, snippet):
@@ -114,8 +119,16 @@ def validate_snippet(document: SnippetDocument, snippet: Snippet) -> bool:
 
 
 def is_variable_in_body(variable_name: str, body: str) -> bool:
+    return (
+        re.search(create_variable_regular_expression(variable_name), body) is not None
+    )
+
+
+def create_variable_regular_expression(variable_name: str) -> str:
     # $value or ${value} or ${value:default}
-    return re.search(rf"\${variable_name}|\${{{variable_name}.*}}", body) is not None
+    # *? is used to find the smallest possible match.
+    # This stops multiple stops from being treated as a single stop.
+    return rf"\${variable_name}|\${{{variable_name}.*?}}"
 
 
 def combine_variables(
@@ -140,6 +153,89 @@ def combine_variables(
             new_variable.wrapper_scope = variable.wrapper_scope
 
     return list(variables.values())
+
+
+def add_final_stop_to_snippet_body(
+    body: str, variables: list[SnippetVariable]
+) -> tuple[str, list[SnippetVariable]]:
+    """Make the snippet body end with stop $0 to allow exiting the snippet with `snip next`.
+    If the snippet has a stop named `0`, it will get replaced with the largest number of a snippet variable name
+    plus 1 with the original variable metadata for stop `0` now associated with the replacement.
+    """
+    if body:
+        final_stop_matches = find_variable_matches("0", body)
+
+        # Only make a change if the snippet body does not end with a final stop.
+        if not (
+            len(final_stop_matches) > 0 and final_stop_matches[-1].end() == len(body)
+        ):
+            biggest_variable_number: int | None = find_largest_variable_number(body)
+            if biggest_variable_number is not None:
+                replacement_name = str(biggest_variable_number + 1)
+                body = replace_final_stop(body, replacement_name, final_stop_matches)
+                variables = replace_variables_for_final_stop(
+                    variables, replacement_name
+                )
+            body += "$0"
+
+    return body, variables
+
+
+def replace_final_stop(body: str, replacement_name: str, final_stop_matches) -> str:
+    # Dealing with matches in reverse means replacing a match
+    # does not change the location of the remaining matches.
+    for match in reversed(final_stop_matches):
+        replacement = match.group().replace("0", replacement_name, 1)
+        body = body[: match.start()] + replacement + body[match.end() :]
+    return body
+
+
+def replace_variables_for_final_stop(variables, replacement_name: str):
+    variables_clone = deepcopy(variables)
+    for variable in variables_clone:
+        if variable.name == "0":
+            variable.name = replacement_name
+    return variables_clone
+
+
+def find_variable_matches(variable_name: str, body: str) -> list[re.Match[str]]:
+    """Find every match of a variable in the body"""
+    expression = create_variable_regular_expression(variable_name)
+    matches = [m for m in re.finditer(expression, body)]
+    return matches
+
+
+def find_largest_variable_number(body: str) -> int | None:
+    # Find all snippet stops with a numeric variable name
+    # +? is used to find the smallest possible match.
+    # We need this here to avoid treating multiple stops as a single one
+    regular_expression = rf"\$\d+?|\${{\d+?:.*?}}|\${{\d+?}}"
+    matches = re.findall(regular_expression, body)
+    if matches:
+        numbers = [
+            compute_first_integer_in_string(match)
+            for match in matches
+            if match is not None
+        ]
+        if numbers:
+            return max(numbers)
+    return None
+
+
+def compute_first_integer_in_string(text: str) -> int | None:
+    start_index: int | None = None
+    ending_index: int | None = None
+    for i, char in enumerate(text):
+        if char.isdigit():
+            if start_index is None:
+                start_index = i
+            ending_index = i + 1
+        elif start_index is not None:
+            break
+    if start_index is not None:
+        integer_text = text[start_index:ending_index]
+        return int(integer_text)
+    return None
 
 
 def normalize_snippet_body_tabs(body: str | None) -> str:
