@@ -221,6 +221,8 @@ def de_camel(text: str) -> str:
 formatter_list = [
     CustomFormatter("NOOP", lambda text: text),
     CustomFormatter("TRAILING_SPACE", lambda text: f"{text} "),
+    CustomFormatter("TRAILING_PERIOD", lambda text: f"{text}."),
+    CustomFormatter("LEADING_SPACE", lambda text: f" {text}"),
     CustomFormatter("DOUBLE_QUOTED_STRING", lambda text: f'"{text}"'),
     CustomFormatter("SINGLE_QUOTED_STRING", lambda text: f"'{text}'"),
     CustomFormatter("SPACE_SURROUNDED_STRING", lambda text: f" {text} "),
@@ -242,7 +244,7 @@ formatter_list = [
     CodeFormatter("SLASH_SEPARATED", "/", lower, lower),
     CodeFormatter("ALL_SLASHES", "/", lambda text: f"/{text.lower()}", lower),
     CodeFormatter("DOUBLE_UNDERSCORE", "__", lower, lower),
-    CodeFormatter("DOUBLE_COLON_SEPARATED", "::", lower, lower),
+    CodeFormatter("DOUBLE_COLON_SEPARATED", "::", lower, lower)
 ]
 
 formatters_dict = {f.id: f for f in formatter_list}
@@ -399,6 +401,15 @@ def get_formatters_and_prose_formatters(
     return formatters, prose_formatters
 
 
+def get_word_formatters():
+    """Returns dictionary of word formatters"""
+    word = {}
+    word.update(
+            actions.user.talon_get_active_registry_list("user.word_formatter")
+    )
+    return word
+
+
 @mod.action_class
 class Actions:
     def formatted_text(phrase: Union[str, Phrase], formatters: str) -> str:
@@ -459,6 +470,29 @@ class Actions:
             if phrase in prose_formatter_names:
                 phrase += " *"
             formatters_help_demo[phrase] = demo
+        return formatters_help_demo
+
+    def get_prose_formatter_words() -> dict:
+        """Returns words currently used as prose, and a demonstration string using those formatters"""
+        formatters_help_demo = {}
+        formatters, prose_formatters = get_formatters_and_prose_formatters(
+            include_reformatters=False
+        )
+        prose_formatter_names = prose_formatters.keys()
+        for phrase in prose_formatter_names:
+            name = formatters[phrase]
+            demo = format_text_without_adding_to_history("one two three", name)
+
+            formatters_help_demo[phrase] = demo
+        return formatters_help_demo
+
+    def get_word_formatter_words() -> dict:
+        """In returns words currently used as word formatters."""
+        formatters_help_demo = {}
+        word = get_word_formatters()
+        for name in word:
+            demo = format_text_without_adding_to_history("one", word[name])
+            formatters_help_demo[name] = demo
         return formatters_help_demo
 
     def get_reformatters_words() -> dict:
