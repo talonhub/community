@@ -1,7 +1,7 @@
 from talon import Context, actions
 
-from ..tags.operators import Operators
 from ...core.described_functions import described_function_create_insert_between
+from ..tags.operators import Operators
 
 ctx = Context()
 ctx.matches = r"""
@@ -20,9 +20,7 @@ operators = Operators(
     MATH_LESS_THAN=" < ",
     MATH_LESS_THAN_OR_EQUAL=" <= ",
     MATH_IN=described_function_create_insert_between(" IN (", ")"),
-    MATH_NOT_IN=described_function_create_insert_between(
-        " NOT IN (", ")"
-    ),
+    MATH_NOT_IN=described_function_create_insert_between(" NOT IN (", ")"),
     MATH_AND=" AND ",
     MATH_OR=" OR ",
 )

@@ -1,7 +1,10 @@
 from talon import Context, Module, actions, app, settings
 
+from ...core.described_functions import (
+    create_described_function,
+    described_function_create_insert_between,
+)
 from ..tags.operators import Operators
-from ...core.described_functions import create_described_function, described_function_create_insert_between
 
 mod = Module()
 ctx = Context()

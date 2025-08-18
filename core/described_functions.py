@@ -13,9 +13,7 @@ def create_described_function(function: Callable, description: str) -> Callable:
     return function
 
 
-def described_function_create_insert_between(
-    before: str, after: str
-) -> Callable:
+def described_function_create_insert_between(before: str, after: str) -> Callable:
     """Creates a described function for calling actions.user.insert_between"""
     return create_described_function(
         lambda: actions.user.insert_between(before, after),

@@ -1,8 +1,8 @@
 from typing import Any, Callable, TypeVar
 
 from talon import Context, Module, actions, settings
-from ...core.described_functions import described_function_create_insert_between
 
+from ...core.described_functions import described_function_create_insert_between
 from ..tags.operators import Operators
 
 mod = Module()
@@ -251,9 +251,7 @@ operators = Operators(
     MATH_MULTIPLY=" * ",
     MATH_DIVIDE=" / ",
     MATH_MODULO=" % ",
-    MATH_EXPONENT=described_function_create_insert_between(
-        ".pow(", ")"
-    ),
+    MATH_EXPONENT=described_function_create_insert_between(".pow(", ")"),
     MATH_EQUAL=" == ",
     MATH_NOT_EQUAL=" != ",
     MATH_GREATER_THAN=" > ",
