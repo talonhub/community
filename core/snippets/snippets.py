@@ -101,6 +101,11 @@ class Actions:
         snippet: Snippet = actions.user.get_snippet(snippet_name)
         return to_wrapper_snippet(snippet, variable_name)
 
+    def escape_snippet_stops(body: str) -> str:
+        """Escapes snippet stops in the body"""
+        body = body.replace("$", "\\$")
+        return body
+
 
 def get_preferred_snippet(snippets: list[Snippet]) -> Snippet:
     lang: Union[str, set[str]] = actions.code.language()

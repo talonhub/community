@@ -436,3 +436,10 @@ class UserActions:
 
     def move_cursor_to_next_snippet_stop():
         actions.user.vscode("jumpToNextSnippetPlaceholder")
+
+    def insert_between(before: str, after: str):
+        """Use the snippet system to directly insert the text around the cursor"""
+        escaped_before = actions.user.escape_snippet_stops(before)
+        escaped_after = actions.user.escape_snippet_stops(after)
+        snippet = f"{escaped_before}$0{escaped_after}"
+        actions.user.insert_snippet(snippet)
