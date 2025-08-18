@@ -103,7 +103,7 @@ class Actions:
 
     def escape_snippet_stops(body: str) -> str:
         """Escapes snippet stops in the body"""
-        body = body.replace("$", "\\$")
+        body = body.replace("\\", "\\\\").replace("$", "\\$")
         return body
 
 
