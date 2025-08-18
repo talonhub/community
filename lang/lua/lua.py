@@ -1,4 +1,4 @@
-from talon import Context, Module, actions, app, settings
+from talon import Context, Module, actions, settings
 
 from ...core.described_functions import (
     create_described_function,
