@@ -244,7 +244,7 @@ formatter_list = [
     CodeFormatter("SLASH_SEPARATED", "/", lower, lower),
     CodeFormatter("ALL_SLASHES", "/", lambda text: f"/{text.lower()}", lower),
     CodeFormatter("DOUBLE_UNDERSCORE", "__", lower, lower),
-    CodeFormatter("DOUBLE_COLON_SEPARATED", "::", lower, lower)
+    CodeFormatter("DOUBLE_COLON_SEPARATED", "::", lower, lower),
 ]
 
 formatters_dict = {f.id: f for f in formatter_list}
@@ -404,9 +404,7 @@ def get_formatters_and_prose_formatters(
 def get_word_formatters():
     """Returns dictionary of word formatters"""
     word = {}
-    word.update(
-            actions.user.talon_get_active_registry_list("user.word_formatter")
-    )
+    word.update(actions.user.talon_get_active_registry_list("user.word_formatter"))
     return word
 
 
