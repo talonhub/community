@@ -1,28 +1,6 @@
 language: snippet
 ---
 
-name: statementHeaderDeclaration
-phrase: state header | statement header
--
-name: $1Statement
-phrase: $2
-insertionScope: statement
-\---
-
-$0
----
-
-name: headerDeclaration
-phrase: header
--
-name: $1
-phrase: $2
-insertionScope: $3
-\---
-
-$0
----
-
 name: nameDeclaration
 phrase: name
 $0.insertionFormatter: PRIVATE_CAMEL_CASE
@@ -42,22 +20,50 @@ phrase: language | lang
 language: $0
 ---
 
+name: descriptionDeclaration
+phrase: description | desc
+-
+description: $0
+---
+
 name: insertionScopeDeclaration
 phrase: insertion scope
 -
 insertionScope: $0
 ---
 
-name: variableFormatterDeclaration
-phrase: variable formatter | formatter
--
-$$1.insertionFormatter: $0
----
-
 name: wrapperScopeDeclaration
 phrase: wrapper scope | wrapper
 -
 $$1.wrapperScope: $0
+---
+
+name: headerDeclaration
+phrase: header
+-
+name: $1
+phrase: $2
+insertionScope: $3
+\---
+
+$0
+---
+
+name: statementHeaderDeclaration
+phrase: state header | statement header
+-
+name: $1Statement
+phrase: $2
+insertionScope: statement
+\---
+
+$0
+---
+
+name: variableFormatterDeclaration
+phrase: variable formatter | formatter
+-
+$$1.insertionFormatter: $0
 ---
 
 name: languageVariantDeclaration
