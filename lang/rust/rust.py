@@ -1,6 +1,6 @@
 from typing import Any, Callable, TypeVar
 
-from talon import Context, Module, actions, app, settings
+from talon import Context, Module, actions, settings
 from ...core.described_functions import described_function_create_insert_between
 
 from ..tags.operators import Operators

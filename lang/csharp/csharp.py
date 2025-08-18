@@ -1,4 +1,4 @@
-from talon import Context, actions, app, settings
+from talon import Context, actions, settings
 
 from ..tags.operators import Operators
 from ...core.described_functions import described_function_create_insert_between
