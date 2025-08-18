@@ -24,29 +24,29 @@ settings():
     user.code_public_variable_formatter = "SNAKE_CASE"
 
 # NOTE: migrated from generic, as they were only used here, though once cpp support is added, perhaps these should be migrated to a tag together with the commands below
-state include: insert("#include ")
-state include system: user.insert_between("#include <", ">")
-state include local: user.insert_between('#include "', '"')
+state include: user.insert_snippet_by_name("importStatement")
+state include system: user.insert_snippet_by_name("includeSystemStatement")
+state include local: user.insert_snippet_by_name("includeLocalStatement")
 state type deaf: insert("typedef ")
 state type deaf struct: user.insert_snippet_by_name("typedefStructDeclaration")
 
 # XXX - create a preprocessor tag for these, as they will match cpp, etc
-state define: "#define "
-state (undefine | undeaf): "#undef "
-state if (define | deaf): "#ifdef "
+state define: user.insert_snippet_by_name("preprocessorDefineStatement")
+state (undefine | undeaf): user.insert_snippet_by_name("preprocessorUndefineStatement")
+state if (define | deaf): user.insert_snippet_by_name("preprocessorIfDefineStatement")
 [state] define <user.text>$:
-    "#define {user.formatted_text(text, 'ALL_CAPS,SNAKE_CASE')}"
+    user.insert_snippet_by_name_with_phrase("preprocessorDefineStatement", text)
 [state] (undefine | undeaf) <user.text>$:
-    "#undef {user.formatted_text(text, 'ALL_CAPS,SNAKE_CASE')}"
+    user.insert_snippet_by_name_with_phrase("preprocessorUndefineStatement", text)
 [state] if (define | deaf) <user.text>$:
-    "#ifdef {user.formatted_text(text, 'ALL_CAPS,SNAKE_CASE')}"
+    user.insert_snippet_by_name_with_phrase("preprocessorIfDefineStatement", text)
 
 # XXX - preprocessor instead of pre?
-state pre if: "#if "
-state error: "#error "
-state pre else if: "#elif "
-state pre end: "#endif "
-state pragma: "#pragma "
+state pre if: user.insert_snippet_by_name("preprocessorIfStatement")
+state error: user.insert_snippet_by_name("preprocessorErrorStatement")
+state pre else if: user.insert_snippet_by_name("preprocessorElseIfStatement")
+state pre end: user.insert_snippet_by_name("preprocessorEndIfStatement")
+state pragma: user.insert_snippet_by_name("preprocessorPragmaStatement")
 state default: "default:\nbreak;"
 
 #control flow
