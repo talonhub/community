@@ -2,7 +2,7 @@ from talon import Context, Module, actions, app, settings
 
 from ...core.described_functions import (
     create_described_function,
-    described_function_create_insert_between,
+    create_described_insert_between,
 )
 from ..tags.operators import Operators
 
@@ -89,7 +89,7 @@ def code_operator_bitwise_right_shift():
 
 operators = Operators(
     # code_operators_array
-    SUBSCRIPT=described_function_create_insert_between("[", "]"),
+    SUBSCRIPT=create_described_insert_between("[", "]"),
     # code_operators_assignment
     ASSIGNMENT=" = ",
     # code_operators_bitwise

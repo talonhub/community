@@ -2,7 +2,7 @@ import re
 
 from talon import Context, Module, actions, settings
 
-from ...core.described_functions import described_function_create_insert_between
+from ...core.described_functions import create_described_insert_between
 from ..tags.operators import Operators
 
 mod = Module()
@@ -124,7 +124,7 @@ ctx.lists["user.python_exception"] = {
 
 operators = Operators(
     # code_operators_array
-    SUBSCRIPT=described_function_create_insert_between("[", "]"),
+    SUBSCRIPT=create_described_insert_between("[", "]"),
     # code_operators_assignment
     ASSIGNMENT=" = ",
     ASSIGNMENT_SUBTRACTION=" -= ",
@@ -146,7 +146,7 @@ operators = Operators(
     BITWISE_LEFT_SHIFT=" << ",
     BITWISE_RIGHT_SHIFT=" >> ",
     # code_operators_lambda
-    LAMBDA=described_function_create_insert_between("lambda ", ": "),
+    LAMBDA=create_described_insert_between("lambda ", ": "),
     # code_operators_math
     MATH_SUBTRACT=" - ",
     MATH_ADD=" + ",

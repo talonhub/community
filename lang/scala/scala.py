@@ -1,6 +1,6 @@
 from talon import Context, Module, actions, settings
 
-from ...core.described_functions import described_function_create_insert_between
+from ...core.described_functions import create_described_insert_between
 from ..tags.operators import Operators
 
 ctx = Context()
@@ -88,7 +88,7 @@ ctx.lists["user.scala_keyword"] = scala_keywords
 
 operators = Operators(
     # code_operators_array
-    SUBSCRIPT=described_function_create_insert_between("(", ")"),
+    SUBSCRIPT=create_described_insert_between("(", ")"),
     # code_operators_assignment
     ASSIGNMENT=" = ",
     ASSIGNMENT_ADDITION=" += ",

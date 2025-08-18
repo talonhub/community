@@ -1,6 +1,6 @@
 from talon import Context, Module, actions, settings
 
-from ...core.described_functions import described_function_create_insert_between
+from ...core.described_functions import create_described_insert_between
 from ..tags.operators import Operators
 
 mod = Module()
@@ -148,7 +148,7 @@ def c_variable(m) -> str:
 
 
 operators = Operators(
-    SUBSCRIPT=described_function_create_insert_between("[", "]"),
+    SUBSCRIPT=create_described_insert_between("[", "]"),
     ASSIGNMENT=" = ",
     ASSIGNMENT_ADDITION=" += ",
     ASSIGNMENT_SUBTRACTION=" -= ",
