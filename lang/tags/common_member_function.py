@@ -9,5 +9,5 @@ mod.list("code_common_member_function", desc="Function to use in a dotted chain,
 @mod.action_class
 class Actions:
 	def code_member_function(name: str):
-		"""Insert the member function call"""
+		"""Inserts a member function call"""
 		actions.user.insert_between(f".{name}(", ")")
