@@ -1,0 +1,18 @@
+list: user.code_common_member_function
+-
+
+add
+append
+get
+items
+join
+keys
+lower
+pop
+remove
+replace
+sort
+split
+strip
+upper
+values
