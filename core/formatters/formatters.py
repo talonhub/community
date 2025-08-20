@@ -388,28 +388,25 @@ def get_code_formatters() -> dict[str, str]:
     )
     return formatters
 
+
 def get_reformatters() -> dict[str, str]:
     """Returns dictionary of reformatters"""
     reformatters = {}
-    reformatters.update(
-        actions.user.talon_get_active_registry_list("user.reformatter")
-    )
+    reformatters.update(actions.user.talon_get_active_registry_list("user.reformatter"))
     return reformatters
+
 
 def get_prose_formatters():
     """Returns dictionary of prose formatters"""
     prose = {}
-    prose.update(
-            actions.user.talon_get_active_registry_list("user.prose_formatter")
-    )
+    prose.update(actions.user.talon_get_active_registry_list("user.prose_formatter"))
     return prose
+
 
 def get_word_formatters():
     """Returns dictionary of word formatters"""
     word = {}
-    word.update(
-            actions.user.talon_get_active_registry_list("user.word_formatter")
-    )
+    word.update(actions.user.talon_get_active_registry_list("user.word_formatter"))
     return word
 
 
@@ -471,7 +468,6 @@ class Actions:
             formatters_help_demo[phrase] = demo
         return formatters_help_demo
 
-
     def get_prose_formatter_words() -> dict:
         """Returns words currently used as prose, and a demonstration string using those formatters"""
         formatters_help_demo = {}
@@ -495,7 +491,7 @@ class Actions:
     def get_formatters_words() -> dict:
         """Returns words currently used as formatters, and a demonstration string using those formatters"""
         formatters_help_demo = {}
-        code_formatters= get_code_formatters()
+        code_formatters = get_code_formatters()
         prose_formatters = get_prose_formatters()
         all_formatters = code_formatters | prose_formatters
 
@@ -518,7 +514,9 @@ class Actions:
 
         for name in sorted(all_formatters):
             name = code_formatters[name]
-            demo = format_text_without_adding_to_history("one_two_three", all_formatters[name], True)
+            demo = format_text_without_adding_to_history(
+                "one_two_three", all_formatters[name], True
+            )
             if name in prose_formatters:
                 name += " *"
             formatters_help_demo[name] = demo
