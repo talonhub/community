@@ -458,7 +458,7 @@ class Actions:
         actions.edit.delete()
         text = actions.user.reformat_text(selected, formatters)
         actions.insert(text)
-  
+
     def get_code_formatter_words() -> dict:
         """Returns words currently used as code formatters, and a demonstration string using those formatters"""
         formatters_help_demo = {}
