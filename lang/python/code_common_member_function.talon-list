@@ -3,6 +3,7 @@ list: user.code_common_member_function
 
 add
 append
+extend
 get
 items
 join
