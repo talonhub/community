@@ -12,6 +12,7 @@ tag(): user.code_data_bool
 tag(): user.code_data_null
 tag(): user.code_functions
 tag(): user.code_functions_common
+tag(): user.code_common_member_function
 tag(): user.code_keywords
 tag(): user.code_libraries
 tag(): user.code_operators_array
@@ -49,9 +50,6 @@ state export: "export "
 state async: "async "
 
 state await: "await "
-
-dot {user.code_common_member_function}:
-    user.insert_between(".{code_common_member_function}(", ")")
 
 state map: app.notify('ERROR: Command deprecated; please use "dot map"')
 state filter: app.notify('ERROR: Command deprecated; please use "dot filter"')
