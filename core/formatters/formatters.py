@@ -224,6 +224,8 @@ formatter_list = [
     CustomFormatter("LEADING_SPACE", lambda text: f" {text}"),
     CustomFormatter("TRAILING_PERIOD", lambda text: f"{text}."),
     CustomFormatter("LEADING_PERIOD", lambda text: f".{text}")
+    CustomFormatter("TRAILING_COMMA", lambda text: f"{text},"),
+    CustomFormatter("LEADING_COMMA", lambda text: f",{text}"),
     CustomFormatter("DOUBLE_QUOTED_STRING", lambda text: f'"{text}"'),
     CustomFormatter("SINGLE_QUOTED_STRING", lambda text: f"'{text}'"),
     CustomFormatter("SPACE_SURROUNDED_STRING", lambda text: f" {text} "),
