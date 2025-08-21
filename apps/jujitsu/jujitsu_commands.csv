@@ -1,0 +1,79 @@
+Subcommand, Spoken form (optional)
+abandon
+backout, back out
+branch
+branch create
+branch delete
+branch forget
+branch list
+branch rename
+branch set
+branch track
+branch untrack, branch un track
+cat
+chmod, change mod
+config
+config edit
+config get
+config list
+config path
+config set
+describe
+diff
+diffedit
+duplicate
+edit
+files
+fix
+git
+git clone
+git export
+git fetch
+git import
+git init, git initialize
+git push
+git remote
+git remote add
+git remote list
+git remote remove
+git remote rename
+help
+init, in it
+interdiff, intersect diff
+log
+new
+next
+obslog, object log
+operation
+operation abandon
+operation log
+operation restore
+operation undo
+parallelize
+prev, previous
+rebase
+resolve
+restore
+root
+show
+sparse
+sparse edit
+sparse list
+sparse reset
+sparse set
+split
+squash
+status
+Subcommand, Spoken form (optional)
+tag
+tag list
+undo
+unsquash, un squash
+untrack, un track
+version
+workspace
+workspace add
+workspace forget
+workspace list
+workspace root
+workspace update-stale, workspace update stale
