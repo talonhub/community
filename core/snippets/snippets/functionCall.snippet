@@ -1,15 +1,15 @@
 name: functionCall
 phrase: call
 insertionScope: statement
-
-$0.wrapperPhrase: call
 ---
 
 language: c | cpp | csharp | python | talon | java | javascript | typescript | javascriptreact | typescriptreact | css | scss | sql | r
+$2.wrapperPhrase: call
 -
-$1($0)
+$1($2)
 ---
 
+$0.wrapperPhrase: call
 language: stata
 -
 $1 $0
