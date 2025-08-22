@@ -145,7 +145,7 @@ class UserActions:
         actions.edit.left()
 
     def code_insert_library(text: str, selection: str):
-        actions.user.insert_snippet_by_name("importStatement", {"0": text + selection})
+        actions.user.insert_snippet_by_name("importStatement", {"1": text + selection})
 
     def code_insert_named_argument(parameter_name: str):
         actions.insert(f"{parameter_name} = ")
