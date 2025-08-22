@@ -111,6 +111,7 @@ cut word right: user.cut_word_right()
 
 # Paste
 (pace | paste) that: edit.paste()
+donk: edit.paste()
 (pace | paste) enter:
     edit.paste()
     key(enter)
@@ -137,6 +138,7 @@ junk: edit.undo()
 redo that: edit.redo()
 
 # Save
+disk: edit.save()
 file save: edit.save()
 file save all: edit.save_all()
 

@@ -1,0 +1,16 @@
+list: user.system_paths
+hostname: Mac.lan
+-
+user: /Users/morgan
+desktop: /Users/morgan/Desktop
+desk: /Users/morgan/Desktop
+documents: /Users/morgan/Documents
+docks: /Users/morgan/Documents
+downloads: /Users/morgan/Downloads
+music: /Users/morgan/Music
+pictures: /Users/morgan/Pictures
+videos: /Users/morgan/Videos
+talon home: /Users/morgan/.talon
+talon recordings: /Users/morgan/.talon/recordings
+talon user: /Users/morgan/.talon/user
+home: /Users/morgan

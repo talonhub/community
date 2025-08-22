@@ -1,11 +1,100 @@
 list: user.vocabulary
 -
-N map: nmap
-under documented: under-documented
-nmap
-admin
-Cisco
-Citrix
-VPN
+A P I: API
 DNS
-Minecraft
+Github
+Gmail
+HMRC
+HSBC
+PR
+PRs
+Pokey
+Schwab
+U R L: URL
+VPN
+admin
+app
+arg
+args
+async
+cheatsheet
+config
+css
+csv
+cursorless
+cursor list: cursorless
+debounce
+debounced
+delimiter
+delimiters
+dfa
+dir
+dock: doc
+docker
+docks: docs
+edit
+edits
+eenum: enum
+fifo
+flash card: flashcard
+flash cards: flashcards
+fontello
+git
+html
+infer
+jason: json
+karabiner
+mouse jay: knausj
+lodash
+matcher
+matchers
+meta
+min
+misrecognized
+make fifo: mkfifo
+node
+no js: node.js
+nonce
+enth: nth
+null
+parser
+parsers
+pi test: pytest
+pie torch: pytorch
+snippet
+subword
+subwords
+svg
+synology
+timeout
+to do: todo
+tuple
+you are I: uri
+you till: util
+van cake: vscode
+walkthrough
+walkthroughs
+wiki
+parse tree
+javascript
+grapheme
+graphemes
+modal
+rev set: revset
+branchless
+tokenizer
+ide
+eslint
+tsconfig
+lay tech: LaTeX
+scope
+endpoint
+endpoints
+OAS
+Yamal: YML
+end point: endpoint
+end points: endpoints
+front end: front-end
+under documented: under-documented
+ay pee eye: API
+id

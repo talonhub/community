@@ -93,19 +93,11 @@ class Actions:
 
     def foot_switch_left_down():
         """Foot switch button left:down"""
-        global cron_job
-        cron_job = cron.after(
-            f"{int(HOLD_TIMEOUT*1000)}ms",
-            actions.user.quick_pick_show,
-        )
+        actions.tracking.control_toggle(True)
 
     def foot_switch_left_up(held: bool):
         """Foot switch button left:up"""
-        global cron_job
-        cron.cancel(cron_job)
-        cron_job = None
-        if not held:
-            actions.user.go_back()
+        actions.tracking.control_toggle(False)
 
     def foot_switch_right_down():
         """Foot switch button right:down"""
