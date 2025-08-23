@@ -91,7 +91,6 @@ All key commands are defined in [keys.talon](core/keys/keys.talon). Say letters 
 
 For modifier keys, say `help modifiers`. For example, say `shift air` to press <kbd>Shift</kbd> + <kbd>A</kbd>, which types a capital `A`.
 
-
 On Windows, try commands such as:
 
 - `control air` to press <kbd>Control</kbd> + <kbd>A</kbd> and select all.
