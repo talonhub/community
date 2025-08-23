@@ -91,7 +91,7 @@ All key commands are defined in [keys.talon](core/keys/keys.talon). Say letters 
 
 For modifier keys, say `help modifiers`. For example, say `shift air` to press <kbd>Shift</kbd> + <kbd>A</kbd>, which types a capital `A`.
 
-For symbols, say `help symbols`. These are defined in [symbols.py](core/keys/symbols.py). 
+For symbols, say `help symbols`. These are defined in [symbols.py](core/keys/symbols.py).
 .
 
 On Windows, try commands such as:
