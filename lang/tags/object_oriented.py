@@ -8,9 +8,7 @@ mod.tag(
     desc="Tag for enabling basic object oriented programming commands (objects, classes, etc)",
 )
 
-mod.list(
-    "code_common_method", desc="Function to use in a dotted chain, eg .foo()"
-)
+mod.list("code_common_method", desc="Function to use in a dotted chain, eg .foo()")
 
 
 @mod.action_class
