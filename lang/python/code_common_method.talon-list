@@ -1,4 +1,4 @@
-list: user.code_common_member_function
+list: user.code_common_method
 -
 
 add
@@ -17,3 +17,5 @@ split
 strip
 upper
 values
+elle strip: lstrip
+are strip: rstrip

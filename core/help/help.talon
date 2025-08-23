@@ -18,7 +18,7 @@ help snip: user.help_list("user.snippet")
 help operators: user.help_operators()
 help keywords: user.help_list("user.code_keyword")
 help keywords unprefixed: user.help_list("user.code_keyword_unprefixed")
-help [common] member functions: user.help_list("user.code_common_member_function")
+help [common] member functions: user.help_list("user.code_common_method")
 help pairs: user.help_list("user.delimiter_pair")
 
 (help formatters | help format | format help):

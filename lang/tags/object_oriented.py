@@ -9,7 +9,7 @@ mod.tag(
 )
 
 mod.list(
-    "code_common_member_function", desc="Function to use in a dotted chain, eg .foo()"
+    "code_common_method", desc="Function to use in a dotted chain, eg .foo()"
 )
 
 

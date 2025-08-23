@@ -11,7 +11,7 @@ code.language: javascriptreact
 code.language: typescriptreact
 """
 
-ctx.lists["user.code_common_member_function"] = {
+ctx.lists["user.code_common_method"] = {
     "catch": "catch",
     "concat": "concat",
     "filter": "filter",
