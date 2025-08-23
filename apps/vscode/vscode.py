@@ -136,6 +136,7 @@ class EditActions:
         else:
             actions.user.vscode("actions.find")
 
+
 @ctx_editor.action_class("user")
 class EditorUserActions:
     def insert_between(before: str, after: str):
@@ -144,6 +145,7 @@ class EditorUserActions:
         escaped_after = actions.user.escape_snippet_stops(after)
         snippet = f"{escaped_before}$0{escaped_after}"
         actions.user.insert_snippet(snippet)
+
 
 @ctx.action_class("edit")
 class EditActions:
