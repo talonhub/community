@@ -24,5 +24,5 @@ class Actions:
         actions.user.insert_snippet_by_name("classDeclaration")
 
     def code_method(name: str):
-        """Inserts a member function call"""
+        """Inserts a method invocation"""
         actions.user.insert_between(f".{name}(", ")")
