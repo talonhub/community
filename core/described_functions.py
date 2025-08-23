@@ -1,5 +1,5 @@
 # This file provides support for defining functions that have an associated description
-# Talon's version of python does not allow getting the code of a function through reflection, so we are instead allowing associating doc strings with lambdas and functions as a way to apply descriptions to the community help system
+# Talon's version of Python does not allow getting the code of a function through reflection, so we are instead allowing associating doc strings with lambdas and functions as a way to apply descriptions to the community help system
 
 
 from typing import Callable
