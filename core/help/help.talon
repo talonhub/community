@@ -19,6 +19,8 @@ help operators: user.help_operators()
 help keywords: user.help_list("user.code_keyword")
 help keywords unprefixed: user.help_list("user.code_keyword_unprefixed")
 help [common] member functions: user.help_list("user.code_common_member_function")
+help pairs: user.help_list("user.delimiter_pair")
+
 (help formatters | help format | format help):
     user.help_formatters(user.get_formatters_words(), false)
 (help re formatters | help re format | re format help):
