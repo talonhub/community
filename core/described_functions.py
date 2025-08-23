@@ -17,5 +17,5 @@ def create_described_insert_between(before: str, after: str) -> Callable:
     """Creates a described function for calling actions.user.insert_between"""
     return create_described_function(
         lambda: actions.user.insert_between(before, after),
-        f"actions.user.insert_between('{before}', '{after}')",
+        f"wraps the cursor with {before} and {after}",
     )
