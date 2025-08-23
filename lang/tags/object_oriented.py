@@ -23,6 +23,6 @@ class Actions:
         """Starts a class definition (e.g., Java's "class" keyword)"""
         actions.user.insert_snippet_by_name("classDeclaration")
 
-    def code_member_function(name: str):
+    def code_method(name: str):
         """Inserts a member function call"""
         actions.user.insert_between(f".{name}(", ")")
