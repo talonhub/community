@@ -123,7 +123,7 @@ def update_operators_text():
                     operator = operators.get(operator_text)
                     if type(operator) == str:
                         text = ": " + operator
-                    elif hasattr(operator, "__doc__"):
+                    elif hasattr(operator, "__doc__") and operator.__doc__:
                         text = ": " + operator.__doc__
                     # Otherwise display the operator name from list
                     else:
