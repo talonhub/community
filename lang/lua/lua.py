@@ -86,6 +86,9 @@ def code_operator_bitwise_right_shift():
     else:
         actions.insert(" bit.rshift() ")
 
+def compute_bitwise_operator_description(operator_text: str) -> str:
+    return f"Insert {operator_text} or library call based on user.lua_version"
+
 
 operators = Operators(
     # code_operators_array
@@ -94,22 +97,24 @@ operators = Operators(
     ASSIGNMENT=" = ",
     # code_operators_bitwise
     BITWISE_AND=create_described_function(
-        code_operator_bitwise_and, "insert bitwise and based on lua version"
+        code_operator_bitwise_and,
+        compute_bitwise_operator_description("&")
     ),
     BITWISE_OR=create_described_function(
-        code_operator_bitwise_or, "insert bitwise or based on lua version"
+        code_operator_bitwise_or,
+        compute_bitwise_operator_description("|")
     ),
     BITWISE_EXCLUSIVE_OR=create_described_function(
         code_operator_bitwise_exclusive_or,
-        "insert bitwise exclusive or based on lua version",
+        compute_bitwise_operator_description("~"),
     ),
     BITWISE_LEFT_SHIFT=create_described_function(
         code_operator_bitwise_left_shift,
-        "insert bitwise left shift based on lua version",
+        compute_bitwise_operator_description("<<"),
     ),
     BITWISE_RIGHT_SHIFT=create_described_function(
         code_operator_bitwise_right_shift,
-        "insert bitwise right shift based on lua version",
+        compute_bitwise_operator_description(">>"),
     ),
     # code_operators_assignment
     MATH_SUBTRACT=" - ",
