@@ -25,12 +25,6 @@ ctx.lists["self.c_signed"] = {
     "unsigned": "unsigned",
 }
 
-ctx.lists["self.c_keywords"] = {
-    "static": "static",
-    "volatile": "volatile",
-    "register": "register",
-}
-
 ctx.lists["self.stdint_types"] = {
     "character": "int8_t",
     "char": "int8_t",
