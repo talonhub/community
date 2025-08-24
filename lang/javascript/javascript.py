@@ -12,9 +12,7 @@ code.language: javascriptreact
 code.language: typescriptreact
 """
 
-mod.list("code_common_member_function", "Function to use in a dotted chain, eg .foo()")
-
-ctx.lists["user.code_common_member_function"] = {
+ctx.lists["user.code_common_method"] = {
     "catch": "catch",
     "concat": "concat",
     "filter": "filter",

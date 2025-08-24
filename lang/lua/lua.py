@@ -208,7 +208,7 @@ class UserActions:
     # code_libraries
     ##
     def code_insert_library(text: str, selection: str):
-        substitutions = {"1": selection, "0": selection}
+        substitutions = {"1": selection, "2": selection}
         actions.user.insert_snippet_by_name("importStatement", substitutions)
 
     # non-tag related actions
