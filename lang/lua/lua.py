@@ -98,22 +98,19 @@ operators = Operators(
     ASSIGNMENT=" = ",
     # code_operators_bitwise
     BITWISE_AND=create_described_function(
-        code_operator_bitwise_and, compute_bitwise_operator_description("&")
+        lambda: code_operator_bitwise_and(), compute_bitwise_operator_description("&")
     ),
     BITWISE_OR=create_described_function(
-        code_operator_bitwise_or, compute_bitwise_operator_description("|")
+        lambda: code_operator_bitwise_or(), compute_bitwise_operator_description("|")
     ),
     BITWISE_EXCLUSIVE_OR=create_described_function(
-        code_operator_bitwise_exclusive_or,
-        compute_bitwise_operator_description("~"),
+        lambda: code_operator_bitwise_exclusive_or(), compute_bitwise_operator_description("~")
     ),
     BITWISE_LEFT_SHIFT=create_described_function(
-        code_operator_bitwise_left_shift,
-        compute_bitwise_operator_description("<<"),
+        lambda: code_operator_bitwise_left_shift(), compute_bitwise_operator_description("<<")
     ),
     BITWISE_RIGHT_SHIFT=create_described_function(
-        code_operator_bitwise_right_shift,
-        compute_bitwise_operator_description(">>"),
+        lambda: code_operator_bitwise_right_shift(), compute_bitwise_operator_description(">>")
     ),
     # code_operators_assignment
     MATH_SUBTRACT=" - ",
