@@ -25,17 +25,7 @@ class Actions:
     ):
         """Insert snippet <name>"""
         snippet: Snippet = actions.user.get_snippet(name)
-        body = snippet.body
-
-        if substitutions:
-            for k, v in substitutions.items():
-                reg = re.compile(rf"\${k}|\$\{{{k}\}}")
-                if not reg.search(body):
-                    raise ValueError(
-                        f"Can't substitute non existing variable '{k}' in snippet '{name}'"
-                    )
-                body = reg.sub(v, body)
-
+        body = compute_snippet_body_with_substitutions(snippet, substitutions)
         actions.user.insert_snippet(body)
 
     def insert_snippet_by_name_with_stop_at_end(
