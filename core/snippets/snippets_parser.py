@@ -56,7 +56,6 @@ def create_snippet(
 ) -> Snippet | None:
     body = normalize_snippet_body_tabs(document.body)
     variables = combine_variables(default_context.variables, document.variables)
-    body, variables = add_final_stop_to_snippet_body(body, variables)
 
     snippet = Snippet(
         name=document.name or default_context.name or "",
