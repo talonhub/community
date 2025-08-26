@@ -46,7 +46,7 @@ class Actions:
         snippet: Snippet = actions.user.get_snippet(name)
         body = compute_snippet_body_with_substitutions(snippet, substitutions)
         body, _ = add_final_stop_to_snippet_body(body, snippet.variables)
-        actions.user.insert_snippet(body) 
+        actions.user.insert_snippet(body)
 
     def insert_snippet_by_name_with_phrase(name: str, phrase: str):
         """Insert snippet <name> with phrase <phrase>"""
@@ -66,7 +66,10 @@ class Actions:
 
         actions.user.insert_snippet_by_name(name, substitutions)
 
-def compute_snippet_body_with_substitutions(snippet: Snippet, substitutions: dict[str, str]) -> str:
+
+def compute_snippet_body_with_substitutions(
+    snippet: Snippet, substitutions: dict[str, str]
+) -> str:
     body = snippet.body
     if substitutions:
         for k, v in substitutions.items():
