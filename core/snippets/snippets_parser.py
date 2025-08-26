@@ -164,7 +164,7 @@ def add_final_stop_to_snippet_body(body: str) -> str:
         return body
 
     biggest_variable_number: int | None = find_largest_variable_number(body)
-    #If there is no integer variable, just add the final stop at the end
+    # If there is no integer variable, just add the final stop at the end
     if biggest_variable_number is None:
         return body + "$0"
 
@@ -174,7 +174,7 @@ def add_final_stop_to_snippet_body(body: str) -> str:
     ):
         return body
 
-    #Add the final stop to the end but replace the original final stop
+    # Add the final stop to the end but replace the original final stop
     replacement_name = str(biggest_variable_number + 1)
     return replace_final_stop(body, replacement_name, final_stop_matches) + "$0"
 
