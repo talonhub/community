@@ -68,3 +68,20 @@ if hasattr(talon, "test_mode"):
         body = "[$1 for $1 in $0]"
         expected = "[$1 for $1 in $2]$0"
         assert_body_with_final_stop_added_as_expected(body, expected)
+
+    def test_nonzero_final_stop():
+        body = "test $1"
+        assert_body_with_final_stop_added_as_expected(body, body)
+
+    def test_nonzero_final_stop_with_default():
+        body = "test ${1:default}"
+        assert_body_with_final_stop_added_as_expected(body, body)
+    
+    def test_nonzero_final_stop_with_number_in_braces():
+        body = "test ${2}"
+        assert_body_with_final_stop_added_as_expected(body, body)
+    
+    def test_nonzero_at_end_with_zero_earlier():
+        body = "test$0 $1"
+        expected = "test$2 $1$0"
+        assert_body_with_final_stop_added_as_expected(body, expected)
