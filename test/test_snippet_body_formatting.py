@@ -5,7 +5,7 @@ if hasattr(talon, "test_mode"):
     from core.snippets import snippets_parser
 
     def assert_body_with_final_stop_added_as_expected(body: str, expected: str):
-        actual, _ = snippets_parser.add_final_stop_to_snippet_body(body)
+        actual = snippets_parser.add_final_stop_to_snippet_body(body)
         assert actual == expected
 
     def test_stop_at_end():
