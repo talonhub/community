@@ -164,16 +164,19 @@ def add_final_stop_to_snippet_body(body: str) -> str:
         return body
 
     biggest_variable_number: int | None = find_largest_variable_number(body)
-    if biggest_variable_number is not None:
-        # If the biggest matching variable is at the end and there is no zero stop, make no change
-        if len(final_stop_matches) == 0 and is_variable_last_match_at_end(
-            str(biggest_variable_number), body
-        ):
-            return body
-        replacement_name = str(biggest_variable_number + 1)
-        body = replace_final_stop(body, replacement_name, final_stop_matches)
-    body += "$0"
-    return body
+    #If there is no integer variable, just add the final stop at the end
+    if biggest_variable_number is None:
+        return body + "$0"
+
+    # If the biggest matching variable is at the end and there is no zero stop, make no change
+    if len(final_stop_matches) == 0 and is_variable_last_match_at_end(
+        str(biggest_variable_number), body
+    ):
+        return body
+
+    #Add the final stop to the end but replace the original final stop
+    replacement_name = str(biggest_variable_number + 1)
+    return replace_final_stop(body, replacement_name, final_stop_matches) + "$0"
 
 
 def is_variable_last_match_at_end(variable: str, body) -> bool:
