@@ -76,11 +76,11 @@ if hasattr(talon, "test_mode"):
     def test_nonzero_final_stop_with_default():
         body = "test ${1:default}"
         assert_body_with_final_stop_added_as_expected(body, body)
-    
+
     def test_nonzero_final_stop_with_number_in_braces():
         body = "test ${2}"
         assert_body_with_final_stop_added_as_expected(body, body)
-    
+
     def test_nonzero_at_end_with_zero_earlier():
         body = "test$0 $1"
         expected = "test$2 $1$0"

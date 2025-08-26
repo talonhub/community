@@ -157,17 +157,23 @@ def add_final_stop_to_snippet_body(body: str) -> str:
     """
     if not body:
         return body
-    
+
     final_stop_matches = find_variable_matches("0", body)
-    #If there is already a final stop at the end, make no change
+    # If there is already a final stop at the end, make no change
     if len(final_stop_matches) > 0 and final_stop_matches[-1].end() == len(body):
         return body
 
     biggest_variable_number: int | None = find_largest_variable_number(body)
     if biggest_variable_number is not None:
-        biggest_variable_matches = find_variable_matches(str(biggest_variable_number), body)
-        #If the biggest matching variable is at the end and there is no zero stop, make no change
-        if len(biggest_variable_matches) > 0 and biggest_variable_matches[-1].end() == len(body) and len(final_stop_matches) == 0:
+        biggest_variable_matches = find_variable_matches(
+            str(biggest_variable_number), body
+        )
+        # If the biggest matching variable is at the end and there is no zero stop, make no change
+        if (
+            len(biggest_variable_matches) > 0
+            and biggest_variable_matches[-1].end() == len(body)
+            and len(final_stop_matches) == 0
+        ):
             return body
         replacement_name = str(biggest_variable_number + 1)
         body = replace_final_stop(body, replacement_name, final_stop_matches)
