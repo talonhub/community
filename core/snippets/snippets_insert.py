@@ -4,6 +4,7 @@ from talon import Module, actions
 
 from .snippet_types import Snippet
 from .snippets_insert_raw_text import go_to_next_stop_raw, insert_snippet_raw_text
+from .snippets_parser import add_final_stop_to_snippet_body
 
 mod = Module()
 
@@ -37,6 +38,16 @@ class Actions:
 
         actions.user.insert_snippet(body)
 
+    def insert_snippet_by_name_with_stop_at_end(
+        name: str,
+        substitutions: dict[str, str] = None,
+    ):
+        """Insert snippet <name> with a final stop guaranteed to be at the end of the snippet"""
+        snippet: Snippet = actions.user.get_snippet(name)
+        body = compute_snippet_body_with_substitutions(snippet, substitutions)
+        body, _ = add_final_stop_to_snippet_body(body, snippet.variables)
+        actions.user.insert_snippet(body) 
+
     def insert_snippet_by_name_with_phrase(name: str, phrase: str):
         """Insert snippet <name> with phrase <phrase>"""
         snippet: Snippet = actions.user.get_snippet(name)
@@ -54,3 +65,15 @@ class Actions:
             )
 
         actions.user.insert_snippet_by_name(name, substitutions)
+
+def compute_snippet_body_with_substitutions(snippet: Snippet, substitutions: dict[str, str]) -> str:
+    body = snippet.body
+    if substitutions:
+        for k, v in substitutions.items():
+            reg = re.compile(rf"\${k}|\$\{{{k}\}}")
+            if not reg.search(body):
+                raise ValueError(
+                    f"Can't substitute non existing variable '{k}' in snippet '{snippet.name}'"
+                )
+            body = reg.sub(v, body)
+    return body
