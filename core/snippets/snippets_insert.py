@@ -53,6 +53,7 @@ class Actions:
         body = add_final_stop_to_snippet_body(body)
         actions.user.insert_snippet(body)
 
+
 def compute_snippet_body_with_substitutions(
     snippet: Snippet, substitutions: dict[str, str]
 ) -> str:
@@ -67,6 +68,7 @@ def compute_snippet_body_with_substitutions(
             body = reg.sub(v, body)
     return body
 
+
 def compute_phrase_substitutions(snippet: Snippet, phrase: str):
     substitutions = {}
 
@@ -80,5 +82,5 @@ def compute_phrase_substitutions(snippet: Snippet, phrase: str):
         raise ValueError(
             f"Can't use snippet phrase. No variable with insertion formatter in snippet '{snippet.name}'"
         )
-    
+
     return substitutions

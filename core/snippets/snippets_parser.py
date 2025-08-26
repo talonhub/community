@@ -150,9 +150,7 @@ def combine_variables(
     return list(variables.values())
 
 
-def add_final_stop_to_snippet_body(
-    body: str
-) -> str:
+def add_final_stop_to_snippet_body(body: str) -> str:
     """Make the snippet body end with stop $0 to allow exiting the snippet with `snip next`.
     If the snippet has a stop named `0`, it will get replaced with the largest number of a snippet variable name
     plus 1 with the original variable metadata for stop `0` now associated with the replacement.
