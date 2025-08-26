@@ -151,8 +151,8 @@ def combine_variables(
 
 
 def add_final_stop_to_snippet_body(
-    body: str, variables: list[SnippetVariable]
-) -> tuple[str, list[SnippetVariable]]:
+    body: str
+) -> str:
     """Make the snippet body end with stop $0 to allow exiting the snippet with `snip next`.
     If the snippet has a stop named `0`, it will get replaced with the largest number of a snippet variable name
     plus 1 with the original variable metadata for stop `0` now associated with the replacement.
@@ -168,12 +168,9 @@ def add_final_stop_to_snippet_body(
             if biggest_variable_number is not None:
                 replacement_name = str(biggest_variable_number + 1)
                 body = replace_final_stop(body, replacement_name, final_stop_matches)
-                variables = replace_variables_for_final_stop(
-                    variables, replacement_name
-                )
             body += "$0"
 
-    return body, variables
+    return body
 
 
 def replace_final_stop(body: str, replacement_name: str, final_stop_matches) -> str:

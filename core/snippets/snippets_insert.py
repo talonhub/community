@@ -35,7 +35,7 @@ class Actions:
         """Insert snippet <name> with a final stop guaranteed to be at the end of the snippet"""
         snippet: Snippet = actions.user.get_snippet(name)
         body = compute_snippet_body_with_substitutions(snippet, substitutions)
-        body, _ = add_final_stop_to_snippet_body(body, snippet.variables)
+        body = add_final_stop_to_snippet_body(body)
         actions.user.insert_snippet(body)
 
     def insert_snippet_by_name_with_phrase(name: str, phrase: str):
