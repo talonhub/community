@@ -24,8 +24,7 @@ class Actions:
         substitutions: dict[str, str] = None,
     ):
         """Insert snippet <name>"""
-        snippet: Snippet = actions.user.get_snippet(name)
-        body = compute_snippet_body_with_substitutions(snippet, substitutions)
+        body = get_snippet_body_by_name_with_substitutions(name, substitutions)
         actions.user.insert_snippet(body)
 
     def insert_snippet_by_name_with_stop_at_end(
@@ -33,24 +32,30 @@ class Actions:
         substitutions: dict[str, str] = None,
     ):
         """Insert snippet <name> with a final stop guaranteed to be at the end of the snippet"""
-        snippet: Snippet = actions.user.get_snippet(name)
-        body = compute_snippet_body_with_substitutions(snippet, substitutions)
+        body = get_snippet_body_by_name_with_substitutions(name, substitutions)
         insert_snippet_with_stop_at_the_end(body)
 
     def insert_snippet_by_name_with_phrase(name: str, phrase: str):
         """Insert snippet <name> with phrase <phrase>"""
-        snippet: Snippet = actions.user.get_snippet(name)
-        substitutions = compute_phrase_substitutions(snippet, phrase)
-        body = compute_snippet_body_with_substitutions(snippet, substitutions)
+        body = get_snippet_body_by_name_with_phrase_substitutions(name, phrase)
         actions.user.insert_snippet(body)
 
     def insert_snippet_by_name_with_phrase_and_stop_at_end(name: str, phrase: str):
         """Insert snippet <name> with phrase <phrase> and a stop at the end"""
-        snippet: Snippet = actions.user.get_snippet(name)
-        substitutions = compute_phrase_substitutions(snippet, phrase)
-        body = compute_snippet_body_with_substitutions(snippet, substitutions)
+        body = get_snippet_body_by_name_with_phrase_substitutions(name, phrase)
         insert_snippet_with_stop_at_the_end(body)
 
+def get_snippet_body_by_name_with_phrase_substitutions(name: str, phrase: str):
+    snippet: Snippet = actions.user.get_snippet(name)
+    substitutions = compute_phrase_substitutions(snippet, phrase)
+    body = compute_snippet_body_with_substitutions(snippet, substitutions)
+    return body
+
+def get_snippet_body_by_name_with_substitutions(name: str, substitutions: dict[str, str]) -> str:
+    snippet: Snippet = actions.user.get_snippet(name)
+    body = compute_snippet_body_with_substitutions(snippet, substitutions)
+    return body
+    
 def insert_snippet_with_stop_at_the_end(body):
     body = add_final_stop_to_snippet_body(body)
     actions.user.insert_snippet(body)
