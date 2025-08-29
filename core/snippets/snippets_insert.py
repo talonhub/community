@@ -45,20 +45,26 @@ class Actions:
         body = get_snippet_body_by_name_with_phrase_substitutions(name, phrase)
         insert_snippet_with_stop_at_the_end(body)
 
+
 def get_snippet_body_by_name_with_phrase_substitutions(name: str, phrase: str):
     snippet: Snippet = actions.user.get_snippet(name)
     substitutions = compute_phrase_substitutions(snippet, phrase)
     body = compute_snippet_body_with_substitutions(snippet, substitutions)
     return body
 
-def get_snippet_body_by_name_with_substitutions(name: str, substitutions: dict[str, str]) -> str:
+
+def get_snippet_body_by_name_with_substitutions(
+    name: str, substitutions: dict[str, str]
+) -> str:
     snippet: Snippet = actions.user.get_snippet(name)
     body = compute_snippet_body_with_substitutions(snippet, substitutions)
     return body
-    
+
+
 def insert_snippet_with_stop_at_the_end(body):
     body = add_final_stop_to_snippet_body(body)
     actions.user.insert_snippet(body)
+
 
 def compute_snippet_body_with_substitutions(
     snippet: Snippet, substitutions: dict[str, str]
