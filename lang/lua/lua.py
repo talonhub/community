@@ -50,9 +50,11 @@ def lua_functions(m) -> str:
 
 # NOTE: < 5.3 assumes Lua BitOp usage
 #       > 5.2 assumes native bitwise operators
+# ALSO NOTE: The documentation strings for these functions are used by help operators
 # TODO: Possibly add settings to define which library to use, as 5.2
 # includes bit32. Neovim uses luajit, which uses Lua BitOp
 def code_operator_bitwise_and():
+    "Insert & or library call based on user.lua_version"
     if settings.get("user.lua_version") > 5.2:
         actions.insert(" & ")
     else:
@@ -60,6 +62,7 @@ def code_operator_bitwise_and():
 
 
 def code_operator_bitwise_or():
+    "Insert | or library call based on user.lua_version"
     if settings.get("user.lua_version") > 5.2:
         actions.insert(" | ")
     else:
@@ -67,6 +70,7 @@ def code_operator_bitwise_or():
 
 
 def code_operator_bitwise_exclusive_or():
+    "Insert ~ or library call based on user.lua_version"
     if settings.get("user.lua_version") > 5.2:
         actions.insert(" ~ ")
     else:
@@ -74,6 +78,7 @@ def code_operator_bitwise_exclusive_or():
 
 
 def code_operator_bitwise_left_shift():
+    "Insert << or library call based on user.lua_version"
     if settings.get("user.lua_version") > 5.2:
         actions.insert(" << ")
     else:
@@ -81,14 +86,11 @@ def code_operator_bitwise_left_shift():
 
 
 def code_operator_bitwise_right_shift():
+    "Insert >> or library call based on user.lua_version"
     if settings.get("user.lua_version") > 5.2:
         actions.insert(" >> ")
     else:
         actions.insert(" bit.rshift() ")
-
-
-def compute_bitwise_operator_description(operator_text: str) -> str:
-    return f"Insert {operator_text} or library call based on user.lua_version"
 
 
 operators = Operators(
@@ -97,24 +99,11 @@ operators = Operators(
     # code_operators_assignment
     ASSIGNMENT=" = ",
     # code_operators_bitwise
-    BITWISE_AND=create_described_function(
-        lambda: code_operator_bitwise_and(), compute_bitwise_operator_description("&")
-    ),
-    BITWISE_OR=create_described_function(
-        lambda: code_operator_bitwise_or(), compute_bitwise_operator_description("|")
-    ),
-    BITWISE_EXCLUSIVE_OR=create_described_function(
-        lambda: code_operator_bitwise_exclusive_or(),
-        compute_bitwise_operator_description("~"),
-    ),
-    BITWISE_LEFT_SHIFT=create_described_function(
-        lambda: code_operator_bitwise_left_shift(),
-        compute_bitwise_operator_description("<<"),
-    ),
-    BITWISE_RIGHT_SHIFT=create_described_function(
-        lambda: code_operator_bitwise_right_shift(),
-        compute_bitwise_operator_description(">>"),
-    ),
+    BITWISE_AND= code_operator_bitwise_and,
+    BITWISE_OR= code_operator_bitwise_or,
+    BITWISE_EXCLUSIVE_OR= code_operator_bitwise_exclusive_or,
+    BITWISE_LEFT_SHIFT= code_operator_bitwise_left_shift,
+    BITWISE_RIGHT_SHIFT= code_operator_bitwise_right_shift,
     # code_operators_assignment
     MATH_SUBTRACT=" - ",
     MATH_ADD=" + ",
