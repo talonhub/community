@@ -99,11 +99,11 @@ operators = Operators(
     # code_operators_assignment
     ASSIGNMENT=" = ",
     # code_operators_bitwise
-    BITWISE_AND= code_operator_bitwise_and,
-    BITWISE_OR= code_operator_bitwise_or,
-    BITWISE_EXCLUSIVE_OR= code_operator_bitwise_exclusive_or,
-    BITWISE_LEFT_SHIFT= code_operator_bitwise_left_shift,
-    BITWISE_RIGHT_SHIFT= code_operator_bitwise_right_shift,
+    BITWISE_AND=code_operator_bitwise_and,
+    BITWISE_OR=code_operator_bitwise_or,
+    BITWISE_EXCLUSIVE_OR=code_operator_bitwise_exclusive_or,
+    BITWISE_LEFT_SHIFT=code_operator_bitwise_left_shift,
+    BITWISE_RIGHT_SHIFT=code_operator_bitwise_right_shift,
     # code_operators_assignment
     MATH_SUBTRACT=" - ",
     MATH_ADD=" + ",
