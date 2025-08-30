@@ -56,7 +56,6 @@ def create_snippet(
 ) -> Snippet | None:
     body = normalize_snippet_body_tabs(document.body)
     variables = combine_variables(default_context.variables, document.variables)
-    body, variables = add_final_stop_to_snippet_body(body, variables)
 
     snippet = Snippet(
         name=document.name or default_context.name or "",
@@ -151,30 +150,37 @@ def combine_variables(
     return list(variables.values())
 
 
-def add_final_stop_to_snippet_body(
-    body: str, variables: list[SnippetVariable]
-) -> tuple[str, list[SnippetVariable]]:
-    """Make the snippet body end with stop $0 to allow exiting the snippet with `snip next`.
-    If the snippet has a stop named `0`, it will get replaced with the largest number of a snippet variable name
-    plus 1 with the original variable metadata for stop `0` now associated with the replacement.
+def add_final_stop_to_snippet_body(body: str) -> str:
+    """Make the snippet body end with the final stop to allow exiting the snippet with `snip next`.
+    If the snippet already has a stop named `0`, it will get replaced with the largest number of a snippet variable name plus 1.
     """
-    if body:
-        final_stop_matches = find_variable_matches("0", body)
+    if not body:
+        return body
 
-        # Only make a change if the snippet body does not end with a final stop.
-        if not (
-            len(final_stop_matches) > 0 and final_stop_matches[-1].end() == len(body)
-        ):
-            biggest_variable_number: int | None = find_largest_variable_number(body)
-            if biggest_variable_number is not None:
-                replacement_name = str(biggest_variable_number + 1)
-                body = replace_final_stop(body, replacement_name, final_stop_matches)
-                variables = replace_variables_for_final_stop(
-                    variables, replacement_name
-                )
-            body += "$0"
+    final_stop_matches = find_variable_matches("0", body)
+    # If there is already a final stop at the end, make no change
+    if len(final_stop_matches) > 0 and final_stop_matches[-1].end() == len(body):
+        return body
 
-    return body, variables
+    largest_variable_number: int | None = find_largest_variable_number(body)
+    # If there is no integer variable, just add the final stop at the end
+    if largest_variable_number is None:
+        return body + "$0"
+
+    # If the largest matching variable is at the end and there is no zero stop, make no change
+    if len(final_stop_matches) == 0 and is_variable_last_match_at_end(
+        str(largest_variable_number), body
+    ):
+        return body
+
+    # Add the final stop to the end but replace the original final stop
+    replacement_name = str(largest_variable_number + 1)
+    return replace_final_stop(body, replacement_name, final_stop_matches) + "$0"
+
+
+def is_variable_last_match_at_end(variable: str, body) -> bool:
+    matches = find_variable_matches(variable, body)
+    return len(matches) > 0 and matches[-1].end() == len(body)
 
 
 def replace_final_stop(body: str, replacement_name: str, final_stop_matches) -> str:
