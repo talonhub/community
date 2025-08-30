@@ -3,7 +3,6 @@ import math
 import re
 from collections import defaultdict
 from itertools import islice
-from textwrap import wrap
 from typing import Any, Iterable, Tuple
 
 from talon import Context, Module, actions, imgui, registry, settings
@@ -87,7 +86,8 @@ def gui_formatters(gui: imgui.GUI):
         gui.text(f"{val}: {key}")
 
     gui.spacer()
-    gui.text("* prose formatter")
+    if point_out_prose:
+        gui.text("* prose formatter")
     gui.spacer()
     if gui.button("Help close"):
         gui_formatters.hide()
@@ -657,17 +657,7 @@ def gui_list_help(gui: imgui.GUI):
     total_page_count = len(pages_list)
     # print(pages_list[current_page])
 
-    if total_page_count == 0:
-        page_info = "empty"
-    else:
-        page_info = f"{current_list_page}/{total_page_count}"
-
-    gui.text(f"List: {selected_list} ({page_info})")
-
-    # Extract description from list declaration, i.e. mod.list(..., desc=...))
-    if (desc := registry.decls.lists[selected_list].desc) is not None:
-        for line in wrap(desc):
-            gui.text(line)
+    gui.text(f"{selected_list} {current_list_page}/{total_page_count}")
 
     gui.line()
 
@@ -706,12 +696,13 @@ class Actions:
         register_events(True)
         ctx.tags = ["user.help_open"]
 
-    def help_formatters(ab: dict, reformat: bool):
+    def help_formatters(ab: dict, reformat: bool, distinguish_prose: bool):
         """Provides the list of formatter keywords"""
         # what you say is stored as a trigger
-        global formatters_words, formatters_reformat
+        global formatters_words, formatters_reformat, point_out_prose
         formatters_words = ab
         formatters_reformat = reformat
+        point_out_prose = distinguish_prose
         reset()
         hide_all_help_guis()
         gui_formatters.show()
