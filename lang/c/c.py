@@ -10,29 +10,35 @@ ctx.matches = r"""
 code.language: c
 """
 
-ctx.lists["self.c_pointers"] = {
+c_and_cpp_ctx = Context()
+c_and_cpp_ctx.matches = r"""
+code.language: c
+code.language: cpp
+"""
+
+c_and_cpp_ctx.lists["self.c_pointers"] = {
     "pointer": "*",
     "pointer to pointer": "**",
 }
 
-ctx.lists["self.stdint_signed"] = {
+c_and_cpp_ctx.lists["self.stdint_signed"] = {
     "signed": "",
     "unsigned": "u",
     "you": "u",
 }
 
-ctx.lists["self.c_signed"] = {
+c_and_cpp_ctx.lists["self.c_signed"] = {
     "signed": "signed",
     "unsigned": "unsigned",
 }
 
-ctx.lists["self.c_keywords"] = {
+c_and_cpp_ctx.lists["self.c_keywords"] = {
     "static": "static",
     "volatile": "volatile",
     "register": "register",
 }
 
-ctx.lists["self.stdint_types"] = {
+c_and_cpp_ctx.lists["self.stdint_types"] = {
     "character": "int8_t",
     "char": "int8_t",
     "short": "int16_t",
@@ -49,7 +55,7 @@ ctx.lists["self.stdint_types"] = {
     "float": "float",
 }
 
-ctx.lists["self.c_types"] = {
+c_and_cpp_ctx.lists["self.c_types"] = {
     "character": "char",
     "char": "char",
     "short": "short",
