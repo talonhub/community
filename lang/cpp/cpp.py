@@ -10,7 +10,7 @@ ctx.matches = r"""
 code.language: cpp
 """
 
-mod.list("cpp_standard_type", desc="Types from the cplusplus standard library")
+mod.list("cpp_standard_type", desc="Types from the C++ standard library")
 mod.list("cpp_standard_prefix", desc="Prefixes for referring to the standard library")
 
 
