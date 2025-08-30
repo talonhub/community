@@ -167,7 +167,7 @@ def add_final_stop_to_snippet_body(body: str) -> str:
     if largest_variable_number is None:
         return body + "$0"
 
-    # If the biggest matching variable is at the end and there is no zero stop, make no change
+    # If the largest matching variable is at the end and there is no zero stop, make no change
     if len(final_stop_matches) == 0 and is_variable_last_match_at_end(
         str(largest_variable_number), body
     ):
