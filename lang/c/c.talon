@@ -77,7 +77,6 @@ cast to <user.c_cast>: "{c_cast}"
 standard cast to <user.stdint_cast>: "{stdint_cast}"
 <user.c_types>: "{c_types}"
 <user.c_pointers>: "{c_pointers}"
-<user.c_keywords>: "{c_keywords}"
 <user.c_signed>: "{c_signed} "
 standard <user.stdint_types>: "{stdint_types}"
 int main: user.insert_between("int main(", ")")
