@@ -7,9 +7,6 @@ ctx.matches = r"""
 code.language: sql
 """
 
-# these vary by dialect
-ctx.lists["user.code_common_function"] = {"count": "Count", "min": "Min", "max": "Max"}
-
 operators = Operators(
     MATH_ADD=" + ",
     MATH_SUBTRACT=" - ",
@@ -45,5 +42,5 @@ class UserActions:
     def code_insert_function(text: str, selection: str):
         substitutions = {"1": text}
         if selection:
-            substitutions["0"] = selection
+            substitutions["2"] = selection
         actions.user.insert_snippet_by_name("functionCall", substitutions)

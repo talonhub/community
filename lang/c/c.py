@@ -9,22 +9,29 @@ ctx.matches = r"""
 code.language: c
 """
 
-ctx.lists["self.c_pointers"] = {
+c_and_cpp_ctx = Context()
+c_and_cpp_ctx.matches = r"""
+code.language: c
+code.language: cpp
+"""
+
+c_and_cpp_ctx.lists["self.c_pointers"] = {
     "pointer": "*",
     "pointer to pointer": "**",
 }
 
-ctx.lists["self.stdint_signed"] = {
+c_and_cpp_ctx.lists["self.stdint_signed"] = {
     "signed": "",
     "unsigned": "u",
+    "you": "u",
 }
 
-ctx.lists["self.c_signed"] = {
+c_and_cpp_ctx.lists["self.c_signed"] = {
     "signed": "signed",
     "unsigned": "unsigned",
 }
 
-ctx.lists["self.stdint_types"] = {
+c_and_cpp_ctx.lists["self.stdint_types"] = {
     "character": "int8_t",
     "char": "int8_t",
     "short": "int16_t",
@@ -41,7 +48,7 @@ ctx.lists["self.stdint_types"] = {
     "float": "float",
 }
 
-ctx.lists["self.c_types"] = {
+c_and_cpp_ctx.lists["self.c_types"] = {
     "character": "char",
     "char": "char",
     "short": "short",
@@ -75,50 +82,6 @@ ctx.lists["user.code_libraries"] = {
     "string": "string.h",
     "time": "time.h",
     "standard int": "stdint.h",
-}
-
-ctx.lists["user.code_common_function"] = {
-    "mem copy": "memcpy",
-    "mem set": "memset",
-    "string cat": "strcat",
-    "stir cat": "strcat",
-    "stir en cat": "strncat",
-    "stir elle cat": "strlcat",
-    "stir copy": "strcpy",
-    "stir en copy": "strncpy",
-    "stir elle copy": "strlcpy",
-    "string char": "strchr",
-    "string dupe": "strdup",
-    "stir dupe": "strdup",
-    "stir comp": "strcmp",
-    "stir en comp": "strncmp",
-    "string len": "strlen",
-    "stir len": "strlen",
-    "is digit": "isdigit",
-    "get char": "getchar",
-    "print eff": "printf",
-    "es print eff": "sprintf",
-    "es en print eff": "sprintf",
-    "stir to int": "strtoint",
-    "stir to unsigned int": "strtouint",
-    "ay to eye": "atoi",
-    "em map": "mmap",
-    "ma map": "mmap",
-    "em un map": "munmap",
-    "size of": "sizeof",
-    "ef open": "fopen",
-    "ef write": "fwrite",
-    "ef read": "fread",
-    "ef close": "fclose",
-    "exit": "exit",
-    "signal": "signal",
-    "set jump": "setjmp",
-    "get op": "getopt",
-    "malloc": "malloc",
-    "see alloc": "calloc",
-    "alloc ah": "alloca",
-    "re alloc": "realloc",
-    "free": "free",
 }
 
 mod.list("c_pointers", desc="Common C pointers")

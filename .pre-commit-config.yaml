@@ -1,7 +1,7 @@
 minimum_pre_commit_version: "3.2.0"
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
+    rev: v6.0.0
     hooks:
       - id: check-added-large-files
       - id: check-case-conflict
@@ -27,7 +27,7 @@ repos:
     hooks:
       - id: prettier
   - repo: https://github.com/ikamensh/flynt/
-    rev: "1.0.1"
+    rev: "1.0.6"
     hooks:
       - id: flynt
   - repo: https://github.com/pycqa/isort
