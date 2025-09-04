@@ -7,6 +7,7 @@ and when the change was applied given the delay between changes being
 submitted and the time they were reviewed and merged.
 
 ---
+* 2025-09-04 Remove `user.c_keywords` list and capture to instead rely on the `user.code_keyword` and `user.code_keyword_unprefixed` lists for consistency. 
 * 2025-08-23 Rename `user.code_common_member_function` to `user.code_common_method` now that support is getting added to other languages.
 * 2025-08-09 Rename `user.code_keyword_bare` to `user.code_keyword_unprefixed` to improve clarity.
 * 2025-07-10 Make `state do` for ruby insert a do while loop instead of the `do` keyword to make the behavior consistent with other languages.
