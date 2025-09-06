@@ -1,4 +1,4 @@
-from talon import actions, Context, Module
+from talon import Context, Module, actions
 
 from ..c.c import operators
 from ..tags.operators import Operators
