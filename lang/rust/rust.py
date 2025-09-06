@@ -340,7 +340,7 @@ class UserActions:
     # tag: libraries
 
     def code_insert_library(text: str, selection: str):
-        actions.user.insert_snippet_by_name("importStatement", {"1": text})
+        actions.user.insert_snippet_by_name("importStatement", {"0": text})
 
     # rust specific grammar
 
