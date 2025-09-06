@@ -13,6 +13,7 @@ Custom format to represent snippets.
 ## Format
 
 - A `.snippet` file can contain multiple snippet documents separated by `---`.
+- If you want a snippet to insert `---`, use `\---` to escape it.
 - Each snippet document has a context and body separated by `-`.
 - Optionally a file can have a single context at the top with no body. This is not a snippet in itself, but default values to be inherited by the other snippet documents in the same file.
 - Some context keys supports multiple values. These values are separated by `|`.
