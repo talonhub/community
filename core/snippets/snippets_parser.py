@@ -6,6 +6,10 @@ from typing import Callable, Union
 
 from .snippet_types import Snippet, SnippetVariable
 
+ESCAPED_SNIPPET_DELIMITER_EXPRESSION = re.compile(r"^\\---$", flags=re.MULTILINE)
+SNIPPET_DELIMITER_EXPRESSION = re.compile(r"^---\n?$", flags=re.MULTILINE)
+SNIPPET_DELIMITER = "---"
+
 
 class SnippetDocument:
     file: str
@@ -291,7 +295,7 @@ def parse_file(file: Path) -> list[SnippetDocument]:
 
 
 def parse_file_content(file: str, text: str) -> list[SnippetDocument]:
-    doc_texts = re.split(r"^---\n?$", text, flags=re.MULTILINE)
+    doc_texts = SNIPPET_DELIMITER_EXPRESSION.split(text)
     documents: list[SnippetDocument] = []
     line = 0
 
@@ -442,7 +446,11 @@ def parse_body(text: str) -> Union[str, None]:
     if match_leading is None:
         return None
 
-    return text[match_leading.start() :].rstrip()
+    body = text[match_leading.start() :].rstrip()
+
+    body = ESCAPED_SNIPPET_DELIMITER_EXPRESSION.sub(SNIPPET_DELIMITER, body)
+
+    return body
 
 
 def parse_vector_value(value: str) -> list[str]:
