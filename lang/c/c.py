@@ -1,5 +1,6 @@
 from talon import Context, Module, actions, settings
 
+from ...core.described_functions import create_described_insert_between
 from ..tags.operators import Operators
 
 mod = Module()
@@ -9,29 +10,29 @@ ctx.matches = r"""
 code.language: c
 """
 
-ctx.lists["self.c_pointers"] = {
+c_and_cpp_ctx = Context()
+c_and_cpp_ctx.matches = r"""
+code.language: c
+code.language: cpp
+"""
+
+c_and_cpp_ctx.lists["self.c_pointers"] = {
     "pointer": "*",
     "pointer to pointer": "**",
 }
 
-ctx.lists["self.stdint_signed"] = {
+c_and_cpp_ctx.lists["self.stdint_signed"] = {
     "signed": "",
     "unsigned": "u",
     "you": "u",
 }
 
-ctx.lists["self.c_signed"] = {
+c_and_cpp_ctx.lists["self.c_signed"] = {
     "signed": "signed",
     "unsigned": "unsigned",
 }
 
-ctx.lists["self.c_keywords"] = {
-    "static": "static",
-    "volatile": "volatile",
-    "register": "register",
-}
-
-ctx.lists["self.stdint_types"] = {
+c_and_cpp_ctx.lists["self.stdint_types"] = {
     "character": "int8_t",
     "char": "int8_t",
     "short": "int16_t",
@@ -48,7 +49,7 @@ ctx.lists["self.stdint_types"] = {
     "float": "float",
 }
 
-ctx.lists["self.c_types"] = {
+c_and_cpp_ctx.lists["self.c_types"] = {
     "character": "char",
     "char": "char",
     "short": "short",
@@ -86,7 +87,6 @@ ctx.lists["user.code_libraries"] = {
 
 mod.list("c_pointers", desc="Common C pointers")
 mod.list("c_signed", desc="Common C datatype signed modifiers")
-mod.list("c_keywords", desc="C keywords")
 mod.list("c_types", desc="Common C types")
 mod.list("stdint_types", desc="Common stdint C types")
 mod.list("stdint_signed", desc="Common stdint C datatype signed modifiers")
@@ -102,12 +102,6 @@ def c_pointers(m) -> str:
 def c_signed(m) -> str:
     "Returns a string"
     return m.c_signed
-
-
-@mod.capture(rule="{self.c_keywords}")
-def c_keywords(m) -> str:
-    "Returns a string"
-    return m.c_keywords
 
 
 @mod.capture(rule="{self.c_types}")
@@ -147,7 +141,7 @@ def c_variable(m) -> str:
 
 
 operators = Operators(
-    SUBSCRIPT=lambda: actions.user.insert_between("[", "]"),
+    SUBSCRIPT=create_described_insert_between("[", "]"),
     ASSIGNMENT=" = ",
     ASSIGNMENT_ADDITION=" += ",
     ASSIGNMENT_SUBTRACTION=" -= ",

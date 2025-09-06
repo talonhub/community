@@ -121,8 +121,11 @@ def update_operators_text():
                     # If the operator is implemented as text insertion,
                     # display the operator text
                     operator = operators.get(operator_text)
-                    if type(operator) == str:
+                    if isinstance(operator, str):
                         text = ": " + operator
+                    # If a documentation string is available, use that
+                    elif doc_string := getattr(operator, "__doc__", None):
+                        text = ": " + doc_string
                     # Otherwise display the operator name from list
                     else:
                         has_operator_without_text_implementation = True
