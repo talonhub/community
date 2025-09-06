@@ -13,3 +13,7 @@ tag(): user.code_operators_pointer
 
 #The default tag for this is for function support, so this is explicitly defined here until full function support is provided
 type <user.code_type>: insert(code_type)
+
+see (none | null): "NULL"
+is see (none | null): " == NULL"
+is not see (none | null): " != NULL"
