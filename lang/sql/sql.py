@@ -42,5 +42,5 @@ class UserActions:
     def code_insert_function(text: str, selection: str):
         substitutions = {"1": text}
         if selection:
-            substitutions["2"] = selection
+            substitutions["0"] = selection
         actions.user.insert_snippet_by_name("functionCall", substitutions)
