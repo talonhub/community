@@ -150,7 +150,7 @@ def format_tabs(text: str) -> str:
     spaces_per_tab: int = settings.get("user.snippet_raw_text_spaces_per_tab")
     if spaces_per_tab < 0:
         return text
-    return re.sub(r"\t", " " * spaces_per_tab, text)
+    return text.replace("\t", " " * spaces_per_tab)
 
 
 def parse_snippet(body: str):
