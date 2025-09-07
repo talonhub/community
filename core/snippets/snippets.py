@@ -112,6 +112,7 @@ class Actions:
         """Get the snippet names"""
         return [snippet_name for snippet_name in snippets_map]
 
+
 def get_preferred_snippet(snippets: list[Snippet]) -> Snippet:
     lang: Union[str, set[str]] = actions.code.language()
     languages = [lang] if isinstance(lang, str) else lang
