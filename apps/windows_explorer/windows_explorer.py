@@ -33,9 +33,9 @@ This has been tested with:
    - Windows 11 24H2, Version 10.0.26100 Build 26100, English and German system language
 """
 
+import logging
 import os
 import re
-import logging
 
 from talon import Context, Module, actions, app, ui
 
@@ -44,7 +44,7 @@ DEBUG_LOGGING = False
 
 # Configure logging
 if DEBUG_LOGGING:
-    logging.basicConfig(level=logging.DEBUG, format='%(levelname)s: %(message)s')
+    logging.basicConfig(level=logging.DEBUG, format="%(levelname)s: %(message)s")
 
 mod = Module()
 apps = mod.apps
@@ -79,19 +79,23 @@ directories_to_remap = {}
 directories_to_exclude = []
 title_suffix_patterns = []
 
+
 def get_system_language():
     """Detect system UI language and return language code."""
     try:
         ui_language_id = ctypes.windll.kernel32.GetUserDefaultUILanguage()
         system_language = locale.windows_locale[ui_language_id]
-        language_code = system_language.split('_')[0]
+        language_code = system_language.split("_")[0]
         if DEBUG_LOGGING:
-            logging.debug(f"Detected system language: {system_language}, code: {language_code}")
+            logging.debug(
+                f"Detected system language: {system_language}, code: {language_code}"
+            )
         return language_code
     except KeyError:
         if DEBUG_LOGGING:
             logging.debug("Language detection failed, defaulting to English")
-        return 'en'
+        return "en"
+
 
 def get_user_display_name():
     """Get Windows user display name for directory mapping."""
@@ -106,16 +110,25 @@ def get_user_display_name():
     except Exception:
         return None
 
+
 if app.platform == "windows":
     import ctypes
     import locale
-    
+
     language_code = get_system_language()
     user_display_name = get_user_display_name()
     # Standard Windows folder names (always in English)
     STANDARD_FOLDERS = [
-        'Desktop', 'Documents', 'Downloads', 'Music', 'OneDrive', 
-        'Pictures', 'Videos', 'Links', 'Favorites', 'Contacts'
+        "Desktop",
+        "Documents",
+        "Downloads",
+        "Music",
+        "OneDrive",
+        "Pictures",
+        "Videos",
+        "Links",
+        "Favorites",
+        "Contacts",
     ]
 
     # Language-specific mappings with standardized structure
@@ -124,141 +137,147 @@ if app.platform == "windows":
     # See existing 'en' and 'de' entries as templates
     # -> Set DEBUG_LOGGING = True
     language_mappings = {
-        'en': {
-            'suffix_patterns': [
-                r' and [0-9]+ more tabs - File Explorer$',
-                r' and 1 more tab - File Explorer$',
-                r' - File Explorer$'
+        "en": {
+            "suffix_patterns": [
+                r" and [0-9]+ more tabs - File Explorer$",
+                r" and 1 more tab - File Explorer$",
+                r" - File Explorer$",
             ],
-            'folder_names': {
-                'Desktop': 'Desktop',
-                'Documents': 'Documents',
-                'Downloads': 'Downloads',
-                'Music': 'Music',
-                'OneDrive': 'OneDrive',
-                'Pictures': 'Pictures',
-                'Videos': 'Videos',
-                'Links': 'Links',
-                'Favorites': 'Favorites',
-                'Contacts': 'Contacts',
+            "folder_names": {
+                "Desktop": "Desktop",
+                "Documents": "Documents",
+                "Downloads": "Downloads",
+                "Music": "Music",
+                "OneDrive": "OneDrive",
+                "Pictures": "Pictures",
+                "Videos": "Videos",
+                "Links": "Links",
+                "Favorites": "Favorites",
+                "Contacts": "Contacts",
             },
-            'excludes': [
-                'Task Switching',
-                'Task View',
-                'This PC',
-                'File Explorer',
-                'Program Manager',
-                'Run',
-                'Gallery',
-                'Home'
-            ]
+            "excludes": [
+                "Task Switching",
+                "Task View",
+                "This PC",
+                "File Explorer",
+                "Program Manager",
+                "Run",
+                "Gallery",
+                "Home",
+            ],
         },
-        'de': {
-            'suffix_patterns': [
-                r' und [0-9]+ weitere Registerkarten – Explorer$',
-                r' und 1 weitere Registerkarte – Explorer$',
-                r' – Datei-Explorer$'
+        "de": {
+            "suffix_patterns": [
+                r" und [0-9]+ weitere Registerkarten – Explorer$",
+                r" und 1 weitere Registerkarte – Explorer$",
+                r" – Datei-Explorer$",
             ],
-            'folder_names': { # Right side is the localized name
-                'Desktop': 'Desktop',
-                'Documents': 'Dokumente',
-                'Downloads': 'Downloads',
-                'Music': 'Musik',
-                'OneDrive': 'OneDrive',
-                'Pictures': 'Bilder',
-                'Videos': 'Videos',
-                'Links': 'Links',
-                'Favorites': 'Favoriten',
-                'Contacts': 'Kontakte',
+            "folder_names": {  # Right side is the localized name
+                "Desktop": "Desktop",
+                "Documents": "Dokumente",
+                "Downloads": "Downloads",
+                "Music": "Musik",
+                "OneDrive": "OneDrive",
+                "Pictures": "Bilder",
+                "Videos": "Videos",
+                "Links": "Links",
+                "Favorites": "Favoriten",
+                "Contacts": "Kontakte",
             },
-            'excludes': [
-                'Dieser PC',
-                'Datei-Explorer',
-                'Ausführen',
-                'Katalog',
-                'Start'
-            ]
-        }
+            "excludes": [
+                "Dieser PC",
+                "Datei-Explorer",
+                "Ausführen",
+                "Katalog",
+                "Start",
+            ],
+        },
     }
 
     def merge_language_mappings(base_mapping, language_code, language_mappings):
         """Merge language-specific mappings with base English mapping."""
-        if language_code == 'en' or language_code not in language_mappings:
+        if language_code == "en" or language_code not in language_mappings:
             return base_mapping
-            
+
         lang_specific = language_mappings[language_code]
         if DEBUG_LOGGING:
-            logging.debug(f"Loading patterns for '{language_code}': {lang_specific.get('suffix_patterns', [])}")
-        
+            logging.debug(
+                f"Loading patterns for '{language_code}': {lang_specific.get('suffix_patterns', [])}"
+            )
+
         # Merge each component safely
-        for key in ['suffix_patterns', 'excludes']:
+        for key in ["suffix_patterns", "excludes"]:
             if key in lang_specific and isinstance(lang_specific[key], list):
                 base_mapping[key].extend(lang_specific[key])
-                
-        if 'folder_names' in lang_specific and isinstance(lang_specific['folder_names'], dict):
-            base_mapping['folder_names'].update(lang_specific['folder_names'])
-            
+
+        if "folder_names" in lang_specific and isinstance(
+            lang_specific["folder_names"], dict
+        ):
+            base_mapping["folder_names"].update(lang_specific["folder_names"])
+
         return base_mapping
-    
+
     # Build current language mapping
     current_language_mapping = merge_language_mappings(
-        language_mappings['en'].copy(), 
-        language_code, 
-        language_mappings
+        language_mappings["en"].copy(), language_code, language_mappings
     )
 
-    title_suffix_patterns = current_language_mapping['suffix_patterns']
-    
+    title_suffix_patterns = current_language_mapping["suffix_patterns"]
+
     def setup_onedrive_detection():
         """Detect OneDrive and return path resolver function."""
         one_drive_path = os.path.expanduser(os.path.join("~", "OneDrive"))
         has_onedrive_desktop = os.path.isdir(os.path.join(one_drive_path, "Desktop"))
-        
+
         if DEBUG_LOGGING:
-            logging.debug(f"OneDrive: path={one_drive_path}, has_desktop={has_onedrive_desktop}")
-        
+            logging.debug(
+                f"OneDrive: path={one_drive_path}, has_desktop={has_onedrive_desktop}"
+            )
+
         def get_folder_path(folder_key):
             """Get actual filesystem path for folder (OneDrive-aware)."""
-            if has_onedrive_desktop and folder_key in ['Desktop', 'Documents', 'Pictures']:
+            if has_onedrive_desktop and folder_key in [
+                "Desktop",
+                "Documents",
+                "Pictures",
+            ]:
                 return os.path.join(one_drive_path, folder_key)
-            elif folder_key == 'OneDrive':
+            elif folder_key == "OneDrive":
                 return one_drive_path
             else:
                 return os.path.join(user_path, folder_key)
-                
+
         return get_folder_path
-    
+
     get_folder_path = setup_onedrive_detection()
-    
+
     def build_directory_mappings(folder_names, get_folder_path, user_display_name):
         """Build directory remapping dictionary."""
         mappings = {}
-        
+
         # Map standard folders
         for folder_key in STANDARD_FOLDERS:
             localized_name = folder_names.get(folder_key, folder_key)
             actual_path = get_folder_path(folder_key)
             mappings[localized_name] = actual_path
-            
+
             if DEBUG_LOGGING:
                 logging.debug(f"Directory mapping: {localized_name} -> {actual_path}")
-        
+
         # Add user display name mapping if available
         if user_display_name:
             mappings[user_display_name] = user_path
             if DEBUG_LOGGING:
                 logging.debug(f"User mapping: {user_display_name} -> {user_path}")
-                
+
         return mappings
-    
+
     # Initialize directory mappings and exclusions
     directories_to_remap = build_directory_mappings(
-        current_language_mapping['folder_names'],
-        get_folder_path,
-        user_display_name
+        current_language_mapping["folder_names"], get_folder_path, user_display_name
     )
-    
-    directories_to_exclude = [""] + current_language_mapping['excludes']
+
+    directories_to_exclude = [""] + current_language_mapping["excludes"]
     if DEBUG_LOGGING:
         logging.debug(f"Directories to exclude: {directories_to_exclude}")
 
@@ -270,7 +289,7 @@ def _strip_explorer_suffixes(path):
             logging.debug(f"Testing pattern '{pattern}' against '{path}'")
         match = re.search(pattern, path)
         if match:
-            path = path[:match.start()]
+            path = path[: match.start()]
             if DEBUG_LOGGING:
                 logging.debug(f"Stripped pattern '{pattern}': {path}")
             break
