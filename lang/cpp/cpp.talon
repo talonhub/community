@@ -13,6 +13,8 @@ tag(): user.code_functions_common
 <user.cpp_standard_type>: insert(cpp_standard_type)
 <user.cpp_standard_constant>: insert(cpp_standard_constant)
 
+from <user.cpp_namespace_list>: insert(cpp_namespace_list)
+
 [funk] <user.cpp_standard_function>: user.code_insert_function(cpp_standard_function, "")
 funk wrap <user.cpp_standard_function>: user.code_insert_function(cpp_standard_function, edit.selected_text())
 

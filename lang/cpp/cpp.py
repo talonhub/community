@@ -24,6 +24,7 @@ mod.list("cpp_standard_function", desc="Functions in the std namespace")
 mod.list("cpp_standard_constant", desc="Constants in the std namespace")
 mod.list("cpp_standard_prefix", desc="Prefixes for referring to the standard library")
 mod.list("cpp_standard_header", desc="Header files of the C++ standard library")
+mod.list("cpp_namespace", desc="Spoken forms for C++ namespaces")
 
 
 @mod.capture(rule="{user.cpp_standard_prefix} {user.cpp_standard_type}")
@@ -40,6 +41,11 @@ def cpp_standard_function(m) -> str:
 def cpp_standard_constant(m) -> str:
     # Discard the prefix word and insert properly prefixed function call
     return "std::" + m[1]
+
+@mod.capture(rule="{user.cpp_namespace}+")
+def cpp_namespace_list(m) -> str:
+    """List of namespaces followed by colons"""
+    return "::".join(m) + "::"
 
 
 @ctx.action_class("user")
