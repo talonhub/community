@@ -1,4 +1,5 @@
 from contextlib import suppress
+
 from talon import Context, Module, actions
 
 from ..c.c import operators
@@ -32,15 +33,18 @@ def cpp_standard_type(m) -> str:
     # Discard the prefix word and properly prefix the type
     return "std::" + m[1]
 
+
 @mod.capture(rule="{user.cpp_standard_prefix} {user.cpp_standard_function}")
 def cpp_standard_function(m) -> str:
     # Discard the prefix word and insert properly prefixed function call
     return "std::" + m[1]
 
+
 @mod.capture(rule="{user.cpp_standard_prefix} {user.cpp_standard_constant}")
 def cpp_standard_constant(m) -> str:
     # Discard the prefix word and insert properly prefixed function call
     return "std::" + m[1]
+
 
 @mod.capture(rule="{user.cpp_namespace}+")
 def cpp_namespace_list(m) -> str:
@@ -60,17 +64,25 @@ class UserActions:
         actions.user.insert_snippet_by_name("functionCall", substitutions)
 
 
-@mod.capture(rule="([<user.c_signed>] <user.c_types>) | <user.c_fixed_integer> | <user.cpp_standard_type>")
+@mod.capture(
+    rule="([<user.c_signed>] <user.c_types>) | <user.c_fixed_integer> | <user.cpp_standard_type>"
+)
 def code_type_raw(m) -> str:
     return " ".join(list(m))
+
 
 @mod.capture(rule="<user.code_type_raw> [{user.cpp_pointers}+] <user.text>")
 def variable_declaration(m) -> str:
     suffix = ""
     with suppress(AttributeError):
         suffix = "".join(m.cpp_pointers_list)
-    return m.code_type_raw+" "+suffix+actions.user.formatted_text(m.text, "SNAKE_CASE")
- 
+    return (
+        m.code_type_raw
+        + " "
+        + suffix
+        + actions.user.formatted_text(m.text, "SNAKE_CASE")
+    )
+
 
 @ctx.capture("user.code_type", rule="<user.code_type_raw> [{user.cpp_pointers}+]")
 def code_type(m):
@@ -78,4 +90,4 @@ def code_type(m):
     suffix = ""
     with suppress(AttributeError):
         suffix = "".join(m.cpp_pointers_list)
-    return m.code_type_raw+suffix
+    return m.code_type_raw + suffix

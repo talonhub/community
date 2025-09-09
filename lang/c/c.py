@@ -1,4 +1,5 @@
 from contextlib import suppress
+
 from talon import Context, Module, actions, settings
 
 from ...core.described_functions import create_described_insert_between
@@ -103,6 +104,7 @@ mod.list("stdint_types", desc="Common stdint C types")
 mod.list("stdint_signed", desc="Common stdint C datatype signed modifiers")
 mod.list("c_type_bit_width", desc="Common C type bit widths")
 
+
 # capture explicitly referenced from the C++ files
 @mod.capture(rule="(fix|fixed) [{self.stdint_signed}] [int] {self.c_type_bit_width}")
 def c_fixed_integer(m) -> str:
@@ -118,11 +120,13 @@ def c_pointers(m) -> str:
     "Returns a string"
     return m.c_pointers
 
+
 # capture explicitly referenced from the C++ files
 @mod.capture(rule="{self.c_signed}")
 def c_signed(m) -> str:
     "Returns a string"
     return m.c_signed
+
 
 # capture explicitly referenced from the C++ files
 @mod.capture(rule="{self.c_types}")

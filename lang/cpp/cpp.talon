@@ -15,8 +15,10 @@ tag(): user.code_functions_common
 
 from <user.cpp_namespace_list>: insert(cpp_namespace_list)
 
-[funk] <user.cpp_standard_function>: user.code_insert_function(cpp_standard_function, "")
-funk wrap <user.cpp_standard_function>: user.code_insert_function(cpp_standard_function, edit.selected_text())
+[funk] <user.cpp_standard_function>:
+    user.code_insert_function(cpp_standard_function, "")
+funk wrap <user.cpp_standard_function>:
+    user.code_insert_function(cpp_standard_function, edit.selected_text())
 
 #The default tag for this is for function support, so this is explicitly defined here until full function support is provided
 type <user.code_type>: insert(code_type)
