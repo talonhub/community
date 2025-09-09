@@ -13,3 +13,8 @@ tag(): user.code_operators_pointer
 
 #The default tag for this is for function support, so this is explicitly defined here until full function support is provided
 type <user.code_type>: insert(code_type)
+
+# usage: type name followed by variable name
+# example: "var stood string reference full name" -> "std::string &full_name"
+var <user.variable_declaration>: insert(variable_declaration)
+
