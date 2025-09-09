@@ -20,6 +20,8 @@ ctx.lists["self.cpp_pointers"] = {
 
 mod.list("cpp_pointers", desc="C++ pointer and reference annotations")
 mod.list("cpp_standard_type", desc="Types from the C++ standard library")
+mod.list("cpp_standard_function", desc="Functions in the std namespace")
+mod.list("cpp_standard_constant", desc="Constants in the std namespace")
 mod.list("cpp_standard_prefix", desc="Prefixes for referring to the standard library")
 
 
@@ -28,11 +30,28 @@ def cpp_standard_type(m) -> str:
     # Discard the prefix word and properly prefix the type
     return "std::" + m[1]
 
+@mod.capture(rule="{user.cpp_standard_prefix} {user.cpp_standard_function}")
+def cpp_standard_function(m) -> str:
+    # Discard the prefix word and insert properly prefixed function call
+    return "std::" + m[1]
+
+@mod.capture(rule="{user.cpp_standard_prefix} {user.cpp_standard_constant}")
+def cpp_standard_constant(m) -> str:
+    # Discard the prefix word and insert properly prefixed function call
+    return "std::" + m[1]
+
 
 @ctx.action_class("user")
 class UserActions:
     def code_get_operators() -> Operators:
         return operators
+
+    def code_insert_function(text: str, selection: str):
+        substitutions = {"1": text}
+        if selection:
+            substitutions["0"] = selection
+        actions.user.insert_snippet_by_name("functionCall", substitutions)
+
 
 @mod.capture(rule="([<user.c_signed>] <user.c_types>) | <user.c_fixed_integer> | <user.cpp_standard_type>")
 def code_type_raw(m) -> str:
