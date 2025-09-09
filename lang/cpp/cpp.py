@@ -23,6 +23,7 @@ mod.list("cpp_standard_type", desc="Types from the C++ standard library")
 mod.list("cpp_standard_function", desc="Functions in the std namespace")
 mod.list("cpp_standard_constant", desc="Constants in the std namespace")
 mod.list("cpp_standard_prefix", desc="Prefixes for referring to the standard library")
+mod.list("cpp_standard_header", desc="Header files of the C++ standard library")
 
 
 @mod.capture(rule="{user.cpp_standard_prefix} {user.cpp_standard_type}")

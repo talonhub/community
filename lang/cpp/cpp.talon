@@ -23,3 +23,9 @@ type <user.code_type>: insert(code_type)
 # example: "var stood string reference full name" -> "std::string &full_name"
 var <user.variable_declaration>: insert(variable_declaration)
 
+# We reserve use of the "import" command from the user.code_libraries tag for use with C++ modules.
+include {user.cpp_standard_header}:
+    user.insert_snippet_by_name_with_phrase("includeSystemStatement", user.cpp_standard_header)
+    key(enter)
+include system: user.insert_snippet_by_name("includeSystemStatement")
+include local: user.insert_snippet_by_name("includeLocalStatement")
