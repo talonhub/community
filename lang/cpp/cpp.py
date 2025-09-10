@@ -30,19 +30,19 @@ mod.list("cpp_namespace", desc="Spoken forms for C++ namespaces")
 
 @mod.capture(rule="{user.cpp_standard_prefix} {user.cpp_standard_type}")
 def cpp_standard_type(m) -> str:
-    # Discard the prefix word and properly prefix the type
+    """Discard the prefix word and properly prefix the type"""
     return "std::" + m[1]
 
 
 @mod.capture(rule="{user.cpp_standard_prefix} {user.cpp_standard_function}")
 def cpp_standard_function(m) -> str:
-    # Discard the prefix word and insert properly prefixed function call
+    """Discard the prefix word and insert properly prefixed function call"""
     return "std::" + m[1]
 
 
 @mod.capture(rule="{user.cpp_standard_prefix} {user.cpp_standard_constant}")
 def cpp_standard_constant(m) -> str:
-    # Discard the prefix word and insert properly prefixed function call
+    """Discard the prefix word and insert properly prefixed standard constant"""
     return "std::" + m[1]
 
 
