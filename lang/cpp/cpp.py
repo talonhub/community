@@ -32,7 +32,7 @@ class UserActions:
         actions.insert("this")
 
     def code_self_accessor():
-        actions.insert("(*this).")
+        actions.insert("this->")
 
 
 @ctx.capture("user.code_type", rule="<user.c_types> | <user.cpp_standard_type>")

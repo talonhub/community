@@ -15,5 +15,4 @@ tag(): user.code_object_oriented
 #The default tag for this is for function support, so this is explicitly defined here until full function support is provided
 type <user.code_type>: insert(code_type)
 
-self arrow: insert("this->")
 (star | dereference) self: insert("*this")
