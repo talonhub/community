@@ -112,7 +112,7 @@ def c_fixed_integer(m) -> str:
     prefix = ""
     with suppress(AttributeError):
         prefix = m.stdint_signed
-    return prefix + "int" + m.c_type_bit_width + "_t"
+    return f"{prefix}int{m.c_type_bit_width}_t"
 
 
 @mod.capture(rule="{self.c_pointers}")
