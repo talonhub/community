@@ -6,6 +6,7 @@ tag(): user.code_operators_assignment
 tag(): user.code_operators_bitwise
 tag(): user.code_operators_math
 tag(): user.code_operators_pointer
+tag(): user.code_keywords
 
 # e.g. "stood vector"
 # To allow more easily dealing with generic types, a future update might include the number of generic type arguments in the string returned by the cpp_standard_type capture
