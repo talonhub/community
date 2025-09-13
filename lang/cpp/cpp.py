@@ -25,6 +25,15 @@ class UserActions:
     def code_get_operators() -> Operators:
         return operators
 
+    def code_insert_null():
+        actions.auto_insert("nullptr")
+
+    def code_insert_is_null():
+        actions.auto_insert(" == nullptr")
+
+    def code_insert_is_not_null():
+        actions.auto_insert(" != nullptr")
+
     def code_insert_true():
         actions.auto_insert("true")
 
