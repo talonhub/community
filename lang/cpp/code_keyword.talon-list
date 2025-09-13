@@ -1,0 +1,55 @@
+list: user.code_keyword
+code.language: cpp
+-
+
+align as: alignas
+align of: alignof
+and: " and "
+and equal: " and_eq "
+a es em: asm
+asm: asm
+auto
+bit and: " bitand "
+bit or: " bitor "
+bool
+break
+case: "case "
+catch: "catch "
+char
+char eight tea: "char8_t"
+char sixteen tea: "char16_t"
+char thirty two tea: char32_t
+class: "class "
+compl: "compl "
+concept: "concept "
+const: "const "
+const eval: "consteval "
+const expr: "constexpr "
+const expression: "constexpr "
+const in it: "constinit "
+const cast: const_cast
+continue
+co await: "co_await "
+co return: "co_return "
+co yield: "co_yield "
+declared type: decltype
+default
+delete: "delete "
+do: "do "
+double
+dynamic_cast
+else: "else "
+enum: "enum "
+explicit: "explicit "
+export: "export "
+extern: "extern "
+false
+float
+for: "for "
+friend: "friend "
+goto: "goto "
+if: "if "
+inline: "inline "
+int
+long
+mutable: "mutable "
