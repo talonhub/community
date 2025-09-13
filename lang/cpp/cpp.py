@@ -30,7 +30,7 @@ class UserActions:
 
     def code_insert_false():
         actions.auto_insert("false")
-       
+
     def code_operator_object_accessor():
         actions.insert(".")
 
