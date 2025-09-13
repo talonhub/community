@@ -6,6 +6,7 @@ tag(): user.code_operators_assignment
 tag(): user.code_operators_bitwise
 tag(): user.code_operators_math
 tag(): user.code_operators_pointer
+tag(): user.code_data_bool
 tag(): user.code_object_oriented
 
 # e.g. "stood vector"
