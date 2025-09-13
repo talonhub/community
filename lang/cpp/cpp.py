@@ -1,4 +1,5 @@
 from contextlib import suppress
+
 from talon import Context, Module, actions
 
 from ..c.c import operators
@@ -101,10 +102,12 @@ def format_type(m, w):
         suffix = "".join(m.cpp_pointers_list)
     return f"{m.code_type_raw}{w}{suffix}"
 
+
 @mod.capture(rule="<user.code_type_raw> [{user.cpp_pointers}+]")
 def variable_type(m) -> str:
     """Returns a type with pointer or reference annotations separated by a space"""
     return format_type(m, " ")
+
 
 @ctx.capture("user.code_type", rule="<user.code_type_raw> [{user.cpp_pointers}+]")
 def code_type(m):
