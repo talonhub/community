@@ -94,23 +94,19 @@ def code_type_raw(m) -> str:
     return " ".join(list(m))
 
 
-@mod.capture(rule="<user.code_type_raw> [{user.cpp_pointers}+] <user.text>")
-def variable_declaration(m) -> str:
+# shared formatting for standalone types and variable declarations (e.g. "int*" and "int *p")
+def format_type(m, w):
     suffix = ""
     with suppress(AttributeError):
         suffix = "".join(m.cpp_pointers_list)
-    return (
-        m.code_type_raw
-        + " "
-        + suffix
-        + actions.user.formatted_text(m.text, "SNAKE_CASE")
-    )
+    return f"{m.code_type_raw}{w}{suffix}"
 
+@mod.capture(rule="<user.code_type_raw> [{user.cpp_pointers}+]")
+def variable_type(m) -> str:
+    """Returns a type with pointer or reference annotations separated by a space"""
+    return format_type(m, " ")
 
 @ctx.capture("user.code_type", rule="<user.code_type_raw> [{user.cpp_pointers}+]")
 def code_type(m):
     """Returns a type with pointer or reference annotations"""
-    suffix = ""
-    with suppress(AttributeError):
-        suffix = "".join(m.cpp_pointers_list)
-    return m.code_type_raw + suffix
+    return format_type(m, "")
