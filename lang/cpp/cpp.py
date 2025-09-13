@@ -25,6 +25,12 @@ class UserActions:
     def code_get_operators() -> Operators:
         return operators
 
+    def code_insert_true():
+        actions.auto_insert("true")
+
+    def code_insert_false():
+        actions.auto_insert("false")
+
     def code_operator_object_accessor():
         actions.insert(".")
 
