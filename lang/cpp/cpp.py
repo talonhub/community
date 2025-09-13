@@ -1,5 +1,4 @@
 from contextlib import suppress
-
 from talon import Context, Module, actions
 
 from ..c.c import operators
@@ -56,6 +55,30 @@ def cpp_namespace_list(m) -> str:
 class UserActions:
     def code_get_operators() -> Operators:
         return operators
+
+    def code_insert_null():
+        actions.auto_insert("nullptr")
+
+    def code_insert_is_null():
+        actions.auto_insert(" == nullptr")
+
+    def code_insert_is_not_null():
+        actions.auto_insert(" != nullptr")
+
+    def code_insert_true():
+        actions.auto_insert("true")
+
+    def code_insert_false():
+        actions.auto_insert("false")
+
+    def code_operator_object_accessor():
+        actions.insert(".")
+
+    def code_self():
+        actions.insert("this")
+
+    def code_self_accessor():
+        actions.insert("this->")
 
     def code_insert_function(text: str, selection: str):
         substitutions = {"1": text}
