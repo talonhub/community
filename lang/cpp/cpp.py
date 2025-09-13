@@ -34,6 +34,12 @@ class UserActions:
     def code_insert_is_not_null():
         actions.auto_insert(" != nullptr")
 
+    def code_insert_true():
+        actions.auto_insert("true")
+
+    def code_insert_false():
+        actions.auto_insert("false")
+
     def code_operator_object_accessor():
         actions.insert(".")
 
