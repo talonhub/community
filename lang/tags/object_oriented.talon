@@ -1,9 +1,7 @@
 tag: user.code_object_oriented
 -
 
-self dot:
-    user.code_self()
-    user.code_operator_object_accessor()
+self dot: user.code_self_accessor()
 
 state self: user.code_self()
 
