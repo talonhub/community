@@ -1,4 +1,4 @@
-from talon import Context, Module
+from talon import Context, Module, actions
 
 from ..c.c import operators
 from ..tags.operators import Operators
@@ -24,6 +24,21 @@ def cpp_standard_type(m) -> str:
 class UserActions:
     def code_get_operators() -> Operators:
         return operators
+
+    def code_insert_true():
+        actions.auto_insert("true")
+
+    def code_insert_false():
+        actions.auto_insert("false")
+
+    def code_operator_object_accessor():
+        actions.insert(".")
+
+    def code_self():
+        actions.insert("this")
+
+    def code_self_accessor():
+        actions.insert("this->")
 
 
 @ctx.capture("user.code_type", rule="<user.c_types> | <user.cpp_standard_type>")
