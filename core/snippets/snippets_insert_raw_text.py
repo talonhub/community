@@ -21,7 +21,21 @@ mod.setting(
     desc="""If true, inserting snippets as raw text will always be done through pasting""",
 )
 
-RE_STOP = re.compile(r"\\?(?:\$(\d+|\w+)|\$\{(\d+|\w+)\}|\$\{(\d+|\w+):(.+)\})")
+RE_STOP = re.compile(
+    r"""
+    (?:\\\$) (?# Escaped $ - not a stop; skip and don't capture anything)
+    |
+    (?:
+        \$(\d+|\w+) (?# $... where ... is a captured stop number or variable)
+        |
+        \$\{(\d+|\w+)\} (?# ${...} where ... is as above)
+        |
+        \$\{(\d+|\w+):(.+)\} (?# ${...:xxx} where ... is as above and xxx a default value)
+    )
+    """,
+    re.VERBOSE,
+)
+
 LAST_SNIPPET_HOLE_KEY_VALUE = 1000
 
 
