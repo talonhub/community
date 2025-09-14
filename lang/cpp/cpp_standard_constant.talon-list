@@ -1,0 +1,7 @@
+list: user.cpp_standard_constant
+code.language: cpp
+language: en
+-
+end line: endl
+see in: cin
+see out: cout

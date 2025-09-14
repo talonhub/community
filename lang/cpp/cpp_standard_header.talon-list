@@ -1,0 +1,101 @@
+list: user.cpp_standard_header
+code.language: cpp
+-
+algorithm
+any
+array
+atomic
+barrier
+bit
+bitset
+char conv: charconv
+chrono
+compare
+complex
+concepts
+condition variable: condition_variable
+contracts
+coroutine
+see stood int: cstdint
+see standard int: cstdint
+debugging
+deck: deque
+exception
+execution
+expected
+filesystem
+flat map: flat_map
+flat set: flat_set
+format
+forward list: forward_list
+F stream: fstream
+functional
+future
+generator
+hazard pointer: hazard_pointer
+hive
+initializer list: initializer_list
+inplace vector: inplace_vector
+in out manip: iomanip
+in out: ios
+in out forward: iosfwd
+I O stream: iostream
+in out stream: iostream
+in stream: istream
+iterator
+latch
+limits
+linear algebra: linalg
+list
+locale
+map
+M D span: mdspan
+memory
+memory resource: memory_resource
+mutex
+new
+numbers
+numeric
+optional
+out stream: ostream
+print
+queue
+random
+ranges
+ratio
+R C U: rcu
+regex
+scoped allocator: scoped_allocator
+semaphore
+set
+shared mutex: shared_mutex
+sim D: simd
+source location: source_location
+span
+span stream: spanstream
+string stream: sstream
+stack
+stack trace: stacktrace
+stood except: stdexcept
+standard except: stdexcept
+stood float: stdfloat
+standard float: stdfloat
+stop token: stop_token
+stream buffer: streambuf
+string
+string view: string_view
+sync stream: syncstream
+system error: system_error
+text encoding: text_encoding
+thread
+tuple
+type traits: type_traits
+type index: typeindex
+type info: typeinfo
+unordered map: unordered_map
+unordered set: unordered_set
+utility
+val array: valarray
+variant
+vector
+version

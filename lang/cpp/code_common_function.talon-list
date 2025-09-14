@@ -1,0 +1,11 @@
+list: user.code_common_function
+code.language: cpp
+-
+mem copy: memcpy
+mem set: memset
+print eff: printf
+es print eff: sprintf
+es en print eff: sprintf
+ay to eye: atoi
+size of: sizeof
+exit: exit
