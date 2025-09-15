@@ -58,3 +58,12 @@ tryCatch({
     $3
 })
 ---
+
+language: lua
+-
+if pcall(function () $1 end) then
+    $2
+else
+    $0
+end
+---

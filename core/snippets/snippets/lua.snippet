@@ -4,6 +4,7 @@ language: lua
 name: forInIPairs
 phrase: for eye pairs
 insertionScope: statement
+
 $1.insertionFormatter: SNAKE_CASE
 -
 for _, $1 in ipairs($2) do
@@ -18,11 +19,4 @@ insertionScope: statement
 for ${1:k}, ${2:v} in pairs($3) do
     $0
 end
----
-
-name: tryCatchStatement
-phrase: try catch
-insertionScope: statement
--
-pcall($0)
 ---
