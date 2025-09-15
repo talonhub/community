@@ -72,6 +72,7 @@ def compute_snippet_body_with_substitutions(
     body = snippet.body
     if substitutions:
         for k, v in substitutions.items():
+            v = v.replace("$", r"\$")
             reg = re.compile(rf"\${k}|\$\{{{k}\}}")
             if not reg.search(body):
                 raise ValueError(
