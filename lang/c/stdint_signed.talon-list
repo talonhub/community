@@ -1,0 +1,7 @@
+Hlist: user.stdint_signed
+code.language: c
+code.language: cpp
+-
+signed: ""
+unsigned: u
+you: u

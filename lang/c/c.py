@@ -18,27 +18,11 @@ code.language: c
 code.language: cpp
 """
 
-c_and_cpp_ctx.lists["self.c_pointers"] = {
-    "pointer": "*",
-    "pointer to pointer": "**",
-}
-
-c_and_cpp_ctx.lists["self.stdint_signed"] = {
-    "signed": "",
-    "unsigned": "u",
-    "you": "u",
-}
-
 c_and_cpp_ctx.lists["self.c_type_bit_width"] = {
     "eight": "8",
     "sixteen": "16",
     "thirty two": "32",
     "sixty four": "64",
-}
-
-c_and_cpp_ctx.lists["self.c_signed"] = {
-    "signed": "signed",
-    "unsigned": "unsigned",
 }
 
 c_and_cpp_ctx.lists["self.stdint_types"] = {
