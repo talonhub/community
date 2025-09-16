@@ -77,3 +77,22 @@ static assert: static_assert
 static cast: static_cast
 struct: "struct "
 switch: "switch "
+template
+this
+thread_local: "thread_local "
+throw
+true
+try: "try "
+typedef: "typedef "
+typeid
+typename
+union: "union "
+unsigned
+using: "using "
+virtual: "virtual "
+void
+volatile: "volatile "
+wchar_t
+while: "while "
+ex or: " xor "
+ex or equal: " xor_eq "
