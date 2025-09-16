@@ -53,3 +53,27 @@ inline: "inline "
 int
 long
 mutable: "mutable "
+namespace: "namespace "
+new: "new "
+no except: noexcept
+not: "not "
+not equal: " not_eq "
+null pointer: nullptr
+operator
+or: " or "
+or equal: " or_eq "
+private
+protected
+public
+register: "register "
+reinterpret cast: reinterpret_cast
+requires
+return: "return "
+short
+signed
+sizeof
+static: "static "
+static assert: static_assert
+static cast: static_cast
+struct: "struct "
+switch: "switch "
