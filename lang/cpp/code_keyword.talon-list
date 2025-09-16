@@ -45,7 +45,6 @@ enum: "enum "
 error: "error "
 ex or equal: " xor_eq "
 ex or: " xor "
-explicit: "explicit "
 export: "export "
 extern: "extern "
 false
@@ -103,7 +102,6 @@ un define: "undef "
 union: "union "
 unsigned
 using: "using "
-virtual: "virtual "
 void
 volatile: "volatile "
 w char tea: wchar_t
