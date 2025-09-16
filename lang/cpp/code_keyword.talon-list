@@ -1,12 +1,14 @@
 list: user.code_keyword
 code.language: cpp
 -
-a es em: asm
-align as: alignas
-align of: alignof
+asm: asm
+aye es em: asm
+align as: "alignas"
+a line as: "alignas"
+align of: "alignof"
+a line of: "alignof"
 and equal: " and_eq "
 and: " and "
-asm: asm
 auto: "auto "
 bit and: " bitand "
 bit or: " bitor "
@@ -23,6 +25,7 @@ co await: "co_await "
 co return: "co_return "
 co yield: "co_yield "
 compl: "compl "
+compliment: "compl "
 concept: "concept "
 const cast: const_cast
 const eval: "consteval "
@@ -38,7 +41,7 @@ defined: "defined "
 delete: "delete "
 do: "do "
 double
-dynamic_cast
+dynamic cast: dynamic_cast
 else: "else "
 end if: "endif "
 enum: "enum "
@@ -93,7 +96,7 @@ struct: "struct "
 switch: "switch "
 template
 this
-thread_local: "thread_local "
+thread local: "thread_local "
 throw
 true
 try: "try "
@@ -107,5 +110,6 @@ using: "using "
 virtual: "virtual "
 void
 volatile: "volatile "
-wchar_t
+w char tea: wchar_t
+wide char tea: wchar_t
 while: "while "
