@@ -1,12 +1,11 @@
 list: user.code_keyword
 code.language: cpp
 -
-
+a es em: asm
 align as: alignas
 align of: alignof
-and: " and "
 and equal: " and_eq "
-a es em: asm
+and: " and "
 asm: asm
 auto
 bit and: " bitand "
@@ -20,48 +19,63 @@ char eight tea: "char8_t"
 char sixteen tea: "char16_t"
 char thirty two tea: char32_t
 class: "class "
+co await: "co_await "
+co return: "co_return "
+co yield: "co_yield "
 compl: "compl "
 concept: "concept "
-const: "const "
+const cast: const_cast
 const eval: "consteval "
 const expr: "constexpr "
 const expression: "constexpr "
 const in it: "constinit "
-const cast: const_cast
+const: "const "
 continue
-co await: "co_await "
-co return: "co_return "
-co yield: "co_yield "
 declared type: decltype
 default
+define: "define "
+defined: "defined "
 delete: "delete "
 do: "do "
 double
 dynamic_cast
 else: "else "
+end if: "endif "
 enum: "enum "
+error: "error "
+ex or equal: " xor_eq "
+ex or: " xor "
 explicit: "explicit "
 export: "export "
 extern: "extern "
 false
+final: "final "
 float
 for: "for "
 friend: "friend "
 goto: "goto "
+if defined: "ifdef "
+if not defined: "ifndef "
 if: "if "
+import: "import "
+include: "include "
 inline: "inline "
 int
+line: "line "
 long
+module: "module "
 mutable: "mutable "
 namespace: "namespace "
 new: "new "
 no except: noexcept
-not: "not "
 not equal: " not_eq "
+not: "not "
 null pointer: nullptr
 operator
-or: " or "
 or equal: " or_eq "
+or: " or "
+override: "override "
+pragma: "pragma "
 private
 protected
 public
@@ -72,9 +86,9 @@ return: "return "
 short
 signed
 sizeof
-static: "static "
 static assert: static_assert
 static cast: static_cast
+static: "static "
 struct: "struct "
 switch: "switch "
 template
@@ -86,6 +100,7 @@ try: "try "
 typedef: "typedef "
 typeid
 typename
+un define: "undef "
 union: "union "
 unsigned
 using: "using "
@@ -94,5 +109,3 @@ void
 volatile: "volatile "
 wchar_t
 while: "while "
-ex or: " xor "
-ex or equal: " xor_eq "
