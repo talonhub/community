@@ -7,7 +7,7 @@ align of: alignof
 and equal: " and_eq "
 and: " and "
 asm: asm
-auto
+auto: "auto "
 bit and: " bitand "
 bit or: " bitor "
 bool
