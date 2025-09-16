@@ -29,10 +29,7 @@ compliment: "compl "
 concept: "concept "
 const cast: const_cast
 const eval: "consteval "
-const expr: "constexpr "
-const expression: "constexpr "
 const in it: "constinit "
-const: "const "
 continue
 declared type: decltype
 default
@@ -91,7 +88,6 @@ signed
 sizeof
 static assert: static_assert
 static cast: static_cast
-static: "static "
 struct: "struct "
 switch: "switch "
 template
