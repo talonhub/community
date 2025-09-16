@@ -226,13 +226,10 @@ class UserActions:
         actions.auto_insert("false")
 
     def code_insert_function(text: str, selection: str):
+        substitutions = {"1": text}
         if selection:
-            text = text + f"({selection})"
-        else:
-            text = text + "()"
-
-        actions.user.paste(text)
-        actions.edit.left()
+            substitutions["0"] = selection
+        actions.user.insert_snippet_by_name("functionCall", substitutions)
 
     # TODO - it would be nice that you integrate that types from c_cast
     # instead of defaulting to void
