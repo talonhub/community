@@ -3,7 +3,7 @@ code.language: cpp
 -
 asm: asm
 aye es em: asm
-align as: "alignas"
+align as: alignas
 a line as: "alignas"
 align of: "alignof"
 a line of: "alignof"
