@@ -1,0 +1,5 @@
+list: user.c_pointers
+code.language: c
+-
+pointer: *
+pointer to pointer: **
