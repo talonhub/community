@@ -17,8 +17,8 @@ break
 case: "case "
 catch: "catch "
 char
-char eight tea: "char8_t"
-char sixteen tea: "char16_t"
+char eight tea: char8_t
+char sixteen tea: char16_t
 char thirty two tea: char32_t
 class: "class "
 co await: "co_await "
