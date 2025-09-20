@@ -5,8 +5,8 @@ asm: asm
 aye es em: asm
 align as: alignas
 a line as: "alignas"
-align of: "alignof"
-a line of: "alignof"
+align of: alignof
+a line of: alignof
 and equal: " and_eq "
 and: " and "
 auto: "auto "
