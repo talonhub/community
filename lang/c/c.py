@@ -124,44 +124,44 @@ def c_pointers(m) -> str:
 # capture explicitly referenced from the C++ files
 @mod.capture(rule="{user.c_signed}")
 def c_signed(m) -> str:
-    """Used for prefixing a signed or unsigned type"""
+    """Signed or unsigned type prefix"""
     return m.c_signed
 
 
 # capture explicitly referenced from the C++ files
 @mod.capture(rule="{user.c_types}")
 def c_types(m) -> str:
-    """Used for C data types"""
+    """C data type"""
     return m.c_types
 
 
 @mod.capture(rule="{user.stdint_types}")
 def stdint_types(m) -> str:
-    """Used for stdint types"""
+    """stdint type"""
     return m.stdint_types
 
 
 @mod.capture(rule="{user.stdint_signed}")
 def stdint_signed(m) -> str:
-    """Used for an unsigned prefix for stdint types"""
+    """Signed or unsigned type prefix"""
     return m.stdint_signed
 
 
 @mod.capture(rule="[<user.c_signed>] <user.c_types> [<user.c_pointers>+]")
 def c_cast(m) -> str:
-    """C casting"""
+    """C cast"""
     return "(" + " ".join(list(m)) + ")"
 
 
 @mod.capture(rule="[<user.stdint_signed>] <user.stdint_types> [<user.c_pointers>+]")
 def stdint_cast(m) -> str:
-    """C stdint casting"""
+    """C stdint cast"""
     return "(" + "".join(list(m)) + ")"
 
 
 @mod.capture(rule="[<user.c_signed>] <user.c_types> [<user.c_pointers>]")
 def c_variable(m) -> str:
-    """Used to dictate a full C variable type"""
+    """Full C variable type"""
     return " ".join(list(m))
 
 
