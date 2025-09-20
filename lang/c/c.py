@@ -64,7 +64,7 @@ def stdint_types(m) -> str:
 
 @mod.capture(rule="{user.stdint_signed}")
 def stdint_signed(m) -> str:
-    """Signed or unsigned type prefix"""
+    """Signed or unsigned stdint type prefix"""
     return m.stdint_signed
 
 
