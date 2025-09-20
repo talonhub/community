@@ -1,0 +1,7 @@
+list: user.cpp_pointers
+code.language: cpp
+-
+array: []
+pointer: *
+ref: &
+reference: &

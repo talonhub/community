@@ -12,13 +12,6 @@ ctx.matches = r"""
 code.language: cpp
 """
 
-ctx.lists["self.cpp_pointers"] = {
-    "pointer": "*",
-    "reference": "&",
-    "ref": "&",
-    "array": "[]",
-}
-
 mod.list("cpp_pointers", desc="C++ pointer and reference annotations")
 mod.list("cpp_standard_type", desc="Types from the C++ standard library")
 mod.list("cpp_standard_function", desc="Functions in the std namespace")
