@@ -1,6 +1,5 @@
 list: user.stdint_types
 code.language: c
-code.language: cpp
 -
 character: int8_t
 char: int8_t
