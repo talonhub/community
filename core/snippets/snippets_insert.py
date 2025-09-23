@@ -85,7 +85,7 @@ def compute_snippet_body_with_substitutions(
 def compute_phrase_substitutions(snippet: Snippet, phrase: str):
     substitutions = {}
 
-    def get_setting (m : re.Match[str]):
+    def get_setting(m: re.Match[str]):
         try:
             return str(settings.get(m.group(1)))
         except KeyError as ex:
