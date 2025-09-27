@@ -45,8 +45,8 @@ class Actions:
         actions.tracking.zoom_cancel()
 
     def mouse_wake():
-        """Enable control mouse, zoom mouse, and disables cursor"""
-        actions.tracking.control_zoom_toggle(True)
+        """Enable control mouse and disables cursor"""
+        actions.tracking.control_toggle(True)
 
         if settings.get("user.mouse_wake_hides_cursor"):
             actions.user.mouse_cursor_hide()
