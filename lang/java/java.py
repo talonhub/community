@@ -139,7 +139,7 @@ def public_camel_case_format_variable(variable: str):
 
 @mod.capture(rule="{user.java_boxed_type} | <user.text>")
 def java_type_parameter_argument(m) -> str:
-    """A java type parameter for a generic data structure"""
+    """A Java type parameter for a generic data structure"""
     with suppress(AttributeError):
         return m.java_boxed_type
     return public_camel_case_format_variable(m.text)
