@@ -46,7 +46,7 @@ It's also possible to set configuration that applies to a specific tab stop (`$0
 | wrapperPhrase      | No       | Yes             | `$0.wrapperPhrase: try \| trying`   |
 | wrapperScope       | No       | No              | `$0.wrapperScope: statement`        |
 
-- `insertionFormatter`: Formatter to apply to the phrase when inserting the snippet. eg `"snip funk get value"`. If omitted no trailing phrase is available for the snippet.
+- `insertionFormatter`: Formatter to apply to the phrase when inserting the snippet. eg `"snip funk get value"`. If omitted no trailing phrase is available for the snippet. Supports formatters from settings, e.g. `setting(user.code_private_variable_formatter)`.
 - `wrapperPhrase`: Used by [Cursorless](https://www.cursorless.org) as the spoken form for wrapping with the snippet. eg `"if wrap air"`. Without Cursorless this spoken form is ignored by Talon.
 - `wrapperScope`: Used by [Cursorless](https://www.cursorless.org) to infer scope when wrapping with the snippet. eg `"if wrap air"` gets inferred as `"if wrap state air"`.
 
