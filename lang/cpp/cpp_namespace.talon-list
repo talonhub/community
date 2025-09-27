@@ -1,0 +1,23 @@
+list: user.cpp_namespace
+code.language: cpp
+-
+stood: std
+standard: std
+boost
+ranges
+chrono
+filesystem
+literals
+placeholders
+regex
+this thread: this_thread
+experimental
+polymorphic: pmr
+views
+a sink I O: asio
+format: fmt
+J son: json
+thread
+atomic
+memory
+algorithm

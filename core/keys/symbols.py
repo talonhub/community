@@ -57,7 +57,7 @@ symbols = [
     Symbol("`", ["back tick"], ["grave"]),
     Symbol(",", ["comma", "coma"]),
     Symbol(".", ["period", "full stop"], ["dot", "point"]),
-    Symbol(";", ["semicolon"]),
+    Symbol(";", ["semicolon"], ["semi"]),
     Symbol(":", ["colon"]),
     Symbol("?", ["question mark"], ["question"]),
     Symbol("!", ["exclamation mark", "exclamation point"], ["bang"]),
