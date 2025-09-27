@@ -147,7 +147,7 @@ def java_type_parameter_argument(m) -> str:
 
 @mod.capture(rule="[type] {user.java_generic_data_structure} | type <user.text>")
 def java_generic_data_structure(m) -> str:
-    """A java generic data structure that takes tight parameter arguments"""
+    """A Java generic data structure that takes tight parameter arguments"""
     with suppress(AttributeError):
         return m.java_generic_data_structure
     return public_camel_case_format_variable(m.text)
