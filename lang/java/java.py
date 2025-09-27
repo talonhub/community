@@ -139,7 +139,7 @@ def public_camel_case_format_variable(variable: str):
 
 @mod.capture(rule="{user.java_boxed_type} | <user.text>")
 def java_type_parameter_argument(m) -> str:
-    """Represents a java type parameter for a generic data structure"""
+    """A java type parameter for a generic data structure"""
     with suppress(AttributeError):
         return m.java_boxed_type
     return public_camel_case_format_variable(m.text)
@@ -147,7 +147,7 @@ def java_type_parameter_argument(m) -> str:
 
 @mod.capture(rule="[type] {user.java_generic_data_structure} | type <user.text>")
 def java_generic_data_structure(m) -> str:
-    """Represents a java generic data structure that takes tight parameter arguments"""
+    """A java generic data structure that takes tight parameter arguments"""
     with suppress(AttributeError):
         return m.java_generic_data_structure
     return public_camel_case_format_variable(m.text)
@@ -157,7 +157,7 @@ def java_generic_data_structure(m) -> str:
     rule="<user.java_generic_data_structure> of ([and] <user.java_type_parameter_argument>)+"
 )
 def java_generic_type(m) -> str:
-    """Represents a generic type with specific type parameters"""
+    """A generic type with specific type parameters"""
     parameters = m.java_type_parameter_argument_list
     parameter_text = ", ".join(parameters)
     return f"{m.java_generic_data_structure}<{parameter_text}>"
