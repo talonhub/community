@@ -141,7 +141,7 @@ def java_type_parameter_argument(m) -> str:
         return m.java_boxed_type
     return public_camel_case_format_variable(m.text)
 
-@mod.capture(rule = "{user.java_generic_data_structure} | <user.text>")
+@mod.capture(rule = "[type] {user.java_generic_data_structure} | type <user.text>")
 def java_generic_data_structure(m) -> str:
     with suppress(AttributeError):
         return m.java_generic_data_structure
