@@ -132,29 +132,26 @@ operators = Operators(
     MATH_NOT="!",
 )
 
+def public_camel_case_format_variable(variable: str):
+    return actions.user.formatted_text(variable, "PUBLIC_CAMEL_CASE")
+
 @mod.capture(rule = "{user.java_boxed_type} | <user.text>")
 def java_type_parameter_argument(m) -> str:
     with suppress(AttributeError):
         return m.java_boxed_type
-    text = m.text
-    formatted_text = actions.user.formatted_text(text, "PUBLIC_CAMEL_CASE")
-    return formatted_text
+    return public_camel_case_format_variable(m.text)
 
 @mod.capture(rule = "{user.java_generic_data_structure} | <user.text>")
 def java_generic_data_structure(m) -> str:
     with suppress(AttributeError):
         return m.java_generic_data_structure
-    text = m.text
-    formatted_text = actions.user.formatted_text(text, "PUBLIC_CAMEL_CASE")
-    return formatted_text
-    
+    return public_camel_case_format_variable(m.text)
 
 @mod.capture(rule = "<user.java_generic_data_structure> of ([and] <user.java_type_parameter_argument>)+")
 def java_generic_type(m) -> str:
-    generic_type = m.java_generic_data_structure
     parameters = m.java_type_parameter_argument_list
     parameter_text = ", ".join(parameters)
-    return f"{generic_type}<{parameter_text}>"
+    return f"{m.java_generic_data_structure}<{parameter_text}>"
     
 
 @ctx.action_class("user")
