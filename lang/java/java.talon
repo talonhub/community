@@ -32,8 +32,7 @@ boxed [type] {user.java_boxed_type}: insert(user.java_boxed_type + " ")
 generic [type] {user.java_generic_data_structure}:
     user.insert_between(java_generic_data_structure + "<", ">")
 
-<user.java_generic_type>:
-    insert(java_generic_type + " ")
+<user.java_generic_type>: insert(java_generic_type + " ")
 
 # Arrays
 type {user.code_type} array:
