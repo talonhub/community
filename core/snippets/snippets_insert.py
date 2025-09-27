@@ -1,6 +1,6 @@
 import re
 
-from talon import Module, actions
+from talon import Module, actions, settings
 
 from .snippet_types import Snippet
 from .snippets_insert_raw_text import go_to_next_stop_raw, insert_snippet_raw_text
@@ -85,9 +85,18 @@ def compute_snippet_body_with_substitutions(
 def compute_phrase_substitutions(snippet: Snippet, phrase: str):
     substitutions = {}
 
+    def get_setting(m: re.Match[str]):
+        try:
+            return str(settings.get(m.group(1)))
+        except KeyError as ex:
+            raise ValueError(
+                f"Undefined formatter setting {ex} in snippet '{snippet.name}'"
+            )
+
     for variable in snippet.variables:
         if variable.insertion_formatters is not None:
             formatters = ",".join(variable.insertion_formatters)
+            formatters = re.sub(r"setting\(([\w.]+)\)", get_setting, formatters)
             formatted_phrase = actions.user.formatted_text(phrase, formatters)
             substitutions[variable.name] = formatted_phrase
 
