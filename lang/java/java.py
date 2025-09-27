@@ -134,7 +134,7 @@ operators = Operators(
 
 @mod.capture(rule = "{user.java_boxed_type} | <user.text>")
 def java_type_parameter_argument(m) -> str:
-    with suppress(Exception):
+    with suppress(AttributeError):
         return m.java_boxed_type
     text = m.text
     formatted_text = actions.user.formatted_text(text, "PUBLIC_CAMEL_CASE")
@@ -142,7 +142,7 @@ def java_type_parameter_argument(m) -> str:
 
 @mod.capture(rule = "{user.java_generic_data_structure} | <user.text>")
 def java_generic_data_structure(m) -> str:
-    with suppress(Exception):
+    with suppress(AttributeError):
         return m.java_generic_data_structure
     text = m.text
     formatted_text = actions.user.formatted_text(text, "PUBLIC_CAMEL_CASE")
