@@ -3,6 +3,8 @@ from talon import Context, Module, actions, settings
 from ...core.described_functions import create_described_insert_between
 from ..tags.operators import Operators
 
+from contextlib import suppress
+
 ctx = Context()
 mod = Module()
 ctx.matches = r"""
@@ -130,6 +132,30 @@ operators = Operators(
     MATH_NOT="!",
 )
 
+@mod.capture(rule = "{user.java_boxed_type} | <user.text>")
+def java_type_parameter_argument(m) -> str:
+    with suppress(Exception):
+        return m.java_boxed_type
+    text = m.text
+    formatted_text = actions.user.formatted_text(text, "PUBLIC_CAMEL_CASE")
+    return formatted_text
+
+@mod.capture(rule = "{user.java_generic_data_structure} | <user.text>")
+def java_generic_data_structure(m) -> str:
+    with suppress(Exception):
+        return m.java_generic_data_structure
+    text = m.text
+    formatted_text = actions.user.formatted_text(text, "PUBLIC_CAMEL_CASE")
+    return formatted_text
+    
+
+@mod.capture(rule = "<user.java_generic_data_structure> of ([and] <user.java_type_parameter_argument>)+")
+def java_generic_type(m) -> str:
+    generic_type = m.java_generic_data_structure
+    parameters = m.java_type_parameter_argument_list
+    parameter_text = ", ".join(parameters)
+    return f"{generic_type}<{parameter_text}>"
+    
 
 @ctx.action_class("user")
 class UserActions:
