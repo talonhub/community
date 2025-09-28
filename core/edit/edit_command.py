@@ -1,3 +1,5 @@
+from inspect import signature
+from typing import Callable
 from talon import Module, actions, settings
 
 from .edit_command_actions import EditAction, EditSimpleAction
@@ -178,14 +180,21 @@ class Actions:
         key = (action.type, modifier.type)
         count = modifier.count
 
-        if key in custom_callbacks:
-            custom_callbacks[key](action, modifier.type, count)
-            return
-
-        elif key in compound_actions:
-            for i in range(1, count + 1):
-                compound_actions[key]()
+        cb = actions.user.get_compound_edit_action_modifier_callback(key)
+        if cb:
+            # Custom callbacks take three parameters, compound callbacks do not.
+            if signature(cb).parameters.get("count"):
+                cb(action, modifier.type, count)
+            else:
+                cb()
             return
 
         actions.user.run_modifier_callback(modifier)
         actions.user.run_action_callback(action)
+
+    def get_compound_edit_action_modifier_callback(
+        pair: tuple[str, str],
+    ) -> Callable | None:
+        """Retrieve a compound or combined operation function for a given action and modifier type pair.
+        Must be done in a single function, so that any functions overriding it can choose to do `action.next(pair)` only if neither of these is valid """
+        return custom_callbacks.get(pair) or compound_actions.get(pair)
