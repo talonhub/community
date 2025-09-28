@@ -48,6 +48,15 @@ def add_pending(motion, end):
         pendingSelection = PendingSelection(motion, end)
 
 
+simple_action_callbacks: dict[str, Callable] = {}
+
+custom_callbacks = {}
+
+compound_actions = {
+    ("delete", "wordLeft"): lambda: actions.key("ctrl-w"),
+}
+
+
 # This operates on a paradigm of staying in insert mode, but at least allows standard community text editing commands if the user has set their shell to vi mode in read line.
 # Vi bindings may occasionally have an issue at the start or end of a line, because the cursor may get stuck and the subsequent reentering of insert mode will leave the cursor one before the end of the line.
 @ctx.action_class("edit")
@@ -113,10 +122,10 @@ class Actions:
         if action_type in edit_action_vi_keys:
             normal_cmd(edit_action_vi_keys[action_type])
         else:
-            try:
-                callback = actions.user.get_simple_action_callback(action_type)
+            callback = actions.user.get_simple_action_callback(action_type)
+            if callback:
                 callback()
-            except KeyError as ex:
+            else:
                 print("readline_vi only supports simple action callbacks")
                 return
 
@@ -146,3 +155,17 @@ class Actions:
 
     def copy_word_right():
         normal_cmd("ywa")
+
+    def get_simple_action_callback(action_type: str) -> Callable | None:
+        """Convert a edit action type created from a string into its associated Callback.
+        If it can't find one in this file, it will try the next most specific community version
+        """
+        cb = simple_action_callbacks.get(action_type)
+        if not cb:
+            cb = actions.next()
+        return cb
+
+    def get_compound_edit_action_modifier_callback(
+        pair: tuple[str, str],
+    ) -> Callable | None:
+        return custom_callbacks.get(pair) or compound_actions.get(pair) or actions.next(pair)
