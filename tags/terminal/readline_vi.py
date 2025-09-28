@@ -27,9 +27,9 @@ edit_action_vi_keys: dict[str, str] = {
     "goBefore": "",
     "goAfter": "",
     # We can't actually use the clipboard for these operations
-    "copyToClipboard": "y",
-    "cutToClipboard": "d",
-    "pasteFromClipboard": "y",
+    # "copyToClipboard": "y",
+    # "cutToClipboard": "d",
+    # "pasteFromClipboard": "y",
 }
 
 
@@ -48,12 +48,23 @@ def add_pending(motion, end):
         pendingSelection = PendingSelection(motion, end)
 
 
+def delete_word_right():
+    # need a custom function, because otherwise the right key that moves the cursor will interfere with the pending action
+    actions.key("escape")
+    sleep(0.1)
+    # the escape key shifts the position one to the left
+    actions.key("right")
+    normal_cmd("dw")
+    actions.insert("i")
+
+
 simple_action_callbacks: dict[str, Callable] = {}
 
 custom_callbacks = {}
 
 compound_actions = {
     ("delete", "wordLeft"): lambda: actions.key("ctrl-w"),
+    ("delete", "wordRight"): delete_word_right,
 }
 
 
@@ -73,7 +84,7 @@ class EditActions:
         # the escape key shifts the position one to the left
         actions.key("right")
         actions.insert("w")
-        # Unfortunately this will end up one character before the end if we have reached the last word of the line
+        # Unfortunately this will end up one character before the end if we have reached the last word of the line, but using 'a' would result in always being in the second character of any other word in the line
         actions.insert("i")
 
     def line_end():
@@ -168,4 +179,8 @@ class Actions:
     def get_compound_edit_action_modifier_callback(
         pair: tuple[str, str],
     ) -> Callable | None:
-        return custom_callbacks.get(pair) or compound_actions.get(pair) or actions.next(pair)
+        return (
+            custom_callbacks.get(pair)
+            or compound_actions.get(pair)
+            or actions.next(pair)
+        )
