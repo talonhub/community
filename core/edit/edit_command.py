@@ -1,5 +1,6 @@
 from inspect import signature
 from typing import Callable
+
 from talon import Module, actions, settings
 
 from .edit_command_actions import EditAction, EditSimpleAction
@@ -196,5 +197,6 @@ class Actions:
         pair: tuple[str, str],
     ) -> Callable | None:
         """Retrieve a compound or combined operation function for a given action and modifier type pair.
-        Must be done in a single function, so that any functions overriding it can choose to do `action.next(pair)` only if neither of these is valid """
+        Must be done in a single function, so that any functions overriding it can choose to do `action.next(pair)` only if neither of these is valid
+        """
         return custom_callbacks.get(pair) or compound_actions.get(pair)
