@@ -63,6 +63,7 @@ modifier_dictionary: dict[str, EditModifierCallback] = {
     item.modifier: item for item in modifiers
 }
 
+
 @mod.action_class
 class Actions:
     def run_modifier_callback(modifier: EditModifier):
