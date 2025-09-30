@@ -63,7 +63,6 @@ modifier_dictionary: dict[str, EditModifierCallback] = {
     item.modifier: item for item in modifiers
 }
 
-
 @mod.action_class
 class Actions:
     def run_modifier_callback(modifier: EditModifier):
@@ -81,4 +80,4 @@ class Actions:
         modifier_type = modifier.type
         if modifier_type not in modifier_dictionary:
             raise ValueError(f"Unknown edit modifier: {modifier_type}")
-        return modifier_dictionary[modifier_type].callback()
+        return modifier_dictionary[modifier_type].callback
