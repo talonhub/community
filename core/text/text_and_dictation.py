@@ -114,6 +114,12 @@ def prose_time(m) -> str:
     return str(m)
 
 
+@mod.capture(rule="spell <user.letters>")
+def prose_spell(m) -> str:
+    """Spell word phoneticly"""
+    return m.letters
+
+
 @mod.capture(rule="({user.vocabulary} | <user.abbreviation> | <word>)")
 def word(m) -> str:
     """A single word, including user-defined vocabulary."""
@@ -146,6 +152,7 @@ def text(m) -> str:
         "| <user.prose_modifier>"
         "| <user.abbreviation>"
         "| <user.prose_contact>"
+        "| <user.prose_spell>"
         "| <phrase>"
         ")+"
     )
@@ -356,7 +363,9 @@ def auto_capitalize(text, state=None):
     return output, (
         "sentence start"
         if charge or sentence_end
-        else "after newline" if newline else None
+        else "after newline"
+        if newline
+        else None
     )
 
 
