@@ -9,6 +9,9 @@ tag: user.generic_unix_shell
 # Uncomment the following line to enable common unix utilities from unix_utilities.py
 # ctx.tags = ["user.unix_utilities"]
 
+# If your terminal is a bash or zsh, set tag user.generic_unix_shell to enable
+# additional capabilities.
+
 
 @ctx.action_class("user")
 class Actions:
@@ -35,6 +38,15 @@ class Actions:
         actions.insert("cd /")
         actions.key("enter")
 
+    def terminal_change_directory_toggle():
+        """Toggle traversal between the two most recent directories"""
+        actions.insert("cd -")
+        actions.key("enter")
+
+    def terminal_change_directory_up(count: int):
+        """Traverse a given number of directories upwards"""
+        actions.insert("cd " + "/".join(count * [".."]))
+
     def terminal_clear_screen():
         """Clear screen"""
         actions.insert("clear")
@@ -53,4 +65,21 @@ class Actions:
         """kills the running command"""
         actions.key("ctrl-c")
         actions.insert("y")
+        actions.key("enter")
+
+
+mod.tag("generic_unix_shell_bash", "tag to enable bash capabilities in unix shells")
+bash_ctx = Context()
+bash_ctx.matches = r"""
+tag: user.generic_unix_shell
+and tag: user.generic_unix_shell_bash
+"""
+
+
+@bash_ctx.action_class("user")
+class BashActions:
+    def terminal_change_directory_back():
+        """Traverse back to the previous directory on the directory stack"""
+        # This is only possible on bash shells (or zsh etc.), but not on POSIX shells.
+        actions.insert("popd")
         actions.key("enter")
