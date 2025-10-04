@@ -1,3 +1,5 @@
+from contextlib import suppress
+
 from talon import Context, Module, actions, settings
 
 from ...core.described_functions import create_described_insert_between
@@ -129,6 +131,44 @@ operators = Operators(
     MATH_OR=" || ",
     MATH_NOT="!",
 )
+
+
+def public_camel_case_format_variable(variable: str):
+    return actions.user.formatted_text(variable, "PUBLIC_CAMEL_CASE")
+
+
+# This is not part of the long term stable API
+# After we implement generics support for several languages,
+# we plan on abstracting out from the specific implementations into a general grammar
+
+
+@mod.capture(rule="{user.java_boxed_type} | <user.text>")
+def java_type_parameter_argument(m) -> str:
+    """A Java type parameter for a generic data structure"""
+    with suppress(AttributeError):
+        return m.java_boxed_type
+    return public_camel_case_format_variable(m.text)
+
+
+@mod.capture(rule="[type] {user.java_generic_data_structure} | type <user.text>")
+def java_generic_data_structure(m) -> str:
+    """A Java generic data structure that takes type parameter arguments"""
+    with suppress(AttributeError):
+        return m.java_generic_data_structure
+    return public_camel_case_format_variable(m.text)
+
+
+@mod.capture(
+    rule="<user.java_generic_data_structure> of ([and] <user.java_type_parameter_argument>)+"
+)
+def java_generic_type(m) -> str:
+    """A generic type with specific type parameters"""
+    parameters = m.java_type_parameter_argument_list
+    parameter_text = ", ".join(parameters)
+    return f"{m.java_generic_data_structure}<{parameter_text}>"
+
+
+# End of unstable section
 
 
 @ctx.action_class("user")
