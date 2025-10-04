@@ -136,9 +136,11 @@ operators = Operators(
 def public_camel_case_format_variable(variable: str):
     return actions.user.formatted_text(variable, "PUBLIC_CAMEL_CASE")
 
-#This is not part of the long term stable API
-#After we implement generics support for several languages, 
+
+# This is not part of the long term stable API
+# After we implement generics support for several languages,
 # we plan on abstracting out from the specific implementations into a general grammar
+
 
 @mod.capture(rule="{user.java_boxed_type} | <user.text>")
 def java_type_parameter_argument(m) -> str:
@@ -165,7 +167,9 @@ def java_generic_type(m) -> str:
     parameter_text = ", ".join(parameters)
     return f"{m.java_generic_data_structure}<{parameter_text}>"
 
+
 # End of unstable section
+
 
 @ctx.action_class("user")
 class UserActions:
