@@ -2,6 +2,7 @@
 (ship | uppercase) <user.letters> [(lowercase | sunk)]:
     user.insert_formatted(letters, "ALL_CAPS")
 <user.symbol_key>: key(symbol_key)
+spike <user.symbol_key>: user.end_line_with_symbol_and_start_line(symbol_key)
 <user.function_key>: key(function_key)
 <user.special_key>: key(special_key)
 <user.keypad_key>: key(keypad_key)
