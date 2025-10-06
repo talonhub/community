@@ -2,10 +2,17 @@ list: user.code_operators_bitwise
 tag: user.code_operators_bitwise
 -
 
-bitwise and: BITWISE_AND
-bitwise or: BITWISE_OR
-bitwise not: BITWISE_NOT
+and: BITWISE_AND
+or: BITWISE_OR
+not: BITWISE_NOT
 
-bitwise ex or: BITWISE_EXCLUSIVE_OR
-bitwise left shift: BITWISE_LEFT_SHIFT
-bitwise right shift: BITWISE_RIGHT_SHIFT
+ex or: BITWISE_EXCLUSIVE_OR
+left shift: BITWISE_LEFT_SHIFT
+right shift: BITWISE_RIGHT_SHIFT
+
+# Assignment operators
+and equals: ASSIGNMENT_BITWISE_AND
+or equals: ASSIGNMENT_BITWISE_OR
+exclusive or equals: ASSIGNMENT_BITWISE_EXCLUSIVE_OR
+left shift equals: ASSIGNMENT_BITWISE_LEFT_SHIFT
+right shift equals: ASSIGNMENT_BITWISE_RIGHT_SHIFT
