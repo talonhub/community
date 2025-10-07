@@ -177,6 +177,7 @@ def prose(m) -> str:
         "| <user.prose_percent>"
         "| <user.abbreviation>"
         "| <user.prose_contact>"
+        "| <user.prose_clipboard>"
         "| <phrase>"
         ")+"
     )
