@@ -133,7 +133,9 @@ def word(m) -> str:
         )
 
 
-@mod.capture(rule="({user.vocabulary} | <user.prose_contact> | <phrase>)+")
+@mod.capture(
+    rule="({user.vocabulary} | <user.prose_contact> | <user.prose_clipboard> | <phrase>)+"
+)
 def text(m) -> str:
     """A sequence of words, including user-defined vocabulary."""
     return format_phrase(m)
@@ -363,7 +365,9 @@ def auto_capitalize(text, state=None):
     return output, (
         "sentence start"
         if charge or sentence_end
-        else "after newline" if newline else None
+        else "after newline"
+        if newline
+        else None
     )
 
 
