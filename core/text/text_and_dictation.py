@@ -133,7 +133,7 @@ def word(m) -> str:
         )
 
 
-@mod.capture(rule="({user.vocabulary} | <user.prose_contact> | <phrase>)+")
+@mod.capture(rule="({user.vocabulary} | <user.prose_contact> | <user.prose_spell> | <phrase>)+")
 def text(m) -> str:
     """A sequence of words, including user-defined vocabulary."""
     return format_phrase(m)
@@ -175,6 +175,7 @@ def prose(m) -> str:
         "| <user.prose_percent>"
         "| <user.abbreviation>"
         "| <user.prose_contact>"
+        "| <user.prose_spell>"
         "| <phrase>"
         ")+"
     )
