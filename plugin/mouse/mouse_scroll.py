@@ -7,6 +7,7 @@ continuous_scroll_mode = ""
 hiss_scroll_up = False
 control_mouse_forced = False
 
+
 class ScrollingState:
     def __init__(self):
         self.continuous_scroll_mode = ""
@@ -50,7 +51,11 @@ class ScrollingState:
         )
         acceleration_setting = settings.get("user.mouse_continuous_scroll_acceleration")
         acceleration_speed = (
-            1 + min((time.perf_counter() - self.scroll_start_ts) / 0.5, acceleration_setting - 1)
+            1
+            + min(
+                (time.perf_counter() - self.scroll_start_ts) / 0.5,
+                acceleration_setting - 1,
+            )
             if acceleration_setting > 1
             else 1
         )
@@ -62,13 +67,15 @@ class ScrollingState:
 
     def compute_gaze_scrolling_factor(self) -> float:
         return self.continuous_scrolling_speed_factor * settings.get(
-        "user.mouse_gaze_scroll_speed_multiplier"
+            "user.mouse_gaze_scroll_speed_multiplier"
         )
 
     def set_continuous_scrolling_speed_factor(self, factor: float):
         self.continuous_scrolling_speed_factor = factor
 
-    def set_continuous_scrolling_direction(self, is_vertical: bool, scroll_dir: Literal[-1, 1]):
+    def set_continuous_scrolling_direction(
+        self, is_vertical: bool, scroll_dir: Literal[-1, 1]
+    ):
         self.is_vertical = is_vertical
         self.scroll_dir = scroll_dir
 
@@ -80,7 +87,7 @@ class ScrollingState:
 
     def reset_scrolling_start_time(self):
         self.scroll_start_ts = time.perf_counter()
-        
+
 
 scrolling_state = ScrollingState()
 
@@ -243,7 +250,7 @@ class Actions:
         continuous_scroll_mode = ""
         return_value = False
         ctx.tags = []
-        
+
         if scrolling_state.has_scrolling_job():
             return_value = True
         scrolling_state.stop_scrolling_job()
@@ -264,7 +271,9 @@ class Actions:
             continuous_scrolling_speed_factor = speed / settings.get(
                 "user.mouse_continuous_scroll_speed_quotient"
             )
-        scrolling_state.set_continuous_scrolling_speed_factor(continuous_scrolling_speed_factor)
+        scrolling_state.set_continuous_scrolling_speed_factor(
+            continuous_scrolling_speed_factor
+        )
 
     def mouse_is_continuous_scrolling():
         """Returns whether continuous scroll is in progress"""
@@ -306,12 +315,17 @@ def mouse_scroll_continuous(
 
     if scrolling_state.is_continuously_scrolling():
         # Issuing a scroll in the same direction aborts scrolling
-        if scrolling_state.get_scroll_dir() == new_scroll_dir and was_vertical == is_vertical:
+        if (
+            scrolling_state.get_scroll_dir() == new_scroll_dir
+            and was_vertical == is_vertical
+        ):
             actions.user.mouse_scroll_stop()
         # Issuing a scroll in the reverse direction resets acceleration
         else:
             scrolling_state.reset_scrolling_start_time()
-            scrolling_state.set_continuous_scrolling_direction(is_vertical, new_scroll_dir)
+            scrolling_state.set_continuous_scrolling_direction(
+                is_vertical, new_scroll_dir
+            )
     else:
         scrolling_state.set_continuous_scrolling_direction(is_vertical, new_scroll_dir)
         scrolling_state.start_continuous_scrolling_job()
