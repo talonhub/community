@@ -61,7 +61,7 @@ class ScrollingState:
         return scroll_delta
 
     def compute_gaze_scrolling_factor(self) -> float:
-        return continuous_scrolling_speed_factor * settings.get(
+        return self.continuous_scrolling_speed_factor * settings.get(
         "user.mouse_gaze_scroll_speed_multiplier"
         )
 
@@ -230,10 +230,11 @@ class Actions:
 
     def mouse_gaze_scroll_toggle():
         """If not scrolling, start gaze scroll, else stop scrolling."""
-        if continuous_scroll_mode == "":
-            actions.user.mouse_gaze_scroll()
-        else:
+        print("toggling")
+        if scrolling_state.has_scrolling_job():
             actions.user.mouse_scroll_stop()
+        else:
+            actions.user.mouse_gaze_scroll()
 
     def mouse_scroll_stop() -> bool:
         """Stops scrolling"""
