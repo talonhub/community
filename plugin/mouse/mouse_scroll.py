@@ -4,14 +4,49 @@ from typing import Literal, Optional
 from talon import Context, Module, actions, app, cron, ctrl, imgui, settings, ui
 
 continuous_scroll_mode = ""
-scroll_job = None
-gaze_job = None
 scroll_dir: Literal[-1, 1] = 1
 scroll_start_ts: float = 0
 hiss_scroll_up = False
 control_mouse_forced = False
 continuous_scrolling_speed_factor: float = 1.0
 is_continuous_scrolling_vertical: bool = True
+
+class ScrollingState:
+    def __init__(self):
+        self.continuous_scroll_mode = ""
+        self.scroll_job = None
+        self.scroll_dir: Literal[-1, 1] = 1
+        self.scroll_start_ts: float = 0
+        self.hiss_scroll_up = False
+        self.control_mouse_forced = False
+        self.continuous_scrolling_speed_factor: float = 1.0
+        self.is_continuous_scrolling_vertical: bool = True
+        self.continuously_scrolling: bool = False
+
+    def start_continuous_scrolling_job(self):
+        scroll_continuous_helper()
+        scroll_job = cron.interval("16ms", scroll_continuous_helper)
+        self.set_scrolling_job(scroll_job)
+        self.continuously_scrolling = True
+
+    def set_scrolling_job(self, job):
+        self.stop_scrolling_job()
+        self.scroll_job = job
+
+    def stop_scrolling_job(self):
+        if self.scroll_job:
+            cron.cancel(self.scroll_job)
+            self.scroll_job = None
+        self.continuously_scrolling = False
+
+    def has_scrolling_job(self) -> bool:
+        return self.scroll_job is not None
+
+    def is_continuously_scrolling(self) -> bool:
+        return self.continuously_scrolling
+
+
+scrolling_state = ScrollingState()
 
 mod = Module()
 ctx = Context()
@@ -141,12 +176,13 @@ class Actions:
 
     def mouse_gaze_scroll():
         """Starts gaze scroll"""
-        global gaze_job, continuous_scroll_mode, control_mouse_forced
+        global continuous_scroll_mode, control_mouse_forced
 
         ctx.tags = ["user.continuous_scrolling"]
 
         continuous_scroll_mode = "gaze scroll"
         gaze_job = cron.interval("16ms", scroll_gaze_helper)
+        scrolling_state.set_scrolling_job(gaze_job)
 
         if not settings.get("user.mouse_hide_mouse_gui"):
             gui_wheel.show()
@@ -165,22 +201,16 @@ class Actions:
 
     def mouse_scroll_stop() -> bool:
         """Stops scrolling"""
-        global scroll_job, gaze_job, continuous_scroll_mode, control_mouse_forced, continuous_scrolling_speed_factor
+        global scrolling_state, continuous_scroll_mode, control_mouse_forced, continuous_scrolling_speed_factor
 
         continuous_scroll_mode = ""
         continuous_scrolling_speed_factor = 1.0
         return_value = False
         ctx.tags = []
-
-        if scroll_job:
-            cron.cancel(scroll_job)
-            scroll_job = None
+        
+        if scrolling_state.has_scrolling_job():
             return_value = True
-
-        if gaze_job:
-            cron.cancel(gaze_job)
-            gaze_job = None
-            return_value = True
+        scrolling_state.stop_scrolling_job()
 
         if control_mouse_forced:
             actions.tracking.control_toggle(False)
@@ -204,7 +234,7 @@ class Actions:
 
     def mouse_is_continuous_scrolling():
         """Returns whether continuous scroll is in progress"""
-        return len(continuous_scroll_mode) > 0
+        return scrolling_state.has_scrolling_job()
 
     def hiss_scroll_up():
         """Change mouse hiss scroll direction to up"""
@@ -235,14 +265,14 @@ def mouse_scroll_continuous(
     speed_factor: Optional[int] = None,
     is_vertical: bool = True,
 ):
-    global scroll_job, scroll_dir, scroll_start_ts, is_continuous_scrolling_vertical
+    global scroll_dir, scroll_start_ts, is_continuous_scrolling_vertical
     actions.user.mouse_scroll_set_speed(speed_factor)
     was_vertical = is_continuous_scrolling_vertical
     is_continuous_scrolling_vertical = is_vertical
 
     update_continuous_scrolling_mode(new_scroll_dir, is_vertical)
 
-    if scroll_job:
+    if scrolling_state.is_continuously_scrolling():
         # Issuing a scroll in the same direction aborts scrolling
         if scroll_dir == new_scroll_dir and was_vertical == is_vertical:
             actions.user.mouse_scroll_stop()
@@ -253,8 +283,7 @@ def mouse_scroll_continuous(
     else:
         scroll_dir = new_scroll_dir
         scroll_start_ts = time.perf_counter()
-        scroll_continuous_helper()
-        scroll_job = cron.interval("16ms", scroll_continuous_helper)
+        scrolling_state.start_continuous_scrolling_job()
         ctx.tags = ["user.continuous_scrolling"]
 
         if not settings.get("user.mouse_hide_mouse_gui"):
