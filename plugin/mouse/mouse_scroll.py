@@ -4,7 +4,6 @@ from typing import Literal, Optional
 from talon import Context, Module, actions, app, cron, ctrl, imgui, settings, ui
 
 continuous_scroll_mode = ""
-scroll_start_ts: float = 0
 hiss_scroll_up = False
 control_mouse_forced = False
 
@@ -21,6 +20,7 @@ class ScrollingState:
         self.continuously_scrolling: bool = False
 
     def start_continuous_scrolling_job(self):
+        self.reset_scrolling_start_time()
         scroll_continuous_helper()
         scroll_job = cron.interval("16ms", scroll_continuous_helper)
         self.set_scrolling_job(scroll_job)
@@ -77,6 +77,9 @@ class ScrollingState:
 
     def get_scroll_dir(self) -> int:
         return self.scroll_dir
+
+    def reset_scrolling_start_time(self):
+        self.scroll_start_ts = time.perf_counter()
         
 
 scrolling_state = ScrollingState()
@@ -254,9 +257,6 @@ class Actions:
 
     def mouse_scroll_set_speed(speed: Optional[int]):
         """Sets the continuous scrolling speed for the current scrolling"""
-        global scroll_start_ts
-        if scroll_start_ts:
-            scroll_start_ts = time.perf_counter()
         if speed is None:
             continuous_scrolling_speed_factor = 1.0
         else:
@@ -298,10 +298,8 @@ def mouse_scroll_continuous(
     speed_factor: Optional[int] = None,
     is_vertical: bool = True,
 ):
-    global scroll_start_ts, is_continuous_scrolling_vertical
     actions.user.mouse_scroll_set_speed(speed_factor)
     was_vertical = scrolling_state.is_continuous_scrolling_vertical()
-    is_continuous_scrolling_vertical = is_vertical
 
     update_continuous_scrolling_mode(new_scroll_dir, is_vertical)
 
@@ -311,11 +309,10 @@ def mouse_scroll_continuous(
             actions.user.mouse_scroll_stop()
         # Issuing a scroll in the reverse direction resets acceleration
         else:
+            scrolling_state.reset_scrolling_start_time()
             scrolling_state.set_continuous_scrolling_direction(is_vertical, new_scroll_dir)
-            scroll_start_ts = time.perf_counter()
     else:
         scrolling_state.set_continuous_scrolling_direction(is_vertical, new_scroll_dir)
-        scroll_start_ts = time.perf_counter()
         scrolling_state.start_continuous_scrolling_job()
         ctx.tags = ["user.continuous_scrolling"]
 
