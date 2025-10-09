@@ -29,6 +29,7 @@ java_boxed_types = {
     "Byte": "Byte",
     "Integer": "Integer",
     "Double": "Double",
+    "String": "String",
     "Short": "Short",
     "Float": "Float",
     "Long": "Long",

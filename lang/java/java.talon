@@ -42,10 +42,10 @@ generic [type] {user.java_generic_data_structure}:
 # user type as a parameter does not require the type prefix: "list of user type" -> List<UserType>
 <user.java_generic_type>: insert(java_generic_type + " ")
 
-# Arrays
-type {user.code_type} array:
+type {user.code_type}:
     insert(user.code_type)
-    user.code_operator_subscript()
+
+type <user.code_type> <user.text>: insert('{code_type} {user.reformat_text(text, "PRIVATE_CAMEL_CASE")}')
 
 [state] {user.java_modifier}: insert(user.java_modifier + " ")
 
