@@ -45,10 +45,10 @@ generic [type] {user.java_generic_data_structure}:
 # Arrays
 type {user.code_type} array:
     insert(user.code_type)
-    user.code_operator_subscript()
+    user.code_operator("SUBSCRIPT")
 
 [state] {user.java_modifier}: insert(user.java_modifier + " ")
 
-op array: user.code_operator_subscript()
+op array: user.code_operator("SUBSCRIPT")
 
 op new: insert("new ")
