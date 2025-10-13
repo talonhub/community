@@ -105,7 +105,9 @@ def update_operators_text():
         # Associate the names of the operator lists with the corresponding prefix
         op_list_names = ["array", "assignment", "lambda", "math", "pointer"]
         names_with_prefix = [(name, "op") for name in op_list_names]
-        names_with_prefix.extend([("math_comparison", "is"), ("bitwise", "(bit | bitwise)")])
+        names_with_prefix.extend(
+            [("math_comparison", "is"), ("bitwise", "(bit | bitwise)")]
+        )
         names_with_prefix.sort()
 
         # Fill in the list by iterating over the operator lists
