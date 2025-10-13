@@ -13,10 +13,3 @@ times equals: ASSIGNMENT_MULTIPLICATION
 divide equals: ASSIGNMENT_DIVISION
 mod equals: ASSIGNMENT_MODULO
 increment: ASSIGNMENT_INCREMENT
-
-# Bitwise operators
-bitwise and equals: ASSIGNMENT_BITWISE_AND
-bitwise or equals: ASSIGNMENT_BITWISE_OR
-bitwise exclusive or equals: ASSIGNMENT_BITWISE_EXCLUSIVE_OR
-left shift equals: ASSIGNMENT_BITWISE_LEFT_SHIFT
-right shift equals: ASSIGNMENT_BITWISE_RIGHT_SHIFT
