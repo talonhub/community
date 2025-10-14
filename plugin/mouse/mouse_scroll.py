@@ -15,34 +15,36 @@ class ScrollingDirection:
     def __init__(self):
         self.scroll_dir: Literal[-1, 1] = 1
         self.is_vertical: bool = True
+        self.direction_constant = self.DOWN
         self.direction_description = "down"
 
     def set_direction(self, direction_constant: int):
+        self.direction_constant = direction_constant
         if direction_constant == self.UP:
-            self.set_up()
+            self._set_up()
         elif direction_constant == self.DOWN:
-            self.set_down()
+            self._set_down()
         elif direction_constant == self.LEFT:
-            self.set_left()
+            self._set_left()
         elif direction_constant == self.RIGHT:
-            self.set_right()
+            self._set_right()
 
-    def set_up(self):
+    def _set_up(self):
         self.is_vertical: bool = True
         self.scroll_dir = -1
         self.direction_description = "up"
 
-    def set_down(self):
+    def _set_down(self):
         self.is_vertical: bool = True
         self.scroll_dir = 1
         self.direction_description = "down"
 
-    def set_left(self):
+    def _set_left(self):
         self.is_vertical: bool = False
         self.scroll_dir = -1
         self.direction_description = "left"
 
-    def set_right(self):
+    def _set_right(self):
         self.is_vertical: bool = False
         self.scroll_dir = 1
         self.direction_description = "right"
@@ -58,22 +60,22 @@ class ScrollingDirection:
         return self.direction_description
 
     def is_equal_to_direction_constant(self, direction_constant: int) -> bool:
-        other = ScrollingDirection()
-        other.set_direction(direction_constant)
-        return self == other
+        return self.direction_constant == direction_constant
 
-    def __eq__(self, other) -> bool:
-        return (
-            self.is_vertical == other.is_vertical
-            and self.scroll_dir == other.scroll_dir
-        )
-
+ScrollingDirectionConstant = Literal[
+    ScrollingDirection.UP,
+    ScrollingDirection.DOWN,
+    ScrollingDirection.LEFT,
+    ScrollingDirection.RIGHT
+]
 
 class ScrollingState:
     def __init__(self):
-        self.scrolling_mode_description = ""
         self.scroll_job = None
+        # The time stamp at which continuous scrolling started
+        # used for acceleration
         self.scroll_start_ts: float = 0
+        # True if eye tracking mouse control was forced on for gaze scroll
         self.control_mouse_forced = False
         self.continuous_scrolling_speed_factor: float = 1.0
         self.direction = ScrollingDirection()
@@ -87,9 +89,9 @@ class ScrollingState:
         self.continuously_scrolling = True
 
     def start_gaze_scrolling_job(self):
-        self.scrolling_mode_description = "gaze scroll"
         gaze_job = cron.interval("16ms", scroll_gaze_helper)
         self.set_scrolling_job(gaze_job)
+        self.set_continuous_scrolling_speed_factor(1)
         # enable 'control mouse' if eye tracker is present and not enabled already
         if not actions.tracking.control_enabled():
             actions.tracking.control_toggle(True)
@@ -107,7 +109,6 @@ class ScrollingState:
             actions.tracking.control_toggle(False)
             self.control_mouse_forced = False
         self.continuously_scrolling = False
-        self.continuous_scrolling_speed_factor = 1.0
 
     def has_scrolling_job(self) -> bool:
         return self.scroll_job is not None
@@ -151,7 +152,11 @@ class ScrollingState:
         self.scroll_start_ts = time.perf_counter()
 
     def get_scrolling_mode_description(self):
-        return f"scroll {self.direction.direction_description} continuous"
+        if not self.has_scrolling_job():
+            return ""
+        if self.is_continuously_scrolling():
+            return f"scroll {self.direction.direction_description} continuous"
+        return "gaze scroll"
 
 
 scrolling_state = ScrollingState()
@@ -353,7 +358,7 @@ class UserActions:
 
 
 def mouse_scroll_continuous(
-    new_scroll_dir: int,
+    new_scroll_dir: ScrollingDirectionConstant,
     speed_factor: Optional[int] = None,
 ):
     actions.user.mouse_scroll_set_speed(speed_factor)
