@@ -83,10 +83,14 @@ class ScrollingState:
 
     def start_continuous_scrolling_job(self):
         self.reset_scrolling_start_time()
-        scroll_continuous_helper()
-        scroll_job = cron.interval("16ms", scroll_continuous_helper)
+        self.scroll_continuous_helper()
+        scroll_job = cron.interval("16ms", self.scroll_continuous_helper)
         self.set_scrolling_job(scroll_job)
         self.continuously_scrolling = True
+
+    def scroll_continuous_helper(self):
+        speed = self.compute_scrolling_speed()
+        self.direction.scroll_in_direction(speed)
 
     def start_gaze_scrolling_job(self):
         gaze_job = cron.interval("16ms", scroll_gaze_helper)
@@ -157,7 +161,6 @@ class ScrollingState:
         if self.is_continuously_scrolling():
             return f"scroll {self.direction.direction_description} continuous"
         return "gaze scroll"
-
 
 scrolling_state = ScrollingState()
 
@@ -374,12 +377,6 @@ def mouse_scroll_continuous(
 
         if not settings.get("user.mouse_hide_mouse_gui"):
             gui_wheel.show()
-
-
-def scroll_continuous_helper():
-    speed = scrolling_state.compute_scrolling_speed()
-    scrolling_direction = scrolling_state.get_direction()
-    scrolling_direction.scroll_in_direction(speed)
 
 
 def scroll_gaze_helper():
