@@ -4,7 +4,6 @@ from typing import Literal, Optional
 from talon import Context, Module, actions, app, cron, ctrl, imgui, settings, ui
 
 hiss_scroll_up = False
-control_mouse_forced = False
 
 
 class ScrollingState:
@@ -13,7 +12,6 @@ class ScrollingState:
         self.scroll_job = None
         self.scroll_dir: Literal[-1, 1] = 1
         self.scroll_start_ts: float = 0
-        self.hiss_scroll_up = False
         self.control_mouse_forced = False
         self.continuous_scrolling_speed_factor: float = 1.0
         self.is_vertical: bool = True
@@ -30,6 +28,10 @@ class ScrollingState:
         self.scrolling_mode_description = "gaze scroll"
         gaze_job = cron.interval("16ms", scroll_gaze_helper)
         self.set_scrolling_job(gaze_job)
+        # enable 'control mouse' if eye tracker is present and not enabled already
+        if not actions.tracking.control_enabled():
+            actions.tracking.control_toggle(True)
+            self.control_mouse_forced = True
 
     def set_scrolling_job(self, job):
         self.stop_scrolling_job()
@@ -39,6 +41,9 @@ class ScrollingState:
         if self.scroll_job:
             cron.cancel(self.scroll_job)
             self.scroll_job = None
+        if self.control_mouse_forced:
+            actions.tracking.control_toggle(False)
+            self.control_mouse_forced = False
         self.continuously_scrolling = False
         self.continuous_scrolling_speed_factor = 1.0
 
@@ -229,18 +234,12 @@ class Actions:
 
     def mouse_gaze_scroll():
         """Starts gaze scroll"""
-        global control_mouse_forced
 
         ctx.tags = ["user.continuous_scrolling"]
         scrolling_state.start_gaze_scrolling_job()
 
         if not settings.get("user.mouse_hide_mouse_gui"):
             gui_wheel.show()
-
-        # enable 'control mouse' if eye tracker is present and not enabled already
-        if not actions.tracking.control_enabled():
-            actions.tracking.control_toggle(True)
-            control_mouse_forced = True
 
     def mouse_gaze_scroll_toggle():
         """If not scrolling, start gaze scroll, else stop scrolling."""
@@ -252,18 +251,12 @@ class Actions:
 
     def mouse_scroll_stop() -> bool:
         """Stops scrolling"""
-        global control_mouse_forced
-
         return_value = False
         ctx.tags = []
 
         if scrolling_state.has_scrolling_job():
             return_value = True
         scrolling_state.stop_scrolling_job()
-
-        if control_mouse_forced:
-            actions.tracking.control_toggle(False)
-            control_mouse_forced = False
 
         gui_wheel.hide()
 
