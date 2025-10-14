@@ -5,16 +5,74 @@ from talon import Context, Module, actions, app, cron, ctrl, imgui, settings, ui
 
 hiss_scroll_up = False
 
+class ScrollingDirection:
+    UP = 0
+    DOWN = 1
+    LEFT = 2
+    RIGHT = 3
+
+    def __init__(self):
+        self.scroll_dir: Literal[-1, 1] = 1
+        self.is_vertical: bool = True
+        self.direction_description = "down"
+
+    def set_direction(self, direction_constant: int):
+        if direction_constant == self.UP:
+            self.set_up()
+        elif direction_constant == self.DOWN:
+            self.set_down()
+        elif direction_constant == self.LEFT:
+            self.set_left()
+        elif direction_constant == self.RIGHT:
+            self.set_right()
+    
+    def set_up(self):
+        self.is_vertical: bool = True
+        self.scroll_dir = -1
+        self.direction_description = "up"
+
+    def set_down(self):
+        self.is_vertical: bool = True
+        self.scroll_dir = 1
+        self.direction_description = "down"
+
+    def set_left(self):
+        self.is_vertical: bool = False
+        self.scroll_dir = -1
+        self.direction_description = "left"
+
+    def set_right(self):
+        self.is_vertical: bool = False
+        self.scroll_dir = 1
+        self.direction_description = "right"
+
+    def scroll_in_direction(self, amount: int):
+        scroll_delta = self.scroll_dir*amount
+        if self.is_vertical:
+            actions.mouse_scroll(scroll_delta)
+        else:
+            actions.mouse_scroll(0, scroll_delta)
+
+    def get_direction_description(self) -> str:
+        return self.direction_description
+
+    def is_equal_to_direction_constant(self, direction_constant: int) -> bool:
+        other = ScrollingDirection()
+        other.set_direction(direction_constant)
+        return self == other
+
+    def __eq__(self, other) -> bool:
+        return self.is_vertical == other.is_vertical and \
+            self.scroll_dir == other.scroll_dir
 
 class ScrollingState:
     def __init__(self):
         self.scrolling_mode_description = ""
         self.scroll_job = None
-        self.scroll_dir: Literal[-1, 1] = 1
         self.scroll_start_ts: float = 0
         self.control_mouse_forced = False
         self.continuous_scrolling_speed_factor: float = 1.0
-        self.is_vertical: bool = True
+        self.direction = ScrollingDirection()
         self.continuously_scrolling: bool = False
 
     def start_continuous_scrolling_job(self):
@@ -69,10 +127,10 @@ class ScrollingState:
             else 1
         )
 
-        scroll_delta = round(scroll_amount * acceleration_speed * self.scroll_dir)
-        if scroll_delta == 0:
-            scroll_delta = self.scroll_dir
-        return scroll_delta
+        accelerated_scroll_amount = round(scroll_amount * acceleration_speed)
+        if accelerated_scroll_amount == 0:
+            accelerated_scroll_amount = 1
+        return accelerated_scroll_amount
 
     def compute_gaze_scrolling_factor(self) -> float:
         return self.continuous_scrolling_speed_factor * settings.get(
@@ -82,26 +140,14 @@ class ScrollingState:
     def set_continuous_scrolling_speed_factor(self, factor: float):
         self.continuous_scrolling_speed_factor = factor
 
-    def set_continuous_scrolling_direction(
-        self, is_vertical: bool, scroll_dir: Literal[-1, 1]
-    ):
-        self.is_vertical = is_vertical
-        self.scroll_dir = scroll_dir
-        self.scrolling_mode_description = compute_continuous_scrolling_description(
-            self.scroll_dir, self.is_vertical
-        )
-
-    def is_continuous_scrolling_vertical(self):
-        return self.is_vertical
-
-    def get_scroll_dir(self) -> int:
-        return self.scroll_dir
+    def get_direction(self):
+        return self.direction
 
     def reset_scrolling_start_time(self):
         self.scroll_start_ts = time.perf_counter()
 
     def get_scrolling_mode_description(self):
-        return self.scrolling_mode_description
+        return f"scroll {self.direction.direction_description} continuous"
 
 
 scrolling_state = ScrollingState()
@@ -218,19 +264,19 @@ class Actions:
 
     def mouse_scroll_up_continuous(speed_factor: Optional[int] = None):
         """Scrolls up continuously"""
-        mouse_scroll_continuous(-1, speed_factor)
+        mouse_scroll_continuous(ScrollingDirection.UP, speed_factor)
 
     def mouse_scroll_down_continuous(speed_factor: Optional[int] = None):
         """Scrolls down continuously"""
-        mouse_scroll_continuous(1, speed_factor)
+        mouse_scroll_continuous(ScrollingDirection.DOWN, speed_factor)
 
     def mouse_scroll_right_continuous(speed_factor: Optional[int] = None):
         """Scrolls right continuously"""
-        mouse_scroll_continuous(1, speed_factor, is_vertical=False)
+        mouse_scroll_continuous(ScrollingDirection.RIGHT, speed_factor)
 
     def mouse_scroll_left_continuous(speed_factor: Optional[int] = None):
         """Scrolls left continuously"""
-        mouse_scroll_continuous(-1, speed_factor, is_vertical=False)
+        mouse_scroll_continuous(ScrollingDirection.LEFT, speed_factor)
 
     def mouse_gaze_scroll():
         """Starts gaze scroll"""
@@ -303,28 +349,24 @@ class UserActions:
 
 
 def mouse_scroll_continuous(
-    new_scroll_dir: Literal[-1, 1],
+    new_scroll_dir: int,
     speed_factor: Optional[int] = None,
-    is_vertical: bool = True,
 ):
     actions.user.mouse_scroll_set_speed(speed_factor)
-    was_vertical = scrolling_state.is_continuous_scrolling_vertical()
+    current_direction = scrolling_state.get_direction()
 
     if scrolling_state.is_continuously_scrolling():
         # Issuing a scroll in the same direction aborts scrolling
         if (
-            scrolling_state.get_scroll_dir() == new_scroll_dir
-            and was_vertical == is_vertical
+            current_direction.is_equal_to_direction_constant(new_scroll_dir)
         ):
             actions.user.mouse_scroll_stop()
-        # Issuing a scroll in the reverse direction resets acceleration
+        # Issuing a scroll in another direction resets acceleration
         else:
             scrolling_state.reset_scrolling_start_time()
-            scrolling_state.set_continuous_scrolling_direction(
-                is_vertical, new_scroll_dir
-            )
+            current_direction.set_direction(new_scroll_dir)
     else:
-        scrolling_state.set_continuous_scrolling_direction(is_vertical, new_scroll_dir)
+        current_direction.set_direction(new_scroll_dir)
         scrolling_state.start_continuous_scrolling_job()
         ctx.tags = ["user.continuous_scrolling"]
 
@@ -332,27 +374,10 @@ def mouse_scroll_continuous(
             gui_wheel.show()
 
 
-def compute_continuous_scrolling_description(
-    new_scroll_dir: Literal[-1, 1], is_vertical: bool
-):
-    if new_scroll_dir == -1:
-        if is_vertical:
-            return "scroll up continuous"
-        else:
-            return "scroll left continuous"
-    else:
-        if is_vertical:
-            return "scroll down continuous"
-        else:
-            return "scroll right continuous"
-
-
 def scroll_continuous_helper():
-    scroll_delta = scrolling_state.compute_scrolling_speed()
-    if scrolling_state.is_continuous_scrolling_vertical():
-        actions.mouse_scroll(scroll_delta)
-    else:
-        actions.mouse_scroll(0, scroll_delta)
+    speed = scrolling_state.compute_scrolling_speed()
+    scrolling_direction = scrolling_state.get_direction()
+    scrolling_direction.scroll_in_direction(speed)
 
 
 def scroll_gaze_helper():
