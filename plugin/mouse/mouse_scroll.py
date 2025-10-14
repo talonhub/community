@@ -364,14 +364,9 @@ def mouse_scroll_continuous(
     actions.user.mouse_scroll_set_speed(speed_factor)
     current_direction = scrolling_state.get_direction()
 
-    if scrolling_state.is_continuously_scrolling():
+    if scrolling_state.is_continuously_scrolling() and current_direction.is_equal_to_direction_constant(new_scroll_dir):
         # Issuing a scroll in the same direction aborts scrolling
-        if current_direction.is_equal_to_direction_constant(new_scroll_dir):
-            actions.user.mouse_scroll_stop()
-        # Issuing a scroll in another direction resets acceleration
-        else:
-            scrolling_state.reset_scrolling_start_time()
-            current_direction.set_direction(new_scroll_dir)
+        actions.user.mouse_scroll_stop()
     else:
         current_direction.set_direction(new_scroll_dir)
         scrolling_state.start_continuous_scrolling_job()
