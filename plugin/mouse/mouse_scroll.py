@@ -5,6 +5,7 @@ from talon import Context, Module, actions, app, cron, ctrl, imgui, settings, ui
 
 hiss_scroll_up = False
 
+
 class ScrollingDirection:
     UP = 0
     DOWN = 1
@@ -25,7 +26,7 @@ class ScrollingDirection:
             self.set_left()
         elif direction_constant == self.RIGHT:
             self.set_right()
-    
+
     def set_up(self):
         self.is_vertical: bool = True
         self.scroll_dir = -1
@@ -47,7 +48,7 @@ class ScrollingDirection:
         self.direction_description = "right"
 
     def scroll_in_direction(self, amount: int):
-        scroll_delta = self.scroll_dir*amount
+        scroll_delta = self.scroll_dir * amount
         if self.is_vertical:
             actions.mouse_scroll(scroll_delta)
         else:
@@ -62,8 +63,11 @@ class ScrollingDirection:
         return self == other
 
     def __eq__(self, other) -> bool:
-        return self.is_vertical == other.is_vertical and \
-            self.scroll_dir == other.scroll_dir
+        return (
+            self.is_vertical == other.is_vertical
+            and self.scroll_dir == other.scroll_dir
+        )
+
 
 class ScrollingState:
     def __init__(self):
@@ -357,9 +361,7 @@ def mouse_scroll_continuous(
 
     if scrolling_state.is_continuously_scrolling():
         # Issuing a scroll in the same direction aborts scrolling
-        if (
-            current_direction.is_equal_to_direction_constant(new_scroll_dir)
-        ):
+        if current_direction.is_equal_to_direction_constant(new_scroll_dir):
             actions.user.mouse_scroll_stop()
         # Issuing a scroll in another direction resets acceleration
         else:
