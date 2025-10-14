@@ -62,12 +62,14 @@ class ScrollingDirection:
     def is_equal_to_direction_constant(self, direction_constant: int) -> bool:
         return self.direction_constant == direction_constant
 
+
 ScrollingDirectionConstant = Literal[
     ScrollingDirection.UP,
     ScrollingDirection.DOWN,
     ScrollingDirection.LEFT,
-    ScrollingDirection.RIGHT
+    ScrollingDirection.RIGHT,
 ]
+
 
 class ScrollingState:
     def __init__(self):
@@ -161,6 +163,7 @@ class ScrollingState:
         if self.is_continuously_scrolling():
             return f"scroll {self.direction.direction_description} continuous"
         return "gaze scroll"
+
 
 scrolling_state = ScrollingState()
 
@@ -367,7 +370,10 @@ def mouse_scroll_continuous(
     actions.user.mouse_scroll_set_speed(speed_factor)
     current_direction = scrolling_state.get_direction()
 
-    if scrolling_state.is_continuously_scrolling() and current_direction.is_equal_to_direction_constant(new_scroll_dir):
+    if (
+        scrolling_state.is_continuously_scrolling()
+        and current_direction.is_equal_to_direction_constant(new_scroll_dir)
+    ):
         # Issuing a scroll in the same direction aborts scrolling
         actions.user.mouse_scroll_stop()
     else:
