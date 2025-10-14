@@ -3,7 +3,6 @@ from typing import Literal, Optional
 
 from talon import Context, Module, actions, app, cron, ctrl, imgui, settings, ui
 
-continuous_scroll_mode = ""
 hiss_scroll_up = False
 control_mouse_forced = False
 
