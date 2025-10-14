@@ -83,7 +83,9 @@ class ScrollingState:
     ):
         self.is_vertical = is_vertical
         self.scroll_dir = scroll_dir
-        self.scrolling_mode_description = compute_continuous_scrolling_description(self.scroll_dir, self.is_vertical)
+        self.scrolling_mode_description = compute_continuous_scrolling_description(
+            self.scroll_dir, self.is_vertical
+        )
 
     def is_continuous_scrolling_vertical(self):
         return self.is_vertical
@@ -96,7 +98,6 @@ class ScrollingState:
 
     def get_scrolling_mode_description(self):
         return self.scrolling_mode_description
-
 
 
 scrolling_state = ScrollingState()
@@ -339,7 +340,9 @@ def mouse_scroll_continuous(
             gui_wheel.show()
 
 
-def compute_continuous_scrolling_description(new_scroll_dir: Literal[-1, 1], is_vertical: bool):
+def compute_continuous_scrolling_description(
+    new_scroll_dir: Literal[-1, 1], is_vertical: bool
+):
     if new_scroll_dir == -1:
         if is_vertical:
             return "scroll up continuous"
