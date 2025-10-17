@@ -377,32 +377,22 @@ def formatter_immune(m) -> ImmuneString:
 
 def get_code_formatters() -> dict[str, str]:
     """Returns dictionary of code formatters"""
-    formatters = {}
-    formatters.update(
-        actions.user.talon_get_active_registry_list("user.code_formatter")
-    )
-    return formatters
+    return actions.user.talon_get_active_registry_list("user.code_formatter")
 
 
 def get_reformatters() -> dict[str, str]:
     """Returns dictionary of reformatters"""
-    reformatters = {}
-    reformatters.update(actions.user.talon_get_active_registry_list("user.reformatter"))
-    return reformatters
+    return actions.user.talon_get_active_registry_list("user.reformatter")
 
 
 def get_prose_formatters():
     """Returns dictionary of prose formatters"""
-    prose = {}
-    prose.update(actions.user.talon_get_active_registry_list("user.prose_formatter"))
-    return prose
+    return actions.user.talon_get_active_registry_list("user.prose_formatter")
 
 
 def get_word_formatters():
     """Returns dictionary of word formatters"""
-    word = {}
-    word.update(actions.user.talon_get_active_registry_list("user.word_formatter"))
-    return word
+    return actions.user.talon_get_active_registry_list("user.word_formatter")
 
 
 @mod.action_class
