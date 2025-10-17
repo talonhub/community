@@ -2,6 +2,7 @@ from typing import Any, Callable, TypeVar
 
 from talon import Context, Module, actions, settings
 
+from ...core.described_functions import create_described_insert_between
 from ..tags.operators import Operators
 
 mod = Module()
@@ -225,7 +226,7 @@ ctx.lists["user.code_trait"] = all_traits
 
 operators = Operators(
     # code_operators_array
-    SUBSCRIPT=lambda: actions.user.insert_between("[", "]"),
+    SUBSCRIPT=create_described_insert_between("[", "]"),
     # code_operators_assignment
     ASSIGNMENT=" = ",
     ASSIGNMENT_ADDITION=" += ",
@@ -250,7 +251,7 @@ operators = Operators(
     MATH_MULTIPLY=" * ",
     MATH_DIVIDE=" / ",
     MATH_MODULO=" % ",
-    MATH_EXPONENT=lambda: actions.user.insert_between(".pow(", ")"),
+    MATH_EXPONENT=create_described_insert_between(".pow(", ")"),
     MATH_EQUAL=" == ",
     MATH_NOT_EQUAL=" != ",
     MATH_GREATER_THAN=" > ",
@@ -340,7 +341,7 @@ class UserActions:
     # tag: libraries
 
     def code_insert_library(text: str, selection: str):
-        actions.user.insert_snippet_by_name("importStatement", {"1": text})
+        actions.user.insert_snippet_by_name("importStatement", {"0": text})
 
     # rust specific grammar
 

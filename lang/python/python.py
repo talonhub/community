@@ -2,6 +2,7 @@ import re
 
 from talon import Context, Module, actions, settings
 
+from ...core.described_functions import create_described_insert_between
 from ..tags.operators import Operators
 
 mod = Module()
@@ -29,25 +30,6 @@ docstring_fields = {
 
 mod.list("python_docstring_fields", desc="python docstring fields")
 ctx.lists["user.python_docstring_fields"] = docstring_fields
-
-ctx.lists["user.code_type"] = {
-    "boolean": "bool",
-    "integer": "int",
-    "string": "str",
-    "none": "None",
-    "dick": "Dict",
-    "float": "float",
-    "any": "Any",
-    "tuple": "Tuple",
-    "union": "UnionAny",
-    "iterable": "Iterable",
-    "vector": "Vector",
-    "bytes": "bytes",
-    "sequence": "Sequence",
-    "callable": "Callable",
-    "list": "List",
-    "no return": "NoReturn",
-}
 
 exception_list = [
     "BaseException",
@@ -123,7 +105,7 @@ ctx.lists["user.python_exception"] = {
 
 operators = Operators(
     # code_operators_array
-    SUBSCRIPT=lambda: actions.user.insert_between("[", "]"),
+    SUBSCRIPT=create_described_insert_between("[", "]"),
     # code_operators_assignment
     ASSIGNMENT=" = ",
     ASSIGNMENT_SUBTRACTION=" -= ",
@@ -145,7 +127,7 @@ operators = Operators(
     BITWISE_LEFT_SHIFT=" << ",
     BITWISE_RIGHT_SHIFT=" >> ",
     # code_operators_lambda
-    LAMBDA=lambda: actions.user.insert_between("lambda ", ": "),
+    LAMBDA=create_described_insert_between("lambda ", ": "),
     # code_operators_math
     MATH_SUBTRACT=" - ",
     MATH_ADD=" + ",
