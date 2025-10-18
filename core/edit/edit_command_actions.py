@@ -103,15 +103,16 @@ class Actions:
             return
 
         match action_type:
-            case "insert":
+            case EditInsertAction.type:
                 assert isinstance(action, EditInsertAction)
                 actions.insert(action.text)
 
-            case "wrapWithDelimiterPair":
+            case EditWrapAction.type:
                 assert isinstance(action, EditWrapAction)
-                return lambda: actions.user.delimiter_pair_wrap_selection(action.pair)
+                # triggered by e.g. "quad wrap word left"
+                actions.user.delimiter_pair_wrap_selection(action.pair)
 
-            case "applyFormatter":
+            case EditFormatAction.type:
                 assert isinstance(action, EditFormatAction)
                 actions.user.formatters_reformat_selection(action.formatters)
 
