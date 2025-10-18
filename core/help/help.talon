@@ -23,6 +23,12 @@ help common methods: user.help_list("user.code_common_method")
 help pairs: user.help_list("user.delimiter_pair")
 
 (help formatters | help format | format help):
-    user.help_formatters(user.get_formatters_words(), false)
+    user.help_formatters(user.get_formatters_words(), false, true)
 (help re formatters | help re format | re format help):
-    user.help_formatters(user.get_reformatters_words(), true)
+    user.help_formatters(user.get_reformatters_words(), true, true)
+(help code | code help):
+    user.help_formatters(user.get_code_formatter_words(), false, false)
+(help prose | prose help):
+    user.help_formatters(user.get_prose_formatter_words(), false, false)
+(help word | word help):
+    user.help_formatters(user.get_word_formatter_words(), false, false)
