@@ -3,6 +3,7 @@ import os
 import re
 import subprocess
 import sys
+from typing import Optional
 
 from talon import Context, Module, actions, app, ui
 from talon.debug import log_exception
@@ -477,8 +478,8 @@ class UserActions:
     def file_manager_open_volume(volume: str):
         actions.user.file_manager_open_directory(volume)
 
-    def terminal_list_directories():
-        actions.insert("ls")
+    def terminal_list_directories(path: Optional[str] = None):
+        actions.insert(f"ls {path or ''}")
         actions.key("enter")
 
     def terminal_list_all_directories():
