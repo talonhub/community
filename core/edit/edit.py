@@ -91,6 +91,11 @@ class Actions:
         """Delete character to the right"""
         actions.key("delete")
 
+    def delete_all():
+        """Delete all text in the current document"""
+        actions.edit.select_all()
+        actions.edit.delete()
+
     def words_left(n: int):
         """Moves left by n words."""
         for _ in range(n):
@@ -146,3 +151,9 @@ class Actions:
         """Cut current line"""
         actions.edit.select_line()
         actions.edit.cut()
+
+    def end_line_with_symbol_and_start_line(symbol: str):
+        """Add <symbol> at end of line and then insert line below"""
+        actions.edit.line_end()
+        actions.key(symbol)
+        actions.edit.line_insert_down()

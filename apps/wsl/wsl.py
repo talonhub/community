@@ -10,6 +10,8 @@ from talon.debug import log_exception
 
 mod = Module()
 
+mod.tag("wsl", desc="Tag to activate WSL support in Talon")
+
 ctx = Context()
 
 # note: this context match is intentionally made more complex so that it is more specific

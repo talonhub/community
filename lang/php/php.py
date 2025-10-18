@@ -1,5 +1,7 @@
 from talon import Context, actions, settings
 
+from ..tags.operators import Operators
+
 ctx = Context()
 ctx.matches = r"""
 code.language: php
@@ -15,40 +17,64 @@ ctx.lists["user.code_type"] = {
     "void": "void",
 }
 
+operators = Operators(
+    # code_operators_assignment
+    ASSIGNMENT=" = ",
+    ASSIGNMENT_ADDITION=" += ",
+    ASSIGNMENT_SUBTRACTION=" -= ",
+    ASSIGNMENT_MULTIPLICATION=" *= ",
+    ASSIGNMENT_DIVISION=" /= ",
+    ASSIGNMENT_MODULO=" %= ",
+    ASSIGNMENT_INCREMENT="++",
+    ASSIGNMENT_BITWISE_AND=" &= ",
+    ASSIGNMENT_BITWISE_OR=" |= ",
+    ASSIGNMENT_BITWISE_EXCLUSIVE_OR=" ^= ",
+    ASSIGNMENT_BITWISE_LEFT_SHIFT=" <<= ",
+    ASSIGNMENT_BITWISE_RIGHT_SHIFT=" >>= ",
+    # code_operators_bitwise
+    BITWISE_AND=" & ",
+    BITWISE_OR=" | ",
+    BITWISE_EXCLUSIVE_OR=" ^ ",
+    BITWISE_LEFT_SHIFT=" << ",
+    BITWISE_RIGHT_SHIFT=" >> ",
+    BITWISE_NOT="~",
+    # code_operators_math
+    MATH_ADD=" + ",
+    MATH_SUBTRACT=" - ",
+    MATH_MULTIPLY=" * ",
+    MATH_DIVIDE=" / ",
+    MATH_MODULO=" % ",
+    MATH_EXPONENT=" ** ",
+    MATH_EQUAL=" === ",
+    MATH_NOT_EQUAL=" !== ",
+    MATH_WEAK_EQUAL=" == ",
+    MATH_WEAK_NOT_EQUAL=" != ",
+    MATH_GREATER_THAN=" > ",
+    MATH_GREATER_THAN_OR_EQUAL=" >= ",
+    MATH_LESS_THAN=" < ",
+    MATH_LESS_THAN_OR_EQUAL=" <= ",
+    MATH_NOT="!",
+    MATH_AND=" && ",
+    MATH_OR=" || ",
+)
+
 
 @ctx.action_class("user")
 class UserActions:
+    def code_get_operators() -> Operators:
+        return operators
+
     def code_self():
         actions.auto_insert("$this")
 
     def code_operator_object_accessor():
         actions.auto_insert("->")
 
-    def code_define_class():
-        actions.auto_insert("class ")
-
-    def code_import():
-        actions.auto_insert("use ;")
-        actions.edit.left()
-
-    def code_comment_line_prefix():
-        actions.auto_insert("// ")
-
-    def code_comment_block():
-        actions.user.code_comment_block_prefix()
-        actions.key("enter")
-        actions.key("enter")
-        actions.user.code_comment_block_suffix()
-        actions.edit.up()
-
     def code_comment_block_prefix():
         actions.auto_insert("/*")
 
     def code_comment_block_suffix():
         actions.auto_insert("*/")
-
-    def code_comment_documentation():
-        actions.insert("/**")
 
     def code_insert_true():
         actions.auto_insert("true")
@@ -66,116 +92,6 @@ class UserActions:
     def code_insert_is_not_null():
         actions.auto_insert("isset()")
         actions.edit.left()
-
-    def code_operator_assignment():
-        actions.auto_insert(" = ")
-
-    def code_operator_subtraction():
-        actions.auto_insert(" - ")
-
-    def code_operator_subtraction_assignment():
-        actions.auto_insert(" -= ")
-
-    def code_operator_addition():
-        actions.auto_insert(" + ")
-
-    def code_operator_addition_assignment():
-        actions.auto_insert(" += ")
-
-    def code_operator_multiplication():
-        actions.auto_insert(" * ")
-
-    def code_operator_multiplication_assignment():
-        actions.auto_insert(" *= ")
-
-    def code_operator_exponent():
-        actions.auto_insert(" ** ")
-
-    def code_operator_division():
-        actions.auto_insert(" / ")
-
-    def code_operator_division_assignment():
-        actions.auto_insert(" /= ")
-
-    def code_operator_modulo():
-        actions.auto_insert(" % ")
-
-    def code_operator_modulo_assignment():
-        actions.auto_insert(" %= ")
-
-    def code_operator_equal():
-        actions.auto_insert(" === ")
-
-    def code_operator_not_equal():
-        actions.auto_insert(" !== ")
-
-    def code_operator_greater_than():
-        actions.auto_insert(" > ")
-
-    def code_operator_greater_than_or_equal_to():
-        actions.auto_insert(" >= ")
-
-    def code_operator_less_than():
-        actions.auto_insert(" < ")
-
-    def code_operator_less_than_or_equal_to():
-        actions.auto_insert(" <= ")
-
-    def code_operator_and():
-        actions.auto_insert(" && ")
-
-    def code_operator_or():
-        actions.auto_insert(" || ")
-
-    def code_state_if():
-        actions.insert("if ()")
-        actions.edit.left()
-
-    def code_state_else_if():
-        actions.insert("elseif ()")
-        actions.edit.left()
-
-    def code_state_else():
-        actions.insert("else {")
-        actions.key("enter")
-
-    def code_state_while():
-        actions.insert("while ()")
-        actions.edit.left()
-
-    def code_state_for():
-        actions.insert("for ()")
-        actions.edit.left()
-
-    def code_state_for_each():
-        actions.insert("foreach ()")
-        actions.edit.left()
-
-    def code_state_switch():
-        actions.insert("switch ()")
-        actions.edit.left()
-
-    def code_state_case():
-        actions.insert("case :")
-        actions.edit.left()
-
-    def code_state_do():
-        actions.insert("do {")
-        actions.key("enter")
-
-    def code_state_go_to():
-        actions.insert("goto ;")
-        actions.edit.left()
-
-    def code_state_return():
-        actions.insert("return ;")
-        actions.edit.left()
-
-    def code_break():
-        actions.insert("break;")
-
-    def code_next():
-        actions.insert("continue;")
 
     def code_default_function(text: str):
         actions.user.code_public_function(text)

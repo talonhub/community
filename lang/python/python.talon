@@ -46,9 +46,8 @@ dock {user.python_docstring_fields}:
 dock type {user.code_type}: user.insert_between(":type ", ": {code_type}")
 dock returns type {user.code_type}: user.insert_between(":rtype ", ": {code_type}")
 
-toggle imports: user.code_toggle_libraries()
 import <user.code_libraries>:
     user.code_insert_library(code_libraries, "")
     key(end enter)
 
-from import: user.insert_between("from ", " import ")
+from import: user.insert_snippet_by_name("importFromStatement")

@@ -31,6 +31,7 @@ port_mapping = {
     "google-android-studio": 8652,
     "idea64.exe": 8653,
     "IntelliJ IDEA": 8653,
+    "IntelliJ IDEA Ultimate Edition": 8653,
     "IntelliJ IDEA Community Edition": 8654,
     "jetbrains-appcode": 8655,
     "jetbrains-clion": 8657,
@@ -55,6 +56,7 @@ port_mapping = {
     "pycharm64.exe": 8658,
     "WebStorm": 8663,
     "webstorm64.exe": 8663,
+    "PhpStorm": 8662,
     # Local plugin development:
     "com.jetbrains.jbr.java": 8666,
 }
@@ -104,14 +106,18 @@ ctx = Context()
 mod = Module()
 
 mod.apps.jetbrains = "app.name: /jetbrains/"
-mod.apps.jetbrains = "app.name: CLion"
-mod.apps.jetbrains = "app.name: IntelliJ IDEA"
-mod.apps.jetbrains = "app.name: PhpStorm"
-mod.apps.jetbrains = "app.name: PyCharm"
-mod.apps.jetbrains = "app.name: WebStorm"
-mod.apps.jetbrains = "app.name: RubyMine"
-mod.apps.jetbrains = "app.name: RubyMine-EAP"
-mod.apps.jetbrains = "app.name: DataGrip"
+appNames = [
+    "CLion",
+    "IntelliJ IDEA",
+    "PhpStorm",
+    "PyCharm",
+    "Webstorm",
+    "RubyMine",
+    "DataGrip",
+]
+for appName in appNames:
+    mod.apps.jetbrains = f"app.name: {appName}"
+    mod.apps.jetbrains = f"app.name: {appName}-EAP"
 mod.apps.jetbrains = """
 os: mac
 and app.bundle: com.google.android.studio

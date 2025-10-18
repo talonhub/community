@@ -3,7 +3,7 @@ phrase: item
 insertionScope: collectionItem
 ---
 
-language: javascript
+language: javascript | typescript | javascriptreact | typescriptreact
 -
 $1: $0,
 ---
@@ -11,4 +11,9 @@ $1: $0,
 language: python
 -
 "$1": $0,
+---
+
+language: r
+-
+${1}="$0",
 ---
