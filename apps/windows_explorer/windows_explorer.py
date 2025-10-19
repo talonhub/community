@@ -15,7 +15,7 @@ and app.exe: /^explorer\.exe$/i
 """
 
 # many commands should work in most save/open dialog.
-# note the "show options" stuff won't work unless work
+# note the "show options" stuff won't work
 # unless the path is displayed in the title, which is rare for those
 apps.windows_file_browser = """
 os: windows
@@ -141,3 +141,13 @@ class UserActions:
     def file_manager_open_volume(volume: str):
         """file_manager_open_volume"""
         actions.user.file_manager_open_directory(volume)
+
+    def address_focus():
+        actions.key("ctrl-l")
+
+    def address_copy_address():
+        actions.key("ctrl-l")
+        actions.edit.copy()
+
+    def address_navigate(address: str):
+        actions.user.file_manager_open_directory(address)

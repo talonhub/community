@@ -1,4 +1,6 @@
-from talon import Context, Module, actions
+from talon import Context, Module, actions, settings
+
+from ..tags.operators import Operators
 
 mod = Module()
 ctx = Context()
@@ -43,52 +45,36 @@ def vimscript_scope(m) -> str:
     return m.vimscript_scope
 
 
+operators = Operators(
+    # code_operators_assignment
+    ASSIGNMENT=" = ",
+    ASSIGNMENT_ADDITION=" += ",
+    ASSIGNMENT_SUBTRACTION=" -= ",
+    ASSIGNMENT_MULTIPLICATION=" *= ",
+    ASSIGNMENT_DIVISION=" /= ",
+    # code_operators_math
+    MATH_ADD=" + ",
+    MATH_SUBTRACT=" - ",
+    MATH_MULTIPLY=" * ",
+    MATH_DIVIDE=" / ",
+)
+
+
+def code_function_declaration(text: str, formatter: str):
+    formatted_text = actions.user.formatted_text(text, settings.get(formatter))
+    actions.user.insert_snippet_by_name("functionDeclaration", {"1": formatted_text})
+
+
 @ctx.action_class("user")
 class UserActions:
-    def code_operator_assignment():
-        actions.auto_insert(" = ")
-
-    def code_operator_subtraction():
-        actions.auto_insert(" - ")
-
-    def code_operator_subtraction_assignment():
-        actions.auto_insert(" -= ")
-
-    def code_operator_addition():
-        actions.auto_insert(" + ")
-
-    def code_operator_addition_assignment():
-        actions.auto_insert(" += ")
-
-    def code_operator_multiplication():
-        actions.auto_insert(" * ")
-
-    def code_operator_multiplication_assignment():
-        actions.auto_insert(" *= ")
-
-    def code_operator_division():
-        actions.auto_insert(" / ")
-
-    def code_operator_division_assignment():
-        actions.auto_insert(" /= ")
-
-    def code_comment_line_prefix():
-        actions.auto_insert('"')
-
-    def code_state_if():
-        actions.insert("if ")
-
-    def code_state_else_if():
-        actions.insert("elseif ")
-
-    def code_state_else():
-        actions.insert("else")
+    def code_get_operators() -> Operators:
+        return operators
 
     def code_private_function(text: str):
-        actions.auto_insert("function ")
+        code_function_declaration(text, "user.code_private_function_formatter")
 
     def code_protected_function(text: str):
-        actions.auto_insert("function ")
+        code_function_declaration(text, "user.code_protected_function_formatter")
 
     def code_public_function(text: str):
-        actions.auto_insert("function ")
+        code_function_declaration(text, "user.code_public_function_formatter")

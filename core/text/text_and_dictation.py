@@ -15,6 +15,13 @@ mod.setting(
     desc="Look at surrounding text to improve auto-capitalization/spacing in dictation mode. By default, this works by selecting that text & copying it to the clipboard, so it may be slow or fail in some applications.",
 )
 
+mod.setting(
+    "context_sensitive_dictation_peek_character",
+    type=str,
+    default=" ",
+    desc="This is the character inserted during dictation_peek to ensure that some text is selected even if the cursor is at the start or end of the document. This should be a single character only.",
+)
+
 mod.list("prose_modifiers", desc="Modifiers that can be used within prose")
 mod.list("prose_snippets", desc="Snippets that can be used within prose")
 mod.list("phrase_ender", "List of commands that can be used to end a phrase")
@@ -31,25 +38,6 @@ ctx_dragon = Context()
 ctx_dragon.matches = r"""
 speech.engine: dragon
 """
-
-# Maps spoken forms to DictationFormat method names (see DictationFormat below).
-ctx.lists["user.prose_modifiers"] = {
-    "cap": "cap",
-    "no cap": "no_cap",
-    "no caps": "no_cap",  # "no caps" variant for Dragon
-    "no space": "no_space",
-}
-ctx.lists["user.prose_snippets"] = {
-    "spacebar": " ",
-    "new line": "\n",
-    "new paragraph": "\n\n",
-    # Curly quotes are used to obtain proper spacing for left and right quotes, but will later be straightened.
-    "open quote": "“",
-    "close quote": "”",
-    "smiley": ":-)",
-    "winky": ";-)",
-    "frowny": ":-(",
-}
 
 ctx.lists["user.hours_twelve"] = get_spoken_form_under_one_hundred(
     1,
@@ -126,6 +114,12 @@ def prose_time(m) -> str:
     return str(m)
 
 
+@mod.capture(rule="clip clip")
+def prose_clipboard(m) -> str:
+    """Clipboard content"""
+    return actions.clip.text()
+
+
 @mod.capture(rule="({user.vocabulary} | <user.abbreviation> | <word>)")
 def word(m) -> str:
     """A single word, including user-defined vocabulary."""
@@ -139,14 +133,31 @@ def word(m) -> str:
         )
 
 
-@mod.capture(rule="({user.vocabulary} | <phrase>)+")
+@mod.capture(
+    rule="({user.vocabulary} | <user.prose_contact> | <user.prose_clipboard> | <phrase>)+"
+)
 def text(m) -> str:
     """A sequence of words, including user-defined vocabulary."""
     return format_phrase(m)
 
 
 @mod.capture(
-    rule="({user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <user.prose_currency> | <user.prose_time> | <user.number_prose_prefixed> | <user.prose_percent> | <user.prose_modifier> | <user.abbreviation> | <phrase>)+"
+    rule=(
+        "("
+        "{user.vocabulary}"
+        "| {user.punctuation}"
+        "| {user.prose_snippets}"
+        "| <user.prose_currency>"
+        "| <user.prose_time>"
+        "| <user.number_prose_prefixed>"
+        "| <user.prose_percent>"
+        "| <user.prose_modifier>"
+        "| <user.abbreviation>"
+        "| <user.prose_contact>"
+        "| <user.prose_clipboard>"
+        "| <phrase>"
+        ")+"
+    )
 )
 def prose(m) -> str:
     """Mixed words and punctuation, auto-spaced & capitalized."""
@@ -155,14 +166,28 @@ def prose(m) -> str:
 
 
 @mod.capture(
-    rule="({user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <user.prose_currency> | <user.prose_time> | <user.number_prose_prefixed> | <user.prose_percent> | <user.abbreviation> | <phrase>)+"
+    rule=(
+        "("
+        "{user.vocabulary}"
+        "| {user.punctuation}"
+        "| {user.prose_snippets}"
+        "| <user.prose_currency>"
+        "| <user.prose_time>"
+        "| <user.number_prose_prefixed>"
+        "| <user.prose_percent>"
+        "| <user.abbreviation>"
+        "| <user.prose_contact>"
+        "| <user.prose_clipboard>"
+        "| <phrase>"
+        ")+"
+    )
 )
 def raw_prose(m) -> str:
     """Mixed words and punctuation, auto-spaced & capitalized, without quote straightening and commands (for use in dictation mode)."""
     return apply_formatting(m)
 
 
-# For dragon, omit support for abbreviations
+# For dragon, omit support for abbreviations and contacts
 @ctx_dragon.capture("user.text", rule="({user.vocabulary} | <phrase>)+")
 def text_dragon(m) -> str:
     """A sequence of words, including user-defined vocabulary."""
@@ -502,10 +527,10 @@ class Actions:
         if not (left or right):
             return None, None
         before, after = None, None
-        # Inserting a space ensures we select something even if we're at
+        # Inserting a character ensures we select something even if we're at
         # document start; some editors 'helpfully' copy the current line if we
         # edit.copy() while nothing is selected.
-        actions.insert(" ")
+        actions.insert(settings.get("user.context_sensitive_dictation_peek_character"))
         if left:
             # In principle the previous word should suffice, but some applications
             # have a funny concept of what the previous word is (for example, they
@@ -520,10 +545,10 @@ class Actions:
             # this will go right over the newline. Argh.
             actions.edit.right()
         if not right:
-            actions.key("backspace")  # remove the space
+            actions.key("backspace")  # remove the peek character
         else:
-            actions.edit.left()  # go left before space
-            # We want to select at least two characters to the right, plus the space
+            actions.edit.left()  # go left before the peek character
+            # We want to select at least two characters to the right, plus the character
             # we inserted, because no_space_before needs two characters in the worst
             # case -- for example, inserting before "' hello" we don't want to add
             # space, while inserted before "'hello" we do.
@@ -539,5 +564,5 @@ class Actions:
             actions.edit.extend_word_right()
             after = actions.edit.selected_text()[1:]
             actions.edit.left()
-            actions.key("delete")  # remove space
+            actions.user.delete_right()  # remove peek character
         return before, after
