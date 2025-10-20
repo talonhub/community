@@ -25,6 +25,10 @@ bar search: user.vscode("workbench.view.search")
 bar source: user.vscode("workbench.view.scm")
 bar test: user.vscode("workbench.view.testing.focus")
 bar switch: user.vscode("workbench.action.toggleSidebarVisibility")
+bar tabs: user.run_rpc_command("andreas.tabs.focus")
+
+tab {user.letter} [{user.letter}]:
+    user.run_rpc_command("andreas.focusTab", "{letter_1}{letter_2 or ''}")
 
 # Symbol search
 symbol hunt [<user.text>]:
@@ -96,6 +100,11 @@ file delete:
     sleep(150ms)
 file open folder: user.vscode("revealFileInOS")
 file reveal: user.vscode("workbench.files.action.showActiveFileInExplorer")
+
+file copy content:
+    user.vscode("editor.action.selectAll")
+    user.vscode("editor.action.clipboardCopyAction")
+
 save ugly: user.vscode("workbench.action.files.saveWithoutFormatting")
 
 # Language Features
