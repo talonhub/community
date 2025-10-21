@@ -262,17 +262,11 @@ class Actions:
 
     def mouse_scroll_continuous(direction: str, speed_factor: Optional[int] = None):
         """Scrolls continuously in the given direction"""
-        match direction:
-            case "UP":
-                actions.user.mouse_scroll_up_continuous(speed_factor)
-            case "DOWN":
-                actions.user.mouse_scroll_down_continuous(speed_factor)
-            case "LEFT":
-                actions.user.mouse_scroll_left_continuous(speed_factor)
-            case "RIGHT":
-                actions.user.mouse_scroll_right_continuous(speed_factor)
-            case _:
-                raise ValueError(f"Invalid continuous scrolling direction: {direction}")
+        try:
+            enumerated_direction = ScrollingDirectionEnum[direction]
+        except KeyError:
+            raise ValueError(f"Invalid continuous scrolling direction: {direction}")
+        mouse_scroll_continuous(enumerated_direction, speed_factor)
 
     def mouse_scroll_up_continuous(speed_factor: Optional[int] = None):
         """Scrolls up continuously"""
