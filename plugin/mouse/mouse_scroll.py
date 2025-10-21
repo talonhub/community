@@ -1,16 +1,18 @@
 import time
-from typing import Literal, Optional
 from enum import Enum, auto
+from typing import Literal, Optional
 
 from talon import Context, Module, actions, app, cron, ctrl, imgui, settings, ui
 
 hiss_scroll_up = False
+
 
 class ScrollingDirectionEnum(Enum):
     UP = auto()
     DOWN = auto()
     LEFT = auto()
     RIGHT = auto()
+
 
 class ScrollingDirection:
     def __init__(self):
@@ -60,7 +62,9 @@ class ScrollingDirection:
     def get_direction_description(self) -> str:
         return self.direction_description
 
-    def is_equal_to_direction_constant(self, direction_constant: ScrollingDirectionEnum) -> bool:
+    def is_equal_to_direction_constant(
+        self, direction_constant: ScrollingDirectionEnum
+    ) -> bool:
         return self.direction_constant == direction_constant
 
 
