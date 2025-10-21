@@ -1,32 +1,33 @@
 import time
 from typing import Literal, Optional
+from enum import Enum, auto
 
 from talon import Context, Module, actions, app, cron, ctrl, imgui, settings, ui
 
 hiss_scroll_up = False
 
+class ScrollingDirectionEnum(Enum):
+    UP = auto()
+    DOWN = auto()
+    LEFT = auto()
+    RIGHT = auto()
 
 class ScrollingDirection:
-    UP = 0
-    DOWN = 1
-    LEFT = 2
-    RIGHT = 3
-
     def __init__(self):
         self.scroll_dir: Literal[-1, 1] = 1
         self.is_vertical: bool = True
-        self.direction_constant = self.DOWN
+        self.direction_constant = ScrollingDirectionEnum.DOWN
         self.direction_description = "down"
 
     def set_direction(self, direction_constant: int):
         self.direction_constant = direction_constant
-        if direction_constant == self.UP:
+        if direction_constant == ScrollingDirectionEnum.UP:
             self._set_up()
-        elif direction_constant == self.DOWN:
+        elif direction_constant == ScrollingDirectionEnum.DOWN:
             self._set_down()
-        elif direction_constant == self.LEFT:
+        elif direction_constant == ScrollingDirectionEnum.LEFT:
             self._set_left()
-        elif direction_constant == self.RIGHT:
+        elif direction_constant == ScrollingDirectionEnum.RIGHT:
             self._set_right()
 
     def _set_up(self):
@@ -59,16 +60,8 @@ class ScrollingDirection:
     def get_direction_description(self) -> str:
         return self.direction_description
 
-    def is_equal_to_direction_constant(self, direction_constant: int) -> bool:
+    def is_equal_to_direction_constant(self, direction_constant: ScrollingDirectionEnum) -> bool:
         return self.direction_constant == direction_constant
-
-
-ScrollingDirectionConstant = Literal[
-    ScrollingDirection.UP,
-    ScrollingDirection.DOWN,
-    ScrollingDirection.LEFT,
-    ScrollingDirection.RIGHT,
-]
 
 
 class ScrollingState:
@@ -279,19 +272,19 @@ class Actions:
 
     def mouse_scroll_up_continuous(speed_factor: Optional[int] = None):
         """Scrolls up continuously"""
-        mouse_scroll_continuous(ScrollingDirection.UP, speed_factor)
+        mouse_scroll_continuous(ScrollingDirectionEnum.UP, speed_factor)
 
     def mouse_scroll_down_continuous(speed_factor: Optional[int] = None):
         """Scrolls down continuously"""
-        mouse_scroll_continuous(ScrollingDirection.DOWN, speed_factor)
+        mouse_scroll_continuous(ScrollingDirectionEnum.DOWN, speed_factor)
 
     def mouse_scroll_right_continuous(speed_factor: Optional[int] = None):
         """Scrolls right continuously"""
-        mouse_scroll_continuous(ScrollingDirection.RIGHT, speed_factor)
+        mouse_scroll_continuous(ScrollingDirectionEnum.RIGHT, speed_factor)
 
     def mouse_scroll_left_continuous(speed_factor: Optional[int] = None):
         """Scrolls left continuously"""
-        mouse_scroll_continuous(ScrollingDirection.LEFT, speed_factor)
+        mouse_scroll_continuous(ScrollingDirectionEnum.LEFT, speed_factor)
 
     def mouse_gaze_scroll():
         """Starts gaze scroll"""
@@ -364,7 +357,7 @@ class UserActions:
 
 
 def mouse_scroll_continuous(
-    new_scroll_dir: ScrollingDirectionConstant,
+    new_scroll_dir: ScrollingDirectionEnum,
     speed_factor: Optional[int] = None,
 ):
     actions.user.mouse_scroll_set_speed(speed_factor)
