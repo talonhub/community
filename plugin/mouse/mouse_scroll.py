@@ -311,7 +311,9 @@ class Actions:
             continuous_scrolling_speed_factor = speed / settings.get(
                 "user.mouse_continuous_scroll_speed_quotient"
             )
-        scrolling_state.continuous_scrolling_speed_factor = continuous_scrolling_speed_factor
+        scrolling_state.continuous_scrolling_speed_factor = (
+            continuous_scrolling_speed_factor
+        )
 
     def mouse_is_continuous_scrolling():
         """Returns whether continuous scroll is in progress"""
