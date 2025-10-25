@@ -90,8 +90,29 @@ class UserActions:
     def discord_decline_call():
         actions.key("esc")
 
+    def discord_start_call():
+        actions.key("ctrl-'")
+
     def discord_go_current_call():
         actions.key("ctrl-shift-alt-v")
 
     def discord_toggle_dms():
         actions.key("ctrl-alt-right")
+
+    def discord_create_join_server():
+        actions.key("ctrl-shift-n")
+
+    def discord_toggle_soundboard():
+        actions.key("ctrl-shift-b")
+
+    def discord_create_private_group():
+        actions.key("ctrl-shift-t")
+
+    def discord_channel_oldest_unread():
+        actions.key("shift-pageup")
+
+    def discord_open_support():
+        actions.key("ctrl-shift-h")
+
+    def discord_start_lofi():
+        actions.key("ctrl-alt-shift-w")
