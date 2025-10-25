@@ -68,14 +68,14 @@ class ScrollingDirection:
 
 class ScrollingState:
     __slots__ = (
-        '_scroll_job',
-        '_scroll_start_ts',
-        '_is_control_mouse_forced',
-        'continuous_scrolling_speed_factor',
-        'direction',
-        'is_continuously_scrolling'
+        "_scroll_job",
+        "_scroll_start_ts",
+        "_is_control_mouse_forced",
+        "continuous_scrolling_speed_factor",
+        "direction",
+        "is_continuously_scrolling",
     )
-    
+
     def __init__(self):
         self._scroll_job = None
         # The time stamp at which continuous scrolling started
