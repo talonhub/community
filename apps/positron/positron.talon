@@ -1,4 +1,4 @@
-#Adding Positron commands, building on Nicolas Riley's personal repo
+#Adding Positron commands, building on Nicholas Riley's personal repo
 app: positron
 -
 notebook new: user.vscode("quarto.newNotebook")
