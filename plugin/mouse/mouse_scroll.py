@@ -18,9 +18,7 @@ class ScrollingDirection:
     __slots__ = ("_scroll_dir", "_is_vertical", "_direction_constant")
 
     def __init__(self):
-        self._scroll_dir: Literal[-1, 1] = 1
-        self._is_vertical: bool = True
-        self._direction_constant: ScrollingDirectionEnum = ScrollingDirectionEnum.DOWN
+        self._set_down()
 
     def set_direction(self, direction_constant: ScrollingDirectionEnum):
         self._direction_constant = direction_constant
