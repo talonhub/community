@@ -57,9 +57,7 @@ class Scroller:
         else:
             actions.mouse_scroll(0, scroll_delta)
 
-    def is_direction_equal_to(
-        self, direction: ScrollingDirection
-    ) -> bool:
+    def is_direction_equal_to(self, direction: ScrollingDirection) -> bool:
         return self.direction == direction
 
     def get_direction_name(self) -> str:
