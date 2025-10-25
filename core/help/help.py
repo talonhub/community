@@ -4,7 +4,7 @@ import re
 from collections import defaultdict
 from itertools import islice
 from textwrap import wrap
-from typing import Any, Iterable, Tuple
+from typing import Any, Iterable, Optional, Tuple
 
 from talon import Context, Module, actions, imgui, registry, settings
 
@@ -103,9 +103,10 @@ def update_operators_text():
         operators = actions.user.code_get_operators()
 
         # Associate the names of the operator lists with the corresponding prefix
-        op_list_names = ["array", "assignment", "bitwise", "lambda", "math", "pointer"]
+        op_list_names = ["array", "assignment", "lambda", "math", "pointer"]
         names_with_prefix = [(name, "op") for name in op_list_names]
-        names_with_prefix.append(("math_comparison", "is"))
+        names_with_prefix += [("math_comparison", "is"), ("bitwise", "(bit | bitwise)")]
+        names_with_prefix.sort()
 
         # Fill in the list by iterating over the operator lists
         operators_text = []
@@ -515,7 +516,7 @@ def refresh_context_command_map(enabled_only=False):
                     if command_alias in registry.commands or not enabled_only:
                         local_context_command_map[context_name][
                             str(val.rule.rule)
-                        ] = val.target.code
+                        ] = val.script.code
                 if len(local_context_command_map[context_name]) == 0:
                     local_context_command_map.pop(context_name)
                 else:
@@ -748,13 +749,13 @@ class Actions:
         register_events(True)
         ctx.tags = ["user.help_open"]
 
-    def help_search(phrase: str):
+    def help_search(phrase: str, enabled_only: Optional[bool] = False):
         """Display command info for search phrase"""
         global search_phrase
 
         reset()
         search_phrase = phrase
-        refresh_context_command_map()
+        refresh_context_command_map(enabled_only=enabled_only)
         hide_all_help_guis()
         gui_context_help.show()
         register_events(True)

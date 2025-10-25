@@ -32,13 +32,23 @@ boxed [type] {user.java_boxed_type}: insert(user.java_boxed_type + " ")
 generic [type] {user.java_generic_data_structure}:
     user.insert_between(java_generic_data_structure + "<", ">")
 
+#This is not part of the long term stable API
+#After we implement generics support for several languages,
+# we plan on abstracting out from the specific implementations into a general grammar
+#Usage:
+# built in types: "list of string" -> List<String>
+# user type with the type prefix: "type user type of string" -> UserType<String>
+# multiple type parameters: "map of string and integer" -> Map<String, Integer>
+# user type as a parameter does not require the type prefix: "list of user type" -> List<UserType>
+<user.java_generic_type>: insert(java_generic_type + " ")
+
 # Arrays
 type {user.code_type} array:
     insert(user.code_type)
-    user.code_operator_subscript()
+    user.code_operator("SUBSCRIPT")
 
 [state] {user.java_modifier}: insert(user.java_modifier + " ")
 
-op array: user.code_operator_subscript()
+op array: user.code_operator("SUBSCRIPT")
 
 op new: insert("new ")
