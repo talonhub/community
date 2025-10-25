@@ -293,7 +293,6 @@ class Actions:
 
     def mouse_gaze_scroll_toggle():
         """If not scrolling, start gaze scroll, else stop scrolling."""
-        print("toggling")
         if scrolling_state.has_scrolling_job():
             actions.user.mouse_scroll_stop()
         else:
