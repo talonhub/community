@@ -16,6 +16,7 @@ class ScrollingDirection(Enum):
 
 class Scroller:
     """Understands how to scroll in a specific direction"""
+
     __slots__ = ("_scroll_dir", "_is_vertical", "_direction_constant")
 
     def __init__(self):
