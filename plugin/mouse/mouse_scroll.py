@@ -17,14 +17,14 @@ class ScrollingDirection(Enum):
 class Scroller:
     """Understands how to scroll in a specific direction"""
 
-    __slots__ = ("_scroll_dir", "_is_vertical", "_direction_constant")
+    __slots__ = ("_scroll_dir", "_is_vertical", "direction")
 
     def __init__(self):
         self._set_down()
 
-    def set_direction(self, direction_constant: ScrollingDirection):
-        self._direction_constant = direction_constant
-        match direction_constant:
+    def set_direction(self, direction: ScrollingDirection):
+        self.direction = direction
+        match direction:
             case ScrollingDirection.UP:
                 self._set_up()
             case ScrollingDirection.DOWN:
@@ -57,13 +57,13 @@ class Scroller:
         else:
             actions.mouse_scroll(0, scroll_delta)
 
-    def is_equal_to_direction_constant(
-        self, direction_constant: ScrollingDirection
+    def is_direction_equal_to(
+        self, direction: ScrollingDirection
     ) -> bool:
-        return self._direction_constant == direction_constant
+        return self.direction == direction
 
     def get_direction_name(self) -> str:
-        return self._direction_constant.name.lower()
+        return self.direction.name.lower()
 
 
 class ScrollingState:
@@ -360,7 +360,7 @@ def mouse_scroll_continuous(
 
     if (
         scrolling_state.is_continuously_scrolling
-        and current_direction.is_equal_to_direction_constant(new_scroll_dir)
+        and current_direction.is_direction_equal_to(new_scroll_dir)
     ):
         # Issuing a scroll in the same direction aborts scrolling
         actions.user.mouse_scroll_stop()
