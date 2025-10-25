@@ -23,14 +23,15 @@ class ScrollingDirection:
 
     def set_direction(self, direction_constant: int):
         self.direction_constant = direction_constant
-        if direction_constant == ScrollingDirectionEnum.UP:
-            self._set_up()
-        elif direction_constant == ScrollingDirectionEnum.DOWN:
-            self._set_down()
-        elif direction_constant == ScrollingDirectionEnum.LEFT:
-            self._set_left()
-        elif direction_constant == ScrollingDirectionEnum.RIGHT:
-            self._set_right()
+        match direction_constant:
+            case ScrollingDirectionEnum.UP:
+                self._set_up()
+            case ScrollingDirectionEnum.DOWN:
+                self._set_down()
+            case ScrollingDirectionEnum.LEFT:
+                self._set_left()
+            case ScrollingDirectionEnum.RIGHT:
+                self._set_right()
 
     def _set_up(self):
         self.is_vertical: bool = True
