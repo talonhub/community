@@ -15,14 +15,14 @@ class ScrollingDirectionEnum(Enum):
 
 
 class ScrollingDirection:
+    __slots__ = ('_scroll_dir', '_is_vertical', '_direction_constant')
     def __init__(self):
-        self.scroll_dir: Literal[-1, 1] = 1
-        self.is_vertical: bool = True
-        self.direction_constant = ScrollingDirectionEnum.DOWN
-        self.direction_description = "down"
+        self._scroll_dir: Literal[-1, 1] = 1
+        self._is_vertical: bool = True
+        self._direction_constant: ScrollingDirectionEnum = ScrollingDirectionEnum.DOWN
 
-    def set_direction(self, direction_constant: int):
-        self.direction_constant = direction_constant
+    def set_direction(self, direction_constant: ScrollingDirectionEnum):
+        self._direction_constant = direction_constant
         match direction_constant:
             case ScrollingDirectionEnum.UP:
                 self._set_up()
@@ -34,28 +34,24 @@ class ScrollingDirection:
                 self._set_right()
 
     def _set_up(self):
-        self.is_vertical: bool = True
-        self.scroll_dir = -1
-        self.direction_description = "up"
+        self._is_vertical: bool = True
+        self._scroll_dir = -1
 
     def _set_down(self):
-        self.is_vertical: bool = True
-        self.scroll_dir = 1
-        self.direction_description = "down"
+        self._is_vertical: bool = True
+        self._scroll_dir = 1
 
     def _set_left(self):
-        self.is_vertical: bool = False
-        self.scroll_dir = -1
-        self.direction_description = "left"
+        self._is_vertical: bool = False
+        self._scroll_dir = -1
 
     def _set_right(self):
-        self.is_vertical: bool = False
-        self.scroll_dir = 1
-        self.direction_description = "right"
+        self._is_vertical: bool = False
+        self._scroll_dir = 1
 
     def scroll_in_direction(self, amount: int):
-        scroll_delta = self.scroll_dir * amount
-        if self.is_vertical:
+        scroll_delta = self._scroll_dir * amount
+        if self._is_vertical:
             actions.mouse_scroll(scroll_delta)
         else:
             actions.mouse_scroll(0, scroll_delta)
@@ -63,7 +59,10 @@ class ScrollingDirection:
     def is_equal_to_direction_constant(
         self, direction_constant: ScrollingDirectionEnum
     ) -> bool:
-        return self.direction_constant == direction_constant
+        return self._direction_constant == direction_constant
+
+    def get_direction_name(self) -> str:
+        return self._direction_constant.name.lower()
 
 
 class ScrollingState:
@@ -156,7 +155,7 @@ class ScrollingState:
         if not self.has_scrolling_job():
             return ""
         if self.is_continuously_scrolling:
-            return f"scroll {self.direction.direction_description} continuous"
+            return f"scroll {self.direction.get_direction_name()} continuous"
         return "gaze scroll"
 
 
