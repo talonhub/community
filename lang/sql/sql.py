@@ -1,5 +1,6 @@
 from talon import Context, actions
 
+from ...core.described_functions import create_described_insert_between
 from ..tags.operators import Operators
 
 ctx = Context()
@@ -18,8 +19,8 @@ operators = Operators(
     MATH_GREATER_THAN_OR_EQUAL=" >= ",
     MATH_LESS_THAN=" < ",
     MATH_LESS_THAN_OR_EQUAL=" <= ",
-    MATH_IN=lambda: actions.user.insert_between(" IN (", ")"),
-    MATH_NOT_IN=lambda: actions.user.insert_between(" NOT IN (", ")"),
+    MATH_IN=create_described_insert_between(" IN (", ")"),
+    MATH_NOT_IN=create_described_insert_between(" NOT IN (", ")"),
     MATH_AND=" AND ",
     MATH_OR=" OR ",
 )
