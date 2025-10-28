@@ -149,7 +149,8 @@ def java_type_parameter_argument(m) -> str:
         return m.java_boxed_type
     return public_camel_case_format_variable(m.text)
 
-@mod.capture(rule = "<user.java_generic_type> done | <user.java_type_parameter_argument>")
+
+@mod.capture(rule="<user.java_generic_type> done | <user.java_type_parameter_argument>")
 def java_recursive_type_parameter_argument(m) -> str:
     with suppress(AttributeError):
         return m.java_generic_type
