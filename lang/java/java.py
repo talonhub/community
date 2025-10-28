@@ -149,6 +149,12 @@ def java_type_parameter_argument(m) -> str:
         return m.java_boxed_type
     return public_camel_case_format_variable(m.text)
 
+@mod.capture(rule = "<user.java_generic_type> done | <user.java_type_parameter_argument>")
+def java_recursive_type_parameter_argument(m) -> str:
+    with suppress(AttributeError):
+        return m.java_generic_type
+    return m.java_type_parameter_argument
+
 
 @mod.capture(rule="[type] {user.java_generic_data_structure} | type <user.text>")
 def java_generic_data_structure(m) -> str:
@@ -159,11 +165,11 @@ def java_generic_data_structure(m) -> str:
 
 
 @mod.capture(
-    rule="<user.java_generic_data_structure> of ([and] <user.java_type_parameter_argument>)+"
+    rule="<user.java_generic_data_structure> of ([and] <user.java_recursive_type_parameter_argument>)+"
 )
 def java_generic_type(m) -> str:
     """A generic type with specific type parameters"""
-    parameters = m.java_type_parameter_argument_list
+    parameters = m.java_recursive_type_parameter_argument_list
     parameter_text = ", ".join(parameters)
     return f"{m.java_generic_data_structure}<{parameter_text}>"
 
