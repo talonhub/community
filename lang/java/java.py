@@ -159,16 +159,16 @@ def java_recursive_type_parameter_argument(m) -> str:
 
 
 @mod.capture(
-    rule="(<user.java_generic_data_structure> of)+ ([and] <user.java_type_parameter_argument>+)"
+    rule="(<user.java_generic_data_structure> of)+ (<user.java_generic_type_parameter_arguments>) [stop]"
 )
 def java_generic_type_tail(m) -> str:
     """Supports nesting generic data structures at the end of a generic type without needing the stop word"""
     nested_structures = m.java_generic_data_structure_list
-    parameter_arguments = m.java_type_parameter_argument_list
+    parameter_arguments = m.java_generic_type_parameter_arguments
     return (
         "<".join(nested_structures)
         + "<"
-        + ",".join(parameter_arguments)
+        + ", ".join(parameter_arguments)
         + ">" * len(nested_structures)
     )
 
@@ -181,24 +181,40 @@ def java_generic_data_structure(m) -> str:
     return public_camel_case_format_variable(m.text)
 
 
+@mod.capture(rule = "(and <user.java_recursive_type_parameter_argument>)+")
+def java_generic_type_parameter_additional_arguments(m) -> list[str]:
+    """Additional Java type parameters"""
+    return m.java_recursive_type_parameter_argument_list
+
+
+@mod.capture(rule = "<user.java_recursive_type_parameter_argument> [<user.java_generic_type_parameter_additional_arguments>]")
+def java_generic_type_parameter_arguments(m) -> list[str]:
+    """A list of Java type parameters"""
+    result = [m.java_recursive_type_parameter_argument]
+    with suppress(AttributeError):
+        result.extend(m.java_generic_type_parameter_additional_arguments)
+    return result
+
 @mod.capture(
-    rule="<user.java_generic_data_structure> of ([and] <user.java_recursive_type_parameter_argument>)+"
+    rule="<user.java_generic_data_structure> of <user.java_generic_type_parameter_arguments>"
 )
 def java_generic_type(m) -> str:
     """A generic type with specific type parameters"""
-    parameters = m.java_recursive_type_parameter_argument_list
+    parameters = m.java_generic_type_parameter_arguments
     parameter_text = ", ".join(parameters)
     return f"{m.java_generic_data_structure}<{parameter_text}>"
 
 
 @mod.capture(
-    rule="<user.java_generic_data_structure> of ([and] <user.java_recursive_type_parameter_argument>)+ [user.java_generic_type_tail]"
+    rule="(<user.java_generic_data_structure> of <user.java_generic_type_parameter_arguments>) | (<user.java_generic_data_structure> of <user.java_generic_type_tail>) | (<user.java_generic_data_structure> of <user.java_generic_type_parameter_arguments> and <user.java_generic_type_tail>)"
 )
 def java_generic_type_spoken_form(m) -> str:
     """The full spoken form for a java generic type"""
-    parameters = m.java_recursive_type_parameter_argument_list
+    parameters = []
     with suppress(AttributeError):
-        parameters.extend(m.java_generic_type_tail_list)
+        parameters.extend(m.java_generic_type_parameter_arguments)
+    with suppress(AttributeError):
+        parameters.append(m.java_generic_type_tail)
     parameter_text = ", ".join(parameters)
     return f"{m.java_generic_data_structure}<{parameter_text}>"
 
