@@ -40,7 +40,7 @@ generic [type] {user.java_generic_data_structure}:
 # user type with the type prefix: "type user type of string" -> UserType<String>
 # multiple type parameters: "map of string and integer" -> Map<String, Integer>
 # user type as a parameter does not require the type prefix: "list of user type" -> List<UserType>
-<user.java_generic_type>: insert(java_generic_type + " ")
+<user.java_generic_type_spoken_form>: insert(java_generic_type_spoken_form + " ")
 
 # Arrays
 type {user.code_type} array:

@@ -158,6 +158,15 @@ def java_recursive_type_parameter_argument(m) -> str:
     return m.java_type_parameter_argument
 
 
+@mod.capture(rule = "(<user.java_generic_data_structure> of)+ ([and] <user.java_type_parameter_argument>+)")
+def java_generic_type_tail(m) -> str:
+    """Supports nesting generic data structures at the end of a generic type without needing the stop word"""
+    nested_structures = m.java_generic_data_structure_list
+    parameter_arguments = m.java_type_parameter_argument_list
+    return "<".join(nested_structures) + "<" + ",".join(parameter_arguments) + ">"*len(nested_structures)
+
+
+
 @mod.capture(rule="[type] {user.java_generic_data_structure} | type <user.text>")
 def java_generic_data_structure(m) -> str:
     """A Java generic data structure that takes type parameter arguments"""
@@ -175,6 +184,16 @@ def java_generic_type(m) -> str:
     parameter_text = ", ".join(parameters)
     return f"{m.java_generic_data_structure}<{parameter_text}>"
 
+
+@mod.capture(rule = "<user.java_generic_data_structure> of ([and] <user.java_recursive_type_parameter_argument>)+ [user.java_generic_type_tail]")
+def java_generic_type_spoken_form(m) -> str:
+    """The full spoken form for a java generic type"""
+    parameters = m.java_recursive_type_parameter_argument_list
+    with suppress(AttributeError):
+        parameters.extend(m.java_generic_type_tail_list)
+    parameter_text = ", ".join(parameters)
+    return f"{m.java_generic_data_structure}<{parameter_text}>"
+    
 
 # End of unstable section
 
