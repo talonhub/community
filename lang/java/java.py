@@ -159,7 +159,7 @@ def java_recursive_type_parameter_argument(m) -> str:
 
 
 @mod.capture(
-    rule="(<user.java_generic_data_structure> of)+ (<user.java_generic_type_parameter_arguments>) [stop]"
+    rule="(<user.java_generic_data_structure> of)+ (<user.java_generic_type_parameter_arguments>)"
 )
 def java_generic_type_tail(m) -> str:
     """Supports nesting generic data structures at the end of a generic type without needing the stop word"""
