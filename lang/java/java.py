@@ -181,19 +181,22 @@ def java_generic_data_structure(m) -> str:
     return public_camel_case_format_variable(m.text)
 
 
-@mod.capture(rule = "(and <user.java_recursive_type_parameter_argument>)+")
+@mod.capture(rule="(and <user.java_recursive_type_parameter_argument>)+")
 def java_generic_type_parameter_additional_arguments(m) -> list[str]:
     """Additional Java type parameters"""
     return m.java_recursive_type_parameter_argument_list
 
 
-@mod.capture(rule = "<user.java_recursive_type_parameter_argument> [<user.java_generic_type_parameter_additional_arguments>]")
+@mod.capture(
+    rule="<user.java_recursive_type_parameter_argument> [<user.java_generic_type_parameter_additional_arguments>]"
+)
 def java_generic_type_parameter_arguments(m) -> list[str]:
     """A list of Java type parameters"""
     result = [m.java_recursive_type_parameter_argument]
     with suppress(AttributeError):
         result.extend(m.java_generic_type_parameter_additional_arguments)
     return result
+
 
 @mod.capture(
     rule="<user.java_generic_data_structure> of <user.java_generic_type_parameter_arguments>"
