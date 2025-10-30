@@ -150,8 +150,9 @@ def java_type_parameter_argument(m) -> str:
     return public_camel_case_format_variable(m.text)
 
 
-@mod.capture(rule="<user.java_generic_type> done | <user.java_type_parameter_argument>")
+@mod.capture(rule="<user.java_generic_type> stop | <user.java_type_parameter_argument>")
 def java_recursive_type_parameter_argument(m) -> str:
+    """Either a nested java generic type or a concrete type"""
     with suppress(AttributeError):
         return m.java_generic_type
     return m.java_type_parameter_argument
