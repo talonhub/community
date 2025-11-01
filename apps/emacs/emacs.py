@@ -363,4 +363,4 @@ class WinActions:
     def filename():
         title = actions.win.title()
         buffer_name = title.split(" - ")[0]
-        return re.sub(r"<[^>]+>$","",buffer_name)
+        return re.sub(r"<[^>]+>$", "", buffer_name)
