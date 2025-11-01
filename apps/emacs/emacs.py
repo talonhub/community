@@ -358,9 +358,17 @@ class CodeActions:
 class WinActions:
     # This assumes the title either is the buffer name or contains the buffer
     # name before a space-surrounded hyphen. This is the default for the latest
-    # GNU Emacs, and can be restored by putting the following into your init.el:
-    # (setq frame-title-format '(multiple-frames "%b" ("" "%b - GNU Emacs at " system-name)))
+    # GNU Emacs. If you are not on macOS and your flavor of Emacs defaults to
+    # something incompatible, you may need to put one of the following two
+    # declarations into your init.el ("%b" being replaced by the buffer name):
+    # (setq frame-title-format "%b")
+    # (setq frame-title-format '(multiple-frames "%b" ("" "%b - Emacs at " system-name)))
     def filename():
+        # On macOS, get the filename directly
+        if doc := getattr(ui.active_window(), "doc"):
+            return doc
+
+        # Otherwise, get it from the window title
         title = actions.win.title()
         buffer_name = title.split(" - ")[0]
         return re.sub(r"<[^>]+>$", "", buffer_name)
