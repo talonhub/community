@@ -156,6 +156,12 @@ class UserActions:
         actions.edit.jump_line(line_end + 1)
         actions.user.emacs("exchange-point-and-mark")
 
+    def tab_jump(number: int):
+        actions.user.emacs("tab-select", number)
+
+    def tab_final():
+        actions.user.emacs("tab-last")
+
     # # Version that highlights without transient-mark-mode:
     # def select_range(line_start, line_end):
     #     actions.edit.jump_line(line_end + 1)
