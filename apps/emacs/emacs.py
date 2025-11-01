@@ -356,8 +356,11 @@ class CodeActions:
 
 @ctx.action_class("win")
 class WinActions:
-    # This assumes the title is/contains the filename.
-    # To do this, put this in init.el:
-    # (setq-default frame-title-format '((:eval (buffer-name (window-buffer (minibuffer-selected-window))))))
+    # This assumes the title either is the buffer name or contains the buffer
+    # name before a space-surrounded hyphen. This is the default for the latest
+    # GNU Emacs, and can be restored by putting the following into your init.el:
+    # (setq frame-title-format '(multiple-frames "%b" ("" "%b - GNU Emacs at " system-name)))
     def filename():
-        return actions.win.title()
+        title = actions.win.title()
+        buffer_name = title.split(" - ")[0]
+        return re.sub(r"<[^>]+>$","",buffer_name)
