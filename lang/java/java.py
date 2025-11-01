@@ -199,16 +199,17 @@ def java_type_parameter_arguments(m) -> str:
         pieces.append(parameter)
         if i < len(connectors):
             connector = connectors[i]
-            if connector == GenericTypeConnector.AND:
-                pieces.append(", ")
-            elif connector == GenericTypeConnector.OF:
-                pieces.append("<")
-                nesting += 1
-            elif connector == GenericTypeConnector.STOP:
-                pieces.append(">")
-                nesting -= 1
-                if i != len(parameters) - 1:
+            match connector:
+                case GenericTypeConnector.AND:
                     pieces.append(", ")
+                case GenericTypeConnector.OF:
+                    pieces.append("<")
+                    nesting += 1
+                case GenericTypeConnector.STOP:
+                    pieces.append(">")
+                    nesting -= 1
+                    if i != len(parameters) - 1:
+                        pieces.append(", ")
     if nesting > 0:
         pieces.append(">" * nesting)
     return "".join(pieces)
