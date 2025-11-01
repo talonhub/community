@@ -158,25 +158,32 @@ def java_generic_data_structure(m) -> str:
         return m.java_generic_data_structure
     return public_camel_case_format_variable(m.text)
 
+
 class GenericTypeConnector(Enum):
     AND = auto()
     OF = auto()
     STOP = auto()
 
 
-@mod.capture(rule = "and|of|stop")
+@mod.capture(rule="and|of|stop")
 def java_generic_type_connector(m) -> GenericTypeConnector:
     """Determines how to put generic type parameters together"""
     return GenericTypeConnector[m[0].upper()]
 
 
-@mod.capture(rule = "(<user.java_generic_type_connector> <user.java_type_parameter_argument>)+")
-def java_generic_type_additional_type_parameters(m) -> tuple[list[GenericTypeConnector], list[str]]:
+@mod.capture(
+    rule="(<user.java_generic_type_connector> <user.java_type_parameter_argument>)+"
+)
+def java_generic_type_additional_type_parameters(
+    m,
+) -> tuple[list[GenericTypeConnector], list[str]]:
     """Type parameters for a generic data structure after the first one"""
     return m.java_generic_type_connector_list, m.java_type_parameter_argument_list
 
 
-@mod.capture(rule = "<user.java_type_parameter_argument> [<user.java_generic_type_additional_type_parameters>]")
+@mod.capture(
+    rule="<user.java_type_parameter_argument> [<user.java_generic_type_additional_type_parameters>]"
+)
 def java_type_parameter_arguments(m) -> str:
     """Formatted Java type parameter arguments"""
     parameters = [m.java_type_parameter_argument]
