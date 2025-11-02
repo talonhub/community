@@ -166,7 +166,7 @@ class GenericTypeConnector(Enum):
     STOP = auto()
 
 
-@mod.capture(rule = "stop")
+@mod.capture(rule="stop")
 def java_generic_type_connector_stop(m) -> GenericTypeConnector:
     """Denotes ending a nested generic type"""
     return GenericTypeConnector.STOP
@@ -179,7 +179,10 @@ def java_generic_type_connector(m) -> GenericTypeConnector:
         return m.java_generic_type_connector_stop
     return GenericTypeConnector[m[0].upper()]
 
-@mod.capture(rule = "<user.java_generic_type_connector> <user.java_type_parameter_argument> [<user.java_generic_type_connector_stop>]+")
+
+@mod.capture(
+    rule="<user.java_generic_type_connector> <user.java_type_parameter_argument> [<user.java_generic_type_connector_stop>]+"
+)
 def java_generic_type_continuation(m) -> list[Union[GenericTypeConnector, str]]:
     """A generic type parameter that goes after the first using connectors"""
     result = [m.java_generic_type_connector, m.java_type_parameter_argument]
@@ -189,10 +192,7 @@ def java_generic_type_continuation(m) -> list[Union[GenericTypeConnector, str]]:
     return result
 
 
-
-@mod.capture(
-    rule="<user.java_generic_type_continuation>+"
-)
+@mod.capture(rule="<user.java_generic_type_continuation>+")
 def java_generic_type_additional_type_parameters(
     m,
 ) -> list[Union[GenericTypeConnector, str]]:
