@@ -1,5 +1,6 @@
 from contextlib import suppress
 from enum import Enum, auto
+from typing import Union
 
 from talon import Context, Module, actions, settings
 
@@ -165,20 +166,45 @@ class GenericTypeConnector(Enum):
     STOP = auto()
 
 
-@mod.capture(rule="and|of|stop")
+@mod.capture(rule = "stop")
+def java_generic_type_connector_stop(m) -> GenericTypeConnector:
+    """Denotes ending a nested generic type"""
+    return GenericTypeConnector.STOP
+
+
+@mod.capture(rule="and|of|<user.java_generic_type_connector_stop>")
 def java_generic_type_connector(m) -> GenericTypeConnector:
     """Determines how to put generic type parameters together"""
+    with suppress(AttributeError):
+        return m.java_generic_type_connector_stop
     return GenericTypeConnector[m[0].upper()]
+
+@mod.capture(rule = "<user.java_generic_type_connector> <user.java_type_parameter_argument> [<user.java_generic_type_connector_stop>]+")
+def java_generic_type_continuation(m) -> list[Union[GenericTypeConnector, str]]:
+    """A generic type parameter that goes after the first using connectors"""
+    result = [m.java_generic_type_connector, m.java_type_parameter_argument]
+    with suppress(AttributeError):
+        stops = m.java_generic_type_connector_stop_list
+        result.extend(stops)
+    return result
+
 
 
 @mod.capture(
-    rule="(<user.java_generic_type_connector> <user.java_type_parameter_argument>)+"
+    rule="<user.java_generic_type_continuation>+"
 )
 def java_generic_type_additional_type_parameters(
     m,
-) -> tuple[list[GenericTypeConnector], list[str]]:
+) -> list[Union[GenericTypeConnector, str]]:
     """Type parameters for a generic data structure after the first one"""
-    return m.java_generic_type_connector_list, m.java_type_parameter_argument_list
+    result = []
+    for continuation in m.java_generic_type_continuation_list:
+        result.extend(continuation)
+    return result
+
+
+def is_immediately_after_nesting_exit(pieces: list[str]) -> bool:
+    return len(pieces) >= 1 and pieces[-1] == ">"
 
 
 @mod.capture(
@@ -187,19 +213,17 @@ def java_generic_type_additional_type_parameters(
 def java_type_parameter_arguments(m) -> str:
     """Formatted Java type parameter arguments"""
     parameters = [m.java_type_parameter_argument]
-    try:
-        additional_parameters = m.java_generic_type_additional_type_parameters
-        connectors = additional_parameters[0]
-        parameters.extend(additional_parameters[1])
-    except AttributeError:
-        connectors = []
+    with suppress(AttributeError):
+        parameters.extend(m.java_generic_type_additional_type_parameters)
     pieces = []
     nesting: int = 0
-    for i, parameter in enumerate(parameters):
-        pieces.append(parameter)
-        if i < len(connectors):
-            connector = connectors[i]
-            match connector:
+    for parameter in parameters:
+        if isinstance(parameter, str):
+            if is_immediately_after_nesting_exit(pieces):
+                pieces.append(", ")
+            pieces.append(parameter)
+        else:
+            match parameter:
                 case GenericTypeConnector.AND:
                     pieces.append(", ")
                 case GenericTypeConnector.OF:
@@ -208,8 +232,6 @@ def java_type_parameter_arguments(m) -> str:
                 case GenericTypeConnector.STOP:
                     pieces.append(">")
                     nesting -= 1
-                    if i != len(parameters) - 1:
-                        pieces.append(", ")
     if nesting > 0:
         pieces.append(">" * nesting)
     return "".join(pieces)
