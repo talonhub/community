@@ -30,37 +30,38 @@ class AppActions:
     def window_close():
         subprocess.check_call(("i3-msg", "kill"))
 
-def i3msg_nocheck(arguments: str): # type: ignore
+
+def i3msg_nocheck(arguments: str):  # type: ignore
     """Call i3-msg on space-separated arguments"""
     subprocess.run(
-        ["i3-msg", "--quiet"]+arguments.split(" "),
+        ["i3-msg", "--quiet"] + arguments.split(" "),
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,
         check=False,
     )
 
+
 @mod.action_class
 class Actions:
-    def i3msg(arguments: str): # type: ignore
+    def i3msg(arguments: str):  # type: ignore
         """Call i3-msg on space-separated arguments"""
-        subprocess.check_call(["i3-msg", "--quiet"]+arguments.split(" "))
+        subprocess.check_call(["i3-msg", "--quiet"] + arguments.split(" "))
 
-    def i3wm_grow_window(amount: int): # type: ignore
+    def i3wm_grow_window(amount: int):  # type: ignore
         """Grow window by specified amount (in pixels)"""
         i3msg_nocheck(f"resize grow width {amount}")
         i3msg_nocheck(f"resize grow height {amount}")
         # behaves very badly if the window is not floating
         # actions.user.i3msg(f"move left {int(amount / 2)}; move up {int(amount / 2)}")
 
-
-    def i3wm_shrink_window(amount: int): # type: ignore
+    def i3wm_shrink_window(amount: int):  # type: ignore
         """Shrink window by specified amount (in pixels)"""
         i3msg_nocheck(f"resize shrink width {amount}")
         i3msg_nocheck(f"resize shrink height {amount}")
         # behaves very badly if the window is not floating
-        #i3msg_nocheck(f"move right {int(amount / 2)}; move down {int(amount / 2)}")
+        # i3msg_nocheck(f"move right {int(amount / 2)}; move down {int(amount / 2)}")
 
-    def i3wm_layout(layout: Optional[str] = None): # type: ignore
+    def i3wm_layout(layout: Optional[str] = None):  # type: ignore
         """Change to specified layout. Toggle split if unspecified."""
         if layout is None:
             actions.user.i3msg("layout toggle split")

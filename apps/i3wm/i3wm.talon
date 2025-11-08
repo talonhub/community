@@ -45,8 +45,7 @@ vertical (shell | terminal):
     user.i3msg("move container to workspace number {number_small}")
 (shuffle | move (win | window) [to]) last port:
     user.i3msg("move container to workspace back_and_forth")
-(shuffle | move) flipper: 
-    user.i3msg("move container to workspace back_and_forth")
+(shuffle | move) flipper: user.i3msg("move container to workspace back_and_forth")
 (shuffle | move (win | window)) left: user.i3msg("move left")
 (shuffle | move (win | window)) right: user.i3msg("move right")
 (shuffle | move (win | window)) up: user.i3msg("move up")
