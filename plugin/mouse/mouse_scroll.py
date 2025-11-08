@@ -311,6 +311,7 @@ class Actions:
 
     def mouse_scroll_set_speed(speed: Optional[int]):
         """Sets the continuous scrolling speed for the current scrolling"""
+        scrolling_state.reset_scrolling_start_time()
         if speed is None:
             continuous_scrolling_speed_factor = 1.0
         else:
