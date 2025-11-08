@@ -372,7 +372,7 @@ class WinActions:
     # (setq frame-title-format '(multiple-frames "%b" ("" "%b - Emacs at " system-name)))
     def filename():
         # On macOS, get the filename directly
-        if doc := getattr(ui.active_window(), "doc"):
+        if doc := getattr(ui.active_window(), "doc", None):
             return doc
 
         # Otherwise, get it from the window title
