@@ -116,7 +116,7 @@ def prose_time(m) -> str:
 
 @mod.capture(rule="spell <user.letters>")
 def prose_spell(m) -> str:
-    """Spell word phoneticly"""
+    """Spell word phonetically"""
     return m.letters
 
 
