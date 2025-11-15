@@ -118,6 +118,8 @@ def prose_time(m) -> str:
 def prose_spell(m) -> str:
     """Spell word phonetically"""
     return m.letters
+
+
 @mod.capture(rule="clip clip")
 def prose_clipboard(m) -> str:
     """Clipboard content"""
