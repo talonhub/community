@@ -1,6 +1,7 @@
 from enum import Enum, auto
 import re
-from typing import Generator, NamedTuple
+from typing import NamedTuple
+from collections.abc import Generator
 
 class TokenType(Enum):
     OPTIONAL_START = auto()
@@ -49,6 +50,8 @@ def tokenize(input_string: str) -> Generator[Token]:
         if match.lastgroup is None:
             raise ValueError("Unexpected character in input string")
         kind = TokenType[match.lastgroup]
+        if kind == TokenType.WHITESPACE:
+            continue
         value = match.group()
         column = match.start()
         yield Token(type=kind, value=value, column=column)
