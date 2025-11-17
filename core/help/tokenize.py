@@ -1,7 +1,8 @@
-from enum import Enum, auto
 import re
-from typing import NamedTuple
 from collections.abc import Generator
+from enum import Enum, auto
+from typing import NamedTuple
+
 
 class TokenType(Enum):
     OPTIONAL_START = auto()
@@ -20,6 +21,7 @@ class TokenType(Enum):
     WHITESPACE = auto()
     WORDS = auto()
 
+
 TOKEN_SPECIFICATION = {
     TokenType.OPTIONAL_START: r"\[",
     TokenType.OPTIONAL_END: r"\]",
@@ -35,15 +37,20 @@ TOKEN_SPECIFICATION = {
     TokenType.START_ANCHOR: r"\^",
     TokenType.END_ANCHOR: r"\$",
     TokenType.WHITESPACE: r"\s",
-    TokenType.WORDS: r"\w+"
+    TokenType.WORDS: r"\w+",
 }
+
 
 class Token(NamedTuple):
     type: TokenType
     value: str
     column: int
 
-TOKENIZE_REGEX = re.compile("|".join(f"(?P<{token.name}>{TOKEN_SPECIFICATION[token]})" for token in TokenType))
+
+TOKENIZE_REGEX = re.compile(
+    "|".join(f"(?P<{token.name}>{TOKEN_SPECIFICATION[token]})" for token in TokenType)
+)
+
 
 def tokenize(input_string: str) -> Generator[Token]:
     for match in TOKENIZE_REGEX.finditer(input_string):
