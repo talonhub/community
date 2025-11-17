@@ -3,12 +3,15 @@ language: markdown
 
 name: link
 phrase: link
+
+$1.wrapperPhrase: link
 -
 [$1]($0)
 ---
 
 name: image
 phrase: image
+$1.wrapperPhrase: image
 -
 ![$1]($0)
 ---
@@ -22,24 +25,28 @@ phrase: to do | check box | tick box
 
 name: bold
 phrase: bold | strong
+$0.wrapperPhrase: bold | strong
 -
 **$0**
 ---
 
 name: italic
 phrase: italic | emph | emphasis
+$0.wrapperPhrase: italic | emph | emphasis
 -
 *$0*
 ---
 
 name: italic bold
 phrase: italic bold | bold italic | strong emphasis | strong emph
+$0.wrapperPhrase: italic bold | bold italic | strong emphasis | strong emph
 -
 ***$0***
 ---
 
 name: quote
 phrase: quote
+$0.wrapperPhrase: quote
 -
 > $0
 ---
