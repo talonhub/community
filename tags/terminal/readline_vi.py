@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from typing import Callable
 
 from talon import Context, actions
+
 sleep = actions.sleep
 
 ctx = Context()
