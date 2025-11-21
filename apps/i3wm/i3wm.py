@@ -1,7 +1,7 @@
 import subprocess
 from typing import Optional, Union
 
-from talon import Context, Module, actions, settings
+from talon import Context, Module, actions, settings, ui
 
 mod = Module()
 ctx = Context()
@@ -39,6 +39,22 @@ def i3msg_nocheck(arguments: str):  # type: ignore
         stderr=subprocess.DEVNULL,
         check=False,
     )
+
+@ctx.action_class("user")
+class UserActions:
+    def switcher_focus(name: str):  # type: ignore
+        app = actions.user.get_running_app(name)
+
+        if app == ui.active_app():
+            # Focus next window on same app
+            actions.app.window_next()
+        else:
+            # Focus first window of app
+            app.focus()
+        # Make sure wereally focus the window, even if
+        # focus_on_window_activation is set to "smart" or "urgent"
+        actions.user.i3msg("[urgent=\"latest\"] focus")
+
 
 
 @mod.action_class
