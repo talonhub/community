@@ -7,6 +7,7 @@ and when the change was applied given the delay between changes being
 submitted and the time they were reviewed and merged.
 
 ---
+* 2025-11-21 Deprecated i3wm commands `[grow | shrink | center] window` in favour of `(win | window) [grow | shrink | center] for consistency with other of window commands.
 * 2025-10-12 Change the prefix for bitwise operators from `op bitwise` to `(bit | bitwise)`. Bitwise assignment operators have been moved to the `user.code_operators_bitwise` list.
 * 2025-09-04 Remove `user.c_keywords` list and capture to instead rely on the `user.code_keyword` and `user.code_keyword_unprefixed` lists for consistency.
 * 2025-08-30 Updated community snippet commands to add a snippet stop to the end of snippets so that the final `snip next` can be used to move the cursor after the snippet. The original snippet insertion actions (user.insert_snippet_by_name and user.insert_snippet_by_name_with_phrase) still insert snippets with the old behavior and can be used for specific snippets where you do not want a stop added at the end. You can revert the snippet commands to the old behavior in core/snippets/snippets.talon by following the commented instructions in that file.
