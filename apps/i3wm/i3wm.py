@@ -20,10 +20,16 @@ mod.setting(
     desc="The default key to use for i3wm commands",
 )
 
-ctx.matches = """
+ctx.matches = r"""
 tag: user.i3wm
 """
 
+mod.list("i3wm_resize_dir", desc="Directions for window resizing in i3wm")
+
+@mod.capture(rule="{user.i3wm_resize_dir}+")
+def i3wm_resize_dirs(m) -> str:
+    "One or more resize directions separated by a space"
+    return str(m)
 
 @ctx.action_class("app")
 class AppActions:
@@ -63,19 +69,10 @@ class Actions:
         """Call i3-msg on space-separated arguments"""
         subprocess.check_call(["i3-msg", "--quiet"] + arguments.split(" "))
 
-    def i3wm_grow_window(amount: int):  # type: ignore
-        """Grow window by specified amount (in pixels)"""
-        i3msg_nocheck(f"resize grow width {amount}")
-        i3msg_nocheck(f"resize grow height {amount}")
-        # behaves very badly if the window is not floating
-        # actions.user.i3msg(f"move left {int(amount / 2)}; move up {int(amount / 2)}")
-
-    def i3wm_shrink_window(amount: int):  # type: ignore
-        """Shrink window by specified amount (in pixels)"""
-        i3msg_nocheck(f"resize shrink width {amount}")
-        i3msg_nocheck(f"resize shrink height {amount}")
-        # behaves very badly if the window is not floating
-        # i3msg_nocheck(f"move right {int(amount / 2)}; move down {int(amount / 2)}")
+    def i3wm_resize_window(op: str, amount: int, directions: str):  # type: ignore
+        """Resize window by specified amount and direction (in steps of 10 pixels)"""
+        for dir in directions.split(" "):
+            i3msg_nocheck(f"resize {op} {dir} {10 * amount}")
 
     def i3wm_layout(layout: Optional[str] = None):  # type: ignore
         """Change to specified layout. Toggle split if unspecified."""
