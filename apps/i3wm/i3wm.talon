@@ -21,18 +21,16 @@ port left: user.i3msg("workspace prev")
     user.i3msg("move position {number_small_1} ppt {number_small_2} ppt")
 (win | window) center: user.i3msg("move position center")
 
-(win | window) width <number_small>:
-    user.i3msg("resize set width {number_small} ppt")
+(win | window) width <number_small>: user.i3msg("resize set width {number_small} ppt")
 (win | window) height <number_small>:
     user.i3msg("resize set height {number_small} ppt")
 
-# grow or shrink windows by the indicated amount (in steps of 10 pixels) 
+# grow or shrink windows by the indicated amount (in steps of 10 pixels)
 # to/from the indicated directions (unless constrained by screen boundaries)
 (win | window) grow [<number>] [<user.i3wm_resize_dirs>]:
     user.i3wm_resize_window("grow", number or 4, i3wm_resize_dirs or "height width")
 (win | window) shrink [<number>] [<user.i3wm_resize_dirs>]:
     user.i3wm_resize_window("shrink", number or 4, i3wm_resize_dirs or "height width")
-
 
 reload i three config: user.i3msg("reload")
 restart i three: user.i3msg("restart")
@@ -44,7 +42,6 @@ focus floating: user.i3msg("focus mode_toggle")
 resize mode: user.i3msg("mode resize")
 focus parent: user.i3msg("focus parent")
 focus child: user.i3msg("focus child")
-
 
 horizontal (shell | terminal):
     user.i3msg("split h")
@@ -60,11 +57,8 @@ vertical (shell | terminal):
     user.i3msg("move container to workspace number {number_small}")
 (shuffle | move (win | window) [to]) last port:
     user.i3msg("move container to workspace back_and_forth")
-(shuffle | move) flipper: 
-    user.i3msg("move container to workspace back_and_forth")
-(shuffle | move (win | window)) {user.arrow_key}: 
-    user.i3msg("move {arrow_key}")
-
+(shuffle | move) flipper: user.i3msg("move container to workspace back_and_forth")
+(shuffle | move (win | window)) {user.arrow_key}: user.i3msg("move {arrow_key}")
 
 (win | window) horizontal: user.i3msg("split h")
 (win | window) vertical: user.i3msg("split v")
@@ -95,12 +89,11 @@ new scratch (shell | window):
     user.i3msg("move scratchpad")
     user.i3msg("scratchpad show")
 
-
 murder:
     user.deprecate_command("2023-02-04", "murder", "win kill")
     app.window_close()
 
-center window: 
+center window:
     user.deprecate_command("2025-11-21", "center window", "(win | window) center")
     user.i3msg("move position center")
 grow window [<number>]:
@@ -109,4 +102,3 @@ grow window [<number>]:
 shrink window [<number>]:
     user.deprecate_command("2025-11-21", "shrink window", "(win | window) shrink")
     user.i3wm_resize_window("shrink", number or 4, "height width")
-
