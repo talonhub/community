@@ -41,7 +41,7 @@ generic [type] {user.java_generic_data_structure}:
 # multiple type parameters: "map of string and integer" -> Map<String, Integer>
 # user type as a parameter does not require the type prefix: "list of user type" -> List<UserType>
 # generic types can be nested. Example: "list of list of string" -> List<List<String>>
-# a nested generic type can be exited with "stop". Example: "map of list of integer stop string" -> Map<List<Integer>, String> 
+# a nested generic type can be exited with "stop". Example: "map of list of integer stop string" -> Map<List<Integer>, String>
 <user.java_generic_type>: insert(java_generic_type + " ")
 
 # Arrays
