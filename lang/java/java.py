@@ -163,32 +163,32 @@ def java_generic_data_structure(m) -> str:
 class GenericTypeConnector(Enum):
     AND = auto()
     OF = auto()
-    STOP = auto()
+    DONE = auto()
 
 
-@mod.capture(rule="stop")
-def java_generic_type_connector_stop(m) -> GenericTypeConnector:
+@mod.capture(rule="done")
+def java_generic_type_connector_done(m) -> GenericTypeConnector:
     """Denotes ending a nested generic type"""
-    return GenericTypeConnector.STOP
+    return GenericTypeConnector.DONE
 
 
-@mod.capture(rule="and|of|<user.java_generic_type_connector_stop>")
+@mod.capture(rule="and|of|<user.java_generic_type_connector_done>")
 def java_generic_type_connector(m) -> GenericTypeConnector:
     """Determines how to put generic type parameters together"""
     with suppress(AttributeError):
-        return m.java_generic_type_connector_stop
+        return m.java_generic_type_connector_done
     return GenericTypeConnector[m[0].upper()]
 
 
 @mod.capture(
-    rule="<user.java_generic_type_connector> <user.java_type_parameter_argument> [<user.java_generic_type_connector_stop>]+"
+    rule="<user.java_generic_type_connector> <user.java_type_parameter_argument> [<user.java_generic_type_connector_done>]+"
 )
 def java_generic_type_continuation(m) -> list[Union[GenericTypeConnector, str]]:
     """A generic type parameter that goes after the first using connectors"""
     result = [m.java_generic_type_connector, m.java_type_parameter_argument]
     with suppress(AttributeError):
-        stops = m.java_generic_type_connector_stop_list
-        result.extend(stops)
+        dones = m.java_generic_type_connector_done_list
+        result.extend(dones)
     return result
 
 
@@ -229,7 +229,7 @@ def java_type_parameter_arguments(m) -> str:
                 case GenericTypeConnector.OF:
                     pieces.append("<")
                     nesting += 1
-                case GenericTypeConnector.STOP:
+                case GenericTypeConnector.DONE:
                     pieces.append(">")
                     nesting -= 1
     if nesting > 0:
