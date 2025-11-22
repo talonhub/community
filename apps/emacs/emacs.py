@@ -1,7 +1,8 @@
 import logging
+import re
 from typing import Optional
 
-from talon import Context, Module, actions, settings
+from talon import Context, Module, actions, settings, ui
 
 mod = Module()
 mod.setting(
@@ -362,8 +363,19 @@ class CodeActions:
 
 @ctx.action_class("win")
 class WinActions:
-    # This assumes the title is/contains the filename.
-    # To do this, put this in init.el:
-    # (setq-default frame-title-format '((:eval (buffer-name (window-buffer (minibuffer-selected-window))))))
+    # This assumes the title either is the buffer name or contains the buffer
+    # name before a space-surrounded hyphen. This is the default for the latest
+    # GNU Emacs. If you are not on macOS and your flavor of Emacs defaults to
+    # something incompatible, you may need to put one of the following two
+    # declarations into your init.el ("%b" being replaced by the buffer name):
+    # (setq frame-title-format "%b")
+    # (setq frame-title-format '(multiple-frames "%b" ("" "%b - Emacs at " system-name)))
     def filename():
-        return actions.win.title()
+        # On macOS, get the filename directly
+        if doc := getattr(ui.active_window(), "doc", None):
+            return doc
+
+        # Otherwise, get it from the window title
+        title = actions.win.title()
+        buffer_name = title.split(" - ")[0]
+        return re.sub(r"<[^>]+>$", "", buffer_name)
