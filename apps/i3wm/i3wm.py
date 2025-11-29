@@ -60,7 +60,7 @@ class UserActions:
         else:
             # Focus first window of app
             app.focus()
-        # Make sure wereally focus the window, even if
+        # Make sure we really focus the window, even if
         # focus_on_window_activation is set to "smart" or "urgent"
         actions.user.i3msg('[urgent="latest"] focus')
 
