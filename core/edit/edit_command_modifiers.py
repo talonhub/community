@@ -68,7 +68,7 @@ modifier_dictionary: dict[str, EditModifierCallback] = {
 class Actions:
     def run_edit_modifier_callback(modifier: EditModifier):
         """
-        Run a callback that selects or prepares text ready to apply and edit action.
+        Run a callback that selects or prepares text ready to apply an edit action.
         Intended for internal use and overwriting
         """
         count = modifier.count
