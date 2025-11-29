@@ -60,8 +60,19 @@ simple_action_callbacks: dict[str, Callable] = {}
 custom_callbacks = {}
 
 compound_actions = {
+    ("delete", "word"): lambda: normal_cmd("d i w"),
     ("delete", "wordLeft"): lambda: actions.key("ctrl-w"),
     ("delete", "wordRight"): delete_word_right,
+
+    ("cutToClipboard", "word"): lambda: normal_cmd("c i w "),
+    ("cutToClipboard", "wordLeft"): lambda: normal_cmd("c b"),
+    ("cutToClipboard", "wordRight"): lambda: normal_cmd("c w"),
+
+    ("copyToClipboard", "word"): lambda: normal_cmd("y i w"),
+    ("copyToClipboard", "wordLeft"):
+    # Yanking backwards doesn't consider the current character the cursor is on, so we need to move the cursor one to the right
+    lambda: normal_cmd("right y b i"),
+    ("copyToClipboard", "wordRight"): lambda: normal_cmd("y w a")
 }
 
 
@@ -147,26 +158,13 @@ class Actions:
     def cut_line():
         normal_cmd("c c")
 
-    def cut_word_right():
-        normal_cmd("c w")
-
-    def cut_word_left():
-        normal_cmd("c b")
-
-    def copy_word_left():
-        # Yanking backwards doesn't consider the current character the cursor is on, so we need to move the cursor one to the right
-        normal_cmd("right y b i")
-
-    def copy_word_right():
-        normal_cmd("y w a")
-
     def get_simple_edit_action_callback(action_type: str) -> Callable | None:
         """Convert a edit action type created from a string into its associated Callback.
         If it can't find one in this file, it will try the next most specific community version
         """
         cb = simple_action_callbacks.get(action_type)
         if not cb:
-            cb = actions.next()
+            cb = actions.next(action_type)
         return cb
 
     def get_compound_edit_action_modifier_callback(
