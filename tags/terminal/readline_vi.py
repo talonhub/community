@@ -101,7 +101,7 @@ class EditActions:
 
     def undo():
         # Technically control underscore works in vi readline mode as well, but this also works in zsh
-        normal_cmd("u a")
+        normal_cmd("u i")
 
     def redo():
         # This does not work in readline (no redo command at all), but will work in zsh and other vi emulators
