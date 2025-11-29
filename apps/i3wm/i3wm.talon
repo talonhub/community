@@ -75,5 +75,3 @@ new scratch (shell | window):
     sleep(200ms)
     user.i3msg("move scratchpad")
     user.i3msg("scratchpad show")
-
-
