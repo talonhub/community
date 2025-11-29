@@ -18,7 +18,7 @@ class PendingSelection:
     count: int = 1
 
 
-pendingSelection: PendingSelection | None = None
+pending_selection: PendingSelection | None = None
 
 
 # using d instead of c for removal so that we remain in normal mode and the character sent to exit normal mode doesn't get inserted
@@ -42,11 +42,11 @@ def normal_cmd(keys):
 
 
 def add_pending(motion, end):
-    global pendingSelection
-    if pendingSelection and pendingSelection.motion == motion:
-        pendingSelection.count += 1
+    global pending_selection
+    if pending_selection and pending_selection.motion == motion:
+        pending_selection.count += 1
     else:
-        pendingSelection = PendingSelection(motion, end)
+        pending_selection = PendingSelection(motion, end)
 
 
 def delete_word_right():
@@ -123,31 +123,31 @@ class EditActions:
 
 @ctx.action_class("user")
 class Actions:
-    def run_action_callback(action):
+    def run_edit_action_callback(action):
         """
         Run a callback that applies an edit action to the selected
         Intended for internal use and overwriting
         """
-        global pendingSelection
+        global pending_selection
         action_type = action.type
 
         if action_type in edit_action_vi_keys:
             normal_cmd(edit_action_vi_keys[action_type])
         else:
-            callback = actions.user.get_simple_action_callback(action_type)
+            callback = actions.user.get_simple_edit_action_callback(action_type)
             if callback:
                 callback()
             else:
                 print("readline_vi only supports simple action callbacks")
                 return
 
-        if not pendingSelection:
+        if not pending_selection:
             print("readline_vi: No pending selection")
             return
-        actions.insert(str(pendingSelection.count))
-        actions.insert(pendingSelection.motion)
-        actions.insert(pendingSelection.endAction)
-        pendingSelection = None
+        actions.insert(str(pending_selection.count))
+        actions.insert(pending_selection.motion)
+        actions.insert(pending_selection.endAction)
+        pending_selection = None
 
     def cut_line():
         normal_cmd("cc")
@@ -168,7 +168,7 @@ class Actions:
     def copy_word_right():
         normal_cmd("ywa")
 
-    def get_simple_action_callback(action_type: str) -> Callable | None:
+    def get_simple_edit_action_callback(action_type: str) -> Callable | None:
         """Convert a edit action type created from a string into its associated Callback.
         If it can't find one in this file, it will try the next most specific community version
         """

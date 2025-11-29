@@ -90,14 +90,14 @@ simple_action_callbacks: dict[str, Callable] = {
 
 @mod.action_class
 class Actions:
-    def run_action_callback(action: EditAction):
+    def run_edit_action_callback(action: EditAction):
         """
         Run a callback that applies an edit action to the selected
         Intended for internal use and overwriting
         """
         action_type = action.type
 
-        callback = actions.user.get_simple_action_callback(action_type)
+        callback = actions.user.get_simple_edit_action_callback(action_type)
         if callback:
             callback()
             return
@@ -119,6 +119,6 @@ class Actions:
             case _:
                 raise ValueError(f"Unknown edit action: {action_type}")
 
-    def get_simple_action_callback(action_type: str) -> Callable | None:
+    def get_simple_edit_action_callback(action_type: str) -> Callable | None:
         """Convert a edit action type created from a string into its associated Callback"""
         return simple_action_callbacks.get(action_type)

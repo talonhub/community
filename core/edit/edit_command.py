@@ -63,7 +63,7 @@ def select_lines(action, direction, count):
     # ensure we take the start/end of the line too!
     extend_line_callback()
     actions.sleep(selection_delay)
-    actions.user.run_action_callback(action)
+    actions.user.run_edit_action_callback(action)
 
 
 def select_words(action, direction, count):
@@ -77,7 +77,7 @@ def select_words(action, direction, count):
         selection_callback()
         actions.sleep(selection_delay)
 
-    actions.user.run_action_callback(action)
+    actions.user.run_edit_action_callback(action)
 
 
 def word_movement_handler(action, direction, count):
@@ -190,8 +190,8 @@ class Actions:
                 cb()
             return
 
-        actions.user.run_modifier_callback(modifier)
-        actions.user.run_action_callback(action)
+        actions.user.run_edit_modifier_callback(modifier)
+        actions.user.run_edit_action_callback(action)
 
     def get_compound_edit_action_modifier_callback(
         pair: tuple[str, str],
