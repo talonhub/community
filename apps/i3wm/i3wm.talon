@@ -75,7 +75,3 @@ new scratch (shell | window):
     sleep(200ms)
     user.i3msg("move scratchpad")
     user.i3msg("scratchpad show")
-
-murder:
-    user.deprecate_command("2023-02-04", "murder", "win kill")
-    app.window_close()
