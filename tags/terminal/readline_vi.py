@@ -38,7 +38,7 @@ def normal_cmd(keys):
     actions.key("escape")
     # sleep to avoid interpreting as an escape sequence
     sleep(0.2)
-    actions.insert(keys)
+    actions.key(keys)
 
 
 def add_pending(motion, end):
@@ -51,12 +51,8 @@ def add_pending(motion, end):
 
 def delete_word_right():
     # need a custom function, because otherwise the right key that moves the cursor will interfere with the pending action
-    actions.key("escape")
-    sleep(0.1)
-    # the escape key shifts the position one to the left
-    actions.key("right")
-    normal_cmd("dw")
-    actions.insert("i")
+    # the normal escape key shifts the position one to the left, so let's undo that first
+    normal_cmd("right d w i")
 
 
 simple_action_callbacks: dict[str, Callable] = {}
@@ -74,19 +70,17 @@ compound_actions = {
 @ctx.action_class("edit")
 class EditActions:
     def delete_line():
-        normal_cmd("cc")
+        normal_cmd("c c")
 
     def word_left():
-        normal_cmd("bi")
+        normal_cmd("b i")
 
     def word_right():
-        actions.key("escape")
-        sleep(0.1)
-        # the escape key shifts the position one to the left
-        actions.key("right")
-        actions.insert("w")
+        # the escape key shifts the position one to the left, sir undo that first to ensure we have not ended up on the previous word
+        normal_cmd("right")
+        actions.key("w")
         # Unfortunately this will end up one character before the end if we have reached the last word of the line, but using 'a' would result in always being in the second character of any other word in the line
-        actions.insert("i")
+        actions.key("i")
 
     def line_end():
         normal_cmd("A")
@@ -96,13 +90,11 @@ class EditActions:
 
     def undo():
         # Technically control underscore works in vi readline mode as well, but this also works in zsh
-        normal_cmd("ua")
+        normal_cmd("u a")
 
     def redo():
-        actions.key("escape")
-        sleep(0.1)
-        actions.key("ctrl-r")
-        actions.insert("a")
+        # This does not work in readline (no redo command at all), but will work in zsh and other vi emulators
+        normal_cmd("ctrl-r a")
 
     # TODO: we don't want to overwrite the system's paste action, should this be a separate command?
     # def paste():
@@ -149,24 +141,24 @@ class Actions:
         actions.insert(pending_selection.endAction)
         pending_selection = None
 
+    # Cut and copy actions can't use the system clipboard,
+    # which we actually want to reserve for copy/paste at terminal anyway,
+    # but we can at least repast them by manually using 'p' if needed
     def cut_line():
-        normal_cmd("cc")
+        normal_cmd("c c")
 
     def cut_word_right():
-        normal_cmd("cw")
+        normal_cmd("c w")
 
     def cut_word_left():
-        normal_cmd("cb")
+        normal_cmd("c b")
 
     def copy_word_left():
-        actions.key("escape")
-        sleep(0.2)
-        actions.key("right")
         # Yanking backwards doesn't consider the current character the cursor is on, so we need to move the cursor one to the right
-        actions.insert("ybi")
+        normal_cmd("right y b i")
 
     def copy_word_right():
-        normal_cmd("ywa")
+        normal_cmd("y w a")
 
     def get_simple_edit_action_callback(action_type: str) -> Callable | None:
         """Convert a edit action type created from a string into its associated Callback.
