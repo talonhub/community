@@ -89,10 +89,6 @@ new scratch (shell | window):
     user.i3msg("move scratchpad")
     user.i3msg("scratchpad show")
 
-murder:
-    user.deprecate_command("2023-02-04", "murder", "win kill")
-    app.window_close()
-
 center window:
     user.deprecate_command("2025-11-21", "center window", "(win | window) center")
     user.i3msg("move position center")
