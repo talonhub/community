@@ -63,16 +63,14 @@ compound_actions = {
     ("delete", "word"): lambda: normal_cmd("d i w"),
     ("delete", "wordLeft"): lambda: actions.key("ctrl-w"),
     ("delete", "wordRight"): delete_word_right,
-
     ("cutToClipboard", "word"): lambda: normal_cmd("c i w "),
     ("cutToClipboard", "wordLeft"): lambda: normal_cmd("c b"),
     ("cutToClipboard", "wordRight"): lambda: normal_cmd("c w"),
-
     ("copyToClipboard", "word"): lambda: normal_cmd("y i w"),
     ("copyToClipboard", "wordLeft"):
     # Yanking backwards doesn't consider the current character the cursor is on, so we need to move the cursor one to the right
     lambda: normal_cmd("right y b i"),
-    ("copyToClipboard", "wordRight"): lambda: normal_cmd("y w a")
+    ("copyToClipboard", "wordRight"): lambda: normal_cmd("y w a"),
 }
 
 
