@@ -48,7 +48,7 @@ It is recommended to install `community` using [`git`](https://git-scm.com/).
    winget install --id Git.Git -e --source winget
    ```
 
-3. Paste the following into a _new_ Powershell window _one_ line at a time:
+3. Paste the following into a *new* Powershell window then press <kbd>Enter</kbd>:
 
    ```
    cd $env:APPDATA/talon/user
