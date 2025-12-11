@@ -41,12 +41,15 @@ Note that it is also possible to install `community` by [downloading and extract
 
 It is recommended to install `community` using [`git`](https://git-scm.com/).
 
-1. Install [`git`](https://git-scm.com/)
-2. Open a [command prompt](https://www.wikihow.com/Open-the-Command-Prompt-in-Windows)
-3. Paste the following into the command prompt window then press <kbd>Enter</kbd>:
+1. Open a [powershell window](https://apps.microsoft.com/detail/9mz1snwt0n5d?hl=en-GB&gl=IN)
+2. Install winget by pasting the following command into the Powershell Window
+   ```
+   winget install --id Git.Git -e --source winget
+   ```
+3. Paste the following into the Powershell window then press <kbd>Enter</kbd>:
 
    ```
-   cd %AppData%\Talon\user
+   cd $env:APPDATA/talon/user
    git clone https://github.com/talonhub/community community
    ```
 
