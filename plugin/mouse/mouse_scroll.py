@@ -216,10 +216,7 @@ class Actions:
         global hiss_scroll_up
         hiss_scroll_up = False
         
-    def hiss_toggle():
-        """Toggles mouse hiss scroll direction"""
-        global hiss_scroll_up
-        hiss_scroll_up = False if hiss_scroll_up is True else True
+
         
         
 
