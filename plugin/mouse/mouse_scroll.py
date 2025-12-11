@@ -215,10 +215,6 @@ class Actions:
         """Change mouse hiss scroll direction to down"""
         global hiss_scroll_up
         hiss_scroll_up = False
-        
-
-        
-        
 
 
 @ctx.action_class("user")
