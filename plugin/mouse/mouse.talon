@@ -126,5 +126,6 @@ wheel {user.continuous_scrolling_direction} here <number_small>:
     user.mouse_scroll_continuous(continuous_scrolling_direction, number_small)
 copy mouse position: user.copy_mouse_position()
 # To scroll with a hiss sound, set mouse_enable_hiss_scroll to true in settings.talon
-mouse hiss up: user.hiss_scroll_up()
-mouse hiss down: user.hiss_scroll_down()
+hiss | his  up: user.hiss_scroll_up()
+hiss | his down: user.hiss_scroll_down()
+hiss | his toggle: user.hiss_toggle()
