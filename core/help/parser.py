@@ -120,7 +120,7 @@ def _word_node(tokens: Sequence[Token]) -> tuple[WordNode | None, Sequence[Token
 class WordsNode:
     def __init__(self, children: list[WordNode]):
         self.children = children
-    
+
     def __str__(self) -> str:
         return "\n".join(self.lines(0))
 
@@ -153,7 +153,10 @@ class ReferenceNode:
         reference = ".".join(token.value for token in self.reference_tokens)
         yield f"{' ' * spaces}ReferenceNode(reference={reference})"
 
-def _reference_node(tokens: Sequence[Token]) -> tuple[ReferenceNode | None, Sequence[Token]]:
+
+def _reference_node(
+    tokens: Sequence[Token],
+) -> tuple[ReferenceNode | None, Sequence[Token]]:
     reference_tokens: list[Token] = []
     while tokens:
         reference_token, tokens = _pop_if_token_type(tokens, TokenType.WORD)
@@ -328,6 +331,7 @@ def _list_node(tokens: Sequence[Token]) -> tuple[ListNode | None, Sequence[Token
 
     return ListNode(reference), tokens
 
+
 class CaptureNode:
     def __init__(self, reference: ReferenceNode):
         self.reference = reference
@@ -353,6 +357,7 @@ def _capture_node(
     _, tokens = _require_token_type(tokens, TokenType.CAPTURE_END, "capture segment")
 
     return CaptureNode(reference), tokens
+
 
 class RuleNode:
     def __init__(
