@@ -19,7 +19,8 @@ class TokenType(Enum):
     START_ANCHOR = auto()
     END_ANCHOR = auto()
     WHITESPACE = auto()
-    WORDS = auto()
+    WORD = auto()
+    DOT = auto()
 
 
 TOKEN_SPECIFICATION = {
@@ -36,8 +37,9 @@ TOKEN_SPECIFICATION = {
     TokenType.CAPTURE_END: r"\>",
     TokenType.START_ANCHOR: r"\^",
     TokenType.END_ANCHOR: r"\$",
-    TokenType.WHITESPACE: r"\s",
-    TokenType.WORDS: r"\w+",
+    TokenType.WHITESPACE: r"\s+",
+    TokenType.WORD: r"\w+",
+    TokenType.DOT: r"\.",
 }
 
 

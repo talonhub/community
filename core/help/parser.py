@@ -34,7 +34,7 @@ def _require_token_type(
 
 type RuleSyntaxNode = PrefixedRuleSyntaxNode | PostfixRuleSyntaxNode
 
-type PrefixedRuleSyntaxNode = WordNode | OptionalNode | GroupNode | ListNode | CaptureNode
+type PrefixedRuleSyntaxNode = WordsNode | ReferenceNode | OptionalNode | GroupNode | ListNode | CaptureNode
 
 type PostfixRuleSyntaxNode = ZeroOrMoreNode | OneOrMoreNode | ChoiceNode
 
@@ -100,21 +100,72 @@ def _rule_syntax_node_postfixed(
 
 
 class WordNode:
-    def __init__(self, words_token: Token):
-        self.words_token = words_token
+    def __init__(self, word_token: Token):
+        self.word_token = word_token
 
     def __str__(self) -> str:
         return "\n".join(self.lines(0))
 
     def lines(self, spaces: int) -> Generator[str]:
-        yield f"{' ' * spaces}WordNode(word={self.words_token.value})"
+        yield f"{' ' * spaces}WordNode(word={self.word_token.value})"
 
 
-def _words_node(tokens: Sequence[Token]) -> tuple[WordNode | None, Sequence[Token]]:
-    words_token, tokens = _pop_if_token_type(tokens, TokenType.WORDS)
+def _word_node(tokens: Sequence[Token]) -> tuple[WordNode | None, Sequence[Token]]:
+    words_token, tokens = _pop_if_token_type(tokens, TokenType.WORD)
     if words_token:
         return WordNode(words_token), tokens
     return None, tokens
+
+
+class WordsNode:
+    def __init__(self, children: list[WordNode]):
+        self.children = children
+    
+    def __str__(self) -> str:
+        return "\n".join(self.lines(0))
+
+    def lines(self, spaces: int) -> Generator[str]:
+        yield f"{' ' * spaces}WordsNode"
+        for child in self.children:
+            yield from child.lines(spaces + INDENT_SIZE)
+
+
+def _words_node(tokens: Sequence[Token]) -> tuple[WordsNode | None, Sequence[Token]]:
+    children: list[WordNode] = []
+    while True:
+        word_node, tokens = _word_node(tokens)
+        if not word_node:
+            break
+        children.append(word_node)
+    if not children:
+        return None, tokens
+    return WordsNode(children), tokens
+
+
+class ReferenceNode:
+    def __init__(self, reference_tokens: list[Token]):
+        self.reference_tokens = reference_tokens
+
+    def __str__(self) -> str:
+        return "\n".join(self.lines(0))
+
+    def lines(self, spaces: int) -> Generator[str]:
+        reference = ".".join(token.value for token in self.reference_tokens)
+        yield f"{' ' * spaces}ReferenceNode(reference={reference})"
+
+def _reference_node(tokens: Sequence[Token]) -> tuple[ReferenceNode | None, Sequence[Token]]:
+    reference_tokens: list[Token] = []
+    while tokens:
+        reference_token, tokens = _pop_if_token_type(tokens, TokenType.WORD)
+        if not reference_token:
+            break
+        reference_tokens.append(reference_token)
+        dot_token, tokens = _pop_if_token_type(tokens, TokenType.DOT)
+        if not dot_token:
+            break
+    if not reference_tokens:
+        return None, tokens
+    return ReferenceNode(reference_tokens), tokens
 
 
 class OptionalNode:
@@ -254,14 +305,15 @@ def _group_node(tokens: Sequence[Token]) -> tuple[GroupNode | None, Sequence[Tok
 
 
 class ListNode:
-    def __init__(self, reference: Token):
+    def __init__(self, reference: ReferenceNode):
         self.reference = reference
 
     def __str__(self) -> str:
         return "\n".join(self.lines(0))
 
     def lines(self, spaces: int) -> Generator[str]:
-        yield f"{' ' * spaces}ListNode(reference={self.reference.value})"
+        yield f"{' ' * spaces}ListNode"
+        yield from self.reference.lines(spaces + INDENT_SIZE)
 
 
 def _list_node(tokens: Sequence[Token]) -> tuple[ListNode | None, Sequence[Token]]:
@@ -269,21 +321,23 @@ def _list_node(tokens: Sequence[Token]) -> tuple[ListNode | None, Sequence[Token
     if not list_start:
         return None, tokens
 
-    reference_token, tokens = _require_token_type(tokens, TokenType.WORDS)
+    reference, tokens = _reference_node(tokens)
+    if not reference:
+        raise ValueError("Expected reference node in list segment")
     _, tokens = _require_token_type(tokens, TokenType.LIST_END, "list segment")
 
-    return ListNode(reference_token), tokens
-
+    return ListNode(reference), tokens
 
 class CaptureNode:
-    def __init__(self, reference: Token):
+    def __init__(self, reference: ReferenceNode):
         self.reference = reference
 
     def __str__(self) -> str:
         return "\n".join(self.lines(0))
 
     def lines(self, spaces: int) -> Generator[str]:
-        yield f"{' ' * spaces}CaptureNode(reference={self.reference.value})"
+        yield f"{' ' * spaces}CaptureNode"
+        yield from self.reference.lines(spaces + INDENT_SIZE)
 
 
 def _capture_node(
@@ -293,11 +347,12 @@ def _capture_node(
     if not capture_start:
         return None, tokens
 
-    reference_token, tokens = _require_token_type(tokens, TokenType.WORDS)
+    reference, tokens = _reference_node(tokens)
+    if not reference:
+        raise ValueError("Expected reference node in capture segment")
     _, tokens = _require_token_type(tokens, TokenType.CAPTURE_END, "capture segment")
 
-    return CaptureNode(reference_token), tokens
-
+    return CaptureNode(reference), tokens
 
 class RuleNode:
     def __init__(
