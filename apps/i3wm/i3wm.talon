@@ -3,7 +3,6 @@ os: linux
 tag: user.i3wm
 -
 # Change the settings below, if your key combination for these actions differs from the defaults.
-# settings():
 # user.i3_launch_key = "super-d"
 # user.i3_terminal_key = "super-enter"
 
