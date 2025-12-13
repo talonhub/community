@@ -64,6 +64,17 @@ class UserActions:
         # focus_on_window_activation is set to "smart" or "urgent"
         actions.user.i3msg('[urgent="latest"] focus')
 
+    # the default implementation considers desktops consecutively numbered
+    # this would be highly confusing given the numbering of i3wm workspaces
+    def desktop(number: int):  # type: ignore
+        actions.user.i3msg(f"workspace number {number}")
+
+    def desktop_next():
+        actions.user.i3msg(f"workspace next")
+
+    def desktop_last():
+        actions.user.i3msg(f"workspace prev")
+
 
 @mod.action_class
 class Actions:
