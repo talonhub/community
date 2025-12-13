@@ -1,7 +1,11 @@
-# NOTE: If you want to use i3wm you must enable the tag settings.talon. i.e.: `tag(): user.i3wm`
+# NOTE: If you want to use i3wm you must enable the tag in settings.talon. i.e.: `tag(): user.i3wm`
 os: linux
 tag: user.i3wm
 -
+
+# Change the settings below, if your key combination for these actions differs from the defaults.
+# user.i3_launch_key = "super-d"
+# user.i3_terminal_key = "super-enter"
 
 # Use the commands in desktops.talon to navigate between workspaces
 (desk flip | flipper): user.i3msg("workspace back_and_forth")
@@ -78,7 +82,9 @@ launch <user.text>:
     user.i3wm_launch()
     sleep(100ms)
     insert("{text}")
-lock screen: user.i3wm_lock()
+
+# adapt key configuration as needed
+lock screen: key(super-shift-x)
 
 (launch (shell | terminal) | koopa): user.i3wm_shell()
 
