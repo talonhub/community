@@ -81,3 +81,14 @@ big word neck [<number_small>]:
     user.navigation_by_name("SELECT", "RIGHT", "DEFAULT", "big", number_small or 1)
 big word pre [<number_small>]:
     user.navigation_by_name("SELECT", "LEFT", "DEFAULT", "big", number_small or 1)
+
+# Select Using the Items Keyword
+<number_small> items:
+    key(shift-down)
+    repeat(number_small-1)
+left <number_small> items:
+    key(shift-left)
+    repeat(number_small-1)
+right <number_small> items:
+    key(shift-right)
+    repeat(number_small-1)
