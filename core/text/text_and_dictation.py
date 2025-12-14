@@ -119,6 +119,10 @@ def prose_spell(m) -> str:
     """Spell word phonetically"""
     return m.letters
 
+@mod.capture(rule="ship <user.letters>")
+def prose_ship(m) -> str:
+    """Spell word phonetically using uppercase letters"""
+    return m.letters.upper()
 
 @mod.capture(rule="clip clip")
 def prose_clipboard(m) -> str:
@@ -161,6 +165,7 @@ def text(m) -> str:
         "| <user.abbreviation>"
         "| <user.prose_contact>"
         "| <user.prose_spell>"
+        "| <user.prose_ship>"
         "| <user.prose_clipboard>"
         "| <phrase>"
         ")+"
@@ -185,6 +190,7 @@ def prose(m) -> str:
         "| <user.abbreviation>"
         "| <user.prose_contact>"
         "| <user.prose_spell>"
+        "| <user.prose_ship>"
         "| <user.prose_clipboard>"
         "| <phrase>"
         ")+"
