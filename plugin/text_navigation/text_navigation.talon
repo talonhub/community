@@ -85,10 +85,10 @@ big word pre [<number_small>]:
 # Select Using the Items Keyword
 <number_small> items:
     key(shift-down)
-    repeat(number_small-1)
+    repeat(number_small - 1)
 left <number_small> items:
     key(shift-left)
-    repeat(number_small-1)
+    repeat(number_small - 1)
 right <number_small> items:
     key(shift-right)
-    repeat(number_small-1)
+    repeat(number_small - 1)
