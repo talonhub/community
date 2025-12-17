@@ -75,6 +75,13 @@ insertionScope: statement
 mod.tag($1, desc="$0")
 ---
 
+name: talonModuleMode
+phrase: module mode
+insertionScope: statement
+-
+mod.mode($1, desc="$0")
+---
+
 name: talonContextMatch
 phrase: context match
 insertionScope: statement
