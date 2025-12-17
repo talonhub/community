@@ -60,6 +60,16 @@ class $2Actions:
     $0
 ---
 
+name: talonImguiFunction
+phrase: talon imgui
+insertionScope: namedFunction
+$2.insertionFormatter: SNAKE_CASE
+-
+@imgui.open($1)
+def $2(gui: imgui.GUI):
+    $3
+---
+
 name: suppressError
 phrase: suppress error
 -
