@@ -39,10 +39,18 @@ insertionScope: statement
 -
 mod.setting(
     "$1",
-    type = $2,
-    default = $3,
-    desc = "$4"
+    type=$2,
+    default=$3,
+    desc="$0"
 )
+---
+
+name: talonModuleCapture
+phrase: module capture
+-
+@mod.capture(rule="$1")
+def $2(m) -> $3:
+    $0
 ---
 
 name: talonContextMatch
