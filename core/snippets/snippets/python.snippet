@@ -151,6 +151,22 @@ def on_ready():
 app.register("ready", on_ready)
 ---
 
+name: talonClipboardRevertBlock
+phrase: clip revert
+insertionScope: statement
+-
+with clip.revert():
+    $0
+---
+
+name: talonClipboardCaptureBlock
+phrase: clip capture
+insertionScope: statement
+-
+with clip.capture() as $1:
+    $0
+---
+
 name: suppressError
 phrase: suppress error
 -
