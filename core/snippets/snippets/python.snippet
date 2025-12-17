@@ -53,6 +53,14 @@ def $2(m) -> $3:
     $0
 ---
 
+name: talonContextCapture
+phrase: context capture
+-
+@ctx.capture($1, rule="$2")
+def $3(m) -> $4:
+    $0
+---
+
 name: talonModuleList
 phrase: module list
 insertionScope: statement
