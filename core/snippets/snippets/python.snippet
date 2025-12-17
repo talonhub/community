@@ -70,6 +70,16 @@ def $2(gui: imgui.GUI):
     $3
 ---
 
+name: talonOnReadyFunction
+phrase: on ready
+-
+def on_ready():
+    $0
+
+
+app.register("ready", on_ready)
+---
+
 name: suppressError
 phrase: suppress error
 -
