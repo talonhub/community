@@ -33,6 +33,18 @@ class Actions:
     $0
 ---
 
+name: talonModuleSetting
+phrase: module setting
+insertionScope: statement
+-
+mod.setting(
+    "$1",
+    type = $2,
+    default = $3,
+    desc = "$4"
+)
+---
+
 name: talonContextMatch
 phrase: context match
 insertionScope: statement
