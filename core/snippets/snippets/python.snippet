@@ -47,14 +47,25 @@ mod.setting(
 
 name: talonModuleCapture
 phrase: module capture
+insertionScope: namedFunction
 -
 @mod.capture(rule="$1")
 def $2(m) -> $3:
     $0
 ---
 
+name: talonModuleScope
+phrase: module scope
+insertionScope: namedFunction
+-
+@mod.scope
+def $1():
+    $0
+---
+
 name: talonContextCapture
 phrase: context capture
+insertionScope: namedFunction
 -
 @ctx.capture($1, rule="$2")
 def $3(m) -> $4:
