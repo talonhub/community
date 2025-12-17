@@ -53,6 +53,20 @@ def $2(m) -> $3:
     $0
 ---
 
+name: talonModuleList
+phrase: module list
+insertionScope: statement
+-
+mod.list($1, desc="$0")
+---
+
+name: talonModuleTag
+phrase: module tag
+insertionScope: statement
+-
+mod.tag($1, desc="$0")
+---
+
 name: talonContextMatch
 phrase: context match
 insertionScope: statement
