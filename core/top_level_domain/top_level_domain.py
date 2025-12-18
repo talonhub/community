@@ -6,17 +6,18 @@ mod = Module()
 mod.list("top_level_domain", desc="A top level domain, such as .com")
 
 _top_level_domains_defaults = {
-	"dot com": ".com",
-	"dot net": ".net",
-	"dot org": ".org",
+    "dot com": ".com",
+    "dot net": ".net",
+    "dot org": ".org",
     "dot education": ".edu",
     "dot e d u": ".edu",
-	"dot us": ".us",
+    "dot us": ".us",
     "dot U S": ".us",
-	"dot co dot UK": ".co.uk",
+    "dot co dot UK": ".co.uk",
 }
 
 ctx = Context()
+
 
 @track_csv_list(
     "top_level_domains.csv",
