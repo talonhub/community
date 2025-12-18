@@ -130,6 +130,14 @@ def $2(gui: imgui.GUI):
     $3
 ---
 
+name: talonImguiButton
+phrase: talon imgui button
+insertionScope: statement
+-
+if gui.button($1):
+    $0
+---
+
 name: talonSettingChangeHandler
 phrase: setting change handler
 insertionScope: namedFunction
