@@ -138,6 +138,17 @@ if gui.button($1):
     $0
 ---
 
+name: talonFileChangeHandler
+phrase: file change handler
+insertionScope: namedFunction
+$1.insertionFormatter: SNAKE_CASE
+-
+def $1(path, flags):
+    $0
+
+fs.watch($2, $1)
+---
+
 name: talonSettingChangeHandler
 phrase: setting change handler
 insertionScope: namedFunction
