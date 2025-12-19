@@ -1,4 +1,5 @@
 from talon import Context, Module, actions, ctrl, settings, ui
+from dataclasses import dataclass
 
 mod = Module()
 ctx = Context()
@@ -32,6 +33,16 @@ mod.setting(
     desc="When enabled, mouse wake will hide the cursor. mouse_wake enables zoom mouse.",
 )
 
+@dataclass(slots=True)
+class EyeTrackingState:
+    control_zoom: bool
+    control: bool
+    control1: bool
+eye_tracking_state = EyeTrackingState(
+        actions.tracking.control_zoom_enabled(),
+        actions.tracking.control_enabled(),
+        actions.tracking.control1_enabled(),
+        )
 
 @mod.action_class
 class Actions:
@@ -46,7 +57,12 @@ class Actions:
 
     def mouse_wake():
         """Enable control mouse, zoom mouse, and disables cursor"""
-        actions.tracking.control_zoom_toggle(True)
+        if eye_tracking_state.control_zoom:
+            actions.tracking.control_zoom_toggle(True)
+        if eye_tracking_state.control:
+            actions.tracking.control_toggle(True)
+        if eye_tracking_state.control1:
+            actions.tracking.control1_toggle(True)
 
         if settings.get("user.mouse_wake_hides_cursor"):
             actions.user.mouse_cursor_hide()
@@ -77,6 +93,10 @@ class Actions:
 
     def mouse_sleep():
         """Disables control mouse, zoom mouse, and re-enables cursor"""
+        global eye_tracking_state
+        eye_tracking_state.control_zoom = actions.tracking.control_zoom_enabled()
+        eye_tracking_state.control = actions.tracking.control_enabled()
+        eye_tracking_state.control1 = actions.tracking.control1_enabled()
         actions.tracking.control_zoom_toggle(False)
         actions.tracking.control_toggle(False)
         actions.tracking.control1_toggle(False)
