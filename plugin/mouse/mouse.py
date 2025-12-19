@@ -37,6 +37,7 @@ mod.setting(
 
 @dataclass(slots=True)
 class EyeTrackingState:
+    """Eye tracking state that can be queried with tracking.*_enabled actions"""
     control_zoom: bool
     control: bool
     control1: bool
