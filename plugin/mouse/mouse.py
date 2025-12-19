@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from talon import Context, Module, actions, ctrl, settings, ui
+from talon import Context, Module, actions, app, ctrl, settings, ui
 
 mod = Module()
 ctx = Context()
@@ -42,12 +42,16 @@ class EyeTrackingState:
     control1: bool
 
 
-eye_tracking_state = EyeTrackingState(
-    actions.tracking.control_zoom_enabled(),
-    actions.tracking.control_enabled(),
-    actions.tracking.control1_enabled(),
-)
+eye_tracking_state: EyeTrackingState
+def on_ready():
+    global eye_tracking_state
+    eye_tracking_state = EyeTrackingState(
+        actions.tracking.control_zoom_enabled(),
+        actions.tracking.control_enabled(),
+        actions.tracking.control1_enabled(),
+    )
 
+app.register("ready", on_ready)
 
 @mod.action_class
 class Actions:
