@@ -43,6 +43,8 @@ class EyeTrackingState:
 
 
 eye_tracking_state: EyeTrackingState
+
+
 def on_ready():
     global eye_tracking_state
     eye_tracking_state = EyeTrackingState(
@@ -51,7 +53,9 @@ def on_ready():
         actions.tracking.control1_enabled(),
     )
 
+
 app.register("ready", on_ready)
+
 
 @mod.action_class
 class Actions:
