@@ -97,6 +97,7 @@ class Actions:
         eye_tracking_state.control_zoom = actions.tracking.control_zoom_enabled()
         eye_tracking_state.control = actions.tracking.control_enabled()
         eye_tracking_state.control1 = actions.tracking.control1_enabled()
+        
         actions.tracking.control_zoom_toggle(False)
         actions.tracking.control_toggle(False)
         actions.tracking.control1_toggle(False)
