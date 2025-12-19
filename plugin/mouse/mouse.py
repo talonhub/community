@@ -69,7 +69,7 @@ class Actions:
         actions.tracking.zoom_cancel()
 
     def mouse_wake():
-        """Enable control mouse, zoom mouse, and disables cursor"""
+        """Re-enable eye tracking state and disables cursor"""
         if eye_tracking_state.control_zoom:
             actions.tracking.control_zoom_toggle(True)
         if eye_tracking_state.control:
