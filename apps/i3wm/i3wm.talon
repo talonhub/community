@@ -1,11 +1,14 @@
-# NOTE: If you want to use i3wm you must enable the tag settings.talon. i.e.: `tag(): user.i3wm`
+# NOTE: If you want to use i3wm you must enable the tag in settings.talon. i.e.: `tag(): user.i3wm`
 os: linux
 tag: user.i3wm
 -
-port <number_small>: user.i3msg("workspace number {number_small}")
-(port flip | flipper): user.i3msg("workspace back_and_forth")
-port right: user.i3msg("workspace next")
-port left: user.i3msg("workspace prev")
+
+# Change the settings below, if your key combination for these actions differs from the defaults.
+# user.i3_launch_key = "super-d"
+# user.i3_terminal_key = "super-enter"
+
+# Use the commands in desktops.talon to navigate between workspaces
+(desk flip | flipper): user.i3msg("workspace back_and_forth")
 
 (win | window) left: user.i3msg("focus left")
 (win | window) right: user.i3msg("focus right")
@@ -79,7 +82,9 @@ launch <user.text>:
     user.i3wm_launch()
     sleep(100ms)
     insert("{text}")
-lock screen: user.i3wm_lock()
+
+# adapt key configuration as needed
+lock screen: key(super-shift-x)
 
 (launch (shell | terminal) | koopa): user.i3wm_shell()
 
@@ -98,3 +103,16 @@ grow window [<number>]:
 shrink window [<number>]:
     user.deprecate_command("2025-11-21", "shrink window", "(win | window) shrink")
     user.i3wm_resize_window("shrink", number or 4, "height width")
+
+port <number_small>:
+    user.deprecate_command("2025-12-11", "port <number_small>", "desk <number_small>")
+    user.i3msg("workspace number {number_small}")
+port flip:
+    user.deprecate_command("2025-12-11", "port flip", "(desk flip | flipper)")
+    user.i3msg("workspace back_and_forth")
+port right:
+    user.deprecate_command("2025-12-11", "port right", "desk right")
+    user.i3msg("workspace next")
+port left:
+    user.deprecate_command("2025-12-11", "port left", "desk left")
+    user.i3msg("workspace prev")
