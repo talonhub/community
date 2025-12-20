@@ -118,6 +118,12 @@ class UserActions:
     def code_insert_null():
         actions.auto_insert("NULL")
 
+    def code_insert_is_null():
+        actions.user.insert_between("is.null(", ")")
+
+    def code_insert_is_not_null():
+        actions.user.insert_between("!is.null(", ")")
+
     def code_insert_true():
         actions.auto_insert("TRUE")
 
