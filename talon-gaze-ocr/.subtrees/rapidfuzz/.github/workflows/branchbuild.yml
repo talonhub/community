@@ -1,0 +1,211 @@
+name: Test Build
+
+on:
+  push:
+    paths-ignore:
+      - 'docs/**'
+  pull_request:
+
+jobs:
+  no_cython_install:
+    name: "Test install with generated cython files"
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - uses: "actions/checkout@v4"
+        with:
+          submodules: 'true'
+
+      - uses: "actions/setup-python@v5"
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install Cython==3.0.11
+
+      - name: Generate cython
+        run: |
+          chmod +x ./src/rapidfuzz/generate.sh
+          ./src/rapidfuzz/generate.sh
+
+      - name: build
+        run: |
+          git apply ./tools/sdist.patch
+          pip install build; python -m build --sdist
+          # test whether tarball contains all files required for compiling
+          pip install dist/rapidfuzz-*.tar.gz -v
+
+      - name: Install testing dependencies
+        run: |
+          pip install pytest hypothesis pandas
+
+      - name: Test with pytest
+        run: |
+          pytest tests
+
+  system_install:
+    name: "Test installation using system supplied libs"
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - uses: "actions/checkout@v4"
+
+      - uses: "actions/setup-python@v5"
+        with:
+          python-version: "3.12"
+
+      - name: Install rapidfuzz-cpp
+        run: |
+          git clone https://github.com/rapidfuzz/rapidfuzz-cpp.git
+          cd rapidfuzz-cpp
+          git checkout v3.1.1
+          mkdir build && cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release
+          cmake --build .
+          sudo cmake --build . --target install
+
+      - name: Install taskflow
+        run: |
+          git clone https://github.com/taskflow/taskflow.git
+          cd taskflow
+          git checkout v3.3.0
+          mkdir build && cd build
+          cmake .. -DTF_BUILD_TESTS=0 -DTF_BUILD_EXAMPLES=0
+          cmake --build .
+          sudo cmake --build . --target install
+
+      - name: build
+        run: |
+          pip install . -v
+
+      - name: Install testing dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest hypothesis pandas
+
+      - name: Test with pytest
+        run: |
+          pytest tests
+
+  system_install2:
+    name: "Test installation using newest version of Taskflow"
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - uses: "actions/checkout@v4"
+
+      - uses: "actions/setup-python@v5"
+        with:
+          python-version: "3.12"
+
+      - name: Install rapidfuzz-cpp
+        run: |
+          git clone https://github.com/rapidfuzz/rapidfuzz-cpp.git
+          cd rapidfuzz-cpp
+          git checkout v3.1.1
+          mkdir build && cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release
+          cmake --build .
+          sudo cmake --build . --target install
+
+      - name: Install taskflow
+        run: |
+          git clone https://github.com/taskflow/taskflow.git
+          cd taskflow
+          git checkout v3.6.0
+          mkdir build && cd build
+          cmake .. -DTF_BUILD_TESTS=0 -DTF_BUILD_EXAMPLES=0
+          cmake --build .
+          sudo cmake --build . --target install
+
+      - name: build
+        run: |
+          pip install . -v
+
+      - name: Install testing dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest hypothesis pandas
+
+      - name: Test with pytest
+        run: |
+          pytest tests
+
+  tests:
+    name: "Python ${{ matrix.python-version }}"
+    runs-on: ${{matrix.os}}
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+        os: [ubuntu-latest, windows-latest, macos-13]
+
+    steps:
+      - uses: "actions/checkout@v4"
+        with:
+          submodules: 'true'
+      - uses: "actions/setup-python@v5"
+        with:
+          allow-prereleases: true
+          python-version: "${{ matrix.python-version }}"
+
+      - name: build
+        run: |
+          pip install . -v
+
+      - name: Install testing dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest hypothesis pandas mypy pyright pyinstaller[hook_testing]
+
+      - name: Test type stubs
+        run: |
+          python tools/test_scorer_typing.py
+          python -m mypy tools/test_process_typing.py --warn-unused-ignores
+          python -m pyright -p tools/pyrightconfig.json tools/test_process_typing.py
+
+      - name: Test with pytest and backtrace in case of SegFault
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt update && sudo apt install systemd-coredump
+          tools/seg_wrapper.sh pytest tests
+      - name: Test with pytest
+        if: runner.os != 'Linux'
+        run: |
+          pytest tests
+
+      - name: test pyinstaller packaging
+        run: |
+          python -m PyInstaller.utils.run_tests --include_only rapidfuzz.
+
+  # validate sse2 code on gcc
+  sde_tests:
+    name: "Test sse2 code on Linux (gcc)"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: "actions/checkout@v4"
+        with:
+          submodules: 'true'
+
+      - uses: "actions/checkout@v4"
+        with:
+          repository: rapidfuzz/intel-sde
+          path: sde
+
+      - uses: "actions/setup-python@v5"
+        with:
+          python-version: "3.11"
+
+      - name: build
+        run: |
+          pip install . -v
+
+      - name: Install testing dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest hypothesis pandas mypy pyinstaller[hook_testing]
+
+      - name: Test on nehalem which does not support avx2
+        run: ./sde/sde -nhm -- pytest tests

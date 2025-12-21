@@ -1,0 +1,50 @@
+[project]
+name = "screen-ocr"
+version = "0.5.0"
+description = "Library for processing screen contents using OCR"
+readme = "README.md"
+authors = [{ name = "James Stout" }]
+requires-python = ">=3.11"
+dependencies = ["pillow>=9.0", "rapidfuzz"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/wolfmanstout/screen-ocr"
+
+[project.optional-dependencies]
+tesseract = ["numpy", "pytesseract", "pandas", "scikit-image"]
+winrt = ["winsdk"]
+easyocr = ["easyocr", "numpy"]
+
+[dependency-groups]
+dev = [
+    "imagehash>=4.3.1",
+    "pytest>=8.3.3",
+    "scikit-image>=0.24.0",
+    "scikit-learn>=1.5.2",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.ruff.lint]
+select = [
+    # pycodestyle
+    "E",
+    # Pyflakes
+    "F",
+    # pyupgrade
+    "UP",
+    # flake8-bugbear
+    "B",
+    # flake8-simplify
+    "SIM",
+    # isort
+    "I",
+]
+ignore = ["E501", "SIM105", "SIM116", "UP007"]

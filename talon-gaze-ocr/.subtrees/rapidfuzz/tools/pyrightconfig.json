@@ -1,0 +1,11 @@
+{
+    "$schema": "https://raw.githubusercontent.com/microsoft/pyright/main/packages/vscode-pyright/schemas/pyrightconfig.schema.json",
+    "typeCheckingMode": "strict",
+    "reportCallInDefaultInitializer": "error",
+    "reportImplicitStringConcatenation": "error",
+    "reportUnnecessaryTypeIgnoreComment": "error",
+    "reportUnusedImport": "none",
+    // I couldn't find a way to properly type the return value of
+    // process.cdist and process.cpdist
+    "reportUnknownMemberType": "none",
+}

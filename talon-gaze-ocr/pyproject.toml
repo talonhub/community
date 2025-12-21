@@ -1,0 +1,27 @@
+[project]
+name = "talon-gaze-ocr"
+version = "0.1.0"
+description = "Talon scripts to enable advanced cursor control using eye tracking and text recognition (OCR)."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = []
+
+[tool.ruff.lint]
+select = [
+    # pycodestyle
+    "E",
+    # Pyflakes
+    "F",
+    # pyupgrade
+    "UP",
+    # flake8-bugbear
+    "B",
+    # flake8-simplify
+    "SIM",
+    # isort
+    "I",
+]
+ignore = ["E501", "SIM105", "SIM116", "UP007"]
+
+[tool.pyright]
+reportSelfClsParameterName = false

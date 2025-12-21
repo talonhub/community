@@ -1,0 +1,6 @@
+[submodule "extern/rapidfuzz-cpp"]
+	path = extern/rapidfuzz-cpp
+	url = https://github.com/rapidfuzz/rapidfuzz-cpp.git
+[submodule "extern/taskflow"]
+	path = extern/taskflow
+	url = https://github.com/taskflow/taskflow.git

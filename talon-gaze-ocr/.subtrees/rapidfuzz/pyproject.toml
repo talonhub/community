@@ -1,0 +1,181 @@
+[build-system]
+requires = [
+    "scikit-build-core>=0.10.7",
+    "Cython >=3.0.11, <3.1.0"
+]
+build-backend = "scikit_build_core.build"
+
+[project]
+name = "RapidFuzz"
+dynamic = ["version"]
+requires-python = ">= 3.9"
+authors = [
+  {name = "Max Bachmann", email = "pypi@maxbachmann.de"},
+]
+description = "rapid fuzzy string matching"
+readme = "README.md"
+classifiers=[
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "License :: OSI Approved :: MIT License",
+]
+Homepage = "https://github.com/rapidfuzz/RapidFuzz"
+Documentation = "https://rapidfuzz.github.io/RapidFuzz/"
+Repository = "https://github.com/rapidfuzz/RapidFuzz.git"
+Issues = "https://github.com/rapidfuzz/RapidFuzz/issues"
+Changelog = "https://github.com/rapidfuzz/RapidFuzz/blob/main/CHANGELOG.rst"
+
+[project.optional-dependencies]
+all = [
+  "numpy"
+]
+
+[project.entry-points.pyinstaller40]
+hook-dirs = "rapidfuzz.__pyinstaller:get_hook_dirs"
+tests = "rapidfuzz.__pyinstaller:get_PyInstaller_tests"
+
+[tool.scikit-build]
+minimum-version = "build-system.requires"
+sdist.include = [
+  "src/rapidfuzz/*.cxx",
+  "src/rapidfuzz/distance/*.cxx",
+]
+sdist.exclude = [
+  ".github"
+]
+wheel.exclude = [
+  "**.pyx",
+  "**.cxx",
+  "**.pxd",
+  "**.cpp",
+  "**.hpp",
+  "**.h",
+  "CMakeLists.txt",
+  "generate.sh"
+]
+wheel.packages = ["src/rapidfuzz"]
+wheel.cmake = false
+messages.after-success = "{yellow}CMake unavailable, falling back to pure Python Extension"
+
+[[tool.scikit-build.overrides]]
+if.any.system-cmake = ">=3.15"
+if.any.cmake-wheel = true
+wheel.cmake = true
+messages.after-success = "{green}C++ Extension built successfully"
+
+[[tool.scikit-build.overrides]]
+if.failed = true
+if.env.CIBUILDWHEEL = false
+if.env.CONDA_BUILD = false
+if.env.PIWHEELS_BUILD = false
+if.env.RAPIDFUZZ_BUILD_EXTENSION = false
+wheel.cmake = false
+messages.after-success = "{yellow}Failed to build C++ Extension, falling back to pure Python Extension"
+
+[[tool.scikit-build.overrides]]
+if.any.env.CIBUILDWHEEL = true
+if.any.env.CONDA_BUILD = true
+if.any.env.PIWHEELS_BUILD = true
+if.any.env.RAPIDFUZZ_BUILD_EXTENSION = true
+wheel.cmake = true
+messages.after-success = "{green}C++ Extension built successfully"
+messages.after-failure = "{red}Failed to build C++ Extension in a packaged build"
+
+[tool.scikit-build.metadata.version]
+provider = "scikit_build_core.metadata.regex"
+input = "src/rapidfuzz/__init__.py"
+
+
+[tool.black]
+line-length = 120
+
+[tool.mypy]
+files = ["src"]
+python_version = "3.9"
+warn_unused_configs = true
+show_error_codes = true
+enable_error_code = ["ignore-without-code", "redundant-expr", "truthy-bool"]
+strict = true
+disallow_untyped_defs = false
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+testpaths = ["tests"]
+addopts = ["-ra", "--showlocals", "--strict-markers", "--strict-config"]
+norecursedirs = ["_skbuild"]
+xfail_strict = true
+log_cli_level = "info"
+
+[tool.pylint]
+py-version = "3.9"
+
+[tool.pylint.reports]
+output-format = "colorized"
+
+[tool.pylint.messages_control]
+disable = [
+  "design",
+  "fixme",
+  "imports",
+  "line-too-long",
+  "imports",
+  "invalid-name",
+  "protected-access",
+  "missing-module-docstring",
+]
+
+[tool.ruff]
+target-version = "py39"
+src = ["src"]
+exclude = []
+
+[tool.ruff.lint]
+select = [
+  "E", "F", "W", # flake8
+  "B",           # flake8-bugbear
+  "I",           # isort
+  "ARG",         # flake8-unused-arguments
+  "C4",          # flake8-comprehensions
+  "EM",          # flake8-errmsg
+  "ICN",         # flake8-import-conventions
+  "ISC",         # flake8-implicit-str-concat
+  "G",           # flake8-logging-format
+  "PGH",         # pygrep-hooks
+  "PIE",         # flake8-pie
+  "PL",          # pylint
+  "PT",          # flake8-pytest-style
+  "PTH",         # flake8-use-pathlib
+  "RET",         # flake8-return
+  "RUF",         # Ruff-specific
+  "SIM",         # flake8-simplify
+  "T20",         # flake8-print
+  "UP",          # pyupgrade
+  "YTT",         # flake8-2020
+  "EXE",         # flake8-executable
+  "NPY",         # NumPy specific rules
+  "PD",          # pandas-vet
+]
+extend-ignore = [
+  "PLR",    # Design related pylint codes
+  "E501",   # Line too long
+  "PT004",  # Use underscore for non-returning fixture (use usefixture instead)
+  "PTH123", # use pathlib instead of builtin open
+]
+unfixable = [
+  "T20",  # Removes print statements
+  "F841", # Removes unused variables
+]
+flake8-unused-arguments.ignore-variadic-names = true
+isort.required-imports = ["from __future__ import annotations"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["T20"]
+"bench/**" = ["T20"]
+"tools/**" = ["T20"]
+"tools/test_process_typing.py" = ["ARG001"]
+"_custom_build/backend.py" = ["T20"]
+"setup.py" = ["T20"]

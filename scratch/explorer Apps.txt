@@ -1,8 +1,0 @@
-explorer App
-
-
-Control Panel,None,False,Microsoft.Windows.ControlPanel,None,None
-File Explorer,None,False,Microsoft.Windows.Explorer,None,None
-Windows Administrative Tools,None,False,Microsoft.Windows.AdministrativeTools,None,None
-Run,Microsoft.Windows.Shell.RunDialog
-This PC,Microsoft.Windows.Computer

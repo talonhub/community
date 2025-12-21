@@ -1,0 +1,206 @@
+name: Full Build
+
+on:
+  release:
+    types:
+      - published
+
+  workflow_dispatch:
+
+jobs:
+  build_sdist:
+    name: Build source distribution
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: 'true'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest hypothesis pandas mypy Cython==3.0.11
+
+      # The cythonized files allow installation from the sdist without cython
+      - name: Generate cython
+        run: |
+          chmod +x ./src/rapidfuzz/generate.sh
+          ./src/rapidfuzz/generate.sh
+
+      - name: Build sdist
+        run: |
+          git apply ./tools/sdist.patch
+          pip install build
+          python -m build --sdist
+          # test whether tarball contains all files required for compiling
+          pip install dist/rapidfuzz-*.tar.gz -v
+
+      #- name: Test type stubs
+      #  # prevent import from rapidfuzz
+      #  working-directory: .github
+      #  run: |
+      #    python -m mypy.stubtest rapidfuzz --ignore-missing-stub
+
+      - name: Test with pytest and backtrace in case of SegFault
+        run: |
+          tools/seg_wrapper.sh pytest tests
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: artifact-sdist
+          path: dist/*.tar.gz
+
+  build_wheels_windows:
+    name: Build wheel on windows-latest/${{matrix.arch}}
+    needs: [build_sdist]
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: [auto32, auto64, ARM64]
+    env:
+      CIBW_ARCHS: ${{matrix.arch}}
+      CIBW_TEST_SKIP: "*-win32"
+      #CIBW_TEST_REQUIRES: pytest hypothesis pandas
+      CIBW_TEST_REQUIRES: pytest hypothesis
+      CIBW_TEST_COMMAND: pytest {package}/tests
+      CIBW_BUILD_VERBOSITY: 3
+      CIBW_PROJECT_REQUIRES_PYTHON: ">=3.9"
+
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: artifact-sdist
+          path: dist
+
+      - name: Copy wheel
+        run: copy dist/*.tar.gz rapidfuzz.tar.gz
+
+      - uses: actions/setup-python@v5
+
+      - name: Build wheels
+        uses: pypa/cibuildwheel@v2.21.1
+        with:
+          package-dir: rapidfuzz.tar.gz
+          output-dir: wheelhouse
+
+      - name: Upload wheels
+        uses: actions/upload-artifact@v4
+        with:
+          name: artifact-${{ github.job }}-${{ strategy.job-index }}
+          path: ./wheelhouse/*.whl
+
+  build_wheels_macos:
+    name: Build wheel on ${{ matrix.os }}/native
+    needs: [build_sdist]
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-13, macos-14]
+    env:
+      CIBW_ARCHS: native
+      CIBW_TEST_SKIP: "pp*-macosx_*"
+      #CIBW_TEST_REQUIRES: pytest hypothesis pandas
+      CIBW_TEST_REQUIRES: pytest hypothesis
+      CIBW_TEST_COMMAND: pytest {package}/tests
+      CIBW_BUILD_VERBOSITY: 3
+      CIBW_PROJECT_REQUIRES_PYTHON: ">=3.9"
+
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: artifact-sdist
+          path: dist
+
+      - uses: actions/setup-python@v5
+
+      - name: Copy wheel
+        run: cp dist/*.tar.gz rapidfuzz.tar.gz
+
+      - name: Build wheels
+        uses: pypa/cibuildwheel@v2.21.1
+        with:
+          package-dir: rapidfuzz.tar.gz
+          output-dir: wheelhouse
+
+      - name: Upload wheels
+        uses: actions/upload-artifact@v4
+        with:
+          name: artifact-${{ github.job }}-${{ strategy.job-index }}
+          path: ./wheelhouse/*.whl
+
+  build_wheels_linux:
+    name: Build wheels on ubuntu-latest/${{matrix.arch}}/${{matrix.python_tag}}
+    needs: [build_sdist]
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: [auto, aarch64, ppc64le, s390x]
+        python_tag: ["cp39-*", "cp310-*", "cp311-*", "cp312-*", "cp313-*", "pp39-*", "pp310-*"]
+        exclude:
+          # PyPy builds not available for these platforms
+          - arch: ppc64le
+            python_tag: "pp39-*"
+          - arch: ppc64le
+            python_tag: "pp310-*"
+          - arch: s390x
+            python_tag: "pp39-*"
+          - arch: s390x
+            python_tag: "pp310-*"
+    env:
+      CIBW_ARCHS_LINUX: ${{matrix.arch}}
+      CIBW_BUILD: ${{matrix.python_tag}}
+      CIBW_TEST_SKIP: "{*_{aarch64,ppc64le,s390x},*musllinux_*}"
+      #CIBW_TEST_REQUIRES: pytest hypothesis pandas
+      CIBW_TEST_REQUIRES: pytest hypothesis
+      CIBW_TEST_COMMAND: pytest {package}/tests
+      # CIBW_TEST_COMMAND: "{package}/tools/seg_wrapper.sh pytest {package}/tests"
+      CIBW_BUILD_VERBOSITY: 3
+
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: artifact-sdist
+          path: dist
+
+      - uses: actions/setup-python@v5
+
+      - name: Copy wheel
+        run: cp dist/*.tar.gz rapidfuzz.tar.gz
+
+      - uses: docker/setup-qemu-action@v3
+        name: Set up QEMU
+
+      - name: Build wheel
+        uses: pypa/cibuildwheel@v2.21.1
+        with:
+          package-dir: rapidfuzz.tar.gz
+          output-dir: wheelhouse
+
+      - name: Upload wheels
+        uses: actions/upload-artifact@v4
+        with:
+          name: artifact-${{ github.job }}-${{ strategy.job-index }}
+          path: ./wheelhouse/*.whl
+
+  deploy-wheels:
+    if: github.event_name == 'release' && github.event.action == 'published'
+    needs: [build_wheels_windows, build_wheels_macos, build_wheels_linux, build_sdist]
+    name: deploy wheels to pypi
+    runs-on: ubuntu-latest
+    environment: pypi-release
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          pattern: artifact-*
+          merge-multiple: true
+
+      - uses: pypa/gh-action-pypi-publish@v1.10.2

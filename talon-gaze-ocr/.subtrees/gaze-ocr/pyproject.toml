@@ -1,0 +1,43 @@
+[project]
+name = "gaze-ocr"
+version = "0.4.0"
+description = "Library for applying OCR to where the user is looking."
+readme = "README.md"
+authors = [{ name = "James Stout" }]
+requires-python = ">=3.11"
+dependencies = ["screen-ocr"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+]
+
+[project.optional-dependencies]
+dragonfly = ["dragonfly2", "pythonnet"]
+
+[project.urls]
+Homepage = "https://github.com/wolfmanstout/gaze-ocr"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv.sources]
+screen-ocr = { path = "../screen_ocr", editable = true }
+
+[tool.ruff.lint]
+select = [
+    # pycodestyle
+    "E",
+    # Pyflakes
+    "F",
+    # pyupgrade
+    "UP",
+    # flake8-bugbear
+    "B",
+    # flake8-simplify
+    "SIM",
+    # isort
+    "I",
+]
+ignore = ["E501", "SIM105", "SIM116", "UP007"]
