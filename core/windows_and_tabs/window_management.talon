@@ -16,4 +16,4 @@ snapfur: user.snap_window_to_position("full")
 aprate: user.snap_window_to_position("right")
 snap rat: user.snap_window_to_position("right")
 
-desk show: user.switcher_show_desktop()
+desk show: key(super-d)
