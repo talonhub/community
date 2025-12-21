@@ -1,7 +1,7 @@
 code.language: terraform
 -
-tag(): user.code_block_c_like
-tag(): user.code_comment_block_c_like
+
+
 tag(): user.code_comment_line
 tag(): user.code_data_bool
 tag(): user.code_data_null

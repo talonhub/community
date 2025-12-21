@@ -72,42 +72,6 @@ class UserActions:
     def code_insert_is_not_null():
         actions.auto_insert(".present?")
 
-    def code_state_do():
-        actions.insert("do ")
-
-    def code_state_if():
-        actions.insert("if ")
-
-    def code_state_else_if():
-        actions.insert("elsif ")
-
-    def code_state_else():
-        actions.insert("else")
-        actions.key("enter")
-
-    def code_state_switch():
-        actions.insert("case ")
-
-    def code_state_case():
-        actions.insert("when ")
-
-    def code_state_for_each():
-        actions.insert(".each do ||")
-        actions.key("left")
-
-    def code_define_class():
-        actions.auto_insert("class ")
-
-    def code_import():
-        actions.auto_insert('require ""')
-        actions.key("left")
-
-    def code_comment_line_prefix():
-        actions.auto_insert("# ")
-
-    def code_state_return():
-        actions.insert("return ")
-
     def code_insert_true():
         actions.auto_insert("true")
 

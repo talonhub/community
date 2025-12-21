@@ -133,49 +133,11 @@ class UserActions:
     def code_insert_is_not_null():
         actions.insert(" != nil")
 
-    def code_state_if():
-        actions.user.insert_between("if ", " ")
-
-    def code_state_else_if():
-        actions.user.insert_between("else if ", " ")
-
-    def code_state_else():
-        actions.insert("else ")
-        actions.key("enter")
-
-    def code_state_switch():
-        actions.user.insert_between("switch ", " ")
-
-    def code_state_case():
-        actions.user.insert_between("case ", ":")
-
-    def code_state_for():
-        actions.user.insert_between("for ", " ")
-
-    # There is no while keyword in go. Closest approximation is a for loop.
-    def code_state_while():
-        actions.user.insert_between("for ", " ")
-
-    def code_break():
-        actions.insert("break")
-
-    def code_next():
-        actions.insert("continue")
-
     def code_insert_true():
         actions.insert("true")
 
     def code_insert_false():
         actions.insert("false")
-
-    def code_import():
-        actions.insert("import ")
-
-    def code_state_return():
-        actions.insert("return ")
-
-    def code_comment_line_prefix():
-        actions.insert("// ")
 
     def code_insert_function(text: str, selection: str):
         text += f"({selection or ''})"

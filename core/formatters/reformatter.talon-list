@@ -1,5 +1,4 @@
 list: user.reformatter
 -
-recap: CAPITALIZE
-list: COMMA_SEPARATED
+cap: CAPITALIZE
 unformat: REMOVE_FORMATTING

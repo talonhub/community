@@ -37,7 +37,7 @@ if hasattr(talon, "test_mode"):
     core.user_settings.track_csv_list = track_csv_list_test
 
     import core.create_spoken_forms
-    
+
     def test_excludes_words():
         result = actions.user.create_spoken_forms("hi world", ["world"], 0, True)
 
@@ -101,18 +101,18 @@ if hasattr(talon, "test_mode"):
     def test_email():
         result = actions.user.create_spoken_forms("stupid@test.com", None, 0, True)
         assert "stupid at test dot com" in result
-    
+
     def test_symbol_removal():
         result = actions.user.create_spoken_forms("$ this_is_a-'test'", None, 0, True)
 
         assert "this is a test" in result
-    
+
     def test_and_symbol():
         result = actions.user.create_spoken_forms("movies & tv", None, 0, True)
-        
+
         assert "movies tv" in result
         assert "movies and tv" in result
-    
+
     def test_apostrophe_stripping():
         result = actions.user.create_spoken_forms("Sam's club", None, 0, True)
 

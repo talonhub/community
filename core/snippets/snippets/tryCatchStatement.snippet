@@ -45,3 +45,16 @@ try:
 except Exception as ex:
     $0
 ---
+
+language: r
+-
+tryCatch({
+    $0
+}, warning = function(w) {
+    $1
+}, error = function(e) {
+    $2
+}, finally = {
+    $3
+})
+---
