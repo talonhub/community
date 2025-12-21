@@ -139,7 +139,8 @@ def get_windows_eleven_taskbar(forced: bool = False):
             for element in taskbar.children:
                 for child in element.children:
                     for child2 in child.children:
-                        if child2.name == "Search":
+                        print(child2)
+                        if child2.name != "Start" and child2.name != "Search" and child2.name != "Task View":
                             global width, height, x_start, y_start, tasklist_width
 
                             tasklist_width = child.rect.width
@@ -147,9 +148,9 @@ def get_windows_eleven_taskbar(forced: bool = False):
                             if not x_start:
                                 width = child2.rect.width
                                 height = child2.rect.height
-                                print(f"{width}x{height}")
                                 x_start = child2.rect.x
                                 y_start = child2.rect.y
+                                print(f"get_windows_eleven_taskbar: first icon found {child2.name} {width}x{height}")
 
                     if child.name == "Show Hidden Icons":
                         show_hidden_x = child.rect.x
@@ -173,8 +174,9 @@ def update_canvas(register):
 
     
     mcanvas = canvas.Canvas.from_screen(ui.main_screen())
+    platform_str = platform.platform()
 
-    if "Windows-11" not in platform.platform():
+    if "Windows-11" not in platform_str:
         get_windows_ten_taskbar(True)
     else:
         get_windows_eleven_taskbar(True)
