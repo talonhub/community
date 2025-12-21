@@ -535,6 +535,7 @@ def hide_all_help_guis():
     gui_context_help.hide()
     gui_formatters.hide()
     gui_list_help.hide()
+    actions.user.switcher_hide_applications()
 
 
 def paginate_list(data, SIZE=None):

@@ -833,6 +833,17 @@ class Actions:
         else:
             print("Persistent Switcher Menu not supported on " + app.platform)
 
+    def switcher_show_applications():
+        """Show applications"""
+        if gui_applications.showing:
+            gui_applications.hide()
+        else:
+            gui_applications.show()
+
+    def switcher_hide_applications():
+        """Show applications"""
+        gui_applications.hide()
+
     def switcher_toggle_running():
         """Shows/hides all running applications"""
         if gui_running.showing:
@@ -848,6 +859,18 @@ def get_app_overrides():
     return APPLICATIONS_OVERRIDES
 
 @imgui.open()
+def gui_applications(gui: imgui.GUI):
+    gui.text("Applications (spoken forms: display name)")
+    gui.line()
+    
+    for display_name, spoken_form in launch_cache:
+        gui.text(f"{display_name}: {spoken_form}")
+
+    gui.spacer()
+    if gui.button("Running close"):
+        actions.user.switcher_hide_running()
+
+@imgui.open()
 def gui_running(gui: imgui.GUI):
     gui.text("Running applications (with spoken forms)")
     gui.line()
@@ -861,8 +884,11 @@ def gui_running(gui: imgui.GUI):
     if gui.button("Running close"):
         actions.user.switcher_hide_running()
 
-
+launch_cache = {}
 def update_launch_list():
+    global launch_cache 
+    launch_cache = {}
+
     launch = {
         application.display_name : application.unique_identifier 
         for application in APPLICATIONS_DICT.values() 
@@ -881,9 +907,27 @@ def update_launch_list():
         if current_app.spoken_forms is not None
         for spoken_form in current_app.spoken_forms
     }
+
     result.update(customized)
+    launch.update(customized)
     ctx.lists["self.launch"] = result
 
+    launch_cache = {
+        application.display_name : application.display_name 
+        for application in APPLICATIONS_DICT.values() 
+        if not application.exclude and not application.spoken_forms
+    }    
+
+    customized_cache = {
+        current_app.display_name : spoken_form 
+        for current_app in APPLICATIONS_DICT.values()
+        if current_app.spoken_forms is not None
+        for spoken_form in current_app.spoken_forms
+    }
+
+    launch_cache.update(customized_cache)
+    launch_cache = sorted(launch_cache.items())
+    
 cache = []
 
 @dataclass

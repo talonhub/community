@@ -40,7 +40,7 @@ not speech.engine: dragon
     user.mouse_sleep()
     speech.disable()
 
-^mixed mode$:
-  mode.disable("sleep")
-  mode.enable("dictation")
-  mode.enable("command")
+# ^mixed mode$:
+#   mode.disable("sleep")
+#   mode.enable("dictation")
+#   mode.enable("command")
