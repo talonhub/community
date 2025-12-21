@@ -323,11 +323,12 @@ def update_running_list():
             app_frame_host_cache[key] = True
             app_frame_host_cache[key.lower()] = True
                 
-        generate_spoken_form_map.update(populate_spoken_forms_for_valid_windows(frame_host_apps[0], 
-                                                                                "Application Frame Host", 
-                                                                                None, 
-                                                                                valid_windows, 
-                                                                                running))
+        if len(frame_host_apps) > 0:
+            generate_spoken_form_map.update(populate_spoken_forms_for_valid_windows(frame_host_apps[0], 
+                                                                                    "Application Frame Host", 
+                                                                                    None, 
+                                                                                    valid_windows, 
+                                                                                    running))
         
         #populate explorer hosted apps
         explorer_apps = ui.apps(name="Windows Explorer", background=False)
