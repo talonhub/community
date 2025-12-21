@@ -9,11 +9,11 @@ focus <user.running_applications>: user.switcher_focus(running_applications)
 #running list: user.switcher_toggle_running()
 #running close: user.switcher_hide_running()
 
-# [start] <user.launch_applications>: user.switcher_launch(launch_applications)
-# (snap) <user.window_snap_position>: user.snap_window(window_snap_position)
+start <user.launch_applications>: user.switcher_launch(launch_applications)
+snap <user.window_snap_position>: user.snap_window(window_snap_position)
 
-# snapfur: user.snap_window_to_position("full")
-# aprate: user.snap_window_to_position("right")
-# snap rat: user.snap_window_to_position("right")
+snapfur: user.snap_window_to_position("full")
+aprate: user.snap_window_to_position("right")
+snap rat: user.snap_window_to_position("right")
 
 desk show: user.switcher_show_desktop()
