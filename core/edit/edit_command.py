@@ -1,6 +1,6 @@
 from talon import Module, actions, settings
 
-from .edit_command_actions import EditAction, run_action_callback
+from .edit_command_actions import EditAction, EditSimpleAction, run_action_callback
 from .edit_command_modifiers import EditModifier, run_modifier_callback
 
 mod = Module()
@@ -41,6 +41,7 @@ def before_line_down():
 def after_line_down():
     actions.edit.down()
     actions.edit.line_end()
+
 
 def select_lines(action, direction, count):
     if direction == "lineUp":
@@ -164,8 +165,16 @@ compound_actions = {
 
 @mod.action_class
 class Actions:
-    def edit_command(action: EditAction, modifier: EditModifier):
-        """Perform edit command"""
+    def edit_command(action: EditAction | str, modifier: EditModifier | str):
+        """Perform edit command with associated modifier.
+        Action and modifier can be dataclasses (formed from utterances via
+        capture) or str, for use in scripts. Strings should match the action or
+        modifier types declared here or in edit_command_modifiers.py or
+        edit_command_actions.py"""
+        if isinstance(modifier, str):
+            modifier = EditModifier(modifier)
+        if isinstance(action, str):
+            action = EditSimpleAction(action)
         key = (action.type, modifier.type)
         count = modifier.count
 

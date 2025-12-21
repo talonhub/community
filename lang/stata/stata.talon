@@ -2,7 +2,7 @@ code.language: stata
 -
 tag(): user.code_imperative
 
-tag(): user.code_comment_block_c_like
+
 tag(): user.code_comment_block
 tag(): user.code_comment_line
 tag(): user.code_functions
@@ -17,12 +17,9 @@ settings():
 
 arg {user.code_parameter_name}: user.code_insert_named_argument(code_parameter_name)
 
-state for val: user.code_state_for()
+state for val: user.insert_snippet_by_name("forLoopStatement")
 
 # alternative to saying ""state import""
 s s c install: user.code_import()
 
 s s c install <user.code_libraries>: user.code_insert_library(code_libraries, "")
-
-toggle imports: user.code_toggle_libraries()
-toggle packages: user.code_toggle_libraries()

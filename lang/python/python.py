@@ -61,22 +61,6 @@ ctx.lists["user.code_type"] = {
     "no return": "NoReturn",
 }
 
-ctx.lists["user.code_keyword"] = {
-    "assert": "assert ",
-    "break": "break",
-    "continue": "continue",
-    "class": "class ",
-    "return": "return ",
-    "import": "import ",
-    "null": "None",
-    "none": "None",
-    "pass": "pass",
-    "true": "True",
-    "false": "False",
-    "yield": "yield ",
-    "from": "from ",
-}
-
 exception_list = [
     "BaseException",
     "SystemExit",
@@ -216,51 +200,11 @@ class UserActions:
     def code_insert_is_not_null():
         actions.auto_insert(" is not None")
 
-    def code_state_if():
-        actions.user.insert_between("if ", ":")
-
-    def code_state_else_if():
-        actions.user.insert_between("elif ", ":")
-
-    def code_state_else():
-        actions.insert("else:")
-        actions.key("enter")
-
-    def code_state_switch():
-        actions.user.insert_between("match ", ":")
-
-    def code_state_case():
-        actions.user.insert_between("case ", ":")
-
-    def code_state_for():
-        actions.auto_insert("for ")
-
-    def code_state_for_each():
-        actions.user.insert_between("for ", " in ")
-
-    def code_state_while():
-        actions.user.insert_between("while ", ":")
-
-    def code_define_class():
-        actions.auto_insert("class ")
-
-    def code_import():
-        actions.auto_insert("import ")
-
-    def code_comment_line_prefix():
-        actions.auto_insert("# ")
-
-    def code_state_return():
-        actions.insert("return ")
-
     def code_insert_true():
         actions.auto_insert("True")
 
     def code_insert_false():
         actions.auto_insert("False")
-
-    def code_comment_documentation():
-        actions.user.insert_between('"""', '"""')
 
     def code_insert_function(text: str, selection: str):
         text += f"({selection or ''})"
@@ -297,9 +241,3 @@ class UserActions:
 
     def code_insert_return_type(type: str):
         actions.insert(f" -> {type}")
-
-    def code_break():
-        actions.insert("break")
-
-    def code_next():
-        actions.insert("continue")

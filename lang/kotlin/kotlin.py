@@ -87,9 +87,6 @@ class UserActions:
     def code_get_operators() -> Operators:
         return operators
 
-    def code_comment_line_prefix():
-        actions.insert("// ")
-
     def code_self():
         actions.auto_insert("this")
 
@@ -101,35 +98,6 @@ class UserActions:
 
     def code_insert_is_not_null():
         actions.insert(" != null")
-
-    def code_state_if():
-        actions.user.insert_between("if (", ") ")
-
-    def code_state_else_if():
-        actions.user.insert_between("else if (", ") ")
-
-    def code_state_else():
-        actions.user.insert_between("else {", "}")
-        actions.key("enter")
-
-    def code_state_switch():
-        actions.user.insert_between("when (", ") ")  # Kotlin uses 'when' for switch
-
-    def code_state_case():
-        actions.insert("case \nbreak;")
-        actions.edit.up()
-
-    def code_state_for():
-        actions.user.insert_between("for (", ") ")
-
-    def code_state_while():
-        actions.user.insert_between("while (", ") ")
-
-    def code_define_class():
-        actions.auto_insert("class ")
-
-    def code_state_return():
-        actions.insert("return ")
 
     def code_insert_function(text: str, selection: str):
         text += f"({selection or ''})"

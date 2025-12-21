@@ -33,7 +33,7 @@ def vscode_plugins_list():
     return set(vscode_plugin_cache)
 
 
-@ctx.action_class
+@ctx.action_class("user")
 class PluginActions:
     def plugins_list():
         return vscode_plugins_list()

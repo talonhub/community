@@ -12,7 +12,7 @@ class messaging_actions:
         """Move to previous workspace/server"""
 
     def messaging_workspace_next():
-        """Move to next qorkspace/server"""
+        """Move to next workspace/server"""
 
     def messaging_open_channel_picker():
         """Open channel picker"""
