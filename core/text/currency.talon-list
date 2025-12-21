@@ -2,7 +2,3 @@ list: user.currency
 -
 dollar: $
 dollars: $
-euro: €
-euros: €
-pound: £
-pounds: £

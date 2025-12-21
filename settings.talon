@@ -29,7 +29,7 @@ settings():
     # 0 = off
     # 1 = on with eyetracker but not zoom mouse mode
     # 2 = on but not with zoom mouse mode
-    user.mouse_enable_pop_click = 1
+    user.mouse_enable_pop_click = 0
 
     # Enable if you like to use the hissing noise to do mouse scroll
     # user.mouse_enable_hiss_scroll = false
@@ -79,7 +79,7 @@ settings():
 # Uncomment this to enable the curse yes/curse no commands (show hide mouse cursor). See issue #688.
 # tag(): user.mouse_cursor_commands_enable
 # tag():user.mouse_grid_enabled
-tag(): user.talon_populate_lists
+# tag(): user.talon_populate_lists
 # tag(): talon_plugins.eye_zoom_mouse.zoom_mouse_noise
-tag(): user.experimental_window_layout
+# tag(): user.experimental_window_layout
 # tag(): user.mouse_grid_enabled

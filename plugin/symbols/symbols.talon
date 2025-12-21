@@ -1,15 +1,15 @@
-double dash: "--"
-triple quote: "'''"
-pebbles: "..."
+# double dash: "--"
+# triple quote: "'''"
+# pebbles: "..."
 # Add symbol at end of line and then insert line below
 # From https://github.com/AndreasArvidsson/andreas-talon/blob/master/misc/keys/keys.talon#L28
-patch {user.symbol_key}:
-    edit.line_end()
-    "{symbol_key}"
-    edit.line_insert_down()
+# patch {user.symbol_key}:
+#     edit.line_end()
+#     "{symbol_key}"
+#     edit.line_insert_down()
 spam | spammy | spama: ", "
-pipe gap: " | "
-boom: ". "
+# pipe gap: " | "
+# boom: ". "
 # arrow: "->"
 # dub arrow: "=>"
 # empty round: "()"
@@ -22,8 +22,8 @@ boom: ". "
 # empty escaped twin: "\\'\\'"
 # empty escaped round: "\\(\\)"
 # empty escaped curly: "\\{{\\}}"
-tween <user.symbol_key>: 
-    user.insert_between("{symbol_key}", "{symbol_key}")
+# tween <user.symbol_key>: 
+#     user.insert_between("{symbol_key}", "{symbol_key}")
 # quad: user.insert_between('"', '"')
 # twin: user.insert_between("'", "'")
 # ski: user.insert_between("`", "`")
@@ -54,40 +54,40 @@ tween <user.symbol_key>:
 #     text = edit.selected_text()
 #     user.paste("'{text}'")
 
-big round:
-    insert("()")
-    key(left enter)
-big square:
-    insert("[]")
-    key(left enter)
-big curly:
-    insert("{}")
-    key(left enter)
+# big round:
+#     insert("()")
+#     key(left enter)
+# big square:
+#     insert("[]")
+#     key(left enter)
+# big curly:
+#     insert("{}")
+#     key(left enter)
 
-slicer:
-    edit.line_end()
-    key(enter)
-    insert("- ")
+# slicer:
+#     edit.line_end()
+#     key(enter)
+#     insert("- ")
 
-end gap:
-    edit.line_end()
-    key(space)
+# end gap:
+#     edit.line_end()
+#     key(space)
 
-slider:
-    edit.line_end()
-    insert(",")
-    key(enter)
+# slider:
+#     edit.line_end()
+#     insert(",")
+#     key(enter)
 
-breaker:
-    edit.line_end()
-    insert(" {")
-    key(enter)
+# breaker:
+#     edit.line_end()
+#     insert(" {")
+#     key(enter)
 
-chronic:
-    edit.line_end()
-    insert(":")
-    key(enter)
-quote that:
-    user.deprecate_command("2024-11-24", "quote that", "twin that")
-    text = edit.selected_text()
-    user.paste("'{text}'")
+# chronic:
+#     edit.line_end()
+#     insert(":")
+#     key(enter)
+# quote that:
+#     user.deprecate_command("2024-11-24", "quote that", "twin that")
+#     text = edit.selected_text()
+#     user.paste("'{text}'")

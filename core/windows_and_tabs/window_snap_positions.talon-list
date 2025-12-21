@@ -1,6 +1,5 @@
 list: user.window_snap_positions
 -
-
 left: LEFT
 right: RIGHT
 top: TOP

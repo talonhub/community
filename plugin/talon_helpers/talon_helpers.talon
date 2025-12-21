@@ -3,7 +3,7 @@
 # Do not enable this tag with dragon, as it will be unusable.
 # with conformer, the latency increase may also be unacceptable depending on your cpu
 # see https://github.com/knausj85/knausj_talon/issues/600
-tag(): user.talon_populate_lists
+# tag(): user.talon_populate_lists
 talent [check] update: menu.check_for_updates()
 talent restart: user.talon_restart()
 talent kill: user.talon_kill()
