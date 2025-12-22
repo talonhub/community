@@ -38,7 +38,7 @@ mod.setting(
 @dataclass(slots=True)
 class EyeTrackingState:
     """Eye tracking state that can be queried with tracking.*_enabled actions
-        This is cached on the user.mouse_sleep action so the state can be restored on the user.mouse_wake action.
+    This is cached on the user.mouse_sleep action so the state can be restored on the user.mouse_wake action.
     """
 
     control_zoom: bool
