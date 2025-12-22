@@ -37,7 +37,9 @@ mod.setting(
 
 @dataclass(slots=True)
 class EyeTrackingState:
-    """Eye tracking state that can be queried with tracking.*_enabled actions"""
+    """Eye tracking state that can be queried with tracking.*_enabled actions
+        This is cached on the user.mouse_sleep action so the state can be restored on the user.mouse_wake action.
+    """
 
     control_zoom: bool
     control: bool
@@ -72,6 +74,7 @@ class Actions:
 
     def mouse_wake():
         """Re-enable eye tracking state and disables cursor"""
+        # restore the eye tracking state to what it was before the last user.mouse_sleep
         if eye_tracking_state.control_zoom:
             actions.tracking.control_zoom_toggle(True)
         if eye_tracking_state.control:
@@ -108,6 +111,7 @@ class Actions:
 
     def mouse_sleep():
         """Disables control mouse, zoom mouse, and re-enables cursor"""
+        # save eye tracking state so it can be restored on user.mouse_wake
         global eye_tracking_state
         eye_tracking_state.control_zoom = actions.tracking.control_zoom_enabled()
         eye_tracking_state.control = actions.tracking.control_enabled()
