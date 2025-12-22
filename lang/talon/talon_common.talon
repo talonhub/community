@@ -19,8 +19,7 @@ capture {user.talon_captures}: "<{talon_captures}>"
 
 setting {user.talon_settings}: user.talon_code_enable_setting(talon_settings)
 
-action {user.talon_actions}:
-    user.talon_code_insert_action_call(talon_actions, "")
+action {user.talon_actions}: user.talon_code_insert_action_call(talon_actions, "")
 
 action wrap {user.talon_actions}:
     user.talon_code_insert_action_call(talon_actions, edit.selected_text())
