@@ -7,7 +7,7 @@ and tag: user.talon_python
 key <user.keys> over: "{keys}"
 key <user.modifiers> over: "{modifiers}"
 
-# the optional variant using user.talon_tags requires user.talon_populate_lists tag. do not use with dragon
+# the variant using the optional user.talon_tags requires user.talon_populate_lists tag. do not use with dragon
 tag set [{user.talon_tags}]:
     tag = talon_tags or ""
     user.talon_code_enable_tag(tag)
