@@ -13,7 +13,7 @@ split
 string: "str"
 update
 
-# talon python functions
+# Talon Python functions
 app notify: actions.app.notify
 clip set text: actions.clip.set_text
 clip text: actions.clip.text
