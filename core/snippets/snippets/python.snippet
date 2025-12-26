@@ -149,17 +149,6 @@ def $1(path, flags):
 fs.watch($2, $1)
 ---
 
-name: talonSettingChangeHandler
-phrase: setting change handler
-insertionScope: namedFunction
-$1.insertionFormatter: SNAKE_CASE
--
-def $1(*args):
-    $0
-
-settings.register($2, $1)
----
-
 name: talonOnReadyFunction
 phrase: on ready handler
 -
