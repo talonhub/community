@@ -74,7 +74,7 @@ class Actions:
 
     def mouse_wake():
         """Re-enable eye tracking state and disables cursor"""
-        # restore the eye tracking state to what it was before the last user.mouse_sleep
+        # restore eye tracking modes enabled as of the last user.mouse_sleep
         if eye_tracking_state.control_zoom:
             actions.tracking.control_zoom_toggle(True)
         if eye_tracking_state.control:
