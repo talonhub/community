@@ -153,6 +153,8 @@ See [screenshot.talon](plugin/screenshot/screenshot.talon).
 
 ### Programming languages
 
+More detailed programming support documentation can be found [here](https://talon.wiki/Voice%20Coding/voice-coding-overview).
+
 Specific programming languages may be activated by voice commands, or via title tracking.
 
 Activating languages via commands will enable the commands globally, e.g. they'll work in any application. This will also disable the title tracking method (code.language in .talon files) until the "clear language modes" voice command is used.
