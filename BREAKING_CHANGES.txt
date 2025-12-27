@@ -7,6 +7,7 @@ and when the change was applied given the delay between changes being
 submitted and the time they were reviewed and merged.
 
 ---
+* 2025-12-22 the `user.mouse_wake` action now restores the eye tracking state to what it was before the last use of the `user.mouse_sleep` action instead of always enabling zoom mouse.
 * 2025-12-22 Removed deprecated `M grid` command and the associated deprecated tag `user.mouse_grid_enabled`.
 * 2025-12-11 Deprecated i3wm commands `port [left | right | <number_small>]` in favour of standard `desk [left | right | <number_small>]` commands.
 * 2025-11-21 Deprecated i3wm commands `[grow | shrink | center] window` in favour of `(win | window) [grow | shrink | center] for consistency with other window commands.
