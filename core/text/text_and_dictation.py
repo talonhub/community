@@ -114,6 +114,18 @@ def prose_time(m) -> str:
     return str(m)
 
 
+@mod.capture(rule="spell <user.letters>")
+def prose_spell(m) -> str:
+    """Spell word phonetically"""
+    return m.letters
+
+
+@mod.capture(rule="ship <user.letters>")
+def prose_ship(m) -> str:
+    """Spell word phonetically using uppercase letters"""
+    return m.letters.upper()
+
+
 @mod.capture(rule="clip clip")
 def prose_clipboard(m) -> str:
     """Clipboard content"""
@@ -134,7 +146,7 @@ def word(m) -> str:
 
 
 @mod.capture(
-    rule="({user.vocabulary} | <user.prose_contact> | <user.prose_clipboard> | <phrase>)+"
+    rule="({user.vocabulary} | <user.prose_contact> | <user.prose_spell> | <user.prose_clipboard> | <phrase>)+"
 )
 def text(m) -> str:
     """A sequence of words, including user-defined vocabulary."""
@@ -154,6 +166,8 @@ def text(m) -> str:
         "| <user.prose_modifier>"
         "| <user.abbreviation>"
         "| <user.prose_contact>"
+        "| <user.prose_spell>"
+        "| <user.prose_ship>"
         "| <user.prose_clipboard>"
         "| <phrase>"
         ")+"
@@ -177,6 +191,8 @@ def prose(m) -> str:
         "| <user.prose_percent>"
         "| <user.abbreviation>"
         "| <user.prose_contact>"
+        "| <user.prose_spell>"
+        "| <user.prose_ship>"
         "| <user.prose_clipboard>"
         "| <phrase>"
         ")+"

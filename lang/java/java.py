@@ -1,4 +1,6 @@
 from contextlib import suppress
+from enum import Enum, auto
+from typing import Union
 
 from talon import Context, Module, actions, settings
 
@@ -158,14 +160,90 @@ def java_generic_data_structure(m) -> str:
     return public_camel_case_format_variable(m.text)
 
 
+class GenericTypeConnector(Enum):
+    AND = auto()
+    OF = auto()
+    DONE = auto()
+
+
+@mod.capture(rule="done")
+def java_generic_type_connector_done(m) -> GenericTypeConnector:
+    """Denotes ending a nested generic type"""
+    return GenericTypeConnector.DONE
+
+
+@mod.capture(rule="and|of|<user.java_generic_type_connector_done>")
+def java_generic_type_connector(m) -> GenericTypeConnector:
+    """Determines how to put generic type parameters together"""
+    with suppress(AttributeError):
+        return m.java_generic_type_connector_done
+    return GenericTypeConnector[m[0].upper()]
+
+
 @mod.capture(
-    rule="<user.java_generic_data_structure> of ([and] <user.java_type_parameter_argument>)+"
+    rule="<user.java_generic_type_connector> <user.java_type_parameter_argument> [<user.java_generic_type_connector_done>]+"
+)
+def java_generic_type_continuation(m) -> list[Union[GenericTypeConnector, str]]:
+    """A generic type parameter that goes after the first using connectors"""
+    result = [m.java_generic_type_connector, m.java_type_parameter_argument]
+    with suppress(AttributeError):
+        dones = m.java_generic_type_connector_done_list
+        result.extend(dones)
+    return result
+
+
+@mod.capture(rule="<user.java_generic_type_continuation>+")
+def java_generic_type_additional_type_parameters(
+    m,
+) -> list[Union[GenericTypeConnector, str]]:
+    """Type parameters for a generic data structure after the first one"""
+    result = []
+    for continuation in m.java_generic_type_continuation_list:
+        result.extend(continuation)
+    return result
+
+
+def is_immediately_after_nesting_exit(pieces: list[str]) -> bool:
+    return len(pieces) >= 1 and pieces[-1] == ">"
+
+
+@mod.capture(
+    rule="<user.java_type_parameter_argument> [<user.java_generic_type_additional_type_parameters>]"
+)
+def java_type_parameter_arguments(m) -> str:
+    """Formatted Java type parameter arguments"""
+    parameters = [m.java_type_parameter_argument]
+    with suppress(AttributeError):
+        parameters.extend(m.java_generic_type_additional_type_parameters)
+    pieces = []
+    nesting: int = 0
+    for parameter in parameters:
+        if isinstance(parameter, str):
+            if is_immediately_after_nesting_exit(pieces):
+                pieces.append(", ")
+            pieces.append(parameter)
+        else:
+            match parameter:
+                case GenericTypeConnector.AND:
+                    pieces.append(", ")
+                case GenericTypeConnector.OF:
+                    pieces.append("<")
+                    nesting += 1
+                case GenericTypeConnector.DONE:
+                    pieces.append(">")
+                    nesting -= 1
+    if nesting > 0:
+        pieces.append(">" * nesting)
+    return "".join(pieces)
+
+
+@mod.capture(
+    rule="<user.java_generic_data_structure> of <user.java_type_parameter_arguments>"
 )
 def java_generic_type(m) -> str:
     """A generic type with specific type parameters"""
-    parameters = m.java_type_parameter_argument_list
-    parameter_text = ", ".join(parameters)
-    return f"{m.java_generic_data_structure}<{parameter_text}>"
+    parameters = m.java_type_parameter_arguments
+    return f"{m.java_generic_data_structure}<{parameters}>"
 
 
 # End of unstable section
