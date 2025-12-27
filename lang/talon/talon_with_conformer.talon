@@ -1,5 +1,5 @@
 # enables the user.talon_populate_lists tag with conformer
-# for talon script and talon python
+# for TalonScript and Talon Python
 # dragon cannot handle the resulting grammar complexity
 code.language: talon
 and speech.engine: wav2letter
