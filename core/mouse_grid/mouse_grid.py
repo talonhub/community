@@ -22,10 +22,6 @@ mod.setting(
 )
 
 mod.tag("mouse_grid_showing", desc="Tag indicates whether the mouse grid is showing")
-mod.tag(
-    "mouse_grid_enabled",
-    desc="Deprecated: do not use. Activates legacy m grid command",
-)
 ctx = Context()
 
 
