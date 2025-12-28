@@ -1,8 +1,7 @@
-from talon import settings
-
 import re
 from typing import Optional
 
+from talon import settings
 from talon.experimental.textarea import (
     DarkThemeLabels,
     LightThemeLabels,

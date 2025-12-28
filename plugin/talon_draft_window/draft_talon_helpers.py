@@ -24,14 +24,14 @@ mod.setting(
     type=str,
     default="dark",
     desc="Sets the main colors of the window, one of 'dark' or 'light'"
-    +SETTING_CHANGE_CAVEAT_DESCRIPTION,
+    + SETTING_CHANGE_CAVEAT_DESCRIPTION,
 )
 mod.setting(
     "draft_window_label_size",
     type=int,
     default=20,
     desc="Sets the size of the word labels used in the draft window"
-    +SETTING_CHANGE_CAVEAT_DESCRIPTION,
+    + SETTING_CHANGE_CAVEAT_DESCRIPTION,
 )
 mod.setting(
     "draft_window_label_color",
@@ -39,7 +39,7 @@ mod.setting(
     default=None,
     desc=(
         "Sets the color of the word labels used in the draft window. "
-        "E.g. 00ff00 would be green"+SETTING_CHANGE_CAVEAT_DESCRIPTION
+        "E.g. 00ff00 would be green" + SETTING_CHANGE_CAVEAT_DESCRIPTION
     ),
 )
 mod.setting(
@@ -47,11 +47,12 @@ mod.setting(
     type=int,
     default=20,
     desc="Sets the size of the text used in the draft window"
-    +SETTING_CHANGE_CAVEAT_DESCRIPTION,
+    + SETTING_CHANGE_CAVEAT_DESCRIPTION,
 )
 
 
 draft_manager = DraftManager()
+
 
 @ctx_focused.action_class("user")
 class ContextSensitiveDictationActions:
