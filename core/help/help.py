@@ -359,8 +359,10 @@ def gui_context_help(gui: imgui.GUI):
     if gui.button("Help close"):
         actions.user.help_hide()
 
+
 def is_wildcard_context_name(context_name: str) -> bool:
     return context_name.startswith("*")
+
 
 def find_commands_corresponding_to_context(context_name: str):
     if is_wildcard_context_name(context_name):
@@ -373,6 +375,7 @@ def find_commands_corresponding_to_context(context_name: str):
     else:
         commands = context_command_map[context_name].items()
     return commands
+
 
 def draw_context_commands(gui: imgui.GUI):
     global selected_context
