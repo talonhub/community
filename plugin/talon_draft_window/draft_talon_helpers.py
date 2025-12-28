@@ -1,6 +1,6 @@
 from typing import Optional
 
-from talon import Context, Module, actions, settings, ui
+from talon import Context, Module, actions, ui
 
 from .draft_ui import DraftManager
 
@@ -48,25 +48,6 @@ mod.setting(
 
 
 draft_manager = DraftManager()
-
-
-# Update the styling of the draft window dynamically as user settings change
-def _update_draft_style(*args):
-    draft_manager.set_styling(
-        **{
-            arg: settings.get(setting)
-            for setting, arg in (
-                ("user.draft_window_theme", "theme"),
-                ("user.draft_window_label_size", "label_size"),
-                ("user.draft_window_label_color", "label_color"),
-                ("user.draft_window_text_size", "text_size"),
-            )
-        }
-    )
-
-
-settings.register("", _update_draft_style)
-
 
 @ctx_focused.action_class("user")
 class ContextSensitiveDictationActions:
