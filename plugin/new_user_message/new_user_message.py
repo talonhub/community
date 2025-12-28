@@ -21,14 +21,14 @@ def new_user_gui(gui: imgui.GUI):
 
     gui.spacer()
 
-    if gui.button("Open Talon Wiki (Opens the Talon Wiki)"):
+    if gui.button("Open Talon Wiki (Open the Talon Wiki)"):
         actions.user.open_url("https://talon.wiki")
     if gui.button(
-        "Open Talon Slack (Opens a slack channel where you can get help and talk with other talon users)"
+        "Open Talon Slack (Open a slack channel where you can get help and talk with other talon users)"
     ):
         actions.user.open_url("http://talonvoice.slack.com/messages/help")
     if gui.button(
-        "Open Talon Practice (Opens a webpage for helping new users learn how to use Talon)"
+        "Open Talon Practice (Open a webpage for helping new users learn how to use Talon)"
     ):
         actions.user.open_url("https://chaosparrot.github.io/talon_practice/")
 
