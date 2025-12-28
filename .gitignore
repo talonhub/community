@@ -15,3 +15,6 @@ __pycache__
 .\#*
 # Vim (from https://github.com/github/gitignore/blob/main/Global/Vim.gitignore)
 [._]*.swp
+
+# Ignore the file indicating that user has dismissed the new user message
+new_user_message_dismissed
