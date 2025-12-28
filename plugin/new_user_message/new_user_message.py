@@ -8,6 +8,23 @@ NEW_USER_MESSAGE_DISMISSAL_PATH = os.path.join(os.path.dirname(__file__), "new_u
 def new_user_gui(gui: imgui.GUI):
 	gui.text("Welcome!")
 	gui.line()
+	gui.text("For additional help or to close this:")
+	gui.text("You may say one of the following commands or click the corresponding button")
+	gui.text("You can reopen this message by saying: \"New User Message\"")
+	gui.spacer()
+	if gui.button("Open Talon Wiki (Opens the Talon Wiki)"):
+		actions.user.open_url("https://talon.wiki")
+	if gui.button("Open Talon Slack (Opens a slack channel where you can get help and talk with other talon users)"):
+		actions.user.open_url("http://talonvoice.slack.com/messages/help")
+	if gui.button("Open Talon Practice (Opens a tool for helping new users learn how to use Talon)"):
+		actions.user.open_url("https://chaosparrot.github.io/talon_practice/")
+	gui.line()
+	if gui.button("Message Hide (Close this message)"):
+		actions.user.new_user_message_hide()
+	if gui.button("Message Dismiss (Close this message and stop seeing it on startup)"):
+		actions.user.new_user_message_stop_showing_on_startup()
+		actions.user.new_user_message_hide()
+	
 
 
 mod = Module()
