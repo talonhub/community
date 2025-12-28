@@ -1,4 +1,8 @@
 from talon import Module, actions, imgui, app, Context
+import os
+
+# we know to stop showing the new user message when the following path is defined
+NEW_USER_MESSAGE_DISMISSAL_PATH = os.path.join(os.path.dirname(__file__), "new_user_message_dismissed")
 
 @imgui.open(y=0)
 def new_user_gui(gui: imgui.GUI):
@@ -12,7 +16,8 @@ mod.tag("new_user_message_showing", desc="The new user message gui is showing")
 ctx = Context()
 
 def on_ready():
-	actions.user.new_user_message_show()
+	if not os.path.exists(NEW_USER_MESSAGE_DISMISSAL_PATH):
+		actions.user.new_user_message_show()
 
 
 app.register("ready", on_ready)
@@ -31,4 +36,6 @@ class Actions:
 
 	def new_user_message_stop_showing_on_startup():
 		"""Stops showing the new user message gui on startup"""
-		pass
+		with open(NEW_USER_MESSAGE_DISMISSAL_PATH, "w") as _:
+			# this creates an empty file
+			pass
