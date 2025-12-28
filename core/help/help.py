@@ -180,6 +180,8 @@ def gui_operators(gui: imgui.GUI):
 
 def format_context_title(context_name: str) -> str:
     global cached_active_contexts_list
+    if is_wildcard_context_name(context_name):
+        return context_name
     return "{} [{}]".format(
         context_name,
         (
@@ -357,14 +359,17 @@ def gui_context_help(gui: imgui.GUI):
     if gui.button("Help close"):
         actions.user.help_hide()
 
+def is_wildcard_context_name(context_name: str) -> bool:
+    return context_name.startswith("*")
+
 def find_commands_corresponding_to_context(context_name: str):
-    if context_name.startswith("*"):
+    if is_wildcard_context_name(context_name):
+        # match every context ending with the part of the context name after the *
         expected_context_tail = context_name[1:]
         commands = []
         for context in context_command_map:
             if context.endswith(expected_context_tail):
-                for item in context_command_map[context].items():
-                    commands.append(item)
+                commands.extend(context_command_map[context].items())
     else:
         commands = context_command_map[context_name].items()
     return commands
