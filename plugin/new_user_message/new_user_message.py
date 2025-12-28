@@ -10,7 +10,7 @@ NEW_USER_MESSAGE_DISMISSAL_PATH = os.path.join(
 
 @imgui.open(y=0)
 def new_user_gui(gui: imgui.GUI):
-    gui.text("Welcome!")
+    gui.text("Welcome to the Talon Community Configuration!")
     gui.line()
 
     gui.text("For additional help or to close this:")
