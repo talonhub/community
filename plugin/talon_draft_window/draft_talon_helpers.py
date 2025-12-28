@@ -17,18 +17,21 @@ ctx_focused.matches = r"""
 title: Talon Draft
 """
 
+SETTING_CHANGE_CAVEAT_DESCRIPTION = ". Seeing the results of changing this setting requires showing the draft window again."
 mod.tag("draft_window_showing", desc="Tag set when draft window showing")
 mod.setting(
     "draft_window_theme",
     type=str,
     default="dark",
-    desc="Sets the main colors of the window, one of 'dark' or 'light'",
+    desc="Sets the main colors of the window, one of 'dark' or 'light'"
+    +SETTING_CHANGE_CAVEAT_DESCRIPTION,
 )
 mod.setting(
     "draft_window_label_size",
     type=int,
     default=20,
-    desc="Sets the size of the word labels used in the draft window",
+    desc="Sets the size of the word labels used in the draft window"
+    +SETTING_CHANGE_CAVEAT_DESCRIPTION,
 )
 mod.setting(
     "draft_window_label_color",
@@ -36,14 +39,15 @@ mod.setting(
     default=None,
     desc=(
         "Sets the color of the word labels used in the draft window. "
-        "E.g. 00ff00 would be green"
+        "E.g. 00ff00 would be green"+SETTING_CHANGE_CAVEAT_DESCRIPTION
     ),
 )
 mod.setting(
     "draft_window_text_size",
     type=int,
     default=20,
-    desc="Sets the size of the text used in the draft window",
+    desc="Sets the size of the text used in the draft window"
+    +SETTING_CHANGE_CAVEAT_DESCRIPTION,
 )
 
 
