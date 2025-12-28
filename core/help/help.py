@@ -795,9 +795,9 @@ class Actions:
         register_events(True)
         ctx.tags = ["user.help_open"]
 
-    def help_dictation_mode():
-        """Display dictation mode commands"""
-        actions.user.help_selected_context(("*dictation_mode.talon"))
+    def help_dictation():
+        """Display primary dictation mode commands"""
+        actions.user.help_selected_context(("*.dictation_mode.talon"))
 
     def help_next():
         """Navigates to next page"""
