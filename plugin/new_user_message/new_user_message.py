@@ -11,6 +11,12 @@ mod.tag("new_user_message_showing", desc="The new user message gui is showing")
 
 ctx = Context()
 
+def on_ready():
+	actions.user.new_user_message_show()
+
+
+app.register("ready", on_ready)
+
 @mod.action_class
 class Actions:
 	def new_user_message_show():
@@ -22,3 +28,7 @@ class Actions:
 		"""Hides the new user message gui"""
 		new_user_gui.hide()
 		ctx.tags = []
+
+	def new_user_message_stop_showing_on_startup():
+		"""Stops showing the new user message gui on startup"""
+		pass
