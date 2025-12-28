@@ -357,6 +357,17 @@ def gui_context_help(gui: imgui.GUI):
     if gui.button("Help close"):
         actions.user.help_hide()
 
+def find_commands_corresponding_to_context(context_name: str):
+    if context_name.startswith("*"):
+        expected_context_tail = context_name[1:]
+        commands = []
+        for context in context_command_map:
+            if context.endswith(expected_context_tail):
+                for item in context_command_map[context].items():
+                    commands.append(item)
+    else:
+        commands = context_command_map[context_name].items()
+    return commands
 
 def draw_context_commands(gui: imgui.GUI):
     global selected_context
@@ -365,7 +376,7 @@ def draw_context_commands(gui: imgui.GUI):
 
     context_title = format_context_title(selected_context)
     title = f"Context: {context_title}"
-    commands = context_command_map[selected_context].items()
+    commands = find_commands_corresponding_to_context(selected_context)
     item_line_counts = [get_command_line_count(command) for command in commands]
     pages = get_pages(item_line_counts)
     total_page_count = max(pages, default=1)
@@ -778,6 +789,10 @@ class Actions:
         gui_context_help.show()
         register_events(True)
         ctx.tags = ["user.help_open"]
+
+    def help_dictation_mode():
+        """Display dictation mode commands"""
+        actions.user.help_selected_context(("*dictation_mode.talon"))
 
     def help_next():
         """Navigates to next page"""
