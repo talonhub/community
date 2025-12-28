@@ -1,0 +1,5 @@
+list: user.vscode_projects
+os: windows
+-
+talent user: %appdata%\talon\user
+talent community: C:\git\knausj_talon

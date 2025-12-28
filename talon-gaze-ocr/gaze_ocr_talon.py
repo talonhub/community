@@ -2,14 +2,14 @@ import glob
 import logging
 import re
 import sys
+import time
 from collections.abc import Callable, Iterable, Sequence
-from math import floor
 from pathlib import Path
-from typing import Literal, Optional, Union
+from typing import Literal, Optional
 
 import numpy as np
 from talon import Context, Module, actions, app, cron, fs, screen, settings, ui
-from talon.canvas import Canvas
+from talon.canvas import Canvas, MouseEvent
 from talon.skia.typeface import Fontstyle, Typeface
 from talon.types import rect
 
@@ -33,8 +33,8 @@ saved_path = sys.path.copy()
 try:
     sys.path.extend([path for path in package_paths if path not in sys.path])
     import gaze_ocr
-    import gaze_ocr.talon
     import screen_ocr  # dependency of gaze-ocr
+    from gaze_ocr import talon_adapter
 finally:
     # Restore the unmodified path.
     sys.path = saved_path.copy()
@@ -73,9 +73,15 @@ mod.setting(
     desc="Adjust the pause between clicks when performing a selection.",
 )
 mod.setting(
+    "ocr_use_window_at_api",
+    type=bool,
+    default=False,
+    desc="Use ui.window_at() API for focusing windows (requires beta Talon). Falls back to accessibility API if disabled or unavailable.",
+)
+mod.setting(
     "ocr_debug_display_seconds",
     type=float,
-    default=2,
+    default=3,
     desc="Adjust how long debugging display is shown.",
 )
 mod.setting(
@@ -94,7 +100,7 @@ mod.setting(
     "ocr_gaze_point_padding",
     type=int,
     default=200,
-    desc="How much padding is applied to gaze point when searching for text.",
+    desc="How much padding is applied to gaze point when taking screenshots for debug overlay commands.",
 )
 mod.setting(
     "ocr_light_background_debug_color",
@@ -120,34 +126,11 @@ mod.tag(
     desc="Tag for disambiguating between different onscreen matches.",
 )
 mod.list("ocr_actions", desc="Actions to perform on selected text.")
+mod.list(
+    "ocr_common_actions", desc="Common actions that can be used without 'seen'/'scene'."
+)
 mod.list("ocr_modifiers", desc="Modifiers to perform on selected text.")
 mod.list("onscreen_ocr_text", desc="Selection list for onscreen text.")
-ctx.lists["self.ocr_actions"] = {
-    "take": "select",
-    "copy": "copy",
-    "carve": "cut",
-    "paste to": "paste",
-    "paste link to": "paste_link",
-    "clear": "delete",
-    "change": "delete",
-    "delete": "delete_with_whitespace",
-    "chuck": "delete_with_whitespace",
-    "cap": "capitalize",
-    "no cap": "uncapitalize",
-    "no caps": "uncapitalize",
-    "lower": "lowercase",
-    "upper": "uppercase",
-    # Note: the following are not defined by default in knausj.
-    "bold": "bold",
-    "italic": "italic",
-    "strikethrough": "strikethrough",
-    "number": "number_list",
-    "bullet": "bullet_list",
-    "link": "link",
-}
-ctx.lists["self.ocr_modifiers"] = {
-    "all": "selectAll",
-}
 
 
 def paste_link() -> None:
@@ -194,7 +177,7 @@ _OCR_MODIFIERS: dict[str, Callable[[], None]] = {
 
 
 @ctx.dynamic_list("user.onscreen_ocr_text")
-def onscreen_ocr_text(phrase) -> Union[str, list[str], dict[str, str]]:
+def onscreen_ocr_text(phrase) -> str | list[str] | dict[str, str]:
     global gaze_ocr_controller, punctuation_table
     reset_disambiguation()
     gaze_ocr_controller.read_nearby((phrase[0].start, phrase[-1].end))
@@ -219,7 +202,18 @@ def add_homophones(
             homophones[word.lower()] = merged_words
 
 
-digits = "zero one two three four five six seven eight nine".split()
+digits = [
+    "zero",
+    "one",
+    "two",
+    "three",
+    "four",
+    "five",
+    "six",
+    "seven",
+    "eight",
+    "nine",
+]
 default_digits_map = {n: i for i, n in enumerate(digits)}
 
 # Inline punctuation words in case people are using vanilla knausj, where these are not
@@ -251,8 +245,7 @@ default_punctuation_words = {
 }
 
 
-user_dir = Path(__file__).parents[2]
-print(user_dir)
+user_dir = Path(__file__).parents[1]
 # Search user_dir to find homophones.csv
 homophones_file = None
 for path in glob.glob(str(user_dir / "**/homophones.csv"), recursive=True):
@@ -284,7 +277,7 @@ def get_knausj_homophones():
 def reload_backend(name, flags):
     # Initialize eye tracking and OCR.
     global tracker, ocr_reader, gaze_ocr_controller, punctuation_table
-    tracker = gaze_ocr.talon.TalonEyeTracker()
+    tracker = talon_adapter.TalonEyeTracker()
     # Note: tracker is connected automatically in the constructor.
     if not settings.get("user.ocr_connect_tracker"):
         tracker.disconnect()
@@ -306,11 +299,13 @@ def reload_backend(name, flags):
             for spoken, punctuation in punctuation_words.items()
         ],
     )
+    # Add common OCR errors to homophones.
     add_homophones(
         homophones,
         [
-            # 0k is not actually a homophone but is frequently produced by OCR.
             ("ok", "okay", "0k"),
+            ("ally", "a11y"),
+            ("AI", "Al"),
         ],
     )
     punctuation_table = str.maketrans(
@@ -337,9 +332,9 @@ def reload_backend(name, flags):
     gaze_ocr_controller = gaze_ocr.Controller(
         ocr_reader,
         tracker,
-        mouse=gaze_ocr.talon.Mouse(),
-        keyboard=gaze_ocr.talon.Keyboard(),
-        app_actions=gaze_ocr.talon.AppActions(),
+        mouse=talon_adapter.Mouse(),
+        keyboard=talon_adapter.Keyboard(),
+        app_actions=talon_adapter.AppActions(),
         save_data_directory=settings.get("user.ocr_logging_dir"),
         gaze_box_padding=settings.get("user.ocr_gaze_box_padding"),
         fallback_when_no_eye_tracker=gaze_ocr.EyeTrackerFallback[
@@ -372,6 +367,55 @@ def get_debug_color(has_light_background: bool):
     )
 
 
+def calculate_optimal_text_size(
+    paint, text: str, bbox_width: float, bbox_height: float
+) -> float:
+    """Calculate optimal font size to fit text within bounding box using Paint.measure_text().
+
+    Uses scaling approach with existing Paint object to avoid Font creation overhead.
+    Maximizes font size while ensuring text fits within both width and height constraints.
+
+    Args:
+        paint: Skia Paint object to use for measurements
+        text: Text string to size
+        bbox_width: Target bounding box width
+        bbox_height: Target bounding box height
+
+    Returns:
+        Optimal font size as float
+    """
+    # Store original text size to restore later
+    original_size = paint.textsize
+
+    # Use a reasonable base size for measurement
+    base_size = 16
+    paint.textsize = base_size
+
+    try:
+        width, bounds = paint.measure_text(text)
+
+        if width <= 0 or bounds.height <= 0:
+            return bbox_height  # Fallback to using bbox height as font size
+
+        # Calculate scaling factors with small safety margin (95% of available space)
+        safety_factor = 0.95
+        width_scale = (bbox_width * safety_factor) / width
+        height_scale = (bbox_height * safety_factor) / bounds.height
+
+        # Use the more restrictive constraint
+        scale = min(width_scale, height_scale)
+        optimal_size = base_size * scale
+
+        # Ensure minimum readable size
+        optimal_size = max(optimal_size, 8)
+
+        return optimal_size
+
+    finally:
+        # Always restore original text size
+        paint.textsize = original_size
+
+
 disambiguation_canvas = None
 debug_canvas = None
 ambiguous_matches: Optional[Sequence[gaze_ocr.CursorLocation]] = None
@@ -384,6 +428,7 @@ def reset_disambiguation():
         disambiguation_generator, \
         disambiguation_canvas, \
         debug_canvas
+    ctx.tags = []
     ambiguous_matches = None
     disambiguation_generator = None
     hide_canvas = disambiguation_canvas or debug_canvas
@@ -428,16 +473,36 @@ def show_disambiguation():
         setting_ocr_disambiguation_display_seconds = settings.get(
             "user.ocr_disambiguation_display_seconds"
         )
-        if setting_ocr_disambiguation_display_seconds:
+        if setting_ocr_disambiguation_display_seconds and disambiguation_canvas:
+            current_canvas = disambiguation_canvas
+
+            def timeout_disambiguation():
+                global disambiguation_canvas
+                if disambiguation_canvas and disambiguation_canvas == current_canvas:
+                    reset_disambiguation()
+
             cron.after(
                 f"{setting_ocr_disambiguation_display_seconds}s",
-                disambiguation_canvas.close,
+                timeout_disambiguation,
             )
 
     ctx.tags = ["user.gaze_ocr_disambiguation"]
     if disambiguation_canvas:
         disambiguation_canvas.close()
-    disambiguation_canvas = Canvas.from_screen(ui.main_screen())
+    rect = screen_ocr.to_rect(contents.bounding_box)
+    screen_rect = screen.main().rect
+    # If rect is approximately equal to screen.main().rect, use Canvas.from_screen to
+    # avoid Windows bug where the screen is blacked out.
+    # https://github.com/wolfmanstout/talon-gaze-ocr/issues/47
+    if (
+        abs(rect.x - screen_rect.x) < 1
+        and abs(rect.y - screen_rect.y) < 1
+        and abs(rect.width - screen_rect.width) < 1
+        and abs(rect.height - screen_rect.height) < 1
+    ):
+        disambiguation_canvas = Canvas.from_screen(screen.main())
+    else:
+        disambiguation_canvas = Canvas.from_rect(rect)
     disambiguation_canvas.register("draw", on_draw)
     disambiguation_canvas.freeze()
 
@@ -454,12 +519,12 @@ def begin_generator(generator):
         pass
 
 
-def move_cursor_to_word_generator(text: TimestampedText):
+def move_cursor_to_word_generator(text: TimestampedText, disambiguate: bool = True):
     result = yield from gaze_ocr_controller.move_cursor_to_words_generator(
         text.text,
-        disambiguate=True,
+        disambiguate=disambiguate,
         time_range=(text.start, text.end),
-        click_offset_right=settings.get("user.ocr_click_offset_right"),
+        click_offset_right=lambda: settings.get("user.ocr_click_offset_right"),
     )
     if not result:
         actions.user.show_ocr_overlay_for_query("text", f"{text.text}")
@@ -476,7 +541,7 @@ def move_text_cursor_to_word_generator(
         disambiguate=True,
         cursor_position=position,
         time_range=(text.start, text.end),
-        click_offset_right=settings.get("user.ocr_click_offset_right"),
+        click_offset_right=lambda: settings.get("user.ocr_click_offset_right"),
         hold_shift=hold_shift,
     )
     if not result:
@@ -495,7 +560,7 @@ def move_text_cursor_to_longest_prefix_generator(
         disambiguate=True,
         cursor_position=position,
         time_range=(text.start, text.end),
-        click_offset_right=settings.get("user.ocr_click_offset_right"),
+        click_offset_right=lambda: settings.get("user.ocr_click_offset_right"),
         hold_shift=hold_shift,
     )
     if not locations:
@@ -515,7 +580,7 @@ def move_text_cursor_to_longest_suffix_generator(
         disambiguate=True,
         cursor_position=position,
         time_range=(text.start, text.end),
-        click_offset_right=settings.get("user.ocr_click_offset_right"),
+        click_offset_right=lambda: settings.get("user.ocr_click_offset_right"),
         hold_shift=hold_shift,
     )
     if not locations:
@@ -529,7 +594,7 @@ def move_text_cursor_to_difference(text: TimestampedText):
         text.text,
         disambiguate=True,
         time_range=(text.start, text.end),
-        click_offset_right=settings.get("user.ocr_click_offset_right"),
+        click_offset_right=lambda: settings.get("user.ocr_click_offset_right"),
     )
     if not result:
         actions.user.show_ocr_overlay_for_query("text", f"{text.text}")
@@ -553,10 +618,10 @@ def select_text_generator(
         for_deletion=for_deletion,
         start_time_range=(start.start, start.end),
         end_time_range=(end.start, end.end) if end else None,
-        click_offset_right=settings.get("user.ocr_click_offset_right"),
+        click_offset_right=lambda: settings.get("user.ocr_click_offset_right"),
         after_start=after_start,
         before_end=before_end,
-        select_pause_seconds=settings.get("user.ocr_select_pause_seconds"),
+        select_pause_seconds=lambda: settings.get("user.ocr_select_pause_seconds"),
     )
     if not result:
         actions.user.show_ocr_overlay_for_query(
@@ -570,8 +635,8 @@ def select_matching_text_generator(text: TimestampedText):
         text.text,
         disambiguate=True,
         time_range=(text.start, text.end),
-        click_offset_right=settings.get("user.ocr_click_offset_right"),
-        select_pause_seconds=settings.get("user.ocr_select_pause_seconds"),
+        click_offset_right=lambda: settings.get("user.ocr_click_offset_right"),
+        select_pause_seconds=lambda: settings.get("user.ocr_select_pause_seconds"),
     )
     if not result:
         actions.user.show_ocr_overlay_for_query("text", f"{text.text}")
@@ -609,6 +674,15 @@ def context_sensitive_insert(text: str):
 
 @mod.action_class
 class GazeOcrActions:
+    def focus_at(x: int, y: int):
+        """Focus the window at the given coordinates."""
+        # Default implementation is a no-op Mac has a specific implementation that uses
+        # either ui.window_at() or ui.element_at()
+        # TODO: Implement for Windows/Linux once ui.window_at() is fixed on those
+        # platforms Need to have at least one action for Talon to recognize this as
+        # implemented
+        actions.sleep("0ms")
+
     #
     # Actions related to the eye tracker.
     #
@@ -625,58 +699,110 @@ class GazeOcrActions:
     # Actions related to the UI.
     #
 
-    def show_ocr_overlay(type: str, near: Optional[TimestampedText] = None):
-        """Displays overlay over primary screen.
+    def show_ocr_overlay(
+        type: str, near: Optional[TimestampedText] = None, refresh: bool = True
+    ):
+        """Displays OCR debug overlay over primary screen, refreshing the OCR nearby
+        where the user is looking by default.
 
-        Reads nearby gaze when the near parameter is spoken."""
+        If the near parameter is provided, refreshes OCR nearby where the user is
+        looking when they spoke the near parameter."""
         reset_disambiguation()
-        if near:
-            gaze_ocr_controller.read_nearby((near.start, near.end))
-        else:
-            gaze_ocr_controller.read_nearby()
-        actions.user.show_ocr_overlay_for_query(type)
+        if refresh:
+            if near:
+                gaze_ocr_controller.read_nearby((near.start, near.end))
+            else:
+                gaze_ocr_controller.read_nearby()
+        actions.user.show_ocr_overlay_for_query(type, "", True)
 
-    def show_ocr_overlay_for_query(type: str, query: str = ""):
+    def show_ocr_overlay_for_query(
+        type: str, query: str = "", persistent: bool = False
+    ):
         """Display overlay over primary screen, displaying the query."""
         global debug_canvas
         if debug_canvas:
             debug_canvas.close()
+            debug_canvas = None
         contents = gaze_ocr_controller.latest_screen_contents()
 
         contents_rect = screen_ocr.to_rect(contents.bounding_box)
 
+        # Capture start time for synchronized fading
+        start_time = time.perf_counter()
+
         def on_draw(c):
-            debug_color = get_debug_color(has_light_background(contents.screenshot))
-            # Show bounding box.
-            c.paint.style = c.paint.Style.STROKE
-            c.paint.color = debug_color
-            c.draw_rect(contents_rect)
-            if contents.screen_coordinates:
+            light_bg = has_light_background(contents.screenshot)
+            debug_color = get_debug_color(light_bg)
+
+            if type == "text":
+                # Text overlay needs opaque background with fading to be readable
+                # Fade timing configuration
+                fade_in_duration = 0.5  # seconds to fade in
+                hold_duration = 0.5  # seconds to hold at full opacity
+                fade_out_duration = 0.5  # seconds to fade out
+                total_cycle_time = (
+                    fade_in_duration + hold_duration + fade_out_duration
+                )  # 1.5s total
+
+                elapsed_time = time.perf_counter() - start_time
+                cycle_time = elapsed_time % total_cycle_time
+
+                # Calculate alpha (0.0 to 1.0) based on cycle position
+                timeout = settings.get("user.ocr_debug_display_seconds")
+                if not persistent and elapsed_time > timeout:
+                    # Ensure the animation does not overrun.
+                    alpha = 0.0
+                elif cycle_time < fade_in_duration:
+                    # Fade in: 0 to 1 over fade_in_duration
+                    alpha = cycle_time / fade_in_duration
+                elif cycle_time < fade_in_duration + hold_duration:
+                    # Hold: stay at 1.0
+                    alpha = 1.0
+                else:
+                    # Fade out: 1 to 0 over fade_out_duration
+                    fade_start = fade_in_duration + hold_duration
+                    alpha = 1.0 - ((cycle_time - fade_start) / fade_out_duration)
+
+                # Clamp alpha to valid range
+                alpha = max(0.0, min(1.0, alpha))
+
+                bg_color = "FFFFFF" if light_bg else "000000"
+                alpha_byte = int(alpha * 255)
+
+                # Draw opaque background over the contents area with alpha
+                c.paint.style = c.paint.Style.FILL
+                c.paint.color = f"{bg_color}{alpha_byte:02X}"
+                c.draw_rect(contents_rect)
+
+                # Show bounding box with alpha
+                c.paint.style = c.paint.Style.STROKE
+                c.paint.color = f"{debug_color}{alpha_byte:02X}"
+                c.draw_rect(contents_rect)
+
+                # Draw text with alpha
+                for line in contents.result.lines:
+                    for word in line.words:
+                        c.paint.typeface = ""
+                        c.paint.textsize = calculate_optimal_text_size(
+                            c.paint, word.text, word.width, word.height
+                        )
+                        c.paint.style = c.paint.Style.FILL
+                        c.paint.color = f"{debug_color}{alpha_byte:02X}"
+                        # Position baseline at ~80% down from top of OCR bounding box
+                        c.draw_text(
+                            word.text, word.left, word.top + (word.height * 0.8)
+                        )
+
+            elif type == "boxes":
+                # Box outlines don't interfere with text, so no background or fading needed
+                # Show bounding box
                 c.paint.style = c.paint.Style.STROKE
                 c.paint.color = debug_color
-                c.draw_circle(
-                    contents.screen_coordinates[0],
-                    contents.screen_coordinates[1],
-                    contents.search_radius,
-                )
-            if query:
-                c.paint.typeface = ""
-                c.paint.textsize = 30
-                c.paint.style = c.paint.Style.FILL
-                c.paint.color = "FFFFFF"
-                c.draw_text(query, x=screen.main().x + screen.main().width / 2, y=20)
-                c.paint.style = c.paint.Style.STROKE
-                c.paint.color = "000000"
-                c.draw_text(query, x=screen.main().x + screen.main().width / 2, y=20)
-            for line in contents.result.lines:
-                for word in line.words:
-                    if type == "text":
-                        c.paint.typeface = ""
-                        c.paint.textsize = floor(word.height)
-                        c.paint.style = c.paint.Style.FILL
-                        c.paint.color = debug_color
-                        c.draw_text(word.text, word.left, word.top)
-                    elif type == "boxes":
+                c.draw_rect(contents_rect)
+
+                # Draw word boxes
+                for line in contents.result.lines:
+                    for word in line.words:
                         c.paint.style = c.paint.Style.STROKE
                         c.paint.color = debug_color
                         c.draw_rect(
@@ -687,11 +813,22 @@ class GazeOcrActions:
                                 height=word.height,
                             )
                         )
-                    else:
-                        raise RuntimeError(f"Type not recognized: {type}")
-            cron.after(
-                f"{settings.get('user.ocr_debug_display_seconds')}s", debug_canvas.close
-            )
+
+            else:
+                raise RuntimeError(f"Type not recognized: {type}")
+            if debug_canvas and not persistent:
+                current_canvas = debug_canvas
+
+                def timeout_debug_canvas():
+                    global debug_canvas
+                    if debug_canvas and debug_canvas == current_canvas:
+                        debug_canvas.close()
+                        debug_canvas = None
+
+                cron.after(
+                    f"{settings.get('user.ocr_debug_display_seconds')}s",
+                    timeout_debug_canvas,
+                )
 
         # Increased size slightly for canvas to ensure everything will be inside canvas
         canvas_rect = contents_rect.copy()
@@ -701,8 +838,23 @@ class GazeOcrActions:
         canvas_rect.center = center
 
         debug_canvas = Canvas.from_rect(canvas_rect)
+        debug_canvas.blocks_mouse = True
         debug_canvas.register("draw", on_draw)
-        debug_canvas.freeze()
+
+        def on_mouse(e: MouseEvent):
+            global debug_canvas
+            if e.event == "mousedown" and debug_canvas:  # Any mouse button click
+                debug_canvas.close()
+                debug_canvas = None
+
+        debug_canvas.register("mouse", on_mouse)
+
+    def hide_ocr_overlay():
+        """Hide any visible OCR overlay."""
+        global debug_canvas
+        if debug_canvas:
+            debug_canvas.close()
+            debug_canvas = None
 
     def choose_gaze_ocr_option(index: int):
         """Disambiguate with the provided index."""
@@ -731,7 +883,6 @@ class GazeOcrActions:
 
     def hide_gaze_ocr_options():
         """Hide the disambiguation UI."""
-        ctx.tags = []
         reset_disambiguation()
 
     #
@@ -772,36 +923,43 @@ class GazeOcrActions:
         begin_generator(run())
 
     def move_cursor_to_text_and_do(
-        text: TimestampedText, action: Callable[[], None]
+        text: TimestampedText, action: Callable[[], None], disambiguate: bool = True
     ) -> None:
         """Moves cursor to onscreen word and performs an action."""
 
         def run():
-            yield from move_cursor_to_word_generator(text)
+            yield from move_cursor_to_word_generator(text, disambiguate)
             action()
 
         begin_generator(run())
 
     def click_text(text: TimestampedText):
         """Click on the provided on-screen text."""
-        actions.user.move_cursor_to_text_and_do(text, lambda: actions.mouse_click(0))
+        actions.user.move_cursor_to_text_and_do(text, lambda: actions.mouse_click())
+
+    def click_text_without_disambiguation(text: TimestampedText):
+        """Click on the provided on-screen text, choosing the best match if multiple are
+        found."""
+        actions.user.move_cursor_to_text_and_do(
+            text, lambda: actions.mouse_click(), disambiguate=False
+        )
 
     def double_click_text(text: TimestampedText):
         """Double-lick on the provided on-screen text."""
 
         def double_click() -> None:
-            actions.mouse_click(0)
-            actions.mouse_click(0)
+            actions.mouse_click()
+            actions.mouse_click()
 
         actions.user.move_cursor_to_text_and_do(text, double_click)
 
     def triple_click_text(text: TimestampedText):
-        """Double-lick on the provided on-screen text."""
+        """Triple-click on the provided on-screen text."""
 
         def triple_click() -> None:
-            actions.mouse_click(0)
-            actions.mouse_click(0)
-            actions.mouse_click(0)
+            actions.mouse_click()
+            actions.mouse_click()
+            actions.mouse_click()
 
         actions.user.move_cursor_to_text_and_do(text, triple_click)
 
@@ -816,18 +974,18 @@ class GazeOcrActions:
     def modifier_click_text(modifier: str, text: TimestampedText):
         """Control-click on the provided on-screen text."""
 
-        def modifier_click() -> None:
+        def click_with_modifier() -> None:
             actions.key(f"{modifier}:down")
-            actions.mouse_click(0)
+            actions.mouse_click()
             actions.key(f"{modifier}:up")
 
-        actions.user.move_cursor_to_text_and_do(text, modifier_click)
+        actions.user.move_cursor_to_text_and_do(text, click_with_modifier)
 
     def change_text_homophone(text: TimestampedText):
         """Switch the on-screen text to a different homophone."""
 
         def change_homophone() -> None:
-            actions.mouse_click(0)
+            actions.mouse_click()
             actions.edit.select_word()
             actions.user.homophones_show_selection()
 
@@ -964,3 +1122,93 @@ class GazeOcrActions:
             context_sensitive_insert(insertion_text)
 
         begin_generator(run())
+
+
+def focus_element_window(element) -> bool:
+    """Focuses the window containing the accessibility element."""
+    try:
+        ax_window = element.AXWindow
+    except AttributeError:
+        # Assume the current element is the window.
+        ax_window = element
+
+    try:
+        ax_app = ax_window.AXParent
+    except AttributeError:
+        return False
+
+    if ax_app.AXRole != "AXApplication":
+        return False
+
+    # Raise the window to the top.
+    try:
+        ax_window.perform("AXRaise")
+    except Exception:
+        return False
+
+    # Focus the application. Check if it is already focused first to avoid
+    # unnecessary impact on window ordering.
+    if not ax_app.AXFrontmost:
+        ax_app.AXFrontmost = True
+    return True
+
+
+# Mac-specific implementation that focuses windows at coordinates
+ctx_mac = Context()
+ctx_mac.matches = "os: mac"
+
+
+@ctx_mac.action_class("user")
+class MacGazeOcrActions:
+    def focus_at(x: int, y: int):
+        """Focus the window at the given coordinates on Mac."""
+        use_window_at = settings.get("user.ocr_use_window_at_api")
+        if use_window_at:
+            # Attempt to turn off HUD if talon_hud is installed.
+            try:
+                actions.user.hud_set_visibility(False, pause_seconds=0)
+            except Exception:
+                pass
+            # Use window_at API (requires beta Talon)
+            try:
+                window = ui.window_at(x, y)
+            except (RuntimeError, AttributeError):
+                # No window at this position
+                logging.debug(f"No window at position ({x}, {y}); skipping focus.")
+                return
+            finally:
+                # Attempt to turn on HUD if talon_hud is installed.
+                try:
+                    actions.user.hud_set_visibility(True, pause_seconds=0)
+                except Exception:
+                    pass
+
+            # Focus the window if not already active
+            if ui.active_window() != window:
+                if window.title == "Notification Center":
+                    app.notify(
+                        "Unable to focus window with notifications active. Please dismiss notifications."
+                    )
+                    return
+                window.focus()
+                start_time = time.perf_counter()
+                while ui.active_window() != window:
+                    if time.perf_counter() - start_time > 1:
+                        logging.warning(
+                            f"Can't focus window: {window.title}. Proceeding anyway."
+                        )
+                        break
+                    actions.sleep(0.1)
+        else:
+            # Use element_at API (works on older Talon versions)
+            try:
+                element = ui.element_at(x, y)
+            except RuntimeError:
+                logging.debug(f"No element at position ({x}, {y}); skipping focus.")
+                return
+
+            if not focus_element_window(element):
+                # This can happen when clicking on the desktop or menu bar.
+                logging.debug(
+                    f"Unable to focus window for element {element}; skipping focus."
+                )

@@ -1,0 +1,27 @@
+name: Push gaze-ocr and screen-ocr git subtrees
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  push-subtrees:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GH_SUBTREE_TOKEN }}
+      - name: Configure Git User
+        run: |
+          git config user.name "GitHub Action"
+          git config user.email "action@github.com"
+
+      - name: Push screen-ocr
+        run: |
+          git subtree push --prefix=.subtrees/screen-ocr https://github.com/wolfmanstout/screen-ocr.git master
+          
+      - name: Push gaze-ocr
+        run: |
+          git subtree push --prefix=.subtrees/gaze-ocr https://github.com/wolfmanstout/gaze-ocr.git master

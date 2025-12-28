@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Optional
 
-from talon import Module, actions
+from talon import Module
 
 mod = Module()
 

@@ -2,7 +2,7 @@ import numpy as np
 import pytesseract
 import six
 from PIL import Image
-from skimage import filters, morphology, transform
+from skimage import filters, morphology, transform  # type: ignore[import-not-found]
 
 from . import _base
 
@@ -15,8 +15,8 @@ class TesseractBackend(_base.OcrBackend):
         threshold_function=None,
         threshold_block_size=None,
         correction_block_size=None,
-        convert_grayscale=False,
-        shift_channels=False,
+        convert_grayscale: bool = False,
+        shift_channels: bool = False,
         debug_image_callback=None,
     ):
         self.tesseract_data_path = (
@@ -28,6 +28,7 @@ class TesseractBackend(_base.OcrBackend):
         if threshold_function == "otsu":
             self.threshold_function = lambda data: filters.threshold_otsu(data)
         elif threshold_function == "local_otsu":
+            assert threshold_block_size is not None
             self.threshold_function = lambda data: filters.rank.otsu(
                 data, morphology.square(threshold_block_size)
             )
@@ -94,6 +95,7 @@ class TesseractBackend(_base.OcrBackend):
         return image
 
     def _binarize_channel(self, data, channel_index):
+        assert self.threshold_function is not None
         if self.debug_image_callback:
             self.debug_image_callback(
                 f"debug_before_{channel_index}", Image.fromarray(data)

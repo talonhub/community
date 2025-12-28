@@ -3,15 +3,12 @@
 import os
 import platform
 import re
+import sys
 from collections import deque
 from collections.abc import Callable, Iterable, Iterator, Mapping, Sequence
 from dataclasses import dataclass
 from itertools import islice
-from typing import (
-    Any,
-    Optional,
-    Union,
-)
+from typing import Any, Optional
 
 try:
     from rapidfuzz import fuzz
@@ -47,17 +44,30 @@ try:
 except ImportError:
     Image = ImageGrab = ImageOps = None
 try:
-    from talon import actions, screen, ui
+    import mss
+except ImportError:
+    mss = None
+try:
+    import dxcam
+except ImportError:
+    dxcam = None
+try:
+    from talon import actions, ctrl, screen, ui
     from talon.types.rect import Rect
 except ImportError:
-    ui = screen = Rect = actions = None
+    ui = screen = Rect = actions = ctrl = None
 
 # Represented as [left, top, right, bottom] pixel coordinates
 BoundingBox = tuple[int, int, int, int]
 
+# Callback function for debugging image processing steps.
+# Parameters: (name: str, image: Any)
+DebugImageCallback = Callable[[str, Any], None]
+
 if Rect:
 
-    def to_rect(bounding_box: BoundingBox) -> Rect:
+    def to_rect(bounding_box: BoundingBox) -> Any:
+        assert Rect is not None
         return Rect(
             x=bounding_box[0],
             y=bounding_box[1],
@@ -65,7 +75,7 @@ if Rect:
             height=bounding_box[3] - bounding_box[1],
         )
 
-    def to_bounding_box(rect_talon: Rect) -> BoundingBox:
+    def to_bounding_box(rect_talon: Any) -> BoundingBox:
         return (
             rect_talon.x,
             rect_talon.y,
@@ -107,16 +117,16 @@ class Reader:
     @classmethod
     def create_reader(
         cls,
-        backend: Union[str, _base.OcrBackend],
-        tesseract_data_path=None,
-        tesseract_command=None,
-        threshold_function="local_otsu",
-        threshold_block_size=41,
-        correction_block_size=31,
-        convert_grayscale=True,
-        shift_channels=True,
-        debug_image_callback=None,
-        language_tag=None,
+        backend: str | _base.OcrBackend,
+        tesseract_data_path: Optional[str] = None,
+        tesseract_command: Optional[str] = None,
+        threshold_function: Optional[str | Callable[[Any], Any]] = "local_otsu",
+        threshold_block_size: Optional[int] = 41,
+        correction_block_size: Optional[int] = 31,
+        convert_grayscale: Optional[bool] = True,
+        shift_channels: Optional[bool] = True,
+        debug_image_callback: Optional[DebugImageCallback] = None,
+        language_tag: Optional[str] = None,
         **kwargs,
     ) -> "Reader":
         """Create reader with specified backend."""
@@ -127,6 +137,8 @@ class Reader:
                 raise ValueError(
                     "Tesseract backend unavailable. To install, run pip install screen-ocr[tesseract]."
                 )
+            assert convert_grayscale is not None
+            assert shift_channels is not None
             backend = _tesseract.TesseractBackend(
                 tesseract_data_path=tesseract_data_path,
                 tesseract_command=tesseract_command,
@@ -137,14 +149,14 @@ class Reader:
                 shift_channels=shift_channels,
                 debug_image_callback=debug_image_callback,
             )
-            defaults = {
+            tesseract_defaults: dict[str, Any] = {
                 "resize_factor": 2,
                 "margin": 50,
             }
             return cls(
                 backend,
                 debug_image_callback=debug_image_callback,
-                **dict(defaults, **kwargs),
+                **dict(tesseract_defaults, **kwargs),
             )
         if backend == "easyocr":
             if not _easyocr:
@@ -164,10 +176,11 @@ class Reader:
                 raise ValueError(
                     "WinRT backend unavailable. To install, run pip install screen-ocr[winrt]."
                 ) from e
+            winrt_defaults: dict[str, Any] = {"resize_factor": 2}
             return cls(
                 backend,
                 debug_image_callback=debug_image_callback,
-                **dict({"resize_factor": 2}, **kwargs),
+                **dict(winrt_defaults, **kwargs),
             )
         if backend == "talon":
             if not _talon:
@@ -184,7 +197,7 @@ class Reader:
         margin: int = 0,
         resize_factor: int = 1,
         resize_method=None,  # Pillow resize method
-        debug_image_callback: Optional[Callable[[str, Any], None]] = None,
+        debug_image_callback: Optional[DebugImageCallback] = None,
         confidence_threshold: float = 0.75,
         radius: int = 200,  # screenshot "radius"
         search_radius: int = 125,
@@ -207,6 +220,10 @@ class Reader:
             if homophones
             else default_homophones()
         )
+        # Initialize platform-specific screen capture
+        self._dxcam_camera = None
+        if dxcam:
+            self._dxcam_camera = dxcam.create()
         # On most platforms the HUD will not be present in the screenshot. It is
         # observed that on Windows, Windows 10 does not hide the HUD, despite the
         # Microsoft documentation suggesting otherwise. To work around this, we toggle
@@ -298,21 +315,125 @@ class Reader:
     def _clean_screenshot(
         self, bounding_box: Optional[BoundingBox], clamp_to_main_screen: bool = True
     ) -> tuple[Any, BoundingBox]:
-        if not self.needs_hud_toggle:
-            return self._screenshot(bounding_box, clamp_to_main_screen)
-        # Attempt to turn off HUD if talon_hud is installed.
+        # Hide cursor during screenshot.
         try:
-            actions.user.hud_set_visibility(False, pause_seconds=0.02)
+            if ctrl:
+                ctrl.cursor_visible(False)
         except Exception:
             pass
         try:
-            return self._screenshot(bounding_box, clamp_to_main_screen)
-        finally:
-            # Attempt to turn on HUD if talon_hud is installed.
+            if not self.needs_hud_toggle:
+                return self._screenshot(bounding_box, clamp_to_main_screen)
+            # Attempt to turn off HUD if talon_hud is installed.
             try:
-                actions.user.hud_set_visibility(True, pause_seconds=0.001)
+                assert actions is not None
+                actions.user.hud_set_visibility(False, pause_seconds=0.02)
             except Exception:
                 pass
+            try:
+                return self._screenshot(bounding_box, clamp_to_main_screen)
+            finally:
+                # Attempt to turn on HUD if talon_hud is installed.
+                try:
+                    assert actions is not None
+                    actions.user.hud_set_visibility(True, pause_seconds=0.001)
+                except Exception:
+                    pass
+        finally:
+            # Restore cursor visibility.
+            try:
+                if ctrl:
+                    ctrl.cursor_visible(True)
+            except Exception:
+                pass
+
+    def _screenshot_with_dxcam(
+        self, bounding_box: Optional[BoundingBox]
+    ) -> Optional[tuple[Any, BoundingBox]]:
+        """Capture screenshot using DXcam (Windows)."""
+        if not self._dxcam_camera:
+            return None
+
+        frame = self._dxcam_camera.grab()
+        if frame is None:
+            return None
+
+        assert Image is not None
+        screenshot = Image.fromarray(frame)
+        if bounding_box:
+            bounding_box = (
+                max(0, bounding_box[0]),
+                max(0, bounding_box[1]),
+                min(screenshot.width, bounding_box[2]),
+                min(screenshot.height, bounding_box[3]),
+            )
+            screenshot = screenshot.crop(bounding_box)
+        else:
+            bounding_box = (0, 0, screenshot.width, screenshot.height)
+        return screenshot, bounding_box
+
+    def _screenshot_with_mss(
+        self, bounding_box: Optional[BoundingBox]
+    ) -> tuple[Any, BoundingBox]:
+        """Capture screenshot using MSS (macOS)."""
+        assert mss is not None
+        with mss.mss() as sct:
+            screen_width = sct.monitors[1]["width"]
+            screen_height = sct.monitors[1]["height"]
+
+            if bounding_box:
+                # Clip bounding box to screen bounds
+                clipped_left = max(0, bounding_box[0])
+                clipped_top = max(0, bounding_box[1])
+                clipped_right = min(screen_width, bounding_box[2])
+                clipped_bottom = min(screen_height, bounding_box[3])
+
+                # MSS uses different coordinate format
+                monitor = {
+                    "top": clipped_top,
+                    "left": clipped_left,
+                    "width": max(1, clipped_right - clipped_left),
+                    "height": max(1, clipped_bottom - clipped_top),
+                }
+                screenshot_raw = sct.grab(monitor)
+                assert Image is not None
+                screenshot = Image.frombytes(
+                    "RGB", screenshot_raw.size, screenshot_raw.bgra, "raw", "BGRX"
+                )
+                bounding_box = (
+                    clipped_left,
+                    clipped_top,
+                    clipped_right,
+                    clipped_bottom,
+                )
+            else:
+                # Capture entire screen
+                monitor = sct.monitors[1]  # Primary monitor
+                screenshot_raw = sct.grab(monitor)
+                assert Image is not None
+                screenshot = Image.frombytes(
+                    "RGB", screenshot_raw.size, screenshot_raw.bgra, "raw", "BGRX"
+                )
+                bounding_box = (0, 0, screen_width, screen_height)
+        return screenshot, bounding_box
+
+    def _screenshot_with_pil(
+        self, bounding_box: Optional[BoundingBox]
+    ) -> tuple[Any, BoundingBox]:
+        """Capture screenshot using PIL ImageGrab (fallback)."""
+        assert ImageGrab is not None
+        screenshot = ImageGrab.grab()
+        if bounding_box:
+            bounding_box = (
+                max(0, bounding_box[0]),
+                max(0, bounding_box[1]),
+                min(screenshot.width, bounding_box[2]),
+                min(screenshot.height, bounding_box[3]),
+            )
+        else:
+            bounding_box = (0, 0, screenshot.width, screenshot.height)
+        screenshot = screenshot.crop(bounding_box)
+        return screenshot, bounding_box
 
     def _screenshot(
         self, bounding_box: Optional[BoundingBox], clamp_to_main_screen: bool = True
@@ -335,20 +456,29 @@ class Reader:
                 retina=False,
             )
         else:
-            # TODO Consider cropping within grab() for performance. Requires knowledge
-            # of screen bounds.
-            assert ImageGrab
-            screenshot = ImageGrab.grab()
-            if bounding_box:
-                bounding_box = (
-                    max(0, bounding_box[0]),
-                    max(0, bounding_box[1]),
-                    min(screenshot.width, bounding_box[2]),
-                    min(screenshot.height, bounding_box[3]),
-                )
+            # Use platform-specific optimized screen capture
+            if sys.platform == "win32":
+                # Windows: DXcam is required for optimal performance
+                if not dxcam:
+                    raise RuntimeError(
+                        "DXcam is required on Windows. Install with: pip install dxcam"
+                    )
+                if not self._dxcam_camera:
+                    raise RuntimeError("Failed to initialize DXcam camera")
+                result = self._screenshot_with_dxcam(bounding_box)
+                if result is None:
+                    raise RuntimeError("DXcam screenshot capture failed")
+                screenshot, bounding_box = result
+            elif sys.platform == "darwin":
+                # macOS: MSS is required for optimal performance
+                if not mss:
+                    raise RuntimeError(
+                        "MSS is required on macOS. Install with: pip install mss"
+                    )
+                screenshot, bounding_box = self._screenshot_with_mss(bounding_box)
             else:
-                bounding_box = (0, 0, screenshot.width, screenshot.height)
-            screenshot = screenshot.crop(bounding_box)
+                # Linux or other platforms: Use PIL fallback
+                screenshot, bounding_box = self._screenshot_with_pil(bounding_box)
         return screenshot, bounding_box
 
     def _adjust_result(

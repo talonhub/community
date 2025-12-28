@@ -42,21 +42,25 @@ class OcrEstimator(BaseEstimator):
         elif self.threshold_type == "local_otsu":
 
             def threshold_function(data):
+                assert self.block_size is not None
                 return filters.rank.otsu(data, morphology.square(self.block_size))
         elif self.threshold_type == "local":
 
             def threshold_function(data):
+                assert self.block_size is not None
                 return filters.threshold_local(data, self.block_size)
         elif self.threshold_type == "niblack":
 
             def threshold_function(data):
+                assert self.block_size is not None
                 return filters.threshold_niblack(data, self.block_size)
         elif self.threshold_type == "sauvola":
 
             def threshold_function(data):
+                assert self.block_size is not None
                 return filters.threshold_sauvola(data, self.block_size)
         elif self.threshold_type is None:
-            threshold_function = None
+            threshold_function = None  # type: ignore[assignment]
         else:
             raise ValueError(f"Unknown threshold type: {self.threshold_type}")
         self.ocr_reader_ = screen_ocr.Reader.create_reader(

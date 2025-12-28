@@ -1,11 +1,16 @@
 [project]
 name = "screen-ocr"
-version = "0.5.0"
+version = "0.7.0"
 description = "Library for processing screen contents using OCR"
 readme = "README.md"
 authors = [{ name = "James Stout" }]
 requires-python = ">=3.11"
-dependencies = ["pillow>=9.0", "rapidfuzz"]
+dependencies = [
+    "dxcam>=0.0.5; sys_platform == 'win32'",
+    "mss>=10.0.0; sys_platform == 'darwin'",
+    "pillow>=9.0",
+    "rapidfuzz",
+]
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: Apache Software License",
@@ -17,7 +22,13 @@ Homepage = "https://github.com/wolfmanstout/screen-ocr"
 
 [project.optional-dependencies]
 tesseract = ["numpy", "pytesseract", "pandas", "scikit-image"]
-winrt = ["winsdk"]
+winrt = [
+    "winrt-windows-foundation>=3.2.1",
+    "winrt-windows-foundation-collections>=3.2.1",
+    "winrt-windows-graphics-imaging>=3.2.1",
+    "winrt-windows-media-ocr>=3.2.1",
+    "winrt-windows-storage-streams>=3.2.1",
+]
 easyocr = ["easyocr", "numpy"]
 
 [dependency-groups]
@@ -47,4 +58,4 @@ select = [
     # isort
     "I",
 ]
-ignore = ["E501", "SIM105", "SIM116", "UP007"]
+ignore = ["E501", "SIM105", "SIM116", "UP045"]

@@ -72,11 +72,11 @@ if args.verbose:
         print(f"{name}:")
         display(image)
 
+    ocr_reader = screen_ocr.Reader.create_reader(
+        "winrt", debug_image_callback=debug_image_callback
+    )
 else:
-    debug_image_callback = None
-ocr_reader = screen_ocr.Reader.create_reader(
-    "winrt", debug_image_callback=debug_image_callback
-)
+    ocr_reader = screen_ocr.Reader.create_reader("winrt")
 
 
 # Run OCR.

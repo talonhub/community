@@ -1,5 +1,10 @@
 # gaze-ocr
 
+[![PyPI](https://img.shields.io/pypi/v/gaze-ocr.svg)](https://pypi.org/project/gaze-ocr/)
+[![Changelog](https://img.shields.io/github/v/release/wolfmanstout/gaze-ocr?include_prereleases&label=changelog)](https://github.com/wolfmanstout/gaze-ocr/releases)
+[![Tests](https://github.com/wolfmanstout/gaze-ocr/actions/workflows/test.yml/badge.svg)](https://github.com/wolfmanstout/gaze-ocr/actions/workflows/test.yml)
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/wolfmanstout/gaze-ocr/blob/master/LICENSE)
+
 The `gaze-ocr` package makes easy to apply OCR to wherever the user is looking.
 This library is designed for voice control. The following instructions are for
 use with Dragonfly. For Talon, see

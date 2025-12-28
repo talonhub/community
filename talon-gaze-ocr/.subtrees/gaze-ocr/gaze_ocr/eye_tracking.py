@@ -1,6 +1,5 @@
 """Tobii eye tracker wrapper."""
 
-import math
 import sys
 
 
@@ -75,6 +74,7 @@ class EyeTracker:
     def disconnect(self):
         if not self.is_connected:
             return
+        assert self._host is not None
         self._host.DisableConnection()
         self._host = None
         self._gaze_point = None
@@ -125,6 +125,8 @@ class EyeTracker:
 
     def get_gaze_point(self):
         if self.has_gaze_point():
+            assert self._gaze_point is not None
+            assert self._screen_scale is not None
             return (
                 self._gaze_point[0] * self._screen_scale[0],
                 self._gaze_point[1] * self._screen_scale[1],
@@ -138,29 +140,8 @@ class EyeTracker:
     def get_monitor_size(self):
         return self._monitor_size
 
-    def print_gaze_point(self):
-        if not self.has_gaze_point():
-            print("No valid gaze point.")
-            return
-        print(f"Gaze point: ({self._gaze_point[0]:f}, {self._gaze_point[1]:f})")
-
     def move_to_gaze_point(self, offset=(0, 0)):
         gaze = self.get_gaze_point_or_default()
         x = max(0, int(gaze[0]) + offset[0])
         y = max(0, int(gaze[1]) + offset[1])
         self._mouse.move((x, y))
-
-    def type_gaze_point(self, format):
-        self._keyboard.type(format % self.get_gaze_point_or_default()).execute()
-
-    def get_head_rotation_or_default(self):
-        rotation = self._head_rotation or (0, 0, 0)
-        if math.isnan(rotation[0]):
-            rotation = (0, 0, 0)
-        return rotation
-
-    def get_head_position_or_default(self):
-        position = self._head_position or (0, 0, 0)
-        if math.isnan(position[0]):
-            position = (0, 0, 0)
-        return position

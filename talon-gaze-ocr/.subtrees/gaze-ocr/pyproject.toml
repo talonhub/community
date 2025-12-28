@@ -1,6 +1,6 @@
 [project]
 name = "gaze-ocr"
-version = "0.4.0"
+version = "0.5.0"
 description = "Library for applying OCR to where the user is looking."
 readme = "README.md"
 authors = [{ name = "James Stout" }]
@@ -40,4 +40,7 @@ select = [
     # isort
     "I",
 ]
-ignore = ["E501", "SIM105", "SIM116", "UP007"]
+ignore = ["E501", "SIM105", "SIM116", "UP045"]
+
+[dependency-groups]
+dev = ["pytest>=8.4.1"]

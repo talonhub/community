@@ -1,3 +1,6 @@
+# Avoid type checker confusion with the module name matching this file name.
+# A cleaner fix would be to rename this file, but that would be a breaking change.
+# pyright: reportAttributeAccessIssue=false, reportCallIssue=false
 import dragonfly
 
 
@@ -8,25 +11,10 @@ class Mouse:
     def click(self):
         dragonfly.Mouse("left").execute()
 
-    def click_down(self):
-        dragonfly.Mouse("left:down").execute()
-
-    def click_up(self):
-        dragonfly.Mouse("left:up").execute()
-
-    def scroll_down(self, n=1):
-        dragonfly.Mouse(f"wheeldown:{n}").execute()
-
-    def scroll_up(self, n=1):
-        dragonfly.Mouse(f"wheelup:{n}").execute()
-
 
 class Keyboard:
     def __init__(self):
         self._shift = False
-
-    def type(self, text):
-        dragonfly.Text(text.replace("%", "%%")).execute()
 
     def shift_down(self):
         dragonfly.Key("shift:down").execute()

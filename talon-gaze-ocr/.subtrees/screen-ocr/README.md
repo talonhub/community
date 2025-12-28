@@ -1,5 +1,10 @@
 # Screen OCR
 
+[![PyPI](https://img.shields.io/pypi/v/screen-ocr.svg)](https://pypi.org/project/screen-ocr/)
+[![Changelog](https://img.shields.io/github/v/release/wolfmanstout/screen-ocr?include_prereleases&label=changelog)](https://github.com/wolfmanstout/screen-ocr/releases)
+[![Tests](https://github.com/wolfmanstout/screen-ocr/actions/workflows/test.yml/badge.svg)](https://github.com/wolfmanstout/screen-ocr/actions/workflows/test.yml)
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/wolfmanstout/screen-ocr/blob/master/LICENSE)
+
 The `screen-ocr` package makes it easy to perform OCR on portions of the screen.
 
 ## Installation

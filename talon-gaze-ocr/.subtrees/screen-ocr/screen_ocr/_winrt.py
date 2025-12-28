@@ -1,28 +1,28 @@
 import asyncio
 import importlib.util
 from concurrent import futures
+from typing import Optional
 
 from . import _base
 
-# Attempt to find winsdk module and let error propagate if it is not available. We don't want to
-# import winsdk here because it needs to be done in a background thread.
-if not importlib.util.find_spec("winsdk"):
-    raise ImportError("Could not find winsdk module")
+# Attempt to find winrt module and let error propagate if it is not available. We don't want to
+# import winrt here because it needs to be done in a background thread.
+if not importlib.util.find_spec("winrt"):
+    raise ImportError("Could not find winrt module")
 
 
 class WinRtBackend(_base.OcrBackend):
-    def __init__(self, language_tag: str = None):
-        # Run all winsdk interactions on a new thread to avoid
+    def __init__(self, language_tag: Optional[str] = None):
+        # Run all winrt interactions on a new thread to avoid
         # "RuntimeError: Cannot change thread mode after it is set."
-        # from import winsdk.
+        # from import winrt.
         self._executor = futures.ThreadPoolExecutor(max_workers=1)
         self._executor.submit(self._init_winrt, language_tag).result()
 
     def _init_winrt(self, language_tag):
-        import winsdk  # noqa: F401
-        import winsdk.windows.graphics.imaging as imaging
-        import winsdk.windows.media.ocr as ocr
-        import winsdk.windows.storage.streams as streams
+        import winrt.windows.graphics.imaging as imaging
+        import winrt.windows.media.ocr as ocr
+        import winrt.windows.storage.streams as streams
 
         engine = None
         if language_tag is None:
