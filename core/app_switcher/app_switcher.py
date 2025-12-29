@@ -743,11 +743,11 @@ class Actions:
                         if valid_window_checker(window) and str(application_user_model_id) == str(get_application_user_model_for_window(window.id)):
                             valid_windows_for_pending_app.append(window)
             
-            if len(valid_windows_for_pending_app) > 1:
-                gui_switcher_chooser.show()
-                ctx.tags = ["user.app_switcher_selector_showing"] 
-            else:
-                actions.user.switcher_focus_window(valid_windows_for_pending_app[-1]) 
+            # if len(valid_windows_for_pending_app) > 1:
+            #     gui_switcher_chooser.show()
+            #     ctx.tags = ["user.app_switcher_selector_showing"] 
+            # else:
+            actions.user.switcher_focus_window(valid_windows_for_pending_app[-1]) 
                 
         else:
             for app in set(apps):
@@ -757,11 +757,11 @@ class Actions:
                 else:
                     valid_windows_for_pending_app.extend(valid_windows) 
 
-            if len(valid_windows_for_pending_app) > 1:
-                gui_switcher_chooser.show()
-                ctx.tags = ["user.app_switcher_selector_showing"] 
-            else:
-                actions.user.switcher_focus_window(valid_windows_for_pending_app[-1])                
+            # if len(valid_windows_for_pending_app) > 1:
+            #     gui_switcher_chooser.show()
+            #     ctx.tags = ["user.app_switcher_selector_showing"] 
+            # else:
+            actions.user.switcher_focus_window(valid_windows_for_pending_app[-1])                
         
     def switcher_focus_app(app: ui.App):
         """Focus application and wait until switch is made"""
