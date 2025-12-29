@@ -750,18 +750,19 @@ class Actions:
             actions.user.switcher_focus_window(valid_windows_for_pending_app[-1]) 
                 
         else:
-            for app in set(apps):
-                valid_windows = get_valid_windows(app)
-                if not valid_windows_for_pending_app:
-                    valid_windows_for_pending_app = valid_windows
-                else:
-                    valid_windows_for_pending_app.extend(valid_windows) 
+            actions.user.switcher_focus_app(apps[-1])
+            # for app in set(apps):
+            #     valid_windows = get_valid_windows(app)
+            #     if not valid_windows_for_pending_app:
+            #         valid_windows_for_pending_app = valid_windows
+            #     else:
+            #         valid_windows_for_pending_app.extend(valid_windows) 
 
             # if len(valid_windows_for_pending_app) > 1:
             #     gui_switcher_chooser.show()
             #     ctx.tags = ["user.app_switcher_selector_showing"] 
             # else:
-            actions.user.switcher_focus_window(valid_windows_for_pending_app[-1])                
+            #actions.user.switcher_focus_window(valid_windows_for_pending_app[-1])                
         
     def switcher_focus_app(app: ui.App):
         """Focus application and wait until switch is made"""
