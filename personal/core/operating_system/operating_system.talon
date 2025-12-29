@@ -6,9 +6,9 @@ task manager:       user.system_task_manager()
 desktop show:       user.system_show_desktop()
 task view:          user.system_task_view()
 switcher:           user.system_switcher()
-clip show | clippy:          user.clipboard_manager_toggle()
-setter:             user.system_show_settings()
-^kill focused$: user.system_kill_focused_application()
+#clip show | clippy:          user.clipboard_manager_toggle()
+configure:          user.system_show_settings()
+#^kill focused$: user.system_kill_focused_application()
 configure {user.system_setting}:
      user.system_setting(system_setting)
 (summon | some in) <user.directory>:

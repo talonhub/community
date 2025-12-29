@@ -81,7 +81,8 @@ y_start = None
 tasklist_width = None
 def get_windows_ten_taskbar(forced: bool = False):
     global cache, taskbar, ms_tasklist, tasklist_width
-
+    taskbar = None
+    ms_tasklist = None
 
     if not taskbar:
         apps = ui.apps(name="Windows Explorer")
@@ -100,13 +101,18 @@ def get_windows_ten_taskbar(forced: bool = False):
                 # break
                 
     if not taskbar:
-        actions.app.notify("taskbar window not found")
-        return
+        print("taskbar not found!")
+        return False
+    
+    if not ms_tasklist:
+        print("tasklist not found!")
+        return False
     
     #update_canvas = forced or len(running_applications.children) != len(cache)
     cache = []
 
     tasklist_width = ms_tasklist.rect.width
+
     #running = {}
     global width, height, x_start, y_start
     for e in ms_tasklist.children:
@@ -122,8 +128,17 @@ def get_windows_ten_taskbar(forced: bool = False):
             print(f"{width}x{height}")
             break
 
+    if x_start:
+        print("Succesfully found taskbar elements")
+        return True
+    
+    return False
+
 def get_windows_eleven_taskbar(forced: bool = False):
-    global cache, taskbar, ms_tasklist, tasklist_width
+    global cache, taskbar, ms_tasklist, tasklist_width, width, height, x_start, y_start
+
+    show_hidden_x = None
+    x_start = None
 
     if not taskbar:
         apps = ui.apps(name="Windows Explorer")
@@ -135,14 +150,11 @@ def get_windows_eleven_taskbar(forced: bool = False):
 
         if taskbar:
             # ms_tasklist = first_matching_child(taskbar.element, class_name=["Taskbar.TaskbarFrameAutomationPeer"])            
-            show_hidden_x = None
             for element in taskbar.children:
                 for child in element.children:
                     for child2 in child.children:
                         print(child2)
                         if child2.name != "Start" and child2.name != "Search" and child2.name != "Task View":
-                            global width, height, x_start, y_start, tasklist_width
-
                             tasklist_width = child.rect.width
                             
                             if not x_start:
@@ -150,13 +162,22 @@ def get_windows_eleven_taskbar(forced: bool = False):
                                 height = child2.rect.height
                                 x_start = child2.rect.x
                                 y_start = child2.rect.y
-                                print(f"get_windows_eleven_taskbar: first icon found {child2.name} {width}x{height}")
+
+                                print(f"get_windows_eleven_taskbar: first icon found: {child2.name}, {width}x{height}")
 
                     if child.name == "Show Hidden Icons":
                         show_hidden_x = child.rect.x
-                        #print("found Hidden!")
+                        print("found show Hidden Icons!")
             
-            tasklist_width = show_hidden_x - x_start
+            if show_hidden_x and x_start:
+                tasklist_width = show_hidden_x - x_start
+                print("Succesfully found taskbar elements")
+                return True
+            
+            return False
+        
+    return False
+        
 mcanvas = None
 def update_canvas(register):
     global mcanvas
@@ -176,12 +197,13 @@ def update_canvas(register):
     mcanvas = canvas.Canvas.from_screen(ui.main_screen())
     platform_str = platform.platform()
 
+    success = False
     if "Windows-11" not in platform_str:
-        get_windows_ten_taskbar(True)
+        success = get_windows_ten_taskbar(True)
     else:
-        get_windows_eleven_taskbar(True)
+        success = get_windows_eleven_taskbar(True)
     
-    if register:
+    if register and success:
         mcanvas.register("draw", draw_options)
         mcanvas.freeze()
 

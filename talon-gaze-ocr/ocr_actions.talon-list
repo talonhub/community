@@ -1,22 +1,22 @@
 list: user.ocr_actions
 -
 grab: select
-copy: copy
-carve: cut
-paste to: paste
-paste link to: paste_link
-clear: delete
-change: delete
-delete: delete_with_whitespace
-chuck: delete_with_whitespace
-cap: capitalize
-no cap: uncapitalize
-no caps: uncapitalize
-lower: lowercase
-upper: uppercase
-bold: bold
-italic: italic
-strikethrough: strikethrough
-number: number_list
-bullet: bullet_list
-link: link
+# copy: copy
+# carve: cut
+# paste to: paste
+# paste link to: paste_link
+# clear: delete
+# change: delete
+# delete: delete_with_whitespace
+# chuck: delete_with_whitespace
+# cap: capitalize
+# no cap: uncapitalize
+# no caps: uncapitalize
+# lower: lowercase
+# upper: uppercase
+# bold: bold
+# italic: italic
+# strikethrough: strikethrough
+# number: number_list
+# bullet: bullet_list
+# link: link
