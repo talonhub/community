@@ -98,8 +98,11 @@ words_to_exclude = [
     "dot",
     "exe",
     "help",
+    "Google",
+    "google",
     "install",
     "installer",
+    "Microsoft",
     "microsoft",
     "nine",
     "readme",
@@ -112,10 +115,8 @@ words_to_exclude = [
 @mod.capture(rule="{self.running}")  # | <user.text>)")
 def running_applications(m) -> str:
     "Returns a single application name"
-    try:
-        return m.running
-    except AttributeError:
-        return m.text
+    return m.running
+
 
 @mod.capture(rule="{self.launch}")
 def launch_applications(m) -> str:
@@ -479,9 +480,9 @@ def add_spoken_forms_from_override(running_list,
     
     if override.spoken_forms:
         for spoken_form in override.spoken_forms:
-            running_list[spoken_form] = app_name
+            running_list[spoken_form.strip()] = app_name
     else:
-        generate_spoken_form_map[override.display_name] = app_name
+        generate_spoken_form_map[override.display_name.strip()] = app_name
 
 def get_installed_apps():
     global INSTALLED_APPLICATIONS_LIST, INSTALLED_APPLICATIONS_INITIALIZED
