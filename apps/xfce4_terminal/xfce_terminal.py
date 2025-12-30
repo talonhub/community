@@ -11,10 +11,12 @@ ctx.matches = r"""
 app: xfce4_terminal
 """
 
+
 @ctx.action_class("user")
 class user_actions:
     def tab_jump(number):
         actions.key(f"alt-{number}")
+
 
 @ctx.action_class("app")
 class app_actions:
@@ -35,6 +37,7 @@ class app_actions:
 
     def window_close():
         actions.key("ctrl-shift-q")
+
 
 @ctx.action_class("edit")
 class EditActions:
