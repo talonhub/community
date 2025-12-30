@@ -8,16 +8,16 @@ ctx = Context()
 
 mod.tag("i3wm", desc="tag for loading i3wm related files")
 mod.setting(
-    "i3_config_path",
+    "i3_terminal_key",
     type=str,
-    default="~/.i3/config",
-    desc="Where to find the configuration path",
+    default="super-enter",
+    desc="The key combination to launch the preferred terminal",
 )
 mod.setting(
-    "i3_mod_key",
+    "i3_launch_key",
     type=str,
-    default="super",
-    desc="The default key to use for i3wm commands",
+    default="super-d",
+    desc="The key combination to start the preferred launcher",
 )
 
 ctx.matches = r"""
@@ -64,6 +64,17 @@ class UserActions:
         # focus_on_window_activation is set to "smart" or "urgent"
         actions.user.i3msg('[urgent="latest"] focus')
 
+    # the default implementation considers desktops consecutively numbered
+    # this would be highly confusing given the numbering of i3wm workspaces
+    def desktop(number: int):  # type: ignore
+        actions.user.i3msg(f"workspace number {number}")
+
+    def desktop_next():
+        actions.user.i3msg(f"workspace next")
+
+    def desktop_last():
+        actions.user.i3msg(f"workspace prev")
+
 
 @mod.action_class
 class Actions:
@@ -89,15 +100,10 @@ class Actions:
 
     def i3wm_launch():
         """Trigger the i3 launcher: ex rofi"""
-        key = settings.get("user.i3_mod_key")
-        actions.key(f"{key}-d")
+        key = settings.get("user.i3_launch_key")
+        actions.key(key)
 
     def i3wm_shell():
         """Launch a shell"""
-        key = settings.get("user.i3_mod_key")
-        actions.key(f"{key}-enter")
-
-    def i3wm_lock():
-        """Trigger the lock screen"""
-        key = settings.get("user.i3_mod_key")
-        actions.key(f"{key}-shift-x")
+        key = settings.get("user.i3_terminal_key")
+        actions.key(key)

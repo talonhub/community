@@ -11,6 +11,7 @@ apps.firefox = "app.name: Firefox-esr"
 apps.firefox = "app.name: firefox-esr"
 apps.firefox = "app.name: LibreWolf"
 apps.firefox = "app.name: waterfox"
+apps.firefox = "app.name: Waterfox"
 apps.firefox = r"""
 os: windows
 and app.name: Firefox
@@ -21,6 +22,11 @@ apps.firefox = """
 os: mac
 and app.bundle: org.mozilla.firefox
 """
+apps.firefox = """
+os: mac
+and app.bundle: net.waterfox.waterfox
+"""
+
 
 # Make the context match more specifically than anything else. This is important, eg. to
 # override the browser.go_home() implementation in tags/browser/browser_mac.py.
