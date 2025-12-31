@@ -1,8 +1,9 @@
 """
 This module gives us the list {user.system_paths} and the capture <user.system_path> that wraps
-the list to easily refer to system paths in talon and python files. It also creates a file
-system_paths-<hostname>.talon-list in the core folder so the user can easily add their own
-custom paths.
+the list to easily refer to system paths in Talon and Python files. It also creates a file
+system_paths-<hostname>.talon-list in the core/system_paths folder, so the user can easily add
+their own custom paths. The additional capture <user.possibly_virtual_system_path> represents a
+combination of the lists {user.system_path} and {user.virtual_system_path}.
 """
 
 import os.path
@@ -12,6 +13,7 @@ from talon import Module, actions, app
 
 mod = Module()
 mod.list("system_paths", desc="List of system paths")
+mod.list("virtual_system_path", desc="Path of virtual system folder like Recycle Bin")
 
 
 def on_ready():
@@ -36,23 +38,6 @@ def on_ready():
 
     if app.platform == "windows":
         import winreg
-
-        # Virtual folders.
-        default_system_paths.update(
-            {
-                # Virtual-only folders.
-                "quick access": "shell:::{679F85CB-0220-4080-B29B-5540CC05AAB6}",
-                "this pc": "shell:MyComputerFolder",  # Or `shell:::{20D04FE0-3AEA-1069-A2D8-08002B30309D}`, also without `shell:`.
-                "network": "shell:NetworkPlacesFolder",  # Or `shell:::{F02C1A0D-BE21-4350-88B0-7367FC96EF3C}`, also without `shell:`.
-                "recycle bin": "shell:RecycleBinFolder",  # Or `shell:::{645FF040-5081-101B-9F08-00AA002F954E}`, also without `shell:`.
-                # Folders with virtual and resolved form.
-                "virtual desktop": "shell:Desktop",
-                # More like, e.g., `shell:Downloads` can be found under the registry key
-                # `HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions`.
-                # You can also find a long list of GUIDs under
-                # <https://www.autohotkey.com/docs/v2/misc/CLSID-List.htm>.
-            }
-        )
 
         # Resolved forms of virtual folders whose locations the user may have changed.
         with winreg.OpenKey(
@@ -150,7 +135,6 @@ def on_ready():
     if app.platform == "windows":
         default_system_paths.update(
             {
-                "trash": default_system_paths["recycle bin"],
                 "win dir": default_system_paths["system root"],
                 "user profile": default_system_paths["user"],  # We also have the long form for other profile folders.
             }
@@ -178,6 +162,11 @@ def on_ready():
 @mod.capture(rule="{user.system_paths}")
 def system_path(m) -> str:
     return m.system_paths
+
+@mod.capture(rule="{user.system_paths} | {user.virtual_system_path}")
+def possibly_virtual_system_path(m) -> str:
+    """A physical or virtual system path, i.e., a combination of the lists `user.system_path` and `user.virtual_system_path`."""
+    return str(m)
 
 
 app.register("ready", on_ready)
