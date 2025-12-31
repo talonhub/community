@@ -62,11 +62,11 @@ def on_ready():
 
             def get_path(value_name, fallback):
                 try:
-                    path_str, value_type = winreg.QueryValueEx(key, value_name)
+                    path, value_type = winreg.QueryValueEx(key, value_name)
                     assert value_type == winreg.REG_EXPAND_SZ
                 except (FileNotFoundError, AssertionError):
-                    path_str = str(fallback)
-                return Path(os.path.expandvars(path_str))
+                    path = fallback
+                return Path(os.path.expandvars(path))
 
             local_downloads_path = get_path(
                 "{7D83EE9B-2244-4E70-B1F5-5393042AF1E4}", r"%USERPROFILE%\Downloads"
