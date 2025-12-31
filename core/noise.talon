@@ -1,1 +1,1 @@
-noise(pop): user.noise_trigger_pop()
+#noise(pop): user.noise_trigger_pop()
