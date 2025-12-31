@@ -121,9 +121,9 @@ def on_ready():
             if onedrive_desktop_path.is_dir():
                 default_system_paths.update(
                     {
-                        "desktop": onedrive_desktop_path,
-                        "documents": onedrive_path / "Documents",
-                        "pictures": onedrive_path / "Pictures",
+                        "one drive desktop": onedrive_desktop_path,
+                        "one drive documents": onedrive_path / "Documents",
+                        "one drive pictures": onedrive_path / "Pictures",
                     }
                 )
     else:  # Mac and Linux.
@@ -150,15 +150,9 @@ def on_ready():
     if app.platform == "windows":
         default_system_paths.update(
             {
-                "virtual desk": default_system_paths["virtual desktop"],
-                "vee desk": default_system_paths["virtual desktop"],
                 "trash": default_system_paths["recycle bin"],
                 "win dir": default_system_paths["system root"],
-                "user profile": default_system_paths["user"],
-                "profile": default_system_paths["user"],
-                "public profile": default_system_paths["public user profile"],
-                "temp files": default_system_paths["temp dir"],
-                "temporary": default_system_paths["temp dir"],
+                "user profile": default_system_paths["user"],  # We also have the long form for other profile folders.
             }
         )
     else:
