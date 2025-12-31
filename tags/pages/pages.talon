@@ -6,7 +6,7 @@ go next [<number_small>]:
     numb = number_small or 1
     user.page_next()
     repeat(numb - 1)
-go last: 
+go last [<number_small>]: 
     numb = number_small or 1
     user.page_previous()
     repeat(numb - 1)
