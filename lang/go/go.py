@@ -1,5 +1,6 @@
 from talon import Context, Module, actions, settings
 
+from ...core.described_functions import create_described_insert_between
 from ..tags.operators import Operators
 
 ctx = Context()
@@ -45,32 +46,9 @@ ctx.lists["user.code_keyword"] = {
     "const": "const",
 }
 
-ctx.lists["user.code_common_function"] = {
-    # golang buildin functions
-    "append": "append",
-    "length": "len",
-    "make": "make",
-    # formatting
-    "format print": "fmt.Printf",
-    "format sprint": "fmt.Sprintf",
-    "format print line": "fmt.Println",
-    # time
-    "time hour": "time.Hour",
-    "time minute": "time.Minute",
-    "time second": "time.Second",
-    "time millisecond": "time.Millisecond",
-    "time microsecond": "time.Microsecond",
-    "time nanosecond": "time.Nanosecond",
-    # IO
-    "buf I O": "bufio.",
-    # strings
-    "string convert": "strconv.",
-    "string convert to int": "strconv.AtoI",
-}
-
 operators = Operators(
     # code_operators_array
-    SUBSCRIPT=lambda: actions.user.insert_between("[", "]"),
+    SUBSCRIPT=create_described_insert_between("[", "]"),
     # code_operators_assignment
     ASSIGNMENT=" = ",
     ASSIGNMENT_ADDITION=" += ",

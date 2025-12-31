@@ -21,7 +21,21 @@ mod.setting(
     desc="""If true, inserting snippets as raw text will always be done through pasting""",
 )
 
-RE_STOP = re.compile(r"\$(\d+|\w+)|\$\{(\d+|\w+)\}|\$\{(\d+|\w+):(.+)\}")
+RE_STOP = re.compile(
+    r"""
+    (?:\\\$) (?# Escaped $ - not a stop; skip and don't capture anything)
+    |
+    (?:
+        \$(\d+|\w+) (?# $... where ... is a captured stop number or variable)
+        |
+        \$\{(\d+|\w+)\} (?# ${...} where ... is as above)
+        |
+        \$\{(\d+|\w+):(.+)\} (?# ${...:xxx} where ... is as above and xxx a default value)
+    )
+    """,
+    re.VERBOSE,
+)
+
 LAST_SNIPPET_HOLE_KEY_VALUE = 1000
 
 
@@ -122,7 +136,7 @@ def is_any_line_from_right_to_left(lines) -> bool:
                 next_key = next_stop.compute_sorting_key()
                 # If the ordering between the keys and columns are inconsistent,
                 # the stops on this line go from right to left
-                if (next_key < stop_key) != (stop.col < next_stop.col):
+                if (next_key < stop_key) != (next_stop.col < stop.col):
                     return True
                 stop_key = next_key
                 stop = next_stop
@@ -150,41 +164,47 @@ def format_tabs(text: str) -> str:
     spaces_per_tab: int = settings.get("user.snippet_raw_text_spaces_per_tab")
     if spaces_per_tab < 0:
         return text
-    return re.sub(r"\t", " " * spaces_per_tab, text)
+    return text.replace("\t", " " * spaces_per_tab)
 
 
 def parse_snippet(body: str):
     # Some IM services will send the message on a tab
     body = format_tabs(body)
 
-    # Replace variable with appropriate value/text
-    body = re.sub(r"\$TM_SELECTED_TEXT", lambda _: actions.edit.selected_text(), body)
-    body = re.sub(r"\$CLIPBOARD", lambda _: actions.clip.text(), body)
-
     lines = body.splitlines()
     stops: list[Stop] = []
 
     for i, line in enumerate(lines):
-        match = RE_STOP.search(line)
-
-        while match:
-            stops.append(
-                Stop(
-                    name=match.group(1) or match.group(2) or match.group(3),
-                    rows_up=len(lines) - i - 1,
-                    columns_left=0,
-                    row=i,
-                    col=match.start(),
-                )
-            )
-
-            # Remove tab stops and variables.
+        start = 0
+        while match := RE_STOP.search(line, start):
             stop_text = match.group(0)
-            default_value = match.group(4) or ""
-            line = line.replace(stop_text, default_value, 1)
+            if stop_text[0] == "\\":
+                # Remove escape for $
+                value = stop_text[1:]
+                # Don't match now-unescaped $ as a stop
+                start = match.end() - 1
+            else:
+                name = match.group(1) or match.group(2) or match.group(3)
+                value = match.group(4) or ""
 
-            # Might have multiple stops on the same line
-            match = RE_STOP.search(line)
+                match name:
+                    case "TM_SELECTED_TEXT":
+                        value = actions.edit.selected_text() or value
+                    case "CLIPBOARD":
+                        value = actions.clip.text() or value
+                    case _:
+                        stops.append(
+                            Stop(
+                                name=name,
+                                rows_up=len(lines) - i - 1,
+                                columns_left=0,
+                                row=i,
+                                col=match.start(),
+                            )
+                        )
+
+            # Remove/replace escaped $, tab stops and variables.
+            line = line.replace(stop_text, value, 1)
 
         # Update existing line
         lines[i] = line

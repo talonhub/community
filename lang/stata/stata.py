@@ -1,5 +1,6 @@
 from talon import Context, actions, settings
 
+from ...core.described_functions import create_described_insert_between
 from ..tags.operators import Operators
 
 ctx = Context()
@@ -15,21 +16,6 @@ ctx.lists["user.code_parameter_name"] = {
     "V C E robust": "vce(robust)",
 }
 
-# functions_common.py
-ctx.lists["user.code_common_function"] = {
-    # base stata
-    "global": "global",
-    "local": "local",
-    "reg": "reg",
-    "regress": "reg",
-    # packages
-    "estadd": "estadd",
-    "estout": "estout",
-    "estpost": "estpost",
-    "eststo": "eststo",
-    "esttab": "esttab",
-}
-
 # libraries.py
 ctx.lists["user.code_libraries"] = {
     "estout": "estout",
@@ -37,7 +23,7 @@ ctx.lists["user.code_libraries"] = {
 
 operators = Operators(
     # code_operators_array
-    SUBSCRIPT=lambda: actions.user.insert_between("[", "]"),
+    SUBSCRIPT=create_described_insert_between("[", "]"),
     # code_operators_assignment
     ASSIGNMENT=" = ",
     # code_operators_math
@@ -45,7 +31,7 @@ operators = Operators(
     MATH_SUBTRACT=" - ",
     MATH_MULTIPLY=" * ",
     MATH_DIVIDE=" / ",
-    MATH_MODULO=lambda: actions.user.insert_between("mod(", ")"),
+    MATH_MODULO=create_described_insert_between("mod(", ")"),
     MATH_EXPONENT=" ^ ",
     MATH_EQUAL=" == ",
     MATH_NOT_EQUAL=" != ",
@@ -86,10 +72,6 @@ class UserActions:
         if selection:
             substitutions["0"] = selection
         actions.user.insert_snippet_by_name("functionCall", substitutions)
-
-    # imperative.py
-    def code_block():
-        actions.auto_insert("\n")
 
     # libraries.py
     def code_insert_library(text: str, selection: str):

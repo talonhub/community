@@ -10,7 +10,7 @@ Can be used on its own, but shines when combined with:
 - [Rango](https://github.com/david-tejada/rango) for browser navigation
 - [gaze-ocr](https://github.com/wolfmanstout/talon-gaze-ocr) for advanced cursor control using eye tracking and text recognition (OCR)
 - [AXKit](https://github.com/phillco/talon-axkit) (macOS only) to enhance Talon with native OS accessibility integrations
-- [Other user file sets](https://talon.wiki/talon_user_file_sets/)
+- [Other user file sets](https://talon.wiki/Integrations/talon_user_file_sets)
 
 ## Installation
 
@@ -91,9 +91,6 @@ All key commands are defined in [keys.talon](core/keys/keys.talon). Say letters 
 
 For modifier keys, say `help modifiers`. For example, say `shift air` to press <kbd>Shift</kbd> + <kbd>A</kbd>, which types a capital `A`.
 
-For symbols, say `help symbols`. These are defined in keys.py;
-search for `modifier_keys` and then keep scrolling — roughly starting [here](core/keys/keys.py#L124).
-
 On Windows, try commands such as:
 
 - `control air` to press <kbd>Control</kbd> + <kbd>A</kbd> and select all.
@@ -110,7 +107,7 @@ Say any combination of modifiers, symbols, alphabet, numbers and function keys t
 
 ### Symbols
 
-Some symbols are defined in [keys.py](core/keys/keys.py#L144), so you can say, e.g. `control colon` to press those keys.
+Some symbols are defined in [symbols.py](core/keys/symbols.py), so you can say, e.g. `control colon` to press those keys.
 
 Multi-character punctuation (e.g., ellipses) is defined in [symbols.talon](plugin/symbols/symbols.talon).
 
@@ -155,6 +152,8 @@ Global window management commands are defined in [window_management.talon](core/
 See [screenshot.talon](plugin/screenshot/screenshot.talon).
 
 ### Programming languages
+
+More detailed programming support documentation can be found [here](https://talon.wiki/Voice%20Coding/voice-coding-overview).
 
 Specific programming languages may be activated by voice commands, or via title tracking.
 
