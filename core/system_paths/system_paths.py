@@ -136,7 +136,9 @@ def on_ready():
         default_system_paths.update(
             {
                 "win dir": default_system_paths["system root"],
-                "user profile": default_system_paths["user"],  # We also have the long form for other profile folders.
+                "user profile": default_system_paths[
+                    "user"
+                ],  # We also have the long form for other profile folders.
             }
         )
     else:
@@ -162,6 +164,7 @@ def on_ready():
 @mod.capture(rule="{user.system_paths}")
 def system_path(m) -> str:
     return m.system_paths
+
 
 @mod.capture(rule="{user.system_paths} | {user.virtual_system_path}")
 def possibly_virtual_system_path(m) -> str:
