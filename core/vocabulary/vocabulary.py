@@ -37,10 +37,13 @@ _capitalize_defaults = [
 ]
 
 # Default words that need to be remapped.
+# This uses the opposite ordering to words_to_replace.csv, which has the target word first
 _word_map_defaults = {
-    # E.g:
-    # "cash": "cache",
-    # This is the opposite ordering to words_to_replace.csv (the latter has the target word first)
+    # Favor American spellings, because they're standard in APIs, and the models often (mostly?) produce it.
+    "favour": "favor",
+    # More common/correct word boundaries.
+    "textbox": "text box",
+    "VSCode": "VS Code",
 }
 _word_map_defaults.update({word.lower(): word for word in _capitalize_defaults})
 phrases_to_replace = {}
