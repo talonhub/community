@@ -1,10 +1,12 @@
 import ctypes
 import os
-from talon import Context, app
 from typing import TYPE_CHECKING
+
+from talon import Context, app
 
 if app.platform == "windows" or TYPE_CHECKING:
     from ctypes import wintypes
+
     user32 = ctypes.windll.user32
 
 ctx = Context()
