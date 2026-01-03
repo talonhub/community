@@ -2,10 +2,12 @@ import ctypes
 import os
 from typing import TYPE_CHECKING
 
-from talon import Context, app
+from talon import Context, actions, app
 
 if app.platform == "windows" or TYPE_CHECKING:
     from ctypes import wintypes
+
+    import win32con
 
     user32 = ctypes.windll.user32
 
@@ -18,27 +20,50 @@ os: windows
 @ctx.action_class("user")
 class UserActions:
     def system_switch_screen_power(on: bool):
-        """Turns all screens off, or, if all are off, turns those on that were on when having turned all off.
+        """Turns all screens off, or, if all are off, turns those on that were on when having turned all off."""
 
-        Turning the screens on didn't work for the author on Windows 11 24H2, even though it worked for him on Windows 10 before when the same call to `DefWindowProcW()` was made in a different programming language. Turning the screens on using code like `actions.mouse_move(actions.mouse_x() + 1, actions.mouse_y() + 1)` also didn't work.
-        """
-
+        user32.GetKeyState.argtypes = [ctypes.c_int]
+        user32.GetKeyState.restype = wintypes.SHORT
         user32.GetDesktopWindow.argtypes = []
         user32.GetDesktopWindow.restype = wintypes.HWND
         user32.DefWindowProcW.argtypes = [wintypes.HWND, wintypes.UINT, wintypes.WPARAM, wintypes.LPARAM]  # fmt: skip
         user32.DefWindowProcW.restype = ctypes.c_ssize_t
 
-        WM_SYSCOMMAND = 0x112
-        SC_MONITORPOWER = 0xF170
+        if on:
+            # When testing this on Windows 11 24H2, simulated mouse movement didn't turn the screens on. However, simulated key presses did. The algorithm settled on, that should have as few side effects as possible, followed these thoughts:
+            #
+            # - `super` activates the Windows start menu.
+            # - Some apps react on `ctrl` on its own.
+            # - `alt` activates the menu bar.
+            # - Besides `capslock`, `shift` *may* be the key that deactivates caps lock, no matter the combination with other modifiers.
+            # - The user may have defined a trigger consisting of multiple modifier keys for something like AI-based speech-to-text. They will most likely be near each other on the keyboard. But then again, the same modifier on the left and on the right may be treated as identical.
 
-        power_code = -1 if on else 2
-        user32.DefWindowProcW(
-            user32.GetDesktopWindow(), WM_SYSCOMMAND, SC_MONITORPOWER, power_code
-        )
+            def has_capslock():
+                return user32.GetKeyState(win32con.VK_CAPITAL) & 1
 
-        # Docs: <https://learn.microsoft.com/en-us/windows/win32/menurc/wm-syscommand#sc_monitorpower>
-        # The remarks section says: "An application can carry out any system command at any time by passing a WM_SYSCOMMAND message to DefWindowProc."
-        # The window handle doesn't seem to matter, but we choose the one at the very top of the hierarchy that'll always be available.
+            had_capslock = has_capslock()
+
+            # When this doesn't turn the screens on, try holding the key for the shortest duration that reliably does the job.
+            actions.key("shift:down")
+            # actions.sleep("100ms")
+            actions.key("shift:up")
+
+            if has_capslock() != had_capslock:
+                # Restore state.
+                actions.key("capslock")
+        else:
+            # Turning the screens on via WinAPI call worked for the author on Windows 10, but didn't anymore on Windows 11 24H2. There may be a slim chance that Microsoft fixes this, at least for a UIAccess app like Talon.
+            power_code = -1 if on else 2
+
+            # Docs: <https://learn.microsoft.com/en-us/windows/win32/menurc/wm-syscommand#sc_monitorpower>
+            # The remarks section says: "An application can carry out any system command at any time by passing a WM_SYSCOMMAND message to DefWindowProc."
+            # The window handle doesn't seem to matter, but we choose the one at the very top of the hierarchy that'll always be available.
+            user32.DefWindowProcW(
+                user32.GetDesktopWindow(),
+                win32con.WM_SYSCOMMAND,
+                win32con.SC_MONITORPOWER,
+                power_code,
+            )
 
     def system_show_settings():
         os.startfile("ms-settings:")
@@ -58,11 +83,9 @@ class UserActions:
         user32.SendMessageW.argtypes = [wintypes.HWND, wintypes.UINT, wintypes.WPARAM, wintypes.LPARAM]  # fmt: skip
         user32.SendMessageW.restype = ctypes.c_ssize_t
 
-        WM_COMMAND = 0x0111
-
         taskbar_hwnd = user32.FindWindowW("Shell_TrayWnd", "")
         if not taskbar_hwnd:
             raise OSError("Couldn't find the taskbar window.")
 
         # Source for command code: <https://www.codeproject.com/articles/Manipulating-The-Windows-Taskbar>
-        user32.SendMessageW(taskbar_hwnd, WM_COMMAND, 0x01FA, 0)
+        user32.SendMessageW(taskbar_hwnd, win32con.WM_COMMAND, 0x01FA, 0)
