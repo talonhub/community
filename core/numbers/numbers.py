@@ -1,5 +1,5 @@
 import math
-from typing import Iterator, Union
+from typing import Iterator, Union, cast
 
 from talon import Context, Module
 
@@ -228,6 +228,21 @@ ctx.lists["user.number_small"] = get_spoken_form_under_one_hundred(
 )
 
 
+def handle_negation_capture(m):
+    """Common code for negation captures with two-part rules. If the type checker complains, the result needs to be `cast()` into the type of the last part of the rule. The function can negate values of type `str`, `int`, and `float`."""
+
+    number = m[-1]
+    must_negate = m[0] in ["negative", "minus"]
+
+    if not must_negate:
+        return number
+
+    if isinstance(number, str):
+        return "-" + number
+    else:
+        return -number
+
+
 # TODO: allow things like "double eight" for 88
 @ctx.capture("digit_string", rule=f"({alt_digits} | {alt_teens} | {alt_tens})+")
 def digit_string(m) -> str:
@@ -255,8 +270,7 @@ def number(m) -> int:
 @mod.capture(rule="[negative | minus] <user.number_string>")
 def number_signed_string(m) -> str:
     """Parses a (possibly negative) number phrase, returning that number as a string."""
-    number = m.number_string
-    return f"-{number}" if (m[0] in ["negative", "minus"]) else number
+    return handle_negation_capture(m)
 
 
 @ctx.capture("number_signed", rule="<user.number_signed_string>")
@@ -300,5 +314,4 @@ def number_small(m) -> int:
 @mod.capture(rule="[negative | minus] <number_small>")
 def number_signed_small(m) -> int:
     """Parses an integer between -99 and 99."""
-    number = m[-1]
-    return -number if (m[0] in ["negative", "minus"]) else number
+    return cast(int, handle_negation_capture(m))
