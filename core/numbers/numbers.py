@@ -1,7 +1,7 @@
 import math
 from typing import Iterator, Union, cast
 
-from talon import Context, Module
+from talon import Context, Module, registry
 
 mod = Module()
 ctx = Context()
@@ -219,6 +219,7 @@ number_word_leading = f"({'|'.join(leading_words)})"
 
 
 mod.list("number_small", "List of small (0-99) numbers")
+mod.list("decimal_separator", "A decimal separator separating the fractional from the integer part")
 mod.tag("unprefixed_numbers", desc="Dont require prefix when saying a number")
 ctx.lists["user.number_small"] = get_spoken_form_under_one_hundred(
     0,
@@ -315,3 +316,76 @@ def number_small(m) -> int:
 def number_signed_small(m) -> int:
     """Parses an integer between -99 and 99."""
     return cast(int, handle_negation_capture(m))
+
+
+@mod.capture(
+    rule="[<user.number_string>] {user.decimal_separator} <digit_string> | <user.number_string>"
+)
+def decimal_string(m) -> str:
+    """A possibly fractional decimal number.
+
+    - Can output any of the decimal separators in the `user.decimal_separator` list.
+    - With `.` as decimal separator, omitting an integer part of zero also omits it in the output.
+    - Float literals for programming languages of the form `1.` can be achieved by using this capture to output the integer part (no need to use another command), followed by an additional command for the decimal separator, as if they were one command.
+    """
+
+    has_decimal_places = hasattr(m, "digit_string")
+    may_omit_int_part_0 = has_decimal_places and m.decimal_separator == "."
+
+    string = getattr(m, "number_string", "" if may_omit_int_part_0 else "0")
+    
+    if has_decimal_places:
+        string += m.decimal_separator
+        string += m.digit_string
+
+    return string
+
+
+@mod.capture(rule="<user.decimal_string>")
+def normalized_decimal_string(m) -> str:
+    """`user.decimal_string`, normalized in the following manner:
+    
+    - Integer part is always present
+    - Decimal separator, if present, is always `.`
+    """
+
+    string = m.decimal_string
+
+    if "." not in string:
+        # Normalize decimal separator to point for technical contexts.
+        for decimal_separator in registry.lists["user.decimal_separator"][-1].values():
+            if decimal_separator == ".":
+                continue
+
+            normalized = string.replace(decimal_separator, ".", 1)
+            if normalized is not string:  # Did replace (no no-op)?
+                return normalized
+
+    if string.startswith("."):
+        string = "0" + string
+
+    return string
+
+
+@mod.capture(rule="<user.normalized_decimal_string>")
+def decimal_as_float(m) -> float:
+    """`user.decimal_string`, correctly converted to `float`. Note that this can involve rounding errors."""
+    return float(m.normalized_decimal_string)
+
+
+@mod.capture(rule="[negative | minus] <user.decimal_string>")
+def signed_decimal_string(m) -> str:
+    """Possibly negated variant of `user.decimal_string`."""
+    return handle_negation_capture(m)
+
+
+@mod.capture(rule="[negative | minus] <user.normalized_decimal_string>")
+def normalized_signed_decimal_string(m) -> str:
+    """Possibly negated variant of `user.normalized_decimal_string`."""
+    return handle_negation_capture(m)
+
+
+@mod.capture(rule="[negative | minus] <user.decimal_as_float>")
+def signed_decimal_as_float(m) -> float:
+    """Possibly negated variant of `user.decimal_as_float`."""
+    return cast(float, handle_negation_capture(m))
