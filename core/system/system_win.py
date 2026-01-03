@@ -2,10 +2,11 @@ import ctypes
 import os
 from typing import TYPE_CHECKING
 
-from talon import Context, app, actions
+from talon import Context, actions, app
 
 if app.platform == "windows" or TYPE_CHECKING:
     from ctypes import wintypes
+
     import win32con
 
     user32 = ctypes.windll.user32
