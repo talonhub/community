@@ -175,12 +175,14 @@ def split_list(value, l: list) -> Iterator:
 #     for scale in scales:
 #         old = l
 #         l = parse_scale(scale, l)
-#         if scale in old: print("  parse -->", l)
-#         else: assert old == l, "parse_scale should do nothing if the scale does not occur in the list"
+#         if scale in old:
+#             print("  parse -->", l)
+#         else:
+#             assert old == l, "parse_scale should do nothing if the scale does not occur in the list"
 #     result = "".join(str(n) for n in l)
 #     assert result == parse_number(string.split())
 #     assert str(expected) == result, f"parsing {string!r}, expected {expected}, got {result}"
-
+#
 # test_number(105000, "one hundred and five thousand")
 # test_number(1000000, "one thousand thousand")
 # test_number(1501000, "one million five hundred one thousand")
@@ -196,6 +198,7 @@ def split_list(value, l: list) -> Iterator:
 # test_number(1010, "one thousand ten")
 # test_number(123456, "one hundred and twenty three thousand and four hundred and fifty six")
 # test_number(123456, "one twenty three thousand four fifty six")
+# test_number("0019", "oh zero one nine") # fractional part of decimal number, or bare digit sequence
 
 # ## failing (and somewhat debatable) tests from old numbers.py
 # #test_number(10000011, "one million one one")
