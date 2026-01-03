@@ -247,51 +247,55 @@ def handle_negation_capture(m):
 # TODO: allow things like "double eight" for 88
 @ctx.capture("digit_string", rule=f"({alt_digits} | {alt_teens} | {alt_tens})+")
 def digit_string(m) -> str:
+    """A sequence of digits, always allowing for bare and initial "oh"."""
     return parse_number(list(m))
 
 
 @ctx.capture("digits", rule="<digit_string>")
 def digits(m) -> int:
-    """Parses a phrase representing a digit sequence, returning it as an integer."""
+    """`digit_string`, converted to `int`."""
     return int(m.digit_string)
 
 
 @mod.capture(rule=f"{number_word_leading} ([and] {number_word})*")
 def number_string(m) -> str:
-    """Parses a number phrase, returning that number as a string."""
+    """An unsigned integer."""
     return parse_number(list(m))
 
 
 @ctx.capture("number", rule="<user.number_string>")
 def number(m) -> int:
-    """Parses a number phrase, returning it as an integer."""
+    """`user.number_string`, converted to `int`."""
     return int(m.number_string)
 
 
 @mod.capture(rule="[negative | minus] <user.number_string>")
 def number_signed_string(m) -> str:
-    """Parses a (possibly negative) number phrase, returning that number as a string."""
+    """Possibly negated variant of `user.number_string`."""
     return handle_negation_capture(m)
 
 
 @ctx.capture("number_signed", rule="<user.number_signed_string>")
 def number_signed(m) -> int:
-    """Parses a (possibly negative) number phrase, returning that number as a integer."""
+    """Possibly negated variant of `number`."""
     return int(m.number_signed_string)
 
 
 @mod.capture(rule="<user.number_string> ((dot | point) <user.number_string>)+")
 def number_prose_with_dot(m) -> str:
+    """Any number of `user.number_string` captures with dots in between."""
     return ".".join(m.number_string_list)
 
 
 @mod.capture(rule="<user.number_string> (comma <user.number_string>)+")
 def number_prose_with_comma(m) -> str:
+    """Any number of `user.number_string` captures with commas in between."""
     return ",".join(m.number_string_list)
 
 
 @mod.capture(rule="<user.number_string> (colon <user.number_string>)+")
 def number_prose_with_colon(m) -> str:
+    """Any number of `user.number_string` captures with colons in between."""
     return ":".join(m.number_string_list)
 
 
@@ -309,12 +313,13 @@ def number_prose_prefixed(m) -> str:
 
 @ctx.capture("number_small", rule="{user.number_small}")
 def number_small(m) -> int:
+    """An integer in the range from 0 to 99."""
     return int(m.number_small)
 
 
 @mod.capture(rule="[negative | minus] <number_small>")
 def number_signed_small(m) -> int:
-    """Parses an integer between -99 and 99."""
+    """Possibly negated variant of `number_small`."""
     return cast(int, handle_negation_capture(m))
 
 
