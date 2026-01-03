@@ -219,7 +219,10 @@ number_word_leading = f"({'|'.join(leading_words)})"
 
 
 mod.list("number_small", "List of small (0-99) numbers")
-mod.list("decimal_separator", "A decimal separator separating the fractional from the integer part")
+mod.list(
+    "decimal_separator",
+    "A decimal separator separating the fractional from the integer part",
+)
 mod.tag("unprefixed_numbers", desc="Dont require prefix when saying a number")
 ctx.lists["user.number_small"] = get_spoken_form_under_one_hundred(
     0,
@@ -338,7 +341,7 @@ def decimal_string(m) -> str:
     may_omit_int_part_0 = has_decimal_places and m.decimal_separator == "."
 
     string = getattr(m, "number_string", "" if may_omit_int_part_0 else "0")
-    
+
     if has_decimal_places:
         string += m.decimal_separator
         string += m.digit_string
@@ -349,7 +352,7 @@ def decimal_string(m) -> str:
 @mod.capture(rule="<user.decimal_string>")
 def normalized_decimal_string(m) -> str:
     """`user.decimal_string`, normalized in the following manner:
-    
+
     - Integer part is always present
     - Decimal separator, if present, is always `.`
     """
