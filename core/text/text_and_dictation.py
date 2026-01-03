@@ -65,13 +65,10 @@ def prose_modifier(m) -> Callable:
 
 
 @mod.capture(
-    rule="<user.number_string> [(dot | point) <digit_string>] percent [sign|sine]"
+    rule="<user.normalized_signed_decimal_string> percent [sign|sine]"
 )
 def prose_percent(m) -> str:
-    s = m.number_string
-    if hasattr(m, "digit_string"):
-        s += "." + m.digit_string
-    return s + "%"
+    return m.normalized_signed_decimal_string + "%"
 
 
 @mod.capture(
