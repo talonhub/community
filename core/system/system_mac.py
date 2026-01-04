@@ -16,6 +16,10 @@ class UserActions:
         # TODO
         pass
 
+    def system_show_task_manager():
+        # TODO
+        pass
+
     def system_lock():
         # TODO
         pass

@@ -17,6 +17,10 @@ class I3wmUserActions:
         # TODO
         pass
 
+    def system_show_task_manager():
+        # TODO
+        pass
+
     def system_lock():
         # Adapt key configuration as needed.
         actions.key("super-shift-x")

@@ -1,5 +1,6 @@
 import ctypes
 import os
+import subprocess
 from typing import TYPE_CHECKING
 
 from talon import Context, actions, app
@@ -68,6 +69,15 @@ class UserActions:
 
     def system_show_settings():
         os.startfile("ms-settings:")
+
+    def system_show_task_manager():
+        """Starts `Taskmgr.exe`.
+
+        This also provides a way to restart `explorer.exe` when it crashed or was terminated and not restarted by a buggy third-party installer. If `explorer.exe` isn't running, there's no taskbar, no Alt+Tab dialog, and hotkeys like Win+R don't work.
+        """
+
+        exe_path = os.path.join(os.environ["SystemRoot"], "System32", "Taskmgr.exe")
+        subprocess.Popen([exe_path])
 
     def system_lock():
         user32.LockWorkStation.argtypes = []
