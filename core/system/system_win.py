@@ -7,6 +7,7 @@ from talon import Context, actions, app
 if app.platform == "windows" or TYPE_CHECKING:
     from ctypes import wintypes
 
+    import win32com.client
     import win32con
 
     user32 = ctypes.windll.user32
@@ -78,14 +79,5 @@ class UserActions:
             raise ctypes.WinError()
 
     def system_show_exit_menu():
-        user32.FindWindowW.argtypes = [wintypes.LPCWSTR, wintypes.LPCWSTR]
-        user32.FindWindowW.restype = wintypes.HWND
-        user32.SendMessageW.argtypes = [wintypes.HWND, wintypes.UINT, wintypes.WPARAM, wintypes.LPARAM]  # fmt: skip
-        user32.SendMessageW.restype = ctypes.c_ssize_t
-
-        taskbar_hwnd = user32.FindWindowW("Shell_TrayWnd", "")
-        if not taskbar_hwnd:
-            raise OSError("Couldn't find the taskbar window.")
-
-        # Source for command code: <https://www.codeproject.com/articles/Manipulating-The-Windows-Taskbar>
-        user32.SendMessageW(taskbar_hwnd, win32con.WM_COMMAND, 0x01FA, 0)
+        shell = win32com.client.Dispatch("Shell.Application")
+        shell.ShutdownWindows()
