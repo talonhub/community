@@ -65,16 +65,13 @@ deck_cached_paths: dict = {}
 class Actions:
     def deck_cache_path(serial: str):
         """Set deck cache"""
-
         global deck_cached_paths
         deck_cached_paths[serial] = actions.deck.current_path(serial)
-        print(deck_cached_paths)
 
     def deck_set_cached_path_and_clear(serial: str):
         """Set and clear deck cache"""
         global deck_cached_paths
 
-        print(deck_cached_paths)
         cache_path = deck_cached_paths.pop(serial, None)
         if cache_path:
             print(f"deck_set_cached_path_and_clear - returning deck {serial} to {cache_path}")
