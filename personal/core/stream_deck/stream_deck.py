@@ -92,14 +92,11 @@ class Actions:
         """document string goes here"""
         
         actions.user.mouse_scroll_down_continuous()
-        actions.deck.goto("A00SA3192M9DW0", "scrolling")
 
 
     def deck4():
         """document string goes here"""
         actions.user.mouse_scroll_up_continuous()
-        actions.deck.goto("A00SA3192M9DW0", "scrolling")
-
 
     def deck5():
         """document string goes here"""

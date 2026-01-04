@@ -129,7 +129,6 @@ class Actions:
     def mouse_scroll_stop() -> bool:
         """Stops scrolling"""
         global scroll_job, gaze_job, continuous_scroll_mode, control_mouse_forced, continuous_scrolling_speed_factor
-
         continuous_scroll_mode = ""
         continuous_scrolling_speed_factor = 1.0
         return_value = False
@@ -139,6 +138,7 @@ class Actions:
             cron.cancel(scroll_job)
             scroll_job = None
             return_value = True
+            actions.deck.goto("A00SA3232MA4OZ", "default")
 
         if gaze_job:
             cron.cancel(gaze_job)
@@ -148,6 +148,7 @@ class Actions:
         if control_mouse_forced:
             actions.tracking.control_toggle(False)
             control_mouse_forced = False
+            actions.deck.goto("A00SA3232MA4OZ", "default")
 
         gui_wheel.hide()
 
@@ -210,6 +211,7 @@ def mouse_scroll_continuous(
         else:
             scroll_dir = new_scroll_dir
             scroll_start_ts = time.perf_counter()
+    
     else:
         scroll_dir = new_scroll_dir
         scroll_start_ts = time.perf_counter()
@@ -220,6 +222,7 @@ def mouse_scroll_continuous(
         if not settings.get("user.mouse_hide_mouse_gui"):
             gui_wheel.show()
 
+        actions.deck.goto("A00SA3232MA4OZ", "scrolling")
 
 def update_continuous_scrolling_mode(new_scroll_dir: Literal[-1, 1]):
     global continuous_scroll_mode
