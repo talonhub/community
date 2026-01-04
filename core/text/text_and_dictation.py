@@ -498,11 +498,9 @@ class Actions:
 
     def needs_space_between(before: str, after: str) -> bool:
         """Test if two strings need a space between them"""
-        return bool(
-            not (
-                actions.user.omit_space_after(before)
-                or actions.user.omit_space_before(after)
-            )
+        return not (
+            actions.user.omit_space_after(before)
+            or actions.user.omit_space_before(after)
         )
 
     def dictation_replace(text: str) -> str:
