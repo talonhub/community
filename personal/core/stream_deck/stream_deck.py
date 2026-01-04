@@ -68,7 +68,7 @@ class Actions:
         """middle pedal"""
         if actions.tracking.control_zoom_enabled():
             actions.tracking.zoom()
-            actions.deck.goto("A00SA3192M9DW0", "zoom")
+            #actions.deck.goto("A00SA3192M9DW0", "zoom")
 
     def deck_pedal_right():
         """right pedal"""
@@ -80,7 +80,7 @@ class Actions:
         if not actions.tracking.control_zoom_enabled():
             actions.tracking.control_zoom_toggle(True)
         actions.tracking.zoom()
-        actions.deck.goto("A00SA3192M9DW0", "zoom")
+        #actions.deck.goto("A00SA3192M9DW0", "zoom")
 
     def deck2():
         """document string goes here"""
@@ -258,80 +258,80 @@ class ControlMouseEnabled:
         """left pedal"""
         actions.mouse_click(0)
         actions.mouse_click(0)
-        actions.deck.goto("A00SA3192M9DW0", "control")
+        # actions.deck.goto("A00SA3192M9DW0", "control")
 
 
     def deck_pedal_middle():
         """middle pedal"""
         actions.mouse_click(0)
         actions.user.mouse_drag_end()
-        actions.deck.goto("A00SA3192M9DW0", "control")
+        # actions.deck.goto("A00SA3192M9DW0", "control")
 
     def deck_pedal_right():
         """right pedal"""
         actions.mouse_click(1)
-        actions.deck.goto("A00SA3192M9DW0", "control")
+        # actions.deck.goto("A00SA3192M9DW0", "control")
 
     def deck1():
         """document string goes here"""
         actions.mouse_click(0)
         actions.user.mouse_drag_end()
-        actions.deck.goto("A00SA3192M9DW0", "control")
+        # actions.deck.goto("A00SA3192M9DW0", "control")
 
     def deck2():
         """document string goes here"""
         actions.mouse_click(1)
-        actions.deck.goto("A00SA3192M9DW0", "control")
+        # actions.deck.goto("A00SA3192M9DW0", "control")
         
 
     def deck3():
         """document string goes here"""
         actions.mouse_click(0)
         actions.mouse_click(0)
-        actions.deck.goto("A00SA3192M9DW0", "control")
+        # actions.deck.goto("A00SA3192M9DW0", "control")
 
     def deck4():
         """document string goes here"""
         actions.mouse_click(0)
         actions.mouse_click(0)
         actions.mouse_click(0)
-        actions.deck.goto("A00SA3192M9DW0", "control")
+        # actions.deck.goto("A00SA3192M9DW0", "control")
         
 
     def deck5():
         """document string goes here"""
         actions.user.mouse_drag(0)
-        actions.deck.goto("A00SA3192M9DW0", "control")
+        # actions.deck.goto("A00SA3192M9DW0", "control")
 
     def deck6():
         """document string goes here"""
         actions.key("shift:down")
         actions.mouse_click(0)
         actions.key("shift:up")
-        actions.deck.goto("A00SA3192M9DW0", "control")
+        # actions.deck.goto("A00SA3192M9DW0", "control")
     
     def deck7():
         """document string goes here"""
         actions.user.quick_pick_show()
-        actions.deck.goto("A00SA3192M9DW0", "control")
+        # actions.deck.goto("A00SA3192M9DW0", "control")
     
     def deck8():
         """document string goes here"""
         
         actions.user.system_switcher()
-        actions.deck.goto("A00SA3192M9DW0", "control")
+        # actions.deck.goto("A00SA3192M9DW0", "control")
 
     def deck9():
         """document string goes here"""
         
         actions.edit.undo()
-        actions.deck.goto("A00SA3192M9DW0", "control")
+        # actions.deck.goto("A00SA3192M9DW0", "control")
 
     def deck10():
         """document string goes here"""
         
         actions.core.repeat_command(1)
-        actions.deck.goto("A00SA3192M9DW0", "control")
+        # actions.deck.goto("A00SA3192M9DW0", "control")
 
     
     def deck11():
@@ -339,40 +339,40 @@ class ControlMouseEnabled:
         actions.key("ctrl:down")
         actions.mouse_click(0)
         actions.key("ctrl:up")
-        actions.deck.goto("A00SA3192M9DW0", "control")
+        # actions.deck.goto("A00SA3192M9DW0", "control")
         
     def deck12():
         """document string goes here"""
         actions.user.mouse_toggle_zoom_mouse()
-        actions.deck.goto("A00SA3192M9DW0", "control")
+        # actions.deck.goto("A00SA3192M9DW0", "control")
     
     def deck13():
         """document string goes here"""
         actions.speech.toggle()
-        actions.deck.goto("A00SA3192M9DW0", "control")
+        # actions.deck.goto("A00SA3192M9DW0", "control")
     
     def deck14():
         """document string goes here"""
         actions.user.microphone_toggle()
-        actions.deck.goto("A00SA3192M9DW0", "control")
+        # actions.deck.goto("A00SA3192M9DW0", "control")
     
     def deck15():
         """document string goes here"""
         sleep_or_wake()
-        actions.deck.goto("A00SA3192M9DW0", "control")
+        # actions.deck.goto("A00SA3192M9DW0", "control")
 
     def pedal_left_left():
         actions.mouse_click(0)
         actions.mouse_click(0)
-        actions.deck.goto("A00SA3192M9DW0", "control")
+        # actions.deck.goto("A00SA3192M9DW0", "control")
 
     def pedal_left_right():
         actions.mouse_click(1)
-        actions.deck.goto("A00SA3192M9DW0", "control")
+        # actions.deck.goto("A00SA3192M9DW0", "control")
      
     def pedal_left_middle():
         actions.mouse_click(0)
-        actions.deck.goto("A00SA3192M9DW0", "control")
+        # actions.deck.goto("A00SA3192M9DW0", "control")
         
         
         
