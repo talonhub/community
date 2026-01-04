@@ -119,7 +119,10 @@ class Actions:
 
     def deck9():
         """document string goes here"""
-        actions.edit.redo()
+        if actions.user.mouse_is_continuous_scrolling():
+            actions.user.mouse_scroll_stop()
+        else:
+            actions.edit.undo()
 
     def deck10():
         """document string goes here"""

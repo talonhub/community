@@ -149,6 +149,7 @@ class Actions:
         if control_mouse_forced:
             actions.tracking.control_toggle(False)
             control_mouse_forced = False
+            actions.deck.goto("A00SA3192M9DW0", "default")
 
         gui_wheel.hide()
 
