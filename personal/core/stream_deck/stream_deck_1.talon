@@ -160,13 +160,9 @@ deck(scrolling/100):
 #     user.deck14()
 deck(scrolling/stop):
     user.mouse_scroll_stop()
-    deck.goto("A00SA3232MA4OZ", "default")
 deck(scrolling/stop 2):
     user.mouse_scroll_stop()
-    deck.goto("A00SA3232MA4OZ", "default")
 deck(scrolling/stop 3):
     user.mouse_scroll_stop()
-    deck.goto("A00SA3232MA4OZ", "default")
 deck(scrolling/stop 4):
     user.mouse_scroll_stop()
-    deck.goto("A00SA3232MA4OZ", "default")

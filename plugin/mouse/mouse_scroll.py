@@ -138,7 +138,7 @@ class Actions:
             cron.cancel(scroll_job)
             scroll_job = None
             return_value = True
-            actions.deck.goto("A00SA3232MA4OZ", "default")
+            actions.user.deck_set_cached_path_and_clear("A00SA3232MA4OZ")
 
         if gaze_job:
             cron.cancel(gaze_job)
@@ -148,7 +148,7 @@ class Actions:
         if control_mouse_forced:
             actions.tracking.control_toggle(False)
             control_mouse_forced = False
-            actions.deck.goto("A00SA3232MA4OZ", "default")
+            #actions.user.deck_set_cached_path_and_clear("A00SA3232MA4OZ")
 
         gui_wheel.hide()
 
@@ -222,6 +222,7 @@ def mouse_scroll_continuous(
         if not settings.get("user.mouse_hide_mouse_gui"):
             gui_wheel.show()
 
+        actions.user.deck_cache_path("A00SA3232MA4OZ")
         actions.deck.goto("A00SA3232MA4OZ", "scrolling")
 
 def update_continuous_scrolling_mode(new_scroll_dir: Literal[-1, 1]):
