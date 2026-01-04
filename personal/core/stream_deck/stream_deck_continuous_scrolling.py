@@ -10,7 +10,7 @@ class ContinuousScrollingActions:
     def deck1():
         """document string goes here"""
         pass
-        #actions.deck.goto("A00SA3232MA4OZ", "default")
+        #actions.deck.goto("A00SA3192M9DW0", "default")
         
 
     def deck2():
