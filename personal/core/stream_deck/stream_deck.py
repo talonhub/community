@@ -103,29 +103,26 @@ class Actions:
 
     def deck5():
         """document string goes here"""
-        if actions.user.mouse_is_continuous_scrolling():
-            actions.user.mouse_scroll_stop()
+        pass
 
 
     def deck6():
         """document"""
-        actions.user.move_cursor_to_gaze_point()
+        #actions.user.move_cursor_to_gaze_point()
+        pass
 
 
     def deck7():
         """document string goes here"""
-        actions.user.quick_pick_show()
+        actions.user.system_switcher()
     
     def deck8():
         """document string goes here"""
-        actions.user.system_switcher()
+        actions.edit.undo()
 
     def deck9():
         """document string goes here"""
-        if actions.user.mouse_is_continuous_scrolling():
-            actions.user.mouse_scroll_stop()
-        else:
-            actions.edit.undo()
+        actions.edit.redo()
 
     def deck10():
         """document string goes here"""
