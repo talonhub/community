@@ -139,6 +139,7 @@ class Actions:
             cron.cancel(scroll_job)
             scroll_job = None
             return_value = True
+            actions.deck.goto("A00SA3192M9DW0", "default")
 
         if gaze_job:
             cron.cancel(gaze_job)
@@ -220,6 +221,7 @@ def mouse_scroll_continuous(
         if not settings.get("user.mouse_hide_mouse_gui"):
             gui_wheel.show()
 
+        actions.deck.goto("A00SA3192M9DW0", "scrolling")
 
 def update_continuous_scrolling_mode(new_scroll_dir: Literal[-1, 1]):
     global continuous_scroll_mode

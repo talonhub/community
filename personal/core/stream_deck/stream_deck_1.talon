@@ -139,9 +139,9 @@ deck(mouse/zzz):
 # deck(reject/zzz):
 #     user.deck15()
 
-deck(scrolling/x):
+deck(scrolling/no 1):
     skip()
-deck(scrolling/y):
+deck(scrolling/no 2):
     skip()
 deck(scrolling/down-arrow):
     user.deck3()
@@ -172,13 +172,9 @@ deck(scrolling/100):
 #     user.deck14()
 deck(scrolling/stop):
     user.mouse_scroll_stop()
-    deck.goto("A00SA3192M9DW0", "default")
 deck(scrolling/stop 2):
     user.mouse_scroll_stop()
-    deck.goto("A00SA3192M9DW0", "default")
 deck(scrolling/stop 3):
     user.mouse_scroll_stop()
-    deck.goto("A00SA3192M9DW0", "default")
-deck(scrolling/zzz):
+deck(scrolling/stop 4):
     user.mouse_scroll_stop()
-    deck.goto("A00SA3192M9DW0", "default")
