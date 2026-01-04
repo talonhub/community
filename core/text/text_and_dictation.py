@@ -296,7 +296,6 @@ no_space_before = re.compile(
 )
 
 
-
 # # TESTS, uncomment to enable
 # assert actions.user.needs_space_between("a", "break")
 # assert actions.user.needs_space_between("break", "a")
@@ -400,7 +399,9 @@ class DictationFormat:
         self.before = text or self.before
 
     def format(self, text, auto_cap=True):
-        if not self.force_no_space and actions.user.needs_space_between(self.before, text):
+        if not self.force_no_space and actions.user.needs_space_between(
+            self.before, text
+        ):
             text = " " + text
         self.force_no_space = False
         if auto_cap:
@@ -486,7 +487,7 @@ class Actions:
     def dictation_reformat_no_space():
         """Removes space before the last utterance"""
         reformat_last_utterance(lambda s: s[1:] if s.startswith(" ") else s)
-    
+
     def omit_space_before(text: str) -> bool:
         """Test if string needs space before"""
         return bool(not text or no_space_before.search(text))
@@ -497,8 +498,13 @@ class Actions:
 
     def needs_space_between(before: str, after: str) -> bool:
         """Test if two strings need a space between them"""
-        return bool(not (actions.user.omit_space_after(before) or actions.user.omit_space_before(after)))
-    
+        return bool(
+            not (
+                actions.user.omit_space_after(before)
+                or actions.user.omit_space_before(after)
+            )
+        )
+
     def dictation_replace(text: str) -> str:
         """Substitutions to be performed before inserting text using dictation_insert"""
         return text.replace("“", '"').replace("”", '"')
@@ -521,7 +527,9 @@ class Actions:
             need_right = not actions.user.omit_space_after(text)
             before, after = actions.user.dictation_peek(need_left, need_right)
             dictation_formatter.update_context(before)
-            add_space_after = after is not None and actions.user.needs_space_between(text, after)
+            add_space_after = after is not None and actions.user.needs_space_between(
+                text, after
+            )
         text = dictation_formatter.format(text, auto_cap)
         # Straighten curly quotes that were introduced to obtain proper
         # spacing. The formatter context still has the original curly quotes
