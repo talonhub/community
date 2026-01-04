@@ -47,5 +47,5 @@ def noise_trigger_hiss_debounce(active: bool):
         actions.user.noise_trigger_hiss(active)
 
 
-noise.register("pop", lambda _: actions.user.noise_trigger_pop())
-noise.register("hiss", noise_trigger_hiss_debounce)
+#noise.register("pop", lambda _: actions.user.noise_trigger_pop())
+#noise.register("hiss", noise_trigger_hiss_debounce)
