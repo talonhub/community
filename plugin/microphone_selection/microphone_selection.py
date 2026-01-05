@@ -10,6 +10,7 @@ if app.platform == "windows":
     preferred_mics = [
         "Microphone (Samson Q9U)",
         "Microphone (d:vice MMA-A)",
+        "Microphone (2- d:vice MMA-A)",
         "System Default",
     ]
 else:

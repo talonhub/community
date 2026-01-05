@@ -46,11 +46,10 @@ def noise_trigger_hiss_debounce(active: bool):
         cron.cancel(hiss_cron)
         actions.user.noise_trigger_hiss(active)
 
-# def on_ready():
-#     actions.mode.disable("noise")
+def on_ready():
+    actions.mode.disable("noise")
 
-
-# app.register("ready", on_ready)
+app.register("ready", on_ready)
 
 noise.register("pop", lambda _: actions.user.noise_trigger_pop())
 noise.register("hiss", noise_trigger_hiss_debounce)
