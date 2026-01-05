@@ -1,0 +1,37 @@
+deck.serial: A00SA3232MA4OZ
+-    
+deck(control/left):
+    mouse_click(0)
+deck(control/right):
+    mouse_click(1)
+deck(control/double):
+    mouse_click(0)
+    mouse_click(0)
+deck(control/triple):
+    mouse_click(0)
+    mouse_click(0)
+    mouse_click(0)
+deck(control/drag):
+    user.mouse_drag(0)
+deck(control/shift-left):
+    key("shift:down")
+    mouse_click(0)
+    key("shift:up")
+deck(control/down-arrow):
+    user.deck3()
+deck(control/up-arrow):
+    user.deck4()
+deck(control/man-gesturing-no):
+    user.deck9()
+deck(control/repeat-button):
+    user.deck10()
+deck(control/ctrl-left):
+    key("ctrl:down")
+    mouse_click(0)
+    key("ctrl:up")
+deck(control/fast-up-button):
+    user.deck7()
+deck(control/mobile-phone):
+    user.deck8()
+deck(control/zzz):
+    user.deck15()
