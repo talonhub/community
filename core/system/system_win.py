@@ -8,8 +8,10 @@ from talon import Context, actions, app
 if app.platform == "windows" or TYPE_CHECKING:
     from ctypes import wintypes
 
+    import win32api
     import win32com.client
     import win32con
+    import win32gui
 
     user32 = ctypes.windll.user32
 
@@ -24,13 +26,6 @@ class UserActions:
     def system_switch_screen_power(on: bool):
         """Turns all screens off, or, if all are off, turns those on that were on when having turned all off."""
 
-        user32.GetKeyState.argtypes = [ctypes.c_int]
-        user32.GetKeyState.restype = wintypes.SHORT
-        user32.GetDesktopWindow.argtypes = []
-        user32.GetDesktopWindow.restype = wintypes.HWND
-        user32.DefWindowProcW.argtypes = [wintypes.HWND, wintypes.UINT, wintypes.WPARAM, wintypes.LPARAM]  # fmt: skip
-        user32.DefWindowProcW.restype = ctypes.c_ssize_t
-
         if on:
             # When testing this on Windows 11 24H2, simulated mouse movement didn't turn the screens on. However, simulated key presses did. The algorithm settled on, that should have as few side effects as possible, followed these thoughts:
             #
@@ -41,7 +36,7 @@ class UserActions:
             # - The user may have defined a trigger consisting of multiple modifier keys for something like AI-based speech-to-text. They will most likely be near each other on the keyboard. But then again, the same modifier on the left and on the right may be treated as identical.
 
             def has_capslock():
-                return user32.GetKeyState(win32con.VK_CAPITAL) & 1
+                return win32api.GetKeyState(win32con.VK_CAPITAL) & 1
 
             had_capslock = has_capslock()
 
@@ -60,8 +55,8 @@ class UserActions:
             # Docs: <https://learn.microsoft.com/en-us/windows/win32/menurc/wm-syscommand#sc_monitorpower>
             # The remarks section says: "An application can carry out any system command at any time by passing a WM_SYSCOMMAND message to DefWindowProc."
             # The window handle doesn't seem to matter, but we choose the one at the very top of the hierarchy that'll always be available.
-            user32.DefWindowProcW(
-                user32.GetDesktopWindow(),
+            win32gui.DefWindowProc(
+                win32gui.GetDesktopWindow(),
                 win32con.WM_SYSCOMMAND,
                 win32con.SC_MONITORPOWER,
                 power_code,
