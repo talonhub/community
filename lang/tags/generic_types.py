@@ -5,11 +5,21 @@ from talon import Module
 from enum import Enum, auto
 from contextlib import suppress
 from typing import Union
+from dataclasses import dataclass
 
 class GenericTypeConnector(Enum):
     AND = auto()
     OF = auto()
     DONE = auto()
+
+@dataclass(slots=True)
+class SimpleLanguageSpecificTypeConnector:
+	"""A type connector that only requires inserting text with no other complexity,
+		e.g. Python's | for union types
+    """
+	text: str
+
+type TypeConnector = Union[GenericTypeConnector, SimpleLanguageSpecificTypeConnector]
 
 mod = Module()
 
@@ -18,12 +28,19 @@ def generic_type_connector_done(m) -> GenericTypeConnector:
     """Denotes ending a nested generic type"""
     return GenericTypeConnector.DONE
 
-@mod.capture(rule="and|of|<user.generic_type_connector_done>")
-def generic_type_connector(m) -> GenericTypeConnector:
+@mod.capture(rule="and|of|<user.generic_type_connector_done>|<user.generic_language_specific_type_connector>")
+def generic_type_connector(m) -> TypeConnector:
     """Determines how to put generic type parameters together"""
     with suppress(AttributeError):
         return m.generic_type_connector_done
+    with suppress(AttributeError):
+        return m.generic_language_specific_type_connector
     return GenericTypeConnector[m[0].upper()]
+
+@mod.capture
+def generic_language_specific_type_connector(m) -> SimpleLanguageSpecificTypeConnector:
+	"""A language specific type connector"""
+	pass
 
 @mod.capture
 def generic_type_parameter_argument(m) -> str:
@@ -33,7 +50,7 @@ def generic_type_parameter_argument(m) -> str:
 @mod.capture(
     rule="<user.generic_type_connector> <user.generic_type_parameter_argument> [<user.generic_type_connector_done>]+"
 )
-def generic_type_continuation(m) -> list[Union[GenericTypeConnector, str]]:
+def generic_type_continuation(m) -> list[Union[TypeConnector, str]]:
     """A generic type parameter that goes after the first using connectors"""
     result = [m.generic_type_connector, m.generic_type_parameter_argument]
     with suppress(AttributeError):
@@ -44,7 +61,7 @@ def generic_type_continuation(m) -> list[Union[GenericTypeConnector, str]]:
 @mod.capture(rule="<user.generic_type_continuation>+")
 def generic_type_additional_type_parameters(
     m,
-) -> list[Union[GenericTypeConnector, str]]:
+) -> list[Union[TypeConnector, str]]:
     """Type parameters for a generic data structure after the first one"""
     result = []
     for continuation in m.generic_type_continuation_list:
@@ -85,7 +102,9 @@ def format_type_parameter_arguments(
             case GenericTypeConnector.DONE:
                 pieces.append(generic_parameters_end)
                 nesting -= 1
-            case str:
+            case SimpleLanguageSpecificTypeConnector():
+                pieces.append(parameter.text)
+            case str():
                 if is_immediately_after_nesting_exit:
                     pieces.append(argument_separator)
                 pieces.append(parameter)

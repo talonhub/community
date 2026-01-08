@@ -4,7 +4,7 @@ from talon import Context, Module, actions, settings
 
 from ...core.described_functions import create_described_insert_between
 from ..tags.operators import Operators
-from ..tags.generic_types import format_type_parameter_arguments
+from ..tags.generic_types import format_type_parameter_arguments, SimpleLanguageSpecificTypeConnector
 from contextlib import suppress
 
 mod = Module()
@@ -136,6 +136,11 @@ def generic_data_structure(m) -> str:
     with suppress(AttributeError):
         return m.python_generic_type
     return actions.user.formatted_text(m.text, "PUBLIC_CAMEL_CASE")
+
+@ctx.capture("user.generic_language_specific_type_connector", rule="or")
+def generic_language_specific_type_connector(m) -> SimpleLanguageSpecificTypeConnector:
+    """A Python specific type connector for union types"""
+    return SimpleLanguageSpecificTypeConnector(" | ")
 
 @ctx.capture(
     "user.generic_type_parameter_arguments",
