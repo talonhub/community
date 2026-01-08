@@ -6,7 +6,7 @@ from talon import Context, Module, actions, settings
 
 from ...core.described_functions import create_described_insert_between
 from ..tags.operators import Operators
-from ..tags.generic_types import GenericTypeConnector
+from ..tags.generic_types import GenericTypeConnector, format_type_parameter_arguments
 
 ctx = Context()
 mod = Module()
@@ -167,31 +167,12 @@ def generic_data_structure(m) -> str:
 )
 def generic_type_parameter_arguments(m) -> str:
     """Formatted Java type parameter arguments"""
-    parameters = [m.generic_type_parameter_argument]
-    with suppress(AttributeError):
-        parameters.extend(m.generic_type_additional_type_parameters)
-    pieces = []
-    nesting: int = 0
-    is_immediately_after_nesting_exit = False
-    for parameter in parameters:
-        match parameter:
-            case GenericTypeConnector.AND:
-                pieces.append(", ")
-            case GenericTypeConnector.OF:
-                pieces.append("<")
-                nesting += 1
-            case GenericTypeConnector.DONE:
-                pieces.append(">")
-                nesting -= 1
-            case str:
-                if is_immediately_after_nesting_exit:
-                    pieces.append(", ")
-                pieces.append(parameter)
-        is_immediately_after_nesting_exit = parameter == GenericTypeConnector.DONE
-    if nesting > 0:
-        pieces.append(">" * nesting)
-    return "".join(pieces)
-
+    return format_type_parameter_arguments(
+        m,
+        ", ",
+        "<",
+        ">"
+    )
     
 @mod.capture(
     rule="<user.generic_data_structure> of <user.generic_type_parameter_arguments>"
