@@ -55,3 +55,9 @@ def generic_type_additional_type_parameters(
 def generic_data_structure(m) -> str:
 	"""A generic data structure that takes type parameter arguments"""
 	pass
+
+@mod.capture(
+    rule="<user.generic_type_parameter_argument> [<user.generic_type_additional_type_parameters>]"
+)
+def generic_type_parameter_arguments(m) -> str:
+	pass

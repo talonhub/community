@@ -165,10 +165,11 @@ def is_immediately_after_nesting_exit(pieces: list[str]) -> bool:
     return len(pieces) >= 1 and pieces[-1] == ">"
 
 
-@mod.capture(
+@ctx.capture(
+    "user.generic_type_parameter_arguments",
     rule="<user.generic_type_parameter_argument> [<user.generic_type_additional_type_parameters>]"
 )
-def java_type_parameter_arguments(m) -> str:
+def generic_type_parameter_arguments(m) -> str:
     """Formatted Java type parameter arguments"""
     parameters = [m.generic_type_parameter_argument]
     with suppress(AttributeError):
@@ -194,13 +195,13 @@ def java_type_parameter_arguments(m) -> str:
         pieces.append(">" * nesting)
     return "".join(pieces)
 
-
+    
 @mod.capture(
-    rule="<user.generic_data_structure> of <user.java_type_parameter_arguments>"
+    rule="<user.generic_data_structure> of <user.generic_type_parameter_arguments>"
 )
 def java_generic_type(m) -> str:
     """A generic type with specific type parameters"""
-    parameters = m.java_type_parameter_arguments
+    parameters = m.generic_type_parameter_arguments
     return f"{m.generic_data_structure}<{parameters}>"
 
 
