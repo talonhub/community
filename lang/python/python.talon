@@ -53,6 +53,17 @@ import <user.code_libraries>:
 from import: user.insert_snippet_by_name("importFromStatement")
 
 # the generic type commands are currently unstable and may be subject to change
+
+# examples of using the <user.python_generic_type> capture:
+# "list of string" -> list[str]
+# "list of string or integer" -> list[str | int]
+# types can be nested with `of`:
+# "list of optional of integer" -> list[Optional[int]]
+# `and` can be used for multiple arguments: 
+# "tuple of integer and float" -> tuple[int, float]
+# `done` can be used to exit a nesting:
+# "tuple of optional of integer done string" -> tuple[Optional[int], str]
+
 <user.python_generic_type>: insert(python_generic_type)
 returns <user.python_generic_type>: insert(" -> {python_generic_type}")
 is type <user.python_generic_type>: insert(": {python_generic_type}")
