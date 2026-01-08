@@ -153,8 +153,8 @@ def generic_type_parameter_argument(m) -> str:
     return public_camel_case_format_variable(m.text)
 
 
-@mod.capture(rule="[type] {user.java_generic_data_structure} | type <user.text>")
-def java_generic_data_structure(m) -> str:
+@ctx.capture("user.generic_data_structure", rule="[type] {user.java_generic_data_structure} | type <user.text>")
+def generic_data_structure(m) -> str:
     """A Java generic data structure that takes type parameter arguments"""
     with suppress(AttributeError):
         return m.java_generic_data_structure
@@ -196,12 +196,12 @@ def java_type_parameter_arguments(m) -> str:
 
 
 @mod.capture(
-    rule="<user.java_generic_data_structure> of <user.java_type_parameter_arguments>"
+    rule="<user.generic_data_structure> of <user.java_type_parameter_arguments>"
 )
 def java_generic_type(m) -> str:
     """A generic type with specific type parameters"""
     parameters = m.java_type_parameter_arguments
-    return f"{m.java_generic_data_structure}<{parameters}>"
+    return f"{m.generic_data_structure}<{parameters}>"
 
 
 # End of unstable section
