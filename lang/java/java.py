@@ -5,8 +5,8 @@ from typing import Union
 from talon import Context, Module, actions, settings
 
 from ...core.described_functions import create_described_insert_between
-from ..tags.operators import Operators
 from ..tags.generic_types import format_type_parameter_arguments
+from ..tags.operators import Operators
 
 ctx = Context()
 mod = Module()
@@ -145,7 +145,9 @@ def public_camel_case_format_variable(variable: str):
 # we plan on abstracting out from the specific implementations into a general grammar
 
 
-@ctx.capture("user.generic_type_parameter_argument", rule="{user.java_boxed_type} | <user.text>")
+@ctx.capture(
+    "user.generic_type_parameter_argument", rule="{user.java_boxed_type} | <user.text>"
+)
 def generic_type_parameter_argument(m) -> str:
     """A Java type parameter for a generic data structure"""
     with suppress(AttributeError):
@@ -153,7 +155,10 @@ def generic_type_parameter_argument(m) -> str:
     return public_camel_case_format_variable(m.text)
 
 
-@ctx.capture("user.generic_data_structure", rule="[type] {user.java_generic_data_structure} | type <user.text>")
+@ctx.capture(
+    "user.generic_data_structure",
+    rule="[type] {user.java_generic_data_structure} | type <user.text>",
+)
 def generic_data_structure(m) -> str:
     """A Java generic data structure that takes type parameter arguments"""
     with suppress(AttributeError):
@@ -163,17 +168,13 @@ def generic_data_structure(m) -> str:
 
 @ctx.capture(
     "user.generic_type_parameter_arguments",
-    rule="<user.generic_type_parameter_argument> [<user.generic_type_additional_type_parameters>]"
+    rule="<user.generic_type_parameter_argument> [<user.generic_type_additional_type_parameters>]",
 )
 def generic_type_parameter_arguments(m) -> str:
     """Formatted Java type parameter arguments"""
-    return format_type_parameter_arguments(
-        m,
-        ", ",
-        "<",
-        ">"
-    )
-    
+    return format_type_parameter_arguments(m, ", ", "<", ">")
+
+
 @mod.capture(
     rule="<user.generic_data_structure> of <user.generic_type_parameter_arguments>"
 )

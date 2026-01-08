@@ -59,7 +59,7 @@ from import: user.insert_snippet_by_name("importFromStatement")
 # "list of string or integer" -> list[str | int]
 # types can be nested with `of`:
 # "list of optional of integer" -> list[Optional[int]]
-# `and` can be used for multiple arguments: 
+# `and` can be used for multiple arguments:
 # "tuple of integer and float" -> tuple[int, float]
 # `done` can be used to exit a nesting:
 # "tuple of optional of integer done string" -> tuple[Optional[int], str]
