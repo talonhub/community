@@ -15,7 +15,7 @@ class GenericTypeConnector(Enum):
 @dataclass(slots=True)
 class SimpleLanguageSpecificTypeConnector:
     """A type connector that only requires inserting text with no other complexity,
-        e.g. Python's | for union types
+        e.g. Python's `|` for union types
     """
     text: str
 
