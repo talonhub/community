@@ -161,10 +161,6 @@ def generic_data_structure(m) -> str:
     return public_camel_case_format_variable(m.text)
 
 
-def is_immediately_after_nesting_exit(pieces: list[str]) -> bool:
-    return len(pieces) >= 1 and pieces[-1] == ">"
-
-
 @ctx.capture(
     "user.generic_type_parameter_arguments",
     rule="<user.generic_type_parameter_argument> [<user.generic_type_additional_type_parameters>]"
@@ -176,9 +172,10 @@ def generic_type_parameter_arguments(m) -> str:
         parameters.extend(m.generic_type_additional_type_parameters)
     pieces = []
     nesting: int = 0
+    is_immediately_after_nesting_exit = False
     for parameter in parameters:
         if isinstance(parameter, str):
-            if is_immediately_after_nesting_exit(pieces):
+            if is_immediately_after_nesting_exit:
                 pieces.append(", ")
             pieces.append(parameter)
         else:
@@ -191,6 +188,7 @@ def generic_type_parameter_arguments(m) -> str:
                 case GenericTypeConnector.DONE:
                     pieces.append(">")
                     nesting -= 1
+        is_immediately_after_nesting_exit = parameter == GenericTypeConnector.DONE
     if nesting > 0:
         pieces.append(">" * nesting)
     return "".join(pieces)
