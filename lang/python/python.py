@@ -4,6 +4,8 @@ from talon import Context, Module, actions, settings
 
 from ...core.described_functions import create_described_insert_between
 from ..tags.operators import Operators
+from ..tags.generic_types import format_type_parameter_arguments
+from contextlib import suppress
 
 mod = Module()
 ctx = Context()
@@ -102,6 +104,60 @@ ctx.lists["user.python_exception"] = {
     " ".join(re.findall("[A-Z][^A-Z]*", exception)).lower(): exception
     for exception in exception_list
 }
+
+# This is not part of the long term stable API
+# After we implement generics support for several languages,
+# we plan on abstracting out from the specific implementations into a general grammar
+
+mod.list("python_generic_type", desc="A python type that takes type parameter arguments")
+
+# this should be moved to a talon-list file after this becomes stable
+ctx.lists["user.python_generic_type"] = {
+    "callable": "Callable",
+    "dictionary": "dict",
+    "iterable": "Iterable",
+    "list": "list",
+    "optional": "Optional",
+    "set": "set",
+    "tuple": "tuple",
+    "union": "Union",
+}
+
+@ctx.capture("user.generic_type_parameter_argument", rule="<user.code_type> | <user.text>")
+def generic_type_parameter_argument(m) -> str:
+    """A Python type parameter for a generic data structure"""
+    with suppress(AttributeError):
+        return m.code_type
+    return actions.user.formatted_text(m.text, "PUBLIC_CAMEL_CASE")
+
+@ctx.capture("user.generic_data_structure", rule="{user.python_generic_type} | type <user.text>")
+def generic_data_structure(m) -> str:
+    """A Python generic data structure that takes type parameter arguments"""
+    with suppress(AttributeError):
+        return m.python_generic_type
+    return actions.user.formatted_text(m.text, "PUBLIC_CAMEL_CASE")
+
+@ctx.capture(
+    "user.generic_type_parameter_arguments",
+    rule="<user.generic_type_parameter_argument> [<user.generic_type_additional_type_parameters>]"
+)
+def generic_type_parameter_arguments(m) -> str:
+    return format_type_parameter_arguments(
+        m,
+        ", ",
+        "[",
+        "]"
+    )
+
+@mod.capture(
+    rule="<user.generic_data_structure> of <user.generic_type_parameter_arguments>"
+)
+def python_generic_type(m) -> str:
+    """A generic type with specific type parameters"""
+    parameters = m.generic_type_parameter_arguments
+    return f"{m.generic_data_structure}[{parameters}]"
+
+# End of unstable section
 
 operators = Operators(
     # code_operators_array

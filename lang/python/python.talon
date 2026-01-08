@@ -51,3 +51,8 @@ import <user.code_libraries>:
     key(end enter)
 
 from import: user.insert_snippet_by_name("importFromStatement")
+
+# the generic type commands are currently unstable and may be subject to change
+<user.python_generic_type>: insert(python_generic_type)
+returns <user.python_generic_type>: insert(" -> {python_generic_type}")
+is type <user.python_generic_type>: insert(": {python_generic_type}")
