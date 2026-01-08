@@ -14,20 +14,16 @@ class GenericTypeConnector(Enum):
 
 @dataclass(slots=True)
 class SimpleLanguageSpecificTypeConnector:
-	"""A type connector that only requires inserting text with no other complexity,
-		e.g. Python's | for union types
+    """A type connector that only requires inserting text with no other complexity,
+        e.g. Python's | for union types
     """
-	text: str
+    text: str
 
 type TypeConnector = Union[GenericTypeConnector, SimpleLanguageSpecificTypeConnector]
 
 mod = Module()
 
 # implement the following for a specific language
-@mod.capture
-def generic_language_specific_type_connector(m) -> SimpleLanguageSpecificTypeConnector:
-	"""A language specific type connector. This should be implemented for languages with unusual connectors"""
-	pass
 
 @mod.capture
 def generic_type_parameter_argument(m) -> str:
@@ -51,14 +47,19 @@ def generic_type_connector_done(m) -> GenericTypeConnector:
     """Denotes ending a nested generic type"""
     return GenericTypeConnector.DONE
 
-@mod.capture(rule="and|of|<user.generic_type_connector_done>|<user.generic_language_specific_type_connector>")
-def generic_type_connector(m) -> TypeConnector:
-    """Determines how to put generic type parameters together"""
+@mod.capture(rule="and|of|<user.generic_type_connector_done>")
+def common_generic_type_connector(m) -> GenericTypeConnector:
+    """A common type connector for generic types"""
     with suppress(AttributeError):
         return m.generic_type_connector_done
-    with suppress(AttributeError):
-        return m.generic_language_specific_type_connector
     return GenericTypeConnector[m[0].upper()]
+
+@mod.capture(rule="<user.common_generic_type_connector>")
+def generic_type_connector(m) -> TypeConnector:
+    """A generic type connector for determining how to put type parameters together
+        override on a per language basis to add additional connectors
+    """
+    return m.common_generic_type_connector
 
 @mod.capture(
     rule="<user.generic_type_connector> <user.generic_type_parameter_argument> [<user.generic_type_connector_done>]+"

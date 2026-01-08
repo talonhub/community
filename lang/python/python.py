@@ -137,9 +137,11 @@ def generic_data_structure(m) -> str:
         return m.python_generic_type
     return actions.user.formatted_text(m.text, "PUBLIC_CAMEL_CASE")
 
-@ctx.capture("user.generic_language_specific_type_connector", rule="or")
-def generic_language_specific_type_connector(m) -> SimpleLanguageSpecificTypeConnector:
+@ctx.capture("user.generic_type_connector", rule="<user.common_generic_type_connector>|or")
+def generic_type_connector(m) -> SimpleLanguageSpecificTypeConnector:
     """A Python specific type connector for union types"""
+    with suppress(AttributeError):
+        return m.common_generic_type_connector
     return SimpleLanguageSpecificTypeConnector(" | ")
 
 @ctx.capture(
