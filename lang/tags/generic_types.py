@@ -23,6 +23,29 @@ type TypeConnector = Union[GenericTypeConnector, SimpleLanguageSpecificTypeConne
 
 mod = Module()
 
+# implement the following for a specific language
+@mod.capture
+def generic_language_specific_type_connector(m) -> SimpleLanguageSpecificTypeConnector:
+	"""A language specific type connector. This should be implemented for languages with unusual connectors"""
+	pass
+
+@mod.capture
+def generic_type_parameter_argument(m) -> str:
+    """A type parameter for a generic data structure. This should include standard types of a language and appropriate formatting of arbitrary text for user types"""
+    pass
+
+@mod.capture
+def generic_data_structure(m) -> str:
+    """A generic data structure that takes type parameter arguments"""
+    pass
+
+@mod.capture(
+    rule="<user.generic_type_parameter_argument> [<user.generic_type_additional_type_parameters>]"
+)
+def generic_type_parameter_arguments(m) -> str:
+    """This combines type parameter arguments, connectors,  and the containing type into a formatted string. This is usually formatted using format_type_parameter_arguments"""
+    pass
+
 @mod.capture(rule="done")
 def generic_type_connector_done(m) -> GenericTypeConnector:
     """Denotes ending a nested generic type"""
@@ -36,16 +59,6 @@ def generic_type_connector(m) -> TypeConnector:
     with suppress(AttributeError):
         return m.generic_language_specific_type_connector
     return GenericTypeConnector[m[0].upper()]
-
-@mod.capture
-def generic_language_specific_type_connector(m) -> SimpleLanguageSpecificTypeConnector:
-	"""A language specific type connector"""
-	pass
-
-@mod.capture
-def generic_type_parameter_argument(m) -> str:
-    """A type parameter for a generic data structure"""
-    pass
 
 @mod.capture(
     rule="<user.generic_type_connector> <user.generic_type_parameter_argument> [<user.generic_type_connector_done>]+"
@@ -67,17 +80,6 @@ def generic_type_additional_type_parameters(
     for continuation in m.generic_type_continuation_list:
         result.extend(continuation)
     return result
-
-@mod.capture
-def generic_data_structure(m) -> str:
-    """A generic data structure that takes type parameter arguments"""
-    pass
-
-@mod.capture(
-    rule="<user.generic_type_parameter_argument> [<user.generic_type_additional_type_parameters>]"
-)
-def generic_type_parameter_arguments(m) -> str:
-    pass
 
 def format_type_parameter_arguments(
     m,
