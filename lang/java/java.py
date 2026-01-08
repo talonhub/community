@@ -161,41 +161,18 @@ def java_generic_data_structure(m) -> str:
     return public_camel_case_format_variable(m.text)
 
 
-@mod.capture(
-    rule="<user.generic_type_connector> <user.generic_type_parameter_argument> [<user.generic_type_connector_done>]+"
-)
-def java_generic_type_continuation(m) -> list[Union[GenericTypeConnector, str]]:
-    """A generic type parameter that goes after the first using connectors"""
-    result = [m.generic_type_connector, m.generic_type_parameter_argument]
-    with suppress(AttributeError):
-        dones = m.generic_type_connector_done_list
-        result.extend(dones)
-    return result
-
-
-@mod.capture(rule="<user.java_generic_type_continuation>+")
-def java_generic_type_additional_type_parameters(
-    m,
-) -> list[Union[GenericTypeConnector, str]]:
-    """Type parameters for a generic data structure after the first one"""
-    result = []
-    for continuation in m.java_generic_type_continuation_list:
-        result.extend(continuation)
-    return result
-
-
 def is_immediately_after_nesting_exit(pieces: list[str]) -> bool:
     return len(pieces) >= 1 and pieces[-1] == ">"
 
 
 @mod.capture(
-    rule="<user.generic_type_parameter_argument> [<user.java_generic_type_additional_type_parameters>]"
+    rule="<user.generic_type_parameter_argument> [<user.generic_type_additional_type_parameters>]"
 )
 def java_type_parameter_arguments(m) -> str:
     """Formatted Java type parameter arguments"""
     parameters = [m.generic_type_parameter_argument]
     with suppress(AttributeError):
-        parameters.extend(m.java_generic_type_additional_type_parameters)
+        parameters.extend(m.generic_type_additional_type_parameters)
     pieces = []
     nesting: int = 0
     for parameter in parameters:
