@@ -26,7 +26,7 @@ class SimpleLanguageSpecificTypeConnector:
     text: str
 
 
-type TypeConnector = Union[CommonTypeConnector, SimpleLanguageSpecificTypeConnector]
+TypeConnector = Union[CommonTypeConnector, SimpleLanguageSpecificTypeConnector]
 
 mod = Module()
 
