@@ -63,7 +63,11 @@ from import: user.insert_snippet_by_name("importFromStatement")
 # "tuple of integer and float" -> tuple[int, float]
 # `done` can be used to exit a nesting:
 # "tuple of optional of integer done string" -> tuple[Optional[int], str]
+# user defined type names are capitalized
+# "list of custom type" -> list[CustomType]
+# saying `type` first refers to a custom type
+# "type list of type integer" -> List[Integer]
 
-<user.python_generic_type>: insert(python_generic_type)
+type <user.python_generic_type>: insert(python_generic_type)
 returns <user.python_generic_type>: insert(" -> {python_generic_type}")
 is type <user.python_generic_type>: insert(": {python_generic_type}")
