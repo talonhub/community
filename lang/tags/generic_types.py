@@ -7,7 +7,8 @@ from contextlib import suppress
 from typing import Union
 from dataclasses import dataclass
 
-class GenericTypeConnector(Enum):
+class CommonTypeConnector(Enum):
+    """A common type connector for connecting type arguments for a generic type"""
     AND = auto()
     OF = auto()
     DONE = auto()
@@ -19,7 +20,7 @@ class SimpleLanguageSpecificTypeConnector:
     """
     text: str
 
-type TypeConnector = Union[GenericTypeConnector, SimpleLanguageSpecificTypeConnector]
+type TypeConnector = Union[CommonTypeConnector, SimpleLanguageSpecificTypeConnector]
 
 mod = Module()
 
@@ -42,22 +43,24 @@ def generic_type_parameter_arguments(m) -> str:
     """This combines type parameter arguments, connectors,  and the containing type into a formatted string. This is usually formatted using format_type_parameter_arguments"""
     pass
 
+# end of language specific section
+
 @mod.capture(rule="done")
-def generic_type_connector_done(m) -> GenericTypeConnector:
+def generic_type_connector_done(m) -> CommonTypeConnector:
     """Denotes ending a nested generic type"""
-    return GenericTypeConnector.DONE
+    return CommonTypeConnector.DONE
 
 @mod.capture(rule="and|of|<user.generic_type_connector_done>")
-def common_generic_type_connector(m) -> GenericTypeConnector:
+def common_generic_type_connector(m) -> CommonTypeConnector:
     """A common type connector for generic types"""
     with suppress(AttributeError):
         return m.generic_type_connector_done
-    return GenericTypeConnector[m[0].upper()]
+    return CommonTypeConnector[m[0].upper()]
 
 @mod.capture(rule="<user.common_generic_type_connector>")
 def generic_type_connector(m) -> TypeConnector:
-    """A generic type connector for determining how to put type parameters together
-        override on a per language basis to add additional connectors
+    """A generic type connector for determining how to put type parameters together.
+        Override on a per language basis to add additional connectors.
     """
     return m.common_generic_type_connector
 
@@ -97,12 +100,12 @@ def format_type_parameter_arguments(
     is_immediately_after_nesting_exit = False
     for parameter in parameters:
         match parameter:
-            case GenericTypeConnector.AND:
+            case CommonTypeConnector.AND:
                 pieces.append(argument_separator)
-            case GenericTypeConnector.OF:
+            case CommonTypeConnector.OF:
                 pieces.append(generic_parameters_start)
                 nesting += 1
-            case GenericTypeConnector.DONE:
+            case CommonTypeConnector.DONE:
                 pieces.append(generic_parameters_end)
                 nesting -= 1
             case SimpleLanguageSpecificTypeConnector():
@@ -111,7 +114,7 @@ def format_type_parameter_arguments(
                 if is_immediately_after_nesting_exit:
                     pieces.append(argument_separator)
                 pieces.append(parameter)
-        is_immediately_after_nesting_exit = parameter == GenericTypeConnector.DONE
+        is_immediately_after_nesting_exit = parameter == CommonTypeConnector.DONE
     if nesting > 0:
         pieces.append(generic_parameters_end * nesting)
     return "".join(pieces)
