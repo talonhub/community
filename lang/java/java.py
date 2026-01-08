@@ -6,6 +6,7 @@ from talon import Context, Module, actions, settings
 
 from ...core.described_functions import create_described_insert_between
 from ..tags.operators import Operators
+from ..tags.generic_types import GenericTypeConnector
 
 ctx = Context()
 mod = Module()
@@ -160,34 +161,14 @@ def java_generic_data_structure(m) -> str:
     return public_camel_case_format_variable(m.text)
 
 
-class GenericTypeConnector(Enum):
-    AND = auto()
-    OF = auto()
-    DONE = auto()
-
-
-@mod.capture(rule="done")
-def java_generic_type_connector_done(m) -> GenericTypeConnector:
-    """Denotes ending a nested generic type"""
-    return GenericTypeConnector.DONE
-
-
-@mod.capture(rule="and|of|<user.java_generic_type_connector_done>")
-def java_generic_type_connector(m) -> GenericTypeConnector:
-    """Determines how to put generic type parameters together"""
-    with suppress(AttributeError):
-        return m.java_generic_type_connector_done
-    return GenericTypeConnector[m[0].upper()]
-
-
 @mod.capture(
-    rule="<user.java_generic_type_connector> <user.java_type_parameter_argument> [<user.java_generic_type_connector_done>]+"
+    rule="<user.generic_type_connector> <user.java_type_parameter_argument> [<user.generic_type_connector_done>]+"
 )
 def java_generic_type_continuation(m) -> list[Union[GenericTypeConnector, str]]:
     """A generic type parameter that goes after the first using connectors"""
-    result = [m.java_generic_type_connector, m.java_type_parameter_argument]
+    result = [m.generic_type_connector, m.java_type_parameter_argument]
     with suppress(AttributeError):
-        dones = m.java_generic_type_connector_done_list
+        dones = m.generic_type_connector_done_list
         result.extend(dones)
     return result
 
