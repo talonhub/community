@@ -6,7 +6,7 @@ from talon import Context, Module, actions, settings
 
 from ...core.described_functions import create_described_insert_between
 from ..tags.operators import Operators
-from ..tags.generic_types import CommonTypeConnector, format_type_parameter_arguments
+from ..tags.generic_types import format_type_parameter_arguments
 
 ctx = Context()
 mod = Module()
