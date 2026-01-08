@@ -120,4 +120,4 @@ class Actions:
 
     def slack_search():
         """Opens the search bar in Slack"""
-        actions.key("ctrl-g") 
+        actions.key("ctrl-g")
