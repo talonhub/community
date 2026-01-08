@@ -117,3 +117,7 @@ class Actions:
 
     def slack_toggle_right_sidebar():
         """Toggles the visibility of the right sidebar in Slack"""
+
+    def slack_search():
+        """Opens the search bar in Slack"""
+        actions.key("ctrl-g") 

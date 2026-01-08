@@ -15,6 +15,7 @@ focus (move | next): key(ctrl-`)
 (slack | lack) threads: user.slack_open_threads()
 (slack | lack) (history [next] | back | backward): user.slack_go_back()
 (slack | lack) forward: user.slack_go_forward()
+(slack | lack) search: user.slack_search()
 
 # Messaging
 grab left: key(shift-up)
