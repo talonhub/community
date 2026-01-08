@@ -140,7 +140,8 @@ def generic_type_parameter_argument(m) -> str:
 
 
 @ctx.capture(
-    "user.generic_data_structure", rule="{user.python_generic_type} | [type] <user.text>"
+    "user.generic_data_structure",
+    rule="{user.python_generic_type} | [type] <user.text>",
 )
 def generic_data_structure(m) -> str:
     """A Python generic data structure that takes type parameter arguments"""
