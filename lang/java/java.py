@@ -174,20 +174,19 @@ def generic_type_parameter_arguments(m) -> str:
     nesting: int = 0
     is_immediately_after_nesting_exit = False
     for parameter in parameters:
-        if isinstance(parameter, str):
-            if is_immediately_after_nesting_exit:
+        match parameter:
+            case GenericTypeConnector.AND:
                 pieces.append(", ")
-            pieces.append(parameter)
-        else:
-            match parameter:
-                case GenericTypeConnector.AND:
+            case GenericTypeConnector.OF:
+                pieces.append("<")
+                nesting += 1
+            case GenericTypeConnector.DONE:
+                pieces.append(">")
+                nesting -= 1
+            case str:
+                if is_immediately_after_nesting_exit:
                     pieces.append(", ")
-                case GenericTypeConnector.OF:
-                    pieces.append("<")
-                    nesting += 1
-                case GenericTypeConnector.DONE:
-                    pieces.append(">")
-                    nesting -= 1
+                pieces.append(parameter)
         is_immediately_after_nesting_exit = parameter == GenericTypeConnector.DONE
     if nesting > 0:
         pieces.append(">" * nesting)
