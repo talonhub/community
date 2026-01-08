@@ -145,8 +145,8 @@ def public_camel_case_format_variable(variable: str):
 # we plan on abstracting out from the specific implementations into a general grammar
 
 
-@mod.capture(rule="{user.java_boxed_type} | <user.text>")
-def java_type_parameter_argument(m) -> str:
+@ctx.capture("user.generic_type_parameter_argument", rule="{user.java_boxed_type} | <user.text>")
+def generic_type_parameter_argument(m) -> str:
     """A Java type parameter for a generic data structure"""
     with suppress(AttributeError):
         return m.java_boxed_type
@@ -162,11 +162,11 @@ def java_generic_data_structure(m) -> str:
 
 
 @mod.capture(
-    rule="<user.generic_type_connector> <user.java_type_parameter_argument> [<user.generic_type_connector_done>]+"
+    rule="<user.generic_type_connector> <user.generic_type_parameter_argument> [<user.generic_type_connector_done>]+"
 )
 def java_generic_type_continuation(m) -> list[Union[GenericTypeConnector, str]]:
     """A generic type parameter that goes after the first using connectors"""
-    result = [m.generic_type_connector, m.java_type_parameter_argument]
+    result = [m.generic_type_connector, m.generic_type_parameter_argument]
     with suppress(AttributeError):
         dones = m.generic_type_connector_done_list
         result.extend(dones)
@@ -189,11 +189,11 @@ def is_immediately_after_nesting_exit(pieces: list[str]) -> bool:
 
 
 @mod.capture(
-    rule="<user.java_type_parameter_argument> [<user.java_generic_type_additional_type_parameters>]"
+    rule="<user.generic_type_parameter_argument> [<user.java_generic_type_additional_type_parameters>]"
 )
 def java_type_parameter_arguments(m) -> str:
     """Formatted Java type parameter arguments"""
-    parameters = [m.java_type_parameter_argument]
+    parameters = [m.generic_type_parameter_argument]
     with suppress(AttributeError):
         parameters.extend(m.java_generic_type_additional_type_parameters)
     pieces = []
