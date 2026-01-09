@@ -1,5 +1,5 @@
 from talon.windows.ax import Element
-from talon import Context, Module, actions, app, imgui, ui, resource, canvas, ctrl, settings
+from talon import Context, Module, actions, app, imgui, ui, resource, canvas, ctrl, settings, cron
 from dataclasses import dataclass, asdict
 from talon.ui import Rect
 import math
@@ -134,12 +134,13 @@ def get_windows_eleven_taskbar(forced: bool = False):
                     break
 
         if taskbar:
+            print(f"taskbar rect {taskbar.rect}")
             # ms_tasklist = first_matching_child(taskbar.element, class_name=["Taskbar.TaskbarFrameAutomationPeer"])            
             show_hidden_x = None
             for element in taskbar.children:
                 for child in element.children:
                     for child2 in child.children:
-                        print(child2)
+                        #print(child2)
                         if child2.name != "Start" and child2.name != "Search" and child2.name != "Task View":
                             global width, height, x_start, y_start, tasklist_width
 
@@ -150,18 +151,24 @@ def get_windows_eleven_taskbar(forced: bool = False):
                                 height = child2.rect.height
                                 x_start = child2.rect.x
                                 y_start = child2.rect.y
-                                print(f"get_windows_eleven_taskbar: first icon found {child2.name} {width}x{height}")
+                                print(f"first taskbar icon found {child2.name}: {child2.rect}")
 
                     if child.name == "Show Hidden Icons":
                         show_hidden_x = child.rect.x
-                        #print("found Hidden!")
+                        print(f"found hidden icons! {child.rect}")
             
             tasklist_width = show_hidden_x - x_start
 mcanvas = None
-def update_canvas(register):
+
+def update_canvas():
     global mcanvas
     global cache, taskbar, ms_tasklist, tasklist_width
     global width, height, x_start, y_start
+    
+    main_screen = ui.main_screen()
+    print(f"main screen: {main_screen}")
+    print(f"screens: {ui.screens()}")
+    
     if mcanvas:
         taskbar = None
         ms_tasklist = None
@@ -171,29 +178,28 @@ def update_canvas(register):
         x_start = None
         y_start = None
         mcanvas.close()
-
     
-    mcanvas = canvas.Canvas.from_screen(ui.main_screen())
+    mcanvas = canvas.Canvas.from_screen(main_screen)
     platform_str = platform.platform()
 
     if "Windows-11" not in platform_str:
         get_windows_ten_taskbar(True)
     else:
         get_windows_eleven_taskbar(True)
-    
-    if register:
-        mcanvas.register("draw", draw_options)
-        mcanvas.freeze()
 
-        #todo: figure out screen changes
-        #ui.register("screen_change", lambda _: on_ready())
+    mcanvas.register("draw", draw_options)
+    mcanvas.freeze()
+
+def on_screen_change(_):
+    print("on_screen_change")
+    update_canvas()
 
 if app.platform == "windows":
-    # uncomment the following for quick testing
+
     def on_ready():
-        update_canvas(True)
-        ui.register("screen_change", lambda _: update_canvas(True))     
-        
+        update_canvas()
+        ui.register("screen_change", on_screen_change)    
+
     app.register("ready", on_ready)
 
 
