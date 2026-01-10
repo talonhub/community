@@ -20,22 +20,18 @@ class TaskBarIcon:
 
 @dataclass
 class TaskBarPositionData:
-    tasklist_width: float
+    taskbar_rect: Rect
     icon_width: float
     icon_height: float 
-    x_start: float 
-    y_start: float
     icon_positions: list[TaskBarIcon]
 
     def __init__(self):
         pass
 
-    def set(self, tasklist_width, icon_width, icon_height, x_start, y_start, icon_positions):
-        self.tasklist_width = tasklist_width
+    def set(self, taskbar_rect, icon_width, icon_height, icon_positions):
+        self.taskbar_rect = taskbar_rect
         self.icon_width = icon_width
         self.icon_height = icon_height
-        self.x_start = x_start
-        self.y_start = y_start
         self.icon_positions = icon_positions
 
 is_windows_eleven = "Windows-11" in platform.platform()
@@ -61,11 +57,12 @@ class Actions:
 def draw_options(canvas):
     paint = canvas.paint
     canvas.paint.text_align = canvas.paint.TextAlign.CENTER
-    count = math.floor(taskbar_data.tasklist_width / taskbar_data.icon_width)
+    taskbar_rect = taskbar_data.taskbar_rect
+    count = math.floor(taskbar_rect.width / taskbar_data.icon_width)
     paint.textsize = 20
 
-    x = taskbar_data.x_start
-    y = taskbar_data.y_start + .8 * taskbar_data.icon_height
+    x = taskbar_rect.x
+    y = taskbar_rect.y + .8 * taskbar_data.icon_height
     for index in range(1, count + 1):
         paint.style = paint.Style.FILL
         paint.color = "000000"
@@ -76,13 +73,11 @@ def draw_options(canvas):
         canvas.draw_text(f"{index}", x_text_position, y_text_position)
         x = x + taskbar_data.icon_width
 
-def get_windows_ten_taskbar(forced: bool = False):
+def get_windows_ten_taskbar():
     icon_position_cache: list[TaskBarIcon] = []  
     icon_width: float = 0.0
     icon_height: float = 0.0
-    x_taskbar_start: float = 0.0
-    y_taskbar_start: float = 0.0
-    x_taskbar_set: bool = False
+    icon_dimensions_set: bool = False
     
     ms_tasklist = None
     taskbar = None
@@ -108,9 +103,7 @@ def get_windows_ten_taskbar(forced: bool = False):
         if "Task View" in e.name:
             icon_width = e.rect.width
             icon_height = e.rect.height
-            x_taskbar_start = e.rect.x
-            y_taskbar_start= e.rect.y
-            x_taskbar_set = True
+            icon_dimensions_set = True
                 
     if not taskbar:
         if not ms_tasklist:
@@ -118,21 +111,18 @@ def get_windows_ten_taskbar(forced: bool = False):
 
         return False
     
-    tasklist_width = ms_tasklist.rect.width
-
     for e in ms_tasklist.children:
-        if not x_taskbar_set:
+        if not icon_dimensions_set:
             icon_width = e.rect.width
             icon_height = e.rect.height
-            x_taskbar_start = e.rect.x
-            y_taskbar_start= e.rect.y
-            x_taskbar_set = True
+            icon_dimensions_set = True
 
         icon_data = TaskBarIcon(e.name, e.rect.copy())
         icon_position_cache.append(icon_data)
             
-    if taskbar and x_taskbar_set:
-        taskbar_data.set(tasklist_width, icon_width, icon_height, x_taskbar_start, y_taskbar_start, icon_data)
+    if taskbar and icon_dimensions_set:
+        taskbar_rect = ms_tasklist.rect.copy()
+        taskbar_data.set(taskbar_rect, icon_width, icon_height, icon_data)
         return True
     
     return False
@@ -141,10 +131,7 @@ def get_windows_eleven_taskbar():
     icon_position_cache: list[TaskBarIcon] = []  
     icon_width: float = 0.0
     icon_height: float = 0.0
-    x_taskbar_start: float = 0.0
-    y_taskbar_start: float = 0.0
-    x_hidden_icons: float = 0.0
-    x_taskbar_set: bool = False
+    icon_dimensions_set: bool = False
     hidden_icon_found: bool = False
 
     apps = ui.apps(name="Windows Explorer")
@@ -156,6 +143,7 @@ def get_windows_eleven_taskbar():
                 break
 
     if taskbar:
+        taskbar_rect = taskbar.rect.copy()
         print(f"taskbar rect {taskbar.rect}")
         for element in taskbar.children:
             for child in element.children:
@@ -164,23 +152,18 @@ def get_windows_eleven_taskbar():
                         icon_data = TaskBarIcon(child2.name, child2.rect.copy())
                         icon_position_cache.append(icon_data)
 
-                        if not x_taskbar_set:                            
+                        if not icon_dimensions_set:                            
                             icon_width = child2.rect.width
                             icon_height = child2.rect.height
-                            x_taskbar_start = child2.rect.x
-                            y_taskbar_start = child2.rect.y
-                            x_taskbar_set = True
                             print(f"first taskbar icon found {child2.name}: {child2.rect}")
                         
-                if child.name == "Show Hidden Icons":
-                    x_hidden_icons = child.rect.x
-                    hidden_icon_found = True
-                    print(f"found hidden icons! {child.rect}")
+                # if child.name == "Show Hidden Icons":
+                #     hidden_icon_found = True
+                #     print(f"found hidden icons! {child.rect}")
         
-        if x_taskbar_set and hidden_icon_found:
-            print(f"all prequistes found for windows 11 taskbar numbers")
-            tasklist_width = x_hidden_icons - x_taskbar_start
-            taskbar_data.set(tasklist_width, icon_width, icon_height, x_taskbar_start, y_taskbar_start, icon_position_cache)
+        if icon_dimensions_set and hidden_icon_found:
+            print("all prequistes found for windows 11 taskbar numbers")
+            taskbar_data.set(taskbar_rect, icon_width, icon_height, icon_position_cache)
             return True
     
     return False
@@ -201,8 +184,10 @@ def update_canvas():
         success = get_windows_eleven_taskbar()
 
     if success:
-        print("taskbar data successfully populated. Creating canvas for taskbar numbers")
-        canvas_taskbar = canvas.Canvas.from_screen(main_screen)
+        rect = taskbar_data.taskbar_rect
+        canvas_taskbar = canvas.Canvas.from_rect(rect)
+
+        print(f"taskbar data successfully populated. Creating canvas for taskbar numbers {rect}")
         canvas_taskbar.register("draw", draw_options)
         canvas_taskbar.freeze()
     else:
