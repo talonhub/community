@@ -66,11 +66,11 @@ symbols = [
     Symbol("#", ["hash sign", "number sign"], ["hash"]),
     Symbol("%", ["percent sign"], ["percent"]),
     Symbol("@", ["at symbol", "at sign"]),
-    Symbol("°", ["degree sign"], ["degree"]),
+    Symbol("°", ["degree sign"], ["degree", "degrees"]),
     Symbol("&", ["ampersand", "and sign"], ["amper"]),
     Symbol("-", ["hyphen"], ["minus", "dash"]),
-    Symbol("–", ["nut dash"]),  # En dash.
-    Symbol("—", ["mutton dash"]),  # Em dash.
+    Symbol("–", ["en dash", "nut dash"]),
+    Symbol("—", ["em dash", "mutton dash"]),
     Symbol("=", None, ["equals"]),
     Symbol("+", None, ["plus"]),
     Symbol("~", None, ["tilde"]),
