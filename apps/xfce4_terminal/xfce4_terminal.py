@@ -13,13 +13,13 @@ app: xfce4_terminal
 
 
 @ctx.action_class("user")
-class user_actions:
+class UserActions:
     def tab_jump(number):
         actions.key(f"alt-{number}")
 
 
 @ctx.action_class("app")
-class app_actions:
+class AppActions:
     def tab_open():
         actions.key("ctrl-shift-t")
 
