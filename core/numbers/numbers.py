@@ -1,7 +1,7 @@
 import math
-from typing import Iterator, Union
+from typing import Iterator, Union, cast
 
-from talon import Context, Module
+from talon import Context, Module, registry
 
 mod = Module()
 ctx = Context()
@@ -175,12 +175,14 @@ def split_list(value, l: list) -> Iterator:
 #     for scale in scales:
 #         old = l
 #         l = parse_scale(scale, l)
-#         if scale in old: print("  parse -->", l)
-#         else: assert old == l, "parse_scale should do nothing if the scale does not occur in the list"
+#         if scale in old:
+#             print("  parse -->", l)
+#         else:
+#             assert old == l, "parse_scale should do nothing if the scale does not occur in the list"
 #     result = "".join(str(n) for n in l)
 #     assert result == parse_number(string.split())
 #     assert str(expected) == result, f"parsing {string!r}, expected {expected}, got {result}"
-
+#
 # test_number(105000, "one hundred and five thousand")
 # test_number(1000000, "one thousand thousand")
 # test_number(1501000, "one million five hundred one thousand")
@@ -196,6 +198,7 @@ def split_list(value, l: list) -> Iterator:
 # test_number(1010, "one thousand ten")
 # test_number(123456, "one hundred and twenty three thousand and four hundred and fifty six")
 # test_number(123456, "one twenty three thousand four fifty six")
+# test_number("0019", "oh zero one nine") # fractional part of decimal number, or bare digit sequence
 
 # ## failing (and somewhat debatable) tests from old numbers.py
 # #test_number(10000011, "one million one one")
@@ -216,6 +219,10 @@ number_word_leading = f"({'|'.join(leading_words)})"
 
 
 mod.list("number_small", "List of small (0-99) numbers")
+mod.list(
+    "decimal_separator",
+    "A decimal separator separating the fractional from the integer part",
+)
 mod.tag("unprefixed_numbers", desc="Dont require prefix when saying a number")
 ctx.lists["user.number_small"] = get_spoken_form_under_one_hundred(
     0,
@@ -225,60 +232,78 @@ ctx.lists["user.number_small"] = get_spoken_form_under_one_hundred(
 )
 
 
+def handle_negation_capture(m):
+    """Common code for negation captures with two-part rules. If the type checker complains, the result needs to be `cast()` into the type of the last part of the rule. The function can negate values of type `str`, `int`, and `float`."""
+
+    number = m[-1]
+    must_negate = m[0] in ["negative", "minus"]
+
+    if not must_negate:
+        return number
+
+    if isinstance(number, str):
+        return "-" + number
+    else:
+        return -number
+
+
 # TODO: allow things like "double eight" for 88
 @ctx.capture("digit_string", rule=f"({alt_digits} | {alt_teens} | {alt_tens})+")
 def digit_string(m) -> str:
+    """A sequence of digits, always allowing for bare and initial "oh"."""
     return parse_number(list(m))
 
 
 @ctx.capture("digits", rule="<digit_string>")
 def digits(m) -> int:
-    """Parses a phrase representing a digit sequence, returning it as an integer."""
+    """`digit_string`, converted to `int`."""
     return int(m.digit_string)
 
 
 @mod.capture(rule=f"{number_word_leading} ([and] {number_word})*")
 def number_string(m) -> str:
-    """Parses a number phrase, returning that number as a string."""
+    """An unsigned integer."""
     return parse_number(list(m))
 
 
 @ctx.capture("number", rule="<user.number_string>")
 def number(m) -> int:
-    """Parses a number phrase, returning it as an integer."""
+    """`user.number_string`, converted to `int`."""
     return int(m.number_string)
 
 
 @mod.capture(rule="[negative | minus] <user.number_string>")
 def number_signed_string(m) -> str:
-    """Parses a (possibly negative) number phrase, returning that number as a string."""
-    number = m.number_string
-    return f"-{number}" if (m[0] in ["negative", "minus"]) else number
+    """Possibly negated variant of `user.number_string`."""
+    return handle_negation_capture(m)
 
 
 @ctx.capture("number_signed", rule="<user.number_signed_string>")
 def number_signed(m) -> int:
-    """Parses a (possibly negative) number phrase, returning that number as a integer."""
+    """Possibly negated variant of `number`."""
     return int(m.number_signed_string)
 
 
 @mod.capture(rule="<user.number_string> ((dot | point) <user.number_string>)+")
 def number_prose_with_dot(m) -> str:
+    """Any number of `user.number_string` captures with dots in between."""
     return ".".join(m.number_string_list)
 
 
 @mod.capture(rule="<user.number_string> (comma <user.number_string>)+")
 def number_prose_with_comma(m) -> str:
+    """Any number of `user.number_string` captures with commas in between."""
     return ",".join(m.number_string_list)
 
 
 @mod.capture(rule="<user.number_string> (colon <user.number_string>)+")
 def number_prose_with_colon(m) -> str:
+    """Any number of `user.number_string` captures with colons in between."""
     return ":".join(m.number_string_list)
 
 
 @mod.capture(
-    rule="<user.number_signed_string> | <user.number_prose_with_dot> | <user.number_prose_with_comma> | <user.number_prose_with_colon>"
+    rule="<user.signed_decimal_string> | <user.number_prose_with_dot> | <user.number_prose_with_comma> | <user.number_prose_with_colon>"
 )
 def number_prose_unprefixed(m) -> str:
     return m[0]
@@ -291,11 +316,84 @@ def number_prose_prefixed(m) -> str:
 
 @ctx.capture("number_small", rule="{user.number_small}")
 def number_small(m) -> int:
+    """An integer in the range from 0 to 99."""
     return int(m.number_small)
 
 
 @mod.capture(rule="[negative | minus] <number_small>")
 def number_signed_small(m) -> int:
-    """Parses an integer between -99 and 99."""
-    number = m[-1]
-    return -number if (m[0] in ["negative", "minus"]) else number
+    """Possibly negated variant of `number_small`."""
+    return cast(int, handle_negation_capture(m))
+
+
+@mod.capture(
+    rule="[<user.number_string>] {user.decimal_separator} <digit_string> | <user.number_string>"
+)
+def decimal_string(m) -> str:
+    """A possibly fractional decimal number.
+
+    - Can output any of the decimal separators in the `user.decimal_separator` list.
+    - With `.` as decimal separator, omitting an integer part of zero also omits it in the output.
+    - Float literals for programming languages of the form `1.` can be achieved by using this capture to output the integer part (no need to use another command), followed by an additional command for the decimal separator, as if they were one command.
+    """
+
+    has_decimal_places = hasattr(m, "digit_string")
+    may_omit_int_part_0 = has_decimal_places and m.decimal_separator == "."
+
+    string = getattr(m, "number_string", "" if may_omit_int_part_0 else "0")
+
+    if has_decimal_places:
+        string += m.decimal_separator
+        string += m.digit_string
+
+    return string
+
+
+@mod.capture(rule="<user.decimal_string>")
+def normalized_decimal_string(m) -> str:
+    """`user.decimal_string`, normalized in the following manner:
+
+    - Integer part is always present
+    - Decimal separator, if present, is always `.`
+    """
+
+    string = m.decimal_string
+
+    if "." not in string:
+        # Normalize decimal separator to point for technical contexts.
+        for decimal_separator in registry.lists["user.decimal_separator"][-1].values():
+            if decimal_separator == ".":
+                continue
+
+            normalized = string.replace(decimal_separator, ".", 1)
+            if normalized is not string:  # Did replace (no no-op)?
+                return normalized
+
+    if string.startswith("."):
+        string = "0" + string
+
+    return string
+
+
+@mod.capture(rule="<user.normalized_decimal_string>")
+def decimal_as_float(m) -> float:
+    """`user.decimal_string`, correctly converted to `float`. Note that this can involve rounding errors."""
+    return float(m.normalized_decimal_string)
+
+
+@mod.capture(rule="[negative | minus] <user.decimal_string>")
+def signed_decimal_string(m) -> str:
+    """Possibly negated variant of `user.decimal_string`."""
+    return handle_negation_capture(m)
+
+
+@mod.capture(rule="[negative | minus] <user.normalized_decimal_string>")
+def normalized_signed_decimal_string(m) -> str:
+    """Possibly negated variant of `user.normalized_decimal_string`."""
+    return handle_negation_capture(m)
+
+
+@mod.capture(rule="[negative | minus] <user.decimal_as_float>")
+def signed_decimal_as_float(m) -> float:
+    """Possibly negated variant of `user.decimal_as_float`."""
+    return cast(float, handle_negation_capture(m))
