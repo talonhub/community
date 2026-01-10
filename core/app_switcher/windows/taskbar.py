@@ -7,13 +7,6 @@ import platform
 
 mod = Module()
 
-mod.setting(
-    "talon_icon_index",
-    type=int,
-    default=0,
-    desc="index of the talent icon in the taskbar",
-)
-
 def first_matching_child(element, **kw):
     if len(kw) > 1:
         raise Exception("Only one matching attribute supported")
@@ -21,181 +14,191 @@ def first_matching_child(element, **kw):
     return next(e for e in element.children if getattr(e, attr) in values)
 
 @dataclass
-class Position:
-    x: int
-    y: int
+class TaskBarIcon:
+    name: str
+    rect: Rect
 
-position_cache = []
+@dataclass
+class TaskBarPositionData:
+    tasklist_width: float
+    icon_width: float
+    icon_height: float 
+    x_start: float 
+    y_start: float
+    icon_positions: list[TaskBarIcon]
+
+    def __init__(self):
+        pass
+
+    def set(self, tasklist_width, icon_width, icon_height, x_start, y_start, icon_positions):
+        self.tasklist_width = tasklist_width
+        self.icon_width = icon_width
+        self.icon_height = icon_height
+        self.x_start = x_start
+        self.y_start = y_start
+        self.icon_positions = icon_positions
+
+is_windows_eleven = "Windows-11" in platform.platform()
+print(platform.platform())
+taskbar_data = TaskBarPositionData()
+canvas_taskbar = None
+icons_to_exclude = ["Start"]#, "Search", "Task View"]
 
 mod = Module()
 
 @mod.action_class
 class Actions:
     def switcher_click(mouse_button: int, index: int):
-        """"""
-        if index == settings.get("user.talon_icon_index"):
-            return
-        
+        """"""        
         x, y = ctrl.mouse_pos()
-        actions.mouse_move(position_cache[index].x, position_cache[index].y)
+        icon_data = taskbar_data.icon_positions[index]
+
+        actions.mouse_move(icon_data.rect.x, icon_data.rect.y)
         actions.mouse_click(mouse_button)
-
-
         actions.sleep("150ms")
         actions.mouse_move(x, y)
 
-
 def draw_options(canvas):
-    if not width:
-        return
     paint = canvas.paint
     #for b in cache:
     canvas.paint.text_align = canvas.paint.TextAlign.CENTER
-    count = math.floor(tasklist_width / width)
+    count = math.floor(taskbar_data.tasklist_width / taskbar_data.icon_width)
     paint.textsize = 20
 
-    x = x_start
-    y = y_start + .8 * height
+    x = taskbar_data.x_start
+    y = taskbar_data.y_start + .8 * taskbar_data.icon_height
     for index in range(1, count + 1):
         paint.style = paint.Style.FILL
         paint.color = "000000"
-        canvas.draw_rect(Rect(math.floor(x + width / 2), y, width / 3, height * .8 ))
-
+        canvas.draw_rect(Rect(math.floor(x + taskbar_data.icon_width / 2), y, taskbar_data.icon_width / 3, taskbar_data.icon_height * .8 ))
+        x_text_position = x + taskbar_data.icon_width / 2 + taskbar_data.icon_width * .18
+        y_text_position = y + taskbar_data.icon_height * .18
         paint.color = "ffffff"
+        canvas.draw_text(f"{index}", x_text_position, y_text_position)
+        x = x + taskbar_data.icon_width
 
-        position = Position(x + width / 2 + width * .18 , y+ height * .18)
-        canvas.draw_text(f"{index}", position.x, position.y )
-
-        position_cache.append(position)
-        x = x + width
-
-
-cache = None 
-ms_tasklist = None 
-taskbar = None
-width = None 
-height = None 
-x_start = None 
-y_start = None
-
-tasklist_width = None
 def get_windows_ten_taskbar(forced: bool = False):
-    global cache, taskbar, ms_tasklist, tasklist_width
-
-
-    if not taskbar:
-        apps = ui.apps(name="Windows Explorer")
-        for app in apps:
-            for window in app.windows():
-                if window.cls == "Shell_TrayWnd":
-                    taskbar = window
-                    break
-            if taskbar:
-                ms_tasklist = first_matching_child(taskbar.element, class_name=["MSTaskListWClass"])
-                # tray = first_matching_child(taskbar.element, class_name=["TrayNotifyWnd"])
-                # pager = first_matching_child(tray, class_name=["SysPager"])
-                # toolbar = first_matching_child(pager, class_name=["ToolbarWindow32"])
-                # for child in toolbar.children:
-                #     print(f"{child.name} {child.rect.width} {child.rect.height}")
-                # break
+    icon_position_cache: list[TaskBarIcon] = []  
+    icon_width: float = 0.0
+    icon_height: float = 0.0
+    x_taskbar_start: float = 0.0
+    y_taskbar_start: float = 0.0
+    x_taskbar_set: bool = False
+    
+    apps = ui.apps(name="Windows Explorer")
+    for app in apps:
+        for window in app.windows():
+            if window.cls == "Shell_TrayWnd":
+                taskbar = window
+                break
+        if taskbar:
+            ms_tasklist = first_matching_child(taskbar.element, class_name=["MSTaskListWClass"])
+            # tray = first_matching_child(taskbar.element, class_name=["TrayNotifyWnd"])
+            # pager = first_matching_child(tray, class_name=["SysPager"])
+            # toolbar = first_matching_child(pager, class_name=["ToolbarWindow32"])
+            # for child in toolbar.children:
+            #     print(f"{child.name} {child.rect.width} {child.rect.height}")
+            # break
                 
     if not taskbar:
-        actions.app.notify("taskbar window not found")
-        return
+        return False
     
-    #update_canvas = forced or len(running_applications.children) != len(cache)
-    cache = []
-
     tasklist_width = ms_tasklist.rect.width
-    #running = {}
-    global width, height, x_start, y_start
+
     for e in ms_tasklist.children:
-        title = e.name
-        splits = title.split(" - ")
-        name = splits[0] 
+        if not x_taskbar_set:
+            icon_width = e.rect.width
+            icon_height = e.rect.height
+            x_taskbar_start = e.rect.x
+            y_taskbar_start= e.rect.y
+            x_taskbar_set = True
 
-        if not x_start:
-            width = e.rect.width
-            height = e.rect.height
-            x_start = e.rect.x
-            y_start = e.rect.y
-            print(f"{width}x{height}")
-            break
-
-def get_windows_eleven_taskbar(forced: bool = False):
-    global cache, taskbar, ms_tasklist, tasklist_width
-
-    if not taskbar:
-        apps = ui.apps(name="Windows Explorer")
-        for app in apps:
-            for window in app.windows():
-                if window.cls == "Shell_TrayWnd":
-                    taskbar = window.element
-                    break
-
-        if taskbar:
-            print(f"taskbar rect {taskbar.rect}")
-            # ms_tasklist = first_matching_child(taskbar.element, class_name=["Taskbar.TaskbarFrameAutomationPeer"])            
-            show_hidden_x = None
-            for element in taskbar.children:
-                for child in element.children:
-                    for child2 in child.children:
-                        #print(child2)
-                        if child2.name != "Start" and child2.name != "Search" and child2.name != "Task View":
-                            global width, height, x_start, y_start, tasklist_width
-
-                            tasklist_width = child.rect.width
-                            
-                            if not x_start:
-                                width = child2.rect.width
-                                height = child2.rect.height
-                                x_start = child2.rect.x
-                                y_start = child2.rect.y
-                                print(f"first taskbar icon found {child2.name}: {child2.rect}")
-
-                    if child.name == "Show Hidden Icons":
-                        show_hidden_x = child.rect.x
-                        print(f"found hidden icons! {child.rect}")
+        icon_data = TaskBarIcon(e.name, e.rect.copy())
+        icon_position_cache.append(icon_data)
             
-            tasklist_width = show_hidden_x - x_start
-mcanvas = None
+    if taskbar and x_taskbar_set:
+        taskbar_data.set(tasklist_width, icon_width, icon_height, x_taskbar_start, y_taskbar_start, icon_data)
+        return True
+    
+    return False
+
+def get_windows_eleven_taskbar():
+    icon_position_cache: list[TaskBarIcon] = []  
+    icon_width: float = 0.0
+    icon_height: float = 0.0
+    x_taskbar_start: float = 0.0
+    y_taskbar_start: float = 0.0
+    x_hidden_icons: float = 0.0
+    x_taskbar_set: bool = False
+    hidden_icon_found: bool = False
+
+    apps = ui.apps(name="Windows Explorer")
+    for app in apps:
+        for window in app.windows():
+            if window.cls == "Shell_TrayWnd":
+                print("found taskbar")
+                taskbar = window.element
+                break
+
+    if taskbar:
+        print(f"taskbar rect {taskbar.rect}")
+        for element in taskbar.children:
+            for child in element.children:
+                for child2 in child.children:
+                    if child2.name not in icons_to_exclude:
+                        icon_data = TaskBarIcon(child2.name, child2.rect.copy())
+                        icon_position_cache.append(icon_data)
+
+                        if not x_taskbar_set:                            
+                            icon_width = child2.rect.width
+                            icon_height = child2.rect.height
+                            x_taskbar_start = child2.rect.x
+                            y_taskbar_start = child2.rect.y
+                            x_taskbar_set = True
+                            print(f"first taskbar icon found {child2.name}: {child2.rect}")
+                        
+                if child.name == "Show Hidden Icons":
+                    x_hidden_icons = child.rect.x
+                    hidden_icon_found = True
+                    print(f"found hidden icons! {child.rect}")
+        
+        if x_taskbar_set and hidden_icon_found:
+            print(f"all prequistes found for windows 11 taskbar numbers")
+            tasklist_width = x_hidden_icons - x_taskbar_start
+            taskbar_data.set(tasklist_width, icon_width, icon_height, x_taskbar_start, y_taskbar_start, icon_position_cache)
+            return True
+    
+    return False
 
 def update_canvas():
-    global mcanvas
-    global cache, taskbar, ms_tasklist, tasklist_width
-    global width, height, x_start, y_start
-    
+    global canvas_taskbar    
     main_screen = ui.main_screen()
+
     print(f"main screen: {main_screen}")
     print(f"screens: {ui.screens()}")
     
-    if mcanvas:
-        taskbar = None
-        ms_tasklist = None
-        tasklist_width = None
-        width = None
-        height = None
-        x_start = None
-        y_start = None
-        mcanvas.close()
+    if canvas_taskbar:
+        canvas_taskbar.close()
     
-    mcanvas = canvas.Canvas.from_screen(main_screen)
-    platform_str = platform.platform()
-
-    if "Windows-11" not in platform_str:
-        get_windows_ten_taskbar(True)
+    if not is_windows_eleven:
+        success = get_windows_ten_taskbar()
     else:
-        get_windows_eleven_taskbar(True)
+        success = get_windows_eleven_taskbar()
 
-    mcanvas.register("draw", draw_options)
-    mcanvas.freeze()
+    if success:
+        print("taskbar data successfully populated. Creating canvas for taskbar numbers")
+        canvas_taskbar = canvas.Canvas.from_screen(main_screen)
+        canvas_taskbar.register("draw", draw_options)
+        canvas_taskbar.freeze()
+    else:
+        print("taskbar data population failed. Skipping canvas creation")
+
 
 def on_screen_change(_):
     print("on_screen_change")
     update_canvas()
 
 if app.platform == "windows":
-
     def on_ready():
         update_canvas()
         ui.register("screen_change", on_screen_change)    
