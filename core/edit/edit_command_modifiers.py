@@ -64,12 +64,21 @@ modifier_dictionary: dict[str, EditModifierCallback] = {
 }
 
 
-def run_modifier_callback(modifier: EditModifier):
-    modifier_type = modifier.type
-    if modifier_type not in modifier_dictionary:
-        raise ValueError(f"Unknown edit modifier: {modifier_type}")
+@mod.action_class
+class Actions:
+    def run_edit_modifier_callback(modifier: EditModifier):
+        """
+        Run a callback that selects or prepares text ready to apply an edit action.
+        Intended for internal use and overwriting
+        """
+        count = modifier.count
+        modifier_callback = actions.user.get_edit_modifier_callback(modifier)
+        for i in range(1, count + 1):
+            modifier_callback()
 
-    count = modifier.count
-    modifier = modifier_dictionary[modifier_type]
-    for i in range(1, count + 1):
-        modifier.callback()
+    def get_edit_modifier_callback(modifier: EditModifier):
+        """Convert an edit modifier created from a string into its associated EditModifierCallback"""
+        modifier_type = modifier.type
+        if modifier_type not in modifier_dictionary:
+            raise ValueError(f"Unknown edit modifier: {modifier_type}")
+        return modifier_dictionary[modifier_type].callback
