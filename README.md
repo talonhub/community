@@ -20,7 +20,7 @@ Can be used on its own, but shines when combined with:
 - Mac, Windows, or Linux
 - Talon's built-in Conformer (wav2letter) speech recognition engine (recommended), or Dragon NaturallySpeaking (Windows) / Dragon for Mac (although beware that Dragon for Mac is discontinued and its use deprecated).
 
-Includes commands for working with an eye tracker; an [eye tracker](https://talon.wiki/Resource%20Hub/Hardware/#eye-trackers/) is not required.
+Includes commands for working with an eye tracker; an [eye tracker](https://talon.wiki/Resource%20Hub/Hardware/#eye-trackers) is not required.
 
 ### Linux & Mac
 
