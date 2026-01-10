@@ -234,9 +234,10 @@ elif app.platform == "mac":
             base = os.path.expanduser(base)
             if os.path.isdir(base):
                 for name in os.listdir(base):
-                    path = os.path.join(base, name)
-                    name = name.rsplit(".", 1)[0].lower()
-                    items[name] = path
+                    if name.endswith(".app"):
+                        path = os.path.join(base, name)
+                        name = name.rsplit(".", 1)[0].lower()
+                        items[name] = path
         return items
 
 
