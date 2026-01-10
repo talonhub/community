@@ -1,5 +1,6 @@
 # Put some settings like this in one of your Talon files to override the styling
 # of the draft window.
+# You must use the draft show command again to see the effects of changing these settings
 -
 settings():
     user.draft_window_theme = "dark" # or light

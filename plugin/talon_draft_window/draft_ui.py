@@ -1,6 +1,7 @@
 import re
 from typing import Optional
 
+from talon import settings
 from talon.experimental.textarea import (
     DarkThemeLabels,
     LightThemeLabels,
@@ -65,11 +66,15 @@ class DraftManager:
         self.area.register("label", self._update_labels)
         self.set_styling()
 
-    def set_styling(self, theme="dark", text_size=20, label_size=20, label_color=None):
+    def set_styling(self):
         """
         Allow settings the style of the draft window. Will dynamically
         update the style based on the passed in parameters.
         """
+        theme = settings.get("user.draft_window_theme")
+        text_size = settings.get("user.draft_window_text_size")
+        label_size = settings.get("user.draft_window_label_size")
+        label_color = settings.get("user.draft_window_label_color")
 
         area_theme = DarkThemeLabels if theme == "dark" else LightThemeLabels
         theme_changes = {
@@ -85,6 +90,8 @@ class DraftManager:
         Show the window. If text is None then keep the old contents,
         otherwise set the text to the given value.
         """
+
+        self.set_styling()
 
         if text is not None:
             self.area.value = text
