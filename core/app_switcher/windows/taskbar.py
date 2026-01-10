@@ -73,7 +73,8 @@ def draw_options(canvas):
         canvas.draw_text(f"{index}", x_text_position, y_text_position)
         x = x + taskbar_data.icon_width
 
-def get_windows_ten_taskbar():
+def get_windows_ten_taskbar() -> bool:
+    """Populated the TaskBarData class for windows 10"""
     icon_position_cache: list[TaskBarIcon] = []  
     icon_width: float = 0.0
     icon_height: float = 0.0
@@ -83,8 +84,8 @@ def get_windows_ten_taskbar():
     taskbar = None
 
     apps = ui.apps(name="Windows Explorer")
-    for app in apps:
-        for window in app.windows():
+    for application in apps:
+        for window in application.windows():
             if window.cls == "Shell_TrayWnd":
                 taskbar = window
                 break
@@ -128,7 +129,9 @@ def get_windows_ten_taskbar():
     
     return False
 
-def get_windows_eleven_taskbar():
+def get_windows_eleven_taskbar() -> bool:
+    """Populates the TaskBarData class for windows 11"""
+
     icon_position_cache: list[TaskBarIcon] = []  
     icon_width: float = 0.0
     icon_height: float = 0.0
