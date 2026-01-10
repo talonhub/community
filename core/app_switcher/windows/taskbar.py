@@ -84,22 +84,38 @@ def get_windows_ten_taskbar(forced: bool = False):
     y_taskbar_start: float = 0.0
     x_taskbar_set: bool = False
     
+    ms_tasklist = None
+    taskbar = None
+
     apps = ui.apps(name="Windows Explorer")
     for app in apps:
         for window in app.windows():
             if window.cls == "Shell_TrayWnd":
                 taskbar = window
                 break
-        if taskbar:
-            ms_tasklist = first_matching_child(taskbar.element, class_name=["MSTaskListWClass"])
-            # tray = first_matching_child(taskbar.element, class_name=["TrayNotifyWnd"])
-            # pager = first_matching_child(tray, class_name=["SysPager"])
-            # toolbar = first_matching_child(pager, class_name=["ToolbarWindow32"])
-            # for child in toolbar.children:
-            #     print(f"{child.name} {child.rect.width} {child.rect.height}")
-            # break
+    if taskbar:
+        ms_tasklist = first_matching_child(taskbar.element, class_name=["MSTaskListWClass"])
+        # tray = first_matching_child(taskbar.element, class_name=["TrayNotifyWnd"])
+        # pager = first_matching_child(tray, class_name=["SysPager"])
+        # toolbar = first_matching_child(pager, class_name=["ToolbarWindow32"])
+        # for child in toolbar.children:
+        #     print(f"{child.name} {child.rect.width} {child.rect.height}")
+        # break
+
+    # include the task view if enabled
+    for e in taskbar.element.children:
+        #print(e.name)
+        if "Task View" in e.name:
+            icon_width = e.rect.width
+            icon_height = e.rect.height
+            x_taskbar_start = e.rect.x
+            y_taskbar_start= e.rect.y
+            x_taskbar_set = True
                 
     if not taskbar:
+        if not ms_tasklist:
+            print("failed to find MSTaskListWClass")
+
         return False
     
     tasklist_width = ms_tasklist.rect.width
