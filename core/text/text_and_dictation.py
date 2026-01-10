@@ -489,7 +489,7 @@ class Actions:
         reformat_last_utterance(lambda s: s[1:] if s.startswith(" ") else s)
 
     def omit_space_before(text: str) -> bool:
-        """Test if string needs space before"""
+        """Test if dictated text needs space before"""
         return bool(not text or no_space_before.search(text))
 
     def omit_space_after(text: str) -> bool:
