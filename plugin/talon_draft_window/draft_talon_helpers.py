@@ -17,13 +17,13 @@ ctx_focused.matches = r"""
 title: Talon Draft
 """
 
-SETTING_CHANGE_CAVEAT_DESCRIPTION = ". Seeing the results of changing this setting requires showing the draft window again."
+SETTING_CHANGE_CAVEAT_DESCRIPTION = ". Show the draft window (again) to see the results of changing this setting."
 mod.tag("draft_window_showing", desc="Tag set when draft window showing")
 mod.setting(
     "draft_window_theme",
     type=str,
     default="dark",
-    desc="Sets the main colors of the window, one of 'dark' or 'light'"
+    desc="Sets the draft window color theme ('dark' or 'light')"
     + SETTING_CHANGE_CAVEAT_DESCRIPTION,
 )
 mod.setting(
