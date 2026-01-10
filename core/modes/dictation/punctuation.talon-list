@@ -1,26 +1,50 @@
-# list: user.punctuation 
-# mode: dictation
-# -
-# dollar sign: $
-# ampersand: &
-# back tick: `
-# comma: ,
-# # Workaround for issue with conformer b-series; see #946
-# coma: , 
-# period: .
-# full stop: .
-# semicolon: ;
-# colon: :
-# forward slash: /
-# question mark: ?
-# exclamation mark: !
-# exclamation point: !
-# asterisk: *
-# number sign: #
-# percent sign: %
-# at sign: @
-# and sign: &
-# ampersand: &
-# # Currencies
-# dollar sign: $
-# pound sign: £
+list: user.punctuation 
+mode: dictation
+-
+dollar sign: $
+ampersand: &
+back tick: `
+tilde: `
+kama: ,
+comma: ,
+coma: , 
+period: .
+full stop: .
+semicolon: ;
+colon: :
+back slach: /
+forward slash: /
+question mark: ?
+exclamation mark: !
+exclamation point: !
+asterisk: *
+pound sign: #
+number sign: #
+percent sign: %
+at sign: @
+and sign: &
+ampersand: &
+dollar sign: $
+dash: -
+hyphen: -
+plus sign: +
+underscore: _
+open brace: {
+left brace: {
+close brace: }
+right brace: }
+open paren: (
+left parenthesis: (
+close paren: )
+right parenthesis: )
+open bracket: [
+left bracket: [
+close bracket: ]
+right bracket: ]
+less than: <
+greater than: >
+double quote: '"'
+quote: '"'
+single quote: "'"
+apostrophe: "'"
+caret: ^
