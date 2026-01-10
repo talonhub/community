@@ -53,7 +53,7 @@ class Actions:
         x, y = ctrl.mouse_pos()
         icon_data = taskbar_data.icon_positions[index]
 
-        actions.mouse_move(icon_data.rect.x, icon_data.rect.y)
+        actions.mouse_move(icon_data.rect.x + icon_data.rect.width / 2, icon_data.rect.y + icon_data.rect.height / 2)
         actions.mouse_click(mouse_button)
         actions.sleep("150ms")
         actions.mouse_move(x, y)
