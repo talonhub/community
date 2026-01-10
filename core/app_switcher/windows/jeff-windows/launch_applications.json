@@ -284,6 +284,16 @@
         "is_default_for_application_group": false
     },
     {
+        "path": null,
+        "display_name": "Command Palette",
+        "unique_identifier": "Microsoft.CommandPalette_8wekyb3d8bbwe!App",
+        "executable_name": null,
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
         "path": "C:\\Windows\\system32\\mmc.exe",
         "display_name": "Component Services",
         "unique_identifier": "{1AC14E77-02E7-4E5D-B744-2EB1AE5198B7}\\comexp.msc",
@@ -791,6 +801,16 @@
         "is_default_for_application_group": false
     },
     {
+        "path": null,
+        "display_name": "Microsoft Teams",
+        "unique_identifier": "MSTeams_8wekyb3d8bbwe!MSTeams",
+        "executable_name": null,
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
         "path": "C:\\Users\\knaus\\AppData\\Local\\Microsoft\\Teams\\Update.exe",
         "display_name": "Microsoft Teams",
         "unique_identifier": "com.squirrel.Teams.Teams",
@@ -1225,6 +1245,16 @@
         "is_default_for_application_group": false
     },
     {
+        "path": "C:\\Users\\knaus\\AppData\\Local\\slack\\slack.exe",
+        "display_name": "Slack",
+        "unique_identifier": "app.slack.com-1710C364_366e83yqjt2rw!App",
+        "executable_name": "slack.exe",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
         "path": null,
         "display_name": "Slack Web App",
         "unique_identifier": "app.slack.com-38BE4B2_366e83yqjt2rw!App",
@@ -1259,6 +1289,16 @@
         "is_default_for_application_group": false
     },
     {
+        "path": "C:\\Games\\Star Trek - Starfleet Academy\\sfa.exe",
+        "display_name": "Software Mode",
+        "unique_identifier": "C:\\Games\\Star Trek - Starfleet Academy\\sfa.exe",
+        "executable_name": "sfa.exe",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
         "path": null,
         "display_name": "Solitaire & Casual Games",
         "unique_identifier": "Microsoft.MicrosoftSolitaireCollection_8wekyb3d8bbwe!App",
@@ -1274,6 +1314,16 @@
         "unique_identifier": "SpotifyAB.SpotifyMusic_zpdnekdrzrea0!Spotify",
         "executable_name": null,
         "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "C:\\Games\\Star Trek - Starfleet Academy\\sfad3d.exe",
+        "display_name": "Star Trek - Starfleet Academy",
+        "unique_identifier": "C:\\Games\\Star Trek - Starfleet Academy\\sfad3d.exe",
+        "executable_name": "sfad3d.exe",
+        "exclude": false,
         "spoken_forms": null,
         "application_group": null,
         "is_default_for_application_group": false
@@ -1354,6 +1404,16 @@
         "unique_identifier": "http://www.gog.com/support/star_trek_armada",
         "executable_name": null,
         "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": null,
+        "display_name": "Support",
+        "unique_identifier": "http://www.gog.com/support/star_trek_starfleet_academy",
+        "executable_name": null,
+        "exclude": false,
         "spoken_forms": null,
         "application_group": null,
         "is_default_for_application_group": false
@@ -1457,6 +1517,16 @@
         "unique_identifier": "Microsoft.Getstarted_8wekyb3d8bbwe!App",
         "executable_name": null,
         "exclude": true,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": null,
+        "display_name": "Tobii Experience",
+        "unique_identifier": "TobiiAB.TobiiEyeTrackingPortal_j9ea20k37yd2w!App",
+        "executable_name": null,
+        "exclude": false,
         "spoken_forms": null,
         "application_group": null,
         "is_default_for_application_group": false

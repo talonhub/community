@@ -88,6 +88,7 @@ def get_windows_ten_taskbar():
             if window.cls == "Shell_TrayWnd":
                 taskbar = window
                 break
+
     if taskbar:
         ms_tasklist = first_matching_child(taskbar.element, class_name=["MSTaskListWClass"])
         # tray = first_matching_child(taskbar.element, class_name=["TrayNotifyWnd"])
@@ -99,7 +100,7 @@ def get_windows_ten_taskbar():
 
     # include the task view if enabled
     for e in taskbar.element.children:
-        #print(e.name)
+        #print(e)
         if "Task View" in e.name:
             icon_width = e.rect.width
             icon_height = e.rect.height
