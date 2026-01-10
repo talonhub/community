@@ -16,3 +16,5 @@ file extensions: settings/file_extensions.csv
 words to replace: settings/words_to_replace.csv
 contacts json: private/contacts.json
 contacts csv: private/contacts.csv
+
+settings: settings.talon
