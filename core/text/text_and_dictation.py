@@ -493,11 +493,11 @@ class Actions:
         return bool(not text or no_space_before.search(text))
 
     def omit_space_after(text: str) -> bool:
-        """Test if string needs space after"""
+        """Test if dictated text needs space after"""
         return bool(not text or no_space_after.search(text))
 
     def needs_space_between(before: str, after: str) -> bool:
-        """Test if two strings need a space between them"""
+        """Test if two text strings need a space between them"""
         return not (
             actions.user.omit_space_after(before)
             or actions.user.omit_space_before(after)
