@@ -60,7 +60,6 @@ class Actions:
 
 def draw_options(canvas):
     paint = canvas.paint
-    #for b in cache:
     canvas.paint.text_align = canvas.paint.TextAlign.CENTER
     count = math.floor(taskbar_data.tasklist_width / taskbar_data.icon_width)
     paint.textsize = 20
