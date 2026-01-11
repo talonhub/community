@@ -9,10 +9,6 @@ and not tag: user.clickable_overlay_active
 
 # Everything here should call `user.dictation_insert()` instead of `insert()`, to correctly auto-capitalize/auto-space.
 <user.raw_prose>: user.dictation_insert(raw_prose)
-{user.punctuation}: auto_insert(punctuation)
-<user.date_written>: user.dictation_insert(date_written)
-<user.prose_time>: user.dictaction_insert(prose_time)
-<user.number_prose_unprefixed>: user.dictation_insert(number_prose_unprefixed)
 
 caps: user.dictation_format_cap()
 # # Hyphenated variants are for Dragon.
