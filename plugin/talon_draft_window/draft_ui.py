@@ -75,8 +75,7 @@ class DraftManager:
 
         name_setting_pairs = (("text_size", "text_size"), ("label_size", "label_size"), ("label", "label_color"))
         for name, setting in name_setting_pairs:
-            value = settings.get(f"user.draft_window_{setting}")
-            if value is not None:
+            if value := settings.get(f"user.draft_window_{setting}") is not None:
                 theme_changes[name] = value
                 
         theme = settings.get("user.draft_window_theme")
