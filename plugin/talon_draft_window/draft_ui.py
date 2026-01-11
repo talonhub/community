@@ -72,7 +72,6 @@ class DraftManager:
         update the style based on the passed in parameters.
         """
         theme_changes = {}
-
         name_setting_pairs = (("text_size", "text_size"), ("label_size", "label_size"), ("label", "label_color"))
         for name, setting in name_setting_pairs:
             if value := settings.get(f"user.draft_window_{setting}") is not None:
