@@ -54,11 +54,15 @@ mod.setting(
 
 
 draft_manager = None
+
+
 def on_ready():
     global draft_manager
     draft_manager = DraftManager()
 
+
 app.register("ready", on_ready)
+
 
 @ctx_focused.action_class("user")
 class ContextSensitiveDictationActions:
