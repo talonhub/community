@@ -72,15 +72,13 @@ class DraftManager:
         update the style based on the passed in parameters.
         """
         theme_changes = {}
-        for setting in ("text_size", "label_size"):
+
+        name_setting_pairs = (("text_size", "text_size"), ("label_size", "label_size"), ("label", "label_color"))
+        for name, setting in name_setting_pairs:
             value = settings.get(f"user.draft_window_{setting}")
             if value is not None:
-                theme_changes[setting] = value
+                theme_changes[name] = value
                 
-        label_color = settings.get("user.draft_window_label_color")
-        if label_color is not None:
-            theme_changes["label"] = label_color
-
         theme = settings.get("user.draft_window_theme")
         area_theme = DarkThemeLabels if theme == "dark" else LightThemeLabels
         self.area.theme = area_theme(**theme_changes)
