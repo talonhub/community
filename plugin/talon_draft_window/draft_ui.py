@@ -71,18 +71,17 @@ class DraftManager:
         Allow settings the style of the draft window. Will dynamically
         update the style based on the passed in parameters.
         """
+        theme_changes = {}
+        name_setting_pairs = (
+            ("text_size", "text_size"),
+            ("label_size", "label_size"),
+            ("label", "label_color"),
+        )
+        for name, setting in name_setting_pairs:
+            if (value := settings.get(f"user.draft_window_{setting}")) is not None:
+                theme_changes[name] = value
         theme = settings.get("user.draft_window_theme")
-        text_size = settings.get("user.draft_window_text_size")
-        label_size = settings.get("user.draft_window_label_size")
-        label_color = settings.get("user.draft_window_label_color")
-
         area_theme = DarkThemeLabels if theme == "dark" else LightThemeLabels
-        theme_changes = {
-            "text_size": text_size,
-            "label_size": label_size,
-        }
-        if label_color is not None:
-            theme_changes["label"] = label_color
         self.area.theme = area_theme(**theme_changes)
 
     def show(self, text: Optional[str] = None):
