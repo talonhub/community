@@ -1,7 +1,6 @@
 list: user.prose_modifiers
 -
 # Maps spoken forms to DictationFormat method names (see DictationFormat below).
-cap: cap
-no cap: no_cap
+caps: cap
 no caps: no_cap
 no space: no_space

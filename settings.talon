@@ -5,7 +5,7 @@ settings():
     tracking.zoom_height = 600
     tracking.zoom_scale = 3
 
-    speech.record_all = 1
+    #speech.record_all = 1
     speech.timeout = .400
     user.listening_timeout_minutes = 3
     # Adjust the scale of the imgui to my liking
