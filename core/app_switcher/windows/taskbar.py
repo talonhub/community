@@ -114,6 +114,7 @@ def get_windows_ten_taskbar() -> bool:
     
     for e in ms_tasklist.children:
         if not icon_dimensions_set:
+            print(f"found first icon {e.name} {e.rect}")
             icon_width = e.rect.width
             icon_height = e.rect.height
             icon_dimensions_set = True
@@ -121,6 +122,8 @@ def get_windows_ten_taskbar() -> bool:
     if taskbar and icon_dimensions_set:
         taskbar_rect = ms_tasklist.rect.copy()
         taskbar_data.set(taskbar_rect, icon_width, icon_height)
+        print(f"all prequistes found for windows 10 taskbar numbers: {taskbar_data}")
+
         return True
     
     return False
