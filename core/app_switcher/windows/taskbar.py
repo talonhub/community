@@ -51,6 +51,7 @@ class Actions:
         actions.mouse_move(x, y)
 
 def draw_options(canvas):
+    print("draw_options")
     paint = canvas.paint
     canvas.paint.text_align = canvas.paint.TextAlign.CENTER
     taskbar_rect = taskbar_data.rect
