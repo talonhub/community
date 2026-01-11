@@ -41,14 +41,11 @@ Note that it is also possible to install `community` by [downloading and extract
 
 It is recommended to install `community` using [`git`](https://git-scm.com/).
 
-1. Open a [powershell window](https://apps.microsoft.com/detail/9mz1snwt0n5d?hl=en-GB&gl=IN) (install if not already packaged with your windows installation)
-2. Install git by pasting the following command into the Powershell Window
+1. Install [`git`](https://git-scm.com/)
 
-   ```
-   winget install --id Git.Git -e --source winget
-   ```
+2. Open a [powershell window](https://apps.microsoft.com/detail/9mz1snwt0n5d?hl=en-GB&gl=IN) (install if not already packaged with your windows installation)
 
-3. Paste the following into a _new_ Powershell window _one line at a time_:
+3. Paste the following into the Powershell window _one line at a time_:
 
    ```
    cd $env:APPDATA/talon/user
