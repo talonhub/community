@@ -158,11 +158,41 @@ sys_tray_data = SystemTrayPositionData()
 taskbar_data = TaskBarPositionData()
 canvas_taskbar = None
 canvas_system_tray = None
+canvas_main = None
 
 mod = Module()
 
 @mod.action_class
 class Actions:
+    def taskbar_hover(index: int):
+        """hover over taskbar button"""
+        #print(index)
+        x_click = taskbar_data.rect_search_button.x
+        y_click = taskbar_data.rect_search_button.y + taskbar_data.rect_search_button.height / 2
+
+        # index zero is always the start button
+        if index == 0:
+            if taskbar_data.rect_start_button:
+                x_click = taskbar_data.rect_start_button.x + taskbar_data.rect_start_button.width / 2
+        
+        # if not the start menu, add the start width to x_click
+        if index != 0:
+            x_click += taskbar_data.rect_start_button.width
+        
+        if index > 0:
+
+            # if the search button is enabled, adjust x_click as appropriate
+            if taskbar_data.search_index:
+                if taskbar_data.search_index == index:
+                    x_click += taskbar_data.rect_search_button.width / 2
+                else:
+                    x_click += taskbar_data.rect_search_button.width
+
+        if index >= taskbar_data.application_start_index:
+            x_click += (taskbar_data.icon_width * (index - taskbar_data.application_start_index - .5)) 
+    
+        actions.mouse_move(x_click, y_click)
+
     def taskbar_click(mouse_button: int, index: int):
         """Click the taskbar button based on the index"""        
         x, y = ctrl.mouse_pos()
@@ -197,6 +227,43 @@ class Actions:
         actions.sleep("150ms")
         actions.mouse_move(x, y)
 
+    def taskbar_control_click(mouse_button: int, index: int):
+        """Click the taskbar button based on the index"""        
+        x, y = ctrl.mouse_pos()
+        #print(index)
+        x_click = taskbar_data.rect_search_button.x
+        y_click = taskbar_data.rect_search_button.y + taskbar_data.rect_search_button.height / 2
+
+        # index zero is always the start button
+        if index == 0:
+            if taskbar_data.rect_start_button:
+                x_click = taskbar_data.rect_start_button.x + taskbar_data.rect_start_button.width / 2
+        
+        # if not the start menu, add the start width to x_click
+        if index != 0:
+            x_click += taskbar_data.rect_start_button.width
+        
+        if index > 0:
+
+            # if the search button is enabled, adjust x_click as appropriate
+            if taskbar_data.search_index:
+                if taskbar_data.search_index == index:
+                    x_click += taskbar_data.rect_search_button.width / 2
+                else:
+                    x_click += taskbar_data.rect_search_button.width
+
+        if index >= taskbar_data.application_start_index:
+            x_click += (taskbar_data.icon_width * (index - taskbar_data.application_start_index - .5)) 
+    
+        actions.mouse_move(x_click, y_click)
+
+        actions.key("ctrl:down")
+        actions.mouse_click(mouse_button)
+        actions.key("ctrl:up")
+
+        actions.sleep("150ms")
+        actions.mouse_move(x, y)
+
     def system_tray_show_hidden():
         """Reveal hidden icons"""
         if sys_tray_data.rect_hidden_icons:
@@ -210,18 +277,69 @@ class Actions:
             actions.sleep("150ms")
             actions.mouse_move(x, y)
 
+    def system_tray_move(index: int):
+        """hover over icon"""
+        x, y = ctrl.mouse_pos()
+        sys_tray_count = len(sys_tray_data.sys_tray_icons)
+        if index >= sys_tray_count:
+            if is_main_canvas_active:
+                sys_tray_icon = main_buttons[index - sys_tray_count]
+            else:
+                return
+        else:       
+            sys_tray_icon = sys_tray_data.sys_tray_icons[index].rect
+
+        actions.mouse_move(sys_tray_icon.x + sys_tray_icon.width / 2, sys_tray_icon.y + sys_tray_icon.height / 2)
+
     def system_tray_click(mouse_button: int, index: int):
         """Clicks system tray icon"""
 
         x, y = ctrl.mouse_pos()
-        sys_tray_icon = sys_tray_data.sys_tray_icons[index]
+        sys_tray_count = len(sys_tray_data.sys_tray_icons)
+        if index >= sys_tray_count:
+            if is_main_canvas_active:
+                sys_tray_icon = main_buttons[index - sys_tray_count]
+            else:
+                return
+        else:       
+            sys_tray_icon = sys_tray_data.sys_tray_icons[index].rect
 
-        actions.mouse_move(sys_tray_icon.rect.x + sys_tray_icon.rect.width / 2, sys_tray_icon.rect.y + sys_tray_icon.rect.height / 2)
+        actions.mouse_move(sys_tray_icon.x + sys_tray_icon.width / 2, sys_tray_icon.y + sys_tray_icon.height / 2)
         actions.mouse_click(mouse_button)
 
         actions.sleep("150ms")
         actions.mouse_move(x, y)
 
+is_main_canvas_active = False
+def draw_main_canvas(canvas):
+    paint = canvas.paint
+    canvas.paint.text_align = canvas.paint.TextAlign.CENTER
+    paint.textsize = 20
+
+    if not is_main_canvas_active:
+        return
+    
+    index = len(sys_tray_data.sys_tray_icons) + 1
+    for rect in main_buttons:
+        x = rect.x
+        y = rect.y
+        x_end = rect.x + rect.width
+
+        width = x_end - x
+
+        paint.style = paint.Style.FILL
+        paint.color = "000000"
+
+        #rect_background = Rect(rect.x, rect.y + rect.height *.75, width * .5, rect.height *.25)
+
+        #canvas.draw_rect(rect_background)
+
+        x_text_position = rect.x + rect.width / 2
+        y_text_position = rect.y + rect.height / 1.25
+
+        paint.color = "ffffff"
+        canvas.draw_text(f"{index}", x_text_position, y_text_position)
+        index = index + 1
 
 def draw_sys_tray_options(canvas):
     paint = canvas.paint
@@ -229,8 +347,7 @@ def draw_sys_tray_options(canvas):
     paint.textsize = 15
     index = 1
     if sys_tray_data.rect_hidden_icons:
-        print(f"drawing {len(sys_tray_data.sys_tray_icons)}")
-
+        #print(f"drawing {len(sys_tray_data.sys_tray_icons)}")
 
         for i in range(0, len(sys_tray_data.sys_tray_icons)):
             icon = sys_tray_data.sys_tray_icons[i]
@@ -313,7 +430,7 @@ def draw_task_bar_options(canvas):
 
     max_task_list_count = math.floor(rect_task_bar_list.width / taskbar_data.icon_width)
 
-    for index in range(current_index,  current_index + max_task_list_count + 1):
+    for index in range(current_index,  current_index + max_task_list_count):
         paint.style = paint.Style.FILL
         paint.color = "000000"
 
@@ -410,7 +527,7 @@ def get_windows_eleven_taskbar() -> bool:
 
     start_menu_configured_correctly = (is_taskbar_left_aligned 
         and task_bar_combine_status["primary"] == "always")
-    
+   
     if not is_start_left_aligned():
         #print("Start menu must be left-aligned")
         pass
@@ -425,18 +542,22 @@ def get_windows_eleven_taskbar() -> bool:
     apps = ui.apps(name="Windows Explorer")
 
     for app in apps:
-        for window in app.windows():
-            try:
+        try:
+            for window in app.windows():
                 if window.cls == "Shell_TrayWnd":
                     #print("found taskbar")
                     taskbar = window.element
 
-            except Exception as e:
-                print(f"Exception: {e}")
-
             if taskbar:
                 break
 
+        except Exception as e:
+            print(f"Exception: {e}")
+
+    if not taskbar:
+        update_cron = cron.after("1s", update_task_bar_canvases)
+        return 
+    
     if taskbar:
         application_start_index = 0
         current_index = 0
@@ -536,9 +657,10 @@ def get_windows_eleven_taskbar() -> bool:
     
     return False
 
-def update_canvas():
+def update_task_bar_canvases():
     global canvas_taskbar 
     global canvas_system_tray
+    global canvas_main
 
     main_screen = ui.main_screen()
 
@@ -571,6 +693,11 @@ def update_canvas():
         canvas_system_tray.register("draw", draw_sys_tray_options)
         canvas_system_tray.freeze()
 
+
+        canvas_main = canvas.Canvas.from_screen(main_screen)
+        canvas_main.register("draw", draw_main_canvas)
+        canvas_main.freeze()
+
     else:
         print("taskbar data population failed. Skipping canvas creation")
 
@@ -585,15 +712,21 @@ def check_for_update():
     apps = ui.apps(name="Windows Explorer")
 
     for app in apps:
-        for window in app.windows():
-            try:
+        try:
+            for window in app.windows():
                 if window.cls == "Shell_TrayWnd":
+                    #print("found taskbar")
                     taskbar = window.element
-            except Exception as e:
-                print(f"Exception: {e}")
-                
+
             if taskbar:
                 break
+
+        except Exception as e:            
+            print(f"Exception: {e}")
+
+    if not taskbar:
+        update_cron = cron.after("5s", check_for_update)
+        return 
 
     if taskbar:
         for element in taskbar.children:
@@ -610,7 +743,7 @@ def check_for_update():
         # the rect associated with the system tray changes.
         if rect_hidden_icons and sys_tray_data.rect_hidden_icons:
             if rect_hidden_icons.x != sys_tray_data.rect_hidden_icons.x:
-                update_canvas()
+                update_task_bar_canvases()
 
     update_cron = cron.after("3s", check_for_update)
 
@@ -621,14 +754,85 @@ def on_screen_change(_):
     #print("on_screen_change")
     cron.cancel(update_cron)
     update_cron = None
-    update_canvas()
+    update_task_bar_canvases()
 
+def test_delay():
+    global main_buttons
+    print("test_delay")
+    active_window = ui.active_window()
+    global is_main_canvas_active, main_buttons
+    main_buttons = []
+
+    match active_window.cls:
+        case "XamlExplorerHostIslandWindow":
+            print("wat")
+            active_window = ui.active_window()
+            
+            for child in active_window.element.children:
+                for child2 in child.children:
+                    print(f"{child2.name}")
+
+        case "TopLevelWindowForOverflowXamlIsland":
+            is_main_canvas_active = True
+            for child in active_window.element.children:
+                for child2 in child.children:
+                    if (child2.name.strip()):
+                        main_buttons.append(child2.rect)
+
+        case "Windows.UI.Core.CoreWindow":
+            print("core")
+            if ("Jump List" in active_window.title):
+                for child in active_window.element.children:
+                    print(child.name)
+
+                    for child2 in child.children:
+                        print(child2.name)
+                        main_buttons.append(child2.rect)          
+    
+    if len(main_buttons) > 0:
+        canvas_main.resume()
+        canvas_main.freeze()
+                
+def on_focus_change(_):
+    global is_main_canvas_active, main_buttons
+    active_window = ui.active_window()
+    print(f"{active_window.title}, cls = {active_window.cls}")
+    was_previously_active = is_main_canvas_active
+    is_main_canvas_active = False
+    main_buttons = []
+
+    match active_window.cls:
+        # case "XamlExplorerHostIslandWindow":
+        #     is_main_canvas_active = True
+
+        case "TopLevelWindowForOverflowXamlIsland":
+            is_main_canvas_active = True
+
+        # case "Windows.UI.Core.CoreWindow":
+        #     # note the start menu and search both 
+        #     if ("Jump List" in active_window.title):
+        #         is_main_canvas_active = True 
+
+        # case "ControlCenterWindow":
+        #     if ("Quick settings" in active_window.title):
+        #         is_main_canvas_active = True 
+
+        case _:
+            is_main_canvas_active = False
+
+    if was_previously_active:
+        canvas_main.resume()
+        canvas_main.freeze()
+ 
+    if is_main_canvas_active:
+        cron.after("750ms", test_delay)
 
 if app.platform == "windows":
     def on_ready():
         global update_cron
-        if update_canvas():
+        if update_task_bar_canvases():
             ui.register("screen_change", on_screen_change) 
+            ui.register("win_focus", on_focus_change)
             update_cron = cron.after("3s", check_for_update)
 
     app.register("ready", on_ready)

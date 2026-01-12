@@ -6,6 +6,9 @@ os: mac
 <number_small>: 
     user.taskbar_click(0, number_small - 1)
 
+<number_small> cycle: 
+    user.taskbar_control_click(0, number_small - 1)
+
 <number_small> connie: 
     user.taskbar_click(1, number_small - 1)
 
@@ -17,3 +20,5 @@ tray <number_small>:
 
 tray <number_small> connie:
     user.system_tray_click(1, number_small - 1)
+
+
