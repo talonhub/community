@@ -21,22 +21,23 @@ def new_user_gui(gui: imgui.GUI):
 
     gui.spacer()
 
-    if gui.button("Open Talon Wiki (Open the Talon Wiki)"):
+    gui.text("Open the Talon Wiki:")
+    if gui.button("Open Talon Wiki"):
         actions.user.open_url("https://talon.wiki")
-    if gui.button(
-        "Open Talon Slack (Open a slack channel where you can get help and talk with other talon users)"
-    ):
+    gui.text("Open a Slack channel where you can get help and talk with other Talon users:")
+    if gui.button("Open Talon Slack"):
         actions.user.open_url("http://talonvoice.slack.com/messages/help")
-    if gui.button(
-        "Open Talon Practice (Open a webpage for helping new users learn how to use Talon)"
-    ):
+    gui.text("Open a webpage for helping new users learn how to use Talon:")
+    if gui.button("Open Talon Practice"):
         actions.user.open_url("https://chaosparrot.github.io/talon_practice/")
 
     gui.line()
 
-    if gui.button("Message Hide (Close this message)"):
+    gui.text("Close this message:")
+    if gui.button("Message Hide"):
         actions.user.new_user_message_hide()
-    if gui.button("Message Dismiss (Close this message and stop seeing it on startup)"):
+    gui.text("Close this message and stop seeing it on startup:")
+    if gui.button("Message Dismiss"):
         actions.user.new_user_message_stop_showing_on_startup()
         actions.user.new_user_message_hide()
 
