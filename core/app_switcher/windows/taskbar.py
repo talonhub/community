@@ -230,22 +230,33 @@ def draw_sys_tray_options(canvas):
     index = 1
     if sys_tray_data.rect_hidden_icons:
         print(f"drawing {len(sys_tray_data.sys_tray_icons)}")
-              
-        #rect_number_background = sys_tray_data.
+
+
         for i in range(0, len(sys_tray_data.sys_tray_icons)):
             icon = sys_tray_data.sys_tray_icons[i]
             if len(icon.name) > 0:
+                
                 rect = icon.rect
+
+                x = icon.rect.x
+                y = icon.rect.y
+                x_end = icon.rect.x + icon.rect.width
+
+                width = x_end - x
 
                 paint.style = paint.Style.FILL
                 paint.color = "000000"
 
-                # canvas.draw_rect(rect_number_background)
-                x_text_position = rect.x + rect.width / 2
-                y_text_position = rect.y + rect.height * .9
+                rect_background = Rect(rect.x, rect.y + rect.height *.75, width * .5, rect.height *.25)
 
-                paint.color = "FFFFFF"
+                canvas.draw_rect(rect_background)
+
+                x_text_position = rect_background.x + rect_background.width / 2
+                y_text_position = rect_background.y + rect_background.height / 1.25
+
+                paint.color = "ffffff"
                 canvas.draw_text(f"{index}", x_text_position, y_text_position)
+
             index += 1
         
 def draw_task_bar_options(canvas):
@@ -504,9 +515,7 @@ def get_windows_eleven_taskbar() -> bool:
                                   rect_taskbar.height)
             
             
-            print(type(sys_tray_icons[0].rect.x))
-            sys_tray_icons = sorted(sys_tray_icons, key=lambda icon: int(icon.rect.x))
-                                    
+            sys_tray_icons = sorted(sys_tray_icons, key=lambda icon: int(icon.rect.x))             
             sys_tray_data.set(rect_hidden_icons.copy(), sys_tray_icons)
 
             taskbar_data.set(rect_taskbar.copy(),
