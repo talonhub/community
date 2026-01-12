@@ -88,51 +88,168 @@ def is_start_left_aligned() -> bool:
     except FileNotFoundError:
         # Key or value missing -> default behavior (Win11 default is centered)
         return False
-    
+
 @dataclass
-class TaskBarPositionData:
-    rect_start_button: Rect
-    rect_search_button: Rect
-    rect_task_view: Rect
-    rect_task_list: Rect
-    icon_width: float
-    icon_height: float 
+class SystemTrayIconData:
+    rect: Rect
+    name: str
+
+    def __init__(self, rect, name):
+        self.name = name
+        self.rect = rect
+
+@dataclass
+class SystemTrayPositionData:
+    rect_hidden_icons: Rect = None
+    sys_tray_icons: list[SystemTrayIconData] = None
 
     def __init__(self):
         pass
 
-    def set(self, rect_start_button, rect_search_button, rect_task_view, rect_task_list, icon_width, icon_height):
+    def set(self, rect_hidden_icons, sys_tray_icons):
+        self.rect_hidden_icons = rect_hidden_icons
+        self.sys_tray_icons = sys_tray_icons
+        
+
+@dataclass
+class TaskBarPositionData:
+    rect_start_button: Rect
+    rect_search_button: Rect
+    rect_taskbar: Rect
+    rect_task_view: Rect
+    rect_task_list: Rect
+    icon_width: float
+    icon_height: float 
+    application_start_index: int
+
+    def __init__(self):
+        pass
+
+    def set(self, 
+            rect_taskbar,
+            rect_start_button, 
+            rect_search_button, 
+            rect_task_view, 
+            rect_task_list, 
+            icon_width, 
+            icon_height,
+            task_view_index, 
+            search_index,
+            application_start_index):
+        
+        self.rect_taskbar = rect_taskbar
         self.rect_start_button = rect_start_button
         self.rect_search_button = rect_search_button
         self.rect_task_view = rect_task_view
         self.rect_task_list = rect_task_list
         self.icon_width = icon_width
         self.icon_height = icon_height
+        
+        self.task_view_index = task_view_index
+        self.search_index = search_index
+        self.application_start_index = application_start_index
 
     def __str__(self):
         return f"rect = {self.rect_task_list}, icon_width = {self.icon_width}, icon_height = {self.icon_height}"
 
 is_windows_eleven = "Windows-11" in platform.platform()
-print(platform.platform())
+#print(platform.platform())
+sys_tray_data = SystemTrayPositionData()
 taskbar_data = TaskBarPositionData()
 canvas_taskbar = None
+canvas_system_tray = None
 
 mod = Module()
 
 @mod.action_class
 class Actions:
-    def switcher_click(mouse_button: int, index: int):
-        """"""        
+    def taskbar_click(mouse_button: int, index: int):
+        """Click the taskbar button based on the index"""        
         x, y = ctrl.mouse_pos()
-        print(index)
-        actions.mouse_move(taskbar_data.rect_task_list.x + (taskbar_data.icon_width * (index + .5)), 
-                           taskbar_data.rect_task_list.y + taskbar_data.rect_task_list.height / 2)
+        #print(index)
+        x_click = taskbar_data.rect_search_button.x
+        y_click = taskbar_data.rect_search_button.y + taskbar_data.rect_search_button.height / 2
+
+        # index zero is always the start button
+        if index == 0:
+            if taskbar_data.rect_start_button:
+                x_click = taskbar_data.rect_start_button.x + taskbar_data.rect_start_button.width / 2
+        
+        # if not the start menu, add the start width to x_click
+        if index != 0:
+            x_click += taskbar_data.rect_start_button.width
+        
+        if index > 0:
+
+            # if the search button is enabled, adjust x_click as appropriate
+            if taskbar_data.search_index:
+                if taskbar_data.search_index == index:
+                    x_click += taskbar_data.rect_search_button.width / 2
+                else:
+                    x_click += taskbar_data.rect_search_button.width
+
+        if index >= taskbar_data.application_start_index:
+            x_click += (taskbar_data.icon_width * (index - taskbar_data.application_start_index - .5)) 
+    
+        actions.mouse_move(x_click, y_click)
         actions.mouse_click(mouse_button)
+
         actions.sleep("150ms")
         actions.mouse_move(x, y)
 
-def draw_options(canvas):
-    print("draw_options")
+    def system_tray_show_hidden():
+        """Reveal hidden icons"""
+        if sys_tray_data.rect_hidden_icons:
+            rect_hidden_icons = sys_tray_data.rect_hidden_icons
+
+            x, y = ctrl.mouse_pos()
+
+            actions.mouse_move(rect_hidden_icons.x + rect_hidden_icons.width / 2, rect_hidden_icons.y)
+            actions.mouse_click(0)
+
+            actions.sleep("150ms")
+            actions.mouse_move(x, y)
+
+    def system_tray_click(mouse_button: int, index: int):
+        """Clicks system tray icon"""
+
+        x, y = ctrl.mouse_pos()
+        sys_tray_icon = sys_tray_data.sys_tray_icons[index]
+
+        actions.mouse_move(sys_tray_icon.rect.x + sys_tray_icon.rect.width / 2, sys_tray_icon.rect.y + sys_tray_icon.rect.height / 2)
+        actions.mouse_click(mouse_button)
+
+        actions.sleep("150ms")
+        actions.mouse_move(x, y)
+
+
+def draw_sys_tray_options(canvas):
+    paint = canvas.paint
+    canvas.paint.text_align = canvas.paint.TextAlign.CENTER
+    paint.textsize = 15
+    index = 1
+    if sys_tray_data.rect_hidden_icons:
+        print(f"drawing {len(sys_tray_data.sys_tray_icons)}")
+              
+        #rect_number_background = sys_tray_data.
+        for i in range(0, len(sys_tray_data.sys_tray_icons)):
+            icon = sys_tray_data.sys_tray_icons[i]
+            if len(icon.name) > 0:
+                rect = icon.rect
+
+                paint.style = paint.Style.FILL
+                paint.color = "000000"
+
+                # canvas.draw_rect(rect_number_background)
+                x_text_position = rect.x + rect.width / 2
+                y_text_position = rect.y + rect.height * .9
+
+                paint.color = "FFFFFF"
+                canvas.draw_text(f"{index}", x_text_position, y_text_position)
+            index += 1
+        
+def draw_task_bar_options(canvas):
+    #print("draw_task_bar_options")
     paint = canvas.paint
     canvas.paint.text_align = canvas.paint.TextAlign.CENTER
     rect_start_menu = taskbar_data.rect_start_button
@@ -142,6 +259,7 @@ def draw_options(canvas):
     paint.textsize = 20
 
     current_index = 1
+
     x = rect_start_menu.x
     y = rect_task_bar_list.y + .8 * taskbar_data.icon_height
     y_text_position = y + taskbar_data.icon_height * .18
@@ -222,12 +340,12 @@ def get_windows_ten_taskbar() -> bool:
         # pager = first_matching_child(tray, class_name=["SysPager"])
         # toolbar = first_matching_child(pager, class_name=["ToolbarWindow32"])
         # for child in toolbar.children:
-        #     print(f"{child.name} {child.rect.width} {child.rect.height}")
+        #     #print(f"{child.name} {child.rect.width} {child.rect.height}")
         # break
 
     # include the task view if enabled
     for e in taskbar.element.children:
-        #print(e)
+        ##print(e)
         if "Task View" in e.name and "Task View" not in icons_to_exclude:
             icon_width = e.rect.width
             icon_height = e.rect.height
@@ -235,21 +353,22 @@ def get_windows_ten_taskbar() -> bool:
             
     if not taskbar:
         if not ms_tasklist:
-            print("failed to find MSTaskListWClass")
-
+            #print("failed to find MSTaskListWClass")
+            pass
+        
         return False
     
     for e in ms_tasklist.children:
         if not icon_dimensions_set:
-            print(f"found first icon {e.name} {e.rect}")
+            #print(f"found first icon {e.name} {e.rect}")
             icon_width = e.rect.width
             icon_height = e.rect.height
             icon_dimensions_set = True
             
     if taskbar and icon_dimensions_set:
-        taskbar_rect = ms_tasklist.rect.copy()
-        taskbar_data.set(taskbar_rect, icon_width, icon_height)
-        print(f"all prequistes found for windows 10 taskbar numbers: {taskbar_data}")
+        rect_taskbar = ms_tasklist.rect.copy()
+        taskbar_data.set(rect_taskbar, icon_width, icon_height)
+        #print(f"all prequistes found for windows 10 taskbar numbers: {taskbar_data}")
 
         return True
     
@@ -257,6 +376,7 @@ def get_windows_ten_taskbar() -> bool:
 
 def get_windows_eleven_taskbar() -> bool:
     """Populates the TaskBarData class for windows 11"""
+    taskbar = None
     icon_width: float = 0.0
     icon_height: float = 0.0
     icon_dimensions_set: bool = False
@@ -264,10 +384,15 @@ def get_windows_eleven_taskbar() -> bool:
     rect_start_button: Rect = None
     rect_task_view: Rect = None
     rect_search_button: Rect = None
+    rect_hidden_icons: Rect = None
     hidden_icon_found: bool = False
     start_menu_found: bool = False
     search_button_found: bool = False
     task_view_button_found: bool = False
+    sys_tray_icons = []
+
+    task_view_index = None
+    search_button_index = None
 
     is_taskbar_left_aligned = is_start_left_aligned()
     task_bar_combine_status = get_taskbar_combine_status()
@@ -276,64 +401,96 @@ def get_windows_eleven_taskbar() -> bool:
         and task_bar_combine_status["primary"] == "always")
     
     if not is_start_left_aligned():
-        print("Start menu must be left-aligned")
+        #print("Start menu must be left-aligned")
+        pass
 
     if task_bar_combine_status["primary"] != "always":
-        print("Start menu icons must be configued to always combine and hide labels")
+        #print("Start menu icons must be configued to always combine and hide labels")
+        pass
 
     if not start_menu_configured_correctly:
         return False
         
     apps = ui.apps(name="Windows Explorer")
+
     for app in apps:
         for window in app.windows():
-            if window.cls == "Shell_TrayWnd":
-                print("found taskbar")
-                taskbar = window.element
+            try:
+                if window.cls == "Shell_TrayWnd":
+                    #print("found taskbar")
+                    taskbar = window.element
+
+            except Exception as e:
+                print(f"Exception: {e}")
+
+            if taskbar:
                 break
 
     if taskbar:
-        taskbar_rect = taskbar.rect.copy()
-        print(f"taskbar rect {taskbar.rect}")
+        application_start_index = 0
+        current_index = 0
+
+        rect_taskbar = taskbar.rect.copy()
+        #print(f"taskbar rect {taskbar.rect}")
         for element in taskbar.children:
             for child in element.children:
                 match child.name:
                     case "Show Hidden Icons":
                         hidden_icon_found = True
                         rect_hidden_icons = child.rect
-                        print(f"found hidden icons! {child.name}")
+                        #print(f"found hidden icons! {child.name}")
+                        
                     case _:
-                        print(f"{child.name}")
+                        #print(f"{child.name}")
+
+                        if rect_hidden_icons and child.rect.x >= rect_hidden_icons.x:
+                            if len(child.name.strip()) > 0:
+                                print(f"*** sys tray: adding {child.name}")
+                                sys_tray_icons.append(SystemTrayIconData(child.rect.copy(), child.name))
 
                 for child2 in child.children:
                     match child2.name:
                         case "Start":
                             rect_start_button = child2.rect
                             start_menu_found = True
-                            print(f"found start button! {child2.rect}")
+                            application_start_index += 1
+                            #print(f"found start button! {child2.rect}")
 
                         case "Search":
                             rect_search_button = child2.rect
+                            search_button_index = current_index
+                            application_start_index += 1
+
                             search_button_found = True
-                            print(f"found search button! {child2.rect}")
+                            #print(f"found search button! {child2.rect}")
 
                         case "Task View":  
                             rect_task_view = child2.rect
                             first_icon_rect = rect_task_view
+                            task_view_index = current_index
                             icon_width = child2.rect.width
                             icon_height = child2.rect.height
 
                             icon_dimensions_set= True
                             task_view_button_found = True
-                            print(f"found Task View button! {child2.rect}")
+                            #print(f"found Task View button! {child2.rect}")
 
                         case _:
+                            # if the x coordinate is greater than the hidden icon thingy
+                            # we can safely assume this is sys tray
+                            if rect_hidden_icons and child2.rect.x >= rect_hidden_icons.x:
+                                if len(child2.name.strip()) > 0:
+                                    sys_tray_icons.append(SystemTrayIconData(child2.rect.copy(), child2.name))
+
                             if not icon_dimensions_set:                            
                                 icon_width = child2.rect.width
                                 icon_height = child2.rect.height
                                 first_icon_rect = child2.rect
                                 icon_dimensions_set = True
-                                print(f"first taskbar icon found {child2.name}: {child2.rect}")
+                                #print(f"first taskbar icon found {child2.name}: {child2.rect}")
+
+
+                    current_index = current_index + 1
 
         
         # The taskbar rect in windows 11 includes the system tray
@@ -341,33 +498,49 @@ def get_windows_eleven_taskbar() -> bool:
         if (icon_dimensions_set 
             and hidden_icon_found
             and start_menu_found):
-            rect_task_list = Rect(taskbar_rect.x, 
-                                  taskbar_rect.y, 
-                                  rect_hidden_icons.x - taskbar_rect.x, 
-                                  taskbar_rect.height)
+            rect_task_list = Rect(rect_taskbar.x, 
+                                  rect_taskbar.y, 
+                                  rect_hidden_icons.x - rect_taskbar.x, 
+                                  rect_taskbar.height)
             
-            taskbar_data.set(rect_start_button.copy() if rect_start_button else None,
+            
+            print(type(sys_tray_icons[0].rect.x))
+            sys_tray_icons = sorted(sys_tray_icons, key=lambda icon: int(icon.rect.x))
+                                    
+            sys_tray_data.set(rect_hidden_icons.copy(), sys_tray_icons)
+
+            taskbar_data.set(rect_taskbar.copy(),
+                             rect_start_button.copy() if rect_start_button else None,
                              rect_search_button.copy() if rect_search_button else None,
                              rect_task_view.copy() if rect_task_view else None,
                              rect_task_list, 
                              icon_width, 
-                             icon_height)
+                             icon_height,
+                             task_view_index,
+                             search_button_index,
+                             application_start_index)
             
-            print(f"all prequistes found for windows 11 taskbar numbers: {taskbar_data}")
+            #print(f"all prequistes found for windows 11 taskbar numbers: {taskbar_data}")
 
+            print(f"sys tray = {sys_tray_icons}, count = {len(sys_tray_icons)}")
             return True
     
     return False
 
 def update_canvas():
-    global canvas_taskbar    
+    global canvas_taskbar 
+    global canvas_system_tray
+
     main_screen = ui.main_screen()
 
-    print(f"main screen: {main_screen}")
-    print(f"screens: {ui.screens()}")
+    #print(f"main screen: {main_screen}")
+    #print(f"screens: {ui.screens()}")
     
     if canvas_taskbar:
         canvas_taskbar.close()
+
+    if canvas_system_tray:
+        canvas_system_tray.close()
     
     if not is_windows_eleven:
         success = get_windows_ten_taskbar()
@@ -375,24 +548,82 @@ def update_canvas():
         success = get_windows_eleven_taskbar()
 
     if success:
-        rect = taskbar_data.rect_task_list
-        canvas_taskbar = canvas.Canvas.from_rect(rect)
+        rect_task_list = taskbar_data.rect_task_list
+        rect_taskbar = taskbar_data.rect_taskbar
+        rect_hidden = sys_tray_data.rect_hidden_icons
 
-        print(f"taskbar data successfully populated. Creating canvas for taskbar numbers {rect}")
-        canvas_taskbar.register("draw", draw_options)
+        canvas_taskbar = canvas.Canvas.from_rect(rect_task_list)
+        #print(f"taskbar data successfully populated. Creating canvas for taskbar numbers {rect_task_list}")
+        canvas_taskbar.register("draw", draw_task_bar_options)
         canvas_taskbar.freeze()
+        
+        rect_system_tray = Rect(rect_hidden.x, rect_hidden.y, rect_taskbar.width, rect_taskbar.height)
+        canvas_system_tray = canvas.Canvas.from_rect(rect_system_tray)
+        canvas_system_tray.register("draw", draw_sys_tray_options)
+        canvas_system_tray.freeze()
+
     else:
         print("taskbar data population failed. Skipping canvas creation")
 
+    return success
+
+update_cron = None
+def check_for_update():
+    global update_cron
+    taskbar = None
+    rect_hidden_icons: Rect = None
+    hidden_icon_found = False
+    apps = ui.apps(name="Windows Explorer")
+
+    for app in apps:
+        for window in app.windows():
+            try:
+                if window.cls == "Shell_TrayWnd":
+                    taskbar = window.element
+            except Exception as e:
+                print(f"Exception: {e}")
+                
+            if taskbar:
+                break
+
+    if taskbar:
+        for element in taskbar.children:
+            for child in element.children:
+                match child.name:
+                    case "Show Hidden Icons":
+                        hidden_icon_found = True
+                        rect_hidden_icons = child.rect
+
+                if hidden_icon_found:
+                    break
+
+        # the only time we should need to update the canvases is when
+        # the rect associated with the system tray changes.
+        if rect_hidden_icons and sys_tray_data.rect_hidden_icons:
+            if rect_hidden_icons.x != sys_tray_data.rect_hidden_icons.x:
+                update_canvas()
+
+    update_cron = cron.after("3s", check_for_update)
+
+
 def on_screen_change(_):
-    print("on_screen_change")
+    global update_cron
+
+    #print("on_screen_change")
+    cron.cancel(update_cron)
+    update_cron = None
     update_canvas()
+
 
 if app.platform == "windows":
     def on_ready():
-        update_canvas()
-        ui.register("screen_change", on_screen_change)    
+        global update_cron
+        if update_canvas():
+            ui.register("screen_change", on_screen_change) 
+            update_cron = cron.after("3s", check_for_update)
 
     app.register("ready", on_ready)
+
+    
 
 
