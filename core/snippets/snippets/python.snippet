@@ -33,6 +33,66 @@ class Actions:
     $0
 ---
 
+name: talonModuleSetting
+phrase: module setting
+insertionScope: statement
+-
+mod.setting(
+    "$1",
+    type=$2,
+    default=$3,
+    desc="$0"
+)
+---
+
+name: talonModuleCapture
+phrase: module capture
+insertionScope: namedFunction
+-
+@mod.capture(rule="$1")
+def $2(m) -> $3:
+    $0
+---
+
+name: talonModuleScope
+phrase: module scope
+insertionScope: namedFunction
+-
+@mod.scope
+def $1():
+    $0
+---
+
+name: talonContextCapture
+phrase: context capture
+insertionScope: namedFunction
+-
+@ctx.capture($1, rule="$2")
+def $3(m) -> $4:
+    $0
+---
+
+name: talonModuleList
+phrase: module list
+insertionScope: statement
+-
+mod.list($1, desc="$0")
+---
+
+name: talonModuleTag
+phrase: module tag
+insertionScope: statement
+-
+mod.tag($1, desc="$0")
+---
+
+name: talonModuleMode
+phrase: module mode
+insertionScope: statement
+-
+mod.mode($1, desc="$0")
+---
+
 name: talonContextMatch
 phrase: context match
 insertionScope: statement
@@ -57,6 +117,61 @@ insertionScope: class | statement
 -
 @ctx.action_class("$1")
 class $2Actions:
+    $0
+---
+
+name: talonImguiFunction
+phrase: talon gooey function
+insertionScope: namedFunction
+$2.insertionFormatter: SNAKE_CASE
+-
+@imgui.open($1)
+def $2(gui: imgui.GUI):
+    $3
+---
+
+name: talonImguiButton
+phrase: talon gooey button
+insertionScope: statement
+-
+if gui.button($1):
+    $0
+---
+
+name: talonFileChangeHandler
+phrase: file change handler
+insertionScope: namedFunction
+$1.insertionFormatter: SNAKE_CASE
+-
+def $1(path, flags):
+    $0
+
+fs.watch($2, $1)
+---
+
+name: talonOnReadyFunction
+phrase: on ready handler
+-
+def on_ready():
+    $0
+
+
+app.register("ready", on_ready)
+---
+
+name: talonClipboardRevertBlock
+phrase: clip revert
+insertionScope: statement
+-
+with clip.revert():
+    $0
+---
+
+name: talonClipboardCaptureBlock
+phrase: clip capture
+insertionScope: statement
+-
+with clip.capture() as $1:
     $0
 ---
 
