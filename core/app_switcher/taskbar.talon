@@ -1,8 +1,6 @@
 os: windows
 os: mac
 -
-# [focus] {user.running_applications}:
-#     user.switcher_accessibility_focus(running_applications)
 <number_small>: 
     user.taskbar_click(0, number_small - 1)
 
@@ -21,4 +19,5 @@ tray <number_small>:
 tray <number_small> connie:
     user.system_tray_click(1, number_small - 1)
 
-
+task refresh:
+    user.taskbar_force_refresh()
