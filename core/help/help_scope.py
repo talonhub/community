@@ -35,7 +35,7 @@ def gui(gui: imgui.GUI):
             value = scope.get(key)
             print_value(gui, key, value, ignore)
     gui.spacer()
-    if gui.button("Hide"):
+    if gui.button("scope close"):
         actions.user.help_scope_toggle()
 
 
