@@ -1,6 +1,6 @@
 from typing import Optional
 
-from talon import Context, Module, actions, settings, ui
+from talon import Context, Module, actions, app, ui
 
 from .draft_ui import DraftManager
 
@@ -17,18 +17,23 @@ ctx_focused.matches = r"""
 title: Talon Draft
 """
 
+SETTING_CHANGE_CAVEAT_DESCRIPTION = (
+    ". Show the draft window (again) to see the results of changing this setting."
+)
 mod.tag("draft_window_showing", desc="Tag set when draft window showing")
 mod.setting(
     "draft_window_theme",
     type=str,
     default="dark",
-    desc="Sets the main colors of the window, one of 'dark' or 'light'",
+    desc="Sets the draft window color theme ('dark' or 'light')"
+    + SETTING_CHANGE_CAVEAT_DESCRIPTION,
 )
 mod.setting(
     "draft_window_label_size",
     type=int,
     default=20,
-    desc="Sets the size of the word labels used in the draft window",
+    desc="Sets the size of the word labels used in the draft window"
+    + SETTING_CHANGE_CAVEAT_DESCRIPTION,
 )
 mod.setting(
     "draft_window_label_color",
@@ -36,36 +41,27 @@ mod.setting(
     default=None,
     desc=(
         "Sets the color of the word labels used in the draft window. "
-        "E.g. 00ff00 would be green"
+        "E.g. 00ff00 would be green" + SETTING_CHANGE_CAVEAT_DESCRIPTION
     ),
 )
 mod.setting(
     "draft_window_text_size",
     type=int,
     default=20,
-    desc="Sets the size of the text used in the draft window",
+    desc="Sets the size of the text used in the draft window"
+    + SETTING_CHANGE_CAVEAT_DESCRIPTION,
 )
 
 
-draft_manager = DraftManager()
+draft_manager = None
 
 
-# Update the styling of the draft window dynamically as user settings change
-def _update_draft_style(*args):
-    draft_manager.set_styling(
-        **{
-            arg: settings.get(setting)
-            for setting, arg in (
-                ("user.draft_window_theme", "theme"),
-                ("user.draft_window_label_size", "label_size"),
-                ("user.draft_window_label_color", "label_color"),
-                ("user.draft_window_text_size", "text_size"),
-            )
-        }
-    )
+def on_ready():
+    global draft_manager
+    draft_manager = DraftManager()
 
 
-settings.register("", _update_draft_style)
+app.register("ready", on_ready)
 
 
 @ctx_focused.action_class("user")
