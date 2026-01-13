@@ -163,7 +163,7 @@ sys_tray_data = SystemTrayPositionData()
 taskbar_data = TaskBarPositionData()
 canvas_taskbar = None
 canvas_system_tray = None
-canvas_main = None
+canvas_hidden_icons = None
 
 mod = Module()
 
@@ -339,12 +339,11 @@ def draw_hidden_icon_canvas(canvas):
         paint.style = paint.Style.FILL
         paint.color = "000000"
 
-        #rect_background = Rect(rect.x, rect.y + rect.height *.75, width * .5, rect.height *.25)
+        rect_background = Rect(rect.x, rect.y + rect.height *.75, width * .5, rect.height *.25)
+        canvas.draw_rect(rect_background)
 
-        #canvas.draw_rect(rect_background)
-
-        x_text_position = rect.x + rect.width / 2
-        y_text_position = rect.y + rect.height / 1.25
+        x_text_position = rect_background.x + rect_background.width / 2
+        y_text_position = rect_background.y + rect_background.height / 1.25
 
         paint.color = "ffffff"
         canvas.draw_text(f"{index}", x_text_position, y_text_position)
@@ -455,6 +454,19 @@ def draw_task_bar_options(canvas):
         canvas.draw_text(f"{index}", x_text_position, y_text_position)
         x = x + taskbar_data.icon_width
 
+def get_window_class(window: ui.Window) -> bool:
+    cls = None
+    if not window:
+        return None
+    try:
+        cls = window.cls
+    except Exception as e:
+        app.notify("get_window_class exception - taskbar")
+        print(f"exception = {e}")
+        cls = None
+    
+    return cls
+
 def get_windows_ten_taskbar() -> bool:
     """Populated the TaskBarData class for windows 10"""
     icon_width: float = 0.0
@@ -467,11 +479,7 @@ def get_windows_ten_taskbar() -> bool:
     apps = ui.apps(name="Windows Explorer")
     for application in apps:
         for window in application.windows():
-            try:
-                cls = window.cls
-            except Exception as e:
-                cls = None
-                continue
+            cls = get_window_class(window)
 
             if cls == "Shell_TrayWnd":
                 taskbar = window
@@ -556,12 +564,7 @@ def get_windows_eleven_taskbar() -> bool:
 
     for app in apps:
         for window in app.windows():
-            try:
-                cls = window.cls
-            except Exception as e:
-                cls = None
-                print(f"exception = {e}")
-                continue
+            cls = get_window_class(window)
 
             if cls == "Shell_TrayWnd":
                 print(f"found taskbar {window.title}")
@@ -676,7 +679,7 @@ def get_windows_eleven_taskbar() -> bool:
 def update_task_bar_canvases():
     global canvas_taskbar 
     global canvas_system_tray
-    global canvas_main
+    global canvas_hidden_icons
 
     main_screen = ui.main_screen()
     print(f"main screen: {main_screen}")
@@ -708,10 +711,6 @@ def update_task_bar_canvases():
         canvas_system_tray.register("draw", draw_sys_tray_options)
         canvas_system_tray.freeze()
 
-        canvas_main = canvas.Canvas.from_screen(main_screen)
-        canvas_main.register("draw", draw_hidden_icon_canvas)
-        canvas_main.freeze()
-
     else:
         print("taskbar data population failed. Skipping canvas creation")
 
@@ -719,7 +718,7 @@ def update_task_bar_canvases():
 
 def start_menu_poller():
     print("***poll_start_menu started***")
-    global cron_poll_start_menu
+    global cron_poll_start_menu, canvas_hidden_icons
     taskbar = None
     rect_hidden_icons: Rect = None
     rect_start_menu: Rect = None
@@ -732,15 +731,12 @@ def start_menu_poller():
 
     for app in apps:
         for window in app.windows():
-            try:
-                cls = window.cls 
-            except Exception as e:
-                cls = None
-                continue
+            cls = get_window_class(window)
 
             if cls == "Shell_TrayWnd":
-                print(f"found taskbar {window.title}")
+                print(f"start_menu_poller - found taskbar {window.title}")
                 taskbar = window.element
+                break
 
         if taskbar:
             break
@@ -764,7 +760,7 @@ def start_menu_poller():
                             print("hidden status doesn't match")
 
                         elif abs(rect_hidden_icons.x - taskbar_data.rect_hidden_icons.x) > 15:
-                            print("hidden width doesn't match")
+                            print("hidden x position doesn't match")
                             print(rect_hidden_icons)
                             print(taskbar_data.rect_hidden_icons)
 
@@ -820,29 +816,44 @@ def start_menu_poller():
         # the rect associated with the system tray changes.
         if update_required:
             print("redrawing")
+            actions.app.notify("Redrawing Taskbar Numbers")
             cron_show_hidden_helper(False)
-            update_task_bar_canvases()
+
+            if update_task_bar_canvases():
+                if canvas_hidden_icons:
+                    canvas_hidden_icons.resume()
+                    canvas_hidden_icons.freeze()
+            else:
+                canvas_hidden_icons.close()
+                canvas_hidden_icons = None
 
     cron_poll_start_menu_helper()
     print("***poll_start_menu complete***")
 
 
 def show_hidden_icon_numbers():
-    global main_buttons
+    print("***show_hidden_icon_numbers started***")
+    global main_buttons, canvas_hidden_icons
     active_window = ui.active_window()
     global is_hidden_menu_showing, main_buttons
     main_buttons = []
 
-    try:
-        cls = active_window.cls 
-    except Exception as e:
-        cls = None
-        if is_hidden_menu_showing:
-            sys_tray_data.sys_tray_icons = []
-            canvas_main.resume()
-            canvas_main.freeze()
-        return 
+    if canvas_hidden_icons:
+        canvas_hidden_icons.close()
+        canvas_hidden_icons = None
 
+    cls = get_window_class(active_window)
+    
+    if is_hidden_menu_showing:
+        sys_tray_data.sys_tray_icons = []
+
+        if canvas_hidden_icons:
+            canvas_hidden_icons.close()
+            canvas_hidden_icons = None
+
+    if not cls:
+        return
+    
     match cls:
         # case "XamlExplorerHostIslandWindow":
         #     print("wat")
@@ -854,10 +865,15 @@ def show_hidden_icon_numbers():
 
         case "TopLevelWindowForOverflowXamlIsland":
             is_hidden_menu_showing = True
-            for child in active_window.element.children:
+            active_element = active_window.element
+            for child in active_element.children:
                 for child2 in child.children:
                     if (child2.name.strip()):
                         main_buttons.append(child2.rect)
+
+            canvas_hidden_icons = canvas.Canvas.from_rect(active_element.rect)
+            canvas_hidden_icons.register("draw", draw_hidden_icon_canvas)
+            canvas_hidden_icons.freeze()
 
         # case "Windows.UI.Core.CoreWindow":
         #     print("core")
@@ -867,15 +883,15 @@ def show_hidden_icon_numbers():
 
         #             for child2 in child.children:
         #                 print(child2.name)
-        #                 main_buttons.append(child2.rect)          
+        #                 main_buttons.append(child2.rect)   
+        # 
     
-    if len(main_buttons) > 0:
-        canvas_main.resume()
-        canvas_main.freeze()
+    print("***show_hidden_icon_numbers completed***")
+       
                 
 def on_focus_change(_):
     print(f"***on_focus_change started***")
-    global is_hidden_menu_showing, main_buttons, cron_show_hidden
+    global is_hidden_menu_showing, main_buttons, cron_show_hidden, canvas_hidden_icons
     active_window = ui.active_window()
     was_showing = is_hidden_menu_showing
 
@@ -883,9 +899,11 @@ def on_focus_change(_):
    
     if was_showing:
         sys_tray_data.sys_tray_icons = []
-        canvas_main.resume()
-        canvas_main.freeze()
- 
+
+        if canvas_hidden_icons:
+            canvas_hidden_icons.close()
+            canvas_hidden_icons = None
+
     if is_hidden_menu_showing:
         cron_show_hidden_helper()
 

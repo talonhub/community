@@ -190,9 +190,22 @@ def gui_switcher_chooser(gui: imgui.GUI):
             gui_switcher_chooser.hide()
             ctx.tags = []
 
+def get_window_class(window: ui.Window) -> bool:
+    cls = None
+    if not window:
+        return None
+    try:
+        cls = window.cls
+    except Exception as e:
+        print(f"exception = {e}")
+        app.notify("get_window_class exception - switcher askbar")
+        cls = None
+    
+    return cls
+
 def is_valid_explorer_window(window: ui.Window) -> bool:
     #invalid_exlorer_titles = ["windows hello", "program manager", "folderview", "shellview", "tree view", "namespace tree control"]
-    return window.cls.lower() in ["explorerwclass", "cabinetwclass"]
+    return get_window_class(window) in ["explorerwclass", "cabinetwclass"]
 
 
 def is_window_valid(window: ui.Window) -> bool:
