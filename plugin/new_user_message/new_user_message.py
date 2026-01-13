@@ -18,6 +18,8 @@ def new_user_gui(gui: imgui.GUI):
         "You may click any of the following buttons or use the corresponding voice commands"
     )
     gui.text("Community buttons always show the name of the equivalent voice command")
+    gui.text("Button text usually shows the exact voice command")
+    gui.text("Buttons corresponding to options in a list have the command before the : and the option description after")
     gui.text('You can reopen this message by saying: "New User Message"')
 
     gui.spacer()
