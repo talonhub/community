@@ -317,7 +317,7 @@ class Actions:
 
     def taskbar_force_refresh():
         """Forces fresh of taskbar"""  
-        on_screen_change()
+        on_screen_change(None)
 
 is_hidden_menu_showing = False
 def draw_hidden_icon_canvas(canvas):
