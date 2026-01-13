@@ -874,47 +874,22 @@ def show_hidden_icon_numbers():
         canvas_main.freeze()
                 
 def on_focus_change(_):
-    print("***on_focus_change started***")
+    print(f"***on_focus_change started***")
     global is_hidden_menu_showing, main_buttons, cron_show_hidden
     active_window = ui.active_window()
-    try:
-        cls = active_window.cls 
-    except Exception as e:
-        cls = None
-        print(f"exception {e}")
-        if is_hidden_menu_showing:
-            canvas_main.resume()
-            canvas_main.freeze()
-        return 
-        
+    was_showing = is_hidden_menu_showing
 
-    match cls:
-        case "TopLevelWindowForOverflowXamlIsland":
-            print("hidden icon open")
-            is_hidden_menu_showing = True
-
-        # case "Windows.UI.Core.CoreWindow":
-        #     # note the start menu and search both 
-        #     if ("Jump List" in active_window.title):
-        #         is_main_canvas_active = True 
-
-        # case "ControlCenterWindow":
-        #     if ("Quick settings" in active_window.title):
-        #         is_main_canvas_active = True 
-
-        case _:
-            if is_hidden_menu_showing:
-                sys_tray_data.sys_tray_icons = []
-                canvas_main.resume()
-                canvas_main.freeze()
-
-            is_hidden_menu_showing = False
+    is_hidden_menu_showing = active_window.title == "System tray overflow window."
+   
+    if was_showing:
+        sys_tray_data.sys_tray_icons = []
+        canvas_main.resume()
+        canvas_main.freeze()
  
     if is_hidden_menu_showing:
         cron_show_hidden_helper()
-    
-    print("***on_focus_change complete***")
 
+    print(f"***on_focus_change complete {active_window.title}***")
 
 def cron_show_hidden_helper(start = True, time = "500ms", func=show_hidden_icon_numbers):
     global cron_show_hidden
