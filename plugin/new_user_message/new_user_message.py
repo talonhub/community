@@ -15,8 +15,9 @@ def new_user_gui(gui: imgui.GUI):
 
     gui.text("For additional help or to close this:")
     gui.text(
-        "You may say one of the following commands or click the corresponding button"
+        "You may click any of the following buttons or use the corresponding voice commands"
     )
+    gui.text("Community buttons always show the name of the equivalent voice command")
     gui.text('You can reopen this message by saying: "New User Message"')
 
     gui.spacer()
