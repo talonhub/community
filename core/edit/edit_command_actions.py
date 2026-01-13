@@ -51,7 +51,7 @@ EditAction = Union[
 mod = Module()
 mod.list(
     "edit_action",
-    desc="Actions for the edit command. Dictate an action name followed by an edit modifier name to perform the action on the text region referred to by the modifier.",
+    desc="Actions for the edit command. Dictate an action name followed by an edit modifier name to perform the action on the target referred to by the modifier.",
 )
 
 
