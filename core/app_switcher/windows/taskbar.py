@@ -287,7 +287,7 @@ class Actions:
         x, y = ctrl.mouse_pos()
         sys_tray_count = len(sys_tray_data.sys_tray_icons)
         if index >= sys_tray_count:
-            if is_main_canvas_active:
+            if is_hidden_menu_showing:
                 sys_tray_icon = main_buttons[index - sys_tray_count]
             else:
                 return
@@ -302,7 +302,7 @@ class Actions:
         x, y = ctrl.mouse_pos()
         sys_tray_count = len(sys_tray_data.sys_tray_icons)
         if index >= sys_tray_count:
-            if is_main_canvas_active:
+            if is_hidden_menu_showing:
                 sys_tray_icon = main_buttons[index - sys_tray_count]
             else:
                 return
@@ -319,13 +319,13 @@ class Actions:
         """Forces fresh of taskbar"""  
         on_screen_change()
 
-is_main_canvas_active = False
-def draw_main_canvas(canvas):
+is_hidden_menu_showing = False
+def draw_hidden_icon_canvas(canvas):
     paint = canvas.paint
     canvas.paint.text_align = canvas.paint.TextAlign.CENTER
     paint.textsize = 20
 
-    if not is_main_canvas_active:
+    if not is_hidden_menu_showing:
         return
     
     index = len(sys_tray_data.sys_tray_icons) + 1
@@ -467,7 +467,13 @@ def get_windows_ten_taskbar() -> bool:
     apps = ui.apps(name="Windows Explorer")
     for application in apps:
         for window in application.windows():
-            if window.cls == "Shell_TrayWnd":
+            try:
+                cls = window.cls
+            except Exception as e:
+                cls = None
+                continue
+
+            if cls == "Shell_TrayWnd":
                 taskbar = window
                 break
 
@@ -549,17 +555,20 @@ def get_windows_eleven_taskbar() -> bool:
     apps = ui.apps(name="Windows Explorer")
 
     for app in apps:
-        try:
-            for window in app.windows():
-                if window.cls == "Shell_TrayWnd":
-                    print("found taskbar")
-                    taskbar = window.element
+        for window in app.windows():
+            try:
+                cls = window.cls
+            except Exception as e:
+                cls = None
+                print(f"exception = {e}")
+                continue
 
-            if taskbar:
-                break
+            if cls == "Shell_TrayWnd":
+                print(f"found taskbar {window.title}")
+                taskbar = window.element
 
-        except Exception as e:
-            print(f"Exception: {e}")
+        if taskbar:
+            break
 
     if not taskbar:
         update_cron = cron.after("5s", update_task_bar_canvases)
@@ -700,7 +709,7 @@ def update_task_bar_canvases():
         canvas_system_tray.freeze()
 
         canvas_main = canvas.Canvas.from_screen(main_screen)
-        canvas_main.register("draw", draw_main_canvas)
+        canvas_main.register("draw", draw_hidden_icon_canvas)
         canvas_main.freeze()
 
     else:
@@ -722,17 +731,19 @@ def start_menu_poller():
     apps = ui.apps(name="Windows Explorer")
 
     for app in apps:
-        try:
-            for window in app.windows():
-                if window.cls == "Shell_TrayWnd":
-                    print("found taskbar")
-                    taskbar = window.element
+        for window in app.windows():
+            try:
+                cls = window.cls 
+            except Exception as e:
+                cls = None
+                continue
 
-            if taskbar:
-                break
+            if cls == "Shell_TrayWnd":
+                print(f"found taskbar {window.title}")
+                taskbar = window.element
 
-        except Exception as e:            
-            print(f"Exception: {e}")
+        if taskbar:
+            break
 
     if not taskbar:
         cron_show_hidden_helper(False)
@@ -752,7 +763,7 @@ def start_menu_poller():
                             update_required = True
                             print("hidden status doesn't match")
 
-                        elif rect_hidden_icons.x != taskbar_data.rect_hidden_icons.x:
+                        elif math.abs(rect_hidden_icons.xumber - taskbar_data.rect_hidden_icons.x) <= 5:
                             print("hidden width doesn't match")
                             print(rect_hidden_icons)
                             print(taskbar_data.rect_hidden_icons)
@@ -772,7 +783,6 @@ def start_menu_poller():
 
                             elif rect_start_button.width != taskbar_data.rect_start_button.width:
                                 print("start width doesn't match")
-
                                 update_required = True
 
                         case "Search":
@@ -793,28 +803,23 @@ def start_menu_poller():
                             rect_task_view = child2.rect
                             task_view_button_found = True
 
-                            if not taskbar_data.rect_task_view:
-                                print("task view status doesn't match")
-                                update_required = True
+                            # if not taskbar_data.rect_task_view:
+                            #     print("task view status doesn't match")
+                            #     update_required = True
 
-                            elif rect_task_view.width != taskbar_data.rect_task_view.width:
-                                print("task view width doesn't match")
-                                update_required = True
-
-                            print(f"found Task View button! {child2.rect}")
+                            # elif rect_task_view.width != taskbar_data.rect_task_view.width:
+                            #     print("task view width doesn't match")
+                            #     update_required = True
+                            # print(f"found Task View button! {child2.rect}")
 
         if not update_required:
             update_required = (taskbar_data.rect_search_button and not search_button_found or
-                            taskbar_data.rect_task_view and not task_view_button_found or
                             taskbar_data.rect_hidden_icons and not hidden_icon_found)
-            
-            if update_required:
-                print(f"one missing {search_button_found, task_view_button_found, hidden_icon_found}")
-
                 
         # the only time we should need to update the canvases is when
         # the rect associated with the system tray changes.
         if update_required:
+            print("redrawing")
             cron_show_hidden_helper(False)
             update_task_bar_canvases()
 
@@ -825,10 +830,20 @@ def start_menu_poller():
 def show_hidden_icon_numbers():
     global main_buttons
     active_window = ui.active_window()
-    global is_main_canvas_active, main_buttons
+    global is_hidden_menu_showing, main_buttons
     main_buttons = []
 
-    match active_window.cls:
+    try:
+        cls = active_window.cls 
+    except Exception as e:
+        cls = None
+        if is_hidden_menu_showing:
+            sys_tray_data.sys_tray_icons = []
+            canvas_main.resume()
+            canvas_main.freeze()
+        return 
+
+    match cls:
         # case "XamlExplorerHostIslandWindow":
         #     print("wat")
         #     active_window = ui.active_window()
@@ -838,7 +853,7 @@ def show_hidden_icon_numbers():
         #             print(f"{child2.name}")
 
         case "TopLevelWindowForOverflowXamlIsland":
-            is_main_canvas_active = True
+            is_hidden_menu_showing = True
             for child in active_window.element.children:
                 for child2 in child.children:
                     if (child2.name.strip()):
@@ -859,18 +874,22 @@ def show_hidden_icon_numbers():
         canvas_main.freeze()
                 
 def on_focus_change(_):
-    global is_main_canvas_active, main_buttons, cron_show_hidden
+    global is_hidden_menu_showing, main_buttons, cron_show_hidden
     active_window = ui.active_window()
-    was_previously_active = is_main_canvas_active
-    is_main_canvas_active = False
-    main_buttons = []
+    try:
+        cls = active_window.cls 
+    except Exception as e:
+        cls = None
+        if is_hidden_menu_showing:
+            sys_tray_data.sys_tray_icons = []
+            canvas_main.resume()
+            canvas_main.freeze()
+        return 
 
-    match active_window.cls:
-        # case "XamlExplorerHostIslandWindow":
-        #     is_main_canvas_active = True
+    match cls:
 
         case "TopLevelWindowForOverflowXamlIsland":
-            is_main_canvas_active = True
+            is_hidden_menu_showing = True
 
         # case "Windows.UI.Core.CoreWindow":
         #     # note the start menu and search both 
@@ -882,13 +901,14 @@ def on_focus_change(_):
         #         is_main_canvas_active = True 
 
         case _:
-            is_main_canvas_active = False
+            if is_hidden_menu_showing:
+                sys_tray_data.sys_tray_icons = []
+                canvas_main.resume()
+                canvas_main.freeze()
 
-    if was_previously_active:
-        canvas_main.resume()
-        canvas_main.freeze()
+            is_hidden_menu_showing = False
  
-    if is_main_canvas_active:
+    if is_hidden_menu_showing:
         cron_show_hidden_helper()
 
 def cron_show_hidden_helper(start = True, time = "500ms", func=show_hidden_icon_numbers):
