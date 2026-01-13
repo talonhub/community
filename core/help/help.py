@@ -193,14 +193,13 @@ def format_context_title(context_name: str) -> str:
 def format_context_button(index: int, context_label: str, context_name: str) -> str:
     global cached_active_contexts_list
     global show_enabled_contexts_only
-    should_show_asterix: bool = not show_enabled_contexts_only and context_map.get(context_name, None) in cached_active_contexts_list
+    should_show_asterix: bool = (
+        not show_enabled_contexts_only
+        and context_map.get(context_name, None) in cached_active_contexts_list
+    )
     postfix: str = "*" if should_show_asterix else ""
 
-    return "Help {}. {}{}".format(
-        index,
-        context_label,
-        postfix,
-    )
+    return f"Help {index}. {context_label}{postfix}"
 
 
 # translates 1-based index -> actual index in sorted_context_map_keys
