@@ -763,7 +763,7 @@ def start_menu_poller():
                             update_required = True
                             print("hidden status doesn't match")
 
-                        elif math.abs(rect_hidden_icons.xumber - taskbar_data.rect_hidden_icons.x) <= 5:
+                        elif abs(rect_hidden_icons.x - taskbar_data.rect_hidden_icons.x) > 15:
                             print("hidden width doesn't match")
                             print(rect_hidden_icons)
                             print(taskbar_data.rect_hidden_icons)
@@ -874,21 +874,23 @@ def show_hidden_icon_numbers():
         canvas_main.freeze()
                 
 def on_focus_change(_):
+    print("***on_focus_change started***")
     global is_hidden_menu_showing, main_buttons, cron_show_hidden
     active_window = ui.active_window()
     try:
         cls = active_window.cls 
     except Exception as e:
         cls = None
+        print(f"exception {e}")
         if is_hidden_menu_showing:
-            sys_tray_data.sys_tray_icons = []
             canvas_main.resume()
             canvas_main.freeze()
         return 
+        
 
     match cls:
-
         case "TopLevelWindowForOverflowXamlIsland":
+            print("hidden icon open")
             is_hidden_menu_showing = True
 
         # case "Windows.UI.Core.CoreWindow":
@@ -910,6 +912,9 @@ def on_focus_change(_):
  
     if is_hidden_menu_showing:
         cron_show_hidden_helper()
+    
+    print("***on_focus_change complete***")
+
 
 def cron_show_hidden_helper(start = True, time = "500ms", func=show_hidden_icon_numbers):
     global cron_show_hidden
