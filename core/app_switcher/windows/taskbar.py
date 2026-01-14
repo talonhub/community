@@ -329,6 +329,7 @@ def draw_hidden_icon_canvas(canvas):
         return
     
     index = len(sys_tray_data.sys_tray_icons) + 1
+    print(index)
     for rect in main_buttons:
         x = rect.x
         y = rect.y
@@ -815,7 +816,7 @@ def start_menu_poller():
         # the only time we should need to update the canvases is when
         # the rect associated with the system tray changes.
         if update_required:
-            print("redrawing")
+            print("redrawing taskbar numbers")
             actions.app.notify("Redrawing Taskbar Numbers")
             cron_show_hidden_helper(False)
 
@@ -845,8 +846,6 @@ def show_hidden_icon_numbers():
     cls = get_window_class(active_window)
     
     if is_hidden_menu_showing:
-        sys_tray_data.sys_tray_icons = []
-
         if canvas_hidden_icons:
             canvas_hidden_icons.close()
             canvas_hidden_icons = None
@@ -898,8 +897,6 @@ def on_focus_change(_):
     is_hidden_menu_showing = active_window.title == "System tray overflow window."
    
     if was_showing:
-        sys_tray_data.sys_tray_icons = []
-
         if canvas_hidden_icons:
             canvas_hidden_icons.close()
             canvas_hidden_icons = None
@@ -929,10 +926,16 @@ def cron_poll_start_menu_helper(start = True, time = "3s", func=start_menu_polle
         cron_poll_start_menu = cron.after(time, func)
 
 def on_screen_change(_):
+    global canvas_hidden_icons
     print(f"on_screen_change started")
     cron_show_hidden_helper(False)
     
     result = update_task_bar_canvases()
+    
+    if canvas_hidden_icons:
+        canvas_hidden_icons.close()
+        canvas_hidden_icons = None
+
     print(f"on_screen_change complete = {result}")
 
 if app.platform == "windows":
