@@ -1,0 +1,21 @@
+list: user.graphite
+-
+absorb
+bottom
+checkout
+continue
+down
+get
+info
+merge
+modify
+move
+P R: pr
+parent
+restack
+submit
+submit stack: submit --stack
+sync
+top
+up
+update stack: submit --stack --update-only

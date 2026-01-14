@@ -5,7 +5,6 @@ vpn
 dns
 regex
 vpc
-fso
 docker
 lambda
 api
@@ -24,8 +23,6 @@ username
 css
 gatsby
 apps
-doggo
-aravaipa
 cognito
 html
 pdf
@@ -58,8 +55,6 @@ reddit
 dendron
 portainer
 raycast
-dappy: dapi
-dappy tasks: dapi-tasks
 telemed
 rango
 P R: PR
@@ -84,3 +79,11 @@ cora logics: coralogix
 macropad
 pydantic
 S M S: sms
+Olympus: olympus
+restack
+yext
+oath: oauth
+ide: id
+greptile
+life cycle: lifecycle
+sink,sync

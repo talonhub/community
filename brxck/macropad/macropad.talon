@@ -6,7 +6,7 @@
 
 
 # key(cmd-shift-alt-ctrl-a):
-  
+
 # key(cmd-shift-alt-ctrl-b):
 
 # key(cmd-shift-alt-ctrl-c):
@@ -17,10 +17,17 @@ key(cmd-shift-alt-ctrl-d):
 key(cmd-shift-alt-ctrl-e):
   user.desktop_next()
 
-key(cmd-shift-alt-ctrl-w):
-  user.mode_toggle()
+key(cmd-shift-alt-ctrl-w:down):
+    speech.disable()
+    # wispr flow has a max key limit & i don't want to rebind the macropad
+    key("ctrl-alt-b:down")
+
+key(cmd-shift-alt-ctrl-w:up):
+    key("ctrl-alt-b:up")
+    speech.enable()
 
 key(cmd-shift-alt-ctrl-x):
+  user.cancel_current_phrase()
   speech.disable()
 
 key(cmd-shift-alt-ctrl-y): speech.enable()

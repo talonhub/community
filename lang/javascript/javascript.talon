@@ -2,6 +2,7 @@ code.language: javascript
 code.language: typescript
 code.language: javascriptreact
 code.language: typescriptreact
+code.language: vue
 -
 tag(): user.code_imperative
 tag(): user.code_object_oriented

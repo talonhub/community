@@ -1,0 +1,16 @@
+list: user.system_paths
+hostname: Brock-McElroy-GWPY4YKQ66
+-
+user: /Users/brock
+desktop: /Users/brock/Desktop
+desk: /Users/brock/Desktop
+documents: /Users/brock/Documents
+docks: /Users/brock/Documents
+downloads: /Users/brock/Downloads
+music: /Users/brock/Music
+pictures: /Users/brock/Pictures
+videos: /Users/brock/Videos
+talon home: /Users/brock/.talon
+talon recordings: /Users/brock/.talon/recordings
+talon user: /Users/brock/.talon/user
+home: /Users/brock

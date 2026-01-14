@@ -1,5 +1,6 @@
 code.language: typescript
 code.language: typescriptreact
+code.language: vue
 -
 
 type union [<user.code_type>]: " | {code_type or ''}"
