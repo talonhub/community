@@ -221,22 +221,28 @@ elif app.platform == "linux":
 elif app.platform == "mac":
     mac_application_directories = [
         "/Applications",
-        "/Applications/Utilities",
         "/System/Applications",
-        "/System/Applications/Utilities",
         f"{Path.home()}/Applications",
         f"{Path.home()}/.nix-profile/Applications",
     ]
 
-    def get_apps():
+    def get_apps(paths: list[str] = mac_application_directories):
         items = {}
-        for base in mac_application_directories:
-            base = os.path.expanduser(base)
-            if os.path.isdir(base):
-                for name in os.listdir(base):
-                    path = os.path.join(base, name)
-                    name = name.rsplit(".", 1)[0].lower()
-                    items[name] = path
+        subdirs = []
+        for base in paths:
+            if not os.path.isdir(base):
+                continue
+            for entry in os.scandir(base):
+                if (not entry.is_dir()) or entry.name.startswith("."):
+                    continue
+                if entry.name.endswith(".app"):
+                    name = entry.name[:-4].lower()
+                    items[name] = entry.path
+                else:
+                    subdirs.append(entry.path)
+        if len(subdirs):
+            items.update(get_apps(subdirs))
+
         return items
 
 
