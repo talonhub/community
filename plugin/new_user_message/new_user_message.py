@@ -60,6 +60,7 @@ mod.tag("new_user_message_showing", desc="The new user message gui is showing")
 
 ctx = Context()
 
+
 @mod.action_class
 class Actions:
     def new_user_message_show():
