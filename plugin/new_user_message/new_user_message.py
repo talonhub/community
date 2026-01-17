@@ -50,7 +50,7 @@ def new_user_gui(gui: imgui.GUI):
     if gui.button("Message Hide"):
         actions.user.new_user_message_hide()
     gui.text("Close this message and stop seeing it on startup:")
-    if gui.button("Message Dismiss"):
+    if gui.button("message dismiss"):
         actions.user.new_user_message_stop_showing_on_startup()
         actions.user.new_user_message_hide()
 
