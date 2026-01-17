@@ -60,13 +60,18 @@ mod.tag("new_user_message_showing", desc="The new user message gui is showing")
 
 ctx = Context()
 
-
+def show_new_user_message():
+    """Show the new user message
+    Having this show up on startup with a fresh and stall required calling a function instead of an action, which is why this function exists
+    """
+    new_user_gui.show()
+    ctx.tags = ["user.new_user_message_showing"]
+    
 @mod.action_class
 class Actions:
     def new_user_message_show():
         """Shows a useful gui intended for new users"""
-        new_user_gui.show()
-        ctx.tags = ["user.new_user_message_showing"]
+        show_new_user_message()
 
     def new_user_message_hide():
         """Hides the new user message gui"""
@@ -82,7 +87,7 @@ class Actions:
 
 def on_ready():
     if not os.path.exists(NEW_USER_MESSAGE_DISMISSAL_PATH):
-        actions.user.new_user_message_show()
+        show_new_user_message()
 
 
 app.register("ready", on_ready)
