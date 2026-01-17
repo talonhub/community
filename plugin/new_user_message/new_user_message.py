@@ -35,7 +35,7 @@ def new_user_gui(gui: imgui.GUI):
     if gui.button("Open Talon Slack"):
         actions.user.open_url("http://talonvoice.slack.com/messages/help")
     gui.text("Open a webpage for helping new users learn how to use Talon:")
-    if gui.button("Open Talon Practice"):
+    if gui.button("open Talon Practice"):
         actions.user.open_url("https://chaosparrot.github.io/talon_practice/")
 
     gui.line()
