@@ -199,7 +199,7 @@ def format_context_button(index: int, context_label: str, context_name: str) -> 
     )
     postfix: str = "*" if should_show_asterisk else ""
 
-    return f"Help {index}. {context_label}{postfix}"
+    return f"help {index}. {context_label}{postfix}"
 
 
 # translates 1-based index -> actual index in sorted_context_map_keys
