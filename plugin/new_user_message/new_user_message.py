@@ -60,15 +60,6 @@ mod.tag("new_user_message_showing", desc="The new user message gui is showing")
 
 ctx = Context()
 
-
-def on_ready():
-    if not os.path.exists(NEW_USER_MESSAGE_DISMISSAL_PATH):
-        actions.user.new_user_message_show()
-
-
-app.register("ready", on_ready)
-
-
 @mod.action_class
 class Actions:
     def new_user_message_show():
@@ -86,3 +77,11 @@ class Actions:
         with open(NEW_USER_MESSAGE_DISMISSAL_PATH, "w") as _:
             # this creates an empty file
             pass
+
+
+def on_ready():
+    if not os.path.exists(NEW_USER_MESSAGE_DISMISSAL_PATH):
+        actions.user.new_user_message_show()
+
+
+app.register("ready", on_ready)
