@@ -180,8 +180,6 @@ def gui_operators(gui: imgui.GUI):
 
 def format_context_title(context_name: str) -> str:
     global cached_active_contexts_list
-    if is_wildcard_context_name(context_name):
-        return context_name
     return "{} [{}]".format(
         context_name,
         (
@@ -354,23 +352,6 @@ def gui_context_help(gui: imgui.GUI):
         actions.user.help_hide()
 
 
-def is_wildcard_context_name(context_name: str) -> bool:
-    return context_name.startswith("*")
-
-
-def find_commands_corresponding_to_context(context_name: str):
-    if is_wildcard_context_name(context_name):
-        # match every context ending with the part of the context name after the *
-        expected_context_tail = context_name[1:]
-        commands = []
-        for context in context_command_map:
-            if context.endswith(expected_context_tail):
-                commands.extend(context_command_map[context].items())
-    else:
-        commands = context_command_map[context_name].items()
-    return commands
-
-
 def draw_context_commands(gui: imgui.GUI):
     global selected_context
     global total_page_count
@@ -378,7 +359,7 @@ def draw_context_commands(gui: imgui.GUI):
 
     context_title = format_context_title(selected_context)
     title = f"Context: {context_title}"
-    commands = find_commands_corresponding_to_context(selected_context)
+    commands = context_command_map[selected_context].items()
     item_line_counts = [get_command_line_count(command) for command in commands]
     pages = get_pages(item_line_counts)
     total_page_count = max(pages, default=1)
@@ -791,10 +772,6 @@ class Actions:
         gui_context_help.show()
         register_events(True)
         ctx.tags = ["user.help_open"]
-
-    def help_dictation():
-        """Display primary dictation mode commands"""
-        actions.user.help_selected_context("*.dictation_mode.talon")
 
     def help_next():
         """Navigates to next page"""
