@@ -1,13 +1,13 @@
 os: windows
 os: mac
 -
-<number_small>: 
+task <number_small>: 
     user.taskbar_click(0, number_small - 1)
 
-<number_small> cycle: 
+task <number_small> cycle: 
     user.taskbar_control_click(0, number_small - 1)
 
-<number_small> connie: 
+task <number_small> connie: 
     user.taskbar_click(1, number_small - 1)
 
 tray hidden:

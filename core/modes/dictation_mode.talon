@@ -69,6 +69,11 @@ caps: user.dictation_format_cap()
 # ^format selection <user.formatters>$: user.formatters_reformat_selection(formatters)
 
 # # Corrections
+undo that [<number_small>]: 
+	numb = number or 1
+	edit.undo()
+	repeat(numb - 1)
+
 nope that | scratch that: user.clear_last_phrase()
 (nope | scratch) selection: edit.delete()
 select that: user.select_last_phrase()

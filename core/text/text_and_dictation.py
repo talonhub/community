@@ -163,7 +163,7 @@ def prose(m) -> str:
         #"| <user.prose_location>"
         "| <user.prose_currency>"
         "| <user.prose_time>"
-        "| <user.number_prose_unprefixed>"
+        "| <user.number_prose_prefixed>"
         "| <user.prose_percent>"
         "| <user.abbreviation>"
         "| <user.prose_contact>"

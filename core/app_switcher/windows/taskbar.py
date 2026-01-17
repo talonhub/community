@@ -462,7 +462,7 @@ def get_window_class(window: ui.Window) -> bool:
     try:
         cls = window.cls
     except Exception as e:
-        app.notify("get_window_class exception - taskbar")
+        #app.notify("get_window_class exception - taskbar")
         print(f"exception = {e}")
         cls = None
     
