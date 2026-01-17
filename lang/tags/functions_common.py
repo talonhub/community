@@ -79,7 +79,7 @@ def gui_functions(gui: imgui.GUI):
             gui.text(f"{i}. {entry}: {talon_list[entry]}")
 
     gui.spacer()
-    if gui.button("Toggle funk (close window)"):
+    if gui.button("funk close"):
         actions.user.code_toggle_functions()
 
 
