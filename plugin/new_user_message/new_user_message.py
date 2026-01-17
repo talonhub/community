@@ -60,13 +60,15 @@ mod.tag("new_user_message_showing", desc="The new user message gui is showing")
 
 ctx = Context()
 
+
 def show_new_user_message():
     """Show the new user message
     Having this show up on startup with a fresh and stall required calling a function instead of an action, which is why this function exists
     """
     new_user_gui.show()
     ctx.tags = ["user.new_user_message_showing"]
-    
+
+
 @mod.action_class
 class Actions:
     def new_user_message_show():
