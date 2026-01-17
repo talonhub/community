@@ -408,6 +408,8 @@ class Actions:
         elif app.platform == "mac":
             # MacOS equivalent is "Mission Control"
             actions.user.dock_send_notification("com.apple.expose.awake")
+        elif app.platform == "linux":
+            actions.key("super")
         else:
             print("Persistent Switcher Menu not supported on " + app.platform)
 
