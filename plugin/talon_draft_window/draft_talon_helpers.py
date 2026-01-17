@@ -1,6 +1,6 @@
 from typing import Optional
 
-from talon import Context, Module, actions, ui
+from talon import Context, Module, actions, app, ui
 
 from .draft_ui import DraftManager
 
@@ -53,7 +53,15 @@ mod.setting(
 )
 
 
-draft_manager = DraftManager()
+draft_manager = None
+
+
+def on_ready():
+    global draft_manager
+    draft_manager = DraftManager()
+
+
+app.register("ready", on_ready)
 
 
 @ctx_focused.action_class("user")
