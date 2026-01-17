@@ -197,7 +197,7 @@ def format_context_button(index: int, context_label: str, context_name: str) -> 
         not show_enabled_contexts_only
         and context_map.get(context_name, None) in cached_active_contexts_list
     )
-    postfix: str = "*" if should_show_asterix else ""
+    postfix: str = "*" if should_show_asterisk else ""
 
     return f"Help {index}. {context_label}{postfix}"
 
