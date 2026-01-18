@@ -205,12 +205,12 @@ class Actions:
         """Click the taskbar popup button based on the index"""        
         x, y = ctrl.mouse_pos()  
 
-        index = index + 1 - popup_start_index
-        if index > len(buttons_popup) or index < popup_start_index:
+        index = index - popup_start_index
+        if index > len(buttons_popup):
             return
 
-        x_click = buttons_popup[index - 1].x + buttons_popup[index - 1].width / 2
-        y_click = buttons_popup[index - 1].y + buttons_popup[index - 1].height / 2
+        x_click = buttons_popup[index].x + buttons_popup[index].width / 2
+        y_click = buttons_popup[index].y + buttons_popup[index].height / 2
 
         actions.mouse_move(x_click, y_click)
         actions.mouse_click(0)
@@ -365,7 +365,7 @@ def draw_canvas_popup(canvas):
         paint.color = "000000"
 
         rect_background = Rect(rect.x, rect.y + rect.height *.75, width * .5, rect.height *.25)
-        canvas.draw_rect(rect_background)
+        #canvas.draw_rect(rect_background)
 
         x_text_position = rect_background.x + rect_background.width / 2
         y_text_position = rect_background.y + rect_background.height / 1.25
@@ -860,8 +860,11 @@ def is_clickable(element):
         pattern = element.invoke_pattern
         if pattern and not isinstance(pattern, str):
             return True
+        else:
+            return False
     except Exception as e:
         return False
+    
 
 def find_all_clickables(element, depth=0):
     result = []
@@ -886,30 +889,48 @@ def walk(element, depth=0):
 
 def show_canvas_popup():
     global canvas_popup, buttons_popup, popup_start_index
-    
     active_window = ui.active_window()
-    buttons_popup = find_all_clickables(active_window.element)
+    element = active_window.element
+
+    # for the start menu, we must get the parent
+    if is_start_menu_showing:
+        element = active_window.element.parent
+
+    buttons_popup = find_all_clickables(element)
     ctx.tags = ['user.taskbar_canvas_popup_showing']
 
     if canvas_popup:
         canvas_popup.close()
         canvas_popup = None
 
-    canvas_popup = canvas.Canvas.from_rect(active_window.element.rect)
+    canvas_popup = canvas.Canvas.from_rect(element.rect)
     canvas_popup.register("draw", draw_canvas_popup)
     canvas_popup.freeze()
        
+is_start_menu_showing = False
+is_search_menu_showing = False
+
 def on_focus_change(_):
     #print(f"***on_focus_change started***")
-    global is_pop_up_canvas_showing, buttons_popup, cron_delay_showing_canvas, canvas_popup, popup_start_index
+    global is_pop_up_canvas_showing, buttons_popup, cron_delay_showing_canvas, is_search_menu_showing
+    global canvas_popup, popup_start_index, is_start_menu_showing
     active_window = ui.active_window()
 
     cls = get_window_class(active_window)
     is_hidden_tray_showing = active_window.title == "System tray overflow window."  
     is_jump_list_showing = cls == "Windows.UI.Core.CoreWindow" and "Jump List" in active_window.title
-    is_pop_up_canvas_showing = is_hidden_tray_showing or is_jump_list_showing
+    is_start_menu_showing = cls == "Windows.UI.Core.CoreWindow" and "Search" == active_window.title and active_window.element.parent.name == "Start"
+    is_search_menu_showing = cls == "Windows.UI.Core.CoreWindow" and "Search" == active_window.title and active_window.element.parent.name != "Start"
+    is_task_view_showing = cls == "XamlExplorerHostIslandWindow" and active_window.title == "Task View"
+    is_taskbar_context = False #cls == "Shell_TrayWnd"
+    
+    is_pop_up_canvas_showing = (is_hidden_tray_showing 
+                                or is_jump_list_showing 
+                                or is_start_menu_showing 
+                                or is_search_menu_showing
+                                or is_task_view_showing)
 
-    #print(f"title = {active_window.title}, class = {cls}")
+    print(f"title = {active_window.title}, class = {cls}, parent = {active_window.element.parent.name}")
     if canvas_popup:
         canvas_popup.close()
         ctx.tags = []
@@ -919,9 +940,18 @@ def on_focus_change(_):
         if is_hidden_tray_showing:
             popup_start_index = len(sys_tray_data.sys_tray_icons)
             cron_delay_canvas_helper(start=True,func=show_canvas_popup)
-        elif is_jump_list_showing:
+        else:
             popup_start_index = 0
-            cron_delay_canvas_helper(start=True,time="150ms",func=show_canvas_popup)
+            if is_jump_list_showing:
+                cron_delay_canvas_helper(start=True,time="150ms",func=show_canvas_popup)
+            elif is_start_menu_showing:
+                cron_delay_canvas_helper(start=True,time="250ms",func=show_canvas_popup)
+            elif is_search_menu_showing:
+                cron_delay_canvas_helper(start=True,time="750ms",func=show_canvas_popup)
+            elif is_task_view_showing:
+                cron_delay_canvas_helper(start=True,time="500ms",func=show_canvas_popup)
+
+
 
     #print(f"***on_focus_change complete {active_window.title}***")
 
