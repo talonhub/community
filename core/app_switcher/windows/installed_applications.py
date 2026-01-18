@@ -1,15 +1,15 @@
-from .data_classes.windows_shortcut import windows_shortcut
+from ...operating_system.windows.data_classes.windows_shortcut import windows_shortcut
 from talon import app, ui
 
 from pathlib import Path
 from uuid import UUID
 from ..common_classes.application import Application
-from .windows_known_applications import get_known_windows_application, mmc
+from ...operating_system.windows.windows_known_applications import get_known_windows_application, mmc
 import glob
 import os
 
 if app.platform == "windows":
-    from .windows_known_paths import resolve_known_windows_path, PathNotFoundException
+    from  ...operating_system.windows.windows_known_paths import resolve_known_windows_path, FOLDERID, PathNotFoundException
     import win32com
     import ctypes
     from ctypes import wintypes
@@ -29,11 +29,7 @@ if app.platform == "windows":
  
     #print(f"{windows_app_dir} {windows_system_app_dir}")
     def get_desktop_path():
-        with winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders") as key:
-
-            desktop = winreg.QueryValueEx(key, "Desktop")[0]
-
-        return os.path.expandvars(desktop)
+        return resolve_known_windows_path(FOLDERID.Desktop)
 
     # since I can't figure out how to get the target paths from the shell folders,
     # we'll parse the known shortcuts and do it live!?

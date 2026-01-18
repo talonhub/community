@@ -1,14 +1,14 @@
-system shutdown:    user.system_shutdown()
-system restart:     user.system_restart()
-system (rest|sleep):        user.system_hibernate()
-system lock:        user.system_lock()
+# system shutdown:    user.system_shutdown()
+# system restart:     user.system_restart()
+# system (rest|sleep):        user.system_hibernate()
+# system lock:        user.system_lock()
 task manager:       user.system_task_manager()
 desktop show:       user.system_show_desktop()
 task view:          user.system_task_view()
 switcher:           user.system_switcher()
-clip show | clippy:          user.clipboard_manager_toggle()
-setter:             user.system_show_settings()
-^kill focused$: user.system_kill_focused_application()
+#clip show | clippy:          user.clipboard_manager_toggle()
+configure:          user.system_show_settings()
+#^kill focused$: user.system_kill_focused_application()
 configure {user.system_setting}:
      user.system_setting(system_setting)
 (summon | some in) <user.directory>:
@@ -19,6 +19,4 @@ configure {user.system_setting}:
 # messy: user.system_show_slacker()
 # outer: user.system_show_email()
 # gitter [<phrase>]$: user.system_show_gitter(phrase or "")
-process$: user.system_show_taskmanager(phrase or "")
-process current$: user.system_taskmanager_find_focused_application()
 
