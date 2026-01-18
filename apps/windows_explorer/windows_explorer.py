@@ -80,21 +80,18 @@ def get_active_explorer_path():
 
 @ctx.action_class("user")
 class UserActions:
-    def get_active_explorer_path():
-        print(get_active_explorer_path())
-
     def file_manager_open_parent():
         actions.key("alt-up")
 
     def file_manager_current_path():
         path = get_active_explorer_path()
 
-        if path in directories_to_remap:
-            path = directories_to_remap[path]
+        # if path in directories_to_remap:
+        #     path = directories_to_remap[path]
 
-        if path in directories_to_exclude:
-            actions.user.file_manager_hide_pickers()
-            path = ""
+        # if path in directories_to_exclude:
+        #     actions.user.file_manager_hide_pickers()
+        #     path = ""
 
         return path
 
