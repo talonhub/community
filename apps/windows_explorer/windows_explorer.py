@@ -1,6 +1,7 @@
 import os
 
 from talon import Context, Module, actions, app, ui
+from ...core.operating_system.windows.windows_known_paths import resolve_known_windows_path, FOLDERID
 
 mod = Module()
 apps = mod.apps
@@ -33,45 +34,27 @@ user_path = os.path.expanduser("~")
 directories_to_remap = {}
 directories_to_exclude = {}
 
+
 if app.platform == "windows":
     is_windows = True
-    import ctypes
+  
+    known_paths_to_resolve = {
+        "Desktop": FOLDERID.Desktop,
+        "Documents": FOLDERID.Documents,
+        "Downloads": FOLDERID.Documents,
+        "Music": FOLDERID.Music,
+        "Pictures": FOLDERID.Pictures,
+        "Videos": FOLDERID.Profile
+    }
 
-    GetUserNameEx = ctypes.windll.secur32.GetUserNameExW
-    NameDisplay = 3
+    for key, value in known_paths_to_resolve.items():
+        try:
+            path = resolve_known_windows_path(value)
+        except Exception as e:
+            path = None
 
-    size = ctypes.pointer(ctypes.c_ulong(0))
-    GetUserNameEx(NameDisplay, None, size)
-
-    nameBuffer = ctypes.create_unicode_buffer(size.contents.value)
-    GetUserNameEx(NameDisplay, nameBuffer, size)
-    one_drive_path = os.path.expanduser(os.path.join("~", "OneDrive"))
-
-    # this is probably not the correct way to check for onedrive, quick and dirty
-    if os.path.isdir(os.path.expanduser(os.path.join("~", r"OneDrive\Desktop"))):
-        directories_to_remap = {
-            "Desktop": os.path.join(one_drive_path, "Desktop"),
-            "Documents": os.path.join(one_drive_path, "Documents"),
-            "Downloads": os.path.join(user_path, "Downloads"),
-            "Music": os.path.join(user_path, "Music"),
-            "OneDrive": one_drive_path,
-            "Pictures": os.path.join(one_drive_path, "Pictures"),
-            "Videos": os.path.join(user_path, "Videos"),
-        }
-    else:
-        # todo use expanduser for cross platform support
-        directories_to_remap = {
-            "Desktop": os.path.join(user_path, "Desktop"),
-            "Documents": os.path.join(user_path, "Documents"),
-            "Downloads": os.path.join(user_path, "Downloads"),
-            "Music": os.path.join(user_path, "Music"),
-            "OneDrive": one_drive_path,
-            "Pictures": os.path.join(user_path, "Pictures"),
-            "Videos": os.path.join(user_path, "Videos"),
-        }
-
-    if nameBuffer.value:
-        directories_to_remap[nameBuffer.value] = user_path
+        if path:
+            directories_to_remap[key] = path
 
     directories_to_exclude = [
         "",
