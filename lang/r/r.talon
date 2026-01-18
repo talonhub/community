@@ -37,7 +37,6 @@ state na integer: insert("NA_integer_")
 is N A: user.insert_between("is.na(", ")")
 is not N A: user.insert_between("!is.na(", ")")
 
-
 # TODO: migrate to function tag
 ^function define <user.text>$: user.code_private_function(text)
 
