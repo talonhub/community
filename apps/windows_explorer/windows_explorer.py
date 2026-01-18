@@ -1,4 +1,6 @@
 import os
+import win32com.client
+import win32gui
 
 from talon import Context, Module, actions, app, ui
 from ...core.operating_system.windows.windows_known_paths import resolve_known_windows_path, FOLDERID
@@ -53,9 +55,6 @@ if app.platform == "windows":
         except Exception as e:
             path = None
 
-        if path:
-            directories_to_remap[key] = path
-
     directories_to_exclude = [
         "",
         "Run",
@@ -66,15 +65,29 @@ if app.platform == "windows":
         "Program Manager",
     ]
 
+def get_active_explorer_path():
+    shell = win32com.client.Dispatch("Shell.Application")
+    hwnd = win32gui.GetForegroundWindow()
+
+    for window in shell.Windows():
+        try:
+            if window.HWND == hwnd:
+                return window.Document.Folder.Self.Path
+        except Exception:
+            continue
+
+    return None
 
 @ctx.action_class("user")
 class UserActions:
+    def get_active_explorer_path():
+        print(get_active_explorer_path())
 
     def file_manager_open_parent():
         actions.key("alt-up")
 
     def file_manager_current_path():
-        path = ui.active_window().title
+        path = get_active_explorer_path()
 
         if path in directories_to_remap:
             path = directories_to_remap[path]
