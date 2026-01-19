@@ -1,0 +1,17 @@
+list: user.system_paths
+hostname: J40L4V3
+-
+user: C:\Users\MPhil
+desktop: C:\Users\MPhil\OneDrive\Desktop
+desk: C:\Users\MPhil\Desktop
+documents: C:\Users\MPhil\OneDrive\Documents
+docks: C:\Users\MPhil\Documents
+downloads: C:\Users\MPhil\Downloads
+music: C:\Users\MPhil\Music
+pictures: C:\Users\MPhil\OneDrive\Pictures
+videos: C:\Users\MPhil\Videos
+talon home: C:\Users\MPhil\AppData\Roaming\talon
+talon recordings: C:\Users\MPhil\AppData\Roaming\talon\recordings
+talon user: C:\Users\MPhil\AppData\Roaming\talon\user
+profile: C:\Users\MPhil
+one drive: C:\Users\MPhil\OneDrive
