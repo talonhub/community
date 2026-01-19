@@ -876,6 +876,8 @@ def on_focus_change(_):
     is_search_menu_showing = cls == "Windows.UI.Core.CoreWindow" and "Search" == active_window.title and active_window.element.parent.name != "Start"
     is_task_view_showing = cls == "XamlExplorerHostIslandWindow" and active_window.title == "Task View"
     is_control_center_showing = cls == "ControlCenterWindow"
+    is_notification_center_showing = cls == "Windows.UI.Core.CoreWindow" and "Notification Center" == active_window.title and active_window.element.parent.name != "Start"
+
     is_taskbar_context = False #cls == "Shell_TrayWnd"
     
     is_pop_up_canvas_showing = (is_hidden_tray_showing 
@@ -883,7 +885,8 @@ def on_focus_change(_):
                                 or is_start_menu_showing 
                                 or is_search_menu_showing
                                 or is_task_view_showing
-                                or is_control_center_showing)
+                                or is_control_center_showing
+                                or is_notification_center_showing)
 
 
     print(f"title = {active_window.title}, class = {cls}, parent = {active_window.element.parent.name} control_type = {active_window.element.control_type}")
@@ -912,6 +915,9 @@ def on_focus_change(_):
                 cron_delay_canvas_helper(start=True,time="500ms",func=show_canvas_popup)
             elif is_control_center_showing:
                 cron_delay_canvas_helper(start=True,time="150ms",func=show_canvas_popup)
+            elif is_notification_center_showing:
+                cron_delay_canvas_helper(start=True,time="150ms",func=show_canvas_popup)
+
 
 
 
