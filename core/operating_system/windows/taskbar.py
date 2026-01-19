@@ -4,10 +4,12 @@ from dataclasses import dataclass, asdict
 from talon.ui import Rect
 import math
 import platform
+from enum import Enum
 
 mod = Module()
 mod.tag("taskbar_canvas_popup_showing", desc="Indicates a taskbar popup is showing")
 ctx = Context()
+
 
 cron_poll_start_menu = None
 cron_delay_showing_canvas = None
@@ -92,6 +94,125 @@ def is_start_left_aligned() -> bool:
     except FileNotFoundError:
         # Key or value missing -> default behavior (Win11 default is centered)
         return False
+
+class ExplorerPopUpState(Enum):
+    NONE = 0
+    DESKTOP = 1
+    SYSTEM_TRAY = 2
+    START_MENU = 3
+    START_MENU_CONTEXT_MENU = 4
+    SEARCH_MENU = 5
+    TASK_VIEW = 6
+    TASK_BAR_JUMP_LIST = 7
+    NOTIFICATION_CENTER = 8
+    CONTROL_CENTER = 9
+    GENERIC_CONTEXT_MENU = 10
+    JUMP_LIST_CONTEXT_MENU = 11
+    PROGRAM_MANAGER = 12
+    SNAP_ASSIST = 13
+
+class ExplorerPopUpElementStrategy(Enum):
+    FOCUSED_ELEMENT = 0
+    FOCUSED_ELEMENT_PARENT = 1
+    ACTIVE_WINDOW_PARENT = 2
+    ACTIVE_WINDOW = 3
+
+@dataclass
+class ExplorerPopupStatus:
+    state: ExplorerPopUpState
+    strategy: ExplorerPopUpElementStrategy
+    element_override: Element
+
+    def __init__(self, state=ExplorerPopUpState.NONE, element_override: Element =None):
+        self.state = state
+        self.element_override = element_override   
+        self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW
+
+    def set(self, state: ExplorerPopUpState, element_override: Element = None, strategy=ExplorerPopUpElementStrategy.FOCUSED_ELEMENT):
+        self.state = state
+        self.element_override = element_override    
+
+    def reset(self):
+        self.state = ExplorerPopUpState.NONE
+        self.element_override = None   
+        self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW    
+
+    def update_state(self):
+        active_window = ui.active_window()
+        focused_element = ui.focused_element()
+
+        try:
+            parent_element = focused_element.parent
+        except Exception as e:
+            print("failed to get parent")
+            parent_element = None
+
+        cls = get_window_class(active_window)
+
+        self.state = ExplorerPopUpState.NONE
+        self.strategy = ExplorerPopUpElementStrategy.FOCUSED_ELEMENT_PARENT
+
+        match cls:
+            case "Windows.UI.Core.CoreWindow":
+                if (parent_element and (focused_element.name == "Lock" or focused_element.parent.name == "Lock")):
+                    self.state = ExplorerPopUpState.GENERIC_CONTEXT_MENU
+                elif ((focused_element.name == "Notification Center")):
+                    self.state = ExplorerPopUpState.NOTIFICATION_CENTER
+                    self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW
+                elif "Jump List" in active_window.title:
+                    self.state = ExplorerPopUpState.JUMP_LIST_CONTEXT_MENU
+                    self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW
+                elif "Search" == active_window.title: #and parent_element and parent_element.name == "Start":
+                    if parent_element and "Desktop" in parent_element.name and parent_element.control_type == "Pane":
+                        self.state = ExplorerPopUpState.SEARCH_MENU
+                        self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW
+                    elif parent_element and ("Start" or "Search" in parent_element.name):
+                        self.state = ExplorerPopUpState.START_MENU
+                        self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW_PARENT
+                elif "Notification Center":
+                    self.state = ExplorerPopUpState.NOTIFICATION_CENTER
+                    self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW
+
+            case "ControlCenterWindow":
+                self.state = ExplorerPopUpState.CONTROL_CENTER
+
+            case "ProgMan":
+                self.state = ExplorerPopUpState.PROGRAM_MANAGER
+                walk(focused_element)
+                self.strategy = ExplorerPopUpElementStrategy.FOCUSED_ELEMENT_PARENT
+
+            case "Shell_TrayWnd":
+                # if focused_element.name in ("Installed apps", "Desktop"):
+                #     self.state = ExplorerPopUpState.GENERIC_CONTEXT_MENU
+                if focused_element.control_type == "MenuItem":
+                    self.state = ExplorerPopUpState.GENERIC_CONTEXT_MENU
+
+            case "XamlExplorerHostIslandWindow":
+                match active_window.title:
+                    case "Task View":
+                        self.state = ExplorerPopUpState.TASK_VIEW
+                    case "Snap Assist":
+                        self.state = ExplorerPopUpState.SNAP_ASSIST
+                        self.strategy = ExplorerPopUpElementStrategy.FOCUSED_ELEMENT_PARENT
+
+            case "ControlCenterWindow":
+                self.state = ExplorerPopUpState.CONTROL_CENTER
+                self.strategy = ExplorerPopUpElementStrategy.FOCUSED_ELEMENT_PARENT
+
+            case _:
+                if active_window.title == "System tray overflow window.":
+                    self.state = ExplorerPopUpState.SYSTEM_TRAY
+                    self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW
+                elif focused_element.control_type == "ListItem" and (parent_element and "Desktop" in parent_element.name):
+                    self.state = ExplorerPopUpState.DESKTOP
+                    self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW
+
+
+
+        print(f"cls = {cls} win_title = {active_window.title} element = {focused_element.name}, parent = {parent_element.name} control_type = {focused_element.control_type} parent_control_type = {parent_element.control_type if parent_element else "None"}")
+    
+
+explorer_popup_status = ExplorerPopupStatus()
 
 @dataclass
 class SystemTrayIconData:
@@ -289,7 +410,7 @@ class Actions:
 
             # if the search button is enabled, adjust x_click as appropriate
             if taskbar_data.search_index:
-                print(f"search index... {index} vs {taskbar_data.search_index}")
+                #print(f"search index... {index} vs {taskbar_data.search_index}")
 
                 if taskbar_data.search_index == index:
                     x_click += taskbar_data.rect_search_button.width / 2
@@ -297,7 +418,7 @@ class Actions:
                     x_click += taskbar_data.rect_search_button.width
 
         if index >= taskbar_data.application_start_index:
-            print("app start")
+            #print("app start")
             x_click += (taskbar_data.icon_width * (index - taskbar_data.application_start_index - .5)) 
     
         actions.mouse_move(x_click, y_click)
@@ -361,7 +482,7 @@ class Actions:
         x, y = ctrl.mouse_pos()
         sys_tray_count = len(system_try_data.sys_tray_icons)
         if index >= sys_tray_count:
-            if is_pop_up_canvas_showing:
+            if explorer_popup_status.state != ExplorerPopupStatus.NONE:
                 sys_tray_icon = buttons_popup[index - sys_tray_count]
             else:
                 return
@@ -376,7 +497,7 @@ class Actions:
         x, y = ctrl.mouse_pos()
         sys_tray_count = len(system_try_data.sys_tray_icons)
         if index >= sys_tray_count:
-            if is_pop_up_canvas_showing:
+            if explorer_popup_status.state == ExplorerPopUpState.SYSTEM_TRAY:
                 sys_tray_icon = buttons_popup[index - sys_tray_count]
             else:
                 return
@@ -393,7 +514,6 @@ class Actions:
         """Forces fresh of taskbar"""  
         on_screen_change(None)
 
-is_pop_up_canvas_showing = False
 popup_start_index = 0
 
 def draw_canvas_popup(canvas):
@@ -404,7 +524,7 @@ def draw_canvas_popup(canvas):
     canvas.paint.text_align = canvas.paint.TextAlign.CENTER
     paint.textsize = 20
 
-    if not is_pop_up_canvas_showing:
+    if explorer_popup_status.state == ExplorerPopUpState.NONE:
         return
     
     index = popup_start_index + 1
@@ -642,7 +762,7 @@ def get_windows_eleven_taskbar():
 
             if cls == "Shell_TrayWnd":
                 taskbar = window.element
-                print(f"found taskbar cls = {cls} {window.title} parent = {taskbar.parent} control_type = {taskbar.control_type}")
+                #print(f"found taskbar cls = {cls} {window.title} parent = {taskbar.parent} control_type = {taskbar.control_type}")
 
 
         if taskbar:
@@ -876,20 +996,31 @@ def walk(element, depth=0):
 def show_canvas_popup():
     global canvas_popup, buttons_popup, popup_start_index
     active_window = ui.active_window()
-    element = ui.focused_element().parent
+    focused_element = ui.focused_element()
+    element = None
 
-    # for the start menu, we must get the parent
-    if is_start_menu_showing:
-        element = active_window.element.parent
-    elif is_jump_list_showing:
-        element = active_window.element
-    elif is_hidden_tray_showing:
-        element = active_window.element
-    elif is_notification_center_showing:
-        element = active_window.element
+    #print(f"title = {active_window.title} {focused_element} {focused_element.parent} {active_window.element.parent}")
 
+    match explorer_popup_status.strategy:
+        case ExplorerPopUpElementStrategy.ACTIVE_WINDOW:
+            element = active_window.element
+        case ExplorerPopUpElementStrategy.ACTIVE_WINDOW_PARENT:
+            element = active_window.element.parent
+        case ExplorerPopUpElementStrategy.FOCUSED_ELEMENT:
+            element = focused_element
+        case ExplorerPopUpElementStrategy.FOCUSED_ELEMENT_PARENT:
+            element = focused_element.parent
+
+    # if we've somehow reach the desktop element, something's gone horribly wrong
+    # so, skip
+    if "Desktop" in element.name and element.control_type == "Pane":
+        print("Prevent enumerating the desktop - skipping")
+        explorer_popup_status.set(ExplorerPopUpState.NONE)
+        return
 
     buttons_popup = find_all_clickable_rects(element)
+
+    #print(f"show_canvas_popup {buttons_popup}")
 
     if canvas_popup:
         canvas_popup.close()
@@ -898,61 +1029,15 @@ def show_canvas_popup():
     canvas_popup = canvas.Canvas.from_rect(element.rect)
     canvas_popup.register("draw", draw_canvas_popup)
     canvas_popup.freeze()
-       
-is_start_menu_showing = False
-is_search_menu_showing = False
-
-
-
-def win_title_changed(window):
-    print(f"win_title_changed {window.title}")
-    focused_element = ui.focused_element()
-    print(focused_element)
-
 
 def on_focus_change(_):
     #print(f"***on_focus_change started***")
-    global is_pop_up_canvas_showing, buttons_popup, cron_delay_showing_canvas, is_notification_center_showing, is_search_menu_showing, is_jump_list_showing, is_hidden_tray_showing
-    global canvas_popup, popup_start_index, is_start_menu_showing
-    active_window = ui.active_window()
-    focused_element = ui.focused_element()
+    global buttons_popup, cron_delay_showing_canvas
+    global canvas_popup, popup_start_index
 
-    try:
-        focused_element_parent = focused_element.parent
-    except Exception as e:
-        print("failed to get parent")
-        focused_element_parent = None
-
-    cls = get_window_class(active_window)
-    is_hidden_tray_showing = active_window.title == "System tray overflow window."  
-    is_jump_list_showing = cls == "Windows.UI.Core.CoreWindow" and "Jump List" in active_window.title
-    is_start_menu_showing = cls == "Windows.UI.Core.CoreWindow" and "Search" == active_window.title and active_window.element.parent.name == "Start"
-    is_search_menu_showing = cls == "Windows.UI.Core.CoreWindow" and "Search" == active_window.title and active_window.element.parent.name != "Start"
-    is_task_view_showing = cls == "XamlExplorerHostIslandWindow" and active_window.title == "Task View"
-    is_control_center_showing = cls == "ControlCenterWindow"
-    is_notification_center_showing = cls == "Windows.UI.Core.CoreWindow" and "Notification Center" == focused_element.name and active_window.element.parent.name != "Start"
-    is_start_context_menu = cls == "Shell_TrayWnd" and focused_element.name in ("Installed apps", "Desktop")
-    is_lock_menu = cls == "Windows.UI.Core.CoreWindow" and (focused_element_parent and focused_element.name in ("Lock"))
-    is_desktop_showing = focused_element.control_type == "ListItem" and (focused_element_parent and "Desktop" in focused_element_parent.name) 
-
+    
     #is_menu_bar = cls == "Tray Window" and focused_element.control_type == "MenuBar"
     #2026-01-19 05:08:33.436    IO cls = = <menu bar 'Application'>, parent = <window 'T'> Desktop 1 control_type = MenuBar parent_control_type = Window
-
-    is_taskbar_context = cls = "Shell_TrayWnd" and focused_element.control_type == "MenuItem"
-    is_pop_up_canvas_showing = (is_hidden_tray_showing 
-                                or is_jump_list_showing 
-                                or is_start_menu_showing 
-                                or is_search_menu_showing
-                                or is_task_view_showing
-                                or is_control_center_showing
-                                or is_notification_center_showing
-                                or is_start_context_menu
-                                or is_lock_menu
-                                or is_taskbar_context
-                                or is_desktop_showing)
-
-
-    print(f"cls = {cls} element = {focused_element}, parent = {focused_element_parent} {active_window.element.parent.name} control_type = {focused_element.control_type} parent_control_type = {focused_element_parent.control_type if focused_element_parent else "None"}")
     # if the taskbar itself has focus, ignore for now
     if canvas_popup:
         cron_delay_canvas_helper(False)
@@ -960,28 +1045,23 @@ def on_focus_change(_):
         ctx.tags = []
         canvas_popup = None
 
-    if is_pop_up_canvas_showing:
-        if is_hidden_tray_showing:
+    active_app = ui.active_app()
+    if active_app.name not in ("Windows Explorer", "SearchHost.exe", "Windows Shell Experience Host", "ShellHost"):
+        print(f"{active_app.name} - skipping")
+        explorer_popup_status.reset()
+        return 
+
+    explorer_popup_status.update_state()
+
+    #print(explorer_popup_status)
+    if explorer_popup_status.state != ExplorerPopUpState.NONE:
+
+        if explorer_popup_status.state == ExplorerPopUpState.SYSTEM_TRAY:
             popup_start_index = len(system_try_data.sys_tray_icons)
             cron_delay_canvas_helper(start=True,func=show_canvas_popup)
         else:
             popup_start_index = 0
-            if is_jump_list_showing:
-                cron_delay_canvas_helper(start=True,time="150ms",func=show_canvas_popup)
-            elif is_start_menu_showing:
-                cron_delay_canvas_helper(start=True,time="250ms",func=show_canvas_popup)
-            elif is_search_menu_showing:
-                cron_delay_canvas_helper(start=True,time="750ms",func=show_canvas_popup)
-            elif is_task_view_showing:
-                cron_delay_canvas_helper(start=True,time="500ms",func=show_canvas_popup)
-            elif is_control_center_showing:
-                cron_delay_canvas_helper(start=True,time="150ms",func=show_canvas_popup)
-            elif (is_notification_center_showing 
-                or is_start_context_menu 
-                or is_lock_menu 
-                or is_taskbar_context
-                or is_desktop_showing):
-                cron_delay_canvas_helper(start=True,time="150ms",func=show_canvas_popup)
+            cron_delay_canvas_helper(start=True,time="500ms",func=show_canvas_popup)
 
     #print(f"***on_focus_change complete {active_window.title}***")
 
