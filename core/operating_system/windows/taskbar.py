@@ -612,8 +612,9 @@ def get_windows_eleven_taskbar():
             cls = get_window_class(window)
 
             if cls == "Shell_TrayWnd":
-                #print(f"found taskbar {window.title}")
                 taskbar = window.element
+                print(f"found taskbar cls = {cls} {window.title} parent = {taskbar.parent} control_type = {taskbar.control_type}")
+
 
         if taskbar:
             break
@@ -739,7 +740,15 @@ def start_menu_poller():
             canvas_popup.close()
 
         return
-        
+
+    # if the taskbar itself has focus, skip updates until it loses focus
+    # we get garbage data in this case
+    active_window = ui.active_window()
+    cls = get_window_class(active_window)
+
+    if cls == "Shell_TrayWnd":
+        return        
+
     update_required = (taskbar_data == None 
                        
                        # check if the sys tray has changed
@@ -768,6 +777,8 @@ def start_menu_poller():
 
         if canvas_popup:
             show_canvas_popup()
+
+        app.notify("Redrawing taskbar")
             
 
     cron_poll_start_menu_helper()
@@ -868,7 +879,13 @@ def on_focus_change(_):
                                 or is_search_menu_showing
                                 or is_task_view_showing)
 
-    print(f"title = {active_window.title}, class = {cls}, parent = {active_window.element.parent.name}")
+
+    print(f"title = {active_window.title}, class = {cls}, parent = {active_window.element.parent.name} control_type = {active_window.element.control_type}")
+
+    # if the taskbar itself has focus, ignore for now
+    if cls == "Shell_TrayWnd":
+        return
+    
     if canvas_popup:
         canvas_popup.close()
         ctx.tags = []
