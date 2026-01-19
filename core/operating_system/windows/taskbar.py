@@ -197,6 +197,29 @@ mod = Module()
 
 @mod.action_class
 class Actions:
+    def taskbar_hide(show: bool):
+        """"""
+        if show:
+            if canvas_popup:
+                canvas_popup.freeze()
+
+            if canvas_system_tray:
+                canvas_system_tray.freeze()
+
+            if canvas_taskbar:
+                canvas_taskbar.freeze()
+        else:
+            if canvas_popup:
+                canvas_popup.hide()
+
+            if canvas_system_tray:
+                canvas_system_tray.hide()
+
+            if canvas_taskbar:
+                canvas_taskbar.hide()
+
+        cron.after("500ms", finish_capture)
+
     def taskbar_hover(index: int):
         """hover over taskbar button"""
         #print(index)
@@ -266,12 +289,15 @@ class Actions:
 
             # if the search button is enabled, adjust x_click as appropriate
             if taskbar_data.search_index:
+                print(f"search index... {index} vs {taskbar_data.search_index}")
+
                 if taskbar_data.search_index == index:
                     x_click += taskbar_data.rect_search_button.width / 2
                 else:
                     x_click += taskbar_data.rect_search_button.width
 
         if index >= taskbar_data.application_start_index:
+            print("app start")
             x_click += (taskbar_data.icon_width * (index - taskbar_data.application_start_index - .5)) 
     
         actions.mouse_move(x_click, y_click)
@@ -372,6 +398,8 @@ popup_start_index = 0
 
 def draw_canvas_popup(canvas):
     #print("draw_canvas_popup")
+    ctx.tags = ['user.taskbar_canvas_popup_showing']
+
     paint = canvas.paint
     canvas.paint.text_align = canvas.paint.TextAlign.CENTER
     paint.textsize = 20
@@ -640,6 +668,7 @@ def get_windows_eleven_taskbar():
                 case "Search":
                     rect_search_button = element.rect
                     search_button_found = True
+                    search_button_index = current_index
                     application_start_index = application_start_index + 1
 
                 case "Start":
@@ -651,7 +680,6 @@ def get_windows_eleven_taskbar():
                     rect_task_view = element.rect
                     task_view_button_found = True
                     task_view_index = current_index
-                    application_start_index = application_start_index + 1
 
                 case _:
                     if not icon_dimensions_set:
@@ -850,7 +878,6 @@ def show_canvas_popup():
         element = active_window.element.parent
 
     buttons_popup = find_all_clickable_rects(element)
-    ctx.tags = ['user.taskbar_canvas_popup_showing']
 
     if canvas_popup:
         canvas_popup.close()
