@@ -243,6 +243,8 @@ class Actions:
         actions.sleep("150ms")
         actions.mouse_move(x, y)      
 
+        show_canvas_popup()
+
     def taskbar_click(mouse_button: int, index: int):
         """Click the taskbar button based on the index"""        
         x, y = ctrl.mouse_pos()
@@ -620,7 +622,6 @@ def get_windows_eleven_taskbar():
             break
 
     if not taskbar:
-        update_cron = cron.after("5s", create_task_bar_canvases)
         return 
     
     application_start_index = 0
@@ -747,6 +748,7 @@ def start_menu_poller():
     cls = get_window_class(active_window)
 
     if cls == "Shell_TrayWnd":
+        cron_poll_start_menu_helper()
         return        
 
     update_required = (taskbar_data == None 
@@ -773,6 +775,8 @@ def start_menu_poller():
     )
     
     if update_required:
+        cron_delay_canvas_helper(False)
+        cron_poll_start_menu_helper(False)
         create_task_bar_canvases(task_bar, sys_tray)
 
         if canvas_popup:
@@ -786,7 +790,7 @@ def start_menu_poller():
 
 def is_clickable(element, depth=0):
     try:
-        if element.control_type in ("Button", "ListViewItem"):
+        if element.control_type in ("Button", "ListViewItem", "ListItem"):
             return True
         
         pattern = element.invoke_pattern
@@ -871,20 +875,21 @@ def on_focus_change(_):
     is_start_menu_showing = cls == "Windows.UI.Core.CoreWindow" and "Search" == active_window.title and active_window.element.parent.name == "Start"
     is_search_menu_showing = cls == "Windows.UI.Core.CoreWindow" and "Search" == active_window.title and active_window.element.parent.name != "Start"
     is_task_view_showing = cls == "XamlExplorerHostIslandWindow" and active_window.title == "Task View"
+    is_control_center_showing = cls == "ControlCenterWindow"
     is_taskbar_context = False #cls == "Shell_TrayWnd"
     
     is_pop_up_canvas_showing = (is_hidden_tray_showing 
                                 or is_jump_list_showing 
                                 or is_start_menu_showing 
                                 or is_search_menu_showing
-                                or is_task_view_showing)
+                                or is_task_view_showing
+                                or is_control_center_showing)
 
 
     print(f"title = {active_window.title}, class = {cls}, parent = {active_window.element.parent.name} control_type = {active_window.element.control_type}")
 
     # if the taskbar itself has focus, ignore for now
-    if cls == "Shell_TrayWnd":
-        return
+
     
     if canvas_popup:
         canvas_popup.close()
@@ -905,6 +910,9 @@ def on_focus_change(_):
                 cron_delay_canvas_helper(start=True,time="750ms",func=show_canvas_popup)
             elif is_task_view_showing:
                 cron_delay_canvas_helper(start=True,time="500ms",func=show_canvas_popup)
+            elif is_control_center_showing:
+                cron_delay_canvas_helper(start=True,time="150ms",func=show_canvas_popup)
+
 
 
 
@@ -912,6 +920,7 @@ def on_focus_change(_):
 
 def cron_delay_canvas_helper(start = True, time = "500ms", func=show_canvas_popup):
     global cron_delay_showing_canvas
+
     if cron_delay_showing_canvas:
         cron.cancel(cron_delay_showing_canvas)
         cron_delay_showing_canvas = None

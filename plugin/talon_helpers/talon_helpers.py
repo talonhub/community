@@ -47,6 +47,19 @@ def talon_convert_list_helper(list_name, output_path):
     else:
         return False
 
+def get_window_class(window: ui.Window) -> bool:
+    cls = None
+    if not window:
+        return None
+    try:
+        cls = window.cls
+    except Exception as e:
+        print(f"exception = {e}")
+        app.notify("get_window_class exception - switcher askbar")
+        cls = None
+    
+    return cls
+
 @mod.action_class
 class Actions:
     def talon_add_context_clipboard_python():
@@ -69,6 +82,18 @@ class Actions:
             )
 
         clip.set_text(result)
+
+    def talon_dump_explorer():
+        """"""
+        import win32com.client
+        import win32gui
+        shell = win32com.client.Dispatch("Shell.Application")
+        hwnd = win32gui.GetForegroundWindow()
+
+        for window in shell.Windows():
+            if window.HWND == hwnd:
+                print(window.Title)
+
 
     def talon_add_context_clipboard():
         """Adds os-specific context info to the clipboard for the focused app for .talon files"""
