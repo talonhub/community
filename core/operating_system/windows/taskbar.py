@@ -885,6 +885,8 @@ def show_canvas_popup():
         element = active_window.element
     elif is_hidden_tray_showing:
         element = active_window.element
+    elif is_notification_center_showing:
+        element = active_window.element
 
 
     buttons_popup = find_all_clickable_rects(element)
@@ -910,7 +912,7 @@ def win_title_changed(window):
 
 def on_focus_change(_):
     #print(f"***on_focus_change started***")
-    global is_pop_up_canvas_showing, buttons_popup, cron_delay_showing_canvas, is_search_menu_showing, is_jump_list_showing, is_hidden_tray_showing
+    global is_pop_up_canvas_showing, buttons_popup, cron_delay_showing_canvas, is_notification_center_showing, is_search_menu_showing, is_jump_list_showing, is_hidden_tray_showing
     global canvas_popup, popup_start_index, is_start_menu_showing
     active_window = ui.active_window()
     focused_element = ui.focused_element()
@@ -918,6 +920,7 @@ def on_focus_change(_):
     try:
         focused_element_parent = focused_element.parent
     except Exception as e:
+        print("failed to get parent")
         focused_element_parent = None
 
     cls = get_window_class(active_window)
@@ -927,9 +930,11 @@ def on_focus_change(_):
     is_search_menu_showing = cls == "Windows.UI.Core.CoreWindow" and "Search" == active_window.title and active_window.element.parent.name != "Start"
     is_task_view_showing = cls == "XamlExplorerHostIslandWindow" and active_window.title == "Task View"
     is_control_center_showing = cls == "ControlCenterWindow"
-    is_notification_center_showing = cls == "Windows.UI.Core.CoreWindow" and "Notification Center" == active_window.title and active_window.element.parent.name != "Start"
+    is_notification_center_showing = cls == "Windows.UI.Core.CoreWindow" and "Notification Center" == focused_element.name and active_window.element.parent.name != "Start"
     is_start_context_menu = cls == "Shell_TrayWnd" and focused_element.name in ("Installed apps", "Desktop")
-    is_lock_menu = cls == "Windows.UI.Core.CoreWindow" and (focused_element.name == "Lock" or focused_element.parent.name == "Lock")
+    is_lock_menu = cls == "Windows.UI.Core.CoreWindow" and (focused_element_parent and focused_element.name in ("Lock"))
+    is_desktop_showing = focused_element.control_type == "ListItem" and (focused_element_parent and "Desktop" in focused_element_parent.name) 
+
     #is_menu_bar = cls == "Tray Window" and focused_element.control_type == "MenuBar"
     #2026-01-19 05:08:33.436    IO cls = = <menu bar 'Application'>, parent = <window 'T'> Desktop 1 control_type = MenuBar parent_control_type = Window
 
@@ -943,12 +948,14 @@ def on_focus_change(_):
                                 or is_notification_center_showing
                                 or is_start_context_menu
                                 or is_lock_menu
-                                or is_taskbar_context)
+                                or is_taskbar_context
+                                or is_desktop_showing)
 
 
     print(f"cls = {cls} element = {focused_element}, parent = {focused_element_parent} {active_window.element.parent.name} control_type = {focused_element.control_type} parent_control_type = {focused_element_parent.control_type if focused_element_parent else "None"}")
     # if the taskbar itself has focus, ignore for now
     if canvas_popup:
+        cron_delay_canvas_helper(False)
         canvas_popup.close()
         ctx.tags = []
         canvas_popup = None
@@ -969,7 +976,11 @@ def on_focus_change(_):
                 cron_delay_canvas_helper(start=True,time="500ms",func=show_canvas_popup)
             elif is_control_center_showing:
                 cron_delay_canvas_helper(start=True,time="150ms",func=show_canvas_popup)
-            elif is_notification_center_showing or is_start_context_menu or is_lock_menu or is_taskbar_context:
+            elif (is_notification_center_showing 
+                or is_start_context_menu 
+                or is_lock_menu 
+                or is_taskbar_context
+                or is_desktop_showing):
                 cron_delay_canvas_helper(start=True,time="150ms",func=show_canvas_popup)
 
     #print(f"***on_focus_change complete {active_window.title}***")
