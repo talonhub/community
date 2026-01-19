@@ -18,13 +18,10 @@ key(cmd-shift-alt-ctrl-e):
   user.desktop_next()
 
 key(cmd-shift-alt-ctrl-w:down):
-    speech.disable()
-    # wispr flow has a max key limit & i don't want to rebind the macropad
-    key("ctrl-alt-b:down")
+    user.wispr_toggle_down()
 
 key(cmd-shift-alt-ctrl-w:up):
-    key("ctrl-alt-b:up")
-    speech.enable()
+    user.wispr_toggle_up()
 
 key(cmd-shift-alt-ctrl-x):
   user.cancel_current_phrase()

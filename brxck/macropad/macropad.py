@@ -2,8 +2,25 @@ from talon import Module, Context, actions, scope
 
 mod = Module()
 
+_wispr_speech_was_enabled = False
+
 @mod.action_class
 class MacroPadActions:
+    def wispr_toggle_down():
+        """Disable speech for wispr if it was enabled, tracking state for re-enable on up"""
+        global _wispr_speech_was_enabled
+        _wispr_speech_was_enabled = actions.speech.enabled()
+        if _wispr_speech_was_enabled:
+            actions.speech.disable()
+        actions.key("ctrl-alt-b:down")
+
+    def wispr_toggle_up():
+        """Re-enable speech after wispr if it was enabled before"""
+        global _wispr_speech_was_enabled
+        actions.key("ctrl-alt-b:up")
+        if _wispr_speech_was_enabled:
+            actions.speech.enable()
+
     def speech_toggle_down():
         """Toggle speech on and off"""
         if actions.speech.enabled():
