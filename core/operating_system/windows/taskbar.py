@@ -163,15 +163,19 @@ class ExplorerPopupStatus:
                     self.state = ExplorerPopUpState.JUMP_LIST_CONTEXT_MENU
                     self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW
                 elif "Search" == active_window.title: #and parent_element and parent_element.name == "Start":
-                    if parent_element and parent_element.name in ["Start", "Search"]:
+                    if parent_element:
+                        print("start menu...")
                         self.state = ExplorerPopUpState.START_MENU
-
-                        # the only way I can tell the difference between the search menu
-                        # and the start menu is by poking at the children. Super fragile
-                        if focused_element.parent.children[0].name == "CoreInput":
+                        if parent_element.parent and parent_element.parent.name == "Start":
                             self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW_PARENT
                         else:
                             self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW
+                        # the only way I can tell the difference between the search menu
+                        # and the start menu is by poking at the children. Super fragile
+                        # if focused_element.parent.control_type == "CoreInput":
+                        #     
+                        # else:
+                        #     
 
                 elif "Notification Center":
                     self.state = ExplorerPopUpState.NOTIFICATION_CENTER
@@ -409,19 +413,21 @@ class Actions:
             if taskbar_data.rect_start_button:
                 x_click = taskbar_data.rect_start_button.x + taskbar_data.rect_start_button.width / 2
         else:
+            x_click = taskbar_data.rect_start_button.x + taskbar_data.rect_start_button.width
+
             # if the search button is enabled, adjust x_click as appropriate
             if taskbar_data.search_index:
-                #print(f"search index... {index} vs {taskbar_data.search_index}")
-
                 if taskbar_data.search_index == index:
-                    x_click += taskbar_data.rect_search_button.width / 2
+                    print("search")
+                    x_click = taskbar_data.rect_search_button.x + (taskbar_data.rect_search_button.width / 2)
                 else:
                     x_click += taskbar_data.rect_search_button.width
                     
             if taskbar_data.task_view_index:
                 if taskbar_data.task_view_index == index:
+                    print("task view")
                     x_click += taskbar_data.rect_task_view.width / 2
-                else:
+                elif index >= taskbar_data.application_start_index:
                     x_click += taskbar_data.rect_task_view.width
 
         if index >= taskbar_data.application_start_index:
@@ -791,8 +797,6 @@ def get_windows_eleven_taskbar():
     if not taskbar:
         return 
     
-    application_start_index = 0
-    current_index = 0
     if taskbar:
         rect_taskbar = taskbar.rect
 
@@ -807,26 +811,31 @@ def get_windows_eleven_taskbar():
                 case "Search":
                     rect_search_button = element.rect
                     search_button_found = True
-                    search_button_index = current_index
-                    application_start_index = application_start_index + 1
 
                 case "Start":
                     rect_start_button = element.rect
                     start_menu_found = True
-                    application_start_index = application_start_index + 1
 
                 case "Task View":
                     rect_task_view = element.rect
                     task_view_button_found = True
-                    task_view_index = current_index
-                    application_start_index = application_start_index + 1
                 case _:
                     if not icon_dimensions_set:
                         first_icon_rect = element.rect
                         icon_dimensions_set = True
-
-            current_index = current_index + 1
             
+        application_start_index = 1
+        if search_button_found:
+            search_button_index = 1
+            application_start_index = 2
+
+        if task_view_button_found:
+            if search_button_found:
+                task_view_index = 2
+                application_start_index = 3
+            else:
+                task_view_index = 1
+                application_start_index = 2
 
         for element in taskbar_clickables:
             if rect_hidden_icons and element.rect.x >= rect_hidden_icons.x:
