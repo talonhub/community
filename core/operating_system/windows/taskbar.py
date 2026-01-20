@@ -155,7 +155,7 @@ class ExplorerPopupStatus:
         match cls:
             case "Windows.UI.Core.CoreWindow":
                 if (parent_element and (focused_element.name == "Lock" or focused_element.parent.name == "Lock")):
-                    self.state = ExplorerPopUpState.GENERIC_CONTEXT_MENU
+                    self.state = ExplorerPopUpState.NONE
                 elif ((focused_element.name == "Notification Center")):
                     self.state = ExplorerPopUpState.NOTIFICATION_CENTER
                     self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW
@@ -164,18 +164,11 @@ class ExplorerPopupStatus:
                     self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW
                 elif "Search" == active_window.title: #and parent_element and parent_element.name == "Start":
                     if parent_element:
-                        print("start menu...")
                         self.state = ExplorerPopUpState.START_MENU
                         if parent_element.parent and parent_element.parent.name == "Start":
                             self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW_PARENT
                         else:
                             self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW
-                        # the only way I can tell the difference between the search menu
-                        # and the start menu is by poking at the children. Super fragile
-                        # if focused_element.parent.control_type == "CoreInput":
-                        #     
-                        # else:
-                        #     
 
                 elif "Notification Center":
                     self.state = ExplorerPopUpState.NOTIFICATION_CENTER
@@ -192,7 +185,7 @@ class ExplorerPopupStatus:
                 # if focused_element.name in ("Installed apps", "Desktop"):
                 #     self.state = ExplorerPopUpState.GENERIC_CONTEXT_MENU
                 if focused_element.control_type == "MenuItem":
-                    self.state = ExplorerPopUpState.GENERIC_CONTEXT_MENU
+                    self.state = ExplorerPopUpState.NONE
 
                 # there's a weird case where if you right click on empty space in the taskbar,
                 # and then open the start menu, we end up with the traywnd class for the start menu.
@@ -205,9 +198,10 @@ class ExplorerPopupStatus:
                 match active_window.title:
                     case "Task View":
                         self.state = ExplorerPopUpState.TASK_VIEW
+                        self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW
                     case "Snap Assist":
                         self.state = ExplorerPopUpState.SNAP_ASSIST
-                        self.strategy = ExplorerPopUpElementStrategy.FOCUSED_ELEMENT_PARENT
+                        self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW
 
             case "ControlCenterWindow":
                 self.state = ExplorerPopUpState.CONTROL_CENTER
