@@ -163,12 +163,16 @@ class ExplorerPopupStatus:
                     self.state = ExplorerPopUpState.JUMP_LIST_CONTEXT_MENU
                     self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW
                 elif "Search" == active_window.title: #and parent_element and parent_element.name == "Start":
-                    if parent_element and "Desktop" in parent_element.name and parent_element.control_type == "Pane":
-                        self.state = ExplorerPopUpState.SEARCH_MENU
-                        self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW
-                    elif parent_element and ("Start" or "Search" in parent_element.name):
+                    if parent_element and parent_element.name in ["Start", "Search"]:
                         self.state = ExplorerPopUpState.START_MENU
-                        self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW_PARENT
+
+                        # the only way I can tell the difference between the search menu
+                        # and the start menu is by poking at the children. Super fragile
+                        if focused_element.parent.children[0].name == "CoreInput":
+                            self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW_PARENT
+                        else:
+                            self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW
+
                 elif "Notification Center":
                     self.state = ExplorerPopUpState.NOTIFICATION_CENTER
                     self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW
@@ -178,7 +182,6 @@ class ExplorerPopupStatus:
 
             case "ProgMan":
                 self.state = ExplorerPopUpState.PROGRAM_MANAGER
-                walk(focused_element)
                 self.strategy = ExplorerPopUpElementStrategy.FOCUSED_ELEMENT_PARENT
 
             case "Shell_TrayWnd":
@@ -186,6 +189,13 @@ class ExplorerPopupStatus:
                 #     self.state = ExplorerPopUpState.GENERIC_CONTEXT_MENU
                 if focused_element.control_type == "MenuItem":
                     self.state = ExplorerPopUpState.GENERIC_CONTEXT_MENU
+
+                # there's a weird case where if you right click on empty space in the taskbar,
+                # and then open the start menu, we end up with the traywnd class for the start menu.
+                # go figure?
+                elif (focused_element.name == "Search box"):
+                    self.state = ExplorerPopUpState.START_MENU
+                    self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW_PARENT
 
             case "XamlExplorerHostIslandWindow":
                 match active_window.title:
@@ -351,12 +361,8 @@ class Actions:
         if index == 0:
             if taskbar_data.rect_start_button:
                 x_click = taskbar_data.rect_start_button.x + taskbar_data.rect_start_button.width / 2
-        
-        # if not the start menu, add the start width to x_click
-        if index != 0:
-            x_click += taskbar_data.rect_start_button.width
-        
-        if index > 0:
+        else:
+            x_click = taskbar_data.rect_start_button.x + taskbar_data.rect_start_button.width
 
             # if the search button is enabled, adjust x_click as appropriate
             if taskbar_data.search_index:
@@ -385,6 +391,7 @@ class Actions:
         actions.mouse_click(0)
 
         actions.sleep("150ms")
+
         actions.mouse_move(x, y)      
 
         show_canvas_popup()
@@ -401,13 +408,7 @@ class Actions:
         if index == 0:
             if taskbar_data.rect_start_button:
                 x_click = taskbar_data.rect_start_button.x + taskbar_data.rect_start_button.width / 2
-        
-        # if not the start menu, add the start width to x_click
-        if index != 0:
-            x_click += taskbar_data.rect_start_button.width
-        
-        if index > 0:
-
+        else:
             # if the search button is enabled, adjust x_click as appropriate
             if taskbar_data.search_index:
                 #print(f"search index... {index} vs {taskbar_data.search_index}")
@@ -416,10 +417,16 @@ class Actions:
                     x_click += taskbar_data.rect_search_button.width / 2
                 else:
                     x_click += taskbar_data.rect_search_button.width
+                    
+            if taskbar_data.task_view_index:
+                if taskbar_data.task_view_index == index:
+                    x_click += taskbar_data.rect_task_view.width / 2
+                else:
+                    x_click += taskbar_data.rect_task_view.width
 
         if index >= taskbar_data.application_start_index:
             #print("app start")
-            x_click += (taskbar_data.icon_width * (index - taskbar_data.application_start_index - .5)) 
+            x_click += (taskbar_data.icon_width * (index - taskbar_data.application_start_index + 1 - .5)) 
     
         actions.mouse_move(x_click, y_click)
         actions.mouse_click(mouse_button)
@@ -512,7 +519,20 @@ class Actions:
 
     def taskbar_force_refresh():
         """Forces fresh of taskbar"""  
-        on_screen_change(None)
+        global taskbar_data
+        taskbar_data = None
+        cron_poll_start_menu_helper(False)
+
+        start_menu_poller()
+        ui.unregister("screen_change", on_screen_change) 
+        ui.unregister("element_focus", on_focus_change)
+
+        ui.register("screen_change", on_screen_change) 
+        ui.register("element_focus", on_focus_change)        
+    
+        cron_poll_start_menu_helper()
+        
+        
 
 popup_start_index = 0
 
@@ -799,7 +819,7 @@ def get_windows_eleven_taskbar():
                     rect_task_view = element.rect
                     task_view_button_found = True
                     task_view_index = current_index
-
+                    application_start_index = application_start_index + 1
                 case _:
                     if not icon_dimensions_set:
                         first_icon_rect = element.rect
@@ -886,7 +906,6 @@ def start_menu_poller():
 
         if canvas_popup:
             canvas_popup.close()
-
         return
 
     # if the taskbar itself has focus, skip updates until it loses focus
@@ -1046,7 +1065,7 @@ def on_focus_change(_):
         canvas_popup = None
 
     active_app = ui.active_app()
-    if active_app.name not in ("Windows Explorer", "SearchHost.exe", "Windows Shell Experience Host", "ShellHost"):
+    if active_app.name not in ("Windows Explorer", "SearchHost.exe", "Windows Shell Experience Host", "ShellHost", "Windows Start Experience Host"):
         print(f"{active_app.name} - skipping")
         explorer_popup_status.reset()
         return 
@@ -1093,7 +1112,7 @@ def on_screen_change(_):
     success, task_bar, sys_tray = get_windows_eleven_taskbar()
     
     if success:
-        create_task_bar_canvases(task_bar, sys_tray)
+        create_task_bar_canvases(task_bar, sys_tray,)
 
     if canvas_popup:
         canvas_popup.close()
@@ -1105,12 +1124,11 @@ if app.platform == "windows":
     def on_ready():
         global cron_poll_start_menu
         success, task_bar, sys_tray = get_windows_eleven_taskbar()
-        print(len(sys_tray.sys_tray_icons))
+
         if success:
             create_task_bar_canvases(task_bar, sys_tray)
             ui.register("screen_change", on_screen_change) 
             ui.register("element_focus", on_focus_change)
-
             cron_poll_start_menu_helper()
 
     app.register("ready", on_ready)
