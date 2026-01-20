@@ -218,7 +218,7 @@ class ExplorerPopupStatus:
                     self.state = ExplorerPopUpState.SYSTEM_TRAY
                     self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW
                 elif focused_element.control_type == "ListItem" and (parent_element and "Desktop" in parent_element.name):
-                    self.state = ExplorerPopUpState.DESKTOP
+                    self.state = ExplorerPopUpState.NONE
                     self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW
 
 
