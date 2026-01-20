@@ -110,6 +110,7 @@ class ExplorerPopUpState(Enum):
     JUMP_LIST_CONTEXT_MENU = 11
     PROGRAM_MANAGER = 12
     SNAP_ASSIST = 13
+    FILE_EXPLORER = 14
 
 class ExplorerPopUpElementStrategy(Enum):
     FOCUSED_ELEMENT = 0
@@ -218,6 +219,10 @@ class ExplorerPopupStatus:
                 elif focused_element.control_type == "ListItem" and (parent_element and "Desktop" in parent_element.name):
                     self.state = ExplorerPopUpState.NONE
                     self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW
+
+                elif "File Explorer" in active_window.title:
+                    self.state = ExplorerPopUpState.NONE
+                    self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW                 
 
 
 
