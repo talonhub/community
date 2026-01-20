@@ -380,7 +380,7 @@ class Actions:
     
         actions.mouse_move(x_click, y_click)
 
-    def taskbar_popup(mouse_button: int, index: int):
+    def taskbar_popup(mouse_button: int, index: int, click_count: int):
         """Click the taskbar popup button based on the index"""        
         x, y = ctrl.mouse_pos()  
 
@@ -392,7 +392,9 @@ class Actions:
         y_click = buttons_popup[index].y + buttons_popup[index].height / 2
 
         actions.mouse_move(x_click, y_click)
-        actions.mouse_click(mouse_button)
+        
+        for i in range(0, click_count):
+            actions.mouse_click(mouse_button)
 
         actions.sleep("150ms")
 
