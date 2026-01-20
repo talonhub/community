@@ -194,6 +194,10 @@ class ExplorerPopupStatus:
                     self.state = ExplorerPopUpState.START_MENU
                     self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW_PARENT
 
+                elif (parent_element.name == "Running applications"):
+                    self.state = ExplorerPopUpState.TASK_VIEW
+                    self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW
+
             case "XamlExplorerHostIslandWindow":
                 match active_window.title:
                     case "Task View":
@@ -393,8 +397,6 @@ class Actions:
         actions.sleep("150ms")
 
         actions.mouse_move(x, y)      
-
-        show_canvas_popup()
 
     def taskbar_click(mouse_button: int, index: int):
         """Click the taskbar button based on the index"""        
@@ -1083,11 +1085,11 @@ def on_focus_change(_):
             cron_delay_canvas_helper(start=True,func=show_canvas_popup)
         else:
             popup_start_index = 0
-            cron_delay_canvas_helper(start=True,time="500ms",func=show_canvas_popup)
+            cron_delay_canvas_helper(start=True,time="50ms",func=show_canvas_popup)
 
     #print(f"***on_focus_change complete {active_window.title}***")
 
-def cron_delay_canvas_helper(start = True, time = "500ms", func=show_canvas_popup):
+def cron_delay_canvas_helper(start = True, time = "50ms", func=show_canvas_popup):
     global cron_delay_showing_canvas
 
     if cron_delay_showing_canvas:
