@@ -719,6 +719,10 @@ class Actions:
                 ctx.tags = []
                 break
 
+    def switcher_show_desktop():
+        """"""
+        actions.key("super-d")
+
     def switcher_focus(name: str):
         """Focus a new application by name"""
         global pending_app 

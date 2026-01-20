@@ -380,7 +380,7 @@ class Actions:
     
         actions.mouse_move(x_click, y_click)
 
-    def taskbar_popup(index: int):
+    def taskbar_popup(mouse_button: int, index: int):
         """Click the taskbar popup button based on the index"""        
         x, y = ctrl.mouse_pos()  
 
@@ -392,7 +392,7 @@ class Actions:
         y_click = buttons_popup[index].y + buttons_popup[index].height / 2
 
         actions.mouse_move(x_click, y_click)
-        actions.mouse_click(0)
+        actions.mouse_click(mouse_button)
 
         actions.sleep("150ms")
 
@@ -418,14 +418,12 @@ class Actions:
             # if the search button is enabled, adjust x_click as appropriate
             if taskbar_data.search_index:
                 if taskbar_data.search_index == index:
-                    print("search")
                     x_click = taskbar_data.rect_search_button.x + (taskbar_data.rect_search_button.width / 2)
                 else:
                     x_click += taskbar_data.rect_search_button.width
                     
             if taskbar_data.task_view_index:
                 if taskbar_data.task_view_index == index:
-                    print("task view")
                     x_click += taskbar_data.rect_task_view.width / 2
                 elif index >= taskbar_data.application_start_index:
                     x_click += taskbar_data.rect_task_view.width
