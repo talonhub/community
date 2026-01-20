@@ -226,7 +226,7 @@ class ExplorerPopupStatus:
 
 
 
-        print(f"cls = {cls} win_title = {active_window.title} element = {focused_element.name}, parent = {parent_element.name} control_type = {focused_element.control_type} parent_control_type = {parent_element.control_type if parent_element else "None"}")
+        #print(f"cls = {cls} win_title = {active_window.title} element = {focused_element.name}, parent = {parent_element.name} control_type = {focused_element.control_type} parent_control_type = {parent_element.control_type if parent_element else "None"}")
     
 
 explorer_popup_status = ExplorerPopupStatus()
