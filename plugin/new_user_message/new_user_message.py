@@ -14,6 +14,7 @@ elif app.platform == "mac":
 else:
     talon_menu_location = "system tray or status area"
 
+
 @imgui.open(y=0)
 def new_user_gui(gui: imgui.GUI):
     gui.text("Welcome to Talon Community!")
