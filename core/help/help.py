@@ -507,9 +507,7 @@ def refresh_context_command_map(enabled_only=False):
                     local_context_command_map[context_name] = current_context_map
 
                     display_name = splits[-2].replace("_", " ")
-                    short_names = compute_short_names(display_name)
-                    for short_name in short_names:
-                        cached_short_context_names[short_name] = context_name
+                    update_short_names(cached_short_context_names, display_name, context_name)
 
                     # the last entry will contain no symbols
                     local_display_name_to_context_name_map[display_name] = context_name
@@ -537,8 +535,9 @@ def refresh_context_command_map(enabled_only=False):
     update_active_contexts_cache(active_context_cache)
 
 
-def compute_short_names(display_name: str):
-    """Compute shorter names for a display name"""
+def update_short_names(short_context_names: dict[str, str], display_name: str, context_name: str):
+    """Compute shorter names for a display name and then update short_context_names
+    to map those shorter names to the context name"""
     short_names = actions.user.create_spoken_forms(
         display_name,
         generate_subsequences=False,
@@ -549,7 +548,8 @@ def compute_short_names(display_name: str):
     elif len(short_names) == 2 and short_names[1] in overrides:
         short_names = [overrides[short_names[1]]]
 
-    return short_names
+    for short_name in short_names:
+        short_context_names[short_name] = context_name
 
 
 def get_sorted_display_keys(
