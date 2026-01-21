@@ -498,7 +498,7 @@ def refresh_context_command_map(enabled_only=False):
                 num_active_commands_in_context: int = 0
                 for command_alias, val in context.commands.items():
                     if command_alias in registry.commands or not enabled_only:
-                       current_context_map[str(val.rule.rule)] = val.script.code
+                        current_context_map[str(val.rule.rule)] = val.script.code
                     if command_alias in registry.commands:
                         num_active_commands_in_context += 1
                 if num_active_commands_in_context != 0:
@@ -536,6 +536,7 @@ def refresh_context_command_map(enabled_only=False):
     ctx.lists["self.help_contexts"] = cached_short_context_names
     update_active_contexts_cache(active_context_cache)
 
+
 def compute_short_names(display_name: str):
     """Compute shorter names for a display name"""
     short_names = actions.user.create_spoken_forms(
@@ -547,7 +548,7 @@ def compute_short_names(display_name: str):
         short_names = [overrides[short_names[0]]]
     elif len(short_names) == 2 and short_names[1] in overrides:
         short_names = [overrides[short_names[1]]]
-    
+
     return short_names
 
 
