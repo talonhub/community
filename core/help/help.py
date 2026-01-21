@@ -493,18 +493,6 @@ def refresh_context_command_map(enabled_only=False):
         splits = context_name.split(".")
 
         if "talon" == splits[-1]:
-            display_name = splits[-2].replace("_", " ")
-
-            short_names = actions.user.create_spoken_forms(
-                display_name,
-                generate_subsequences=False,
-            )
-
-            if short_names[0] in overrides:
-                short_names = [overrides[short_names[0]]]
-            elif len(short_names) == 2 and short_names[1] in overrides:
-                short_names = [overrides[short_names[1]]]
-
             if not enabled_only or context in active_contexts:
                 current_context_map = {}
                 num_active_commands_in_context: int = 0
@@ -517,6 +505,9 @@ def refresh_context_command_map(enabled_only=False):
                     active_context_cache.append(context)
                 if len(current_context_map) != 0:
                     local_context_command_map[context_name] = current_context_map
+
+                    display_name = splits[-2].replace("_", " ")
+                    short_names = compute_short_names(display_name)
                     for short_name in short_names:
                         cached_short_context_names[short_name] = context_name
 
@@ -544,6 +535,20 @@ def refresh_context_command_map(enabled_only=False):
 
     ctx.lists["self.help_contexts"] = cached_short_context_names
     update_active_contexts_cache(active_context_cache)
+
+def compute_short_names(display_name: str):
+    """Compute shorter names for a display name"""
+    short_names = actions.user.create_spoken_forms(
+        display_name,
+        generate_subsequences=False,
+    )
+
+    if short_names[0] in overrides:
+        short_names = [overrides[short_names[0]]]
+    elif len(short_names) == 2 and short_names[1] in overrides:
+        short_names = [overrides[short_names[1]]]
+    
+    return short_names
 
 
 def get_sorted_display_keys(
