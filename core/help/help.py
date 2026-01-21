@@ -479,9 +479,9 @@ def update_active_contexts_cache(active_contexts):
 # overrides = {"generic browser": "broswer"}
 overrides = {}
 
-
 def refresh_context_command_map(enabled_only=False):
     active_contexts = registry.last_active_contexts
+    active_context_cache = []
 
     local_context_map = {}
     local_display_name_to_context_name_map = {}
@@ -506,11 +506,16 @@ def refresh_context_command_map(enabled_only=False):
 
             if enabled_only and context in active_contexts or not enabled_only:
                 local_context_command_map[context_name] = {}
+                active_count: int = 0 #number of active commands in the context
                 for command_alias, val in context.commands.items():
                     if command_alias in registry.commands or not enabled_only:
                         local_context_command_map[context_name][
                             str(val.rule.rule)
                         ] = val.script.code
+                    if command_alias in registry.commands:
+                        active_count += 1
+                if active_count != 0:
+                    active_context_cache.append(context)
                 if len(local_context_command_map[context_name]) == 0:
                     local_context_command_map.pop(context_name)
                 else:
@@ -540,7 +545,7 @@ def refresh_context_command_map(enabled_only=False):
     rule_word_map = refresh_rule_word_map(local_context_command_map)
 
     ctx.lists["self.help_contexts"] = cached_short_context_names
-    update_active_contexts_cache(active_contexts)
+    update_active_contexts_cache(active_context_cache)
 
 
 def get_sorted_display_keys(
