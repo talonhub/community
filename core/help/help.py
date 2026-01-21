@@ -504,7 +504,7 @@ def refresh_context_command_map(enabled_only=False):
             elif len(short_names) == 2 and short_names[1] in overrides:
                 short_names = [overrides[short_names[1]]]
 
-            if enabled_only and context in active_contexts or not enabled_only:
+            if not enabled_only or context in active_contexts:
                 local_context_command_map[context_name] = {}
                 num_active_commands_in_context: int = 0
                 for command_alias, val in context.commands.items():
