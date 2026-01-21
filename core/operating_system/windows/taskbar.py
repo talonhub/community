@@ -111,12 +111,14 @@ class ExplorerPopUpState(Enum):
     PROGRAM_MANAGER = 12
     SNAP_ASSIST = 13
     FILE_EXPLORER = 14
+    MENU = 15
 
 class ExplorerPopUpElementStrategy(Enum):
     FOCUSED_ELEMENT = 0
     FOCUSED_ELEMENT_PARENT = 1
-    ACTIVE_WINDOW_PARENT = 2
-    ACTIVE_WINDOW = 3
+    FOCUSED_ELEMENT_FIRST_PARENT_WINDOW = 2
+    ACTIVE_WINDOW_PARENT = 3
+    ACTIVE_WINDOW = 4
 
 @dataclass
 class ExplorerPopupStatus:
@@ -221,10 +223,20 @@ class ExplorerPopupStatus:
                     self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW
 
                 elif "File Explorer" in active_window.title:
-                    self.state = ExplorerPopUpState.NONE
-                    self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW                 
-
-
+                    if focused_element.control_type == "MenuItem":
+                        #walk(focused_element.parent)
+                        if focused_element.parent.name == "Context":
+                            #print("context menu...")
+                            self.strategy = ExplorerPopUpElementStrategy.FOCUSED_ELEMENT_PARENT
+                            self.start = ExplorerPopUpState.GENERIC_CONTEXT_MENU
+                        else:
+                            self.strategy = ExplorerPopUpElementStrategy.FOCUSED_ELEMENT_FIRST_PARENT_WINDOW
+                            self.state = ExplorerPopUpState.MENU
+                    else:
+                        self.state = ExplorerPopUpState.FILE_EXPLORER
+                        self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW
+                else:
+                    print(active_window.title)                 
 
         #print(f"cls = {cls} win_title = {active_window.title} element = {focused_element.name}, parent = {parent_element.name} control_type = {focused_element.control_type} parent_control_type = {parent_element.control_type if parent_element else "None"}")
     
@@ -966,25 +978,34 @@ def start_menu_poller():
     #print("***poll_start_menu complete***")
 
 def is_clickable(element, depth=0):
-    try:
-        if element.control_type in ("Button", "ListViewItem", "ListItem", "Menu"):
-            return True
-        
-        pattern = element.invoke_pattern
+    clickable = False
 
-        if pattern and not isinstance(pattern, str):
-            return True
-        else:
-            if element.name in ["Shut down or sign out"]:
-                return True
-            
-            return False
-    except Exception as e:
-        if element.name in ["Shut down or sign out"]:
-            return True
-        
-        return False
+    # if not element.is_keyboard_focusable:
+    #     return False
     
+    match element.control_type:
+        case "Button":
+            clickable = True
+        case "TreeItem":
+            clickable = True    
+        # case "SplitItem":
+        #     clickable = True 
+        case "ListViewItem":
+            clickable = True      
+        case "ListItem":   
+            clickable = True      
+        case "MenuItem":
+            clickable = True      
+        
+        case _:
+            try:
+                pattern = element.invoke_pattern
+                if pattern and not isinstance(pattern, str):
+                    clickable = True
+            except Exception as e:
+                pass
+
+    return clickable
 
 def find_all_clickable_rects(element, depth=0) -> list[Rect]:
     result = []
@@ -1040,6 +1061,13 @@ def show_canvas_popup():
             element = focused_element
         case ExplorerPopUpElementStrategy.FOCUSED_ELEMENT_PARENT:
             element = focused_element.parent
+        case ExplorerPopUpElementStrategy.FOCUSED_ELEMENT_FIRST_PARENT_WINDOW:
+            element = focused_element.parent 
+            while element.control_type not in ["Window"]:
+                element = element.parent
+
+            #print(element.control_type)
+
 
     # if we've somehow reach the desktop element, something's gone horribly wrong
     # so, skip
@@ -1047,16 +1075,17 @@ def show_canvas_popup():
         print("Prevent enumerating the desktop - skipping")
         explorer_popup_status.set(ExplorerPopUpState.NONE)
         return
-
+    
     buttons_popup = find_all_clickable_rects(element)
-
-    #print(f"show_canvas_popup {buttons_popup}")
+    # if explorer_popup_status.strategy == ExplorerPopUpElementStrategy.FOCUSED_ELEMENT_FIRST_PARENT_WINDOW:
+    #     print(f"show_canvas_popup {buttons_popup}")
 
     if canvas_popup:
         canvas_popup.close()
         canvas_popup = None
 
-    canvas_popup = canvas.Canvas.from_rect(element.rect)
+    #the element rect in the FOCUSED_ELEMENT_FIRST_PARENT_WINDOW strategy is not correct
+    canvas_popup = canvas.Canvas.from_rect(ui.main_screen().rect)
     canvas_popup.register("draw", draw_canvas_popup)
     canvas_popup.freeze()
 
