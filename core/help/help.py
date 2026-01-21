@@ -479,6 +479,7 @@ def update_active_contexts_cache(active_contexts):
 # overrides = {"generic browser": "broswer"}
 overrides = {}
 
+
 def refresh_context_command_map(enabled_only=False):
     active_contexts = registry.last_active_contexts
     active_context_cache = []
