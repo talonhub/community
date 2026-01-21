@@ -506,15 +506,15 @@ def refresh_context_command_map(enabled_only=False):
 
             if enabled_only and context in active_contexts or not enabled_only:
                 local_context_command_map[context_name] = {}
-                active_count: int = 0 #number of active commands in the context
+                num_active_commands_in_context: int = 0
                 for command_alias, val in context.commands.items():
                     if command_alias in registry.commands or not enabled_only:
                         local_context_command_map[context_name][
                             str(val.rule.rule)
                         ] = val.script.code
                     if command_alias in registry.commands:
-                        active_count += 1
-                if active_count != 0:
+                        num_active_commands_in_context += 1
+                if num_active_commands_in_context != 0:
                     active_context_cache.append(context)
                 if len(local_context_command_map[context_name]) == 0:
                     local_context_command_map.pop(context_name)
