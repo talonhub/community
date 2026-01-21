@@ -504,7 +504,7 @@ def refresh_context_command_map(enabled_only=False):
             continue
         if is_any_context_command_active(context):
             active_context_cache.append(context)
-        
+
         local_context_command_map[context_name] = current_context_map
 
         display_name = splits[-2].replace("_", " ")
@@ -536,7 +536,9 @@ def refresh_context_command_map(enabled_only=False):
     update_active_contexts_cache(active_context_cache)
 
 
-def update_short_names(short_context_names: dict[str, str], display_name: str, context_name: str):
+def update_short_names(
+    short_context_names: dict[str, str], display_name: str, context_name: str
+):
     """Compute shorter names for a display name and then update short_context_names
     to map those shorter names to the context name"""
     short_names = actions.user.create_spoken_forms(
