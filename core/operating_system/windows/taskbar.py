@@ -689,7 +689,7 @@ def get_window_class(window: ui.Window) -> bool:
         cls = window.cls
     except Exception as e:
         #app.notify("get_window_class exception - taskbar")
-        #print(f"exception = {e}")
+        print(f"get_window_class exception = {e}")
         cls = None
     
     return cls
@@ -752,9 +752,12 @@ def get_windows_ten_taskbar() -> bool:
     
     return False
 
+count = 0
+simcount = 3
 def get_windows_eleven_taskbar():
     """Populates the TaskBarData class for windows 11"""
     taskbar = None
+    global count, simcount
     icon_dimensions_set: bool = False
     first_icon_rect: Rect = None
     rect_start_button: Rect = None
@@ -783,20 +786,25 @@ def get_windows_eleven_taskbar():
     
     apps = ui.apps(name="Windows Explorer")
 
-    for app in apps:
-        for window in app.windows():
+    for explorer_instances in apps:
+        try:
+            windows = explorer_instances.windows()
+        except Exception as e:
+            print(f"taskbar - caught exception {e}")
+            continue
+
+        for window in windows:
             cls = get_window_class(window)
 
             if cls == "Shell_TrayWnd":
                 taskbar = window.element
-                #print(f"found taskbar cls = {cls} {window.title} parent = {taskbar.parent} control_type = {taskbar.control_type}")
-
+                print(f"found taskbar cls = {cls} {window.title} parent = {taskbar.parent} control_type = {taskbar.control_type}")
 
         if taskbar:
             break
 
     if not taskbar:
-        return 
+        return False, None, None
     
     if taskbar:
         rect_taskbar = taskbar.rect
@@ -901,21 +909,14 @@ def create_task_bar_canvases(taskbar: TaskBarPositionData, system_tray: SystemTr
     canvas_system_tray.freeze()
 
 def start_menu_poller():
-    #print("***poll_start_menu started***")
+    print("***poll_start_menu started***")
     global canvas_popup, canvas_taskbar, canvas_system_tray
     global taskbar_data, system_try_data
     success, task_bar, sys_tray = get_windows_eleven_taskbar()
 
     # if something's gone horribly wrong, close everything
     if not success:
-        if canvas_taskbar: 
-            canvas_taskbar.close()
-        
-        if canvas_system_tray:
-            canvas_system_tray.close()
-
-        if canvas_popup:
-            canvas_popup.close()
+        cleanup_and_retry()
         return
 
     # if the taskbar itself has focus, skip updates until it loses focus
@@ -1104,7 +1105,7 @@ def cron_delay_canvas_helper(start = True, time = "50ms", func=show_canvas_popup
     if start:   
         cron_delay_showing_canvas = cron.after(time, func)
 
-def cron_poll_start_menu_helper(start = True, time = "3s", func=start_menu_poller):
+def cron_poll_start_menu_helper(start = True, time = "500ms", func=start_menu_poller):
     global cron_poll_start_menu
 
     if cron_poll_start_menu:
@@ -1114,6 +1115,35 @@ def cron_poll_start_menu_helper(start = True, time = "3s", func=start_menu_polle
     if start:   
         cron_poll_start_menu = cron.after(time, func)
 
+def cleanup_and_retry():
+    # reset data
+    global taskbar_data, system_try_data
+
+    cron_delay_canvas_helper(False)
+    cron_poll_start_menu_helper(False)
+
+    taskbar_data = None
+    system_try_data = None
+
+    if canvas_taskbar: 
+        canvas_taskbar.close()
+    
+    if canvas_system_tray:
+        canvas_system_tray.close()
+
+    if canvas_popup:
+        canvas_popup.close()
+
+    # attempt to recover
+    print("Failed to get taskbar, attempting recovery")
+    #app.notify("Failed to get taskbar, attempting recovery")
+
+    cron_poll_start_menu_helper(True, time = "100ms")
+
+
+
+
+
 def on_screen_change(_):
     global canvas_popup
     #print(f"on_screen_change started")
@@ -1122,11 +1152,13 @@ def on_screen_change(_):
     success, task_bar, sys_tray = get_windows_eleven_taskbar()
     
     if success:
-        create_task_bar_canvases(task_bar, sys_tray,)
+        create_task_bar_canvases(task_bar, sys_tray)
 
-    if canvas_popup:
-        canvas_popup.close()
-        canvas_popup = None
+        if canvas_popup:
+            canvas_popup.close()
+            canvas_popup = None
+    else:
+        cleanup_and_retry()
 
     #print(f"on_screen_change complete = {result}")
 
@@ -1140,6 +1172,8 @@ if app.platform == "windows":
             ui.register("screen_change", on_screen_change) 
             ui.register("element_focus", on_focus_change)
             cron_poll_start_menu_helper()
+        else:
+            cleanup_and_retry()
 
     app.register("ready", on_ready)
 

@@ -223,7 +223,15 @@ def is_window_valid(window: ui.Window) -> bool:
 
 def get_valid_windows(app: ui.App):
     valid_windows = []
-    for window in app.windows():
+
+    try:
+        windows = app.windows()
+    except Exception as e:
+        app.notify("app switcher - caught exception {e}")
+        print(f"app switcher - caught exception {e}")
+        return []
+
+    for window in windows:
         if is_window_valid(window):
             valid_windows.append(window)
 
@@ -671,8 +679,6 @@ def update_launch_applications(f):
         process_launch_applications_file(True)
     else:
         update_running_list()
-        if app.platform == "windows":
-            rebuild_taskbar_app_list()
         update_launch_list()
 
 @mod.action_class
@@ -742,10 +748,19 @@ class Actions:
 
         if len(splits) == 3:
             title = splits[2].lower()
-            for window in app.windows():
+
+            try:
+                windows = app.windows()
+            except Exception as e:
+                app.notify("app switcher - caught exception {e}")
+                print(f"app switcher - caught exception {e}")
+                return 
+            
+            for window in windows:
                 if title == window.title.lower():
                     window.focus()
                     break
+
         elif len(splits) == 2:
             application_user_model_id = splits[1]
             valid_windows_for_pending_app = []
@@ -753,7 +768,15 @@ class Actions:
                 valid_windows_for_pending_app = RUNNING_APPLICATION_DICT[application_user_model_id.lower()]
             else:
                 for app in set(apps):
-                    for window in app.windows():
+
+                    try:
+                        windows = app.windows()
+                    except Exception as e:
+                        app.notify("app switcher - caught exception {e}")
+                        print(f"app switcher - caught exception {e}")
+                        continue
+
+                    for window in windows:
                         if valid_window_checker(window) and str(application_user_model_id) == str(get_application_user_model_for_window(window.id)):
                             valid_windows_for_pending_app.append(window)
             
@@ -957,65 +980,11 @@ def first_matching_child(element, **kw):
     attr, values = list(kw.items())[0]
     return next(e for e in element.children if getattr(e, attr) in values)
 
-taskbar = None
-ms_tasklist = None
-def rebuild_taskbar_app_list(forced: bool = False):
-    return
-    global cache, taskbar, ms_tasklist
-
-        
-    if not taskbar:
-        apps = ui.apps(name="Windows Explorer")
-        for app in apps:
-            for window in app.windows():
-                if window.cls == "Shell_TrayWnd":
-                    taskbar = window
-                    break
-            if taskbar:
-                ms_tasklist = first_matching_child(taskbar.element, class_name=["MSTaskListWClass"])
-                break
-                
-    if not taskbar:
-        actions.app.notify("taskbar window not found")
-        return
-    
-    #update_canvas = forced or len(running_applications.children) != len(cache)
-    cache = []
-    running_applications_result = {}
-    #running = {}
-    for e in ms_tasklist.children:
-
-        title = e.name
-        splits = title.split(" - ")
-        name = splits[0] 
-        cache.append(TaskBarItem(title, str(e.control_type), e))
-        override = None
-        if name in APPLICATIONS_OVERRIDES:
-            override = APPLICATIONS_OVERRIDES[name]
-            
-        if override and override.spoken_forms:
-            for form in override.spoken_forms:
-                running_applications_result[form] = title
-                #running[form] = name if name not in WINDOWS_NAME_TO_TALON_NAME else WINDOWS_NAME_TO_TALON_NAME[name]
-        else:
-            running_applications_result[name] = title
-            #running[name] = name if name not in WINDOWS_NAME_TO_TALON_NAME else WINDOWS_NAME_TO_TALON_NAME[name]
-
-    update_dict = {
-        "user.running_applications": running_applications_result, 
-        #"user.running": running
-    }
-
-    ctx.lists.update(update_dict)
-
 def ui_event(event, arg):
     if event in ("app_launch", "app_close", "app_activate", "app_deactivate"):
         update_running_list()
-        if app.platform == "windows":
-            rebuild_taskbar_app_list()
 
 def on_ready():
     ui.register("", ui_event)
-
 
 app.register("ready", on_ready)

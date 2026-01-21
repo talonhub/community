@@ -298,7 +298,14 @@ if app.platform == "windows":
             app_list = [application]
 
         for cur_app in app_list:
-            for window in cur_app.windows():
+            try:
+                windows = cur_app.windows()
+            except Exception as e:
+                app.notify("installed applications - caught exception {e}")
+                print(f"installed applications - caught exception {e}")
+                continue
+
+            for window in windows:
                 if valid_window_checker(window):
                     window_app_user_model_id = get_application_user_model_for_window(window.id)
                     
