@@ -506,20 +506,17 @@ def refresh_context_command_map(enabled_only=False):
                 short_names = [overrides[short_names[1]]]
 
             if not enabled_only or context in active_contexts:
-                local_context_command_map[context_name] = {}
+                current_context_map = {}
                 num_active_commands_in_context: int = 0
                 for command_alias, val in context.commands.items():
                     if command_alias in registry.commands or not enabled_only:
-                        local_context_command_map[context_name][
-                            str(val.rule.rule)
-                        ] = val.script.code
+                       current_context_map[str(val.rule.rule)] = val.script.code
                     if command_alias in registry.commands:
                         num_active_commands_in_context += 1
                 if num_active_commands_in_context != 0:
                     active_context_cache.append(context)
-                if len(local_context_command_map[context_name]) == 0:
-                    local_context_command_map.pop(context_name)
-                else:
+                if len(current_context_map) != 0:
+                    local_context_command_map[context_name] = current_context_map
                     for short_name in short_names:
                         cached_short_context_names[short_name] = context_name
 
