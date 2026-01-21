@@ -493,27 +493,26 @@ def refresh_context_command_map(enabled_only=False):
 
     for context_name, context in registry.contexts.items():
         splits = context_name.split(".")
+        if "talon" != splits[-1] or (enabled_only and context not in active_contexts):
+            continue
+        current_context_map = {
+            str(val.rule.rule): val.script.code
+            for command_alias, val in context.commands.items()
+            if not enabled_only or command_alias in registry.commands
+        }
+        if not current_context_map:
+            continue
+        if is_any_context_command_active(context):
+            active_context_cache.append(context)
+        
+        local_context_command_map[context_name] = current_context_map
 
-        if "talon" == splits[-1]:
-            if not enabled_only or context in active_contexts:
-                current_context_map = {}
-                num_active_commands_in_context: int = 0
-                for command_alias, val in context.commands.items():
-                    if command_alias in registry.commands or not enabled_only:
-                        current_context_map[str(val.rule.rule)] = val.script.code
-                    if command_alias in registry.commands:
-                        num_active_commands_in_context += 1
-                if num_active_commands_in_context != 0:
-                    active_context_cache.append(context)
-                if len(current_context_map) != 0:
-                    local_context_command_map[context_name] = current_context_map
+        display_name = splits[-2].replace("_", " ")
+        update_short_names(cached_short_context_names, display_name, context_name)
 
-                    display_name = splits[-2].replace("_", " ")
-                    update_short_names(cached_short_context_names, display_name, context_name)
-
-                    # the last entry will contain no symbols
-                    local_display_name_to_context_name_map[display_name] = context_name
-                    local_context_map[context_name] = context
+        # the last entry will contain no symbols
+        local_display_name_to_context_name_map[display_name] = context_name
+        local_context_map[context_name] = context
 
     # Update all the global state after we've performed our calculations
     global context_map
@@ -552,6 +551,14 @@ def update_short_names(short_context_names: dict[str, str], display_name: str, c
 
     for short_name in short_names:
         short_context_names[short_name] = context_name
+
+
+def is_any_context_command_active(context) -> bool:
+    """Returns if any command in the context is active"""
+    for command_alias in context.commands:
+        if command_alias in registry.commands:
+            return True
+    return False
 
 
 def get_sorted_display_keys(
