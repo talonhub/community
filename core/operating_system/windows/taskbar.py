@@ -201,6 +201,25 @@ class ExplorerPopupStatus:
                     self.state = ExplorerPopUpState.TASK_VIEW
                     self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW
 
+            case "CabinetWClass":
+                if (parent_element.control_type == "AppBar"):
+                    #print("AppBAR!!!!")
+                    self.state = ExplorerPopUpState.MENU
+                    self.strategy = ExplorerPopUpElementStrategy.FOCUSED_ELEMENT_PARENT
+                elif "File Explorer" in active_window.title:
+                    if focused_element.control_type == "MenuItem":
+                        #walk(focused_element.parent)
+                        if focused_element.parent.name == "Context":
+                            #print("context menu...")
+                            self.strategy = ExplorerPopUpElementStrategy.FOCUSED_ELEMENT_PARENT
+                            self.start = ExplorerPopUpState.GENERIC_CONTEXT_MENU
+                        else:
+                            self.strategy = ExplorerPopUpElementStrategy.FOCUSED_ELEMENT_FIRST_PARENT_WINDOW
+                            self.state = ExplorerPopUpState.MENU
+                    else:
+                        self.state = ExplorerPopUpState.FILE_EXPLORER
+                        self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW
+
             case "XamlExplorerHostIslandWindow":
                 match active_window.title:
                     case "Task View":
@@ -220,23 +239,7 @@ class ExplorerPopupStatus:
                     self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW
                 elif focused_element.control_type == "ListItem" and (parent_element and "Desktop" in parent_element.name):
                     self.state = ExplorerPopUpState.NONE
-                    self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW
-
-                elif "File Explorer" in active_window.title:
-                    if focused_element.control_type == "MenuItem":
-                        #walk(focused_element.parent)
-                        if focused_element.parent.name == "Context":
-                            #print("context menu...")
-                            self.strategy = ExplorerPopUpElementStrategy.FOCUSED_ELEMENT_PARENT
-                            self.start = ExplorerPopUpState.GENERIC_CONTEXT_MENU
-                        else:
-                            self.strategy = ExplorerPopUpElementStrategy.FOCUSED_ELEMENT_FIRST_PARENT_WINDOW
-                            self.state = ExplorerPopUpState.MENU
-                    else:
-                        self.state = ExplorerPopUpState.FILE_EXPLORER
-                        self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW
-                else:
-                    print(active_window.title)                 
+                    self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW             
 
         #print(f"cls = {cls} win_title = {active_window.title} element = {focused_element.name}, parent = {parent_element.name} control_type = {focused_element.control_type} parent_control_type = {parent_element.control_type if parent_element else "None"}")
     
@@ -810,7 +813,7 @@ def get_windows_eleven_taskbar():
 
             if cls == "Shell_TrayWnd":
                 taskbar = window.element
-                print(f"found taskbar cls = {cls} {window.title} parent = {taskbar.parent} control_type = {taskbar.control_type}")
+                #print(f"found taskbar cls = {cls} {window.title} parent = {taskbar.parent} control_type = {taskbar.control_type}")
 
         if taskbar:
             break
@@ -921,7 +924,7 @@ def create_task_bar_canvases(taskbar: TaskBarPositionData, system_tray: SystemTr
     canvas_system_tray.freeze()
 
 def start_menu_poller():
-    print("***poll_start_menu started***")
+    #print("***poll_start_menu started***")
     global canvas_popup, canvas_taskbar, canvas_system_tray
     global taskbar_data, system_try_data
     success, task_bar, sys_tray = get_windows_eleven_taskbar()
@@ -982,28 +985,31 @@ def is_clickable(element, depth=0):
 
     # if not element.is_keyboard_focusable:
     #     return False
-    
-    match element.control_type:
-        case "Button":
-            clickable = True
-        case "TreeItem":
-            clickable = True    
-        # case "SplitItem":
-        #     clickable = True 
-        case "ListViewItem":
-            clickable = True      
-        case "ListItem":   
-            clickable = True      
-        case "MenuItem":
-            clickable = True      
+    try:
+        match element.control_type:
+            case "Button":
+                clickable = True
+            case "TreeItem":
+                clickable = True    
+            # case "SplitItem":
+            #     clickable = True 
+            case "ListViewItem":
+                clickable = True      
+            case "ListItem":   
+                clickable = True      
+            case "MenuItem":
+                clickable = True    
+
+    except Exception as e:
+        clickable = False
         
-        case _:
-            try:
-                pattern = element.invoke_pattern
-                if pattern and not isinstance(pattern, str):
-                    clickable = True
-            except Exception as e:
-                pass
+    if not clickable:
+        try:
+            pattern = element.invoke_pattern
+            if pattern and not isinstance(pattern, str):
+                clickable = True
+        except Exception as e:
+            pass
 
     return clickable
 
@@ -1094,12 +1100,12 @@ def on_focus_change(_):
     global buttons_popup, cron_delay_showing_canvas
     global canvas_popup, popup_start_index
 
-    
+    cron_delay_canvas_helper(False)
+
     #is_menu_bar = cls == "Tray Window" and focused_element.control_type == "MenuBar"
     #2026-01-19 05:08:33.436    IO cls = = <menu bar 'Application'>, parent = <window 'T'> Desktop 1 control_type = MenuBar parent_control_type = Window
     # if the taskbar itself has focus, ignore for now
     if canvas_popup:
-        cron_delay_canvas_helper(False)
         canvas_popup.close()
         ctx.tags = []
         canvas_popup = None
@@ -1120,11 +1126,11 @@ def on_focus_change(_):
             cron_delay_canvas_helper(start=True,func=show_canvas_popup)
         else:
             popup_start_index = 0
-            cron_delay_canvas_helper(start=True,time="50ms",func=show_canvas_popup)
+            cron_delay_canvas_helper(start=True,time="150ms",func=show_canvas_popup)
 
     #print(f"***on_focus_change complete {active_window.title}***")
 
-def cron_delay_canvas_helper(start = True, time = "50ms", func=show_canvas_popup):
+def cron_delay_canvas_helper(start = True, time = "150ms", func=show_canvas_popup):
     global cron_delay_showing_canvas
 
     if cron_delay_showing_canvas:
@@ -1166,12 +1172,7 @@ def cleanup_and_retry():
     # attempt to recover
     print("Failed to get taskbar, attempting recovery")
     #app.notify("Failed to get taskbar, attempting recovery")
-
     cron_poll_start_menu_helper(True, time = "100ms")
-
-
-
-
 
 def on_screen_change(_):
     global canvas_popup
