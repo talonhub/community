@@ -1112,7 +1112,7 @@ def on_focus_change(_):
 
     active_app = ui.active_app()
     if active_app.name not in ("Windows Explorer", "SearchHost.exe", "Windows Shell Experience Host", "ShellHost", "Windows Start Experience Host"):
-        print(f"{active_app.name} - skipping")
+        #print(f"{active_app.name} - skipping")
         explorer_popup_status.reset()
         return 
 
