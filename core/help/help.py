@@ -482,7 +482,7 @@ overrides = {}
 
 def refresh_context_command_map(enabled_only=False):
     """Update information on command contexts
-    enabled_only: indicates if only active context should be considered"""
+    enabled_only: indicates if only active contexts should be considered"""
     active_contexts = registry.last_active_contexts
     active_context_cache = set()
 
