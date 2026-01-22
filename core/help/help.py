@@ -51,7 +51,7 @@ selected_context_page = 1
 
 total_page_count = 1
 
-cached_active_contexts_list = []
+cached_active_contexts = set()
 
 live_update = True
 show_enabled_contexts_only = False
@@ -179,23 +179,23 @@ def gui_operators(gui: imgui.GUI):
 
 
 def format_context_title(context_name: str) -> str:
-    global cached_active_contexts_list
+    global cached_active_contexts
     return "{} [{}]".format(
         context_name,
         (
             "ACTIVE"
-            if context_map.get(context_name, None) in cached_active_contexts_list
+            if context_map.get(context_name, None) in cached_active_contexts
             else "INACTIVE"
         ),
     )
 
 
 def format_context_button(index: int, context_label: str, context_name: str) -> str:
-    global cached_active_contexts_list
+    global cached_active_contexts
     global show_enabled_contexts_only
     should_show_asterisk: bool = (
         not show_enabled_contexts_only
-        and context_map.get(context_name, None) in cached_active_contexts_list
+        and context_map.get(context_name, None) in cached_active_contexts
     )
     postfix: str = "*" if should_show_asterisk else ""
 
@@ -273,7 +273,7 @@ def gui_context_help(gui: imgui.GUI):
     global selected_context_page
     global sorted_display_list
     global show_enabled_contexts_only
-    global cached_active_contexts_list
+    global cached_active_contexts
     global total_page_count
     global search_phrase
 
@@ -377,7 +377,7 @@ def draw_context_commands(gui: imgui.GUI):
 def draw_search_commands(gui: imgui.GUI):
     global search_phrase
     global total_page_count
-    global cached_active_contexts_list
+    global cached_active_contexts
     global selected_context_page
 
     title = f"Search: {search_phrase}"
@@ -386,7 +386,7 @@ def draw_search_commands(gui: imgui.GUI):
 
     sorted_commands_grouped = sorted(
         commands_grouped.items(),
-        key=lambda item: context_map[item[0]] not in cached_active_contexts_list,
+        key=lambda item: context_map[item[0]] not in cached_active_contexts,
     )
 
     pages = get_pages(
@@ -471,8 +471,8 @@ def reset():
 
 def update_active_contexts_cache(active_contexts):
     # print("update_active_contexts_cache")
-    global cached_active_contexts_list
-    cached_active_contexts_list = active_contexts
+    global cached_active_contexts
+    cached_active_contexts = active_contexts
 
 
 # example usage todo: make a list definable in .talon
@@ -484,7 +484,7 @@ def refresh_context_command_map(enabled_only=False):
     """Update information on command contexts
     enabled_only: indicates if only active context should be considered"""
     active_contexts = registry.last_active_contexts
-    active_context_cache = []
+    active_context_cache = set()
 
     local_context_map = {}
     local_display_name_to_context_name_map = {}
@@ -502,8 +502,8 @@ def refresh_context_command_map(enabled_only=False):
         }
         if not current_context_map:
             continue
-        if is_any_context_command_active(context):
-            active_context_cache.append(context)
+        if context in active_contexts and is_any_context_command_active(context):
+            active_context_cache.add(context)
 
         local_context_command_map[context_name] = current_context_map
 
