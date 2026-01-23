@@ -5,6 +5,7 @@ from talon.ui import Rect
 import math
 import platform
 from enum import Enum
+from ....core.app_switcher.windows.installed_applications import get_application_user_model_for_window
 
 mod = Module()
 mod.tag("taskbar_canvas_popup_showing", desc="Indicates a taskbar popup is showing")
@@ -112,13 +113,24 @@ class ExplorerPopUpState(Enum):
     SNAP_ASSIST = 13
     FILE_EXPLORER = 14
     MENU = 15
-
+    CONTROL_PANEL = 16
+    SETTINGS = 17
+    WORD = 18
+    
 class ExplorerPopUpElementStrategy(Enum):
     FOCUSED_ELEMENT = 0
     FOCUSED_ELEMENT_PARENT = 1
     FOCUSED_ELEMENT_FIRST_PARENT_WINDOW = 2
     ACTIVE_WINDOW_PARENT = 3
     ACTIVE_WINDOW = 4
+
+def get_focused_element():
+    try:
+        focused_element = ui.focused_element()
+        return focused_element
+    except Exception as e:
+        print(f"get_focused_element = {e}")
+        return None
 
 @dataclass
 class ExplorerPopupStatus:
@@ -142,7 +154,13 @@ class ExplorerPopupStatus:
 
     def update_state(self):
         active_window = ui.active_window()
-        focused_element = ui.focused_element()
+        focused_element = get_focused_element()
+
+        self.state = ExplorerPopUpState.NONE
+        self.strategy = ExplorerPopUpElementStrategy.FOCUSED_ELEMENT_PARENT
+
+        if not focused_element:
+            return
 
         try:
             parent_element = focused_element.parent
@@ -151,9 +169,6 @@ class ExplorerPopupStatus:
             parent_element = None
 
         cls = get_window_class(active_window)
-
-        self.state = ExplorerPopUpState.NONE
-        self.strategy = ExplorerPopUpElementStrategy.FOCUSED_ELEMENT_PARENT
 
         match cls:
             case "Windows.UI.Core.CoreWindow":
@@ -197,12 +212,12 @@ class ExplorerPopupStatus:
                     self.state = ExplorerPopUpState.START_MENU
                     self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW_PARENT
 
-                elif (parent_element.name == "Running applications"):
+                elif (parent_element and parent_element.name == "Running applications"):
                     self.state = ExplorerPopUpState.TASK_VIEW
                     self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW
 
             case "CabinetWClass":
-                if (parent_element.control_type == "AppBar"):
+                if (parent_element and parent_element.control_type == "AppBar"):
                     #print("AppBAR!!!!")
                     self.state = ExplorerPopUpState.MENU
                     self.strategy = ExplorerPopUpElementStrategy.FOCUSED_ELEMENT_PARENT
@@ -219,6 +234,9 @@ class ExplorerPopupStatus:
                     else:
                         self.state = ExplorerPopUpState.FILE_EXPLORER
                         self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW
+                elif "Control Panel" in active_window.title:
+                    self.state = ExplorerPopUpState.CONTROL_PANEL
+                    self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW
 
             case "XamlExplorerHostIslandWindow":
                 match active_window.title:
@@ -241,7 +259,7 @@ class ExplorerPopupStatus:
                     self.state = ExplorerPopUpState.NONE
                     self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW             
 
-        #print(f"cls = {cls} win_title = {active_window.title} element = {focused_element.name}, parent = {parent_element.name} control_type = {focused_element.control_type} parent_control_type = {parent_element.control_type if parent_element else "None"}")
+        print(f"cls = {cls} win_title = {active_window.title} element = {focused_element.name}, parent = {parent_element.name} control_type = {focused_element.control_type} parent_control_type = {parent_element.control_type if parent_element else "None"}")
     
 
 explorer_popup_status = ExplorerPopupStatus()
@@ -370,8 +388,6 @@ class Actions:
 
             if canvas_taskbar:
                 canvas_taskbar.hide()
-
-        cron.after("500ms", finish_capture)
 
     def taskbar_hover(index: int):
         """hover over taskbar button"""
@@ -982,15 +998,19 @@ def start_menu_poller():
 
 def is_clickable(element, depth=0):
     clickable = False
-
+    name = element.name
     # if not element.is_keyboard_focusable:
     #     return False
     try:
         match element.control_type:
             case "Button":
                 clickable = True
+            case "CheckBox":
+                clickable = True
             case "TreeItem":
-                clickable = True    
+                clickable = True   
+            case "TabItem":
+                clickable = True  
             # case "SplitItem":
             #     clickable = True 
             case "ListViewItem":
@@ -1001,6 +1021,8 @@ def is_clickable(element, depth=0):
                 clickable = True    
 
     except Exception as e:
+        #print(f"is_clickable exception {e} {name}")
+
         clickable = False
         
     if not clickable:
@@ -1008,32 +1030,46 @@ def is_clickable(element, depth=0):
             pattern = element.invoke_pattern
             if pattern and not isinstance(pattern, str):
                 clickable = True
+                
         except Exception as e:
-            pass
+            #print(f"is_clickable exception {e} {element.name}")
+            clickable = False
 
     return clickable
 
 def find_all_clickable_rects(element, depth=0) -> list[Rect]:
     result = []
     if (is_clickable(element)):
-        result.append(element.rect)
+        result.append(element.rect.copy())
 
-    for child in element.children:
+    try:
+        children = element.children
+    except Exception as e:
+        print(f"rects exception {e} {element.name}")
+        return result 
+    
+    for child in children:
         child_result = find_all_clickable_rects(child, depth + 1)
-        result.extend(child_result)
-
+        result.extend(child_result)        
     return result
 
 def find_all_clickable_elements(element, depth=0) -> list:
     result = []
-
+    name = element.name
     if (is_clickable(element)):
         result.append(element)
         #print("  " * depth + f"{element.control_type}: {element.name}")
     #else:
         #print("  " * depth + f"*{element.control_type}: {element.name}")
 
-    for child in element.children:
+    try:
+        children = element.children
+    except Exception as e:
+        
+        #print(f"all clickable exception {e} {name}")
+        return result 
+
+    for child in children:
         child_result = find_all_clickable_elements(child, depth + 1)
         result.extend(child_result)
 
@@ -1053,7 +1089,11 @@ def walk(element, depth=0):
 def show_canvas_popup():
     global canvas_popup, buttons_popup, popup_start_index
     active_window = ui.active_window()
-    focused_element = ui.focused_element()
+
+    focused_element = get_focused_element()
+    if not focused_element:
+        return
+    
     element = None
 
     #print(f"title = {active_window.title} {focused_element} {focused_element.parent} {active_window.element.parent}")
@@ -1111,12 +1151,35 @@ def on_focus_change(_):
         canvas_popup = None
 
     active_app = ui.active_app()
-    if active_app.name not in ("Windows Explorer", "SearchHost.exe", "Windows Shell Experience Host", "ShellHost", "Windows Start Experience Host"):
-        #print(f"{active_app.name} - skipping")
+    app_name = active_app.name
+    if active_app.name not in ("Windows Explorer", "SearchHost.exe", "Windows Shell Experience Host", "ShellHost", "Windows Start Experience Host", "Application Frame Host"):
+        print(f"{active_app.name} - skipping")
+                    
+
         explorer_popup_status.reset()
         return 
 
-    explorer_popup_status.update_state()
+    if active_app.name == "Application Frame Host":
+        model_id = get_application_user_model_for_window(ui.active_window().id)
+        
+
+        match model_id:
+            case "windows.immersivecontrolpanel_cw5n1h2txyewy!microsoft.windows.immersivecontrolpanel":
+                explorer_popup_status.reset()
+                explorer_popup_status.state = ExplorerPopUpState.SETTINGS
+                explorer_popup_status.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW
+
+
+            case _:
+                return
+    # elif active_app.name == "Microsoft Word":
+    #     explorer_popup_status.reset()
+    #     explorer_popup_status.state = ExplorerPopUpState.WORD
+    #     explorer_popup_status.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW        
+    
+    else:
+        explorer_popup_status.update_state()
+
 
     #print(explorer_popup_status)
     if explorer_popup_status.state != ExplorerPopUpState.NONE:
