@@ -7,6 +7,13 @@ NEW_USER_MESSAGE_DISMISSAL_PATH = os.path.join(
     os.path.dirname(__file__), "new_user_message_dismissed"
 )
 
+if app.platform == "windows":
+    talon_menu_location = "system tray"
+elif app.platform == "mac":
+    talon_menu_location = "status area"
+else:
+    talon_menu_location = "system tray or status area"
+
 
 @imgui.open(y=0)
 def new_user_gui(gui: imgui.GUI):
@@ -41,7 +48,7 @@ def new_user_gui(gui: imgui.GUI):
     gui.line()
 
     gui.text(
-        "You can see the Talon menu by right clicking the Talon icon in the system tray or status area"
+        f"You can see the Talon menu by clicking the Talon icon in the {talon_menu_location}"
     )
 
     gui.line()
@@ -63,7 +70,7 @@ ctx = Context()
 
 def show_new_user_message():
     """Show the new user message
-    Having this show up on startup with a fresh and stall required calling a function instead of an action, which is why this function exists
+    Having this show up on startup with a fresh install required calling a function instead of an action, which is why this function exists
     """
     new_user_gui.show()
     ctx.tags = ["user.new_user_message_showing"]
