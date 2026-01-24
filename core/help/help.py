@@ -382,7 +382,6 @@ def draw_search_commands(gui: imgui.GUI):
 
     title = f"Search: {search_phrase}"
     commands_grouped = get_search_commands(search_phrase)
-    commands_flat = list(itertools.chain.from_iterable(commands_grouped.values()))
 
     sorted_commands_grouped = sorted(
         commands_grouped.items(),
@@ -399,7 +398,6 @@ def draw_search_commands(gui: imgui.GUI):
 
     draw_commands_title(gui, title)
 
-    current_item_index = 1
     for (context, commands), page in zip(sorted_commands_grouped, pages):
         if page == selected_context_page:
             gui.text(format_context_title(context))
