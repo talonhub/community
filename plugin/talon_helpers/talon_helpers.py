@@ -9,7 +9,7 @@ from talon import Module, actions, app, clip, registry, scope, speech_system, ui
 from talon.grammar import Phrase
 from talon.scripting.types import ListTypeFull
 
-from ...core.app_switcher.windows.installed_applications import get_application_user_model_id, get_application_user_model_for_window
+from ...core.operating_system.windows.app_user_model_id import get_application_user_model_id, get_application_user_model_for_window
 
 pp = pprint.PrettyPrinter()
 

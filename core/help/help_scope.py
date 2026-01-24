@@ -1,5 +1,5 @@
 from talon import Context, Module, actions, imgui, scope, settings, ui, app
-from ..app_switcher.windows.installed_applications import get_application_user_model_id, get_application_user_model_for_window
+from ..operating_system.windows.app_user_model_id import get_application_user_model_id, get_application_user_model_for_window, get_valid_windows_by_app_user_model_id
 
 ctx = Context()
 mod = Module()

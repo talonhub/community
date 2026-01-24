@@ -3,9 +3,10 @@ from talon import Context, Module, actions, app, imgui, ui, resource, canvas, ct
 from dataclasses import dataclass, asdict
 from talon.ui import Rect
 import math
+import re
 import platform
 from enum import Enum
-from ....core.app_switcher.windows.installed_applications import get_application_user_model_for_window
+from ...operating_system.windows.app_user_model_id import get_application_user_model_id, get_application_user_model_for_window, get_valid_windows_by_app_user_model_id
 
 mod = Module()
 mod.tag("taskbar_canvas_popup_showing", desc="Indicates a taskbar popup is showing")
@@ -116,6 +117,7 @@ class ExplorerPopUpState(Enum):
     CONTROL_PANEL = 16
     SETTINGS = 17
     WORD = 18
+    TASKBAR_PREVIEW = 19
     
 class ExplorerPopUpElementStrategy(Enum):
     FOCUSED_ELEMENT = 0
@@ -169,6 +171,12 @@ class ExplorerPopupStatus:
             parent_element = None
 
         cls = get_window_class(active_window)
+
+        # if focused_element.control_type == "Edit":
+        #     value_pattern = focused_element.value_pattern
+
+        #     if value_pattern:
+        #         print(value_pattern)
 
         match cls:
             case "Windows.UI.Core.CoreWindow":
@@ -462,15 +470,28 @@ class Actions:
                 elif index >= taskbar_data.application_start_index:
                     x_click += taskbar_data.rect_task_view.width
 
-        if index >= taskbar_data.application_start_index:
+
+        is_application = index >= taskbar_data.application_start_index
+        if is_application:
             #print("app start")
             x_click += (taskbar_data.icon_width * (index - taskbar_data.application_start_index + 1 - .5)) 
     
         actions.mouse_move(x_click, y_click)
-        actions.mouse_click(mouse_button)
+        element = ui.element_at(int(x_click), int(y_click))
+        
+        match = re.search(r'(\d+)\s+running\s+window', element.name)
+        if match:
+            running_windows = int(match.group(1))
 
-        actions.sleep("150ms")
-        actions.mouse_move(x, y)
+            if running_windows > 1 and is_application:
+                actions.key(f"super-{index - taskbar_data.application_start_index + 1}")
+            else:
+                actions.mouse_click(mouse_button)
+
+        else:
+            actions.mouse_click(mouse_button)
+
+    
 
     def taskbar_control_click(mouse_button: int, index: int):
         """Click the taskbar button based on the index"""        

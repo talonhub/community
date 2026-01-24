@@ -6,7 +6,8 @@ from pathlib import Path
 import csv
 import talon
 from talon import Context, Module, actions, app, imgui, ui, resource
-from .windows.installed_applications import get_installed_windows_apps, get_valid_windows_by_app_user_model_id, get_application_user_model_id, get_application_user_model_for_window
+from ..operating_system.windows.app_user_model_id import get_application_user_model_id, get_application_user_model_for_window, get_valid_windows_by_app_user_model_id
+from .windows.installed_applications import get_installed_windows_apps
 from .mac.installed_applications import get_installed_mac_apps
 from .common_classes.exclusion import ExclusionType, RunningApplicationExclusion
 from typing import Union
