@@ -132,7 +132,7 @@ abbreviations = {
     "double ended queue": "deque",
     "double": "dbl",
     "dupe": "dup",
-    "duplicate": "dupe",
+    "duplicate": "dup",
     "dynamic": "dyn",
     "elastic": "elast",
     "element": "elem",
