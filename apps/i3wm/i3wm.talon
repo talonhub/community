@@ -83,9 +83,6 @@ launch <user.text>:
     sleep(100ms)
     insert("{text}")
 
-# adapt key configuration as needed
-lock screen: key(super-shift-x)
-
 (launch (shell | terminal) | koopa): user.i3wm_shell()
 
 new scratch (shell | window):
@@ -116,3 +113,8 @@ port right:
 port left:
     user.deprecate_command("2025-12-11", "port left", "desk left")
     user.i3msg("workspace prev")
+
+lock screen:
+    user.deprecate_command("2026-01-02", "lock screen", "^system lock$")
+    # adapt key configuration as needed
+    key(super-shift-x)
