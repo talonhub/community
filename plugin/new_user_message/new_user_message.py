@@ -48,7 +48,7 @@ def new_user_gui(gui: imgui.GUI):
     gui.line()
 
     gui.text(
-        f"You can see the Talon menu by right clicking the Talon icon in the {talon_menu_location}"
+        f"You can see the Talon menu by clicking the Talon icon in the {talon_menu_location}"
     )
 
     gui.line()
