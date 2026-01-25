@@ -1,1 +1,8 @@
-test
+
+
+# right clicking on a desktop shortcut
+
+<list item 'PlayerClassic_IL_Bundle1_Launch9_2024-03-04_14.03.55.log'>, 
+parent = <list 'Desktop'> Desktop 1 
+control_type = ListItem 
+parent_control_type = List

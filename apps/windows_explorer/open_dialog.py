@@ -8,74 +8,37 @@ from ...core.operating_system.windows.windows_known_paths import resolve_known_w
 mod = Module()
 apps = mod.apps
 
-apps.windows_explorer = r"""
-os: windows
-and app.name: Windows Explorer
-os: windows
-and app.name: Windows-Explorer
-os: windows
-and app.exe: /^explorer\.exe$/i
-"""
 
-# # many commands should work in most save/open dialog.
-# # note the "show options" stuff won't work unless work
-# # unless the path is displayed in the title, which is rare for those
-# apps.windows_file_browser = """
-# os: windows
-# and app.name: /.*/
-# and title: /(Save|Open|Browse|Select)/
-# """
+# many commands should work in most save/open dialog.
+# note the "show options" stuff won't work unless work
+# unless the path is displayed in the title, which is rare for those
+apps.windows_file_browser = """
+os: windows
+and app.name: /.*/
+and title: /(Save|Open|Browse|Select)/
+"""
 
 ctx = Context()
 ctx.matches = r"""
-app: windows_explorer
-# app: windows_file_browser
+win.class: #32770
 """
 
-user_path = os.path.expanduser("~")
-directories_to_remap = {}
-directories_to_exclude = {}
+def walk(element, depth=0):
+    print("  " * depth + f"{element.control_type}: {element.name}")
 
-
-if app.platform == "windows":
-    is_windows = True
-  
-    known_paths_to_resolve = {
-        "Desktop": FOLDERID.Desktop,
-        "Documents": FOLDERID.Documents,
-        "Downloads": FOLDERID.Documents,
-        "Music": FOLDERID.Music,
-        "Pictures": FOLDERID.Pictures,
-        "Videos": FOLDERID.Profile
-    }
-
-    for key, value in known_paths_to_resolve.items():
-        try:
-            path = resolve_known_windows_path(value)
-        except Exception as e:
-            path = None
-
-    directories_to_exclude = [
-        "",
-        "Run",
-        "Task Switching",
-        "Task View",
-        "This PC",
-        "File Explorer",
-        "Program Manager",
-    ]
+    try:
+        for child in element.children:
+            walk(child, depth + 1)
+    except (OSError, RuntimeError):
+        pass  # Element became stale
 
 def get_active_explorer_path():
-    shell = win32com.client.Dispatch("Shell.Application")
-    hwnd = win32gui.GetForegroundWindow()
+    # dialog = ui.active_window().element.find_one(control_type = "ToolBar", name="Address", max_depth=3)
 
-    for window in shell.Windows():
-        try:
-            if window.HWND == hwnd:
-                return window.Document.Folder.Self.Path
-        except Exception:
-            continue
-
+    # if dialog:
+    #     value = dialog.ValuePattern.value
+    #     print(f"{value}")
+    #     return value
     return None
 
 @ctx.action_class("user")
