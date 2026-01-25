@@ -836,6 +836,11 @@ def get_windows_eleven_taskbar():
 
     task_view_index = None
     search_button_index = None
+    
+    search_button_found = False
+    start_menu_found = False
+    hidden_icon_found = False
+    task_view_button_found = False
 
     is_taskbar_left_aligned = is_start_left_aligned()
     task_bar_combine_status = get_taskbar_combine_status()
@@ -1050,8 +1055,8 @@ def is_clickable(element, depth=0):
             clickable = True   
         case "TabItem":
             clickable = True  
-        # case "SplitItem":
-        #     clickable = True 
+        case "SplitButton":
+            clickable = True 
         case "ListViewItem":
             clickable = True      
         case "ListItem":   
@@ -1060,15 +1065,15 @@ def is_clickable(element, depth=0):
             clickable = True    
     
     # back up. todo: re-evaluate if this is necessary
-    if not clickable:
-        try:
-            pattern = element.invoke_pattern
-        except:
-            pattern = None
-            clickable = False
+    # if not clickable:
+    #     try:
+    #         pattern = element.invoke_pattern
+    #     except:
+    #         pattern = None
+    #         clickable = False
 
-        if pattern and not isinstance(pattern, str):
-            clickable = True
+    #     if pattern and not isinstance(pattern, str):
+    #         clickable = True
                 
     return clickable
 
@@ -1080,7 +1085,7 @@ def find_all_clickable_rects(element, depth=0) -> list[Rect]:
     # you may think you can skip the children of offscreen or disabled elements,
     # but you can't. e.g., the parent of a tree view in explorer may not be visible,
     # and the childen can be.    
-    if not element.is_offscreen and element.is_enabled and (is_clickable(element)):
+    if not element.is_offscreen and (is_clickable(element)):
         result.append(element.rect)
 
         #print("  " * depth + f"{element.control_type}: {element.name}")
@@ -1108,25 +1113,11 @@ def find_all_clickable_rects(element, depth=0) -> list[Rect]:
 
 def find_all_clickable_elements(element, depth=0) -> list:
     result = []
-    name = element.name
-    control_type = element.control_type
-
-    if element.is_offscreen:
-        return result
     
-    if (is_clickable(element)):
+    if (not element.is_offscreen and is_clickable(element)):
         result.append(element)
-        #print("  " * depth + f"{element.control_type}: {element.name}")
-    #else:
-        #print("  " * depth + f"*{element.control_type}: {element.name}")
 
-    # match control_type:
-    #     case "TabItem":
-    #         selection_item_pattern = element.selectionitem_pattern
-    #         if not selection_item_pattern.is_selected:
-    #             print("tab not selected!!")
-    #             return result
-
+    # if the element is disabled, can we safely skip?
     try:
         children = element.children
     except Exception as e:
