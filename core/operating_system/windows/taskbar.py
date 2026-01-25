@@ -167,28 +167,27 @@ class ExplorerPopupStatus:
 
         try:
             parent_element = focused_element.parent
+            parent_element_type = parent_element.control_type
+            parent_name = parent_element.name
         except Exception as e:
-            print("failed to get parent")
+            #print("failed to get parent")
             parent_element = None
+            parent_element_type = None
+            parent_name = "N/A"
 
         cls = get_window_class(active_window)
-
-        # if focused_element.control_type == "Edit":
-        #     value_pattern = focused_element.value_pattern
-
-        #     if value_pattern:
-        #         print(value_pattern)
-        #print(active_window.title)
-        #if active_window.title in ["Open Folder", "Open File"]:
-
-            #print(f"cls = {cls} win_title = {active_window.title} element = {focused_element.name}, parent = {parent_name} control_type = {focused_element.control_type} parent_control_type = {parent_element.control_type if parent_element else "None"}")
-        #    return
         
         match cls:
             # this seems to be the open dialg
             case "#32770":
-                self.state = ExplorerPopUpState.OPEN_DIALOG
-                self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW 
+                match parent_element_type:
+                    # case "Menu":
+                    #     self.state = ExplorerPopUpState.MENU
+                    #     self.strategy = ExplorerPopUpElementStrategy.FOCUSED_ELEMENT
+                    case _:
+                        self.state = ExplorerPopUpState.OPEN_DIALOG
+                        self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW 
+
             case "Windows.UI.Core.CoreWindow":
                 if (parent_element and (focused_element.name == "Lock" or focused_element.parent.name == "Lock")):
                     self.state = ExplorerPopUpState.NONE
@@ -282,8 +281,7 @@ class ExplorerPopupStatus:
                     self.state = ExplorerPopUpState.NONE
                     self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW                         
 
-        parent_name = parent_element.name if parent_element else "N/A"
-        print(f"cls = {cls} win_title = {active_window.title} element = {focused_element.name}, parent = {parent_name} control_type = {focused_element.control_type} parent_control_type = {parent_element.control_type if parent_element else "None"}")
+        #print(f"cls = {cls} win_title = {active_window.title} element = {focused_element.name}, parent = {parent_name} control_type = {focused_element.control_type} parent_control_type = {parent_element_type}")
     
 
 explorer_popup_status = ExplorerPopupStatus()
@@ -1250,11 +1248,11 @@ def on_focus_change(_):
             cron_delay_canvas_helper(start=True,func=show_canvas_popup)
         else:
             popup_start_index = 0
-            cron_delay_canvas_helper(start=True,time="150ms",func=show_canvas_popup)
+            cron_delay_canvas_helper(start=True,time="25ms",func=show_canvas_popup)
 
     #print(f"***on_focus_change complete {active_window.title}***")
 
-def cron_delay_canvas_helper(start = True, time = "150ms", func=show_canvas_popup):
+def cron_delay_canvas_helper(start = True, time = "25ms", func=show_canvas_popup):
     global cron_delay_showing_canvas
 
     if cron_delay_showing_canvas:
