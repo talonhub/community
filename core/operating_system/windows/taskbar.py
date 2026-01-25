@@ -1051,6 +1051,8 @@ def is_clickable(element, depth=0):
             clickable = True
         case "CheckBox":
             clickable = True
+        case "Edit":
+            clickable = True
         case "TreeItem":
             clickable = True   
         case "TabItem":
