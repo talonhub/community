@@ -23,22 +23,18 @@ ctx.matches = r"""
 win.class: #32770
 """
 
-def walk(element, depth=0):
-    print("  " * depth + f"{element.control_type}: {element.name}")
-
-    try:
-        for child in element.children:
-            walk(child, depth + 1)
-    except (OSError, RuntimeError):
-        pass  # Element became stale
 
 def get_active_explorer_path():
-    # dialog = ui.active_window().element.find_one(control_type = "ToolBar", name="Address", max_depth=3)
+    try: 
+        toolbar = ui.active_window().element.find_one(automation_id = "1001", max_depth=0)
+        if toolbar:
+            path = toolbar.legacyiaccessible_pattern.name.replace("Address: ", "")
+            return path
+        else:
+            print("didn't find toolbar")
+    except:
+        pass
 
-    # if dialog:
-    #     value = dialog.ValuePattern.value
-    #     print(f"{value}")
-    #     return value
     return None
 
 @ctx.action_class("user")
