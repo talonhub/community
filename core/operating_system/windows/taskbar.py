@@ -118,6 +118,7 @@ class ExplorerPopUpState(Enum):
     SETTINGS = 17
     WORD = 18
     TASKBAR_PREVIEW = 19
+    OPEN_DIALOG = 20
     
 class ExplorerPopUpElementStrategy(Enum):
     FOCUSED_ELEMENT = 0
@@ -177,8 +178,17 @@ class ExplorerPopupStatus:
 
         #     if value_pattern:
         #         print(value_pattern)
+        #print(active_window.title)
+        #if active_window.title in ["Open Folder", "Open File"]:
 
+            #print(f"cls = {cls} win_title = {active_window.title} element = {focused_element.name}, parent = {parent_name} control_type = {focused_element.control_type} parent_control_type = {parent_element.control_type if parent_element else "None"}")
+        #    return
+        
         match cls:
+            # this seems to be the open dialg
+            case "#32770":
+                self.state = ExplorerPopUpState.OPEN_DIALOG
+                self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW 
             case "Windows.UI.Core.CoreWindow":
                 if (parent_element and (focused_element.name == "Lock" or focused_element.parent.name == "Lock")):
                     self.state = ExplorerPopUpState.NONE
@@ -225,27 +235,32 @@ class ExplorerPopupStatus:
                     self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW
 
             case "CabinetWClass":
-                if (parent_element and parent_element.control_type == "AppBar"):
-                    #print("AppBAR!!!!")
-                    self.state = ExplorerPopUpState.MENU
-                    self.strategy = ExplorerPopUpElementStrategy.FOCUSED_ELEMENT_PARENT
-                elif "File Explorer" in active_window.title:
-                    if focused_element.control_type == "MenuItem":
-                        #walk(focused_element.parent)
-                        if focused_element.parent.name == "Context":
-                            #print("context menu...")
-                            self.strategy = ExplorerPopUpElementStrategy.FOCUSED_ELEMENT_PARENT
-                            self.start = ExplorerPopUpState.GENERIC_CONTEXT_MENU
-                        else:
-                            self.strategy = ExplorerPopUpElementStrategy.FOCUSED_ELEMENT_FIRST_PARENT_WINDOW
+                match focused_element.control_type:
+                    case "MenuItem":
+                        self.state = ExplorerPopUpState.MENU
+                        self.strategy = ExplorerPopUpElementStrategy.FOCUSED_ELEMENT_FIRST_PARENT_WINDOW 
+                    case _:
+                        if (parent_element and parent_element.control_type == "AppBar"):
+                            #print("AppBAR!!!!")
                             self.state = ExplorerPopUpState.MENU
-                    else:
-                        self.state = ExplorerPopUpState.FILE_EXPLORER
-                        self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW
-                elif "Control Panel" in active_window.title:
-                    self.state = ExplorerPopUpState.CONTROL_PANEL
-                    self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW
-
+                            self.strategy = ExplorerPopUpElementStrategy.FOCUSED_ELEMENT_PARENT
+                        elif "File Explorer" in active_window.title:
+                            if focused_element.control_type == "MenuItem":
+                                #walk(focused_element.parent)
+                                if focused_element.parent.name == "Context":
+                                    #print("context menu...")
+                                    self.strategy = ExplorerPopUpElementStrategy.FOCUSED_ELEMENT_PARENT
+                                    self.start = ExplorerPopUpState.GENERIC_CONTEXT_MENU
+                                else:
+                                    self.strategy = ExplorerPopUpElementStrategy.FOCUSED_ELEMENT_FIRST_PARENT_WINDOW
+                                    self.state = ExplorerPopUpState.MENU
+                            else:
+                                self.state = ExplorerPopUpState.FILE_EXPLORER
+                                self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW
+                        elif "Control Panel" in active_window.title:
+                            self.state = ExplorerPopUpState.CONTROL_PANEL
+                            self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW
+                
             case "XamlExplorerHostIslandWindow":
                 match active_window.title:
                     case "Task View":
@@ -265,9 +280,10 @@ class ExplorerPopupStatus:
                     self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW
                 elif focused_element.control_type == "ListItem" and (parent_element and "Desktop" in parent_element.name):
                     self.state = ExplorerPopUpState.NONE
-                    self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW             
+                    self.strategy = ExplorerPopUpElementStrategy.ACTIVE_WINDOW                         
 
-        print(f"cls = {cls} win_title = {active_window.title} element = {focused_element.name}, parent = {parent_element.name} control_type = {focused_element.control_type} parent_control_type = {parent_element.control_type if parent_element else "None"}")
+        parent_name = parent_element.name if parent_element else "N/A"
+        print(f"cls = {cls} win_title = {active_window.title} element = {focused_element.name}, parent = {parent_name} control_type = {focused_element.control_type} parent_control_type = {parent_element.control_type if parent_element else "None"}")
     
 
 explorer_popup_status = ExplorerPopupStatus()
@@ -1019,69 +1035,97 @@ def start_menu_poller():
 
 def is_clickable(element, depth=0):
     clickable = False
-    name = element.name
-    # if not element.is_keyboard_focusable:
-    #     return False
+
     try:
-        match element.control_type:
-            case "Button":
-                clickable = True
-            case "CheckBox":
-                clickable = True
-            case "TreeItem":
-                clickable = True   
-            case "TabItem":
-                clickable = True  
-            # case "SplitItem":
-            #     clickable = True 
-            case "ListViewItem":
-                clickable = True      
-            case "ListItem":   
-                clickable = True      
-            case "MenuItem":
-                clickable = True    
+        control_type = element.control_type
+    except:
+        return clickable
 
-    except Exception as e:
-        #print(f"is_clickable exception {e} {name}")
-
-        clickable = False
-        
+    match control_type:
+        case "Button":
+            clickable = True
+        case "CheckBox":
+            clickable = True
+        case "TreeItem":
+            clickable = True   
+        case "TabItem":
+            clickable = True  
+        # case "SplitItem":
+        #     clickable = True 
+        case "ListViewItem":
+            clickable = True      
+        case "ListItem":   
+            clickable = True      
+        case "MenuItem":
+            clickable = True    
+    
+    # back up. todo: re-evaluate if this is necessary
     if not clickable:
         try:
             pattern = element.invoke_pattern
-            if pattern and not isinstance(pattern, str):
-                clickable = True
-                
-        except Exception as e:
-            #print(f"is_clickable exception {e} {element.name}")
+        except:
+            pattern = None
             clickable = False
 
+        if pattern and not isinstance(pattern, str):
+            clickable = True
+                
     return clickable
 
 def find_all_clickable_rects(element, depth=0) -> list[Rect]:
     result = []
-    if (is_clickable(element)):
-        result.append(element.rect.copy())
+    name = element.name
+    control_type = element.control_type
+
+    # you may think you can skip the children of offscreen or disabled elements,
+    # but you can't. e.g., the parent of a tree view in explorer may not be visible,
+    # and the childen can be.    
+    if not element.is_offscreen and element.is_enabled and (is_clickable(element)):
+        result.append(element.rect)
+
+        #print("  " * depth + f"{element.control_type}: {element.name}")
+    #else:
+        #print("  " * depth + f"*{element.control_type}: {element.name}")
+
+    # match control_type:
+    #     case "Pane":
+    #         selection_item_pattern = element.selectionitem_pattern
+    #         if not selection_item_pattern.is_selected:
+    #             print("tab not selected!!")
+    #             return result
 
     try:
         children = element.children
     except Exception as e:
-        print(f"rects exception {e} {element.name}")
+        #print(f"all clickable exception {e} {name}")
         return result 
-    
+
     for child in children:
         child_result = find_all_clickable_rects(child, depth + 1)
-        result.extend(child_result)        
+        result.extend(child_result)
+
     return result
 
 def find_all_clickable_elements(element, depth=0) -> list:
     result = []
     name = element.name
+    control_type = element.control_type
+
+    if element.is_offscreen:
+        return result
+    
     if (is_clickable(element)):
         result.append(element)
         #print("  " * depth + f"{element.control_type}: {element.name}")
     #else:
         #print("  " * depth + f"*{element.control_type}: {element.name}")
+
+    # match control_type:
+    #     case "TabItem":
+    #         selection_item_pattern = element.selectionitem_pattern
+    #         if not selection_item_pattern.is_selected:
+    #             print("tab not selected!!")
+    #             return result
 
     try:
         children = element.children
@@ -1119,19 +1163,22 @@ def show_canvas_popup():
 
     #print(f"title = {active_window.title} {focused_element} {focused_element.parent} {active_window.element.parent}")
 
-    match explorer_popup_status.strategy:
-        case ExplorerPopUpElementStrategy.ACTIVE_WINDOW:
-            element = active_window.element
-        case ExplorerPopUpElementStrategy.ACTIVE_WINDOW_PARENT:
-            element = active_window.element.parent
-        case ExplorerPopUpElementStrategy.FOCUSED_ELEMENT:
-            element = focused_element
-        case ExplorerPopUpElementStrategy.FOCUSED_ELEMENT_PARENT:
-            element = focused_element.parent
-        case ExplorerPopUpElementStrategy.FOCUSED_ELEMENT_FIRST_PARENT_WINDOW:
-            element = focused_element.parent 
-            while element.control_type not in ["Window"]:
-                element = element.parent
+    if explorer_popup_status == ExplorerPopUpState.CONTROL_CENTER:
+        element = element.parent.parent.parent.parent
+    else:
+        match explorer_popup_status.strategy:
+            case ExplorerPopUpElementStrategy.ACTIVE_WINDOW:
+                element = active_window.element
+            case ExplorerPopUpElementStrategy.ACTIVE_WINDOW_PARENT:
+                element = active_window.element.parent
+            case ExplorerPopUpElementStrategy.FOCUSED_ELEMENT:
+                element = focused_element
+            case ExplorerPopUpElementStrategy.FOCUSED_ELEMENT_PARENT:
+                element = focused_element.parent
+            case ExplorerPopUpElementStrategy.FOCUSED_ELEMENT_FIRST_PARENT_WINDOW:
+                element = focused_element.parent 
+                while element.control_type not in ["Window"]:
+                    element = element.parent
 
             #print(element.control_type)
 
@@ -1173,7 +1220,7 @@ def on_focus_change(_):
 
     active_app = ui.active_app()
     app_name = active_app.name
-    if active_app.name not in ("Windows Explorer", "SearchHost.exe", "Windows Shell Experience Host", "ShellHost", "Windows Start Experience Host", "Application Frame Host"):
+    if active_app.name not in ("Windows Explorer", "SearchHost.exe", "Windows Shell Experience Host", "ShellHost", "Windows Start Experience Host", "Application Frame Host", "Visual Studio Code"):
         print(f"{active_app.name} - skipping")
                     
 
@@ -1200,7 +1247,7 @@ def on_focus_change(_):
     
     else:
         explorer_popup_status.update_state()
-
+        #print(explorer_popup_status.state)
 
     #print(explorer_popup_status)
     if explorer_popup_status.state != ExplorerPopUpState.NONE:
