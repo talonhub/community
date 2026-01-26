@@ -35,7 +35,7 @@ ctx.lists["user.code_type"] = {
     "integer": "int",
     "string": "str",
     "none": "None",
-    "dick": "Dict",
+    "dick": "dict",
     "float": "float",
     "any": "Any",
     "tuple": "Tuple",
@@ -45,7 +45,7 @@ ctx.lists["user.code_type"] = {
     "bytes": "bytes",
     "sequence": "Sequence",
     "callable": "Callable",
-    "list": "List",
+    "list": "list",
     "no return": "NoReturn",
 }
 
