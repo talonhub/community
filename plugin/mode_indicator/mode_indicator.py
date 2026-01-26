@@ -93,7 +93,7 @@ def get_alpha_color() -> str:
 def get_gradient_color(color: str) -> str:
     factor = settings.get("user.mode_indicator_color_gradient")
     # hex -> rgb
-    (r, g, b) = tuple(int(color[i : i + 2], 16) for i in (0, 2, 4))
+    r, g, b = tuple(int(color[i : i + 2], 16) for i in (0, 2, 4))
     # Darken rgb
     r, g, b = int(r * factor), int(g * factor), int(b * factor)
     # rgb -> hex
