@@ -1,0 +1,109 @@
+list: user.code_keyword
+code.language: cpp
+-
+asm: asm
+aye es em: asm
+align as: alignas
+a line as: alignas
+align of: alignof
+a line of: alignof
+and equal: " and_eq "
+and: " and "
+auto: "auto "
+bit and: " bitand "
+bit or: " bitor "
+bool
+break
+case: "case "
+catch: "catch "
+char
+char eight tea: char8_t
+char sixteen tea: char16_t
+char thirty two tea: char32_t
+class: "class "
+co await: "co_await "
+co return: "co_return "
+co yield: "co_yield "
+compl: "compl "
+compliment: "compl "
+concept: "concept "
+const cast: const_cast
+const eval: "consteval "
+const in it: "constinit "
+continue
+declared type: decltype
+default
+define: "define "
+defined: "defined "
+delete: "delete "
+do: "do "
+double
+dynamic cast: dynamic_cast
+else: "else "
+end if: "endif "
+enum: "enum "
+error: "error "
+ex or equal: " xor_eq "
+ex or: " xor "
+export: "export "
+extern: "extern "
+false
+final: "final "
+float
+for: "for "
+friend: "friend "
+goto: "goto "
+if defined: "ifdef "
+if not defined: "ifndef "
+if: "if "
+import: "import "
+include: "include "
+inline: "inline "
+int
+line: "line "
+long
+module: "module "
+mutable: "mutable "
+namespace: "namespace "
+new: "new "
+no except: noexcept
+not equal: " not_eq "
+not: "not "
+null pointer: nullptr
+operator
+or equal: " or_eq "
+or: " or "
+override: "override "
+pragma: "pragma "
+private
+protected
+public
+register: "register "
+reinterpret cast: reinterpret_cast
+requires
+return: "return "
+short
+signed
+sizeof
+static assert: static_assert
+static cast: static_cast
+struct: "struct "
+switch: "switch "
+template
+this
+thread local: "thread_local "
+throw
+true
+try: "try "
+typedef: "typedef "
+typeid
+typename
+un define: "undef "
+union: "union "
+unsigned
+using: "using "
+void
+volatile: "volatile "
+w char tea: wchar_t
+wide char tea: wchar_t
+while: "while "

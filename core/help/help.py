@@ -4,7 +4,7 @@ import re
 from collections import defaultdict
 from itertools import islice
 from textwrap import wrap
-from typing import Any, Iterable, Tuple
+from typing import Any, Iterable, Optional, Tuple
 
 from talon import Context, Module, actions, imgui, registry, settings
 
@@ -103,9 +103,10 @@ def update_operators_text():
         operators = actions.user.code_get_operators()
 
         # Associate the names of the operator lists with the corresponding prefix
-        op_list_names = ["array", "assignment", "bitwise", "lambda", "math", "pointer"]
+        op_list_names = ["array", "assignment", "lambda", "math", "pointer"]
         names_with_prefix = [(name, "op") for name in op_list_names]
-        names_with_prefix.append(("math_comparison", "is"))
+        names_with_prefix += [("math_comparison", "is"), ("bitwise", "(bit | bitwise)")]
+        names_with_prefix.sort()
 
         # Fill in the list by iterating over the operator lists
         operators_text = []
@@ -121,8 +122,11 @@ def update_operators_text():
                     # If the operator is implemented as text insertion,
                     # display the operator text
                     operator = operators.get(operator_text)
-                    if type(operator) == str:
+                    if isinstance(operator, str):
                         text = ": " + operator
+                    # If a documentation string is available, use that
+                    elif doc_string := getattr(operator, "__doc__", None):
+                        text = ": " + doc_string
                     # Otherwise display the operator name from list
                     else:
                         has_operator_without_text_implementation = True
@@ -189,19 +193,13 @@ def format_context_title(context_name: str) -> str:
 def format_context_button(index: int, context_label: str, context_name: str) -> str:
     global cached_active_contexts_list
     global show_enabled_contexts_only
+    should_show_asterisk: bool = (
+        not show_enabled_contexts_only
+        and context_map.get(context_name, None) in cached_active_contexts_list
+    )
+    postfix: str = "*" if should_show_asterisk else ""
 
-    if not show_enabled_contexts_only:
-        return "{}. {}{}".format(
-            index,
-            context_label,
-            (
-                "*"
-                if context_map.get(context_name, None) in cached_active_contexts_list
-                else ""
-            ),
-        )
-    else:
-        return f"{index}. {context_label} "
+    return f"help {index}. {context_label}{postfix}"
 
 
 # translates 1-based index -> actual index in sorted_context_map_keys
@@ -384,7 +382,6 @@ def draw_search_commands(gui: imgui.GUI):
 
     title = f"Search: {search_phrase}"
     commands_grouped = get_search_commands(search_phrase)
-    commands_flat = list(itertools.chain.from_iterable(commands_grouped.values()))
 
     sorted_commands_grouped = sorted(
         commands_grouped.items(),
@@ -401,7 +398,6 @@ def draw_search_commands(gui: imgui.GUI):
 
     draw_commands_title(gui, title)
 
-    current_item_index = 1
     for (context, commands), page in zip(sorted_commands_grouped, pages):
         if page == selected_context_page:
             gui.text(format_context_title(context))
@@ -512,7 +508,7 @@ def refresh_context_command_map(enabled_only=False):
                     if command_alias in registry.commands or not enabled_only:
                         local_context_command_map[context_name][
                             str(val.rule.rule)
-                        ] = val.target.code
+                        ] = val.script.code
                 if len(local_context_command_map[context_name]) == 0:
                     local_context_command_map.pop(context_name)
                 else:
@@ -745,13 +741,13 @@ class Actions:
         register_events(True)
         ctx.tags = ["user.help_open"]
 
-    def help_search(phrase: str):
+    def help_search(phrase: str, enabled_only: Optional[bool] = False):
         """Display command info for search phrase"""
         global search_phrase
 
         reset()
         search_phrase = phrase
-        refresh_context_command_map()
+        refresh_context_command_map(enabled_only=enabled_only)
         hide_all_help_guis()
         gui_context_help.show()
         register_events(True)
