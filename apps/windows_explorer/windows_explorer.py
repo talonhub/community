@@ -2,7 +2,7 @@ import os
 import win32com.client
 import win32gui
 
-from talon import Context, Module, actions, app, ui
+from talon import Context, Module, actions, app, ui, clip
 from ...core.operating_system.windows.windows_known_paths import resolve_known_windows_path, FOLDERID
 
 mod = Module()
@@ -11,10 +11,12 @@ apps = mod.apps
 apps.windows_explorer = r"""
 os: windows
 and app.name: Windows Explorer
+and win.title: /File Explorer/
 os: windows
 and app.name: Windows-Explorer
 os: windows
 and app.exe: /^explorer\.exe$/i
+and win.title: /File Explorer/
 """
 
 # # many commands should work in most save/open dialog.
@@ -107,9 +109,8 @@ class UserActions:
     def file_manager_open_directory(path: str):
         """opens the directory that's already visible in the view"""
         actions.key("ctrl-l")
-        actions.sleep("100ms")
-        actions.insert(path)
-        actions.sleep("100ms")
+        toolbar = ui.active_window().element.find_one(automation_id = "TextBox", max_depth=0)
+        toolbar.value_pattern.value = path
         actions.key("enter")
 
     def file_manager_select_directory(path: str):
@@ -125,9 +126,8 @@ class UserActions:
     def file_manager_open_file(path: str):
         """opens the file"""
         actions.key("ctrl-l")
-        actions.sleep("50ms")
-        actions.insert(path)
-        actions.sleep("50ms")
+        toolbar = ui.active_window().element.find_one(automation_id = "TextBox", max_depth=0)
+        toolbar.value_pattern.value = path
         actions.key("enter")
 
     def file_manager_select_file(path: str):
@@ -143,9 +143,7 @@ class UserActions:
         actions.key("ctrl-l")
 
     def address_copy_address():
-        actions.key("ctrl-l")
-        actions.sleep("100ms")
-        actions.edit.copy()
+        clip.set_text(get_active_explorer_path())
 
     def address_navigate(address: str):
         actions.user.file_manager_open_directory(address)
