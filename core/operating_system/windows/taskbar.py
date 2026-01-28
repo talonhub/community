@@ -1078,6 +1078,8 @@ def is_clickable(element, depth=0):
     match control_type:
         case "Button":
             clickable = True
+        case "ComboBox":
+            clickable = True
         case "CheckBox":
             clickable = True
         case "Edit":
@@ -1098,15 +1100,15 @@ def is_clickable(element, depth=0):
             clickable = True    
     
     # back up. todo: re-evaluate if this is necessary
-    if not clickable:
-        try:
-            pattern = element.invoke_pattern
-        except:
-            pattern = None
-            clickable = False
+    # if not clickable:
+    #     try:
+    #         pattern = element.invoke_pattern
+    #     except:
+    #         pattern = None
+    #         clickable = False
 
-        if pattern and not isinstance(pattern, str):
-            clickable = True
+    #     if pattern and not isinstance(pattern, str):
+    #         clickable = True
                 
     return clickable
 
@@ -1209,7 +1211,7 @@ def show_canvas_popup():
 
     # if we've somehow reach the desktop element, something's gone horribly wrong
     # so, skip
-    if "Desktop" in element.name and element.control_type == "Pane":
+    if "Desktop" in element.name and "GitHub" not in element.name and element.control_type == "Pane":
         print("Prevent enumerating the desktop - skipping")
         explorer_popup_status.set(AccessibilityPopUpState.NONE)
         return
@@ -1263,7 +1265,7 @@ def on_focus_change(_):
                 case _:
                     return
 
-        case "Microsoft Word":
+        case "Microsoft Word" | "GitHubDesktop.exe":
             explorer_popup_status.state = AccessibilityPopUpState.SETTINGS
             explorer_popup_status.strategy = PopUpStrategy.ACTIVE_WINDOW   
 
