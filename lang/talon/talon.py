@@ -138,3 +138,9 @@ class UserActions:
         text += f"({selection or ''})"
         actions.user.paste(text)
         actions.edit.left()
+
+    def code_insert_true():
+        actions.auto_insert("true")
+
+    def code_insert_false():
+        actions.auto_insert("false")
