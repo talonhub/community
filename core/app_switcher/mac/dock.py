@@ -16,7 +16,7 @@ os: mac
 
 @ctx.action_class("user")
 class Actions:
-    def switcher_click(mouse_button: int, index: int):
+    def taskbar_click(mouse_button: int, index: int):
         """"""
         dock_items = ui.apps(bundle="com.apple.dock")[0].children
         if index > len(dock_items[0].children):

@@ -1,9 +1,12 @@
-import os
-import win32com.client
-import win32gui
 
 from talon import Context, Module, actions, app, ui, clip
+import os
 from ...core.operating_system.windows.windows_known_paths import resolve_known_windows_path, FOLDERID
+
+if app.platform == "windows":
+    import win32com.client
+    import win32gui
+
 
 mod = Module()
 apps = mod.apps
@@ -12,14 +15,14 @@ apps = mod.apps
 # many commands should work in most save/open dialog.
 # note the "show options" stuff won't work unless work
 # unless the path is displayed in the title, which is rare for those
-apps.windows_file_browser = """
+apps.windows_file_browser = r"""
 os: windows
-and app.name: /.*/
-and title: /(Save|Open|Browse|Select)/
+win.class: #32770
 """
 
 ctx = Context()
 ctx.matches = r"""
+os: windows
 win.class: #32770
 """
 

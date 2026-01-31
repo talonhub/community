@@ -8,6 +8,10 @@ import platform
 from enum import Enum
 from ...operating_system.windows.app_user_model_id import get_application_user_model_id, get_application_user_model_for_window, get_valid_windows_by_app_user_model_id
 
+if app.platform == "windows":
+    import winreg
+    
+
 mod = Module()
 mod.tag("taskbar_canvas_popup_showing", desc="Indicates a taskbar popup is showing")
 ctx = Context()
@@ -30,7 +34,6 @@ def first_matching_child(element, **kw):
     attr, values = list(kw.items())[0]
     return next(e for e in element.children if getattr(e, attr) in values)
 
-import winreg
 from typing import Literal, Optional, TypedDict
 
 TaskbarCombineMode = Literal["always", "when_full", "never", "unknown"]
@@ -84,8 +87,6 @@ def get_taskbar_combine_status() -> TaskbarCombineStatus:
     return status
 
 def is_start_left_aligned() -> bool:
-    import winreg
-
     """
     Returns True if Windows 11 taskbar (Start/menu button + icons) is left-aligned.
     Returns False if centered.
