@@ -51,3 +51,10 @@ phrase: static cast
 -
 static_cast<$1>($0)
 ---
+
+name: autoVariableDeclaration
+phrase: auto
+$1.insertionFormatter: setting(user.code_private_variable_formatter)
+-
+auto $1 = $0
+---

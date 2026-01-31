@@ -3,6 +3,7 @@ import os
 import re
 import subprocess
 import sys
+from typing import Optional
 
 from talon import Context, Module, actions, app, ui
 from talon.debug import log_exception
@@ -164,7 +165,7 @@ if app.platform == "windows":
         _update_wsl_distros()
         distro = None
         try:
-            (distro, path) = re.match(wsl_title_regex, path).groups()
+            distro, path = re.match(wsl_title_regex, path).groups()
             if distro not in wsl_distros:
                 raise Exception(f"Unknown wsl distro: {distro}")
                 # log_exception(f'[_update_wsl_distros()] {sys.exc_info()[1]}')
@@ -258,7 +259,7 @@ def run_wslpath(args, in_path, in_distro=None):
 
         while loop_num < MAX_ATTEMPTS:
             # print(f"_run_wslpath(): {path_detection_disabled=}.")
-            (distro, path, error) = run_wsl(["wslpath", *args, in_path], in_distro)
+            distro, path, error = run_wsl(["wslpath", *args, in_path], in_distro)
             if error:
                 if in_path == distro and error.endswith("No such file or directory"):
                     # for testing
@@ -422,7 +423,7 @@ class UserActions:
             )
             return ""
 
-        (distro, path) = _parse_win_title()
+        distro, path = _parse_win_title()
 
         if "~" in path:
             # the only way I could find to correctly support the user folder:
@@ -477,8 +478,8 @@ class UserActions:
     def file_manager_open_volume(volume: str):
         actions.user.file_manager_open_directory(volume)
 
-    def terminal_list_directories():
-        actions.insert("ls")
+    def terminal_list_directories(path: Optional[str] = None):
+        actions.insert(f"ls {path or ''}")
         actions.key("enter")
 
     def terminal_list_all_directories():
@@ -520,7 +521,7 @@ class Actions:
         results = []
         _update_wsl_distros()
         for in_distro in wsl_distros:
-            (distro, result, error) = run_wsl(
+            distro, result, error = run_wsl(
                 ["echo", 'Hello, my name is "${WSL_DISTRO_NAME}".'], in_distro
             )
             if error:

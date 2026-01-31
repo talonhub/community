@@ -1,3 +1,5 @@
+from typing import Optional
+
 from talon import Context, Module, actions
 
 ctx = Context()
@@ -14,9 +16,8 @@ tag: user.generic_unix_shell
 class Actions:
     # Implements the functions from terminal.py for unix shells
 
-    def terminal_list_directories():
-        """Lists directories"""
-        actions.insert("ls")
+    def terminal_list_directories(path: Optional[str] = None):
+        actions.insert(f"ls {path or ''}")
         actions.key("enter")
 
     def terminal_list_all_directories():
