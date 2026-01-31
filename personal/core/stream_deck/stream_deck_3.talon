@@ -1,5 +1,5 @@
 # #control mouse enabled page
-# deck.serial: A00SA3192M9DW0
+# deck.serial: A00SA3232MA4OZ
 # -
 # #images from https://joypixels.com/emoji
 # deck(left):

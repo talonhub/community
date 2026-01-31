@@ -11,7 +11,7 @@ class ContinuousScrollingActions:
         """document string goes here"""
         pass
         
-        actions.deck.goto("A00SA3192M9DW0", "default")
+        actions.deck.goto("A00SA3232MA4OZ", "default")
         
 
     def deck2():
@@ -23,7 +23,7 @@ class ContinuousScrollingActions:
         """document string goes here"""
         actions.user.mouse_scroll_down_continuous()
         if not actions.user.mouse_is_continuous_scrolling():
-            actions.deck.goto("A00SA3192M9DW0", "default")
+            actions.deck.goto("A00SA3232MA4OZ", "default")
 
 
 
@@ -31,7 +31,7 @@ class ContinuousScrollingActions:
         """document string goes here"""
         actions.user.mouse_scroll_up_continuous()
         if not actions.user.mouse_is_continuous_scrolling():
-            actions.deck.goto("A00SA3192M9DW0", "default")
+            actions.deck.goto("A00SA3232MA4OZ", "default")
 
 
 
@@ -59,7 +59,7 @@ class ContinuousScrollingActions:
         actions.user.mouse_scroll_set_speed(100)
     
     def deck11():
-        actions.deck.goto("A00SA3192M9DW0", "default")
+        actions.deck.goto("A00SA3232MA4OZ", "default")
 
     def deck12():
-        actions.deck.goto("A00SA3192M9DW0", "default")
+        actions.deck.goto("A00SA3232MA4OZ", "default")
