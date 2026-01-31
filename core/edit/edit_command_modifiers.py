@@ -8,7 +8,7 @@ mod = Module()
 mod.list("edit_modifier", desc="Modifiers for the edit command")
 mod.list(
     "edit_modifier_repeatable",
-    desc="Modifiers for the edit command that are repeatable",
+    desc="Modifiers for the edit command that are repeatable. You say a number before the modifier to repeat it that many times.",
 )
 
 
