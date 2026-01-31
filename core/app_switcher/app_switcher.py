@@ -6,7 +6,8 @@ from pathlib import Path
 import csv
 import talon
 from talon import Context, Module, actions, app, imgui, ui, resource
-from .windows.installed_applications import get_installed_windows_apps, get_valid_windows_by_app_user_model_id, get_application_user_model_id, get_application_user_model_for_window
+from ..operating_system.windows.app_user_model_id import get_application_user_model_id, get_application_user_model_for_window, get_valid_windows_by_app_user_model_id
+from .windows.installed_applications import get_installed_windows_apps
 from .mac.installed_applications import get_installed_mac_apps
 from .common_classes.exclusion import ExclusionType, RunningApplicationExclusion
 from typing import Union
@@ -112,10 +113,8 @@ words_to_exclude = [
 @mod.capture(rule="{self.running}")  # | <user.text>)")
 def running_applications(m) -> str:
     "Returns a single application name"
-    try:
-        return m.running
-    except AttributeError:
-        return m.text
+    return m.running
+
 
 @mod.capture(rule="{self.launch}")
 def launch_applications(m) -> str:
@@ -192,9 +191,22 @@ def gui_switcher_chooser(gui: imgui.GUI):
             gui_switcher_chooser.hide()
             ctx.tags = []
 
+def get_window_class(window: ui.Window) -> bool:
+    cls = None
+    if not window:
+        return None
+    try:
+        cls = window.cls
+    except Exception as e:
+        print(f"exception = {e}")
+        app.notify("get_window_class exception - switcher askbar")
+        cls = None
+    
+    return cls
+
 def is_valid_explorer_window(window: ui.Window) -> bool:
     #invalid_exlorer_titles = ["windows hello", "program manager", "folderview", "shellview", "tree view", "namespace tree control"]
-    return window.cls.lower() in ["explorerwclass", "cabinetwclass"]
+    return get_window_class(window) in ["explorerwclass", "cabinetwclass"]
 
 
 def is_window_valid(window: ui.Window) -> bool:
@@ -212,7 +224,15 @@ def is_window_valid(window: ui.Window) -> bool:
 
 def get_valid_windows(app: ui.App):
     valid_windows = []
-    for window in app.windows():
+
+    try:
+        windows = app.windows()
+    except Exception as e:
+        app.notify("app switcher - caught exception {e}")
+        print(f"app switcher - caught exception {e}")
+        return []
+
+    for window in windows:
         if is_window_valid(window):
             valid_windows.append(window)
 
@@ -323,11 +343,12 @@ def update_running_list():
             app_frame_host_cache[key] = True
             app_frame_host_cache[key.lower()] = True
                 
-        generate_spoken_form_map.update(populate_spoken_forms_for_valid_windows(frame_host_apps[0], 
-                                                                                "Application Frame Host", 
-                                                                                None, 
-                                                                                valid_windows, 
-                                                                                running))
+        if len(frame_host_apps) > 0:
+            generate_spoken_form_map.update(populate_spoken_forms_for_valid_windows(frame_host_apps[0], 
+                                                                                    "Application Frame Host", 
+                                                                                    None, 
+                                                                                    valid_windows, 
+                                                                                    running))
         
         #populate explorer hosted apps
         explorer_apps = ui.apps(name="Windows Explorer", background=False)
@@ -478,9 +499,9 @@ def add_spoken_forms_from_override(running_list,
     
     if override.spoken_forms:
         for spoken_form in override.spoken_forms:
-            running_list[spoken_form] = app_name
+            running_list[spoken_form.strip()] = app_name
     else:
-        generate_spoken_form_map[override.display_name] = app_name
+        generate_spoken_form_map[override.display_name.strip()] = app_name
 
 def get_installed_apps():
     global INSTALLED_APPLICATIONS_LIST, INSTALLED_APPLICATIONS_INITIALIZED
@@ -659,8 +680,6 @@ def update_launch_applications(f):
         process_launch_applications_file(True)
     else:
         update_running_list()
-        if app.platform == "windows":
-            rebuild_taskbar_app_list()
         update_launch_list()
 
 @mod.action_class
@@ -707,6 +726,10 @@ class Actions:
                 ctx.tags = []
                 break
 
+    def switcher_show_desktop():
+        """"""
+        actions.key("super-d")
+
     def switcher_focus(name: str):
         """Focus a new application by name"""
         global pending_app 
@@ -726,10 +749,19 @@ class Actions:
 
         if len(splits) == 3:
             title = splits[2].lower()
-            for window in app.windows():
+
+            try:
+                windows = app.windows()
+            except Exception as e:
+                app.notify("app switcher - caught exception {e}")
+                print(f"app switcher - caught exception {e}")
+                return 
+            
+            for window in windows:
                 if title == window.title.lower():
                     window.focus()
                     break
+
         elif len(splits) == 2:
             application_user_model_id = splits[1]
             valid_windows_for_pending_app = []
@@ -737,7 +769,15 @@ class Actions:
                 valid_windows_for_pending_app = RUNNING_APPLICATION_DICT[application_user_model_id.lower()]
             else:
                 for app in set(apps):
-                    for window in app.windows():
+
+                    try:
+                        windows = app.windows()
+                    except Exception as e:
+                        app.notify("app switcher - caught exception {e}")
+                        print(f"app switcher - caught exception {e}")
+                        continue
+
+                    for window in windows:
                         if valid_window_checker(window) and str(application_user_model_id) == str(get_application_user_model_for_window(window.id)):
                             valid_windows_for_pending_app.append(window)
             
@@ -832,6 +872,17 @@ class Actions:
         else:
             print("Persistent Switcher Menu not supported on " + app.platform)
 
+    def switcher_show_applications():
+        """Show applications"""
+        if gui_applications.showing:
+            gui_applications.hide()
+        else:
+            gui_applications.show()
+
+    def switcher_hide_applications():
+        """Show applications"""
+        gui_applications.hide()
+
     def switcher_toggle_running():
         """Shows/hides all running applications"""
         if gui_running.showing:
@@ -847,6 +898,18 @@ def get_app_overrides():
     return APPLICATIONS_OVERRIDES
 
 @imgui.open()
+def gui_applications(gui: imgui.GUI):
+    gui.text("Applications (spoken forms: display name)")
+    gui.line()
+    
+    for display_name, spoken_form in launch_cache:
+        gui.text(f"{display_name}: {spoken_form}")
+
+    gui.spacer()
+    if gui.button("Running close"):
+        actions.user.switcher_hide_running()
+
+@imgui.open()
 def gui_running(gui: imgui.GUI):
     gui.text("Running applications (with spoken forms)")
     gui.line()
@@ -860,8 +923,11 @@ def gui_running(gui: imgui.GUI):
     if gui.button("Running close"):
         actions.user.switcher_hide_running()
 
-
+launch_cache = {}
 def update_launch_list():
+    global launch_cache 
+    launch_cache = {}
+
     launch = {
         application.display_name : application.unique_identifier 
         for application in APPLICATIONS_DICT.values() 
@@ -880,9 +946,27 @@ def update_launch_list():
         if current_app.spoken_forms is not None
         for spoken_form in current_app.spoken_forms
     }
+
     result.update(customized)
+    launch.update(customized)
     ctx.lists["self.launch"] = result
 
+    launch_cache = {
+        application.display_name : application.display_name 
+        for application in APPLICATIONS_DICT.values() 
+        if not application.exclude and not application.spoken_forms
+    }    
+
+    customized_cache = {
+        current_app.display_name : spoken_form 
+        for current_app in APPLICATIONS_DICT.values()
+        if current_app.spoken_forms is not None
+        for spoken_form in current_app.spoken_forms
+    }
+
+    launch_cache.update(customized_cache)
+    launch_cache = sorted(launch_cache.items())
+    
 cache = []
 
 @dataclass
@@ -897,65 +981,11 @@ def first_matching_child(element, **kw):
     attr, values = list(kw.items())[0]
     return next(e for e in element.children if getattr(e, attr) in values)
 
-taskbar = None
-ms_tasklist = None
-def rebuild_taskbar_app_list(forced: bool = False):
-    return
-    global cache, taskbar, ms_tasklist
-
-        
-    if not taskbar:
-        apps = ui.apps(name="Windows Explorer")
-        for app in apps:
-            for window in app.windows():
-                if window.cls == "Shell_TrayWnd":
-                    taskbar = window
-                    break
-            if taskbar:
-                ms_tasklist = first_matching_child(taskbar.element, class_name=["MSTaskListWClass"])
-                break
-                
-    if not taskbar:
-        actions.app.notify("taskbar window not found")
-        return
-    
-    #update_canvas = forced or len(running_applications.children) != len(cache)
-    cache = []
-    running_applications_result = {}
-    #running = {}
-    for e in ms_tasklist.children:
-
-        title = e.name
-        splits = title.split(" - ")
-        name = splits[0] 
-        cache.append(TaskBarItem(title, str(e.control_type), e))
-        override = None
-        if name in APPLICATIONS_OVERRIDES:
-            override = APPLICATIONS_OVERRIDES[name]
-            
-        if override and override.spoken_forms:
-            for form in override.spoken_forms:
-                running_applications_result[form] = title
-                #running[form] = name if name not in WINDOWS_NAME_TO_TALON_NAME else WINDOWS_NAME_TO_TALON_NAME[name]
-        else:
-            running_applications_result[name] = title
-            #running[name] = name if name not in WINDOWS_NAME_TO_TALON_NAME else WINDOWS_NAME_TO_TALON_NAME[name]
-
-    update_dict = {
-        "user.running_applications": running_applications_result, 
-        #"user.running": running
-    }
-
-    ctx.lists.update(update_dict)
-
 def ui_event(event, arg):
     if event in ("app_launch", "app_close", "app_activate", "app_deactivate"):
         update_running_list()
-        if app.platform == "windows":
-            rebuild_taskbar_app_list()
 
 def on_ready():
     ui.register("", ui_event)
-
 
 app.register("ready", on_ready)

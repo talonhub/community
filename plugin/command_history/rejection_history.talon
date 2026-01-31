@@ -1,3 +1,6 @@
+mode: dictation
+mode: command 
+-
 (rejection|reject) history: user.rejection_history_toggle()
 copy (lest|last) (reject|rejection): user.rejection_copy_last()
 [move] reject [category] [good] one: user.rejection_move_last(1)

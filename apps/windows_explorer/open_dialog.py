@@ -8,75 +8,32 @@ from ...core.operating_system.windows.windows_known_paths import resolve_known_w
 mod = Module()
 apps = mod.apps
 
-apps.windows_explorer = r"""
-os: windows
-and app.name: Windows Explorer
-and win.title: /File Explorer/
-os: windows
-and app.name: Windows-Explorer
-os: windows
-and app.exe: /^explorer\.exe$/i
-and win.title: /File Explorer/
-"""
 
-# # many commands should work in most save/open dialog.
-# # note the "show options" stuff won't work unless work
-# # unless the path is displayed in the title, which is rare for those
-# apps.windows_file_browser = """
-# os: windows
-# and app.name: /.*/
-# and title: /(Save|Open|Browse|Select)/
-# """
+# many commands should work in most save/open dialog.
+# note the "show options" stuff won't work unless work
+# unless the path is displayed in the title, which is rare for those
+apps.windows_file_browser = """
+os: windows
+and app.name: /.*/
+and title: /(Save|Open|Browse|Select)/
+"""
 
 ctx = Context()
 ctx.matches = r"""
-app: windows_explorer
-# app: windows_file_browser
+win.class: #32770
 """
 
-user_path = os.path.expanduser("~")
-directories_to_remap = {}
-directories_to_exclude = {}
-
-
-if app.platform == "windows":
-    is_windows = True
-  
-    known_paths_to_resolve = {
-        "Desktop": FOLDERID.Desktop,
-        "Documents": FOLDERID.Documents,
-        "Downloads": FOLDERID.Documents,
-        "Music": FOLDERID.Music,
-        "Pictures": FOLDERID.Pictures,
-        "Videos": FOLDERID.Profile
-    }
-
-    for key, value in known_paths_to_resolve.items():
-        try:
-            path = resolve_known_windows_path(value)
-        except Exception as e:
-            path = None
-
-    directories_to_exclude = [
-        "",
-        "Run",
-        "Task Switching",
-        "Task View",
-        "This PC",
-        "File Explorer",
-        "Program Manager",
-    ]
 
 def get_active_explorer_path():
-    shell = win32com.client.Dispatch("Shell.Application")
-    hwnd = win32gui.GetForegroundWindow()
-
-    for window in shell.Windows():
-        try:
-            if window.HWND == hwnd:
-                return window.Document.Folder.Self.Path
-        except Exception:
-            continue
+    try: 
+        toolbar = ui.active_window().element.find_one(automation_id = "1001", max_depth=0)
+        if toolbar:
+            path = toolbar.legacyiaccessible_pattern.name.replace("Address: ", "")
+            return path
+        else:
+            print("didn't find toolbar")
+    except:
+        pass
 
     return None
 
@@ -109,7 +66,7 @@ class UserActions:
     def file_manager_open_directory(path: str):
         """opens the directory that's already visible in the view"""
         actions.key("ctrl-l")
-        toolbar = ui.active_window().element.find_one(automation_id = "TextBox", max_depth=0)
+        toolbar = ui.active_window().element.find_one(automation_id = "1001", max_depth=0)
         toolbar.value_pattern.value = path
         actions.key("enter")
 
@@ -126,7 +83,7 @@ class UserActions:
     def file_manager_open_file(path: str):
         """opens the file"""
         actions.key("ctrl-l")
-        toolbar = ui.active_window().element.find_one(automation_id = "TextBox", max_depth=0)
+        toolbar = ui.active_window().element.find_one(automation_id = "1001", max_depth=0)
         toolbar.value_pattern.value = path
         actions.key("enter")
 
@@ -143,7 +100,9 @@ class UserActions:
         actions.key("ctrl-l")
 
     def address_copy_address():
-        clip.set_text(get_active_explorer_path())
+        path = get_active_explorer_path()
+        if path:
+            clip.set_text(path)
 
     def address_navigate(address: str):
         actions.user.file_manager_open_directory(address)

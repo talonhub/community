@@ -1,5 +1,6 @@
 from typing import Tuple
 from talon import Context, actions, app, ui
+from .windows_known_paths import resolve_known_windows_path, get_user_display_name, FOLDERID 
 import os
 
 ctx = Context()
@@ -31,63 +32,36 @@ ctx.lists["self.system_setting"] = {
 }
 
 if app.platform == "windows":
-    one_drive_path = os.path.expanduser(os.path.join("~", "OneDrive"))
+    system_directories = {
+        "applications": "shell:AppsFolder",
+        "talent home": os.path.expandvars("%AppData%\\Talon"),
+        "talent user": os.path.expandvars("%AppData%\\Talon\\user"),
+        "talent recordings": os.path.expandvars("%AppData%\\talon\\recordings"),
+        "talent recording": os.path.expandvars("%AppData%\\talon\\recordings"),
+    }
 
-    # this is probably not the correct way to check for onedrive, quick and dirty
-    if os.path.isdir(os.path.expanduser(os.path.join("~", r"OneDrive\Desktop"))):
-        default_folder = os.path.join("~", "Desktop")
+    known_paths_to_resolve = {
+        "desk": FOLDERID.Desktop,
+        "desktop": FOLDERID.Desktop,
+        "docks": FOLDERID.Documents,
+        "documents": FOLDERID.Documents,
+        "downloads": FOLDERID.Downloads,
+        "music": FOLDERID.Music,
+        "pictures": FOLDERID.Pictures,
+        "picks": FOLDERID.Pictures,
+        "user": FOLDERID.Profile
+    }
 
-        ctx.lists["self.system_directories"] = {
-            "applications": "shell:AppsFolder",
-            "desk": os.path.join(one_drive_path, "Desktop"),
-            "docks": os.path.join(one_drive_path, "Documents"),
-            "downloads": os.path.expanduser("~/Downloads"),
-            "pictures": os.path.join(one_drive_path, "Pictures"),
-            "one drive": one_drive_path,
-            "user": os.path.expanduser("~"),
-            "profile": os.path.expanduser("~"),
-            "program files": os.path.expandvars("%ProgramFiles%"),
-            "talent home": os.path.expandvars("%AppData%\\Talon"),
-            "talent user": os.path.expandvars("%AppData%\\Talon\\user"),
-            "talent recordings": os.path.expandvars("%AppData%\\talon\\recordings"),
-            "talent recording": os.path.expandvars("%AppData%\\talon\\recordings"),
-            "talent plugins": os.path.expandvars(
-                "%ProgramFiles%\\Talon\\talon_plugins"
-            ),
-            "talent plugin": os.path.expandvars(
-                "%ProgramFiles%\\Talon\\talon_plugins"
-            ),
-            "local app data": os.path.expandvars("%LocalAppData%"), 
-            "app data": os.path.expandvars("%AppData%"),
-            "rejects": os.path.expandvars("%AppData%\\talon\\recordings\\2024-11\\reject"), 
-            "root": "\\",
-        }
+    for key, value in known_paths_to_resolve.items():
+        try:
+            path = resolve_known_windows_path(value)
+        except Exception as e:
+            path = None
 
-    else:
-        ctx.lists["self.system_directories"] = {
-            "applications": "shell:AppsFolder",
-            "desk": os.path.expanduser("~/Desktop"),
-            "docks": os.path.expanduser("~/Documents"),
-            "downloads": os.path.expanduser("~/Downloads"),
-            "pictures": os.path.expanduser("~/Pictures"),
-            "user": os.path.expanduser("~"),
-            "profile": os.path.expanduser("~"),
-            "program files": os.path.expandvars("%ProgramFiles%"),
-            "talent home": os.path.expandvars("%AppData%\\Talon"),
-            "talent user": os.path.expandvars("%AppData%\\Talon\\user"),
-            "talent recordings": os.path.expandvars("%AppData%\\talon\\recordings"),
-            "talent recording": os.path.expandvars("%AppData%\\talon\\recordings"),
-            "talent plugins": os.path.expandvars(
-                "%ProgramFiles%\\Talon\\talon_plugins"
-            ),
-            "talent plugin": os.path.expandvars(
-                "%ProgramFiles%\\Talon\\talon_plugins"
-            ),
-            "local app data": os.path.expandvars("%LocalAppData%"), 
-            "app data": os.path.expandvars("%AppData%"),
-            "rejects": os.path.expandvars("%AppData%\\talon\\recordings\\2024-11\\reject"),
-            "root": "\\",
-        }
+        if path:
+            system_directories[key] = path
+
+    ctx.lists["self.system_directories"] = system_directories
 
 def get_selection(document_range, selection_range) -> Tuple[int, int]:
     """Get the selection from the Windows API"""

@@ -401,9 +401,10 @@ def create_spoken_forms_from_regex(source: str, pattern: re.Pattern):
     For numeric pieces detected by the regex, generates both digit-wise and full
     spoken forms for the numbers where appropriate.
     """
-    source_without_apostrophes = source.replace("'", "")
+    source_without_apostrophes = source.strip().replace("'", "")
     pieces = list(pattern.finditer(source_without_apostrophes))
-    spoken_forms = list(map(lambda x: x.group(0), pieces))
+    spoken_forms = list(map(lambda x: x.group(0).strip(), pieces))
+    spoken_forms = [s for s in spoken_forms if len(s) > 0]
 
     # NOTE: Order is sometimes important
     transforms = [
@@ -525,16 +526,16 @@ class Actions:
                 name, words_to_exclude, minimum_term_length, generate_subsequences
             )
             for spoken_form in spoken_forms:
-                all_spoken_forms[spoken_form].append(SpeakableItem(name, value))
+                all_spoken_forms[spoken_form.strip()].append(SpeakableItem(name.strip(), value))
 
         final_spoken_forms = {}
         for spoken_form, spoken_form_sources in all_spoken_forms.items():
             if len(spoken_form_sources) > 1:
-                final_spoken_forms[spoken_form] = min(
+                final_spoken_forms[spoken_form.strip()] = min(
                     spoken_form_sources,
                     key=lambda speakable_item: len(speakable_item.name),
                 ).value
             else:
-                final_spoken_forms[spoken_form] = spoken_form_sources[0].value
+                final_spoken_forms[spoken_form.strip()] = spoken_form_sources[0].value
 
         return final_spoken_forms

@@ -1,0 +1,4 @@
+list: user.user_directories
+-
+# note: desktop, music, pictures, documents are defined elsewhere already
+example: C:\

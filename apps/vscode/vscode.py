@@ -47,27 +47,40 @@ and app.name: Positron
 mod.apps.vscode = r"""
 os: windows
 and app.name: Visual Studio Code
+and not win.class: #32770
 os: windows
 and app.name: Visual Studio Code Insiders
+and not win.class: #32770
 os: windows
 and app.name: Visual Studio Code - Insiders
+and not win.class: #32770
 os: windows
 and app.exe: /^code\.exe$/i
+and not win.class: #32770
 os: windows
 and app.exe: /^code-insiders\.exe$/i
+and not win.class: #32770
 os: windows
 and app.name: VSCodium
+and not win.class: #32770
 os: windows
 and app.exe: /^vscodium\.exe$/i
+and not win.class: #32770
 os: windows
 and app.name: Azure Data Studio
+and not win.class: #32770
 os: windows
 and app.exe: /^azuredatastudio\.exe$/i
+and not win.class: #32770
 os: windows
 and app.exe: positron.exe
+and not win.class: #32770
 os: windows
 and app.exe: /^cursor\.exe$/i
+and not win.class: #32770
 os: windows
+and app.exe: /^positron\.exe$/i
+and not win.class: #32770
 """
 
 ctx.matches = r"""
@@ -139,6 +152,16 @@ class EditActions:
             )
         else:
             actions.user.vscode("actions.find")
+
+
+@ctx_editor.action_class("user")
+class EditorUserActions:
+    def insert_between(before: str, after: str, middle: str=""):
+        """Use the snippet system to directly insert the text around the cursor"""
+        escaped_before = actions.user.escape_snippet_stops(before)
+        escaped_after = actions.user.escape_snippet_stops(after)
+        snippet = f"{escaped_before}$0{escaped_after}"
+        actions.user.insert_snippet(snippet)
 
 
 @ctx.action_class("edit")

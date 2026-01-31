@@ -13,7 +13,15 @@ class AppActions:
 
 def get_valid_windows(app: ui.App):
     valid_windows = []
-    for window in app.windows():
+
+    try:
+        windows = app.windows()
+    except Exception as e:
+        app.notify("windows and tabs - caught exception {e}")
+        print(f"windows and tabs - caught exception {e}")
+        return []
+    
+    for window in windows:
         if is_window_valid(window):
             valid_windows.append(window)
 

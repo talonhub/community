@@ -7,6 +7,12 @@ if app.platform == "windows":
     from ctypes import windll, wintypes
     from uuid import UUID
 
+    try:
+        from win32com.shell import shell, shellcon
+    except ImportError:
+        shell = None
+        shellcon = None
+        
     class GUID(ctypes.Structure):   # [1]
         _fields_ = [
             ("Data1", wintypes.DWORD),
@@ -130,19 +136,46 @@ if app.platform == "windows":
         ctypes.POINTER(GUID), wintypes.DWORD, wintypes.HANDLE, ctypes.POINTER(ctypes.c_wchar_p)
     ] 
 
-    cached_paths = {}
 
     class PathNotFoundException(Exception): pass
 
-    def resolve_known_windows_path(folderid, user_handle=UserHandle.common):
+    cached_paths = {}
+    cached_user_name = None
+        
+    def get_user_display_name():
+        """Get Windows user display name for directory mapping.
+        Returns:
+            str or None: User's display name or None if retrieval fails.
+        """
+        global cached_user_name
+
+        try:
+            if cached_user_name:
+                return cached_user_name
+            
+            GetUserNameEx = ctypes.windll.secur32.GetUserNameExW
+            NameDisplay = 3
+            size = ctypes.pointer(ctypes.c_ulong(0))
+            GetUserNameEx(NameDisplay, None, size)
+            nameBuffer = ctypes.create_unicode_buffer(size.contents.value)
+            GetUserNameEx(NameDisplay, nameBuffer, size)
+
+            cached_user_name = nameBuffer.value 
+            return cached_user_name
+        except Exception as e:
+            return None
+
+    def resolve_known_windows_path(folderid, user_handle=UserHandle.current):
         if str(folderid) in cached_paths:
             return cached_paths[str(folderid)]
         
         fid = GUID(folderid) 
         pPath = ctypes.c_wchar_p()
         S_OK = 0
+        
         if _SHGetKnownFolderPath(ctypes.byref(fid), 0, user_handle, ctypes.byref(pPath)) != S_OK:
-            raise PathNotFoundException()
+            print(f"resolve_known_windows_path failed to find path {folderid} for {user_handle}")
+        
         path = pPath.value
         cached_paths[str(folderid)] = path
 

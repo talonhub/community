@@ -2,8 +2,6 @@ from talon import Context, Module, actions, ctrl, settings, ui
 
 mod = Module()
 ctx_global = Context()
-ctx_zoom_triggered = Context()
-ctx_control_mouse_enabled = Context()
 ctx_is_dragging = Context()
 
 mod.list(
@@ -56,20 +54,15 @@ mod.setting(
     desc="When enabled, drag will enable control mouse",
 )
 
+is_zoom_allowed = False
 
 @mod.action_class
 class Actions:
-    def zoom_clear_activated():
-        """"""
-        ctx_zoom_triggered.tags = []
-        actions.tracking.control_zoom_toggle(False)
-
     def mouse_wake():
         """Enable control mouse, zoom mouse, and disables cursor"""
         if actions.tracking.control_enabled():            
             actions.tracking.control_toggle(False)
             actions.tracking.control1_toggle(False)
-            ctx_control_mouse_enabled.tags = []
             ctx_is_dragging.tags = []
         try:
             # actions.user.clickless_mouse_enable()
@@ -152,6 +145,8 @@ class Actions:
         actions.user.mouse_cursor_show()
         actions.user.mouse_scroll_stop()
         actions.user.mouse_drag_end()
+        actions.user.zoom_set_allowed(False)
+
 
     def copy_mouse_position():
         """Copy the current mouse position coordinates"""
@@ -172,65 +167,14 @@ class Actions:
                 actions.tracking.control_zoom_toggle()
             actions.user.clickless_mouse_disable()
 
+    def zoom_set_allowed(allowed: bool):
+        """asdf"""
+        print(f"zoom_set_allowed: {allowed}")
+        global is_zoom_allowed 
+        is_zoom_allowed = allowed
+    
+    def zoom_allowed():
+        """Returns whether or not zoom mouse is allowed"""
+        global is_zoom_allowed 
+        return is_zoom_allowed
 
-
-@ctx_control_mouse_enabled.action_class("user")
-class UserActions:
-    def noise_trigger_pop():
-        dont_click = False
-
-        # Allow pop to stop drag
-        if settings.get("user.mouse_enable_pop_stops_drag"):
-            if actions.user.mouse_drag_end():
-                dont_click = True
-
-        # Allow pop to stop scroll
-        if settings.get("user.mouse_enable_pop_stops_scroll"):
-            if actions.user.mouse_scroll_stop():
-                dont_click = True
-
-        if dont_click:
-            return
-
-        # Otherwise respect the mouse_enable_pop_click setting
-        setting_val = settings.get("user.mouse_enable_pop_click")
-
-        is_using_eye_tracker = (
-            actions.tracking.control_zoom_enabled()
-            or actions.tracking.control_enabled()
-            or actions.tracking.control1_enabled()
-        )
-
-        should_click = (
-            setting_val == 2 and not actions.tracking.control_zoom_enabled()
-        ) or (
-            setting_val == 1
-            and is_using_eye_tracker
-            and not actions.tracking.control_zoom_enabled()
-        )
-
-        if should_click:
-            ctrl.mouse_click(button=0, hold=16000)
-            
-ctx_global = Context()
-@ctx_global.action_class("tracking")
-class TrackingActions:
-    def zoom():
-        if not actions.user.mouse_is_continuous_scrolling():
-            if actions.tracking.control_zoom_enabled():
-                ctx_zoom_triggered.tags = ["user.zoom_mouse_activated"]
-                actions.next()
-            else:
-                ctx_zoom_triggered.tags = []
-
-    def zoom_cancel():
-        if actions.tracking.control_zoom_enabled() or "user.zoom_mouse_activated" in ctx_zoom_triggered.tags:
-            actions.next()
-            
-    def control_zoom_toggle(state: bool = None) -> None:    
-        actions.next(state)
-
-        if state:
-            ctx_control_mouse_enabled.tags = ["user.zoom_mouse_enabled"]
-        else:
-            ctx_control_mouse_enabled.tags = []

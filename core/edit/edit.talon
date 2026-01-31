@@ -46,6 +46,11 @@ pace: edit.paste()
 	numb = number or 1
 	edit.undo()
 	repeat(numb - 1)
+	
+undo that [<number_small>]: 
+	numb = number or 1
+	edit.undo()
+	repeat(numb - 1)
 again [<number_small>]: 
 	numb  = number_small or 1
 	edit.redo()
