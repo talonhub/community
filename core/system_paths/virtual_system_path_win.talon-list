@@ -1,0 +1,21 @@
+list: user.virtual_system_path
+os: windows
+-
+
+# Virtual-only folders.
+quick access: shell:::{679F85CB-0220-4080-B29B-5540CC05AAB6}
+# Or `shell:::{20D04FE0-3AEA-1069-A2D8-08002B30309D}` for "This PC", also without `shell:`.
+this pc: shell:MyComputerFolder
+# Or `shell:::{F02C1A0D-BE21-4350-88B0-7367FC96EF3C}` for "Network", also without `shell:`.
+network: shell:NetworkPlacesFolder
+# Or `shell:::{645FF040-5081-101B-9F08-00AA002F954E}` for "Recycle Bin", also without `shell:`.
+recycle bin: shell:RecycleBinFolder
+trash: shell:RecycleBinFolder
+
+# Folders with virtual and resolved form.
+virtual desktop: shell:Desktop
+
+# More like, e.g., `shell:Downloads` can be found under the registry key
+# `HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions`.
+# You can also find a long list of GUIDs under
+# <https://www.autohotkey.com/docs/v2/misc/CLSID-List.htm>.
