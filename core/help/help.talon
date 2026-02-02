@@ -21,6 +21,7 @@ help keywords: user.help_list("user.code_keyword")
 help keywords unprefixed: user.help_list("user.code_keyword_unprefixed")
 help common methods: user.help_list("user.code_common_method")
 help pairs: user.help_list("user.delimiter_pair")
+help customize: user.help_list("user.edit_text_file")
 
 (help formatters | help format | format help):
     user.help_formatters(user.get_formatters_words(), false)
