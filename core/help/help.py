@@ -473,11 +473,6 @@ def update_active_contexts_cache(active_contexts):
     cached_active_contexts = active_contexts
 
 
-# example usage todo: make a list definable in .talon
-# overrides = {"generic browser": "broswer"}
-overrides = {}
-
-
 def refresh_context_command_map(enabled_only=False):
     """Update information on command contexts
     enabled_only: indicates if only active contexts should be considered"""
@@ -487,7 +482,7 @@ def refresh_context_command_map(enabled_only=False):
     local_context_map = {}
     local_display_name_to_context_name_map = {}
     local_context_command_map = {}
-    cached_short_context_names = {}
+    cached_context_names = {}
 
     for context_name, context in registry.contexts.items():
         splits = context_name.split(".")
@@ -506,7 +501,7 @@ def refresh_context_command_map(enabled_only=False):
         local_context_command_map[context_name] = current_context_map
 
         display_name = splits[-2].replace("_", " ")
-        update_short_names(cached_short_context_names, display_name, context_name)
+        update_spoken_forms(cached_context_names, display_name, context_name)
 
         # the last entry will contain no symbols
         local_display_name_to_context_name_map[display_name] = context_name
@@ -530,27 +525,22 @@ def refresh_context_command_map(enabled_only=False):
     display_name_to_context_name_map = local_display_name_to_context_name_map
     rule_word_map = refresh_rule_word_map(local_context_command_map)
 
-    ctx.lists["self.help_contexts"] = cached_short_context_names
+    ctx.lists["self.help_contexts"] = cached_context_names
     update_active_contexts_cache(active_context_cache)
 
 
-def update_short_names(
-    short_context_names: dict[str, str], display_name: str, context_name: str
+def update_spoken_forms(
+    context_spoken_forms: dict[str, str], display_name: str, context_name: str
 ):
-    """Compute shorter names for a display name and then update short_context_names
-    to map those shorter names to the context name"""
-    short_names = actions.user.create_spoken_forms(
+    """Compute spoken forms for a display name and then update context_spoken_forms
+    to map those spoken forms to the context name"""
+    spoken_forms = actions.user.create_spoken_forms(
         display_name,
         generate_subsequences=False,
     )
 
-    if short_names[0] in overrides:
-        short_names = [overrides[short_names[0]]]
-    elif len(short_names) == 2 and short_names[1] in overrides:
-        short_names = [overrides[short_names[1]]]
-
-    for short_name in short_names:
-        short_context_names[short_name] = context_name
+    for spoken_form in spoken_forms:
+        context_spoken_forms[spoken_form] = context_name
 
 
 def is_any_context_command_active(context) -> bool:
