@@ -19,6 +19,8 @@ settings():
     user.mode_indicator_color_mute = "000000"
     # Grey color for sleep mode
     user.mode_indicator_color_sleep = "808080"
+    # Dark gray color for deep sleep
+    user.mode_indicator_color_deep_sleep = "5A5A5A"
     # Gold color for dictation mode
     user.mode_indicator_color_dictation = "ffd700"
     # MediumSeaGreen color for mixed mode
