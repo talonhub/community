@@ -25,27 +25,6 @@ ctx.lists["self.code_type"] = {
     "channel": "channel",
 }
 
-ctx.lists["user.code_keyword"] = {
-    "break": "break",
-    "continue": "continue",
-    "struct": "struct",
-    "type": "type",
-    "return": "return",
-    "package": "package",
-    "import": "import",
-    "null": "nil",
-    "nil": "nil",
-    "true": "true",
-    "false": "false",
-    "defer": "defer",
-    "go": "go",
-    "if": "if",
-    "else": "else",
-    "switch": "switch",
-    "select": "select",
-    "const": "const",
-}
-
 operators = Operators(
     # code_operators_array
     SUBSCRIPT=create_described_insert_between("[", "]"),
