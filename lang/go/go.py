@@ -9,22 +9,6 @@ ctx.matches = r"""
 code.language: go
 """
 
-# Primitive Types
-ctx.lists["self.code_type"] = {
-    "boolean": "bool",
-    "int": "int",
-    "float": "float",
-    "byte": "byte",
-    "double": "double",
-    "short": "short",
-    "long": "long",
-    "char": "char",
-    "string": "string",
-    "rune": "rune",
-    "void": "void",
-    "channel": "channel",
-}
-
 operators = Operators(
     # code_operators_array
     SUBSCRIPT=create_described_insert_between("[", "]"),

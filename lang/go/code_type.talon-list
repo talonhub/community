@@ -1,0 +1,14 @@
+list: self.code_type
+code.language: go
+-
+
+boolean: "bool"
+int: "int"
+you int: "uint
+you int pointer: "uintptr"
+float 32: "float32"
+float: "float64"
+string: "string"
+byte: "byte"
+rune: "rune"
+channel: "channel"
