@@ -4,7 +4,7 @@ code.language: go
 
 boolean: "bool"
 int: "int"
-you int: "uint
+you int: "uint"
 you int pointer: "uintptr"
 float 32: "float32"
 float: "float64"
