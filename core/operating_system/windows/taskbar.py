@@ -7,7 +7,7 @@ import re
 import platform
 from enum import Enum
 from ...operating_system.windows.app_user_model_id import get_application_user_model_id, get_application_user_model_for_window, get_valid_windows_by_app_user_model_id
-from .accessibility import walk, find_all_clickable_elements, find_all_clickable_elements_parallel, find_all_clickable_rects, find_all_clickable_rects_parallel
+from .accessibility import walk, find_all_clickable_elements, find_all_clickable_elements_parallel, find_all_clickable_rects, find_all_clickable_rects_parallel, process_children_in_parallel
 
 
 if app.platform == "windows":
@@ -1089,6 +1089,8 @@ import re
 def strip_more_tabs(title: str) -> str:
     return re.sub(r"\s+and\s+\d+\s+more\s+tab.*", "", title)
 
+
+
 def show_canvas_popup():
     global canvas_popup, buttons_popup, popup_start_index
     active_window = ui.active_window()
@@ -1134,14 +1136,18 @@ def show_canvas_popup():
         # print("***started***")
         # walk(element)
         # print("***ended***")
-
-        #return
+        targets = []
         active_tab_name = strip_more_tabs(ui.active_window().title.replace("- File Explorer", ""))
-        buttons_popup = []
-        allowed_children_by_type = {
-            "Pane": ["", active_tab_name]
-        }
-        buttons_popup = find_all_clickable_rects_parallel(element, filter_children=allowed_children_by_type)
+        match_found = False
+        for child in element.children:
+            if child.name == "":
+                targets.append(child)
+
+            elif child.name == active_tab_name and not match_found:
+                targets.append(child)
+                match_found = True
+
+        buttons_popup = process_children_in_parallel(targets)
 
     # if explorer_popup_status.strategy == ExplorerPopUpElementStrategy.FOCUSED_ELEMENT_FIRST_PARENT_WINDOW:
     #     print(f"show_canvas_popup {buttons_popup}")

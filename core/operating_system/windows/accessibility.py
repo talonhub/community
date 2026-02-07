@@ -148,6 +148,27 @@ def find_all_clickable_rects(element, depth=0) -> list[Rect]:
 
     return result
 
+def process_children_in_parallel(targets):
+    results = []
+    # First pass: select which children to process (serial, deterministic)
+    # Parallel execution using threads
+    with ThreadPoolExecutor() as executor:
+        futures = [
+            executor.submit(find_all_clickable_rects_parallel, child)
+            for child in targets
+        ]
+
+        for future in as_completed(futures):
+            try:
+                result = future.result()
+                if result:
+                    results.extend(result)
+            except Exception as exc:
+                # handle/log per-task failures without killing the whole run
+                print(f"Thread failed: {exc}")
+
+    return results
+
 def find_all_clickable_elements(element, depth=0) -> list:
     result = []
     
