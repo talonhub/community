@@ -1143,7 +1143,7 @@ def show_canvas_popup():
             if child.name == "":
                 targets.append(child)
 
-            elif child.name == active_tab_name and not match_found:
+            elif child.name.strip() == active_tab_name.strip() and not match_found:
                 targets.append(child)
                 match_found = True
 
