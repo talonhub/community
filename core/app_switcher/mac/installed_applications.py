@@ -23,6 +23,10 @@ if app.platform == "mac":
             base = os.path.expanduser(base)
             if os.path.isdir(base):
                 for name in os.listdir(base):
+                    # skip things that don't end in .app
+                    if not name.endswith(".app"):
+                        continue 
+
                     new_app = None
                     path = os.path.join(base, name)
                     display_name = name.rsplit(".", 1)[0]

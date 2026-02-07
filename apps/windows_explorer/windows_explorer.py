@@ -1,8 +1,10 @@
-import os
-import win32com.client
-import win32gui
-
 from talon import Context, Module, actions, app, ui, clip
+import os
+
+if app.platform == "windows":
+    import win32com.client
+    import win32gui
+
 from ...core.operating_system.windows.windows_known_paths import resolve_known_windows_path, FOLDERID
 
 mod = Module()

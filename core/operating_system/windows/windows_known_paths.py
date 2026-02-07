@@ -181,3 +181,14 @@ if app.platform == "windows":
 
         _CoTaskMemFree(pPath)
         return path
+else:
+    #polyfill some key imports on other platforms
+    
+    def resolve_known_windows_path(folderid, user_handle):
+        pass
+
+    def get_user_display_name():
+        pass
+
+    class FOLDERID:
+        pass 

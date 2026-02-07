@@ -7,6 +7,7 @@ import csv
 import talon
 from talon import Context, Module, actions, app, imgui, ui, resource
 from ..operating_system.windows.app_user_model_id import get_application_user_model_id, get_application_user_model_for_window, get_valid_windows_by_app_user_model_id
+from ..windows_and_tabs.windows_and_tabs import get_valid_windows, is_window_valid
 from .windows.installed_applications import get_installed_windows_apps
 from .mac.installed_applications import get_installed_mac_apps
 from .common_classes.exclusion import ExclusionType, RunningApplicationExclusion
@@ -208,35 +209,6 @@ def is_valid_explorer_window(window: ui.Window) -> bool:
     #invalid_exlorer_titles = ["windows hello", "program manager", "folderview", "shellview", "tree view", "namespace tree control"]
     return get_window_class(window) in ["explorerwclass", "cabinetwclass"]
 
-
-def is_window_valid(window: ui.Window) -> bool:
-    """Returns true if this window is valid for focusing"""
-    return (
-        not window.hidden
-        # On Windows, there are many fake windows with empty titles -- this excludes them.
-        and len(window.title) > 0
-        and "chrome legacy window" not in window.title.lower()
-        # This excludes many tiny windows that are not actual windows, and is a rough heuristic.
-        and window.rect.width > window.screen.dpi
-        and window.rect.height > window.screen.dpi
-    )
-
-
-def get_valid_windows(app: ui.App):
-    valid_windows = []
-
-    try:
-        windows = app.windows()
-    except Exception as e:
-        app.notify("app switcher - caught exception {e}")
-        print(f"app switcher - caught exception {e}")
-        return []
-
-    for window in windows:
-        if is_window_valid(window):
-            valid_windows.append(window)
-
-    return valid_windows
 
 def get_spoken_form_mapping_for_host_app(host_app, valid_window_checker=is_window_valid, host_cache=None, empty_window_model_id_mapping=None):
     spoken_form_map = {}

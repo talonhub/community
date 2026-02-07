@@ -83,6 +83,7 @@ class Actions:
         """middle pedal"""
         if actions.tracking.control_zoom_enabled():
             actions.tracking.zoom()
+            actions.deck.goto("A00SA3232MA4OZ", "zoom")
 
     def deck_pedal_right():
         """right pedal"""
@@ -96,6 +97,7 @@ class Actions:
 
         actions.user.zoom_set_allowed(True)
         actions.tracking.zoom()
+        actions.deck.goto("A00SA3232MA4OZ", "zoom")
 
     def deck2():
         """document string goes here"""
@@ -107,11 +109,14 @@ class Actions:
         """document string goes here"""
         
         actions.user.mouse_scroll_down_continuous()
+        actions.deck.goto("A00SA3232MA4OZ", "scrolling")
 
 
     def deck4():
         """document string goes here"""
         actions.user.mouse_scroll_up_continuous()
+        actions.deck.goto("A00SA3232MA4OZ", "scrolling")
+
 
     def deck5():
         """document string goes here"""
