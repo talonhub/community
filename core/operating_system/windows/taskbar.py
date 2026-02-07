@@ -7,6 +7,8 @@ import re
 import platform
 from enum import Enum
 from ...operating_system.windows.app_user_model_id import get_application_user_model_id, get_application_user_model_for_window, get_valid_windows_by_app_user_model_id
+from .accessibility import walk, find_all_clickable_elements, find_all_clickable_elements_parallel, find_all_clickable_rects, find_all_clickable_rects_parallel
+
 
 mod = Module()
 mod.tag("taskbar_canvas_popup_showing", desc="Indicates a taskbar popup is showing")
@@ -147,21 +149,34 @@ def get_focused_element():
 class ExplorerPopupStatus:
     state: AccessibilityPopUpState
     strategy: PopUpStrategy
+    parallel: bool
     element_override: Element
 
-    def __init__(self, state=AccessibilityPopUpState.NONE, element_override: Element =None):
+    def __init__(self, 
+                 state=AccessibilityPopUpState.NONE, 
+                 element_override: Element=None,
+                 parallel=False):
         self.state = state
         self.element_override = element_override   
         self.strategy = PopUpStrategy.ACTIVE_WINDOW
+        self.parallel = False
 
-    def set(self, state: AccessibilityPopUpState, element_override: Element = None, strategy=PopUpStrategy.FOCUSED_ELEMENT):
+    def set(self, 
+            state: AccessibilityPopUpState, 
+            element_override: Element = None, 
+            strategy=PopUpStrategy.FOCUSED_ELEMENT,
+            parallel = False):
+        
         self.state = state
-        self.element_override = element_override    
+        self.element_override = element_override
+        self.strategy = strategy
+        self.parallel = parallel    
 
     def reset(self):
         self.state = AccessibilityPopUpState.NONE
         self.element_override = None   
-        self.strategy = PopUpStrategy.ACTIVE_WINDOW    
+        self.strategy = PopUpStrategy.ACTIVE_WINDOW
+        self.parallel = False    
 
     def update_state(self):
         active_window = ui.active_window()
@@ -169,6 +184,7 @@ class ExplorerPopupStatus:
 
         self.state = AccessibilityPopUpState.NONE
         self.strategy = PopUpStrategy.FOCUSED_ELEMENT_PARENT
+        self.parallel = False
 
         if not focused_element:
             return
@@ -262,6 +278,7 @@ class ExplorerPopupStatus:
                                     self.strategy = PopUpStrategy.FOCUSED_ELEMENT_FIRST_PARENT_WINDOW
                                     self.state = AccessibilityPopUpState.MENU
                             else:
+                                self.parallel = True
                                 self.state = AccessibilityPopUpState.FILE_EXPLORER
                                 self.strategy = PopUpStrategy.ACTIVE_WINDOW
                         elif "Control Panel" in active_window.title:
@@ -1067,115 +1084,9 @@ def start_menu_poller():
     cron_poll_start_menu_helper()
     #print("***poll_start_menu complete***")
 
-def is_clickable(element, depth=0):
-    clickable = False
-
-    try:
-        control_type = element.control_type
-    except:
-        return clickable
-
-    match control_type:
-        case "Button":
-            clickable = True
-        case "ComboBox":
-            clickable = True
-        case "CheckBox":
-            clickable = True
-        case "Edit":
-            clickable = True
-        case "TreeItem":
-            clickable = True   
-        case "TabItem":
-            clickable = True  
-        case "SplitButton":
-            clickable = True 
-        case "ListViewItem":
-            clickable = True      
-        case "ListItem":   
-            clickable = True 
-        case "Menu":
-            clickable = True        
-        case "MenuItem":
-            clickable = True    
-    
-    # back up. todo: re-evaluate if this is necessary
-    # if not clickable:
-    #     try:
-    #         pattern = element.invoke_pattern
-    #     except:
-    #         pattern = None
-    #         clickable = False
-
-    #     if pattern and not isinstance(pattern, str):
-    #         clickable = True
-                
-    return clickable
-
-def find_all_clickable_rects(element, depth=0) -> list[Rect]:
-    result = []
-    name = element.name
-    control_type = element.control_type
-
-    # you may think you can skip the children of offscreen or disabled elements,
-    # but you can't. e.g., the parent of a tree view in explorer may not be visible,
-    # and the childen can be.    
-    if (is_clickable(element)):
-        result.append(element.rect)
-
-        #print("  " * depth + f"{element.control_type}: {element.name}")
-    #else:
-        #print("  " * depth + f"*{element.control_type}: {element.name}")
-
-    # match control_type:
-    #     case "Pane":
-    #         selection_item_pattern = element.selectionitem_pattern
-    #         if not selection_item_pattern.is_selected:
-    #             print("tab not selected!!")
-    #             return result
-
-    try:
-        children = element.children
-    except Exception as e:
-        #print(f"all clickable exception {e} {name}")
-        return result 
-
-    for child in children:
-        child_result = find_all_clickable_rects(child, depth + 1)
-        result.extend(child_result)
-
-    return result
-
-def find_all_clickable_elements(element, depth=0) -> list:
-    result = []
-    
-    if (not element.is_offscreen and is_clickable(element)):
-        result.append(element)
-
-    # if the element is disabled, can we safely skip?
-    try:
-        children = element.children
-    except Exception as e:
-        
-        #print(f"all clickable exception {e} {name}")
-        return result 
-
-    for child in children:
-        child_result = find_all_clickable_elements(child, depth + 1)
-        result.extend(child_result)
-
-    return result
-
-
-def walk(element, depth=0):
-    print("  " * depth + f"{element.control_type}: {element.name}")
-    try:
-        for child in element.children:
-            walk(child, depth + 1)
-    except (OSError, RuntimeError):
-        pass  # Element became stale
-
-#walk(ui.active_window().element)
+import re
+def strip_more_tabs(title: str) -> str:
+    return re.sub(r"\s+and\s+\d+\s+more\s+tabs?$", "", title)
 
 def show_canvas_popup():
     global canvas_popup, buttons_popup, popup_start_index
@@ -1216,7 +1127,28 @@ def show_canvas_popup():
         explorer_popup_status.set(AccessibilityPopUpState.NONE)
         return
     
-    buttons_popup = find_all_clickable_rects(element)
+    if not explorer_popup_status.parallel:
+        buttons_popup = find_all_clickable_rects(element)
+    else:
+        # print("***started***")
+        # walk(element)
+        # print("***ended***")
+
+        #return
+        active_tab_name = strip_more_tabs(ui.active_window().title)
+        buttons_popup = []
+        match_found = False
+        
+        for child in element.children:
+            match child.name:
+                case "":
+                    buttons_popup.extend(find_all_clickable_rects_parallel(child))
+
+                case active_tab_name:
+                    if not match_found:
+                        buttons_popup.extend(find_all_clickable_rects_parallel(child))   
+                        match_found = True 
+
     # if explorer_popup_status.strategy == ExplorerPopUpElementStrategy.FOCUSED_ELEMENT_FIRST_PARENT_WINDOW:
     #     print(f"show_canvas_popup {buttons_popup}")
 
