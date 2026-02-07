@@ -49,7 +49,10 @@ EditAction = Union[
 ]
 
 mod = Module()
-mod.list("edit_action", desc="Actions for the edit command")
+mod.list(
+    "edit_action",
+    desc="Edit command actions. Follow an action by an edit modifier to perform the action on the modifier's target.",
+)
 
 
 @mod.capture(rule="{user.edit_action}")
