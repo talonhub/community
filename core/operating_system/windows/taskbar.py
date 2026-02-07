@@ -1269,7 +1269,7 @@ def on_win_resize(window):
 def on_screen_change(_):
     global canvas_popup
     #print(f"on_screen_change started")
-    cron_delay_showing_canvas(False)
+    cron_delay_canvas_helper(False)
 
     success, task_bar, sys_tray = get_windows_eleven_taskbar()
     
