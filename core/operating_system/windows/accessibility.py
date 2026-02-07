@@ -46,7 +46,7 @@ def is_clickable(element, depth=0):
                 
     return clickable
 
-def find_all_clickable_rects_parallel(element, max_workers=8):
+def find_all_clickable_rects_parallel(element, filter_children=None, max_workers=8):
     # Do a shallow expansion on the main thread to avoid sending huge work units
 
     result = []
@@ -62,13 +62,22 @@ def find_all_clickable_rects_parallel(element, max_workers=8):
     except Exception:
         children = []
 
-    def worker(subroot):
+    def worker(subroot, filter_children):
         # WARNING: only safe if subroot is safe to access in worker threads
-        return find_all_clickable_rects_parallel(subroot)
+        if filter_children:
+            if subroot.control_type in filter_children:
+                if subroot.name in filter_children[subroot.control_type]:
 
+                    return find_all_clickable_rects_parallel(subroot)
+                
+                #print(f"{subroot.name}: {subroot.control_type}")
+                return []
+        else:
+            return find_all_clickable_rects_parallel(subroot)
+        
     if len(children) > 0:
         with ThreadPoolExecutor(max_workers=max_workers) as ex:
-            futures = [ex.submit(worker, ch) for ch in children]
+            futures = [ex.submit(worker, ch, filter_children) for ch in children]
             for f in as_completed(futures):
                 try:
                     result.extend(f.result())

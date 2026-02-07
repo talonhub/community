@@ -1087,7 +1087,7 @@ def start_menu_poller():
 
 import re
 def strip_more_tabs(title: str) -> str:
-    return re.sub(r"\s+and\s+\d+\s+more\s+tabs?$", "", title)
+    return re.sub(r"\s+and\s+\d+\s+more\s+tab.*", "", title)
 
 def show_canvas_popup():
     global canvas_popup, buttons_popup, popup_start_index
@@ -1136,19 +1136,12 @@ def show_canvas_popup():
         # print("***ended***")
 
         #return
-        active_tab_name = strip_more_tabs(ui.active_window().title)
+        active_tab_name = strip_more_tabs(ui.active_window().title.replace("- File Explorer", ""))
         buttons_popup = []
-        match_found = False
-        
-        for child in element.children:
-            match child.name:
-                case "":
-                    buttons_popup.extend(find_all_clickable_rects_parallel(child))
-
-                case active_tab_name:
-                    if not match_found:
-                        buttons_popup.extend(find_all_clickable_rects_parallel(child))   
-                        match_found = True 
+        allowed_children_by_type = {
+            "Pane": ["", active_tab_name]
+        }
+        buttons_popup = find_all_clickable_rects_parallel(element, filter_children=allowed_children_by_type)
 
     # if explorer_popup_status.strategy == ExplorerPopUpElementStrategy.FOCUSED_ELEMENT_FIRST_PARENT_WINDOW:
     #     print(f"show_canvas_popup {buttons_popup}")
