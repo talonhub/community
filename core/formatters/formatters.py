@@ -375,28 +375,24 @@ def formatter_immune(m) -> ImmuneString:
     return ImmuneString(str(value))
 
 
-def get_formatters_and_prose_formatters(
-    include_reformatters: bool,
-) -> tuple[dict[str, str], dict[str, str]]:
-    """Returns dictionary of non-word formatters and a dictionary of all prose formatters"""
-    formatters = {}
-    prose_formatters = {}
-    formatters.update(
-        actions.user.talon_get_active_registry_list("user.code_formatter")
-    )
-    formatters.update(
-        actions.user.talon_get_active_registry_list("user.prose_formatter")
-    )
+def get_code_formatters() -> dict[str, str]:
+    """Returns dictionary of code formatters"""
+    return actions.user.talon_get_active_registry_list("user.code_formatter")
 
-    if include_reformatters:
-        formatters.update(
-            actions.user.talon_get_active_registry_list("user.reformatter")
-        )
 
-    prose_formatters.update(
-        actions.user.talon_get_active_registry_list("user.prose_formatter")
-    )
-    return formatters, prose_formatters
+def get_reformatters() -> dict[str, str]:
+    """Returns dictionary of reformatters"""
+    return actions.user.talon_get_active_registry_list("user.reformatter")
+
+
+def get_prose_formatters():
+    """Returns dictionary of prose formatters"""
+    return actions.user.talon_get_active_registry_list("user.prose_formatter")
+
+
+def get_word_formatters():
+    """Returns dictionary of word formatters"""
+    return actions.user.talon_get_active_registry_list("user.word_formatter")
 
 
 @mod.action_class
@@ -445,35 +441,70 @@ class Actions:
         text = actions.user.reformat_text(selected, formatters)
         actions.insert(text)
 
+    def get_code_formatter_words() -> dict:
+        """Returns words currently used as code formatters, and a demonstration string using those formatters"""
+        formatters_help_demo = {}
+        formatters = get_code_formatters()
+        code_formatter_names = formatters.keys()
+        for phrase in code_formatter_names:
+            name = formatters[phrase]
+            demo = format_text_without_adding_to_history("one two three", name)
+
+            formatters_help_demo[phrase] = demo
+        return formatters_help_demo
+
+    def get_prose_formatter_words() -> dict:
+        """Returns words currently used as prose, and a demonstration string using those formatters"""
+        formatters_help_demo = {}
+        prose_formatters = get_prose_formatters()
+        for phrase in prose_formatters:
+            name = prose_formatters[phrase]
+            demo = format_text_without_adding_to_history("one two three", name)
+
+            formatters_help_demo[phrase] = demo
+        return formatters_help_demo
+
+    def get_word_formatter_words() -> dict:
+        """In returns words currently used as word formatters."""
+        formatters_help_demo = {}
+        word = get_word_formatters()
+        for name in word:
+            demo = format_text_without_adding_to_history("one", word[name])
+            formatters_help_demo[name] = demo
+        return formatters_help_demo
+
     def get_formatters_words() -> dict:
         """Returns words currently used as formatters, and a demonstration string using those formatters"""
         formatters_help_demo = {}
-        formatters, prose_formatters = get_formatters_and_prose_formatters(
-            include_reformatters=False
-        )
-        prose_formatter_names = prose_formatters.keys()
+        code_formatters = get_code_formatters()
+        prose_formatters = get_prose_formatters()
+        all_formatters = code_formatters | prose_formatters
 
-        for phrase in sorted(formatters):
-            name = formatters[phrase]
-            demo = format_text_without_adding_to_history("one two three", name)
-            if phrase in prose_formatter_names:
-                phrase += " *"
-            formatters_help_demo[phrase] = demo
+        for name in sorted(all_formatters):
+            phrase = all_formatters[name]
+            demo = format_text_without_adding_to_history("one two three", phrase)
+            if name in prose_formatters:
+                name += " *"
+
+            formatters_help_demo[name] = demo
         return formatters_help_demo
 
     def get_reformatters_words() -> dict:
         """Returns words currently used as re-formatters, and a demonstration string using those re-formatters"""
         formatters_help_demo = {}
-        formatters, prose_formatters = get_formatters_and_prose_formatters(
-            include_reformatters=True
-        )
-        prose_formatter_names = prose_formatters.keys()
-        for phrase in sorted(formatters):
-            name = formatters[phrase]
-            demo = format_text_without_adding_to_history("one_two_three", name, True)
-            if phrase in prose_formatter_names:
-                phrase += " *"
-            formatters_help_demo[phrase] = demo
+        code_formatters = get_code_formatters()
+        prose_formatters = get_prose_formatters()
+        reformatters = get_reformatters()
+        all_formatters = code_formatters | prose_formatters | reformatters
+
+        for name in sorted(all_formatters):
+            name = code_formatters[name]
+            demo = format_text_without_adding_to_history(
+                "one_two_three", all_formatters[name], True
+            )
+            if name in prose_formatters:
+                name += " *"
+            formatters_help_demo[name] = demo
         return formatters_help_demo
 
     def insert_many(strings: list[str]) -> None:

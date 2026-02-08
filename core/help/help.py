@@ -3,8 +3,7 @@ import math
 import re
 from collections import defaultdict
 from itertools import islice
-from textwrap import wrap
-from typing import Any, Iterable, Optional, Tuple
+from typing import Any, Iterable, Tuple
 
 from talon import Context, Module, actions, imgui, registry, settings
 
@@ -87,7 +86,8 @@ def gui_formatters(gui: imgui.GUI):
         gui.text(f"{val}: {key}")
 
     gui.spacer()
-    gui.text("* prose formatter")
+    if point_out_prose:
+        gui.text("* prose formatter")
     gui.spacer()
     if gui.button("Help close"):
         gui_formatters.hide()
@@ -103,10 +103,9 @@ def update_operators_text():
         operators = actions.user.code_get_operators()
 
         # Associate the names of the operator lists with the corresponding prefix
-        op_list_names = ["array", "assignment", "lambda", "math", "pointer"]
+        op_list_names = ["array", "assignment", "bitwise", "lambda", "math", "pointer"]
         names_with_prefix = [(name, "op") for name in op_list_names]
-        names_with_prefix += [("math_comparison", "is"), ("bitwise", "(bit | bitwise)")]
-        names_with_prefix.sort()
+        names_with_prefix.append(("math_comparison", "is"))
 
         # Fill in the list by iterating over the operator lists
         operators_text = []
@@ -122,11 +121,8 @@ def update_operators_text():
                     # If the operator is implemented as text insertion,
                     # display the operator text
                     operator = operators.get(operator_text)
-                    if isinstance(operator, str):
+                    if type(operator) == str:
                         text = ": " + operator
-                    # If a documentation string is available, use that
-                    elif doc_string := getattr(operator, "__doc__", None):
-                        text = ": " + doc_string
                     # Otherwise display the operator name from list
                     else:
                         has_operator_without_text_implementation = True
@@ -508,7 +504,7 @@ def refresh_context_command_map(enabled_only=False):
                     if command_alias in registry.commands or not enabled_only:
                         local_context_command_map[context_name][
                             str(val.rule.rule)
-                        ] = val.script.code
+                        ] = val.target.code
                 if len(local_context_command_map[context_name]) == 0:
                     local_context_command_map.pop(context_name)
                 else:
@@ -653,17 +649,7 @@ def gui_list_help(gui: imgui.GUI):
     total_page_count = len(pages_list)
     # print(pages_list[current_page])
 
-    if total_page_count == 0:
-        page_info = "empty"
-    else:
-        page_info = f"{current_list_page}/{total_page_count}"
-
-    gui.text(f"List: {selected_list} ({page_info})")
-
-    # Extract description from list declaration, i.e. mod.list(..., desc=...))
-    if (desc := registry.decls.lists[selected_list].desc) is not None:
-        for line in wrap(desc):
-            gui.text(line)
+    gui.text(f"{selected_list} {current_list_page}/{total_page_count}")
 
     gui.line()
 
@@ -702,12 +688,13 @@ class Actions:
         register_events(True)
         ctx.tags = ["user.help_open"]
 
-    def help_formatters(ab: dict, reformat: bool):
+    def help_formatters(ab: dict, reformat: bool, distinguish_prose: bool):
         """Provides the list of formatter keywords"""
         # what you say is stored as a trigger
-        global formatters_words, formatters_reformat
+        global formatters_words, formatters_reformat, point_out_prose
         formatters_words = ab
         formatters_reformat = reformat
+        point_out_prose = distinguish_prose
         reset()
         hide_all_help_guis()
         gui_formatters.show()
@@ -741,13 +728,13 @@ class Actions:
         register_events(True)
         ctx.tags = ["user.help_open"]
 
-    def help_search(phrase: str, enabled_only: Optional[bool] = False):
+    def help_search(phrase: str):
         """Display command info for search phrase"""
         global search_phrase
 
         reset()
         search_phrase = phrase
-        refresh_context_command_map(enabled_only=enabled_only)
+        refresh_context_command_map()
         hide_all_help_guis()
         gui_context_help.show()
         register_events(True)
