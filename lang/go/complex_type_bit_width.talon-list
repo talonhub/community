@@ -1,4 +1,4 @@
-list: user.float_type_bit_width
+list: user.complex_type_bit_width
 code.language: go
 -
 
