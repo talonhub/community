@@ -55,8 +55,8 @@ operators = Operators(
     POINTER_INDIRECTION="*",
 )
 
-mod.list("user.float_type_bit_width", desc="Float type bit widths")
-mod.list("user.complex_type_bit_width", desc="Complex type bit widths")
+mod.list("float_type_bit_width", desc="Float type bit widths")
+mod.list("complex_type_bit_width", desc="Complex type bit widths")
 
 
 @mod.capture(rule="[{user.stdint_signed}] int {user.c_type_bit_width}")
@@ -82,7 +82,7 @@ def go_complex_type(m) -> str:
 
 @ctx.capture(
     "user.code_type",
-    rule="{user.code_type} | {user.go_int_type} | {user.go_float_type} | {user.go_complex_type}",
+    rule="{user.code_type} | <user.go_int_type> | <user.go_float_type> | <user.go_complex_type>",
 )
 def code_type(m) -> str:
     """All go types"""
