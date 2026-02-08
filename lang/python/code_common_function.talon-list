@@ -12,3 +12,14 @@ set
 split
 string: "str"
 update
+
+# Talon Python functions
+app notify: actions.app.notify
+clip set text: actions.clip.set_text
+clip text: actions.clip.text
+cron after: cron.after
+cron cancel: cron.cancel
+cron interval: cron.interval
+eff es watch: fs.watch
+fs watch: fs.watch
+settings get: "settings.get"
