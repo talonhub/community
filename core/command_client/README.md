@@ -12,7 +12,7 @@ The hotkeys to look for are:
 
 - [Windows/Linux: `ctrl-shift-f17`](https://github.com/talonhub/community/blob/358d327b96891f628bd84728831a3fb544a27a15/core/command_client/command_client.py#L129)
 - [Mac: `cmd-shift-f17`](https://github.com/talonhub/community/blob/358d327b96891f628bd84728831a3fb544a27a15/core/command_client/command_client.py#L148)
-- [Vscode Linux: `ctrl-shift-alt-p`](https://github.com/talonhub/community/blob/358d327b96891f628bd84728831a3fb544a27a15/apps/vscode/vscode_command_client.py#L107)
+- [VSCode Linux: `ctrl-shift-alt-p`](https://github.com/talonhub/community/blob/358d327b96891f628bd84728831a3fb544a27a15/apps/vscode/vscode_command_client.py#L107)
 
 ## Contributing
 
