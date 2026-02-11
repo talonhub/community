@@ -1,5 +1,6 @@
 name: structDeclaration
 phrase: struct
+
 $1.insertionFormatter: PUBLIC_CAMEL_CASE
 ---
 
@@ -17,3 +18,12 @@ insertionScope: statement
 struct $1 {
     $0
 };
+---
+
+language: go
+insertionScope: statement
+-
+type $1 struct {
+    $0
+}
+---
