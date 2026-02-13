@@ -129,3 +129,11 @@ class UserActions:
         )
 
         actions.user.code_insert_function(result, None)
+
+
+@mod.action_class
+class Actions:
+    def go_cast_wrap(type: str):
+        """Wraps the selected text in a cast"""
+        current_selected = actions.edit.selected_text()
+        actions.insert(f"{type}({current_selected})")

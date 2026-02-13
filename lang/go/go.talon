@@ -37,3 +37,7 @@ channel (receive | send): " <- "
 [state] if not (err | error):
     insert("if err == nil {")
     key("enter")
+
+cast to <user.code_type>: user.insert_between(user.code_type+"(", ")")
+cast wrap <user.code_type>:
+    user.go_cast_wrap(user.code_type)
