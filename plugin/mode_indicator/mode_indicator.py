@@ -50,6 +50,7 @@ mod.setting(
 mod.setting("mode_indicator_color_text", type=str)
 mod.setting("mode_indicator_color_mute", type=str)
 mod.setting("mode_indicator_color_sleep", type=str)
+mod.setting("mode_indicator_color_deep_sleep", type=str)
 mod.setting("mode_indicator_color_dictation", type=str)
 mod.setting("mode_indicator_color_mixed", type=str)
 mod.setting("mode_indicator_color_command", type=str)
@@ -64,6 +65,7 @@ setting_paths = {
     "user.mode_indicator_color_gradient",
     "user.mode_indicator_color_mute",
     "user.mode_indicator_color_sleep",
+    "mode_indicator_color_deep_sleep",
     "user.mode_indicator_color_dictation",
     "user.mode_indicator_color_mixed",
     "user.mode_indicator_color_command",
@@ -75,6 +77,8 @@ def get_mode_color() -> str:
     if current_microphone == "None":
         return settings.get("user.mode_indicator_color_mute")
     if current_mode == "sleep":
+        if "user.deep_sleep" in scope.get("tag"):
+            return settings.get("user.mode_indicator_color_deep_sleep")
         return settings.get("user.mode_indicator_color_sleep")
     elif current_mode == "dictation":
         return settings.get("user.mode_indicator_color_dictation")
