@@ -1,3 +1,5 @@
+from contextlib import suppress
+
 from talon import Context, Module, actions, settings
 
 from ...core.described_functions import create_described_insert_between
@@ -8,43 +10,6 @@ mod = Module()
 ctx.matches = r"""
 code.language: go
 """
-
-# Primitive Types
-ctx.lists["self.code_type"] = {
-    "boolean": "bool",
-    "int": "int",
-    "float": "float",
-    "byte": "byte",
-    "double": "double",
-    "short": "short",
-    "long": "long",
-    "char": "char",
-    "string": "string",
-    "rune": "rune",
-    "void": "void",
-    "channel": "channel",
-}
-
-ctx.lists["user.code_keyword"] = {
-    "break": "break",
-    "continue": "continue",
-    "struct": "struct",
-    "type": "type",
-    "return": "return",
-    "package": "package",
-    "import": "import",
-    "null": "nil",
-    "nil": "nil",
-    "true": "true",
-    "false": "false",
-    "defer": "defer",
-    "go": "go",
-    "if": "if",
-    "else": "else",
-    "switch": "switch",
-    "select": "select",
-    "const": "const",
-}
 
 operators = Operators(
     # code_operators_array
@@ -89,6 +54,39 @@ operators = Operators(
     POINTER_ADDRESS_OF="&",
     POINTER_INDIRECTION="*",
 )
+
+mod.list("float_type_bit_width", desc="Float type bit widths")
+mod.list("complex_type_bit_width", desc="Complex type bit widths")
+
+
+@mod.capture(rule="[{user.stdint_signed}] int {user.c_type_bit_width}")
+def go_int_type(m) -> str:
+    """fixed-width integer types (e.g. "uint32")"""
+    prefix = ""
+    with suppress(AttributeError):
+        prefix = m.stdint_signed
+    return f"{prefix}int{m.c_type_bit_width}"
+
+
+@mod.capture(rule="float {user.float_type_bit_width}")
+def go_float_type(m) -> str:
+    """fixed-width float types (e.g. "float32")"""
+    return f"float{m.float_type_bit_width}"
+
+
+@mod.capture(rule="complex {user.complex_type_bit_width}")
+def go_complex_type(m) -> str:
+    """fixed-width complex types (e.g. "complex64")"""
+    return f"complex{m.complex_type_bit_width}"
+
+
+@ctx.capture(
+    "user.code_type",
+    rule="{user.code_type} | <user.go_int_type> | <user.go_float_type> | <user.go_complex_type>",
+)
+def code_type(m) -> str:
+    """All go types"""
+    return "".join(list(m))
 
 
 @ctx.action_class("user")

@@ -1,7 +1,9 @@
 list: user.stdint_signed
 code.language: c
 code.language: cpp
+code.language: go
 -
+
 signed: ""
 unsigned: u
 you: u
