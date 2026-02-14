@@ -33,6 +33,7 @@ def $1($2):
 ---
 
 language: rust
+
 $1.insertionFormatter: SNAKE_CASE
 -
 fn $1($2) {
@@ -70,6 +71,15 @@ language: r
 $1.insertionFormatter: SNAKE_CASE
 -
 $1 <- function($2){
+    $0
+}
+---
+
+language: go
+
+$1.insertionFormatter: PRIVATE_CAMEL_CASE
+-
+func $1($2) {
     $0
 }
 ---

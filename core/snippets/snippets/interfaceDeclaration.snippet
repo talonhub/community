@@ -1,0 +1,22 @@
+name: interfaceDeclaration
+phrase: interface
+insertionScope: statement
+---
+
+language: typescript | typescriptreact
+
+$1.insertionFormatter: PUBLIC_CAMEL_CASE
+-
+interface $1 {
+    $0
+}
+---
+
+language: go
+
+$1.insertionFormatter: PUBLIC_CAMEL_CASE
+-
+type $1 interface {
+    $0
+}
+---
