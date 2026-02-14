@@ -10,7 +10,7 @@ The command client sends key presses that the command server listens for as a si
 
 The hotkeys to look for are:
 
-- [Windows/Linux: `ctrl-shift-f17`](https://github.com/talonhub/community/blob/358d327b96891f628bd84728831a3fb544a27a15/core/command_client/command_client.py#L129)
+- [Windows & non-VSCode Linux: `ctrl-shift-f17`](https://github.com/talonhub/community/blob/358d327b96891f628bd84728831a3fb544a27a15/core/command_client/command_client.py#L129)
 - [Mac: `cmd-shift-f17`](https://github.com/talonhub/community/blob/358d327b96891f628bd84728831a3fb544a27a15/core/command_client/command_client.py#L148)
 - [VSCode Linux: `ctrl-shift-alt-p`](https://github.com/talonhub/community/blob/358d327b96891f628bd84728831a3fb544a27a15/apps/vscode/vscode_command_client.py#L107)
 
