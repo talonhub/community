@@ -48,6 +48,7 @@ def i3msg_nocheck(arguments: str):  # type: ignore
         check=False,
     )
 
+
 # For i3wm we cannot rely on the focusing functions from the UI toolkit, because
 # i3wm treats this like the application is trying to acquire focus on its own.
 # The default reaction of i3wm to such requests from windows on another
@@ -56,6 +57,7 @@ def i3msg_nocheck(arguments: str):  # type: ignore
 # the focus commands successfully changing the focus.
 def i3wm_focus_window_by_id(id: int):
     actions.user.i3msg(f"[id={id}] focus")
+
 
 @ctx.action_class("user")
 class UserActions:
@@ -69,8 +71,8 @@ class UserActions:
     def switcher_focus_app(app: ui.App):  # type: ignore
         # Obtain window ids for all windows of the application
         # (sorting is necessary, because the order differs between calls)
-        app_window_ids: list[int] = sorted([window.id for window in app.windows() ])
-        assert(len(app_window_ids) > 0)
+        app_window_ids: list[int] = sorted([window.id for window in app.windows()])
+        assert len(app_window_ids) > 0
 
         if app == ui.active_app():
             # Focus next window of already active app
