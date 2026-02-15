@@ -49,20 +49,39 @@ def i3msg_nocheck(arguments: str):  # type: ignore
     )
 
 
+# For i3wm we cannot rely on the focusing functions from the UI toolkit, because
+# i3wm treats this like the application is trying to acquire focus on its own.
+# The default reaction of i3wm to such requests from windows on another
+# workspace is to downgrade this to setting the "urgent" flag. Is violates the
+# implicit contract of commands like those for the draft editor, which rely on
+# the focus commands successfully changing the focus.
+def i3wm_focus_window_by_id(id: int):
+    actions.user.i3msg(f"[id={id}] focus")
+
+
 @ctx.action_class("user")
 class UserActions:
+    def switcher_focus_window(window: ui.Window):  # type: ignore
+        i3wm_focus_window_by_id(window.id)
+
     def switcher_focus(name: str):  # type: ignore
         app = actions.user.get_running_app(name)
+        actions.user.switcher_focus_app(app)
+
+    def switcher_focus_app(app: ui.App):  # type: ignore
+        # Obtain window ids for all windows of the application
+        # (sorting is necessary, because the order differs between calls)
+        app_window_ids: list[int] = sorted([window.id for window in app.windows()])
+        assert len(app_window_ids) > 0
 
         if app == ui.active_app():
-            # Focus next window on same app
-            actions.app.window_next()
+            # Focus next window of already active app
+            current_idx = app_window_ids.index(app.active_window.id)
+            next_idx = (current_idx + 1) % len(app_window_ids)
+            i3wm_focus_window_by_id(app_window_ids[next_idx])
         else:
-            # Focus first window of app
-            app.focus()
-        # Make sure we really focus the window, even if
-        # focus_on_window_activation is set to "smart" or "urgent"
-        actions.user.i3msg('[urgent="latest"] focus')
+            # Focus first window of previously inactive app
+            i3wm_focus_window_by_id(app_window_ids[0])
 
     # the default implementation considers desktops consecutively numbered
     # this would be highly confusing given the numbering of i3wm workspaces
