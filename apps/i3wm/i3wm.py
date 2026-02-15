@@ -51,9 +51,15 @@ def i3msg_nocheck(arguments: str):  # type: ignore
 
 @ctx.action_class("user")
 class UserActions:
+    def switcher_focus_window(window: ui.Window):
+        window.focus()
+        actions.user.i3msg('[urgent="latest"] focus')
+
     def switcher_focus(name: str):  # type: ignore
         app = actions.user.get_running_app(name)
+        actions.user.switcher_focus_app(app)
 
+    def switcher_focus_app(app: ui.App):  # type: ignore
         if app == ui.active_app():
             # Focus next window on same app
             actions.app.window_next()
