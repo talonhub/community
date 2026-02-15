@@ -1,5 +1,5 @@
 from inspect import signature
-from typing import Callable
+from typing import Callable, Union
 
 from talon import Module, actions, settings
 
@@ -168,7 +168,7 @@ compound_actions = {
 
 @mod.action_class
 class Actions:
-    def edit_command(action: EditAction | str, modifier: EditModifier | str):
+    def edit_command(action: Union[EditAction, str], modifier: Union[EditModifier, str]):
         """Perform edit command with associated modifier.
         Action and modifier can be dataclasses (formed from utterances via
         capture) or str, for use in scripts. Strings should match the action or
