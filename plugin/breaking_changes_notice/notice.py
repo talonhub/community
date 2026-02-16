@@ -4,10 +4,11 @@
 
 import os
 
-from talon import Module, actions, app, imgui, Context
+from talon import Context, Module, actions, app, imgui
 
 # used to activate the tag for when the notice is showing
 ctx = Context()
+
 
 @imgui.open(y=0)
 def notice_gui(gui: imgui.GUI):
@@ -79,7 +80,11 @@ def compute_breaking_changes_path_from_current_directory(current_directory: str)
 
 mod = Module()
 
-mod.tag("breaking_changes_notice_showing", desc="The notification that breaking changes has updated is showing")
+mod.tag(
+    "breaking_changes_notice_showing",
+    desc="The notification that breaking changes has updated is showing",
+)
+
 
 @mod.action_class
 class Actions:
