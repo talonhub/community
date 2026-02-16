@@ -1,4 +1,4 @@
-.# notifies the user if the breaking changes document has updated
+# notifies the user if the breaking changes document has updated
 # this expects the breaking changes document to be two directory levels above the current one
 # if the breaking changes file is moved or renamed, update the compute_breaking_changes_path_from_current_directory function
 
