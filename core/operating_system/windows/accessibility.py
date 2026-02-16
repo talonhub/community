@@ -35,15 +35,6 @@ def is_clickable(element, depth=0):
             clickable = True    
         case _:
             clickable = element.is_keyboard_focusable
-            # if not clickable:
-            #     try:
-            #         pattern = element.invoke_pattern
-            #     except:
-            #         pattern = None
-            #         clickable = False
-
-            #     if pattern and not isinstance(pattern, str):
-            #         clickable = True
     # back up. todo: re-evaluate if this is necessary
 
                 
@@ -55,7 +46,8 @@ def find_all_clickable_rects_parallel(element, filter_children=None, max_workers
     result = []
     # include root on main thread
     try:
-        if element.is_enabled and not element.is_offscreen and is_clickable(element):
+        # note: checking not element.is_offscreen appears to eliminate clickable menu items..
+        if element.is_enabled and is_clickable(element):
             result.append(element.rect)
     except Exception:
         pass
@@ -95,7 +87,8 @@ def find_all_clickable_elements_parallel(element, max_workers=8):
     result = []
     # include root on main thread
     try:
-        if element.is_enabled and not element.is_offscreen and is_clickable(element):
+        # note: checking not element.is_offscreen appears to eliminate clickable menu items..
+        if element.is_enabled and is_clickable(element):
             result.append(element)
     except Exception:
         pass
@@ -194,8 +187,7 @@ def find_all_clickable_elements(element, depth=0) -> list:
 
 
 def walk(element, depth=0):
-    if element.automation_id:
-        print("  " * depth + f"{element.control_type}: {element.name}, automation_id = {element.automation_id}") 
+    print("  " * depth + f"{element.control_type}: {element.name}, automation_id = {element.automation_id}") 
     
     try:
         for child in element.children:
@@ -214,6 +206,6 @@ def on_focused_element_change(_):
     window = ui.active_window()
     print(f"element focus: {ui.focused_element().name} {window.cls} {window.id}")
     
-ui.register("win_focus", on_focus_change)
+#ui.register("win_focus", on_focus_change)
 #ui.register("win_title", on_title_change)
-ui.register("element_focus", on_focused_element_change)
+#ui.register("element_focus", on_focused_element_change)
