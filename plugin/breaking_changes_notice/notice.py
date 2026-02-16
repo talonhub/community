@@ -11,8 +11,8 @@ def notice_gui(gui: imgui.GUI):
 	pass
 
 def on_ready():
-	current_size: int = get_current_size()
 	parent: str = os.path.dirname(__file__)
+	current_size: int = get_current_size(parent)
 	previous_size_file_name: str = "previous_breaking_changes_size"
 	previous_size_path: str = os.path.join(parent, previous_size_file_name)
 	could_read_file: bool = False
@@ -27,9 +27,12 @@ def on_ready():
 		notice_gui.show()
 
 
-def get_current_size() -> int:
+def get_current_size(current_directory_path: str) -> int:
 	"""Gets the current size of the breaking changes file"""
-	pass
+	great_grandparent: str = os.path.dirname(os.path.dirname(current_directory_path))
+	breaking_changes_path: str = os.path.join(great_grandparent, "BREAKING_CHANGES.txt")
+	stats: os.stat_result = os.stat(breaking_changes_path)
+	return stats.st_size
 
 def get_previous_size(path: str) -> int:
 	"""Get the last read size of the breaking changes file.
