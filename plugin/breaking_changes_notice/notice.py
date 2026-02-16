@@ -18,13 +18,19 @@ def notice_gui(gui: imgui.GUI):
         actions.user.breaking_changes_open()
     if gui.button("breaking hide"):
         actions.user.breaking_changes_notice_hide()
+    gui.text("Never show again:")
+    if gui.button("breaking dismiss"):
+        actions.user.breaking_changes_notice_never_show_again()
 
 
 def on_ready():
-    parent: str = os.path.dirname(__file__)
-    current_size: int = get_current_size(parent)
+    current_directory: str = os.path.dirname(__file__)
+    do_not_show_filepath: str = compute_do_not_show_breaking_changes_notice_path(current_directory)
+    if os.path.exists(do_not_show_filepath):
+        return 
+    current_size: int = get_current_size(current_directory)
     previous_size_file_name: str = "previous_breaking_changes_size"
-    previous_size_path: str = os.path.join(parent, previous_size_file_name)
+    previous_size_path: str = os.path.join(current_directory, previous_size_file_name)
     could_read_file: bool = True
     try:
         previous_size: int = get_previous_size(previous_size_path)
@@ -39,6 +45,9 @@ def on_ready():
         ctx.tags = ["user.breaking_changes_notice_showing"]
     save_size(previous_size_path, current_size)
 
+
+def compute_do_not_show_breaking_changes_notice_path(current_directory: str) -> str:
+    return os.path.join(current_directory, "do_not_show_breaking_changes_notice")
 
 def get_current_size(current_directory_path: str) -> int:
     """Gets the current size of the breaking changes file"""
@@ -73,7 +82,7 @@ def save_size(path: str, size: int):
         f.write(value_text)
 
 
-def compute_breaking_changes_path_from_current_directory(current_directory: str):
+def compute_breaking_changes_path_from_current_directory(current_directory: str) -> str:
     grandparent: str = os.path.dirname(os.path.dirname(current_directory))
     return os.path.join(grandparent, "BREAKING_CHANGES.txt")
 
@@ -92,6 +101,15 @@ class Actions:
         """Hide the breaking changes notice"""
         ctx.tags = []
         notice_gui.hide()
+
+    def breaking_changes_notice_never_show_again():
+        """Never show the breaking changes notice again"""
+        actions.user.breaking_changes_notice_hide()
+        current_directory: str = os.path.dirname(__file__)
+        path: str = compute_do_not_show_breaking_changes_notice_path(current_directory)
+        # create empty file
+        with open(path, "w") as _:
+            pass
 
     def breaking_changes_open():
         """Opens the breaking changes file"""
