@@ -152,32 +152,38 @@ class ExplorerPopupStatus:
     strategy: PopUpStrategy
     parallel: bool
     element_override: Element
+    window_id: int
 
     def __init__(self, 
                  state=AccessibilityPopUpState.NONE, 
                  element_override: Element=None,
-                 parallel=False):
+                 parallel=False,
+                 window_id=None):
         self.state = state
         self.element_override = element_override   
         self.strategy = PopUpStrategy.ACTIVE_WINDOW
         self.parallel = False
+        self.window_id=window_id
 
     def set(self, 
             state: AccessibilityPopUpState, 
             element_override: Element = None, 
             strategy=PopUpStrategy.FOCUSED_ELEMENT,
-            parallel = False):
+            parallel = False,
+            window_id=None):
         
         self.state = state
         self.element_override = element_override
         self.strategy = strategy
         self.parallel = parallel    
+        self.window_id=window_id
 
     def reset(self):
         self.state = AccessibilityPopUpState.NONE
         self.element_override = None   
         self.strategy = PopUpStrategy.ACTIVE_WINDOW
         self.parallel = False    
+        self.window_id = None
 
     def update_state(self):
         active_window = ui.active_window()
@@ -279,6 +285,8 @@ class ExplorerPopupStatus:
                                     self.strategy = PopUpStrategy.FOCUSED_ELEMENT_FIRST_PARENT_WINDOW
                                     self.state = AccessibilityPopUpState.MENU
                             else:
+                                pass
+    
                                 self.parallel = True
                                 self.state = AccessibilityPopUpState.FILE_EXPLORER
                                 self.strategy = PopUpStrategy.ACTIVE_WINDOW
@@ -306,6 +314,8 @@ class ExplorerPopupStatus:
                 elif focused_element.control_type == "ListItem" and (parent_element and "Desktop" in parent_element.name):
                     self.state = AccessibilityPopUpState.NONE
                     self.strategy = PopUpStrategy.ACTIVE_WINDOW                         
+
+        self.window_id = ui.active_window().id if self.state != AccessibilityPopUpState.NONE else None
 
         #print(f"cls = {cls} win_title = {active_window.title} element = {focused_element.name}, parent = {parent_name} control_type = {focused_element.control_type} parent_control_type = {parent_element_type}")
     
@@ -624,12 +634,14 @@ class Actions:
 
         start_menu_poller()
         ui.unregister("screen_change", on_screen_change) 
-        ui.unregister("element_focus", on_focus_change)
+        ui.unregister("win_focus", on_win_focus)
+        ui.unregister("element_focus", on_element_focus)
         ui.unregister("win_resize", on_win_resize)
         ui.unregister("win_move", on_win_resize)
         
         ui.register("screen_change", on_screen_change) 
-        ui.register("element_focus", on_focus_change)        
+        ui.register("win_focus", on_win_focus)  
+        #ui.register("element_focus", on_element_focus)      
         ui.register("win_resize", on_win_resize)
         ui.register("win_move", on_win_resize)
         cron_poll_start_menu_helper()
@@ -679,7 +691,7 @@ def draw_canvas_popup(canvas):
         x_text_position = rect_background.x + rect_background.width / 2
         y_text_position = rect_background.y + rect_background.height / 1.25
 
-        label = label_for_index(index_pure)
+        label = label_for_index(index_pure - 1)
 
         paint.color = "ffffff"
         canvas.draw_text(f"{label}", x_text_position, y_text_position)
@@ -780,7 +792,10 @@ def draw_task_bar_options(canvas):
 
     max_task_list_count = math.floor(rect_task_bar_list.width / taskbar_data.icon_width)
 
+    print(f"{max_task_list_count} {taskbar_data.icon_width}")
     for index in range(current_index,  current_index + max_task_list_count):
+        print(index)
+
         paint.style = paint.Style.FILL
         paint.color = "000000"
 
@@ -947,8 +962,21 @@ def get_windows_eleven_taskbar():
 
                 case "Task View":
                     rect_task_view = element.rect
+                    first_icon_rect = element.rect
                     task_view_button_found = True
+                    icon_dimensions_set = True
+
+                case "Taskbar":
+                    pass
+
+                #skip empty string
+                case "":
+                    pass
+
                 case _:
+                    if not element.name:
+                        continue
+
                     if not icon_dimensions_set:
                         first_icon_rect = element.rect
                         icon_dimensions_set = True
@@ -1125,7 +1153,7 @@ def show_canvas_popup():
 
     # if we've somehow reach the desktop element, something's gone horribly wrong
     # so, skip
-    if "Desktop" in element.name and "GitHub" not in element.name and element.control_type == "Pane":
+    if "Desktop" in element.name and element.control_type == "Pane":
         print("Prevent enumerating the desktop - skipping")
         explorer_popup_status.set(AccessibilityPopUpState.NONE)
         return
@@ -1161,7 +1189,12 @@ def show_canvas_popup():
     canvas_popup.register("draw", draw_canvas_popup)
     canvas_popup.freeze()
 
-def on_focus_change(_):
+def on_element_focus(_):
+    if explorer_popup_status and explorer_popup_status.window_id:
+        if explorer_popup_status.window_id == ui.active_window().id:
+            on_win_focus(_)
+
+def on_win_focus(_):
     #print(f"***on_focus_change started***")
     global buttons_popup, cron_delay_showing_canvas
     global canvas_popup, popup_start_index
@@ -1176,9 +1209,14 @@ def on_focus_change(_):
         ctx.tags = []
         canvas_popup = None
 
+    # focused_element = ui.focused_element()
+    # if not focused_element.automation_id and not focused_element.name:
+    #     explorer_popup_status.reset()
+    #     return 
+
     active_app = ui.active_app()
     app_name = active_app.name
-    if active_app.name not in ("Windows Explorer", "SearchHost.exe", "Windows Shell Experience Host", "ShellHost", "Windows Start Experience Host", "Application Frame Host", "Visual Studio Code"):
+    if active_app.name not in ("Windows Explorer", "SearchHost.exe", "Windows Shell Experience Host", "ShellHost", "Windows Start Experience Host", "Application Frame Host"):
         print(f"{active_app.name} - skipping")
         return 
 
@@ -1193,31 +1231,32 @@ def on_focus_change(_):
                     explorer_popup_status.state = AccessibilityPopUpState.SETTINGS
                     explorer_popup_status.strategy = PopUpStrategy.ACTIVE_WINDOW
 
-
                 case _:
                     return
 
-        case "Microsoft Word" | "GitHubDesktop.exe":
-            explorer_popup_status.state = AccessibilityPopUpState.SETTINGS
-            explorer_popup_status.strategy = PopUpStrategy.ACTIVE_WINDOW   
+        # case "Microsoft Word" | "GitHubDesktop.exe":
+        #     explorer_popup_status.state = AccessibilityPopUpState.SETTINGS
+        #     explorer_popup_status.strategy = PopUpStrategy.ACTIVE_WINDOW   
 
         case _:
             explorer_popup_status.update_state()
 
-
+    explorer_popup_status.window_id = ui.active_window().id if explorer_popup_status.state != AccessibilityPopUpState.NONE else None
+    
     #print(explorer_popup_status)
     if explorer_popup_status.state != AccessibilityPopUpState.NONE:
+
 
         if explorer_popup_status.state == AccessibilityPopUpState.SYSTEM_TRAY:
             popup_start_index = len(system_try_data.sys_tray_icons)
             cron_delay_canvas_helper(start=True,func=show_canvas_popup)
         else:
             popup_start_index = 0
-            cron_delay_canvas_helper(start=True,time="25ms",func=show_canvas_popup)
+            cron_delay_canvas_helper(start=True,time="100ms",func=show_canvas_popup)
 
     #print(f"***on_focus_change complete {active_window.title}***")
 
-def cron_delay_canvas_helper(start = True, time = "25ms", func=show_canvas_popup):
+def cron_delay_canvas_helper(start = True, time = "100ms", func=show_canvas_popup):
     global cron_delay_showing_canvas
 
     if cron_delay_showing_canvas:
@@ -1292,7 +1331,8 @@ if app.platform == "windows":
         if success:
             create_task_bar_canvases(task_bar, sys_tray)
             ui.register("screen_change", on_screen_change) 
-            ui.register("element_focus", on_focus_change)
+            ui.register("win_focus", on_win_focus)
+            #ui.register("element_focus", on_element_focus)
             ui.register("win_resize", on_win_resize)
             ui.register("win_move", on_win_resize)
             cron_poll_start_menu_helper()

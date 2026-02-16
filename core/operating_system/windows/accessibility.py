@@ -1,4 +1,5 @@
 from talon.ui import Rect
+from talon import ui
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 def is_clickable(element, depth=0):
@@ -32,17 +33,19 @@ def is_clickable(element, depth=0):
             clickable = True        
         case "MenuItem":
             clickable = True    
-    
-    # back up. todo: re-evaluate if this is necessary
-    # if not clickable:
-    #     try:
-    #         pattern = element.invoke_pattern
-    #     except:
-    #         pattern = None
-    #         clickable = False
+        case _:
+            clickable = element.is_keyboard_focusable
+            # if not clickable:
+            #     try:
+            #         pattern = element.invoke_pattern
+            #     except:
+            #         pattern = None
+            #         clickable = False
 
-    #     if pattern and not isinstance(pattern, str):
-    #         clickable = True
+            #     if pattern and not isinstance(pattern, str):
+            #         clickable = True
+    # back up. todo: re-evaluate if this is necessary
+
                 
     return clickable
 
@@ -200,4 +203,17 @@ def walk(element, depth=0):
     except (OSError, RuntimeError):
         pass  # Element became stale
 
-#walk(ui.active_window().element)
+def on_title_change(_):
+    print(ui.active_window().title)
+
+def on_focus_change(_):
+    window = ui.active_window()
+    print(f"window focus: {ui.focused_element().name} {window.cls} {window.id}")
+
+def on_focused_element_change(_):
+    window = ui.active_window()
+    print(f"element focus: {ui.focused_element().name} {window.cls} {window.id}")
+    
+ui.register("win_focus", on_focus_change)
+#ui.register("win_title", on_title_change)
+ui.register("element_focus", on_focused_element_change)
