@@ -1,4 +1,4 @@
-# notifies the user if the breaking changes document has updated
+.# notifies the user if the breaking changes document has updated
 # this expects the breaking changes document to be two directory levels above the current one
 # if the breaking changes file is moved or renamed, update the compute_breaking_changes_path_from_current_directory function
 
@@ -24,18 +24,17 @@ def notice_gui(gui: imgui.GUI):
 
 
 def on_ready():
+    """Perform bookkeeping and show gui if the breaking changes file has changed"""
     current_directory: str = os.path.dirname(__file__)
-    do_not_show_filepath: str = compute_do_not_show_breaking_changes_notice_path(
-        current_directory
-    )
+    do_not_show_filepath: str = compute_do_not_show_breaking_changes_notice_path(current_directory)
     if os.path.exists(do_not_show_filepath):
-        return
-    current_size: int = get_current_size(current_directory)
+        return 
+    current_size: int = get_current_breaking_changes_file_size(current_directory)
     previous_size_file_name: str = "previous_breaking_changes_size"
     previous_size_path: str = os.path.join(current_directory, previous_size_file_name)
     could_read_file: bool = True
     try:
-        previous_size: int = get_previous_size(previous_size_path)
+        previous_size: int = get_previous_breaking_changes_file_size(previous_size_path)
     except ValueError as ex:
         could_read_file = False
         app.notify(str(ex))
@@ -45,14 +44,14 @@ def on_ready():
     if could_read_file and (current_size != previous_size):
         notice_gui.show()
         ctx.tags = ["user.breaking_changes_notice_showing"]
-    save_size(previous_size_path, current_size)
+    save_breaking_changes_file_size(previous_size_path, current_size)
 
 
 def compute_do_not_show_breaking_changes_notice_path(current_directory: str) -> str:
+    """Computes the path to the file that indicates that the notice should not be shown again given a path to this file's directory"""
     return os.path.join(current_directory, "do_not_show_breaking_changes_notice")
 
-
-def get_current_size(current_directory_path: str) -> int:
+def get_current_breaking_changes_file_size(current_directory_path: str) -> int:
     """Gets the current size of the breaking changes file"""
     breaking_changes_path: str = compute_breaking_changes_path_from_current_directory(
         current_directory_path
@@ -61,7 +60,7 @@ def get_current_size(current_directory_path: str) -> int:
     return stats.st_size
 
 
-def get_previous_size(path: str) -> int:
+def get_previous_breaking_changes_file_size(path: str) -> int:
     """Get the last read size of the breaking changes file.
     Raises a FileNotFoundError if the size was never recorded.
     Raises a ValueError if the value cannot be parsed"""
@@ -78,14 +77,15 @@ def get_previous_size(path: str) -> int:
         return size
 
 
-def save_size(path: str, size: int):
+def save_breaking_changes_file_size(path: str, size: int):
     """Updates the recorded previous size of the breaking changes file"""
     with open(path, "w") as f:
-        value_text = str(size)
+        value_text: str = str(size)
         f.write(value_text)
 
 
 def compute_breaking_changes_path_from_current_directory(current_directory: str) -> str:
+    """Compute the path to the breaking changes file given this file's directory"""
     grandparent: str = os.path.dirname(os.path.dirname(current_directory))
     return os.path.join(grandparent, "BREAKING_CHANGES.txt")
 
