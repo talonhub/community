@@ -205,6 +205,18 @@ def on_win_close(window):
     if active_window_id == window.id:
         actions.user.hinting_close()
 
+def on_win_hide(window):
+    on_win_close(window)
+
+def on_win_disable(window):
+    on_win_close(window)
+
+def on_win_title(window):
+    if window.id != active_window_id:
+        return
+    else:
+        on_win_close(window)
+
 def on_win_focus(_):
     window = ui.active_window()
 
@@ -214,4 +226,7 @@ def on_win_focus(_):
     
 ui.register("win_focus", on_win_focus)
 ui.register("win_open", on_win_open)
+ui.register("win_hide", on_win_hide)
 ui.register("win_close", on_win_close)
+ui.register("win_disable", on_win_disable)
+ui.register("win_title", on_win_title)

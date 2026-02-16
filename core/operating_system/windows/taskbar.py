@@ -627,17 +627,17 @@ class Actions:
 
         start_menu_poller()
         ui.unregister("screen_change", on_screen_change) 
-        ui.unregister("win_focus", on_win_focus)
-        ui.unregister("win_open", on_win_open)
-        ui.unregister("win_close", on_win_close)
+        # ui.unregister("win_focus", on_win_focus)
+        # ui.unregister("win_open", on_win_open)
+        # ui.unregister("win_close", on_win_close)
         #ui.unregister("element_focus", on_element_focus)
         #ui.unregister("win_resize", on_win_resize)
         #ui.unregister("win_move", on_win_resize)
         
         ui.register("screen_change", on_screen_change) 
-        ui.register("win_focus", on_win_focus)  
-        ui.register("win_open", on_win_open)
-        ui.register("win_close", on_win_close)        
+        # ui.register("win_focus", on_win_focus)  
+        # ui.register("win_open", on_win_open)
+        # ui.register("win_close", on_win_close)        
 
         #ui.register("element_focus", on_element_focus)      
         #ui.register("win_resize", on_win_resize)
@@ -1354,18 +1354,18 @@ if app.platform == "windows":
         if success:
             create_task_bar_canvases(task_bar, sys_tray)
             ui.register("screen_change", on_screen_change) 
-            ui.register("win_focus", on_win_focus)
-            #ui.register("element_focus", on_element_focus)
-            #ui.register("win_resize", on_win_resize)
-            ui.register("win_open", on_win_open)
-            ui.register("win_close", on_win_close)
-            ui.register("win_hide", on_win_hide)
+            # ui.register("win_focus", on_win_focus)
+            # #ui.register("element_focus", on_element_focus)
+            # #ui.register("win_resize", on_win_resize)
+            # ui.register("win_open", on_win_open)
+            # ui.register("win_close", on_win_close)
+            # ui.register("win_hide", on_win_hide)
 
             cron_poll_start_menu_helper()
         else:
             cleanup_and_retry()
 
-    #ui.register("", print)
+    ui.register("", print)
 
     app.register("ready", on_ready)
 
