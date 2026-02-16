@@ -4,13 +4,19 @@
 
 import os
 
-from talon import Module, actions, app, imgui
+from talon import Module, actions, app, imgui, Context
 
+# used to activate the tag for when the notice is showing
+ctx = Context()
 
 @imgui.open(y=0)
 def notice_gui(gui: imgui.GUI):
     """Notifies the user that breaking changes has changed"""
-    pass
+    gui.text("There are new breaking changes")
+    if gui.button("read breaking changes"):
+        actions.user.breaking_changes_open()
+    if gui.button("breaking hide"):
+        actions.user.breaking_changes_notice_hide()
 
 
 def on_ready():
@@ -29,6 +35,7 @@ def on_ready():
         could_read_file = False
     if could_read_file and (current_size != previous_size):
         notice_gui.show()
+        ctx.tags = ["user.breaking_changes_notice_showing"]
     save_size(previous_size_path, current_size)
 
 
@@ -72,11 +79,13 @@ def compute_breaking_changes_path_from_current_directory(current_directory: str)
 
 mod = Module()
 
+mod.tag("breaking_changes_notice_showing", desc="The notification that breaking changes has updated is showing")
 
 @mod.action_class
 class Actions:
     def breaking_changes_notice_hide():
         """Hide the breaking changes notice"""
+        ctx.tags = []
         notice_gui.hide()
 
     def breaking_changes_open():
