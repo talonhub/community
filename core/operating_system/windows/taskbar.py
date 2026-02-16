@@ -128,6 +128,7 @@ class PopUpStrategy(Enum):
     FOCUSED_ELEMENT_FIRST_PARENT_WINDOW = 2
     ACTIVE_WINDOW_PARENT = 3
     ACTIVE_WINDOW = 4
+    ELEMENT_OVERRIDE = 5,
 
 def get_focused_element():
     try:
@@ -626,13 +627,18 @@ class Actions:
 
         start_menu_poller()
         ui.unregister("screen_change", on_screen_change) 
-        #ui.unregister("win_focus", on_win_focus)
+        ui.unregister("win_focus", on_win_focus)
+        ui.unregister("win_open", on_win_open)
+        ui.unregister("win_close", on_win_close)
         #ui.unregister("element_focus", on_element_focus)
         #ui.unregister("win_resize", on_win_resize)
         #ui.unregister("win_move", on_win_resize)
         
         ui.register("screen_change", on_screen_change) 
-        #ui.register("win_focus", on_win_focus)  
+        ui.register("win_focus", on_win_focus)  
+        ui.register("win_open", on_win_open)
+        ui.register("win_close", on_win_close)        
+
         #ui.register("element_focus", on_element_focus)      
         #ui.register("win_resize", on_win_resize)
         #ui.register("win_move", on_win_resize)
@@ -1136,10 +1142,10 @@ def show_canvas_popup():
                 element = focused_element.parent 
                 while element.control_type not in ["Window"]:
                     element = element.parent
+            case PopUpStrategy.ELEMENT_OVERRIDE:
+                element = explorer_popup_status.element_override
 
             #print(element.control_type)
-
-
     # if we've somehow reach the desktop element, something's gone horribly wrong
     # so, skip
     if "Desktop" in element.name and element.control_type == "Pane":
@@ -1147,9 +1153,7 @@ def show_canvas_popup():
         explorer_popup_status.set(AccessibilityPopUpState.NONE)
         return
     
-    if not explorer_popup_status.parallel:
-        buttons_popup = find_all_clickable_rects(element)
-    else:
+    if explorer_popup_status.state == AccessibilityPopUpState.FILE_EXPLORER:
         # print("***started***")
         # walk(element)
         # print("***ended***")
@@ -1165,11 +1169,14 @@ def show_canvas_popup():
                 match_found = True
 
         buttons_popup = find_all_clickables_in_list_parallel(targets)
+    else:
+        buttons_popup = find_all_clickable_rects(element)
 
     # if explorer_popup_status.strategy == ExplorerPopUpElementStrategy.FOCUSED_ELEMENT_FIRST_PARENT_WINDOW:
     #     print(f"show_canvas_popup {buttons_popup}")
 
     if canvas_popup:
+        print("hiding popup 2")
         canvas_popup.close()
         canvas_popup = None
 
@@ -1193,20 +1200,27 @@ def on_win_focus(_):
     #is_menu_bar = cls == "Tray Window" and focused_element.control_type == "MenuBar"
     #2026-01-19 05:08:33.436    IO cls = = <menu bar 'Application'>, parent = <window 'T'> Desktop 1 control_type = MenuBar parent_control_type = Window
     # if the taskbar itself has focus, ignore for now
+    if is_context_menu_open:
+        return
+    
     if canvas_popup:
         canvas_popup.close()
         ctx.tags = []
         canvas_popup = None 
 
-    # focused_element = ui.focused_element()
-    # if not focused_element.automation_id and not focused_element.name:
-    #     explorer_popup_status.reset()
-    #     return 
+    focused_element = ui.focused_element()
+    if not focused_element.automation_id and not focused_element.name:
+        explorer_popup_status.reset()
+        return 
 
     active_app = ui.active_app()
-    app_name = active_app.name
-    if active_app.name not in ("Windows Explorer", "SearchHost.exe", "Windows Shell Experience Host", "ShellHost", "Windows Start Experience Host"):
-        print(f"{active_app.name} - skipping")
+    active_app_name = active_app.name
+    if active_app_name not in ("Windows Explorer", 
+                               "SearchHost.exe", 
+                               "Windows Shell Experience Host", 
+                               "ShellHost", 
+                               "Windows Start Experience Host"):
+        #(f"{app_name} - skipping")
         return 
 
     explorer_popup_status.update_state()
@@ -1260,6 +1274,7 @@ def cleanup_and_retry():
         canvas_system_tray.close()
 
     if canvas_popup:
+        print("hitting popup 3")
         canvas_popup.close()
 
     # attempt to recover
@@ -1290,6 +1305,47 @@ def on_screen_change(_):
 
     #print(f"on_screen_change complete = {result}")
 
+is_context_menu_open = False
+def on_win_open(window):
+    global is_context_menu_open, clickables, context_menu_window_id, popup_start_index
+    #print(f"win open - title = {window.title} cls = {window.cls} id = {window.id}")
+
+    match window.cls:
+
+        # file explorer context menu
+        case "#32768":
+            context_menu_window_id = window.id
+            is_context_menu_open = True
+            popup_start_index = 0
+            explorer_popup_status.state = AccessibilityPopUpState.GENERIC_CONTEXT_MENU
+            explorer_popup_status.strategy = PopUpStrategy.ELEMENT_OVERRIDE
+            explorer_popup_status.element_override = window.element
+            cron_delay_canvas_helper(start=True,time="50ms",func=show_canvas_popup)
+            
+        # taskbar context menus
+        case "Xaml_WindowedPopupClass":
+            if window.title in ("PopupHost"):
+                context_menu_window_id = window.id
+                is_context_menu_open = True
+                popup_start_index = 0
+                explorer_popup_status.state = AccessibilityPopUpState.GENERIC_CONTEXT_MENU
+                explorer_popup_status.strategy = PopUpStrategy.ELEMENT_OVERRIDE
+                explorer_popup_status.element_override = window.element
+                cron_delay_canvas_helper(start=True,time="50ms",func=show_canvas_popup)
+
+def on_win_hide(window):
+    on_win_close(window)
+
+def on_win_close(window):
+    global is_context_menu_open, context_menu_window_id, canvas_popup
+
+    if context_menu_window_id == window.id:
+        is_context_menu_open = False
+        context_menu_window_id = None
+        if canvas_popup:
+            canvas_popup.close()
+            canvas_popup = None    
+
 if app.platform == "windows":
     def on_ready():
         global cron_poll_start_menu
@@ -1298,14 +1354,18 @@ if app.platform == "windows":
         if success:
             create_task_bar_canvases(task_bar, sys_tray)
             ui.register("screen_change", on_screen_change) 
-            #ui.register("win_focus", on_win_focus)
+            ui.register("win_focus", on_win_focus)
             #ui.register("element_focus", on_element_focus)
             #ui.register("win_resize", on_win_resize)
-            #ui.register("win_move", on_win_resize)
+            ui.register("win_open", on_win_open)
+            ui.register("win_close", on_win_close)
+            ui.register("win_hide", on_win_hide)
+
             cron_poll_start_menu_helper()
         else:
             cleanup_and_retry()
 
+    #ui.register("", print)
 
     app.register("ready", on_ready)
 
