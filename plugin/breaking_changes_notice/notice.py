@@ -25,9 +25,11 @@ def notice_gui(gui: imgui.GUI):
 
 def on_ready():
     current_directory: str = os.path.dirname(__file__)
-    do_not_show_filepath: str = compute_do_not_show_breaking_changes_notice_path(current_directory)
+    do_not_show_filepath: str = compute_do_not_show_breaking_changes_notice_path(
+        current_directory
+    )
     if os.path.exists(do_not_show_filepath):
-        return 
+        return
     current_size: int = get_current_size(current_directory)
     previous_size_file_name: str = "previous_breaking_changes_size"
     previous_size_path: str = os.path.join(current_directory, previous_size_file_name)
@@ -48,6 +50,7 @@ def on_ready():
 
 def compute_do_not_show_breaking_changes_notice_path(current_directory: str) -> str:
     return os.path.join(current_directory, "do_not_show_breaking_changes_notice")
+
 
 def get_current_size(current_directory_path: str) -> int:
     """Gets the current size of the breaking changes file"""
