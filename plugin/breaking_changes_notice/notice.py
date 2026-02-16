@@ -34,7 +34,9 @@ def on_ready():
 
 def get_current_size(current_directory_path: str) -> int:
     """Gets the current size of the breaking changes file"""
-    breaking_changes_path: str = compute_breaking_changes_path_from_current_directory(current_directory_path)
+    breaking_changes_path: str = compute_breaking_changes_path_from_current_directory(
+        current_directory_path
+    )
     stats: os.stat_result = os.stat(breaking_changes_path)
     return stats.st_size
 
@@ -66,9 +68,10 @@ def save_size(path: str, size: int):
 def compute_breaking_changes_path_from_current_directory(current_directory: str):
     grandparent: str = os.path.dirname(os.path.dirname(current_directory))
     return os.path.join(grandparent, "BREAKING_CHANGES.txt")
-    
+
 
 mod = Module()
+
 
 @mod.action_class
 class Actions:
@@ -79,7 +82,10 @@ class Actions:
     def breaking_changes_open():
         """Opens the breaking changes file"""
         current_directory: str = os.path.dirname(__file__)
-        path: str = compute_breaking_changes_path_from_current_directory(current_directory)
+        path: str = compute_breaking_changes_path_from_current_directory(
+            current_directory
+        )
         actions.user.edit_text_file(path)
+
 
 app.register("ready", on_ready)
