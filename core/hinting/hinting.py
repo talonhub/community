@@ -1,6 +1,6 @@
 from talon import Context, Module, actions, app, imgui, ui, resource, canvas, ctrl, settings, cron
 from talon.ui import Rect
-from ..operating_system.windows.accessibility import walk, find_all_clickable_elements, find_all_clickable_elements_parallel, find_all_clickable_rects, find_all_clickable_rects_parallel, process_children_in_parallel
+from ..operating_system.windows.accessibility import find_all_clickable_rects, get_window_class, find_all_clickables_in_list_parallel
 
 mod = Module()
 mod.tag("hinting_active", desc="Indicates hints are active")
@@ -36,6 +36,8 @@ def label_for_index(n: int) -> str:
     m = n - 26
     return A[m // 26] + A[m % 26]
 
+
+
 def draw_hints(canvas):
     global current_button_mapping 
     current_button_mapping = {}
@@ -45,7 +47,6 @@ def draw_hints(canvas):
     paint.textsize = 20
 
     if not clickables:
-        canvas.close()
         return
     
     index = 1
@@ -75,6 +76,10 @@ def draw_hints(canvas):
 
     ctx.tags = ['user.hinting_active']
 
+import re
+def strip_more_tabs(title: str) -> str:
+    return re.sub(r"\s+and\s+\d+\s+more\s+tab.*", "", title)
+
 @mod.action_class
 class Actions:
     def hinting_close():
@@ -94,39 +99,52 @@ class Actions:
         
     def hinting_toggle():
         """Toggles hints"""
-        global clickables, canvas_active_window, current_button_mapping, active_window_id
+        global is_context_menu_open, clickables, canvas_active_window, current_button_mapping, active_window_id
 
         if actions.user.hinting_close():
             return
         
-        active_window = ui.active_window() 
+        active_window = ui.active_window()
+        element = active_window.element
         
-        focused_element = ui.focused_element()
-        parent_element = focused_element.parent
-        active_window_id = active_window.id
+        if not is_context_menu_open:
+            focused_element = ui.focused_element()
+            active_window_id = active_window.id
 
-        match focused_element.control_type:
-            case "Menu" | "MenuItem":
+            match ui.active_app().name:
+                case "Windows Explorer":
+                    cls = get_window_class(ui.active_window())
 
-                element = focused_element.parent 
-                clickables = find_all_clickable_rects_parallel(element)
+                    match cls:
+                        case "CabinetWClass":
+                            targets = []
+                            active_tab_name = strip_more_tabs(ui.active_window().title.replace("- File Explorer", ""))
+                            match_found = False
+                            for child in element.children:
+                                if child.name == "":
+                                    targets.append(child)
 
-            case "Edit":
-                match active_window.cls:
-                    case "Windows.UI.Core.CoreWindow":
-                        if parent_element.name == "Search":
-                            clickables = find_all_clickable_rects_parallel(active_window.element.parent)
-                        else:
-                            clickables = find_all_clickable_rects_parallel(active_window.element)
-                    case _:
-                        clickables = find_all_clickable_rects_parallel(active_window.element)
-            case _:
-                #print(f"{focused_element.control_type} {active_window.cls} {active_window.title}")
-                clickables = find_all_clickable_rects_parallel(active_window.element)
+                                elif child.name.strip() == active_tab_name.strip() and not match_found:
+                                    targets.append(child)
+                                    match_found = True
 
-        canvas_active_window = canvas.Canvas.from_rect(active_window.rect)
-        canvas_active_window.register("draw", draw_hints)
-        canvas_active_window.freeze()
+                            clickables = find_all_clickables_in_list_parallel(targets) if len(targets) > 0 else []
+                case _:    
+                    match focused_element.control_type:
+                        case "Menu" | "MenuItem":
+                            element = focused_element.parent 
+
+                        case "Edit":
+                            match active_window.cls:
+                                case "Windows.UI.Core.CoreWindow":
+                                    element = active_window.element.parent
+
+                    clickables = find_all_clickable_rects(element)
+
+        if len(clickables) > 0:
+            canvas_active_window = canvas.Canvas.from_rect(ui.main_screen().rect)
+            canvas_active_window.register("draw", draw_hints)
+            canvas_active_window.freeze()
 
     def hinting_select(mouse_button: int, label: str, click_count: int):
         """Click the hint based on the index"""        
@@ -147,6 +165,46 @@ class Actions:
 
         actions.user.hinting_close()
 
+is_context_menu_open = False
+def on_win_open(window):
+    global is_context_menu_open, clickables, active_window_id
+    #print(f"win open - title = {window.title} cls = {window.cls} id = {window.id}")
+
+    match window.cls:
+
+        # file explorer context menu
+        case "#32768":
+            clickables = find_all_clickable_rects(window.element)
+            active_window_id = window.id
+            is_context_menu_open = True
+
+        # taskbar context menus
+        case "Xaml_WindowedPopupClass":
+            if window.title in ("PopupHost"):
+                clickables = find_all_clickable_rects(window.element)
+                active_window_id = window.id
+                is_context_menu_open = True
+
+def on_win_close(window):
+    global is_context_menu_open, active_window_id
+    match window.cls:
+
+        # file explorer context menu
+        case "#32768":
+            is_context_menu_open = False
+            active_window_id = None
+            actions.user.hinting_close()
+
+        # taskbar context menus
+        case "Xaml_WindowedPopupClass":
+            if window.title in ("PopupHost"):
+                active_window_id = None
+                is_context_menu_open = False
+                actions.user.hinting_close()
+
+    if active_window_id == window.id:
+        actions.user.hinting_close()
+
 def on_win_focus(_):
     window = ui.active_window()
 
@@ -155,3 +213,5 @@ def on_win_focus(_):
            actions.user.hinting_close()
     
 ui.register("win_focus", on_win_focus)
+ui.register("win_open", on_win_open)
+ui.register("win_close", on_win_close)

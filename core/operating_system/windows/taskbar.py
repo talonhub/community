@@ -7,7 +7,7 @@ import re
 import platform
 from enum import Enum
 from ...operating_system.windows.app_user_model_id import get_application_user_model_id, get_application_user_model_for_window, get_valid_windows_by_app_user_model_id
-from .accessibility import walk, find_all_clickable_elements, find_all_clickable_elements_parallel, find_all_clickable_rects, find_all_clickable_rects_parallel, process_children_in_parallel
+from .accessibility import walk, find_all_clickable_elements, find_all_clickable_elements_parallel, find_all_clickable_rects, find_all_clickable_rects_parallel, find_all_clickables_in_list_parallel
 
 
 if app.platform == "windows":
@@ -1164,7 +1164,7 @@ def show_canvas_popup():
                 targets.append(child)
                 match_found = True
 
-        buttons_popup = process_children_in_parallel(targets)
+        buttons_popup = find_all_clickables_in_list_parallel(targets)
 
     # if explorer_popup_status.strategy == ExplorerPopUpElementStrategy.FOCUSED_ELEMENT_FIRST_PARENT_WINDOW:
     #     print(f"show_canvas_popup {buttons_popup}")
@@ -1306,8 +1306,6 @@ if app.platform == "windows":
         else:
             cleanup_and_retry()
 
-    
-    #ui.register("", print)
 
     app.register("ready", on_ready)
 

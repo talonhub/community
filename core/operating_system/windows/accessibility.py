@@ -47,7 +47,7 @@ def find_all_clickable_rects_parallel(element, filter_children=None, max_workers
     # include root on main thread
     try:
         # note: checking not element.is_offscreen appears to eliminate clickable menu items..
-        if element.is_enabled and is_clickable(element):
+        if is_clickable(element):
             result.append(element.rect)
     except Exception:
         pass
@@ -144,7 +144,7 @@ def find_all_clickable_rects(element, depth=0) -> list[Rect]:
 
     return result
 
-def process_children_in_parallel(targets):
+def find_all_clickables_in_list_parallel(targets):
     results = []
     # First pass: select which children to process (serial, deterministic)
     # Parallel execution using threads
@@ -185,6 +185,16 @@ def find_all_clickable_elements(element, depth=0) -> list:
 
     return result
 
+def get_window_class(window: ui.Window) -> bool:
+    cls = None
+    if not window:
+        return None
+    try:
+        cls = window.cls
+    except Exception as e:
+        cls = None
+
+    return cls
 
 def walk(element, depth=0):
     print("  " * depth + f"{element.control_type}: {element.name}, automation_id = {element.automation_id}") 
