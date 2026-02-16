@@ -62,12 +62,15 @@ def save_size(path: str, size: int):
         value_text = str(size)
         f.write(value_text)
 
+
 mod = Module()
+
 
 @mod.action_class
 class Actions:
     def breaking_changes_notice_hide():
         """Hide the breaking changes notice"""
         notice_gui.hide()
+
 
 app.register("ready", on_ready)
