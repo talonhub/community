@@ -18,15 +18,6 @@ mod = Module()
 mod.tag("taskbar_canvas_popup_showing", desc="Indicates a taskbar popup is showing")
 ctx = Context()
 
-@mod.capture(rule="<user.letter> (twice | second)")
-def popup_hint_double(m) -> str:
-    return m.letter + m.letter
-
-
-@mod.capture(rule="<user.letter> | <user.letter> <user.letter> | <user.popup_hint_double>")
-def popup_hint(m) -> str:
-    return "".join(m)
-
 cron_poll_start_menu = None
 cron_delay_showing_canvas = None
 
@@ -281,9 +272,10 @@ class ExplorerPopupStatus:
                                     #print("context menu...")
                                     self.strategy = PopUpStrategy.FOCUSED_ELEMENT_PARENT
                                     self.start = AccessibilityPopUpState.GENERIC_CONTEXT_MENU
-                                else:
-                                    self.strategy = PopUpStrategy.FOCUSED_ELEMENT_FIRST_PARENT_WINDOW
-                                    self.state = AccessibilityPopUpState.MENU
+
+                                # else:
+                                #     self.strategy = PopUpStrategy.FOCUSED_ELEMENT_FIRST_PARENT_WINDOW
+                                #     self.state = AccessibilityPopUpState.MENU
                             else:
                                 pass
     
@@ -634,16 +626,16 @@ class Actions:
 
         start_menu_poller()
         ui.unregister("screen_change", on_screen_change) 
-        ui.unregister("win_focus", on_win_focus)
-        ui.unregister("element_focus", on_element_focus)
-        ui.unregister("win_resize", on_win_resize)
-        ui.unregister("win_move", on_win_resize)
+        #ui.unregister("win_focus", on_win_focus)
+        #ui.unregister("element_focus", on_element_focus)
+        #ui.unregister("win_resize", on_win_resize)
+        #ui.unregister("win_move", on_win_resize)
         
         ui.register("screen_change", on_screen_change) 
-        ui.register("win_focus", on_win_focus)  
+        #ui.register("win_focus", on_win_focus)  
         #ui.register("element_focus", on_element_focus)      
-        ui.register("win_resize", on_win_resize)
-        ui.register("win_move", on_win_resize)
+        #ui.register("win_resize", on_win_resize)
+        #ui.register("win_move", on_win_resize)
         cron_poll_start_menu_helper()
         
         
@@ -792,10 +784,7 @@ def draw_task_bar_options(canvas):
 
     max_task_list_count = math.floor(rect_task_bar_list.width / taskbar_data.icon_width)
 
-    print(f"{max_task_list_count} {taskbar_data.icon_width}")
     for index in range(current_index,  current_index + max_task_list_count):
-        print(index)
-
         paint.style = paint.Style.FILL
         paint.color = "000000"
 
@@ -945,7 +934,7 @@ def get_windows_eleven_taskbar():
         rect_taskbar = taskbar.rect
 
         taskbar_clickables = find_all_clickable_elements(taskbar)
-        
+
         for element in taskbar_clickables:
             match element.name:
                 case "Show Hidden Icons" | "Show Hidden Icons Hide":
@@ -1107,7 +1096,7 @@ def start_menu_poller():
         if canvas_popup:
             show_canvas_popup()
 
-        app.notify("Redrawing taskbar")
+        #app.notify("Redrawing taskbar")
             
 
     cron_poll_start_menu_helper()
@@ -1207,7 +1196,7 @@ def on_win_focus(_):
     if canvas_popup:
         canvas_popup.close()
         ctx.tags = []
-        canvas_popup = None
+        canvas_popup = None 
 
     # focused_element = ui.focused_element()
     # if not focused_element.automation_id and not focused_element.name:
@@ -1216,37 +1205,15 @@ def on_win_focus(_):
 
     active_app = ui.active_app()
     app_name = active_app.name
-    if active_app.name not in ("Windows Explorer", "SearchHost.exe", "Windows Shell Experience Host", "ShellHost", "Windows Start Experience Host", "Application Frame Host"):
+    if active_app.name not in ("Windows Explorer", "SearchHost.exe", "Windows Shell Experience Host", "ShellHost", "Windows Start Experience Host"):
         print(f"{active_app.name} - skipping")
         return 
 
-    match active_app.name:
-        case "Application Frame Host":
-            model_id = get_application_user_model_for_window(ui.active_window().id)
-        
-
-            match model_id:
-                case "windows.immersivecontrolpanel_cw5n1h2txyewy!microsoft.windows.immersivecontrolpanel":
-                    explorer_popup_status.reset()
-                    explorer_popup_status.state = AccessibilityPopUpState.SETTINGS
-                    explorer_popup_status.strategy = PopUpStrategy.ACTIVE_WINDOW
-
-                case _:
-                    return
-
-        # case "Microsoft Word" | "GitHubDesktop.exe":
-        #     explorer_popup_status.state = AccessibilityPopUpState.SETTINGS
-        #     explorer_popup_status.strategy = PopUpStrategy.ACTIVE_WINDOW   
-
-        case _:
-            explorer_popup_status.update_state()
-
+    explorer_popup_status.update_state()
     explorer_popup_status.window_id = ui.active_window().id if explorer_popup_status.state != AccessibilityPopUpState.NONE else None
     
     #print(explorer_popup_status)
     if explorer_popup_status.state != AccessibilityPopUpState.NONE:
-
-
         if explorer_popup_status.state == AccessibilityPopUpState.SYSTEM_TRAY:
             popup_start_index = len(system_try_data.sys_tray_icons)
             cron_delay_canvas_helper(start=True,func=show_canvas_popup)
@@ -1331,10 +1298,10 @@ if app.platform == "windows":
         if success:
             create_task_bar_canvases(task_bar, sys_tray)
             ui.register("screen_change", on_screen_change) 
-            ui.register("win_focus", on_win_focus)
+            #ui.register("win_focus", on_win_focus)
             #ui.register("element_focus", on_element_focus)
-            ui.register("win_resize", on_win_resize)
-            ui.register("win_move", on_win_resize)
+            #ui.register("win_resize", on_win_resize)
+            #ui.register("win_move", on_win_resize)
             cron_poll_start_menu_helper()
         else:
             cleanup_and_retry()

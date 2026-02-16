@@ -100,7 +100,9 @@ class Actions:
             return
         
         active_window = ui.active_window() 
+        
         focused_element = ui.focused_element()
+        parent_element = focused_element.parent
         active_window_id = active_window.id
 
         match focused_element.control_type:
@@ -109,10 +111,18 @@ class Actions:
                 element = focused_element.parent 
                 clickables = find_all_clickable_rects_parallel(element)
 
+            case "Edit":
+                match active_window.cls:
+                    case "Windows.UI.Core.CoreWindow":
+                        if parent_element.name == "Search":
+                            clickables = find_all_clickable_rects_parallel(active_window.element.parent)
+                        else:
+                            clickables = find_all_clickable_rects_parallel(active_window.element)
+                    case _:
+                        clickables = find_all_clickable_rects_parallel(active_window.element)
             case _:
-                print(f"{focused_element.control_type} {active_window.cls}")
+                #print(f"{focused_element.control_type} {active_window.cls} {active_window.title}")
                 clickables = find_all_clickable_rects_parallel(active_window.element)
-
 
         canvas_active_window = canvas.Canvas.from_rect(active_window.rect)
         canvas_active_window.register("draw", draw_hints)
@@ -134,8 +144,6 @@ class Actions:
         if click_count > 0:
             for i in range(0, click_count):
                 actions.mouse_click(mouse_button)
-
-            actions.sleep("150ms")
 
         actions.user.hinting_close()
 
