@@ -49,7 +49,7 @@ def get_previous_size(path: str) -> int:
         line_text: str = f.readline().strip()
         try:
             size: int = int(line_text)
-        except Exception as _:
+        except ValueError:
             raise ValueError(
                 f"Could not parse the first line of the file responsible for tracking the previous size of the breaking changes file as an integer: {line_text}"
             )
