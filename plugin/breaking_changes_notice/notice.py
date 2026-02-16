@@ -26,7 +26,9 @@ def notice_gui(gui: imgui.GUI):
 def on_ready():
     """Perform bookkeeping and show gui if the breaking changes file has changed"""
     current_directory: str = os.path.dirname(__file__)
-    do_not_show_filepath: str = compute_do_not_show_breaking_changes_notice_path(current_directory)
+    do_not_show_filepath: str = compute_do_not_show_breaking_changes_notice_path(
+        current_directory
+    )
     if os.path.exists(do_not_show_filepath):
         return
     current_size: int = get_current_breaking_changes_file_size(current_directory)
@@ -50,6 +52,7 @@ def on_ready():
 def compute_do_not_show_breaking_changes_notice_path(current_directory: str) -> str:
     """Computes the path to the file that indicates that the notice should not be shown again given a path to this file's directory"""
     return os.path.join(current_directory, "do_not_show_breaking_changes_notice")
+
 
 def get_current_breaking_changes_file_size(current_directory_path: str) -> int:
     """Gets the current size of the breaking changes file"""
