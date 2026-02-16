@@ -1,5 +1,6 @@
 # notifies the user if the breaking changes document has updated
 # this expects the breaking changes document to be two directory levels above the current one
+# if the breaking changes file is moved or renamed, update the compute_breaking_changes_path_from_current_directory function
 
 import os
 
@@ -33,8 +34,7 @@ def on_ready():
 
 def get_current_size(current_directory_path: str) -> int:
     """Gets the current size of the breaking changes file"""
-    great_grandparent: str = os.path.dirname(os.path.dirname(current_directory_path))
-    breaking_changes_path: str = os.path.join(great_grandparent, "BREAKING_CHANGES.txt")
+    breaking_changes_path: str = compute_breaking_changes_path_from_current_directory(current_directory_path)
     stats: os.stat_result = os.stat(breaking_changes_path)
     return stats.st_size
 
@@ -63,8 +63,12 @@ def save_size(path: str, size: int):
         f.write(value_text)
 
 
-mod = Module()
+def compute_breaking_changes_path_from_current_directory(current_directory: str):
+    grandparent: str = os.path.dirname(os.path.dirname(current_directory))
+    return os.path.join(grandparent, "BREAKING_CHANGES.txt")
+    
 
+mod = Module()
 
 @mod.action_class
 class Actions:
@@ -72,5 +76,10 @@ class Actions:
         """Hide the breaking changes notice"""
         notice_gui.hide()
 
+    def breaking_changes_open():
+        """Opens the breaking changes file"""
+        current_directory: str = os.path.dirname(__file__)
+        path: str = compute_breaking_changes_path_from_current_directory(current_directory)
+        actions.user.edit_text_file(path)
 
 app.register("ready", on_ready)
