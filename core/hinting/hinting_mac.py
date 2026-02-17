@@ -219,13 +219,13 @@ def is_clickable(element, depth=0):
 
     clickable = element.AXRole in ("AXCell", "AXButton", "AXGroup", "AXRole")
 
-    # if not clickable:
-    #     clickable = "AXEnabled" in element.attrs and ("AXPress" in actions or 
-    #         "AXShowMenu" in actions or 
-    #         "AXConfirm" in actions or 
-    #         "AXOpen" in actions or
-    #         "AXCell" in actions or
-    #         "AXCheckBox" in actions)
+    if not clickable:
+        clickable = "AXEnabled" in element.attrs and ("AXPress" in actions or 
+            "AXShowMenu" in actions or 
+            "AXConfirm" in actions or 
+            "AXOpen" in actions or
+            "AXCell" in actions or
+            "AXCheckBox" in actions)
     
     
     #print(f"{element.AXRole}")
