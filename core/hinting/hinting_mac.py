@@ -198,7 +198,12 @@ def walk(element, depth=0):
 
 
 def is_within_window(window, element):
-    if window and window.rect.contains(element.AXFrame.x, element.AXFrame.y) or not window:
+    try:
+        frame = element.AXFrame
+    except:
+        frame = None
+
+    if window and frame and window.rect.contains(frame.x, frame.y) or not window:
         return True
     
     return False
@@ -212,7 +217,7 @@ def is_clickable(element, depth=0):
     except:
         return clickable
 
-    clickable = element.AXRole in ("AXCell", "AXButton")
+    clickable = element.AXRole in ("AXCell", "AXButton", "AXGroup")
 
     if not clickable:
         clickable = "AXEnabled" in element.attrs and ("AXPress" in actions or 
