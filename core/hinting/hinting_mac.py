@@ -1,5 +1,6 @@
 from talon import Context, Module, actions, app, imgui, ui, resource, canvas, ctrl, settings, cron
 from talon.ui import Rect
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 
 mod = Module()
@@ -91,7 +92,7 @@ class Actions:
         active_window = ui.active_window()
         element = active_window.element
         if not is_menu_open:
-            clickables = find_all_clickable_elements(active_window, element)
+            clickables = find_all_clickable_elements_parallel(active_window, element)
 
         if clickables and len(clickables) > 0:
             canvas_active_window = canvas.Canvas.from_rect(ui.main_screen().rect)
@@ -163,8 +164,7 @@ def on_menu_close(window):
     is_menu_open = False
 
     if canvas_active_window:
-        canvas_active_window.close()
-        canvas_active_window = None
+        actions.user.hinting_close()
 
 
 if app.platform == "mac":
@@ -217,15 +217,15 @@ def is_clickable(element, depth=0):
     except:
         return clickable
 
-    clickable = element.AXRole in ("AXCell", "AXButton", "AXGroup")
+    clickable = element.AXRole in ("AXCell", "AXButton", "AXGroup", "AXRole")
 
-    if not clickable:
-        clickable = "AXEnabled" in element.attrs and ("AXPress" in actions or 
-            "AXShowMenu" in actions or 
-            "AXConfirm" in actions or 
-            "AXOpen" in actions or
-            "AXCell" in actions or
-            "AXCheckBox" in actions)
+    # if not clickable:
+    #     clickable = "AXEnabled" in element.attrs and ("AXPress" in actions or 
+    #         "AXShowMenu" in actions or 
+    #         "AXConfirm" in actions or 
+    #         "AXOpen" in actions or
+    #         "AXCell" in actions or
+    #         "AXCheckBox" in actions)
     
     
     #print(f"{element.AXRole}")
@@ -236,7 +236,8 @@ def is_clickable(element, depth=0):
 def find_all_clickable_elements(window, element, depth=0) -> list:
     result = []
     
-    if is_within_window(window, element) and (is_clickable(element)):
+    is_element_clickable = is_within_window(window, element) and (is_clickable(element))
+    if is_element_clickable:
         result.append(element)
 
     # if the element is disabled, can we safely skip?
@@ -254,5 +255,38 @@ def find_all_clickable_elements(window, element, depth=0) -> list:
             child_result = find_all_clickable_elements(window, child, depth + 1)
             result.extend(child_result)
 
+
+    return result
+
+def find_all_clickable_elements_parallel(window, element, max_workers=8):
+    # Do a shallow expansion on the main thread to avoid sending huge work units
+
+    result = []
+    # include root on main thread
+    try:
+        # note: checking not element.is_offscreen appears to eliminate clickable menu items..
+        is_element_clickable = is_within_window(window, element) and (is_clickable(element))
+        if is_element_clickable:
+            result.append(element)
+    except Exception:
+        pass
+
+    try:
+        children = element.AXChildren
+    except Exception:
+        children = None
+
+    def worker(subroot):
+        # WARNING: only safe if subroot is safe to access in worker threads
+        return find_all_clickable_elements_parallel(window, subroot, max_workers=8)
+
+    if children and len(children) > 0:
+        with ThreadPoolExecutor(max_workers=max_workers) as ex:
+            futures = [ex.submit(worker, ch) for ch in children]
+            for f in as_completed(futures):
+                try:
+                    result.extend(f.result())
+                except Exception:
+                    pass
 
     return result
