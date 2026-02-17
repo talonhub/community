@@ -1,6 +1,6 @@
 from talon import Context, Module, actions, app, imgui, ui, resource, canvas, ctrl, settings, cron
 from talon.ui import Rect
-from ..operating_system.windows.accessibility import find_all_clickable_rects, get_window_class, find_all_clickables_in_list_parallel
+from ..operating_system.windows.accessibility import find_all_clickable_rects, find_all_clickable_rects_parallel, get_window_class, find_all_clickables_in_list_parallel
 
 mod = Module()
 mod.tag("hinting_active", desc="Indicates hints are active")
@@ -22,8 +22,6 @@ def label_for_index(n: int) -> str:
 
     m = n - 26
     return A[m // 26] + A[m % 26]
-
-
 
 def draw_hints(canvas):
     global current_button_mapping 
@@ -109,7 +107,7 @@ class Actions:
                                     targets.append(child)
                                     match_found = True
 
-                            clickables = find_all_clickables_in_list_parallel(targets) if len(targets) > 0 else []
+                            clickables = find_all_clickables_in_list_parallel(active_window, targets) if len(targets) > 0 else []
                 case _:    
                     match focused_element.control_type:
                         case "Menu" | "MenuItem":
@@ -120,7 +118,7 @@ class Actions:
                                 case "Windows.UI.Core.CoreWindow":
                                     element = active_window.element.parent
 
-                    clickables = find_all_clickable_rects(element)
+                    clickables = find_all_clickable_rects_parallel(active_window, element)
 
         if len(clickables) > 0:
             canvas_active_window = canvas.Canvas.from_rect(ui.main_screen().rect)

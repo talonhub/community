@@ -915,7 +915,7 @@ def get_windows_eleven_taskbar():
         return False
     
     apps = ui.apps(name="Windows Explorer")
-
+    taskbar_window = None
     for explorer_instances in apps:
         try:
             windows = explorer_instances.windows()
@@ -928,6 +928,7 @@ def get_windows_eleven_taskbar():
 
             if cls == "Shell_TrayWnd":
                 taskbar = window.element
+                taskbar_window = window
                 #print(f"found taskbar cls = {cls} {window.title} parent = {taskbar.parent} control_type = {taskbar.control_type}")
 
         if taskbar:
@@ -939,7 +940,7 @@ def get_windows_eleven_taskbar():
     if taskbar:
         rect_taskbar = taskbar.rect
 
-        taskbar_clickables = find_all_clickable_elements(taskbar)
+        taskbar_clickables = find_all_clickable_elements(taskbar_window, taskbar)
 
         for element in taskbar_clickables:
             match element.name:
@@ -1168,9 +1169,9 @@ def show_canvas_popup():
                 targets.append(child)
                 match_found = True
 
-        buttons_popup = find_all_clickables_in_list_parallel(targets)
+        buttons_popup = find_all_clickables_in_list_parallel(ui.active_window(), targets)
     else:
-        buttons_popup = find_all_clickable_rects(element)
+        buttons_popup = find_all_clickable_rects(ui.active_window(), element)
 
     # if explorer_popup_status.strategy == ExplorerPopUpElementStrategy.FOCUSED_ELEMENT_FIRST_PARENT_WINDOW:
     #     print(f"show_canvas_popup {buttons_popup}")

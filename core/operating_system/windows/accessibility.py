@@ -40,14 +40,14 @@ def is_clickable(element, depth=0):
                 
     return clickable
 
-def find_all_clickable_rects_parallel(element, filter_children=None, max_workers=8):
+def find_all_clickable_rects_parallel(window, element, filter_children=None, max_workers=8):
     # Do a shallow expansion on the main thread to avoid sending huge work units
 
     result = []
     # include root on main thread
     try:
         # note: checking not element.is_offscreen appears to eliminate clickable menu items..
-        if is_clickable(element):
+        if is_within_window(window, element) and is_clickable(element):
             result.append(element.rect)
     except Exception:
         pass
@@ -63,12 +63,12 @@ def find_all_clickable_rects_parallel(element, filter_children=None, max_workers
             if subroot.control_type in filter_children:
                 if subroot.name in filter_children[subroot.control_type]:
 
-                    return find_all_clickable_rects_parallel(subroot)
+                    return find_all_clickable_rects_parallel(window, subroot)
                 
                 #print(f"{subroot.name}: {subroot.control_type}")
                 return []
         else:
-            return find_all_clickable_rects_parallel(subroot)
+            return find_all_clickable_rects_parallel(window, subroot)
         
     if len(children) > 0:
         with ThreadPoolExecutor(max_workers=max_workers) as ex:
@@ -81,14 +81,14 @@ def find_all_clickable_rects_parallel(element, filter_children=None, max_workers
 
     return result
 
-def find_all_clickable_elements_parallel(element, max_workers=8):
+def find_all_clickable_elements_parallel(window, element, max_workers=8):
     # Do a shallow expansion on the main thread to avoid sending huge work units
 
     result = []
     # include root on main thread
     try:
         # note: checking not element.is_offscreen appears to eliminate clickable menu items..
-        if element.is_enabled and is_clickable(element):
+        if is_within_window(window, element) and element.is_enabled and is_clickable(element):
             result.append(element)
     except Exception:
         pass
@@ -100,7 +100,7 @@ def find_all_clickable_elements_parallel(element, max_workers=8):
 
     def worker(subroot):
         # WARNING: only safe if subroot is safe to access in worker threads
-        return find_all_clickable_elements_parallel(subroot)
+        return find_all_clickable_elements_parallel(window, subroot)
 
     if len(children) > 0:
         with ThreadPoolExecutor(max_workers=max_workers) as ex:
@@ -113,12 +113,23 @@ def find_all_clickable_elements_parallel(element, max_workers=8):
 
     return result
 
-def find_all_clickable_rects(element, depth=0) -> list[Rect]:
+def is_within_window(window, element):
+    try:
+        rect = element.rect
+    except:
+        rect = None
+
+    if window and rect and window.rect.contains(rect.x, rect.y) or not window:
+        return True
+    
+    return False
+
+def find_all_clickable_rects(window, element, depth=0) -> list[Rect]:
     result = []
     name = element.name
     control_type = element.control_type
 
-    if (is_clickable(element)):
+    if (is_within_window(window, element) and is_clickable(element)):
         result.append(element.rect)
 
         #print("  " * depth + f"{element.control_type}: {element.name}")
@@ -139,18 +150,18 @@ def find_all_clickable_rects(element, depth=0) -> list[Rect]:
         return result 
 
     for child in children:
-        child_result = find_all_clickable_rects(child, depth + 1)
+        child_result = find_all_clickable_rects(window, child, depth + 1)
         result.extend(child_result)
 
     return result
 
-def find_all_clickables_in_list_parallel(targets):
+def find_all_clickables_in_list_parallel(window, targets):
     results = []
     # First pass: select which children to process (serial, deterministic)
     # Parallel execution using threads
     with ThreadPoolExecutor() as executor:
         futures = [
-            executor.submit(find_all_clickable_rects_parallel, child)
+            executor.submit(find_all_clickable_rects_parallel, window, child)
             for child in targets
         ]
 
@@ -165,10 +176,10 @@ def find_all_clickables_in_list_parallel(targets):
 
     return results
 
-def find_all_clickable_elements(element, depth=0) -> list:
+def find_all_clickable_elements(window, element, depth=0) -> list:
     result = []
-    
-    if (not element.is_offscreen and is_clickable(element)):
+
+    if (not element.is_offscreen and is_within_window(window, element) and is_clickable(element)):
         result.append(element)
 
     # if the element is disabled, can we safely skip?
@@ -180,7 +191,7 @@ def find_all_clickable_elements(element, depth=0) -> list:
         return result 
 
     for child in children:
-        child_result = find_all_clickable_elements(child, depth + 1)
+        child_result = find_all_clickable_elements(window, child, depth + 1)
         result.extend(child_result)
 
     return result
