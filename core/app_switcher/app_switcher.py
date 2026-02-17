@@ -957,7 +957,7 @@ def ui_event(event, arg):
     if event in ("app_launch", "app_close", "app_activate", "app_deactivate"):
         update_running_list()
 
-def on_ready():
-    ui.register("", ui_event)
+# def on_ready():
+#     ui.register("", ui_event)
 
-app.register("ready", on_ready)
+# app.register("ready", on_ready)

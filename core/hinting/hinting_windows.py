@@ -120,7 +120,7 @@ class Actions:
 
                     clickables = find_all_clickable_rects_parallel(active_window, element)
 
-        if len(clickables) > 0:
+        if clickables and len(clickables) > 0:
             canvas_active_window = canvas.Canvas.from_rect(ui.main_screen().rect)
             canvas_active_window.register("draw", draw_hints)
             canvas_active_window.freeze()
@@ -153,14 +153,14 @@ def on_win_open(window):
 
         # file explorer context menu
         case "#32768":
-            clickables = find_all_clickable_rects(window.element)
+            clickables = find_all_clickable_rects(None, window.element)
             active_window_id = window.id
             is_context_menu_open = True
 
         # taskbar context menus
         case "Xaml_WindowedPopupClass":
             if window.title in ("PopupHost"):
-                clickables = find_all_clickable_rects(window.element)
+                clickables = find_all_clickable_rects(None, window.element)
                 active_window_id = window.id
                 is_context_menu_open = True
 

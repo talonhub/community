@@ -1366,7 +1366,7 @@ if app.platform == "windows":
         else:
             cleanup_and_retry()
 
-    ui.register("", print)
+    #ui.register("", print)
 
     app.register("ready", on_ready)
 

@@ -221,12 +221,12 @@ def on_title_change(_):
 
 def on_focus_change(_):
     window = ui.active_window()
-    print(f"window focus: {ui.focused_element().name} {window.cls} {window.id}")
+    #print(f"window focus: {ui.focused_element().name} {window.cls} {window.id}")
 
 def on_focused_element_change(_):
     window = ui.active_window()
-    print(f"element focus: {ui.focused_element().name} {window.cls} {window.id}")
+    #print(f"element focus: {ui.focused_element().name} {window.cls} {window.id}")
     
 #ui.register("win_focus", on_focus_change)
 #ui.register("win_title", on_title_change)
-#ui.register("element_focus", on_focused_element_change)
+#ui.register("", print)
