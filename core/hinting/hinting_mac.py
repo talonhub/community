@@ -61,16 +61,19 @@ import re
 def strip_more_tabs(title: str) -> str:
     return re.sub(r"\s+and\s+\d+\s+more\s+tab.*", "", title)
 
-roles = [{"AXRole": "AXStaticText"}, {"AXRole": "AXButton"}, {"AXRole": "AXRadioButton"}, {"AXRole": "AXMenuButton"}, {"AXRole": "AXCell"}]
+roles = [{"AXRole": "AXStaticText"}, 
+         {"AXRole": "AXButton"}, 
+         {"AXRole": "AXRadioButton"}, 
+         {"AXRole": "AXMenuButton"}, 
+         {"AXRole": "AXCell"}, 
+         {"AXRole": "AXPopUpButton"},
+         {"AXRole": "AXToggle"},
+         {"AXRole": "AXCheckBox"},
+         {"AXRole": "AXDisclosureTriangle"},
+         {"AXRole": "AXMenuItem"}]
+
 def find_clickables(element):    
     items = element.children.find(*roles, visible_only=True)
-    clickables = []
-    for item in items:
-        match item.AXRole:
-            case _:
-                actions = item.actions
-                if (len(actions) > 0):
-                    clickables.append(item)
     return items
 
 @ctx.action_class("user")
