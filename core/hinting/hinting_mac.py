@@ -61,14 +61,25 @@ import re
 def strip_more_tabs(title: str) -> str:
     return re.sub(r"\s+and\s+\d+\s+more\s+tab.*", "", title)
 
+roles = ["AXButton", "AXRadioButton", "AXCell", "AXCheckBox", "AXStaticText", "AXRow", "AXTextField", "AXPopUpButton", "AXGroup", "AXTextArea", "AXMenuButton"]
+#roles = ["AXStaticText"]
+
 def find_clickables(element):
     clickables = []
-    for role in ("AXCell", "AXButton", "AXGroup"):
-        clickables_sub = element.children.find(AXRole=role, visible_only=True)
-
-        for element in clickables_sub:
-            if element not in clickables:
-                clickables.append(element)
+    for role in roles:
+        clickable_items = element.children.find(AXRole=role, visible_only=True,max_depth=-1)
+        for element in clickable_items:
+            match element.AXRole:
+                case "AXStaticText":
+                    try:
+                        if "AXPress" in element.actions:
+                            print("FOUND ONE!!")
+                            clickables.append(element)
+                    except:
+                        print("failed")
+                        continue
+                case _:
+                    clickables.append(element)
 
     return clickables
 
@@ -98,11 +109,10 @@ class Actions:
         if actions.user.hinting_close():
             return
         
-        active_window = ui.active_window()
         if not is_menu_open:
+            clickables = None
+            active_window = ui.active_window()
             clickables = find_clickables(active_window.element)
-
-            #find_all_clickable_elements_parallel(active_window, element)
 
         if clickables and len(clickables) > 0:
             canvas_active_window = canvas.Canvas.from_rect(ui.main_screen().rect)
@@ -188,19 +198,3 @@ if app.platform == "mac":
     ui.register("menu_close", on_menu_close)
 
     #ui.register("", print)
-
-    print("  " * depth + f"{element.AXRole}, {element.actions}") 
-
-    try:
-        if app.platform == "windows":
-            for child in element.children:
-                walk(child, depth + 1)
-        else:
-            try:
-                if element.children and len(element.children) > 0:
-                    for child in element.children:
-                        walk(child, depth + 1)
-            except:
-                pass
-    except (OSError, RuntimeError):
-        pass  # Element became stale
