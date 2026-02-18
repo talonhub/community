@@ -1,7 +1,5 @@
 from talon import Context, Module, actions, app, imgui, ui, resource, canvas, ctrl, settings, cron
 from talon.ui import Rect
-from concurrent.futures import ThreadPoolExecutor, as_completed
-
 
 mod = Module()
 mod.tag("hinting_active", desc="Indicates hints are active")
@@ -63,6 +61,17 @@ import re
 def strip_more_tabs(title: str) -> str:
     return re.sub(r"\s+and\s+\d+\s+more\s+tab.*", "", title)
 
+def find_clickables(element):
+    clickables = []
+    for role in ("AXCell", "AXButton", "AXGroup"):
+        clickables_sub = element.children.find(AXRole=role, visible_only=True)
+
+        for element in clickables_sub:
+            if element not in clickables:
+                clickables.append(element)
+
+    return clickables
+
 @ctx.action_class("user")
 class Actions:
     def hinting_close():
@@ -90,9 +99,10 @@ class Actions:
             return
         
         active_window = ui.active_window()
-        element = active_window.element
         if not is_menu_open:
-            clickables = find_all_clickable_elements_parallel(active_window, element)
+            clickables = find_clickables(active_window.element)
+
+            #find_all_clickable_elements_parallel(active_window, element)
 
         if clickables and len(clickables) > 0:
             canvas_active_window = canvas.Canvas.from_rect(ui.main_screen().rect)
@@ -152,7 +162,7 @@ is_menu_open = False
 def on_menu_open(element):
     global is_menu_open, clickables, active_window_id
     #print(f"win open - title = {window.title} cls = {window.cls} id = {window.id}")  
-    clickables = find_all_clickable_elements(None, element)
+    clickables = find_clickables(element)
     active_window_id = None
     is_menu_open = True
 
@@ -179,7 +189,6 @@ if app.platform == "mac":
 
     #ui.register("", print)
 
-def walk(element, depth=0):
     print("  " * depth + f"{element.AXRole}, {element.actions}") 
 
     try:
@@ -195,98 +204,3 @@ def walk(element, depth=0):
                 pass
     except (OSError, RuntimeError):
         pass  # Element became stale
-
-
-def is_within_window(window, element):
-    try:
-        frame = element.AXFrame
-    except:
-        frame = None
-
-    if window and frame and window.rect.contains(frame.x, frame.y) or not window:
-        return True
-    
-    return False
-
-
-def is_clickable(element, depth=0):
-    clickable = False
-
-    try:
-        actions = element.actions
-    except:
-        return clickable
-
-    clickable = element.AXRole in ("AXCell", "AXButton", "AXGroup", "AXRole")
-
-    if not clickable:
-        clickable = "AXEnabled" in element.attrs and ("AXPress" in actions or 
-            "AXShowMenu" in actions or 
-            "AXConfirm" in actions or 
-            "AXOpen" in actions or
-            "AXCell" in actions or
-            "AXCheckBox" in actions)
-    
-    
-    #print(f"{element.AXRole}")
-    # back up. todo: re-evaluate if this is necessary
-
-    return clickable
-
-def find_all_clickable_elements(window, element, depth=0) -> list:
-    result = []
-    
-    is_element_clickable = is_within_window(window, element) and (is_clickable(element))
-    if is_element_clickable:
-        result.append(element)
-
-    # if the element is disabled, can we safely skip?
-    children = None
-    try:
-        children = element.AXChildren
-    except:
-        children = None
-
-        #print(f"all clickable exception {e} {name}")
-        return result 
-
-    if children:
-        for child in children:
-            child_result = find_all_clickable_elements(window, child, depth + 1)
-            result.extend(child_result)
-
-
-    return result
-
-def find_all_clickable_elements_parallel(window, element, max_workers=8):
-    # Do a shallow expansion on the main thread to avoid sending huge work units
-
-    result = []
-    # include root on main thread
-    try:
-        # note: checking not element.is_offscreen appears to eliminate clickable menu items..
-        is_element_clickable = is_within_window(window, element) and (is_clickable(element))
-        if is_element_clickable:
-            result.append(element)
-    except Exception:
-        pass
-
-    try:
-        children = element.AXChildren
-    except Exception:
-        children = None
-
-    def worker(subroot):
-        # WARNING: only safe if subroot is safe to access in worker threads
-        return find_all_clickable_elements_parallel(window, subroot, max_workers=8)
-
-    if children and len(children) > 0:
-        with ThreadPoolExecutor(max_workers=max_workers) as ex:
-            futures = [ex.submit(worker, ch) for ch in children]
-            for f in as_completed(futures):
-                try:
-                    result.extend(f.result())
-                except Exception:
-                    pass
-
-    return result
