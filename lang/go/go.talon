@@ -28,7 +28,7 @@ settings():
 
 (variadic | spread): "..."
 declare: " := "
-channel (receive | send): " <- "
+(channel (receive | send) | op channel): " <- "
 
 [state] if (err | error):
     insert("if err != nil {")

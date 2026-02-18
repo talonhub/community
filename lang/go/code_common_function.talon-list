@@ -5,7 +5,11 @@ code.language: go
 # golang builtin functions
 append
 length: len
+capacity: cap
 make
+new
+delete
+close
 # formatting
 format print: fmt.Printf
 format print eff: fmt.Printf
@@ -13,6 +17,7 @@ format sprint: fmt.Sprintf
 format es print eff: fmt.Sprintf
 format print line: fmt.Println
 # time
+time now: time.Now
 time hour: time.Hour
 time minute: time.Minute
 time second: time.Second
