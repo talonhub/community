@@ -37,8 +37,8 @@ def draw_hints(canvas):
     
     index = 1
 
-    for item in clickables:
-        rect = item.AXFrame
+    for axframe in clickables:
+        rect = axframe
         paint.style = paint.Style.FILL
         paint.color = "000000"
 
@@ -74,7 +74,8 @@ roles = [{"AXRole": "AXStaticText"},
 
 def find_clickables(element):    
     items = element.children.find(*roles, visible_only=True)
-    return items
+    clickables = [item.AXFrame for item in items]
+    return clickables
 
 @ctx.action_class("user")
 class Actions:
