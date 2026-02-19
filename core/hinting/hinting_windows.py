@@ -108,6 +108,9 @@ class Actions:
                                     match_found = True
 
                             clickables = find_all_clickables_in_list_parallel(active_window, targets) if len(targets) > 0 else []
+
+                        case _:
+                            clickables = find_all_clickable_rects_parallel(active_window, element)
                 case _:    
                     match focused_element.control_type:
                         case "Menu" | "MenuItem":
