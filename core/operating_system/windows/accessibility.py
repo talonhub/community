@@ -2,9 +2,6 @@ from talon.ui import Rect
 from talon import ui
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-
-
-
 def is_clickable(element, depth=0):
     clickable = False
 
@@ -42,29 +39,6 @@ def is_clickable(element, depth=0):
 
                 
     return clickable
-
-
-control_types = [{"control_type": "Button"},
-                 {"control_type": "ComboBox"},                 
-                 {"control_type": "CheckBox"},
-                 {"control_type": "Edit"},
-                 {"control_type": "TreeItem"},
-                 {"control_type": "TabItem"},
-                 {"control_type": "SplitButton"},
-                 {"control_type": "ListViewItem"},
-                 {"control_type": "ListItem"},
-                 {"control_type": "Menu"},
-                 {"control_type": "MenuItem"},]
-
-def find_clickables(element):    
-    #help(element.find)
-    items = element.find(*control_types, visible_only=True, prefetch=["rect"])
-
-    clickables = []
-    for item in items:
-        clickables.append(item.rect)
-
-    return clickables
 
 def find_all_clickable_rects_parallel(window, element, filter_children=None, max_workers=8):
     # Do a shallow expansion on the main thread to avoid sending huge work units
