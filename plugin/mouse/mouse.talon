@@ -107,7 +107,7 @@ wheel upper here:
 wheel gaze here:
     user.mouse_move_center_active_window()
     user.mouse_gaze_scroll()
-(well stop | scroll stop): user.mouse_scroll_stop()
+(well stop | scroll stop | wheel stop): user.mouse_scroll_stop()
 
 downer: user.mouse_scroll_down()
 downer tiny: mouse_scroll(20)
