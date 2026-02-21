@@ -36,14 +36,21 @@ def on_ready():
     try:
         current_size: int = get_current_breaking_changes_file_size(current_directory)
     except FileNotFoundError:
-        app.notify("The breaking changes file could not be found. Please report this error on the Talon slack or Community GitHub.")
-        return 
-    previous_size_path: str = os.path.join(current_directory, "previous_breaking_changes_size")
-    previous_size: int | None = compute_previous_breaking_changes_file_size(previous_size_path)
+        app.notify(
+            "The breaking changes file could not be found. Please report this error on the Talon slack or Community GitHub."
+        )
+        return
+    previous_size_path: str = os.path.join(
+        current_directory, "previous_breaking_changes_size"
+    )
+    previous_size: int | None = compute_previous_breaking_changes_file_size(
+        previous_size_path
+    )
     if previous_size is not None and (current_size != previous_size):
         notice_gui.show()
         ctx.tags = ["user.breaking_changes_notice_showing"]
     save_breaking_changes_file_size(previous_size_path, current_size)
+
 
 def compute_previous_breaking_changes_file_size(previous_size_path: str) -> int | None:
     """Computes the previous size of the breaking changes file. Returns None if the value cannot be obtained."""
@@ -56,12 +63,14 @@ def compute_previous_breaking_changes_file_size(previous_size_path: str) -> int 
         pass
     return None
 
+
 def should_not_show_breaking_changes_notice(current_directory: str) -> bool:
     """Determines if the breaking changes notice should not be shown"""
     do_not_show_filepath: str = compute_do_not_show_breaking_changes_notice_path(
         current_directory
     )
     return os.path.exists(do_not_show_filepath)
+
 
 def compute_do_not_show_breaking_changes_notice_path(current_directory: str) -> str:
     """Computes the path to the file that indicates that the notice should not be shown again given a path to this file's directory"""
