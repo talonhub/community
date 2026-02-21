@@ -1,6 +1,9 @@
 name: infiniteLoopStatement
 phrase: loop
 insertionScope: statement
+
+$0.wrapperPhrase: loop
+$0.wrapperScope: statement
 ---
 
 language: rust
@@ -15,4 +18,10 @@ language: go
 for {
     $0
 }
+---
+
+language: python
+-
+while True:
+    $0
 ---
