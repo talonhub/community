@@ -39,8 +39,10 @@ def on_ready():
     try:
         current_size: int = get_current_breaking_changes_file_size(current_directory)
     except FileNotFoundError:
-        app.notify("The breaking changes file could not be found. Please report this error on the Talon slack or Community GitHub.")
-        return 
+        app.notify(
+            "The breaking changes file could not be found. Please report this error on the Talon slack or Community GitHub."
+        )
+        return
     previous_size_file_name: str = "previous_breaking_changes_size"
     previous_size_path: str = os.path.join(current_directory, previous_size_file_name)
     could_read_file: bool = True
