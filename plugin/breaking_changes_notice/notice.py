@@ -112,10 +112,9 @@ def save_breaking_changes_file_size(path: str, size: int):
 
 def compute_breaking_changes_path() -> str:
     current_directory: str = os.path.dirname(__file__)
-    path: str = compute_breaking_changes_path_from_current_directory(
-        current_directory
-    )
+    path: str = compute_breaking_changes_path_from_current_directory(current_directory)
     return path
+
 
 def compute_breaking_changes_path_from_current_directory(current_directory: str) -> str:
     """Compute the path to the breaking changes file given this file's directory"""
