@@ -110,6 +110,13 @@ def save_breaking_changes_file_size(path: str, size: int):
         f.write(value_text)
 
 
+def compute_breaking_changes_path() -> str:
+    current_directory: str = os.path.dirname(__file__)
+    path: str = compute_breaking_changes_path_from_current_directory(
+        current_directory
+    )
+    return path
+
 def compute_breaking_changes_path_from_current_directory(current_directory: str) -> str:
     """Compute the path to the breaking changes file given this file's directory"""
     grandparent: str = os.path.dirname(os.path.dirname(current_directory))
@@ -142,10 +149,7 @@ class Actions:
 
     def breaking_changes_open():
         """Opens the breaking changes file"""
-        current_directory: str = os.path.dirname(__file__)
-        path: str = compute_breaking_changes_path_from_current_directory(
-            current_directory
-        )
+        path: str = compute_breaking_changes_path()
         actions.user.edit_text_file(path)
 
 
