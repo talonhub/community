@@ -13,11 +13,14 @@ ctx = Context()
 @imgui.open(y=0)
 def notice_gui(gui: imgui.GUI):
     """Notifies the user that breaking changes has changed"""
-    gui.text("There are new breaking changes.")
+    gui.text("There was a new breaking change.")
     gui.text("A breaking change changes or removes some preexisting functionality.")
-    gui.text("The breaking changes file documents breaking changes.")
+    gui.text("We document breaking changes in the BREAKING_CHANGES.txt file.")
+    gui.line()
+    gui.text("Open BREAKING_CHANGES.txt:")
     if gui.button("read breaking changes"):
         actions.user.breaking_changes_open()
+    gui.text("Close this message:")
     if gui.button("breaking hide"):
         actions.user.breaking_changes_notice_hide()
     gui.text("Never show again:")
