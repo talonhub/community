@@ -4,7 +4,7 @@
 
 import os
 
-from talon import Context, Module, actions, app, imgui
+from talon import Context, Module, actions, app, imgui, fs
 
 # used to activate the tag for when the notice is showing
 ctx = Context()
@@ -112,9 +112,10 @@ def save_breaking_changes_file_size(path: str, size: int):
 
 def compute_breaking_changes_path() -> str:
     current_directory: str = os.path.dirname(__file__)
-    path: str = compute_breaking_changes_path_from_current_directory(current_directory)
+    path: str = compute_breaking_changes_path_from_current_directory(
+        current_directory
+    )
     return path
-
 
 def compute_breaking_changes_path_from_current_directory(current_directory: str) -> str:
     """Compute the path to the breaking changes file given this file's directory"""
@@ -151,5 +152,9 @@ class Actions:
         path: str = compute_breaking_changes_path()
         actions.user.edit_text_file(path)
 
+def on_breaking_changes_file_change(path, flags):
+    on_ready()
+
+fs.watch(compute_breaking_changes_path(), on_breaking_changes_file_change)
 
 app.register("ready", on_ready)
