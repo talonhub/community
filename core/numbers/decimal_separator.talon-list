@@ -1,0 +1,4 @@
+list: user.decimal_separator
+-
+point: .
+comma: ,
