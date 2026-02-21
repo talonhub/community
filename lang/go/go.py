@@ -34,7 +34,7 @@ operators = Operators(
     BITWISE_LEFT_SHIFT=" << ",
     BITWISE_RIGHT_SHIFT=" >> ",
     # code_operators_lambda
-    LAMBDA=" -> ",
+    LAMBDA=" func() ",
     # code_operators_math
     MATH_ADD=" + ",
     MATH_SUBTRACT=" - ",
