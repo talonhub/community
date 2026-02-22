@@ -6,11 +6,11 @@ mod.setting(
     "starting_mode",
     type=str,
     default="command",
-    desc="Initial mode for Talon after startup (sleep, command, dictation)",
+    desc="Mode enabled on Talon launch (sleep, command or dictation)",
 )
 
 
-def set_initial_status():
+def enable_starting_mode():
     starting_mode = settings.get("user.starting_mode", "command")
     if starting_mode == "sleep":
         print("Talon ready, in sleep mode")
@@ -22,4 +22,4 @@ def set_initial_status():
         pass  # Talon starts in command mode by default.
 
 
-app.register("ready", set_initial_status)
+app.register("ready", enable_starting_mode)
