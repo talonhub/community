@@ -139,8 +139,8 @@ class Actions:
 
             element = ui.active_window().element
 
-            if focused_element and focused_element.AXRole in  ("AXMenu", "AXMenuItem", "AXMenuBarItem", "AXWindow"):
-                element = focused_element
+            # if focused_element and focused_element.AXRole in  ("AXMenu", "AXMenuItem", "AXMenuBarItem"):
+            #     element = focused_element
             
             try:
                 clickables = find_clickables(element)
