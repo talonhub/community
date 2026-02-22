@@ -20,8 +20,9 @@ def on_ready():
             print("Talon ready, in dictation mode")
             actions.user.dictation_mode()
         case "command":
-            pass # already the default; nothing to do
+            pass  # already the default; nothing to do
         case _:
             app.notify("Unsupported mode for user.initial_mode: {initial_mode}")
+
 
 app.register("ready", on_ready)
