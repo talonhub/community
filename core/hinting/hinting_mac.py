@@ -200,16 +200,34 @@ class Actions:
 is_menu_open = False
 def on_win_open(window):
     global is_menu_open, clickables, active_window_id
+    print(f"on_win_open {window.app.bundle}")
+
+    try:
+        match window.app.bundle:
+            case "com.apple.Spotlight":
+                is_menu_open = True
+                clickables = find_clickables(window.element)
+                actions.user.hinting_close()
+                actions.user.hinting_toggle()
+    except:
+        pass
     #print(f"win open - title = {window.title} cls = {window.cls} id = {window.id}")
 
 def on_win_close(window):
-    global is_menu_open, active_window_id
+    global is_menu_open, active_window_id, clickables
+    try:
+        print(f"on_win_close {window.app.bundle}")
+    except:
+        print(f"on_win_close")
 
     # we need special processig for control center...
     try:
-        if window.app.bundle == "com.apple.controlcenter":
-            is_menu_open = False
-            actions.user.hinting_toggle()
+        match window.app.bundle:
+            case "com.apple.controlcenter" | "com.apple.Spotlight":
+                is_menu_open = False
+                clickables = None
+                active_window_id = None
+                actions.user.hinting_toggle()
     except:
         pass
 
@@ -217,16 +235,16 @@ def on_win_close(window):
         actions.user.hinting_close()
 
 def on_win_hide(window):
-    print("on_win_hide")
+    print(f"on_win_hide {window.app.bundle}")
 
     on_win_close(window)
 
 def on_win_disable(window):
-    print("on_win_disable")
+    print(f"on_win_disable {window.app.bundle}")
     on_win_close(window)
 
 def on_win_title(window):
-    print("on_win_title")
+    print(f"on_win_title {window.app.bundle}")
 
     if window.id != active_window_id:
         return
@@ -234,23 +252,25 @@ def on_win_title(window):
         on_win_close(window)
 
 def on_win_focus(window):
+    print(f"on_win_focus {window.app.bundle}")
+
     global is_menu_open, clickables, active_window_id
 
     if canvas_active_window:
         if active_window_id != window.id:
            actions.user.hinting_close()
 
-    # we need special processig for control center...
-    if window.app.bundle == "com.apple.controlcenter":
-        active_window_id = window.id
-        clickables = find_clickables(window.element)
-        is_menu_open = True
-        actions.user.hinting_toggle()
-
-
-
-
-    
+    # we need special processigng for control center & a few others...
+    try:
+        match window.app.bundle:
+            case "com.apple.controlcenter" | "com.apple.Spotlight":
+                active_window_id = window.id
+                is_menu_open = True
+                clickables = find_clickables(window.element)
+                actions.user.hinting_close()
+                actions.user.hinting_toggle()
+    except:
+        pass    
 
 is_menu_open = False
 def on_menu_open(element):
@@ -281,7 +301,7 @@ def on_element_focus(element):
 
 if app.platform == "mac":
     ui.register("win_focus", on_win_focus)
-    #ui.register("win_open", on_win_open)
+    ui.register("win_open", on_win_open)
     ui.register("win_hide", on_win_hide)
     ui.register("win_close", on_win_close)
     ui.register("win_disable", on_win_disable)
