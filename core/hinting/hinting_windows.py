@@ -61,7 +61,7 @@ def strip_more_tabs(title: str) -> str:
 
 @ctx.action_class("user")
 class Actions:
-    def hinting_close():
+    def hinting_close(clear_cache):
         """Closes hinting canvas if open"""
         global clickables, canvas_active_window, current_button_mapping, active_window_id
 
