@@ -97,7 +97,7 @@ settings():
     # -width windows are resized to stay full-height/width.
     # user.window_snap_screen = "size aware"
 
-    # Mode that Talon enters directly after launch (command, dictation, or sleep)
+    # Mode activated on Talon launch (command by default; dictation or sleep are other options)
     # user.starting_mode = "sleep"
 
     # Puts Talon into sleep mode if no commands are spoken for a defined period of time.
