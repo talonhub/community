@@ -204,7 +204,7 @@ def on_win_open(window):
 
     try:
         match window.app.bundle:
-            case "com.apple.Spotlight":
+            case "com.apple.controlcenter" | "com.apple.Spotlight" | "com.apple.loginwindow" | "com.apple.notificationcenterui":
                 is_menu_open = True
                 clickables = find_clickables(window.element)
                 actions.user.hinting_close()
@@ -223,7 +223,7 @@ def on_win_close(window):
     # we need special processig for control center...
     try:
         match window.app.bundle:
-            case "com.apple.controlcenter" | "com.apple.Spotlight":
+            case "com.apple.controlcenter" | "com.apple.Spotlight" | "com.apple.loginwindow" | "com.apple.notificationcenterui":
                 is_menu_open = False
                 clickables = None
                 active_window_id = None
@@ -263,7 +263,7 @@ def on_win_focus(window):
     # we need special processigng for control center & a few others...
     try:
         match window.app.bundle:
-            case "com.apple.controlcenter" | "com.apple.Spotlight":
+            case "com.apple.controlcenter" | "com.apple.Spotlight" | "com.apple.loginwindow" | "com.apple.notificationcenterui":
                 active_window_id = window.id
                 is_menu_open = True
                 clickables = find_clickables(window.element)
