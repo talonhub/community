@@ -133,7 +133,13 @@ def on_draw(c: SkiaCanvas):
             Point2d(x, y), radius, [color_text, color_text]
         )
 
-        text = current_microphone[:2]
+        text = current_microphone
+        # on windows the current_microphone string always starts with "microphone (..."
+        if app.platform == "windows":
+            text = text.split("(")[1]
+
+        text = text[:2]
+
         c.paint.style = c.paint.Style.FILL
         c.paint.color = color_text
         text_rect = c.paint.measure_text(text)[1]
