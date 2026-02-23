@@ -88,8 +88,10 @@ DEFAULT_ROLE_PRIORITY = {
     "AXButton": 100,
     "AXLink": 90,
     "AXMenuItem": 85,
+    "AXMenuButton": 85,
     "AXCheckBox": 80,
     "AXRadioButton": 80,
+    "AXToggle": 80,
     "AXTextField": 75,
     "AXPopUpButton": 75,
     "AXGroup": 20,
@@ -189,22 +191,30 @@ def filter_elements(
                 continue
             
         if should_filter_overlaps:
-            for existing in result:
-                er = existing.AXFrame
-
+            for index, existing_element in enumerate(result):
+                er = existing_element.AXFrame
+                
                 # Containment rule
-                if contains(er, r):
+                if contains(er, r):                    
                     skip = True
-                    break
 
                 # High IoU duplicate
                 if iou(r, er) > iou_threshold:
                     skip = True
-                    break
 
                 # Nearly identical centers
                 if center_distance(r, er) < center_threshold:
                     skip = True
+
+                if skip:
+                    #pressable = "AXPress" in item.actions or "AXShowMenu" in item.actions
+                    #existing_pressable = "AXPress" in existing_element.actions or "AXShowMenu" in existing_element.actions
+                    is_smaller = area(r) < area(er)
+
+                    if is_smaller: #or (pressable and not existing_pressable):
+                        #print("swapping to smaller item")
+                        result[index] = item
+
                     break
 
             if not skip:
@@ -267,7 +277,7 @@ class Actions:
         #     print("cached!!")
 
         element = ui.active_window().element if not cached_element else cached_element
-            
+
         try:
             clickables = find_clickables(element)
         except AttributeError:
