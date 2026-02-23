@@ -7,7 +7,7 @@ mod.tag("hinting_active", desc="Indicates hints are active")
 mod.setting(
     "auto_hint_menus",
     type=bool,
-    default=True,
+    default=False,
     desc="Enables experimental auto-hinting of menus",
 )
 
@@ -56,30 +56,3 @@ class Actions:
     def hinting_select(mouse_button: int, label: str, click_count: int):
         """Click the hint based on the index"""        
         pass
-
-    def dump_element_at_mouse():
-        """"""
-        print(f"{actions.mouse_x()},{actions.mouse_y()}")
-        el = ui.element_at(actions.mouse_x(), actions.mouse_y())
-        print(el.parent)
-        #help(el)
-
-        #print(f"{el.AXRole} {el.AXDescription}") 
-
-        #walk(el)
-
-def walk(element, depth=0):
-    desc = ""
-    try:
-        desc = element.AXDescription
-    except:
-        desc = ""
-
-    print("  " * depth + f"{element.AXRole}") 
-    
-    try:
-        for child in element.children:
-            walk(child, depth + 1)
-    except (OSError, RuntimeError):
-        pass  # Element became stale
-
