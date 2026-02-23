@@ -265,6 +265,8 @@ class Actions:
         except AttributeError:
             app.notify("find_clickables failed: attribute error")            
 
+        #walk(element)
+        
         if clickables and len(clickables) > 0:
             canvas_active_window = canvas.Canvas.from_rect(ui.main_screen().rect)
             canvas_active_window.register("draw", draw_hints)
@@ -309,14 +311,9 @@ class Actions:
         if not ui.element_at(x_click, y_click).AXRole == "AXMenuBarItem":
             actions.user.hinting_close(True)
 
-    def dump_element_at_mouse():
-        """"""
-        #print(f"{actions.mouse_x()},{actions.mouse_y()}")
-        el = ui.element_at(actions.mouse_x(), actions.mouse_y())
-        print(el.dump())
-
 is_menu_open = False
 
+# we need special processig for certain windows...
 def process_problem_children(window, opened):
     global is_menu_open, active_window_id, cached_element
 
@@ -354,7 +351,6 @@ def on_win_close(window):
     except:
         print(f"on_win_close")
 
-    # we need special processig for control center...
     process_problem_children(window, False)
 
     if canvas_active_window:
@@ -432,3 +428,21 @@ if app.platform == "mac":
     ui.register("element_focus", on_element_focus)
 
     #ui.register("", print)
+
+def walk(element, depth=0):
+    desc = ""
+    try:
+        desc = element.AXDescription
+    except:
+        desc = ""
+
+    try:
+        print("  " * depth + f"{element.AXRole}") 
+    except:
+        pass
+
+    try:
+        for child in element.children:
+            walk(child, depth + 1)
+    except (OSError, RuntimeError, AttributeError):
+        pass  # Element became stale
