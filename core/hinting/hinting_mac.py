@@ -158,10 +158,26 @@ def filter_elements(
     
     should_filter_overlaps = settings.get("user.hinting_filter_overlapping_item")
     should_filter_by_actions = settings.get("user.hinting_filter_using_actions")
-    
-    if not should_filter_overlaps and not should_filter_by_actions:
+    should_filter_element_at = settings.get("user.hinting_filter_using_element_at")
+
+    if not should_filter_overlaps and not should_filter_by_actions and not should_filter_element_at:
         return items
-     
+
+    result = items
+    if should_filter_element_at:
+        result = []
+        for item in items:
+            try:
+                el = ui.element_at(*item.AXFrame.center)
+            except:
+                continue
+
+            if el not in result:
+                result.append(el)    
+
+    if not should_filter_by_actions and not should_filter_overlaps:
+        return result
+
     if role_priority is None:
         role_priority = DEFAULT_ROLE_PRIORITY
 
@@ -172,12 +188,11 @@ def filter_elements(
         )
 
     if should_filter_overlaps:
-        sorted_items = sorted(items, key=sort_key)
+        sorted_items = sorted(result, key=sort_key)
     else:
-        sorted_items = items
+        sorted_items = result
 
-    result = []
-
+    existing_items = []
     for item in sorted_items:
         r = item.AXFrame
 
@@ -191,7 +206,7 @@ def filter_elements(
                 continue
             
         if should_filter_overlaps:
-            for index, existing_element in enumerate(result):
+            for index, existing_element in enumerate(existing_items):
                 er = existing_element.AXFrame
                 
                 # Containment rule
@@ -199,11 +214,11 @@ def filter_elements(
                     skip = True
 
                 # High IoU duplicate
-                if iou(r, er) > iou_threshold:
+                if not skip and iou(r, er) > iou_threshold:
                     skip = True
 
                 # Nearly identical centers
-                if center_distance(r, er) < center_threshold:
+                if not skip and center_distance(r, er) < center_threshold:
                     skip = True
 
                 if skip:
@@ -213,14 +228,14 @@ def filter_elements(
 
                     if is_smaller: #or (pressable and not existing_pressable):
                         #print("swapping to smaller item")
-                        result[index] = item
+                        existing_items[index] = item
 
                     break
 
             if not skip:
-                result.append(item)
+                existing_items.append(item)
 
-    return result
+    return existing_items
 
 def find_clickables(element): 
     items = []

@@ -23,6 +23,13 @@ mod.setting(
     desc="Enables filtering of elements without AXPress, AXShowMenu or similar actions",
 )
 
+mod.setting(
+    "hinting_filter_using_element_at",
+    type=bool,
+    default=False,
+    desc="Enables filtering of elements without AXPress, AXShowMenu or similar actions",
+)
+
 ctx = Context()
 
 @mod.capture(rule="<user.letter> (twice | second)")
