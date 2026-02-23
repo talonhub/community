@@ -249,7 +249,7 @@ class Actions:
         
     def hinting_toggle():
         """Toggles hints"""
-        global is_menu_open, clickables, canvas_active_window, current_button_mapping, active_window_id
+        global is_menu_open, clickables, canvas_active_window, current_button_mapping, active_window_id, cached_element
         
 
         # print("hinting toggle!!!")
@@ -265,7 +265,11 @@ class Actions:
         try:
             clickables = find_clickables(element)
         except AttributeError:
-            app.notify("find_clickables failed: attribute error. Skipping.")            
+            if cached_element:
+                app.notify("find_clickables failed with cached element. Skipping.")  
+                cached_element = None
+            else:
+                app.notify("find_clickables failed with active_window. Skipping.")  
 
         #walk(element)
         
