@@ -79,7 +79,9 @@ roles = [{"AXRole": "AXStaticText"},
          {"AXRole": "AXMenuBarItem"},
          {"AXRole": "AXMenuItem"},
          {"AXRole": "AXMenu"},
+         {"AXRole": "AXColorWell"},
          {"AXRole": "AXTextField"}]
+
          #{"AXRole": "AXTextField"}]
 
 DEFAULT_ROLE_PRIORITY = {
@@ -396,7 +398,7 @@ def on_menu_open(element):
     active_window_id = None
     is_menu_open = True
 
-    if settings.get("user.hinting_"):
+    if settings.get("user.hinting_auto_hint_menus"):
         actions.user.hinting_toggle()
 
 def on_menu_close(element):
