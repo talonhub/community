@@ -11,23 +11,25 @@ mod.setting(
     desc="Enables experimental auto-hinting of menus",
 )
 mod.setting(
-    "hinting_filter_items",
+    "hinting_filter_overlapping_item",
     type=bool,
     default=True,
-    desc="Enables filtering of clickable elements",
+    desc="Enables filtering of overlapping rects",
+)
+mod.setting(
+    "hinting_filter_using_actions",
+    type=bool,
+    default=False,
+    desc="Enables filtering of elements without AXPress, AXShowMenu or similar actions",
 )
 
 ctx = Context()
-
-canvas_active_window = None
-active_window_id = None
-clickables = None
 
 @mod.capture(rule="<user.letter> (twice | second)")
 def hinting_double(m) -> str:
     return m.letter + m.letter
 
-@mod.capture(rule="<user.letter> | <user.letter> <user.letter> | <user.letter> <user.letter> <user.letter> | <user.hinting_double> ")
+@mod.capture(rule="<user.letter> | <user.letter> <user.letter> | <user.hinting_double> ")
 def hinting(m) -> str:
     return "".join(m)
 
@@ -40,14 +42,6 @@ class MainActions:
     def mouse_scroll(y: float = 0, x: float = 0, by_lines: bool = False):
         actions.user.hinting_close(True)
         actions.next(y, x, by_lines)
-
-def label_for_index(n: int) -> str:
-    A = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    if n < 26:
-        return A[n]
-
-    m = n - 26
-    return A[m // 26] + A[m % 26]
 
 @mod.action_class
 class Actions:

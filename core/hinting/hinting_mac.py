@@ -153,16 +153,13 @@ def filter_elements(
     center_threshold: float = 4.0,
     role_priority: Optional[Dict[str, int]] = None,
 ) -> list:
-    """
-    items: list of dicts:
-        {
-            "rect": (x, y, w, h),
-            "role": "AXButton"  # optional
-        }
-
-    Returns filtered list.
-    """
-
+    
+    should_filter_overlaps = settings.get("user.hinting_filter_overlapping_item")
+    should_filter_by_actions = settings.get("user.hinting_filter_using_actions")
+    
+    if not should_filter_overlaps and not should_filter_by_actions:
+        return items
+     
     if role_priority is None:
         role_priority = DEFAULT_ROLE_PRIORITY
 
@@ -172,7 +169,10 @@ def filter_elements(
             area(item.AXFrame)
         )
 
-    sorted_items = sorted(items, key=sort_key)
+    if should_filter_overlaps:
+        sorted_items = sorted(items, key=sort_key)
+    else:
+        sorted_items = items
 
     result = []
 
@@ -183,30 +183,32 @@ def filter_elements(
 
         # double check that it's clickable. 
         # This eliminates many clickable elements in eg finder that don't have actions defined...
-        # if "AXPress" not in item.actions and "AXShowMenu" not in item.actions:
-        #     #print("FITLERED NON-CLICKABLE ELEMENT")
-        #     continue
+        
+        if should_filter_by_actions:
+            if "AXPress" not in item.actions and "AXShowMenu" not in item.actions:
+                continue
+            
+        if should_filter_overlaps:
+            for existing in result:
+                er = existing.AXFrame
 
-        for existing in result:
-            er = existing.AXFrame
+                # Containment rule
+                if contains(er, r):
+                    skip = True
+                    break
 
-            # Containment rule
-            if contains(er, r):
-                skip = True
-                break
+                # High IoU duplicate
+                if iou(r, er) > iou_threshold:
+                    skip = True
+                    break
 
-            # High IoU duplicate
-            if iou(r, er) > iou_threshold:
-                skip = True
-                break
+                # Nearly identical centers
+                if center_distance(r, er) < center_threshold:
+                    skip = True
+                    break
 
-            # Nearly identical centers
-            if center_distance(r, er) < center_threshold:
-                skip = True
-                break
-
-        if not skip:
-            result.append(item)
+            if not skip:
+                result.append(item)
 
     return result
 
@@ -214,11 +216,15 @@ def find_clickables(element):
     items = []
     menu_bar_items = None
     if not is_menu_open:   
-        menu_bar = ui.element_at(0, 0)
-        menu_bar_items = menu_bar.children.find(*roles, visible_only=True,prefetch=["AXFrame", "AXRole"])
-        items.extend(menu_bar_items)
+        try:
+            menu_bar = ui.element_at(0, 0)
+            menu_bar_items = menu_bar.children.find(*roles, visible_only=True,prefetch=["AXFrame", "AXRole"])
+            items.extend(menu_bar_items)
+        except:
+            app.notify("Failed to get menubar... figure this out later")
+            pass 
 
-    if settings.get("user.hinting_filter_items"):
+    if settings.get("user.hinting_filter_overlapping_item"):
         application_items = filter_elements(element.children.find(*roles, visible_only=True,prefetch=["AXFrame", "AXRole"]), iou_threshold=0.00,role_priority=DEFAULT_ROLE_PRIORITY)
     else:
         application_items = element.children.find(*roles, visible_only=True,prefetch=["AXFrame", "AXRole"])
