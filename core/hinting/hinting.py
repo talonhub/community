@@ -5,10 +5,16 @@ from ..operating_system.windows.accessibility import find_all_clickable_rects, g
 mod = Module()
 mod.tag("hinting_active", desc="Indicates hints are active")
 mod.setting(
-    "auto_hint_menus",
+    "hinting_auto_hint_menus",
     type=bool,
     default=False,
     desc="Enables experimental auto-hinting of menus",
+)
+mod.setting(
+    "hinting_filter_items",
+    type=bool,
+    default=True,
+    desc="Enables filtering of clickable elements",
 )
 
 ctx = Context()

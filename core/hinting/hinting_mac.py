@@ -5,7 +5,6 @@ from talon.ui import Rect
 
 
 mod = Module()
-mod.tag("hinting_active", desc="Indicates hints are active")
 ctx = Context()
 
 canvas_active_window = None
@@ -131,9 +130,8 @@ def contains(a, b) -> bool:
 
     return ax1 <= bx1 and ay1 <= by1 and ax2 >= bx2 and ay2 >= by2
 
-def center(r):
-    x, y, w, h = r
-    return (x + w / 2.0, y + h / 2.0)
+def center(rect):
+    return (rect.x + rect.width / 2.0, rect.y + rect.height / 2.0)
 
 
 def center_distance(a, b) -> float:
@@ -147,7 +145,7 @@ def role_score(role: Optional[str],
         return 50
     return role_priority.get(role, 50)
 
-def filter_overlapping_elements(
+def filter_elements(
     items: list,
     iou_threshold: float = 0.85,
     center_threshold: float = 4.0,
@@ -218,8 +216,10 @@ def find_clickables(element):
         menu_bar_items = menu_bar.children.find(*roles, visible_only=True,prefetch=["AXFrame", "AXRole"])
         items.extend(menu_bar_items)
 
-    #application_items = element.children.find(*roles, visible_only=True,prefetch=["AXFrame", "AXRole"])
-    application_items = filter_overlapping_elements(element.children.find(*roles, visible_only=True,prefetch=["AXFrame", "AXRole"]), iou_threshold=0.00,role_priority=DEFAULT_ROLE_PRIORITY)
+    if settings.get("user.hinting_filter_items"):
+        application_items = filter_elements(element.children.find(*roles, visible_only=True,prefetch=["AXFrame", "AXRole"]), iou_threshold=0.00,role_priority=DEFAULT_ROLE_PRIORITY)
+    else:
+        application_items = element.children.find(*roles, visible_only=True,prefetch=["AXFrame", "AXRole"])
     items.extend(application_items)
 
     return items
@@ -332,7 +332,7 @@ def process_problem_children(window, opened):
                     active_window_id = None
                     actions.user.hinting_close(True) 
 
-                if is_menu_open and settings.get("user.auto_hint_menus"):
+                if is_menu_open and settings.get("user.hinting_auto_hint_menus"):
                     actions.user.hinting_toggle()
     except:
         pass
@@ -396,7 +396,7 @@ def on_menu_open(element):
     active_window_id = None
     is_menu_open = True
 
-    if settings.get("user.auto_hint_menus"):
+    if settings.get("user.hinting_"):
         actions.user.hinting_toggle()
 
 def on_menu_close(element):
