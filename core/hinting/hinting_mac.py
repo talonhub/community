@@ -196,7 +196,7 @@ def on_win_open(window):
 
     try:
         match window.app.bundle:
-            case "com.apple.controlcenter" | "com.apple.Spotlight" | "com.apple.loginwindow" | "com.apple.notificationcenterui":
+            case "com.apple.controlcenter" | "com.apple.Spotlight" | "com.apple.loginwindow" | "com.apple.notificationcenterui" | "com.apple.UserNotificationCenter":
                 actions.user.hinting_close(True)
 
                 is_menu_open = True
