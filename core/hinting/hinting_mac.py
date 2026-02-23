@@ -263,7 +263,7 @@ class Actions:
         try:
             clickables = find_clickables(element)
         except AttributeError:
-            app.notify("find_clickables failed: attribute error")            
+            app.notify("find_clickables failed: attribute error. Skipping.")            
 
         #walk(element)
         
@@ -274,8 +274,6 @@ class Actions:
 
     def hinting_select(mouse_button: int, label: str, click_count: int):
         """Click the hint based on the index"""        
-        global force_hinting
-
         suppress_click = False
         label = label.upper()
         if label not in current_button_mapping:
@@ -290,11 +288,12 @@ class Actions:
             x = actions.mouse_x()
             y = actions.mouse_y()
 
+            # this logic attempts to allow the user to "switch" menu bar items
+            # without repeated voice commands. e.g. file to 
             menu_bar = ui.element_at(0, 0)
             is_clicking_menu_bar = menu_bar.AXFrame.contains(x_click, y_click)
             if is_clicking_menu_bar:
                 if menu_bar.AXFrame.contains(x,y):
-
                     suppress_click = ui.element_at(x_click, y_click).AXRole == "AXMenuBarItem"
                 # elif is_menu_open:
                 #     print("context menu open, forcing multiple clicks")
