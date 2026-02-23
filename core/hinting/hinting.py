@@ -30,6 +30,15 @@ mod.setting(
     desc="Enables filtering of elements without AXPress, AXShowMenu or similar actions",
 )
 
+mod.setting(
+    "hinting_iou_threshold",
+    type=float,
+    default=0.15,
+    desc="Sets min threshold for eliminating overlapping elements",
+)
+
+
+
 ctx = Context()
 
 @mod.capture(rule="<user.letter> (twice | second)")

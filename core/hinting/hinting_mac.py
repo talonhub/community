@@ -250,7 +250,7 @@ def find_clickables(element):
             pass 
 
     if settings.get("user.hinting_filter_overlapping_item"):
-        application_items = filter_elements(element.children.find(*roles, visible_only=True,prefetch=["AXFrame", "AXRole"]), iou_threshold=0.00,role_priority=DEFAULT_ROLE_PRIORITY)
+        application_items = filter_elements(element.children.find(*roles, visible_only=True,prefetch=["AXFrame", "AXRole"]), iou_threshold=settings.get("user.hinting_iou_threshold"),role_priority=DEFAULT_ROLE_PRIORITY)
     else:
         application_items = element.children.find(*roles, visible_only=True,prefetch=["AXFrame", "AXRole"])
     items.extend(application_items)
