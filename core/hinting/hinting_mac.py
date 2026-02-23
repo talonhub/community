@@ -312,7 +312,7 @@ class Actions:
 
 is_menu_open = False
 
-# we need special processig for certain windows...
+# we need special processing for certain windows...
 def process_problem_children(window, opened):
     global is_menu_open, active_window_id, cached_element
 
