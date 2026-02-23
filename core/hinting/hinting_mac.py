@@ -1,5 +1,8 @@
+from typing import List, Optional, Dict
+import math
 from talon import Context, Module, actions, app, ui, canvas, settings
 from talon.ui import Rect
+
 
 mod = Module()
 mod.tag("hinting_active", desc="Indicates hints are active")
@@ -62,10 +65,6 @@ def draw_hints(canvas):
 
     ctx.tags = ['user.hinting_active']
 
-import re
-def strip_more_tabs(title: str) -> str:
-    return re.sub(r"\s+and\s+\d+\s+more\s+tab.*", "", title)
-
 roles = [{"AXRole": "AXStaticText"}, 
          {"AXRole": "AXButton"},
          {"AXRole": "AXRadioButton"}, 
@@ -84,16 +83,143 @@ roles = [{"AXRole": "AXStaticText"},
          {"AXRole": "AXTextField"}]
          #{"AXRole": "AXTextField"}]
 
+DEFAULT_ROLE_PRIORITY = {
+    "AXButton": 100,
+    "AXLink": 90,
+    "AXMenuItem": 85,
+    "AXCheckBox": 80,
+    "AXRadioButton": 80,
+    "AXTextField": 75,
+    "AXPopUpButton": 75,
+    "AXGroup": 20,
+    "AXScrollArea": 10,
+    "AXWindow": 0,
+}
+
+def rect_edges(rect):
+    return (rect.x, rect.y, rect.x + rect.width, rect.y + rect.height)
+
+def area(rect) -> float:
+    return max(0.0, rect.width) * max(0.0, rect.height)
+
+
+def intersection_area(a, b) -> float:
+    ax1, ay1, ax2, ay2 = rect_edges(a)
+    bx1, by1, bx2, by2 = rect_edges(b)
+
+    x1 = max(ax1, bx1)
+    y1 = max(ay1, by1)
+    x2 = min(ax2, bx2)
+    y2 = min(ay2, by2)
+
+    if x2 <= x1 or y2 <= y1:
+        return 0.0
+
+    return (x2 - x1) * (y2 - y1)
+
+
+def iou(a, b) -> float:
+    inter = intersection_area(a, b)
+    if inter == 0:
+        return 0.0
+    return inter / (area(a) + area(b) - inter)
+
+
+def contains(a, b) -> bool:
+    ax1, ay1, ax2, ay2 = rect_edges(a)
+    bx1, by1, bx2, by2 = rect_edges(b)
+
+    return ax1 <= bx1 and ay1 <= by1 and ax2 >= bx2 and ay2 >= by2
+
+def center(r):
+    x, y, w, h = r
+    return (x + w / 2.0, y + h / 2.0)
+
+
+def center_distance(a, b) -> float:
+    ax, ay = center(a)
+    bx, by = center(b)
+    return math.hypot(ax - bx, ay - by)
+
+def role_score(role: Optional[str],
+               role_priority: Dict[str, int]) -> int:
+    if role is None:
+        return 50
+    return role_priority.get(role, 50)
+
+def filter_overlapping_elements(
+    items: list,
+    iou_threshold: float = 0.85,
+    center_threshold: float = 4.0,
+    role_priority: Optional[Dict[str, int]] = None,
+) -> list:
+    """
+    items: list of dicts:
+        {
+            "rect": (x, y, w, h),
+            "role": "AXButton"  # optional
+        }
+
+    Returns filtered list.
+    """
+
+    if role_priority is None:
+        role_priority = DEFAULT_ROLE_PRIORITY
+
+    def sort_key(item):
+        return (
+            -role_score(item.AXRole, role_priority),
+            area(item.AXFrame)
+        )
+
+    sorted_items = sorted(items, key=sort_key)
+
+    result = []
+
+    for item in sorted_items:
+        r = item.AXFrame
+
+        skip = False
+
+        # double check that it's clickable. 
+        # This eliminates many clickable elements in eg finder that don't have actions defined...
+        # if "AXPress" not in item.actions and "AXShowMenu" not in item.actions:
+        #     #print("FITLERED NON-CLICKABLE ELEMENT")
+        #     continue
+
+        for existing in result:
+            er = existing.AXFrame
+
+            # Containment rule
+            if contains(er, r):
+                skip = True
+                break
+
+            # High IoU duplicate
+            if iou(r, er) > iou_threshold:
+                skip = True
+                break
+
+            # Nearly identical centers
+            if center_distance(r, er) < center_threshold:
+                skip = True
+                break
+
+        if not skip:
+            result.append(item)
+
+    return result
 
 def find_clickables(element): 
     items = []
     menu_bar_items = None
     if not is_menu_open:   
         menu_bar = ui.element_at(0, 0)
-        menu_bar_items = menu_bar.children.find(*roles, visible_only=True)
+        menu_bar_items = menu_bar.children.find(*roles, visible_only=True,prefetch=["AXFrame", "AXRole"])
         items.extend(menu_bar_items)
 
-    application_items = element.children.find(*roles, visible_only=True)
+    #application_items = element.children.find(*roles, visible_only=True,prefetch=["AXFrame", "AXRole"])
+    application_items = filter_overlapping_elements(element.children.find(*roles, visible_only=True,prefetch=["AXFrame", "AXRole"]), iou_threshold=0.00,role_priority=DEFAULT_ROLE_PRIORITY)
     items.extend(application_items)
 
     return items
@@ -190,23 +316,35 @@ class Actions:
         print(el.dump())
 
 is_menu_open = False
-def on_win_open(window):
-    global is_menu_open, clickables, active_window_id, cached_element
-    print(f"on_win_open {window.app.bundle}")
+
+def process_problem_children(window, opened):
+    global is_menu_open, active_window_id, cached_element
 
     try:
         match window.app.bundle:
-            case "com.apple.controlcenter" | "com.apple.Spotlight" | "com.apple.loginwindow" | "com.apple.notificationcenterui" | "com.apple.UserNotificationCenter":
+            case "com.apple.controlcenter" | "com.apple.Spotlight" | "com.apple.loginwindow" | "com.apple.notificationcenterui" | "com.apple.coreservices.uiagent" | "com.apple.UserNotificationCenter":
                 actions.user.hinting_close(True)
 
-                is_menu_open = True
-                cached_element = window.element
-                active_window_id = window.id
+                if opened:
+                    active_window_id = window.id
+                    cached_element = window.element
+                    is_menu_open = True
 
-                
-                actions.user.hinting_toggle()
+                else:
+                    is_menu_open = False
+                    cached_element = None
+                    active_window_id = None
+                    actions.user.hinting_close(True) 
+
+                if is_menu_open and settings.get("user.auto_hint_menus"):
+                    actions.user.hinting_toggle()
     except:
         pass
+
+def on_win_open(window):
+    print(f"on_win_open {window.app.bundle}")
+    process_problem_children(window, True)
+
     #print(f"win open - title = {window.title} cls = {window.cls} id = {window.id}")
 
 def on_win_close(window):
@@ -217,15 +355,7 @@ def on_win_close(window):
         print(f"on_win_close")
 
     # we need special processig for control center...
-    try:
-        match window.app.bundle:
-            case "com.apple.controlcenter" | "com.apple.Spotlight" | "com.apple.loginwindow" | "com.apple.notificationcenterui" | "com.apple.coreservices.uiagent":
-                is_menu_open = False
-                cached_element = None
-                active_window_id = None
-                actions.user.hinting_close(True) 
-    except:
-        pass
+    process_problem_children(window, False)
 
     if canvas_active_window:
         actions.user.hinting_close(False)
@@ -250,32 +380,13 @@ def on_win_title(window):
 def on_win_focus(window):
     print(f"on_win_focus {window.app.bundle}")
 
-    global is_menu_open, clickables, active_window_id, cached_element
-
+    global is_menu_open, clickables, active_window_id, cached_element    
     if canvas_active_window:
         if active_window_id != window.id:
            actions.user.hinting_close(False)
 
     # we need special processigng for control center & a few others...
-    try:
-        match window.app.bundle:
-            case "com.apple.controlcenter" | "com.apple.Spotlight" | "com.apple.loginwindow" | "com.apple.notificationcenterui" | "com.apple.coreservices.uiagent":
-                actions.user.hinting_close(True)
-
-                cached_element = window.element
-                active_window_id = window.id
-                is_menu_open = True
-
-                if settings.get("user.auto_hint_menus"):
-                    actions.user.hinting_toggle()
-
-            case _:
-                if is_menu_open:
-                    actions.user.hinting_close(True)
-                    if settings.get("user.auto_hint_menus"):
-                        actions.user.hinting_toggle() 
-    except:
-        pass    
+    process_problem_children(window, True)
 
 is_menu_open = False
 def on_menu_open(element):
