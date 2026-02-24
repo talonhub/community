@@ -29,6 +29,7 @@ def on_ready():
     show_breaking_changes_message_if_needed()
     fs.watch(compute_breaking_changes_path(), on_breaking_changes_file_change)
 
+
 def on_breaking_changes_file_change(path, flags):
     show_breaking_changes_message_if_needed()
 
@@ -48,14 +49,12 @@ def show_breaking_changes_message_if_needed():
     previous_size_path = os.path.join(
         current_directory, "previous_breaking_changes_size"
     )
-    previous_size = compute_previous_breaking_changes_file_size(
-        previous_size_path
-    )
+    previous_size = compute_previous_breaking_changes_file_size(previous_size_path)
     if previous_size is not None and (current_size != previous_size):
         notice_gui.show()
         ctx.tags = ["user.breaking_changes_notice_showing"]
     save_breaking_changes_file_size(previous_size_path, current_size)
-    
+
 
 def compute_previous_breaking_changes_file_size(previous_size_path):
     """Computes the previous size of the breaking changes file. Returns None if the value cannot be obtained."""
