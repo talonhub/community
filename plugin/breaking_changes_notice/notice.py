@@ -21,7 +21,7 @@ def notice_gui(gui: imgui.GUI):
         actions.user.breaking_changes_open()
     if gui.button("breaking hide"):
         actions.user.breaking_changes_notice_hide()
-    if gui.button("breaking dismiss (do not show again)"):
+    if gui.button("breaking dismiss (do not show this again)"):
         actions.user.breaking_changes_notice_never_show_again()
 
 
