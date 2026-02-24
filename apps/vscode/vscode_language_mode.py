@@ -6,6 +6,7 @@ ctx = Context()
 ctx.matches = r"""
 app: vscode
 not tag: user.code_language_forced
+win.title: /lang:\[\w+\]/
 """
 
 # Looks for special string in window title.
