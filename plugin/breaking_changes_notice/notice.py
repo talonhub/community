@@ -17,14 +17,11 @@ def notice_gui(gui: imgui.GUI):
     gui.text("A breaking change changes or removes some preexisting functionality.")
     gui.text("We document breaking changes in the BREAKING_CHANGES.txt file.")
     gui.line()
-    gui.text("Open BREAKING_CHANGES.txt:")
     if gui.button("read breaking changes"):
         actions.user.breaking_changes_open()
-    gui.text("Close this message:")
     if gui.button("breaking hide"):
         actions.user.breaking_changes_notice_hide()
-    gui.text("Never show again:")
-    if gui.button("breaking dismiss"):
+    if gui.button("breaking dismiss (do not show again)"):
         actions.user.breaking_changes_notice_never_show_again()
 
 
