@@ -26,6 +26,14 @@ def notice_gui(gui: imgui.GUI):
 
 
 def on_ready():
+    show_breaking_changes_message_if_needed()
+    fs.watch(compute_breaking_changes_path(), on_breaking_changes_file_change)
+
+def on_breaking_changes_file_change(path, flags):
+    show_breaking_changes_message_if_needed()
+
+
+def show_breaking_changes_message_if_needed():
     """Perform bookkeeping and show gui if the breaking changes file has changed"""
     current_directory: str = os.path.dirname(__file__)
     if should_not_show_breaking_changes_notice(current_directory):
@@ -47,7 +55,7 @@ def on_ready():
         notice_gui.show()
         ctx.tags = ["user.breaking_changes_notice_showing"]
     save_breaking_changes_file_size(previous_size_path, current_size)
-
+    
 
 def compute_previous_breaking_changes_file_size(previous_size_path: str) -> int | None:
     """Computes the previous size of the breaking changes file. Returns None if the value cannot be obtained."""
@@ -148,11 +156,5 @@ class Actions:
         path: str = compute_breaking_changes_path()
         actions.user.edit_text_file(path)
 
-
-def on_breaking_changes_file_change(path, flags):
-    on_ready()
-
-
-fs.watch(compute_breaking_changes_path(), on_breaking_changes_file_change)
 
 app.register("ready", on_ready)
