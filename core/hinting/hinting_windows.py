@@ -66,11 +66,14 @@ class Actions:
         global clickables, canvas_active_window, current_button_mapping, active_window_id
 
         if canvas_active_window:
-            clickables = None
+            if clear_cache:
+                clickables = None
+                current_button_mapping = None
+                active_window_id = None
+                
             canvas_active_window.close()
             canvas_active_window = None
-            current_button_mapping = None
-            active_window_id = None
+
             ctx.tags = []
             return True
         
@@ -80,7 +83,7 @@ class Actions:
         """Toggles hints"""
         global is_context_menu_open, clickables, canvas_active_window, current_button_mapping, active_window_id
 
-        if actions.user.hinting_close():
+        if actions.user.hinting_close(False):
             return
         
         active_window = ui.active_window()
@@ -145,7 +148,7 @@ class Actions:
             for i in range(0, click_count):
                 actions.mouse_click(mouse_button)
 
-        actions.user.hinting_close()
+        actions.user.hinting_close(True)
 
 is_context_menu_open = False
 def on_win_open(window):
@@ -182,10 +185,10 @@ def on_win_close(window):
             if window.title in ("PopupHost"):
                 active_window_id = None
                 is_context_menu_open = False
-                actions.user.hinting_close()
+                actions.user.hinting_close(True)
 
     if active_window_id == window.id:
-        actions.user.hinting_close()
+        actions.user.hinting_close(True)
 
 def on_win_hide(window):
     on_win_close(window)
@@ -204,7 +207,7 @@ def on_win_focus(_):
 
     if canvas_active_window:
         if active_window_id != window.id:
-           actions.user.hinting_close()
+           actions.user.hinting_close(True)
     
 if app.platform == "windows":
     ui.register("win_focus", on_win_focus)
