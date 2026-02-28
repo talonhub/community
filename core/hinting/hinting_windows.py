@@ -15,6 +15,70 @@ ctx.matches = r"""
 os: windows
 """
 
+
+explorer_automation_ids =[{'automation_id': 'StatusBarModuleInner'}, 
+                          {'automation_id': 'System.StatusBarViewItemCount'}, 
+                          {'automation_id': 'PropertyValue'}, 
+                          {'automation_id': 'ViewButtonsGroup'}, 
+                          {'automation_id': 'ViewMode_Details'}, 
+                          {'automation_id': 'ViewMode_LargeIcons'}, 
+                          {'automation_id': 'ProperTreeHost'}, 
+                          {'automation_id': '100'}, 
+                          {'automation_id': 'NonClientVerticalScrollBar'}, 
+                          {'automation_id': 'UpButton'}, 
+                          {'automation_id': 'UpPageButton'}, 
+                          {'automation_id': 'ScrollbarThumb'}, 
+                          {'automation_id': 'DownPageButton'}, 
+                          {'automation_id': 'DownButton'}, 
+                          {'automation_id': 'listview'}, 
+                          {'automation_id': 'HorizontalScrollBar'}, 
+                          {'automation_id': 'UpButton'}, 
+                          {'automation_id': 'ScrollbarThumb'}, 
+                          {'automation_id': 'DownPageButton'}, 
+                          {'automation_id': 'DownButton'}, 
+                          {'automation_id': 'System.ItemNameDisplay'}, 
+                          {'automation_id': 'DropDown'}, 
+                          {'automation_id': 'System.DateModified'}, 
+                          {'automation_id': 'DropDown'}, 
+                          {'automation_id': 'System.ItemTypeText'}, 
+                          {'automation_id': 'DropDown'}, 
+                          {'automation_id': 'System.Size'}, 
+                          {'automation_id': 'DropDown'},  
+                          {'automation_id': 'System.ItemNameDisplay'}, 
+                          {'automation_id': 'System.DateModified'}, 
+                          {'automation_id': 'System.ItemTypeText'},
+                          {'automation_id': 'System.Size'}, 
+                          {'automation_id': 'System.ItemNameDisplay'}, 
+                          {'automation_id': 'System.DateModified'}, 
+                          {'automation_id': 'System.ItemTypeText'}, 
+                          {'automation_id': 'System.Size'}, 
+                          {'automation_id': 'TabView'}, 
+                          {'automation_id': 'TabListView'}, 
+                          {'automation_id': 'CloseButton'}, 
+                          {'automation_id': 'AddButton'}, 
+                          {'automation_id': 'NavigationCommands'}, 
+                          {'automation_id': 'backButton'}, 
+                          {'automation_id': 'forwardButton'}, 
+                          {'automation_id': 'upButton'}, 
+                          {'automation_id': 'refreshButton'}, 
+                          {'automation_id': 'PART_AutoSuggestBox'}, 
+                          {'automation_id': 'TextBox'}, 
+                          {'automation_id': 'FirstCrumbStackPanel'}, 
+                          {'automation_id': 'PART_BreadcrumbBar'}, 
+                          {'automation_id': 'FileExplorerSearchBox'}, 
+                          {'automation_id': 'TextBox'}, 
+                          {'automation_id': 'FileExplorerCommandBar'}, 
+                          {'automation_id': 'SortAndGroupButton'}, 
+                          {'automation_id': 'MoreButton'}, 
+                          {'automation_id': 'FileExplorerSecondaryCommandBar'}, 
+                          {'automation_id': 'PreviewPaneToggleButton'}, 
+                          {'automation_id': 'TitleBar'}, 
+                          {'automation_id': 'SystemMenuBar'}, 
+                          {'automation_id': 'Minimize-Restore'}, 
+                          {'automation_id': 'Maximize-Restore'}, 
+                          {'automation_id': 'Close'}]
+
+
 def label_for_index(n: int) -> str:
     A = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     if n < 26:
@@ -70,7 +134,7 @@ class Actions:
                 clickables = None
                 current_button_mapping = None
                 active_window_id = None
-                
+
             canvas_active_window.close()
             canvas_active_window = None
 
@@ -110,10 +174,71 @@ class Actions:
                                     targets.append(child)
                                     match_found = True
 
-                            clickables = find_all_clickables_in_list_parallel(active_window, targets) if len(targets) > 0 else []
+                            #walk(active_window.element)
+                            app_bar_navigation = element.find_one(automation_id="NavigationCommands", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect"])
+                            app_bar_nav_buttons = app_bar_navigation.find(control_type="Button", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect"])
+
+                            app_bar_command = element.find_one(automation_id="FileExplorerCommandBar", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect"])
+                            app_bar_command_buttons = app_bar_command.find(control_type="Button", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect"])
+
+                            app_bar_second_command = element.find_one(automation_id="FileExplorerSecondaryCommandBar", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect"])
+                            app_bar_second_command_buttons = app_bar_second_command.find(control_type="Button", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect"])
+
+                            tree = element.find_one(automation_id="100", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect"])
+                            tree_items = tree.find(control_type="TreeItem", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect"])
+                            
+                            listy = element.find_one(control_type="List", name = "Items View", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect"])
+                            list_items = listy.find(control_type="ListItem", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect"])
+                           
+                            menu_bar = element.find_one(automation_id="TitleBar")
+                            menu_bar_buttons = menu_bar.find(control_type="Button", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect"])
+                            
+                            tab_list = element.find_one(automation_id="TabView", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect"])
+                            tab_buttons = tab_list.find(control_type="Button", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect"])
+                            
+                            search_box = element.find_one(automation_id="FileExplorerSearchBox", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect"])
+                             
+                            crumb_stack = element.find_one(automation_id="FirstCrumbStackPanel", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect", "parent"])
+                            crumb_buttons = crumb_stack.parent.find(control_type="SplitButton", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect", "parent"])
+                            
+                            #listview = element.find_one(automation_id="listview", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect", "parent"])
+                            #whimmywazzle = [{"control_type":"SplitButton"},{"control_type":"Button"}]
+                            #listview_buttons = listview.parent.find(*whimmywazzle, visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect", "parent"])
+
+                            #view_button_group = element.find_one(automation_id="ViewButtonsGroup", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect"])
+                            #view_buttons = view_button_group.find(control_type="RadioButton", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect"])
+                            
+                            #others = element.find(*explorer_automation_ids, visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect"])
+                            clickables = [item.rect for item in tree_items]
+                            clickables.append(search_box.rect)
+                            for item in list_items:
+                                clickables.append(item.rect)
+
+                            for item in app_bar_nav_buttons:
+                                clickables.append(item.rect)
+
+                            for item in app_bar_command_buttons:
+                                clickables.append(item.rect)
+
+                            for item in app_bar_second_command_buttons:
+                                clickables.append(item.rect)
+                            
+                            for item in tab_buttons:
+                                clickables.append(item.rect)
+
+                            for item in menu_bar_buttons:
+                                clickables.append(item.rect)
+
+                            for crumb in crumb_buttons:
+                                clickables.append(crumb.rect)
+
+                            # for button in listview_buttons:
+                            #     clickables.append(button.rect)
+                            #clickables.appednfind_all_clickables_in_list_parallel(active_window, targets) if len(targets) > 0 else []
 
                         case _:
-                            clickables = find_all_clickable_rects_parallel(active_window, element)
+                            pass
+                            #clickables = find_all_clickable_rects_parallel(active_window, element)
                 case _:    
                     match focused_element.control_type:
                         case "Menu" | "MenuItem":
@@ -178,7 +303,7 @@ def on_win_close(window):
         case "#32768":
             is_context_menu_open = False
             active_window_id = None
-            actions.user.hinting_close()
+            actions.user.hinting_close(True)
 
         # taskbar context menus
         case "Xaml_WindowedPopupClass":
@@ -216,3 +341,21 @@ if app.platform == "windows":
     ui.register("win_close", on_win_close)
     ui.register("win_disable", on_win_disable)
     ui.register("win_title", on_win_title)
+    #ui.register("", print)
+
+
+#control_types = [{"control_type": "Button"}]
+def walk(element, depth=0):
+    result = []
+    if element.automation_id:
+        #result.append({"automation_id": element.automation_id})
+
+        print("  " * depth + f"{element.control_type}: {element.name}, automation_id = {element.automation_id}") 
+    
+    try:
+        for child in element.children:
+            walk(child, depth + 1)
+    except (OSError, RuntimeError, AttributeError):
+        return []
+
+    return result
