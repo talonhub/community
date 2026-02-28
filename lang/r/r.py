@@ -1,4 +1,4 @@
-from talon import Context, actions, settings
+from talon import Context, actions, settings, Module
 
 from ..tags.operators import Operators
 
@@ -60,6 +60,7 @@ ctx.lists["user.code_parameter_name"] = {
     "fill": "fill",
     "H just": "hjust",
     "keep": ".keep",
+    "keep all": ".keep_all",
     "label": "label",
     "labels": "labels",
     "log": "log",
@@ -71,6 +72,8 @@ ctx.lists["user.code_parameter_name"] = {
     "position": "position",
     "plex label": "xlab",
     "plex limit": "xlim",
+    "rep": "rep",
+    "sep": "sep",
     "scales": "scales",
     "size": "size",
     "show legend": "show.legend",
