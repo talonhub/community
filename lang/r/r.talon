@@ -29,11 +29,7 @@ library <user.code_libraries>:
     key(end)
     " %>%"
     key(enter)
-state na: insert("NA")
-state na character: insert("NA_character_")
-state na real: insert("NA_real_")
-state na complex: insert("NA_complex_")
-state na integer: insert("NA_integer_")
+state na: user.deprecate_command("2026-03-01", "state na", "put N A")
 is N A: user.insert_between("is.na(", ")")
 is not N A: user.insert_between("!is.na(", ")")
 
