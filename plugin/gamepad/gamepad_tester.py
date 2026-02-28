@@ -288,3 +288,11 @@ class Actions:
     def gamepad_tester_stick(id: str, x: float, y: float):
         """Indicates that a gamepad stick has changed state"""
         sticks[id] = (x, y)
+
+    def gamepad_tester_get_stick(id: str) -> tuple[float, float]:
+        """Get current stick value as reported by hardware"""
+        return sticks.get(id, (0.0, 0.0))
+
+    def gamepad_tester_get_trigger(id: str) -> float:
+        """Get current trigger value as reported by hardware"""
+        return triggers.get(id, 0.0)
