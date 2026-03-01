@@ -939,9 +939,8 @@ def get_windows_eleven_taskbar():
     
     if taskbar:
         rect_taskbar = taskbar.rect
-
+        #walk(taskbar_window.element)
         taskbar_clickables = find_all_clickable_elements(taskbar_window, taskbar)
-
         for element in taskbar_clickables:
             match element.name:
                 case "Show Hidden Icons" | "Show Hidden Icons Hide":
@@ -996,7 +995,7 @@ def get_windows_eleven_taskbar():
 
         # The taskbar rect in windows 11 includes the system tray
         # we want to provide a rect that removes this
-        if (icon_dimensions_set and rect_hidden_icons):
+        if (icon_dimensions_set and rect_hidden_icons and rect_start_button):
             rect_task_list = Rect(rect_taskbar.x, 
                                   rect_taskbar.y, 
                                   rect_hidden_icons.x - rect_taskbar.x, 
@@ -1177,7 +1176,7 @@ def show_canvas_popup():
     #     print(f"show_canvas_popup {buttons_popup}")
 
     if canvas_popup:
-        print("hiding popup 2")
+        #print("hiding popup 2")
         canvas_popup.close()
         canvas_popup = None
 
@@ -1265,6 +1264,7 @@ def cleanup_and_retry():
     cron_delay_canvas_helper(False)
     cron_poll_start_menu_helper(False)
 
+
     taskbar_data = None
     system_try_data = None
 
@@ -1275,7 +1275,7 @@ def cleanup_and_retry():
         canvas_system_tray.close()
 
     if canvas_popup:
-        print("hitting popup 3")
+        #print("hitting popup 3")
         canvas_popup.close()
 
     # attempt to recover

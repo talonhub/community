@@ -81,11 +81,12 @@ explorer_automation_ids =[{'automation_id': 'StatusBarModuleInner'},
 
 def label_for_index(n: int) -> str:
     A = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    if n < 26:
-        return A[n]
-
-    m = n - 26
-    return A[m // 26] + A[m % 26]
+    label = ""
+    while n >= 0:
+        n, remainder = divmod(n, 26)
+        label = chr(remainder + ord('A')) + label
+        n -= 1
+    return label
 
 def draw_hints(canvas):
     global current_button_mapping 
@@ -123,6 +124,18 @@ import re
 def strip_more_tabs(title: str) -> str:
     return re.sub(r"\s+and\s+\d+\s+more\s+tab.*", "", title)
 
+control_types = [{"control_type": "Button"},
+                 {"control_type": "CheckBox"},
+                 {"control_type": "ComboBox"},                 
+                 {"control_type": "Edit"},
+                 {"control_type": "ListItem"},
+                 {"control_type": "ListViewItem"},
+                 {"control_type": "Menu"},
+                 {"control_type": "MenuItem"},
+                 {"control_type": "SplitButton"},
+                 {"control_type": "TabItem"},
+                 {"control_type": "TreeItem"},]
+
 @ctx.action_class("user")
 class Actions:
     def hinting_close(clear_cache):
@@ -154,107 +167,115 @@ class Actions:
         element = active_window.element
         
         if not is_context_menu_open:
-            focused_element = ui.focused_element()
+            #focused_element = ui.focused_element()
             active_window_id = active_window.id
 
-            match ui.active_app().name:
-                case "Windows Explorer":
-                    cls = get_window_class(ui.active_window())
+            # match ui.active_app().name:
+            #     case "Windows Explorer":
+            #         cls = get_window_class(ui.active_window())
 
-                    match cls:
-                        case "CabinetWClass":
-                            targets = []
-                            active_tab_name = strip_more_tabs(ui.active_window().title.replace("- File Explorer", ""))
-                            match_found = False
-                            for child in element.children:
-                                if child.name == "":
-                                    targets.append(child)
+            #         match cls:
+            #             case "CabinetWClass":
+            #                 targets = []
+            #                 active_tab_name = strip_more_tabs(ui.active_window().title.replace("- File Explorer", ""))
+            #                 match_found = False
+            #                 for child in element.children:
+            #                     if child.name == "":
+            #                         targets.append(child)
 
-                                elif child.name.strip() == active_tab_name.strip() and not match_found:
-                                    targets.append(child)
-                                    match_found = True
+            #                     elif child.name.strip() == active_tab_name.strip() and not match_found:
+            #                         targets.append(child)
+            #                         match_found = True
 
-                            #walk(active_window.element)
-                            app_bar_navigation = element.find_one(automation_id="NavigationCommands", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect"])
-                            app_bar_nav_buttons = app_bar_navigation.find(control_type="Button", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect"])
+            #                 #walk(active_window.element)
+            #                 app_bar_navigation = element.find_one(automation_id="NavigationCommands", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect"])
+            #                 app_bar_nav_buttons = app_bar_navigation.find(control_type="Button", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect"])
 
-                            app_bar_command = element.find_one(automation_id="FileExplorerCommandBar", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect"])
-                            app_bar_command_buttons = app_bar_command.find(control_type="Button", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect"])
+            #                 app_bar_command = element.find_one(automation_id="FileExplorerCommandBar", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect"])
+            #                 app_bar_command_buttons = app_bar_command.find(control_type="Button", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect"])
 
-                            app_bar_second_command = element.find_one(automation_id="FileExplorerSecondaryCommandBar", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect"])
-                            app_bar_second_command_buttons = app_bar_second_command.find(control_type="Button", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect"])
+            #                 app_bar_second_command = element.find_one(automation_id="FileExplorerSecondaryCommandBar", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect"])
+            #                 app_bar_second_command_buttons = app_bar_second_command.find(control_type="Button", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect"])
 
-                            tree = element.find_one(automation_id="100", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect"])
-                            tree_items = tree.find(control_type="TreeItem", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect"])
+            #                 tree = element.find_one(automation_id="100", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect"])
+            #                 tree_items = tree.find(control_type="TreeItem", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect"])
                             
-                            listy = element.find_one(control_type="List", name = "Items View", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect"])
-                            list_items = listy.find(control_type="ListItem", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect"])
+            #                 listy = element.find_one(control_type="List", name = "Items View", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect"])
+            #                 list_items = listy.find(control_type="ListItem", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect"])
                            
-                            menu_bar = element.find_one(automation_id="TitleBar")
-                            menu_bar_buttons = menu_bar.find(control_type="Button", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect"])
+            #                 menu_bar = element.find_one(automation_id="TitleBar")
+            #                 menu_bar_buttons = menu_bar.find(control_type="Button", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect"])
                             
-                            tab_list = element.find_one(automation_id="TabView", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect"])
-                            tab_buttons = tab_list.find(control_type="Button", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect"])
+            #                 tab_list = element.find_one(automation_id="TabView", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect"])
+            #                 tab_buttons = tab_list.find(control_type="Button", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect"])
                             
-                            search_box = element.find_one(automation_id="FileExplorerSearchBox", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect"])
+            #                 search_box = element.find_one(automation_id="FileExplorerSearchBox", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect"])
                              
-                            crumb_stack = element.find_one(automation_id="FirstCrumbStackPanel", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect", "parent"])
-                            crumb_buttons = crumb_stack.parent.find(control_type="SplitButton", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect", "parent"])
+            #                 crumb_stack = element.find_one(automation_id="FirstCrumbStackPanel", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect", "parent"])
+            #                 crumb_buttons = crumb_stack.parent.find(control_type="SplitButton", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect", "parent"])
                             
-                            #listview = element.find_one(automation_id="listview", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect", "parent"])
-                            #whimmywazzle = [{"control_type":"SplitButton"},{"control_type":"Button"}]
-                            #listview_buttons = listview.parent.find(*whimmywazzle, visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect", "parent"])
+            #                 #listview = element.find_one(automation_id="listview", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect", "parent"])
+            #                 #whimmywazzle = [{"control_type":"SplitButton"},{"control_type":"Button"}]
+            #                 #listview_buttons = listview.parent.find(*whimmywazzle, visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect", "parent"])
 
-                            #view_button_group = element.find_one(automation_id="ViewButtonsGroup", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect"])
-                            #view_buttons = view_button_group.find(control_type="RadioButton", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect"])
+            #                 #view_button_group = element.find_one(automation_id="ViewButtonsGroup", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect"])
+            #                 #view_buttons = view_button_group.find(control_type="RadioButton", visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect"])
                             
-                            #others = element.find(*explorer_automation_ids, visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect"])
-                            clickables = [item.rect for item in tree_items]
-                            clickables.append(search_box.rect)
-                            for item in list_items:
-                                clickables.append(item.rect)
+            #                 #others = element.find(*explorer_automation_ids, visible_only=True,is_offscreen=False,is_enabled=True,prefetch=["rect"])
+            #                 clickables = [item.rect for item in tree_items]
+            #                 clickables.append(search_box.rect)
+            #                 for item in list_items:
+            #                     clickables.append(item.rect)
 
-                            for item in app_bar_nav_buttons:
-                                clickables.append(item.rect)
+            #                 for item in app_bar_nav_buttons:
+            #                     clickables.append(item.rect)
 
-                            for item in app_bar_command_buttons:
-                                clickables.append(item.rect)
+            #                 for item in app_bar_command_buttons:
+            #                     clickables.append(item.rect)
 
-                            for item in app_bar_second_command_buttons:
-                                clickables.append(item.rect)
+            #                 for item in app_bar_second_command_buttons:
+            #                     clickables.append(item.rect)
                             
-                            for item in tab_buttons:
-                                clickables.append(item.rect)
+            #                 for item in tab_buttons:
+            #                     clickables.append(item.rect)
 
-                            for item in menu_bar_buttons:
-                                clickables.append(item.rect)
+            #                 for item in menu_bar_buttons:
+            #                     clickables.append(item.rect)
 
-                            for crumb in crumb_buttons:
-                                clickables.append(crumb.rect)
+            #                 for crumb in crumb_buttons:
+            #                     clickables.append(crumb.rect)
 
-                            # for button in listview_buttons:
-                            #     clickables.append(button.rect)
-                            #clickables.appednfind_all_clickables_in_list_parallel(active_window, targets) if len(targets) > 0 else []
+            #                 # for button in listview_buttons:
+            #                 #     clickables.append(button.rect)
+            #                 #clickables.appednfind_all_clickables_in_list_parallel(active_window, targets) if len(targets) > 0 else []
 
-                        case _:
-                            pass
-                            #clickables = find_all_clickable_rects_parallel(active_window, element)
-                case _:    
-                    match focused_element.control_type:
-                        case "Menu" | "MenuItem":
-                            element = focused_element.parent 
+            #             case _:
+            #                 pass
+            #                 #clickables = find_all_clickable_rects_parallel(active_window, element)
+            #     case _:    
+            #         match focused_element.control_type:
+            #             case "Menu" | "MenuItem":
+            #                 element = focused_element.parent 
 
-                        case "Edit":
-                            match active_window.cls:
-                                case "Windows.UI.Core.CoreWindow":
-                                    element = active_window.element.parent
+            #             case "Edit":
+            #                 match active_window.cls:
+            #                     case "Windows.UI.Core.CoreWindow":
+            #                         element = active_window.element.parent
 
-                    clickables = find_all_clickable_rects_parallel(active_window, element)
 
-        if clickables and len(clickables) > 0:
-            canvas_active_window = canvas.Canvas.from_rect(ui.main_screen().rect)
-            canvas_active_window.register("draw", draw_hints)
-            canvas_active_window.freeze()
+        items = element.find(*control_types, 
+                             visible_only=True,
+                             is_offscreen=False,
+                             is_keyboard_focusable=True,
+                             prefetch=["rect", "control_type", "is_keyboard_focusable", "is_enabled"])
+        
+        clickables = [el.rect for el in items]
+        help(element.find)
+
+        # if clickables and len(clickables) > 0:
+        #     canvas_active_window = canvas.Canvas.from_rect(ui.main_screen().rect)
+        #     canvas_active_window.register("draw", draw_hints)
+        #     canvas_active_window.freeze()
 
     def hinting_select(mouse_button: int, label: str, click_count: int):
         """Click the hint based on the index"""        
