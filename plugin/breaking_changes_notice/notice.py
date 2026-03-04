@@ -70,7 +70,9 @@ def compute_previous_breaking_changes_file_size(previous_size_file_name):
 
 def should_not_show_breaking_changes_notice():
     """Determines if the breaking changes notice should not be shown"""
-    return actions.user.stored_state_does_file_exist(DO_NOT_SHOW_BREAKING_CHANGES_FILE_NAME)
+    return actions.user.stored_state_does_file_exist(
+        DO_NOT_SHOW_BREAKING_CHANGES_FILE_NAME
+    )
 
 
 def get_current_breaking_changes_file_size():
@@ -132,7 +134,9 @@ class Actions:
     def breaking_changes_notice_never_show_again():
         """Never show the breaking changes notice again"""
         actions.user.breaking_changes_notice_hide()
-        actions.user.stored_state_create_signal_file(DO_NOT_SHOW_BREAKING_CHANGES_FILE_NAME)
+        actions.user.stored_state_create_signal_file(
+            DO_NOT_SHOW_BREAKING_CHANGES_FILE_NAME
+        )
 
     def breaking_changes_open():
         """Opens the breaking changes file"""
