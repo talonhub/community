@@ -34,6 +34,7 @@ class Actions:
         with open(path, "r") as f:
             return f.read()
 
+
 def compute_stored_state_path(file_name: str):
     """Returns the path to the specified file in the stored state directory"""
     if stored_state_directory is None:
@@ -52,5 +53,6 @@ def setup_directory():
     stored_state_directory = path / "stored_state"
     if not stored_state_directory.exists():
         os.makedirs(stored_state_directory, exist_ok=True)
+
 
 setup_directory()
