@@ -46,20 +46,18 @@ def show_breaking_changes_message_if_needed():
             "The breaking changes file could not be found. Please report this error on the Talon slack or Community GitHub."
         )
         return
-    previous_size_path = os.path.join(
-        current_directory, "previous_breaking_changes_size"
-    )
-    previous_size = compute_previous_breaking_changes_file_size(previous_size_path)
+    previous_size_file_name = "previous_breaking_changes_size"
+    previous_size = compute_previous_breaking_changes_file_size(previous_size_file_name)
     if previous_size is not None and (current_size != previous_size):
         notice_gui.show()
         ctx.tags = ["user.breaking_changes_notice_showing"]
-    save_breaking_changes_file_size(previous_size_path, current_size)
+    save_breaking_changes_file_size(previous_size_file_name, current_size)
 
 
-def compute_previous_breaking_changes_file_size(previous_size_path):
+def compute_previous_breaking_changes_file_size(previous_size_file_name):
     """Computes the previous size of the breaking changes file. Returns None if the value cannot be obtained."""
     try:
-        return get_previous_breaking_changes_file_size(previous_size_path)
+        return get_previous_breaking_changes_file_size(previous_size_file_name)
     except ValueError as ex:
         app.notify(str(ex))
         print(ex)
@@ -90,28 +88,26 @@ def get_current_breaking_changes_file_size(current_directory_path):
     return stats.st_size
 
 
-def get_previous_breaking_changes_file_size(path):
+def get_previous_breaking_changes_file_size(name):
     """Get the last read size of the breaking changes file.
     Raises a FileNotFoundError if the size was never recorded.
     Raises a ValueError if the value cannot be parsed"""
-    if not os.path.exists(path):
+    if not actions.user.stored_state_does_file_exist(name):
         raise FileNotFoundError()
-    with open(path, "r") as f:
-        line_text = f.readline().strip()
-        try:
-            size = int(line_text)
-        except ValueError:
-            raise ValueError(
-                f"Could not parse the first line of the file responsible for tracking the previous size of the breaking changes file as an integer: {line_text}"
-            )
-        return size
+    line_text = actions.user.storage_state_get_text(name).strip()
+    try:
+        size = int(line_text)
+    except ValueError:
+        raise ValueError(
+            f"Could not parse the first line of the file responsible for tracking the previous size of the breaking changes file as an integer: {line_text}"
+        )
+    return size
 
 
-def save_breaking_changes_file_size(path, size):
+def save_breaking_changes_file_size(file_name, size):
     """Updates the recorded previous size of the breaking changes file"""
-    with open(path, "w") as f:
-        value_text = str(size)
-        f.write(value_text)
+    value_text = str(size)
+    actions.user.stored_state_set_value(file_name, value_text)
 
 
 def compute_breaking_changes_path():
