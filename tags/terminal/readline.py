@@ -1,5 +1,6 @@
-from talon import Context, actions, clip
 from typing import Callable
+
+from talon import Context, actions, clip
 
 ctx = Context()
 ctx.matches = r"""
@@ -32,7 +33,8 @@ class EditActions:
     # def paste():
     #     actions.key("ctrl-y")
 
-# Wraps a method in a clip revert. 
+
+# Wraps a method in a clip revert.
 # Might actually not be necessary for readline because in the default implementation it uses a seperate clipboard to the desktop
 # Though left in in case that has been modified
 def with_clip_revert(f: Callable) -> Callable:
@@ -40,32 +42,40 @@ def with_clip_revert(f: Callable) -> Callable:
     def wrapped_method():
         with clip.revert():
             f()
+
     return wrapped_method
+
 
 def with_selection_revert(f: Callable) -> Callable:
     def wrapped_method():
         f()
         actions.key("ctrl-y")
+
     return wrapped_method
+
 
 def cut_word():
     actions.edit.word_left()
     actions.user.cut_word_right()
 
+
 def cut_line_start():
     actions.key("ctrl-x backspace")
 
+
 def cut_line_end():
     actions.key("ctrl-k")
-    
+
+
 cut_actions = {
-    "wordLeft":actions.user.cut_word_left,
-    "wordRight":actions.user.cut_word_right,
-    "word":cut_word,
-    "line":actions.user.cut_line,
-    "lineStart":cut_line_start,
-    "lineEnd":cut_line_end,
+    "wordLeft": actions.user.cut_word_left,
+    "wordRight": actions.user.cut_word_right,
+    "word": cut_word,
+    "line": actions.user.cut_line,
+    "lineStart": cut_line_start,
+    "lineEnd": cut_line_end,
 }
+
 
 @ctx.action_class("user")
 class Actions:
@@ -101,7 +111,6 @@ class Actions:
                     callback = with_clip_revert(callback)
                 elif action_name == "copyToClipboard":
                     callback = with_selection_revert(callback)
-                
+
                 return callback
         return actions.next(pair)
-
