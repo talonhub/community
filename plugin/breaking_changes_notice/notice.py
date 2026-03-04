@@ -10,6 +10,9 @@ from talon import Context, Module, actions, app, fs, imgui
 ctx = Context()
 
 
+DO_NOT_SHOW_BREAKING_CHANGES_FILE_NAME: str = "do_not_show_breaking_changes_notice"
+
+
 @imgui.open(y=0)
 def notice_gui(gui: imgui.GUI):
     """Notifies the user that breaking changes has changed"""
@@ -36,11 +39,10 @@ def on_breaking_changes_file_change(path, flags):
 
 def show_breaking_changes_message_if_needed():
     """Perform bookkeeping and show gui if the breaking changes file has changed"""
-    current_directory = os.path.dirname(__file__)
-    if should_not_show_breaking_changes_notice(current_directory):
+    if should_not_show_breaking_changes_notice():
         return
     try:
-        current_size = get_current_breaking_changes_file_size(current_directory)
+        current_size = get_current_breaking_changes_file_size()
     except FileNotFoundError:
         app.notify(
             "The breaking changes file could not be found. Please report this error on the Talon slack or Community GitHub."
@@ -66,24 +68,14 @@ def compute_previous_breaking_changes_file_size(previous_size_file_name):
     return None
 
 
-def should_not_show_breaking_changes_notice(current_directory):
+def should_not_show_breaking_changes_notice():
     """Determines if the breaking changes notice should not be shown"""
-    do_not_show_filepath = compute_do_not_show_breaking_changes_notice_path(
-        current_directory
-    )
-    return os.path.exists(do_not_show_filepath)
+    return actions.user.stored_state_does_file_exist(DO_NOT_SHOW_BREAKING_CHANGES_FILE_NAME)
 
 
-def compute_do_not_show_breaking_changes_notice_path(current_directory):
-    """Computes the path to the file that indicates that the notice should not be shown again given a path to this file's directory"""
-    return os.path.join(current_directory, "do_not_show_breaking_changes_notice")
-
-
-def get_current_breaking_changes_file_size(current_directory_path):
+def get_current_breaking_changes_file_size():
     """Gets the current size of the breaking changes file"""
-    breaking_changes_path = compute_breaking_changes_path_from_current_directory(
-        current_directory_path
-    )
+    breaking_changes_path = compute_breaking_changes_path_from_current_directory()
     stats = os.stat(breaking_changes_path)
     return stats.st_size
 
@@ -94,7 +86,7 @@ def get_previous_breaking_changes_file_size(name):
     Raises a ValueError if the value cannot be parsed"""
     if not actions.user.stored_state_does_file_exist(name):
         raise FileNotFoundError()
-    line_text = actions.user.storage_state_get_text(name).strip()
+    line_text = actions.user.stored_state_get_text(name).strip()
     try:
         size = int(line_text)
     except ValueError:
@@ -111,13 +103,13 @@ def save_breaking_changes_file_size(file_name, size):
 
 
 def compute_breaking_changes_path():
-    current_directory = os.path.dirname(__file__)
-    path = compute_breaking_changes_path_from_current_directory(current_directory)
+    path = compute_breaking_changes_path_from_current_directory()
     return path
 
 
-def compute_breaking_changes_path_from_current_directory(current_directory):
-    """Compute the path to the breaking changes file given this file's directory"""
+def compute_breaking_changes_path_from_current_directory():
+    """Compute the path to the breaking changes file"""
+    current_directory = os.path.dirname(__file__)
     grandparent = os.path.dirname(os.path.dirname(current_directory))
     return os.path.join(grandparent, "BREAKING_CHANGES.txt")
 
@@ -140,11 +132,7 @@ class Actions:
     def breaking_changes_notice_never_show_again():
         """Never show the breaking changes notice again"""
         actions.user.breaking_changes_notice_hide()
-        current_directory = os.path.dirname(__file__)
-        path = compute_do_not_show_breaking_changes_notice_path(current_directory)
-        # create empty file
-        with open(path, "w") as _:
-            pass
+        actions.user.stored_state_create_signal_file(DO_NOT_SHOW_BREAKING_CHANGES_FILE_NAME)
 
     def breaking_changes_open():
         """Opens the breaking changes file"""

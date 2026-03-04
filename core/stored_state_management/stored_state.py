@@ -28,7 +28,7 @@ class Actions:
         with open(path, "w") as f:
             f.write(value)
 
-    def storage_state_get_text(name: str) -> str:
+    def stored_state_get_text(name: str) -> str:
         """Gets the text from the file with specified name in the stored state directory"""
         path = compute_stored_state_path(name)
         with open(path, "r") as f:
