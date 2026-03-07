@@ -14,6 +14,7 @@ ctx = Context()
 DO_NOT_SHOW_BREAKING_CHANGES_FILE_NAME: str = "do_not_show_breaking_changes_notice"
 STORED_STATE_SUBDIRECTORY_NAME: str = "breaking_changes_update_notice"
 
+
 @imgui.open(y=0)
 def notice_gui(gui: imgui.GUI):
     """Notifies the user that breaking changes has changed"""
@@ -72,8 +73,7 @@ def compute_previous_breaking_changes_file_size(previous_size_file_name):
 def should_not_show_breaking_changes_notice():
     """Determines if the breaking changes notice should not be shown"""
     return actions.user.stored_state_does_file_exist(
-        STORED_STATE_SUBDIRECTORY_NAME,
-        DO_NOT_SHOW_BREAKING_CHANGES_FILE_NAME
+        STORED_STATE_SUBDIRECTORY_NAME, DO_NOT_SHOW_BREAKING_CHANGES_FILE_NAME
     )
 
 
@@ -88,9 +88,13 @@ def get_previous_breaking_changes_file_size(name):
     """Get the last read size of the breaking changes file.
     Raises a FileNotFoundError if the size was never recorded.
     Raises a ValueError if the value cannot be parsed"""
-    if not actions.user.stored_state_does_file_exist(STORED_STATE_SUBDIRECTORY_NAME, name):
+    if not actions.user.stored_state_does_file_exist(
+        STORED_STATE_SUBDIRECTORY_NAME, name
+    ):
         raise FileNotFoundError()
-    line_text = actions.user.stored_state_get_text(STORED_STATE_SUBDIRECTORY_NAME, name).strip()
+    line_text = actions.user.stored_state_get_text(
+        STORED_STATE_SUBDIRECTORY_NAME, name
+    ).strip()
     try:
         size = int(line_text)
     except ValueError:
@@ -103,7 +107,9 @@ def get_previous_breaking_changes_file_size(name):
 def save_breaking_changes_file_size(file_name, size):
     """Updates the recorded previous size of the breaking changes file"""
     value_text = str(size)
-    actions.user.stored_state_set_value(STORED_STATE_SUBDIRECTORY_NAME, file_name, value_text)
+    actions.user.stored_state_set_value(
+        STORED_STATE_SUBDIRECTORY_NAME, file_name, value_text
+    )
 
 
 def compute_breaking_changes_path():
@@ -137,8 +143,7 @@ class Actions:
         """Never show the breaking changes notice again"""
         actions.user.breaking_changes_notice_hide()
         actions.user.stored_state_create_signal_file(
-            STORED_STATE_SUBDIRECTORY_NAME,
-            DO_NOT_SHOW_BREAKING_CHANGES_FILE_NAME
+            STORED_STATE_SUBDIRECTORY_NAME, DO_NOT_SHOW_BREAKING_CHANGES_FILE_NAME
         )
 
     def breaking_changes_open():
