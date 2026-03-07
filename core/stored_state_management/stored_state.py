@@ -55,8 +55,7 @@ def setup_directory():
     for _ in range(DISTANCE_TO_COMMUNITY_ROOT_DIRECTORY):
         path = path.parent
     stored_state_directory = path / "stored_state"
-    if not stored_state_directory.exists():
-        os.makedirs(stored_state_directory, exist_ok=True)
+    os.makedirs(stored_state_directory, exist_ok=True)
 
 
 setup_directory()
