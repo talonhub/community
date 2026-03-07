@@ -1,7 +1,7 @@
 import os
 import pathlib
 
-from talon import Module, actions
+from talon import Module
 
 DISTANCE_TO_COMMUNITY_ROOT_DIRECTORY: int = 3
 stored_state_directory = None
