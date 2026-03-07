@@ -1,8 +1,11 @@
+# This provides the intended way to manage Community stored state as documented in CONTRIBUTING.md P08.
+
 import os
 import pathlib
 
 from talon import Module
 
+# this file is this many directories under community's root directory
 DISTANCE_TO_COMMUNITY_ROOT_DIRECTORY: int = 3
 stored_state_directory = None
 
@@ -45,6 +48,7 @@ def compute_stored_state_path(file_name: str):
 
 
 def setup_directory():
+    """Create the stored state directory if it does not already exist"""
     global stored_state_directory
     path_to_file = pathlib.Path(__file__)
     path = path_to_file
