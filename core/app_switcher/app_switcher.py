@@ -221,22 +221,28 @@ elif app.platform == "linux":
 elif app.platform == "mac":
     mac_application_directories = [
         "/Applications",
-        "/Applications/Utilities",
         "/System/Applications",
-        "/System/Applications/Utilities",
         f"{Path.home()}/Applications",
         f"{Path.home()}/.nix-profile/Applications",
     ]
 
-    def get_apps():
+    def get_apps(paths: list[str] = mac_application_directories):
         items = {}
-        for base in mac_application_directories:
-            base = os.path.expanduser(base)
-            if os.path.isdir(base):
-                for name in os.listdir(base):
-                    path = os.path.join(base, name)
-                    name = name.rsplit(".", 1)[0].lower()
-                    items[name] = path
+        subdirs = []
+        for base in paths:
+            if not os.path.isdir(base):
+                continue
+            for entry in os.scandir(base):
+                if (not entry.is_dir()) or entry.name.startswith("."):
+                    continue
+                if entry.name.endswith(".app"):
+                    name = entry.name[:-4].lower()
+                    items[name] = entry.path
+                else:
+                    subdirs.append(entry.path)
+        if len(subdirs):
+            items.update(get_apps(subdirs))
+
         return items
 
 
@@ -339,7 +345,7 @@ class Actions:
         raise RuntimeError(f'App not running: "{name}"')
 
     def switcher_focus(name: str):
-        """Focus a new application by name"""
+        """Focus application by name, cycle windows if already active"""
         app = actions.user.get_running_app(name)
 
         # Focus next window on same app
@@ -350,7 +356,7 @@ class Actions:
             actions.user.switcher_focus_app(app)
 
     def switcher_focus_app(app: ui.App):
-        """Focus application and wait until switch is made"""
+        """Focus application and wait until switch is made (no cycling of active windows)"""
         app.focus()
         t1 = time.perf_counter()
         while ui.active_app() != app:
@@ -402,6 +408,8 @@ class Actions:
         elif app.platform == "mac":
             # MacOS equivalent is "Mission Control"
             actions.user.dock_send_notification("com.apple.expose.awake")
+        elif app.platform == "linux":
+            actions.key("super")
         else:
             print("Persistent Switcher Menu not supported on " + app.platform)
 

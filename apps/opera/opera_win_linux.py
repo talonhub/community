@@ -39,6 +39,9 @@ class UserActions:
 
 @ctx.action_class("app")
 class AppActions:
+    def preferences():
+        actions.key("alt-p")
+
     def tab_next():
         actions.key("ctrl-pagedown")
 

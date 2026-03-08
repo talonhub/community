@@ -70,31 +70,11 @@ class UserActions:
     def code_operator_object_accessor():
         actions.auto_insert("->")
 
-    def code_define_class():
-        actions.auto_insert("class ")
-
-    def code_import():
-        actions.auto_insert("use ;")
-        actions.edit.left()
-
-    def code_comment_line_prefix():
-        actions.auto_insert("// ")
-
-    def code_comment_block():
-        actions.user.code_comment_block_prefix()
-        actions.key("enter")
-        actions.key("enter")
-        actions.user.code_comment_block_suffix()
-        actions.edit.up()
-
     def code_comment_block_prefix():
         actions.auto_insert("/*")
 
     def code_comment_block_suffix():
         actions.auto_insert("*/")
-
-    def code_comment_documentation():
-        actions.insert("/**")
 
     def code_insert_true():
         actions.auto_insert("true")
@@ -112,56 +92,6 @@ class UserActions:
     def code_insert_is_not_null():
         actions.auto_insert("isset()")
         actions.edit.left()
-
-    def code_state_if():
-        actions.insert("if ()")
-        actions.edit.left()
-
-    def code_state_else_if():
-        actions.insert("elseif ()")
-        actions.edit.left()
-
-    def code_state_else():
-        actions.insert("else {")
-        actions.key("enter")
-
-    def code_state_while():
-        actions.insert("while ()")
-        actions.edit.left()
-
-    def code_state_for():
-        actions.insert("for ()")
-        actions.edit.left()
-
-    def code_state_for_each():
-        actions.insert("foreach ()")
-        actions.edit.left()
-
-    def code_state_switch():
-        actions.insert("switch ()")
-        actions.edit.left()
-
-    def code_state_case():
-        actions.insert("case :")
-        actions.edit.left()
-
-    def code_state_do():
-        actions.insert("do {")
-        actions.key("enter")
-
-    def code_state_go_to():
-        actions.insert("goto ;")
-        actions.edit.left()
-
-    def code_state_return():
-        actions.insert("return ;")
-        actions.edit.left()
-
-    def code_break():
-        actions.insert("break;")
-
-    def code_next():
-        actions.insert("continue;")
 
     def code_default_function(text: str):
         actions.user.code_public_function(text)

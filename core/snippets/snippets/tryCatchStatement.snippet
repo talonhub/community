@@ -45,3 +45,25 @@ try:
 except Exception as ex:
     $0
 ---
+
+language: r
+-
+tryCatch({
+    $0
+}, warning = function(w) {
+    $1
+}, error = function(e) {
+    $2
+}, finally = {
+    $3
+})
+---
+
+language: lua
+-
+if pcall(function () $1 end) then
+    $2
+else
+    $0
+end
+---

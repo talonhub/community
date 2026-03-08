@@ -61,7 +61,7 @@ class Actions:
 
     def talon_sim_phrase(phrase: Union[str, Phrase]):
         """Sims the phrase in the active app and dumps to the log"""
-        print("**** Simulated Phrse **** ")
+        print("**** Simulated Phrase **** ")
         print(speech_system._sim(str(phrase)))
         print("*************************")
 
@@ -139,6 +139,10 @@ class Actions:
         result += "\nBundle: " + actions.app.bundle()
         result += "\nTitle: " + actions.win.title()
         return result
+
+    def talon_get_active_window_class_name() -> str:
+        """Returns the class name of the active window"""
+        return ui.active_window().cls
 
     def talon_version_info() -> str:
         """Returns talon & operation system verison information"""

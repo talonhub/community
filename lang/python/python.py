@@ -1,7 +1,13 @@
 import re
+from contextlib import suppress
 
 from talon import Context, Module, actions, settings
 
+from ...core.described_functions import create_described_insert_between
+from ..tags.generic_types import (
+    SimpleLanguageSpecificTypeConnector,
+    format_type_parameter_arguments,
+)
 from ..tags.operators import Operators
 
 mod = Module()
@@ -9,18 +15,6 @@ ctx = Context()
 ctx.matches = r"""
 code.language: python
 """
-ctx.lists["user.code_common_function"] = {
-    "enumerate": "enumerate",
-    "integer": "int",
-    "length": "len",
-    "list": "list",
-    "print": "print",
-    "range": "range",
-    "set": "set",
-    "split": "split",
-    "string": "str",
-    "update": "update",
-}
 
 """a set of fields used in python docstrings that will follow the
 reStructuredText format"""
@@ -41,41 +35,6 @@ docstring_fields = {
 
 mod.list("python_docstring_fields", desc="python docstring fields")
 ctx.lists["user.python_docstring_fields"] = docstring_fields
-
-ctx.lists["user.code_type"] = {
-    "boolean": "bool",
-    "integer": "int",
-    "string": "str",
-    "none": "None",
-    "dick": "Dict",
-    "float": "float",
-    "any": "Any",
-    "tuple": "Tuple",
-    "union": "UnionAny",
-    "iterable": "Iterable",
-    "vector": "Vector",
-    "bytes": "bytes",
-    "sequence": "Sequence",
-    "callable": "Callable",
-    "list": "List",
-    "no return": "NoReturn",
-}
-
-ctx.lists["user.code_keyword"] = {
-    "assert": "assert ",
-    "break": "break",
-    "continue": "continue",
-    "class": "class ",
-    "return": "return ",
-    "import": "import ",
-    "null": "None",
-    "none": "None",
-    "pass": "pass",
-    "true": "True",
-    "false": "False",
-    "yield": "yield ",
-    "from": "from ",
-}
 
 exception_list = [
     "BaseException",
@@ -149,9 +108,80 @@ ctx.lists["user.python_exception"] = {
     for exception in exception_list
 }
 
+# This is not part of the long term stable API
+# After we implement generics support for several languages,
+# we plan on abstracting out from the specific implementations into a general grammar
+
+mod.list(
+    "python_generic_type", desc="A python type that takes type parameter arguments"
+)
+
+# this should be moved to a talon-list file after this becomes stable
+ctx.lists["user.python_generic_type"] = {
+    "callable": "Callable",
+    "dictionary": "dict",
+    "iterable": "Iterable",
+    "list": "list",
+    "optional": "Optional",
+    "set": "set",
+    "tuple": "tuple",
+    "union": "Union",
+}
+
+
+@ctx.capture(
+    "user.generic_type_parameter_argument", rule="<user.code_type> | [type] <user.text>"
+)
+def generic_type_parameter_argument(m) -> str:
+    """A Python type parameter for a generic data structure"""
+    with suppress(AttributeError):
+        return m.code_type
+    return actions.user.formatted_text(m.text, "PUBLIC_CAMEL_CASE")
+
+
+@ctx.capture(
+    "user.generic_data_structure",
+    rule="{user.python_generic_type} | [type] <user.text>",
+)
+def generic_data_structure(m) -> str:
+    """A Python generic data structure that takes type parameter arguments"""
+    with suppress(AttributeError):
+        return m.python_generic_type
+    return actions.user.formatted_text(m.text, "PUBLIC_CAMEL_CASE")
+
+
+@ctx.capture(
+    "user.generic_type_connector", rule="<user.common_generic_type_connector>|or"
+)
+def generic_type_connector(m) -> SimpleLanguageSpecificTypeConnector:
+    """A Python specific type connector for union types"""
+    with suppress(AttributeError):
+        return m.common_generic_type_connector
+    return SimpleLanguageSpecificTypeConnector(" | ")
+
+
+@ctx.capture(
+    "user.generic_type_parameter_arguments",
+    rule="<user.generic_type_parameter_argument> [<user.generic_type_additional_type_parameters>]",
+)
+def generic_type_parameter_arguments(m) -> str:
+    return format_type_parameter_arguments(m, ", ", "[", "]")
+
+
+@mod.capture(
+    rule="<user.generic_data_structure> of <user.generic_type_parameter_arguments>"
+)
+def python_generic_type(m) -> str:
+    """A generic type with specific type parameters"""
+    parameters = m.generic_type_parameter_arguments
+    return f"{m.generic_data_structure}[{parameters}]"
+
+
+# End of unstable section
+
 operators = Operators(
     # code_operators_array
-    SUBSCRIPT=lambda: actions.user.insert_between("[", "]"),
+    SUBSCRIPT=create_described_insert_between("[", "]"),
     # code_operators_assignment
     ASSIGNMENT=" = ",
     ASSIGNMENT_SUBTRACTION=" -= ",
@@ -173,7 +203,7 @@ operators = Operators(
     BITWISE_LEFT_SHIFT=" << ",
     BITWISE_RIGHT_SHIFT=" >> ",
     # code_operators_lambda
-    LAMBDA=lambda: actions.user.insert_between("lambda ", ": "),
+    LAMBDA=create_described_insert_between("lambda ", ": "),
     # code_operators_math
     MATH_SUBTRACT=" - ",
     MATH_ADD=" + ",
@@ -216,51 +246,11 @@ class UserActions:
     def code_insert_is_not_null():
         actions.auto_insert(" is not None")
 
-    def code_state_if():
-        actions.user.insert_between("if ", ":")
-
-    def code_state_else_if():
-        actions.user.insert_between("elif ", ":")
-
-    def code_state_else():
-        actions.insert("else:")
-        actions.key("enter")
-
-    def code_state_switch():
-        actions.user.insert_between("match ", ":")
-
-    def code_state_case():
-        actions.user.insert_between("case ", ":")
-
-    def code_state_for():
-        actions.auto_insert("for ")
-
-    def code_state_for_each():
-        actions.user.insert_between("for ", " in ")
-
-    def code_state_while():
-        actions.user.insert_between("while ", ":")
-
-    def code_define_class():
-        actions.auto_insert("class ")
-
-    def code_import():
-        actions.auto_insert("import ")
-
-    def code_comment_line_prefix():
-        actions.auto_insert("# ")
-
-    def code_state_return():
-        actions.insert("return ")
-
     def code_insert_true():
         actions.auto_insert("True")
 
     def code_insert_false():
         actions.auto_insert("False")
-
-    def code_comment_documentation():
-        actions.user.insert_between('"""', '"""')
 
     def code_insert_function(text: str, selection: str):
         text += f"({selection or ''})"
@@ -297,9 +287,3 @@ class UserActions:
 
     def code_insert_return_type(type: str):
         actions.insert(f" -> {type}")
-
-    def code_break():
-        actions.insert("break")
-
-    def code_next():
-        actions.insert("continue")

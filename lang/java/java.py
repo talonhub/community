@@ -1,5 +1,11 @@
+from contextlib import suppress
+from enum import Enum, auto
+from typing import Union
+
 from talon import Context, Module, actions, settings
 
+from ...core.described_functions import create_described_insert_between
+from ..tags.generic_types import format_type_parameter_arguments
 from ..tags.operators import Operators
 
 ctx = Context()
@@ -91,7 +97,7 @@ ctx.lists["self.java_modifier"] = java_modifiers
 
 operators = Operators(
     # code_operators_array
-    SUBSCRIPT=lambda: actions.user.insert_between("[", "]"),
+    SUBSCRIPT=create_described_insert_between("[", "]"),
     # code_operators_assignment
     ASSIGNMENT=" = ",
     ASSIGNMENT_SUBTRACTION=" -= ",
@@ -130,6 +136,57 @@ operators = Operators(
 )
 
 
+def public_camel_case_format_variable(variable: str):
+    return actions.user.formatted_text(variable, "PUBLIC_CAMEL_CASE")
+
+
+# This is not part of the long term stable API
+# After we implement generics support for several languages,
+# we plan on abstracting out from the specific implementations into a general grammar
+
+
+@ctx.capture(
+    "user.generic_type_parameter_argument", rule="{user.java_boxed_type} | <user.text>"
+)
+def generic_type_parameter_argument(m) -> str:
+    """A Java type parameter for a generic data structure"""
+    with suppress(AttributeError):
+        return m.java_boxed_type
+    return public_camel_case_format_variable(m.text)
+
+
+@ctx.capture(
+    "user.generic_data_structure",
+    rule="[type] {user.java_generic_data_structure} | type <user.text>",
+)
+def generic_data_structure(m) -> str:
+    """A Java generic data structure that takes type parameter arguments"""
+    with suppress(AttributeError):
+        return m.java_generic_data_structure
+    return public_camel_case_format_variable(m.text)
+
+
+@ctx.capture(
+    "user.generic_type_parameter_arguments",
+    rule="<user.generic_type_parameter_argument> [<user.generic_type_additional_type_parameters>]",
+)
+def generic_type_parameter_arguments(m) -> str:
+    """Formatted Java type parameter arguments"""
+    return format_type_parameter_arguments(m, ", ", "<", ">")
+
+
+@mod.capture(
+    rule="<user.generic_data_structure> of <user.generic_type_parameter_arguments>"
+)
+def java_generic_type(m) -> str:
+    """A generic type with specific type parameters"""
+    parameters = m.generic_type_parameter_arguments
+    return f"{m.generic_data_structure}<{parameters}>"
+
+
+# End of unstable section
+
+
 @ctx.action_class("user")
 class UserActions:
     def code_get_operators() -> Operators:
@@ -150,52 +207,11 @@ class UserActions:
     def code_insert_is_not_null():
         actions.insert(" != null")
 
-    def code_state_if():
-        actions.user.insert_between("if (", ") ")
-
-    def code_state_else_if():
-        actions.user.insert_between("else if (", ") ")
-
-    def code_state_else():
-        actions.insert("else ")
-        actions.key("enter")
-
-    def code_state_switch():
-        actions.user.insert_between("switch (", ") ")
-
-    def code_state_case():
-        actions.insert("case \nbreak;")
-        actions.edit.up()
-
-    def code_state_for():
-        actions.user.insert_between("for (", ") ")
-
-    def code_state_while():
-        actions.user.insert_between("while (", ") ")
-
-    def code_break():
-        actions.insert("break;")
-
-    def code_next():
-        actions.insert("continue;")
-
     def code_insert_true():
         actions.insert("true")
 
     def code_insert_false():
         actions.insert("false")
-
-    def code_define_class():
-        actions.insert("class ")
-
-    def code_import():
-        actions.insert("import ")
-
-    def code_state_return():
-        actions.insert("return ")
-
-    def code_comment_line_prefix():
-        actions.insert("// ")
 
     def code_insert_function(text: str, selection: str):
         text += f"({selection or ''})"

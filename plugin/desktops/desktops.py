@@ -14,11 +14,11 @@ class Actions:
         app.notify("Not supported on this operating system")
 
     def desktop_next():
-        """move to next desktop"""
+        """move to next desktop (to the right)"""
         app.notify("Not supported on this operating system")
 
     def desktop_last():
-        """move to previous desktop"""
+        """move to previous desktop (to the left)"""
         app.notify("Not supported on this operating system")
 
     def window_move_desktop_left():

@@ -6,6 +6,7 @@ vocabulary: core/vocabulary/vocabulary.talon-list
 alphabet: core/keys/letter.talon-list
 homophones: core/homophones/homophones.csv
 search engines: core/websites_and_search_engines/search_engine.talon-list
+top level domains: core/top_level_domain/top_level_domain.talon-list
 websites: core/websites_and_search_engines/website.talon-list
 
 unix utilities: tags/terminal/unix_utility.talon-list
@@ -15,3 +16,5 @@ file extensions: settings/file_extensions.csv
 words to replace: settings/words_to_replace.csv
 contacts json: private/contacts.json
 contacts csv: private/contacts.csv
+
+settings: settings.talon

@@ -1,0 +1,10 @@
+list: user.top_level_domain
+-
+dot co dot UK: .co.uk
+dot com: .com
+dot e d u: .edu
+dot education: .edu
+dot net: .net
+dot org: .org
+dot U S: .us
+dot us: .us

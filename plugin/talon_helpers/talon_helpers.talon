@@ -18,6 +18,9 @@ talon copy bundle:
 talon copy title:
     title = win.title()
     clip.set_text(title)
+talon copy class:
+    class_name = user.talon_get_active_window_class_name()
+    clip.set_text(class_name)
 talon dump version:
     result = user.talon_version_info()
     print(result)

@@ -3,7 +3,8 @@ import math
 import re
 from collections import defaultdict
 from itertools import islice
-from typing import Any, Iterable, Tuple
+from textwrap import wrap
+from typing import Any, Iterable, Optional, Tuple
 
 from talon import Context, Module, actions, imgui, registry, settings
 
@@ -50,7 +51,7 @@ selected_context_page = 1
 
 total_page_count = 1
 
-cached_active_contexts_list = []
+cached_active_contexts = set()
 
 live_update = True
 show_enabled_contexts_only = False
@@ -69,6 +70,8 @@ def update_title():
                 refresh_context_command_map(show_enabled_contexts_only)
             else:
                 update_active_contexts_cache(registry.last_active_contexts)
+        if gui_operators.showing:
+            update_operators_text()
 
 
 @imgui.open(y=0)
@@ -90,34 +93,113 @@ def gui_formatters(gui: imgui.GUI):
         gui_formatters.hide()
 
 
+def update_operators_text():
+    """For operators implemented for the active language, map spoken forms including operator prefix to
+    the operator text for operators implemented as text insertion
+    or an asterisk for operators implemented as a function call.
+    """
+    global operators_text, total_page_count
+    try:
+        operators = actions.user.code_get_operators()
+
+        # Associate the names of the operator lists with the corresponding prefix
+        op_list_names = ["array", "assignment", "lambda", "math", "pointer"]
+        names_with_prefix = [(name, "op") for name in op_list_names]
+        names_with_prefix += [("math_comparison", "is"), ("bitwise", "(bit | bitwise)")]
+        names_with_prefix.sort()
+
+        # Fill in the list by iterating over the operator lists
+        operators_text = []
+        has_operator_without_text_implementation = False
+        for name, prefix in names_with_prefix:
+            operators_list = actions.user.talon_get_active_registry_list(
+                "user.code_operators_" + name
+            )
+            has_added_first_list_item = False
+            for operator_name, operator_text in sorted(operators_list.items()):
+                # Only display operators implemented for the active language
+                if operator_text in operators:
+                    # If the operator is implemented as text insertion,
+                    # display the operator text
+                    operator = operators.get(operator_text)
+                    if isinstance(operator, str):
+                        text = ": " + operator
+                    # If a documentation string is available, use that
+                    elif doc_string := getattr(operator, "__doc__", None):
+                        text = ": " + doc_string
+                    # Otherwise display the operator name from list
+                    else:
+                        has_operator_without_text_implementation = True
+                        text = "*"
+                    # Only add the header if an item in the list is defined in operators
+                    if not has_added_first_list_item:
+                        has_added_first_list_item = True
+                        operators_text.append(f"{name} operators:")
+
+                    operators_text.append(f" {prefix} {operator_name}{text}")
+        if has_operator_without_text_implementation:
+            operators_text.append(
+                "* operator is implemented as a function call and cannot be displayed"
+            )
+        page_size = settings.get("user.help_max_command_lines_per_page")
+        total_page_count = math.ceil(len(operators_text) / page_size)
+    # This exception will get raised if there is no operators object defined in the active context
+    except NotImplementedError:
+        operators_text = None
+
+
+@imgui.open(y=0)
+def gui_operators(gui: imgui.GUI):
+    global operators_text
+
+    if operators_text is None:
+        gui.text("Help: Operators (1/1)")
+        gui.line()
+        gui.text("There is no active programming language when you opened this menu")
+        gui.text("or the language does not have operator support.")
+    else:
+        page_size = settings.get("user.help_max_command_lines_per_page")
+        page_start = page_size * (current_list_page - 1)
+        page_end = page_start + page_size
+        gui.text(f"Help: Operators ({current_list_page}/{total_page_count})")
+        gui.line()
+        for text in operators_text[page_start:page_end]:
+            gui.text(text)
+
+        if total_page_count > 1:
+            gui.spacer()
+            if gui.button("Help next"):
+                actions.user.help_next()
+
+            if gui.button("Help previous"):
+                actions.user.help_previous()
+    gui.spacer()
+    if gui.button("Help close"):
+        gui_operators.hide()
+
+
 def format_context_title(context_name: str) -> str:
-    global cached_active_contexts_list
+    global cached_active_contexts
     return "{} [{}]".format(
         context_name,
         (
             "ACTIVE"
-            if context_map.get(context_name, None) in cached_active_contexts_list
+            if context_map.get(context_name, None) in cached_active_contexts
             else "INACTIVE"
         ),
     )
 
 
 def format_context_button(index: int, context_label: str, context_name: str) -> str:
-    global cached_active_contexts_list
+    global cached_active_contexts
     global show_enabled_contexts_only
+    should_show_asterisk: bool = (
+        not show_enabled_contexts_only
+        and context_map.get(context_name, None) in cached_active_contexts
+    )
+    postfix: str = "*" if should_show_asterisk else ""
 
-    if not show_enabled_contexts_only:
-        return "{}. {}{}".format(
-            index,
-            context_label,
-            (
-                "*"
-                if context_map.get(context_name, None) in cached_active_contexts_list
-                else ""
-            ),
-        )
-    else:
-        return f"{index}. {context_label} "
+    return f"help {index}. {context_label}{postfix}"
 
 
 # translates 1-based index -> actual index in sorted_context_map_keys
@@ -191,7 +273,7 @@ def gui_context_help(gui: imgui.GUI):
     global selected_context_page
     global sorted_display_list
     global show_enabled_contexts_only
-    global cached_active_contexts_list
+    global cached_active_contexts
     global total_page_count
     global search_phrase
 
@@ -295,16 +377,15 @@ def draw_context_commands(gui: imgui.GUI):
 def draw_search_commands(gui: imgui.GUI):
     global search_phrase
     global total_page_count
-    global cached_active_contexts_list
+    global cached_active_contexts
     global selected_context_page
 
     title = f"Search: {search_phrase}"
     commands_grouped = get_search_commands(search_phrase)
-    commands_flat = list(itertools.chain.from_iterable(commands_grouped.values()))
 
     sorted_commands_grouped = sorted(
         commands_grouped.items(),
-        key=lambda item: context_map[item[0]] not in cached_active_contexts_list,
+        key=lambda item: context_map[item[0]] not in cached_active_contexts,
     )
 
     pages = get_pages(
@@ -317,7 +398,6 @@ def draw_search_commands(gui: imgui.GUI):
 
     draw_commands_title(gui, title)
 
-    current_item_index = 1
     for (context, commands), page in zip(sorted_commands_grouped, pages):
         if page == selected_context_page:
             gui.text(format_context_title(context))
@@ -333,6 +413,10 @@ def get_search_commands(phrase: str) -> dict[str, tuple[str, str]]:
     viable_commands = rule_word_map[tokens[0]]
     for token in tokens[1:]:
         viable_commands &= rule_word_map[token]
+
+    # sets have no stable sort order, unlike dicts
+    viable_commands = list(viable_commands)
+    viable_commands.sort()
 
     commands_grouped = defaultdict(list)
     for context, rule in viable_commands:
@@ -385,55 +469,43 @@ def reset():
 
 def update_active_contexts_cache(active_contexts):
     # print("update_active_contexts_cache")
-    global cached_active_contexts_list
-    cached_active_contexts_list = active_contexts
-
-
-# example usage todo: make a list definable in .talon
-# overrides = {"generic browser": "broswer"}
-overrides = {}
+    global cached_active_contexts
+    cached_active_contexts = active_contexts
 
 
 def refresh_context_command_map(enabled_only=False):
+    """Update information on command contexts
+    enabled_only: indicates if only active contexts should be considered"""
     active_contexts = registry.last_active_contexts
+    active_context_cache = set()
 
     local_context_map = {}
     local_display_name_to_context_name_map = {}
     local_context_command_map = {}
-    cached_short_context_names = {}
+    cached_context_names = {}
 
     for context_name, context in registry.contexts.items():
         splits = context_name.split(".")
+        if "talon" != splits[-1] or (enabled_only and context not in active_contexts):
+            continue
+        current_context_map = {
+            str(val.rule.rule): val.script.code
+            for command_alias, val in context.commands.items()
+            if not enabled_only or command_alias in registry.commands
+        }
+        if not current_context_map:
+            continue
+        if context in active_contexts and is_any_context_command_active(context):
+            active_context_cache.add(context)
 
-        if "talon" == splits[-1]:
-            display_name = splits[-2].replace("_", " ")
+        local_context_command_map[context_name] = current_context_map
 
-            short_names = actions.user.create_spoken_forms(
-                display_name,
-                generate_subsequences=False,
-            )
+        display_name = splits[-2].replace("_", " ")
+        update_spoken_forms(cached_context_names, display_name, context_name)
 
-            if short_names[0] in overrides:
-                short_names = [overrides[short_names[0]]]
-            elif len(short_names) == 2 and short_names[1] in overrides:
-                short_names = [overrides[short_names[1]]]
-
-            if enabled_only and context in active_contexts or not enabled_only:
-                local_context_command_map[context_name] = {}
-                for command_alias, val in context.commands.items():
-                    if command_alias in registry.commands or not enabled_only:
-                        local_context_command_map[context_name][
-                            str(val.rule.rule)
-                        ] = val.target.code
-                if len(local_context_command_map[context_name]) == 0:
-                    local_context_command_map.pop(context_name)
-                else:
-                    for short_name in short_names:
-                        cached_short_context_names[short_name] = context_name
-
-                    # the last entry will contain no symbols
-                    local_display_name_to_context_name_map[display_name] = context_name
-                    local_context_map[context_name] = context
+        # the last entry will contain no symbols
+        local_display_name_to_context_name_map[display_name] = context_name
+        local_context_map[context_name] = context
 
     # Update all the global state after we've performed our calculations
     global context_map
@@ -453,8 +525,30 @@ def refresh_context_command_map(enabled_only=False):
     display_name_to_context_name_map = local_display_name_to_context_name_map
     rule_word_map = refresh_rule_word_map(local_context_command_map)
 
-    ctx.lists["self.help_contexts"] = cached_short_context_names
-    update_active_contexts_cache(active_contexts)
+    ctx.lists["self.help_contexts"] = cached_context_names
+    update_active_contexts_cache(active_context_cache)
+
+
+def update_spoken_forms(
+    context_spoken_forms: dict[str, str], display_name: str, context_name: str
+):
+    """Compute spoken forms for a display name and then update context_spoken_forms
+    to map those spoken forms to the context name"""
+    spoken_forms = actions.user.create_spoken_forms(
+        display_name,
+        generate_subsequences=False,
+    )
+
+    for spoken_form in spoken_forms:
+        context_spoken_forms[spoken_form] = context_name
+
+
+def is_any_context_command_active(context) -> bool:
+    """Returns if any command in the context is active"""
+    for command_alias in context.commands:
+        if command_alias in registry.commands:
+            return True
+    return False
 
 
 def get_sorted_display_keys(
@@ -531,6 +625,7 @@ def hide_all_help_guis():
     gui_context_help.hide()
     gui_formatters.hide()
     gui_list_help.hide()
+    gui_operators.hide()
 
 
 def paginate_list(data, SIZE=None):
@@ -568,12 +663,23 @@ def gui_list_help(gui: imgui.GUI):
     total_page_count = len(pages_list)
     # print(pages_list[current_page])
 
-    gui.text(f"{selected_list} {current_list_page}/{total_page_count}")
+    if total_page_count == 0:
+        page_info = "empty"
+    else:
+        page_info = f"{current_list_page}/{total_page_count}"
+
+    gui.text(f"List: {selected_list} ({page_info})")
+
+    # Extract description from list declaration, i.e. mod.list(..., desc=...))
+    if (desc := registry.decls.lists[selected_list].desc) is not None:
+        for line in wrap(desc):
+            gui.text(line)
 
     gui.line()
 
-    for key, value in pages_list[current_list_page - 1].items():
-        gui.text(f"{value}: {key}")
+    if len(pages_list) > 0:
+        for key, value in pages_list[current_list_page - 1].items():
+            gui.text(f"{value}: {key}")
 
     gui.spacer()
 
@@ -618,6 +724,15 @@ class Actions:
         register_events(False)
         ctx.tags = ["user.help_open"]
 
+    def help_operators():
+        """Displays the list of operator names"""
+        reset()
+        hide_all_help_guis()
+        update_operators_text()
+        gui_operators.show()
+        register_events(True)
+        ctx.tags = ["user.help_open"]
+
     def help_context_enabled():
         """Display contextual command info"""
         reset()
@@ -636,13 +751,13 @@ class Actions:
         register_events(True)
         ctx.tags = ["user.help_open"]
 
-    def help_search(phrase: str):
+    def help_search(phrase: str, enabled_only: Optional[bool] = False):
         """Display command info for search phrase"""
         global search_phrase
 
         reset()
         search_phrase = phrase
-        refresh_context_command_map()
+        refresh_context_command_map(enabled_only=enabled_only)
         hide_all_help_guis()
         gui_context_help.show()
         register_events(True)
@@ -687,7 +802,7 @@ class Actions:
                 else:
                     selected_context_page = 1
 
-        if gui_list_help.showing:
+        if gui_list_help.showing or gui_operators.showing:
             if current_list_page != total_page_count:
                 current_list_page += 1
             else:
@@ -734,7 +849,7 @@ class Actions:
                 else:
                     selected_context_page = total_page_count
 
-        if gui_list_help.showing:
+        if gui_list_help.showing or gui_operators.showing:
             if current_list_page != total_page_count:
                 current_list_page -= 1
             else:

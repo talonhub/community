@@ -4,7 +4,6 @@ tag(): user.code_comment_line
 tag(): user.code_comment_block_c_like
 tag(): user.code_comment_documentation
 
-tag(): user.code_block_c_like
 tag(): user.code_imperative
 tag(): user.code_object_oriented
 
@@ -44,8 +43,6 @@ state enum <user.text>:
     insert("enum ")
     insert(user.formatted_text(text, "PUBLIC_CAMEL_CASE"))
 
-toggle use: user.code_toggle_libraries()
-
 ## Simple aliases
 borrow: "&"
 borrow mutable: "&mut "
@@ -63,7 +60,6 @@ state (mod | module): "mod "
 state ref (mute | mutable): "ref mut "
 state ref: "ref "
 state trait: "trait "
-state match: user.code_state_switch()
 state (some | sum): "Some"
 state static: "static "
 self taught: "self."
@@ -71,7 +67,7 @@ state use: user.code_import()
 
 use <user.code_libraries>:
     user.code_insert_library(code_libraries, "")
-    key(; enter)
+    key(enter)
 
 ## specialist flow control
 state if let some: user.insert_between("if let Some(", ")")
@@ -99,6 +95,9 @@ dynamic trait {user.code_trait}: insert("dyn {code_trait}")
 macro {user.code_macros}: user.code_insert_macro(code_macros, "")
 macro wrap {user.code_macros}:
     user.code_insert_macro(code_macros, edit.selected_text())
+
+# Turbofish
+turbo fish: user.insert_between("::<", ">")
 
 ## rust specific document comments
 block dock comment: user.code_comment_documentation_block()

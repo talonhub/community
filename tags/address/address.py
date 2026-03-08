@@ -3,13 +3,13 @@ from talon import Module
 mod = Module()
 mod.tag(
     "address",
-    desc="Application with a mechanism to browse or navigate by address; eg an address bar or Finder's go-to-folder functionality",
+    desc="Application with a mechanism to browse or navigate by address; e.g., an address bar or Finder's go-to-folder functionality",
 )
 
 
 @mod.capture
 def address(m) -> str:
-    """Captures an address; this capture must be implemented the context which desires to support the grammar"""
+    """Captures an address; this capture must be implemented in the context which desires to support the grammar"""
 
 
 @mod.action_class

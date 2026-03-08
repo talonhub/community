@@ -10,7 +10,7 @@ Can be used on its own, but shines when combined with:
 - [Rango](https://github.com/david-tejada/rango) for browser navigation
 - [gaze-ocr](https://github.com/wolfmanstout/talon-gaze-ocr) for advanced cursor control using eye tracking and text recognition (OCR)
 - [AXKit](https://github.com/phillco/talon-axkit) (macOS only) to enhance Talon with native OS accessibility integrations
-- [Other user file sets](https://talon.wiki/talon_user_file_sets/)
+- [Other user file sets](https://talon.wiki/Integrations/talon_user_file_sets)
 
 ## Installation
 
@@ -20,7 +20,7 @@ Can be used on its own, but shines when combined with:
 - Mac, Windows, or Linux
 - Talon's built-in Conformer (wav2letter) speech recognition engine (recommended), or Dragon NaturallySpeaking (Windows) / Dragon for Mac (although beware that Dragon for Mac is discontinued and its use deprecated).
 
-Includes commands for working with an eye tracker; an [eye tracker](https://talon.wiki/Quickstart/Hardware/#eye-trackers) is not required.
+Includes commands for working with an eye tracker; an [eye tracker](https://talon.wiki/Resource%20Hub/Hardware/#eye-trackers) is not required.
 
 ### Linux & Mac
 
@@ -28,7 +28,7 @@ It is recommended to install `community` using [`git`](https://git-scm.com/).
 
 1. Install [`git`](https://git-scm.com/)
 2. Open a terminal ([Mac](https://support.apple.com/en-gb/guide/terminal/apd5265185d-f365-44cb-8b09-71a064a42125/mac) / [Ubuntu](https://ubuntu.com/tutorials/command-line-for-beginners#3-opening-a-terminal))
-3. Paste the following into the terminal window then press Enter/Return:
+3. Paste the following into the terminal window then press <kbd>Enter</kbd>/<kbd>Return</kbd>:
 
    ```bash
    cd ~/.talon/user
@@ -43,7 +43,7 @@ It is recommended to install `community` using [`git`](https://git-scm.com/).
 
 1. Install [`git`](https://git-scm.com/)
 2. Open a [command prompt](https://www.wikihow.com/Open-the-Command-Prompt-in-Windows)
-3. Paste the following into the command prompt window then press Enter:
+3. Paste the following into the command prompt window then press <kbd>Enter</kbd>:
 
    ```
    cd %AppData%\Talon\user
@@ -89,28 +89,25 @@ Try saying e.g. `air bat cap` to insert abc.
 
 All key commands are defined in [keys.talon](core/keys/keys.talon). Say letters of the [Talon alphabet](#alphabet) for A–Z.
 
-For modifier keys, say `help modifiers`. For example, say `shift air` to press `shift-a`, which types a capital `A`.
-
-For symbols, say `help symbols`. These are defined in keys.py;
-search for `modifier_keys` and then keep scrolling — roughly starting [here](core/keys/keys.py#L124).
+For modifier keys, say `help modifiers`. For example, say `shift air` to press <kbd>Shift</kbd> + <kbd>A</kbd>, which types a capital `A`.
 
 On Windows, try commands such as:
 
-- `control air` to press Control+A and select all.
+- `control air` to press <kbd>Control</kbd> + <kbd>A</kbd> and select all.
 
-- `super-shift-sun` to press Win+Shift+S, triggering the screenshot application (Windows 10). Then try `escape` to exit.
+- `super-shift-sun` to press <kbd>Win</kbd> + <kbd>Shift</kbd> + <kbd>S</kbd>, triggering the screenshot application (Windows 10/11). Then try `escape` to exit.
 
 On Mac, try commands such as:
 
-- `command air` to press ⌘A and select all.
+- `command air` to press <kbd>⌘</kbd><kbd>A</kbd> and select all.
 
-- `control shift command 4` to press ⌃⇧⌘4, copying a screenshot of the selected area to the clipboard. Then try `escape` to exit. Please note the order of the modifiers doesn't matter.
+- `control shift command 4` to press <kbd>⌃</kbd><kbd>⇧</kbd><kbd>⌘</kbd><kbd>4</kbd>, copying a screenshot of the selected area to the clipboard. Then try `escape` to exit. Please note the order of the modifiers doesn't matter.
 
-Say any combination of modifiers, symbols, alphabet, numbers and function keys to execute keyboard shortcuts. Modifier keys can be tapped using `press`, for example `press control` taps the Control (⌃) key by itself.
+Say any combination of modifiers, symbols, alphabet, numbers and function keys to execute keyboard shortcuts. Modifier keys can be tapped using `press`, for example `press control` taps the <kbd>Control</kbd> (<kbd>⌃</kbd>) key by itself.
 
 ### Symbols
 
-Some symbols are defined in [keys.py](core/keys/keys.py#L144), so you can say, e.g. `control colon` to press those keys.
+Some symbols are defined in [symbols.py](core/keys/symbols.py), so you can say, e.g. `control colon` to press those keys.
 
 Multi-character punctuation (e.g., ellipses) is defined in [symbols.talon](plugin/symbols/symbols.talon).
 
@@ -140,7 +137,7 @@ Editing commands in [edit.talon](core/edit/edit.talon) are global. Commands such
 
 Voice commands for repeating commands are defined in [repeater.talon](plugin/repeater/repeater.talon).
 
-Say `go up fifth` or `go up five times` to go up five lines. `select up third` will press Shift+Up three times to select several lines of text.
+Say `go up fifth` or `go up five times` to go up five lines. `select up third` will press <kbd>Shift</kbd>+<kbd>↑</kbd> three times to select several lines of text.
 
 ### Window management
 
@@ -155,6 +152,8 @@ Global window management commands are defined in [window_management.talon](core/
 See [screenshot.talon](plugin/screenshot/screenshot.talon).
 
 ### Programming languages
+
+More detailed programming support documentation can be found [here](https://talon.wiki/Voice%20Coding/voice-coding-overview).
 
 Specific programming languages may be activated by voice commands, or via title tracking.
 
@@ -217,7 +216,7 @@ Notes:
 
 - If there no hidden files or folders, and the items are displayed in alphabetical order, you can typically issue the `follow <number>`, `file <number>` and `open <number>` commands based on the displayed order.
 
-To implement support for a new program, implement the relevant file manager actions for your application and assert the `user.file_manager` tag. There are a number of example implementations in the repository. [Finder](apps/finder/finder.py) is a good example to copy and mdoify.
+To implement support for a new program, implement the relevant file manager actions for your application and assert the `user.file_manager` tag. There are a number of example implementations in the repository. [Finder](apps/finder/finder.py) is a good example to copy and modify.
 
 ## Terminal commands
 
@@ -309,7 +308,7 @@ alt: alt
 
 ## Other Talon user file sets
 
-In addition to this repo, there are [other Talon user file sets](https://talon.wiki/talon_user_file_sets/) containing additional commands that you may want to experiment with if you're feeling adventurous 😊. Many of them are meant to be used alongside `community`, but a few of them are designed as replacements. If it's not clear which, please file an issue against the given GitHub repository for that user file set!
+In addition to this repo, there are [other Talon user file sets](https://talon.wiki/Integrations/talon_user_file_sets) containing additional commands that you may want to experiment with if you're feeling adventurous 😊. Many of them are meant to be used alongside `community`, but a few of them are designed as replacements. If it's not clear which, please file an issue against the given GitHub repository for that user file set!
 
 # Collaborators
 

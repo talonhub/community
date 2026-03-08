@@ -1,0 +1,21 @@
+list: user.code_common_method
+-
+
+add
+append
+are strip: rstrip
+elle strip: lstrip
+extend
+get
+items
+join
+keys
+lower
+pop
+remove
+replace
+sort
+split
+strip
+upper
+values

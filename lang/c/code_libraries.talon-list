@@ -1,0 +1,20 @@
+list: user.code_libraries
+code.language: c
+-
+arguments: stdarg.h
+assert: assert.h
+definition: stddef.h
+error: errno.h
+float: float.h
+input: stdio.h
+library: stdlib.h
+limits: limits.h
+locale: locale.h
+math: math.h
+output: stdio.h
+set jump: setjmp.h
+signal: signal.h
+standard int: stdint.h
+string: string.h
+time: time.h
+type: ctype.h

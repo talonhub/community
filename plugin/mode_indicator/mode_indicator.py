@@ -3,7 +3,7 @@ from talon.canvas import Canvas
 from talon.screen import Screen
 from talon.skia.canvas import Canvas as SkiaCanvas
 from talon.skia.imagefilter import ImageFilter
-from talon.ui import Rect
+from talon.ui import Point2d, Rect
 
 canvas: Canvas = None
 current_mode = ""
@@ -15,6 +15,12 @@ mod.setting(
     type=bool,
     default=False,
     desc="If true the mode indicator is shown",
+)
+mod.setting(
+    "mode_indicator_show_microphone_name",
+    type=bool,
+    default=False,
+    desc="Show first two letters of microphone name if true",
 )
 mod.setting(
     "mode_indicator_size",
@@ -41,8 +47,10 @@ mod.setting(
     type=float,
     desc="Mode indicator gradient brightness in percentages(0-1). 0=darkest, 1=brightest",
 )
+mod.setting("mode_indicator_color_text", type=str)
 mod.setting("mode_indicator_color_mute", type=str)
 mod.setting("mode_indicator_color_sleep", type=str)
+mod.setting("mode_indicator_color_deep_sleep", type=str)
 mod.setting("mode_indicator_color_dictation", type=str)
 mod.setting("mode_indicator_color_mixed", type=str)
 mod.setting("mode_indicator_color_command", type=str)
@@ -57,6 +65,7 @@ setting_paths = {
     "user.mode_indicator_color_gradient",
     "user.mode_indicator_color_mute",
     "user.mode_indicator_color_sleep",
+    "mode_indicator_color_deep_sleep",
     "user.mode_indicator_color_dictation",
     "user.mode_indicator_color_mixed",
     "user.mode_indicator_color_command",
@@ -68,6 +77,8 @@ def get_mode_color() -> str:
     if current_microphone == "None":
         return settings.get("user.mode_indicator_color_mute")
     if current_mode == "sleep":
+        if "user.deep_sleep" in scope.get("tag"):
+            return settings.get("user.mode_indicator_color_deep_sleep")
         return settings.get("user.mode_indicator_color_sleep")
     elif current_mode == "dictation":
         return settings.get("user.mode_indicator_color_dictation")
@@ -86,7 +97,7 @@ def get_alpha_color() -> str:
 def get_gradient_color(color: str) -> str:
     factor = settings.get("user.mode_indicator_color_gradient")
     # hex -> rgb
-    (r, g, b) = tuple(int(color[i : i + 2], 16) for i in (0, 2, 4))
+    r, g, b = tuple(int(color[i : i + 2], 16) for i in (0, 2, 4))
     # Darken rgb
     r, g, b = int(r * factor), int(g * factor), int(b * factor)
     # rgb -> hex
@@ -97,16 +108,17 @@ def get_colors():
     color_mode = get_mode_color()
     color_gradient = get_gradient_color(color_mode)
     color_alpha = get_alpha_color()
-    return f"{color_mode}{color_alpha}", f"{color_gradient}"
+    color_text = settings.get("user.mode_indicator_color_text")
+    return f"{color_mode}{color_alpha}", color_gradient, color_text
 
 
 def on_draw(c: SkiaCanvas):
-    color_mode, color_gradient = get_colors()
+    color_mode, color_gradient, color_text = get_colors()
     x, y = c.rect.center.x, c.rect.center.y
     radius = c.rect.height / 2 - 2
 
     c.paint.shader = skia.Shader.radial_gradient(
-        (x, y), radius, [color_mode, color_gradient]
+        Point2d(x, y), radius, [color_mode, color_gradient]
     )
 
     c.paint.imagefilter = ImageFilter.drop_shadow(1, 1, 1, 1, color_gradient)
@@ -114,6 +126,22 @@ def on_draw(c: SkiaCanvas):
     c.paint.style = c.paint.Style.FILL
     c.paint.color = color_mode
     c.draw_circle(x, y, radius)
+
+    if settings.get("user.mode_indicator_show_microphone_name"):
+        # Remove c.paint.shader gradient before drawing again
+        c.paint.shader = skia.Shader.radial_gradient(
+            Point2d(x, y), radius, [color_text, color_text]
+        )
+
+        text = current_microphone[:2]
+        c.paint.style = c.paint.Style.FILL
+        c.paint.color = color_text
+        text_rect = c.paint.measure_text(text)[1]
+        c.draw_text(
+            text,
+            x - text_rect.center.x,
+            y - text_rect.center.y,
+        )
 
 
 def move_indicator():
@@ -197,7 +225,7 @@ def poll_microphone():
 def on_ready():
     registry.register("update_contexts", on_update_contexts)
     registry.register("update_settings", on_update_settings)
-    ui.register("screen_change", lambda _: update_indicator)
+    ui.register("screen_change", lambda _: update_indicator())
     cron.interval("500ms", poll_microphone)
 
 

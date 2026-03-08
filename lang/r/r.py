@@ -1,4 +1,4 @@
-from talon import Context, actions, settings
+from talon import Context, Module, actions, settings
 
 from ..tags.operators import Operators
 
@@ -8,161 +8,6 @@ ctx.matches = r"""
 code.language: r
 """
 
-ctx.lists["user.code_common_function"] = {
-    # base R
-    "as character": "as.character",
-    "as data frame": "as.data.frame",
-    "as date": "as.Date",
-    "as double": "as.double",
-    "as factor": "as.factor",
-    "as integer": "as.integer",
-    "as numeric": "as.numeric",
-    "base read RDS": "readRDS",
-    "base save RDS": "saveRDS",
-    "cable": "kable",
-    "correlation": "cor",
-    "count": "count",
-    "covariance": "cov",
-    "describe": "describe",
-    "eigen": "eigen",
-    "ex table": "xtable",
-    "get working directory": "getwd",
-    "head": "head",
-    "if else": "ifelse",
-    "install packages": "install.packages",
-    "is NA": "is.na",
-    "is not NA": "!is.na",
-    "length": "length",
-    "library": "library",
-    "list files": "list.files",
-    "list": "list",
-    "lm": "lm",
-    "log": "log",
-    "make directory": "dir.create",
-    "margins": "margins",
-    "max": "max",
-    "mean": "mean",
-    "min": "min",
-    "names": "names",
-    "paste": "paste0",
-    "print": "print",
-    "reorder": "reorder",
-    "repeat": "rep",
-    "scale": "scale",
-    "sequence along": "seq_along",
-    "sequence length": "seq_len",
-    "sequence": "seq",
-    "set working directory": "setwd",
-    "sort": "sort",
-    "subset": "subset",
-    "sum": "sum",
-    "summary": "summary",
-    "tail": "tail",
-    "tidy": "tidy",
-    "trim white space": "trimws",
-    "type": "typeof",
-    "unique": "unique",
-    "vector": "c",
-    "vee table": "vtable",
-    "view": "View",
-    # dplyr
-    "anti join": "anti_join",
-    "arrange": "arrange",
-    "as tibble": "as_tibble",
-    "bind rows": "bind_rows",
-    "case when": "case_when",
-    "distinct": "distinct",
-    "everything": "everything",
-    "filter": "filter",
-    "full join": "full_join",
-    "glimpse": "glimpse",
-    "group by": "group_by",
-    "inner join": "inner_join",
-    "left join": "left_join",
-    "mutate": "mutate",
-    "pull": "pull",
-    "rename all": "rename_all",
-    "rename": "rename",
-    "right join": "right_join",
-    "select all": "select_all",
-    "select": "select",
-    "semi join": "semi_join",
-    "starts with": "starts_with",
-    "summarise": "summarise",
-    "tibble": "tibble",
-    "ungroup": "ungroup",
-    # ggplot2
-    "coord cartesian": "coor_cartesian",
-    "element text": "element_text",
-    "element blank": "element_blank",
-    "facet grid": "facet_grid",
-    "facet wrap": "facet_wrap",
-    "geom A B line": "geom_abline",
-    "geom area": "geom_area",
-    "geom bar": "geom_bar",
-    "geom boxplot": "geom_boxplot",
-    "geom histogram": "geom_histogram",
-    "geom horizontal line": "geom_hline",
-    "geom line": "geom_line",
-    "geom point": "geom_point",
-    "geom pointrange": "geom_pointrange",
-    "geom polygon": "geom_polygon",
-    "geom ribbon": "geom_ribbon",
-    "geom segment": "geom_segment",
-    "geom smooth": "geom_smooth",
-    "geom vertical line": "geom_vline",
-    "geom violin": "geom_violin",
-    "labs": "labs",
-    "scale colour manual": "scale_colour_manual",
-    "scale fill manual": "scale_fill_manual",
-    "scale fill viridis": "scale_fill_viridis_c",
-    "scale colour viridis": "scale_colour_viridis_c",
-    "theme set": "theme_set",
-    # purrr
-    "map character": "map_chr",
-    "map data frame": "map_dfr",
-    "map double": "map_dbl",
-    "map": "map",
-    "P map": "pmap",
-    # stringr
-    "string contains": "str_detect",
-    "string detect": "str_detect",
-    "string replace all": "str_replace_all",
-    "string replace": "str_replace",
-    # tidyr
-    "drop NA": "drop_na",
-    "gather": "gather",
-    "nest": "nest",
-    "pivot longer": "pivot_longer",
-    "pivot wider": "pivot_wider",
-    "spread": "spread",
-    "un nest": "unnest",
-    # readr, readxl, and other non-base R reading/writing
-    "read E views": "readEViews",
-    "read CSV": "read_csv",
-    "read RDS": "read_rds",
-    "read excel": "read_xlsx",
-    "write CSV": "write_csv",
-    "write RDS": "write_rds",
-    # Shiny
-    "shine ui": "shinyUI",
-    "title panel": "titlePanel",
-    "main panel": "mainPanel",
-    "tab panel": "tabPanel",
-    "navigation list panel": "navlistPanel",
-    "conditional panel": "conditionalPanel",
-    "input panel": "inputPanel",
-    "ui output": "uiOutput",
-    "text output": "textOutput",
-    "table output": "tableOutput",
-    "data table output": "dataTableOutput",
-    "select size input": "selectizeInput",
-    "action button": "actionButton",
-    "download button": "downloadButton",
-    "render ui": "renderUI",
-    "observe event": "observeEvent",
-    # Base
-}
 
 ctx.lists["user.code_libraries"] = {
     "bayes plot": "bayesplot",
@@ -215,6 +60,7 @@ ctx.lists["user.code_parameter_name"] = {
     "fill": "fill",
     "H just": "hjust",
     "keep": ".keep",
+    "keep all": ".keep_all",
     "label": "label",
     "labels": "labels",
     "log": "log",
@@ -226,6 +72,8 @@ ctx.lists["user.code_parameter_name"] = {
     "position": "position",
     "plex label": "xlab",
     "plex limit": "xlim",
+    "rep": "rep",
+    "sep": "sep",
     "scales": "scales",
     "size": "size",
     "show legend": "show.legend",
@@ -273,40 +121,11 @@ class UserActions:
     def code_insert_null():
         actions.auto_insert("NULL")
 
-    def code_state_if():
-        actions.insert("if () {}")
-        actions.key("left enter up end left:3")
+    def code_insert_is_null():
+        actions.user.insert_between("is.null(", ")")
 
-    def code_state_else_if():
-        actions.insert(" else if () {}")
-        actions.key("left enter up end left:3")
-
-    def code_state_else():
-        actions.insert(" else {}")
-        actions.key("left enter")
-
-    def code_state_for():
-        actions.insert("for ( in ) {}")
-        actions.key("left enter up end left:7")
-
-    def code_state_while():
-        actions.insert("while () {}")
-        actions.key("left enter up end left:3")
-
-    def code_import():
-        actions.user.insert_between("library(", ")")
-
-    def code_comment_line_prefix():
-        actions.auto_insert("#")
-
-    def code_state_return():
-        actions.user.insert_between("return(", ")")
-
-    def code_break():
-        actions.auto_insert("break")
-
-    def code_next():
-        actions.auto_insert("next")
+    def code_insert_is_not_null():
+        actions.user.insert_between("!is.null(", ")")
 
     def code_insert_true():
         actions.auto_insert("TRUE")
@@ -335,8 +154,7 @@ class UserActions:
         actions.edit.left()
 
     def code_insert_library(text: str, selection: str):
-        actions.user.insert_between("library(", ")")
-        actions.user.paste(text + selection)
+        actions.user.insert_snippet_by_name("importStatement", {"0": text + selection})
 
     def code_insert_named_argument(parameter_name: str):
         actions.insert(f"{parameter_name} = ")

@@ -1,9 +1,14 @@
 import logging
 import re
+from copy import deepcopy
 from pathlib import Path
 from typing import Callable, Union
 
 from .snippet_types import Snippet, SnippetVariable
+
+ESCAPED_SNIPPET_DELIMITER_EXPRESSION = re.compile(r"^\\---$", flags=re.MULTILINE)
+SNIPPET_DELIMITER_EXPRESSION = re.compile(r"^---\n?$", flags=re.MULTILINE)
+SNIPPET_DELIMITER = "---"
 
 
 class SnippetDocument:
@@ -53,14 +58,17 @@ def create_snippet(
     document: SnippetDocument,
     default_context: SnippetDocument,
 ) -> Snippet | None:
+    body = normalize_snippet_body_tabs(document.body)
+    variables = combine_variables(default_context.variables, document.variables)
+
     snippet = Snippet(
         name=document.name or default_context.name or "",
         description=document.description or default_context.description,
         languages=document.languages or default_context.languages,
         phrases=document.phrases or default_context.phrases,
         insertion_scopes=document.insertionScopes or default_context.insertionScopes,
-        variables=combine_variables(default_context.variables, document.variables),
-        body=normalize_snippet_body_tabs(document.body),
+        variables=variables,
+        body=body,
     )
 
     if not validate_snippet(document, snippet):
@@ -110,8 +118,16 @@ def validate_snippet(document: SnippetDocument, snippet: Snippet) -> bool:
 
 
 def is_variable_in_body(variable_name: str, body: str) -> bool:
+    return (
+        re.search(create_variable_regular_expression(variable_name), body) is not None
+    )
+
+
+def create_variable_regular_expression(variable_name: str) -> str:
     # $value or ${value} or ${value:default}
-    return re.search(rf"\${variable_name}|\${{{variable_name}.*}}", body) is not None
+    # *? is used to find the smallest possible match.
+    # This stops multiple stops from being treated as a single stop.
+    return rf"\${variable_name}|\${{{variable_name}.*?}}"
 
 
 def combine_variables(
@@ -136,6 +152,96 @@ def combine_variables(
             new_variable.wrapper_scope = variable.wrapper_scope
 
     return list(variables.values())
+
+
+def add_final_stop_to_snippet_body(body: str) -> str:
+    """Make the snippet body end with the final stop to allow exiting the snippet with `snip next`.
+    If the snippet already has a stop named `0`, it will get replaced with the largest number of a snippet variable name plus 1.
+    """
+    if not body:
+        return body
+
+    final_stop_matches = find_variable_matches("0", body)
+    # If there is already a final stop at the end, make no change
+    if len(final_stop_matches) > 0 and final_stop_matches[-1].end() == len(body):
+        return body
+
+    largest_variable_number: int | None = find_largest_variable_number(body)
+    # If there is no integer variable, just add the final stop at the end
+    if largest_variable_number is None:
+        return body + "$0"
+
+    # If the largest matching variable is at the end and there is no zero stop, make no change
+    if len(final_stop_matches) == 0 and is_variable_last_match_at_end(
+        str(largest_variable_number), body
+    ):
+        return body
+
+    # Add the final stop to the end but replace the original final stop
+    replacement_name = str(largest_variable_number + 1)
+    return replace_final_stop(body, replacement_name, final_stop_matches) + "$0"
+
+
+def is_variable_last_match_at_end(variable: str, body) -> bool:
+    matches = find_variable_matches(variable, body)
+    return len(matches) > 0 and matches[-1].end() == len(body)
+
+
+def replace_final_stop(body: str, replacement_name: str, final_stop_matches) -> str:
+    # Dealing with matches in reverse means replacing a match
+    # does not change the location of the remaining matches.
+    for match in reversed(final_stop_matches):
+        replacement = match.group().replace("0", replacement_name, 1)
+        body = body[: match.start()] + replacement + body[match.end() :]
+    return body
+
+
+def replace_variables_for_final_stop(variables, replacement_name: str):
+    variables_clone = deepcopy(variables)
+    for variable in variables_clone:
+        if variable.name == "0":
+            variable.name = replacement_name
+    return variables_clone
+
+
+def find_variable_matches(variable_name: str, body: str) -> list[re.Match[str]]:
+    """Find every match of a variable in the body"""
+    expression = create_variable_regular_expression(variable_name)
+    matches = [m for m in re.finditer(expression, body)]
+    return matches
+
+
+def find_largest_variable_number(body: str) -> int | None:
+    # Find all snippet stops with a numeric variable name
+    # +? is used to find the smallest possible match.
+    # We need this here to avoid treating multiple stops as a single one
+    regular_expression = rf"\$\d+?|\${{\d+?:.*?}}|\${{\d+?}}"
+    matches = re.findall(regular_expression, body)
+    if matches:
+        numbers = [
+            compute_first_integer_in_string(match)
+            for match in matches
+            if match is not None
+        ]
+        if numbers:
+            return max(numbers)
+    return None
+
+
+def compute_first_integer_in_string(text: str) -> int | None:
+    start_index: int | None = None
+    ending_index: int | None = None
+    for i, char in enumerate(text):
+        if char.isdigit():
+            if start_index is None:
+                start_index = i
+            ending_index = i + 1
+        elif start_index is not None:
+            break
+    if start_index is not None:
+        integer_text = text[start_index:ending_index]
+        return int(integer_text)
+    return None
 
 
 def normalize_snippet_body_tabs(body: str | None) -> str:
@@ -189,7 +295,7 @@ def parse_file(file: Path) -> list[SnippetDocument]:
 
 
 def parse_file_content(file: str, text: str) -> list[SnippetDocument]:
-    doc_texts = re.split(r"^---\n?$", text, flags=re.MULTILINE)
+    doc_texts = SNIPPET_DELIMITER_EXPRESSION.split(text)
     documents: list[SnippetDocument] = []
     line = 0
 
@@ -340,7 +446,11 @@ def parse_body(text: str) -> Union[str, None]:
     if match_leading is None:
         return None
 
-    return text[match_leading.start() :].rstrip()
+    body = text[match_leading.start() :].rstrip()
+
+    body = ESCAPED_SNIPPET_DELIMITER_EXPRESSION.sub(SNIPPET_DELIMITER, body)
+
+    return body
 
 
 def parse_vector_value(value: str) -> list[str]:

@@ -134,10 +134,13 @@ class UserActions:
     def code_get_operators() -> Operators:
         return operators
 
-    def code_comment_line_prefix():
-        actions.auto_insert("#")
-
     def code_insert_function(text: str, selection: str):
         text += f"({selection or ''})"
         actions.user.paste(text)
         actions.edit.left()
+
+    def code_insert_true():
+        actions.auto_insert("true")
+
+    def code_insert_false():
+        actions.auto_insert("false")

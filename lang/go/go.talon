@@ -8,6 +8,7 @@ tag(): user.code_comment_block_c_like
 tag(): user.code_data_bool
 tag(): user.code_data_null
 tag(): user.code_functions
+tag(): user.code_functions_common
 tag(): user.code_libraries
 tag(): user.code_operators_array
 tag(): user.code_operators_assignment
@@ -15,6 +16,7 @@ tag(): user.code_operators_bitwise
 tag(): user.code_operators_lambda
 tag(): user.code_operators_math
 tag(): user.code_operators_pointer
+tag(): user.code_keywords
 
 settings():
     user.code_private_function_formatter = "PRIVATE_CAMEL_CASE"
@@ -26,7 +28,7 @@ settings():
 
 (variadic | spread): "..."
 declare: " := "
-channel (receive | send): " <- "
+(channel (receive | send) | op channel): " <- "
 
 [state] if (err | error):
     insert("if err != nil {")
@@ -35,3 +37,6 @@ channel (receive | send): " <- "
 [state] if not (err | error):
     insert("if err == nil {")
     key("enter")
+
+cast to <user.code_type>: user.insert_between(user.code_type + "(", ")")
+cast wrap <user.code_type>: user.go_cast_wrap(user.code_type)

@@ -1,0 +1,20 @@
+list: user.c_types
+code.language: c
+code.language: cpp
+-
+char
+character: char
+double
+float
+int
+integer: int
+long
+long double: "long double"
+long long: "long long"
+num: enum
+short
+size tea: size_t
+struck: struct
+struct
+union
+void
