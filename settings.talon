@@ -4,7 +4,7 @@ settings():
 
     # Uncomment to set the speech timeout. This is the amount of time after you stop
     # speaking until Talon starts processing the spoken audio. Default is 0.3s.
-    # speech.timeout = 0.3
+    speech.timeout = 0.6
 
     # Uncomment to enable dark mode for talon help menus
     # imgui.dark_mode = true
@@ -40,7 +40,7 @@ settings():
     # 0 = off
     # 1 = on with eyetracker but not zoom mouse mode
     # 2 = on but not with zoom mouse mode
-    user.mouse_enable_pop_click = 1
+    user.mouse_enable_pop_click = 2
 
     # If `true`, use a hissing noise to scroll continuously
     user.mouse_enable_hiss_scroll = false

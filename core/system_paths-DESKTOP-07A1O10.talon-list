@@ -1,0 +1,16 @@
+list: user.system_paths
+hostname: DESKTOP-07A1O10
+-
+user: C:\Users\lenovo
+desktop: C:\Users\lenovo\Desktop
+desk: C:\Users\lenovo\Desktop
+documents: C:\Users\lenovo\Documents
+docks: C:\Users\lenovo\Documents
+downloads: C:\Users\lenovo\Downloads
+music: C:\Users\lenovo\Music
+pictures: C:\Users\lenovo\Pictures
+videos: C:\Users\lenovo\Videos
+talon home: C:\Users\lenovo\AppData\Roaming\talon
+talon recordings: C:\Users\lenovo\AppData\Roaming\talon\recordings
+talon user: C:\Users\lenovo\AppData\Roaming\talon\user
+profile: C:\Users\lenovo
