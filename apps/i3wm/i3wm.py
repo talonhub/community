@@ -1,4 +1,5 @@
 import subprocess
+import time
 from typing import Optional, Union
 
 from talon import Context, Module, actions, settings, ui
@@ -49,20 +50,58 @@ def i3msg_nocheck(arguments: str):  # type: ignore
     )
 
 
+# For i3wm we cannot rely on the focusing functions from the UI toolkit, because
+# i3wm treats this like the application is trying to acquire focus on its own.
+# The default reaction of i3wm to such requests from windows on another
+# workspace is to downgrade this to setting the "urgent" flag. Is violates the
+# implicit contract of commands like those for the draft editor, which rely on
+# the focus commands successfully changing the focus.
+def i3wm_focus_window_by_id(id: int):
+    actions.user.i3msg(f"[id={id}] focus")
+
+
+_switcher_focus_windows_to_skip: set[int] = set()
+
+
 @ctx.action_class("user")
 class UserActions:
+    def switcher_focus_window(window: ui.Window):  # type: ignore
+        i3wm_focus_window_by_id(window.id)
+
     def switcher_focus(name: str):  # type: ignore
+        global _switcher_focus_windows_to_skip
         app = actions.user.get_running_app(name)
 
-        if app == ui.active_app():
-            # Focus next window on same app
-            actions.app.window_next()
+        # If app is inactive, focus most recently active window
+        if app != ui.active_app():
+            i3wm_focus_window_by_id(app.active_window.id)
+
+        # Otherwise, cycle through available windows
+        app_window_ids: list[int] = [
+            window.id for window in app.windows() if not window.hidden
+        ]
+        assert len(app_window_ids) > 0
+
+        _switcher_focus_windows_to_skip.add(ui.active_window().id)
+        targets = [
+            id for id in app_window_ids if id not in _switcher_focus_windows_to_skip
+        ]
+        if len(targets) > 0:
+            # focus new window if one is available
+            i3wm_focus_window_by_id(targets[0])
         else:
-            # Focus first window of app
-            app.focus()
-        # Make sure we really focus the window, even if
-        # focus_on_window_activation is set to "smart" or "urgent"
-        actions.user.i3msg('[urgent="latest"] focus')
+            # otherwise, focus window that is furthest down the stack
+            _switcher_focus_windows_to_skip = set()
+            i3wm_focus_window_by_id(app_window_ids[-1])
+
+    def switcher_focus_app(app: ui.App):  # type: ignore
+        i3wm_focus_window_by_id(app.active_window.id)
+
+        t1 = time.perf_counter()
+        while ui.active_app() != app:
+            if time.perf_counter() - t1 > 1:
+                raise RuntimeError(f"Can't focus app: {app.name}")
+            actions.sleep(0.1)
 
     # the default implementation considers desktops consecutively numbered
     # this would be highly confusing given the numbering of i3wm workspaces

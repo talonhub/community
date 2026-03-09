@@ -50,6 +50,7 @@ mod.setting(
 mod.setting("mode_indicator_color_text", type=str)
 mod.setting("mode_indicator_color_mute", type=str)
 mod.setting("mode_indicator_color_sleep", type=str)
+mod.setting("mode_indicator_color_deep_sleep", type=str)
 mod.setting("mode_indicator_color_dictation", type=str)
 mod.setting("mode_indicator_color_mixed", type=str)
 mod.setting("mode_indicator_color_command", type=str)
@@ -64,6 +65,7 @@ setting_paths = {
     "user.mode_indicator_color_gradient",
     "user.mode_indicator_color_mute",
     "user.mode_indicator_color_sleep",
+    "mode_indicator_color_deep_sleep",
     "user.mode_indicator_color_dictation",
     "user.mode_indicator_color_mixed",
     "user.mode_indicator_color_command",
@@ -75,6 +77,8 @@ def get_mode_color() -> str:
     if current_microphone == "None":
         return settings.get("user.mode_indicator_color_mute")
     if current_mode == "sleep":
+        if "user.deep_sleep" in scope.get("tag"):
+            return settings.get("user.mode_indicator_color_deep_sleep")
         return settings.get("user.mode_indicator_color_sleep")
     elif current_mode == "dictation":
         return settings.get("user.mode_indicator_color_dictation")
@@ -93,7 +97,7 @@ def get_alpha_color() -> str:
 def get_gradient_color(color: str) -> str:
     factor = settings.get("user.mode_indicator_color_gradient")
     # hex -> rgb
-    (r, g, b) = tuple(int(color[i : i + 2], 16) for i in (0, 2, 4))
+    r, g, b = tuple(int(color[i : i + 2], 16) for i in (0, 2, 4))
     # Darken rgb
     r, g, b = int(r * factor), int(g * factor), int(b * factor)
     # rgb -> hex
@@ -221,7 +225,7 @@ def poll_microphone():
 def on_ready():
     registry.register("update_contexts", on_update_contexts)
     registry.register("update_settings", on_update_settings)
-    ui.register("screen_change", lambda _: update_indicator)
+    ui.register("screen_change", lambda _: update_indicator())
     cron.interval("500ms", poll_microphone)
 
 

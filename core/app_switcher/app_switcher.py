@@ -345,7 +345,7 @@ class Actions:
         raise RuntimeError(f'App not running: "{name}"')
 
     def switcher_focus(name: str):
-        """Focus a new application by name"""
+        """Focus application by name, cycle windows if already active"""
         app = actions.user.get_running_app(name)
 
         # Focus next window on same app
@@ -356,7 +356,7 @@ class Actions:
             actions.user.switcher_focus_app(app)
 
     def switcher_focus_app(app: ui.App):
-        """Focus application and wait until switch is made"""
+        """Focus application and wait until switch is made (no cycling of active windows)"""
         app.focus()
         t1 = time.perf_counter()
         while ui.active_app() != app:
@@ -408,6 +408,8 @@ class Actions:
         elif app.platform == "mac":
             # MacOS equivalent is "Mission Control"
             actions.user.dock_send_notification("com.apple.expose.awake")
+        elif app.platform == "linux":
+            actions.key("super")
         else:
             print("Persistent Switcher Menu not supported on " + app.platform)
 
