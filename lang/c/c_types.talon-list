@@ -2,6 +2,7 @@ list: user.c_types
 code.language: c
 code.language: cpp
 -
+
 char
 character: char
 double

@@ -25,8 +25,7 @@ tag: user.i3wm
 (win | window) center: user.i3msg("move position center")
 
 (win | window) width <number_small>: user.i3msg("resize set width {number_small} ppt")
-(win | window) height <number_small>:
-    user.i3msg("resize set height {number_small} ppt")
+(win | window) height <number_small>: user.i3msg("resize set height {number_small} ppt")
 
 # grow or shrink windows by the indicated amount (in steps of 10 pixels)
 # to/from the indicated directions (unless constrained by screen boundaries)

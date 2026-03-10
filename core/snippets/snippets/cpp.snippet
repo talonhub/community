@@ -36,6 +36,7 @@ const $1 &$0
 
 name: headerGuard
 phrase: header guard
+
 $1.insertionFormatter: ALL_CAPS,SNAKE_CASE
 -
 #ifndef $1
@@ -54,6 +55,7 @@ static_cast<$1>($0)
 
 name: autoVariableDeclaration
 phrase: auto
+
 $1.insertionFormatter: setting(user.code_private_variable_formatter)
 -
 auto $1 = $0
