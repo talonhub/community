@@ -8,7 +8,7 @@ tag: user.i3wm
 # user.i3_terminal_key = "super-enter"
 
 # Use the commands in desktops.talon to navigate between workspaces
-(desk flip | flipper): user.i3msg("workspace back_and_forth")
+desk flip | flipper: user.i3msg("workspace back_and_forth")
 
 (win | window) left: user.i3msg("focus left")
 (win | window) right: user.i3msg("focus right")
@@ -37,7 +37,7 @@ tag: user.i3wm
 reload i three config: user.i3msg("reload")
 restart i three: user.i3msg("restart")
 
-(full screen | scuba): user.i3msg("fullscreen")
+full screen | scuba: user.i3msg("fullscreen")
 toggle floating: user.i3msg("floating toggle")
 focus floating: user.i3msg("focus mode_toggle")
 
@@ -85,7 +85,7 @@ launch <user.text>:
 # adapt key configuration as needed
 lock screen: key(super-shift-x)
 
-(launch (shell | terminal) | koopa): user.i3wm_shell()
+launch (shell | terminal) | koopa: user.i3wm_shell()
 
 new scratch (shell | window):
     user.i3wm_shell()

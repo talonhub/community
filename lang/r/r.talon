@@ -33,7 +33,7 @@ using <user.code_libraries>:
     insert("::")
 
 # R specific commands
-(chain | pipe that):
+chain | pipe that:
     key(end)
     " %>%"
     key(enter)
