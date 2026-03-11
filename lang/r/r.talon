@@ -35,7 +35,7 @@ using <user.code_libraries>:
 # R specific commands
 chain | pipe that:
     key(end)
-    " %>%"
+    insert(" %>%")
     key(enter)
 
 op pipe: " %>% "

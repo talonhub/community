@@ -26,7 +26,7 @@ with: user.insert_snippet_by_name("withStatement")
 
 column:
     key(return)
-    ", "
+    insert(", ")
 
 count: user.code_insert_function("Count", "")
 
