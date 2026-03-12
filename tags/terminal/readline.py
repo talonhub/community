@@ -67,13 +67,30 @@ def cut_line_end():
     actions.key("ctrl-k")
 
 
-cut_actions = {
-    "wordLeft": actions.user.cut_word_left,
-    "wordRight": actions.user.cut_word_right,
-    "word": cut_word,
-    "line": actions.user.cut_line,
-    "lineStart": cut_line_start,
-    "lineEnd": cut_line_end,
+compound_actions = {
+    # Delete
+    ("delete", "wordLeft"): with_clip_revert(actions.user.cut_word_left),
+    ("delete", "wordRight"): with_clip_revert(actions.user.cut_word_right),
+    ("delete", "word"): with_clip_revert(cut_word),
+    ("delete", "line"): with_clip_revert(actions.user.cut_line),
+    ("delete", "lineStart"): with_clip_revert(cut_line_start),
+    ("delete", "lineEnd"): with_clip_revert(cut_line_end),
+    # Copy
+    ("copyToClipboard", "wordLeft"): with_selection_revert(actions.user.cut_word_left),
+    ("copyToClipboard", "wordRight"): with_selection_revert(
+        actions.user.cut_word_right
+    ),
+    ("copyToClipboard", "word"): with_selection_revert(cut_word),
+    ("copyToClipboard", "line"): with_selection_revert(actions.user.cut_line),
+    ("copyToClipboard", "lineStart"): with_selection_revert(cut_line_start),
+    ("copyToClipboard", "lineEnd"): with_selection_revert(cut_line_end),
+    # Cut
+    ("cutToClipboard", "wordLeft"): actions.user.cut_word_left,
+    ("cutToClipboard", "wordRight"): actions.user.cut_word_right,
+    ("cutToClipboard", "word"): cut_word,
+    ("cutToClipboard", "line"): actions.user.cut_line,
+    ("cutToClipboard", "lineStart"): cut_line_start,
+    ("cutToClipboard", "lineEnd"): cut_line_end,
 }
 
 
@@ -101,16 +118,4 @@ class Actions:
     def get_compound_edit_action_modifier_callback(
         pair: tuple[str, str],
     ) -> Callable | None:
-        action_name = pair[0]
-        modifier_name = pair[1]
-        if action_name in ["delete", "copyToClipboard", "cutToClipboard"]:
-            if modifier_name in cut_actions:
-                callback = cut_actions[modifier_name]
-
-                if action_name == "delete":
-                    callback = with_clip_revert(callback)
-                elif action_name == "copyToClipboard":
-                    callback = with_selection_revert(callback)
-
-                return callback
-        return actions.next(pair)
+        return compound_actions.get(pair) or actions.next(pair)
