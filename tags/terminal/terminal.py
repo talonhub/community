@@ -5,6 +5,7 @@ from talon import Context, Module, actions
 mod = Module()
 
 ctx = Context()
+ctx.matches = "tag: terminal"
 
 
 @mod.action_class
