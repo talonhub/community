@@ -25,6 +25,19 @@ class Actions:
         with open(path, "w") as f:
             pass
 
+    def stored_state_remove_signal_file(directory_name: str, name: str):
+        """Deletes the specified signal file in the stared state directory"""
+        path = compute_stored_state_path(directory_name, name)
+        if not path.exists():
+            return 
+        if path.is_dir():
+            raise IsADirectoryError(f"Tried to remove signal file at path {path} but it was a directory!")
+        if not path.is_file():
+            raise OSError(f"Tried to remove a signal file at path {path} but it was not a file!")
+        elif path.stat().st_size != 0:
+            raise ValueError(f"Tried to remove signal file at path {path} but it was not empty, so it was not a signal file!")
+        path.unlink(missing_ok=True)
+
     def stored_state_set_value(directory_name: str, name: str, value: str):
         """Stores the value in the file with that name in the stored state directory"""
         path = compute_stored_state_path(directory_name, name)
