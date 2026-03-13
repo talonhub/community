@@ -36,7 +36,7 @@ class Actions:
 
 @ctx.action_class("user")
 class TerminalActions:
-
+    # user.file_manager
     # def file_manager_current_path():
     #     pass
 
@@ -56,7 +56,7 @@ class TerminalActions:
 
     def file_manager_open_file(path: str):
         """opens the file"""
-        actions.insert(path)
+        actions.insert("./" + path)
         actions.key("enter")
 
     def file_manager_select_file(path: str):
