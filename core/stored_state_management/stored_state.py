@@ -76,4 +76,3 @@ def create_parent_directory(path):
     """Creates the parent directory if it does not exist"""
     parent_dir = path.parent
     parent_dir.mkdir(exist_ok=True)
-
