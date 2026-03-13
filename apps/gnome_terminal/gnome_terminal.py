@@ -33,7 +33,7 @@ class user_actions:
 
         # split on colon to find the path
         if ": " in title:
-            title = title.split(" — ")[1]
+            title = title.split(": ")[1]
 
         if "~" in title:
             title = os.path.expanduser(title)

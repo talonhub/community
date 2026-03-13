@@ -45,10 +45,10 @@ class TerminalActions:
 
     def file_manager_open_directory(path: str):
         """opens the directory that's already visible in the view"""
-        actions.terminal_change_directory(path)
+        actions.user.terminal_change_directory(path)
 
     def file_manager_open_parent():
-        actions.terminal_change_directory("..")
+        actions.user.terminal_change_directory("..")
 
     def file_manager_select_directory(path: str):
         """selects the directory"""
