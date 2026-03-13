@@ -1,8 +1,10 @@
 from typing import Optional
 
-from talon import Module
+from talon import Module, Context, actions
 
 mod = Module()
+
+ctx = Context()
 
 
 @mod.action_class
@@ -30,3 +32,36 @@ class Actions:
 
     def terminal_kill_all():
         """kills the running command"""
+
+
+@ctx.action_class("user")
+class TerminalActions:
+
+    # def file_manager_current_path():
+    #     pass
+
+    # def file_manager_show_properties():
+    #     """Shows the properties for the file"""
+
+    def file_manager_open_directory(path: str):
+        """opens the directory that's already visible in the view"""
+        actions.terminal_change_directory(path)
+
+    def file_manager_open_parent():
+        actions.terminal_change_directory("..")
+
+    def file_manager_select_directory(path: str):
+        """selects the directory"""
+        actions.insert(path + "/")
+
+    def file_manager_open_file(path: str):
+        """opens the file"""
+        actions.insert(path)
+        actions.key("enter")
+
+    def file_manager_select_file(path: str):
+        """selects the file"""
+        actions.insert(path)
+
+    # def file_manager_refresh_title():
+    #     return
