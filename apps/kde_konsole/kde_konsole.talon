@@ -14,4 +14,3 @@ tag(): user.anaconda
 # tag(): user.kubectl
 
 tag(): user.tabs
-# TODO: add file_manager support

@@ -139,6 +139,5 @@ debug continue: key(f8)
 # terminal scroll up: user.vscode("Terminal:ScrollUp")
 # terminal scroll down: user.vscode("Terminal:ScrollDown")
 
-#TODO: should this be added to linecommands?
 copy line down: key(ctrl-alt-down)
 copy line up: key(ctrl-alt-up)
