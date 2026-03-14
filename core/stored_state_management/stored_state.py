@@ -44,11 +44,11 @@ class Actions:
         path = stored_state_directory / directory_name / name
         if not path.exists():
             return
-        if path.is_dir():
+        elif path.is_dir():
             raise IsADirectoryError(
                 f"Tried to remove signal file at path {path} but it was a directory!"
             )
-        if not path.is_file():
+        elif not path.is_file():
             raise OSError(
                 f"Tried to remove a signal file at path {path} but it was not a file!"
             )
