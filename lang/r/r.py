@@ -1,4 +1,4 @@
-from talon import Context, actions, settings
+from talon import Context, Module, actions, settings
 
 from ..tags.operators import Operators
 
@@ -60,6 +60,7 @@ ctx.lists["user.code_parameter_name"] = {
     "fill": "fill",
     "H just": "hjust",
     "keep": ".keep",
+    "keep all": ".keep_all",
     "label": "label",
     "labels": "labels",
     "log": "log",
@@ -71,6 +72,8 @@ ctx.lists["user.code_parameter_name"] = {
     "position": "position",
     "plex label": "xlab",
     "plex limit": "xlim",
+    "rep": "rep",
+    "sep": "sep",
     "scales": "scales",
     "size": "size",
     "show legend": "show.legend",
@@ -117,6 +120,12 @@ class UserActions:
 
     def code_insert_null():
         actions.auto_insert("NULL")
+
+    def code_insert_is_null():
+        actions.user.insert_between("is.null(", ")")
+
+    def code_insert_is_not_null():
+        actions.user.insert_between("!is.null(", ")")
 
     def code_insert_true():
         actions.auto_insert("TRUE")

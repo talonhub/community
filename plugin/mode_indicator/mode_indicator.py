@@ -225,7 +225,7 @@ def poll_microphone():
 def on_ready():
     registry.register("update_contexts", on_update_contexts)
     registry.register("update_settings", on_update_settings)
-    ui.register("screen_change", lambda _: update_indicator)
+    ui.register("screen_change", lambda _: update_indicator())
     cron.interval("500ms", poll_microphone)
 
 
