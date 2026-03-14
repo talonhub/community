@@ -133,10 +133,6 @@ class Actions:
         else:
             actions.user.i3msg(f"layout {layout}")
 
-    # TODO The remaining functions hard code default keybindings for actions
-    # that are commonly customized in the config file. Make this configuration
-    # more visible.
-
     def i3wm_launch():
         """Trigger the i3 launcher: ex rofi"""
         key = settings.get("user.i3_launch_key")

@@ -13,7 +13,6 @@ tag(): user.anaconda
 # tag(): user.kubectl
 
 tag(): user.tabs
-# TODO: file_manager
 tag(): user.splits
 
 settings open: key(ctrl-,)

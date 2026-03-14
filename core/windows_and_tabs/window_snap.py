@@ -4,9 +4,6 @@ Originally from dweil/talon_community - modified for newapi by jcaw.
 
 """
 
-# TODO: Map keyboard shortcuts to this manager once Talon has key hooks on all
-#   platforms
-
 import logging
 from typing import Dict, Optional
 
@@ -137,8 +134,6 @@ def _move_to_screen(
             window.maximized = True
         return
 
-    # TODO: Test vertical screen with different aspect ratios
-    # Does the orientation between the screens change? (vertical/horizontal)
     if how != "proportional":
         logging.warning(
             f"Unrecognized 'window_snap_screen' setting: {how!r}. Using default 'proportional'."
@@ -168,7 +163,7 @@ def _move_to_screen(
         # the positioning is more complicated than proportionally scaling the x/y coordinates.
         # It is computed by keeping the free space to the left of the window proportional to the right
         # and respectively for the top/bottom free space.
-        # The if conditions account for division by 0. TODO: Refactor positioning without division by 0
+        # The if conditions account for division by 0.
         if src.height == window.rect.height:
             x = dest.left + (dest.width - width) / 2
         else:

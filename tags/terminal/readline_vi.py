@@ -105,9 +105,6 @@ class EditActions:
         # This does not work in readline (no redo command at all), but will work in zsh and other vi emulators
         normal_cmd("ctrl-r a")
 
-    # TODO: we don't want to overwrite the system's paste action, should this be a separate command?
-    # def paste():
-
     # Read line doesn't have any selection mechanism, so instead we add any "selections" to a pending selection object, which get applied when the edit next action is called
     def extend_line_end():
         add_pending("$", "a")

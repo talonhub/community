@@ -29,10 +29,6 @@ class EditActions:
     def undo():
         actions.key("ctrl-_")
 
-    # TODO: we don't want to overwrite the system's paste action, should this be a separate command?
-    # def paste():
-    #     actions.key("ctrl-y")
-
 
 # Wraps a method in a clip revert.
 # Might actually not be necessary for readline because in the default implementation it uses a seperate clipboard to the desktop
@@ -111,7 +107,6 @@ class Actions:
         actions.key("ctrl-y")
 
     def copy_word_right():
-        # TODO: how put cursor back at starting position?
         actions.user.cut_word_right()
         actions.key("ctrl-y")
 
