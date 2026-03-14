@@ -79,7 +79,6 @@ class ContextSensitiveDictationActions:
         )
 
     def paste(text: str):
-        # todo: remove once user.paste works reliably with the draft window
         actions.insert(text)
 
 

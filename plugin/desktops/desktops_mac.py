@@ -50,7 +50,6 @@ class MacActions:
             actions.user.desktop_next()
 
     def window_move_desktop(desktop_number: int):
-        # TODO: amethyst stuff should be pulled out into a separate file
         if ui.apps(bundle="com.amethyst.Amethyst"):
             actions.key(f"ctrl-alt-shift-{desktop_number}")
         else:

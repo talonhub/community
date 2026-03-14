@@ -27,11 +27,6 @@ class EditActions:
     def undo():
         actions.key("ctrl-_")
 
-    # TODO: we don't want to overwrite the system's paste action, should this be a separate command?
-    # def paste():
-    #     actions.key("ctrl-y")
-
-
 @ctx.action_class("user")
 class Actions:
     def cut_line():
@@ -49,20 +44,5 @@ class Actions:
         actions.key("ctrl-y")
 
     def copy_word_right():
-        # TODO: how put cursor back at starting position?
         actions.user.cut_word_right()
         actions.key("ctrl-y")
-
-    # TODO: not sure how to implement these
-    # def cut_word():
-    #     pass
-    # def copy_word():
-    #     pass
-    # def delete_word():
-    #     pass
-
-    # TODO: not sure how to implement these without overwriting clipboard
-    # def delete_word_left():
-    #     actions.user.cut_word_left()
-    # def delete_word_right():
-    #     actions.user.cut_word_right()
