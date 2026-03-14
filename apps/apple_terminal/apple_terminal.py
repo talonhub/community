@@ -2,7 +2,6 @@ import os
 
 from talon import Context, actions, ui
 
-
 ctx = Context()
 ctx.matches = r"""
 app: apple_terminal

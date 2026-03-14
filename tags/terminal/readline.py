@@ -29,6 +29,7 @@ class EditActions:
     def undo():
         actions.key("ctrl-_")
 
+
 # Wraps a method in a clip revert.
 # Might actually not be necessary for readline because in the default implementation it uses a seperate clipboard to the desktop
 # Though left in in case that has been modified
