@@ -3,7 +3,7 @@ and tag: user.git
 -
 git {user.git_command} [<user.git_arguments>]:
     args = git_arguments or ""
-    "git {git_command}{args} "
+    insert("git {git_command}{args} ")
 git commit [<user.git_arguments>] message [<user.prose>]:
     args = git_arguments or ""
     message = prose or ""

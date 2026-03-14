@@ -93,8 +93,7 @@ dynamic trait {user.code_trait}: insert("dyn {code_trait}")
 
 ## for generic reference of macro
 macro {user.code_macros}: user.code_insert_macro(code_macros, "")
-macro wrap {user.code_macros}:
-    user.code_insert_macro(code_macros, edit.selected_text())
+macro wrap {user.code_macros}: user.code_insert_macro(code_macros, edit.selected_text())
 
 # Turbofish
 turbo fish: user.insert_between("::<", ">")

@@ -38,15 +38,8 @@ repos:
     rev: 26.1.0
     hooks:
       - id: black
-  - repo: https://github.com/Lucas-C/pre-commit-hooks
-    rev: v1.5.6
+  - repo: https://github.com/cursorless-dev/talon-tools
+    rev: v0.7.0
     hooks:
-      - id: remove-tabs
-        types: [file]
-        files: \.talon$
-        args: ["--whitespaces-count=4"]
-  - repo: https://github.com/wenkokke/talonfmt
-    rev: 1.10.2
-    hooks:
-      - id: talonfmt
-        args: ["--in-place"]
+      - id: talon-fmt
+      - id: snippet-fmt
