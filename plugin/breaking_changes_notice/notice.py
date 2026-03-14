@@ -2,7 +2,6 @@
 # this expects the breaking changes document to be two directory levels above the current one
 # if the breaking changes file is moved or renamed, update the compute_breaking_changes_path_from_current_directory function
 
-import os
 import pathlib
 
 from talon import Context, Module, actions, app, fs, imgui
@@ -80,7 +79,7 @@ def should_not_show_breaking_changes_notice():
 def get_current_breaking_changes_file_size():
     """Gets the current size of the breaking changes file"""
     breaking_changes_path = compute_breaking_changes_path_from_current_directory()
-    stats = os.stat(breaking_changes_path)
+    stats = breaking_changes_path.stat()
     return stats.st_size
 
 
