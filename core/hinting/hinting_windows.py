@@ -1,6 +1,7 @@
 from talon import Context, Module, actions, app, imgui, ui, resource, canvas, ctrl, settings, cron
 from talon.ui import Rect
 from ..operating_system.windows.accessibility import find_all_clickable_rects, find_all_clickable_rects_parallel, get_window_class, find_all_clickables_in_list_parallel
+import threading
 
 mod = Module()
 mod.tag("hinting_active", desc="Indicates hints are active")
@@ -159,7 +160,10 @@ class Actions:
     def hinting_toggle():
         """Toggles hints"""
         global is_context_menu_open, clickables, canvas_active_window, current_button_mapping, active_window_id
-
+        print("toggling hints")
+        hinting_toggle_pipe()
+        return
+    
         if actions.user.hinting_close(False):
             return
         
@@ -295,6 +299,49 @@ class Actions:
                 actions.mouse_click(mouse_button)
 
         actions.user.hinting_close(True)
+
+import win32pipe
+import win32file
+import threading
+
+def send_to_pipe(command: str):
+    """Send a command to the HintOverlay named pipe in a non-blocking thread"""
+    def _send():
+        try:
+            # Ensure command ends with newline
+            if not command.endswith('\n'):
+                command_with_newline = command + '\n'
+            else:
+                command_with_newline = command
+            
+            handle = win32file.CreateFile(
+                r"\\.\pipe\HintOverlay_Pipe",  # ← Note: underscore, not camelCase
+                win32file.GENERIC_WRITE,
+                0,
+                None,
+                win32file.OPEN_EXISTING,
+                0,
+                None
+            )
+            win32file.WriteFile(handle, command_with_newline.encode('utf-8'))
+            handle.Close()
+            print(f"✓ Command sent: {command.strip()}")
+        except Exception as e:
+            print(f"✗ Pipe error: {e}")
+    
+    threading.Thread(target=_send, daemon=True).start()
+
+def hinting_toggle_pipe():
+    """Toggle hints using the named pipe"""
+    send_to_pipe("TOGGLE")
+
+def hinting_select_pipe(label: str):
+    """Select a hint using the named pipe"""
+    send_to_pipe(f"SELECT {label}")
+
+def hinting_deactivate_pipe():
+    """Deactivate the overlay using the named pipe"""
+    send_to_pipe("DEACTIVATE")
 
 is_context_menu_open = False
 def on_win_open(window):
