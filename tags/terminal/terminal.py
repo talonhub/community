@@ -34,13 +34,17 @@ class Actions:
     def terminal_kill_all():
         """kills the running command"""
 
+    def terminal_escape_string(string: str) -> str:
+        """Escapes a string for a given terminal"""
+        return f'"{string}"'
+
     def terminal_escape_relative_file(string: str) -> str:
         """Escapes a string for a given terminal"""
-        return f'./"{string}"'
+        return actions.user.terminal_escape_string(f"./{string}")
 
     def terminal_escape_relative_directory(string: str) -> str:
         """Escapes a string for a given terminal"""
-        return f'"{string}/"'
+        return actions.user.terminal_escape_string(f"{string}/")
 
 
 @ctx.action_class("user")
@@ -61,12 +65,12 @@ class TerminalActions:
 
     def file_manager_open_file(path: str):
         """opens the file"""
-        actions.insert(actions.user.terminal_escape_relative_path(path))
+        actions.insert(actions.user.terminal_escape_relative_file(path))
         actions.key("enter")
 
     def file_manager_select_file(path: str):
         """selects the file"""
-        actions.insert(actions.user.terminal_escape_relative_path(path))
+        actions.insert(actions.user.terminal_escape_relative_file(path))
 
     def file_manager_new_folder(name: str):
         """Creates a new folder in a gui filemanager or inserts the command to do so for terminals"""
