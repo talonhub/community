@@ -344,6 +344,7 @@ class TaskBarPositionData:
     rect_search_button: Rect
     rect_taskbar: Rect
     rect_task_view: Rect
+    rect_widgets: Rect
     rect_task_list: Rect
     rect_hidden_icons: Rect
     icon_width: float
@@ -355,6 +356,7 @@ class TaskBarPositionData:
             rect_start_button, 
             rect_search_button, 
             rect_task_view, 
+            rect_widgets,
             rect_task_list,
             rect_hidden_icons,
             icon_width, 
@@ -367,6 +369,7 @@ class TaskBarPositionData:
         self.rect_start_button = rect_start_button
         self.rect_search_button = rect_search_button
         self.rect_task_view = rect_task_view
+        self.rect_widgets = rect_widgets
         self.rect_task_list = rect_task_list
         self.rect_hidden_icons = rect_hidden_icons
         self.icon_width = icon_width
@@ -382,6 +385,7 @@ class TaskBarPositionData:
             rect_start_button, 
             rect_search_button, 
             rect_task_view, 
+            rect_widgets,
             rect_task_list,
             rect_hidden_icons,
             icon_width, 
@@ -394,6 +398,7 @@ class TaskBarPositionData:
         self.rect_start_button = rect_start_button
         self.rect_search_button = rect_search_button
         self.rect_task_view = rect_task_view
+        self.rect_widgets = rect_widgets
         self.rect_task_list = rect_task_list
         self.rect_hidden_icons = rect_hidden_icons
         self.icon_width = icon_width
@@ -708,31 +713,38 @@ def draw_canvas_system_tray(canvas):
     index = 1
 
     if system_try_data.rect_hidden_icons:
-        #print(f"drawing {len(sys_tray_data.sys_tray_icons)}")
-
-        for i in range(0, len(system_try_data.sys_tray_icons)):
-            icon = system_try_data.sys_tray_icons[i]
+        #print(f"drawing {len(system_try_data.sys_tray_icons)}")
+        for icon in system_try_data.sys_tray_icons:
             if len(icon.name) > 0:
-                
                 rect = icon.rect
 
-                x = icon.rect.x
-                y = icon.rect.y
-                x_end = icon.rect.x + icon.rect.width
-
-                width = x_end - x
+                x_text_position = (
+                    icon.rect.x
+                    + icon.rect.width / 2
+                )
+                y_text_position = (
+                    icon.rect.y
+                    + rect.height * .9
+                )
 
                 paint.style = paint.Style.FILL
                 paint.color = "000000"
 
-                rect_background = Rect(icon.rect.x - icon.rect.width / 2 - 10, icon.rect.y + rect.height - 30, 20, 20)
-                #canvas.draw_rect(rect_background)
-
-                x_text_position = icon.rect.x + icon.rect.width / 2
-                y_text_position = icon.rect.y + rect.height *.9
+                rect_number_background = Rect(math.floor(rect.x + rect.width / 2), 
+                                        rect.y + rect.height * .75,
+                                        rect.width / 3, 
+                                        rect.height * .25)
+                
+                canvas.draw_rect(rect_number_background)
+                x_text_position = rect_number_background.x + rect_number_background.width / 2
+                y_text_position = rect_number_background.y + rect_number_background.height
 
                 paint.color = "ffffff"
-                canvas.draw_text(f"{index}", x_text_position, y_text_position)
+                canvas.draw_text(
+                    f"{index}",
+                    x_text_position,
+                    y_text_position
+                )
 
             index += 1
         
@@ -742,6 +754,7 @@ def draw_task_bar_options(canvas):
     canvas.paint.text_align = canvas.paint.TextAlign.CENTER
     rect_start_menu = taskbar_data.rect_start_button
     rect_search_button = taskbar_data.rect_search_button
+    rect_widgets = taskbar_data.rect_widgets
 
     rect_task_bar_list = taskbar_data.rect_task_list
     paint.textsize = 20
@@ -805,6 +818,21 @@ def draw_task_bar_options(canvas):
         paint.color = "ffffff"
         canvas.draw_text(f"{index}", x_text_position, y_text_position)
         x = x + taskbar_data.icon_width
+
+    if rect_widgets:
+        paint.style = paint.Style.FILL
+        paint.color = "000000"
+
+        rect_number_background = Rect(math.floor(rect_widgets.x + rect_widgets.width / 2), 
+                                    y, 
+                                    rect_widgets.width / 3, 
+                                    rect_widgets.height * .8 )
+        
+        canvas.draw_rect(rect_number_background)
+        x_text_position = rect_number_background.x + rect_number_background.width / 2
+        y_text_position = rect_number_background.y + rect_widgets.height * .18
+        paint.color = "ffffff"
+        canvas.draw_text(f"{current_index + max_task_list_count}", x_text_position, y_text_position)
 
 def get_window_class(window: ui.Window) -> bool:
     cls = None
@@ -889,6 +917,8 @@ def get_windows_eleven_taskbar():
     rect_task_view: Rect = None
     rect_search_button: Rect = None
     rect_hidden_icons: Rect = None
+    rect_widgets: Rect = None
+
     sys_tray_icons = []
 
     task_view_index = None
@@ -898,18 +928,20 @@ def get_windows_eleven_taskbar():
     start_menu_found = False
     hidden_icon_found = False
     task_view_button_found = False
+    widgets_button_found = False
+
 
     is_taskbar_left_aligned = is_start_left_aligned()
     task_bar_combine_status = get_taskbar_combine_status()
-
-    start_menu_configured_correctly = (is_taskbar_left_aligned 
-        and task_bar_combine_status["primary"] == "always")
+    #print(f"taskbar combine status = {task_bar_combine_status}")
+    start_menu_configured_correctly = (is_taskbar_left_aligned)
+        #and task_bar_combine_status["primary"] == "always")
    
     if not is_start_left_aligned():
         print("Start menu must be left-aligned")
 
-    if task_bar_combine_status["primary"] != "always":
-        print("Start menu icons must be configued to always combine and hide labels")
+    #if task_bar_combine_status["primary"] != "always":
+    #    print("Start menu icons must be configued to always combine and hide labels")
 
     if not start_menu_configured_correctly:
         return False
@@ -941,6 +973,7 @@ def get_windows_eleven_taskbar():
         rect_taskbar = taskbar.rect
         #walk(taskbar_window.element)
         taskbar_clickables = find_all_clickable_elements(taskbar_window, taskbar)
+        #print(f"{taskbar_clickables}")
         for element in taskbar_clickables:
             match element.name:
                 case "Show Hidden Icons" | "Show Hidden Icons Hide":
@@ -960,7 +993,7 @@ def get_windows_eleven_taskbar():
                     first_icon_rect = element.rect
                     task_view_button_found = True
                     icon_dimensions_set = True
-
+                    
                 case "Taskbar":
                     pass
 
@@ -971,6 +1004,10 @@ def get_windows_eleven_taskbar():
                 case _:
                     if not element.name:
                         continue
+
+                    if "Widgets" in element.name:
+                        rect_widgets = element.rect
+                        widgets_button_found = True
 
                     if not icon_dimensions_set:
                         first_icon_rect = element.rect
@@ -996,10 +1033,16 @@ def get_windows_eleven_taskbar():
         # The taskbar rect in windows 11 includes the system tray
         # we want to provide a rect that removes this
         if (icon_dimensions_set and rect_hidden_icons and rect_start_button):
-            rect_task_list = Rect(rect_taskbar.x, 
-                                  rect_taskbar.y, 
-                                  rect_hidden_icons.x - rect_taskbar.x, 
-                                  rect_taskbar.height)
+            if not widgets_button_found:
+                rect_task_list = Rect(rect_taskbar.x, 
+                                    rect_taskbar.y, 
+                                    rect_hidden_icons.x - rect_taskbar.x, 
+                                    rect_taskbar.height)
+            else:
+                rect_task_list = Rect(rect_taskbar.x, 
+                                    rect_taskbar.y, 
+                                    rect_widgets.x - rect_taskbar.x, 
+                                    rect_taskbar.height)
             
             sys_tray_icons = sorted(sys_tray_icons, key=lambda icon: int(icon.rect.x)) 
             system_tray = SystemTrayPositionData(rect_hidden_icons.copy(), sys_tray_icons)
@@ -1007,6 +1050,7 @@ def get_windows_eleven_taskbar():
                              rect_start_button.copy() if rect_start_button else None,
                              rect_search_button.copy() if rect_search_button else None,
                              rect_task_view.copy() if rect_task_view else None,
+                             rect_widgets.copy() if rect_widgets else None,
                              rect_task_list, 
                              rect_hidden_icons.copy(),
                              first_icon_rect.width, 
@@ -1347,6 +1391,13 @@ def on_win_close(window):
             canvas_popup.close()
             canvas_popup = None    
 
+def on_menu_closed(window):
+    print(f"Menu closed: {window.title}")
+
+
+def on_menu_open(window):
+    print(f"Menu opened: {window.title}")
+
 if app.platform == "windows":
     def on_ready():
         global cron_poll_start_menu
@@ -1361,7 +1412,8 @@ if app.platform == "windows":
             # ui.register("win_open", on_win_open)
             # ui.register("win_close", on_win_close)
             # ui.register("win_hide", on_win_hide)
-
+            ui.register("menu_open", on_menu_open)
+            ui.register("menu_close", on_menu_closed)
             cron_poll_start_menu_helper()
         else:
             cleanup_and_retry()
