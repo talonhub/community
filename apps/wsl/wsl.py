@@ -409,13 +409,6 @@ def get_distro():
 
 @ctx.action_class("user")
 class UserActions:
-    def file_manager_refresh_title():
-        actions.skip()
-
-    def file_manager_open_parent():
-        actions.insert("cd ..")
-        actions.key("enter")
-
     def file_manager_current_path():
         if path_detection_disabled:
             logging.warning(
@@ -442,15 +435,6 @@ class UserActions:
 
         return path
 
-    # def file_manager_terminal_here():
-    #     actions.key("ctrl-l")
-    #     actions.insert("cmd.exe")
-    #     actions.key("enter")
-
-    # def file_manager_show_properties():
-    #     """Shows the properties for the file"""
-    #     actions.key("alt-enter")
-
     def file_manager_open_directory(path: str):
         """opens the directory that's already visible in the view"""
         if ":" in str(path):
@@ -459,21 +443,6 @@ class UserActions:
         actions.insert(f'cd "{path}"')
         actions.key("enter")
         actions.user.file_manager_refresh_title()
-
-    def file_manager_select_directory(path: str):
-        """selects the directory"""
-        actions.insert(f'"{path}"')
-
-    def file_manager_new_folder(name: str):
-        """Creates a new folder in a gui filemanager or inserts the command to do so for terminals"""
-        actions.insert(f'mkdir "{name}"')
-
-    def file_manager_open_file(path: str):
-        actions.insert(path)
-        # actions.key("enter")
-
-    def file_manager_select_file(path: str):
-        actions.insert(path)
 
     def file_manager_open_volume(volume: str):
         actions.user.file_manager_open_directory(volume)
