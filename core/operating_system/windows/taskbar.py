@@ -819,20 +819,20 @@ def draw_task_bar_options(canvas):
         canvas.draw_text(f"{index}", x_text_position, y_text_position)
         x = x + taskbar_data.icon_width
 
-    if rect_widgets:
-        paint.style = paint.Style.FILL
-        paint.color = "000000"
-
-        rect_number_background = Rect(math.floor(rect_widgets.x + rect_widgets.width / 2), 
-                                    y, 
-                                    rect_widgets.width / 3, 
-                                    rect_widgets.height * .8 )
+    # if rect_widgets:
+    #     paint.style = paint.Style.FILL
+    #     paint.color = "000000"
+    #     print(f"widgets rect = {rect_widgets}")
+    #     rect_number_background = Rect(math.floor(rect_widgets.x + rect_widgets.width), 
+    #                                 y, 
+    #                                 rect_widgets.width, 
+    #                                 rect_widgets.height)
         
-        canvas.draw_rect(rect_number_background)
-        x_text_position = rect_number_background.x + rect_number_background.width / 2
-        y_text_position = rect_number_background.y + rect_widgets.height * .18
-        paint.color = "ffffff"
-        canvas.draw_text(f"{current_index + max_task_list_count}", x_text_position, y_text_position)
+    #     canvas.draw_rect(rect_number_background)
+    #     x_text_position = rect_number_background.x + rect_number_background.width / 2
+    #     y_text_position = rect_number_background.y + rect_widgets.height * .18
+    #     paint.color = "000000"
+    #     canvas.draw_text("1", x_text_position, y_text_position)
 
 def get_window_class(window: ui.Window) -> bool:
     cls = None
