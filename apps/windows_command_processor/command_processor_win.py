@@ -51,6 +51,7 @@ class UserActions:
         """file_manager_open_volume"""
         actions.insert(volume)
         actions.key("enter")
+        actions.user.file_manager_refresh_title()
 
     def terminal_list_directories(path: Optional[str] = None):
         """Lists directories"""
