@@ -89,7 +89,7 @@ class UserActions:
         return operators
 
     def code_self():
-        actions.auto_insert("this")
+        actions.insert("this")
 
     def code_insert_null():
         actions.insert("null")

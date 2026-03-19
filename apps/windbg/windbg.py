@@ -54,10 +54,10 @@ class UserActions:
         # XXX -
 
     def debugger_step_line():
-        actions.auto_insert("")
+        actions.insert("")
 
     def debugger_step_over_line():
-        actions.auto_insert("")
+        actions.insert("")
 
     def debugger_step_out():
         actions.key("shift-f11")

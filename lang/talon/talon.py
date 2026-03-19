@@ -140,7 +140,7 @@ class UserActions:
         actions.edit.left()
 
     def code_insert_true():
-        actions.auto_insert("true")
+        actions.insert("true")
 
     def code_insert_false():
-        actions.auto_insert("false")
+        actions.insert("false")
