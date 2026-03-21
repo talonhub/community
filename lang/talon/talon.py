@@ -41,7 +41,6 @@ tag: user.talon_python
 
 
 def on_update_decls(decls):
-    # todo modes?
     for thing in [
         "actions",
         "lists",

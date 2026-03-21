@@ -152,8 +152,6 @@ class UserActions:
             substitutions["0"] = selection
         actions.user.insert_snippet_by_name("functionCall", substitutions)
 
-    # TODO - it would be nice that you integrate that types from c_cast
-    # instead of defaulting to void
     def code_private_function(text: str):
         """Inserts private function declaration"""
         result = "void {}".format(
