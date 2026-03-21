@@ -65,32 +65,32 @@ class UserActions:
         return operators
 
     def code_self():
-        actions.auto_insert("$this")
+        actions.insert("$this")
 
     def code_operator_object_accessor():
-        actions.auto_insert("->")
+        actions.insert("->")
 
     def code_comment_block_prefix():
-        actions.auto_insert("/*")
+        actions.insert("/*")
 
     def code_comment_block_suffix():
-        actions.auto_insert("*/")
+        actions.insert("*/")
 
     def code_insert_true():
-        actions.auto_insert("true")
+        actions.insert("true")
 
     def code_insert_false():
-        actions.auto_insert("false")
+        actions.insert("false")
 
     def code_insert_null():
-        actions.auto_insert("null")
+        actions.insert("null")
 
     def code_insert_is_null():
-        actions.auto_insert("is_null()")
+        actions.insert("is_null()")
         actions.edit.left()
 
     def code_insert_is_not_null():
-        actions.auto_insert("isset()")
+        actions.insert("isset()")
         actions.edit.left()
 
     def code_default_function(text: str):

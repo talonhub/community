@@ -132,19 +132,19 @@ class UserActions:
         return operators
 
     def code_insert_null():
-        actions.auto_insert("NULL")
+        actions.insert("NULL")
 
     def code_insert_is_null():
-        actions.auto_insert(" == NULL ")
+        actions.insert(" == NULL ")
 
     def code_insert_is_not_null():
-        actions.auto_insert(" != NULL")
+        actions.insert(" != NULL")
 
     def code_insert_true():
-        actions.auto_insert("true")
+        actions.insert("true")
 
     def code_insert_false():
-        actions.auto_insert("false")
+        actions.insert("false")
 
     def code_insert_function(text: str, selection: str):
         substitutions = {"1": text}

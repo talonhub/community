@@ -32,7 +32,7 @@ class CActions:
         actions.edit.up()
 
     def code_comment_block_prefix():
-        actions.auto_insert("/*")
+        actions.insert("/*")
 
     def code_comment_block_suffix():
-        actions.auto_insert("*/")
+        actions.insert("*/")

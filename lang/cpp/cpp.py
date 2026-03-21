@@ -51,19 +51,19 @@ class UserActions:
         return operators
 
     def code_insert_null():
-        actions.auto_insert("nullptr")
+        actions.insert("nullptr")
 
     def code_insert_is_null():
-        actions.auto_insert(" == nullptr")
+        actions.insert(" == nullptr")
 
     def code_insert_is_not_null():
-        actions.auto_insert(" != nullptr")
+        actions.insert(" != nullptr")
 
     def code_insert_true():
-        actions.auto_insert("true")
+        actions.insert("true")
 
     def code_insert_false():
-        actions.auto_insert("false")
+        actions.insert("false")
 
     def code_operator_object_accessor():
         actions.insert(".")
