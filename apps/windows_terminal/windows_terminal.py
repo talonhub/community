@@ -144,10 +144,6 @@ class UserActions:
         # and closing a split does mean something differnent that in a code editor like vs code
         actions.key("ctrl-shift-w")
 
-    def split_clear_all():
-        """Clears all splits"""
-        pass
-
     def split_next():
         """Goes to next split"""
         actions.app.notify(
