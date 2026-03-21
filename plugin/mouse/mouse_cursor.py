@@ -22,7 +22,6 @@ default_cursor = {
     "IBeam": "",
 }
 
-# todo figure out why notepad++ still shows the cursor sometimes.
 hidden_cursor = os.path.join(
     os.path.dirname(os.path.realpath(__file__)), r"Resources\HiddenCursor.cur"
 )

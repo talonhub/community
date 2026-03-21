@@ -2,8 +2,6 @@ import os
 
 from talon import Context, actions, ui
 
-# TODO: fit this to terminal.py
-
 ctx = Context()
 ctx.matches = r"""
 app: apple_terminal

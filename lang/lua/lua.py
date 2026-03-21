@@ -51,8 +51,6 @@ def lua_functions(m) -> str:
 # NOTE: < 5.3 assumes Lua BitOp usage
 #       > 5.2 assumes native bitwise operators
 # ALSO NOTE: The documentation strings for these functions are used by help operators
-# TODO: Possibly add settings to define which library to use, as 5.2
-# includes bit32. Neovim uses luajit, which uses Lua BitOp
 def code_operator_bitwise_and():
     "Insert & or library call based on user.lua_version"
     if settings.get("user.lua_version") > 5.2:

@@ -59,7 +59,6 @@ if app.platform == "windows":
             "Videos": os.path.join(user_path, "Videos"),
         }
     else:
-        # todo use expanduser for cross platform support
         directories_to_remap = {
             "Desktop": os.path.join(user_path, "Desktop"),
             "Documents": os.path.join(user_path, "Documents"),
