@@ -277,10 +277,10 @@ class UserActions:
     # tag: object_oriented
 
     def code_operator_object_accessor():
-        actions.auto_insert(".")
+        actions.insert(".")
 
     def code_self():
-        actions.auto_insert("self")
+        actions.insert("self")
 
     def code_define_class():
         actions.user.insert_snippet_by_name("structDeclaration")
@@ -288,21 +288,21 @@ class UserActions:
     # tag: data_bool
 
     def code_insert_true():
-        actions.auto_insert("true")
+        actions.insert("true")
 
     def code_insert_false():
-        actions.auto_insert("false")
+        actions.insert("false")
 
     # tag: data_null
 
     def code_insert_null():
-        actions.auto_insert("None")
+        actions.insert("None")
 
     def code_insert_is_null():
-        actions.auto_insert(".is_none()")
+        actions.insert(".is_none()")
 
     def code_insert_is_not_null():
-        actions.auto_insert(".is_some()")
+        actions.insert(".is_some()")
 
     # tag: functions
 
@@ -310,28 +310,28 @@ class UserActions:
         actions.user.code_private_function(text)
 
     def code_private_function(text: str):
-        actions.auto_insert("fn ")
+        actions.insert("fn ")
         formatter = settings.get("user.code_private_function_formatter")
         function_name = actions.user.formatted_text(text, formatter)
         actions.user.code_insert_function(function_name, None)
 
     def code_protected_function(text: str):
-        actions.auto_insert("pub(crate) fn ")
+        actions.insert("pub(crate) fn ")
         formatter = settings.get("user.code_protected_function_formatter")
         function_name = actions.user.formatted_text(text, formatter)
         actions.user.code_insert_function(function_name, None)
 
     def code_public_function(text: str):
-        actions.auto_insert("pub fn ")
+        actions.insert("pub fn ")
         formatter = settings.get("user.code_public_function_formatter")
         function_name = actions.user.formatted_text(text, formatter)
         actions.user.code_insert_function(function_name, None)
 
     def code_insert_type_annotation(type: str):
-        actions.auto_insert(f": {type}")
+        actions.insert(f": {type}")
 
     def code_insert_return_type(type: str):
-        actions.auto_insert(f" -> {type}")
+        actions.insert(f" -> {type}")
 
     # tag: functions_gui
 
@@ -364,7 +364,7 @@ class UserActions:
         actions.key("enter")
 
     def code_comment_documentation_inner():
-        actions.auto_insert("//! ")
+        actions.insert("//! ")
 
     def code_comment_documentation_block_inner():
         actions.user.insert_between("/*!", "*/")
