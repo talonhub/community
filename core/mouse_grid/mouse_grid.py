@@ -24,7 +24,7 @@ mod.setting(
     "grid_show_zoomed",
     type=bool,
     default=True,
-    desc="If true, show a zoomed in version of the mouse grid when it becomes sufficiently small"
+    desc="If true, show a zoomed in version of the mouse grid when it becomes sufficiently small",
 )
 
 mod.tag("mouse_grid_showing", desc="Tag indicates whether the mouse grid is showing")
