@@ -1,7 +1,9 @@
 import os
 
 from talon import Context, actions, ui
-from talon.mac import applescript
+
+if app.platform == "mac":
+    from talon.mac import applescript
 
 ctx = Context()
 ctx.matches = r"""

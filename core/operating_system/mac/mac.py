@@ -1,5 +1,8 @@
 from talon import Context, actions, app, ui
-from talon.mac import applescript
+
+if app.platform == "mac":
+    from talon.mac import applescript
+
 import os
 import subprocess
 
