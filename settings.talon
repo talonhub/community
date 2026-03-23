@@ -64,6 +64,9 @@ settings():
     # If `true`, start mouse grid numbering on the bottom left (vs. top left)
     user.grids_put_one_bottom_left = true
 
+    # If `true`, show a zoomed in version of the mouse grid when it becomes sufficiently small
+    user.grid_show_zoomed = true
+
     # Set the default number of command history lines to display
     user.command_history_display = 10
 
