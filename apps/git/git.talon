@@ -1,6 +1,7 @@
 tag: terminal
 and tag: user.git
 -
+
 git {user.git_command} [<user.git_arguments>]:
     args = git_arguments or ""
     insert("git {git_command}{args} ")

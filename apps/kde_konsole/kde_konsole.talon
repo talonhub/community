@@ -1,6 +1,7 @@
 os: linux
 and app.name: konsole
 -
+
 # makes the commands in terminal.talon available
 tag(): terminal
 

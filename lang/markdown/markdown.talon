@@ -1,5 +1,6 @@
 code.language: markdown
 -
+
 (level | heading | header) one:
     edit.line_start()
     insert("# ")

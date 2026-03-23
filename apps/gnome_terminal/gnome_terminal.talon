@@ -1,5 +1,6 @@
 app: gnome_terminal
 -
+
 # Set tags
 tag(): terminal
 tag(): user.tabs
