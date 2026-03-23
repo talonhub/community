@@ -16,6 +16,7 @@ app.bundle: com.apple.Safari.WebApp.75652608-4A3F-4B48-9317-3C2516AA5CE1
 """
 
 ctx.matches = r"""
+os: mac
 app: safari
 """
 

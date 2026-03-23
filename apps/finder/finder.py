@@ -1,6 +1,6 @@
 import os
 
-from talon import Context, actions, ui
+from talon import Context, actions, ui, app
 
 if app.platform == "mac":
     from talon.mac import applescript
