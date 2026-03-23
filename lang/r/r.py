@@ -119,7 +119,7 @@ class UserActions:
         return operators
 
     def code_insert_null():
-        actions.auto_insert("NULL")
+        actions.insert("NULL")
 
     def code_insert_is_null():
         actions.user.insert_between("is.null(", ")")
@@ -128,10 +128,10 @@ class UserActions:
         actions.user.insert_between("!is.null(", ")")
 
     def code_insert_true():
-        actions.auto_insert("TRUE")
+        actions.insert("TRUE")
 
     def code_insert_false():
-        actions.auto_insert("FALSE")
+        actions.insert("FALSE")
 
     def code_insert_function(text: str, selection: str):
         text += f"({selection or ''})"
