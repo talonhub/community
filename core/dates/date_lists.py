@@ -84,7 +84,7 @@ class Actions:
         actions.insert(_format_with_preference(date.today() - timedelta(days=1)))
 
     def insert_date_next_weekday(weekday: str):
-        """Insert the next weekday name according to preferred format"""
+        """Insert the next calendar date matching the given weekday using the preferred date format"""
         weekday_norm = weekday.strip().lower()
         if weekday_norm not in WEEKDAY_MAP:
             raise ValueError(f"Unknown weekday: {weekday}")
