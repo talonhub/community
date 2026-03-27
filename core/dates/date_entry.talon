@@ -5,7 +5,7 @@ date {user.day} {user.month} {user.year}:
     user.insert_date_from_parts(day, month, year)
 
 # Insert date as US format mm/dd/yyyy
-# (defaults remains dd/mm/yyyy for standard use)
+# (default remains dd/mm/yyyy for standard use)
 date {user.day} {user.month} {user.year} us:
     user.insert_date_formatted_us(day, month, year)
 
