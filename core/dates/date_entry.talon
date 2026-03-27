@@ -1,9 +1,5 @@
 # Date entry commands using day, month, year lists
 
-settings():
-    # Define the date format mode for all date commands: uk | us | iso
-    user.date_format = "uk"
-
 # Insert date using preferred mode from settings
 date {user.day} {user.month} {user.year}:
     user.insert_date_from_parts(day, month, year)
