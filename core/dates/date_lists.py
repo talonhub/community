@@ -42,8 +42,13 @@ class Actions:
         year_num = int(year)
         month_num = int(month_padded)
         day_num = int(day_padded)
-        computed = date(year_num, month_num, day_num)
-        actions.insert(_format_with_preference(computed))
+        try:
+            computed = date(year_num, month_num, day_num)
+            actions.insert(_format_with_preference(computed))
+        except ValueError:
+            # Fall back to inserting an unvalidated formatted string to avoid errors
+            date_str = f"{day_padded}/{month_padded}/{year}"
+            actions.insert(date_str)
 
     def insert_date_formatted(day: str, month: str, year: str):
         """Insert a formatted date from spoken day/month/year as dd/mm/yyyy"""
