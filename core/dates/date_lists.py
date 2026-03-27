@@ -29,6 +29,15 @@ def _format_with_preference(a_date: date) -> str:
         return a_date.strftime("%m/%d/%Y")
     if fmt == "iso":
         return a_date.strftime("%Y-%m-%d")
+    if fmt != "uk":
+        # Notify on invalid configuration but still fall back to UK format
+        try:
+            actions.app.notify(
+                f"Invalid user.date_format '{fmt}' (expected 'uk', 'us', or 'iso'); falling back to 'uk'."
+            )
+        except Exception:
+            # If notification fails for any reason, silently fall back to UK
+            pass
     # default UK
     return a_date.strftime("%d/%m/%Y")
 
