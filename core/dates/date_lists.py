@@ -48,10 +48,15 @@ class Actions:
         """Insert date from spoken day/month/year using preferred date_format"""
         day_padded = day.zfill(2)
         month_padded = month.zfill(2)
-        year_num = int(year)
-        month_num = int(month_padded)
-        day_num = int(day_padded)
-        computed = date(year_num, month_num, day_num)
+        try:
+            year_num = int(year)
+            month_num = int(month_padded)
+            day_num = int(day_padded)
+            computed = date(year_num, month_num, day_num)
+        except ValueError:
+            # Invalid combination of day/month/year (e.g., "thirty first" "february").
+            actions.app.notify(f"Invalid date: {day}/{month}/{year}")
+            return
         actions.insert(_format_with_preference(computed))
 
     def insert_date_formatted(day: str, month: str, year: str):
