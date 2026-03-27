@@ -1,5 +1,7 @@
 name: formatString
 phrase: format
+
+$0.wrapperPhrase: format
 ---
 
 language: cpp
@@ -30,4 +32,9 @@ f"$0"
 language: r
 -
 ${1:glue::}glue("$0")
+---
+
+language: go
+-
+fmt.Sprintf("$0", $1)
 ---

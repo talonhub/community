@@ -1,0 +1,6 @@
+list: user.float_type_bit_width
+code.language: go
+-
+
+thirty two: 32
+sixty four: 64

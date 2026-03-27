@@ -2,7 +2,7 @@
 
 Custom subtitles with settings to tweak color, position and timeout.
 
-Talon's default subtitles needs to be disabled from the Talon menu to avoid duplicates.
+Talon's default subtitles need to be disabled from the Talon menu (under Speech Recognition > Show Subtitles) to avoid duplicates.
 
 ![Subtitle](./images/subtitle.png)
 

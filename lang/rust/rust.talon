@@ -96,6 +96,9 @@ macro {user.code_macros}: user.code_insert_macro(code_macros, "")
 macro wrap {user.code_macros}:
     user.code_insert_macro(code_macros, edit.selected_text())
 
+# Turbofish
+turbo fish: user.insert_between("::<", ">")
+
 ## rust specific document comments
 block dock comment: user.code_comment_documentation_block()
 inner dock comment: user.code_comment_documentation_inner()

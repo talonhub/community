@@ -5,7 +5,6 @@ from talon import Context, Module, actions, settings
 ctx = Context()
 mod = Module()
 
-# TODO: abstract visibilities using a list (#663)
 
 mod.tag("code_functions", desc="Tag for enabling commands for functions")
 
