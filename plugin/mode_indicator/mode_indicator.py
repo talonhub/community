@@ -13,8 +13,8 @@ current_microphone = ""
 
 
 class VisibilityMode(Enum):
-    MANUALLY_SHOWING = auto()
-    MANUALLY_HIDDEN = auto()
+    SHOWING_FORCED = auto()
+    HIDDEN_FORCED = auto()
     RELY_ON_SETTING = auto()
 
 
@@ -177,7 +177,7 @@ def move_indicator():
 
 
 def should_show_indicator():
-    return (visibility_mode == VisibilityMode.MANUALLY_SHOWING) or (
+    return (visibility_mode == VisibilityMode.SHOWING_FORCED) or (
         visibility_mode == VisibilityMode.RELY_ON_SETTING
         and settings.get("user.mode_indicator_show")
     )
@@ -245,13 +245,13 @@ class Actions:
     def mode_indicator_show():
         """Forces the mode indicator to be shown ignoring the user.mode_indicator_show setting"""
         global visibility_mode
-        visibility_mode = VisibilityMode.MANUALLY_SHOWING
+        visibility_mode = VisibilityMode.SHOWING_FORCED
         update_indicator()
 
     def mode_indicator_hide():
         """Forces the mode indicator to be hidden ignoring the user.mode_indicator_show setting"""
         global visibility_mode
-        visibility_mode = VisibilityMode.MANUALLY_HIDDEN
+        visibility_mode = VisibilityMode.HIDDEN_FORCED
         update_indicator()
 
 
