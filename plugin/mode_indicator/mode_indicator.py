@@ -13,8 +13,11 @@ current_microphone = ""
 
 
 class VisibilityMode(Enum):
+    # show indicator
     SHOWING_FORCED = auto()
+    # hide indicator
     HIDDEN_FORCED = auto()
+    # visibility decided by setting
     RELY_ON_SETTING = auto()
 
 
