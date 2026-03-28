@@ -1,6 +1,7 @@
 #custom eclipse commands go here
 app: eclipse
 -
+
 tag(): user.find_and_replace
 tag(): user.line_commands
 # tag(): user.multiple_cursors
@@ -93,7 +94,7 @@ refactor rename: key(alt-shift-r)
 refactor this: key(alt-shift-i)
 
 #code navigation
-(go declaration | follow): key(f3)
+go declaration | follow: key(f3)
 go back: key(alt-left)
 go forward: key(alt-right)
 # go implementation:
@@ -139,6 +140,5 @@ debug continue: key(f8)
 # terminal scroll up: user.vscode("Terminal:ScrollUp")
 # terminal scroll down: user.vscode("Terminal:ScrollDown")
 
-#TODO: should this be added to linecommands?
 copy line down: key(ctrl-alt-down)
 copy line up: key(ctrl-alt-up)

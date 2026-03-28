@@ -16,4 +16,3 @@ mod.apps.calibre = """
 os: linux
 app.name: calibre
 """
-# TODO: mac context

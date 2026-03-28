@@ -32,8 +32,6 @@ class app_actions:
         actions.key("ctrl-shift-w")
 
     def tab_reopen():
-        # TODO: decide whether this notification is good style
-        # (if this function wouldn't be defined here a wrong default would be activated)
         actions.app.notify("tab reopen is not possible in kde konsole")
 
     def window_open():
@@ -59,7 +57,3 @@ class EditActions:
         actions.key("ctrl-shift-f")
         if str:
             actions.insert(text)
-
-    # TODO: fix select line and other selection (like shift-right)
-    # see: https://unix.stackexchange.com/questions/485536/kde-konsole-swallows-shift-left-and-shift-right
-    #  also fix extend_left and co
