@@ -243,13 +243,13 @@ def poll_microphone():
 @mod.action_class
 class Actions:
     def mode_indicator_show():
-        """Show the mode indicator"""
+        """Forces the mode indicator to be shown ignoring the user.mode_indicator_show setting"""
         global visibility_mode
         visibility_mode = VisibilityMode.MANUALLY_SHOWING
         update_indicator()
 
     def mode_indicator_hide():
-        """Hide the mode indicator"""
+        """Forces the mode indicator to be hidden ignoring the user.mode_indicator_show setting"""
         global visibility_mode
         visibility_mode = VisibilityMode.MANUALLY_HIDDEN
         update_indicator()
