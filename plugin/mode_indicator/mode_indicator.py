@@ -1,3 +1,5 @@
+from typing import Optional
+
 from talon import Module, actions, app, cron, registry, scope, settings, skia, ui
 from talon.canvas import Canvas
 from talon.screen import Screen
@@ -8,6 +10,8 @@ from talon.ui import Point2d, Rect
 canvas: Canvas = None
 current_mode = ""
 current_microphone = ""
+# True: always show indicator, False: always hide indicator, None: visibility determined by the `user.mode_indicator_show` setting
+visibility_mode = None
 mod = Module()
 
 mod.setting(
@@ -165,6 +169,12 @@ def move_indicator():
     canvas.move(x, y)
 
 
+def should_show_indicator():
+    return visibility_mode or (
+        visibility_mode is None and settings.get("user.mode_indicator_show")
+    )
+
+
 def show_indicator():
     global canvas
     canvas = Canvas.from_rect(Rect(0, 0, 0, 0))
@@ -179,7 +189,7 @@ def hide_indicator():
 
 
 def update_indicator():
-    if settings.get("user.mode_indicator_show"):
+    if should_show_indicator():
         if not canvas:
             show_indicator()
         move_indicator()
@@ -219,6 +229,17 @@ def poll_microphone():
     microphone = actions.sound.active_microphone()
     if current_microphone != microphone:
         current_microphone = microphone
+        update_indicator()
+
+
+@mod.action_class
+class Actions:
+    def mode_indicator_set_visibility(
+        new_visibility_mode: Optional[bool] = None,
+    ):
+        """Update how the mode indicator visibility is determined. True means to show the indicator. False means to hide the indicator. None means to default to the user.mode_indicator_show setting."""
+        global visibility_mode
+        visibility_mode = new_visibility_mode
         update_indicator()
 
 
