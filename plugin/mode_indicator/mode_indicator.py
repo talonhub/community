@@ -1,27 +1,16 @@
-from enum import Enum, auto
-
 from talon import Module, actions, app, cron, registry, scope, settings, skia, ui
 from talon.canvas import Canvas
 from talon.screen import Screen
 from talon.skia.canvas import Canvas as SkiaCanvas
 from talon.skia.imagefilter import ImageFilter
 from talon.ui import Point2d, Rect
+from typing import Optional
 
 canvas: Canvas = None
 current_mode = ""
 current_microphone = ""
-
-
-class VisibilityMode(Enum):
-    # show indicator
-    SHOWING_FORCED = auto()
-    # hide indicator
-    HIDDEN_FORCED = auto()
-    # visibility decided by setting
-    RELY_ON_SETTING = auto()
-
-
-visibility_mode = VisibilityMode.RELY_ON_SETTING
+# True: always show indicator, False: always hide indicator, None: visibility determined by the `user.mode_indicator_show` setting
+visibility_mode = None
 mod = Module()
 
 mod.setting(
@@ -180,8 +169,8 @@ def move_indicator():
 
 
 def should_show_indicator():
-    return (visibility_mode == VisibilityMode.SHOWING_FORCED) or (
-        visibility_mode == VisibilityMode.RELY_ON_SETTING
+    return visibility_mode or (
+        visibility_mode is None
         and settings.get("user.mode_indicator_show")
     )
 
@@ -245,18 +234,11 @@ def poll_microphone():
 
 @mod.action_class
 class Actions:
-    def mode_indicator_show():
-        """Forces the mode indicator to be shown ignoring the user.mode_indicator_show setting"""
+    def mode_indicator_update_visibility_mode(new_visibility_mode: Optional[bool]=None):
+        """Update how the mode indicator visibility is determined. True means to show the indicator. False means to hide the indicator. None means to default to the user.mode_indicator_show setting."""
         global visibility_mode
-        visibility_mode = VisibilityMode.SHOWING_FORCED
+        visibility_mode = new_visibility_mode
         update_indicator()
-
-    def mode_indicator_hide():
-        """Forces the mode indicator to be hidden ignoring the user.mode_indicator_show setting"""
-        global visibility_mode
-        visibility_mode = VisibilityMode.HIDDEN_FORCED
-        update_indicator()
-
 
 def on_ready():
     registry.register("update_contexts", on_update_contexts)

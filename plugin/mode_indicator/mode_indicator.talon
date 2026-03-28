@@ -30,5 +30,5 @@ settings():
     # GhostWhite color for other modes
     user.mode_indicator_color_other = "f8f8ff"
 
-mode indicator show: user.mode_indicator_show()
-mode indicator hide: user.mode_indicator_hide()
+mode indicator show: user.mode_indicator_update_visibility_mode(true)
+mode indicator hide: user.mode_indicator_update_visibility_mode(false)
