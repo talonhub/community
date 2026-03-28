@@ -73,6 +73,7 @@ setting_paths = {
 }
 setting_values = {name: None for name in setting_paths}
 
+
 def get_mode_color() -> str:
     if current_microphone == "None":
         return settings.get("user.mode_indicator_color_mute")
