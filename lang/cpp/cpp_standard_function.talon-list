@@ -1,6 +1,7 @@
 list: user.cpp_standard_function
 code.language: cpp
 -
+
 all of: all_of
 any of: any_of
 apply

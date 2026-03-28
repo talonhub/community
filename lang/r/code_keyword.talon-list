@@ -1,0 +1,9 @@
+list: user.code_keyword
+code.language: r
+-
+
+N A: NA
+N A character: NA_character_
+N A real: NA_real_
+N A complex: NA_complex_
+N A integer: NA_integer_
