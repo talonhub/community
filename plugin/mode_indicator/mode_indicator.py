@@ -1,10 +1,11 @@
+from typing import Optional
+
 from talon import Module, actions, app, cron, registry, scope, settings, skia, ui
 from talon.canvas import Canvas
 from talon.screen import Screen
 from talon.skia.canvas import Canvas as SkiaCanvas
 from talon.skia.imagefilter import ImageFilter
 from talon.ui import Point2d, Rect
-from typing import Optional
 
 canvas: Canvas = None
 current_mode = ""
@@ -170,8 +171,7 @@ def move_indicator():
 
 def should_show_indicator():
     return visibility_mode or (
-        visibility_mode is None
-        and settings.get("user.mode_indicator_show")
+        visibility_mode is None and settings.get("user.mode_indicator_show")
     )
 
 
@@ -234,11 +234,14 @@ def poll_microphone():
 
 @mod.action_class
 class Actions:
-    def mode_indicator_update_visibility_mode(new_visibility_mode: Optional[bool]=None):
+    def mode_indicator_update_visibility_mode(
+        new_visibility_mode: Optional[bool] = None,
+    ):
         """Update how the mode indicator visibility is determined. True means to show the indicator. False means to hide the indicator. None means to default to the user.mode_indicator_show setting."""
         global visibility_mode
         visibility_mode = new_visibility_mode
         update_indicator()
+
 
 def on_ready():
     registry.register("update_contexts", on_update_contexts)
