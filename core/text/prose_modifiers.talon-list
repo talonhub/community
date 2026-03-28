@@ -1,5 +1,6 @@
 list: user.prose_modifiers
 -
+
 # Maps spoken forms to DictationFormat method names (see DictationFormat in text_and_dictation.py).
 cap: cap
 no cap: no_cap

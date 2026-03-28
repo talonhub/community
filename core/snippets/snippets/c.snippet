@@ -1,9 +1,11 @@
 language: c | cpp
 ---
+
 name: typedefStructDeclaration
 phrase: typedef struct
-$0.insertionFormatter: PUBLIC_CAMEL_CASE
 insertionScope: statement
+
+$0.insertionFormatter: PUBLIC_CAMEL_CASE
 -
 typedef struct {
     $1

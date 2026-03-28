@@ -1,5 +1,6 @@
 app: signal
 -
+
 show shortcuts: key("ctrl-/")
 
 # Note that the order below matches Keyboard Shortcuts listings

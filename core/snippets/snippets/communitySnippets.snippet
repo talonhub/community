@@ -2,51 +2,52 @@ language: snippet
 ---
 
 name: nameDeclaration
-phrase: name
 description: defines the internal name of the snippet
+phrase: name
+
 $0.insertionFormatter: PRIVATE_CAMEL_CASE
 -
 name: $0
 ---
 
 name: phraseDeclaration
-phrase: phrase
 description: defines the spoken form used to refer to the snippet
+phrase: phrase
 -
 phrase: $0
 ---
 
 name: languageDeclaration
-phrase: language | lang
 description: defines the code language associated with the snippet
+phrase: language | lang
 -
 language: $0
 ---
 
 name: descriptionDeclaration
-phrase: description | desc
 description: defines the description for the snippet
+phrase: description | desc
 -
 description: $0
 ---
 
 name: insertionScopeDeclaration
-phrase: insertion scope
 description: defines the insertion scope for the snippet
+phrase: insertion scope
 -
 insertionScope: $0
 ---
 
 name: wrapperScopeDeclaration
-phrase: wrapper scope | wrapper
 description: defines the wrapper scope of the snippet
+phrase: wrapper scope | wrapper
 -
 $$1.wrapperScope: $0
 ---
 
 name: headerDeclaration
-phrase: header
 description: defines a header for the snippet file including name, phrase, and insertion scope.
+phrase: header
 -
 name: $1
 phrase: $2
@@ -57,8 +58,8 @@ $0
 ---
 
 name: statementHeaderDeclaration
-phrase: state header | statement header
 description: defines a header for a snippet file intended to implement a statement insertion.
+phrase: state header | statement header
 -
 name: $1Statement
 phrase: $2
@@ -69,15 +70,15 @@ $0
 ---
 
 name: variableFormatterDeclaration
-phrase: variable formatter | formatter
 description: declares the insertion formatter for a snippet variable.
+phrase: variable formatter | formatter
 -
 $$1.insertionFormatter: $0
 ---
 
 name: languageVariantDeclaration
-phrase: language snippet | lang snippet
 description: defines the body for a code language specific implementation of a snippet. This pattern is often used in the community snippets where a header defines things like the name and spoken form that is used across all the snippets but what is inserted is changed on a per language basis.
+phrase: language snippet | lang snippet
 -
 language: $1
 -
@@ -87,8 +88,8 @@ $0
 ---
 
 name: snippetDeclaration
-phrase: snippet
 description: defines a snippet. The first snippet hole is for the header and the second is for a body.
+phrase: snippet
 -
 $1
 -
@@ -98,8 +99,8 @@ $0
 ---
 
 name: defaultVariableDeclaration
-phrase: default variable | default
 description: defines a snippet variable with a default value. The variable name goes in the first snippet hole and the default value goes in the second.
+phrase: default variable | default
 -
 ${$1:$0}
 ---

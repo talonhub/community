@@ -6,6 +6,7 @@ and win.title: /PowerShell/
 os: windows
 and app.exe: powershell.exe
 -
+
 # makes the commands in terminal.talon available
 tag(): terminal
 

@@ -1,5 +1,6 @@
 code.language: r
 -
+
 tag(): user.code_imperative
 
 tag(): user.code_comment_line
@@ -33,9 +34,9 @@ using <user.code_libraries>:
     insert("::")
 
 # R specific commands
-(chain | pipe that):
+chain | pipe that:
     key(end)
-    " %>%"
+    insert(" %>%")
     key(enter)
 
 op pipe: " %>% "
