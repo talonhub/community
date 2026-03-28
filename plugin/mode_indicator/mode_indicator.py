@@ -234,7 +234,7 @@ def poll_microphone():
 
 @mod.action_class
 class Actions:
-    def mode_indicator_update_visibility_mode(
+    def mode_indicator_set_visibility(
         new_visibility_mode: Optional[bool] = None,
     ):
         """Update how the mode indicator visibility is determined. True means to show the indicator. False means to hide the indicator. None means to default to the user.mode_indicator_show setting."""
