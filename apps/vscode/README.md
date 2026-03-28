@@ -79,4 +79,4 @@ ${activeEditorShort}${separator}${rootName}${separator}${profileName}${separator
 
 This causes VS Code to include `lang:[python]` in the window title with the current active language ID. [Community's VS Code support looks for this string in the window title](vscode_language_mode.py#L15) to activate the correct `code.language`.
 
-If you have existing customizations to your window title you want to keep, ensure that `lang:[${activeEditorLanguageId}]` appears somewhere within your custom `window.title`.
+If you have existing customizations to your window title you want to keep, ensure that `lang:[${activeEditorLanguageId}]` appears somewhere within your custom `window.title`, e.g. `focus:[${focusedView}] lang:[${activeEditorLanguageId}]`.
