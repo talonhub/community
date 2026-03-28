@@ -56,6 +56,7 @@ mod.setting("mode_indicator_color_mixed", type=str)
 mod.setting("mode_indicator_color_command", type=str)
 mod.setting("mode_indicator_color_other", type=str)
 
+
 def compute_placeholder_setting_values():
     setting_paths = [
         "user.mode_indicator_show",
@@ -73,6 +74,8 @@ def compute_placeholder_setting_values():
         "user.mode_indicator_color_other",
     ]
     return {name: None for name in setting_paths}
+
+
 setting_values = compute_placeholder_setting_values()
 
 
