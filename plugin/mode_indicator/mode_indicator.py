@@ -1,19 +1,22 @@
+from enum import Enum, auto
+
 from talon import Module, actions, app, cron, registry, scope, settings, skia, ui
 from talon.canvas import Canvas
 from talon.screen import Screen
 from talon.skia.canvas import Canvas as SkiaCanvas
 from talon.skia.imagefilter import ImageFilter
 from talon.ui import Point2d, Rect
-from enum import Enum, auto
 
 canvas: Canvas = None
 current_mode = ""
 current_microphone = ""
 
+
 class VisibilityMode(Enum):
     MANUALLY_SHOWING = auto()
     MANUALLY_HIDDEN = auto()
     RELY_ON_SETTING = auto()
+
 
 visibility_mode = VisibilityMode.RELY_ON_SETTING
 mod = Module()
@@ -172,8 +175,12 @@ def move_indicator():
     canvas.resize(side, side)
     canvas.move(x, y)
 
+
 def should_show_indicator():
-    return (visibility_mode == VisibilityMode.MANUALLY_SHOWING) or (visibility_mode == VisibilityMode.RELY_ON_SETTING and settings.get("user.mode_indicator_show")) 
+    return (visibility_mode == VisibilityMode.MANUALLY_SHOWING) or (
+        visibility_mode == VisibilityMode.RELY_ON_SETTING
+        and settings.get("user.mode_indicator_show")
+    )
 
 
 def show_indicator():
@@ -232,6 +239,7 @@ def poll_microphone():
         current_microphone = microphone
         update_indicator()
 
+
 @mod.action_class
 class Actions:
     def mode_indicator_show():
@@ -247,7 +255,6 @@ class Actions:
         update_indicator()
 
 
-
 def on_ready():
     registry.register("update_contexts", on_update_contexts)
     registry.register("update_settings", on_update_settings)
@@ -256,4 +263,3 @@ def on_ready():
 
 
 app.register("ready", on_ready)
-
