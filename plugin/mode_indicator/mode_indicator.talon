@@ -3,7 +3,7 @@ mode indicator hide: user.mode_indicator_hide()
 
 settings():
     # Don't show mode indicator by default
-    user.mode_indicator_show = true
+    user.mode_indicator_show = false
     # Set to true to show the first 2 letters of the microphone name inside the mode indicator
     user.mode_indicator_show_microphone_name = false
     # 30pixels diameter
