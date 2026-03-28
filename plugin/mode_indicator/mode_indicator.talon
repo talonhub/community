@@ -1,6 +1,3 @@
-mode indicator show: user.mode_indicator_show()
-mode indicator hide: user.mode_indicator_hide()
-
 settings():
     # Don't show mode indicator by default
     user.mode_indicator_show = false
@@ -32,3 +29,6 @@ settings():
     user.mode_indicator_color_command = "6495ed"
     # GhostWhite color for other modes
     user.mode_indicator_color_other = "f8f8ff"
+
+mode indicator show: user.mode_indicator_show()
+mode indicator hide: user.mode_indicator_hide()
