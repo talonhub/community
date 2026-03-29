@@ -1,5 +1,6 @@
-from talon import Context, Module, actions
 from typing import Optional
+
+from talon import Context, Module, actions
 
 c_like_ctx = Context()
 mod = Module()
@@ -15,7 +16,7 @@ c_like_ctx.tags = ["user.code_comment_block"]
 
 @mod.action_class
 class Actions:
-    def code_comment_block(text: Optional[str]=None):
+    def code_comment_block(text: Optional[str] = None):
         """Block comment"""
         actions.user.insert_snippet_by_name("commentBlock")
         if text is not None:
@@ -27,7 +28,7 @@ class Actions:
     def code_comment_block_suffix():
         """Block comment end syntax"""
 
-    def code_block_comment_line(text: Optional[str]=None):
+    def code_block_comment_line(text: Optional[str] = None):
         """Wraps current line in block comment markers. Puts `text` between them if given"""
         actions.edit.line_start()
         actions.user.code_comment_block_prefix()
@@ -47,9 +48,10 @@ class Actions:
         actions.key("space")
         actions.user.code_comment_block_suffix()
 
+
 @c_like_ctx.action_class("user")
 class CActions:
-    def code_comment_block(text: Optional[str]=None):
+    def code_comment_block(text: Optional[str] = None):
         actions.insert("/*\n\n*/")
         actions.edit.up()
         if text is not None:
