@@ -57,26 +57,21 @@ mod.setting("mode_indicator_color_command", type=str)
 mod.setting("mode_indicator_color_other", type=str)
 
 
-def compute_placeholder_setting_values():
-    setting_paths = [
-        "user.mode_indicator_show",
-        "user.mode_indicator_size",
-        "user.mode_indicator_x",
-        "user.mode_indicator_y",
-        "user.mode_indicator_color_alpha",
-        "user.mode_indicator_color_gradient",
-        "user.mode_indicator_color_mute",
-        "user.mode_indicator_color_sleep",
-        "user.mode_indicator_color_deep_sleep",
-        "user.mode_indicator_color_dictation",
-        "user.mode_indicator_color_mixed",
-        "user.mode_indicator_color_command",
-        "user.mode_indicator_color_other",
-    ]
-    return {name: None for name in setting_paths}
-
-
-setting_values = compute_placeholder_setting_values()
+setting_values = {name: None for name in (
+    "user.mode_indicator_show",
+    "user.mode_indicator_size",
+    "user.mode_indicator_x",
+    "user.mode_indicator_y",
+    "user.mode_indicator_color_alpha",
+    "user.mode_indicator_color_gradient",
+    "user.mode_indicator_color_mute",
+    "user.mode_indicator_color_sleep",
+    "user.mode_indicator_color_deep_sleep",
+    "user.mode_indicator_color_dictation",
+    "user.mode_indicator_color_mixed",
+    "user.mode_indicator_color_command",
+    "user.mode_indicator_color_other",
+)}
 
 
 def get_mode_color() -> str:
