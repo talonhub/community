@@ -15,9 +15,11 @@ c_like_ctx.tags = ["user.code_comment_block"]
 
 @mod.action_class
 class Actions:
-    def code_comment_block():
+    def code_comment_block(text: Optional[str]=None):
         """Block comment"""
         actions.user.insert_snippet_by_name("commentBlock")
+        if text is not None:
+            actions.insert(text)
 
     def code_comment_block_prefix():
         """Block comment start syntax"""
@@ -26,7 +28,7 @@ class Actions:
         """Block comment end syntax"""
 
     def code_block_comment_line(text: Optional[str]=None):
-        """Block comment line"""
+        """Wraps current line in block comment markers. Puts `text` between them if given"""
         actions.edit.line_start()
         actions.user.code_comment_block_prefix()
         actions.key("space")
@@ -36,11 +38,22 @@ class Actions:
         actions.key("space")
         actions.user.code_comment_block_suffix()
 
+    def code_inline_block_comment(text: str):
+        """Inserts an inline block comment with the specified text"""
+        actions.edit.line_end()
+        actions.user.code_comment_block_prefix()
+        actions.key("space")
+        actions.insert(text)
+        actions.key("space")
+        actions.user.code_comment_block_suffix()
+
 @c_like_ctx.action_class("user")
 class CActions:
-    def code_comment_block():
+    def code_comment_block(text: Optional[str]=None):
         actions.insert("/*\n\n*/")
         actions.edit.up()
+        if text is not None:
+            actions.insert(text)
 
     def code_comment_block_prefix():
         actions.insert("/*")

@@ -8,24 +8,12 @@ block comment line:
 block comment line <user.text> over:
     user.code_block_comment_line(text)
 block comment <user.text> over:
-    user.code_comment_block()
-    insert(user.text)
+    user.code_comment_block(text)
 block comment <user.text>$:
-    user.code_comment_block()
-    insert(user.text)
+    user.code_comment_block(text)
 (line | inline) block comment <user.text> over:
-    edit.line_end()
-    user.code_comment_block_prefix()
-    key(space)
-    insert(user.text)
-    key(space)
-    user.code_comment_block_suffix()
+    user.code_inline_block_comment(text)
 (line | inline) block comment <user.text>$:
-    edit.line_end()
-    user.code_comment_block_prefix()
-    key(space)
-    insert(user.text)
-    key(space)
-    user.code_comment_block_suffix()
+    user.code_inline_block_comment(text)
 open block comment: user.code_comment_block_prefix()
 close block comment: user.code_comment_block_suffix()
