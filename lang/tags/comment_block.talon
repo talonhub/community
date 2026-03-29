@@ -3,17 +3,10 @@ tag: user.code_comment_block
 
 block comment: user.code_comment_block()
 block comment line:
-    edit.line_start()
-    user.code_comment_block_prefix()
-    key(space)
-    edit.line_end()
-    key(space)
-    user.code_comment_block_suffix()
+    user.code_block_comment_line()
 #adds comment to the start of the line
 block comment line <user.text> over:
-    edit.line_start()
-    user.code_comment_block()
-    insert(user.text)
+    user.code_block_comment_line(text)
 block comment <user.text> over:
     user.code_comment_block()
     insert(user.text)

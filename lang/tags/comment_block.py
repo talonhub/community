@@ -1,4 +1,5 @@
 from talon import Context, Module, actions
+from typing import Optional
 
 c_like_ctx = Context()
 mod = Module()
@@ -24,6 +25,16 @@ class Actions:
     def code_comment_block_suffix():
         """Block comment end syntax"""
 
+    def code_block_comment_line(text: Optional[str]=None):
+        """Block comment line"""
+        actions.edit.line_start()
+        actions.user.code_comment_block_prefix()
+        actions.key("space")
+        if text is not None:
+            actions.insert(text)
+        actions.edit.line_end()
+        actions.key("space")
+        actions.user.code_comment_block_suffix()
 
 @c_like_ctx.action_class("user")
 class CActions:
