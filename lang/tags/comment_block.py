@@ -28,13 +28,11 @@ class Actions:
     def code_comment_block_suffix():
         """Block comment end syntax"""
 
-    def code_block_comment_line(text: Optional[str] = None):
-        """Wraps current line in block comment markers. Puts `text` between them if given"""
+    def code_block_comment_line():
+        """Wraps current line in block comment markers"""
         actions.edit.line_start()
         actions.user.code_comment_block_prefix()
         actions.key("space")
-        if text is not None:
-            actions.insert(text)
         actions.edit.line_end()
         actions.key("space")
         actions.user.code_comment_block_suffix()
