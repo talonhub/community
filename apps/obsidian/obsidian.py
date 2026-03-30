@@ -357,3 +357,13 @@ class EditActions:
         actions.user.obsidian('editor:open-search')
         if text:
             actions.insert(text)
+
+    def find_next():
+        actions.key("escape")
+        actions.edit.find()
+        actions.key("enter")
+
+    def find_previous():
+        actions.key("escape")
+        actions.edit.find()
+        actions.key("shift-enter")
