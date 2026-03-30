@@ -1,5 +1,6 @@
-from talon import Context, Module, actions, settings
 import subprocess
+
+from talon import Context, Module, actions, settings
 
 lang_ctx = Context()
 lang_ctx.matches = r"""
@@ -7,10 +8,12 @@ app: obsidian
 not tag: user.code_language_forced
 """
 
+
 @lang_ctx.action_class("code")
 class CodeActions:
     def language():
         return "markdown"
+
 
 ctx = Context()
 ctx.matches = r"""
@@ -232,7 +235,7 @@ obsidian_command_names = {
     "workspace:split-vertical": "Split right",
     "workspace:toggle-pin": "Toggle pin",
     "workspace:toggle-stacked-tabs": "Toggle stacked tabs",
-    "workspace:undo-close-pane":   "Undo close tab"
+    "workspace:undo-close-pane": "Undo close tab",
 }
 
 
@@ -245,6 +248,7 @@ def command_uri_or_client_fallback(command_id: str):
     else:
         obsidian_palette_command(command_id)
 
+
 def get_command_palette_name(command_id: str) -> str:
     try:
         return obsidian_command_names[command_id]
@@ -252,13 +256,14 @@ def get_command_palette_name(command_id: str) -> str:
         print(f"ERROR: Could not find obsidian pellet name for command_id {command_id}")
         return ""
 
+
 def obsidian_palette_command(command_id: str):
-    actions.key('ctrl-p')
+    actions.key("ctrl-p")
     command = get_command_palette_name(command_id)
     if not command:
         return None
     actions.insert(command)
-    actions.key('enter')
+    actions.key("enter")
 
 
 @mod.action_class
@@ -275,19 +280,19 @@ class AppActions:
         actions.user.obsidian("workspace:new-tab")
 
     def tab_close():
-        actions.user.obsidian('workspace:close')
+        actions.user.obsidian("workspace:close")
 
     def tab_next():
-        actions.user.obsidian('workspace:next-tab')
+        actions.user.obsidian("workspace:next-tab")
 
     def tab_previous():
-        actions.user.obsidian('workspace:previous-tab')
+        actions.user.obsidian("workspace:previous-tab")
 
     def tab_reopen():
-        actions.user.obsidian('workspace:undo-close-pane')
+        actions.user.obsidian("workspace:undo-close-pane")
 
     def window_close():
-        actions.user.obsidian('workspace:close-window')
+        actions.user.obsidian("workspace:close-window")
 
 
 @ctx.action_class("user")
@@ -299,62 +304,63 @@ class UserActions:
             actions.insert(command)
 
     def tab_jump(number: int):
-        actions.user.obsidian(f'workspace:goto-tab-{number}')
+        actions.user.obsidian(f"workspace:goto-tab-{number}")
 
     def tab_final():
-        actions.user.obsidian('workspace:goto-last-tab')
+        actions.user.obsidian("workspace:goto-last-tab")
 
     # splits support (basic)
     def split_window():
-        actions.user.obsidian('workspace:split-vertical')
+        actions.user.obsidian("workspace:split-vertical")
 
     def split_window_vertically():
-        actions.user.obsidian('workspace:split-vertical')
+        actions.user.obsidian("workspace:split-vertical")
 
     def split_window_horizontally():
-        actions.user.obsidian('workspace:split-horizontal')
+        actions.user.obsidian("workspace:split-horizontal")
 
     def split_next():
-        actions.user.obsidian('editor:focus-right')
+        actions.user.obsidian("editor:focus-right")
 
     def split_last():
-        actions.user.obsidian('editor:focus-left')
+        actions.user.obsidian("editor:focus-left")
 
     def split_clear():
-        actions.user.obsidian('workspace:close-tab-group')
+        actions.user.obsidian("workspace:close-tab-group")
 
     # multiple cursor support (limited)
     def multi_cursor_add_above():
-        actions.user.obsidian('editor:add-cursor-above')
+        actions.user.obsidian("editor:add-cursor-above")
 
     def multi_cursor_add_below():
-        actions.user.obsidian('editor:add-cursor-below')
+        actions.user.obsidian("editor:add-cursor-below")
 
     def multi_cursor_disable():
-        actions.key('escape')
+        actions.key("escape")
 
     def multi_cursor_enable():
         actions.skip()
 
     # project-wide search
     def find_everywhere(text: str):
-        actions.user.obsidian('global-search:open')
+        actions.user.obsidian("global-search:open")
         if text:
             actions.insert(text)
 
     def replace(text: str):
-        actions.user.obsidian('editor:open-search-replace')
+        actions.user.obsidian("editor:open-search-replace")
         if text:
             actions.insert(text)
+
 
 @ctx.action_class("edit")
 class EditActions:
     # basic editor operations
     def save():
-        actions.user.obsidian('editor:save-file')
+        actions.user.obsidian("editor:save-file")
 
     def find(text: str = None):
-        actions.user.obsidian('editor:open-search')
+        actions.user.obsidian("editor:open-search")
         if text:
             actions.insert(text)
 
