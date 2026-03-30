@@ -18,7 +18,19 @@ app: Obsidian
 """
 
 mod = Module()
+# Expand app detection similar to VSCode to support all OS variants
 mod.apps.obsidian = """
+os: linux
+and app.name: Obsidian
+"""
+mod.apps.obsidian = """
+os: mac
+and app.bundle: md.obsidian
+"""
+mod.apps.obsidian = r"""
+os: windows
+and app.exe: /^obsidian\.exe$/i
+os: windows
 app.name: Obsidian
 """
 
