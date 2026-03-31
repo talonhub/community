@@ -37,6 +37,12 @@ os: windows
 app.name: Obsidian
 """
 
+mac_ctx = Context()
+mac_ctx.matches = r"""
+os: mac
+app: vscode
+"""
+
 mod.setting(
     "obsidian_use_cli",
     type=bool,
@@ -258,13 +264,23 @@ def get_command_palette_name(command_id: str) -> str:
 
 
 def obsidian_palette_command(command_id: str):
-    actions.key("ctrl-p")
+    actions.user.command_palette()
     command = get_command_palette_name(command_id)
     if not command:
         return None
     actions.insert(command)
     actions.key("enter")
 
+@mod.action_class
+class Actions:
+    def command_palette():
+        """Show command palette"""
+        actions.key("ctrl-p")
+
+@mac_ctx.action_class("user")
+class MacUserActions:
+    def command_palette():
+        actions.key("cmd-p")
 
 @mod.action_class
 class Actions:
