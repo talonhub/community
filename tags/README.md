@@ -2,7 +2,7 @@
 
 The tags folder has several other subfolders containing various commands:
 
-- `address` has commands for navigating by address, such as through an address bar or Finder's go-to-folder functionality". 
+- `address` has commands for navigating by address, such as through an address bar or Finder's go-to-folder functionality. 
 - `browser` has generic web browser commands, such as for changing the current webpage and bookmarking pages
 - `chapters` has commands for navigating between chapters in a reader application
  - `command_search` provides a command for running an arbitrary command based on a search, such as through VSCode's command palette.
