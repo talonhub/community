@@ -259,7 +259,7 @@ def get_command_palette_name(command_id: str) -> str:
     try:
         return obsidian_command_names[command_id]
     except Exception as ex:
-        print(f"ERROR: Could not find obsidian pellet name for command_id {command_id}")
+        print(f"ERROR: Could not find obsidian palette name for command_id {command_id}")
         return ""
 
 
