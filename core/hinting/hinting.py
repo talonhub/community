@@ -1,5 +1,8 @@
-from talon import Context, Module, actions, app, imgui, ui, resource, canvas, ctrl, settings, cron
-from talon.ui import Rect
+from talon import (
+    Context,
+    Module,
+    actions,
+)
 
 mod = Module()
 mod.tag("hinting_active", desc="Indicates hints are active")
@@ -37,16 +40,20 @@ mod.setting(
 )
 
 
-
 ctx = Context()
+
 
 @mod.capture(rule="<user.letter> (twice | second)")
 def hinting_double(m) -> str:
     return m.letter + m.letter
 
-@mod.capture(rule="<user.letter> | <user.letter> <user.letter> | <user.hinting_double> ")
+
+@mod.capture(
+    rule="<user.letter> | <user.letter> <user.letter> | <user.hinting_double> "
+)
 def hinting(m) -> str:
     return "".join(m)
+
 
 @ctx.action_class("main")
 class MainActions:
@@ -58,16 +65,17 @@ class MainActions:
         actions.user.hinting_close(True)
         actions.next(y, x, by_lines)
 
+
 @mod.action_class
 class Actions:
     def hinting_close(clear_cache: True):
         """Closes hinting canvas if open"""
         return False
-        
+
     def hinting_toggle():
         """Toggles hints"""
         pass
 
     def hinting_select(mouse_button: int, label: str, click_count: int):
-        """Click the hint based on the index"""        
+        """Click the hint based on the index"""
         pass
