@@ -1,6 +1,5 @@
 from talon import Context, Module, actions, app, imgui, ui, resource, canvas, ctrl, settings, cron
 from talon.ui import Rect
-from ..operating_system.windows.accessibility import find_all_clickable_rects, get_window_class, find_all_clickables_in_list_parallel
 
 mod = Module()
 mod.tag("hinting_active", desc="Indicates hints are active")
