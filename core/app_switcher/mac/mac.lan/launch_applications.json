@@ -660,6 +660,26 @@
         "is_default_for_application_group": false
     },
     {
+        "path": "/Applications/Parallels Desktop.app",
+        "display_name": "Parallels Desktop",
+        "unique_identifier": "com.parallels.desktop.console",
+        "executable_name": "prl_client_app",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/Applications/Parallels Toolbox.app",
+        "display_name": "Parallels Toolbox",
+        "unique_identifier": "com.parallels.toolbox",
+        "executable_name": "Parallels Toolbox",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
         "path": "/System/Applications/Passwords.app",
         "display_name": "Passwords",
         "unique_identifier": "com.apple.Passwords",
@@ -1064,6 +1084,16 @@
         "display_name": "Weather",
         "unique_identifier": "com.apple.weather",
         "executable_name": "Weather",
+        "exclude": false,
+        "spoken_forms": null,
+        "application_group": null,
+        "is_default_for_application_group": false
+    },
+    {
+        "path": "/Applications/WhatsApp.app",
+        "display_name": "WhatsApp",
+        "unique_identifier": "net.whatsapp.WhatsApp",
+        "executable_name": "WhatsApp",
         "exclude": false,
         "spoken_forms": null,
         "application_group": null,

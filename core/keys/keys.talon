@@ -1,5 +1,4 @@
-not tag: user.homerow_search
-not tag: user.fluent_search_screen_search
+not tag: user.hinting_active
 -
 <user.letter>: key(letter)
 (ship | uppercase) <user.letters> [(lowercase | sunk)]:
@@ -18,7 +17,7 @@ shift <user.arrow_key> [<number_small>]:
     repeat(numb - 1)
 # shift right [<number_small>]:
 #     numb  = number_small or 1
-#     key(shift-right)
+#     key(shift-right)zu
 #     repeat(numb - 1)
 # shift up [<number_small>]:
 #     numb  = number_small or 1
