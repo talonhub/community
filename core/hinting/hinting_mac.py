@@ -1,4 +1,4 @@
-from typing import List, Optional, Dict
+from typing import Dict, Optional
 import math
 from talon import Context, Module, actions, app, ui, canvas, settings
 from talon.ui import Rect
@@ -7,19 +7,93 @@ from talon.ui import Rect
 mod = Module()
 ctx = Context()
 
-canvas_active_window = None
-active_window_id = None
-cached_element = None
-clickables = None
-force_hinting = False
-
 ctx = Context()
 ctx.matches = r"""
 os: mac
 """
 
+
+class HintingState:
+    def __init__(self):
+        self.canvas_active_window = None
+        self.active_window_id = None
+        self.cached_element = None
+        self.clickables = None
+        self.current_button_mapping = {}
+        self.is_menu_open = False
+
+
+state = HintingState()
+
+ROLES = [
+    {"AXRole": "AXStaticText"},
+    {"AXRole": "AXButton"},
+    {"AXRole": "AXRadioButton"},
+    {"AXRole": "AXMenuButton"},
+    {"AXRole": "AXRow"},
+    {"AXRole": "AXCell"},
+    {"AXRole": "AXPopUpButton"},
+    {"AXRole": "AXToggle"},
+    {"AXRole": "AXCheckBox"},
+    {"AXRole": "AXDisclosureTriangle"},
+    {"AXRole": "AXUrl"},
+    {"AXRole": "AXGroup"},
+    {"AXRole": "AXMenuBarItem"},
+    {"AXRole": "AXMenuItem"},
+    {"AXRole": "AXMenu"},
+    {"AXRole": "AXColorWell"},
+    {"AXRole": "AXTextField"},
+]
+
+CLICK_ACTIONS = {"AXPress", "AXShowMenu"}
+
+SPECIAL_WINDOW_BUNDLES = {
+    "com.apple.controlcenter",
+    "com.apple.Spotlight",
+    "com.apple.loginwindow",
+    "com.apple.notificationcenterui",
+    "com.apple.coreservices.uiagent",
+    "com.apple.UserNotificationCenter",
+}
+
+
+def set_hinting_tag(is_active: bool):
+    ctx.tags = ["user.hinting_active"] if is_active else []
+
+
+def close_hinting_canvas(clear_cache: bool) -> bool:
+    if not state.canvas_active_window:
+        return False
+
+    state.clickables = None
+    state.canvas_active_window.close()
+    state.canvas_active_window = None
+    state.current_button_mapping = {}
+    state.active_window_id = None
+
+    if clear_cache:
+        state.cached_element = None
+
+    set_hinting_tag(False)
+    return True
+
+
+def set_menu_context(element=None, active_window_id=None):
+    state.cached_element = element
+    state.active_window_id = active_window_id
+    state.is_menu_open = element is not None
+
+
+def clear_menu_context():
+    state.cached_element = None
+    state.active_window_id = None
+    state.is_menu_open = False
+
+
+def get_target_element():
+    return state.cached_element or ui.active_window().element
+
 def label_for_index(n: int) -> str:
-    A = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     label = ""
     while n >= 0:
         n, remainder = divmod(n, 26)
@@ -28,19 +102,16 @@ def label_for_index(n: int) -> str:
     return label
 
 def draw_hints(canvas):
-    global current_button_mapping 
-    current_button_mapping = {}
+    state.current_button_mapping = {}
 
     paint = canvas.paint
     canvas.paint.text_align = canvas.paint.TextAlign.CENTER
     paint.textsize = 10
 
-    if not clickables:
+    if not state.clickables:
         return
-    
-    index = 1
 
-    for item in clickables:
+    for index, item in enumerate(state.clickables):
         rect = item.AXFrame
 
         paint.style = paint.Style.FILL
@@ -52,37 +123,12 @@ def draw_hints(canvas):
         x_text_position = rect_background.x + rect_background.width / 2
         y_text_position = rect_background.y + rect_background.height / 1.25
 
-        try:
-            label = label_for_index(index - 1)
-            paint.color = "ffffff"
-            canvas.draw_text(f"{label}", x_text_position, y_text_position)
-            index = index + 1
-            current_button_mapping[label] = rect
-        except:
-            print(f"Failed to generate label for index {index}")
-            break
+        label = label_for_index(index)
+        paint.color = "ffffff"
+        canvas.draw_text(label, x_text_position, y_text_position)
+        state.current_button_mapping[label] = rect
 
-    ctx.tags = ['user.hinting_active']
-
-roles = [{"AXRole": "AXStaticText"}, 
-         {"AXRole": "AXButton"},
-         {"AXRole": "AXRadioButton"}, 
-         {"AXRole": "AXMenuButton"}, 
-         {"AXRole": "AXRow"}, 
-         {"AXRole": "AXCell"}, 
-         {"AXRole": "AXPopUpButton"},
-         {"AXRole": "AXToggle"},
-         {"AXRole": "AXCheckBox"},
-         {"AXRole": "AXDisclosureTriangle"},
-         {"AXRole": "AXUrl"},
-         {"AXRole": "AXGroup"},
-         {"AXRole": "AXMenuBarItem"},
-         {"AXRole": "AXMenuItem"},
-         {"AXRole": "AXMenu"},
-         {"AXRole": "AXColorWell"},
-         {"AXRole": "AXTextField"}]
-
-         #{"AXRole": "AXTextField"}]
+    set_hinting_tag(True)
 
 DEFAULT_ROLE_PRIORITY = {
     "AXButton": 100,
@@ -169,7 +215,7 @@ def filter_elements(
         for item in items:
             try:
                 el = ui.element_at(*item.AXFrame.center)
-            except:
+            except (AttributeError, OSError, RuntimeError):
                 continue
 
             if el not in result:
@@ -202,7 +248,7 @@ def filter_elements(
         # This eliminates many clickable elements in eg finder that don't have actions defined...
         
         if should_filter_by_actions:
-            if "AXPress" not in item.actions and "AXShowMenu" not in item.actions:
+            if not CLICK_ACTIONS.intersection(item.actions):
                 continue
             
         if should_filter_overlaps:
@@ -237,96 +283,106 @@ def filter_elements(
 
     return existing_items
 
+
+def get_menu_bar_clickables() -> list:
+    if state.is_menu_open:
+        return []
+
+    try:
+        menu_bar = ui.element_at(0, 0)
+        return menu_bar.children.find(*ROLES, visible_only=True, prefetch=["AXFrame", "AXRole"])
+    except (AttributeError, OSError, RuntimeError):
+        app.notify("Failed to get menubar... figure this out later")
+        return []
+
+
+def get_application_clickables(element) -> list:
+    application_items = element.children.find(*ROLES, visible_only=True, prefetch=["AXFrame", "AXRole"])
+    if settings.get("user.hinting_filter_overlapping_item"):
+        return filter_elements(
+            application_items,
+            iou_threshold=settings.get("user.hinting_iou_threshold"),
+            role_priority=DEFAULT_ROLE_PRIORITY,
+        )
+    return application_items
+
 def find_clickables(element): 
     items = []
-    menu_bar_items = None
-    if not is_menu_open:   
-        try:
-            menu_bar = ui.element_at(0, 0)
-            menu_bar_items = menu_bar.children.find(*roles, visible_only=True,prefetch=["AXFrame", "AXRole"])
-            items.extend(menu_bar_items)
-        except:
-            app.notify("Failed to get menubar... figure this out later")
-            pass 
-
-    if settings.get("user.hinting_filter_overlapping_item"):
-        application_items = filter_elements(element.children.find(*roles, visible_only=True,prefetch=["AXFrame", "AXRole"]), iou_threshold=settings.get("user.hinting_iou_threshold"),role_priority=DEFAULT_ROLE_PRIORITY)
-    else:
-        application_items = element.children.find(*roles, visible_only=True,prefetch=["AXFrame", "AXRole"])
-    items.extend(application_items)
+    items.extend(get_menu_bar_clickables())
+    items.extend(get_application_clickables(element))
 
     return items
+
+
+def maybe_auto_hint_menu():
+    if state.is_menu_open and settings.get("user.hinting_auto_hint_menus"):
+        actions.user.hinting_toggle()
+
+
+def handle_special_window(window, opened: bool):
+    try:
+        bundle = window.app.bundle
+    except AttributeError:
+        return
+
+    if bundle not in SPECIAL_WINDOW_BUNDLES:
+        return
+
+    actions.user.hinting_close(True)
+
+    if opened:
+        set_menu_context(element=window.element, active_window_id=window.id)
+    else:
+        clear_menu_context()
+        actions.user.hinting_close(True)
+
+    maybe_auto_hint_menu()
 
 @ctx.action_class("user")
 class Actions:
     def hinting_close(clear_cache):
         """Closes hinting canvas if open"""
-        global clickables, canvas_active_window, current_button_mapping, active_window_id, cached_element
-
-        if canvas_active_window:
-            clickables = None
-            canvas_active_window.close()
-            canvas_active_window = None
-            current_button_mapping = None
-            active_window_id = None
-
-            if clear_cache:
-                cached_element = None
-
-            ctx.tags = []
-            return True
-        
-        return False
+        return close_hinting_canvas(clear_cache)
         
     def hinting_toggle():
         """Toggles hints"""
-        global is_menu_open, clickables, canvas_active_window, current_button_mapping, active_window_id, cached_element
-        
-
-        # print("hinting toggle!!!")
         if actions.user.hinting_close(False):
-            #print("closed hints")
             return
-        
-        # if cached_element:
-        #     print("cached!!")
 
-        element = ui.active_window().element if not cached_element else cached_element
+        element = get_target_element()
 
         try:
-            clickables = find_clickables(element)
+            state.clickables = find_clickables(element)
         except AttributeError:
-            if cached_element:
+            if state.cached_element:
                 app.notify("find_clickables failed with cached element. Skipping.")  
-                cached_element = None
+                state.cached_element = None
             else:
                 app.notify("find_clickables failed with active_window. Skipping.")  
 
-        #walk(element)
-        
-        if clickables and len(clickables) > 0:
-            canvas_active_window = canvas.Canvas.from_rect(ui.main_screen().rect)
-            canvas_active_window.register("draw", draw_hints)
-            canvas_active_window.freeze()
+        if state.clickables and len(state.clickables) > 0:
+            state.canvas_active_window = canvas.Canvas.from_rect(ui.main_screen().rect)
+            state.canvas_active_window.register("draw", draw_hints)
+            state.canvas_active_window.freeze()
 
     def hinting_select(mouse_button: int, label: str, click_count: int):
         """Click the hint based on the index"""        
         suppress_click = False
         label = label.upper()
-        if label not in current_button_mapping:
+        if label not in state.current_button_mapping:
             return
 
-        rect = current_button_mapping[label]
+        rect = state.current_button_mapping[label]
         x_click = rect.x + rect.width / 2
         y_click = rect.y + rect.height / 2
     
         # do some special processing if the apple menu bar is already open
-        if is_menu_open:
+        if state.is_menu_open:
             x = actions.mouse_x()
             y = actions.mouse_y()
 
             # this logic attempts to allow the user to "switch" menu bar items
-            # without repeated voice commands. e.g. file to 
+            # without repeated voice commands. e.g. file to edit
             menu_bar = ui.element_at(0, 0)
             is_clicking_menu_bar = menu_bar.AXFrame.contains(x_click, y_click)
             if is_clicking_menu_bar:
@@ -347,32 +403,9 @@ class Actions:
         if not ui.element_at(x_click, y_click).AXRole == "AXMenuBarItem":
             actions.user.hinting_close(True)
 
-is_menu_open = False
-
 # we need special processing for certain windows...
 def process_problem_children(window, opened):
-    global is_menu_open, active_window_id, cached_element
-
-    try:
-        match window.app.bundle:
-            case "com.apple.controlcenter" | "com.apple.Spotlight" | "com.apple.loginwindow" | "com.apple.notificationcenterui" | "com.apple.coreservices.uiagent" | "com.apple.UserNotificationCenter":
-                actions.user.hinting_close(True)
-
-                if opened:
-                    active_window_id = window.id
-                    cached_element = window.element
-                    is_menu_open = True
-
-                else:
-                    is_menu_open = False
-                    cached_element = None
-                    active_window_id = None
-                    actions.user.hinting_close(True) 
-
-                if is_menu_open and settings.get("user.hinting_auto_hint_menus"):
-                    actions.user.hinting_toggle()
-    except:
-        pass
+    handle_special_window(window, opened)
 
 def on_win_open(window):
     print(f"on_win_open {window.app.bundle}")
@@ -381,15 +414,14 @@ def on_win_open(window):
     #print(f"win open - title = {window.title} cls = {window.cls} id = {window.id}")
 
 def on_win_close(window):
-    global is_menu_open, active_window_id, clickables, cached_element
     try:
         print(f"on_win_close {window.app.bundle}")
-    except:
-        print(f"on_win_close")
+    except AttributeError:
+        print("on_win_close")
 
     process_problem_children(window, False)
 
-    if canvas_active_window:
+    if state.canvas_active_window:
         actions.user.hinting_close(False)
 
 def on_win_hide(window):
@@ -404,7 +436,7 @@ def on_win_disable(window):
 def on_win_title(window):
     print(f"on_win_title {window.app.bundle}")
 
-    if window.id != active_window_id:
+    if window.id != state.active_window_id:
         return
     else:
         on_win_close(window)
@@ -412,40 +444,28 @@ def on_win_title(window):
 def on_win_focus(window):
     print(f"on_win_focus {window.app.bundle}")
 
-    global is_menu_open, clickables, active_window_id, cached_element    
-    if canvas_active_window:
-        if active_window_id != window.id:
+    if state.canvas_active_window:
+        if state.active_window_id != window.id:
            actions.user.hinting_close(False)
 
     # we need special processigng for control center & a few others...
     process_problem_children(window, True)
 
-is_menu_open = False
 def on_menu_open(element):
-    global is_menu_open, clickables, active_window_id, cached_element
     print(f"on_menu_opened {element}")
 
     actions.user.hinting_close(True)
 
-    active_window_id = None
-    cached_element = element
-
-    active_window_id = None
-    is_menu_open = True
-
-    if settings.get("user.hinting_auto_hint_menus"):
-        actions.user.hinting_toggle()
+    set_menu_context(element=element)
+    maybe_auto_hint_menu()
 
 def on_menu_close(element):
     print("on_menu_close")
-    global is_menu_open, active_window_id, clickables, cached_element
-    active_window_id = None
-    is_menu_open = False
-    cached_element = None
+    clear_menu_context()
 
     on_win_close(element)
 
-    if canvas_active_window:
+    if state.canvas_active_window:
         actions.user.hinting_close(True)
 
 def on_element_focus(element):
