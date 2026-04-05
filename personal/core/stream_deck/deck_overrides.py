@@ -6,7 +6,7 @@ ctx_global = Context()
 @ctx_global.action_class("deck")
 class DeckActions:
     def goto(serial: str, path: str):
-        if path in ["control", "zoom"]:
+        if path in ["control", "zoom"] and path != actions.deck.current_path(serial):
             actions.user.deck_cache_path("A00SA3232MA4OZ")
 
         actions.next(serial, path)
