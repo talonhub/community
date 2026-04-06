@@ -69,6 +69,14 @@ class Actions:
         """Toggles hints"""
         pass
 
+    def hinting_taskbar():
+        """Hints the taskbar or equivalent"""
+        pass
+
+    def hinting_system_tray():
+        """Hints the system tray or equivalent"""
+        pass
+
     def hinting_select(mouse_button: int, label: str, click_count: int):
         """Click the hint based on the index"""        
         pass

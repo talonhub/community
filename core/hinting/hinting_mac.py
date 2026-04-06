@@ -47,6 +47,8 @@ ROLES = [
 
 CLICK_ACTIONS = {"AXPress", "AXShowMenu"}
 
+system_tray_bundle = "com.apple.systemuiserver"
+
 SPECIAL_WINDOW_BUNDLES = {
     "com.apple.controlcenter",
     "com.apple.Spotlight",
@@ -343,6 +345,21 @@ class Actions:
     def hinting_close(clear_cache):
         """Closes hinting canvas if open"""
         return close_hinting_canvas(clear_cache)
+    
+    def hinting_taskbar():
+        try:
+            actions.user.hinting_close(True)
+
+            dock = ui.apps(bundle="com.apple.dock")[0]
+            state.clickables = dock.children.find(AXRole="AXDockItem", prefetch=["AXFrame"])
+
+            if state.clickables and len(state.clickables) > 0:
+                state.canvas_active_window = canvas.Canvas.from_rect(ui.main_screen().rect)
+                state.canvas_active_window.register("draw", draw_hints)
+                state.canvas_active_window.freeze()
+            
+        except (IndexError, AttributeError, OSError, RuntimeError):
+            app.notify("Failed to get system tray... figure this out later")
         
     def hinting_toggle():
         """Toggles hints"""

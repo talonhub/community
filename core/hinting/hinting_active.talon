@@ -1,4 +1,3 @@
-tag: user.taskbar_canvas_popup_showing
 tag: user.hinting_active
 -
 ^<user.hinting>$: 
