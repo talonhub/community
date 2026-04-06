@@ -22,6 +22,18 @@ class HintingState:
         self.current_button_mapping = {}
         self.is_menu_open = False
 
+    def reset(self, clear_cached_element: bool = False):
+        if self.canvas_active_window:
+            self.canvas_active_window.close()
+
+        self.canvas_active_window = None
+        self.active_window_id = None
+        if clear_cached_element:
+            self.cached_element = None
+        self.clickables = None
+        self.current_button_mapping = {}
+        self.is_menu_open = False
+
 
 state = HintingState()
 
@@ -62,19 +74,11 @@ SPECIAL_WINDOW_BUNDLES = {
 def set_hinting_tag(is_active: bool):
     ctx.tags = ["user.hinting_active"] if is_active else []
 
-
 def close_hinting_canvas(clear_cache: bool) -> bool:
     if not state.canvas_active_window:
         return False
 
-    state.clickables = None
-    state.canvas_active_window.close()
-    state.canvas_active_window = None
-    state.current_button_mapping = {}
-    state.active_window_id = None
-
-    if clear_cache:
-        state.cached_element = None
+    state.reset(clear_cache)
 
     set_hinting_tag(False)
     return True
@@ -84,12 +88,6 @@ def set_menu_context(element=None, active_window_id=None):
     state.cached_element = element
     state.active_window_id = active_window_id
     state.is_menu_open = element is not None
-
-
-def clear_menu_context():
-    state.cached_element = None
-    state.active_window_id = None
-    state.is_menu_open = False
 
 
 def get_target_element():
@@ -335,7 +333,7 @@ def handle_special_window(window, opened: bool):
     if opened:
         set_menu_context(element=window.element, active_window_id=window.id)
     else:
-        clear_menu_context()
+        state.reset(True)
         actions.user.hinting_close(True)
 
     maybe_auto_hint_menu()
@@ -375,6 +373,7 @@ class Actions:
                 app.notify("find_clickables failed with cached element. Skipping.")  
                 state.cached_element = None
             else:
+                state.reset(True)
                 app.notify("find_clickables failed with active_window. Skipping.")  
 
         if state.clickables and len(state.clickables) > 0:
@@ -478,7 +477,7 @@ def on_menu_open(element):
 
 def on_menu_close(element):
     print("on_menu_close")
-    clear_menu_context()
+    state.reset(True)
 
     on_win_close(element)
 
