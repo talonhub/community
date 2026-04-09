@@ -1,4 +1,6 @@
-from talon import Context, Module, actions
+import os
+
+from talon import Context, Module, actions, ui
 
 # App definition
 mod = Module()
@@ -24,6 +26,19 @@ class user_actions:
     # user.tabs
     def tab_jump(number):
         actions.key(f"alt-{number}")
+
+    # user.file_manager
+    def file_manager_current_path():
+        title = ui.active_window().title
+
+        # split on colon to find the path
+        if ": " in title:
+            title = title.split(": ")[1]
+
+        if "~" in title:
+            title = os.path.expanduser(title)
+
+        return title
 
 
 @ctx.action_class("app")

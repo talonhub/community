@@ -1,5 +1,6 @@
 tag: terminal
 -
+
 # tags should be activated for each specific terminal in the respective talon file
 
 lisa [dir] [<user.text>]: user.terminal_list_directories(text or "")

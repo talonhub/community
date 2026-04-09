@@ -10,7 +10,6 @@ app: windows_terminal
 and win.title: /Command Prompt/
 """
 
-user_path = os.path.expanduser("~")
 directories_to_remap = {}
 directories_to_exclude = {}
 
@@ -29,11 +28,6 @@ class UserActions:
         actions.insert("title Command Prompt: %CD%")
         actions.key("enter")
 
-    def file_manager_open_parent():
-        actions.insert("cd ..")
-        actions.key("enter")
-        actions.user.file_manager_refresh_title()
-
     def file_manager_current_path():
         path = ui.active_window().title
         path = path.replace("Administrator:  ", "").replace("Command Prompt: ", "")
@@ -44,14 +38,8 @@ class UserActions:
             path = ""
         return path
 
-    # def file_manager_terminal_here():
-    #     actions.key("ctrl-l")
-    #     actions.insert("cmd.exe")
-    #     actions.key("enter")
-
-    # def file_manager_show_properties():
-    #     """Shows the properties for the file"""
-    #     actions.key("alt-enter")
+    def terminal_escape_relative_file(string: str) -> str:
+        return f'"{string}"'
 
     def file_manager_open_directory(path: str):
         """opens the directory that's already visible in the view"""
@@ -59,26 +47,11 @@ class UserActions:
         actions.key("enter")
         actions.user.file_manager_refresh_title()
 
-    def file_manager_select_directory(path: str):
-        """selects the directory"""
-        actions.insert(f'"{path}"')
-
-    def file_manager_new_folder(name: str):
-        """Creates a new folder in a gui filemanager or inserts the command to do so for terminals"""
-        actions.insert(f'mkdir "{name}"')
-
-    def file_manager_open_file(path: str):
-        """opens the file"""
-        actions.insert(path)
-        # actions.key("enter")
-
-    def file_manager_select_file(path: str):
-        """selects the file"""
-        actions.insert(path)
-
     def file_manager_open_volume(volume: str):
         """file_manager_open_volume"""
-        actions.user.file_manager_open_directory(volume)
+        actions.insert(volume)
+        actions.key("enter")
+        actions.user.file_manager_refresh_title()
 
     def terminal_list_directories(path: Optional[str] = None):
         """Lists directories"""
@@ -91,8 +64,8 @@ class UserActions:
 
     def terminal_change_directory(path: str):
         actions.insert(f"cd {path}")
-        # if path:
-        # actions.key("enter")
+        if path:
+            actions.key("enter")
 
     def terminal_change_directory_root():
         """Root of current drive"""
@@ -111,3 +84,6 @@ class UserActions:
         actions.key("ctrl-c")
         actions.insert("y")
         actions.key("enter")
+
+    def terminal_escape_string(string: str) -> str:
+        return string.replace(" ", r"\ ")

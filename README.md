@@ -68,13 +68,13 @@ Note that it is also possible to install `community` by [downloading and extract
    - `paste that`, `copy that`, and `cut that` for pasting/copy/cutting, respectively.
 8. For community-generated documentation on Talon itself, please visit https://talon.wiki/.
 
-It's recommended to learn the alphabet first, then get familiar with the keys, symbols, formatters, mouse, and generic_editor commands.
+It's recommended to learn the alphabet first, then get familiar with the keys, symbols, formatters, mouse, and edit commands.
 
 Once you have the basics of text input down, try copying some code from one window to another.
 
 After that, explore using ordinal repetition for easily repeating a command without pausing (e.g., saying `go up fifth` will go up five lines), window switching (`focus chrome`), and moving around in your text editor of choice.
 
-If you use vim, just start with the numbers and alphabet, otherwise look at generic_editor.talon as well at jetbrains, vscode, and any other integrations.
+If you use vim, just start with the numbers and alphabet, otherwise look at edit.talon as well at jetbrains, vscode, and any other integrations.
 
 ### Alphabet
 

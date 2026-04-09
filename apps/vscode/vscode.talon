@@ -1,6 +1,7 @@
 #custom vscode commands go here
 app: vscode
 -
+
 tag(): user.find_and_replace
 tag(): user.line_commands
 tag(): user.multiple_cursors
@@ -121,7 +122,7 @@ refactor rename: user.vscode("editor.action.rename")
 refactor this: user.vscode("editor.action.refactor")
 
 #code navigation
-(go declaration | follow): user.vscode("editor.action.revealDefinition")
+go declaration | follow: user.vscode("editor.action.revealDefinition")
 go back: user.vscode("workbench.action.navigateBack")
 go forward: user.vscode("workbench.action.navigateForward")
 go implementation: user.vscode("editor.action.goToImplementation")
