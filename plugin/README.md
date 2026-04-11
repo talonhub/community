@@ -1,8 +1,9 @@
 # plugin
 
 The plugin folder has several other subfolders containing various commands and features:
+
 - `are_you_sure` has an action that takes an action as an argument and shows an "are you sure" message. The user can use a command to accept and perform the action or another command to close the message without performing the action.
-- `breaking_changes_notice` notifies the user if the breaking changes file has been updated. 
+- `breaking_changes_notice` notifies the user if the breaking changes file has been updated.
 - `cancel` contains commands to make talon ignore a command
 - `command_history` has commands to see previous commands
 - `datetimeinsert` has commands to automatically write the current date and time
@@ -16,11 +17,11 @@ The plugin folder has several other subfolders containing various commands and f
 - `microphone_selection` has commands for selecting a microphone to use
 - `mode_indicator` does not have commands, but has settings for enabling a graphical mode indicator
 - `mouse` has commands to click, drag, scroll, and use an eye tracker
-- `new_user_message` shows a message intended for new users. 
+- `new_user_message` shows a message intended for new users.
 - `repeater` has commands for repeating other commands, described briefly in the top level [README](https://github.com/talonhub/community?tab=readme-ov-file#repeating-commands)
 - `screenshot` has commands for taking screenshots
 - `symbols` has commands for inserting certain symbols, like pairs of parentheses or quotation marks
 - `talon_draft_window` has the rest of the commands for using the draft editor window
 - `talon_helpers` has commands helpful for debugging, opening the talon directory, and getting updates
 - `text_navigation` has commands for navigating the cursor in text
-- `then` has a command that does nothing, which is sometimes useful for command chaining. 
+- `then` has a command that does nothing, which is sometimes useful for command chaining.
