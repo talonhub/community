@@ -50,9 +50,9 @@ file copy full path: user.obsidian("workspace:copy-full-path")
 file copy url: user.obsidian("workspace:copy-url")
 
 # daily notes
-note daily: user.obsidian("daily-notes")
-note daily previous: user.obsidian("daily-notes:goto-prev")
-note daily next: user.obsidian("daily-notes:goto-next")
+daily open: user.obsidian("daily-notes")
+daily previous: user.obsidian("daily-notes:goto-prev")
+daily next: user.obsidian("daily-notes:goto-next")
 
 # links and navigation
 link follow | follow this: user.obsidian("editor:follow-link")
@@ -87,25 +87,16 @@ replace here [<user.text>]:
     insert(user.text or "")
 
 # formatting and lists
-bold toggle: user.obsidian("editor:toggle-bold")
-italic toggle: user.obsidian("editor:toggle-italics")
-code toggle: user.obsidian("editor:toggle-code")
-blockquote toggle: user.obsidian("editor:toggle-blockquote")
-list bullet toggle: user.obsidian("editor:toggle-bullet-list")
-list number toggle: user.obsidian("editor:toggle-numbered-list")
-checkbox toggle: user.obsidian("editor:toggle-checklist-status")
-line numbers toggle: user.obsidian("editor:toggle-line-numbers")
-readable length toggle: user.obsidian("editor:toggle-readable-line-length")
-spellcheck toggle: user.obsidian("editor:toggle-spellcheck")
-
-# headings
-heading one: user.obsidian("editor:set-heading-1")
-heading two: user.obsidian("editor:set-heading-2")
-heading three: user.obsidian("editor:set-heading-3")
-heading four: user.obsidian("editor:set-heading-4")
-heading five: user.obsidian("editor:set-heading-5")
-heading six: user.obsidian("editor:set-heading-6")
-heading remove: user.obsidian("editor:set-heading-0")
+bold: user.obsidian("editor:toggle-bold")
+italic: user.obsidian("editor:toggle-italics")
+code: user.obsidian("editor:toggle-code")
+blockquote: user.obsidian("editor:toggle-blockquote")
+bullet: user.obsidian("editor:toggle-bullet-list")
+list number: user.obsidian("editor:toggle-numbered-list")
+checkbox: user.obsidian("editor:toggle-checklist-status")
+line numbers: user.obsidian("editor:toggle-line-numbers")
+readable length: user.obsidian("editor:toggle-readable-line-length")
+spellcheck: user.obsidian("editor:toggle-spellcheck")
 
 # folding and movement
 fold all: user.obsidian("editor:fold-all")
