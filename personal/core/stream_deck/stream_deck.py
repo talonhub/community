@@ -1,5 +1,9 @@
-from talon import ui, Module, Context, registry, actions, imgui, cron, app, scope
+from talon import ui, Module, Context, registry, actions, imgui, cron, app, scope, settings
 mod = Module()
+
+mod.setting("tracking_use_gaze_mouse", type=bool, default=False, desc="Whether to use gaze mouse tracking")
+ctx_global = Context()
+
 ctx_zoom_mouse_enabled = Context()
 ctx_zoom_mouse_enabled.matches = r"""
 not user.running: Optikey Mouse
@@ -92,12 +96,16 @@ class Actions:
 
     def deck1():
         """document string goes here"""
-        if not actions.tracking.control_zoom_enabled():
-            actions.tracking.control_zoom_toggle(True)
+        if not settings.get("user.tracking_use_gaze_mouse"):
+            if not actions.tracking.control_zoom_enabled():
+                actions.tracking.control_zoom_toggle(True)
 
-        actions.user.zoom_set_allowed(True)
-        actions.tracking.zoom()
-        actions.deck.goto("A00SA3232MA4OZ", "zoom")
+            actions.user.zoom_set_allowed(True)
+            actions.tracking.zoom()
+            actions.deck.goto("A00SA3232MA4OZ", "zoom")
+        else: 
+            actions.user.gaze_grid_toggle()
+            actions.deck.goto("A00SA3232MA4OZ", "gaze")
 
     def deck2():
         """document string goes here"""
