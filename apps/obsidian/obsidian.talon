@@ -87,10 +87,6 @@ replace here [<user.text>]:
     user.obsidian("editor:open-search-replace")
     sleep(50ms)
     insert(user.text or "")
-command hunt [<user.text>]:
-    user.obsidian("command-palette:open")
-    sleep(50ms)
-    insert(user.text or "")
 
 # formatting and lists
 bold toggle: user.obsidian("editor:toggle-bold")

@@ -40,7 +40,7 @@ app.name: Obsidian
 mac_ctx = Context()
 mac_ctx.matches = r"""
 os: mac
-app: vscode
+app: obsidian
 """
 
 mod.setting(
@@ -245,12 +245,16 @@ obsidian_command_names = {
 }
 
 
+def obsidian_run_cli_command(command_id: str):
+    subprocess.run(["obsidian", "command", f"id={command_id}"], timeout=1.0)
+
+
 def command_uri_or_client_fallback(command_id: str):
     """If advanced-uri is supported, use it to invoke the command.
     Otherwise, fall back to the client"""
 
     if settings.get("user.obsidian_use_cli"):
-        subprocess.run(["obsidian", "command", f"id={command_id}"], timeout=1.0)
+        obsidian_run_cli_command(command_id)
     else:
         obsidian_palette_command(command_id)
 
@@ -274,17 +278,24 @@ def obsidian_palette_command(command_id: str):
     actions.key("enter")
 
 
+def command_palette(key_fallback: str):
+    if settings.get("user.obsidian_use_cli"):
+        obsidian_run_cli_command("command-palette:open")
+    else:
+        actions.key(key_fallback)
+
+
 @mod.action_class
 class Actions:
     def command_palette():
         """Show command palette"""
-        actions.key("ctrl-p")
+        command_palette("ctrl-p")
 
 
 @mac_ctx.action_class("user")
 class MacUserActions:
     def command_palette():
-        actions.key("cmd-p")
+        command_palette("cmd-p")
 
 
 @mod.action_class
