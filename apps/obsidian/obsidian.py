@@ -17,7 +17,7 @@ class CodeActions:
 
 ctx = Context()
 ctx.matches = r"""
-app: Obsidian
+app: obsidian
 """
 
 mod = Module()
@@ -34,7 +34,7 @@ mod.apps.obsidian = r"""
 os: windows
 and app.exe: /^obsidian\.exe$/i
 os: windows
-app.name: Obsidian
+app.name: obsidian
 """
 
 mac_ctx = Context()
@@ -384,6 +384,13 @@ class UserActions:
         if text:
             actions.insert(text)
 
+    # navigation
+    def go_back():
+        actions.user.obsidian("app:go-back")
+
+    def go_forward():
+        actions.user.obsidian("app:go-forward")
+
 
 @ctx.action_class("edit")
 class EditActions:
@@ -405,3 +412,12 @@ class EditActions:
         actions.key("escape")
         actions.edit.find()
         actions.key("shift-enter")
+
+    def zoom_in():
+        actions.user.obsidian("window:zoom-in")
+
+    def zoom_out():
+        actions.user.obsidian("window:zoom-out")
+
+    def zoom_reset():
+        actions.user.obsidian("window:reset-zoom")

@@ -6,6 +6,7 @@ tag(): user.multiple_cursors
 tag(): user.splits
 tag(): user.tabs
 tag(): user.command_search
+tag(): user.navigation
 
 left side: user.obsidian("editor:focus-left")
 right side: user.obsidian("editor:focus-right")
@@ -20,7 +21,6 @@ ribbon switch: user.obsidian("app:toggle-ribbon")
 
 # window and settings
 window reload | reload it: user.obsidian("app:reload")
-window close: user.obsidian("workspace:close-window")
 show settings: user.obsidian("app:open-settings")
 
 # note operations
@@ -58,8 +58,6 @@ note daily next: user.obsidian("daily-notes:goto-next")
 link follow | follow this: user.obsidian("editor:follow-link")
 link open: user.obsidian("editor:open-link-in-new-leaf")
 link split: user.obsidian("editor:open-link-in-new-split")
-go back: user.obsidian("app:go-back")
-go forward: user.obsidian("app:go-forward")
 
 tab pin: user.obsidian("workspace:toggle-pin")
 close other tabs: user.obsidian("workspace:close-others")
@@ -122,6 +120,3 @@ line move down: user.obsidian("editor:swap-line-down")
 # display and theme
 theme switch: user.obsidian("theme:switch")
 theme toggle: user.obsidian("theme:toggle-light-dark")
-zoom in: user.obsidian("window:zoom-in")
-zoom out: user.obsidian("window:zoom-out")
-zoom reset: user.obsidian("window:reset-zoom")
