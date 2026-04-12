@@ -1,4 +1,5 @@
 import subprocess
+import re
 
 from talon import Context, Module, actions, settings
 
@@ -246,7 +247,28 @@ obsidian_command_names = {
 
 
 def obsidian_run_cli_command(command_id: str):
-    subprocess.run(["obsidian", "command", f"id={command_id}"], timeout=1.0)
+    try:
+        subprocess.check_output(
+            ["obsidian", "command", f"id={command_id}"], timeout=1.0
+        )
+    except OSError as e:
+        print(f"Error running obsidian command via cli: {e}")
+        print("Obsidian might not be on PATH?")
+    except subprocess.CalledProcessError as e:
+        # Note: As of at least obsidian version 1.12, the CLI never emits a failure exit code, so none of these will trigger currently, but a future update to obsidian might fix that.
+        print(f"Error running obsidian command via cli: {e.output}")
+        if "Command line interface is not enabled" in e.output:
+            print(
+                "Talon settings say to use the obsidian CLI for obsidian commands, but CLI interface control is disabled in obsidian settings."
+            )
+            print("Please turn it on in Settings > General >Advanced")
+        elif re.match('Command "[^"]*"not found', e.output):
+            print(
+                f"Command '{command_id}' does not seem to be a valid obsidian command"
+            )
+
+        print(f"Falling back to palette command for {command_id}")
+        obsidian_palette_command(command_id)
 
 
 def command_uri_or_client_fallback(command_id: str):
