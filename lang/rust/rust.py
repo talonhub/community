@@ -1,4 +1,5 @@
-from typing import Any, Callable, TypeVar
+from itertools import chain
+from typing import Any, Callable, Dict, Iterator, List, Tuple, TypeVar
 
 from talon import Context, Module, actions, settings
 
@@ -65,7 +66,7 @@ scalar_types = {
 }
 
 compound_types = {
-    "tuple": "()",
+    "unit": "()",
     "array": "[]",
 }
 
@@ -97,11 +98,19 @@ standard_sync_types = {
     "sink sender": "SyncSender",
 }
 
+FINISH = "FINISH"
+TUPLE = "TUPLE"
+imaginary_types = {
+    "finish": FINISH,
+    "tuple": TUPLE,
+}
+
 all_types = {
     **scalar_types,
     **compound_types,
     **standard_library_types,
     **standard_sync_types,
+    **imaginary_types,
 }
 
 standard_function_macros = {
@@ -213,11 +222,141 @@ ctx.lists["user.code_type_modifier"] = {
     "mute borrowed": "&mut ",
 }
 
+# TODO: allow extending this in user configs somehow?
+generic_argument_counts: Dict[str, int] = {
+    "Box": 1,
+    "Vec": 1,
+    "Option": 1,
+    "Result": 2,
+    "HashMap": 2,
+    "HashSet": 1,
+    "Rc": 1,
+    "Arc": 1,
+    "Mutex": 1,
+    "RwLock": 1,
+    "Receiver": 1,
+    "Sender": 1,
+    "SyncSender": 1,
+}
 
-@ctx.capture("user.code_type", rule="[{user.code_type_modifier}] {user.code_type}")
+
+@mod.capture(rule="[{user.code_type_modifier}] {user.code_type}")
+def generic_type(m) -> Tuple[str, int, str]:
+    """returns (start, arg count, end), negative arg count for n-ary things"""
+    m: List[str] = list(m)
+    if m[-1] == TUPLE:
+        result = ("(", -1, ")")
+    elif m[-1] in generic_argument_counts:
+        result = ("".join(m + ["<"]), generic_argument_counts[m[-1]], ">")
+    else:
+        result = ("".join(m), 0, "")
+    return result
+
+
+@ctx.capture("user.code_type", rule="<user.generic_type>+")
 def code_type(m) -> str:
-    """Returns a macro name"""
-    return "".join(m)
+    """Parses a type, inserting brackets for generic arguments.
+    This knows about standard library generic types and how many arguments they take.
+
+    To start a tuple type, say "tuple"; to end a tuple type, say "finish".
+    If you don't end a tuple type, it'll automatically be closed.
+
+    For example:
+    'vector' -> 'Vec<>'
+    'vector eye thirty two' -> 'Vec<i32>'
+    'hash map borrowed mute eye thirty two string' -> 'HashMap<&mut i32, String>'
+    'borrowed mute hash map eye thirty two string' -> '&mut HashMap<i32, String>'
+    'tuple eye thirty two character string' -> '(i32, char, String)'
+    'hash map tuple boolean boolean finish string' -> 'HashMap<(boolean, boolean), String)'
+    """
+
+    def parse(tokens: Iterator[Tuple[str, int, str]]) -> Iterator[str]:
+        """Consume some number of tokens, yielding a sequence of strs That can be joined with '' to give a single type."""
+        try:
+            start, expected_args, end = next(tokens)
+        except StopIteration:
+            # this seems silly but is mandated by PEP 479
+            return
+
+        if start == FINISH:
+            # we haven't started a tuple, and this isn't a real type, so suppress it
+            return
+
+        if expected_args == 0:
+            # simplest case, a non-generic type
+            yield start
+
+        elif expected_args > 0:
+            # a generic type with a concrete number of arguments
+            yield start
+            for i in range(expected_args):
+                # each `yield from` corresponds to a single type.
+                # if we run out of tokens, this won't throw an exception, it'll just do nothing--
+                # which is fine, we still want to insert commas and brangles
+                yield from parse(tokens)
+
+                if i < expected_args - 1:
+                    yield ", "
+            yield end
+        else:
+            # expected_args < 0, ie an n-ary object like a tuple
+            yield start
+            written = 0
+            while True:
+                # peek
+                try:
+                    next_start, next_expected, next_end = next(tokens)
+                    stopping = next_start == FINISH
+                except StopIteration:
+                    # stream has ended, but we're inside an n-ary:
+                    # optimistically close it.
+                    stopping = True
+
+                if stopping:
+                    if written == 1:
+                        # (T, ) != (T), so we can't get rid of the comma in this case
+                        yield ", "
+                    break
+                # we're not done, but we might need a comma
+                elif written > 0:
+                    yield ", "
+
+                # reconstruct the iterator and do this step
+                yield from parse(chain([(next_start, next_expected, next_end)], tokens))
+                written += 1
+            yield end
+
+    return "".join(parse(iter(m)))
+
+
+def code_type_(*args):
+    return code_type([generic_type(arg) for arg in args])
+
+
+assert code_type_(["Vec"]) == "Vec<>"
+assert code_type_(["Vec"], ["i32"]) == "Vec<i32>"
+assert (
+    code_type_(["HashMap"], ["&mut ", "i32"], ["String"]) == "HashMap<&mut i32, String>"
+)
+assert code_type_(["HashMap"], ["&mut ", "i32"]) == "HashMap<&mut i32, >"
+assert (
+    code_type_(["&mut ", "HashMap"], ["i32"], ["String"]) == "&mut HashMap<i32, String>"
+)
+assert (
+    code_type_(["HashMap"], ["Vec"], ["i32"], ["HashMap"], ["String"], ["()"])
+    == "HashMap<Vec<i32>, HashMap<String, ()>>"
+)
+assert (
+    code_type_(["HashMap"], [TUPLE], ["bool"], ["bool"], [FINISH], ["String"])
+    == "HashMap<(bool, bool), String>"
+)
+assert code_type_([TUPLE], ["i32"], ["i32"], ["i32"]) == "(i32, i32, i32)"
+assert code_type_([TUPLE], ["i32"]) == "(i32, )"
+assert (
+    code_type_([TUPLE], [TUPLE], ["i32"], ["i32"], [FINISH], ["String"])
+    == "((i32, i32), String)"
+)
+assert code_type_([TUPLE], [FINISH]) == "()"
 
 
 ctx.lists["user.code_macros"] = all_macros
