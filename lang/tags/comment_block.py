@@ -60,9 +60,13 @@ class Actions:
 @c_like_ctx.action_class("user")
 class CActions:
     def code_comment_block(text: Optional[str] = None):
-        actions.insert(f"/*\n{text}\n*/")
-        actions.edit.up()
-        actions.edit.line_end()
+        if text is None:
+            substitutions = None
+            snippet = f"/*\n$0\n*/"
+        else:
+            substitutions = {"0": text}
+            snippet = f"/*\n$0$1\n*/"
+        actions.user.insert_snippet_with_substitutions(snippet, substitutions)
 
     def code_comment_block_prefix():
         actions.insert("/*")

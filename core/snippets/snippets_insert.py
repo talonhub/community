@@ -15,6 +15,11 @@ class Actions:
         """Insert snippet"""
         insert_snippet_raw_text(body)
 
+    def insert_snippet_with_substitutions(body: str, substitutions: dict[str, str]=None):
+        """Insert snippet with substitutions"""
+        body = compute_snippet_body_with_substitutions_from_body(body, substitutions)
+        actions.user.insert_snippet(body)
+
     def move_cursor_to_next_snippet_stop():
         """Moves the cursor to the next snippet stop"""
         go_to_next_stop_raw()
@@ -70,6 +75,11 @@ def compute_snippet_body_with_substitutions(
     snippet: Snippet, substitutions: dict[str, str]
 ) -> str:
     body = snippet.body
+    return compute_snippet_body_with_substitutions_from_body(body, substitutions)
+
+def compute_snippet_body_with_substitutions_from_body(
+    body: str, substitutions: dict[str, str]
+) -> str:
     if substitutions:
         for k, v in substitutions.items():
             v = v.replace("$", r"\$")
@@ -80,7 +90,6 @@ def compute_snippet_body_with_substitutions(
                 )
             body = reg.sub(v, body)
     return body
-
 
 def compute_phrase_substitutions(snippet: Snippet, phrase: str):
     substitutions = {}
