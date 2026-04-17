@@ -18,9 +18,10 @@ c_like_ctx.tags = ["user.code_comment_block"]
 class Actions:
     def code_comment_block(text: Optional[str] = None):
         """Block comment"""
-        actions.user.insert_snippet_by_name("commentBlock")
+        substitutions = None
         if text is not None:
-            actions.insert(text)
+            substitutions = {"0": text}
+        actions.user.insert_snippet_by_name("commentBlock", substitutions)
 
     def code_comment_block_prefix():
         """Block comment start syntax"""
@@ -59,10 +60,9 @@ class Actions:
 @c_like_ctx.action_class("user")
 class CActions:
     def code_comment_block(text: Optional[str] = None):
-        actions.insert("/*\n\n*/")
+        actions.insert(f"/*\n{text}\n*/")
         actions.edit.up()
-        if text is not None:
-            actions.insert(text)
+        actions.edit.line_end()
 
     def code_comment_block_prefix():
         actions.insert("/*")
