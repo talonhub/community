@@ -15,13 +15,6 @@ class Actions:
         """Insert snippet"""
         insert_snippet_raw_text(body)
 
-    def insert_snippet_with_substitutions(
-        body: str, substitutions: dict[str, str] = None
-    ):
-        """Insert snippet with substitutions"""
-        body = compute_snippet_body_with_substitutions_from_body(body, substitutions)
-        actions.user.insert_snippet(body)
-
     def move_cursor_to_next_snippet_stop():
         """Moves the cursor to the next snippet stop"""
         go_to_next_stop_raw()
