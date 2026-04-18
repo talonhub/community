@@ -18,8 +18,9 @@ c_like_ctx.tags = ["user.code_comment_block"]
 class Actions:
     def code_comment_block(text: Optional[str] = None):
         """Block comment"""
-        substitutions = None
-        if text is not None:
+        if text is None:
+            substitutions = None
+        else:
             substitutions = {"0": text}
         actions.user.insert_snippet_by_name("commentBlock", substitutions)
 
