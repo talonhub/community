@@ -51,9 +51,7 @@ class Actions:
     def code_block_comment_inline(text: str):
         """Inserts an inline block comment"""
         actions.user.code_comment_block_prefix()
-        actions.key("space")
-        actions.insert(text)
-        actions.key("space")
+        actions.insert(f" {text} ")
         actions.user.code_comment_block_suffix()
 
 
