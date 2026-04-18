@@ -4,7 +4,7 @@ tag: user.code_comment_block
 block comment: user.code_comment_block()
 block comment line: user.code_comment_block_line()
 #adds comment to the start of the line
-block comment line <user.text> over: 
+block comment line <user.text> over:
     edit.line_start()
     user.code_block_comment_inline(text)
 block comment <user.text> over: user.code_comment_block(text)
