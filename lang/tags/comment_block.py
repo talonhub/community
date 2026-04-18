@@ -49,7 +49,7 @@ class Actions:
         actions.user.code_block_comment_inline(text)
 
     def code_block_comment_inline(text: str):
-        """Inserts an inline block comment at the end of the line with the specified text"""
+        """Inserts an inline block comment"""
         actions.user.code_comment_block_prefix()
         actions.key("space")
         actions.insert(text)
