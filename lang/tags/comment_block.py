@@ -29,7 +29,7 @@ class Actions:
     def code_comment_block_suffix():
         """Block comment end syntax"""
 
-    def code_block_comment_line():
+    def code_comment_block_line():
         """Wraps current line in block comment markers"""
         actions.edit.line_start()
         actions.user.code_comment_block_prefix()
