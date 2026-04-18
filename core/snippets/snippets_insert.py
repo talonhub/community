@@ -70,12 +70,6 @@ def compute_snippet_body_with_substitutions(
     snippet: Snippet, substitutions: dict[str, str]
 ) -> str:
     body = snippet.body
-    return compute_snippet_body_with_substitutions_from_body(body, substitutions)
-
-
-def compute_snippet_body_with_substitutions_from_body(
-    body: str, substitutions: dict[str, str]
-) -> str:
     if substitutions:
         for k, v in substitutions.items():
             v = v.replace("$", r"\$")
