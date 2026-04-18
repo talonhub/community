@@ -38,17 +38,17 @@ class Actions:
         actions.key("space")
         actions.user.code_comment_block_suffix()
 
-    def code_start_line_with_block_comment(text: str):
+    def code_comment_block_at_line_start(text: str):
         """Inserts a block comment at the start of the line"""
         actions.edit.line_start()
-        actions.user.code_inline_block_comment(text)
+        actions.user.code_block_comment_inline(text)
 
-    def code_end_line_with_block_comment(text: str):
+    def code_comment_block_at_line_end(text: str):
         """Inserts a block comment at the end of the line"""
         actions.edit.line_end()
-        actions.user.code_inline_block_comment(text)
+        actions.user.code_block_comment_inline(text)
 
-    def code_inline_block_comment(text: str):
+    def code_block_comment_inline(text: str):
         """Inserts an inline block comment at the end of the line with the specified text"""
         actions.user.code_comment_block_prefix()
         actions.key("space")
