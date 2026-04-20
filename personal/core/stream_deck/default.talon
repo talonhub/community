@@ -9,9 +9,7 @@ deck.serial: A00SA3232MA4OZ
 deck(default/magnifying-glass-tilted-right):
     user.deck1()
 deck(default/house-with-garden):
-    user.performance_start()
-    user.hinting_toggle()
-    user.performance_end()
+    key(ctrl-alt-h)
 deck(default/down-arrow):
     user.deck3()
 deck(default/up-arrow):
