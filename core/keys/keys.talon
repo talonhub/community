@@ -1,4 +1,4 @@
-not tag: user.hinting_active
+user.windows_hinting_active: False
 -
 <user.letter>: key(letter)
 (ship | uppercase) <user.letters> [(lowercase | sunk)]:
