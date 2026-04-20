@@ -4,6 +4,21 @@ user.windows_hinting_active: True
     key(user.hinting)
     key(enter)
 
+^<user.hinting> left$:
+    key(shift-l)
+    key(user.hinting)
+    key(enter)
+
+^<user.hinting> troll$:
+    key(shift-c)
+    key(user.hinting)
+    key(enter)
+
+^<user.hinting> shift$:
+    key(shift-s)
+    key(user.hinting)
+    key(enter)
+
 ^<user.hinting> connie$: 
     key(shift-r)
     sleep(100ms)
