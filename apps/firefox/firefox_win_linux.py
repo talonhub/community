@@ -18,6 +18,9 @@ class UserActions:
     def firefox_history_sidebar():
         actions.key("ctrl-h")
 
+    def window_reopen():
+        actions.key("ctrl-shift-n")
+
 
 @ctx.action_class("browser")
 class BrowserActions:

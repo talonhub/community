@@ -1,9 +1,22 @@
-from talon import Context, actions
+from talon import Context, Module, actions, ui
+from talon.mac import applescript
 
+mod = Module()
 ctx = Context()
 ctx.matches = r"""
 os: mac
 """
+
+
+@mod.action_class
+class Actions:
+    def app_hide():
+        """Hide the current app"""
+        ui.active_app().element.AXHidden = True
+
+    def app_hide_others():
+        """Hide all other apps"""
+        actions.key("cmd-alt-h")
 
 
 @ctx.action_class("app")
@@ -27,12 +40,19 @@ class AppActions:
         actions.key("cmd-shift-t")
 
     def window_close():
-        actions.key("cmd-w")
+        if window := ui.active_window():
+            window.close()
+        else:
+            actions.key("cmd-w")
 
     def window_hide():
-        actions.key("cmd-m")
+        if window := ui.active_window():
+            window.minimized = True
+        else:
+            actions.key("cmd-m")
 
     def window_hide_others():
+        # TODO: Currently hides all apps, like `actions.user.app_hide_others()` already does. Correct this to hide windows instead, if useful, or remove it.
         actions.key("cmd-alt-h")
 
     def window_open():
