@@ -13,6 +13,7 @@ os: mac
 app.bundle: com.google.Chrome
 app.bundle: com.google.Chrome.canary
 app.bundle: org.chromium.Chromium
+app.bundle: /^com.google.Chrome.app.*$/i
 """
 mod.apps.chrome = """
 os: linux
