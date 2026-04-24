@@ -86,7 +86,7 @@ def calculate_rule_info():
         filename = current_command[0].target.filename
         rule = " ".join(current_command[1]._unmapped)
         return f'\nTriggered from "{rule}" ({filename}:{start_line})'
-    except Exception:
+    except:
         return ""
 
 
@@ -140,7 +140,7 @@ class Actions:
         msg = (
             f'The "{name}" command is deprecated since {time_deprecated}.'
             f' Instead, say: "{replacement}".'
-            f' See {os.path.join(REPO_DIR, "BREAKING_CHANGES.txt")}'
+            f" See {os.path.join(REPO_DIR, 'BREAKING_CHANGES.txt')}"
         )
         warnings.warn(msg, DeprecationWarning)
 
@@ -156,7 +156,7 @@ class Actions:
 
         msg = (
             f"The `{name}` capture is deprecated since {time_deprecated}."
-            f' See {os.path.join(REPO_DIR, "BREAKING_CHANGES.txt")}'
+            f" See {os.path.join(REPO_DIR, 'BREAKING_CHANGES.txt')}"
             f"{calculate_rule_info()}"
         )
         warnings.warn(msg, DeprecationWarning, stacklevel=3)
@@ -176,7 +176,7 @@ class Actions:
         msg = (
             f"The `{name}` action is deprecated since {time_deprecated}."
             f"{replacement_msg}"
-            f' See {os.path.join(REPO_DIR, "BREAKING_CHANGES.txt")}'
+            f" See {os.path.join(REPO_DIR, 'BREAKING_CHANGES.txt')}"
             f"{calculate_rule_info()}"
         )
         warnings.warn(msg, DeprecationWarning, stacklevel=5)
