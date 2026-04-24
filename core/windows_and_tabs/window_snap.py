@@ -5,7 +5,7 @@ Originally from dweil/talon_community - modified for newapi by jcaw.
 """
 
 import logging
-from typing import Dict, Optional
+from typing import Optional
 
 from talon import Context, Module, actions, app, registry, settings, ui
 from talon.ui import Window

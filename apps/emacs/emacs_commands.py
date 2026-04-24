@@ -1,9 +1,7 @@
 import csv
-from dataclasses import dataclass
-from pathlib import Path
 from typing import NamedTuple, Optional
 
-from talon import Context, Module, actions, app, resource
+from talon import Context, Module, actions, resource
 
 mod = Module()
 mod.list("emacs_command", desc="Emacs commands")
@@ -62,10 +60,10 @@ def load_commands(f):
         command_list = actions.user.create_spoken_forms_from_list(
             [c.name for c in commands], generate_subsequences=False
         )
-    except:
+    except Exception:
         pass
     else:
         for c in commands:
             if c.spoken:
                 command_list[c.spoken] = c.name
-    ctx.lists["self.emacs_command"] = command_list
+        ctx.lists["self.emacs_command"] = command_list

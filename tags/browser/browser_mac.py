@@ -1,4 +1,4 @@
-from talon import Context, actions, app, mac, ui
+from talon import Context, actions, app, ui
 
 ctx = Context()
 ctx.matches = r"""
@@ -47,7 +47,7 @@ class BrowserActions:
                     ]
                     if len(addresses) == 1:
                         return addresses[0]
-        except (ui.UIErr, AttributeError) as e:
+        except (ui.UIErr, AttributeError):
             pass
         try:
             # for Chromium-based browsers (if scripting available)
