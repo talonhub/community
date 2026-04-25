@@ -28,7 +28,7 @@ repos:
     hooks:
       - id: oxfmt
         types_or: [file]
-        files: \.(json|yaml|toml|md)$
+        files: \.(json|ya?ml|toml|md)$
         require_serial: true
 
   - repo: https://github.com/ikamensh/flynt
