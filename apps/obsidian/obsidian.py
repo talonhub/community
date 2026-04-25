@@ -1,5 +1,5 @@
-import subprocess
 import re
+import subprocess
 
 from talon import Context, Module, actions, settings
 
