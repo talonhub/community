@@ -52,7 +52,6 @@ See https://github.com/talonhub/community/issues/940 for original discussion
 import datetime
 import os.path
 import warnings
-from typing import Optional
 
 from talon import Module, actions, settings, speech_system
 
@@ -87,7 +86,7 @@ def calculate_rule_info():
         filename = current_command[0].target.filename
         rule = " ".join(current_command[1]._unmapped)
         return f'\nTriggered from "{rule}" ({filename}:{start_line})'
-    except Exception as e:
+    except:
         return ""
 
 

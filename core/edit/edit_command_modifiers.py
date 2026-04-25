@@ -73,7 +73,7 @@ class Actions:
         """
         count = modifier.count
         modifier_callback = actions.user.get_edit_modifier_callback(modifier)
-        for i in range(1, count + 1):
+        for _ in range(1, count + 1):
             modifier_callback()
 
     def get_edit_modifier_callback(modifier: EditModifier):

@@ -389,5 +389,5 @@ RT = TypeVar("RT")  # return type
 
 
 def repeat_call(n: int, f: Callable[..., RT], *args: Any, **kwargs: Any):
-    for i in range(n):
+    for _ in range(n):
         f(*args, **kwargs)

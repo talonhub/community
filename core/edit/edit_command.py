@@ -56,7 +56,7 @@ def select_lines(action, direction, count):
 
     selection_delay = f"{settings.get('user.edit_command_line_selection_delay')}ms"
 
-    for i in range(1, count + 1):
+    for _ in range(1, count + 1):
         selection_callback()
         actions.sleep(selection_delay)
 
@@ -73,7 +73,7 @@ def select_words(action, direction, count):
         selection_callback = actions.edit.extend_word_right
 
     selection_delay = f"{settings.get('user.edit_command_word_selection_delay')}ms"
-    for i in range(1, count + 1):
+    for _ in range(1, count + 1):
         selection_callback()
         actions.sleep(selection_delay)
 
@@ -87,7 +87,7 @@ def word_movement_handler(action, direction, count):
         movement_callback = actions.edit.word_right
 
     selection_delay = f"{settings.get('user.edit_command_word_selection_delay')}ms"
-    for i in range(1, count + 1):
+    for _ in range(1, count + 1):
         movement_callback()
         actions.sleep(selection_delay)
 

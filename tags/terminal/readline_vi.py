@@ -110,7 +110,7 @@ class EditActions:
         add_pending("$", "a")
 
     def extend_line_start():
-        pendingSelection = add_pending("0", "i")
+        add_pending("0", "i")
 
     def extend_word_left():
         add_pending("b", "i")

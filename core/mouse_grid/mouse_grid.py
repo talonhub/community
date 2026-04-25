@@ -179,9 +179,6 @@ class MouseSnapNine:
         if not should_show_zoomed_in:
             paint.color = "00ff007f"
             for which in range(1, 10):
-                gap = 35 - self.count * 10
-                if not self.active:
-                    gap = 45
                 draw_crosses(*self.calc_narrow(which, self.rect))
 
         paint.stroke_width = grid_stroke
