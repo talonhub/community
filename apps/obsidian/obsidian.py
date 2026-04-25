@@ -248,27 +248,47 @@ obsidian_command_names = {
 
 def obsidian_run_cli_command(command_id: str):
     try:
-        subprocess.check_output(
-            ["obsidian", "command", f"id={command_id}"], timeout=1.0
+        result = subprocess.run(
+            [
+                "obsidian",
+                "command",
+                f"id={command_id}",
+            ],
+            timeout=1.0,
+            capture_output=True,
+            encoding="utf-8",
+            check=True,
         )
+        if result.stdout:
+            parse_obsidian_errors(result.stdout, command_id)
     except OSError as e:
-        print(f"Error running obsidian command via cli: {e}")
-        print("Obsidian might not be on PATH?")
+        actions.app.notify(
+            f"""Error running obsidian command via cli. Obsidian might not be on PATH?
+            Full error:
+            {e}
+            """
+        )
+        actions.app.notify(f"Falling back to palette command for {command_id}")
+        obsidian_palette_command(command_id, fallback=True)
     except subprocess.CalledProcessError as e:
-        # Note: As of at least obsidian version 1.12, the CLI never emits a failure exit code, so none of these will trigger currently, but a future update to obsidian might fix that.
-        print(f"Error running obsidian command via cli: {e.output}")
-        if "Command line interface is not enabled" in e.output:
-            print(
-                "Talon settings say to use the obsidian CLI for obsidian commands, but CLI interface control is disabled in obsidian settings."
-            )
-            print("Please turn it on in Settings > General >Advanced")
-        elif re.match('Command "[^"]*"not found', e.output):
-            print(
-                f"Command '{command_id}' does not seem to be a valid obsidian command"
-            )
+        # Note: As of at least obsidian version 1.12, the CLI never
+        # emits a failure exit code, so this block won't trigger unless that changes.
+        parse_obsidian_errors(e.output, command_id)
 
-        print(f"Falling back to palette command for {command_id}")
-        obsidian_palette_command(command_id)
+
+def parse_obsidian_errors(message, command_id):
+    if "Command line interface is not enabled" in message:
+        actions.app.notify(
+            """Talon settings say to use the obsidian CLI for obsidian commands, but CLI interface control is disabled in obsidian settings.
+            Please turn it on in Settings > General >Advanced
+            """
+        )
+        actions.app.notify(f"Falling back to palette command for {command_id}")
+        obsidian_palette_command(command_id, fallback=True)
+    elif re.match('Command "[^"]*"not found', message):
+        actions.app.notify(
+            f"Command '{command_id}' does not seem to be a valid obsidian command"
+        )
 
 
 def command_uri_or_client_fallback(command_id: str):
@@ -284,15 +304,18 @@ def command_uri_or_client_fallback(command_id: str):
 def get_command_palette_name(command_id: str) -> str:
     try:
         return obsidian_command_names[command_id]
-    except Exception as ex:
-        print(
+    except KeyError as ex:
+        actions.app.notify(
             f"ERROR: Could not find obsidian palette name for command_id {command_id}"
         )
         return ""
 
 
-def obsidian_palette_command(command_id: str):
-    actions.user.command_palette()
+def obsidian_palette_command(command_id: str, fallback=False):
+    if settings.get("user.obsidian_use_cli") and not fallback:
+        obsidian_run_cli_command("command-palette:open")
+    else:
+        actions.user.command_palette_key()
     command = get_command_palette_name(command_id)
     if not command:
         return None
@@ -300,24 +323,17 @@ def obsidian_palette_command(command_id: str):
     actions.key("enter")
 
 
-def command_palette(key_fallback: str):
-    if settings.get("user.obsidian_use_cli"):
-        obsidian_run_cli_command("command-palette:open")
-    else:
-        actions.key(key_fallback)
-
-
 @mod.action_class
 class Actions:
-    def command_palette():
+    def command_palette_key():
         """Show command palette"""
-        command_palette("ctrl-p")
+        actions.key("ctrl-p")
 
 
 @mac_ctx.action_class("user")
 class MacUserActions:
-    def command_palette():
-        command_palette("cmd-p")
+    def command_palette_key():
+        actions.key("cmd-p")
 
 
 @mod.action_class
