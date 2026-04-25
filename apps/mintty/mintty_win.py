@@ -71,7 +71,7 @@ class UserActions:
         path = get_win_path(title)
 
         if path in directories_to_remap:
-            path = directories_to_remap[title]
+            path = directories_to_remap[path]
 
         if path in directories_to_exclude:
             path = ""
