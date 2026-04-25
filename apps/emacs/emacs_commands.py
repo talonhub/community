@@ -60,6 +60,7 @@ def load_commands(f):
         command_list = actions.user.create_spoken_forms_from_list(
             [c.name for c in commands], generate_subsequences=False
         )
+    except:
         pass
     else:
         for c in commands:
