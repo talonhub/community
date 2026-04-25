@@ -28,7 +28,6 @@ repos:
     hooks:
       - id: oxfmt
         types_or: [markdown, yaml, toml, json]
-        require_serial: true
 
   - repo: https://github.com/ikamensh/flynt
     rev: "1.0.6"
