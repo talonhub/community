@@ -155,9 +155,9 @@ class MouseSnapNine:
                 for col in range(3):
                     text_string = ""
                     if settings.get("user.grids_put_one_bottom_left"):
-                        text_string = f"{(2 - row)*3+col+1}"
+                        text_string = f"{(2 - row) * 3 + col + 1}"
                     else:
-                        text_string = f"{row*3+col+1}"
+                        text_string = f"{row * 3 + col + 1}"
                     text_rect = canvas.paint.measure_text(text_string)[1]
                     background_rect = text_rect.copy()
                     background_rect.center = Point2d(

@@ -1,4 +1,4 @@
-minimum_pre_commit_version: "3.2.0"
+minimum_pre_commit_version: "4.5.0"
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
@@ -29,20 +29,14 @@ repos:
       - id: oxfmt
         types_or: [markdown, yaml, toml, json]
 
-  - repo: https://github.com/ikamensh/flynt
-    rev: "1.0.6"
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.15.12
     hooks:
-      - id: flynt
-
-  - repo: https://github.com/pycqa/isort
-    rev: 8.0.1
-    hooks:
-      - id: isort
-
-  - repo: https://github.com/psf/black-pre-commit-mirror
-    rev: 26.3.1
-    hooks:
-      - id: black
+      - id: ruff-check
+        # Want to use pyproject instead of toml, but pre-commit.ci doesn't yet support it.
+        types_or: [python, toml]
+        args: [--fix]
+      - id: ruff-format
 
   - repo: https://github.com/cursorless-dev/talon-tools
     rev: v0.10.2
