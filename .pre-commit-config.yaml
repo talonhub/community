@@ -29,15 +29,12 @@ repos:
       - id: prettier
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    # Ruff version.
     rev: v0.15.12
     hooks:
-      # Run the linter.
       - id: ruff-check
         # Want to use pyproject instead of toml, but pre-commit.ci doesn't yet support it.
         types_or: [python, toml]
         args: [--fix]
-      # Run the formatter.
       - id: ruff-format
 
   - repo: https://github.com/cursorless-dev/talon-tools
