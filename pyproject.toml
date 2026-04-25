@@ -5,10 +5,7 @@ target-version = ['py310']
 profile = 'black'
 
 [tool.pytest.ini_options]
-pythonpath = [
-    ".",
-    "test/stubs",
-]
+pythonpath = [".", "test/stubs"]
 
 [tool.pyright]
 reportSelfClsParameterName = false
