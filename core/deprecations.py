@@ -140,7 +140,7 @@ class Actions:
         msg = (
             f'The "{name}" command is deprecated since {time_deprecated}.'
             f' Instead, say: "{replacement}".'
-            f" See {os.path.join(REPO_DIR, 'BREAKING_CHANGES.txt')}"
+            f' See {os.path.join(REPO_DIR, "BREAKING_CHANGES.txt")}'
         )
         warnings.warn(msg, DeprecationWarning)
 
