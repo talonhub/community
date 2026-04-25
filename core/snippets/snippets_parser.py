@@ -458,8 +458,8 @@ def parse_vector_value(value: str) -> list[str]:
 
 
 def error(file: str, line: int, message: str):
-    logging.error(f"{file}:{line+1} | {message}")
+    logging.error(f"{file}:{line + 1} | {message}")
 
 
 def warn(file: str, line: int, message: str):
-    logging.warning(f"{file}:{line+1} | {message}")
+    logging.warning(f"{file}:{line + 1} | {message}")

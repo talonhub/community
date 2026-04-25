@@ -158,7 +158,6 @@ and app.bundle: com.jetbrains.jbr.java
 
 @mod.action_class
 class Actions:
-
     def idea(commands: str):
         """Send a command to Jetbrains product"""
         command_list = commands.split(",")
@@ -305,7 +304,6 @@ class WinActions:
 
 @ctx.action_class("user")
 class UserActions:
-
     def command_server_directory() -> str:
         return "jetbrains-command-server"
 

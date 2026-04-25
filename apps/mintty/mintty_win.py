@@ -67,8 +67,8 @@ class EditActions:
 @ctx.action_class("user")
 class UserActions:
     def file_manager_current_path():
-        path = ui.active_window().title
-        path = get_win_path(path)
+        title = ui.active_window().title
+        path = get_win_path(title)
 
         if path in directories_to_remap:
             path = directories_to_remap[title]

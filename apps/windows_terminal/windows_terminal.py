@@ -32,7 +32,6 @@ class EditActions:
 
 @ctx.action_class("user")
 class UserActions:
-
     def tab_jump(number: int):
         actions.key(f"ctrl-alt-{number}")
 

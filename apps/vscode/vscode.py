@@ -115,7 +115,7 @@ class CodeActions:
 # Only do this for editor, so that e.g. modal windows can still be pasted into with
 # ctrl-v.
 @ctx_editor.action_class("edit")
-class EditActions:
+class EditorEditActions:
     def undo():
         actions.user.vscode("undo")
 

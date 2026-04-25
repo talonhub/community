@@ -4,7 +4,7 @@ if hasattr(talon, "test_mode"):
     # Only include this when we're running tests
 
     import itertools
-    from typing import IO, Callable
+    from typing import Callable
 
     from talon import actions
 
