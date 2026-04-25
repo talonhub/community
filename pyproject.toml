@@ -6,7 +6,7 @@ target-version = "py310"
 
 [tool.ruff.lint]
 select = [
-    "I" # isort
+    "I", # isort
 ]
 ignore = ["E722", "E741"]
 
