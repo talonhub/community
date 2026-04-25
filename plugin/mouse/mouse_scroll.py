@@ -4,6 +4,76 @@ from typing import Optional
 
 from talon import Context, Module, actions, app, cron, ctrl, imgui, settings, ui
 
+mod = Module()
+ctx = Context()
+
+mod.list(
+    "continuous_scrolling_direction",
+    desc="Defines names for directions used with continuous scrolling",
+)
+
+mod.setting(
+    "mouse_wheel_down_amount",
+    type=int,
+    default=120,
+    desc="The amount to scroll up/down (equivalent to mouse wheel on Windows by default)",
+)
+mod.setting(
+    "mouse_wheel_horizontal_amount",
+    type=int,
+    default=40,
+    desc="The amount to scroll left/right",
+)
+mod.setting(
+    "mouse_continuous_scroll_amount",
+    type=int,
+    default=8,
+    desc="The default amount used when scrolling continuously",
+)
+mod.setting(
+    "mouse_continuous_scroll_acceleration",
+    type=float,
+    default=1,
+    desc="The maximum (linear) acceleration factor when scrolling continuously. 1=constant speed/no acceleration",
+)
+mod.setting(
+    "mouse_enable_hiss_scroll",
+    type=bool,
+    default=False,
+    desc="Hiss noise scrolls down when enabled",
+)
+mod.setting(
+    "mouse_hide_mouse_gui",
+    type=bool,
+    default=False,
+    desc="When enabled, the 'Scroll Mouse' GUI will not be shown.",
+)
+
+mod.setting(
+    "mouse_continuous_scroll_speed_quotient",
+    type=float,
+    default=10.0,
+    desc="When adjusting the continuous scrolling speed through voice commands, the result is that the speed is multiplied by the dictated number divided by this number.",
+)
+mod.setting(
+    "continuous_scroll_by_lines",
+    type=bool,
+    default=False,
+    desc="When enabled, continuous mouse scrolls by lines instead of the OS default",
+)
+
+mod.setting(
+    "mouse_gaze_scroll_speed_multiplier",
+    type=float,
+    default=1.0,
+    desc="This multiplies the gaze scroll speed",
+)
+
+mod.tag(
+    "continuous_scrolling",
+    desc="Allows commands for adjusting continuous scrolling behavior",
+)
+
 hiss_scroll_up = False
 
 
@@ -50,12 +120,12 @@ class Scroller:
         self._is_vertical: bool = False
         self._scroll_dir = 1
 
-    def scroll_in_direction(self, amount: int):
+    def scroll_in_direction(self, amount: int, by_lines: bool):
         scroll_delta = self._scroll_dir * amount
         if self._is_vertical:
-            actions.mouse_scroll(scroll_delta)
+            actions.mouse_scroll(scroll_delta, by_lines=by_lines)
         else:
-            actions.mouse_scroll(0, scroll_delta)
+            actions.mouse_scroll(0, scroll_delta, by_lines=by_lines)
 
     def is_direction_equal_to(self, direction: ScrollingDirection) -> bool:
         return self.direction == direction
@@ -94,7 +164,16 @@ class ScrollingState:
 
     def scroll_continuous_helper(self):
         speed = self.compute_scrolling_speed()
-        self.scroller.scroll_in_direction(speed)
+        by_lines = settings.get("user.continuous_scroll_by_lines")
+        if by_lines:
+            # Set to 2 because usual speeds are too large as a lines value.
+            # Instead, sleep for a proportional time.
+            sleep_time = 1 / speed
+            speed = 2
+
+        self.scroller.scroll_in_direction(speed, by_lines)
+        if by_lines:
+            actions.sleep(sleep_time)
 
     def start_gaze_scrolling_job(self):
         self.continuous_scrolling_speed_factor = 1
@@ -159,70 +238,6 @@ class ScrollingState:
 
 
 scrolling_state = ScrollingState()
-
-mod = Module()
-ctx = Context()
-
-mod.list(
-    "continuous_scrolling_direction",
-    desc="Defines names for directions used with continuous scrolling",
-)
-
-mod.setting(
-    "mouse_wheel_down_amount",
-    type=int,
-    default=120,
-    desc="The amount to scroll up/down (equivalent to mouse wheel on Windows by default)",
-)
-mod.setting(
-    "mouse_wheel_horizontal_amount",
-    type=int,
-    default=40,
-    desc="The amount to scroll left/right",
-)
-mod.setting(
-    "mouse_continuous_scroll_amount",
-    type=int,
-    default=8,
-    desc="The default amount used when scrolling continuously",
-)
-mod.setting(
-    "mouse_continuous_scroll_acceleration",
-    type=float,
-    default=1,
-    desc="The maximum (linear) acceleration factor when scrolling continuously. 1=constant speed/no acceleration",
-)
-mod.setting(
-    "mouse_enable_hiss_scroll",
-    type=bool,
-    default=False,
-    desc="Hiss noise scrolls down when enabled",
-)
-mod.setting(
-    "mouse_hide_mouse_gui",
-    type=bool,
-    default=False,
-    desc="When enabled, the 'Scroll Mouse' GUI will not be shown.",
-)
-
-mod.setting(
-    "mouse_continuous_scroll_speed_quotient",
-    type=float,
-    default=10.0,
-    desc="When adjusting the continuous scrolling speed through voice commands, the result is that the speed is multiplied by the dictated number divided by this number.",
-)
-
-mod.setting(
-    "mouse_gaze_scroll_speed_multiplier",
-    type=float,
-    default=1.0,
-    desc="This multiplies the gaze scroll speed",
-)
-
-mod.tag(
-    "continuous_scrolling",
-    desc="Allows commands for adjusting continuous scrolling behavior",
-)
 
 
 @imgui.open(x=700, y=0)
