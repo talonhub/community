@@ -1,4 +1,4 @@
-minimum_pre_commit_version: "3.2.0"
+minimum_pre_commit_version: "4.5.0"
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
@@ -13,7 +13,7 @@ repos:
       - id: detect-private-key
       - id: fix-byte-order-marker
       # NB. To avoid sometimes needing multiple runs, we need:
-      # - trailing-whitespace BEFORE end-of-file-fixer,
+      # - trailing-whitespace BEFORE end-of-sfile-fixer,
       #   otherwise trailing newline followed by whitespace, "\n ",
       #   will need multiple runs.
       # - end-of-file-fixer   BEFORE mixed-line-ending,
@@ -34,7 +34,8 @@ repos:
     hooks:
       # Run the linter.
       - id: ruff-check
-        types_or: [python, pyproject]
+        # Want to use pyproject instead of toml, but pre-commit.ci doesn't yet support it.
+        types_or: [python, toml]
         args: [--fix]
       # Run the formatter.
       - id: ruff-format
