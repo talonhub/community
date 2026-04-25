@@ -13,7 +13,7 @@ repos:
       - id: detect-private-key
       - id: fix-byte-order-marker
       # NB. To avoid sometimes needing multiple runs, we need:
-      # - trailing-whitespace BEFORE end-of-sfile-fixer,
+      # - trailing-whitespace BEFORE end-of-file-fixer,
       #   otherwise trailing newline followed by whitespace, "\n ",
       #   will need multiple runs.
       # - end-of-file-fixer   BEFORE mixed-line-ending,
