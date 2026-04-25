@@ -579,7 +579,7 @@ def get_sorted_keys_by_context_specificity(
             if keys:
                 return (display_name, "Context-dependent", 1)
             return (display_name, "Global", 0)
-        except Exception:
+        except:
             return (display_name, "", 0)
 
     grouped_list = [
