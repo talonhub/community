@@ -156,7 +156,7 @@ class Actions:
 
         msg = (
             f"The `{name}` capture is deprecated since {time_deprecated}."
-            f" See {os.path.join(REPO_DIR, 'BREAKING_CHANGES.txt')}"
+            f' See {os.path.join(REPO_DIR, "BREAKING_CHANGES.txt")}'
             f"{calculate_rule_info()}"
         )
         warnings.warn(msg, DeprecationWarning, stacklevel=3)
