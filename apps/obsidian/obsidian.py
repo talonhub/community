@@ -48,7 +48,7 @@ mod.setting(
     "obsidian_use_cli",
     type=bool,
     default=False,
-    desc="""Whether to use cli instead of palette to send obsidian commands. Palette (false) will work out of the box but requires the language to be set to english and is slower. cli (true) it requires command line interface to be enabled in the obsidian general options, and requires obsidian to be on the PATH""",
+    desc="""Whether to use the Obsidian CLI instead of palette to send Obsidian commands. Palette (false) will work out of the box but requires the language to be set to English and is slower. CLI (true) requires command line interface to be enabled in the Obsidian general options, and requires Obsidian to be on the PATH""",
 )
 
 obsidian_command_names = {
@@ -263,7 +263,7 @@ def obsidian_run_cli_command(command_id: str):
             parse_obsidian_errors(result.stdout, command_id)
     except OSError as e:
         actions.app.notify(
-            f"""Error running obsidian command via cli. Obsidian might not be on PATH?
+            f"""Error running Obsidian command via CLI. The obsidian command might not be on your PATH?
             Full error:
             {e}
             """
@@ -279,15 +279,15 @@ def obsidian_run_cli_command(command_id: str):
 def parse_obsidian_errors(message, command_id):
     if "Command line interface is not enabled" in message:
         actions.app.notify(
-            """Talon settings say to use the obsidian CLI for obsidian commands, but CLI interface control is disabled in obsidian settings.
-            Please turn it on in Settings > General >Advanced
+            """Talon settings say to use the Obsidian CLI for Obsidian commands, but CLI interface control is disabled in Obsidian settings.
+            Please turn it on in Settings > General > Advanced
             """
         )
         actions.app.notify(f"Falling back to palette command for {command_id}")
         obsidian_palette_command(command_id, fallback=True)
     elif re.match('Command "[^"]*"not found', message):
         actions.app.notify(
-            f"Command '{command_id}' does not seem to be a valid obsidian command"
+            f"Command '{command_id}' does not seem to be a valid Obsidian command."
         )
 
 
@@ -306,7 +306,7 @@ def get_command_palette_name(command_id: str) -> str:
         return obsidian_command_names[command_id]
     except KeyError as ex:
         actions.app.notify(
-            f"ERROR: Could not find obsidian palette name for command_id {command_id}"
+            f"ERROR: Could not find Obsidian palette name for command_id {command_id}"
         )
         return ""
 
@@ -407,9 +407,6 @@ class UserActions:
 
     def multi_cursor_disable():
         actions.key("escape")
-
-    def multi_cursor_enable():
-        actions.skip()
 
     # project-wide search
     def find_everywhere(text: str):

@@ -55,7 +55,7 @@ daily previous: user.obsidian("daily-notes:goto-prev")
 daily next: user.obsidian("daily-notes:goto-next")
 
 # links and navigation
-link follow | follow this: user.obsidian("editor:follow-link")
+follow: user.obsidian("editor:follow-link")
 link open: user.obsidian("editor:open-link-in-new-leaf")
 link split: user.obsidian("editor:open-link-in-new-split")
 
