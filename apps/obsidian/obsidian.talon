@@ -1,4 +1,4 @@
-app: Obsidian
+app: obsidian
 -
 
 tag(): user.find_and_replace
@@ -72,20 +72,6 @@ bar tags: user.obsidian("tag-pane:open")
 bar graph: user.obsidian("graph:open")
 bar local graph: user.obsidian("graph:open-local")
 
-# find and replace helpers (phrase-capable)
-search here [<user.text>]:
-    user.obsidian("editor:open-search")
-    sleep(50ms)
-    insert(user.text or "")
-search all [<user.text>]:
-    user.obsidian("global-search:open")
-    sleep(50ms)
-    insert(user.text or "")
-replace here [<user.text>]:
-    user.obsidian("editor:open-search-replace")
-    sleep(50ms)
-    insert(user.text or "")
-
 # formatting and lists
 bold: user.obsidian("editor:toggle-bold")
 italic: user.obsidian("editor:toggle-italics")
@@ -105,8 +91,6 @@ fold more: user.obsidian("editor:fold-more")
 fold less: user.obsidian("editor:fold-less")
 fold toggle: user.obsidian("editor:toggle-fold")
 fold properties toggle: user.obsidian("editor:toggle-fold-properties")
-line move up: user.obsidian("editor:swap-line-up")
-line move down: user.obsidian("editor:swap-line-down")
 
 # display and theme
 theme switch: user.obsidian("theme:switch")

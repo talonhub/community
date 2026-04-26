@@ -411,11 +411,13 @@ class UserActions:
     # project-wide search
     def find_everywhere(text: str):
         actions.user.obsidian("global-search:open")
+        actions.sleep("50ms")
         if text:
             actions.insert(text)
 
     def replace(text: str):
         actions.user.obsidian("editor:open-search-replace")
+        actions.sleep("50ms")
         if text:
             actions.insert(text)
 
@@ -434,6 +436,7 @@ class EditActions:
         actions.user.obsidian("editor:save-file")
 
     def find(text: str = None):
+        actions.sleep("50ms")
         actions.user.obsidian("editor:open-search")
         if text:
             actions.insert(text)
@@ -456,3 +459,9 @@ class EditActions:
 
     def zoom_reset():
         actions.user.obsidian("window:reset-zoom")
+
+    def line_swap_up():
+        actions.key("alt-up")
+
+    def line_swap_down():
+        actions.key("alt-down")
