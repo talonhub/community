@@ -89,7 +89,6 @@ def create_spoken_form_for_number(num: int):
     """Creates a spoken form for an integer"""
 
     n3 = []
-    r1 = ""
     # create numeric string
     ns = str(num)
     for k in range(3, 33, 3):
@@ -105,7 +104,6 @@ def create_spoken_form_for_number(num: int):
                 n3.append(int(r[:2]))
             elif q >= -2:
                 n3.append(int(r[:1]))
-        r1 = r
 
     # break each group of 3 digits into
     # ones, tens/twenties, hundreds

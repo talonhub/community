@@ -1,6 +1,6 @@
 from typing import Optional
 
-from talon import Context, Module, actions, app, ui
+from talon import Context, Module, actions, app, cron, ui
 
 from .draft_ui import DraftManager
 
@@ -94,9 +94,6 @@ class EditActions:
             result = area[area.sel.left : area.sel.right]
             return result
         return ""
-
-
-from talon import cron
 
 
 class UndoWorkaround:

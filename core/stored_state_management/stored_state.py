@@ -36,8 +36,7 @@ class Actions:
         """Creates an empty file with that name in the stored state directory"""
         path = stored_state_directory / directory_name / name
         create_parent_directory(path)
-        with open(path, "w") as f:
-            pass
+        open(path, "w").close()
 
     def stored_state_remove_signal_file(directory_name: str, name: str):
         """Deletes the specified signal file in the stared state directory"""

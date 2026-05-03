@@ -1,6 +1,4 @@
-import os
-
-from talon import Context, Module, actions, ui
+from talon import Context, Module, actions
 
 ctx = Context()
 mod = Module()
@@ -34,7 +32,6 @@ class EditActions:
 
 @ctx.action_class("user")
 class UserActions:
-
     def tab_jump(number: int):
         actions.key(f"ctrl-alt-{number}")
 

@@ -5,7 +5,7 @@ Originally from dweil/talon_community - modified for newapi by jcaw.
 """
 
 import logging
-from typing import Dict, Optional
+from typing import Optional
 
 from talon import Context, Module, actions, app, registry, settings, ui
 from talon.ui import Window
@@ -97,9 +97,9 @@ def _move_to_screen(
     moved.
 
     """
-    assert (
-        screen_number or offset and not (screen_number and offset)
-    ), "Provide exactly one of `screen_number` or `offset`."
+    assert screen_number or offset and not (screen_number and offset), (
+        "Provide exactly one of `screen_number` or `offset`."
+    )
 
     src_screen = window.screen
 

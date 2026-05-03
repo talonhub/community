@@ -215,7 +215,7 @@ def find_largest_variable_number(body: str) -> int | None:
     # Find all snippet stops with a numeric variable name
     # +? is used to find the smallest possible match.
     # We need this here to avoid treating multiple stops as a single one
-    regular_expression = rf"\$\d+?|\${{\d+?:.*?}}|\${{\d+?}}"
+    regular_expression = r"\$\d+?|\$\{\d+?:.*?\}|\$\{\d+?\}"
     matches = re.findall(regular_expression, body)
     if matches:
         numbers = [
@@ -458,8 +458,8 @@ def parse_vector_value(value: str) -> list[str]:
 
 
 def error(file: str, line: int, message: str):
-    logging.error(f"{file}:{line+1} | {message}")
+    logging.error(f"{file}:{line + 1} | {message}")
 
 
 def warn(file: str, line: int, message: str):
-    logging.warning(f"{file}:{line+1} | {message}")
+    logging.warning(f"{file}:{line + 1} | {message}")
