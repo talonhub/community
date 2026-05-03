@@ -39,7 +39,7 @@ repos:
       - id: ruff-format
 
   - repo: https://github.com/cursorless-dev/talon-tools
-    rev: v0.10.2
+    rev: v0.11.0
     hooks:
       - id: talon-fmt
       - id: snippet-fmt
