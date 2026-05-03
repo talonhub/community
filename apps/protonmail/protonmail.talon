@@ -1,6 +1,7 @@
 tag: browser
 win.title: /ProtonMail/
 -
+
 # General
 ## Application
 open help: key(?)

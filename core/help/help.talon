@@ -26,7 +26,7 @@ help edit modifiers: user.help_list("user.edit_modifier")
 help edit repeatable modifiers: user.help_list("user.edit_modifier_repeatable")
 help customize: user.help_list("user.edit_text_file")
 
-(help formatters | help format | format help):
+help formatters | help format | format help:
     user.help_formatters(user.get_formatters_words(), false)
-(help re formatters | help re format | re format help):
+help re formatters | help re format | re format help:
     user.help_formatters(user.get_reformatters_words(), true)

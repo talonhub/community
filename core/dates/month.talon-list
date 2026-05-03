@@ -1,15 +1,15 @@
 list: user.month
 -
 
-january: 1
-february: 2
-march: 3
-april: 4
-may: 5
-june: 6
-july: 7
-august: 8
-september: 9
-october: 10
-november: 11
-december: 12
+january: january
+february: february
+march: march
+april: april
+may: may
+june: june
+july: july
+august: august
+september: september
+october: october
+november: november
+december: december
