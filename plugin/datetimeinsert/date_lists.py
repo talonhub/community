@@ -5,9 +5,7 @@ from talon import Module, actions, settings
 mod = Module()
 
 # Declare lists in Talon grammar; values come from talon-list files
-mod.list("day", "Ordinal and numeric day values (1-31)")
 mod.list("month", "Month names and numeric values (1-12)")
-mod.list("year", "Year values from 1964 to 2066")
 mod.list("weekday", "Weekday names for relative date commands")
 
 mod.setting("date_format", type=str, default="uk", desc="Preferred date format: uk, us, or iso")
@@ -35,34 +33,43 @@ def _format_with_preference(a_date: date) -> str:
 
 @mod.action_class
 class Actions:
-    def insert_date_from_parts(day: str, month: str, year: str):
-        """Insert date from spoken day/month/year using preferred date_format"""
-        day_padded = day.zfill(2)
-        month_padded = month.zfill(2)
+    def insert_date_from_parts(day: int, month: str, year: int):
+        """Insert date from spoken day/month/year using preferred date_format.
+
+        `day` is expected to come from the `<number_small>` capture (0-99)
+        and may be an int or numeric string. Gracefully fall back to a
+        string insertion for invalid calendar combinations (e.g. 31 Feb).
+        """
+        day_num = int(day)
+        day_padded = f"{day_num:02d}"
+        month_padded = str(month).zfill(2)
         year_num = int(year)
         month_num = int(month_padded)
-        day_num = int(day_padded)
-        computed = date(year_num, month_num, day_num)
-        actions.insert(_format_with_preference(computed))
+        try:
+            computed = date(year_num, month_num, day_num)
+            actions.insert(_format_with_preference(computed))
+        except ValueError:
+            date_str = f"{day_padded}/{month_padded}/{year}"
+            actions.insert(date_str)
 
-    def insert_date_formatted(day: str, month: str, year: str):
+    def insert_date_formatted(day: int, month: str, year: int):
         """Insert a formatted date from spoken day/month/year as dd/mm/yyyy"""
-        day_padded = day.zfill(2)
-        month_padded = month.zfill(2)
+        day_padded = f"{int(day):02d}"
+        month_padded = str(month).zfill(2)
         date_str = f"{day_padded}/{month_padded}/{year}"
         actions.insert(date_str)
 
-    def insert_date_formatted_us(day: str, month: str, year: str):
+    def insert_date_formatted_us(day: int, month: str, year: int):
         """Insert a formatted date from spoken day/month/year as mm/dd/yyyy"""
-        day_padded = day.zfill(2)
-        month_padded = month.zfill(2)
+        day_padded = f"{int(day):02d}"
+        month_padded = str(month).zfill(2)
         date_str = f"{month_padded}/{day_padded}/{year}"
         actions.insert(date_str)
 
-    def insert_date_formatted_iso(day: str, month: str, year: str):
+    def insert_date_formatted_iso(day: int, month: str, year: int):
         """Insert a formatted date from spoken day/month/year as yyyy-mm-dd"""
-        day_padded = day.zfill(2)
-        month_padded = month.zfill(2)
+        day_padded = f"{int(day):02d}"
+        month_padded = str(month).zfill(2)
         date_str = f"{year}-{month_padded}-{day_padded}"
         actions.insert(date_str)
 
