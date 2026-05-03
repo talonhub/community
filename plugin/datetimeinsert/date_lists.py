@@ -31,6 +31,30 @@ def _format_with_preference(a_date: date) -> str:
     return a_date.strftime("%d/%m/%Y")
 
 
+def _month_to_int(month) -> int:
+    """Convert a spoken month (name, abbreviation, or numeric string/int) to its month number.
+
+    Accepts ints, numeric strings, full month names ("january"), and abbreviations ("jan").
+    """
+    if isinstance(month, int):
+        return month
+    m = str(month).strip().lower()
+    if m.isdigit():
+        return int(m)
+    # full names
+    months = {name.lower(): i for i, name in enumerate(calendar.month_name) if name}
+    # abbreviations (Jan, Feb, ...)
+    abbr = {name.lower(): i for i, name in enumerate(calendar.month_abbr) if name}
+    if m in months:
+        return months[m]
+    if m in abbr:
+        return abbr[m]
+    # accept common alternative 'sept'
+    if m == "sept":
+        return 9
+    raise ValueError(f"Unknown month: {month}")
+
+
 @mod.action_class
 class Actions:
     def insert_date_from_parts(day: int, month: str, year: int):
@@ -40,36 +64,72 @@ class Actions:
         and may be an int or numeric string. Gracefully fall back to a
         string insertion for invalid calendar combinations (e.g. 31 Feb).
         """
-        day_num = int(day)
-        day_padded = f"{day_num:02d}"
-        month_padded = str(month).zfill(2)
-        year_num = int(year)
-        month_num = int(month_padded)
-        try:
-            computed = date(year_num, month_num, day_num)
-            actions.insert(_format_with_preference(computed))
-        except ValueError:
-            date_str = f"{day_padded}/{month_padded}/{year}"
-            actions.insert(date_str)
+        actions.user.insert_date_formatted(day, month, year, None)
 
     def insert_date_formatted(day: int, month: str, year: int):
         """Insert a formatted date from spoken day/month/year as dd/mm/yyyy"""
         day_padded = f"{int(day):02d}"
-        month_padded = str(month).zfill(2)
+        month_padded = f"{_month_to_int(month):02d}"
         date_str = f"{day_padded}/{month_padded}/{year}"
         actions.insert(date_str)
 
     def insert_date_formatted_us(day: int, month: str, year: int):
         """Insert a formatted date from spoken day/month/year as mm/dd/yyyy"""
         day_padded = f"{int(day):02d}"
-        month_padded = str(month).zfill(2)
+        month_padded = f"{_month_to_int(month):02d}"
         date_str = f"{month_padded}/{day_padded}/{year}"
         actions.insert(date_str)
+    def insert_date_formatted(day: int, month: str, year: int, fmt: str = None):
+        """Insert a formatted date from spoken day/month/year.
+
+        `fmt` may be 'uk', 'us', 'iso', or `None` to use the user's
+        `user.date_format` setting (default 'uk'). This function validates
+        the calendar date and falls back to inserting a formatted string
+        when the date is invalid.
+        """
+        day_num = int(day)
+        month_num = _month_to_int(month)
+        year_num = int(year)
+
+        # Determine format preference
+        fmt_pref = fmt or settings.get("user.date_format") or "uk"
+
+        # Try to construct a real date for correct calendar handling
+        try:
+            computed = date(year_num, month_num, day_num)
+            if fmt_pref == "us":
+                actions.insert(computed.strftime("%m/%d/%Y"))
+                return
+            if fmt_pref == "iso":
+                actions.insert(computed.strftime("%Y-%m-%d"))
+                return
+            # default UK
+            actions.insert(computed.strftime("%d/%m/%Y"))
+            return
+        except ValueError:
+            # Fall back to formatting by parts when invalid (e.g., 31 Feb)
+            day_padded = f"{day_num:02d}"
+            month_padded = f"{month_num:02d}"
+            if fmt_pref == "us":
+                date_str = f"{month_padded}/{day_padded}/{year_num}"
+            elif fmt_pref == "iso":
+                date_str = f"{year_num}-{month_padded}-{day_padded}"
+            else:
+                date_str = f"{day_padded}/{month_padded}/{year_num}"
+
+            # Notify user that the spoken date was not a valid calendar date,
+            # but still insert the best-effort formatted string.
+            try:
+                actions.app.notify(f"Invalid date spoken — inserted: {date_str}")
+            except Exception:
+                # Best-effort: ignore notification failures so insertion still happens
+                pass
+            actions.insert(date_str)
 
     def insert_date_formatted_iso(day: int, month: str, year: int):
         """Insert a formatted date from spoken day/month/year as yyyy-mm-dd"""
         day_padded = f"{int(day):02d}"
-        month_padded = str(month).zfill(2)
+        month_padded = f"{_month_to_int(month):02d}"
         date_str = f"{year}-{month_padded}-{day_padded}"
         actions.insert(date_str)
 
