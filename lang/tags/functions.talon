@@ -1,5 +1,6 @@
 tag: user.code_functions
 -
+
 # Default implementation of capture listens for the following keywords in any
 # order: private pro pub static
 #

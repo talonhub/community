@@ -1,5 +1,6 @@
 app: thunderbird_inbox
 -
+
 # navigate
 (mail | message) open: key(enter)
 (mail | message) (up | last): key(b)

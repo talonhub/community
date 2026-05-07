@@ -67,13 +67,13 @@ class UserActions:
         return operators
 
     def code_self():
-        actions.auto_insert("self")
+        actions.insert("self")
 
     def code_insert_true():
-        actions.auto_insert("true")
+        actions.insert("true")
 
     def code_insert_false():
-        actions.auto_insert("false")
+        actions.insert("false")
 
     def code_insert_null():
         actions.insert("nil")
@@ -113,17 +113,17 @@ class UserActions:
         actions.user.code_insert_function(result, None)
 
     def code_import_module(text: str):
-        actions.auto_insert("import ")
+        actions.insert("import ")
         actions.insert(text)
 
     def code_alias_module(text: str):
-        actions.auto_insert("alias ")
+        actions.insert("alias ")
         actions.insert(text)
 
     def code_require_module(text: str):
-        actions.auto_insert("require ")
+        actions.insert("require ")
         actions.insert(text)
 
     def code_use_module(text: str):
-        actions.auto_insert("use ")
+        actions.insert("use ")
         actions.insert(text)

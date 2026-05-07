@@ -123,6 +123,7 @@ class $2Actions:
 name: talonImguiFunction
 phrase: talon gooey function
 insertionScope: namedFunction
+
 $2.insertionFormatter: SNAKE_CASE
 -
 @imgui.open($1)
@@ -141,6 +142,7 @@ if gui.button($1):
 name: talonFileChangeHandler
 phrase: file change handler
 insertionScope: namedFunction
+
 $1.insertionFormatter: SNAKE_CASE
 -
 def $1(path, flags):

@@ -110,25 +110,25 @@ class UserActions:
         return operators
 
     def code_insert_is_not_null():
-        actions.auto_insert(" !== null")
+        actions.insert(" !== null")
 
     def code_insert_is_null():
-        actions.auto_insert(" === null")
+        actions.insert(" === null")
 
     def code_self():
-        actions.auto_insert("this")
+        actions.insert("this")
 
     def code_operator_object_accessor():
-        actions.auto_insert(".")
+        actions.insert(".")
 
     def code_insert_true():
-        actions.auto_insert("true")
+        actions.insert("true")
 
     def code_insert_false():
-        actions.auto_insert("false")
+        actions.insert("false")
 
     def code_insert_null():
-        actions.auto_insert("null")
+        actions.insert("null")
 
     def code_insert_function(text: str, selection: str):
         text += f"({selection or ''})"

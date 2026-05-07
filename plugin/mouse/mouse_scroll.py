@@ -1,6 +1,6 @@
 import time
 from enum import Enum, auto
-from typing import Literal, Optional
+from typing import Optional
 
 from talon import Context, Module, actions, app, cron, ctrl, imgui, settings, ui
 
@@ -228,7 +228,7 @@ mod.tag(
 @imgui.open(x=700, y=0)
 def gui_wheel(gui: imgui.GUI):
     gui.text(f"Scroll mode: {scrolling_state.get_scrolling_mode_description()}")
-    gui.text(f"say a number between 0 and 99 to set scrolling speed")
+    gui.text("say a number between 0 and 99 to set scrolling speed")
     gui.line()
     if gui.button("[Wheel] Stop"):
         actions.user.mouse_scroll_stop()

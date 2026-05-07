@@ -225,7 +225,6 @@ ctx.lists["user.number_small"] = get_spoken_form_under_one_hundred(
 )
 
 
-# TODO: allow things like "double eight" for 88
 @ctx.capture("digit_string", rule=f"({alt_digits} | {alt_teens} | {alt_tens})+")
 def digit_string(m) -> str:
     return parse_number(list(m))

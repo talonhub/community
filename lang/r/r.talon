@@ -1,5 +1,6 @@
 code.language: r
 -
+
 tag(): user.code_imperative
 
 tag(): user.code_comment_line
@@ -33,9 +34,9 @@ using <user.code_libraries>:
     insert("::")
 
 # R specific commands
-(chain | pipe that):
+chain | pipe that:
     key(end)
-    " %>%"
+    insert(" %>%")
     key(enter)
 
 op pipe: " %>% "
@@ -50,7 +51,6 @@ state na:
 is N A: user.insert_between("is.na(", ")")
 is not N A: user.insert_between("!is.na(", ")")
 
-# TODO: migrate to function tag
 ^function define <user.text>$: user.code_private_function(text)
 
 named arg {user.code_parameter_name}:

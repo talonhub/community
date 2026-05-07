@@ -32,65 +32,65 @@ class UserActions:
 
     # Code execution
     def debugger_step_into():
-        actions.auto_insert("stepi\n")
+        actions.insert("stepi\n")
 
     def debugger_step_over():
-        actions.auto_insert("nexti\n")
+        actions.insert("nexti\n")
 
     def debugger_step_line():
-        actions.auto_insert("step\n")
+        actions.insert("step\n")
 
     def debugger_step_over_line():
-        actions.auto_insert("next\n")
+        actions.insert("next\n")
 
     def debugger_step_out():
-        actions.auto_insert("finish\n")
+        actions.insert("finish\n")
 
     def debugger_continue():
-        actions.auto_insert("c\n")
+        actions.insert("c\n")
 
     def debugger_stop():
         actions.key("ctrl-c")
 
     def debugger_start():
-        actions.auto_insert("run\n")
+        actions.insert("run\n")
 
     def debugger_restart():
-        actions.auto_insert("run\n")
+        actions.insert("run\n")
 
     # XXX -
     def debugger_detach():
-        actions.auto_insert("")
+        actions.insert("")
 
     # Registers
     def debugger_show_registers():
-        actions.auto_insert("info registers\n")
+        actions.insert("info registers\n")
 
     def debugger_get_register():
-        actions.auto_insert("r ")
+        actions.insert("r ")
 
     def debugger_set_register():
         actions.user.insert_between("set $", "=")
         # Breakpoints
 
     def debugger_show_breakpoints():
-        actions.auto_insert("info breakpoints\n")
+        actions.insert("info breakpoints\n")
 
     def debugger_add_sw_breakpoint():
-        actions.auto_insert("break ")
+        actions.insert("break ")
 
     # XXX -
     def debugger_add_hw_breakpoint():
-        actions.auto_insert("")
+        actions.insert("")
 
     def debugger_break_now():
         actions.key("ctrl-c")
 
     def debugger_break_here():
-        actions.auto_insert("break\n")
+        actions.insert("break\n")
 
     def debugger_clear_all_breakpoints():
-        actions.auto_insert("d br\n")
+        actions.insert("d br\n")
 
     def debugger_clear_breakpoint():
         actions.insert("d br ")
