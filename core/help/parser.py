@@ -34,7 +34,9 @@ def _require_token_type(
 
 type RuleSyntaxNode = PrefixedRuleSyntaxNode | PostfixRuleSyntaxNode
 
-type PrefixedRuleSyntaxNode = WordsNode | ReferenceNode | OptionalNode | GroupNode | ListNode | CaptureNode
+type PrefixedRuleSyntaxNode = (
+    WordsNode | ReferenceNode | OptionalNode | GroupNode | ListNode | CaptureNode
+)
 
 type PostfixRuleSyntaxNode = ZeroOrMoreNode | OneOrMoreNode | ChoiceNode
 
