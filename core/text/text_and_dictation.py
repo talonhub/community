@@ -1,6 +1,7 @@
 # Descended from https://github.com/dwiel/talon_community/blob/master/misc/dictation.py
 import re
-from typing import Callable, Optional
+from collections.abc import Callable
+from typing import Optional
 
 from talon import Context, Module, actions, grammar, settings, ui
 

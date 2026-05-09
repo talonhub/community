@@ -1,6 +1,7 @@
 import csv
+from collections.abc import Callable
 from pathlib import Path
-from typing import IO, Callable
+from typing import IO
 
 from talon import resource
 

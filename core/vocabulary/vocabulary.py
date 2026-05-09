@@ -1,7 +1,8 @@
 import logging
 import os
 import re
-from typing import Sequence, Union
+from collections.abc import Sequence
+from typing import Union
 
 from talon import Context, Module, actions
 from talon.grammar import Phrase

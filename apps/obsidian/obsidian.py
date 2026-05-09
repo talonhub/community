@@ -304,7 +304,7 @@ def command_uri_or_client_fallback(command_id: str):
 def get_command_palette_name(command_id: str) -> str:
     try:
         return obsidian_command_names[command_id]
-    except KeyError as ex:
+    except KeyError:
         actions.app.notify(
             f"ERROR: Could not find Obsidian palette name for command_id {command_id}"
         )

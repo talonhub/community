@@ -39,7 +39,7 @@ def load_commands(f):
 
     commands = []
     for row in rows[1:]:
-        if 0 == len(row):
+        if len(row) == 0:
             continue
         if len(row) > 4:
             print(

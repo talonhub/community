@@ -215,8 +215,8 @@ class Actions:
         if number <= len(active_word_list) and number > 0:
             return active_word_list[number - 1]
 
-        error = "homophones.py index {} is out of range (1-{})".format(
-            number, len(active_word_list)
+        error = (
+            f"homophones.py index {number} is out of range (1-{len(active_word_list)})"
         )
         app.notify(error)
         raise error

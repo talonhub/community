@@ -29,17 +29,11 @@ class Actions:
         executable = os.path.basename(actions.app.executable())
         app_name = create_name(friendly_name.removesuffix(".exe"))
         if app.platform == "mac":
-            result = 'mod.apps.{} = """\nos: mac\nand app.bundle: {}\n"""'.format(
-                app_name, actions.app.bundle()
-            )
+            result = f'mod.apps.{app_name} = """\nos: mac\nand app.bundle: {actions.app.bundle()}\n"""'
         elif app.platform == "windows":
-            result = 'mod.apps.{} = r"""\nos: windows\nand app.name: {}\nos: windows\nand app.exe: /^{}$/i\n"""'.format(
-                app_name, friendly_name, re.escape(executable.lower())
-            )
+            result = f'mod.apps.{app_name} = r"""\nos: windows\nand app.name: {friendly_name}\nos: windows\nand app.exe: /^{re.escape(executable.lower())}$/i\n"""'
         else:
-            result = 'mod.apps.{} = """\nos: {}\nand app.name: {}\n"""'.format(
-                app_name, app.platform, friendly_name
-            )
+            result = f'mod.apps.{app_name} = """\nos: {app.platform}\nand app.name: {friendly_name}\n"""'
 
         clip.set_text(result)
 
@@ -51,9 +45,7 @@ class Actions:
         if app.platform == "mac":
             result = f"os: mac\nand app.bundle: {actions.app.bundle()}\n"
         elif app.platform == "windows":
-            result = "os: windows\nand app.name: {}\nos: windows\nand app.exe: /^{}$/i\n".format(
-                friendly_name, re.escape(executable.lower())
-            )
+            result = f"os: windows\nand app.name: {friendly_name}\nos: windows\nand app.exe: /^{re.escape(executable.lower())}$/i\n"
         else:
             result = f"os: {app.platform}\nand app.name: {friendly_name}\n"
 
