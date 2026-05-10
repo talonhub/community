@@ -3,11 +3,11 @@ settings():
     user.date_format = "uk"
 
 date insert:
-    user.depreciate_command("date insert", "Use 'date today' command instead")
+    user.deprecate_command("2026-05-10", "date insert", "date today")
     insert(user.time_format("%Y-%m-%d"))
 
 date insert UTC:
-    user.depreciate_command("date insert UTC", "Use 'date today UTC' command instead")
+    user.deprecate_command("2026-05-10", "date insert UTC", "date today UTC")
     insert(user.time_format_utc("%Y-%m-%d"))
 
 date today UTC: insert(user.time_format_utc("%Y-%m-%d"))
