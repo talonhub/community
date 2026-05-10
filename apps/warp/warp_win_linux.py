@@ -37,3 +37,12 @@ class UserActions:
 
     def tab_final():
         actions.key("ctrl-9")
+
+
+@ctx.action_class("edit")
+class EditActions:
+    def word_left():
+        actions.key("ctrl-left")
+
+    def word_right():
+        actions.key("ctrl-right")
