@@ -2,8 +2,16 @@ settings():
     # Define the date format mode for all date commands: uk | us | iso
     user.date_format = "uk"
 
-date insert: insert(user.time_format("%Y-%m-%d"))
+date insert:
+    user.depreciate_command("date insert", "Use 'date today' command instead")
+    insert(user.time_format("%Y-%m-%d"))
+
+date insert UTC:
+    user.depreciate_command("date insert UTC", "Use 'date today UTC' command instead")
+    insert(user.time_format_utc("%Y-%m-%d"))
+
 date today UTC: insert(user.time_format_utc("%Y-%m-%d"))
+
 timestamp insert: insert(user.time_format("%Y-%m-%d %H:%M:%S"))
 timestamp insert high resolution: insert(user.time_format("%Y-%m-%d %H:%M:%S.%f"))
 timestamp insert UTC: insert(user.time_format_utc("%Y-%m-%d %H:%M:%S"))
@@ -13,17 +21,16 @@ timestamp insert UTC high resolution:
 # Date entry commands using day, month, year lists
 
 # Insert date using preferred mode from settings
-^date <number_small> {user.month} <number>$:
-    user.insert_date_from_parts(number_small, month, number)
+^date {user.day} {user.month} <number>$: user.insert_date_from_parts(day, month, number)
 
 # Insert date as US format mm/dd/yyyy
 # (defaults remains dd/mm/yyyy for standard use)
-^date <number_small> {user.month} <number> us$:
-    user.insert_date_formatted_us(number_small, month, number)
+^date {user.day} {user.month} <number> us$:
+    user.insert_date_formatted_us(day, month, number)
 
 # Insert date as ISO format yyyy-mm-dd
-^date <number_small> {user.month} <number> iso$:
-    user.insert_date_formatted_iso(number_small, month, number)
+^date {user.day} {user.month} <number> iso$:
+    user.insert_date_formatted_iso(day, month, number)
 
 # Relative date commands
 # Today/now uses list default or settings format

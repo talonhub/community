@@ -7,7 +7,8 @@ and when the change was applied given the delay between changes being
 submitted and the time they were reviewed and merged.
 
 ---
-* 2026-05-03 Deprecate `date insert` voice command in favour of `date today`. Use `date today` or `date now` to insert today's date; `date insert` will be removed in a future release.
+* 2026-05-10 Deprecate `date insert` voice command in favour of `date today`. Use `date today` or `date now` to insert today's date; `date insert` will be removed in a future release.
+* 2026-05-10 Deprecate `date insert UTC` voice command in favour of `date today UTC`. Use `date today UTC` to insert today's date in UTC; `date insert UTC` will be removed in a future release.
 * 2025-12-22 the `user.mouse_wake` action now restores the eye tracking state to what it was before the last use of the `user.mouse_sleep` action instead of always enabling zoom mouse.
 * 2025-12-22 Removed deprecated `M grid` command and the associated deprecated tag `user.mouse_grid_enabled`.
 * 2025-12-11 Deprecated i3wm commands `port [left | right | <number_small>]` in favour of standard `desk [left | right | <number_small>]` commands.
