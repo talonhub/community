@@ -14,6 +14,8 @@ and app.exe: warp.exe
 
 ctx = Context()
 ctx.matches = r"""
+os: linux
+os: windows
 app: warp
 """
 
