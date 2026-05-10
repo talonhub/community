@@ -40,7 +40,7 @@ class UserActions:
         actions.insert(path)
         actions.key("enter")
 
-    def file_manager_new_folder(name: Optional[str] = None):
+    def file_manager_new_folder(name: str = None):
         actions.key("ctrl-shift-n")
         if name:
             actions.insert(name)
