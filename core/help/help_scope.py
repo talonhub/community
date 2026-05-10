@@ -41,7 +41,7 @@ def gui(gui: imgui.GUI):
         actions.user.help_scope_toggle()
 
 
-def print_value(gui: imgui.GUI, path: str, value, ignore: Optional[set[str]]):
+def print_value(gui: imgui.GUI, path: str, value, ignore: Optional[set[str]] = None):
     if isinstance(value, dict):
         if not ignore:
             ignore = set()
