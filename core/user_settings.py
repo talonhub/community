@@ -25,7 +25,7 @@ def read_csv_list(
     mapping = {}
     if len(rows) >= 2:
         actual_headers = rows[0]
-        if not actual_headers == list(headers):
+        if actual_headers != list(headers):
             print(
                 f'"{f.name}": Malformed headers - {actual_headers}.'
                 + f" Should be {list(headers)}. Ignoring row."
@@ -99,7 +99,7 @@ def append_to_csv(filename: str, rows: dict[str, str], private: bool = False):
 
     with open(str(path)) as file:
         line = None
-        for line in file:
+        for line in file:  # noqa: B007
             pass
         needs_newline = line is not None and not line.endswith("\n")
     with open(path, "a", encoding="utf-8", newline="") as file:

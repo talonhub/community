@@ -438,7 +438,7 @@ class DictationFormat:
 
 def format_first_letter(text, formatter):
     i = -1
-    for i, c in enumerate(text):
+    for i, c in enumerate(text):  # noqa: B007
         if c.isalpha():
             break
     if i >= 0 and i < len(text):

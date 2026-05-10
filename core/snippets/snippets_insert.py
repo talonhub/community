@@ -91,7 +91,7 @@ def compute_phrase_substitutions(snippet: Snippet, phrase: str):
         except KeyError as ex:
             raise ValueError(
                 f"Undefined formatter setting {ex} in snippet '{snippet.name}'"
-            )
+            ) from ex
 
     for variable in snippet.variables:
         if variable.insertion_formatters is not None:

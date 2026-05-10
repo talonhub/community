@@ -108,7 +108,7 @@ if app.platform == "windows":
             if e.winerror & 0x80070000 == 0x80070000:
                 # It's a WinAPI error, so re-raise it, letting Python
                 # raise a specific exception such as FileNotFoundError.
-                raise ctypes.WinError(e.winerror & 0x0000FFFF)
+                raise ctypes.WinError(e.winerror & 0x0000FFFF) from e
             raise
         finally:
             if pidl:

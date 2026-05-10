@@ -365,7 +365,7 @@ def draw_context_commands(gui: imgui.GUI):
 
     filtered_commands = [
         command
-        for command, page in zip(commands, pages)
+        for command, page in zip(commands, pages, strict=False)
         if page == selected_context_page
     ]
 
@@ -396,7 +396,7 @@ def draw_search_commands(gui: imgui.GUI):
 
     draw_commands_title(gui, title)
 
-    for (context, commands), page in zip(sorted_commands_grouped, pages):
+    for (context, commands), page in zip(sorted_commands_grouped, pages, strict=True):
         if page == selected_context_page:
             gui.text(format_context_title(context))
             gui.line()
@@ -543,10 +543,7 @@ def update_spoken_forms(
 
 def is_any_context_command_active(context) -> bool:
     """Returns if any command in the context is active"""
-    for command_alias in context.commands:
-        if command_alias in registry.commands:
-            return True
-    return False
+    return any(command_alias in registry.commands for command_alias in context.commands)
 
 
 def get_sorted_display_keys(
@@ -808,8 +805,8 @@ class Actions:
     def help_select_index(index: int):
         """Select the context by a number"""
         global sorted_display_list, selected_context
-        if gui_context_help.showing:
-            if index < settings.get("user.help_max_contexts_per_page") and (
+        if gui_context_help.showing:  # noqa: SIM102
+            if index < settings.get("user.help_max_contexts_per_page") and (  # noqa: SIM102
                 (current_context_page - 1)
                 * settings.get("user.help_max_contexts_per_page")
                 + index

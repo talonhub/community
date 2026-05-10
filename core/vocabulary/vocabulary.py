@@ -219,7 +219,7 @@ def append_to_vocabulary(rows: dict[str, str]):
     vocabulary_file_path = actions.user.get_vocabulary_file_path()
     with open(str(vocabulary_file_path)) as file:
         line = None
-        for line in file:
+        for line in file:  # noqa: B007
             pass
         needs_newline = line is not None and not line.endswith("\n")
 

@@ -142,7 +142,7 @@ class Actions:
             f' Instead, say: "{replacement}".'
             f" See {os.path.join(REPO_DIR, 'BREAKING_CHANGES.txt')}"
         )
-        warnings.warn(msg, DeprecationWarning)
+        warnings.warn(msg, DeprecationWarning, stacklevel=2)
 
     def deprecate_capture(time_deprecated: str, name: str):
         """
