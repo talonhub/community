@@ -170,6 +170,8 @@ class UI:
     def register(*args, **kwargs):
         pass
 
+    Rect = object
+
 
 class Settings:
     """
