@@ -50,8 +50,9 @@ class CActions:
         # inserting this way instead of using a snippet
         # has advantages by allowing editor specific behavior such as
         # putting a star at the start of the lines inside the block comment for some languages
+        # illustration:
         # /*
-        #  *
+        #  * (cursor goes here)
         #  */
         actions.insert("/*\n\n*/")
         actions.edit.up()
