@@ -47,6 +47,12 @@ class Actions:
 @c_like_ctx.action_class("user")
 class CActions:
     def code_comment_block(text: Optional[str] = None):
+        # inserting this way instead of using a snippet
+        # has advantages by allowing editor specific behavior such as
+        # putting a star at the start of the lines inside the block comment for some languages
+        # /*
+        #  * 
+        #  */
         actions.insert("/*\n\n*/")
         actions.edit.up()
         if text is not None:
