@@ -1,3 +1,5 @@
+from typing import Optional
+
 from talon import Context, Module, actions, settings
 
 from ...core.described_functions import (
@@ -5,8 +7,6 @@ from ...core.described_functions import (
     create_described_insert_between,
 )
 from ..tags.operators import Operators
-
-from typing import Optional
 
 mod = Module()
 ctx = Context()
