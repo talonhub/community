@@ -6,6 +6,8 @@ from ...core.described_functions import (
 )
 from ..tags.operators import Operators
 
+from typing import Optional
+
 mod = Module()
 ctx = Context()
 ctx.matches = r"""
@@ -201,5 +203,15 @@ class UserActions:
     def code_insert_library(text: str, selection: str):
         substitutions = {"1": selection, "0": selection}
         actions.user.insert_snippet_by_name("importStatement", substitutions)
+
+    ##
+    # comment_block
+    ##
+    def code_comment_block(text: Optional[str] = None):
+        if text is None:
+            substitutions = {}
+        else:
+            substitutions = {"0": text}
+        actions.user.insert_snippet_by_name("commentMultilineBlock", substitutions)
 
     # non-tag related actions
