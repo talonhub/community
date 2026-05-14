@@ -29,7 +29,7 @@ action.user.insert_snippet_by_name("ifStatement", {"0": "return False"})
 ```
 
 # Code Simplicity
-Simplify your code when possible and consider leaving a comment describing complicated code. Try to avoid using an unnecessarily complex Talon abstraction for what you are trying to do. 
+Simplify your code when possible and consider leaving a comment describing complicated code. In general, use the simplest Talon abstraction that does what you want.
 
 When you want to limit some behavior to a specific context:
   - If the behavior is only relevant to an application, just match it directly and provide an [app definition](https://talon.wiki/Customization/Talon%20Framework/apps) if needed.
@@ -40,9 +40,9 @@ When you want to limit some behavior to a specific context:
   - A [scope](https://talon.wiki/Customization/Talon%20Framework/scopes) can be used for complex context matching if nothing else is adequate.
 
 When you want to define spoken forms:
-  - Defining a single command directly is simplest. Defining a list with a single item is not recommended.
+  - Defining a single command directly is simplest.
   - Avoid adding multiple spoken forms for a single command without a good reason.
-  - Consider using a [list](https://talon.wiki/Customization/Talon%20Framework/lists) to give users a static set of options
+  - Consider using a [list](https://talon.wiki/Customization/Talon%20Framework/lists) to give users a set of options
     - Implementing a list in a [.talon-list file](https://talon.wiki/Customization/talon_lists/) is preferred unless you have a good reason to do so in Python.
   - Consider using a [capture](https://talon.wiki/Customization/Talon%20Framework/captures) for complex spoken forms.
 
@@ -73,7 +73,7 @@ This approach allows reusing the- same commands in multiple contexts and helps p
   - Community uses a noun-verb pattern, such as using `window close` instead of `close window`.
   - Our convention is to capitalize single letters to slightly improve readability.
   - Talon currently only handles alphabetic characters and spoken forms. Spell out numbers, symbols, etc.
-  - Avoid unnecessary command anchoring. Anchoring is typically only used when needed to prevent misrecognitions or ambiguities, such as putting `$` after a command ending with the `user.prose` capture so that everything the user says at the end is interpreted as part of that command.
+  - Command anchoring is typically only used when needed to prevent misrecognitions or ambiguities, such as putting `$` after a command ending with the `user.prose` capture so that everything the user says at the end is interpreted as part of that command. Anchoring is also useful for commands that users would strongly want to avoid triggering on accident and would not use often by putting `^` at the start and `$` at the end.
   - Consider using a prefix word for a group of commands, such as window commands being prefixed with the word `window`. Making the commands longer reduces the probability of misrecognitions, and adding a prefix helps prevent conflicts.
   - Hesitate to add short commands — especially to the global grammar — because single syllable commands can easily misrecognize with each other.
   - Consider testing that your spoken forms recognize with multiple Conformer speech engines.
