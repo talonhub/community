@@ -39,4 +39,12 @@ When you want to limit some behavior to a specific context:
     - Consider using a [mode](https://talon.wiki/Customization/Talon%20Framework/modes) if only specific commands should be available in the context
   - A [scope](https://talon.wiki/Customization/Talon%20Framework/scopes) can be used for complex context matching if nothing else is adequate
 
+When you want to define spoken forms:
+  - Defining a single command directly is simplest. Defining a list with a single item is not recommended
+  - Avoid adding multiple spoken forms for a single command without a good reason
+  - Consider using a [list](https://talon.wiki/Customization/Talon%20Framework/lists) to give users a static set of options
+    - Implementing a list in a [.talon-list](https://talon.wiki/Customization/talon_lists/) is preferred unless you have a good reason to do so in Python
+  - Consider using a [capture](https://talon.wiki/Customization/Talon%20Framework/captures) for complex spoken forms
+
+In general, implementing functionality in .talon files is simpler than doing so in .py files. It is nonetheless usually preferred to implement behavior in an [action](https://talon.wiki/Customization/Talon%20Framework/actions) in Python to allow reusability and context specific overriding despite the added complexity.
 
