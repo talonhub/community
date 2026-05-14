@@ -2,6 +2,15 @@ This file documents preferred practices and offers advice on contributing to Com
 
 This will not repeat information in [the contributing guidelines file](CONTRIBUTING.md).
 
+# Table of Contents
+* [Breaking Changes](#breaking-changes)
+* [Useless/Unused code](#uselessunused-code)
+* [Went to Use Snippets](#when-to-use-snippets)
+* [Code Simplicity](#code-simplicity)
+* [Supporting Multiple Operating Systems](#supporting-multiple-operating-systems)
+* [Generalizing Commands](#generalizing-commands)
+* [Spoken Form Considerations](#spoken-form-considerations)
+
 # Breaking Changes
 Consider discussing wether breaking changes are acceptable with maintainers before following these instructions.
 
