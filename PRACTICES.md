@@ -9,12 +9,12 @@ In general, breaking changes to the project should be documented in [BREAKING_CH
 
 When we decide to remove existing functionality, deprecate it if possible using [deprecations.py](core/deprecations.py) instead of removing it immediately. See the documentation string at the top of that file for instructions on deprecations. Deprecated behavior should remain unchanged in Community for 6 months if possible.
 
-# Remove Useless/Unused Code
+# Useless/Unused Code
 We do not leave useless code in Community. This includes commented out code, code that cannot be executed, code that is not used anywhere, and Talon abstractions defined on a context that will never activate. 
 
 Defining actions on a tag we do not activate is fine if we advertise to the user that activating that tag will enable some optional functionality.
 
-# Consider Using Snippets for Complex Text Insertion
+# When to Use Snippets
 See [the snippets README for details on snippets](core/snippets/README.md). A snippet inserts text with placeholders so the user can use a command to go to the next placeholder. Consider using a snippet in the following situations:
   - You need to make sure the cursor ends up in a specific location in the text and user.insert_between is inadequate.
   - The user is likely to want to put the cursor in another location shortly after using the command/action.
@@ -28,7 +28,7 @@ Note that you can use the `insert_snippet_by_name` action to programmatically in
 action.user.insert_snippet_by_name("ifStatement", {"0": "return False"})
 ```
 
-# Avoid Unnecessarily Complex Code
+# Code Simplicity
 Simplify your code when possible and consider leaving a comment describing complicated code. Try to avoid using an unnecessarily complex Talon abstraction for what you are trying to do. 
 
 When you want to limit some behavior to a specific context:
