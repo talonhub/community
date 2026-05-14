@@ -55,14 +55,14 @@ The common approach in Community is to provide the Windows implementation in the
 
 # Generalizing Commands
 If you write commands for a specific context that would be useful in other contexts, consider doing the following:
-  - Define a subdirectory for your commands in the [tags/](tags/) directory.
-  - Provide empty action definitions in your subdirectory.
-  - Define a tag for the commands.
-  - Put the commands in your subdirectory.
-  - Make the commands available when the tag is active.
-  - Update [the tags README](tags/README.md) describing your new commands.
-  - Provide implementations for the actions in the original context you wrote them for.
-  - Activate the tags in the original context.
+  - 1. Define a subdirectory for your commands in the [tags/](tags/) directory.
+  - 2. Provide empty action definitions in your subdirectory.
+  - 3. Define a tag for the commands.
+  - 4. Put the commands in your subdirectory.
+  - 5. Make the commands available when the tag is active.
+  - 6. Update [the tags README](tags/README.md) describing your new commands.
+  - 7. Provide implementations for the actions in the original context you wrote them for.
+  - 8. Activate the tags in the original context.
 
 You can see examples of the kinds of things we put in the general command grammar in the [tags/](tags/) directory. 
 
