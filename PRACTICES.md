@@ -48,3 +48,7 @@ When you want to define spoken forms:
 
 In general, implementing functionality in .talon files is simpler than doing so in .py files. It is nonetheless usually preferred to implement behavior in an [action](https://talon.wiki/Customization/Talon%20Framework/actions) in Python to allow reusability and context specific overriding despite the added complexity.
 
+# Supporting Multiple Operating Systems
+Some functionality needs to support multiple operating systems, such as using the correct keyboard shortcut based on the current operating system. It is not always necessary for new features to support every operating system, but it is recommended to put functionality that needs to work across operating systems in Talon abstractions so that they can be overridden based on the active operating systems.
+
+The common approach in Community is to provide the Windows implementation in the base files and put the Mac implementation in variants with the `_mac` postfix and the Linux implementation (if different from the Windows implementation) in variants with the `_linux` postfix. Consider looking at the [slack implementation](apps/slack) for an example. 
