@@ -5,7 +5,7 @@ This will not repeat information in [the contributing guidelines file](CONTRIBUT
 # Table of Contents
 * [Breaking Changes](#breaking-changes)
 * [Useless/Unused code](#uselessunused-code)
-* [Went to Use Snippets](#when-to-use-snippets)
+* [When to Use Snippets](#when-to-use-snippets)
 * [Code Simplicity](#code-simplicity)
 * [Supporting Multiple Operating Systems](#supporting-multiple-operating-systems)
 * [Generalizing Commands](#generalizing-commands)
