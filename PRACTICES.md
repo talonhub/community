@@ -5,9 +5,9 @@ This will not repeat information in [the contributing guidelines file](CONTRIBUT
 # Breaking Changes
 Consider discussing wether breaking changes are acceptable with maintainers before following these instructions.
 
-In general, breaking changes to the project should be documented in [Breaking Changes](BREAKING_CHANGES.txt) including a description of what replaced the prior functionality. 
+In general, document breaking changes in [Breaking Changes](BREAKING_CHANGES.txt) including a description of what replaced the prior functionality. 
 
-When we decide to remove existing functionality, deprecate it if possible using [our deprecations support](core/deprecations.py) instead of removing it immediately. See the documentation string at the top of that file for instructions on deprecations. Deprecated behavior should remain unchanged in Community for 6 months if possible.
+When we decide to remove existing functionality, deprecate it if possible using [our deprecations support](core/deprecations.py) instead of removing it immediately. See the documentation string at the top of that file for instructions on deprecations. We should leave deprecated behavior unchanged in Community for 6 months if possible.
 
 # Useless/Unused Code
 We do not leave useless code in Community. This includes commented out code, code that cannot be executed, code that is not used anywhere, and Talon abstractions defined on a context that will never activate. 
