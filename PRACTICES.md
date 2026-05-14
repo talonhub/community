@@ -66,4 +66,14 @@ If you write commands for a specific context that would be useful in other conte
 
 You can see examples of the kinds of things we put in the general command grammar in the [tags/](tags/) directory. 
 
-This approach allows reusing the same commands in multiple contexts and helps prevent inconsistencies.
+This approach allows reusing the- same commands in multiple contexts and helps prevent inconsistencies.
+
+
+# Spoken Form Considerations
+  - Community uses a noun-verb pattern, such as using `window close` instead of `close window`.
+  - Our convention is to capitalize single letters to slightly improve readability.
+  - Talon currently only handles alphabetic characters and spoken forms. Spell out numbers, symbols, etc.
+  - Avoid unnecessary command anchoring. Anchoring is typically only used when needed to prevent misrecognitions or ambiguities, such as putting `$` after a command ending with the `user.prose` capture so that everything the user says at the end is interpreted as part of that command.
+  - Consider using a prefix word for a group of commands, such as window commands being prefixed with the word `window`. Making the commands longer reduces the probability of misrecognitions, and adding a prefix helps prevent conflicts.
+  - Hesitate to add short commands — especially to the global grammar — because single syllable commands can easily misrecognize with each other.
+  - Consider testing that your spoken forms recognize with multiple Conformer speech engines.
