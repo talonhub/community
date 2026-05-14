@@ -1,13 +1,13 @@
 This file documents preferred practices and offers advice on contributing to Community. Contributors are not expected to read this entire document. This primarily exists to preserve knowledge when maintainers leave, let maintainers save time in code review by linking relevant sections, and help onboard frequent contributors.
 
-This will not repeat information in [CONTRIBUTING.md](CONTRIBUTING.md).
+This will not repeat information in [the contributing guidelines file](CONTRIBUTING.md).
 
 # Breaking Changes
 Consider discussing wether breaking changes are acceptable with maintainers before following these instructions.
 
-In general, breaking changes to the project should be documented in [BREAKING_CHANGES.txt](BREAKING_CHANGES.txt) including a description of what replaced the prior functionality. 
+In general, breaking changes to the project should be documented in [Breaking Changes](BREAKING_CHANGES.txt) including a description of what replaced the prior functionality. 
 
-When we decide to remove existing functionality, deprecate it if possible using [deprecations.py](core/deprecations.py) instead of removing it immediately. See the documentation string at the top of that file for instructions on deprecations. Deprecated behavior should remain unchanged in Community for 6 months if possible.
+When we decide to remove existing functionality, deprecate it if possible using [our deprecations support](core/deprecations.py) instead of removing it immediately. See the documentation string at the top of that file for instructions on deprecations. Deprecated behavior should remain unchanged in Community for 6 months if possible.
 
 # Useless/Unused Code
 We do not leave useless code in Community. This includes commented out code, code that cannot be executed, code that is not used anywhere, and Talon abstractions defined on a context that will never activate. 
@@ -43,7 +43,7 @@ When you want to define spoken forms:
   - Defining a single command directly is simplest. Defining a list with a single item is not recommended.
   - Avoid adding multiple spoken forms for a single command without a good reason.
   - Consider using a [list](https://talon.wiki/Customization/Talon%20Framework/lists) to give users a static set of options
-    - Implementing a list in a [.talon-list](https://talon.wiki/Customization/talon_lists/) is preferred unless you have a good reason to do so in Python.
+    - Implementing a list in a [.talon-list file](https://talon.wiki/Customization/talon_lists/) is preferred unless you have a good reason to do so in Python.
   - Consider using a [capture](https://talon.wiki/Customization/Talon%20Framework/captures) for complex spoken forms.
 
 In general, implementing functionality in .talon files is simpler than doing so in .py files. It is nonetheless usually preferred to implement behavior in an [action](https://talon.wiki/Customization/Talon%20Framework/actions) in Python to allow reusability and context-specific overriding despite the added complexity.
