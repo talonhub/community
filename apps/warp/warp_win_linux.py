@@ -8,7 +8,6 @@ and app.name: warp
 """
 mod.apps.warp = """
 os: windows
-and app.name: Warp
 and app.exe: warp.exe
 """
 
