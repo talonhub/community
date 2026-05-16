@@ -9,6 +9,7 @@ and app.bundle: dev.warp.Warp-Stable
 
 ctx = Context()
 ctx.matches = r"""
+os: mac
 app: warp
 """
 
