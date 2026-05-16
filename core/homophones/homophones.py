@@ -222,7 +222,7 @@ class Actions:
         app.notify(error)
         raise error
 
-    def homophones_get(word: str) -> Optional[[str]]:
+    def homophones_get(word: str) -> Optional[str]:
         """Get homophones for the given word"""
         word = word.lower()
         if word in all_homophones:
