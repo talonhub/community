@@ -1,5 +1,3 @@
-from typing import Optional
-
 from talon import Context, Module, actions
 
 # App definition. Dolphin is the default file manager for KDE plasma, one of
