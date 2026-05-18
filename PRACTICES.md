@@ -84,7 +84,7 @@ If you write commands for a specific context that would be useful in other conte
 - 7. Provide implementations for the actions in the original context you wrote them for.
 - 8. Activate the tag in the original context.
 
-You can see examples of the kinds of things we put in the general command grammar in the [tags/](tags/) directory.
+You can see examples of the kinds of things we put in the general command grammar in the [tags/](./tags/) directory.
 
 This approach allows reusing the- same commands in multiple contexts and helps prevent inconsistencies.
 
