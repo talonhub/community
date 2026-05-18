@@ -69,7 +69,7 @@ In general, implementing functionality in .talon files is simpler than doing so 
 
 Some functionality needs to support multiple operating systems, such as using the correct keyboard shortcut based on the current operating system. It is not always necessary for new features to support every operating system, but it is recommended to put functionality that needs to work across operating systems in Talon abstractions so that they can be overridden based on the active operating systems.
 
-The common approach in Community is to provide the Windows implementation in the base files and put the Mac implementation in variants with the `_mac` postfix and the Linux implementation (if different from the Windows implementation) in variants with the `_linux` postfix. Consider looking at the [slack implementation](apps/slack) for an example.
+The common approach in Community is to provide the Windows implementation in the base files and put the Mac implementation in variants with the `_mac` postfix and the Linux implementation (if different from the Windows implementation) in variants with the `_linux` postfix. Consider looking at the [slack implementation](./apps/slack) for an example.
 
 # Generalizing Commands
 
