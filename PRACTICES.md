@@ -1,6 +1,6 @@
 This file documents preferred practices and offers advice on contributing to Community. Contributors are not expected to read this entire document. This primarily exists to preserve knowledge when maintainers leave, let maintainers save time in code review by linking relevant sections, and help onboard frequent contributors.
 
-This will not repeat information in [the contributing guidelines file](CONTRIBUTING.md).
+This will not repeat information in [the contributing guidelines file](./CONTRIBUTING.md).
 
 # Table of Contents
 
@@ -16,9 +16,9 @@ This will not repeat information in [the contributing guidelines file](CONTRIBUT
 
 Consider discussing wether breaking changes are acceptable with maintainers before following these instructions.
 
-In general, document breaking changes in [Breaking Changes](BREAKING_CHANGES.txt) including a description of what replaced the prior functionality.
+In general, document breaking changes in [Breaking Changes](./BREAKING_CHANGES.txt) including a description of what replaced the prior functionality.
 
-When we decide to remove existing functionality, deprecate it if possible using [our deprecations support](core/deprecations.py) instead of removing it immediately. See the documentation string at the top of that file for instructions on deprecations. We should leave deprecated behavior unchanged in Community for 6 months if possible.
+When we decide to remove existing functionality, deprecate it if possible using [our deprecations support](./core/deprecations.py) instead of removing it immediately. See the documentation string at the top of that file for instructions on deprecations. We should leave deprecated behavior unchanged in Community for 6 months if possible.
 
 # Useless/Unused Code
 
@@ -28,7 +28,7 @@ Defining actions on a tag we do not activate is fine if we advertise to the user
 
 # When to Use Snippets
 
-See [the snippets README for details on snippets](core/snippets/README.md). A snippet inserts text with placeholders so the user can use a command to go to the next placeholder. Consider using a snippet in the following situations:
+See [the snippets README for details on snippets](./core/snippets/README.md). A snippet inserts text with placeholders so the user can use a command to go to the next placeholder. Consider using a snippet in the following situations:
 
 - You need to make sure the cursor ends up in a specific location in the text and user.insert_between is inadequate.
 - The user is likely to want to put the cursor in another location shortly after using the command/action.
@@ -80,7 +80,7 @@ If you write commands for a specific context that would be useful in other conte
 - 3. Define a tag for the commands.
 - 4. Put the commands in your subdirectory.
 - 5. Make the commands available when the tag is active.
-- 6. Update [the tags README](tags/README.md) describing your new commands.
+- 6. Update [the tags README](./tags/README.md) describing your new commands.
 - 7. Provide implementations for the actions in the original context you wrote them for.
 - 8. Activate the tag in the original context.
 
