@@ -36,7 +36,7 @@ See [the snippets README for details on snippets](./core/snippets/README.md). A 
 - Similar functionality is already implemented with snippets and keeping the `snip` prefix consistent makes it easier for the user to remember the command.
 - You are implementing functionality for a programming language where the same functionality is implemented for other languages using snippets.
 
-Note that you can use the `insert_snippet_by_name` action to programmatically insert snippets. The first argument is the name of the snippet and the second is an optional dictionary containing substitutions. The substitution dictionary maps snippet stops (placeholders) to text to put there, such as the following to put `return False` at the stop `$0`:
+Note that you can use the `user.insert_snippet_by_name` action to programmatically insert snippets. The first argument is the name of the snippet and the second is an optional dictionary containing substitutions. The substitution dictionary maps snippet stops (placeholders) to text to put there, such as the following to put `return False` at the stop `$0`:
 
 ```python
 action.user.insert_snippet_by_name("ifStatement", {"0": "return False"})
