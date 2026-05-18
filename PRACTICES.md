@@ -75,7 +75,7 @@ The common approach in Community is to provide the Windows implementation in the
 
 If you write commands for a specific context that would be useful in other contexts, consider doing the following:
 
-- 1. Define a subdirectory for your commands in the [tags/](tags/) directory.
+- 1. Define a subdirectory for your commands in the [tags/](./tags/) directory.
 - 2. Provide empty action definitions in your subdirectory.
 - 3. Define a tag for the commands.
 - 4. Put the commands in your subdirectory.
