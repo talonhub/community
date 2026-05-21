@@ -144,10 +144,16 @@ class Actions:
         actions.edit.select_line()
         half_line_length = int(len(actions.edit.selected_text()) / 2)
         actions.edit.left()
-        for i in range(0, half_line_length):
+        for _ in range(0, half_line_length):
             actions.edit.right()
 
     def cut_line():
         """Cut current line"""
         actions.edit.select_line()
         actions.edit.cut()
+
+    def end_line_with_symbol_and_start_line(symbol: str):
+        """Add <symbol> at end of line and then insert line below"""
+        actions.edit.line_end()
+        actions.key(symbol)
+        actions.edit.line_insert_down()

@@ -2,6 +2,7 @@ from typing import Any, Callable, TypeVar
 
 from talon import Context, Module, actions, settings
 
+from ...core.described_functions import create_described_insert_between
 from ..tags.operators import Operators
 
 mod = Module()
@@ -225,7 +226,7 @@ ctx.lists["user.code_trait"] = all_traits
 
 operators = Operators(
     # code_operators_array
-    SUBSCRIPT=lambda: actions.user.insert_between("[", "]"),
+    SUBSCRIPT=create_described_insert_between("[", "]"),
     # code_operators_assignment
     ASSIGNMENT=" = ",
     ASSIGNMENT_ADDITION=" += ",
@@ -250,7 +251,7 @@ operators = Operators(
     MATH_MULTIPLY=" * ",
     MATH_DIVIDE=" / ",
     MATH_MODULO=" % ",
-    MATH_EXPONENT=lambda: actions.user.insert_between(".pow(", ")"),
+    MATH_EXPONENT=create_described_insert_between(".pow(", ")"),
     MATH_EQUAL=" == ",
     MATH_NOT_EQUAL=" != ",
     MATH_GREATER_THAN=" > ",
@@ -273,16 +274,13 @@ class UserActions:
 
     # tag: imperative
 
-    def code_break():
-        actions.auto_insert("break;")
-
     # tag: object_oriented
 
     def code_operator_object_accessor():
-        actions.auto_insert(".")
+        actions.insert(".")
 
     def code_self():
-        actions.auto_insert("self")
+        actions.insert("self")
 
     def code_define_class():
         actions.user.insert_snippet_by_name("structDeclaration")
@@ -290,21 +288,21 @@ class UserActions:
     # tag: data_bool
 
     def code_insert_true():
-        actions.auto_insert("true")
+        actions.insert("true")
 
     def code_insert_false():
-        actions.auto_insert("false")
+        actions.insert("false")
 
     # tag: data_null
 
     def code_insert_null():
-        actions.auto_insert("None")
+        actions.insert("None")
 
     def code_insert_is_null():
-        actions.auto_insert(".is_none()")
+        actions.insert(".is_none()")
 
     def code_insert_is_not_null():
-        actions.auto_insert(".is_some()")
+        actions.insert(".is_some()")
 
     # tag: functions
 
@@ -312,28 +310,28 @@ class UserActions:
         actions.user.code_private_function(text)
 
     def code_private_function(text: str):
-        actions.auto_insert("fn ")
+        actions.insert("fn ")
         formatter = settings.get("user.code_private_function_formatter")
         function_name = actions.user.formatted_text(text, formatter)
         actions.user.code_insert_function(function_name, None)
 
     def code_protected_function(text: str):
-        actions.auto_insert("pub(crate) fn ")
+        actions.insert("pub(crate) fn ")
         formatter = settings.get("user.code_protected_function_formatter")
         function_name = actions.user.formatted_text(text, formatter)
         actions.user.code_insert_function(function_name, None)
 
     def code_public_function(text: str):
-        actions.auto_insert("pub fn ")
+        actions.insert("pub fn ")
         formatter = settings.get("user.code_public_function_formatter")
         function_name = actions.user.formatted_text(text, formatter)
         actions.user.code_insert_function(function_name, None)
 
     def code_insert_type_annotation(type: str):
-        actions.auto_insert(f": {type}")
+        actions.insert(f": {type}")
 
     def code_insert_return_type(type: str):
-        actions.auto_insert(f" -> {type}")
+        actions.insert(f" -> {type}")
 
     # tag: functions_gui
 
@@ -366,7 +364,7 @@ class UserActions:
         actions.key("enter")
 
     def code_comment_documentation_inner():
-        actions.auto_insert("//! ")
+        actions.insert("//! ")
 
     def code_comment_documentation_block_inner():
         actions.user.insert_between("/*!", "*/")
@@ -391,5 +389,5 @@ RT = TypeVar("RT")  # return type
 
 
 def repeat_call(n: int, f: Callable[..., RT], *args: Any, **kwargs: Any):
-    for i in range(n):
+    for _ in range(n):
         f(*args, **kwargs)

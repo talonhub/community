@@ -1,14 +1,16 @@
 from talon import Context, actions, settings
 
+from ...core.described_functions import create_described_insert_between
 from ..tags.operators import Operators
 
 ctx = Context()
 ctx.matches = r"""
 code.language: ruby
 """
+
 operators = Operators(
     # code_operators_array
-    SUBSCRIPT=lambda: actions.user.insert_between("[", "]"),
+    SUBSCRIPT=create_described_insert_between("[", "]"),
     # code_operators_assignment
     ASSIGNMENT=" = ",
     ASSIGNMENT_OR=" ||= ",
@@ -57,29 +59,26 @@ class UserActions:
         return operators
 
     def code_self():
-        actions.auto_insert("self")
+        actions.insert("self")
 
     def code_operator_object_accessor():
-        actions.auto_insert(".")
+        actions.insert(".")
 
     def code_insert_null():
-        actions.auto_insert("nil")
+        actions.insert("nil")
 
     def code_insert_is_null():
-        actions.auto_insert(".nil?")
+        actions.insert(".nil?")
 
     # Technically .present? is provided by Rails
     def code_insert_is_not_null():
-        actions.auto_insert(".present?")
-
-    def code_state_do():
-        actions.insert("do ")
+        actions.insert(".present?")
 
     def code_insert_true():
-        actions.auto_insert("true")
+        actions.insert("true")
 
     def code_insert_false():
-        actions.auto_insert("false")
+        actions.insert("false")
 
     def code_comment_documentation():
         actions.insert("##")

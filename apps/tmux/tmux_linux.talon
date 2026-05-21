@@ -1,6 +1,7 @@
 os: linux
 tag: user.tmux
 -
+
 mux: "tmux "
 
 #session management

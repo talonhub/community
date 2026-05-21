@@ -1,11 +1,21 @@
 name: forRangeStatement
 phrase: for range
 insertionScope: statement
+
+$0.wrapperPhrase: for range
+$0.wrapperScope: statement
 ---
 
-language: c | cpp | csharp | java
+language: c | csharp | java
 -
 for (int i = 0; i < $1; ++i) {
+    $0
+}
+---
+
+language: cpp
+-
+for (size_t i = 0; i < $1; ++i) {
     $0
 }
 ---

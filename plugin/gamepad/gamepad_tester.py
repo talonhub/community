@@ -88,7 +88,7 @@ def render_buttons(
     c.paint.style = c.paint.Style.STROKE
     c.draw_circle(x, y, CIRCLE_RADIUS)
     for i, button_id in enumerate(buttons_ids):
-        (offset_x, offset_y) = BUTTON_OFFSETS[i]
+        offset_x, offset_y = BUTTON_OFFSETS[i]
         button_x = x + offset_x * BUTTON_OFFSET
         button_y = y + offset_y * BUTTON_OFFSET
         is_pressed = buttons[button_id]

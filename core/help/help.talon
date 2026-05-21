@@ -9,12 +9,24 @@ help arrows: user.help_list("user.arrow_key")
 help context$: user.help_context()
 help active$: user.help_context_enabled()
 help search <user.text>$: user.help_search(text)
+help active search <user.text>$: user.help_search(text, true)
+help clip search: user.help_search(clip.text())
+help this search: user.help_search(edit.selected_text())
 help context {user.help_contexts}$: user.help_selected_context(help_contexts)
 help help: user.help_search("help")
 help scope$: user.help_scope_toggle()
 help snip: user.help_list("user.snippet")
+help operators: user.help_operators()
+help keywords: user.help_list("user.code_keyword")
+help keywords unprefixed: user.help_list("user.code_keyword_unprefixed")
+help common methods: user.help_list("user.code_common_method")
+help pairs: user.help_list("user.delimiter_pair")
+help edit actions: user.help_list("user.edit_action")
+help edit modifiers: user.help_list("user.edit_modifier")
+help edit repeatable modifiers: user.help_list("user.edit_modifier_repeatable")
+help customize: user.help_list("user.edit_text_file")
 
-(help formatters | help format | format help):
+help formatters | help format | format help:
     user.help_formatters(user.get_formatters_words(), false)
-(help re formatters | help re format | re format help):
+help re formatters | help re format | re format help:
     user.help_formatters(user.get_reformatters_words(), true)

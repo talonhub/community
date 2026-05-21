@@ -1,5 +1,6 @@
 name: defaultStatement
 phrase: default
+insertionScope: branch
 ---
 
 language: c | cpp | csharp | java | javascript | typescript | javascriptreact | typescriptreact | go
@@ -34,4 +35,9 @@ _ ->
 language: kotlin
 -
 else -> $0
+---
+
+language: rust
+-
+_ => $0,
 ---

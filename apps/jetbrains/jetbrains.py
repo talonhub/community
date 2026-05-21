@@ -31,6 +31,7 @@ port_mapping = {
     "google-android-studio": 8652,
     "idea64.exe": 8653,
     "IntelliJ IDEA": 8653,
+    "IntelliJ IDEA Ultimate Edition": 8653,
     "IntelliJ IDEA Community Edition": 8654,
     "jetbrains-appcode": 8655,
     "jetbrains-clion": 8657,
@@ -157,7 +158,6 @@ and app.bundle: com.jetbrains.jbr.java
 
 @mod.action_class
 class Actions:
-
     def idea(commands: str):
         """Send a command to Jetbrains product"""
         command_list = commands.split(",")
@@ -304,7 +304,6 @@ class WinActions:
 
 @ctx.action_class("user")
 class UserActions:
-
     def command_server_directory() -> str:
         return "jetbrains-command-server"
 

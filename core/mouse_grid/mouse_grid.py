@@ -20,12 +20,14 @@ mod.setting(
     default=False,
     desc="""Allows you to switch mouse grid and friends between a computer numpad and a phone numpad (the number one goes on the bottom left or the top left)""",
 )
+mod.setting(
+    "grid_show_zoomed",
+    type=bool,
+    default=True,
+    desc="If true, show a zoomed in version of the mouse grid when it becomes sufficiently small",
+)
 
 mod.tag("mouse_grid_showing", desc="Tag indicates whether the mouse grid is showing")
-mod.tag(
-    "mouse_grid_enabled",
-    desc="Deprecated: do not use. Activates legacy m grid command",
-)
 ctx = Context()
 
 
@@ -153,9 +155,9 @@ class MouseSnapNine:
                 for col in range(3):
                     text_string = ""
                     if settings.get("user.grids_put_one_bottom_left"):
-                        text_string = f"{(2 - row)*3+col+1}"
+                        text_string = f"{(2 - row) * 3 + col + 1}"
                     else:
-                        text_string = f"{row*3+col+1}"
+                        text_string = f"{row * 3 + col + 1}"
                     text_rect = canvas.paint.measure_text(text_string)[1]
                     background_rect = text_rect.copy()
                     background_rect.center = Point2d(
@@ -173,12 +175,10 @@ class MouseSnapNine:
                         offset_y + height / 6 + row * height / 3 + text_rect.height / 2,
                     )
 
-        if self.count < 2:
+        should_show_zoomed_in = self.should_show_zoomed_in()
+        if not should_show_zoomed_in:
             paint.color = "00ff007f"
             for which in range(1, 10):
-                gap = 35 - self.count * 10
-                if not self.active:
-                    gap = 45
                 draw_crosses(*self.calc_narrow(which, self.rect))
 
         paint.stroke_width = grid_stroke
@@ -186,7 +186,7 @@ class MouseSnapNine:
             paint.color = "ff0000ff"
         else:
             paint.color = "000000ff"
-        if self.count >= 2:
+        if should_show_zoomed_in:
             aspect = self.rect.width / self.rect.height
             if aspect >= 1:
                 w = self.screen.width / 3
@@ -204,6 +204,10 @@ class MouseSnapNine:
 
             paint.textsize += 12 - self.count * 3
             draw_text(self.rect.x, self.rect.y, self.rect.width, self.rect.height)
+
+    def should_show_zoomed_in(self):
+        """Determines if the display of the grid should be zoomed in"""
+        return settings.get("user.grid_show_zoomed") and self.count >= 2
 
     def calc_narrow(self, which, rect):
         rect = rect.copy()
@@ -229,7 +233,7 @@ class MouseSnapNine:
             self.count += 1
         if move:
             ctrl.mouse_move(*rect.center)
-        if self.count >= 2:
+        if self.should_show_zoomed_in():
             self.update_screenshot()
         else:
             self.mcanvas.freeze()

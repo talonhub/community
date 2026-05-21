@@ -10,7 +10,7 @@ Can be used on its own, but shines when combined with:
 - [Rango](https://github.com/david-tejada/rango) for browser navigation
 - [gaze-ocr](https://github.com/wolfmanstout/talon-gaze-ocr) for advanced cursor control using eye tracking and text recognition (OCR)
 - [AXKit](https://github.com/phillco/talon-axkit) (macOS only) to enhance Talon with native OS accessibility integrations
-- [Other user file sets](https://talon.wiki/talon_user_file_sets/)
+- [Other user file sets](https://talon.wiki/Integrations/talon_user_file_sets)
 
 ## Installation
 
@@ -20,7 +20,7 @@ Can be used on its own, but shines when combined with:
 - Mac, Windows, or Linux
 - Talon's built-in Conformer (wav2letter) speech recognition engine (recommended), or Dragon NaturallySpeaking (Windows) / Dragon for Mac (although beware that Dragon for Mac is discontinued and its use deprecated).
 
-Includes commands for working with an eye tracker; an [eye tracker](https://talon.wiki/Quickstart/Hardware/#eye-trackers) is not required.
+Includes commands for working with an eye tracker; an [eye tracker](https://talon.wiki/Resource%20Hub/Hardware/#eye-trackers) is not required.
 
 ### Linux & Mac
 
@@ -68,13 +68,13 @@ Note that it is also possible to install `community` by [downloading and extract
    - `paste that`, `copy that`, and `cut that` for pasting/copy/cutting, respectively.
 8. For community-generated documentation on Talon itself, please visit https://talon.wiki/.
 
-It's recommended to learn the alphabet first, then get familiar with the keys, symbols, formatters, mouse, and generic_editor commands.
+It's recommended to learn the alphabet first, then get familiar with the keys, symbols, formatters, mouse, and edit commands.
 
 Once you have the basics of text input down, try copying some code from one window to another.
 
 After that, explore using ordinal repetition for easily repeating a command without pausing (e.g., saying `go up fifth` will go up five lines), window switching (`focus chrome`), and moving around in your text editor of choice.
 
-If you use vim, just start with the numbers and alphabet, otherwise look at generic_editor.talon as well at jetbrains, vscode, and any other integrations.
+If you use vim, just start with the numbers and alphabet, otherwise look at edit.talon as well at jetbrains, vscode, and any other integrations.
 
 ### Alphabet
 
@@ -90,9 +90,6 @@ Try saying e.g. `air bat cap` to insert abc.
 All key commands are defined in [keys.talon](core/keys/keys.talon). Say letters of the [Talon alphabet](#alphabet) for A–Z.
 
 For modifier keys, say `help modifiers`. For example, say `shift air` to press <kbd>Shift</kbd> + <kbd>A</kbd>, which types a capital `A`.
-
-For symbols, say `help symbols`. These are defined in keys.py;
-search for `modifier_keys` and then keep scrolling — roughly starting [here](core/keys/keys.py#L124).
 
 On Windows, try commands such as:
 
@@ -110,7 +107,7 @@ Say any combination of modifiers, symbols, alphabet, numbers and function keys t
 
 ### Symbols
 
-Some symbols are defined in [keys.py](core/keys/keys.py#L144), so you can say, e.g. `control colon` to press those keys.
+Some symbols are defined in [symbols.py](core/keys/symbols.py), so you can say, e.g. `control colon` to press those keys.
 
 Multi-character punctuation (e.g., ellipses) is defined in [symbols.talon](plugin/symbols/symbols.talon).
 
@@ -155,6 +152,8 @@ Global window management commands are defined in [window_management.talon](core/
 See [screenshot.talon](plugin/screenshot/screenshot.talon).
 
 ### Programming languages
+
+More detailed programming support documentation can be found [here](https://talon.wiki/Voice%20Coding/voice-coding-overview).
 
 Specific programming languages may be activated by voice commands, or via title tracking.
 
@@ -309,7 +308,7 @@ alt: alt
 
 ## Other Talon user file sets
 
-In addition to this repo, there are [other Talon user file sets](https://talon.wiki/talon_user_file_sets/) containing additional commands that you may want to experiment with if you're feeling adventurous 😊. Many of them are meant to be used alongside `community`, but a few of them are designed as replacements. If it's not clear which, please file an issue against the given GitHub repository for that user file set!
+In addition to this repo, there are [other Talon user file sets](https://talon.wiki/Integrations/talon_user_file_sets) containing additional commands that you may want to experiment with if you're feeling adventurous 😊. Many of them are meant to be used alongside `community`, but a few of them are designed as replacements. If it's not clear which, please file an issue against the given GitHub repository for that user file set!
 
 # Collaborators
 

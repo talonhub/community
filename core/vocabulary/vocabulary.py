@@ -65,8 +65,7 @@ class PhraseReplacer:
             words = spoken_form.split()
             if not words:
                 logging.warning(
-                    "Found empty spoken form for written form"
-                    f"{written_form}, ignored"
+                    f"Found empty spoken form for written form{written_form}, ignored"
                 )
                 continue
             first_word, n_next = words[0], len(words) - 1

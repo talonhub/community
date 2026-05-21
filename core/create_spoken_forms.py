@@ -89,7 +89,6 @@ def create_spoken_form_for_number(num: int):
     """Creates a spoken form for an integer"""
 
     n3 = []
-    r1 = ""
     # create numeric string
     ns = str(num)
     for k in range(3, 33, 3):
@@ -105,7 +104,6 @@ def create_spoken_form_for_number(num: int):
                 n3.append(int(r[:2]))
             elif q >= -2:
                 n3.append(int(r[:1]))
-        r1 = r
 
     # break each group of 3 digits into
     # ones, tens/twenties, hundreds
@@ -164,12 +162,6 @@ def create_spoken_form_years(num: str):
     if remainder != 0:
         # 1906 => "nineteen six"
         if remainder < 10:
-            # todo: decide if we want nineteen oh five"
-            # todo: decide if we want "and"
-            # both seem like a waste
-            # if centuries % 10 != 0:
-            #     words.append("oh")
-
             words.append(REVERSE_PRONUNCIATION_MAP[str(remainder)])
         else:
             words.append(create_spoken_form_for_number(remainder))
@@ -223,8 +215,6 @@ def create_single_spoken_form(source: str):
 
 def create_exploded_forms(spoken_forms: List[str]):
     """Exploded common packed words into separate words"""
-    # TODO: This could be moved somewhere else, possibly seeded from something like
-    # words to replace...
     packed_words = {"readme": "read me"}
 
     new_spoken_forms = []
@@ -429,7 +419,6 @@ def generate_string_subsequences(
     # 1. Each word in source, eg "foo bar baz" -> "foo", "bar", "baz".
     # 2. Each leading subsequence of words from source,
     #    eg "foo bar baz" -> "foo", "foo bar", "foo bar baz"
-    #    (but not "bar baz" - TODO: is this intentional?)
     #
     # Except for:
     # 3. strings shorter than minimum_term_length
@@ -473,7 +462,6 @@ class Actions:
             source, REGEX_NO_SYMBOLS
         )
 
-        # todo: this could probably be optimized out if there's no symbols
         spoken_forms_with_symbols = create_spoken_forms_from_regex(
             source, REGEX_WITH_SYMBOLS
         )
@@ -483,7 +471,6 @@ class Actions:
 
         # only generate the subsequences if requested
         if generate_subsequences:
-            # todo: do we care about the subsequences that are excluded.
             # the only one that seems relevant are the full spoken form for
             spoken_forms.update(
                 generate_string_subsequences(

@@ -1,0 +1,7 @@
+list: user.code_keyword_unprefixed
+code.language: python
+-
+
+continue: "continue"
+finally: "finally"
+nonlocal: "nonlocal "
