@@ -68,9 +68,13 @@ In general, implementing functionality in .talon files is simpler than doing so 
 
 # Supporting Multiple Operating Systems
 
-Some functionality needs to support multiple operating systems, such as using the correct keyboard shortcut based on the current operating system. It is not always necessary for new features to support every operating system, but it is recommended to put functionality that needs to work across operating systems in Talon abstractions so that they can be overridden based on the active operating systems.
+Some functionality needs to support multiple operating systems, such as using the correct keyboard shortcut based on the current operating system (OS). while new contributions do not have to support every OS, implement functionality needing OS specific behavior using Talon abstractions to make overriding easier.
 
-The preferred approach in Community is usually to provide a base Python file with actions that do the right thing on all relevant operating systems and empty action definitions for actions that need operating system specific implementations. The implementations for the different operating systems should go in separate files with a postfix after the base file name but before the extension for each implementation file. If the implementations for multiple operating systems are the same, which is sometimes the case with Windows and Linux, combine the postfixes i.e. `_win_linux`.
+Recommended File Structure
+- 1. Put actions that work universally in a base Python file.
+- 2. Create empty action definitions for actions needing OS specific implementations in the base file.
+- 3. Define separate files for different implementations. Implementations that are the same for multiple OSs can go in the same implementation file.
+- 4. The implementation files' names should be the base file name followed by the postfix(es) for the implemented OS(s), i.e. `base_name_win_linux.py` for a file providing Windows and Linux implementations. 
 
 | OS      | postfix |
 | ------- | ------- |
