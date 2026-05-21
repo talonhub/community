@@ -73,10 +73,10 @@ Some functionality needs to support multiple operating systems, such as using th
 The preferred approach in Community is usually to provide a base Python file with actions that do the right thing on all relevant operating systems and empty action definitions for actions that need operating system specific implementations. The implementations for the different operating systems should go in separate files with a postfix after the base file name but before the extension for each implementation file. If the implementations for multiple operating systems are the same, which is sometimes the case with Windows and Linux, combine the postfixes i.e. `_win_linux`.
 
 | OS      | postfix |
-|-------------------|
-| Windows | _win    |
-| MacOS   | _mac    |
-| Linux   | _linux  |
+| ------- | ------- |
+| Windows | \_win   |
+| MacOS   | \_mac   |
+| Linux   | \_linux |
 
 Consider looking at the [firefox implementation](./apps/firefox) for an example.
 
