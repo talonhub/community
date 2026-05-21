@@ -11,6 +11,7 @@ This will not repeat information in [the contributing guidelines file](./CONTRIB
 - [Supporting Multiple Operating Systems](#supporting-multiple-operating-systems)
 - [Generalizing Commands](#generalizing-commands)
 - [Spoken Form Considerations](#spoken-form-considerations)
+- [Sleep Practices](#sleep-practices)
 
 # Breaking Changes
 
@@ -97,3 +98,8 @@ This approach allows reusing the- same commands in multiple contexts and helps p
 - Consider using a prefix word for a group of commands, such as window commands being prefixed with the word `window`. Making the commands longer reduces the probability of misrecognitions, and adding a prefix helps prevent conflicts.
 - Hesitate to add short commands — especially to the global grammar — because single syllable commands can easily misrecognize with each other.
 - Consider testing that your spoken forms recognize with multiple Conformer speech engines.
+
+# Sleep Practices
+
+- Use the `sleep` action instead of the Python `time.sleep` function
+- Avoid sleeping inside a cron thread
