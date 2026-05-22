@@ -68,7 +68,7 @@ In general, implementing functionality in .talon files is simpler than doing so 
 
 # Supporting Multiple Operating Systems
 
-Some functionality needs to support multiple operating systems, such as using the correct keyboard shortcut based on the current operating system (OS). while new contributions do not have to support every OS, implement functionality needing OS specific behavior using Talon abstractions to make overriding easier.
+Some functionality needs to support multiple operating systems, such as using the correct keyboard shortcut based on the current operating system (OS). While new contributions do not have to support every OS, implement functionality needing OS specific behavior using Talon abstractions to make overriding easier.
 
 Recommended File Structure
 
