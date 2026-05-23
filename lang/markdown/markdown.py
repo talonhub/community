@@ -32,6 +32,6 @@ class Actions:
         actions.user.insert_snippet_by_name("link", substitutions)
 
     def markdown_wrap_selection_with_link(url: str):
-        """Wraps the selection with a markdown link pointing to the specified url"""
+        """Wraps the selection with a markdown link for the specified url"""
         description = actions.edit.selected_text()
         actions.user.markdown_insert_link(url, description)
