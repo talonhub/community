@@ -1,6 +1,6 @@
-from talon import Context, Module, actions
-
 from typing import Optional
+
+from talon import Context, Module, actions
 
 mod = Module()
 ctx = Context()
@@ -22,9 +22,10 @@ ctx.lists["user.markdown_code_block_language"] = {
     "markdown": "markdown",
 }
 
+
 @mod.action_class
 class Actions:
-    def markdown_insert_link(url: str, description: Optional[str]=None):
+    def markdown_insert_link(url: str, description: Optional[str] = None):
         """Inserts a markdown link filling in the url and optionally filling in the description"""
         substitutions = {"0": url}
         if description is not None:
