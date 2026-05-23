@@ -1,6 +1,6 @@
 This file documents preferred practices and offers advice on contributing to Community. Contributors are not expected to read this entire document. This primarily exists to preserve knowledge when maintainers leave, let maintainers save time in code review by linking relevant sections, and help onboard frequent contributors.
 
-This will not repeat information in [the contributing guidelines file](./CONTRIBUTING.md).
+This does not make [the contributing guidelines file](./CONTRIBUTING.md) obsolete.
 
 # Table of Contents
 
