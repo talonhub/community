@@ -148,8 +148,6 @@ def raise_homophones(word_to_find_homophones_for, forced=False, selection=False)
 @imgui.open(x=main_screen.x + main_screen.width / 2.6, y=main_screen.y)
 def gui(gui: imgui.GUI):
     global active_word_list
-    if False:
-        gui.text("Homophone help - todo")
     gui.text("Select a homophone")
     gui.line()
     index = 1
