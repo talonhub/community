@@ -7,7 +7,7 @@ This does not make [the contributing guidelines file](./CONTRIBUTING.md) obsolet
 ## Table of Contents
 
 - [Breaking Changes](#breaking-changes)
-- [Useless/Unused code](#uselessunused-code)
+- [Useless/Unused Code](#uselessunused-code)
 - [When to Use Snippets](#when-to-use-snippets)
 - [Code Simplicity](#code-simplicity)
 - [Supporting Multiple Operating Systems](#supporting-multiple-operating-systems)
