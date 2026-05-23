@@ -83,7 +83,7 @@ Some functionality needs to support multiple operating systems, such as using th
 | MacOS   | \_mac   |
 | Linux   | \_linux |
 
-Consider looking at the [firefox implementation](./apps/firefox) for an example.
+Consider looking at the [Firefox implementation](./apps/firefox) for an example.
 
 # Generalizing Commands
 
