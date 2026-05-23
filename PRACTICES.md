@@ -104,7 +104,7 @@ If you write commands for a specific context that would be useful in other conte
 
 You can see examples of the kinds of things we put in the general command grammar in the [tags/](./tags/) directory.
 
-This approach allows reusing the- same commands in multiple contexts and helps prevent inconsistencies.
+This approach allows reusing the same commands in multiple contexts and helps prevent inconsistencies.
 
 ## Spoken Form Considerations
 
