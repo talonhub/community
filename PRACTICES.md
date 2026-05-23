@@ -75,7 +75,7 @@ Some functionality needs to support multiple operating systems, such as using th
 - 1. Put actions that work universally in a base Python file.
 - 2. Create empty action definitions for actions needing OS specific implementations in the base file.
 - 3. Define separate files for different implementations. Implementations that are the same for multiple OSs can go in the same implementation file.
-- 4. The implementation files' names should be the base file name followed by the postfix(es) for the implemented OS(s), i.e. `base_name_win_linux.py` for a file providing Windows and Linux implementations.
+- 4. The implementation files' names should be the base file name followed by the postfix(es) for the implemented OS(es), i.e. `base_name_win_linux.py` for a file providing Windows and Linux implementations.
 
 | OS      | postfix |
 | ------- | ------- |
