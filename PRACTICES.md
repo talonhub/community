@@ -68,7 +68,7 @@ When you want to define spoken forms:
   - Implementing a list in a [.talon-list file](https://talon.wiki/Customization/talon_lists/) is preferred unless you have a good reason to do so in Python.
 - Consider using a [capture](https://talon.wiki/Customization/Talon%20Framework/captures) for complex spoken forms.
 
-In general, implementing functionality in .talon files is simpler than doing so in .py files. It is nonetheless usually preferred to implement behavior in an [action](https://talon.wiki/Customization/Talon%20Framework/actions) in Python to allow reusability and context-specific overriding despite the added complexity.
+In general, implementing functionality in .talon files is simpler than doing so in Python. However, in Community, prefer implementing behavior in a Python [action](https://talon.wiki/Customization/Talon%20Framework/actions) for reusability and to facilitate contextual overrides despite the added complexity.
 
 ## Supporting Multiple Operating Systems
 
