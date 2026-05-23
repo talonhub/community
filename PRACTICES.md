@@ -114,5 +114,5 @@ This approach allows reusing the- same commands in multiple contexts and helps p
 
 # Sleep Practices
 
-- Use the `sleep` action instead of the Python `time.sleep` function
-- Avoid sleeping inside a cron thread
+- Use the `sleep` action instead of the Python `time.sleep` function.
+- Avoid sleeping inside a cron thread because Talon currently runs all of the cron jobs in a single thread.
