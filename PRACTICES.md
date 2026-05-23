@@ -55,7 +55,7 @@ When you want to limit some behavior to a specific context:
 
 - If the behavior is only relevant to an application, just match it directly and provide an [app definition](https://talon.wiki/Customization/Talon%20Framework/apps) if needed.
 - If the behavior is general enough to be used by multiple applications or contexts and should not be manually turned on and off by the user, consider putting it behind a [tag](https://talon.wiki/Customization/Talon%20Framework/tags).
-- If behavior needs to be activated/deactivated by the user
+- If behavior needs to be activated/deactivated by the user:
   - Putting it behind a tag is simplest.
   - Consider using a [mode](https://talon.wiki/Customization/Talon%20Framework/modes) if only specific commands should be available in the context.
 - A [scope](https://talon.wiki/Customization/Talon%20Framework/scopes) can be used for complex context matching if nothing else is adequate.
