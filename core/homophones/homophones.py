@@ -150,18 +150,17 @@ def gui(gui: imgui.GUI):
     global active_word_list
     if False:
         gui.text("Homophone help - todo")
-    else:
-        gui.text("Select a homophone")
-        gui.line()
-        index = 1
-        for word in active_word_list:
-            if gui.button(f"Choose {index}: {word}"):
-                actions.insert(actions.user.homophones_select(index))
-                actions.user.homophones_hide()
-            index = index + 1
-
-        if gui.button("Phones (hide | exit)"):
+    gui.text("Select a homophone")
+    gui.line()
+    index = 1
+    for word in active_word_list:
+        if gui.button(f"Choose {index}: {word}"):
+            actions.insert(actions.user.homophones_select(index))
             actions.user.homophones_hide()
+        index = index + 1
+
+    if gui.button("Phones (hide | exit)"):
+        actions.user.homophones_hide()
 
 
 @mod.capture(rule="{self.homophones_canonicals}")
