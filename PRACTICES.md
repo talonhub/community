@@ -45,6 +45,8 @@ Note that you can use the `user.insert_snippet_by_name` action to programmatical
 action.user.insert_snippet_by_name("ifStatement", {"0": "return False"})
 ```
 
+See the [snippets README](./core/snippets/README.md) for details on snippets.
+
 ## Code Simplicity
 
 Simplify your code when possible and consider leaving a comment describing complicated code. In general, use the simplest Talon abstraction that does what you want.
