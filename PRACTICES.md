@@ -108,7 +108,6 @@ This approach allows reusing the same commands in multiple contexts and helps pr
 
 ## Spoken Form Considerations
 
-- Community uses a noun-verb pattern, such as using `window close` instead of `close window`.
 - Our convention is to capitalize single letters to slightly improve readability.
 - Talon currently only handles alphabetic characters and spoken forms. Spell out numbers, symbols, etc.
 - Command anchoring is typically only used when needed to prevent misrecognitions or ambiguities, such as putting `$` after a command ending with the `user.prose` capture so that everything the user says at the end is interpreted as part of that command. Anchoring is also useful for commands that users would strongly want to avoid triggering on accident and would not use often by putting `^` at the start and `$` at the end.
