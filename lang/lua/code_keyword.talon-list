@@ -1,0 +1,26 @@
+list: user.code_keyword
+code.language: lua
+-
+
+and: " and "
+break: "break "
+do: "do "
+else: "else "
+elseif: "elseif "
+end: "end"
+false: "false"
+function: "function "
+for: "for "
+goto: "goto "
+if: "if "
+in: " in "
+local: "local "
+nil: "nil"
+not: "not "
+or: " or "
+repeat: "repeat "
+return: "return "
+then: "then"
+true: "true"
+until: "until "
+while: "while "
