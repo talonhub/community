@@ -57,7 +57,7 @@ def update_homophones(name, flags):
 
 update_homophones(homophones_file, None)
 fs.watch(cwd, update_homophones)
-active_word_list = None
+active_word_list = []
 is_selection = False
 
 
