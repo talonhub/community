@@ -15,7 +15,7 @@ This will not repeat information in [the contributing guidelines file](./CONTRIB
 
 # Breaking Changes
 
-Consider discussing wether breaking changes are acceptable with maintainers before following these instructions.
+Consider discussing whether breaking changes are acceptable with maintainers before following these instructions.
 
 In general, document breaking changes in [Breaking Changes](./BREAKING_CHANGES.txt) including a description of what replaced the prior functionality.
 
