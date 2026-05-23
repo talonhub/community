@@ -70,7 +70,7 @@ In general, implementing functionality in .talon files is simpler than doing so 
 
 Some functionality needs to support multiple operating systems, such as using the correct keyboard shortcut based on the current operating system (OS). While new contributions do not have to support every OS, implement functionality needing OS specific behavior using Talon abstractions to make overriding easier.
 
-Recommended File Structure
+## Recommended File Structure
 
 - 1. Put actions that work universally in a base Python file.
 - 2. Create empty action definitions for actions needing OS specific implementations in the base file.
