@@ -110,7 +110,7 @@ This approach allows reusing the same commands in multiple contexts and helps pr
 
 - Our convention is to capitalize single letters to slightly improve readability.
 - Talon currently only handles alphabetic characters and spoken forms. Spell out numbers, symbols, etc.
-- Command anchoring is typically only used when needed to prevent misrecognitions or ambiguities, such as putting `$` after a command ending with the `user.prose` capture so that everything the user says at the end is interpreted as part of that command. Anchoring is also useful for commands that users would strongly want to avoid triggering on accident and would not use often by putting `^` at the start and `$` at the end.
+- Anchor commands only when needed to prevent misrecognitions or ambiguities. For example, a trailing anchor `$` after a command ending with the `user.prose` capture ensures the remainder of the utterance is consumed by the capture. Anchoring at both the start (`^`) and end (`$`) is useful for commands that users would want to avoid triggering accidentally and would not use often.
 - Consider using a prefix word for a group of commands, such as window commands being prefixed with the word `window`. Making the commands longer reduces the probability of misrecognitions, and adding a prefix helps prevent conflicts.
 - Hesitate to add short commands — especially to the global grammar — because single syllable commands can easily misrecognize with each other.
 - Consider testing that your spoken forms recognize with multiple Conformer speech engines.
