@@ -63,18 +63,18 @@ index (var | variable) <user.text>:
 state return dick: user.insert_between("return {", "}")
 
 # deprecated commands
-state local: 
-    user.deprecate_command("2026-05-17", "state local", "put local")    
-    "local"
+state local:
+    user.deprecate_command("2026-05-17", "state local", "put local")
+    insert("local")
 state end:
     user.deprecate_command("2026-05-17", "state end", "put end")
-    "end"
-state then: 
+    insert("end")
+state then:
     user.deprecate_command("2026-05-17", "state then", "put then")
-    "then"
+    insert("then")
 state repeat:
     user.deprecate_command("2026-05-17", "state repeat", "put repeat")
-    "repeat"
+    insert("repeat")
 state until:
     user.deprecate_command("2026-05-17", "state until", "put until")
-    "until"
+    insert("until")
