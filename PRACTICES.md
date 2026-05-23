@@ -1,8 +1,10 @@
+# Community Practices
+
 This file documents preferred practices and offers advice on contributing to Community. Contributors are not expected to read this entire document. This primarily exists to preserve knowledge when maintainers leave, let maintainers save time in code review by linking relevant sections, and help onboard frequent contributors.
 
 This does not make [the contributing guidelines file](./CONTRIBUTING.md) obsolete.
 
-# Table of Contents
+## Table of Contents
 
 - [Breaking Changes](#breaking-changes)
 - [Useless/Unused code](#uselessunused-code)
@@ -13,7 +15,7 @@ This does not make [the contributing guidelines file](./CONTRIBUTING.md) obsolet
 - [Spoken Form Considerations](#spoken-form-considerations)
 - [Sleep Practices](#sleep-practices)
 
-# Breaking Changes
+## Breaking Changes
 
 Consider discussing whether breaking changes are acceptable with maintainers before following these instructions.
 
@@ -21,13 +23,13 @@ In general, document breaking changes in [Breaking Changes](./BREAKING_CHANGES.t
 
 When we decide to remove existing functionality, deprecate it if possible using [our deprecations support](./core/deprecations.py) instead of removing it immediately. See the documentation string at the top of that file for instructions on deprecations. We should leave deprecated behavior unchanged in Community for 6 months if possible.
 
-# Useless/Unused Code
+## Useless/Unused Code
 
 We do not leave useless code in Community. This includes commented out code, code that cannot be executed, code that is not used anywhere, and Talon abstractions defined on a context that will never activate.
 
 Defining actions on a tag we do not activate is fine if we advertise to the user that activating that tag will enable some optional functionality.
 
-# When to Use Snippets
+## When to Use Snippets
 
 See [the snippets README for details on snippets](./core/snippets/README.md). A snippet inserts text with placeholders so the user can use a command to go to the next placeholder. Consider using a snippet in the following situations:
 
@@ -43,7 +45,7 @@ Note that you can use the `user.insert_snippet_by_name` action to programmatical
 action.user.insert_snippet_by_name("ifStatement", {"0": "return False"})
 ```
 
-# Code Simplicity
+## Code Simplicity
 
 Simplify your code when possible and consider leaving a comment describing complicated code. In general, use the simplest Talon abstraction that does what you want.
 
@@ -66,11 +68,11 @@ When you want to define spoken forms:
 
 In general, implementing functionality in .talon files is simpler than doing so in .py files. It is nonetheless usually preferred to implement behavior in an [action](https://talon.wiki/Customization/Talon%20Framework/actions) in Python to allow reusability and context-specific overriding despite the added complexity.
 
-# Supporting Multiple Operating Systems
+## Supporting Multiple Operating Systems
 
 Some functionality needs to support multiple operating systems, such as using the correct keyboard shortcut based on the current operating system (OS). While new contributions do not have to support every OS, implement functionality needing OS specific behavior using Talon abstractions to make overriding easier.
 
-## Recommended File Structure
+### Recommended File Structure
 
 - 1. Put actions that work universally in a base Python file.
 - 2. Create empty action definitions for actions needing OS specific implementations in the base file.
@@ -85,7 +87,7 @@ Some functionality needs to support multiple operating systems, such as using th
 
 Consider looking at the [Firefox implementation](./apps/firefox) for an example.
 
-# Generalizing Commands
+## Generalizing Commands
 
 If you write commands for a specific context that would be useful in other contexts, consider doing the following:
 
@@ -102,7 +104,7 @@ You can see examples of the kinds of things we put in the general command gramma
 
 This approach allows reusing the- same commands in multiple contexts and helps prevent inconsistencies.
 
-# Spoken Form Considerations
+## Spoken Form Considerations
 
 - Community uses a noun-verb pattern, such as using `window close` instead of `close window`.
 - Our convention is to capitalize single letters to slightly improve readability.
@@ -112,7 +114,7 @@ This approach allows reusing the- same commands in multiple contexts and helps p
 - Hesitate to add short commands — especially to the global grammar — because single syllable commands can easily misrecognize with each other.
 - Consider testing that your spoken forms recognize with multiple Conformer speech engines.
 
-# Sleep Practices
+## Sleep Practices
 
 - Use the `sleep` action instead of the Python `time.sleep` function.
 - Avoid sleeping inside a cron thread because Talon currently runs all of the cron jobs in a single thread.
