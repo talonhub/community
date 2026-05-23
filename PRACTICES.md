@@ -31,7 +31,7 @@ Defining actions on a tag we do not activate is fine if we advertise to the user
 
 ## When to Use Snippets
 
-See [the snippets README for details on snippets](./core/snippets/README.md). A snippet inserts text with placeholders so the user can use a command to go to the next placeholder. Consider using a snippet in the following situations:
+A snippet inserts text with placeholders so the user can use a command to go to the next placeholder. Consider using a snippet in the following situations:
 
 - You need to make sure the cursor ends up in a specific location in the text and `user.insert_between` is inadequate.
 - The user is likely to want to put the cursor in another location shortly after using the command/action.
