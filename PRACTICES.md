@@ -118,5 +118,5 @@ This approach allows reusing the same commands in multiple contexts and helps pr
 ## Sleep Practices
 
 - Use the `sleep` action instead of the Python `time.sleep` function.
-- Avoid sleeping inside a `cron` job because Talon currently runs all of the `cron` jobs in a single thread.
+- Avoid sleeping inside a `cron` callback because public Talon runs all such callbacks in a single thread.
 - Avoid sleeping for 2 seconds or more to avoid blocking input and triggering a watchdog warning in the log. Consider using `cron` for scheduling significantly delayed actions.
