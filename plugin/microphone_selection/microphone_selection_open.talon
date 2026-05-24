@@ -1,6 +1,8 @@
 tag: user.microphone_selection_open
 -
 
+^microphone pick <number_small>$: user.microphone_select(number_small)
+
 cancel: user.microphone_selection_hide()
 key(escape): user.microphone_selection_hide()
 
