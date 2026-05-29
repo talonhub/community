@@ -44,8 +44,8 @@ def get_editor_names():
 
 def handle_app_running(_app):
     editor_names = get_editor_names()
-    for app in ui.apps(background=False):
-        if app.name in editor_names:
+    for a in ui.apps(background=False):
+        if a.name in editor_names:
             add_tag("user.draft_editor_app_running")
             return
     remove_tag("user.draft_editor_app_running")

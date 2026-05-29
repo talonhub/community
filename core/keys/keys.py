@@ -1,4 +1,4 @@
-from talon import Context, Module, actions, app
+from talon import Context, Module
 
 from .symbols import (
     dragon_punctuation_dict,

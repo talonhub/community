@@ -1,6 +1,4 @@
 from contextlib import suppress
-from enum import Enum, auto
-from typing import Union
 
 from talon import Context, Module, actions, settings
 

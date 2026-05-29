@@ -1,9 +1,8 @@
-import copy
 import time
 from dataclasses import dataclass
 from typing import List, Optional, Union
 
-from talon import Context, Module, actions, settings, ui
+from talon import Context, Module, actions, ui
 from talon.ui import UIErr, Window
 
 from .windows_and_tabs import is_window_valid
@@ -140,15 +139,9 @@ def snap_layout(layout: WindowLayout):
 
 
 def filter_nonviable_windows(windows: List[Window]) -> list[Window]:
-    active_window = ui.active_window()
-
-    # Many invisible non-resizable windows are identifiable because they exist above the current window
-    # in the z-index
-    all_windows = ui.windows()
-    active_window_idx = all_windows.index(active_window)  # type: ignore
     return list(
         filter(
-            lambda w: (isinstance(w, Gap) or is_window_valid(w)),
+            lambda w: isinstance(w, Gap) or is_window_valid(w),
             windows,
         )
     )

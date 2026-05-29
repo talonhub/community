@@ -144,7 +144,7 @@ class Actions:
         actions.edit.select_line()
         half_line_length = int(len(actions.edit.selected_text()) / 2)
         actions.edit.left()
-        for i in range(0, half_line_length):
+        for _ in range(0, half_line_length):
             actions.edit.right()
 
     def cut_line():
