@@ -58,6 +58,13 @@ class CActions:
         actions.edit.up()
         if text is not None:
             actions.insert(text)
+        
+    def code_block_comment_inline(text: Optional[str]):
+        if text is None:
+            substitutions = None
+        else:
+            substitutions = {"0": text}
+        actions.user.insert_snippet_with_substitutions("/* $0 */", substitutions)
 
     def code_comment_block_prefix():
         actions.insert("/*")
