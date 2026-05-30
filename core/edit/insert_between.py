@@ -6,7 +6,7 @@ mod.setting(
     "insert_between_wait",
     type=float,
     default=0,
-    desc="Time in milliseconds to sleep after inserting text with `insert_between` (e.g. when using paired delimiters like 'box' or 'round'), before moving the cursor back. Useful to set on a per-application basis, to prevent moving the moving the cursor before text is inserted",
+    desc="Time in seconds to sleep after inserting text with `insert_between` (e.g. when using paired delimiters like 'box' or 'round'), before moving the cursor back. Useful to set on a per-application basis, to prevent moving the moving the cursor before text is inserted",
 )
 
 
