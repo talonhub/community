@@ -42,7 +42,7 @@ mod.tag(
 
 @imgui.open()
 def gui(gui: imgui.GUI):
-    gui.text("Click or type to select a microphone")
+    gui.text("Click or press a number key to select a microphone")
     gui.text("(or say “microphone pick #”)")
     gui.line()
     gui.text("Microphone list updates every 5 seconds")
