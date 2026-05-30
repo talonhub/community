@@ -15,7 +15,6 @@ homophones_file = os.path.join(cwd, "homophones.csv")
 # if quick_replace, then when a word is selected and only one homophone exists,
 # replace it without bringing up the options
 quick_replace = True
-show_help = False
 ########################################################################
 
 ctx = Context()
@@ -85,7 +84,6 @@ def find_matching_format_function(word_with_formatting, format_functions):
 def raise_homophones(word_to_find_homophones_for, forced=False, selection=False):
     global quick_replace
     global active_word_list
-    global show_help
     global force_raise
     global is_selection
 
@@ -144,33 +142,23 @@ def raise_homophones(word_to_find_homophones_for, forced=False, selection=False)
         return
 
     ctx.tags = ["user.homophones_open"]
-    show_help = False
     gui.show()
 
 
 @imgui.open(x=main_screen.x + main_screen.width / 2.6, y=main_screen.y)
 def gui(gui: imgui.GUI):
     global active_word_list
-    if show_help:
-        gui.text("Homophone help - todo")
-    else:
-        gui.text("Select a homophone")
-        gui.line()
-        index = 1
-        for word in active_word_list:
-            if gui.button(f"Choose {index}: {word}"):
-                actions.insert(actions.user.homophones_select(index))
-                actions.user.homophones_hide()
-            index = index + 1
-
-        if gui.button("Phones (hide | exit)"):
+    gui.text("Select a homophone")
+    gui.line()
+    index = 1
+    for word in active_word_list:
+        if gui.button(f"Choose {index}: {word}"):
+            actions.insert(actions.user.homophones_select(index))
             actions.user.homophones_hide()
+        index = index + 1
 
-
-def show_help_gui():
-    global show_help
-    show_help = True
-    gui.show()
+    if gui.button("Phones (hide | exit)"):
+        actions.user.homophones_hide()
 
 
 @mod.capture(rule="{self.homophones_canonicals}")
