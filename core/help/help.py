@@ -1,9 +1,10 @@
 import math
 import re
 from collections import defaultdict
+from collections.abc import Iterable
 from itertools import islice
 from textwrap import wrap
-from typing import Any, Iterable, Optional, Tuple
+from typing import Any, Optional
 
 from talon import Context, Module, actions, imgui, registry, settings
 
@@ -183,7 +184,7 @@ def format_context_title(context_name: str) -> str:
         context_name,
         (
             "ACTIVE"
-            if context_map.get(context_name, None) in cached_active_contexts
+            if context_map.get(context_name) in cached_active_contexts
             else "INACTIVE"
         ),
     )
@@ -194,7 +195,7 @@ def format_context_button(index: int, context_label: str, context_name: str) -> 
     global show_enabled_contexts_only
     should_show_asterisk: bool = (
         not show_enabled_contexts_only
-        and context_map.get(context_name, None) in cached_active_contexts
+        and context_map.get(context_name) in cached_active_contexts
     )
     postfix: str = "*" if should_show_asterisk else ""
 
@@ -286,9 +287,7 @@ def gui_context_help(gui: imgui.GUI):
             )
         else:
             gui.text(
-                "Help: Active Contexts Only ({}/{})".format(
-                    current_context_page, total_page_count
-                )
+                f"Help: Active Contexts Only ({current_context_page}/{total_page_count})"
             )
 
         gui.line()
@@ -366,7 +365,7 @@ def draw_context_commands(gui: imgui.GUI):
 
     filtered_commands = [
         command
-        for command, page in zip(commands, pages)
+        for command, page in zip(commands, pages, strict=False)
         if page == selected_context_page
     ]
 
@@ -397,7 +396,7 @@ def draw_search_commands(gui: imgui.GUI):
 
     draw_commands_title(gui, title)
 
-    for (context, commands), page in zip(sorted_commands_grouped, pages):
+    for (context, commands), page in zip(sorted_commands_grouped, pages, strict=True):
         if page == selected_context_page:
             gui.text(format_context_title(context))
             gui.line()
@@ -485,7 +484,7 @@ def refresh_context_command_map(enabled_only=False):
 
     for context_name, context in registry.contexts.items():
         splits = context_name.split(".")
-        if "talon" != splits[-1] or (enabled_only and context not in active_contexts):
+        if splits[-1] != "talon" or (enabled_only and context not in active_contexts):
             continue
         current_context_map = {
             str(val.rule.rule): val.script.code
@@ -544,10 +543,7 @@ def update_spoken_forms(
 
 def is_any_context_command_active(context) -> bool:
     """Returns if any command in the context is active"""
-    for command_alias in context.commands:
-        if command_alias in registry.commands:
-            return True
-    return False
+    return any(command_alias in registry.commands for command_alias in context.commands)
 
 
 def get_sorted_display_keys(
@@ -568,8 +564,8 @@ def get_sorted_display_keys(
 def get_sorted_keys_by_context_specificity(
     context_map: dict[str, Any],
     display_name_to_context_name_map: dict[str, str],
-) -> list[Tuple[str, str, int]]:
-    def get_group(display_name) -> Tuple[str, str, int]:
+) -> list[tuple[str, str, int]]:
+    def get_group(display_name) -> tuple[str, str, int]:
         try:
             context_name = display_name_to_context_name_map[display_name]
             context = context_map[context_name]
@@ -583,8 +579,7 @@ def get_sorted_keys_by_context_specificity(
             return (display_name, "", 0)
 
     grouped_list = [
-        get_group(display_name)
-        for display_name in display_name_to_context_name_map.keys()
+        get_group(display_name) for display_name in display_name_to_context_name_map
     ]
     return sorted(
         grouped_list,
@@ -810,8 +805,8 @@ class Actions:
     def help_select_index(index: int):
         """Select the context by a number"""
         global sorted_display_list, selected_context
-        if gui_context_help.showing:
-            if index < settings.get("user.help_max_contexts_per_page") and (
+        if gui_context_help.showing:  # noqa: SIM102
+            if index < settings.get("user.help_max_contexts_per_page") and (  # noqa: SIM102
                 (current_context_page - 1)
                 * settings.get("user.help_max_contexts_per_page")
                 + index

@@ -82,7 +82,7 @@ def _get_nonce(port: int, file_prefix: str) -> Optional[str]:
 def send_idea_command(cmd: str) -> str:
     active_app = ui.active_app()
     bundle = active_app.bundle or active_app.name
-    port = port_mapping.get(bundle, None)
+    port = port_mapping.get(bundle)
     if not port:
         raise Exception(f"unknown application {bundle}")
     nonce = _get_nonce(port, ".vcidea_") or _get_nonce(port, "vcidea_")

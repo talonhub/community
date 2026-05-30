@@ -96,10 +96,10 @@ def get_previous_breaking_changes_file_size(name):
     ).strip()
     try:
         size = int(line_text)
-    except ValueError:
+    except ValueError as ex:
         raise ValueError(
             f"Could not parse the first line of the file responsible for tracking the previous size of the breaking changes file as an integer: {line_text}"
-        )
+        ) from ex
     return size
 
 

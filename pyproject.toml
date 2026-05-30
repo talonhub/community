@@ -6,9 +6,22 @@ target-version = "py310"
 
 [tool.ruff.lint]
 select = [
+    "E", # pycodestyle
+    "F", # Pyflakes
     "I", # isort
+    "UP", # pyupgrade
+    "B", # flake8-bugbear
+    "SIM", # flake8-simplify
 ]
-ignore = ["E722", "E741"]
+ignore = [
+    "E501", # line-too-long (until we decide)
+    "E722", # except: (consider replacing with catching Exception)
+    "E741", # variable names l, O, or I
+    "SIM108", # always use ternary operator
+    "UP007", # Union[X, Y] -> X | Y not supported in Talon 0.4 actions
+    "UP045", # Optional[X] -> X | None not supported in Talon 0.4 actions
+]
+
 
 [tool.pyright]
 reportSelfClsParameterName = false

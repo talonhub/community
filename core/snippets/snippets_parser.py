@@ -1,8 +1,9 @@
 import logging
 import re
+from collections.abc import Callable
 from copy import deepcopy
 from pathlib import Path
-from typing import Callable, Union
+from typing import Union
 
 from .snippet_types import Snippet, SnippetVariable
 

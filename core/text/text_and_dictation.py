@@ -1,6 +1,7 @@
 # Descended from https://github.com/dwiel/talon_community/blob/master/misc/dictation.py
 import re
-from typing import Callable, Optional
+from collections.abc import Callable
+from typing import Optional
 
 from talon import Context, Module, actions, grammar, settings, ui
 
@@ -437,7 +438,7 @@ class DictationFormat:
 
 def format_first_letter(text, formatter):
     i = -1
-    for i, c in enumerate(text):
+    for i, c in enumerate(text):  # noqa: B007
         if c.isalpha():
             break
     if i >= 0 and i < len(text):
