@@ -43,3 +43,5 @@ list six:
     user.insert_snippet("```{markdown_code_block_language}\n$0\n```")
 
 link: user.insert_snippet_by_name("link")
+link clip: user.markdown_insert_link(clip.text())
+link wrap clip: user.markdown_wrap_selection_with_link(clip.text())
