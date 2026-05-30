@@ -18,16 +18,16 @@ def update_microphone_list():
     global microphone_device_list
     # By convention, None and System Default are listed first
     # to match the Talon microphone menu.
-    microphone_device_list = ["None", "System Default"]
+    meta_devices = ["None", "System Default"]
 
     devices = [
         device
         for device in actions.sound.microphones()
-        if device not in microphone_device_list and device not in EXCLUDE_MICROPHONES
+        if device not in meta_devices and device not in EXCLUDE_MICROPHONES
     ]
     devices.sort()
 
-    microphone_device_list += devices
+    microphone_device_list = meta_devices + devices
 
 
 def devices_changed(device_type):
