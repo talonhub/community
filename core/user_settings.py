@@ -1,6 +1,7 @@
 import csv
+from collections.abc import Callable
 from pathlib import Path
-from typing import IO, Callable
+from typing import IO, Optional, Union
 
 from talon import resource
 
@@ -24,7 +25,7 @@ def read_csv_list(
     mapping = {}
     if len(rows) >= 2:
         actual_headers = rows[0]
-        if not actual_headers == list(headers):
+        if actual_headers != list(headers):
             print(
                 f'"{f.name}": Malformed headers - {actual_headers}.'
                 + f" Should be {list(headers)}. Ignoring row."
@@ -56,7 +57,7 @@ def read_csv_list(
 def write_csv_defaults(
     path: Path,
     headers: tuple[str, str],
-    default: dict[str, str] = None,
+    default: Optional[dict[str, str]] = None,
     is_spoken_form_first: bool = False,
 ) -> None:
     if not path.is_file() and default is not None:
@@ -75,7 +76,7 @@ def write_csv_defaults(
 def track_csv_list(
     filename: str,
     headers: tuple[str, str],
-    default: dict[str, str] = None,
+    default: Optional[dict[str, str]] = None,
     is_spoken_form_first: bool = False,
     private: bool = False,
 ) -> DecoratorT:
@@ -92,15 +93,19 @@ def track_csv_list(
     return decorator
 
 
+def needs_final_newline(path: Union[Path, str]) -> bool:
+    with open(path) as file:
+        line = None
+        for line in file:  # noqa: B007
+            pass  # iterate through each line in file
+    return line is not None and not line.endswith("\n")
+
+
 def append_to_csv(filename: str, rows: dict[str, str], private: bool = False):
     path = (PRIVATE_DIR / filename) if private else (SETTINGS_DIR / filename)
     assert filename.endswith(".csv")
 
-    with open(str(path)) as file:
-        line = None
-        for line in file:
-            pass
-        needs_newline = line is not None and not line.endswith("\n")
+    needs_newline = needs_final_newline(path)
     with open(path, "a", encoding="utf-8", newline="") as file:
         writer = csv.writer(file)
         if needs_newline:

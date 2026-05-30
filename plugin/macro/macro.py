@@ -17,7 +17,7 @@ recording = False
 def macro_list_gui(gui: imgui.GUI):
     gui.text("macros")
     gui.line()
-    for command_name in macros.keys():
+    for command_name in macros:
         gui.text(command_name)
 
     if gui.button("macro list close"):

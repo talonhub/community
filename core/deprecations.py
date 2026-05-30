@@ -142,7 +142,8 @@ class Actions:
             f' Instead, say: "{replacement}".'
             f" See {os.path.join(REPO_DIR, 'BREAKING_CHANGES.txt')}"
         )
-        warnings.warn(msg, DeprecationWarning)
+        # No caller makes sense, since a voice command triggered this action.
+        warnings.warn_explicit(msg, DeprecationWarning, "", 0)
 
     def deprecate_capture(time_deprecated: str, name: str):
         """

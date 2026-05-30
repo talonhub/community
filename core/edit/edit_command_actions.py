@@ -1,5 +1,6 @@
+from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Callable, Union
+from typing import Union
 
 from talon import Module, actions
 

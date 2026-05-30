@@ -1,6 +1,6 @@
 import time
 from dataclasses import dataclass
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 from talon import Context, Module, actions, ui
 from talon.ui import UIErr, Window
@@ -138,7 +138,7 @@ def snap_layout(layout: WindowLayout):
         layout_in_progress = None
 
 
-def filter_nonviable_windows(windows: List[Window]) -> list[Window]:
+def filter_nonviable_windows(windows: list[Window]) -> list[Window]:
     return list(
         filter(
             lambda w: isinstance(w, Gap) or is_window_valid(w),

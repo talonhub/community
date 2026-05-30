@@ -1,12 +1,15 @@
 import logging
 import os
 import re
-from typing import Sequence, Union
+
+# Can't import Sequence from collections.abc because this doesn't match the
+# core Talon action dictate.replace_words
+from typing import Sequence, Union  # noqa: UP035
 
 from talon import Context, Module, actions
 from talon.grammar import Phrase
 
-from ..user_settings import append_to_csv, track_csv_list
+from ..user_settings import append_to_csv, needs_final_newline, track_csv_list
 
 mod = Module()
 ctx = Context()
@@ -216,11 +219,7 @@ def _add_selection_to_file(
 
 def append_to_vocabulary(rows: dict[str, str]):
     vocabulary_file_path = actions.user.get_vocabulary_file_path()
-    with open(str(vocabulary_file_path)) as file:
-        line = None
-        for line in file:
-            pass
-        needs_newline = line is not None and not line.endswith("\n")
+    needs_newline = needs_final_newline(vocabulary_file_path)
 
     with open(vocabulary_file_path, "a", encoding="utf-8") as file:
         if needs_newline:

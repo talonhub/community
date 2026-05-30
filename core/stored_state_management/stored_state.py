@@ -67,7 +67,7 @@ class Actions:
     def stored_state_get_text(directory_name: str, name: str) -> str:
         """Gets the text from the file with specified name in the stored state directory"""
         path = stored_state_directory / directory_name / name
-        with open(path, "r") as f:
+        with open(path) as f:
             return f.read()
 
 

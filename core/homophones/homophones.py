@@ -1,4 +1,5 @@
 import os
+from typing import Optional
 
 from talon import Context, Module, actions, app, clip, fs, imgui, ui
 
@@ -55,7 +56,7 @@ def update_homophones(name, flags):
 
 update_homophones(homophones_file, None)
 fs.watch(cwd, update_homophones)
-active_word_list = None
+active_word_list = []
 is_selection = False
 
 
@@ -203,13 +204,13 @@ class Actions:
         if number <= len(active_word_list) and number > 0:
             return active_word_list[number - 1]
 
-        error = "homophones.py index {} is out of range (1-{})".format(
-            number, len(active_word_list)
+        error = (
+            f"homophones.py index {number} is out of range (1-{len(active_word_list)})"
         )
         app.notify(error)
-        raise error
+        raise IndexError(error)
 
-    def homophones_get(word: str) -> [str] or None:
+    def homophones_get(word: str) -> Optional[list[str]]:
         """Get homophones for the given word"""
         word = word.lower()
         if word in all_homophones:
