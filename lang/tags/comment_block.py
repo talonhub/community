@@ -58,7 +58,7 @@ class CActions:
         actions.edit.up()
         if text is not None:
             actions.insert(text)
-        
+
     def code_block_comment_inline(text: Optional[str]):
         if text is None:
             substitutions = None

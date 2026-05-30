@@ -77,7 +77,9 @@ def compute_snippet_body_with_substitutions(
     return compute_snippet_text_with_substitutions(snippet.body, substitutions)
 
 
-def compute_snippet_text_with_substitutions(text: str, substitutions: dict[str, str]) -> str:
+def compute_snippet_text_with_substitutions(
+    text: str, substitutions: dict[str, str]
+) -> str:
     result = text
     if substitutions:
         for k, v in substitutions.items():
