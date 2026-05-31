@@ -14,6 +14,7 @@ This does not make [the contributing guidelines file](./CONTRIBUTING.md) obsolet
 - [Generalizing Commands](#generalizing-commands)
 - [Spoken Form Considerations](#spoken-form-considerations)
 - [Sleep Practices](#sleep-practices)
+- [GUI Practices](#gui-practices)
 
 ## Breaking Changes
 
@@ -120,3 +121,17 @@ This approach allows reusing the same commands in multiple contexts and helps pr
 - Use the `sleep` action instead of the Python `time.sleep` function.
 - Avoid sleeping inside a `cron` callback because public Talon runs all such callbacks in a single thread.
 - Avoid command or action implementations that sleep for more than a total of ~200 ms. Talon is unresponsive to commands while sleeping; long delays also trigger watchdog warnings in the Talon log. Consider using `cron` to schedule actions requiring a longer delay.
+
+## GUI Practices
+
+- Please add a screenshot showing GUI changes to the PR description to make review easier.
+- Use a `tag` if you want to do context matching on if a GUI is showing.
+
+### imgui Practices
+
+- Keep operations in an imgui drawing function efficient and limited because the imgui framework will frequently and repeatedly call the function.
+- Create a button and command for closing the imgui. Make the button text show the command's spoken form.
+- When listing options, provide buttons and a command for choosing the options. Either make the buttons show the exact spoken forms for selecting the corresponding options or explain the spoken forms in the imgui.
+- Keep the new user message's description of Community GUIs consistent with new GUIs. Update the description if you have a good reason to not follow the patterns it documents.
+- If an imgui sometimes goes off the screen from having too much height, consider using pagination like the help system does.
+- Show spoken forms with Talonscript syntax for things like optional words or alternative spoken forms
