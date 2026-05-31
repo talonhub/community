@@ -134,4 +134,4 @@ This approach allows reusing the same commands in multiple contexts and helps pr
 - When listing options, provide buttons and a command for choosing the options. Either make the buttons show the exact spoken forms for selecting the corresponding options or explain the spoken forms in the imgui.
 - Keep the new user message's description of Community GUIs consistent with new GUIs. Update the description if you have a good reason to not follow the patterns it documents.
 - If an imgui sometimes goes off the screen from having too much height, consider using pagination like the help system does.
-- Show spoken forms with Talonscript syntax for things like optional words or alternative spoken forms
+- Show spoken forms with Talonscript syntax for things like optional words or alternative spoken forms.
