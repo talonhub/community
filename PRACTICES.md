@@ -121,6 +121,7 @@ This approach allows reusing the same commands in multiple contexts and helps pr
 - Use the `sleep` action instead of the Python `time.sleep` function.
 - Avoid sleeping inside a `cron` callback because public Talon runs all such callbacks in a single thread.
 - Avoid command or action implementations that sleep for more than a total of ~200 ms. Talon is unresponsive to commands while sleeping; long delays also trigger watchdog warnings in the Talon log. Consider using `cron` to schedule actions requiring a longer delay.
+- Sleep duration settings should be a `float`-typed number of seconds to sleep unless you have a good reason to do otherwise. Note that the `sleep` action interprets a `float` argument as seconds.
 
 ## GUI Practices
 
