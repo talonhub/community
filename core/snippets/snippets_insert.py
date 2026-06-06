@@ -1,4 +1,5 @@
 import re
+from typing import Optional
 
 from talon import Module, actions, settings
 
@@ -78,7 +79,7 @@ def compute_snippet_body_with_substitutions(
 
 
 def compute_snippet_text_with_substitutions(
-    body: str, substitutions: dict[str, str]
+    body: str, substitutions: dict[str, str], name: Optional[str]=None
 ) -> str:
     result = body
     if substitutions:
@@ -86,8 +87,12 @@ def compute_snippet_text_with_substitutions(
             v = v.replace("$", r"\$")
             reg = re.compile(rf"\${k}|\$\{{{k}\}}")
             if not reg.search(result):
+                if name is None:
+                    snippet_text = body
+                else:
+                    snippet_text = name
                 raise ValueError(
-                    f"Can't substitute non existing variable '{k}' in snippet '{body}'"
+                    f"Can't substitute non existing variable '{k}' in snippet '{snippet_text}'"
                 )
             result = reg.sub(v, result)
     return result
