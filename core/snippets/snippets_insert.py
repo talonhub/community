@@ -79,7 +79,7 @@ def compute_snippet_body_with_substitutions(
 
 
 def compute_snippet_text_with_substitutions(
-    body: str, substitutions: dict[str, str], name: Optional[str]=None
+    body: str, substitutions: dict[str, str], name: Optional[str] = None
 ) -> str:
     result = body
     if substitutions:
