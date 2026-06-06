@@ -133,5 +133,5 @@ This approach allows reusing the same commands in multiple contexts and helps pr
 - Create a button and voice command for closing each imgui window.
 - For each option in a list of options, provide a button and voice command. Either make the buttons show the exact spoken forms for selecting the corresponding options or explain the spoken forms elsewhere in the UI.
 - Keep the "new user message" description consistent with new UI. Update the description if you have a good reason to not follow the patterns it documents.
-- If your imgui window is too tall for the some screens, consider using pagination buttons like the help system.
-- Try to avoid having multiple spoken forms for the same button, but if you must do this, show alternatives using TalonScript syntax (e.g. `(foo | bar) [baz]`).
+- If your imgui window is too tall for some screens, consider using pagination buttons like the help system.
+- Try to avoid having multiple spoken forms for the same button. If you must, show alternatives using TalonScript syntax (e.g. `(foo | bar) [baz]`).
