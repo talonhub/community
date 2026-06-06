@@ -78,16 +78,16 @@ def compute_snippet_body_with_substitutions(
 
 
 def compute_snippet_text_with_substitutions(
-    text: str, substitutions: dict[str, str]
+    body: str, substitutions: dict[str, str]
 ) -> str:
-    result = text
+    result = body
     if substitutions:
         for k, v in substitutions.items():
             v = v.replace("$", r"\$")
             reg = re.compile(rf"\${k}|\$\{{{k}\}}")
             if not reg.search(result):
                 raise ValueError(
-                    f"Can't substitute non existing variable '{k}' in snippet '{text}'"
+                    f"Can't substitute non existing variable '{k}' in snippet '{body}'"
                 )
             result = reg.sub(v, result)
     return result
