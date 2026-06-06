@@ -125,13 +125,13 @@ This approach allows reusing the same commands in multiple contexts and helps pr
 ## GUI Practices
 
 - Please add a screenshot showing GUI changes to the PR description to make review easier.
-- Use a `tag` if you want to do context matching on if a GUI is showing.
+- Manually activate a `tag` if you want a context to match whether a GUI element is visible.
 
 ### imgui Practices
 
-- Keep operations in an imgui drawing function efficient and limited because the imgui framework will frequently and repeatedly call the function.
-- Create a button and command for closing the imgui. Make the button text show the command's spoken form.
-- When listing options, provide buttons and a command for choosing the options. Either make the buttons show the exact spoken forms for selecting the corresponding options or explain the spoken forms in the imgui.
-- Keep the new user message's description of Community GUIs consistent with new GUIs. Update the description if you have a good reason to not follow the patterns it documents.
-- If an imgui sometimes goes off the screen from having too much height, consider using pagination like the help system does.
-- Show spoken forms with Talonscript syntax for things like optional words or alternative spoken forms.
+- Keep operations in an imgui drawing function (decorated by `imgui.open`) efficient and limited because the imgui framework will frequently and repeatedly call the function. For example, cache displayed information in a global variable.
+- Create a button and voice command for closing each imgui window.
+- For each option in a list of options, provide a button and voice command. Either make the buttons show the exact spoken forms for selecting the corresponding options or explain the spoken forms elsewhere in the UI.
+- Keep the "new user message" description consistent with new UI. Update the description if you have a good reason to not follow the patterns it documents.
+- If your imgui window is too tall for the some screens, consider using pagination buttons like the help system.
+- Try to avoid having multiple spoken forms for the same button, but if you must do this, show alternatives using TalonScript syntax (e.g. `(foo | bar) [baz]`).
