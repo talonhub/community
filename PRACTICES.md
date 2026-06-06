@@ -107,14 +107,18 @@ You can see examples of the kinds of things we put in the general command gramma
 
 This approach allows reusing the same commands in multiple contexts and helps prevent inconsistencies.
 
-## Spoken Form Considerations
+## Spoken Form Considerations and Practices
 
 - Our convention is to capitalize single letters to slightly improve readability.
-- Talon currently only handles alphabetic characters and spoken forms. Spell out numbers, symbols, etc.
+- Talon currently only handles alphabetic characters in spoken forms. Spell out numbers, symbols, etc.
 - Anchor commands only when needed to prevent misrecognitions or ambiguities. For example, a trailing anchor `$` after a command ending with the `user.prose` capture ensures the remainder of the utterance is consumed by the capture. Anchoring at both the start (`^`) and end (`$`) is useful for commands that users would want to avoid triggering accidentally and would not use often.
 - Consider using a prefix word for a group of commands, such as window commands being prefixed with the word `window`. Making the commands longer reduces the probability of misrecognitions, and adding a prefix helps prevent conflicts.
 - Hesitate when adding short commands — especially when always available — because they can be easily misrecognized.
 - Consider testing that your spoken forms recognize with multiple Conformer speech engines.
+
+### Clip Versus Paste
+
+Our voice commands using the clipboard usually have `paste` or `clip` in their spoken forms. Going forward, use `paste` for commands directly performing a kind of paste operation, such as pasting without formatting. Use `clip` for commands using the clipboard contents for anything else. This includes performing a paste as a step towards achieving a bigger objective, such as searching for the current clipboard contents in a file.
 
 ## Sleep Practices
 
