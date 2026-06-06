@@ -75,7 +75,7 @@ def insert_snippet_with_stop_at_the_end(body):
 def compute_snippet_body_with_substitutions(
     snippet: Snippet, substitutions: dict[str, str]
 ) -> str:
-    return compute_snippet_text_with_substitutions(snippet.body, substitutions)
+    return compute_snippet_text_with_substitutions(snippet.body, substitutions, snippet.name)
 
 
 def compute_snippet_text_with_substitutions(
