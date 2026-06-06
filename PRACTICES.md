@@ -14,6 +14,7 @@ This does not make [the contributing guidelines file](./CONTRIBUTING.md) obsolet
 - [Generalizing Commands](#generalizing-commands)
 - [Spoken Form Considerations](#spoken-form-considerations)
 - [Sleep Practices](#sleep-practices)
+- [GUI Practices](#gui-practices)
 
 ## Breaking Changes
 
@@ -121,3 +122,17 @@ This approach allows reusing the same commands in multiple contexts and helps pr
 - Avoid sleeping inside a `cron` callback because public Talon runs all such callbacks in a single thread.
 - Avoid command or action implementations that sleep for more than a total of ~200 ms. Talon is unresponsive to commands while sleeping; long delays also trigger watchdog warnings in the Talon log. Consider using `cron` to schedule actions requiring a longer delay.
 - Sleep duration settings should be a `float`-typed number of seconds to sleep unless you have a good reason to do otherwise. Note that the `sleep` action interprets a `float` argument as seconds.
+
+## GUI Practices
+
+- Please add a screenshot showing GUI changes to the PR description to make review easier.
+- Manually activate a `tag` if you want a context to match whether a GUI element is visible.
+
+### imgui Practices
+
+- Keep operations in an imgui drawing function (decorated by `imgui.open`) efficient and limited because the imgui framework will frequently and repeatedly call the function. For example, cache displayed information in a global variable.
+- Create a button and voice command for closing each imgui window.
+- For each option in a list of options, provide a button and voice command. Either make the buttons show the exact spoken forms for selecting the corresponding options or explain the spoken forms elsewhere in the UI.
+- Keep the "new user message" description consistent with new UI. Update the description if you have a good reason to not follow the patterns it documents.
+- If your imgui window is too tall for some screens, consider using pagination buttons like the help system.
+- Try to avoid having multiple spoken forms for the same button. If you must, show alternatives using TalonScript syntax (e.g. `(foo | bar) [baz]`).
