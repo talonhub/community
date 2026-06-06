@@ -118,7 +118,7 @@ This approach allows reusing the same commands in multiple contexts and helps pr
 
 ### Clip Versus Paste
 
-Our voice commands using the clipboard usually have `paste` or `clip` in their spoken forms. Going forward, use `paste` for commands directly performing a kind of paste operation, such as pasting without formatting. Use `clip` for commands using the clipboard contents for anything else. Use `clip` for commands performing a paste as a step towards achieving a bigger objective, such as searching for the current clipboard contents in a file.
+Our voice commands using the clipboard usually have `paste` or `clip` in their spoken forms. Going forward, use `paste` for commands directly performing a kind of paste operation, such as pasting without formatting. Use `clip` for commands using the clipboard contents for anything else. This includes performing a paste as a step towards achieving a bigger objective, such as searching for the current clipboard contents in a file.
 
 ## Sleep Practices
 
