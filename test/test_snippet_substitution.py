@@ -13,7 +13,12 @@ if hasattr(talon, "test_mode"):  # Only include this when we're running tests
         actual = compute_snippet_text_with_substitutions(body, substitutions)
         assert actual == expected
 
-    def assert_substituting_raises_exception(body: str, substitutions: dict[str, str], name: str | None=None, expected_text: str | None=None):
+    def assert_substituting_raises_exception(
+        body: str,
+        substitutions: dict[str, str],
+        name: str | None = None,
+        expected_text: str | None = None,
+    ):
         with pytest.raises(ValueError) as error_info:
             compute_snippet_text_with_substitutions(body, substitutions, name)
         if expected_text is not None:
@@ -58,15 +63,12 @@ if hasattr(talon, "test_mode"):  # Only include this when we're running tests
         assert_substituting_raises_exception(
             FUNCTION_DECLARATION_BODY,
             substitution,
-            expected_text=FUNCTION_DECLARATION_BODY
+            expected_text=FUNCTION_DECLARATION_BODY,
         )
 
     def test_error_message_contains_name():
         substitution = {"9": "test"}
-        name="function declaration"
+        name = "function declaration"
         assert_substituting_raises_exception(
-            FUNCTION_DECLARATION_BODY,
-            substitution,
-            name=name,
-            expected_text=name
+            FUNCTION_DECLARATION_BODY, substitution, name=name, expected_text=name
         )
