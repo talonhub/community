@@ -12,7 +12,7 @@ This does not make [the contributing guidelines file](./CONTRIBUTING.md) obsolet
 - [Code Simplicity](#code-simplicity)
 - [Supporting Multiple Operating Systems](#supporting-multiple-operating-systems)
 - [Generalizing Commands](#generalizing-commands)
-- [Spoken Form Considerations](#spoken-form-considerations)
+- [Spoken Form Considerations](#spoken-form-considerations-and-practices)
 - [Sleep Practices](#sleep-practices)
 - [GUI Practices](#gui-practices)
 
