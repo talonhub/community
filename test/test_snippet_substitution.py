@@ -1,18 +1,22 @@
 import talon
-if hasattr(talon, "test_mode"):   # Only include this when we're running tests
-    from core.snippets.snippets_insert import compute_snippet_text_with_substitutions
+
+if hasattr(talon, "test_mode"):  # Only include this when we're running tests
     import pytest
+
+    from core.snippets.snippets_insert import compute_snippet_text_with_substitutions
 
     FUNCTION_DECLARATION_BODY = "def $1($2):\n\t$0"
 
-    def assert_substituting_matches_expected(body: str, substitutions: dict[str, str], expected: str):
+    def assert_substituting_matches_expected(
+        body: str, substitutions: dict[str, str], expected: str
+    ):
         actual = compute_snippet_text_with_substitutions(body, substitutions)
         assert actual == expected
 
     def assert_substituting_raises_exception(body: str, substitutions: dict[str, str]):
         with pytest.raises():
             compute_snippet_text_with_substitutions(body, substitutions)
-    
+
     def test_substitution_only():
         body = "$0"
         substitution = {"0": "test"}
@@ -22,19 +26,27 @@ if hasattr(talon, "test_mode"):   # Only include this when we're running tests
     def test_substituting_first():
         substitution = {"1": "test"}
         expected = "def test($2):\n\t$0"
-        assert_substituting_matches_expected(FUNCTION_DECLARATION_BODY, substitution, expected)
+        assert_substituting_matches_expected(
+            FUNCTION_DECLARATION_BODY, substitution, expected
+        )
 
     def test_substituting_second():
         substitution = {"2": "test"}
         expected = "def $1(test):\n\t$0"
-        assert_substituting_matches_expected(FUNCTION_DECLARATION_BODY, substitution, expected)
+        assert_substituting_matches_expected(
+            FUNCTION_DECLARATION_BODY, substitution, expected
+        )
 
     def test_substituting_third():
         substitution = {"0": "test"}
         expected = "def $1($2):\n\ttest"
-        assert_substituting_matches_expected(FUNCTION_DECLARATION_BODY, substitution, expected)
-        
+        assert_substituting_matches_expected(
+            FUNCTION_DECLARATION_BODY, substitution, expected
+        )
+
     def test_substituting_all():
         substitution = {"0": "third", "1": "first", "2": "second"}
         expected = "def first(second):\n\tthird"
-        assert_substituting_matches_expected(FUNCTION_DECLARATION_BODY, substitution, expected)
+        assert_substituting_matches_expected(
+            FUNCTION_DECLARATION_BODY, substitution, expected
+        )
