@@ -14,6 +14,7 @@ This does not make [the contributing guidelines file](./CONTRIBUTING.md) obsolet
 - [Generalizing Commands](#generalizing-commands)
 - [Spoken Form Considerations](#spoken-form-considerations)
 - [Sleep Practices](#sleep-practices)
+- [GUI Practices](#gui-practices)
 
 ## Breaking Changes
 
@@ -106,17 +107,36 @@ You can see examples of the kinds of things we put in the general command gramma
 
 This approach allows reusing the same commands in multiple contexts and helps prevent inconsistencies.
 
-## Spoken Form Considerations
+## Spoken Form Considerations and Practices
 
 - Our convention is to capitalize single letters to slightly improve readability.
-- Talon currently only handles alphabetic characters and spoken forms. Spell out numbers, symbols, etc.
+- Talon currently only handles alphabetic characters in spoken forms. Spell out numbers, symbols, etc.
 - Anchor commands only when needed to prevent misrecognitions or ambiguities. For example, a trailing anchor `$` after a command ending with the `user.prose` capture ensures the remainder of the utterance is consumed by the capture. Anchoring at both the start (`^`) and end (`$`) is useful for commands that users would want to avoid triggering accidentally and would not use often.
 - Consider using a prefix word for a group of commands, such as window commands being prefixed with the word `window`. Making the commands longer reduces the probability of misrecognitions, and adding a prefix helps prevent conflicts.
 - Hesitate when adding short commands — especially when always available — because they can be easily misrecognized.
 - Consider testing that your spoken forms recognize with multiple Conformer speech engines.
+
+### Clip Versus Paste
+
+Our voice commands using the clipboard usually have `paste` or `clip` in their spoken forms. Going forward, use `paste` for commands directly performing a kind of paste operation, such as pasting without formatting. Use `clip` for commands using the clipboard contents for anything else. This includes performing a paste as a step towards achieving a bigger objective, such as searching for the current clipboard contents in a file.
 
 ## Sleep Practices
 
 - Use the `sleep` action instead of the Python `time.sleep` function.
 - Avoid sleeping inside a `cron` callback because public Talon runs all such callbacks in a single thread.
 - Avoid command or action implementations that sleep for more than a total of ~200 ms. Talon is unresponsive to commands while sleeping; long delays also trigger watchdog warnings in the Talon log. Consider using `cron` to schedule actions requiring a longer delay.
+- Sleep duration settings should be a `float`-typed number of seconds to sleep unless you have a good reason to do otherwise. Note that the `sleep` action interprets a `float` argument as seconds.
+
+## GUI Practices
+
+- Please add a screenshot showing GUI changes to the PR description to make review easier.
+- Manually activate a `tag` if you want a context to match whether a GUI element is visible.
+
+### imgui Practices
+
+- Keep operations in an imgui drawing function (decorated by `imgui.open`) efficient and limited because the imgui framework will frequently and repeatedly call the function. For example, cache displayed information in a global variable.
+- Create a button and voice command for closing each imgui window.
+- For each option in a list of options, provide a button and voice command. Either make the buttons show the exact spoken forms for selecting the corresponding options or explain the spoken forms elsewhere in the UI.
+- Keep the "new user message" description consistent with new UI. Update the description if you have a good reason to not follow the patterns it documents.
+- If your imgui window is too tall for some screens, consider using pagination buttons like the help system.
+- Try to avoid having multiple spoken forms for the same button. If you must, show alternatives using TalonScript syntax (e.g. `(foo | bar) [baz]`).
