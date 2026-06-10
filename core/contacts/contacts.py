@@ -46,7 +46,7 @@ class Contact:
             pron_parts = pronunciation.split()
             name_parts = full_name.split()
             if len(pron_parts) == len(name_parts):
-                for pron, name in zip(pron_parts, name_parts):
+                for pron, name in zip(pron_parts, name_parts, strict=True):
                     if name in pronunciations and pronunciations[name] != pron:
                         logging.info(
                             f"Multiple different pronunciations found for '{name}' in "

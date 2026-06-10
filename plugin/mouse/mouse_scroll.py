@@ -260,8 +260,10 @@ class Actions:
         """Scrolls continuously in the given direction"""
         try:
             enumerated_direction = ScrollingDirection[direction]
-        except KeyError:
-            raise ValueError(f"Invalid continuous scrolling direction: {direction}")
+        except KeyError as ex:
+            raise ValueError(
+                f"Invalid continuous scrolling direction: {direction}"
+            ) from ex
         mouse_scroll_continuous(enumerated_direction, speed_factor)
 
     def mouse_scroll_up_continuous(speed_factor: Optional[int] = None):
