@@ -1,5 +1,5 @@
 tag: browser
-browser.host: /atlassian\.(com|net|cloud)/
+browser.host: /atlassian\.(com|net|cloud)$/
 -
 
 settings():
