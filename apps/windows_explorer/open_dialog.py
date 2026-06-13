@@ -3,9 +3,9 @@ from talon import Context, Module, actions, app, ui, clip
 import os
 from ...core.operating_system.windows.windows_known_paths import resolve_known_windows_path, FOLDERID
 
-if app.platform == "windows":
-    import win32com.client
-    import win32gui
+# if app.platform == "windows":
+#     import win32com.client
+#     import win32gui
 
 
 mod = Module()
