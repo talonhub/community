@@ -1,6 +1,6 @@
 settings():
-    # Define the date format mode for all date commands: uk | us | iso
-    user.date_format = "uk"
+    # Define the date format mode for all date commands: %x (locale's preferred date representation) | uk | us | iso
+    user.date_format = "%x"
 
 date insert:
     user.deprecate_command("2026-05-10", "date insert", "date today")

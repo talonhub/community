@@ -7,9 +7,9 @@ mod = Module()
 # Declare lists in Talon grammar; values come from talon-list files
 mod.list("month", "Month names and numeric values (1-12)")
 mod.list("weekday", "Weekday names for relative date commands")
-
-mod.setting("date_format", type=str, default="uk", desc="Preferred date format: uk, us, or iso")
-
+# Note %x is locale's preferred date representation, which may be different from the other three formats
+mod.setting("date_format", type=str, default="%x", desc="Preferred date format: %x, uk, us, or iso")
+#print("Date format setting:", settings.get("user.date_format"))
 WEEKDAY_MAP = {
     "monday": 0,
     "tuesday": 1,
@@ -28,13 +28,14 @@ MONTH_MAP = {
 
 
 def _format_with_preference(a_date: date) -> str:
-    fmt = settings.get("user.date_format") or "uk"
+    fmt = settings.get("user.date_format") or "%x"
     if fmt == "us":
         return a_date.strftime("%m/%d/%Y")
     if fmt == "iso":
         return a_date.strftime("%Y-%m-%d")
-    # default UK
-    return a_date.strftime("%d/%m/%Y")
+    if fmt == "uk":
+        return a_date.strftime("%d/%m/%Y")
+    return a_date.strftime("%x")  # default to locale
 
 
 def _month_to_int(month) -> int:
@@ -62,7 +63,7 @@ class Actions:
     def insert_date_formatted(day: int, month: str, year: int, fmt: str = None):
         """Insert a formatted date from spoken day/month/year.
 
-        `fmt` may be 'uk', 'us', 'iso', or `None` to use the user's
+        `fmt` may be '%x', 'uk', 'us', 'iso', or `None` to use the user's
         `user.date_format` setting (default 'uk'). This function validates
         the calendar date and falls back to inserting a formatted string
         when the date is invalid.
@@ -72,7 +73,7 @@ class Actions:
         year_num = int(year)
 
         # Determine format preference
-        fmt_pref = fmt or settings.get("user.date_format") or "uk"
+        fmt_pref = fmt or settings.get("user.date_format") or "%x"
 
         # Try to construct a real date for correct calendar handling
         try:
@@ -83,8 +84,11 @@ class Actions:
             if fmt_pref == "iso":
                 actions.insert(computed.strftime("%Y-%m-%d"))
                 return
-            # default UK
-            actions.insert(computed.strftime("%d/%m/%Y"))
+            if fmt_pref == "uk":
+                actions.insert(computed.strftime("%d/%m/%Y"))
+                return
+            # default %x (locale) if unknown format preference
+            actions.insert(computed.strftime("%x"))
             return
         except ValueError:
             # Fall back to formatting by parts when invalid (e.g., 31 Feb)
