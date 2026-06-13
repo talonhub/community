@@ -6,7 +6,6 @@ import math
 import re
 import platform
 from enum import Enum
-from ...operating_system.windows.app_user_model_id import get_application_user_model_id, get_application_user_model_for_window, get_valid_windows_by_app_user_model_id
 from .accessibility import walk, find_all_clickable_elements, find_all_clickable_elements_parallel, find_all_clickable_rects, find_all_clickable_rects_parallel, find_all_clickables_in_list_parallel
 
 
@@ -856,7 +855,7 @@ def get_windows_ten_taskbar() -> bool:
     ms_tasklist = None
     taskbar = None
 
-    apps = ui.apps(name="Windows Explorer")
+    apps = ui.apps(name="explorer.exe")
     for application in apps:
         for window in application.windows():
             cls = get_window_class(window)
@@ -908,6 +907,7 @@ def get_windows_ten_taskbar() -> bool:
 count = 0
 simcount = 3
 def get_windows_eleven_taskbar():
+    #print("getting windows 11 taskbar")
     """Populates the TaskBarData class for windows 11"""
     taskbar = None
     global count, simcount
@@ -931,22 +931,21 @@ def get_windows_eleven_taskbar():
     widgets_button_found = False
 
 
-    is_taskbar_left_aligned = is_start_left_aligned()
-    task_bar_combine_status = get_taskbar_combine_status()
     #print(f"taskbar combine status = {task_bar_combine_status}")
-    start_menu_configured_correctly = (is_taskbar_left_aligned)
+    #start_menu_configured_correctly = (is_taskbar_left_aligned)
         #and task_bar_combine_status["primary"] == "always")
    
-    if not is_start_left_aligned():
-        print("Start menu must be left-aligned")
+    # if not is_start_left_aligned():
+    #     print("Start menu must be left-aligned")
 
     #if task_bar_combine_status["primary"] != "always":
     #    print("Start menu icons must be configued to always combine and hide labels")
 
-    if not start_menu_configured_correctly:
-        return False
+    # if not start_menu_configured_correctly:
+    #     return False
     
-    apps = ui.apps(name="Windows Explorer")
+    apps = ui.apps(name="explorer.exe")
+    #print(f"found {len(apps)} explorer instances")
     taskbar_window = None
     for explorer_instances in apps:
         try:
@@ -957,7 +956,7 @@ def get_windows_eleven_taskbar():
 
         for window in windows:
             cls = get_window_class(window)
-
+            #print(f"checking cls = {cls} {window.title}")
             if cls == "Shell_TrayWnd":
                 taskbar = window.element
                 taskbar_window = window
