@@ -9,7 +9,7 @@ from talon import Module, actions, app, clip, registry, scope, speech_system, ui
 from talon.grammar import Phrase
 from talon.scripting.types import ListTypeFull
 
-from ...core.operating_system.windows.app_user_model_id import get_application_user_model_id, get_application_user_model_for_window
+#from ...core.operating_system.windows.app_user_model_id import get_application_user_model_id, get_application_user_model_for_window
 
 pp = pprint.PrettyPrinter()
 
@@ -85,14 +85,14 @@ class Actions:
 
     def talon_dump_explorer():
         """"""
-        import win32com.client
-        import win32gui
-        shell = win32com.client.Dispatch("Shell.Application")
-        hwnd = win32gui.GetForegroundWindow()
+        # import win32com.client
+        # import win32gui
+        # shell = win32com.client.Dispatch("Shell.Application")
+        # hwnd = win32gui.GetForegroundWindow()
 
-        for window in shell.Windows():
-            if window.HWND == hwnd:
-                print(window.Title)
+        # for window in shell.Windows():
+        #     if window.HWND == hwnd:
+        #         print(window.Title)
 
 
     def talon_add_context_clipboard():
@@ -174,10 +174,10 @@ class Actions:
         title = actions.win.title()
         hostname = scope.get("hostname")
 
-        try:
-            app_user_model_id = get_application_user_model_id(ui.active_app().pid)
-        except:
-            app_user_model_id = "None"
+        # try:
+        #     app_user_model_id = get_application_user_model_id(ui.active_app().pid)
+        # except:
+        app_user_model_id = "None"
 
         if app.platform == "windows":
             result = f"Name: {name}\nExecutable: {executable}\nAppUserModelId: {app_user_model_id}\nWindow AppUserModelId: {get_application_user_model_for_window(ui.active_window().id)}\nTitle: {title}\nhostname: {hostname}"
@@ -337,13 +337,13 @@ def scope_gui(gui: imgui.GUI):
     title = actions.win.title()
     hostname = scope.get("hostname")
 
-    try:
-        app_user_model_id = get_application_user_model_id(ui.active_app().pid)
-    except:
-        app_user_model_id = "None"
+    # try:
+    #     app_user_model_id = get_application_user_model_id(ui.active_app().pid)
+    # except:
+    app_user_model_id = "None"
 
     try:
-        window_id = get_application_user_model_for_window(ui.active_window().id)
+        window_id = None #get_application_user_model_for_window(ui.active_window().id)
     except:
         window_id = "None"
 
