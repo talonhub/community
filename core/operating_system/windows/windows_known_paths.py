@@ -6,12 +6,6 @@ if app.platform == "windows":
     import ctypes, sys
     from ctypes import windll, wintypes
     from uuid import UUID
-
-    try:
-        from win32com.shell import shell, shellcon
-    except ImportError:
-        shell = None
-        shellcon = None
         
     class GUID(ctypes.Structure):   # [1]
         _fields_ = [
