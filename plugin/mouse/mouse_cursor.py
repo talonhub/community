@@ -48,34 +48,4 @@ class Actions:
 
 def show_cursor_helper(show: bool):
     """Show/hide the cursor"""
-    if app.platform == "windows":
-        import ctypes
-        import winreg
-
-        import win32con
-
-        try:
-            Registrykey = winreg.OpenKey(
-                winreg.HKEY_CURRENT_USER, r"Control Panel\Cursors", 0, winreg.KEY_WRITE
-            )
-
-            for value_name, value in default_cursor.items():
-                if show:
-                    winreg.SetValueEx(
-                        Registrykey, value_name, 0, winreg.REG_EXPAND_SZ, value
-                    )
-                else:
-                    winreg.SetValueEx(
-                        Registrykey, value_name, 0, winreg.REG_EXPAND_SZ, hidden_cursor
-                    )
-
-            winreg.CloseKey(Registrykey)
-
-            ctypes.windll.user32.SystemParametersInfoA(
-                win32con.SPI_SETCURSORS, 0, None, 0
-            )
-
-        except OSError:
-            print(f"Unable to show_cursor({show})")
-    else:
-        ctrl.cursor_visible(show)
+    ctrl.cursor_visible(show)
