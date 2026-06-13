@@ -1390,12 +1390,12 @@ def on_win_close(window):
             canvas_popup.close()
             canvas_popup = None    
 
-def on_menu_closed(window):
-    print(f"Menu closed: {window.title}")
+def on_menu_closed(element):
+    print(f"Menu closed: {element}")
 
 
-def on_menu_open(window):
-    print(f"Menu opened: {window.title}")
+def on_menu_open(element):
+    print(f"Menu opened: {element}")
 
 if app.platform == "windows":
     def on_ready():
@@ -1411,8 +1411,8 @@ if app.platform == "windows":
             # ui.register("win_open", on_win_open)
             # ui.register("win_close", on_win_close)
             # ui.register("win_hide", on_win_hide)
-            ui.register("menu_open", on_menu_open)
-            ui.register("menu_close", on_menu_closed)
+            #ui.register("menu_open", on_menu_open)
+            #ui.register("menu_close", on_menu_closed)
             cron_poll_start_menu_helper()
         else:
             cleanup_and_retry()
