@@ -201,8 +201,8 @@ class Actions:
         result += "\nBundle: " + actions.app.bundle()
         result += "\nTitle: " + actions.win.title()
 
-        if app.platform == "windows":
-            result +="\nAppUserModelId: " + get_application_user_model_id(ui.active_app().pid)
+        #if app.platform == "windows":
+            #result +="\nAppUserModelId: " + get_application_user_model_id(ui.active_app().pid)
 
         return result
 

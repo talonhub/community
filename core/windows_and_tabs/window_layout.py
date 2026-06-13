@@ -6,7 +6,7 @@ from typing import List, Optional, Union
 from talon import Context, Module, actions, settings, ui
 from talon.ui import UIErr, Window
 from .windows_and_tabs import is_window_valid
-from ..operating_system.windows.app_user_model_id import get_application_user_model_for_window
+#from ..operating_system.windows.app_user_model_id import get_application_user_model_for_window
 
 """Tools for laying out windows in an arrangement """
 
@@ -191,10 +191,10 @@ def application_windows(m) -> list[Window]:
             apps = actions.user.get_running_app(app_name)
 
             application_user_model_id = splits[1]
-            for app in apps:
-                for window in app.windows():
-                    if application_user_model_id == get_application_user_model_for_window(window.id):
-                        windows = [window]
+            # for app in apps:
+            #     for window in app.windows():
+            #         if application_user_model_id == get_application_user_model_for_window(window.id):
+            #             windows = [window]
     result = []
     if windows:
         for window in windows:
