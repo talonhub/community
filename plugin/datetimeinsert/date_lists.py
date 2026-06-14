@@ -9,7 +9,7 @@ mod.list("month", "Month names and numeric values (1-12)")
 mod.list("weekday", "Weekday names for relative date commands")
 # Note %x is locale's preferred date representation, which may be different from the other three formats
 mod.setting("date_format", type=str, default="%x", desc="Preferred date format: %x, uk, us, or iso")
-#print("Date format setting:", settings.get("user.date_format"))
+
 WEEKDAY_MAP = {
     "monday": 0,
     "tuesday": 1,
@@ -116,14 +116,27 @@ class Actions:
     def insert_date_today():
         """Insert today according to preferred format"""
         actions.insert(_format_with_preference(date.today()))
-
-    def insert_date_tomorrow():
-        """Insert tomorrow according to preferred format"""
-        actions.insert(_format_with_preference(date.today() + timedelta(days=1)))
-
-    def insert_date_yesterday():
-        """Insert yesterday according to preferred format"""
-        actions.insert(_format_with_preference(date.today() - timedelta(days=1)))
+    
+    def insert_date_relative(days: int, months: int, years: int):
+        """Insert a date relative to today by the specified number of days, months, and years."""
+        today = date.today()
+        # Calculate the new year and month
+        new_year = today.year + years
+        new_month = today.month + months
+        # Adjust year and month if new_month is out of bounds
+        while new_month > 12:
+            new_month -= 12
+            new_year += 1
+        while new_month < 1:
+            new_month += 12
+            new_year -= 1
+        # Calculate the last day of the new month to avoid invalid dates
+        last_day_of_new_month = calendar.monthrange(new_year, new_month)[1]
+        # Ensure the day does not exceed the last day of the new month
+        new_day = min(today.day, last_day_of_new_month)
+        # Create the new date and add the relative days
+        relative_date = date(new_year, new_month, new_day) + timedelta(days=days)
+        actions.insert(_format_with_preference(relative_date))
 
     def insert_date_next_weekday(weekday: str):
         """Insert the next weekday name according to preferred format"""
@@ -137,45 +150,3 @@ class Actions:
             days_ahead = 7
         next_day = today + timedelta(days=days_ahead)
         actions.insert(_format_with_preference(next_day))
-
-    def insert_date_next_month():
-        """Insert a date representing the same day next month"""
-        today = date.today()
-        year = today.year + (today.month // 12)
-        month = today.month % 12 + 1
-        day = min(today.day, calendar.monthrange(year, month)[1])
-        next_month = date(year, month, day)
-        actions.insert(_format_with_preference(next_month))
-
-    def insert_date_next_year():
-        """Insert a date representing the same day next year"""
-        today = date.today()
-        next_year = today.year + 1
-        day = min(today.day, calendar.monthrange(next_year, today.month)[1])
-        new_date = date(next_year, today.month, day)
-        actions.insert(_format_with_preference(new_date))
-
-    def insert_date_last_year():
-        """Insert a date representing the same day last year"""
-        today = date.today()
-        last_year = today.year - 1
-        day = min(today.day, calendar.monthrange(last_year, today.month)[1])
-        new_date = date(last_year, today.month, day)
-        actions.insert(_format_with_preference(new_date))
-
-    def set_date_format_uk():
-        """Set preferred date format to UK dd/mm/yyyy"""
-        settings.set("user.date_format", "uk")
-
-    def set_date_format_us():
-        """Set preferred date format to US mm/dd/yyyy"""
-        settings.set("user.date_format", "us")
-
-    def set_date_format_iso():
-        """Set preferred date format to ISO yyyy-mm-dd"""
-        settings.set("user.date_format", "iso")
-
-
-
-
-
