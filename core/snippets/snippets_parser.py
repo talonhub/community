@@ -12,6 +12,7 @@ SNIPPET_DELIMITER_EXPRESSION = re.compile(r"^---\n?$", flags=re.MULTILINE)
 SNIPPET_DELIMITER = "---"
 ESCAPED_SPACE_EXPRESSION = re.compile(r"([^\\]|^)\\[\\\\]* ")
 
+
 class SnippetDocument:
     file: str
     line_doc: int
@@ -285,7 +286,7 @@ def escape_spaces(body: str) -> str:
     # treat backslash space as space
     matches = [m for m in re.finditer(ESCAPED_SPACE_EXPRESSION, body)]
     for match in reversed(matches):
-        body = body[: match.end()-2] + body[match.end()-1 :]
+        body = body[: match.end() - 2] + body[match.end() - 1 :]
     return body.replace("\\\\", "\\")
 
 
