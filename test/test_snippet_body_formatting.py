@@ -101,3 +101,13 @@ if hasattr(talon, "test_mode"):
         body = "\\ "
         expected = " "
         snippet_body_matches_expected(body, expected)
+
+    def test_escaping_space_at_start_with_three_backslashes():
+        body = "\\\\\\ "
+        expected = "\\ "
+        snippet_body_matches_expected(body, expected)
+
+    def test_escaping_four_backslashes():
+        body = "\\\\ "
+        expected = "\\ "
+        snippet_body_matches_expected(body, expected)
