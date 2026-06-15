@@ -2,6 +2,34 @@ list: user.code_common_function
 code.language: csharp
 -
 
-integer: int.TryParse
-print: Console.WriteLine
-string: .ToString
+integer: "int.TryParse",
+print: "Console.WriteLine",
+string: ".ToString",
+length: ".Length",
+order by: "OrderBy",
+order by descending: "OrderByDescending",
+then by: "ThenBy",
+then by descending: "ThenByDescending",
+include: "Include",
+group by: "GroupBy",
+select: "Select",
+where: "Where",
+first or default: "FirstOrDefault",
+first: "First",
+first or default async: "FirstOrDefaultAsync",
+first async: "FirstAsync",
+single or default: "SingleOrDefault",
+contains: "Contains",
+count: "Count",
+to list: "ToList",
+to list async: "ToListAsync",
+to array: "ToArray",
+to dictionary: "ToDictionary",
+to lower: "ToLower",
+to upper: "ToUpper",
+trim: "Trim",
+trim start: "TrimStart",
+trim end: "TrimEnd",
+substring: "Substring",
+replace: "Replace",
+split: "Split",

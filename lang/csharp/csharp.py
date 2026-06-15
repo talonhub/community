@@ -1,12 +1,17 @@
-from talon import Context, actions, settings
+from talon import Context,Module, actions, settings
 
 from ...core.described_functions import create_described_insert_between
 from ..tags.operators import Operators
+
+mod = Module()
 
 ctx = Context()
 ctx.matches = r"""
 code.language: csharp
 """
+
+mod.list("code_common_function", desc="Common C# functions")
+mod.list("code_keyword", desc="Common C# keywords")
 
 operators = Operators(
     # code_operators_array
