@@ -10,6 +10,7 @@ from .snippet_types import Snippet, SnippetVariable
 ESCAPED_SNIPPET_DELIMITER_EXPRESSION = re.compile(r"^\\---$", flags=re.MULTILINE)
 SNIPPET_DELIMITER_EXPRESSION = re.compile(r"^---\n?$", flags=re.MULTILINE)
 SNIPPET_DELIMITER = "---"
+ESCAPED_SPACE_EXPRESSION = re.compile(r"([^\\]|^)\\[\\\\]* ")
 
 
 class SnippetDocument:
@@ -59,7 +60,7 @@ def create_snippet(
     document: SnippetDocument,
     default_context: SnippetDocument,
 ) -> Snippet | None:
-    body = normalize_snippet_body_tabs(document.body)
+    body = escape_spaces(normalize_snippet_body_tabs(document.body))
     variables = combine_variables(default_context.variables, document.variables)
 
     snippet = Snippet(
@@ -278,6 +279,15 @@ def normalize_snippet_body_tabs(body: str | None) -> str:
     ]
 
     return "\n".join(normalized_lines)
+
+
+def escape_spaces(body: str) -> str:
+    # treat double backslash as escaped backslash
+    # treat backslash space as space
+    matches = [m for m in re.finditer(ESCAPED_SPACE_EXPRESSION, body)]
+    for match in reversed(matches):
+        body = body[: match.end() - 2] + body[match.end() - 1 :]
+    return body.replace("\\\\", "\\")
 
 
 def reconstruct_line(smallest_indentation: str, indentation: str, rest: str) -> str:
