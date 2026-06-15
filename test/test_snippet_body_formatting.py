@@ -89,7 +89,12 @@ if hasattr(talon, "test_mode"):
         assert_body_with_final_stop_added_as_expected(body, expected)
 
     def snippet_body_matches_expected(body: str, expected: str):
-        document = snippets_parser.SnippetDocument("", 1, 0)
+        document = snippets_parser.SnippetDocument("", 1, 2 + body.count("\n"))
         document.body = body
         snippet = snippets_parser.create_snippet(document, DEFAULT_CONTEXT)
         assert snippet.body == expected
+
+    def test_escaping_space_at_start():
+        body = "\\ "
+        expected = " "
+        snippet_body_matches_expected(body, expected)
