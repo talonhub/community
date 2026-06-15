@@ -4,6 +4,8 @@ if hasattr(talon, "test_mode"):
     # Only include this when we're running tests
     from core.snippets import snippets_parser
 
+    DEFAULT_CONTEXT = snippets_parser.SnippetDocument("", -1, -1)
+
     def assert_body_with_final_stop_added_as_expected(body: str, expected: str):
         actual = snippets_parser.add_final_stop_to_snippet_body(body)
         assert actual == expected
@@ -85,3 +87,9 @@ if hasattr(talon, "test_mode"):
         body = "test$0 $1"
         expected = "test$2 $1$0"
         assert_body_with_final_stop_added_as_expected(body, expected)
+
+    def snippet_body_matches_expected(body: str, expected: str):
+        document = snippets_parser.SnippetDocument("", 1, 0)
+        document.body = body
+        snippet = snippets_parser.create_snippet(document, DEFAULT_CONTEXT)
+        assert snippet.body == expected
