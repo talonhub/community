@@ -26,3 +26,9 @@ ctx.lists["self.kubectl_object"] = (
     "configmaps",
     "secrets"
 )
+
+mod.list("kubectl_output_format_object", desc="-o parameters, so output formatters")
+ctx.lists["self.kubectl_output_format_object"] = (
+    "yaml",
+    "wide"
+)
