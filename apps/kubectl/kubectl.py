@@ -24,11 +24,8 @@ ctx.lists["self.kubectl_object"] = (
     "replicasets",
     "daemonsets",
     "configmaps",
-    "secrets"
+    "secrets",
 )
 
 mod.list("kubectl_output_format_object", desc="-o parameters, so output formatters")
-ctx.lists["self.kubectl_output_format_object"] = (
-    "yaml",
-    "wide"
-)
+ctx.lists["self.kubectl_output_format_object"] = ("yaml", "wide")
