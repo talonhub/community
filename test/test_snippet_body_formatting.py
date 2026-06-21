@@ -111,3 +111,13 @@ if hasattr(talon, "test_mode"):
         body = "\\\\ "
         expected = "\\ "
         snippet_body_matches_expected(body, expected)
+
+    def test_escaping_multiple_spaces():
+        body = "\\ \\ a\\ b"
+        expected = "  a b"
+        snippet_body_matches_expected(body, expected)
+
+    def test_escaping_backslashes_in_the_middle():
+        body = "	a\\\\ \\\\\\\\b \\\\ c"
+        expected = "	a\\ \\\\b \\ c"
+        snippet_body_matches_expected(body, expected)
