@@ -4,6 +4,8 @@ if hasattr(talon, "test_mode"):
     # Only include this when we're running tests
     from core.snippets import snippets_parser
 
+    DEFAULT_CONTEXT = snippets_parser.SnippetDocument("", -1, -1)
+
     def assert_body_with_final_stop_added_as_expected(body: str, expected: str):
         actual = snippets_parser.add_final_stop_to_snippet_body(body)
         assert actual == expected
@@ -85,3 +87,37 @@ if hasattr(talon, "test_mode"):
         body = "test$0 $1"
         expected = "test$2 $1$0"
         assert_body_with_final_stop_added_as_expected(body, expected)
+
+    def snippet_body_matches_expected(body: str, expected: str):
+        document = snippets_parser.SnippetDocument(
+            "test.snippet", 1, 2 + body.count("\n")
+        )
+        document.body = body
+        document.name = "test"
+        snippet = snippets_parser.create_snippet(document, DEFAULT_CONTEXT)
+        assert snippet.body == expected
+
+    def test_escaping_space_at_start():
+        body = "\\ "
+        expected = " "
+        snippet_body_matches_expected(body, expected)
+
+    def test_escaping_space_at_start_with_three_backslashes():
+        body = "\\\\\\ "
+        expected = "\\ "
+        snippet_body_matches_expected(body, expected)
+
+    def test_escaping_four_backslashes():
+        body = "\\\\ "
+        expected = "\\ "
+        snippet_body_matches_expected(body, expected)
+
+    def test_escaping_multiple_spaces():
+        body = "\\ \\ a\\ b"
+        expected = "  a b"
+        snippet_body_matches_expected(body, expected)
+
+    def test_escaping_backslashes_in_the_middle():
+        body = "	a\\\\ \\\\\\\\b \\\\ c"
+        expected = "	a\\ \\\\b \\ c"
+        snippet_body_matches_expected(body, expected)
