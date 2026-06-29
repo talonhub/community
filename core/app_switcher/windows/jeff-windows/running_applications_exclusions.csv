@@ -1,9 +1,0 @@
-exe=TextInputHost.exe
-exe=StartMenuExperienceHost.exe
-exe=ShellExperienceHost.exe
-name=Windows Shell Experience Host
-exe=msedgewebview2.exe
-exe=LockApp.exe
-exe=Cortana.exe
-exe=SearchApp.exe
-name=Search application
