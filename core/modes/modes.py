@@ -113,7 +113,7 @@ class Actions:
 
     def sleep_all():
         """Disables all things"""
-        actions.user.switcher_hide_running()
+        #actions.user.switcher_hide_running()
         # todo: remove when the talon_hud perf is fixed on rust branch
         if "user.talon_hud_available" in scope.get("tag"):
             actions.user.hud_disable()
