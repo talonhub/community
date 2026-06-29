@@ -1,8 +1,8 @@
 from talon import Module, actions, app, cron, registry, scope, settings, skia, ui
 from talon.canvas import Canvas
 from talon.screen import Screen
-from talon.skia.canvas import Canvas as SkiaCanvas
-from talon.skia.imagefilter import ImageFilter
+from skia import Canvas as SkiaCanvas
+from skia import ImageFilter
 from talon.ui import Rect
 
 canvas: Canvas = None
