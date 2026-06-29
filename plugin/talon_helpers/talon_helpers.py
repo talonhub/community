@@ -85,6 +85,7 @@ class Actions:
 
     def talon_dump_explorer():
         """"""
+        pass
         # import win32com.client
         # import win32gui
         # shell = win32com.client.Dispatch("Shell.Application")
@@ -312,15 +313,16 @@ class Actions:
 		
     def talon_get_windows_app_id():
         """do it"""
-        import win32com.client
+        pass
+        # import win32com.client
 
-        shell = win32com.client.Dispatch("Shell.Application")
-        folder = shell.NameSpace('shell:::{4234d49b-0245-4df3-b780-3893943456e1}')
-        items = folder.Items()
+        # shell = win32com.client.Dispatch("Shell.Application")
+        # folder = shell.NameSpace('shell:::{4234d49b-0245-4df3-b780-3893943456e1}')
+        # items = folder.Items()
         
-        for item in items:
-            if ui.active_app().name.lower() in item.Name.lower():
-                clip.set_text(item.path)
+        # for item in items:
+        #     if ui.active_app().name.lower() in item.Name.lower():
+        #         clip.set_text(item.path)
 
     def talon_toggle_scope_gui():
         """dsfadf"""
