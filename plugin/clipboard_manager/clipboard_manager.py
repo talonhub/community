@@ -1,5 +1,5 @@
 from talon import Module, Context, actions, clip, app, cron, settings
-from talon.skia.image import Image
+from skia import Image
 from talon.clip import MimeData
 from dataclasses import dataclass
 from typing import Optional

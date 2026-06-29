@@ -69,7 +69,7 @@ class TrackingActions:
             actions.user.zoom_set_allowed(False)
             actions.next()
             
-    def control_zoom_toggle(state: bool = None) -> None:    
+    def control_zoom_toggle(state) -> None:    
         actions.next(state)
         actions.user.zoom_set_allowed(False)
 

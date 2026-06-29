@@ -1,7 +1,7 @@
 from talon import Context, Module, ui
 from talon.canvas import Canvas, MouseEvent
 from talon.screen import Screen
-from talon.skia.canvas import Canvas as SkiaCanvas
+from skia import Canvas as SkiaCanvas
 from talon.types import Point2d, Rect
 
 mod = Module()
