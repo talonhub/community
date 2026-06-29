@@ -4,7 +4,7 @@ import math
 from typing import Union
 
 from talon import Context, Module, actions, canvas, cron, ctrl, screen, settings, ui
-from talon.skia import Paint, Rect
+from skia import Paint, Rect
 from talon.types.point import Point2d
 
 mod = Module()
