@@ -232,7 +232,7 @@ class EditActions:
     def find_previous():
         actions.user.idea("action FindPrevious")
 
-    def find(text: str = None):
+    def find(text=None):
         actions.user.idea("action Find")
         if text:
             actions.insert(text)
@@ -252,7 +252,7 @@ class EditActions:
     def indent_less():
         actions.user.idea("action EditorUnindentSelection")
 
-    def select_line(n: int = None):
+    def select_line(n=None):
         actions.user.idea("action EditorSelectLine")
 
     def select_word():

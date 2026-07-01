@@ -432,7 +432,7 @@ class EditActions:
     def save():
         actions.user.obsidian("editor:save-file")
 
-    def find(text: str = None):
+    def find(text=None):
         actions.sleep("50ms")
         actions.user.obsidian("editor:open-search")
         if text:
