@@ -30,7 +30,7 @@ repos:
         types_or: [markdown, yaml, toml, json]
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.15.18
+    rev: v0.15.20
     hooks:
       - id: ruff-check
         # Want to use pyproject instead of toml, but pre-commit.ci doesn't yet support it.
