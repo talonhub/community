@@ -287,12 +287,14 @@ def escape_spaces(body: str) -> str:
     # treat double backslash as escaped backslash
     # treat backslash space as space
     if UNICODE_ESCAPED_BACKSLASH_PLACEHOLDER in body:
-        raise ValueError(f"Snippet body {body} contained the unicode character the snippet system uses as a placeholder character during escaping {UNICODE_ESCAPED_BACKSLASH_PLACEHOLDER}, which is disallowed!")
+        raise ValueError(
+            f"Snippet body {body} contained the unicode character the snippet system uses as a placeholder character during escaping {UNICODE_ESCAPED_BACKSLASH_PLACEHOLDER}, which is disallowed!"
+        )
     return (
         body.replace("\\\\", UNICODE_ESCAPED_BACKSLASH_PLACEHOLDER)
-			.replace("\\ ", " ")
-			.replace(UNICODE_ESCAPED_BACKSLASH_PLACEHOLDER, "\\")
-        )
+        .replace("\\ ", " ")
+        .replace(UNICODE_ESCAPED_BACKSLASH_PLACEHOLDER, "\\")
+    )
 
 
 def reconstruct_line(smallest_indentation: str, indentation: str, rest: str) -> str:
