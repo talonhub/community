@@ -10,7 +10,9 @@ from .snippet_types import Snippet, SnippetVariable
 ESCAPED_SNIPPET_DELIMITER_EXPRESSION = re.compile(r"^\\---$", flags=re.MULTILINE)
 SNIPPET_DELIMITER_EXPRESSION = re.compile(r"^---\n?$", flags=re.MULTILINE)
 SNIPPET_DELIMITER = "---"
-ESCAPED_SPACE_EXPRESSION = re.compile(r"([^\\]|^)\\[\\\\]*(?= )")
+# used as a temporary placeholder for escaped backslashes during escaping.
+# not allowed in snippets!
+UNICODE_ESCAPED_BACKSLASH_PLACEHOLDER = "\u0000"
 
 
 class SnippetDocument:
@@ -284,10 +286,13 @@ def normalize_snippet_body_tabs(body: str | None) -> str:
 def escape_spaces(body: str) -> str:
     # treat double backslash as escaped backslash
     # treat backslash space as space
-    matches = [m for m in re.finditer(ESCAPED_SPACE_EXPRESSION, body)]
-    for match in reversed(matches):
-        body = body[: match.end() - 1] + body[match.end() :]
-    return body.replace("\\\\", "\\")
+    if UNICODE_ESCAPED_BACKSLASH_PLACEHOLDER in body:
+        raise ValueError(f"Snippet body {body} contained the unicode character the snippet system uses as a placeholder character during escaping {UNICODE_ESCAPED_BACKSLASH_PLACEHOLDER}, which is disallowed!")
+    return (
+        body.replace("\\\\", UNICODE_ESCAPED_BACKSLASH_PLACEHOLDER)
+			.replace("\\ ", " ")
+			.replace(UNICODE_ESCAPED_BACKSLASH_PLACEHOLDER, "\\")
+        )
 
 
 def reconstruct_line(smallest_indentation: str, indentation: str, rest: str) -> str:
