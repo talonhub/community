@@ -92,6 +92,14 @@ def validate_snippet(document: SnippetDocument, snippet: Snippet) -> bool:
         error(document.file, document.line_doc, "Missing snippet variables")
         return False
 
+    if document.body and UNICODE_ESCAPED_BACKSLASH_PLACEHOLDER in document.body:
+        error(
+            document.file,
+            document.line_doc,
+            f"Snippet body {document.body} contained the unicode character \\u0000 the snippet system uses as a placeholder character during escaping, which is disallowed!",
+        )
+        is_valid = False
+
     for variable in snippet.variables:
         var_name = f"${variable.name}"
         if not is_variable_in_body(variable.name, snippet.body):
@@ -115,14 +123,6 @@ def validate_snippet(document: SnippetDocument, snippet: Snippet) -> bool:
                 document.file,
                 document.line_doc,
                 f"'{var_name}.wrapperPhrase' required when using '{var_name}.wrapperScope'",
-            )
-            is_valid = False
-
-        if document.body and UNICODE_ESCAPED_BACKSLASH_PLACEHOLDER in document.body:
-            error(
-                document.file,
-                document.line_doc,
-                f"Snippet body {document.body} contained the unicode character \\u0000 the snippet system uses as a placeholder character during escaping, which is disallowed!",
             )
             is_valid = False
 
