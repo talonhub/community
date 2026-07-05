@@ -118,6 +118,14 @@ def validate_snippet(document: SnippetDocument, snippet: Snippet) -> bool:
             )
             is_valid = False
 
+        if document.body and UNICODE_ESCAPED_BACKSLASH_PLACEHOLDER in document.body:
+            error(
+                document.file,
+                document.line_doc,
+                f"Snippet body {document.body} contained the unicode character \\u0000 the snippet system uses as a placeholder character during escaping, which is disallowed!"
+            )
+            is_valid = False
+
     return is_valid
 
 
@@ -286,10 +294,6 @@ def normalize_snippet_body_tabs(body: str | None) -> str:
 def escape_spaces(body: str) -> str:
     # treat double backslash as escaped backslash
     # treat backslash space as space
-    if UNICODE_ESCAPED_BACKSLASH_PLACEHOLDER in body:
-        raise ValueError(
-            f"Snippet body {body} contained the unicode character the snippet system uses as a placeholder character during escaping {UNICODE_ESCAPED_BACKSLASH_PLACEHOLDER}, which is disallowed!"
-        )
     return (
         body.replace("\\\\", UNICODE_ESCAPED_BACKSLASH_PLACEHOLDER)
         .replace("\\ ", " ")
