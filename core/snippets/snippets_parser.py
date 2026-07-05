@@ -122,7 +122,7 @@ def validate_snippet(document: SnippetDocument, snippet: Snippet) -> bool:
             error(
                 document.file,
                 document.line_doc,
-                f"Snippet body {document.body} contained the unicode character \\u0000 the snippet system uses as a placeholder character during escaping, which is disallowed!"
+                f"Snippet body {document.body} contained the unicode character \\u0000 the snippet system uses as a placeholder character during escaping, which is disallowed!",
             )
             is_valid = False
 
