@@ -624,7 +624,6 @@ def matches_all_groups(text: str, groups):
     return True
 
 
-
 events_registered = False
 
 
@@ -699,7 +698,7 @@ def gui_list_help(gui: imgui.GUI):
     gui.line()
 
     if len(pages_list) > 0:
-        groups = expand_word_groups(search_phrase) # 
+        groups = expand_word_groups(search_phrase)  #
 
         for key, value in pages_list[current_list_page - 1].items():
             text_key = key.lower().strip()
@@ -707,9 +706,9 @@ def gui_list_help(gui: imgui.GUI):
 
             # If a search phrase exists, only include entries with match for every word group
             if groups:
-                if not matches_all_groups(text_key, groups): 
+                if not matches_all_groups(text_key, groups):
                     continue
-            
+
             # Display the entry
             if omit_list_value or text_key == text_val:
                 gui.text(f"{key}")
@@ -717,7 +716,7 @@ def gui_list_help(gui: imgui.GUI):
                 gui.text(f"{value}: {key}")
             else:
                 gui.text(f"{key}: {value}")
-            
+
     gui.spacer()
 
     if total_page_count > 1:
@@ -739,11 +738,13 @@ def gui_list_help(gui: imgui.GUI):
 
 @mod.action_class
 class Actions:
-    def help_list(ab: str, reverse: bool = False, omit_value: bool = False, phrase: str = None):
+    def help_list(
+        ab: str, reverse: bool = False, omit_value: bool = False, phrase: str = None
+    ):
         """Provides the symbol dictionary"""
         # what you say is stored as globals used when help UI is triggered
         global selected_list, search_phrase, reverse_list_key_value, omit_list_value
-        print(f"phrase: {type(phrase)}") 
+        print(f"phrase: {type(phrase)}")
         reset()
         selected_list = ab
         search_phrase = phrase
