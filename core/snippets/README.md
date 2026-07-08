@@ -20,7 +20,7 @@ Custom format to represent snippets.
   - For most keys like `language` or `phrase` multiple values means _or_. You can use phrase _1_ or phrase _2_. The snippet is active in language _A_ or language _B_.
   - For `insertionFormatter` multiple values means that the formatters will be applied in sequence.
 - The smallest amount of leading white space on a line gets interpreted as the indentation size.
-- You can escape a space character by putting a '\' before it.
+- You can escape a space character by putting a `\` before it.
 - If you want to escape a backslash character, use `\\`.
 - You may not use the unicode character `"\u0000"` in a snippet.
 
