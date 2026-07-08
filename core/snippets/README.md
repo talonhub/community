@@ -19,7 +19,10 @@ Custom format to represent snippets.
 - Some context keys supports multiple values. These values are separated by `|`.
   - For most keys like `language` or `phrase` multiple values means _or_. You can use phrase _1_ or phrase _2_. The snippet is active in language _A_ or language _B_.
   - For `insertionFormatter` multiple values means that the formatters will be applied in sequence.
-
+- The smallest amount of leading white space on a line gets interpreted as the indentation size.
+- If you want to insert an escaped space character, use `\ `.
+- If you want to escape a backslash character, use `\\`.
+- You may not use the unicode character `"\u0000"` in a snippet.
 ### Context fields
 
 | Key            | Required | Multiple values | Example                        |
