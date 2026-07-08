@@ -23,6 +23,7 @@ Custom format to represent snippets.
 - If you want to insert an escaped space character, use `\ `.
 - If you want to escape a backslash character, use `\\`.
 - You may not use the unicode character `"\u0000"` in a snippet.
+
 ### Context fields
 
 | Key            | Required | Multiple values | Example                        |
