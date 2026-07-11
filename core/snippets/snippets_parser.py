@@ -478,7 +478,8 @@ def parse_body(text: str) -> Union[str, None]:
 def rstrip_except_escaped_space(text: str) -> str:
     stripped = text.rstrip()
     if (
-        stripped.endswith("\\")
+        len(stripped) < len(text)
+        and stripped.endswith("\\")
         and text[len(stripped)] == " "
         and count_trailing_backslashes(stripped) % 2 == 1
     ):
