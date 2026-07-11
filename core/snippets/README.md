@@ -13,16 +13,14 @@ Custom format to represent snippets.
 ## Format
 
 - A `.snippet` file can contain multiple snippet documents separated by `---`.
-- If you want a snippet to insert `---`, use `\---` to escape it.
 - Each snippet document has a context and body separated by `-`.
 - Optionally a file can have a single context at the top with no body. This is not a snippet in itself, but default values to be inherited by the other snippet documents in the same file.
-- Some context keys supports multiple values. These values are separated by `|`.
+- Some context keys support multiple values. These values are separated by `|`.
   - For most keys like `language` or `phrase` multiple values means _or_. You can use phrase _1_ or phrase _2_. The snippet is active in language _A_ or language _B_.
   - For `insertionFormatter` multiple values means that the formatters will be applied in sequence.
-- The smallest amount of leading white space on a line gets interpreted as the indentation size.
-- You can escape a space character by putting a `\` before it.
-- If you want to escape a backslash character, use `\\`.
-- You may not use the unicode character `"\u0000"` in a snippet.
+- A snippet's indentation size is the smallest number of leading spaces on any of its lines.
+- You can escape `---`, a space, or a backslash by putting a backslash before it.
+- A snippet body cannot have the unicode character `"\u0000"`.
 
 ### Context fields
 
