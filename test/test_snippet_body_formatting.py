@@ -88,7 +88,7 @@ if hasattr(talon, "test_mode"):
         expected = "test$2 $1$0"
         assert_body_with_final_stop_added_as_expected(body, expected)
 
-    def snippet_body_matches_expected(body: str, expected: str):
+    def assert_snippet_body_matches_expected(body: str, expected: str):
         document = snippets_parser.SnippetDocument(
             "test.snippet", 1, 2 + body.count("\n")
         )
@@ -100,24 +100,40 @@ if hasattr(talon, "test_mode"):
     def test_escaping_space_at_start():
         body = "\\ "
         expected = " "
-        snippet_body_matches_expected(body, expected)
+        assert_snippet_body_matches_expected(body, expected)
 
     def test_escaping_space_at_start_with_three_backslashes():
         body = "\\\\\\ "
         expected = "\\ "
-        snippet_body_matches_expected(body, expected)
+        assert_snippet_body_matches_expected(body, expected)
 
     def test_escaping_four_backslashes():
         body = "\\\\ "
         expected = "\\ "
-        snippet_body_matches_expected(body, expected)
+        assert_snippet_body_matches_expected(body, expected)
 
     def test_escaping_multiple_spaces():
         body = "\\ \\ a\\ b"
         expected = "  a b"
-        snippet_body_matches_expected(body, expected)
+        assert_snippet_body_matches_expected(body, expected)
 
     def test_escaping_backslashes_in_the_middle():
         body = "	a\\\\ \\\\\\\\b \\\\ c"
         expected = "	a\\ \\\\b \\ c"
-        snippet_body_matches_expected(body, expected)
+        assert_snippet_body_matches_expected(body, expected)
+
+    def assert_snippet_literal_body_matches_expected(body: str, expected: str):
+        text = f"name: snippetName\nphrase: phrase\n-\n{body}\n---"
+        documents = snippets_parser.parse_file_content("file", text)
+        snippet = snippets_parser.create_snippets(documents)[0]
+        assert_snippet_body_matches_expected(snippet.body, expected)
+        
+    def test_escaping_backslash_at_the_end():
+        text = "snippetBody\\ "
+        expected = "snippetBody "
+        assert_snippet_literal_body_matches_expected(text, expected)
+
+    def test_escaping_three_backslashes_at_the_end():
+        text = "snippetBody\\\\\\ "
+        expected = "snippetBody "
+        assert_snippet_literal_body_matches_expected(text, expected)
