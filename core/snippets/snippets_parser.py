@@ -96,7 +96,7 @@ def validate_snippet(document: SnippetDocument, snippet: Snippet) -> bool:
         error(
             document.file,
             document.line_doc,
-            f"Snippet body {document.body} has unicode character \\u0000, which is not allowed",
+            f"Snippet body {document.body} has Unicode character \\u0000, which is not allowed",
         )
         is_valid = False
 
