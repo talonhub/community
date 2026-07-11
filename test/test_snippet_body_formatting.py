@@ -128,12 +128,12 @@ if hasattr(talon, "test_mode"):
         snippet = snippets_parser.create_snippets(documents)[0]
         assert snippet.body == expected
 
-    def test_escaping_backslash_at_the_end():
+    def test_escaping_space_at_the_end():
         text = "snippetBody\\ "
         expected = "snippetBody "
         assert_snippet_literal_body_matches_expected(text, expected)
 
-    def test_escaping_three_backslashes_at_the_end():
+    def test_escaping_three_backslashes_and_a_space_at_the_end():
         text = "snippetBody\\\\\\ "
         expected = "snippetBody\\ "
         assert_snippet_literal_body_matches_expected(text, expected)
@@ -141,4 +141,9 @@ if hasattr(talon, "test_mode"):
     def test_escaping_two_backslashes_at_the_end():
         text = "snippetBody\\\\ "
         expected = "snippetBody\\"
+        assert_snippet_literal_body_matches_expected(text, expected)
+
+    def test_escaping_space_before_more_whitespace():
+        text = "snippetBody\\   "
+        expected = "snippetBody "
         assert_snippet_literal_body_matches_expected(text, expected)
