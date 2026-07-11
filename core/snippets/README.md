@@ -18,8 +18,8 @@ Custom format to represent snippets.
 - Some context keys support multiple values. These values are separated by `|`.
   - For most keys like `language` or `phrase` multiple values means _or_. You can use phrase _1_ or phrase _2_. The snippet is active in language _A_ or language _B_.
   - For `insertionFormatter` multiple values means that the formatters will be applied in sequence.
-- A snippet's indentation size is the smallest number of leading spaces on any of its lines.
-- You can escape `---`, a space, or a backslash by putting a backslash before it.
+- Snippets use leading white space as indentation. This means that the smallest leading sequence of whitespace characters from a snippet body's lines represents a single level of indentation. You must escape leading spaces in a snippet body to treat them as literal spaces.
+- You can escape a space, `---`, or a backslash by putting a backslash before it.
 - A snippet body cannot have the unicode character `"\u0000"`.
 
 ### Context fields
