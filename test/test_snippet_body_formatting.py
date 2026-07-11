@@ -126,7 +126,7 @@ if hasattr(talon, "test_mode"):
         text = f"name: snippetName\nphrase: phrase\n-\n{body}\n---"
         documents = snippets_parser.parse_file_content("file", text)
         snippet = snippets_parser.create_snippets(documents)[0]
-        assert_snippet_body_matches_expected(snippet.body, expected)
+        assert snippet.body == expected
 
     def test_escaping_backslash_at_the_end():
         text = "snippetBody\\ "
