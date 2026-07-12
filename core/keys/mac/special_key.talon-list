@@ -12,7 +12,11 @@ page up: pageup
 escape: escape
 space: space
 tab: tab
-insert: insert
 wipe: backspace
 delete: backspace
 forward delete: delete
+
+num lock: numlock
+caps lock: capslock
+scroll lock: scroll_lock
+insert: insert
