@@ -1,7 +1,8 @@
 tag: terminal
 -
+
 settings():
-      user.paste_to_insert_threshold = -1
+    user.paste_to_insert_threshold = -1
 
 # tags should be activated for each specific terminal in the respective talon file
 
