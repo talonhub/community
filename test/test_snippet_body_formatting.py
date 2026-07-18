@@ -98,18 +98,18 @@ if hasattr(talon, "test_mode"):
         assert snippet.body == expected
 
     def test_escaping_space_at_start():
-        body = "\\ "
-        expected = " "
+        body = "\\ a"
+        expected = " a"
         assert_snippet_body_matches_expected(body, expected)
 
     def test_escaping_space_at_start_with_three_backslashes():
-        body = "\\\\\\ "
-        expected = "\\ "
+        body = "\\\\\\ a"
+        expected = "\\ a"
         assert_snippet_body_matches_expected(body, expected)
 
     def test_escaping_four_backslashes():
-        body = "\\\\ "
-        expected = "\\ "
+        body = "\\\\ a"
+        expected = "\\ a"
         assert_snippet_body_matches_expected(body, expected)
 
     def test_escaping_multiple_spaces():
