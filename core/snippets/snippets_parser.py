@@ -64,9 +64,10 @@ def create_snippet(
     document: SnippetDocument,
     default_context: SnippetDocument,
 ) -> Snippet | None:
-    stripped_body = rstrip_except_escaped_space(document.body)
-    normalized_body = normalize_snippet_body_tabs(stripped_body)
-    body = escape_spaces(normalized_body)
+    body = rstrip_except_escaped_space(document.body)
+    body = normalize_snippet_body_tabs(body)
+    body = ESCAPED_SNIPPET_DELIMITER_EXPRESSION.sub(SNIPPET_DELIMITER, body)
+    body = escape_spaces(body)
     variables = combine_variables(default_context.variables, document.variables)
 
     snippet = Snippet(
@@ -492,10 +493,7 @@ def parse_body(text: str) -> Union[str, None]:
     if match_leading is None:
         return None
 
-    body = text[match_leading.start() :]
-    body = ESCAPED_SNIPPET_DELIMITER_EXPRESSION.sub(SNIPPET_DELIMITER, body)
-
-    return body
+    return text[match_leading.start() :]
 
 
 def parse_vector_value(value: str) -> list[str]:
