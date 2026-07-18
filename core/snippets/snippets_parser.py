@@ -1,11 +1,11 @@
-from talon import actions
-
 import logging
 import re
 from collections.abc import Callable
 from copy import deepcopy
 from pathlib import Path
 from typing import Union
+
+from talon import actions
 
 from .snippet_types import Snippet, SnippetVariable
 
@@ -309,7 +309,7 @@ def rstrip_except_escaped_space(text: str | None) -> str | None:
     """Remove trailing white space except for an escaped space at the end if present"""
     if not text:
         return text
-    
+
     stripped = text.rstrip()
     if (
         len(stripped) < len(text)
