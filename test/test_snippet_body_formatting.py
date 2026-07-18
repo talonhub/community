@@ -147,3 +147,13 @@ if hasattr(talon, "test_mode"):
         text = "snippetBody\\   "
         expected = "snippetBody "
         assert_snippet_literal_body_matches_expected(text, expected)
+
+    def test_escaping_snippet_delimiter():
+        text = "text\n\\---\nmoreText"
+        expected = "text\n---\nmoreText"
+        assert_snippet_literal_body_matches_expected(text, expected)
+
+    def test_escaping_snippet_delimiter_with_trailing_space_at_the_end():
+        text = "text\n\\---   "
+        expected = "text\n---"
+        assert_snippet_literal_body_matches_expected(text, expected)
