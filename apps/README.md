@@ -4,6 +4,8 @@ Some of the Talon files for web apps (e.g. `apps/github/github_web.talon`) use a
 
 `community` is set up so that if a URL is found in the titlebar of an application matching the 'browser' tag it will be used to populate the browser.host matcher (see `code/browser.py`). This probably means that you will need an extension to make the browser.host based scripts work.
 
+When adding a web app, see recommendation P02 in [CONTRIBUTING.md](https://github.com/talonhub/community/blob/main/CONTRIBUTING.md#voice-command-principles).
+
 Browser extensions that can add the protocol and hostname or even the entire URL to the window title:
 
 Firefox:
