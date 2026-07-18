@@ -1,3 +1,5 @@
+from talon import actions
+
 import logging
 import re
 from collections.abc import Callable
@@ -496,7 +498,9 @@ def parse_vector_value(value: str) -> list[str]:
 
 
 def error(file: str, line: int, message: str):
-    logging.error(f"{file}:{line + 1} | {message}")
+    error_text = f"{file}:{line + 1} | {message}"
+    logging.error(error_text)
+    actions.app.notify(error_text)
 
 
 def warn(file: str, line: int, message: str):
