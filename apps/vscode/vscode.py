@@ -1,7 +1,5 @@
 from talon import Context, Module, actions, app
 
-from ...core.snippets.snippets_parser import UNICODE_ESCAPED_BACKSLASH_PLACEHOLDER
-
 is_mac = app.platform == "mac"
 
 ctx = Context()
