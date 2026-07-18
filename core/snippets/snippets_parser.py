@@ -1,11 +1,11 @@
+from talon import actions
+
 import logging
 import re
 from collections.abc import Callable
 from copy import deepcopy
 from pathlib import Path
 from typing import Union
-
-from talon import actions
 
 from .snippet_types import Snippet, SnippetVariable
 
@@ -64,7 +64,9 @@ def create_snippet(
     document: SnippetDocument,
     default_context: SnippetDocument,
 ) -> Snippet | None:
-    body = escape_spaces(normalize_snippet_body_tabs(document.body))
+    stripped_body = rstrip_except_escaped_space(document.body)
+    normalized_body = normalize_snippet_body_tabs(stripped_body)
+    body = escape_spaces(normalized_body)
     variables = combine_variables(default_context.variables, document.variables)
 
     snippet = Snippet(
@@ -303,6 +305,26 @@ def escape_spaces(body: str) -> str:
     )
 
 
+def rstrip_except_escaped_space(text: str | None) -> str | None:
+    """Remove trailing white space except for an escaped space at the end if present"""
+    if not text:
+        return text
+    
+    stripped = text.rstrip()
+    if (
+        len(stripped) < len(text)
+        and stripped.endswith("\\")
+        and text[len(stripped)] == " "
+        and count_trailing_backslashes(stripped) % 2 == 1
+    ):
+        return f"{stripped} "
+    return stripped
+
+
+def count_trailing_backslashes(text: str) -> int:
+    return len(text) - len(text.rstrip("\\"))
+
+
 def reconstruct_line(smallest_indentation: str, indentation: str, rest: str) -> str:
     # Update indentation by replacing each occurrent of smallest space indentation with a tab
     indentation = indentation.replace(smallest_indentation, "\t")
@@ -470,27 +492,10 @@ def parse_body(text: str) -> Union[str, None]:
     if match_leading is None:
         return None
 
-    body = rstrip_except_escaped_space(text[match_leading.start() :])
-
+    body = text[match_leading.start() :]
     body = ESCAPED_SNIPPET_DELIMITER_EXPRESSION.sub(SNIPPET_DELIMITER, body)
 
     return body
-
-
-def rstrip_except_escaped_space(text: str) -> str:
-    stripped = text.rstrip()
-    if (
-        len(stripped) < len(text)
-        and stripped.endswith("\\")
-        and text[len(stripped)] == " "
-        and count_trailing_backslashes(stripped) % 2 == 1
-    ):
-        return f"{stripped} "
-    return stripped
-
-
-def count_trailing_backslashes(text: str) -> int:
-    return len(text) - len(text.rstrip("\\"))
 
 
 def parse_vector_value(value: str) -> list[str]:
