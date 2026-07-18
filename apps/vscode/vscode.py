@@ -1,5 +1,7 @@
 from talon import Context, Module, actions, app
 
+from ...core.snippets.snippets_parser import UNICODE_ESCAPED_BACKSLASH_PLACEHOLDER
+
 is_mac = app.platform == "mac"
 
 ctx = Context()
@@ -444,8 +446,6 @@ class UserActions:
         actions.key("esc")
 
     def insert_snippet(body: str):
-        # Avoid triggering VSCode's escaping mechanisms on accident
-        body = body.replace("\\", "\\\\")
         actions.user.run_rpc_command("editor.action.insertSnippet", {"snippet": body})
 
     def move_cursor_to_next_snippet_stop():
