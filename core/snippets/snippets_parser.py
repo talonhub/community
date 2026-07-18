@@ -1,11 +1,11 @@
-from talon import actions
-
 import logging
 import re
 from collections.abc import Callable
 from copy import deepcopy
 from pathlib import Path
 from typing import Union
+
+from talon import actions
 
 from .snippet_types import Snippet, SnippetVariable
 
