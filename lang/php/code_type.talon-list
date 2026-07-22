@@ -1,0 +1,11 @@
+list: user.code_type
+code.language: php
+-
+
+int
+float
+string
+bool
+array
+null
+void
