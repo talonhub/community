@@ -3,7 +3,6 @@ from talon import Context, Module, actions
 from ..tags.operators import Operators
 
 mod = Module()
-global_ctx = Context()
 ctx = Context()
 ctx.matches = """
 code.language: css
