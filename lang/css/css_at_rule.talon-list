@@ -9,8 +9,8 @@ namespace
 media
 supports
 # other nested
-page
 font face: font-face
 keyframes
+page
 # CSS Modules
 value

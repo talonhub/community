@@ -4,9 +4,9 @@ list: user.css_unit
 # distance (length)
 char: ch
 em
-rem
 pixels: px
 points: pt
+rem
 view height: vh
 view width: vw
 # angle
@@ -14,8 +14,8 @@ degrees: deg
 radians: rad
 turn
 # duration (time)
-seconds: s
 millis: ms
+seconds: s
 # resolution
 dots per pixel: dppx
 # flexible length (flex) - grid
