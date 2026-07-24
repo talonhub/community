@@ -14,47 +14,6 @@ mod.list("css_at_rule", desc="List of CSS @rules")
 mod.list("css_unit", desc="List of CSS units")
 mod.list("css_global_value", desc="CSS-wide values")
 
-global_ctx.lists["self.css_unit"] = {
-    # distance (length)
-    "char": "ch",
-    "em": "em",
-    "rem": "rem",
-    "pixels": "px",
-    "points": "pt",
-    "view height": "vh",
-    "view width": "vw",
-    # angle
-    "degrees": "deg",
-    "radians": "rad",
-    "turn": "turn",
-    # duration (time)
-    "seconds": "s",
-    "millis": "ms",
-    # resolution
-    "dots per pixel": "dppx",
-    # flexible length (flex) - grid
-    "fraction": "fr",
-}
-
-global_ctx.lists["self.css_at_rule"] = {
-    # regular
-    "charset": "charset",
-    "import": "import",
-    "namespace": "namespace",
-    # conditional group
-    "media": "media",
-    "supports": "supports",
-    # other nested
-    "page": "page",
-    "font face": "font-face",
-    "keyframes": "keyframes",
-    # CSS Modules
-    "value": "value",
-}
-
-global_ctx.lists["self.css_global_value"] = ["initial", "inherit", "unset", "revert"]
-
-
 operators = Operators(
     MATH_ADD=" + ",
     MATH_SUBTRACT=" - ",
