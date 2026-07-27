@@ -4,7 +4,10 @@
 		"threshold": {
 			">power": 0.01,
 			">probability": 0.9
-		}
+		},
+        "throttle": {
+            "click": 0.1
+        }
     },
 	"shush": {
         "sounds": ["shush"],
