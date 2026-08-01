@@ -104,12 +104,12 @@ if hasattr(talon, "test_mode"):
 
     def test_escaping_space_at_start_with_three_backslashes():
         body = "\\\\\\ a"
-        expected = "\\ a"
+        expected = "\\\\ a"
         assert_snippet_body_matches_expected(body, expected)
 
     def test_escaping_four_backslashes():
         body = "\\\\ a"
-        expected = "\\ a"
+        expected = "\\\\ a"
         assert_snippet_body_matches_expected(body, expected)
 
     def test_escaping_multiple_spaces():
@@ -119,7 +119,7 @@ if hasattr(talon, "test_mode"):
 
     def test_escaping_backslashes_in_the_middle():
         body = "	a\\\\ \\\\\\\\b \\\\ c"
-        expected = "	a\\ \\\\b \\ c"
+        expected = "	a\\\\ \\\\\\\\b \\\\ c"
         assert_snippet_body_matches_expected(body, expected)
 
     def assert_snippet_literal_body_matches_expected(body: str, expected: str):
@@ -135,12 +135,12 @@ if hasattr(talon, "test_mode"):
 
     def test_escaping_three_backslashes_and_a_space_at_the_end():
         text = "snippetBody\\\\\\ "
-        expected = "snippetBody\\ "
+        expected = "snippetBody\\\\ "
         assert_snippet_literal_body_matches_expected(text, expected)
 
     def test_escaping_two_backslashes_at_the_end():
         text = "snippetBody\\\\ "
-        expected = "snippetBody\\"
+        expected = "snippetBody\\\\"
         assert_snippet_literal_body_matches_expected(text, expected)
 
     def test_escaping_space_before_more_whitespace():

@@ -299,10 +299,12 @@ def normalize_snippet_body_tabs(body: str | None) -> str:
 def escape_spaces(body: str) -> str:
     # treat double backslash as escaped backslash
     # treat backslash space as space
+    # preserve double backslashes to be escaped by textmate supporting editors
+    # we can convert them to single backslashes for other editors
     return (
         body.replace("\\\\", UNICODE_ESCAPED_BACKSLASH_PLACEHOLDER)
         .replace("\\ ", " ")
-        .replace(UNICODE_ESCAPED_BACKSLASH_PLACEHOLDER, "\\")
+        .replace(UNICODE_ESCAPED_BACKSLASH_PLACEHOLDER, "\\\\")
     )
 
 
