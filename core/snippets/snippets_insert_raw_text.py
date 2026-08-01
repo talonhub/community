@@ -170,8 +170,8 @@ def format_tabs(text: str) -> str:
 
 
 def parse_snippet(body: str):
-    # Some IM services will send the message on a tab
     body = body.replace("\\\\", UNICODE_ESCAPED_BACKSLASH_PLACEHOLDER)
+    # Some IM services will send the message on a tab
     body = format_tabs(body)
 
     lines = body.splitlines()
