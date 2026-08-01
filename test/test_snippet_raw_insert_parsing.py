@@ -2,7 +2,7 @@ import talon
 
 if hasattr(talon, "test_mode"):
     # Only include this when we're running tests
-    from ..core.snippets.snippets_insert_raw_text import Stop, parse_snippet
+    from core.snippets.snippets_insert_raw_text import Stop, parse_snippet
 
     def escapes_backslashes_and_dollar_signs_properly():
         body = "\\\\\\$9$1\\\\\\\\$0\\\\"
