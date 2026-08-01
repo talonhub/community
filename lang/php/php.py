@@ -84,7 +84,14 @@ class UserActions:
         actions.edit.left()
 
     def code_default_function(text: str):
-        actions.user.code_public_function(text)
+        """Inserts function declaration"""
+        result = "function {}()".format(
+            actions.user.formatted_text(
+                text, settings.get("user.code_public_function_formatter")
+            )
+        )
+        actions.user.paste(result)
+        actions.edit.left()
 
     def code_protected_function(text: str):
         """Inserts protected function declaration"""
