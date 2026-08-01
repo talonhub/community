@@ -2,9 +2,9 @@ import re
 from collections import defaultdict
 from dataclasses import dataclass
 
-from .snippets_parser import UNICODE_ESCAPED_BACKSLASH_PLACEHOLDER
-
 from talon import Module, actions, app, settings
+
+from .snippets_parser import UNICODE_ESCAPED_BACKSLASH_PLACEHOLDER
 
 mod = Module()
 
@@ -217,7 +217,9 @@ def parse_snippet(body: str):
         stop.columns_left = len(lines[stop.row]) - stop.col
 
     updated_snippet = "\n".join(lines)
-    updated_snippet = updated_snippet.replace(UNICODE_ESCAPED_BACKSLASH_PLACEHOLDER, "\\")
+    updated_snippet = updated_snippet.replace(
+        UNICODE_ESCAPED_BACKSLASH_PLACEHOLDER, "\\"
+    )
 
     return updated_snippet, stops
 
