@@ -7,16 +7,6 @@ ctx.matches = r"""
 code.language: php
 """
 
-ctx.lists["user.code_type"] = {
-    "int": "int",
-    "float": "float",
-    "string": "string",
-    "bool": "bool",
-    "array": "array",
-    "null": "null",
-    "void": "void",
-}
-
 operators = Operators(
     # code_operators_assignment
     ASSIGNMENT=" = ",
