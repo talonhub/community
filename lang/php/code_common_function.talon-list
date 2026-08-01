@@ -1,0 +1,93 @@
+list: user.code_common_function
+code.language: php
+-
+
+array diff: array_diff
+array filter: array_filter
+array flip: array_flip
+array key exists: array_key_exists
+array keys: array_keys
+array map: array_map
+array merge: array_merge
+array pop: array_pop
+array reverse: array_reverse
+array search: array_search
+array shift: array_shift
+array slice: array_slice
+array unique: array_unique
+array unshift: array_unshift
+array values: array_values
+base sixty four decode: base64_decode
+base sixty four encode: base64_encode
+base name: basename
+call user funk: call_user_func
+call user funk array: call_user_func_array
+class exists: class_exists
+count
+current
+date
+defined
+dir name: dirname
+end
+explode
+F close: fclose
+file exists: file_exists
+file get contents: file_get_contents
+file put contents: file_put_contents
+filter var: filter_var
+F open: fopen
+function exists: function_exists
+F write: fwrite
+get class: get_class
+get C W D: getcwd
+get envy: getenv
+get type: gettype
+implode
+in array: in_array
+innie get: ini_get
+is array: is_array
+is bool: is_bool
+is callable: is_callable
+is dir: is_dir
+is file: is_file
+is int: is_int
+is null: is_null
+is numeric: is_numeric
+is object: is_object
+is string: is_string
+jason decode: json_decode
+jason encode: json_encode
+K sort: ksort
+L trim: ltrim
+max
+method exists: method_exists
+micro time: microtime
+min
+make dur: mkdir
+parse url: parse_url
+preg match: preg_match
+preg match all: preg_match_all
+preg quote: preg_quote
+preg replace: preg_replace
+preg replace callback: preg_replace_callback
+preg split: preg_split
+real path: realpath
+reset
+round
+R trim: rtrim
+serialize: serialize
+sprint F: sprintf
+stir repeat: str_repeat
+stir replace: str_replace
+stir len: strlen
+stir pose: strpos
+stir r pose: strrpos
+stir to lower: strtolower
+stir to upper: strtoupper
+stir ter: strtr
+sub stir: substr
+time
+trim
+you see first: ucfirst
+unlink
+var export: var_export
