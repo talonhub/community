@@ -132,21 +132,30 @@ serialize
 shuffle
 sort
 sprint F: sprintf
+str ends with: str_ends_with
 str r pos: strrpos
+str to time: strtotime
+stripos
+strlen
+strpad
+strpos
 strrepeat
 strreplace
-strlen
-strpos
 strstr
 strtolower
 strtoupper
 strtr
-stripos
 strval
 substr
+tempnam
 time
 trim
-U C first: ucfirst
+ucwords
 unlink
+url decode: urldecode
+urlencode: urlencode
 var dump: var_dump
 var export: var_export
+You A sort: uasort
+You C first: ucfirst
+You sort: usort
