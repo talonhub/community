@@ -39,6 +39,7 @@ A snippet inserts text with placeholders so the user can use a command to go to 
 - You are currently depending on editor-specific behavior to put the cursor in the right place or do things like close delimiters.
 - Similar functionality is already implemented with snippets and keeping the `snip` prefix consistent makes it easier for the user to remember the command.
 - You are implementing functionality for a programming language where the same functionality is implemented for other languages using snippets.
+- You are implementing support for a multistep text insertion process that would be simplest to complete with a single snippet.
 
 Use the `user.insert_snippet_by_name` action to programmatically insert snippets. The first argument is the name of the snippet and the second is an optional dictionary containing substitutions. The substitution dictionary maps snippet stops (placeholders) to replacement text, such as the following to insert `return False` at stop `$0`:
 
