@@ -55,15 +55,15 @@ is null: is_null
 is numeric: is_numeric
 is object: is_object
 is string: is_string
-jason decode: json_decode
-jason encode: json_encode
+json decode: json_decode
+json encode: json_encode
 K sort: ksort
 L trim: ltrim
 max
 method exists: method_exists
 micro time: microtime
 min
-make dur: mkdir
+make dir: mkdir
 parse url: parse_url
 preg match: preg_match
 preg match all: preg_match_all
@@ -77,17 +77,17 @@ round
 R trim: rtrim
 serialize: serialize
 sprint F: sprintf
-stir repeat: str_repeat
-stir replace: str_replace
-stir len: strlen
-stir pose: strpos
-stir r pose: strrpos
-stir to lower: strtolower
-stir to upper: strtoupper
-stir ter: strtr
-sub stir: substr
+str repeat: str_repeat
+str replace: str_replace
+str len: strlen
+str pos: strpos
+str r pos: strrpos
+str to lower: strtolower
+str to upper: strtoupper
+str tr: strtr
+sub str: substr
 time
 trim
-you see first: ucfirst
+U C first: ucfirst
 unlink
 var export: var_export
