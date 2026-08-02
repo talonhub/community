@@ -5,6 +5,7 @@ code.language: php
 array
 bool
 callable
+false
 float
 int
 iterable
@@ -17,4 +18,5 @@ resource
 self
 static
 string
+true
 void
