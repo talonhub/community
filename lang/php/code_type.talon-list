@@ -2,10 +2,19 @@ list: user.code_type
 code.language: php
 -
 
-int
-float
-string
-bool
 array
+bool
+callable
+float
+int
+iterable
+mixed
+never
 null
+object
+parent
+resource
+self
+static
+string
 void
