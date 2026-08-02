@@ -25,6 +25,7 @@ settings():
 
 state try: user.insert_snippet_by_name("tryStatement")
 state catch: user.insert_snippet_by_name("catchStatement")
+type union [<user.code_type>]: "|{code_type}"
 
 var <phrase> [over]:
     insert("$")
