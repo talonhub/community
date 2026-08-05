@@ -944,7 +944,7 @@ def get_windows_eleven_taskbar():
     # if not start_menu_configured_correctly:
     #     return False
     
-    apps = ui.apps(name="explorer.exe")
+    apps = ui.apps(name="Windows Explorer")
     #print(f"found {len(apps)} explorer instances")
     taskbar_window = None
     for explorer_instances in apps:
