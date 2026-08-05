@@ -137,10 +137,10 @@ str r pos: strrpos
 str to time: strtotime
 stripos
 strlen
-strpad
+strpad: str_pad
 strpos
-strrepeat
-strreplace
+strrepeat: str_repeat
+strreplace: str_replace
 strstr
 strtolower
 strtoupper
