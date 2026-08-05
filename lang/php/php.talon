@@ -28,11 +28,3 @@ state catch: user.insert_snippet_by_name("catchStatement")
 var <phrase> [over]:
     insert("$")
     insert(user.formatted_text(phrase, "PRIVATE_CAMEL_CASE"))
-
-returns class <phrase>:
-    formatted = user.formatted_text(phrase, "PUBLIC_CAMEL_CASE")
-    insert(": {formatted}")
-
-returns global class <phrase>:
-    formatted = user.formatted_text(phrase, "PUBLIC_CAMEL_CASE")
-    insert(": \\{formatted}")
