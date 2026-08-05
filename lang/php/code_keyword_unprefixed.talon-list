@@ -1,6 +1,0 @@
-list: user.code_keyword_unprefixed
-code.language: php
--
-
-continue: "continue"
-finally: " finally "
