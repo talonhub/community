@@ -13,6 +13,7 @@ tag(): user.code_data_null
 tag(): user.code_operators_assignment
 tag(): user.code_operators_math
 tag(): user.code_functions
+tag(): user.code_functions_common
 
 settings():
     user.code_private_function_formatter = "PRIVATE_CAMEL_CASE"
