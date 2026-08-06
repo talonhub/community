@@ -1,6 +1,5 @@
 # fmt: off
 
-from ..user_settings import track_csv_list
 
 # define the spoken forms for symbols in command and dictation mode
 punctuation_dict = {}
