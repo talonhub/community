@@ -1,5 +1,6 @@
 # fmt: off
 
+from ..user_settings import track_csv_list
 
 # define the spoken forms for symbols in command and dictation mode
 punctuation_dict = {}
@@ -95,9 +96,9 @@ symbols = [
 # by convention, symbols should include currency symbols
 symbols.extend(currency_symbols)
 
-# @track_csv_list("symbols.csv", headers=("symbol", "mode", "spoken forms"))
-# def on_symbols(values):
-#     pass
+@track_csv_list("symbols.csv", headers=("symbol", "mode", "spoken forms"))
+def on_symbols(values):
+    pass
 
 for symbol in symbols:
     if symbol.command_and_dictation_forms:
