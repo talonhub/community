@@ -1,6 +1,6 @@
 # fmt: off
 
-from talon import actions, Module, Context
+from talon import Context, Module, actions
 
 from ..user_settings import track_csv_rows
 

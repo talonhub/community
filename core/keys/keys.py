@@ -103,4 +103,3 @@ def keys(m) -> str:
 def letters(m) -> str:
     "Multiple letter keys"
     return "".join(m.letter_list)
-
