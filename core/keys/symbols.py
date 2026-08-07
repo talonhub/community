@@ -26,7 +26,8 @@ symbols_for_create_spoken_forms = {
     "plus": "+",
 }
 
-
+# this class is kept for backwards compatibility with people's Community forks
+# symbols defined with this are used for the default symbols.csv only
 class Symbol:
     character: str
     command_and_dictation_forms: list[str] = None
@@ -55,7 +56,7 @@ currency_symbols = [
     Symbol("€", ["euro sign"], ["euro"]),
 ]
 
-symbols = [
+old_symbols = [
     Symbol("`", ["back tick"], ["grave"]),
     Symbol(",", ["comma", "coma"]),
     Symbol(".", ["period", "full stop"], ["dot", "point"]),
@@ -93,10 +94,10 @@ symbols = [
 ]
 
 # by convention, symbols should include currency symbols
-symbols.extend(currency_symbols)
+old_symbols.extend(currency_symbols)
 
 default_symbols = []
-for symbol in symbols:
+for symbol in old_symbols:
 	dictation_row = [symbol.character, "dictation"]
 	command_row = [symbol.character, "command"]
 	if symbol.command_and_dictation_forms:
