@@ -139,4 +139,3 @@ def on_symbols(values):
 			warning = f"Row {i+1} of symbols.csv has mode not used by the symbol support {mode}!"
 			print(warning)
 			actions.app.notify(warning)
-
