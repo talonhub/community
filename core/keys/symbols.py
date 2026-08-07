@@ -98,16 +98,13 @@ old_symbols.extend(currency_symbols)
 
 default_symbols = []
 for symbol in old_symbols:
-	dictation_row = [symbol.character, "dictation"]
-	command_row = [symbol.character, "command"]
 	if symbol.command_and_dictation_forms:
-		command_row.extend(symbol.command_and_dictation_forms)
-		dictation_row.extend(symbol.command_and_dictation_forms)
+		command_and_dictation_row = [symbol.character, "both"]
+		command_and_dictation_row.extend(symbol.command_and_dictation_forms)
+		default_symbols.append(command_and_dictation_row)
 	if symbol.command_forms:
+		command_row = [symbol.character, "command"]
 		command_row.extend(symbol.command_forms)
-	if len(dictation_row) > 2:
-		default_symbols.append(dictation_row)
-	if len(command_row) > 2:
 		default_symbols.append(command_row)
 
 @track_csv_rows("symbols.csv", headers=("symbol", "mode", "spoken forms"), default=default_symbols)
