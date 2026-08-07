@@ -14,12 +14,6 @@ speech.engine: dragon
 # define the spoken forms for symbols in command and dictation mode
 punctuation_dict = {}
 
-# include additional spoken forms for dragon
-dragon_punctuation_dict = {}
-
-# define the spoken forms for symbols that are intended for command mode only
-symbol_key_dict = {}
-
 # define spoken form for symbols for use in create_spoken_forms.py functionality
 # we define a handful of symbol only. at present, this is restricted to one entry per symbol.
 symbols_for_create_spoken_forms = {
@@ -117,8 +111,9 @@ for symbol in symbols:
 
 @track_csv_rows("symbols.csv", headers=("symbol", "mode", "spoken forms"), default=default_symbols)
 def on_symbols(values):
-	global dragon_punctuation_dict
-	symbol_key_dict.clear()
+	# define the spoken forms for symbols that are intended for command mode only
+	symbol_key_dict = {}
+	# for command and dictation mode
 	punctuation_dict.clear()
 	# for dragon, we add a couple of mappings that don't work for conformer
 	# i.e. dragon supports some actual symbols as the spoken form
