@@ -3,7 +3,7 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import IO, Optional, Union
 
-from talon import resource, actions
+from talon import actions, resource
 
 # NOTE: This method requires this module to be one folder below the top-level
 #   community folder.
@@ -136,9 +136,8 @@ def track_file(
 
     return decorator
 
-def read_csv_rows(
-    f: IO, headers: tuple[str, ...]
-) -> list[list[str]]:
+
+def read_csv_rows(f: IO, headers: tuple[str, ...]) -> list[list[str]]:
     rows = list(csv.reader(f))
     if len(rows) == 0:
         actions.app.notify(f"{f.name} is empty!")
@@ -155,6 +154,7 @@ def read_csv_rows(
         return []
     return rows[1:]
 
+
 def write_csv_default_rows(
     path: Path,
     headers: tuple[str, ...],
@@ -166,8 +166,10 @@ def write_csv_default_rows(
             writer.writerow(headers)
             writer.writerows(default)
 
+
 RawRowsCallbackT = Callable[[list[list[str]]], None]
 RawRowsDecoratorT = Callable[[RawRowsCallbackT], RawRowsCallbackT]
+
 
 def track_csv_rows(
     filename: str,
@@ -184,6 +186,7 @@ def track_csv_rows(
         def on_update(f):
             data = read_csv_rows(f, headers)
             fn(data)
+
         return on_update
 
     return decorator
