@@ -1,16 +1,14 @@
 # fmt: off
 
+from talon import actions
+
 from ..user_settings import track_csv_rows
 
 # define the spoken forms for symbols in command and dictation mode
 punctuation_dict = {}
 
-# for dragon, we add a couple of mappings that don't work for conformer
-# i.e. dragon supports some actual symbols as the spoken form
-dragon_punctuation_dict = {
-    "`": "`",
-    ",": ",",
-}
+# include additional spoken forms for dragon
+dragon_punctuation_dict = {}
 
 # define the spoken forms for symbols that are intended for command mode only
 symbol_key_dict = {}
@@ -112,15 +110,33 @@ for symbol in symbols:
 
 @track_csv_rows("symbols.csv", headers=("symbol", "mode", "spoken forms"), default=default_symbols)
 def on_symbols(values):
-    pass
+	global dragon_punctuation_dict
+	symbol_key_dict.clear()
+	punctuation_dict.clear()
+	# for dragon, we add a couple of mappings that don't work for conformer
+	# i.e. dragon supports some actual symbols as the spoken form
+	dragon_punctuation_dict = {
+		"`": "`",
+		",": ",",
+	}
+	for i, row in enumerate(values):
+		if len(row) < 3:
+			warning = f"Row {i+1} of symbols.csv did not have enough columns!"
+			print(warning)
+			actions.app.notify(warning)
+			continue
+		symbol = row[0]
+		mode = row[1]
+		spoken_forms = row[2:]
+		if mode == "command" or mode == "both":
+			for spoken_form in spoken_forms:
+				symbol_key_dict[spoken_form] = symbol
+		if mode == "dictation" or mode == "both":
+			for spoken_form in spoken_forms:
+				punctuation_dict[spoken_form] = symbol
+				dragon_punctuation_dict[spoken_form] = symbol
+		if mode not in ("command", "dictation", "both"):
+			warning = f"Row {i+1} of symbols.csv has mode not used by the symbol support {mode}!"
+			print(warning)
+			actions.app.notify(warning)
 
-for symbol in symbols:
-    if symbol.command_and_dictation_forms:
-        for spoken_form in symbol.command_and_dictation_forms:
-            punctuation_dict[spoken_form] = symbol.character
-            symbol_key_dict[spoken_form] = symbol.character
-            dragon_punctuation_dict[spoken_form] = symbol.character
-
-    if symbol.command_forms:
-        for spoken_form in symbol.command_forms:
-            symbol_key_dict[spoken_form] = symbol.character
