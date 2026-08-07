@@ -1,8 +1,15 @@
 # fmt: off
 
-from talon import actions
+from talon import actions, Module, Context
 
 from ..user_settings import track_csv_rows
+
+ctx = Context()
+
+ctx_dragon = Context()
+ctx_dragon.matches = r"""
+speech.engine: dragon
+"""
 
 # define the spoken forms for symbols in command and dictation mode
 punctuation_dict = {}
@@ -139,3 +146,13 @@ def on_symbols(values):
 			warning = f"Row {i+1} of symbols.csv has mode not used by the symbol support {mode}!"
 			print(warning)
 			actions.app.notify(warning)
+	ctx.lists["user.punctuation"] = punctuation_dict
+	ctx.lists["user.symbol_key"] = symbol_key_dict
+	ctx_dragon.lists["user.punctuation"] = dragon_punctuation_dict
+
+mod = Module()
+@mod.action_class
+class Actions:
+    def get_punctuation_words():
+        """Gets the user.punctuation list"""
+        return punctuation_dict
