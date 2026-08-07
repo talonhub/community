@@ -173,7 +173,7 @@ RawRowsDecoratorT = Callable[[RawRowsCallbackT], RawRowsCallbackT]
 
 def track_csv_rows(
     filename: str,
-    headers: tuple[str, str],
+    headers: tuple[str, ...],
     default: Optional[list[list[str]]] = None,
     private: bool = False,
 ) -> RawRowsDecoratorT:
