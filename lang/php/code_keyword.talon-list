@@ -12,7 +12,7 @@ class: "class "
 clone: "clone "
 const: "const "
 continue: "continue"
-default: "default:"
+default
 do: "do "
 echo: "echo "
 else: "else "
