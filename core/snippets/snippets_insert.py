@@ -1,4 +1,5 @@
 import re
+from typing import Optional
 
 from talon import Module, actions, settings
 
@@ -45,6 +46,11 @@ class Actions:
         body = get_snippet_body_by_name_with_phrase_substitutions(name, phrase)
         insert_snippet_with_stop_at_the_end(body)
 
+    def insert_snippet_with_substitutions(body: str, substitutions: dict[str, str]):
+        """Insert snippet with substitutions"""
+        body = compute_snippet_text_with_substitutions(body, substitutions)
+        actions.user.insert_snippet(body)
+
 
 def get_snippet_body_by_name_with_phrase_substitutions(name: str, phrase: str):
     snippet: Snippet = actions.user.get_snippet(name)
@@ -69,17 +75,29 @@ def insert_snippet_with_stop_at_the_end(body):
 def compute_snippet_body_with_substitutions(
     snippet: Snippet, substitutions: dict[str, str]
 ) -> str:
-    body = snippet.body
+    return compute_snippet_text_with_substitutions(
+        snippet.body, substitutions, snippet.name
+    )
+
+
+def compute_snippet_text_with_substitutions(
+    body: str, substitutions: dict[str, str], name: Optional[str] = None
+) -> str:
+    result = body
     if substitutions:
         for k, v in substitutions.items():
             v = v.replace("$", r"\$")
             reg = re.compile(rf"\${k}|\$\{{{k}\}}")
-            if not reg.search(body):
+            if not reg.search(result):
+                if name is None:
+                    snippet_text = body
+                else:
+                    snippet_text = name
                 raise ValueError(
-                    f"Can't substitute non existing variable '{k}' in snippet '{snippet.name}'"
+                    f"Can't substitute non existing variable '{k}' in snippet '{snippet_text}'"
                 )
-            body = reg.sub(v, body)
-    return body
+            result = reg.sub(v, result)
+    return result
 
 
 def compute_phrase_substitutions(snippet: Snippet, phrase: str):

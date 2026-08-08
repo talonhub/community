@@ -1,5 +1,5 @@
-name: commentBlock
-phrase: inline comment
+name: commentMultilineBlock
+phrase: block comment
 insertionScope: statement
 
 $0.insertionFormatter: CAPITALIZE_FIRST_WORD
@@ -7,20 +7,28 @@ $0.insertionFormatter: CAPITALIZE_FIRST_WORD
 
 language: c | cpp | csharp | java | javascript | typescript | javascriptreact | typescriptreact | php | scala | kotlin | go
 -
-/* $0 */
+/*
+ * $0
+ */
 ---
 
 language: python
 -
-"""$0"""
+"""
+$0
+"""
 ---
 
 language: xml | html
 -
-<!-- $0 -->
+<!--
+	$0
+-->
 ---
 
 language: lua
 -
---[[ $0 --]]
+--[[
+$0
+--]]
 ---
