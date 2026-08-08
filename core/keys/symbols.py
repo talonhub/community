@@ -107,7 +107,7 @@ for symbol in old_symbols:
 		command_row.extend(symbol.command_forms)
 		default_symbols.append(command_row)
 
-@track_csv_rows("symbols.csv", headers=("symbol", "mode", "spoken forms"), default=default_symbols)
+@track_csv_rows("symbols.csv", headers=("symbol", "mode (command/dictation/both)", "spoken forms (you can put multiple comma separated spoken forms)"), default=default_symbols)
 def on_symbols(values):
 	# define the spoken forms for symbols that are intended for command mode only
 	symbol_key_dict = {}
