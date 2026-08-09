@@ -132,21 +132,21 @@ serialize
 shuffle
 sort
 sprint F: sprintf
-str ends with: str_ends_with
-str r pos: strrpos
-str to time: strtotime
-stripos
-strlen
-strpad: str_pad
-strpos
-strrepeat: str_repeat
-strreplace: str_replace
-strstr
-strtolower
-strtoupper
-strtr
-strval
-substr
+stir ends with: str_ends_with
+stir rye pos: strripos
+stir R pos: strrpos
+stir to time: strtotime
+stir len: strlen
+stir pad: str_pad
+stir pos: strpos
+stir repeat: str_repeat
+stir replace: str_replace
+stir stir: strstr
+stir to lower: strtolower
+stir to upper: strtoupper
+stir tr: strtr
+stir val: strval
+sub stir: substr
 tempnam
 time
 trim
