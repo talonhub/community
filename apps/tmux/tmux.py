@@ -57,6 +57,11 @@ class AppActions:
     def tab_previous():
         actions.user.tmux_execute_command("select-window -p")
 
+    def tab_close():
+        actions.user.tmux_execute_command_with_confirmation(
+            "kill-window", "kill-window #W?"
+        )
+
 
 @ctx.action_class("user")
 class UserActions:
@@ -65,11 +70,6 @@ class UserActions:
             actions.user.tmux_keybind(f"{number}")
         else:
             actions.user.tmux_execute_command(f"select-window -t {number}")
-
-    def tab_close_wrapper():
-        actions.user.tmux_execute_command_with_confirmation(
-            "kill-window", "kill-window #W?"
-        )
 
     def split_window_right():
         actions.user.split_window_horizontally()
