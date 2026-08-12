@@ -386,22 +386,30 @@ def draw_search_commands(gui: imgui.GUI):
         key=lambda item: context_map[item[0]] not in cached_active_contexts,
     )
 
-    pages = get_pages(
-        [
-            sum(get_command_line_count(command) for command in commands) + 3
-            for _, commands in sorted_commands_grouped
-        ]
-    )
+    # flatten to individual commands so get_pages applies the limit per-command, not per-context group
+    flat_commands = []
+    item_line_counts = []
+    for context, commands in sorted_commands_grouped:
+        for i, command in enumerate(commands):
+            flat_commands.append((context, command))
+            # add header overhead (title + separator + spacer) once per context group
+            item_line_counts.append(get_command_line_count(command) + (3 if i == 0 else 0))
+    pages = get_pages(item_line_counts)
     total_page_count = max(pages, default=1)
 
     draw_commands_title(gui, title)
 
-    for (context, commands), page in zip(sorted_commands_grouped, pages, strict=True):
-        if page == selected_context_page:
+    current_context = None
+    for (context, command), page in zip(flat_commands, pages, strict=True):
+        if page != selected_context_page:
+            continue
+        if context != current_context:
+            if current_context is not None:
+                gui.spacer()
             gui.text(format_context_title(context))
             gui.line()
-            draw_commands(gui, commands)
-            gui.spacer()
+            current_context = context
+        draw_commands(gui, [command])
 
 
 def get_search_commands(phrase: str) -> dict[str, tuple[str, str]]:
