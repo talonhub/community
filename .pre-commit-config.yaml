@@ -34,10 +34,10 @@ repos:
         types_or: [markdown, yaml, toml, json]
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.16.1
+    rev: v0.16.2
     hooks:
       - id: ruff-check
-        types_or: [python, pyproject]
+        types_or: [python, pyi, jupyter, pyproject]
         args: [--fix]
       - id: ruff-format
 
