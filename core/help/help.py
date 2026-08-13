@@ -230,8 +230,7 @@ def get_command_line_count(command: tuple[str, str]) -> int:
     lines = len(body.split("\n"))
     if lines == 1:
         return 1
-    else:
-        return lines + 1
+    return lines + 1
 
 
 def get_pages(item_line_counts: list[int]) -> list[int]:

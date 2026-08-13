@@ -138,12 +138,9 @@ def word(m) -> str:
     """A single word, including user-defined vocabulary."""
     if hasattr(m, "vocabulary"):
         return m.vocabulary
-    elif hasattr(m, "abbreviation"):
+    if hasattr(m, "abbreviation"):
         return m.abbreviation
-    else:
-        return " ".join(
-            actions.dictate.replace_words(actions.dictate.parse_words(m.word))
-        )
+    return " ".join(actions.dictate.replace_words(actions.dictate.parse_words(m.word)))
 
 
 @mod.capture(
@@ -489,7 +486,7 @@ class Actions:
 
     def dictation_reformat_no_space():
         """Removes space before the last utterance"""
-        reformat_last_utterance(lambda s: s[1:] if s.startswith(" ") else s)
+        reformat_last_utterance(lambda s: s.removeprefix(" "))
 
     def omit_space_before(text: str) -> bool:
         """Test if dictated text needs space before"""

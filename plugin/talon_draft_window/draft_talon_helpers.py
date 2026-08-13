@@ -91,8 +91,7 @@ class EditActions:
     def selected_text() -> str:
         area = draft_manager.area
         if area.sel:
-            result = area[area.sel.left : area.sel.right]
-            return result
+            return area[area.sel.left : area.sel.right]
         return ""
 
 
