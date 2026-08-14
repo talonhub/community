@@ -84,7 +84,7 @@ class CodeFormatter(Formatter):
             if word.isnumeric():
                 first = True
             # Word is symbol
-            elif not word.isalpha():
+            elif not word.isalnum():
                 groups.append(delimiter.join(group))
                 word = word.strip()
                 if word != ".":
