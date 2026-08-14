@@ -41,7 +41,8 @@ mod.setting(
     default=None,
     desc=(
         "Sets the color of the word labels used in the draft window. "
-        "E.g. 00ff00 would be green" + SETTING_CHANGE_CAVEAT_DESCRIPTION
+        + "E.g. 00ff00 would be green"
+        + SETTING_CHANGE_CAVEAT_DESCRIPTION
     ),
 )
 mod.setting(

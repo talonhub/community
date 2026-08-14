@@ -87,7 +87,7 @@ def any_alphanumeric_key(m) -> str:
 
 @mod.capture(
     rule="( <self.letter> | <self.number_key> | <self.symbol_key> "
-    "| <self.arrow_key> | <self.function_key> | <self.special_key> | <self.keypad_key>)"
+    + "| <self.arrow_key> | <self.function_key> | <self.special_key> | <self.keypad_key>)"
 )
 def unmodified_key(m) -> str:
     "A single key with no modifiers"

@@ -14,7 +14,7 @@ select = [
     "SIM", # flake8-simplify
     "W", # PyCodeStyle warnings
     "C4", # Catch incorrect use of comprehensions, dict, list, etc
-    "ISC", # Good use of string concatenation
+    "ISC", # Require explicit string concatenation
     "ICN", # Use common import conventions
     "RET", # Good return practices
     "FURB", # Suggest more idiomatic Python patterns
@@ -26,8 +26,10 @@ ignore = [
     "SIM108", # always use ternary operator
     "UP007", # Union[X, Y] -> X | Y not supported in Talon 0.4 actions
     "UP045", # Optional[X] -> X | None not supported in Talon 0.4 actions
-    "ISC001", # Conflicts with Ruff formatter
 ]
+
+[tool.ruff.lint.flake8-implicit-str-concat]
+allow-multiline = false
 
 [tool.pyright]
 reportSelfClsParameterName = false

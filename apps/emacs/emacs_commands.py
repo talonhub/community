@@ -44,7 +44,7 @@ def load_commands(f):
         if len(row) > 4:
             print(
                 f"emacs_commands.csv: More than four values in row: {row}. "
-                " Ignoring the extras"
+                + " Ignoring the extras"
             )
         name, keys, short, spoken = (
             [x.strip() or None for x in row] + [None, None, None]
