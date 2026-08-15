@@ -148,7 +148,7 @@ def word(m) -> str:
 
 @mod.capture(
     rule="("
-    "{user.vocabulary}"
+    + "{user.vocabulary}"
     + "| <user.prose_contact>"
     + "| <user.prose_spell>"
     + "| <user.prose_clipboard>"
@@ -161,24 +161,22 @@ def text(m) -> str:
 
 
 @mod.capture(
-    rule=(
-        "("
-        "{user.vocabulary}"
-        "| {user.punctuation}"
-        "| {user.prose_snippets}"
-        "| <user.prose_currency>"
-        "| <user.prose_time>"
-        "| <user.number_prose_prefixed>"
-        "| <user.prose_percent>"
-        "| <user.prose_modifier>"
-        "| <user.abbreviation>"
-        "| <user.prose_contact>"
-        "| <user.prose_spell>"
-        "| <user.prose_ship>"
-        "| <user.prose_clipboard>"
-        "| <phrase>"
-        ")+"
-    )
+    rule="("
+    + "{user.vocabulary}"
+    + "| {user.punctuation}"
+    + "| {user.prose_snippets}"
+    + "| <user.prose_currency>"
+    + "| <user.prose_time>"
+    + "| <user.number_prose_prefixed>"
+    + "| <user.prose_percent>"
+    + "| <user.prose_modifier>"
+    + "| <user.abbreviation>"
+    + "| <user.prose_contact>"
+    + "| <user.prose_spell>"
+    + "| <user.prose_ship>"
+    + "| <user.prose_clipboard>"
+    + "| <phrase>"
+    + ")+"
 )
 def prose(m) -> str:
     """Mixed words and punctuation, auto-spaced & capitalized."""
@@ -187,23 +185,21 @@ def prose(m) -> str:
 
 
 @mod.capture(
-    rule=(
-        "("
-        "{user.vocabulary}"
-        "| {user.punctuation}"
-        "| {user.prose_snippets}"
-        "| <user.prose_currency>"
-        "| <user.prose_time>"
-        "| <user.number_prose_prefixed>"
-        "| <user.prose_percent>"
-        "| <user.abbreviation>"
-        "| <user.prose_contact>"
-        "| <user.prose_spell>"
-        "| <user.prose_ship>"
-        "| <user.prose_clipboard>"
-        "| <phrase>"
-        ")+"
-    )
+    rule="("
+    + "{user.vocabulary}"
+    + "| {user.punctuation}"
+    + "| {user.prose_snippets}"
+    + "| <user.prose_currency>"
+    + "| <user.prose_time>"
+    + "| <user.number_prose_prefixed>"
+    + "| <user.prose_percent>"
+    + "| <user.abbreviation>"
+    + "| <user.prose_contact>"
+    + "| <user.prose_spell>"
+    + "| <user.prose_ship>"
+    + "| <user.prose_clipboard>"
+    + "| <phrase>"
+    + ")+"
 )
 def raw_prose(m) -> str:
     """Mixed words and punctuation, auto-spaced & capitalized, without quote straightening and commands (for use in dictation mode)."""
@@ -223,7 +219,7 @@ def text_dragon(m) -> str:
 @ctx_dragon.capture(
     "user.prose",
     rule="("
-    "<phrase>"
+    + "<phrase>"
     + "| {user.vocabulary}"
     + "| {user.punctuation}"
     + "| {user.prose_snippets}"
@@ -243,7 +239,7 @@ def prose_dragon(m) -> str:
 @ctx_dragon.capture(
     "user.raw_prose",
     rule="("
-    "<phrase>"
+    + "<phrase>"
     + "| {user.vocabulary}"
     + "| {user.punctuation}"
     + "| {user.prose_snippets}"
