@@ -125,9 +125,9 @@ def on_symbols(values):
             print(warning)
             actions.app.notify(warning)
             continue
-        symbol = row[0]
-        mode = row[1]
-        spoken_forms = row[2:]
+        symbol = row[0].strip()
+        mode = row[1].strip()
+        spoken_forms = [s.strip() for s in row[2:]]
         if mode == "command" or mode == "both":
             for spoken_form in spoken_forms:
                 symbol_key_dict[spoken_form] = symbol
