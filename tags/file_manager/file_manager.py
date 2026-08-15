@@ -73,7 +73,10 @@ ctx.lists["user.file_manager_directories"] = []
 ctx.lists["user.file_manager_files"] = []
 
 
-@ctx_file_manager.capture("user.address", rule="{user.system_paths}")
+@ctx_file_manager.capture(
+    "user.address",
+    rule="{user.system_paths}",
+)
 def address(m) -> str:
     return str(m)
 

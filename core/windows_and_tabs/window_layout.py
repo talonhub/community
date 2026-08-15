@@ -182,7 +182,7 @@ def application_windows(m) -> list[Window]:
 
 
 @mod.capture(
-    rule="<user.application_windows>|<user.numbered_windows>|<user.skip_window>"
+    rule="<user.application_windows> | <user.numbered_windows> | <user.skip_window>"
 )
 def layout_item(m) -> list[Optional[Window]]:
     attributes = [

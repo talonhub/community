@@ -66,7 +66,7 @@ def prose_modifier(m) -> Callable:
 
 
 @mod.capture(
-    rule="<user.number_string> [(dot | point) <digit_string>] percent [sign|sine]"
+    rule="<user.number_string> [(dot | point) <digit_string>] percent [sign | sine]"
 )
 def prose_percent(m) -> str:
     s = m.number_string
@@ -76,7 +76,7 @@ def prose_percent(m) -> str:
 
 
 @mod.capture(
-    rule="<user.number_string> {user.currency} [[and] <user.number_string> [cents|pence]]"
+    rule="<user.number_string> {user.currency} [[and] <user.number_string> [cents | pence]]"
 )
 def prose_currency(m) -> str:
     s = m.currency + m.number_string_1
@@ -85,7 +85,7 @@ def prose_currency(m) -> str:
     return s
 
 
-@mod.capture(rule="am|pm")
+@mod.capture(rule="am | pm")
 def time_am_pm(m) -> str:
     return str(m)
 
@@ -205,7 +205,10 @@ def raw_prose(m) -> str:
 
 
 # For dragon, omit support for abbreviations and contacts
-@ctx_dragon.capture("user.text", rule="({user.vocabulary} | <phrase>)+")
+@ctx_dragon.capture(
+    "user.text",
+    rule="({user.vocabulary} | <phrase>)+",
+)
 def text_dragon(m) -> str:
     """A sequence of words, including user-defined vocabulary."""
     return format_phrase(m)

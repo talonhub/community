@@ -144,7 +144,8 @@ def public_camel_case_format_variable(variable: str):
 
 
 @ctx.capture(
-    "user.generic_type_parameter_argument", rule="{user.java_boxed_type} | <user.text>"
+    "user.generic_type_parameter_argument",
+    rule="{user.java_boxed_type} | <user.text>",
 )
 def generic_type_parameter_argument(m) -> str:
     """A Java type parameter for a generic data structure"""

@@ -276,14 +276,14 @@ def prose_contact_snippet(m) -> str:
 
 @mod.capture(
     rule=(
-        "<user.prose_name> "
-        "| <user.prose_name_possessive> "
-        "| <user.prose_email> "
-        "| <user.prose_username> "
-        "| <user.prose_full_name> "
-        "| <user.prose_full_name_possessive> "
-        "| <user.prose_first_name> "
-        "| <user.prose_first_name_possessive> "
+        "<user.prose_name>"
+        "| <user.prose_name_possessive>"
+        "| <user.prose_email>"
+        "| <user.prose_username>"
+        "| <user.prose_full_name>"
+        "| <user.prose_full_name_possessive>"
+        "| <user.prose_first_name>"
+        "| <user.prose_first_name_possessive>"
         "| <user.prose_last_name>"
         "| <user.prose_last_name_possessive>"
         "| <user.prose_contact_snippet>"
