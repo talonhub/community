@@ -1,4 +1,4 @@
-from talon import Context, Module, actions
+from talon import Context, Module, actions, settings
 
 ctx = Context()
 mod = Module()
@@ -9,6 +9,28 @@ mod.tag(
 )
 
 mod.list("code_common_method", desc="Commonly invoked method, e.g. 'foo' in '.foo()'")
+
+mod.setting(
+    "code_class_formatter",
+    type=str,
+    default="PUBLIC_CAMEL_CASE",
+    desc="Formatter used when a class/type name is dictated as free text (e.g. 'returns' followed by a spoken class name)",
+)
+
+ctx.matches = r"""
+tag: user.code_object_oriented
+"""
+
+
+@ctx.capture("user.code_type", rule="{user.code_type} | <user.text>")
+def code_type(m) -> str:
+    """Returns a type, allowing dictated text to be used as a class name"""
+    try:
+        return m.code_type
+    except AttributeError:
+        return actions.user.formatted_text(
+            m.text, settings.get("user.code_class_formatter")
+        )
 
 
 @mod.action_class

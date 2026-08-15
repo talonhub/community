@@ -22,9 +22,6 @@ tag: user.code_functions
 # for annotating function parameters
 is type <user.code_type>: user.code_insert_type_annotation(code_type)
 returns [type] <user.code_type>: user.code_insert_return_type(code_type)
-returns class <user.text>:
-    formatted = user.formatted_text(text, "PUBLIC_CAMEL_CASE")
-    user.code_insert_return_type(formatted)
 
 # for generic reference of types
 type <user.code_type>: insert(code_type)
