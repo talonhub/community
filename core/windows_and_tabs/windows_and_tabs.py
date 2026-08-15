@@ -1,6 +1,7 @@
-from talon import Context, actions, ui
+from talon import Context, Module, actions, ui
 
 ctx = Context()
+mod = Module()
 
 
 @ctx.action_class("app")
@@ -10,6 +11,16 @@ class AppActions:
 
     def window_next():
         cycle_windows(ui.active_app(), 1)
+
+
+@mod.action_class
+class Actions:
+    def window_go(direction: str):
+        """Go to next or previous window depending on direction (PREV/NEXT)"""
+        if direction == "PREV":
+            actions.app.window_previous()
+        else:
+            actions.app.window_next()
 
 
 def cycle_windows(app: ui.App, diff: int):

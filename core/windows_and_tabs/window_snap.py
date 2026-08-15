@@ -329,6 +329,13 @@ class Actions:
         """Move the active window to the previous screen."""
         _move_to_screen(ui.active_window(), offset=-1)
 
+    def move_window_go(direction: str) -> None:
+        """Move the active window to the next or previous screen depending on direction (PREV/NEXT)"""
+        if direction == "PREV":
+            actions.user.move_window_previous_screen()
+        else:
+            actions.user.move_window_next_screen()
+
     def move_window_to_screen(screen_number: int) -> None:
         """Move the active window leftward by one."""
         _move_to_screen(ui.active_window(), screen_number=screen_number)

@@ -170,6 +170,10 @@ class Actions:
             app.notify(str(e))
             raise
 
+    def idea_go(direction: str, commands_prev: str, commands_next: str):
+        """Send commands_prev or commands_next to Jetbrains product depending on direction (PREV/NEXT)"""
+        actions.user.idea(commands_prev if direction == "PREV" else commands_next)
+
     def idea_grab(times: int):
         """Copies specified number of words to the left"""
         old_clip = clip.get()

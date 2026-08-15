@@ -47,6 +47,13 @@ class Actions:
         to command palette."""
         command_server_or_client_fallback(command_id, False)
 
+    def vscode_go(direction: str, command_id_prev: str, command_id_next: str):
+        """Execute command_id_prev or command_id_next via vscode command server
+        depending on direction (PREV/NEXT)."""
+        actions.user.vscode(
+            command_id_prev if direction == "PREV" else command_id_next
+        )
+
     def vscode_and_wait(command_id: str):
         """Execute command via vscode command server, if available, and wait
         for command to finish.  If command server not available, uses command

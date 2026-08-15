@@ -19,12 +19,9 @@ mux new window:
 mux window <number>:
     key(ctrl-b)
     key('{number}')
-mux previous window:
+mux <user.spatial_previous_next> window:
     key(ctrl-b)
-    key(p)
-mux next window:
-    key(ctrl-b)
-    key(n)
+    user.key_spatial_previous_next(spatial_previous_next, "p", "n")
 mux rename window:
     key(ctrl-b)
     key(,)

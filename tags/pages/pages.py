@@ -19,6 +19,13 @@ class Actions:
         """Go to previous page"""
         actions.user.page_jump(actions.user.page_current() - 1)
 
+    def page_go(direction: str):
+        """Go to next or previous page depending on direction (PREV/NEXT)"""
+        if direction == "PREV":
+            actions.user.page_previous()
+        else:
+            actions.user.page_next()
+
     def page_jump(number: int):
         """Go to page number"""
 

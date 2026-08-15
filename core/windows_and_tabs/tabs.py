@@ -19,3 +19,10 @@ class TabActions:
 
     def tab_duplicate():
         """Duplicates the current tab"""
+
+    def tab_go(direction: str):
+        """Go to next or previous tab depending on direction (PREV/NEXT)"""
+        if direction == "PREV":
+            actions.app.tab_previous()
+        else:
+            actions.app.tab_next()

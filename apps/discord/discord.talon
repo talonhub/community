@@ -10,8 +10,7 @@ tag(): user.emoji
 switcher: user.discord_quick_switcher("", "")
 
 # Navigation: Channels
-[channel] mentions last: user.discord_mentions_last()
-[channel] mentions next: user.discord_mentions_next()
+[channel] mentions <user.spatial_previous_next>: user.discord_mentions_go(spatial_previous_next)
 oldest unread: user.discord_oldest_unread()
 current call: user.discord_go_current_call()
 

@@ -47,10 +47,8 @@ change assignee: key(a)
 change milestone: key(m)
 change label: key(l)
 right comment: key(r)
-next [unresolved] discussion: key(n)
-previous [unresolved] discussion: key(p)
-next file: key(])
-previous file: key([)
+<user.spatial_previous_next> [unresolved] discussion: user.key_spatial_previous_next(spatial_previous_next, "p", "n")
+<user.spatial_previous_next> file: user.key_spatial_previous_next(spatial_previous_next, "[", "]")
 
 # project files
 back to files: key(escape)

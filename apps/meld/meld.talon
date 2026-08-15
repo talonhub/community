@@ -3,5 +3,4 @@ app: meld
 
 tag(): user.tabs
 
-change next: key(alt-down)
-change (previous | last): key(alt-up)
+change <user.spatial_previous_next>: user.key_spatial_previous_next(spatial_previous_next, "alt-up", "alt-down")
