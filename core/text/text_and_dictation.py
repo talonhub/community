@@ -147,7 +147,13 @@ def word(m) -> str:
 
 
 @mod.capture(
-    rule="({user.vocabulary} | <user.prose_contact> | <user.prose_spell> | <user.prose_clipboard> | <phrase>)+"
+    rule="("
+    "{user.vocabulary}"
+    + "| <user.prose_contact>"
+    + "| <user.prose_spell>"
+    + "| <user.prose_clipboard>"
+    + "| <phrase>"
+    + ")+"
 )
 def text(m) -> str:
     """A sequence of words, including user-defined vocabulary."""
@@ -216,7 +222,17 @@ def text_dragon(m) -> str:
 
 @ctx_dragon.capture(
     "user.prose",
-    rule="(<phrase> | {user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <user.prose_currency> | <user.prose_time> | <user.prose_number> | <user.prose_percent> | <user.prose_modifier>)+",
+    rule="("
+    "<phrase>"
+    + "| {user.vocabulary}"
+    + "| {user.punctuation}"
+    + "| {user.prose_snippets}"
+    + "| <user.prose_currency>"
+    + "| <user.prose_time>"
+    + "| <user.prose_number>"
+    + "| <user.prose_percent>"
+    + "| <user.prose_modifier>"
+    + ")+",
 )
 def prose_dragon(m) -> str:
     """Mixed words and punctuation, auto-spaced & capitalized."""
@@ -226,7 +242,16 @@ def prose_dragon(m) -> str:
 
 @ctx_dragon.capture(
     "user.raw_prose",
-    rule="(<phrase> | {user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <user.prose_currency> | <user.prose_time> | <user.prose_number> | <user.prose_percent>)+",
+    rule="("
+    "<phrase>"
+    + "| {user.vocabulary}"
+    + "| {user.punctuation}"
+    + "| {user.prose_snippets}"
+    + "| <user.prose_currency>"
+    + "| <user.prose_time>"
+    + "| <user.prose_number>"
+    + "| <user.prose_percent>"
+    + ")+",
 )
 def raw_prose_dragon(m) -> str:
     """Mixed words and punctuation, auto-spaced & capitalized, without quote straightening and commands (for use in dictation mode)."""

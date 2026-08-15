@@ -88,7 +88,7 @@ def any_alphanumeric_key(m) -> str:
 @mod.capture(
     rule="<user.letter>"
     + "| <user.number_key>"
-    + "| <user.symbol_key> "
+    + "| <user.symbol_key>"
     + "| <user.arrow_key>"
     + "| <user.function_key>"
     + "| <user.special_key>"
