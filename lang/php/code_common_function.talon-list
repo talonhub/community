@@ -158,4 +158,4 @@ var dump: var_dump
 var export: var_export
 You A sort: uasort
 U C first: ucfirst
-You sort: usort
+U sort: usort
