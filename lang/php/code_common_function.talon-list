@@ -157,5 +157,5 @@ urlencode: urlencode
 var dump: var_dump
 var export: var_export
 You A sort: uasort
-You C first: ucfirst
+U C first: ucfirst
 You sort: usort
