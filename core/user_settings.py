@@ -140,13 +140,13 @@ def track_file(
 def read_csv_rows(f: IO, headers: tuple[str, ...]) -> list[list[str]]:
     rows = list(csv.reader(f))
     if len(rows) == 0:
-        actions.app.notify(f"{f.name} is empty!")
+        warn_about_error(f"{f.name} is empty!")
     elif len(rows) == 1:
-        actions.app.notify(f"{f.name} has only the header!")
+        warn_about_error(f"{f.name} has only the header!")
     if len(rows) >= 1:
         actual_headers = rows[0]
         if actual_headers != list(headers):
-            print(
+            warn_about_error(
                 f'"{f.name}": Malformed headers - {actual_headers}.'
                 + f" Should be {list(headers)}. Ignoring row."
             )
@@ -190,3 +190,8 @@ def track_csv_rows(
         return on_update
 
     return decorator
+
+
+def warn_about_error(message: str):
+    actions.app.notify(message)
+    print(message)
