@@ -33,16 +33,16 @@ ctx = Context()
 
 class MouseSnapNine:
     def __init__(self):
-        user.screen = None
-        user.rect = None
-        user.history = []
-        user.img = None
-        user.mcanvas = None
-        user.active = False
-        user.count = 0
-        user.was_zoom_mouse_active = False
-        user.was_control_mouse_active = False
-        user.was_control1_mouse_active = False
+        self.screen = None
+        self.rect = None
+        self.history = []
+        self.img = None
+        self.mcanvas = None
+        self.active = False
+        self.count = 0
+        self.was_zoom_mouse_active = False
+        self.was_control_mouse_active = False
+        self.was_control1_mouse_active = False
 
     def setup(self, *, rect: Rect = None, screen_num: int = None):
         screens = ui.screens()
@@ -58,55 +58,55 @@ class MouseSnapNine:
         if rect is None:
             screen = screens[0]
             rect = screen.rect
-        user.rect = rect.copy()
-        user.screen = screen
-        user.count = 0
-        user.img = None
-        if user.mcanvas is not None:
-            user.mcanvas.close()
-        user.mcanvas = canvas.Canvas.from_screen(screen)
-        if user.active:
-            user.mcanvas.register("draw", user.draw)
-            user.mcanvas.freeze()
+        self.rect = rect.copy()
+        self.screen = screen
+        self.count = 0
+        self.img = None
+        if self.mcanvas is not None:
+            self.mcanvas.close()
+        self.mcanvas = canvas.Canvas.from_screen(screen)
+        if self.active:
+            self.mcanvas.register("draw", self.draw)
+            self.mcanvas.freeze()
 
     def show(self):
-        if user.active:
+        if self.active:
             return
         # noinspection PyUnresolvedReferences
         if actions.tracking.control_zoom_enabled():
-            user.was_zoom_mouse_active = True
+            self.was_zoom_mouse_active = True
             actions.tracking.control_zoom_toggle(False)
         if actions.tracking.control_enabled():
-            user.was_control_mouse_active = True
+            self.was_control_mouse_active = True
             actions.tracking.control_toggle(False)
         if actions.tracking.control1_enabled():
-            user.was_control1_mouse_active = True
+            self.was_control1_mouse_active = True
             actions.tracking.control1_toggle(False)
-        user.mcanvas.register("draw", user.draw)
-        user.mcanvas.freeze()
-        user.active = True
+        self.mcanvas.register("draw", self.draw)
+        self.mcanvas.freeze()
+        self.active = True
         return
 
     def close(self):
-        if not user.active:
+        if not self.active:
             return
-        user.mcanvas.unregister("draw", user.draw)
-        user.mcanvas.close()
-        user.mcanvas = None
-        user.img = None
+        self.mcanvas.unregister("draw", self.draw)
+        self.mcanvas.close()
+        self.mcanvas = None
+        self.img = None
 
-        user.active = False
+        self.active = False
 
-        if user.was_control_mouse_active and not actions.tracking.control_enabled():
+        if self.was_control_mouse_active and not actions.tracking.control_enabled():
             actions.tracking.control_toggle(True)
-        if user.was_control1_mouse_active and not actions.tracking.control1_enabled():
+        if self.was_control1_mouse_active and not actions.tracking.control1_enabled():
             actions.tracking.control1_toggle(True)
-        if user.was_zoom_mouse_active and not actions.tracking.control_zoom_enabled():
+        if self.was_zoom_mouse_active and not actions.tracking.control_zoom_enabled():
             actions.tracking.control_zoom_toggle(True)
 
-        user.was_zoom_mouse_active = False
-        user.was_control_mouse_active = False
-        user.was_control1_mouse_active = False
+        self.was_zoom_mouse_active = False
+        self.was_control_mouse_active = False
+        self.was_control1_mouse_active = False
 
     def draw(self, canvas):
         paint = canvas.paint
@@ -175,39 +175,39 @@ class MouseSnapNine:
                         offset_y + height / 6 + row * height / 3 + text_rect.height / 2,
                     )
 
-        should_show_zoomed_in = user.should_show_zoomed_in()
+        should_show_zoomed_in = self.should_show_zoomed_in()
         if not should_show_zoomed_in:
             paint.color = "00ff007f"
             for which in range(1, 10):
-                draw_crosses(*user.calc_narrow(which, user.rect))
+                draw_crosses(*self.calc_narrow(which, self.rect))
 
         paint.stroke_width = grid_stroke
-        if user.active:
+        if self.active:
             paint.color = "ff0000ff"
         else:
             paint.color = "000000ff"
         if should_show_zoomed_in:
-            aspect = user.rect.width / user.rect.height
+            aspect = self.rect.width / self.rect.height
             if aspect >= 1:
-                w = user.screen.width / 3
+                w = self.screen.width / 3
                 h = w / aspect
             else:
-                h = user.screen.height / 3
+                h = self.screen.height / 3
                 w = h * aspect
-            x = user.screen.x + (user.screen.width - w) / 2
-            y = user.screen.y + (user.screen.height - h) / 2
-            user.draw_zoom(canvas, x, y, w, h)
+            x = self.screen.x + (self.screen.width - w) / 2
+            y = self.screen.y + (self.screen.height - h) / 2
+            self.draw_zoom(canvas, x, y, w, h)
             draw_grid(x, y, w, h)
             draw_text(x, y, w, h)
         else:
-            draw_grid(user.rect.x, user.rect.y, user.rect.width, user.rect.height)
+            draw_grid(self.rect.x, self.rect.y, self.rect.width, self.rect.height)
 
-            paint.textsize += 12 - user.count * 3
-            draw_text(user.rect.x, user.rect.y, user.rect.width, user.rect.height)
+            paint.textsize += 12 - self.count * 3
+            draw_text(self.rect.x, self.rect.y, self.rect.width, self.rect.height)
 
     def should_show_zoomed_in(self):
         """Determines if the display of the grid should be zoomed in"""
-        return settings.get("user.grid_show_zoomed") and user.count >= 2
+        return settings.get("user.grid_show_zoomed") and self.count >= 2
 
     def calc_narrow(self, which, rect):
         rect = rect.copy()
@@ -225,47 +225,47 @@ class MouseSnapNine:
     def narrow(self, which, move=True):
         if which < 1 or which > 9:
             return
-        user.save_state()
-        rect = user.calc_narrow(which, user.rect)
+        self.save_state()
+        rect = self.calc_narrow(which, self.rect)
         # check count so we don't bother zooming in _too_ far
-        if user.count < 5:
-            user.rect = rect.copy()
-            user.count += 1
+        if self.count < 5:
+            self.rect = rect.copy()
+            self.count += 1
         if move:
             ctrl.mouse_move(*rect.center)
-        if user.should_show_zoomed_in():
-            user.update_screenshot()
+        if self.should_show_zoomed_in():
+            self.update_screenshot()
         else:
-            user.mcanvas.freeze()
+            self.mcanvas.freeze()
 
     def update_screenshot(self):
         def finish_capture():
-            user.img = screen.capture_rect(user.rect)
-            user.mcanvas.freeze()
+            self.img = screen.capture_rect(self.rect)
+            self.mcanvas.freeze()
 
-        user.mcanvas.hide()
+        self.mcanvas.hide()
         cron.after("16ms", finish_capture)
 
     def draw_zoom(self, canvas, x, y, w, h):
-        if user.img:
-            src = Rect(0, 0, user.img.width, user.img.height)
+        if self.img:
+            src = Rect(0, 0, self.img.width, self.img.height)
             dst = Rect(x, y, w, h)
-            canvas.draw_image_rect(user.img, src, dst)
+            canvas.draw_image_rect(self.img, src, dst)
 
     def narrow_to_pos(self, x, y):
-        col_size = int(user.width // 3)
-        row_size = int(user.height // 3)
-        col = math.floor((x - user.rect.x) / col_size)
-        row = math.floor((y - user.rect.x) / row_size)
-        user.narrow(1 + col + 3 * row, move=False)
+        col_size = int(self.width // 3)
+        row_size = int(self.height // 3)
+        col = math.floor((x - self.rect.x) / col_size)
+        row = math.floor((y - self.rect.x) / row_size)
+        self.narrow(1 + col + 3 * row, move=False)
 
     def save_state(self):
-        user.history.append((user.count, user.rect.copy()))
+        self.history.append((self.count, self.rect.copy()))
 
     def go_back(self):
         # FIXME: need window and screen tracking
-        user.count, user.rect = user.history.pop()
-        user.mcanvas.freeze()
+        self.count, self.rect = self.history.pop()
+        self.mcanvas.freeze()
 
 
 mg = MouseSnapNine()

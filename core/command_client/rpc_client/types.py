@@ -12,11 +12,11 @@ class Request:
 
     def to_dict(self):
         return {
-            "commandId": user.command_id,
-            "args": user.args,
-            "waitForFinish": user.wait_for_finish,
-            "returnCommandOutput": user.return_command_output,
-            "uuid": user.uuid,
+            "commandId": self.command_id,
+            "args": self.args,
+            "waitForFinish": self.wait_for_finish,
+            "returnCommandOutput": self.return_command_output,
+            "uuid": self.uuid,
         }
 
 

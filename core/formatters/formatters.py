@@ -10,7 +10,7 @@ from talon.grammar import Phrase
 
 class Formatter(ABC):
     def __init__(self, id: str):
-        user.id = id
+        self.id = id
 
     @abstractmethod
     def format(self, text: str) -> str:
@@ -29,15 +29,15 @@ class CustomFormatter(Formatter):
         unformat: Optional[Callable[[str], str]] = None,
     ):
         super().__init__(id)
-        user._format = format
-        user._unformat = unformat
+        self._format = format
+        self._unformat = unformat
 
     def format(self, text: str) -> str:
-        return user._format(text)
+        return self._format(text)
 
     def unformat(self, text: str) -> str:
-        if user._unformat:
-            return user._unformat(text)
+        if self._unformat:
+            return self._unformat(text)
         return text
 
 
@@ -50,13 +50,13 @@ class CodeFormatter(Formatter):
         format_rest: Callable[[str], str],
     ):
         super().__init__(id)
-        user._delimiter = delimiter
-        user._format_first = format_first
-        user._format_rest = format_rest
+        self._delimiter = delimiter
+        self._format_first = format_first
+        self._format_rest = format_rest
 
     def format(self, text: str) -> str:
-        return user._format_delim(
-            text, user._delimiter, user._format_first, user._format_rest
+        return self._format_delim(
+            text, self._delimiter, self._format_first, self._format_rest
         )
 
     def unformat(self, text: str) -> str:
@@ -132,7 +132,7 @@ class TitleFormatter(Formatter):
 
     def format(self, text: str) -> str:
         words = [x for x in re.split(r"(\s+)", text) if x]
-        words = user._title_case_words(words)
+        words = self._title_case_words(words)
         return "".join(words)
 
     def unformat(self, text: str) -> str:
@@ -142,7 +142,7 @@ class TitleFormatter(Formatter):
         self, word: str, is_first: bool, is_last: bool, following_symbol: bool
     ) -> str:
         if not word.islower() or (
-            word in user._words_to_keep_lowercase
+            word in self._words_to_keep_lowercase
             and not is_first
             and not is_last
             and not following_symbol
@@ -151,7 +151,7 @@ class TitleFormatter(Formatter):
 
         if "-" in word:
             words = word.split("-")
-            words = user._title_case_words(words)
+            words = self._title_case_words(words)
             return "-".join(words)
 
         return word.capitalize()
@@ -163,7 +163,7 @@ class TitleFormatter(Formatter):
                 continue
             is_first = i == 0
             is_last = i == len(words) - 1
-            words[i] = user._title_case_word(word, is_first, is_last, following_symbol)
+            words[i] = self._title_case_word(word, is_first, is_last, following_symbol)
             following_symbol = not word[-1].isalnum()
         return words
 
@@ -374,13 +374,13 @@ class ImmuneString:
     """Wrapper that makes a string immune from formatting."""
 
     def __init__(self, string):
-        user.string = string
+        self.string = string
 
 
 @mod.capture(
     # Add anything else into this that you want to have inserted when
     # using a prose formatter.
-    rule="(<user.symbol_key> | (numb | numeral) <number>)"
+    rule="<user.symbol_key> | (numb | numeral) <number>"
 )
 def formatter_immune(m) -> ImmuneString:
     """Symbols and numbers that can be interspersed into a prose formatter

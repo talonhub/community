@@ -133,7 +133,7 @@ def prose_clipboard(m) -> str:
     return actions.clip.text()
 
 
-@mod.capture(rule="({user.vocabulary} | <user.abbreviation> | <word>)")
+@mod.capture(rule="{user.vocabulary} | <user.abbreviation> | <word>")
 def word(m) -> str:
     """A single word, including user-defined vocabulary."""
     if hasattr(m, "vocabulary"):
@@ -380,50 +380,50 @@ def auto_capitalize(text, state=None):
 # ---------- DICTATION AUTO FORMATTING ---------- #
 class DictationFormat:
     def __init__(self):
-        user.reset()
+        self.reset()
 
     def reset(self):
-        user.reset_context()
-        user.force_no_space = False
-        user.force_capitalization = None  # Can also be "cap" or "no cap".
+        self.reset_context()
+        self.force_no_space = False
+        self.force_capitalization = None  # Can also be "cap" or "no cap".
 
     def reset_context(self):
-        user.before = ""
-        user.state = "sentence start"
+        self.before = ""
+        self.state = "sentence start"
 
     def update_context(self, before):
         if before is None:
             return
-        user.reset_context()
-        user.pass_through(before)
+        self.reset_context()
+        self.pass_through(before)
 
     def pass_through(self, text):
-        _, user.state = auto_capitalize(text, user.state)
-        user.before = text or user.before
+        _, self.state = auto_capitalize(text, self.state)
+        self.before = text or self.before
 
     def format(self, text, auto_cap=True):
-        if not user.force_no_space and actions.user.needs_space_between(
-            user.before, text
+        if not self.force_no_space and actions.user.needs_space_between(
+            self.before, text
         ):
             text = " " + text
-        user.force_no_space = False
+        self.force_no_space = False
         if auto_cap:
-            text, user.state = auto_capitalize(text, user.state)
-        if user.force_capitalization == "cap":
+            text, self.state = auto_capitalize(text, self.state)
+        if self.force_capitalization == "cap":
             text = format_first_letter(text, lambda s: s.capitalize())
-            user.force_capitalization = None
-        if user.force_capitalization == "no cap":
+            self.force_capitalization = None
+        if self.force_capitalization == "no cap":
             text = format_first_letter(text, lambda s: s.lower())
-            user.force_capitalization = None
-        user.before = text or user.before
+            self.force_capitalization = None
+        self.before = text or self.before
         return text
 
     # These are used as callbacks by prose modifiers / dictation_mode commands.
     def cap(self):
-        user.force_capitalization = "cap"
+        self.force_capitalization = "cap"
 
     def no_cap(self):
-        user.force_capitalization = "no cap"
+        self.force_capitalization = "no cap"
 
     def no_space(self):
         # This is typically used after repositioning the cursor, so it is helpful to
@@ -432,8 +432,8 @@ class DictationFormat:
         # FIXME: this sets state to "sentence start", capitalizing the next
         # word. probably undesirable, since most places are not the start of
         # sentences?
-        user.reset_context()
-        user.force_no_space = True
+        self.reset_context()
+        self.force_no_space = True
 
 
 def format_first_letter(text, formatter):

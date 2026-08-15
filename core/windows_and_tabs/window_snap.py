@@ -206,13 +206,13 @@ class RelativeScreenPos:
     """Represents a window position as a fraction of the screen."""
 
     def __init__(self, left, top, right, bottom):
-        user.left = left
-        user.top = top
-        user.bottom = bottom
-        user.right = right
+        self.left = left
+        self.top = top
+        self.bottom = bottom
+        self.right = right
 
     def __str__(self):
-        return f"RelativeScreenPos(left={user.left}, top={user.top}, right={user.right}, bottom={user.bottom})"
+        return f"RelativeScreenPos(left={self.left}, top={self.top}, right={self.right}, bottom={self.bottom})"
 
 
 _snap_positions = {

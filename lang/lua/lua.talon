@@ -53,7 +53,7 @@ method <user.text>:
     insert("()")
     edit.left()
 
-self dot: "user."
+self dot: "self."
 
 index <user.word>: '["{word}"]'
 index (var | variable) <user.text>:

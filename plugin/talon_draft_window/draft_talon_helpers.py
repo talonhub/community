@@ -305,7 +305,7 @@ def draft_anchor(m) -> str:
     return "".join(m)
 
 
-@mod.capture(rule="(top|bottom|left|right|middle)")
+@mod.capture(rule="top | bottom | left | right | middle")
 def draft_window_position(m) -> str:
     """
     One of the named positions you can move the window to

@@ -12,7 +12,7 @@ class EditSimpleAction:
     type: str
 
     def __str__(self):
-        return user.type
+        return self.type
 
 
 @dataclass
@@ -21,7 +21,7 @@ class EditInsertAction:
     text: str
 
     def __str__(self):
-        return user.type
+        return self.type
 
 
 @dataclass
@@ -30,7 +30,7 @@ class EditWrapAction:
     pair: list[str]
 
     def __str__(self):
-        return user.type
+        return self.type
 
 
 @dataclass
@@ -39,7 +39,7 @@ class EditFormatAction:
     formatters: str
 
     def __str__(self):
-        return user.type
+        return self.type
 
 
 EditAction = Union[

@@ -5,22 +5,22 @@ from typing import Optional
 
 class RegisteredActionsAccessor:
     def __init__(self, registered_actions, namespace):
-        user.registered_actions = registered_actions
-        user.namespace = namespace
+        self.registered_actions = registered_actions
+        self.namespace = namespace
 
     def __getattr__(self, name):
         for category in ("test", "module"):
-            cat_actions = user.registered_actions[category]
-            if user.namespace in cat_actions:  # noqa: SIM102
-                if name in cat_actions[user.namespace]:
-                    return cat_actions[user.namespace][name]
+            cat_actions = self.registered_actions[category]
+            if self.namespace in cat_actions:  # noqa: SIM102
+                if name in cat_actions[self.namespace]:
+                    return cat_actions[self.namespace][name]
 
-        raise AttributeError(f"Couldn't find action {user.namespace}.{name}")
+        raise AttributeError(f"Couldn't find action {self.namespace}.{name}")
 
     def __call__(self, *args, **kwargs):
         # Provide a useful error message if people try something like
         # actions.my_action() when they should do actions.user.my_action()
-        raise RuntimeError(f"actions.{user.namespace}() is not an available action")
+        raise RuntimeError(f"actions.{self.namespace}() is not an available action")
 
 
 class Actions:
@@ -30,19 +30,19 @@ class Actions:
     """
 
     def __init__(self):
-        user.registered_actions = {
+        self.registered_actions = {
             "module": {},
             "test": {},
         }
 
         # Some built in actions
-        user.register_module_action("", "key", lambda x: None)
-        user.register_module_action("", "insert", lambda x: None)
-        user.register_module_action("", "sleep", lambda x: None)
-        user.register_module_action("edit", "selected_text", lambda: "test")
+        self.register_module_action("", "key", lambda x: None)
+        self.register_module_action("", "insert", lambda x: None)
+        self.register_module_action("", "sleep", lambda x: None)
+        self.register_module_action("edit", "selected_text", lambda: "test")
 
     def reset_test_actions(self):
-        user.registered_actions["test"] = {}
+        self.registered_actions["test"] = {}
 
     def register_module_action(self, namespace: str, name: str, func: Callable):
         """
@@ -53,7 +53,7 @@ class Actions:
         actions.
         """
 
-        user._register_action("module", namespace, name, func)
+        self._register_action("module", namespace, name, func)
 
     def register_test_action(self, namespace: str, name: str, func: Callable):
         """
@@ -62,15 +62,15 @@ class Actions:
             actions.register("user.my_action", lambda: None)
         """
 
-        user._register_action("test", namespace, name, func)
+        self._register_action("test", namespace, name, func)
 
     def _register_action(
         self, category: str, namespace: str, name: str, func: Callable
     ):
-        if namespace not in user.registered_actions[category]:
-            user.registered_actions[category][namespace] = {}
+        if namespace not in self.registered_actions[category]:
+            self.registered_actions[category][namespace] = {}
 
-        user.registered_actions[category][namespace][name] = func
+        self.registered_actions[category][namespace][name] = func
 
     def __getattr__(self, name):
         try:
@@ -83,12 +83,12 @@ class Actions:
         try:
             # Else if name is an action like actions.key
             # that has no namespace then return that.
-            default_accessor = RegisteredActionsAccessor(user.registered_actions, "")
+            default_accessor = RegisteredActionsAccessor(self.registered_actions, "")
             return getattr(default_accessor, name)
         except AttributeError:
             # Otherwise treat name as an action namespace
             # (like actions.user).
-            return RegisteredActionsAccessor(user.registered_actions, name)
+            return RegisteredActionsAccessor(self.registered_actions, name)
 
 
 class Module:

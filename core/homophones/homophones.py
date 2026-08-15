@@ -72,7 +72,7 @@ PHONES_FORMATTERS = [
 
 
 def find_matching_format_function(word_with_formatting, format_functions):
-    """Finds the formatter function from a list of formatter functions which transforms a word into ituser.
+    """Finds the formatter function from a list of formatter functions which transforms a word into itself.
     Returns an identity function if none exists"""
     for formatter in format_functions:
         formatted_word = formatter(word_with_formatting)

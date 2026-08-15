@@ -79,15 +79,15 @@ def function_key(m) -> str:
     return m.function_key
 
 
-@mod.capture(rule="( <user.letter> | <user.number_key> | <user.symbol_key> )")
+@mod.capture(rule="<user.letter> | <user.number_key> | <user.symbol_key>")
 def any_alphanumeric_key(m) -> str:
     "any alphanumeric key"
     return str(m)
 
 
 @mod.capture(
-    rule="( <user.letter> | <user.number_key> | <user.symbol_key> "
-    "| <user.arrow_key> | <user.function_key> | <user.special_key> | <user.keypad_key>)"
+    rule="<user.letter> | <user.number_key> | <user.symbol_key> "
+    "| <user.arrow_key> | <user.function_key> | <user.special_key> | <user.keypad_key>"
 )
 def unmodified_key(m) -> str:
     "A single key with no modifiers"

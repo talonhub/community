@@ -63,7 +63,7 @@ state ref: "ref "
 state trait: "trait "
 state (some | sum): "Some"
 state static: "static "
-self taught: "user."
+self taught: "self."
 state use: user.code_import()
 
 use <user.code_libraries>:

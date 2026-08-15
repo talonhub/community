@@ -30,9 +30,9 @@ class SnippetDocument:
     body: str | None = None
 
     def __init__(self, file: str, line_doc: int, line_body: int):
-        user.file = file
-        user.line_doc = line_doc
-        user.line_body = line_body
+        self.file = file
+        self.line_doc = line_doc
+        self.line_body = line_body
 
 
 def create_snippets_from_file(file: Path) -> list[Snippet]:

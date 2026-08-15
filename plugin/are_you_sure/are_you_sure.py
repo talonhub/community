@@ -8,33 +8,33 @@ mod.tag("are_you_sure", desc="Activates are you sure commands")
 
 class ConfirmationState:
     def __init__(self):
-        user.context = Context()
+        self.context = Context()
 
     def request_confirmation(self, message: str, on_confirmation, on_disconfirmation):
-        user.on_confirmation = on_confirmation
-        user.on_cancel = on_disconfirmation
-        user.message = message
-        user.context.tags = ["user.are_you_sure"]
+        self.on_confirmation = on_confirmation
+        self.on_cancel = on_disconfirmation
+        self.message = message
+        self.context.tags = ["user.are_you_sure"]
         gui.show()
 
     def confirm(self):
-        user.on_confirmation()
-        user.cleanup()
+        self.on_confirmation()
+        self.cleanup()
 
     def cancel(self):
-        if user.on_cancel:
-            user.on_cancel()
-        user.cleanup()
+        if self.on_cancel:
+            self.on_cancel()
+        self.cleanup()
 
     def cleanup(self):
-        user.context.tags = []
-        user.on_confirmation = None
-        user.on_cancel = None
-        user.message = None
+        self.context.tags = []
+        self.on_confirmation = None
+        self.on_cancel = None
+        self.message = None
         gui.hide()
 
     def get_message(self) -> str:
-        return user.message
+        return self.message
 
 
 confirmation = ConfirmationState()

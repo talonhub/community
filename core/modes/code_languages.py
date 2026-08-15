@@ -4,11 +4,11 @@ class Language:
     extensions: list[str]
 
     def __init__(self, id: str, spoken_form: str | list[str], extensions: list[str]):
-        user.id = id
-        user.spoken_forms = (
+        self.id = id
+        self.spoken_forms = (
             [spoken_form] if isinstance(spoken_form, str) else spoken_form
         )
-        user.extensions = extensions
+        self.extensions = extensions
 
 
 # Maps code language identifiers, names and file extensions. Only put languages
