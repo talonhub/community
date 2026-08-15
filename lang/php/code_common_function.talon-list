@@ -156,6 +156,6 @@ url decode: urldecode
 urlencode: urlencode
 var dump: var_dump
 var export: var_export
-You A sort: uasort
+U A sort: uasort
 U C first: ucfirst
 U sort: usort
