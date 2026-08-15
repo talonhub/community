@@ -66,9 +66,6 @@ class UserActions:
     def code_comment_block_suffix():
         actions.insert("*/")
 
-    def code_insert_type_annotation(type: str):
-        actions.insert(f"{type} ")
-
     def code_insert_true():
         actions.insert("true")
 
