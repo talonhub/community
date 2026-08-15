@@ -25,6 +25,9 @@ settings():
 
 state try: user.insert_snippet_by_name("tryStatement")
 state catch: user.insert_snippet_by_name("catchStatement")
+returns global class <user.text>:
+    formatted = user.formatted_text(text, "PUBLIC_CAMEL_CASE")
+    user.code_insert_return_type("\\" + formatted)
 
 var <phrase> [over]:
     insert("$")
