@@ -32,7 +32,7 @@ state (def | deaf | deft): "def "
 state try: "try:\n"
 state except: "except "
 state raise: "raise "
-self taught: "self."
+self taught: "user."
 pie test: "pytest"
 state past: "pass"
 

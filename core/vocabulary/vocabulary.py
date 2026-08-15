@@ -59,7 +59,7 @@ class PhraseReplacer:
     """
 
     def __init__(self):
-        self.phrase_index = {}
+        user.phrase_index = {}
 
     def update(self, phrase_dict: dict[str, str]):
         # Index phrases by first word, then number of subsequent words n_next
@@ -77,7 +77,7 @@ class PhraseReplacer:
             ] = written_form
 
         # Sort n_next index so longer phrases have priority
-        self.phrase_index = {
+        user.phrase_index = {
             first_word: sorted(same_first_word.items(), key=lambda x: -x[0])
             for first_word, same_first_word in phrase_index.items()
         }
@@ -90,7 +90,7 @@ class PhraseReplacer:
             first_word = input_words[first_word_i]
             next_word_i = first_word_i + 1
             # Could this word be the first of a phrase we should replace?
-            for n_next, phrases_n_next in self.phrase_index.get(first_word, []):
+            for n_next, phrases_n_next in user.phrase_index.get(first_word, []):
                 # Yes. Perhaps a phrase with n_next subsequent words?
                 continuation = input_words[next_word_i : next_word_i + n_next]
                 if continuation in phrases_n_next:
@@ -106,7 +106,7 @@ class PhraseReplacer:
 
     # Wrapper used for testing.
     def replace_string(self, text: str) -> str:
-        return " ".join(self.replace(text.split()))
+        return " ".join(user.replace(text.split()))
 
 
 # Unit tests for PhraseReplacer

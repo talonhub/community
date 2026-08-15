@@ -176,7 +176,7 @@ def application_windows(m) -> list[Window]:
         [
             window
             for app in m.running_applications_list
-            for window in actions.self.get_running_app(app).windows()
+            for window in actions.user.get_running_app(app).windows()
         ]
     )
 

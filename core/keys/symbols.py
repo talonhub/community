@@ -34,17 +34,17 @@ class Symbol:
     def __init__(
         self, character: str, command_and_dictation_forms=None, command_forms=None
     ):
-        self.character = character
+        user.character = character
 
         if command_and_dictation_forms:
-            self.command_and_dictation_forms = (
+            user.command_and_dictation_forms = (
                 [command_and_dictation_forms]
                 if isinstance(command_and_dictation_forms, str)
                 else command_and_dictation_forms
             )
 
         if command_forms:
-            self.command_forms = (
+            user.command_forms = (
                 [command_forms] if isinstance(command_forms, str) else command_forms
             )
 

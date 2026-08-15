@@ -297,7 +297,7 @@ class Actions:
 # Some capture groups we need
 
 
-@mod.capture(rule="{self.letter}+")
+@mod.capture(rule="{user.letter}+")
 def draft_anchor(m) -> str:
     """
     An anchor (string of letters)

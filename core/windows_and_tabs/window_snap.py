@@ -54,7 +54,7 @@ def _bring_forward(window):
 
 
 def _get_app_window(app_name: str) -> ui.Window:
-    return actions.self.get_running_app(app_name).active_window
+    return actions.user.get_running_app(app_name).active_window
 
 
 def interpolate_interval(w0, w1, s0, s1, d0, d1):
@@ -206,13 +206,13 @@ class RelativeScreenPos:
     """Represents a window position as a fraction of the screen."""
 
     def __init__(self, left, top, right, bottom):
-        self.left = left
-        self.top = top
-        self.bottom = bottom
-        self.right = right
+        user.left = left
+        user.top = top
+        user.bottom = bottom
+        user.right = right
 
     def __str__(self):
-        return f"RelativeScreenPos(left={self.left}, top={self.top}, right={self.right}, bottom={self.bottom})"
+        return f"RelativeScreenPos(left={user.left}, top={user.top}, right={user.right}, bottom={user.bottom})"
 
 
 _snap_positions = {

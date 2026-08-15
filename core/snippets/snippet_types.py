@@ -9,9 +9,9 @@ class SnippetLists:
     wrapper: dict[str, str]
 
     def __init__(self):
-        self.insertion = {}
-        self.with_phrase = {}
-        self.wrapper = {}
+        user.insertion = {}
+        user.with_phrase = {}
+        user.wrapper = {}
 
 
 @dataclass
@@ -39,13 +39,13 @@ class Snippet:
     variables: list[SnippetVariable]
 
     def get_variable(self, name: str):
-        for var in self.variables:
+        for var in user.variables:
             if var.name == name:
                 return var
         return None
 
     def get_variable_strict(self, name: str):
-        variable = self.get_variable(name)
+        variable = user.get_variable(name)
         if variable is None:
             raise ValueError(f"No variable '{name}' in {self}")
         return variable

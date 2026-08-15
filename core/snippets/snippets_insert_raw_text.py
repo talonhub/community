@@ -51,10 +51,10 @@ class Stop:
 
     def compute_sorting_key(self) -> int:
         """Returns a key value used to sort stops"""
-        if self.name == "0":
+        if user.name == "0":
             return LAST_SNIPPET_HOLE_KEY_VALUE
-        if self.name.isdigit():
-            return int(self.name)
+        if user.name.isdigit():
+            return int(user.name)
         return 999
 
 

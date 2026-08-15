@@ -62,11 +62,11 @@ class DraftManager:
     """
 
     def __init__(self):
-        self.area = TextArea()
-        self.area.title = "Talon Draft"
-        self.area.value = ""
-        self.area.register("label", self._update_labels)
-        self.set_styling()
+        user.area = TextArea()
+        user.area.title = "Talon Draft"
+        user.area.value = ""
+        user.area.register("label", user._update_labels)
+        user.set_styling()
 
     def set_styling(self):
         """
@@ -84,7 +84,7 @@ class DraftManager:
                 theme_changes[name] = value
         theme = settings.get("user.draft_window_theme")
         area_theme = DarkThemeLabels if theme == "dark" else LightThemeLabels
-        self.area.theme = area_theme(**theme_changes)
+        user.area.theme = area_theme(**theme_changes)
 
     def show(self, text: Optional[str] = None):
         """
@@ -92,32 +92,32 @@ class DraftManager:
         otherwise set the text to the given value.
         """
 
-        self.set_styling()
+        user.set_styling()
 
         if text is not None:
-            self.area.value = text
-        self.area.show()
+            user.area.value = text
+        user.area.show()
 
     def hide(self):
         """
         Hide the window.
         """
 
-        self.area.hide()
+        user.area.hide()
 
     def get_text(self) -> str:
         """
         Gets the context of the text area
         """
 
-        return self.area.value
+        return user.area.value
 
     def get_rect(self) -> ui.Rect:
         """
         Get the Rect for the window
         """
 
-        return self.area.rect
+        return user.area.rect
 
     def reposition(
         self,
@@ -130,7 +130,7 @@ class DraftManager:
         Move the window or resize it without having to change all properties.
         """
 
-        rect = self.area.rect
+        rect = user.area.rect
         if xpos is not None:
             rect.x = xpos
 
@@ -143,7 +143,7 @@ class DraftManager:
         if height is not None:
             rect.height = height
 
-        self.area.rect = rect
+        user.area.rect = rect
 
     def select_text(
         self, start_anchor, end_anchor=None, include_trailing_whitespace=False
@@ -154,28 +154,28 @@ class DraftManager:
         then also selects trailing space characters (useful for delete).
         """
 
-        start_index, end_index, last_space_index = self.anchor_to_range(start_anchor)
+        start_index, end_index, last_space_index = user.anchor_to_range(start_anchor)
         if end_anchor is not None:
-            _, end_index, last_space_index = self.anchor_to_range(end_anchor)
+            _, end_index, last_space_index = user.anchor_to_range(end_anchor)
 
         if include_trailing_whitespace:
             end_index = last_space_index
 
-        self.area.sel = Span(start_index, end_index)
+        user.area.sel = Span(start_index, end_index)
 
     def position_caret(self, anchor, after=False):
         """
         Positions the caret before the given anchor. If after=True position it directly after.
         """
 
-        start_index, end_index, _ = self.anchor_to_range(anchor)
+        start_index, end_index, _ = user.anchor_to_range(anchor)
         index = end_index if after else start_index
 
-        self.area.sel = index
+        user.area.sel = index
 
     def anchor_to_range(self, anchor):
         anchors_data = calculate_text_anchors(
-            self._get_visible_text(), self.area.sel.left
+            user._get_visible_text(), user.area.sel.left
         )
         for loop_anchor, start_index, end_index, last_space_index in anchors_data:
             if anchor == loop_anchor:
@@ -189,7 +189,7 @@ class DraftManager:
         """
 
         anchors_data = calculate_text_anchors(
-            self._get_visible_text(), self.area.sel.left
+            user._get_visible_text(), user.area.sel.left
         )
         return [
             (Span(start_index, end_index), anchor)
@@ -198,7 +198,7 @@ class DraftManager:
 
     def _get_visible_text(self):
         # Placeholder for a future method of getting this
-        return self.area.value
+        return user.area.value
 
 
 if False:
