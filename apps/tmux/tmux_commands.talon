@@ -18,8 +18,8 @@ mux rename window: user.tmux_keybind(",")
 mux close window: user.tmux_keybind("&")
 
 # Pane management
-mux split horizontal: user.tmux_keybind("%")
-mux split vertical: user.tmux_keybind("\"")
+mux split horizontal: user.tmux_keybind("\"")
+mux split vertical: user.tmux_keybind("%")
 mux next pane: user.tmux_keybind("o")
 mux move <user.arrow_key>: user.tmux_keybind(arrow_key)
 mux close pane: user.tmux_keybind("x")
