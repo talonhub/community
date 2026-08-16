@@ -47,7 +47,7 @@ class Actions:
         to command palette."""
         command_server_or_client_fallback(command_id, False)
 
-    def vscode_go(direction: str, command_id_prev: str, command_id_next: str):
+    def vscode_next_previous_helper(direction: str, command_id_prev: str, command_id_next: str):
         """Execute command_id_prev or command_id_next via vscode command server
         depending on direction (PREV/NEXT)."""
         actions.user.vscode(

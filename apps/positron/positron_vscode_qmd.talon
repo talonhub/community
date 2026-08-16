@@ -5,12 +5,12 @@ win.file_ext: .qmd
 -
 
 # Quarto Markdown
-cell <user.spatial_previous_next>: user.vscode_go(spatial_previous_next, "quarto.goToPreviousCell", "quarto.goToNextCell")
+cell <user.spatial_previous_next>: user.vscode_next_previous_helper(spatial_previous_next, "quarto.goToPreviousCell", "quarto.goToNextCell")
 notebook run head: user.vscode("quarto.runCellsAbove")
 notebook run tail: user.vscode("quarto.runCellsBelow")
 cellbrun here: user.vscode("quarto.runCurrentCell")
 cell run: user.vscode("quarto.runCurrentAdvance")
-cell run <user.spatial_previous_next>: user.vscode_go(spatial_previous_next, "quarto.runPreviousCell", "quarto.runNextCell")
+cell run <user.spatial_previous_next>: user.vscode_next_previous_helper(spatial_previous_next, "quarto.runPreviousCell", "quarto.runNextCell")
 run [that]: user.vscode("quarto.runCurrent")
 notebook run: user.vscode("quarto.runAllCells")
 cell new: user.vscode("quarto.insertCodeCell")

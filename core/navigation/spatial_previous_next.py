@@ -14,6 +14,6 @@ def spatial_previous_next(m) -> str:
 
 @mod.action_class
 class Actions:
-    def key_spatial_previous_next(direction: str, key_prev: str, key_next: str):
+    def key_next_previous_helper(direction: str, key_prev: str, key_next: str):
         """Press key_prev or key_next depending on direction (PREV/NEXT)"""
         actions.key(key_prev if direction == "PREV" else key_next)

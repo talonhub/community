@@ -22,7 +22,7 @@ grab right: key(shift-down)
 add line: key(shift-enter)
 
 (slack | lack) (slap | slaw | slapper): edit.line_insert_down()
-(element | bit) [<user.spatial_previous_next>]: user.key_spatial_previous_next(spatial_previous_next or "NEXT", "shift-tab", "tab")
+(element | bit) [<user.spatial_previous_next>]: user.key_next_previous_helper(spatial_previous_next or "NEXT", "shift-tab", "tab")
 
 (slack | lack) (my stuff | activity): user.slack_open_activity()
 (slack | lack) directory: user.slack_open_directory()

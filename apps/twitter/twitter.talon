@@ -5,7 +5,7 @@ browser.host: twitter.com
 
 # navigation
 show shortcuts | shortcuts help: key(?)
-<user.spatial_previous_next> tweet: user.key_spatial_previous_next(spatial_previous_next, "k", "j")
+<user.spatial_previous_next> tweet: user.key_next_previous_helper(spatial_previous_next, "k", "j")
 page down: key(space)
 load new tweet: key(.)
 go home: insert("gh")

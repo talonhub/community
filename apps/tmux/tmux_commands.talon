@@ -21,7 +21,7 @@ mux window <number>:
     key('{number}')
 mux <user.spatial_previous_next> window:
     key(ctrl-b)
-    user.key_spatial_previous_next(spatial_previous_next, "p", "n")
+    user.key_next_previous_helper(spatial_previous_next, "p", "n")
 mux rename window:
     key(ctrl-b)
     key(,)

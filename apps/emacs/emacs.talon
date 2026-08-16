@@ -175,7 +175,7 @@ buffer finish:
     edit.save()
     user.emacs("server-edit")
 buffer list: user.emacs("buffer-menu")
-buffer <user.spatial_previous_next>: user.emacs_go(spatial_previous_next, "previous-buffer", "next-buffer")
+buffer <user.spatial_previous_next>: user.emacs_next_previous_helper(spatial_previous_next, "previous-buffer", "next-buffer")
 buffer rename: user.emacs("rename-buffer")
 buffer widen: user.emacs("widen")
 buffer narrow | [buffer] narrow to region: user.emacs("narrow-to-region")
@@ -228,7 +228,7 @@ go <number> bottom:
     edit.jump_line(number)
     user.emacs("recenter-top-bottom", -2)
 
-<user.spatial_previous_next> error | error <user.spatial_previous_next>: user.emacs_go(spatial_previous_next, "previous-error", "next-error")
+<user.spatial_previous_next> error | error <user.spatial_previous_next>: user.emacs_next_previous_helper(spatial_previous_next, "previous-error", "next-error")
 
 term right: user.emacs("forward-sexp")
 term left: user.emacs("backward-sexp")
@@ -329,7 +329,7 @@ python (shell switch | switch [to] shell): user.emacs("python-shell-switch-to-sh
 
 # smerge-mode #
 smerge mode: user.emacs("smerge-mode")
-merge <user.spatial_previous_next>: user.emacs_go(spatial_previous_next, "smerge-prev", "smerge-next")
+merge <user.spatial_previous_next>: user.emacs_next_previous_helper(spatial_previous_next, "smerge-prev", "smerge-next")
 merge keep upper: user.emacs("smerge-keep-upper")
 merge keep lower: user.emacs("smerge-keep-lower")
 merge keep base: user.emacs("smerge-keep-base")
@@ -354,7 +354,7 @@ outline hide other: user.emacs("outline-hide-other")
 outline forward [same level]: user.emacs("outline-forward-same-level")
 outline (backward | back) [same level]: user.emacs("outline-backward-same-level")
 outline <user.spatial_previous_next> [visible heading]:
-    user.emacs_go(spatial_previous_next, "outline-previous-visible-heading", "outline-next-visible-heading")
+    user.emacs_next_previous_helper(spatial_previous_next, "outline-previous-visible-heading", "outline-next-visible-heading")
 outline insert [heading]: user.emacs("outline-insert-heading")
 outline up [heading]: user.emacs("outline-up-heading")
 outline promote: user.emacs("outline-promote")
