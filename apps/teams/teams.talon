@@ -26,10 +26,12 @@ open calendar: key(ctrl-4)
 open planner: key(ctrl-5)
 open calls: key(ctrl-6)
 open files: key(ctrl-7)
-[go] [to] <user.spatial_previous_next> [list] item: user.key_next_previous_helper(spatial_previous_next, "alt-up", "alt-down")
+[go] [to] <user.spatial_previous_next> [list] item:
+    user.key_next_previous_helper(spatial_previous_next, "alt-up", "alt-down")
 move [selected] team up: key(ctrl-shift-up)
 move [selected] team down: key(ctrl-shift-down)
-[go] [to] <user.spatial_previous_next> section: user.key_next_previous_helper(spatial_previous_next, "ctrl-shift-f6", "ctrl-f6")
+[go] [to] <user.spatial_previous_next> section:
+    user.key_next_previous_helper(spatial_previous_next, "ctrl-shift-f6", "ctrl-f6")
 
 # messaging
 [go] [to] compose [box]: key(c)
@@ -53,7 +55,8 @@ decline screen share: key(ctrl-shift-d)
 accept screen share: key(ctrl-shift-a)
 schedule [a] meeting: key(alt-shift-n)
 go to current time: key(alt-.)
-go to <user.spatial_previous_next> (day | week): user.key_next_previous_helper(spatial_previous_next, "ctrl-alt-left", "ctrl-alt-right")
+go to <user.spatial_previous_next> (day | week):
+    user.key_next_previous_helper(spatial_previous_next, "ctrl-alt-left", "ctrl-alt-right")
 view day: key(ctrl-alt-1)
 view work week: key(ctrl-alt-2)
 view week: key(ctrl-alt-3)

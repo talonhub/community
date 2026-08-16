@@ -111,7 +111,8 @@ references find: user.vscode("references-view.find")
 format that: user.vscode("editor.action.formatDocument")
 format selection: user.vscode("editor.action.formatSelection")
 imports fix: user.vscode("editor.action.organizeImports")
-problem <user.spatial_previous_next>: user.vscode_next_previous_helper(spatial_previous_next, "editor.action.marker.prevInFiles", "editor.action.marker.nextInFiles")
+problem <user.spatial_previous_next>:
+    user.vscode_next_previous_helper(spatial_previous_next, "editor.action.marker.prevInFiles", "editor.action.marker.nextInFiles")
 problem fix: user.vscode("editor.action.quickFix")
 rename that: user.vscode("editor.action.rename")
 refactor that: user.vscode("editor.action.refactor")
@@ -140,7 +141,8 @@ go marks:
     user.deprecate_command("2023-06-06", "go marks", "bar marks")
     user.vscode("workbench.view.extension.bookmarks")
 toggle mark: user.vscode("bookmarks.toggle")
-go <user.spatial_previous_next> mark: user.vscode_next_previous_helper(spatial_previous_next, "bookmarks.jumpToPrevious", "bookmarks.jumpToNext")
+go <user.spatial_previous_next> mark:
+    user.vscode_next_previous_helper(spatial_previous_next, "bookmarks.jumpToPrevious", "bookmarks.jumpToNext")
 
 close other tabs: user.vscode("workbench.action.closeOtherEditors")
 close all tabs: user.vscode("workbench.action.closeAllEditors")
@@ -199,7 +201,8 @@ git unstage all: user.vscode("git.unstageAll")
 pull request: user.vscode("pr.create")
 # Use keyboard shortcuts because VSCode relies on when clause contexts to choose the appropriate
 # action: https://code.visualstudio.com/api/references/when-clause-contexts
-change <user.spatial_previous_next>: user.key_next_previous_helper(spatial_previous_next, "shift-alt-f5", "alt-f5")
+change <user.spatial_previous_next>:
+    user.key_next_previous_helper(spatial_previous_next, "shift-alt-f5", "alt-f5")
 
 # Testing
 test run: user.vscode("testing.runAtCursor")
@@ -232,7 +235,8 @@ debug clean: user.vscode("workbench.debug.panel.action.clearReplAction")
 # Terminal
 terminal external: user.vscode("workbench.action.terminal.openNativeConsole")
 terminal new: user.vscode("workbench.action.terminal.new")
-terminal <user.spatial_previous_next>: user.vscode_next_previous_helper(spatial_previous_next, "workbench.action.terminal.focusPrevious", "workbench.action.terminal.focusNext")
+terminal <user.spatial_previous_next>:
+    user.vscode_next_previous_helper(spatial_previous_next, "workbench.action.terminal.focusPrevious", "workbench.action.terminal.focusNext")
 terminal split: user.vscode("workbench.action.terminal.split")
 terminal zoom: user.vscode("workbench.action.toggleMaximizedPanel")
 terminal trash: user.vscode("workbench.action.terminal.kill")
@@ -276,7 +280,8 @@ select word: user.vscode("editor.action.addSelectionToNextFindMatch")
 skip word: user.vscode("editor.action.moveSelectionToNextFindMatch")
 
 # jupyter
-cell <user.spatial_previous_next>: user.vscode_next_previous_helper(spatial_previous_next, "notebook.focusPreviousEditor", "notebook.focusNextEditor")
+cell <user.spatial_previous_next>:
+    user.vscode_next_previous_helper(spatial_previous_next, "notebook.focusPreviousEditor", "notebook.focusNextEditor")
 cell run above: user.vscode("notebook.cell.executeCellsAbove")
 cell run: user.vscode("notebook.cell.execute")
 

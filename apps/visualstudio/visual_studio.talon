@@ -76,7 +76,8 @@ go usage: key(shift-f12)
 # Bookmarks.
 go marks: key(ctrl-k ctrl-w)
 toggle mark: key(ctrl-k ctrl-k)
-go <user.spatial_previous_next> mark: user.key_next_previous_helper(spatial_previous_next, "ctrl-k ctrl-p", "ctrl-k ctrl-n")
+go <user.spatial_previous_next> mark:
+    user.key_next_previous_helper(spatial_previous_next, "ctrl-k ctrl-p", "ctrl-k ctrl-n")
 
 # Folding
 fold toggle: key(ctrl-m ctrl-m)

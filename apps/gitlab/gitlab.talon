@@ -47,8 +47,10 @@ change assignee: key(a)
 change milestone: key(m)
 change label: key(l)
 right comment: key(r)
-<user.spatial_previous_next> [unresolved] discussion: user.key_next_previous_helper(spatial_previous_next, "p", "n")
-<user.spatial_previous_next> file: user.key_next_previous_helper(spatial_previous_next, "[", "]")
+<user.spatial_previous_next> [unresolved] discussion:
+    user.key_next_previous_helper(spatial_previous_next, "p", "n")
+<user.spatial_previous_next> file:
+    user.key_next_previous_helper(spatial_previous_next, "[", "]")
 
 # project files
 back to files: key(escape)

@@ -9,7 +9,8 @@ workspace <number>: user.slack_open_workspace(number)
 # Channel
 (slack | lack) [channel] info: user.slack_show_channel_info()
 focus (move | next): key(ctrl-`)
-(section | zone) [<user.spatial_previous_next>]: user.slack_section_go(spatial_previous_next or "NEXT")
+(section | zone) [<user.spatial_previous_next>]:
+    user.slack_section_go(spatial_previous_next or "NEXT")
 (slack | lack) (starred [items] | stars): user.slack_open_starred_items()
 (slack | lack) [direct] messages: user.slack_open_direct_messages()
 (slack | lack) threads: user.slack_open_threads()
@@ -22,7 +23,8 @@ grab right: key(shift-down)
 add line: key(shift-enter)
 
 (slack | lack) (slap | slaw | slapper): edit.line_insert_down()
-(element | bit) [<user.spatial_previous_next>]: user.key_next_previous_helper(spatial_previous_next or "NEXT", "shift-tab", "tab")
+(element | bit) [<user.spatial_previous_next>]:
+    user.key_next_previous_helper(spatial_previous_next or "NEXT", "shift-tab", "tab")
 
 (slack | lack) (my stuff | activity): user.slack_open_activity()
 (slack | lack) directory: user.slack_open_directory()

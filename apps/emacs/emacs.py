@@ -92,7 +92,9 @@ class Actions:
             actions.insert(short_form or command_name)
             actions.key("enter")
 
-    def emacs_next_previous_helper(direction: str, command_prev: str, command_next: str):
+    def emacs_next_previous_helper(
+        direction: str, command_prev: str, command_next: str
+    ):
         """Runs command_prev or command_next depending on direction (PREV/NEXT)."""
         actions.user.emacs(command_prev if direction == "PREV" else command_next)
 

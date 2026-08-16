@@ -1,9 +1,7 @@
 from talon import Module, actions
 
 mod = Module()
-mod.list(
-    "spatial_previous_next", desc="Canonical spatial previous/next direction word"
-)
+mod.list("spatial_previous_next", desc="Canonical spatial previous/next direction word")
 
 
 @mod.capture(rule="{user.spatial_previous_next}")
