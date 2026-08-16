@@ -7,10 +7,10 @@ show shortcuts: key("ctrl-/")
 
 # Navigation
 (next | nav | navigate) [by] (sec | section): key("ctrl-t")
-(prev | previous) (chat | conversation): key("alt-down")
-next (chat | conversation): key("alt-up")
-(prev | previous) unread: key("alt-shift-down")
-next unread: key("alt-shift-up")
+<user.spatial_previous_next> (chat | conversation):
+    user.key_next_previous_helper(spatial_previous_next, "alt-down", "alt-up")
+<user.spatial_previous_next> unread:
+    user.key_next_previous_helper(spatial_previous_next, "alt-shift-down", "alt-shift-up")
 [open] (pref | preferences): key("ctrl-,")
 open conversation menu: key("ctrl-shift-l")
 search: key("ctrl-f")

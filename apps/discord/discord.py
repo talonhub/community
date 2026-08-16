@@ -32,6 +32,13 @@ class discord_actions:
     def discord_mentions_next():
         """Go down to channel with unread mentions"""
 
+    def discord_mentions_go(direction: str):
+        """Go up or down to channel with unread mentions depending on direction (PREV/NEXT)"""
+        if direction == "PREV":
+            actions.user.discord_mentions_last()
+        else:
+            actions.user.discord_mentions_next()
+
     def discord_oldest_unread():
         """Go to oldest unread message"""
 

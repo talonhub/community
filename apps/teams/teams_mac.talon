@@ -28,12 +28,12 @@ open teams: key(super-3)
 open calendar: key(super-4)
 open calls: key(super-5)
 open files: key(super-6)
-[go] [to] (prev | previous) [list] item: key(alt-up)
-[go] [to] next [list] item: key(alt-down)
+[go] [to] <user.spatial_previous_next> [list] item:
+    user.key_next_previous_helper(spatial_previous_next, "alt-up", "alt-down")
 move [selected] team up: key(super-shift-up)
 move [selected] team down: key(super-shift-down)
-[go] [to] (prev | previous) section: key(super-shift-f6)
-[go] [to] next section: key(super-f6)
+[go] [to] <user.spatial_previous_next> section:
+    user.key_next_previous_helper(spatial_previous_next, "super-shift-f6", "super-f6")
 
 # messaging
 [go] [to] compose [box]: key(shift-alt-c)
@@ -62,8 +62,8 @@ decline screen share: key(super-shift-d)
 accept screen share: key(super-shift-a)
 schedule [a] meeting: key(alt-shift-n)
 go to current time: key(alt-.)
-go to (prev | previous) (day | week): key(super-alt-left)
-go to next (day | week): key(super-alt-right)
+go to <user.spatial_previous_next> (day | week):
+    user.key_next_previous_helper(spatial_previous_next, "super-alt-left", "super-alt-right")
 view day: key(super-alt-1)
 view work week: key(super-alt-2)
 view week: key(super-alt-3)

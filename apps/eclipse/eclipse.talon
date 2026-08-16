@@ -106,8 +106,8 @@ go forward: key(alt-right)
 #requires https://marketplace.eclipse.org/content/quick-bookmarks
 go marks: key(alt-end)
 toggle mark: key(ctrl-alt-b down enter)
-go next mark: key(alt-pagedown)
-go last mark: key(alt-pageup)
+go <user.spatial_previous_next> mark:
+    user.key_next_previous_helper(spatial_previous_next, "alt-pageup", "alt-pagedown")
 
 # Folding
 # fold that:

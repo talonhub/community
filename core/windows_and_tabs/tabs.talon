@@ -2,8 +2,7 @@ tag: user.tabs
 -
 
 tab (open | new): app.tab_open()
-tab (last | previous): app.tab_previous()
-tab next: app.tab_next()
+tab <user.spatial_previous_next>: user.tab_go(spatial_previous_next)
 tab close: user.tab_close_wrapper()
 tab (reopen | restore): app.tab_reopen()
 go tab <number>: user.tab_jump(number)

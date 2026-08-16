@@ -46,6 +46,13 @@ class Actions:
         """Selects the previous Slack section"""
         actions.key("shift-f6")
 
+    def slack_section_go(direction: str):
+        """Selects the next or previous Slack section depending on direction (PREV/NEXT)"""
+        if direction == "PREV":
+            actions.user.slack_section_previous()
+        else:
+            actions.user.slack_section_next()
+
     def slack_open_direct_messages():
         """Opens direct messages in Slack"""
 

@@ -20,6 +20,6 @@ plot copy: user.vscode("workbench.action.positronPlots.copy")
 plot clear: user.vscode("workbench.action.positronPlots.clear")
 plot open: user.vscode("workbench.action.positronPlots.openEditor")
 plot refresh: user.vscode("workbench.action.positronPlots.refresh")
-plot next: user.vscode("workbench.action.positronPlots.next")
-plot (previous | last): user.vscode("workbench.action.positronPlots.previous")
+plot <user.spatial_previous_next>:
+    user.vscode_next_previous_helper(spatial_previous_next, "workbench.action.positronPlots.previous", "workbench.action.positronPlots.next")
 plot toggle: user.vscode("workbench.action.positron.togglePlots")

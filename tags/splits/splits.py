@@ -1,4 +1,4 @@
-from talon import Module
+from talon import Module, actions
 
 mod = Module()
 mod.tag("splits", desc="Tag for enabling generic window split commands")
@@ -47,6 +47,13 @@ class Actions:
 
     def split_last():
         """Goes to last split"""
+
+    def split_go(direction: str):
+        """Goes to next or previous split depending on direction (PREV/NEXT)"""
+        if direction == "PREV":
+            actions.user.split_last()
+        else:
+            actions.user.split_next()
 
     def split_number(index: int):
         """Navigates to a the specified split"""

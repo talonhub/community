@@ -8,9 +8,9 @@ run from top: key("cmd-alt-b")
 run to end: key("cmd-alt-e")
 run (function | funk): key("cmd-alt-f")
 run section: key("cmd-alt-t")
-run previous chunks: key("cmd-alt-p")
+run <user.spatial_previous_next> chunk [s]:
+    user.key_next_previous_helper(spatial_previous_next, "cmd-alt-p", "cmd-alt-n")
 run chunk: key("cmd-alt-c")
-run next chunk: key("cmd-alt-n")
 run all: key("cmd-shift-s")
 run knitter: key("cmd-shift-k")
 run profiler: key("cmd-shift-alt-p")
@@ -51,8 +51,8 @@ unfold all: key("cmd-shift-alt-o")
 
 # Find and replace
 find and replace: key("cmd-f")
-find next: key("cmd-g")
-find previous: key("cmd-shift-g")
+find <user.spatial_previous_next>:
+    user.key_next_previous_helper(spatial_previous_next, "cmd-shift-g", "cmd-g")
 find with selection: key("cmd-e")
 find in files: key("cmd-shift-f")
 run replace: key("cmd-shift-j")
@@ -74,8 +74,8 @@ go to omni: key("ctrl-.")
 go to line: key("cmd-shift-alt-g")
 go to section: key("cmd-shift-alt-j")
 go to tab: key("ctrl-shift-.")
-go to previous tab: key("ctrl-f11")
-go to next tab: key("ctrl-f12")
+go to <user.spatial_previous_next> tab:
+    user.key_next_previous_helper(spatial_previous_next, "ctrl-f11", "ctrl-f12")
 go to first tab: key("ctrl-shift-f11")
 go to last tab: key("ctrl-shift-f12")
 
@@ -84,8 +84,8 @@ zoom source: key("ctrl-shift-1")
 
 help that: key("f1")
 define that: key("f2")
-previous plot: key("cmd-alt-f11")
-next plot: key("cmd-alt-f12")
+<user.spatial_previous_next> plot:
+    user.key_next_previous_helper(spatial_previous_next, "cmd-alt-f11", "cmd-alt-f12")
 
 # devtools, package development, and session management
 restart R session: key("cmd-shift-f10")

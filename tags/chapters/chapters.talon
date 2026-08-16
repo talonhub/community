@@ -1,7 +1,6 @@
 tag: user.chapters
 -
 
-chapter next: user.chapter_next()
-chapter last: user.chapter_previous()
+chapter <user.spatial_previous_next>: user.chapter_go(spatial_previous_next)
 go chapter <number>: user.chapter_jump(number)
 go chapter final: user.chapter_final()

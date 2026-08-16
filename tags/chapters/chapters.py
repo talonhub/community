@@ -19,6 +19,13 @@ class Actions:
         """Go to previous chapter"""
         actions.user.chapter_jump(actions.user.chapter_current() - 1)
 
+    def chapter_go(direction: str):
+        """Go to next or previous chapter depending on direction (PREV/NEXT)"""
+        if direction == "PREV":
+            actions.user.chapter_previous()
+        else:
+            actions.user.chapter_next()
+
     def chapter_jump(number: int):
         """Go to chapter number"""
 

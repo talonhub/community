@@ -775,6 +775,13 @@ class Actions:
         register_events(True)
         ctx.tags = ["user.help_open"]
 
+    def help_go(direction: str):
+        """Navigates to next or previous page depending on direction (PREV/NEXT)"""
+        if direction == "PREV":
+            actions.user.help_previous()
+        else:
+            actions.user.help_next()
+
     def help_next():
         """Navigates to next page"""
         global current_context_page

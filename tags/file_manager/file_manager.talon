@@ -38,8 +38,6 @@ properties show: user.file_manager_show_properties()
 # open terminal at location
 terminal here: user.file_manager_terminal_here()
 
-folder next: user.file_manager_next_folder_page()
-folder last: user.file_manager_previous_folder_page()
+folder <user.spatial_previous_next>: user.file_manager_folder_go(spatial_previous_next)
 
-file next: user.file_manager_next_file_page()
-file last: user.file_manager_previous_file_page()
+file <user.spatial_previous_next>: user.file_manager_file_go(spatial_previous_next)

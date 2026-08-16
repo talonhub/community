@@ -172,6 +172,13 @@ class Actions:
 
             gui_files.show()
 
+    def file_manager_file_go(direction: str):
+        """Go to next or previous page of files depending on direction (PREV/NEXT)"""
+        if direction == "PREV":
+            actions.user.file_manager_previous_file_page()
+        else:
+            actions.user.file_manager_next_file_page()
+
     def file_manager_next_folder_page():
         """next_folder_page"""
         global current_folder_page
@@ -193,6 +200,13 @@ class Actions:
                 current_folder_page = total_folder_pages
 
             gui_folders.show()
+
+    def file_manager_folder_go(direction: str):
+        """Go to next or previous page of folders depending on direction (PREV/NEXT)"""
+        if direction == "PREV":
+            actions.user.file_manager_previous_folder_page()
+        else:
+            actions.user.file_manager_next_folder_page()
 
 
 def is_dir(f):
