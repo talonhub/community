@@ -411,7 +411,7 @@ def draw_search_commands(gui: imgui.GUI):
             gui.text(format_context_title(context))
             gui.line()
             current_context = context
-        draw_commands(gui, [command])
+        draw_command(gui, command)
 
 
 def get_search_commands(phrase: str) -> dict[str, tuple[str, str]]:
@@ -442,15 +442,20 @@ def draw_commands_title(gui: imgui.GUI, title: str):
     gui.line()
 
 
+def draw_command(gui: imgui.GUI, command: tuple[str, str]):
+    key, val = command
+    val = val.split("\n")
+    if len(val) > 1:
+        gui.text(f"{key}:")
+        for line in val:
+            gui.text(f"    {line}")
+    else:
+        gui.text(f"{key}: {val[0]}")
+
+
 def draw_commands(gui: imgui.GUI, commands: Iterable[tuple[str, str]]):
-    for key, val in commands:
-        val = val.split("\n")
-        if len(val) > 1:
-            gui.text(f"{key}:")
-            for line in val:
-                gui.text(f"    {line}")
-        else:
-            gui.text(f"{key}: {val[0]}")
+    for command in commands:
+        draw_command(gui, command)
 
 
 def reset():
