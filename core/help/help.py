@@ -393,7 +393,9 @@ def draw_search_commands(gui: imgui.GUI):
         for i, command in enumerate(commands):
             flat_commands.append((context, command))
             # add header overhead (title + separator + spacer) once per context group
-            item_line_counts.append(get_command_line_count(command) + (3 if i == 0 else 0))
+            item_line_counts.append(
+                get_command_line_count(command) + (3 if i == 0 else 0)
+            )
     pages = get_pages(item_line_counts)
     total_page_count = max(pages, default=1)
 
