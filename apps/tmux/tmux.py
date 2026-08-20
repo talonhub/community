@@ -17,13 +17,9 @@ mod.setting(
 
 @mod.action_class
 class TmuxActions:
-    def tmux_prefix():
-        """press control and the configured tmux prefix key"""
-        actions.key(settings.get("user.tmux_prefix_key"))
-
     def tmux_keybind(key: str):
         """press tmux prefix followed by a key bind"""
-        actions.user.tmux_prefix()
+        actions.key(settings.get("user.tmux_prefix_key"))
         actions.key(key)
 
     def tmux_enter_command(command: str = ""):
@@ -61,6 +57,11 @@ class AppActions:
     def tab_previous():
         actions.user.tmux_execute_command("select-window -p")
 
+    def tab_close():
+        actions.user.tmux_execute_command_with_confirmation(
+            "kill-window", "kill-window #W?"
+        )
+
 
 @ctx.action_class("user")
 class UserActions:
@@ -69,11 +70,6 @@ class UserActions:
             actions.user.tmux_keybind(f"{number}")
         else:
             actions.user.tmux_execute_command(f"select-window -t {number}")
-
-    def tab_close_wrapper():
-        actions.user.tmux_execute_command_with_confirmation(
-            "kill-window", "kill-window #W?"
-        )
 
     def split_window_right():
         actions.user.split_window_horizontally()
