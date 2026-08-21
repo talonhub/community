@@ -13,6 +13,8 @@ tag(): user.code_data_null
 tag(): user.code_operators_assignment
 tag(): user.code_operators_math
 tag(): user.code_functions
+tag(): user.code_functions_common
+tag(): user.code_keywords
 
 settings():
     user.code_private_function_formatter = "PRIVATE_CAMEL_CASE"
@@ -22,15 +24,11 @@ settings():
     user.code_protected_variable_formatter = "PRIVATE_CAMEL_CASE"
     user.code_public_variable_formatter = "PRIVATE_CAMEL_CASE"
 
-(op | is) loosely equal:
-    user.deprecate_command("2025-03-20", "(op | is) loosely equal", "is weak equal")
-    insert(" == ")
-(op | is) loosely not equal:
-    user.deprecate_command("2025-03-20", "(op | is) loosely not equal", "is weak not equal")
-    insert(" != ")
-
 state try: user.insert_snippet_by_name("tryStatement")
 state catch: user.insert_snippet_by_name("catchStatement")
+returns global class <user.text>:
+    formatted = user.formatted_text(text, "PUBLIC_CAMEL_CASE")
+    user.code_insert_return_type("\\" + formatted)
 
 var <phrase> [over]:
     insert("$")

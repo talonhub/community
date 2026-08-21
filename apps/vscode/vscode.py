@@ -27,6 +27,8 @@ mod.apps.vscode = """
 os: linux
 and app.name: Code
 os: linux
+and app.name: code
+os: linux
 and app.name: code-oss
 os: linux
 and app.name: code-insiders
@@ -128,7 +130,7 @@ class EditorEditActions:
     def paste():
         actions.user.vscode("editor.action.clipboardPasteAction")
 
-    def find(text: str = None):
+    def find(text=None):
         if text:
             actions.user.run_rpc_command(
                 "editor.actions.findWithArgs", {"searchString": text}
@@ -225,7 +227,7 @@ class Actions:
 
 @mac_ctx.action_class("edit")
 class MacEditActions:
-    def find(text: str = None):
+    def find(text=None):
         actions.key("cmd-f")
         if text:
             actions.insert(text)
