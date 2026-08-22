@@ -37,6 +37,12 @@ mod.setting("code_public_function_formatter", str)
 mod.setting("code_private_variable_formatter", str)
 mod.setting("code_protected_variable_formatter", str)
 mod.setting("code_public_variable_formatter", str)
+mod.setting(
+    "code_class_formatter",
+    type=str,
+    default="PUBLIC_CAMEL_CASE",
+    desc="Formatter used when a class/type name is dictated as free text (e.g. 'returns' followed by a spoken class name)",
+)
 
 
 @mod.action_class
