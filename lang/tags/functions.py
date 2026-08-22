@@ -57,22 +57,21 @@ class Actions:
 
         if mods == {}:
             return actions.user.code_default_function(text)
-        elif mods == {"static"}:
+        if mods == {"static"}:
             return actions.user.code_private_static_function(text)
-        elif mods == {"private"}:
+        if mods == {"private"}:
             return actions.user.code_private_function(text)
-        elif mods == {"private", "static"}:
+        if mods == {"private", "static"}:
             return actions.user.code_private_static_function(text)
-        elif mods == {"protected"}:
+        if mods == {"protected"}:
             return actions.user.code_protected_function(text)
-        elif mods == {"protected", "static"}:
+        if mods == {"protected", "static"}:
             return actions.user.code_protected_static_function(text)
-        elif mods == {"public"}:
+        if mods == {"public"}:
             return actions.user.code_public_function(text)
-        elif mods == {"public", "static"}:
+        if mods == {"public", "static"}:
             return actions.user.code_public_static_function(text)
-        else:
-            raise RuntimeError(f"Unhandled modifier set: {mods}")
+        raise RuntimeError(f"Unhandled modifier set: {mods}")
 
     def code_default_function(text: str):
         """Inserts function declaration"""

@@ -224,8 +224,7 @@ def replace_variables_for_final_stop(variables, replacement_name: str):
 def find_variable_matches(variable_name: str, body: str) -> list[re.Match[str]]:
     """Find every match of a variable in the body"""
     expression = create_variable_regular_expression(variable_name)
-    matches = [m for m in re.finditer(expression, body)]
-    return matches
+    return list(re.finditer(expression, body))
 
 
 def find_largest_variable_number(body: str) -> int | None:

@@ -113,13 +113,11 @@ class Actions:
         bundle = actions.app.bundle()
         title = actions.win.title()
         hostname = scope.get("hostname")
-        result = f"Name: {name}\nExecutable: {executable}\nBundle: {bundle}\nTitle: {title}\nhostname: {hostname}"
-        return result
+        return f"Name: {name}\nExecutable: {executable}\nBundle: {bundle}\nTitle: {title}\nhostname: {hostname}"
 
     def talon_get_hostname() -> str:
         """Returns the hostname"""
-        hostname = scope.get("hostname")
-        return hostname
+        return scope.get("hostname")
 
     def talon_get_active_application_info() -> str:
         """Returns all active app info to the cliboard"""
@@ -138,10 +136,9 @@ class Actions:
 
     def talon_version_info() -> str:
         """Returns talon & operation system verison information"""
-        result = (
+        return (
             f"Version: {app.version}, Branch: {app.branch}, OS: {platform.platform()}"
         )
-        return result
 
     def talon_pretty_print(obj: object):
         """Uses pretty print to dump an object"""
