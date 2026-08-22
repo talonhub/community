@@ -1,6 +1,10 @@
 from talon import Context, Module, actions, settings
 
 ctx = Context()
+ctx.matches = r"""
+tag: user.code_object_oriented
+"""
+
 mod = Module()
 
 mod.tag(
@@ -16,11 +20,6 @@ mod.setting(
     default="PUBLIC_CAMEL_CASE",
     desc="Formatter used when a class/type name is dictated as free text (e.g. 'returns' followed by a spoken class name)",
 )
-
-ctx.matches = r"""
-tag: user.code_object_oriented
-"""
-
 
 @ctx.capture("user.code_type", rule="{user.code_type} | <user.text>")
 def code_type(m) -> str:
