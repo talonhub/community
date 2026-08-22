@@ -14,17 +14,18 @@ mod.tag(
 
 mod.list("code_common_method", desc="Commonly invoked method, e.g. 'foo' in '.foo()'")
 
-
 @ctx.capture("user.code_type", rule="{user.code_type} | <user.text>")
 def code_type(m) -> str:
     """Returns a type, allowing dictated text to be used as a class name"""
     try:
         return m.code_type
     except AttributeError:
-        return actions.user.formatted_text(
-            m.text, settings.get("user.code_class_formatter")
-        )
-
+        if m.text.lower().startswith("class "):
+            return actions.user.formatted_text(
+                m.text[6:], settings.get("user.code_class_formatter")
+            )
+        else:
+            return m.text
 
 @mod.action_class
 class Actions:
