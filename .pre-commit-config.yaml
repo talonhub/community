@@ -24,13 +24,13 @@ repos:
       - id: mixed-line-ending
 
   - repo: https://github.com/oxc-project/mirrors-oxfmt
-    rev: "v0.45.0"
+    rev: "v0.63.0"
     hooks:
       - id: oxfmt
         types_or: [markdown, yaml, toml, json]
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.16.2
+    rev: v0.16.3
     hooks:
       - id: ruff-check
         # Want to use pyproject instead of toml, but pre-commit.ci doesn't yet support it.
@@ -39,7 +39,7 @@ repos:
       - id: ruff-format
 
   - repo: https://github.com/cursorless-dev/talon-tools
-    rev: v0.11.2
+    rev: v0.12.0
     hooks:
       - id: talon-fmt
       - id: snippet-fmt
