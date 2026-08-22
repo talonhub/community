@@ -14,6 +14,7 @@ mod.tag(
 
 mod.list("code_common_method", desc="Commonly invoked method, e.g. 'foo' in '.foo()'")
 
+
 @ctx.capture("user.code_type", rule="{user.code_type} | <user.text>")
 def code_type(m) -> str:
     """Returns a type, allowing dictated text to be used as a class name"""
