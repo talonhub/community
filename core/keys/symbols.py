@@ -121,8 +121,7 @@ def on_symbols(values):
     }
     for i, row in enumerate(values):
         # tolerate a blank line
-        if (len(row) == 1 and (not row[0] or row[0].isspace())) \
-             or len(row) == 0:
+        if (len(row) == 0 or (len(row) == 1 and row[0].isspace()):
             continue
         if len(row) < 3:
             warning = f"Row {i+1} of symbols.csv did not have enough columns!"
