@@ -6,8 +6,18 @@ add
 append
 are strip: rstrip
 elle strip: lstrip
+capitalize
+case fold: "casefold"
+clear
+copy
+count
+ends with: "endswith"
 extend
+find
+format
 get
+index
+insert
 items
 join
 keys
@@ -15,8 +25,12 @@ lower
 pop
 remove
 replace
+reverse
 sort
 split
+starts with: "startswith"
 strip
+title
+update
 upper
 values

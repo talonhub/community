@@ -17,13 +17,9 @@ mod.setting(
 
 @mod.action_class
 class TmuxActions:
-    def tmux_prefix():
-        """press control and the configured tmux prefix key"""
-        actions.key(settings.get("user.tmux_prefix_key"))
-
     def tmux_keybind(key: str):
         """press tmux prefix followed by a key bind"""
-        actions.user.tmux_prefix()
+        actions.key(settings.get("user.tmux_prefix_key"))
         actions.key(key)
 
     def tmux_enter_command(command: str = ""):
@@ -61,6 +57,11 @@ class AppActions:
     def tab_previous():
         actions.user.tmux_execute_command("select-window -p")
 
+    def tab_close():
+        actions.user.tmux_execute_command_with_confirmation(
+            "kill-window", "kill-window #W?"
+        )
+
 
 @ctx.action_class("user")
 class UserActions:
@@ -70,33 +71,31 @@ class UserActions:
         else:
             actions.user.tmux_execute_command(f"select-window -t {number}")
 
-    def tab_close_wrapper():
-        actions.user.tmux_execute_command_with_confirmation(
-            "kill-window", "kill-window #W?"
-        )
-
-    def split_window_right():
+    def split_window_up():
         actions.user.split_window_horizontally()
-        actions.user.tmux_execute_command("swap-pane -U -s #P")
-
-    def split_window_left():
-        actions.user.split_window_horizontally()
+        actions.user.tmux_execute_command("swap-pane -U")
 
     def split_window_down():
-        actions.user.split_window_vertically()
-        actions.user.tmux_execute_command("swap-pane -U -s #P")
+        actions.user.split_window_horizontally()
 
-    def split_window_up():
+    def split_window_left():
+        actions.user.split_window_vertically()
+        actions.user.tmux_execute_command("swap-pane -U")
+
+    def split_window_right():
         actions.user.split_window_vertically()
 
     def split_flip():
         actions.user.tmux_execute_command("next-layout")
 
+    # Tmux uses -h to create a left/right split. Applications such as VSCode and
+    # Obsidian call this a vertical split. By passing the -h flag, we keep the
+    # voice commands consistent with those used in those other applications.
     def split_window_vertically():
-        actions.user.tmux_execute_command("split-pane")
+        actions.user.tmux_execute_command("split-pane -h")
 
     def split_window_horizontally():
-        actions.user.tmux_execute_command("split-pane -h")
+        actions.user.tmux_execute_command("split-pane")
 
     def split_maximize():
         # toggle the maximization because zooming when already zoomed is pointless

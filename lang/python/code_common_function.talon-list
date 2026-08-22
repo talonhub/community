@@ -2,13 +2,32 @@ list: user.code_common_function
 code.language: python
 -
 
+all
+any
+boolean: "bool"
+dick: "dict"
 enumerate
+float
+input
 integer: "int"
+is instance: "isinstance"
 length: "len"
 list
+map
+max
+min
+next
+open
 print
 range
+reversed
+round
 set
 split
+sorted
 string: "str"
+sum
+tuple
+type
 update
+zip
