@@ -326,17 +326,15 @@ def handle_extend(before_or_after, direction, start, end, length):
 
 def match_backwards(regex, occurrence_number, subtext):
     try:
-        match = list(regex.finditer(subtext))[-occurrence_number]
-        return match
+        return list(regex.finditer(subtext))[-occurrence_number]
     except IndexError:
-        return
+        return None
 
 
 def match_forward(regex, occurrence_number, sub_text):
     try:
-        match = next(
+        return next(
             itertools.islice(regex.finditer(sub_text), occurrence_number - 1, None)
         )
-        return match
     except StopIteration:
         return None

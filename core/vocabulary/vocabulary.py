@@ -63,7 +63,7 @@ class PhraseReplacer:
 
     def update(self, phrase_dict: dict[str, str]):
         # Index phrases by first word, then number of subsequent words n_next
-        phrase_index = dict()
+        phrase_index = {}
         for spoken_form, written_form in phrase_dict.items():
             words = spoken_form.split()
             if not words:
@@ -239,10 +239,7 @@ class Actions:
     def get_vocabulary_file_path():
         """Returns the path for the active vocabulary file"""
         vocabulary_directory = os.path.dirname(os.path.realpath(__file__))
-        vocabulary_file_path = os.path.join(
-            vocabulary_directory, "vocabulary.talon-list"
-        )
-        return vocabulary_file_path
+        return os.path.join(vocabulary_directory, "vocabulary.talon-list")
 
     def add_selection_to_vocabulary(phrase: Union[Phrase, str] = "", type: str = ""):
         """Permanently adds the currently selected text to the vocabulary with the provided

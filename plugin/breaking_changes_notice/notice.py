@@ -112,8 +112,7 @@ def save_breaking_changes_file_size(file_name, size):
 
 
 def compute_breaking_changes_path():
-    path = compute_breaking_changes_path_from_current_directory()
-    return path
+    return compute_breaking_changes_path_from_current_directory()
 
 
 def compute_breaking_changes_path_from_current_directory():

@@ -318,7 +318,7 @@ def obsidian_palette_command(command_id: str, fallback=False):
         actions.user.command_palette_key()
     command = get_command_palette_name(command_id)
     if not command:
-        return None
+        return
     actions.insert(command)
     actions.key("enter")
 

@@ -107,8 +107,8 @@ def raise_homophones(word_to_find_homophones_for, forced=False, selection=False)
         word_to_find_homophones_for.endswith("s")
         and word_to_find_homophones_for[:-1] in all_homophones
     ):
-        valid_homophones = map(
-            lambda w: w + "s", all_homophones[word_to_find_homophones_for[:-1]]
+        valid_homophones = (
+            word + "s" for word in all_homophones[word_to_find_homophones_for[:-1]]
         )
     else:
         app.notify(

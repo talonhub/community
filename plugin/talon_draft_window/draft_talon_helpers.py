@@ -41,7 +41,8 @@ mod.setting(
     default=None,
     desc=(
         "Sets the color of the word labels used in the draft window. "
-        "E.g. 00ff00 would be green" + SETTING_CHANGE_CAVEAT_DESCRIPTION
+        + "E.g. 00ff00 would be green"
+        + SETTING_CHANGE_CAVEAT_DESCRIPTION
     ),
 )
 mod.setting(
@@ -91,8 +92,7 @@ class EditActions:
     def selected_text() -> str:
         area = draft_manager.area
         if area.sel:
-            result = area[area.sel.left : area.sel.right]
-            return result
+            return area[area.sel.left : area.sel.right]
         return ""
 
 
