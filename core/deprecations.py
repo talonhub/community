@@ -155,7 +155,9 @@ class Actions:
         # No caller makes sense, since a voice command triggered this action.
         warnings.warn_explicit(log_message, DeprecationWarning, "", 0)
         if settings.get("user.strict_command_deprecation"):
-            raise DeprecatedCommandException(f'The "{name}" command is deprecated with replacement {replacement}".')
+            raise DeprecatedCommandException(
+                f'The "{name}" command is deprecated with replacement {replacement}".'
+            )
 
     def deprecate_capture(time_deprecated: str, name: str):
         """
