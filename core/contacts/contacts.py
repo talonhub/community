@@ -275,7 +275,7 @@ def prose_contact_snippet(m) -> str:
 
 
 @mod.capture(
-    rule="|".join(
+    rule=" | ".join(
         [
             "<user.prose_name>",
             "<user.prose_name_possessive>",

@@ -75,7 +75,7 @@ def any_alphanumeric_key(m) -> str:
 
 
 @mod.capture(
-    rule="|".join(
+    rule=" | ".join(
         [
             "<user.letter>",
             "<user.number_key>",

@@ -325,7 +325,7 @@ def number_prose_with_colon(m) -> str:
 
 
 @mod.capture(
-    rule="|".join(
+    rule=" | ".join(
         [
             "<user.number_signed_string>",
             "<user.number_prose_with_dot>",
