@@ -8,14 +8,14 @@ ctx.matches = r"""
 code.language: vimscript
 """
 
-ctx.lists["self.vimscript_functions"] = {
+ctx.lists["user.vimscript_functions"] = {
     "string len": "strlen",
     "get line": "getline",
     "set line": "setline",
     "length": "len",
 }
 
-ctx.lists["self.vimscript_scope"] = {
+ctx.lists["user.vimscript_scope"] = {
     "argument": "a:",
     "arg": "a:",
     "buffer": "b:",
@@ -33,13 +33,13 @@ mod.list("vimscript_functions", desc="Standard built-in vimscript functions")
 mod.list("vimscript_scope", desc="vimscript scoping types for functions and variables")
 
 
-@mod.capture(rule="{self.vimscript_functions}")
+@mod.capture(rule="{user.vimscript_functions}")
 def vimscript_functions(m) -> str:
     "Returns a string"
     return m.vimscript_functions
 
 
-@mod.capture(rule="{self.vimscript_scope}")
+@mod.capture(rule="{user.vimscript_scope}")
 def vimscript_scope(m) -> str:
     "Returns a string"
     return m.vimscript_scope
