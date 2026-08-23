@@ -83,6 +83,11 @@ class UserActions:
         actions.insert("isset()")
         actions.edit.left()
 
+    def code_insert_function(text: str, selection: str):
+        text += f"({selection or ''})"
+        actions.user.paste(text)
+        actions.edit.left()
+
     def code_default_function(text: str):
         """Inserts function declaration"""
         result = "function {}()".format(
@@ -152,6 +157,9 @@ class UserActions:
         )
         actions.user.paste(result)
         actions.edit.left()
+
+    def code_insert_type_annotation(type: str):
+        actions.insert(f"{type} ")
 
     def code_insert_return_type(type: str):
         actions.insert(f": {type}")
