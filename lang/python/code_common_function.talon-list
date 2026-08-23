@@ -23,11 +23,9 @@ range
 reversed
 round
 set
-split
 sorted
 string: "str"
 sum
 tuple
 type
-update
 zip
