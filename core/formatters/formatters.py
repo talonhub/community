@@ -343,14 +343,14 @@ def formatters(m) -> str:
     return ",".join(list(m))
 
 
-@mod.capture(rule="{self.code_formatter}+")
+@mod.capture(rule="{user.code_formatter}+")
 def code_formatters(m) -> str:
     "Returns a comma-separated string of code formatters e.g. 'SNAKE,DUBSTRING'"
     return ",".join(m.code_formatter_list)
 
 
 @mod.capture(
-    rule="<self.formatters> <user.text> (<user.text> | <user.formatter_immune>)*"
+    rule="<user.formatters> <user.text> (<user.text> | <user.formatter_immune>)*"
 )
 def format_text(m) -> str:
     """Formats text and returns a string"""
@@ -380,7 +380,7 @@ class ImmuneString:
 @mod.capture(
     # Add anything else into this that you want to have inserted when
     # using a prose formatter.
-    rule="(<user.symbol_key> | (numb | numeral) <number>)"
+    rule="<user.symbol_key> | (numb | numeral) <number>"
 )
 def formatter_immune(m) -> ImmuneString:
     """Symbols and numbers that can be interspersed into a prose formatter

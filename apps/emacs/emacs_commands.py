@@ -66,4 +66,4 @@ def load_commands(f):
         for c in commands:
             if c.spoken:
                 command_list[c.spoken] = c.name
-        ctx.lists["self.emacs_command"] = command_list
+        ctx.lists["user.emacs_command"] = command_list

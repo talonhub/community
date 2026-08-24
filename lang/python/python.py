@@ -130,7 +130,8 @@ ctx.lists["user.python_generic_type"] = {
 
 
 @ctx.capture(
-    "user.generic_type_parameter_argument", rule="<user.code_type> | [type] <user.text>"
+    "user.generic_type_parameter_argument",
+    rule="<user.code_type> | [type] <user.text>",
 )
 def generic_type_parameter_argument(m) -> str:
     """A Python type parameter for a generic data structure"""
@@ -151,7 +152,8 @@ def generic_data_structure(m) -> str:
 
 
 @ctx.capture(
-    "user.generic_type_connector", rule="<user.common_generic_type_connector>|or"
+    "user.generic_type_connector",
+    rule="<user.common_generic_type_connector> | or",
 )
 def generic_type_connector(m) -> SimpleLanguageSpecificTypeConnector:
     """A Python specific type connector for union types"""

@@ -6,9 +6,13 @@ repos:
       - id: check-added-large-files
       - id: check-case-conflict
       - id: check-executables-have-shebangs
+      - id: check-illegal-windows-names
       - id: check-merge-conflict
       - id: check-shebang-scripts-are-executable
       - id: check-symlinks
+      - id: check-toml
+      - id: check-yaml
+      - id: debug-statements
       - id: destroyed-symlinks
       - id: detect-private-key
       - id: fix-byte-order-marker
@@ -33,8 +37,7 @@ repos:
     rev: v0.16.3
     hooks:
       - id: ruff-check
-        # Want to use pyproject instead of toml, but pre-commit.ci doesn't yet support it.
-        types_or: [python, toml]
+        types_or: [python, pyi, jupyter, pyproject]
         args: [--fix]
       - id: ruff-format
 

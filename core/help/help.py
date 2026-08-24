@@ -230,8 +230,7 @@ def get_command_line_count(command: tuple[str, str]) -> int:
     lines = len(body.split("\n"))
     if lines == 1:
         return 1
-    else:
-        return lines + 1
+    return lines + 1
 
 
 def get_pages(item_line_counts: list[int]) -> list[int]:
@@ -523,7 +522,7 @@ def refresh_context_command_map(enabled_only=False):
     display_name_to_context_name_map = local_display_name_to_context_name_map
     rule_word_map = refresh_rule_word_map(local_context_command_map)
 
-    ctx.lists["self.help_contexts"] = cached_context_names
+    ctx.lists["user.help_contexts"] = cached_context_names
     update_active_contexts_cache(active_context_cache)
 
 
