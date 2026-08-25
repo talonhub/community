@@ -153,6 +153,99 @@ if app.platform == "windows":
         return items
 
 
+elif app.platform == "linux":
+    import configparser
+    import re
+
+    linux_application_directories = [
+        "/usr/share/applications",
+        "/usr/local/share/applications",
+        f"{Path.home()}/.local/share/applications",
+        "/var/lib/flatpak/exports/share/applications",
+        "/var/lib/snapd/desktop/applications",
+    ]
+    xdg_data_dirs = os.environ.get("XDG_DATA_DIRS")
+    if xdg_data_dirs is not None:
+        for directory in xdg_data_dirs.split(":"):
+            linux_application_directories.append(f"{directory}/applications")
+    linux_application_directories = list(set(linux_application_directories))
+
+    def get_apps():
+        # app shortcuts in program menu are contained in .desktop files. This function parses those files for the app name and command
+        items = {}
+        # find field codes in exec key with regex
+        # https://specifications.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html#exec-variables
+        args_pattern = re.compile(r"\%[UufFcik]")
+        for base in linux_application_directories:
+            if os.path.isdir(base):
+                for entry in os.scandir(base):
+                    if entry.name.endswith(".desktop"):
+                        try:
+                            config = configparser.ConfigParser(interpolation=None)
+                            config.read(entry.path)
+                            # only parse shortcuts that are not hidden
+                            if not config.has_option("Desktop Entry", "NoDisplay"):
+                                name_key = config["Desktop Entry"]["Name"]
+                                exec_key = config["Desktop Entry"]["Exec"]
+                                # remove extra quotes from exec
+                                if exec_key[0] == '"' and exec_key[-1] == '"':
+                                    exec_key = re.sub('"', "", exec_key)
+                                # remove field codes and add full path if necessary
+                                if exec_key[0] == "/":
+                                    items[name_key] = re.sub(args_pattern, "", exec_key)
+                                else:
+                                    exec_path = (
+                                        subprocess.check_output(
+                                            ["which", exec_key.split()[0]],
+                                            stderr=subprocess.DEVNULL,
+                                        )
+                                        .decode("utf-8")
+                                        .strip()
+                                    )
+                                    items[name_key] = (
+                                        exec_path
+                                        + " "
+                                        + re.sub(
+                                            args_pattern,
+                                            "",
+                                            " ".join(exec_key.split()[1:]),
+                                        )
+                                    )
+                        except Exception:
+                            print(
+                                "linux get_apps(): skipped parsing application file ",
+                                entry.name,
+                            )
+        return items
+
+elif app.platform == "mac":
+    mac_application_directories = [
+        "/Applications",
+        "/System/Applications",
+        f"{Path.home()}/Applications",
+        f"{Path.home()}/.nix-profile/Applications",
+    ]
+
+    def get_apps(paths: list[str] = mac_application_directories):
+        items = {}
+        subdirs = []
+        for base in paths:
+            if not os.path.isdir(base):
+                continue
+            for entry in os.scandir(base):
+                if (not entry.is_dir()) or entry.name.startswith("."):
+                    continue
+                if entry.name.endswith(".app"):
+                    name = entry.name[:-4].lower()
+                    items[name] = entry.path
+                else:
+                    subdirs.append(entry.path)
+        if len(subdirs):
+            items.update(get_apps(subdirs))
+
+        return items
+
+
 @mod.capture(rule="{user.running}")  # | <user.text>)")
 def running_applications(m) -> str:
     "Returns a single application name"
