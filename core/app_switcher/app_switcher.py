@@ -66,92 +66,94 @@ words_to_exclude = [
 # rather than via e.g. the start menu. This way, all apps, including "modern" apps are
 # launchable. To easily retrieve the apps this makes available, navigate to shell:AppsFolder in Explorer
 if app.platform == "windows":
-    import ctypes
-    import os
-    from ctypes import wintypes
+    try:
+        import ctypes
+        import os
+        from ctypes import wintypes
 
-    import pywintypes
-    from win32com.propsys import propsys, pscon
-    from win32com.shell import shell, shellcon
+        import pywintypes
+        from win32com.propsys import propsys, pscon
+        from win32com.shell import shell, shellcon
 
-    # KNOWNFOLDERID
-    # https://msdn.microsoft.com/en-us/library/dd378457
-    # win32com defines most of these, except the ones added in Windows 8.
-    FOLDERID_AppsFolder = pywintypes.IID("{1e87508d-89c2-42f0-8a7e-645a0f50ca58}")
+        # KNOWNFOLDERID
+        # https://msdn.microsoft.com/en-us/library/dd378457
+        # win32com defines most of these, except the ones added in Windows 8.
+        FOLDERID_AppsFolder = pywintypes.IID("{1e87508d-89c2-42f0-8a7e-645a0f50ca58}")
 
-    # win32com is missing SHGetKnownFolderIDList, so use ctypes.
+        # win32com is missing SHGetKnownFolderIDList, so use ctypes.
 
-    _ole32 = ctypes.OleDLL("ole32")
-    _shell32 = ctypes.OleDLL("shell32")
+        _ole32 = ctypes.OleDLL("ole32")
+        _shell32 = ctypes.OleDLL("shell32")
 
-    _REFKNOWNFOLDERID = ctypes.c_char_p
-    _PPITEMIDLIST = ctypes.POINTER(ctypes.c_void_p)
+        _REFKNOWNFOLDERID = ctypes.c_char_p
+        _PPITEMIDLIST = ctypes.POINTER(ctypes.c_void_p)
 
-    _ole32.CoTaskMemFree.restype = None
-    _ole32.CoTaskMemFree.argtypes = (wintypes.LPVOID,)
+        _ole32.CoTaskMemFree.restype = None
+        _ole32.CoTaskMemFree.argtypes = (wintypes.LPVOID,)
 
-    _shell32.SHGetKnownFolderIDList.argtypes = (
-        _REFKNOWNFOLDERID,  # rfid
-        wintypes.DWORD,  # dwFlags
-        wintypes.HANDLE,  # hToken
-        _PPITEMIDLIST,
-    )  # ppidl
+        _shell32.SHGetKnownFolderIDList.argtypes = (
+            _REFKNOWNFOLDERID,  # rfid
+            wintypes.DWORD,  # dwFlags
+            wintypes.HANDLE,  # hToken
+            _PPITEMIDLIST,
+        )  # ppidl
 
-    def get_known_folder_id_list(folder_id, htoken=None):
-        if isinstance(folder_id, pywintypes.IIDType):
-            folder_id = bytes(folder_id)
-        pidl = ctypes.c_void_p()
-        try:
-            _shell32.SHGetKnownFolderIDList(folder_id, 0, htoken, ctypes.byref(pidl))
-            return shell.AddressAsPIDL(pidl.value)
-        except OSError as e:
-            if e.winerror & 0x80070000 == 0x80070000:
-                # It's a WinAPI error, so re-raise it, letting Python
-                # raise a specific exception such as FileNotFoundError.
-                raise ctypes.WinError(e.winerror & 0x0000FFFF) from e
-            raise
-        finally:
-            if pidl:
-                _ole32.CoTaskMemFree(pidl)
-
-    def enum_known_folder(folder_id, htoken=None):
-        id_list = get_known_folder_id_list(folder_id, htoken)
-        folder_shell_item = shell.SHCreateShellItem(None, None, id_list)
-        items_enum = folder_shell_item.BindToHandler(
-            None, shell.BHID_EnumItems, shell.IID_IEnumShellItems
-        )
-        yield from items_enum
-
-    def list_known_folder(folder_id, htoken=None):
-        result = []
-        for item in enum_known_folder(folder_id, htoken):
-            result.append(item.GetDisplayName(shellcon.SIGDN_NORMALDISPLAY))
-        result.sort(key=lambda x: x.upper())
-        return result
-
-    def get_apps():
-        items = {}
-        for item in enum_known_folder(FOLDERID_AppsFolder):
+        def get_known_folder_id_list(folder_id, htoken=None):
+            if isinstance(folder_id, pywintypes.IIDType):
+                folder_id = bytes(folder_id)
+            pidl = ctypes.c_void_p()
             try:
-                property_store = item.BindToHandler(
-                    None, shell.BHID_PropertyStore, propsys.IID_IPropertyStore
-                )
-                app_user_model_id = property_store.GetValue(
-                    pscon.PKEY_AppUserModel_ID
-                ).ToString()
+                _shell32.SHGetKnownFolderIDList(folder_id, 0, htoken, ctypes.byref(pidl))
+                return shell.AddressAsPIDL(pidl.value)
+            except OSError as e:
+                if e.winerror & 0x80070000 == 0x80070000:
+                    # It's a WinAPI error, so re-raise it, letting Python
+                    # raise a specific exception such as FileNotFoundError.
+                    raise ctypes.WinError(e.winerror & 0x0000FFFF) from e
+                raise
+            finally:
+                if pidl:
+                    _ole32.CoTaskMemFree(pidl)
 
-            except pywintypes.error:
-                continue
+        def enum_known_folder(folder_id, htoken=None):
+            id_list = get_known_folder_id_list(folder_id, htoken)
+            folder_shell_item = shell.SHCreateShellItem(None, None, id_list)
+            items_enum = folder_shell_item.BindToHandler(
+                None, shell.BHID_EnumItems, shell.IID_IEnumShellItems
+            )
+            yield from items_enum
 
-            name = item.GetDisplayName(shellcon.SIGDN_NORMALDISPLAY)
+        def list_known_folder(folder_id, htoken=None):
+            result = []
+            for item in enum_known_folder(folder_id, htoken):
+                result.append(item.GetDisplayName(shellcon.SIGDN_NORMALDISPLAY))
+            result.sort(key=lambda x: x.upper())
+            return result
 
-            # exclude anything with install/uninstall...
-            # 'cause I don't think we don't want 'em
-            if "install" not in name.lower():
-                items[name] = app_user_model_id
+        def get_apps():
+            items = {}
+            for item in enum_known_folder(FOLDERID_AppsFolder):
+                try:
+                    property_store = item.BindToHandler(
+                        None, shell.BHID_PropertyStore, propsys.IID_IPropertyStore
+                    )
+                    app_user_model_id = property_store.GetValue(
+                        pscon.PKEY_AppUserModel_ID
+                    ).ToString()
 
-        return items
+                except pywintypes.error:
+                    continue
 
+                name = item.GetDisplayName(shellcon.SIGDN_NORMALDISPLAY)
+
+                # exclude anything with install/uninstall...
+                # 'cause I don't think we don't want 'em
+                if "install" not in name.lower():
+                    items[name] = app_user_model_id
+
+            return items
+    except ImportError:
+        pass
 
 elif app.platform == "linux":
     import configparser
