@@ -155,7 +155,8 @@ if app.platform == "windows":
 
             return items
     except ImportError:
-        pass
+        def get_apps():
+            return actions.apps.list()
 
 elif app.platform == "linux":
     import configparser
