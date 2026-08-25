@@ -70,14 +70,14 @@ if app.platform == "windows":
     import os
     from ctypes import wintypes
 
-    from win32com.propsys import propsys, pscon
-    from win32com.shell import shell, shellcon
 
     # KNOWNFOLDERID
     # https://msdn.microsoft.com/en-us/library/dd378457
     # win32com defines most of these, except the ones added in Windows 8.
     try:
         import pywintypes
+        from win32com.propsys import propsys, pscon
+        from win32com.shell import shell, shellcon
         FOLDERID_AppsFolder = pywintypes.IID("{1e87508d-89c2-42f0-8a7e-645a0f50ca58}")
     except:
         FOLDERID_AppsFolder = None
