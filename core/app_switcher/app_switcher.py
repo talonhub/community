@@ -66,190 +66,92 @@ words_to_exclude = [
 # rather than via e.g. the start menu. This way, all apps, including "modern" apps are
 # launchable. To easily retrieve the apps this makes available, navigate to shell:AppsFolder in Explorer
 if app.platform == "windows":
-    try:
-        import ctypes
-        import os
-        from ctypes import wintypes
+    import ctypes
+    import os
+    from ctypes import wintypes
 
-        # KNOWNFOLDERID
-        # https://msdn.microsoft.com/en-us/library/dd378457
-        # win32com defines most of these, except the ones added in Windows 8.
-        import pywintypes
-        from win32com.propsys import propsys, pscon
-        from win32com.shell import shell, shellcon
+    import pywintypes
+    from win32com.propsys import propsys, pscon
+    from win32com.shell import shell, shellcon
 
-        FOLDERID_AppsFolder = pywintypes.IID("{1e87508d-89c2-42f0-8a7e-645a0f50ca58}")
+    # KNOWNFOLDERID
+    # https://msdn.microsoft.com/en-us/library/dd378457
+    # win32com defines most of these, except the ones added in Windows 8.
+    FOLDERID_AppsFolder = pywintypes.IID("{1e87508d-89c2-42f0-8a7e-645a0f50ca58}")
 
-        # win32com is missing SHGetKnownFolderIDList, so use ctypes.
+    # win32com is missing SHGetKnownFolderIDList, so use ctypes.
 
-        _ole32 = ctypes.OleDLL("ole32")
-        _shell32 = ctypes.OleDLL("shell32")
+    _ole32 = ctypes.OleDLL("ole32")
+    _shell32 = ctypes.OleDLL("shell32")
 
-        _REFKNOWNFOLDERID = ctypes.c_char_p
-        _PPITEMIDLIST = ctypes.POINTER(ctypes.c_void_p)
+    _REFKNOWNFOLDERID = ctypes.c_char_p
+    _PPITEMIDLIST = ctypes.POINTER(ctypes.c_void_p)
 
-        _ole32.CoTaskMemFree.restype = None
-        _ole32.CoTaskMemFree.argtypes = (wintypes.LPVOID,)
+    _ole32.CoTaskMemFree.restype = None
+    _ole32.CoTaskMemFree.argtypes = (wintypes.LPVOID,)
 
-        _shell32.SHGetKnownFolderIDList.argtypes = (
-            _REFKNOWNFOLDERID,  # rfid
-            wintypes.DWORD,  # dwFlags
-            wintypes.HANDLE,  # hToken
-            _PPITEMIDLIST,
-        )  # ppidl
+    _shell32.SHGetKnownFolderIDList.argtypes = (
+        _REFKNOWNFOLDERID,  # rfid
+        wintypes.DWORD,  # dwFlags
+        wintypes.HANDLE,  # hToken
+        _PPITEMIDLIST,
+    )  # ppidl
 
-        def get_known_folder_id_list(folder_id, htoken=None):
-            if isinstance(folder_id, pywintypes.IIDType):
-                folder_id = bytes(folder_id)
-            pidl = ctypes.c_void_p()
-            try:
-                _shell32.SHGetKnownFolderIDList(
-                    folder_id, 0, htoken, ctypes.byref(pidl)
-                )
-                return shell.AddressAsPIDL(pidl.value)
-            except OSError as e:
-                if e.winerror & 0x80070000 == 0x80070000:
-                    # It's a WinAPI error, so re-raise it, letting Python
-                    # raise a specific exception such as FileNotFoundError.
-                    raise ctypes.WinError(e.winerror & 0x0000FFFF) from e
-                raise
-            finally:
-                if pidl:
-                    _ole32.CoTaskMemFree(pidl)
+    def get_known_folder_id_list(folder_id, htoken=None):
+        if isinstance(folder_id, pywintypes.IIDType):
+            folder_id = bytes(folder_id)
+        pidl = ctypes.c_void_p()
+        try:
+            _shell32.SHGetKnownFolderIDList(folder_id, 0, htoken, ctypes.byref(pidl))
+            return shell.AddressAsPIDL(pidl.value)
+        except OSError as e:
+            if e.winerror & 0x80070000 == 0x80070000:
+                # It's a WinAPI error, so re-raise it, letting Python
+                # raise a specific exception such as FileNotFoundError.
+                raise ctypes.WinError(e.winerror & 0x0000FFFF) from e
+            raise
+        finally:
+            if pidl:
+                _ole32.CoTaskMemFree(pidl)
 
-        def enum_known_folder(folder_id, htoken=None):
-            id_list = get_known_folder_id_list(folder_id, htoken)
-            folder_shell_item = shell.SHCreateShellItem(None, None, id_list)
-            items_enum = folder_shell_item.BindToHandler(
-                None, shell.BHID_EnumItems, shell.IID_IEnumShellItems
-            )
-            yield from items_enum
+    def enum_known_folder(folder_id, htoken=None):
+        id_list = get_known_folder_id_list(folder_id, htoken)
+        folder_shell_item = shell.SHCreateShellItem(None, None, id_list)
+        items_enum = folder_shell_item.BindToHandler(
+            None, shell.BHID_EnumItems, shell.IID_IEnumShellItems
+        )
+        yield from items_enum
 
-        def list_known_folder(folder_id, htoken=None):
-            result = []
-            for item in enum_known_folder(folder_id, htoken):
-                result.append(item.GetDisplayName(shellcon.SIGDN_NORMALDISPLAY))
-            result.sort(key=lambda x: x.upper())
-            return result
-
-        def get_apps():
-            items = {}
-            for item in enum_known_folder(FOLDERID_AppsFolder):
-                try:
-                    property_store = item.BindToHandler(
-                        None, shell.BHID_PropertyStore, propsys.IID_IPropertyStore
-                    )
-                    app_user_model_id = property_store.GetValue(
-                        pscon.PKEY_AppUserModel_ID
-                    ).ToString()
-
-                except pywintypes.error:
-                    continue
-
-                name = item.GetDisplayName(shellcon.SIGDN_NORMALDISPLAY)
-
-                # exclude anything with install/uninstall...
-                # 'cause I don't think we don't want 'em
-                if "install" not in name.lower():
-                    items[name] = app_user_model_id
-
-            return items
-    except ImportError:
-
-        def get_apps():
-            return actions.apps.list()
-
-elif app.platform == "linux":
-    import configparser
-    import re
-
-    linux_application_directories = [
-        "/usr/share/applications",
-        "/usr/local/share/applications",
-        f"{Path.home()}/.local/share/applications",
-        "/var/lib/flatpak/exports/share/applications",
-        "/var/lib/snapd/desktop/applications",
-    ]
-    xdg_data_dirs = os.environ.get("XDG_DATA_DIRS")
-    if xdg_data_dirs is not None:
-        for directory in xdg_data_dirs.split(":"):
-            linux_application_directories.append(f"{directory}/applications")
-    linux_application_directories = list(set(linux_application_directories))
+    def list_known_folder(folder_id, htoken=None):
+        result = []
+        for item in enum_known_folder(folder_id, htoken):
+            result.append(item.GetDisplayName(shellcon.SIGDN_NORMALDISPLAY))
+        result.sort(key=lambda x: x.upper())
+        return result
 
     def get_apps():
-        # app shortcuts in program menu are contained in .desktop files. This function parses those files for the app name and command
         items = {}
-        # find field codes in exec key with regex
-        # https://specifications.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html#exec-variables
-        args_pattern = re.compile(r"\%[UufFcik]")
-        for base in linux_application_directories:
-            if os.path.isdir(base):
-                for entry in os.scandir(base):
-                    if entry.name.endswith(".desktop"):
-                        try:
-                            config = configparser.ConfigParser(interpolation=None)
-                            config.read(entry.path)
-                            # only parse shortcuts that are not hidden
-                            if not config.has_option("Desktop Entry", "NoDisplay"):
-                                name_key = config["Desktop Entry"]["Name"]
-                                exec_key = config["Desktop Entry"]["Exec"]
-                                # remove extra quotes from exec
-                                if exec_key[0] == '"' and exec_key[-1] == '"':
-                                    exec_key = re.sub('"', "", exec_key)
-                                # remove field codes and add full path if necessary
-                                if exec_key[0] == "/":
-                                    items[name_key] = re.sub(args_pattern, "", exec_key)
-                                else:
-                                    exec_path = (
-                                        subprocess.check_output(
-                                            ["which", exec_key.split()[0]],
-                                            stderr=subprocess.DEVNULL,
-                                        )
-                                        .decode("utf-8")
-                                        .strip()
-                                    )
-                                    items[name_key] = (
-                                        exec_path
-                                        + " "
-                                        + re.sub(
-                                            args_pattern,
-                                            "",
-                                            " ".join(exec_key.split()[1:]),
-                                        )
-                                    )
-                        except Exception:
-                            print(
-                                "linux get_apps(): skipped parsing application file ",
-                                entry.name,
-                            )
-        return items
+        for item in enum_known_folder(FOLDERID_AppsFolder):
+            try:
+                property_store = item.BindToHandler(
+                    None, shell.BHID_PropertyStore, propsys.IID_IPropertyStore
+                )
+                app_user_model_id = property_store.GetValue(
+                    pscon.PKEY_AppUserModel_ID
+                ).ToString()
 
-elif app.platform == "mac":
-    mac_application_directories = [
-        "/Applications",
-        "/System/Applications",
-        f"{Path.home()}/Applications",
-        f"{Path.home()}/.nix-profile/Applications",
-    ]
-
-    def get_apps(paths: list[str] = mac_application_directories):
-        items = {}
-        subdirs = []
-        for base in paths:
-            if not os.path.isdir(base):
+            except pywintypes.error:
                 continue
-            for entry in os.scandir(base):
-                if (not entry.is_dir()) or entry.name.startswith("."):
-                    continue
-                if entry.name.endswith(".app"):
-                    name = entry.name[:-4].lower()
-                    items[name] = entry.path
-                else:
-                    subdirs.append(entry.path)
-        if len(subdirs):
-            items.update(get_apps(subdirs))
+
+            name = item.GetDisplayName(shellcon.SIGDN_NORMALDISPLAY)
+
+            # exclude anything with install/uninstall...
+            # 'cause I don't think we don't want 'em
+            if "install" not in name.lower():
+                items[name] = app_user_model_id
 
         return items
+
 
 
 @mod.capture(rule="{user.running}")  # | <user.text>)")
