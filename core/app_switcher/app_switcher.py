@@ -155,6 +155,7 @@ if app.platform == "windows":
 
             return items
     except ImportError:
+
         def get_apps():
             return actions.apps.list()
 
