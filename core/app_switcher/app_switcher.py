@@ -103,7 +103,9 @@ if app.platform == "windows":
                 folder_id = bytes(folder_id)
             pidl = ctypes.c_void_p()
             try:
-                _shell32.SHGetKnownFolderIDList(folder_id, 0, htoken, ctypes.byref(pidl))
+                _shell32.SHGetKnownFolderIDList(
+                    folder_id, 0, htoken, ctypes.byref(pidl)
+                )
                 return shell.AddressAsPIDL(pidl.value)
             except OSError as e:
                 if e.winerror & 0x80070000 == 0x80070000:
