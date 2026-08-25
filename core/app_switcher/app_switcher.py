@@ -153,7 +153,6 @@ if app.platform == "windows":
         return items
 
 
-
 @mod.capture(rule="{user.running}")  # | <user.text>)")
 def running_applications(m) -> str:
     "Returns a single application name"
