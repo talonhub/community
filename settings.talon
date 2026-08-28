@@ -45,7 +45,7 @@ settings():
     # If `true`, use a hissing noise to scroll continuously
     user.mouse_enable_hiss_scroll = false
 
-    # If `true`, hold the mouse buttons down for 16 ms when clicking to increase reliability.
+    # If `true`, hold mouse buttons for 16 ms so clicks register reliably
     user.mouse_click_with_hold = false
 
     # How much time a hiss must last for to be considered a hiss rather than
