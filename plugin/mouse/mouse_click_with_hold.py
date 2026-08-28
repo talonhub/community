@@ -3,13 +3,13 @@ from talon import Context, Module, ctrl
 mod = Module()
 
 mod.tag(
-    "mouse_long_click",
-    desc="Tag for enabling long click behavior",
+    "mouse_click_with_hold",
+    desc="Hold mouse buttons for 16 ms so clicks register reliably",
 )
 
 ctx = Context()
 ctx.matches = r"""
-tag: user.mouse_long_click
+tag: user.mouse_click_with_hold
 """
 
 
