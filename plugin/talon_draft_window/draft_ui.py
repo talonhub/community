@@ -1,6 +1,7 @@
 import re
 from typing import Optional
 
+from talon import settings, ui
 from talon.experimental.textarea import (
     DarkThemeLabels,
     LightThemeLabels,
@@ -33,7 +34,7 @@ def calculate_text_anchors(text, cursor_position, anchor_labels=None):
 
     # Find all the word spans
     matches = []
-    cursor_idx = None
+    cursor_idx = 0
     for match in word_matcher.finditer(text):
         matches.append((match.start(), match.end() - len(match.group(2)), match.end()))
         if matches[-1][0] <= cursor_position and matches[-1][2] >= cursor_position:
@@ -48,7 +49,9 @@ def calculate_text_anchors(text, cursor_position, anchor_labels=None):
     anchor_start_idx = max(0, anchor_end_idx - len(anchor_labels))
 
     # Now add anchors to the selected matches
-    for i, anchor in zip(range(anchor_start_idx, anchor_end_idx), anchor_labels):
+    for i, anchor in zip(
+        range(anchor_start_idx, anchor_end_idx), anchor_labels, strict=False
+    ):
         word_start, word_end, whitespace_end = matches[i]
         yield (anchor, word_start, word_end, whitespace_end)
 
@@ -65,19 +68,22 @@ class DraftManager:
         self.area.register("label", self._update_labels)
         self.set_styling()
 
-    def set_styling(self, theme="dark", text_size=20, label_size=20, label_color=None):
+    def set_styling(self):
         """
         Allow settings the style of the draft window. Will dynamically
         update the style based on the passed in parameters.
         """
-
+        theme_changes = {}
+        name_setting_pairs = (
+            ("text_size", "text_size"),
+            ("label_size", "label_size"),
+            ("label", "label_color"),
+        )
+        for name, setting in name_setting_pairs:
+            if (value := settings.get(f"user.draft_window_{setting}")) is not None:
+                theme_changes[name] = value
+        theme = settings.get("user.draft_window_theme")
         area_theme = DarkThemeLabels if theme == "dark" else LightThemeLabels
-        theme_changes = {
-            "text_size": text_size,
-            "label_size": label_size,
-        }
-        if label_color is not None:
-            theme_changes["label"] = label_color
         self.area.theme = area_theme(**theme_changes)
 
     def show(self, text: Optional[str] = None):
@@ -85,6 +91,8 @@ class DraftManager:
         Show the window. If text is None then keep the old contents,
         otherwise set the text to the given value.
         """
+
+        self.set_styling()
 
         if text is not None:
             self.area.value = text
@@ -104,7 +112,7 @@ class DraftManager:
 
         return self.area.value
 
-    def get_rect(self) -> "talon.types.Rect":
+    def get_rect(self) -> ui.Rect:
         """
         Get the Rect for the window
         """

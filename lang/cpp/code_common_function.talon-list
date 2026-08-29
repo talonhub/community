@@ -1,6 +1,7 @@
 list: user.code_common_function
 code.language: cpp
 -
+
 mem copy: memcpy
 mem set: memset
 print eff: printf

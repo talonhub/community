@@ -7,11 +7,11 @@ mod = Module()
 class Actions:
     def dragon_engine_sleep():
         """Sleep the dragon engine"""
-        speech_system.engine_mimic("go to sleep"),
+        speech_system.engine_mimic("go to sleep")
 
     def dragon_engine_wake():
         """Wake the dragon engine"""
-        speech_system.engine_mimic("wake up"),
+        speech_system.engine_mimic("wake up")
 
     def dragon_engine_command_mode():
         """Switch dragon to command mode. Requires Pro."""

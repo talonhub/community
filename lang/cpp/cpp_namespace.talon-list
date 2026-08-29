@@ -1,6 +1,7 @@
 list: user.cpp_namespace
 code.language: cpp
 -
+
 stood: std
 standard: std
 boost

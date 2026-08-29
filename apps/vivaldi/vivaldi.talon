@@ -1,5 +1,6 @@
 app: vivaldi
 -
+
 tag(): browser
 tag(): user.tabs
 tag(): user.command_search

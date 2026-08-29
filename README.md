@@ -20,7 +20,7 @@ Can be used on its own, but shines when combined with:
 - Mac, Windows, or Linux
 - Talon's built-in Conformer (wav2letter) speech recognition engine (recommended), or Dragon NaturallySpeaking (Windows) / Dragon for Mac (although beware that Dragon for Mac is discontinued and its use deprecated).
 
-Includes commands for working with an eye tracker; an [eye tracker](https://talon.wiki/Quickstart/Hardware/#eye-trackers) is not required.
+Includes commands for working with an eye tracker; an [eye tracker](https://talon.wiki/Resource%20Hub/Hardware/#eye-trackers) is not required.
 
 ### Linux & Mac
 
@@ -68,13 +68,13 @@ Note that it is also possible to install `community` by [downloading and extract
    - `paste that`, `copy that`, and `cut that` for pasting/copy/cutting, respectively.
 8. For community-generated documentation on Talon itself, please visit https://talon.wiki/.
 
-It's recommended to learn the alphabet first, then get familiar with the keys, symbols, formatters, mouse, and generic_editor commands.
+It's recommended to learn the alphabet first, then get familiar with the keys, symbols, formatters, mouse, and edit commands.
 
 Once you have the basics of text input down, try copying some code from one window to another.
 
 After that, explore using ordinal repetition for easily repeating a command without pausing (e.g., saying `go up fifth` will go up five lines), window switching (`focus chrome`), and moving around in your text editor of choice.
 
-If you use vim, just start with the numbers and alphabet, otherwise look at generic_editor.talon as well at jetbrains, vscode, and any other integrations.
+If you use vim, just start with the numbers and alphabet, otherwise look at edit.talon as well at jetbrains, vscode, and any other integrations.
 
 ### Alphabet
 
@@ -308,7 +308,7 @@ alt: alt
 
 ## Other Talon user file sets
 
-In addition to this repo, there are [other Talon user file sets](https://talon.wiki/talon_user_file_sets/) containing additional commands that you may want to experiment with if you're feeling adventurous 😊. Many of them are meant to be used alongside `community`, but a few of them are designed as replacements. If it's not clear which, please file an issue against the given GitHub repository for that user file set!
+In addition to this repo, there are [other Talon user file sets](https://talon.wiki/Integrations/talon_user_file_sets) containing additional commands that you may want to experiment with if you're feeling adventurous 😊. Many of them are meant to be used alongside `community`, but a few of them are designed as replacements. If it's not clear which, please file an issue against the given GitHub repository for that user file set!
 
 # Collaborators
 
@@ -355,7 +355,7 @@ You then have a few options as to when to run it:
   - Note that because many of the rules automatically apply fixes, typically you just need to stage the changes that they made, then reattempt your commit.
   - Whether to use the hook comes down to personal taste. If you like to make many small incremental "work" commits developing a feature, it may be too much overhead.
 
-If you run into setup difficulty with `pre-commit`, you might want to ensure that you have a modern Python 3 local environment first. [pyenv](https://github.com/pyenv/pyenv) is good way to install such Python versions without affecting your system Python (recommend installing 3.9 to match Talon's current version). On macOS you can also `brew install pre-commit`.
+If you run into setup difficulty with `pre-commit`, you might want to ensure that you have a modern Python 3 local environment first. [uv](https://github.com/astral-sh/uv) is good way to install such Python versions without affecting your system Python. We recommend a version of Python matching Talon's current version, which is 3.11 for Talon 0.4 as of this writing (`uv tool install --python 3.11 pre-commit`).
 
 ## Automated tests
 

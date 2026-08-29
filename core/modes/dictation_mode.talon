@@ -1,5 +1,6 @@
 mode: dictation
 -
+
 ^press <user.modifiers>$: key(modifiers)
 ^press <user.keys>$: key(keys)
 
@@ -7,8 +8,8 @@ mode: dictation
 <user.raw_prose>: user.dictation_insert(raw_prose)
 cap: user.dictation_format_cap()
 # Hyphenated variants are for Dragon.
-(no cap | no-caps): user.dictation_format_no_cap()
-(no space | no-space): user.dictation_format_no_space()
+no cap | no-caps: user.dictation_format_no_cap()
+no space | no-space: user.dictation_format_no_space()
 ^cap that$: user.dictation_reformat_cap()
 ^(no cap | no-caps) that$: user.dictation_reformat_no_cap()
 ^(no space | no-space) that$: user.dictation_reformat_no_space()
@@ -25,6 +26,12 @@ go left <number_small> (word | words):
     repeat(number_small - 1)
 go right <number_small> (word | words):
     edit.word_right()
+    repeat(number_small - 1)
+go left <number_small> (character | characters):
+    edit.left()
+    repeat(number_small - 1)
+go right <number_small> (character | characters):
+    edit.right()
     repeat(number_small - 1)
 go line start: edit.line_start()
 go line end: edit.line_end()

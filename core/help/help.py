@@ -1,10 +1,10 @@
-import itertools
 import math
 import re
 from collections import defaultdict
+from collections.abc import Iterable
 from itertools import islice
 from textwrap import wrap
-from typing import Any, Iterable, Optional, Tuple
+from typing import Any, Optional
 
 from talon import Context, Module, actions, imgui, registry, settings
 
@@ -51,7 +51,7 @@ selected_context_page = 1
 
 total_page_count = 1
 
-cached_active_contexts_list = []
+cached_active_contexts = set()
 
 live_update = True
 show_enabled_contexts_only = False
@@ -179,33 +179,27 @@ def gui_operators(gui: imgui.GUI):
 
 
 def format_context_title(context_name: str) -> str:
-    global cached_active_contexts_list
+    global cached_active_contexts
     return "{} [{}]".format(
         context_name,
         (
             "ACTIVE"
-            if context_map.get(context_name, None) in cached_active_contexts_list
+            if context_map.get(context_name) in cached_active_contexts
             else "INACTIVE"
         ),
     )
 
 
 def format_context_button(index: int, context_label: str, context_name: str) -> str:
-    global cached_active_contexts_list
+    global cached_active_contexts
     global show_enabled_contexts_only
+    should_show_asterisk: bool = (
+        not show_enabled_contexts_only
+        and context_map.get(context_name) in cached_active_contexts
+    )
+    postfix: str = "*" if should_show_asterisk else ""
 
-    if not show_enabled_contexts_only:
-        return "{}. {}{}".format(
-            index,
-            context_label,
-            (
-                "*"
-                if context_map.get(context_name, None) in cached_active_contexts_list
-                else ""
-            ),
-        )
-    else:
-        return f"{index}. {context_label} "
+    return f"help {index}. {context_label}{postfix}"
 
 
 # translates 1-based index -> actual index in sorted_context_map_keys
@@ -236,8 +230,7 @@ def get_command_line_count(command: tuple[str, str]) -> int:
     lines = len(body.split("\n"))
     if lines == 1:
         return 1
-    else:
-        return lines + 1
+    return lines + 1
 
 
 def get_pages(item_line_counts: list[int]) -> list[int]:
@@ -279,7 +272,7 @@ def gui_context_help(gui: imgui.GUI):
     global selected_context_page
     global sorted_display_list
     global show_enabled_contexts_only
-    global cached_active_contexts_list
+    global cached_active_contexts
     global total_page_count
     global search_phrase
 
@@ -293,9 +286,7 @@ def gui_context_help(gui: imgui.GUI):
             )
         else:
             gui.text(
-                "Help: Active Contexts Only ({}/{})".format(
-                    current_context_page, total_page_count
-                )
+                f"Help: Active Contexts Only ({current_context_page}/{total_page_count})"
             )
 
         gui.line()
@@ -373,7 +364,7 @@ def draw_context_commands(gui: imgui.GUI):
 
     filtered_commands = [
         command
-        for command, page in zip(commands, pages)
+        for command, page in zip(commands, pages, strict=False)
         if page == selected_context_page
     ]
 
@@ -383,16 +374,15 @@ def draw_context_commands(gui: imgui.GUI):
 def draw_search_commands(gui: imgui.GUI):
     global search_phrase
     global total_page_count
-    global cached_active_contexts_list
+    global cached_active_contexts
     global selected_context_page
 
     title = f"Search: {search_phrase}"
     commands_grouped = get_search_commands(search_phrase)
-    commands_flat = list(itertools.chain.from_iterable(commands_grouped.values()))
 
     sorted_commands_grouped = sorted(
         commands_grouped.items(),
-        key=lambda item: context_map[item[0]] not in cached_active_contexts_list,
+        key=lambda item: context_map[item[0]] not in cached_active_contexts,
     )
 
     pages = get_pages(
@@ -405,8 +395,7 @@ def draw_search_commands(gui: imgui.GUI):
 
     draw_commands_title(gui, title)
 
-    current_item_index = 1
-    for (context, commands), page in zip(sorted_commands_grouped, pages):
+    for (context, commands), page in zip(sorted_commands_grouped, pages, strict=True):
         if page == selected_context_page:
             gui.text(format_context_title(context))
             gui.line()
@@ -477,55 +466,43 @@ def reset():
 
 def update_active_contexts_cache(active_contexts):
     # print("update_active_contexts_cache")
-    global cached_active_contexts_list
-    cached_active_contexts_list = active_contexts
-
-
-# example usage todo: make a list definable in .talon
-# overrides = {"generic browser": "broswer"}
-overrides = {}
+    global cached_active_contexts
+    cached_active_contexts = active_contexts
 
 
 def refresh_context_command_map(enabled_only=False):
+    """Update information on command contexts
+    enabled_only: indicates if only active contexts should be considered"""
     active_contexts = registry.last_active_contexts
+    active_context_cache = set()
 
     local_context_map = {}
     local_display_name_to_context_name_map = {}
     local_context_command_map = {}
-    cached_short_context_names = {}
+    cached_context_names = {}
 
     for context_name, context in registry.contexts.items():
         splits = context_name.split(".")
+        if splits[-1] != "talon" or (enabled_only and context not in active_contexts):
+            continue
+        current_context_map = {
+            str(val.rule.rule): val.script.code
+            for command_alias, val in context.commands.items()
+            if not enabled_only or command_alias in registry.commands
+        }
+        if not current_context_map:
+            continue
+        if context in active_contexts and is_any_context_command_active(context):
+            active_context_cache.add(context)
 
-        if "talon" == splits[-1]:
-            display_name = splits[-2].replace("_", " ")
+        local_context_command_map[context_name] = current_context_map
 
-            short_names = actions.user.create_spoken_forms(
-                display_name,
-                generate_subsequences=False,
-            )
+        display_name = splits[-2].replace("_", " ")
+        update_spoken_forms(cached_context_names, display_name, context_name)
 
-            if short_names[0] in overrides:
-                short_names = [overrides[short_names[0]]]
-            elif len(short_names) == 2 and short_names[1] in overrides:
-                short_names = [overrides[short_names[1]]]
-
-            if enabled_only and context in active_contexts or not enabled_only:
-                local_context_command_map[context_name] = {}
-                for command_alias, val in context.commands.items():
-                    if command_alias in registry.commands or not enabled_only:
-                        local_context_command_map[context_name][
-                            str(val.rule.rule)
-                        ] = val.script.code
-                if len(local_context_command_map[context_name]) == 0:
-                    local_context_command_map.pop(context_name)
-                else:
-                    for short_name in short_names:
-                        cached_short_context_names[short_name] = context_name
-
-                    # the last entry will contain no symbols
-                    local_display_name_to_context_name_map[display_name] = context_name
-                    local_context_map[context_name] = context
+        # the last entry will contain no symbols
+        local_display_name_to_context_name_map[display_name] = context_name
+        local_context_map[context_name] = context
 
     # Update all the global state after we've performed our calculations
     global context_map
@@ -545,8 +522,27 @@ def refresh_context_command_map(enabled_only=False):
     display_name_to_context_name_map = local_display_name_to_context_name_map
     rule_word_map = refresh_rule_word_map(local_context_command_map)
 
-    ctx.lists["self.help_contexts"] = cached_short_context_names
-    update_active_contexts_cache(active_contexts)
+    ctx.lists["user.help_contexts"] = cached_context_names
+    update_active_contexts_cache(active_context_cache)
+
+
+def update_spoken_forms(
+    context_spoken_forms: dict[str, str], display_name: str, context_name: str
+):
+    """Compute spoken forms for a display name and then update context_spoken_forms
+    to map those spoken forms to the context name"""
+    spoken_forms = actions.user.create_spoken_forms(
+        display_name,
+        generate_subsequences=False,
+    )
+
+    for spoken_form in spoken_forms:
+        context_spoken_forms[spoken_form] = context_name
+
+
+def is_any_context_command_active(context) -> bool:
+    """Returns if any command in the context is active"""
+    return any(command_alias in registry.commands for command_alias in context.commands)
 
 
 def get_sorted_display_keys(
@@ -567,8 +563,8 @@ def get_sorted_display_keys(
 def get_sorted_keys_by_context_specificity(
     context_map: dict[str, Any],
     display_name_to_context_name_map: dict[str, str],
-) -> list[Tuple[str, str, int]]:
-    def get_group(display_name) -> Tuple[str, str, int]:
+) -> list[tuple[str, str, int]]:
+    def get_group(display_name) -> tuple[str, str, int]:
         try:
             context_name = display_name_to_context_name_map[display_name]
             context = context_map[context_name]
@@ -578,12 +574,11 @@ def get_sorted_keys_by_context_specificity(
             if keys:
                 return (display_name, "Context-dependent", 1)
             return (display_name, "Global", 0)
-        except Exception as ex:
+        except:
             return (display_name, "", 0)
 
     grouped_list = [
-        get_group(display_name)
-        for display_name in display_name_to_context_name_map.keys()
+        get_group(display_name) for display_name in display_name_to_context_name_map
     ]
     return sorted(
         grouped_list,
@@ -629,7 +624,7 @@ def hide_all_help_guis():
 def paginate_list(data, SIZE=None):
     chunk_size = SIZE or settings.get("user.help_max_command_lines_per_page")
     it = iter(data)
-    for i in range(0, len(data), chunk_size):
+    for _ in range(0, len(data), chunk_size):
         yield {k: data[k] for k in islice(it, chunk_size)}
 
 
@@ -809,8 +804,8 @@ class Actions:
     def help_select_index(index: int):
         """Select the context by a number"""
         global sorted_display_list, selected_context
-        if gui_context_help.showing:
-            if index < settings.get("user.help_max_contexts_per_page") and (
+        if gui_context_help.showing:  # noqa: SIM102
+            if index < settings.get("user.help_max_contexts_per_page") and (  # noqa: SIM102
                 (current_context_page - 1)
                 * settings.get("user.help_max_contexts_per_page")
                 + index

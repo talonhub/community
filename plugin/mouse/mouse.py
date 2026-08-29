@@ -142,12 +142,12 @@ class UserActions:
         dont_click = False
 
         # Allow pop to stop drag
-        if settings.get("user.mouse_enable_pop_stops_drag"):
+        if settings.get("user.mouse_enable_pop_stops_drag"):  # noqa: SIM102
             if actions.user.mouse_drag_end():
                 dont_click = True
 
         # Allow pop to stop scroll
-        if settings.get("user.mouse_enable_pop_stops_scroll"):
+        if settings.get("user.mouse_enable_pop_stops_scroll"):  # noqa: SIM102
             if actions.user.mouse_scroll_stop():
                 dont_click = True
 
