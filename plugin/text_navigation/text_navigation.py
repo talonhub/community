@@ -41,7 +41,7 @@ navigation_target_names = {
     "method": r"\w+\((.*?)\)",
     "constant": r"[A-Z_][A-Z_]+",
 }
-ctx.lists["self.navigation_target_name"] = navigation_target_names
+ctx.lists["user.navigation_target_name"] = navigation_target_names
 
 
 @mod.capture(

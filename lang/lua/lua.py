@@ -36,7 +36,7 @@ ctx.lists["user.code_libraries"] = {
 }
 
 
-@mod.capture(rule="{self.lua_functions}")
+@mod.capture(rule="{user.lua_functions}")
 def lua_functions(m) -> str:
     "Returns a string"
     return m.lua_functions
