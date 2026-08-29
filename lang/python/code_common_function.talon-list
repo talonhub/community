@@ -28,7 +28,6 @@ string: "str"
 sum
 tuple
 type
-update
 zip
 
 # Talon Python functions
