@@ -51,7 +51,7 @@ def update_homophones(name, flags):
 
     global all_homophones
     all_homophones = phones
-    ctx.lists["self.homophones_canonicals"] = canonical_list
+    ctx.lists["user.homophones_canonicals"] = canonical_list
 
 
 update_homophones(homophones_file, None)
@@ -162,7 +162,7 @@ def gui(gui: imgui.GUI):
         actions.user.homophones_hide()
 
 
-@mod.capture(rule="{self.homophones_canonicals}")
+@mod.capture(rule="{user.homophones_canonicals}")
 def homophones_canonical(m) -> str:
     "Returns a single string"
     return m.homophones_canonicals
