@@ -75,13 +75,17 @@ def any_alphanumeric_key(m) -> str:
 
 
 @mod.capture(
-    rule="<user.letter>"
-    + "| <user.number_key>"
-    + "| <user.symbol_key>"
-    + "| <user.arrow_key>"
-    + "| <user.function_key>"
-    + "| <user.special_key>"
-    + "| <user.keypad_key>"
+    rule=" | ".join(
+        [
+            "<user.letter>",
+            "<user.number_key>",
+            "<user.symbol_key>",
+            "<user.arrow_key>",
+            "<user.function_key>",
+            "<user.special_key>",
+            "<user.keypad_key>",
+        ]
+    )
 )
 def unmodified_key(m) -> str:
     "A single key with no modifiers"
