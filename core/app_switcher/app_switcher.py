@@ -66,6 +66,9 @@ words_to_exclude = [
 # rather than via e.g. the start menu. This way, all apps, including "modern" apps are
 # launchable. To easily retrieve the apps this makes available, navigate to shell:AppsFolder in Explorer
 if app.platform == "windows":
+    # This try/except block is to make this work with versions of beta Talon that have removed pywin32 as a dependency
+    # this handles an import error by using the new builtin Talon action for getting the list of apps
+    # remove the try block after public Talon supports that action and use the definition in the except block for get_apps
     try:
         import ctypes
         import os
