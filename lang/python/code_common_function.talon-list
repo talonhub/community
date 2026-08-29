@@ -29,3 +29,10 @@ sum
 tuple
 type
 zip
+
+# Talon Python functions
+cron after: cron.after
+cron cancel: cron.cancel
+cron interval: cron.interval
+F S watch: fs.watch
+settings get: "settings.get"
