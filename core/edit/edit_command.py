@@ -189,9 +189,14 @@ class Actions:
             # Custom callbacks take three parameters, compound callbacks do not.
             if signature(cb).parameters.get("count"):
                 cb(action, modifier.type, count)
-            else:
+                return
+            elif count == 1:
                 cb()
-            return
+                return
+            # Compound callbacks that don't accept a count have no way to
+            # honor a spoken count > 1 (e.g. "clear five right"), so fall
+            # through to the generic per-repeat modifier/action path below
+            # instead of silently discarding the count.
 
         actions.user.run_edit_modifier_callback(modifier)
         actions.user.run_edit_action_callback(action)

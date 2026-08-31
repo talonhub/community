@@ -2,13 +2,25 @@ from collections.abc import Callable
 from contextlib import suppress
 from dataclasses import dataclass
 
-from talon import Module, actions
+from talon import Module, actions, settings
 
 mod = Module()
 mod.list("edit_modifier", desc="Modifiers for the edit command")
 mod.list(
     "edit_modifier_repeatable",
     desc="Edit modifiers that are repeatable. Say a number before the modifier to repeat the action that many times.",
+)
+
+# Talon can fire repeated key events much faster than a human, which some
+# apps drop or coalesce (see the similar word/line selection delays in
+# edit_command.py). Without this, a repeatable modifier's count is
+# unreliable, e.g. "clear five right" nondeterministically acting on fewer
+# than 5 characters.
+mod.setting(
+    "edit_command_repeat_delay",
+    type=int,
+    default=75,
+    desc="Sleep (ms) between repeated presses of a repeatable edit modifier",
 )
 
 
@@ -73,8 +85,10 @@ class Actions:
         """
         count = modifier.count
         modifier_callback = actions.user.get_edit_modifier_callback(modifier)
+        delay = f"{settings.get('user.edit_command_repeat_delay')}ms"
         for _ in range(1, count + 1):
             modifier_callback()
+            actions.sleep(delay)
 
     def get_edit_modifier_callback(modifier: EditModifier):
         """Convert an edit modifier created from a string into its associated EditModifierCallback"""
