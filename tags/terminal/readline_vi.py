@@ -55,6 +55,14 @@ def delete_word_right():
     normal_cmd("right d w i")
 
 
+def delete_chars_right(action, modifier_type, count):
+    normal_cmd(f"{' '.join(str(count))} x i")
+
+
+def delete_chars_left(action, modifier_type, count):
+    normal_cmd(f"{' '.join(str(count))} X i")
+
+
 simple_action_callbacks: dict[str, Callable] = {}
 
 custom_callbacks = {}
@@ -63,6 +71,8 @@ compound_actions = {
     ("delete", "word"): lambda: normal_cmd("d i w"),
     ("delete", "wordLeft"): lambda: actions.key("ctrl-w"),
     ("delete", "wordRight"): delete_word_right,
+    ("delete", "left"): delete_chars_left,
+    ("delete", "right"): delete_chars_right,
     ("cutToClipboard", "word"): lambda: normal_cmd("c i w "),
     ("cutToClipboard", "wordLeft"): lambda: normal_cmd("c b"),
     ("cutToClipboard", "wordRight"): lambda: normal_cmd("c w"),
