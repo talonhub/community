@@ -11,11 +11,6 @@ mod.list(
     desc="Edit modifiers that are repeatable. Say a number before the modifier to repeat the action that many times.",
 )
 
-# Talon can fire repeated key events much faster than a human, which some
-# apps drop or coalesce (see the similar word/line selection delays in
-# edit_command.py). Without this, a repeatable modifier's count is
-# unreliable, e.g. "clear five right" nondeterministically acting on fewer
-# than 5 characters.
 mod.setting(
     "edit_command_repeat_delay",
     type=int,
