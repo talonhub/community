@@ -190,7 +190,7 @@ class Actions:
             if signature(cb).parameters.get("count"):
                 cb(action, modifier.type, count)
                 return
-            elif count == 1:
+            if count == 1:
                 cb()
                 return
             # Compound callbacks that don't accept a count have no way to
