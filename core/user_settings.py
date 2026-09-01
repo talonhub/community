@@ -2,6 +2,7 @@ import csv
 from collections.abc import Callable
 from pathlib import Path
 from typing import IO, Optional, Union
+import os
 
 from talon import actions, resource
 
@@ -195,3 +196,22 @@ def track_csv_rows(
 def warn_about_error(message: str):
     actions.app.notify(message)
     print(message)
+
+def parse_snippet_dirs(raw_setting: str | None, base_dir: Path | None = None) -> list[Path]:
+    """Parses a pipe-separated string of directories into resolved Path objects."""
+    if not raw_setting or not raw_setting.strip():
+        return []
+
+    dirs: list[Path] = []
+    for segment in raw_setting.split("|"):
+        segment = segment.strip()
+        if not segment:
+            continue
+
+        path = Path(segment)
+        if not path.is_absolute() and base_dir is not None:
+            path = base_dir / path
+
+        dirs.append(path.resolve())
+
+    return dirs

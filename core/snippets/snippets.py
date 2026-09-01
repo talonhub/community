@@ -4,6 +4,7 @@ from typing import Union
 from talon import Context, Module, actions, app, fs, settings
 
 from ..modes.code_languages import code_languages
+from ..user_settings import parse_snippet_dirs
 from .snippet_types import (
     InsertionSnippet,
     Snippet,
@@ -25,7 +26,19 @@ mod.setting(
     "snippets_dir",
     type=str,
     default=None,
-    desc="Directory (relative to Talon user) containing additional snippets",
+    desc="""
+    Directory path(s) containing additional snippets. Can be relative to the Talon user folder or absolute.
+
+    Accepts a single path, or multiple paths separated by pipe (`|`) characters.
+    Spaces inside path names are supported directly and do not need to be escaped.
+    Whitespace around the `|` delimiter is automatically trimmed.
+
+    Examples:
+      - Single relative path: "my_snippets"
+      - Path containing spaces: "my custom snippets/python"
+      - Absolute path: "/Users/name/documents/snippets"
+      - Multiple paths: "my_snippets | /var/snippets | custom snippets/lang"
+    """,
 )
 
 # `_` represents the global context, ie snippets available regardless of language
@@ -46,18 +59,10 @@ for lang in code_languages:
     languages_state_map[lang.id] = SnippetLanguageState(ctx, SnippetLists())
 
 
-def get_setting_dir():
-    setting_dir = settings.get("user.snippets_dir")
-    if not setting_dir:
-        return None
-
-    dir = Path(setting_dir)
-
-    if not dir.is_absolute():
-        user_dir = Path(actions.path.talon_user())
-        dir = user_dir / dir
-
-    return dir.resolve()
+def get_setting_dirs() -> list[Path]:
+    setting_val = settings.get("user.snippets_dir")
+    user_dir = Path(actions.path.talon_user())
+    return parse_snippet_dirs(setting_val, user_dir)
 
 
 @mod.action_class
@@ -210,15 +215,15 @@ def update_contexts(language_to_lists: dict[str, SnippetLists]):
 
 
 def get_snippets_from_files() -> list[Snippet]:
-    setting_dir = get_setting_dir()
     result = []
 
     for file in SNIPPETS_DIR.glob("**/*.snippet"):
         result.extend(create_snippets_from_file(file))
 
-    if setting_dir:
-        for file in setting_dir.glob("**/*.snippet"):
-            result.extend(create_snippets_from_file(file))
+    for setting_dir in get_setting_dirs():
+        if setting_dir.exists():
+            for file in setting_dir.glob("**/*.snippet"):
+                result.extend(create_snippets_from_file(file))
 
     return result
 
@@ -226,8 +231,9 @@ def get_snippets_from_files() -> list[Snippet]:
 def on_ready():
     fs.watch(SNIPPETS_DIR, lambda _path, _flags: update_snippets())
 
-    if get_setting_dir():
-        fs.watch(get_setting_dir(), lambda _path, _flags: update_snippets())
+    for setting_dir in get_setting_dirs():
+        if setting_dir.exists():
+            fs.watch(setting_dir, lambda _path, _flags: update_snippets())
 
     update_snippets()
 
