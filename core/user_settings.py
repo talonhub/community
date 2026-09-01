@@ -202,7 +202,8 @@ def track_line_separated_values(
     # output default if path not defined
     if not path.is_file():
         with open(path, "w") as f:
-            f.writelines(default)
+            for l in default:
+                f.write(l + "\n")
 
     # called decorated function when the path changes
     # passing it the lines of the file
@@ -210,7 +211,7 @@ def track_line_separated_values(
         @resource.watch(str(path))
         def on_update(f):
             # read the lines removing trailing new line characters
-            data = [l.rstrip("\n\r") for l in f.readlines(default)]
+            data = [l.rstrip("\n\r") for l in f.readlines()]
             fn(data)
 
         return on_update
