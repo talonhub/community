@@ -202,8 +202,7 @@ def track_line_separated_values(
     # output default if path not defined
     if not path.is_file():
         with open(path, "w") as f:
-            for l in default:
-                f.write(l + "\n")
+            f.writelines(l + "\n" for l in default)
 
     # called decorated function when the path changes
     # passing it the lines of the file
