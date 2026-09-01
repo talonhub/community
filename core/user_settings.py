@@ -191,6 +191,32 @@ def track_csv_rows(
 
     return decorator
 
+def track_line_separated_values(
+    filename: str,
+    default: list[str],
+    private: bool = False,
+):
+    path = compute_file_path(filename, private)
+    
+    # output default if path not defined
+    if not path.is_file():
+        with open(path, "w") as f:
+            f.writelines(default)
+    
+    # called decorated function when the path changes
+    # passing it the lines of the file
+    def decorator(fn):
+        @resource.watch(str(path))
+        def on_update(f):
+            # read the lines removing trailing new line characters
+            data = [l.rstrip("\n\r") for l in f.readlines(default)]
+            fn(data)
+        return on_update
+    
+    return decorator
+
+def compute_file_path(filename, is_private):
+    return (PRIVATE_DIR / filename) if is_private else (SETTINGS_DIR / filename)
 
 def warn_about_error(message: str):
     actions.app.notify(message)
