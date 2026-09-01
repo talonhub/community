@@ -24,8 +24,12 @@ def new_user_gui(gui: imgui.GUI):
     gui.text(
         "You may click any of the following buttons or use the corresponding voice commands"
     )
-    gui.text("If a community graphical user interface does not have an explanation of what to say for each button,")
-    gui.text("    then each button will show the name of the equivalent voice command and")
+    gui.text(
+        "If a community graphical user interface does not have an explanation of what to say for each button,"
+    )
+    gui.text(
+        "    then each button will show the name of the equivalent voice command and"
+    )
     gui.text(
         "    buttons corresponding to options in a list will have the command before the : and the option description after."
     )
