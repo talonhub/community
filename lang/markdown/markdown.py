@@ -48,8 +48,7 @@ class Actions:
             snippet_body_parts.append(f" ${i + 1} |")
         # add the dashed lines
         snippet_body_parts.append("\n|")
-        for i in range(num_columns):
-            snippet_body_parts.append("---|")
+        snippet_body_parts.append("---|"*num_columns)
         # put it all together
         snippet_body = "".join(snippet_body_parts)
         # directly insert the snippet body.
