@@ -36,3 +36,22 @@ class Actions:
         """Wraps the selection with a markdown link for the specified url"""
         description = actions.edit.selected_text()
         actions.user.markdown_insert_link(url, description)
+
+    def markdown_insert_table_header(num_columns: int):
+        """Creates a table header with the given number of columns"""
+        if num_columns <= 0:
+            return 
+        # build a snippet
+        # add the places to put the column names
+        snippet_body_parts = ["|"]
+        for i in range(num_columns):
+            snippet_body_parts.append(f" ${i+1} |")
+        # add the dashed lines
+        snippet_body_parts.append("\n|")
+        for i in range(num_columns):
+            snippet_body_parts.append(f"---|")
+        # put it all together
+        snippet_body = "".join(snippet_body_parts)
+        # directly insert the snippet body. 
+        # Because the number of placeholders varies, we could not do this in a .snippet file.
+        actions.user.insert_snippet(snippet_body)
