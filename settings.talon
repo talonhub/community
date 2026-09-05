@@ -62,8 +62,9 @@ settings():
     user.mouse_wheel_horizontal_amount = 40
 
     # Set the duration to hold mouse clicks in milliseconds. 0 means no hold.
-    # In some full screen applications, particular games, mouse clicks may not be recognized unless held for a short duration.
-    # Recommended value for such cases is to try with 16 ms.
+    # In some full-screen applications, particularly games, mouse clicks may not
+	  # be recognized unless held for a short duration.  If this occurs, try
+    # starting with a setting of 16.
     user.mouse_click_hold = 0
 
     # If `true`, start mouse grid numbering on the bottom left (vs. top left)
