@@ -57,9 +57,12 @@ cube help: "kubectl help "
 cube plugin: "kubectl plugin "
 cube version: "kubectl version "
 
-cube {user.kubectl_action} [{user.kubectl_object}]:
+cube {user.kubectl_action} [{user.kubectl_object}] [{user.kubectl_output_format_object}]:
     insert("kubectl {kubectl_action} ")
     insert(kubectl_object or "")
+    # requires beta:
+    if kubectl_output_format_object: insert(" -o {kubectl_output_format_object}")
+    insert(" ")
 
 cube detach:
     key("ctrl-p")
