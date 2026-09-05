@@ -1,20 +1,23 @@
-from talon import Context, Module, ctrl
+from talon import Context, Module, actions, ctrl
 
 mod = Module()
 
-mod.tag(
-    "mouse_click_with_hold",
-    desc="Hold mouse buttons for 16 ms so clicks register reliably",
+mod.setting(
+    "mouse_click_hold",
+    type=int,
+    default=0,
+    desc="Duration to hold mouse clicks in milliseconds",
 )
 
 ctx = Context()
-ctx.matches = r"""
-tag: user.mouse_click_with_hold
-"""
 
 
 @ctx.action_class("main")
 class MainActions:
-    @staticmethod
     def mouse_click(button: int = 0):
-        ctrl.mouse_click(button=button, hold=16000)
+        hold_duration = actions.settings.get("user.mouse_click_hold")
+
+        if hold_duration < 1:
+            actions.next(button)
+        else:
+            ctrl.mouse_click(button=button, hold=hold_duration * 1000)
