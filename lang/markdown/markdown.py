@@ -40,7 +40,7 @@ class Actions:
     def markdown_insert_table_header(num_columns: int):
         """Creates a table header with the given number of columns"""
         if num_columns <= 0:
-            return
+            raise ValueError("Can't insert table header with 0 columns.")
         # build a snippet
         # add the places to put the column names
         snippet_body_parts = ["|"]
