@@ -63,7 +63,7 @@ settings():
 
     # Set the duration to hold mouse clicks in milliseconds. 0 means no hold.
     # In some full-screen applications, particularly games, mouse clicks may not
-	  # be recognized unless held for a short duration.  If this occurs, try
+    # be recognized unless held for a short duration.  If this occurs, try
     # starting with a setting of 16.
     user.mouse_click_hold = 0
 
