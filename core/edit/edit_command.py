@@ -189,9 +189,10 @@ class Actions:
             # Custom callbacks take three parameters, compound callbacks do not.
             if signature(cb).parameters.get("count"):
                 cb(action, modifier.type, count)
-            else:
+                return
+            if count == 1:
                 cb()
-            return
+                return
 
         actions.user.run_edit_modifier_callback(modifier)
         actions.user.run_edit_action_callback(action)
