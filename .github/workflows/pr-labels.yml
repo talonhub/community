@@ -14,4 +14,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Update PR labels
-        uses: AndreasArvidsson/gh-pr-labeler@v1.1.0
+        uses: AndreasArvidsson/gh-pr-labeler@v1.2.0
