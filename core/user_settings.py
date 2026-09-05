@@ -3,7 +3,7 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import IO, Optional, Union
 
-from talon import resource
+from talon import actions, resource
 
 # NOTE: This method requires this module to be one folder below the top-level
 #   community folder.
@@ -135,3 +135,63 @@ def track_file(
         return on_update
 
     return decorator
+
+
+def read_csv_rows(f: IO, headers: tuple[str, ...]) -> list[list[str]]:
+    rows = list(csv.reader(f))
+    if len(rows) == 0:
+        warn_about_error(f"{f.name} is empty!")
+    elif len(rows) == 1:
+        warn_about_error(f"{f.name} has only the header!")
+    if len(rows) >= 1:
+        actual_headers = rows[0]
+        if actual_headers != list(headers):
+            warn_about_error(
+                f'"{f.name}": Malformed headers - {actual_headers}.'
+                + f" Should be {list(headers)}. Ignoring row."
+            )
+    if len(rows) < 2:
+        return []
+    return rows[1:]
+
+
+def write_csv_default_rows(
+    path: Path,
+    headers: tuple[str, ...],
+    default: Optional[list[list[str]]] = None,
+) -> None:
+    if not path.is_file() and default is not None:
+        with open(path, "w", encoding="utf-8", newline="") as file:
+            writer = csv.writer(file)
+            writer.writerow(headers)
+            writer.writerows(default)
+
+
+RawRowsCallbackT = Callable[[list[list[str]]], None]
+RawRowsDecoratorT = Callable[[RawRowsCallbackT], RawRowsCallbackT]
+
+
+def track_csv_rows(
+    filename: str,
+    headers: tuple[str, ...],
+    default: Optional[list[list[str]]] = None,
+    private: bool = False,
+) -> RawRowsDecoratorT:
+    assert filename.endswith(".csv")
+    path = (PRIVATE_DIR / filename) if private else (SETTINGS_DIR / filename)
+    write_csv_default_rows(path, headers, default)
+
+    def decorator(fn: RawRowsCallbackT) -> RawRowsCallbackT:
+        @resource.watch(str(path))
+        def on_update(f):
+            data = read_csv_rows(f, headers)
+            fn(data)
+
+        return on_update
+
+    return decorator
+
+
+def warn_about_error(message: str):
+    actions.app.notify(message)
+    print(message)

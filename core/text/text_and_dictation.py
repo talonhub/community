@@ -66,7 +66,7 @@ def prose_modifier(m) -> Callable:
 
 
 @mod.capture(
-    rule="<user.number_string> [(dot | point) <digit_string>] percent [sign|sine]"
+    rule="<user.number_string> [(dot | point) <digit_string>] percent [sign | sine]"
 )
 def prose_percent(m) -> str:
     s = m.number_string
@@ -76,7 +76,7 @@ def prose_percent(m) -> str:
 
 
 @mod.capture(
-    rule="<user.number_string> {user.currency} [[and] <user.number_string> [cents|pence]]"
+    rule="<user.number_string> {user.currency} [[and] <user.number_string> [cents | pence]]"
 )
 def prose_currency(m) -> str:
     s = m.currency + m.number_string_1
@@ -85,7 +85,7 @@ def prose_currency(m) -> str:
     return s
 
 
-@mod.capture(rule="am|pm")
+@mod.capture(rule="am | pm")
 def time_am_pm(m) -> str:
     return str(m)
 
@@ -133,21 +133,28 @@ def prose_clipboard(m) -> str:
     return actions.clip.text()
 
 
-@mod.capture(rule="({user.vocabulary} | <user.abbreviation> | <word>)")
+@mod.capture(rule="{user.vocabulary} | <user.abbreviation> | <word>")
 def word(m) -> str:
     """A single word, including user-defined vocabulary."""
     if hasattr(m, "vocabulary"):
         return m.vocabulary
-    elif hasattr(m, "abbreviation"):
+    if hasattr(m, "abbreviation"):
         return m.abbreviation
-    else:
-        return " ".join(
-            actions.dictate.replace_words(actions.dictate.parse_words(m.word))
-        )
+    return " ".join(actions.dictate.replace_words(actions.dictate.parse_words(m.word)))
 
 
 @mod.capture(
-    rule="({user.vocabulary} | <user.prose_contact> | <user.prose_spell> | <user.prose_clipboard> | <phrase>)+"
+    rule="({})+".format(
+        " | ".join(
+            [
+                "{user.vocabulary}",
+                "<user.prose_contact>",
+                "<user.prose_spell>",
+                "<user.prose_clipboard>",
+                "<phrase>",
+            ]
+        )
+    )
 )
 def text(m) -> str:
     """A sequence of words, including user-defined vocabulary."""
@@ -155,23 +162,25 @@ def text(m) -> str:
 
 
 @mod.capture(
-    rule=(
-        "("
-        "{user.vocabulary}"
-        "| {user.punctuation}"
-        "| {user.prose_snippets}"
-        "| <user.prose_currency>"
-        "| <user.prose_time>"
-        "| <user.number_prose_prefixed>"
-        "| <user.prose_percent>"
-        "| <user.prose_modifier>"
-        "| <user.abbreviation>"
-        "| <user.prose_contact>"
-        "| <user.prose_spell>"
-        "| <user.prose_ship>"
-        "| <user.prose_clipboard>"
-        "| <phrase>"
-        ")+"
+    rule="({})+".format(
+        " | ".join(
+            [
+                "{user.vocabulary}",
+                "{user.punctuation}",
+                "{user.prose_snippets}",
+                "<user.prose_currency>",
+                "<user.prose_time>",
+                "<user.number_prose_prefixed>",
+                "<user.prose_percent>",
+                "<user.prose_modifier>",
+                "<user.abbreviation>",
+                "<user.prose_contact>",
+                "<user.prose_spell>",
+                "<user.prose_ship>",
+                "<user.prose_clipboard>",
+                "<phrase>",
+            ]
+        )
     )
 )
 def prose(m) -> str:
@@ -181,22 +190,24 @@ def prose(m) -> str:
 
 
 @mod.capture(
-    rule=(
-        "("
-        "{user.vocabulary}"
-        "| {user.punctuation}"
-        "| {user.prose_snippets}"
-        "| <user.prose_currency>"
-        "| <user.prose_time>"
-        "| <user.number_prose_prefixed>"
-        "| <user.prose_percent>"
-        "| <user.abbreviation>"
-        "| <user.prose_contact>"
-        "| <user.prose_spell>"
-        "| <user.prose_ship>"
-        "| <user.prose_clipboard>"
-        "| <phrase>"
-        ")+"
+    rule="({})+".format(
+        " | ".join(
+            [
+                "{user.vocabulary}",
+                "{user.punctuation}",
+                "{user.prose_snippets}",
+                "<user.prose_currency>",
+                "<user.prose_time>",
+                "<user.number_prose_prefixed>",
+                "<user.prose_percent>",
+                "<user.abbreviation>",
+                "<user.prose_contact>",
+                "<user.prose_spell>",
+                "<user.prose_ship>",
+                "<user.prose_clipboard>",
+                "<phrase>",
+            ]
+        )
     )
 )
 def raw_prose(m) -> str:
@@ -205,7 +216,10 @@ def raw_prose(m) -> str:
 
 
 # For dragon, omit support for abbreviations and contacts
-@ctx_dragon.capture("user.text", rule="({user.vocabulary} | <phrase>)+")
+@ctx_dragon.capture(
+    "user.text",
+    rule="({user.vocabulary} | <phrase>)+",
+)
 def text_dragon(m) -> str:
     """A sequence of words, including user-defined vocabulary."""
     return format_phrase(m)
@@ -213,7 +227,21 @@ def text_dragon(m) -> str:
 
 @ctx_dragon.capture(
     "user.prose",
-    rule="(<phrase> | {user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <user.prose_currency> | <user.prose_time> | <user.prose_number> | <user.prose_percent> | <user.prose_modifier>)+",
+    rule="({})+".format(
+        " | ".join(
+            [
+                "<phrase>",
+                "{user.vocabulary}",
+                "{user.punctuation}",
+                "{user.prose_snippets}",
+                "<user.prose_currency>",
+                "<user.prose_time>",
+                "<user.prose_number>",
+                "<user.prose_percent>",
+                "<user.prose_modifier>",
+            ]
+        )
+    ),
 )
 def prose_dragon(m) -> str:
     """Mixed words and punctuation, auto-spaced & capitalized."""
@@ -223,7 +251,20 @@ def prose_dragon(m) -> str:
 
 @ctx_dragon.capture(
     "user.raw_prose",
-    rule="(<phrase> | {user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <user.prose_currency> | <user.prose_time> | <user.prose_number> | <user.prose_percent>)+",
+    rule="({})+".format(
+        " | ".join(
+            [
+                "<phrase>",
+                "{user.vocabulary}",
+                "{user.punctuation}",
+                "{user.prose_snippets}",
+                "<user.prose_currency>",
+                "<user.prose_time>",
+                "<user.prose_number>",
+                "<user.prose_percent>",
+            ]
+        )
+    ),
 )
 def raw_prose_dragon(m) -> str:
     """Mixed words and punctuation, auto-spaced & capitalized, without quote straightening and commands (for use in dictation mode)."""
@@ -489,7 +530,7 @@ class Actions:
 
     def dictation_reformat_no_space():
         """Removes space before the last utterance"""
-        reformat_last_utterance(lambda s: s[1:] if s.startswith(" ") else s)
+        reformat_last_utterance(lambda s: s.removeprefix(" "))
 
     def omit_space_before(text: str) -> bool:
         """Test if dictated text needs space before"""
