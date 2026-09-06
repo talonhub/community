@@ -1,7 +1,11 @@
+from collections.abc import Callable
+from inspect import signature
+from typing import Union
+
 from talon import Module, actions, settings
 
-from .edit_command_actions import EditAction, EditSimpleAction, run_action_callback
-from .edit_command_modifiers import EditModifier, run_modifier_callback
+from .edit_command_actions import EditAction, EditSimpleAction
+from .edit_command_modifiers import EditModifier
 
 mod = Module()
 
@@ -53,14 +57,14 @@ def select_lines(action, direction, count):
 
     selection_delay = f"{settings.get('user.edit_command_line_selection_delay')}ms"
 
-    for i in range(1, count + 1):
+    for _ in range(1, count + 1):
         selection_callback()
         actions.sleep(selection_delay)
 
     # ensure we take the start/end of the line too!
     extend_line_callback()
     actions.sleep(selection_delay)
-    run_action_callback(action)
+    actions.user.run_edit_action_callback(action)
 
 
 def select_words(action, direction, count):
@@ -70,11 +74,11 @@ def select_words(action, direction, count):
         selection_callback = actions.edit.extend_word_right
 
     selection_delay = f"{settings.get('user.edit_command_word_selection_delay')}ms"
-    for i in range(1, count + 1):
+    for _ in range(1, count + 1):
         selection_callback()
         actions.sleep(selection_delay)
 
-    run_action_callback(action)
+    actions.user.run_edit_action_callback(action)
 
 
 def word_movement_handler(action, direction, count):
@@ -84,7 +88,7 @@ def word_movement_handler(action, direction, count):
         movement_callback = actions.edit.word_right
 
     selection_delay = f"{settings.get('user.edit_command_word_selection_delay')}ms"
-    for i in range(1, count + 1):
+    for _ in range(1, count + 1):
         movement_callback()
         actions.sleep(selection_delay)
 
@@ -165,7 +169,9 @@ compound_actions = {
 
 @mod.action_class
 class Actions:
-    def edit_command(action: EditAction | str, modifier: EditModifier | str):
+    def edit_command(
+        action: Union[EditAction, str], modifier: Union[EditModifier, str]
+    ):
         """Perform edit command with associated modifier.
         Action and modifier can be dataclasses (formed from utterances via
         capture) or str, for use in scripts. Strings should match the action or
@@ -178,14 +184,22 @@ class Actions:
         key = (action.type, modifier.type)
         count = modifier.count
 
-        if key in custom_callbacks:
-            custom_callbacks[key](action, modifier.type, count)
+        cb = actions.user.get_compound_edit_action_modifier_callback(key)
+        if cb:
+            # Custom callbacks take three parameters, compound callbacks do not.
+            if signature(cb).parameters.get("count"):
+                cb(action, modifier.type, count)
+            else:
+                cb()
             return
 
-        elif key in compound_actions:
-            for i in range(1, count + 1):
-                compound_actions[key]()
-            return
+        actions.user.run_edit_modifier_callback(modifier)
+        actions.user.run_edit_action_callback(action)
 
-        run_modifier_callback(modifier)
-        run_action_callback(action)
+    def get_compound_edit_action_modifier_callback(
+        pair: tuple[str, str],
+    ) -> Callable | None:
+        """Retrieve a compound or combined operation function for a given action and modifier type pair.
+        Must be done in a single function, so that any functions overriding it can choose to do `action.next(pair)` only if neither of these is valid
+        """
+        return custom_callbacks.get(pair) or compound_actions.get(pair)

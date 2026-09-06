@@ -18,7 +18,7 @@ def robust_unlink(path: Path):
             graveyard_path = graveyard_dir / str(uuid4())
             print(
                 f"WARNING: File {path} was in use when we tried to delete it; "
-                f"moving to graveyard at path {graveyard_path}"
+                + f"moving to graveyard at path {graveyard_path}"
             )
             path.rename(graveyard_path)
         else:

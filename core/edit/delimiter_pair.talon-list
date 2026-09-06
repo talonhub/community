@@ -20,6 +20,6 @@ percentages: % %
 pad: space space
 
 escaped quad: '\\" \\"'
-escaped twin:  "\\' \\'"
+escaped twin: "\\' \\'"
 escaped round: \( \)
 escaped box: \[ \]
