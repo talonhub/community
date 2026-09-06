@@ -1,5 +1,4 @@
 from talon import Context, Module, actions, app, ctrl, ui
-from talon.types.size import Size2d
 
 mod = Module()
 mod.tag("meeting_zoom", desc="Tag to indicate that the user is in a Zoom meeting")
