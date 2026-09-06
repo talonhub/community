@@ -1,43 +1,33 @@
 import csv
-import os
+from collections.abc import Callable
 from pathlib import Path
+from typing import IO, Optional, Union
 
-from talon import resource
+from talon import actions, resource
 
 # NOTE: This method requires this module to be one folder below the top-level
-#   community/knausj folder.
+#   community folder.
 SETTINGS_DIR = Path(__file__).parents[1] / "settings"
+SETTINGS_DIR.mkdir(exist_ok=True)
+PRIVATE_DIR = Path(__file__).parents[1] / "private"
+PRIVATE_DIR.mkdir(exist_ok=True)
 
-if not SETTINGS_DIR.is_dir():
-    os.mkdir(SETTINGS_DIR)
+CallbackT = Callable[[dict[str, str]], None]
+DecoratorT = Callable[[CallbackT], CallbackT]
 
 
-def get_list_from_csv(
-    filename: str, headers: tuple[str, str], default: dict[str, str] = {}
-):
-    """Retrieves list from CSV"""
-    path = SETTINGS_DIR / filename
-    assert filename.endswith(".csv")
-
-    if not path.is_file():
-        with open(path, "w", encoding="utf-8", newline="") as file:
-            writer = csv.writer(file)
-            writer.writerow(headers)
-            for key, value in default.items():
-                writer.writerow([key] if key == value else [value, key])
-
-    # Now read via resource to take advantage of talon's
-    # ability to reload this script for us when the resource changes
-    with resource.open(str(path), "r") as f:
-        rows = list(csv.reader(f))
+def read_csv_list(
+    f: IO, headers: tuple[str, str], is_spoken_form_first: bool = False
+) -> dict[str, str]:
+    rows = list(csv.reader(f))
 
     # print(str(rows))
     mapping = {}
     if len(rows) >= 2:
         actual_headers = rows[0]
-        if not actual_headers == list(headers):
+        if actual_headers != list(headers):
             print(
-                f'"{filename}": Malformed headers - {actual_headers}.'
+                f'"{f.name}": Malformed headers - {actual_headers}.'
                 + f" Should be {list(headers)}. Ignoring row."
             )
         for row in rows[1:]:
@@ -47,10 +37,14 @@ def get_list_from_csv(
             if len(row) == 1:
                 output = spoken_form = row[0]
             else:
-                output, spoken_form = row[:2]
+                if is_spoken_form_first:
+                    spoken_form, output = row[:2]
+                else:
+                    output, spoken_form = row[:2]
+
                 if len(row) > 2:
                     print(
-                        f'"{filename}": More than two values in row: {row}.'
+                        f'"{f.name}": More than two values in row: {row}.'
                         + " Ignoring the extras."
                     )
             # Leading/trailing whitespace in spoken form can prevent recognition.
@@ -60,18 +54,144 @@ def get_list_from_csv(
     return mapping
 
 
-def append_to_csv(filename: str, rows: dict[str, str]):
-    path = SETTINGS_DIR / filename
+def write_csv_defaults(
+    path: Path,
+    headers: tuple[str, str],
+    default: Optional[dict[str, str]] = None,
+    is_spoken_form_first: bool = False,
+) -> None:
+    if not path.is_file() and default is not None:
+        with open(path, "w", encoding="utf-8", newline="") as file:
+            writer = csv.writer(file)
+            writer.writerow(headers)
+            for key, value in default.items():
+                if key == value:
+                    writer.writerow([key])
+                elif is_spoken_form_first:
+                    writer.writerow([key, value])
+                else:
+                    writer.writerow([value, key])
+
+
+def track_csv_list(
+    filename: str,
+    headers: tuple[str, str],
+    default: Optional[dict[str, str]] = None,
+    is_spoken_form_first: bool = False,
+    private: bool = False,
+) -> DecoratorT:
+    assert filename.endswith(".csv")
+    path = (PRIVATE_DIR / filename) if private else (SETTINGS_DIR / filename)
+    write_csv_defaults(path, headers, default, is_spoken_form_first)
+
+    def decorator(fn: CallbackT) -> CallbackT:
+        @resource.watch(str(path))
+        def on_update(f):
+            data = read_csv_list(f, headers, is_spoken_form_first)
+            fn(data)
+
+    return decorator
+
+
+def needs_final_newline(path: Union[Path, str]) -> bool:
+    with open(path) as file:
+        line = None
+        for line in file:  # noqa: B007
+            pass  # iterate through each line in file
+    return line is not None and not line.endswith("\n")
+
+
+def append_to_csv(filename: str, rows: dict[str, str], private: bool = False):
+    path = (PRIVATE_DIR / filename) if private else (SETTINGS_DIR / filename)
     assert filename.endswith(".csv")
 
-    with open(str(path)) as file:
-        line = None
-        for line in file:
-            pass
-        needs_newline = line is not None and not line.endswith("\n")
+    needs_newline = needs_final_newline(path)
     with open(path, "a", encoding="utf-8", newline="") as file:
         writer = csv.writer(file)
         if needs_newline:
             writer.writerow([])
         for key, value in rows.items():
             writer.writerow([key] if key == value else [value, key])
+
+
+WatchCallbackType = Callable[[IO], None]
+WatchDecoratorType = Callable[[WatchCallbackType], WatchCallbackType]
+
+
+def track_file(
+    filename: str,
+    default: str = "",
+    private: bool = False,
+) -> WatchDecoratorType:
+    path = (PRIVATE_DIR / filename) if private else (SETTINGS_DIR / filename)
+    if not path.is_file():
+        path.write_text(default)
+
+    def decorator(fn: WatchCallbackType) -> WatchCallbackType:
+        @resource.watch(path)
+        def on_update(f):
+            fn(f)
+
+        return on_update
+
+    return decorator
+
+
+def read_csv_rows(f: IO, headers: tuple[str, ...]) -> list[list[str]]:
+    rows = list(csv.reader(f))
+    if len(rows) == 0:
+        warn_about_error(f"{f.name} is empty!")
+    elif len(rows) == 1:
+        warn_about_error(f"{f.name} has only the header!")
+    if len(rows) >= 1:
+        actual_headers = rows[0]
+        if actual_headers != list(headers):
+            warn_about_error(
+                f'"{f.name}": Malformed headers - {actual_headers}.'
+                + f" Should be {list(headers)}. Ignoring row."
+            )
+    if len(rows) < 2:
+        return []
+    return rows[1:]
+
+
+def write_csv_default_rows(
+    path: Path,
+    headers: tuple[str, ...],
+    default: Optional[list[list[str]]] = None,
+) -> None:
+    if not path.is_file() and default is not None:
+        with open(path, "w", encoding="utf-8", newline="") as file:
+            writer = csv.writer(file)
+            writer.writerow(headers)
+            writer.writerows(default)
+
+
+RawRowsCallbackT = Callable[[list[list[str]]], None]
+RawRowsDecoratorT = Callable[[RawRowsCallbackT], RawRowsCallbackT]
+
+
+def track_csv_rows(
+    filename: str,
+    headers: tuple[str, ...],
+    default: Optional[list[list[str]]] = None,
+    private: bool = False,
+) -> RawRowsDecoratorT:
+    assert filename.endswith(".csv")
+    path = (PRIVATE_DIR / filename) if private else (SETTINGS_DIR / filename)
+    write_csv_default_rows(path, headers, default)
+
+    def decorator(fn: RawRowsCallbackT) -> RawRowsCallbackT:
+        @resource.watch(str(path))
+        def on_update(f):
+            data = read_csv_rows(f, headers)
+            fn(data)
+
+        return on_update
+
+    return decorator
+
+
+def warn_about_error(message: str):
+    actions.app.notify(message)
+    print(message)

@@ -1,5 +1,6 @@
 code.language: python
 -
+
 tag(): user.code_imperative
 tag(): user.code_object_oriented
 
@@ -11,7 +12,6 @@ tag(): user.code_functions
 tag(): user.code_functions_common
 tag(): user.code_keywords
 tag(): user.code_libraries
-tag(): user.code_libraries_gui
 tag(): user.code_operators_array
 tag(): user.code_operators_assignment
 tag(): user.code_operators_bitwise
@@ -47,9 +47,28 @@ dock {user.python_docstring_fields}:
 dock type {user.code_type}: user.insert_between(":type ", ": {code_type}")
 dock returns type {user.code_type}: user.insert_between(":rtype ", ": {code_type}")
 
-toggle imports: user.code_toggle_libraries()
 import <user.code_libraries>:
     user.code_insert_library(code_libraries, "")
     key(end enter)
 
-from import: user.insert_between("from ", " import ")
+from import: user.insert_snippet_by_name("importFromStatement")
+
+# the generic type commands are currently unstable and may be subject to change
+
+# examples of using the <user.python_generic_type> capture:
+# "list of string" -> list[str]
+# "list of string or integer" -> list[str | int]
+# types can be nested with `of`:
+# "list of optional of integer" -> list[Optional[int]]
+# `and` can be used for multiple arguments:
+# "tuple of integer and float" -> tuple[int, float]
+# `done` can be used to exit a nesting:
+# "tuple of optional of integer done string" -> tuple[Optional[int], str]
+# user defined type names are capitalized
+# "list of custom type" -> list[CustomType]
+# saying `type` first refers to a custom type
+# "type list of type integer" -> List[Integer]
+
+type <user.python_generic_type>: insert(python_generic_type)
+returns <user.python_generic_type>: insert(" -> {python_generic_type}")
+is type <user.python_generic_type>: insert(": {python_generic_type}")

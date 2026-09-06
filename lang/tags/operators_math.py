@@ -1,12 +1,6 @@
-from talon import Context, Module
+from talon import Module
 
-ctx = Context()
 mod = Module()
-
-
-# TODO: Could split into numeric, comparison, and logic?
-
-mod.tag("code_operators_math", desc="Tag for enabling mathematical operator commands")
 
 
 @mod.action_class
@@ -52,6 +46,9 @@ class Actions:
 
     def code_operator_or():
         """code_operator_or"""
+
+    def code_operator_not():
+        """code_operator_not"""
 
     def code_operator_in():
         """code_operator_in"""
