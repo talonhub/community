@@ -36,23 +36,22 @@ class Actions:
         """Creates an empty file with that name in the stored state directory"""
         path = stored_state_directory / directory_name / name
         create_parent_directory(path)
-        with open(path, "w") as f:
-            pass
+        open(path, "w").close()
 
     def stored_state_remove_signal_file(directory_name: str, name: str):
         """Deletes the specified signal file in the stared state directory"""
         path = stored_state_directory / directory_name / name
         if not path.exists():
             return
-        elif path.is_dir():
+        if path.is_dir():
             raise IsADirectoryError(
                 f"Tried to remove signal file at path {path} but it was a directory!"
             )
-        elif not path.is_file():
+        if not path.is_file():
             raise OSError(
                 f"Tried to remove a signal file at path {path} but it was not a file!"
             )
-        elif path.stat().st_size != 0:
+        if path.stat().st_size != 0:
             raise ValueError(
                 f"Tried to remove signal file at path {path} but it was not empty, so it was not a signal file!"
             )
@@ -68,7 +67,7 @@ class Actions:
     def stored_state_get_text(directory_name: str, name: str) -> str:
         """Gets the text from the file with specified name in the stored state directory"""
         path = stored_state_directory / directory_name / name
-        with open(path, "r") as f:
+        with open(path) as f:
             return f.read()
 
 

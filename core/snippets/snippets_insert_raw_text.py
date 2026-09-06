@@ -4,6 +4,8 @@ from dataclasses import dataclass
 
 from talon import Module, actions, app, settings
 
+from .snippets_parser import UNICODE_ESCAPED_BACKSLASH_PLACEHOLDER
+
 mod = Module()
 
 
@@ -168,6 +170,7 @@ def format_tabs(text: str) -> str:
 
 
 def parse_snippet(body: str):
+    body = body.replace("\\\\", UNICODE_ESCAPED_BACKSLASH_PLACEHOLDER)
     # Some IM services will send the message on a tab
     body = format_tabs(body)
 
@@ -214,6 +217,9 @@ def parse_snippet(body: str):
         stop.columns_left = len(lines[stop.row]) - stop.col
 
     updated_snippet = "\n".join(lines)
+    updated_snippet = updated_snippet.replace(
+        UNICODE_ESCAPED_BACKSLASH_PLACEHOLDER, "\\"
+    )
 
     return updated_snippet, stops
 

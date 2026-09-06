@@ -1,6 +1,6 @@
 import subprocess
 import time
-from typing import Optional, Union
+from typing import Optional
 
 from talon import Context, Module, actions, settings, ui
 
@@ -109,10 +109,10 @@ class UserActions:
         actions.user.i3msg(f"workspace number {number}")
 
     def desktop_next():
-        actions.user.i3msg(f"workspace next")
+        actions.user.i3msg("workspace next")
 
     def desktop_last():
-        actions.user.i3msg(f"workspace prev")
+        actions.user.i3msg("workspace prev")
 
 
 @mod.action_class

@@ -1,7 +1,7 @@
 import re
 from typing import Optional
 
-from talon import settings
+from talon import settings, ui
 from talon.experimental.textarea import (
     DarkThemeLabels,
     LightThemeLabels,
@@ -34,7 +34,7 @@ def calculate_text_anchors(text, cursor_position, anchor_labels=None):
 
     # Find all the word spans
     matches = []
-    cursor_idx = None
+    cursor_idx = 0
     for match in word_matcher.finditer(text):
         matches.append((match.start(), match.end() - len(match.group(2)), match.end()))
         if matches[-1][0] <= cursor_position and matches[-1][2] >= cursor_position:
@@ -49,7 +49,9 @@ def calculate_text_anchors(text, cursor_position, anchor_labels=None):
     anchor_start_idx = max(0, anchor_end_idx - len(anchor_labels))
 
     # Now add anchors to the selected matches
-    for i, anchor in zip(range(anchor_start_idx, anchor_end_idx), anchor_labels):
+    for i, anchor in zip(
+        range(anchor_start_idx, anchor_end_idx), anchor_labels, strict=False
+    ):
         word_start, word_end, whitespace_end = matches[i]
         yield (anchor, word_start, word_end, whitespace_end)
 
@@ -110,7 +112,7 @@ class DraftManager:
 
         return self.area.value
 
-    def get_rect(self) -> "talon.types.Rect":
+    def get_rect(self) -> ui.Rect:
         """
         Get the Rect for the window
         """

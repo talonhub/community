@@ -1,7 +1,6 @@
 from talon import Context, Module, actions, settings
 
 from ...core.described_functions import (
-    create_described_function,
     create_described_insert_between,
 )
 from ..tags.operators import Operators
@@ -37,7 +36,7 @@ ctx.lists["user.code_libraries"] = {
 }
 
 
-@mod.capture(rule="{self.lua_functions}")
+@mod.capture(rule="{user.lua_functions}")
 def lua_functions(m) -> str:
     "Returns a string"
     return m.lua_functions

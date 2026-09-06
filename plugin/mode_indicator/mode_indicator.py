@@ -61,9 +61,8 @@ mod.setting("mode_indicator_color_command", type=str)
 mod.setting("mode_indicator_color_other", type=str)
 
 
-setting_values = {
-    name: None
-    for name in (
+setting_values = dict.fromkeys(
+    (
         "user.mode_indicator_show",
         "user.mode_indicator_size",
         "user.mode_indicator_x",
@@ -78,7 +77,7 @@ setting_values = {
         "user.mode_indicator_color_command",
         "user.mode_indicator_color_other",
     )
-}
+)
 
 
 def get_mode_color() -> str:
@@ -88,14 +87,13 @@ def get_mode_color() -> str:
         if "user.deep_sleep" in scope.get("tag"):
             return settings.get("user.mode_indicator_color_deep_sleep")
         return settings.get("user.mode_indicator_color_sleep")
-    elif current_mode == "dictation":
+    if current_mode == "dictation":
         return settings.get("user.mode_indicator_color_dictation")
-    elif current_mode == "mixed":
+    if current_mode == "mixed":
         return settings.get("user.mode_indicator_color_mixed")
-    elif current_mode == "command":
+    if current_mode == "command":
         return settings.get("user.mode_indicator_color_command")
-    else:
-        return settings.get("user.mode_indicator_color_other")
+    return settings.get("user.mode_indicator_color_other")
 
 
 def get_alpha_color() -> str:

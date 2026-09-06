@@ -155,9 +155,9 @@ class MouseSnapNine:
                 for col in range(3):
                     text_string = ""
                     if settings.get("user.grids_put_one_bottom_left"):
-                        text_string = f"{(2 - row)*3+col+1}"
+                        text_string = f"{(2 - row) * 3 + col + 1}"
                     else:
-                        text_string = f"{row*3+col+1}"
+                        text_string = f"{row * 3 + col + 1}"
                     text_rect = canvas.paint.measure_text(text_string)[1]
                     background_rect = text_rect.copy()
                     background_rect.center = Point2d(
@@ -179,9 +179,6 @@ class MouseSnapNine:
         if not should_show_zoomed_in:
             paint.color = "00ff007f"
             for which in range(1, 10):
-                gap = 35 - self.count * 10
-                if not self.active:
-                    gap = 45
                 draw_crosses(*self.calc_narrow(which, self.rect))
 
         paint.stroke_width = grid_stroke
@@ -300,7 +297,7 @@ class GridActions:
     def grid_narrow_list(digit_list: list[str]):
         """Choose fields multiple times in a row"""
         for d in digit_list:
-            actions.self.grid_narrow(int(d))
+            actions.user.grid_narrow(int(d))
 
     def grid_narrow(digit: Union[int, str]):
         """Choose a field of the grid and narrow the selection down"""

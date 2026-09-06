@@ -1,0 +1,161 @@
+list: user.code_common_function
+code.language: php
+-
+
+abs
+add slashes: addslashes
+array all: array_all
+array any: array_any
+array chunk: array_chunk
+array column: array_column
+array combine: array_combine
+array diff: array_diff
+array fill: array_fill
+array fill keys: array_fill_keys
+array filter: array_filter
+array find: array_find
+array first: array_first
+array flip: array_flip
+array intersect: array_intersect
+array key exists: array_key_exists
+array keys: array_keys
+array key first: array_key_first
+array key last: array_key_last
+array last: array_last
+array map: array_map
+array merge: array_merge
+array pop: array_pop
+array push: array_push
+array reduce: array_reduce
+array reverse: array_reverse
+array search: array_search
+array shift: array_shift
+array slice: array_slice
+array splice: array_splice
+array sum: array_sum
+array unique: array_unique
+array unshift: array_unshift
+array values: array_values
+A R sort: arsort
+A sort: asort
+assert
+assert options: assert_options
+base sixty four decode: base64_decode
+base sixty four encode: base64_encode
+base name: basename
+call user funk: call_user_func
+call user funk array: call_user_func_array
+ceil
+class exists: class_exists
+count
+current
+date
+define
+defined
+dir name: dirname
+echo
+empty
+end
+error log: error_log
+explode
+F close: fclose
+F get csv: fgetcsv
+F get S: fgets
+F open: fopen
+F put csv: fputcsv
+F write: fwrite
+file
+file exists: file_exists
+file get contents: file_get_contents
+file put contents: file_put_contents
+filter var: filter_var
+floor
+function exists: function_exists
+get class: get_class
+get C W D: getcwd
+get envy: getenv
+get opt: getopt
+get type: gettype
+glob
+implode
+in array: in_array
+innie get: ini_get
+int val: intval
+is array: is_array
+is bool: is_bool
+is callable: is_callable
+is dir: is_dir
+is file: is_file
+is float: is_float
+is int: is_int
+is nan: is_nan
+is null: is_null
+is numeric: is_numeric
+is object: is_object
+is readable: is_readable
+is resource: is_resource
+is set: isset
+is string: is_string
+json decode: json_decode
+json encode: json_encode
+json validate: json_validate
+K R sort: krsort
+K sort: ksort
+L trim: ltrim
+max
+method exists: method_exists
+micro time: microtime
+min
+make dir: mkdir
+number format: number_format
+parse url: parse_url
+path info: pathinfo
+preg match: preg_match
+preg match all: preg_match_all
+preg quote: preg_quote
+preg replace: preg_replace
+preg replace callback: preg_replace_callback
+preg split: preg_split
+print
+print F: printf
+print R: print_r
+rtrim
+rand
+range
+real path: realpath
+rename
+reset
+rewind
+round
+err sort: rsort
+serialize
+shuffle
+sort
+sprint F: sprintf
+stir ends with: str_ends_with
+stir rye pos: strripos
+stir R pos: strrpos
+stir to time: strtotime
+stir len: strlen
+stir pad: str_pad
+stir pos: strpos
+stir repeat: str_repeat
+stir replace: str_replace
+stir stir: strstr
+stir to lower: strtolower
+stir to upper: strtoupper
+stir tr: strtr
+stir val: strval
+sub stir: substr
+tempnam
+time
+trim
+ucwords
+unlink
+url decode: urldecode
+url encode: urlencode
+var dump: var_dump
+var export: var_export
+U A sort: uasort
+U C first: ucfirst
+U sort: usort

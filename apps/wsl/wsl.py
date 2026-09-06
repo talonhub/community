@@ -489,7 +489,7 @@ class Actions:
         results = []
         _update_wsl_distros()
         for in_distro in wsl_distros:
-            distro, result, error = run_wsl(
+            _, result, error = run_wsl(
                 ["echo", 'Hello, my name is "${WSL_DISTRO_NAME}".'], in_distro
             )
             if error:

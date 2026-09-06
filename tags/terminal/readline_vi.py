@@ -1,5 +1,5 @@
+from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Callable
 
 from talon import Context, actions
 
@@ -110,7 +110,7 @@ class EditActions:
         add_pending("$", "a")
 
     def extend_line_start():
-        pendingSelection = add_pending("0", "i")
+        add_pending("0", "i")
 
     def extend_word_left():
         add_pending("b", "i")

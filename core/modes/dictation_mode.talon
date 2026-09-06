@@ -27,6 +27,12 @@ go left <number_small> (word | words):
 go right <number_small> (word | words):
     edit.word_right()
     repeat(number_small - 1)
+go left <number_small> (character | characters):
+    edit.left()
+    repeat(number_small - 1)
+go right <number_small> (character | characters):
+    edit.right()
+    repeat(number_small - 1)
 go line start: edit.line_start()
 go line end: edit.line_end()
 

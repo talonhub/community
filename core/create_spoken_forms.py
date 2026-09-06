@@ -1,8 +1,9 @@
 import itertools
 import re
 from collections import defaultdict
+from collections.abc import Mapping
 from dataclasses import dataclass
-from typing import Any, List, Mapping, Optional
+from typing import Any, Optional
 
 from talon import Module, actions
 
@@ -89,7 +90,6 @@ def create_spoken_form_for_number(num: int):
     """Creates a spoken form for an integer"""
 
     n3 = []
-    r1 = ""
     # create numeric string
     ns = str(num)
     for k in range(3, 33, 3):
@@ -98,14 +98,12 @@ def create_spoken_form_for_number(num: int):
         # break if end of ns has been reached
         if q < -2:
             break
-        else:
-            if q >= 0:
-                n3.append(int(r[:3]))
-            elif q >= -1:
-                n3.append(int(r[:2]))
-            elif q >= -2:
-                n3.append(int(r[:1]))
-        r1 = r
+        if q >= 0:
+            n3.append(int(r[:3]))
+        elif q >= -1:
+            n3.append(int(r[:2]))
+        elif q >= -2:
+            n3.append(int(r[:1]))
 
     # break each group of 3 digits into
     # ones, tens/twenties, hundreds
@@ -116,8 +114,7 @@ def create_spoken_form_for_number(num: int):
         b3 = (x % 1000) // 100
         if x == 0:
             continue  # skip
-        else:
-            t = thousands[i]
+        t = thousands[i]
 
         # print(str(b1) + ", " + str(b2) + ", " + str(b3))
         if b2 == 0:
@@ -215,7 +212,7 @@ def create_single_spoken_form(source: str):
     return mapped_source
 
 
-def create_exploded_forms(spoken_forms: List[str]):
+def create_exploded_forms(spoken_forms: list[str]):
     """Exploded common packed words into separate words"""
     packed_words = {"readme": "read me"}
 
@@ -235,7 +232,7 @@ def create_exploded_forms(spoken_forms: List[str]):
         # ex: "readme" explodes into "read me"
         else:
             for word in line.split(" "):
-                if word in packed_words.keys():
+                if word in packed_words:
                     exploded_form.append(packed_words[word])
                 else:
                     exploded_form.append(word)
@@ -243,7 +240,7 @@ def create_exploded_forms(spoken_forms: List[str]):
     return new_spoken_forms
 
 
-def create_extension_forms(spoken_forms: List[str]):
+def create_extension_forms(spoken_forms: list[str]):
     """Add extension forms"""
     new_spoken_forms = []
 
@@ -257,7 +254,7 @@ def create_extension_forms(spoken_forms: List[str]):
             # NOTE: If we ever run in to file extensions in the middle of file name, the
             # truncated form is going to be busted. ie: foo.md.disabled
 
-            if substring in file_extensions_map.keys():
+            if substring in file_extensions_map:
                 file_extension_forms.append(file_extensions_map[substring])
                 dotted_extension_form.append(REVERSE_PRONUNCIATION_MAP["."])
                 dotted_extension_form.append(file_extensions_map[substring])
@@ -276,7 +273,7 @@ def create_extension_forms(spoken_forms: List[str]):
     return set(dict.fromkeys(new_spoken_forms))
 
 
-def create_cased_forms(spoken_forms: List[str]):
+def create_cased_forms(spoken_forms: list[str]):
     """Add lower and upper case forms"""
     new_spoken_forms = []
 
@@ -298,7 +295,7 @@ def create_cased_forms(spoken_forms: List[str]):
     return set(dict.fromkeys(new_spoken_forms))
 
 
-def create_abbreviated_forms(spoken_forms: List[str]):
+def create_abbreviated_forms(spoken_forms: list[str]):
     """Add abbreviated case forms"""
     new_spoken_forms = []
 
@@ -307,7 +304,7 @@ def create_abbreviated_forms(spoken_forms: List[str]):
         unabbreviated_forms = []
         abbreviated_forms = []
         for substring in line.split(" "):
-            if substring in swapped_abbreviation_map.keys():
+            if substring in swapped_abbreviation_map:
                 abbreviated_forms.append(swapped_abbreviation_map[substring])
             else:
                 abbreviated_forms.append(substring)
@@ -319,7 +316,7 @@ def create_abbreviated_forms(spoken_forms: List[str]):
     return set(dict.fromkeys(new_spoken_forms))
 
 
-def create_spoken_number_forms(source: List[str]):
+def create_spoken_number_forms(source: list[str]):
     """
     Create a list of spoken forms by transforming numbers in source into spoken forms.
     This creates a first pass of spoken forms with numbers translated, but will go
@@ -394,7 +391,7 @@ def create_spoken_forms_from_regex(source: str, pattern: re.Pattern):
     """
     source_without_apostrophes = source.replace("'", "")
     pieces = list(pattern.finditer(source_without_apostrophes))
-    spoken_forms = list(map(lambda x: x.group(0), pieces))
+    spoken_forms = [piece.group(0) for piece in pieces]
 
     # NOTE: Order is sometimes important
     transforms = [

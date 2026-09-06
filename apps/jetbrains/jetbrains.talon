@@ -18,7 +18,6 @@ smart: user.idea("action SmartTypeCompletion")
 done | finish: user.idea("action EditorCompleteStatement")
 # Copying
 grab <number>: user.idea_grab(number)
-action [<user.text>]: user.deprecate_command("2024-09-02", "action", "please")
 # Refactoring
 refactor: user.idea("action Refactorings.QuickListPopupAction")
 refactor <user.text>:
@@ -124,7 +123,7 @@ configure servers: user.idea("action tasks.configure.servers")
 # Git / Github (not using verb-noun-adjective pattern, mirroring terminal commands.)
 git pull: user.idea("action Vcs.UpdateProject")
 git commit: user.idea("action CheckinProject")
-git push: user.idea("action CheckinProject")
+git push: user.idea("action Vcs.Push")
 git log: user.idea("action Vcs.ShowTabbedFileHistory")
 git browse: user.idea("action Github.Open.In.Browser")
 git (gets | gist): user.idea("action Github.Create.Gist")
