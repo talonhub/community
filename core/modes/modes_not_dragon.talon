@@ -3,6 +3,7 @@ mode: dictation
 mode: sleep
 not speech.engine: dragon
 -
+
 # The optional <phrase> afterwards allows these to match even if you say arbitrary text
 # after this command, without having to wait for the speech timeout.
 
@@ -22,8 +23,8 @@ not speech.engine: dragon
 # engine, this controls Talon.
 ^go to sleep [<phrase>]$: speech.disable()
 ^talon sleep [<phrase>]$:
-    speech.disable()
     user.deprecate_command("2025-06-25", "talon sleep (without dragon)", "go to sleep")
+    speech.disable()
 
 ^sleep all [<phrase>]$:
     user.switcher_hide_running()

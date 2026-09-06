@@ -13,7 +13,6 @@ from talon import Context, Module, actions, app, fs, imgui, ui
 # <spoken form>,<app name or .exe> - to add a spoken form override for the app, or
 # <app name or .exe> - to exclude the app from appearing in "running list" or "focus <app>"
 
-# TODO: Consider moving overrides to settings directory
 overrides_directory = os.path.dirname(os.path.realpath(__file__))
 override_file_name = f"app_name_overrides.{talon.app.platform}.csv"
 override_file_path = os.path.normcase(
@@ -67,91 +66,101 @@ words_to_exclude = [
 # rather than via e.g. the start menu. This way, all apps, including "modern" apps are
 # launchable. To easily retrieve the apps this makes available, navigate to shell:AppsFolder in Explorer
 if app.platform == "windows":
-    import ctypes
-    import os
-    from ctypes import wintypes
+    # This try/except block is to make this work with versions of beta Talon that have removed pywin32 as a dependency
+    # this handles an import error by using the new builtin Talon action for getting the list of apps
+    # remove the try block after public Talon supports that action and use the definition in the except block for get_apps
+    try:
+        import ctypes
+        import os
+        from ctypes import wintypes
 
-    import pywintypes
-    from win32com.propsys import propsys, pscon
-    from win32com.shell import shell, shellcon
+        import pywintypes
+        from win32com.propsys import propsys, pscon
+        from win32com.shell import shell, shellcon
 
-    # KNOWNFOLDERID
-    # https://msdn.microsoft.com/en-us/library/dd378457
-    # win32com defines most of these, except the ones added in Windows 8.
-    FOLDERID_AppsFolder = pywintypes.IID("{1e87508d-89c2-42f0-8a7e-645a0f50ca58}")
+        # KNOWNFOLDERID
+        # https://msdn.microsoft.com/en-us/library/dd378457
+        # win32com defines most of these, except the ones added in Windows 8.
+        FOLDERID_AppsFolder = pywintypes.IID("{1e87508d-89c2-42f0-8a7e-645a0f50ca58}")
 
-    # win32com is missing SHGetKnownFolderIDList, so use ctypes.
+        # win32com is missing SHGetKnownFolderIDList, so use ctypes.
 
-    _ole32 = ctypes.OleDLL("ole32")
-    _shell32 = ctypes.OleDLL("shell32")
+        _ole32 = ctypes.OleDLL("ole32")
+        _shell32 = ctypes.OleDLL("shell32")
 
-    _REFKNOWNFOLDERID = ctypes.c_char_p
-    _PPITEMIDLIST = ctypes.POINTER(ctypes.c_void_p)
+        _REFKNOWNFOLDERID = ctypes.c_char_p
+        _PPITEMIDLIST = ctypes.POINTER(ctypes.c_void_p)
 
-    _ole32.CoTaskMemFree.restype = None
-    _ole32.CoTaskMemFree.argtypes = (wintypes.LPVOID,)
+        _ole32.CoTaskMemFree.restype = None
+        _ole32.CoTaskMemFree.argtypes = (wintypes.LPVOID,)
 
-    _shell32.SHGetKnownFolderIDList.argtypes = (
-        _REFKNOWNFOLDERID,  # rfid
-        wintypes.DWORD,  # dwFlags
-        wintypes.HANDLE,  # hToken
-        _PPITEMIDLIST,
-    )  # ppidl
+        _shell32.SHGetKnownFolderIDList.argtypes = (
+            _REFKNOWNFOLDERID,  # rfid
+            wintypes.DWORD,  # dwFlags
+            wintypes.HANDLE,  # hToken
+            _PPITEMIDLIST,
+        )  # ppidl
 
-    def get_known_folder_id_list(folder_id, htoken=None):
-        if isinstance(folder_id, pywintypes.IIDType):
-            folder_id = bytes(folder_id)
-        pidl = ctypes.c_void_p()
-        try:
-            _shell32.SHGetKnownFolderIDList(folder_id, 0, htoken, ctypes.byref(pidl))
-            return shell.AddressAsPIDL(pidl.value)
-        except OSError as e:
-            if e.winerror & 0x80070000 == 0x80070000:
-                # It's a WinAPI error, so re-raise it, letting Python
-                # raise a specific exception such as FileNotFoundError.
-                raise ctypes.WinError(e.winerror & 0x0000FFFF)
-            raise
-        finally:
-            if pidl:
-                _ole32.CoTaskMemFree(pidl)
-
-    def enum_known_folder(folder_id, htoken=None):
-        id_list = get_known_folder_id_list(folder_id, htoken)
-        folder_shell_item = shell.SHCreateShellItem(None, None, id_list)
-        items_enum = folder_shell_item.BindToHandler(
-            None, shell.BHID_EnumItems, shell.IID_IEnumShellItems
-        )
-        yield from items_enum
-
-    def list_known_folder(folder_id, htoken=None):
-        result = []
-        for item in enum_known_folder(folder_id, htoken):
-            result.append(item.GetDisplayName(shellcon.SIGDN_NORMALDISPLAY))
-        result.sort(key=lambda x: x.upper())
-        return result
-
-    def get_apps():
-        items = {}
-        for item in enum_known_folder(FOLDERID_AppsFolder):
+        def get_known_folder_id_list(folder_id, htoken=None):
+            if isinstance(folder_id, pywintypes.IIDType):
+                folder_id = bytes(folder_id)
+            pidl = ctypes.c_void_p()
             try:
-                property_store = item.BindToHandler(
-                    None, shell.BHID_PropertyStore, propsys.IID_IPropertyStore
+                _shell32.SHGetKnownFolderIDList(
+                    folder_id, 0, htoken, ctypes.byref(pidl)
                 )
-                app_user_model_id = property_store.GetValue(
-                    pscon.PKEY_AppUserModel_ID
-                ).ToString()
+                return shell.AddressAsPIDL(pidl.value)
+            except OSError as e:
+                if e.winerror & 0x80070000 == 0x80070000:
+                    # It's a WinAPI error, so re-raise it, letting Python
+                    # raise a specific exception such as FileNotFoundError.
+                    raise ctypes.WinError(e.winerror & 0x0000FFFF) from e
+                raise
+            finally:
+                if pidl:
+                    _ole32.CoTaskMemFree(pidl)
 
-            except pywintypes.error:
-                continue
+        def enum_known_folder(folder_id, htoken=None):
+            id_list = get_known_folder_id_list(folder_id, htoken)
+            folder_shell_item = shell.SHCreateShellItem(None, None, id_list)
+            items_enum = folder_shell_item.BindToHandler(
+                None, shell.BHID_EnumItems, shell.IID_IEnumShellItems
+            )
+            yield from items_enum
 
-            name = item.GetDisplayName(shellcon.SIGDN_NORMALDISPLAY)
+        def list_known_folder(folder_id, htoken=None):
+            result = []
+            for item in enum_known_folder(folder_id, htoken):
+                result.append(item.GetDisplayName(shellcon.SIGDN_NORMALDISPLAY))
+            result.sort(key=lambda x: x.upper())
+            return result
 
-            # exclude anything with install/uninstall...
-            # 'cause I don't think we don't want 'em
-            if "install" not in name.lower():
-                items[name] = app_user_model_id
+        def get_apps():
+            items = {}
+            for item in enum_known_folder(FOLDERID_AppsFolder):
+                try:
+                    property_store = item.BindToHandler(
+                        None, shell.BHID_PropertyStore, propsys.IID_IPropertyStore
+                    )
+                    app_user_model_id = property_store.GetValue(
+                        pscon.PKEY_AppUserModel_ID
+                    ).ToString()
 
-        return items
+                except pywintypes.error:
+                    continue
+
+                name = item.GetDisplayName(shellcon.SIGDN_NORMALDISPLAY)
+
+                # exclude anything with install/uninstall...
+                # 'cause I don't think we don't want 'em
+                if "install" not in name.lower():
+                    items[name] = app_user_model_id
+
+            return items
+    except ImportError:
+
+        def get_apps():
+            return actions.apps.list()
 
 elif app.platform == "linux":
     import configparser
@@ -221,26 +230,32 @@ elif app.platform == "linux":
 elif app.platform == "mac":
     mac_application_directories = [
         "/Applications",
-        "/Applications/Utilities",
         "/System/Applications",
-        "/System/Applications/Utilities",
         f"{Path.home()}/Applications",
         f"{Path.home()}/.nix-profile/Applications",
     ]
 
-    def get_apps():
+    def get_apps(paths: list[str] = mac_application_directories):
         items = {}
-        for base in mac_application_directories:
-            base = os.path.expanduser(base)
-            if os.path.isdir(base):
-                for name in os.listdir(base):
-                    path = os.path.join(base, name)
-                    name = name.rsplit(".", 1)[0].lower()
-                    items[name] = path
+        subdirs = []
+        for base in paths:
+            if not os.path.isdir(base):
+                continue
+            for entry in os.scandir(base):
+                if (not entry.is_dir()) or entry.name.startswith("."):
+                    continue
+                if entry.name.endswith(".app"):
+                    name = entry.name[:-4].lower()
+                    items[name] = entry.path
+                else:
+                    subdirs.append(entry.path)
+        if len(subdirs):
+            items.update(get_apps(subdirs))
+
         return items
 
 
-@mod.capture(rule="{self.running}")  # | <user.text>)")
+@mod.capture(rule="{user.running}")  # | <user.text>)")
 def running_applications(m) -> str:
     "Returns a single application name"
     try:
@@ -249,7 +264,7 @@ def running_applications(m) -> str:
         return m.text
 
 
-@mod.capture(rule="{self.launch}")
+@mod.capture(rule="{user.launch}")
 def launch_applications(m) -> str:
     "Returns a single application name"
     return m.launch
@@ -286,7 +301,7 @@ def update_running_list():
         if running_app_name := running_application_dict.get(full_application_name):
             running[running_name] = running_app_name
 
-    ctx.lists["self.running"] = running
+    ctx.lists["user.running"] = running
 
 
 def update_overrides(name, flags):
@@ -323,7 +338,7 @@ class Actions:
                     f'Skipped getting app: "{name}" has less than 3 chars.'
                 )
             for running_name, full_application_name in ctx.lists[
-                "self.running"
+                "user.running"
             ].items():
                 if running_name == name or running_name.lower().startswith(
                     name.lower()
@@ -339,7 +354,7 @@ class Actions:
         raise RuntimeError(f'App not running: "{name}"')
 
     def switcher_focus(name: str):
-        """Focus a new application by name"""
+        """Focus application by name, cycle windows if already active"""
         app = actions.user.get_running_app(name)
 
         # Focus next window on same app
@@ -350,7 +365,7 @@ class Actions:
             actions.user.switcher_focus_app(app)
 
     def switcher_focus_app(app: ui.App):
-        """Focus application and wait until switch is made"""
+        """Focus application and wait until switch is made (no cycling of active windows)"""
         app.focus()
         t1 = time.perf_counter()
         while ui.active_app() != app:
@@ -402,6 +417,8 @@ class Actions:
         elif app.platform == "mac":
             # MacOS equivalent is "Mission Control"
             actions.user.dock_send_notification("com.apple.expose.awake")
+        elif app.platform == "linux":
+            actions.key("super")
         else:
             print("Persistent Switcher Menu not supported on " + app.platform)
 
@@ -422,7 +439,7 @@ def gui_running(gui: imgui.GUI):
     gui.text("Running applications (with spoken forms)")
     gui.line()
     running_apps = sorted(
-        (v.lower(), k, v) for k, v in ctx.lists["self.running"].items()
+        (v.lower(), k, v) for k, v in ctx.lists["user.running"].items()
     )
     for _, running_name, full_application_name in running_apps:
         gui.text(f"{full_application_name}: {running_name}")
@@ -437,7 +454,7 @@ def update_launch_list():
 
     # actions.user.talon_pretty_print(launch)
 
-    ctx.lists["self.launch"] = actions.user.create_spoken_forms_from_map(
+    ctx.lists["user.launch"] = actions.user.create_spoken_forms_from_map(
         launch, words_to_exclude
     )
 

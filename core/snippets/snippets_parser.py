@@ -1,14 +1,20 @@
 import logging
 import re
+from collections.abc import Callable
 from copy import deepcopy
 from pathlib import Path
-from typing import Callable, Union
+from typing import Union
+
+from talon import actions
 
 from .snippet_types import Snippet, SnippetVariable
 
 ESCAPED_SNIPPET_DELIMITER_EXPRESSION = re.compile(r"^\\---$", flags=re.MULTILINE)
 SNIPPET_DELIMITER_EXPRESSION = re.compile(r"^---\n?$", flags=re.MULTILINE)
 SNIPPET_DELIMITER = "---"
+# used as a temporary placeholder for escaped backslashes during escaping.
+# not allowed in snippets!
+UNICODE_ESCAPED_BACKSLASH_PLACEHOLDER = "\u0000"
 
 
 class SnippetDocument:
@@ -58,7 +64,10 @@ def create_snippet(
     document: SnippetDocument,
     default_context: SnippetDocument,
 ) -> Snippet | None:
-    body = normalize_snippet_body_tabs(document.body)
+    body = rstrip_except_escaped_space(document.body)
+    body = normalize_snippet_body_tabs(body)
+    body = ESCAPED_SNIPPET_DELIMITER_EXPRESSION.sub(SNIPPET_DELIMITER, body)
+    body = escape_spaces(body)
     variables = combine_variables(default_context.variables, document.variables)
 
     snippet = Snippet(
@@ -87,6 +96,14 @@ def validate_snippet(document: SnippetDocument, snippet: Snippet) -> bool:
     if snippet.variables is None:
         error(document.file, document.line_doc, "Missing snippet variables")
         return False
+
+    if document.body and UNICODE_ESCAPED_BACKSLASH_PLACEHOLDER in document.body:
+        error(
+            document.file,
+            document.line_doc,
+            f"Snippet body {document.body} has Unicode character \\u0000, which is not allowed",
+        )
+        is_valid = False
 
     for variable in snippet.variables:
         var_name = f"${variable.name}"
@@ -207,15 +224,14 @@ def replace_variables_for_final_stop(variables, replacement_name: str):
 def find_variable_matches(variable_name: str, body: str) -> list[re.Match[str]]:
     """Find every match of a variable in the body"""
     expression = create_variable_regular_expression(variable_name)
-    matches = [m for m in re.finditer(expression, body)]
-    return matches
+    return list(re.finditer(expression, body))
 
 
 def find_largest_variable_number(body: str) -> int | None:
     # Find all snippet stops with a numeric variable name
     # +? is used to find the smallest possible match.
     # We need this here to avoid treating multiple stops as a single one
-    regular_expression = rf"\$\d+?|\${{\d+?:.*?}}|\${{\d+?}}"
+    regular_expression = r"\$\d+?|\$\{\d+?:.*?\}|\$\{\d+?\}"
     matches = re.findall(regular_expression, body)
     if matches:
         numbers = [
@@ -277,6 +293,38 @@ def normalize_snippet_body_tabs(body: str | None) -> str:
     ]
 
     return "\n".join(normalized_lines)
+
+
+def escape_spaces(body: str) -> str:
+    # treat double backslash as escaped backslash
+    # treat backslash space as space
+    # preserve double backslashes to be escaped by textmate supporting editors
+    # we can convert them to single backslashes for other editors
+    return (
+        body.replace("\\\\", UNICODE_ESCAPED_BACKSLASH_PLACEHOLDER)
+        .replace("\\ ", " ")
+        .replace(UNICODE_ESCAPED_BACKSLASH_PLACEHOLDER, "\\\\")
+    )
+
+
+def rstrip_except_escaped_space(text: str | None) -> str | None:
+    """Remove trailing white space except for an escaped space at the end if present"""
+    if not text:
+        return text
+
+    stripped = text.rstrip()
+    if (
+        len(stripped) < len(text)
+        and stripped.endswith("\\")
+        and text[len(stripped)] == " "
+        and count_trailing_backslashes(stripped) % 2 == 1
+    ):
+        return f"{stripped} "
+    return stripped
+
+
+def count_trailing_backslashes(text: str) -> int:
+    return len(text) - len(text.rstrip("\\"))
 
 
 def reconstruct_line(smallest_indentation: str, indentation: str, rest: str) -> str:
@@ -446,11 +494,7 @@ def parse_body(text: str) -> Union[str, None]:
     if match_leading is None:
         return None
 
-    body = text[match_leading.start() :].rstrip()
-
-    body = ESCAPED_SNIPPET_DELIMITER_EXPRESSION.sub(SNIPPET_DELIMITER, body)
-
-    return body
+    return text[match_leading.start() :]
 
 
 def parse_vector_value(value: str) -> list[str]:
@@ -458,8 +502,10 @@ def parse_vector_value(value: str) -> list[str]:
 
 
 def error(file: str, line: int, message: str):
-    logging.error(f"{file}:{line+1} | {message}")
+    error_text = f"{file}:{line + 1} | {message}"
+    logging.error(error_text)
+    actions.app.notify(error_text)
 
 
 def warn(file: str, line: int, message: str):
-    logging.warning(f"{file}:{line+1} | {message}")
+    logging.warning(f"{file}:{line + 1} | {message}")

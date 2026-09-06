@@ -21,8 +21,14 @@ help keywords: user.help_list("user.code_keyword")
 help keywords unprefixed: user.help_list("user.code_keyword_unprefixed")
 help common methods: user.help_list("user.code_common_method")
 help pairs: user.help_list("user.delimiter_pair")
+help edit actions: user.help_list("user.edit_action")
+help edit modifiers: user.help_list("user.edit_modifier")
+help edit repeatable modifiers: user.help_list("user.edit_modifier_repeatable")
+help customize: user.help_list("user.edit_text_file")
+help websites: user.help_list("user.website")
+help search engines: user.help_list("user.search_engine")
 
-(help formatters | help format | format help):
+help formatters | help format | format help:
     user.help_formatters(user.get_formatters_words(), false)
-(help re formatters | help re format | re format help):
+help re formatters | help re format | re format help:
     user.help_formatters(user.get_reformatters_words(), true)

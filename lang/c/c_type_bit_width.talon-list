@@ -1,7 +1,9 @@
 list: user.c_type_bit_width
 code.language: c
 code.language: cpp
+code.language: go
 -
+
 eight: 8
 sixteen: 16
 thirty two: 32

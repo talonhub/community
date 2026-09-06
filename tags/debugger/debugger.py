@@ -56,7 +56,7 @@ x64_registers = {
 windows_x64_register_parameters = ["rcx", "rdx", "r8", "r9"]
 
 # XXX - make this dynamic
-ctx.lists["self.registers"] = x64_registers
+ctx.lists["user.registers"] = x64_registers
 
 # assembly_languages = {
 #    "x86": x86_registers,
@@ -66,7 +66,7 @@ ctx.lists["self.registers"] = x64_registers
 mod.list("registers", desc="Main architecture register set")
 
 
-@mod.capture(rule="{self.registers}")
+@mod.capture(rule="{user.registers}")
 def registers(m) -> str:
     "Returns a register"
     return m.registers
