@@ -6,15 +6,6 @@ mod.tag("find_and_replace", desc="Tag for enabling generic find and replace comm
 
 @mod.action_class
 class Actions:
-    def find(text: str):
-        """Finds text in current editor"""
-
-    def find_next():
-        """Navigates to the next occurrence"""
-
-    def find_previous():
-        """Navigates to the previous occurrence"""
-
     def find_everywhere(text: str):
         """Finds text across project"""
 

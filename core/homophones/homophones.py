@@ -1,4 +1,5 @@
 import os
+from typing import Optional
 
 from talon import Context, Module, actions, app, clip, fs, imgui, ui
 
@@ -15,7 +16,6 @@ homophones_file = os.path.join(cwd, "homophones.csv")
 # if quick_replace, then when a word is selected and only one homophone exists,
 # replace it without bringing up the options
 quick_replace = True
-show_help = False
 ########################################################################
 
 ctx = Context()
@@ -39,6 +39,7 @@ def update_homophones(name, flags):
     with open(homophones_file) as f:
         for line in f:
             words = line.rstrip().split(",")
+            words = [x for x in words if x.strip() != ""]
             canonical_list.append(words[0])
             merged_words = set(words)
             for word in words:
@@ -50,12 +51,12 @@ def update_homophones(name, flags):
 
     global all_homophones
     all_homophones = phones
-    ctx.lists["self.homophones_canonicals"] = canonical_list
+    ctx.lists["user.homophones_canonicals"] = canonical_list
 
 
 update_homophones(homophones_file, None)
 fs.watch(cwd, update_homophones)
-active_word_list = None
+active_word_list = []
 is_selection = False
 
 
@@ -84,7 +85,6 @@ def find_matching_format_function(word_with_formatting, format_functions):
 def raise_homophones(word_to_find_homophones_for, forced=False, selection=False):
     global quick_replace
     global active_word_list
-    global show_help
     global force_raise
     global is_selection
 
@@ -93,7 +93,6 @@ def raise_homophones(word_to_find_homophones_for, forced=False, selection=False)
 
     if is_selection:
         word_to_find_homophones_for = word_to_find_homophones_for.strip()
-
     formatter = find_matching_format_function(
         word_to_find_homophones_for, PHONES_FORMATTERS
     )
@@ -108,8 +107,8 @@ def raise_homophones(word_to_find_homophones_for, forced=False, selection=False)
         word_to_find_homophones_for.endswith("s")
         and word_to_find_homophones_for[:-1] in all_homophones
     ):
-        valid_homophones = map(
-            lambda w: w + "s", all_homophones[word_to_find_homophones_for[:-1]]
+        valid_homophones = (
+            word + "s" for word in all_homophones[word_to_find_homophones_for[:-1]]
         )
     else:
         app.notify(
@@ -120,8 +119,9 @@ def raise_homophones(word_to_find_homophones_for, forced=False, selection=False)
     # Move current word to end of list to reduce searcher's cognitive load
     valid_homophones_reordered = list(
         filter(
-            lambda word_from_list: word_from_list.lower()
-            != word_to_find_homophones_for,
+            lambda word_from_list: (
+                word_from_list.lower() != word_to_find_homophones_for
+            ),
             valid_homophones,
         )
     ) + [word_to_find_homophones_for]
@@ -140,40 +140,29 @@ def raise_homophones(word_to_find_homophones_for, forced=False, selection=False)
 
         clip.set(new)
         actions.edit.paste()
-
         return
 
     ctx.tags = ["user.homophones_open"]
-    show_help = False
     gui.show()
 
 
 @imgui.open(x=main_screen.x + main_screen.width / 2.6, y=main_screen.y)
 def gui(gui: imgui.GUI):
     global active_word_list
-    if show_help:
-        gui.text("Homophone help - todo")
-    else:
-        gui.text("Select a homophone")
-        gui.line()
-        index = 1
-        for word in active_word_list:
-            if gui.button(f"Choose {index}: {word}"):
-                actions.insert(actions.user.homophones_select(index))
-                actions.user.homophones_hide()
-            index = index + 1
-
-        if gui.button("Phones hide"):
+    gui.text("Select a homophone")
+    gui.line()
+    index = 1
+    for word in active_word_list:
+        if gui.button(f"Choose {index}: {word}"):
+            actions.insert(actions.user.homophones_select(index))
             actions.user.homophones_hide()
+        index = index + 1
+
+    if gui.button("Phones (hide | exit)"):
+        actions.user.homophones_hide()
 
 
-def show_help_gui():
-    global show_help
-    show_help = True
-    gui.show()
-
-
-@mod.capture(rule="{self.homophones_canonicals}")
+@mod.capture(rule="{user.homophones_canonicals}")
 def homophones_canonical(m) -> str:
     "Returns a single string"
     return m.homophones_canonicals
@@ -215,15 +204,30 @@ class Actions:
         if number <= len(active_word_list) and number > 0:
             return active_word_list[number - 1]
 
-        error = "homophones.py index {} is out of range (1-{})".format(
-            number, len(active_word_list)
+        error = (
+            f"homophones.py index {number} is out of range (1-{len(active_word_list)})"
         )
         app.notify(error)
-        raise error
+        raise IndexError(error)
 
-    def homophones_get(word: str) -> [str] or None:
+    def homophones_get(word: str) -> Optional[list[str]]:
         """Get homophones for the given word"""
         word = word.lower()
         if word in all_homophones:
             return all_homophones[word]
         return None
+
+
+ctx_homophones_open = Context()
+ctx_homophones_open.matches = """
+tag: user.homophones_open
+"""
+
+
+@ctx_homophones_open.action_class("user")
+class UserActions:
+    def choose(number_small: int):
+        """Choose the nth homophone"""
+        result = actions.user.homophones_select(number_small)
+        actions.insert(result)
+        actions.user.homophones_hide()

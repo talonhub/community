@@ -1,0 +1,13 @@
+language: java
+---
+
+name: synchronizedBlockStatement
+phrase: sync
+insertionScope: statement
+
+$1.insertionFormatter: PRIVATE_CAMEL_CASE
+-
+synchronized ($1) {
+    $0
+}
+---

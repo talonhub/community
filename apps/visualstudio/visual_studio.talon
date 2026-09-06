@@ -1,12 +1,11 @@
-os: windows
 app: visual_studio
 -
+
 tag(): user.tabs
 tag(): user.line_commands
 tag(): user.find_and_replace
-tag(): user.snippets
 tag(): user.multiple_cursors
-#multiple_cursor.py support end
+tag(): user.command_client
 
 # Panels
 panel solution: key(ctrl-alt-l)
@@ -56,7 +55,7 @@ refactor remove parameters: key(ctrl-r ctrl-v)
 refactor that: key(ctrl-r ctrl-r)
 
 #code navigation
-(go declaration | follow): key(ctrl-f12)
+go declaration | follow: key(ctrl-f12)
 go back: key(ctrl--)
 go forward: key(ctrl-shift--)
 go implementation: key(f12)

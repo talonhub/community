@@ -1,0 +1,71 @@
+name: ifElseStatement
+phrase: if else
+insertionScope: statement
+
+$1.wrapperPhrase: if else cond
+$1.wrapperScope: statement
+$2.wrapperPhrase: if else
+$2.wrapperScope: statement
+---
+
+language: c | cpp | csharp | java | javascript | typescript | javascriptreact | typescriptreact | php | scala | kotlin | r
+-
+if ($1) {
+    $2
+} else {
+    $0
+}
+---
+
+language: python
+-
+if $1:
+    $2
+else:
+    $0
+---
+
+language: lua
+-
+if $1 then
+    $2
+else
+    $0
+end
+---
+
+language: ruby
+-
+if $1
+    $2
+else
+    $0
+end
+---
+
+language: vimscript
+-
+if $1
+    $2
+else
+    $0
+endif
+---
+
+language: rust | stata | go
+-
+if $1 {
+    $2
+} else {
+    $0
+}
+---
+
+language: elixir
+-
+if $1 do
+    $2
+else
+    $0
+end
+---

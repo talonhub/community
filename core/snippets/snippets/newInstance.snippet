@@ -1,0 +1,20 @@
+name: newInstance
+phrase: instance
+
+$0.wrapperPhrase: instance
+---
+
+language: cpp | csharp | java | javascript | typescript | javascriptreact | typescriptreact | php
+-
+new $1($0);
+---
+
+language: python
+-
+$1($0)
+---
+
+language: go
+-
+$1{$0}
+---

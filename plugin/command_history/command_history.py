@@ -1,39 +1,40 @@
 from typing import Optional
 
-from talon import Module, actions, imgui, speech_system
+from talon import Module, actions, imgui, settings, speech_system
+
+from ..subtitles.on_phrase import skip_phrase
 
 # We keep command_history_size lines of history, but by default display only
 # command_history_display of them.
 mod = Module()
-setting_command_history_size = mod.setting("command_history_size", int, default=50)
-setting_command_history_display = mod.setting(
-    "command_history_display", int, default=10
-)
+mod.setting("command_history_size", type=int, default=50)
+mod.setting("command_history_display", type=int, default=10)
 
-hist_more = False
-history = []
+hist_more: bool = False
+history: list[str] = []
 
 
 def on_phrase(j):
     global history
+    if skip_phrase(j):
+        return
 
-    words = j.get("text")
-
+    words = j.get("phrase")
     text = actions.user.history_transform_phrase_text(words)
-
     if text is not None:
         history.append(text)
-        history = history[-setting_command_history_size.get() :]
+        history = history[-settings.get("user.command_history_size") :]
 
 
-# todo: dynamic rect?
 @imgui.open(y=0)
 def gui(gui: imgui.GUI):
     global history
     gui.text("Command History")
     gui.line()
     text = (
-        history[:] if hist_more else history[-setting_command_history_display.get() :]
+        history[:]
+        if hist_more
+        else history[-settings.get("user.command_history_display") :]
     )
     for line in text:
         gui.text(line)
@@ -85,8 +86,4 @@ class Actions:
 
     def history_transform_phrase_text(words: list[str]) -> Optional[str]:
         """Transforms phrase text for presentation in history. Return `None` to omit from history"""
-
-        if not actions.speech.enabled():
-            return None
-
         return " ".join(words) if words else None

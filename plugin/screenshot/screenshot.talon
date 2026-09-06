@@ -1,3 +1,6 @@
+not tag: user.screenshot_disabled
+-
+
 ^grab screen$: user.screenshot()
 ^grab screen <number_small>$: user.screenshot(number_small)
 ^grab window$: user.screenshot_window()

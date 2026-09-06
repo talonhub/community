@@ -10,14 +10,16 @@ balance-windows, ctrl-x +
 beginning-of-buffer, meta-<
 browse-kill-ring,, b-k-r
 buffer-menu, ctrl-x ctrl-b
-next-buffer, ctrl-x right
-previous-buffer, ctrl-x left
 bury-buffer,, bur
+byte-compile-file,, by-c
+byte-recompile-directory
+byte-recompile-file
 clear-rectangle, ctrl-x r c
 clone-indirect-buffer,, clo-i
 comment-dwim, meta-;
 comment-line,, comment-l
 comment-region, ctrl-c ;
+compile
 compile-defun,, co-def
 copy-rectangle-as-kill, ctrl-x r meta-w
 copy-rectangle-to-register, ctrl-x r r
@@ -46,6 +48,7 @@ eval-expression, meta-:
 eval-print-last-sexp,, ev-p
 eval-region,, ev-r
 exchange-point-and-mark, ctrl-x ctrl-x
+execute-extended-command, meta-x
 fileloop-continue,, filel
 fill-paragraph, meta-q
 find-file, ctrl-x ctrl-f
@@ -60,6 +63,7 @@ global-hl-line-mode,, g-hl-l-m
 global-visual-line-mode,, gl-v-l-m
 goto-line, meta-g meta-g
 highlight-lines-matching-regexp, meta-s h l
+highlight-phrase, meta-s h p
 highlight-regexp, meta-s h r
 hl-line-mode,, hl-l-m
 indent-region, meta-ctrl-\
@@ -94,9 +98,11 @@ mark-whole-buffer, ctrl-x h
 move-beginning-of-line, ctrl-a
 move-end-of-line, ctrl-e
 narrow-to-region, ctrl-x n n
+next-buffer, ctrl-x right
 next-error, meta-g n
 occur, meta-s o
 open-rectangle, ctrl-x r o
+other-frame, ctrl-x 5 o
 other-window, ctrl-x o
 outline-backward-same-level, ctrl-c @ ctrl-b
 outline-demote, ctrl-c @ ctrl->
@@ -123,7 +129,8 @@ outline-up-heading, ctrl-c @ ctrl-u
 overwrite-mode,, overwr
 package-autoremove
 pop-global-mark, ctrl-x ctrl-@
-pop-mark, ctrl-u ctrl-space
+pop-to-mark-command, ctrl-u ctrl-space
+previous-buffer, ctrl-x left
 previous-error, meta-g p
 project-find-file, ctrl-x p f
 project-find-regexp, ctrl-x p g
@@ -191,7 +198,8 @@ tab-next, ctrl-x t o
 tab-previous, ctrl-x t O
 tab-undo, ctrl-x t u
 text-mode,, text-m
-toggle-debug-on-error
+toggle-debug-on-error,, t-d-on-e
+toggle-debug-on-quit,, t-d-on-q
 toggle-input-method, ctrl-\
 toggle-truncate-lines, ctrl-x x t
 toggle-word-wrap
@@ -207,9 +215,17 @@ unhighlight-regexp, meta-s h u
 universal-argument, ctrl-u
 vc-annotate, ctrl-x v g
 view-lossage, ctrl-h l
+visit-tags-table,, v-t-t
 visual-line-mode,, visu-l-m
 whitespace-cleanup,, wh-cl
 whitespace-mode,, white-m
 widen, ctrl-x n w
+xref-find-apropos, meta-ctrl-.
+xref-find-definitions, meta-.
+xref-find-definitions-other-frame, ctrl-x 5 .
+xref-find-definitions-other-window, ctrl-x 4 .
+xref-find-references, meta-?
+xref-find-references-and-replace
+xref-go-back,"meta-,"
 yank, ctrl-y
 yank-rectangle, ctrl-x r y

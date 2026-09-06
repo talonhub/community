@@ -1,30 +1,45 @@
 from talon import Context, Module, actions
 
 mod = Module()
-ctx = Context()
+mod.tag("windbg", "tag to enabled windbg related functionality")
 
+# global context for enabling and disabling user.gdb tag
+ctx_global = Context()
 
-ctx.matches = r"""
-mode: user.windbg
+# user.windbg-specific context
+ctx_windbg_enabled = Context()
+ctx_windbg_enabled.matches = r"""
+tag: user.windbg
 """
 
-ctx.lists["self.windows_dlls"] = {
+ctx_windbg_enabled.lists["user.windows_dlls"] = {
     "core": "ntdll",
     "en tea": "ntdll",
     "user": "user32",
 }
 
 
-@mod.capture(rule="{self.windows_dlls}")
+@mod.capture(rule="{user.windows_dlls}")
 def windows_dlls(m) -> str:
     "Return an register"
     return m.windows_dlls
 
 
+@mod.action_class
+class Actions:
+    def windbg_enable():
+        """Enables the windbg tag"""
+        ctx_global.tags = ["user.windbg"]
+
+    def windbg_disable():
+        """Disables the windbg tag"""
+        ctx_global.tags = []
+
+
 # XXX - trigger alt-1 to hit command window for necessary commands?
 # ex: user.windbg_insert_in_cmd()
 #    edit.left()
-@ctx.action_class("user")
+@ctx_windbg_enabled.action_class("user")
 class UserActions:
     ##
     # Generic debugger actions
@@ -39,10 +54,10 @@ class UserActions:
         # XXX -
 
     def debugger_step_line():
-        actions.auto_insert("")
+        actions.insert("")
 
     def debugger_step_over_line():
-        actions.auto_insert("")
+        actions.insert("")
 
     def debugger_step_out():
         actions.key("shift-f11")

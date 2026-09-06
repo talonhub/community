@@ -4,7 +4,7 @@ mod = Module()
 
 ctx = Context()
 ctx.matches = r"""
-tag: user.protobuf
+code.language: protobuf
 """
 
 ctx.lists["user.code_type"] = {

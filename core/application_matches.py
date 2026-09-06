@@ -26,11 +26,6 @@ os: mac
 and app.bundle: com.apple.Terminal
 """
 
-apps.iterm2 = """
-os: mac
-and app.bundle: com.googlecode.iterm2
-"""
-
 # linux specific apps
 apps.keepass = """
 os: linux
@@ -59,21 +54,21 @@ os: linux
 and app.name: /termite/
 """
 
-apps.windows_command_processor = """
+apps.windows_command_processor = r"""
 os: windows
 and app.name: Windows Command Processor
 os: windows
-and app.exe: cmd.exe
+and app.exe: /^cmd\.exe$/i
 """
 
-apps.windows_terminal = """
+apps.windows_terminal = r"""
 os: windows
-and app.exe: WindowsTerminal.exe
+and app.exe: /^windowsterminal\.exe$/i
 """
 
-mod.apps.windows_power_shell = """
+mod.apps.windows_power_shell = r"""
 os: windows
-and app.exe: powershell.exe
+and app.exe: /^powershell\.exe$/i
 """
 
 apps.vim = """

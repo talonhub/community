@@ -1,6 +1,6 @@
 from typing import Optional
 
-from talon import Context, Module, actions, settings, ui
+from talon import Context, Module, actions, app, cron, ui
 
 from .draft_ui import DraftManager
 
@@ -17,62 +17,59 @@ ctx_focused.matches = r"""
 title: Talon Draft
 """
 
+SETTING_CHANGE_CAVEAT_DESCRIPTION = (
+    ". Show the draft window (again) to see the results of changing this setting."
+)
 mod.tag("draft_window_showing", desc="Tag set when draft window showing")
-setting_theme = mod.setting(
+mod.setting(
     "draft_window_theme",
     type=str,
     default="dark",
-    desc="Sets the main colors of the window, one of 'dark' or 'light'",
+    desc="Sets the draft window color theme ('dark' or 'light')"
+    + SETTING_CHANGE_CAVEAT_DESCRIPTION,
 )
-setting_label_size = mod.setting(
+mod.setting(
     "draft_window_label_size",
     type=int,
     default=20,
-    desc="Sets the size of the word labels used in the draft window",
+    desc="Sets the size of the word labels used in the draft window"
+    + SETTING_CHANGE_CAVEAT_DESCRIPTION,
 )
-setting_label_color = mod.setting(
+mod.setting(
     "draft_window_label_color",
     type=str,
     default=None,
     desc=(
         "Sets the color of the word labels used in the draft window. "
-        "E.g. 00ff00 would be green"
+        + "E.g. 00ff00 would be green"
+        + SETTING_CHANGE_CAVEAT_DESCRIPTION
     ),
 )
-setting_text_size = mod.setting(
+mod.setting(
     "draft_window_text_size",
     type=int,
     default=20,
-    desc="Sets the size of the text used in the draft window",
+    desc="Sets the size of the text used in the draft window"
+    + SETTING_CHANGE_CAVEAT_DESCRIPTION,
 )
 
 
-draft_manager = DraftManager()
+draft_manager = None
 
 
-# Update the styling of the draft window dynamically as user settings change
-def _update_draft_style(*args):
-    draft_manager.set_styling(
-        **{
-            arg: setting.get()
-            for setting, arg in (
-                (setting_theme, "theme"),
-                (setting_label_size, "label_size"),
-                (setting_label_color, "label_color"),
-                (setting_text_size, "text_size"),
-            )
-        }
-    )
+def on_ready():
+    global draft_manager
+    draft_manager = DraftManager()
 
 
-settings.register("", _update_draft_style)
+app.register("ready", on_ready)
 
 
 @ctx_focused.action_class("user")
 class ContextSensitiveDictationActions:
     """
     Override these actions to assist 'Smart dictation mode'.
-    see https://github.com/knausj85/knausj_talon/pull/356
+    see https://github.com/talonhub/community/pull/356
     """
 
     def dictation_peek(left, right):
@@ -83,7 +80,6 @@ class ContextSensitiveDictationActions:
         )
 
     def paste(text: str):
-        # todo: remove once user.paste works reliably with the draft window
         actions.insert(text)
 
 
@@ -96,12 +92,8 @@ class EditActions:
     def selected_text() -> str:
         area = draft_manager.area
         if area.sel:
-            result = area[area.sel.left : area.sel.right]
-            return result
+            return area[area.sel.left : area.sel.right]
         return ""
-
-
-from talon import cron
 
 
 class UndoWorkaround:
@@ -305,7 +297,7 @@ class Actions:
 # Some capture groups we need
 
 
-@mod.capture(rule="{self.letter}+")
+@mod.capture(rule="{user.letter}+")
 def draft_anchor(m) -> str:
     """
     An anchor (string of letters)
@@ -313,7 +305,7 @@ def draft_anchor(m) -> str:
     return "".join(m)
 
 
-@mod.capture(rule="(top|bottom|left|right|middle)")
+@mod.capture(rule="top | bottom | left | right | middle")
 def draft_window_position(m) -> str:
     """
     One of the named positions you can move the window to

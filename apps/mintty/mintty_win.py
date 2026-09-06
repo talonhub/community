@@ -1,6 +1,7 @@
 import subprocess
+from typing import Optional
 
-from talon import Context, Module, actions, ui
+from talon import Context, Module, actions, settings, ui
 
 mod = Module()
 mod.apps.mintty = """
@@ -26,7 +27,7 @@ ctx.tags = [
 directories_to_remap = {}
 directories_to_exclude = {}
 
-setting_cyg_path = mod.setting(
+mod.setting(
     "cygpath",
     type=str,
     default="C:\\cygwin64\\bin\\cygpath.exe",
@@ -37,8 +38,12 @@ setting_cyg_path = mod.setting(
 def get_win_path(cyg_path):
     path = ""
     try:
+        si = subprocess.STARTUPINFO()
+        si.dwFlags |= subprocess.STARTF_USESHOWWINDOW
         path = (
-            subprocess.check_output([setting_cyg_path.get(), "-w", cyg_path])
+            subprocess.check_output(
+                [settings.get("user.cygpath"), "-w", cyg_path], startupinfo=si
+            )
             .strip(b"\n")
             .decode()
         )
@@ -61,56 +66,23 @@ class EditActions:
 
 @ctx.action_class("user")
 class UserActions:
-    def file_manager_open_parent():
-        actions.insert("cd ..")
-        actions.key("enter")
-
     def file_manager_current_path():
-        path = ui.active_window().title
-        path = get_win_path(path)
+        title = ui.active_window().title
+        path = get_win_path(title)
 
         if path in directories_to_remap:
-            path = directories_to_remap[title]
+            path = directories_to_remap[path]
 
         if path in directories_to_exclude:
             path = ""
         return path
 
-    def file_manager_show_properties():
-        """Shows the properties for the file"""
-
-    def file_manager_open_directory(path: str):
-        """opens the directory that's already visible in the view"""
-        actions.insert("cd ")
-        path = f'"{path}"'
-        actions.insert(path)
-        actions.key("enter")
-
-    def file_manager_select_directory(path: str):
-        """selects the directory"""
-        actions.insert(path)
-
-    def file_manager_new_folder(name: str):
-        """Creates a new folder in a gui filemanager or inserts the command to do so for terminals"""
-        name = f'"{name}"'
-
-        actions.insert("mkdir " + name)
-
-    def file_manager_open_file(path: str):
-        """opens the file"""
-        actions.insert(path)
-        actions.key("enter")
-
-    def file_manager_select_file(path: str):
-        """selects the file"""
-        actions.insert(path)
-
     def file_manager_open_volume(volume: str):
         """file_manager_open_volume"""
         actions.user.file_manager_open_directory(volume)
 
-    def terminal_list_directories():
-        actions.insert("ls")
+    def terminal_list_directories(path: Optional[str] = None):
+        actions.insert(f"ls {path or ''}")
         actions.key("enter")
 
     def terminal_list_all_directories():

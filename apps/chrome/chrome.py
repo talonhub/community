@@ -4,9 +4,9 @@ ctx = Context()
 mod = Module()
 
 mod.apps.chrome = "app.name: Google Chrome"
-mod.apps.chrome = """
+mod.apps.chrome = r"""
 os: windows
-and app.exe: chrome.exe
+and app.exe: /^chrome\.exe$/i
 """
 mod.apps.chrome = """
 os: mac

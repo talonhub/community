@@ -1,5 +1,6 @@
-tag: user.batch
+code.language: batch
 -
+
 tag(): user.code_comment_line
 
 # exit without killing cmd shell

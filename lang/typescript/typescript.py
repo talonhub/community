@@ -2,7 +2,10 @@ from talon import Context, actions, settings
 
 ctx = Context()
 ctx.matches = r"""
-tag: user.typescript
+code.language: typescript
+code.language: typescriptreact
+# Make typescript win over javascript
+mode: command
 """
 
 ctx.lists["user.code_type"] = {

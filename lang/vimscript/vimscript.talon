@@ -1,5 +1,6 @@
-tag: user.vimscript
+code.language: vimscript
 -
+
 tag(): user.code_imperative
 tag(): user.code_operators_assignment
 tag(): user.code_operators_math

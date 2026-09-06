@@ -1,7 +1,8 @@
-from talon import Context, Module
+from talon import Context, Module, actions
 
 mod = Module()
 apps = mod.apps
+apps.discord = "app.bundle: com.hnc.Discord"
 apps.discord = "app.name: Discord"
 apps.discord = "app.name: Discord.exe"
 apps.discord = """
@@ -18,7 +19,6 @@ app: discord
 
 ctx.lists["user.discord_destination"] = {
     "user": "@",
-    "channel": "#",
     "voice": "!",
     "server": "*",
 }
@@ -50,6 +50,9 @@ class discord_actions:
     def discord_gif_picker():
         """Toggle gif picker"""
 
+    def discord_sticker_picker():
+        """Toggle sticker picker"""
+
     def discord_mark_inbox_read():
         """Mark top inbox channel read"""
 
@@ -73,3 +76,10 @@ class discord_actions:
 
     def discord_toggle_dms():
         """Toggle between dms and your most recent server"""
+
+
+@ctx.action_class("user")
+class UserActions:
+    # Navigation: Channels
+    def messaging_open_channel_picker():
+        actions.user.discord_quick_switcher("#", "")

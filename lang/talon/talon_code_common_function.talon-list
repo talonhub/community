@@ -1,0 +1,8 @@
+list: user.code_common_function
+code.language: talon
+-
+
+insert
+key
+print
+repeat

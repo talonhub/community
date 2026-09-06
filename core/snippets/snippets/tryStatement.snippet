@@ -1,0 +1,31 @@
+name: tryStatement
+phrase: try
+insertionScope: statement
+---
+
+language: cpp | csharp | java | javascript | typescript | javascriptreact | typescriptreact | php
+-
+try {
+    $0
+}
+---
+
+language: python
+-
+try:
+    $0
+---
+
+language: elixir
+-
+try do
+    $0
+end
+---
+
+language: r
+-
+tryCatch({
+    $0
+},
+---
