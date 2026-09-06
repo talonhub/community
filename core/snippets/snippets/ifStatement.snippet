@@ -8,7 +8,7 @@ $0.wrapperPhrase: if
 $0.wrapperScope: statement
 ---
 
-language: javascript | java
+language: c | cpp | csharp | java | javascript | typescript | javascriptreact | typescriptreact | php | scala | kotlin | r
 -
 if ($1) {
     $0
@@ -24,6 +24,34 @@ if $1:
 language: lua
 -
 if $1 then
+    $0
+end
+---
+
+language: ruby
+-
+if $1
+    $0
+end
+---
+
+language: vimscript
+-
+if $1
+    $0
+endif
+---
+
+language: rust | stata | go
+-
+if $1 {
+    $0
+}
+---
+
+language: elixir
+-
+if $1 do
     $0
 end
 ---

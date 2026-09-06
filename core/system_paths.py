@@ -7,7 +7,7 @@ custom paths.
 
 from pathlib import Path
 
-from talon import Context, Module, actions, app, registry
+from talon import Module, actions, app
 
 mod = Module()
 mod.list("system_paths", desc="List of system paths")
@@ -15,7 +15,7 @@ mod.list("system_paths", desc="List of system paths")
 
 def on_ready():
     # If user.system_paths defined otherwise, don't generate a file
-    if registry.lists["user.system_paths"][0]:
+    if actions.user.talon_get_active_registry_list("user.system_paths"):
         return
 
     hostname = actions.user.talon_get_hostname()

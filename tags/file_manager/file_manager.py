@@ -2,10 +2,14 @@ import math
 from itertools import islice
 from pathlib import Path
 
-from talon import Context, Module, actions, app, imgui, registry, settings, ui
+from talon import Context, Module, actions, app, imgui, scope, settings, ui
 
 mod = Module()
 ctx = Context()
+ctx_file_manager = Context()
+ctx_file_manager.matches = r"""
+tag: user.file_manager
+"""
 
 mod.tag("file_manager", desc="Tag for enabling generic file management commands")
 mod.list("file_manager_directories", desc="List of subdirectories for the current path")
@@ -65,8 +69,16 @@ cached_path = None
 file_selections = folder_selections = []
 current_file_page = current_folder_page = 1
 
-ctx.lists["self.file_manager_directories"] = []
-ctx.lists["self.file_manager_files"] = []
+ctx.lists["user.file_manager_directories"] = []
+ctx.lists["user.file_manager_files"] = []
+
+
+@ctx_file_manager.capture(
+    "user.address",
+    rule="{user.system_paths}",
+)
+def address(m) -> str:
+    return str(m)
 
 
 @mod.action_class
@@ -232,7 +244,7 @@ def get_file_map(current_path):
 def gui_folders(gui: imgui.GUI):
     global current_folder_page, total_folder_pages
     total_folder_pages = math.ceil(
-        len(ctx.lists["self.file_manager_directories"])
+        len(ctx.lists["user.file_manager_directories"])
         / settings.get("user.file_manager_imgui_limit")
     )
     gui.text(f"Select a directory ({current_folder_page}/{total_folder_pages})")
@@ -321,14 +333,14 @@ def gui_files(gui: imgui.GUI):
 def clear_lists():
     global folder_selections, file_selections, current_folder_page, current_file_page
     if (
-        len(ctx.lists["self.file_manager_directories"]) > 0
-        or len(ctx.lists["self.file_manager_files"]) > 0
+        len(ctx.lists["user.file_manager_directories"]) > 0
+        or len(ctx.lists["user.file_manager_files"]) > 0
     ):
         current_folder_page = current_file_page = 1
         ctx.lists.update(
             {
-                "self.file_manager_directories": [],
-                "self.file_manager_files": [],
+                "user.file_manager_directories": [],
+                "user.file_manager_files": [],
             }
         )
         folder_selections = []
@@ -371,8 +383,8 @@ def update_lists(path=None):
     current_folder_page = current_file_page = 1
     ctx.lists.update(
         {
-            "self.file_manager_directories": directories,
-            "self.file_manager_files": files,
+            "user.file_manager_directories": directories,
+            "user.file_manager_files": files,
         }
     )
 
@@ -392,7 +404,7 @@ def win_event_handler(window):
     if not window.app.exe or window != ui.active_window():
         return
 
-    if "user.file_manager" not in registry.tags:
+    if "user.file_manager" not in scope.get("tag"):
         actions.user.file_manager_hide_pickers()
         clear_lists()
         cached_path = None

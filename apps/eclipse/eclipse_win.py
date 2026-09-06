@@ -110,6 +110,11 @@ class UserActions:
     def split_window():
         actions.key("alt-ctrl-s s")
 
+    def command_search(command: str = ""):
+        actions.key("ctrl-3")
+        if command != "":
+            actions.insert(command)
+
     # splits.py support end
 
     # find_and_replace.py support begin
@@ -121,8 +126,6 @@ class UserActions:
         if text:
             actions.insert(text)
 
-    # todo: these commands should only be available
-    # when it's focused
     def find_toggle_match_by_case():
         """Toggles find match by case sensitivity"""
         actions.key("alt-c")

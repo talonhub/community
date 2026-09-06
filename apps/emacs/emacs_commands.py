@@ -1,9 +1,7 @@
 import csv
-from dataclasses import dataclass
-from pathlib import Path
 from typing import NamedTuple, Optional
 
-from talon import Context, Module, actions, app, resource
+from talon import Context, Module, actions, resource
 
 mod = Module()
 mod.list("emacs_command", desc="Emacs commands")
@@ -41,7 +39,7 @@ def load_commands(f):
 
     commands = []
     for row in rows[1:]:
-        if 0 == len(row):
+        if len(row) == 0:
             continue
         if len(row) > 4:
             print(
@@ -68,4 +66,4 @@ def load_commands(f):
         for c in commands:
             if c.spoken:
                 command_list[c.spoken] = c.name
-    ctx.lists["self.emacs_command"] = command_list
+        ctx.lists["user.emacs_command"] = command_list

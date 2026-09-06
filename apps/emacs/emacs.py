@@ -1,7 +1,8 @@
 import logging
+import re
 from typing import Optional
 
-from talon import Context, Module, actions, settings
+from talon import Context, Module, actions, settings, ui
 
 mod = Module()
 mod.setting(
@@ -18,9 +19,9 @@ mod.apps.emacs = """
 os: mac
 app.bundle: org.gnu.Emacs
 """
-mod.apps.emacs = """
+mod.apps.emacs = r"""
 os: windows
-app.exe: emacs.exe
+app.exe: /^emacs\.exe$/i
 """
 
 ctx = Context()
@@ -31,9 +32,9 @@ def meta(keys):
     m = settings.get("user.emacs_meta")
     if m == "alt":
         return " ".join("alt-" + k for k in keys.split())
-    elif m == "cmd":
+    if m == "cmd":
         return " ".join("cmd-" + k for k in keys.split())
-    elif m != "esc":
+    if m != "esc":
         logging.error(
             f"Unrecognized 'emacs_meta' setting: {m!r}. Falling back to 'esc'."
         )
@@ -60,7 +61,6 @@ class Actions:
         example, if the setting user.emacs_meta = 'esc', user.emacs_key("meta-ctrl-a")
         becomes key("esc ctrl-a").
         """
-        # TODO: handle corner-cases like key(" ") and key("ctrl- "), etc.
         actions.key(" ".join(meta_fixup(k) for k in keys.split()))
 
     def emacs_prefix(n: Optional[int] = None):
@@ -155,6 +155,12 @@ class UserActions:
         actions.edit.jump_line(line_start)
         actions.edit.jump_line(line_end + 1)
         actions.user.emacs("exchange-point-and-mark")
+
+    def tab_jump(number: int):
+        actions.user.emacs("tab-select", number)
+
+    def tab_final():
+        actions.user.emacs("tab-last")
 
     # # Version that highlights without transient-mark-mode:
     # def select_range(line_start, line_end):
@@ -279,7 +285,7 @@ class EditActions:
     def jump_line(n):
         actions.user.emacs("goto-line", n)
 
-    def select_line(n: int = None):
+    def select_line(n=None):
         if n is not None:
             actions.edit.jump_line(n)
         else:
@@ -309,7 +315,7 @@ class EditActions:
 
     # Some modes override ctrl-s/r to do something other than isearch-forward, so we
     # deliberately don't use actions.user.emacs.
-    def find(text: str = None):
+    def find(text=None):
         actions.key("ctrl-s")
         if text:
             actions.insert(text)
@@ -349,15 +355,26 @@ class CodeActions:
 
     def language():
         # Assumes win.filename() gives buffer name.
-        if "*scratch*" == actions.win.filename():
+        if actions.win.filename() == "*scratch*":
             return "elisp"
         return actions.next()
 
 
 @ctx.action_class("win")
 class WinActions:
-    # This assumes the title is/contains the filename.
-    # To do this, put this in init.el:
-    # (setq-default frame-title-format '((:eval (buffer-name (window-buffer (minibuffer-selected-window))))))
+    # This assumes the title either is the buffer name or contains the buffer
+    # name before a space-surrounded hyphen. This is the default for the latest
+    # GNU Emacs. If you are not on macOS and your flavor of Emacs defaults to
+    # something incompatible, you may need to put one of the following two
+    # declarations into your init.el ("%b" being replaced by the buffer name):
+    # (setq frame-title-format "%b")
+    # (setq frame-title-format '(multiple-frames "%b" ("" "%b - Emacs at " system-name)))
     def filename():
-        return actions.win.title()
+        # On macOS, get the filename directly
+        if doc := getattr(ui.active_window(), "doc", None):
+            return doc
+
+        # Otherwise, get it from the window title
+        title = actions.win.title()
+        buffer_name = title.split(" - ")[0]
+        return re.sub(r"<[^>]+>$", "", buffer_name)

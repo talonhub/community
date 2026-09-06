@@ -1,12 +1,15 @@
 import logging
 import os
 import re
-from typing import Sequence, Union
+
+# Can't import Sequence from collections.abc because this doesn't match the
+# core Talon action dictate.replace_words
+from typing import Sequence, Union  # noqa: UP035
 
 from talon import Context, Module, actions
 from talon.grammar import Phrase
 
-from ..user_settings import append_to_csv, track_csv_list
+from ..user_settings import append_to_csv, needs_final_newline, track_csv_list
 
 mod = Module()
 ctx = Context()
@@ -60,13 +63,12 @@ class PhraseReplacer:
 
     def update(self, phrase_dict: dict[str, str]):
         # Index phrases by first word, then number of subsequent words n_next
-        phrase_index = dict()
+        phrase_index = {}
         for spoken_form, written_form in phrase_dict.items():
             words = spoken_form.split()
             if not words:
                 logging.warning(
-                    "Found empty spoken form for written form"
-                    f"{written_form}, ignored"
+                    f"Found empty spoken form for written form{written_form}, ignored"
                 )
                 continue
             first_word, n_next = words[0], len(words) - 1
@@ -196,24 +198,15 @@ def _add_selection_to_file(
     entries = _create_vocabulary_entries(spoken_form, written_form, type)
     added_some_phrases = False
 
-    # until we add support for parsing or otherwise getting the active
-    # vocabulary.talon-list, skip the logic for checking for duplicates etc
-    if file_contents:
-        # clear the new entries dictionary
-        new_entries = {}
-        for spoken_form, written_form in entries.items():
-            if skip_identical_replacement and spoken_form == written_form:
-                actions.app.notify(f'Skipping identical replacement: "{spoken_form}"')
-            elif spoken_form in file_contents:
-                actions.app.notify(
-                    f'Spoken form "{spoken_form}" is already in {file_name}'
-                )
-            else:
-                new_entries[spoken_form] = written_form
-                added_some_phrases = True
-    else:
-        new_entries = entries
-        added_some_phrases = True
+    new_entries = {}
+    for spoken_form, written_form in entries.items():
+        if skip_identical_replacement and spoken_form == written_form:
+            actions.app.notify(f'Skipping identical replacement: "{spoken_form}"')
+        elif spoken_form in file_contents:
+            actions.app.notify(f'Spoken form "{spoken_form}" is already in {file_name}')
+        else:
+            new_entries[spoken_form] = written_form
+            added_some_phrases = True
 
     if file_name.endswith(".csv"):
         append_to_csv(file_name, new_entries)
@@ -226,11 +219,7 @@ def _add_selection_to_file(
 
 def append_to_vocabulary(rows: dict[str, str]):
     vocabulary_file_path = actions.user.get_vocabulary_file_path()
-    with open(str(vocabulary_file_path)) as file:
-        line = None
-        for line in file:
-            pass
-        needs_newline = line is not None and not line.endswith("\n")
+    needs_newline = needs_final_newline(vocabulary_file_path)
 
     with open(vocabulary_file_path, "a", encoding="utf-8") as file:
         if needs_newline:
@@ -239,7 +228,8 @@ def append_to_vocabulary(rows: dict[str, str]):
             if key == value:
                 file.write(f"{key}\n")
             else:
-                value = repr(value)
+                if not str.isprintable(value) or "'" in value or '"' in value:
+                    value = repr(value)
                 file.write(f"{key}: {value}\n")
 
 
@@ -249,10 +239,7 @@ class Actions:
     def get_vocabulary_file_path():
         """Returns the path for the active vocabulary file"""
         vocabulary_directory = os.path.dirname(os.path.realpath(__file__))
-        vocabulary_file_path = os.path.join(
-            vocabulary_directory, "vocabulary.talon-list"
-        )
-        return vocabulary_file_path
+        return os.path.join(vocabulary_directory, "vocabulary.talon-list")
 
     def add_selection_to_vocabulary(phrase: Union[Phrase, str] = "", type: str = ""):
         """Permanently adds the currently selected text to the vocabulary with the provided
@@ -262,7 +249,7 @@ class Actions:
             phrase,
             type,
             "vocabulary.talon-list",
-            None,
+            actions.user.talon_get_active_registry_list("user.vocabulary"),
             False,
         )
 
@@ -277,3 +264,21 @@ class Actions:
             phrases_to_replace,
             True,
         )
+
+    def check_vocabulary_for_selection():
+        """Checks if the currently selected text is in the vocabulary."""
+        text = actions.edit.selected_text().strip()
+        spoken_forms = [
+            spoken
+            for spoken, written in actions.user.talon_get_active_registry_list(
+                "user.vocabulary"
+            ).items()
+            if text == written
+        ]
+        if spoken_forms:
+            if len(spoken_forms) == 1:
+                actions.app.notify(f'"{text}" is spoken as "{spoken_forms[0]}"')
+            else:
+                actions.app.notify(f'"{text}" is spoken as any of {spoken_forms}')
+        else:
+            actions.app.notify(f'"{text}" is not in the vocabulary')
