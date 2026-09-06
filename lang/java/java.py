@@ -39,7 +39,7 @@ java_boxed_types = {
 }
 
 mod.list("java_boxed_type", desc="Java Boxed Types")
-ctx.lists["self.java_boxed_type"] = java_boxed_types
+ctx.lists["user.java_boxed_type"] = java_boxed_types
 
 # Common Classes
 java_common_classes = {
@@ -50,7 +50,7 @@ java_common_classes = {
 }
 
 mod.list("java_common_class", desc="Java Common Classes")
-ctx.lists["self.java_common_class"] = java_common_classes
+ctx.lists["user.java_common_class"] = java_common_classes
 
 
 # Java Generic Data Structures
@@ -74,7 +74,7 @@ unboxed_types.update(java_generic_data_structures)
 ctx.lists["user.code_type"] = unboxed_types
 
 mod.list("java_generic_data_structure", desc="Java Generic Data Structures")
-ctx.lists["self.java_generic_data_structure"] = java_generic_data_structures
+ctx.lists["user.java_generic_data_structure"] = java_generic_data_structures
 
 # Java Modifies
 java_modifiers = {
@@ -91,7 +91,7 @@ java_modifiers = {
 }
 
 mod.list("java_modifier", desc="Java Modifiers")
-ctx.lists["self.java_modifier"] = java_modifiers
+ctx.lists["user.java_modifier"] = java_modifiers
 
 operators = Operators(
     # code_operators_array
@@ -144,7 +144,8 @@ def public_camel_case_format_variable(variable: str):
 
 
 @ctx.capture(
-    "user.generic_type_parameter_argument", rule="{user.java_boxed_type} | <user.text>"
+    "user.generic_type_parameter_argument",
+    rule="{user.java_boxed_type} | <user.text>",
 )
 def generic_type_parameter_argument(m) -> str:
     """A Java type parameter for a generic data structure"""

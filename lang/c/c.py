@@ -27,7 +27,7 @@ mod.list("c_type_bit_width", desc="Common C type bit widths")
 
 
 # capture explicitly referenced from the C++ files
-@mod.capture(rule="(fix|fixed) [{user.stdint_signed}] [int] {user.c_type_bit_width}")
+@mod.capture(rule="(fix | fixed) [{user.stdint_signed}] [int] {user.c_type_bit_width}")
 def c_fixed_integer(m) -> str:
     """fixed-width integer types (e.g. "uint32_t")"""
     prefix = ""

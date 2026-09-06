@@ -50,7 +50,7 @@ class Contact:
                     if name in pronunciations and pronunciations[name] != pron:
                         logging.info(
                             f"Multiple different pronunciations found for '{name}' in "
-                            f"{full_name_raw}; using '{pron}'"
+                            + f"{full_name_raw}; using '{pron}'"
                         )
                     pronunciations[name] = pron
             else:
@@ -73,7 +73,7 @@ class Contact:
                 ):
                     logging.info(
                         f"Multiple different pronunciations found for '{nickname}' in "
-                        f"contact {email}; using '{pronunciation}'"
+                        + f"contact {email}; using '{pronunciation}'"
                     )
                 pronunciations[nickname] = pronunciation
                 nicknames.append(nickname)
@@ -275,18 +275,20 @@ def prose_contact_snippet(m) -> str:
 
 
 @mod.capture(
-    rule=(
-        "<user.prose_name> "
-        "| <user.prose_name_possessive> "
-        "| <user.prose_email> "
-        "| <user.prose_username> "
-        "| <user.prose_full_name> "
-        "| <user.prose_full_name_possessive> "
-        "| <user.prose_first_name> "
-        "| <user.prose_first_name_possessive> "
-        "| <user.prose_last_name>"
-        "| <user.prose_last_name_possessive>"
-        "| <user.prose_contact_snippet>"
+    rule=" | ".join(
+        [
+            "<user.prose_name>",
+            "<user.prose_name_possessive>",
+            "<user.prose_email>",
+            "<user.prose_username>",
+            "<user.prose_full_name>",
+            "<user.prose_full_name_possessive>",
+            "<user.prose_first_name>",
+            "<user.prose_first_name_possessive>",
+            "<user.prose_last_name>",
+            "<user.prose_last_name_possessive>",
+            "<user.prose_contact_snippet>",
+        ]
     ),
 )
 def prose_contact(m) -> str:
