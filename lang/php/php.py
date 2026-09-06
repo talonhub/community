@@ -7,16 +7,6 @@ ctx.matches = r"""
 code.language: php
 """
 
-ctx.lists["user.code_type"] = {
-    "int": "int",
-    "float": "float",
-    "string": "string",
-    "bool": "bool",
-    "array": "array",
-    "null": "null",
-    "void": "void",
-}
-
 operators = Operators(
     # code_operators_assignment
     ASSIGNMENT=" = ",
@@ -93,8 +83,20 @@ class UserActions:
         actions.insert("isset()")
         actions.edit.left()
 
+    def code_insert_function(text: str, selection: str):
+        text += f"({selection or ''})"
+        actions.user.paste(text)
+        actions.edit.left()
+
     def code_default_function(text: str):
-        actions.user.code_public_function(text)
+        """Inserts function declaration"""
+        result = "function {}()".format(
+            actions.user.formatted_text(
+                text, settings.get("user.code_public_function_formatter")
+            )
+        )
+        actions.user.paste(result)
+        actions.edit.left()
 
     def code_protected_function(text: str):
         """Inserts protected function declaration"""
@@ -155,6 +157,9 @@ class UserActions:
         )
         actions.user.paste(result)
         actions.edit.left()
+
+    def code_insert_type_annotation(type: str):
+        actions.insert(f"{type} ")
 
     def code_insert_return_type(type: str):
         actions.insert(f": {type}")

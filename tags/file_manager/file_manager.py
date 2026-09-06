@@ -69,11 +69,14 @@ cached_path = None
 file_selections = folder_selections = []
 current_file_page = current_folder_page = 1
 
-ctx.lists["self.file_manager_directories"] = []
-ctx.lists["self.file_manager_files"] = []
+ctx.lists["user.file_manager_directories"] = []
+ctx.lists["user.file_manager_files"] = []
 
 
-@ctx_file_manager.capture("user.address", rule="{user.system_paths}")
+@ctx_file_manager.capture(
+    "user.address",
+    rule="{user.system_paths}",
+)
 def address(m) -> str:
     return str(m)
 
@@ -241,7 +244,7 @@ def get_file_map(current_path):
 def gui_folders(gui: imgui.GUI):
     global current_folder_page, total_folder_pages
     total_folder_pages = math.ceil(
-        len(ctx.lists["self.file_manager_directories"])
+        len(ctx.lists["user.file_manager_directories"])
         / settings.get("user.file_manager_imgui_limit")
     )
     gui.text(f"Select a directory ({current_folder_page}/{total_folder_pages})")
@@ -330,14 +333,14 @@ def gui_files(gui: imgui.GUI):
 def clear_lists():
     global folder_selections, file_selections, current_folder_page, current_file_page
     if (
-        len(ctx.lists["self.file_manager_directories"]) > 0
-        or len(ctx.lists["self.file_manager_files"]) > 0
+        len(ctx.lists["user.file_manager_directories"]) > 0
+        or len(ctx.lists["user.file_manager_files"]) > 0
     ):
         current_folder_page = current_file_page = 1
         ctx.lists.update(
             {
-                "self.file_manager_directories": [],
-                "self.file_manager_files": [],
+                "user.file_manager_directories": [],
+                "user.file_manager_files": [],
             }
         )
         folder_selections = []
@@ -380,8 +383,8 @@ def update_lists(path=None):
     current_folder_page = current_file_page = 1
     ctx.lists.update(
         {
-            "self.file_manager_directories": directories,
-            "self.file_manager_files": files,
+            "user.file_manager_directories": directories,
+            "user.file_manager_files": files,
         }
     )
 

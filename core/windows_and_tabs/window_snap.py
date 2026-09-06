@@ -54,7 +54,7 @@ def _bring_forward(window):
 
 
 def _get_app_window(app_name: str) -> ui.Window:
-    return actions.self.get_running_app(app_name).active_window
+    return actions.user.get_running_app(app_name).active_window
 
 
 def interpolate_interval(w0, w1, s0, s1, d0, d1):
