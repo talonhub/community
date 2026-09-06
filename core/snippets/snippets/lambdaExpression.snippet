@@ -29,10 +29,30 @@ language: r
 function($1){ $0 }
 ---
 
-
 language: cpp
 -
 [$1]($2) {
+    $0
+}
+---
+
+language: go
+-
+func($1) $2 {
+    $0
+}
+---
+
+language: lua
+-
+function($1)
+    $0
+end
+---
+
+language: php
+-
+function ($1) {
     $0
 }
 ---

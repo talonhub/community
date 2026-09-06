@@ -1,6 +1,6 @@
 from typing import Optional
 
-from talon import Context, Module, actions, ui
+from talon import Context, Module, actions, app, cron, ui
 
 from .draft_ui import DraftManager
 
@@ -41,7 +41,8 @@ mod.setting(
     default=None,
     desc=(
         "Sets the color of the word labels used in the draft window. "
-        "E.g. 00ff00 would be green" + SETTING_CHANGE_CAVEAT_DESCRIPTION
+        + "E.g. 00ff00 would be green"
+        + SETTING_CHANGE_CAVEAT_DESCRIPTION
     ),
 )
 mod.setting(
@@ -53,7 +54,15 @@ mod.setting(
 )
 
 
-draft_manager = DraftManager()
+draft_manager = None
+
+
+def on_ready():
+    global draft_manager
+    draft_manager = DraftManager()
+
+
+app.register("ready", on_ready)
 
 
 @ctx_focused.action_class("user")
@@ -71,7 +80,6 @@ class ContextSensitiveDictationActions:
         )
 
     def paste(text: str):
-        # todo: remove once user.paste works reliably with the draft window
         actions.insert(text)
 
 
@@ -84,12 +92,8 @@ class EditActions:
     def selected_text() -> str:
         area = draft_manager.area
         if area.sel:
-            result = area[area.sel.left : area.sel.right]
-            return result
+            return area[area.sel.left : area.sel.right]
         return ""
-
-
-from talon import cron
 
 
 class UndoWorkaround:
@@ -293,7 +297,7 @@ class Actions:
 # Some capture groups we need
 
 
-@mod.capture(rule="{self.letter}+")
+@mod.capture(rule="{user.letter}+")
 def draft_anchor(m) -> str:
     """
     An anchor (string of letters)
@@ -301,7 +305,7 @@ def draft_anchor(m) -> str:
     return "".join(m)
 
 
-@mod.capture(rule="(top|bottom|left|right|middle)")
+@mod.capture(rule="top | bottom | left | right | middle")
 def draft_window_position(m) -> str:
     """
     One of the named positions you can move the window to

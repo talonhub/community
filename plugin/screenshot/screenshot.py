@@ -62,11 +62,8 @@ class Actions:
         win = ui.active_window()
         clipboard_rect(win.rect)
 
-    def screenshot_rect(
-        rect: ui.Rect, title: str = "", screen_num: Optional[int] = None
-    ):
+    def screenshot_rect(rect: ui.Rect, title: str = ""):
         """Allow other modules this screenshot a rectangle"""
-        selected_screen = get_screen(screen_num)
         flash_rect(rect)
         img = screen.capture_rect(rect)
         path = get_screenshot_path(title)
