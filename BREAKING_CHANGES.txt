@@ -8,6 +8,9 @@ submitted and the time they were reviewed and merged.
 
 ---
 * 2026-08-20 `snip block comment` now inserts a multiline comment. Use `snip inline comment` for the old behavior of inserting an inline comment.
+* 2026-08-23 Remove `split` and `update` from the Python function vocabulary. These are methods, not built-in Python functions, and should now be invoked with the method voice command instead (e.g. "dot split" instead of "funk split").
+* 2026-08-23 Removed deprecated Jetbrains command `action` in favour of the `please` command.
+* 2026-08-10 Change tmux split commands to match the orientation conventions we use for other applications such as VS Code and Obsidian. (PR #2290)
 * 2026-07-25 Remove unused code for `presentation mode`. Use the `user.deep_sleep` tag instead.
 * 2026-05-17 Deprecate `state local`, `state end`, etc. for Lua in favour of using `put` via the list/capture/tag `user.code_keyword`.
 * 2025-12-22 the `user.mouse_wake` action now restores the eye tracking state to what it was before the last use of the `user.mouse_sleep` action instead of always enabling zoom mouse.
