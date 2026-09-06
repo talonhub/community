@@ -1,9 +1,10 @@
 tag: terminal
 and tag: user.git
 -
+
 jojo {user.jujitsu_command} [<user.jujitsu_arguments>]:
     args = jujitsu_arguments or ""
-    "jj {jujitsu_command}{args} "
+    insert("jj {jujitsu_command}{args} ")
 jojo describe [<user.jujitsu_arguments>] message [<user.prose>]:
     args = jujitsu_arguments or ""
     message = prose or ""
