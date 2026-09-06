@@ -29,17 +29,11 @@ class Actions:
         executable = os.path.basename(actions.app.executable())
         app_name = create_name(friendly_name.removesuffix(".exe"))
         if app.platform == "mac":
-            result = 'mod.apps.{} = """\nos: mac\nand app.bundle: {}\n"""'.format(
-                app_name, actions.app.bundle()
-            )
+            result = f'mod.apps.{app_name} = """\nos: mac\nand app.bundle: {actions.app.bundle()}\n"""'
         elif app.platform == "windows":
-            result = 'mod.apps.{} = r"""\nos: windows\nand app.name: {}\nos: windows\nand app.exe: /^{}$/i\n"""'.format(
-                app_name, friendly_name, re.escape(executable.lower())
-            )
+            result = f'mod.apps.{app_name} = r"""\nos: windows\nand app.name: {friendly_name}\nos: windows\nand app.exe: /^{re.escape(executable.lower())}$/i\n"""'
         else:
-            result = 'mod.apps.{} = """\nos: {}\nand app.name: {}\n"""'.format(
-                app_name, app.platform, friendly_name
-            )
+            result = f'mod.apps.{app_name} = """\nos: {app.platform}\nand app.name: {friendly_name}\n"""'
 
         clip.set_text(result)
 
@@ -51,9 +45,7 @@ class Actions:
         if app.platform == "mac":
             result = f"os: mac\nand app.bundle: {actions.app.bundle()}\n"
         elif app.platform == "windows":
-            result = "os: windows\nand app.name: {}\nos: windows\nand app.exe: /^{}$/i\n".format(
-                friendly_name, re.escape(executable.lower())
-            )
+            result = f"os: windows\nand app.name: {friendly_name}\nos: windows\nand app.exe: /^{re.escape(executable.lower())}$/i\n"
         else:
             result = f"os: {app.platform}\nand app.name: {friendly_name}\n"
 
@@ -121,13 +113,11 @@ class Actions:
         bundle = actions.app.bundle()
         title = actions.win.title()
         hostname = scope.get("hostname")
-        result = f"Name: {name}\nExecutable: {executable}\nBundle: {bundle}\nTitle: {title}\nhostname: {hostname}"
-        return result
+        return f"Name: {name}\nExecutable: {executable}\nBundle: {bundle}\nTitle: {title}\nhostname: {hostname}"
 
     def talon_get_hostname() -> str:
         """Returns the hostname"""
-        hostname = scope.get("hostname")
-        return hostname
+        return scope.get("hostname")
 
     def talon_get_active_application_info() -> str:
         """Returns all active app info to the cliboard"""
@@ -140,12 +130,15 @@ class Actions:
         result += "\nTitle: " + actions.win.title()
         return result
 
+    def talon_get_active_window_class_name() -> str:
+        """Returns the class name of the active window"""
+        return ui.active_window().cls
+
     def talon_version_info() -> str:
         """Returns talon & operation system verison information"""
-        result = (
+        return (
             f"Version: {app.version}, Branch: {app.branch}, OS: {platform.platform()}"
         )
-        return result
 
     def talon_pretty_print(obj: object):
         """Uses pretty print to dump an object"""
