@@ -1,3 +1,5 @@
+from typing import Optional
+
 from talon import Module, actions, app, cron, registry, scope, settings, skia, ui
 from talon.canvas import Canvas
 from talon.screen import Screen
@@ -8,6 +10,8 @@ from talon.ui import Point2d, Rect
 canvas: Canvas = None
 current_mode = ""
 current_microphone = ""
+# True: always show indicator, False: always hide indicator, None: visibility determined by the `user.mode_indicator_show` setting
+visibility_mode = None
 mod = Module()
 
 mod.setting(
@@ -50,40 +54,46 @@ mod.setting(
 mod.setting("mode_indicator_color_text", type=str)
 mod.setting("mode_indicator_color_mute", type=str)
 mod.setting("mode_indicator_color_sleep", type=str)
+mod.setting("mode_indicator_color_deep_sleep", type=str)
 mod.setting("mode_indicator_color_dictation", type=str)
 mod.setting("mode_indicator_color_mixed", type=str)
 mod.setting("mode_indicator_color_command", type=str)
 mod.setting("mode_indicator_color_other", type=str)
 
-setting_paths = {
-    "user.mode_indicator_show",
-    "user.mode_indicator_size",
-    "user.mode_indicator_x",
-    "user.mode_indicator_y",
-    "user.mode_indicator_color_alpha",
-    "user.mode_indicator_color_gradient",
-    "user.mode_indicator_color_mute",
-    "user.mode_indicator_color_sleep",
-    "user.mode_indicator_color_dictation",
-    "user.mode_indicator_color_mixed",
-    "user.mode_indicator_color_command",
-    "user.mode_indicator_color_other",
-}
+
+setting_values = dict.fromkeys(
+    (
+        "user.mode_indicator_show",
+        "user.mode_indicator_size",
+        "user.mode_indicator_x",
+        "user.mode_indicator_y",
+        "user.mode_indicator_color_alpha",
+        "user.mode_indicator_color_gradient",
+        "user.mode_indicator_color_mute",
+        "user.mode_indicator_color_sleep",
+        "user.mode_indicator_color_deep_sleep",
+        "user.mode_indicator_color_dictation",
+        "user.mode_indicator_color_mixed",
+        "user.mode_indicator_color_command",
+        "user.mode_indicator_color_other",
+    )
+)
 
 
 def get_mode_color() -> str:
     if current_microphone == "None":
         return settings.get("user.mode_indicator_color_mute")
     if current_mode == "sleep":
+        if "user.deep_sleep" in scope.get("tag"):
+            return settings.get("user.mode_indicator_color_deep_sleep")
         return settings.get("user.mode_indicator_color_sleep")
-    elif current_mode == "dictation":
+    if current_mode == "dictation":
         return settings.get("user.mode_indicator_color_dictation")
-    elif current_mode == "mixed":
+    if current_mode == "mixed":
         return settings.get("user.mode_indicator_color_mixed")
-    elif current_mode == "command":
+    if current_mode == "command":
         return settings.get("user.mode_indicator_color_command")
-    else:
-        return settings.get("user.mode_indicator_color_other")
+    return settings.get("user.mode_indicator_color_other")
 
 
 def get_alpha_color() -> str:
@@ -93,7 +103,7 @@ def get_alpha_color() -> str:
 def get_gradient_color(color: str) -> str:
     factor = settings.get("user.mode_indicator_color_gradient")
     # hex -> rgb
-    (r, g, b) = tuple(int(color[i : i + 2], 16) for i in (0, 2, 4))
+    r, g, b = tuple(int(color[i : i + 2], 16) for i in (0, 2, 4))
     # Darken rgb
     r, g, b = int(r * factor), int(g * factor), int(b * factor)
     # rgb -> hex
@@ -161,6 +171,12 @@ def move_indicator():
     canvas.move(x, y)
 
 
+def should_show_indicator():
+    return visibility_mode or (
+        visibility_mode is None and settings.get("user.mode_indicator_show")
+    )
+
+
 def show_indicator():
     global canvas
     canvas = Canvas.from_rect(Rect(0, 0, 0, 0))
@@ -175,7 +191,7 @@ def hide_indicator():
 
 
 def update_indicator():
-    if settings.get("user.mode_indicator_show"):
+    if should_show_indicator():
         if not canvas:
             show_indicator()
         move_indicator()
@@ -204,8 +220,19 @@ def on_update_contexts():
         update_indicator()
 
 
-def on_update_settings(updated_settings: set[str]):
-    if setting_paths & updated_settings:
+def poll_for_changes():
+    poll_settings()
+    poll_microphone()
+
+
+def poll_settings():
+    did_a_setting_change = False
+    for setting_name in setting_values:
+        current = settings.get(setting_name)
+        if current != setting_values[setting_name]:
+            did_a_setting_change = True
+            setting_values[setting_name] = current
+    if did_a_setting_change:
         update_indicator()
 
 
@@ -218,11 +245,21 @@ def poll_microphone():
         update_indicator()
 
 
+@mod.action_class
+class Actions:
+    def mode_indicator_set_visibility(
+        new_visibility_mode: Optional[bool] = None,
+    ):
+        """Update how the mode indicator visibility is determined. True means to show the indicator. False means to hide the indicator. None means to default to the user.mode_indicator_show setting."""
+        global visibility_mode
+        visibility_mode = new_visibility_mode
+        update_indicator()
+
+
 def on_ready():
     registry.register("update_contexts", on_update_contexts)
-    registry.register("update_settings", on_update_settings)
-    ui.register("screen_change", lambda _: update_indicator)
-    cron.interval("500ms", poll_microphone)
+    ui.register("screen_change", lambda _: update_indicator())
+    cron.interval("500ms", poll_for_changes)
 
 
 app.register("ready", on_ready)

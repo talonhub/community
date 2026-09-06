@@ -11,7 +11,7 @@ mod.list(
 )
 
 
-@mod.capture(rule=("{user.code_keyword}|{user.code_keyword_unprefixed}"))
+@mod.capture(rule="{user.code_keyword} | {user.code_keyword_unprefixed}")
 def code_keyword(m) -> str:
     return str(m)
 

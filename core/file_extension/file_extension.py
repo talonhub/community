@@ -72,4 +72,4 @@ ctx = Context()
     default=_file_extensions_defaults,
 )
 def on_update(values):
-    ctx.lists["self.file_extension"] = values
+    ctx.lists["user.file_extension"] = values
