@@ -1,0 +1,54 @@
+list: user.code_common_function
+code.language: css
+code.language: scss
+-
+
+# reference
+attribute: attr
+env
+url
+var
+variable: var
+# mathematical
+calc
+calculate: calc
+clamp
+max
+min
+# color
+HSL: hsl
+hue sat light: hsl
+HSLA: hsla
+lab
+LCH: lch
+RGB: rgb
+red green blue: rgb
+RGBA: rgba
+color
+# image functions
+linear gradient: linear-gradient
+# counter functions
+counter
+counters
+symbols
+# filter
+blur
+brightness
+contrast
+drop shadow: drop-shadow
+grayscale
+hue rotate: hue-rotate
+invert
+opacity
+saturate
+sepia
+# grid
+fit content: fit-content
+min max: minmax
+repeat
+# transform
+matrix
+rotate
+scale
+skew
+translate

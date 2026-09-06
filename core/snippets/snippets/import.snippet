@@ -1,6 +1,5 @@
 name: importStatement
 phrase: import
-
 ---
 
 language: javascript | typescript | javascriptreact | typescriptreact
@@ -56,4 +55,9 @@ using $0;
 language: r
 -
 library(${1}${2:, warn.conflicts = FALSE})
+---
+
+language: c
+-
+#include $0
 ---

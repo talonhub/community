@@ -1,6 +1,7 @@
 # These are active when we have focus on the draft window
 title: Talon Draft
 -
+
 settings():
     # Enable 'Smart dictation mode', see https://github.com/talonhub/community/pull/356
     user.context_sensitive_dictation = true

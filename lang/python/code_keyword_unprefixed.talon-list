@@ -1,4 +1,4 @@
-list: user.code_keyword_bare
+list: user.code_keyword_unprefixed
 code.language: python
 -
 
