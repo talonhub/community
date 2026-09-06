@@ -1,5 +1,5 @@
 import math
-from typing import Dict, Optional
+from typing import Optional
 
 from talon import Context, Module, actions, app, canvas, settings, ui
 from talon.ui import Rect
@@ -196,7 +196,7 @@ def center_distance(a, b) -> float:
     return math.hypot(ax - bx, ay - by)
 
 
-def role_score(role: Optional[str], role_priority: Dict[str, int]) -> int:
+def role_score(role: Optional[str], role_priority: dict[str, int]) -> int:
     if role is None:
         return 50
     return role_priority.get(role, 50)
@@ -206,7 +206,7 @@ def filter_elements(
     items: list,
     iou_threshold: float = 0.85,
     center_threshold: float = 4.0,
-    role_priority: Optional[Dict[str, int]] = None,
+    role_priority: Optional[dict[str, int]] = None,
 ) -> list:
 
     should_filter_overlaps = settings.get("user.hinting_filter_overlapping_item")
@@ -460,8 +460,7 @@ def on_win_title(window):
 
     if window.id != state.active_window_id:
         return
-    else:
-        on_win_close(window)
+    on_win_close(window)
 
 
 def on_win_focus(window):
