@@ -1,4 +1,4 @@
-from talon import Context, Module, actions, app
+from talon import Context, Module, actions
 
 ctx = Context()
 mod = Module()
@@ -19,6 +19,12 @@ class UserActions:
     def tab_close_wrapper():
         actions.sleep("180ms")
         actions.app.tab_close()
+
+    def command_search(command: str = ""):
+        actions.key("cmd-l")
+        if command != "":
+            actions.sleep("200ms")
+            actions.insert(command)
 
 
 @ctx.action_class("browser")

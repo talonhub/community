@@ -34,29 +34,25 @@ class Actions:
 
 
 def get_python_context(active_app: ui.App, app_name: str) -> str:
-    return '''\
+    return f'''\
 from talon import Module, Context, actions
 
 mod = Module()
 ctx = Context()
 
 mod.apps.{app_name} = r"""
-os: {os}
-and {app_context}
+os: {app.platform}
+and {get_app_context(active_app)}
 """
 
 ctx.matches = r"""
-os: {os}
+os: {app.platform}
 app: {app_name}
 """
 
 # @mod.action_class
 # class Actions:
-'''.format(
-        app_name=app_name,
-        os=app.platform,
-        app_context=get_app_context(active_app),
-    )
+'''
 
 
 def get_talon_context(app_name: str) -> str:

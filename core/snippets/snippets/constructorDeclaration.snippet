@@ -3,16 +3,16 @@ phrase: constructor
 insertionScope: namedFunction | statement
 ---
 
-language: javascript
+language: cpp | csharp | java
 -
-constructor($1) {
+$1($2) {
     $0
 }
 ---
 
-language: java
+language: javascript | typescript | javascriptreact | typescriptreact
 -
-$1($2) {
+constructor($1) {
     $0
 }
 ---
@@ -21,4 +21,11 @@ language: python
 -
 def __init__(self$1):
     $0
+---
+
+language: php
+-
+public function __construct($1) {
+    $0
+}
 ---

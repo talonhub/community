@@ -1,23 +1,10 @@
-language: html
+language: html | javascriptreact | typescriptreact
 ---
 
-name: element
-phrase: element | tag
-insertionScope: xmlElement
-
-$1.insertionFormatter: PRIVATE_CAMEL_CASE
+name: attributeClassName
+phrase: class name
 -
-<$1>
-    $0
-</$1>
----
-
-name: attribute
-phrase: attribute
-
-$1.insertionFormatter: PRIVATE_CAMEL_CASE
--
-$1=$0
+className="$0"
 ---
 
 name: table

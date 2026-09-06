@@ -1,4 +1,6 @@
 talon check updates: menu.check_for_updates()
+# the debug window is only available in the talon beta
+talon open debug: menu.open_debug_window()
 talon open log: menu.open_log()
 talon open rebel: menu.open_repl()
 talon home: menu.open_talon_home()
@@ -16,6 +18,9 @@ talon copy bundle:
 talon copy title:
     title = win.title()
     clip.set_text(title)
+talon copy class:
+    class_name = user.talon_get_active_window_class_name()
+    clip.set_text(class_name)
 talon dump version:
     result = user.talon_version_info()
     print(result)
