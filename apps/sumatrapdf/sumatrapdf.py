@@ -2,7 +2,7 @@ from talon import Context, Module, actions
 
 # --- App definition ---
 mod = Module()
-mod.apps.sumatrapdf = """
+mod.apps.sumatrapdf = r"""
 os: windows
 and app.name: SumatraPDF
 os: windows

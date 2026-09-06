@@ -44,8 +44,8 @@ def get_editor_names():
 
 def handle_app_running(_app):
     editor_names = get_editor_names()
-    for app in ui.apps(background=False):
-        if app.name in editor_names:
+    for a in ui.apps(background=False):
+        if a.name in editor_names:
             add_tag("user.draft_editor_app_running")
             return
     remove_tag("user.draft_editor_app_running")
@@ -58,10 +58,16 @@ def handle_app_activate(app):
         remove_tag("user.draft_editor_app_focused")
 
 
-ui.register("app_launch", handle_app_running)
-ui.register("app_close", handle_app_running)
-ui.register("app_activate", handle_app_activate)
+def on_ready():
+    ui.register("app_launch", handle_app_running)
+    ui.register("app_close", handle_app_running)
+    ui.register("app_activate", handle_app_activate)
 
+    handle_app_running(None)
+    handle_app_activate(ui.active_app())
+
+
+app.register("ready", on_ready)
 
 original_window = None
 
@@ -101,9 +107,9 @@ class Actions:
 def get_editor_app() -> ui.App:
     editor_names = get_editor_names()
 
-    for app in ui.apps(background=False):
-        if app.name in editor_names:
-            return app
+    for foreground_app in ui.apps(background=False):
+        if foreground_app.name in editor_names:
+            return foreground_app
 
     raise RuntimeError("Draft editor is not running")
 

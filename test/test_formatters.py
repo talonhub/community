@@ -5,7 +5,7 @@ if hasattr(talon, "test_mode"):
 
     from talon import actions
 
-    from core.text import formatters
+    from core.formatters import formatters
 
     def setup_function():
         actions.reset_test_actions()
@@ -15,6 +15,25 @@ if hasattr(talon, "test_mode"):
         result = formatters.Actions.formatted_text("hello world", "SNAKE_CASE")
 
         assert result == "hello_world"
+
+    def test_snake_case_alnum():
+        result = formatters.Actions.formatted_text("hello x11 world", "SNAKE_CASE")
+
+        assert result == "hello_x11_world"
+
+    def test_snake_case_dot():
+        result = formatters.Actions.formatted_text(
+            "hello world. hello world", "SNAKE_CASE"
+        )
+
+        assert result == "hello_world.hello_world"
+
+    def test_snake_case_comma():
+        result = formatters.Actions.formatted_text(
+            "hello world, hello world", "SNAKE_CASE"
+        )
+
+        assert result == "hello_world, hello_world"
 
     def test_no_spaces():
         result = formatters.Actions.formatted_text("hello world", "NO_SPACES")

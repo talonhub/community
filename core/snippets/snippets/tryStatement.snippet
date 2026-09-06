@@ -3,17 +3,10 @@ phrase: try
 insertionScope: statement
 ---
 
-language: javascript
+language: cpp | csharp | java | javascript | typescript | javascriptreact | typescriptreact | php
 -
 try {
     $0
-}
----
-
-language: java
--
-try {
-    $1
 }
 ---
 
@@ -21,4 +14,18 @@ language: python
 -
 try:
     $0
+---
+
+language: elixir
+-
+try do
+    $0
+end
+---
+
+language: r
+-
+tryCatch({
+    $0
+},
 ---

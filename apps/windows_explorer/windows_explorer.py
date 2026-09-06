@@ -15,7 +15,7 @@ and app.exe: /^explorer\.exe$/i
 """
 
 # many commands should work in most save/open dialog.
-# note the "show options" stuff won't work unless work
+# note the "show options" stuff won't work
 # unless the path is displayed in the title, which is rare for those
 apps.windows_file_browser = """
 os: windows
@@ -59,7 +59,6 @@ if app.platform == "windows":
             "Videos": os.path.join(user_path, "Videos"),
         }
     else:
-        # todo use expanduser for cross platform support
         directories_to_remap = {
             "Desktop": os.path.join(user_path, "Desktop"),
             "Documents": os.path.join(user_path, "Documents"),
@@ -86,7 +85,6 @@ if app.platform == "windows":
 
 @ctx.action_class("user")
 class UserActions:
-
     def file_manager_open_parent():
         actions.key("alt-up")
 

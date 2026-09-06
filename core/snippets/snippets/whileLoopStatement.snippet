@@ -1,11 +1,16 @@
 name: whileLoopStatement
 phrase: while
 insertionScope: statement
+
+$1.wrapperPhrase: while cond
+$1.wrapperScope: statement
+$0.wrapperPhrase: while
+$0.wrapperScope: statement
 ---
 
-language: javascript | java
+language: c | cpp | csharp | java | javascript | typescript | javascriptreact | typescriptreact | php | scala | kotlin | r
 -
-while($1) {
+while ($1) {
     $0
 }
 ---
@@ -14,4 +19,32 @@ language: python
 -
 while $1:
     $0
+---
+
+language: ruby
+-
+while $1
+    $0
+end
+---
+
+language: go
+-
+for $1 {
+    $0
+}
+---
+
+language: rust | stata
+-
+while $1 {
+    $0
+}
+---
+
+language: elixir | lua
+-
+while $1 do
+    $0
+end
 ---

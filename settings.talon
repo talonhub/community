@@ -21,8 +21,11 @@ settings():
     # Uncomment to always sort help contexts alphabetically.
     # user.help_sort_contexts_by_specificity = false
 
-    # Set the scroll amount for continuous scroll/gaze scroll
-    user.mouse_continuous_scroll_amount = 80
+    # Set the scroll amount for continuous scroll
+    user.mouse_continuous_scroll_amount = 8
+
+    # Set the scroll multiplier for gaze scroll
+    user.mouse_gaze_scroll_speed_multiplier = 1.0
 
     # Set the maximum acceleration factor when scrolling continuously. 1=constant speed/no acceleration.
     user.mouse_continuous_scroll_acceleration = 1
@@ -42,6 +45,10 @@ settings():
     # If `true`, use a hissing noise to scroll continuously
     user.mouse_enable_hiss_scroll = false
 
+    # How much time a hiss must last for to be considered a hiss rather than
+    # part of speech, in ms
+    user.hiss_scroll_debounce_time = 100
+
     # If `true`, hide the continuous scroll/gaze scroll GUI
     user.mouse_hide_mouse_gui = false
 
@@ -54,8 +61,17 @@ settings():
     # Set the amount to scroll left/right
     user.mouse_wheel_horizontal_amount = 40
 
+    # Set the duration to hold mouse clicks in milliseconds. 0 means no hold.
+    # In some full-screen applications, particularly games, mouse clicks may not
+    # be recognized unless held for a short duration.  If this occurs, try
+    # starting with a setting of 16.
+    user.mouse_click_hold = 0
+
     # If `true`, start mouse grid numbering on the bottom left (vs. top left)
     user.grids_put_one_bottom_left = true
+
+    # If `true`, show a zoomed in version of the mouse grid when it becomes sufficiently small
+    user.grid_show_zoomed = true
 
     # Set the default number of command history lines to display
     user.command_history_display = 10
@@ -71,8 +87,12 @@ settings():
     # .snippet files. Changing this setting requires a restart of Talon.
     # user.snippets_dir = "snippets"
 
+    # Set to the number of spaces to use for each tab when inserting snippets as raw text (without editor support). Set to -1 to insert tabs as tabs, such as in code editors that can expand tabs in pasted or typed text. This setting is provided for applications like web browsers and chat apps that do not understand code formatting.
+    user.snippet_raw_text_spaces_per_tab = 4
+
     # Uncomment to insert text longer than 10 characters (customizable) by pasting from
     # the clipboard. This is often faster than typing.
+    # Note: some contexts (e.g. the terminal tag) may override this global setting.
     # user.paste_to_insert_threshold = 10
 
     # Uncomment to enable context-sensitive dictation. This determines how to format
@@ -87,11 +107,20 @@ settings():
     # -width windows are resized to stay full-height/width.
     # user.window_snap_screen = "size aware"
 
+    # Mode enabled on Talon launch (command by default; dictation or sleep are other options)
+    # user.initial_mode = "sleep"
+
     # Puts Talon into sleep mode if no commands are spoken for a defined period of time.
     # user.listening_timeout_minutes = 3
 
     # Time in seconds to wait for the clipboard to change when trying to get selected text
     # user.selected_text_timeout = 0.25
+
+    # Time in seconds to sleep after inserting text with `insert_between` (e.g. when using paired delimiters like 'box' or 'round'), before moving the cursor back. Useful to set on a per-application basis, to prevent moving the moving the cursor before text is inserted.
+    # user.insert_between_wait = 0
+
+    # If deprecated commands should throw an exception, which stops the commands from running. You might find this helps you learn the new replacement commands faster.
+    # user.strict_command_deprecation = true
 
 # Uncomment to enable the curse yes/curse no commands (show/hide mouse cursor).
 # See issue #688 for more detail: https://github.com/talonhub/community/issues/688
@@ -112,3 +141,7 @@ settings():
 # By default you need to say "numb one" to write "1". If you uncomment this,
 # you can say "one" to write "1".
 # tag(): user.unprefixed_numbers
+
+# Uncomment the below to enable the experimental window layout commands
+# defined in window_layout.talon
+# tag(): user.experimental_window_layout
