@@ -62,7 +62,7 @@ def generic_type_connector_done(m) -> CommonTypeConnector:
     return CommonTypeConnector.DONE
 
 
-@mod.capture(rule="and|of|<user.generic_type_connector_done>")
+@mod.capture(rule="and | of | <user.generic_type_connector_done>")
 def common_generic_type_connector(m) -> CommonTypeConnector:
     """A common type connector for generic types"""
     with suppress(AttributeError):
