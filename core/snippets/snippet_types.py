@@ -47,7 +47,7 @@ class Snippet:
     def get_variable_strict(self, name: str):
         variable = self.get_variable(name)
         if variable is None:
-            raise ValueError(f"Snippet '{self.name}' has no variable '{name}'")
+            raise ValueError(f"No variable '{name}' in {self}")
         return variable
 
 

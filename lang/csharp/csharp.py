@@ -1,5 +1,6 @@
 from talon import Context, actions, settings
 
+from ...core.described_functions import create_described_insert_between
 from ..tags.operators import Operators
 
 ctx = Context()
@@ -9,7 +10,7 @@ code.language: csharp
 
 operators = Operators(
     # code_operators_array
-    SUBSCRIPT=lambda: actions.user.insert_between("[", "]"),
+    SUBSCRIPT=create_described_insert_between("[", "]"),
     # code_operators_assignment
     ASSIGNMENT=" = ",
     ASSIGNMENT_ADDITION=" += ",
@@ -60,25 +61,25 @@ class UserActions:
         return operators
 
     def code_self():
-        actions.auto_insert("this")
+        actions.insert("this")
 
     def code_operator_object_accessor():
-        actions.auto_insert(".")
+        actions.insert(".")
 
     def code_insert_null():
-        actions.auto_insert("null")
+        actions.insert("null")
 
     def code_insert_is_null():
-        actions.auto_insert(" == null ")
+        actions.insert(" == null ")
 
     def code_insert_is_not_null():
-        actions.auto_insert(" != null")
+        actions.insert(" != null")
 
     def code_insert_true():
-        actions.auto_insert("true")
+        actions.insert("true")
 
     def code_insert_false():
-        actions.auto_insert("false")
+        actions.insert("false")
 
     def code_insert_function(text: str, selection: str):
         text += f"({selection or ''})"

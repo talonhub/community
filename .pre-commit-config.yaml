@@ -1,14 +1,18 @@
-minimum_pre_commit_version: "3.2.0"
+minimum_pre_commit_version: "4.5.0"
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
+    rev: v6.0.0
     hooks:
       - id: check-added-large-files
       - id: check-case-conflict
       - id: check-executables-have-shebangs
+      - id: check-illegal-windows-names
       - id: check-merge-conflict
       - id: check-shebang-scripts-are-executable
       - id: check-symlinks
+      - id: check-toml
+      - id: check-yaml
+      - id: debug-statements
       - id: destroyed-symlinks
       - id: detect-private-key
       - id: fix-byte-order-marker
@@ -22,31 +26,23 @@ repos:
       - id: trailing-whitespace
       - id: end-of-file-fixer
       - id: mixed-line-ending
-  - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: "v4.0.0-alpha.8"
+
+  - repo: https://github.com/oxc-project/mirrors-oxfmt
+    rev: "v0.65.0"
     hooks:
-      - id: prettier
-  - repo: https://github.com/ikamensh/flynt/
-    rev: "1.0.4"
+      - id: oxfmt
+        types_or: [markdown, yaml, toml, json]
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.16.5
     hooks:
-      - id: flynt
-  - repo: https://github.com/pycqa/isort
-    rev: 6.0.1
+      - id: ruff-check
+        types_or: [python, pyi, jupyter, pyproject]
+        args: [--fix]
+      - id: ruff-format
+
+  - repo: https://github.com/cursorless-dev/talon-tools
+    rev: v0.12.0
     hooks:
-      - id: isort
-  - repo: https://github.com/psf/black-pre-commit-mirror
-    rev: 25.1.0
-    hooks:
-      - id: black
-  - repo: https://github.com/Lucas-C/pre-commit-hooks
-    rev: v1.5.5
-    hooks:
-      - id: remove-tabs
-        types: [file]
-        files: \.talon$
-        args: ["--whitespaces-count=4"]
-  - repo: https://github.com/wenkokke/talonfmt
-    rev: 1.10.2
-    hooks:
-      - id: talonfmt
-        args: ["--in-place"]
+      - id: talon-fmt
+      - id: snippet-fmt

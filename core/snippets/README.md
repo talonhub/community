@@ -15,9 +15,12 @@ Custom format to represent snippets.
 - A `.snippet` file can contain multiple snippet documents separated by `---`.
 - Each snippet document has a context and body separated by `-`.
 - Optionally a file can have a single context at the top with no body. This is not a snippet in itself, but default values to be inherited by the other snippet documents in the same file.
-- Some context keys supports multiple values. These values are separated by `|`.
+- Some context keys support multiple values. These values are separated by `|`.
   - For most keys like `language` or `phrase` multiple values means _or_. You can use phrase _1_ or phrase _2_. The snippet is active in language _A_ or language _B_.
   - For `insertionFormatter` multiple values means that the formatters will be applied in sequence.
+- Snippet bodies without tab characters use leading space character(s) as indentation. In this case, the shortest sequence of space character(s) at the beginning of one of a snippet body's lines represents a single level of indentation. You must therefore escape leading spaces to treat them as literal spaces in a snippet body that has no tab characters.
+- You can escape a space, a line consisting entirely of `---`, or a backslash by putting a backslash before it.
+- A snippet body cannot have the Unicode character `"\u0000"`.
 
 ### Context fields
 
@@ -45,7 +48,7 @@ It's also possible to set configuration that applies to a specific tab stop (`$0
 | wrapperPhrase      | No       | Yes             | `$0.wrapperPhrase: try \| trying`   |
 | wrapperScope       | No       | No              | `$0.wrapperScope: statement`        |
 
-- `insertionFormatter`: Formatter to apply to the phrase when inserting the snippet. eg `"snip funk get value"`. If omitted no trailing phrase is available for the snippet.
+- `insertionFormatter`: Formatter to apply to the phrase when inserting the snippet. eg `"snip funk get value"`. If omitted no trailing phrase is available for the snippet. Supports formatters from settings, e.g. `setting(user.code_private_variable_formatter)`.
 - `wrapperPhrase`: Used by [Cursorless](https://www.cursorless.org) as the spoken form for wrapping with the snippet. eg `"if wrap air"`. Without Cursorless this spoken form is ignored by Talon.
 - `wrapperScope`: Used by [Cursorless](https://www.cursorless.org) to infer scope when wrapping with the snippet. eg `"if wrap air"` gets inferred as `"if wrap state air"`.
 
