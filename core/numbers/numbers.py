@@ -1,15 +1,51 @@
 import math
-from typing import Iterator, Union
+from collections.abc import Iterator
+from typing import Union
 
 from talon import Context, Module
 
 mod = Module()
 ctx = Context()
 
-digit_list = "zero one two three four five six seven eight nine".split()
-teens = "ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen".split()
-tens = "twenty thirty forty fifty sixty seventy eighty ninety".split()
-scales = "hundred thousand million billion trillion quadrillion quintillion sextillion septillion octillion nonillion decillion".split()
+digit_list = [
+    "zero",
+    "one",
+    "two",
+    "three",
+    "four",
+    "five",
+    "six",
+    "seven",
+    "eight",
+    "nine",
+]
+teens = [
+    "ten",
+    "eleven",
+    "twelve",
+    "thirteen",
+    "fourteen",
+    "fifteen",
+    "sixteen",
+    "seventeen",
+    "eighteen",
+    "nineteen",
+]
+tens = ["twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"]
+scales = [
+    "hundred",
+    "thousand",
+    "million",
+    "billion",
+    "trillion",
+    "quadrillion",
+    "quintillion",
+    "sextillion",
+    "septillion",
+    "octillion",
+    "nonillion",
+    "decillion",
+]
 
 digits_map = {n: i for i, n in enumerate(digit_list)}
 digits_map["oh"] = 0
@@ -225,13 +261,18 @@ ctx.lists["user.number_small"] = get_spoken_form_under_one_hundred(
 )
 
 
-# TODO: allow things like "double eight" for 88
-@ctx.capture("digit_string", rule=f"({alt_digits} | {alt_teens} | {alt_tens})+")
+@ctx.capture(
+    "digit_string",
+    rule=f"({alt_digits} | {alt_teens} | {alt_tens})+",
+)
 def digit_string(m) -> str:
     return parse_number(list(m))
 
 
-@ctx.capture("digits", rule="<digit_string>")
+@ctx.capture(
+    "digits",
+    rule="<digit_string>",
+)
 def digits(m) -> int:
     """Parses a phrase representing a digit sequence, returning it as an integer."""
     return int(m.digit_string)
@@ -243,7 +284,10 @@ def number_string(m) -> str:
     return parse_number(list(m))
 
 
-@ctx.capture("number", rule="<user.number_string>")
+@ctx.capture(
+    "number",
+    rule="<user.number_string>",
+)
 def number(m) -> int:
     """Parses a number phrase, returning it as an integer."""
     return int(m.number_string)
@@ -256,7 +300,10 @@ def number_signed_string(m) -> str:
     return f"-{number}" if (m[0] in ["negative", "minus"]) else number
 
 
-@ctx.capture("number_signed", rule="<user.number_signed_string>")
+@ctx.capture(
+    "number_signed",
+    rule="<user.number_signed_string>",
+)
 def number_signed(m) -> int:
     """Parses a (possibly negative) number phrase, returning that number as a integer."""
     return int(m.number_signed_string)
@@ -278,7 +325,14 @@ def number_prose_with_colon(m) -> str:
 
 
 @mod.capture(
-    rule="<user.number_signed_string> | <user.number_prose_with_dot> | <user.number_prose_with_comma> | <user.number_prose_with_colon>"
+    rule=" | ".join(
+        [
+            "<user.number_signed_string>",
+            "<user.number_prose_with_dot>",
+            "<user.number_prose_with_comma>",
+            "<user.number_prose_with_colon>",
+        ]
+    )
 )
 def number_prose_unprefixed(m) -> str:
     return m[0]
@@ -289,7 +343,10 @@ def number_prose_prefixed(m) -> str:
     return m.number_prose_unprefixed
 
 
-@ctx.capture("number_small", rule="{user.number_small}")
+@ctx.capture(
+    "number_small",
+    rule="{user.number_small}",
+)
 def number_small(m) -> int:
     return int(m.number_small)
 

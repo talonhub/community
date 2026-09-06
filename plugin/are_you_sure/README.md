@@ -12,15 +12,22 @@ You confirm an action by saying "yes I am sure" and cancel it by saying "cancel"
 from talon import actions, Module, app
 
 mod = Module()
+
+
 @mod.action_class
 class Actions:
     def test_are_you_sure():
-        '''A simple test for the are you sure dialog'''
+        """A simple test for the are you sure dialog"""
+
         def on_confirm():
-            app.notify('Confirmed')
+            app.notify("Confirmed")
+
         def on_cancel():
-            app.notify('Cancelled')
-        actions.user.are_you_sure_set_on_confirmation_action('Would you like to receive the on confirm message?', on_confirm, on_cancel)
+            app.notify("Cancelled")
+
+        actions.user.are_you_sure_set_on_confirmation_action(
+            "Would you like to receive the on confirm message?", on_confirm, on_cancel
+        )
 ```
 
 ```talon

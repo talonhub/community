@@ -1,6 +1,7 @@
 # Descended from https://github.com/dwiel/talon_community/blob/master/misc/dictation.py
 import re
-from typing import Callable, Optional
+from collections.abc import Callable
+from typing import Optional
 
 from talon import Context, Module, actions, grammar, settings, ui
 
@@ -13,6 +14,13 @@ mod.setting(
     type=bool,
     default=False,
     desc="Look at surrounding text to improve auto-capitalization/spacing in dictation mode. By default, this works by selecting that text & copying it to the clipboard, so it may be slow or fail in some applications.",
+)
+
+mod.setting(
+    "context_sensitive_dictation_peek_character",
+    type=str,
+    default=" ",
+    desc="This is the character inserted during dictation_peek to ensure that some text is selected even if the cursor is at the start or end of the document. This should be a single character only.",
 )
 
 mod.list("prose_modifiers", desc="Modifiers that can be used within prose")
@@ -58,7 +66,7 @@ def prose_modifier(m) -> Callable:
 
 
 @mod.capture(
-    rule="<user.number_string> [(dot | point) <digit_string>] percent [sign|sine]"
+    rule="<user.number_string> [(dot | point) <digit_string>] percent [sign | sine]"
 )
 def prose_percent(m) -> str:
     s = m.number_string
@@ -68,7 +76,7 @@ def prose_percent(m) -> str:
 
 
 @mod.capture(
-    rule="<user.number_string> {user.currency} [[and] <user.number_string> [cents|pence]]"
+    rule="<user.number_string> {user.currency} [[and] <user.number_string> [cents | pence]]"
 )
 def prose_currency(m) -> str:
     s = m.currency + m.number_string_1
@@ -77,7 +85,7 @@ def prose_currency(m) -> str:
     return s
 
 
-@mod.capture(rule="am|pm")
+@mod.capture(rule="am | pm")
 def time_am_pm(m) -> str:
     return str(m)
 
@@ -107,40 +115,72 @@ def prose_time(m) -> str:
     return str(m)
 
 
-@mod.capture(rule="({user.vocabulary} | <user.abbreviation> | <word>)")
+@mod.capture(rule="spell <user.letters>")
+def prose_spell(m) -> str:
+    """Spell word phonetically"""
+    return m.letters
+
+
+@mod.capture(rule="ship <user.letters>")
+def prose_ship(m) -> str:
+    """Spell word phonetically using uppercase letters"""
+    return m.letters.upper()
+
+
+@mod.capture(rule="clip clip")
+def prose_clipboard(m) -> str:
+    """Clipboard content"""
+    return actions.clip.text()
+
+
+@mod.capture(rule="{user.vocabulary} | <user.abbreviation> | <word>")
 def word(m) -> str:
     """A single word, including user-defined vocabulary."""
     if hasattr(m, "vocabulary"):
         return m.vocabulary
-    elif hasattr(m, "abbreviation"):
+    if hasattr(m, "abbreviation"):
         return m.abbreviation
-    else:
-        return " ".join(
-            actions.dictate.replace_words(actions.dictate.parse_words(m.word))
+    return " ".join(actions.dictate.replace_words(actions.dictate.parse_words(m.word)))
+
+
+@mod.capture(
+    rule="({})+".format(
+        " | ".join(
+            [
+                "{user.vocabulary}",
+                "<user.prose_contact>",
+                "<user.prose_spell>",
+                "<user.prose_clipboard>",
+                "<phrase>",
+            ]
         )
-
-
-@mod.capture(rule="({user.vocabulary} | <user.prose_contact> | <phrase>)+")
+    )
+)
 def text(m) -> str:
     """A sequence of words, including user-defined vocabulary."""
     return format_phrase(m)
 
 
 @mod.capture(
-    rule=(
-        "("
-        "{user.vocabulary}"
-        "| {user.punctuation}"
-        "| {user.prose_snippets}"
-        "| <user.prose_currency>"
-        "| <user.prose_time>"
-        "| <user.number_prose_prefixed>"
-        "| <user.prose_percent>"
-        "| <user.prose_modifier>"
-        "| <user.abbreviation>"
-        "| <user.prose_contact>"
-        "| <phrase>"
-        ")+"
+    rule="({})+".format(
+        " | ".join(
+            [
+                "{user.vocabulary}",
+                "{user.punctuation}",
+                "{user.prose_snippets}",
+                "<user.prose_currency>",
+                "<user.prose_time>",
+                "<user.number_prose_prefixed>",
+                "<user.prose_percent>",
+                "<user.prose_modifier>",
+                "<user.abbreviation>",
+                "<user.prose_contact>",
+                "<user.prose_spell>",
+                "<user.prose_ship>",
+                "<user.prose_clipboard>",
+                "<phrase>",
+            ]
+        )
     )
 )
 def prose(m) -> str:
@@ -150,19 +190,24 @@ def prose(m) -> str:
 
 
 @mod.capture(
-    rule=(
-        "("
-        "{user.vocabulary}"
-        "| {user.punctuation}"
-        "| {user.prose_snippets}"
-        "| <user.prose_currency>"
-        "| <user.prose_time>"
-        "| <user.number_prose_prefixed>"
-        "| <user.prose_percent>"
-        "| <user.abbreviation>"
-        "| <user.prose_contact>"
-        "| <phrase>"
-        ")+"
+    rule="({})+".format(
+        " | ".join(
+            [
+                "{user.vocabulary}",
+                "{user.punctuation}",
+                "{user.prose_snippets}",
+                "<user.prose_currency>",
+                "<user.prose_time>",
+                "<user.number_prose_prefixed>",
+                "<user.prose_percent>",
+                "<user.abbreviation>",
+                "<user.prose_contact>",
+                "<user.prose_spell>",
+                "<user.prose_ship>",
+                "<user.prose_clipboard>",
+                "<phrase>",
+            ]
+        )
     )
 )
 def raw_prose(m) -> str:
@@ -171,7 +216,10 @@ def raw_prose(m) -> str:
 
 
 # For dragon, omit support for abbreviations and contacts
-@ctx_dragon.capture("user.text", rule="({user.vocabulary} | <phrase>)+")
+@ctx_dragon.capture(
+    "user.text",
+    rule="({user.vocabulary} | <phrase>)+",
+)
 def text_dragon(m) -> str:
     """A sequence of words, including user-defined vocabulary."""
     return format_phrase(m)
@@ -179,7 +227,21 @@ def text_dragon(m) -> str:
 
 @ctx_dragon.capture(
     "user.prose",
-    rule="(<phrase> | {user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <user.prose_currency> | <user.prose_time> | <user.prose_number> | <user.prose_percent> | <user.prose_modifier>)+",
+    rule="({})+".format(
+        " | ".join(
+            [
+                "<phrase>",
+                "{user.vocabulary}",
+                "{user.punctuation}",
+                "{user.prose_snippets}",
+                "<user.prose_currency>",
+                "<user.prose_time>",
+                "<user.prose_number>",
+                "<user.prose_percent>",
+                "<user.prose_modifier>",
+            ]
+        )
+    ),
 )
 def prose_dragon(m) -> str:
     """Mixed words and punctuation, auto-spaced & capitalized."""
@@ -189,7 +251,20 @@ def prose_dragon(m) -> str:
 
 @ctx_dragon.capture(
     "user.raw_prose",
-    rule="(<phrase> | {user.vocabulary} | {user.punctuation} | {user.prose_snippets} | <user.prose_currency> | <user.prose_time> | <user.prose_number> | <user.prose_percent>)+",
+    rule="({})+".format(
+        " | ".join(
+            [
+                "<phrase>",
+                "{user.vocabulary}",
+                "{user.punctuation}",
+                "{user.prose_snippets}",
+                "<user.prose_currency>",
+                "<user.prose_time>",
+                "<user.prose_number>",
+                "<user.prose_percent>",
+            ]
+        )
+    ),
 )
 def raw_prose_dragon(m) -> str:
     """Mixed words and punctuation, auto-spaced & capitalized, without quote straightening and commands (for use in dictation mode)."""
@@ -201,7 +276,7 @@ def format_phrase(m):
     words = capture_to_words(m)
     result = ""
     for i, word in enumerate(words):
-        if i > 0 and needs_space_between(words[i - 1], word):
+        if i > 0 and actions.user.needs_space_between(words[i - 1], word):
             result += " "
         result += word
     return result
@@ -263,47 +338,35 @@ no_space_before = re.compile(
 )
 
 
-def omit_space_before(text: str) -> bool:
-    return not text or no_space_before.search(text)
-
-
-def omit_space_after(text: str) -> bool:
-    return not text or no_space_after.search(text)
-
-
-def needs_space_between(before: str, after: str) -> bool:
-    return not (omit_space_after(before) or omit_space_before(after))
-
-
 # # TESTS, uncomment to enable
-# assert needs_space_between("a", "break")
-# assert needs_space_between("break", "a")
-# assert needs_space_between(".", "a")
-# assert needs_space_between("said", "'hello")
-# assert needs_space_between("hello'", "said")
-# assert needs_space_between("hello.", "'John")
-# assert needs_space_between("John.'", "They")
-# assert needs_space_between("paid", "$50")
-# assert needs_space_between("50$", "payment")
-# assert not needs_space_between("", "")
-# assert not needs_space_between("a", "")
-# assert not needs_space_between("a", " ")
-# assert not needs_space_between("", "a")
-# assert not needs_space_between(" ", "a")
-# assert not needs_space_between("a", ",")
-# assert not needs_space_between("'", "a")
-# assert not needs_space_between("a", "'")
-# assert not needs_space_between("and-", "or")
-# assert not needs_space_between("mary", "-kate")
-# assert not needs_space_between("$", "50")
-# assert not needs_space_between("US", "$")
-# assert not needs_space_between("(", ")")
-# assert not needs_space_between("(", "e.g.")
-# assert not needs_space_between("example", ")")
-# assert not needs_space_between("example", '".')
-# assert not needs_space_between("example", '."')
-# assert not needs_space_between("hello'", ".")
-# assert not needs_space_between("hello.", "'")
+# assert actions.user.needs_space_between("a", "break")
+# assert actions.user.needs_space_between("break", "a")
+# assert actions.user.needs_space_between(".", "a")
+# assert actions.user.needs_space_between("said", "'hello")
+# assert actions.user.needs_space_between("hello'", "said")
+# assert actions.user.needs_space_between("hello.", "'John")
+# assert actions.user.needs_space_between("John.'", "They")
+# assert actions.user.needs_space_between("paid", "$50")
+# assert actions.user.needs_space_between("50$", "payment")
+# assert not actions.user.needs_space_between("", "")
+# assert not actions.user.needs_space_between("a", "")
+# assert not actions.user.needs_space_between("a", " ")
+# assert not actions.user.needs_space_between("", "a")
+# assert not actions.user.needs_space_between(" ", "a")
+# assert not actions.user.needs_space_between("a", ",")
+# assert not actions.user.needs_space_between("'", "a")
+# assert not actions.user.needs_space_between("a", "'")
+# assert not actions.user.needs_space_between("and-", "or")
+# assert not actions.user.needs_space_between("mary", "-kate")
+# assert not actions.user.needs_space_between("$", "50")
+# assert not actions.user.needs_space_between("US", "$")
+# assert not actions.user.needs_space_between("(", ")")
+# assert not actions.user.needs_space_between("(", "e.g.")
+# assert not actions.user.needs_space_between("example", ")")
+# assert not actions.user.needs_space_between("example", '".')
+# assert not actions.user.needs_space_between("example", '."')
+# assert not actions.user.needs_space_between("hello'", ".")
+# assert not actions.user.needs_space_between("hello.", "'")
 
 no_cap_after = re.compile(
     r"""(
@@ -349,7 +412,9 @@ def auto_capitalize(text, state=None):
     return output, (
         "sentence start"
         if charge or sentence_end
-        else "after newline" if newline else None
+        else "after newline"
+        if newline
+        else None
     )
 
 
@@ -378,7 +443,9 @@ class DictationFormat:
         self.before = text or self.before
 
     def format(self, text, auto_cap=True):
-        if not self.force_no_space and needs_space_between(self.before, text):
+        if not self.force_no_space and actions.user.needs_space_between(
+            self.before, text
+        ):
             text = " " + text
         self.force_no_space = False
         if auto_cap:
@@ -412,7 +479,7 @@ class DictationFormat:
 
 def format_first_letter(text, formatter):
     i = -1
-    for i, c in enumerate(text):
+    for i, c in enumerate(text):  # noqa: B007
         if c.isalpha():
             break
     if i >= 0 and i < len(text):
@@ -463,13 +530,32 @@ class Actions:
 
     def dictation_reformat_no_space():
         """Removes space before the last utterance"""
-        reformat_last_utterance(lambda s: s[1:] if s.startswith(" ") else s)
+        reformat_last_utterance(lambda s: s.removeprefix(" "))
+
+    def omit_space_before(text: str) -> bool:
+        """Test if dictated text needs space before"""
+        return bool(not text or no_space_before.search(text))
+
+    def omit_space_after(text: str) -> bool:
+        """Test if dictated text needs space after"""
+        return bool(not text or no_space_after.search(text))
+
+    def needs_space_between(before: str, after: str) -> bool:
+        """Test if two text strings need a space between them"""
+        return not (
+            actions.user.omit_space_after(before)
+            or actions.user.omit_space_before(after)
+        )
+
+    def dictation_replace(text: str) -> str:
+        """Substitutions to be performed before inserting text using dictation_insert"""
+        return text.replace("“", '"').replace("”", '"')
 
     def dictation_insert_raw(text: str):
         """Inserts text as-is, without invoking the dictation formatter."""
         actions.user.dictation_insert(text, auto_cap=False)
 
-    def dictation_insert(text: str, auto_cap: bool = True) -> str:
+    def dictation_insert(text: str, auto_cap: bool = True):
         """Inserts dictated text, formatted appropriately."""
         add_space_after = False
         if settings.get("user.context_sensitive_dictation"):
@@ -477,18 +563,20 @@ class Actions:
             # peek right if we might need trailing space. NB. We peek right
             # BEFORE insertion to avoid breaking the undo-chain between the
             # inserted text and the trailing space.
-            need_left = not omit_space_before(text) or (
+            need_left = not actions.user.omit_space_before(text) or (
                 auto_cap and text != auto_capitalize(text, "sentence start")[0]
             )
-            need_right = not omit_space_after(text)
+            need_right = not actions.user.omit_space_after(text)
             before, after = actions.user.dictation_peek(need_left, need_right)
             dictation_formatter.update_context(before)
-            add_space_after = after is not None and needs_space_between(text, after)
+            add_space_after = after is not None and actions.user.needs_space_between(
+                text, after
+            )
         text = dictation_formatter.format(text, auto_cap)
         # Straighten curly quotes that were introduced to obtain proper
         # spacing. The formatter context still has the original curly quotes
         # so that future dictation is properly formatted.
-        text = text.replace("“", '"').replace("”", '"')
+        text = actions.user.dictation_replace(text)
         actions.user.add_phrase_to_history(text)
         actions.user.insert_between(text, " " if add_space_after else "")
 
@@ -510,10 +598,10 @@ class Actions:
         if not (left or right):
             return None, None
         before, after = None, None
-        # Inserting a space ensures we select something even if we're at
+        # Inserting a character ensures we select something even if we're at
         # document start; some editors 'helpfully' copy the current line if we
         # edit.copy() while nothing is selected.
-        actions.insert(" ")
+        actions.insert(settings.get("user.context_sensitive_dictation_peek_character"))
         if left:
             # In principle the previous word should suffice, but some applications
             # have a funny concept of what the previous word is (for example, they
@@ -528,10 +616,10 @@ class Actions:
             # this will go right over the newline. Argh.
             actions.edit.right()
         if not right:
-            actions.key("backspace")  # remove the space
+            actions.key("backspace")  # remove the peek character
         else:
-            actions.edit.left()  # go left before space
-            # We want to select at least two characters to the right, plus the space
+            actions.edit.left()  # go left before the peek character
+            # We want to select at least two characters to the right, plus the character
             # we inserted, because no_space_before needs two characters in the worst
             # case -- for example, inserting before "' hello" we don't want to add
             # space, while inserted before "'hello" we do.
@@ -547,5 +635,5 @@ class Actions:
             actions.edit.extend_word_right()
             after = actions.edit.selected_text()[1:]
             actions.edit.left()
-            actions.key("delete")  # remove space
+            actions.user.delete_right()  # remove peek character
         return before, after

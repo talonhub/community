@@ -66,17 +66,14 @@ class UserActions:
     def code_get_operators() -> Operators:
         return operators
 
-    def code_comment_line_prefix():
-        actions.insert("# ")
-
     def code_self():
-        actions.auto_insert("self")
+        actions.insert("self")
 
     def code_insert_true():
-        actions.auto_insert("true")
+        actions.insert("true")
 
     def code_insert_false():
-        actions.auto_insert("false")
+        actions.insert("false")
 
     def code_insert_null():
         actions.insert("nil")
@@ -87,32 +84,8 @@ class UserActions:
     def code_insert_is_not_null():
         actions.insert(" != nil")
 
-    def code_state_if():
-        actions.user.insert_between("if ", " do\nend")
-
     def code_state_else_if():
         actions.user.insert_between("else if ", " do\nend")
-
-    def code_state_else():
-        actions.insert("else\nend")
-        actions.key("enter")
-
-    def code_state_case():
-        actions.user.insert_between("case ", " do\nend")
-
-    def code_state_for():
-        actions.user.insert_between("for ", " do\nend")
-
-    def code_state_while():
-        actions.user.insert_between("while ", " do\nend")
-
-    def code_define_class():
-        # Elixir doesn't have classes, so this is not applicable
-        pass
-
-    def code_state_return():
-        # Elixir functions automatically return the last evaluated expression
-        pass
 
     def code_insert_function(text: str, selection: str):
         text += f"({selection or ''})"
@@ -140,17 +113,17 @@ class UserActions:
         actions.user.code_insert_function(result, None)
 
     def code_import_module(text: str):
-        actions.auto_insert("import ")
+        actions.insert("import ")
         actions.insert(text)
 
     def code_alias_module(text: str):
-        actions.auto_insert("alias ")
+        actions.insert("alias ")
         actions.insert(text)
 
     def code_require_module(text: str):
-        actions.auto_insert("require ")
+        actions.insert("require ")
         actions.insert(text)
 
     def code_use_module(text: str):
-        actions.auto_insert("use ")
+        actions.insert("use ")
         actions.insert(text)

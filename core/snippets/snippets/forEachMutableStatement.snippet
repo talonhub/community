@@ -1,0 +1,25 @@
+name: forEachMutableStatement
+phrase: for each mute | each mute
+insertionScope: statement
+---
+
+language: cpp
+-
+for (auto &$1 : $2) {
+    $0
+}
+---
+
+language: java
+-
+for ($1 : $2) {
+    $0
+}
+---
+
+language: javascript | typescript | javascriptreact | typescriptreact
+-
+for ($1 of $2) {
+    $0
+}
+---

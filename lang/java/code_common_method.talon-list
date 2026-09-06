@@ -1,0 +1,21 @@
+list: user.code_common_method
+code.language: java
+-
+
+add
+char at: charAt
+clear
+clone
+contains
+contains key: containsKey
+equals
+get
+isEmpty
+length
+put
+remove
+set
+size
+substring
+to string: toString
+trim

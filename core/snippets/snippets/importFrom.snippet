@@ -1,6 +1,5 @@
 name: importFromStatement
 phrase: import from
-
 ---
 
 language: javascript | typescript | javascriptreact | typescriptreact
@@ -11,4 +10,13 @@ import $1 from "$0";
 language: python
 -
 from $1 import $0
+---
+
+language: r
+-
+library(
+    ${1},
+    include.only = c(${0})${2:,
+    warn.conflicts = FALSE}
+)
 ---

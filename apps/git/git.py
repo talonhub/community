@@ -1,8 +1,4 @@
-import csv
-import os
-from pathlib import Path
-
-from talon import Context, Module, actions, resource
+from talon import Context, Module
 
 mod = Module()
 ctx = Context()

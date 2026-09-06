@@ -1,4 +1,4 @@
-from talon import Context, Module
+from talon import Context, Module, actions
 
 ctx = Context()
 mod = Module()
@@ -12,3 +12,4 @@ mod.tag(
 class Actions:
     def code_comment_documentation():
         """Inserts a document comment and positions the cursor appropriately"""
+        actions.user.insert_snippet_by_name("commentDocumentation")

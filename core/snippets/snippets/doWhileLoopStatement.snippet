@@ -9,3 +9,25 @@ do {
     $0
 } while($1);
 ---
+
+language: lua
+-
+repeat
+    $0
+until $1
+---
+
+language: php
+-
+do {
+    $0
+} while ($1);
+---
+
+language: ruby
+-
+loop do
+    $0
+    break if $1
+end
+---
