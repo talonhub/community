@@ -324,9 +324,6 @@ def gui_files(gui: imgui.GUI):
         if gui.button("File last"):
             actions.user.file_manager_previous_file_page()
 
-    gui.spacer()
-    if gui.button("Manager close"):
-        actions.user.file_manager_hide_pickers()
 
 
 def clear_lists():
