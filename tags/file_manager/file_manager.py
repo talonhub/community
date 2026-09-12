@@ -325,7 +325,6 @@ def gui_files(gui: imgui.GUI):
             actions.user.file_manager_previous_file_page()
 
 
-
 def clear_lists():
     global folder_selections, file_selections, current_folder_page, current_file_page
     if (
