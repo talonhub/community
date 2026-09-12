@@ -1,14 +1,25 @@
 from talon import Context, Module, actions, cron, imgui
 
+from ...core.user_settings import track_line_separated_values
+
 mod = Module()
 ctx = Context()
 
 
-EXCLUDE_MICROPHONES = {
+DEFAULT_EXCLUDE_MICROPHONES = [
     "Microsoft Teams Audio Device",
     "WebexMediaAudioDevice",
     "ZoomAudioDevice",
-}
+]
+
+EXCLUDE_MICROPHONES = set()
+
+
+@track_line_separated_values("microphones_to_exclude", DEFAULT_EXCLUDE_MICROPHONES)
+def on_microphones_to_exclude_update(microphone_names):
+    global EXCLUDE_MICROPHONES
+    EXCLUDE_MICROPHONES = {name for name in microphone_names if name.strip()}
+
 
 microphone_device_list = []
 update_microphone_cron_job = None

@@ -15,6 +15,7 @@ abbreviations: settings/abbreviations.csv
 file extensions: settings/file_extensions.csv
 symbols: settings/symbols.csv
 words to replace: settings/words_to_replace.csv
+microphones to exclude: settings/microphones_to_exclude
 contacts json: private/contacts.json
 contacts csv: private/contacts.csv
 
