@@ -70,6 +70,9 @@ settings():
 
 Setting this value replaces the default editor list; it does not add to it.
 
+After changing this setting, either quit and restart Talon or your configured
+text editor so the draft editor recognizes it is running.
+
 ## Demo
 
 [Watch the draft editor demo on YouTube](https://www.youtube.com/watch?v=U6Q9qjSIVQg).
