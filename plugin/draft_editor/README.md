@@ -1,11 +1,11 @@
 # Draft editor
 
 The draft editor plugin lets you use a Talon-enabled text editor to compose or
-revise text from almost any application.  It is most useful in applications with
+revise text from almost any application. It is most useful in applications with
 limited support for text editing and/or Talon.
 
 To start a draft, the draft editor records the current window, opens a temporary
-tab in the text editor and optionally copies selected text into the tab.  When
+tab in the text editor and optionally copies selected text into the tab. When
 you say `draft submit`, the draft editor closes the temporary tab, returns
 keyboard focus to the original window, and pastes the (revised) text. If text
 was selected in the original window, the pasted text replaces it.
@@ -23,15 +23,15 @@ is running and is not the focused application.
 
 ## Commands
 
-| Command         | Action                                                                                           |
-| --------------- | ------------------------------------------------------------------------------------------------ |
-| `draft this`    | Open a temporary text editor tab for use as a draft. If text is selected, copy it into the draft.|
-| `draft all`     | Select all text in the focused text field (document) and copy it into a new draft.               |
-| `draft line`    | Select and copy the current line into a new draft.                                               |
-| `draft top`     | Select and copy from the insertion point to the start of the document into a new draft.          |
-| `draft bottom`  | Select and copy from the insertion point to the end of the document into a new draft.            |
-| `draft submit`  | While editing a draft, close its tab, focus the original window, and paste the drafted text.     |
-| `draft discard` | Close the draft without saving your changes and focus the original window.                       |
+| Command         | Action                                                                                            |
+| --------------- | ------------------------------------------------------------------------------------------------- |
+| `draft this`    | Open a temporary text editor tab for use as a draft. If text is selected, copy it into the draft. |
+| `draft all`     | Select all text in the focused text field (document) and copy it into a new draft.                |
+| `draft line`    | Select and copy the current line into a new draft.                                                |
+| `draft top`     | Select and copy from the insertion point to the start of the document into a new draft.           |
+| `draft bottom`  | Select and copy from the insertion point to the end of the document into a new draft.             |
+| `draft submit`  | While editing a draft, close its tab, focus the original window, and paste the drafted text.      |
+| `draft discard` | Close the draft without saving your changes and focus the original window.                        |
 
 ## Example workflow
 
@@ -45,8 +45,8 @@ is running and is not the focused application.
 
 The most recently submitted draft is kept in memory. While a recognized text
 editor is running but not focused, saying `draft submit` pastes the drafted
-text.  This can be used to recover from a failed window switch or to insert the
-drafted text somewhere else.  The submitted draft is not preserved when Talon
+text. This can be used to recover from a failed window switch or to insert the
+drafted text somewhere else. The submitted draft is not preserved when Talon
 restarts.
 
 ## Configure a different text editor
