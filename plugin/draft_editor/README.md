@@ -12,14 +12,12 @@ was selected in the original window, the pasted text replaces it.
 
 ## Requirements
 
-- The text editor must be running before you start a draft.
+- Commands for starting a draft are available only when a recognized text editor
+  is running and is not the currently focused application.
 - By default, the plugin recognizes Visual Studio Code, VSCodium, Codium, and
   code-oss as text editors.
 - The source application and text editor must support standard Talon editing and
   tab actions defined by community.
-
-Commands for starting a draft are available only when a recognized text editor
-is running and is not the focused application.
 
 ## Commands
 
