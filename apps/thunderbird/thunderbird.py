@@ -45,7 +45,7 @@ mod.apps.thunderbird_calendar = f"""
 app: thunderbird
 title: Calendar - Mozilla Thunderbird
 title: Kalender - Mozilla Thunderbird
-title: /({"|".join(map(lambda m: m + " ", months))})/
+title: /({"|".join(m + " " for m in months)})/
 """
 
 # Tasks tab

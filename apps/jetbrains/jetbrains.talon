@@ -18,7 +18,6 @@ smart: user.idea("action SmartTypeCompletion")
 done | finish: user.idea("action EditorCompleteStatement")
 # Copying
 grab <number>: user.idea_grab(number)
-action [<user.text>]: user.deprecate_command("2024-09-02", "action", "please")
 # Refactoring
 refactor: user.idea("action Refactorings.QuickListPopupAction")
 refactor <user.text>:

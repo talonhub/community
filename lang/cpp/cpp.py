@@ -102,7 +102,10 @@ def variable_type(m) -> str:
     return format_type(m, " ")
 
 
-@ctx.capture("user.code_type", rule="<user.code_type_raw> [{user.cpp_pointers}+]")
+@ctx.capture(
+    "user.code_type",
+    rule="<user.code_type_raw> [{user.cpp_pointers}+]",
+)
 def code_type(m):
     """Returns a type with pointer or reference annotations"""
     return format_type(m, "")

@@ -65,6 +65,12 @@ mod.setting(
     deprecated action/command/capture.""",
     default=24,
 )
+mod.setting(
+    "strict_command_deprecation",
+    type=bool,
+    default=False,
+    desc="Decides if deprecated commands should throw an exception. Setting this to true can help you learn the new replacement commands faster.",
+)
 
 # Tells us the last time a notification was shown so we can
 # decide when to re-show it without annoying the user too
@@ -115,6 +121,10 @@ def post_phrase(_ignored):
 speech_system.register("post:phrase", post_phrase)
 
 
+class DeprecatedCommandException(Exception):
+    """Indicates that a deprecated command was used with the user.strict_command_deprecation setting set to True"""
+
+
 @mod.action_class
 class Actions:
     def deprecate_command(time_deprecated: str, name: str, replacement: str):
@@ -132,18 +142,22 @@ class Actions:
         # so if they repeat the command they get another chance to read
         # the popup message.
         notified_in_phrase.add(name)
-        msg = (
+        notification = (
             f'The "{name}" command is deprecated. Instead, say: "{replacement}".'
-            f" See log for more."
+            + " See log for more."
         )
-        actions.app.notify(msg, "Deprecation warning")
-        msg = (
+        actions.app.notify(notification, "Deprecation warning")
+        log_message = (
             f'The "{name}" command is deprecated since {time_deprecated}.'
-            f' Instead, say: "{replacement}".'
-            f" See {os.path.join(REPO_DIR, 'BREAKING_CHANGES.txt')}"
+            + f' Instead, say: "{replacement}".'
+            + f" See {os.path.join(REPO_DIR, 'BREAKING_CHANGES.txt')}"
         )
         # No caller makes sense, since a voice command triggered this action.
-        warnings.warn_explicit(msg, DeprecationWarning, "", 0)
+        warnings.warn_explicit(log_message, DeprecationWarning, "", 0)
+        if settings.get("user.strict_command_deprecation"):
+            raise DeprecatedCommandException(
+                f'The "{name}" command is deprecated with replacement {replacement}".'
+            )
 
     def deprecate_capture(time_deprecated: str, name: str):
         """
@@ -157,8 +171,8 @@ class Actions:
 
         msg = (
             f"The `{name}` capture is deprecated since {time_deprecated}."
-            f" See {os.path.join(REPO_DIR, 'BREAKING_CHANGES.txt')}"
-            f"{calculate_rule_info()}"
+            + f" See {os.path.join(REPO_DIR, 'BREAKING_CHANGES.txt')}"
+            + f"{calculate_rule_info()}"
         )
         warnings.warn(msg, DeprecationWarning, stacklevel=3)
 
@@ -176,8 +190,8 @@ class Actions:
 
         msg = (
             f"The `{name}` action is deprecated since {time_deprecated}."
-            f"{replacement_msg}"
-            f" See {os.path.join(REPO_DIR, 'BREAKING_CHANGES.txt')}"
-            f"{calculate_rule_info()}"
+            + f"{replacement_msg}"
+            + f" See {os.path.join(REPO_DIR, 'BREAKING_CHANGES.txt')}"
+            + f"{calculate_rule_info()}"
         )
         warnings.warn(msg, DeprecationWarning, stacklevel=5)

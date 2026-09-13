@@ -32,9 +32,9 @@ def meta(keys):
     m = settings.get("user.emacs_meta")
     if m == "alt":
         return " ".join("alt-" + k for k in keys.split())
-    elif m == "cmd":
+    if m == "cmd":
         return " ".join("cmd-" + k for k in keys.split())
-    elif m != "esc":
+    if m != "esc":
         logging.error(
             f"Unrecognized 'emacs_meta' setting: {m!r}. Falling back to 'esc'."
         )

@@ -37,6 +37,8 @@ and app.name: VSCodium
 os: linux
 and app.name: Codium
 os: linux
+and app.name: codium
+os: linux
 and app.name: Cursor
 os: linux
 and app.name: Positron

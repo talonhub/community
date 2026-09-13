@@ -98,13 +98,12 @@ def create_spoken_form_for_number(num: int):
         # break if end of ns has been reached
         if q < -2:
             break
-        else:
-            if q >= 0:
-                n3.append(int(r[:3]))
-            elif q >= -1:
-                n3.append(int(r[:2]))
-            elif q >= -2:
-                n3.append(int(r[:1]))
+        if q >= 0:
+            n3.append(int(r[:3]))
+        elif q >= -1:
+            n3.append(int(r[:2]))
+        elif q >= -2:
+            n3.append(int(r[:1]))
 
     # break each group of 3 digits into
     # ones, tens/twenties, hundreds
@@ -115,8 +114,7 @@ def create_spoken_form_for_number(num: int):
         b3 = (x % 1000) // 100
         if x == 0:
             continue  # skip
-        else:
-            t = thousands[i]
+        t = thousands[i]
 
         # print(str(b1) + ", " + str(b2) + ", " + str(b3))
         if b2 == 0:
@@ -393,7 +391,7 @@ def create_spoken_forms_from_regex(source: str, pattern: re.Pattern):
     """
     source_without_apostrophes = source.replace("'", "")
     pieces = list(pattern.finditer(source_without_apostrophes))
-    spoken_forms = list(map(lambda x: x.group(0), pieces))
+    spoken_forms = [piece.group(0) for piece in pieces]
 
     # NOTE: Order is sometimes important
     transforms = [

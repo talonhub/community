@@ -2,7 +2,7 @@
 pythonpath = [".", "test/stubs"]
 
 [tool.ruff]
-target-version = "py310"
+target-version = "py311"
 
 [tool.ruff.lint]
 select = [
@@ -12,6 +12,12 @@ select = [
     "UP", # pyupgrade
     "B", # flake8-bugbear
     "SIM", # flake8-simplify
+    "W", # PyCodeStyle warnings
+    "C4", # Catch incorrect use of comprehensions, dict, list, etc
+    "ISC", # Require explicit string concatenation
+    "ICN", # Use common import conventions
+    "RET", # Good return practices
+    "FURB", # Suggest more idiomatic Python patterns
 ]
 ignore = [
     "E501", # line-too-long (until we decide)
@@ -22,6 +28,8 @@ ignore = [
     "UP045", # Optional[X] -> X | None not supported in Talon 0.4 actions
 ]
 
+[tool.ruff.lint.flake8-implicit-str-concat]
+allow-multiline = false
 
 [tool.pyright]
 reportSelfClsParameterName = false

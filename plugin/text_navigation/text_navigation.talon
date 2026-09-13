@@ -56,7 +56,7 @@ navigate [{user.arrow_key}] [{user.navigation_action}] [{user.navigation_target_
 #   For move/extend: where to leave the cursor, before or after the target.
 #   Defaults to "after" for right/down and "before" for left/up.
 #
-#   For select/copy/cut: if absent, select/copy/cut the target iself. If
+#   For select/copy/cut: if absent, select/copy/cut the target itself. If
 #   present, the navigation_target_name before/after the target.
 #
 # [<user.ordinals>]: an english ordinal, like "second" (default: first)

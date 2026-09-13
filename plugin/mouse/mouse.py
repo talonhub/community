@@ -172,4 +172,4 @@ class UserActions:
         )
 
         if should_click:
-            ctrl.mouse_click(button=0, hold=16000)
+            actions.mouse_click()
