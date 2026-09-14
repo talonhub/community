@@ -110,7 +110,5 @@ class Actions:
         actions.user.cut_word_right()
         actions.key("ctrl-y")
 
-    def get_compound_edit_action_modifier_callback(
-        pair: tuple[str, str],
-    ) -> Callable | None:
+    def get_compound_edit_action_modifier_callback(pair):
         return compound_actions.get(pair) or actions.next(pair)

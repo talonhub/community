@@ -1,6 +1,6 @@
 from collections.abc import Callable
 from inspect import signature
-from typing import Union
+from typing import Optional, Union
 
 from talon import Module, actions, settings
 
@@ -199,7 +199,7 @@ class Actions:
 
     def get_compound_edit_action_modifier_callback(
         pair: tuple[str, str],
-    ) -> Callable | None:
+    ) -> Optional[Callable]:
         """Retrieve a compound or combined operation function for a given action and modifier type pair.
         Must be done in a single function, so that any functions overriding it can choose to do `action.next(pair)` only if neither of these is valid
         """
