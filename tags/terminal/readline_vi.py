@@ -153,7 +153,7 @@ class Actions:
     def cut_line():
         normal_cmd("c c")
 
-    def get_simple_edit_action_callback(action_type: str) -> Callable | None:
+    def get_simple_edit_action_callback(action_type):
         """Convert a edit action type created from a string into its associated Callback.
         If it can't find one in this file, it will try the next most specific community version
         """
@@ -162,9 +162,7 @@ class Actions:
             cb = actions.next(action_type)
         return cb
 
-    def get_compound_edit_action_modifier_callback(
-        pair: tuple[str, str],
-    ) -> Callable | None:
+    def get_compound_edit_action_modifier_callback(pair):
         return (
             custom_callbacks.get(pair)
             or compound_actions.get(pair)
