@@ -56,11 +56,13 @@ def delete_word_right():
 
 
 def delete_chars_right(action, modifier_type, count):
-    normal_cmd(f"{' '.join(str(count))} x i")
+    # the normal escape key shifts the position one to the left, so let's undo that first
+    normal_cmd(f"right {' '.join(str(count))} x i")
 
 
 def delete_chars_left(action, modifier_type, count):
-    normal_cmd(f"{' '.join(str(count))} X i")
+    # the normal escape key shifts the position one to the left, so let's undo that first
+    normal_cmd(f"right {' '.join(str(count))} X i")
 
 
 simple_action_callbacks: dict[str, Callable] = {}
