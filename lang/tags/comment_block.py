@@ -64,7 +64,7 @@ class CActions:
             substitutions = None
         else:
             substitutions = {"0": text}
-        actions.user.insert_snippet_with_substitutions("/* $0 */", substitutions)
+        actions.user.insert_snippet_body_with_substitutions("/* $0 */", substitutions)
 
     def code_comment_block_prefix():
         actions.insert("/*")

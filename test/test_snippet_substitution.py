@@ -3,14 +3,14 @@ import talon
 if hasattr(talon, "test_mode"):  # Only include this when we're running tests
     import pytest
 
-    from core.snippets.snippets_insert import compute_snippet_text_with_substitutions
+    from core.snippets.snippets_insert import expand_snippet_body_with_substitutions
 
     FUNCTION_DECLARATION_BODY = "def $1($2):\n\t$0"
 
     def assert_substituting_matches_expected(
         body: str, substitutions: dict[str, str], expected: str
     ):
-        actual = compute_snippet_text_with_substitutions(body, substitutions)
+        actual = expand_snippet_body_with_substitutions(body, substitutions)
         assert actual == expected
 
     def assert_substituting_raises_exception(
@@ -20,7 +20,7 @@ if hasattr(talon, "test_mode"):  # Only include this when we're running tests
         expected_text: str | None = None,
     ):
         with pytest.raises(ValueError) as error_info:
-            compute_snippet_text_with_substitutions(body, substitutions, name)
+            expand_snippet_body_with_substitutions(body, substitutions, name)
         if expected_text is not None:
             assert expected_text in str(error_info.value)
 
