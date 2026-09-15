@@ -46,7 +46,9 @@ class Actions:
         body = get_snippet_body_by_name_with_phrase_substitutions(name, phrase)
         insert_snippet_with_stop_at_the_end(body)
 
-    def insert_snippet_body_with_substitutions(body: str, substitutions: dict[str, str]):
+    def insert_snippet_body_with_substitutions(
+        body: str, substitutions: dict[str, str]
+    ):
         """Insert snippet with substitutions"""
         body = expand_snippet_body_with_substitutions(body, substitutions)
         actions.user.insert_snippet(body)
