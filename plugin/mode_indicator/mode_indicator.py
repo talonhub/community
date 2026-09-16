@@ -123,6 +123,9 @@ def on_draw(c: SkiaCanvas):
     x, y = c.rect.center.x, c.rect.center.y
     radius = c.rect.height / 2 - 2
 
+    if radius <= 0:
+        return
+
     c.paint.shader = skia.Shader.radial_gradient(
         Point2d(x, y), radius, [color_mode, color_gradient]
     )
@@ -180,6 +183,7 @@ def should_show_indicator():
 def show_indicator():
     global canvas
     canvas = Canvas.from_rect(Rect(0, 0, 0, 0))
+    move_indicator()
     canvas.register("draw", on_draw)
 
 
@@ -194,7 +198,8 @@ def update_indicator():
     if should_show_indicator():
         if not canvas:
             show_indicator()
-        move_indicator()
+        else:
+            move_indicator()
         canvas.freeze()
     elif canvas:
         hide_indicator()

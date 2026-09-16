@@ -33,7 +33,7 @@ class EditActions:
 # Wraps a method in a clip revert.
 # Might actually not be necessary for readline because in the default implementation it uses a seperate clipboard to the desktop
 # Though left in in case that has been modified
-def with_clip_revert(f: Callable) -> Callable:
+def with_clip_revert(f: Callable[[], None]) -> Callable[[], None]:
 
     def wrapped_method():
         with clip.revert():
@@ -42,7 +42,7 @@ def with_clip_revert(f: Callable) -> Callable:
     return wrapped_method
 
 
-def with_selection_revert(f: Callable) -> Callable:
+def with_selection_revert(f: Callable[[], None]) -> Callable[[], None]:
     def wrapped_method():
         f()
         actions.key("ctrl-y")
