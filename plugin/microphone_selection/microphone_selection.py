@@ -1,24 +1,24 @@
 from talon import Context, Module, actions, cron, imgui
 
-from ...core.user_settings import track_line_separated_values
+from ...core.user_settings import track_csv_rows
 
 mod = Module()
 ctx = Context()
 
 
 DEFAULT_EXCLUDE_MICROPHONES = [
-    "Microsoft Teams Audio Device",
-    "WebexMediaAudioDevice",
-    "ZoomAudioDevice",
+    ["Microsoft Teams Audio Device"],
+    ["WebexMediaAudioDevice"],
+    ["ZoomAudioDevice"],
 ]
 
 EXCLUDE_MICROPHONES = set()
 
 
-@track_line_separated_values("microphones_to_exclude", DEFAULT_EXCLUDE_MICROPHONES)
-def on_microphones_to_exclude_update(microphone_names):
+@track_csv_rows("microphones_to_exclude.csv", headers=("Each line has the exact name of a microphone to exclude from the microphone picker list",), default=DEFAULT_EXCLUDE_MICROPHONES)
+def on_microphones_to_exclude_update(rows):
     global EXCLUDE_MICROPHONES
-    EXCLUDE_MICROPHONES = {name for name in microphone_names if name.strip()}
+    EXCLUDE_MICROPHONES = {row[0] for row in rows if row[0].strip()}
 
 
 microphone_device_list = []
