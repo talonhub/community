@@ -5,7 +5,7 @@ from talon.canvas import Canvas
 from talon.screen import Screen
 from talon.skia.canvas import Canvas as SkiaCanvas
 from talon.skia.imagefilter import ImageFilter
-from talon.ui import Point2d, Rect
+from skia import Point2d, Rect
 
 canvas: Canvas = None
 current_mode = ""
