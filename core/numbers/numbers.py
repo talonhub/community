@@ -279,8 +279,7 @@ def handle_negation_capture(m):
 
     if isinstance(number, str):
         return "-" + number
-    else:
-        return -number
+    return -number
 
 
 @ctx.capture(
