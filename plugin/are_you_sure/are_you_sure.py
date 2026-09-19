@@ -1,4 +1,5 @@
 from collections.abc import Callable
+from typing import Optional
 
 from talon import Context, Module, actions, imgui
 
@@ -7,10 +8,19 @@ mod.tag("are_you_sure", desc="Activates are you sure commands")
 
 
 class ConfirmationState:
+    message: str = ""
+    on_confirmation: Optional[Callable[[], None]] = None
+    on_cancel: Optional[Callable[[], None]] = None
+
     def __init__(self):
         self.context = Context()
 
-    def request_confirmation(self, message: str, on_confirmation, on_disconfirmation):
+    def request_confirmation(
+        self,
+        message: str,
+        on_confirmation: Callable[[], None],
+        on_disconfirmation: Optional[Callable[[], None]] = None,
+    ):
         self.on_confirmation = on_confirmation
         self.on_cancel = on_disconfirmation
         self.message = message
@@ -18,7 +28,8 @@ class ConfirmationState:
         gui.show()
 
     def confirm(self):
-        self.on_confirmation()
+        if self.on_confirmation:
+            self.on_confirmation()
         self.cleanup()
 
     def cancel(self):
@@ -28,9 +39,9 @@ class ConfirmationState:
 
     def cleanup(self):
         self.context.tags = []
+        self.message = ""
         self.on_confirmation = None
         self.on_cancel = None
-        self.message = None
         gui.hide()
 
     def get_message(self) -> str:
@@ -61,7 +72,9 @@ class Actions:
         confirmation.cancel()
 
     def are_you_sure_set_on_confirmation_action(
-        message: str, on_confirmation: Callable, on_cancel: Callable = None
+        message: str,
+        on_confirmation: Callable[[], None],
+        on_cancel: Optional[Callable[[], None]] = None,
     ):
         """Sets the action to be performed on user confirmation.
         message: the message to display to the user
