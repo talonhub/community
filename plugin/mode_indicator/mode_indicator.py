@@ -1,11 +1,11 @@
 from typing import Optional
 
+from skia import Point2d, Rect
 from talon import Module, actions, app, cron, registry, scope, settings, skia, ui
 from talon.canvas import Canvas
 from talon.screen import Screen
 from talon.skia.canvas import Canvas as SkiaCanvas
 from talon.skia.imagefilter import ImageFilter
-from skia import Point2d, Rect
 
 canvas: Canvas = None
 current_mode = ""
