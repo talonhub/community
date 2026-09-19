@@ -36,6 +36,7 @@ class BrowserActions:
             address = address_field.AXValue
         except (ui.UIErr, AttributeError):
             from talon.mac import applescript
+
             address = applescript.run(f"""
                 tell application id "{actions.app.bundle()}"
                     with timeout of 0.1 seconds
