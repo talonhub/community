@@ -1,5 +1,6 @@
 app: thunderbird_composer
 -
+
 # mail
 (draft | mail | message) save: user.thunderbird_mod("s")
 (draft | mail | message) print: user.thunderbird_mod("p")

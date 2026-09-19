@@ -1,19 +1,20 @@
 list: user.code_type
 code.language: python
 -
+
 any: Any
 boolean: bool
 bytes
 callable: Callable
-dick: Dict
+dick: dict
 float
 integer: int
 iterable: Iterable
-list: List
+list: list
 no return: NoReturn
 none: None
 sequence: Sequence
 string: str
-tuple: Tuple
+tuple: tuple
 union: UnionAny
 vector: Vector

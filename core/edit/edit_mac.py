@@ -89,7 +89,7 @@ class EditActions:
     def file_start():
         actions.key("cmd-up")
 
-    def find(text: str = None):
+    def find(text=None):
         if text is not None:
             clip.set_text(text, mode="find")
         actions.key("cmd-f")
@@ -161,7 +161,7 @@ class EditActions:
     def select_all():
         actions.key("cmd-a")
 
-    def select_line(n: int = None):
+    def select_line(n=None):
         if n is not None:
             actions.edit.jump_line(n)
         actions.key("cmd-right cmd-shift-left")

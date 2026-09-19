@@ -1,0 +1,38 @@
+list: user.code_common_method
+code.language: cpp
+-
+
+are begin: rbegin
+are end: rend
+at
+back
+begin
+capacity
+clear
+contains
+count
+data
+emplace
+emplace back: emplace_back
+emplace front: emplace_front
+empty
+end
+equal range: equal_range
+erase
+find
+front
+insert
+lower bound: lower_bound
+max size: max_size
+pop back: pop_back
+pop front: pop_front
+push back: push_back
+push front: push_front
+reserve
+resize
+reverse begin: rbegin
+reverse end: rend
+shrink to fit: shrink_to_fit
+size
+swap
+upper bound: upper_bound

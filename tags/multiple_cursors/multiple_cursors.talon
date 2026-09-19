@@ -1,5 +1,6 @@
 tag: user.multiple_cursors
 -
+
 cursor multiple: user.multi_cursor_enable()
 cursor stop: user.multi_cursor_disable()
 cursor up: user.multi_cursor_add_above()

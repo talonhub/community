@@ -7,7 +7,7 @@ if hasattr(talon, "test_mode"):
 
     def setup_function():
         # Load our code under test (register code_* actions)
-        import lang.tags.functions  # isort:skip
+        import lang.tags.functions  # noqa: F401
 
         actions.reset_test_actions()
 

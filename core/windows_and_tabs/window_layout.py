@@ -1,9 +1,8 @@
-import copy
 import time
 from dataclasses import dataclass
-from typing import List, Optional, Union
+from typing import Optional, Union
 
-from talon import Context, Module, actions, settings, ui
+from talon import Context, Module, actions, ui
 from talon.ui import UIErr, Window
 
 from .windows_and_tabs import is_window_valid
@@ -111,7 +110,7 @@ def snap_layout(layout: WindowLayout):
             layout.rotation_count = last_layout.rotation_count + 1
 
         # Copy these data structures so we can mutate them:
-        remaining_windows = [w for w in layout.windows]
+        remaining_windows = list(layout.windows)
         split_positions = layout.split_positions.copy()
 
         snapped_windows = []
@@ -139,16 +138,10 @@ def snap_layout(layout: WindowLayout):
         layout_in_progress = None
 
 
-def filter_nonviable_windows(windows: List[Window]) -> list[Window]:
-    active_window = ui.active_window()
-
-    # Many invisible non-resizable windows are identifiable because they exist above the current window
-    # in the z-index
-    all_windows = ui.windows()
-    active_window_idx = all_windows.index(active_window)  # type: ignore
+def filter_nonviable_windows(windows: list[Window]) -> list[Window]:
     return list(
         filter(
-            lambda w: (isinstance(w, Gap) or is_window_valid(w)),
+            lambda w: isinstance(w, Gap) or is_window_valid(w),
             windows,
         )
     )
@@ -183,13 +176,13 @@ def application_windows(m) -> list[Window]:
         [
             window
             for app in m.running_applications_list
-            for window in actions.self.get_running_app(app).windows()
+            for window in actions.user.get_running_app(app).windows()
         ]
     )
 
 
 @mod.capture(
-    rule="<user.application_windows>|<user.numbered_windows>|<user.skip_window>"
+    rule="<user.application_windows> | <user.numbered_windows> | <user.skip_window>"
 )
 def layout_item(m) -> list[Optional[Window]]:
     attributes = [
@@ -206,21 +199,19 @@ def layout_item(m) -> list[Optional[Window]]:
     # Return the appropriate list based on which attribute is available
     if hasattr(m, "application_windows"):
         return m.application_windows
-    elif hasattr(m, "numbered_windows"):
+    if hasattr(m, "numbered_windows"):
         return m.numbered_windows
-    elif hasattr(m, "skip_window"):
+    if hasattr(m, "skip_window"):
         return m.skip_window
-    else:
-        return []
+    return []
 
 
 @mod.capture(rule="<user.ordinals_small>+")
 def numbered_windows(m) -> list[Window]:
     all_windows = filter_nonviable_windows(ui.windows())
-    selected_windows = [
+    return [
         all_windows[i - 1] for i in m.ordinals_small_list if i - 1 < len(all_windows)
     ]
-    return selected_windows
 
 
 @mod.capture(rule="<user.layout_item>+ [<user.all_candidate_windows>]")

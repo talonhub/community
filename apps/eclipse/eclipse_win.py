@@ -126,8 +126,6 @@ class UserActions:
         if text:
             actions.insert(text)
 
-    # todo: these commands should only be available
-    # when it's focused
     def find_toggle_match_by_case():
         """Toggles find match by case sensitivity"""
         actions.key("alt-c")

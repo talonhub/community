@@ -1,5 +1,6 @@
 app: keepass
 -
+
 # Database
 open database: key(ctrl-o)
 save database: key(ctrl-s)

@@ -4,13 +4,6 @@ mod = Module()
 ctx_sleep = Context()
 ctx_awake = Context()
 
-modes = {
-    "presentation": "a more strict form of sleep where only a more strict wake up command works",
-}
-
-for key, value in modes.items():
-    mod.mode(key, value)
-
 ctx_sleep.matches = r"""
 mode: sleep
 """
@@ -34,6 +27,20 @@ class ActionsAwakeMode:
 
 @mod.action_class
 class Actions:
+    def command_mode():
+        """Enable command mode"""
+        actions.mode.disable("sleep")
+        actions.mode.disable("dictation")
+        actions.mode.enable("command")
+
+    def dictation_mode():
+        """Enable dictation mode"""
+        actions.mode.disable("sleep")
+        actions.mode.disable("command")
+        actions.mode.enable("dictation")
+        actions.user.code_clear_language_mode()
+        actions.user.gdb_disable()
+
     def talon_mode():
         """For windows and Mac with Dragon, enables Talon commands and Dragon's command mode."""
         actions.speech.enable()

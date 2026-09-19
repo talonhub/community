@@ -1,6 +1,7 @@
+from collections.abc import Callable
 from contextlib import suppress
 from dataclasses import dataclass
-from typing import Callable, Literal
+from typing import Literal
 
 from talon import Module, actions, settings
 
@@ -52,7 +53,7 @@ class Actions:
                     repeat_action(actions.edit.down, step.count)
 
 
-def repeat_action(action: Callable, count: int, delay: bool = False):
+def repeat_action(action: Callable[[], None], count: int, delay: bool = False):
     delay_string = None
 
     if delay:

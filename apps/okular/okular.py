@@ -12,7 +12,6 @@ mod.apps.okular = """
 os: linux
 and app.name: okular
 """
-# TODO: mac context and implementation
 
 # Context matching
 ctx = Context()

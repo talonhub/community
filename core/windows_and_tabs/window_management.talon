@@ -5,7 +5,6 @@ window close: app.window_close()
 window hide: app.window_hide()
 app (preferences | prefs | settings): app.preferences()
 focus <user.running_applications>: user.switcher_focus(running_applications)
-# following only works on windows. Can't figure out how to make it work for mac. No idea what the equivalent for linux would be.
 focus$: user.switcher_menu()
 focus last: user.switcher_focus_last()
 running list: user.switcher_toggle_running()

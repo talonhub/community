@@ -1,6 +1,7 @@
 # Requires https://plugins.jetbrains.com/plugin/10504-voice-code-idea
 app: jetbrains
 -
+
 tag(): user.line_commands
 tag(): user.multiple_cursors
 tag(): user.splits
@@ -14,10 +15,9 @@ tag(): user.command_client
 complete: user.idea("action CodeCompletion")
 perfect: user.idea("action CodeCompletion,action CodeCompletion")
 smart: user.idea("action SmartTypeCompletion")
-(done | finish): user.idea("action EditorCompleteStatement")
+done | finish: user.idea("action EditorCompleteStatement")
 # Copying
 grab <number>: user.idea_grab(number)
-action [<user.text>]: user.deprecate_command("2024-09-02", "action", "please")
 # Refactoring
 refactor: user.idea("action Refactorings.QuickListPopupAction")
 refactor <user.text>:
@@ -36,7 +36,7 @@ rename file: user.idea("action RenameFile")
 fix (format | formatting): user.idea("action ReformatCode")
 fix imports: user.idea("action OptimizeImports")
 #navigation
-(go declaration | follow): user.idea("action GotoDeclaration")
+go declaration | follow: user.idea("action GotoDeclaration")
 go implementation: user.idea("action GotoImplementation")
 go usage: user.idea("action FindUsages")
 go type: user.idea("action GotoTypeDeclaration")
@@ -123,7 +123,7 @@ configure servers: user.idea("action tasks.configure.servers")
 # Git / Github (not using verb-noun-adjective pattern, mirroring terminal commands.)
 git pull: user.idea("action Vcs.UpdateProject")
 git commit: user.idea("action CheckinProject")
-git push: user.idea("action CheckinProject")
+git push: user.idea("action Vcs.Push")
 git log: user.idea("action Vcs.ShowTabbedFileHistory")
 git browse: user.idea("action Github.Open.In.Browser")
 git (gets | gist): user.idea("action Github.Create.Gist")
@@ -179,7 +179,7 @@ toggle comment: code.toggle_comment()
 change scheme: user.idea("action QuickChangeScheme")
 # Always javadoc
 (toggle | pop) (doc | documentation): user.idea("action QuickJavaDoc")
-(pop deaf | toggle definition): user.idea("action QuickImplementations")
+pop deaf | toggle definition: user.idea("action QuickImplementations")
 pop type: user.idea("action ExpressionTypeInfo")
 pop parameters: user.idea("action ParameterInfo")
 # Breakpoints / debugging

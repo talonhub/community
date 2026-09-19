@@ -1,5 +1,6 @@
 code.language: sql
 -
+
 tag(): user.code_operators_math
 tag(): user.code_comment_line
 tag(): user.code_comment_block_c_like
@@ -26,7 +27,7 @@ with: user.insert_snippet_by_name("withStatement")
 
 column:
     key(return)
-    ", "
+    insert(", ")
 
 count: user.code_insert_function("Count", "")
 

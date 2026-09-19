@@ -1,6 +1,11 @@
 name: whileLoopStatement
 phrase: while
 insertionScope: statement
+
+$1.wrapperPhrase: while cond
+$1.wrapperScope: statement
+$0.wrapperPhrase: while
+$0.wrapperScope: statement
 ---
 
 language: c | cpp | csharp | java | javascript | typescript | javascriptreact | typescriptreact | php | scala | kotlin | r

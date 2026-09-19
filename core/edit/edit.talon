@@ -44,7 +44,7 @@ go page down: edit.page_down()
 
 # Indentation
 indent [more]: edit.indent_more()
-(indent less | out dent): edit.indent_less()
+indent less | out dent: edit.indent_less()
 
 # Copy
 copy that: edit.copy()

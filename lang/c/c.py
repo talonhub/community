@@ -27,7 +27,7 @@ mod.list("c_type_bit_width", desc="Common C type bit widths")
 
 
 # capture explicitly referenced from the C++ files
-@mod.capture(rule="(fix|fixed) [{user.stdint_signed}] [int] {user.c_type_bit_width}")
+@mod.capture(rule="(fix | fixed) [{user.stdint_signed}] [int] {user.c_type_bit_width}")
 def c_fixed_integer(m) -> str:
     """fixed-width integer types (e.g. "uint32_t")"""
     prefix = ""
@@ -132,19 +132,19 @@ class UserActions:
         return operators
 
     def code_insert_null():
-        actions.auto_insert("NULL")
+        actions.insert("NULL")
 
     def code_insert_is_null():
-        actions.auto_insert(" == NULL ")
+        actions.insert(" == NULL ")
 
     def code_insert_is_not_null():
-        actions.auto_insert(" != NULL")
+        actions.insert(" != NULL")
 
     def code_insert_true():
-        actions.auto_insert("true")
+        actions.insert("true")
 
     def code_insert_false():
-        actions.auto_insert("false")
+        actions.insert("false")
 
     def code_insert_function(text: str, selection: str):
         substitutions = {"1": text}
@@ -152,8 +152,6 @@ class UserActions:
             substitutions["0"] = selection
         actions.user.insert_snippet_by_name("functionCall", substitutions)
 
-    # TODO - it would be nice that you integrate that types from c_cast
-    # instead of defaulting to void
     def code_private_function(text: str):
         """Inserts private function declaration"""
         result = "void {}".format(

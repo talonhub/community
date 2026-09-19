@@ -1,43 +1,60 @@
-from talon import Module, actions, app, imgui
-from talon.lib import cubeb
+from talon import Context, Module, actions, cron, imgui
 
-ctx = cubeb.Context()
 mod = Module()
+ctx = Context()
 
+
+EXCLUDE_MICROPHONES = {
+    "Microsoft Teams Audio Device",
+    "WebexMediaAudioDevice",
+    "ZoomAudioDevice",
+}
 
 microphone_device_list = []
+update_microphone_cron_job = None
 
 
-# by convention, None and System Default are listed first
-# to match the Talon context menu.
 def update_microphone_list():
     global microphone_device_list
-    microphone_device_list = ["None", "System Default"]
+    # By convention, None and System Default are listed first
+    # to match the Talon microphone menu.
+    meta_devices = ["None", "System Default"]
 
-    # On Windows, it's presently necessary to check the state, or
-    # we will get any and every microphone that was ever connected.
     devices = [
-        dev.name for dev in ctx.inputs() if dev.state == cubeb.DeviceState.ENABLED
+        device
+        for device in actions.sound.microphones()
+        if device not in meta_devices and device not in EXCLUDE_MICROPHONES
     ]
-
     devices.sort()
-    microphone_device_list += devices
+
+    microphone_device_list = meta_devices + devices
 
 
 def devices_changed(device_type):
     update_microphone_list()
 
 
+mod.tag(
+    "microphone_selection_open",
+    "tag for commands that are available only when the list of microphones is visible",
+)
+
+
 @imgui.open()
 def gui(gui: imgui.GUI):
-    gui.text("Select a Microphone")
+    gui.text("Click or press a number key to select a microphone")
+    gui.text("(or say “microphone pick #”)")
     gui.line()
-    for index, item in enumerate(microphone_device_list, 1):
-        if gui.button(f"{index}. {item}"):
-            actions.user.microphone_select(index)
-
+    gui.text("Microphone list updates every 5 seconds")
     gui.spacer()
-    if gui.button("Microphone close"):
+    active_microphone = actions.sound.active_microphone()
+    for index, item in enumerate(microphone_device_list, 1):
+        if gui.button(
+            f"{f'[{index}] ' if index < 10 else ''}{item}{' — active' if item == active_microphone else ''}"
+        ):
+            actions.user.microphone_select(index)
+    gui.spacer()
+    if gui.button("[esc] microphone close"):
         actions.user.microphone_selection_hide()
 
 
@@ -45,27 +62,27 @@ def gui(gui: imgui.GUI):
 class Actions:
     def microphone_selection_toggle():
         """Show GUI for choosing the Talon microphone"""
+        global update_microphone_cron_job
+
         if gui.showing:
-            gui.hide()
-        else:
-            update_microphone_list()
-            gui.show()
+            actions.user.microphone_selection_hide()
+            return
+        update_microphone_list()
+        gui.show()
+        ctx.tags = ["user.microphone_selection_open"]
+        update_microphone_cron_job = cron.interval("5s", update_microphone_list)
 
     def microphone_selection_hide():
         """Hide the microphone selection GUI"""
+        global update_microphone_cron_job
+
         gui.hide()
+        ctx.tags = []
+        cron.cancel(update_microphone_cron_job)
+        update_microphone_cron_job = None
 
     def microphone_select(index: int):
-        """Selects a micropohone"""
-        if 1 <= index and index <= len(microphone_device_list):
+        """Selects a microphone"""
+        if index >= 1 and index <= len(microphone_device_list):
             actions.sound.set_microphone(microphone_device_list[index - 1])
-            app.notify(f"Activating microphone: {microphone_device_list[index - 1]}")
-            gui.hide()
-
-
-def on_ready():
-    ctx.register("devices_changed", devices_changed)
-    update_microphone_list()
-
-
-app.register("ready", on_ready)
+            actions.user.microphone_selection_hide()

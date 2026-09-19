@@ -1,5 +1,6 @@
 app: slack
 -
+
 tag(): user.messaging
 tag(): user.emoji
 
@@ -32,19 +33,19 @@ add line: key(shift-enter)
 
 (go | undo | toggle) full: user.slack_toggle_full_screen()
 (slack | lack) (react | reaction): user.slack_add_reaction()
-(insert command | commandify): user.slack_insert_command()
+insert command | commandify: user.slack_insert_command()
 insert link: user.slack_insert_link()
 insert code: user.slack_insert_code()
 (slack | lack) (bull | bullet | bulleted) [list]: user.slack_start_bulleted_list()
 (slack | lack) (number | numbered) [list]: user.slack_start_numbered_list()
 (slack | lack) (quotes | quotation): user.slack_insert_quotation()
 bold: user.slack_toggle_bold()
-(italic | italicize): user.slack_toggle_italic()
-(strike | strikethrough): user.slack_toggle_strikethrough()
+italic | italicize: user.slack_toggle_italic()
+strike | strikethrough: user.slack_toggle_strikethrough()
 (slack | lack) snippet: user.slack_create_snippet()
 # Calls
 (slack | lack) huddle: user.slack_huddle()
-([toggle] mute | unmute): key(m)
+[toggle] mute | unmute: key(m)
 (slack | lack) ([toggle] video): key(v)
 (slack | lack) invite: key(a)
 

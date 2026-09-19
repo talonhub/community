@@ -1,7 +1,6 @@
 from talon import Context, Module
 
 # --- App definitions ---
-# Main app TODO: mac context
 mod = Module()
 mod.apps.thunderbird = r"""
 os: windows
@@ -14,7 +13,6 @@ os: linux
 and app.name: Thunderbird
 """
 
-# Inbox tab TODO: also matches emails opened in new tab
 mod.apps.thunderbird_inbox = """
 app: thunderbird
 title: /@/
@@ -47,7 +45,7 @@ mod.apps.thunderbird_calendar = f"""
 app: thunderbird
 title: Calendar - Mozilla Thunderbird
 title: Kalender - Mozilla Thunderbird
-title: /({"|".join(map(lambda m: m + " ", months))})/
+title: /({"|".join(m + " " for m in months)})/
 """
 
 # Tasks tab

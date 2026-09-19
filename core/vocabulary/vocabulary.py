@@ -1,12 +1,15 @@
 import logging
 import os
 import re
-from typing import Sequence, Union
+
+# Can't import Sequence from collections.abc because this doesn't match the
+# core Talon action dictate.replace_words
+from typing import Sequence, Union  # noqa: UP035
 
 from talon import Context, Module, actions
 from talon.grammar import Phrase
 
-from ..user_settings import append_to_csv, track_csv_list
+from ..user_settings import append_to_csv, needs_final_newline, track_csv_list
 
 mod = Module()
 ctx = Context()
@@ -60,13 +63,12 @@ class PhraseReplacer:
 
     def update(self, phrase_dict: dict[str, str]):
         # Index phrases by first word, then number of subsequent words n_next
-        phrase_index = dict()
+        phrase_index = {}
         for spoken_form, written_form in phrase_dict.items():
             words = spoken_form.split()
             if not words:
                 logging.warning(
-                    "Found empty spoken form for written form"
-                    f"{written_form}, ignored"
+                    f"Found empty spoken form for written form{written_form}, ignored"
                 )
                 continue
             first_word, n_next = words[0], len(words) - 1
@@ -217,11 +219,7 @@ def _add_selection_to_file(
 
 def append_to_vocabulary(rows: dict[str, str]):
     vocabulary_file_path = actions.user.get_vocabulary_file_path()
-    with open(str(vocabulary_file_path)) as file:
-        line = None
-        for line in file:
-            pass
-        needs_newline = line is not None and not line.endswith("\n")
+    needs_newline = needs_final_newline(vocabulary_file_path)
 
     with open(vocabulary_file_path, "a", encoding="utf-8") as file:
         if needs_newline:
@@ -241,10 +239,7 @@ class Actions:
     def get_vocabulary_file_path():
         """Returns the path for the active vocabulary file"""
         vocabulary_directory = os.path.dirname(os.path.realpath(__file__))
-        vocabulary_file_path = os.path.join(
-            vocabulary_directory, "vocabulary.talon-list"
-        )
-        return vocabulary_file_path
+        return os.path.join(vocabulary_directory, "vocabulary.talon-list")
 
     def add_selection_to_vocabulary(phrase: Union[Phrase, str] = "", type: str = ""):
         """Permanently adds the currently selected text to the vocabulary with the provided

@@ -59,26 +59,26 @@ class UserActions:
         return operators
 
     def code_self():
-        actions.auto_insert("self")
+        actions.insert("self")
 
     def code_operator_object_accessor():
-        actions.auto_insert(".")
+        actions.insert(".")
 
     def code_insert_null():
-        actions.auto_insert("nil")
+        actions.insert("nil")
 
     def code_insert_is_null():
-        actions.auto_insert(".nil?")
+        actions.insert(".nil?")
 
     # Technically .present? is provided by Rails
     def code_insert_is_not_null():
-        actions.auto_insert(".present?")
+        actions.insert(".present?")
 
     def code_insert_true():
-        actions.auto_insert("true")
+        actions.insert("true")
 
     def code_insert_false():
-        actions.auto_insert("false")
+        actions.insert("false")
 
     def code_comment_documentation():
         actions.insert("##")

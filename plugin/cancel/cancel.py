@@ -7,7 +7,7 @@ from talon import Context, Module, actions, speech_system
 from talon.grammar import Phrase
 
 # To change the phrase used to cancel commands, you must also adjust cancel.talon
-cancel_phrase = "cancel cancel".split()
+cancel_phrase = "cancel cancel".split()  # noqa: SIM905
 
 mod = Module()
 ctx = Context()

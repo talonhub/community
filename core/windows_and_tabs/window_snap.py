@@ -4,11 +4,8 @@ Originally from dweil/talon_community - modified for newapi by jcaw.
 
 """
 
-# TODO: Map keyboard shortcuts to this manager once Talon has key hooks on all
-#   platforms
-
 import logging
-from typing import Dict, Optional
+from typing import Optional
 
 from talon import Context, Module, actions, app, registry, settings, ui
 from talon.ui import Window
@@ -57,7 +54,7 @@ def _bring_forward(window):
 
 
 def _get_app_window(app_name: str) -> ui.Window:
-    return actions.self.get_running_app(app_name).active_window
+    return actions.user.get_running_app(app_name).active_window
 
 
 def interpolate_interval(w0, w1, s0, s1, d0, d1):
@@ -100,9 +97,9 @@ def _move_to_screen(
     moved.
 
     """
-    assert (
-        screen_number or offset and not (screen_number and offset)
-    ), "Provide exactly one of `screen_number` or `offset`."
+    assert screen_number or offset and not (screen_number and offset), (
+        "Provide exactly one of `screen_number` or `offset`."
+    )
 
     src_screen = window.screen
 
@@ -137,8 +134,6 @@ def _move_to_screen(
             window.maximized = True
         return
 
-    # TODO: Test vertical screen with different aspect ratios
-    # Does the orientation between the screens change? (vertical/horizontal)
     if how != "proportional":
         logging.warning(
             f"Unrecognized 'window_snap_screen' setting: {how!r}. Using default 'proportional'."
@@ -168,7 +163,7 @@ def _move_to_screen(
         # the positioning is more complicated than proportionally scaling the x/y coordinates.
         # It is computed by keeping the free space to the left of the window proportional to the right
         # and respectively for the top/bottom free space.
-        # The if conditions account for division by 0. TODO: Refactor positioning without division by 0
+        # The if conditions account for division by 0.
         if src.height == window.rect.height:
             x = dest.left + (dest.width - width) / 2
         else:

@@ -8,4 +8,3 @@ and app.name: Kindle
 os: windows
 and app.exe: /^kindle\.exe$/i
 """
-# TODO: mac context and implementation

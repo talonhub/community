@@ -1,14 +1,35 @@
-[tool.black]
-target-version = ['py310']
-
-[tool.isort]
-profile = 'black'
-
 [tool.pytest.ini_options]
-pythonpath = [
-    ".",
-    "test/stubs",
+pythonpath = [".", "test/stubs"]
+
+[tool.ruff]
+target-version = "py311"
+
+[tool.ruff.lint]
+select = [
+    "E", # pycodestyle
+    "F", # Pyflakes
+    "I", # isort
+    "UP", # pyupgrade
+    "B", # flake8-bugbear
+    "SIM", # flake8-simplify
+    "W", # PyCodeStyle warnings
+    "C4", # Catch incorrect use of comprehensions, dict, list, etc
+    "ISC", # Require explicit string concatenation
+    "ICN", # Use common import conventions
+    "RET", # Good return practices
+    "FURB", # Suggest more idiomatic Python patterns
 ]
+ignore = [
+    "E501", # line-too-long (until we decide)
+    "E722", # except: (consider replacing with catching Exception)
+    "E741", # variable names l, O, or I
+    "SIM108", # always use ternary operator
+    "UP007", # Union[X, Y] -> X | Y not supported in Talon 0.4 actions
+    "UP045", # Optional[X] -> X | None not supported in Talon 0.4 actions
+]
+
+[tool.ruff.lint.flake8-implicit-str-concat]
+allow-multiline = false
 
 [tool.pyright]
 reportSelfClsParameterName = false

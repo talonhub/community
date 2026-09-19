@@ -52,3 +52,6 @@ class Actions:
         actions.key("ctrl-c")
         actions.insert("y")
         actions.key("enter")
+
+    def terminal_escape_string(string: str) -> str:
+        return string.replace(" ", "` ")
