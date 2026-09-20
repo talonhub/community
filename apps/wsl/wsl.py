@@ -184,7 +184,7 @@ def run_wslpath(args, in_path, in_distro=None):
 
         while loop_num < MAX_ATTEMPTS:
             # print(f"_run_wslpath(): {path_detection_disabled=}.")
-            (distro, path, error) = run_wsl(["wslpath", *args, in_path], in_distro)
+            distro, path, error = run_wsl(["wslpath", *args, in_path], in_distro)
             if error:
                 if in_path == distro and error.endswith("No such file or directory"):
                     # for testing
@@ -439,7 +439,7 @@ class Actions:
         results = []
         _update_wsl_distros()
         for in_distro in wsl_distros:
-            (distro, result, error) = run_wsl(
+            _, result, error = run_wsl(
                 ["echo", 'Hello, my name is "${WSL_DISTRO_NAME}".'], in_distro
             )
             if error:
