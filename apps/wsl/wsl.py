@@ -91,7 +91,7 @@ if app.platform == "windows":
         _update_wsl_distros()
         distro = None
         try:
-            (distro, path) = re.match(wsl_title_regex, path).groups()
+            distro, path = re.match(wsl_title_regex, path).groups()
             if distro not in wsl_distros:
                 raise Exception(f"Unknown wsl distro: {distro}")
                 # log_exception(f'[_update_wsl_distros()] {sys.exc_info()[1]}')
@@ -341,7 +341,7 @@ class UserActions:
             )
             return ""
 
-        (distro, path) = _parse_win_title()
+        distro, path = _parse_win_title()
 
         if "~" in path:
             # the only way I could find to correctly support the user folder:
@@ -359,15 +359,6 @@ class UserActions:
             path = ""
 
         return path
-
-    # def file_manager_terminal_here():
-    #     actions.key("ctrl-l")
-    #     actions.insert("cmd.exe")
-    #     actions.key("enter")
-
-    # def file_manager_show_properties():
-    #     """Shows the properties for the file"""
-    #     actions.key("alt-enter")
 
     def file_manager_open_directory(path: str):
         """opens the directory that's already visible in the view"""
