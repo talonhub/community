@@ -77,10 +77,10 @@ if app.platform == "windows":
                         distro_name = winreg.QueryValueEx(
                             distro_handle, "DistributionName"
                         )[0]
-                        
+
                         wsl_distros.append(distro_name)
 
-            #print(f'_update_wsl_distros discovered {len(wsl_distros)} distros: {wsl_distros}')
+            # print(f'_update_wsl_distros discovered {len(wsl_distros)} distros: {wsl_distros}')
 
         except OSError:
             log_exception(f"[_update_wsl_distros()] {sys.exc_info()[1]}")
