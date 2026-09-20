@@ -71,7 +71,7 @@ and app.exe: /^cursor\.exe$/i
 os: windows
 and app.name: Antigravity IDE
 os: windows
-and app.exe: /^antigravity( IDE)?\.exe$/i
+and app.exe: antigravity.exe
 os: windows
 and app.exe: /^positron\.exe$/i
 """
