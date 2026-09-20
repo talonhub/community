@@ -369,21 +369,6 @@ class UserActions:
         actions.key("enter")
         actions.user.file_manager_refresh_title()
 
-    def file_manager_select_directory(path: str):
-        """selects the directory"""
-        actions.insert(f'"{path}"')
-
-    def file_manager_new_folder(name: str):
-        """Creates a new folder in a gui filemanager or inserts the command to do so for terminals"""
-        actions.insert(f'mkdir "{name}"')
-
-    def file_manager_open_file(path: str):
-        actions.insert(path)
-        # actions.key("enter")
-
-    def file_manager_select_file(path: str):
-        actions.insert(path)
-
     def file_manager_open_volume(volume: str):
         actions.user.file_manager_open_directory(volume)
 
