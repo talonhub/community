@@ -334,13 +334,6 @@ def get_distro():
 
 @ctx.action_class("user")
 class UserActions:
-    def file_manager_refresh_title():
-        actions.skip()
-
-    def file_manager_open_parent():
-        actions.insert("cd ..")
-        actions.key("enter")
-
     def file_manager_current_path():
         if path_detection_disabled:
             logging.warning(
