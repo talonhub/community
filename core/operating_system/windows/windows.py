@@ -1,6 +1,6 @@
 from typing import Tuple
 from talon import Context, actions, app, ui
-#from .windows_known_paths import resolve_known_windows_path, get_user_display_name, FOLDERID 
+from .windows_known_paths import resolve_known_windows_path, get_user_display_name, FOLDERID 
 import os
 
 ctx = Context()
@@ -41,22 +41,22 @@ if app.platform == "windows":
     }
 
     known_paths_to_resolve = {
-        # "desk": FOLDERID.Desktop,
-        # "desktop": FOLDERID.Desktop,
-        # "docks": FOLDERID.Documents,
-        # "documents": FOLDERID.Documents,
-        # "downloads": FOLDERID.Downloads,
-        # "music": FOLDERID.Music,
-        # "pictures": FOLDERID.Pictures,
-        # "picks": FOLDERID.Pictures,
-        # "user": FOLDERID.Profile
+        "desk": FOLDERID.Desktop,
+        "desktop": FOLDERID.Desktop,
+        "docks": FOLDERID.Documents,
+        "documents": FOLDERID.Documents,
+        "downloads": FOLDERID.Downloads,
+        "music": FOLDERID.Music,
+        "pictures": FOLDERID.Pictures,
+        "picks": FOLDERID.Pictures,
+        "user": FOLDERID.Profile
     }
 
     for key, value in known_paths_to_resolve.items():
-        # try:
-        #     path = resolve_known_windows_path(value)
-        # except Exception as e:
-        path = None
+        try:
+            path = resolve_known_windows_path(value)
+        except Exception as e:
+            path = None
 
         if path:
             system_directories[key] = path
@@ -88,6 +88,7 @@ class UserActionsWin:
     def dictation_peek(left, right):
         # Latency for this approach when I tested it with Slack in Firefox was <16ms.
         try:
+            print("Peeking dictation context")
             focused_element = ui.focused_element()
             # print("focused_element")
             text_pattern = focused_element.text_pattern
@@ -120,10 +121,11 @@ class UserActionsWin:
                 document_text[chars_before_start:selection_start],
                 document_text[selection_end:chars_after_end])
         except OSError as e:
+            print("OS error when trying to peek dictation context: " + str(e))
             print(str(e))
             return actions.next(left, right)
         except Exception as e: 
-            print(str(e))
+            print("Error when trying to peek dictation context: " + str(e))
             return actions.next(left, right)
                         
     
