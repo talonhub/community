@@ -56,14 +56,9 @@ if app.platform == "windows":
         registry_access_flags = registry_access_flags | winreg.KEY_WOW64_64KEY
 
     # read the list of wsl distros from the registry
-    #
-    # note: winreg has no equivalent of win32api.RegNotifyChangeKeyValue, so we can't be
-    # notified when the list of distros changes. instead we simply re-read the key on each
-    # call - the registry read is cheap and this happens infrequently.
     def _update_wsl_distros():
         global wsl_distros
-
-        distros = []
+        wsl_distros = []
         try:
             with winreg.OpenKeyEx(
                 winreg.HKEY_CURRENT_USER,
@@ -75,7 +70,6 @@ if app.platform == "windows":
                 subkey_count = winreg.QueryInfoKey(registry_key_handle)[0]
                 for index in range(subkey_count):
                     subkey = winreg.EnumKey(registry_key_handle, index)
-                    # print(f'{subkey=}')
 
                     with winreg.OpenKeyEx(
                         registry_key_handle, subkey, 0, registry_access_flags
@@ -83,14 +77,13 @@ if app.platform == "windows":
                         distro_name = winreg.QueryValueEx(
                             distro_handle, "DistributionName"
                         )[0]
-                        # print(f'{distro_name=}')
-                        distros.append(distro_name)
+                        
+                        wsl_distros.append(distro_name)
 
-            wsl_distros = distros
+            #print(f'_update_wsl_distros discovered {len(wsl_distros)} distros: {wsl_distros}')
+
         except OSError:
             log_exception(f"[_update_wsl_distros()] {sys.exc_info()[1]}")
-
-        # print(f'{wsl_distros=}')
 
     def _parse_win_title():
         path = ui.active_window().title
