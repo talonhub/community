@@ -1,5 +1,5 @@
 from talon import Context, Module, actions, imgui, scope, settings, ui, app
-#from ..operating_system.windows.app_user_model_id import get_application_user_model_id, get_application_user_model_for_window, get_valid_windows_by_app_user_model_id
+from ...core.app_switcher.windows.installed_applications import get_application_user_model_id, get_application_user_model_for_window, get_valid_windows_by_app_user_model_id
 
 ctx = Context()
 mod = Module()
@@ -40,14 +40,14 @@ def gui(gui: imgui.GUI):
         gui.text("Windows-specific")
         application_user_model_id = None
         window_application_user_model_id = None
-        # try:
-        #     application_user_model_id = get_application_user_model_id(ui.active_app().pid)
-        # except:
-        #     pass
-        # try:
-        #     window_application_user_model_id = get_application_user_model_id(ui.active_app().pid)
-        # except:
-        #     pass
+        try:
+            application_user_model_id = get_application_user_model_id(ui.active_app().pid)
+        except:
+            pass
+        try:
+            window_application_user_model_id = get_application_user_model_id(ui.active_app().pid)
+        except:
+            pass
 
         gui.text(f"AppUserModelId: {application_user_model_id}")
         gui.text(f"Window AppUserModelId: {window_application_user_model_id}")

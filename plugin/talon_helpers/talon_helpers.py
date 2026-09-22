@@ -9,7 +9,9 @@ from talon import Module, actions, app, clip, registry, scope, speech_system, ui
 from talon.grammar import Phrase
 from talon.scripting.types import ListTypeFull
 
-#from ...core.operating_system.windows.app_user_model_id import get_application_user_model_id, get_application_user_model_for_window
+
+from ...core.app_switcher.windows.installed_applications import get_installed_windows_apps, get_valid_windows_by_app_user_model_id, get_application_user_model_id, get_application_user_model_for_window
+
 
 pp = pprint.PrettyPrinter()
 
@@ -339,13 +341,13 @@ def scope_gui(gui: imgui.GUI):
     title = actions.win.title()
     hostname = scope.get("hostname")
 
-    # try:
-    #     app_user_model_id = get_application_user_model_id(ui.active_app().pid)
-    # except:
-    app_user_model_id = "None"
+    try:
+        app_user_model_id = get_application_user_model_id(ui.active_app().pid)
+    except:
+        app_user_model_id = "None"
 
     try:
-        window_id = None #get_application_user_model_for_window(ui.active_window().id)
+        window_id = get_application_user_model_for_window(ui.active_window().id)
     except:
         window_id = "None"
 
