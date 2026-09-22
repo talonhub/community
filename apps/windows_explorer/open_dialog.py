@@ -47,7 +47,6 @@ class UserActions:
 
     def file_manager_current_path():
         path = get_active_explorer_path()
-
         # if path in directories_to_remap:
         #     path = directories_to_remap[path]
 
@@ -69,8 +68,7 @@ class UserActions:
     def file_manager_open_directory(path: str):
         """opens the directory that's already visible in the view"""
         actions.key("ctrl-l")
-        toolbar = ui.active_window().element.find_one(automation_id = "1001", max_depth=0)
-        toolbar.value_pattern.value = path
+        actions.insert(path)
         actions.key("enter")
 
     def file_manager_select_directory(path: str):
