@@ -1,5 +1,6 @@
-import talon
 from pathlib import Path
+
+import talon
 
 if hasattr(talon, "test_mode"):
     from core.user_settings import parse_snippet_dirs
