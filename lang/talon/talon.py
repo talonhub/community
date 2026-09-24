@@ -124,6 +124,7 @@ operators = Operators(
     MATH_ADD=" + ",
     MATH_MULTIPLY=" * ",
     MATH_DIVIDE=" / ",
+    MATH_MODULO=" % ",
     ASSIGNMENT=" = ",
 )
 
