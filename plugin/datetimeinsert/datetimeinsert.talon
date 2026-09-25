@@ -35,7 +35,7 @@ timestamp insert UTC high resolution:
 
 # Relative date commands
 # Today/now uses list default or settings format
-^date (today | now): user.insert_date_today()
+date (today | now): user.insert_date_relative(0, 0, 0)
 
 # Relative day modifiers
 ^date tomorrow: user.insert_date_relative(1, 0, 0)
