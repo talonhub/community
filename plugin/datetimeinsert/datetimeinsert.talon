@@ -2,7 +2,7 @@ settings():
     # Define the default date format for all date commands using Python strftime codes.
     # Use an explicit pattern to avoid ambiguous locale output.
     # https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes
-    user.date_format = "%d-%m-%Y"
+    user.date_format = "%m-%d-%Y"
 
 date insert:
     user.deprecate_command("2026-05-10", "date insert", "date today")
