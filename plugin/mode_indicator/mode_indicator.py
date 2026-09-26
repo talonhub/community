@@ -1,6 +1,6 @@
 from typing import Optional
 
-from skia import Canvas as SkiaCanvas
+pfrom skia import Canvas as SkiaCanvas
 from skia import ImageFilter, Point2d, Rect, Shader
 from talon import Module, actions, app, cron, registry, scope, settings, ui
 from talon.canvas import Canvas

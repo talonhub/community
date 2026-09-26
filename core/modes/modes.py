@@ -41,6 +41,12 @@ class Actions:
         actions.user.code_clear_language_mode()
         actions.user.gdb_disable()
 
+    def mixed_mode():
+        """Enable mixed mode"""
+        actions.mode.disable("sleep")
+        actions.mode.enable("command")
+        actions.mode.enable("dictation")
+
     def talon_mode():
         """For windows and Mac with Dragon, enables Talon commands and Dragon's command mode."""
         actions.speech.enable()
