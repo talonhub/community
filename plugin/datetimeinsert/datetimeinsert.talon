@@ -1,10 +1,8 @@
 settings():
     # Define the default date format for all date commands using Python strftime codes.
-    # Use a full-year format to avoid ambiguous locale output such as mm/dd/yy.
+    # Use an explicit pattern to avoid ambiguous locale output.
     # https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes
-    # user.date_format = "%Y-%m-%d"
     user.date_format = "%d-%m-%Y"
-    # user.date_format = "%m-%d-%Y"
 
 date insert:
     user.deprecate_command("2026-05-10", "date insert", "date today")
@@ -19,7 +17,7 @@ date today UTC: insert(user.time_format_utc("%Y-%m-%d"))
 timestamp insert: insert(user.time_format("%Y-%m-%d %H:%M:%S"))
 timestamp insert high resolution: insert(user.time_format("%Y-%m-%d %H:%M:%S.%f"))
 timestamp insert UTC: insert(user.time_format_utc("%Y-%m-%d %H:%M:%S"))
-|timestamp insert UTC high resolution:
+timestamp insert UTC high resolution:
     insert(user.time_format_utc("%Y-%m-%d %H:%M:%S.%f"))
 
 # Date entry commands using day, month, year lists
@@ -34,7 +32,7 @@ date {user.day} {user.month} <number> format:
     user.insert_date_formatted(day, month, number, format)
 
 # Relative date commands
-# Today/now uses list default or settings format
+# Today/now uses the configured default format from settings.
 date (today | now): user.insert_date_today()
 
 # Relative day modifiers
