@@ -7,8 +7,10 @@ mod = Module()
 # Declare lists in Talon grammar; values come from talon-list files
 mod.list("month", "Month names and numeric values (1-12)")
 mod.list("weekday", "Weekday names for relative date commands")
-# Note %x is locale's preferred date representation, which may be different from the other three formats
-mod.setting("date_format", type=str, default="%x", desc="Preferred date format: %x, uk, us, or iso")
+# Date format using standard (1989 C standard) format codes.
+# Default to a full-year ISO-like representation to avoid ambiguous locale output.
+# https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes
+mod.setting("date_format", type=str, default="%Y-%m-%d", desc="Preferred date format (using format codes)")
 
 WEEKDAY_MAP = {
     "monday": 0,
@@ -27,15 +29,14 @@ MONTH_MAP = {
 }
 
 
+def _resolve_date_format(fmt: str | None) -> str:
+    """Return the configured format or a concrete strftime pattern."""
+    return fmt or settings.get("user.date_format") or "%x"
+
+
 def _format_with_preference(a_date: date) -> str:
-    fmt = settings.get("user.date_format") or "%x"
-    if fmt == "us":
-        return a_date.strftime("%m/%d/%Y")
-    if fmt == "iso":
-        return a_date.strftime("%Y-%m-%d")
-    if fmt == "uk":
-        return a_date.strftime("%d/%m/%Y")
-    return a_date.strftime("%x")  # default to locale
+    fmt = _resolve_date_format(None)
+    return a_date.strftime(fmt)  # default to locale
 
 
 def _month_to_int(month) -> int:
@@ -61,57 +62,30 @@ class Actions:
         actions.user.insert_date_formatted(day, month, year, None)
 
     def insert_date_formatted(day: int, month: str, year: int, fmt: str = None):
-        """Insert a formatted date from spoken day/month/year.
+        """Insert a date from spoken day/month/year using `strftime` format codes.
 
-        `fmt` may be '%x', 'uk', 'us', 'iso', or `None` to use the user's
-        `user.date_format` setting (default 'uk'). This function validates
-        the calendar date and falls back to inserting a formatted string
-        when the date is invalid.
+        `fmt` may be a concrete format string such as `%x` or `%Y-%m-%d`.
+        When omitted, this uses the user's `user.date_format` setting. The
+        function validates the date before inserting it.
         """
         day_num = int(day)
         month_num = _month_to_int(month)
         year_num = int(year)
 
-        # Determine format preference
-        fmt_pref = fmt or settings.get("user.date_format") or "%x"
+        fmt_pref = _resolve_date_format(fmt)
 
         # Try to construct a real date for correct calendar handling
         try:
             computed = date(year_num, month_num, day_num)
-            if fmt_pref == "us":
-                actions.insert(computed.strftime("%m/%d/%Y"))
-                return
-            if fmt_pref == "iso":
-                actions.insert(computed.strftime("%Y-%m-%d"))
-                return
-            if fmt_pref == "uk":
-                actions.insert(computed.strftime("%d/%m/%Y"))
-                return
-            # default %x (locale) if unknown format preference
-            actions.insert(computed.strftime("%x"))
+            actions.insert(computed.strftime(fmt_pref))
             return
         except ValueError:
-            # Fall back to formatting by parts when invalid (e.g., 31 Feb)
-            day_padded = f"{day_num:02d}"
-            month_padded = f"{month_num:02d}"
-            if fmt_pref == "us":
-                date_str = f"{month_padded}/{day_padded}/{year_num}"
-            elif fmt_pref == "iso":
-                date_str = f"{year_num}-{month_padded}-{day_padded}"
-            else:
-                date_str = f"{day_padded}/{month_padded}/{year_num}"
-
-            # Notify user that the spoken date was not a valid calendar date,
-            # but still insert the best-effort formatted string.
-            actions.app.notify(f"Invalid date spoken — inserted: {date_str}")
-            actions.insert(date_str)
+            # Invalid Date Received (e.g., 31 Feb)
+            actions.app.notify(f"Invalid date spoken — could not insert: {day_num}/{month_num}/{year_num}")
 
     def insert_date_formatted_iso(day: int, month: str, year: int):
-        """Insert a formatted date from spoken day/month/year as yyyy-mm-dd"""
-        day_padded = f"{int(day):02d}"
-        month_padded = f"{_month_to_int(month):02d}"
-        date_str = f"{year}-{month_padded}-{day_padded}"
-        actions.insert(date_str)
+        """Insert a date from spoken day/month/year using the ISO `%Y-%m-%d` format."""
+        actions.user.insert_date_formatted(day, month, year, "%Y-%m-%d")
 
     def insert_date_today():
         """Insert today according to preferred format"""
