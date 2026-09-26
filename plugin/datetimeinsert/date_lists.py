@@ -1,12 +1,22 @@
 from datetime import date, timedelta
 import calendar
-from talon import Module, actions, settings
+from talon import Context, Module, actions, settings
+
+from core.numbers.numbers import get_spoken_form_under_one_hundred
 
 mod = Module()
+ctx = Context()
 
 # Declare lists in Talon grammar; values come from talon-list files
 mod.list("month", "Month names and numeric values (1-12)")
+mod.list("day", "Days of the month, 1-31")
 mod.list("weekday", "Weekday names for relative date commands")
+ctx.lists["user.day"] = get_spoken_form_under_one_hundred(
+    1,
+    31,
+    include_oh_variant_for_single_digits=False,
+    include_default_variant_for_single_digits=True,
+)
 # Date format using standard (1989 C standard) format codes.
 # Default to a full-year ISO-like representation to avoid ambiguous locale output.
 # https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes
@@ -31,7 +41,7 @@ MONTH_MAP = {
 
 def _resolve_date_format(fmt: str | None) -> str:
     """Return the configured format or a concrete strftime pattern."""
-    return fmt or settings.get("user.date_format") or "%x"
+    return fmt or settings.get("user.date_format") or "%Y-%m-%d"
 
 
 def _format_with_preference(a_date: date) -> str:
@@ -64,7 +74,7 @@ class Actions:
     def insert_date_formatted(day: int, month: str, year: int, fmt: str = None):
         """Insert a date from spoken day/month/year using `strftime` format codes.
 
-        `fmt` may be a concrete format string such as `%x` or `%Y-%m-%d`.
+        `fmt` may be a concrete format string such as `%Y-%m-%d` or `%d-%m-%Y`.
         When omitted, this uses the user's `user.date_format` setting. The
         function validates the date before inserting it.
         """
@@ -112,8 +122,19 @@ class Actions:
         relative_date = date(new_year, new_month, new_day) + timedelta(days=days)
         actions.insert(_format_with_preference(relative_date))
 
+    def insert_date_first_of_month():
+        """Insert the first day of the current month."""
+        today = date.today()
+        actions.insert(_format_with_preference(date(today.year, today.month, 1)))
+
+    def insert_date_last_day_of_month():
+        """Insert the last day of the current month."""
+        today = date.today()
+        last_day = calendar.monthrange(today.year, today.month)[1]
+        actions.insert(_format_with_preference(date(today.year, today.month, last_day)))
+
     def insert_date_next_weekday(weekday: str):
-        """Insert the next weekday name according to preferred format"""
+        """Insert the next occurrence of a weekday according to preferred format."""
         weekday_norm = weekday.strip().lower()
         if weekday_norm not in WEEKDAY_MAP:
             raise ValueError(f"Unknown weekday: {weekday}")
@@ -124,3 +145,16 @@ class Actions:
             days_ahead = 7
         next_day = today + timedelta(days=days_ahead)
         actions.insert(_format_with_preference(next_day))
+
+    def insert_date_last_weekday(weekday: str):
+        """Insert the previous occurrence of a weekday according to preferred format."""
+        weekday_norm = weekday.strip().lower()
+        if weekday_norm not in WEEKDAY_MAP:
+            raise ValueError(f"Unknown weekday: {weekday}")
+        target = WEEKDAY_MAP[weekday_norm]
+        today = date.today()
+        days_ago = (today.weekday() - target + 7) % 7
+        if days_ago == 0:
+            days_ago = 7
+        last_day = today - timedelta(days=days_ago)
+        actions.insert(_format_with_preference(last_day))
