@@ -1,8 +1,8 @@
 user.running: amethyst
 -
 
-window <user.spatial_previous_next>:
-    user.key_next_previous_helper(spatial_previous_next, "alt-shift-k", "alt-shift-j")
+window next: key("alt-shift-j")
+window (previous | prev): key("alt-shift-k")
 # window move desk: key("ctrl-alt-shift-h")
 window full: key("alt-shift-d")
 window float: key(alt-shift-t)

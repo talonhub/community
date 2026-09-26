@@ -1,4 +1,4 @@
-from talon import Module, actions
+from talon import Module
 
 mod = Module()
 mod.tag("messaging", desc="Tag for generic multi-channel messaging apps")
@@ -14,13 +14,6 @@ class messaging_actions:
     def messaging_workspace_next():
         """Move to next workspace/server"""
 
-    def messaging_workspace_go(direction: str):
-        """Move to next or previous workspace/server depending on direction (PREV/NEXT)"""
-        if direction == "PREV":
-            actions.user.messaging_workspace_previous()
-        else:
-            actions.user.messaging_workspace_next()
-
     def messaging_open_channel_picker():
         """Open channel picker"""
 
@@ -35,13 +28,6 @@ class messaging_actions:
 
     def messaging_unread_next():
         """Moved to next unread channel"""
-
-    def messaging_unread_go(direction: str):
-        """Move to next or previous unread channel depending on direction (PREV/NEXT)"""
-        if direction == "PREV":
-            actions.user.messaging_unread_previous()
-        else:
-            actions.user.messaging_unread_next()
 
     def messaging_open_search():
         """Open message search"""

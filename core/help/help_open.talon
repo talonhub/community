@@ -3,7 +3,8 @@ mode: command
 mode: dictation
 -
 
-help <user.spatial_previous_next>$: user.help_go(spatial_previous_next)
+help next$: user.help_next()
+help (previous | prev)$: user.help_previous()
 help <number>$: user.help_select_index(number - 1)
 help return$: user.help_return()
 help refresh$: user.help_refresh()

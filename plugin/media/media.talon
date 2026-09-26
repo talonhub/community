@@ -2,6 +2,6 @@ volume up: key(volup)
 volume down: key(voldown)
 set volume <number>: user.media_set_volume(number)
 (volume | media) mute: key(mute)
-[media] play <user.spatial_previous_next>:
-    user.key_next_previous_helper(spatial_previous_next, "prev", "next")
+[media] play next: key(next)
+[media] play (previous | prev): key(prev)
 media (play | pause): user.play_pause()

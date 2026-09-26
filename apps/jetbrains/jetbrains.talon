@@ -86,8 +86,8 @@ play recording <user.text> [over]:
 # Marks
 go mark: user.idea("action ShowBookmarks")
 toggle mark: user.idea("action ToggleBookmark")
-go <user.spatial_previous_next> mark:
-    user.idea_next_previous_helper(spatial_previous_next, "action GotoPreviousBookmark", "action GotoNextBookmark")
+go next mark: user.idea("action GotoNextBookmark")
+go (previous | prev) mark: user.idea("action GotoPreviousBookmark")
 toggle mark <number>: user.idea("action ToggleBookmark{number}")
 go mark <number>: user.idea("action GotoBookmark{number}")
 # Folding
@@ -97,8 +97,8 @@ collapse deep: user.idea("action CollapseRegionRecursively")
 collapse all: user.idea("action CollapseAllRegions")
 # miscellaneous
 # XXX These might be better than the structural ones depending on language.
-go <user.spatial_previous_next> (method | function):
-    user.idea_next_previous_helper(spatial_previous_next, "action MethodUp", "action MethodDown")
+go next (method | function): user.idea("action MethodDown")
+go (previous | prev) (method | function): user.idea("action MethodUp")
 # Clipboard
 clippings: user.idea("action PasteMultiple")
 copy path: user.idea("action CopyPaths")
@@ -202,10 +202,13 @@ continue: user.idea("action Resume")
 (grow | shrink) window up: user.idea("action ResizeToolWindowUp")
 (grow | shrink) window down: user.idea("action ResizeToolWindowDown")
 # Movement
-go <user.spatial_previous_next> (error | air):
-    user.idea_next_previous_helper(spatial_previous_next, "action GotoPreviousError", "action GotoNextError")
-fix <user.spatial_previous_next> (error | air):
-    user.idea_next_previous_helper(spatial_previous_next, "action GotoPreviousError", "action GotoNextError")
+go next (error | air): user.idea("action GotoNextError")
+go (previous | prev) (error | air): user.idea("action GotoPreviousError")
+fix next (error | air):
+    user.idea("action GotoNextError")
+    user.idea("action ShowIntentionActions")
+fix (previous | prev) (error | air):
+    user.idea("action GotoPreviousError")
     user.idea("action ShowIntentionActions")
 # Special Selects
 select less: user.idea("action EditorUnSelectWord")

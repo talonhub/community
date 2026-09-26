@@ -27,10 +27,10 @@ select last [message]: key(and)
 open [this] message: key(o)
 open [this] message [in] [a] new window: key(shift-enter)
 close [this] message: key(esc)
-[open] [the] <user.spatial_previous_next> (item | message):
-    user.key_next_previous_helper(spatial_previous_next, "ctrl-,", "ctrl-.")
-<user.spatial_previous_next> [reading] [pane] (item | message):
-    user.key_next_previous_helper(spatial_previous_next, ",", ".")
+[open] [the] next (item | message): key(ctrl-.)
+[open] [the] (previous | prev) (item | message): key(ctrl-,)
+next [reading] [pane] (item | message): key(.)
+(previous | prev) [reading] [pane] (item | message): key(,)
 (expand | collapse) [conversation]: key(x)
 
 # go to

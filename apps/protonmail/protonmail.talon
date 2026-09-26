@@ -40,8 +40,8 @@ save message: key(ctrl-s)
     key(t)
 
 ## Navigation
-<user.spatial_previous_next> message:
-    user.key_next_previous_helper(spatial_previous_next, "up", "down")
+(previous | prev) message: key(up)
+next message: key(down)
 exit message: key(left)
 enter message: key(right)
 (show | display) newer [message]: key(k)
@@ -72,8 +72,8 @@ forward (message | conversation): key(shift-f)
 
 # Contacts
 ## Contact List
-<user.spatial_previous_next> contact:
-    user.key_next_previous_helper(spatial_previous_next, "up", "down")
+(previous | prev) contact: key(up)
+next contact: key(down)
 enter contact: key(right)
 delete contact: key(t)
 
