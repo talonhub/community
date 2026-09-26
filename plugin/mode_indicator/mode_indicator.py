@@ -1,11 +1,10 @@
 from typing import Optional
 
-from talon import Module, actions, app, cron, registry, scope, settings, skia, ui
+from skia import Canvas as SkiaCanvas
+from skia import ImageFilter, Point2d, Rect, Shader
+from talon import Module, actions, app, cron, registry, scope, settings, ui
 from talon.canvas import Canvas
 from talon.screen import Screen
-from talon.skia.canvas import Canvas as SkiaCanvas
-from talon.skia.imagefilter import ImageFilter
-from talon.ui import Point2d, Rect
 
 canvas: Canvas = None
 current_mode = ""
@@ -126,7 +125,7 @@ def on_draw(c: SkiaCanvas):
     if radius <= 0:
         return
 
-    c.paint.shader = skia.Shader.radial_gradient(
+    c.paint.shader = Shader.radial_gradient(
         Point2d(x, y), radius, [color_mode, color_gradient]
     )
 
@@ -138,7 +137,7 @@ def on_draw(c: SkiaCanvas):
 
     if settings.get("user.mode_indicator_show_microphone_name"):
         # Remove c.paint.shader gradient before drawing again
-        c.paint.shader = skia.Shader.radial_gradient(
+        c.paint.shader = Shader.radial_gradient(
             Point2d(x, y), radius, [color_text, color_text]
         )
 
