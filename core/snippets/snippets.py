@@ -110,7 +110,7 @@ class Actions:
 
     def get_snippet_names() -> list[str]:
         """Get the snippet names"""
-        return [snippet_name for snippet_name in snippets_map]
+        return list(snippets_map)
 
 
 def get_preferred_snippet(snippets: list[Snippet]) -> Snippet:

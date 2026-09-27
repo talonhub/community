@@ -2,7 +2,7 @@
 # Talon's version of Python does not allow getting the code of a function through reflection, so we are instead allowing associating doc strings with lambdas and functions as a way to apply descriptions to the community help system
 
 
-from typing import Callable
+from collections.abc import Callable
 
 from talon import actions
 

@@ -1,0 +1,4 @@
+Each line has the exact name of a microphone to exclude from the microphone picker list
+Microsoft Teams Audio Device
+WebexMediaAudioDevice
+ZoomAudioDevice

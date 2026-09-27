@@ -31,7 +31,18 @@ ordinal_words = {
     80: "eightieth",
     90: "ninetieth",
 }
-tens_words = "zero ten twenty thirty forty fifty sixty seventy eighty ninety".split()
+tens_words = [
+    "zero",
+    "ten",
+    "twenty",
+    "thirty",
+    "forty",
+    "fifty",
+    "sixty",
+    "seventy",
+    "eighty",
+    "ninety",
+]
 
 # ordinal_numbers maps ordinal words into their corresponding numbers.
 ordinal_numbers = {}
@@ -43,7 +54,7 @@ for n in range(1, 100):
     else:
         tens, units = divmod(n, 10)
         assert 1 < tens < 10, "we have already handled all ordinals < 20"
-        assert 0 < units, "we have already handled all ordinals divisible by ten"
+        assert units > 0, "we have already handled all ordinals divisible by ten"
         word = f"{tens_words[tens]} {ordinal_words[units]}"
     if n <= 20:
         ordinal_small[word] = str(n)

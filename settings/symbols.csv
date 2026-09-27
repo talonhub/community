@@ -1,0 +1,53 @@
+Symbol,Mode (command/dictation/both),Spoken Forms (separated with commas)
+`,both,back tick
+`,command,grave
+",",both,comma,coma
+.,both,period,full stop
+.,command,dot,point
+;,both,semicolon
+;,command,semi
+:,both,colon
+?,both,question mark
+?,command,question
+!,both,exclamation mark,exclamation point
+!,command,bang
+*,both,asterisk
+*,command,star
+#,both,hash sign,number sign
+#,command,hash
+%,both,percent sign
+%,command,percent
+@,both,at symbol,at sign
+°,both,degree sign
+°,command,degree,degrees
+&,both,ampersand,and sign
+&,command,amper
+-,both,hyphen
+-,command,minus,dash
+–,both,en dash,nut dash
+—,both,em dash,mutton dash
+=,command,equals
++,command,plus
+~,command,tilde
+_,command,down score,underscore
+(,both,paren,L paren,left paren
+),both,R paren,right paren
+[,command,brack,L brack,bracket,L bracket,left bracket,square,L square,left square
+],command,R brack,R bracket,right bracket,R square,right square
+/,both,forward slash
+/,command,slash
+\,command,backslash
+{,command,brace,L brace,left brace,curly bracket,left curly bracket
+},command,R brace,right brace,R curly bracket,right curly bracket
+<,command,angle,L Angle,left angle,less than
+>,command,rangle,R angle,right angle,greater than
+^,command,caret
+|,command,pipe
+',command,quote,apostrophe
+"""",command,dub quote,double quote
+$,both,dollar sign
+$,command,dollar
+£,both,pound sign
+£,command,pound
+€,both,euro sign
+€,command,euro

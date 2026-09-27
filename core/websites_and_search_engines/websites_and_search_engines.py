@@ -28,6 +28,9 @@ class Actions:
         webbrowser.open(url)
 
 
-@ctx_browser.capture("user.address", rule="{user.website}")
+@ctx_browser.capture(
+    "user.address",
+    rule="{user.website}",
+)
 def address(m) -> str:
     return m.website

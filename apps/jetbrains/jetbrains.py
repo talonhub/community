@@ -82,7 +82,7 @@ def _get_nonce(port: int, file_prefix: str) -> Optional[str]:
 def send_idea_command(cmd: str) -> str:
     active_app = ui.active_app()
     bundle = active_app.bundle or active_app.name
-    port = port_mapping.get(bundle, None)
+    port = port_mapping.get(bundle)
     if not port:
         raise Exception(f"unknown application {bundle}")
     nonce = _get_nonce(port, ".vcidea_") or _get_nonce(port, "vcidea_")
@@ -232,7 +232,7 @@ class EditActions:
     def find_previous():
         actions.user.idea("action FindPrevious")
 
-    def find(text: str = None):
+    def find(text=None):
         actions.user.idea("action Find")
         if text:
             actions.insert(text)
@@ -252,7 +252,7 @@ class EditActions:
     def indent_less():
         actions.user.idea("action EditorUnindentSelection")
 
-    def select_line(n: int = None):
+    def select_line(n=None):
         actions.user.idea("action EditorSelectLine")
 
     def select_word():

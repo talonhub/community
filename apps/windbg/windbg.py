@@ -12,14 +12,14 @@ ctx_windbg_enabled.matches = r"""
 tag: user.windbg
 """
 
-ctx_windbg_enabled.lists["self.windows_dlls"] = {
+ctx_windbg_enabled.lists["user.windows_dlls"] = {
     "core": "ntdll",
     "en tea": "ntdll",
     "user": "user32",
 }
 
 
-@mod.capture(rule="{self.windows_dlls}")
+@mod.capture(rule="{user.windows_dlls}")
 def windows_dlls(m) -> str:
     "Return an register"
     return m.windows_dlls

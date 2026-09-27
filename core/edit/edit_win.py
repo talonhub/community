@@ -91,7 +91,7 @@ class EditActions:
     def file_start():
         actions.key("ctrl-home")
 
-    def find(text: str = None):
+    def find(text=None):
         actions.key("ctrl-f")
         if text:
             actions.insert(text)
@@ -161,7 +161,7 @@ class EditActions:
     def select_all():
         actions.key("ctrl-a")
 
-    def select_line(n: int = None):
+    def select_line(n=None):
         if n is not None:
             actions.edit.jump_line(n)
         actions.key("end shift-home")

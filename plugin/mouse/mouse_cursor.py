@@ -51,7 +51,7 @@ def show_cursor_helper(show: bool):
         import ctypes
         import winreg
 
-        import win32con
+        SPI_SETCURSORS = 0x57
 
         try:
             Registrykey = winreg.OpenKey(
@@ -70,9 +70,7 @@ def show_cursor_helper(show: bool):
 
             winreg.CloseKey(Registrykey)
 
-            ctypes.windll.user32.SystemParametersInfoA(
-                win32con.SPI_SETCURSORS, 0, None, 0
-            )
+            ctypes.windll.user32.SystemParametersInfoA(SPI_SETCURSORS, 0, None, 0)
 
         except OSError:
             print(f"Unable to show_cursor({show})")

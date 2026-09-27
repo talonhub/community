@@ -1,0 +1,62 @@
+command,spoken
+awk,ark
+base64 -d,base sixty four decode
+base64,base sixty four
+cat,concat
+chmod -R,change mode recurse
+chmod,change mode
+chown -R,change owner recurse
+chown,change owner
+curl
+cut
+df -h,disk free human
+df,disk free
+dig
+du -h,disk usage human
+du,disk usage
+echo
+false
+find
+grep -Hirn,grab here
+grep,grab
+head
+htop,harp top
+id -u,I D user
+id,I D
+less
+ln -s,link soft
+ln,link
+md5sum,M D five sum
+mkdir,make dear
+paste
+printf,print format
+pwd,work dear
+rev,reverse
+rsync,are sync
+sed,said
+seq,sequence
+sha256sum,shah two fifty six sum
+sleep
+sort -h,sort human
+sort -n,sort numeric
+sort -r,sort reverse
+sort -u,sort unique
+sort
+ssh,S S H
+stat
+sudo,pseudo
+tail -f,tail follow
+tail
+tee -a,tea append
+tee,tea
+touch
+tr -d,translate delete
+tr,translate
+true
+uniq -c,unique count
+uniq,unique
+wc -c,word count characters
+wc -l,word count lines
+wc,word count
+who
+whoami,who am I

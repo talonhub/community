@@ -1,6 +1,10 @@
-from talon import Context, Module, actions
+from talon import Context, Module, actions, settings
 
 ctx = Context()
+ctx.matches = r"""
+tag: user.code_object_oriented
+"""
+
 mod = Module()
 
 mod.tag(
@@ -9,6 +13,17 @@ mod.tag(
 )
 
 mod.list("code_common_method", desc="Commonly invoked method, e.g. 'foo' in '.foo()'")
+
+
+@ctx.capture("user.code_type", rule="{user.code_type} | class <user.text>")
+def code_type(m) -> str:
+    """Returns a type, allowing dictated text to be used as a class name"""
+    try:
+        return m.code_type
+    except AttributeError:
+        return actions.user.formatted_text(
+            m.text, settings.get("user.code_class_formatter")
+        )
 
 
 @mod.action_class

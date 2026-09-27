@@ -3,8 +3,8 @@
 import math
 from typing import Union
 
+from skia import Paint, Rect
 from talon import Context, Module, actions, canvas, cron, ctrl, screen, settings, ui
-from talon.skia import Paint, Rect
 from talon.types.point import Point2d
 
 mod = Module()
@@ -297,7 +297,7 @@ class GridActions:
     def grid_narrow_list(digit_list: list[str]):
         """Choose fields multiple times in a row"""
         for d in digit_list:
-            actions.self.grid_narrow(int(d))
+            actions.user.grid_narrow(int(d))
 
     def grid_narrow(digit: Union[int, str]):
         """Choose a field of the grid and narrow the selection down"""

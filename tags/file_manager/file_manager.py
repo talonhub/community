@@ -69,11 +69,14 @@ cached_path = None
 file_selections = folder_selections = []
 current_file_page = current_folder_page = 1
 
-ctx.lists["self.file_manager_directories"] = []
-ctx.lists["self.file_manager_files"] = []
+ctx.lists["user.file_manager_directories"] = []
+ctx.lists["user.file_manager_files"] = []
 
 
-@ctx_file_manager.capture("user.address", rule="{user.system_paths}")
+@ctx_file_manager.capture(
+    "user.address",
+    rule="{user.system_paths}",
+)
 def address(m) -> str:
     return str(m)
 
@@ -241,8 +244,7 @@ def get_file_map(current_path):
 def gui_folders(gui: imgui.GUI):
     global current_folder_page, total_folder_pages
     total_folder_pages = math.ceil(
-        len(ctx.lists["self.file_manager_directories"])
-        / settings.get("user.file_manager_imgui_limit")
+        len(folder_selections) / settings.get("user.file_manager_imgui_limit")
     )
     gui.text(f"Select a directory ({current_folder_page}/{total_folder_pages})")
     gui.line()
@@ -270,14 +272,12 @@ def gui_folders(gui: imgui.GUI):
         current_index += 1
         index = index + 1
 
-    # if total_folder_pages > 1:
-    # gui.spacer()
-
-    # if gui.button('Next...'):
-    #    actions.user.file_manager_next_folder_page()
-
-    # if gui.button("Previous..."):
-    #   actions.user.file_manager_previous_folder_page()
+    if total_folder_pages > 1:
+        gui.spacer()
+        if gui.button("Folder next"):
+            actions.user.file_manager_next_folder_page()
+        if gui.button("Folder last"):
+            actions.user.file_manager_previous_folder_page()
 
     gui.spacer()
     if gui.button("Manager close"):
@@ -317,27 +317,25 @@ def gui_files(gui: imgui.GUI):
         current_index = current_index + 1
         index = index + 1
 
-    # if total_file_pages > 1:
-    #    gui.spacer()
-
-    #    if gui.button('Next...'):
-    #        actions.user.file_manager_next_file_page()
-
-    #   if gui.button("Previous..."):
-    #        actions.user.file_manager_previous_file_page()
+    if total_file_pages > 1:
+        gui.spacer()
+        if gui.button("File next"):
+            actions.user.file_manager_next_file_page()
+        if gui.button("File last"):
+            actions.user.file_manager_previous_file_page()
 
 
 def clear_lists():
     global folder_selections, file_selections, current_folder_page, current_file_page
     if (
-        len(ctx.lists["self.file_manager_directories"]) > 0
-        or len(ctx.lists["self.file_manager_files"]) > 0
+        len(ctx.lists["user.file_manager_directories"]) > 0
+        or len(ctx.lists["user.file_manager_files"]) > 0
     ):
         current_folder_page = current_file_page = 1
         ctx.lists.update(
             {
-                "self.file_manager_directories": [],
-                "self.file_manager_files": [],
+                "user.file_manager_directories": [],
+                "user.file_manager_files": [],
             }
         )
         folder_selections = []
@@ -380,8 +378,8 @@ def update_lists(path=None):
     current_folder_page = current_file_page = 1
     ctx.lists.update(
         {
-            "self.file_manager_directories": directories,
-            "self.file_manager_files": files,
+            "user.file_manager_directories": directories,
+            "user.file_manager_files": files,
         }
     )
 

@@ -67,3 +67,12 @@ else
     $0
 end
 ---
+
+language: php
+-
+try {
+    $1
+} catch (\Throwable \$exception) {
+    $0
+}
+---

@@ -59,7 +59,7 @@ endfunction
 
 language: php
 
-$1.insertionFormatter: SNAKE_CASE
+$1.insertionFormatter: PRIVATE_CAMEL_CASE
 -
 function $1($2) {
     $0
@@ -82,4 +82,13 @@ $1.insertionFormatter: PRIVATE_CAMEL_CASE
 func $1($2) {
     $0
 }
+---
+
+language: lua
+
+$1.insertionFormatter: SNAKE_CASE
+-
+function $1 ($2)
+    $0
+end
 ---

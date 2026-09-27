@@ -1,6 +1,6 @@
+from collections.abc import Callable
 from contextlib import suppress
 from dataclasses import dataclass
-from typing import Callable
 
 from talon import Module, actions
 

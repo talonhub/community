@@ -304,7 +304,7 @@ def command_uri_or_client_fallback(command_id: str):
 def get_command_palette_name(command_id: str) -> str:
     try:
         return obsidian_command_names[command_id]
-    except KeyError as ex:
+    except KeyError:
         actions.app.notify(
             f"ERROR: Could not find Obsidian palette name for command_id {command_id}"
         )
@@ -318,7 +318,7 @@ def obsidian_palette_command(command_id: str, fallback=False):
         actions.user.command_palette_key()
     command = get_command_palette_name(command_id)
     if not command:
-        return None
+        return
     actions.insert(command)
     actions.key("enter")
 
@@ -329,18 +329,15 @@ class Actions:
         """Show command palette"""
         actions.key("ctrl-p")
 
+    def obsidian(command_id: str):
+        """Invoke an action by Obsidian command id"""
+        command_uri_or_client_fallback(command_id)
+
 
 @mac_ctx.action_class("user")
 class MacUserActions:
     def command_palette_key():
         actions.key("cmd-p")
-
-
-@mod.action_class
-class Actions:
-    def obsidian(command_id: str):
-        """Invoke an action by Obsidian command id"""
-        command_uri_or_client_fallback(command_id)
 
 
 @ctx.action_class("app")
@@ -435,7 +432,7 @@ class EditActions:
     def save():
         actions.user.obsidian("editor:save-file")
 
-    def find(text: str = None):
+    def find(text=None):
         actions.sleep("50ms")
         actions.user.obsidian("editor:open-search")
         if text:

@@ -1,11 +1,10 @@
 from typing import Optional
 
-from talon import Module, actions, app, cron, registry, scope, settings, skia, ui
+from skia import Canvas as SkiaCanvas
+from skia import ImageFilter, Point2d, Rect, Shader
+from talon import Module, actions, app, cron, registry, scope, settings, ui
 from talon.canvas import Canvas
 from talon.screen import Screen
-from talon.skia.canvas import Canvas as SkiaCanvas
-from talon.skia.imagefilter import ImageFilter
-from talon.ui import Point2d, Rect
 
 canvas: Canvas = None
 current_mode = ""
@@ -61,9 +60,8 @@ mod.setting("mode_indicator_color_command", type=str)
 mod.setting("mode_indicator_color_other", type=str)
 
 
-setting_values = {
-    name: None
-    for name in (
+setting_values = dict.fromkeys(
+    (
         "user.mode_indicator_show",
         "user.mode_indicator_size",
         "user.mode_indicator_x",
@@ -78,7 +76,7 @@ setting_values = {
         "user.mode_indicator_color_command",
         "user.mode_indicator_color_other",
     )
-}
+)
 
 
 def get_mode_color() -> str:
@@ -88,14 +86,13 @@ def get_mode_color() -> str:
         if "user.deep_sleep" in scope.get("tag"):
             return settings.get("user.mode_indicator_color_deep_sleep")
         return settings.get("user.mode_indicator_color_sleep")
-    elif current_mode == "dictation":
+    if current_mode == "dictation":
         return settings.get("user.mode_indicator_color_dictation")
-    elif current_mode == "mixed":
+    if current_mode == "mixed":
         return settings.get("user.mode_indicator_color_mixed")
-    elif current_mode == "command":
+    if current_mode == "command":
         return settings.get("user.mode_indicator_color_command")
-    else:
-        return settings.get("user.mode_indicator_color_other")
+    return settings.get("user.mode_indicator_color_other")
 
 
 def get_alpha_color() -> str:
@@ -125,7 +122,10 @@ def on_draw(c: SkiaCanvas):
     x, y = c.rect.center.x, c.rect.center.y
     radius = c.rect.height / 2 - 2
 
-    c.paint.shader = skia.Shader.radial_gradient(
+    if radius <= 0:
+        return
+
+    c.paint.shader = Shader.radial_gradient(
         Point2d(x, y), radius, [color_mode, color_gradient]
     )
 
@@ -137,7 +137,7 @@ def on_draw(c: SkiaCanvas):
 
     if settings.get("user.mode_indicator_show_microphone_name"):
         # Remove c.paint.shader gradient before drawing again
-        c.paint.shader = skia.Shader.radial_gradient(
+        c.paint.shader = Shader.radial_gradient(
             Point2d(x, y), radius, [color_text, color_text]
         )
 
@@ -182,6 +182,7 @@ def should_show_indicator():
 def show_indicator():
     global canvas
     canvas = Canvas.from_rect(Rect(0, 0, 0, 0))
+    move_indicator()
     canvas.register("draw", on_draw)
 
 
@@ -196,7 +197,8 @@ def update_indicator():
     if should_show_indicator():
         if not canvas:
             show_indicator()
-        move_indicator()
+        else:
+            move_indicator()
         canvas.freeze()
     elif canvas:
         hide_indicator()

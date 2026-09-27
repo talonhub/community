@@ -1,4 +1,5 @@
-from typing import Any, Callable, TypeVar
+from collections.abc import Callable
+from typing import Any, TypeVar
 
 from talon import Context, Module, actions, settings
 
@@ -214,7 +215,10 @@ ctx.lists["user.code_type_modifier"] = {
 }
 
 
-@ctx.capture("user.code_type", rule="[{user.code_type_modifier}] {user.code_type}")
+@ctx.capture(
+    "user.code_type",
+    rule="[{user.code_type_modifier}] {user.code_type}",
+)
 def code_type(m) -> str:
     """Returns a macro name"""
     return "".join(m)

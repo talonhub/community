@@ -355,7 +355,7 @@ You then have a few options as to when to run it:
   - Note that because many of the rules automatically apply fixes, typically you just need to stage the changes that they made, then reattempt your commit.
   - Whether to use the hook comes down to personal taste. If you like to make many small incremental "work" commits developing a feature, it may be too much overhead.
 
-If you run into setup difficulty with `pre-commit`, you might want to ensure that you have a modern Python 3 local environment first. [pyenv](https://github.com/pyenv/pyenv) is good way to install such Python versions without affecting your system Python (recommend installing 3.9 to match Talon's current version). On macOS you can also `brew install pre-commit`.
+If you run into setup difficulty with `pre-commit`, you might want to ensure that you have a modern Python 3 local environment first. [uv](https://github.com/astral-sh/uv) is good way to install such Python versions without affecting your system Python. We recommend a version of Python matching Talon's current version, which is 3.11 for Talon 0.4 as of this writing (`uv tool install --python 3.11 pre-commit`).
 
 ## Automated tests
 

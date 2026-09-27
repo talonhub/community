@@ -1,0 +1,9 @@
+URL Template,Name
+https://www.amazon.com/s/?field-keywords=%s,amazon
+https://www.google.com/search?q=%s,google
+https://maps.google.com/maps?q=%s,map
+https://scholar.google.com/scholar?q=%s,scholar
+https://en.wikipedia.org/w/index.php?search=%s,wiki
+https://www.bing.com/search?pglt=161&q=%s,bing
+https://www.ebay.com/sch/i.html?_nkw=%s,ebay
+https://www.youtube.com/results?search_query=%s,youtube

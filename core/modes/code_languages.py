@@ -22,6 +22,7 @@ code_languages = [
     Language("snippet", "snippet", ["snippet"]),
     # Language("cmake", "see make", ["cmake"]),
     Language("csharp", "see sharp", ["cs"]),
+    Language("aspnetcorerazor", "asp net core razor", ["razor", "cshtml"]),
     Language("css", "c s s", ["css"]),
     # Language("elisp", "elisp", ["el"]),
     Language("elixir", "elixir", ["ex"]),

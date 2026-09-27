@@ -1,0 +1,21 @@
+list: user.code_type
+code.language: php
+-
+
+array
+bool
+callable
+false
+float
+int
+iterable
+mixed
+never
+null
+object
+parent
+self
+static
+string
+true
+void
