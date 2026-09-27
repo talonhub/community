@@ -1,7 +1,6 @@
 import os
 
 from talon import Context, actions, ui
-from talon.mac import applescript
 
 ctx = Context()
 ctx.matches = r"""
@@ -31,6 +30,8 @@ class UserActions:
         return title
 
     def file_manager_terminal_here():
+        from talon.mac import applescript
+
         applescript.run(r"""
         tell application "Finder"
             set myWin to window 1

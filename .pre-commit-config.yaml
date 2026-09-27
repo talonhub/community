@@ -28,13 +28,13 @@ repos:
       - id: mixed-line-ending
 
   - repo: https://github.com/oxc-project/mirrors-oxfmt
-    rev: "v0.67.0"
+    rev: "v0.69.0"
     hooks:
       - id: oxfmt
         types_or: [markdown, yaml, toml, json]
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.16.7
+    rev: v0.16.8
     hooks:
       - id: ruff-check
         types_or: [python, pyi, jupyter, pyproject]
