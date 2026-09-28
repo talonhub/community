@@ -139,7 +139,7 @@ class GUI:
 
         # Defer hiding until after rendering
         if self._egui is not None:
-            cron.after("0ms", self.hide)
+            cron.after("1ms", self.hide)
             return
 
         try:
