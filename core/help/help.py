@@ -663,12 +663,14 @@ def draw_list_commands():
     total_page_count = len(pages_list)
     return pages_list
 
+scrolling_page_delta = 0
 
 @open_gui(y=0)
 async def gui_list_help(ui, helpers):
     global total_page_count
     global current_list_page
     global selected_list
+    global scrolling_page_delta
 
     ui.label(f"List: {selected_list}")
 
@@ -682,6 +684,7 @@ async def gui_list_help(ui, helpers):
 
     text_size = helpers.get_text_size()
     maximum_height = text_size*settings.get("user.help_max_command_lines_per_page")
+    page_delta = scrolling_page_delta
     if len(talon_list) > 0:
         headers = ["Spoken Form", "Value"]
         rows = [[key, value] for key, value in talon_list.items()]
@@ -692,17 +695,19 @@ async def gui_list_help(ui, helpers):
             rows,
             maximum_height=maximum_height,
             row_height=text_size,
-            id_salt="help_list")
-
+            id_salt="help_list",
+            page_delta=page_delta,
+            )
+    scrolling_page_delta -= page_delta
     helpers.spacing(ui)
 
     async with ui.horizontal_wrapped():
         if ui.button("Help next").clicked():
-            #actions.user.help_next()
-            ui.scroll_with_delta(egui.Vec2(0, maximum_height))
+            scrolling_page_delta += 1
+
 
         if ui.button("Help previous").clicked():
-            actions.user.help_previous()
+            scrolling_page_delta -= 1
 
         if ui.button("Help return").clicked():
             actions.user.help_return()

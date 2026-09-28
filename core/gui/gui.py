@@ -59,7 +59,7 @@ class Helpers:
     def spacing(self, ui: egui.Ui):
         ui.add_space(TEXT_SIZE)
 
-    async def draw_table(self, ui, headers, rows, row_height=None, show_row=None, auto_size_columns=False, maximum_height=None, id_salt=None):
+    async def draw_table(self, ui, headers, rows, row_height=None, show_row=None, auto_size_columns=False, maximum_height=None, id_salt=None, page_delta: int=0):
         if id_salt is None:
             id_salt = str(rows)
         if maximum_height is None:
@@ -68,7 +68,6 @@ class Helpers:
         table = (
                 egui.TableBuilder(ui)
                 .cell_layout(egui.Layout.left_to_right(egui.Align.Center).with_main_wrap(True))
-                .min_scrolled_height(0.0)
                 .max_scroll_height(maximum_height)
                 .id_salt(id_salt)
             )
@@ -77,18 +76,22 @@ class Helpers:
                 table = table.column(egui.Column.auto())
             else:
                 table = table.column(egui.Column.remainder().at_most(column_width))
+        
+        if page_delta != 0:
+            target_row = 10
+            print("scrolling to row", target_row)
+            table = table.scroll_to_row(target_row)
 
         async with table.header(20) as header:
             for h in headers:
                 async with header.col() as header_ui:
                     header_ui.strong(h)
 
-        table = header.table()
         if row_height is None:
             row_height = ui.spacing().interact_size.y
         if show_row is None:
             show_row = show_row_with_labels
-        async with table.body() as body:
+        async with header.table().body() as body:
             async for row in body.rows(row_height, len(rows)):
                 row.set_overline(True)
                 await show_row(row, rows)
