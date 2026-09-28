@@ -53,7 +53,7 @@ class Helpers:
     def button(self, ui: egui.Ui, text: str) -> bool:
         return ui.button(text).clicked()
 
-    def spacing(self):
+    def spacing(self, ui: egui.Ui):
         ui.add_space(TEXT_SIZE)
 
     async def draw_table(self, ui, headers, rows, row_height=None, show_row=None, auto_size_columns=False, maximum_height=None, id_salt=None):
@@ -91,8 +91,6 @@ class Helpers:
                 await show_row(row, rows)
 
 
-draw_callback_type = Callable[[egui.Ui, Helpers], None]
-
 def open_gui(
     *,
     screen: Screen | None = None,
@@ -101,7 +99,7 @@ def open_gui(
     width: float | None = None,
     height: float | None = None,
 ):
-    def open_inner(draw: draw_callback_type):
+    def open_inner(draw):
         return GUI(
             draw,
             screen=screen,
@@ -116,7 +114,7 @@ def open_gui(
 
 @dataclass
 class Props:
-    draw: draw_callback_type
+    draw: Callable
     screen: Screen | None
     x: float | None
     y: float | None
@@ -132,7 +130,7 @@ class GUI:
 
     def __init__(
         self,
-        draw: draw_callback_type,
+        draw: Callable,
         screen: Screen | None,
         x: float | None,
         y: float | None,
@@ -197,7 +195,7 @@ class GUI:
         async with frame.show() as content_ui:
             try:
                 self._egui = content_ui
-                self._props.draw(content_ui, Helpers())
+                await self._props.draw(content_ui, Helpers())
             finally:
                 # An egui.Ui is only valid during the current frame.
                 self._egui = None

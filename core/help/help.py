@@ -6,6 +6,8 @@ from itertools import islice
 from textwrap import wrap
 from typing import Any, Optional
 
+from ...core.gui.gui import open_gui
+
 from talon import Context, Module, actions, imgui, registry, settings
 
 mod = Module()
@@ -643,7 +645,7 @@ def paginate_list(data, SIZE=None):
         yield {k: data[k] for k in islice(it, chunk_size)}
 
 
-def draw_list_commands(gui: imgui.GUI):
+def draw_list_commands():
     global selected_list
     global total_page_count
     global selected_context_page
@@ -661,13 +663,13 @@ def draw_list_commands(gui: imgui.GUI):
     return pages_list
 
 
-@imgui.open(y=0)
-def gui_list_help(gui: imgui.GUI):
+@open_gui(y=0)
+async def gui_list_help(ui, helpers):
     global total_page_count
     global current_list_page
     global selected_list
 
-    pages_list = draw_list_commands(gui)
+    pages_list = draw_list_commands()
     total_page_count = len(pages_list)
     # print(pages_list[current_page])
 
@@ -676,36 +678,36 @@ def gui_list_help(gui: imgui.GUI):
     else:
         page_info = f"{current_list_page}/{total_page_count}"
 
-    gui.text(f"List: {selected_list} ({page_info})")
+    ui.label(f"List: {selected_list} ({page_info})")
 
     # Extract description from list declaration, i.e. mod.list(..., desc=...))
     if (desc := registry.decls.lists[selected_list].desc) is not None:
-        for line in wrap(desc):
-            gui.text(line)
+        ui.label(desc[:70])
 
-    gui.line()
+    ui.separator()
 
     if len(pages_list) > 0:
         for key, value in pages_list[current_list_page - 1].items():
-            gui.text(f"{value}: {key}")
+            ui.label(f"{value}: {key}")
 
-    gui.spacer()
+    helpers.spacing(ui)
 
-    if total_page_count > 1:
-        if gui.button("Help next"):
-            actions.user.help_next()
+    async with ui.horizontal_wrapped():
+        if total_page_count > 1:
+            if ui.button("Help next").clicked():
+                actions.user.help_next()
 
-        if gui.button("Help previous"):
-            actions.user.help_previous()
+            if ui.button("Help previous").clicked():
+                actions.user.help_previous()
 
-        if gui.button("Help return"):
-            actions.user.help_return()
+            if ui.button("Help return").clicked():
+                actions.user.help_return()
 
-    if gui.button("Help refresh"):
-        actions.user.help_refresh()
+        if ui.button("Help refresh").clicked():
+            actions.user.help_refresh()
 
-    if gui.button("Help close"):
-        actions.user.help_hide()
+        if ui.button("Help close").clicked():
+            actions.user.help_hide()
 
 
 @mod.action_class
