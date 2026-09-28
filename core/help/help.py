@@ -669,16 +669,7 @@ async def gui_list_help(ui, helpers):
     global current_list_page
     global selected_list
 
-    pages_list = draw_list_commands()
-    total_page_count = len(pages_list)
-    # print(pages_list[current_page])
-
-    if total_page_count == 0:
-        page_info = "empty"
-    else:
-        page_info = f"{current_list_page}/{total_page_count}"
-
-    ui.label(f"List: {selected_list} ({page_info})")
+    ui.label(f"List: {selected_list}")
 
     # Extract description from list declaration, i.e. mod.list(..., desc=...))
     if (desc := registry.decls.lists[selected_list].desc) is not None:
@@ -686,22 +677,24 @@ async def gui_list_help(ui, helpers):
 
     ui.separator()
 
-    if len(pages_list) > 0:
-        for key, value in pages_list[current_list_page - 1].items():
-            ui.label(f"{value}: {key}")
+    talon_list = actions.user.talon_get_active_registry_list(selected_list)
+
+    if len(talon_list) > 0:
+        headers = ["Spoken Form", "Value"]
+        rows = [[key, value] for key, value in talon_list.items()]
+        await helpers.draw_table(ui, headers, rows, id_salt="help_list")
 
     helpers.spacing(ui)
 
     async with ui.horizontal_wrapped():
-        if total_page_count > 1:
-            if ui.button("Help next").clicked():
-                actions.user.help_next()
+        if ui.button("Help next").clicked():
+            actions.user.help_next()
 
-            if ui.button("Help previous").clicked():
-                actions.user.help_previous()
+        if ui.button("Help previous").clicked():
+            actions.user.help_previous()
 
-            if ui.button("Help return").clicked():
-                actions.user.help_return()
+        if ui.button("Help return").clicked():
+            actions.user.help_return()
 
         if ui.button("Help refresh").clicked():
             actions.user.help_refresh()
