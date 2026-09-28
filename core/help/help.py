@@ -682,7 +682,12 @@ async def gui_list_help(ui, helpers):
     if len(talon_list) > 0:
         headers = ["Spoken Form", "Value"]
         rows = [[key, value] for key, value in talon_list.items()]
-        await helpers.draw_table(ui, headers, rows, id_salt="help_list")
+        await helpers.draw_table(
+            ui,
+            headers,
+            rows,
+            row_height=helpers.get_text_size(),
+            id_salt="help_list")
 
     helpers.spacing(ui)
 

@@ -44,6 +44,9 @@ async def show_row_with_labels(row, contents):
             cell_ui.label(column)
 
 class Helpers:
+    def get_text_size(self) -> float:
+        return TEXT_SIZE
+
     def title(self, ui: egui.Ui, text: str):
         title = egui.RichText(text).size(TEXT_SIZE * 1.5).strong()
         ui.label(title)
