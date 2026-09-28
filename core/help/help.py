@@ -682,7 +682,7 @@ async def gui_list_help(ui, helpers):
 
     # Extract description from list declaration, i.e. mod.list(..., desc=...))
     if (desc := registry.decls.lists[selected_list].desc) is not None:
-        ui.label(desc[:70])
+        ui.label(desc)
 
     ui.separator()
 
