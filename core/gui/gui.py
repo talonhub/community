@@ -37,6 +37,12 @@ TEXT_SIZE = 14
 TEXT_COLOR_DARK_MODE = "#D0D0D0"
 BUTTON_PADDING = egui.Vec2(5.0, 2.5)
 
+async def show_row_with_labels(row, contents):
+    index = row.index()
+    for column in contents[index]:
+        async with row.col() as cell_ui:
+            cell_ui.label(column)
+
 class Helpers:
     def title(self, ui: egui.Ui, text: str):
         title = egui.RichText(text).size(TEXT_SIZE * 1.5).strong()
@@ -49,6 +55,41 @@ class Helpers:
 
     def spacing(self):
         ui.add_space(TEXT_SIZE)
+
+    async def draw_table(self, ui, headers, rows, row_height=None, show_row=None, auto_size_columns=False, maximum_height=None, id_salt=None):
+        if id_salt is None:
+            id_salt = str(rows)
+        if maximum_height is None:
+            maximum_height = ui.available_height()
+        column_width = ui.available_width()/len(headers)
+        table = (
+                egui.TableBuilder(ui)
+                .cell_layout(egui.Layout.left_to_right(egui.Align.Center).with_main_wrap(True))
+                .min_scrolled_height(0.0)
+                .max_scroll_height(maximum_height)
+                .id_salt(id_salt)
+            )
+        for _ in range(len(headers)):
+            if auto_size_columns:
+                table = table.column(egui.Column.auto())
+            else:
+                table = table.column(egui.Column.remainder().at_most(column_width))
+
+        async with table.header(20) as header:
+            for h in headers:
+                async with header.col() as header_ui:
+                    header_ui.strong(h)
+
+        table = header.table()
+        if row_height is None:
+            row_height = ui.spacing().interact_size.y
+        if show_row is None:
+            show_row = show_row_with_labels
+        async with table.body() as body:
+            async for row in body.rows(row_height, len(rows)):
+                row.set_overline(True)
+                await show_row(row, rows)
+
 
 draw_callback_type = Callable[[egui.Ui, Helpers], None]
 
