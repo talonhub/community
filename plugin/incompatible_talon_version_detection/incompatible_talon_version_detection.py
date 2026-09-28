@@ -13,7 +13,7 @@ def compute_version_number() -> float:
                 break
         i += 1
     if i == 0:
-        raise ValueError(f"Could not parse Talon version {version}")
+        raise ValueError(f"Could not parse Talon version {version} while trying to decide if your versions of Community and Talon are compatible.")
     return float(version[:i])
 
 
