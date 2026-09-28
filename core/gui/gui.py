@@ -33,7 +33,7 @@ from talon import cron, ui
 from talon.egui import Window
 from talon.screen import Screen
 
-TEXT_SIZE = 14
+TEXT_SIZE = 12
 TEXT_COLOR_DARK_MODE = "#D0D0D0"
 BUTTON_PADDING = egui.Vec2(5.0, 2.5)
 

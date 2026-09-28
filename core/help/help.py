@@ -7,6 +7,7 @@ from textwrap import wrap
 from typing import Any, Optional
 
 from ...core.gui.gui import open_gui
+import egui
 
 from talon import Context, Module, actions, imgui, registry, settings
 
@@ -679,21 +680,26 @@ async def gui_list_help(ui, helpers):
 
     talon_list = actions.user.talon_get_active_registry_list(selected_list)
 
+    text_size = helpers.get_text_size()
+    maximum_height = text_size*settings.get("user.help_max_command_lines_per_page")
     if len(talon_list) > 0:
         headers = ["Spoken Form", "Value"]
         rows = [[key, value] for key, value in talon_list.items()]
+        text_size = helpers.get_text_size()
         await helpers.draw_table(
             ui,
             headers,
             rows,
-            row_height=helpers.get_text_size(),
+            maximum_height=maximum_height,
+            row_height=text_size,
             id_salt="help_list")
 
     helpers.spacing(ui)
 
     async with ui.horizontal_wrapped():
         if ui.button("Help next").clicked():
-            actions.user.help_next()
+            #actions.user.help_next()
+            ui.scroll_with_delta(egui.Vec2(0, maximum_height))
 
         if ui.button("Help previous").clicked():
             actions.user.help_previous()
