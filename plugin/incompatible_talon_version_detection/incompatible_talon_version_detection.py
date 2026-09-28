@@ -1,6 +1,7 @@
 from talon import app, imgui, actions, Module, Context
 
 def compute_version_number() -> float:
+	"""Convert the Talon version string to a float by finding the first valid float in the string. This will only capture the first 2 dot separated numbers in the version"""
 	version = app.version
 	decimal_points = 0
 	i = 0
@@ -24,6 +25,7 @@ ctx = Context()
 def on_ready():
 	global incompatible_version_gui
 	if compute_version_number() < 1:
+		# define this inside the if statement so that future Talon versions that remove imgui do not throw an exception
 		@imgui.open()
 		def gui(gui: imgui.GUI):
 			gui.text("You are using a version of the Community maintained voice command set")
