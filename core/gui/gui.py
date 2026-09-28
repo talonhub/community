@@ -38,7 +38,17 @@ TEXT_COLOR_DARK_MODE = "#D0D0D0"
 BUTTON_PADDING = egui.Vec2(5.0, 2.5)
 
 class Helpers:
-    pass
+    def title(self, ui: egui.Ui, text: str):
+        title = egui.RichText(text).size(TEXT_SIZE * 1.5).strong()
+        ui.label(title)
+        ui.separator()
+        ui.add_space(8)
+
+    def button(self, ui: egui.Ui, text: str) -> bool:
+        return ui.button(text).clicked()
+
+    def spacing(self):
+        ui.add_space(TEXT_SIZE)
 
 draw_callback_type = Callable[[egui.Ui, Helpers], None]
 
@@ -138,28 +148,6 @@ class GUI:
         finally:
             self._window = None
 
-    def text(self, text: str):
-        self._ui().label(text)
-
-    def header(self, text: str):
-        self._ui().heading(text)
-
-    def title(self, text: str):
-        ui = self._ui()
-        title = egui.RichText(text).size(TEXT_SIZE * 1.5).strong()
-        ui.label(title)
-        ui.separator()
-        self._ui().add_space(8)
-
-    def button(self, text: str) -> bool:
-        return self._ui().button(text).clicked()
-
-    def separator(self):
-        self._ui().separator()
-
-    def spacing(self):
-        self._ui().add_space(TEXT_SIZE)
-
     async def _render(self, ui: egui.Ui) -> None:
         self._apply_theme(ui)
 
@@ -223,10 +211,3 @@ class GUI:
         except Exception as e:
             print(f"Error getting active screen, defaulting to main screen: {e}")
             return ui.main_screen()
-
-    def _ui(self) -> egui.Ui:
-        if self._egui is None:
-            raise RuntimeError(
-                "GUI widgets may only be created inside the draw callback"
-            )
-        return self._egui
