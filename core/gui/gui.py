@@ -68,6 +68,7 @@ class Helpers:
         table = (
                 egui.TableBuilder(ui)
                 .cell_layout(egui.Layout.left_to_right(egui.Align.Center).with_main_wrap(True))
+                .min_scrolled_height(0.0)
                 .max_scroll_height(maximum_height)
                 .id_salt(id_salt)
             )
