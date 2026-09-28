@@ -1,7 +1,7 @@
 from talon import app, imgui, actions, Module, Context
 
 def compute_version_number() -> float:
-	"""Convert the Talon version string to a float by finding the first valid float in the string. This will only capture the first 2 dot separated numbers in the version"""
+	"""Convert the Talon version string to a float by finding the longest prefix that is a valid float. This will only capture the first 2 dot separated numbers in the version"""
 	version = app.version
 	decimal_points = 0
 	i = 0
