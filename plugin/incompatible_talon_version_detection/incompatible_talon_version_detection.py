@@ -47,9 +47,9 @@ def on_ready():
             gui.text("Community version compatible with Talon 0.4")
             if gui.button("open zero point four download page"):
                 actions.user.open_zero_point_four_compatible_community_download_page()
-                actions.user.incompatible_version_message_hide()
+                actions.user.hide_incompatible_version_message()
             if gui.button("version message hide"):
-                actions.user.incompatible_version_message_hide()
+                actions.user.hide_incompatible_version_message()
 
         ctx.tags = ["user.incompatible_version_message_showing"]
         gui.show()
@@ -58,7 +58,7 @@ def on_ready():
 
 @mod.action_class
 class Actions:
-    def incompatible_version_message_hide():
+    def hide_incompatible_version_message():
         """Close the version incompatibility message"""
         if incompatible_version_gui:
             incompatible_version_gui.hide()
