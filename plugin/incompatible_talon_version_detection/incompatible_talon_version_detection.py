@@ -28,8 +28,9 @@ def on_ready():
 		def gui(gui: imgui.GUI):
 			gui.text("You are using a version of the Community maintained voice command set")
 			gui.text("intended for Talon 1.0 on an older version of Talon.")
+			gui.text("You should either update Talon or download a compatible Community version.")
 			gui.text("The following button takes you to a page where you can download a")
-			gui.text("version compatible with Talon 0.4")
+			gui.text("Community version compatible with Talon 0.4")
 			if gui.button("open zero point four download page"):
 				actions.user.open_zero_point_four_compatible_community_download_page()
 				actions.user.incompatible_version_message_hide()
