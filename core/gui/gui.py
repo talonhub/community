@@ -46,22 +46,30 @@ async def show_row_with_labels(row, contents):
 
 class PageScroller:
     def __init__(self):
-        self.scrolling_time = 0
         self.page_size = 0
         self.page_delta = 0
         self.start_page = None
+        self.scroll = False
     
     def increase_page(self):
-        self.scrolling_time = 1.0
         self.page_delta += 1
+        self.scroll = True
 
     def decrease_page(self):
-        self.scrolling_time = 1.0
         self.page_delta -= 1
+        self.scroll = True
     
-    def update_start_page(self, current_page):
+    def update_start_page(self, current, bottom, maximum_target):
+        page = current//self.page_size
         if not self.is_scrolling():
-            self.start_page = current_page
+            self.start_page = page
+        target = self.compute_target(maximum_target)
+        if page == target//self.page_size or (current + self.page_size > target):
+            if self.is_scrolling():
+                self.page_delta = 0
+                self.target_page = None
+                self.start_page = None
+                self.scroll = False
 
     def compute_target(self, maximum):
         target_page = self.start_page + self.page_delta
@@ -70,16 +78,8 @@ class PageScroller:
         target = max(target, 0)
         return target
 
-    def handle_scroll(self, time_unit):
-        self.scrolling_time -= time_unit
-        self.scrolling_time = max(self.scrolling_time, 0)
-        if not self.is_scrolling():
-            self.page_delta = 0
-            self.target_page = None
-            self.start_page = None
-    
     def is_scrolling(self):
-        return self.scrolling_time > 0 and self.start_page is not None
+        return self.scroll
 
         
 class Helpers:
@@ -126,9 +126,9 @@ class Helpers:
         
         if scroller and scroller.is_scrolling():
             target_row = scroller.compute_target(len(rows) - 1)
+            if target_row + scroller.page_size > len(rows) - 1:
+                target_row = len(rows) - scroller.page_size
             table = table.scroll_to_row(target_row, egui.Align.TOP)
-            # we need 2 frames to scroll a table properly
-            scroller.handle_scroll(0.5)
 
         async with table.header(20) as header:
             for h in headers:
@@ -159,7 +159,7 @@ class Helpers:
                     last_row_index = row.index()
         if scroller and scroller.page_size is not None and current_row_index is not None:
             page = current_row_index//scroller.page_size
-            scroller.update_start_page(page)
+            scroller.update_start_page(current_row_index, last_row_index, len(rows) - 1)
 
 
 
@@ -334,3 +334,5 @@ class GUI:
     def refresh(self):
         if self._window:
             self._window.refresh()
+
+    
