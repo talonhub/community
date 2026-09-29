@@ -62,6 +62,7 @@ show_enabled_contexts_only = False
 selected_list = None
 current_list_page = 1
 
+page_scroller: PageScroller | None = None
 
 def update_title():
     global live_update
@@ -470,6 +471,7 @@ def reset():
     global display_name_to_context_name_map
     global selected_list
     global current_list_page
+    global page_scroller
 
     current_context_page = 1
     sorted_display_list = []
@@ -480,6 +482,7 @@ def reset():
     display_name_to_context_name_map = {}
     selected_list = None
     current_list_page = 1
+    page_scroller = None
 
 
 def update_active_contexts_cache(active_contexts):
@@ -663,14 +666,15 @@ def draw_list_commands():
     total_page_count = len(pages_list)
     return pages_list
 
-page_scroller = PageScroller()
-
 @open_gui(y=0)
 async def gui_list_help(ui, helpers):
     global total_page_count
     global current_list_page
     global selected_list
-    global scrolling_page_delta
+    global page_scroller
+    
+    if not page_scroller:
+        page_scroller = PageScroller()
 
     ui.label(f"List: {selected_list}")
 
@@ -704,7 +708,6 @@ async def gui_list_help(ui, helpers):
     async with ui.horizontal_wrapped():
         if ui.button("Help next").clicked():
             page_scroller.increase_page()
-
 
         if ui.button("Help previous").clicked():
             page_scroller.decrease_page()
@@ -809,6 +812,10 @@ class Actions:
 
         global current_list_page
 
+        if page_scroller:
+            page_scroller.increase_page()
+            return 
+
         if gui_context_help.showing:
             if selected_context is None and search_phrase is None:
                 if current_context_page != total_page_count:
@@ -854,6 +861,10 @@ class Actions:
         global total_page_count
 
         global current_list_page
+
+        if page_scroller:
+            page_scroller.decrease_page()
+            return 
 
         if gui_context_help.showing:
             if selected_context is None and search_phrase is None:
