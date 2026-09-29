@@ -49,32 +49,34 @@ class PageScroller:
         self.scrolling_time = 0
         self.page_size = 0
         self.page_delta = 0
-        self.target_page = None
         self.start_page = None
     
     def increase_page(self):
         self.scrolling_time = 1.0
         self.page_delta += 1
-        self.target_page = None
 
     def decrease_page(self):
         self.scrolling_time = 1.0
         self.page_delta -= 1
-        self.target_page = None
     
-    def update_target_page(self, current_page):
-        if  not self.start_page:
+    def update_start_page(self, current_page):
+        if not self.is_scrolling():
             self.start_page = current_page
 
-        self.target_page = self.start_page + self.page_delta
-        return self.target_page*self.page_size
+    def compute_target(self):
+        target_page = self.start_page + self.page_delta
+        return target_page*self.page_size
 
     def handle_scroll(self, time_unit):
         self.scrolling_time -= time_unit
         self.scrolling_time = max(self.scrolling_time, 0)
+        if not self.is_scrolling():
+            self.page_delta = 0
+            self.target_page = None
+            self.start_page = None
     
     def is_scrolling(self):
-        return self.scrolling_time > 0
+        return self.scrolling_time > 0 and self.start_page
 
         
 @dataclass
@@ -104,7 +106,7 @@ class Helpers:
     def spacing(self, ui: egui.Ui):
         ui.add_space(TEXT_SIZE)
 
-    async def draw_table(self, ui, headers, rows, row_height=None, show_row=None, auto_size_columns=False, maximum_height=None, id_salt=None, page_delta: int=0):
+    async def draw_table(self, ui, headers, rows, row_height=None, show_row=None, auto_size_columns=False, maximum_height=None, id_salt=None, scroller=None):
         if id_salt is None:
             id_salt = str(rows)
         if maximum_height is None:
@@ -124,10 +126,11 @@ class Helpers:
             else:
                 table = table.column(egui.Column.remainder().at_most(column_width))
         
-        if page_delta != 0:
-            target_row = 10
-            print("scrolling to row", target_row, page_delta)
+        if scroller and scroller.is_scrolling():
+            target_row = scroller.compute_target()
             table = table.scroll_to_row(target_row, egui.Align.TOP)
+            # we need 2 frames to scroll a table properly
+            scroller.handle_scroll(0.5)
 
         async with table.header(20) as header:
             for h in headers:
@@ -156,7 +159,9 @@ class Helpers:
                     current_row_index = row.index()
                 if bottom >= 0:
                     last_row_index = row.index()
-        return TableState(current_row_index, last_row_index)
+        if scroller and scroller.page_size is not None and current_row_index is not None:
+            page = current_row_index//scroller.page_size
+            scroller.update_start_page(page)
 
 
 

@@ -6,7 +6,7 @@ from itertools import islice
 from textwrap import wrap
 from typing import Any, Optional
 
-from ...core.gui.gui import open_gui
+from ...core.gui.gui import open_gui, PageScroller
 import egui
 
 from talon import Context, Module, actions, imgui, registry, settings
@@ -663,7 +663,7 @@ def draw_list_commands():
     total_page_count = len(pages_list)
     return pages_list
 
-scrolling_page_delta = 0
+page_scroller = PageScroller()
 
 @open_gui(y=0)
 async def gui_list_help(ui, helpers):
@@ -682,33 +682,32 @@ async def gui_list_help(ui, helpers):
 
     talon_list = actions.user.talon_get_active_registry_list(selected_list)
 
+    page_size = settings.get("user.help_max_command_lines_per_page")
+    page_scroller.page_size = page_size
+
     row_size = helpers.get_label_row_size(ui)
-    maximum_height = (row_size+helpers.get_item_spacing(ui)*2)*settings.get("user.help_max_command_lines_per_page")
-    page_delta = scrolling_page_delta
+    maximum_height = (row_size+helpers.get_item_spacing(ui)*2)*page_size
     if len(talon_list) > 0:
         headers = ["Spoken Form", "Value"]
         rows = [[key, value] for key, value in talon_list.items()]
-        state = await helpers.draw_table(
+        await helpers.draw_table(
             ui,
             headers,
             rows,
             maximum_height=maximum_height,
             row_height=row_size,
             id_salt="help_list",
-            page_delta=page_delta,
+            scroller=page_scroller,
             )
-    if page_delta:
-        scrolling_page_delta -= 0.5
-        scrolling_page_delta = max(scrolling_page_delta, 0)
     helpers.spacing(ui)
 
     async with ui.horizontal_wrapped():
         if ui.button("Help next").clicked():
-            scrolling_page_delta += 1
+            page_scroller.increase_page()
 
 
         if ui.button("Help previous").clicked():
-            scrolling_page_delta -= 1
+            page_scroller.decrease_page()
 
         if ui.button("Help return").clicked():
             actions.user.help_return()
