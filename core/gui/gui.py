@@ -138,23 +138,18 @@ class Helpers:
         if show_row is None:
             show_row = show_row_with_labels
         current_row_index = None
-        last_row_index = None
 
         async with header.table().body() as body:
             body_rect = body.max_rect()
             body_top = min(body_rect.top(), body_rect.bottom())
-            body_bottom = max(body_rect.top(), body_rect.bottom())
             async for row in body.rows(row_height, len(rows)):
                 row.set_overline(True)
                 await show_row(row, rows)
                 response = row.response()
                 rect = response.rect
                 top = min(rect.top(), rect.bottom()) - body_top
-                bottom = body_bottom - max(rect.top(), rect.bottom())
                 if current_row_index is None and top >= 0:
                     current_row_index = row.index()
-                if bottom >= 0:
-                    last_row_index = row.index()
         if scroller and scroller.page_size is not None and current_row_index is not None:
             scroller.update_start_page(current_row_index, len(rows) - 1)
 
