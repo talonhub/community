@@ -36,6 +36,7 @@ from talon.screen import Screen
 TEXT_SIZE = 12
 TEXT_COLOR_DARK_MODE = "#D0D0D0"
 BUTTON_PADDING = egui.Vec2(5.0, 2.5)
+VERTICAL_ITEM_SPACING = 1.0
 
 async def show_row_with_labels(row, contents):
     index = row.index()
@@ -55,6 +56,12 @@ class TableState:
 class Helpers:
     def get_text_size(self) -> float:
         return TEXT_SIZE
+
+    def get_label_row_size(self, ui) -> float:
+        return ui.spacing().item_spacing.y + egui.TextStyle.Body.resolve(ui.style()).size
+
+    def get_item_spacing(self, ui) -> float:
+        return ui.spacing().item_spacing.y
 
     def title(self, ui: egui.Ui, text: str):
         title = egui.RichText(text).size(TEXT_SIZE * 1.5).strong()
@@ -249,7 +256,10 @@ class GUI:
         )
 
         # Default button padding (4, 1) is too little.
-        style.spacing.button_padding = BUTTON_PADDING
+        spacing = style.spacing
+        spacing.button_padding = BUTTON_PADDING
+        spacing.item_spacing = egui.Vec2(spacing.item_spacing.x, VERTICAL_ITEM_SPACING)
+        style.spacing = spacing
 
         ui.set_style(style)
 

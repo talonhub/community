@@ -682,19 +682,18 @@ async def gui_list_help(ui, helpers):
 
     talon_list = actions.user.talon_get_active_registry_list(selected_list)
 
-    text_size = helpers.get_text_size()
-    maximum_height = text_size*settings.get("user.help_max_command_lines_per_page")
+    row_size = helpers.get_label_row_size(ui)
+    maximum_height = (row_size+helpers.get_item_spacing(ui)*2)*settings.get("user.help_max_command_lines_per_page")
     page_delta = scrolling_page_delta
     if len(talon_list) > 0:
         headers = ["Spoken Form", "Value"]
         rows = [[key, value] for key, value in talon_list.items()]
-        text_size = helpers.get_text_size()
-        await helpers.draw_table(
+        state = await helpers.draw_table(
             ui,
             headers,
             rows,
             maximum_height=maximum_height,
-            row_height=text_size,
+            row_height=row_size,
             id_salt="help_list",
             page_delta=page_delta,
             )
