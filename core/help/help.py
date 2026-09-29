@@ -9,7 +9,7 @@ from typing import Any, Optional
 from ...core.gui.gui import open_gui, PageScroller
 import egui
 
-from talon import Context, Module, actions, imgui, registry, settings
+from talon import Context, Module, actions, app, cron, imgui, registry, settings
 
 mod = Module()
 mod.list("help_contexts", desc="list of available contexts")
@@ -471,6 +471,7 @@ def reset():
     global selected_list
     global current_list_page
     global page_scroller
+    global current_gui
 
     current_context_page = 1
     sorted_display_list = []
@@ -482,6 +483,7 @@ def reset():
     selected_list = None
     current_list_page = 1
     page_scroller = None
+    current_gui = None
 
 
 def update_active_contexts_cache(active_contexts):
@@ -724,8 +726,8 @@ class Actions:
         # what you say is stored as a trigger
         global selected_list
         global current_gui
-        current_gui = gui_list_help
         reset()
+        current_gui = gui_list_help
         selected_list = ab
         gui_list_help.show()
         register_events(True)
@@ -811,9 +813,7 @@ class Actions:
 
         if page_scroller:
             page_scroller.increase_page()
-            # this is a workaround for a bug requiring interaction for a egui to update
-            if current_gui:
-                current_gui.refresh()
+            refresh_gui()
             return 
 
         if gui_context_help.showing:
@@ -864,9 +864,7 @@ class Actions:
 
         if page_scroller:
             page_scroller.decrease_page()
-            # this is a workaround for a bug requiring interaction for a egui to update
-            if current_gui:
-                current_gui.refresh()
+            refresh_gui()
             return 
 
         if gui_context_help.showing:
@@ -927,3 +925,14 @@ class Actions:
 
 def commands_updated(_):
     update_title()
+
+def refresh_gui():
+    # this is a workaround for requiring interaction for a egui to update (bug?)
+    if current_gui:
+        current_gui.refresh()
+
+def on_ready():
+    cron.interval("1000ms", refresh_gui)
+
+
+app.register("ready", on_ready)
