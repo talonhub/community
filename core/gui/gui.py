@@ -59,7 +59,7 @@ class PageScroller:
         self.page_delta -= 1
         self.scroll = True
     
-    def update_start_page(self, current, bottom, maximum_target):
+    def update_start_page(self, current, maximum_target):
         page = current//self.page_size
         if not self.is_scrolling():
             self.start_page = page
@@ -158,8 +158,7 @@ class Helpers:
                 if bottom >= 0:
                     last_row_index = row.index()
         if scroller and scroller.page_size is not None and current_row_index is not None:
-            page = current_row_index//scroller.page_size
-            scroller.update_start_page(current_row_index, last_row_index, len(rows) - 1)
+            scroller.update_start_page(current_row_index, len(rows) - 1)
 
 
 
