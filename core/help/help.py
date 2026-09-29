@@ -813,7 +813,7 @@ class Actions:
             page_scroller.increase_page()
             # this is a workaround for a bug requiring interaction for a egui to update
             if current_gui:
-                current_gui.focus()
+                current_gui.refresh()
             return 
 
         if gui_context_help.showing:
@@ -866,7 +866,7 @@ class Actions:
             page_scroller.decrease_page()
             # this is a workaround for a bug requiring interaction for a egui to update
             if current_gui:
-                current_gui.focus()
+                current_gui.refresh()
             return 
 
         if gui_context_help.showing:

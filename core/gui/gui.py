@@ -330,3 +330,7 @@ class GUI:
     def focus(self):
         if self._window:
             self._window.focus()
+    
+    def refresh(self):
+        if self._window:
+            self._window.refresh()
