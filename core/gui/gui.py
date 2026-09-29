@@ -326,3 +326,7 @@ class GUI:
         except Exception as e:
             print(f"Error getting active screen, defaulting to main screen: {e}")
             return ui.main_screen()
+
+    def focus(self):
+        if self._window:
+            self._window.focus()

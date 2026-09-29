@@ -63,6 +63,8 @@ selected_list = None
 current_list_page = 1
 
 page_scroller: PageScroller | None = None
+# this is being used for the egui migrated guis
+current_gui = None
 
 def update_title():
     global live_update
@@ -669,7 +671,7 @@ async def gui_list_help(ui, helpers):
     global current_list_page
     global selected_list
     global page_scroller
-    
+
     if not page_scroller:
         page_scroller = PageScroller()
 
@@ -721,6 +723,8 @@ class Actions:
         """Provides the symbol dictionary"""
         # what you say is stored as a trigger
         global selected_list
+        global current_gui
+        current_gui = gui_list_help
         reset()
         selected_list = ab
         gui_list_help.show()
@@ -807,6 +811,9 @@ class Actions:
 
         if page_scroller:
             page_scroller.increase_page()
+            # this is a workaround for a bug requiring interaction for a egui to update
+            if current_gui:
+                current_gui.focus()
             return 
 
         if gui_context_help.showing:
@@ -857,6 +864,9 @@ class Actions:
 
         if page_scroller:
             page_scroller.decrease_page()
+            # this is a workaround for a bug requiring interaction for a egui to update
+            if current_gui:
+                current_gui.focus()
             return 
 
         if gui_context_help.showing:
