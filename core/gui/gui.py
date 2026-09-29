@@ -232,6 +232,7 @@ class GUI:
 
     def show(self):
         if self.showing:
+            self._window.focus()
             return
 
         self._window = Window()
