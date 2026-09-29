@@ -63,9 +63,12 @@ class PageScroller:
         if not self.is_scrolling():
             self.start_page = current_page
 
-    def compute_target(self):
+    def compute_target(self, maximum):
         target_page = self.start_page + self.page_delta
-        return target_page*self.page_size
+        target = target_page*self.page_size
+        target = min(target, maximum)
+        target = max(target, 0)
+        return target
 
     def handle_scroll(self, time_unit):
         self.scrolling_time -= time_unit
@@ -76,7 +79,7 @@ class PageScroller:
             self.start_page = None
     
     def is_scrolling(self):
-        return self.scrolling_time > 0 and self.start_page
+        return self.scrolling_time > 0 and self.start_page is not None
 
         
 @dataclass
@@ -127,7 +130,7 @@ class Helpers:
                 table = table.column(egui.Column.remainder().at_most(column_width))
         
         if scroller and scroller.is_scrolling():
-            target_row = scroller.compute_target()
+            target_row = scroller.compute_target(len(rows) - 1)
             table = table.scroll_to_row(target_row, egui.Align.TOP)
             # we need 2 frames to scroll a table properly
             scroller.handle_scroll(0.5)
