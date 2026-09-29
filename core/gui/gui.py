@@ -45,11 +45,12 @@ async def show_row_with_labels(row, contents):
             cell_ui.label(column)
 
 class PageScroller:
-    __slots__ = ('start_page', 'page_size', 'scroll', 'page_delta')
+    __slots__ = ('page_delta', 'page_size', 'scroll', 'start', 'start_page')
     def __init__(self):
         self.page_size = 0
         self.page_delta = 0
         self.start_page = None
+        self.start = None
         self.scroll = False
     
     def increase_page(self):
@@ -63,6 +64,7 @@ class PageScroller:
     def update_start_page(self, current, maximum_target):
         page = current//self.page_size
         if not self.is_scrolling() or self.start_page is None:
+            self.start = current
             self.start_page = page
         target = self.compute_target(maximum_target)
         if self.is_scrolling() and page == target//self.page_size or (current + self.page_size > target):
@@ -71,6 +73,9 @@ class PageScroller:
 
     def compute_target(self, maximum):
         target_page = self.start_page + self.page_delta
+        # if going back and not at the page start, then the first move back moves to the start of the current page
+        if self.page_delta < 0 and self.start % self.page_size != 0:
+            target_page += 1
         target = target_page*self.page_size
         target = min(target, maximum)
         target = max(target, 0)
