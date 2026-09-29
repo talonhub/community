@@ -343,9 +343,6 @@ def gui_context_help(gui: imgui.GUI):
             if gui.button("Help previous"):
                 actions.user.help_previous()
 
-        if gui.button("Help return"):
-            actions.user.help_return()
-
     if gui.button("Help refresh"):
         actions.user.help_refresh()
 
@@ -703,24 +700,20 @@ async def gui_list_help(ui, helpers):
             id_salt="help_list",
             scroller=page_scroller,
             )
+    else:
+        rows = None
     helpers.spacing(ui)
 
     async with ui.horizontal_wrapped():
-        if ui.button("Help next").clicked():
-            page_scroller.increase_page()
-
-        if ui.button("Help previous").clicked():
-            page_scroller.decrease_page()
-
-        if ui.button("Help return").clicked():
-            actions.user.help_return()
-
-        if ui.button("Help refresh").clicked():
-            actions.user.help_refresh()
-
         if ui.button("Help close").clicked():
             actions.user.help_hide()
+        
+        if rows is not None and len(rows) > page_size:
+            if ui.button("Help next").clicked():
+                page_scroller.increase_page()
 
+            if ui.button("Help previous").clicked():
+                page_scroller.decrease_page()
 
 @mod.action_class
 class Actions:
