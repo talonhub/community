@@ -74,6 +74,8 @@ class PageScroller:
         target = target_page*self.page_size
         target = min(target, maximum)
         target = max(target, 0)
+        if target + self.page_size > maximum:
+            target = maximum - self.page_size + 1
         return target
 
     def is_scrolling(self):
@@ -124,8 +126,6 @@ class Helpers:
         
         if scroller and scroller.is_scrolling():
             target_row = scroller.compute_target(len(rows) - 1)
-            if target_row + scroller.page_size > len(rows) - 1:
-                target_row = len(rows) - scroller.page_size
             table = table.scroll_to_row(target_row, egui.Align.TOP)
 
         async with table.header(20) as header:
