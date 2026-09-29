@@ -82,11 +82,6 @@ class PageScroller:
         return self.scrolling_time > 0 and self.start_page is not None
 
         
-@dataclass
-class TableState:
-    top_row: int | None
-    bottom_row: int | None
-
 class Helpers:
     def get_text_size(self) -> float:
         return TEXT_SIZE
