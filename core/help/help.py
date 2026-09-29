@@ -698,7 +698,9 @@ async def gui_list_help(ui, helpers):
             id_salt="help_list",
             page_delta=page_delta,
             )
-    scrolling_page_delta -= page_delta
+    if page_delta:
+        scrolling_page_delta -= 0.5
+        scrolling_page_delta = max(scrolling_page_delta, 0)
     helpers.spacing(ui)
 
     async with ui.horizontal_wrapped():

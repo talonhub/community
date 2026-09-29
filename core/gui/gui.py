@@ -43,6 +43,15 @@ async def show_row_with_labels(row, contents):
         async with row.col() as cell_ui:
             cell_ui.label(column)
 
+class PageScroller:
+    def __init__(self):
+        self.scrolling_time = 0
+        
+@dataclass
+class TableState:
+    top_row: int | None
+    bottom_row: int | None
+
 class Helpers:
     def get_text_size(self) -> float:
         return TEXT_SIZE
@@ -70,6 +79,7 @@ class Helpers:
                 .cell_layout(egui.Layout.left_to_right(egui.Align.Center).with_main_wrap(True))
                 .min_scrolled_height(0.0)
                 .max_scroll_height(maximum_height)
+                .animate_scrolling(False)
                 .id_salt(id_salt)
             )
         for _ in range(len(headers)):
@@ -80,8 +90,8 @@ class Helpers:
         
         if page_delta != 0:
             target_row = 10
-            print("scrolling to row", target_row)
-            table = table.scroll_to_row(target_row)
+            print("scrolling to row", target_row, page_delta)
+            table = table.scroll_to_row(target_row, egui.Align.TOP)
 
         async with table.header(20) as header:
             for h in headers:
@@ -92,10 +102,26 @@ class Helpers:
             row_height = ui.spacing().interact_size.y
         if show_row is None:
             show_row = show_row_with_labels
+        current_row_index = None
+        last_row_index = None
+
         async with header.table().body() as body:
+            body_rect = body.max_rect()
+            body_top = min(body_rect.top(), body_rect.bottom())
+            body_bottom = max(body_rect.top(), body_rect.bottom())
             async for row in body.rows(row_height, len(rows)):
                 row.set_overline(True)
                 await show_row(row, rows)
+                response = row.response()
+                rect = response.rect
+                top = min(rect.top(), rect.bottom()) - body_top
+                bottom = body_bottom - max(rect.top(), rect.bottom())
+                if current_row_index is None and top >= 0:
+                    current_row_index = row.index()
+                if bottom >= 0:
+                    last_row_index = row.index()
+        return TableState(current_row_index, last_row_index)
+
 
 
 def open_gui(
