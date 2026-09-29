@@ -47,6 +47,35 @@ async def show_row_with_labels(row, contents):
 class PageScroller:
     def __init__(self):
         self.scrolling_time = 0
+        self.page_size = 0
+        self.page_delta = 0
+        self.target_page = None
+        self.start_page = None
+    
+    def increase_page(self):
+        self.scrolling_time = 1.0
+        self.page_delta += 1
+        self.target_page = None
+
+    def decrease_page(self):
+        self.scrolling_time = 1.0
+        self.page_delta -= 1
+        self.target_page = None
+    
+    def update_target_page(self, current_page):
+        if  not self.start_page:
+            self.start_page = current_page
+
+        self.target_page = self.start_page + self.page_delta
+        return self.target_page*self.page_size
+
+    def handle_scroll(self, time_unit):
+        self.scrolling_time -= time_unit
+        self.scrolling_time = max(self.scrolling_time, 0)
+    
+    def is_scrolling(self):
+        return self.scrolling_time > 0
+
         
 @dataclass
 class TableState:
