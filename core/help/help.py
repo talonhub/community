@@ -62,6 +62,7 @@ show_enabled_contexts_only = False
 selected_list = None
 current_list_page = 1
 
+# used for programmatic scrolling with egui
 page_scroller: PageScroller | None = None
 # this is being used for the egui migrated guis
 current_gui = None
@@ -651,27 +652,31 @@ async def gui_list_help(ui, helpers):
     global selected_list
     global page_scroller
 
-    if not page_scroller:
-        page_scroller = PageScroller()
-
-    ui.label(f"List: {selected_list}")
+    # show list name and description for the title
+    title = f"List: {selected_list}"
 
     # Extract description from list declaration, i.e. mod.list(..., desc=...))
     if (desc := registry.decls.lists[selected_list].desc) is not None:
-        ui.label(desc)
+        subtitle = desc
+    else:
+        subtitle = ""
 
-    ui.separator()
+    helpers.title(title, subtitle)
 
-    talon_list = actions.user.talon_get_active_registry_list(selected_list)
-
+    # setup paging handling
     page_size = settings.get("user.help_max_command_lines_per_page")
     page_scroller.page_size = page_size
-
     row_size = helpers.get_label_row_size()
+    # the amount space to allocate for showing a single page of rows
     maximum_height = (row_size+helpers.get_item_spacing()*2)*page_size
-    if len(talon_list) > 0:
+
+    # get the list
+    talon_list = actions.user.talon_get_active_registry_list(selected_list)
+    rows = [[key, value] for key, value in talon_list.items()]
+    
+    # show the rows in a table
+    if len(rows) > 0:
         headers = ["Spoken Form", "Value"]
-        rows = [[key, value] for key, value in talon_list.items()]
         await helpers.draw_table(
             headers,
             rows,
@@ -680,19 +685,19 @@ async def gui_list_help(ui, helpers):
             id_salt="help_list",
             scroller=page_scroller,
             )
-    else:
-        rows = None
+        
     helpers.spacing()
 
+    # show navigation buttons. these are arranged horizontally but will wrap onto more rows if needed
     async with ui.horizontal_wrapped():
-        if ui.button("Help close").clicked():
+        if helpers.button("Help close"):
             actions.user.help_hide()
         
-        if rows is not None and len(rows) > page_size:
-            if ui.button("Help next").clicked():
+        if len(rows) > page_size:
+            if helpers.button("Help next"):
                 page_scroller.increase_page()
 
-            if ui.button("Help previous").clicked():
+            if helpers.button("Help previous"):
                 page_scroller.decrease_page()
 
 @mod.action_class
@@ -700,12 +705,12 @@ class Actions:
     def help_list(ab: str):
         """Provides the symbol dictionary"""
         # what you say is stored as a trigger
-        global selected_list
-        global current_gui
+        global selected_list, current_gui, page_scroller
         gui_list_help.hide()
         reset()
         current_gui = gui_list_help
         selected_list = ab
+        page_scroller = PageScroller()
         gui_list_help.show()
         register_events(True)
         ctx.tags = ["user.help_open"]

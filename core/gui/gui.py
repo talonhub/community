@@ -109,10 +109,12 @@ class Helpers:
         ui = self._ui(ui)
         return ui.spacing().item_spacing.y
 
-    def title(self, text, ui=None):
+    def title(self, text, subtitle="", ui=None):
         ui = self._ui(ui)
         title = egui.RichText(text).size(TEXT_SIZE * 1.5).strong()
         ui.label(title)
+        if subtitle:
+            ui.strong(subtitle)
         ui.separator()
         ui.add_space(8)
 
