@@ -183,6 +183,8 @@ def open_gui(
     width: float | None = None,
     height: float | None = None,
     refresh_period: str | None=None,
+    toplevel: bool=True,
+    decorated: bool=False,
 ):
     def open_inner(draw):
         return GUI(
@@ -192,7 +194,9 @@ def open_gui(
             y=y,
             width=width,
             height=height,
-            refresh_period=refresh_period
+            refresh_period=refresh_period,
+            toplevel=toplevel,
+            decorated=decorated,
         )
 
     return open_inner
@@ -206,6 +210,17 @@ class Props:
     y: float | None
     width: float | None
     height: float | None
+    toplevel: bool
+    decorated: bool
+
+    def create_window(self, callback):
+        window = Window()
+        window.draggable = True
+        window.autosize = self.width is None or self.height is None
+        window.decorated = self.decorated
+        window.toplevel = self.toplevel
+        window.set_content(callback)
+        return window
 
 
 class GUI:
@@ -223,7 +238,9 @@ class GUI:
         y: float | None,
         width: float | None,
         height: float | None,
-        refresh_period: str | None
+        refresh_period: str | None,
+        toplevel: bool,
+        decorated: bool,
     ):
         self._props = Props(
             draw=draw,
@@ -232,6 +249,8 @@ class GUI:
             y=y,
             width=width,
             height=height,
+            toplevel=toplevel,
+            decorated=decorated,
         )
         self._window = None
         self._egui = None
@@ -250,12 +269,7 @@ class GUI:
         
         self._cancel_refresh_job()
 
-        self._window = Window()
-        self._window.draggable = True
-        self._window.autosize = self._props.width is None or self._props.height is None
-        # Hide title bar
-        self._window.decorated = False
-        self._window.set_content(self._render)
+        self._window = self._props.create_window(self._render)
 
         if self._stored_rect is not None:
             self._window.show()
