@@ -230,7 +230,7 @@ def open_gui(
 ):
     """Decorator for for an egui callback drawing function. 
     screen: the screen to show the gui on. 
-    x, y, width, height: location and dimensions of the gui window
+    x, y, width, height: location and dimensions of the gui window relative to the screen. The width and height are fractions of the screen width/height.
     refresh_period: an optional string giving a cron time period for how often to refresh the gui. egui only updates a ui when the user interacts with it by, so setting this causes a periodic refresh. If you only need to update the ui under specific conditions, call .refresh() on the GUI instead.
     toplevel: decides if the ui should be shown as the top level.
     decorated: decides if the gui should be shown with window borders.
