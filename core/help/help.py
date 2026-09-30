@@ -643,34 +643,8 @@ def hide_all_help_guis():
     gui_operators.hide()
 
 
-def paginate_list(data, SIZE=None):
-    chunk_size = SIZE or settings.get("user.help_max_command_lines_per_page")
-    it = iter(data)
-    for _ in range(0, len(data), chunk_size):
-        yield {k: data[k] for k in islice(it, chunk_size)}
-
-
-def draw_list_commands():
-    global selected_list
-    global total_page_count
-    global selected_context_page
-
-    talon_list = actions.user.talon_get_active_registry_list(selected_list)
-    # numpages = math.ceil(len(talon_list) / SIZE)
-
-    pages_list = []
-
-    for item in paginate_list(talon_list):
-        pages_list.append(item)
-    # print(pages_list)
-
-    total_page_count = len(pages_list)
-    return pages_list
-
 @open_gui(y=0, refresh_period="1000ms")
 async def gui_list_help(ui, helpers):
-    global total_page_count
-    global current_list_page
     global selected_list
     global page_scroller
 
@@ -826,8 +800,7 @@ class Actions:
                     selected_context_page += 1
                 else:
                     selected_context_page = 1
-
-        if gui_list_help.showing or gui_operators.showing:
+        if gui_operators.showing:
             if current_list_page != total_page_count:
                 current_list_page += 1
             else:
@@ -879,7 +852,7 @@ class Actions:
                 else:
                     selected_context_page = total_page_count
 
-        if gui_list_help.showing or gui_operators.showing:
+        if gui_operators.showing:
             if current_list_page != total_page_count:
                 current_list_page -= 1
             else:
