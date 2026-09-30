@@ -690,13 +690,12 @@ async def gui_list_help(ui, helpers):
     page_size = settings.get("user.help_max_command_lines_per_page")
     page_scroller.page_size = page_size
 
-    row_size = helpers.get_label_row_size(ui)
-    maximum_height = (row_size+helpers.get_item_spacing(ui)*2)*page_size
+    row_size = helpers.get_label_row_size()
+    maximum_height = (row_size+helpers.get_item_spacing()*2)*page_size
     if len(talon_list) > 0:
         headers = ["Spoken Form", "Value"]
         rows = [[key, value] for key, value in talon_list.items()]
         await helpers.draw_table(
-            ui,
             headers,
             rows,
             maximum_height=maximum_height,
@@ -706,7 +705,7 @@ async def gui_list_help(ui, helpers):
             )
     else:
         rows = None
-    helpers.spacing(ui)
+    helpers.spacing()
 
     async with ui.horizontal_wrapped():
         if ui.button("Help close").clicked():

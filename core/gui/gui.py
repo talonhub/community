@@ -1,28 +1,27 @@
-"""This file has code taken from 
-distributed under the license:
-MIT License
-https://github.com/AndreasArvidsson/andreas-talon/tree/main?tab=MIT-1-ov-file
-Copyright (c) 2021 Andreas Arvidsson
+# This file has code taken from 
+# distributed under the license:
+# MIT License
+# https://github.com/AndreasArvidsson/andreas-talon/tree/main?tab=MIT-1-ov-file
+# Copyright (c) 2021 Andreas Arvidsson
+# 
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+# 
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
-"""
 
 from collections.abc import Callable
 from dataclasses import dataclass
@@ -88,28 +87,44 @@ class PageScroller:
 
         
 class Helpers:
-    def get_text_size(self) -> float:
-        return TEXT_SIZE
+    __slots__ = ('ui',)
+    def __init__(self, ui):
+        self.ui = ui
 
-    def get_label_row_size(self, ui) -> float:
+    def _ui(self, ui):
+        if ui is not None:
+            return ui
+        return self.ui
+
+    def get_text_size(self, ui=None) -> float:
+        ui = self._ui(ui)
+        return egui.TextStyle.Body.resolve(ui.style()).size
+
+    def get_label_row_size(self, ui=None) -> float:
+        ui = self._ui(ui)
         return ui.spacing().item_spacing.y + egui.TextStyle.Body.resolve(ui.style()).size
 
-    def get_item_spacing(self, ui) -> float:
+    def get_item_spacing(self, ui=None) -> float:
+        ui = self._ui(ui)
         return ui.spacing().item_spacing.y
 
-    def title(self, ui: egui.Ui, text: str):
+    def title(self, text, ui=None):
+        ui = self._ui(ui)
         title = egui.RichText(text).size(TEXT_SIZE * 1.5).strong()
         ui.label(title)
         ui.separator()
         ui.add_space(8)
 
-    def button(self, ui: egui.Ui, text: str) -> bool:
+    def button(self, text, ui=None) -> bool:
+        ui = self._ui(ui)
         return ui.button(text).clicked()
 
-    def spacing(self, ui: egui.Ui):
+    def spacing(self, ui=None):
+        ui = self._ui(ui)
         ui.add_space(TEXT_SIZE)
 
-    async def draw_table(self, ui, headers, rows, row_height=None, show_row=None, auto_size_columns=False, maximum_height=None, id_salt=None, scroller=None):
+    async def draw_table(self, headers, rows, row_height=None, show_row=None, auto_size_columns=False, maximum_height=None, id_salt=None, scroller=None, ui=None):
+        ui = self._ui(ui)
         if id_salt is None:
             id_salt = str(rows)
         if maximum_height is None:
@@ -265,7 +280,7 @@ class GUI:
         async with frame.show() as content_ui:
             try:
                 self._egui = content_ui
-                await self._props.draw(content_ui, Helpers())
+                await self._props.draw(content_ui, Helpers(content_ui))
             finally:
                 # An egui.Ui is only valid during the current frame.
                 self._egui = None
