@@ -143,11 +143,29 @@ class Helpers:
         ui.add_space(TEXT_SIZE)
 
     async def draw_table(self, headers, rows, row_height=None, show_row=None, auto_size_columns=False, maximum_height=None, id_salt=None, scroller=None, ui=None):
+        """Draw a table with consistent row height. Assumes each row is at most the given row height. Uses the interact_size of the ui for the default row height, which may be excessive for your application. This assumes that each row has a single line.
+        headers: the headers to show at the top of the table. The length of the headers should equal the column size of the rows.
+        rows: the rows to display in the table.
+        row_height: each row should be at most this big.
+        show_row: a callback for displaying the row. The default uses a label for each column.
+        auto_size_columns: decides if the column width should be based on the item sizes. Otherwise, each column takes an equal portion of the available width.
+        maximum_height: the maximum height of the scroll area for the table. Setting this is recommended if you need to leave room for widgets after the table.
+        id_salt: used to distinguish between this table and other tables in the ui. The default used by this function is str(rows), which may be expensive.
+        scroller: handles programmatic scrolling.
+        """
         ui = self._ui(ui)
+
+        # use defaults when needed
         if id_salt is None:
             id_salt = str(rows)
         if maximum_height is None:
             maximum_height = ui.available_height()
+        if row_height is None:
+            row_height = ui.spacing().interact_size.y
+        if show_row is None:
+            show_row = show_row_with_labels
+        
+        # set up the table
         column_width = ui.available_width()/len(headers)
         table = (
                 egui.TableBuilder(ui)
@@ -157,38 +175,43 @@ class Helpers:
                 .animate_scrolling(False)
                 .id_salt(id_salt)
             )
+        # set column sizes
         for _ in range(len(headers)):
             if auto_size_columns:
                 table = table.column(egui.Column.auto())
             else:
                 table = table.column(egui.Column.remainder().at_most(column_width))
-        
+        # scroll programmatically if needed
         if scroller and scroller.is_scrolling():
             target_row = scroller.compute_target(len(rows) - 1)
             table = table.scroll_to_row(target_row, egui.Align.TOP)
 
+        # add the headers
         async with table.header(20) as header:
             for h in headers:
                 async with header.col() as header_ui:
                     header_ui.strong(h)
 
-        if row_height is None:
-            row_height = ui.spacing().interact_size.y
-        if show_row is None:
-            show_row = show_row_with_labels
         current_row_index = None
 
+        # show the visible rows
         async with header.table().body() as body:
+            # track the top of the rectangle to help determine the first visible row
+            # this still gets called for some rows that are not visible, but those can be filtered out because they are considered above the scroll area
             body_rect = body.max_rect()
             body_top = min(body_rect.top(), body_rect.bottom())
             async for row in body.rows(row_height, len(rows)):
+                # draw lines above each row
                 row.set_overline(True)
+                # let the call back decide how to draw the row
                 await show_row(row, rows)
+                # if this is the first visible row, update current_row_index
                 response = row.response()
                 rect = response.rect
                 top = min(rect.top(), rect.bottom()) - body_top
                 if current_row_index is None and top >= 0:
                     current_row_index = row.index()
+        # update the scroller's understanding of the scroll area location
         if scroller and scroller.page_size is not None and current_row_index is not None:
             scroller.update_start_page(current_row_index, len(rows) - 1)
 
