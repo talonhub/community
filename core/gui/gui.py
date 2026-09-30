@@ -36,6 +36,7 @@ TEXT_SIZE = 12
 TEXT_COLOR_DARK_MODE = "#D0D0D0"
 BUTTON_PADDING = egui.Vec2(5.0, 2.5)
 VERTICAL_ITEM_SPACING = 1.0
+INNER_MARGIN = 16.0
 
 async def show_row_with_labels(row, contents):
     index = row.index()
@@ -213,10 +214,13 @@ class Props:
     toplevel: bool
     decorated: bool
 
+    def will_auto_size(self):
+        return self.width is None or self.height is None
+
     def create_window(self, callback):
         window = Window()
         window.draggable = True
-        window.autosize = self.width is None or self.height is None
+        window.autosize = self.will_auto_size()
         window.decorated = self.decorated
         window.toplevel = self.toplevel
         window.set_content(callback)
@@ -229,6 +233,7 @@ class GUI:
     _egui: egui.Ui | None
     _stored_rect: Rect | None
     _refresh_period: str | None
+    _last_height_taken: float | None
 
     def __init__(
         self,
@@ -257,6 +262,7 @@ class GUI:
         self._stored_rect = None
         self._refresh_period = refresh_period
         self._refresh_job = None
+        self._last_height_taken = None
 
     @property
     def showing(self) -> bool:
@@ -307,12 +313,14 @@ class GUI:
     async def _render(self, ui: egui.Ui) -> None:
         self._apply_theme(ui)
 
-        frame = egui.Frame().inner_margin(16.0)
+        frame = egui.Frame().inner_margin(INNER_MARGIN)
 
+        available_height = ui.available_height()
         async with frame.show() as content_ui:
             try:
                 self._egui = content_ui
                 await self._props.draw(content_ui, Helpers(content_ui))
+                self._last_height_taken = available_height - ui.available_height() + INNER_MARGIN
             finally:
                 # An egui.Ui is only valid during the current frame.
                 self._egui = None
@@ -376,6 +384,10 @@ class GUI:
     
     def refresh(self):
         if self._window:
+            if self._last_height_taken is not None and self._props.will_auto_size:
+                print(self._last_height_taken)
+                self._window.autosize = False
+                self._window.resize(int(self._window.rect.width), int(self._last_height_taken))
             self._window.refresh()
 
     
