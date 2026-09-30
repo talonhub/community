@@ -903,6 +903,6 @@ def commands_updated(_):
     update_title()
 
 def refresh_gui():
-    # this is a workaround for requiring interaction for a egui to update (bug?)
+    # egui UIs must be refreshed to update without user interaction
     if current_gui:
         current_gui.refresh()
