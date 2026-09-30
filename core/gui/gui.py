@@ -253,6 +253,7 @@ def open_gui(
 
 @dataclass
 class Props:
+    """Contains information on how to draw the ui"""
     draw: Callable
     screen: Screen | None
     x: float | None
@@ -266,6 +267,7 @@ class Props:
         return self.width is None or self.height is None
 
     def create_window(self, callback):
+        """Create a window for showing the callback on a ui. This allows wrapping the draw callable."""
         window = Window()
         window.draggable = True
         window.autosize = self.will_auto_size()
@@ -276,6 +278,7 @@ class Props:
 
 
 class GUI:
+    """Manages an egui window"""
     _props: Props
     _window: Window | None
     _egui: egui.Ui | None
@@ -331,7 +334,7 @@ class GUI:
 
         screen = self._get_screen()
         self._window.show()
-        self._window.rect = self._apply_partial_rect(screen.rect)
+        self._window.rect = self._compute_rect_relative_to_screen(screen.rect)
         
         if self._refresh_period:
             self._refresh_job = cron.interval(self._refresh_period, self.refresh)
@@ -371,6 +374,7 @@ class GUI:
             finally:
                 # An egui.Ui is only valid during the current frame.
                 self._egui = None
+        # keep track of the amount of height actually taken
         self._last_height_taken = available_height - ui.available_height() + INNER_MARGIN
 
     def _apply_theme(self, ui: egui.Ui) -> None:
@@ -395,7 +399,8 @@ class GUI:
 
         ui.set_style(style)
 
-    def _apply_partial_rect(self, screen: Rect) -> Rect:
+    def _compute_rect_relative_to_screen(self, screen: Rect) -> Rect:
+        """Compute the rectangle for the window relative to the screen location and dimensions."""
         if self._window is None:
             raise RuntimeError("Window is not initialized")
 
@@ -432,6 +437,7 @@ class GUI:
     
     def refresh(self):
         if self._window:
+            # do our own auto sizing instead of the builtin for now
             if self._last_height_taken is not None and self._props.will_auto_size:
                 self._window.autosize = False
                 self._window.resize(int(self._window.rect.width), int(self._last_height_taken))
