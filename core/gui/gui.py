@@ -326,7 +326,6 @@ class GUI:
             visuals.override_text_color = egui.Color32.from_hex(TEXT_COLOR_DARK_MODE)
             style.set_visuals(visuals)
 
-        # Default text size (13) is too small. This also applies to the button text.
         style.set_text_style(
             egui.TextStyle.Body,
             egui.FontId(TEXT_SIZE, egui.FontFamily.Proportional),
