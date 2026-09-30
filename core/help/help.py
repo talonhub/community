@@ -345,6 +345,9 @@ def gui_context_help(gui: imgui.GUI):
             if gui.button("Help previous"):
                 actions.user.help_previous()
 
+        if gui.button("Help return"):
+            actions.user.help_return()
+
     if gui.button("Help refresh"):
         actions.user.help_refresh()
 
