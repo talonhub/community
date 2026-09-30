@@ -385,7 +385,6 @@ class GUI:
     def refresh(self):
         if self._window:
             if self._last_height_taken is not None and self._props.will_auto_size:
-                print(self._last_height_taken)
                 self._window.autosize = False
                 self._window.resize(int(self._window.rect.width), int(self._last_height_taken))
             self._window.refresh()
