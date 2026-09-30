@@ -9,7 +9,7 @@ from typing import Any, Optional
 from ...core.gui.gui import open_gui, PageScroller
 import egui
 
-from talon import Context, Module, actions, app, cron, imgui, registry, settings
+from talon import Context, Module, actions, imgui, registry, settings
 
 mod = Module()
 mod.list("help_contexts", desc="list of available contexts")
@@ -667,7 +667,7 @@ def draw_list_commands():
     total_page_count = len(pages_list)
     return pages_list
 
-@open_gui(y=0)
+@open_gui(y=0, refresh_period="1000ms")
 async def gui_list_help(ui, helpers):
     global total_page_count
     global current_list_page
@@ -929,9 +929,3 @@ def refresh_gui():
     # this is a workaround for requiring interaction for a egui to update (bug?)
     if current_gui:
         current_gui.refresh()
-
-def on_ready():
-    cron.interval("1000ms", refresh_gui)
-
-
-app.register("ready", on_ready)

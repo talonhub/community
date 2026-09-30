@@ -182,6 +182,7 @@ def open_gui(
     y: float | None = None,
     width: float | None = None,
     height: float | None = None,
+    refresh_period: str | None=None,
 ):
     def open_inner(draw):
         return GUI(
@@ -191,6 +192,7 @@ def open_gui(
             y=y,
             width=width,
             height=height,
+            refresh_period=refresh_period
         )
 
     return open_inner
@@ -211,6 +213,7 @@ class GUI:
     _window: Window | None
     _egui: egui.Ui | None
     _stored_rect: Rect | None
+    _refresh_period: str | None
 
     def __init__(
         self,
@@ -220,6 +223,7 @@ class GUI:
         y: float | None,
         width: float | None,
         height: float | None,
+        refresh_period: str | None
     ):
         self._props = Props(
             draw=draw,
@@ -232,6 +236,8 @@ class GUI:
         self._window = None
         self._egui = None
         self._stored_rect = None
+        self._refresh_period = refresh_period
+        self._refresh_job = None
 
     @property
     def showing(self) -> bool:
@@ -241,6 +247,8 @@ class GUI:
         if self.showing:
             self._window.focus()
             return
+        
+        self._cancel_refresh_job()
 
         self._window = Window()
         self._window.draggable = True
@@ -256,8 +264,18 @@ class GUI:
             screen = self._get_screen()
             self._window.show()
             self._window.rect = self._apply_partial_rect(screen.rect)
+        
+        if self._refresh_period:
+            self._refresh_job = cron.interval(self._refresh_period, self.refresh)
+
+    def _cancel_refresh_job(self):
+        if self._refresh_job:
+            cron.cancel(self._refresh_job)
+            self._refresh_job = None
 
     def hide(self):
+        self._cancel_refresh_job()
+
         if self._window is None:
             return
 
