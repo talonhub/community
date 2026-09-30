@@ -39,12 +39,18 @@ VERTICAL_ITEM_SPACING = 1.0
 INNER_MARGIN = 16.0
 
 async def show_row_with_labels(row, contents):
+    """Show every column of the row using a label"""
     index = row.index()
     for column in contents[index]:
         async with row.col() as cell_ui:
             cell_ui.label(column)
 
 class PageScroller:
+    """Helps with programmatic scrolling by tracking pagination, determining how far to scroll to reach a target page, and determining when the target page has been reached. 
+    There should be 2 clients for this class: (1) the part of the code responsible for initiating programmatic scrolling and (2) the part of the code providing the target scroll area.
+    Client 1: set page_size first, then call increase_page, decrease_page to trigger scrolling
+    Client 2: call is_scrolling to decide if programmatic scrolling should be triggered. call update_start_page on every loop with the current scrolling position and maximum. when scrolling, call compute_target to compute where to scroll to.
+    """
     __slots__ = ('page_delta', 'page_size', 'scroll', 'start', 'start_page')
     def __init__(self):
         self.page_size = 0
