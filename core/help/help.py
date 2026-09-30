@@ -702,6 +702,7 @@ class Actions:
         # what you say is stored as a trigger
         global selected_list
         global current_gui
+        gui_list_help.hide()
         reset()
         current_gui = gui_list_help
         selected_list = ab

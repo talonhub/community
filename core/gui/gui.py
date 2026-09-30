@@ -277,13 +277,13 @@ class GUI:
 
         self._window = self._props.create_window(self._render)
 
-        if self._stored_rect is not None:
-            self._window.show()
-            self._window.rect = self._stored_rect
-        else:
-            screen = self._get_screen()
-            self._window.show()
-            self._window.rect = self._apply_partial_rect(screen.rect)
+        # if self._stored_rect is not None:
+        #     self._window.show()
+        #     self._window.rect = self._stored_rect
+
+        screen = self._get_screen()
+        self._window.show()
+        self._window.rect = self._apply_partial_rect(screen.rect)
         
         if self._refresh_period:
             self._refresh_job = cron.interval(self._refresh_period, self.refresh)
