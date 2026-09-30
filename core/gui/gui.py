@@ -285,6 +285,7 @@ class GUI:
     _stored_rect: Rect | None
     _refresh_period: str | None
     _last_height_taken: float | None
+    _previous_height_taken: float | None
 
     def __init__(
         self,
@@ -314,6 +315,7 @@ class GUI:
         self._refresh_period = refresh_period
         self._refresh_job = None
         self._last_height_taken = None
+        self._previous_height_taken = None
 
     @property
     def showing(self) -> bool:
@@ -375,7 +377,7 @@ class GUI:
                 # An egui.Ui is only valid during the current frame.
                 self._egui = None
         # keep track of the amount of height actually taken
-        self._last_height_taken = available_height - ui.available_height() + INNER_MARGIN
+        self._last_height_taken = available_height - ui.available_height() + INNER_MARGIN - 5
 
     def _apply_theme(self, ui: egui.Ui) -> None:
         style = ui.style()
@@ -438,9 +440,16 @@ class GUI:
     def refresh(self):
         if self._window:
             # do our own auto sizing instead of the builtin for now
+            # our on detection of the height is flawed unless we allow the auto sizing first
+            # so when we detect a height change, temporarily re enable auto sizing
             if self._last_height_taken is not None and self._props.will_auto_size:
-                self._window.autosize = False
-                self._window.resize(int(self._window.rect.width), int(self._last_height_taken))
+                if self._previous_height_taken and self._last_height_taken != self._previous_height_taken:
+                    self._window.autosize = True
+                else:
+                    self._window.autosize = False
+                    print(self._last_height_taken - self._window.rect.height)
+                    self._window.resize(int(self._window.rect.width), int(self._last_height_taken))
+                self._previous_height_taken = self._last_height_taken
             self._window.refresh()
 
     
