@@ -313,17 +313,17 @@ class GUI:
     async def _render(self, ui: egui.Ui) -> None:
         self._apply_theme(ui)
 
+        available_height = ui.available_height()
         frame = egui.Frame().inner_margin(INNER_MARGIN)
 
-        available_height = ui.available_height()
         async with frame.show() as content_ui:
             try:
                 self._egui = content_ui
                 await self._props.draw(content_ui, Helpers(content_ui))
-                self._last_height_taken = available_height - ui.available_height() + INNER_MARGIN
             finally:
                 # An egui.Ui is only valid during the current frame.
                 self._egui = None
+        self._last_height_taken = available_height - ui.available_height() + INNER_MARGIN
 
     def _apply_theme(self, ui: egui.Ui) -> None:
         style = ui.style()
