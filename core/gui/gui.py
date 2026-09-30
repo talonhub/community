@@ -94,6 +94,7 @@ class PageScroller:
 
         
 class Helpers:
+    """Provides helper methods for drawing on a ui. These methods use the wrapped ui by default, but you can use the ui parameter to provide another one"""
     __slots__ = ('ui',)
     def __init__(self, ui):
         self.ui = ui
@@ -104,18 +105,25 @@ class Helpers:
         return self.ui
 
     def get_text_size(self, ui=None) -> float:
+        """Compute the text size of the ui"""
         ui = self._ui(ui)
         return egui.TextStyle.Body.resolve(ui.style()).size
 
     def get_label_row_size(self, ui=None) -> float:
+        """Compute the size of a row consisting of a text label"""
         ui = self._ui(ui)
         return ui.spacing().item_spacing.y + egui.TextStyle.Body.resolve(ui.style()).size
 
     def get_item_spacing(self, ui=None) -> float:
+        """Get the vertical item spacing"""
         ui = self._ui(ui)
         return ui.spacing().item_spacing.y
 
     def title(self, text, subtitle="", ui=None):
+        """Draw a title.
+        text: the main title
+        subtitle: an optional subtitle shown in smaller font
+        """
         ui = self._ui(ui)
         title = egui.RichText(text).size(TEXT_SIZE * 1.5).strong()
         ui.label(title)
@@ -125,10 +133,12 @@ class Helpers:
         ui.add_space(8)
 
     def button(self, text, ui=None) -> bool:
+        """Draw a button and return True if the button was clicked this frame"""
         ui = self._ui(ui)
         return ui.button(text).clicked()
 
     def spacing(self, ui=None):
+        """Add space based on the default text size"""
         ui = self._ui(ui)
         ui.add_space(TEXT_SIZE)
 
