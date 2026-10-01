@@ -208,8 +208,9 @@ class Helpers:
                     body_rect = body.max_rect()
                     body_top = min(body_rect.top(), body_rect.bottom())
                     async for row in body.rows(row_height, len(rows)):
-                        # draw lines above each row
-                        row.set_overline(True)
+                        # draw lines above each row with a value for the first column
+                        if rows[row.index()][0]:
+                            row.set_overline(True)
                         # let the call back decide how to draw the row
                         await show_row(row, rows)
                         # if this is the first visible row, update current_row_index

@@ -672,7 +672,15 @@ async def gui_list_help(ui, helpers):
 
     # get the list
     talon_list = actions.user.talon_get_active_registry_list(selected_list)
-    rows = [[key, value] for key, value in talon_list.items()]
+    rows = []
+    for key, value in talon_list.items():
+        if "\n" in value:
+            lines = value.split("\n")
+            rows.append((key, lines[0]))
+            for l in lines[1:]:
+                rows.append(("", l))
+        else:
+            rows.append((key, value))
     
     # show the rows in a table
     if len(rows) > 0:
