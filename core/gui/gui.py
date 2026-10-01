@@ -188,73 +188,72 @@ class Helpers:
         if show_row is None:
             show_row = show_row_with_labels
 
-        async with ui.scope() as scope:
-            async with scope.style_mut() as style:
-                # make scrollbar always visible when a scroll area is needed
-                spacing = style.spacing
-                spacing.scroll = egui.ScrollStyle.solid()
-                style.spacing = spacing
+        async with ui.scope() as scope, scope.style_mut() as style:
+            # make scrollbar always visible when a scroll area is needed
+            spacing = style.spacing
+            spacing.scroll = egui.ScrollStyle.solid()
+            style.spacing = spacing
 
-                # set up the table
-                column_width = ui.available_width() / len(headers)
-                table = (
-                    egui.TableBuilder(ui)
-                    .cell_layout(
-                        egui.Layout.left_to_right(egui.Align.Center).with_main_wrap(
-                            False
-                        )
+            # set up the table
+            column_width = ui.available_width() / len(headers)
+            table = (
+                egui.TableBuilder(ui)
+                .cell_layout(
+                    egui.Layout.left_to_right(egui.Align.Center).with_main_wrap(
+                        False
                     )
-                    .min_scrolled_height(0.0)
-                    .max_scroll_height(maximum_height)
-                    .animate_scrolling(False)
-                    .id_salt(id_salt)
                 )
-                # set column sizes
-                for _ in range(len(headers)):
-                    if auto_size_columns:
-                        table = table.column(egui.Column.auto())
-                    else:
-                        table = table.column(
-                            egui.Column.remainder().at_most(column_width).clip(True)
-                        )
-                # scroll programmatically if needed
-                if scroller and scroller.is_scrolling():
-                    target_row = scroller.compute_target(len(rows) - 1)
-                    table = table.scroll_to_row(target_row, egui.Align.TOP)
+                .min_scrolled_height(0.0)
+                .max_scroll_height(maximum_height)
+                .animate_scrolling(False)
+                .id_salt(id_salt)
+            )
+            # set column sizes
+            for _ in range(len(headers)):
+                if auto_size_columns:
+                    table = table.column(egui.Column.auto())
+                else:
+                    table = table.column(
+                        egui.Column.remainder().at_most(column_width).clip(True)
+                    )
+            # scroll programmatically if needed
+            if scroller and scroller.is_scrolling():
+                target_row = scroller.compute_target(len(rows) - 1)
+                table = table.scroll_to_row(target_row, egui.Align.TOP)
 
-                # add the headers
-                async with table.header(20) as header:
-                    for h in headers:
-                        async with header.col() as header_ui:
-                            header_ui.strong(h)
+            # add the headers
+            async with table.header(20) as header:
+                for h in headers:
+                    async with header.col() as header_ui:
+                        header_ui.strong(h)
 
-                current_row_index = None
+            current_row_index = None
 
-                # show the visible rows
-                async with header.table().body() as body:
-                    # track the top of the rectangle to help determine the first visible row
-                    # this still gets called for some rows that are not visible, but those can be filtered out because they are considered above the scroll area
-                    body_rect = body.max_rect()
-                    body_top = min(body_rect.top(), body_rect.bottom())
-                    async for row in body.rows(row_height, len(rows)):
-                        # draw lines above each row with a value for the first column
-                        if rows[row.index()][0]:
-                            row.set_overline(True)
-                        # let the call back decide how to draw the row
-                        await show_row(row, rows)
-                        # if this is the first visible row, update current_row_index
-                        response = row.response()
-                        rect = response.rect
-                        top = min(rect.top(), rect.bottom()) - body_top
-                        if current_row_index is None and top >= 0:
-                            current_row_index = row.index()
-                # update the scroller's understanding of the scroll area location
-                if (
-                    scroller
-                    and scroller.page_size is not None
-                    and current_row_index is not None
-                ):
-                    scroller.update_start_page(current_row_index, len(rows) - 1)
+            # show the visible rows
+            async with header.table().body() as body:
+                # track the top of the rectangle to help determine the first visible row
+                # this still gets called for some rows that are not visible, but those can be filtered out because they are considered above the scroll area
+                body_rect = body.max_rect()
+                body_top = min(body_rect.top(), body_rect.bottom())
+                async for row in body.rows(row_height, len(rows)):
+                    # draw lines above each row with a value for the first column
+                    if rows[row.index()][0]:
+                        row.set_overline(True)
+                    # let the call back decide how to draw the row
+                    await show_row(row, rows)
+                    # if this is the first visible row, update current_row_index
+                    response = row.response()
+                    rect = response.rect
+                    top = min(rect.top(), rect.bottom()) - body_top
+                    if current_row_index is None and top >= 0:
+                        current_row_index = row.index()
+            # update the scroller's understanding of the scroll area location
+            if (
+                scroller
+                and scroller.page_size is not None
+                and current_row_index is not None
+            ):
+                scroller.update_start_page(current_row_index, len(rows) - 1)
 
 
 def open_gui(
