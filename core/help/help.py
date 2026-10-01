@@ -650,6 +650,11 @@ async def gui_list_help(ui, helpers):
     global selected_list
     global page_scroller
 
+    # clicking the close button forces a refresh even though we are closing this gui. 
+    # #If we are closing this list, just return
+    if  not selected_list:
+        return 
+
     # show list name and description for the title
     title = f"List: {selected_list}"
 
