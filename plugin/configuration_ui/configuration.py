@@ -91,7 +91,7 @@ async def draw_toggle(setting: Setting, ui):
 		ui.label(setting.description)
 		new_value = setting.value.get()
 		if value != new_value:
-			setting.update_function(setting.path, setting.name, value)
+			setting.update_function(setting.path, setting.name, new_value)
 		
 def create_tag_setting(name, description, value):
 	return Setting(
