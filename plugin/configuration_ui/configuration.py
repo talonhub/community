@@ -35,7 +35,7 @@ def update_tag(path, name, should_be_active):
 	active_string = f"tag(): {name}"
 	deactivated_string = f"# tag(): {name}"
 	for i, line in enumerate(lines):
-		stripped_line = line.strip()
+		stripped_line = line.rstrip()
 		encountered_duplicate = False
 		if stripped_line == deactivated_string:
 			if matching_line is not None:
@@ -53,16 +53,16 @@ def update_tag(path, name, should_be_active):
 			raise IOError(f"Encountered the tag {name} twice in the file {path}!")
 	if is_active != should_be_active:
 		new_string = active_string if should_be_active else deactivated_string
+		new_string += "\n"
 		if matching_line:
 			lines[matching_line] = new_string
 		else:
 			lines.append("\n")
-			lines.append(new_string + "\n")
+			lines.append(new_string)
 		
 		with open(path, "w") as f:
 			f.writelines(lines)
 		
-
 @dataclass
 class Setting:
 	path: Path
