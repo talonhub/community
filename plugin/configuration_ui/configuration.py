@@ -23,6 +23,60 @@ from .gui import open_gui
 
 import egui
 
+@dataclass
+class SettingFileSettingInformation:
+	value: Any
+	description: str
+
+COMMENTED_TAG_PREFIX = "# tag(): "
+def compute_commented_tag(line):
+	if line.startswith(COMMENTED_TAG_PREFIX):
+		return line[len(COMMENTED_TAG_PREFIX):].strip()
+	return None
+
+COMMENTED_SETTING_PREFIX = "    # "
+
+def compute_setting(line: str, prefix: str):
+	if not line.startswith(prefix):
+		return None
+	equals_index = line.find(" = ")
+	if equals_index == -1 or equals_index >= len(line) - 3:
+		return None
+	if len(line) < len(prefix):
+		return None
+	if not line[len(prefix)].isalpha():
+		return None
+	value = line[equals_index+4:]
+	name = line[len(prefix)+1:equals_index]
+	return name, value
+
+SETTING_INDENTATION_PREFIX = "    "
+
+def parse_settings(path):
+	tags = {}
+	settings = {}
+	description = []
+	with open(path, "r") as f:
+		for l in f.readlines():
+			line = l.rstrip("\n\r")
+			if tag := compute_commented_tag(line):
+				tags[tag] = SettingFileSettingInformation(False, "\n".join(description))
+				description.clear()
+			elif setting := compute_setting(line, COMMENTED_SETTING_PREFIX):
+				name, value = setting
+				settings[name] = SettingFileSettingInformation(value, "\n".join(description))
+				description.clear()
+			elif setting := compute_setting(line, SETTING_INDENTATION_PREFIX):
+				name, value = setting
+				settings[name] = SettingFileSettingInformation(value, "\n".join(description))
+				description.clear()
+			elif line.lstrip().startswith("#"):
+				comment = line.strip()[0:]
+				description.append(comment)
+			else:
+				description.clear()
+	return tags, settings
+
 def update_setting(path, name, value):
 	pass
 
@@ -102,6 +156,7 @@ def create_tag_setting(name, description, value):
 		update_tag,
 	)
 
+
 @dataclass
 class Page:
 	title: str
@@ -160,4 +215,3 @@ manager = Manager()
 async def draw(ui, helpers):
 	await manager.draw(ui)
 
-draw.show()
