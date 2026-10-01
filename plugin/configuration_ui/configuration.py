@@ -46,8 +46,8 @@ def compute_setting(line: str, prefix: str):
 		return None
 	if not line[len(prefix)].isalpha():
 		return None
-	value = line[equals_index+4:]
-	name = line[len(prefix)+1:equals_index]
+	value = line[equals_index+3:]
+	name = line[len(prefix):equals_index]
 	return name, value
 
 SETTING_INDENTATION_PREFIX = "    "
@@ -70,8 +70,8 @@ def parse_settings(path):
 				name, value = setting
 				settings[name] = SettingFileSettingInformation(value, "\n".join(description))
 				description.clear()
-			elif line.lstrip().startswith("#"):
-				comment = line.strip()[0:]
+			elif line.lstrip().startswith("# "):
+				comment = line.strip()[1:].strip()
 				description.append(comment)
 			else:
 				description.clear()
