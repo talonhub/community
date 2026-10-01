@@ -176,7 +176,7 @@ class Helpers:
                 column_width = ui.available_width()/len(headers)
                 table = (
                         egui.TableBuilder(ui)
-                        .cell_layout(egui.Layout.left_to_right(egui.Align.Center).with_main_wrap(True))
+                        .cell_layout(egui.Layout.left_to_right(egui.Align.Center).with_main_wrap(False))
                         .min_scrolled_height(0.0)
                         .max_scroll_height(maximum_height)
                         .animate_scrolling(False)
@@ -187,7 +187,7 @@ class Helpers:
                     if auto_size_columns:
                         table = table.column(egui.Column.auto())
                     else:
-                        table = table.column(egui.Column.remainder().at_most(column_width))
+                        table = table.column(egui.Column.remainder().at_most(column_width).clip(True))
                 # scroll programmatically if needed
                 if scroller and scroller.is_scrolling():
                     target_row = scroller.compute_target(len(rows) - 1)
