@@ -337,13 +337,17 @@ class GUI:
 
         self._window = self._props.create_window(self._render)
 
-        # if self._stored_rect is not None:
-        #     self._window.show()
-        #     self._window.rect = self._stored_rect
-
-        screen = self._get_screen()
-        self._window.show()
-        self._window.rect = self._compute_rect_relative_to_screen(screen.rect)
+        if self._stored_rect is not None and not self._props.will_auto_size():
+            self._window.show()
+            self._window.rect = self._stored_rect
+        else:
+            screen = self._get_screen()
+            self._window.show()
+            rectangle = self._compute_rect_relative_to_screen(screen.rect)
+            if self._stored_rect is not None and self._props.will_auto_size():
+                rectangle.x = self._stored_rect.x
+                rectangle.y = self._stored_rect.y
+            self._window.rect = rectangle
         
         if self._refresh_period:
             self._refresh_job = cron.interval(self._refresh_period, self.refresh)
