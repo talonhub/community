@@ -25,7 +25,43 @@ def update_setting(path, name, value):
 	pass
 
 def update_tag(path, name, should_be_active):
-	pass
+	lines = []
+	with open(path, "r") as f:
+		lines = [l for l in f.readlines()]
+	if not lines:
+		raise IOError(f"Found no lines in the file {path}!")
+	matching_line = None
+	is_active = None
+	active_string = f"tag(): {name}"
+	deactivated_string = f"# tag(): {name}"
+	for i, line in enumerate(lines):
+		stripped_line = line.strip()
+		encountered_duplicate = False
+		if stripped_line == deactivated_string:
+			if matching_line is not None:
+				encountered_duplicate = True
+			else:
+				matching_line = i
+				is_active = False
+		elif stripped_line == active_string:
+			if matching_line is not None:
+				encountered_duplicate = True
+			else:
+				matching_line = i
+				is_active = True
+		if encountered_duplicate:
+			raise IOError(f"Encountered the tag {name} twice in the file {path}!")
+	if is_active != should_be_active:
+		new_string = active_string if should_be_active else deactivated_string
+		if matching_line:
+			lines[matching_line] = new_string
+		else:
+			lines.append("\n")
+			lines.append(new_string + "\n")
+		
+		with open(path, "w") as f:
+			f.writelines(lines)
+		
 
 @dataclass
 class Setting:
