@@ -2,14 +2,11 @@ import math
 import re
 from collections import defaultdict
 from collections.abc import Iterable
-from itertools import islice
-from textwrap import wrap
 from typing import Any, Optional
 
-from ...core.gui.gui import open_gui, PageScroller
-import egui
-
 from talon import Context, Module, actions, imgui, registry, settings
+
+from ...core.gui.gui import PageScroller, open_gui
 
 mod = Module()
 mod.list("help_contexts", desc="list of available contexts")
@@ -66,6 +63,7 @@ current_list_page = 1
 page_scroller: PageScroller | None = None
 # this is being used for the egui migrated guis
 current_gui = None
+
 
 def update_title():
     global live_update
@@ -668,7 +666,7 @@ async def gui_list_help(ui, helpers):
     page_scroller.page_size = page_size
     row_size = helpers.get_label_row_size()
     # the amount space to allocate for showing a single page of rows
-    maximum_height = (row_size+helpers.get_item_spacing()*2)*page_size
+    maximum_height = (row_size + helpers.get_item_spacing() * 2) * page_size
 
     # get the list
     talon_list = actions.user.talon_get_active_registry_list(selected_list)
@@ -681,7 +679,7 @@ async def gui_list_help(ui, helpers):
                 rows.append(("", l))
         else:
             rows.append((key, value))
-    
+
     # show the rows in a table
     if len(rows) > 0:
         headers = ["Spoken Form", "Value"]
@@ -692,21 +690,22 @@ async def gui_list_help(ui, helpers):
             row_height=row_size,
             id_salt="help_list",
             scroller=page_scroller,
-            )
-        
+        )
+
     helpers.spacing()
 
     # show navigation buttons. these are arranged horizontally but will wrap onto more rows if needed
     async with ui.horizontal_wrapped():
         if helpers.button("Help close"):
             actions.user.help_hide()
-        
+
         if len(rows) > page_size:
             if helpers.button("Help next"):
                 page_scroller.increase_page()
 
             if helpers.button("Help previous"):
                 page_scroller.decrease_page()
+
 
 @mod.action_class
 class Actions:
@@ -804,7 +803,7 @@ class Actions:
         if page_scroller:
             page_scroller.increase_page()
             refresh_gui()
-            return 
+            return
 
         if gui_context_help.showing:
             if selected_context is None and search_phrase is None:
@@ -854,7 +853,7 @@ class Actions:
         if page_scroller:
             page_scroller.decrease_page()
             refresh_gui()
-            return 
+            return
 
         if gui_context_help.showing:
             if selected_context is None and search_phrase is None:
@@ -914,6 +913,7 @@ class Actions:
 
 def commands_updated(_):
     update_title()
+
 
 def refresh_gui():
     # egui UIs must be refreshed to update without user interaction

@@ -1,19 +1,19 @@
-# This file has code taken from 
+# This file has code taken from
 # distributed under the license:
 # MIT License
 # https://github.com/AndreasArvidsson/andreas-talon/tree/main?tab=MIT-1-ov-file
 # Copyright (c) 2021 Andreas Arvidsson
-# 
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-# 
+#
 # The above copyright notice and this permission notice shall be included in all
 # copies or substantial portions of the Software.
-# 
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -38,6 +38,7 @@ BUTTON_PADDING = egui.Vec2(5.0, 2.5)
 VERTICAL_ITEM_SPACING = 1.0
 INNER_MARGIN = 16.0
 
+
 async def show_row_with_labels(row, contents):
     """Show every column of the row using a label"""
     index = row.index()
@@ -45,20 +46,23 @@ async def show_row_with_labels(row, contents):
         async with row.col() as cell_ui:
             cell_ui.label(column)
 
+
 class PageScroller:
-    """Helps with programmatic scrolling by tracking pagination, determining how far to scroll to reach a target page, and determining when the target page has been reached. 
+    """Helps with programmatic scrolling by tracking pagination, determining how far to scroll to reach a target page, and determining when the target page has been reached.
     There should be 2 clients for this class: (1) the part of the code responsible for initiating programmatic scrolling and (2) the part of the code providing the target scroll area.
     Client 1: set page_size first, then call increase_page, decrease_page to trigger scrolling
     Client 2: call is_scrolling to decide if programmatic scrolling should be triggered. call update_start_page on every loop with the current scrolling position and maximum. when scrolling, call compute_target to compute where to scroll to.
     """
-    __slots__ = ('page_delta', 'page_size', 'scroll', 'start', 'start_page')
+
+    __slots__ = ("page_delta", "page_size", "scroll", "start", "start_page")
+
     def __init__(self):
         self.page_size = 0
         self.page_delta = 0
         self.start_page = None
         self.start = None
         self.scroll = False
-    
+
     def increase_page(self):
         self.page_delta += 1
         self.scroll = True
@@ -66,14 +70,18 @@ class PageScroller:
     def decrease_page(self):
         self.page_delta -= 1
         self.scroll = True
-    
+
     def update_start_page(self, current, maximum_target):
-        page = current//self.page_size
+        page = current // self.page_size
         if not self.is_scrolling() or self.start_page is None:
             self.start = current
             self.start_page = page
         target = self.compute_target(maximum_target)
-        if self.is_scrolling() and page == target//self.page_size or (current + self.page_size > target):
+        if (
+            self.is_scrolling()
+            and page == target // self.page_size
+            or (current + self.page_size > target)
+        ):
             self.scroll = False
             self.page_delta = 0
 
@@ -82,7 +90,7 @@ class PageScroller:
         # if going back and not at the page start, then the first move back moves to the start of the current page
         if self.page_delta < 0 and self.start % self.page_size != 0:
             target_page += 1
-        target = target_page*self.page_size
+        target = target_page * self.page_size
         target = min(target, maximum)
         target = max(target, 0)
         if target + self.page_size > maximum:
@@ -92,10 +100,12 @@ class PageScroller:
     def is_scrolling(self):
         return self.scroll
 
-        
+
 class Helpers:
     """Provides helper methods for drawing on a ui. These methods use the wrapped ui by default, but you can use the ui parameter to provide another one"""
-    __slots__ = ('ui',)
+
+    __slots__ = ("ui",)
+
     def __init__(self, ui):
         self.ui = ui
 
@@ -112,7 +122,9 @@ class Helpers:
     def get_label_row_size(self, ui=None) -> float:
         """Compute the size of a row consisting of a text label"""
         ui = self._ui(ui)
-        return ui.spacing().item_spacing.y + egui.TextStyle.Body.resolve(ui.style()).size
+        return (
+            ui.spacing().item_spacing.y + egui.TextStyle.Body.resolve(ui.style()).size
+        )
 
     def get_item_spacing(self, ui=None) -> float:
         """Get the vertical item spacing"""
@@ -142,7 +154,18 @@ class Helpers:
         ui = self._ui(ui)
         ui.add_space(TEXT_SIZE)
 
-    async def draw_table(self, headers, rows, row_height=None, show_row=None, auto_size_columns=False, maximum_height=None, id_salt=None, scroller=None, ui=None):
+    async def draw_table(
+        self,
+        headers,
+        rows,
+        row_height=None,
+        show_row=None,
+        auto_size_columns=False,
+        maximum_height=None,
+        id_salt=None,
+        scroller=None,
+        ui=None,
+    ):
         """Draw a table with consistent row height. Assumes each row is at most the given row height. Uses the interact_size of the ui for the default row height, which may be excessive for your application. This assumes that each row has a single line.
         headers: the headers to show at the top of the table. The length of the headers should equal the column size of the rows.
         rows: the rows to display in the table.
@@ -173,21 +196,27 @@ class Helpers:
                 style.spacing = spacing
 
                 # set up the table
-                column_width = ui.available_width()/len(headers)
+                column_width = ui.available_width() / len(headers)
                 table = (
-                        egui.TableBuilder(ui)
-                        .cell_layout(egui.Layout.left_to_right(egui.Align.Center).with_main_wrap(False))
-                        .min_scrolled_height(0.0)
-                        .max_scroll_height(maximum_height)
-                        .animate_scrolling(False)
-                        .id_salt(id_salt)
+                    egui.TableBuilder(ui)
+                    .cell_layout(
+                        egui.Layout.left_to_right(egui.Align.Center).with_main_wrap(
+                            False
+                        )
                     )
-                    # set column sizes
+                    .min_scrolled_height(0.0)
+                    .max_scroll_height(maximum_height)
+                    .animate_scrolling(False)
+                    .id_salt(id_salt)
+                )
+                # set column sizes
                 for _ in range(len(headers)):
                     if auto_size_columns:
                         table = table.column(egui.Column.auto())
                     else:
-                        table = table.column(egui.Column.remainder().at_most(column_width).clip(True))
+                        table = table.column(
+                            egui.Column.remainder().at_most(column_width).clip(True)
+                        )
                 # scroll programmatically if needed
                 if scroller and scroller.is_scrolling():
                     target_row = scroller.compute_target(len(rows) - 1)
@@ -220,9 +249,12 @@ class Helpers:
                         if current_row_index is None and top >= 0:
                             current_row_index = row.index()
                 # update the scroller's understanding of the scroll area location
-                if scroller and scroller.page_size is not None and current_row_index is not None:
+                if (
+                    scroller
+                    and scroller.page_size is not None
+                    and current_row_index is not None
+                ):
                     scroller.update_start_page(current_row_index, len(rows) - 1)
-
 
 
 def open_gui(
@@ -232,17 +264,18 @@ def open_gui(
     y: float | None = None,
     width: float | None = None,
     height: float | None = None,
-    refresh_period: str | None=None,
-    toplevel: bool=True,
-    decorated: bool=False,
+    refresh_period: str | None = None,
+    toplevel: bool = True,
+    decorated: bool = False,
 ):
-    """Decorator for for an egui callback drawing function. 
-    screen: the screen to show the gui on. 
+    """Decorator for for an egui callback drawing function.
+    screen: the screen to show the gui on.
     x, y, width, height: location and dimensions of the gui window relative to the screen. The width and height are fractions of the screen width/height.
     refresh_period: an optional string giving a cron time period for how often to refresh the gui. egui only updates a ui when the user interacts with it by, so setting this causes a periodic refresh. If you only need to update the ui under specific conditions, call .refresh() on the GUI instead.
     toplevel: decides if the ui should be shown as the top level.
     decorated: decides if the gui should be shown with window borders.
     """
+
     def open_inner(draw):
         return GUI(
             draw,
@@ -262,6 +295,7 @@ def open_gui(
 @dataclass
 class Props:
     """Contains information on how to draw the ui"""
+
     draw: Callable
     screen: Screen | None
     x: float | None
@@ -287,6 +321,7 @@ class Props:
 
 class GUI:
     """Manages an egui window"""
+
     _props: Props
     _window: Window | None
     _egui: egui.Ui | None
@@ -333,7 +368,7 @@ class GUI:
         if self.showing:
             self._window.focus()
             return
-        
+
         self._cancel_refresh_job()
 
         self._window = self._props.create_window(self._render)
@@ -349,7 +384,7 @@ class GUI:
                 rectangle.x = self._stored_rect.x
                 rectangle.y = self._stored_rect.y
             self._window.rect = rectangle
-        
+
         if self._refresh_period:
             self._refresh_job = cron.interval(self._refresh_period, self.refresh)
 
@@ -389,7 +424,9 @@ class GUI:
                 # An egui.Ui is only valid during the current frame.
                 self._egui = None
         # keep track of the amount of height actually taken
-        self._last_height_taken = available_height - ui.available_height() + INNER_MARGIN - 5
+        self._last_height_taken = (
+            available_height - ui.available_height() + INNER_MARGIN - 5
+        )
 
     def _apply_theme(self, ui: egui.Ui) -> None:
         style = ui.style()
@@ -448,19 +485,22 @@ class GUI:
     def focus(self):
         if self._window:
             self._window.focus()
-    
+
     def refresh(self):
         if self._window:
             # do our own auto sizing instead of the builtin for now
             # our on detection of the height is flawed unless we allow the auto sizing first
             # so when we detect a height change, temporarily re enable auto sizing
             if self._last_height_taken is not None and self._props.will_auto_size:
-                if self._previous_height_taken and self._last_height_taken != self._previous_height_taken:
+                if (
+                    self._previous_height_taken
+                    and self._last_height_taken != self._previous_height_taken
+                ):
                     self._window.autosize = True
                 else:
                     self._window.autosize = False
-                    self._window.resize(int(self._window.rect.width), int(self._last_height_taken))
+                    self._window.resize(
+                        int(self._window.rect.width), int(self._last_height_taken)
+                    )
                 self._previous_height_taken = self._last_height_taken
             self._window.refresh()
-
-    
