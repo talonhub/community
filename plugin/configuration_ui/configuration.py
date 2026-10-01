@@ -17,7 +17,9 @@
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Callable
+from typing import Callable, Any
+
+from .gui import open_gui
 
 import egui
 
@@ -63,24 +65,63 @@ def update_tag(path, name, should_be_active):
 		with open(path, "w") as f:
 			f.writelines(lines)
 		
+def compute_vertical_size_from_number_of_lines_in_description(setting: Setting, ui):
+	number_of_description_lines = len(setting.description.split("\n"))
+	row_size = ui.spacing().item_spacing.y + egui.TextStyle.Body.resolve(ui.style()).size
+	interactive_size = ui.spacing().item_spacing.y + ui.spacing().interact_size.y
+	return interactive_size + row_size*number_of_description_lines
+
+SETTINGS_PATH = Path(__file__).parent.parent.parent / "settings.talon"
+
 @dataclass
 class Setting:
-	path: Path
 	name: str
+	value: Any
 	description: str
-	compute_vertical_size: Callable
 	draw: Callable
-	update_function: Callable=update_setting
+	update_function: Callable
+	path: Path=SETTINGS_PATH
+	compute_vertical_size: Callable=compute_vertical_size_from_number_of_lines_in_description
+
+
+async def draw_toggle(setting: Setting, ui):
+	async with ui.horizontal():
+		value = setting.value.get()
+		ui.checkbox(setting.value, setting.name)
+		ui.label(setting.description)
+		new_value = setting.value.get()
+		if value != new_value:
+			setting.update_function(setting.path, setting.name, value)
+		
+def create_tag_setting(name, description, value):
+	return Setting(
+		name,
+		egui.Mutable(value),
+		description,
+		draw_toggle,
+		update_tag,
+	)
 
 @dataclass
 class Page:
 	title: str
+	description: str
 	settings: list[Setting]
-	description: str=""
 
 class Manager:
 	def __init__(self):
-		pages = []
+		pages = [
+			Page(
+				"Popping",
+				"Decide what should happen when you make a popping noise",
+				[
+					create_tag_setting("user.pop_twice_to_repeat", """# Uncomment below enable pop_twice_to_repeat
+# Enabling this tag will repeat the last command when two pops are heard within the allotted time window
+# Without this tag noise_trigger_pop is usually associated with pop to click actions
+# Enabling this tag disables other pop to click actions in command mode, including pop to click""", False)
+				]
+			)
+		]
 		self.pages = {page.title: page for page in pages}
 		self.page = ""
 
@@ -113,3 +154,10 @@ class Manager:
 		for setting in page.settings:
 			await setting.draw(setting, ui)
 
+manager = Manager()
+
+@open_gui(x=0.5, width=0.5, height=0.5, toplevel=False, decorated=True)
+async def draw(ui, helpers):
+	await manager.draw(ui)
+
+draw.show()
