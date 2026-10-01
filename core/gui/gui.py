@@ -422,7 +422,7 @@ class GUI:
                 self._egui = None
         # keep track of the amount of height actually taken
         self._last_height_taken = (
-            available_height - ui.available_height() + INNER_MARGIN - 5
+            available_height - ui.available_height() + INNER_MARGIN
         )
 
     def _apply_theme(self, ui: egui.Ui) -> None:
