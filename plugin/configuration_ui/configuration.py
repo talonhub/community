@@ -140,7 +140,7 @@ class Manager:
 				if ui.selectable_label(page == self.page, page).clicked():
 					self.page = page
 			ui.add_space(total_available_height - ui.min_size().y)
-			ui.separator()
+		ui.separator()
 
 	async def draw_current_page(self, ui, total_available_height):
 		if not self.page:
