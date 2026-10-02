@@ -165,6 +165,9 @@ def compute_vertical_size_from_number_of_lines_in_description(setting: Setting, 
 	return interactive_size + row_size*number_of_description_lines
 
 SETTINGS_PATH = Path(__file__).parent.parent.parent / "settings.talon"
+MODE_INDICATOR_PATH = Path(__file__).parent.parent / "mode_indicator" / "mode_indicator.talon"
+
+RELEVANT_PATHS = [SETTINGS_PATH, MODE_INDICATOR_PATH]
 
 @dataclass
 class Setting:
@@ -200,12 +203,15 @@ def create_tag_setting(name):
 		is_tag=True,
 	)
 
-def create_boolean_setting(name):
-	return Setting(
+def create_boolean_setting(name, path=None):
+	result = Setting(
 		name,
 		draw_toggle,
 		update_setting,
 	)
+	if path is not None:
+		result.path = path
+	return result
 
 async def draw_numeric_input(setting: Setting, ui, minimum, maximum):
 	old_value = setting.value.get()
@@ -231,17 +237,23 @@ async def draw_single_line_text_input(setting: Setting, ui):
 	if old_value != value:
 		setting.update_function(setting.path, setting.name, value)
 
-def create_numeric_setting(name, minimum=None, maximum=None):
-	return Setting(
+def create_numeric_setting(name, minimum=None, maximum=None, path=None):
+	result = Setting(
 		name,
 		lambda setting, ui: draw_numeric_input(setting, ui, minimum, maximum),
 	)
+	if path is not None:
+		result.path = path
+	return result
 
-def create_single_line_text_setting(name):
-	return Setting(
+def create_single_line_text_setting(name, path=None):
+	result = Setting(
 		name,
 		draw_single_line_text_input,
 	)
+	if path is not None:
+		result.path = path
+	return result
 
 @dataclass
 class Page:
@@ -313,7 +325,7 @@ class Manager:
 				[
 					create_tag_setting("user.pop_twice_to_repeat"),
 					create_tag_setting("user.pop_twice_to_wake"),
-					create_numeric_setting("user.double_pop_speed_minimum", 0.0),
+					create_numeric_setting("user.zdouble_pop_speed_minimum", 0.0),
 					create_numeric_setting("user.double_pop_speed_maximum", 0.0),
 					create_numeric_setting("user.mouse_enable_pop_click", 0, 2),
 					create_boolean_setting("user.mouse_enable_pop_stops_scroll"),
@@ -338,6 +350,16 @@ class Manager:
 				]
 			),
 			Page(
+				"Mode Indicator",
+				"The mode indicator shows a colored circle indicating which mode is active.",
+				[
+					create_boolean_setting("user.mode_indicator_show", MODE_INDICATOR_PATH),
+					create_boolean_setting("user.mode_indicator_show_microphone_name", MODE_INDICATOR_PATH),
+					create_numeric_setting("user.mode_indicator_size", 1, path=MODE_INDICATOR_PATH),
+
+				]
+			),
+			Page(
 				"Miscellaneous",
 				"",
 				[
@@ -351,7 +373,8 @@ class Manager:
 		]
 		self.pages = {page.title: page for page in pages}
 		self.page = ""
-		self.on_change(SETTINGS_PATH)
+		for path in RELEVANT_PATHS:
+			self.on_change(path)
 
 	def on_change(self, path):
 		tags, settings = parse_settings(path)
@@ -412,7 +435,8 @@ def handle_file_update(path, flags):
 		manager.on_change(Path(path))
 		draw.refresh()
 
-fs.watch(SETTINGS_PATH, handle_file_update)
+for path in RELEVANT_PATHS:
+	fs.watch(path, handle_file_update)
 
 mod = Module()
 @mod.action_class
