@@ -13,6 +13,7 @@ from ast import literal_eval
 class SettingFileSettingInformation:
 	value: Any
 	description: str
+	is_deactivated: bool=False
 
 COMMENTED_TAG_PREFIX = "# tag(): "
 TAG_PREFIX = "tag(): "
@@ -67,7 +68,7 @@ def parse_settings(path):
 				description.clear()
 			elif setting := compute_setting(line, COMMENTED_SETTING_PREFIX):
 				name, value = setting
-				settings[name] = SettingFileSettingInformation(value, "\n".join(description))
+				settings[name] = SettingFileSettingInformation(value, "\n".join(description), is_deactivated=True)
 				description.clear()
 			elif setting := compute_setting(line, SETTING_INDENTATION_PREFIX):
 				name, value = setting
@@ -166,6 +167,7 @@ class Setting:
 	update_function: Callable=update_setting
 	path: Path=SETTINGS_PATH
 	is_tag: bool=False
+	is_deactivated: bool=False
 	value: Any=None
 	description: str=""
 	compute_vertical_size: Callable=compute_vertical_size_from_number_of_lines_in_description
@@ -221,9 +223,10 @@ class Page:
 	description: str
 	settings: list[Setting]
 
-def update_setting_information(setting, file_setting_information):
+def update_setting_information(setting: Setting, file_setting_information: SettingFileSettingInformation):
 	setting.description = file_setting_information.description
 	setting.value = egui.Mutable(file_setting_information.value)
+	setting.is_deactivated = file_setting_information.is_deactivated
 
 class Manager:
 	def __init__(self):
@@ -246,7 +249,7 @@ class Manager:
 				"",
 				[
 					create_tag_setting("user.unprefixed_numbers"),
-					
+
 				]
 			)
 		]
