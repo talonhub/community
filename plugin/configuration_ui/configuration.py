@@ -288,6 +288,15 @@ class Manager:
 					create_boolean_setting("user.mouse_enable_pop_stops_scroll"),
 					create_boolean_setting("user.mouse_enable_pop_stops_drag"),
 				]
+			),
+			Page(
+				"Help System",
+				"",
+				[
+					create_numeric_setting("user.help_max_command_lines_per_page", 1),
+					create_numeric_setting("user.help_max_contexts_per_page", 1),
+					create_boolean_setting("user.help_sort_contexts_by_specificity"),
+				]
 			)
 		]
 		self.pages = {page.title: page for page in pages}
