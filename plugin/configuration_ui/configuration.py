@@ -175,6 +175,27 @@ def create_tag_setting(name):
 		is_tag=True,
 	)
 
+async def draw_numeric_input(setting: Setting, ui, minimum, maximum):
+	old_value = setting.value.get()
+	async with ui.horizontal():
+		ui.label(setting.name)
+		ui.add(egui.DragValue(setting.value))
+	ui.label(setting.description)
+	value = setting.value.get()
+	if minimum is not None and value < minimum:
+		setting.value.set(minimum)
+	if maximum is not None and value > maximum:
+		setting.value.set(maximum)
+	if old_value != value:
+		setting.update_function(setting.path, setting.name, value)
+
+def create_numeric_setting(name, minimum=None, maximum=None):
+	return Setting(
+		name,
+		lambda setting, ui: draw_numeric_input(setting, ui, minimum, maximum),
+		is_tag=True,
+	)
+
 
 @dataclass
 class Page:
@@ -194,7 +215,8 @@ class Manager:
 				"Decide what should happen when you make a popping noise",
 				[
 					create_tag_setting("user.pop_twice_to_repeat"),
-					create_tag_setting("user.pop_twice_to_wake")
+					create_tag_setting("user.pop_twice_to_wake"),
+					create_numeric_setting("user.mouse_enable_pop_click", 0, 2)
 				]
 			)
 		]
