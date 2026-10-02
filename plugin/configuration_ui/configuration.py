@@ -220,7 +220,7 @@ class Manager:
 
 manager = Manager()
 
-@open_gui(x=0.5, width=0.5, height=0.5, toplevel=False, decorated=True)
+@open_gui(x=0.25, y=0.25, width=0.5, height=0.5, toplevel=False, decorated=True)
 async def draw(ui, helpers):
 	await manager.draw(ui)
 
