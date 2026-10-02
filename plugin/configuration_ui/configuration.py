@@ -166,8 +166,8 @@ def compute_vertical_size_from_number_of_lines_in_description(setting: Setting, 
 
 SETTINGS_PATH = Path(__file__).parent.parent.parent / "settings.talon"
 MODE_INDICATOR_PATH = Path(__file__).parent.parent / "mode_indicator" / "mode_indicator.talon"
-
-RELEVANT_PATHS = [SETTINGS_PATH, MODE_INDICATOR_PATH]
+SUBTITLES_PATH = Path(__file__).parent.parent / "subtitles" / "subtitles.talon"
+RELEVANT_PATHS = [SETTINGS_PATH, MODE_INDICATOR_PATH, SUBTITLES_PATH]
 
 @dataclass
 class Setting:
@@ -368,6 +368,21 @@ class Manager:
 					create_single_line_text_setting("user.mode_indicator_color_mixed", MODE_INDICATOR_PATH),
 					create_single_line_text_setting("user.mode_indicator_color_command", MODE_INDICATOR_PATH),
 					create_single_line_text_setting("user.mode_indicator_color_other", MODE_INDICATOR_PATH),
+				]
+			),
+			Page(
+				"Subtitles",
+				"Configuration for Community's subtitles (not the Talon builtin subtitles)",
+				[
+					create_boolean_setting("user.subtitles_show", SUBTITLES_PATH),
+					create_single_line_text_setting("user.subtitles_screens", SUBTITLES_PATH),
+					create_numeric_setting("user.subtitles_size", 0, path=SUBTITLES_PATH),
+					create_single_line_text_setting("user.subtitles_color", SUBTITLES_PATH),
+					create_single_line_text_setting("user.subtitles_color_outline", SUBTITLES_PATH),
+					create_numeric_setting("user.subtitles_timeout_per_char", 0, path=SUBTITLES_PATH),
+					create_numeric_setting("user.subtitles_timeout_min", 0, path=SUBTITLES_PATH),
+					create_numeric_setting("user.subtitles_timeout_max", 0, path=SUBTITLES_PATH),
+					create_numeric_setting("user.subtitles_y", 0.0, 1.0, path=SUBTITLES_PATH),
 				]
 			),
 			Page(
