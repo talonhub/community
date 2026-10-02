@@ -134,13 +134,12 @@ class Setting:
 
 
 async def draw_toggle(setting: Setting, ui):
-	async with ui.horizontal():
-		value = setting.value.get()
-		ui.checkbox(setting.value, setting.name)
-		ui.label(setting.description)
-		new_value = setting.value.get()
-		if value != new_value:
-			setting.update_function(setting.path, setting.name, new_value)
+	value = setting.value.get()
+	ui.checkbox(setting.value, setting.name)
+	ui.label(setting.description)
+	new_value = setting.value.get()
+	if value != new_value:
+		setting.update_function(setting.path, setting.name, new_value)
 		
 def create_tag_setting(name):
 	return Setting(
