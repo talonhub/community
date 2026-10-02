@@ -1,4 +1,4 @@
-from talon import Module
+from talon import Module, fs
 
 from dataclasses import dataclass
 from pathlib import Path
@@ -148,7 +148,7 @@ class Page:
 	description: str
 	settings: list[Setting]
 
-def update_setting(setting, file_setting_information):
+def update_setting_information(setting, file_setting_information):
 	setting.description = file_setting_information.description
 	setting.value = egui.Mutable(file_setting_information.value)
 
@@ -176,10 +176,10 @@ class Manager:
 				if setting.is_tag:
 					if name in tags:
 						tag = tags[name]
-						update_setting(setting, tag)
+						update_setting_information(setting, tag)
 				elif name in settings:
 					setting_information = settings[name]
-					update_setting(setting, setting_information)
+					update_setting_information(setting, setting_information)
 	
 	async def draw(self, ui):
 		total_available_height = ui.available_height()
@@ -215,6 +215,13 @@ manager = Manager()
 @open_gui(x=0.5, width=0.5, height=0.5, toplevel=False, decorated=True)
 async def draw(ui, helpers):
 	await manager.draw(ui)
+
+def handle_file_update(path, flags):
+	if manager:
+		manager.on_change(Path(path))
+		draw.refresh()
+
+fs.watch(SETTINGS_PATH, handle_file_update)
 
 mod = Module()
 @mod.action_class
