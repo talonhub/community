@@ -114,6 +114,9 @@ def update_setting(path, setting_name, new_value):
 	with open(path, "w") as f:
 		f.write("\n".join(lines))
 
+def uncomment_setting(path, name):
+	pass
+
 def update_tag(path, name, should_be_active):
 	lines = []
 	with open(path, "r") as f:
@@ -173,6 +176,11 @@ class Setting:
 	description: str=""
 	compute_vertical_size: Callable=compute_vertical_size_from_number_of_lines_in_description
 
+async def draw_setting_un_commenting_button(ui, setting: Setting):
+	file_name = setting.path.stem + setting.path.suffix
+	if ui.button(f"Click this if you want to set {setting.name} in {file_name}").clicked():
+		uncomment_setting(setting.path, setting.name)
+	ui.label(setting.description)
 
 async def draw_toggle(setting: Setting, ui):
 	value = setting.value.get()
@@ -250,7 +258,7 @@ class Manager:
 				"",
 				[
 					create_tag_setting("user.unprefixed_numbers"),
-
+					create_numeric_setting("user.paste_to_insert_threshold", -1),
 				]
 			)
 		]
@@ -301,7 +309,10 @@ class Manager:
 			ui.label(page.description)
 		ui.separator()
 		for setting in page.settings:
-			await setting.draw(setting, ui)
+			if setting.is_deactivated:
+				await draw_setting_un_commenting_button(ui, setting)
+			else:
+				await setting.draw(setting, ui)
 			ui.add_space(10)
 
 manager = Manager()
