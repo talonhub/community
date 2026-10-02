@@ -165,7 +165,7 @@ class Page:
 
 def update_setting(setting, file_setting_information):
 	setting.description = file_setting_information.description
-	setting.value = file_setting_information.value
+	setting.value = egui.Mutable(file_setting_information.value)
 
 class Manager:
 	def __init__(self):
