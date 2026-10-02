@@ -277,6 +277,21 @@ class Manager:
 				]
 			),
 			Page(
+				"Scrolling",
+				"",
+				[
+					create_numeric_setting("user.mouse_continuous_scroll_amount", 1),
+					create_numeric_setting("user.mouse_gaze_scroll_speed_multiplier", 1.0),
+					create_numeric_setting("user.mouse_continuous_scroll_acceleration", 1),
+					create_boolean_setting("user.mouse_enable_pop_stops_scroll"),
+					create_boolean_setting("user.mouse_enable_hiss_scroll"),
+					create_numeric_setting("user.hiss_scroll_debounce_time", 0),
+					create_boolean_setting("user.mouse_hide_mouse_gui"),
+					create_numeric_setting("user.mouse_wheel_down_amount", 0),
+					create_numeric_setting("user.mouse_wheel_horizontal_amount", 0)
+				]
+			),
+			Page(
 				"Popping",
 				"Decide what should happen when you make a popping noise",
 				[
@@ -297,7 +312,7 @@ class Manager:
 					create_numeric_setting("user.help_max_contexts_per_page", 1),
 					create_boolean_setting("user.help_sort_contexts_by_specificity"),
 				]
-			)
+			),
 		]
 		self.pages = {page.title: page for page in pages}
 		self.page = ""
