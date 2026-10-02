@@ -109,7 +109,8 @@ def update_setting(path, setting_name, new_value):
 			if found_setting:
 				raise IOError(f"Found duplicate setting assignment for {setting_name} inside file {path}")
 			lines[i] = new_setting_text
-			
+	if not found_setting:
+		raise IOError(f"Could not find {setting_name} inside file {path}")
 	with open(path, "w") as f:
 		f.write("\n".join(lines))
 
