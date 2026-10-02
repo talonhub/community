@@ -14,9 +14,15 @@ class SettingFileSettingInformation:
 	description: str
 
 COMMENTED_TAG_PREFIX = "# tag(): "
+TAG_PREFIX = "tag(): "
 def compute_commented_tag(line):
 	if line.startswith(COMMENTED_TAG_PREFIX):
 		return line[len(COMMENTED_TAG_PREFIX):].strip()
+	return None
+
+def compute_tag(line):
+	if line.startswith(TAG_PREFIX):
+		return line[len(TAG_PREFIX):].strip()
 	return None
 
 COMMENTED_SETTING_PREFIX = "    # "
@@ -54,6 +60,9 @@ def parse_settings(path):
 			elif setting := compute_setting(line, SETTING_INDENTATION_PREFIX):
 				name, value = setting
 				settings[name] = SettingFileSettingInformation(value, "\n".join(description))
+				description.clear()
+			elif tag := compute_tag(line):
+				tags[tag] = SettingFileSettingInformation(True, "\n".join(description))
 				description.clear()
 			elif line.lstrip().startswith("# "):
 				comment = line.strip()[1:].strip()
