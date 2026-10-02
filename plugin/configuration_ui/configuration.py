@@ -240,6 +240,14 @@ class Manager:
 					create_boolean_setting("user.mouse_enable_pop_stops_scroll"),
 					create_boolean_setting("user.mouse_enable_pop_stops_drag"),
 				]
+			),
+			Page(
+				"Text insertion",
+				"",
+				[
+					create_tag_setting("user.unprefixed_numbers"),
+					
+				]
 			)
 		]
 		self.pages = {page.title: page for page in pages}
