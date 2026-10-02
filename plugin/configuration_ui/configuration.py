@@ -7,6 +7,7 @@ from typing import Callable, Any
 from .gui import open_gui
 
 import egui
+from ast import literal_eval
 
 @dataclass
 class SettingFileSettingInformation:
@@ -37,9 +38,20 @@ def compute_setting(line: str, prefix: str):
 		return None
 	if not line[len(prefix)].isalpha():
 		return None
-	value = line[equals_index+3:]
+	value = parse_value(line[equals_index+3:].strip())
 	name = line[len(prefix):equals_index]
 	return name, value
+
+def parse_value(value):
+	if value == "true":
+		return True
+	elif value == "false":
+		return False
+	else:
+		try:
+			return literal_eval(value)
+		except Exception as ex:
+			return None
 
 SETTING_INDENTATION_PREFIX = "    "
 
