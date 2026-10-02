@@ -221,12 +221,20 @@ async def draw_numeric_input(setting: Setting, ui, minimum, maximum):
 	if old_value != value:
 		setting.update_function(setting.path, setting.name, value)
 
+async def draw_single_line_text_input(setting: Setting, ui):
+	pass
+
 def create_numeric_setting(name, minimum=None, maximum=None):
 	return Setting(
 		name,
 		lambda setting, ui: draw_numeric_input(setting, ui, minimum, maximum),
 	)
 
+def create_single_line_text_setting(name):
+	return Setting(
+		name,
+		draw_single_line_text_input,
+	)
 
 @dataclass
 class Page:
@@ -243,13 +251,22 @@ class Manager:
 	def __init__(self):
 		pages = [
 			Page(
-				"Text insertion",
+				"Text Insertion",
 				"",
 				[
 					create_tag_setting("user.unprefixed_numbers"),
 					create_numeric_setting("user.paste_to_insert_threshold", -1),
 					create_boolean_setting("user.context_sensitive_dictation"),
 					create_numeric_setting("user.insert_between_wait", 0),
+				]
+			),
+			Page(
+				"Speech Recognition",
+				"",
+				[
+					create_numeric_setting("speech.timeout", 0.0),
+					create_single_line_text_setting("user.initial_mode"),
+					create_numeric_setting("user.listening_timeout_minutes", -1),
 				]
 			),
 			Page(
