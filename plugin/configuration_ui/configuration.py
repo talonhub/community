@@ -1,19 +1,4 @@
-#Design:
-#	you can use pages showing the settings or do a search
-#	1. Setting object including:
-#		filepath
-#		update method: update the file, handle failure
-#		setting/tag name
-#		get description from setting and tag name, for default description otherwise get from file
-#		get ui vertical size to support heterogeneous rows
-#	2. Pages:
-#		have a list of setting objects
-#		page title, optional description
-#		drawn by the overall manager
-#	3. Manager:
-#		heterogeneous scroll area
-#		given an initial width
-#		show pages on the left alongside a search feature
+from talon import Module
 
 from dataclasses import dataclass
 from pathlib import Path
@@ -174,7 +159,8 @@ class Manager:
 				"Popping",
 				"Decide what should happen when you make a popping noise",
 				[
-					create_tag_setting("user.pop_twice_to_repeat")
+					create_tag_setting("user.pop_twice_to_repeat"),
+					create_tag_setting("user.pop_twice_to_wake")
 				]
 			)
 		]
@@ -230,3 +216,13 @@ manager = Manager()
 async def draw(ui, helpers):
 	await manager.draw(ui)
 
+mod = Module()
+@mod.action_class
+class Actions:
+	def show_configuration_window():
+		"""Show the Community configuration window"""
+		draw.show()
+
+	def hide_configuration_window():
+		"""Hide the Community configuration window"""
+		draw.hide()
