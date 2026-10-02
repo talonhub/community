@@ -292,6 +292,22 @@ class Manager:
 				]
 			),
 			Page(
+				"Mouse Grid",
+				"",
+				[
+					create_boolean_setting("user.grids_put_one_bottom_left"),
+					create_boolean_setting("user.grid_show_zoomed"),
+				]
+			),
+			Page(
+				"Command History",
+				"",
+				[
+					create_numeric_setting("user.command_history_display", 1),
+					create_numeric_setting("user.command_history_size", 1),
+				]
+			),
+			Page(
 				"Popping",
 				"Decide what should happen when you make a popping noise",
 				[
