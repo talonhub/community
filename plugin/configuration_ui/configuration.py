@@ -187,6 +187,13 @@ def create_tag_setting(name):
 		is_tag=True,
 	)
 
+def create_boolean_setting(name):
+	return Setting(
+		name,
+		draw_toggle,
+		update_setting,
+	)
+
 async def draw_numeric_input(setting: Setting, ui, minimum, maximum):
 	old_value = setting.value.get()
 	async with ui.horizontal():
@@ -230,6 +237,8 @@ class Manager:
 					create_numeric_setting("user.double_pop_speed_minimum", 0.0),
 					create_numeric_setting("user.double_pop_speed_maximum", 0.0),
 					create_numeric_setting("user.mouse_enable_pop_click", 0, 2),
+					create_boolean_setting("user.mouse_enable_pop_stops_scroll"),
+					create_boolean_setting("user.mouse_enable_pop_stops_drag"),
 				]
 			)
 		]
