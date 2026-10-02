@@ -329,6 +329,25 @@ class Manager:
 					create_boolean_setting("user.help_sort_contexts_by_specificity"),
 				]
 			),
+			Page(
+				"Window Management",
+				"",
+				[
+					create_single_line_text_setting("user.window_snap_screen"),
+					create_tag_setting("user.experimental_window_layout"),
+				]
+			),
+			Page(
+				"Miscellaneous",
+				"",
+				[
+					create_numeric_setting("user.mouse_click_hold", 0),
+					create_boolean_setting("user.file_manager_auto_show_pickers"),
+					create_boolean_setting("user.strict_command_deprecation"),
+					create_numeric_setting("user.selected_text_timeout", 0.0),
+					create_tag_setting("user.mouse_cursor_commands_enable"),
+				]
+			)
 		]
 		self.pages = {page.title: page for page in pages}
 		self.page = ""
