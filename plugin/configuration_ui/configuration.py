@@ -356,7 +356,18 @@ class Manager:
 					create_boolean_setting("user.mode_indicator_show", MODE_INDICATOR_PATH),
 					create_boolean_setting("user.mode_indicator_show_microphone_name", MODE_INDICATOR_PATH),
 					create_numeric_setting("user.mode_indicator_size", 1, path=MODE_INDICATOR_PATH),
-
+					create_numeric_setting("user.mode_indicator_x", 0.0, 1.0, MODE_INDICATOR_PATH),
+					create_numeric_setting("user.mode_indicator_y", 0.0, 1.0, MODE_INDICATOR_PATH),
+					create_numeric_setting("user.mode_indicator_color_alpha", 0.0, 1.0, MODE_INDICATOR_PATH),
+					create_numeric_setting("user.mode_indicator_color_gradient", 0.0, 1.0, MODE_INDICATOR_PATH),
+					create_single_line_text_setting("user.mode_indicator_color_text", MODE_INDICATOR_PATH),
+					create_single_line_text_setting("user.mode_indicator_color_mute", MODE_INDICATOR_PATH),
+					create_single_line_text_setting("user.mode_indicator_color_sleep", MODE_INDICATOR_PATH),
+					create_single_line_text_setting("user.mode_indicator_color_deep_sleep", MODE_INDICATOR_PATH),
+					create_single_line_text_setting("user.mode_indicator_color_dictation", MODE_INDICATOR_PATH),
+					create_single_line_text_setting("user.mode_indicator_color_mixed", MODE_INDICATOR_PATH),
+					create_single_line_text_setting("user.mode_indicator_color_command", MODE_INDICATOR_PATH),
+					create_single_line_text_setting("user.mode_indicator_color_other", MODE_INDICATOR_PATH),
 				]
 			),
 			Page(
