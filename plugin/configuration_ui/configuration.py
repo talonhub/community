@@ -92,30 +92,32 @@ def convert_value_to_talon_script_literal(value) -> str:
 	elif isinstance(value, str):
 		return f"\"{value.replace('"', '\\"')}\""
 
-def update_setting(path, setting_name, new_value):
-	"""Updates the file to set the setting to a new value.
-		Assumes that the setting takes a single line and that there is no variable name getting created equalling the setting name
-		"""
+def replace_setting_assignment(path, setting_name, new_text):
 	current_text = ""
 	with open(path, "r") as f:
 		current_text = f.read()
 	lines = current_text.split("\n")
 	setting_text = f"    {setting_name} = "
+	commented_setting_text = f"    # {setting_name} = "
 	found_setting = False
-	converted_value = convert_value_to_talon_script_literal(new_value)
-	new_setting_text = f"    {setting_name} = {converted_value}"
 	for i, line in enumerate(lines):
-		if line.startswith(setting_text):
+		if line.startswith(setting_text) or line.startswith(commented_setting_text):
 			if found_setting:
 				raise IOError(f"Found duplicate setting assignment for {setting_name} inside file {path}")
-			lines[i] = new_setting_text
+			lines[i] = new_text
+			found_setting = True
 	if not found_setting:
 		raise IOError(f"Could not find {setting_name} inside file {path}")
 	with open(path, "w") as f:
 		f.write("\n".join(lines))
 
-def uncomment_setting(path, name):
-	pass
+def update_setting(path, setting_name, new_value):
+	"""Updates the file to set the setting to a new value.
+		Assumes that the setting takes a single line and that there is no variable name getting created equalling the setting name
+		"""
+	converted_value = convert_value_to_talon_script_literal(new_value)
+	new_setting_text = f"    {setting_name} = {converted_value}"
+	replace_setting_assignment(path, setting_name, new_setting_text)
 
 def update_tag(path, name, should_be_active):
 	lines = []
@@ -179,7 +181,7 @@ class Setting:
 async def draw_setting_un_commenting_button(ui, setting: Setting):
 	file_name = setting.path.stem + setting.path.suffix
 	if ui.button(f"Click this if you want to set {setting.name} in {file_name}").clicked():
-		uncomment_setting(setting.path, setting.name)
+		update_setting(setting.path, setting.name, setting.value.get())
 	ui.label(setting.description)
 
 async def draw_toggle(setting: Setting, ui):
@@ -279,7 +281,6 @@ class Manager:
 						update_setting_information(setting, tag)
 				elif name in settings:
 					setting_information = settings[name]
-					print(name, setting_information)
 					update_setting_information(setting, setting_information)
 	
 	async def draw(self, ui):
