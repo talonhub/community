@@ -222,7 +222,14 @@ async def draw_numeric_input(setting: Setting, ui, minimum, maximum):
 		setting.update_function(setting.path, setting.name, value)
 
 async def draw_single_line_text_input(setting: Setting, ui):
-	pass
+	old_value = setting.value.get()
+	async with ui.horizontal():
+		ui.label(setting.name)
+		ui.add(egui.TextEdit.singleline(setting.value))
+	ui.label(setting.description)
+	value = setting.value.get()
+	if old_value != value:
+		setting.update_function(setting.path, setting.name, value)
 
 def create_numeric_setting(name, minimum=None, maximum=None):
 	return Setting(
