@@ -277,6 +277,7 @@ class Manager:
 		ui.separator()
 		for setting in page.settings:
 			await setting.draw(setting, ui)
+			ui.add_space(10)
 
 manager = Manager()
 
