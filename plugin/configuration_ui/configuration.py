@@ -71,8 +71,34 @@ def parse_settings(path):
 				description.clear()
 	return tags, settings
 
-def update_setting(path, name, value):
-	pass
+def convert_value_to_talon_script_literal(value) -> str:
+	if isinstance(value, bool):
+		return str(value).lower()
+	elif isinstance(value, int) or isinstance(value, float):
+		return str(value)
+	elif isinstance(value, str):
+		return f"\"{value.replace('"', '\\"')}\""
+
+def update_setting(path, setting_name, new_value):
+	"""Updates the file to set the setting to a new value.
+		Assumes that the setting takes a single line and that there is no variable name getting created equalling the setting name
+		"""
+	current_text = ""
+	with open(path, "r") as f:
+		current_text = f.read()
+	lines = current_text.split("\n")
+	setting_text = f"    {setting_name} = "
+	found_setting = False
+	converted_value = convert_value_to_talon_script_literal(new_value)
+	new_setting_text = f"    {setting_name} = {converted_value}"
+	for i, line in enumerate(lines):
+		if line.startswith(setting_text):
+			if found_setting:
+				raise IOError(f"Found duplicate setting assignment for {setting_name} inside file {path}")
+			lines[i] = new_setting_text
+			
+	with open(path, "w") as f:
+		f.write("\n".join(lines))
 
 def update_tag(path, name, should_be_active):
 	lines = []
@@ -125,7 +151,7 @@ SETTINGS_PATH = Path(__file__).parent.parent.parent / "settings.talon"
 class Setting:
 	name: str
 	draw: Callable
-	update_function: Callable
+	update_function: Callable=update_setting
 	path: Path=SETTINGS_PATH
 	is_tag: bool=False
 	value: Any=None
