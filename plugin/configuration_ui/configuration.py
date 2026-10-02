@@ -261,6 +261,8 @@ class Manager:
 		tags, settings = parse_settings(path)
 		for page in self.pages.values():
 			for setting in page.settings:
+				if setting.path != path:
+					continue
 				name = setting.name
 				if setting.is_tag:
 					if name in tags:
