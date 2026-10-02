@@ -243,6 +243,16 @@ class Manager:
 	def __init__(self):
 		pages = [
 			Page(
+				"Text insertion",
+				"",
+				[
+					create_tag_setting("user.unprefixed_numbers"),
+					create_numeric_setting("user.paste_to_insert_threshold", -1),
+					create_boolean_setting("user.context_sensitive_dictation"),
+					create_numeric_setting("user.insert_between_wait", 0),
+				]
+			),
+			Page(
 				"Popping",
 				"Decide what should happen when you make a popping noise",
 				[
@@ -253,14 +263,6 @@ class Manager:
 					create_numeric_setting("user.mouse_enable_pop_click", 0, 2),
 					create_boolean_setting("user.mouse_enable_pop_stops_scroll"),
 					create_boolean_setting("user.mouse_enable_pop_stops_drag"),
-				]
-			),
-			Page(
-				"Text insertion",
-				"",
-				[
-					create_tag_setting("user.unprefixed_numbers"),
-					create_numeric_setting("user.paste_to_insert_threshold", -1),
 				]
 			)
 		]
