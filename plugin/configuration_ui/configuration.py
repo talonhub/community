@@ -205,7 +205,6 @@ def create_numeric_setting(name, minimum=None, maximum=None):
 	return Setting(
 		name,
 		lambda setting, ui: draw_numeric_input(setting, ui, minimum, maximum),
-		is_tag=True,
 	)
 
 
@@ -247,6 +246,7 @@ class Manager:
 						update_setting_information(setting, tag)
 				elif name in settings:
 					setting_information = settings[name]
+					print(name, setting_information)
 					update_setting_information(setting, setting_information)
 	
 	async def draw(self, ui):
