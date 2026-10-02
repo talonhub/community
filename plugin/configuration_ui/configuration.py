@@ -130,11 +130,12 @@ SETTINGS_PATH = Path(__file__).parent.parent.parent / "settings.talon"
 @dataclass
 class Setting:
 	name: str
-	value: Any
-	description: str
 	draw: Callable
 	update_function: Callable
 	path: Path=SETTINGS_PATH
+	is_tag: bool=False
+	value: Any=None
+	description: str=""
 	compute_vertical_size: Callable=compute_vertical_size_from_number_of_lines_in_description
 
 
@@ -147,13 +148,12 @@ async def draw_toggle(setting: Setting, ui):
 		if value != new_value:
 			setting.update_function(setting.path, setting.name, new_value)
 		
-def create_tag_setting(name, description, value):
+def create_tag_setting(name):
 	return Setting(
 		name,
-		egui.Mutable(value),
-		description,
 		draw_toggle,
 		update_tag,
+		is_tag=True,
 	)
 
 
@@ -163,6 +163,10 @@ class Page:
 	description: str
 	settings: list[Setting]
 
+def update_setting(setting, file_setting_information):
+	setting.description = file_setting_information.description
+	setting.value = file_setting_information.value
+
 class Manager:
 	def __init__(self):
 		pages = [
@@ -170,16 +174,27 @@ class Manager:
 				"Popping",
 				"Decide what should happen when you make a popping noise",
 				[
-					create_tag_setting("user.pop_twice_to_repeat", """# Uncomment below enable pop_twice_to_repeat
-# Enabling this tag will repeat the last command when two pops are heard within the allotted time window
-# Without this tag noise_trigger_pop is usually associated with pop to click actions
-# Enabling this tag disables other pop to click actions in command mode, including pop to click""", False)
+					create_tag_setting("user.pop_twice_to_repeat")
 				]
 			)
 		]
 		self.pages = {page.title: page for page in pages}
 		self.page = ""
+		self.on_change(SETTINGS_PATH)
 
+	def on_change(self, path):
+		tags, settings = parse_settings(path)
+		for page in self.pages.values():
+			for setting in page.settings:
+				name = setting.name
+				if setting.is_tag:
+					if name in tags:
+						tag = tags[name]
+						update_setting(setting, tag)
+				elif name in settings:
+					setting_information = settings[name]
+					update_setting(setting, setting_information)
+	
 	async def draw(self, ui):
 		total_available_height = ui.available_height()
 		async with ui.horizontal():
