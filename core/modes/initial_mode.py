@@ -21,6 +21,8 @@ def on_ready():
             actions.user.dictation_mode()
         case "command":
             pass  # already the default; nothing to do
+        case "mixed":
+            actions.user.mixed_mode()
         case _:
             app.notify("Unsupported mode for user.initial_mode: {initial_mode}")
 
