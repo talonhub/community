@@ -227,7 +227,9 @@ class Manager:
 				[
 					create_tag_setting("user.pop_twice_to_repeat"),
 					create_tag_setting("user.pop_twice_to_wake"),
-					create_numeric_setting("user.mouse_enable_pop_click", 0, 2)
+					create_numeric_setting("user.double_pop_speed_minimum", 0.0),
+					create_numeric_setting("user.double_pop_speed_maximum", 0.0),
+					create_numeric_setting("user.mouse_enable_pop_click", 0, 2),
 				]
 			)
 		]
