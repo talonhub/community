@@ -3,14 +3,121 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import IO
 
-from talon import actions, resource, settings
+from talon import Module, actions, resource, settings
 
 # NOTE: This method requires this module to be one folder below the top-level
 #   community folder.
 COMMUNITY_ROOT_DIR = Path(__file__).parents[1]
 
-CallbackT = Callable[[dict[str, str]], None]
-DecoratorT = Callable[[CallbackT], CallbackT]
+SpokenPairCallbackT = Callable[[dict[str, str]], None]
+DecoratorT = Callable[[SpokenPairCallbackT], None]
+
+RawRowsCallbackT = Callable[[list[list[str]]], None]
+RawRowsDecoratorT = Callable[[RawRowsCallbackT], RawRowsCallbackT]
+
+mod = Module()
+
+
+# For inclusion in setting documentation
+SETTING_DIRECTORY_DOCUMENTATION = """
+Accepts a single path, or multiple paths separated by new lines.
+Paths must be separated by forward slashs (not the default Windows backslash!).
+Spaces inside path names are supported directly and do not need to be escaped.
+Whitespace around the lines is automatically trimmed.
+The `~` character is automatically expanded to the users home directory.
+"""
+
+
+def parse_directories_setting(
+    dir_strings: str | None, base_dir: Path | None = None
+) -> list[Path]:
+    """Parses a newline-separated string of directories into resolved Path objects."""
+    if not dir_strings or not dir_strings.strip():
+        return []
+
+    dirs: list[Path] = []
+    for segment in dir_strings.split("\n"):
+        segment = segment.strip()
+        if not segment:
+            continue
+
+        path = Path(segment).expanduser()
+        if not path.is_absolute() and base_dir is not None:
+            path = base_dir / path
+
+        dirs.append(path.resolve())
+
+    return dirs
+
+
+def get_setting_directories(setting) -> list[Path]:
+    setting_val = settings.get(setting)
+    user_dir = Path(actions.path.talon_user())
+    return parse_directories_setting(setting_val, user_dir)
+
+
+def register_customization_csv(
+    filename: str,
+    headers: tuple[str, str],
+    default: dict[str, str] | None = None,
+    is_spoken_form_first: bool = False,
+    private: bool = False,
+) -> DecoratorT:
+    assert filename.endswith(".csv")
+    path = resolve_setting_file_path(filename, private)
+    write_csv_defaults(path, headers, default, is_spoken_form_first)
+
+    def decorator(fn: SpokenPairCallbackT) -> None:
+        @resource.watch(str(path))
+        def on_update(f):
+            data = read_csv_list(f, headers, is_spoken_form_first)
+            fn(data)
+
+    return decorator
+
+
+def track_csv_rows(
+    filename: str,
+    headers: tuple[str, ...],
+    default: list[list[str]] | None = None,
+    private: bool = False,
+) -> RawRowsDecoratorT:
+    assert filename.endswith(".csv")
+    path = resolve_setting_file_path(filename, private)
+    write_csv_default_rows(path, headers, default)
+
+    def decorator(fn: RawRowsCallbackT) -> RawRowsCallbackT:
+        @resource.watch(str(path))
+        def on_update(f):
+            data = read_csv_rows(f, headers)
+            fn(data)
+
+        return on_update
+
+    return decorator
+
+
+WatchCallbackType = Callable[[IO], None]
+WatchDecoratorType = Callable[[WatchCallbackType], WatchCallbackType]
+
+
+def track_file(
+    filename: str,
+    default: str = "",
+    private: bool = False,
+) -> WatchDecoratorType:
+    path = resolve_setting_file_path(filename, private)
+    if not path.is_file():
+        path.write_text(default)
+
+    def decorator(fn: WatchCallbackType) -> WatchCallbackType:
+        @resource.watch(path)
+        def on_update(f):
+            fn(f)
+
+        return on_update
+
+    return decorator
 
 
 def read_csv_list(
@@ -67,6 +174,8 @@ def write_csv_defaults(
     is_spoken_form_first: bool = False,
 ) -> None:
     """Writes a dict of output: spoken form pairs to csv if the file doesn't exist. is_spoken_form_first swaps the order to spoken form: output."""
+    if default is None:
+        default = {}
     rows = []
     for key, value in default.items():
         if key == value:
@@ -92,26 +201,6 @@ def write_csv_default_rows(
         writer.writerows(default)
 
 
-def register_customization_csv(
-    filename: str,
-    headers: tuple[str, str],
-    default: dict[str, str] | None = None,
-    is_spoken_form_first: bool = False,
-    private: bool = False,
-) -> DecoratorT:
-    assert filename.endswith(".csv")
-    path = resolve_setting_file_path(filename, private)
-    write_csv_defaults(path, headers, default, is_spoken_form_first)
-
-    def decorator(fn: CallbackT) -> CallbackT:
-        @resource.watch(str(path))
-        def on_update(f):
-            data = read_csv_list(f, headers, is_spoken_form_first)
-            fn(data)
-
-    return decorator
-
-
 def append_to_csv(filename: str, rows: dict[str, str], private: bool = False):
     assert filename.endswith(".csv")
     path = resolve_setting_file_path(filename, private)
@@ -125,7 +214,7 @@ def append_to_csv(filename: str, rows: dict[str, str], private: bool = False):
             writer.writerow([key] if key == value else [value, key])
 
 
-def resolve_setting_file_path(filename, private):
+def resolve_setting_file_path(filename: Path | str, private: bool):
     # Make directory on resolve rather than earlier, in case it has been deleted since talon was started
     settings_dir = COMMUNITY_ROOT_DIR / "settings"
     settings_dir.mkdir(exist_ok=True)
@@ -142,92 +231,6 @@ def needs_final_newline(path: Path | str) -> bool:
     return line is not None and not line.endswith("\n")
 
 
-WatchCallbackType = Callable[[IO], None]
-WatchDecoratorType = Callable[[WatchCallbackType], WatchCallbackType]
-
-
-def track_file(
-    filename: str,
-    default: str = "",
-    private: bool = False,
-) -> WatchDecoratorType:
-    path = resolve_setting_file_path(filename, private)
-    if not path.is_file():
-        path.write_text(default)
-
-    def decorator(fn: WatchCallbackType) -> WatchCallbackType:
-        @resource.watch(path)
-        def on_update(f):
-            fn(f)
-
-        return on_update
-
-    return decorator
-
-
-RawRowsCallbackT = Callable[[list[list[str]]], None]
-RawRowsDecoratorT = Callable[[RawRowsCallbackT], RawRowsCallbackT]
-
-
-def track_csv_rows(
-    filename: str,
-    headers: tuple[str, ...],
-    default: list[list[str]] | None = None,
-    private: bool = False,
-) -> RawRowsDecoratorT:
-    assert filename.endswith(".csv")
-    path = resolve_setting_file_path(filename, private)
-    write_csv_default_rows(path, headers, default)
-
-    def decorator(fn: RawRowsCallbackT) -> RawRowsCallbackT:
-        @resource.watch(str(path))
-        def on_update(f):
-            data = read_csv_rows(f, headers)
-            fn(data)
-
-        return on_update
-
-    return decorator
-
-
 def warn_about_error(message: str):
     actions.app.notify(message)
     print(message)
-
-
-def get_setting_directories(setting) -> list[Path]:
-    setting_val = settings.get(setting)
-    user_dir = Path(actions.path.talon_user())
-    return parse_directories_setting(setting_val, user_dir)
-
-
-# For inclusion in setting documentation
-setting_directory_documentation = """
-Accepts a single path, or multiple paths separated by new lines.
-Paths must be separated by forward slashs (not the default windows backslash!).
-Spaces inside path names are supported directly and do not need to be escaped.
-Whitespace around the lines is automatically trimmed.
-The `~` character is automatically expanded to the users home directory.
-"""
-
-
-def parse_directories_setting(
-    dir_strings: str | None, base_dir: Path | None = None
-) -> list[Path]:
-    """Parses a newline-separated string of directories into resolved Path objects."""
-    if not dir_strings or not dir_strings.strip():
-        return []
-
-    dirs: list[Path] = []
-    for segment in dir_strings.split("\n"):
-        segment = segment.strip()
-        if not segment:
-            continue
-
-        path = Path(segment).expanduser()
-        if not path.is_absolute() and base_dir is not None:
-            path = base_dir / path
-
-        dirs.append(path.resolve())
-
-    return dirs
