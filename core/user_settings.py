@@ -28,6 +28,19 @@ Whitespace around the lines is automatically trimmed.
 The `~` character is automatically expanded to the users home directory.
 """
 
+mod.setting(
+    "extra_settings_dirs",
+    type=str,
+    default=None,
+    desc=f"""
+    Additional directories to search for settings .csvs in. Can be relative to the Talon user folder, or absolute.
+    The contents of any default tracked csvs will be created unpopulated in all of the specified directories (if they don't already exist) then merged with existing settings lists.
+    Useful for storing per machine or per project words to replace, contacts, or file extensions, for example
+
+    {SETTING_DIRECTORY_DOCUMENTATION}
+    """,
+)
+
 
 def parse_directories_setting(
     dir_strings: str | None, base_dir: Path | None = None
@@ -94,34 +107,67 @@ def register_customization_csv(
 def apply_registered_csv_on_ready():
     """Once talon is ready and all talon user settings are in place"""
     for filename, entry in _registered_csvs.items():
-        path = resolve_setting_file_path(filename, entry.private)
-        write_csv_defaults(
-            path,
-            entry.headers,
-            entry.default,
-            entry.is_spoken_form_first,
-        )
-        reload_on_change(path, filename)
+        core_path, paths = get_settings_csv_paths(filename, entry.private)
+        for path in paths:
+            path.parent.mkdir(exist_ok=True)
+
+            if path == core_path:
+                write_csv_defaults(
+                    path,
+                    entry.headers,
+                    entry.default,
+                    entry.is_spoken_form_first,
+                )
+            else:
+                write_csv_defaults(
+                    path,
+                    entry.headers,
+                    is_spoken_form_first=entry.is_spoken_form_first,
+                )
+
+            reload_on_change(path, filename)
     app.unregister("ready", apply_registered_csv_on_ready)
 
 
 app.register("ready", apply_registered_csv_on_ready)
 
 
+def get_settings_csv_paths(filename: str, private=False):
+    # Path for the file version that exists within communities settings folder and is always created
+    core_path = resolve_setting_file_path(filename, private)
+
+    # Join with any other settings directories the user may have set
+    user_extra_directories = get_setting_directories("user.extra_settings_dirs")
+    paths = [core_path] + [dir / filename for dir in user_extra_directories]
+    return core_path, paths
+
+
 def reload_on_change(path: Path, setting_csv_filename: str):
     @resource.watch(str(path))
-    def on_update(io):
-        load_settings_values(io, setting_csv_filename)
+    def on_update(_):
+        load_settings_values(setting_csv_filename)
 
 
-def load_settings_values(io, setting_csv_filename):
+def load_settings_values(setting_csv_filename):
     try:
         entry = _registered_csvs[setting_csv_filename]
     except KeyError:
-        # Shouldn't ever happen, because to get here you should have been tracked, but if it does let's not crash.
+        # Shouldn't ever happen, because to get here you should have been registered, but if it does let's not crash.
         return
-    settings_values = read_csv_list(io, entry.headers, entry.is_spoken_form_first)
-    entry.callback_fn(settings_values)
+    core_path, paths = get_settings_csv_paths(setting_csv_filename, entry.private)
+    data = {}
+    paths = [p for p in paths if p.exists()]
+    for path in paths:
+        with open(path, encoding="utf-8") as f:
+            settings_values = read_csv_list(
+                # This watcher callback receives the io for the changed file, but we want to reload all files that provide data for this setting
+                f,
+                entry.headers,
+                entry.is_spoken_form_first,
+                permit_no_entries=path != core_path,
+            )
+            data.update(settings_values)
+    entry.callback_fn(data)
 
 
 def track_csv_rows(
@@ -169,9 +215,12 @@ def track_file(
 
 
 def read_csv_list(
-    f: IO, headers: tuple[str, str], is_spoken_form_first: bool = False
+    f: IO,
+    headers: tuple[str, str],
+    is_spoken_form_first: bool = False,
+    permit_no_entries=False,
 ) -> dict[str, str]:
-    rows = read_csv_rows(f, headers)
+    rows = read_csv_rows(f, headers, permit_no_entries)
     mapping = {}
     for row in rows:
         if len(row) == 0:
@@ -197,11 +246,13 @@ def read_csv_list(
     return mapping
 
 
-def read_csv_rows(f: IO, headers: tuple[str, ...]) -> list[list[str]]:
+def read_csv_rows(
+    f: IO, headers: tuple[str, ...], permit_no_entries=False
+) -> list[list[str]]:
     rows = list(csv.reader(f))
     if len(rows) == 0:
         warn_about_error(f"{f.name} is empty!")
-    elif len(rows) == 1:
+    elif len(rows) == 1 and not permit_no_entries:
         warn_about_error(f"{f.name} has only the header!")
     if len(rows) >= 1:
         actual_headers = rows[0]
