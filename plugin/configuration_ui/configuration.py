@@ -227,6 +227,19 @@ async def draw_numeric_input(setting: Setting, ui, minimum, maximum):
 	if old_value != value:
 		setting.update_function(setting.path, setting.name, value)
 
+async def draw_slider_input(setting: Setting, ui, minimum, maximum):
+	old_value = setting.value.get()
+	slider_label_text = setting.name
+	slider = egui.Slider(
+		setting.value,
+		minimum,
+		maximum).text(slider_label_text)
+	ui.add(slider)
+	ui.label(setting.description)
+	value = setting.value.get()
+	if old_value != value:
+		setting.update_function(setting.path, setting.name, value)
+
 async def draw_single_line_text_input(setting: Setting, ui):
 	old_value = setting.value.get()
 	async with ui.horizontal():
@@ -237,10 +250,11 @@ async def draw_single_line_text_input(setting: Setting, ui):
 	if old_value != value:
 		setting.update_function(setting.path, setting.name, value)
 
-def create_numeric_setting(name, minimum=None, maximum=None, path=None):
+def create_numeric_setting(name, minimum=None, maximum=None, path=None, use_slider=False):
+	ui_function = draw_slider_input if use_slider else draw_numeric_input
 	result = Setting(
 		name,
-		lambda setting, ui: draw_numeric_input(setting, ui, minimum, maximum),
+		lambda setting, ui: ui_function(setting, ui, minimum, maximum),
 	)
 	if path is not None:
 		result.path = path
@@ -356,10 +370,10 @@ class Manager:
 					create_boolean_setting("user.mode_indicator_show", MODE_INDICATOR_PATH),
 					create_boolean_setting("user.mode_indicator_show_microphone_name", MODE_INDICATOR_PATH),
 					create_numeric_setting("user.mode_indicator_size", 1, path=MODE_INDICATOR_PATH),
-					create_numeric_setting("user.mode_indicator_x", 0.0, 1.0, MODE_INDICATOR_PATH),
-					create_numeric_setting("user.mode_indicator_y", 0.0, 1.0, MODE_INDICATOR_PATH),
-					create_numeric_setting("user.mode_indicator_color_alpha", 0.0, 1.0, MODE_INDICATOR_PATH),
-					create_numeric_setting("user.mode_indicator_color_gradient", 0.0, 1.0, MODE_INDICATOR_PATH),
+					create_numeric_setting("user.mode_indicator_x", 0.0, 1.0, MODE_INDICATOR_PATH, use_slider=True),
+					create_numeric_setting("user.mode_indicator_y", 0.0, 1.0, MODE_INDICATOR_PATH, use_slider=True),
+					create_numeric_setting("user.mode_indicator_color_alpha", 0.0, 1.0, MODE_INDICATOR_PATH, use_slider=True),
+					create_numeric_setting("user.mode_indicator_color_gradient", 0.0, 1.0, MODE_INDICATOR_PATH, use_slider=True),
 					create_single_line_text_setting("user.mode_indicator_color_text", MODE_INDICATOR_PATH),
 					create_single_line_text_setting("user.mode_indicator_color_mute", MODE_INDICATOR_PATH),
 					create_single_line_text_setting("user.mode_indicator_color_sleep", MODE_INDICATOR_PATH),
@@ -382,7 +396,7 @@ class Manager:
 					create_numeric_setting("user.subtitles_timeout_per_char", 0, path=SUBTITLES_PATH),
 					create_numeric_setting("user.subtitles_timeout_min", 0, path=SUBTITLES_PATH),
 					create_numeric_setting("user.subtitles_timeout_max", 0, path=SUBTITLES_PATH),
-					create_numeric_setting("user.subtitles_y", 0.0, 1.0, path=SUBTITLES_PATH),
+					create_numeric_setting("user.subtitles_y", 0.0, 1.0, path=SUBTITLES_PATH, use_slider=True),
 				]
 			),
 			Page(
