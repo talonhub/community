@@ -1,6 +1,7 @@
 import inspect
 from collections.abc import Callable
 from typing import Optional
+from unittest.mock import MagicMock
 
 
 class RegisteredActionsAccessor:
@@ -203,6 +204,8 @@ class App:
     """
 
     platform = "mac"
+    register = MagicMock
+    unregister = MagicMock
 
 
 actions = Actions()

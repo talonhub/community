@@ -1,9 +1,10 @@
 import csv
 from collections.abc import Callable
+from dataclasses import dataclass
 from pathlib import Path
 from typing import IO
 
-from talon import Module, actions, resource, settings
+from talon import Module, actions, app, resource, settings
 
 # NOTE: This method requires this module to be one folder below the top-level
 #   community folder.
@@ -56,6 +57,19 @@ def get_setting_directories(setting) -> list[Path]:
     return parse_directories_setting(setting_val, user_dir)
 
 
+@dataclass
+class RegisteredCsv:
+    headers: tuple[str, str]
+    default: dict[str, str] | None
+    is_spoken_form_first: bool
+    private: bool
+    callback_fn: SpokenPairCallbackT
+
+
+# Keep track of CSV files tracked by register_customization_csv
+_registered_csvs: dict[str, RegisteredCsv] = {}
+
+
 def register_customization_csv(
     filename: str,
     headers: tuple[str, str],
@@ -63,17 +77,51 @@ def register_customization_csv(
     is_spoken_form_first: bool = False,
     private: bool = False,
 ) -> DecoratorT:
-    assert filename.endswith(".csv")
-    path = resolve_setting_file_path(filename, private)
-    write_csv_defaults(path, headers, default, is_spoken_form_first)
+    """
+    Register a csv within the settings directories for automatic creation and reloading
+    """
+    assert str(filename).endswith(".csv")
 
     def decorator(fn: SpokenPairCallbackT) -> None:
-        @resource.watch(str(path))
-        def on_update(f):
-            data = read_csv_list(f, headers, is_spoken_form_first)
-            fn(data)
+        if filename not in _registered_csvs:
+            _registered_csvs[filename] = RegisteredCsv(
+                headers, default, is_spoken_form_first, private, callback_fn=fn
+            )
 
     return decorator
+
+
+def apply_registered_csv_on_ready():
+    """Once talon is ready and all talon user settings are in place"""
+    for filename, entry in _registered_csvs.items():
+        path = resolve_setting_file_path(filename, entry.private)
+        write_csv_defaults(
+            path,
+            entry.headers,
+            entry.default,
+            entry.is_spoken_form_first,
+        )
+        reload_on_change(path, filename)
+    app.unregister("ready", apply_registered_csv_on_ready)
+
+
+app.register("ready", apply_registered_csv_on_ready)
+
+
+def reload_on_change(path: Path, setting_csv_filename: str):
+    @resource.watch(str(path))
+    def on_update(io):
+        load_settings_values(io, setting_csv_filename)
+
+
+def load_settings_values(io, setting_csv_filename):
+    try:
+        entry = _registered_csvs[setting_csv_filename]
+    except KeyError:
+        # Shouldn't ever happen, because to get here you should have been tracked, but if it does let's not crash.
+        return
+    settings_values = read_csv_list(io, entry.headers, entry.is_spoken_form_first)
+    entry.callback_fn(settings_values)
 
 
 def track_csv_rows(
