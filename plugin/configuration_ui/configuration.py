@@ -185,7 +185,6 @@ async def draw_setting_un_commenting_button(ui, setting: Setting):
 	file_name = setting.path.stem + setting.path.suffix
 	if ui.button(f"Click this if you want to set {setting.name} in {file_name}").clicked():
 		update_setting(setting.path, setting.name, setting.value.get())
-	ui.label(setting.description)
 
 async def draw_toggle(setting: Setting, ui):
 	value = setting.value.get()
@@ -237,7 +236,6 @@ async def draw_slider_input(setting: Setting, ui, minimum, maximum):
 		minimum,
 		maximum)
 	ui.add(slider)
-	ui.label(setting.description)
 	value = setting.value.get()
 	if old_value != value:
 		setting.update_function(setting.path, setting.name, value)
