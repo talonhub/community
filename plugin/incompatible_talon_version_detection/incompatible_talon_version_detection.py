@@ -11,7 +11,7 @@ def compute_version_number() -> float:
         return float(values[0]) + float("0." + values[1])
 
     raise ValueError(
-        f"Could not parse Talon version {version} while trying to decide if your versions of Community   and Talon are compatible."
+        f"Could not parse Talon version {version} while trying to decide if your versions of Community and Talon are compatible."
     )
 
 
