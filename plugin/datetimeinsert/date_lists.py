@@ -1,14 +1,26 @@
 from datetime import date, timedelta
 import calendar
-from talon import Module, actions, settings
+from talon import Context, Module, actions, settings
+
+from core.numbers.numbers import get_spoken_form_under_one_hundred
 
 mod = Module()
+ctx = Context()
 
 # Declare lists in Talon grammar; values come from talon-list files
 mod.list("month", "Month names and numeric values (1-12)")
+mod.list("day", "Days of the month, 1-31")
 mod.list("weekday", "Weekday names for relative date commands")
-
-mod.setting("date_format", type=str, default="uk", desc="Preferred date format: uk, us, or iso")
+ctx.lists["user.day"] = get_spoken_form_under_one_hundred(
+    1,
+    31,
+    include_oh_variant_for_single_digits=False,
+    include_default_variant_for_single_digits=True,
+)
+# Date format using standard (1989 C standard) format codes.
+# Default to a full-year ISO-like representation to avoid ambiguous locale output.
+# https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes
+mod.setting("date_format", type=str, default="%Y-%m-%d", desc="Preferred date format (using format codes)")
 
 WEEKDAY_MAP = {
     "monday": 0,
@@ -20,15 +32,21 @@ WEEKDAY_MAP = {
     "sunday": 6,
 }
 
+MONTH_MAP = {
+    **{name.lower(): i for i, name in enumerate(calendar.month_name) if name},
+    **{name.lower(): i for i, name in enumerate(calendar.month_abbr) if name},
+    "sept": 9,
+}
+
+
+def _resolve_date_format(fmt: str | None) -> str:
+    """Return the configured format or a concrete strftime pattern."""
+    return fmt or settings.get("user.date_format") or "%Y-%m-%d"
+
 
 def _format_with_preference(a_date: date) -> str:
-    fmt = settings.get("user.date_format") or "uk"
-    if fmt == "us":
-        return a_date.strftime("%m/%d/%Y")
-    if fmt == "iso":
-        return a_date.strftime("%Y-%m-%d")
-    # default UK
-    return a_date.strftime("%d/%m/%Y")
+    fmt = _resolve_date_format(None)
+    return a_date.strftime(fmt)  # default to locale
 
 
 def _month_to_int(month) -> int:
@@ -41,112 +59,82 @@ def _month_to_int(month) -> int:
     m = str(month).strip().lower()
     if m.isdigit():
         return int(m)
-    # full names
-    months = {name.lower(): i for i, name in enumerate(calendar.month_name) if name}
-    # abbreviations (Jan, Feb, ...)
-    abbr = {name.lower(): i for i, name in enumerate(calendar.month_abbr) if name}
-    if m in months:
-        return months[m]
-    if m in abbr:
-        return abbr[m]
-    # accept common alternative 'sept'
-    if m == "sept":
-        return 9
+    # Use module-level MONTH_MAP to avoid rebuilding mappings every call
+    if m in MONTH_MAP:
+        return MONTH_MAP[m]
     raise ValueError(f"Unknown month: {month}")
 
 
 @mod.action_class
 class Actions:
     def insert_date_from_parts(day: int, month: str, year: int):
-        """Insert date from spoken day/month/year using preferred date_format.
-
-        `day` is expected to come from the `<number_small>` capture (0-99)
-        and may be an int or numeric string. Gracefully fall back to a
-        string insertion for invalid calendar combinations (e.g. 31 Feb).
-        """
+        """Insert date from spoken day/month/year using preferred date_format."""
         actions.user.insert_date_formatted(day, month, year, None)
 
-    def insert_date_formatted(day: int, month: str, year: int):
-        """Insert a formatted date from spoken day/month/year as dd/mm/yyyy"""
-        day_padded = f"{int(day):02d}"
-        month_padded = f"{_month_to_int(month):02d}"
-        date_str = f"{day_padded}/{month_padded}/{year}"
-        actions.insert(date_str)
-
-    def insert_date_formatted_us(day: int, month: str, year: int):
-        """Insert a formatted date from spoken day/month/year as mm/dd/yyyy"""
-        day_padded = f"{int(day):02d}"
-        month_padded = f"{_month_to_int(month):02d}"
-        date_str = f"{month_padded}/{day_padded}/{year}"
-        actions.insert(date_str)
     def insert_date_formatted(day: int, month: str, year: int, fmt: str = None):
-        """Insert a formatted date from spoken day/month/year.
+        """Insert a date from spoken day/month/year using `strftime` format codes.
 
-        `fmt` may be 'uk', 'us', 'iso', or `None` to use the user's
-        `user.date_format` setting (default 'uk'). This function validates
-        the calendar date and falls back to inserting a formatted string
-        when the date is invalid.
+        `fmt` may be a concrete format string such as `%Y-%m-%d` or `%d-%m-%Y`.
+        When omitted, this uses the user's `user.date_format` setting. The
+        function validates the date before inserting it.
         """
         day_num = int(day)
         month_num = _month_to_int(month)
         year_num = int(year)
 
-        # Determine format preference
-        fmt_pref = fmt or settings.get("user.date_format") or "uk"
+        fmt_pref = _resolve_date_format(fmt)
 
         # Try to construct a real date for correct calendar handling
         try:
             computed = date(year_num, month_num, day_num)
-            if fmt_pref == "us":
-                actions.insert(computed.strftime("%m/%d/%Y"))
-                return
-            if fmt_pref == "iso":
-                actions.insert(computed.strftime("%Y-%m-%d"))
-                return
-            # default UK
-            actions.insert(computed.strftime("%d/%m/%Y"))
+            actions.insert(computed.strftime(fmt_pref))
             return
         except ValueError:
-            # Fall back to formatting by parts when invalid (e.g., 31 Feb)
-            day_padded = f"{day_num:02d}"
-            month_padded = f"{month_num:02d}"
-            if fmt_pref == "us":
-                date_str = f"{month_padded}/{day_padded}/{year_num}"
-            elif fmt_pref == "iso":
-                date_str = f"{year_num}-{month_padded}-{day_padded}"
-            else:
-                date_str = f"{day_padded}/{month_padded}/{year_num}"
-
-            # Notify user that the spoken date was not a valid calendar date,
-            # but still insert the best-effort formatted string.
-            try:
-                actions.app.notify(f"Invalid date spoken — inserted: {date_str}")
-            except Exception:
-                # Best-effort: ignore notification failures so insertion still happens
-                pass
-            actions.insert(date_str)
+            # Invalid Date Received (e.g., 31 Feb)
+            actions.app.notify(f"Invalid date spoken — could not insert: {day_num}/{month_num}/{year_num}")
 
     def insert_date_formatted_iso(day: int, month: str, year: int):
-        """Insert a formatted date from spoken day/month/year as yyyy-mm-dd"""
-        day_padded = f"{int(day):02d}"
-        month_padded = f"{_month_to_int(month):02d}"
-        date_str = f"{year}-{month_padded}-{day_padded}"
-        actions.insert(date_str)
+        """Insert a date from spoken day/month/year using the ISO `%Y-%m-%d` format."""
+        actions.user.insert_date_formatted(day, month, year, "%Y-%m-%d")
 
     def insert_date_today():
         """Insert today according to preferred format"""
         actions.insert(_format_with_preference(date.today()))
+    
+    def insert_date_relative(days: int, months: int, years: int):
+        """Insert a date relative to today by the specified number of days, months, and years."""
+        today = date.today()
+        # Calculate the new year and month
+        new_year = today.year + years
+        new_month = today.month + months
+        # Adjust year and month if new_month is out of bounds
+        while new_month > 12:
+            new_month -= 12
+            new_year += 1
+        while new_month < 1:
+            new_month += 12
+            new_year -= 1
+        # Calculate the last day of the new month to avoid invalid dates
+        last_day_of_new_month = calendar.monthrange(new_year, new_month)[1]
+        # Ensure the day does not exceed the last day of the new month
+        new_day = min(today.day, last_day_of_new_month)
+        # Create the new date and add the relative days
+        relative_date = date(new_year, new_month, new_day) + timedelta(days=days)
+        actions.insert(_format_with_preference(relative_date))
 
-    def insert_date_tomorrow():
-        """Insert tomorrow according to preferred format"""
-        actions.insert(_format_with_preference(date.today() + timedelta(days=1)))
+    def insert_date_first_of_month():
+        """Insert the first day of the current month."""
+        today = date.today()
+        actions.insert(_format_with_preference(date(today.year, today.month, 1)))
 
-    def insert_date_yesterday():
-        """Insert yesterday according to preferred format"""
-        actions.insert(_format_with_preference(date.today() - timedelta(days=1)))
+    def insert_date_last_day_of_month():
+        """Insert the last day of the current month."""
+        today = date.today()
+        last_day = calendar.monthrange(today.year, today.month)[1]
+        actions.insert(_format_with_preference(date(today.year, today.month, last_day)))
 
     def insert_date_next_weekday(weekday: str):
-        """Insert the next weekday name according to preferred format"""
+        """Insert the next occurrence of a weekday according to preferred format."""
         weekday_norm = weekday.strip().lower()
         if weekday_norm not in WEEKDAY_MAP:
             raise ValueError(f"Unknown weekday: {weekday}")
@@ -158,44 +146,15 @@ class Actions:
         next_day = today + timedelta(days=days_ahead)
         actions.insert(_format_with_preference(next_day))
 
-    def insert_date_next_month():
-        """Insert a date representing the same day next month"""
+    def insert_date_last_weekday(weekday: str):
+        """Insert the previous occurrence of a weekday according to preferred format."""
+        weekday_norm = weekday.strip().lower()
+        if weekday_norm not in WEEKDAY_MAP:
+            raise ValueError(f"Unknown weekday: {weekday}")
+        target = WEEKDAY_MAP[weekday_norm]
         today = date.today()
-        year = today.year + (today.month // 12)
-        month = today.month % 12 + 1
-        day = min(today.day, calendar.monthrange(year, month)[1])
-        next_month = date(year, month, day)
-        actions.insert(_format_with_preference(next_month))
-
-    def insert_date_next_year():
-        """Insert a date representing the same day next year"""
-        today = date.today()
-        next_year = today.year + 1
-        day = min(today.day, calendar.monthrange(next_year, today.month)[1])
-        new_date = date(next_year, today.month, day)
-        actions.insert(_format_with_preference(new_date))
-
-    def insert_date_last_year():
-        """Insert a date representing the same day last year"""
-        today = date.today()
-        last_year = today.year - 1
-        day = min(today.day, calendar.monthrange(last_year, today.month)[1])
-        new_date = date(last_year, today.month, day)
-        actions.insert(_format_with_preference(new_date))
-
-    def set_date_format_uk():
-        """Set preferred date format to UK dd/mm/yyyy"""
-        settings.set("user.date_format", "uk")
-
-    def set_date_format_us():
-        """Set preferred date format to US mm/dd/yyyy"""
-        settings.set("user.date_format", "us")
-
-    def set_date_format_iso():
-        """Set preferred date format to ISO yyyy-mm-dd"""
-        settings.set("user.date_format", "iso")
-
-
-
-
-
+        days_ago = (today.weekday() - target + 7) % 7
+        if days_ago == 0:
+            days_ago = 7
+        last_day = today - timedelta(days=days_ago)
+        actions.insert(_format_with_preference(last_day))
