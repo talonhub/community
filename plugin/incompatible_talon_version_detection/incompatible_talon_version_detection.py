@@ -1,22 +1,17 @@
-from talon import Context, Module, actions, app, imgui
+from talon import Context, Module, actions, app
 
+from contextlib import suppress
 
 def compute_version_number() -> float:
     """Convert the Talon version string to a float by finding the longest prefix that is a valid float. This will only capture the first 2 dot separated numbers in the version"""
     version = app.version
-    decimal_points = 0
-    i = 0
-    while i < len(version) and (version[i] == "." or version[i].isdigit()):
-        if version[i] == ".":
-            decimal_points += 1
-            if decimal_points > 1:
-                break
-        i += 1
-    if i == 0:
-        raise ValueError(
-            f"Could not parse Talon version {version} while trying to decide if your versions of Community and Talon are compatible."
+    values = version.split(".")
+    with suppress(Exception):
+        return float(values[0]) + float('0.' + values[1])
+
+    raise ValueError(
+            f"Could not parse Talon version {version} while trying to decide if your versions of Community   and Talon are compatible."
         )
-    return float(version[:i])
 
 
 incompatible_version_gui = None
@@ -33,6 +28,7 @@ ctx = Context()
 def on_ready():
     global incompatible_version_gui
     if compute_version_number() < 1:
+        from talon import imgui
         # define this inside the if statement so that future Talon versions that remove imgui do not throw an exception
         @imgui.open()
         def gui(gui: imgui.GUI):
