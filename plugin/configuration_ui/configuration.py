@@ -189,7 +189,14 @@ async def draw_setting_un_commenting_button(ui, setting: Setting):
 
 async def draw_toggle(setting: Setting, ui):
 	value = setting.value.get()
-	ui.checkbox(setting.value, setting.name)
+	if value:
+		label_prefix = "Disable"
+	else:
+		label_prefix = "Enable"
+	async with ui.horizontal():
+		ui.checkbox(setting.value, "")
+		label_text = f"{label_prefix} {setting.name}"
+		ui.toggle_value(setting.value, label_text)
 	ui.label(setting.description)
 	new_value = setting.value.get()
 	if value != new_value:
