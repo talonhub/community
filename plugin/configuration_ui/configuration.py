@@ -190,14 +190,13 @@ async def draw_setting_un_commenting_button(ui, setting: Setting):
 async def draw_toggle(setting: Setting, ui):
 	value = setting.value.get()
 	if value:
-		label_prefix = "Disable"
+		label_text = "Disable"
 	else:
-		label_prefix = "Enable"
+		label_text = "Enable"
 	async with ui.horizontal():
 		ui.checkbox(setting.value, "")
-		label_text = f"{label_prefix} {setting.name}"
+		label_text = f"{label_text}"
 		ui.toggle_value(setting.value, label_text)
-	ui.label(setting.description)
 	new_value = setting.value.get()
 	if value != new_value:
 		setting.update_function(setting.path, setting.name, new_value)
@@ -222,10 +221,7 @@ def create_boolean_setting(name, path=None):
 
 async def draw_numeric_input(setting: Setting, ui, minimum, maximum):
 	old_value = setting.value.get()
-	async with ui.horizontal():
-		ui.add(egui.DragValue(setting.value))
-		ui.label(setting.name)
-	ui.label(setting.description)
+	ui.add(egui.DragValue(setting.value))
 	value = setting.value.get()
 	if minimum is not None and value < minimum:
 		setting.value.set(minimum)
@@ -236,11 +232,10 @@ async def draw_numeric_input(setting: Setting, ui, minimum, maximum):
 
 async def draw_slider_input(setting: Setting, ui, minimum, maximum):
 	old_value = setting.value.get()
-	slider_label_text = setting.name
 	slider = egui.Slider(
 		setting.value,
 		minimum,
-		maximum).text(slider_label_text)
+		maximum)
 	ui.add(slider)
 	ui.label(setting.description)
 	value = setting.value.get()
@@ -249,10 +244,7 @@ async def draw_slider_input(setting: Setting, ui, minimum, maximum):
 
 async def draw_single_line_text_input(setting: Setting, ui):
 	old_value = setting.value.get()
-	async with ui.horizontal():
-		ui.add(egui.TextEdit.singleline(setting.value))
-		ui.label(setting.name)
-	ui.label(setting.description)
+	ui.add(egui.TextEdit.singleline(setting.value))
 	value = setting.value.get()
 	if old_value != value:
 		setting.update_function(setting.path, setting.name, value)
@@ -466,10 +458,13 @@ class Manager:
 				ui.label(page.description)
 			ui.separator()
 			for setting in page.settings:
-				if setting.is_deactivated:
-					await draw_setting_un_commenting_button(ui, setting)
-				else:
-					await setting.draw(setting, ui)
+				async with ui.group():
+					ui.label(setting.name)
+					ui.label(setting.description)
+					if setting.is_deactivated:
+						await draw_setting_un_commenting_button(ui, setting)
+					else:
+						await setting.draw(setting, ui)
 				ui.add_space(10)
 
 manager = Manager()
