@@ -439,16 +439,17 @@ class Manager:
 			return
 		page = self.pages[self.page]
 		# use a single column table with heterogeneous rows later
-		ui.strong(page.title)
-		if page.description:
-			ui.label(page.description)
-		ui.separator()
-		for setting in page.settings:
-			if setting.is_deactivated:
-				await draw_setting_un_commenting_button(ui, setting)
-			else:
-				await setting.draw(setting, ui)
-			ui.add_space(10)
+		async with egui.ScrollArea.vertical().max_height(total_available_height).show():
+			ui.strong(page.title)
+			if page.description:
+				ui.label(page.description)
+			ui.separator()
+			for setting in page.settings:
+				if setting.is_deactivated:
+					await draw_setting_un_commenting_button(ui, setting)
+				else:
+					await setting.draw(setting, ui)
+				ui.add_space(10)
 
 manager = Manager()
 
