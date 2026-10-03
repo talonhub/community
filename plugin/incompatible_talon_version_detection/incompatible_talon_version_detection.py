@@ -8,7 +8,10 @@ def compute_version_number() -> float:
     version = app.version
     values = version.split(".")
     with suppress(Exception):
-        return float(values[0]) + float("0." + values[1])
+        result = float(values[0])
+        if len(values) > 1 and values[1].isdigit():
+            result += float("0." + values[1])
+        return result
 
     raise ValueError(
         f"Could not parse Talon version {version} while trying to decide if your versions of Community and Talon are compatible."
