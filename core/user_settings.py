@@ -92,7 +92,7 @@ def write_csv_default_rows(
         writer.writerows(default)
 
 
-def track_csv_list(
+def register_customization_csv(
     filename: str,
     headers: tuple[str, str],
     default: dict[str, str] | None = None,

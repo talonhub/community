@@ -11,11 +11,11 @@ if hasattr(talon, "test_mode"):
     import core.abbreviate
     import core.user_settings
 
-    # we need to replace the track_csv_list decorator for unit tests.
+    # we need to replace the register_settings_csv decorator for unit tests.
     CallbackT = Callable[[dict[str, str]], None]
     DecoratorT = Callable[[CallbackT], CallbackT]
 
-    def track_csv_list_test(
+    def register_settings_csv_test(
         filename: str,
         headers: tuple[str, str],
         default: dict[str, str] = None,
@@ -33,8 +33,8 @@ if hasattr(talon, "test_mode"):
 
         return decorator
 
-    # replace track_csv_list before importing create_spoken_forms
-    core.user_settings.track_csv_list = track_csv_list_test
+    # replace register_settings_csv before importing create_spoken_forms, so it registers our mock
+    core.user_settings.register_customization_csv = register_settings_csv_test
     import core.create_spoken_forms
     from core.create_spoken_forms import create_spoken_form_years
     from core.vocabulary.vocabulary import PhraseReplacer
