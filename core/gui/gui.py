@@ -488,7 +488,7 @@ class GUI:
             # do our own auto sizing instead of the builtin for now
             # our on detection of the height is flawed unless we allow the auto sizing first
             # so when we detect a height change, temporarily re enable auto sizing
-            if self._last_height_taken is not None and self._props.will_auto_size:
+            if self._last_height_taken is not None and self._props.will_auto_size():
                 if (
                     self._previous_height_taken
                     and self._last_height_taken != self._previous_height_taken
