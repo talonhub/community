@@ -474,10 +474,14 @@ class Manager:
 				async with ui.group():
 					ui.strong(compute_readable_name(setting.name, page.prefix))
 					ui.weak(setting.name)
-					declaration = registry.decls.settings[setting.name]
-					description = declaration.desc
-					if description is None:
+					try:
+						declaration = registry.decls.settings[setting.name]
+						description = declaration.desc
+					except Exception as ex:
+						description = setting.description
+					if not description:
 						description = "Something went wrong. Could not find the setting description."
+					ui.add_space(5)
 					ui.label(description)
 					if setting.is_deactivated:
 						await draw_setting_un_commenting_button(ui, setting)
