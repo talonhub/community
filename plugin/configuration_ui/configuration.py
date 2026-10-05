@@ -28,6 +28,9 @@ def compute_tag(line):
 
 COMMENTED_SETTING_PREFIX = "    # "
 
+def is_start_of_multiline_string(line):
+	return line.endswith('"""') or line.endswith("'''")
+
 def compute_setting(line: str, prefix: str):
 	if not line.startswith(prefix):
 		return None
@@ -38,9 +41,14 @@ def compute_setting(line: str, prefix: str):
 		return None
 	if not line[len(prefix)].isalpha():
 		return None
-	value = parse_value(line[equals_index+3:].strip())
+	righthand_side = line[equals_index+3:]
+	is_multiline_string = is_start_of_multiline_string(righthand_side.lstrip())
+	if is_multiline_string:
+		value = righthand_side.lstrip()
+	else:
+		value = parse_value(righthand_side.strip())
 	name = line[len(prefix):equals_index]
-	return name, value
+	return name, value, is_multiline_string
 
 VALUE_UNAVAILABLE = ...
 
@@ -55,22 +63,51 @@ def parse_value(value):
 		except Exception as ex:
 			return VALUE_UNAVAILABLE
 
+def parse_multiline_string(lines):
+	return "\n".join(lines[1:])[:-3]
+
+def compute_commented_or_not_commented_setting(line):
+	if setting := compute_setting(line, COMMENTED_SETTING_PREFIX):
+		return *setting, False
+	elif setting := compute_setting(line, SETTING_INDENTATION_PREFIX):
+		return *setting, True
+	return None
+
 SETTING_INDENTATION_PREFIX = "    "
 
 def parse_settings(path):
 	tags = {}
 	settings = {}
+
+	# values for keeping track of a setting that has a multiline string value
+	current_setting = None
+	multiline_string = []
+	multiline_string_starting_characters = None
+	is_activated = None
+
 	with open(path, "r") as f:
 		for l in f.readlines():
 			line = l.rstrip("\n\r")
-			if tag := compute_commented_tag(line):
+			if multiline_string:
+				multiline_string.append(line)
+				if line.strip().endswith(multiline_string_starting_characters):
+					value = parse_multiline_string(multiline_string)
+					settings[current_setting] = SettingFileSettingInformation(value, is_activated)
+					current_setting = None
+					multiline_string_starting_characters = None
+					is_activated = None
+					multiline_string.clear()
+			elif tag := compute_commented_tag(line):
 				tags[tag] = SettingFileSettingInformation(False)
-			elif setting := compute_setting(line, COMMENTED_SETTING_PREFIX):
-				name, value = setting
-				settings[name] = SettingFileSettingInformation(value, is_activated=False)
-			elif setting := compute_setting(line, SETTING_INDENTATION_PREFIX):
-				name, value = setting
-				settings[name] = SettingFileSettingInformation(value)
+			elif setting := compute_commented_or_not_commented_setting(line):
+				name, value, is_multiline_string, activated = setting
+				if is_multiline_string:
+					current_setting = name
+					multiline_string = [value]
+					multiline_string_starting_characters = value[:3]
+					is_activated = activated
+				else:
+					settings[name] = SettingFileSettingInformation(value, is_activated=activated)
 			elif tag := compute_tag(line):
 				tags[tag] = SettingFileSettingInformation(True)
 	return tags, settings
@@ -81,7 +118,11 @@ def convert_value_to_talon_script_literal(value) -> str:
 	elif isinstance(value, int) or isinstance(value, float):
 		return str(value)
 	elif isinstance(value, str):
-		return f"\"{value.replace('"', '\\"')}\""
+		value = value.replace('"', '\\"')
+		if "\n" in value:
+			return f"\"\"\"\n    {value}\"\"\""
+		else:
+			return f"\"{value}\""
 	raise ValueError(f"Could not convert value {value} to Talonscript")
 
 def replace_setting_assignment(path, setting_name, new_text):
@@ -259,6 +300,13 @@ async def draw_single_line_text_input(setting: Setting, ui):
 	if old_value != value:
 		setting.update_function(setting.path, setting.name, value)
 
+async def draw_multiline_text_input(setting: Setting, ui):
+	old_value = setting.value.get()
+	ui.add(egui.TextEdit.multiline(setting.value))
+	value = setting.value.get()
+	if old_value != value:
+		setting.update_function(setting.path, setting.name, value)
+
 def create_numeric_setting(name, minimum=None, maximum=None, path=None, use_slider=False):
 	ui_function = draw_slider_input if use_slider else draw_numeric_input
 	result = Setting(
@@ -273,6 +321,15 @@ def create_single_line_text_setting(name, path=None):
 	result = Setting(
 		name,
 		draw_single_line_text_input,
+	)
+	if path is not None:
+		result.path = path
+	return result
+
+def create_multiline_text_setting(name, path=None):
+	result = Setting(
+		name,
+		draw_multiline_text_input,
 	)
 	if path is not None:
 		result.path = path
@@ -421,6 +478,14 @@ class Manager:
 					create_numeric_setting("user.subtitles_y", 0.0, 1.0, path=SUBTITLES_PATH, use_slider=True),
 				],
 				prefix="user.subtitles_"
+			),
+			Page(
+				"Snippets",
+				"",
+				[
+					create_numeric_setting("user.snippet_raw_text_spaces_per_tab", 0),
+					create_multiline_text_setting("user.snippets_dir"),
+				]
 			),
 			Page(
 				"Miscellaneous",
