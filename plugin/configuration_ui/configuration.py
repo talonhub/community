@@ -271,6 +271,7 @@ class Page:
 	title: str
 	description: str
 	settings: list[Setting]
+	prefix: str=""
 
 def update_setting_information(setting: Setting, file_setting_information: SettingFileSettingInformation):
 	setting.description = file_setting_information.description
@@ -279,9 +280,12 @@ def update_setting_information(setting: Setting, file_setting_information: Setti
 
 def compute_readable_name(setting_name, page_prefix: str):
 	words = []
-	prefix, name = setting_name.split(".")
-	if prefix != "user":
-		words.append(prefix)
+	if page_prefix and page_prefix in setting_name:
+		name = setting_name[len(page_prefix):]
+	else:
+		prefix, name = setting_name.split(".")
+		if prefix != "user":
+			words.append(prefix)
 	words.extend(name.split("_"))
 	capitalized_words = [w.capitalize() for w in words]
 	return " ".join(capitalized_words)
@@ -388,7 +392,8 @@ class Manager:
 					create_single_line_text_setting("user.mode_indicator_color_mixed", MODE_INDICATOR_PATH),
 					create_single_line_text_setting("user.mode_indicator_color_command", MODE_INDICATOR_PATH),
 					create_single_line_text_setting("user.mode_indicator_color_other", MODE_INDICATOR_PATH),
-				]
+				],
+				prefix="user.mode_indicator_"
 			),
 			Page(
 				"Subtitles",
@@ -403,7 +408,8 @@ class Manager:
 					create_numeric_setting("user.subtitles_timeout_min", 0, path=SUBTITLES_PATH),
 					create_numeric_setting("user.subtitles_timeout_max", 0, path=SUBTITLES_PATH),
 					create_numeric_setting("user.subtitles_y", 0.0, 1.0, path=SUBTITLES_PATH, use_slider=True),
-				]
+				],
+				prefix="user.subtitles_"
 			),
 			Page(
 				"Miscellaneous",
@@ -466,7 +472,7 @@ class Manager:
 			ui.separator()
 			for setting in page.settings:
 				async with ui.group():
-					ui.strong(compute_readable_name(setting.name, ""))
+					ui.strong(compute_readable_name(setting.name, page.prefix))
 					ui.weak(setting.name)
 					ui.label(setting.description)
 					if setting.is_deactivated:
