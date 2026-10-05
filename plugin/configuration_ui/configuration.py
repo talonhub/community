@@ -169,6 +169,8 @@ MODE_INDICATOR_PATH = Path(__file__).parent.parent / "mode_indicator" / "mode_in
 SUBTITLES_PATH = Path(__file__).parent.parent / "subtitles" / "subtitles.talon"
 RELEVANT_PATHS = [SETTINGS_PATH, MODE_INDICATOR_PATH, SUBTITLES_PATH]
 
+DEFAULT_DESCRIPTION = "Something went wrong. Could not find the setting description."
+
 @dataclass
 class Setting:
 	name: str
@@ -178,9 +180,18 @@ class Setting:
 	is_tag: bool=False
 	is_deactivated: bool=False
 	value: Any=None
-	description: str=""
 	compute_vertical_size: Callable=compute_vertical_size_from_number_of_lines_in_description
 	draws_description: bool=False
+	
+	def get_description(self):
+		try:
+			if self.is_tag:
+				return registry.decls.tags[self.name].desc
+			else:
+				return registry.decls.settings[self.name].desc
+		except Exception as ex:
+			return DEFAULT_DESCRIPTION
+
 
 async def draw_setting_un_commenting_button(ui, setting: Setting):
 	file_name = setting.path.stem + setting.path.suffix
@@ -189,7 +200,7 @@ async def draw_setting_un_commenting_button(ui, setting: Setting):
 
 async def draw_toggle(setting: Setting, ui):
 	value = setting.value.get()
-	ui.checkbox(setting.value, setting.description)
+	ui.checkbox(setting.value, setting.get_description())
 	new_value = setting.value.get()
 	if value != new_value:
 		setting.update_function(setting.path, setting.name, new_value)
@@ -270,7 +281,6 @@ class Page:
 	prefix: str=""
 
 def update_setting_information(setting: Setting, file_setting_information: SettingFileSettingInformation):
-	setting.description = file_setting_information.description
 	setting.value = egui.Mutable(file_setting_information.value)
 	setting.is_deactivated = file_setting_information.is_deactivated
 
@@ -470,16 +480,9 @@ class Manager:
 				async with ui.group():
 					ui.strong(compute_readable_name(setting.name, page.prefix))
 					ui.weak(setting.name)
-					try:
-						declaration = registry.decls.settings[setting.name]
-						description = declaration.desc
-					except Exception as ex:
-						description = setting.description
-					if not description:
-						description = "Something went wrong. Could not find the setting description."
 					ui.add_space(5)
 					if not setting.draws_description:
-						ui.label(description)
+						ui.label(setting.get_description())
 					if setting.is_deactivated:
 						await draw_setting_un_commenting_button(ui, setting)
 					else:
