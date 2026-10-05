@@ -6,7 +6,7 @@ from typing import Any, Optional
 
 from talon import Context, Module, actions, imgui, registry, settings
 
-from ...core.gui.gui import PageScroller, open_gui
+from ...core.gui.gui import PageScroller, open_gui, convert_key_value_pairs_to_rows
 
 mod = Module()
 mod.list("help_contexts", desc="list of available contexts")
@@ -675,15 +675,7 @@ async def gui_list_help(ui, helpers):
 
     # get the list
     talon_list = actions.user.talon_get_active_registry_list(selected_list)
-    rows = []
-    for key, value in talon_list.items():
-        if "\n" in value:
-            lines = value.split("\n")
-            rows.append((key, lines[0]))
-            for l in lines[1:]:
-                rows.append(("", l))
-        else:
-            rows.append((key, value))
+    rows = convert_key_value_pairs_to_rows(talon_list)
 
     # show the rows in a table
     if len(rows) > 0:

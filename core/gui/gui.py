@@ -19,6 +19,20 @@ VERTICAL_ITEM_SPACING = 1.0
 INNER_MARGIN = 16.0
 
 
+def convert_key_value_pairs_to_rows(dictionary):
+    """Convert key value pairs into a series of rows where each row has a single line. Keys are assumed to only have a single line."""
+    rows = []
+    for key, value in dictionary.items():
+        if "\n" in value:
+            lines = value.split("\n")
+            rows.append((key, lines[0]))
+            for l in lines[1:]:
+                rows.append(("", l))
+        else:
+            rows.append((key, value))
+    return rows
+
+
 async def show_row_with_labels(row, contents):
     """Show every column of the row using a label"""
     index = row.index()
