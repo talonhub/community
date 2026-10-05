@@ -673,7 +673,6 @@ async def gui_list_help(ui, ui_wrapper):
     # the amount space to allocate for showing a single page of rows
     maximum_height = (row_size + ui_wrapper.get_item_spacing()) * page_size
 
-
     # get the list
     talon_list = actions.user.talon_get_active_registry_list(selected_list)
     rows = convert_key_value_pairs_to_rows(talon_list)
