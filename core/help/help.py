@@ -6,7 +6,7 @@ from typing import Any, Optional
 
 from talon import Context, Module, actions, imgui, registry, settings
 
-from ...core.gui.gui import PageScroller, open_gui, convert_key_value_pairs_to_rows
+from ...core.gui.gui import PageScroller, convert_key_value_pairs_to_rows, open_gui
 
 mod = Module()
 mod.list("help_contexts", desc="list of available contexts")
