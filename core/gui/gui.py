@@ -99,7 +99,7 @@ class PageScroller:
         return self.scroll
 
 
-class Helpers:
+class UIWrapper:
     """Provides helper methods for drawing on a ui. These methods use the wrapped ui by default, but you can use the ui parameter to provide another one"""
 
     __slots__ = ("ui",)
@@ -414,7 +414,7 @@ class GUI:
         async with frame.show() as content_ui:
             try:
                 self._egui = content_ui
-                await self._props.draw(content_ui, Helpers(content_ui))
+                await self._props.draw(content_ui, UIWrapper(content_ui))
             finally:
                 # An egui.Ui is only valid during the current frame.
                 self._egui = None
