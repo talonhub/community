@@ -497,7 +497,10 @@ class Manager:
 							if not setting.draws_description:
 								ui.label(setting.get_description())
 							async with ui.add_enabled_ui(setting.is_activated or setting.is_tag):
-								await setting.draw(setting, ui)
+								try:
+									await setting.draw(setting, ui)
+								except Exception as ex:
+									self.error_message = f"Something went wrong: {ex}"
 				ui.add_space(10)
 
 manager = Manager()
