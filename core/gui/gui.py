@@ -14,7 +14,6 @@ from talon import cron, ui
 from talon.egui import Window
 from talon.screen import Screen
 
-# Changing this will break correctness. The logic around tables needs more exactly correct math for changing this to not break things
 # This code currently does not support changing the scale with imgui.scale.
 TEXT_SIZE = 12
 TEXT_COLOR_DARK_MODE = "#D0D0D0"
