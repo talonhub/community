@@ -671,7 +671,8 @@ async def gui_list_help(ui, ui_wrapper):
     page_scroller.page_size = page_size
     row_size = ui_wrapper.get_label_row_size()
     # the amount space to allocate for showing a single page of rows
-    maximum_height = (row_size + ui_wrapper.get_item_spacing() * 2) * page_size
+    maximum_height = (row_size + ui_wrapper.get_item_spacing()) * page_size
+
 
     # get the list
     talon_list = actions.user.talon_get_active_registry_list(selected_list)
