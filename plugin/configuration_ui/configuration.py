@@ -42,6 +42,8 @@ def compute_setting(line: str, prefix: str):
 	name = line[len(prefix):equals_index]
 	return name, value
 
+VALUE_UNAVAILABLE = ...
+
 def parse_value(value):
 	if value == "true":
 		return True
@@ -51,7 +53,7 @@ def parse_value(value):
 		try:
 			return literal_eval(value)
 		except Exception as ex:
-			return None
+			return VALUE_UNAVAILABLE
 
 SETTING_INDENTATION_PREFIX = "    "
 
@@ -80,6 +82,7 @@ def convert_value_to_talon_script_literal(value) -> str:
 		return str(value)
 	elif isinstance(value, str):
 		return f"\"{value.replace('"', '\\"')}\""
+	raise ValueError(f"Could not convert value {value} to Talonscript")
 
 def replace_setting_assignment(path, setting_name, new_text):
 	"""Updates the file to set the setting to a new value.
@@ -181,7 +184,7 @@ class Setting:
 	path: Path=SETTINGS_PATH
 	is_tag: bool=False
 	is_activated: bool=True
-	value: Any=None
+	value: egui.Mutable = egui.Mutable(VALUE_UNAVAILABLE)
 	compute_vertical_size: Callable=compute_vertical_size_from_number_of_lines_in_description
 	draws_description: bool=False
 	
@@ -448,10 +451,13 @@ class Manager:
 					if name in tags:
 						tag = tags[name]
 						update_setting_information(setting, tag)
-				elif name in settings:
-					setting_information = settings[name]
-					update_setting_information(setting, setting_information)
-	
+				else:
+					if name in settings:
+						setting_information = settings[name]
+						update_setting_information(setting, setting_information)
+					else:
+						setting.value.set(VALUE_UNAVAILABLE)
+
 	async def draw(self, ui):
 		total_available_height = ui.available_height()
 		async with ui.horizontal():
@@ -469,6 +475,31 @@ class Manager:
 			ui.add_space(total_available_height - ui.min_size().y)
 		ui.separator()
 
+	async def draw_settings_ui(self, ui, setting, page):
+		async with ui.group():
+			readable_name = compute_readable_name(setting.name, page.prefix)
+			async with ui.horizontal():
+				if not setting.is_tag:
+					if ui.checkbox(egui.Mutable(setting.is_activated), "").clicked():
+						error_message = toggle_setting_activation(setting)
+						if error_message is not None:
+							self.error_message = error_message
+				async with ui.vertical():
+					ui.strong(readable_name)
+					ui.weak(setting.name)
+					ui.add_space(5)
+					if not setting.draws_description:
+						ui.label(setting.get_description())
+					if not setting.is_tag and setting.value.get() == VALUE_UNAVAILABLE:
+						ui.label("Something went wrong. The setting could not be found or could not be parsed.")
+						return 
+					async with ui.add_enabled_ui(setting.is_activated or setting.is_tag):
+						try:
+							await setting.draw(setting, ui)
+						except Exception as ex:
+							self.error_message = f"Something went wrong: {ex}"
+							print(ex, setting.name, setting.value.get(), type(setting.value.get()))
+
 	async def draw_current_page(self, ui, total_available_height):
 		if not self.page:
 			return
@@ -482,25 +513,7 @@ class Manager:
 				ui.label(page.description)
 			ui.separator()
 			for setting in page.settings:
-				async with ui.group():
-					readable_name = compute_readable_name(setting.name, page.prefix)
-					async with ui.horizontal():
-						if not setting.is_tag:
-							if ui.checkbox(egui.Mutable(setting.is_activated), "").clicked():
-								error_message = toggle_setting_activation(setting)
-								if error_message is not None:
-									self.error_message = error_message
-						async with ui.vertical():
-							ui.strong(readable_name)
-							ui.weak(setting.name)
-							ui.add_space(5)
-							if not setting.draws_description:
-								ui.label(setting.get_description())
-							async with ui.add_enabled_ui(setting.is_activated or setting.is_tag):
-								try:
-									await setting.draw(setting, ui)
-								except Exception as ex:
-									self.error_message = f"Something went wrong: {ex}"
+				await self.draw_settings_ui(ui, setting, page)
 				ui.add_space(10)
 
 manager = Manager()
