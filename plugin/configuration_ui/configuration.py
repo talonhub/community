@@ -118,7 +118,7 @@ def toggle_setting_activation(setting):
 	try:
 		function(setting.path, setting.name, setting.value.get())
 	except Exception as ex:
-		return f"Something went wrong trying to toggle a setting activation {ex}"
+		return f"Something went wrong trying to toggle a setting activation: {ex}"
 
 def update_tag(path, name, should_be_active):
 	lines = []
