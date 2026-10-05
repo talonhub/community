@@ -646,7 +646,7 @@ def hide_all_help_guis():
 
 
 @open_gui(y=0, refresh_period="500ms")
-async def gui_list_help(ui, helpers):
+async def gui_list_help(ui, ui_wrapper):
     global selected_list
     global page_scroller
 
@@ -664,14 +664,14 @@ async def gui_list_help(ui, helpers):
     else:
         subtitle = ""
 
-    helpers.title(title, subtitle)
+    ui_wrapper.title(title, subtitle)
 
     # setup paging handling
     page_size = settings.get("user.help_max_command_lines_per_page")
     page_scroller.page_size = page_size
-    row_size = helpers.get_label_row_size()
+    row_size = ui_wrapper.get_label_row_size()
     # the amount space to allocate for showing a single page of rows
-    maximum_height = (row_size + helpers.get_item_spacing() * 2) * page_size
+    maximum_height = (row_size + ui_wrapper.get_item_spacing() * 2) * page_size
 
     # get the list
     talon_list = actions.user.talon_get_active_registry_list(selected_list)
@@ -680,7 +680,7 @@ async def gui_list_help(ui, helpers):
     # show the rows in a table
     if len(rows) > 0:
         headers = ["Spoken Form", "Value"]
-        await helpers.draw_table(
+        await ui_wrapper.draw_table(
             headers,
             rows,
             maximum_height=maximum_height,
@@ -689,18 +689,18 @@ async def gui_list_help(ui, helpers):
             scroller=page_scroller,
         )
 
-    helpers.spacing()
+    ui_wrapper.spacing()
 
     # show navigation buttons. these are arranged horizontally but will wrap onto more rows if needed
     async with ui.horizontal_wrapped():
-        if helpers.button("Help close"):
+        if ui_wrapper.button("Help close"):
             actions.user.help_hide()
 
         if len(rows) > page_size:
-            if helpers.button("Help next"):
+            if ui_wrapper.button("Help next"):
                 page_scroller.page_down()
 
-            if helpers.button("Help previous"):
+            if ui_wrapper.button("Help previous"):
                 page_scroller.page_up()
 
 
