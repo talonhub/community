@@ -277,6 +277,15 @@ def update_setting_information(setting: Setting, file_setting_information: Setti
 	setting.value = egui.Mutable(file_setting_information.value)
 	setting.is_deactivated = file_setting_information.is_deactivated
 
+def compute_readable_name(setting_name, page_prefix: str):
+	words = []
+	prefix, name = setting_name.split(".")
+	if prefix != "user":
+		words.append(prefix)
+	words.extend(name.split("_"))
+	capitalized_words = [w.capitalize() for w in words]
+	return " ".join(capitalized_words)
+
 class Manager:
 	def __init__(self):
 		pages = [
@@ -457,7 +466,8 @@ class Manager:
 			ui.separator()
 			for setting in page.settings:
 				async with ui.group():
-					ui.strong(setting.name)
+					ui.strong(compute_readable_name(setting.name, ""))
+					ui.weak(setting.name)
 					ui.label(setting.description)
 					if setting.is_deactivated:
 						await draw_setting_un_commenting_button(ui, setting)
