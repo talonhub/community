@@ -496,7 +496,7 @@ class Manager:
 							ui.add_space(5)
 							if not setting.draws_description:
 								ui.label(setting.get_description())
-							async with ui.add_enabled_ui(setting.is_activated):
+							async with ui.add_enabled_ui(setting.is_activated or setting.is_tag):
 								await setting.draw(setting, ui)
 				ui.add_space(10)
 
