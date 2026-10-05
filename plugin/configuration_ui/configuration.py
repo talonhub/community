@@ -63,8 +63,11 @@ def parse_value(value):
 		except Exception as ex:
 			return VALUE_UNAVAILABLE
 
+def remove_starting_single_indent(line: str):
+	return line[4:]
+
 def parse_multiline_string(lines):
-	return "\n".join(lines[1:])[:-3]
+	return "\n".join([remove_starting_single_indent(l) for l in lines[1:]])[:-3]
 
 def compute_commented_or_not_commented_setting(line):
 	if setting := compute_setting(line, COMMENTED_SETTING_PREFIX):
