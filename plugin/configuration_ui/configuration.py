@@ -180,6 +180,7 @@ class Setting:
 	value: Any=None
 	description: str=""
 	compute_vertical_size: Callable=compute_vertical_size_from_number_of_lines_in_description
+	draws_description: bool=False
 
 async def draw_setting_un_commenting_button(ui, setting: Setting):
 	file_name = setting.path.stem + setting.path.suffix
@@ -188,14 +189,7 @@ async def draw_setting_un_commenting_button(ui, setting: Setting):
 
 async def draw_toggle(setting: Setting, ui):
 	value = setting.value.get()
-	if value:
-		label_text = "Turn off"
-	else:
-		label_text = "Turn on"
-	async with ui.horizontal():
-		ui.checkbox(setting.value, "")
-		label_text = f"{label_text}"
-		ui.toggle_value(setting.value, label_text)
+	ui.checkbox(setting.value, setting.description)
 	new_value = setting.value.get()
 	if value != new_value:
 		setting.update_function(setting.path, setting.name, new_value)
@@ -206,6 +200,7 @@ def create_tag_setting(name):
 		draw_toggle,
 		update_tag,
 		is_tag=True,
+		draws_description=True,
 	)
 
 def create_boolean_setting(name, path=None):
@@ -213,6 +208,7 @@ def create_boolean_setting(name, path=None):
 		name,
 		draw_toggle,
 		update_setting,
+		draws_description=True,
 	)
 	if path is not None:
 		result.path = path
@@ -482,7 +478,8 @@ class Manager:
 					if not description:
 						description = "Something went wrong. Could not find the setting description."
 					ui.add_space(5)
-					ui.label(description)
+					if not setting.draws_description:
+						ui.label(description)
 					if setting.is_deactivated:
 						await draw_setting_un_commenting_button(ui, setting)
 					else:
