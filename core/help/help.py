@@ -698,10 +698,10 @@ async def gui_list_help(ui, helpers):
 
         if len(rows) > page_size:
             if helpers.button("Help next"):
-                page_scroller.increase_page()
+                page_scroller.page_up()
 
             if helpers.button("Help previous"):
-                page_scroller.decrease_page()
+                page_scroller.page_down()
 
 
 @mod.action_class
@@ -798,7 +798,7 @@ class Actions:
         global current_list_page
 
         if page_scroller:
-            page_scroller.increase_page()
+            page_scroller.page_up()
             refresh_gui()
             return
 
@@ -848,7 +848,7 @@ class Actions:
         global current_list_page
 
         if page_scroller:
-            page_scroller.decrease_page()
+            page_scroller.page_down()
             refresh_gui()
             return
 
