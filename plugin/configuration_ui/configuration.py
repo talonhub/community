@@ -1,4 +1,4 @@
-from talon import Module, fs
+from talon import Module, fs, registry
 
 from dataclasses import dataclass
 from pathlib import Path
@@ -474,7 +474,11 @@ class Manager:
 				async with ui.group():
 					ui.strong(compute_readable_name(setting.name, page.prefix))
 					ui.weak(setting.name)
-					ui.label(setting.description)
+					declaration = registry.decls.settings[setting.name]
+					description = declaration.desc
+					if description is None:
+						description = "Something went wrong. Could not find the setting description."
+					ui.label(description)
 					if setting.is_deactivated:
 						await draw_setting_un_commenting_button(ui, setting)
 					else:
