@@ -6,7 +6,7 @@ from typing import Any, Optional
 
 from talon import Context, Module, actions, imgui, registry, settings
 
-from ...core.gui.gui import PageScroller, convert_key_value_pairs_to_rows, open_gui
+from ...core.gui.gui import PageScroller, convert_key_value_pairs_to_rows, open_gui, compute_table_height
 
 mod = Module()
 mod.list("help_contexts", desc="list of available contexts")
@@ -670,10 +670,7 @@ async def gui_list_help(ui, ui_wrapper):
     page_size = settings.get("user.help_max_command_lines_per_page")
     page_scroller.page_size = page_size
     row_size = ui_wrapper.get_label_row_size()
-    # the amount space to allocate for showing a single page of rows
-    maximum_height = (
-        row_size + ui_wrapper.get_item_spacing()
-    ) * page_size + ui_wrapper.get_item_spacing()
+    maximum_height = compute_table_height(row_size, ui_wrapper.get_item_spacing(), page_size)
 
     # get the list
     talon_list = actions.user.talon_get_active_registry_list(selected_list)
