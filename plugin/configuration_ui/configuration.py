@@ -12,7 +12,6 @@ from ast import literal_eval
 @dataclass
 class SettingFileSettingInformation:
 	value: Any
-	description: str
 	is_deactivated: bool=False
 
 COMMENTED_TAG_PREFIX = "# tag(): "
@@ -59,29 +58,19 @@ SETTING_INDENTATION_PREFIX = "    "
 def parse_settings(path):
 	tags = {}
 	settings = {}
-	description = []
 	with open(path, "r") as f:
 		for l in f.readlines():
 			line = l.rstrip("\n\r")
 			if tag := compute_commented_tag(line):
-				tags[tag] = SettingFileSettingInformation(False, "\n".join(description))
-				description.clear()
+				tags[tag] = SettingFileSettingInformation(False)
 			elif setting := compute_setting(line, COMMENTED_SETTING_PREFIX):
 				name, value = setting
-				settings[name] = SettingFileSettingInformation(value, "\n".join(description), is_deactivated=True)
-				description.clear()
+				settings[name] = SettingFileSettingInformation(value, is_deactivated=True)
 			elif setting := compute_setting(line, SETTING_INDENTATION_PREFIX):
 				name, value = setting
-				settings[name] = SettingFileSettingInformation(value, "\n".join(description))
-				description.clear()
+				settings[name] = SettingFileSettingInformation(value)
 			elif tag := compute_tag(line):
-				tags[tag] = SettingFileSettingInformation(True, "\n".join(description))
-				description.clear()
-			elif line.lstrip().startswith("# "):
-				comment = line.strip()[1:].strip()
-				description.append(comment)
-			else:
-				description.clear()
+				tags[tag] = SettingFileSettingInformation(True)
 	return tags, settings
 
 def convert_value_to_talon_script_literal(value) -> str:
@@ -159,6 +148,7 @@ def update_tag(path, name, should_be_active):
 			f.writelines(lines)
 		
 def compute_vertical_size_from_number_of_lines_in_description(setting: Setting, ui):
+	# this function is currently out of date
 	number_of_description_lines = len(setting.description.split("\n"))
 	row_size = ui.spacing().item_spacing.y + egui.TextStyle.Body.resolve(ui.style()).size
 	interactive_size = ui.spacing().item_spacing.y + ui.spacing().interact_size.y
