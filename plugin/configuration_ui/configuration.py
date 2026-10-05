@@ -468,15 +468,20 @@ class Manager:
 			ui.separator()
 			for setting in page.settings:
 				async with ui.group():
-					ui.strong(compute_readable_name(setting.name, page.prefix))
-					ui.weak(setting.name)
-					ui.add_space(5)
-					if not setting.draws_description:
-						ui.label(setting.get_description())
-					if setting.is_deactivated:
-						await draw_setting_un_commenting_button(ui, setting)
-					else:
-						await setting.draw(setting, ui)
+					readable_name = compute_readable_name(setting.name, page.prefix)
+					async with ui.horizontal():
+						if ui.checkbox(egui.Mutable(True), ""):
+							pass
+						async with ui.vertical():
+							ui.strong(readable_name)
+							ui.weak(setting.name)
+							ui.add_space(5)
+							if not setting.draws_description:
+								ui.label(setting.get_description())
+							if setting.is_deactivated:
+								await draw_setting_un_commenting_button(ui, setting)
+							else:
+								await setting.draw(setting, ui)
 				ui.add_space(10)
 
 manager = Manager()
