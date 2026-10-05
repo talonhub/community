@@ -57,11 +57,11 @@ class PageScroller:
         self.start = None
         self.scroll = False
 
-    def page_up(self):
+    def page_down(self):
         self.page_delta += 1
         self.scroll = True
 
-    def page_down(self):
+    def page_up(self):
         self.page_delta -= 1
         self.scroll = True
 
