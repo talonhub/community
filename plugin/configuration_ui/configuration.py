@@ -12,7 +12,7 @@ from ast import literal_eval
 @dataclass
 class SettingFileSettingInformation:
 	value: Any
-	is_deactivated: bool=False
+	is_activated: bool=True
 
 COMMENTED_TAG_PREFIX = "# tag(): "
 TAG_PREFIX = "tag(): "
@@ -65,7 +65,7 @@ def parse_settings(path):
 				tags[tag] = SettingFileSettingInformation(False)
 			elif setting := compute_setting(line, COMMENTED_SETTING_PREFIX):
 				name, value = setting
-				settings[name] = SettingFileSettingInformation(value, is_deactivated=True)
+				settings[name] = SettingFileSettingInformation(value, is_activated=False)
 			elif setting := compute_setting(line, SETTING_INDENTATION_PREFIX):
 				name, value = setting
 				settings[name] = SettingFileSettingInformation(value)
@@ -82,6 +82,9 @@ def convert_value_to_talon_script_literal(value) -> str:
 		return f"\"{value.replace('"', '\\"')}\""
 
 def replace_setting_assignment(path, setting_name, new_text):
+	"""Updates the file to set the setting to a new value.
+		Assumes that the setting takes a single line and that there is no variable name getting created equalling the setting name
+		"""
 	current_text = ""
 	with open(path, "r") as f:
 		current_text = f.read()
@@ -101,12 +104,21 @@ def replace_setting_assignment(path, setting_name, new_text):
 		f.write("\n".join(lines))
 
 def update_setting(path, setting_name, new_value):
-	"""Updates the file to set the setting to a new value.
-		Assumes that the setting takes a single line and that there is no variable name getting created equalling the setting name
-		"""
 	converted_value = convert_value_to_talon_script_literal(new_value)
 	new_setting_text = f"    {setting_name} = {converted_value}"
 	replace_setting_assignment(path, setting_name, new_setting_text)
+
+def comment_out_setting(path, setting_name, new_value):
+	converted_value = convert_value_to_talon_script_literal(new_value)
+	new_setting_text = f"    # {setting_name} = {converted_value}"
+	replace_setting_assignment(path, setting_name, new_setting_text)
+
+def toggle_setting_activation(setting):
+	function = comment_out_setting if setting.is_activated else update_setting
+	try:
+		function(setting.path, setting.name, setting.value.get())
+	except Exception as ex:
+		return f"Something went wrong trying to toggle a setting activation {ex}"
 
 def update_tag(path, name, should_be_active):
 	lines = []
@@ -168,7 +180,7 @@ class Setting:
 	update_function: Callable=update_setting
 	path: Path=SETTINGS_PATH
 	is_tag: bool=False
-	is_deactivated: bool=False
+	is_activated: bool=True
 	value: Any=None
 	compute_vertical_size: Callable=compute_vertical_size_from_number_of_lines_in_description
 	draws_description: bool=False
@@ -272,7 +284,7 @@ class Page:
 
 def update_setting_information(setting: Setting, file_setting_information: SettingFileSettingInformation):
 	setting.value = egui.Mutable(file_setting_information.value)
-	setting.is_deactivated = file_setting_information.is_deactivated
+	setting.is_activated = file_setting_information.is_activated
 
 def compute_readable_name(setting_name, page_prefix: str):
 	words = []
@@ -423,6 +435,7 @@ class Manager:
 		self.page = ""
 		for path in RELEVANT_PATHS:
 			self.on_change(path)
+		self.error_message = ""
 
 	def on_change(self, path):
 		tags, settings = parse_settings(path)
@@ -461,6 +474,8 @@ class Manager:
 			return
 		page = self.pages[self.page]
 		# use a single column table with heterogeneous rows later
+		if self.error_message:
+			ui.strong(self.error_message)
 		async with egui.ScrollArea.vertical().max_height(total_available_height).show():
 			ui.strong(page.title)
 			if page.description:
@@ -470,17 +485,18 @@ class Manager:
 				async with ui.group():
 					readable_name = compute_readable_name(setting.name, page.prefix)
 					async with ui.horizontal():
-						if ui.checkbox(egui.Mutable(True), ""):
-							pass
+						if not setting.is_tag:
+							if ui.checkbox(egui.Mutable(setting.is_activated), "").clicked():
+								error_message = toggle_setting_activation(setting)
+								if error_message is not None:
+									self.error_message = error_message
 						async with ui.vertical():
 							ui.strong(readable_name)
 							ui.weak(setting.name)
 							ui.add_space(5)
 							if not setting.draws_description:
 								ui.label(setting.get_description())
-							if setting.is_deactivated:
-								await draw_setting_un_commenting_button(ui, setting)
-							else:
+							if setting.is_activated:
 								await setting.draw(setting, ui)
 				ui.add_space(10)
 
