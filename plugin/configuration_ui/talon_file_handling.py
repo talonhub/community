@@ -31,21 +31,21 @@ def is_start_of_multiline_string(line):
 	return line.endswith('"""') or line.endswith("'''")
 
 def compute_setting(line: str, prefix: str):
+	# we are checking for the pattern:
+	# prefix at least one letter = something
 	if not line.startswith(prefix):
 		return None
 	before, separator, righthand_side = line.partition(" = ")
+	name = before[len(prefix):]
 	
-	# we are checking for the pattern:
-	# prefix at least one letter = something
-	# give up if the separator is not found, there is nothing after it, or the first character after the prefix is not alphabetic
-	if not righthand_side or not line[len(prefix)].isalpha():
+	# give up if the separator is not found, there is no righthand side, or there is no valid name
+	if not righthand_side or not name or not name[0].isalpha():
 		return None
 	is_multiline_string = is_start_of_multiline_string(righthand_side.lstrip())
 	if is_multiline_string:
 		value = righthand_side.lstrip()
 	else:
 		value = parse_value(righthand_side.strip())
-	name = before[len(prefix):]
 	return name, value, is_multiline_string
 
 VALUE_UNAVAILABLE = ...
