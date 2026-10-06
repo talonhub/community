@@ -64,6 +64,10 @@ def parse_value(value):
 			return VALUE_UNAVAILABLE
 
 def remove_starting_single_indent(line: str):
+	if line.startswith("    # "):
+		return line[6:]
+	elif line.startswith("    #"):
+		return line[5:]
 	return line[4:]
 
 def parse_multiline_string(lines):
@@ -113,7 +117,7 @@ def parse_settings(path):
 				tags[tag] = SettingFileSettingInformation(True)
 	return tags, settings
 
-def convert_value_to_talon_script_literal(value) -> str:
+def convert_value_to_talon_script_literal(value, is_comment=False) -> str:
 	if isinstance(value, bool):
 		return str(value).lower()
 	elif isinstance(value, int) or isinstance(value, float):
@@ -122,10 +126,9 @@ def convert_value_to_talon_script_literal(value) -> str:
 		value = value.replace('"', '\\"')
 		if "\n" in value:
 			lines = value.split("\n")
-			indented_lines = [lines[0]]
-			for l in lines[1:]:
-				indented_lines.append(f"    {l}")
-			return f"\"\"\"\n    {"\n".join(indented_lines)}\"\"\""
+			prefix = "    # " if is_comment else "    "
+			indented_lines = [f"{prefix}{l}" for l in lines]
+			return f"\"\"\"\n{"\n".join(indented_lines)}\"\"\""
 		else:
 			return f"\"{value}\""
 	raise ValueError(f"Could not convert value {value} to Talonscript")
@@ -169,7 +172,7 @@ def update_setting(path, setting_name, new_value):
 	replace_setting_assignment(path, setting_name, new_setting_text)
 
 def comment_out_setting(path, setting_name, new_value):
-	converted_value = convert_value_to_talon_script_literal(new_value)
+	converted_value = convert_value_to_talon_script_literal(new_value, is_comment=True)
 	new_setting_text = f"    # {setting_name} = {converted_value}"
 	replace_setting_assignment(path, setting_name, new_setting_text)
 
