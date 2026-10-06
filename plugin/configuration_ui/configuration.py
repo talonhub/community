@@ -137,14 +137,25 @@ def replace_setting_assignment(path, setting_name, new_text):
 	setting_text = f"    {setting_name} = "
 	commented_setting_text = f"    # {setting_name} = "
 	found_setting = False
+	# for handling multiline strings
+	lines_to_remove = set()
+	multiline_string_start = None
 	for i, line in enumerate(lines):
-		if line.startswith(setting_text) or line.startswith(commented_setting_text):
+		right_stripped_line = line.rstrip()
+		if multiline_string_start:
+			lines_to_remove.add(i)
+			if right_stripped_line.endswith(multiline_string_start):
+				multiline_string_start = None
+		elif line.startswith(setting_text) or line.startswith(commented_setting_text):
 			if found_setting:
 				raise IOError(f"Found duplicate setting assignment for {setting_name} inside file {path}")
 			lines[i] = new_text
 			found_setting = True
+			if is_start_of_multiline_string(right_stripped_line):
+				multiline_string_start = right_stripped_line[-3:]
 	if not found_setting:
 		raise IOError(f"Could not find {setting_name} inside file {path}")
+	lines = [l for i, l in enumerate(lines) if i not in lines_to_remove]
 	with open(path, "w") as f:
 		f.write("\n".join(lines))
 
