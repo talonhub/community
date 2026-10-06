@@ -121,7 +121,11 @@ def convert_value_to_talon_script_literal(value) -> str:
 	elif isinstance(value, str):
 		value = value.replace('"', '\\"')
 		if "\n" in value:
-			return f"\"\"\"\n    {value}\"\"\""
+			lines = value.split("\n")
+			indented_lines = [lines[0]]
+			for l in lines[1:]:
+				indented_lines.append(f"    {l}")
+			return f"\"\"\"\n    {"\n".join(indented_lines)}\"\"\""
 		else:
 			return f"\"{value}\""
 	raise ValueError(f"Could not convert value {value} to Talonscript")
