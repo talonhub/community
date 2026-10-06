@@ -582,7 +582,6 @@ class Manager:
 							await setting.draw(setting, ui)
 						except Exception as ex:
 							self.error_message = f"Something went wrong: {ex}"
-							print(ex, setting.name, setting.value.get(), type(setting.value.get()))
 
 	async def draw_current_page(self, ui, total_available_height):
 		if not self.page:
@@ -591,6 +590,7 @@ class Manager:
 		# use a single column table with heterogeneous rows later
 		if self.error_message:
 			ui.strong(self.error_message)
+		ui.add_space(10)
 		async with egui.ScrollArea.vertical().max_height(total_available_height).show():
 			ui.strong(page.title)
 			if page.description:
