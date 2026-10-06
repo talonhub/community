@@ -36,8 +36,8 @@ def compute_setting(line: str, prefix: str):
 	# prefix at least one letter = something
 	if not line.startswith(prefix):
 		return None
-	before, separator, righthand_side = line.partition(" = ")
-	name = before[len(prefix):]
+	lefthand_side, separator, righthand_side = line.partition(" = ")
+	name = lefthand_side[len(prefix):]
 	
 	# give up if the separator is not found, there is no righthand side, or there is no valid name
 	if not righthand_side or not name or not name[0].isalpha():
