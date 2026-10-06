@@ -188,20 +188,15 @@ def replace_setting_assignment(path, setting_name, new_text):
 	with open(path, "w") as f:
 		f.write("\n".join(lines))
 
-def update_setting(path, setting_name, new_value):
-	converted_value = convert_value_to_talon_script_literal(new_value)
-	new_setting_text = f"{INDENTATION}{setting_name} = {converted_value}"
-	replace_setting_assignment(path, setting_name, new_setting_text)
-
-def comment_out_setting(path, setting_name, new_value):
-	converted_value = convert_value_to_talon_script_literal(new_value, is_comment=True)
-	new_setting_text = f"{INDENTED_COMMENT_PREFIX}{setting_name} = {converted_value}"
+def update_setting(path, setting_name, new_value, make_comment=False):
+	converted_value = convert_value_to_talon_script_literal(new_value, is_comment=make_comment)
+	prefix = INDENTED_COMMENT_PREFIX if make_comment else INDENTATION
+	new_setting_text = f"{prefix}{setting_name} = {converted_value}"
 	replace_setting_assignment(path, setting_name, new_setting_text)
 
 def toggle_setting_activation(setting):
-	function = comment_out_setting if setting.is_activated else update_setting
 	try:
-		function(setting.path, setting.name, setting.value.get())
+		update_setting(setting.path, setting.name, setting.value.get(), make_comment=setting.is_activated)
 	except Exception as ex:
 		return f"Something went wrong trying to toggle a setting activation: {ex}"
 
