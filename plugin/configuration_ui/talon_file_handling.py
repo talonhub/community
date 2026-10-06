@@ -82,10 +82,11 @@ def compute_commented_or_not_commented_setting(line):
 INDENTATION = "    "
 
 class SettingsParser:
-	__slots__ = ('_is_activated', '_multiline_string_lines', 'settings', '_multiline_string_starting_characters', 'tags', '_current_name')
+	__slots__ = ('_is_activated', '_multiline_string_lines', 'settings', '_multiline_string_starting_characters', 'tags', '_current_name', 'lines')
 	def __init__(self):
 		self.tags = {}
 		self.settings = {}
+		self.lines = []
 
 		self._current_name = None
 		self._multiline_string_lines = []
@@ -122,20 +123,19 @@ class SettingsParser:
 			else:
 				self.settings[name] = SettingFileSettingInformation(value, line_index, is_activated=activated)
 
-	def parse_file(self, path: str) -> Tuple[Dict[str, bool], Dict[str, bool]]:
+	def parse_file(self, path):
 		with open(path, "r", encoding="utf-8") as f:
-			for i, line in enumerate(f):
-				stripped = line.rstrip("\n\r")
-				if self._multiline_string_starting_characters is not None:
-					self._add_to_multiline_string(stripped, i)
-				else:
-					self._process_simple_line(stripped, i)
-				
-		return self.tags, self.settings
+			self.lines = [l.rstrip("\n\r") for l in f.readlines()]
+		for i, line in enumerate(self.lines):
+			if self._multiline_string_starting_characters is not None:
+				self._add_to_multiline_string(line, i)
+			else:
+				self._process_simple_line(line, i)
 
 def parse_settings(path):
 	parser = SettingsParser()
-	return parser.parse_file(path)
+	parser.parse_file(path)
+	return parser.tags, parser.settings
 
 def convert_value_to_talon_script_literal(value, is_comment=False) -> str:
 	if isinstance(value, bool):
