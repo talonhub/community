@@ -15,14 +15,11 @@ class SettingFileSettingInformation:
 
 COMMENTED_TAG_PREFIX = "# tag(): "
 TAG_PREFIX = "tag(): "
-def compute_commented_tag(line):
-	if line.startswith(COMMENTED_TAG_PREFIX):
-		return line[len(COMMENTED_TAG_PREFIX):].strip()
-	return None
-
 def compute_tag(line):
-	if line.startswith(TAG_PREFIX):
-		return line[len(TAG_PREFIX):].strip()
+	if line.startswith(COMMENTED_TAG_PREFIX):
+		return line[len(COMMENTED_TAG_PREFIX):].strip(), False
+	elif line.startswith(TAG_PREFIX):
+		return line[len(TAG_PREFIX):].strip(), True
 	return None
 
 INDENTED_COMMENT_PREFIX = "    # "
@@ -132,9 +129,8 @@ class SettingsParser:
 
 	def _process_simple_line(self, line, line_index) -> None:
 		if tag := compute_tag(line):
-			self._add_tag(tag, True, line_index)
-		elif tag := compute_commented_tag(line):
-			self._add_tag(tag, False, line_index)
+			name, is_active = tag
+			self._add_tag(name, is_active, line_index)
 		elif setting := compute_commented_or_not_commented_setting(line):
 			name, value, is_multiline_start, activated = setting
 			if is_multiline_start:
