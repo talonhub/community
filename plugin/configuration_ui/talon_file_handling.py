@@ -189,17 +189,14 @@ def update_tag(path, name, should_be_active):
 		stripped_line = line.rstrip()
 		encountered_duplicate = False
 		if stripped_line == deactivated_string:
-			if matching_line is not None:
-				encountered_duplicate = True
-			else:
-				matching_line = i
-				is_active = False
+			is_active = False
 		elif stripped_line == active_string:
+			is_active = True
+		if is_active is not None:
 			if matching_line is not None:
 				encountered_duplicate = True
 			else:
 				matching_line = i
-				is_active = True
 		if encountered_duplicate:
 			raise IOError(f"Encountered the tag {name} twice in the file {path}!")
 	if is_active != should_be_active:
