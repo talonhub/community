@@ -122,7 +122,7 @@ class SettingsParser:
 
 	def _finalize_multiline(self, line_index) -> None:
 		value = parse_multiline_string(self._multiline_string_lines, not self._is_activated)
-		self._add_setting(self._current_name, SettingFileSettingInformation(value, line_index, self._is_activated))
+		self._add_setting(self._current_name, SettingFileSettingInformation(value, line_index - value.count("\n") - 1, self._is_activated))
 		self._reset_multiline_state()
 
 	def _reset_multiline_state(self) -> None:
@@ -187,8 +187,9 @@ def replace_setting_assignment(path, setting_name, new_text):
 	# remove original multiline string text after the line
 	value = info.value
 	if isinstance(value, str) and "\n" in value:
-		line_after_multiline_string = info.line_index + value.count("\n")
-		print(lines[line_after_multiline_string])
+		print(info.line_index)
+		line_after_multiline_string = info.line_index + value.count("\n") + 2
+		print("debug!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", lines[info.line_index+1:line_after_multiline_string])
 		print(value.count("\n"))
 		lines = lines[:info.line_index+1] + lines[line_after_multiline_string:]
 

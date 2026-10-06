@@ -85,9 +85,7 @@ settings():
 
     # Uncomment to add a directory (relative to the Talon user dir) with additional
     # .snippet files. Changing this setting requires a restart of Talon.
-    user.snippets_dir = """
-    snippets
-    """
+    # user.snippets_dir = "snippets"
 
     # Set to the number of spaces to use for each tab when inserting snippets as raw text (without editor support). Set to -1 to insert tabs as tabs, such as in code editors that can expand tabs in pasted or typed text. This setting is provided for applications like web browsers and chat apps that do not understand code formatting.
     user.snippet_raw_text_spaces_per_tab = 4
