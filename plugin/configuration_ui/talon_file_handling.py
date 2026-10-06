@@ -83,7 +83,7 @@ INDENTATION = "    "
 
 class SettingsParser:
 	__slots__ = ('_is_activated', '_multiline_string_lines', 'settings', 'duplicate_tags', 'duplicate_settings', '_multiline_string_starting_characters', 'tags', '_current_name', 'lines')
-	def __init__(self):
+	def __init__(self, path):
 		self.tags = {}
 		self.settings = {}
 		self.duplicate_tags = set()
@@ -94,6 +94,7 @@ class SettingsParser:
 		self._multiline_string_lines = []
 		self._is_activated = None
 		self._multiline_string_starting_characters = None
+		self._parse_file(path)
 
 	def _is_duplicate(self, name, dictionary, duplicates):
 		if name in duplicates:
@@ -144,7 +145,7 @@ class SettingsParser:
 			else:
 				self._add_setting(name, SettingFileSettingInformation(value, line_index, is_activated=activated))
 
-	def parse_file(self, path):
+	def _parse_file(self, path):
 		with open(path, "r", encoding="utf-8") as f:
 			self.lines = [l.rstrip("\n\r") for l in f.readlines()]
 		for i, line in enumerate(self.lines):
@@ -154,8 +155,7 @@ class SettingsParser:
 				self._process_simple_line(line, i)
 
 def parse_settings(path):
-	parser = SettingsParser()
-	parser.parse_file(path)
+	parser = SettingsParser(path)
 	return parser.tags, parser.settings
 
 def convert_value_to_talon_script_literal(value, is_comment=False) -> str:
@@ -175,8 +175,7 @@ def convert_value_to_talon_script_literal(value, is_comment=False) -> str:
 	raise ValueError(f"Could not convert value {value} to Talonscript")
 
 def replace_setting_assignment(path, setting_name, new_text):
-	parser = SettingsParser()
-	parser.parse_file(path)
+	parser = SettingsParser(path)
 	if setting_name in parser.duplicate_settings:
 		raise OSError(f"Found duplicate setting assignment for {setting_name} inside file {path}")
 	if setting_name not in parser.settings:
@@ -211,35 +210,23 @@ def toggle_setting_activation(setting):
 		return f"Something went wrong trying to toggle a setting activation: {ex}"
 
 def update_tag(path, name, should_be_active):
-	lines = []
-	with open(path, "r") as f:
-		lines = [l for l in f.readlines()]
-	matching_line = None
-	is_active = None
-	active_string = f"tag(): {name}"
-	deactivated_string = f"# tag(): {name}"
-	for i, line in enumerate(lines):
-		stripped_line = line.rstrip()
-		detected_tag_state = None
-		if stripped_line == deactivated_string:
-			detected_tag_state = False
-		elif stripped_line == active_string:
-			detected_tag_state = True
-		if detected_tag_state is not None:
-			if matching_line is not None:
-				raise OSError(f"Encountered the tag {name} twice in the file {path}!")
-			else:
-				matching_line = i
-				is_active = detected_tag_state
-	if is_active != should_be_active:
-		new_string = active_string if should_be_active else deactivated_string
-		new_string += "\n"
-		if matching_line:
-			lines[matching_line] = new_string
-		else:
-			lines.append("\n")
-			lines.append(new_string)
-		
-		with open(path, "w") as f:
-			f.writelines(lines)
+	parser = SettingsParser(path)
+	if name in parser.duplicate_tags:
+		raise OSError(f"Found duplicate tag activation for tag {name} in the file {path}!")
+	if name in parser.tags and parser.tags[name].value == should_be_active:
+		return 
+	
+	lines = parser.lines
+	prefix = "" if should_be_active else "# "
+	new_string = f"{prefix}tag(): {name}"
+
+	if name in parser.tags:
+		info = parser.tags[name]
+		lines[info.line_index] = new_string
+	else:
+		lines.append("\n")
+		lines.append(new_string)
+	
+	with open(path, "w") as f:
+		f.write("\n".join(lines))
 		
