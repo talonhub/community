@@ -179,8 +179,6 @@ def update_tag(path, name, should_be_active):
 	lines = []
 	with open(path, "r") as f:
 		lines = [l for l in f.readlines()]
-	if not lines:
-		raise IOError(f"Found no lines in the file {path}!")
 	matching_line = None
 	is_active = None
 	active_string = f"tag(): {name}"
