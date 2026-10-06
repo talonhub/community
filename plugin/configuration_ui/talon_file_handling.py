@@ -10,6 +10,7 @@ MINIMAL_COMMENT_SIZE = SPACES_PER_INDENT + 1
 @dataclass
 class SettingFileSettingInformation:
 	value: Any
+	line_index: int
 	is_activated: bool=True
 
 COMMENTED_TAG_PREFIX = "# tag(): "
@@ -91,26 +92,26 @@ class SettingsParser:
 		self._is_activated = None
 		self._multiline_string_starting_characters = None
 
-	def _add_to_multiline_string(self, line: str) -> None:
+	def _add_to_multiline_string(self, line, line_index) -> None:
 		if self._multiline_string_starting_characters is not None:
 			self._multiline_string_lines.append(line)
 			if line.strip().endswith(self._multiline_string_starting_characters):
-				self._finalize_multiline()
+				self._finalize_multiline(line_index)
 
-	def _finalize_multiline(self) -> None:
+	def _finalize_multiline(self, line_index) -> None:
 		value = parse_multiline_string(self._multiline_string_lines, not self._is_activated)
-		self.settings[self._current_name] = SettingFileSettingInformation(value, self._is_activated)
+		self.settings[self._current_name] = SettingFileSettingInformation(value, line_index, self._is_activated)
 		self._reset_multiline_state()
 
 	def _reset_multiline_state(self) -> None:
 		self._multiline_string_lines = []
 		self._current_name = self._is_activated = self._multiline_string_starting_characters = None
 
-	def _process_simple_line(self, line: str) -> None:
+	def _process_simple_line(self, line, line_index) -> None:
 		if tag := compute_tag(line):
-			self.tags[tag] = SettingFileSettingInformation(True)
+			self.tags[tag] = SettingFileSettingInformation(True, line_index)
 		elif tag := compute_commented_tag(line):
-			self.tags[tag] = SettingFileSettingInformation(False)
+			self.tags[tag] = SettingFileSettingInformation(False, line_index)
 		elif setting := compute_commented_or_not_commented_setting(line):
 			name, value, is_multiline_start, activated = setting
 			if is_multiline_start:
@@ -119,16 +120,16 @@ class SettingsParser:
 				self._multiline_string_starting_characters = value[:3]
 				self._is_activated = activated
 			else:
-				self.settings[name] = SettingFileSettingInformation(value, is_activated=activated)
+				self.settings[name] = SettingFileSettingInformation(value, line_index, is_activated=activated)
 
 	def parse_file(self, path: str) -> Tuple[Dict[str, bool], Dict[str, bool]]:
 		with open(path, "r", encoding="utf-8") as f:
-			for line in f:
+			for i, line in enumerate(f):
 				stripped = line.rstrip("\n\r")
 				if self._multiline_string_starting_characters is not None:
-					self._add_to_multiline_string(stripped)
+					self._add_to_multiline_string(stripped, i)
 				else:
-					self._process_simple_line(stripped)
+					self._process_simple_line(stripped, i)
 				
 		return self.tags, self.settings
 
