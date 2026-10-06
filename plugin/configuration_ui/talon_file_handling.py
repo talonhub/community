@@ -29,11 +29,10 @@ def compute_setting(line: str, prefix: str):
 	if not line.startswith(prefix):
 		return None
 	equals_index = line.find(" = ")
-	if equals_index == -1 or equals_index >= len(line) - 3:
-		return None
-	if len(line) < len(prefix):
-		return None
-	if not line[len(prefix)].isalpha():
+	# there is no setting here if there is no assignment, there is nothing after the assignment, there is no room for the prefix, and there is no letter right after the prefix
+	# we are checking for the pattern:
+	# prefix at least one letter = something
+	if equals_index == -1 or equals_index >= len(line) - 3 or len(line) < len(prefix) or not line[len(prefix)].isalpha():
 		return None
 	righthand_side = line[equals_index+3:]
 	is_multiline_string = is_start_of_multiline_string(righthand_side.lstrip())
