@@ -2,6 +2,10 @@ from dataclasses import dataclass
 
 from ast import literal_eval
 
+SPACES_PER_INDENT = 4
+STANDARD_COMMENT_SIZE = SPACES_PER_INDENT + 2
+MINIMAL_COMMENT_SIZE = SPACES_PER_INDENT + 1
+
 @dataclass
 class SettingFileSettingInformation:
 	value: Any
@@ -19,7 +23,7 @@ def compute_tag(line):
 		return line[len(TAG_PREFIX):].strip()
 	return None
 
-COMMENTED_SETTING_PREFIX = "    # "
+INDENTED_COMMENT_PREFIX = "    # "
 
 def is_start_of_multiline_string(line):
 	return line.endswith('"""') or line.endswith("'''")
@@ -56,23 +60,23 @@ def parse_value(value):
 			return VALUE_UNAVAILABLE
 
 def remove_starting_single_indent(line: str, is_commented: bool):
-	if is_commented and line.startswith("    # "):
-		return line[6:]
+	if is_commented and line.startswith(INDENTED_COMMENT_PREFIX):
+		return line[STANDARD_COMMENT_SIZE:]
 	elif is_commented and line.startswith("    #"):
-		return line[5:]
-	return line[4:]
+		return line[MINIMAL_COMMENT_SIZE:]
+	return line[SPACES_PER_INDENT:]
 
 def parse_multiline_string(lines, is_commented):
 	return "\n".join([remove_starting_single_indent(l, is_commented) for l in lines[1:]])[:-3]
 
 def compute_commented_or_not_commented_setting(line):
-	if setting := compute_setting(line, COMMENTED_SETTING_PREFIX):
+	if setting := compute_setting(line, INDENTED_COMMENT_PREFIX):
 		return *setting, False
-	elif setting := compute_setting(line, SETTING_INDENTATION_PREFIX):
+	elif setting := compute_setting(line, INDENTATION):
 		return *setting, True
 	return None
 
-SETTING_INDENTATION_PREFIX = "    "
+INDENTATION = "    "
 
 def parse_settings(path):
 	tags = {}
@@ -118,7 +122,7 @@ def convert_value_to_talon_script_literal(value, is_comment=False) -> str:
 		value = value.replace('"', '\\"')
 		if "\n" in value:
 			lines = value.split("\n")
-			prefix = "    # " if is_comment else "    "
+			prefix = INDENTED_COMMENT_PREFIX if is_comment else INDENTATION
 			indented_lines = [f"{prefix}{l}" for l in lines]
 			return f"\"\"\"\n{"\n".join(indented_lines)}\"\"\""
 		else:
@@ -134,7 +138,7 @@ def replace_setting_assignment(path, setting_name, new_text):
 		current_text = f.read()
 	lines = current_text.split("\n")
 	setting_text = f"    {setting_name} = "
-	commented_setting_text = f"    # {setting_name} = "
+	commented_setting_text = f"{INDENTED_COMMENT_PREFIX}{setting_name} = "
 	found_setting = False
 	# for handling multiline strings
 	lines_to_remove = set()
