@@ -63,15 +63,15 @@ def parse_value(value):
 		except Exception as ex:
 			return VALUE_UNAVAILABLE
 
-def remove_starting_single_indent(line: str):
-	if line.startswith("    # "):
+def remove_starting_single_indent(line: str, is_commented: bool):
+	if is_commented and line.startswith("    # "):
 		return line[6:]
-	elif line.startswith("    #"):
+	elif is_commented and line.startswith("    #"):
 		return line[5:]
 	return line[4:]
 
-def parse_multiline_string(lines):
-	return "\n".join([remove_starting_single_indent(l) for l in lines[1:]])[:-3]
+def parse_multiline_string(lines, is_commented):
+	return "\n".join([remove_starting_single_indent(l, is_commented) for l in lines[1:]])[:-3]
 
 def compute_commented_or_not_commented_setting(line):
 	if setting := compute_setting(line, COMMENTED_SETTING_PREFIX):
@@ -98,7 +98,7 @@ def parse_settings(path):
 			if multiline_string:
 				multiline_string.append(line)
 				if line.strip().endswith(multiline_string_starting_characters):
-					value = parse_multiline_string(multiline_string)
+					value = parse_multiline_string(multiline_string, not is_activated)
 					settings[current_setting] = SettingFileSettingInformation(value, is_activated)
 					current_setting = multiline_string_starting_characters = is_activated = None
 					multiline_string.clear()
