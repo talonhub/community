@@ -80,40 +80,61 @@ def compute_commented_or_not_commented_setting(line):
 
 INDENTATION = "    "
 
-def parse_settings(path):
-	tags = {}
-	settings = {}
+class SettingsParser:
+	__slots__ = ('_is_activated', '_multiline_string_lines', 'settings', '_multiline_string_starting_characters', 'tags', '_current_name')
+	def __init__(self):
+		self.tags = {}
+		self.settings = {}
 
-	# values for keeping track of a setting that has a multiline string value
-	current_setting = None
-	multiline_string = []
-	multiline_string_starting_characters = None
-	is_activated = None
+		self._current_name = None
+		self._multiline_string_lines = []
+		self._is_activated = None
+		self._multiline_string_starting_characters = None
 
-	with open(path, "r") as f:
-		for l in f.readlines():
-			line = l.rstrip("\n\r")
-			if multiline_string:
-				multiline_string.append(line)
-				if line.strip().endswith(multiline_string_starting_characters):
-					value = parse_multiline_string(multiline_string, not is_activated)
-					settings[current_setting] = SettingFileSettingInformation(value, is_activated)
-					current_setting = multiline_string_starting_characters = is_activated = None
-					multiline_string.clear()
-			elif tag := compute_commented_tag(line):
-				tags[tag] = SettingFileSettingInformation(False)
-			elif setting := compute_commented_or_not_commented_setting(line):
-				name, value, is_multiline_string, activated = setting
-				if is_multiline_string:
-					current_setting = name
-					multiline_string = [value]
-					multiline_string_starting_characters = value[:3]
-					is_activated = activated
+	def _add_to_multiline_string(self, line: str) -> None:
+		if self._multiline_string_starting_characters is not None:
+			self._multiline_string_lines.append(line)
+			if line.strip().endswith(self._multiline_string_starting_characters):
+				self._finalize_multiline()
+
+	def _finalize_multiline(self) -> None:
+		value = parse_multiline_string(self._multiline_string_lines, not self._is_activated)
+		self.settings[self._current_name] = SettingFileSettingInformation(value, self._is_activated)
+		self._reset_multiline_state()
+
+	def _reset_multiline_state(self) -> None:
+		self._multiline_string_lines = []
+		self._current_name = self._is_activated = self._multiline_string_starting_characters = None
+
+	def _process_simple_line(self, line: str) -> None:
+		if tag := compute_tag(line):
+			self.tags[tag] = SettingFileSettingInformation(True)
+		elif tag := compute_commented_tag(line):
+			self.tags[tag] = SettingFileSettingInformation(False)
+		elif setting := compute_commented_or_not_commented_setting(line):
+			name, value, is_multiline_start, activated = setting
+			if is_multiline_start:
+				self._current_name = name
+				self._multiline_string_lines = [value]
+				self._multiline_string_starting_characters = value[:3]
+				self._is_activated = activated
+			else:
+				self.settings[name] = SettingFileSettingInformation(value, is_activated=activated)
+
+	def parse_file(self, path: str) -> Tuple[Dict[str, bool], Dict[str, bool]]:
+		with open(path, "r", encoding="utf-8") as f:
+			for line in f:
+				stripped = line.rstrip("\n\r")
+				if self._multiline_string_starting_characters is not None:
+					self._add_to_multiline_string(stripped)
 				else:
-					settings[name] = SettingFileSettingInformation(value, is_activated=activated)
-			elif tag := compute_tag(line):
-				tags[tag] = SettingFileSettingInformation(True)
-	return tags, settings
+					self._process_simple_line(stripped)
+				
+		return self.tags, self.settings
+
+def parse_settings(path):
+	parser = SettingsParser()
+	return parser.parse_file(path)
 
 def convert_value_to_talon_script_literal(value, is_comment=False) -> str:
 	if isinstance(value, bool):
