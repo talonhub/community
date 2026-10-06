@@ -96,9 +96,7 @@ def parse_settings(path):
 				if line.strip().endswith(multiline_string_starting_characters):
 					value = parse_multiline_string(multiline_string)
 					settings[current_setting] = SettingFileSettingInformation(value, is_activated)
-					current_setting = None
-					multiline_string_starting_characters = None
-					is_activated = None
+					current_setting = multiline_string_starting_characters = is_activated = None
 					multiline_string.clear()
 			elif tag := compute_commented_tag(line):
 				tags[tag] = SettingFileSettingInformation(False)
