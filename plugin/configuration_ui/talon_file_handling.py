@@ -187,10 +187,7 @@ def replace_setting_assignment(path, setting_name, new_text):
 	# remove original multiline string text after the line
 	value = info.value
 	if isinstance(value, str) and "\n" in value:
-		print(info.line_index)
 		line_after_multiline_string = info.line_index + value.count("\n") + 2
-		print("debug!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", lines[info.line_index+1:line_after_multiline_string])
-		print(value.count("\n"))
 		lines = lines[:info.line_index+1] + lines[line_after_multiline_string:]
 
 	with open(path, "w") as f:
