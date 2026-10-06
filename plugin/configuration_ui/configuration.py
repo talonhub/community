@@ -315,7 +315,7 @@ class Manager:
 			ui.add_space(total_available_height - ui.min_size().y)
 		ui.separator()
 
-	async def draw_settings_ui(self, ui, setting, page):
+	async def draw_setting_ui(self, ui, setting, page):
 		old_value = setting.value.get()
 		async with ui.group():
 			readable_name = compute_readable_name(setting.name, page.prefix)
@@ -357,7 +357,7 @@ class Manager:
 				ui.label(page.description)
 			ui.separator()
 			for setting in page.settings:
-				await self.draw_settings_ui(ui, setting, page)
+				await self.draw_setting_ui(ui, setting, page)
 				ui.add_space(10)
 
 manager = Manager()
