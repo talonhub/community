@@ -46,11 +46,6 @@ class Setting:
 			return DEFAULT_DESCRIPTION
 
 
-async def draw_setting_un_commenting_button(ui, setting: Setting):
-	file_name = setting.path.stem + setting.path.suffix
-	if ui.button(f"Click this if you want to set {setting.name} in {file_name}").clicked():
-		update_setting(setting.path, setting.name, setting.value.get())
-
 async def draw_toggle(setting: Setting, ui):
 	value = setting.value.get()
 	ui.checkbox(setting.value, setting.get_description())
@@ -124,19 +119,11 @@ def create_numeric_setting(name, minimum=None, maximum=None, path=None, use_slid
 		result.path = path
 	return result
 
-def create_single_line_text_setting(name, path=None):
+def create_text_setting(name, path=None, is_multiline=False):
+	ui_function = draw_multiline_text_input if is_multiline else draw_single_line_text_input
 	result = Setting(
 		name,
-		draw_single_line_text_input,
-	)
-	if path is not None:
-		result.path = path
-	return result
-
-def create_multiline_text_setting(name, path=None):
-	result = Setting(
-		name,
-		draw_multiline_text_input,
+		ui_function,
 	)
 	if path is not None:
 		result.path = path
@@ -183,7 +170,7 @@ class Manager:
 				"",
 				[
 					create_numeric_setting("speech.timeout", 0.0),
-					create_single_line_text_setting("user.initial_mode"),
+					create_text_setting("user.initial_mode"),
 					create_numeric_setting("user.listening_timeout_minutes", -1),
 				]
 			),
@@ -244,7 +231,7 @@ class Manager:
 				"Window Management",
 				"",
 				[
-					create_single_line_text_setting("user.window_snap_screen"),
+					create_text_setting("user.window_snap_screen"),
 					create_tag_setting("user.experimental_window_layout"),
 				]
 			),
@@ -259,14 +246,14 @@ class Manager:
 					create_numeric_setting("user.mode_indicator_y", 0.0, 1.0, MODE_INDICATOR_PATH, use_slider=True),
 					create_numeric_setting("user.mode_indicator_color_alpha", 0.0, 1.0, MODE_INDICATOR_PATH, use_slider=True),
 					create_numeric_setting("user.mode_indicator_color_gradient", 0.0, 1.0, MODE_INDICATOR_PATH, use_slider=True),
-					create_single_line_text_setting("user.mode_indicator_color_text", MODE_INDICATOR_PATH),
-					create_single_line_text_setting("user.mode_indicator_color_mute", MODE_INDICATOR_PATH),
-					create_single_line_text_setting("user.mode_indicator_color_sleep", MODE_INDICATOR_PATH),
-					create_single_line_text_setting("user.mode_indicator_color_deep_sleep", MODE_INDICATOR_PATH),
-					create_single_line_text_setting("user.mode_indicator_color_dictation", MODE_INDICATOR_PATH),
-					create_single_line_text_setting("user.mode_indicator_color_mixed", MODE_INDICATOR_PATH),
-					create_single_line_text_setting("user.mode_indicator_color_command", MODE_INDICATOR_PATH),
-					create_single_line_text_setting("user.mode_indicator_color_other", MODE_INDICATOR_PATH),
+					create_text_setting("user.mode_indicator_color_text", MODE_INDICATOR_PATH),
+					create_text_setting("user.mode_indicator_color_mute", MODE_INDICATOR_PATH),
+					create_text_setting("user.mode_indicator_color_sleep", MODE_INDICATOR_PATH),
+					create_text_setting("user.mode_indicator_color_deep_sleep", MODE_INDICATOR_PATH),
+					create_text_setting("user.mode_indicator_color_dictation", MODE_INDICATOR_PATH),
+					create_text_setting("user.mode_indicator_color_mixed", MODE_INDICATOR_PATH),
+					create_text_setting("user.mode_indicator_color_command", MODE_INDICATOR_PATH),
+					create_text_setting("user.mode_indicator_color_other", MODE_INDICATOR_PATH),
 				],
 				prefix="user.mode_indicator_"
 			),
@@ -275,10 +262,10 @@ class Manager:
 				"Configuration for Community's subtitles (not the Talon builtin subtitles)",
 				[
 					create_boolean_setting("user.subtitles_show", SUBTITLES_PATH),
-					create_single_line_text_setting("user.subtitles_screens", SUBTITLES_PATH),
+					create_text_setting("user.subtitles_screens", SUBTITLES_PATH),
 					create_numeric_setting("user.subtitles_size", 0, path=SUBTITLES_PATH),
-					create_single_line_text_setting("user.subtitles_color", SUBTITLES_PATH),
-					create_single_line_text_setting("user.subtitles_color_outline", SUBTITLES_PATH),
+					create_text_setting("user.subtitles_color", SUBTITLES_PATH),
+					create_text_setting("user.subtitles_color_outline", SUBTITLES_PATH),
 					create_numeric_setting("user.subtitles_timeout_per_char", 0, path=SUBTITLES_PATH),
 					create_numeric_setting("user.subtitles_timeout_min", 0, path=SUBTITLES_PATH),
 					create_numeric_setting("user.subtitles_timeout_max", 0, path=SUBTITLES_PATH),
@@ -291,7 +278,7 @@ class Manager:
 				"",
 				[
 					create_numeric_setting("user.snippet_raw_text_spaces_per_tab", 0),
-					create_multiline_text_setting("user.snippets_dir"),
+					create_text_setting("user.snippets_dir", is_multiline=True),
 				]
 			),
 			Page(
