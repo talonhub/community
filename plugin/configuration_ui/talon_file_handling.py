@@ -175,35 +175,23 @@ def convert_value_to_talon_script_literal(value, is_comment=False) -> str:
 	raise ValueError(f"Could not convert value {value} to Talonscript")
 
 def replace_setting_assignment(path, setting_name, new_text):
-	"""Updates the file to set the setting to a new value.
-		Assumes that the setting takes a single line and that there is no variable name getting created equalling the setting name
-		"""
-	current_text = ""
-	with open(path, "r") as f:
-		current_text = f.read()
-	lines = current_text.split("\n")
-	setting_text = f"    {setting_name} = "
-	commented_setting_text = f"{INDENTED_COMMENT_PREFIX}{setting_name} = "
-	found_setting = False
-	# for handling multiline strings
-	lines_to_remove = set()
-	multiline_string_start = None
-	for i, line in enumerate(lines):
-		right_stripped_line = line.rstrip()
-		if multiline_string_start:
-			lines_to_remove.add(i)
-			if right_stripped_line.endswith(multiline_string_start):
-				multiline_string_start = None
-		elif line.startswith(setting_text) or line.startswith(commented_setting_text):
-			if found_setting:
-				raise OSError(f"Found duplicate setting assignment for {setting_name} inside file {path}")
-			lines[i] = new_text
-			found_setting = True
-			if is_start_of_multiline_string(right_stripped_line):
-				multiline_string_start = right_stripped_line[-3:]
-	if not found_setting:
+	parser = SettingsParser()
+	parser.parse_file(path)
+	if setting_name in parser.duplicate_settings:
+		raise OSError(f"Found duplicate setting assignment for {setting_name} inside file {path}")
+	if setting_name not in parser.settings:
 		raise OSError(f"Could not find {setting_name} inside file {path}")
-	lines = [l for i, l in enumerate(lines) if i not in lines_to_remove]
+	lines = parser.lines
+	info = parser.settings[setting_name]
+	lines[info.line_index] = new_text
+	# remove original multiline string text after the line
+	value = info.value
+	if isinstance(value, str) and "\n" in value:
+		line_after_multiline_string = info.line_index + value.count("\n")
+		print(lines[line_after_multiline_string])
+		print(value.count("\n"))
+		lines = lines[:info.line_index+1] + lines[line_after_multiline_string:]
+
 	with open(path, "w") as f:
 		f.write("\n".join(lines))
 
