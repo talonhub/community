@@ -147,13 +147,13 @@ def replace_setting_assignment(path, setting_name, new_text):
 				multiline_string_start = None
 		elif line.startswith(setting_text) or line.startswith(commented_setting_text):
 			if found_setting:
-				raise IOError(f"Found duplicate setting assignment for {setting_name} inside file {path}")
+				raise OSError(f"Found duplicate setting assignment for {setting_name} inside file {path}")
 			lines[i] = new_text
 			found_setting = True
 			if is_start_of_multiline_string(right_stripped_line):
 				multiline_string_start = right_stripped_line[-3:]
 	if not found_setting:
-		raise IOError(f"Could not find {setting_name} inside file {path}")
+		raise OSError(f"Could not find {setting_name} inside file {path}")
 	lines = [l for i, l in enumerate(lines) if i not in lines_to_remove]
 	with open(path, "w") as f:
 		f.write("\n".join(lines))
@@ -192,7 +192,7 @@ def update_tag(path, name, should_be_active):
 			detected_tag_state = True
 		if detected_tag_state is not None:
 			if matching_line is not None:
-				raise IOError(f"Encountered the tag {name} twice in the file {path}!")
+				raise OSError(f"Encountered the tag {name} twice in the file {path}!")
 			else:
 				matching_line = i
 				is_active = detected_tag_state
