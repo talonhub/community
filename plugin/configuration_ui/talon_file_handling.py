@@ -24,6 +24,7 @@ def compute_tag(line):
 	return None
 
 INDENTED_COMMENT_PREFIX = "    # "
+INDENTED_COMMENT_PREFIX_WITHOUT_SPACE = "    #"
 
 def is_start_of_multiline_string(line):
 	return line.endswith('"""') or line.endswith("'''")
@@ -62,7 +63,7 @@ def parse_value(value):
 def remove_starting_single_indent(line: str, is_commented: bool):
 	if is_commented and line.startswith(INDENTED_COMMENT_PREFIX):
 		return line[STANDARD_COMMENT_SIZE:]
-	elif is_commented and line.startswith("    #"):
+	elif is_commented and line.startswith(INDENTED_COMMENT_PREFIX_WITHOUT_SPACE):
 		return line[MINIMAL_COMMENT_SIZE:]
 	return line[SPACES_PER_INDENT:]
 
@@ -164,12 +165,12 @@ def replace_setting_assignment(path, setting_name, new_text):
 
 def update_setting(path, setting_name, new_value):
 	converted_value = convert_value_to_talon_script_literal(new_value)
-	new_setting_text = f"    {setting_name} = {converted_value}"
+	new_setting_text = f"{INDENTATION}{setting_name} = {converted_value}"
 	replace_setting_assignment(path, setting_name, new_setting_text)
 
 def comment_out_setting(path, setting_name, new_value):
 	converted_value = convert_value_to_talon_script_literal(new_value, is_comment=True)
-	new_setting_text = f"    # {setting_name} = {converted_value}"
+	new_setting_text = f"{INDENTED_COMMENT_PREFIX}{setting_name} = {converted_value}"
 	replace_setting_assignment(path, setting_name, new_setting_text)
 
 def toggle_setting_activation(setting):
