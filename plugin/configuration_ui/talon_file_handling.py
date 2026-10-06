@@ -95,12 +95,22 @@ class SettingsParser:
 		self._is_activated = None
 		self._multiline_string_starting_characters = None
 
-	def _add_tag(self, tag, is_active, line_index):
-		if tag in self.duplicate_tags:
+	def _is_duplicate(self, name, dictionary, duplicates):
+		if name in duplicates:
+			return True
+		if name in dictionary:
+			duplicates.add(name)
+			dictionary.pop(name)
+			return True
+		return False
+
+	def _add_setting(self, name, information):
+		if self._is_duplicate(name, self.settings, self.duplicate_settings):
 			return 
-		if tag in self.tags:
-			self.duplicate_tags.add(tag)
-			self.tags.pop(tag)
+		self.settings[name] = information
+
+	def _add_tag(self, tag, is_active, line_index):
+		if self._is_duplicate(tag, self.tags, self.duplicate_tags):
 			return 
 		self.tags[tag] = SettingFileSettingInformation(is_active, line_index)
 
@@ -112,7 +122,7 @@ class SettingsParser:
 
 	def _finalize_multiline(self, line_index) -> None:
 		value = parse_multiline_string(self._multiline_string_lines, not self._is_activated)
-		self.settings[self._current_name] = SettingFileSettingInformation(value, line_index, self._is_activated)
+		self._add_setting(self._current_name, SettingFileSettingInformation(value, line_index, self._is_activated))
 		self._reset_multiline_state()
 
 	def _reset_multiline_state(self) -> None:
@@ -132,7 +142,7 @@ class SettingsParser:
 				self._multiline_string_starting_characters = value[:3]
 				self._is_activated = activated
 			else:
-				self.settings[name] = SettingFileSettingInformation(value, line_index, is_activated=activated)
+				self._add_setting(name, SettingFileSettingInformation(value, line_index, is_activated=activated))
 
 	def parse_file(self, path):
 		with open(path, "r", encoding="utf-8") as f:
