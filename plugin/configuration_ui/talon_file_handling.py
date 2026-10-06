@@ -82,16 +82,27 @@ def compute_commented_or_not_commented_setting(line):
 INDENTATION = "    "
 
 class SettingsParser:
-	__slots__ = ('_is_activated', '_multiline_string_lines', 'settings', '_multiline_string_starting_characters', 'tags', '_current_name', 'lines')
+	__slots__ = ('_is_activated', '_multiline_string_lines', 'settings', 'duplicate_tags', 'duplicate_settings', '_multiline_string_starting_characters', 'tags', '_current_name', 'lines')
 	def __init__(self):
 		self.tags = {}
 		self.settings = {}
+		self.duplicate_tags = set()
+		self.duplicate_settings = set()
 		self.lines = []
 
 		self._current_name = None
 		self._multiline_string_lines = []
 		self._is_activated = None
 		self._multiline_string_starting_characters = None
+
+	def _add_tag(self, tag, is_active, line_index):
+		if tag in self.duplicate_tags:
+			return 
+		if tag in self.tags:
+			self.duplicate_tags.add(tag)
+			self.tags.pop(tag)
+			return 
+		self.tags[tag] = SettingFileSettingInformation(is_active, line_index)
 
 	def _add_to_multiline_string(self, line, line_index) -> None:
 		if self._multiline_string_starting_characters is not None:
@@ -110,9 +121,9 @@ class SettingsParser:
 
 	def _process_simple_line(self, line, line_index) -> None:
 		if tag := compute_tag(line):
-			self.tags[tag] = SettingFileSettingInformation(True, line_index)
+			self._add_tag(tag, True, line_index)
 		elif tag := compute_commented_tag(line):
-			self.tags[tag] = SettingFileSettingInformation(False, line_index)
+			self._add_tag(tag, False, line_index)
 		elif setting := compute_commented_or_not_commented_setting(line):
 			name, value, is_multiline_start, activated = setting
 			if is_multiline_start:
