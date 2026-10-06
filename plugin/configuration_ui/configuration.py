@@ -47,11 +47,7 @@ class Setting:
 
 
 async def draw_toggle(setting: Setting, ui):
-	value = setting.value.get()
 	ui.checkbox(setting.value, setting.get_description())
-	new_value = setting.value.get()
-	if value != new_value:
-		setting.update_function(setting.path, setting.name, new_value)
 		
 def create_tag_setting(name):
 	return Setting(
@@ -74,40 +70,25 @@ def create_boolean_setting(name, path=None):
 	return result
 
 async def draw_numeric_input(setting: Setting, ui, minimum, maximum):
-	old_value = setting.value.get()
 	ui.add(egui.DragValue(setting.value))
 	value = setting.value.get()
 	if minimum is not None and value < minimum:
 		setting.value.set(minimum)
 	if maximum is not None and value > maximum:
 		setting.value.set(maximum)
-	if old_value != value:
-		setting.update_function(setting.path, setting.name, value)
 
 async def draw_slider_input(setting: Setting, ui, minimum, maximum):
-	old_value = setting.value.get()
 	slider = egui.Slider(
 		setting.value,
 		minimum,
 		maximum)
 	ui.add(slider)
-	value = setting.value.get()
-	if old_value != value:
-		setting.update_function(setting.path, setting.name, value)
 
 async def draw_single_line_text_input(setting: Setting, ui):
-	old_value = setting.value.get()
 	ui.add(egui.TextEdit.singleline(setting.value))
-	value = setting.value.get()
-	if old_value != value:
-		setting.update_function(setting.path, setting.name, value)
 
 async def draw_multiline_text_input(setting: Setting, ui):
-	old_value = setting.value.get()
 	ui.add(egui.TextEdit.multiline(setting.value))
-	value = setting.value.get()
-	if old_value != value:
-		setting.update_function(setting.path, setting.name, value)
 
 def create_numeric_setting(name, minimum=None, maximum=None, path=None, use_slider=False):
 	ui_function = draw_slider_input if use_slider else draw_numeric_input
@@ -335,6 +316,7 @@ class Manager:
 		ui.separator()
 
 	async def draw_settings_ui(self, ui, setting, page):
+		old_value = setting.value.get()
 		async with ui.group():
 			readable_name = compute_readable_name(setting.name, page.prefix)
 			async with ui.horizontal():
@@ -355,6 +337,9 @@ class Manager:
 					async with ui.add_enabled_ui(setting.is_activated or setting.is_tag):
 						try:
 							await setting.draw(setting, ui)
+							value = setting.value.get()
+							if old_value != value:
+								setting.update_function(setting.path, setting.name, value)
 						except Exception as ex:
 							self.error_message = f"Something went wrong: {ex}"
 
