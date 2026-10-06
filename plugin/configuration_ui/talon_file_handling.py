@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
 from ast import literal_eval
+import re
 
 SPACES_PER_INDENT = 4
 STANDARD_COMMENT_SIZE = SPACES_PER_INDENT + 2
@@ -32,19 +33,19 @@ def is_start_of_multiline_string(line):
 def compute_setting(line: str, prefix: str):
 	if not line.startswith(prefix):
 		return None
-	equals_index = line.find(" = ")
-	# there is no setting here if there is no assignment, there is nothing after the assignment, there is no room for the prefix, and there is no letter right after the prefix
+	before, separator, righthand_side = line.partition(" = ")
+	
 	# we are checking for the pattern:
 	# prefix at least one letter = something
-	if equals_index == -1 or equals_index >= len(line) - 3 or len(line) < len(prefix) or not line[len(prefix)].isalpha():
+	# give up if the separator is not found, there is nothing after it, or the first character after the prefix is not alphabetic
+	if not righthand_side or not line[len(prefix)].isalpha():
 		return None
-	righthand_side = line[equals_index+3:]
 	is_multiline_string = is_start_of_multiline_string(righthand_side.lstrip())
 	if is_multiline_string:
 		value = righthand_side.lstrip()
 	else:
 		value = parse_value(righthand_side.strip())
-	name = line[len(prefix):equals_index]
+	name = before[len(prefix):]
 	return name, value, is_multiline_string
 
 VALUE_UNAVAILABLE = ...
