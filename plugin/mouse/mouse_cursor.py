@@ -30,7 +30,7 @@ mod = Module()
 
 mod.tag(
     "mouse_cursor_commands_enable",
-    desc="Tag enables hide/show mouse cursor commands",
+    desc="Enables hide/show mouse cursor commands",
 )
 
 
