@@ -10,14 +10,14 @@ mod.tag("pop_twice_to_wake", desc="tag for enabling pop twice to wake in sleep m
 mod.setting(
     "double_pop_speed_minimum",
     type=float,
-    desc="""Shortest time in seconds to accept a second pop to trigger additional actions""",
+    desc="""Two pops must be at least this many seconds apart to trigger `pop twice` actions""",
     default=0.1,
 )
 
 mod.setting(
     "double_pop_speed_maximum",
     type=float,
-    desc="""Longest time in seconds to accept a second pop to trigger additional actions""",
+    desc="""Two pops must be at most this many seconds apart to trigger `pop twice` actions""",
     default=0.3,
 )
 
