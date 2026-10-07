@@ -8,7 +8,7 @@ mod.setting(
     "listening_timeout_minutes",
     int,
     default=-1,
-    desc="After X mintues, disable speech recognition",
+    desc="Puts Talon into sleep mode if no commands are spoken for this many minutes",
 )
 mod.setting(
     "listening_timeout_show_notification",
