@@ -212,6 +212,27 @@ def create_color_picker_setting(name, path=None):
 		result.path = path
 	return result
 
+async def draw_discreet_choices_input(setting: Setting, ui, choices):
+	async with (
+		egui.ComboBox(setting.name, "pick option")
+		.selected_text(str(setting.value.get()))
+		.show()
+	) as combo_box:
+		if combo_box.shown:
+			combo_ui = combo_box.ui
+			for value, text in choices:
+				combo_ui.selectable_value(setting.value, value, text)
+
+def create_discreet_choices_setting(name, choices, path=None):
+	"""Choices is an iterable of tuples with the value and text of each option respectively"""
+	result = Setting(
+		name,
+		lambda setting, ui: draw_discreet_choices_input(setting, ui, choices),
+	)
+	if path is not None:
+		result.path = path
+	return result
+
 @dataclass
 class Page:
 	title: str
@@ -253,7 +274,10 @@ class Manager:
 				"",
 				[
 					create_numeric_setting("speech.timeout", 0.0),
-					create_text_setting("user.initial_mode"),
+					create_discreet_choices_setting("user.initial_mode",[
+						(mode, f"{mode} mode") for mode in 
+						("dictation", "command", "mixed", "sleep")
+					]),
 					create_numeric_setting("user.listening_timeout_minutes", -1),
 				]
 			),
