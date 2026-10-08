@@ -160,6 +160,11 @@ def is_valid_hexadecimal_rgb(text):
 
 COLOR_NAMES = ["black","blue","gold","gray","green","light_blue","light_green","light_red","magenta","red","white",]
 
+def compute_hexadecimal_from_color_name(name):
+	function = getattr(egui.Color32, name)
+	color = function()
+	return color.to_hex()[1:-2]
+
 async def draw_color_picker_input(setting: Setting, ui):
 	value = setting.value.get()
 	async with ui.horizontal_wrapped():
@@ -172,6 +177,9 @@ async def draw_color_picker_input(setting: Setting, ui):
 			new_value = convert_rgb_to_string(out_rgba.to_srgba_unmultiplied()[:3])
 
 			color_name = egui.Mutable("")
+			for name in COLOR_NAMES:
+				if compute_hexadecimal_from_color_name(name) == value:
+					color_name.set(name)
 			async with (
 				egui.ComboBox(setting.name, "pick by name")
 				.selected_text(color_name.get())
@@ -183,9 +191,7 @@ async def draw_color_picker_input(setting: Setting, ui):
 						combo_ui.selectable_value(color_name, name, name)
 			name = color_name.get()
 			if name != "":
-				function = getattr(egui.Color32, name)
-				color = function()
-				new_value = color.to_hex()[1:-2]
+				new_value = compute_hexadecimal_from_color_name(name)
 
 			if new_value != setting.value.get().lower():
 				setting.value.set(new_value)
