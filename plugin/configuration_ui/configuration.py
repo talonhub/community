@@ -72,7 +72,12 @@ def create_boolean_setting(name, path=None):
 		result.path = path
 	return result
 
+def make_value_float_if_there_is_a_float_bound(value, minimum, maximum):
+	if (isinstance(minimum, float) or isinstance(maximum, float)) and isinstance(value.get(), int):
+		value.set(float(value.get()))
+
 async def draw_numeric_input(setting: Setting, ui, minimum, maximum):
+	make_value_float_if_there_is_a_float_bound(setting.value, minimum, maximum)
 	ui.add(egui.DragValue(setting.value))
 	value = setting.value.get()
 	if minimum is not None and value < minimum:
@@ -81,6 +86,7 @@ async def draw_numeric_input(setting: Setting, ui, minimum, maximum):
 		setting.value.set(maximum)
 
 async def draw_slider_input(setting: Setting, ui, minimum, maximum):
+	make_value_float_if_there_is_a_float_bound(setting.value, minimum, maximum)
 	slider = egui.Slider(
 		setting.value,
 		minimum,
