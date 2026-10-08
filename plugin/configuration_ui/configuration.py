@@ -340,7 +340,9 @@ class Manager:
 				"Window Management",
 				"",
 				[
-					create_text_setting("user.window_snap_screen"),
+					create_discreet_choices_setting("user.window_snap_screen", [
+						(option, option) for option in ("proportional", "size aware")
+					]),
 					create_tag_setting("user.experimental_window_layout"),
 				]
 			),
