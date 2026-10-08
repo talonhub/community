@@ -52,7 +52,7 @@ is N A: user.insert_between("is.na(", ")")
 is not N A: user.insert_between("!is.na(", ")")
 
 ^function define <user.text>$:
-    user.deprecate_command("2026-08-08", "function define <user.text>", "funky <user.text>")
+    user.deprecate_command("2026-10-08", "function define <user.text>", "funky <user.text>")
     user.code_private_function(text)
 
 named arg {user.code_parameter_name}:
