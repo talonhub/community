@@ -125,10 +125,27 @@ def parse_rgb_from_string(color):
 		result.append(value)
 	return result
 
+def convert_number_to_hexadecimal_digit(number: int):
+	if number < 10:
+		return str(number)
+	return chr(number - 10 + ord("a"))
+
+def convert_number_to_hexadecimal_string(number: int) -> str:
+	"""Assumes the number is between 0 and 255"""
+	last_place = number % 16
+	first_place = (number - last_place)//16
+	return f"{convert_number_to_hexadecimal_digit(first_place)}{convert_number_to_hexadecimal_digit(last_place)}"
+
+def convert_rgb_to_string(rgb):
+	hexadecimal_digits = [convert_number_to_hexadecimal_string(n) for n in rgb]
+	return "".join(hexadecimal_digits)
 
 async def draw_color_picker_input(setting: Setting, ui):
 	rgb = egui.Mutable(parse_rgb_from_string(setting.value.get()))
 	egui.color_edit_button_rgb(ui, rgb)
+	new_value = convert_rgb_to_string(rgb.get())
+	setting.value.set(new_value)
+
 
 def create_color_picker_setting(name, path=None):
 	result = Setting(
