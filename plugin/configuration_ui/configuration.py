@@ -133,7 +133,7 @@ def convert_number_to_hexadecimal_digit(number: int):
 def convert_number_to_hexadecimal_string(number: int) -> str:
 	"""Assumes the number is between 0 and 255"""
 	last_place = number % 16
-	first_place = (number - last_place)//16
+	first_place = number//16
 	return f"{convert_number_to_hexadecimal_digit(first_place)}{convert_number_to_hexadecimal_digit(last_place)}"
 
 def convert_rgb_to_string(rgb):
