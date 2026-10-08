@@ -113,8 +113,21 @@ def create_text_setting(name, path=None, is_multiline=False):
 		result.path = path
 	return result
 
+def hexadecimal_digit_to_decimal(digit):
+	if digit.isdigit():
+		return int(digit)
+	return ord(digit.lower()) - ord("a") + 10
+
+def parse_rgb_from_string(color):
+	result = []
+	for i in range(0, len(color), 2):
+		value = hexadecimal_digit_to_decimal(color[i])*16 + hexadecimal_digit_to_decimal(color[i+1])
+		result.append(value)
+	return result
+
+
 async def draw_color_picker_input(setting: Setting, ui):
-	rgb = egui.Mutable([10, 10, 10])
+	rgb = egui.Mutable(parse_rgb_from_string(setting.value.get()))
 	egui.color_edit_button_rgb(ui, rgb)
 
 def create_color_picker_setting(name, path=None):
