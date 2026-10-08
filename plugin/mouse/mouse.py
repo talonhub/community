@@ -13,7 +13,7 @@ mod.setting(
     "mouse_enable_pop_click",
     type=int,
     default=0,
-    desc="Decides how pop click should work in 'control mouse' mode.\n0 = off\n1 = on with eyetracker but not with zoom mouse mode\n2 = on but not with zoom mouse mode",
+    desc="Decides how pop to click should work in 'control mouse' mode.\n0 = off\n1 = on with eyetracker but not with zoom mouse mode\n2 = on but not with zoom mouse mode",
 )
 mod.setting(
     "mouse_enable_pop_stops_scroll",
