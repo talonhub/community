@@ -27,7 +27,7 @@ mod.setting(
     "help_sort_contexts_by_specificity",
     type=bool,
     default=True,
-    desc="Sort contexts by specificity before alphabetically. Otherwise, contexts are just sorted alphabetically.",
+    desc="Sort contexts by specificity before sorting alphabetically. Otherwise, contexts are just sorted alphabetically.",
 )
 
 ctx = Context()
