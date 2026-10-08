@@ -39,9 +39,12 @@ class Setting:
 	def get_description(self):
 		try:
 			if self.is_tag:
-				return registry.decls.tags[self.name].desc
+				description = registry.decls.tags[self.name].desc
 			else:
-				return registry.decls.settings[self.name].desc
+				description = registry.decls.settings[self.name].desc
+			if not description:
+				return DEFAULT_DESCRIPTION
+			return description
 		except Exception as ex:
 			return DEFAULT_DESCRIPTION
 
@@ -109,6 +112,9 @@ def create_text_setting(name, path=None, is_multiline=False):
 	if path is not None:
 		result.path = path
 	return result
+
+async def draw_color_picker_input(setting: Setting, ui):
+	pass
 
 @dataclass
 class Page:
