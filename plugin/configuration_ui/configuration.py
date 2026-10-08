@@ -141,10 +141,14 @@ def convert_rgb_to_string(rgb):
 	return "".join(hexadecimal_digits)
 
 async def draw_color_picker_input(setting: Setting, ui):
-	rgb = egui.Mutable(parse_rgb_from_string(setting.value.get()))
+	red, green, blue = parse_rgb_from_string(setting.value.get())
+	rgba = egui.Rgba.from_srgba_unmultiplied(red, green, blue, 255)
+	rgb = egui.Mutable([rgba.r, rgba.g, rgba.b])
 	egui.color_edit_button_rgb(ui, rgb)
 	new_value = convert_rgb_to_string(rgb.get())
-	setting.value.set(new_value)
+	# if new_value != setting.value.get().lower():
+	# 	print(rgb.get(), new_value)
+	# 	setting.value.set(new_value)
 
 
 def create_color_picker_setting(name, path=None):
