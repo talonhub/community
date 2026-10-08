@@ -320,7 +320,9 @@ class Manager:
 					create_tag_setting("user.pop_twice_to_wake"),
 					create_numeric_setting("user.double_pop_speed_minimum", 0.0),
 					create_numeric_setting("user.double_pop_speed_maximum", 0.0),
-					create_numeric_setting("user.mouse_enable_pop_click", 0, 2),
+					create_discreet_choices_setting("user.mouse_enable_pop_click", [
+						(0, "off"), (1, "on with eyetracker but not zoom mouse mode"), (2, "on but not with zoom mouse mode")
+					]),
 					create_boolean_setting("user.mouse_enable_pop_stops_scroll"),
 					create_boolean_setting("user.mouse_enable_pop_stops_drag"),
 				]
