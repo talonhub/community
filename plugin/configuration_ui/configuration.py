@@ -114,7 +114,17 @@ def create_text_setting(name, path=None, is_multiline=False):
 	return result
 
 async def draw_color_picker_input(setting: Setting, ui):
-	pass
+	rgb = egui.Mutable([10, 10, 10])
+	egui.color_edit_button_rgb(ui, rgb)
+
+def create_color_picker_setting(name, path=None):
+	result = Setting(
+		name,
+		draw_color_picker_input,
+	)
+	if path is not None:
+		result.path = path
+	return result
 
 @dataclass
 class Page:
@@ -233,14 +243,14 @@ class Manager:
 					create_numeric_setting("user.mode_indicator_y", 0.0, 1.0, MODE_INDICATOR_PATH, use_slider=True),
 					create_numeric_setting("user.mode_indicator_color_alpha", 0.0, 1.0, MODE_INDICATOR_PATH, use_slider=True),
 					create_numeric_setting("user.mode_indicator_color_gradient", 0.0, 1.0, MODE_INDICATOR_PATH, use_slider=True),
-					create_text_setting("user.mode_indicator_color_text", MODE_INDICATOR_PATH),
-					create_text_setting("user.mode_indicator_color_mute", MODE_INDICATOR_PATH),
-					create_text_setting("user.mode_indicator_color_sleep", MODE_INDICATOR_PATH),
-					create_text_setting("user.mode_indicator_color_deep_sleep", MODE_INDICATOR_PATH),
-					create_text_setting("user.mode_indicator_color_dictation", MODE_INDICATOR_PATH),
-					create_text_setting("user.mode_indicator_color_mixed", MODE_INDICATOR_PATH),
-					create_text_setting("user.mode_indicator_color_command", MODE_INDICATOR_PATH),
-					create_text_setting("user.mode_indicator_color_other", MODE_INDICATOR_PATH),
+					create_color_picker_setting("user.mode_indicator_color_text", MODE_INDICATOR_PATH),
+					create_color_picker_setting("user.mode_indicator_color_mute", MODE_INDICATOR_PATH),
+					create_color_picker_setting("user.mode_indicator_color_sleep", MODE_INDICATOR_PATH),
+					create_color_picker_setting("user.mode_indicator_color_deep_sleep", MODE_INDICATOR_PATH),
+					create_color_picker_setting("user.mode_indicator_color_dictation", MODE_INDICATOR_PATH),
+					create_color_picker_setting("user.mode_indicator_color_mixed", MODE_INDICATOR_PATH),
+					create_color_picker_setting("user.mode_indicator_color_command", MODE_INDICATOR_PATH),
+					create_color_picker_setting("user.mode_indicator_color_other", MODE_INDICATOR_PATH),
 				],
 				prefix="user.mode_indicator_"
 			),
