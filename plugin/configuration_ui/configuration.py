@@ -373,7 +373,12 @@ class Manager:
 				"Configuration for Community's subtitles (not the Talon builtin subtitles)",
 				[
 					create_boolean_setting("user.subtitles_show", SUBTITLES_PATH),
-					create_text_setting("user.subtitles_screens", SUBTITLES_PATH),
+					create_discreet_choices_setting("user.subtitles_screens", path=SUBTITLES_PATH, choices=[
+						("all", "all screens"),
+						("main", "main screen as configured in OS"),
+						("cursor", "screen containing mouse pointer"),
+						("focus", "screen containing active/focused window/app")
+					]),
 					create_numeric_setting("user.subtitles_size", 0, path=SUBTITLES_PATH),
 					create_color_picker_setting("user.subtitles_color", SUBTITLES_PATH),
 					create_color_picker_setting("user.subtitles_color_outline", SUBTITLES_PATH),
