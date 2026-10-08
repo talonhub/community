@@ -24,7 +24,7 @@ def on_ready():
         case "mixed":
             actions.user.mixed_mode()
         case _:
-            app.notify("Unsupported mode for user.initial_mode: {initial_mode}")
+            app.notify(f"Unsupported mode for user.initial_mode: {initial_mode}")
 
 
 app.register("ready", on_ready)
