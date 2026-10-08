@@ -137,7 +137,7 @@ def convert_number_to_hexadecimal_string(number: int) -> str:
 	return f"{convert_number_to_hexadecimal_digit(first_place)}{convert_number_to_hexadecimal_digit(last_place)}"
 
 def convert_rgb_to_string(rgb):
-	hexadecimal_digits = [convert_number_to_hexadecimal_string(n) for n in rgb]
+	hexadecimal_digits = [convert_number_to_hexadecimal_string(int(n)) for n in rgb]
 	return "".join(hexadecimal_digits)
 
 async def draw_color_picker_input(setting: Setting, ui):
