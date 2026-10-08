@@ -252,7 +252,10 @@ number_word_leading = f"({'|'.join(leading_words)})"
 
 
 mod.list("number_small", "List of small (0-99) numbers")
-mod.tag("unprefixed_numbers", desc="Dont require prefix when saying a number")
+mod.tag(
+    "unprefixed_numbers",
+    desc='Enable support for saying numbers without a prefix. By default you need to say "numb one" to write "1". Enabling this lets you say "one" to write "1".',
+)
 ctx.lists["user.number_small"] = get_spoken_form_under_one_hundred(
     0,
     99,

@@ -13,14 +13,14 @@ mod.setting(
     "snippet_raw_text_spaces_per_tab",
     type=int,
     default=4,
-    desc="""The number of spaces per tab when inserting snippets as raw text. Set to -1 to insert tabs as tabs, such as in code editors that can expand tabs in pasted or typed text. This setting is provided for applications like web browsers and chat apps.""",
+    desc="""The number of spaces per tab when inserting snippets as raw text. Set to -1 to insert tabs as tabs, such as in code editors that can expand tabs in pasted or typed text. This setting is provided for applications like web browsers and chat apps that do not understand code formatting.""",
 )
 
 mod.setting(
     "snippet_raw_text_paste",
     type=bool,
     default=False,
-    desc="""If true, inserting snippets as raw text will always be done through pasting""",
+    desc="""Inserting snippets as raw text will always be done through pasting""",
 )
 
 RE_STOP = re.compile(

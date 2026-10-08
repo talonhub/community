@@ -154,7 +154,7 @@ mod.list(
 )
 mod.tag(
     "experimental_window_layout",
-    desc="Tag to enable experimental window layout commands",
+    desc="Enables experimental window layout commands",
 )
 
 ctx = Context()
