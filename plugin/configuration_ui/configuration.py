@@ -148,7 +148,6 @@ async def draw_color_picker_input(setting: Setting, ui):
 	out_rgba = egui.Rgba.from_rgb(*rgb.get())
 	new_value = convert_rgb_to_string(out_rgba.to_srgba_unmultiplied()[:3])
 	if new_value != setting.value.get().lower():
-		print(rgb.get(), new_value)
 		setting.value.set(new_value)
 
 
