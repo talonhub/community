@@ -5,7 +5,10 @@ from talon import Context, Module, actions, settings
 ctx = Context()
 mod = Module()
 
-mod.tag("pop_twice_to_wake", desc="Pop twice to wake in sleep mode. Enabling this tag disables other pop to click actions in sleep mode, including pop to click")
+mod.tag(
+    "pop_twice_to_wake",
+    desc="Pop twice to wake in sleep mode. Enabling this tag disables other pop to click actions in sleep mode, including pop to click",
+)
 
 mod.setting(
     "double_pop_speed_minimum",
