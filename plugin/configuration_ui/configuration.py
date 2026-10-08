@@ -167,6 +167,7 @@ def compute_hexadecimal_from_color_name(name):
 
 async def draw_color_picker_input(setting: Setting, ui):
 	value = setting.value.get()
+	new_value = value
 	async with ui.horizontal_wrapped():
 		if is_valid_hexadecimal_rgb(value):
 			red, green, blue = parse_rgb_from_string(value)
@@ -176,27 +177,29 @@ async def draw_color_picker_input(setting: Setting, ui):
 			out_rgba = egui.Rgba.from_rgb(*rgb.get())
 			new_value = convert_rgb_to_string(out_rgba.to_srgba_unmultiplied()[:3])
 
-			color_name = egui.Mutable("")
-			for name in COLOR_NAMES:
-				if compute_hexadecimal_from_color_name(name) == value:
-					color_name.set(name)
-			async with (
-				egui.ComboBox(setting.name, "pick by name")
-				.selected_text(color_name.get())
-				.show()
-			) as combo_box:
-				if combo_box.shown:
-					combo_ui = combo_box.ui
-					for name in COLOR_NAMES:
-						combo_ui.selectable_value(color_name, name, name)
-			name = color_name.get()
-			if name != "":
-				new_value = compute_hexadecimal_from_color_name(name)
-
-			if new_value != setting.value.get().lower():
-				setting.value.set(new_value)
 		else:
 			ui.label("Not valid color.")
+
+		color_name = egui.Mutable("")
+		for name in COLOR_NAMES:
+			if compute_hexadecimal_from_color_name(name) == value:
+				color_name.set(name)
+				break
+		async with (
+			egui.ComboBox(setting.name, "pick by name")
+			.selected_text(color_name.get())
+			.show()
+		) as combo_box:
+			if combo_box.shown:
+				combo_ui = combo_box.ui
+				for name in COLOR_NAMES:
+					combo_ui.selectable_value(color_name, name, name)
+		name = color_name.get()
+		if name != "":
+			new_value = compute_hexadecimal_from_color_name(name)
+
+		if new_value != setting.value.get().lower():
+			setting.value.set(new_value)
 		ui.add(egui.TextEdit.singleline(setting.value))
 
 
