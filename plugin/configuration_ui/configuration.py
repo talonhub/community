@@ -146,15 +146,33 @@ def convert_rgb_to_string(rgb):
 	hexadecimal_digits = [convert_number_to_hexadecimal_string(round(n)) for n in rgb]
 	return "".join(hexadecimal_digits)
 
+def is_valid_hexadecimal_digit(c):
+	if c.isdigit():
+		return True
+	if not c.isalpha():
+		return False
+	character_number = ord(c.lower())
+	return character_number >= ord("a") and character_number <= ord("f")
+
+def is_valid_hexadecimal_rgb(text):
+	return len(text) == 6 and \
+		all([is_valid_hexadecimal_digit(c) for c in text])
+
 async def draw_color_picker_input(setting: Setting, ui):
-	red, green, blue = parse_rgb_from_string(setting.value.get())
-	rgba = egui.Rgba.from_srgba_unmultiplied(red, green, blue, 255)
-	rgb = egui.Mutable([rgba.r, rgba.g, rgba.b])
-	egui.color_edit_button_rgb(ui, rgb)
-	out_rgba = egui.Rgba.from_rgb(*rgb.get())
-	new_value = convert_rgb_to_string(out_rgba.to_srgba_unmultiplied()[:3])
-	if new_value != setting.value.get().lower():
-		setting.value.set(new_value)
+	value = setting.value.get()
+	async with ui.horizontal_wrapped():
+		if is_valid_hexadecimal_rgb(value):
+			red, green, blue = parse_rgb_from_string(value)
+			rgba = egui.Rgba.from_srgba_unmultiplied(red, green, blue, 255)
+			rgb = egui.Mutable([rgba.r, rgba.g, rgba.b])
+			egui.color_edit_button_rgb(ui, rgb)
+			out_rgba = egui.Rgba.from_rgb(*rgb.get())
+			new_value = convert_rgb_to_string(out_rgba.to_srgba_unmultiplied()[:3])
+			if new_value != setting.value.get().lower():
+				setting.value.set(new_value)
+		else:
+			ui.label("Not valid color.")
+		ui.add(egui.TextEdit.singleline(setting.value))
 
 
 def create_color_picker_setting(name, path=None):
