@@ -9,7 +9,7 @@ from talon import Module, actions
 
 from .keys.symbols import symbols_for_create_spoken_forms
 from .numbers.numbers import digits_map, scales, teens, tens
-from .user_settings import track_csv_list
+from .user_settings import register_customization_csv
 
 mod = Module()
 
@@ -42,7 +42,7 @@ def update_regex():
 update_regex()
 
 
-@track_csv_list("file_extensions.csv", headers=("File extension", "Name"))
+@register_customization_csv("file_extensions.csv", headers=("File extension", "Name"))
 def on_extensions(values):
     global FILE_EXTENSIONS_REGEX
     global file_extensions
@@ -56,7 +56,9 @@ def on_extensions(values):
 abbreviations_list = {}
 
 
-@track_csv_list("abbreviations.csv", headers=("Abbreviation", "Spoken Form"))
+@register_customization_csv(
+    "abbreviations.csv", headers=("Abbreviation", "Spoken Form")
+)
 def on_abbreviations(values):
     global abbreviations_list
     abbreviations_list = values
@@ -166,29 +168,6 @@ def create_spoken_form_years(num: str):
             words.append(create_spoken_form_for_number(remainder))
 
     return " ".join(words)
-
-
-# # ---------- create_spoken_form_years  (uncomment to run) ----------
-# def test_year(year: str, expected: str):
-#     result = create_spoken_form_years(year)
-#     print(f"test_year: test string = {year}, result = {result}, expected = {expected}")
-#     assert create_spoken_form_years(year) == expected
-
-
-# print("************* test_year tests ******************")
-# test_year("1100", "eleven hundred")
-# test_year("1905", "nineteen five")
-# test_year("1910", "nineteen ten")
-# test_year("1925", "nineteen twenty five")
-# test_year("2000", "two thousand")
-# test_year("2005", "two thousand five")
-# test_year("2020", "twenty twenty")
-# test_year("2019", "twenty nineteen")
-# test_year("2085", "twenty eighty five")
-# test_year("2100", "twenty one hundred")
-# test_year("2105", "twenty one five")
-# test_year("9999", "ninety nine ninety nine")
-# print("************* test_year tests done**************")
 
 
 def create_single_spoken_form(source: str):
@@ -507,7 +486,10 @@ class Actions:
 
         for name, value in sources.items():
             spoken_forms = actions.user.create_spoken_forms(
-                name, words_to_exclude, minimum_term_length, generate_subsequences
+                name,
+                words_to_exclude,
+                minimum_term_length,
+                generate_subsequences,
             )
             for spoken_form in spoken_forms:
                 all_spoken_forms[spoken_form].append(SpeakableItem(name, value))

@@ -2,7 +2,7 @@ import re
 
 from talon import Context, Module
 
-from ..user_settings import track_csv_list
+from ..user_settings import register_customization_csv
 
 mod = Module()
 ctx = Context()
@@ -454,7 +454,7 @@ def abbreviation(m) -> str:
     return m.abbreviation
 
 
-@track_csv_list(
+@register_customization_csv(
     "abbreviations.csv", headers=("Abbreviation", "Spoken Form"), default=abbreviations
 )
 def on_abbreviations(values):

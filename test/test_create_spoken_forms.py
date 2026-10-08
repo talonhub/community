@@ -11,11 +11,11 @@ if hasattr(talon, "test_mode"):
     import core.abbreviate
     import core.user_settings
 
-    # we need to replace the track_csv_list decorator for unit tests.
+    # we need to replace the register_settings_csv decorator for unit tests.
     CallbackT = Callable[[dict[str, str]], None]
     DecoratorT = Callable[[CallbackT], CallbackT]
 
-    def track_csv_list_test(
+    def register_settings_csv_test(
         filename: str,
         headers: tuple[str, str],
         default: dict[str, str] = None,
@@ -33,10 +33,11 @@ if hasattr(talon, "test_mode"):
 
         return decorator
 
-    # replace track_csv_list before importing create_spoken_forms
-    core.user_settings.track_csv_list = track_csv_list_test
-
+    # replace register_settings_csv before importing create_spoken_forms, so it registers our mock
+    core.user_settings.register_customization_csv = register_settings_csv_test
     import core.create_spoken_forms
+    from core.create_spoken_forms import create_spoken_form_years
+    from core.vocabulary.vocabulary import PhraseReplacer
 
     def test_excludes_words():
         result = actions.user.create_spoken_forms("hi world", ["world"], 0, True)
@@ -163,3 +164,49 @@ if hasattr(talon, "test_mode"):
             # Generated forms at least as numerous as input if subseq is True
             if subseq:
                 assert len(result) >= len(tokens), statement
+
+    def test_create_spoken_form_years():
+        # ---------- create_spoken_form_years  (uncomment to run) ----------
+        def test_year(year: str, expected: str):
+            result = create_spoken_form_years(year)
+            print(
+                f"test_year: test string = {year}, result = {result}, expected = {expected}"
+            )
+            assert create_spoken_form_years(year) == expected
+
+        print("************* test_year tests ******************")
+        test_year("1100", "eleven hundred")
+        test_year("1905", "nineteen five")
+        test_year("1910", "nineteen ten")
+        test_year("1925", "nineteen twenty five")
+        test_year("2000", "two thousand")
+        test_year("2005", "two thousand five")
+        test_year("2020", "twenty twenty")
+        test_year("2019", "twenty nineteen")
+        test_year("2085", "twenty eighty five")
+        test_year("2100", "twenty one hundred")
+        test_year("2105", "twenty one five")
+        test_year("9999", "ninety nine ninety nine")
+        print("************* test_year tests done**************")
+
+    def test_PhraseReplacer():
+        rep = PhraseReplacer()
+        rep.update(
+            {
+                "this": "foo",
+                "that": "bar",
+                "this is": "stopping early",
+                "this is a test": "it worked!",
+            }
+        )
+        assert rep.replace_string("gnork") == "gnork"
+        assert rep.replace_string("this") == "foo"
+        assert rep.replace_string("this that this") == "foo bar foo"
+        assert rep.replace_string("this is a test") == "it worked!"
+        assert (
+            rep.replace_string("well this is a test really") == "well it worked! really"
+        )
+        assert rep.replace_string("try this is too") == "try stopping early too"
+        assert (
+            rep.replace_string("this is a tricky one") == "stopping early a tricky one"
+        )

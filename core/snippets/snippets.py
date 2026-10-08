@@ -5,8 +5,8 @@ from talon import Context, Module, actions, app, fs
 
 from ..modes.code_languages import code_languages
 from ..user_settings import (
+    SETTING_DIRECTORY_DOCUMENTATION,
     get_setting_directories,
-    setting_directory_documentation,
 )
 from .snippet_types import (
     InsertionSnippet,
@@ -32,7 +32,7 @@ mod.setting(
     desc=f'''
     Directory path(s) containing additional snippets. Can be relative to the Talon user folder, or absolute.
 
-    {setting_directory_documentation}
+    {SETTING_DIRECTORY_DOCUMENTATION}
 
     Examples:
       # Single relative path

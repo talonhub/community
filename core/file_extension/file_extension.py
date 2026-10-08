@@ -1,6 +1,6 @@
 from talon import Context, Module
 
-from ..user_settings import track_csv_list
+from ..user_settings import register_customization_csv
 
 mod = Module()
 mod.list("file_extension", desc="A file extension, such as .py")
@@ -54,7 +54,7 @@ _file_extensions_defaults = {
 ctx = Context()
 
 
-@track_csv_list(
+@register_customization_csv(
     "file_extensions.csv",
     headers=("File extension", "Name"),
     default=_file_extensions_defaults,

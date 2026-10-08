@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 from talon import Context, Module
 
-from ..user_settings import track_csv_list, track_file
+from ..user_settings import register_customization_csv, track_file
 
 mod = Module()
 ctx = Context()
@@ -92,7 +92,9 @@ csv_contacts: list[Contact] = []
 json_contacts: list[Contact] = []
 
 
-@track_csv_list("contacts.csv", headers=("Name", "Email"), default={}, private=True)
+@register_customization_csv(
+    "contacts.csv", headers=("Name", "Email"), default={}, private=True
+)
 def on_contacts_csv(values):
     global csv_contacts
     csv_contacts = []
