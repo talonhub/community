@@ -17,13 +17,13 @@ mod.setting(
     "mode_indicator_show",
     type=bool,
     default=False,
-    desc="If true the mode indicator is shown",
+    desc="Show the mode indicator",
 )
 mod.setting(
     "mode_indicator_show_microphone_name",
     type=bool,
     default=False,
-    desc="Show first two letters of microphone name if true",
+    desc="Show the first two letters of the microphone name",
 )
 mod.setting(
     "mode_indicator_size",
@@ -50,14 +50,14 @@ mod.setting(
     type=float,
     desc="Mode indicator gradient brightness in percentages(0-1). 0=darkest, 1=brightest",
 )
-mod.setting("mode_indicator_color_text", type=str)
-mod.setting("mode_indicator_color_mute", type=str)
-mod.setting("mode_indicator_color_sleep", type=str)
-mod.setting("mode_indicator_color_deep_sleep", type=str)
-mod.setting("mode_indicator_color_dictation", type=str)
-mod.setting("mode_indicator_color_mixed", type=str)
-mod.setting("mode_indicator_color_command", type=str)
-mod.setting("mode_indicator_color_other", type=str)
+mod.setting("mode_indicator_color_text", type=str, desc="The color of the optional mode indicator overlay text")
+mod.setting("mode_indicator_color_mute", type=str, desc="The color of the mode indicator when the active microphone is None")
+mod.setting("mode_indicator_color_sleep", type=str, desc="The color of the mode indicator in sleep mode")
+mod.setting("mode_indicator_color_deep_sleep", type=str, desc="The color of the mode indicator in deep sleep")
+mod.setting("mode_indicator_color_dictation", type=str, desc="The color of the mode indicator in dictation mode")
+mod.setting("mode_indicator_color_mixed", type=str, desc="The color of the mode indicator in mixed mode")
+mod.setting("mode_indicator_color_command", type=str, desc="The color of the mode indicator in command mode")
+mod.setting("mode_indicator_color_other", type=str, desc="The color of the mode indicator in other modes")
 
 
 setting_values = dict.fromkeys(
