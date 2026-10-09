@@ -1,5 +1,6 @@
 from ast import literal_eval
 from dataclasses import dataclass
+from typing import Any
 
 SPACES_PER_INDENT = 4
 STANDARD_COMMENT_SIZE = SPACES_PER_INDENT + 2
@@ -204,8 +205,8 @@ def convert_value_to_talon_script_literal(value, is_comment=False) -> str:
         if "\n" in value:
             lines = value.split("\n")
             prefix = INDENTED_COMMENT_PREFIX if is_comment else INDENTATION
-            indented_lines = [f"{prefix}{l}" for l in lines]
-            return f'"""\n{"\n".join(indented_lines)}"""'
+            indented_lines = "\n".join([f"{prefix}{l}" for l in lines])
+            return f'"""\n{indented_lines}"""'
         return f'"{value}"'
     raise ValueError(f"Could not convert value {value} to Talonscript")
 

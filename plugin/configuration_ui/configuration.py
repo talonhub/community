@@ -190,7 +190,7 @@ def is_valid_hexadecimal_digit(c):
 
 
 def is_valid_hexadecimal_rgb(text):
-    return len(text) == 6 and all([is_valid_hexadecimal_digit(c) for c in text])
+    return len(text) == 6 and all(is_valid_hexadecimal_digit(c) for c in text)
 
 
 COLOR_NAMES = [
@@ -596,11 +596,10 @@ class Manager:
         async with ui.group():
             readable_name = compute_readable_name(setting.name, page.prefix)
             async with ui.horizontal():
-                if not setting.is_tag:
-                    if ui.checkbox(egui.Mutable(setting.is_activated), "").clicked():
-                        error_message = toggle_setting_activation(setting)
-                        if error_message is not None:
-                            self.error_message = error_message
+                if not setting.is_tag and ui.checkbox(egui.Mutable(setting.is_activated), "").clicked():
+                    error_message = toggle_setting_activation(setting)
+                    if error_message is not None:
+                        self.error_message = error_message
                 async with ui.vertical():
                     ui.strong(readable_name)
                     ui.weak(setting.name)
