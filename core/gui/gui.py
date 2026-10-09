@@ -14,13 +14,13 @@ from talon import cron, ui
 from talon.egui import Window
 from talon.screen import Screen
 
+from talon import Module, settings
+
 # This code currently does not support changing the scale with imgui.scale.
 TEXT_COLOR_DARK_MODE = "#D0D0D0"
 BUTTON_PADDING = egui.Vec2(5.0, 2.5)
 VERTICAL_ITEM_SPACING = 1.0
 INNER_MARGIN = 16.0
-
-from talon import Module, settings
 
 mod = Module()
 
