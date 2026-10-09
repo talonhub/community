@@ -77,15 +77,13 @@ def create_tag_setting(name):
     )
 
 
-def create_boolean_setting(name, path=None):
+def create_boolean_setting(name):
     result = Setting(
         name,
         draw_toggle,
         update_setting,
         draws_description=True,
     )
-    if path is not None:
-        result.path = path
     return result
 
 
@@ -121,19 +119,17 @@ async def draw_multiline_text_input(setting: Setting, ui):
 
 
 def create_numeric_setting(
-    name, minimum=None, maximum=None, path=None, use_slider=False
+    name, minimum=None, maximum=None, use_slider=False
 ):
     ui_function = draw_slider_input if use_slider else draw_numeric_input
     result = Setting(
         name,
         lambda setting, ui: ui_function(setting, ui, minimum, maximum),
     )
-    if path is not None:
-        result.path = path
     return result
 
 
-def create_text_setting(name, path=None, is_multiline=False):
+def create_text_setting(name, is_multiline=False):
     ui_function = (
         draw_multiline_text_input if is_multiline else draw_single_line_text_input
     )
@@ -141,8 +137,6 @@ def create_text_setting(name, path=None, is_multiline=False):
         name,
         ui_function,
     )
-    if path is not None:
-        result.path = path
     return result
 
 
@@ -252,13 +246,11 @@ async def draw_color_picker_input(setting: Setting, ui):
         ui.add(egui.TextEdit.singleline(setting.value))
 
 
-def create_color_picker_setting(name, path=None):
+def create_color_picker_setting(name):
     result = Setting(
         name,
         draw_color_picker_input,
     )
-    if path is not None:
-        result.path = path
     return result
 
 
@@ -274,14 +266,12 @@ async def draw_discreet_choices_input(setting: Setting, ui, choices):
                 combo_ui.selectable_value(setting.value, value, text)
 
 
-def create_discreet_choices_setting(name, choices, path=None):
+def create_discreet_choices_setting(name, choices):
     """Choices is an iterable of tuples with the value and text of each option respectively"""
     result = Setting(
         name,
         lambda setting, ui: draw_discreet_choices_input(setting, ui, choices),
     )
-    if path is not None:
-        result.path = path
     return result
 
 
