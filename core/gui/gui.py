@@ -15,11 +15,21 @@ from talon.egui import Window
 from talon.screen import Screen
 
 # This code currently does not support changing the scale with imgui.scale.
-TEXT_SIZE = 12
 TEXT_COLOR_DARK_MODE = "#D0D0D0"
 BUTTON_PADDING = egui.Vec2(5.0, 2.5)
 VERTICAL_ITEM_SPACING = 1.0
 INNER_MARGIN = 16.0
+
+from talon import Module, settings
+
+mod = Module()
+
+mod.setting(
+    "community_egui_text_size",
+    type=float,
+    default=12.0,
+    desc="The standard text size for Community egui UIs"
+)
 
 
 def convert_key_value_pairs_to_rows(dictionary):
@@ -139,7 +149,7 @@ class UIWrapper:
         subtitle: an optional subtitle shown in smaller font
         """
         ui = self._ui(ui)
-        title = egui.RichText(text).size(TEXT_SIZE * 1.5).strong()
+        title = egui.RichText(text).size(settings.get("user.community_egui_text_size") * 1.5).strong()
         ui.label(title)
         if subtitle:
             ui.strong(subtitle)
@@ -154,7 +164,7 @@ class UIWrapper:
     def spacing(self, ui=None):
         """Add space based on the default text size"""
         ui = self._ui(ui)
-        ui.add_space(TEXT_SIZE)
+        ui.add_space(settings.get("user.community_egui_text_size"))
 
     async def draw_table(
         self,
@@ -438,7 +448,7 @@ class GUI:
 
         style.set_text_style(
             egui.TextStyle.Body,
-            egui.FontId(TEXT_SIZE, egui.FontFamily.Proportional),
+            egui.FontId(settings.get("user.community_egui_text_size"), egui.FontFamily.Proportional),
         )
 
         # Default button padding (4, 1) is too little.
