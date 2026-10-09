@@ -6,10 +6,10 @@ import egui
 from talon import Module, fs, registry
 
 from .gui import open_gui
-from .talon_file_handling import *
+from .talon_file_handling import update_setting, VALUE_UNAVAILABLE, update_tag, parse_settings, SettingFileSettingInformation, toggle_setting_activation
 
 
-def compute_vertical_size_from_number_of_lines_in_description(setting: Setting, ui):
+def compute_vertical_size_from_number_of_lines_in_description(setting, ui):
     # this function is currently out of date
     number_of_description_lines = len(setting.description.split("\n"))
     row_size = (
