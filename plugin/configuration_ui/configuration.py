@@ -596,7 +596,10 @@ class Manager:
         async with ui.group():
             readable_name = compute_readable_name(setting.name, page.prefix)
             async with ui.horizontal():
-                if not setting.is_tag and ui.checkbox(egui.Mutable(setting.is_activated), "").clicked():
+                if (
+                    not setting.is_tag
+                    and ui.checkbox(egui.Mutable(setting.is_activated), "").clicked()
+                ):
                     error_message = toggle_setting_activation(setting)
                     if error_message is not None:
                         self.error_message = error_message
