@@ -10,11 +10,9 @@ from dataclasses import dataclass
 
 import egui
 from skia import Rect
-from talon import cron, ui
+from talon import Module, cron, settings, ui
 from talon.egui import Window
 from talon.screen import Screen
-
-from talon import Module, settings
 
 # This code currently does not support changing the scale with imgui.scale.
 TEXT_COLOR_DARK_MODE = "#D0D0D0"
