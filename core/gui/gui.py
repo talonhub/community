@@ -507,7 +507,7 @@ class GUI:
             # so when we detect a height change, temporarily re enable auto sizing
             if self._last_height_taken is not None and self._props.will_auto_size():
                 if (
-                    self._previous_height_taken
+                    self._previous_height_taken is not None
                     and self._last_height_taken != self._previous_height_taken
                 ):
                     self._window.autosize = True
