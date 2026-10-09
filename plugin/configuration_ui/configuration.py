@@ -285,12 +285,15 @@ def create_discreet_choices_setting(name, choices, path=None):
     return result
 
 
-@dataclass
 class Page:
-    title: str
-    description: str
-    settings: list[Setting]
-    prefix: str = ""
+    def __init__(self, title, description, settings, prefix="", path=None):
+        self.title = title
+        self.description = description
+        self.settings = settings
+        self.prefix = prefix
+        if path is not None:
+            for setting in self.settings:
+                setting.path = path
 
 
 def update_setting_information(
@@ -421,68 +424,65 @@ class Manager:
                 "The mode indicator shows a colored circle indicating which mode is active.",
                 [
                     create_boolean_setting(
-                        "user.mode_indicator_show", MODE_INDICATOR_PATH
+                        "user.mode_indicator_show",
                     ),
                     create_boolean_setting(
-                        "user.mode_indicator_show_microphone_name", MODE_INDICATOR_PATH
+                        "user.mode_indicator_show_microphone_name"
                     ),
                     create_numeric_setting(
-                        "user.mode_indicator_size", 1, path=MODE_INDICATOR_PATH
+                        "user.mode_indicator_size", 1
                     ),
                     create_numeric_setting(
                         "user.mode_indicator_x",
                         0.0,
                         1.0,
-                        MODE_INDICATOR_PATH,
                         use_slider=True,
                     ),
                     create_numeric_setting(
                         "user.mode_indicator_y",
                         0.0,
                         1.0,
-                        MODE_INDICATOR_PATH,
                         use_slider=True,
                     ),
                     create_numeric_setting(
                         "user.mode_indicator_color_alpha",
                         0.0,
                         1.0,
-                        MODE_INDICATOR_PATH,
                         use_slider=True,
                     ),
                     create_numeric_setting(
                         "user.mode_indicator_color_gradient",
                         0.0,
                         1.0,
-                        MODE_INDICATOR_PATH,
                         use_slider=True,
                     ),
                     create_color_picker_setting(
-                        "user.mode_indicator_color_text", MODE_INDICATOR_PATH
+                        "user.mode_indicator_color_text"
                     ),
                     create_color_picker_setting(
-                        "user.mode_indicator_color_mute", MODE_INDICATOR_PATH
+                        "user.mode_indicator_color_mute"
                     ),
                     create_color_picker_setting(
-                        "user.mode_indicator_color_sleep", MODE_INDICATOR_PATH
+                        "user.mode_indicator_color_sleep"
                     ),
                     create_color_picker_setting(
-                        "user.mode_indicator_color_deep_sleep", MODE_INDICATOR_PATH
+                        "user.mode_indicator_color_deep_sleep"
                     ),
                     create_color_picker_setting(
-                        "user.mode_indicator_color_dictation", MODE_INDICATOR_PATH
+                        "user.mode_indicator_color_dictation"
                     ),
                     create_color_picker_setting(
-                        "user.mode_indicator_color_mixed", MODE_INDICATOR_PATH
+                        "user.mode_indicator_color_mixed"
                     ),
                     create_color_picker_setting(
-                        "user.mode_indicator_color_command", MODE_INDICATOR_PATH
+                        "user.mode_indicator_color_command"
                     ),
                     create_color_picker_setting(
-                        "user.mode_indicator_color_other", MODE_INDICATOR_PATH
+                        "user.mode_indicator_color_other"
                     ),
                 ],
                 prefix="user.mode_indicator_",
+                path=MODE_INDICATOR_PATH,
             ),
             Page(
                 "Subtitles",
