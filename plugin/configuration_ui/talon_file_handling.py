@@ -198,7 +198,7 @@ def parse_settings(path):
 def convert_value_to_talon_script_literal(value, is_comment=False) -> str:
     if isinstance(value, bool):
         return str(value).lower()
-    if isinstance(value, int) or isinstance(value, float):
+    if isinstance(value, (int, float)):
         return str(value)
     if isinstance(value, str):
         value = value.replace('"', '\\"')
