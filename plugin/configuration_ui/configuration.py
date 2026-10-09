@@ -426,12 +426,8 @@ class Manager:
                     create_boolean_setting(
                         "user.mode_indicator_show",
                     ),
-                    create_boolean_setting(
-                        "user.mode_indicator_show_microphone_name"
-                    ),
-                    create_numeric_setting(
-                        "user.mode_indicator_size", 1
-                    ),
+                    create_boolean_setting("user.mode_indicator_show_microphone_name"),
+                    create_numeric_setting("user.mode_indicator_size", 1),
                     create_numeric_setting(
                         "user.mode_indicator_x",
                         0.0,
@@ -456,30 +452,14 @@ class Manager:
                         1.0,
                         use_slider=True,
                     ),
-                    create_color_picker_setting(
-                        "user.mode_indicator_color_text"
-                    ),
-                    create_color_picker_setting(
-                        "user.mode_indicator_color_mute"
-                    ),
-                    create_color_picker_setting(
-                        "user.mode_indicator_color_sleep"
-                    ),
-                    create_color_picker_setting(
-                        "user.mode_indicator_color_deep_sleep"
-                    ),
-                    create_color_picker_setting(
-                        "user.mode_indicator_color_dictation"
-                    ),
-                    create_color_picker_setting(
-                        "user.mode_indicator_color_mixed"
-                    ),
-                    create_color_picker_setting(
-                        "user.mode_indicator_color_command"
-                    ),
-                    create_color_picker_setting(
-                        "user.mode_indicator_color_other"
-                    ),
+                    create_color_picker_setting("user.mode_indicator_color_text"),
+                    create_color_picker_setting("user.mode_indicator_color_mute"),
+                    create_color_picker_setting("user.mode_indicator_color_sleep"),
+                    create_color_picker_setting("user.mode_indicator_color_deep_sleep"),
+                    create_color_picker_setting("user.mode_indicator_color_dictation"),
+                    create_color_picker_setting("user.mode_indicator_color_mixed"),
+                    create_color_picker_setting("user.mode_indicator_color_command"),
+                    create_color_picker_setting("user.mode_indicator_color_other"),
                 ],
                 prefix="user.mode_indicator_",
                 path=MODE_INDICATOR_PATH,
