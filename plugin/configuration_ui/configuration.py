@@ -478,22 +478,12 @@ class Manager:
                             ("focus", "screen containing active/focused window/app"),
                         ],
                     ),
-                    create_numeric_setting(
-                        "user.subtitles_size", 0
-                    ),
+                    create_numeric_setting("user.subtitles_size", 0),
                     create_color_picker_setting("user.subtitles_color"),
-                    create_color_picker_setting(
-                        "user.subtitles_color_outline"
-                    ),
-                    create_numeric_setting(
-                        "user.subtitles_timeout_per_char", 0
-                    ),
-                    create_numeric_setting(
-                        "user.subtitles_timeout_min", 0
-                    ),
-                    create_numeric_setting(
-                        "user.subtitles_timeout_max", 0
-                    ),
+                    create_color_picker_setting("user.subtitles_color_outline"),
+                    create_numeric_setting("user.subtitles_timeout_per_char", 0),
+                    create_numeric_setting("user.subtitles_timeout_min", 0),
+                    create_numeric_setting("user.subtitles_timeout_max", 0),
                     create_numeric_setting(
                         "user.subtitles_y",
                         0.0,
