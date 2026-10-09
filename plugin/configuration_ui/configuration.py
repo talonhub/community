@@ -468,10 +468,9 @@ class Manager:
                 "Subtitles",
                 "Configuration for Community's subtitles (not the Talon builtin subtitles)",
                 [
-                    create_boolean_setting("user.subtitles_show", SUBTITLES_PATH),
+                    create_boolean_setting("user.subtitles_show"),
                     create_discreet_choices_setting(
                         "user.subtitles_screens",
-                        path=SUBTITLES_PATH,
                         choices=[
                             ("all", "all screens"),
                             ("main", "main screen as configured in OS"),
@@ -480,30 +479,30 @@ class Manager:
                         ],
                     ),
                     create_numeric_setting(
-                        "user.subtitles_size", 0, path=SUBTITLES_PATH
+                        "user.subtitles_size", 0
                     ),
-                    create_color_picker_setting("user.subtitles_color", SUBTITLES_PATH),
+                    create_color_picker_setting("user.subtitles_color"),
                     create_color_picker_setting(
-                        "user.subtitles_color_outline", SUBTITLES_PATH
+                        "user.subtitles_color_outline"
                     ),
                     create_numeric_setting(
-                        "user.subtitles_timeout_per_char", 0, path=SUBTITLES_PATH
+                        "user.subtitles_timeout_per_char", 0
                     ),
                     create_numeric_setting(
-                        "user.subtitles_timeout_min", 0, path=SUBTITLES_PATH
+                        "user.subtitles_timeout_min", 0
                     ),
                     create_numeric_setting(
-                        "user.subtitles_timeout_max", 0, path=SUBTITLES_PATH
+                        "user.subtitles_timeout_max", 0
                     ),
                     create_numeric_setting(
                         "user.subtitles_y",
                         0.0,
                         1.0,
-                        path=SUBTITLES_PATH,
                         use_slider=True,
                     ),
                 ],
                 prefix="user.subtitles_",
+                path=SUBTITLES_PATH,
             ),
             Page(
                 "Snippets",
