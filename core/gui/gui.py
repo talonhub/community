@@ -513,8 +513,12 @@ class GUI:
                     self._window.autosize = True
                 else:
                     self._window.autosize = False
-                    self._window.resize(
-                        int(self._window.rect.width), int(self._last_height_taken)
-                    )
+                    current_height = self._window.rect.height
+                    # tolerate small differences to prevent fluctuation with small text size
+                    # the auto sizing only overestimates, so this is acceptable
+                    if abs(current_height - self._last_height_taken) > INNER_MARGIN:
+                        self._window.resize(
+                            int(self._window.rect.width), int(self._last_height_taken)
+                        )
                 self._previous_height_taken = self._last_height_taken
             self._window.refresh()
