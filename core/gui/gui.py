@@ -28,7 +28,7 @@ mod.setting(
     "community_egui_text_size",
     type=float,
     default=12.0,
-    desc="The standard text size for Community egui UIs"
+    desc="The standard text size for Community egui UIs",
 )
 
 
@@ -149,7 +149,11 @@ class UIWrapper:
         subtitle: an optional subtitle shown in smaller font
         """
         ui = self._ui(ui)
-        title = egui.RichText(text).size(settings.get("user.community_egui_text_size") * 1.5).strong()
+        title = (
+            egui.RichText(text)
+            .size(settings.get("user.community_egui_text_size") * 1.5)
+            .strong()
+        )
         ui.label(title)
         if subtitle:
             ui.strong(subtitle)
@@ -448,7 +452,10 @@ class GUI:
 
         style.set_text_style(
             egui.TextStyle.Body,
-            egui.FontId(settings.get("user.community_egui_text_size"), egui.FontFamily.Proportional),
+            egui.FontId(
+                settings.get("user.community_egui_text_size"),
+                egui.FontFamily.Proportional,
+            ),
         )
 
         # Default button padding (4, 1) is too little.
