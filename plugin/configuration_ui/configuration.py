@@ -78,13 +78,12 @@ def create_tag_setting(name):
 
 
 def create_boolean_setting(name):
-    result = Setting(
+    return Setting(
         name,
         draw_toggle,
         update_setting,
         draws_description=True,
     )
-    return result
 
 
 def make_value_float_if_there_is_a_float_bound(value, minimum, maximum):
@@ -120,22 +119,20 @@ async def draw_multiline_text_input(setting: Setting, ui):
 
 def create_numeric_setting(name, minimum=None, maximum=None, use_slider=False):
     ui_function = draw_slider_input if use_slider else draw_numeric_input
-    result = Setting(
+    return Setting(
         name,
         lambda setting, ui: ui_function(setting, ui, minimum, maximum),
     )
-    return result
 
 
 def create_text_setting(name, is_multiline=False):
     ui_function = (
         draw_multiline_text_input if is_multiline else draw_single_line_text_input
     )
-    result = Setting(
+    return Setting(
         name,
         ui_function,
     )
-    return result
 
 
 def hexadecimal_digit_to_decimal(digit):
