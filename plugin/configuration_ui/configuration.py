@@ -118,9 +118,7 @@ async def draw_multiline_text_input(setting: Setting, ui):
     ui.add(egui.TextEdit.multiline(setting.value))
 
 
-def create_numeric_setting(
-    name, minimum=None, maximum=None, use_slider=False
-):
+def create_numeric_setting(name, minimum=None, maximum=None, use_slider=False):
     ui_function = draw_slider_input if use_slider else draw_numeric_input
     result = Setting(
         name,
