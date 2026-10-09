@@ -242,11 +242,10 @@ async def draw_color_picker_input(setting: Setting, ui):
 
 
 def create_color_picker_setting(name):
-    result = Setting(
+    return Setting(
         name,
         draw_color_picker_input,
     )
-    return result
 
 
 async def draw_discreet_choices_input(setting: Setting, ui, choices):
@@ -263,11 +262,10 @@ async def draw_discreet_choices_input(setting: Setting, ui, choices):
 
 def create_discreet_choices_setting(name, choices):
     """Choices is an iterable of tuples with the value and text of each option respectively"""
-    result = Setting(
+    return Setting(
         name,
         lambda setting, ui: draw_discreet_choices_input(setting, ui, choices),
     )
-    return result
 
 
 class Page:
