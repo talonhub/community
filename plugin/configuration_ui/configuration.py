@@ -6,7 +6,14 @@ import egui
 from talon import Module, fs, registry
 
 from .gui import open_gui
-from .talon_file_handling import update_setting, VALUE_UNAVAILABLE, update_tag, parse_settings, SettingFileSettingInformation, toggle_setting_activation
+from .talon_file_handling import (
+    VALUE_UNAVAILABLE,
+    SettingFileSettingInformation,
+    parse_settings,
+    toggle_setting_activation,
+    update_setting,
+    update_tag,
+)
 
 
 def compute_vertical_size_from_number_of_lines_in_description(setting, ui):
