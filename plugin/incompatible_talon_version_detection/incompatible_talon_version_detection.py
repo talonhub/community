@@ -7,7 +7,7 @@ def compute_version_number() -> float:
     """Convert the Talon version string to a float by finding the longest prefix that is a valid float. This will only capture the first 2 dot separated numbers in the version"""
     version = app.version
     values = version.split(".")
-    with suppress(Exception):
+    with suppress(ValueError):
         result = float(values[0])
         if len(values) > 1 and values[1].isdigit():
             result += float("0." + values[1])
