@@ -5,9 +5,9 @@
 # distributed under an MIT license Copyright (c) 2021 Andreas Arvidsson
 # You can see the full text of an MIT license in the LICENSE file at the top level directory of this repo.
 
+import math
 from collections.abc import Callable
 from dataclasses import dataclass
-import math
 
 import egui
 from skia import Rect
@@ -130,8 +130,8 @@ class UIWrapper:
     def get_label_row_size(self, ui=None) -> float:
         """Compute the size of a row consisting of a text label"""
         ui = self._ui(ui)
-        return (
-            ui.spacing().item_spacing.y + math.ceil(egui.TextStyle.Body.resolve(ui.style()).size)
+        return ui.spacing().item_spacing.y + math.ceil(
+            egui.TextStyle.Body.resolve(ui.style()).size
         )
 
     def get_item_spacing(self, ui=None) -> float:
