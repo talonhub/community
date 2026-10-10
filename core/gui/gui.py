@@ -269,14 +269,14 @@ def open_gui(
     width: float | None = None,
     height: float | None = None,
     refresh_period: str | None = None,
-    toplevel: bool = True,
+    always_on_top: bool = True,
     decorated: bool = False,
 ):
     """Decorator for for an egui callback drawing function.
     screen: the screen to show the gui on.
     x, y, width, height: location and dimensions of the gui window relative to the screen. The width and height are fractions of the screen width/height.
-    refresh_period: an optional string giving a cron time period for how often to refresh the gui. egui only updates a ui when the user interacts with it by, so setting this causes a periodic refresh. If you only need to update the ui under specific conditions, call .refresh() on the GUI instead.
-    toplevel: decides if the ui should be shown as the top level.
+    refresh_period: an optional string giving a cron time period for how often to refresh the gui. egui only updates a ui when the user interacts with it, so setting this causes a periodic refresh. If you only need to update the ui under specific conditions, call .refresh() on the GUI instead.
+    always_on_top: decides if the ui should be shown as the top level.
     decorated: decides if the gui should be shown with window borders.
     """
 
@@ -289,7 +289,7 @@ def open_gui(
             width=width,
             height=height,
             refresh_period=refresh_period,
-            toplevel=toplevel,
+            always_on_top=always_on_top,
             decorated=decorated,
         )
 
@@ -306,7 +306,7 @@ class Props:
     y: float | None
     width: float | None
     height: float | None
-    toplevel: bool
+    always_on_top: bool
     decorated: bool
 
     def will_auto_size(self):
@@ -318,7 +318,7 @@ class Props:
         window.draggable = True
         window.autosize = self.will_auto_size()
         window.decorated = self.decorated
-        window.toplevel = self.toplevel
+        window.toplevel = self.always_on_top
         window.set_content(callback)
         return window
 
@@ -343,7 +343,7 @@ class GUI:
         width: float | None,
         height: float | None,
         refresh_period: str | None,
-        toplevel: bool,
+        always_on_top: bool,
         decorated: bool,
     ):
         self._props = Props(
@@ -353,7 +353,7 @@ class GUI:
             y=y,
             width=width,
             height=height,
-            toplevel=toplevel,
+            always_on_top=always_on_top,
             decorated=decorated,
         )
         self._window = None
