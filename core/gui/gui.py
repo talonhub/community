@@ -7,6 +7,7 @@
 
 from collections.abc import Callable
 from dataclasses import dataclass
+import math
 
 import egui
 from skia import Rect
@@ -130,7 +131,7 @@ class UIWrapper:
         """Compute the size of a row consisting of a text label"""
         ui = self._ui(ui)
         return (
-            ui.spacing().item_spacing.y + egui.TextStyle.Body.resolve(ui.style()).size
+            ui.spacing().item_spacing.y + math.ceil(egui.TextStyle.Body.resolve(ui.style()).size)
         )
 
     def get_item_spacing(self, ui=None) -> float:
