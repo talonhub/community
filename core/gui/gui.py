@@ -10,7 +10,7 @@ from dataclasses import dataclass
 
 import egui
 from skia import Rect
-from talon import Module, cron, settings, ui
+from talon import cron, settings, ui
 from talon.egui import Window
 from talon.screen import Screen
 
@@ -20,10 +20,11 @@ BUTTON_PADDING = egui.Vec2(5.0, 2.5)
 VERTICAL_ITEM_SPACING = 1.0
 INNER_MARGIN = 16.0
 
-DEFAULT_TEXT_SIZE = 12.0/1.3
+DEFAULT_TEXT_SIZE = 12.0 / 1.3
+
 
 def compute_text_size():
-    return DEFAULT_TEXT_SIZE*settings.get("imgui.scale")
+    return DEFAULT_TEXT_SIZE * settings.get("imgui.scale")
 
 
 def convert_key_value_pairs_to_rows(dictionary):
@@ -143,11 +144,7 @@ class UIWrapper:
         subtitle: an optional subtitle shown in smaller font
         """
         ui = self._ui(ui)
-        title = (
-            egui.RichText(text)
-            .size(compute_text_size() * 1.5)
-            .strong()
-        )
+        title = egui.RichText(text).size(compute_text_size() * 1.5).strong()
         ui.label(title)
         if subtitle:
             ui.strong(subtitle)
