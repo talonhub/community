@@ -20,14 +20,10 @@ BUTTON_PADDING = egui.Vec2(5.0, 2.5)
 VERTICAL_ITEM_SPACING = 1.0
 INNER_MARGIN = 16.0
 
-mod = Module()
+DEFAULT_TEXT_SIZE = 12.0/1.3
 
-mod.setting(
-    "community_egui_text_size",
-    type=float,
-    default=12.0,
-    desc="The standard text size for Community egui UIs",
-)
+def compute_text_size():
+    return DEFAULT_TEXT_SIZE*settings.get("imgui.scale")
 
 
 def convert_key_value_pairs_to_rows(dictionary):
@@ -149,7 +145,7 @@ class UIWrapper:
         ui = self._ui(ui)
         title = (
             egui.RichText(text)
-            .size(settings.get("user.community_egui_text_size") * 1.5)
+            .size(compute_text_size() * 1.5)
             .strong()
         )
         ui.label(title)
@@ -166,7 +162,7 @@ class UIWrapper:
     def spacing(self, ui=None):
         """Add space based on the default text size"""
         ui = self._ui(ui)
-        ui.add_space(settings.get("user.community_egui_text_size"))
+        ui.add_space(compute_text_size())
 
     async def draw_table(
         self,
@@ -451,7 +447,7 @@ class GUI:
         style.set_text_style(
             egui.TextStyle.Body,
             egui.FontId(
-                settings.get("user.community_egui_text_size"),
+                compute_text_size(),
                 egui.FontFamily.Proportional,
             ),
         )
