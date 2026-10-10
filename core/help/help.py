@@ -2,11 +2,16 @@ import math
 import re
 from collections import defaultdict
 from collections.abc import Iterable
-from itertools import islice
-from textwrap import wrap
 from typing import Any, Optional
 
 from talon import Context, Module, actions, imgui, registry, settings
+
+from ...core.gui.gui import (
+    PageScroller,
+    compute_table_height,
+    convert_key_value_pairs_to_rows,
+    open_gui,
+)
 
 mod = Module()
 mod.list("help_contexts", desc="list of available contexts")
@@ -58,6 +63,11 @@ show_enabled_contexts_only = False
 
 selected_list = None
 current_list_page = 1
+
+# used for programmatic scrolling with egui
+page_scroller: PageScroller | None = None
+# this is being used for the egui migrated guis
+current_gui = None
 
 
 def update_title():
@@ -467,6 +477,8 @@ def reset():
     global display_name_to_context_name_map
     global selected_list
     global current_list_page
+    global page_scroller
+    global current_gui
 
     current_context_page = 1
     sorted_display_list = []
@@ -477,6 +489,8 @@ def reset():
     display_name_to_context_name_map = {}
     selected_list = None
     current_list_page = 1
+    page_scroller = None
+    current_gui = None
 
 
 def update_active_contexts_cache(active_contexts):
@@ -636,76 +650,64 @@ def hide_all_help_guis():
     gui_operators.hide()
 
 
-def paginate_list(data, SIZE=None):
-    chunk_size = SIZE or settings.get("user.help_max_command_lines_per_page")
-    it = iter(data)
-    for _ in range(0, len(data), chunk_size):
-        yield {k: data[k] for k in islice(it, chunk_size)}
-
-
-def draw_list_commands(gui: imgui.GUI):
+@open_gui(y=0, refresh_period="500ms")
+async def gui_list_help(ui, ui_wrapper):
     global selected_list
-    global total_page_count
-    global selected_context_page
+    global page_scroller
 
-    talon_list = actions.user.talon_get_active_registry_list(selected_list)
-    # numpages = math.ceil(len(talon_list) / SIZE)
+    # clicking the close button forces a refresh even though we are closing this gui.
+    # #If we are closing this list, just return
+    if not selected_list:
+        return
 
-    pages_list = []
-
-    for item in paginate_list(talon_list):
-        pages_list.append(item)
-    # print(pages_list)
-
-    total_page_count = len(pages_list)
-    return pages_list
-
-
-@imgui.open(y=0)
-def gui_list_help(gui: imgui.GUI):
-    global total_page_count
-    global current_list_page
-    global selected_list
-
-    pages_list = draw_list_commands(gui)
-    total_page_count = len(pages_list)
-    # print(pages_list[current_page])
-
-    if total_page_count == 0:
-        page_info = "empty"
-    else:
-        page_info = f"{current_list_page}/{total_page_count}"
-
-    gui.text(f"List: {selected_list} ({page_info})")
+    # show list name and description for the title
+    title = f"List: {selected_list}"
 
     # Extract description from list declaration, i.e. mod.list(..., desc=...))
     if (desc := registry.decls.lists[selected_list].desc) is not None:
-        for line in wrap(desc):
-            gui.text(line)
+        subtitle = desc
+    else:
+        subtitle = ""
 
-    gui.line()
+    ui_wrapper.title(title, subtitle)
 
-    if len(pages_list) > 0:
-        for key, value in pages_list[current_list_page - 1].items():
-            gui.text(f"{value}: {key}")
+    # setup paging handling
+    page_size = settings.get("user.help_max_command_lines_per_page")
+    page_scroller.page_size = page_size
+    row_size = ui_wrapper.get_label_row_size()
+    maximum_height = compute_table_height(
+        row_size, ui_wrapper.get_item_spacing(), page_size
+    )
 
-    gui.spacer()
+    # get the list
+    talon_list = actions.user.talon_get_active_registry_list(selected_list)
+    rows = convert_key_value_pairs_to_rows(talon_list)
 
-    if total_page_count > 1:
-        if gui.button("Help next"):
-            actions.user.help_next()
+    # show the rows in a table
+    if len(rows) > 0:
+        headers = ["Spoken Form", "Value"]
+        await ui_wrapper.draw_table(
+            headers,
+            rows,
+            maximum_height=maximum_height,
+            row_height=row_size,
+            id_salt="help_list",
+            scroller=page_scroller,
+        )
 
-        if gui.button("Help previous"):
-            actions.user.help_previous()
+    ui_wrapper.spacing()
 
-        if gui.button("Help return"):
-            actions.user.help_return()
+    # show navigation buttons. these are arranged horizontally but will wrap onto more rows if needed
+    async with ui.horizontal_wrapped():
+        if ui_wrapper.button("Help close"):
+            actions.user.help_hide()
 
-    if gui.button("Help refresh"):
-        actions.user.help_refresh()
+        if len(rows) > page_size:
+            if ui_wrapper.button("Help next"):
+                page_scroller.page_down()
 
-    if gui.button("Help close"):
-        actions.user.help_hide()
+            if ui_wrapper.button("Help previous"):
+                page_scroller.page_up()
 
 
 @mod.action_class
@@ -713,9 +715,12 @@ class Actions:
     def help_list(ab: str):
         """Provides the symbol dictionary"""
         # what you say is stored as a trigger
-        global selected_list
+        global selected_list, current_gui, page_scroller
+        gui_list_help.hide()
         reset()
+        current_gui = gui_list_help
         selected_list = ab
+        page_scroller = PageScroller()
         gui_list_help.show()
         register_events(True)
         ctx.tags = ["user.help_open"]
@@ -798,6 +803,11 @@ class Actions:
 
         global current_list_page
 
+        if page_scroller:
+            page_scroller.page_down()
+            refresh_gui()
+            return
+
         if gui_context_help.showing:
             if selected_context is None and search_phrase is None:
                 if current_context_page != total_page_count:
@@ -809,8 +819,7 @@ class Actions:
                     selected_context_page += 1
                 else:
                     selected_context_page = 1
-
-        if gui_list_help.showing or gui_operators.showing:
+        if gui_operators.showing:
             if current_list_page != total_page_count:
                 current_list_page += 1
             else:
@@ -844,6 +853,11 @@ class Actions:
 
         global current_list_page
 
+        if page_scroller:
+            page_scroller.page_up()
+            refresh_gui()
+            return
+
         if gui_context_help.showing:
             if selected_context is None and search_phrase is None:
                 if current_context_page != 1:
@@ -857,7 +871,7 @@ class Actions:
                 else:
                     selected_context_page = total_page_count
 
-        if gui_list_help.showing or gui_operators.showing:
+        if gui_operators.showing:
             if current_list_page != total_page_count:
                 current_list_page -= 1
             else:
@@ -902,3 +916,9 @@ class Actions:
 
 def commands_updated(_):
     update_title()
+
+
+def refresh_gui():
+    # egui UIs must be refreshed to update without user interaction
+    if current_gui:
+        current_gui.refresh()
