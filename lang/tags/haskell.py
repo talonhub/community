@@ -1,11 +1,10 @@
 import re
 from contextlib import suppress
 import logging
-import warnings
 
 # TODO: remove unncessary imports copy pasted from python.py
 
-from talon import Context, Module, actions, settings
+from talon import Context, Module, actions, settings, app
 
 from ...core.described_functions import create_described_insert_between
 from ..tags.generic_types import (
@@ -20,32 +19,34 @@ ctx.matches = r"""
 code.language: haskell
 """
 
-# TODO: change teh python copy pasta to haskell
+# TODO: change teh python copy pasta to haskell + test
 operators = Operators(
     # code_operators_array
     SUBSCRIPT=" !! ",
     # code_operators_assignment
     ASSIGNMENT=" = ",
-    ASSIGNMENT_SUBTRACTION=" -= ",
-    ASSIGNMENT_ADDITION=" += ",
-    ASSIGNMENT_MULTIPLICATION=" *= ",
-    ASSIGNMENT_DIVISION=" /= ",
-    ASSIGNMENT_MODULO=" %= ",
-    ASSIGNMENT_INCREMENT=" += 1",
-    ASSIGNMENT_BITWISE_AND=" &= ",
-    ASSIGNMENT_BITWISE_OR=" |= ",
-    ASSIGNMENT_BITWISE_EXCLUSIVE_OR=" ^= ",
-    ASSIGNMENT_BITWISE_LEFT_SHIFT=" <<= ",
-    ASSIGNMENT_BITWISE_RIGHT_SHIFT=" >>= ",
+    # don't really exist except for library lens
+    # ASSIGNMENT_SUBTRACTION=" -= ",
+    # ASSIGNMENT_ADDITION=" += ",
+    # ASSIGNMENT_MULTIPLICATION=" *= ",
+    # ASSIGNMENT_DIVISION=" /= ",
+    # ASSIGNMENT_MODULO=" %= ",
+    # ASSIGNMENT_INCREMENT=" += 1",
+    # ASSIGNMENT_BITWISE_AND=" &= ",
+    # ASSIGNMENT_BITWISE_OR=" |= ",
+    # ASSIGNMENT_BITWISE_EXCLUSIVE_OR=" ^= ",
+    # ASSIGNMENT_BITWISE_LEFT_SHIFT=" <<= ",
+    # ASSIGNMENT_BITWISE_RIGHT_SHIFT=" >>= ",
     # code_operators_bitwise
-    BITWISE_NOT="~",
-    BITWISE_AND=" & ",
-    BITWISE_OR=" | ",
-    BITWISE_EXCLUSIVE_OR=" ^ ",
-    BITWISE_LEFT_SHIFT=" << ",
-    BITWISE_RIGHT_SHIFT=" >> ",
+    # requires Data.Bits import
+    BITWISE_NOT="complement ",
+    BITWISE_AND=" .&. ",
+    BITWISE_OR=" .|. ",
+    BITWISE_EXCLUSIVE_OR=" .^. ",
+    BITWISE_LEFT_SHIFT=" `shiftL` ",
+    BITWISE_RIGHT_SHIFT=" `shiftR` ",
     # code_operators_lambda
-    LAMBDA=create_described_insert_between("lambda ", ": "),
+    LAMBDA=create_described_insert_between("\\", "-> "),
     # code_operators_math
     MATH_SUBTRACT=" - ",
     MATH_ADD=" + ",
@@ -55,20 +56,20 @@ operators = Operators(
     MATH_MODULO=" % ",
     MATH_EXPONENT=" ** ",
     MATH_EQUAL=" == ",
-    MATH_NOT_EQUAL=" != ",
+    MATH_NOT_EQUAL=" /= ",
     MATH_GREATER_THAN=" > ",
     MATH_GREATER_THAN_OR_EQUAL=" >= ",
     MATH_LESS_THAN=" < ",
     MATH_LESS_THAN_OR_EQUAL=" <= ",
-    MATH_AND=" and ",
-    MATH_OR=" or ",
+    MATH_AND=" && ",
+    MATH_OR=" || ",
     MATH_NOT=" not ",
     MATH_IN=" in ",
     MATH_NOT_IN=" not in ",
 )
 
 def haskell_and_null_warning():
-    warnings.warn(
+    app.notify(
         """For the method null see common functions. 
         Otherwise you can't check for undefined in Haskell, which is not quite null anway. 
         Maybe use Maybe type instead.
@@ -88,6 +89,7 @@ class UserActions:
 
 
     def code_insert_is_null():
+        actions.insert("null ")
         haskell_and_null_warning()
 
     def code_insert_is_not_null():

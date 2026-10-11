@@ -10,4 +10,15 @@ tag(): user.code_data_null
 tag(): user.code_functions
 
 tag(): user.code_functions_common
-# TODO: complete 
+tag(): user.code_operators_array
+tag(): user.code_operators_assignment
+tag(): user.code_operators_bitwise
+tag(): user.code_operators_lambda
+tag(): user.code_operators_math
+
+
+# TODO: complete tags 
+
+# it is not assignement either!
+op do equals: insert("<-")
+op bind: insert("<-")
