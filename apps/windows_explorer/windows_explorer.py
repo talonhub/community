@@ -75,14 +75,12 @@ class UserActions:
     def file_manager_current_path():
         path = get_active_explorer_path()
 
-        # if path in directories_to_remap:
-        #     path = directories_to_remap[path]
-
-        # if path in directories_to_exclude:
-        #     actions.user.file_manager_hide_pickers()
-        #     path = ""
-
-        return path
+        if path.is_virtual:
+            #print(f"Virtual folder {path}")
+            actions.app.notify("Cannot get path for virtual folder, command failed")
+            return None
+        else:
+            return path
 
     def file_manager_terminal_here():
         actions.key("ctrl-l")

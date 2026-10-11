@@ -5,12 +5,35 @@ pywin32 (win32com / win32gui) has no free-threaded build, so instead of
 through ctypes. This works with or without the GIL and has no third-party
 dependency.
 
-The public entry point is :func:`get_active_explorer_path`, which returns the
-path of the foreground Explorer window, or ``None`` when the foreground window
-is not an Explorer view (for example a save/open common dialog).
+The public entry point is :func:`get_active_explorer_path`, which returns an
+:class:`ExplorerPath` for the foreground Explorer window, or ``None`` when the
+foreground window is not an Explorer view (for example a save/open common
+dialog). The result is a ``str`` subclass, so existing callers that treat it
+as a path keep working; its ``is_virtual`` attribute lets callers distinguish
+a real filesystem path from a virtual folder (This PC, Home, Network, Recycle
+Bin, ...) whose value is a shell parsing name instead of a filesystem path.
 """
 
 from talon import app, ui
+
+
+class ExplorerPath(str):
+    """The active Explorer location, as a ``str`` with an origin flag.
+
+    For ordinary folders the value is the filesystem path and
+    :attr:`is_virtual` is ``False``. For virtual folders that have no
+    filesystem path the value is the shell parsing name (e.g.
+    ``::{20D04FE0-3AEA-1069-A2D8-08002B30309D}`` for This PC), which can be
+    typed back into the Explorer address bar, and :attr:`is_virtual` is
+    ``True``.
+    """
+
+    is_virtual: bool
+
+    def __new__(cls, value: str, *, is_virtual: bool):
+        obj = super().__new__(cls, value)
+        obj.is_virtual = is_virtual
+        return obj
 
 if app.platform == "windows":
     import ctypes
@@ -26,6 +49,10 @@ if app.platform == "windows":
     VT_I4 = 3
     GA_ROOT = 2
     MAX_PATH = 260
+    # SIGDN flag for SHGetNameFromIDList: the canonical, locale-independent
+    # parsing name. For filesystem folders this is the path; for virtual
+    # folders it is a form like "::{CLSID}" that the address bar accepts.
+    SIGDN_DESKTOPABSOLUTEPARSING = 0x80028000
 
     class GUID(ctypes.Structure):
         _fields_ = [
@@ -58,6 +85,12 @@ if app.platform == "windows":
     _ole32.IIDFromString.restype = c_long
     _shell32.SHGetPathFromIDListW.argtypes = [c_void_p, ctypes.c_wchar_p]
     _shell32.SHGetPathFromIDListW.restype = wintypes.BOOL
+    # Note: SHGetNameFromIDList has no A/W suffix (it only ever returns a
+    # wide string), unlike SHGetPathFromIDListW.
+    _shell32.SHGetNameFromIDList.argtypes = [
+        c_void_p, wintypes.DWORD, POINTER(c_void_p)
+    ]
+    _shell32.SHGetNameFromIDList.restype = c_long
     _user32.GetForegroundWindow.restype = wintypes.HWND
     _user32.GetAncestor.argtypes = [wintypes.HWND, wintypes.UINT]
     _user32.GetAncestor.restype = wintypes.HWND
@@ -101,6 +134,28 @@ if app.platform == "windows":
     def _release(ptr):
         if ptr:
             _vtable_call(ptr, 2, c_ulong)
+
+    def _location_from_pidl(pidl):
+        """Resolve an absolute PIDL to an :class:`ExplorerPath`, or None.
+
+        Ordinary folders resolve to a filesystem path (``is_virtual`` False).
+        Virtual folders (This PC, Home, Network, Recycle Bin, ...) have no
+        filesystem path, so fall back to the shell parsing name
+        (``is_virtual`` True). Returns None if neither can be obtained.
+        """
+        buf = ctypes.create_unicode_buffer(MAX_PATH)
+        if _shell32.SHGetPathFromIDListW(pidl, buf) and buf.value:
+            return ExplorerPath(buf.value, is_virtual=False)
+
+        name = c_void_p()
+        if _shell32.SHGetNameFromIDList(
+            pidl, SIGDN_DESKTOPABSOLUTEPARSING, byref(name)
+        ) == S_OK and name:
+            try:
+                return ExplorerPath(ctypes.wstring_at(name), is_virtual=True)
+            finally:
+                _ole32.CoTaskMemFree(name)
+        return None
 
     def _path_from_browser(disp, hwnd_fg, active_tab):
         # IUnknown::QueryInterface for IServiceProvider
@@ -159,10 +214,7 @@ if app.platform == "windows":
                                             (POINTER(c_void_p), byref(pidl))) != S_OK or not pidl:
                                 return None
                             try:
-                                buf = ctypes.create_unicode_buffer(MAX_PATH)
-                                if _shell32.SHGetPathFromIDListW(pidl, buf):
-                                    return buf.value
-                                return None
+                                return _location_from_pidl(pidl)
                             finally:
                                 _ole32.CoTaskMemFree(pidl)
                         finally:
@@ -229,10 +281,13 @@ if app.platform == "windows":
 
 
 def get_active_explorer_path():
-    """Return the filesystem path of the active Explorer window, or None."""
+    """Return the active Explorer window's location, or None.
+
+    The result is an :class:`ExplorerPath` (a ``str``): a filesystem path for
+    ordinary folders, or a shell parsing name for virtual folders such as
+    This PC or Home. Check ``.is_virtual`` to tell them apart. Returns None
+    when the foreground window is not an Explorer view.
+    """
     if app.platform != "windows":
         return None
-    path = _get_active_explorer_path_windows()
-
-    print(path)
-    return path
+    return _get_active_explorer_path_windows()
