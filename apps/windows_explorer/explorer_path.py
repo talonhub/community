@@ -61,6 +61,10 @@ if app.platform == "windows":
     _user32.GetForegroundWindow.restype = wintypes.HWND
     _user32.GetAncestor.argtypes = [wintypes.HWND, wintypes.UINT]
     _user32.GetAncestor.restype = wintypes.HWND
+    _user32.FindWindowExW.argtypes = [
+        wintypes.HWND, wintypes.HWND, ctypes.c_wchar_p, ctypes.c_wchar_p
+    ]
+    _user32.FindWindowExW.restype = wintypes.HWND
 
     def _guid(s: str) -> GUID:
         g = GUID()
@@ -73,6 +77,14 @@ if app.platform == "windows":
     IID_IServiceProvider = _guid("{6D5140C1-7436-11CE-8034-00AA006009FA}")
     SID_STopLevelBrowser = _guid("{4C96BE40-915C-11CF-99D3-00AA004AE837}")
     IID_IShellBrowser = _guid("{000214E2-0000-0000-C000-000000000046}")
+    # SID_SShellBrowser is the same GUID as IID_IShellBrowser. Asking the
+    # service provider for this service returns the browser for *this* tab,
+    # whereas SID_STopLevelBrowser returns a single browser shared by every
+    # tab in the window (and so cannot distinguish the active tab).
+    SID_SShellBrowser = IID_IShellBrowser
+    # Win11 Explorer hosts each tab in a child window of this class; the
+    # active tab is the topmost one in z-order.
+    SHELL_TAB_WINDOW_CLASS = "ShellTabWindowClass"
     IID_IFolderView = _guid("{CDE725B0-CCC9-4519-917E-325D72FAB4CE}")
     IID_IPersistFolder2 = _guid("{1AC3D9F0-175C-11D1-95BE-00609797EA4F}")
 
@@ -90,7 +102,7 @@ if app.platform == "windows":
         if ptr:
             _vtable_call(ptr, 2, c_ulong)
 
-    def _path_from_browser(disp, hwnd_fg):
+    def _path_from_browser(disp, hwnd_fg, active_tab):
         # IUnknown::QueryInterface for IServiceProvider
         sp = c_void_p()
         if _vtable_call(disp, 0, c_long,
@@ -98,20 +110,27 @@ if app.platform == "windows":
                         (POINTER(c_void_p), byref(sp))) != S_OK or not sp:
             return None
         try:
-            # IServiceProvider::QueryService -> IShellBrowser
+            # IServiceProvider::QueryService(SID_SShellBrowser) -> the
+            # IShellBrowser for this specific tab.
             sb = c_void_p()
             if _vtable_call(sp, 3, c_long,
-                            (POINTER(GUID), byref(SID_STopLevelBrowser)),
+                            (POINTER(GUID), byref(SID_SShellBrowser)),
                             (POINTER(GUID), byref(IID_IShellBrowser)),
                             (POINTER(c_void_p), byref(sb))) != S_OK or not sb:
                 return None
             try:
-                # IOleWindow::GetWindow, then match the owning top-level window
+                # IOleWindow::GetWindow -> this tab's window handle.
                 hwnd = wintypes.HWND()
                 if _vtable_call(sb, 3, c_long,
                                 (POINTER(wintypes.HWND), byref(hwnd))) != S_OK:
                     return None
-                if _user32.GetAncestor(hwnd, GA_ROOT) != hwnd_fg:
+                if active_tab:
+                    # Window has tabs: match the active tab exactly.
+                    if hwnd.value != active_tab:
+                        return None
+                elif _user32.GetAncestor(hwnd, GA_ROOT) != hwnd_fg:
+                    # No tab handle available: fall back to matching the
+                    # owning top-level window.
                     return None
 
                 # IShellBrowser::QueryActiveShellView -> IShellView
@@ -159,9 +178,16 @@ if app.platform == "windows":
 
     def _get_active_explorer_path_windows():
         hwnd_fg = ui.active_window().id
-        print(hwnd_fg)
         if not hwnd_fg:
             return None
+
+        # The active tab is hosted in the topmost ShellTabWindowClass child
+        # of the foreground window. FindWindowEx enumerates children in
+        # z-order, so the first match is the active tab. Returns 0 when the
+        # window has no such child (e.g. older Explorer without tabs).
+        active_tab = _user32.FindWindowExW(
+            hwnd_fg, None, SHELL_TAB_WINDOW_CLASS, None
+        )
 
         hr = _ole32.CoInitializeEx(None, COINIT_APARTMENTTHREADED)
         need_uninit = hr in (S_OK, S_FALSE)
@@ -189,7 +215,7 @@ if app.platform == "windows":
                                     (POINTER(c_void_p), byref(disp))) != S_OK or not disp:
                         continue
                     try:
-                        path = _path_from_browser(disp, hwnd_fg)
+                        path = _path_from_browser(disp, hwnd_fg, active_tab)
                         if path is not None:
                             return path
                     finally:
