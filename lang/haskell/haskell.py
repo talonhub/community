@@ -1,16 +1,8 @@
-import re
-from contextlib import suppress
-import logging
-
 # TODO: remove unncessary imports copy pasted from python.py
 
-from talon import Context, Module, actions, settings, app
+from talon import Context, Module, actions, app, settings
 
 from ...core.described_functions import create_described_insert_between
-from ..tags.generic_types import (
-    SimpleLanguageSpecificTypeConnector,
-    format_type_parameter_arguments,
-)
 from ..tags.operators import Operators
 
 mod = Module()
@@ -20,14 +12,12 @@ code.language: haskell
 """
 
 
-
 # TODO: change teh python copy pasta to haskell + test
 operators = Operators(
     # code_operators_array
     SUBSCRIPT=" !! ",
     # code_operators_assignment
     ASSIGNMENT=" = ",
-
     # don't really exist except for library lens
     # ASSIGNMENT_SUBTRACTION=" -= ",
     # ASSIGNMENT_ADDITION=" += ",
@@ -41,7 +31,6 @@ operators = Operators(
     # ASSIGNMENT_BITWISE_LEFT_SHIFT=" <<= ",
     # ASSIGNMENT_BITWISE_RIGHT_SHIFT=" >>= ",
     # code_operators_bitwise
-
     # requires Data.Bits import
     BITWISE_NOT="complement ",
     BITWISE_AND=" .&. ",
@@ -72,25 +61,25 @@ operators = Operators(
     MATH_NOT_IN=" not in ",
 )
 
+
 def haskell_and_null_warning():
     app.notify(
-        """For the method null see common functions. 
-        Otherwise you can't check for undefined in Haskell, which is not quite null anway. 
+        """For the method null see common functions.
+        Otherwise you can't check for undefined in Haskell, which is not quite null anway.
         Maybe use Maybe type instead.
         See https://stackoverflow.com/questions/35198674/can-i-declare-a-null-value-in-haskell
         """
     )
+
 
 @ctx.action_class("user")
 class UserActions:
     def code_get_operators() -> Operators:
         return operators
 
-
     def code_insert_null():
         actions.insert("undefined")
         haskell_and_null_warning()
-
 
     def code_insert_is_null():
         actions.insert("null ")
@@ -98,8 +87,6 @@ class UserActions:
 
     def code_insert_is_not_null():
         haskell_and_null_warning()
-
-   
 
     def code_insert_true():
         actions.insert("True")
@@ -111,14 +98,12 @@ class UserActions:
         text += f" {selection or ''}"
         actions.insert(text)
         # actions.user.paste in ghci loses the trailing space
-        
-        
+
     def code_default_function(text: str):
         actions.user.code_public_function(text)
 
     def code_private_function(text: str):
         app.notify("no private functions in haskell")
-        
 
     def code_public_function(text: str):
         """Deliberately not adding = because that is easy to add
@@ -127,9 +112,7 @@ class UserActions:
             text, settings.get("user.code_public_function_formatter")
         )
 
-        
         actions.user.paste(result)
-
 
     def code_insert_type_annotation(type: str):
         actions.insert(f" {type} ")

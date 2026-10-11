@@ -13,7 +13,7 @@ foldable: Foldable t => t a
 fun: a -> b
 int: Int
 integer: Integer
-io: IO 
+io: IO
 list: [a]
 map: Map k v
 maybe: Maybe a

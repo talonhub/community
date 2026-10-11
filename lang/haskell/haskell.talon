@@ -15,8 +15,7 @@ tag(): user.code_operators_bitwise
 tag(): user.code_operators_lambda
 tag(): user.code_operators_math
 
-
-# TODO: complete tags 
+# TODO: complete tags
 
 # following https://wiki.haskell.org/Programming_guidelines#Naming_Conventions
 settings():
