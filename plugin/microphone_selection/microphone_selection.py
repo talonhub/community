@@ -47,10 +47,6 @@ def update_microphone_list():
     microphone_device_list = meta_devices + devices
 
 
-def devices_changed(device_type):
-    update_microphone_list()
-
-
 mod.tag(
     "microphone_selection_open",
     "tag for commands that are available only when the list of microphones is visible",
