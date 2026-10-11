@@ -48,10 +48,13 @@ if app.platform == "windows":
     CLSCTX_ALL = 0x17
     VT_I4 = 3
     GA_ROOT = 2
-    MAX_PATH = 260
-    # SIGDN flag for SHGetNameFromIDList: the canonical, locale-independent
-    # parsing name. For filesystem folders this is the path; for virtual
-    # folders it is a form like "::{CLSID}" that the address bar accepts.
+    # SIGDN flags for SHGetNameFromIDList. FILESYSPATH yields the filesystem
+    # path and succeeds only for filesystem-backed items; DESKTOPABSOLUTEPARSING
+    # yields the canonical, locale-independent parsing name (a form like
+    # "::{CLSID}" for virtual folders, which the address bar accepts).
+    # Neither is capped at MAX_PATH -- the shell allocates the buffer -- so
+    # unlike the legacy SHGetPathFromIDListW they handle long (>260) paths.
+    SIGDN_FILESYSPATH = 0x80058000
     SIGDN_DESKTOPABSOLUTEPARSING = 0x80028000
 
     class GUID(ctypes.Structure):
@@ -83,10 +86,9 @@ if app.platform == "windows":
     _ole32.CoCreateInstance.restype = c_long
     _ole32.IIDFromString.argtypes = [ctypes.c_wchar_p, POINTER(GUID)]
     _ole32.IIDFromString.restype = c_long
-    _shell32.SHGetPathFromIDListW.argtypes = [c_void_p, ctypes.c_wchar_p]
-    _shell32.SHGetPathFromIDListW.restype = wintypes.BOOL
-    # Note: SHGetNameFromIDList has no A/W suffix (it only ever returns a
-    # wide string), unlike SHGetPathFromIDListW.
+    # SHGetNameFromIDList has no A/W suffix (it only ever returns a wide
+    # string). It is used in place of the MAX_PATH-bound SHGetPathFromIDListW
+    # so that long filesystem paths are not truncated.
     _shell32.SHGetNameFromIDList.argtypes = [
         c_void_p, wintypes.DWORD, POINTER(c_void_p)
     ]
@@ -138,23 +140,25 @@ if app.platform == "windows":
     def _location_from_pidl(pidl):
         """Resolve an absolute PIDL to an :class:`ExplorerPath`, or None.
 
-        Ordinary folders resolve to a filesystem path (``is_virtual`` False).
-        Virtual folders (This PC, Home, Network, Recycle Bin, ...) have no
-        filesystem path, so fall back to the shell parsing name
-        (``is_virtual`` True). Returns None if neither can be obtained.
+        SIGDN_FILESYSPATH succeeds only for filesystem-backed items and,
+        because the shell allocates the string, is not capped at MAX_PATH, so
+        long (>260) paths come back intact and ``is_virtual`` is False.
+        Virtual folders (This PC, Home, Network, Recycle Bin, ...) fail that
+        and fall back to the canonical parsing name (``is_virtual`` True).
+        Returns None if neither can be obtained.
         """
-        buf = ctypes.create_unicode_buffer(MAX_PATH)
-        if _shell32.SHGetPathFromIDListW(pidl, buf) and buf.value:
-            return ExplorerPath(buf.value, is_virtual=False)
-
-        name = c_void_p()
-        if _shell32.SHGetNameFromIDList(
-            pidl, SIGDN_DESKTOPABSOLUTEPARSING, byref(name)
-        ) == S_OK and name:
-            try:
-                return ExplorerPath(ctypes.wstring_at(name), is_virtual=True)
-            finally:
-                _ole32.CoTaskMemFree(name)
+        for sigdn, is_virtual in (
+            (SIGDN_FILESYSPATH, False),
+            (SIGDN_DESKTOPABSOLUTEPARSING, True),
+        ):
+            name = c_void_p()
+            if _shell32.SHGetNameFromIDList(pidl, sigdn, byref(name)) == S_OK and name:
+                try:
+                    value = ctypes.wstring_at(name)
+                finally:
+                    _ole32.CoTaskMemFree(name)
+                if value:
+                    return ExplorerPath(value, is_virtual=is_virtual)
         return None
 
     def _path_from_browser(disp, hwnd_fg, active_tab):
