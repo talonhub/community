@@ -1,4 +1,4 @@
-from talon import Context, Module, actions, cron, imgui
+from talon import Context, Module, actions, imgui
 
 from ...core.user_settings import track_csv_rows
 
@@ -27,8 +27,6 @@ def on_microphones_to_exclude_update(rows):
     EXCLUDE_MICROPHONES = {row[0] for row in rows if row[0].strip()}
 
 
-
-
 def get_microphone_list():
     # By convention, None and System Default are listed first
     # to match the Talon microphone menu.
@@ -41,7 +39,7 @@ def get_microphone_list():
     ]
     devices.sort()
 
-    return  meta_devices + devices
+    return meta_devices + devices
 
 
 mod.tag(
@@ -73,7 +71,6 @@ def gui(gui: imgui.GUI):
 class Actions:
     def microphone_selection_toggle():
         """Show GUI for choosing the Talon microphone"""
-
 
         if gui.showing:
             actions.user.microphone_selection_hide()
