@@ -28,6 +28,7 @@ code_languages = [
     # Language("elm", "elm", ["elm"]),
     Language("gdb", "g d b", ["gdb"]),
     Language("go", ["go lang", "go language"], ["go"]),
+    Language("haskell", "haskell", ["hs"]),
     Language("java", "java", ["java"]),
     Language("javascript", "java script", ["js"]),
     Language("javascriptreact", "java script react", ["jsx"]),
