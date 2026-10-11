@@ -1,6 +1,7 @@
 import re
 from contextlib import suppress
 import logging
+import warnings
 
 # TODO: remove unncessary imports copy pasted from python.py
 
@@ -66,6 +67,15 @@ operators = Operators(
     MATH_NOT_IN=" not in ",
 )
 
+def haskell_and_null_warning():
+    warnings.warn(
+        """For the method null see common functions. 
+        Otherwise you can't check for undefined in Haskell, which is not quite null anway. 
+        Maybe use Maybe type instead.
+        See https://stackoverflow.com/questions/35198674/can-i-declare-a-null-value-in-haskell
+        """
+    )
+
 @ctx.action_class("user")
 class UserActions:
     def code_get_operators() -> Operators:
@@ -74,12 +84,16 @@ class UserActions:
 
     def code_insert_null():
         actions.insert("undefined")
+        haskell_and_null_warning()
+
 
     def code_insert_is_null():
-        logging.warning("For the method null see common functions. Otherwise you can't check for undefined in Haskell. Use Maybe type instead.")
+        haskell_and_null_warning()
 
     def code_insert_is_not_null():
-        logging.warning("For the method null see common functions. Otherwise you can't check for undefined in Haskell. Use Maybe type instead.")
+        haskell_and_null_warning()
+
+   
 
     def code_insert_true():
         actions.insert("True")
