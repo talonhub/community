@@ -1,6 +1,6 @@
 # defines the default app actions for linux
 
-from talon import Context, actions
+from talon import Context, actions, ui
 
 ctx = Context()
 ctx.matches = r"""
@@ -8,6 +8,7 @@ os: linux
 """
 
 
+# TODO: Some keyboard shortcuts were obviously just copied from the Windows implementation. Correct what doesn't work.
 @ctx.action_class("app")
 class AppActions:
     def tab_close():
@@ -26,10 +27,18 @@ class AppActions:
         actions.key("ctrl-shift-t")
 
     def window_close():
-        actions.key("alt-f4")
+        if window := ui.active_window():
+            # TODO: Does this work on Linux?
+            window.close()
+        else:
+            actions.key("alt-f4")
 
     def window_hide():
-        actions.key("alt-space n")
+        if window := ui.active_window():
+            # TODO: Does this work on Linux?
+            window.minimized = True
+        else:
+            actions.key("alt-space n")
 
     def window_hide_others():
         actions.key("win-d alt-tab")
