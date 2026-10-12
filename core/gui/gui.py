@@ -47,6 +47,10 @@ async def show_row_with_labels(row, contents):
     index = row.index()
     for column in contents[index]:
         async with row.col() as cell_ui:
+            if isinstance(column, tuple):
+                for label in column:
+                    cell_ui.label(label)
+                continue
             cell_ui.label(column)
 
 
@@ -111,6 +115,9 @@ class PageScroller:
 
 def create_bold_text(text):
     return egui.RichText(text).strong()
+
+def create_italicized_text(text):
+    return egui.RichText(text).italics()
 
 class UIWrapper:
     """Provides helper methods for drawing on a ui. These methods use the wrapped ui by default, but you can use the ui parameter to provide another one"""

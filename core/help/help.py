@@ -13,6 +13,7 @@ from ...core.gui.gui import (
     convert_key_value_pairs_to_rows,
     open_gui,
     create_bold_text,
+    create_italicized_text
 )
 
 mod = Module()
@@ -135,10 +136,10 @@ def update_operators_text():
                     # display the operator text
                     operator = operators.get(operator_text)
                     if isinstance(operator, str):
-                        text = ": " + operator
+                        text = operator
                     # If a documentation string is available, use that
                     elif doc_string := getattr(operator, "__doc__", None):
-                        text = ": " + doc_string
+                        text = doc_string
                     # Otherwise display the operator name from list
                     else:
                         has_operator_without_text_implementation = True
@@ -146,10 +147,10 @@ def update_operators_text():
                     # Only add the header if an item in the list is defined in operators
                     if not has_added_first_list_item:
                         has_added_first_list_item = True
-                        rich_text = create_bold_text(f"{name} operators:")
+                        rich_text = create_italicized_text(f"{name} operators:")
                         operators_text.append((rich_text,))
 
-                    operators_text.append((f"    {prefix} {operator_name}{text}",))
+                    operators_text.append(((f"    {prefix} {operator_name}:", create_bold_text(text)),))
         if has_operator_without_text_implementation:
             operators_text.append(
                 "* operator is implemented as a function call and cannot be displayed"
