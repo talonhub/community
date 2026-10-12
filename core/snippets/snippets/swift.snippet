@@ -1,0 +1,157 @@
+language: swift
+---
+
+name: catchWhere
+phrase: catch where
+insertionScope: statement
+-
+catch $1 where $2 {
+    $0
+}
+---
+
+name: tryConvert
+phrase: try question | try convert
+insertionScope: statement
+
+$0.wrapperPhrase: try question | try convert 
+$0.wrapperScope: statement
+$1.wrapperPhrase: try question return | try convert return
+$1.wrapperScope: statement
+-
+try? $0 {
+    return $1
+}
+---
+
+name: tryForced
+phrase: try bang | try exclamation mark | try forced
+insertionScope: statement
+
+$0.wrapperPhrase: try bang | try exclamation mark | try forced 
+$0.wrapperScope: statement
+-
+try! $0
+---
+
+name: deferBlock
+phrase: defer
+insertionScope: statement
+
+$0.wrapperPhrase: defer
+$0.wrapperScope: statement
+-
+defer {
+    $0
+}
+---
+
+name: downcastOptional
+phrase: as question | as optional | as option
+insertionScope: statement
+
+$0.insertionFormatter: PRIVATE_CAMEL_CASE
+$0.wrapperPhrase: as question | as optional | as option
+$0.wrapperScope: statement
+$1.insertionFormatter: PUBLIC_CAMEL_CASE
+-
+$0 as? $1 {
+    $2
+}
+---
+
+name: downcastForced
+phrase: as bang | as exclamation point | as forced
+insertionScope: statement
+
+$0.insertionFormatter: PRIVATE_CAMEL_CASE
+$0.wrapperPhrase: as bang | as exclamation point | as forced
+$0.wrapperScope: statement
+$1.insertionFormatter: PUBLIC_CAMEL_CASE
+-
+$0 as! $1 {
+    $2
+}
+---
+
+name: deinitializer
+phrase: deinitializer | deinit
+insertionScope: statement
+-
+deinit {
+    $0
+}
+---
+
+name: enumeration
+phrase: enumeration | enum
+insertionScope: class
+
+$1.insertionFormatter: PUBLIC_CAMEL_CASE
+-
+enum $1 {
+    $0
+}
+---
+
+name: actor
+phrase: actor
+insertionScope: class
+
+$1.insertionFormatter: PUBLIC_CAMEL_CASE
+-
+actor $1 {
+    $0
+}
+---
+
+name: protocol
+phrase: protocol
+insertionScope: class
+
+$1.insertionFormatter: PUBLIC_CAMEL_CASE
+-
+protocol $1 {
+    $0
+}
+---
+
+name: await
+phrase: await
+insertionScope: statement
+-
+await $0
+---
+
+name: tryAwait
+phrase: try await
+insertionScope: statement
+-
+try await $0
+---
+
+name: asyncLet
+phrase: async let
+insertionScope: statement
+
+$0.insertionFormatter: PRIVATE_CAMEL_CASE
+$0.wrapperPhrase: async let
+$0.wrapperScope: statement
+-
+async let $0 = $1
+---
+
+name: awaitTask
+phrase: await task
+insertionScope: statement
+
+$0.wrapperPhrase: block await as task
+$0.wrapperScope: statement
+$1.insertionFormatter: PRIVATE_CAMEL_CASE
+$1.wrapperPhrase: await task
+$1.wrapperScope: statement
+-
+await $1($2) { $3 in
+    $0
+}
+---
