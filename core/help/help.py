@@ -153,7 +153,7 @@ def update_operators_text():
                     )
         if has_operator_without_text_implementation:
             operators_text.append(
-                "* operator is implemented as a function call and cannot be displayed"
+                ("* operator is implemented as a function call and cannot be displayed",)
             )
         page_scroller.page_size = settings.get("user.help_max_command_lines_per_page")
     # This exception will get raised if there is no operators object defined in the active context
