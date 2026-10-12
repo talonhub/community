@@ -545,39 +545,38 @@ class Manager:
 
     async def draw_setting_ui(self, ui, setting, page):
         old_value = setting.value.get()
-        async with ui.group():
-            readable_name = compute_readable_name(setting.name, page.prefix)
-            async with ui.horizontal():
-                if (
-                    not setting.is_tag
-                    and ui.checkbox(egui.Mutable(setting.is_activated), "").clicked()
+        readable_name = compute_readable_name(setting.name, page.prefix)
+        async with ui.horizontal():
+            if (
+                not setting.is_tag
+                and ui.checkbox(egui.Mutable(setting.is_activated), "").clicked()
+            ):
+                error_message = toggle_setting_activation(setting)
+                if error_message is not None:
+                    self.error_message = error_message
+            async with ui.vertical():
+                ui.strong(readable_name)
+                ui.weak(setting.name)
+                ui.add_space(5)
+                if not setting.draws_description:
+                    ui.label(setting.get_description())
+                if not setting.is_tag and setting.value.get() == VALUE_UNAVAILABLE:
+                    ui.label(
+                        "Something went wrong. The setting could not be found or could not be parsed."
+                    )
+                    return
+                async with ui.add_enabled_ui(
+                    setting.is_activated or setting.is_tag
                 ):
-                    error_message = toggle_setting_activation(setting)
-                    if error_message is not None:
-                        self.error_message = error_message
-                async with ui.vertical():
-                    ui.strong(readable_name)
-                    ui.weak(setting.name)
-                    ui.add_space(5)
-                    if not setting.draws_description:
-                        ui.label(setting.get_description())
-                    if not setting.is_tag and setting.value.get() == VALUE_UNAVAILABLE:
-                        ui.label(
-                            "Something went wrong. The setting could not be found or could not be parsed."
-                        )
-                        return
-                    async with ui.add_enabled_ui(
-                        setting.is_activated or setting.is_tag
-                    ):
-                        try:
-                            await setting.draw(setting, ui)
-                            value = setting.value.get()
-                            if old_value != value:
-                                setting.update_function(
-                                    setting.path, setting.name, value
-                                )
-                        except Exception as ex:
-                            self.error_message = f"Something went wrong: {ex}"
+                    try:
+                        await setting.draw(setting, ui)
+                        value = setting.value.get()
+                        if old_value != value:
+                            setting.update_function(
+                                setting.path, setting.name, value
+                            )
+                    except Exception as ex:
+                        self.error_message = f"Something went wrong: {ex}"
 
     async def draw_current_page(self, ui, total_available_height):
         if not self.page:
@@ -594,7 +593,8 @@ class Manager:
             ui.separator()
             for setting in page.settings:
                 await self.draw_setting_ui(ui, setting, page)
-                ui.add_space(10)
+                ui.separator()
+
 
 
 manager = Manager()
