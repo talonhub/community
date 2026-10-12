@@ -10,8 +10,6 @@ ctx.matches = r"""
 code.language: csharp
 """
 
-mod.list("code_common_function", desc="Common C# functions")
-mod.list("code_keyword", desc="Common C# keywords")
 
 operators = Operators(
     # code_operators_array
