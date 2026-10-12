@@ -41,9 +41,8 @@ def convert_key_value_pairs_to_rows(dictionary):
             rows.append((key, value))
     return rows
 
-
-async def show_row_with_labels(row, contents):
-    """Show every column of the row using a label"""
+async def show_title_and_rich_content_rows(row, contents):
+    """The contents for each row is either a tuple of rich text or regular text to format as a title"""
     index = row.index()
     for column in contents[index]:
         async with row.col() as cell_ui:
@@ -51,6 +50,14 @@ async def show_row_with_labels(row, contents):
                 for label in column:
                     cell_ui.label(label)
                 continue
+            async with cell_ui.with_layout(egui.Layout.top_down(egui.Align.Center)):
+                cell_ui.label(column)
+
+async def show_row_with_labels(row, contents):
+    """Show every column of the row using a label"""
+    index = row.index()
+    for column in contents[index]:
+        async with row.col() as cell_ui:
             cell_ui.label(column)
 
 

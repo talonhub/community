@@ -13,7 +13,7 @@ from ...core.gui.gui import (
     convert_key_value_pairs_to_rows,
     open_gui,
     create_bold_text,
-    create_italicized_text
+    show_title_and_rich_content_rows,
 )
 
 mod = Module()
@@ -147,10 +147,9 @@ def update_operators_text():
                     # Only add the header if an item in the list is defined in operators
                     if not has_added_first_list_item:
                         has_added_first_list_item = True
-                        rich_text = create_italicized_text(f"{name} operators:")
-                        operators_text.append((rich_text,))
+                        operators_text.append((f"{name} operators:",))
 
-                    operators_text.append(((f"    {prefix} {operator_name}:", create_bold_text(text)),))
+                    operators_text.append(((f"{prefix} {operator_name}:", create_bold_text(text)),))
         if has_operator_without_text_implementation:
             operators_text.append(
                 "* operator is implemented as a function call and cannot be displayed"
@@ -184,9 +183,10 @@ async def gui_operators(ui, ui_wrapper):
             row_height=row_size,
             id_salt="help_operators",
             scroller=page_scroller,
+            show_row=show_title_and_rich_content_rows,
         )
 
-    async with ui.horizontal_wrapped():
+    async with ui.horizontal_wrapped(): 
         if ui_wrapper.button("Help close"):
             gui_operators.hide()
         if operators_text and len(operators_text) > page_scroller.page_size:
