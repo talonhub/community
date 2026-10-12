@@ -6,6 +6,11 @@ import egui
 from talon import Module, fs, registry
 
 from ...core.gui.gui import open_gui
+from .rgb_conversions import (
+    convert_rgb_to_string,
+    is_valid_hexadecimal_rgb,
+    parse_rgb_from_string,
+)
 from .talon_file_handling import (
     VALUE_UNAVAILABLE,
     SettingFileSettingInformation,
@@ -14,7 +19,6 @@ from .talon_file_handling import (
     update_setting,
     update_tag,
 )
-from .rgb_conversions import convert_rgb_to_string, is_valid_hexadecimal_rgb, parse_rgb_from_string
 
 SETTINGS_PATH = Path(__file__).parent.parent.parent / "settings.talon"
 MODE_INDICATOR_PATH = (
