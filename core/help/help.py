@@ -185,16 +185,16 @@ async def gui_operators(ui, ui_wrapper):
             scroller=page_scroller,
         )
 
-        async with ui.horizontal_wrapped():
-            if ui_wrapper.button("Help close"):
-                gui_operators.hide()
-            if len(operators_text) > page_scroller.page_size:
-                ui_wrapper.spacing()
-                if ui_wrapper.button("Help next"):
-                    actions.user.help_next()
+    async with ui.horizontal_wrapped():
+        if ui_wrapper.button("Help close"):
+            gui_operators.hide()
+        if operators_text and len(operators_text) > page_scroller.page_size:
+            ui_wrapper.spacing()
+            if ui_wrapper.button("Help next"):
+                actions.user.help_next()
 
-                if ui_wrapper.button("Help previous"):
-                    actions.user.help_previous()
+            if ui_wrapper.button("Help previous"):
+                actions.user.help_previous()
 
 
 def format_context_title(context_name: str) -> str:
