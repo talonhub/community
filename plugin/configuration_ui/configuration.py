@@ -596,10 +596,10 @@ manager = Manager()
 
 
 @open_gui(
-    x=0.25,
-    y=0.25,
-    width=0.5,
-    height=0.5,
+    x=0.125,
+    y=0.125,
+    width=0.75,
+    height=0.75,
     always_on_top=False,
     decorated=True,
     title="Community Settings",
