@@ -152,6 +152,13 @@ class UIWrapper:
         ui.separator()
         ui.add_space(8)
 
+    def header(self, text, ui=None):
+        """Draw a header"""
+        ui = self._ui(ui)
+        header = egui.RichText(text).size(compute_text_size() * 1.5).strong()
+        ui.label(header)
+        ui.add_space(8)
+
     def button(self, text, ui=None) -> bool:
         """Draw a button and return True if the button was clicked this frame"""
         ui = self._ui(ui)
@@ -228,7 +235,9 @@ class UIWrapper:
                 table = table.scroll_to_row(target_row, egui.Align.TOP)
 
             # add the headers
-            async with table.header(20) as header:
+            header_size = 20 if any(headers) else 0
+
+            async with table.header(header_size) as header:
                 for h in headers:
                     async with header.col() as header_ui:
                         header_ui.strong(h)

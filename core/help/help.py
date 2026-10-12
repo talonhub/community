@@ -162,7 +162,7 @@ def update_operators_text():
 @open_gui(y=0, refresh_period="500ms")
 async def gui_operators(ui, ui_wrapper):
     global operators_text
-    ui_wrapper.title("Help: Operators")
+    ui_wrapper.header("Help: Operators")
 
     if operators_text is None:
         ui.label("There is no active programming language when you opened this menu")
