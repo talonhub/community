@@ -750,9 +750,10 @@ class Actions:
 
     def help_operators():
         """Displays the list of operator names"""
-        global page_scroller
+        global page_scroller, current_gui
         reset()
         hide_all_help_guis()
+        current_gui = gui_operators
         page_scroller = PageScroller()
         update_operators_text()
         gui_operators.show()
