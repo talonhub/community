@@ -186,11 +186,11 @@ async def gui_operators(ui, ui_wrapper):
             show_row=show_title_and_rich_content_rows,
         )
 
+    ui_wrapper.spacing()
     async with ui.horizontal_wrapped():
         if ui_wrapper.button("Help close"):
             gui_operators.hide()
         if operators_text and len(operators_text) > page_scroller.page_size:
-            ui_wrapper.spacing()
             if ui_wrapper.button("Help next"):
                 actions.user.help_next()
 
