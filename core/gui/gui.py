@@ -272,7 +272,7 @@ def open_gui(
     refresh_period: str | None = None,
     always_on_top: bool = True,
     decorated: bool = False,
-    title: str = ""
+    title: str = "",
 ):
     """Decorator for for an egui callback drawing function.
     screen: the screen to show the gui on.
@@ -293,7 +293,7 @@ def open_gui(
             refresh_period=refresh_period,
             always_on_top=always_on_top,
             decorated=decorated,
-            title=title
+            title=title,
         )
 
     return open_inner
@@ -362,7 +362,7 @@ class GUI:
             height=height,
             always_on_top=always_on_top,
             decorated=decorated,
-            title=title
+            title=title,
         )
         self._window = None
         self._egui = None
