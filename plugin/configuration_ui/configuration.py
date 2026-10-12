@@ -16,16 +16,6 @@ from .talon_file_handling import (
 )
 
 
-def compute_vertical_size_from_number_of_lines_in_description(setting, ui):
-    # this function is currently out of date
-    number_of_description_lines = len(setting.description.split("\n"))
-    row_size = (
-        ui.spacing().item_spacing.y + egui.TextStyle.Body.resolve(ui.style()).size
-    )
-    interactive_size = ui.spacing().item_spacing.y + ui.spacing().interact_size.y
-    return interactive_size + row_size * number_of_description_lines
-
-
 SETTINGS_PATH = Path(__file__).parent.parent.parent / "settings.talon"
 MODE_INDICATOR_PATH = (
     Path(__file__).parent.parent / "mode_indicator" / "mode_indicator.talon"
@@ -45,9 +35,6 @@ class Setting:
     is_tag: bool = False
     is_activated: bool = True
     value: egui.Mutable = egui.Mutable(VALUE_UNAVAILABLE)
-    compute_vertical_size: Callable = (
-        compute_vertical_size_from_number_of_lines_in_description
-    )
     draws_description: bool = False
 
     def get_description(self):
