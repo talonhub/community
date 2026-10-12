@@ -108,7 +108,7 @@ def update_operators_text():
     the operator text for operators implemented as text insertion
     or an asterisk for operators implemented as a function call.
     """
-    global operators_text, total_page_count
+    global operators_text
     try:
         operators = actions.user.code_get_operators()
 
@@ -144,48 +144,54 @@ def update_operators_text():
                     # Only add the header if an item in the list is defined in operators
                     if not has_added_first_list_item:
                         has_added_first_list_item = True
-                        operators_text.append(f"{name} operators:")
+                        operators_text.append((f"{name} operators:",))
 
-                    operators_text.append(f" {prefix} {operator_name}{text}")
+                    operators_text.append((f"    {prefix} {operator_name}{text}",))
         if has_operator_without_text_implementation:
             operators_text.append(
                 "* operator is implemented as a function call and cannot be displayed"
             )
-        page_size = settings.get("user.help_max_command_lines_per_page")
-        total_page_count = math.ceil(len(operators_text) / page_size)
+        page_scroller.page_size = settings.get("user.help_max_command_lines_per_page")
     # This exception will get raised if there is no operators object defined in the active context
     except NotImplementedError:
         operators_text = None
 
 
-@imgui.open(y=0)
-def gui_operators(gui: imgui.GUI):
+@open_gui(y=0, refresh_period="500ms")
+async def gui_operators(ui, ui_wrapper):
     global operators_text
+    ui_wrapper.title("Help: Operators")
 
     if operators_text is None:
-        gui.text("Help: Operators (1/1)")
-        gui.line()
-        gui.text("There is no active programming language when you opened this menu")
-        gui.text("or the language does not have operator support.")
+        ui.label("There is no active programming language when you opened this menu")
+        ui.label("or the language does not have operator support.")
     else:
-        page_size = settings.get("user.help_max_command_lines_per_page")
-        page_start = page_size * (current_list_page - 1)
-        page_end = page_start + page_size
-        gui.text(f"Help: Operators ({current_list_page}/{total_page_count})")
-        gui.line()
-        for text in operators_text[page_start:page_end]:
-            gui.text(text)
+        
+        row_size = ui_wrapper.get_label_row_size()
+        maximum_height = compute_table_height(
+            row_size, ui_wrapper.get_item_spacing(), page_scroller.page_size
+        )
 
-        if total_page_count > 1:
-            gui.spacer()
-            if gui.button("Help next"):
-                actions.user.help_next()
+        headers = [""]
+        await ui_wrapper.draw_table(
+            headers,
+            operators_text,
+            maximum_height=maximum_height,
+            row_height=row_size,
+            id_salt="help_operators",
+            scroller=page_scroller,
+        )
 
-            if gui.button("Help previous"):
-                actions.user.help_previous()
-    gui.spacer()
-    if gui.button("Help close"):
-        gui_operators.hide()
+        async with ui.horizontal_wrapped():
+            if ui_wrapper.button("Help close"):
+                gui_operators.hide()
+            if len(operators_text) > page_scroller.page_size:
+                ui_wrapper.spacing()
+                if ui_wrapper.button("Help next"):
+                    actions.user.help_next()
+
+                if ui_wrapper.button("Help previous"):
+                    actions.user.help_previous()
 
 
 def format_context_title(context_name: str) -> str:
@@ -739,8 +745,10 @@ class Actions:
 
     def help_operators():
         """Displays the list of operator names"""
+        global page_scroller
         reset()
         hide_all_help_guis()
+        page_scroller = PageScroller()
         update_operators_text()
         gui_operators.show()
         register_events(True)
@@ -819,11 +827,6 @@ class Actions:
                     selected_context_page += 1
                 else:
                     selected_context_page = 1
-        if gui_operators.showing:
-            if current_list_page != total_page_count:
-                current_list_page += 1
-            else:
-                current_list_page = 1
 
     def help_select_index(index: int):
         """Select the context by a number"""
@@ -870,12 +873,6 @@ class Actions:
                     selected_context_page -= 1
                 else:
                     selected_context_page = total_page_count
-
-        if gui_operators.showing:
-            if current_list_page != total_page_count:
-                current_list_page -= 1
-            else:
-                current_list_page = 1
 
     def help_return():
         """Returns to the main help window"""
