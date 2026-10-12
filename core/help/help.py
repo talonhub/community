@@ -148,21 +148,23 @@ def update_operators_text():
                     if not has_added_first_list_item:
                         has_added_first_list_item = True
                         row_text = f"{name} operators:"
-                        operators_max_row_size = max(operators_max_row_size, len(row_text))
+                        operators_max_row_size = max(
+                            operators_max_row_size, len(row_text)
+                        )
                         operators_text.append((row_text,))
 
                     operator_name_text = f"{prefix} {operator_name}:"
-                    operators_max_row_size = max(operators_max_row_size, len(operator_name_text) + len(text))
+                    operators_max_row_size = max(
+                        operators_max_row_size, len(operator_name_text) + len(text)
+                    )
                     operators_text.append(
                         ((operator_name_text, create_bold_text(text)),)
                     )
         if has_operator_without_text_implementation:
-            row_text = "* operator is implemented as a function call and cannot be displayed"
-            operators_text.append(
-                (
-                    row_text,
-                )
+            row_text = (
+                "* operator is implemented as a function call and cannot be displayed"
             )
+            operators_text.append((row_text,))
             operators_max_row_size = max(operators_max_row_size, len(row_text))
         page_scroller.page_size = settings.get("user.help_max_command_lines_per_page")
     # This exception will get raised if there is no operators object defined in the active context
@@ -180,7 +182,7 @@ async def gui_operators(ui, ui_wrapper):
             # add padding so that there is enough room for all of the lines in the table
             # this is currently needed because of how auto sizing works and the rows significantly varying in length
             padding_width = max(0, operators_max_row_size - len(title))
-            padding = " "*padding_width
+            padding = " " * padding_width
             title = f"{title}{padding}"
         ui_wrapper.header(title)
 
