@@ -565,16 +565,12 @@ class Manager:
                         "Something went wrong. The setting could not be found or could not be parsed."
                     )
                     return
-                async with ui.add_enabled_ui(
-                    setting.is_activated or setting.is_tag
-                ):
+                async with ui.add_enabled_ui(setting.is_activated or setting.is_tag):
                     try:
                         await setting.draw(setting, ui)
                         value = setting.value.get()
                         if old_value != value:
-                            setting.update_function(
-                                setting.path, setting.name, value
-                            )
+                            setting.update_function(setting.path, setting.name, value)
                     except Exception as ex:
                         self.error_message = f"Something went wrong: {ex}"
 
@@ -594,7 +590,6 @@ class Manager:
             for setting in page.settings:
                 await self.draw_setting_ui(ui, setting, page)
                 ui.separator()
-
 
 
 manager = Manager()
