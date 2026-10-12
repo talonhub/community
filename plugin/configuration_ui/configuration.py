@@ -5,7 +5,7 @@ from pathlib import Path
 import egui
 from talon import Module, fs, registry
 
-from .gui import open_gui
+from ...core.gui.gui import open_gui
 from .talon_file_handling import (
     VALUE_UNAVAILABLE,
     SettingFileSettingInformation,
@@ -600,7 +600,7 @@ class Manager:
 manager = Manager()
 
 
-@open_gui(x=0.25, y=0.25, width=0.5, height=0.5, toplevel=False, decorated=True)
+@open_gui(x=0.25, y=0.25, width=0.5, height=0.5, always_on_top=False, decorated=True)
 async def draw(ui, helpers):
     await manager.draw(ui)
 
