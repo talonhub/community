@@ -4,6 +4,16 @@ import egui
 from talon import Module, fs
 
 from ...core.gui.gui import open_gui
+from .setting_file_paths import MODE_INDICATOR_PATH, RELEVANT_PATHS, SUBTITLES_PATH
+from .setting_uis import (
+    Setting,
+    create_boolean_setting,
+    create_color_picker_setting,
+    create_discreet_choices_setting,
+    create_numeric_setting,
+    create_tag_setting,
+    create_text_setting,
+)
 from .talon_file_handling import (
     VALUE_UNAVAILABLE,
     SettingFileSettingInformation,
@@ -11,8 +21,6 @@ from .talon_file_handling import (
     toggle_setting_activation,
 )
 
-from .setting_file_paths import RELEVANT_PATHS, MODE_INDICATOR_PATH, SUBTITLES_PATH
-from .setting_uis import Setting, create_tag_setting, create_boolean_setting, create_numeric_setting, create_text_setting, create_color_picker_setting, create_discreet_choices_setting
 
 class Page:
     def __init__(self, title, description, settings, prefix="", path=None):

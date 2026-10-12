@@ -12,12 +12,12 @@ from .rgb_conversions import (
     is_valid_hexadecimal_rgb,
     parse_rgb_from_string,
 )
+from .setting_file_paths import SETTINGS_PATH
 from .talon_file_handling import (
     VALUE_UNAVAILABLE,
     update_setting,
     update_tag,
 )
-from .setting_file_paths import SETTINGS_PATH
 
 DEFAULT_DESCRIPTION = "Something went wrong. Could not find the setting description."
 
@@ -202,4 +202,3 @@ def create_discreet_choices_setting(name, choices):
         name,
         lambda setting, ui: draw_discreet_choices_input(setting, ui, choices),
     )
-
