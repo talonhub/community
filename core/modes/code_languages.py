@@ -49,6 +49,7 @@ code_languages = [
     # Language("snippets", "snippets", ["snippets"]),
     Language("sql", "sql", ["sql"]),
     Language("stata", "stata", ["do", "ado"]),
+    Language("swift", "swift", ["swift"]),
     Language("talon", "talon", ["talon"]),
     Language("talonlist", "talon list", ["talon-list"]),
     Language("terraform", "terraform", ["tf"]),

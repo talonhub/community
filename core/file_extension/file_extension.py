@@ -49,6 +49,7 @@ _file_extensions_defaults = {
     "dot java": ".java",
     "dot class": ".class",
     "dot log": ".log",
+    "dot swift": ".swift",
 }
 
 ctx = Context()
