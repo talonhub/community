@@ -41,6 +41,7 @@ def convert_key_value_pairs_to_rows(dictionary):
             rows.append((key, value))
     return rows
 
+
 async def show_title_and_rich_content_rows(row, contents):
     """The contents for each row is either a tuple of rich text or regular text to format as a title"""
     index = row.index()
@@ -52,6 +53,7 @@ async def show_title_and_rich_content_rows(row, contents):
                 continue
             async with cell_ui.with_layout(egui.Layout.top_down(egui.Align.Center)):
                 cell_ui.label(column)
+
 
 async def show_row_with_labels(row, contents):
     """Show every column of the row using a label"""
@@ -122,6 +124,7 @@ class PageScroller:
 
 def create_bold_text(text):
     return egui.RichText(text).strong()
+
 
 class UIWrapper:
     """Provides helper methods for drawing on a ui. These methods use the wrapped ui by default, but you can use the ui parameter to provide another one"""

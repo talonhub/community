@@ -5,14 +5,13 @@ from collections.abc import Iterable
 from typing import Any, Optional
 
 from talon import Context, Module, actions, imgui, registry, settings
-import egui
 
 from ...core.gui.gui import (
     PageScroller,
     compute_table_height,
     convert_key_value_pairs_to_rows,
-    open_gui,
     create_bold_text,
+    open_gui,
     show_title_and_rich_content_rows,
 )
 
@@ -149,7 +148,9 @@ def update_operators_text():
                         has_added_first_list_item = True
                         operators_text.append((f"{name} operators:",))
 
-                    operators_text.append(((f"{prefix} {operator_name}:", create_bold_text(text)),))
+                    operators_text.append(
+                        ((f"{prefix} {operator_name}:", create_bold_text(text)),)
+                    )
         if has_operator_without_text_implementation:
             operators_text.append(
                 "* operator is implemented as a function call and cannot be displayed"
@@ -169,7 +170,6 @@ async def gui_operators(ui, ui_wrapper):
         ui.label("There is no active programming language when you opened this menu")
         ui.label("or the language does not have operator support.")
     else:
-        
         row_size = ui_wrapper.get_label_row_size()
         maximum_height = compute_table_height(
             row_size, ui_wrapper.get_item_spacing(), page_scroller.page_size
@@ -186,7 +186,7 @@ async def gui_operators(ui, ui_wrapper):
             show_row=show_title_and_rich_content_rows,
         )
 
-    async with ui.horizontal_wrapped(): 
+    async with ui.horizontal_wrapped():
         if ui_wrapper.button("Help close"):
             gui_operators.hide()
         if operators_text and len(operators_text) > page_scroller.page_size:
