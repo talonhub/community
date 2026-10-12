@@ -1,10 +1,158 @@
-language: html | javascriptreact | typescriptreact
+language: html | javascriptreact | typescriptreact | aspnetcorerazor
 ---
 
 name: attributeClassName
 phrase: class name
 -
 className="$0"
+---
+
+name: anchor
+phrase: anchor
+-
+<a href="$1">$0</a>
+---
+
+name: article
+phrase: article
+-
+<article>
+    $0
+</article>
+---
+
+name: aside
+phrase: aside
+-
+<aside>
+    $0
+</aside>
+---
+
+name: button
+phrase: button
+-
+<button$1>$0</button>
+---
+
+name: div
+phrase: div | divide
+-
+<div$1>
+    $0
+</div>
+---
+
+name: footer
+phrase: footer
+-
+<footer>
+    $0
+</footer>
+---
+
+name: form
+phrase: form
+-
+<form$1>
+    $0
+</form>
+---
+
+name: header
+phrase: header
+-
+<header>
+    $0
+</header>
+---
+
+name: image
+phrase: image
+-
+<img src="$1" alt="$0" />
+---
+
+name: iframe
+phrase: iframe
+-
+<iframe src="$1" title="$0"></iframe>
+---
+
+name: input
+phrase: input
+-
+<input $1 />
+---
+
+name: label
+phrase: label
+-
+<label$1>$0</label>
+---
+
+name: listItem
+phrase: list item
+-
+<li>$0</li>
+---
+
+name: main
+phrase: main
+-
+<main>
+    $0
+</main>
+---
+
+name: nav
+phrase: navigation
+-
+<nav>
+    $0
+</nav>
+---
+
+name: option
+phrase: option
+-
+<option$1>$0</option>
+---
+
+name: orderedList
+phrase: ordered list
+-
+<ol>
+    <li>$0</li>
+</ol>
+---
+
+name: paragraph
+phrase: paragraph
+-
+<p$1>$0</p>
+---
+
+name: section
+phrase: section
+-
+<section>
+    $0
+</section>
+---
+
+name: select
+phrase: select list
+-
+<select$1>
+    $0
+</select>
+---
+
+name: span
+phrase: span
+-
+<span$1>$0</span>
 ---
 
 name: table
@@ -24,10 +172,50 @@ phrase: table
 </table>
 ---
 
+name: tableBody
+phrase: table body
+-
+<tbody>
+    $0
+</tbody>
+---
+
+name: tableData
+phrase: table data
+-
+<td>$0</td>
+---
+
+name: tableHeader
+phrase: table header
+-
+<th>$0</th>
+---
+
+name: tableRow
+phrase: table row
+-
+<tr>
+    $0
+</tr>
+---
+
+name: textArea
+phrase: text area
+-
+<textarea$1>$0</textarea>
+---
+
 name: unorderedList
-phrase: list
+phrase: unordered list
 -
 <ul>
     <li>$0</li>
 </ul>
+---
+
+name: video
+phrase: video
+-
+<video$1>$0</video>
 ---
