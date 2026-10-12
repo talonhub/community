@@ -110,7 +110,8 @@ def update_operators_text():
     the operator text for operators implemented as text insertion
     or an asterisk for operators implemented as a function call.
     """
-    global operators_text
+    global operators_text, operators_max_row_size
+    operators_max_row_size = 0
     try:
         operators = actions.user.code_get_operators()
 
@@ -146,17 +147,23 @@ def update_operators_text():
                     # Only add the header if an item in the list is defined in operators
                     if not has_added_first_list_item:
                         has_added_first_list_item = True
-                        operators_text.append((f"{name} operators:",))
+                        row_text = f"{name} operators:"
+                        operators_max_row_size = max(operators_max_row_size, len(row_text))
+                        operators_text.append((row_text,))
 
+                    operator_name_text = f"{prefix} {operator_name}:"
+                    operators_max_row_size = max(operators_max_row_size, len(operator_name_text) + len(text))
                     operators_text.append(
-                        ((f"{prefix} {operator_name}:", create_bold_text(text)),)
+                        ((operator_name_text, create_bold_text(text)),)
                     )
         if has_operator_without_text_implementation:
+            row_text = "* operator is implemented as a function call and cannot be displayed"
             operators_text.append(
                 (
-                    "* operator is implemented as a function call and cannot be displayed",
+                    row_text,
                 )
             )
+            operators_max_row_size = max(operators_max_row_size, len(row_text))
         page_scroller.page_size = settings.get("user.help_max_command_lines_per_page")
     # This exception will get raised if there is no operators object defined in the active context
     except NotImplementedError:
@@ -166,7 +173,16 @@ def update_operators_text():
 @open_gui(y=0, refresh_period="500ms")
 async def gui_operators(ui, ui_wrapper):
     global operators_text
-    ui_wrapper.header("Help: Operators")
+    # use horizontal layout to prevent wrapping
+    async with ui.horizontal():
+        title = "Help: Operators"
+        if operators_text:
+            # add padding so that there is enough room for all of the lines in the table
+            # this is currently needed because of how auto sizing works and the rows significantly varying in length
+            padding_width = max(0, operators_max_row_size - len(title))
+            padding = " "*padding_width
+            title = f"{title}{padding}"
+        ui_wrapper.header(title)
 
     if operators_text is None:
         ui.separator()
