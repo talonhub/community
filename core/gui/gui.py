@@ -102,8 +102,7 @@ class PageScroller:
         target = min(target, maximum)
         if target + self.page_size > maximum:
             target = maximum - self.page_size + 1
-        target = max(target, 0)
-        return target
+        return max(target, 0)
 
     def is_scrolling(self):
         return self.scroll
