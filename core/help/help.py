@@ -167,6 +167,7 @@ async def gui_operators(ui, ui_wrapper):
     ui_wrapper.header("Help: Operators")
 
     if operators_text is None:
+        ui.separator()
         ui.label("There is no active programming language when you opened this menu")
         ui.label("or the language does not have operator support.")
     else:
