@@ -12,6 +12,7 @@ from ...core.gui.gui import (
     compute_table_height,
     convert_key_value_pairs_to_rows,
     open_gui,
+    create_bold_text,
 )
 
 mod = Module()
@@ -145,7 +146,7 @@ def update_operators_text():
                     # Only add the header if an item in the list is defined in operators
                     if not has_added_first_list_item:
                         has_added_first_list_item = True
-                        rich_text = egui.RichText(f"{name} operators:").strong()
+                        rich_text = create_bold_text(f"{name} operators:")
                         operators_text.append((rich_text,))
 
                     operators_text.append((f"    {prefix} {operator_name}{text}",))

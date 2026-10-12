@@ -109,6 +109,9 @@ class PageScroller:
         return self.scroll
 
 
+def create_bold_text(text):
+    return egui.RichText(text).strong()
+
 class UIWrapper:
     """Provides helper methods for drawing on a ui. These methods use the wrapped ui by default, but you can use the ui parameter to provide another one"""
 
