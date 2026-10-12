@@ -15,7 +15,6 @@ from .talon_file_handling import (
     update_tag,
 )
 
-
 SETTINGS_PATH = Path(__file__).parent.parent.parent / "settings.talon"
 MODE_INDICATOR_PATH = (
     Path(__file__).parent.parent / "mode_indicator" / "mode_indicator.talon"
