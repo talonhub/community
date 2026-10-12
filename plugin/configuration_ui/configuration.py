@@ -609,7 +609,7 @@ manager = Manager()
     decorated=True,
     title="Community Settings",
 )
-async def draw(ui, helpers):
+async def draw(ui, ui_wrappers):
     await manager.draw(ui)
 
 
