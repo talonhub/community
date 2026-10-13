@@ -208,7 +208,7 @@ async def draw_discreet_choices_input(setting: Setting, ui, choices, is_chosen):
         .show()
     ) as combo_box:
         if is_chosen:
-                print("attempt")
+            print("attempt")
         if combo_box.shown:
             combo_ui = combo_box.ui
             for value, text in choices:
@@ -219,5 +219,7 @@ def create_discreet_choices_setting(name, choices):
     """Choices is an iterable of tuples with the value and text of each option respectively"""
     return Setting(
         name,
-        lambda setting, ui, is_chosen: draw_discreet_choices_input(setting, ui, choices, is_chosen),
+        lambda setting, ui, is_chosen: draw_discreet_choices_input(
+            setting, ui, choices, is_chosen
+        ),
     )
