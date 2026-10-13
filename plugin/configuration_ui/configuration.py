@@ -275,6 +275,14 @@ class Manager:
         ctx.lists["user.community_settings_window_page"] = {
             page.title: page.title for page in pages
         }
+        self.chosen_setting = ""
+
+    def update_page(self, page_name):
+        self.page = page_name
+        page = self.pages[self.page]
+        ctx.lists["user.community_settings_window_setting"] = {
+            compute_readable_name(setting.name, page.prefix): setting.name for setting in page.settings
+        }
 
     def on_change(self, path):
         tags, settings = parse_settings(path)
@@ -312,7 +320,7 @@ class Manager:
         async with ui.vertical():
             for page in self.pages:
                 if ui.selectable_label(page == self.page, page).clicked():
-                    self.page = page
+                    self.update_page(page)
             ui.add_space(total_available_height - ui.min_size().y)
         ui.separator()
 
@@ -340,7 +348,10 @@ class Manager:
                     return
                 async with ui.add_enabled_ui(setting.is_activated or setting.is_tag):
                     try:
-                        await setting.draw(setting, ui)
+                        is_setting_chosen = setting.name == self.chosen_setting
+                        await setting.draw(setting, ui, is_setting_chosen)
+                        if is_setting_chosen:
+                            self.chosen_setting = ""
                         value = setting.value.get()
                         if old_value != value:
                             setting.update_function(setting.path, setting.name, value)
@@ -410,5 +421,10 @@ class Actions:
 
     def configuration_window_open_page(name: str):
         """Open the page of the Community settings configuration window by name"""
-        manager.page = name
+        manager.update_page(name)
+        draw.refresh()
+
+    def configuration_window_choose_setting_ui(name: str):
+        """Focus or toggle the setting"""
+        manager.chosen_setting = name
         draw.refresh()

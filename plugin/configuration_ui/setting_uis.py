@@ -46,8 +46,10 @@ class Setting:
             return DEFAULT_DESCRIPTION
 
 
-async def draw_toggle(setting: Setting, ui):
+async def draw_toggle(setting: Setting, ui, is_setting_chosen):
     ui.checkbox(setting.value, setting.get_description())
+    if is_setting_chosen:
+        setting.value.set(not setting.value.get())
 
 
 def create_tag_setting(name):
@@ -76,35 +78,43 @@ def make_value_float_if_there_is_a_float_bound(value, minimum, maximum):
         value.set(float(value.get()))
 
 
-async def draw_numeric_input(setting: Setting, ui, minimum, maximum):
+async def draw_numeric_input(setting: Setting, ui, minimum, maximum, is_setting_chosen):
     make_value_float_if_there_is_a_float_bound(setting.value, minimum, maximum)
-    ui.add(egui.DragValue(setting.value))
+    response = ui.add(egui.DragValue(setting.value))
     value = setting.value.get()
     if minimum is not None and value < minimum:
         setting.value.set(minimum)
     if maximum is not None and value > maximum:
         setting.value.set(maximum)
+    if is_setting_chosen:
+        response.request_focus()
 
 
-async def draw_slider_input(setting: Setting, ui, minimum, maximum):
+async def draw_slider_input(setting: Setting, ui, minimum, maximum, is_setting_chosen):
     make_value_float_if_there_is_a_float_bound(setting.value, minimum, maximum)
     slider = egui.Slider(setting.value, minimum, maximum)
-    ui.add(slider)
+    response = ui.add(slider)
+    if is_setting_chosen:
+        response.request_focus()
 
 
-async def draw_single_line_text_input(setting: Setting, ui):
-    ui.add(egui.TextEdit.singleline(setting.value))
+async def draw_single_line_text_input(setting: Setting, ui, is_setting_chosen):
+    response = ui.add(egui.TextEdit.singleline(setting.value))
+    if is_setting_chosen:
+        response.request_focus()
 
 
-async def draw_multiline_text_input(setting: Setting, ui):
-    ui.add(egui.TextEdit.multiline(setting.value))
+async def draw_multiline_text_input(setting: Setting, ui, is_setting_chosen):
+    response = ui.add(egui.TextEdit.multiline(setting.value))
+    if is_setting_chosen:
+        response.request_focus()
 
 
 def create_numeric_setting(name, minimum=None, maximum=None, use_slider=False):
     ui_function = draw_slider_input if use_slider else draw_numeric_input
     return Setting(
         name,
-        lambda setting, ui: ui_function(setting, ui, minimum, maximum),
+        lambda setting, ui, is_setting_chosen: ui_function(setting, ui, minimum, maximum, is_setting_chosen),
     )
 
 
@@ -139,7 +149,7 @@ def compute_hexadecimal_from_color_name(name):
     return color.to_hex()[1:-2]
 
 
-async def draw_color_picker_input(setting: Setting, ui):
+async def draw_color_picker_input(setting: Setting, ui, is_setting_chosen):
     value = setting.value.get()
     new_value = value
     async with ui.horizontal_wrapped():
