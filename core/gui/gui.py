@@ -411,6 +411,7 @@ class GUI:
         self._cancel_refresh_job()
 
         self._window = self._props.create_window(self._render)
+        self._window.register("on_close", self._on_hide_cleanup)
 
         if self._stored_rect is not None and not self._props.will_auto_size():
             self._window.show()
@@ -433,11 +434,6 @@ class GUI:
             self._refresh_job = None
 
     def hide(self):
-        if self.tag:
-            self.context.tags = []
-
-        self._cancel_refresh_job()
-
         if self._window is None:
             return
 
@@ -450,7 +446,14 @@ class GUI:
             self._stored_rect = self._window.rect
             self._window.close()
         finally:
-            self._window = None
+            self._on_hide_cleanup()
+
+    def _on_hide_cleanup(self):
+        if self.tag:
+            self.context.tags = []
+
+        self._cancel_refresh_job()
+        self._window = None
 
     async def _render(self, ui: egui.Ui) -> None:
         self._apply_theme(ui)
