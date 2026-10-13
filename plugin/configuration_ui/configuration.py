@@ -277,6 +277,7 @@ class Manager:
             page.title: page.title for page in pages
         }
         self.chosen_setting = ""
+        self.comment_toggle_setting = ""
         self.post_action = None
 
     def update_page(self, page_name):
@@ -307,6 +308,7 @@ class Manager:
 
     async def draw(self, ui):
         chosen_setting = self.chosen_setting
+        comment_toggle_setting = self.comment_toggle_setting
         total_available_height = ui.available_height()
         async with ui.horizontal():
             await self.draw_page_navigation(ui, total_available_height)
@@ -319,10 +321,13 @@ class Manager:
                 ui.vertical(),
             ):
                 post_action = await self.draw_current_page(
-                    interaction_ui, total_available_height, chosen_setting
+                    interaction_ui, total_available_height, chosen_setting, comment_toggle_setting
                 )
         if chosen_setting:
             self.chosen_setting = ""
+            draw.refresh()
+        if comment_toggle_setting:
+            self.comment_toggle_setting = ""
             draw.refresh()
         if self.post_action:
             self.post_action()
@@ -338,14 +343,15 @@ class Manager:
             ui.add_space(total_available_height - ui.min_size().y)
         ui.separator()
 
-    async def draw_setting_ui(self, ui, setting, page, chosen_setting):
+    async def draw_setting_ui(self, ui, setting, page, chosen_setting, comment_toggle_setting):
         old_value = setting.value.get()
         readable_name = compute_readable_name(setting.name, page.prefix)
         async with ui.horizontal():
             if (
                 not setting.is_tag
-                and ui.checkbox(egui.Mutable(setting.is_activated), "").clicked()
+                and (ui.checkbox(egui.Mutable(setting.is_activated), "").clicked() or comment_toggle_setting == setting.name)
             ):
+                print(comment_toggle_setting, "toggling")
                 error_message = toggle_setting_activation(setting)
                 if error_message is not None:
                     self.error_message = error_message
@@ -371,7 +377,7 @@ class Manager:
                     except Exception as ex:
                         self.error_message = f"Something went wrong: {ex}"
 
-    async def draw_current_page(self, ui, total_available_height, chosen_setting):
+    async def draw_current_page(self, ui, total_available_height, chosen_setting, comment_toggle_setting):
         if not self.page:
             return None
         page = self.pages[self.page]
@@ -392,7 +398,7 @@ class Manager:
             ui.separator()
             for setting in page.settings:
                 was_chosen = await self.draw_setting_ui(
-                    ui, setting, page, chosen_setting
+                    ui, setting, page, chosen_setting, comment_toggle_setting,
                 )
                 ui.separator()
                 if was_chosen:
@@ -445,3 +451,9 @@ class Actions:
         """Focus or toggle the setting"""
         manager.chosen_setting = name
         draw.refresh()
+
+    def configuration_window_toggle_commenting_setting(name: str):
+        """Toggle commenting the setting"""
+        manager.comment_toggle_setting = name
+        draw.refresh()
+    
