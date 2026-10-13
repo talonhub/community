@@ -352,15 +352,15 @@ class Manager:
     ):
         old_value = setting.value.get()
         readable_name = compute_readable_name(setting.name, page.prefix)
+        error_representation_of_name = f"{readable_name} ({setting.name})"
         async with ui.horizontal():
             if not setting.is_tag and (
                 ui.checkbox(egui.Mutable(setting.is_activated), "").clicked()
                 or comment_toggle_setting == setting.name
             ):
-                print(comment_toggle_setting, "toggling")
                 error_message = toggle_setting_activation(setting)
                 if error_message is not None:
-                    self.error_message = error_message
+                    self.error_message = f"Something went wrong trying to toggle commenting {error_representation_of_name}: error_message"
                     self.error_setting = setting
             async with ui.vertical():
                 ui.strong(readable_name)
@@ -369,7 +369,7 @@ class Manager:
                 if not setting.draws_description:
                     ui.label(setting.get_description())
                 if not setting.is_tag and setting.value.get() == VALUE_UNAVAILABLE:
-                    error_message = f"Something went wrong. The setting {readable_name} could not be found or could not be parsed."
+                    error_message = f"Something went wrong. The setting {error_representation_of_name} could not be found or could not be parsed."
                     async with ui.horizontal():
                         ui.label(error_message)
                         await self.draw_error_copy_buttons(ui, error_message, setting)
@@ -384,7 +384,7 @@ class Manager:
                             setting.update_function(setting.path, setting.name, value)
                         return is_setting_chosen
                     except Exception as ex:
-                        self.error_message = f"Something went wrong in the UI for setting {readable_name}: {ex}"
+                        self.error_message = f"Something went wrong in the UI for setting {error_representation_of_name}: {ex}"
                         self.error_setting = setting
 
     async def draw_current_page(
@@ -430,8 +430,11 @@ class Manager:
             clip.set_text(error_message)
         if ui.button("copy with setting file").clicked():
             path: Path = setting.path
-            file_text = path.read_text()
-            text = f"{error_message}\n\n{path}\n\n{file_text}"
+            try:
+                file_text = path.read_text()
+            except OSError as ex:
+                file_text = f"Error occurred trying to open the file {ex}"
+            text = f"{error_message}\n\n{path.stem + path.suffix}\n\n{file_text}"
             clip.set_text(text)
 
 
