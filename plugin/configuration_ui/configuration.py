@@ -3,7 +3,7 @@ from pathlib import Path
 import egui
 from talon import Module, fs
 
-from ...core.gui.gui import open_gui
+from ...core.gui.gui import open_gui, let_user_use_page_keys_to_scroll_scroll_area
 from .setting_file_paths import MODE_INDICATOR_PATH, RELEVANT_PATHS, SUBTITLES_PATH
 from .setting_uis import (
     Setting,
@@ -341,21 +341,7 @@ class Manager:
             .max_height(total_available_height)
             .show() as scroll_ui
         ):
-            async with scroll_ui.input() as input_state:
-                events = input_state.events()
-                scrolling_delta = None
-                for event in events:
-                    if key := event.key():
-                        key_name = key.name().lower()
-                        if key_name == "pagedown":
-                            scrolling_delta = -1
-                        elif key_name == "pageup":
-                            scrolling_delta = 1
-                if scrolling_delta is not None:
-                    clip_rect = scroll_ui.clip_rect()
-                    scroll_ui.scroll_with_delta(
-                        egui.Vec2(0, scrolling_delta * abs(clip_rect.height()))
-                    )
+            await let_user_use_page_keys_to_scroll_scroll_area(scroll_ui)
 
             ui.strong(page.title)
             if page.description:
