@@ -330,7 +330,6 @@ class Manager:
         if post_action:
             self.post_action = post_action
 
-
     async def draw_page_navigation(self, ui, total_available_height):
         async with ui.vertical():
             for page in self.pages:
@@ -360,7 +359,7 @@ class Manager:
                     ui.label(
                         "Something went wrong. The setting could not be found or could not be parsed."
                     )
-                    return
+                    return None
                 async with ui.add_enabled_ui(setting.is_activated or setting.is_tag):
                     try:
                         is_setting_chosen = setting.name == chosen_setting
@@ -374,7 +373,7 @@ class Manager:
 
     async def draw_current_page(self, ui, total_available_height, chosen_setting):
         if not self.page:
-            return
+            return None
         page = self.pages[self.page]
         # use a single column table with heterogeneous rows later
         if self.error_message:
@@ -392,7 +391,9 @@ class Manager:
                 ui.label(page.description)
             ui.separator()
             for setting in page.settings:
-                was_chosen = await self.draw_setting_ui(ui, setting, page, chosen_setting)
+                was_chosen = await self.draw_setting_ui(
+                    ui, setting, page, chosen_setting
+                )
                 ui.separator()
                 if was_chosen:
                     return setting.post_chosen_action
