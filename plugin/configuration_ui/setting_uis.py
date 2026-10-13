@@ -165,7 +165,7 @@ async def draw_color_picker_input(setting: Setting, ui, is_setting_chosen):
             new_value = convert_rgb_to_string(out_rgba.to_srgba_unmultiplied()[:3])
             if is_setting_chosen:
                 picker_response.request_focus()
-                actions.key('enter')
+                actions.key("enter")
         else:
             ui.label("Not valid color.")
 
