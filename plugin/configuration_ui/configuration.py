@@ -337,6 +337,19 @@ class Manager:
             ui.strong(self.error_message)
         ui.add_space(10)
         async with egui.ScrollArea.vertical().max_height(total_available_height).show():
+            async with ui.input() as input_state:
+                events = input_state.events()
+                scrolling_delta = None
+                for event in events:
+                    if key := event.key():
+                        key_name = key.name().lower()
+                        if key_name == "pagedown":
+                            scrolling_delta = 1
+                        elif key_name == "pageup":
+                            scrolling_delta = -1
+                if scrolling_delta is not None:
+                    ui.scroll_with_delta(egui.Vec2(0, scrolling_delta*100))
+                                
             ui.strong(page.title)
             if page.description:
                 ui.label(page.description)
