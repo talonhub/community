@@ -348,8 +348,8 @@ class Manager:
                         elif key_name == "pageup":
                             scrolling_delta = -1
                 if scrolling_delta is not None:
-                    ui.scroll_with_delta(egui.Vec2(0, scrolling_delta*100))
-                                
+                    ui.scroll_with_delta(egui.Vec2(0, scrolling_delta * 100))
+
             ui.strong(page.title)
             if page.description:
                 ui.label(page.description)
