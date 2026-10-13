@@ -154,14 +154,17 @@ def compute_hexadecimal_from_color_name(name):
 async def draw_color_picker_input(setting: Setting, ui, is_setting_chosen):
     value = setting.value.get()
     new_value = value
+    is_valid_rgb = is_valid_hexadecimal_rgb(value)
     async with ui.horizontal_wrapped():
-        if is_valid_hexadecimal_rgb(value):
+        if is_valid_rgb:
             red, green, blue = parse_rgb_from_string(value)
             rgba = egui.Rgba.from_srgba_unmultiplied(red, green, blue, 255)
             rgb = egui.Mutable([rgba.r, rgba.g, rgba.b])
-            egui.color_edit_button_rgb(ui, rgb)
+            picker_response = egui.color_edit_button_rgb(ui, rgb)
             out_rgba = egui.Rgba.from_rgb(*rgb.get())
             new_value = convert_rgb_to_string(out_rgba.to_srgba_unmultiplied()[:3])
+            if is_setting_chosen:
+                picker_response.request_focus()
 
         else:
             ui.label("Not valid color.")
@@ -186,7 +189,9 @@ async def draw_color_picker_input(setting: Setting, ui, is_setting_chosen):
 
         if new_value != setting.value.get().lower():
             setting.value.set(new_value)
-        ui.add(egui.TextEdit.singleline(setting.value))
+        text_response = ui.add(egui.TextEdit.singleline(setting.value))
+        if is_setting_chosen and not is_valid_rgb:
+            text_response.request_focus()
 
 
 def create_color_picker_setting(name):
@@ -196,12 +201,14 @@ def create_color_picker_setting(name):
     )
 
 
-async def draw_discreet_choices_input(setting: Setting, ui, choices):
+async def draw_discreet_choices_input(setting: Setting, ui, choices, is_chosen):
     async with (
         egui.ComboBox(setting.name, "pick option")
         .selected_text(str(setting.value.get()))
         .show()
     ) as combo_box:
+        if is_chosen:
+                print("attempt")
         if combo_box.shown:
             combo_ui = combo_box.ui
             for value, text in choices:
@@ -212,5 +219,5 @@ def create_discreet_choices_setting(name, choices):
     """Choices is an iterable of tuples with the value and text of each option respectively"""
     return Setting(
         name,
-        lambda setting, ui: draw_discreet_choices_input(setting, ui, choices),
+        lambda setting, ui, is_chosen: draw_discreet_choices_input(setting, ui, choices, is_chosen),
     )
