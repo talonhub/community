@@ -316,7 +316,9 @@ class Manager:
                 ui.allocate_ui(interaction_region_space) as interaction_ui,
                 ui.vertical(),
             ):
-                await self.draw_current_page(interaction_ui, total_available_height, chosen_setting)
+                await self.draw_current_page(
+                    interaction_ui, total_available_height, chosen_setting
+                )
         if chosen_setting:
             self.chosen_setting = ""
             draw.refresh()
