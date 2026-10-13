@@ -423,6 +423,7 @@ class Manager:
                 ui.separator()
                 if was_chosen:
                     return setting.post_chosen_action
+        return None
 
     async def draw_error_copy_buttons(self, ui, error_message, setting):
         if ui.button("copy").clicked():
