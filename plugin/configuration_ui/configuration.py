@@ -277,6 +277,7 @@ class Manager:
             page.title: page.title for page in pages
         }
         self.chosen_setting = ""
+        self.post_action = None
 
     def update_page(self, page_name):
         self.page = page_name
@@ -317,12 +318,18 @@ class Manager:
                 ui.allocate_ui(interaction_region_space) as interaction_ui,
                 ui.vertical(),
             ):
-                await self.draw_current_page(
+                post_action = await self.draw_current_page(
                     interaction_ui, total_available_height, chosen_setting
                 )
         if chosen_setting:
             self.chosen_setting = ""
             draw.refresh()
+        if self.post_action:
+            self.post_action()
+            self.post_action = None
+        if post_action:
+            self.post_action = post_action
+
 
     async def draw_page_navigation(self, ui, total_available_height):
         async with ui.vertical():
@@ -361,6 +368,7 @@ class Manager:
                         value = setting.value.get()
                         if old_value != value:
                             setting.update_function(setting.path, setting.name, value)
+                        return is_setting_chosen
                     except Exception as ex:
                         self.error_message = f"Something went wrong: {ex}"
 
@@ -384,8 +392,10 @@ class Manager:
                 ui.label(page.description)
             ui.separator()
             for setting in page.settings:
-                await self.draw_setting_ui(ui, setting, page, chosen_setting)
+                was_chosen = await self.draw_setting_ui(ui, setting, page, chosen_setting)
                 ui.separator()
+                if was_chosen:
+                    return setting.post_chosen_action
 
 
 manager = Manager()

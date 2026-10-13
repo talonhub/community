@@ -32,6 +32,7 @@ class Setting:
     is_activated: bool = True
     value: egui.Mutable = egui.Mutable(VALUE_UNAVAILABLE)
     draws_description: bool = False
+    post_chosen_action: Callable | None=None
 
     def get_description(self):
         try:
@@ -233,4 +234,5 @@ def create_discreet_choices_setting(name, choices, is_numeric=False):
         lambda setting, ui, is_chosen: draw_discreet_choices_input(
             setting, ui, choices, is_chosen, is_numeric
         ),
+        post_chosen_action=lambda : actions.key('enter')
     )
