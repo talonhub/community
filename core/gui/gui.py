@@ -11,7 +11,7 @@ from dataclasses import dataclass
 
 import egui
 from skia import Rect
-from talon import cron, settings, ui, Context
+from talon import Context, cron, settings, ui
 from talon.egui import Window
 from talon.screen import Screen
 
@@ -372,7 +372,7 @@ class GUI:
         always_on_top: bool,
         decorated: bool,
         title: str,
-        tag: str
+        tag: str,
     ):
         self._props = Props(
             draw=draw,

@@ -357,6 +357,7 @@ manager = Manager()
 mod = Module()
 mod.tag("community_settings", desc="Community settings configuration window is showing")
 
+
 @open_gui(
     x=0.125,
     y=0.125,
@@ -379,6 +380,7 @@ def handle_file_update(path, flags):
 
 for path in RELEVANT_PATHS:
     fs.watch(path, handle_file_update)
+
 
 @mod.action_class
 class Actions:
