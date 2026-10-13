@@ -281,7 +281,8 @@ class Manager:
         self.page = page_name
         page = self.pages[self.page]
         ctx.lists["user.community_settings_window_setting"] = {
-            compute_readable_name(setting.name, page.prefix): setting.name for setting in page.settings
+            compute_readable_name(setting.name, page.prefix): setting.name
+            for setting in page.settings
         }
 
     def on_change(self, path):

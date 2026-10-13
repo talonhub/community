@@ -114,7 +114,9 @@ def create_numeric_setting(name, minimum=None, maximum=None, use_slider=False):
     ui_function = draw_slider_input if use_slider else draw_numeric_input
     return Setting(
         name,
-        lambda setting, ui, is_setting_chosen: ui_function(setting, ui, minimum, maximum, is_setting_chosen),
+        lambda setting, ui, is_setting_chosen: ui_function(
+            setting, ui, minimum, maximum, is_setting_chosen
+        ),
     )
 
 
