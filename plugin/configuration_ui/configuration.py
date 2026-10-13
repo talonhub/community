@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import egui
-from talon import Context, Module, fs
+from talon import Context, Module, fs, clip
 
 from ...core.gui.gui import let_user_use_page_keys_to_scroll_scroll_area, open_gui
 from .setting_file_paths import MODE_INDICATOR_PATH, RELEVANT_PATHS, SUBTITLES_PATH
@@ -273,6 +273,7 @@ class Manager:
         for path in RELEVANT_PATHS:
             self.on_change(path)
         self.error_message = ""
+        self.error_setting = None
         ctx.lists["user.community_settings_window_page"] = {
             page.title: page.title for page in pages
         }
@@ -360,6 +361,7 @@ class Manager:
                 error_message = toggle_setting_activation(setting)
                 if error_message is not None:
                     self.error_message = error_message
+                    self.error_setting = setting
             async with ui.vertical():
                 ui.strong(readable_name)
                 ui.weak(setting.name)
@@ -367,9 +369,11 @@ class Manager:
                 if not setting.draws_description:
                     ui.label(setting.get_description())
                 if not setting.is_tag and setting.value.get() == VALUE_UNAVAILABLE:
-                    ui.label(
-                        "Something went wrong. The setting could not be found or could not be parsed."
-                    )
+                    error_message = f"Something went wrong. The setting {readable_name} could not be found or could not be parsed."
+                    async with ui.horizontal():
+                        ui.label(error_message)
+                        await self.draw_error_copy_buttons(ui, error_message, setting)
+
                     return None
                 async with ui.add_enabled_ui(setting.is_activated or setting.is_tag):
                     try:
@@ -380,7 +384,8 @@ class Manager:
                             setting.update_function(setting.path, setting.name, value)
                         return is_setting_chosen
                     except Exception as ex:
-                        self.error_message = f"Something went wrong: {ex}"
+                        self.error_message = f"Something went wrong in the UI for setting {readable_name}: {ex}"
+                        self.error_setting = setting
 
     async def draw_current_page(
         self, ui, total_available_height, chosen_setting, comment_toggle_setting
@@ -390,7 +395,9 @@ class Manager:
         page = self.pages[self.page]
         # use a single column table with heterogeneous rows later
         if self.error_message:
-            ui.strong(self.error_message)
+            async with ui.horizontal_wrapped():
+                ui.strong(self.error_message)
+                await self.draw_error_copy_buttons(ui, self.error_message, self.error_setting)
         ui.add_space(10)
         async with (
             egui.ScrollArea.vertical()
@@ -415,6 +422,14 @@ class Manager:
                 if was_chosen:
                     return setting.post_chosen_action
 
+    async def draw_error_copy_buttons(self, ui, error_message, setting):
+        if ui.button("copy").clicked():
+            clip.set_text(error_message)
+        if ui.button("copy with setting file").clicked():
+            path: Path = setting.path
+            file_text = path.read_text()
+            text = f"{error_message}\n\n{path}\n\n{file_text}"
+            clip.set_text(text)
 
 manager = Manager()
 
