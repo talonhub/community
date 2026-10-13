@@ -354,6 +354,8 @@ class Manager:
 
 manager = Manager()
 
+mod = Module()
+mod.tag("community_settings", desc="Community settings configuration window is showing")
 
 @open_gui(
     x=0.125,
@@ -363,6 +365,7 @@ manager = Manager()
     always_on_top=False,
     decorated=True,
     title="Community Settings",
+    tag="user.community_settings",
 )
 async def draw(ui, ui_wrappers):
     await manager.draw(ui)
@@ -376,9 +379,6 @@ def handle_file_update(path, flags):
 
 for path in RELEVANT_PATHS:
     fs.watch(path, handle_file_update)
-
-mod = Module()
-
 
 @mod.action_class
 class Actions:

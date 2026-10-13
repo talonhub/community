@@ -11,7 +11,7 @@ from dataclasses import dataclass
 
 import egui
 from skia import Rect
-from talon import cron, settings, ui
+from talon import cron, settings, ui, Context
 from talon.egui import Window
 from talon.screen import Screen
 
@@ -291,6 +291,7 @@ def open_gui(
     always_on_top: bool = True,
     decorated: bool = False,
     title: str = "",
+    tag: str = "",
 ):
     """Decorator for for an egui callback drawing function.
     screen: the screen to show the gui on.
@@ -312,6 +313,7 @@ def open_gui(
             always_on_top=always_on_top,
             decorated=decorated,
             title=title,
+            tag=tag,
         )
 
     return open_inner
@@ -370,6 +372,7 @@ class GUI:
         always_on_top: bool,
         decorated: bool,
         title: str,
+        tag: str
     ):
         self._props = Props(
             draw=draw,
@@ -389,6 +392,9 @@ class GUI:
         self._refresh_job = None
         self._last_height_taken = None
         self._previous_height_taken = None
+        self.tag = tag
+        if tag:
+            self.context = Context()
 
     @property
     def showing(self) -> bool:
@@ -398,6 +404,9 @@ class GUI:
         if self.showing:
             self._window.focus()
             return
+
+        if self.tag:
+            self.context.tags = [self.tag]
 
         self._cancel_refresh_job()
 
@@ -424,6 +433,9 @@ class GUI:
             self._refresh_job = None
 
     def hide(self):
+        if self.tag:
+            self.context.tags = []
+
         self._cancel_refresh_job()
 
         if self._window is None:
