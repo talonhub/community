@@ -304,6 +304,7 @@ class Manager:
                         setting.value.set(VALUE_UNAVAILABLE)
 
     async def draw(self, ui):
+        chosen_setting = self.chosen_setting
         total_available_height = ui.available_height()
         async with ui.horizontal():
             await self.draw_page_navigation(ui, total_available_height)
@@ -315,7 +316,10 @@ class Manager:
                 ui.allocate_ui(interaction_region_space) as interaction_ui,
                 ui.vertical(),
             ):
-                await self.draw_current_page(interaction_ui, total_available_height)
+                await self.draw_current_page(interaction_ui, total_available_height, chosen_setting)
+        if chosen_setting:
+            self.chosen_setting = ""
+            draw.refresh()
 
     async def draw_page_navigation(self, ui, total_available_height):
         async with ui.vertical():
@@ -325,7 +329,7 @@ class Manager:
             ui.add_space(total_available_height - ui.min_size().y)
         ui.separator()
 
-    async def draw_setting_ui(self, ui, setting, page):
+    async def draw_setting_ui(self, ui, setting, page, chosen_setting):
         old_value = setting.value.get()
         readable_name = compute_readable_name(setting.name, page.prefix)
         async with ui.horizontal():
@@ -349,17 +353,15 @@ class Manager:
                     return
                 async with ui.add_enabled_ui(setting.is_activated or setting.is_tag):
                     try:
-                        is_setting_chosen = setting.name == self.chosen_setting
+                        is_setting_chosen = setting.name == chosen_setting
                         await setting.draw(setting, ui, is_setting_chosen)
-                        if is_setting_chosen:
-                            self.chosen_setting = ""
                         value = setting.value.get()
                         if old_value != value:
                             setting.update_function(setting.path, setting.name, value)
                     except Exception as ex:
                         self.error_message = f"Something went wrong: {ex}"
 
-    async def draw_current_page(self, ui, total_available_height):
+    async def draw_current_page(self, ui, total_available_height, chosen_setting):
         if not self.page:
             return
         page = self.pages[self.page]
@@ -379,7 +381,7 @@ class Manager:
                 ui.label(page.description)
             ui.separator()
             for setting in page.settings:
-                await self.draw_setting_ui(ui, setting, page)
+                await self.draw_setting_ui(ui, setting, page, chosen_setting)
                 ui.separator()
 
 
