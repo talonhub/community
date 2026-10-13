@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import egui
-from talon import Module, fs
+from talon import Context, Module, fs
 
 from ...core.gui.gui import let_user_use_page_keys_to_scroll_scroll_area, open_gui
 from .setting_file_paths import MODE_INDICATOR_PATH, RELEVANT_PATHS, SUBTITLES_PATH
@@ -20,6 +20,13 @@ from .talon_file_handling import (
     parse_settings,
     toggle_setting_activation,
 )
+
+mod = Module()
+ctx = Context()
+
+mod.tag("community_settings_window", desc="Community settings configuration window is showing")
+mod.list("community_settings_window_page", desc="The name of a page in the Community settings window")
+mod.list("community_settings_window_setting", desc="The name of a setting on the current Community settings window page")
 
 
 class Page:
@@ -256,6 +263,7 @@ class Manager:
         for path in RELEVANT_PATHS:
             self.on_change(path)
         self.error_message = ""
+        ctx.lists["user.community_settings_window_page"] = {page.title: page.title for page in pages}
 
     def on_change(self, path):
         tags, settings = parse_settings(path)
@@ -354,10 +362,6 @@ class Manager:
 
 manager = Manager()
 
-mod = Module()
-mod.tag("community_settings", desc="Community settings configuration window is showing")
-
-
 @open_gui(
     x=0.125,
     y=0.125,
@@ -366,7 +370,7 @@ mod.tag("community_settings", desc="Community settings configuration window is s
     always_on_top=False,
     decorated=True,
     title="Community Settings",
-    tag="user.community_settings",
+    tag="user.community_settings_window",
 )
 async def draw(ui, ui_wrappers):
     await manager.draw(ui)
@@ -385,9 +389,14 @@ for path in RELEVANT_PATHS:
 @mod.action_class
 class Actions:
     def show_configuration_window():
-        """Show the Community configuration window"""
+        """Show the Community settings configuration window"""
         draw.show()
 
     def hide_configuration_window():
-        """Hide the Community configuration window"""
+        """Hide the Community settings configuration window"""
         draw.hide()
+
+    def configuration_window_open_page(name: str):
+        """Open the page of the Community settings configuration window by name"""
+        manager.page = name
+        draw.refresh()
