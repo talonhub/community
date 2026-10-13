@@ -341,7 +341,7 @@ class Manager:
             .max_height(total_available_height)
             .show() as scroll_ui
         ):
-            async with ui.input() as input_state:
+            async with scroll_ui.input() as input_state:
                 events = input_state.events()
                 scrolling_delta = None
                 for event in events:
@@ -353,7 +353,7 @@ class Manager:
                             scrolling_delta = 1
                 if scrolling_delta is not None:
                     clip_rect = scroll_ui.clip_rect()
-                    ui.scroll_with_delta(
+                    scroll_ui.scroll_with_delta(
                         egui.Vec2(0, scrolling_delta * abs(clip_rect.height()))
                     )
 
