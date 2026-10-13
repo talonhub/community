@@ -204,7 +204,9 @@ def create_color_picker_setting(name):
     )
 
 
-async def draw_discreet_choices_input(setting: Setting, ui, choices, is_chosen, is_numeric):
+async def draw_discreet_choices_input(
+    setting: Setting, ui, choices, is_chosen, is_numeric
+):
     async with ui.horizontal():
         async with (
             egui.ComboBox(setting.name, "pick option")
