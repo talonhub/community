@@ -344,9 +344,9 @@ class Manager:
                     if key := event.key():
                         key_name = key.name().lower()
                         if key_name == "pagedown":
-                            scrolling_delta = 1
-                        elif key_name == "pageup":
                             scrolling_delta = -1
+                        elif key_name == "pageup":
+                            scrolling_delta = 1
                 if scrolling_delta is not None:
                     ui.scroll_with_delta(egui.Vec2(0, scrolling_delta * 100))
 
