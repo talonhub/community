@@ -336,7 +336,11 @@ class Manager:
         if self.error_message:
             ui.strong(self.error_message)
         ui.add_space(10)
-        async with egui.ScrollArea.vertical().max_height(total_available_height).show() as scroll_ui:
+        async with (
+            egui.ScrollArea.vertical()
+            .max_height(total_available_height)
+            .show() as scroll_ui
+        ):
             async with ui.input() as input_state:
                 events = input_state.events()
                 scrolling_delta = None
@@ -349,7 +353,9 @@ class Manager:
                             scrolling_delta = 1
                 if scrolling_delta is not None:
                     clip_rect = scroll_ui.clip_rect()
-                    ui.scroll_with_delta(egui.Vec2(0, scrolling_delta * abs(clip_rect.height())))
+                    ui.scroll_with_delta(
+                        egui.Vec2(0, scrolling_delta * abs(clip_rect.height()))
+                    )
 
             ui.strong(page.title)
             if page.description:
