@@ -1,5 +1,6 @@
 language: swift
 ---
+
 name: letStatement
 phrase: let
 insertionScope: statement
@@ -153,7 +154,6 @@ async let $1 = $0
 name: awaitTask
 phrase: await task
 insertionScope: statement
-
 -
 await $1($2) { $3 in
     $0
@@ -165,7 +165,6 @@ phrase: let await task
 insertionScope: statement
 
 $var.insertionFormatter: PRIVATE_CAMEL_CASE
-
 -
 let $var = await $1($2) { $3 in
     $0
@@ -228,7 +227,7 @@ phrase: type throw | type throws
 insertionScope: statement
 
 $0.insertionFormatter: PUBLIC_CAMEL_CASE
-$0.wrapperPhrase: throws 
+$0.wrapperPhrase: throws
 $0.wrapperScope: identifier
 -
 throws($0)
@@ -237,12 +236,12 @@ throws($0)
 name: doStatement
 phrase: do | do state
 insertionScope: statement
-
 -
 do {
     $0
 }
 ---
+
 name: doCatch
 phrase: do catch
 insertionScope: statement
