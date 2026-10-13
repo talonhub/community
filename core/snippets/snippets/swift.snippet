@@ -14,10 +14,10 @@ name: tryConvert
 phrase: try question | try convert
 insertionScope: statement
 
-$0.wrapperPhrase: try question | try convert 
-$0.wrapperScope: statement
 $1.wrapperPhrase: try question return | try convert return
 $1.wrapperScope: statement
+$0.wrapperPhrase: try question | try convert
+$0.wrapperScope: statement
 -
 try? $0 {
     return $1
@@ -28,7 +28,7 @@ name: tryForced
 phrase: try bang | try exclamation mark | try forced
 insertionScope: statement
 
-$0.wrapperPhrase: try bang | try exclamation mark | try forced 
+$0.wrapperPhrase: try bang | try exclamation mark | try forced
 $0.wrapperScope: statement
 -
 try! $0
@@ -50,10 +50,10 @@ name: downcastOptional
 phrase: as question | as optional | as option
 insertionScope: statement
 
+$1.insertionFormatter: PUBLIC_CAMEL_CASE
 $0.insertionFormatter: PRIVATE_CAMEL_CASE
 $0.wrapperPhrase: as question | as optional | as option
 $0.wrapperScope: statement
-$1.insertionFormatter: PUBLIC_CAMEL_CASE
 -
 $0 as? $1 {
     $2
@@ -64,10 +64,10 @@ name: downcastForced
 phrase: as bang | as exclamation point | as forced
 insertionScope: statement
 
+$1.insertionFormatter: PUBLIC_CAMEL_CASE
 $0.insertionFormatter: PRIVATE_CAMEL_CASE
 $0.wrapperPhrase: as bang | as exclamation point | as forced
 $0.wrapperScope: statement
-$1.insertionFormatter: PUBLIC_CAMEL_CASE
 -
 $0 as! $1 {
     $2
@@ -145,11 +145,11 @@ name: awaitTask
 phrase: await task
 insertionScope: statement
 
-$0.wrapperPhrase: block await as task
-$0.wrapperScope: statement
 $1.insertionFormatter: PRIVATE_CAMEL_CASE
 $1.wrapperPhrase: await task
 $1.wrapperScope: statement
+$0.wrapperPhrase: block await as task
+$0.wrapperScope: statement
 -
 await $1($2) { $3 in
     $0
