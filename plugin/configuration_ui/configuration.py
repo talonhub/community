@@ -24,9 +24,18 @@ from .talon_file_handling import (
 mod = Module()
 ctx = Context()
 
-mod.tag("community_settings_window", desc="Community settings configuration window is showing")
-mod.list("community_settings_window_page", desc="The name of a page in the Community settings window")
-mod.list("community_settings_window_setting", desc="The name of a setting on the current Community settings window page")
+mod.tag(
+    "community_settings_window",
+    desc="Community settings configuration window is showing",
+)
+mod.list(
+    "community_settings_window_page",
+    desc="The name of a page in the Community settings window",
+)
+mod.list(
+    "community_settings_window_setting",
+    desc="The name of a setting on the current Community settings window page",
+)
 
 
 class Page:
@@ -263,7 +272,9 @@ class Manager:
         for path in RELEVANT_PATHS:
             self.on_change(path)
         self.error_message = ""
-        ctx.lists["user.community_settings_window_page"] = {page.title: page.title for page in pages}
+        ctx.lists["user.community_settings_window_page"] = {
+            page.title: page.title for page in pages
+        }
 
     def on_change(self, path):
         tags, settings = parse_settings(path)
@@ -361,6 +372,7 @@ class Manager:
 
 
 manager = Manager()
+
 
 @open_gui(
     x=0.125,
