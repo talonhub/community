@@ -204,25 +204,31 @@ def create_color_picker_setting(name):
     )
 
 
-async def draw_discreet_choices_input(setting: Setting, ui, choices, is_chosen):
-    async with (
-        egui.ComboBox(setting.name, "pick option")
-        .selected_text(str(setting.value.get()))
-        .show()
-    ) as combo_box:
+async def draw_discreet_choices_input(setting: Setting, ui, choices, is_chosen, is_numeric):
+    async with ui.horizontal():
+        async with (
+            egui.ComboBox(setting.name, "pick option")
+            .selected_text(str(setting.value.get()))
+            .show()
+        ) as combo_box:
+            if combo_box.shown:
+                combo_ui = combo_box.ui
+                for value, text in choices:
+                    combo_ui.selectable_value(setting.value, value, text)
+        if is_numeric:
+            response = ui.add(egui.DragValue(setting.value))
+        else:
+            response = ui.add(egui.TextEdit.singleline(setting.value))
         if is_chosen:
-            print("attempt")
-        if combo_box.shown:
-            combo_ui = combo_box.ui
-            for value, text in choices:
-                combo_ui.selectable_value(setting.value, value, text)
+            focus_widget(response, True)
+            actions.key("shift-tab")
 
 
-def create_discreet_choices_setting(name, choices):
+def create_discreet_choices_setting(name, choices, is_numeric=False):
     """Choices is an iterable of tuples with the value and text of each option respectively"""
     return Setting(
         name,
         lambda setting, ui, is_chosen: draw_discreet_choices_input(
-            setting, ui, choices, is_chosen
+            setting, ui, choices, is_chosen, is_numeric
         ),
     )

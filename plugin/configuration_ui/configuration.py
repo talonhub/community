@@ -147,6 +147,7 @@ class Manager:
                             (1, "on with eyetracker but not zoom mouse mode"),
                             (2, "on but not with zoom mouse mode"),
                         ],
+                        is_numeric=True,
                     ),
                     create_boolean_setting("user.mouse_enable_pop_stops_scroll"),
                     create_boolean_setting("user.mouse_enable_pop_stops_drag"),
