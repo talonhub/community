@@ -3,7 +3,7 @@ from pathlib import Path
 import egui
 from talon import Module, fs
 
-from ...core.gui.gui import open_gui, let_user_use_page_keys_to_scroll_scroll_area
+from ...core.gui.gui import let_user_use_page_keys_to_scroll_scroll_area, open_gui
 from .setting_file_paths import MODE_INDICATOR_PATH, RELEVANT_PATHS, SUBTITLES_PATH
 from .setting_uis import (
     Setting,
