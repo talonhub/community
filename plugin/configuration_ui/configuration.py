@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import egui
-from talon import Context, Module, fs, clip
+from talon import Context, Module, clip, fs
 
 from ...core.gui.gui import let_user_use_page_keys_to_scroll_scroll_area, open_gui
 from .setting_file_paths import MODE_INDICATOR_PATH, RELEVANT_PATHS, SUBTITLES_PATH
@@ -397,7 +397,9 @@ class Manager:
         if self.error_message:
             async with ui.horizontal_wrapped():
                 ui.strong(self.error_message)
-                await self.draw_error_copy_buttons(ui, self.error_message, self.error_setting)
+                await self.draw_error_copy_buttons(
+                    ui, self.error_message, self.error_setting
+                )
         ui.add_space(10)
         async with (
             egui.ScrollArea.vertical()
@@ -430,6 +432,7 @@ class Manager:
             file_text = path.read_text()
             text = f"{error_message}\n\n{path}\n\n{file_text}"
             clip.set_text(text)
+
 
 manager = Manager()
 
