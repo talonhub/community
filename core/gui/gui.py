@@ -284,9 +284,7 @@ class UIWrapper:
         if font_id is None:
             font_id = egui.FontId(self.get_text_size(ui), egui.FontFamily.Proportional)
         microphone_galley = ui.painter().layout_no_wrap(
-            text,
-            font_id,
-            egui.Color32.black()
+            text, font_id, egui.Color32.black()
         )
         return microphone_galley.size().x
 

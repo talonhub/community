@@ -407,7 +407,12 @@ class Manager:
                 ui.separator()
 
     async def draw_current_page(
-        self, ui, ui_wrapper, total_available_height, chosen_setting, comment_toggle_setting
+        self,
+        ui,
+        ui_wrapper,
+        total_available_height,
+        chosen_setting,
+        comment_toggle_setting,
     ):
         if self.page == MAIN_PAGE_NAME:
             await self.draw_main_page(ui, total_available_height)
