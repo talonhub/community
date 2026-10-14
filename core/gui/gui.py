@@ -29,20 +29,6 @@ def compute_text_size():
     return DEFAULT_TEXT_SIZE * settings.get("imgui.scale")
 
 
-def convert_key_value_pairs_to_rows(dictionary):
-    """Convert key value pairs into a series of rows where each row has a single line. Keys are assumed to only have a single line."""
-    rows = []
-    for key, value in dictionary.items():
-        if "\n" in value:
-            lines = value.split("\n")
-            rows.append((key, lines[0]))
-            for l in lines[1:]:
-                rows.append(("", l))
-        else:
-            rows.append((key, value))
-    return rows
-
-
 async def show_row_ui(row, contents):
     """Show every column of the row using its ui method"""
     index = row.index()
