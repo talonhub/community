@@ -313,7 +313,7 @@ class Manager:
                     else:
                         setting.value.set(VALUE_UNAVAILABLE)
 
-    async def draw(self, ui):
+    async def draw(self, ui, ui_wrapper):
         chosen_setting = self.chosen_setting
         comment_toggle_setting = self.comment_toggle_setting
         total_available_height = ui.available_height()
@@ -329,6 +329,7 @@ class Manager:
             ):
                 post_action = await self.draw_current_page(
                     interaction_ui,
+                    ui_wrapper,
                     total_available_height,
                     chosen_setting,
                     comment_toggle_setting,
@@ -354,7 +355,7 @@ class Manager:
         ui.separator()
 
     async def draw_setting_ui(
-        self, ui, setting, page, is_setting_chosen, comment_toggle_setting
+        self, ui, ui_wrapper, setting, page, is_setting_chosen, comment_toggle_setting
     ):
         old_value = setting.value.get()
         readable_name = compute_readable_name(setting.name, page.prefix)
@@ -363,10 +364,11 @@ class Manager:
             checkbox_size = ui.spacing().icon_width
             if setting.is_tag:
                 spacing_size = ui.spacing().icon_spacing + ui.spacing().item_spacing.x
-                ui.add_space(checkbox_size + spacing_size)
+                star_width = ui_wrapper.compute_text_width("*")
+                ui.add_space(checkbox_size + spacing_size + star_width)
             else:
                 if (
-                    ui.checkbox(egui.Mutable(setting.is_activated), "").clicked()
+                    ui.checkbox(egui.Mutable(setting.is_activated), "*").clicked()
                     or comment_toggle_setting == setting.name
                 ):
                     error_message = toggle_setting_activation(setting)
@@ -405,7 +407,7 @@ class Manager:
                 ui.separator()
 
     async def draw_current_page(
-        self, ui, total_available_height, chosen_setting, comment_toggle_setting
+        self, ui, ui_wrapper, total_available_height, chosen_setting, comment_toggle_setting
     ):
         if self.page == MAIN_PAGE_NAME:
             await self.draw_main_page(ui, total_available_height)
@@ -434,6 +436,7 @@ class Manager:
                 is_setting_chosen = setting.name == chosen_setting
                 await self.draw_setting_ui(
                     ui,
+                    ui_wrapper,
                     setting,
                     page,
                     is_setting_chosen,
@@ -485,8 +488,8 @@ manager = Manager()
     title="Community Settings",
     tag="user.community_settings_window",
 )
-async def draw(ui, ui_wrappers):
-    await manager.draw(ui)
+async def draw(ui, ui_wrapper):
+    await manager.draw(ui, ui_wrapper)
 
 
 def handle_file_update(path, flags):

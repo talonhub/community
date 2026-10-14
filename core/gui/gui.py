@@ -279,6 +279,17 @@ class UIWrapper:
             ):
                 scroller.update_start_page(current_row_index, len(rows) - 1)
 
+    def compute_text_width(self, text: str, ui=None, font_id=None) -> float:
+        ui = self._ui(ui)
+        if font_id is None:
+            font_id = egui.FontId(self.get_text_size(ui), egui.FontFamily.Proportional)
+        microphone_galley = ui.painter().layout_no_wrap(
+            text,
+            font_id,
+            egui.Color32.black()
+        )
+        return microphone_galley.size().x
+
 
 def open_gui(
     *,
