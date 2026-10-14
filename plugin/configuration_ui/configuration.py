@@ -349,7 +349,7 @@ class Manager:
     async def draw_page_navigation(self, ui, total_available_height):
         async with ui.vertical():
             for page in self.pages:
-                if ui.selectable_label(page == self.page, page).clicked():
+                if ui.selectable_label(page == self.page, f"Page {page}").clicked():
                     self.update_page(page)
             ui.add_space(total_available_height - ui.min_size().y)
         ui.separator()
@@ -468,6 +468,9 @@ class Manager:
                 ui.label(
                     "Community provides several .talon files for configuring settings. You can use this graphical interface to edit those files without needing to learn TalonScript.\nYou may encounter unexpected behavior if you have chosen to set those settings in your own .talon files.\n\n\nThis graphical interface may not always work as intended if you have manually edited those files yourself.\nIf you run into issues with that, feel free to ask for help on the slack!"
                 )
+                ui.add_space(total_available_height / 8)
+                ui.heading("Navigation Commands")
+                ui.label("You can open a page by saying `page` and then the page name, such a saying `page popping` to open the popping settings page. You can use the ui widget for editing a setting by saying `setting` and then the setting name. You can toggle if a setting is set in a Community .talon file by saying `comment toggle` and then the name of a setting.")
 
     async def draw_error_copy_buttons(self, ui, error_message, setting):
         if ui.button("copy").clicked():
