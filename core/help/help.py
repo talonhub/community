@@ -8,12 +8,11 @@ from talon import Context, Module, actions, imgui, registry, settings
 
 from ...core.gui.gui import (
     PageScroller,
+    TextRow,
     compute_table_height,
-    convert_key_value_pairs_to_rows,
     create_bold_text,
     open_gui,
     show_title_and_rich_content_rows,
-    TextRow,
 )
 
 mod = Module()

@@ -185,6 +185,7 @@ class TextRow(Row):
             result.extend(cls.create(row))
         return result
 
+
 class UIWrapper:
     """Provides helper methods for drawing on a ui. These methods use the wrapped ui by default, but you can use the ui parameter to provide another one"""
 
