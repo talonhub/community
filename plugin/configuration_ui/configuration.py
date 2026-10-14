@@ -361,7 +361,9 @@ class Manager:
         error_representation_of_name = f"{readable_name} ({setting.name})"
         async with ui.horizontal():
             if setting.is_tag:
-                ui.add_space(ui.style().checkbox_style(egui.WidgetState.Inactive).checkbox_size)
+                checkbox_size = ui.spacing().icon_width
+                spacing_size = ui.spacing().icon_spacing + ui.spacing().item_spacing.x
+                ui.add_space(checkbox_size + spacing_size)
             else:
                 if (
                     ui.checkbox(egui.Mutable(setting.is_activated), "").clicked()
