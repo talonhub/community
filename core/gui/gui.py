@@ -56,12 +56,13 @@ async def show_title_and_rich_content_rows(row, contents):
                 cell_ui.label(column)
 
 
-async def show_row_with_labels(row, contents):
-    """Show every column of the row using a label"""
+async def show_row_ui(row, contents):
+    """Show every column of the row using its ui method"""
     index = row.index()
-    for column in contents[index]:
+    row_contents = contents[index]
+    for column_index in range(row_contents.get_num_columns()):
         async with row.col() as cell_ui:
-            cell_ui.label(column)
+            row_contents.ui(cell_ui, column_index)
 
 
 def compute_table_height(row_size, item_spacing, rows_per_page):
@@ -167,7 +168,7 @@ class TextRow(Row):
         return len(self.columns)
 
     @classmethod
-    def create(self, columns: list[str]):
+    def create(cls, columns: list[str]):
         column_lines = [c.split("\n") for c in columns]
         result = []
         num_lines = max(len(c) for c in column_lines)
@@ -177,6 +178,12 @@ class TextRow(Row):
             result.append(row)
         return result
 
+    @classmethod
+    def create_list(cls, rows: list[list[str]]):
+        result = []
+        for row in rows:
+            result.extend(cls.create(row))
+        return result
 
 class UIWrapper:
     """Provides helper methods for drawing on a ui. These methods use the wrapped ui by default, but you can use the ui parameter to provide another one"""
@@ -254,7 +261,7 @@ class UIWrapper:
         headers: the headers to show at the top of the table. The length of the headers should equal the column size of the rows.
         rows: the rows to display in the table.
         row_height: each row should be at most this big.
-        show_row: a callback for displaying the row. The default uses a label for each column.
+        show_row: a callback for displaying the row.
         auto_size_columns: decides if the column width should be based on the item sizes. Otherwise, each column takes an equal portion of the available width.
         maximum_height: the maximum height of the scroll area for the table. Setting this is recommended if you need to leave room for widgets after the table.
         id_salt: used to distinguish between this table and other tables in the ui. The default used by this function is str(rows), which may be expensive.
@@ -270,7 +277,7 @@ class UIWrapper:
         if row_height is None:
             row_height = ui.spacing().interact_size.y
         if show_row is None:
-            show_row = show_row_with_labels
+            show_row = show_row_ui
 
         async with ui.scope() as scope, scope.style_mut() as style:
             # make scrollbar always visible when a scroll area is needed
@@ -321,7 +328,7 @@ class UIWrapper:
                 body_top = min(body_rect.top(), body_rect.bottom())
                 async for row in body.rows(row_height, len(rows)):
                     # draw lines above each row with a value for the first column
-                    if rows[row.index()][0]:
+                    if rows[row.index()].should_show_overline():
                         row.set_overline(True)
                     # let the call back decide how to draw the row
                     await show_row(row, rows)

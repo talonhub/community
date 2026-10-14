@@ -13,6 +13,7 @@ from ...core.gui.gui import (
     create_bold_text,
     open_gui,
     show_title_and_rich_content_rows,
+    TextRow,
 )
 
 mod = Module()
@@ -712,7 +713,7 @@ async def gui_list_help(ui, ui_wrapper):
 
     # get the list
     talon_list = actions.user.talon_get_active_registry_list(selected_list)
-    rows = convert_key_value_pairs_to_rows(talon_list)
+    rows = TextRow.create_list([pair for pair in talon_list.items()])
 
     # show the rows in a table
     if len(rows) > 0:
