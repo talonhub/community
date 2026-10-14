@@ -436,6 +436,8 @@ class Manager:
             ui.strong(page.title)
             if page.description:
                 ui.label(page.description)
+            ui.add_space(5)
+            ui.label("* toggle setting that setting in a Community .talon file")
             ui.separator()
             for setting in page.settings:
                 is_setting_chosen = setting.name == chosen_setting
