@@ -164,12 +164,9 @@ async def draw_color_picker_input(setting: Setting, ui, is_setting_chosen):
             red, green, blue = parse_rgb_from_string(value)
             rgba = egui.Rgba.from_srgba_unmultiplied(red, green, blue, 255)
             rgb = egui.Mutable([rgba.r, rgba.g, rgba.b])
-            picker_response = egui.color_edit_button_rgb(ui, rgb)
+            egui.color_edit_button_rgb(ui, rgb)
             out_rgba = egui.Rgba.from_rgb(*rgb.get())
             new_value = convert_rgb_to_string(out_rgba.to_srgba_unmultiplied()[:3])
-            if is_setting_chosen:
-                focus_widget(picker_response, True)
-                actions.key("enter")
         else:
             ui.label("Not valid color.")
 
@@ -194,14 +191,16 @@ async def draw_color_picker_input(setting: Setting, ui, is_setting_chosen):
         if new_value != setting.value.get().lower():
             setting.value.set(new_value)
         text_response = ui.add(egui.TextEdit.singleline(setting.value))
-        if not is_valid_rgb:
-            focus_widget(text_response, is_setting_chosen)
+        if is_setting_chosen:
+            focus_widget(text_response, True)
+            actions.key('shift-tab')
 
 
 def create_color_picker_setting(name):
     return Setting(
         name,
         draw_color_picker_input,
+        post_chosen_action=lambda: actions.key("space")
     )
 
 
@@ -234,5 +233,5 @@ def create_discreet_choices_setting(name, choices, is_numeric=False):
         lambda setting, ui, is_chosen: draw_discreet_choices_input(
             setting, ui, choices, is_chosen, is_numeric
         ),
-        post_chosen_action=lambda: actions.key("enter"),
+        post_chosen_action=lambda: actions.key("space"),
     )
