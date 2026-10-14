@@ -174,7 +174,7 @@ def update_operators_text():
             )
             operators_text.append(
                 RichTextSingleColumnRow(
-                    row_text,
+                    (row_text,)
                 )
             )
             operators_max_row_size = max(operators_max_row_size, len(row_text))
