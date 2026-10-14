@@ -354,12 +354,11 @@ class Manager:
         ui.separator()
 
     async def draw_setting_ui(
-        self, ui, setting, page, chosen_setting, comment_toggle_setting
+        self, ui, setting, page, is_setting_chosen, comment_toggle_setting
     ):
         old_value = setting.value.get()
         readable_name = compute_readable_name(setting.name, page.prefix)
         error_representation_of_name = f"{readable_name} ({setting.name})"
-        is_setting_chosen = setting.name == chosen_setting
         async with ui.horizontal():
             checkbox_size = ui.spacing().icon_width
             if setting.is_tag:
@@ -404,7 +403,6 @@ class Manager:
                             self.error_message = f"Something went wrong in the UI for setting {error_representation_of_name}: {ex}"
                             self.error_setting = setting
                 ui.separator()
-        return is_setting_chosen
 
     async def draw_current_page(
         self, ui, total_available_height, chosen_setting, comment_toggle_setting
@@ -433,15 +431,16 @@ class Manager:
                 ui.label(page.description)
             ui.separator()
             for setting in page.settings:
-                was_chosen = await self.draw_setting_ui(
+                is_setting_chosen = setting.name == chosen_setting
+                await self.draw_setting_ui(
                     ui,
                     setting,
                     page,
-                    chosen_setting,
+                    is_setting_chosen,
                     comment_toggle_setting,
                 )
                 ui.separator()
-                if was_chosen:
+                if is_setting_chosen:
                     return setting.post_chosen_action
         return None
 
