@@ -109,10 +109,10 @@ class Row(ABC):
         """Draw the column on the ui"""
         pass
 
-    # @abstractmethod
-    # def wrap(self, max_length):
-    #     """Returns a list of Rows after wrapping with the given maximum length"""
-    #     pass
+    @abstractmethod
+    def wrap(self, max_column_length):
+        """Returns a list of Rows after wrapping with the given maximum length"""
+        pass
 
     @abstractmethod
     def should_show_overline(self) -> bool:
@@ -146,15 +146,22 @@ class TextRow(Row):
         return len(self.columns)
 
     @classmethod
-    def create(cls, columns: list[str]):
-        column_lines = [c.split("\n") for c in columns]
+    def _split_across_rows(cls, splits: list[list[str]]):
         result = []
-        num_lines = max(len(c) for c in column_lines)
+        num_lines = max(len(c) for c in splits)
         for i in range(num_lines):
-            line = [c[i] if i < len(c) else "" for c in column_lines]
+            line = [c[i] if i < len(c) else "" for c in splits]
             row = TextRow(line, i == 0)
             result.append(row)
         return result
+
+    def wrap(self, max_column_length):
+        pass
+
+    @classmethod
+    def create(cls, columns: list[str]):
+        column_lines = [c.split("\n") for c in columns]
+        return cls._split_across_rows(column_lines)
 
     @classmethod
     def create_list(cls, rows: list[list[str]]):
