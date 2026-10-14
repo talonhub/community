@@ -361,8 +361,8 @@ class Manager:
         error_representation_of_name = f"{readable_name} ({setting.name})"
         is_setting_chosen = setting.name == chosen_setting
         async with ui.horizontal():
+            checkbox_size = ui.spacing().icon_width
             if setting.is_tag:
-                checkbox_size = ui.spacing().icon_width
                 spacing_size = ui.spacing().icon_spacing + ui.spacing().item_spacing.x
                 ui.add_space(checkbox_size + spacing_size)
             else:
@@ -374,27 +374,29 @@ class Manager:
                     if error_message is not None:
                         self.error_message = f"Something went wrong trying to toggle commenting {error_representation_of_name}: error_message"
                         self.error_setting = setting
-            ui.separator()
-            async with ui.vertical():
-                ui.strong(readable_name)
-                ui.weak(setting.name)
-                ui.add_space(5)
-                if not setting.draws_description:
-                    ui.label(setting.get_description())
-                if not setting.is_tag and setting.value.get() == VALUE_UNAVAILABLE:
-                    error_message = f"Something went wrong. The setting {error_representation_of_name} could not be found or could not be parsed."
-                    async with ui.horizontal():
-                        ui.label(error_message)
-                        await self.draw_error_copy_buttons(ui, error_message, setting)
-                else:
-                    try:
-                        await setting.draw(setting, ui, is_setting_chosen)
-                        value = setting.value.get()
-                        if old_value != value:
-                            setting.update_function(setting.path, setting.name, value)
-                    except Exception as ex:
-                        self.error_message = f"Something went wrong in the UI for setting {error_representation_of_name}: {ex}"
-                        self.error_setting = setting
+            ui.add_space(checkbox_size)
+            async with ui.with_layout(egui.Layout.right_to_left(egui.Align.TOP)):
+                async with ui.vertical():
+                    ui.strong(readable_name)
+                    ui.weak(setting.name)
+                    ui.add_space(5)
+                    if not setting.draws_description:
+                        ui.label(setting.get_description())
+                    if not setting.is_tag and setting.value.get() == VALUE_UNAVAILABLE:
+                        error_message = f"Something went wrong. The setting {error_representation_of_name} could not be found or could not be parsed."
+                        async with ui.horizontal():
+                            ui.label(error_message)
+                            await self.draw_error_copy_buttons(ui, error_message, setting)
+                    else:
+                        try:
+                            await setting.draw(setting, ui, is_setting_chosen)
+                            value = setting.value.get()
+                            if old_value != value:
+                                setting.update_function(setting.path, setting.name, value)
+                        except Exception as ex:
+                            self.error_message = f"Something went wrong in the UI for setting {error_representation_of_name}: {ex}"
+                            self.error_setting = setting
+                ui.separator()
         return is_setting_chosen
 
     async def draw_current_page(
