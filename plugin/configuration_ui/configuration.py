@@ -71,6 +71,7 @@ def compute_readable_name(setting_name, page_prefix: str):
 
 MAIN_PAGE_NAME = "Main"
 
+
 class Manager:
     def __init__(self):
         pages = [
@@ -287,7 +288,7 @@ class Manager:
         self.page = page_name
         if self.page == MAIN_PAGE_NAME:
             ctx.lists["user.community_settings_window_setting"] = {}
-            return 
+            return
         page = self.pages[self.page]
         ctx.lists["user.community_settings_window_setting"] = {
             compute_readable_name(setting.name, page.prefix): setting.name
@@ -438,10 +439,12 @@ class Manager:
             .show() as scroll_ui
         ):
             await let_user_use_page_keys_to_scroll_scroll_area(scroll_ui)
-            ui.add_space(total_available_height/4)
+            ui.add_space(total_available_height / 4)
             ui.heading("Welcome to the Community Setting Configuration Window")
             ui.add_space(20)
-            ui.label("Community provides several .talon files for configuring settings. You can use this window to edit those files through a graphical interface.\nThere may be a conflict if you have chosen to set those settings in your own .talon files.")
+            ui.label(
+                "Community provides several .talon files for configuring settings. You can use this window to edit those files through a graphical interface.\nThere may be a conflict if you have chosen to set those settings in your own .talon files."
+            )
 
     async def draw_error_copy_buttons(self, ui, error_message, setting):
         if ui.button("copy").clicked():
