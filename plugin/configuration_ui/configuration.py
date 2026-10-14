@@ -391,7 +391,8 @@ class Manager:
                             )
                     else:
                         try:
-                            await setting.draw(setting, ui, is_setting_chosen)
+                            async with ui.add_enabled_ui(setting.is_activated or setting.is_tag):
+                                await setting.draw(setting, ui, is_setting_chosen)
                             value = setting.value.get()
                             if old_value != value:
                                 setting.update_function(
