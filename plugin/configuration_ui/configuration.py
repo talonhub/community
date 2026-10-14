@@ -532,7 +532,7 @@ class Actions:
     def configuration_window_open_page(name: str):
         """Open the page of the Community settings configuration window by name"""
         if manager is None:
-            return 
+            return
         manager.update_page(name)
         draw.refresh()
 
