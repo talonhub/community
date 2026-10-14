@@ -360,14 +360,18 @@ class Manager:
         readable_name = compute_readable_name(setting.name, page.prefix)
         error_representation_of_name = f"{readable_name} ({setting.name})"
         async with ui.horizontal():
-            if not setting.is_tag and (
-                ui.checkbox(egui.Mutable(setting.is_activated), "").clicked()
-                or comment_toggle_setting == setting.name
-            ):
-                error_message = toggle_setting_activation(setting)
-                if error_message is not None:
-                    self.error_message = f"Something went wrong trying to toggle commenting {error_representation_of_name}: error_message"
-                    self.error_setting = setting
+            if setting.is_tag:
+                ui.add_space(ui.style().checkbox_style(egui.WidgetState.Inactive).checkbox_size)
+            else:
+                if (
+                    ui.checkbox(egui.Mutable(setting.is_activated), "").clicked()
+                    or comment_toggle_setting == setting.name
+                ):
+                    error_message = toggle_setting_activation(setting)
+                    if error_message is not None:
+                        self.error_message = f"Something went wrong trying to toggle commenting {error_representation_of_name}: error_message"
+                        self.error_setting = setting
+            ui.separator()
             async with ui.vertical():
                 ui.strong(readable_name)
                 ui.weak(setting.name)
