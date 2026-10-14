@@ -198,7 +198,7 @@ async def draw_color_picker_input(setting: Setting, ui, is_setting_chosen):
 
 def create_color_picker_setting(name):
     return Setting(
-        name, draw_color_picker_input, post_chosen_action=lambda: actions.key("space")
+        name, draw_color_picker_input, post_chosen_action=lambda: actions.key("enter")
     )
 
 
@@ -231,5 +231,5 @@ def create_discreet_choices_setting(name, choices, is_numeric=False):
         lambda setting, ui, is_chosen: draw_discreet_choices_input(
             setting, ui, choices, is_chosen, is_numeric
         ),
-        post_chosen_action=lambda: actions.key("space"),
+        post_chosen_action=lambda: actions.key("enter"),
     )

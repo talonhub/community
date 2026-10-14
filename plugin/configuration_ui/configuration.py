@@ -314,6 +314,7 @@ class Manager:
                         setting.value.set(VALUE_UNAVAILABLE)
 
     async def draw(self, ui, ui_wrapper):
+        post_action = self.post_action
         chosen_setting = self.chosen_setting
         comment_toggle_setting = self.comment_toggle_setting
         total_available_height = ui.available_height()
@@ -327,7 +328,7 @@ class Manager:
                 ui.allocate_ui(interaction_region_space) as interaction_ui,
                 ui.vertical(),
             ):
-                post_action = await self.draw_current_page(
+                await self.draw_current_page(
                     interaction_ui,
                     ui_wrapper,
                     total_available_height,
@@ -340,11 +341,9 @@ class Manager:
         if comment_toggle_setting:
             self.comment_toggle_setting = ""
             draw.refresh()
-        if self.post_action:
-            self.post_action()
-            self.post_action = None
         if post_action:
-            self.post_action = post_action
+            post_action()
+            self.post_action = None
 
     async def draw_page_navigation(self, ui, total_available_height):
         async with ui.vertical():
@@ -416,7 +415,7 @@ class Manager:
     ):
         if self.page == MAIN_PAGE_NAME:
             await self.draw_main_page(ui, total_available_height)
-            return None
+            return
         page = self.pages[self.page]
         # use a single column table with heterogeneous rows later
         if self.error_message:
@@ -451,8 +450,7 @@ class Manager:
                 )
                 ui.separator()
                 if is_setting_chosen:
-                    return setting.post_chosen_action
-        return None
+                    self.post_action = setting.post_chosen_action
 
     async def draw_main_page(self, ui, total_available_height):
         async with (
