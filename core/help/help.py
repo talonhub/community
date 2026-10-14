@@ -111,8 +111,7 @@ def update_operators_text():
     the operator text for operators implemented as text insertion
     or an asterisk for operators implemented as a function call.
     """
-    global operators_text, operators_max_row_size
-    operators_max_row_size = 0
+    global operators_text
     try:
         operators = actions.user.code_get_operators()
 
@@ -148,10 +147,7 @@ def update_operators_text():
                     # Only add the header if an item in the list is defined in operators
                     if not has_added_first_list_item:
                         has_added_first_list_item = True
-                        row_text = f"{name} operators:"
-                        operators_max_row_size = max(
-                            operators_max_row_size, len(row_text)
-                        )
+                        row_text = egui.RichText(f"{name} operators:")
                         operators_text.append(
                             RichTextSingleColumnRow(
                                 (row_text,),
@@ -159,10 +155,7 @@ def update_operators_text():
                             )
                         )
 
-                    operator_name_text = f"{prefix} {operator_name}:"
-                    operators_max_row_size = max(
-                        operators_max_row_size, len(operator_name_text) + len(text)
-                    )
+                    operator_name_text = egui.RichText(f"{prefix} {operator_name}:")
                     operators_text.append(
                         RichTextSingleColumnRow(
                             (operator_name_text, create_bold_text(text))
@@ -170,10 +163,9 @@ def update_operators_text():
                     )
         if has_operator_without_text_implementation:
             row_text = (
-                "* operator is implemented as a function call and cannot be displayed"
+                egui.RichText("* operator is implemented as a function call and cannot be displayed")
             )
             operators_text.append(RichTextSingleColumnRow((row_text,)))
-            operators_max_row_size = max(operators_max_row_size, len(row_text))
         page_scroller.page_size = settings.get("user.help_max_command_lines_per_page")
     # This exception will get raised if there is no operators object defined in the active context
     except NotImplementedError:
@@ -189,6 +181,7 @@ async def gui_operators(ui, ui_wrapper):
         if operators_text:
             # add padding so that there is enough room for all of the lines in the table
             # this is currently needed because of how auto sizing works and the rows significantly varying in length
+            operators_max_row_size = max(t.get_text_length() for t in operators_text)
             padding_width = max(0, operators_max_row_size - len(title))
             padding = " " * padding_width
             title = f"{title}{padding}"

@@ -124,6 +124,11 @@ class Row(ABC):
         """Returns the number of columns"""
         pass
 
+    @abstractmethod
+    def get_text_length(self) -> int:
+        """Return the total text length of the row"""
+        pass
+
 
 class TextRow(Row):
     def __init__(self, columns, show_overline=True):
@@ -158,6 +163,9 @@ class TextRow(Row):
             result.extend(cls.create(row))
         return result
 
+    def get_text_length(self) -> int:
+        return sum(len(c) for c in self.columns)
+
 
 class RichTextSingleColumnRow(Row):
     def __init__(self, parts, show_overline=True, layout=None):
@@ -182,6 +190,9 @@ class RichTextSingleColumnRow(Row):
 
     def get_num_columns(self):
         return 1
+
+    def get_text_length(self) -> int:
+        return sum(len(p.text()) for p in self.parts)
 
 
 class UIWrapper:
