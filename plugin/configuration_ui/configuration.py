@@ -440,11 +440,12 @@ class Manager:
         ):
             await let_user_use_page_keys_to_scroll_scroll_area(scroll_ui)
             ui.add_space(total_available_height / 4)
-            ui.heading("Welcome to the Community Setting Configuration Window")
-            ui.add_space(20)
-            ui.label(
-                "Community provides several .talon files for configuring settings. You can use this graphical interface to edit those files without needing to learn TalonScript.\nYou may encounter unexpected behavior if you have chosen to set those settings in your own .talon files.\nThis graphical interface may not always work as intended if you have manually edited those files yourself.\nIf you run into issues with that, feel free to ask for help on the slack!"
-            )
+            async with ui.with_layout(egui.Layout.top_down(egui.Align.Center)):
+                ui.heading("Welcome to the Community Setting Configuration Window")
+                ui.add_space(20)
+                ui.label(
+                    "Community provides several .talon files for configuring settings. You can use this graphical interface to edit those files without needing to learn TalonScript.\nYou may encounter unexpected behavior if you have chosen to set those settings in your own .talon files.\n\n\nThis graphical interface may not always work as intended if you have manually edited those files yourself.\nIf you run into issues with that, feel free to ask for help on the slack!"
+                )
 
     async def draw_error_copy_buttons(self, ui, error_message, setting):
         if ui.button("copy").clicked():
