@@ -386,13 +386,17 @@ class Manager:
                         error_message = f"Something went wrong. The setting {error_representation_of_name} could not be found or could not be parsed."
                         async with ui.horizontal():
                             ui.label(error_message)
-                            await self.draw_error_copy_buttons(ui, error_message, setting)
+                            await self.draw_error_copy_buttons(
+                                ui, error_message, setting
+                            )
                     else:
                         try:
                             await setting.draw(setting, ui, is_setting_chosen)
                             value = setting.value.get()
                             if old_value != value:
-                                setting.update_function(setting.path, setting.name, value)
+                                setting.update_function(
+                                    setting.path, setting.name, value
+                                )
                         except Exception as ex:
                             self.error_message = f"Something went wrong in the UI for setting {error_representation_of_name}: {ex}"
                             self.error_setting = setting
