@@ -179,7 +179,7 @@ class RichTextSingleColumnRow(Row):
         self.parts = parts
         self.show_overline = show_overline
         self.layout = layout
-    
+
     async def ui(self, ui, column_number):
         if self.layout:
             async with ui.with_layout(self.layout):
