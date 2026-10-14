@@ -470,7 +470,9 @@ class Manager:
                 )
                 ui.add_space(total_available_height / 8)
                 ui.heading("Navigation Commands")
-                ui.label("You can open a page by saying `page` and then the page name, such a saying `page popping` to open the popping settings page. You can use the ui widget for editing a setting by saying `setting` and then the setting name. You can toggle if a setting is set in a Community .talon file by saying `comment toggle` and then the name of a setting.")
+                ui.label(
+                    "You can open a page by saying `page` and then the page name, such a saying `page popping` to open the popping settings page. You can use the ui widget for editing a setting by saying `setting` and then the setting name. You can toggle if a setting is set in a Community .talon file by saying `comment toggle` and then the name of a setting."
+                )
 
     async def draw_error_copy_buttons(self, ui, error_message, setting):
         if ui.button("copy").clicked():
