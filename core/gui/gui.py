@@ -43,26 +43,13 @@ def convert_key_value_pairs_to_rows(dictionary):
     return rows
 
 
-async def show_title_and_rich_content_rows(row, contents):
-    """The contents for each row is either a tuple of rich text or regular text to format as a title"""
-    index = row.index()
-    for column in contents[index]:
-        async with row.col() as cell_ui:
-            if isinstance(column, tuple):
-                for label in column:
-                    cell_ui.label(label)
-                continue
-            async with cell_ui.with_layout(egui.Layout.top_down(egui.Align.Center)):
-                cell_ui.label(column)
-
-
 async def show_row_ui(row, contents):
     """Show every column of the row using its ui method"""
     index = row.index()
     row_contents = contents[index]
     for column_index in range(row_contents.get_num_columns()):
         async with row.col() as cell_ui:
-            row_contents.ui(cell_ui, column_index)
+            await row_contents.ui(cell_ui, column_index)
 
 
 def compute_table_height(row_size, item_spacing, rows_per_page):
@@ -132,7 +119,7 @@ class Row(ABC):
     """Represents the row of a table"""
 
     @abstractmethod
-    def ui(self, ui, column_number):
+    async def ui(self, ui, column_number):
         """Draw the column on the ui"""
         pass
 
@@ -158,7 +145,7 @@ class TextRow(Row):
         self.columns = columns
         self.show_overline = show_overline
 
-    def ui(self, ui, column_number):
+    async def ui(self, ui, column_number):
         ui.label(self.columns[column_number])
 
     def should_show_overline(self):
@@ -184,6 +171,31 @@ class TextRow(Row):
         for row in rows:
             result.extend(cls.create(row))
         return result
+
+
+class RichTextSingleColumnRow(Row):
+    def __init__(self, parts, show_overline=True, layout=None):
+        """A single column row consisting of rich text objects"""
+        self.parts = parts
+        self.show_overline = show_overline
+        self.layout = layout
+    
+    async def ui(self, ui, column_number):
+        if self.layout:
+            async with ui.with_layout(self.layout):
+                await self._ui(ui)
+        else:
+            await self._ui(ui)
+
+    async def _ui(self, ui):
+        for part in self.parts:
+            ui.label(part)
+
+    def should_show_overline(self):
+        return self.show_overline
+
+    def get_num_columns(self):
+        return 1
 
 
 class UIWrapper:

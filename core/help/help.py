@@ -5,6 +5,7 @@ from collections.abc import Iterable
 from typing import Any, Optional
 
 from talon import Context, Module, actions, imgui, registry, settings
+import egui
 
 from ...core.gui.gui import (
     PageScroller,
@@ -12,7 +13,7 @@ from ...core.gui.gui import (
     compute_table_height,
     create_bold_text,
     open_gui,
-    show_title_and_rich_content_rows,
+    RichTextSingleColumnRow,
 )
 
 mod = Module()
@@ -151,20 +152,20 @@ def update_operators_text():
                         operators_max_row_size = max(
                             operators_max_row_size, len(row_text)
                         )
-                        operators_text.append((row_text,))
+                        operators_text.append(RichTextSingleColumnRow((row_text,), layout=egui.Layout.top_down(egui.Align.Center)))
 
                     operator_name_text = f"{prefix} {operator_name}:"
                     operators_max_row_size = max(
                         operators_max_row_size, len(operator_name_text) + len(text)
                     )
                     operators_text.append(
-                        ((operator_name_text, create_bold_text(text)),)
+                        RichTextSingleColumnRow((operator_name_text, create_bold_text(text)))
                     )
         if has_operator_without_text_implementation:
             row_text = (
                 "* operator is implemented as a function call and cannot be displayed"
             )
-            operators_text.append((row_text,))
+            operators_text.append(RichTextSingleColumnRow(row_text,))
             operators_max_row_size = max(operators_max_row_size, len(row_text))
         page_scroller.page_size = settings.get("user.help_max_command_lines_per_page")
     # This exception will get raised if there is no operators object defined in the active context
@@ -204,7 +205,6 @@ async def gui_operators(ui, ui_wrapper):
             row_height=row_size,
             id_salt="help_operators",
             scroller=page_scroller,
-            show_row=show_title_and_rich_content_rows,
         )
 
     ui_wrapper.spacing()
