@@ -8,6 +8,7 @@
 import math
 from collections.abc import Callable
 from dataclasses import dataclass
+from abc import abstractmethod, ABC
 
 import egui
 from skia import Rect
@@ -125,6 +126,55 @@ class PageScroller:
 def create_bold_text(text):
     return egui.RichText(text).strong()
 
+
+class Row(ABC):
+    """Represents the row of a table"""
+
+    @abstractmethod
+    def ui(self, ui, column_number):
+        """Draw the column on the ui"""
+        pass
+
+    # @abstractmethod
+    # def wrap(self, max_length):
+    #     """Returns a list of Rows after wrapping with the given maximum length"""
+    #     pass
+
+    @abstractmethod
+    def should_show_overline(self) -> bool:
+        """Decides if there should be an overline above the row"""
+        pass
+
+    @abstractmethod
+    def get_num_columns(self) -> int:
+        """Returns the number of columns"""
+        pass
+
+class TextRow(Row):
+    def __init__(self, columns, show_overline=True):
+        """A row consisting of strings"""
+        self.columns = columns
+        self.show_overline = show_overline
+
+    def ui(self, ui, column_number):
+        ui.label(self.columns[column_number])
+
+    def should_show_overline(self):
+        return self.show_overline
+
+    def get_num_columns(self):
+        return len(self.columns)
+
+    @classmethod
+    def create(self, columns: list[str]):
+        column_lines = [c.split("\n") for c in columns]
+        result = []
+        num_lines = max(len(c) for c in column_lines)
+        for i in range(num_lines):
+            line = [c[i] if i < len(c) else "" for c in column_lines]
+            row = TextRow(line, i == 0)
+            result.append(row)
+        return result
 
 class UIWrapper:
     """Provides helper methods for drawing on a ui. These methods use the wrapped ui by default, but you can use the ui parameter to provide another one"""
