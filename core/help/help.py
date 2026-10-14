@@ -172,11 +172,7 @@ def update_operators_text():
             row_text = (
                 "* operator is implemented as a function call and cannot be displayed"
             )
-            operators_text.append(
-                RichTextSingleColumnRow(
-                    (row_text,)
-                )
-            )
+            operators_text.append(RichTextSingleColumnRow((row_text,)))
             operators_max_row_size = max(operators_max_row_size, len(row_text))
         page_scroller.page_size = settings.get("user.help_max_command_lines_per_page")
     # This exception will get raised if there is no operators object defined in the active context
