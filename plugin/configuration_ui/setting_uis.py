@@ -193,14 +193,12 @@ async def draw_color_picker_input(setting: Setting, ui, is_setting_chosen):
         text_response = ui.add(egui.TextEdit.singleline(setting.value))
         if is_setting_chosen:
             focus_widget(text_response, True)
-            actions.key('shift-tab')
+            actions.key("shift-tab")
 
 
 def create_color_picker_setting(name):
     return Setting(
-        name,
-        draw_color_picker_input,
-        post_chosen_action=lambda: actions.key("space")
+        name, draw_color_picker_input, post_chosen_action=lambda: actions.key("space")
     )
 
 
