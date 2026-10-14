@@ -6,9 +6,9 @@
 # You can see the full text of an MIT license in the LICENSE file at the top level directory of this repo.
 
 import math
+from abc import ABC, abstractmethod
 from collections.abc import Callable
 from dataclasses import dataclass
-from abc import abstractmethod, ABC
 
 import egui
 from skia import Rect
@@ -150,6 +150,7 @@ class Row(ABC):
         """Returns the number of columns"""
         pass
 
+
 class TextRow(Row):
     def __init__(self, columns, show_overline=True):
         """A row consisting of strings"""
@@ -175,6 +176,7 @@ class TextRow(Row):
             row = TextRow(line, i == 0)
             result.append(row)
         return result
+
 
 class UIWrapper:
     """Provides helper methods for drawing on a ui. These methods use the wrapped ui by default, but you can use the ui parameter to provide another one"""
