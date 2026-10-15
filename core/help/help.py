@@ -732,7 +732,7 @@ async def gui_list_help(ui, ui_wrapper):
 
     # get the list
     talon_list = actions.user.talon_get_active_registry_list(selected_list)
-    rows = TextRow.create_list([pair for pair in talon_list.items()])
+    rows = TextRow.create_list(list(talon_list.items()))
 
     # show the rows in a table
     if len(rows) > 0:
