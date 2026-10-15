@@ -708,6 +708,7 @@ async def gui_list_help(ui, ui_wrapper):
 
     # show list name and description for the title
     title = f"List: {selected_list}"
+    # use the title to claim enough width: add enough padding to show columns with the maximum length
     padding_size = max(0, round((MAX_COLUMN_LENGTH_FOR_HELP_LIST) * 2.5 - len(title)))
     if padding_size > 0:
         padding = " " * padding_size
