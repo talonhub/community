@@ -203,9 +203,6 @@ class RichTextSingleColumnRow(Row):
     def wrap(self, max_column_length):
         result = []
 
-        
-        
-
         return result
 
     def should_show_overline(self):
