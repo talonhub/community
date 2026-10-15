@@ -690,7 +690,9 @@ def hide_all_help_guis():
     gui_list_help.hide()
     gui_operators.hide()
 
-
+MAX_COLUMN_LENGTH_FOR_HELP_LIST = 20
+LIST_KEY_HEADER = "Spoken Form"
+LIST_VALUE_HEADER = "Value"
 @open_gui(y=0, refresh_period="500ms")
 async def gui_list_help(ui, ui_wrapper):
     global selected_list
@@ -703,6 +705,10 @@ async def gui_list_help(ui, ui_wrapper):
 
     # show list name and description for the title
     title = f"List: {selected_list}"
+    padding_size = max(0, round((MAX_COLUMN_LENGTH_FOR_HELP_LIST)*2.5 - len(title)))
+    if padding_size > 0:
+        padding = " "*padding_size
+        title = f"{title}{padding}"
 
     # Extract description from list declaration, i.e. mod.list(..., desc=...))
     if (desc := registry.decls.lists[selected_list].desc) is not None:
@@ -726,7 +732,7 @@ async def gui_list_help(ui, ui_wrapper):
 
     # show the rows in a table
     if len(rows) > 0:
-        headers = ["Spoken Form", "Value"]
+        headers = [LIST_KEY_HEADER, LIST_VALUE_HEADER]
         await ui_wrapper.draw_table(
             headers,
             rows,
@@ -734,6 +740,7 @@ async def gui_list_help(ui, ui_wrapper):
             row_height=row_size,
             id_salt="help_list",
             scroller=page_scroller,
+            max_column_text_length=MAX_COLUMN_LENGTH_FOR_HELP_LIST,
         )
 
     ui_wrapper.spacing()
