@@ -213,11 +213,11 @@ class RichTextSingleColumnRow(Row):
             text = part.text()
             current_text.append(text)
             current_create.append(create)
-            row_text = "".join(current_text)
+            row_text = " ".join(current_text)
             wrapped_lines = wrap(row_text, width=max_column_length)
             if len(wrapped_lines) > 1:
                 # handle the need for wrapping
-                prior_text = "".join(current_text[:-1])
+                prior_text = " ".join(current_text[:-1])
                 first_line = wrapped_lines[0]
                 if len(prior_text) >= len(first_line):
                     current_text.pop()
@@ -229,8 +229,15 @@ class RichTextSingleColumnRow(Row):
                         current_text[:], current_create[:], show_overline, self.layout
                     )
                 )
-                current_text = wrapped_lines[1:]
-                current_create = [create] * (len(wrapped_lines) - 1)
+                if len(wrapped_lines) > 2:
+                    for l in wrapped_lines[1:-1]:
+                        result.append(
+                            RichTextSingleColumnRow(
+                                [l], [create], show_overline, self.layout
+                            )
+                        )
+                current_text = [wrapped_lines[-1]]
+                current_create = [create]
                 show_overline = False
         result.append(
             RichTextSingleColumnRow(
