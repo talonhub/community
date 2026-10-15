@@ -226,7 +226,6 @@ class RichTextSingleColumnRow(Row):
                 current_text = wrapped_lines[1:]
                 current_create = [create] * (len(wrapped_lines) - 1)
                 show_overline = False
-                pass
         result.append(
             RichTextSingleColumnRow(
                 current_text, current_create, show_overline, self.layout
@@ -315,6 +314,7 @@ class UIWrapper:
         id_salt=None,
         scroller=None,
         ui=None,
+        max_column_text_length=None
     ):
         """Draw a table with consistent row height. Assumes each row is at most the given row height. Uses the interact_size of the ui for the default row height, which may be excessive for your application. This assumes that each row has a single line.
         headers: the headers to show at the top of the table. The length of the headers should equal the column size of the rows.
@@ -325,6 +325,7 @@ class UIWrapper:
         maximum_height: the maximum height of the scroll area for the table. Setting this is recommended if you need to leave room for widgets after the table.
         id_salt: used to distinguish between this table and other tables in the ui. The default used by this function is str(rows), which may be expensive.
         scroller: handles programmatic scrolling.
+        max_column_text_length: text wrap in each column based on this maximum length.
         """
         ui = self._ui(ui)
 
@@ -337,6 +338,12 @@ class UIWrapper:
             row_height = ui.spacing().interact_size.y
         if show_row is None:
             show_row = show_row_ui
+        
+        if max_column_text_length is not None:
+            new_rows = []
+            for r in rows:
+                new_rows.extend(r.wrap(max_column_text_length))
+            rows = new_rows
 
         async with ui.scope() as scope, scope.style_mut() as style:
             # make scrollbar always visible when a scroll area is needed

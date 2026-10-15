@@ -155,7 +155,7 @@ def update_operators_text():
                             )
                         )
 
-                    operator_name_text = egui.RichText(f"{prefix} {operator_name}:")
+                    operator_name_text = f"{prefix} {operator_name}:"
                     operators_text.append(
                         RichTextSingleColumnRow(
                             (operator_name_text, text),
@@ -206,6 +206,7 @@ async def gui_operators(ui, ui_wrapper):
             row_height=row_size,
             id_salt="help_operators",
             scroller=page_scroller,
+            max_column_text_length=10 #for testing, change this later
         )
 
     ui_wrapper.spacing()
