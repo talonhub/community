@@ -9,6 +9,7 @@ import math
 from abc import ABC, abstractmethod
 from collections.abc import Callable
 from dataclasses import dataclass
+from textwrap import wrap
 
 import egui
 from skia import Rect
@@ -110,7 +111,7 @@ class Row(ABC):
         pass
 
     @abstractmethod
-    def wrap(self, max_column_length):
+    def wrap(self, max_column_length) -> list:
         """Returns a list of Rows after wrapping with the given maximum length"""
         pass
 
@@ -156,7 +157,8 @@ class TextRow(Row):
         return result
 
     def wrap(self, max_column_length):
-        pass
+        wrapped_lines = [wrap(c, width=max_column_length) for c in self.columns]
+        return self._split_across_rows(wrapped_lines)
 
     @classmethod
     def create(cls, columns: list[str]):
@@ -175,9 +177,15 @@ class TextRow(Row):
 
 
 class RichTextSingleColumnRow(Row):
-    def __init__(self, parts, show_overline=True, layout=None):
+    def __init__(self, parts, create_rich_text=None, show_overline=True, layout=None):
         """A single column row consisting of rich text objects"""
-        self.parts = parts
+        if create_rich_text:
+            self.parts = []
+            for text, create in zip(parts, create_rich_text, strict=True):
+                self.parts.append(create(text))
+        else:
+            self.parts = [egui.RichText(p) for p in parts]
+        self.create_rich_text = create_rich_text
         self.show_overline = show_overline
         self.layout = layout
 
@@ -191,6 +199,14 @@ class RichTextSingleColumnRow(Row):
     async def _ui(self, ui):
         for part in self.parts:
             ui.label(part)
+
+    def wrap(self, max_column_length):
+        result = []
+
+        
+        
+
+        return result
 
     def should_show_overline(self):
         return self.show_overline

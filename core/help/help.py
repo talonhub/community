@@ -147,7 +147,7 @@ def update_operators_text():
                     # Only add the header if an item in the list is defined in operators
                     if not has_added_first_list_item:
                         has_added_first_list_item = True
-                        row_text = egui.RichText(f"{name} operators:")
+                        row_text = f"{name} operators:"
                         operators_text.append(
                             RichTextSingleColumnRow(
                                 (row_text,),
@@ -158,13 +158,12 @@ def update_operators_text():
                     operator_name_text = egui.RichText(f"{prefix} {operator_name}:")
                     operators_text.append(
                         RichTextSingleColumnRow(
-                            (operator_name_text, create_bold_text(text))
+                            (operator_name_text, text),
+                            (egui.RichText, create_bold_text)
                         )
                     )
         if has_operator_without_text_implementation:
-            row_text = egui.RichText(
-                "* operator is implemented as a function call and cannot be displayed"
-            )
+            row_text = "* operator is implemented as a function call and cannot be displayed"
             operators_text.append(RichTextSingleColumnRow((row_text,)))
         page_scroller.page_size = settings.get("user.help_max_command_lines_per_page")
     # This exception will get raised if there is no operators object defined in the active context
