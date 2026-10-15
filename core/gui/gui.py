@@ -208,10 +208,6 @@ class RichTextSingleColumnRow(Row):
             ui.label(part)
 
     def wrap(self, max_column_length):
-        # determine how far you have to go before it wraps using the textwrap.wrap function
-        # for each line before the last one, have a separate single column row object created for each
-        # using the relevant parts and create rich text functions
-        # then continue from the last line looping at the first step
         result = []
         show_overline = self.show_overline
         current_text = []
