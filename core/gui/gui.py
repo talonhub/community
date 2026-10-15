@@ -25,6 +25,7 @@ INNER_MARGIN = 16.0
 
 DEFAULT_TEXT_SIZE = 12.0 / 1.3
 
+
 def wrap_with_subsequent_indent(text, width):
     return wrap(text, width=width, subsequent_indent=" ")
 
@@ -160,7 +161,10 @@ class TextRow(Row):
         return result
 
     def wrap(self, max_column_length):
-        wrapped_lines = [wrap_with_subsequent_indent(c, width=max_column_length) for c in self.columns]
+        wrapped_lines = [
+            wrap_with_subsequent_indent(c, width=max_column_length)
+            for c in self.columns
+        ]
         return self._split_across_rows(wrapped_lines, self.show_overline)
 
     @classmethod
@@ -217,7 +221,9 @@ class RichTextSingleColumnRow(Row):
             current_text.append(text)
             current_create.append(create)
             row_text = " ".join(current_text)
-            wrapped_lines = wrap_with_subsequent_indent(row_text, width=max_column_length)
+            wrapped_lines = wrap_with_subsequent_indent(
+                row_text, width=max_column_length
+            )
             if len(wrapped_lines) > 1:
                 # handle the need for wrapping
                 prior_text = " ".join(current_text[:-1])
