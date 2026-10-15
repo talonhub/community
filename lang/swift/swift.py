@@ -23,6 +23,52 @@ ctx.matches = r"""
 code.language: swift
 """
 
+# Action class #
+
+
+@mod.action_class
+class Actions:
+    def call_common_snippets():
+        """todo"""
+
+
+# Lists and Captures #
+
+mod.list("code_macros", desc="List of active macros for the active language")
+
+# Macros
+
+standard_library_macros = {
+    "debug description": "@DebugDescription",
+    "ob jay see": "@objc",
+    "observable": "@Observable",
+    "observation ignored": "@ObservationIgnored",
+    "observation tracked": "@ObservationTracked",
+    "resolvable": "@Resolvable",
+    "task local": "@TaskLocal",
+    "file": "#file",
+    "file id": "#fileID",
+    "file path": "#filePath",
+    "function": "#function",
+    "line": "#line",
+    "column": "#column",
+    "source location": "#sourceLocation",
+    "availability": "#availability",
+    "available": "#available",
+    "unavailable": "#unavailable",
+    "if": "#if",
+    "else": "#else",
+    "else if": "#elseif",
+    "end if": "#endif",
+    "warning": "#warning",
+    "error": "#error",
+    "external macro": "#externalMacro",
+    "dee ess oh handle": "#dsohandle",
+    "isolation": "#isolation",
+}
+
+# Types
+
 number_types = {
     "int": "Int",
     "int eight": "Int8",
