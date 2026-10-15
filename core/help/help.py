@@ -176,7 +176,7 @@ def update_operators_text():
 
 
 OPERATORS_MAX_COLUMN_LENGTH = 40
-
+TWO_COLUMN_EXTRA_PADDING = 9
 
 @open_gui(y=0, refresh_period="500ms")
 async def gui_operators(ui, ui_wrapper):
@@ -187,9 +187,7 @@ async def gui_operators(ui, ui_wrapper):
         if operators_text:
             # add padding so the auto sizing creates enough width
             operators_max_row_size = max(t.get_text_length() for t in operators_text)
-            required_padding = round(
-                min(operators_max_row_size, OPERATORS_MAX_COLUMN_LENGTH) * 2.5
-            )
+            required_padding = min(operators_max_row_size, OPERATORS_MAX_COLUMN_LENGTH) * 2 + TWO_COLUMN_EXTRA_PADDING
             padding_width = max(0, required_padding - len(title))
             padding = " " * padding_width
             title = f"{title}{padding}"
@@ -708,7 +706,7 @@ async def gui_list_help(ui, ui_wrapper):
     # show list name and description for the title
     title = f"List: {selected_list}"
     # use the title to claim enough width: add enough padding to show columns with the maximum length
-    padding_size = max(0, round((MAX_COLUMN_LENGTH_FOR_HELP_LIST) * 2.5 - len(title)))
+    padding_size = max(0, MAX_COLUMN_LENGTH_FOR_HELP_LIST * 2 + TWO_COLUMN_EXTRA_PADDING - len(title))
     if padding_size > 0:
         padding = " " * padding_size
         title = f"{title}{padding}"
