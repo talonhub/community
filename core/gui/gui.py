@@ -314,7 +314,7 @@ class UIWrapper:
         id_salt=None,
         scroller=None,
         ui=None,
-        max_column_text_length=None
+        max_column_text_length=None,
     ):
         """Draw a table with consistent row height. Assumes each row is at most the given row height. Uses the interact_size of the ui for the default row height, which may be excessive for your application. This assumes that each row has a single line.
         headers: the headers to show at the top of the table. The length of the headers should equal the column size of the rows.
@@ -338,7 +338,7 @@ class UIWrapper:
             row_height = ui.spacing().interact_size.y
         if show_row is None:
             show_row = show_row_ui
-        
+
         if max_column_text_length is not None:
             new_rows = []
             for r in rows:

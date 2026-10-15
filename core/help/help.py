@@ -206,7 +206,7 @@ async def gui_operators(ui, ui_wrapper):
             row_height=row_size,
             id_salt="help_operators",
             scroller=page_scroller,
-            max_column_text_length=10 #for testing, change this later
+            max_column_text_length=10,  # for testing, change this later
         )
 
     ui_wrapper.spacing()
