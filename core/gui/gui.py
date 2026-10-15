@@ -25,6 +25,9 @@ INNER_MARGIN = 16.0
 
 DEFAULT_TEXT_SIZE = 12.0 / 1.3
 
+def wrap_with_subsequent_indent(text, width):
+    return wrap(text, width=width, subsequent_indent=" ")
+
 
 def compute_text_size():
     return DEFAULT_TEXT_SIZE * settings.get("imgui.scale")
@@ -147,23 +150,23 @@ class TextRow(Row):
         return len(self.columns)
 
     @classmethod
-    def _split_across_rows(cls, splits: list[list[str]]):
+    def _split_across_rows(cls, splits: list[list[str]], show_overline: bool):
         result = []
         num_lines = max(len(c) for c in splits)
         for i in range(num_lines):
             line = [c[i] if i < len(c) else "" for c in splits]
-            row = TextRow(line, i == 0)
+            row = TextRow(line, show_overline and i == 0)
             result.append(row)
         return result
 
     def wrap(self, max_column_length):
-        wrapped_lines = [wrap(c, width=max_column_length) for c in self.columns]
-        return self._split_across_rows(wrapped_lines)
+        wrapped_lines = [wrap_with_subsequent_indent(c, width=max_column_length) for c in self.columns]
+        return self._split_across_rows(wrapped_lines, self.show_overline)
 
     @classmethod
     def create(cls, columns: list[str]):
         column_lines = [c.split("\n") for c in columns]
-        return cls._split_across_rows(column_lines)
+        return cls._split_across_rows(column_lines, True)
 
     @classmethod
     def create_list(cls, rows: list[list[str]]):
@@ -214,7 +217,7 @@ class RichTextSingleColumnRow(Row):
             current_text.append(text)
             current_create.append(create)
             row_text = " ".join(current_text)
-            wrapped_lines = wrap(row_text, width=max_column_length)
+            wrapped_lines = wrap_with_subsequent_indent(row_text, width=max_column_length)
             if len(wrapped_lines) > 1:
                 # handle the need for wrapping
                 prior_text = " ".join(current_text[:-1])
