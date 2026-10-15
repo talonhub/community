@@ -130,6 +130,7 @@ def update_operators_text():
             )
             has_added_first_list_item = False
             for operator_name, operator_text in sorted(operators_list.items()):
+                has_value = True
                 # Only display operators implemented for the active language
                 if operator_text in operators:
                     # If the operator is implemented as text insertion,
@@ -144,6 +145,7 @@ def update_operators_text():
                     else:
                         has_operator_without_text_implementation = True
                         text = "*"
+                        has_value = False
                     # Only add the header if an item in the list is defined in operators
                     if not has_added_first_list_item:
                         has_added_first_list_item = True
@@ -155,13 +157,16 @@ def update_operators_text():
                             )
                         )
 
-                    operator_name_text = f"{prefix} {operator_name}:"
-                    operators_text.append(
-                        RichTextSingleColumnRow(
+                    postfix = ":" if has_value else "*"
+                    operator_name_text = f"{prefix} {operator_name}{postfix}"
+                    if has_value:
+                        row = RichTextSingleColumnRow(
                             (operator_name_text, text),
                             (egui.RichText, create_bold_text),
                         )
-                    )
+                    else:
+                        row = RichTextSingleColumnRow((operator_name_text,))
+                    operators_text.append(row)
         if has_operator_without_text_implementation:
             row_text = (
                 "* operator is implemented as a function call and cannot be displayed"
@@ -183,8 +188,7 @@ async def gui_operators(ui, ui_wrapper):
     async with ui.horizontal():
         title = "Help: Operators"
         if operators_text:
-            # add padding so that there is enough room for all of the lines in the table
-            # this is currently needed because of how auto sizing works and the rows significantly varying in length
+            # add padding so the auto sizing creates enough width
             operators_max_row_size = max(t.get_text_length() for t in operators_text)
             required_padding = min(operators_max_row_size, OPERATORS_MAX_COLUMN_LENGTH)
             padding_width = max(0, required_padding - len(title))
