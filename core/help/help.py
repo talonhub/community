@@ -153,32 +153,29 @@ def update_operators_text():
                         operators_text.append(
                             RichTextSingleColumnRow(
                                 (row_text,),
-                                layout=egui.Layout.top_down(egui.Align.Center),
+                                (create_bold_text,)
                             )
                         )
 
-                    postfix = ":" if has_value else "*"
-                    operator_name_text = f"{prefix} {operator_name}{postfix}"
+                    postfix = "" if has_value else "*"
+                    operator_name_text = f"    {prefix} {operator_name}{postfix}"
                     if has_value:
-                        row = RichTextSingleColumnRow(
-                            (operator_name_text, text),
-                            (egui.RichText, create_bold_text),
-                        )
+                        row = TextRow((operator_name_text, text))
                     else:
-                        row = RichTextSingleColumnRow((operator_name_text,))
+                        row = RichTextSingleColumnRow((operator_name_text,), (create_bold_text,))
                     operators_text.append(row)
         if has_operator_without_text_implementation:
             row_text = (
                 "* operator is implemented as a function call and cannot be displayed"
             )
-            operators_text.append(RichTextSingleColumnRow((row_text,)))
+            operators_text.append(RichTextSingleColumnRow((row_text,),(create_bold_text,)))
         page_scroller.page_size = settings.get("user.help_max_command_lines_per_page")
     # This exception will get raised if there is no operators object defined in the active context
     except NotImplementedError:
         operators_text = None
 
 
-OPERATORS_MAX_COLUMN_LENGTH = 50
+OPERATORS_MAX_COLUMN_LENGTH = 40
 
 
 @open_gui(y=0, refresh_period="500ms")
@@ -190,7 +187,7 @@ async def gui_operators(ui, ui_wrapper):
         if operators_text:
             # add padding so the auto sizing creates enough width
             operators_max_row_size = max(t.get_text_length() for t in operators_text)
-            required_padding = min(operators_max_row_size, OPERATORS_MAX_COLUMN_LENGTH)
+            required_padding = round(min(operators_max_row_size, OPERATORS_MAX_COLUMN_LENGTH) * 2.5)
             padding_width = max(0, required_padding - len(title))
             padding = " " * padding_width
             title = f"{title}{padding}"
@@ -206,7 +203,7 @@ async def gui_operators(ui, ui_wrapper):
             row_size, ui_wrapper.get_item_spacing(), page_scroller.page_size
         )
 
-        headers = [""]
+        headers = ["", ""]
         await ui_wrapper.draw_table(
             headers,
             operators_text,

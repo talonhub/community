@@ -34,14 +34,17 @@ def compute_text_size():
     return DEFAULT_TEXT_SIZE * settings.get("imgui.scale")
 
 
-async def show_row_ui(row, contents):
+async def show_row_ui(row, contents, num_columns):
     """Show every column of the row using its ui method"""
     index = row.index()
     row_contents = contents[index]
     for column_index in range(row_contents.get_num_columns()):
         async with row.col() as cell_ui:
             await row_contents.ui(cell_ui, column_index)
-
+    if row_contents.get_num_columns() < num_columns:
+        for _ in range(num_columns - row_contents.get_num_columns()):
+            async with row.col() as cell_ui:
+                cell_ui.label(" ")
 
 def compute_table_height(row_size, item_spacing, rows_per_page):
     """Compute how big the table needs to be to hold the given number of rows"""
@@ -415,7 +418,7 @@ class UIWrapper:
                     if rows[row.index()].should_show_overline():
                         row.set_overline(True)
                     # let the call back decide how to draw the row
-                    await show_row(row, rows)
+                    await show_row(row, rows, len(headers))
                     # if this is the first visible row, update current_row_index
                     response = row.response()
                     rect = response.rect
