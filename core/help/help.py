@@ -4,7 +4,6 @@ from collections import defaultdict
 from collections.abc import Iterable
 from typing import Any, Optional
 
-import egui
 from talon import Context, Module, actions, imgui, registry, settings
 
 from ...core.gui.gui import (
@@ -151,10 +150,7 @@ def update_operators_text():
                         has_added_first_list_item = True
                         row_text = f"{name} operators:"
                         operators_text.append(
-                            RichTextSingleColumnRow(
-                                (row_text,),
-                                (create_bold_text,)
-                            )
+                            RichTextSingleColumnRow((row_text,), (create_bold_text,))
                         )
 
                     postfix = "" if has_value else "*"
@@ -162,13 +158,17 @@ def update_operators_text():
                     if has_value:
                         row = TextRow((operator_name_text, text))
                     else:
-                        row = RichTextSingleColumnRow((operator_name_text,), (create_bold_text,))
+                        row = RichTextSingleColumnRow(
+                            (operator_name_text,), (create_bold_text,)
+                        )
                     operators_text.append(row)
         if has_operator_without_text_implementation:
             row_text = (
                 "* operator is implemented as a function call and cannot be displayed"
             )
-            operators_text.append(RichTextSingleColumnRow((row_text,),(create_bold_text,)))
+            operators_text.append(
+                RichTextSingleColumnRow((row_text,), (create_bold_text,))
+            )
         page_scroller.page_size = settings.get("user.help_max_command_lines_per_page")
     # This exception will get raised if there is no operators object defined in the active context
     except NotImplementedError:
@@ -187,7 +187,9 @@ async def gui_operators(ui, ui_wrapper):
         if operators_text:
             # add padding so the auto sizing creates enough width
             operators_max_row_size = max(t.get_text_length() for t in operators_text)
-            required_padding = round(min(operators_max_row_size, OPERATORS_MAX_COLUMN_LENGTH) * 2.5)
+            required_padding = round(
+                min(operators_max_row_size, OPERATORS_MAX_COLUMN_LENGTH) * 2.5
+            )
             padding_width = max(0, required_padding - len(title))
             padding = " " * padding_width
             title = f"{title}{padding}"

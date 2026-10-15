@@ -46,6 +46,7 @@ async def show_row_ui(row, contents, num_columns):
             async with row.col() as cell_ui:
                 cell_ui.label(" ")
 
+
 def compute_table_height(row_size, item_spacing, rows_per_page):
     """Compute how big the table needs to be to hold the given number of rows"""
     return (row_size + item_spacing) * rows_per_page + item_spacing
