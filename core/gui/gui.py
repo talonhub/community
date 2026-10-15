@@ -223,7 +223,7 @@ class RichTextSingleColumnRow(Row):
                     current_text.pop()
                     current_create.pop()
                 else:
-                    current_text[-1] = first_line[len(prior_text):]
+                    current_text[-1] = first_line[len(prior_text) :]
                 result.append(
                     RichTextSingleColumnRow(
                         current_text[:], current_create[:], show_overline, self.layout
