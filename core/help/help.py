@@ -172,7 +172,9 @@ def update_operators_text():
     except NotImplementedError:
         operators_text = None
 
+
 OPERATORS_MAX_COLUMN_LENGTH = 50
+
 
 @open_gui(y=0, refresh_period="500ms")
 async def gui_operators(ui, ui_wrapper):
