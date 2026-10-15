@@ -109,6 +109,7 @@ class PageScroller:
 def create_bold_text(text):
     return egui.RichText(text).strong()
 
+
 def create_italics_text(text):
     return egui.RichText(text).italics()
 

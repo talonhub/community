@@ -189,7 +189,9 @@ async def gui_operators(ui, ui_wrapper):
         title = "Help: Operators"
         if operators_text:
             # add padding so the auto sizing creates enough width
-            required_total_width = OPERATORS_MAX_COLUMN_LENGTH * 2 + TWO_COLUMN_EXTRA_PADDING
+            required_total_width = (
+                OPERATORS_MAX_COLUMN_LENGTH * 2 + TWO_COLUMN_EXTRA_PADDING
+            )
             padding_width = max(0, required_total_width - len(title))
             padding = " " * padding_width
             title = f"{title}{padding}"
@@ -197,7 +199,9 @@ async def gui_operators(ui, ui_wrapper):
 
     if operators_text is None:
         ui.separator()
-        ui.label("There is no active programming language when you opened this menu\nor the language does not have operator support.")
+        ui.label(
+            "There is no active programming language when you opened this menu\nor the language does not have operator support."
+        )
     else:
         row_size = ui_wrapper.get_label_row_size()
         maximum_height = compute_table_height(
