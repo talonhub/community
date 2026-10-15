@@ -179,12 +179,12 @@ class TextRow(Row):
 class RichTextSingleColumnRow(Row):
     def __init__(self, parts, create_rich_text=None, show_overline=True, layout=None):
         """A single column row consisting of rich text objects"""
-        if create_rich_text:
-            self.parts = []
-            for text, create in zip(parts, create_rich_text, strict=True):
-                self.parts.append(create(text))
-        else:
-            self.parts = [egui.RichText(p) for p in parts]
+        if not create_rich_text:
+            create_rich_text = [egui.RichText]*len(parts)
+        self.create_rich_text = create_rich_text
+        self.parts = []
+        for text, create in zip(parts, self.create_rich_text, strict=True):
+            self.parts.append(create(text))
         self.create_rich_text = create_rich_text
         self.show_overline = show_overline
         self.layout = layout
@@ -201,8 +201,29 @@ class RichTextSingleColumnRow(Row):
             ui.label(part)
 
     def wrap(self, max_column_length):
+        # determine how far you have to go before it wraps using the textwrap.wrap function
+        # for each line before the last one, have a separate single column row object created for each
+        # using the relevant parts and create rich text functions
+        # then continue from the last line looping at the first step
         result = []
-
+        show_overline = self.show_overline
+        current_text = []
+        current_create = []
+        for part, create in zip(self.parts, self.create_rich_text, strict=True):
+            text = part.text()
+            current_text.append(text)
+            current_create.append(create)
+            row_text = "".join(current_text)
+            wrapped_lines = wrap(row_text, width=max_column_length)
+            if len(wrapped_lines) > 1:
+                # handle the need for wrapping
+                current_text[-1] = wrapped_lines[0]
+                result.append(RichTextSingleColumnRow(current_text[:], current_create[:], show_overline, self.layout))
+                current_text = wrapped_lines[1:]
+                current_create = [create]*(len(wrapped_lines) - 1)
+                show_overline = False
+                pass
+        result.append(RichTextSingleColumnRow(current_text, current_create, show_overline, self.layout))
         return result
 
     def should_show_overline(self):
