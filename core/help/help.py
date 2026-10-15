@@ -172,6 +172,7 @@ def update_operators_text():
     except NotImplementedError:
         operators_text = None
 
+OPERATORS_MAX_COLUMN_LENGTH = 50
 
 @open_gui(y=0, refresh_period="500ms")
 async def gui_operators(ui, ui_wrapper):
@@ -183,7 +184,8 @@ async def gui_operators(ui, ui_wrapper):
             # add padding so that there is enough room for all of the lines in the table
             # this is currently needed because of how auto sizing works and the rows significantly varying in length
             operators_max_row_size = max(t.get_text_length() for t in operators_text)
-            padding_width = max(0, operators_max_row_size - len(title))
+            required_padding = min(operators_max_row_size, OPERATORS_MAX_COLUMN_LENGTH)
+            padding_width = max(0, required_padding - len(title))
             padding = " " * padding_width
             title = f"{title}{padding}"
         ui_wrapper.header(title)
@@ -206,7 +208,7 @@ async def gui_operators(ui, ui_wrapper):
             row_height=row_size,
             id_salt="help_operators",
             scroller=page_scroller,
-            max_column_text_length=10,  # for testing, change this later
+            max_column_text_length=OPERATORS_MAX_COLUMN_LENGTH,
         )
 
     ui_wrapper.spacing()
