@@ -180,7 +180,7 @@ class RichTextSingleColumnRow(Row):
     def __init__(self, parts, create_rich_text=None, show_overline=True, layout=None):
         """A single column row consisting of rich text objects"""
         if not create_rich_text:
-            create_rich_text = [egui.RichText]*len(parts)
+            create_rich_text = [egui.RichText] * len(parts)
         self.create_rich_text = create_rich_text
         self.parts = []
         for text, create in zip(parts, self.create_rich_text, strict=True):
@@ -218,12 +218,20 @@ class RichTextSingleColumnRow(Row):
             if len(wrapped_lines) > 1:
                 # handle the need for wrapping
                 current_text[-1] = wrapped_lines[0]
-                result.append(RichTextSingleColumnRow(current_text[:], current_create[:], show_overline, self.layout))
+                result.append(
+                    RichTextSingleColumnRow(
+                        current_text[:], current_create[:], show_overline, self.layout
+                    )
+                )
                 current_text = wrapped_lines[1:]
-                current_create = [create]*(len(wrapped_lines) - 1)
+                current_create = [create] * (len(wrapped_lines) - 1)
                 show_overline = False
                 pass
-        result.append(RichTextSingleColumnRow(current_text, current_create, show_overline, self.layout))
+        result.append(
+            RichTextSingleColumnRow(
+                current_text, current_create, show_overline, self.layout
+            )
+        )
         return result
 
     def should_show_overline(self):
