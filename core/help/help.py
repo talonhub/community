@@ -12,6 +12,7 @@ from ...core.gui.gui import (
     TextRow,
     compute_table_height,
     create_bold_text,
+    create_italics_text,
     open_gui,
 )
 
@@ -159,7 +160,7 @@ def update_operators_text():
                         row = TextRow((operator_name_text, text))
                     else:
                         row = RichTextSingleColumnRow(
-                            (operator_name_text,), (create_bold_text,)
+                            (operator_name_text,), (create_italics_text,)
                         )
                     operators_text.append(row)
         if has_operator_without_text_implementation:
@@ -176,6 +177,7 @@ def update_operators_text():
 
 
 OPERATORS_MAX_COLUMN_LENGTH = 40
+# We must account for the space taken up for the column separation. This number was determined empirically.
 TWO_COLUMN_EXTRA_PADDING = 9
 
 
@@ -187,30 +189,24 @@ async def gui_operators(ui, ui_wrapper):
         title = "Help: Operators"
         if operators_text:
             # add padding so the auto sizing creates enough width
-            operators_max_row_size = max(t.get_text_length() for t in operators_text)
-            required_padding = (
-                min(operators_max_row_size, OPERATORS_MAX_COLUMN_LENGTH) * 2
-                + TWO_COLUMN_EXTRA_PADDING
-            )
-            padding_width = max(0, required_padding - len(title))
+            required_total_width = OPERATORS_MAX_COLUMN_LENGTH * 2 + TWO_COLUMN_EXTRA_PADDING
+            padding_width = max(0, required_total_width - len(title))
             padding = " " * padding_width
             title = f"{title}{padding}"
         ui_wrapper.header(title)
 
     if operators_text is None:
         ui.separator()
-        ui.label("There is no active programming language when you opened this menu")
-        ui.label("or the language does not have operator support.")
+        ui.label("There is no active programming language when you opened this menu\nor the language does not have operator support.")
     else:
         row_size = ui_wrapper.get_label_row_size()
         maximum_height = compute_table_height(
             row_size, ui_wrapper.get_item_spacing(), page_scroller.page_size
         )
 
-        headers = ["", ""]
         await ui_wrapper.draw_table(
-            headers,
-            operators_text,
+            headers=["", ""],
+            rows=operators_text,
             maximum_height=maximum_height,
             row_height=row_size,
             id_salt="help_operators",
