@@ -690,9 +690,12 @@ def hide_all_help_guis():
     gui_list_help.hide()
     gui_operators.hide()
 
+
 MAX_COLUMN_LENGTH_FOR_HELP_LIST = 20
 LIST_KEY_HEADER = "Spoken Form"
 LIST_VALUE_HEADER = "Value"
+
+
 @open_gui(y=0, refresh_period="500ms")
 async def gui_list_help(ui, ui_wrapper):
     global selected_list
@@ -705,9 +708,9 @@ async def gui_list_help(ui, ui_wrapper):
 
     # show list name and description for the title
     title = f"List: {selected_list}"
-    padding_size = max(0, round((MAX_COLUMN_LENGTH_FOR_HELP_LIST)*2.5 - len(title)))
+    padding_size = max(0, round((MAX_COLUMN_LENGTH_FOR_HELP_LIST) * 2.5 - len(title)))
     if padding_size > 0:
-        padding = " "*padding_size
+        padding = " " * padding_size
         title = f"{title}{padding}"
 
     # Extract description from list declaration, i.e. mod.list(..., desc=...))
