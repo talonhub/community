@@ -109,19 +109,19 @@ def gui_formatters(gui: imgui.GUI):
 OPERATORS_MAX_COLUMN_LENGTH = 40
 
 
-def _add_rows_for_operator(rows, prefix, operator_name, value_text):
-    postfix = "" if value_text else "*"
+def _add_rows_for_operator(rows, prefix, operator_name, description):
+    postfix = "" if description else "*"
     operator_name_text = f"    {prefix} {operator_name}{postfix}"
     columns = [operator_name_text]
-    if value_text:
-        columns.append(value_text)
+    if description:
+        columns.append(description)
         rich_text_functions = None
     else:
         rich_text_functions = (create_italics_text,)
     rows.extend(TextRow.create(columns, rich_text_functions=rich_text_functions))
 
 
-def _compute_operator_text(operator):
+def _compute_operator_description(operator):
     # If the operator is implemented as text insertion,
     # display the operator text
     if isinstance(operator, str):
@@ -178,9 +178,9 @@ def update_operators_text():
                         _add_rows_for_operator_category_header(rows, name)
                         has_added_first_list_item = True
                     operator = operators.get(operator_text)
-                    text = _compute_operator_text(operator)
-                    _add_rows_for_operator(rows, prefix, operator_name, text)
-                    if not text:
+                    description = _compute_operator_description(operator)
+                    _add_rows_for_operator(rows, prefix, operator_name, description)
+                    if not description:
                         has_operator_without_text_implementation = True
 
         if has_operator_without_text_implementation:
