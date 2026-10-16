@@ -191,6 +191,16 @@ def pad_title_for_two_column_row(title, max_length_per_column):
         title = f"{title}{padding}"
     return title
 
+def add_help_close_button(ui_wrapper):
+    if ui_wrapper.button("Help close"):
+        actions.user.help_hide()
+
+def add_page_navigation_buttons(ui_wrapper, scroller):
+    if ui_wrapper.button("Help next"):
+        scroller.page_down()
+
+    if ui_wrapper.button("Help previous"):
+        scroller.page_up()
 
 @open_gui(y=0, refresh_period="500ms")
 async def gui_operators(ui, ui_wrapper):
@@ -225,14 +235,9 @@ async def gui_operators(ui, ui_wrapper):
 
     ui_wrapper.spacing()
     async with ui.horizontal_wrapped():
-        if ui_wrapper.button("Help close"):
-            actions.user.help_hide()
+        add_help_close_button(ui_wrapper)
         if operators_text and len(operators_text) > page_scroller.page_size:
-            if ui_wrapper.button("Help next"):
-                page_scroller.page_down()
-
-            if ui_wrapper.button("Help previous"):
-                page_scroller.page_up()
+            add_page_navigation_buttons(ui_wrapper, page_scroller)
 
 
 def format_context_title(context_name: str) -> str:
@@ -754,15 +759,9 @@ async def gui_list_help(ui, ui_wrapper):
 
     # show navigation buttons. these are arranged horizontally but will wrap onto more rows if needed
     async with ui.horizontal_wrapped():
-        if ui_wrapper.button("Help close"):
-            actions.user.help_hide()
-
+        add_help_close_button(ui_wrapper)
         if len(rows) > page_size:
-            if ui_wrapper.button("Help next"):
-                page_scroller.page_down()
-
-            if ui_wrapper.button("Help previous"):
-                page_scroller.page_up()
+            add_page_navigation_buttons(ui_wrapper, page_scroller)
 
 
 @mod.action_class
