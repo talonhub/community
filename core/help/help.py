@@ -183,7 +183,7 @@ def update_operators_text():
 TWO_COLUMN_EXTRA_PADDING = 9
 
 
-def pad_title_for_two_column_row(title, max_length_per_column):
+def pad_title_for_two_column_rows(title, max_length_per_column):
     required_total_width = max_length_per_column * 2 + TWO_COLUMN_EXTRA_PADDING
     padding_width = max(0, required_total_width - len(title))
     if padding_width > 0:
@@ -216,7 +216,7 @@ async def gui_operators(ui, ui_wrapper):
         title = "Help: Operators"
         if operators_text:
             # add padding so the auto sizing creates enough width
-            title = pad_title_for_two_column_row(title, OPERATORS_MAX_COLUMN_LENGTH)
+            title = pad_title_for_two_column_rows(title, OPERATORS_MAX_COLUMN_LENGTH)
         ui_wrapper.header(title)
 
     if operators_text is None:
@@ -728,7 +728,7 @@ async def gui_list_help(ui, ui_wrapper):
     # show list name and description for the title
     title = f"List: {selected_list}"
     # use the title to claim enough width: add enough padding to show columns with the maximum length
-    title = pad_title_for_two_column_row(title, MAX_COLUMN_LENGTH_FOR_HELP_LIST)
+    title = pad_title_for_two_column_rows(title, MAX_COLUMN_LENGTH_FOR_HELP_LIST)
 
     # Extract description from list declaration, i.e. mod.list(..., desc=...))
     if (desc := registry.decls.lists[selected_list].desc) is not None:
