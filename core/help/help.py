@@ -14,6 +14,7 @@ from ...core.gui.gui import (
     create_bold_text,
     create_italics_text,
     open_gui,
+    wrap_rows,
 )
 
 mod = Module()
@@ -106,6 +107,8 @@ def gui_formatters(gui: imgui.GUI):
         gui_formatters.hide()
 
 
+OPERATORS_MAX_COLUMN_LENGTH = 40
+
 def update_operators_text():
     """For operators implemented for the active language, map spoken forms including operator prefix to
     the operator text for operators implemented as text insertion
@@ -122,7 +125,7 @@ def update_operators_text():
         names_with_prefix.sort()
 
         # Fill in the list by iterating over the operator lists
-        operators_text = []
+        rows = []
         has_operator_without_text_implementation = False
         for name, prefix in names_with_prefix:
             operators_list = actions.user.talon_get_active_registry_list(
@@ -150,7 +153,7 @@ def update_operators_text():
                     if not has_added_first_list_item:
                         has_added_first_list_item = True
                         row_text = f"{name} operators:"
-                        operators_text.append(
+                        rows.append(
                             RichTextSingleColumnRow((row_text,), (create_bold_text,))
                         )
 
@@ -162,21 +165,21 @@ def update_operators_text():
                         row = RichTextSingleColumnRow(
                             (operator_name_text,), (create_italics_text,)
                         )
-                    operators_text.append(row)
+                    rows.append(row)
         if has_operator_without_text_implementation:
             row_text = (
                 "* operator is implemented as a function call and cannot be displayed"
             )
-            operators_text.append(
+            rows.append(
                 RichTextSingleColumnRow((row_text,), (create_bold_text,))
             )
         page_scroller.page_size = settings.get("user.help_max_command_lines_per_page")
+        operators_text = wrap_rows(rows, OPERATORS_MAX_COLUMN_LENGTH)
     # This exception will get raised if there is no operators object defined in the active context
     except NotImplementedError:
         operators_text = None
 
 
-OPERATORS_MAX_COLUMN_LENGTH = 40
 # We must account for the space taken up for the column separation. This number was determined empirically.
 TWO_COLUMN_EXTRA_PADDING = 9
 
@@ -219,7 +222,6 @@ async def gui_operators(ui, ui_wrapper):
             row_height=row_size,
             id_salt="help_operators",
             scroller=page_scroller,
-            max_column_text_length=OPERATORS_MAX_COLUMN_LENGTH,
         )
 
     ui_wrapper.spacing()
@@ -735,6 +737,7 @@ async def gui_list_help(ui, ui_wrapper):
     # get the list
     talon_list = actions.user.talon_get_active_registry_list(selected_list)
     rows = TextRow.create_list(list(talon_list.items()))
+    rows = wrap_rows(rows, MAX_COLUMN_LENGTH_FOR_HELP_LIST)
 
     # show the rows in a table
     if len(rows) > 0:
@@ -746,7 +749,6 @@ async def gui_list_help(ui, ui_wrapper):
             row_height=row_size,
             id_salt="help_list",
             scroller=page_scroller,
-            max_column_text_length=MAX_COLUMN_LENGTH_FOR_HELP_LIST,
         )
 
     ui_wrapper.spacing()
