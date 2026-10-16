@@ -268,11 +268,13 @@ class RichTextSingleColumnRow(Row):
     def get_text_length(self) -> int:
         return sum(len(p.text()) for p in self.parts)
 
+
 def wrap_rows(rows, max_column_text_length):
     new_rows = []
     for r in rows:
         new_rows.extend(r.wrap(max_column_text_length))
     return new_rows
+
 
 class UIWrapper:
     """Provides helper methods for drawing on a ui. These methods use the wrapped ui by default, but you can use the ui parameter to provide another one"""

@@ -109,6 +109,7 @@ def gui_formatters(gui: imgui.GUI):
 
 OPERATORS_MAX_COLUMN_LENGTH = 40
 
+
 def update_operators_text():
     """For operators implemented for the active language, map spoken forms including operator prefix to
     the operator text for operators implemented as text insertion
@@ -170,9 +171,7 @@ def update_operators_text():
             row_text = (
                 "* operator is implemented as a function call and cannot be displayed"
             )
-            rows.append(
-                RichTextSingleColumnRow((row_text,), (create_bold_text,))
-            )
+            rows.append(RichTextSingleColumnRow((row_text,), (create_bold_text,)))
         page_scroller.page_size = settings.get("user.help_max_command_lines_per_page")
         operators_text = wrap_rows(rows, OPERATORS_MAX_COLUMN_LENGTH)
     # This exception will get raised if there is no operators object defined in the active context
