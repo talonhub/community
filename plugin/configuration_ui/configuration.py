@@ -345,16 +345,16 @@ class Manager:
         # cleanup state and handle post action
         if chosen_setting:
             self.chosen_setting = ""
-            draw.refresh()
+            settings_gui.refresh()
         if comment_toggle_setting:
             self.comment_toggle_setting = ""
-            draw.refresh()
+            settings_gui.refresh()
         if post_action:
             post_action()
-            draw.refresh()
+            settings_gui.refresh()
             self.post_action = None
         if old_error_message != self.error_message:
-            draw.refresh()
+            settings_gui.refresh()
 
     async def draw_page_navigation(self, ui, total_available_height):
         async with ui.vertical():
@@ -551,14 +551,14 @@ manager = None
     title="Community Settings",
     tag="user.community_settings_window",
 )
-async def draw(ui, ui_wrapper):
+async def settings_gui(ui, ui_wrapper):
     await manager.draw(ui, ui_wrapper)
 
 
 def handle_file_update(path, flags):
     if manager:
         manager.on_change(Path(path))
-        draw.refresh()
+        settings_gui.refresh()
 
 
 for path in RELEVANT_PATHS:
@@ -572,14 +572,14 @@ class Actions:
         global manager
         if manager is None:
             manager = Manager()
-        draw.show()
+        settings_gui.show()
         # the refresh is sometimes needed for this to display correctly
-        draw.refresh()
+        settings_gui.refresh()
 
     def settings_window_hide():
         """Hide the Community settings configuration window"""
         global manager
-        draw.hide()
+        settings_gui.hide()
         manager = None
 
     def settings_window_open(name: str):
@@ -587,18 +587,18 @@ class Actions:
         if manager is None:
             return
         manager.update_page(name)
-        draw.refresh()
+        settings_gui.refresh()
 
     def settings_window_choose_setting_ui(name: str):
         """Focus or toggle the setting"""
         if manager is None:
             return
         manager.chosen_setting = name
-        draw.refresh()
+        settings_gui.refresh()
 
     def settings_window_toggle_commenting_setting(name: str):
         """Toggle commenting the setting"""
         if manager is None:
             return
         manager.comment_toggle_setting = name
-        draw.refresh()
+        settings_gui.refresh()
