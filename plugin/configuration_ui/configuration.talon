@@ -1,1 +1,1 @@
-configuration show: user.show_configuration_window()
+settings show: user.settings_window_show()

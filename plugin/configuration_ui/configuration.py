@@ -564,7 +564,7 @@ for path in RELEVANT_PATHS:
 
 @mod.action_class
 class Actions:
-    def show_configuration_window():
+    def settings_window_show():
         """Show the Community settings configuration window"""
         global manager
         if manager is None:
@@ -573,27 +573,27 @@ class Actions:
         # the refresh is sometimes needed for this to display correctly
         draw.refresh()
 
-    def hide_configuration_window():
+    def settings_window_hide():
         """Hide the Community settings configuration window"""
         global manager
         draw.hide()
         manager = None
 
-    def configuration_window_open_page(name: str):
+    def settings_window_open(name: str):
         """Open the page of the Community settings configuration window by name"""
         if manager is None:
             return
         manager.update_page(name)
         draw.refresh()
 
-    def configuration_window_choose_setting_ui(name: str):
+    def settings_window_choose_setting_ui(name: str):
         """Focus or toggle the setting"""
         if manager is None:
             return
         manager.chosen_setting = name
         draw.refresh()
 
-    def configuration_window_toggle_commenting_setting(name: str):
+    def settings_window_toggle_commenting_setting(name: str):
         """Toggle commenting the setting"""
         if manager is None:
             return
