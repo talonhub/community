@@ -48,6 +48,7 @@ class Setting:
 
 
 async def draw_toggle(setting: Setting, ui, is_setting_chosen):
+    raise ValueError("nothing is wrong")
     response = ui.checkbox(setting.value, setting.get_description())
     if is_setting_chosen:
         setting.value.set(not setting.value.get())

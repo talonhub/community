@@ -314,16 +314,21 @@ class Manager:
                         setting.value.set(VALUE_UNAVAILABLE)
 
     async def draw(self, ui, ui_wrapper):
+        # set these at the start to avoid a situation where these are set in the middle of this function leading to an invalid state
         post_action = self.post_action
         chosen_setting = self.chosen_setting
         comment_toggle_setting = self.comment_toggle_setting
+
         total_available_height = ui.available_height()
         async with ui.horizontal():
             await self.draw_page_navigation(ui, total_available_height)
+
+            # put the page on the space to the right of the page navigation
             available_width = ui.available_width()
             interaction_region_space = egui.Vec2(
                 available_width, total_available_height
             )
+
             async with (
                 ui.allocate_ui(interaction_region_space) as interaction_ui,
                 ui.vertical(),
@@ -335,6 +340,8 @@ class Manager:
                     chosen_setting,
                     comment_toggle_setting,
                 )
+
+        # cleanup state and handle post action
         if chosen_setting:
             self.chosen_setting = ""
             draw.refresh()
@@ -343,6 +350,7 @@ class Manager:
             draw.refresh()
         if post_action:
             post_action()
+            draw.refresh()
             self.post_action = None
 
     async def draw_page_navigation(self, ui, total_available_height):
@@ -417,13 +425,9 @@ class Manager:
             await self.draw_main_page(ui, total_available_height)
             return
         page = self.pages[self.page]
-        # use a single column table with heterogeneous rows later
+        
         if self.error_message:
-            async with ui.horizontal_wrapped():
-                ui.strong(self.error_message)
-                await self.draw_error_copy_buttons(
-                    ui, self.error_message, self.error_setting
-                )
+            await self.draw_error_message(ui, ui_wrapper)
         ui.add_space(10)
         async with (
             egui.ScrollArea.vertical()
@@ -452,7 +456,15 @@ class Manager:
                 if is_setting_chosen:
                     self.post_action = setting.post_chosen_action
 
+    async def draw_error_message(self, ui, ui_wrapper):
+        async with ui.horizontal_wrapped():
+            ui.strong(self.error_message)
+            await self.draw_error_copy_buttons(
+                ui_wrapper, self.error_message, self.error_setting
+            )
+
     async def draw_main_page(self, ui, total_available_height):
+        """Draw introductory page"""
         async with (
             egui.ScrollArea.vertical()
             .max_height(total_available_height)
@@ -472,10 +484,11 @@ class Manager:
                     "You can open a page by saying `page` and then the page name, such a saying `page popping` to open the popping settings page. You can use the ui widget for editing a setting by saying `setting` and then the setting name. You can toggle if a setting is set in a Community .talon file by saying `comment toggle` and then the name of a setting."
                 )
 
-    async def draw_error_copy_buttons(self, ui, error_message, setting):
-        if ui.button("copy").clicked():
+    async def draw_error_copy_buttons(self, ui_wrapper, error_message, setting):
+        """Draw buttons for copying an error message including one that copies the relevant file for added context"""
+        if ui_wrapper.button("copy"):
             clip.set_text(error_message)
-        if ui.button("copy with setting file").clicked():
+        if ui_wrapper.button("copy with setting file"):
             path: Path = setting.path
             try:
                 file_text = path.read_text()
