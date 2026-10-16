@@ -154,7 +154,9 @@ def update_operators_text():
                         has_added_first_list_item = True
                         row_text = f"{name} operators:"
                         rows.extend(
-                            TextRow.create((row_text,), rich_text_functions=(create_bold_text,))
+                            TextRow.create(
+                                (row_text,), rich_text_functions=(create_bold_text,)
+                            )
                         )
 
                     postfix = "" if has_value else "*"
@@ -163,14 +165,17 @@ def update_operators_text():
                         row = TextRow.create((operator_name_text, text))
                     else:
                         row = TextRow.create(
-                            (operator_name_text,), rich_text_functions=(create_italics_text,)
+                            (operator_name_text,),
+                            rich_text_functions=(create_italics_text,),
                         )
                     rows.extend(row)
         if has_operator_without_text_implementation:
             row_text = (
                 "* operator is implemented as a function call and cannot be displayed"
             )
-            rows.extend(TextRow.create((row_text,), rich_text_functions=(create_bold_text,)))
+            rows.extend(
+                TextRow.create((row_text,), rich_text_functions=(create_bold_text,))
+            )
         page_scroller.page_size = settings.get("user.help_max_command_lines_per_page")
         operators_text = wrap_rows(rows, OPERATORS_MAX_COLUMN_LENGTH)
     # This exception will get raised if there is no operators object defined in the active context

@@ -7,10 +7,9 @@
 
 import math
 from abc import ABC, abstractmethod
-from collections.abc import Callable
+from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 from textwrap import wrap
-from typing import Sequence
 
 import egui
 from skia import Rect
@@ -156,7 +155,9 @@ class TextRow(Row):
 
     async def ui(self, ui, column_number):
         text = self.columns[column_number]
-        if self.rich_text_functions and (create_rich_text := self.rich_text_functions[column_number]):
+        if self.rich_text_functions and (
+            create_rich_text := self.rich_text_functions[column_number]
+        ):
             text = create_rich_text(text)
         ui.label(text)
 
@@ -167,7 +168,12 @@ class TextRow(Row):
         return len(self.columns)
 
     @classmethod
-    def _split_across_rows(cls, splits: Sequence[Sequence[str]], show_overline: bool, rich_text_functions=None):
+    def _split_across_rows(
+        cls,
+        splits: Sequence[Sequence[str]],
+        show_overline: bool,
+        rich_text_functions=None,
+    ):
         result = []
         num_lines = max(len(c) for c in splits)
         for i in range(num_lines):
@@ -181,7 +187,9 @@ class TextRow(Row):
             wrap_with_subsequent_indent(c, width=max_column_length)
             for c in self.columns
         ]
-        return self._split_across_rows(wrapped_lines, self.show_overline, self.rich_text_functions)
+        return self._split_across_rows(
+            wrapped_lines, self.show_overline, self.rich_text_functions
+        )
 
     @classmethod
     def create(cls, columns: Sequence[str], rich_text_functions=None):
