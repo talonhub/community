@@ -25,6 +25,18 @@ INNER_MARGIN = 16.0
 
 DEFAULT_TEXT_SIZE = 12.0 / 1.3
 
+# We must account for the space taken up for the column separation. This number was determined empirically.
+TWO_COLUMN_EXTRA_PADDING = 9
+
+
+def pad_title_for_two_column_rows(title, max_length_per_column):
+    required_total_width = max_length_per_column * 2 + TWO_COLUMN_EXTRA_PADDING
+    padding_width = max(0, required_total_width - len(title))
+    if padding_width > 0:
+        padding = " " * padding_width
+        title = f"{title}{padding}"
+    return title
+
 
 def wrap_with_subsequent_indent(text, width):
     return wrap(text, width=width, subsequent_indent=" ")

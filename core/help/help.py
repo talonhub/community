@@ -13,6 +13,7 @@ from ...core.gui.gui import (
     create_bold_text,
     create_italics_text,
     open_gui,
+    pad_title_for_two_column_rows,
     wrap_rows,
 )
 
@@ -190,19 +191,6 @@ def update_operators_text():
     # This exception will get raised if there is no operators object defined in the active context
     except NotImplementedError:
         operators_text = None
-
-
-# We must account for the space taken up for the column separation. This number was determined empirically.
-TWO_COLUMN_EXTRA_PADDING = 9
-
-
-def pad_title_for_two_column_rows(title, max_length_per_column):
-    required_total_width = max_length_per_column * 2 + TWO_COLUMN_EXTRA_PADDING
-    padding_width = max(0, required_total_width - len(title))
-    if padding_width > 0:
-        padding = " " * padding_width
-        title = f"{title}{padding}"
-    return title
 
 
 def add_help_close_button(ui_wrapper):
