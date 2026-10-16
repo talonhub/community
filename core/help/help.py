@@ -166,8 +166,10 @@ def update_operators_text():
                         columns.append(text)
                         rich_text_functions = None
                     else:
-                        rich_text_functions=(create_italics_text,)
-                    rows.extend(TextRow.create(columns, rich_text_functions=rich_text_functions))
+                        rich_text_functions = (create_italics_text,)
+                    rows.extend(
+                        TextRow.create(columns, rich_text_functions=rich_text_functions)
+                    )
         if has_operator_without_text_implementation:
             row_text = (
                 "* operator is implemented as a function call and cannot be displayed"
