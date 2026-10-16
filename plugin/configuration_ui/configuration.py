@@ -494,7 +494,7 @@ class Manager:
             ):
                 error_message = toggle_setting_activation(setting)
                 if error_message is not None:
-                    self.error_message = f"Something went wrong trying to toggle commenting {error_representation_of_name}: error_message"
+                    self.error_message = f"Something went wrong trying to toggle commenting {error_representation_of_name}: {error_message}"
                     self.error_setting = setting
         ui.add_space(checkbox_size)
 
