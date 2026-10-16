@@ -198,6 +198,9 @@ def add_help_close_button(ui_wrapper):
 
 
 def add_page_navigation_buttons(ui_wrapper, scroller):
+    if not scroller:
+        return 
+        
     if ui_wrapper.button("Help next"):
         scroller.page_down()
 
@@ -531,6 +534,7 @@ def reset():
     global show_enabled_contexts_only
     global display_name_to_context_name_map
     global selected_list
+    global operators_text
     global current_list_page
     global page_scroller
     global current_gui
@@ -543,6 +547,7 @@ def reset():
     show_enabled_contexts_only = False
     display_name_to_context_name_map = {}
     selected_list = None
+    operators_text = None
     current_list_page = 1
     page_scroller = None
     current_gui = None
