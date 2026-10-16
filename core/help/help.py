@@ -161,14 +161,13 @@ def update_operators_text():
 
                     postfix = "" if has_value else "*"
                     operator_name_text = f"    {prefix} {operator_name}{postfix}"
+                    columns = [operator_name_text]
                     if has_value:
-                        row = TextRow.create((operator_name_text, text))
+                        columns.append(text)
+                        rich_text_functions = None
                     else:
-                        row = TextRow.create(
-                            (operator_name_text,),
-                            rich_text_functions=(create_italics_text,),
-                        )
-                    rows.extend(row)
+                        rich_text_functions=(create_italics_text,)
+                    rows.extend(TextRow.create(columns, rich_text_functions=rich_text_functions))
         if has_operator_without_text_implementation:
             row_text = (
                 "* operator is implemented as a function call and cannot be displayed"
