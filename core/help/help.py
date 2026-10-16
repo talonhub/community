@@ -118,9 +118,8 @@ def _add_rows_for_operator(rows, prefix, operator_name, value_text):
         rich_text_functions = None
     else:
         rich_text_functions = (create_italics_text,)
-    rows.extend(
-        TextRow.create(columns, rich_text_functions=rich_text_functions)
-    )
+    rows.extend(TextRow.create(columns, rich_text_functions=rich_text_functions))
+
 
 def _compute_operator_text(operator):
     # If the operator is implemented as text insertion,
@@ -128,26 +127,21 @@ def _compute_operator_text(operator):
     if isinstance(operator, str):
         return operator
     # If a documentation string is available, use that
-    elif doc_string := getattr(operator, "__doc__", None):
+    if doc_string := getattr(operator, "__doc__", None):
         return doc_string
     # Otherwise display the operator name from list
     return ""
 
+
 def _add_rows_for_operator_category_header(rows, name):
     row_text = f"{name} operators:"
-    rows.extend(
-        TextRow.create(
-            (row_text,), rich_text_functions=(create_bold_text,)
-        )
-    )
+    rows.extend(TextRow.create((row_text,), rich_text_functions=(create_bold_text,)))
+
 
 def _add_missing_text_implementation_footnote(rows):
-    row_text = (
-                    "* operator is implemented as a function call and cannot be displayed"
-                )
-    rows.extend(
-        TextRow.create((row_text,), rich_text_functions=(create_bold_text,))
-    )
+    row_text = "* operator is implemented as a function call and cannot be displayed"
+    rows.extend(TextRow.create((row_text,), rich_text_functions=(create_bold_text,)))
+
 
 def _compute_operator_list_names_with_prefixes():
     # Associate the names of the operator lists with the corresponding prefix
@@ -156,6 +150,7 @@ def _compute_operator_list_names_with_prefixes():
     names_with_prefix += [("math_comparison", "is"), ("bitwise", "(bit | bitwise)")]
     names_with_prefix.sort()
     return names_with_prefix
+
 
 def update_operators_text():
     """For operators implemented for the active language, map spoken forms including operator prefix to
