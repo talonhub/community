@@ -361,6 +361,66 @@ class Manager:
             ui.add_space(total_available_height - ui.min_size().y)
         ui.separator()
 
+    async def draw_current_page(
+        self,
+        ui,
+        ui_wrapper,
+        total_available_height,
+        chosen_setting,
+        comment_toggle_setting,
+    ):
+        if self.page == MAIN_PAGE_NAME:
+            await self.draw_main_page(ui, total_available_height)
+            return
+        
+        if self.error_message:
+            await self.draw_error_message(ui, ui_wrapper)
+        ui.add_space(10)
+        await self.draw_configuration_page(
+            ui,
+            ui_wrapper,
+            total_available_height,
+            chosen_setting,
+            comment_toggle_setting,
+        )
+        
+    async def draw_configuration_page(
+        self,
+        ui,
+        ui_wrapper,
+        total_available_height,
+        chosen_setting,
+        comment_toggle_setting,
+    ):
+        page = self.pages[self.page]
+        
+        async with (
+            egui.ScrollArea.vertical()
+            .max_height(total_available_height)
+            .show() as scroll_ui
+        ):
+            await let_user_use_page_keys_to_scroll_scroll_area(scroll_ui)
+
+            ui.strong(page.title)
+            if page.description:
+                ui.label(page.description)
+            ui.add_space(5)
+            ui.label("* toggle setting that setting in a Community .talon file")
+            ui.separator()
+            for setting in page.settings:
+                is_setting_chosen = setting.name == chosen_setting
+                await self.draw_setting_ui(
+                    ui,
+                    ui_wrapper,
+                    setting,
+                    page,
+                    is_setting_chosen,
+                    comment_toggle_setting,
+                )
+                ui.separator()
+                if is_setting_chosen:
+                    self.post_action = setting.post_chosen_action
+
     async def draw_setting_ui(
         self, ui, ui_wrapper, setting, page, is_setting_chosen, comment_toggle_setting
     ):
@@ -412,49 +472,6 @@ class Manager:
                             self.error_message = f"Something went wrong in the UI for setting {error_representation_of_name}: {ex}"
                             self.error_setting = setting
                 ui.separator()
-
-    async def draw_current_page(
-        self,
-        ui,
-        ui_wrapper,
-        total_available_height,
-        chosen_setting,
-        comment_toggle_setting,
-    ):
-        if self.page == MAIN_PAGE_NAME:
-            await self.draw_main_page(ui, total_available_height)
-            return
-        page = self.pages[self.page]
-        
-        if self.error_message:
-            await self.draw_error_message(ui, ui_wrapper)
-        ui.add_space(10)
-        async with (
-            egui.ScrollArea.vertical()
-            .max_height(total_available_height)
-            .show() as scroll_ui
-        ):
-            await let_user_use_page_keys_to_scroll_scroll_area(scroll_ui)
-
-            ui.strong(page.title)
-            if page.description:
-                ui.label(page.description)
-            ui.add_space(5)
-            ui.label("* toggle setting that setting in a Community .talon file")
-            ui.separator()
-            for setting in page.settings:
-                is_setting_chosen = setting.name == chosen_setting
-                await self.draw_setting_ui(
-                    ui,
-                    ui_wrapper,
-                    setting,
-                    page,
-                    is_setting_chosen,
-                    comment_toggle_setting,
-                )
-                ui.separator()
-                if is_setting_chosen:
-                    self.post_action = setting.post_chosen_action
 
     async def draw_error_message(self, ui, ui_wrapper):
         async with ui.horizontal_wrapped():
