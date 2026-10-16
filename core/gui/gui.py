@@ -288,7 +288,7 @@ class UIWrapper:
     ):
         """Draw a table with consistent row height. Assumes each row is at most the given row height. Uses the interact_size of the ui for the default row height, which may be excessive for your application. This assumes that each row has a single line.
         headers: the headers to show at the top of the table. The length of the headers should equal the column size of the rows.
-        rows: the rows to display in the table.
+        rows: the rows to display in the table. Each row should be a subclass of Row.
         row_height: each row should be at most this big.
         show_row: a callback for displaying the row.
         auto_size_columns: decides if the column width should be based on the item sizes. Otherwise, each column takes an equal portion of the available width.
