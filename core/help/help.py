@@ -226,13 +226,13 @@ async def gui_operators(ui, ui_wrapper):
     ui_wrapper.spacing()
     async with ui.horizontal_wrapped():
         if ui_wrapper.button("Help close"):
-            gui_operators.hide()
+            actions.user.help_hide()
         if operators_text and len(operators_text) > page_scroller.page_size:
             if ui_wrapper.button("Help next"):
-                actions.user.help_next()
+                page_scroller.page_down()
 
             if ui_wrapper.button("Help previous"):
-                actions.user.help_previous()
+                page_scroller.page_up()
 
 
 def format_context_title(context_name: str) -> str:
