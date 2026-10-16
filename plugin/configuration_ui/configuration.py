@@ -372,7 +372,7 @@ class Manager:
         if self.page == MAIN_PAGE_NAME:
             await self.draw_main_page(ui, total_available_height)
             return
-        
+
         if self.error_message:
             await self.draw_error_message(ui, ui_wrapper)
         ui.add_space(10)
@@ -383,7 +383,7 @@ class Manager:
             chosen_setting,
             comment_toggle_setting,
         )
-        
+
     async def draw_configuration_page(
         self,
         ui,
@@ -393,7 +393,7 @@ class Manager:
         comment_toggle_setting,
     ):
         page = self.pages[self.page]
-        
+
         async with (
             egui.ScrollArea.vertical()
             .max_height(total_available_height)
