@@ -10,6 +10,7 @@ from abc import ABC, abstractmethod
 from collections.abc import Callable
 from dataclasses import dataclass
 from textwrap import wrap
+from typing import Sequence
 
 import egui
 from skia import Rect
@@ -144,13 +145,20 @@ class Row(ABC):
 
 
 class TextRow(Row):
-    def __init__(self, columns, show_overline=True):
+    def __init__(self, columns, show_overline=True, rich_text_functions=None):
         """A row consisting of strings"""
         self.columns = columns
         self.show_overline = show_overline
+        if rich_text_functions:
+            self.rich_text_functions = rich_text_functions
+        else:
+            self.rich_text_functions = []
 
     async def ui(self, ui, column_number):
-        ui.label(self.columns[column_number])
+        text = self.columns[column_number]
+        if self.rich_text_functions and (create_rich_text := self.rich_text_functions[column_number]):
+            text = create_rich_text(text)
+        ui.label(text)
 
     def should_show_overline(self):
         return self.show_overline
@@ -159,12 +167,12 @@ class TextRow(Row):
         return len(self.columns)
 
     @classmethod
-    def _split_across_rows(cls, splits: list[list[str]], show_overline: bool):
+    def _split_across_rows(cls, splits: Sequence[Sequence[str]], show_overline: bool, rich_text_functions=None):
         result = []
         num_lines = max(len(c) for c in splits)
         for i in range(num_lines):
             line = [c[i] if i < len(c) else "" for c in splits]
-            row = TextRow(line, show_overline and i == 0)
+            row = TextRow(line, show_overline and i == 0, rich_text_functions)
             result.append(row)
         return result
 
@@ -173,18 +181,18 @@ class TextRow(Row):
             wrap_with_subsequent_indent(c, width=max_column_length)
             for c in self.columns
         ]
-        return self._split_across_rows(wrapped_lines, self.show_overline)
+        return self._split_across_rows(wrapped_lines, self.show_overline, self.rich_text_functions)
 
     @classmethod
-    def create(cls, columns: list[str]):
+    def create(cls, columns: Sequence[str], rich_text_functions=None):
         column_lines = [c.split("\n") for c in columns]
-        return cls._split_across_rows(column_lines, True)
+        return cls._split_across_rows(column_lines, True, rich_text_functions)
 
     @classmethod
-    def create_list(cls, rows: list[list[str]]):
+    def create_list(cls, rows: Sequence[Sequence[str]], rich_text_functions=None):
         result = []
         for row in rows:
-            result.extend(cls.create(row))
+            result.extend(cls.create(row, rich_text_functions))
         return result
 
     def get_text_length(self) -> int:

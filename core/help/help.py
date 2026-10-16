@@ -8,7 +8,6 @@ from talon import Context, Module, actions, imgui, registry, settings
 
 from ...core.gui.gui import (
     PageScroller,
-    RichTextSingleColumnRow,
     TextRow,
     compute_table_height,
     create_bold_text,
@@ -154,24 +153,24 @@ def update_operators_text():
                     if not has_added_first_list_item:
                         has_added_first_list_item = True
                         row_text = f"{name} operators:"
-                        rows.append(
-                            RichTextSingleColumnRow((row_text,), (create_bold_text,))
+                        rows.extend(
+                            TextRow.create((row_text,), rich_text_functions=(create_bold_text,))
                         )
 
                     postfix = "" if has_value else "*"
                     operator_name_text = f"    {prefix} {operator_name}{postfix}"
                     if has_value:
-                        row = TextRow((operator_name_text, text))
+                        row = TextRow.create((operator_name_text, text))
                     else:
-                        row = RichTextSingleColumnRow(
-                            (operator_name_text,), (create_italics_text,)
+                        row = TextRow.create(
+                            (operator_name_text,), rich_text_functions=(create_italics_text,)
                         )
-                    rows.append(row)
+                    rows.extend(row)
         if has_operator_without_text_implementation:
             row_text = (
                 "* operator is implemented as a function call and cannot be displayed"
             )
-            rows.append(RichTextSingleColumnRow((row_text,), (create_bold_text,)))
+            rows.extend(TextRow.create((row_text,), rich_text_functions=(create_bold_text,)))
         page_scroller.page_size = settings.get("user.help_max_command_lines_per_page")
         operators_text = wrap_rows(rows, OPERATORS_MAX_COLUMN_LENGTH)
     # This exception will get raised if there is no operators object defined in the active context
