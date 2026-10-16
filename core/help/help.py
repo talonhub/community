@@ -199,8 +199,8 @@ def add_help_close_button(ui_wrapper):
 
 def add_page_navigation_buttons(ui_wrapper, scroller):
     if not scroller:
-        return 
-        
+        return
+
     if ui_wrapper.button("Help next"):
         scroller.page_down()
 
