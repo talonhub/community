@@ -374,7 +374,7 @@ class Manager:
             return
 
         if self.error_message:
-            await self.draw_error_message(ui, ui_wrapper)
+            await self.draw_error_message(ui, ui_wrapper, self.error_message, self.error_setting)
         ui.add_space(10)
         await self.draw_configuration_page(
             ui,
@@ -424,25 +424,12 @@ class Manager:
     async def draw_setting_ui(
         self, ui, ui_wrapper, setting, page, is_setting_chosen, comment_toggle_setting
     ):
+        """Draw the ui for a setting"""
         old_value = setting.value.get()
         readable_name = compute_readable_name(setting.name, page.prefix)
         error_representation_of_name = f"{readable_name} ({setting.name})"
         async with ui.horizontal():
-            checkbox_size = ui.spacing().icon_width
-            if setting.is_tag:
-                spacing_size = ui.spacing().icon_spacing + ui.spacing().item_spacing.x
-                star_width = ui_wrapper.compute_text_width("*")
-                ui.add_space(checkbox_size + spacing_size + star_width)
-            else:
-                if (
-                    ui.checkbox(egui.Mutable(setting.is_activated), "*").clicked()
-                    or comment_toggle_setting == setting.name
-                ):
-                    error_message = toggle_setting_activation(setting)
-                    if error_message is not None:
-                        self.error_message = f"Something went wrong trying to toggle commenting {error_representation_of_name}: error_message"
-                        self.error_setting = setting
-            ui.add_space(checkbox_size)
+            await self.draw_toggle_commenting_setting_column(ui, ui_wrapper, setting, comment_toggle_setting, error_representation_of_name)
             async with ui.with_layout(egui.Layout.right_to_left(egui.Align.TOP)):
                 async with ui.vertical():
                     ui.strong(readable_name)
@@ -473,11 +460,28 @@ class Manager:
                             self.error_setting = setting
                 ui.separator()
 
-    async def draw_error_message(self, ui, ui_wrapper):
+    async def draw_toggle_commenting_setting_column(self, ui, ui_wrapper, setting, comment_toggle_setting, error_representation_of_name):
+        checkbox_size = ui.spacing().icon_width
+        if setting.is_tag:
+            spacing_size = ui.spacing().icon_spacing + ui.spacing().item_spacing.x
+            star_width = ui_wrapper.compute_text_width("*")
+            ui.add_space(checkbox_size + spacing_size + star_width)
+        else:
+            if (
+                ui.checkbox(egui.Mutable(setting.is_activated), "*").clicked()
+                or comment_toggle_setting == setting.name
+            ):
+                error_message = toggle_setting_activation(setting)
+                if error_message is not None:
+                    self.error_message = f"Something went wrong trying to toggle commenting {error_representation_of_name}: error_message"
+                    self.error_setting = setting
+        ui.add_space(checkbox_size)
+
+    async def draw_error_message(self, ui, ui_wrapper, error_message, error_setting):
         async with ui.horizontal_wrapped():
-            ui.strong(self.error_message)
+            ui.strong(error_message)
             await self.draw_error_copy_buttons(
-                ui_wrapper, self.error_message, self.error_setting
+                ui_wrapper, error_message, error_setting
             )
 
     async def draw_main_page(self, ui, total_available_height):
