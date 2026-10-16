@@ -374,7 +374,9 @@ class Manager:
             return
 
         if self.error_message:
-            await self.draw_error_message(ui, ui_wrapper, self.error_message, self.error_setting)
+            await self.draw_error_message(
+                ui, ui_wrapper, self.error_message, self.error_setting
+            )
         ui.add_space(10)
         await self.draw_configuration_page(
             ui,
@@ -428,7 +430,13 @@ class Manager:
         readable_name = compute_readable_name(setting.name, page.prefix)
         error_representation_of_name = f"{readable_name} ({setting.name})"
         async with ui.horizontal():
-            await self.draw_toggle_commenting_setting_column(ui, ui_wrapper, setting, comment_toggle_setting, error_representation_of_name)
+            await self.draw_toggle_commenting_setting_column(
+                ui,
+                ui_wrapper,
+                setting,
+                comment_toggle_setting,
+                error_representation_of_name,
+            )
             async with ui.with_layout(egui.Layout.right_to_left(egui.Align.TOP)):
                 async with ui.vertical():
                     ui.strong(readable_name)
@@ -438,28 +446,37 @@ class Manager:
                         ui.label(setting.get_description())
                     if not setting.is_tag and setting.value.get() == VALUE_UNAVAILABLE:
                         error_message = f"Something went wrong. The setting {error_representation_of_name} could not be found or could not be parsed."
-                        await self.draw_error_message(ui, ui_wrapper, error_message, setting)
+                        await self.draw_error_message(
+                            ui, ui_wrapper, error_message, setting
+                        )
                     else:
-                        await self.draw_settings_ui(ui, setting, is_setting_chosen, error_representation_of_name)
+                        await self.draw_settings_ui(
+                            ui, setting, is_setting_chosen, error_representation_of_name
+                        )
                 ui.separator()
 
-    async def draw_settings_ui(self, ui, setting, is_setting_chosen, error_representation_of_name):
+    async def draw_settings_ui(
+        self, ui, setting, is_setting_chosen, error_representation_of_name
+    ):
         old_value = setting.value.get()
         try:
-            async with ui.add_enabled_ui(
-                setting.is_activated or setting.is_tag
-            ):
+            async with ui.add_enabled_ui(setting.is_activated or setting.is_tag):
                 await setting.draw(setting, ui, is_setting_chosen)
             value = setting.value.get()
             if old_value != value:
-                setting.update_function(
-                    setting.path, setting.name, value
-                )
+                setting.update_function(setting.path, setting.name, value)
         except Exception as ex:
             self.error_message = f"Something went wrong in the UI for setting {error_representation_of_name}: {ex}"
             self.error_setting = setting
 
-    async def draw_toggle_commenting_setting_column(self, ui, ui_wrapper, setting, comment_toggle_setting, error_representation_of_name):
+    async def draw_toggle_commenting_setting_column(
+        self,
+        ui,
+        ui_wrapper,
+        setting,
+        comment_toggle_setting,
+        error_representation_of_name,
+    ):
         checkbox_size = ui.spacing().icon_width
         if setting.is_tag:
             spacing_size = ui.spacing().icon_spacing + ui.spacing().item_spacing.x
@@ -479,9 +496,7 @@ class Manager:
     async def draw_error_message(self, ui, ui_wrapper, error_message, error_setting):
         async with ui.horizontal_wrapped():
             ui.strong(error_message)
-            await self.draw_error_copy_buttons(
-                ui_wrapper, error_message, error_setting
-            )
+            await self.draw_error_copy_buttons(ui_wrapper, error_message, error_setting)
 
     async def draw_main_page(self, ui, total_available_height):
         """Draw introductory page"""
