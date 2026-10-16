@@ -318,6 +318,7 @@ class Manager:
         post_action = self.post_action
         chosen_setting = self.chosen_setting
         comment_toggle_setting = self.comment_toggle_setting
+        old_error_message = self.error_message
 
         total_available_height = ui.available_height()
         async with ui.horizontal():
@@ -352,6 +353,8 @@ class Manager:
             post_action()
             draw.refresh()
             self.post_action = None
+        if old_error_message != self.error_message:
+            draw.refresh()
 
     async def draw_page_navigation(self, ui, total_available_height):
         async with ui.vertical():
