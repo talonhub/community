@@ -191,9 +191,11 @@ def pad_title_for_two_column_row(title, max_length_per_column):
         title = f"{title}{padding}"
     return title
 
+
 def add_help_close_button(ui_wrapper):
     if ui_wrapper.button("Help close"):
         actions.user.help_hide()
+
 
 def add_page_navigation_buttons(ui_wrapper, scroller):
     if ui_wrapper.button("Help next"):
@@ -201,6 +203,7 @@ def add_page_navigation_buttons(ui_wrapper, scroller):
 
     if ui_wrapper.button("Help previous"):
         scroller.page_up()
+
 
 @open_gui(y=0, refresh_period="500ms")
 async def gui_operators(ui, ui_wrapper):
