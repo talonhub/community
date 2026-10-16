@@ -409,7 +409,7 @@ class Manager:
             ui.separator()
             for setting in page.settings:
                 is_setting_chosen = setting.name == chosen_setting
-                await self.draw_setting_ui(
+                await self.draw_setting_row(
                     ui,
                     ui_wrapper,
                     setting,
@@ -421,11 +421,10 @@ class Manager:
                 if is_setting_chosen:
                     self.post_action = setting.post_chosen_action
 
-    async def draw_setting_ui(
+    async def draw_setting_row(
         self, ui, ui_wrapper, setting, page, is_setting_chosen, comment_toggle_setting
     ):
-        """Draw the ui for a setting"""
-        old_value = setting.value.get()
+        """Draw the row for a setting"""
         readable_name = compute_readable_name(setting.name, page.prefix)
         error_representation_of_name = f"{readable_name} ({setting.name})"
         async with ui.horizontal():
@@ -439,26 +438,26 @@ class Manager:
                         ui.label(setting.get_description())
                     if not setting.is_tag and setting.value.get() == VALUE_UNAVAILABLE:
                         error_message = f"Something went wrong. The setting {error_representation_of_name} could not be found or could not be parsed."
-                        async with ui.horizontal():
-                            ui.label(error_message)
-                            await self.draw_error_copy_buttons(
-                                ui, error_message, setting
-                            )
+                        await self.draw_error_message(ui, ui_wrapper, error_message, setting)
                     else:
-                        try:
-                            async with ui.add_enabled_ui(
-                                setting.is_activated or setting.is_tag
-                            ):
-                                await setting.draw(setting, ui, is_setting_chosen)
-                            value = setting.value.get()
-                            if old_value != value:
-                                setting.update_function(
-                                    setting.path, setting.name, value
-                                )
-                        except Exception as ex:
-                            self.error_message = f"Something went wrong in the UI for setting {error_representation_of_name}: {ex}"
-                            self.error_setting = setting
+                        await self.draw_settings_ui(ui, setting, is_setting_chosen, error_representation_of_name)
                 ui.separator()
+
+    async def draw_settings_ui(self, ui, setting, is_setting_chosen, error_representation_of_name):
+        old_value = setting.value.get()
+        try:
+            async with ui.add_enabled_ui(
+                setting.is_activated or setting.is_tag
+            ):
+                await setting.draw(setting, ui, is_setting_chosen)
+            value = setting.value.get()
+            if old_value != value:
+                setting.update_function(
+                    setting.path, setting.name, value
+                )
+        except Exception as ex:
+            self.error_message = f"Something went wrong in the UI for setting {error_representation_of_name}: {ex}"
+            self.error_setting = setting
 
     async def draw_toggle_commenting_setting_column(self, ui, ui_wrapper, setting, comment_toggle_setting, error_representation_of_name):
         checkbox_size = ui.spacing().icon_width
