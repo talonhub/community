@@ -458,6 +458,7 @@ class Manager:
     async def draw_settings_ui(
         self, ui, setting, is_setting_chosen, error_representation_of_name
     ):
+        """Draw the ui for changing the setting"""
         old_value = setting.value.get()
         try:
             async with ui.add_enabled_ui(setting.is_activated or setting.is_tag):
@@ -477,6 +478,7 @@ class Manager:
         comment_toggle_setting,
         error_representation_of_name,
     ):
+        """Draw the column for the checkbox for toggling commenting a setting"""
         checkbox_size = ui.spacing().icon_width
         if setting.is_tag:
             spacing_size = ui.spacing().icon_spacing + ui.spacing().item_spacing.x
