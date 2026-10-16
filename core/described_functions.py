@@ -9,7 +9,7 @@ from talon import actions
 
 def create_described_function(function: Callable, description: str) -> Callable:
     """Creates a function with an associated doc string. Primarily intended to be used with lambdas"""
-    function.__doc__ = description
+    function.__doc__ = None
     return function
 
 

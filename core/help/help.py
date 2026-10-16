@@ -109,6 +109,54 @@ def gui_formatters(gui: imgui.GUI):
 OPERATORS_MAX_COLUMN_LENGTH = 40
 
 
+def _add_rows_for_operator(rows, prefix, operator_name, value_text):
+    postfix = "" if value_text else "*"
+    operator_name_text = f"    {prefix} {operator_name}{postfix}"
+    columns = [operator_name_text]
+    if value_text:
+        columns.append(value_text)
+        rich_text_functions = None
+    else:
+        rich_text_functions = (create_italics_text,)
+    rows.extend(
+        TextRow.create(columns, rich_text_functions=rich_text_functions)
+    )
+
+def _compute_operator_text(operator):
+    # If the operator is implemented as text insertion,
+    # display the operator text
+    if isinstance(operator, str):
+        return operator
+    # If a documentation string is available, use that
+    elif doc_string := getattr(operator, "__doc__", None):
+        return doc_string
+    # Otherwise display the operator name from list
+    return ""
+
+def _add_rows_for_operator_category_header(rows, name):
+    row_text = f"{name} operators:"
+    rows.extend(
+        TextRow.create(
+            (row_text,), rich_text_functions=(create_bold_text,)
+        )
+    )
+
+def _add_missing_text_implementation_footnote(rows):
+    row_text = (
+                    "* operator is implemented as a function call and cannot be displayed"
+                )
+    rows.extend(
+        TextRow.create((row_text,), rich_text_functions=(create_bold_text,))
+    )
+
+def _compute_operator_list_names_with_prefixes():
+    # Associate the names of the operator lists with the corresponding prefix
+    op_list_names = ["array", "assignment", "lambda", "math", "pointer"]
+    names_with_prefix = [(name, "op") for name in op_list_names]
+    names_with_prefix += [("math_comparison", "is"), ("bitwise", "(bit | bitwise)")]
+    names_with_prefix.sort()
+    return names_with_prefix
+
 def update_operators_text():
     """For operators implemented for the active language, map spoken forms including operator prefix to
     the operator text for operators implemented as text insertion
@@ -117,12 +165,7 @@ def update_operators_text():
     global operators_text
     try:
         operators = actions.user.code_get_operators()
-
-        # Associate the names of the operator lists with the corresponding prefix
-        op_list_names = ["array", "assignment", "lambda", "math", "pointer"]
-        names_with_prefix = [(name, "op") for name in op_list_names]
-        names_with_prefix += [("math_comparison", "is"), ("bitwise", "(bit | bitwise)")]
-        names_with_prefix.sort()
+        names_with_prefix = _compute_operator_list_names_with_prefixes()
 
         # Fill in the list by iterating over the operator lists
         rows = []
@@ -133,50 +176,20 @@ def update_operators_text():
             )
             has_added_first_list_item = False
             for operator_name, operator_text in sorted(operators_list.items()):
-                has_value = True
                 # Only display operators implemented for the active language
                 if operator_text in operators:
-                    # If the operator is implemented as text insertion,
-                    # display the operator text
-                    operator = operators.get(operator_text)
-                    if isinstance(operator, str):
-                        text = operator
-                    # If a documentation string is available, use that
-                    elif doc_string := getattr(operator, "__doc__", None):
-                        text = doc_string
-                    # Otherwise display the operator name from list
-                    else:
-                        has_operator_without_text_implementation = True
-                        text = "*"
-                        has_value = False
                     # Only add the header if an item in the list is defined in operators
                     if not has_added_first_list_item:
+                        _add_rows_for_operator_category_header(rows, name)
                         has_added_first_list_item = True
-                        row_text = f"{name} operators:"
-                        rows.extend(
-                            TextRow.create(
-                                (row_text,), rich_text_functions=(create_bold_text,)
-                            )
-                        )
+                    operator = operators.get(operator_text)
+                    text = _compute_operator_text(operator)
+                    _add_rows_for_operator(rows, prefix, operator_name, text)
+                    if not text:
+                        has_operator_without_text_implementation = True
 
-                    postfix = "" if has_value else "*"
-                    operator_name_text = f"    {prefix} {operator_name}{postfix}"
-                    columns = [operator_name_text]
-                    if has_value:
-                        columns.append(text)
-                        rich_text_functions = None
-                    else:
-                        rich_text_functions = (create_italics_text,)
-                    rows.extend(
-                        TextRow.create(columns, rich_text_functions=rich_text_functions)
-                    )
         if has_operator_without_text_implementation:
-            row_text = (
-                "* operator is implemented as a function call and cannot be displayed"
-            )
-            rows.extend(
-                TextRow.create((row_text,), rich_text_functions=(create_bold_text,))
-            )
+            _add_missing_text_implementation_footnote(rows)
         page_scroller.page_size = settings.get("user.help_max_command_lines_per_page")
         operators_text = wrap_rows(rows, OPERATORS_MAX_COLUMN_LENGTH)
     # This exception will get raised if there is no operators object defined in the active context
