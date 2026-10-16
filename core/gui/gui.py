@@ -357,7 +357,6 @@ class UIWrapper:
         maximum_height: the maximum height of the scroll area for the table. Setting this is recommended if you need to leave room for widgets after the table.
         id_salt: used to distinguish between this table and other tables in the ui. The default used by this function is str(rows), which may be expensive.
         scroller: handles programmatic scrolling.
-        max_column_text_length: text wrap in each column based on this maximum length.
         """
         ui = self._ui(ui)
 
