@@ -11,9 +11,11 @@ from dataclasses import dataclass
 
 import egui
 from skia import Rect
-from talon import cron, settings, ui
+from talon import actions, cron, settings, ui
 from talon.egui import Window
 from talon.screen import Screen
+
+from .rectangle_storage import get_rectangle, store_rectangle
 
 # This code currently does not support changing the scale with imgui.scale.
 TEXT_COLOR_DARK_MODE = "#D0D0D0"
@@ -272,6 +274,7 @@ def open_gui(
     refresh_period: str | None = None,
     always_on_top: bool = True,
     decorated: bool = False,
+    id: str = "",
 ):
     """Decorator for for an egui callback drawing function.
     screen: the screen to show the gui on.
@@ -292,6 +295,7 @@ def open_gui(
             refresh_period=refresh_period,
             always_on_top=always_on_top,
             decorated=decorated,
+            id=id,
         )
 
     return open_inner
@@ -309,6 +313,7 @@ class Props:
     height: float | None
     always_on_top: bool
     decorated: bool
+    id: str
 
     def will_auto_size(self):
         return self.width is None or self.height is None
@@ -346,6 +351,7 @@ class GUI:
         refresh_period: str | None,
         always_on_top: bool,
         decorated: bool,
+        id: str,
     ):
         self._props = Props(
             draw=draw,
@@ -356,6 +362,7 @@ class GUI:
             height=height,
             always_on_top=always_on_top,
             decorated=decorated,
+            id=id,
         )
         self._window = None
         self._egui = None
@@ -378,13 +385,19 @@ class GUI:
 
         self._window = self._props.create_window(self._render)
 
+        if self._stored_rect is None:
+            self._stored_rect = get_rectangle(self._props.id)
+
         if self._stored_rect is not None and not self._props.will_auto_size():
-            self._window.show()
             self._window.rect = self._stored_rect
+            self._window.show()
         else:
             screen = self._get_screen()
             self._window.show()
-            rectangle = self._compute_rect_relative_to_screen(screen.rect)
+            actions.sleep(0.5)
+            rectangle = self._compute_rect_relative_to_screen(
+                screen.rect, self._window.rect
+            )
             if self._stored_rect is not None and self._props.will_auto_size():
                 rectangle.x = self._stored_rect.x
                 rectangle.y = self._stored_rect.y
@@ -410,10 +423,14 @@ class GUI:
             return
 
         try:
-            self._stored_rect = self._window.rect
+            self._update_stored_rectangle()
             self._window.close()
         finally:
             self._window = None
+
+    def _update_stored_rectangle(self):
+        self._stored_rect = self._window.rect
+        store_rectangle(self._props.id, self._stored_rect)
 
     async def _render(self, ui: egui.Ui) -> None:
         self._apply_theme(ui)
@@ -458,13 +475,10 @@ class GUI:
 
         ui.set_style(style)
 
-    def _compute_rect_relative_to_screen(self, screen: Rect) -> Rect:
+    def _compute_rect_relative_to_screen(self, screen: Rect, window: Rect) -> Rect:
         """Compute the rectangle for the window relative to the screen location and dimensions."""
-        if self._window is None:
-            raise RuntimeError("Window is not initialized")
 
         props = self._props
-        window = self._window.rect
 
         width = window.width if props.width is None else screen.width * props.width
         height = window.height if props.height is None else screen.height * props.height
