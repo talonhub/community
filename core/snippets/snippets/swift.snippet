@@ -1,0 +1,277 @@
+language: swift
+---
+
+name: letStatement
+phrase: let
+insertionScope: statement
+
+$0.insertionFormatter: PRIVATE_CAMEL_CASE
+$0.wrapperPhrase: let
+$0.wrapperScope: identifier
+-
+let $0
+---
+
+name: tryQuestion
+phrase: try question
+insertionScope: statement
+
+$0.wrapperPhrase: try question
+$0.wrapperScope: identifier
+-
+try? $0
+---
+
+name: tryForced
+phrase: try bang | try exclamation mark
+insertionScope: statement
+
+$0.wrapperPhrase: try bang | try exclamation mark
+$0.wrapperScope: identifier
+-
+try! $0
+---
+
+name: deferBlock
+phrase: defer
+insertionScope: statement
+
+$0.wrapperPhrase: defer
+$0.wrapperScope: statement
+-
+defer {
+    $0
+}
+---
+
+name: downcastOptional
+phrase: as question | as optional | as option
+insertionScope: statement
+
+$0.insertionFormatter: PRIVATE_CAMEL_CASE
+$0.wrapperPhrase: as question | as optional | as option
+$0.wrapperScope: identifier
+-
+$0 as? $1
+---
+
+name: downcastForced
+phrase: as bang | as exclamation point | as forced
+insertionScope: statement
+
+$0.insertionFormatter: PRIVATE_CAMEL_CASE
+$0.wrapperPhrase: as bang | as exclamation point | as forced
+$0.wrapperScope: identifier
+-
+$0 as! $1
+---
+
+name: deinitializer
+phrase: deinitializer | deinit
+insertionScope: statement
+
+$0.wrapperPhrase: deinitializer | deinit
+$0.wrapperScope: statement
+-
+deinit {
+    $0
+}
+---
+
+name: enumeration
+phrase: enumeration | enum
+insertionScope: class | statement
+
+$1.insertionFormatter: PUBLIC_CAMEL_CASE
+-
+enum $1 {
+    $0
+}
+---
+
+name: actor
+phrase: actor
+insertionScope: class | statement
+
+$1.insertionFormatter: PUBLIC_CAMEL_CASE
+-
+actor $1 {
+    $0
+}
+---
+
+name: protocol
+phrase: protocol
+insertionScope: class | statement
+
+$1.insertionFormatter: PUBLIC_CAMEL_CASE
+-
+protocol $1 {
+    $0
+}
+---
+
+name: extension
+phrase: extension
+insertionScope: class | statement
+
+$1.insertionFormatter: PUBLIC_CAMEL_CASE
+-
+extension $1 {
+    $0
+}
+---
+
+name: await
+phrase: await
+insertionScope: statement
+
+$0.wrapperPhrase: await
+$0.wrapperScope: identifier
+-
+await $0
+---
+
+name: tryAwait
+phrase: try await
+insertionScope: statement
+
+$0.wrapperPhrase: try await
+$0.wrapperScope: identifier
+-
+try await $0
+---
+
+name: asyncLet
+phrase: async let
+insertionScope: statement
+
+$1.insertionFormatter: PRIVATE_CAMEL_CASE
+-
+async let $1 = $0
+---
+
+name: awaitTask
+phrase: await task
+insertionScope: statement
+-
+await $1($2) { $3 in
+    $0
+}
+---
+
+name: letAwaitTask
+phrase: let await task
+insertionScope: statement
+
+$var.insertionFormatter: PRIVATE_CAMEL_CASE
+-
+let $var = await $1($2) { $3 in
+    $0
+}
+---
+
+name: forAwait
+phrase: for await
+insertionScope: statement
+
+$0.wrapperPhrase: for await
+$0.wrapperScope: statement
+-
+for await $1 in $2 {
+    $0
+}
+---
+
+name: funcReturn
+phrase: funk return
+insertionScope: namedFunction | statement
+
+$1.insertionFormatter: PRIVATE_CAMEL_CASE
+$0.wrapperPhrase: funk return | funk returns
+$0.wrapperScope: statement
+-
+func $1($2) -> $3 {
+    $0
+}
+---
+
+name: funcAsync
+phrase: funk async
+insertionScope: namedFunction | statement
+
+$1.insertionFormatter: PRIVATE_CAMEL_CASE
+$0.wrapperPhrase: funk async
+$0.wrapperScope: statement
+-
+func $1($2) async -> $3 {
+    $0
+}
+---
+
+name: funcThrows
+phrase: funk throw | funk throws
+insertionScope: namedFunction | statement
+
+$1.insertionFormatter: PRIVATE_CAMEL_CASE
+$0.wrapperPhrase: funk throw | funk throws
+$0.wrapperScope: statement
+-
+func $1($2) throws -> $3 {
+    $0
+}
+---
+
+name: throwType
+phrase: type throw | type throws
+insertionScope: statement
+
+$0.insertionFormatter: PUBLIC_CAMEL_CASE
+$0.wrapperPhrase: throws
+$0.wrapperScope: identifier
+-
+throws($0)
+---
+
+name: doStatement
+phrase: do | do state
+insertionScope: statement
+-
+do {
+    $0
+}
+---
+
+name: doCatch
+phrase: do catch
+insertionScope: statement
+
+$1.wrapperPhrase: do | do state
+$1.wrapperScope: statement
+$0.wrapperPhrase: catch
+$0.wrapperScope: statement
+-
+do {
+    $1
+} catch {
+    $0
+}
+---
+
+name: doThrow
+phrase: do throw | do throws
+insertionScope: statement
+-
+do throws($1) {
+    $0
+}
+---
+
+name: catchWhere
+phrase: catch where
+insertionScope: statement
+-
+catch $1 where $2 {
+    $0
+}
+---
