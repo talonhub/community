@@ -5,6 +5,8 @@
 # distributed under an MIT license Copyright (c) 2021 Andreas Arvidsson
 # You can see the full text of an MIT license in the LICENSE file at the top level directory of this repo.
 
+from .rectangle_storage import store_rectangle, get_rectangle
+
 import math
 from collections.abc import Callable
 from dataclasses import dataclass
@@ -272,6 +274,7 @@ def open_gui(
     refresh_period: str | None = None,
     always_on_top: bool = True,
     decorated: bool = False,
+    id: str="",
 ):
     """Decorator for for an egui callback drawing function.
     screen: the screen to show the gui on.
@@ -292,6 +295,7 @@ def open_gui(
             refresh_period=refresh_period,
             always_on_top=always_on_top,
             decorated=decorated,
+            id=id,
         )
 
     return open_inner
@@ -309,6 +313,7 @@ class Props:
     height: float | None
     always_on_top: bool
     decorated: bool
+    id: str
 
     def will_auto_size(self):
         return self.width is None or self.height is None
@@ -346,6 +351,7 @@ class GUI:
         refresh_period: str | None,
         always_on_top: bool,
         decorated: bool,
+        id: str,
     ):
         self._props = Props(
             draw=draw,
@@ -356,10 +362,11 @@ class GUI:
             height=height,
             always_on_top=always_on_top,
             decorated=decorated,
+            id=id,
         )
         self._window = None
         self._egui = None
-        self._stored_rect = None
+        self._stored_rect = get_rectangle(self._props.id)
         self._refresh_period = refresh_period
         self._refresh_job = None
         self._last_height_taken = None
@@ -411,6 +418,7 @@ class GUI:
 
         try:
             self._stored_rect = self._window.rect
+            store_rectangle(self._props.id, self._stored_rect)
             self._window.close()
         finally:
             self._window = None
