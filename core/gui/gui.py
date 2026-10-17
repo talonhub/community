@@ -11,7 +11,7 @@ from dataclasses import dataclass
 
 import egui
 from skia import Rect
-from talon import cron, settings, ui
+from talon import actions, cron, settings, ui
 from talon.egui import Window
 from talon.screen import Screen
 
@@ -394,7 +394,8 @@ class GUI:
         else:
             screen = self._get_screen()
             self._window.show()
-            rectangle = self._compute_rect_relative_to_screen(screen.rect)
+            actions.sleep(0.5)
+            rectangle = self._compute_rect_relative_to_screen(screen.rect, self._window.rect)
             if self._stored_rect is not None and self._props.will_auto_size():
                 rectangle.x = self._stored_rect.x
                 rectangle.y = self._stored_rect.y
@@ -472,13 +473,10 @@ class GUI:
 
         ui.set_style(style)
 
-    def _compute_rect_relative_to_screen(self, screen: Rect) -> Rect:
+    def _compute_rect_relative_to_screen(self, screen: Rect, window: Rect) -> Rect:
         """Compute the rectangle for the window relative to the screen location and dimensions."""
-        if self._window is None:
-            raise RuntimeError("Window is not initialized")
 
         props = self._props
-        window = self._window.rect
 
         width = window.width if props.width is None else screen.width * props.width
         height = window.height if props.height is None else screen.height * props.height
