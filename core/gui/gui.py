@@ -11,7 +11,7 @@ from dataclasses import dataclass
 
 import egui
 from skia import Rect
-from talon import cron, settings, ui
+from talon import Context, cron, settings, ui
 from talon.egui import Window
 from talon.screen import Screen
 
@@ -53,6 +53,24 @@ async def show_row_with_labels(row, contents):
 def compute_table_height(row_size, item_spacing, rows_per_page):
     """Compute how big the table needs to be to hold the given number of rows"""
     return (row_size + item_spacing) * rows_per_page + item_spacing
+
+
+async def let_user_use_page_keys_to_scroll_scroll_area(scroll_ui):
+    async with scroll_ui.input() as input_state:
+        events = input_state.events()
+        scrolling_delta = None
+        for event in events:
+            if key := event.key():
+                key_name = key.name().lower()
+                if key_name == "pagedown":
+                    scrolling_delta = -1
+                elif key_name == "pageup":
+                    scrolling_delta = 1
+        if scrolling_delta is not None:
+            clip_rect = scroll_ui.clip_rect()
+            scroll_ui.scroll_with_delta(
+                egui.Vec2(0, scrolling_delta * abs(clip_rect.height()))
+            )
 
 
 class PageScroller:
@@ -260,6 +278,15 @@ class UIWrapper:
             ):
                 scroller.update_start_page(current_row_index, len(rows) - 1)
 
+    def compute_text_width(self, text: str, ui=None, font_id=None) -> float:
+        ui = self._ui(ui)
+        if font_id is None:
+            font_id = egui.FontId(self.get_text_size(ui), egui.FontFamily.Proportional)
+        microphone_galley = ui.painter().layout_no_wrap(
+            text, font_id, egui.Color32.black()
+        )
+        return microphone_galley.size().x
+
 
 def open_gui(
     *,
@@ -271,6 +298,8 @@ def open_gui(
     refresh_period: str | None = None,
     always_on_top: bool = True,
     decorated: bool = False,
+    title: str = "",
+    tag: str = "",
 ):
     """Decorator for for an egui callback drawing function.
     screen: the screen to show the gui on.
@@ -291,6 +320,8 @@ def open_gui(
             refresh_period=refresh_period,
             always_on_top=always_on_top,
             decorated=decorated,
+            title=title,
+            tag=tag,
         )
 
     return open_inner
@@ -308,6 +339,7 @@ class Props:
     height: float | None
     always_on_top: bool
     decorated: bool
+    title: str
 
     def will_auto_size(self):
         return self.width is None or self.height is None
@@ -315,6 +347,8 @@ class Props:
     def create_window(self, callback):
         """Create a window for showing the callback on a ui. This allows wrapping the draw callable."""
         window = Window()
+        if self.title:
+            window.title = self.title
         window.draggable = True
         window.autosize = self.will_auto_size()
         window.decorated = self.decorated
@@ -345,6 +379,8 @@ class GUI:
         refresh_period: str | None,
         always_on_top: bool,
         decorated: bool,
+        title: str,
+        tag: str,
     ):
         self._props = Props(
             draw=draw,
@@ -355,6 +391,7 @@ class GUI:
             height=height,
             always_on_top=always_on_top,
             decorated=decorated,
+            title=title,
         )
         self._window = None
         self._egui = None
@@ -363,6 +400,9 @@ class GUI:
         self._refresh_job = None
         self._last_height_taken = None
         self._previous_height_taken = None
+        self.tag = tag
+        if tag:
+            self.context = Context()
 
     @property
     def showing(self) -> bool:
@@ -373,9 +413,13 @@ class GUI:
             self._window.focus()
             return
 
+        if self.tag:
+            self.context.tags = [self.tag]
+
         self._cancel_refresh_job()
 
         self._window = self._props.create_window(self._render)
+        self._window.register("on_close", self._on_hide_cleanup)
 
         if self._stored_rect is not None and not self._props.will_auto_size():
             self._window.show()
@@ -398,8 +442,6 @@ class GUI:
             self._refresh_job = None
 
     def hide(self):
-        self._cancel_refresh_job()
-
         if self._window is None:
             return
 
@@ -412,7 +454,14 @@ class GUI:
             self._stored_rect = self._window.rect
             self._window.close()
         finally:
-            self._window = None
+            self._on_hide_cleanup()
+
+    def _on_hide_cleanup(self):
+        if self.tag:
+            self.context.tags = []
+
+        self._cancel_refresh_job()
+        self._window = None
 
     async def _render(self, ui: egui.Ui) -> None:
         self._apply_theme(ui)
