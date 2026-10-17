@@ -103,8 +103,6 @@ class UserActions:
     def code_default_function(text: str):
         actions.user.code_public_function(text)
 
-    def code_private_function(text: str):
-        app.notify("no private functions in haskell")
 
     def code_public_function(text: str):
         """Deliberately not adding = because that is easy to add
