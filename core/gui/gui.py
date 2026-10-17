@@ -6,8 +6,10 @@
 # You can see the full text of an MIT license in the LICENSE file at the top level directory of this repo.
 
 import math
-from collections.abc import Callable
+from abc import ABC, abstractmethod
+from collections.abc import Callable, Sequence
 from dataclasses import dataclass
+from textwrap import wrap
 
 import egui
 from skia import Rect
@@ -23,31 +25,38 @@ INNER_MARGIN = 16.0
 
 DEFAULT_TEXT_SIZE = 12.0 / 1.3
 
+# We must account for the space taken up for the column separation. This number was determined empirically.
+TWO_COLUMN_EXTRA_PADDING = 9
+
+
+def pad_title_for_two_column_rows(title, max_length_per_column):
+    required_total_width = max_length_per_column * 2 + TWO_COLUMN_EXTRA_PADDING
+    padding_width = max(0, required_total_width - len(title))
+    if padding_width > 0:
+        padding = " " * padding_width
+        title = f"{title}{padding}"
+    return title
+
+
+def wrap_with_subsequent_indent(text, width):
+    return wrap(text, width=width, subsequent_indent=" ")
+
 
 def compute_text_size():
     return DEFAULT_TEXT_SIZE * settings.get("imgui.scale")
 
 
-def convert_key_value_pairs_to_rows(dictionary):
-    """Convert key value pairs into a series of rows where each row has a single line. Keys are assumed to only have a single line."""
-    rows = []
-    for key, value in dictionary.items():
-        if "\n" in value:
-            lines = value.split("\n")
-            rows.append((key, lines[0]))
-            for l in lines[1:]:
-                rows.append(("", l))
-        else:
-            rows.append((key, value))
-    return rows
-
-
-async def show_row_with_labels(row, contents):
-    """Show every column of the row using a label"""
+async def show_row_ui(row, contents, num_columns):
+    """Show every column of the row using its ui method"""
     index = row.index()
-    for column in contents[index]:
+    row_contents = contents[index]
+    for column_index in range(row_contents.get_num_columns()):
         async with row.col() as cell_ui:
-            cell_ui.label(column)
+            await row_contents.ui(cell_ui, column_index)
+    if row_contents.get_num_columns() < num_columns:
+        for _ in range(num_columns - row_contents.get_num_columns()):
+            async with row.col() as cell_ui:
+                cell_ui.label(" ")
 
 
 def compute_table_height(row_size, item_spacing, rows_per_page):
@@ -108,6 +117,114 @@ class PageScroller:
         return self.scroll
 
 
+def create_bold_text(text):
+    return egui.RichText(text).strong()
+
+
+def create_italics_text(text):
+    return egui.RichText(text).italics()
+
+
+class Row(ABC):
+    """Represents the row of a table"""
+
+    @abstractmethod
+    async def ui(self, ui, column_number):
+        """Draw the column on the ui"""
+        pass
+
+    @abstractmethod
+    def wrap(self, max_column_length) -> list:
+        """Returns a list of Rows after wrapping with the given maximum length"""
+        pass
+
+    @abstractmethod
+    def should_show_overline(self) -> bool:
+        """Decides if there should be an overline above the row"""
+        pass
+
+    @abstractmethod
+    def get_num_columns(self) -> int:
+        """Returns the number of columns"""
+        pass
+
+    @abstractmethod
+    def get_text_length(self) -> int:
+        """Return the total text length of the row"""
+        pass
+
+
+class TextRow(Row):
+    def __init__(self, columns, show_overline=True, rich_text_functions=None):
+        """A row consisting of strings"""
+        self.columns = columns
+        self.show_overline = show_overline
+        if rich_text_functions:
+            self.rich_text_functions = rich_text_functions
+        else:
+            self.rich_text_functions = []
+
+    async def ui(self, ui, column_number):
+        text = self.columns[column_number]
+        if self.rich_text_functions and (
+            create_rich_text := self.rich_text_functions[column_number]
+        ):
+            text = create_rich_text(text)
+        ui.label(text)
+
+    def should_show_overline(self):
+        return self.show_overline
+
+    def get_num_columns(self):
+        return len(self.columns)
+
+    @classmethod
+    def _split_across_rows(
+        cls,
+        splits: Sequence[Sequence[str]],
+        show_overline: bool,
+        rich_text_functions=None,
+    ):
+        result = []
+        num_lines = max(len(c) for c in splits)
+        for i in range(num_lines):
+            line = [c[i] if i < len(c) else "" for c in splits]
+            row = TextRow(line, show_overline and i == 0, rich_text_functions)
+            result.append(row)
+        return result
+
+    def wrap(self, max_column_length):
+        wrapped_lines = [
+            wrap_with_subsequent_indent(c, width=max_column_length)
+            for c in self.columns
+        ]
+        return self._split_across_rows(
+            wrapped_lines, self.show_overline, self.rich_text_functions
+        )
+
+    @classmethod
+    def create(cls, columns: Sequence[str], rich_text_functions=None):
+        column_lines = [c.split("\n") for c in columns]
+        return cls._split_across_rows(column_lines, True, rich_text_functions)
+
+    @classmethod
+    def create_list(cls, rows: Sequence[Sequence[str]], rich_text_functions=None):
+        result = []
+        for row in rows:
+            result.extend(cls.create(row, rich_text_functions))
+        return result
+
+    def get_text_length(self) -> int:
+        return sum(len(c) for c in self.columns)
+
+
+def wrap_rows(rows, max_column_text_length):
+    new_rows = []
+    for r in rows:
+        new_rows.extend(r.wrap(max_column_text_length))
+    return new_rows
+
+
 class UIWrapper:
     """Provides helper methods for drawing on a ui. These methods use the wrapped ui by default, but you can use the ui parameter to provide another one"""
 
@@ -151,6 +268,13 @@ class UIWrapper:
         ui.separator()
         ui.add_space(8)
 
+    def header(self, text, ui=None):
+        """Draw a header"""
+        ui = self._ui(ui)
+        header = egui.RichText(text).size(compute_text_size() * 1.5).strong()
+        ui.label(header)
+        ui.add_space(8)
+
     def button(self, text, ui=None) -> bool:
         """Draw a button and return True if the button was clicked this frame"""
         ui = self._ui(ui)
@@ -175,9 +299,9 @@ class UIWrapper:
     ):
         """Draw a table with consistent row height. Assumes each row is at most the given row height. Uses the interact_size of the ui for the default row height, which may be excessive for your application. This assumes that each row has a single line.
         headers: the headers to show at the top of the table. The length of the headers should equal the column size of the rows.
-        rows: the rows to display in the table.
+        rows: the rows to display in the table. Each row should be a subclass of Row.
         row_height: each row should be at most this big.
-        show_row: a callback for displaying the row. The default uses a label for each column.
+        show_row: a callback for displaying the row.
         auto_size_columns: decides if the column width should be based on the item sizes. Otherwise, each column takes an equal portion of the available width.
         maximum_height: the maximum height of the scroll area for the table. Setting this is recommended if you need to leave room for widgets after the table.
         id_salt: used to distinguish between this table and other tables in the ui. The default used by this function is str(rows), which may be expensive.
@@ -193,7 +317,7 @@ class UIWrapper:
         if row_height is None:
             row_height = ui.spacing().interact_size.y
         if show_row is None:
-            show_row = show_row_with_labels
+            show_row = show_row_ui
 
         async with ui.scope() as scope, scope.style_mut() as style:
             # make scrollbar always visible when a scroll area is needed
@@ -227,7 +351,9 @@ class UIWrapper:
                 table = table.scroll_to_row(target_row, egui.Align.TOP)
 
             # add the headers
-            async with table.header(20) as header:
+            header_size = 20 if any(headers) else 0
+
+            async with table.header(header_size) as header:
                 for h in headers:
                     async with header.col() as header_ui:
                         header_ui.strong(h)
@@ -242,10 +368,10 @@ class UIWrapper:
                 body_top = min(body_rect.top(), body_rect.bottom())
                 async for row in body.rows(row_height, len(rows)):
                     # draw lines above each row with a value for the first column
-                    if rows[row.index()][0]:
+                    if rows[row.index()].should_show_overline():
                         row.set_overline(True)
                     # let the call back decide how to draw the row
-                    await show_row(row, rows)
+                    await show_row(row, rows, len(headers))
                     # if this is the first visible row, update current_row_index
                     response = row.response()
                     rect = response.rect
