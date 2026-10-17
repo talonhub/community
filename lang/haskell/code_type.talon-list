@@ -1,0 +1,23 @@
+list: user.code_type
+code.language: haskell
+-
+
+any: a
+bool: Bool
+bytes: ByteString
+char: Char
+double: Double
+either: Either e a
+float: Float
+foldable: Foldable t => t a
+fun: a -> b
+int: Int
+integer: Integer
+io: IO
+list: [a]
+map: Map k v
+maybe: Maybe a
+natural: Natural
+set: Set a
+traversable: Traversable t => t a
+unit: ()
