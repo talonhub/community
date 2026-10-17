@@ -86,6 +86,7 @@ class UserActions:
         haskell_and_null_warning()
 
     def code_insert_is_not_null():
+        actions.insert("not null ")
         haskell_and_null_warning()
 
     def code_insert_true():
