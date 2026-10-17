@@ -395,7 +395,9 @@ class GUI:
             screen = self._get_screen()
             self._window.show()
             actions.sleep(0.5)
-            rectangle = self._compute_rect_relative_to_screen(screen.rect, self._window.rect)
+            rectangle = self._compute_rect_relative_to_screen(
+                screen.rect, self._window.rect
+            )
             if self._stored_rect is not None and self._props.will_auto_size():
                 rectangle.x = self._stored_rect.x
                 rectangle.y = self._stored_rect.y
