@@ -366,7 +366,7 @@ class GUI:
         )
         self._window = None
         self._egui = None
-        self._stored_rect = get_rectangle(self._props.id)
+        self._stored_rect = None
         self._refresh_period = refresh_period
         self._refresh_job = None
         self._last_height_taken = None
@@ -385,9 +385,12 @@ class GUI:
 
         self._window = self._props.create_window(self._render)
 
+        if self._stored_rect is None:
+            self._stored_rect = get_rectangle(self._props.id)
+
         if self._stored_rect is not None and not self._props.will_auto_size():
-            self._window.show()
             self._window.rect = self._stored_rect
+            self._window.show()
         else:
             screen = self._get_screen()
             self._window.show()
