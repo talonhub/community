@@ -53,7 +53,6 @@ def gui(gui: imgui.GUI):
     gui.text("Click or press a number key to select a microphone")
     gui.text("(or say “microphone pick #”)")
     gui.line()
-    gui.text("Microphone list updates automatically")
     gui.spacer()
     active_microphone = actions.sound.active_microphone()
     microphone_device_list = get_microphone_list()
