@@ -5,8 +5,6 @@
 # distributed under an MIT license Copyright (c) 2021 Andreas Arvidsson
 # You can see the full text of an MIT license in the LICENSE file at the top level directory of this repo.
 
-from .rectangle_storage import store_rectangle, get_rectangle
-
 import math
 from collections.abc import Callable
 from dataclasses import dataclass
@@ -16,6 +14,8 @@ from skia import Rect
 from talon import cron, settings, ui
 from talon.egui import Window
 from talon.screen import Screen
+
+from .rectangle_storage import get_rectangle, store_rectangle
 
 # This code currently does not support changing the scale with imgui.scale.
 TEXT_COLOR_DARK_MODE = "#D0D0D0"
@@ -274,7 +274,7 @@ def open_gui(
     refresh_period: str | None = None,
     always_on_top: bool = True,
     decorated: bool = False,
-    id: str="",
+    id: str = "",
 ):
     """Decorator for for an egui callback drawing function.
     screen: the screen to show the gui on.
