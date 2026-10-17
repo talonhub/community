@@ -103,7 +103,6 @@ class UserActions:
     def code_default_function(text: str):
         actions.user.code_public_function(text)
 
-
     def code_public_function(text: str):
         """Deliberately not adding = because that is easy to add
         You wanna call this twice because the type annotations are in a seperate line"""
