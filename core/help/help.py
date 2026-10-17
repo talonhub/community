@@ -716,7 +716,7 @@ class Actions:
         """Provides the symbol dictionary"""
         # what you say is stored as a trigger
         global selected_list, current_gui, page_scroller
-        gui_list_help.hide()
+        hide_all_help_guis()
         reset()
         current_gui = gui_list_help
         selected_list = ab
