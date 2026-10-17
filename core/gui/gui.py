@@ -420,11 +420,14 @@ class GUI:
             return
 
         try:
-            self._stored_rect = self._window.rect
-            store_rectangle(self._props.id, self._stored_rect)
+            self._update_stored_rectangle()
             self._window.close()
         finally:
             self._window = None
+
+    def _update_stored_rectangle(self):
+        self._stored_rect = self._window.rect
+        store_rectangle(self._props.id, self._stored_rect)
 
     async def _render(self, ui: egui.Ui) -> None:
         self._apply_theme(ui)
