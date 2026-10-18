@@ -27,10 +27,14 @@ def on_microphones_to_exclude_update(rows):
     EXCLUDE_MICROPHONES = {row[0] for row in rows if row[0].strip()}
 
 
+meta_devices = ["None", "System Default"]
+
+
 def get_microphone_list():
-    # By convention, None and System Default are listed first
-    # to match the Talon microphone menu.
-    meta_devices = ["None", "System Default"]
+    """
+    By convention, None and System Default are listed first
+    to match the Talon microphone menu.
+    """
 
     devices = [
         device
