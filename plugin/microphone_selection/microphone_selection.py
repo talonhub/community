@@ -1,4 +1,4 @@
-from talon import Context, Module, actions, cron, imgui
+from talon import Context, Module, actions, imgui
 
 from ...core.user_settings import track_csv_rows
 
@@ -27,15 +27,14 @@ def on_microphones_to_exclude_update(rows):
     EXCLUDE_MICROPHONES = {row[0] for row in rows if row[0].strip()}
 
 
-microphone_device_list = []
-update_microphone_cron_job = None
+meta_devices = ["None", "System Default"]
 
 
-def update_microphone_list():
-    global microphone_device_list
-    # By convention, None and System Default are listed first
-    # to match the Talon microphone menu.
-    meta_devices = ["None", "System Default"]
+def get_microphone_list():
+    """
+    By convention, None and System Default are listed first
+    to match the Talon microphone menu.
+    """
 
     devices = [
         device
@@ -44,11 +43,7 @@ def update_microphone_list():
     ]
     devices.sort()
 
-    microphone_device_list = meta_devices + devices
-
-
-def devices_changed(device_type):
-    update_microphone_list()
+    return meta_devices + devices
 
 
 mod.tag(
@@ -62,9 +57,9 @@ def gui(gui: imgui.GUI):
     gui.text("Click or press a number key to select a microphone")
     gui.text("(or say “microphone pick #”)")
     gui.line()
-    gui.text("Microphone list updates every 5 seconds")
     gui.spacer()
     active_microphone = actions.sound.active_microphone()
+    microphone_device_list = get_microphone_list()
     for index, item in enumerate(microphone_device_list, 1):
         if gui.button(
             f"{f'[{index}] ' if index < 10 else ''}{item}{' — active' if item == active_microphone else ''}"
@@ -79,27 +74,22 @@ def gui(gui: imgui.GUI):
 class Actions:
     def microphone_selection_toggle():
         """Show GUI for choosing the Talon microphone"""
-        global update_microphone_cron_job
 
         if gui.showing:
             actions.user.microphone_selection_hide()
             return
-        update_microphone_list()
         gui.show()
         ctx.tags = ["user.microphone_selection_open"]
-        update_microphone_cron_job = cron.interval("5s", update_microphone_list)
 
     def microphone_selection_hide():
         """Hide the microphone selection GUI"""
-        global update_microphone_cron_job
 
         gui.hide()
         ctx.tags = []
-        cron.cancel(update_microphone_cron_job)
-        update_microphone_cron_job = None
 
     def microphone_select(index: int):
         """Selects a microphone"""
+        microphone_device_list = get_microphone_list()
         if index >= 1 and index <= len(microphone_device_list):
             actions.sound.set_microphone(microphone_device_list[index - 1])
             actions.user.microphone_selection_hide()
