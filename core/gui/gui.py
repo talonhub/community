@@ -217,13 +217,17 @@ class TextRow(Row):
 class Table:
     """Helps manage row creation and normalization"""
 
-    def __init__(self):
+    def __init__(self, max_column_length: int | None):
         self.rows: list[Row] = []
-        self.wrapped_rows: list[Row] = []
+        self.max_column_length = max_column_length
 
     def add_row(self, row: Row):
         rows = row.split_lines()
-        self.rows.extend(rows)
+        if self.max_column_length is not None:
+            for r in rows:
+                self.rows.extend(r.wrap(self.max_column_length))
+        else:
+            self.rows.extend(rows)
 
     def add_strings(self, rows: Sequence[Sequence[str]], rich_text_functions=None):
         text_rows = [
@@ -233,22 +237,11 @@ class Table:
         for r in text_rows:
             self.add_row(r)
 
-    def wrap(self, max_column_length: int):
-        wrapped_rows = []
-        for r in self.rows:
-            wrapped_rows.extend(r.wrap(max_column_length))
-        self.wrapped_rows = wrapped_rows
-
-    def get_rows(self) -> list[Row]:
-        if self.wrapped_rows:
-            return self.wrapped_rows
-        return self.rows
-
     def has_rows(self) -> bool:
         return len(self.rows) > 0
 
     def __len__(self) -> int:
-        return len(self.get_rows())
+        return len(self.rows)
 
 
 class UIWrapper:
@@ -335,7 +328,7 @@ class UIWrapper:
         """
         ui = self._ui(ui)
 
-        rows = table.get_rows()
+        rows = table.rows
 
         # use defaults when needed
         if id_salt is None:

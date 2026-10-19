@@ -164,7 +164,7 @@ def update_operators_text():
         names_with_prefix = _compute_operator_list_names_with_prefixes()
 
         # Fill in the table by iterating over the operator lists
-        table = Table()
+        table = Table(OPERATORS_MAX_COLUMN_LENGTH)
         has_operator_without_text_implementation = False
         for name, prefix in names_with_prefix:
             operators_list = actions.user.talon_get_active_registry_list(
@@ -187,7 +187,6 @@ def update_operators_text():
         if has_operator_without_text_implementation:
             _add_missing_text_implementation_footnote(table)
         page_scroller.page_size = settings.get("user.help_max_command_lines_per_page")
-        table.wrap(OPERATORS_MAX_COLUMN_LENGTH)
         operators_text = table
     # This exception will get raised if there is no operators object defined in the active context
     except NotImplementedError:
@@ -750,9 +749,8 @@ async def gui_list_help(ui, ui_wrapper):
 
     # get the list
     talon_list = actions.user.talon_get_active_registry_list(selected_list)
-    table = Table()
+    table = Table(MAX_COLUMN_LENGTH_FOR_HELP_LIST)
     table.add_strings(list(talon_list.items()))
-    table.wrap(MAX_COLUMN_LENGTH_FOR_HELP_LIST)
 
     # show the rows in a table
     if table.has_rows():
