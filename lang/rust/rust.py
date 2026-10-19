@@ -9,7 +9,6 @@ from ..tags.operators import Operators
 mod = Module()
 # rust specific grammar
 mod.list("code_type_modifier", desc="List of type modifiers for active language")
-mod.list("code_macros", desc="List of macros for active language")
 mod.list("code_trait", desc="List of traits for active language")
 
 
@@ -17,15 +16,6 @@ mod.list("code_trait", desc="List of traits for active language")
 class Actions:
     def code_state_implements():
         """Inserts implements block, positioning the cursor appropriately"""
-
-    def code_insert_macro(text: str, selection: str):
-        """Inserts a macro and positions the cursor appropriately"""
-
-    def code_insert_macro_array(text: str, selection: str):
-        """Inserts a macro array and positions the cursor appropriately"""
-
-    def code_insert_macro_block(text: str, selection: str):
-        """Inserts a macro block and positions the cursor appropriately"""
 
     def code_state_unsafe():
         """Inserts an unsafe block and positions the cursor appropriately"""
@@ -150,12 +140,17 @@ all_block_macros = {
     **standard_block_macros,
 }
 
+ctx.lists["user.code_function_macro_likes"] = all_function_macros
+ctx.lists["user.code_array_macro_likes"] = all_array_macros
+ctx.lists["user.code_block_macro_likes"] = all_block_macros
+
 all_macros = {
     **all_function_macros,
     **all_array_macros,
     **all_block_macros,
 }
 
+# These can probably be removed as long as no external userscripts are relying on them!
 all_function_macro_values = set(all_function_macros.values())
 all_array_macro_values = set(all_array_macros.values())
 all_block_macro_values = set(all_block_macros.values())
@@ -220,11 +215,9 @@ ctx.lists["user.code_type_modifier"] = {
     rule="[{user.code_type_modifier}] {user.code_type}",
 )
 def code_type(m) -> str:
-    """Returns a macro name"""
+    """Returns a type name"""
     return "".join(m)
 
-
-ctx.lists["user.code_macros"] = all_macros
 
 ctx.lists["user.code_trait"] = all_traits
 
@@ -340,7 +333,12 @@ class UserActions:
     # tag: functions_gui
 
     def code_insert_function(text: str, selection: str):
-        code_insert_function_or_macro(text, selection, "(", ")")
+        if selection:
+            out_text = text + f"({selection})"
+        else:
+            out_text = text + "()"
+        actions.user.paste(out_text)
+        actions.edit.left()
 
     # tag: libraries
 
@@ -351,14 +349,6 @@ class UserActions:
 
     def code_state_implements():
         actions.user.insert_snippet_by_name("implementsStruct")
-
-    def code_insert_macro(text: str, selection: str):
-        if text in all_array_macro_values:
-            code_insert_function_or_macro(text, selection, "[", "]")
-        elif text in all_block_macro_values:
-            code_insert_function_or_macro(text, selection, "{", "}")
-        else:
-            code_insert_function_or_macro(text, selection, "(", ")")
 
     def code_state_unsafe():
         actions.user.insert_snippet_by_name("unsafeBlock")
@@ -373,20 +363,6 @@ class UserActions:
     def code_comment_documentation_block_inner():
         actions.user.insert_between("/*!", "*/")
         actions.key("enter")
-
-
-def code_insert_function_or_macro(
-    text: str,
-    selection: str,
-    left_delim: str,
-    right_delim: str,
-):
-    if selection:
-        out_text = text + f"{left_delim}{selection}{right_delim}"
-    else:
-        out_text = text + f"{left_delim}{right_delim}"
-    actions.user.paste(out_text)
-    actions.edit.left()
 
 
 RT = TypeVar("RT")  # return type
