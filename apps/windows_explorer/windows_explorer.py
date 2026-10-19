@@ -76,7 +76,7 @@ class UserActions:
         path = get_active_explorer_path()
 
         if path.is_virtual:
-            #print(f"Virtual folder {path}")
+            #todo: explore whether we can do anything useful with these folders via accessibility
             actions.app.notify("Cannot get path for virtual folder, command failed")
             return None
         else:

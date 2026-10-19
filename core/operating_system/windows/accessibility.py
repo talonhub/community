@@ -42,7 +42,7 @@ def is_clickable(element, depth=0):
 
 def find_all_clickable_rects_parallel(window, element, filter_children=None, max_workers=8):
     # Do a shallow expansion on the main thread to avoid sending huge work units
-
+    print(f"find_all_clickable_rects_parallel: {element.control_type} {element.name} {element.automation_id} {element.is_enabled} {element.is_keyboard_focusable} {element.is_offscreen}")
     result = []
     # include root on main thread
     try:
@@ -55,6 +55,7 @@ def find_all_clickable_rects_parallel(window, element, filter_children=None, max
     try:
         children = element.children
     except Exception:
+        print("failed to get children for element: " + str(element))
         children = []
 
     def worker(subroot, filter_children):
@@ -129,8 +130,9 @@ def find_all_clickable_rects(window, element, depth=0) -> list[Rect]:
     name = element.name
     control_type = element.control_type
 
-    if (is_within_window(window, element) and is_clickable(element)):
-        result.append(element.rect)
+    result.append(element.rect)
+    #else:
+    #   print(f"not clickable: {element.control_type} {element.name} {element.automation_id} {element.is_enabled} {element.is_keyboard_focusable} {element.is_offscreen}")
 
         #print("  " * depth + f"{element.control_type}: {element.name}")
     #else:

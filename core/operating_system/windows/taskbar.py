@@ -1,3 +1,5 @@
+from modulefinder import test
+
 from talon.windows.ax import Element
 from talon import Context, Module, actions, app, imgui, ui, resource, canvas, ctrl, settings, cron
 from dataclasses import dataclass, asdict
@@ -176,15 +178,19 @@ class ExplorerPopupStatus:
         self.parallel = False    
         self.window_id = None
 
-    def update_state(self):
+    def update_state(self,focused_element=None):
         active_window = ui.active_window()
-        focused_element = get_focused_element()
+        if not focused_element:
+            focused_element = get_focused_element()
 
         self.state = AccessibilityPopUpState.NONE
         self.strategy = PopUpStrategy.FOCUSED_ELEMENT_PARENT
         self.parallel = False
 
+        cls = get_window_class(active_window)
+
         if not focused_element:
+            print("update_state - no focused element")
             return
 
         try:
@@ -197,120 +203,147 @@ class ExplorerPopupStatus:
             parent_element_type = None
             parent_name = "N/A"
 
-        cls = get_window_class(active_window)
+        if focused_element.control_type == "MenuItem" and parent_element and parent_element.control_type in ("Menu", "ToolBar", "Window", "MenuBar"):
+            self.state = AccessibilityPopUpState.MENU
+            print("1")
+            self.strategy = PopUpStrategy.ELEMENT_OVERRIDE
+            self.element_override = parent_element
+            
+        elif focused_element.control_type == "Menu":
+            self.state = AccessibilityPopUpState.MENU
+            self.strategy = PopUpStrategy.FOCUSED_ELEMENT
+            
+        elif focused_element.control_type == "Group" and parent_element and parent_element.control_type == "MenuItem":
+            self.state = AccessibilityPopUpState.MENU
+            self.strategy = PopUpStrategy.FOCUSED_ELEMENT_FIRST_PARENT_WINDOW
+            
+        elif parent_element and parent_element.control_type == "ToolBar":
+            print("tool bar")
+            self.state = AccessibilityPopUpState.MENU
+            self.strategy = PopUpStrategy.FOCUSED_ELEMENT_PARENT
         
-        match cls:
-            # this seems to be the open dialg
-            case "#32770":
-                match parent_element_type:
-                    # case "Menu":
-                    #     self.state = ExplorerPopUpState.MENU
-                    #     self.strategy = ExplorerPopUpElementStrategy.FOCUSED_ELEMENT
-                    case _:
-                        self.state = AccessibilityPopUpState.OPEN_DIALOG
-                        self.strategy = PopUpStrategy.ACTIVE_WINDOW 
+        elif focused_element.control_type == "Window" and parent_element and focused_element.name == "Popup":
+            print("window popup")
+            self.state = AccessibilityPopUpState.MENU
+            self.strategy = PopUpStrategy.ELEMENT_OVERRIDE
+            self.element_override = focused_element
+        else:
 
-            case "Windows.UI.Core.CoreWindow":
-                if (parent_element and (focused_element.name == "Lock" or focused_element.parent.name == "Lock")):
-                    self.state = AccessibilityPopUpState.NONE
-                elif ((focused_element.name == "Notification Center")):
-                    self.state = AccessibilityPopUpState.NOTIFICATION_CENTER
-                    self.strategy = PopUpStrategy.ACTIVE_WINDOW
-                elif "Jump List" in active_window.title:
-                    self.state = AccessibilityPopUpState.JUMP_LIST_CONTEXT_MENU
-                    self.strategy = PopUpStrategy.ACTIVE_WINDOW
-                elif "Search" == active_window.title: #and parent_element and parent_element.name == "Start":
-                    if parent_element:
-                        self.state = AccessibilityPopUpState.START_MENU
-                        if parent_element.parent and parent_element.parent.name == "Start":
-                            self.strategy = PopUpStrategy.ACTIVE_WINDOW_PARENT
-                        else:
-                            self.strategy = PopUpStrategy.ACTIVE_WINDOW
+        
+            match cls:
+                # this seems to be the open dialg
+                case "#32770":
+                    match parent_element_type:
+                        # case "Menu":
+                        #     self.state = ExplorerPopUpState.MENU
+                        #     self.strategy = ExplorerPopUpElementStrategy.FOCUSED_ELEMENT
+                        case _:
+                            self.state = AccessibilityPopUpState.OPEN_DIALOG
+                            self.strategy = PopUpStrategy.ACTIVE_WINDOW 
 
-                elif "Notification Center":
-                    self.state = AccessibilityPopUpState.NOTIFICATION_CENTER
-                    self.strategy = PopUpStrategy.ACTIVE_WINDOW
-
-            case "ControlCenterWindow":
-                self.state = AccessibilityPopUpState.CONTROL_CENTER
-
-            case "ProgMan":
-                self.state = AccessibilityPopUpState.PROGRAM_MANAGER
-                self.strategy = PopUpStrategy.FOCUSED_ELEMENT_PARENT
-
-            case "Shell_TrayWnd":
-                # if focused_element.name in ("Installed apps", "Desktop"):
-                #     self.state = ExplorerPopUpState.GENERIC_CONTEXT_MENU
-                if focused_element.control_type == "MenuItem":
-                    self.state = AccessibilityPopUpState.NONE
-
-                # there's a weird case where if you right click on empty space in the taskbar,
-                # and then open the start menu, we end up with the traywnd class for the start menu.
-                # go figure?
-                elif (focused_element.name == "Search box"):
-                    self.state = AccessibilityPopUpState.START_MENU
-                    self.strategy = PopUpStrategy.ACTIVE_WINDOW_PARENT
-
-                elif (parent_element and parent_element.name == "Running applications"):
-                    self.state = AccessibilityPopUpState.TASK_VIEW
-                    self.strategy = PopUpStrategy.ACTIVE_WINDOW
-
-            case "CabinetWClass":
-                match focused_element.control_type:
-                    case "MenuItem":
-                        self.state = AccessibilityPopUpState.MENU
-                        self.strategy = PopUpStrategy.FOCUSED_ELEMENT_FIRST_PARENT_WINDOW 
-                    case _:
-                        if (parent_element and parent_element.control_type == "AppBar"):
-                            #print("AppBAR!!!!")
-                            self.state = AccessibilityPopUpState.MENU
-                            self.strategy = PopUpStrategy.FOCUSED_ELEMENT_PARENT
-                        elif "File Explorer" in active_window.title:
-                            if focused_element.control_type == "MenuItem":
-                                #walk(focused_element.parent)
-                                if focused_element.parent.name == "Context":
-                                    #print("context menu...")
-                                    self.strategy = PopUpStrategy.FOCUSED_ELEMENT_PARENT
-                                    self.start = AccessibilityPopUpState.GENERIC_CONTEXT_MENU
-
-                                # else:
-                                #     self.strategy = PopUpStrategy.FOCUSED_ELEMENT_FIRST_PARENT_WINDOW
-                                #     self.state = AccessibilityPopUpState.MENU
+                case "Windows.UI.Core.CoreWindow":
+                    if (parent_element and (focused_element.name == "Lock" or focused_element.parent.name == "Lock")):
+                        self.state = AccessibilityPopUpState.NONE
+                    elif ((focused_element.name == "Notification Center")):
+                        self.state = AccessibilityPopUpState.NOTIFICATION_CENTER
+                        self.strategy = PopUpStrategy.ACTIVE_WINDOW
+                    elif "Jump List" in active_window.title:
+                        self.state = AccessibilityPopUpState.JUMP_LIST_CONTEXT_MENU
+                        self.strategy = PopUpStrategy.ACTIVE_WINDOW
+                    elif "Search" == active_window.title: #and parent_element and parent_element.name == "Start":
+                        if parent_element:
+                            self.state = AccessibilityPopUpState.START_MENU
+                            if parent_element.parent and parent_element.parent.name == "Start":
+                                self.strategy = PopUpStrategy.ACTIVE_WINDOW_PARENT
                             else:
-                                pass
-    
-                                self.parallel = True
-                                self.state = AccessibilityPopUpState.FILE_EXPLORER
                                 self.strategy = PopUpStrategy.ACTIVE_WINDOW
-                        elif "Control Panel" in active_window.title:
-                            self.state = AccessibilityPopUpState.CONTROL_PANEL
-                            self.strategy = PopUpStrategy.ACTIVE_WINDOW
-                
-            case "XamlExplorerHostIslandWindow":
-                match active_window.title:
-                    case "Task View":
+
+                    elif "Notification Center":
+                        self.state = AccessibilityPopUpState.NOTIFICATION_CENTER
+                        self.strategy = PopUpStrategy.ACTIVE_WINDOW
+
+                case "ControlCenterWindow":
+                    self.state = AccessibilityPopUpState.CONTROL_CENTER
+
+                case "ProgMan":
+                    self.state = AccessibilityPopUpState.PROGRAM_MANAGER
+                    self.strategy = PopUpStrategy.FOCUSED_ELEMENT_PARENT
+
+                case "Shell_TrayWnd":
+                    # if focused_element.name in ("Installed apps", "Desktop"):
+                    #     self.state = ExplorerPopUpState.GENERIC_CONTEXT_MENU
+                    if focused_element.control_type == "MenuItem":
+                        self.state = AccessibilityPopUpState.NONE
+
+                    # there's a weird case where if you right click on empty space in the taskbar,
+                    # and then open the start menu, we end up with the traywnd class for the start menu.
+                    # go figure?
+                    elif (focused_element.name == "Search box"):
+                        self.state = AccessibilityPopUpState.START_MENU
+                        self.strategy = PopUpStrategy.ACTIVE_WINDOW_PARENT
+
+                    elif (parent_element and parent_element.name == "Running applications"):
                         self.state = AccessibilityPopUpState.TASK_VIEW
                         self.strategy = PopUpStrategy.ACTIVE_WINDOW
-                    case "Snap Assist":
-                        self.state = AccessibilityPopUpState.SNAP_ASSIST
+
+                case "CabinetWClass":
+                    match focused_element.control_type:
+                        case "MenuItem":
+                            self.state = AccessibilityPopUpState.MENU
+                            self.strategy = PopUpStrategy.FOCUSED_ELEMENT_FIRST_PARENT_WINDOW 
+                        case _:
+                            if (parent_element and parent_element.control_type == "AppBar"):
+                                #print("AppBAR!!!!")
+                                self.state = AccessibilityPopUpState.MENU
+                                self.strategy = PopUpStrategy.FOCUSED_ELEMENT_PARENT
+                            elif "File Explorer" in active_window.title:
+                                if focused_element.control_type == "MenuItem":
+                                    #walk(focused_element.parent)
+                                    if focused_element.parent.name == "Context":
+                                        #print("context menu...")
+                                        self.strategy = PopUpStrategy.FOCUSED_ELEMENT_PARENT
+                                        self.start = AccessibilityPopUpState.GENERIC_CONTEXT_MENU
+
+                                    # else:
+                                    #     self.strategy = PopUpStrategy.FOCUSED_ELEMENT_FIRST_PARENT_WINDOW
+                                    #     self.state = AccessibilityPopUpState.MENU
+                                else:
+                                    pass
+        
+                                    self.parallel = True
+                                    self.state = AccessibilityPopUpState.FILE_EXPLORER
+                                    self.strategy = PopUpStrategy.ACTIVE_WINDOW
+                            elif "Control Panel" in active_window.title:
+                                self.state = AccessibilityPopUpState.CONTROL_PANEL
+                                self.strategy = PopUpStrategy.ACTIVE_WINDOW
+                    
+                case "XamlExplorerHostIslandWindow":
+                    match active_window.title:
+                        case "Task View":
+                            self.state = AccessibilityPopUpState.TASK_VIEW
+                            self.strategy = PopUpStrategy.ACTIVE_WINDOW
+                        case "Snap Assist":
+                            self.state = AccessibilityPopUpState.SNAP_ASSIST
+                            self.strategy = PopUpStrategy.ACTIVE_WINDOW
+
+                case "ControlCenterWindow":
+                    self.state = AccessibilityPopUpState.CONTROL_CENTER
+                    self.strategy = PopUpStrategy.FOCUSED_ELEMENT_PARENT
+
+                case _:
+                    if active_window.title == "System tray overflow window.":
+                        self.state = AccessibilityPopUpState.SYSTEM_TRAY
                         self.strategy = PopUpStrategy.ACTIVE_WINDOW
-
-            case "ControlCenterWindow":
-                self.state = AccessibilityPopUpState.CONTROL_CENTER
-                self.strategy = PopUpStrategy.FOCUSED_ELEMENT_PARENT
-
-            case _:
-                if active_window.title == "System tray overflow window.":
-                    self.state = AccessibilityPopUpState.SYSTEM_TRAY
-                    self.strategy = PopUpStrategy.ACTIVE_WINDOW
-                elif focused_element.control_type == "ListItem" and (parent_element and "Desktop" in parent_element.name):
-                    self.state = AccessibilityPopUpState.NONE
-                    self.strategy = PopUpStrategy.ACTIVE_WINDOW                         
+                    elif focused_element.control_type == "ListItem" and (parent_element and "Desktop" in parent_element.name):
+                        self.state = AccessibilityPopUpState.NONE
+                        self.strategy = PopUpStrategy.ACTIVE_WINDOW                         
 
         self.window_id = ui.active_window().id if self.state != AccessibilityPopUpState.NONE else None
 
-        #print(f"cls = {cls} win_title = {active_window.title} element = {focused_element.name}, parent = {parent_name} control_type = {focused_element.control_type} parent_control_type = {parent_element_type}")
+        #print(f"update_state = {self.state}, strategy = {self.strategy}, cls = {cls} win_title = {active_window.title} element = {focused_element.name}, parent = {parent_name} control_type = {focused_element.control_type} parent_control_type = {parent_element_type}")
     
+        #print(f"update_state: state = {self.state}, strategy = {self.strategy}")
+
 
 explorer_popup_status = ExplorerPopupStatus()
 
@@ -634,7 +667,7 @@ class Actions:
         # ui.unregister("win_focus", on_win_focus)
         # ui.unregister("win_open", on_win_open)
         # ui.unregister("win_close", on_win_close)
-        #ui.unregister("element_focus", on_element_focus)
+        ui.unregister("element_focus", on_element_focus)
         #ui.unregister("win_resize", on_win_resize)
         #ui.unregister("win_move", on_win_resize)
         
@@ -945,6 +978,9 @@ def get_windows_eleven_taskbar():
     #     return False
     
     apps = ui.apps(name="Windows Explorer")
+    if len(apps) == 0:
+        apps = ui.apps(name="explorer.exe")
+
     #print(f"found {len(apps)} explorer instances")
     taskbar_window = None
     for explorer_instances in apps:
@@ -1228,13 +1264,37 @@ def show_canvas_popup():
     canvas_popup.register("draw", draw_canvas_popup)
     canvas_popup.freeze()
 
-def on_element_focus(_):
+def on_element_focus(item):
+    global canvas_popup
+    #print(f"***on_element_focus {item.control_type}***")
+    previous_state = explorer_popup_status.state
+    match item.control_type:
+        case "Menu" | "MenuItem" | "Window":
+
+            explorer_popup_status.update_state(item)
+
+            if explorer_popup_status.state != AccessibilityPopUpState.NONE:
+                cron_delay_canvas_helper(start=True,time="50ms",func=show_canvas_popup)
+
+        case _:
+            explorer_popup_status.state = AccessibilityPopUpState.NONE
+
+            print(f"on_element_focus {item.control_type}: {item.name}")
+
+
     if explorer_popup_status and explorer_popup_status.window_id:
         if explorer_popup_status.window_id == ui.active_window().id:
-            on_win_focus(_)
+            on_win_focus(item)
 
-def on_win_focus(_):
-    #print(f"***on_focus_change started***")
+    if explorer_popup_status.state == AccessibilityPopUpState.NONE:
+        if canvas_popup:
+            canvas_popup.close()
+            canvas_popup = None
+
+            ctx.tags = []
+
+def on_win_focus(item):
+    print(f"***on_win_focus {item}***")
     global buttons_popup, cron_delay_showing_canvas
     global canvas_popup, popup_start_index
 
@@ -1267,6 +1327,7 @@ def on_win_focus(_):
         return 
 
     explorer_popup_status.update_state()
+
     explorer_popup_status.window_id = ui.active_window().id if explorer_popup_status.state != AccessibilityPopUpState.NONE else None
     
     #print(explorer_popup_status)
@@ -1275,6 +1336,7 @@ def on_win_focus(_):
             popup_start_index = len(system_try_data.sys_tray_icons)
             cron_delay_canvas_helper(start=True,func=show_canvas_popup)
         else:
+            print(f"***on_win_focus {explorer_popup_status.state}***")
             popup_start_index = 0
             cron_delay_canvas_helper(start=True,time="100ms",func=show_canvas_popup)
 
@@ -1380,10 +1442,12 @@ def on_win_open(window):
 def on_win_hide(window):
     on_win_close(window)
 
+context_menu_window_id = None
+
 def on_win_close(window):
     global is_context_menu_open, context_menu_window_id, canvas_popup
 
-    if context_menu_window_id == window.id:
+    if context_menu_window_id and context_menu_window_id == window.id:
         is_context_menu_open = False
         context_menu_window_id = None
         if canvas_popup:
@@ -1395,7 +1459,7 @@ def on_menu_closed(element):
 
 
 def on_menu_open(element):
-    print(f"Menu opened: {element}")
+    print(f"Menu opened: {element.children}")
 
 if app.platform == "windows":
     def on_ready():
@@ -1404,15 +1468,15 @@ if app.platform == "windows":
 
         if success:
             create_task_bar_canvases(task_bar, sys_tray)
-            ui.register("screen_change", on_screen_change) 
-            ui.register("win_focus", on_win_focus)
-            # #ui.register("element_focus", on_element_focus)
+            #ui.register("screen_change", on_screen_change) 
+            #ui.register("win_focus", on_win_focus)
+            #ui.register("element_focus", on_element_focus)
             #ui.register("win_resize", on_win_resize)
-            ui.register("win_open", on_win_open)
-            ui.register("win_close", on_win_close)
-            ui.register("win_hide", on_win_hide)
-            ui.register("menu_open", on_menu_open)
-            ui.register("menu_close", on_menu_closed)
+            #ui.register("win_open", on_win_open)
+            #ui.register("win_close", on_win_close)
+            #ui.register("win_hide", on_win_hide)
+            #ui.register("menu_open", on_menu_open)
+            #ui.register("menu_close", on_menu_closed)
             cron_poll_start_menu_helper()
         else:
             cleanup_and_retry()

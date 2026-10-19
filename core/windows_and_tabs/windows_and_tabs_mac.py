@@ -45,7 +45,7 @@ class AppActions:
         actions.key("cmd-`")
 
 
-@ctx.action_class("user")
-class UserActions:
-    def switcher_focus_last():
-        actions.key("cmd-tab")
+# @ctx.action_class("user")
+# class UserActions:
+#     def switcher_focus_last():
+#         actions.key("cmd-tab")

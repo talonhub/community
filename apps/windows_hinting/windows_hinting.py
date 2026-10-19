@@ -33,4 +33,4 @@ def on_title(win):
 def on_ready():
     ui.register("win_title", on_title)
 
-app.register("ready", on_ready)
+app.register("ready", on_ready)``
