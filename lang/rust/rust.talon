@@ -101,3 +101,8 @@ turbo fish: user.insert_between("::<", ">")
 block dock comment: user.code_comment_documentation_block()
 inner dock comment: user.code_comment_documentation_inner()
 inner block dock comment: user.code_comment_documentation_block_inner()
+
+# DEPRECATED: old macro functionality
+# Warning is produced on the python side, as what was once two commands here is now six (eight if counting the form not used by Rust!)
+macro {user.code_macros}: user.code_insert_macro(code_macros, "")
+macro wrap {user.code_macros}: user.code_insert_macro(code_macros, edit.selected_text())

@@ -29,6 +29,32 @@ class Actions:
     def code_comment_documentation_block_inner():
         """Inserts an inner block document comment and positions the cursor appropriately"""
 
+    # DEPRECATED
+
+    def code_insert_macro(text: str, selection: str):
+        """DEPRECATED: Inserts a macro and positions the cursor appropriately"""
+        actions.user.deprecate_action(
+            "2026-10-19",
+            "user.code_insert_macro",
+            "user.code_insert_function_macro_like",
+        )
+
+    def code_insert_macro_array(text: str, selection: str):
+        """DEPRECATED: Inserts a macro array and positions the cursor appropriately"""
+        actions.user.deprecate_action(
+            "2026-10-19",
+            "user.code_insert_macro_array",
+            "user.code_insert_macro_array_like",
+        )
+
+    def code_insert_macro_block(text: str, selection: str):
+        """DEPRECATED: Inserts a macro block and positions the cursor appropriately"""
+        actions.user.deprecate_action(
+            "2026-10-19",
+            "user.code_insert_macro_block",
+            "user.code_insert_macro_block_like",
+        )
+
 
 ctx = Context()
 ctx.matches = r"""
@@ -364,6 +390,36 @@ class UserActions:
         actions.user.insert_between("/*!", "*/")
         actions.key("enter")
 
+    # DEPRECATED
+    def code_insert_macro(text: str, selection: str):
+        wrap_string = " wrap " if selection != "" else ""
+        deprecated_command = "macro" + wrap_string + "{user.code_macros}"
+
+        if text in all_array_macro_values:
+            new_command = (
+                "(macro | anno)" + wrap_string + "{user.code_array_macro_likes}"
+            )
+            actions.user.deprecate_command(
+                "2026-10-19", deprecated_command, new_command
+            )
+            actions.user.code_insert_macro_array_like(text, selection)
+        elif text in all_block_macro_values:
+            new_command = (
+                "(macro | anno)" + wrap_string + "{user.code_block_macro_likes}"
+            )
+            actions.user.deprecate_command(
+                "2026-10-19", deprecated_command, new_command
+            )
+            actions.user.code_insert_macro_block_like(text, selection)
+        else:
+            new_command = (
+                "(macro | anno)" + wrap_string + "{user.code_function_macro_likes}"
+            )
+            actions.user.deprecate_command(
+                "2026-10-19", deprecated_command, new_command
+            )
+            actions.user.code_insert_function_macro_like(text, selection)
+
 
 RT = TypeVar("RT")  # return type
 
@@ -371,3 +427,26 @@ RT = TypeVar("RT")  # return type
 def repeat_call(n: int, f: Callable[..., RT], *args: Any, **kwargs: Any):
     for _ in range(n):
         f(*args, **kwargs)
+
+
+# Deprecated Macro Functionality
+mod.list(
+    "code_macros",
+    desc="DEPRECATED as of 2026-10-19, use `macro_like.py` lists insted! Original description: List of macros for active language",
+)
+ctx.lists["user.code_macros"] = all_macros
+
+
+# Deprecated: use do_macro_like_insert in macro_like.py or implement in your own code
+def code_insert_function_or_macro(
+    text: str,
+    selection: str,
+    left_delim: str,
+    right_delim: str,
+):
+    if selection:
+        out_text = text + f"{left_delim}{selection}{right_delim}"
+    else:
+        out_text = text + f"{left_delim}{right_delim}"
+    actions.user.paste(out_text)
+    actions.edit.left()
