@@ -299,9 +299,9 @@ class UIWrapper:
     ):
         """Render a table with consistent row height. Assumes each row is at most the given row height. Uses the interact_size of the ui for the default row height, which may be excessive for your application. This assumes that each row has a single line.
         headers: the headers to render at the top of the table. The length of the headers should equal the column size of the rows.
-        rows: the rows to display in the table. Each row should be a subclass of Row.
+        rows: the rows to render in the table. Each row should be a subclass of Row.
         row_height: each row should be at most this big.
-        render_row: a callback for displaying the row.
+        render_row: a callback for rendering the row.
         auto_size_columns: decides if the column width should be based on the item sizes. Otherwise, each column takes an equal portion of the available width.
         maximum_height: the maximum height of the scroll area for the table. Setting this is recommended if you need to leave room for widgets after the table.
         id_salt: used to distinguish between this table and other tables in the ui. The default used by this function is str(rows), which may be expensive.
