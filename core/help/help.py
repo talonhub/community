@@ -110,7 +110,7 @@ def gui_formatters(gui: imgui.GUI):
 OPERATORS_MAX_COLUMN_LENGTH = 40
 
 
-def _add_rows_for_operator(rows, prefix, operator_name, description):
+def _add_rows_for_operator(table, prefix, operator_name, description):
     postfix = "" if description else "*"
     operator_name_text = f"    {prefix} {operator_name}{postfix}"
     columns = [operator_name_text]
@@ -119,7 +119,7 @@ def _add_rows_for_operator(rows, prefix, operator_name, description):
         rich_text_functions = None
     else:
         rich_text_functions = (create_italics_text,)
-    rows.extend(TextRow.create(columns, rich_text_functions=rich_text_functions))
+    table.add_row(TextRow(columns, rich_text_functions=rich_text_functions))
 
 
 def _compute_operator_description(operator):
@@ -134,14 +134,14 @@ def _compute_operator_description(operator):
     return ""
 
 
-def _add_rows_for_operator_category_header(rows, name):
+def _add_rows_for_operator_category_header(table, name):
     row_text = f"{name} operators:"
-    rows.extend(TextRow.create((row_text,), rich_text_functions=(create_bold_text,)))
+    table.add_row(TextRow((row_text,), rich_text_functions=(create_bold_text,)))
 
 
-def _add_missing_text_implementation_footnote(rows):
+def _add_missing_text_implementation_footnote(table):
     row_text = "* operator is implemented as a function call and cannot be displayed"
-    rows.extend(TextRow.create((row_text,), rich_text_functions=(create_bold_text,)))
+    table.add_row(TextRow((row_text,), rich_text_functions=(create_bold_text,)))
 
 
 def _compute_operator_list_names_with_prefixes():
@@ -163,8 +163,8 @@ def update_operators_text():
         operators = actions.user.code_get_operators()
         names_with_prefix = _compute_operator_list_names_with_prefixes()
 
-        # Fill in the list by iterating over the operator lists
-        rows = []
+        # Fill in the table by iterating over the operator lists
+        table = Table()
         has_operator_without_text_implementation = False
         for name, prefix in names_with_prefix:
             operators_list = actions.user.talon_get_active_registry_list(
@@ -176,18 +176,19 @@ def update_operators_text():
                 if operator_text in operators:
                     # Only add the header if an item in the list is defined in operators
                     if not has_added_first_list_item:
-                        _add_rows_for_operator_category_header(rows, name)
+                        _add_rows_for_operator_category_header(table, name)
                         has_added_first_list_item = True
                     operator = operators.get(operator_text)
                     description = _compute_operator_description(operator)
-                    _add_rows_for_operator(rows, prefix, operator_name, description)
+                    _add_rows_for_operator(table, prefix, operator_name, description)
                     if not description:
                         has_operator_without_text_implementation = True
 
         if has_operator_without_text_implementation:
-            _add_missing_text_implementation_footnote(rows)
+            _add_missing_text_implementation_footnote(table)
         page_scroller.page_size = settings.get("user.help_max_command_lines_per_page")
-        operators_text = wrap_rows(rows, OPERATORS_MAX_COLUMN_LENGTH)
+        table.wrap(OPERATORS_MAX_COLUMN_LENGTH)
+        operators_text = table
     # This exception will get raised if there is no operators object defined in the active context
     except NotImplementedError:
         operators_text = None
@@ -233,7 +234,7 @@ async def gui_operators(ui, ui_wrapper):
 
         await ui_wrapper.render_table(
             headers=["", ""],
-            rows=operators_text,
+            table=operators_text,
             maximum_height=maximum_height,
             row_height=row_size,
             id_salt="help_operators",
