@@ -1,5 +1,6 @@
 app: apple_terminal
 -
+
 # makes the commands in terminal.talon available
 tag(): terminal
 
@@ -15,7 +16,6 @@ tag(): user.git
 tag(): user.anaconda
 tag(): user.kubectl
 
-# TODO: explain
 tag(): user.tabs
 tag(): user.file_manager
 

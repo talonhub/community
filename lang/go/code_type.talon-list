@@ -1,0 +1,13 @@
+list: user.code_type
+code.language: go
+-
+
+boolean: "bool"
+int: "int"
+you int: "uint"
+you int pointer: "uintptr"
+string: "string"
+byte: "byte"
+rune: "rune"
+channel: "chan "
+error: "error"

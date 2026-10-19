@@ -1,5 +1,6 @@
 user.running: amethyst
 -
+
 window next: key("alt-shift-j")
 window previous: key("alt-shift-k")
 # window move desk: key("ctrl-alt-shift-h")

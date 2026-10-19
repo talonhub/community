@@ -1,9 +1,6 @@
 import os
 
-from talon import Context, actions, ui, app
-
-if app.platform == "mac":
-    from talon.mac import applescript
+from talon import Context, actions, ui
 
 ctx = Context()
 ctx.matches = r"""
@@ -33,8 +30,9 @@ class UserActions:
         return title
 
     def file_manager_terminal_here():
-        applescript.run(
-            r"""
+        from talon.mac import applescript
+
+        applescript.run(r"""
         tell application "Finder"
             set myWin to window 1
             set thePath to (quoted form of POSIX path of (target of myWin as alias))
@@ -44,8 +42,7 @@ class UserActions:
                     do script "cd " & thePath
                 end tell
             end tell
-        end tell"""
-        )
+        end tell""")
 
     def file_manager_show_properties():
         """Shows the properties for the file"""

@@ -1,10 +1,12 @@
-^capture screen$: user.screenshot()
-^capture screen <number_small>$: user.screenshot(number_small)
-^capture window$: user.screenshot_window()
-^capture selection$: user.screenshot_selection()
-^capture selection clip$: user.screenshot_selection_clip()
-capture: user.screenshot_selection()
-^capture settings$: user.screenshot_settings()
-^capture screen clip$: user.screenshot_clipboard()
-^capture screen <number_small> clip$: user.screenshot_clipboard(number_small)
-^capture window clip$: user.screenshot_window_clipboard()
+not tag: user.screenshot_disabled
+-
+
+^grab screen$: user.screenshot()
+^grab screen <number_small>$: user.screenshot(number_small)
+^grab window$: user.screenshot_window()
+^grab selection$: user.screenshot_selection()
+^grab selection clip$: user.screenshot_selection_clip()
+^grab settings$: user.screenshot_settings()
+^grab screen clip$: user.screenshot_clipboard()
+^grab screen <number_small> clip$: user.screenshot_clipboard(number_small)
+^grab window clip$: user.screenshot_window_clipboard()

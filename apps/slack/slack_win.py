@@ -44,3 +44,84 @@ class UserActions:
     # Files and Snippets
     def messaging_upload_file():
         actions.key("ctrl-u")
+
+    def slack_open_workspace(number: int):
+        actions.key(f"ctrl-{number}")
+
+    def slack_show_channel_info():
+        actions.key("ctrl-shift-i")
+
+    def slack_open_direct_messages():
+        actions.key("ctrl-shift-k")
+
+    def slack_open_threads():
+        actions.key("ctrl-shift-t")
+
+    def slack_go_back():
+        actions.key("alt-left")
+
+    def slack_go_forward():
+        actions.key("alt-right")
+
+    def slack_open_activity():
+        actions.key("ctrl-shift-m")
+
+    def slack_open_directory():
+        actions.key("ctrl-shift-e")
+
+    def slack_open_unread_messages():
+        actions.key("ctrl-shift-a")
+
+    def slack_open_starred_items():
+        actions.key("ctrl-shift-s")
+
+    def slack_toggle_full_screen():
+        actions.key("ctrl-ctrl-f")
+
+    def slack_add_reaction():
+        actions.key("ctrl-shift-\\")
+
+    def slack_insert_command():
+        actions.key("ctrl-shift-c")
+
+    def slack_insert_link():
+        actions.key("ctrl-shift-u")
+
+    def slack_insert_code():
+        actions.insert("```")
+
+    def slack_start_bulleted_list():
+        actions.key("ctrl-shift-8")
+
+    def slack_start_numbered_list():
+        actions.key("ctrl-shift-7")
+
+    def slack_insert_quotation():
+        actions.key("ctrl-shift-9")
+
+    def slack_toggle_bold():
+        actions.key("ctrl-b")
+
+    def slack_toggle_italic():
+        actions.key("ctrl-i")
+
+    def slack_toggle_strikethrough():
+        actions.key("ctrl-shift-x")
+
+    def slack_create_snippet():
+        actions.key("ctrl-shift-enter")
+
+    def slack_huddle():
+        actions.key("ctrl-shift-h")
+
+    def slack_open_keyboard_shortcuts():
+        """Opens the keyboard shortcuts menu in Slack"""
+        actions.key("ctrl-/")
+
+    def slack_toggle_left_sidebar():
+        """Toggles the visibility of the left sidebar in Slack"""
+        actions.key("ctrl-shift-d")
+
+    def slack_toggle_right_sidebar():
+        """Toggles the visibility of the right sidebar in Slack"""
+        actions.key("ctrl-.")

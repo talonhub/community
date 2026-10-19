@@ -9,6 +9,7 @@ tag(): user.code_data_bool
 tag(): user.code_data_null
 tag(): user.code_functions
 tag(): user.code_functions_common
+tag(): user.code_keywords
 tag(): user.code_libraries
 tag(): user.code_operators_array
 tag(): user.code_operators_assignment
@@ -24,11 +25,6 @@ settings():
     user.code_private_variable_formatter = "SNAKE_CASE"
     user.code_public_variable_formatter = "SNAKE_CASE"
 
-state local: "local"
-state end: "end"
-state then: "then"
-state repeat: "repeat"
-state until: "until"
 state return (null | nil): "return nil"
 state return true: "return true"
 state return false: "return false"
@@ -65,3 +61,20 @@ index (var | variable) <user.text>:
     insert("[{var}]")
 
 state return dick: user.insert_between("return {", "}")
+
+# deprecated commands
+state local:
+    user.deprecate_command("2026-05-17", "state local", "put local")
+    insert("local")
+state end:
+    user.deprecate_command("2026-05-17", "state end", "put end")
+    insert("end")
+state then:
+    user.deprecate_command("2026-05-17", "state then", "put then")
+    insert("then")
+state repeat:
+    user.deprecate_command("2026-05-17", "state repeat", "put repeat")
+    insert("repeat")
+state until:
+    user.deprecate_command("2026-05-17", "state until", "put until")
+    insert("until")

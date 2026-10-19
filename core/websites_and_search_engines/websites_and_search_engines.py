@@ -25,13 +25,16 @@ class Actions:
     def open_new_url(url: str):
         """Visit the given URL."""
         webbrowser.open_new(url)
-
+		
     def search_with_search_engine(search_template: str, search_text: str):
         """Search a search engine for given text"""
         url = search_template.replace("%s", quote_plus(search_text))
         webbrowser.open(url)
 
 
-@ctx_browser.capture("user.address", rule="{user.website}")
+@ctx_browser.capture(
+    "user.address",
+    rule="{user.website}",
+)
 def address(m) -> str:
     return m.website

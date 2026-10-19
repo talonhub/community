@@ -1,16 +1,17 @@
-from typing import Any, Callable, Optional, Sequence, Type
+from collections.abc import Callable, Sequence
+from typing import Any, Optional
 
-from talon import Module, app, cron, ctrl, settings, ui
-from talon.canvas import Canvas
 from skia import Canvas as SkiaCanvas
 from skia import ImageFilter
+from talon import Module, app, cron, ctrl, settings, ui
+from talon.canvas import Canvas
 from talon.types import Rect
 
 mod = Module()
 
 
 def setting(
-    name: str, type: Type, desc: str, *, default: Optional[Any] = None
+    name: str, type: type, desc: str, *, default: Optional[Any] = None
 ) -> Callable[[], type]:
     mod.setting(f"subtitles_{name}", type, default=default, desc=f"Subtitles: {desc}")
     return lambda: settings.get(f"user.subtitles_{name}")
