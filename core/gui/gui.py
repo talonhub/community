@@ -52,7 +52,7 @@ async def render_row_ui(row, contents, num_columns):
     row_contents = contents[index]
     for column_index in range(row_contents.get_num_columns()):
         async with row.col() as cell_ui:
-            await row_contents.ui(cell_ui, column_index)
+            await row_contents.render(cell_ui, column_index)
     if row_contents.get_num_columns() < num_columns:
         for _ in range(num_columns - row_contents.get_num_columns()):
             async with row.col() as cell_ui:
@@ -129,7 +129,7 @@ class Row(ABC):
     """Represents the row of a table"""
 
     @abstractmethod
-    async def ui(self, ui, column_number):
+    async def render(self, ui, column_number):
         """Render the column on the ui"""
         pass
 
@@ -163,7 +163,7 @@ class TextRow(Row):
         else:
             self.rich_text_functions = []
 
-    async def ui(self, ui, column_number):
+    async def render(self, ui, column_number):
         text = self.columns[column_number]
         if self.rich_text_functions and (
             create_rich_text := self.rich_text_functions[column_number]
