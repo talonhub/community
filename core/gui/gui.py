@@ -152,11 +152,6 @@ class Row(ABC):
         """Returns the number of columns"""
         pass
 
-    @abstractmethod
-    def get_text_length(self) -> int:
-        """Return the total text length of the row"""
-        pass
-
 
 class TextRow(Row):
     def __init__(self, columns, render_overline=True, rich_text_functions=None):
@@ -209,9 +204,6 @@ class TextRow(Row):
     def split_lines(self) -> list:
         column_lines = [c.splitlines() for c in self.columns]
         return TextRow._split_across_rows(column_lines, True, self.rich_text_functions)
-
-    def get_text_length(self) -> int:
-        return sum(len(c) for c in self.columns)
 
 
 class Table:
