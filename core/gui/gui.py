@@ -46,8 +46,8 @@ def compute_text_size():
     return DEFAULT_TEXT_SIZE * settings.get("imgui.scale")
 
 
-async def show_row_ui(row, contents, num_columns):
-    """Show every column of the row using its ui method"""
+async def render_row_ui(row, contents, num_columns):
+    """Render every column of the row using its ui method"""
     index = row.index()
     row_contents = contents[index]
     for column_index in range(row_contents.get_num_columns()):
@@ -130,7 +130,7 @@ class Row(ABC):
 
     @abstractmethod
     async def ui(self, ui, column_number):
-        """Draw the column on the ui"""
+        """Render the column on the ui"""
         pass
 
     @abstractmethod
@@ -139,7 +139,7 @@ class Row(ABC):
         pass
 
     @abstractmethod
-    def should_show_overline(self) -> bool:
+    def should_render_overline(self) -> bool:
         """Decides if there should be an overline above the row"""
         pass
 
@@ -155,10 +155,10 @@ class Row(ABC):
 
 
 class TextRow(Row):
-    def __init__(self, columns, show_overline=True, rich_text_functions=None):
+    def __init__(self, columns, render_overline=True, rich_text_functions=None):
         """A row consisting of strings"""
         self.columns = columns
-        self.show_overline = show_overline
+        self.render_overline = render_overline
         if rich_text_functions:
             self.rich_text_functions = rich_text_functions
         else:
@@ -172,8 +172,8 @@ class TextRow(Row):
             text = create_rich_text(text)
         ui.label(text)
 
-    def should_show_overline(self):
-        return self.show_overline
+    def should_render_overline(self):
+        return self.render_overline
 
     def get_num_columns(self):
         return len(self.columns)
@@ -182,14 +182,14 @@ class TextRow(Row):
     def _split_across_rows(
         cls,
         splits: Sequence[Sequence[str]],
-        show_overline: bool,
+        render_overline: bool,
         rich_text_functions=None,
     ):
         result = []
         num_lines = max(len(c) for c in splits)
         for i in range(num_lines):
             line = [c[i] if i < len(c) else "" for c in splits]
-            row = TextRow(line, show_overline and i == 0, rich_text_functions)
+            row = TextRow(line, render_overline and i == 0, rich_text_functions)
             result.append(row)
         return result
 
@@ -199,7 +199,7 @@ class TextRow(Row):
             for c in self.columns
         ]
         return self._split_across_rows(
-            wrapped_lines, self.show_overline, self.rich_text_functions
+            wrapped_lines, self.render_overline, self.rich_text_functions
         )
 
     @classmethod
@@ -226,7 +226,7 @@ def wrap_rows(rows, max_column_text_length):
 
 
 class UIWrapper:
-    """Provides helper methods for drawing on a ui. These methods use the wrapped ui by default, but you can use the ui parameter to provide another one"""
+    """Provides helper methods for rendering widgets on a ui. These methods use the wrapped ui by default, but you can use the ui parameter to provide another one"""
 
     __slots__ = ("ui",)
 
@@ -256,9 +256,9 @@ class UIWrapper:
         return ui.spacing().item_spacing.y
 
     def title(self, text, subtitle="", ui=None):
-        """Draw a title.
+        """Render a title.
         text: the main title
-        subtitle: an optional subtitle shown in smaller font
+        subtitle: an optional subtitle rendered in smaller font
         """
         ui = self._ui(ui)
         title = egui.RichText(text).size(compute_text_size() * 1.5).strong()
@@ -269,14 +269,14 @@ class UIWrapper:
         ui.add_space(8)
 
     def header(self, text, ui=None):
-        """Draw a header"""
+        """Render a header"""
         ui = self._ui(ui)
         header = egui.RichText(text).size(compute_text_size() * 1.5).strong()
         ui.label(header)
         ui.add_space(8)
 
     def button(self, text, ui=None) -> bool:
-        """Draw a button and return True if the button was clicked this frame"""
+        """Render a button and return True if the button was clicked this frame"""
         ui = self._ui(ui)
         return ui.button(text).clicked()
 
@@ -285,23 +285,23 @@ class UIWrapper:
         ui = self._ui(ui)
         ui.add_space(compute_text_size())
 
-    async def draw_table(
+    async def render_table(
         self,
         headers,
         rows,
         row_height=None,
-        show_row=None,
+        render_row=None,
         auto_size_columns=False,
         maximum_height=None,
         id_salt=None,
         scroller=None,
         ui=None,
     ):
-        """Draw a table with consistent row height. Assumes each row is at most the given row height. Uses the interact_size of the ui for the default row height, which may be excessive for your application. This assumes that each row has a single line.
-        headers: the headers to show at the top of the table. The length of the headers should equal the column size of the rows.
+        """Render a table with consistent row height. Assumes each row is at most the given row height. Uses the interact_size of the ui for the default row height, which may be excessive for your application. This assumes that each row has a single line.
+        headers: the headers to render at the top of the table. The length of the headers should equal the column size of the rows.
         rows: the rows to display in the table. Each row should be a subclass of Row.
         row_height: each row should be at most this big.
-        show_row: a callback for displaying the row.
+        render_row: a callback for displaying the row.
         auto_size_columns: decides if the column width should be based on the item sizes. Otherwise, each column takes an equal portion of the available width.
         maximum_height: the maximum height of the scroll area for the table. Setting this is recommended if you need to leave room for widgets after the table.
         id_salt: used to distinguish between this table and other tables in the ui. The default used by this function is str(rows), which may be expensive.
@@ -316,8 +316,8 @@ class UIWrapper:
             maximum_height = ui.available_height()
         if row_height is None:
             row_height = ui.spacing().interact_size.y
-        if show_row is None:
-            show_row = show_row_ui
+        if render_row is None:
+            render_row = render_row_ui
 
         async with ui.scope() as scope, scope.style_mut() as style:
             # make scrollbar always visible when a scroll area is needed
@@ -360,18 +360,18 @@ class UIWrapper:
 
             current_row_index = None
 
-            # show the visible rows
+            # render the visible rows
             async with header.table().body() as body:
                 # track the top of the rectangle to help determine the first visible row
                 # this still gets called for some rows that are not visible, but those can be filtered out because they are considered above the scroll area
                 body_rect = body.max_rect()
                 body_top = min(body_rect.top(), body_rect.bottom())
                 async for row in body.rows(row_height, len(rows)):
-                    # draw lines above each row with a value for the first column
-                    if rows[row.index()].should_show_overline():
+                    # render lines above each row with a value for the first column
+                    if rows[row.index()].should_render_overline():
                         row.set_overline(True)
-                    # let the call back decide how to draw the row
-                    await show_row(row, rows, len(headers))
+                    # let the call back decide how to render the row
+                    await render_row(row, rows, len(headers))
                     # if this is the first visible row, update current_row_index
                     response = row.response()
                     rect = response.rect
@@ -398,17 +398,17 @@ def open_gui(
     always_on_top: bool = True,
     decorated: bool = False,
 ):
-    """Decorator for for an egui callback drawing function.
-    screen: the screen to show the gui on.
+    """Decorator for for an egui callback rendering function.
+    screen: the screen to render the gui on.
     x, y, width, height: location and dimensions of the gui window relative to the screen. The width and height are fractions of the screen width/height.
     refresh_period: an optional string giving a cron time period for how often to refresh the gui. egui only updates a ui when the user interacts with it, so setting this causes a periodic refresh. If you only need to update the ui under specific conditions, call .refresh() on the GUI instead.
-    always_on_top: decides if the ui should be shown as the top level.
-    decorated: decides if the gui should be shown with window borders.
+    always_on_top: decides if the ui should be rendered as the top level.
+    decorated: decides if the gui should be rendered with window borders.
     """
 
-    def open_inner(draw):
+    def open_inner(render):
         return GUI(
-            draw,
+            render,
             screen=screen,
             x=x,
             y=y,
@@ -424,9 +424,9 @@ def open_gui(
 
 @dataclass
 class Props:
-    """Contains information on how to draw the ui"""
+    """Contains information on how to render the ui"""
 
-    draw: Callable
+    render: Callable
     screen: Screen | None
     x: float | None
     y: float | None
@@ -439,7 +439,7 @@ class Props:
         return self.width is None or self.height is None
 
     def create_window(self, callback):
-        """Create a window for showing the callback on a ui. This allows wrapping the draw callable."""
+        """Create a window for rendering the callback on a ui. This allows wrapping the render callable."""
         window = Window()
         window.draggable = True
         window.autosize = self.will_auto_size()
@@ -462,7 +462,7 @@ class GUI:
 
     def __init__(
         self,
-        draw: Callable,
+        render: Callable,
         screen: Screen | None,
         x: float | None,
         y: float | None,
@@ -473,7 +473,7 @@ class GUI:
         decorated: bool,
     ):
         self._props = Props(
-            draw=draw,
+            render=render,
             screen=screen,
             x=x,
             y=y,
@@ -549,7 +549,7 @@ class GUI:
         async with frame.show() as content_ui:
             try:
                 self._egui = content_ui
-                await self._props.draw(content_ui, UIWrapper(content_ui))
+                await self._props.render(content_ui, UIWrapper(content_ui))
             finally:
                 # An egui.Ui is only valid during the current frame.
                 self._egui = None

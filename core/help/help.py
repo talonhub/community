@@ -231,7 +231,7 @@ async def gui_operators(ui, ui_wrapper):
             row_size, ui_wrapper.get_item_spacing(), page_scroller.page_size
         )
 
-        await ui_wrapper.draw_table(
+        await ui_wrapper.render_table(
             headers=["", ""],
             rows=operators_text,
             maximum_height=maximum_height,
@@ -755,7 +755,7 @@ async def gui_list_help(ui, ui_wrapper):
     # show the rows in a table
     if len(rows) > 0:
         headers = [LIST_KEY_HEADER, LIST_VALUE_HEADER]
-        await ui_wrapper.draw_table(
+        await ui_wrapper.render_table(
             headers,
             rows,
             maximum_height=maximum_height,
