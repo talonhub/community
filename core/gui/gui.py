@@ -240,6 +240,11 @@ class Table:
             return self.wrapped_rows
         return self.rows
 
+    def has_rows(self) -> bool:
+        return len(self.rows) > 0
+
+    def __len__(self) -> int:
+        return len(self.get_rows())
 
 class UIWrapper:
     """Provides helper methods for rendering widgets on a ui. These methods use the wrapped ui by default, but you can use the ui parameter to provide another one"""
@@ -304,7 +309,7 @@ class UIWrapper:
     async def render_table(
         self,
         headers,
-        rows,
+        table,
         row_height=None,
         render_row=None,
         auto_size_columns=False,
@@ -315,7 +320,7 @@ class UIWrapper:
     ):
         """Render a table with consistent row height. Assumes each row is at most the given row height. Uses the interact_size of the ui for the default row height, which may be excessive for your application. This assumes that each row has a single line.
         headers: the headers to render at the top of the table. The length of the headers should equal the column size of the rows.
-        rows: the rows to render in the table. Each row should be a subclass of Row.
+        table: provides the rows to render in the table.
         row_height: each row should be at most this big.
         render_row: a callback for rendering the row.
         auto_size_columns: decides if the column width should be based on the item sizes. Otherwise, each column takes an equal portion of the available width.
@@ -324,6 +329,8 @@ class UIWrapper:
         scroller: handles programmatic scrolling.
         """
         ui = self._ui(ui)
+
+        rows = table.get_rows()
 
         # use defaults when needed
         if id_salt is None:

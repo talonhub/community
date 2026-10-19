@@ -14,7 +14,7 @@ from ...core.gui.gui import (
     create_italics_text,
     open_gui,
     pad_title_for_two_column_rows,
-    wrap_rows,
+    Table,
 )
 
 mod = Module()
@@ -749,15 +749,17 @@ async def gui_list_help(ui, ui_wrapper):
 
     # get the list
     talon_list = actions.user.talon_get_active_registry_list(selected_list)
-    rows = TextRow.create_list(list(talon_list.items()))
-    rows = wrap_rows(rows, MAX_COLUMN_LENGTH_FOR_HELP_LIST)
+    table = Table()
+    table.add_strings(list(talon_list.items()))
+    table.wrap(MAX_COLUMN_LENGTH_FOR_HELP_LIST)
+    
 
     # show the rows in a table
-    if len(rows) > 0:
+    if table.has_rows():
         headers = [LIST_KEY_HEADER, LIST_VALUE_HEADER]
         await ui_wrapper.render_table(
             headers,
-            rows,
+            table,
             maximum_height=maximum_height,
             row_height=row_size,
             id_salt="help_list",
@@ -769,7 +771,7 @@ async def gui_list_help(ui, ui_wrapper):
     # show navigation buttons. these are arranged horizontally but will wrap onto more rows if needed
     async with ui.horizontal_wrapped():
         add_help_close_button(ui_wrapper)
-        if len(rows) > page_size:
+        if len(table) > page_size:
             add_page_navigation_buttons(ui_wrapper, page_scroller)
 
 
