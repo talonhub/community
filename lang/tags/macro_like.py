@@ -57,22 +57,22 @@ def code_basic_macro_likes(m) -> str:
     return m.code_basic_macro_likes
 
 
-@mod.capture(rule="{code_function_macro_likes}")
+@mod.capture(rule="{user.code_function_macro_likes}")
 def code_function_macro_likes(m) -> str:
     "A function-like macro-like"
     return m.code_function_macro_likes
 
 
-@mod.capture(rule="{code_array_macro_likes}")
+@mod.capture(rule="{user.code_array_macro_likes}")
 def code_array_macro_likes(m) -> str:
     "A array-like macro-like"
     return m.code_array_macro_likes
 
 
-@mod.capture(rule="{code_block_macros_likes}")
+@mod.capture(rule="{user.code_block_macros_likes}")
 def code_block_macros(m) -> str:
     "A block macro-like"
-    return m.code_block_macros_likes
+    return m.code_block_macro_likes
 
 
 @mod.action_class
