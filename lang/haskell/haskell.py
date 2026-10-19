@@ -105,7 +105,7 @@ class UserActions:
 
     def code_public_function(text: str):
         """Deliberately not adding = because that is easy to add
-        You wanna call this twice because the type annotations are in a seperate line"""
+        You wanna call this twice because the type annotations are in a separate line"""
         result = actions.user.formatted_text(
             text, settings.get("user.code_public_function_formatter")
         )
