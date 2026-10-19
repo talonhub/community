@@ -8,13 +8,13 @@ from talon import Context, Module, actions, imgui, registry, settings
 
 from ...core.gui.gui import (
     PageScroller,
+    Table,
     TextRow,
     compute_table_height,
     create_bold_text,
     create_italics_text,
     open_gui,
     pad_title_for_two_column_rows,
-    Table,
 )
 
 mod = Module()
@@ -752,7 +752,6 @@ async def gui_list_help(ui, ui_wrapper):
     table = Table()
     table.add_strings(list(talon_list.items()))
     table.wrap(MAX_COLUMN_LENGTH_FOR_HELP_LIST)
-    
 
     # show the rows in a table
     if table.has_rows():

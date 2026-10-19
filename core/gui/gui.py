@@ -216,16 +216,20 @@ class TextRow(Row):
 
 class Table:
     """Helps manage row creation and normalization"""
+
     def __init__(self):
         self.rows: list[Row] = []
         self.wrapped_rows: list[Row] = []
-    
+
     def add_row(self, row: Row):
         rows = row.split_lines()
         self.rows.extend(rows)
 
     def add_strings(self, rows: Sequence[Sequence[str]], rich_text_functions=None):
-        text_rows = [TextRow(columns, rich_text_functions=rich_text_functions) for columns in rows]
+        text_rows = [
+            TextRow(columns, rich_text_functions=rich_text_functions)
+            for columns in rows
+        ]
         for r in text_rows:
             self.add_row(r)
 
@@ -245,6 +249,7 @@ class Table:
 
     def __len__(self) -> int:
         return len(self.get_rows())
+
 
 class UIWrapper:
     """Provides helper methods for rendering widgets on a ui. These methods use the wrapped ui by default, but you can use the ui parameter to provide another one"""
