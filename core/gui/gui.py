@@ -204,7 +204,7 @@ class TextRow(Row):
 
     @classmethod
     def create(cls, columns: Sequence[str], rich_text_functions=None):
-        column_lines = [c.split("\n") for c in columns]
+        column_lines = [c.splitlines() for c in columns]
         return cls._split_across_rows(column_lines, True, rich_text_functions)
 
     @classmethod
