@@ -750,7 +750,7 @@ async def gui_list_help(ui, ui_wrapper):
     # get the list
     talon_list = actions.user.talon_get_active_registry_list(selected_list)
     table = Table(MAX_COLUMN_LENGTH_FOR_HELP_LIST)
-    table.add_strings(list(talon_list.items()))
+    table.add_text_rows(list(talon_list.items()))
 
     # show the rows in a table
     if table.has_rows():

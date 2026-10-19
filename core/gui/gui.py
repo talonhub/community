@@ -229,7 +229,7 @@ class Table:
         else:
             self.rows.extend(rows)
 
-    def add_strings(self, rows: Sequence[Sequence[str]], rich_text_functions=None):
+    def add_text_rows(self, rows: Sequence[Sequence[str]], rich_text_functions=None):
         text_rows = [
             TextRow(columns, rich_text_functions=rich_text_functions)
             for columns in rows
