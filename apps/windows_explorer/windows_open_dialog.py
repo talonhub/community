@@ -1,6 +1,4 @@
-
-from talon import Context, Module, actions, ui, clip
-import os
+from talon import Context, Module, actions, clip, ui
 
 mod = Module()
 apps = mod.apps
@@ -19,10 +17,11 @@ ctx.matches = r"""
 app: windows_open_dialog
 """
 
+
 def get_path():
     path = None
-    try: 
-        toolbar = ui.active_window().element.find_one(automation_id = "1001", max_depth=0)
+    try:
+        toolbar = ui.active_window().element.find_one(automation_id="1001", max_depth=0)
         if toolbar:
             path = toolbar.legacyiaccessible_pattern.name.replace("Address: ", "")
         else:
@@ -31,6 +30,7 @@ def get_path():
         pass
 
     return path
+
 
 @ctx.action_class("user")
 class UserActions:
@@ -70,7 +70,6 @@ class UserActions:
         """selects the file"""
         actions.key("home")
         actions.insert(path)
-
 
     def file_manager_select_file(path: str):
         """selects the file"""

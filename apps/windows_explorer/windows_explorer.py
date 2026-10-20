@@ -1,6 +1,5 @@
-import os
+from talon import Context, Module, actions
 
-from talon import Context, Module, actions, app, ui
 from .explorer_path import get_active_explorer_path
 
 mod = Module()
@@ -19,6 +18,7 @@ ctx.matches = r"""
 app: windows_explorer
 """
 
+
 @ctx.action_class("user")
 class UserActions:
     def file_manager_open_parent():
@@ -31,8 +31,7 @@ class UserActions:
             # note:  possibly explore whether we can do anything useful with these folders via accessibility
             actions.app.notify("Cannot get path for virtual folder, command skipped")
             return None
-        else:
-            return path
+        return path
 
     def file_manager_terminal_here():
         actions.key("ctrl-l")
