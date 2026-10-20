@@ -138,7 +138,7 @@ class Expansion:
 				if lists:
 					ui.label("lists: ")
 					for l in lists:
-						if ui.button(f"help {l.number}: {l.name}").clicked():
+						if ui.button(f"help list {l.number}: {l.name}").clicked():
 							show_list_help(l.name)
 			for c in captures:
 				await self.show_expansion(ui, encountered, c.rule, c)
