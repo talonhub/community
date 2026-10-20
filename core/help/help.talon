@@ -34,4 +34,7 @@ help re formatters | help re format | re format help:
     user.help_formatters(user.get_reformatters_words(), true)
 
 expansion show: user.spoken_form_expansion_show()
+expansion show clip:
+    text = clip.text()
+    user.spoken_form_expansion_show(text)
 expansion hide: user.spoken_form_expansion_hide()
