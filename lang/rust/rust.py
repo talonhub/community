@@ -33,27 +33,12 @@ class Actions:
 
     def code_insert_macro(text: str, selection: str):
         """DEPRECATED: Inserts a macro and positions the cursor appropriately"""
-        actions.user.deprecate_action(
-            "2026-10-19",
-            "user.code_insert_macro",
-            "user.code_insert_function_macro_like",
-        )
 
     def code_insert_macro_array(text: str, selection: str):
         """DEPRECATED: Inserts a macro array and positions the cursor appropriately"""
-        actions.user.deprecate_action(
-            "2026-10-19",
-            "user.code_insert_macro_array",
-            "user.code_insert_macro_array_like",
-        )
 
     def code_insert_macro_block(text: str, selection: str):
         """DEPRECATED: Inserts a macro block and positions the cursor appropriately"""
-        actions.user.deprecate_action(
-            "2026-10-19",
-            "user.code_insert_macro_block",
-            "user.code_insert_macro_block_like",
-        )
 
 
 ctx = Context()
@@ -166,9 +151,9 @@ all_block_macros = {
     **standard_block_macros,
 }
 
-ctx.lists["user.code_function_macro_likes"] = all_function_macros
-ctx.lists["user.code_array_macro_likes"] = all_array_macros
-ctx.lists["user.code_block_macro_likes"] = all_block_macros
+ctx.lists["user.code_function_macro_like"] = all_function_macros
+ctx.lists["user.code_array_macro_like"] = all_array_macros
+ctx.lists["user.code_block_macro_like"] = all_block_macros
 
 all_macros = {
     **all_function_macros,
@@ -176,10 +161,10 @@ all_macros = {
     **all_block_macros,
 }
 
-# These can probably be removed as long as no external userscripts are relying on them!
-all_function_macro_values = set(all_function_macros.values())
-all_array_macro_values = set(all_array_macros.values())
-all_block_macro_values = set(all_block_macros.values())
+# DEPRECATED: Derive this yourself from the lists in macro_like.py
+# all_function_macro_values = set(all_function_macros.values())
+# all_array_macro_values = set(all_array_macros.values())
+# all_block_macro_values = set(all_block_macros.values())
 
 closure_traits = {
     "closure": "Fn",
@@ -392,33 +377,10 @@ class UserActions:
 
     # DEPRECATED
     def code_insert_macro(text: str, selection: str):
-        wrap_string = " wrap " if selection != "" else ""
-        deprecated_command = "macro" + wrap_string + "{user.code_macros}"
-
-        if text in all_array_macro_values:
-            new_command = (
-                "(macro | anno)" + wrap_string + "{user.code_array_macro_likes}"
-            )
-            actions.user.deprecate_command(
-                "2026-10-19", deprecated_command, new_command
-            )
-            actions.user.code_insert_macro_array_like(text, selection)
-        elif text in all_block_macro_values:
-            new_command = (
-                "(macro | anno)" + wrap_string + "{user.code_block_macro_likes}"
-            )
-            actions.user.deprecate_command(
-                "2026-10-19", deprecated_command, new_command
-            )
-            actions.user.code_insert_macro_block_like(text, selection)
-        else:
-            new_command = (
-                "(macro | anno)" + wrap_string + "{user.code_function_macro_likes}"
-            )
-            actions.user.deprecate_command(
-                "2026-10-19", deprecated_command, new_command
-            )
-            actions.user.code_insert_function_macro_like(text, selection)
+        actions.user.deprecate_action(
+            "2026-10-19", "user.code_insert_macro", "user.code_insert_macro_like"
+        )
+        actions.user.code_insert_macro_like(text, selection)
 
 
 RT = TypeVar("RT")  # return type
